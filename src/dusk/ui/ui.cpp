@@ -172,7 +172,7 @@ Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) 
     if (passive) {
         sPassiveDocuments.push_back(std::move(doc));
     } else {
-        sDocumentStack.push_back({std::move(doc)});
+        sDocumentStack.push_back(std::move(doc));
     }
     if (show) {
         ret.show();
@@ -215,12 +215,17 @@ void update() noexcept {
     }
 
     input::update_input();
-    for (const auto& doc : sDocumentStack) {
-        doc->update();
-    }
-    for (const auto& doc : sPassiveDocuments) {
-        doc->update();
-    }
+    const auto update_documents = [](auto& documents) {
+        const std::size_t count = documents.size();
+        for (std::size_t i = 0; i < count && i < documents.size(); ++i) {
+            Document* doc = documents[i].get();
+            if (doc != nullptr && !doc->closed()) {
+                doc->update();
+            }
+        }
+    };
+    update_documents(sDocumentStack);
+    update_documents(sPassiveDocuments);
 
     // Remove closed documents
     {

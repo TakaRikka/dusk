@@ -134,8 +134,14 @@ hero img {
     decorator: horizontal-gradient(#00000000 #00000000);
 }
 
+#menu-list button:disabled {
+    opacity: 0.75;
+    cursor: default;
+    decorator: horizontal-gradient(#00000000 #00000000);
+}
+
 #menu-list button.anim-done {
-    transition: decorator color 0.1s linear-in-out;
+    transition: decorator color opacity 0.1s linear-in-out;
 }
 
 #menu-list button:hover,
@@ -210,13 +216,29 @@ body.mirrored version-info {
     color: #FFC9C9;
 }
 
+#disc-status[status=verifying] {
+    color: #FFFFFF;
+}
+
+#disc-status[status=mismatch] {
+    color: #FFD6A7;
+}
+
+#disc-status[status=unknown] {
+    color: rgba(224, 219, 200, 65%);
+}
+
 #disc-status icon {
-    display: block;
+    display: none;
     width: 24dp;
     height: 24dp;
     font-family: "Material Symbols Rounded";
     font-weight: normal;
     font-size: 24dp;
+}
+
+#disc-status[status] icon {
+    display: block;
 }
 
 #disc-status[status=good] icon {
@@ -225,6 +247,18 @@ body.mirrored version-info {
 
 #disc-status[status=bad] icon {
     decorator: text("&#xe5cd;" center center);
+}
+
+#disc-status[status=verifying] icon {
+    decorator: text("&#xe8b5;" center center);
+}
+
+#disc-status[status=mismatch] icon {
+    decorator: text("&#xe002;" center center);
+}
+
+#disc-status[status=unknown] icon {
+    decorator: text("&#xe887;" center center);
 }
 
 #disc-version {

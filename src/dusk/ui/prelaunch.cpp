@@ -11,11 +11,23 @@
 #include "version.h"
 
 #include <SDL3/SDL_dialog.h>
+#include <aurora/lib/logging.hpp>
 #include <aurora/lib/window.hpp>
+#include <fmt/format.h>
+
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <exception>
+#include <filesystem>
+#include <optional>
+#include <thread>
 
 #include "m_Do/m_Do_MemCard.h"
 
 namespace dusk::ui {
+namespace {
+aurora::Module PrelaunchLog{"dusk::ui::prelaunch"};
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -54,8 +66,133 @@ constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
     {"All Files", "*"},
 }};
 
-static std::string get_error_msg(iso::ValidationError error) {
+struct DiscVerificationResult {
+    std::string path;
+    iso::ValidationError validation = iso::ValidationError::Unknown;
+};
+
+struct DiscVerificationTask {
+    explicit DiscVerificationTask(std::string discPath) : path(std::move(discPath)) {
+        worker = std::thread([this] {
+            try {
+                validation = iso::validate(path.c_str(), status);
+            } catch (const std::exception& e) {
+                PrelaunchLog.error(
+                    "Disc verification failed with exception for '{}': {}", path, e.what());
+                validation = iso::ValidationError::Unknown;
+            } catch (...) {
+                PrelaunchLog.error(
+                    "Disc verification failed with unknown exception for '{}'", path);
+                validation = iso::ValidationError::Unknown;
+            }
+            done.store(true, std::memory_order_release);
+        });
+    }
+
+    ~DiscVerificationTask() {
+        status.shouldCancel.store(true, std::memory_order_relaxed);
+        join();
+    }
+
+    void join() {
+        if (worker.joinable()) {
+            worker.join();
+        }
+    }
+
+    [[nodiscard]] bool finished() const { return done.load(std::memory_order_acquire); }
+
+    std::string path;
+    iso::VerificationStatus status;
+    iso::ValidationError validation = iso::ValidationError::Unknown;
+    std::atomic_bool done = false;
+    std::thread worker;
+};
+
+std::unique_ptr<DiscVerificationTask> sDiscVerificationTask;
+bool sDiscVerificationModalPushed = false;
+
+bool validation_allows_launch(iso::ValidationError validation) noexcept {
+    return validation == iso::ValidationError::Success ||
+           validation == iso::ValidationError::HashMismatch ||
+           validation == iso::ValidationError::Canceled;
+}
+
+bool verification_state_allows_launch(iso::ValidationError validation) noexcept {
+    return validation == iso::ValidationError::Unknown ||
+           validation == iso::ValidationError::Success ||
+           validation == iso::ValidationError::HashMismatch ||
+           validation == iso::ValidationError::Canceled;
+}
+
+iso::ValidationError verification_from_config(DiscVerificationState value) noexcept {
+    switch (value) {
+    case DiscVerificationState::Success:
+        return iso::ValidationError::Success;
+    case DiscVerificationState::HashMismatch:
+        return iso::ValidationError::HashMismatch;
+    default:
+        return iso::ValidationError::Unknown;
+    }
+}
+
+DiscVerificationState verification_to_config(iso::ValidationError validation) {
+    switch (validation) {
+    case iso::ValidationError::Success:
+        return DiscVerificationState::Success;
+    case iso::ValidationError::HashMismatch:
+        return DiscVerificationState::HashMismatch;
+    default:
+        return DiscVerificationState::Unknown;
+    }
+}
+
+std::string format_bytes(std::size_t bytes) {
+    constexpr double KiB = 1024.0;
+    constexpr double MiB = KiB * 1024.0;
+    constexpr double GiB = MiB * 1024.0;
+    if (bytes >= static_cast<std::size_t>(GiB)) {
+        return fmt::format("{:.2f} GiB", static_cast<double>(bytes) / GiB);
+    }
+    if (bytes >= static_cast<std::size_t>(MiB)) {
+        return fmt::format("{:.0f} MiB", static_cast<double>(bytes) / MiB);
+    }
+    if (bytes >= static_cast<std::size_t>(KiB)) {
+        return fmt::format("{:.0f} KiB", static_cast<double>(bytes) / KiB);
+    }
+    return fmt::format("{} B", bytes);
+}
+
+void begin_disc_verification(std::string path) noexcept {
+    if (path.empty()) {
+        return;
+    }
+    if (sDiscVerificationTask != nullptr) {
+        sDiscVerificationTask->status.shouldCancel.store(true, std::memory_order_relaxed);
+        sDiscVerificationTask.reset();
+    }
+    sDiscVerificationTask = std::make_unique<DiscVerificationTask>(std::move(path));
+    sDiscVerificationModalPushed = false;
+}
+
+std::optional<DiscVerificationResult> take_finished_disc_verification() {
+    if (sDiscVerificationTask == nullptr || !sDiscVerificationTask->finished()) {
+        return std::nullopt;
+    }
+    DiscVerificationResult result{
+        .path = sDiscVerificationTask->path,
+        .validation = sDiscVerificationTask->validation,
+    };
+    sDiscVerificationTask->join();
+    sDiscVerificationTask.reset();
+    sDiscVerificationModalPushed = false;
+    return result;
+}
+
+std::string get_error_msg(iso::ValidationError error) {
     switch (error) {
+    default:
+        return "The selected disc image could not be validated.";
     case iso::ValidationError::IOError:
         return "Unable to read the selected file.";
     case iso::ValidationError::InvalidImage:
@@ -64,36 +201,214 @@ static std::string get_error_msg(iso::ValidationError error) {
         return "The selected game is not supported by Dusk.";
     case iso::ValidationError::WrongVersion:
         return "Dusk currently supports GameCube USA and PAL disc images only.";
+    case iso::ValidationError::Canceled:
+        return "Disc verification was canceled. Dusk cannot guarantee the selected disc image "
+               "is compatible.";
+    case iso::ValidationError::HashMismatch:
+        return "The selected disc image did not pass hash verification. It may be corrupt or "
+               "modified.";
     case iso::ValidationError::Success:
         return "The selected disc image is valid.";
-    default:
-        return "The selected disc image could not be validated.";
     }
 }
 
-void file_dialog_callback(void*, const char* path, const char* error) {
-    auto& state = prelaunch_state();
-    if (error != nullptr) {
-        return;
-    }
-    if (path == nullptr) {
-        return;
-    }
+void persist_disc_choice(const std::string& path, iso::ValidationError validation) {
+    getSettings().backend.isoPath.setValue(path);
+    getSettings().backend.isoVerification.setValue(verification_to_config(validation));
+    config::Save();
+}
 
-    const auto validation = iso::validate(path);
-    if (validation != iso::ValidationError::Success) {
-        state.errorString = escape(get_error_msg(validation));
-        return;
-    }
+void apply_valid_disc_result(const std::string& path, iso::ValidationError validation) {
+    auto& state = prelaunch_state();
+    iso::DiscInfo info{};
+    const bool pal =
+        iso::inspect(path.c_str(), info) == iso::ValidationError::Success && info.isPal;
 
     state.selectedDiscPath = path;
-    state.errorString.clear();
-    getSettings().backend.isoPath.setValue(state.selectedDiscPath);
-    config::Save();
-    refresh_state();
+    state.selectedDiscIsValid = true;
+    state.selectedDiscIsPal = pal;
+    state.initialDiscValidationRes = validation;
+    state.initialDiscIsPal = pal;
+    persist_disc_choice(path, validation);
+}
+
+void apply_disc_verification_result(const DiscVerificationResult& result) {
+    auto& state = prelaunch_state();
+
+    if (result.validation == iso::ValidationError::HashMismatch ||
+        result.validation == iso::ValidationError::Canceled)
+    {
+        state.pendingDiscPath = result.path;
+        state.pendingDiscValidation = result.validation;
+        state.errorString = escape(get_error_msg(result.validation));
+        return;
+    }
+
+    if (validation_allows_launch(result.validation)) {
+        apply_valid_disc_result(result.path, result.validation);
+
+        if (result.validation == iso::ValidationError::Success) {
+            state.errorString.clear();
+            state.pendingDiscPath.clear();
+            state.pendingDiscValidation = iso::ValidationError::Unknown;
+        }
+        return;
+    }
+
+    state.pendingDiscPath.clear();
+    state.pendingDiscValidation = iso::ValidationError::Unknown;
+    state.errorString = escape(get_error_msg(result.validation));
+}
+
+class DiscVerificationModal : public WindowSmall {
+public:
+    DiscVerificationModal() : WindowSmall("modal", "modal-dialog") {
+        auto* header = append(mDialog, "div");
+        header->SetClass("modal-header", true);
+
+        auto* title = append(header, "div");
+        title->SetClass("modal-title", true);
+        title->SetInnerRML("Verifying disc image");
+
+        auto* icon = append(header, "icon");
+        icon->SetClass("verifying", true);
+
+        auto* body = append(mDialog, "div");
+        body->SetClass("modal-body", true);
+
+        auto* content = append(body, "div");
+        content->SetClass("verification-progress", true);
+
+        mFileName = append(content, "div");
+        mFileName->SetClass("verification-file", true);
+
+        mProgress = append(content, "progressbar");
+        mProgress->SetClass("progress-ongoing", true);
+        mProgress->SetClass("verification-progress-bar", true);
+        mProgress->SetAttribute("value", 0.f);
+
+        mDetail = append(content, "div");
+        mDetail->SetClass("verification-detail", true);
+
+        auto* actions = append(mDialog, "div");
+        actions->SetClass("modal-actions", true);
+        mCancelButton = std::make_unique<Button>(actions, "Cancel");
+        mCancelButton->root()->SetClass("modal-btn", true);
+        mCancelButton->on_pressed([this] { request_cancel(); });
+
+        refresh();
+    }
+
+    void update() override {
+        if (mFinished) {
+            return;
+        }
+        if (auto result = take_finished_disc_verification()) {
+            mFinished = true;
+            apply_disc_verification_result(*result);
+            pop();
+            return;
+        }
+        if (sDiscVerificationTask == nullptr) {
+            mFinished = true;
+            pop();
+            return;
+        }
+        refresh();
+    }
+
+    bool focus() override { return mCancelButton != nullptr && mCancelButton->focus(); }
+
+protected:
+    bool handle_nav_command(Rml::Event& event, NavCommand cmd) override {
+        if (cmd == NavCommand::Cancel || cmd == NavCommand::Menu) {
+            request_cancel();
+            event.StopPropagation();
+            return true;
+        }
+        if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
+            return true;
+        }
+        return false;
+    }
+
+private:
+    void request_cancel() {
+        if (sDiscVerificationTask == nullptr || mCancelRequested) {
+            return;
+        }
+
+        mCancelRequested = true;
+        sDiscVerificationTask->status.shouldCancel.store(true, std::memory_order_relaxed);
+        if (mCancelButton != nullptr) {
+            mCancelButton->set_text("Cancelling...");
+            mCancelButton->set_disabled(true);
+        }
+    }
+
+    void refresh() {
+        if (sDiscVerificationTask == nullptr) {
+            return;
+        }
+
+        if (mCancelRequested) {
+            return;
+        }
+
+        if (mFileName != nullptr) {
+            std::string fileName =
+                std::filesystem::path(sDiscVerificationTask->path).filename().string();
+            if (fileName.empty()) {
+                fileName = sDiscVerificationTask->path;
+            }
+            mFileName->SetInnerRML(escape(fileName));
+        }
+
+        const std::size_t bytesRead =
+            sDiscVerificationTask->status.bytesRead.load(std::memory_order_relaxed);
+        const std::size_t bytesTotal =
+            sDiscVerificationTask->status.bytesTotal.load(std::memory_order_relaxed);
+
+        if (bytesTotal == 0) {
+            if (mProgress != nullptr) {
+                mProgress->SetAttribute("value", 0.f);
+            }
+            if (mDetail != nullptr) {
+                mDetail->SetInnerRML("Opening disc image...");
+            }
+            return;
+        }
+
+        const float fraction =
+            std::clamp(static_cast<float>(bytesRead) / static_cast<float>(bytesTotal), 0.0f, 1.0f);
+        if (mProgress != nullptr) {
+            mProgress->SetAttribute("value", fraction);
+        }
+        if (mDetail != nullptr) {
+            mDetail->SetInnerRML(escape(fmt::format("{} / {} ({:.0f}%)", format_bytes(bytesRead),
+                format_bytes(bytesTotal), fraction * 100.0f)));
+        }
+    }
+
+    Rml::Element* mFileName = nullptr;
+    Rml::Element* mProgress = nullptr;
+    Rml::Element* mDetail = nullptr;
+    std::unique_ptr<Button> mCancelButton;
+    bool mCancelRequested = false;
+    bool mFinished = false;
+};
+
+void file_dialog_callback(void*, const char* path, const char* error) {
+    if (path == nullptr || error != nullptr) {
+        return;
+    }
+
+    begin_disc_verification(path);
 }
 
 PrelaunchState sPrelaunchState;
+
+}  // namespace
 
 PrelaunchState& prelaunch_state() noexcept {
     return sPrelaunchState;
@@ -101,13 +416,109 @@ PrelaunchState& prelaunch_state() noexcept {
 
 void refresh_state() noexcept {
     auto& state = prelaunch_state();
-    const auto validation = iso::validate(state.selectedDiscPath.c_str());
-    if (state.selectedDiscPath.empty() || validation != iso::ValidationError::Success) {
+    if (state.selectedDiscPath.empty()) {
         state.selectedDiscIsValid = false;
+        state.selectedDiscIsPal = false;
         return;
     }
-    state.selectedDiscIsValid = true;
-    state.selectedDiscIsPal = iso::isPal(state.selectedDiscPath.c_str());
+
+    iso::DiscInfo info{};
+    const auto metadataValidation = iso::inspect(state.selectedDiscPath.c_str(), info);
+    if (metadataValidation != iso::ValidationError::Success) {
+        state.selectedDiscIsValid = false;
+        state.selectedDiscIsPal = false;
+        state.initialDiscValidationRes = metadataValidation;
+        state.initialDiscIsPal = false;
+        return;
+    }
+
+    auto verification = state.initialDiscValidationRes;
+    if (state.selectedDiscPath == getSettings().backend.isoPath.getValue()) {
+        verification = verification_from_config(getSettings().backend.isoVerification.getValue());
+    }
+
+    if (verification_state_allows_launch(verification)) {
+        state.selectedDiscIsValid = true;
+        state.selectedDiscIsPal = info.isPal;
+        state.initialDiscValidationRes = verification;
+        state.initialDiscIsPal = info.isPal;
+        return;
+    }
+
+    state.selectedDiscIsValid = false;
+    state.selectedDiscIsPal = false;
+    state.initialDiscValidationRes = iso::ValidationError::Unknown;
+    state.initialDiscIsPal = false;
+}
+
+void try_push_verification_modal(Document& host) {
+    auto& state = prelaunch_state();
+    if (sDiscVerificationTask != nullptr && !sDiscVerificationModalPushed) {
+        sDiscVerificationModalPushed = true;
+        host.push(std::make_unique<DiscVerificationModal>());
+        return;
+    }
+
+    if (state.errorString.empty()) {
+        return;
+    }
+
+    auto dismiss = [](Modal& modal) {
+        auto& state = prelaunch_state();
+        state.errorString.clear();
+        state.pendingDiscPath.clear();
+        state.pendingDiscValidation = iso::ValidationError::Unknown;
+        modal.pop();
+    };
+
+    if (!state.pendingDiscPath.empty()) {
+        const Rml::String bodyRml =
+            state.errorString + "<br/><br/>You may proceed at your own risk.";
+        auto acceptHashMismatch = [](Modal& modal) {
+            auto& st = prelaunch_state();
+            std::string path = std::move(st.pendingDiscPath);
+            const auto validation = st.pendingDiscValidation;
+            st.pendingDiscPath.clear();
+            st.pendingDiscValidation = iso::ValidationError::Unknown;
+            st.errorString.clear();
+            apply_valid_disc_result(path, validation);
+            refresh_state();
+            modal.pop();
+        };
+        host.push(std::make_unique<Modal>(Modal::Props{
+            .title = "Disc verification warning",
+            .bodyRml = bodyRml,
+            .actions =
+                {
+                    ModalAction{
+                        .label = "Cancel",
+                        .onPressed = dismiss,
+                    },
+                    ModalAction{
+                        .label = "Continue anyway",
+                        .onPressed = acceptHashMismatch,
+                    },
+                },
+            .onDismiss = dismiss,
+            .variant = "danger",
+            .isWarning = true,
+        }));
+        return;
+    }
+
+    host.push(std::make_unique<Modal>(Modal::Props{
+        .title = "Disc verification error",
+        .bodyRml = state.errorString,
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismiss,
+                },
+            },
+        .onDismiss = dismiss,
+        .isError = true,
+    }));
 }
 
 void ensure_initialized() noexcept {
@@ -118,9 +529,8 @@ void ensure_initialized() noexcept {
 
     state.selectedDiscPath = getSettings().backend.isoPath;
     state.initialDiscPath = state.selectedDiscPath;
-    if (iso::validate(state.initialDiscPath.c_str()) == iso::ValidationError::Success) {
-        state.initialDiscIsPal = iso::isPal(state.initialDiscPath.c_str());
-    }
+    state.initialDiscValidationRes =
+        verification_from_config(getSettings().backend.isoVerification.getValue());
     state.initialLanguage = getSettings().game.language;
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
     state.initialCardFileType = getSettings().backend.cardFileType;
@@ -289,28 +699,14 @@ void Prelaunch::update() {
     ensure_initialized();
     try_apply_mirrored_layout(mDocument);
 
-    auto& state = prelaunch_state();
-    if (!state.errorString.empty() && top_document() == this) {
-        auto dismiss = [](Modal& modal) {
-            prelaunch_state().errorString.clear();
-            modal.pop();
-        };
-        push(std::make_unique<Modal>(Modal::Props{
-            .title = "Invalid disc image",
-            .bodyRml = state.errorString,
-            .actions =
-                {
-                    ModalAction{
-                        .label = "OK",
-                        .onPressed = dismiss,
-                    },
-                },
-            .onDismiss = dismiss,
-        }));
+    if (top_document() == this) {
+        try_push_verification_modal(*this);
     }
 
-    const bool hasValidPath = prelaunch_state().selectedDiscIsValid;
-    mDocument->SetClass("disc-ready", hasValidPath);
+    const auto& state = prelaunch_state();
+
+    const bool hasValidPath = state.selectedDiscIsValid;
+    mDocument->SetClass("disc-ready", IsGameLaunched);
     if (hasValidPath) {
         if (getSettings().backend.skipPreLaunchUI) {
             hide(true);
@@ -330,16 +726,26 @@ void Prelaunch::update() {
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
 
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
-        if (hasValidPath) {
+        if (state.initialDiscValidationRes == iso::ValidationError::Success) {
             mDiscStatus->SetAttribute("status", "good");
             discStatusLabel->SetInnerRML("Disc ready.");
+        } else if (state.initialDiscValidationRes == iso::ValidationError::HashMismatch) {
+            mDiscStatus->SetAttribute("status", "mismatch");
+            discStatusLabel->SetInnerRML("Disc hash mismatch.");
+        } else if (hasValidPath) {
+            mDiscStatus->SetAttribute("status", "unknown");
+            discStatusLabel->SetInnerRML("Disc not verified.");
+        } else {
+            mDiscStatus->RemoveAttribute("status");
+            discStatusLabel->SetInnerRML("No disc image found.");
         }
     }
     if (mDiscDetail != nullptr) {
         if (hasValidPath) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
-            mDiscDetail->SetInnerRML(
-                prelaunch_state().initialDiscIsPal ? "GameCube • EUR" : "GameCube • USA");
+            Rml::String innerRML = "GameCube • ";
+            innerRML += state.initialDiscIsPal ? "EUR" : "USA";
+            mDiscDetail->SetInnerRML(innerRML);
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
         }

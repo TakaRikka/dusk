@@ -1,5 +1,6 @@
 #pragma once
 
+#include "dusk/iso_validate.hpp"
 #include "button.hpp"
 #include "document.hpp"
 
@@ -39,12 +40,15 @@ struct PrelaunchState {
     std::string selectedDiscPath;
     bool selectedDiscIsValid = false;
     bool selectedDiscIsPal = false;
-    std::string errorString;
-    bool initialDiscIsPal = false;
     std::string initialDiscPath;
+    iso::ValidationError initialDiscValidationRes = iso::ValidationError::Unknown;
+    bool initialDiscIsPal = false;
     GameLanguage initialLanguage = GameLanguage::English;
     std::string initialGraphicsBackend;
     int initialCardFileType = 0;
+    std::string errorString;
+    std::string pendingDiscPath;
+    iso::ValidationError pendingDiscValidation = iso::ValidationError::Unknown;
 };
 
 PrelaunchState& prelaunch_state() noexcept;
@@ -52,5 +56,6 @@ void ensure_initialized() noexcept;
 void refresh_state() noexcept;
 void open_iso_picker() noexcept;
 bool is_restart_pending() noexcept;
+void try_push_verification_modal(Document& host);
 
 }  // namespace dusk::ui
