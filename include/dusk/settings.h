@@ -27,6 +27,11 @@ enum class DiscVerificationState : u8 {
     HashMismatch,
 };
 
+enum class GyroMode : u8 {
+    Sensor = 0,
+    Mouse = 1,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -44,6 +49,12 @@ template <>
 struct ConfigEnumRange<DiscVerificationState> {
     static constexpr auto min = DiscVerificationState::Unknown;
     static constexpr auto max = DiscVerificationState::HashMismatch;
+};
+
+template <>
+struct ConfigEnumRange<GyroMode> {
+    static constexpr auto min = GyroMode::Sensor;
+    static constexpr auto max = GyroMode::Mouse;
 };
 }
 
@@ -120,6 +131,7 @@ struct UserSettings {
         ConfigVar<bool> midnasLamentNonStop;
 
         // Input
+        ConfigVar<GyroMode> gyroMode;
         ConfigVar<bool> enableGyroAim;
         ConfigVar<bool> enableGyroRollgoal;
         ConfigVar<float> gyroSensitivityX;

@@ -729,10 +729,12 @@ static void koro2_game(fshop_class* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x4020.z, 0, 2, 0x200);
     case 2:
 #if TARGET_PC
-        if (dusk::getSettings().game.enableGyroRollgoal) {
+        if (dusk::gyro::rollgoal_gyro_enabled()) {
             if (!dusk::gyro::get_sensor_keep_alive()) {
                 dusk::gyro::set_sensor_keep_alive(true);
             }
+        } else if (dusk::gyro::get_sensor_keep_alive()) {
+            dusk::gyro::set_sensor_keep_alive(false);
         }
 #endif
 
@@ -753,7 +755,7 @@ static void koro2_game(fshop_class* i_this) {
             old_stick_x = mDoCPd_c::getSubStickX(PAD_1);
             cLib_addCalcAngleS2(&i_this->field_0x4060, i_this->field_0x4062, 4, 0x1000);
 #if TARGET_PC
-            if (dusk::getSettings().game.enableGyroRollgoal) {
+            if (dusk::gyro::rollgoal_gyro_enabled()) {
                 dusk::gyro::rollgoalTick(true, i_this->field_0x4060);
             }
 #endif
@@ -791,7 +793,7 @@ static void koro2_game(fshop_class* i_this) {
             s16 gyro_ax = 0;
             s16 gyro_az = 0;
 #if TARGET_PC
-            if (dusk::getSettings().game.enableGyroRollgoal) {
+            if (dusk::gyro::rollgoal_gyro_enabled()) {
                 dusk::gyro::rollgoalTableOffset(gyro_ax, gyro_az);
             }
 #endif

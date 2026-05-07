@@ -12,6 +12,7 @@
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
 #include "number_button.hpp"
+#include "menu_bar.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
@@ -39,6 +40,11 @@ constexpr std::array kFpsOverlayCornerNames = {
     "Top Right",
     "Bottom Left",
     "Bottom Right",
+};
+
+constexpr std::array kGyroInputModeLabels = {
+    "Sensor",
+    "Mouse",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -199,7 +205,9 @@ int float_setting_percent(ConfigVar<float>& var) {
 }
 
 bool gyro_enabled() {
-    return getSettings().game.enableGyroAim || getSettings().game.enableGyroRollgoal;
+    return getSettings().game.enableGyroAim ||
+           (getSettings().game.enableGyroRollgoal &&
+            getSettings().game.gyroMode.getValue() != GyroMode::Mouse);
 }
 
 struct ConfigBoolProps {
@@ -627,12 +635,50 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             [] { return !getSettings().game.freeCamera; });
 
         leftPane.add_section("Gyro");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Gyro Input Method",
+                .getValue =
+                    [] {
+                        const auto mode = getSettings().game.gyroMode.getValue();
+                        const auto idx = static_cast<size_t>(mode);
+                        return Rml::String{kGyroInputModeLabels[idx]};
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.gyroMode.getValue() !=
+                               getSettings().game.gyroMode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
+                    pane
+                        .add_button({
+                            .text = Rml::String{kGyroInputModeLabels[i]},
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.gyroMode.getValue() == static_cast<GyroMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            const GyroMode mode = static_cast<GyroMode>(i);
+                            getSettings().game.gyroMode.setValue(mode);
+                            config::Save();
+                        });
+                }
+                pane.add_rml(
+                    "<br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/>"
+                    "<br/><b>Mouse</b> uses relative mouse movement as gyro input (for example, Steam Deck).<br/>"
+                    "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
+            });
         addOption("Gyro Aim", getSettings().game.enableGyroAim,
             "Enables gyro controls while in look mode, aiming a hawk, and aiming "
             "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
             "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
         addOption("Gyro Rollgoal", getSettings().game.enableGyroRollgoal,
-            "Enables gyro controls for Rollgoal in Hena's Cabin.");
+            "Enables gyro controls for Rollgoal in Hena's Cabin.",
+            [] { return getSettings().game.gyroMode.getValue() == GyroMode::Mouse; });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityY,
             "Gyro Pitch Sensitivity", "Controls vertical gyro aiming sensitivity.", 25, 400, 5,
             [] { return !gyro_enabled(); });
@@ -641,7 +687,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             [] { return !gyro_enabled(); });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
             "Rollgoal Sensitivity", "Controls how strongly gyro input tilts the Rollgoal table.",
-            25, 400, 5, [] { return !getSettings().game.enableGyroRollgoal; });
+            25, 400, 5,
+            [] {
+                return !getSettings().game.enableGyroRollgoal ||
+                       getSettings().game.gyroMode.getValue() == GyroMode::Mouse;
+            });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroDeadband, "Gyro Deadband",
             "Ignores small gyro movement to reduce drift and jitter.", 0, 50, 1,
             [] { return !gyro_enabled(); });

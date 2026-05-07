@@ -12,6 +12,7 @@ void rollgoalTableOffset(s16& out_ax, s16& out_az);
 extern bool s_sensor_keep_alive;
 bool get_sensor_keep_alive();
 void set_sensor_keep_alive(bool value);
+bool rollgoal_gyro_enabled();
 }  // namespace dusk::gyro
 
 #endif
