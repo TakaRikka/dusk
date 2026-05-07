@@ -11262,6 +11262,26 @@ static int camera_execute(camera_process_class* i_this) {
     return 1;
 }
 
+#ifdef TARGET_PC
+void set_ar_corrected_trim(dDlst_window_c* window, float trim_height) {
+    const auto viewport = window->getViewPort();
+    
+    if (mDoGph_gInf_c::isWideZoom()) {
+        const auto target_ar = FB_WIDTH / (FB_HEIGHT - trim_height * 2.0f);
+        const auto current_ar = mDoGph_gInf_c::m_safeWidthF / mDoGph_gInf_c::m_safeHeightF;
+
+        if (current_ar < target_ar) {
+            trim_height = FB_HEIGHT / 2.0f * (1.0f - current_ar / target_ar);
+        } else {
+            trim_height = 0.0f;
+        }
+    }
+
+    trim_height *= viewport->height / FB_HEIGHT;
+    window->setScissor(0.0f, trim_height, viewport->width, viewport->height - trim_height * 2.0f);
+}
+#endif
+
 static int camera_draw(camera_process_class* i_this) {
     camera_class* a_this = (camera_class*)i_this;
     dCamera_c* body = &i_this->mCamera;
@@ -11315,21 +11335,40 @@ static int camera_draw(camera_process_class* i_this) {
 #endif
 
 #if TARGET_PC
-    auto trim_height = body->TrimHeight();
+    set_ar_corrected_trim(window, body->TrimHeight());
 
-    if (mDoGph_gInf_c::isWideZoom()) {
-        const auto target_ar = FB_WIDTH / (FB_HEIGHT - trim_height * 2.0f);
-        const auto current_ar = mDoGph_gInf_c::m_safeWidthF / mDoGph_gInf_c::m_safeHeightF;
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        dusk::frame_interp::add_interpolation_callback([](bool _, void* pUserWork) {
+            const auto i_this = static_cast<camera_process_class*>(pUserWork);
+            const auto camera = &i_this->mCamera;
 
-        if (current_ar < target_ar) {
-            trim_height = FB_HEIGHT / 2.0f * (1.0f - current_ar / target_ar);
-        } else {
-            trim_height = 0.0f;
-        }
+            const auto trim_size = camera->mTrimSize;
+
+            if (camera->mCurState != 2 && trim_size >= 0 && trim_size <= 3) {
+                // derive trim height at previous tick using current camera state
+                f32 target;
+                switch (trim_size) {
+                    case 0:
+                        target = 0.0f;
+                        break;
+                    case 1:
+                        target = camera->mCamSetup.VistaTrimHeight();
+                        break;
+                    case 2:
+                    case 3:
+                        target = camera->mCamSetup.CinemaScopeTrimHeight();
+                        break;
+                }
+
+                const auto step = dusk::frame_interp::get_interpolation_step();
+                const auto cur = camera->TrimHeight();
+                const auto prev = (4.0f * cur - target) / 3.0f; 
+                const auto trim_height = prev + (cur - prev) * step;
+
+                set_ar_corrected_trim(get_window((camera_class*)i_this), trim_height);
+            }
+        }, i_this);
     }
-
-    trim_height *= viewport->height / FB_HEIGHT;
-    window->setScissor(0.0f, trim_height, viewport->width, viewport->height - trim_height * 2.0f);
 #else
     int trim_height = body->TrimHeight();
 
