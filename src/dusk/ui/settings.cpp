@@ -14,6 +14,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
+#include "menu_bar.hpp"
 
 #include <algorithm>
 
@@ -920,6 +921,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Show Pipeline Compilation",
                 .helpText = "Show an overlay when shaders are being compiled for your hardware.",
+            });
+
+        config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
+            {
+                .key = "Enable Advanced Settings",
+                .helpText = "Show the advanced settings on the menu bar.<br/>Most users should have this disabled.",
+                .onChange = [](bool value) { get_document_stack()[0] = std::make_unique<MenuBar>(); },
             });
     });
 }

@@ -10,7 +10,9 @@
 
 namespace dusk {
     void ImGuiMenuTools::ShowCameraOverlay() {
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F9, m_showCameraOverlay)) {
+        if (!getSettings().backend.enableAdvancedSettings ||
+            !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F9, m_showCameraOverlay))
+        {
             return;
         }
 

@@ -267,7 +267,11 @@ namespace dusk {
         }
 
         if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
-            m_isHidden = !m_isHidden;
+            if (getSettings().backend.enableAdvancedSettings) {
+                m_isHidden = !m_isHidden;
+            } else {
+                m_isHidden = true;
+            }
         }
         bool showMenu = !m_isHidden;
 

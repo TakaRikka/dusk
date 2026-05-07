@@ -9,7 +9,9 @@
 
 namespace dusk {
     void ImGuiMenuTools::ShowMapLoader() {
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F7, m_showMapLoader)) {
+    if (!getSettings().backend.enableAdvancedSettings ||
+        !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F7, m_showMapLoader))
+    {
             return;
         }
 
