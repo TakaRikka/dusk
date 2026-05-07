@@ -507,7 +507,7 @@ void try_push_verification_modal(Document& host) {
                 },
             .onDismiss = dismiss,
             .variant = "danger",
-            .isWarning = true,
+            .icon = "warning",
         }));
         return;
     }
@@ -523,7 +523,7 @@ void try_push_verification_modal(Document& host) {
                 },
             },
         .onDismiss = dismiss,
-        .isError = true,
+        .icon = "error",
     }));
 }
 

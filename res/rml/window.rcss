@@ -287,6 +287,10 @@ icon.celebration {
     decorator: text("&#xea65;" center center);
 }
 
+icon.question-mark {
+    decorator: text("&#xeb8b;" center center);
+}
+
 .achievement-row {
     display: flex;
     align-items: flex-start;
@@ -445,6 +449,11 @@ window.modal.danger .modal-header icon {
     font-size: 20dp;
     color: #FFFFFF;
     font-weight: normal;
+}
+
+.modal-body span.tip {
+    font-size: 14dp;
+    color: #92875B;
 }
 
 .verification-progress {

@@ -13,6 +13,7 @@
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
 #include "imgui.h"
+#include "modal.hpp"
 #include "settings.hpp"
 #include "ui.hpp"
 #include "window.hpp"
@@ -58,13 +59,60 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
     mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
     mTabBar->add_tab("Reset", [this] {
         mTabBar->set_active_tab(-1);
-        if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
-            return;
-        }
-        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-        hide(false);
+        const auto dismiss = [](Modal& modal) { modal.pop(); };
+        push(std::make_unique<Modal>(Modal::Props{
+            .title = "Reset Game",
+            .bodyRml = "Unsaved progress will be lost.<br/>"
+                       "<span class=\"tip\">Tip: You can also reset by holding Start+X+B</span>",
+            .actions =
+                {
+                    ModalAction{
+                        .label = "Cancel",
+                        .onPressed = dismiss,
+                    },
+                    ModalAction{
+                        .label = "Reset",
+                        .onPressed =
+                            [this, dismiss](Modal& modal) {
+                                if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
+                                    dismiss(modal);
+                                    return;
+                                }
+                                JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+                                dismiss(modal);
+                                hide(false);
+                            },
+                    },
+                },
+            .onDismiss = dismiss,
+            .icon = "question-mark",
+        }));
     });
-    mTabBar->add_tab("Quit", [] { IsRunning = false; });
+    mTabBar->add_tab("Quit", [this] {
+        mTabBar->set_active_tab(-1);
+        const auto dismiss = [](Modal& modal) { modal.pop(); };
+        push(std::make_unique<Modal>(Modal::Props{
+            .title = "Quit Dusk",
+            .bodyRml = "Unsaved progress will be lost.",
+            .actions =
+                {
+                    ModalAction{
+                        .label = "Cancel",
+                        .onPressed = dismiss,
+                    },
+                    ModalAction{
+                        .label = "Quit",
+                        .onPressed =
+                            [dismiss](Modal& modal) {
+                                dismiss(modal);
+                                IsRunning = false;
+                            },
+                    },
+                },
+            .onDismiss = dismiss,
+            .icon = "question-mark",
+        }));
+    });
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {

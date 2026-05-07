@@ -14,12 +14,9 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
     title->SetClass("modal-title", true);
     title->SetInnerRML(mProps.title);
 
-    if (mProps.isWarning) {
+    if (!mProps.icon.empty()) {
         auto* icon = append(header, "icon");
-        icon->SetClass("warning", true);
-    } else if (mProps.isError) {
-        auto* icon = append(header, "icon");
-        icon->SetClass("error", true);
+        icon->SetClass(mProps.icon, true);
     }
 
     auto* body = append(mDialog, "div");
