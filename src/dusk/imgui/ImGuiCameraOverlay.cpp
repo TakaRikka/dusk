@@ -63,11 +63,27 @@ namespace dusk {
                 ImGui::SetTooltip("Cannot enable while paused or during an active event.");
             } else {
                 ImGui::SetTooltip("Detach camera and fly freely.\n"
-                                  "Left stick: move, C-stick: look\n"
-                                  "L/R triggers: up/down, Z: fast");
+                                  "WASD/Arrows/Left stick: move, Mouse/C-stick: look\n"
+                                  "Ctrl/L: down, Space/R: up, Shift/Z: fast\n"
+                                "Q Key/Y: roll left, R Key/X: roll right");
             }
         }
         if (eventRunning) {
+            ImGui::EndDisabled();
+        }
+
+        if (!getSettings().game.debugFlyCam) {
+            ImGui::BeginDisabled();
+        }
+        config::ImGuiCheckbox("Lock Events", getSettings().game.debugFlyCamLockEvents);
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+            if (!getSettings().game.debugFlyCam) {
+                ImGui::SetTooltip("Enable Fly Mode first.");
+            } else {
+                ImGui::SetTooltip("Freeze game events while flying.");
+            }
+        }
+        if (!getSettings().game.debugFlyCam) {
             ImGui::EndDisabled();
         }
 
