@@ -50,7 +50,11 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
     // mTabBar->add_tab("Warp", [] {
     //     // TODO
     // });
-    mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
+
+    if (getSettings().backend.enableAdvancedSettings) {
+        mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
+    }
+
     mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
     mTabBar->add_tab("Reset", [this] {
         mTabBar->set_active_tab(-1);

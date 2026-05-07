@@ -14,6 +14,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
+#include "menu_bar.hpp"
 
 #include <algorithm>
 
@@ -871,6 +872,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Enable Advanced Settings",
                 .helpText = "Show the advanced settings on the menu bar.<br/>Most users should have this disabled.",
+                .onChange = [](bool value) { get_document_stack()[0] = std::make_unique<MenuBar>(); },
             });
     });
 }
