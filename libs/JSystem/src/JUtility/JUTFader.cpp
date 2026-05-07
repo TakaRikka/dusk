@@ -8,6 +8,10 @@
 #include "JSystem/JUtility/JUTFader.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 
+#ifdef TARGET_PC
+#include <algorithm>
+#endif
+
 JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor)
     : mColor(pColor), mBox(x, y, x + width, y + height) {
     mStatus = None;
@@ -63,14 +67,24 @@ void JUTFader::advance() {
 
 void JUTFader::control() {
     advance();
-#ifndef TARGET_PC
-    // FRAME INTERP NOTE: Draw is called by JFWDisplay when interpolation is active
     draw();
-#endif
 }
 
 void JUTFader::draw() {
     if (mColor.a != 0) {
+#ifdef TARGET_PC
+        if (dusk::frame_interp::is_enabled() && mDuration != 0) {
+            const auto step = dusk::frame_interp::get_interpolation_step();
+            const auto progress = static_cast<f32>(mTimer) / static_cast<f32>(mDuration);
+            const auto timer = mTimer - 1 + step + progress;
+            auto alpha = timer / mDuration;
+            if (mStatus == FadeIn) {
+                alpha = 1.0f - alpha;
+            }
+            alpha = std::clamp(alpha, 0.0f, 1.0f);
+            mColor.a = static_cast<u8>(alpha * 255.0f);
+        }
+#endif
         J2DOrthoGraph orthograph;
         orthograph.setColor(mColor);
         orthograph.fillBox(mBox);

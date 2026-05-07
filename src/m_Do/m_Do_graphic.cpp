@@ -502,6 +502,14 @@ void mDoGph_gInf_c::calcFade() {
     }
 
     if (mFadeColor.a != 0) {
+#ifdef TARGET_PC
+        if (dusk::frame_interp::is_enabled() && mFade != 0) {
+            const auto step = dusk::frame_interp::get_interpolation_step();
+            const auto progress = mFadeSpeed < 0.0f ? 1.0f - mFadeRate : mFadeRate;
+            const auto fade_amt = mFadeRate + mFadeSpeed * (step - 1.0f + progress);
+            mFadeColor.a = 255.0f * std::clamp(fade_amt, 0.0f, 1.0f);
+        }
+#endif
         darwFilter(mFadeColor);
     }
 }
