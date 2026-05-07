@@ -610,9 +610,6 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
             }
 
             IsGameLaunched = true;
-            if (!getSettings().backend.wasPresetChosen) {
-                push_document(std::make_unique<dusk::ui::PresetWindow>());
-            }
             hide(true);
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
@@ -718,9 +715,6 @@ void Prelaunch::update() {
         activeDiscLoaded && state.configuredDiscPath != state.activeDiscPath;
     mDocument->SetClass("disc-ready", IsGameLaunched);
     if (canLaunchConfiguredDisc) {
-        if (getSettings().backend.skipPreLaunchUI) {
-            hide(true);
-        }
         IsGameLaunched = true;
     }
 

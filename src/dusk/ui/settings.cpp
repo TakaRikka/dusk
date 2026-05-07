@@ -853,7 +853,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
                 .key = "Skip Dusk Main Menu",
-                .helpText = "When starting Dusk, skips the main menu and boots straight into the "
+                .helpText = "When starting Dusk, skip the main menu and boot straight into the "
                             "game if a disc image is available.",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
