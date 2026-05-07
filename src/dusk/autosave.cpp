@@ -1,4 +1,5 @@
 #include "dusk/autosave.h"
+#include "dusk/ui/ui.hpp"
 #include "imgui/ImGuiConsole.hpp"
 
 u8 mSaveBuffer[QUEST_LOG_SIZE * 3];
@@ -83,6 +84,9 @@ void waitingForWrite() {
 }
 
 void endAutoSave() {
-    dusk::g_imguiConsole.AddToast("Saving...", 2.0f);
+    dusk::ui::push_toast({
+        .type = "autosave",
+        .duration = std::chrono::milliseconds(1500),
+    });
     mAutoSaveProc = 0;
 }

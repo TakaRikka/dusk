@@ -219,7 +219,7 @@ void ImGuiEngine_AddTextures() {
         ImGuiEngine::orgIcon = AddTexture("org-icon.png");
     }
     if (ImGuiEngine::duskLogo == 0) {
-        ImGuiEngine::duskLogo = AddTexture("logo.png");
+        ImGuiEngine::duskLogo = AddTexture("logo-mascot.png");
     }
 }
 }  // namespace dusk

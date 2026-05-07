@@ -1595,7 +1595,7 @@ void dMap_c::_move(f32 i_centerX, f32 i_centerZ, int i_roomNo, f32 param_3) {
         calcMapCmPerTexel(field_0x80, &field_0x58);
         getPack(field_0x80, &mPackX, &mPackZ);
 
-        mCenterX += mPackX;
+        mCenterX += IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -mPackX :) mPackX;
         mCenterZ -= mPackZ;
         mCenterX += field_0x64;
         mCenterZ += mPackPlusZ;
@@ -1657,7 +1657,7 @@ void dMap_c::_move(f32 i_centerX, f32 i_centerZ, int i_roomNo, f32 param_3) {
             calcMapCmPerTexel(field_0x80, &field_0x58);
             getPack(field_0x80, &mPackX, &mPackZ);
 
-            mCenterX += mPackX;
+            mCenterX += IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -mPackX :) mPackX;
             mCenterZ -= mPackZ;
         }
         break;
@@ -1737,7 +1737,7 @@ void dMap_c::_move(f32 i_centerX, f32 i_centerZ, int i_roomNo, f32 param_3) {
                 calcMapCmPerTexel(field_0x80, &field_0x58);
                 getPack(field_0x80, &mPackX, &mPackZ);
 
-                mCenterX += mPackX;
+                mCenterX += IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -mPackX :) mPackX;
                 mCenterZ -= mPackZ;
                 field_0x8f = 4;
 #if DEBUG
@@ -1829,7 +1829,7 @@ void dMap_c::_move(f32 i_centerX, f32 i_centerZ, int i_roomNo, f32 param_3) {
 
             sp14 += temp_f31_2 * (spC - sp14);
             sp10 += temp_f31_2 * (sp8 - sp10);
-            mCenterX += sp14;
+            mCenterX += IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -sp14 :) sp14;
             mCenterZ -= sp10;
             break;
         }

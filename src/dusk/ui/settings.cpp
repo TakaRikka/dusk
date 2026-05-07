@@ -8,16 +8,142 @@
 #include "dusk/config.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/livesplit.h"
+#include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "number_button.hpp"
-#include "overlay.hpp"
 #include "pane.hpp"
+#include "prelaunch.hpp"
 #include "ui.hpp"
 
 #include <algorithm>
 
+#include "modal.hpp"
+
 namespace dusk::ui {
 namespace {
+
+constexpr std::array kLanguageNames = {
+    "English",
+    "German",
+    "French",
+    "Spanish",
+    "Italian",
+};
+
+constexpr std::array kCardFileTypes = {
+    "Card Image",
+    "GCI Folder",
+};
+
+bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
+    if (backend == "auto") {
+        outBackend = BACKEND_AUTO;
+        return true;
+    }
+    if (backend == "d3d11") {
+        outBackend = BACKEND_D3D11;
+        return true;
+    }
+    if (backend == "d3d12") {
+        outBackend = BACKEND_D3D12;
+        return true;
+    }
+    if (backend == "metal") {
+        outBackend = BACKEND_METAL;
+        return true;
+    }
+    if (backend == "vulkan") {
+        outBackend = BACKEND_VULKAN;
+        return true;
+    }
+    if (backend == "opengl") {
+        outBackend = BACKEND_OPENGL;
+        return true;
+    }
+    if (backend == "opengles") {
+        outBackend = BACKEND_OPENGLES;
+        return true;
+    }
+    if (backend == "webgpu") {
+        outBackend = BACKEND_WEBGPU;
+        return true;
+    }
+    if (backend == "null") {
+        outBackend = BACKEND_NULL;
+        return true;
+    }
+
+    return false;
+}
+
+std::string_view backend_name(AuroraBackend backend) {
+    switch (backend) {
+    default:
+        return "Auto";
+    case BACKEND_D3D12:
+        return "D3D12";
+    case BACKEND_D3D11:
+        return "D3D11";
+    case BACKEND_METAL:
+        return "Metal";
+    case BACKEND_VULKAN:
+        return "Vulkan";
+    case BACKEND_OPENGL:
+        return "OpenGL";
+    case BACKEND_OPENGLES:
+        return "OpenGL ES";
+    case BACKEND_WEBGPU:
+        return "WebGPU";
+    case BACKEND_NULL:
+        return "Null";
+    }
+}
+
+std::string_view backend_id(AuroraBackend backend) {
+    switch (backend) {
+    default:
+        return "auto";
+    case BACKEND_D3D12:
+        return "d3d12";
+    case BACKEND_D3D11:
+        return "d3d11";
+    case BACKEND_METAL:
+        return "metal";
+    case BACKEND_VULKAN:
+        return "vulkan";
+    case BACKEND_OPENGL:
+        return "opengl";
+    case BACKEND_OPENGLES:
+        return "opengles";
+    case BACKEND_WEBGPU:
+        return "webgpu";
+    case BACKEND_NULL:
+        return "null";
+    }
+}
+
+std::vector<AuroraBackend> available_backends() {
+    std::vector<AuroraBackend> backends;
+    backends.emplace_back(BACKEND_AUTO);
+    size_t backendCount = 0;
+    const AuroraBackend* raw = aurora_get_available_backends(&backendCount);
+    for (size_t i = 0; i < backendCount; ++i) {
+        // Do not expose NULL or D3D11
+        if (raw[i] != BACKEND_NULL && raw[i] != BACKEND_D3D11) {
+            backends.emplace_back(raw[i]);
+        }
+    }
+    return backends;
+}
+
+AuroraBackend configured_backend() {
+    AuroraBackend configuredBackend = BACKEND_AUTO;
+    const auto configuredId = getSettings().backend.graphicsBackend.getValue();
+    if (!try_parse_backend(configuredId, configuredBackend)) {
+        configuredBackend = BACKEND_AUTO;
+    }
+    return configuredBackend;
+}
 
 void reset_for_speedrun_mode() {
     mDoMain::developmentMode = -1;
@@ -130,8 +256,8 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
 }
 
 template <typename T>
-void overlay_control(
-    Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var, const OverlayProps& props) {
+void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var,
+    const GraphicsTunerProps& props) {
     leftPane.register_control(
         leftPane
             .add_select_button({
@@ -152,7 +278,7 @@ void overlay_control(
             .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    window.push(std::make_unique<Overlay>(props));
+                    window.push(std::make_unique<GraphicsTuner>(props));
                     return true;
                 }
                 return false;
@@ -165,30 +291,165 @@ void overlay_control(
 
 }  // namespace
 
-SettingsWindow::SettingsWindow() {
+SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
+    if (prelaunch) {
+        mSuppressNavFallback = true;
+        add_tab("Prelaunch", [this](Rml::Element* content) {
+            auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+            auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+            leftPane.register_control(
+                leftPane
+                    .add_select_button({
+                        .key = "Disc Image",
+                        .getValue =
+                            [] {
+                                const auto& path = prelaunch_state().selectedDiscPath;
+                                std::string display;
+                                if (path.empty()) {
+                                    display = "(none)";
+                                } else {
+                                    display = std::filesystem::path(path).filename().string();
+                                    if (display.empty()) {
+                                        display = path;
+                                    }
+                                }
+                                return display;
+                            },
+                        .isModified =
+                            [] {
+                                const auto& state = prelaunch_state();
+                                const auto& initial = state.initialDiscPath;
+                                return !initial.empty() && state.selectedDiscPath != initial;
+                            },
+                    })
+                    .on_pressed([] { open_iso_picker(); }),
+                rightPane, [](Pane& pane) {
+                    pane.add_rml("Set the disc image that Dusk uses to launch the game.<br/><br/>"
+                                 "Changes require a restart.");
+                });
+            leftPane.register_control(
+                leftPane.add_select_button({
+                    .key = "Language",
+                    .getValue =
+                        [] {
+                            const auto& state = prelaunch_state();
+                            if (!state.selectedDiscIsValid || !state.selectedDiscIsPal) {
+                                return kLanguageNames[0];
+                            }
+                            const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
+                            return kLanguageNames[idx];
+                        },
+                    .isDisabled =
+                        [] {
+                            const auto& state = prelaunch_state();
+                            return !state.selectedDiscIsValid || !state.selectedDiscIsPal;
+                        },
+                    .isModified =
+                        [] {
+                            return getSettings().game.language.getValue() !=
+                                   prelaunch_state().initialLanguage;
+                        },
+                }),
+                rightPane, [](Pane& pane) {
+                    for (int i = 0; i < kLanguageNames.size(); i++) {
+                        pane.add_button({
+                                            .text = kLanguageNames[i],
+                                            .isSelected =
+                                                [i] {
+                                                    return getSettings().game.language.getValue() ==
+                                                           static_cast<GameLanguage>(i);
+                                                },
+                                        })
+                            .on_pressed([i] {
+                                mDoAud_seStartMenu(kSoundItemChange);
+                                getSettings().game.language.setValue(static_cast<GameLanguage>(i));
+                                config::Save();
+                            });
+                    }
+                    pane.add_rml("<br/>Changes require a restart.");
+                });
+            leftPane.register_control(
+                leftPane.add_select_button({
+                    .key = "Graphics Backend",
+                    .getValue = [] { return Rml::String{backend_name(configured_backend())}; },
+                    .isModified =
+                        [] {
+                            return getSettings().backend.graphicsBackend.getValue() !=
+                                   prelaunch_state().initialGraphicsBackend;
+                        },
+                }),
+                rightPane, [](Pane& pane) {
+                    const auto availableBackends = available_backends();
+                    for (const auto backend : availableBackends) {
+                        pane
+                            .add_button({
+                                .text = Rml::String{backend_name(backend)},
+                                .isSelected = [backend] { return configured_backend() == backend; },
+                            })
+                            .on_pressed([backend] {
+                                mDoAud_seStartMenu(kSoundItemChange);
+                                getSettings().backend.graphicsBackend.setValue(
+                                    std::string{backend_id(backend)});
+                                config::Save();
+                            });
+                    }
+                    pane.add_rml("<br/>Changes require a restart.");
+                });
+            leftPane.register_control(
+                leftPane.add_select_button({
+                    .key = "Save File Type",
+                    .getValue =
+                        [] {
+                            return kCardFileTypes[getSettings().backend.cardFileType.getValue()];
+                        },
+                    .isModified =
+                        [] {
+                            return getSettings().backend.cardFileType.getValue() !=
+                                   prelaunch_state().initialCardFileType;
+                        },
+                }),
+                rightPane, [](Pane& pane) {
+                    for (int i = 0; i < kCardFileTypes.size(); i++) {
+                        pane
+                            .add_button({
+                                .text = kCardFileTypes[i],
+                                .isSelected =
+                                    [i] {
+                                        return getSettings().backend.cardFileType.getValue() == i;
+                                    },
+                            })
+                            .on_pressed([i] {
+                                mDoAud_seStartMenu(kSoundItemChange);
+                                getSettings().backend.cardFileType.setValue(i);
+                                config::Save();
+                            });
+                    }
+                });
+        });
+    }
+
     add_tab("Graphics", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Display");
 
-        leftPane.register_control(
-            leftPane.add_button("Toggle Fullscreen").on_pressed([] {
-                getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
-                VISetWindowFullscreen(getSettings().video.enableFullscreen);
-                config::Save();
-            }),
-            rightPane, [](Pane& pane) { pane.clear(); }
-        );
-        leftPane.register_control(
-            leftPane.add_button("Restore Default Window Size").on_pressed([] {
-                getSettings().video.enableFullscreen.setValue(false);
-                VISetWindowFullscreen(false);
-                VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
-                VICenterWindow();
-            }),
-            rightPane, [](Pane& pane) { pane.clear(); }
-        );
+        leftPane.register_control(leftPane.add_button("Toggle Fullscreen").on_pressed([] {
+            mDoAud_seStartMenu(kSoundItemChange);
+            getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+            config::Save();
+        }),
+            rightPane, [](Pane& pane) { pane.clear(); });
+        leftPane.register_control(leftPane.add_button("Restore Default Window Size").on_pressed([] {
+            mDoAud_seStartMenu(kSoundItemChange);
+            getSettings().video.enableFullscreen.setValue(false);
+            VISetWindowFullscreen(false);
+            VISetWindowSize(FB_WIDTH * 2, FB_HEIGHT * 2);
+            VICenterWindow();
+        }),
+            rightPane, [](Pane& pane) { pane.clear(); });
         config_bool_select(leftPane, rightPane, getSettings().video.enableVsync,
             {
                 .key = "Enable VSync",
@@ -212,8 +473,9 @@ SettingsWindow::SettingsWindow() {
             });
 
         leftPane.add_section("Resolution");
-        overlay_control(*this, leftPane, rightPane, getSettings().game.internalResolutionScale,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane,
+            getSettings().game.internalResolutionScale,
+            GraphicsTunerProps{
                 .option = GraphicsOption::InternalResolution,
                 .title = "Internal Resolution",
                 .helpText = kInternalResolutionHelpText,
@@ -221,8 +483,9 @@ SettingsWindow::SettingsWindow() {
                 .valueMax = 12,
                 .defaultValue = 0,
             });
-        overlay_control(*this, leftPane, rightPane, getSettings().game.shadowResolutionMultiplier,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane,
+            getSettings().game.shadowResolutionMultiplier,
+            GraphicsTunerProps{
                 .option = GraphicsOption::ShadowResolution,
                 .title = "Shadow Resolution",
                 .helpText = kShadowResolutionHelpText,
@@ -232,8 +495,8 @@ SettingsWindow::SettingsWindow() {
             });
 
         leftPane.add_section("Post-Processing");
-        overlay_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
+            GraphicsTunerProps{
                 .option = GraphicsOption::BloomMode,
                 .title = "Bloom",
                 .helpText = kBloomHelpText,
@@ -241,8 +504,8 @@ SettingsWindow::SettingsWindow() {
                 .valueMax = static_cast<int>(BloomMode::Dusk),
                 .defaultValue = static_cast<int>(BloomMode::Classic),
             });
-        overlay_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
-            OverlayProps{
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
+            GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
                 .title = "Bloom Brightness",
                 .helpText = kBloomBrightnessHelpText,
@@ -597,17 +860,39 @@ SettingsWindow::SettingsWindow() {
                 .key = "Skip TV Settings Screen",
                 .helpText = "Skips the TV calibration screen shown when loading a save.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.skipWarningScreen,
-            {
-                .key = "Skip Warning Screen",
-                .helpText = "Skips the warning screen shown when starting the game.",
-            });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
             {
                 .key = "Show Pipeline Compilation",
                 .helpText = "Show an overlay when shaders are being compiled for your hardware.",
             });
     });
+}
+
+void SettingsWindow::update() {
+    // Show disc validation error message if present
+    if (mPrelaunch && top_document() == this) {
+        auto& state = prelaunch_state();
+        if (!state.errorString.empty()) {
+            auto dismissInvalidDisc = [](Modal& modal) {
+                prelaunch_state().errorString.clear();
+                modal.pop();
+            };
+            push_document(std::make_unique<Modal>(Modal::Props{
+                .title = "Invalid disc image",
+                .bodyRml = state.errorString,
+                .actions =
+                    {
+                        ModalAction{
+                            .label = "OK",
+                            .onPressed = dismissInvalidDisc,
+                        },
+                    },
+                .onDismiss = dismissInvalidDisc,
+            }));
+        }
+    }
+
+    Window::update();
 }
 
 }  // namespace dusk::ui

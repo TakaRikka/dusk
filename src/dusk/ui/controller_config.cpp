@@ -391,10 +391,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         pane.add_button(
                 {
                     .text = "None",
-                    .isSelected =
-                        [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
-                })
+                .isSelected =
+                    [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
+            })
             .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
@@ -406,6 +407,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             .isSelected = [port] { return keyboard_active(port); },
                         })
             .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
@@ -426,6 +428,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             [port, i] { return PADGetIndexForPort(port) == static_cast<s32>(i); },
                     })
                 .on_pressed([this, port, i] {
+                    mDoAud_seStartMenu(kSoundItemChange);
                     cancel_pending_binding();
                     PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                     PADSetPortForIndex(i, port);

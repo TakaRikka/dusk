@@ -343,6 +343,11 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                     }
 
                     f32 pos_x = icon_pos_x + i_posX;
+                    #if TARGET_PC
+                    if (dusk::getSettings().game.enableMirrorMode) {
+                        pos_x = getMirrorCenterPosX(pos_x, 0.0f);
+                    }
+                    #endif
                     mpDrawCursor->setPos(pos_x, icon_pos_y + i_posY);
                     mpDrawCursor->setScale(mIconInfo[info_idx].scale * g_fmapHIO.mMapIconHIO.mPortalCursorScale);
                     mpDrawCursor->draw();
@@ -364,6 +369,12 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                     }
 
                     f32 pos_x = (icon_pos_x + i_posX);
+                    #if TARGET_PC
+                    if (dusk::getSettings().game.enableMirrorMode) {
+                        pos_x = getMirrorCenterPosX(pos_x, 0.0f);
+                    }
+                    #endif
+
                     mpPortalIcon->setPos(pos_x, icon_pos_y + i_posY);
                     mpPortalIcon->setScale(mIconInfo[info_idx].scale * g_fmapHIO.mMapIconHIO.mPortalIconScale);
                     mpPortalIcon->draw();
@@ -399,6 +410,12 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                 }
 
                 f32 pos_x = i_posX + (icon_pos_x - (icon_size_x / 2));
+                #if TARGET_PC
+                if (dusk::getSettings().game.enableMirrorMode) {
+                    pos_x = getMirrorCenterPosX(i_posX + (icon_pos_x - (icon_size_x / 2)), icon_size_x / 2);
+                }
+                #endif
+
                 mPictures[mIconInfo[info_idx].icon_no]->draw(pos_x, (i_posY + (icon_pos_y - icon_size_y / 2)),
                                                              icon_size_x, icon_size_y, false, false, false);
 

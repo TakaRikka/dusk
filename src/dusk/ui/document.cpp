@@ -44,15 +44,8 @@ Document::Document(const Rml::String& source) : mDocument(load_document(source))
         if (cmd == NavCommand::None) {
             return;
         }
-        auto* prevFocused = mDocument->GetFocusLeafNode();
         if (handle_nav_command(event, cmd)) {
             event.StopPropagation();
-            return;
-        }
-        if ((cmd == NavCommand::Up || cmd == NavCommand::Down) &&
-            mDocument->GetFocusLeafNode() != prevFocused)
-        {
-            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
         }
     });
 }
@@ -113,7 +106,7 @@ bool Document::visible() const {
 
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Menu) {
-        mDoAud_seStartMenu(visible() ? Z2SE_SY_MENU_OUT : Z2SE_SY_MENU_IN);
+        mDoAud_seStartMenu(visible() ? kSoundMenuClose : kSoundMenuOpen);
         toggle();
         return true;
     }

@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <array>
 
-namespace dusk::ui {
+namespace dusk::ui::input {
 namespace {
 
 constexpr double kGamepadRepeatInitialDelay = 0.32;
