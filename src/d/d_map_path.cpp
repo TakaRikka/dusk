@@ -16,6 +16,7 @@
 
 #ifdef TARGET_PC
 #include <span>
+#include <numbers>
 
 constexpr u16 kMapResolutionMultiplier = 4;
 constexpr u16 kMapImageSide = 16 * kMapResolutionMultiplier;
