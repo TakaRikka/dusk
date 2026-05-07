@@ -2,8 +2,11 @@
 
 namespace dusk::ui {
 
-Modal::Modal(Props props)
-    : WindowSmall("modal", "modal-dialog"), mProps(std::move(props)) {
+Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::move(props)) {
+    if (!mProps.variant.empty()) {
+        mRoot->SetClass(mProps.variant, true);
+    }
+
     auto* header = append(mDialog, "div");
     header->SetClass("modal-header", true);
 
@@ -14,7 +17,7 @@ Modal::Modal(Props props)
     if (mProps.isWarning) {
         auto* icon = append(header, "icon");
         icon->SetClass("warning", true);
-    } else if ( mProps.isError ) {
+    } else if (mProps.isError) {
         auto* icon = append(header, "icon");
         icon->SetClass("error", true);
     }

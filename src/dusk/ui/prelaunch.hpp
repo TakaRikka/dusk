@@ -48,7 +48,7 @@ struct PrelaunchState {
     int initialCardFileType = 0;
     std::string errorString;
     std::string pendingDiscPath;
-    std::string userAcceptedDiscPath;
+    iso::ValidationError pendingDiscValidation = iso::ValidationError::Unknown;
 };
 
 PrelaunchState& prelaunch_state() noexcept;

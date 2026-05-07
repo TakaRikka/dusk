@@ -224,6 +224,10 @@ body.mirrored version-info {
     color: #FFD6A7;
 }
 
+#disc-status[status=unknown] {
+    color: rgba(224, 219, 200, 65%);
+}
+
 #disc-status icon {
     display: none;
     width: 24dp;
@@ -251,6 +255,10 @@ body.mirrored version-info {
 
 #disc-status[status=mismatch] icon {
     decorator: text("&#xe002;" center center);
+}
+
+#disc-status[status=unknown] icon {
+    decorator: text("&#xe887;" center center);
 }
 
 #disc-version {

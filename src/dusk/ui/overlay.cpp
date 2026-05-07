@@ -189,7 +189,8 @@ void Overlay::update() {
 
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
                                        PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&
-                                       dynamic_cast<Window*>(top_document()) == nullptr;
+                                       dynamic_cast<Window*>(top_document()) == nullptr &&
+                                       dynamic_cast<WindowSmall*>(top_document()) == nullptr;
     if (showControllerWarning && mControllerWarning == nullptr) {
         mControllerWarning = create_controller_warning(mDocument);
     } else if (showControllerWarning && mControllerWarning != nullptr) {

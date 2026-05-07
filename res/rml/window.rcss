@@ -279,6 +279,10 @@ icon.error {
     decorator: text("&#xe000;" center center);
 }
 
+icon.verifying {
+    decorator: text("&#xe8b5;" center center);
+}
+
 icon.celebration {
     decorator: text("&#xea65;" center center);
 }
@@ -399,6 +403,10 @@ button.achievement-clear {
     text-align: left;
 }
 
+window.modal.danger {
+    border: 2dp #852221;
+}
+
 .modal-header {
     display: flex;
     flex-direction: row;
@@ -424,6 +432,11 @@ button.achievement-clear {
     flex: 1 1 auto;
 }
 
+window.modal.danger .modal-title,
+window.modal.danger .modal-header icon {
+    color: #B3261E;
+}
+
 .modal-body {
     display: block;
     width: 100%;
@@ -432,6 +445,30 @@ button.achievement-clear {
     font-size: 20dp;
     color: #FFFFFF;
     font-weight: normal;
+}
+
+.verification-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 10dp;
+    width: 100%;
+}
+
+.verification-file {
+    display: block;
+    font-size: 17dp;
+    color: #FFFFFF;
+}
+
+progressbar.verification-progress-bar {
+    height: 8dp;
+    margin: 2dp 0 0 0;
+}
+
+.verification-detail {
+    display: block;
+    font-size: 14dp;
+    color: rgba(224, 219, 200, 65%);
 }
 
 .modal-actions {

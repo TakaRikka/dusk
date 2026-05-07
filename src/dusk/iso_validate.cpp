@@ -1,8 +1,13 @@
 #include "iso_validate.hpp"
 
-#include <nod.h>
 #include <SDL3/SDL_iostream.h>
+#include <nod.h>
+#include <xxhash.h>
+
+#include <array>
+#include <memory>
 #include <stdexcept>
+#include <string_view>
 
 namespace {
 
@@ -62,8 +67,8 @@ struct KnownDisc {
 
     constexpr KnownDisc(std::string_view id, Platform platform, Region region)
         : id(id), platform(platform), region(region) {}
-    constexpr KnownDisc(std::string_view id, Platform platform, Region region,
-                        const std::string_view hash)
+    constexpr KnownDisc(
+        std::string_view id, Platform platform, Region region, const std::string_view hash)
         : id(id), platform(platform), region(region), supported(true), hash(parse_xxh128(hash)) {}
 };
 
@@ -144,22 +149,30 @@ void StreamClose(void* user_data) {
 }
 
 ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
-    const auto hashState = XXH3_createState();
-    XXH3_128bits_reset(hashState);
+    std::unique_ptr<XXH3_state_t, decltype(&XXH3_freeState)> hashState(
+        XXH3_createState(), XXH3_freeState);
+    if (!hashState) {
+        return ValidationError::Unknown;
+    }
+    XXH3_128bits_reset(hashState.get());
 
     while (true) {
+        if (status.shouldCancel.load(std::memory_order_relaxed)) {
+            return ValidationError::Canceled;
+        }
+
         size_t bytesAvail;
         const auto buf = nod_buf_read(disc, &bytesAvail);
         if (!bytesAvail)
             break;
 
-        XXH3_128bits_update(hashState, buf, bytesAvail);
+        XXH3_128bits_update(hashState.get(), buf, bytesAvail);
 
-        status.bytesRead += bytesAvail;
+        status.bytesRead.fetch_add(bytesAvail, std::memory_order_relaxed);
         nod_buf_consume(disc, bytesAvail);
     }
 
-    const auto hash = XXH3_128bits_digest(hashState);
+    const auto hash = XXH3_128bits_digest(hashState.get());
     if (!XXH128_isEqual(hash, status.knownDisc->hash)) {
         return ValidationError::HashMismatch;
     }
@@ -175,7 +188,7 @@ ValidationError validate(const char* path, VerificationStatus& status) {
         return ValidationError::IOError;
     }
 
-    const NodDiscStream nod_stream {
+    const NodDiscStream nod_stream{
         .user_data = sdlStream,
         .read_at = StreamReadAt,
         .stream_len = StreamLength,
@@ -187,7 +200,7 @@ ValidationError validate(const char* path, VerificationStatus& status) {
         return convertNodError(result);
     }
 
-    status.bytesTotal = nod_disc_size(disc.handle);
+    status.bytesTotal.store(nod_disc_size(disc.handle), std::memory_order_relaxed);
 
     NodDiscHeader header{};
     result = nod_disc_header(disc.handle, &header);
@@ -215,12 +228,12 @@ ValidationError validate(const char* path) {
     return validate(path, status);
 }
 
-bool isPal(const char* path) {
+ValidationError inspect(const char* path, DiscInfo& info) {
     NodHandleWrapper disc;
 
     const auto sdlStream = SDL_IOFromFile(path, "rb");
     if (sdlStream == nullptr) {
-        return false;
+        return ValidationError::IOError;
     }
 
     const NodDiscStream nod_stream{
@@ -230,19 +243,30 @@ bool isPal(const char* path) {
         .close = StreamClose,
     };
 
-    if (nod_disc_open_stream(&nod_stream, nullptr, &disc.handle) != NOD_RESULT_OK ||
-        disc.handle == nullptr)
-    {
-        return false;
+    auto result = nod_disc_open_stream(&nod_stream, nullptr, &disc.handle);
+    if (disc.handle == nullptr || result != NOD_RESULT_OK) {
+        return convertNodError(result);
     }
 
     NodDiscHeader header{};
-    if (nod_disc_header(disc.handle, &header) != NOD_RESULT_OK) {
-        return false;
+    result = nod_disc_header(disc.handle, &header);
+    if (result != NOD_RESULT_OK) {
+        return convertNodError(result);
     }
 
     const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
+    if (!knownDisc) {
+        return ValidationError::WrongGame;
+    }
+    info.isPal = knownDisc->region == Region::Europe;
+    if (!knownDisc->supported) {
+        return ValidationError::WrongVersion;
+    }
+    return ValidationError::Success;
+}
 
-    return knownDisc && knownDisc->region == Region::Europe;
+bool isPal(const char* path) {
+    DiscInfo info{};
+    return inspect(path, info) == ValidationError::Success && info.isPal;
 }
 }  // namespace dusk::iso
