@@ -8,6 +8,8 @@ UserSettings g_userSettings = {
         .enableFullscreen {"video.enableFullscreen", false},
         .enableVsync {"video.enableVsync", true},
         .lockAspectRatio {"video.lockAspectRatio", false},
+        .enableFpsOverlay {"game.enableFpsOverlay", false},
+        .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
     },
 
     .audio = {
@@ -128,6 +130,8 @@ void registerSettings() {
     Register(g_userSettings.video.enableFullscreen);
     Register(g_userSettings.video.enableVsync);
     Register(g_userSettings.video.lockAspectRatio);
+    Register(g_userSettings.video.enableFpsOverlay);
+    Register(g_userSettings.video.fpsOverlayCorner);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);

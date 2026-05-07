@@ -6,6 +6,7 @@
 #include "window.hpp"
 
 #include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_timer.h>
 #include <algorithm>
 #include <dolphin/pad.h>
 
@@ -19,6 +20,7 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/overlay.rcss" />
 </head>
 <body>
+    <fps id="fps" />
 </body>
 </rml>
 )RML";
@@ -30,6 +32,8 @@ constexpr std::array<std::pair<const char*, const char*>, 3> kAutoSaveLayers{{
 }};
 
 constexpr auto kMenuNotificationDuration = std::chrono::milliseconds(2500);
+
+constexpr std::array<const char*, 4> kFpsCorners = { "tl", "tr", "bl", "br" };
 
 Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
     if (toast.type == "autosave") {
@@ -153,7 +157,46 @@ void remove_element(Rml::Element*& elem) noexcept {
 
 }  // namespace
 
+// https://vplesko.com/posts/how_to_implement_an_fps_counter.html
+void Overlay::advance_fps_counter(float& outFps, Uint64 perfFreq) {
+    if (perfFreq == 0) {
+        outFps = 0.f;
+        return;
+    }
+
+    const Uint64 curr = SDL_GetPerformanceCounter();
+    if (!mFpsHavePrevCounter) {
+        mFpsPrevCounter = curr;
+        mFpsHavePrevCounter = true;
+        outFps = 0.f;
+        return;
+    }
+
+    const Uint64 processingTicks = curr - mFpsPrevCounter;
+    mFpsPrevCounter = curr;
+
+    mFpsFrameEvents.push_back({curr, processingTicks});
+    mFpsSumTicks += processingTicks;
+
+    while (!mFpsFrameEvents.empty() && mFpsFrameEvents.front().endCounter + perfFreq < curr) {
+        mFpsSumTicks -= mFpsFrameEvents.front().processingTicks;
+        mFpsFrameEvents.pop_front();
+    }
+
+    const auto n = mFpsFrameEvents.size();
+    if (n == 0 || mFpsSumTicks == 0) {
+        outFps = 0.f;
+        return;
+    }
+
+    const double avgSeconds =
+        static_cast<double>(mFpsSumTicks) / static_cast<double>(n) / static_cast<double>(perfFreq);
+    outFps = static_cast<float>(1.0 / avgSeconds);
+}
+
 Overlay::Overlay() : Document(kDocumentSource) {
+    mFpsCounter = mDocument->GetElementById("fps");
+
     listen(mDocument, Rml::EventId::Focus, [](Rml::Event&) { Log.warn("Overlay received focus"); });
     listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mCurrentToast) {
@@ -185,6 +228,33 @@ void Overlay::update() {
     Document::update();
     if (mDocument == nullptr) {
         return;
+    }
+
+    if (mFpsCounter != nullptr) {
+        if (getSettings().video.enableFpsOverlay.getValue()) {
+            const int idx = getSettings().video.fpsOverlayCorner.getValue();
+            mFpsCounter->SetAttribute("open", "");
+            mFpsCounter->SetAttribute("corner", kFpsCorners[idx]);
+
+            const Uint64 perfFreq = SDL_GetPerformanceFrequency();
+            float fps = 0.f;
+            advance_fps_counter(fps, perfFreq);
+
+            const Uint64 now = SDL_GetPerformanceCounter();
+            // Limit updates to twice per second
+            const bool refreshLabel = perfFreq == 0 || mFpsLastUpdate == 0 ||
+                static_cast<double>(now - mFpsLastUpdate) >= 0.5 * static_cast<double>(perfFreq);
+            if (refreshLabel) {
+                mFpsLastUpdate = now;
+                mFpsCounter->SetInnerRML(escape(fmt::format("{:.0f} FPS", fps)));
+            }
+        } else {
+            mFpsCounter->RemoveAttribute("open");
+            mFpsFrameEvents.clear();
+            mFpsSumTicks = 0;
+            mFpsHavePrevCounter = false;
+            mFpsLastUpdate = 0;
+        }
     }
 
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
