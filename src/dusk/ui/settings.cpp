@@ -779,12 +779,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     },
                 .isDisabled = [] { return !getSettings().game.speedrunMode; },
             });
-
-        leftPane.add_section("Recording");
-
-        addOption("Recording Mode", getSettings().game.recordingMode,
-            "Disables the HUD of the game.<br/>Useful for recording or a more immersive "
-            "experience.");
     });
 
     add_tab("Cheats", [this](Rml::Element* content) {
@@ -836,6 +830,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
+        leftPane.add_section("User Interface");
+
         config_bool_select(leftPane, rightPane, getSettings().game.enableAchievementNotifications,
             {
                 .key = "Achievement Notifications",
@@ -859,15 +855,23 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "When starting Dusk, skip the main menu and boot straight into the "
                             "game if a disc image is available.",
             });
+        config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
+            {
+                .key = "Show Pipeline Compilation",
+                .helpText = "Show an overlay when shaders are being compiled for your hardware.",
+            });
+
+        leftPane.add_section("Game");
+
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",
                 .helpText = "Skips the TV calibration screen shown when loading a save.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
+        config_bool_select(leftPane, rightPane, getSettings().game.recordingMode,
             {
-                .key = "Show Pipeline Compilation",
-                .helpText = "Show an overlay when shaders are being compiled for your hardware.",
+                .key = "Recording Mode",
+                .helpText = "Disables the HUD of the game.<br/>Useful for recording or a more immersive experience.",
             });
     });
 }
