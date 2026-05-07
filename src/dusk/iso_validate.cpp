@@ -94,7 +94,6 @@ struct NodHandleWrapper {
     NodHandle* handle;
 
     NodHandleWrapper() : handle(nullptr) {}
-
     ~NodHandleWrapper() {
         if (handle != nullptr) {
             nod_free(handle);
@@ -103,7 +102,7 @@ struct NodHandleWrapper {
     }
 };
 
-static ValidationError convertNodError(NodResult result) {
+static ValidationError convert_nod_error(NodResult result) {
     switch (result) {
     case NOD_RESULT_ERR_IO:
         return ValidationError::IOError;
@@ -118,34 +117,27 @@ s64 StreamReadAt(void* user_data, u64 offset, void* out, size_t len) {
     if (len == 0) {
         return 0;
     }
-
-    auto io = static_cast<SDL_IOStream*>(user_data);
-
-    auto ret = SDL_SeekIO(io, static_cast<s64>(offset), SDL_IO_SEEK_SET);
+    auto* io = static_cast<SDL_IOStream*>(user_data);
+    const auto ret = SDL_SeekIO(io, static_cast<s64>(offset), SDL_IO_SEEK_SET);
     if (ret < 0) {
         return -1;
     }
-
-    auto read = SDL_ReadIO(io, out, len);
+    const auto read = SDL_ReadIO(io, out, len);
     if (read == 0) {
         if (SDL_GetIOStatus(io) == SDL_IO_STATUS_EOF) {
             return 0;
         }
-
         return -1;
     }
-
     return static_cast<s64>(read);
 }
 
 s64 StreamLength(void* user_data) {
-    auto io = static_cast<SDL_IOStream*>(user_data);
-    return SDL_GetIOSize(io);
+    return SDL_GetIOSize(static_cast<SDL_IOStream*>(user_data));
 }
 
 void StreamClose(void* user_data) {
-    auto io = static_cast<SDL_IOStream*>(user_data);
-    SDL_CloseIO(io);
+    SDL_CloseIO(static_cast<SDL_IOStream*>(user_data));
 }
 
 ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
@@ -176,28 +168,25 @@ ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
     if (!XXH128_isEqual(hash, status.knownDisc->hash)) {
         return ValidationError::HashMismatch;
     }
-
     return ValidationError::Success;
 }
 
 ValidationError validate(const char* path, VerificationStatus& status) {
-    NodHandleWrapper disc;
-
     const auto sdlStream = SDL_IOFromFile(path, "rb");
     if (sdlStream == nullptr) {
         return ValidationError::IOError;
     }
 
+    NodHandleWrapper disc;
     const NodDiscStream nod_stream{
         .user_data = sdlStream,
         .read_at = StreamReadAt,
         .stream_len = StreamLength,
         .close = StreamClose,
     };
-
     auto result = nod_disc_open_stream(&nod_stream, nullptr, &disc.handle);
     if (disc.handle == nullptr || result != NOD_RESULT_OK) {
-        return convertNodError(result);
+        return convert_nod_error(result);
     }
 
     status.bytesTotal.store(nod_disc_size(disc.handle), std::memory_order_relaxed);
@@ -205,53 +194,42 @@ ValidationError validate(const char* path, VerificationStatus& status) {
     NodDiscHeader header{};
     result = nod_disc_header(disc.handle, &header);
     if (result != NOD_RESULT_OK) {
-        return convertNodError(result);
+        return convert_nod_error(result);
     }
 
     const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
-
     if (!knownDisc) {
         return ValidationError::WrongGame;
     }
-
     status.knownDisc = knownDisc;
-
     if (!knownDisc->supported) {
         return ValidationError::WrongVersion;
     }
-
     return verify_disc(disc.handle, status);
 }
 
-ValidationError validate(const char* path) {
-    VerificationStatus status{};
-    return validate(path, status);
-}
-
 ValidationError inspect(const char* path, DiscInfo& info) {
-    NodHandleWrapper disc;
-
     const auto sdlStream = SDL_IOFromFile(path, "rb");
     if (sdlStream == nullptr) {
         return ValidationError::IOError;
     }
 
+    NodHandleWrapper disc;
     const NodDiscStream nod_stream{
         .user_data = sdlStream,
         .read_at = StreamReadAt,
         .stream_len = StreamLength,
         .close = StreamClose,
     };
-
     auto result = nod_disc_open_stream(&nod_stream, nullptr, &disc.handle);
     if (disc.handle == nullptr || result != NOD_RESULT_OK) {
-        return convertNodError(result);
+        return convert_nod_error(result);
     }
 
     NodDiscHeader header{};
     result = nod_disc_header(disc.handle, &header);
     if (result != NOD_RESULT_OK) {
-        return convertNodError(result);
+        return convert_nod_error(result);
     }
 
     const auto knownDisc = find_disc(std::string_view(header.game_id, 6));

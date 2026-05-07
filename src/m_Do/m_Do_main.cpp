@@ -618,28 +618,35 @@ int game_main(int argc, char* argv[]) {
     dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
 
-    // Invalidate a bad saved isoPath so that Dusk can't get blocked from starting up
+    // Invalidate a bad saved isoPath so that Dusk can't get blocked from starting up.
+    // This is only a metadata check; full hash verification is handled by the prelaunch UI.
     const std::string p = dusk::getSettings().backend.isoPath;
-    if (!p.empty() && dusk::iso::validate(p.c_str()) < dusk::iso::ValidationError::HashMismatch) {
+    dusk::iso::DiscInfo discInfo{};
+    if (!p.empty() &&
+        dusk::iso::inspect(p.c_str(), discInfo) != dusk::iso::ValidationError::Success)
+    {
         dusk::getSettings().backend.isoPath.setValue("");
+        dusk::getSettings().backend.isoVerification.setValue(dusk::DiscVerificationState::Unknown);
     }
 
     std::string dvd_path;
     bool dvd_opened = false;
     if (parsed_arg_options.count("dvd")) {
         dvd_path = parsed_arg_options["dvd"].as<std::string>();
-        if (dusk::iso::validate(dvd_path.c_str()) >= dusk::iso::ValidationError::HashMismatch) {
+        if (dusk::iso::inspect(dvd_path.c_str(), discInfo) == dusk::iso::ValidationError::Success) {
             DuskLog.info("Loading DVD image from command line: {}", dvd_path);
             dvd_opened = aurora_dvd_open(dvd_path.c_str());
             if (!dvd_opened) {
                 DuskLog.warn("Failed to open DVD image from command line: {}, opening prelaunch UI", dvd_path);
             } else {
                 dusk::getSettings().backend.isoPath.setValue(dvd_path);
+                dusk::getSettings().backend.isoVerification.setValue(
+                    dusk::DiscVerificationState::Unknown);
                 dusk::config::Save();
                 dusk::IsGameLaunched = true;
             }
         } else {
-            DuskLog.warn("DVD image from command line failed verification: {}, opening prelaunch UI", dvd_path);
+            DuskLog.warn("DVD image from command line failed validation: {}, opening prelaunch UI", dvd_path);
         }
     }
 
@@ -668,8 +675,9 @@ int game_main(int argc, char* argv[]) {
             DuskLog.fatal("No DVD image specified, unable to boot!");
         }
         if (!dusk::IsGameLaunched &&
-            dusk::iso::validate(dvd_path.c_str()) < dusk::iso::ValidationError::HashMismatch) {
-            DuskLog.fatal("DVD image failed verification: {}", dvd_path);
+            dusk::iso::inspect(dvd_path.c_str(), discInfo) != dusk::iso::ValidationError::Success)
+        {
+            DuskLog.fatal("DVD image failed validation: {}", dvd_path);
         }
         DuskLog.info("Loading DVD image: {}", dvd_path);
         if (!aurora_dvd_open(dvd_path.c_str())) {
