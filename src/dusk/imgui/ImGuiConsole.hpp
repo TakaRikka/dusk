@@ -73,8 +73,6 @@ bool ImGuiButtonCenter(std::string_view text);
 float ImGuiScale();
 }  // namespace dusk
 
-void DuskDebugPad();
-
 #if defined(_WIN32) ||                                                                             \
     (defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_TV && !TARGET_OS_MACCATALYST) ||           \
     (defined(__linux__) && !defined(__ANDROID__))

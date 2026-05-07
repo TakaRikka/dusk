@@ -1450,7 +1450,6 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiProcessOverlay.cpp
         src/dusk/imgui/ImGuiCameraOverlay.cpp
         src/dusk/imgui/ImGuiHeapOverlay.cpp
-        src/dusk/imgui/ImGuiDebugPad.cpp
         src/dusk/imgui/ImGuiControllerOverlay.cpp
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/imgui/ImGuiMapLoader.cpp

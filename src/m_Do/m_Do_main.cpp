@@ -280,7 +280,6 @@ void main01(void) {
                 for (int sim_tick = 0; sim_tick < pacing.sim_ticks_to_run; ++sim_tick) {
                     dusk::frame_interp::begin_sim_tick();
                     mDoCPd_c::read();
-                    DuskDebugPad();
                     dusk::gyro::read(pacing.sim_pace);
                     fapGm_Execute();
                     mDoAud_Execute();
