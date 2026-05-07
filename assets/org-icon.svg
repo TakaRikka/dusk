@@ -1,0 +1,66 @@
+<svg width="600" height="600" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="150" r="105" fill="none" stroke="white" stroke-width="4"/>
+  <circle cx="150" cy="150" r="95" fill="none" stroke="white" stroke-width="4"/>
+  <circle cx="150" cy="150" r="60" fill="none" stroke="white" stroke-width="4"/>
+  <circle cx="150" cy="150" r="75" fill="none" stroke="white" stroke-width="4"/>
+
+  <defs>
+    <line id="ray" x1="150" y1="55" x2="150" y2="45"/>
+    <clipPath id="zigzag-clip">
+      <circle cx="150" cy="150" r="75"/>
+    </clipPath>
+  </defs>
+
+  <g stroke="white" stroke-width="3">
+    <use href="#ray"/>
+    <use href="#ray" transform="rotate(18 150 150)"/>
+    <use href="#ray" transform="rotate(36 150 150)"/>
+    <use href="#ray" transform="rotate(54 150 150)"/>
+    <use href="#ray" transform="rotate(72 150 150)"/>
+    <use href="#ray" transform="rotate(90 150 150)"/>
+    <use href="#ray" transform="rotate(108 150 150)"/>
+    <use href="#ray" transform="rotate(126 150 150)"/>
+    <use href="#ray" transform="rotate(144 150 150)"/>
+    <use href="#ray" transform="rotate(162 150 150)"/>
+    <use href="#ray" transform="rotate(180 150 150)"/>
+    <use href="#ray" transform="rotate(198 150 150)"/>
+    <use href="#ray" transform="rotate(216 150 150)"/>
+    <use href="#ray" transform="rotate(234 150 150)"/>
+    <use href="#ray" transform="rotate(252 150 150)"/>
+    <use href="#ray" transform="rotate(270 150 150)"/>
+    <use href="#ray" transform="rotate(288 150 150)"/>
+    <use href="#ray" transform="rotate(306 150 150)"/>
+    <use href="#ray" transform="rotate(324 150 150)"/>
+    <use href="#ray" transform="rotate(342 150 150)"/>
+  </g>
+
+  <polygon fill="none" stroke="white" stroke-width="4" opacity="1" clip-path="url(#zigzag-clip)"
+    points="
+      126.82,78.67
+      150,90
+      173.18,78.67
+      185.27,101.46
+      210.68,105.92
+      207.06,131.46
+      225,150
+      207.06,168.54
+      210.68,194.08
+      185.27,198.54
+      173.18,221.33
+      150,210
+      126.82,221.33
+      114.73,198.54
+      89.32,194.08
+      92.94,168.54
+      75,150
+      92.94,131.46
+      89.32,105.92
+      114.73,101.46
+    "/>
+
+  <g fill="none" stroke="white" stroke-width="4">
+    <polygon points="150,105 130,140 170,140"/>
+    <polygon points="130,140 110,175 150,175"/>
+    <polygon points="170,140 150,175 190,175"/>
+  </g>
+</svg>

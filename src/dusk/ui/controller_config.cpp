@@ -322,6 +322,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             .isSelected = [port] { return PADGetIndexForPort(port) < 0; },
                         })
             .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSerializeMappings();
@@ -335,6 +336,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             [port, i] { return PADGetIndexForPort(port) == static_cast<s32>(i); },
                     })
                 .on_pressed([this, port, i] {
+                    mDoAud_seStartMenu(kSoundItemChange);
                     cancel_pending_binding();
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();

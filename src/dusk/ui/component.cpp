@@ -59,16 +59,6 @@ void Component::set_disabled(bool value) {
     }
 }
 
-Rml::Element* Component::append(Rml::Element* parent, const Rml::String& tag) {
-    if (parent == nullptr) {
-        return nullptr;
-    }
-    auto* doc = parent->GetOwnerDocument();
-    if (doc == nullptr) {
-        return nullptr;
-    }
-    return parent->AppendChild(doc->CreateElement(tag));
-}
 void Component::listen(Rml::Element* element, Rml::EventId event,
     ScopedEventListener::Callback callback, bool capture) {
     if (element == nullptr) {

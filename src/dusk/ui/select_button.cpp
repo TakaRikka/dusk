@@ -59,6 +59,7 @@ SelectButton& SelectButton::on_pressed(SelectButtonCallback callback) {
     listen(Rml::EventId::Submit, [this, callback = std::move(callback)](Rml::Event& event) {
         if (!disabled() && event.GetTargetElement() == mRoot) {
             callback();
+            event.StopPropagation();
         }
     });
     return *this;

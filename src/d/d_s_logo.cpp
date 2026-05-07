@@ -1120,26 +1120,12 @@ int dScnLogo_c::create() {
     checkProgSelect();
     if (field_0x20a != 0) {
         mExecCommand = EXEC_PROG_IN;
-        #if TARGET_PC
-        mTimer = dusk::getSettings().game.skipWarningScreen ? 1 : 30;
-        #else
         mTimer = 30;
-        #endif
         field_0x218 = getProgressiveMode();
     } else {
         #if TARGET_PC
-        if (dusk::getSettings().game.skipWarningScreen) {
-            mTimer = 0;  // Possibly unnecessary but just in case
-            mExecCommand = EXEC_DVD_WAIT;
-        } else {
-            if (mDoRst::getWarningDispFlag()) {
-                mTimer = 90;
-                mExecCommand = EXEC_NINTENDO_IN;
-            } else {
-                mTimer = 120;
-                mExecCommand = EXEC_WARNING_IN;
-            }
-        }
+        mTimer = 0;  // Possibly unnecessary but just in case
+        mExecCommand = EXEC_DVD_WAIT;
         #else
         if (mDoRst::getWarningDispFlag()) {
             mTimer = 90;

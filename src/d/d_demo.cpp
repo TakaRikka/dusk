@@ -11,6 +11,62 @@
 #include "JSystem/JGadget/define.h"
 #include <cstring>
 
+#include "dusk/logging.h"
+
+#if TARGET_PC
+#include "dusk/ui/ui.hpp"
+
+namespace {
+static int sJaiSkip = -1;
+
+static JSUList<JAIStream>* get_stream_list() {
+    return Z2GetSoundMgr()->getStreamMgr()->getStreamList();
+}
+
+static int get_stream_count(JSUList<JAIStream>* list) {
+    int i = 0;
+    for (JSULink<JAIStream>* l = list != nullptr ? list->getFirst() : nullptr; l != nullptr;
+        l = l->getNext()) {
+        i++;
+    }
+    return i;
+}
+
+static void pause_stream(int skip_first, bool paused) {
+    int i = 0;
+    JSUList<JAIStream>* list = get_stream_list();
+    for (JSULink<JAIStream>* l = list->getFirst(); l != nullptr; l = l->getNext(), ++i) {
+        if (i >= skip_first) {
+            l->getObject()->pause(paused);
+        }
+    }
+}
+
+static void pause_streams(int skip_first) {
+    if (!dusk::ui::is_prelaunch_open()) {
+        return;
+    }
+    JSUList<JAIStream>* list = get_stream_list();
+    if (list == nullptr || get_stream_count(list) <= skip_first) {
+        return;
+    }
+    pause_stream(skip_first, true);
+    sJaiSkip = skip_first;
+}
+
+static void unpause_streams(bool require_prelaunch_hidden) {
+    if (sJaiSkip < 0) {
+        return;
+    }
+    if (require_prelaunch_hidden && dusk::ui::is_prelaunch_open()) {
+        return;
+    }
+    pause_stream(sJaiSkip, false);
+    sJaiSkip = -1;
+}
+}  // namespace
+#endif
+
 s16 dDemo_c::m_branchId = -1;
 
 namespace {
@@ -1006,7 +1062,16 @@ int dDemo_c::start(u8 const* p_data, cXyz* p_translation, f32 rotationY) {
         m_control->setSuspend(0);
     }
 
+#if TARGET_PC
+    const int existing_streams = get_stream_count(get_stream_list());
+#endif
+
     m_control->forward(0);
+
+#if TARGET_PC
+    pause_streams(existing_streams);
+#endif
+
     m_translation = p_translation;
 
     if (m_translation != NULL) {
@@ -1034,6 +1099,10 @@ static void dummyString2() {
 void dDemo_c::end() {
     JUT_ASSERT(1956, m_system != NULL);
 
+#if TARGET_PC
+    unpause_streams(false);
+#endif
+
     m_control->destroyObject_all();
     m_object->remove();
     m_data = NULL;
@@ -1053,6 +1122,10 @@ void dDemo_c::branch() {
 
 int dDemo_c::update() {
     JUT_ASSERT(2064, m_system != NULL);
+
+#if TARGET_PC
+    unpause_streams(true);
+#endif
 
     if (m_data == NULL) {
         if (m_branchData == NULL) {
