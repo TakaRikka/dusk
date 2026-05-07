@@ -1317,8 +1317,12 @@ int daMBdoorL1_c::checkArea() {
     if (fabsf(local_48.z) > 110.0f) {
         return 0;
     }
-    
+
+#ifdef TARGET_PC
+    if ((s16)((s32)fabs(angle - 0x7fff - player->current.angle.y) & 0xffff) > 0x4000) {
+#else
     if ((s16)fabs((f64)(angle - 0x7fff - player->current.angle.y)) > 0x4000) {
+#endif
         return 0;
     } else {
         return 1;
