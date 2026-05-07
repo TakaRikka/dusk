@@ -74,7 +74,6 @@
 #include "SDL3/SDL_filesystem.h"
 #include "cxxopts.hpp"
 #include "d/actor/d_a_movie_player.h"
-#include "dusk/android/JavaWrapperFuncs.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
