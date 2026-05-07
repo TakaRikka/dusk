@@ -343,7 +343,7 @@ icon.celebration {
     color: rgba(224, 219, 200, 45%);
 }
 
-progressbar {
+progress {
     display: block;
     width: 100%;
     height: 6dp;
@@ -352,12 +352,12 @@ progressbar {
     margin: 6dp 0 2dp 0;
 }
 
-progressbar.progress-done fill {
+progress.progress-done fill {
     background-color: #44aa22;
     border-radius: 3dp;
 }
 
-progressbar.progress-ongoing fill {
+progress.progress-ongoing fill {
     background-color: #2255bb;
     border-radius: 3dp;
 }
@@ -460,7 +460,7 @@ window.modal.danger .modal-header icon {
     color: #FFFFFF;
 }
 
-progressbar.verification-progress-bar {
+progress.verification-progress-bar {
     height: 8dp;
     margin: 2dp 0 0 0;
 }

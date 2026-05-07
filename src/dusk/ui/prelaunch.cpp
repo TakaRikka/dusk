@@ -278,7 +278,7 @@ public:
         mFileName = append(content, "div");
         mFileName->SetClass("verification-file", true);
 
-        mProgress = append(content, "progressbar");
+        mProgress = append(content, "progress");
         mProgress->SetClass("progress-ongoing", true);
         mProgress->SetClass("verification-progress-bar", true);
         mProgress->SetAttribute("value", 0.f);

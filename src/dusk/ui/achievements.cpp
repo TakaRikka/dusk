@@ -41,7 +41,7 @@ Rml::String build_achievement_info_rml(const Achievement& a) {
     if (a.isCounter) {
         float fraction = a.goal > 0 ? float(a.progress) / float(a.goal) : 1.0f;
         s += fmt::format(
-            R"(<progressbar value="{:.3f}" class="{}"/>)"
+            R"(<progress value="{:.3f}" class="{}"/>)"
             R"(<span class="achievement-progress">{} / {}</span>)",
             fraction,
             a.unlocked ? "progress-done" : "progress-ongoing",
