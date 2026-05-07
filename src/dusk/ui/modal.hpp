@@ -19,8 +19,7 @@ public:
         std::vector<ModalAction> actions;
         std::function<void(Modal&)> onDismiss;
         Rml::String variant;
-        bool isWarning = false;
-        bool isError = false;
+        Rml::String icon = "";
     };
 
     explicit Modal(Props props);
