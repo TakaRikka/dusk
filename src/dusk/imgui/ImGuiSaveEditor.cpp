@@ -13,7 +13,6 @@
 #include "d/actor/d_a_player.h"
 
 #include <map>
-#include <bit>
 
 namespace dusk {
     enum ItemType {
@@ -1354,38 +1353,30 @@ namespace dusk {
         // genCommonAreaFlags(membit);
     }
 
-    template <typename T>
-    concept FlagIter = requires(T t) {
-        ++t;
-        --t;
-        t + 1;
-        t < t;
-        { t->flagID } -> std::convertible_to<u16>;
-    };
-
-    template <typename T>
-    concept FlagTester = requires(T t, u16 flagID) {
-        { t(flagID) } -> std::convertible_to<bool>;
-    };
-
-    static void sortByFlags(FlagIter auto begin, FlagIter auto end, FlagTester auto&& flagTester) {
+    template <typename FlagIter, typename FlagTester>
+    requires requires(FlagIter a, FlagTester tester) {
+        --a; ++a; a < a; *a;
+        a + 1;
+        { tester(*a) } -> std::convertible_to<bool>;
+    }
+    static void sortByFlags(FlagIter begin, FlagIter end, FlagTester&& flagTester) {
         if (begin == end) return;
 
-        FlagIter auto fullEnd = end;
+        auto fullEnd = end;
 
         // We want to find the location of where we can swap our `On` flags to.
         // We're gonna put the `Off` bits first, and the `On` bits last. 0 < 1
         // We can achieve this by skipping all the `On` bits at the end.
 
         // backtrack until we find a bit that is off
-        while (begin < --end && flagTester(end->flagID)) {
+        while (begin < --end && flagTester(*end)) {
             // move the end pointer back while we find on bits
         }
 
         // end should now be pointing to a bit that is off
         while (begin < end) {
             // if there's a flag that's on
-            if (flagTester(begin->flagID)) {
+            if (flagTester(*begin)) {
                 // move it to the end
                 std::rotate(begin, begin + 1, fullEnd);
                 // move back the end of where we're checking
@@ -1401,122 +1392,82 @@ namespace dusk {
 
     
     static void genAreaFlagTable(uint8_t areaIndex, dSv_memBit_c& membit) {
-        constexpr auto makeMask             = [](uint8_t size) -> uint16_t              { return (1 << size) - 1; };
-        constexpr auto getByteIndexFromFlag = [](uint16_t f) -> uint8_t                 { return f >> 8; };
-        constexpr auto getBitMaskFromFlag   = [](uint16_t f) -> uint8_t                 { return f & 0xff; };
-        constexpr auto getValueSize = [getBitMaskFromFlag](uint16_t f) -> uint8_t {
-            return std::popcount(getBitMaskFromFlag(f));
-        };
-        
-        constexpr auto makeEventFlag = [](uint8_t byteIndex, uint8_t bitIndices) -> uint16_t {
-            return (byteIndex << 8) | bitIndices;
-        };
-
-        const auto eventFlagToAreaFlag = [&](uint16_t areaFlag) -> int {
-            auto byteInd = getByteIndexFromFlag(areaFlag);
-            constexpr size_t areaIndexSize = 5;
-            // if we're looking at 0x580, that would be byte 5, and check if 0x80 is set on that byte
-            // the event flags are structured differently than area flags
-            // B is byte index, b is the flag mask to check
-            // event flags are BBBBBBBB bbbbbbbb
-            // for area flags, they check bitIndex, not mask, i is index
-            // also area uses u32 index, not byte index
-            // area flags are BBBiiiii
-            // so we need to convert from bit mask to index
-            // also our byte index has to become a u32 index
-            
-            // dividing byte index by sizeof(u32) gets us the u32 index
-            // but in big endian, the first byte is the highest order byte of the u32
-            // so we skip 24 bytes for the first byte, 16 for the second, etc
-            // essentially (3 - (x % 4)), reversing the modulus, 0=3, 1=2
-            auto bitsToSkip = 8 * ((sizeof(u32) - 1) - (byteInd % sizeof(u32)));
-            return ((byteInd / sizeof(u32)) << areaIndexSize) | ((std::countr_zero(areaFlag) + bitsToSkip) & makeMask(areaIndexSize));
-        };
-
-        constexpr uint8_t validTbox = sizeof(membit.mTbox);
-        constexpr uint8_t validSwitch = validTbox + sizeof(membit.mSwitch);
-        constexpr uint8_t validItem = validSwitch + sizeof(membit.mItem);
-        constexpr uint16_t tboxConvert = 0;
-        constexpr uint16_t switchConvert = sizeof(membit.mTbox) << 8;
-        constexpr uint16_t itemConvert = switchConvert + (sizeof(membit.mItem) << 8);
-
-        const auto LoadFlag = [&](uint16_t flag) -> bool {            
-            const auto byteIndex = getByteIndexFromFlag(flag);
-
-            if (byteIndex < validTbox) {
-                return membit.isTbox(eventFlagToAreaFlag(flag - tboxConvert));
-            } else if (byteIndex < validSwitch) {
-                return membit.isSwitch(eventFlagToAreaFlag(flag - switchConvert));
-            } else if (byteIndex < validItem) {
-                return membit.isItem(eventFlagToAreaFlag(flag - itemConvert));
+        const auto LoadFlag = [&](const EventAreaFlags& flag) -> bool {
+            switch (flag.flag.type) {
+            case AreaFlagType::Item: {
+                return membit.isItem(flag.flag.flagID);
+            } break;
+            case AreaFlagType::Switch: {
+                return membit.isSwitch(flag.flag.flagID);
+            } break;
+            case AreaFlagType::Tbox: {
+                return membit.isTbox(flag.flag.flagID);
+            } break;
             }
             return false;
         };
 
-        const auto SetFlag = [&](uint16_t flag, bool set) -> void {
-            const auto byteIndex = getByteIndexFromFlag(flag);
+        const auto SetFlag = [&](const AreaFlagInd& flag, bool set) -> void {
             if (set) {
-                if (byteIndex < validTbox) {
-                    membit.onTbox(eventFlagToAreaFlag(flag - tboxConvert));
-                } else if (byteIndex < validSwitch) {
-                    membit.onSwitch(eventFlagToAreaFlag(flag - switchConvert));
-                } else if (byteIndex < validItem) {
-                    membit.onItem(eventFlagToAreaFlag(flag - itemConvert));
+                switch (flag.type) {
+                case AreaFlagType::Item: {
+                    membit.onItem(flag.flagID);
+                } break;
+                case AreaFlagType::Switch: {
+                    membit.onSwitch(flag.flagID);
+                } break;
+                case AreaFlagType::Tbox: {
+                    membit.onTbox(flag.flagID);
+                } break;
                 }
             } else {
-                if (byteIndex < validTbox) {
-                    membit.offTbox(eventFlagToAreaFlag(flag - tboxConvert));
-                } else if (byteIndex < validSwitch) {
-                    membit.offSwitch(eventFlagToAreaFlag(flag - switchConvert));
-                } else if (byteIndex < validItem) {
-                    membit.offItem(eventFlagToAreaFlag(flag - itemConvert));
+                switch (flag.type) {
+                case AreaFlagType::Item: {
+                    membit.offItem(flag.flagID);
+                } break;
+                case AreaFlagType::Switch: {
+                    membit.offSwitch(flag.flagID);
+                } break;
+                case AreaFlagType::Tbox: {
+                    membit.offTbox(flag.flagID);
+                } break;
                 }
             }
         };
 
-        const auto LoadMultiByteFlag = [&](uint16_t flag) -> uint8_t {
-            const auto bitInds = getBitMaskFromFlag(flag);
-            const auto byteIndex = getByteIndexFromFlag(flag);
-
-            const uint16_t startingMask = std::bit_floor(bitInds);
-            uint8_t val = 0;
-            for (uint16_t bitIndexMask = startingMask; (bitInds & bitIndexMask) != 0;
-                 bitIndexMask >>= 1)
-            {
-                val <<= 1;
-                if (LoadFlag(makeEventFlag(byteIndex, bitInds & bitIndexMask))) {
-                    val |= 1;
-                }
+        const auto LoadMultiByteFlag = [&](const AreaFlagMultibit& flag) -> uint8_t {
+            BE(u32)* areaFlags = nullptr;
+            switch (flag.type) {
+            case AreaFlagType::Item: {
+                areaFlags = membit.mItem;
+            } break;
+            case AreaFlagType::Switch: {
+                areaFlags = membit.mSwitch;
+            } break;
+            case AreaFlagType::Tbox: {
+                areaFlags = membit.mTbox;
+            } break;
             }
-            return val;
+            assert(areaFlags != nullptr);
+            return (areaFlags[flag.index] & flag.mask) >> flag.shift;
         };
 
-        const auto SetMultiByteFlag = [&](uint16_t flag, uint8_t val) -> void {
-            const auto bitInds = getBitMaskFromFlag(flag);
-            const auto byteIndex = getByteIndexFromFlag(flag);
-
-            const uint16_t startingMask = std::bit_floor(bitInds);
-            uint16_t valueMask = 1 << (getValueSize(flag) - 1);
-
-            for (uint16_t bitIndexMask = startingMask; (bitInds & bitIndexMask) != 0;
-                 bitIndexMask >>= 1, valueMask >>= 1)
-            {
-                SetFlag(makeEventFlag(byteIndex, bitInds & bitIndexMask), (val & valueMask) != 0);
+        const auto SetMultiByteFlag = [&](const AreaFlagMultibit& flag, uint8_t val) -> void {
+            BE(u32)* areaFlags = nullptr;
+            switch (flag.type) {
+            case AreaFlagType::Item: {
+                areaFlags = membit.mItem;
+            } break;
+            case AreaFlagType::Switch: {
+                areaFlags = membit.mSwitch;
+            } break;
+            case AreaFlagType::Tbox: {
+                areaFlags = membit.mTbox;
+            } break;
             }
-        };
 
-        const auto LoadSpreadMultiByte = [&](uint16_t high, uint16_t low) -> uint8_t {
-            if (low == AREA_FLAG_NONE)
-                return LoadMultiByteFlag(high);
-            return (LoadMultiByteFlag(high) << getValueSize(low)) | LoadMultiByteFlag(low);
-        };
-
-        const auto SetSpreadMultiByte = [&](uint16_t high, uint16_t low, uint8_t value) -> void {
-            if (low == AREA_FLAG_NONE)
-                return SetMultiByteFlag(high, value);
-            const auto lowerSize = getValueSize(low);
-            SetMultiByteFlag(high, value >> lowerSize);
-            SetMultiByteFlag(low, value & makeMask(lowerSize));
+            areaFlags[flag.index] &= ~flag.mask;
+            areaFlags[flag.index] |= (val << flag.shift) & flag.mask;
         };
 
         auto iter = imguiAreaFlagLookup.find(areaIndex);
@@ -1568,7 +1519,7 @@ namespace dusk {
                         case COLUMN_DESC:
                             return l.description < r.description;
                         case COLUMN_BIT:
-                            return l.flagID < r.flagID;
+                            return l.GetFlagID() < r.GetFlagID();
                         }
                         return false;
                     };
@@ -1597,9 +1548,9 @@ namespace dusk {
 
                 ImGui::TableNextRow();
                 ImGui::TableNextColumn();
-                bool flag = LoadFlag(e.flagID);
-                if (ImGui::Checkbox(fmt::format("##_unused_area_flag_{}", e.flagID).c_str(), &flag)) {
-                    SetFlag(e.flagID, flag);
+                bool flag = LoadFlag(e);
+                if (ImGui::Checkbox(fmt::format("##_unused_area_flag_{}", e.flag.flagID).c_str(), &flag)) {
+                    SetFlag(e.flag, flag);
                 }
 
                 ImGui::TableNextColumn();
@@ -1611,7 +1562,7 @@ namespace dusk {
         }
 
         for (const auto& multiByteFlag : areaFlags.multibyteFlags) {
-            auto flagValue = LoadSpreadMultiByte(multiByteFlag.highOrderflag, multiByteFlag.lowOrderflag); 
+            auto flagValue = LoadMultiByteFlag(multiByteFlag.flag);
 
             const char* currentVal = "UNKNOWN";
 
@@ -1623,7 +1574,7 @@ namespace dusk {
             if (ImGui::BeginCombo(multiByteFlag.name, currentVal)) {
                 for (const auto& [val, name] : multiByteFlag.enumValues) {
                     if (ImGui::Selectable(name)) {
-                        SetSpreadMultiByte(multiByteFlag.highOrderflag, multiByteFlag.lowOrderflag, val);
+                        SetMultiByteFlag(multiByteFlag.flag, val);
                     }
                 }
                 ImGui::EndCombo();
@@ -1756,7 +1707,9 @@ namespace dusk {
                     // if we're sorting by flags, do special sort, regular sort is bad for sorting bools
                     // it can swap values that are the same, and that causes constant reordering
                     if (column == COLUMN_FLAG) {
-                        const auto testEventFunc = [&event](u16 flag) -> bool { return event.isEventBit(flag); };
+                        const auto testEventFunc = [&event](const duskImguiEventFlagEntry& flag) -> bool {
+                            return event.isEventBit(flag.flagID);
+                        };
 
                         if (direction == ImGuiSortDirection_Ascending) {
                             sortByFlags(std::begin(duskImguiEventFlags),
