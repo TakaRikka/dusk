@@ -2,6 +2,9 @@
 
 #include "ui.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <utility>
 
 namespace dusk::ui {

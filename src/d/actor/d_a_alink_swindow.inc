@@ -41,7 +41,7 @@ void daAlink_c::setOriginalHeap(JKRExpHeap** i_ppheap, u32 i_size) {
         u32 var_r28 = 0x10;
         u32 size = ROUND(i_size, 16);
 #if TARGET_PC
-        size *= 2;
+        size *= 20; // Increase Link's heap size to prevent mods from crashing with higher-quality models.
 #endif
         JKRHeap* parent = mDoExt_getGameHeap();
 

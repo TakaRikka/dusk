@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <array>
 
-namespace dusk::ui {
+namespace dusk::ui::input {
 namespace {
 
 constexpr double kGamepadRepeatInitialDelay = 0.32;
@@ -73,15 +73,6 @@ bool has_menu_chord_part_held(u32 port) noexcept {
 
     const u32 held = sPadHoldMasks[port];
     return (held & (PAD_TRIGGER_R | PAD_BUTTON_START)) != 0;
-}
-
-bool should_block_pad_for_menu_chord() noexcept {
-    for (u32 port = 0; port < sPadHoldMasks.size(); ++port) {
-        if (sMenuChordConsumed[port] && has_menu_chord_part_held(port)) {
-            return true;
-        }
-    }
-    return false;
 }
 
 const char* controller_change_type(Uint32 eventType) noexcept {
@@ -635,7 +626,8 @@ void process_axis_direction(
     }
 
     set_pad_button_held(port, heldPadButton, true);
-    const bool chorded = heldPadButton == PAD_TRIGGER_R && is_menu_chord(port);
+    const bool chorded = heldPadButton == PAD_TRIGGER_R && is_menu_chord(port) &&
+                         (port >= sMenuChordConsumed.size() || !sMenuChordConsumed[port]);
     if (chorded) {
         consume_menu_chord(port, context);
     }
@@ -657,7 +649,7 @@ void process_axis_direction(
 }  // namespace
 
 void sync_input_block() noexcept {
-    const bool shouldBlock = any_document_visible() || should_block_pad_for_menu_chord();
+    const bool shouldBlock = any_document_visible();
     if (sPadInputBlocked == shouldBlock) {
         return;
     }

@@ -3,6 +3,7 @@
 }
 
 body {
+    display: flex;
     width: 100%;
     height: 100%;
     padding: 64dp;
@@ -17,6 +18,7 @@ window {
     display: flex;
     flex-flow: column;
     height: 100%;
+    width: 100%;
     max-width: 1088dp;
     max-height: 768dp;
     margin: auto;
@@ -30,6 +32,19 @@ window {
     transform: scale(0.9);
     transform-origin: center;
     transition: filter transform 0.2s cubic-in-out;
+}
+
+window.small {
+    height: auto;
+    width: auto;
+}
+
+window.preset {
+    min-width: 650dp;
+}
+
+window.modal {
+    max-width: 816dp;
 }
 
 window[open] {
@@ -62,7 +77,7 @@ window tab-bar tab {
 
 window content {
     display: flex;
-    flex: 1 1 0;
+    flex: 1 1 auto;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
@@ -72,7 +87,6 @@ window content pane {
     display: flex;
     flex-flow: column;
     flex: 1 1 0;
-    height: 100%;
     min-width: 0;
     min-height: 0;
     padding: 24dp;
@@ -90,12 +104,22 @@ window content pane > * {
     flex: 0 0 auto;
 }
 
+window content pane:last-of-type > div {
+    line-height: 1.625;
+}
+
 window content pane > spacer {
     display: block;
     /* Completes the 24dp bottom inset after the pane's 8dp gap. */
     flex: 0 0 16dp;
     height: 16dp;
     pointer-events: none;
+}
+
+window modal {
+    padding: 32dp;
+    gap: 20dp;
+    flex: 0 1 auto;
 }
 
 scrollbarvertical {
@@ -184,6 +208,12 @@ button:not(:disabled):active {
     box-shadow: #C2A42D 0 0 0 2dp;
 }
 
+button.modal-btn {
+    font-size: 20dp;
+    padding: 16dp 10dp;
+    flex: 1 1 0;
+}
+
 select-button {
     display: flex;
     align-items: center;
@@ -255,4 +285,156 @@ icon.warning {
     height: 1em;
     decorator: text("&#xe002;" center center);
     color: #ffcc00;
+}
+
+.achievement-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10dp;
+    padding: 12dp 0;
+    border-bottom: 1dp rgba(146, 135, 91, 30%);
+}
+
+.achievement-info {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.achievement-header {
+    display: flex;
+    align-items: center;
+}
+
+.achievement-name {
+    flex: 1;
+    font-weight: bold;
+}
+
+.achievement-name.unlocked {
+    color: #ffa826;
+}
+
+.achievement-badge {
+    font-size: 14dp;
+    opacity: 0.7;
+}
+
+.achievement-badge.unlocked {
+    color: #44cc55;
+    opacity: 1;
+}
+
+.achievement-badge.locked {
+    color: #cc4444;
+    opacity: 1;
+}
+
+.achievement-desc {
+    display: block;
+    color: rgba(224, 219, 200, 55%);
+    font-size: 16dp;
+    margin: 4dp 0 0 0;
+}
+
+.achievement-progress {
+    display: block;
+    font-size: 13dp;
+    color: rgba(224, 219, 200, 45%);
+}
+
+progressbar {
+    display: block;
+    width: 100%;
+    height: 6dp;
+    border-radius: 3dp;
+    background-color: rgba(255, 255, 255, 10%);
+    margin: 6dp 0 2dp 0;
+}
+
+progressbar.progress-done fill {
+    background-color: #44aa22;
+    border-radius: 3dp;
+}
+
+progressbar.progress-ongoing fill {
+    background-color: #2255bb;
+    border-radius: 3dp;
+}
+
+button.achievement-clear {
+    flex: 0 0 auto;
+    align-self: center;
+    font-size: 14dp;
+    padding: 2dp 8dp;
+    opacity: 0.45;
+}
+
+.preset-dialog {
+    display: flex;
+    flex-flow: column;
+    padding: 32dp;
+    gap: 20dp;
+    flex: 0 1 auto;
+}
+
+.preset-title {
+    display: block;
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 30dp;
+    text-align: center;
+}
+
+.preset-intro {
+    display: block;
+    font-size: 18dp;
+    text-align: center;
+    color: rgba(224, 219, 200, 65%);
+}
+
+.preset-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 20dp;
+    flex: 0 1 auto;
+    align-items: flex-start;
+}
+
+.preset-col {
+    display: flex;
+    flex-flow: column;
+    gap: 12dp;
+    flex: 1 1 0;
+}
+
+button.preset-btn {
+    font-size: 22dp;
+    padding: 20dp 16dp;
+}
+
+.preset-desc {
+    display: block;
+    font-size: 16dp;
+    color: rgba(224, 219, 200, 65%);
+    text-align: center;
+}
+
+.modal-dialog {
+    display: flex;
+    flex-flow: column;
+    padding: 16dp;
+    gap: 20dp;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12dp;
+    padding-top: 12dp;
+    width: 100%;
 }

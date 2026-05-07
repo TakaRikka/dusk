@@ -1,5 +1,8 @@
 #include "number_button.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <charconv>
 #include <fmt/format.h>
 
@@ -51,11 +54,13 @@ void NumberButton::set_value(Rml::String value) {
 }
 
 bool NumberButton::handle_nav_command(NavCommand cmd) {
-    if (cmd == NavCommand::Left) {
-        mSetValue(std::clamp(mGetValue() - mStep, mMin, mMax));
-        return true;
-    } else if (cmd == NavCommand::Right) {
-        mSetValue(std::clamp(mGetValue() + mStep, mMin, mMax));
+    if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
+        const int newValue = std::clamp(
+            mGetValue() + (cmd == NavCommand::Right ? mStep : -mStep), mMin, mMax);
+        if (newValue != mGetValue()) {
+            mSetValue(newValue);
+            mDoAud_seStartMenu(kSoundItemChange);
+        }
         return true;
     }
     return BaseStringButton::handle_nav_command(cmd);

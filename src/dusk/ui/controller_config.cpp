@@ -246,18 +246,16 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     mRightPane = &rightPane;
     mActivePort = port;
 
-    auto showPage = [this, &rightPane, port](Page page) {
-        mPage = page;
-        render_page(rightPane, port, page);
-    };
-    auto addPageButton = [&leftPane, showPage](Page page, Rml::String key, auto getValue) {
-        leftPane
-            .add_select_button({
-                .key = std::move(key),
-                .getValue = std::move(getValue),
-            })
-            .on_focus([showPage, page](Rml::Event&) { showPage(page); })
-            .on_pressed([showPage, page] { showPage(page); });
+    auto addPageButton = [this, &leftPane, &rightPane, port](
+                             Page page, Rml::String key, auto getValue) {
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = std::move(key),
+                                      .getValue = std::move(getValue),
+                                  }),
+            rightPane, [this, port, page](Pane& pane) {
+                mPage = page;
+                render_page(pane, port, page);
+            });
     };
 
     addPageButton(Page::Controller, "Controller", [port] { return current_controller_name(port); });
@@ -266,47 +264,43 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); });
 
     leftPane.add_section("Options");
-    leftPane
-        .add_child<BoolButton>(BoolButton::Props{
-            .key = "Enable Dead Zones",
-            .getValue =
-                [port] {
-                    PADDeadZones* deadZones = PADGetDeadZones(port);
-                    return deadZones != nullptr && deadZones->useDeadzones;
-                },
-            .setValue =
-                [port](bool value) {
-                    if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
-                        deadZones->useDeadzones = value;
-                        PADSerializeMappings();
-                    }
-                },
-            .isDisabled = [port] { return PADGetDeadZones(port) == nullptr; },
-        })
-        .on_focus([&rightPane](Rml::Event&) {
-            rightPane.clear();
-            rightPane.add_text("Apply configured dead zones to the sticks and analog triggers.");
+    leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
+                                  .key = "Enable Dead Zones",
+                                  .getValue =
+                                      [port] {
+                                          PADDeadZones* deadZones = PADGetDeadZones(port);
+                                          return deadZones != nullptr && deadZones->useDeadzones;
+                                      },
+                                  .setValue =
+                                      [port](bool value) {
+                                          if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+                                              deadZones->useDeadzones = value;
+                                              PADSerializeMappings();
+                                          }
+                                      },
+                                  .isDisabled = [port] { return PADGetDeadZones(port) == nullptr; },
+                              }),
+        rightPane, [](Pane& pane) {
+            pane.add_text("Apply configured dead zones to the sticks and analog triggers.");
         });
-    leftPane
-        .add_child<BoolButton>(BoolButton::Props{
-            .key = "Emulate Triggers",
-            .getValue =
-                [port] {
-                    PADDeadZones* deadZones = PADGetDeadZones(port);
-                    return deadZones != nullptr && deadZones->emulateTriggers;
-                },
-            .setValue =
-                [port](bool value) {
-                    if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
-                        deadZones->emulateTriggers = value;
-                        PADSerializeMappings();
-                    }
-                },
-            .isDisabled = [port] { return PADGetDeadZones(port) == nullptr; },
-        })
-        .on_focus([&rightPane](Rml::Event&) {
-            rightPane.clear();
-            rightPane.add_text("Treat analog trigger movement as digital L and R button input.");
+    leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
+                                  .key = "Emulate Triggers",
+                                  .getValue =
+                                      [port] {
+                                          PADDeadZones* deadZones = PADGetDeadZones(port);
+                                          return deadZones != nullptr && deadZones->emulateTriggers;
+                                      },
+                                  .setValue =
+                                      [port](bool value) {
+                                          if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+                                              deadZones->emulateTriggers = value;
+                                              PADSerializeMappings();
+                                          }
+                                      },
+                                  .isDisabled = [port] { return PADGetDeadZones(port) == nullptr; },
+                              }),
+        rightPane, [](Pane& pane) {
+            pane.add_text("Treat analog trigger movement as digital L and R button input.");
         });
 
     render_page(rightPane, port, mPage);
@@ -328,6 +322,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             .isSelected = [port] { return PADGetIndexForPort(port) < 0; },
                         })
             .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSerializeMappings();
@@ -341,6 +336,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             [port, i] { return PADGetIndexForPort(port) == static_cast<s32>(i); },
                     })
                 .on_pressed([this, port, i] {
+                    mDoAud_seStartMenu(kSoundItemChange);
                     cancel_pending_binding();
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();

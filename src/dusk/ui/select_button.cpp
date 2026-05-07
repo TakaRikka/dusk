@@ -59,6 +59,7 @@ SelectButton& SelectButton::on_pressed(SelectButtonCallback callback) {
     listen(Rml::EventId::Submit, [this, callback = std::move(callback)](Rml::Event& event) {
         if (!disabled() && event.GetTargetElement() == mRoot) {
             callback();
+            event.StopPropagation();
         }
     });
     return *this;
@@ -84,7 +85,7 @@ void SelectButton::update_props(Props props) {
 }
 
 bool SelectButton::handle_nav_command(NavCommand cmd) {
-    if (cmd == NavCommand::Confirm) {
+    if (cmd == NavCommand::Confirm && mProps.submit) {
         mRoot->DispatchEvent(Rml::EventId::Submit, {});
         return true;
     }

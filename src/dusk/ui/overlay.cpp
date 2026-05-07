@@ -1,17 +1,17 @@
 #include "overlay.hpp"
 
-#include <dolphin/gx/GXAurora.h>
-#include <dolphin/vi.h>
-#include <fmt/format.h>
+#include "aurora/lib/logging.hpp"
+#include "dusk/achievements.h"
+#include "magic_enum.hpp"
+#include "window.hpp"
 
-#include "dusk/config.hpp"
-#include "dusk/settings.h"
-
+#include <SDL3/SDL_gamepad.h>
 #include <algorithm>
-#include <string>
+#include <dolphin/pad.h>
 
 namespace dusk::ui {
 namespace {
+aurora::Module Log{"dusk::ui::overlay"};
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -19,257 +19,253 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/overlay.rcss" />
 </head>
 <body>
-    <div id="root" class="overlay-root">
-        <div class="overlay">
-            <div class="header">
-                <div id="title"></div>
-                <div id="carousel-container" class="carousel-container"></div>
-            </div>
-            <div id="description" class="description"></div>
-            <div class="divider"></div>
-            <div id="footer" class="footer"></div>
-        </div>
-    </div>
 </body>
 </rml>
 )RML";
 
-int get_value(GraphicsOption option) {
-    switch (option) {
-    case GraphicsOption::InternalResolution:
-        return getSettings().game.internalResolutionScale.getValue();
-    case GraphicsOption::ShadowResolution:
-        return getSettings().game.shadowResolutionMultiplier.getValue();
-    case GraphicsOption::BloomMode:
-        return static_cast<int>(getSettings().game.bloomMode.getValue());
-    case GraphicsOption::BloomMultiplier:
-        return std::clamp(
-            static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0,
-            100);
+constexpr std::array<std::pair<const char*, const char*>, 3> kAutoSaveLayers{{
+    {"inner", "res/org-icon-inner.png"},
+    {"outer", "res/org-icon-outer.png"},
+    {"center", "res/org-icon-center.png"},
+}};
+
+constexpr auto kMenuNotificationDuration = std::chrono::milliseconds(2500);
+
+Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
+    if (toast.type == "autosave") {
+        auto* logo = append(parent, "logo");
+        for (const auto [cls, src] : kAutoSaveLayers) {
+            auto* img = append(logo, "img");
+            img->SetClass(cls, true);
+            img->SetAttribute("src", src);
+        }
+        return logo;
     }
-    return 0;
-}
 
-void set_value(GraphicsOption option, int value) {
-    switch (option) {
-    case GraphicsOption::InternalResolution:
-        getSettings().game.internalResolutionScale.setValue(value);
-        VISetFrameBufferScale(static_cast<float>(value));
-        break;
-    case GraphicsOption::ShadowResolution:
-        getSettings().game.shadowResolutionMultiplier.setValue(value);
-        break;
-    case GraphicsOption::BloomMode:
-        getSettings().game.bloomMode.setValue(static_cast<BloomMode>(std::clamp(
-            value, static_cast<int>(BloomMode::Off), static_cast<int>(BloomMode::Dusk))));
-        break;
-    case GraphicsOption::BloomMultiplier:
-        getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
-        break;
+    auto* elem = append(parent, "toast");
+    if (!toast.type.empty()) {
+        elem->SetClass(toast.type, true);
     }
-    config::Save();
+    {
+        auto* heading = append(elem, "heading");
+        if (toast.title.starts_with("<")) {
+            heading->SetInnerRML(toast.title);
+        } else {
+            auto* span = append(heading, "span");
+            span->SetInnerRML(toast.title);
+        }
+        if (toast.type == "achievement") {
+            auto* icon = append(heading, "icon");
+            icon->SetClass("trophy", true);
+            mDoAud_seStartMenu(kSoundAchievementUnlock);
+        } else if (toast.type == "controller") {
+            auto* icon = append(heading, "icon");
+            icon->SetClass("controller", true);
+        }
+    }
+    {
+        auto* message = append(elem, "message");
+        if (toast.content.starts_with("<")) {
+            message->SetInnerRML(toast.content);
+        } else {
+            auto* span = append(message, "span");
+            span->SetInnerRML(toast.content);
+        }
+    }
+    {
+        auto* progress = append(elem, "progress");
+        progress->SetAttribute("value", 1.f);
+    }
+    return elem;
 }
 
-Rml::Element* create_stepped_carousel_root(Rml::Element* parent) {
-    auto* doc = parent->GetOwnerDocument();
-    auto root = doc->CreateElement("div");
-    root->SetClass("stepped-carousel", true);
-    root->SetAttribute("tabindex", "0");
-    return parent->AppendChild(std::move(root));
+Rml::Element* create_controller_warning(Rml::Element* parent) {
+    auto* elem = append(parent, "toast");
+    elem->SetClass("controller-warning", true);
+
+    auto* heading = append(elem, "heading");
+    auto* title = append(heading, "span");
+    title->SetInnerRML("No controller assigned");
+    auto* icon = append(heading, "icon");
+    icon->SetClass("warning", true);
+
+    auto* message = append(elem, "message");
+    auto* content = append(message, "span");
+    content->SetInnerRML("Configure controller port 1 in Settings.");
+
+    return elem;
 }
 
-Rml::Element* create_stepped_carousel_arrow(
-    Rml::Element* parent, const Rml::String& className, const Rml::String& label) {
-    auto* doc = parent->GetOwnerDocument();
-    auto button = doc->CreateElement("button");
-    button->SetClass("stepped-carousel-arrow", true);
-    button->SetClass(className, true);
-    button->SetInnerRML(label);
-    return parent->AppendChild(std::move(button));
+SDL_Gamepad* gamepad_for_port(u32 port) noexcept {
+    const s32 index = PADGetIndexForPort(port);
+    if (index < 0) {
+        return nullptr;
+    }
+    return PADGetSDLGamepadForIndex(static_cast<u32>(index));
+}
+
+Rml::String back_button_name() {
+    if (auto* gamepad = gamepad_for_port(PAD_CHAN0)) {
+        switch (SDL_GetGamepadType(gamepad)) {
+        case SDL_GAMEPAD_TYPE_PS3:
+            return "Select";
+        case SDL_GAMEPAD_TYPE_PS4:
+            return "Share";
+        case SDL_GAMEPAD_TYPE_PS5:
+            return "Create";
+        case SDL_GAMEPAD_TYPE_XBOX360:
+            return "Back";
+        case SDL_GAMEPAD_TYPE_XBOXONE:
+            return "View";
+        case SDL_GAMEPAD_TYPE_GAMECUBE:
+            return "R + Start";
+        default:
+            break;
+        }
+    }
+    return "Back";
+}
+
+Rml::Element* create_menu_notification(Rml::Element* parent) {
+    auto* elem = append(parent, "toast");
+    elem->SetClass("menu-notification", true);
+
+    auto* message = append(elem, "message");
+    auto* row = append(message, "row");
+    append(row, "span")->SetInnerRML("Press F1 or");
+    auto* icon = append(row, "icon");
+    icon->SetClass("controller", true);
+    append(row, "span")->SetInnerRML(escape(back_button_name()));
+    append(row, "span")->SetInnerRML("to open menu");
+
+    return elem;
+}
+
+void remove_element(Rml::Element*& elem) noexcept {
+    if (elem == nullptr) {
+        return;
+    }
+    if (auto* parent = elem->GetParentNode()) {
+        parent->RemoveChild(elem);
+    }
+    elem = nullptr;
 }
 
 }  // namespace
 
-SteppedCarousel::SteppedCarousel(Rml::Element* parent, Props props)
-    : Component(create_stepped_carousel_root(parent)), mProps(std::move(props)) {
-    Rml::Element* prevElem = create_stepped_carousel_arrow(mRoot, "prev", "&#xe5cb;");
-    mValueElem = append(mRoot, "div");
-    mValueElem->SetClass("stepped-carousel-value", true);
-    Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", "&#xe5cc;");
-
-    listen(prevElem, Rml::EventId::Click,
-        [this](Rml::Event&) { handle_nav_command(NavCommand::Left); });
-    listen(nextElem, Rml::EventId::Click,
-        [this](Rml::Event&) { handle_nav_command(NavCommand::Right); });
-    listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
-        const auto cmd = map_nav_event(event);
-        if (cmd != NavCommand::None && handle_nav_command(cmd)) {
-            event.StopPropagation();
-        }
-    });
-}
-
-bool SteppedCarousel::focus() {
-    return Component::focus();
-}
-
-void SteppedCarousel::update() {
-    if (mValueElem == nullptr) {
-        return;
-    }
-    const int value = std::clamp(mProps.getValue ? mProps.getValue() : 0, mProps.min, mProps.max);
-    if (mProps.formatValue) {
-        mValueElem->SetInnerRML(mProps.formatValue(value));
-    } else {
-        mValueElem->SetInnerRML(std::to_string(value));
-    }
-}
-
-bool SteppedCarousel::handle_nav_command(NavCommand cmd) {
-    if (cmd == NavCommand::Left) {
-        const int value = mProps.getValue ? mProps.getValue() : 0;
-        apply(std::clamp(value - mProps.step, mProps.min, mProps.max));
-        return true;
-    }
-    if (cmd == NavCommand::Right) {
-        const int value = mProps.getValue ? mProps.getValue() : 0;
-        apply(std::clamp(value + mProps.step, mProps.min, mProps.max));
-        return true;
-    }
-    return false;
-}
-
-void SteppedCarousel::apply(int value) {
-    const int nextValue = std::clamp(value, mProps.min, mProps.max);
-    const int currentValue =
-        std::clamp(mProps.getValue ? mProps.getValue() : 0, mProps.min, mProps.max);
-    if (nextValue == currentValue) {
-        return;
-    }
-    if (mProps.onChange) {
-        mProps.onChange(nextValue);
-    }
-}
-
-Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
-    switch (option) {
-    case GraphicsOption::InternalResolution:
-        if (value <= 0) {
-            return "Auto";
-        } else {
-            u32 width = 0;
-            u32 height = 0;
-            AuroraGetRenderSize(&width, &height);
-            return fmt::format("{}x ({}x{})", value, width, height);
-        }
-    case GraphicsOption::ShadowResolution:
-        return fmt::format("{}x", value);
-    case GraphicsOption::BloomMode:
-        switch (static_cast<BloomMode>(value)) {
-        case BloomMode::Off:
-            return "Off";
-        case BloomMode::Classic:
-            return "Classic";
-        case BloomMode::Dusk:
-            return "Dusk";
-        }
-        break;
-    case GraphicsOption::BloomMultiplier:
-        return fmt::format("{}%", value);
-    }
-    return "";
-}
-
-Overlay::Overlay(OverlayProps props)
-    : Document(kDocumentSource), mOption(props.option), mValueMin(props.valueMin),
-      mValueMax(props.valueMax), mDefaultValue(props.defaultValue) {
-    if (mDocument == nullptr) {
-        return;
-    }
-
-    if (auto* title = mDocument->GetElementById("title")) {
-        title->SetInnerRML(escape(props.title));
-    }
-    if (auto* description = mDocument->GetElementById("description")) {
-        description->SetInnerRML(escape(props.helpText));
-    }
-    if (auto* carouselParent = mDocument->GetElementById("carousel-container")) {
-        add_component<SteppedCarousel>(carouselParent,
-            SteppedCarousel::Props{
-                .min = mValueMin,
-                .max = mValueMax,
-                .step = 1,
-                .getValue = [this] { return get_value(mOption); },
-                .onChange = [this](int value) { set_value(mOption, value); },
-                .formatValue =
-                    [this](int value) { return format_graphics_setting_value(mOption, value); },
-            });
-    }
-
-    if (auto* footer = mDocument->GetElementById("footer")) {
-        auto& returnButton = add_component<Button>(footer, "\xE2\x86\x90 Return", "footer-button")
-                                 .on_pressed([this] { pop(); });
-        returnButton.root()->SetClass("return", true);
-        auto& resetButton =
-            add_component<Button>(footer, "Reset to default", "footer-button").on_pressed([this] {
-                reset_default();
-            });
-        resetButton.root()->SetClass("reset", true);
-    }
-
-    // Hide document after transition completion
-    mRoot = mDocument->GetElementById("root");
-    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
-            Document::visible())
+Overlay::Overlay() : Document(kDocumentSource) {
+    listen(mDocument, Rml::EventId::Focus, [](Rml::Event&) { Log.warn("Overlay received focus"); });
+    listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
+        if (event.GetTargetElement() == mCurrentToast) {
+            if (get_toasts().empty() ||
+                clock::now() >= mCurrentToastStartTime + get_toasts().front().duration)
+            {
+                mCurrentToast->SetPseudoClass("done", true);
+            }
+        } else if (mControllerWarning != nullptr &&
+                   event.GetTargetElement() == mControllerWarning &&
+                   !mControllerWarning->HasAttribute("open"))
         {
-            Document::hide(mPendingClose);
+            mControllerWarning->SetPseudoClass("done", true);
+        } else if (mMenuNotification != nullptr && event.GetTargetElement() == mMenuNotification &&
+                   !mMenuNotification->HasAttribute("open"))
+        {
+            mMenuNotification->SetPseudoClass("done", true);
         }
     });
 }
 
 void Overlay::show() {
-    Document::show();
-    mRoot->SetAttribute("open", "");
-}
-
-void Overlay::hide(bool close) {
-    mRoot->RemoveAttribute("open");
-    if (close) {
-        mPendingClose = true;
+    if (mDocument != nullptr) {
+        mDocument->Show(Rml::ModalFlag::None, Rml::FocusFlag::None, Rml::ScrollFlag::None);
     }
 }
 
 void Overlay::update() {
-    for (const auto& component : mComponents) {
-        component->update();
-    }
     Document::update();
-}
+    if (mDocument == nullptr) {
+        return;
+    }
 
-bool Overlay::focus() {
-    for (const auto& component : mComponents) {
-        if (component->focus()) {
-            return true;
+    const bool showControllerWarning =
+        PADGetIndexForPort(PAD_CHAN0) < 0 && dynamic_cast<Window*>(top_document()) == nullptr;
+    if (showControllerWarning && mControllerWarning == nullptr) {
+        mControllerWarning = create_controller_warning(mDocument);
+    } else if (showControllerWarning && mControllerWarning != nullptr) {
+        mControllerWarning->SetAttribute("open", "");
+        mControllerWarning->SetPseudoClass("opened", true);
+        mControllerWarning->SetPseudoClass("done", false);
+    } else if (!showControllerWarning && mControllerWarning != nullptr) {
+        if (mControllerWarning->IsPseudoClassSet("done") ||
+            !mControllerWarning->IsPseudoClassSet("opened"))
+        {
+            remove_element(mControllerWarning);
+        } else {
+            mControllerWarning->RemoveAttribute("open");
         }
     }
-    return false;
-}
 
-bool Overlay::visible() const {
-    return mRoot->HasAttribute("open");
+    if (mMenuNotification != nullptr) {
+        if (clock::now() >= mMenuNotificationStartTime + kMenuNotificationDuration) {
+            if (mMenuNotification->IsPseudoClassSet("done") ||
+                !mMenuNotification->IsPseudoClassSet("opened"))
+            {
+                remove_element(mMenuNotification);
+            } else {
+                mMenuNotification->RemoveAttribute("open");
+            }
+        } else {
+            mMenuNotification->SetAttribute("open", "");
+            mMenuNotification->SetPseudoClass("opened", true);
+            mMenuNotification->SetPseudoClass("done", false);
+        }
+    }
+    if (consume_menu_notification_request()) {
+        if (mMenuNotification == nullptr) {
+            mMenuNotification = create_menu_notification(mDocument);
+        }
+        mMenuNotificationStartTime = clock::now();
+    }
+
+    auto& toasts = get_toasts();
+    if (mCurrentToast == nullptr) {
+        if (!toasts.empty()) {
+            const auto& toast = toasts.front();
+            mCurrentToast = create_toast(mDocument, toast);
+            mCurrentToastStartTime = clock::now();
+        }
+    } else if (!toasts.empty()) {
+        const auto& toast = toasts.front();
+        const float duration = std::chrono::duration<float>(toast.duration).count();
+        const float elapsed =
+            std::chrono::duration<float>(clock::now() - mCurrentToastStartTime).count();
+        const float ratio = duration > 0.0f ? std::clamp(elapsed / duration, 0.0f, 1.0f) : 1.0f;
+        const auto remaining = 1.f - ratio;
+        Rml::ElementList list;
+        mDocument->GetElementsByTagName(list, "progress");
+        for (auto* elem : list) {
+            elem->SetAttribute("value", remaining);
+        }
+        if (remaining == 0.f) {
+            if (mCurrentToast->IsPseudoClassSet("done") ||
+                // Fallback for large gaps in time where we never actually opened it
+                !mCurrentToast->IsPseudoClassSet("opened"))
+            {
+                remove_element(mCurrentToast);
+                toasts.pop_front();
+            } else {
+                mCurrentToast->RemoveAttribute("open");
+            }
+        } else {
+            mCurrentToast->SetAttribute("open", "");
+            mCurrentToast->SetPseudoClass("opened", true);
+        }
+    }
 }
 
 bool Overlay::handle_nav_command(Rml::Event& event, NavCommand cmd) {
-    if (cmd == NavCommand::Cancel) {
-        pop();
-        return true;
-    }
-    return Document::handle_nav_command(event, cmd);
-}
-
-void Overlay::reset_default() {
-    set_value(mOption, mDefaultValue);
+    Log.warn("Overlay received nav command: {}", magic_enum::enum_name(cmd));
+    return false;
 }
 
 }  // namespace dusk::ui

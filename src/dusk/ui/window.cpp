@@ -6,6 +6,9 @@
 #include "pane.hpp"
 #include "ui.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
 #include <algorithm>
 #include <cmath>
 
@@ -36,11 +39,24 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
+const Rml::String kDocumentSourceSmall = R"RML(
+<rml>
+<head>
+    <link type="text/rcss" href="res/rml/window.rcss" />
+</head>
+<body>
+    <window id="window" class="small">
+        <div id="dialog"/>
+    </window>
+</body>
+</rml>
+)RML";
+
 }  // namespace
 
 Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] { pop(); },
+                                                  .onClose = [this] { request_close(); },
                                                   .selectedTabIndex = 0,
                                                   .autoSelect = true,
                                               });
@@ -65,7 +81,9 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 
     // Hide document after transition completion
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
-        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") && Document::visible()) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
+        {
             Document::hide(mPendingClose);
         }
     });
@@ -88,6 +106,10 @@ Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("w
 void Window::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
+    if (mInitialOpen) {
+        mDoAud_seStartMenu(kSoundWindowOpen);
+        mInitialOpen = false;
+    }
 }
 
 void Window::hide(bool close) {
@@ -136,6 +158,21 @@ bool Window::set_active_tab(int index) {
     return mTabBar->set_active_tab(index);
 }
 
+void Window::request_close() {
+    if (!consume_close_request()) {
+        mDoAud_seStartMenu(kSoundWindowClose);
+        pop();
+    }
+}
+
+bool Window::consume_close_request() {
+    return false;
+}
+
+void Window::refresh_active_tab() {
+    mTabBar->refresh_active_tab();
+}
+
 void Window::add_tab(const Rml::String& title, TabBuilder builder) {
     mTabBar->add_tab(title, [this, builder = std::move(builder)] {
         clear_content();
@@ -168,23 +205,31 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         }
     }
     if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
-        if (!mContentComponents.empty()) {
-            return mContentComponents.front()->focus();
+        if (!mContentComponents.empty() && mContentComponents.front()->focus()) {
+            mDoAud_seStartMenu(kSoundItemFocus);
+            return true;
         }
     }
     if (cmd == NavCommand::Cancel) {
-        pop();
+        request_close();
         return true;
     }
     if (mTabBar->handle_nav_command(event, cmd)) {
         return true;
     }
-    return Document::handle_nav_command(event, cmd);
+    return mSuppressNavFallback ? false : Document::handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up) {
-        return focus();
+        if (focus()) {
+            mDoAud_seStartMenu(kSoundItemFocus);
+            return true;
+        }
+        return false;
+    } else if (cmd == NavCommand::Down) {
+        // End of content, avoid looping
+        return true;
     } else if (cmd == NavCommand::Cancel) {
         int currentComponent = -1;
         for (int i = 0; i < mContentComponents.size(); ++i) {
@@ -232,6 +277,35 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
         }
     }
     return false;
+}
+
+WindowSmall::WindowSmall(const Rml::String& windowClass, const Rml::String& dialogClass)
+    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")),
+      mDialog(mDocument->GetElementById("dialog")) {
+    listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
+        if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
+            Document::visible())
+        {
+            Document::hide(mPendingClose);
+        }
+    });
+
+    mRoot->SetClass(windowClass, true);
+    mDialog->SetClass(dialogClass, true);
+}
+
+void WindowSmall::show() {
+    Document::show();
+    mRoot->SetAttribute("open", "");
+}
+
+void WindowSmall::hide(bool close) {
+    mRoot->RemoveAttribute("open");
+    mPendingClose = close;
+}
+
+bool WindowSmall::visible() const {
+    return mRoot->HasAttribute("open");
 }
 
 }  // namespace dusk::ui

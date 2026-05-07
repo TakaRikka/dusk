@@ -1,10 +1,17 @@
-#include "popup.hpp"
+#include "menu_bar.hpp"
 
 #include <RmlUi/Core.h>
 
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "m_Do/m_Do_audio.h"
+
+#include "achievements.hpp"
 #include "aurora/rmlui.hpp"
 #include "dusk/main.h"
+#include "dusk/settings.h"
 #include "editor.hpp"
+#include "f_pc/f_pc_manager.h"
+#include "f_pc/f_pc_name.h"
 #include "imgui.h"
 #include "settings.hpp"
 #include "ui.hpp"
@@ -23,16 +30,20 @@ const Rml::String kDocumentSource = R"RML(
     <link type="text/rcss" href="res/rml/popup.rcss" />
 </head>
 <body>
-    <popup id="popup"></popup>
+    <popup id="popup" />
 </body>
 </rml>
 )RML";
 
 }
 
-Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
+MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] { hide(false); },
+                                                  .onClose =
+                                                      [this] {
+                                                          mDoAud_seStartMenu(kSoundMenuClose);
+                                                          hide(false);
+                                                      },
                                                   .autoSelect = false,
                                               });
     mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
@@ -40,9 +51,13 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
     //     // TODO
     // });
     mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
+    mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
     mTabBar->add_tab("Reset", [this] {
-        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         mTabBar->set_active_tab(-1);
+        if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
+            return;
+        }
+        JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         hide(false);
     });
     mTabBar->add_tab("Quit", [] { IsRunning = false; });
@@ -55,30 +70,31 @@ Popup::Popup() : Document(kDocumentSource), mRoot(mDocument->GetElementById("pop
             Document::hide(mPendingClose);
         }
     });
-
-    // We start hidden, but want focus for an open nav event
-    mDocument->Focus();
 }
 
-void Popup::show() {
+void MenuBar::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
     mTabBar->set_active_tab(-1);
+    if (!mTabBar->focus_tab(mFocusedTabIndex)) {
+        mTabBar->focus();
+    }
 }
 
-void Popup::hide(bool close) {
+void MenuBar::hide(bool close) {
+    mFocusedTabIndex = mTabBar->focused_tab_index();
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;
     }
 }
 
-void Popup::update() {
+void MenuBar::update() {
     update_safe_area();
     Document::update();
 }
 
-void Popup::update_safe_area() noexcept {
+void MenuBar::update_safe_area() noexcept {
     if (mDocument == nullptr || mTabBar == nullptr) {
         return;
     }
@@ -116,19 +132,23 @@ void Popup::update_safe_area() noexcept {
     }
 }
 
-bool Popup::visible() const {
+bool MenuBar::visible() const {
     return mRoot->HasAttribute("open");
 }
 
-bool Popup::handle_nav_command(Rml::Event& event, NavCommand cmd) {
-    if (cmd == NavCommand::Cancel) {
+bool MenuBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
+    if (!getSettings().backend.wasPresetChosen) {
+        return true;
+    }
+    if (cmd == NavCommand::Cancel && visible()) {
+        mDoAud_seStartMenu(kSoundMenuClose);
         hide(false);
         return true;
     }
     return Document::handle_nav_command(event, cmd);
 }
 
-bool Popup::focus() {
+bool MenuBar::focus() {
     return mTabBar->focus();
 }
 

@@ -24,6 +24,7 @@ protected:
 
 private:
     bool mEntranceAnimationStarted = false;
+    bool mRestartSuppressed = false;
     std::vector<std::unique_ptr<Button>> mMenuButtons;
     Rml::Element* mRoot = nullptr;
     Rml::Element* mDiscStatus = nullptr;
@@ -34,17 +35,22 @@ private:
 class PrelaunchOptions;
 
 struct PrelaunchState {
-    std::string selectedIsoPath;
-    std::string errorString;
-    std::string initialGraphicsBackend;
-    bool isPal = false;
     bool initialized = false;
+    std::string selectedDiscPath;
+    bool selectedDiscIsValid = false;
+    bool selectedDiscIsPal = false;
+    std::string errorString;
+    bool initialDiscIsPal = false;
+    std::string initialDiscPath;
+    GameLanguage initialLanguage = GameLanguage::English;
+    std::string initialGraphicsBackend;
+    int initialCardFileType = 0;
 };
 
 PrelaunchState& prelaunch_state() noexcept;
 void ensure_initialized() noexcept;
-void refresh_path_state() noexcept;
-bool is_selected_path_valid() noexcept;
+void refresh_state() noexcept;
 void open_iso_picker() noexcept;
+bool is_restart_pending() noexcept;
 
 }  // namespace dusk::ui

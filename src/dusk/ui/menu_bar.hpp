@@ -8,12 +8,12 @@
 
 namespace dusk::ui {
 
-class Popup : public Document {
+class MenuBar : public Document {
 public:
-    Popup();
+    MenuBar();
 
-    Popup(const Popup&) = delete;
-    Popup& operator=(const Popup&) = delete;
+    MenuBar(const MenuBar&) = delete;
+    MenuBar& operator=(const MenuBar&) = delete;
 
     void show() override;
     void hide(bool close) override;
@@ -32,6 +32,7 @@ private:
     std::unique_ptr<Button> mCloseButton;
     Insets mTabBarPadding;
     float mTopMargin = 0.f;
+    int mFocusedTabIndex = -1;
 };
 
 }  // namespace dusk::ui

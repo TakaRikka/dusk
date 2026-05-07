@@ -56,6 +56,7 @@ struct UserSettings {
         ConfigVar<int> fanfareVolume;
         ConfigVar<bool> enableReverb;
         ConfigVar<bool> enableHrtf;
+        ConfigVar<bool> menuSounds;
     } audio;
 
     // Game settings
@@ -66,7 +67,6 @@ struct UserSettings {
         // QoL
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
-        ConfigVar<bool> skipWarningScreen;
         ConfigVar<bool> biggerWallets;
         ConfigVar<bool> noReturnRupees;
         ConfigVar<bool> disableRupeeCutscenes;
@@ -119,6 +119,7 @@ struct UserSettings {
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<float> freeCameraSensitivity;
+        ConfigVar<bool> debugFlyCam;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;

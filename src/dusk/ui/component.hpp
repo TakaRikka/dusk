@@ -47,7 +47,6 @@ public:
     Rml::Element* root() const { return mRoot; }
 
 protected:
-    static Rml::Element* append(Rml::Element* parent, const Rml::String& tag);
     void clear_children();
 
     Rml::Element* mRoot = nullptr;
@@ -64,15 +63,6 @@ public:
         Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
         Component::listen(mRoot, event, std::move(callback), capture);
         return static_cast<Derived&>(*this);
-    }
-
-    Derived& on_focus(ScopedEventListener::Callback callback) {
-        return listen(
-            Rml::EventId::Focus, [this, callback = std::move(callback)](Rml::Event& event) {
-                if (!disabled()) {
-                    callback(event);
-                }
-            });
     }
 
     Derived& on_nav_command(std::function<bool(Rml::Event&, NavCommand)> callback) {

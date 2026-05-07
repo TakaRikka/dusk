@@ -50,8 +50,6 @@ public:
     bool hasSignal(const char* key) const;
 
     std::vector<Achievement> getAchievements() const;
-    bool hasPendingUnlock() const { return !m_pendingUnlocks.empty(); }
-    std::string consumePendingUnlock();
 
 private:
     struct Entry {
@@ -68,7 +66,6 @@ private:
     std::unordered_set<std::string_view> m_signals;
     bool m_loaded = false;
     bool m_dirty = false;
-    std::queue<std::string> m_pendingUnlocks;
 };
 
 } // namespace dusk
