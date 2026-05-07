@@ -291,10 +291,6 @@ namespace dusk {
         ImGui::PopStyleColor();
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
-            AddToast(ImGui::GetIO().MouseSource == ImGuiMouseSource_TouchScreen ?
-                                      "3-finger tap to toggle menu"s :
-                                      "Press F1 to toggle menu"s,
-                                  4.f);
             m_isLaunchInitialized = true;
             if (getSettings().game.liveSplitEnabled) {
                 dusk::speedrun::connectLiveSplit();
@@ -389,7 +385,6 @@ namespace dusk {
             m_menuTools.ShowSaveEditor();
             m_menuTools.ShowStateShare();
         }
-        DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.
         ImGuiIO& io = ImGui::GetIO();

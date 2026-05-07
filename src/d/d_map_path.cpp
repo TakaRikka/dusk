@@ -15,13 +15,47 @@
 #include <cstring>
 
 #ifdef TARGET_PC
+#include <span>
+#include <numbers>
+#include <array>
+
 constexpr u16 kMapResolutionMultiplier = 4;
-constexpr u16 kMapCircleSize = 16 * kMapResolutionMultiplier;
+constexpr u16 kMapImageSide = 16 * kMapResolutionMultiplier;
+constexpr u32 kMapImageTotalPixels = kMapImageSide * kMapImageSide;
+
+typedef std::function<u8(size_t, size_t)> PaintI8Fn;
+
+void paint_i8(std::span<u8> dst, size_t width, PaintI8Fn paint) {
+    const auto blocksAcross = width >> 3;
+
+    for (size_t i = 0; i < dst.size(); i++) {
+        // 8x4 block swizzling for I8
+        const auto blockIdx = i >> 5;
+        const auto localIdx = i & 31;
+
+        const auto blockY = blockIdx / blocksAcross;
+        const auto blockX = blockIdx % blocksAcross;
+
+        const auto localY = localIdx >> 3;
+        const auto localX = localIdx & 7;
+
+        const auto x = (blockX << 3) + localX;
+        const auto y = (blockY << 2) + localY;
+
+        dst[i] = paint(x, y);
+    }
+}
 #endif
 
 void dMpath_n::dTexObjAggregate_c::create() {
     static int const data[7] = {
-        79, 80, 77, 78, 76, 81, 82,
+        79, // 0: im_map_icon_square_4i.bti
+        80, // 1: im_map_icon_tresurebox_4i.bti
+        77, // 2: im_map_icon_enter_4i.bti
+        78, // 3: im_map_icon_nijumaru_4i.bti
+        76, // 4: im_map_icon_circle_4i.bti
+        81, // 5: im_map_icon_try_force_4i.bti
+        82, // 6: map_icon_circle16x16_4i.bti
     };
 
     for (int lp1 = 0; lp1 < 7; lp1++) {
@@ -35,45 +69,101 @@ void dMpath_n::dTexObjAggregate_c::create() {
     }
 
 #if TARGET_PC
-    auto hqCircle = JKR_NEW TGXTexObj();
+    static bool hqTexsDrawn = false;
 
-    static bool hqCircleDrawn = false;
-    static u8 hqCircleData[kMapCircleSize * kMapCircleSize];
+    static u8 hqCircleData[kMapImageTotalPixels];
+    static u8 hqCircleAltData[kMapImageTotalPixels];
+    static u8 hqNijumaruData[kMapImageTotalPixels];
+    static u8 hqEnterData[kMapImageTotalPixels];
+    static u8 hqTryForceData[kMapImageTotalPixels];
 
-    if (!hqCircleDrawn) {
-        const auto center = kMapCircleSize / 2.0f;
-        const auto radiusSq = center * center;
-        const auto blocksAcross = kMapCircleSize >> 3;
-        const auto totalPixels = sizeof(hqCircleData);
+    if (!hqTexsDrawn) {
+        constexpr auto center = kMapImageSide / 2.0f;
+        constexpr auto radiusSq = center * center;
 
-        for (size_t i = 0; i < totalPixels; i++) {
-            // 8x4 block swizzling for I8
-            const auto blockIdx = i >> 5;
-            const auto localIdx = i & 31;
+        // 6: map_icon_circle16x16_4i.bti - simple circle
+        paint_i8(std::span{hqCircleData}, kMapImageSide, [=](auto x, auto y) {
+            const auto dx = (x + 0.5f) - center;
+            const auto dy = (y + 0.5f) - center;
+            return (dx * dx + dy * dy < radiusSq) ? 0x11 : 0;
+        });
 
-            const auto blockY = blockIdx / blocksAcross;
-            const auto blockX = blockIdx % blocksAcross;
-
-            const auto localY = localIdx >> 3;
-            const auto localX = localIdx & 7;
-
-            const auto x = (blockX << 3) + localX;
-            const auto y = (blockY << 2) + localY;
+        // 4: im_map_icon_circle_4i.bti - outlined circle
+        paint_i8(std::span{hqCircleAltData}, kMapImageSide, [=](auto x, auto y) {
+            constexpr auto innerRadius = kMapImageSide * 3.0f / 8.0f;
+            constexpr auto innerRadiusSq = innerRadius * innerRadius;
 
             const auto dx = (x + 0.5f) - center;
             const auto dy = (y + 0.5f) - center;
+            const auto dSq = dx * dx + dy * dy;
 
-            // the original texture is in I4 format and uses 1 to indicate if inside the circle
-            // so we scale to I8 range: 255 / 15 = 17
-            hqCircleData[i] = (dx * dx + dy * dy < radiusSq) ? 17 : 0;
-        }
-        hqCircleDrawn = true;
+            return dSq < radiusSq ? (dSq < innerRadiusSq ? 0x22 : 0x11) : 0;
+        });
+
+        // 3: im_map_icon_nijumaru_4i.bti - concentric rings
+        paint_i8(std::span{hqNijumaruData}, kMapImageSide, [=](auto x, auto y) {
+            constexpr u8 nijumaruRings[] = {0x11, 0x22, 0x11, 0x11, 0x22, 0x22};
+
+            const auto dx = (x + 0.5f) - center;
+            const auto dy = (y + 0.5f) - center;
+            const auto dSq = dx * dx + dy * dy;
+
+            if (dSq < radiusSq) {
+                const auto ringIndex =
+                    static_cast<size_t>(std::trunc(std::sqrt(dSq) / kMapImageSide * 12));
+                return nijumaruRings[ringIndex];
+            }
+            return u8{0};
+        });
+
+        // 2: im_map_icon_enter_4i.bti - outlined octagram
+        paint_i8(std::span{hqEnterData}, kMapImageSide, [=](auto x, auto y) {
+            constexpr auto outlineWidth = kMapImageSide / 6.0f;
+
+            const auto adx = std::abs((x + 0.5f) - center);
+            const auto ady = std::abs((y + 0.5f) - center);
+            const auto dist =
+                std::min(adx + ady, std::max(adx, ady) * std::numbers::sqrt2_v<float>) -
+                kMapImageSide / 2.0f;
+
+            return dist > 0.0f ? 0 : (dist > -outlineWidth ? 0x22 : 0x33);
+        });
+
+        // 5: im_map_icon_try_force_4i.bti - outlined circle with triangle
+        paint_i8(std::span{hqTryForceData}, kMapImageSide, [=](auto x, auto y) {
+            constexpr auto innerRadiusNorm = 5.0f / 12.0f;
+            constexpr auto innerRadius = kMapImageSide * innerRadiusNorm;
+            constexpr auto innerRadiusSq = innerRadius * innerRadius;
+            constexpr auto triRadius = kMapImageSide * innerRadiusNorm / 2.0f;
+
+            const auto dx = (x + 0.5f) - center;
+            const auto dy = (y + 0.5f) - center;
+            const auto dSq = dx * dx + dy * dy;
+            const auto triSideDist = (std::numbers::sqrt3_v<float> * std::abs(dx) - dy) * 0.5f;
+            const auto insideTri = std::max(dy, triSideDist) < triRadius;
+
+            return insideTri ? 0x22 : (dSq < radiusSq ? (dSq < innerRadiusSq ? 0x33 : 0x22) : 0);
+        });
+
+        hqTexsDrawn = true;
     }
 
-    GXInitTexObj(hqCircle, hqCircleData, kMapCircleSize, kMapCircleSize, GX_TF_I8, GX_CLAMP,
-                 GX_CLAMP, GX_FALSE);
-    GXInitTexObjLOD(hqCircle, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    mp_texObj[6] = hqCircle;
+    constexpr auto replacements = std::to_array<std::pair<size_t, const u8*> >({
+        {2, hqEnterData},
+        {3, hqNijumaruData},
+        {4, hqCircleAltData},
+        {5, hqTryForceData},
+        {6, hqCircleData},
+    });
+
+    for (const auto& [idx, data] : replacements) {
+        JKR_DELETE(mp_texObj[idx]);
+        const auto texobj = JKR_NEW TGXTexObj();
+        GXInitTexObj(
+            texobj, data, kMapImageSide, kMapImageSide, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObjLOD(texobj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        mp_texObj[idx] = texobj;
+    }
 #endif
 }
 

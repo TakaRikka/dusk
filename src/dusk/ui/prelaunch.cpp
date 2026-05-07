@@ -260,6 +260,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
             }
 
             mDoAud_seStartMenu(kSoundPlay);
+            show_menu_notification();
 
             if (getSettings().audio.menuSounds) {
                 JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
@@ -281,7 +282,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Options"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
         mMenuButtons.back()->on_pressed([this] {
             mRestartSuppressed = false;
             push(std::make_unique<SettingsWindow>(true));

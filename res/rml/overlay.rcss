@@ -110,6 +110,47 @@ toast.achievement heading {
     color: #C2A42D;
 }
 
+toast.controller-warning {
+    top: auto;
+    right: auto;
+    bottom: 40dp;
+    left: 50%;
+    width: 440dp;
+    max-width: 90%;
+    transform: translateX(-50%) scale(0.9);
+}
+
+toast.controller-warning[open] {
+    transform: translateX(-50%) scale(1);
+}
+
+toast.controller-warning heading {
+    color: #C2A42D;
+}
+
+toast.menu-notification {
+    top: 40dp;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    max-width: 90%;
+    transform: translateX(-50%) scale(0.9);
+}
+
+toast.menu-notification[open] {
+    transform: translateX(-50%) scale(1);
+}
+
+toast.menu-notification message {
+    align-items: center;
+    text-align: center;
+}
+
+toast.menu-notification message row {
+    align-items: center;
+    gap: 6dp;
+}
+
 icon {
     font-family: "Material Symbols Rounded";
     font-weight: normal;
@@ -136,6 +177,13 @@ icon.controller {
     height: 24dp;
     font-size: 24dp;
     decorator: text("&#xf135;" center center);
+}
+
+icon.warning {
+    width: 24dp;
+    height: 24dp;
+    font-size: 24dp;
+    decorator: text("&#xe002;" center center);
 }
 
 logo {

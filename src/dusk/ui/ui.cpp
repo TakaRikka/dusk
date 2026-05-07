@@ -27,6 +27,7 @@ std::vector<std::unique_ptr<Document> > sDocumentStack;
 // Documents that don't participate in the focus stack
 std::vector<std::unique_ptr<Document> > sPassiveDocuments;
 std::deque<Toast> sToasts;
+bool sMenuNotificationRequested = false;
 
 // Sometimes gamepads can connect and disconnect quickly, especially during
 // connection negotiation. In this case, we'll receive an _ADDED event for a
@@ -359,6 +360,16 @@ void push_toast(Toast toast) noexcept {
 
 std::deque<Toast>& get_toasts() noexcept {
     return sToasts;
+}
+
+void show_menu_notification() noexcept {
+    sMenuNotificationRequested = true;
+}
+
+bool consume_menu_notification_request() noexcept {
+    const bool requested = sMenuNotificationRequested;
+    sMenuNotificationRequested = false;
+    return requested;
 }
 
 }  // namespace dusk::ui
