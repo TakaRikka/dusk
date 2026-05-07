@@ -97,6 +97,7 @@ struct UserSettings {
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
+        ConfigVar<bool> minimalHUD;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementNotifications;

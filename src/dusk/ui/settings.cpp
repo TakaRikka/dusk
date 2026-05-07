@@ -687,6 +687,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("General");
         addOption("Mirror Mode", getSettings().game.enableMirrorMode,
             "Mirrors the world horizontally, matching the Wii version of the game.");
+        addOption("Minimal HUD", getSettings().game.minimalHUD,
+            "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive experience.");
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
@@ -871,7 +873,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.recordingMode,
             {
                 .key = "Recording Mode",
-                .helpText = "Disables the HUD of the game.<br/>Useful for recording or a more immersive experience.",
+                .helpText = "Disables the entire HUD of the game.<br/>Useful for recording footage.",
             });
     });
 }
