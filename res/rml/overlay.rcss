@@ -24,8 +24,6 @@ fps,
 toast {
     position: absolute;
     border: 1dp #92875B;
-    backdrop-filter: blur(5dp);
-    box-shadow: 0 0 15dp 3dp;
     background-color: rgba(21, 22, 16, 80%);
 }
 
@@ -36,6 +34,8 @@ toast {
     flex-flow: column;
     border-radius: 14dp;
     overflow: hidden;
+    backdrop-filter: blur(5dp);
+    box-shadow: 0 0 15dp 3dp;
     filter: opacity(0);
     transform: scale(0.9);
     transform-origin: center;

@@ -479,39 +479,53 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Pause on Focus Lost",
                 .isDisabled = [] { return IsMobile; },
             });
-        config_bool_select(leftPane, rightPane, getSettings().video.enableFpsOverlay,
-            {
-                .key = "Enable FPS Counter",
-                .helpText = "Display the current framerate in a corner of the screen while playing.",
-            });
         leftPane.register_control(leftPane.add_select_button({
-                .key = "FPS Counter Display Corner",
+                .key = "Show FPS Counter",
                 .getValue =
                     [] {
-                        const int corner = getSettings().video.fpsOverlayCorner.getValue();
-                        return Rml::String{kFpsOverlayCornerNames[corner]};
+                        if (!getSettings().video.enableFpsOverlay.getValue()) {
+                            return Rml::String{"Off"};
+                        }
+                        const int idx = getSettings().video.fpsOverlayCorner.getValue();
+                        return Rml::String{kFpsOverlayCornerNames[idx]};
                     },
-                .isDisabled = [] { return !getSettings().video.enableFpsOverlay.getValue(); },
+                .isModified =
+                    [] {
+                        const auto& enable = getSettings().video.enableFpsOverlay;
+                        const auto& corner = getSettings().video.fpsOverlayCorner;
+                        return enable.getValue() != enable.getDefaultValue() ||
+                               (enable.getValue() && corner.getValue() != corner.getDefaultValue());
+                    },
             }),
             rightPane, [](Pane& pane) {
+                pane.add_button({
+                        .text = "Off",
+                        .isSelected =
+                            [] { return !getSettings().video.enableFpsOverlay.getValue(); },
+                    })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().video.enableFpsOverlay.setValue(false);
+                        config::Save();
+                    });
                 for (int i = 0; i < static_cast<int>(kFpsOverlayCornerNames.size()); ++i) {
-                    pane
-                        .add_button({
+                    pane.add_button({
                             .text = kFpsOverlayCornerNames[i],
                             .isSelected =
                                 [i] {
-                                    return std::clamp(
-                                               getSettings().video.fpsOverlayCorner.getValue(), 0,
-                                               3) == i;
+                                    return getSettings().video.enableFpsOverlay.getValue() &&
+                                           getSettings().video.fpsOverlayCorner.getValue() == i;
                                 },
                         })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.enableFpsOverlay.setValue(true);
                             getSettings().video.fpsOverlayCorner.setValue(i);
                             config::Save();
                         });
                 }
-                pane.add_rml("<br/>Choose which corner the framerate counter displays in.");
+                pane.add_rml(
+                    "<br/>Display the current framerate in a corner of the screen while playing.");
             });
 
         leftPane.add_section("Resolution");
