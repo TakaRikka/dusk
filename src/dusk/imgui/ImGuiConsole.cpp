@@ -276,16 +276,6 @@ namespace dusk {
             m_menuGame.draw();
             m_menuTools.draw();
 
-            const auto fpsLabel =
-                fmt::format(FMT_STRING("FPS: {:.2f}\n"), ImGui::GetIO().Framerate);
-            const auto fpsSize =
-                ImGui::CalcTextSize(fpsLabel.data(), fpsLabel.data() + fpsLabel.size());
-            ImGui::SetCursorPosX(
-                ImMax(ImGui::GetCursorPosX(), ImGui::GetWindowWidth() -
-                                                  ImGui::GetStyle().DisplaySafeAreaPadding.x -
-                                                  fpsSize.x - ImGui::GetStyle().ItemSpacing.x));
-            ImGuiStringViewText(fpsLabel);
-
             ImGui::EndMainMenuBar();
         }
         ImGui::PopStyleColor();
