@@ -59,7 +59,7 @@ bool NumberButton::handle_nav_command(NavCommand cmd) {
             mGetValue() + (cmd == NavCommand::Right ? mStep : -mStep), mMin, mMax);
         if (newValue != mGetValue()) {
             mSetValue(newValue);
-            mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
+            mDoAud_seStartMenu(kSoundItemChange);
         }
         return true;
     }

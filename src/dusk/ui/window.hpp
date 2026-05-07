@@ -54,6 +54,7 @@ protected:
     std::unique_ptr<TabBar> mTabBar;
     std::vector<std::unique_ptr<Component> > mContentComponents;
     Insets mBodyPadding;
+    bool mInitialOpen = true;
 };
 
 // Shared shell for small-style windows such as Modal and PresetWindow

@@ -6,7 +6,6 @@
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "modal.hpp"
-#include "popup.hpp"
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"
@@ -199,6 +198,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
                 open_iso_picker();
                 return;
             }
+
+            mDoAud_seStartMenu(kSoundPlay);
 
             if (getSettings().audio.menuSounds) {
                 JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
@@ -407,6 +408,7 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     int i = ((focusedButton + direction) % n + n) % n;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
+            mDoAud_seStartMenu(kSoundItemFocus);
             event.StopPropagation();
             return true;
         }
