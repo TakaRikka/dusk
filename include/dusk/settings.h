@@ -169,6 +169,7 @@ struct UserSettings {
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
         ConfigVar<int> cardFileType;
+        ConfigVar<bool> enableAdvancedSettings;
     } backend;
 };
 

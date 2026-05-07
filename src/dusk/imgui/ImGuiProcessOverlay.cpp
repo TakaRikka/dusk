@@ -126,7 +126,9 @@ namespace dusk {
     }
 
     void ImGuiMenuTools::ShowProcessManager() {
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F2, m_showProcessManagement)) {
+        if (!getSettings().backend.enableAdvancedSettings ||
+            !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F2, m_showProcessManagement))
+        {
             return;
         }
 

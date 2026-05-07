@@ -282,7 +282,9 @@ static void ShowAllJAISeqs() {
 }
 
 void dusk::ImGuiMenuTools::ShowAudioDebug() {
-    if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F10, m_showAudioDebug)) {
+    if (!getSettings().backend.enableAdvancedSettings ||
+        !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F10, m_showAudioDebug))
+    {
         return;
     }
 
@@ -328,7 +330,9 @@ void dusk::ImGuiMenuTools::ShowAudioDebug() {
 }
 
 void dusk::ImGuiMenuTools::ShowSaveEditor() {
-    if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F6, m_showSaveEditor)) {
+    if (!getSettings().backend.enableAdvancedSettings ||
+        !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F6, m_showSaveEditor))
+    {
         return;
     }
     m_saveEditor.draw(m_showSaveEditor);

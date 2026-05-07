@@ -866,6 +866,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Show Pipeline Compilation",
                 .helpText = "Show an overlay when shaders are being compiled for your hardware.",
             });
+
+        config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
+            {
+                .key = "Enable Advanced Settings",
+                .helpText = "Show the advanced settings on the menu bar.<br/>Most users should have this disabled.",
+            });
     });
 }
 
