@@ -645,11 +645,6 @@ int game_main(int argc, char* argv[]) {
         }
     }
 
-#if TARGET_ANDROID
-    // setup JNI method ptrs
-    dusk::android::setupMethods();
-#endif
-
     if (!dvd_opened) {
         if (!dusk::getSettings().backend.skipPreLaunchUI) {
             dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);

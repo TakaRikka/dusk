@@ -93,13 +93,14 @@ void file_dialog_callback(void*, const char* path, const char* error) {
     state.errorString.clear();
     getSettings().backend.isoPath.setValue(state.selectedDiscPath);
     config::Save();
-    refresh_state();
-    
+
 #if TARGET_ANDROID
     // store path permissions
-    android::takeUriPermissions(state.selectedIsoPath);
+    android::takeUriPermissions(state.selectedDiscPath);
     state.isIsoPermitted = true;
 #endif
+
+    refresh_state();
 }
 
 PrelaunchState sPrelaunchState;
@@ -138,16 +139,7 @@ void ensure_initialized() noexcept {
     refresh_state();
 
 #if TARGET_ANDROID
-    state.isIsoPermitted = !state.selectedIsoPath.empty() && android::checkUriPermissions(state.selectedIsoPath.c_str());
-#endif
-}
-
-bool is_selected_path_valid() noexcept {
-#if TARGET_ANDROID
-    return !prelaunch_state().selectedIsoPath.empty() && prelaunch_state().isIsoPermitted;
-#else
-    return !prelaunch_state().selectedIsoPath.empty() &&
-           SDL_GetPathInfo(prelaunch_state().selectedIsoPath.c_str(), nullptr);
+    state.isIsoPermitted = !state.selectedDiscPath.empty() && android::checkUriPermissions(state.selectedDiscPath.c_str());
 #endif
 }
 
