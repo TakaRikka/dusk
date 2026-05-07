@@ -3,7 +3,7 @@
 #include "bool_button.hpp"
 #include "button.hpp"
 #include "pane.hpp"
-#include "select_button.hpp"
+#include "number_button.hpp"
 
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_keyboard.h>
@@ -279,6 +279,18 @@ s32 keyboard_key_pressed() {
     return PAD_KEY_INVALID;
 }
 
+u16 percent_to_raw(int percent) {
+    return static_cast<u16>((static_cast<float>(percent) / 100.f) * 32767.f);
+}
+
+int deadzone_raw_to_percent(u16 raw) {
+    return static_cast<int>((static_cast<float>(raw) * 100.f) / 32767.f + 0.5f);
+}
+
+int rumble_raw_to_percent(u16 raw) {
+    return static_cast<int>((static_cast<float>(raw) / 32767.f) * 100.f + 0.5f);
+}
+
 }  // namespace
 
 ControllerConfigWindow::ControllerConfigWindow() {
@@ -308,6 +320,7 @@ ControllerConfigWindow::ControllerConfigWindow() {
 }
 
 void ControllerConfigWindow::hide(bool close) {
+    stop_rumble_test();
     cancel_pending_binding();
     Window::hide(close);
 }
@@ -318,16 +331,18 @@ void ControllerConfigWindow::update() {
 }
 
 void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
+    stop_rumble_test();
     auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
     auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
     mRightPane = &rightPane;
     mActivePort = port;
 
     auto addPageButton = [this, &leftPane, &rightPane, port](
-                             Page page, Rml::String key, auto getValue) {
+                             Page page, Rml::String key, auto getValue, auto isDisabled) {
         leftPane.register_control(leftPane.add_select_button({
                                       .key = std::move(key),
                                       .getValue = std::move(getValue),
+                                      .isDisabled = std::move(isDisabled),
                                   }),
             rightPane, [this, port, page](Pane& pane) {
                 mPage = page;
@@ -335,10 +350,11 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             });
     };
 
-    addPageButton(Page::Controller, "Controller", [port] { return current_controller_name(port); });
-    addPageButton(Page::Buttons, "Buttons", [] { return Rml::String(">"); });
-    addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); });
-    addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); });
+    addPageButton(Page::Controller, "Controller", [port] { return current_controller_name(port); }, [] { return false; });
+    addPageButton(Page::Buttons, "Buttons", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Rumble, "Rumble", [] { return Rml::String(">"); }, [port] { return !PADSupportsRumbleIntensity(static_cast<u32>(port)); });
 
     leftPane.add_section("Options");
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
@@ -684,6 +700,38 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             }
         }
+
+        if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+            pane.add_section("Emulated Trigger Thresholds");
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "L Threshold",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->leftTriggerActivationZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->leftTriggerActivationZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->emulateTriggers; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "R Threshold",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->rightTriggerActivationZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->rightTriggerActivationZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->emulateTriggers; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+        }
         break;
     }
     case Page::Sticks: {
@@ -769,12 +817,121 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         addAxis(PAD_AXIS_LEFT_Y_NEG);
         addAxis(PAD_AXIS_LEFT_X_NEG);
         addAxis(PAD_AXIS_LEFT_X_POS);
+        if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "Deadzone",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->stickDeadZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->stickDeadZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->useDeadzones; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+        }
 
         pane.add_section("C Stick");
         addAxis(PAD_AXIS_RIGHT_Y_POS);
         addAxis(PAD_AXIS_RIGHT_Y_NEG);
         addAxis(PAD_AXIS_RIGHT_X_NEG);
         addAxis(PAD_AXIS_RIGHT_X_POS);
+        if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "Deadzone",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->substickDeadZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->substickDeadZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->useDeadzones; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+        }
+
+        break;
+    }
+    case Page::Rumble: {
+        auto& rumbleTest = pane.add_select_button({
+            .key = "Test Rumble",
+            .getValue =
+                [this, port] {
+                    return (mRumbleTestActive && mRumbleTestPort == port) ? Rml::String("Stop")
+                                                                          : Rml::String("Start");
+                },
+        });
+        rumbleTest.on_pressed([this, port] {
+            if (!PADSupportsRumbleIntensity(static_cast<u32>(port))) {
+                return;
+            }
+            mDoAud_seStartMenu(kSoundItemChange);
+            if (mRumbleTestActive && mRumbleTestPort == port) {
+                PADControlMotor(port, PAD_MOTOR_STOP_HARD);
+                mRumbleTestActive = false;
+                mRumbleTestPort = -1;
+            } else {
+                if (mRumbleTestActive) {
+                    PADControlMotor(mRumbleTestPort, PAD_MOTOR_STOP_HARD);
+                }
+                PADControlMotor(port, PAD_MOTOR_RUMBLE);
+                mRumbleTestActive = true;
+                mRumbleTestPort = port;
+            }
+        });
+        pane.add_child<NumberButton>(NumberButton::Props{
+            .key = "Low Rumble Frequency",
+            .getValue =
+                [port] {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    return rumble_raw_to_percent(low);
+                },
+            .setValue =
+                [port](int value) {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    PADSetRumbleIntensity(static_cast<u32>(port), percent_to_raw(value), high);
+                    PADSerializeMappings();
+                },
+            .isDisabled = [this] { return mRumbleTestActive; },
+            .min = 0,
+            .max = 100,
+            .step = 1,
+            .suffix = "%",
+        });
+        pane.add_child<NumberButton>(NumberButton::Props{
+            .key = "High Rumble Frequency",
+            .getValue =
+                [port] {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    return rumble_raw_to_percent(high);
+                },
+            .setValue =
+                [port](int value) {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    PADSetRumbleIntensity(static_cast<u32>(port), low, percent_to_raw(value));
+                    PADSerializeMappings();
+                },
+            .isDisabled = [this] { return mRumbleTestActive; },
+            .min = 0,
+            .max = 100,
+            .step = 1,
+            .suffix = "%",
+        });
+        pane.add_text("Configure your desired rumble intensities, then run a test to check how they feel.");
         break;
     }
     }
@@ -936,6 +1093,17 @@ void ControllerConfigWindow::finish_pending_key_binding() {
 
 Rml::String ControllerConfigWindow::pending_key_label() const {
     return mPendingBindingArmed ? "Press a key or mouse button..." : "Waiting...";
+}
+
+void ControllerConfigWindow::stop_rumble_test() {
+    if (!mRumbleTestActive) {
+        return;
+    }
+    if (mRumbleTestPort >= PAD_CHAN0 && mRumbleTestPort < PAD_CHANMAX) {
+        PADControlMotor(mRumbleTestPort, PAD_MOTOR_STOP_HARD);
+    }
+    mRumbleTestActive = false;
+    mRumbleTestPort = -1;
 }
 
 }  // namespace dusk::ui

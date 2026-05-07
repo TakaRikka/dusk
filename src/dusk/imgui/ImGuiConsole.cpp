@@ -261,7 +261,9 @@ namespace dusk {
         }
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            ImGuiMenuGame::ToggleFullscreen();
+            getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+            config::Save();
         }
 
         if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
@@ -360,7 +362,6 @@ namespace dusk {
             ImGui::End();
         }
 
-        m_menuGame.windowControllerConfig();
         m_menuGame.windowInputViewer();
         m_menuGame.drawSpeedrunTimerOverlay();
 
