@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 struct RoomEntry {
     u8 roomNo;
     std::vector<s16> roomPoints = {};

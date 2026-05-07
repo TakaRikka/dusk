@@ -1403,7 +1403,7 @@ void dMenu_Fmap2DBack_c::regionTextureDraw() {
             if (uVar10 != uVar9) {
                 bool b = 0;
                 f32 v = mTransX + (dVar14 + (mRegionMinMapX[uVar10] + field_0xf0c[uVar10]));
-                
+
                 #if TARGET_PC
                 if (dusk::getSettings().game.enableMirrorMode) {
                     b = true;

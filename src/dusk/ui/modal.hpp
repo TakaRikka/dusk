@@ -18,6 +18,9 @@ public:
         Rml::String bodyRml;
         std::vector<ModalAction> actions;
         std::function<void(Modal&)> onDismiss;
+        Rml::String variant;
+        bool isWarning = false;
+        bool isError = false;
     };
 
     explicit Modal(Props props);
