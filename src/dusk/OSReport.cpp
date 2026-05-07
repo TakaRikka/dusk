@@ -21,16 +21,30 @@ static bool checkEnabled() {
     return !__OSReport_disable || dusk::OSReportReallyForceEnable;
 }
 
-static std::string FormatToString(const char* msg, va_list list) {
-    int ret = vsnprintf(nullptr, 0, msg, list);
-    if (ret <= 0) {
-        return {};
+#ifndef va_copy
+#define va_copy(d, s) ((d) = (s))
+#endif
+
+static std::string FormatToString(const char* msg, va_list list) {    
+    size_t size = (strlen(msg) * 2) + 50;
+    std::string str;
+    va_list ap;
+    while (true) {
+        str.resize(size);
+        va_copy(ap, list);
+        int n = vsnprintf(str.data(), size, msg, ap);
+        va_end(ap);
+        if (n > -1 && n < size) { 
+            str.resize(n);
+            return str;
+        }
+        if (n > -1) {
+            size = n + 1;
+        } else {
+            size *= 2;
+        }
     }
-    ++ret;
-    std::unique_ptr<char[]> buf(new char[ret]);
-    vsnprintf(buf.get(), ret, msg, list);
-    buf[ret - 1] = '\0';
-    return {buf.get()};
+    return str;
 }
 
 void OSReport(const char* fmt, ...) {
