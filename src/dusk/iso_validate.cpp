@@ -171,7 +171,7 @@ ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
     return ValidationError::Success;
 }
 
-ValidationError validate(const char* path, VerificationStatus& status) {
+ValidationError validate(const char* path, VerificationStatus& status, DiscInfo& info) {
     const auto sdlStream = SDL_IOFromFile(path, "rb");
     if (sdlStream == nullptr) {
         return ValidationError::IOError;
@@ -202,6 +202,7 @@ ValidationError validate(const char* path, VerificationStatus& status) {
         return ValidationError::WrongGame;
     }
     status.knownDisc = knownDisc;
+    info.isPal = knownDisc->region == Region::Europe;
     if (!knownDisc->supported) {
         return ValidationError::WrongVersion;
     }

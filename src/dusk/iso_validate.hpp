@@ -29,7 +29,7 @@ struct DiscInfo {
 };
 
 ValidationError inspect(const char* path, DiscInfo& info);
-ValidationError validate(const char* path, VerificationStatus& status);
+ValidationError validate(const char* path, VerificationStatus& status, DiscInfo& info);
 bool isPal(const char* path);
 
 }  // namespace dusk::iso

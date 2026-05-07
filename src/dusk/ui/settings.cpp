@@ -302,7 +302,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         .key = "Disc Image",
                         .getValue =
                             [] {
-                                const auto& path = prelaunch_state().selectedDiscPath;
+                                const auto& path = prelaunch_state().configuredDiscPath;
                                 std::string display;
                                 if (path.empty()) {
                                     display = "(none)";
@@ -317,8 +317,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         .isModified =
                             [] {
                                 const auto& state = prelaunch_state();
-                                const auto& initial = state.initialDiscPath;
-                                return !initial.empty() && state.selectedDiscPath != initial;
+                                const auto& active = state.activeDiscPath;
+                                return !active.empty() && state.configuredDiscPath != active;
                             },
                     })
                     .on_pressed([] { open_iso_picker(); }),
@@ -332,7 +332,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .getValue =
                         [] {
                             const auto& state = prelaunch_state();
-                            if (!state.selectedDiscIsValid || !state.selectedDiscIsPal) {
+                            if (!state.configuredDiscCanLaunch ||
+                                !state.configuredDiscInfo.isPal)
+                            {
                                 return kLanguageNames[0];
                             }
                             const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
@@ -341,7 +343,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .isDisabled =
                         [] {
                             const auto& state = prelaunch_state();
-                            return !state.selectedDiscIsValid || !state.selectedDiscIsPal;
+                            return !state.configuredDiscCanLaunch ||
+                                   !state.configuredDiscInfo.isPal;
                         },
                     .isModified =
                         [] {

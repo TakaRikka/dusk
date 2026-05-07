@@ -228,6 +228,10 @@ body.mirrored version-info {
     color: rgba(224, 219, 200, 65%);
 }
 
+#disc-status[status=pending] {
+    color: #FEE685;
+}
+
 #disc-status icon {
     display: none;
     width: 24dp;
@@ -259,6 +263,10 @@ body.mirrored version-info {
 
 #disc-status[status=unknown] icon {
     decorator: text("&#xe887;" center center);
+}
+
+#disc-status[status=pending] icon {
+    decorator: text("&#xe863;" center center);
 }
 
 #disc-version {
