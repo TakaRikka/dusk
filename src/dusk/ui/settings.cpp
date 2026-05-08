@@ -891,7 +891,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Dusk");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Toasts",
+                .key = "Notifications",
                 .getValue = [] {
                     const bool ach = getSettings().game.enableAchievementToasts.getValue();
                     const bool ctl = getSettings().game.enableControllerToasts.getValue();
@@ -951,7 +951,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         v.setValue(!v.getValue());
                         config::Save();
                     });
-                pane.add_rml("<br/>Choose which in-game toasts can be displayed.");
+                pane.add_rml("<br/>Choose which notifications can be displayed.");
             });
 #if DUSK_ENABLE_SENTRY_NATIVE
         config_bool_select(leftPane, rightPane, getSettings().backend.enableCrashReporting,
