@@ -793,11 +793,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.autoSave,
             {
                 .key = "Autosave",
-                .icon = "warning",
-                .helpText =
-                    "Autosaves the game when going to a new area, opening a dungeon door, "
-                    "or getting a new item.<br/><br/><icon class=\"warning\"/> Experimental "
-                    "feature: Use at your own risk.",
+                .helpText = "Autosaves the game when going to a new area, opening a dungeon door, "
+                            "or getting a new item.",
             });
         addOption("Instant Saves", getSettings().game.instantSaves,
             "Skips the delay when writing to the Memory Card.");

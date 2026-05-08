@@ -43,6 +43,7 @@ void applyPresetDusk() {
     s.game.internalResolutionScale.setValue(0);
     s.game.shadowResolutionMultiplier.setValue(4);
     s.game.enableGyroAim.setValue(true);
+    s.game.autoSave.setValue(true);
 }
 
 }  // namespace
