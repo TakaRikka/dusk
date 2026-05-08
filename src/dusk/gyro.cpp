@@ -140,8 +140,8 @@ void read(float dt) {
         float my_rel = 0.0f;
         SDL_GetRelativeMouseState(&mx_rel, &my_rel);
         // Convert pixels to radians
-        s_pitch_rad = -my_rel * kMousePixelToRad * getSettings().game.gyroSensitivityX;
-        s_yaw_rad = mx_rel * kMousePixelToRad * getSettings().game.gyroSensitivityY;
+        s_pitch_rad = my_rel * kMousePixelToRad * getSettings().game.gyroSensitivityX;
+        s_yaw_rad = -mx_rel * kMousePixelToRad * getSettings().game.gyroSensitivityY;
         s_roll_rad = 0.0f;
 
         s_pitch_rad = getSettings().game.gyroInvertPitch ? -s_pitch_rad : s_pitch_rad;
