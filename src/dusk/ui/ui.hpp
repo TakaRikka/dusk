@@ -82,6 +82,8 @@ Rml::Element* append(Rml::Element* parent, const Rml::String& tag) noexcept;
 NavCommand map_nav_event(const Rml::Event& event) noexcept;
 Insets safe_area_insets(Rml::Context* context) noexcept;
 
+std::vector<std::unique_ptr<Document> >& get_document_stack() noexcept;
+
 void push_toast(Toast toast) noexcept;
 std::deque<Toast>& get_toasts() noexcept;
 void show_menu_notification() noexcept;

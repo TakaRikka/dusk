@@ -363,6 +363,10 @@ void push_toast(Toast toast) noexcept {
     sToasts.push_back(std::move(toast));
 }
 
+std::vector<std::unique_ptr<Document> >& get_document_stack() noexcept {
+    return sDocumentStack;
+}
+
 std::deque<Toast>& get_toasts() noexcept {
     return sToasts;
 }

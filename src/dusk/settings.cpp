@@ -8,6 +8,8 @@ UserSettings g_userSettings = {
         .enableFullscreen {"video.enableFullscreen", false},
         .enableVsync {"video.enableVsync", true},
         .lockAspectRatio {"video.lockAspectRatio", false},
+        .enableFpsOverlay {"game.enableFpsOverlay", false},
+        .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
     },
 
     .audio = {
@@ -79,6 +81,7 @@ UserSettings g_userSettings = {
         .invertCameraYAxis {"game.invertCameraYAxis", false},
         .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
         .debugFlyCam {"game.debugFlyCam", false},
+        .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -116,7 +119,8 @@ UserSettings g_userSettings = {
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
         .wasPresetChosen {"backend.wasPresetChosen", false},
         .enableCrashReporting {"backend.enableCrashReporting", true},
-        .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)}
+        .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)},
+        .enableAdvancedSettings {"backend.enableAdvancedSettings", false},
     }
 };
 
@@ -129,6 +133,8 @@ void registerSettings() {
     Register(g_userSettings.video.enableFullscreen);
     Register(g_userSettings.video.enableVsync);
     Register(g_userSettings.video.lockAspectRatio);
+    Register(g_userSettings.video.enableFpsOverlay);
+    Register(g_userSettings.video.fpsOverlayCorner);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
@@ -207,6 +213,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroInvertYaw);
     Register(g_userSettings.game.freeCamera);
     Register(g_userSettings.game.debugFlyCam);
+    Register(g_userSettings.game.debugFlyCamLockEvents);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);
@@ -216,6 +223,7 @@ void registerSettings() {
     Register(g_userSettings.backend.wasPresetChosen);
     Register(g_userSettings.backend.enableCrashReporting);
     Register(g_userSettings.backend.cardFileType);
+    Register(g_userSettings.backend.enableAdvancedSettings);
 }
 
 // Transient settings

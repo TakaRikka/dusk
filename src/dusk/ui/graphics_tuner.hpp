@@ -34,6 +34,8 @@ private:
     void apply(int value);
 
     Props mProps;
+    Rml::Element* mPrevElem = nullptr;
+    Rml::Element* mNextElem = nullptr;
     Rml::Element* mValueElem = nullptr;
 };
 

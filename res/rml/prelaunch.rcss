@@ -322,3 +322,84 @@ body.animate-in .intro-item {
 .delay-5 {
     transition: opacity transform 0.3s 0.6s cubic-in-out;
 }
+
+/* Mobile layout */
+@media (max-height: 640dp) {
+    .gradient {
+        decorator: horizontal-gradient(#00000000 #000000FF);
+    }
+
+    body.mirrored .gradient {
+        decorator: horizontal-gradient(#000000FF #00000000);
+    }
+
+    menu {
+        left: 20dp;
+        right: 20dp;
+        width: auto;
+        min-width: 0;
+        max-width: none;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16dp;
+    }
+
+    body.mirrored menu {
+        left: 20dp;
+        right: 20dp;
+        flex-direction: row-reverse;
+    }
+
+    hero {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 48%;
+
+    }
+
+    body.mirrored hero {
+        align-items: flex-end;
+    }
+
+    hero img {
+        width: 100%;
+    }
+
+    #menu-list {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 52%;
+        align-items: flex-end;
+    }
+
+    #menu-list button {
+        width: 100%;
+        max-width: 100%;
+        text-align: right;
+    }
+
+    #menu-list button:hover,
+    #menu-list button:focus-visible {
+        decorator: horizontal-gradient(#FEE68500 #FEE685FF);
+    }
+
+    body.mirrored #menu-list {
+        align-items: flex-start;
+    }
+
+    body.mirrored #menu-list button {
+        text-align: left;
+    }
+
+    body.mirrored #menu-list button:hover,
+    body.mirrored #menu-list button:focus-visible {
+        decorator: horizontal-gradient(#FEE685FF #FEE68500);
+    }
+
+    .eyebrow,
+    disc-info,
+    version-info {
+        display: none;
+    }
+}

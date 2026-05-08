@@ -20,18 +20,22 @@ body {
     pointer-events: none;
 }
 
+fps,
 toast {
     position: absolute;
+    border: 1dp #92875B;
+    background-color: rgba(21, 22, 16, 80%);
+}
+
+toast {
     top: 40dp;
     right: 40dp;
     display: flex;
     flex-flow: column;
     border-radius: 14dp;
     overflow: hidden;
-    border: 1dp #92875B;
     backdrop-filter: blur(5dp);
     box-shadow: 0 0 15dp 3dp;
-    background-color: rgba(21, 22, 16, 80%);
     filter: opacity(0);
     transform: scale(0.9);
     transform-origin: center;
@@ -184,6 +188,41 @@ icon.warning {
     height: 24dp;
     font-size: 24dp;
     decorator: text("&#xe002;" center center);
+}
+
+fps {
+    display: none;
+    z-index: 99;
+    font-size: 18dp;
+    font-weight: bold;
+    padding: 9dp 12dp;
+    border-radius: 7dp;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+fps[open] {
+    display: block;
+}
+
+fps[corner=tl] {
+    top: 12dp;
+    left: 12dp;
+}
+
+fps[corner=tr] {
+    top: 12dp;
+    right: 12dp;
+}
+
+fps[corner=bl] {
+    bottom: 12dp;
+    left: 12dp;
+}
+
+fps[corner=br] {
+    bottom: 12dp;
+    right: 12dp;
 }
 
 logo {

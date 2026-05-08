@@ -318,7 +318,9 @@ int dMeter2_c::_execute() {
 
 int dMeter2_c::_draw() {
     #if TARGET_PC
-    if (dusk::getSettings().game.recordingMode || dusk::getSettings().game.minimalHUD) {
+    if (dusk::getSettings().game.recordingMode || dusk::getSettings().game.minimalHUD ||
+        dusk::getSettings().game.debugFlyCam)
+    {
         return 1;
     }
     #endif

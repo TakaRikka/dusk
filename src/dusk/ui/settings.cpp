@@ -14,6 +14,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
+#include "menu_bar.hpp"
 
 #include <algorithm>
 
@@ -31,6 +32,13 @@ constexpr std::array kLanguageNames = {
 constexpr std::array kCardFileTypes = {
     "Card Image",
     "GCI Folder",
+};
+
+constexpr std::array kFpsOverlayCornerNames = {
+    "Top Left",
+    "Top Right",
+    "Bottom Left",
+    "Bottom Right",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -430,7 +438,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         });
     }
 
-    add_tab("Graphics", [this](Rml::Element* content) {
+    add_tab("Video", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
@@ -471,6 +479,54 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Pause on Focus Lost",
                 .isDisabled = [] { return IsMobile; },
+            });
+        leftPane.register_control(leftPane.add_select_button({
+                .key = "Show FPS Counter",
+                .getValue =
+                    [] {
+                        if (!getSettings().video.enableFpsOverlay.getValue()) {
+                            return Rml::String{"Off"};
+                        }
+                        const int idx = getSettings().video.fpsOverlayCorner.getValue();
+                        return Rml::String{kFpsOverlayCornerNames[idx]};
+                    },
+                .isModified =
+                    [] {
+                        const auto& enable = getSettings().video.enableFpsOverlay;
+                        const auto& corner = getSettings().video.fpsOverlayCorner;
+                        return enable.getValue() != enable.getDefaultValue() ||
+                               (enable.getValue() && corner.getValue() != corner.getDefaultValue());
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.add_button({
+                        .text = "Off",
+                        .isSelected =
+                            [] { return !getSettings().video.enableFpsOverlay.getValue(); },
+                    })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().video.enableFpsOverlay.setValue(false);
+                        config::Save();
+                    });
+                for (int i = 0; i < static_cast<int>(kFpsOverlayCornerNames.size()); ++i) {
+                    pane.add_button({
+                            .text = kFpsOverlayCornerNames[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().video.enableFpsOverlay.getValue() &&
+                                           getSettings().video.fpsOverlayCorner.getValue() == i;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.enableFpsOverlay.setValue(true);
+                            getSettings().video.fpsOverlayCorner.setValue(i);
+                            config::Save();
+                        });
+                }
+                pane.add_rml(
+                    "<br/>Display the current framerate in a corner of the screen while playing.");
             });
 
         leftPane.add_section("Resolution");
@@ -874,6 +930,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Recording Mode",
                 .helpText = "Disables the entire HUD of the game.<br/>Useful for recording footage.",
+            });
+
+        config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
+            {
+                .key = "Enable Advanced Settings",
+                .helpText = "Show the advanced settings on the menu bar.<br/>Most users should have this disabled.",
+                .onChange = [](bool value) { get_document_stack()[0] = std::make_unique<MenuBar>(); },
             });
     });
 }

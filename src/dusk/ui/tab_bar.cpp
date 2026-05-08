@@ -212,6 +212,15 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             if (activeTab != -1) {
                 currentComponent = activeTab;
             }
+        } else {
+            int activeTab = tab_containing(event.GetTargetElement());
+            if (activeTab != -1) {
+                currentComponent = activeTab;
+            } else if (mLastFocusedTabIndex >= 0 &&
+                mLastFocusedTabIndex < static_cast<int>(mTabs.size()))
+            {
+                currentComponent = mLastFocusedTabIndex;
+            }
         }
         int direction = isNext ? 1 : -1;
         if (currentComponent == -1) {
@@ -221,8 +230,9 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
                     return false;
                 }
                 currentComponent = -1;
+            } else if (cmd == NavCommand::Next) {
+                currentComponent = -1;
             } else {
-                // Next/Previous require a currently selected tab to navigate from
                 return false;
             }
         }

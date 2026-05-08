@@ -22,7 +22,9 @@ namespace dusk {
     void ShowHeapDetailed(JKRHeap* heap, OpenHeapData& data, bool& open);
 
     void ImGuiMenuTools::ShowHeapOverlay() {
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F4, m_showHeapOverlay)) {
+        if (!getSettings().backend.enableAdvancedSettings ||
+            !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F4, m_showHeapOverlay))
+        {
             return;
         }
 

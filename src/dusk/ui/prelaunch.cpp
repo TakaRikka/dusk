@@ -278,7 +278,7 @@ public:
         mFileName = append(content, "div");
         mFileName->SetClass("verification-file", true);
 
-        mProgress = append(content, "progressbar");
+        mProgress = append(content, "progress");
         mProgress->SetClass("progress-ongoing", true);
         mProgress->SetClass("verification-progress-bar", true);
         mProgress->SetAttribute("value", 0.f);
@@ -507,7 +507,7 @@ void try_push_verification_modal(Document& host) {
                 },
             .onDismiss = dismiss,
             .variant = "danger",
-            .isWarning = true,
+            .icon = "warning",
         }));
         return;
     }
@@ -523,7 +523,7 @@ void try_push_verification_modal(Document& host) {
                 },
             },
         .onDismiss = dismiss,
-        .isError = true,
+        .icon = "error",
     }));
 }
 
@@ -621,7 +621,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit To Desktop"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }

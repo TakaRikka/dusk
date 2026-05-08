@@ -57,6 +57,8 @@ struct UserSettings {
         ConfigVar<bool> enableFullscreen;
         ConfigVar<bool> enableVsync;
         ConfigVar<bool> lockAspectRatio;
+        ConfigVar<bool> enableFpsOverlay;
+        ConfigVar<int> fpsOverlayCorner;
     } video;
 
     struct {
@@ -132,6 +134,7 @@ struct UserSettings {
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<float> freeCameraSensitivity;
         ConfigVar<bool> debugFlyCam;
+        ConfigVar<bool> debugFlyCamLockEvents;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
@@ -170,6 +173,7 @@ struct UserSettings {
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
         ConfigVar<int> cardFileType;
+        ConfigVar<bool> enableAdvancedSettings;
     } backend;
 };
 
