@@ -136,6 +136,7 @@ Component& Pane::register_control(
             for (const auto& child : mChildren) {
                 if (child->selected()) {
                     set_selected_item(-1);
+                    break;
                 }
             }
 
