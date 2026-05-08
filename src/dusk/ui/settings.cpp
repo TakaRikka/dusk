@@ -871,7 +871,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat(
             "Moon Jump (R+A)", getSettings().game.moonJump, "Hold R and A to rise into the air.");
         addCheat("Super Clawshot", getSettings().game.superClawshot,
-            "Extends clawshot behavior beyond the normal game rules.");
+            "Extends Clawshot behavior beyond the normal game rules.<br/>This will disable chains from rendering to prevent crashes.");
         addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
             "Allows the Great Spin attack without requiring full health.");
         addCheat("Fast Iron Boots", getSettings().game.enableFastIronBoots,
