@@ -90,7 +90,6 @@ void file_dialog_callback(void*, const char* path, const char* error) {
     state.errorString.clear();
     getSettings().backend.isoPath.setValue(state.selectedDiscPath);
     config::Save();
-
     refresh_state();
 }
 
@@ -128,7 +127,6 @@ void ensure_initialized() noexcept {
     state.errorString.clear();
     state.initialized = true;
     refresh_state();
-
 }
 
 void open_iso_picker() noexcept {

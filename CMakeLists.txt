@@ -342,9 +342,7 @@ if (MSVC)
 endif ()
 
 if(ANDROID)
-    list(APPEND GAME_COMPILE_DEFS
-            TARGET_ANDROID=1
-    )
+    list(APPEND GAME_COMPILE_DEFS TARGET_ANDROID=1)
 endif ()
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1
