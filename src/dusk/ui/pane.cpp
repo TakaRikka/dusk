@@ -126,11 +126,20 @@ Component& Pane::register_control(
             }
         });
     component.listen(component.root(), Rml::EventId::Focus,
-        [&component, &nextPane, callback = std::move(callback)](Rml::Event&) {
+        [this, &component, &nextPane, callback = std::move(callback)](Rml::Event&) {
             if (component.disabled()) {
                 return;
             }
             nextPane.clear();
+
+            // If an item is already selected, deselect
+            for (const auto& child : mChildren) {
+                if (child->selected()) {
+                    set_selected_item(-1);
+                    break;
+                }
+            }
+
             if (callback) {
                 callback(nextPane);
             }
