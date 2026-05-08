@@ -25,10 +25,11 @@ static bool checkEnabled() {
 #define va_copy(d, s) ((d) = (s))
 #endif
 
-static std::string FormatToString(const char* msg, va_list list) {    
+static std::string FormatToString(const char* msg, va_list list) {
     size_t size = (strlen(msg) * 2) + 50;
     std::string str;
     va_list ap;
+    int attempts = 0;
     while (true) {
         str.resize(size);
         va_copy(ap, list);
@@ -36,7 +37,15 @@ static std::string FormatToString(const char* msg, va_list list) {
         va_end(ap);
         if (n > -1 && n < size) { 
             str.resize(n);
-            return str;
+            break;
+        }
+        
+        ++attempts;
+        if (attempts >= 3) {
+            if (n == -1) {
+                str.clear();
+            }
+            break;
         }
         if (n > -1) {
             size = n + 1;
