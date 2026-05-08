@@ -1,11 +1,12 @@
 package com.twilitrealm.dusk;
 
 import android.app.ActionBar;
+import android.content.ClipData;
 import android.content.Intent;
-import android.content.UriPermission;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DuskActivity extends SDLActivity {
+    private static final String TAG = "DuskActivity";
+
     private static String[] splitArgs(String raw) {
         List<String> out = new ArrayList<>();
         StringBuilder current = new StringBuilder();
@@ -115,33 +118,55 @@ public class DuskActivity extends SDLActivity {
         return new String[0];
     }
 
-    // Called by JNI from Dusk.
-    public static void takeUriPermissions(String uri) {
-        if(mSingleton != null) {
-            mSingleton.getContentResolver().takePersistableUriPermission(Uri.parse(uri), Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            System.out.println("Saved uri permissions.");
-        }else {
-            System.out.println("Unable to save uri permissions.");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            persistUriPermissions(data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void persistUriPermissions(Intent data) {
+        if (data == null) {
+            return;
+        }
+
+        int permissionFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        if (permissionFlags == 0) {
+            return;
+        }
+
+        Uri uri = data.getData();
+        if (uri != null) {
+            persistUriPermission(uri, permissionFlags);
+        }
+
+        ClipData clipData = data.getClipData();
+        if (clipData == null) {
+            return;
+        }
+        for (int i = 0; i < clipData.getItemCount(); ++i) {
+            Uri itemUri = clipData.getItemAt(i).getUri();
+            if (itemUri != null) {
+                persistUriPermission(itemUri, permissionFlags);
+            }
         }
     }
 
-    // Called by JNI from Dusk.
-    public static boolean checkUriPermissions(String uri) {
-        if(mSingleton != null) {
-            Uri suppliedUri = Uri.parse(uri);
-
-            System.out.println("Checking uri permissions.");
-            for (UriPermission permission : mSingleton.getContentResolver().getPersistedUriPermissions()) {
-                if(permission.getUri().equals(suppliedUri) && permission.isReadPermission()) {
-                    System.out.println("Uri has valid persistent permissions.");
-                    return true;
-                }
-            }
-
-            System.out.println("Uri permission was not persisted, unable to use.");
-            return false;
+    private void persistUriPermission(Uri uri, int permissionFlags) {
+        if ((permissionFlags & Intent.FLAG_GRANT_READ_URI_PERMISSION) != 0) {
+            persistUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION, "read");
         }
-        System.out.println("Unable to check uri permissions.");
-        return false;
+        if ((permissionFlags & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
+            persistUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION, "write");
+        }
+    }
+
+    private void persistUriPermission(Uri uri, int permissionFlag, String permissionName) {
+        try {
+            getContentResolver().takePersistableUriPermission(uri, permissionFlag);
+        } catch (SecurityException | IllegalArgumentException e) {
+            Log.w(TAG, "Unable to persist " + permissionName + " URI permission for " + uri, e);
+        }
     }
 }

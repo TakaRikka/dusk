@@ -13,9 +13,6 @@
 #include <SDL3/SDL_dialog.h>
 #include <aurora/lib/window.hpp>
 
-#if TARGET_ANDROID
-#include "dusk/android/JavaWrapperFuncs.hpp"
-#endif
 #include "m_Do/m_Do_MemCard.h"
 
 namespace dusk::ui {
@@ -94,12 +91,6 @@ void file_dialog_callback(void*, const char* path, const char* error) {
     getSettings().backend.isoPath.setValue(state.selectedDiscPath);
     config::Save();
 
-#if TARGET_ANDROID
-    // store path permissions
-    android::takeUriPermissions(state.selectedDiscPath);
-    state.isIsoPermitted = true;
-#endif
-
     refresh_state();
 }
 
@@ -138,9 +129,6 @@ void ensure_initialized() noexcept {
     state.initialized = true;
     refresh_state();
 
-#if TARGET_ANDROID
-    state.isIsoPermitted = !state.selectedDiscPath.empty() && android::checkUriPermissions(state.selectedDiscPath.c_str());
-#endif
 }
 
 void open_iso_picker() noexcept {

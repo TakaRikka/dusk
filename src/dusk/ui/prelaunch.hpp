@@ -36,9 +36,6 @@ class PrelaunchOptions;
 
 struct PrelaunchState {
     bool initialized = false;
-#if TARGET_ANDROID
-    bool isIsoPermitted = false;
-#endif
     std::string selectedDiscPath;
     bool selectedDiscIsValid = false;
     bool selectedDiscIsPal = false;

@@ -2032,7 +2032,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         try {
             ParcelFileDescriptor pfd = mSingleton.getContentResolver().openFileDescriptor(Uri.parse(uri), mode);
             return pfd != null ? pfd.detachFd() : -1;
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | SecurityException e) {
             e.printStackTrace();
             return -1;
         }
@@ -2227,4 +2227,3 @@ class SDLClipboardHandler implements
         SDLActivity.onNativeClipboardChanged();
     }
 }
-
