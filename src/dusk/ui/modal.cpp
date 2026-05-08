@@ -36,6 +36,8 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
         });
         mButtons.push_back(std::move(btn));
     }
+
+    mDoAud_seStartMenu(kSoundWindowOpen);
 }
 
 bool Modal::focus() {

@@ -68,12 +68,17 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                 {
                     ModalAction{
                         .label = "Cancel",
-                        .onPressed = dismiss,
+                        .onPressed =
+                            [this, dismiss](Modal& modal) {
+                                mDoAud_seStartMenu(kSoundWindowClose);
+                                dismiss(modal);
+                            },
                     },
                     ModalAction{
                         .label = "Reset",
                         .onPressed =
                             [this, dismiss](Modal& modal) {
+                                mDoAud_seStartMenu(kSoundClick);
                                 if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
                                     dismiss(modal);
                                     return;
@@ -98,12 +103,17 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                 {
                     ModalAction{
                         .label = "Cancel",
-                        .onPressed = dismiss,
+                        .onPressed =
+                            [dismiss](Modal& modal) {
+                                mDoAud_seStartMenu(kSoundWindowClose);
+                                dismiss(modal);
+                            },
                     },
                     ModalAction{
                         .label = "Quit",
                         .onPressed =
                             [dismiss](Modal& modal) {
+                                mDoAud_seStartMenu(kSoundClick);
                                 dismiss(modal);
                                 IsRunning = false;
                             },
