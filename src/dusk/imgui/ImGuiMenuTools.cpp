@@ -48,6 +48,8 @@ namespace dusk {
                 ImGui::EndDisabled();
             }
 
+            ImGui::Separator();
+            ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
 
 #if DUSK_CAN_OPEN_DATA_FOLDER
             ImGui::Separator();

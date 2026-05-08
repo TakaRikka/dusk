@@ -10,12 +10,7 @@
 namespace dusk {
     ImGuiMenuGame::ImGuiMenuGame() {}
 
-    void ImGuiMenuGame::draw() {
-        if (ImGui::BeginMenu("Settings")) {
-            ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
-            ImGui::EndMenu();
-        }
-    }
+    void ImGuiMenuGame::draw() {}
 
     static std::string GetFormattedTime(OSTime ticks) {
         OSCalendarTime time;

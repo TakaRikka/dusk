@@ -46,28 +46,11 @@ namespace dusk {
         ImGuiMenuGame();
         void draw();
 
-        void windowInputViewer();
         void drawSpeedrunTimerOverlay();
 
         static void resetForSpeedrunMode();
 
     private:
-        struct {
-            int m_selectedPort = 0;
-            bool m_isReading = false;
-            PADButtonMapping* m_pendingButtonMapping = nullptr;
-            PADAxisMapping* m_pendingAxisMapping = nullptr;
-            int m_pendingPort = -1;
-            bool m_isRumbling = false;
-        } m_controllerConfig;
-
-        bool m_showControllerConfig = false;
-
-        bool m_showInputViewer = false;
-        bool m_showInputViewerGyro = false;
-        int m_inputOverlayCorner = 3;
-        std::string m_controllerName;
-
         bool m_showTimerWindow = false;
     };
 }

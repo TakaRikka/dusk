@@ -356,7 +356,7 @@ namespace dusk {
             ImGui::End();
         }
 
-        m_menuGame.windowInputViewer();
+        m_menuTools.ShowInputViewer();
         m_menuGame.drawSpeedrunTimerOverlay();
 
         if (getSettings().game.liveSplitEnabled) {

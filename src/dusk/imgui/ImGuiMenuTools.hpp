@@ -27,6 +27,7 @@ namespace dusk {
         void ShowAudioDebug();
         void ShowSaveEditor();
         void ShowStateShare();
+        void ShowInputViewer();
 
     private:
 		bool m_showDebugOverlay = false;
@@ -66,6 +67,11 @@ namespace dusk {
 
         bool m_showStateShare = false;
         ImGuiStateShare m_stateShare;
+
+        bool m_showInputViewer = false;
+        bool m_showInputViewerGyro = false;
+        int m_inputOverlayCorner = 3;
+        std::string m_controllerName;
     };
 }
 

@@ -708,7 +708,7 @@ int game_main(int argc, char* argv[]) {
     dComIfG_ct();
 
     // Development Mode
-    mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
+    // mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
     mDoDvdThd::SyncWidthSound = false;
 
     OSReport("Starting main01 (Game Loop)...\n");

@@ -3,12 +3,11 @@
 #include "imgui.h"
 #include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
-#include "ImGuiMenuGame.hpp"
 
 #include <dolphin/pad.h>
 
 namespace dusk {
-    void ImGuiMenuGame::windowInputViewer() {
+    void ImGuiMenuTools::ShowInputViewer() {
         if (!m_showInputViewer) {
             return;
         }
