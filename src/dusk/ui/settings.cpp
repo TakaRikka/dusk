@@ -10,11 +10,11 @@
 #include "dusk/livesplit.h"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
+#include "menu_bar.hpp"
 #include "number_button.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
-#include "menu_bar.hpp"
 
 #include <algorithm>
 
@@ -340,9 +340,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .getValue =
                         [] {
                             const auto& state = prelaunch_state();
-                            if (!state.configuredDiscCanLaunch ||
-                                !state.configuredDiscInfo.isPal)
-                            {
+                            if (!state.configuredDiscCanLaunch || !state.configuredDiscInfo.isPal) {
                                 return kLanguageNames[0];
                             }
                             const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
@@ -480,7 +478,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Pause on Focus Lost",
                 .isDisabled = [] { return IsMobile; },
             });
-        leftPane.register_control(leftPane.add_select_button({
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Show FPS Counter",
                 .getValue =
                     [] {
@@ -499,25 +498,27 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     },
             }),
             rightPane, [](Pane& pane) {
-                pane.add_button({
-                        .text = "Off",
-                        .isSelected =
-                            [] { return !getSettings().video.enableFpsOverlay.getValue(); },
-                    })
+                pane.add_button(
+                        {
+                            .text = "Off",
+                            .isSelected =
+                                [] { return !getSettings().video.enableFpsOverlay.getValue(); },
+                        })
                     .on_pressed([] {
                         mDoAud_seStartMenu(kSoundItemChange);
                         getSettings().video.enableFpsOverlay.setValue(false);
                         config::Save();
                     });
                 for (int i = 0; i < static_cast<int>(kFpsOverlayCornerNames.size()); ++i) {
-                    pane.add_button({
-                            .text = kFpsOverlayCornerNames[i],
-                            .isSelected =
-                                [i] {
-                                    return getSettings().video.enableFpsOverlay.getValue() &&
-                                           getSettings().video.fpsOverlayCorner.getValue() == i;
-                                },
-                        })
+                    pane.add_button(
+                            {
+                                .text = kFpsOverlayCornerNames[i],
+                                .isSelected =
+                                    [i] {
+                                        return getSettings().video.enableFpsOverlay.getValue() &&
+                                               getSettings().video.fpsOverlayCorner.getValue() == i;
+                                    },
+                            })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
                             getSettings().video.enableFpsOverlay.setValue(true);
@@ -744,7 +745,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Mirror Mode", getSettings().game.enableMirrorMode,
             "Mirrors the world horizontally, matching the Wii version of the game.");
         addOption("Minimal HUD", getSettings().game.minimalHUD,
-            "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive experience.");
+            "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive "
+            "experience.");
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
@@ -883,13 +885,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
     });
 
-    // TODO: Reorganize all of this?
     add_tab("Interface", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("User Interface");
-
+        leftPane.add_section("Dusk");
         config_bool_select(leftPane, rightPane, getSettings().game.enableAchievementNotifications,
             {
                 .key = "Achievement Notifications",
@@ -918,9 +918,25 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Show Pipeline Compilation",
                 .helpText = "Show an overlay when shaders are being compiled for your hardware.",
             });
+        config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
+            {
+                .key = "Enable Advanced Settings",
+                .icon = "warning",
+                .helpText = "Show advanced settings and debugging tools with "
+                            "Shift+F1.<br/><br/><icon class=\"warning\"/> WARNING: Debugging tools "
+                            "can easily break your game. Do not use on a regular save!",
+                .onChange =
+                    [](bool) {
+                        for (auto& doc : get_document_stack()) {
+                            if (dynamic_cast<MenuBar*>(doc.get())) {
+                                doc = std::make_unique<MenuBar>();
+                                break;
+                            }
+                        }
+                    },
+            });
 
         leftPane.add_section("Game");
-
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",
@@ -929,14 +945,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.recordingMode,
             {
                 .key = "Recording Mode",
-                .helpText = "Disables the entire HUD of the game.<br/>Useful for recording footage.",
-            });
-
-        config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
-            {
-                .key = "Enable Advanced Settings",
-                .helpText = "Show the advanced settings on the menu bar.<br/>Most users should have this disabled.",
-                .onChange = [](bool value) { get_document_stack()[0] = std::make_unique<MenuBar>(); },
+                .helpText = "Disables the game HUD and all background music.<br/><br/>Useful for "
+                            "recording footage.",
             });
     });
 }
