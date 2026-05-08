@@ -965,7 +965,8 @@ void dMenu_Letter_c::screenSetBase() {
     }
     if (field_0x374 > 1) {
         J2DPane* pJVar6 = mpBaseScreen->search('pi_n');
-        f32 dVar18 = field_0x1f0[1]->getBounds().i.x - field_0x1f0[0]->getBounds().i.x;
+        f32 x1 = field_0x1f0[1]->getBounds().i.x;
+        f32 dVar18 = x1 - field_0x1f0[0]->getBounds().i.x;
         f32 dVar17 = dVar18 * (field_0x374 - 1);
         f32 dVar16 = (pJVar6->getWidth() / 2) - (dVar17 / 2);
         for (int i = 0; i < 9; i++) {
