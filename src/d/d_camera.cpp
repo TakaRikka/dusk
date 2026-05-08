@@ -31,6 +31,7 @@
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
+#include "imgui.h"
 #endif
 
 namespace {
@@ -7483,6 +7484,8 @@ static constexpr f32 FLYCAM_SPEED = 0.5f;
 static constexpr f32 FLYCAM_FAST_SPEED = 4.0f;
 static constexpr f32 FLYCAM_ROTATION_SPEED = 0.002f;
 static constexpr f32 FLYCAM_TRIGGER_DEADZONE = 20.0f;
+static constexpr s16 FLYCAM_ROLL_SPEED = 256;
+static ImVec2 sFlyCamLastMousePos = {-1.f, -1.f};
 
 #if TARGET_PC
 bool dCamera_c::executeDebugFlyCam() {
@@ -7490,6 +7493,7 @@ bool dCamera_c::executeDebugFlyCam() {
         if (mDebugFlyCam.initialized) {
             deactivateDebugFlyCam();
         }
+        sFlyCamLastMousePos = {-1.f, -1.f};
         return false;
     }
 
@@ -7519,16 +7523,63 @@ bool dCamera_c::executeDebugFlyCam() {
         mDebugFlyCam.initialized = true;
     }
 
-    event->mEventStatus = 1;
-    dComIfGp_getEventManager().setCameraPlay(1);
+    if (dusk::getSettings().game.debugFlyCamLockEvents) {
+        event->mEventStatus = 1;
+        dComIfGp_getEventManager().setCameraPlay(1);
+    } else {
+        if (event->mEventStatus != 0) {
+            event->mEventStatus = 0;
+        }
+        dComIfGp_getEventManager().setCameraPlay(0);
+    }
 
-    interface_of_controller_pad& pad = mDoCPd_c::getCpadInfo(0);
-    f32 stickY = pad.mMainStickPosY * 72.0f;
-    f32 stickX = pad.mMainStickPosX * 72.0f;
-    f32 cStickY = pad.mCStickPosY * 59.0f;
-    f32 cStickX = pad.mCStickPosX * 59.0f;
-    f32 trigL = pad.mTriggerLeft * 150.0f;
-    f32 trigR = pad.mTriggerRight * 150.0f;
+    f32 stickY = 0.f;
+    f32 stickX = 0.f;
+    f32 cStickY = 0.f;
+    f32 cStickX = 0.f;
+    f32 trigL = 0.f;
+    f32 trigR = 0.f;
+    f32 rollInput = 0.f;
+    bool fast = false;
+
+    if (dusk::getSettings().game.debugFlyCamLockEvents) {
+        interface_of_controller_pad& pad = mDoCPd_c::getCpadInfo(0);
+        stickY = pad.mMainStickPosY * 72.0f;
+        stickX = pad.mMainStickPosX * 72.0f;
+        cStickY = pad.mCStickPosY * 59.0f;
+        cStickX = pad.mCStickPosX * 59.0f;
+        trigL = pad.mTriggerLeft * 150.0f;
+        trigR = pad.mTriggerRight * 150.0f;
+        fast = mDoCPd_c::getHoldZ(PAD_1);
+        if (mDoCPd_c::getHoldY(PAD_1)) rollInput -= 1.f;
+        if (mDoCPd_c::getHoldX(PAD_1)) rollInput += 1.f;
+    }
+
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        if (!io.WantCaptureKeyboard) {
+            f32 kbX = 0.0f, kbY = 0.0f;
+            if (ImGui::IsKeyDown(ImGuiKey_W) || ImGui::IsKeyDown(ImGuiKey_UpArrow)) kbY += 1.f;
+            if (ImGui::IsKeyDown(ImGuiKey_S) || ImGui::IsKeyDown(ImGuiKey_DownArrow)) kbY -= 1.f;
+            if (ImGui::IsKeyDown(ImGuiKey_D) || ImGui::IsKeyDown(ImGuiKey_RightArrow)) kbX += 1.f;
+            if (ImGui::IsKeyDown(ImGuiKey_A) || ImGui::IsKeyDown(ImGuiKey_LeftArrow)) kbX -= 1.f;
+            f32 len = sqrtf(kbX * kbX + kbY * kbY);
+            if (len > 1.f) { kbX /= len; kbY /= len; }
+            stickX += kbX * 72.0f;
+            stickY += kbY * 72.0f;
+            if (ImGui::IsKeyDown(ImGuiKey_Space)) trigR += 150.0f;
+            if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) trigL += 150.0f;
+            if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) fast = true;
+            if (ImGui::IsKeyDown(ImGuiKey_Q)) rollInput -= 1.0f;
+            if (ImGui::IsKeyDown(ImGuiKey_E)) rollInput += 1.0f;
+        }
+        bool mouseValid = !io.WantCaptureMouse && io.MousePos.x >= 0.0f && io.MousePos.y >= 0.0f;
+        if (mouseValid && sFlyCamLastMousePos.x >= 0.0f) {
+            cStickX -= (io.MousePos.x - sFlyCamLastMousePos.x) * 2.0f;
+            cStickY -= (io.MousePos.y - sFlyCamLastMousePos.y) * 2.0f;
+        }
+        sFlyCamLastMousePos = mouseValid ? io.MousePos : ImVec2{-1.0f, -1.0f};
+    }
 
     f32 verticalDisp = 0.0f;
     if (trigR >= FLYCAM_TRIGGER_DEADZONE) {
@@ -7542,7 +7593,7 @@ bool dCamera_c::executeDebugFlyCam() {
     f32 moveDx = stickY * cosf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) - stickX * sinf(mDebugFlyCam.yaw);
     f32 moveDz = stickY * sinf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) + stickX * cosf(mDebugFlyCam.yaw);
 
-    f32 speed = mDoCPd_c::getHoldZ(PAD_1) ? FLYCAM_FAST_SPEED : FLYCAM_SPEED;
+    f32 speed = fast ? FLYCAM_FAST_SPEED : FLYCAM_SPEED;
 
     mEye.x += speed * moveDx;
     mEye.y += speed * moveDy;
@@ -7553,6 +7604,7 @@ bool dCamera_c::executeDebugFlyCam() {
     mCenter.z = mEye.z + sinf(mDebugFlyCam.yaw) * cosf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
     mCenter.y = mEye.y + sinf(mDebugFlyCam.pitch) * FLYCAM_TARGET_DIST;
 
+    mBank = mBank + static_cast<s16>(rollInput * FLYCAM_ROLL_SPEED * (fast ? FLYCAM_FAST_SPEED / FLYCAM_SPEED : 1.f));
     Reset(mCenter, mEye);
 
     f32 yawInput = dusk::getSettings().game.invertCameraXAxis ? cStickX : -cStickX;
@@ -7570,7 +7622,7 @@ void dCamera_c::deactivateDebugFlyCam() {
     Reset(mDebugFlyCam.savedCenter, mDebugFlyCam.savedEye, mDebugFlyCam.savedFovy, mDebugFlyCam.savedBank.Val());
 
     dEvt_control_c* event = dComIfGp_getEvent();
-    if (event != nullptr) {
+    if (event != nullptr && event->mEventStatus != 0) {
         event->mEventStatus = 0;
     }
     dComIfGp_getEventManager().setCameraPlay(0);

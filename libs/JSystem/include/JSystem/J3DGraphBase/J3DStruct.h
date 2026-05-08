@@ -1,8 +1,8 @@
 #ifndef J3DSTRUCT_H
 #define J3DSTRUCT_H
 
+#include <cstring>
 #include <gx.h>
-#include <mtx.h>
 #include <mtx.h>
 #include "global.h"
 #include "JSystem/JMath/JMath.h"
@@ -11,7 +11,7 @@
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DLightInfo {
     bool operator==(J3DLightInfo& other) const;
@@ -28,7 +28,7 @@ struct J3DLightInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTextureSRTInfo {
     // NOTE: Big endian when loaded from file!
@@ -79,7 +79,7 @@ enum J3DTexMtxMode {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTexMtxInfo {
     bool operator==(J3DTexMtxInfo& other) const;
@@ -97,7 +97,7 @@ struct J3DTexMtxInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DIndTexMtxInfo {
     J3DIndTexMtxInfo& operator=(J3DIndTexMtxInfo const&);
@@ -107,7 +107,7 @@ struct J3DIndTexMtxInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DFogInfo {
     bool operator==(J3DFogInfo&) const;
@@ -126,7 +126,7 @@ struct J3DFogInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DNBTScaleInfo {
     bool operator==(const J3DNBTScaleInfo& other) const;
@@ -153,7 +153,7 @@ struct J3DIndTexOrderInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTevSwapModeInfo {
     /* 0x0 */ u8 mRasSel;
@@ -164,7 +164,7 @@ struct J3DTevSwapModeInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTevSwapModeTableInfo {
     /* 0x0 */ u8 field_0x0;
@@ -175,7 +175,7 @@ struct J3DTevSwapModeTableInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTevStageInfo {
     /* 0x0 */ u8 field_0x0;
@@ -202,7 +202,7 @@ struct J3DTevStageInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DIndTevStageInfo {
     /* 0x0 */ u8 mIndStage;
@@ -219,7 +219,7 @@ struct J3DIndTevStageInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTexCoordInfo {
     /* 0x0 */ u8 mTexGenType;
@@ -265,7 +265,7 @@ struct J3DBlendInfo {
 
 /**
  * @ingroup jsystem-j3d
- * 
+ *
  */
 struct J3DTevOrderInfo {
     void operator=(const J3DTevOrderInfo& other) {

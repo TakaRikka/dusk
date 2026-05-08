@@ -21,6 +21,12 @@ enum class GameLanguage : u8 {
     Italian = OS_LANGUAGE_ITALIAN,
 };
 
+enum class DiscVerificationState : u8 {
+    Unknown = 0,
+    Success,
+    HashMismatch,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -32,6 +38,12 @@ template <>
 struct ConfigEnumRange<GameLanguage> {
     static constexpr auto min = GameLanguage::English;
     static constexpr auto max = GameLanguage::Italian;
+};
+
+template <>
+struct ConfigEnumRange<DiscVerificationState> {
+    static constexpr auto min = DiscVerificationState::Unknown;
+    static constexpr auto max = DiscVerificationState::HashMismatch;
 };
 }
 
@@ -45,6 +57,8 @@ struct UserSettings {
         ConfigVar<bool> enableFullscreen;
         ConfigVar<bool> enableVsync;
         ConfigVar<bool> lockAspectRatio;
+        ConfigVar<bool> enableFpsOverlay;
+        ConfigVar<int> fpsOverlayCorner;
     } video;
 
     struct {
@@ -85,7 +99,7 @@ struct UserSettings {
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
-        ConfigVar<bool> disableMainHUD;
+        ConfigVar<bool> minimalHUD;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementNotifications;
@@ -120,6 +134,7 @@ struct UserSettings {
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<float> freeCameraSensitivity;
         ConfigVar<bool> debugFlyCam;
+        ConfigVar<bool> debugFlyCamLockEvents;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
@@ -146,16 +161,19 @@ struct UserSettings {
         // Tools
         ConfigVar<bool> speedrunMode;
         ConfigVar<bool> liveSplitEnabled;
+        ConfigVar<bool> recordingMode;
     } game;
 
     struct {
         ConfigVar<std::string> isoPath;
+        ConfigVar<DiscVerificationState> isoVerification;
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> enableCrashReporting;
         ConfigVar<int> cardFileType;
+        ConfigVar<bool> enableAdvancedSettings;
     } backend;
 };
 

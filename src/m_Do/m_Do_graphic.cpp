@@ -56,6 +56,7 @@
 #include "dusk/gx_helper.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/logging.h"
+#include "dusk/settings.h"
 #endif
 
 class mDoGph_HIO_c : public JORReflexible {
@@ -1172,6 +1173,11 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
 }
 
 static void trimming(view_class* param_0, view_port_class* param_1) {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     ZoneScoped;
     UNUSED(param_0);
 

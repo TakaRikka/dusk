@@ -9,6 +9,10 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_pane_class.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {
     if (param_1 != NULL) {
         field_0xd8 = param_1;
@@ -187,6 +191,11 @@ void dMsgScrnTree_c::exec() {
 }
 
 void dMsgScrnTree_c::draw() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
     mpScreen->draw(0.0f, 0.0f, grafContext);

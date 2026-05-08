@@ -261,12 +261,19 @@ namespace dusk {
         }
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
-            ImGuiMenuGame::ToggleFullscreen();
+            getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
+            VISetWindowFullscreen(getSettings().video.enableFullscreen);
+            config::Save();
         }
 
         if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
-            m_isHidden = !m_isHidden;
+            if (getSettings().backend.enableAdvancedSettings) {
+                m_isHidden = !m_isHidden;
+            } else {
+                m_isHidden = true;
+            }
         }
+        
         bool showMenu = !m_isHidden;
 
         // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,
@@ -275,16 +282,6 @@ namespace dusk {
         if (showMenu && ImGui::BeginMainMenuBar()) {
             m_menuGame.draw();
             m_menuTools.draw();
-
-            const auto fpsLabel =
-                fmt::format(FMT_STRING("FPS: {:.2f}\n"), ImGui::GetIO().Framerate);
-            const auto fpsSize =
-                ImGui::CalcTextSize(fpsLabel.data(), fpsLabel.data() + fpsLabel.size());
-            ImGui::SetCursorPosX(
-                ImMax(ImGui::GetCursorPosX(), ImGui::GetWindowWidth() -
-                                                  ImGui::GetStyle().DisplaySafeAreaPadding.x -
-                                                  fpsSize.x - ImGui::GetStyle().ItemSpacing.x));
-            ImGuiStringViewText(fpsLabel);
 
             ImGui::EndMainMenuBar();
         }
@@ -360,8 +357,7 @@ namespace dusk {
             ImGui::End();
         }
 
-        m_menuGame.windowControllerConfig();
-        m_menuGame.windowInputViewer();
+        m_menuTools.ShowInputViewer();
         m_menuGame.drawSpeedrunTimerOverlay();
 
         if (getSettings().game.liveSplitEnabled) {
@@ -385,7 +381,6 @@ namespace dusk {
             m_menuTools.ShowSaveEditor();
             m_menuTools.ShowStateShare();
         }
-        DuskDebugPad(); // temporary, remove later
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.
         ImGuiIO& io = ImGui::GetIO();

@@ -2,6 +2,8 @@
 
 #include "string_button.hpp"
 
+#include <climits>
+
 namespace dusk::ui {
 
 class NumberButton : public BaseStringButton {

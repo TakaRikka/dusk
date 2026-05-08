@@ -18,6 +18,8 @@ public:
         Rml::String bodyRml;
         std::vector<ModalAction> actions;
         std::function<void(Modal&)> onDismiss;
+        Rml::String variant;
+        Rml::String icon = "";
     };
 
     explicit Modal(Props props);

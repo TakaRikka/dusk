@@ -19,6 +19,7 @@ private:
         Buttons,
         Triggers,
         Sticks,
+        Rumble,
     };
 
     void build_port_tab(Rml::Element* content, int port);
@@ -32,6 +33,9 @@ private:
     Rml::String pending_button_label() const;
     Rml::String pending_axis_label() const;
     void cancel_pending_binding();
+    void finish_pending_key_binding();
+    Rml::String pending_key_label() const;
+    void stop_rumble_test();
 
     Page mPage = Page::Controller;
     Pane* mRightPane = nullptr;
@@ -42,6 +46,10 @@ private:
     int mSuppressNavigationPort = -1;
     PADButtonMapping* mPendingButtonMapping = nullptr;
     PADAxisMapping* mPendingAxisMapping = nullptr;
+    int mPendingKeyButton = -1;
+    int mPendingKeyAxis = -1;
+    bool mRumbleTestActive = false;
+    int mRumbleTestPort = -1;
 };
 
 }  // namespace dusk::ui

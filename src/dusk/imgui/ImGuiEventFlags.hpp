@@ -899,7 +899,7 @@ constexpr auto eventFlagToAreaFlagFormat(uint16_t eventFlag) -> AreaFlagInd {
     // so we skip 24 bytes for the first byte, 16 for the second, etc
     // essentially (3 - (x % 4)), reversing the modulus, 0=3, 1=2
     const auto bitsToSkip = 8 * ((sizeof(u32) - 1) - (relativeByteInd % sizeof(u32)));
-    const int areaFlag = ((eventU32Ind) << areaIndexSize) | 
+    const int areaFlag = ((eventU32Ind) << areaIndexSize) |
                          ((std::countr_zero(eventFlag) + bitsToSkip) & makeMask(areaIndexSize));
 
     return AreaFlagInd{byteIndexToAreaFlagType(byteInd), areaFlag};

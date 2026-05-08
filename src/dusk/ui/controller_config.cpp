@@ -3,10 +3,11 @@
 #include "bool_button.hpp"
 #include "button.hpp"
 #include "pane.hpp"
-#include "select_button.hpp"
+#include "number_button.hpp"
 
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_mouse.h>
 #include <fmt/format.h>
 
 #include <array>
@@ -17,9 +18,17 @@
 namespace dusk::ui {
 namespace {
 
+bool keyboard_active(int port) {
+    u32 count = 0;
+    return PADGetKeyButtonBindings(static_cast<u32>(port), &count) != nullptr;
+}
+
 Rml::String current_controller_name(int port) {
     const char* name = PADGetName(port);
-    return name == nullptr ? "None" : name;
+    if (name != nullptr) {
+        return name;
+    }
+    return keyboard_active(port) ? "Keyboard" : "None";
 }
 
 Rml::String controller_index_name(u32 index) {
@@ -202,6 +211,86 @@ bool keyboard_escape_pressed() {
     return keys != nullptr && SDL_SCANCODE_ESCAPE < keyCount && keys[SDL_SCANCODE_ESCAPE];
 }
 
+Rml::String keyboard_key_name(s32 scancode) {
+    if (scancode == PAD_KEY_INVALID) {
+        return "Not bound";
+    }
+    switch (scancode) {
+    case PAD_KEY_MOUSE_LEFT:
+        return "Mouse Left";
+    case PAD_KEY_MOUSE_MIDDLE:
+        return "Mouse Middle";
+    case PAD_KEY_MOUSE_RIGHT:
+        return "Mouse Right";
+    case PAD_KEY_MOUSE_X1:
+        return "Mouse X1";
+    case PAD_KEY_MOUSE_X2:
+        return "Mouse X2";
+    default:
+        break;
+    }
+    if (scancode < 0) {
+        return "Unknown";
+    }
+    const char* name = SDL_GetScancodeName(static_cast<SDL_Scancode>(scancode));
+    if (name == nullptr || name[0] == '\0') {
+        return "Unknown";
+    }
+    return name;
+}
+
+bool keyboard_neutral() {
+    int keyCount = 0;
+    const bool* keys = SDL_GetKeyboardState(&keyCount);
+    if (keys != nullptr) {
+        for (int i = 0; i < keyCount; ++i) {
+            if (keys[i]) {
+                return false;
+            }
+        }
+    }
+    float x, y;
+    if (SDL_GetMouseState(&x, &y) != 0) {
+        return false;
+    }
+    return true;
+}
+
+s32 keyboard_key_pressed() {
+    int keyCount = 0;
+    const bool* keys = SDL_GetKeyboardState(&keyCount);
+    if (keys != nullptr) {
+        for (int i = 1; i < keyCount; ++i) {
+            if (i == SDL_SCANCODE_ESCAPE) {
+                continue;
+            }
+            if (keys[i]) {
+                return static_cast<s32>(i);
+            }
+        }
+    }
+    float x, y;
+    const auto mouseButtons = SDL_GetMouseState(&x, &y);
+    for (int btn = 1; btn <= 5; ++btn) {
+        if (mouseButtons & (1u << (btn - 1))) {
+            return -(btn + 1);  // maps to PAD_KEY_MOUSE_LEFT (-2), etc.
+        }
+    }
+    return PAD_KEY_INVALID;
+}
+
+u16 percent_to_raw(int percent) {
+    return static_cast<u16>((static_cast<float>(percent) / 100.f) * 32767.f);
+}
+
+int deadzone_raw_to_percent(u16 raw) {
+    return static_cast<int>((static_cast<float>(raw) * 100.f) / 32767.f + 0.5f);
+}
+
+int rumble_raw_to_percent(u16 raw) {
+    return static_cast<int>((static_cast<float>(raw) / 32767.f) * 100.f + 0.5f);
+}
+
 }  // namespace
 
 ControllerConfigWindow::ControllerConfigWindow() {
@@ -231,6 +320,7 @@ ControllerConfigWindow::ControllerConfigWindow() {
 }
 
 void ControllerConfigWindow::hide(bool close) {
+    stop_rumble_test();
     cancel_pending_binding();
     Window::hide(close);
 }
@@ -241,16 +331,18 @@ void ControllerConfigWindow::update() {
 }
 
 void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
+    stop_rumble_test();
     auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
     auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
     mRightPane = &rightPane;
     mActivePort = port;
 
     auto addPageButton = [this, &leftPane, &rightPane, port](
-                             Page page, Rml::String key, auto getValue) {
+                             Page page, Rml::String key, auto getValue, auto isDisabled) {
         leftPane.register_control(leftPane.add_select_button({
                                       .key = std::move(key),
                                       .getValue = std::move(getValue),
+                                      .isDisabled = std::move(isDisabled),
                                   }),
             rightPane, [this, port, page](Pane& pane) {
                 mPage = page;
@@ -258,10 +350,11 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             });
     };
 
-    addPageButton(Page::Controller, "Controller", [port] { return current_controller_name(port); });
-    addPageButton(Page::Buttons, "Buttons", [] { return Rml::String(">"); });
-    addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); });
-    addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); });
+    addPageButton(Page::Controller, "Controller", [port] { return current_controller_name(port); }, [] { return false; });
+    addPageButton(Page::Buttons, "Buttons", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Rumble, "Rumble", [] { return Rml::String(">"); }, [port] { return !PADSupportsRumbleIntensity(static_cast<u32>(port)); });
 
     leftPane.add_section("Options");
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
@@ -311,22 +404,37 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
 
     switch (page) {
     case Page::Controller: {
-        const u32 controllerCount = PADCount();
-        if (controllerCount == 0) {
-            pane.add_text("No controllers detected");
-            break;
-        }
+        pane.add_button(
+                {
+                    .text = "None",
+                .isSelected =
+                    [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
+            })
+            .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                cancel_pending_binding();
+                PADClearPort(port);
+                PADSetKeyboardActive(static_cast<u32>(port), FALSE);
+                PADSerializeMappings();
+            });
 
         pane.add_button({
-                            .text = "None",
-                            .isSelected = [port] { return PADGetIndexForPort(port) < 0; },
+                            .text = "Keyboard",
+                            .isSelected = [port] { return keyboard_active(port); },
                         })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
                 PADClearPort(port);
+                PADSetKeyboardActive(static_cast<u32>(port), TRUE);
                 PADSerializeMappings();
             });
+
+        const u32 controllerCount = PADCount();
+        if (controllerCount == 0) {
+            pane.add_text("No controllers detected");
+            break;
+        }
 
         for (u32 i = 0; i < controllerCount; ++i) {
             pane.add_button(
@@ -338,6 +446,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 .on_pressed([this, port, i] {
                     mDoAud_seStartMenu(kSoundItemChange);
                     cancel_pending_binding();
+                    PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();
                 });
@@ -345,6 +454,54 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Buttons: {
+        if (keyboard_active(port)) {
+            auto addKeyButton = [&](PADButton button) {
+                pane.add_select_button(
+                        {
+                            .key = PADGetButtonName(button),
+                            .getValue =
+                                [this, port, button] {
+                                    if (mPendingKeyButton == static_cast<int>(button)) {
+                                        return pending_key_label();
+                                    }
+                                    u32 count = 0;
+                                    PADKeyButtonBinding* bindings =
+                                        PADGetKeyButtonBindings(static_cast<u32>(port), &count);
+                                    if (bindings == nullptr) {
+                                        return Rml::String("Not bound");
+                                    }
+                                    for (u32 i = 0; i < PAD_BUTTON_COUNT; ++i) {
+                                        if (bindings[i].padButton == button) {
+                                            return keyboard_key_name(bindings[i].scancode);
+                                        }
+                                    }
+                                    return Rml::String("Not bound");
+                                },
+                        })
+                    .on_pressed([this, port, button] {
+                        cancel_pending_binding();
+                        mPendingPort = port;
+                        mPendingBindingArmed = false;
+                        mPendingKeyButton = static_cast<int>(button);
+                    });
+            };
+
+            pane.add_section("Buttons");
+            addKeyButton(PAD_BUTTON_A);
+            addKeyButton(PAD_BUTTON_B);
+            addKeyButton(PAD_BUTTON_X);
+            addKeyButton(PAD_BUTTON_Y);
+            addKeyButton(PAD_BUTTON_START);
+            addKeyButton(PAD_TRIGGER_Z);
+
+            pane.add_section("D-Pad");
+            addKeyButton(PAD_BUTTON_UP);
+            addKeyButton(PAD_BUTTON_DOWN);
+            addKeyButton(PAD_BUTTON_LEFT);
+            addKeyButton(PAD_BUTTON_RIGHT);
+            break;
+        }
+
         u32 buttonCount = 0;
         PADButtonMapping* mappings = PADGetButtonMappings(port, &buttonCount);
         if (mappings == nullptr) {
@@ -407,6 +564,79 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Triggers: {
+        if (keyboard_active(port)) {
+            auto addKeyButton = [&](PADButton button) {
+                pane.add_select_button(
+                        {
+                            .key = PADGetButtonName(button),
+                            .getValue =
+                                [this, port, button] {
+                                    if (mPendingKeyButton == static_cast<int>(button)) {
+                                        return pending_key_label();
+                                    }
+                                    u32 count = 0;
+                                    PADKeyButtonBinding* bindings =
+                                        PADGetKeyButtonBindings(static_cast<u32>(port), &count);
+                                    if (bindings == nullptr) {
+                                        return Rml::String("Not bound");
+                                    }
+                                    for (u32 i = 0; i < PAD_BUTTON_COUNT; ++i) {
+                                        if (bindings[i].padButton == button) {
+                                            return keyboard_key_name(bindings[i].scancode);
+                                        }
+                                    }
+                                    return Rml::String("Not bound");
+                                },
+                        })
+                    .on_pressed([this, port, button] {
+                        cancel_pending_binding();
+                        mPendingPort = port;
+                        mPendingBindingArmed = false;
+                        mPendingKeyButton = static_cast<int>(button);
+                    });
+            };
+
+            auto addKeyAxis = [&](PADAxis axis) {
+                pane.add_select_button(
+                        {
+                            .key = PADGetAxisName(axis),
+                            .getValue =
+                                [this, port, axis] {
+                                    if (mPendingKeyAxis == static_cast<int>(axis)) {
+                                        return pending_key_label();
+                                    }
+                                    u32 count = 0;
+                                    PADKeyAxisBinding* bindings =
+                                        PADGetKeyAxisBindings(static_cast<u32>(port), &count);
+                                    if (bindings == nullptr) {
+                                        return Rml::String("Not bound");
+                                    }
+                                    for (u32 i = 0; i < PAD_AXIS_COUNT; ++i) {
+                                        if (bindings[i].padAxis == axis) {
+                                            return keyboard_key_name(bindings[i].scancode);
+                                        }
+                                    }
+                                    return Rml::String("Not bound");
+                                },
+                        })
+                    .on_pressed([this, port, axis] {
+                        cancel_pending_binding();
+                        mPendingPort = port;
+                        mPendingBindingArmed = false;
+                        mPendingKeyAxis = static_cast<int>(axis);
+                    });
+            };
+
+            pane.add_section("Analog");
+            addKeyAxis(PAD_AXIS_TRIGGER_L);
+            addKeyAxis(PAD_AXIS_TRIGGER_R);
+
+            pane.add_section("Digital");
+            addKeyButton(PAD_TRIGGER_L);
+            addKeyButton(PAD_TRIGGER_R);
+            break;
+        }
+
         u32 axisCount = 0;
         PADAxisMapping* axes = PADGetAxisMappings(port, &axisCount);
         u32 buttonCount = 0;
@@ -470,9 +700,87 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             }
         }
+
+        if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+            pane.add_section("Emulated Trigger Thresholds");
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "L Threshold",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->leftTriggerActivationZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->leftTriggerActivationZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->emulateTriggers; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "R Threshold",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->rightTriggerActivationZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->rightTriggerActivationZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->emulateTriggers; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+        }
         break;
     }
     case Page::Sticks: {
+        if (keyboard_active(port)) {
+            auto addKeyAxis = [&](PADAxis axis) {
+                pane.add_select_button(
+                        {
+                            .key = PADGetAxisDirectionLabel(axis),
+                            .getValue =
+                                [this, port, axis] {
+                                    if (mPendingKeyAxis == static_cast<int>(axis)) {
+                                        return pending_key_label();
+                                    }
+                                    u32 count = 0;
+                                    PADKeyAxisBinding* bindings =
+                                        PADGetKeyAxisBindings(static_cast<u32>(port), &count);
+                                    if (bindings == nullptr) {
+                                        return Rml::String("Not bound");
+                                    }
+                                    for (u32 i = 0; i < PAD_AXIS_COUNT; ++i) {
+                                        if (bindings[i].padAxis == axis) {
+                                            return keyboard_key_name(bindings[i].scancode);
+                                        }
+                                    }
+                                    return Rml::String("Not bound");
+                                },
+                        })
+                    .on_pressed([this, port, axis] {
+                        cancel_pending_binding();
+                        mPendingPort = port;
+                        mPendingBindingArmed = false;
+                        mPendingKeyAxis = static_cast<int>(axis);
+                    });
+            };
+
+            pane.add_section("Control Stick");
+            addKeyAxis(PAD_AXIS_LEFT_Y_POS);
+            addKeyAxis(PAD_AXIS_LEFT_Y_NEG);
+            addKeyAxis(PAD_AXIS_LEFT_X_NEG);
+            addKeyAxis(PAD_AXIS_LEFT_X_POS);
+
+            pane.add_section("C Stick");
+            addKeyAxis(PAD_AXIS_RIGHT_Y_POS);
+            addKeyAxis(PAD_AXIS_RIGHT_Y_NEG);
+            addKeyAxis(PAD_AXIS_RIGHT_X_NEG);
+            addKeyAxis(PAD_AXIS_RIGHT_X_POS);
+            break;
+        }
+
         u32 axisCount = 0;
         PADAxisMapping* axes = PADGetAxisMappings(port, &axisCount);
         if (axes == nullptr) {
@@ -509,12 +817,121 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         addAxis(PAD_AXIS_LEFT_Y_NEG);
         addAxis(PAD_AXIS_LEFT_X_NEG);
         addAxis(PAD_AXIS_LEFT_X_POS);
+        if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "Deadzone",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->stickDeadZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->stickDeadZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->useDeadzones; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+        }
 
         pane.add_section("C Stick");
         addAxis(PAD_AXIS_RIGHT_Y_POS);
         addAxis(PAD_AXIS_RIGHT_Y_NEG);
         addAxis(PAD_AXIS_RIGHT_X_NEG);
         addAxis(PAD_AXIS_RIGHT_X_POS);
+        if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "Deadzone",
+                .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->substickDeadZone); },
+                .setValue =
+                    [deadZones](int value) {
+                        deadZones->substickDeadZone = percent_to_raw(value);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [deadZones] { return !deadZones->useDeadzones; },
+                .min = 0,
+                .max = 100,
+                .step = 1,
+                .suffix = "%",
+            });
+        }
+
+        break;
+    }
+    case Page::Rumble: {
+        auto& rumbleTest = pane.add_select_button({
+            .key = "Test Rumble",
+            .getValue =
+                [this, port] {
+                    return (mRumbleTestActive && mRumbleTestPort == port) ? Rml::String("Stop")
+                                                                          : Rml::String("Start");
+                },
+        });
+        rumbleTest.on_pressed([this, port] {
+            if (!PADSupportsRumbleIntensity(static_cast<u32>(port))) {
+                return;
+            }
+            mDoAud_seStartMenu(kSoundItemChange);
+            if (mRumbleTestActive && mRumbleTestPort == port) {
+                PADControlMotor(port, PAD_MOTOR_STOP_HARD);
+                mRumbleTestActive = false;
+                mRumbleTestPort = -1;
+            } else {
+                if (mRumbleTestActive) {
+                    PADControlMotor(mRumbleTestPort, PAD_MOTOR_STOP_HARD);
+                }
+                PADControlMotor(port, PAD_MOTOR_RUMBLE);
+                mRumbleTestActive = true;
+                mRumbleTestPort = port;
+            }
+        });
+        pane.add_child<NumberButton>(NumberButton::Props{
+            .key = "Low Rumble Frequency",
+            .getValue =
+                [port] {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    return rumble_raw_to_percent(low);
+                },
+            .setValue =
+                [port](int value) {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    PADSetRumbleIntensity(static_cast<u32>(port), percent_to_raw(value), high);
+                    PADSerializeMappings();
+                },
+            .isDisabled = [this] { return mRumbleTestActive; },
+            .min = 0,
+            .max = 100,
+            .step = 1,
+            .suffix = "%",
+        });
+        pane.add_child<NumberButton>(NumberButton::Props{
+            .key = "High Rumble Frequency",
+            .getValue =
+                [port] {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    return rumble_raw_to_percent(high);
+                },
+            .setValue =
+                [port](int value) {
+                    u16 low = 0;
+                    u16 high = 0;
+                    PADGetRumbleIntensity(static_cast<u32>(port), &low, &high);
+                    PADSetRumbleIntensity(static_cast<u32>(port), low, percent_to_raw(value));
+                    PADSerializeMappings();
+                },
+            .isDisabled = [this] { return mRumbleTestActive; },
+            .min = 0,
+            .max = 100,
+            .step = 1,
+            .suffix = "%",
+        });
+        pane.add_text("Configure your desired rumble intensities, then run a test to check how they feel.");
         break;
     }
     }
@@ -545,6 +962,21 @@ void ControllerConfigWindow::poll_pending_binding() {
     if (!mPendingBindingArmed) {
         if (pending_input_neutral()) {
             mPendingBindingArmed = true;
+        }
+        return;
+    }
+
+    if (mPendingKeyButton >= 0 || mPendingKeyAxis >= 0) {
+        const s32 scancode = keyboard_key_pressed();
+        if (scancode != PAD_KEY_INVALID) {
+            if (mPendingKeyButton >= 0) {
+                PADSetKeyButtonBinding(static_cast<u32>(mPendingPort),
+                    {scancode, static_cast<PADButton>(mPendingKeyButton)});
+            } else {
+                PADSetKeyAxisBinding(static_cast<u32>(mPendingPort),
+                    {scancode, static_cast<PADAxis>(mPendingKeyAxis), 0});
+            }
+            finish_pending_key_binding();
         }
         return;
     }
@@ -590,26 +1022,40 @@ void ControllerConfigWindow::finish_pending_binding(int completedPort) {
 }
 
 void ControllerConfigWindow::unmap_pending_binding() {
-    if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr) {
+    if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr &&
+        mPendingKeyButton < 0 && mPendingKeyAxis < 0)
+    {
         return;
     }
 
     const int completedPort = mPendingPort;
     if (mPendingButtonMapping != nullptr) {
         mPendingButtonMapping->nativeButton = PAD_NATIVE_BUTTON_INVALID;
-    }
-    if (mPendingAxisMapping != nullptr) {
+        finish_pending_binding(completedPort);
+    } else if (mPendingAxisMapping != nullptr) {
         mPendingAxisMapping->nativeAxis = {-1, AXIS_SIGN_POSITIVE};
         mPendingAxisMapping->nativeButton = -1;
+        finish_pending_binding(completedPort);
+    } else if (mPendingKeyButton >= 0) {
+        PADSetKeyButtonBinding(static_cast<u32>(completedPort),
+            {PAD_KEY_INVALID, static_cast<PADButton>(mPendingKeyButton)});
+        finish_pending_key_binding();
+    } else if (mPendingKeyAxis >= 0) {
+        PADSetKeyAxisBinding(static_cast<u32>(completedPort),
+            {PAD_KEY_INVALID, static_cast<PADAxis>(mPendingKeyAxis), 0});
+        finish_pending_key_binding();
     }
-    finish_pending_binding(completedPort);
 }
 
 bool ControllerConfigWindow::capture_active() const {
-    return mPendingButtonMapping != nullptr || mPendingAxisMapping != nullptr;
+    return mPendingButtonMapping != nullptr || mPendingAxisMapping != nullptr ||
+           mPendingKeyButton >= 0 || mPendingKeyAxis >= 0;
 }
 
 bool ControllerConfigWindow::pending_input_neutral() const {
+    if (mPendingKeyButton >= 0 || mPendingKeyAxis >= 0) {
+        return keyboard_neutral();
+    }
     return input_neutral(mPendingPort);
 }
 
@@ -623,16 +1069,41 @@ Rml::String ControllerConfigWindow::pending_axis_label() const {
 
 void ControllerConfigWindow::cancel_pending_binding() {
     if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr &&
-        !mSuppressNavigationUntilNeutral)
+        !mSuppressNavigationUntilNeutral && mPendingKeyButton < 0 && mPendingKeyAxis < 0)
     {
         return;
     }
     mPendingButtonMapping = nullptr;
     mPendingAxisMapping = nullptr;
+    mPendingKeyButton = -1;
+    mPendingKeyAxis = -1;
     mPendingPort = -1;
     mPendingBindingArmed = false;
     mSuppressNavigationUntilNeutral = false;
     mSuppressNavigationPort = -1;
+}
+
+void ControllerConfigWindow::finish_pending_key_binding() {
+    mPendingKeyButton = -1;
+    mPendingKeyAxis = -1;
+    mPendingPort = -1;
+    mPendingBindingArmed = false;
+    PADSerializeMappings();
+}
+
+Rml::String ControllerConfigWindow::pending_key_label() const {
+    return mPendingBindingArmed ? "Press a key or mouse button..." : "Waiting...";
+}
+
+void ControllerConfigWindow::stop_rumble_test() {
+    if (!mRumbleTestActive) {
+        return;
+    }
+    if (mRumbleTestPort >= PAD_CHAN0 && mRumbleTestPort < PAD_CHANMAX) {
+        PADControlMotor(mRumbleTestPort, PAD_MOTOR_STOP_HARD);
+    }
+    mRumbleTestActive = false;
+    mRumbleTestPort = -1;
 }
 
 }  // namespace dusk::ui

@@ -6,6 +6,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_pane_class.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 dMsgScrnArrow_c::dMsgScrnArrow_c() {
     mpScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(0, mpScreen != NULL);
@@ -65,6 +69,11 @@ dMsgScrnArrow_c::~dMsgScrnArrow_c() {
 }
 
 void dMsgScrnArrow_c::draw() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     J2DGrafContext* graf_ctx = dComIfGp_getCurrentGrafPort();
     mpScreen->draw(0.0f, 0.0f, graf_ctx);
 }

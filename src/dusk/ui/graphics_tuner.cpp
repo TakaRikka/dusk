@@ -91,18 +91,23 @@ Rml::Element* create_stepped_carousel_arrow(
     return parent->AppendChild(std::move(button));
 }
 
+void update_carousel_arrow_color(Rml::Element* arrow, bool dim) {
+    const Rml::Colourb& color = Rml::Colourb(255, 255, 255, dim ? 128 : 255);
+    arrow->SetProperty(Rml::PropertyId::Color, Rml::Property(color, Rml::Unit::COLOUR));
+}
+
 }  // namespace
 
 SteppedCarousel::SteppedCarousel(Rml::Element* parent, Props props)
     : Component(create_stepped_carousel_root(parent)), mProps(std::move(props)) {
-    Rml::Element* prevElem = create_stepped_carousel_arrow(mRoot, "prev", "&#xe5cb;");
+    mPrevElem = create_stepped_carousel_arrow(mRoot, "prev", "&#xe5cb;");
     mValueElem = append(mRoot, "div");
     mValueElem->SetClass("stepped-carousel-value", true);
-    Rml::Element* nextElem = create_stepped_carousel_arrow(mRoot, "next", "&#xe5cc;");
+    mNextElem = create_stepped_carousel_arrow(mRoot, "next", "&#xe5cc;");
 
-    listen(prevElem, Rml::EventId::Click,
+    listen(mPrevElem, Rml::EventId::Click,
         [this](Rml::Event&) { handle_nav_command(NavCommand::Left); });
-    listen(nextElem, Rml::EventId::Click,
+    listen(mNextElem, Rml::EventId::Click,
         [this](Rml::Event&) { handle_nav_command(NavCommand::Right); });
     listen(mRoot, Rml::EventId::Keydown, [this](Rml::Event& event) {
         const auto cmd = map_nav_event(event);
@@ -126,6 +131,9 @@ void SteppedCarousel::update() {
     } else {
         mValueElem->SetInnerRML(std::to_string(value));
     }
+
+    update_carousel_arrow_color(mPrevElem, value == mProps.min);
+    update_carousel_arrow_color(mNextElem, value == mProps.max);
 }
 
 bool SteppedCarousel::handle_nav_command(NavCommand cmd) {

@@ -8,6 +8,10 @@
 #include "d/d_pane_class.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 dMsgScrnBase_c::dMsgScrnBase_c() {
     init();
 }
@@ -57,12 +61,22 @@ void dMsgScrnBase_c::init() {
 }
 
 void dMsgScrnBase_c::multiDraw() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     if (field_0x48 != NULL) {
         dComIfGd_set2DOpa(field_0x48);
     }
 }
 
 void dMsgScrnBase_c::draw() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     J2DGrafContext* ctx = dComIfGp_getCurrentGrafPort();
 
     ctx->setup2D();
@@ -72,10 +86,20 @@ void dMsgScrnBase_c::draw() {
 }
 
 void dMsgScrnBase_c::drawSelf() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     drawOutFont(0.0f, 0.0f, 1.0f);
 }
 
 void dMsgScrnBase_c::drawOutFont(f32 param_0, f32 param_1, f32 param_2) {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     mpOutFont->draw(NULL, param_0, param_1, param_2);
 }
 

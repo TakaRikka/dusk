@@ -10,14 +10,13 @@
 #include "dusk/livesplit.h"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
+#include "menu_bar.hpp"
 #include "number_button.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
 
 #include <algorithm>
-
-#include "modal.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -33,6 +32,13 @@ constexpr std::array kLanguageNames = {
 constexpr std::array kCardFileTypes = {
     "Card Image",
     "GCI Folder",
+};
+
+constexpr std::array kFpsOverlayCornerNames = {
+    "Top Left",
+    "Top Right",
+    "Bottom Left",
+    "Bottom Right",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -304,7 +310,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         .key = "Disc Image",
                         .getValue =
                             [] {
-                                const auto& path = prelaunch_state().selectedDiscPath;
+                                const auto& path = prelaunch_state().configuredDiscPath;
                                 std::string display;
                                 if (path.empty()) {
                                     display = "(none)";
@@ -319,8 +325,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         .isModified =
                             [] {
                                 const auto& state = prelaunch_state();
-                                const auto& initial = state.initialDiscPath;
-                                return !initial.empty() && state.selectedDiscPath != initial;
+                                const auto& active = state.activeDiscPath;
+                                return !active.empty() && state.configuredDiscPath != active;
                             },
                     })
                     .on_pressed([] { open_iso_picker(); }),
@@ -334,7 +340,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .getValue =
                         [] {
                             const auto& state = prelaunch_state();
-                            if (!state.selectedDiscIsValid || !state.selectedDiscIsPal) {
+                            if (!state.configuredDiscCanLaunch || !state.configuredDiscInfo.isPal) {
                                 return kLanguageNames[0];
                             }
                             const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
@@ -343,7 +349,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .isDisabled =
                         [] {
                             const auto& state = prelaunch_state();
-                            return !state.selectedDiscIsValid || !state.selectedDiscIsPal;
+                            return !state.configuredDiscCanLaunch ||
+                                   !state.configuredDiscInfo.isPal;
                         },
                     .isModified =
                         [] {
@@ -429,7 +436,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         });
     }
 
-    add_tab("Graphics", [this](Rml::Element* content) {
+    add_tab("Video", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
@@ -470,6 +477,57 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Pause on Focus Lost",
                 .isDisabled = [] { return IsMobile; },
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Show FPS Counter",
+                .getValue =
+                    [] {
+                        if (!getSettings().video.enableFpsOverlay.getValue()) {
+                            return Rml::String{"Off"};
+                        }
+                        const int idx = getSettings().video.fpsOverlayCorner.getValue();
+                        return Rml::String{kFpsOverlayCornerNames[idx]};
+                    },
+                .isModified =
+                    [] {
+                        const auto& enable = getSettings().video.enableFpsOverlay;
+                        const auto& corner = getSettings().video.fpsOverlayCorner;
+                        return enable.getValue() != enable.getDefaultValue() ||
+                               (enable.getValue() && corner.getValue() != corner.getDefaultValue());
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.add_button(
+                        {
+                            .text = "Off",
+                            .isSelected =
+                                [] { return !getSettings().video.enableFpsOverlay.getValue(); },
+                        })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().video.enableFpsOverlay.setValue(false);
+                        config::Save();
+                    });
+                for (int i = 0; i < static_cast<int>(kFpsOverlayCornerNames.size()); ++i) {
+                    pane.add_button(
+                            {
+                                .text = kFpsOverlayCornerNames[i],
+                                .isSelected =
+                                    [i] {
+                                        return getSettings().video.enableFpsOverlay.getValue() &&
+                                               getSettings().video.fpsOverlayCorner.getValue() == i;
+                                    },
+                            })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.enableFpsOverlay.setValue(true);
+                            getSettings().video.fpsOverlayCorner.setValue(i);
+                            config::Save();
+                        });
+                }
+                pane.add_rml(
+                    "<br/>Display the current framerate in a corner of the screen while playing.");
             });
 
         leftPane.add_section("Resolution");
@@ -686,8 +744,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("General");
         addOption("Mirror Mode", getSettings().game.enableMirrorMode,
             "Mirrors the world horizontally, matching the Wii version of the game.");
-        addOption("Disable Main HUD", getSettings().game.disableMainHUD,
-            "Disables the main HUD of the game.<br/>Useful for recording or a more immersive "
+        addOption("Minimal HUD", getSettings().game.minimalHUD,
+            "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive "
             "experience.");
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
@@ -735,11 +793,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.autoSave,
             {
                 .key = "Autosave",
-                .icon = "warning",
-                .helpText =
-                    "Autosaves the game when going to a new area, opening a dungeon door, "
-                    "or getting a new item.<br/><br/><icon class=\"warning\"/> Experimental "
-                    "feature: Use at your own risk.",
+                .helpText = "Autosaves the game when going to a new area, opening a dungeon door, "
+                            "or getting a new item.",
             });
         addOption("Instant Saves", getSettings().game.instantSaves,
             "Skips the delay when writing to the Memory Card.");
@@ -827,11 +882,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
     });
 
-    // TODO: Reorganize all of this?
     add_tab("Interface", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
+        leftPane.add_section("Dusk");
         config_bool_select(leftPane, rightPane, getSettings().game.enableAchievementNotifications,
             {
                 .key = "Achievement Notifications",
@@ -852,44 +907,50 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
                 .key = "Skip Dusk Main Menu",
-                .helpText = "When starting Dusk, skips the main menu and boots straight into the "
+                .helpText = "When starting Dusk, skip the main menu and boot straight into the "
                             "game if a disc image is available.",
-            });
-        config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
-            {
-                .key = "Skip TV Settings Screen",
-                .helpText = "Skips the TV calibration screen shown when loading a save.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
             {
                 .key = "Show Pipeline Compilation",
                 .helpText = "Show an overlay when shaders are being compiled for your hardware.",
             });
+        config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
+            {
+                .key = "Enable Advanced Settings",
+                .icon = "warning",
+                .helpText = "Show advanced settings and debugging tools with "
+                            "Shift+F1.<br/><br/><icon class=\"warning\"/> WARNING: Debugging tools "
+                            "can easily break your game. Do not use on a regular save!",
+                .onChange =
+                    [](bool) {
+                        for (auto& doc : get_document_stack()) {
+                            if (dynamic_cast<MenuBar*>(doc.get())) {
+                                doc = std::make_unique<MenuBar>();
+                                break;
+                            }
+                        }
+                    },
+            });
+
+        leftPane.add_section("Game");
+        config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
+            {
+                .key = "Skip TV Settings Screen",
+                .helpText = "Skips the TV calibration screen shown when loading a save.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.recordingMode,
+            {
+                .key = "Recording Mode",
+                .helpText = "Disables the game HUD and all background music.<br/><br/>Useful for "
+                            "recording footage.",
+            });
     });
 }
 
 void SettingsWindow::update() {
-    // Show disc validation error message if present
     if (mPrelaunch && top_document() == this) {
-        auto& state = prelaunch_state();
-        if (!state.errorString.empty()) {
-            auto dismissInvalidDisc = [](Modal& modal) {
-                prelaunch_state().errorString.clear();
-                modal.pop();
-            };
-            push_document(std::make_unique<Modal>(Modal::Props{
-                .title = "Invalid disc image",
-                .bodyRml = state.errorString,
-                .actions =
-                    {
-                        ModalAction{
-                            .label = "OK",
-                            .onPressed = dismissInvalidDisc,
-                        },
-                    },
-                .onDismiss = dismissInvalidDisc,
-            }));
-        }
+        try_push_verification_modal(*this);
     }
 
     Window::update();

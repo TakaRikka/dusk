@@ -48,6 +48,8 @@ namespace dusk {
                 ImGui::EndDisabled();
             }
 
+            ImGui::Separator();
+            ImGui::Checkbox("Show Input Viewer", &m_showInputViewer);
 
 #if DUSK_CAN_OPEN_DATA_FOLDER
             ImGui::Separator();
@@ -119,7 +121,9 @@ namespace dusk {
     }
 
     void ImGuiMenuTools::ShowDebugOverlay() {
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F3, m_showDebugOverlay)) {
+        if (!getSettings().backend.enableAdvancedSettings ||
+            !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F3, m_showDebugOverlay))
+        {
             return;
         }
 
@@ -183,7 +187,9 @@ namespace dusk {
     }
 
     void ImGuiMenuTools::ShowPlayerInfo() {
-        if (!ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F5, m_showPlayerInfo)) {
+        if (!getSettings().backend.enableAdvancedSettings ||
+            !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F5, m_showPlayerInfo))
+        {
             return;
         }
 

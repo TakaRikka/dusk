@@ -13,6 +13,10 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_pane_class.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {
     if (param_0 != NULL) {
         field_0xd4 = param_0;
@@ -176,6 +180,11 @@ void dMsgScrnKanban_c::exec() {
 }
 
 void dMsgScrnKanban_c::draw() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     J2DGrafContext* grafContext = dComIfGp_getCurrentGrafPort();
     grafContext->setup2D();
     mpScreen->draw(0.0f, 0.0f, grafContext);

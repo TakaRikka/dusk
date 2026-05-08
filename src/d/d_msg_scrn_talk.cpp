@@ -20,6 +20,10 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     if (param_3 != NULL) {
         field_0xe4 = param_3;
@@ -303,6 +307,11 @@ void dMsgScrnTalk_c::exec() {
 }
 
 void dMsgScrnTalk_c::drawSelf() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     J2DGrafContext* grafContext[1];
     grafContext[0] = dComIfGp_getCurrentGrafPort();
     grafContext[0]->setup2D();

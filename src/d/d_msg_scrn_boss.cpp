@@ -6,6 +6,10 @@
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 dMsgScrnBoss_c::dMsgScrnBoss_c() {
     static u64 t_tag[7] = {
         MULTI_CHAR('sfontb0'), MULTI_CHAR('sfontb1'), MULTI_CHAR('sfontb2'), MULTI_CHAR('sfontl0'), MULTI_CHAR('sfontl1'), MULTI_CHAR('sfontl2'), MULTI_CHAR('sfont00'),
@@ -91,6 +95,11 @@ void dMsgScrnBoss_c::exec() {
 }
 
 void dMsgScrnBoss_c::drawSelf() {
+#if TARGET_PC
+    if (dusk::getSettings().game.recordingMode) {
+        return;
+    }
+#endif
     J2DGrafContext* ctx = dComIfGp_getCurrentGrafPort();
     ctx->setup2D();
     drawOutFont(0.0f, 0.0f, 1.0f);

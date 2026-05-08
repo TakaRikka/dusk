@@ -12,6 +12,10 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 #define DRAW_TYPE_YELLOW 0
 #define DRAW_TYPE_RED    1
 
@@ -1422,6 +1426,11 @@ int dAttention_c::Run() {
 }
 
 void dAttention_c::Draw() {
+#if TARGET_PC
+if (dusk::getSettings().game.recordingMode) {
+    return;
+}
+#endif
     if (mAttParam.CheckFlag(dAttParam_c::EFlag_ARROW_OFF)) {
         draw[0].field_0x173 = 3;
         draw[1].field_0x173 = 3;
