@@ -1113,7 +1113,7 @@ void AchievementSystem::processEntry(Entry& e) {
     if (nowUnlocked) {
         e.achievement.progress = e.achievement.isCounter ? e.achievement.goal : 1;
         e.achievement.unlocked = true;
-        if (getSettings().game.enableAchievementNotifications) {
+        if (getSettings().game.enableAchievementToasts) {
             ui::push_toast({
                 .type = "achievement",
                 .title = "Achievement Unlocked!",

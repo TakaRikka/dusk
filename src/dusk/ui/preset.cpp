@@ -14,7 +14,8 @@ void applyPresetClassic() {
     auto& s = getSettings();
     s.video.lockAspectRatio.setValue(true);
     s.game.bloomMode.setValue(BloomMode::Classic);
-    s.game.enableAchievementNotifications.setValue(false);
+    s.game.enableAchievementToasts.setValue(false);
+    s.game.enableControllerToasts.setValue(false);
     s.game.internalResolutionScale.setValue(1);
     s.game.shadowResolutionMultiplier.setValue(1);
     s.game.hideTvSettingsScreen.setValue(false);
@@ -33,7 +34,8 @@ void applyPresetDusk() {
     s.game.biggerWallets.setValue(true);
     s.game.invertCameraXAxis.setValue(true);
     s.game.no2ndFishForCat.setValue(true);
-    s.game.enableAchievementNotifications.setValue(true);
+    s.game.enableAchievementToasts.setValue(true);
+    s.game.enableControllerToasts.setValue(true);
     s.game.enableQuickTransform.setValue(true);
     s.game.instantSaves.setValue(true);
     s.game.midnasLamentNonStop.setValue(true);

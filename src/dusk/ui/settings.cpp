@@ -889,10 +889,69 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Dusk");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableAchievementNotifications,
-            {
-                .key = "Achievement Notifications",
-                .helpText = "Display a toast when an achievement is unlocked.",
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Toasts",
+                .getValue = [] {
+                    const bool ach = getSettings().game.enableAchievementToasts.getValue();
+                    const bool ctl = getSettings().game.enableControllerToasts.getValue();
+                    if (!ach && !ctl) {
+                        return Rml::String{"Off"};
+                    }
+                    if (ach && ctl) {
+                        return Rml::String{"All"};
+                    }
+                    return Rml::String{"Some"};
+                },
+                .isModified = [] {
+                    const auto& ach = getSettings().game.enableAchievementToasts;
+                    const auto& ctl = getSettings().game.enableControllerToasts;
+                    return ach.getValue() != ach.getDefaultValue() || ctl.getValue() != ctl.getDefaultValue();
+                },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_button("Select All").on_pressed([] {
+                    mDoAud_seStartMenu(kSoundItemChange);
+                    getSettings().game.enableAchievementToasts.setValue(true);
+                    getSettings().game.enableControllerToasts.setValue(true);
+                    config::Save();
+                });
+                pane.add_button("Select None").on_pressed([] {
+                    mDoAud_seStartMenu(kSoundItemChange);
+                    getSettings().game.enableAchievementToasts.setValue(false);
+                    getSettings().game.enableControllerToasts.setValue(false);
+                    config::Save();
+                });
+
+                pane.add_section("Types");
+                pane.add_button(
+                    {
+                        .text = "Achievements",
+                        .isSelected =
+                        [] {
+                            return getSettings().game.enableAchievementToasts.getValue();
+                        },
+                    })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        auto& v = getSettings().game.enableAchievementToasts;
+                        v.setValue(!v.getValue());
+                        config::Save();
+                    });
+                pane.add_button(
+                    {
+                        .text = "Controller",
+                        .isSelected =
+                            [] { return getSettings().game.enableControllerToasts.getValue(); },
+                    })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        auto& v = getSettings().game.enableControllerToasts;
+                        v.setValue(!v.getValue());
+                        config::Save();
+                    });
+                pane.add_rml("<br/>Choose which in-game toasts can be displayed.");
             });
 #if DUSK_ENABLE_SENTRY_NATIVE
         config_bool_select(leftPane, rightPane, getSettings().backend.enableCrashReporting,

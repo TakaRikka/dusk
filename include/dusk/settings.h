@@ -102,8 +102,8 @@ struct UserSettings {
         ConfigVar<bool> minimalHUD;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
-        ConfigVar<bool> enableAchievementNotifications;
-
+        ConfigVar<bool> enableAchievementToasts;
+        ConfigVar<bool> enableControllerToasts;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
