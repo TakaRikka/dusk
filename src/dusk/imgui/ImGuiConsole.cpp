@@ -253,13 +253,6 @@ namespace dusk {
 
         UpdateSettings();
 
-        if (!fpcM_SearchByName(fpcNm_LOGO_SCENE_e) &&
-            (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) || ImGui::IsKeyDown(ImGuiKey_RightCtrl)) &&
-            ImGui::IsKeyPressed(ImGuiKey_R))
-        {
-            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
-        }
-
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
             getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
             VISetWindowFullscreen(getSettings().video.enableFullscreen);
