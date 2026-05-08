@@ -8,6 +8,8 @@
 #include "d/actor/d_a_obj_swhang.h"
 #include "d/actor/d_a_obj_chandelier.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
 
 enum {
     HS_MODE_NONE_e,
@@ -234,6 +236,31 @@ void daAlink_c::hsChainShape_c::draw() {
         }
     }
 }
+
+#if TARGET_PC
+static void ironBallChainInterpCallback(bool isSimFrame, void* pUserWork) {
+    static_cast<daAlink_c*>(pUserWork)->onIronBallChainInterpCallback();
+}
+
+void daAlink_c::onIronBallChainInterpCallback() {
+    if (!mIBChainInterpPrevValid || !mIBChainInterpCurrValid) {
+        return;
+    }
+    if (mIronBallChainPos == NULL || mIronBallChainAngle == NULL) {
+        return;
+    }
+
+    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+
+    for (int i = 0; i < IRON_BALL_CHAIN_COUNT; i++) {
+        mIronBallChainPos[i] = mIBChainInterpPrevPos[i] + (mIBChainInterpCurrPos[i] - mIBChainInterpPrevPos[i]) * alpha;
+        mIronBallChainAngle[i].x = mIBChainInterpPrevAngle[i].x + (s16)((s16)(mIBChainInterpCurrAngle[i].x - mIBChainInterpPrevAngle[i].x) * alpha);
+        mIronBallChainAngle[i].y = mIBChainInterpPrevAngle[i].y + (s16)((s16)(mIBChainInterpCurrAngle[i].y - mIBChainInterpPrevAngle[i].y) * alpha);
+        mIronBallChainAngle[i].z = mIBChainInterpPrevAngle[i].z + (s16)((s16)(mIBChainInterpCurrAngle[i].z - mIBChainInterpPrevAngle[i].z) * alpha);
+    }
+    mHookshotTopPos = mIBChainInterpPrevHandRoot + (mIBChainInterpCurrHandRoot - mIBChainInterpPrevHandRoot) * alpha;
+}
+#endif
 
 void daAlink_c::hookshotAtHitCallBack(dCcD_GObjInf* i_atObjInf, fopAc_ac_c* i_tgActor,
                                       dCcD_GObjInf* i_tgObjInf) {

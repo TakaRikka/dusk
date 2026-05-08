@@ -51,6 +51,7 @@
 #include "d/actor/d_a_ni.h"
 #include "d/d_s_play.h"
 
+#include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #include "res/Object/Alink.h"
 #include <cstring>
@@ -14787,6 +14788,10 @@ void daAlink_c::deleteEquipItem(BOOL i_isPlaySound, BOOL i_isDeleteKantera) {
     mIronBallChainPos = NULL;
     mIronBallChainAngle = NULL;
     field_0x3848 = NULL;
+#if TARGET_PC
+    mIBChainInterpPrevValid = false;
+    mIBChainInterpCurrValid = false;
+#endif
     field_0x0774 = NULL;
     field_0x0778 = NULL;
     mpHookshotLinChk = NULL;
@@ -19717,6 +19722,27 @@ int daAlink_c::draw() {
                 )
             {
                 dComIfGd_getOpaListDark()->entryImm(mpHookChain, 0);
+
+#if TARGET_PC
+                if (dusk::getSettings().game.enableFrameInterpolation &&
+                    mEquipItem == dItemNo_IRONBALL_e &&
+                    mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
+                {
+                    if (mIBChainInterpCurrValid) {
+                        memcpy(mIBChainInterpPrevPos, mIBChainInterpCurrPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
+                        memcpy(mIBChainInterpPrevAngle, mIBChainInterpCurrAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
+                        mIBChainInterpPrevHandRoot = mIBChainInterpCurrHandRoot;
+                        mIBChainInterpPrevValid = true;
+                    }
+
+                    memcpy(mIBChainInterpCurrPos, mIronBallChainPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
+                    memcpy(mIBChainInterpCurrAngle, mIronBallChainAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
+                    mIBChainInterpCurrHandRoot = mHookshotTopPos;
+                    mIBChainInterpCurrValid = true;
+
+                    dusk::frame_interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
+                }
+#endif
             }
         }
 
