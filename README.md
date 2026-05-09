@@ -23,10 +23,10 @@ It aims to be as accurate as possible to the original while also providing new o
 
 First, make sure your dump of the game is clean and supported by Dusk. You can do this by checking the SHA-1 hash of your dump against this list of supported versions:
 
-| Version      | SHA-1 hash                                 |
-|--------------| ------------------------------------------ |
-| GameCube USA | `75edd3ddff41f125d1b4ce1a40378f1b565519e7` |
-| GameCube EUR | `2601822a488eeb86fb89db16ca8f29c2c953e1ca` |
+| Version      | .ISO SHA-1 hash         | .RVZ SHA-1 hash                        |
+|--------------| ------------------------------------------ | ------------------------------------------ |
+| GameCube USA | `75edd3ddff41f125d1b4ce1a40378f1b565519e7` | `4ec0b52e4f25b4cfed6905ce0ba53f562e6989eb` |
+| GameCube EUR | `2601822a488eeb86fb89db16ca8f29c2c953e1ca` | `62b33289b61408ebaffa0db2e243db70d5026f20` |
 
 *Support for other versions of the game is planned in the future.
 
@@ -50,7 +50,7 @@ First, make sure your dump of the game is clean and supported by Dusk. You can d
 
 # Building
 
-If you'd like to build Dusk from source, please read the [build instructions](docs/building.md).
+If you'd like to build Dusk from source, please read th`e [build instructions](docs/building.md).
 
 Pull requests are welcomed! Note that we do not accept contributions that are primarily AI-generated and will close your PR if we suspect as much.
 
