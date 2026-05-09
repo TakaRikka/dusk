@@ -1194,8 +1194,13 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
     if ((y_orig_pos == 0) && (param_1->scissor.y_orig != param_1->y_orig ||
                               (param_1->scissor.height != param_1->height)))
     {
+        #if TARGET_PC
+        f32 sc_top = param_1->scissor.y_orig;
+        f32 sc_bottom = param_1->scissor.y_orig + param_1->scissor.height;
+        #else
         s32 sc_top = (int)param_1->scissor.y_orig;
         s32 sc_bottom = param_1->scissor.y_orig + param_1->scissor.height;
+        #endif
         GXSetNumChans(1);
         GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTexGens(0);
@@ -1224,20 +1229,20 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
         GXLoadPosMtxImm(cMtx_getIdentity(), 0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, DUSK_IF_ELSE(GX_F32, GX_RGBA4), 0);
         GXSetProjection(ortho, GX_ORTHOGRAPHIC);
         GXSetCurrentMtx(0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 8);
 
         #if TARGET_PC
-        GXPosition3s16(0, 0, -5);
-        GXPosition3s16(param_1->width, 0, -5);
-        GXPosition3s16(param_1->width, sc_top, -5);
-        GXPosition3s16(0, sc_top, -5);
-        GXPosition3s16(0, sc_bottom, -5);
-        GXPosition3s16(param_1->width, sc_bottom, -5);
-        GXPosition3s16(param_1->width, param_1->height, -5);
-        GXPosition3s16(0, param_1->height, -5);
+        GXPosition3f32(0, 0, -5);
+        GXPosition3f32(param_1->width, 0, -5);
+        GXPosition3f32(param_1->width, sc_top, -5);
+        GXPosition3f32(0, sc_top, -5);
+        GXPosition3f32(0, sc_bottom, -5);
+        GXPosition3f32(param_1->width, sc_bottom, -5);
+        GXPosition3f32(param_1->width, param_1->height, -5);
+        GXPosition3f32(0, param_1->height, -5);
         #else
         GXPosition3s16(0, 0, -5);
         GXPosition3s16(FB_WIDTH, 0, -5);
