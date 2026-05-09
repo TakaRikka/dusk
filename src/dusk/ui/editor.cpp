@@ -1881,9 +1881,9 @@ EditorWindow::EditorWindow() {
         }
     });
 
-    add_tab("Flags", [this](Rml::Element* content) {
-        // TODO
-    });
+    //add_tab("Flags", [this](Rml::Element* content) {
+    //    // TODO
+    //});
 
     add_tab("Minigame", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
