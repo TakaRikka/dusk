@@ -208,7 +208,7 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
         description->SetInnerRML(escape(props.helpText));
     }
     if (auto* carouselParent = mDocument->GetElementById("carousel-container")) {
-        add_component<SteppedCarousel>(carouselParent,
+        mCarousel = &add_component<SteppedCarousel>(carouselParent,
             SteppedCarousel::Props{
                 .min = mValueMin,
                 .max = mValueMax,
@@ -280,6 +280,10 @@ bool GraphicsTuner::visible() const {
 bool GraphicsTuner::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel) {
         pop();
+        return true;
+    }
+
+    if(mCarousel && mCarousel->handle_nav_command(cmd)) {
         return true;
     }
 
