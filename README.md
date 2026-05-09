@@ -50,7 +50,7 @@ First, make sure your dump of the game is clean and supported by Dusk. You can d
 
 # Building
 
-If you'd like to build Dusk from source, please read th`e [build instructions](docs/building.md).
+If you'd like to build Dusk from source, please read the [build instructions](docs/building.md).
 
 Pull requests are welcomed! Note that we do not accept contributions that are primarily AI-generated and will close your PR if we suspect as much.
 
