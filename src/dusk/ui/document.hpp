@@ -43,6 +43,8 @@ public:
     bool pending_close() const { return mPendingClose; }
     bool closed() const { return mClosed; }
 
+    void toggle_cursor_if_gyro(bool);
+
 protected:
     virtual bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 

@@ -5,6 +5,7 @@
 
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
+#include <imgui.h>
 
 namespace dusk::ui {
 namespace {
@@ -106,11 +107,25 @@ bool Document::visible() const {
 
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Menu) {
+        toggle_cursor_if_gyro(!visible());
         mDoAud_seStartMenu(visible() ? kSoundMenuClose : kSoundMenuOpen);
         toggle();
         return true;
     }
     return false;
+}
+
+void Document::toggle_cursor_if_gyro(bool cursor_enabled) {
+    if (dusk::getSettings().game.gyroMode.getValue() == GyroMode::Mouse)
+    {
+        if (cursor_enabled) {
+            ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+            SDL_ShowCursor();
+        } else {
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            SDL_HideCursor();
+        }
+    }
 }
 
 }  // namespace dusk::ui

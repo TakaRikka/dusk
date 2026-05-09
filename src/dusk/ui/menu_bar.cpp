@@ -42,6 +42,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
                                                   .onClose =
                                                       [this] {
+                                                          toggle_cursor_if_gyro(false);
                                                           mDoAud_seStartMenu(kSoundMenuClose);
                                                           hide(false);
                                                       },
@@ -203,6 +204,7 @@ bool MenuBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         return true;
     }
     if (cmd == NavCommand::Cancel && visible()) {
+        toggle_cursor_if_gyro(false);
         mDoAud_seStartMenu(kSoundMenuClose);
         hide(false);
         return true;
