@@ -274,7 +274,7 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
 
 template <typename T>
 void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var,
-    const GraphicsTunerProps& props) {
+    const GraphicsTunerProps& props, bool prelaunch) {
     leftPane.register_control(
         leftPane
             .add_select_button({
@@ -292,10 +292,10 @@ void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, Con
                 .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
                 .submit = false,
             })
-            .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
+            .on_nav_command([&window, props, prelaunch](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
                     cmd == NavCommand::Right) {
-                    window.push(std::make_unique<GraphicsTuner>(props));
+                    window.push(std::make_unique<GraphicsTuner>(props, prelaunch));
                     return true;
                 }
                 return false;
@@ -551,7 +551,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 12,
                 .defaultValue = 0,
-            });
+            }, mPrelaunch);
         graphics_tuner_control(*this, leftPane, rightPane,
             getSettings().game.shadowResolutionMultiplier,
             GraphicsTunerProps{
@@ -561,7 +561,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 1,
                 .valueMax = 8,
                 .defaultValue = 1,
-            });
+            }, mPrelaunch);
 
         leftPane.add_section("Post-Processing");
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
@@ -572,7 +572,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = static_cast<int>(BloomMode::Off),
                 .valueMax = static_cast<int>(BloomMode::Dusk),
                 .defaultValue = static_cast<int>(BloomMode::Classic),
-            });
+            }, mPrelaunch);
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
@@ -581,7 +581,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 100,
                 .defaultValue = 100,
-            });
+            }, mPrelaunch);
 
         leftPane.add_section("Rendering");
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,

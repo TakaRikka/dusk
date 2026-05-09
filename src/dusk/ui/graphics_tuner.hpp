@@ -59,7 +59,7 @@ struct GraphicsTunerProps {
 
 class GraphicsTuner : public Document {
 public:
-    explicit GraphicsTuner(GraphicsTunerProps props);
+    explicit GraphicsTuner(GraphicsTunerProps props, bool prelaunch);
 
     void show() override;
     void hide(bool close) override;
@@ -87,6 +87,7 @@ private:
     int mDefaultValue = 0;
     std::vector<std::unique_ptr<Component> > mComponents;
     Rml::Element* mRoot;
+    bool mPrelaunch;
 };
 
 }  // namespace dusk::ui
