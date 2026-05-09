@@ -544,7 +544,8 @@ int game_main(int argc, char* argv[]) {
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::InitializeCrashReporting();
     EnsureInitialPipelineCache(dusk::ConfigPath);
-    PADSetDefaultMapping(&defaultPadMapping);
+    // TODO: How to handle this?
+    //PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
 
     {
         const auto configPathString = dusk::ConfigPath.string();
