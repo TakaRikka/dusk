@@ -498,7 +498,6 @@ progress.verification-progress-bar {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: stretch;
     align-items: stretch;
     gap: 12dp;
     width: 100%;
