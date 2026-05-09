@@ -195,8 +195,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
 
 GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
     : Document(kDocumentSource), mOption(props.option), mValueMin(props.valueMin),
-      mValueMax(props.valueMax), mDefaultValue(props.defaultValue), mPrelaunch(prelaunch)
-{
+      mValueMax(props.valueMax), mDefaultValue(props.defaultValue), mPrelaunch(prelaunch) {
     if (mDocument == nullptr) {
         return;
     }
@@ -283,7 +282,7 @@ bool GraphicsTuner::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         return true;
     }
 
-    if(mCarousel && mCarousel->handle_nav_command(cmd)) {
+    if (mCarousel && mCarousel->handle_nav_command(cmd)) {
         return true;
     }
 
