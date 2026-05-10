@@ -16114,6 +16114,7 @@ int daAlink_c::procSlideLand() {
 
 int daAlink_c::procFrontRollInit() {
     BOOL is_guard_anime = checkUpperGuardAnime();
+    const f32 rollFastMultiplier = dusk::getSettings().game.rollFast ? 2.0f : 1.0f;
 
     if (mProcID == PROC_FRONT_ROLL && mDemo.getDemoMode() == daPy_demo_c::DEMO_FRONT_ROLL_e) {
         return 0;
@@ -16129,7 +16130,8 @@ int daAlink_c::procFrontRollInit() {
         roll_anm_speed = mpHIO->mFrontRoll.m.mRollAnm.mStartFrame;
     }
 
-    setSingleAnime(ANM_FRONT_ROLL, mpHIO->mFrontRoll.m.mRollAnm.mSpeed, roll_anm_speed,
+    setSingleAnime(ANM_FRONT_ROLL,
+                   mpHIO->mFrontRoll.m.mRollAnm.mSpeed * rollFastMultiplier, roll_anm_speed,
                    mpHIO->mFrontRoll.m.mRollAnm.mEndFrame,
                    mpHIO->mFrontRoll.m.mRollAnm.mInterpolation);
 
@@ -16149,6 +16151,7 @@ int daAlink_c::procFrontRollInit() {
     } else if (checkHeavyStateOn(TRUE, TRUE)) {
         mNormalSpeed *= mHeavySpeedMultiplier;
     }
+    mNormalSpeed *= rollFastMultiplier;
 
     current.angle.y = shape_angle.y;
     voiceStart(Z2SE_AL_V_BACKTEN);
@@ -16375,6 +16378,7 @@ int daAlink_c::procFrontRollSuccess() {
 
 int daAlink_c::procSideRollInit(int param_0) {
     BOOL is_prev_guardAnm = checkUpperGuardAnime();
+    const f32 rollFastMultiplier = dusk::getSettings().game.rollFast ? 2.0f : 1.0f;
 
     if (!commonProcInitNotSameProc(PROC_SIDE_ROLL)) {
         return 0;
@@ -16391,7 +16395,7 @@ int daAlink_c::procSideRollInit(int param_0) {
         current.angle.y = shape_angle.y + -0x4000;
     }
 
-    setSingleAnime(anmID, mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed,
+    setSingleAnime(anmID, mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed * rollFastMultiplier,
                    mpHIO->mGuard.mTurnMove.m.mTurnAnm.mStartFrame,
                    mpHIO->mGuard.mTurnMove.m.mTurnAnm.mEndFrame,
                    mpHIO->mGuard.mTurnMove.m.mTurnAnm.mInterpolation);
@@ -16402,6 +16406,7 @@ int daAlink_c::procSideRollInit(int param_0) {
     } else if (checkHeavyStateOn(TRUE, TRUE)) {
         mNormalSpeed *= mHeavySpeedMultiplier;
     }
+    mNormalSpeed *= rollFastMultiplier;
 
     setFootEffectProcType(0);
     field_0x2f9d = 4;
