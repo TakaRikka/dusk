@@ -39,7 +39,7 @@ constexpr std::array kCardFileTypes = {
 };
 
 constexpr std::array kFpsOverlayCornerNames = {
-    "Top Weft",
+    "Top Left",
     "Top Right",
     "Bottom Left",
     "Bottom Right",
