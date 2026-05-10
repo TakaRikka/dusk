@@ -3,6 +3,8 @@
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
 #include "magic_enum.hpp"
+#include "menu_bar.hpp"
+#include "ui.hpp"
 #include "window.hpp"
 
 #include <SDL3/SDL_gamepad.h>
@@ -241,6 +243,16 @@ void Overlay::update() {
     }
 
     if (mFpsCounter != nullptr) {
+        const auto& docStack = get_document_stack();
+        const bool menuBarOpen = std::any_of(docStack.begin(), docStack.end(), [](const auto& doc) {
+            return dynamic_cast<const MenuBar*>(doc.get()) != nullptr && doc->visible() &&
+                   !doc->pending_close();
+        });
+        if (menuBarOpen) {
+            mFpsCounter->SetAttribute("menu-open", "");
+        } else {
+            mFpsCounter->RemoveAttribute("menu-open");
+        }
         if (getSettings().video.enableFpsOverlay.getValue()) {
             const int idx = getSettings().video.fpsOverlayCorner.getValue();
             mFpsCounter->SetAttribute("open", "");

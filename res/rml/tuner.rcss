@@ -145,3 +145,72 @@ footer-button.reset {
     font-family: "Material Symbols Rounded";
     font-weight: normal;
 }
+
+.tuner-preview {
+    display: none;
+}
+
+.tuner-preview.active {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0 64dp;
+}
+
+.preview-card {
+    width: 100%;
+    max-width: 560dp;
+    display: flex;
+    flex-direction: column;
+    gap: 12dp;
+    padding: 18dp 24dp;
+    background-color: rgba(21, 22, 16, 80%);
+    border: 1dp #92875B;
+    border-radius: 10dp;
+    backdrop-filter: blur(5dp);
+    color: #E0DBC8;
+    font-family: "Fira Sans";
+}
+
+.preview-heading {
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 18dp;
+    text-transform: uppercase;
+    color: #92875B;
+}
+
+.preview-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16dp;
+    font-size: 20dp;
+}
+
+.preview-row .preview-key {
+    color: #E0DBC8;
+}
+
+.preview-row .preview-value {
+    font-weight: bold;
+    color: #C2A42D;
+}
+
+.preview-body {
+    font-size: 15dp;
+    line-height: 20dp;
+    color: rgba(224, 219, 200, 70%);
+}
+
+@media (max-height: 800dp) {
+    .tuner-preview.active {
+        padding: 0 48dp;
+    }
+
+    .preview-card {
+        max-width: 480dp;
+        padding: 14dp 20dp;
+        gap: 10dp;
+    }
+}

@@ -19,7 +19,10 @@
 #include "prelaunch.hpp"
 #include "ui.hpp"
 
+#include <fmt/format.h>
+
 #include <algorithm>
+#include <cmath>
 
 namespace dusk::ui {
 namespace {
@@ -490,6 +493,50 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Pause on Focus Lost",
                 .isDisabled = [] { return IsMobile; },
             });
+        {
+            static const Rml::String kUiScaleHelpText =
+                "Scale all menus, the HUD overlay, and the pause menu. Useful when "
+                "playing on a TV from a distance.";
+            leftPane.register_control(
+                leftPane
+                    .add_select_button({
+                        .key = "UI Scale",
+                        .getValue =
+                            [] {
+                                const float v = getSettings().video.uiScale.getValue();
+                                return Rml::String{fmt::format(
+                                    "{}%", static_cast<int>(v * 100.0f + 0.5f))};
+                            },
+                        .isModified =
+                            [] {
+                                const auto& var = getSettings().video.uiScale;
+                                return std::abs(var.getValue() - var.getDefaultValue()) >
+                                       1e-4f;
+                            },
+                        .submit = false,
+                    })
+                    .on_nav_command([this](Rml::Event&, NavCommand cmd) {
+                        if (cmd == NavCommand::Confirm || cmd == NavCommand::Left ||
+                            cmd == NavCommand::Right) {
+                            push(std::make_unique<GraphicsTuner>(
+                                GraphicsTunerProps{
+                                    .option = GraphicsOption::UiScale,
+                                    .title = "UI Scale",
+                                    .helpText = kUiScaleHelpText,
+                                    .valueMin = 0,
+                                    .valueMax = 7,
+                                    .defaultValue = 2,
+                                },
+                                mPrelaunch));
+                            return true;
+                        }
+                        return false;
+                    }),
+                rightPane, [](Pane& pane) {
+                    pane.clear();
+                    pane.add_text(kUiScaleHelpText);
+                });
+        }
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Show FPS Counter",

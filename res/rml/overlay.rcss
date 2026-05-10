@@ -225,6 +225,12 @@ fps[corner=br] {
     right: 12dp;
 }
 
+/* Avoid colliding with the Start/R menu bar (64dp tall) when it is open */
+fps[menu-open][corner=tl],
+fps[menu-open][corner=tr] {
+    top: 76dp;
+}
+
 logo {
     position: absolute;
     width: 100dp;

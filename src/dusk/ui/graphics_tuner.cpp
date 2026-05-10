@@ -11,10 +11,37 @@
 #include "dusk/settings.h"
 
 #include <algorithm>
+#include <array>
+#include <cmath>
 #include <string>
 
 namespace dusk::ui {
 namespace {
+
+constexpr std::array<float, 8> kUiScalePresets = {
+    0.80f,
+    0.90f,
+    1.00f,
+    1.10f,
+    1.25f,
+    1.50f,
+    1.75f,
+    2.00f,
+};
+constexpr int kUiScaleDefaultIndex = 2;
+
+int find_ui_scale_index(float value) {
+    int best = kUiScaleDefaultIndex;
+    float bestDiff = std::abs(kUiScalePresets[kUiScaleDefaultIndex] - value);
+    for (int i = 0; i < static_cast<int>(kUiScalePresets.size()); ++i) {
+        const float diff = std::abs(kUiScalePresets[i] - value);
+        if (diff < bestDiff) {
+            bestDiff = diff;
+            best = i;
+        }
+    }
+    return best;
+}
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -23,6 +50,7 @@ const Rml::String kDocumentSource = R"RML(
 </head>
 <body>
     <div id="root" class="tuner-root">
+        <div id="preview" class="tuner-preview"></div>
         <div class="tuner">
             <div class="header">
                 <div id="title"></div>
@@ -37,6 +65,21 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
+const Rml::String kUiScalePreviewSource = R"RML(
+<div class="preview-card">
+    <div class="preview-heading">Sample Menu</div>
+    <div class="preview-row">
+        <div class="preview-key">Enable VSync</div>
+        <div class="preview-value">On</div>
+    </div>
+    <div class="preview-row">
+        <div class="preview-key">Show FPS Counter</div>
+        <div class="preview-value">Top-Right</div>
+    </div>
+    <div class="preview-body">Menu text and controls scale together with this setting.</div>
+</div>
+)RML";
+
 int get_value(GraphicsOption option) {
     switch (option) {
     case GraphicsOption::InternalResolution:
@@ -49,6 +92,8 @@ int get_value(GraphicsOption option) {
         return std::clamp(
             static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0,
             100);
+    case GraphicsOption::UiScale:
+        return find_ui_scale_index(getSettings().video.uiScale.getValue());
     }
     return 0;
 }
@@ -69,6 +114,11 @@ void set_value(GraphicsOption option, int value) {
     case GraphicsOption::BloomMultiplier:
         getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
         break;
+    case GraphicsOption::UiScale: {
+        const int idx = std::clamp(value, 0, static_cast<int>(kUiScalePresets.size()) - 1);
+        getSettings().video.uiScale.setValue(kUiScalePresets[idx]);
+        break;
+    }
     }
     config::Save();
 }
@@ -189,6 +239,10 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
         break;
     case GraphicsOption::BloomMultiplier:
         return fmt::format("{}%", value);
+    case GraphicsOption::UiScale: {
+        const int idx = std::clamp(value, 0, static_cast<int>(kUiScalePresets.size()) - 1);
+        return fmt::format("{}%", static_cast<int>(kUiScalePresets[idx] * 100.0f + 0.5f));
+    }
     }
     return "";
 }
@@ -205,6 +259,12 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
     }
     if (auto* description = mDocument->GetElementById("description")) {
         description->SetInnerRML(escape(props.helpText));
+    }
+    if (auto* preview = mDocument->GetElementById("preview")) {
+        if (props.option == GraphicsOption::UiScale) {
+            preview->SetInnerRML(kUiScalePreviewSource);
+            preview->SetClass("active", true);
+        }
     }
     if (auto* carouselParent = mDocument->GetElementById("carousel-container")) {
         mCarousel = &add_component<SteppedCarousel>(carouselParent,

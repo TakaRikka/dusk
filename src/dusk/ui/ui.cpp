@@ -7,11 +7,13 @@
 #include <fmt/format.h>
 
 #include <algorithm>
+#include <cmath>
 #include <filesystem>
 #include <ranges>
 
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
+#include "dusk/settings.h"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -217,6 +219,13 @@ Document* top_document() noexcept {
 void update() noexcept {
     if (!aurora::rmlui::is_initialized()) {
         return;
+    }
+
+    {
+        const float userScale = std::clamp(getSettings().video.uiScale.getValue(), 0.5f, 2.5f);
+        if (std::abs(aurora::rmlui::get_ui_scale() - userScale) > 1e-4f) {
+            aurora::rmlui::set_ui_scale(userScale);
+        }
     }
 
     input::update_input();
