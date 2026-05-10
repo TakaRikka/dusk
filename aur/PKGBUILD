@@ -1,0 +1,45 @@
+pkgname=tw-dusk-bin
+pkgver=1.0.0
+pkgrel=5
+pkgdesc="Dusk is a reverse-engineered reimplementation of Twilight Princess"
+arch=('x86_64')
+url="https://github.com/TwilitRealm/dusk"
+license=('CC0-1.0')
+options=('!strip' '!debug')
+
+depends=(
+    'alsa-lib'
+    'libpulse'
+    'libxrandr'
+    'freetype2'
+    'vulkan-icd-loader'
+    'hicolor-icon-theme'
+    'fuse2'
+)
+
+provides=("dusk")
+conflicts=("dusk" "dusk-git")
+
+source=("https://github.com/TwilitRealm/dusk/releases/download/v${pkgver}/Dusk-v${pkgver}-linux-x86_64.zip"
+        "dusk.desktop::https://raw.githubusercontent.com/TwilitRealm/dusk/refs/heads/main/platforms/freedesktop/dusk.desktop"
+        "dusk.png::https://raw.githubusercontent.com/TwilitRealm/dusk/refs/heads/main/platforms/freedesktop/512x512/apps/dusk.png")
+
+sha256sums=('da9edeef6e0c4233e7f461a854aa1f41119f68848b4e00e037149be8298e13ca'
+            'a0528509703844e70adf5d8502558048610982150ad8809fac2badc63e663840'
+            '223800f8c29c7d4dad7af0c1f947dec3120120507bdea0c0d6d08366840f5aef')
+
+package() {
+    install -d "$pkgdir/opt/dusk"
+    install -d "$pkgdir/usr/bin"
+    
+    install -Dm755 "$srcdir"/*.AppImage "$pkgdir/opt/dusk/dusk.AppImage"
+
+    cat << 'EOF' > "$pkgdir/usr/bin/dusk"
+#!/bin/bash
+exec /opt/dusk/dusk.AppImage "$@"
+EOF
+    chmod 755 "$pkgdir/usr/bin/dusk"
+
+    install -Dm644 "$srcdir/dusk.png" "$pkgdir/usr/share/icons/hicolor/512x512/apps/dusk.png"
+    install -Dm644 "$srcdir/dusk.desktop" "$pkgdir/usr/share/applications/dusk.desktop"
+}
