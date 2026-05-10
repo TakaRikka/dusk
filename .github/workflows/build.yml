@@ -50,7 +50,7 @@ jobs:
             libxss-dev libfuse2 libusb-1.0-0-dev libdecor-0-dev libpipewire-0.3-dev libunwind-dev
 
       - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+        uses: mozilla-actions/sccache-action@v0.0.10
 
       - name: Print sccache stats
         run: sccache --show-stats
@@ -124,7 +124,7 @@ jobs:
           rustup target add x86_64-apple-darwin
 
       - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+        uses: mozilla-actions/sccache-action@v0.0.10
 
       - name: Configure CMake
         run: cmake --preset ${{matrix.preset}}
@@ -175,7 +175,7 @@ jobs:
           java-version: 17
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Install Android SDK packages
         run: sdkmanager "platforms;android-36" "build-tools;36.1.0" "ndk;${ANDROID_NDK_VERSION}"
@@ -186,7 +186,7 @@ jobs:
           rustup target add ${{matrix.rust_target}}
 
       - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+        uses: mozilla-actions/sccache-action@v0.0.10
 
       - name: Configure CMake
         run: cmake --preset ${{matrix.preset}}
