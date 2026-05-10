@@ -2,14 +2,12 @@
 #define DUSK_IO_HPP
 
 #include <vector>
+#include <filesystem>
 
 // I can't believe it's 2026 and neither SDL (no error codes) nor
 // C++ (no error codes) have a file system API functional enough for me to use.
 // Here you go, this one's inspired by C#. I only wrote the functions I need.
 
-namespace std::filesystem {
-    class path;
-}
 
 namespace dusk::io {
 
