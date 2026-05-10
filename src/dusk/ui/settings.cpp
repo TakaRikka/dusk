@@ -18,6 +18,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
+#include "lang.hpp"
 
 #include <algorithm>
 
@@ -38,7 +39,7 @@ constexpr std::array kCardFileTypes = {
 };
 
 constexpr std::array kFpsOverlayCornerNames = {
-    "Top Left",
+    "Top Weft",
     "Top Right",
     "Bottom Left",
     "Bottom Right",

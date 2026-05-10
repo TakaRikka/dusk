@@ -405,6 +405,7 @@ set(GAME_BASE_FILES
         ${REL_FILES}
         ${DUSK_FILES}
         ${DOLPHIN_FILES}
+        "src/dusk/ui/lang.cpp"
 )
 set_source_files_properties(
         ${GAME_BASE_FILES}
