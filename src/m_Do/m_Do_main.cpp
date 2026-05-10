@@ -472,15 +472,28 @@ static std::filesystem::path calculate_config_path() {
         DuskLog.fatal("Unable to get iOS Documents path: {}", SDL_GetError());
     }
 
-    std::filesystem::path configPath = reinterpret_cast<const char8_t*>(documentsPath);
+    // Expose the full Dusk app data directory through Files/Finder
+    std::filesystem::path configPath =
+        std::filesystem::path(reinterpret_cast<const char8_t*>(documentsPath)) / "Dusk";
 
+    // Ensure the new directory exists
+    std::error_code ec;
+    std::filesystem::create_directories(configPath, ec);
+
+    if (ec) {
+        DuskLog.fatal("Unable to create Dusk Documents directory: {}", ec.message());
+    }
+
+    // Migrate old Application Support data automatically
     char* oldPrefPath = SDL_GetPrefPath(dusk::OrgName, dusk::AppName);
     if (oldPrefPath) {
-        const std::filesystem::path oldConfigPath = reinterpret_cast<const char8_t*>(oldPrefPath);
+        const std::filesystem::path oldConfigPath =
+            reinterpret_cast<const char8_t*>(oldPrefPath);
+
         SDL_free(oldPrefPath);
 
-        std::error_code ec;
-        if (oldConfigPath != configPath && std::filesystem::exists(oldConfigPath, ec)) {
+        if (oldConfigPath != configPath &&
+            std::filesystem::exists(oldConfigPath, ec)) {
             migrate_directory(oldConfigPath, configPath);
         }
     }
