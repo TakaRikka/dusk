@@ -8,6 +8,7 @@
 #include <mutex>
 #include <string>
 
+#include "dusk/io.hpp"
 #include "tracy/Tracy.hpp"
 
 #if TARGET_ANDROID
@@ -40,7 +41,7 @@ std::atomic g_logStateAlive(true);
 struct LogState {
     std::mutex mutex;
     FILE* file = nullptr;
-    std::string filePath;
+    std::u8string filePath;
 
     ~LogState() {
         CloseFile();
@@ -212,14 +213,14 @@ void dusk::InitializeFileLogging(const std::filesystem::path& configDir, AuroraL
     }
 
     const std::filesystem::path logPath = logsDir / MakeTimestampedLogName();
-    g_logState.file = std::fopen(logPath.string().c_str(), "wb");
+    g_logState.file = io::FileStream::Create(logPath).ToInner();
     if (g_logState.file == nullptr) {
         std::fprintf(stderr, "[WARNING | dusk] Failed to open log file '%s'\n",
                      logPath.string().c_str());
         return;
     }
 
-    g_logState.filePath = logPath.string();
+    g_logState.filePath = logPath.u8string();
     aurora::g_config.logCallback = &aurora_log_callback;
     aurora::g_config.logLevel = logLevel;
     WriteLogLine(g_logState.file, "INFO", "dusk", "File logging initialized", 24);
@@ -237,5 +238,6 @@ const char* dusk::GetLogFilePath() {
         return nullptr;
     }
     std::lock_guard lock(g_logState.mutex);
-    return g_logState.filePath.empty() ? nullptr : g_logState.filePath.c_str();
+    return reinterpret_cast<const char*>(
+        g_logState.filePath.empty() ? nullptr : g_logState.filePath.c_str());
 }

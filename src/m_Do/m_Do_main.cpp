@@ -398,7 +398,7 @@ static std::filesystem::path CalculateConfigPath() {
         DuskLog.fatal("Unable to get PrefPath: {}", SDL_GetError());
     }
 
-    return result;
+    return reinterpret_cast<const char8_t*>(result);
 }
 
 static void EnsureInitialPipelineCache(const std::filesystem::path& configDir) {
@@ -548,10 +548,10 @@ int game_main(int argc, char* argv[]) {
     //PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
 
     {
-        const auto configPathString = dusk::ConfigPath.string();
+        const auto configPathString = dusk::ConfigPath.u8string();
         AuroraConfig config{};
         config.appName = dusk::AppName;
-        config.configPath = configPathString.c_str();
+        config.configPath = reinterpret_cast<const char*>(configPathString.c_str());
         config.vsync = dusk::getSettings().video.enableVsync;
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
         config.windowPosX = -1;

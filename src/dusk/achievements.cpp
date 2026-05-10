@@ -1030,7 +1030,7 @@ void AchievementSystem::load() {
         return;
     }
     try {
-        auto data = io::FileStream::ReadAllBytes(filePath.string().c_str());
+        auto data = io::FileStream::ReadAllBytes(filePath);
         auto j = json::parse(data);
         if (!j.is_object()) {
             return;
@@ -1067,7 +1067,7 @@ void AchievementSystem::save() {
     }
     try {
         io::FileStream::WriteAllText(
-            (dusk::ConfigPath / ACHIEVEMENTS_FILENAME).string().c_str(),
+            dusk::ConfigPath / ACHIEVEMENTS_FILENAME,
             j.dump(2)
         );
     } catch (const std::exception&) {}

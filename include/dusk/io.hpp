@@ -7,6 +7,10 @@
 // C++ (no error codes) have a file system API functional enough for me to use.
 // Here you go, this one's inspired by C#. I only wrote the functions I need.
 
+namespace std::filesystem {
+    class path;
+}
+
 namespace dusk::io {
 
 /**
@@ -15,7 +19,7 @@ namespace dusk::io {
  * Methods on this class throw appropriate C++ exceptions when an error occurs.
  */
 class FileStream {
-    void* file;
+    FILE* file;
 
 public:
     FileStream() noexcept;
@@ -23,7 +27,7 @@ public:
     /**
      * \brief Take ownership of a FILE* handle.
      */
-    explicit FileStream(void* file);
+    explicit FileStream(FILE* file);
     FileStream(const FileStream& other) = delete;
     FileStream(FileStream&& other) noexcept;
 
@@ -35,11 +39,23 @@ public:
     static FileStream OpenRead(const char* utf8Path);
 
     /**
+     * \brief Open a file for reading at the given path.
+     */
+    static FileStream OpenRead(const std::filesystem::path& path);
+
+    /**
      * \brief Create a file for writing.
      *
      * If there is an existing file, its contents are demolished.
      */
     static FileStream Create(const char* utf8Path);
+
+    /**
+     * \brief Create a file for writing.
+     *
+     * If there is an existing file, its contents are demolished.
+     */
+    static FileStream Create(const std::filesystem::path& path);
 
     /**
      * \brief Read the byte contents of a file directly into a vector.
@@ -49,7 +65,17 @@ public:
     /**
      * \brief Read the byte contents of a file directly into a vector.
      */
+    static std::vector<u8> ReadAllBytes(const std::filesystem::path& path);
+
+    /**
+     * \brief Read the byte contents of a file directly into a vector.
+     */
     static void WriteAllText(const char* utf8Path, std::string_view text);
+
+    /**
+     * \brief Read the byte contents of a file directly into a vector.
+     */
+    static void WriteAllText(const std::filesystem::path& path, std::string_view text);
 
     /**
      * \brief Read the remaining contents of the file directly into a vector.
@@ -67,6 +93,8 @@ public:
      * Write data to the file.
      */
     void Write(const char* data, size_t dataLen);
+
+    FILE* ToInner();
 };
 
 }

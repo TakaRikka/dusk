@@ -58,7 +58,7 @@ static FILE* OpenCore(const char* path, const MODE_TYPE* mode) {
 FileStream::FileStream() noexcept : file(nullptr) {
 }
 
-FileStream::FileStream(void* file) : file(file) {
+FileStream::FileStream(FILE* file) : file(file) {
     if (!file) {
         CRASH("Invalid file handle");
     }
@@ -78,8 +78,16 @@ FileStream FileStream::OpenRead(const char* utf8Path) {
     return FileStream(OpenCore(utf8Path, MODE("rb")));
 }
 
+FileStream FileStream::OpenRead(const std::filesystem::path& path) {
+    return FileStream(OpenCore(path, MODE("rb")));
+}
+
 FileStream FileStream::Create(const char* utf8Path) {
     return FileStream(OpenCore(utf8Path, MODE("wb")));
+}
+
+FileStream FileStream::Create(const std::filesystem::path& path) {
+    return FileStream(OpenCore(path, MODE("wb")));
 }
 
 std::vector<u8> FileStream::ReadFull() {
@@ -128,7 +136,11 @@ std::vector<u8> FileStream::ReadFull() {
 }
 
 std::vector<u8> FileStream::ReadAllBytes(const char* utf8Path) {
-    auto handle = OpenRead(utf8Path);
+    return ReadAllBytes(reinterpret_cast<const char8_t*>(utf8Path));
+}
+
+std::vector<u8> FileStream::ReadAllBytes(const std::filesystem::path& path) {
+    auto handle = OpenRead(path);
     return std::move(handle.ReadFull());
 }
 
@@ -142,6 +154,16 @@ void FileStream::Write(const char* data, size_t dataLen) {
 }
 
 void FileStream::WriteAllText(const char* utf8Path, const std::string_view text) {
-    auto handle = Create(utf8Path);
+    WriteAllText(reinterpret_cast<const char8_t*>(utf8Path), text);
+}
+
+void FileStream::WriteAllText(const std::filesystem::path& path, const std::string_view text) {
+    auto handle = Create(path);
     handle.Write(text.data(), text.size());
+}
+
+FILE* FileStream::ToInner() {
+    auto handle = file;
+    file = nullptr;
+    return handle;
 }
