@@ -74,6 +74,7 @@ jobs:
           path: |
             build/install/Dusk-*.AppImage
             build/install/debug.tar.*
+          archive: false
 
   build-apple:
     name: Build Apple (${{matrix.name}})
