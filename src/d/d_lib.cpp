@@ -152,7 +152,7 @@ u8 STControl::checkTrigger() {
                 field_0x22 = -field_0x24;
             }
         }
-
+#if !TARGET_PC
         if (!(mDirectionTrig & 3)) {
             Xinit();
         }
@@ -160,10 +160,35 @@ u8 STControl::checkTrigger() {
         if (!(mDirectionTrig & 0xC)) {
             Yinit();
         }
+#endif
     } else {
         mDirectionTrig = 0;
+#if !TARGET_PC
         Xinit();
         Yinit();
+#endif
+#if TARGET_PC
+        if (mDoCPd_c::getHoldLeft(PAD_1)) {
+            mDirectionTrig |= TRIG_LEFT;
+        }
+        if (mDoCPd_c::getHoldRight(PAD_1)) {
+            mDirectionTrig |= TRIG_RIGHT;
+        }
+        if (mDoCPd_c::getHoldUp(PAD_1)) {
+            mDirectionTrig |= TRIG_UP;
+        }
+        if (mDoCPd_c::getHoldDown(PAD_1)) {
+            mDirectionTrig |= TRIG_DOWN;
+        }
+    }
+
+    if (!(mDirectionTrig & 3)) {
+        Xinit();
+    }
+
+    if (!(mDirectionTrig & 0xC)) {
+        Yinit();
+#endif
     }
 
     if ((field_0x0d & mDirectionTrig & 3) && field_0x0e > 0) {
