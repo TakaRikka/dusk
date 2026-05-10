@@ -70,7 +70,7 @@
         installPhase = ''
           mkdir -p $out/bin
           cp dusk $out/bin/dusk
-          cp -r ../res $out/res
+          cp -r ./res $out/bin/res
         '';
         nativeBuildInputs = [
           pkgs.cmake
