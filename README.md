@@ -52,7 +52,7 @@ First, make sure your dump of the game is clean and supported by Dusk. You can d
 
 If you'd like to build Dusk from source, please read the [build instructions](docs/building.md).
 
-Pull requests are welcomed! Note that we do not accept contributions that are primarily AI-generated and will close your PR if we suspect as much.
+Pull requests are welcomed! Note that we do not accept contributions that are primarily AI-generated and will close your PR if we suspect as much. Please also see the [code conventions](docs/code-conventions.md).
 
 # Credits
 
