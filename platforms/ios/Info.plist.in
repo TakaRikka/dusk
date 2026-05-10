@@ -83,5 +83,7 @@
     <true/>
     <key>LSSupportsOpeningDocumentsInPlace</key>
     <true/>
+    <key>LSSupportsGameMode</key>
+    <true/>
 </dict>
 </plist>

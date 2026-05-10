@@ -45,5 +45,7 @@
     <string>LaunchScreen</string>
     <key>UIUserInterfaceStyle</key>
     <string>Automatic</string>
+    <key>LSSupportsGameMode</key>
+    <true />
 </dict>
 </plist>
