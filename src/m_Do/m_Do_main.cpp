@@ -671,7 +671,7 @@ int game_main(int argc, char* argv[]) {
             ("h,help", "Print usage")
             ("console", "Show the Windows console window for logs", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
-            ("config", "Path to the config directory", cxxopts::value<std::string>()->default_value(calculate_config_path().string()))
+            ("config", "Path to the config directory", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
@@ -692,7 +692,7 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
-    dusk::ConfigPath = parsed_arg_options["config"].as<std::string>();
+    dusk::ConfigPath = parsed_arg_options.count("config") ? std::filesystem::path(parsed_arg_options["config"].as<std::string>()) : calculate_config_path();
     const auto startupLogLevel = static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
     dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
 
