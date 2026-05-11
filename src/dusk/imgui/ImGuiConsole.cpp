@@ -375,6 +375,7 @@ namespace dusk {
             m_menuTools.ShowAudioDebug();
             m_menuTools.ShowSaveEditor();
             m_menuTools.ShowStateShare();
+            m_menuTools.ShowActorSpawner();
         }
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.

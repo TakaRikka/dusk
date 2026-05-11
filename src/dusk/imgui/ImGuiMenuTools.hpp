@@ -28,6 +28,7 @@ namespace dusk {
         void ShowSaveEditor();
         void ShowStateShare();
         void ShowInputViewer();
+        void ShowActorSpawner();
 
     private:
 		bool m_showDebugOverlay = false;
@@ -70,6 +71,7 @@ namespace dusk {
 
         bool m_showInputViewer = false;
         bool m_showInputViewerGyro = false;
+        bool m_showActorSpawner = false;
         int m_inputOverlayCorner = 3;
         std::string m_controllerName;
     };

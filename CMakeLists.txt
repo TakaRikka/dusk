@@ -444,6 +444,12 @@ target_link_libraries(dusk PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBR
 target_precompile_headers(dusk PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
 if (TARGET crashpad_handler)
     add_dependencies(dusk crashpad_handler)
+    add_custom_command(TARGET dusk POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "$<TARGET_FILE:crashpad_handler>"
+            "$<TARGET_FILE_DIR:dusk>"
+        COMMENT "Copying crashpad handler"
+    )
 endif ()
 
 if (ANDROID)
