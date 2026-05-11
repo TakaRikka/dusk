@@ -116,7 +116,7 @@ bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 }
 
 void Document::toggle_cursor_if_gyro(bool cursor_enabled) {
-    if (dusk::getSettings().game.gyroMode.getValue() == GyroMode::Mouse)
+    if (dusk::getSettings().game.enableMouseAim)
     {
         if (cursor_enabled) {
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;

@@ -377,7 +377,7 @@ namespace dusk {
         }
 
         // Hide mouse cursor if the F1 menu is not open and the cursor is idle for 3 seconds.
-        if (dusk::getSettings().game.gyroMode.getValue() != GyroMode::Mouse)
+        if (!dusk::getSettings().game.enableMouseAim)
         {
             ImGuiIO& io = ImGui::GetIO();
             if (io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f) {
