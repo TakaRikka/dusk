@@ -7648,7 +7648,10 @@ bool dCamera_c::freeCamera() {
     cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
 
-    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY != 0) {
+    // If we aren't in manual cam mode, don't trigger it if the player tries to hit C-up
+    // for first person
+    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY < 0 ||
+        (mCamParam.mManualMode == 1 && mPadInfo.mCStick.mLastPosY != 0)) {
         mCamParam.mManualMode = 1;
         camMovement = camMovement.normalize();
         camMovement.y *= dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f;

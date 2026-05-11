@@ -1495,6 +1495,8 @@ set(DUSK_FILES
         src/dusk/ui/prelaunch.hpp
         src/dusk/ui/preset.cpp
         src/dusk/ui/preset.hpp
+        src/dusk/ui/reporting.cpp
+        src/dusk/ui/reporting.hpp
         src/dusk/ui/select_button.cpp
         src/dusk/ui/select_button.hpp
         src/dusk/ui/settings.cpp

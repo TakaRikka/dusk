@@ -119,8 +119,8 @@ BOOL daAlink_c::setBodyAngleToCamera() {
                 var_f31 /= dComIfGp_getCameraZoomScale(field_0x317c);
             }
 
-            shape_angle.y = shape_angle.y + (var_f31 * cM_ssin(mStickAngle));
-            sp8 = mBodyAngle.x + (var_f31 * cM_scos(mStickAngle));
+            shape_angle.y = shape_angle.y + (var_f31 * cM_ssin(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonXAxis ? -1.0f : 1.0f)));
+            sp8 = mBodyAngle.x + (var_f31 * cM_scos(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonYAxis ? -1.0f : 1.0f)));
 
             if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
                 sp8 = mBodyAngle.x;
@@ -144,8 +144,8 @@ BOOL daAlink_c::setBodyAngleToCamera() {
             f32 gy_pitch = 0.f;
             dusk::gyro::getAimDeltas(gy_yaw, gy_pitch);
 
-            shape_angle.y = shape_angle.y + cM_rad2s(gy_yaw * gyro_scale);
-            sp8 = sp8 + cM_rad2s(gy_pitch * gyro_scale);
+            shape_angle.y = shape_angle.y + cM_rad2s(gy_yaw * gyro_scale * (dusk::getSettings().game.invertFirstPersonXAxis ? -1.0f : 1.0f));
+            sp8 = sp8 + cM_rad2s(gy_pitch * gyro_scale * (dusk::getSettings().game.invertFirstPersonYAxis ? -1.0f : 1.0f));
 
             if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
                 sp8 = mBodyAngle.x;
