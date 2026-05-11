@@ -183,7 +183,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.alwaysGreatspin.setValue(false);
     getSettings().game.enableFastIronBoots.setValue(false);
     getSettings().game.canTransformAnywhere.setValue(false);
-    getSettings().game.rollFast.setValue(false);
+    getSettings().game.fastRoll.setValue(false);
     getSettings().game.fastSpinner.setValue(false);
     getSettings().game.freeMagicArmor.setValue(false);
 
@@ -945,7 +945,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Speeds up movement while wearing the Iron Boots.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
-        addCheat("Roll Fast", getSettings().game.rollFast,
+        addCheat("Fast Roll", getSettings().game.fastRoll,
             "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");

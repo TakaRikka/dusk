@@ -164,7 +164,7 @@ struct UserSettings {
         ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
-        ConfigVar<bool> rollFast;
+        ConfigVar<bool> fastRoll;
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
 

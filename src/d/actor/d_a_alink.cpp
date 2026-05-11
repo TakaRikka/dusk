@@ -16115,7 +16115,7 @@ int daAlink_c::procSlideLand() {
 int daAlink_c::procFrontRollInit() {
     BOOL is_guard_anime = checkUpperGuardAnime();
 #ifdef TARGET_PC    
-    const f32 rollFastMultiplier = dusk::getSettings().game.rollFast ? 2.0f : 1.0f;
+    const f32 fastRollMultiplier = dusk::getSettings().game.fastRoll ? 2.0f : 1.0f;
 #endif
 
     if (mProcID == PROC_FRONT_ROLL && mDemo.getDemoMode() == daPy_demo_c::DEMO_FRONT_ROLL_e) {
@@ -16134,7 +16134,7 @@ int daAlink_c::procFrontRollInit() {
 
     setSingleAnime(ANM_FRONT_ROLL,
 #ifdef TARGET_PC        
-                   mpHIO->mFrontRoll.m.mRollAnm.mSpeed * rollFastMultiplier, 
+                   mpHIO->mFrontRoll.m.mRollAnm.mSpeed * fastRollMultiplier, 
 #else
                    mpHIO->mFrontRoll.m.mRollAnm.mSpeed,
 #endif
@@ -16160,7 +16160,7 @@ int daAlink_c::procFrontRollInit() {
     }
 
 #ifdef TARGET_PC        
-    mNormalSpeed *= rollFastMultiplier;
+    mNormalSpeed *= fastRollMultiplier;
 #endif
 
     current.angle.y = shape_angle.y;
@@ -16389,7 +16389,7 @@ int daAlink_c::procFrontRollSuccess() {
 int daAlink_c::procSideRollInit(int param_0) {
     BOOL is_prev_guardAnm = checkUpperGuardAnime();
 #ifdef TARGET_PC            
-    const f32 rollFastMultiplier = dusk::getSettings().game.rollFast ? 2.0f : 1.0f;
+    const f32 fastRollMultiplier = dusk::getSettings().game.fastRoll ? 2.0f : 1.0f;
 #endif
 
     if (!commonProcInitNotSameProc(PROC_SIDE_ROLL)) {
@@ -16409,7 +16409,7 @@ int daAlink_c::procSideRollInit(int param_0) {
 
     setSingleAnime(anmID, 
 #ifdef TARGET_PC        
-                   mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed * rollFastMultiplier,
+                   mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed * fastRollMultiplier,
 #else
                    mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed,
 #endif
@@ -16424,7 +16424,7 @@ int daAlink_c::procSideRollInit(int param_0) {
         mNormalSpeed *= mHeavySpeedMultiplier;
     }
 #ifdef TARGET_PC        
-    mNormalSpeed *= rollFastMultiplier;
+    mNormalSpeed *= fastRollMultiplier;
 #endif
 
     setFootEffectProcType(0);

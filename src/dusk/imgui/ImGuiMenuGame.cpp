@@ -40,7 +40,7 @@ namespace dusk {
         getSettings().game.alwaysGreatspin.setValue(false);
         getSettings().game.enableFastIronBoots.setValue(false);
         getSettings().game.canTransformAnywhere.setValue(false);
-        getSettings().game.rollFast.setValue(false);
+        getSettings().game.fastRoll.setValue(false);
         getSettings().game.fastSpinner.setValue(false);
         getSettings().game.freeMagicArmor.setValue(false);
 
