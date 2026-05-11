@@ -3,6 +3,13 @@
 
 namespace dusk {
 
+#if defined(__ANDROID__) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS) || \
+    (defined(TARGET_OS_TV) && TARGET_OS_TV)
+constexpr bool kDefaultTouchControlsEnabled = true;
+#else
+constexpr bool kDefaultTouchControlsEnabled = false;
+#endif
+
 UserSettings g_userSettings = {
     .video = {
         .enableFullscreen {"video.enableFullscreen", false},
@@ -87,6 +94,11 @@ UserSettings g_userSettings = {
         .debugFlyCam {"game.debugFlyCam", false},
         .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
         .allowBackgroundInput {"game.allowBackgroundInput", true},
+        .enableTouchControls {"game.enableTouchControls", kDefaultTouchControlsEnabled},
+        .touchControlsPreset {"game.touchControlsPreset", ControllerOverlayLayout::GameCube},
+        .touchControlsScale {"game.touchControlsScale", 1.0f},
+        .touchControlsOpacity {"game.touchControlsOpacity", 0.72f},
+        .touchControlsEditMode {"game.touchControlsEditMode", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -109,6 +121,25 @@ UserSettings g_userSettings = {
 
         // Controls
         .enableTurboKeybind {"game.enableTurboKeybind", false},
+        .inputViewerLayout {"game.inputViewerLayout", ControllerOverlayLayout::GameCube},
+        .inputViewerScale {"game.inputViewerScale", 1.0f},
+        .hudButtonBackground {"game.hudButtonBackground", true},
+        .hudButtonEditTarget {"game.hudButtonEditTarget", 0},
+        .hudButtonAOffsetX {"game.hudButtonAOffsetX", 0.0f},
+        .hudButtonAOffsetY {"game.hudButtonAOffsetY", 0.0f},
+        .hudButtonAScale {"game.hudButtonAScale", 1.0f},
+        .hudButtonBOffsetX {"game.hudButtonBOffsetX", 0.0f},
+        .hudButtonBOffsetY {"game.hudButtonBOffsetY", 0.0f},
+        .hudButtonBScale {"game.hudButtonBScale", 1.0f},
+        .hudButtonXOffsetX {"game.hudButtonXOffsetX", 0.0f},
+        .hudButtonXOffsetY {"game.hudButtonXOffsetY", 0.0f},
+        .hudButtonXScale {"game.hudButtonXScale", 1.0f},
+        .hudButtonYOffsetX {"game.hudButtonYOffsetX", 0.0f},
+        .hudButtonYOffsetY {"game.hudButtonYOffsetY", 0.0f},
+        .hudButtonYScale {"game.hudButtonYScale", 1.0f},
+        .hudButtonZOffsetX {"game.hudButtonZOffsetX", 0.0f},
+        .hudButtonZOffsetY {"game.hudButtonZOffsetY", 0.0f},
+        .hudButtonZScale {"game.hudButtonZScale", 1.0f},
 
         // Tools
         .speedrunMode {"game.speedrunMode", false},
@@ -224,6 +255,30 @@ void registerSettings() {
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);
     Register(g_userSettings.game.allowBackgroundInput);
+    Register(g_userSettings.game.enableTouchControls);
+    Register(g_userSettings.game.touchControlsPreset);
+    Register(g_userSettings.game.touchControlsScale);
+    Register(g_userSettings.game.touchControlsOpacity);
+    Register(g_userSettings.game.touchControlsEditMode);
+    Register(g_userSettings.game.inputViewerLayout);
+    Register(g_userSettings.game.inputViewerScale);
+    Register(g_userSettings.game.hudButtonBackground);
+    Register(g_userSettings.game.hudButtonEditTarget);
+    Register(g_userSettings.game.hudButtonAOffsetX);
+    Register(g_userSettings.game.hudButtonAOffsetY);
+    Register(g_userSettings.game.hudButtonAScale);
+    Register(g_userSettings.game.hudButtonBOffsetX);
+    Register(g_userSettings.game.hudButtonBOffsetY);
+    Register(g_userSettings.game.hudButtonBScale);
+    Register(g_userSettings.game.hudButtonXOffsetX);
+    Register(g_userSettings.game.hudButtonXOffsetY);
+    Register(g_userSettings.game.hudButtonXScale);
+    Register(g_userSettings.game.hudButtonYOffsetX);
+    Register(g_userSettings.game.hudButtonYOffsetY);
+    Register(g_userSettings.game.hudButtonYScale);
+    Register(g_userSettings.game.hudButtonZOffsetX);
+    Register(g_userSettings.game.hudButtonZOffsetY);
+    Register(g_userSettings.game.hudButtonZScale);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);

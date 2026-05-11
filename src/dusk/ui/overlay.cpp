@@ -2,6 +2,7 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
+#include "dusk/settings.h"
 #include "magic_enum.hpp"
 #include "window.hpp"
 
@@ -268,7 +269,9 @@ void Overlay::update() {
         }
     }
 
-    const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
+    const bool virtualControllerAvailable = getSettings().game.enableTouchControls.getValue();
+    const bool showControllerWarning = !virtualControllerAvailable &&
+                                       PADGetIndexForPort(PAD_CHAN0) < 0 &&
                                        PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&
                                        dynamic_cast<Window*>(top_document()) == nullptr &&
                                        dynamic_cast<WindowSmall*>(top_document()) == nullptr;

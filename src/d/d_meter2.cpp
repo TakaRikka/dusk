@@ -22,6 +22,7 @@
 #include "d/d_meter_string.h"
 #include "f_op/f_op_msg_mng.h"
 #include "d/actor/d_a_horse.h"
+#include "dusk/hud_layout.hpp"
 #include <cstring>
 
 #if TARGET_PC
@@ -1246,6 +1247,13 @@ void dMeter2_c::moveButtonA() {
     var_r29 = 0;
     emphasis_a = false;
 
+    static u32 sButtonALayoutStamp = 0;
+    const u32 hudLayoutStamp = dusk::hud_layout::LayoutStamp();
+    if (sButtonALayoutStamp != hudLayoutStamp) {
+        sButtonALayoutStamp = hudLayoutStamp;
+        draw_buttonA = true;
+    }
+
     if (dComIfGp_getDoStatusForce() != 0) {
         dComIfGp_setDoStatus(dComIfGp_getDoStatusForce(), dComIfGp_getDoSetFlagForce());
         dComIfGp_setDoStatusForce(0, 0);
@@ -1411,6 +1419,13 @@ void dMeter2_c::moveButtonB() {
     draw_buttonB = false;
     var_r29 = 0;
     emphasis_b = false;
+
+    static u32 sButtonBLayoutStamp = 0;
+    const u32 hudLayoutStamp = dusk::hud_layout::LayoutStamp();
+    if (sButtonBLayoutStamp != hudLayoutStamp) {
+        sButtonBLayoutStamp = hudLayoutStamp;
+        draw_buttonB = true;
+    }
 
     if (dComIfGp_getAStatusForce() != 0) {
         dComIfGp_setAStatus(dComIfGp_getAStatusForce(), dComIfGp_getASetFlagForce());
@@ -1650,6 +1665,13 @@ void dMeter2_c::moveButtonR() {
 void dMeter2_c::moveButtonZ() {
     bool draw_buttonZ = false;
 
+    static u32 sButtonZLayoutStamp = 0;
+    const u32 hudLayoutStamp = dusk::hud_layout::LayoutStamp();
+    if (sButtonZLayoutStamp != hudLayoutStamp) {
+        sButtonZLayoutStamp = hudLayoutStamp;
+        draw_buttonZ = true;
+    }
+
     if (field_0x324 != g_drawHIO.mButtonZScale) {
         field_0x324 = g_drawHIO.mButtonZScale;
         draw_buttonZ = true;
@@ -1812,6 +1834,14 @@ void dMeter2_c::moveButtonXY() {
     for (int i = 0; i < 2; i++) {
         sp8[i] = 0;
         spC[i] = 0;
+    }
+
+    static u32 sButtonXYLayoutStamp = 0;
+    const u32 hudLayoutStamp = dusk::hud_layout::LayoutStamp();
+    if (sButtonXYLayoutStamp != hudLayoutStamp) {
+        sButtonXYLayoutStamp = hudLayoutStamp;
+        sp8[0] = true;
+        sp8[1] = true;
     }
 
     if (field_0x33c != g_drawHIO.mButtonXScale) {

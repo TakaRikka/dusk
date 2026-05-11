@@ -1428,6 +1428,8 @@ set(DUSK_FILES
         src/dusk/game_clock.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
+        src/dusk/hud_layout.cpp
+        src/dusk/hud_layout.hpp
 		src/dusk/gamepad_color.cpp
 		src/dusk/autosave.cpp
         src/dusk/http/http.hpp
@@ -1436,6 +1438,8 @@ set(DUSK_FILES
         src/dusk/logging.cpp
         src/dusk/settings.cpp
         src/dusk/stubs.cpp
+        src/dusk/touch_controls.cpp
+        src/dusk/touch_controls.hpp
         src/dusk/update_check.cpp
         src/dusk/update_check.hpp
         #src/dusk/m_Do_ext_dusk.cpp

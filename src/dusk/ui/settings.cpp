@@ -7,9 +7,12 @@
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
 #include "dusk/file_select.hpp"
+#include "dusk/hud_layout.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/io.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
+#include "dusk/touch_controls.hpp"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
@@ -18,15 +21,25 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
+#include "nlohmann/json.hpp"
 
 #if DUSK_ENABLE_SENTRY_NATIVE
 #include "dusk/crash_reporting.h"
 #endif
 
 #include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <exception>
+#include <filesystem>
+#include <iterator>
+#include <string>
+#include <utility>
 
 namespace dusk::ui {
 namespace {
+
+using json = nlohmann::json;
 
 constexpr std::array kLanguageNames = {
     "English",
@@ -51,6 +64,20 @@ constexpr std::array kFpsOverlayCornerNames = {
 constexpr std::array kGyroInputModeLabels = {
     "Sensor",
     "Mouse",
+};
+
+constexpr std::array kControllerOverlayLayouts = {
+    ControllerOverlayLayout::GameCube,
+    ControllerOverlayLayout::WiiU,
+    ControllerOverlayLayout::XBox,
+};
+
+constexpr std::array kHudButtonNames = {
+    "A",
+    "B",
+    "X",
+    "Y",
+    "Z",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -210,6 +237,357 @@ int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
 }
 
+int rounded_float_setting(ConfigVar<float>& var) {
+    return static_cast<int>(std::round(var.getValue()));
+}
+
+int hud_button_index() {
+    return std::clamp(getSettings().game.hudButtonEditTarget.getValue(), 0,
+        static_cast<int>(kHudButtonNames.size()) - 1);
+}
+
+const char* hud_button_name(int index) {
+    return kHudButtonNames[static_cast<size_t>(std::clamp(
+        index, 0, static_cast<int>(kHudButtonNames.size()) - 1))];
+}
+
+ConfigVar<float>& hud_button_offset_x(int index) {
+    auto& game = getSettings().game;
+    switch (std::clamp(index, 0, static_cast<int>(kHudButtonNames.size()) - 1)) {
+    case 1:
+        return game.hudButtonBOffsetX;
+    case 2:
+        return game.hudButtonXOffsetX;
+    case 3:
+        return game.hudButtonYOffsetX;
+    case 4:
+        return game.hudButtonZOffsetX;
+    case 0:
+    default:
+        return game.hudButtonAOffsetX;
+    }
+}
+
+ConfigVar<float>& hud_button_offset_y(int index) {
+    auto& game = getSettings().game;
+    switch (std::clamp(index, 0, static_cast<int>(kHudButtonNames.size()) - 1)) {
+    case 1:
+        return game.hudButtonBOffsetY;
+    case 2:
+        return game.hudButtonXOffsetY;
+    case 3:
+        return game.hudButtonYOffsetY;
+    case 4:
+        return game.hudButtonZOffsetY;
+    case 0:
+    default:
+        return game.hudButtonAOffsetY;
+    }
+}
+
+ConfigVar<float>& hud_button_scale(int index) {
+    auto& game = getSettings().game;
+    switch (std::clamp(index, 0, static_cast<int>(kHudButtonNames.size()) - 1)) {
+    case 1:
+        return game.hudButtonBScale;
+    case 2:
+        return game.hudButtonXScale;
+    case 3:
+        return game.hudButtonYScale;
+    case 4:
+        return game.hudButtonZScale;
+    case 0:
+    default:
+        return game.hudButtonAScale;
+    }
+}
+
+bool hud_button_modified(int index) {
+    auto& offsetX = hud_button_offset_x(index);
+    auto& offsetY = hud_button_offset_y(index);
+    auto& scale = hud_button_scale(index);
+    return offsetX.getValue() != offsetX.getDefaultValue() ||
+           offsetY.getValue() != offsetY.getDefaultValue() ||
+           scale.getValue() != scale.getDefaultValue();
+}
+
+bool hud_layout_modified() {
+    for (size_t i = 0; i < kHudButtonNames.size(); ++i) {
+        if (hud_button_modified(static_cast<int>(i))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void reset_hud_button(int index) {
+    auto& offsetX = hud_button_offset_x(index);
+    auto& offsetY = hud_button_offset_y(index);
+    auto& scale = hud_button_scale(index);
+    offsetX.setValue(offsetX.getDefaultValue());
+    offsetY.setValue(offsetY.getDefaultValue());
+    scale.setValue(scale.getDefaultValue());
+}
+
+void reset_hud_layout() {
+    for (size_t i = 0; i < kHudButtonNames.size(); ++i) {
+        reset_hud_button(static_cast<int>(i));
+    }
+}
+
+std::filesystem::path layout_export_path(const char* fileName) {
+    if (ConfigPath.empty()) {
+        return {};
+    }
+    return ConfigPath / fileName;
+}
+
+template <typename T>
+T json_value_or(const json& object, const char* key, T fallback) {
+    if (!object.is_object()) {
+        return fallback;
+    }
+    const auto found = object.find(key);
+    if (found == object.end()) {
+        return fallback;
+    }
+    try {
+        return found->get<T>();
+    } catch (...) {
+        return fallback;
+    }
+}
+
+ControllerOverlayLayout json_layout_or(const json& object, const char* key,
+    ControllerOverlayLayout fallback) {
+    const int raw = json_value_or(object, key, static_cast<int>(fallback));
+    const int min = static_cast<int>(ControllerOverlayLayout::GameCube);
+    const int max = static_cast<int>(ControllerOverlayLayout::XBox);
+    return static_cast<ControllerOverlayLayout>(std::clamp(raw, min, max));
+}
+
+void set_float_from_json(
+    ConfigVar<float>& var, const json& object, const char* key, float min, float max) {
+    var.setValue(std::clamp(json_value_or(object, key, var.getValue()), min, max));
+}
+
+json hud_button_to_json(int index) {
+    return {
+        {"x", hud_button_offset_x(index).getValue()},
+        {"y", hud_button_offset_y(index).getValue()},
+        {"scale", hud_button_scale(index).getValue()},
+    };
+}
+
+void import_hud_button_json(const json& buttons, int index) {
+    const auto found = buttons.find(hud_button_name(index));
+    if (found == buttons.end() || !found->is_object()) {
+        return;
+    }
+    set_float_from_json(hud_button_offset_x(index), *found, "x", -300.0f, 300.0f);
+    set_float_from_json(hud_button_offset_y(index), *found, "y", -300.0f, 300.0f);
+    set_float_from_json(hud_button_scale(index), *found, "scale", 0.4f, 2.2f);
+}
+
+json export_touch_controls_json() {
+    auto& game = getSettings().game;
+    return {
+        {"version", 1},
+        {"enabled", game.enableTouchControls.getValue()},
+        {"preset", static_cast<int>(game.touchControlsPreset.getValue())},
+        {"scale", game.touchControlsScale.getValue()},
+        {"opacity", game.touchControlsOpacity.getValue()},
+        {"editMode", game.touchControlsEditMode.getValue()},
+        {"layout", touch_controls::ExportLayout()},
+    };
+}
+
+bool import_touch_controls_json(const json& root) {
+    if (!root.is_object()) {
+        return false;
+    }
+    if (root.contains("controls")) {
+        return touch_controls::ImportLayout(root);
+    }
+
+    const json* touch = &root;
+    const auto nestedTouch = root.find("touchControls");
+    if (nestedTouch != root.end()) {
+        if (!nestedTouch->is_object()) {
+            return false;
+        }
+        touch = &*nestedTouch;
+    }
+
+    if (!touch->contains("enabled") && !touch->contains("preset") && !touch->contains("scale") &&
+        !touch->contains("opacity") && !touch->contains("editMode") &&
+        !touch->contains("layout"))
+    {
+        return false;
+    }
+
+    auto& game = getSettings().game;
+    game.enableTouchControls.setValue(
+        json_value_or(*touch, "enabled", game.enableTouchControls.getValue()));
+    game.touchControlsPreset.setValue(
+        json_layout_or(*touch, "preset", game.touchControlsPreset.getValue()));
+    set_float_from_json(game.touchControlsScale, *touch, "scale", 0.6f, 1.6f);
+    set_float_from_json(game.touchControlsOpacity, *touch, "opacity", 0.2f, 1.0f);
+    game.touchControlsEditMode.setValue(
+        json_value_or(*touch, "editMode", game.touchControlsEditMode.getValue()));
+
+    const auto layout = touch->find("layout");
+    if (layout != touch->end()) {
+        touch_controls::ImportLayout(*layout);
+    }
+    return true;
+}
+
+json export_hud_layout_json() {
+    json buttons = json::object();
+    for (size_t i = 0; i < kHudButtonNames.size(); ++i) {
+        buttons[hud_button_name(static_cast<int>(i))] =
+            hud_button_to_json(static_cast<int>(i));
+    }
+
+    return {
+        {"version", 1},
+        {"background", getSettings().game.hudButtonBackground.getValue()},
+        {"buttons", std::move(buttons)},
+    };
+}
+
+bool import_hud_layout_json(const json& root) {
+    if (!root.is_object()) {
+        return false;
+    }
+
+    const json* hud = &root;
+    const auto nestedHud = root.find("hudButtons");
+    if (nestedHud != root.end()) {
+        if (!nestedHud->is_object()) {
+            return false;
+        }
+        hud = &*nestedHud;
+    }
+
+    if (!hud->contains("background") && !hud->contains("buttons")) {
+        return false;
+    }
+
+    auto& game = getSettings().game;
+    game.hudButtonBackground.setValue(
+        json_value_or(*hud, "background", game.hudButtonBackground.getValue()));
+    const auto buttons = hud->find("buttons");
+    if (buttons != hud->end() && buttons->is_object()) {
+        for (size_t i = 0; i < kHudButtonNames.size(); ++i) {
+            import_hud_button_json(*buttons, static_cast<int>(i));
+        }
+    }
+    return true;
+}
+
+void push_layout_toast(Rml::String title, Rml::String content) noexcept {
+    push_toast({
+        .type = "controller",
+        .title = std::move(title),
+        .content = std::move(content),
+        .duration = std::chrono::seconds(4),
+    });
+}
+
+void export_layout_file(const char* fileName, const json& layout, Rml::String label) {
+    const auto path = layout_export_path(fileName);
+    if (path.empty()) {
+        push_layout_toast(label + " Export Failed", "No config directory is available.");
+        return;
+    }
+
+    try {
+        std::filesystem::create_directories(path.parent_path());
+        io::FileStream::WriteAllText(path, layout.dump(4));
+        push_layout_toast(label + " Exported", "Saved to " + escape(io::fs_path_to_string(path)));
+    } catch (const std::exception& error) {
+        push_layout_toast(label + " Export Failed", escape(error.what()));
+    }
+}
+
+enum class LayoutImportKind {
+    TouchControls,
+    Hud,
+};
+
+LayoutImportKind sTouchControlsImportKind = LayoutImportKind::TouchControls;
+LayoutImportKind sHudImportKind = LayoutImportKind::Hud;
+
+Rml::String import_label(LayoutImportKind kind) {
+    return kind == LayoutImportKind::Hud ? "HUD Layout" : "Touch Controls";
+}
+
+bool import_layout_json(LayoutImportKind kind, const json& root) {
+    return kind == LayoutImportKind::Hud ? import_hud_layout_json(root) :
+                                           import_touch_controls_json(root);
+}
+
+void import_layout_file_callback(void* userdata, const char* path, const char* error) {
+    const auto kind =
+        userdata != nullptr ? *static_cast<LayoutImportKind*>(userdata) :
+                              LayoutImportKind::TouchControls;
+    const Rml::String label = import_label(kind);
+    if (error != nullptr) {
+        push_layout_toast(label + " Import Failed", escape(error));
+        return;
+    }
+    if (path == nullptr || path[0] == '\0') {
+        return;
+    }
+
+    try {
+        const auto data = io::FileStream::ReadAllBytes(path);
+        const json root = json::parse(data);
+        if (!import_layout_json(kind, root)) {
+            push_layout_toast(
+                label + " Import Failed", "The selected file has no matching layout data.");
+            return;
+        }
+        config::Save();
+        push_layout_toast(label + " Imported", escape(display_name_for_path(path)));
+    } catch (const std::exception& error) {
+        push_layout_toast(label + " Import Failed", escape(error.what()));
+    }
+}
+
+void open_layout_import_picker(LayoutImportKind kind) {
+    static constexpr SDL_DialogFileFilter filters[] = {
+        {"Dusk Layout", "json"},
+        {"All Files", "*"},
+    };
+    static std::string defaultLocation;
+    defaultLocation = ConfigPath.empty() ? std::string{} : io::fs_path_to_string(ConfigPath);
+    ShowFileSelect(import_layout_file_callback,
+        kind == LayoutImportKind::Hud ? &sHudImportKind : &sTouchControlsImportKind, nullptr,
+        filters,
+        static_cast<int>(std::size(filters)),
+        defaultLocation.empty() ? nullptr : defaultLocation.c_str(), false);
+}
+
+void export_touch_controls_file() {
+    export_layout_file(
+        "touch_controls_settings.json", export_touch_controls_json(), "Touch Controls");
+}
+
+void export_hud_layout_file() {
+    export_layout_file("hud_layout_settings.json", export_hud_layout_json(), "HUD Layout");
+}
+
+void open_touch_controls_import_picker() {
+    open_layout_import_picker(LayoutImportKind::TouchControls);
+}
+
+void open_hud_layout_import_picker() {
+    open_layout_import_picker(LayoutImportKind::Hud);
+}
+
 bool gyro_enabled() {
     return getSettings().game.enableGyroAim ||
            (getSettings().game.enableGyroRollgoal &&
@@ -274,6 +652,92 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
         pane.clear();
         pane.add_text(helpText);
     });
+    return button;
+}
+
+SelectButton& config_hud_pixel_select(Pane& leftPane, Pane& rightPane, Rml::String key,
+    std::function<ConfigVar<float>&()> selectVar, Rml::String helpText) {
+    auto& button = leftPane.add_child<NumberButton>(NumberButton::Props{
+        .key = std::move(key),
+        .getValue = [selectVar] { return rounded_float_setting(selectVar()); },
+        .setValue =
+            [selectVar](int value) {
+                selectVar().setValue(static_cast<float>(value));
+                config::Save();
+            },
+        .isModified = [selectVar] {
+            auto& var = selectVar();
+            return var.getValue() != var.getDefaultValue();
+        },
+        .min = -300,
+        .max = 300,
+        .step = 1,
+        .suffix = " px",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+SelectButton& config_hud_percent_select(Pane& leftPane, Pane& rightPane, Rml::String key,
+    std::function<ConfigVar<float>&()> selectVar, Rml::String helpText) {
+    auto& button = leftPane.add_child<NumberButton>(NumberButton::Props{
+        .key = std::move(key),
+        .getValue = [selectVar] { return float_setting_percent(selectVar()); },
+        .setValue =
+            [selectVar](int value) {
+                selectVar().setValue(std::clamp(value, 40, 220) / 100.0f);
+                config::Save();
+            },
+        .isModified = [selectVar] {
+            auto& var = selectVar();
+            return var.getValue() != var.getDefaultValue();
+        },
+        .min = 40,
+        .max = 220,
+        .step = 5,
+        .suffix = "%",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+SelectButton& config_layout_select(Pane& leftPane, Pane& rightPane,
+    ConfigVar<ControllerOverlayLayout>& var, Rml::String key, Rml::String helpText,
+    std::function<void(ControllerOverlayLayout)> onChange = {},
+    std::function<bool()> isDisabled = {}) {
+    auto* varPtr = &var;
+    auto& button = leftPane.add_select_button({
+        .key = std::move(key),
+        .getValue = [varPtr] { return Rml::String{hud_layout::LayoutName(varPtr->getValue())}; },
+        .isDisabled = isDisabled,
+        .isModified = [varPtr] { return varPtr->getValue() != varPtr->getDefaultValue(); },
+    });
+    leftPane.register_control(button, rightPane,
+        [varPtr, helpText = std::move(helpText), onChange = std::move(onChange)](Pane& pane) {
+            pane.clear();
+            for (const auto layout : kControllerOverlayLayouts) {
+                pane
+                    .add_button({
+                        .text = Rml::String{hud_layout::LayoutName(layout)},
+                        .isSelected = [varPtr, layout] { return varPtr->getValue() == layout; },
+                    })
+                    .on_pressed([varPtr, layout, onChange] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        varPtr->setValue(layout);
+                        config::Save();
+                        if (onChange) {
+                            onChange(layout);
+                        }
+                    });
+            }
+            pane.add_rml(Rml::String{"<br/>"} + helpText);
+        });
     return button;
 }
 
@@ -631,6 +1095,58 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Allow Background Input",
                 .helpText = "Allow controller input even when the game window is not focused.",
                 .onChange = [](bool value) { aurora_set_background_input(value); },
+            });
+
+        leftPane.add_section("Touch Controls");
+        config_bool_select(leftPane, rightPane, getSettings().game.enableTouchControls,
+            {
+                .key = "Touch Controller",
+                .helpText = "Shows an on-screen controller and feeds touch input into player one.",
+            });
+        config_layout_select(leftPane, rightPane, getSettings().game.touchControlsPreset,
+            "Touch Layout",
+            "Choose the initial arrangement used by the on-screen controller.",
+            [](ControllerOverlayLayout layout) { touch_controls::ApplyPreset(layout); },
+            [] { return !getSettings().game.enableTouchControls.getValue(); });
+        config_percent_select(leftPane, rightPane, getSettings().game.touchControlsScale,
+            "Touch Scale", "Scales the on-screen controller.", 60, 160, 5,
+            [] { return !getSettings().game.enableTouchControls.getValue(); });
+        config_percent_select(leftPane, rightPane, getSettings().game.touchControlsOpacity,
+            "Touch Opacity", "Adjusts the transparency of the on-screen controller.", 20, 100, 5,
+            [] { return !getSettings().game.enableTouchControls.getValue(); });
+        config_bool_select(leftPane, rightPane, getSettings().game.touchControlsEditMode,
+            {
+                .key = "Edit Touch Layout",
+                .helpText = "When enabled, touch controls can be dragged into new positions.",
+            });
+        leftPane.register_control(
+            leftPane.add_button("Reset Touch Layout").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                touch_controls::ApplyPreset(getSettings().game.touchControlsPreset.getValue());
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Restores the selected touch layout preset.");
+            });
+        leftPane.register_control(
+            leftPane.add_button("Export Touch Controls").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                export_touch_controls_file();
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text(
+                    "Exports touch controller settings and custom positions as a JSON file.");
+            });
+        leftPane.register_control(
+            leftPane.add_button("Import Touch Controls").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                open_touch_controls_import_picker();
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text(
+                    "Imports touch controller settings and custom positions from a JSON file.");
             });
 
         leftPane.add_section("Camera");
@@ -1090,6 +1606,89 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             }
                         }
                     },
+            });
+
+        leftPane.add_section("Overlays");
+        config_layout_select(leftPane, rightPane, getSettings().game.inputViewerLayout,
+            "Input Viewer Layout",
+            "Changes the button arrangement used by the input viewer overlay.");
+        config_percent_select(leftPane, rightPane, getSettings().game.inputViewerScale,
+            "Input Viewer Scale", "Scales the input viewer overlay.", 60, 160, 5);
+        config_bool_select(leftPane, rightPane, getSettings().game.hudButtonBackground,
+            {
+                .key = "HUD Button Background",
+                .helpText = "Shows the decorative backing behind the in-game HUD buttons.",
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "HUD Button",
+                .getValue = [] { return Rml::String{hud_button_name(hud_button_index())}; },
+                .isModified = [] { return hud_layout_modified(); },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                for (size_t i = 0; i < kHudButtonNames.size(); ++i) {
+                    pane
+                        .add_button({
+                            .text = Rml::String{hud_button_name(static_cast<int>(i))},
+                            .isSelected =
+                                [i] { return hud_button_index() == static_cast<int>(i); },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.hudButtonEditTarget.setValue(static_cast<int>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>Choose which in-game HUD button the X, Y, and Scale controls "
+                             "edit.");
+            });
+        config_hud_pixel_select(leftPane, rightPane, "HUD Button X",
+            []() -> ConfigVar<float>& { return hud_button_offset_x(hud_button_index()); },
+            "Moves the selected in-game HUD button horizontally.");
+        config_hud_pixel_select(leftPane, rightPane, "HUD Button Y",
+            []() -> ConfigVar<float>& { return hud_button_offset_y(hud_button_index()); },
+            "Moves the selected in-game HUD button vertically.");
+        config_hud_percent_select(leftPane, rightPane, "HUD Button Scale",
+            []() -> ConfigVar<float>& { return hud_button_scale(hud_button_index()); },
+            "Scales the selected in-game HUD button.");
+        leftPane.register_control(
+            leftPane.add_button("Reset HUD Button").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                reset_hud_button(hud_button_index());
+                config::Save();
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Resets X, Y, and Scale for the selected in-game HUD button.");
+            });
+        leftPane.register_control(
+            leftPane.add_button("Reset HUD Layout").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                reset_hud_layout();
+                config::Save();
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Resets custom X, Y, and Scale values for all in-game HUD buttons.");
+            });
+        leftPane.register_control(
+            leftPane.add_button("Export HUD Layout").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                export_hud_layout_file();
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Exports HUD background and button positions as a JSON file.");
+            });
+        leftPane.register_control(
+            leftPane.add_button("Import HUD Layout").on_pressed([] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                open_hud_layout_import_picker();
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Imports HUD background and button positions from a JSON file.");
             });
 
         leftPane.add_section("Game");

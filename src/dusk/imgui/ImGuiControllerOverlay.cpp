@@ -1,5 +1,6 @@
 #include "m_Do/m_Do_controller_pad.h"
 
+#include "dusk/settings.h"
 #include "imgui.h"
 #include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
@@ -27,7 +28,7 @@ namespace dusk {
 
         ImGui::SetNextWindowBgAlpha(0.65f);
         if (ImGui::Begin("Input Viewer", nullptr, windowFlags)) {
-            float scale = ImGuiScale();
+            float scale = ImGuiScale() * getSettings().game.inputViewerScale.getValue();
             if (!m_controllerName.empty()) {
                 ImGuiTextCenter(m_controllerName);
                 ImGui::Separator();
@@ -35,73 +36,99 @@ namespace dusk {
 
             ImDrawList* dl = ImGui::GetWindowDrawList();
             ImVec2 p = ImGui::GetCursorScreenPos();
+            p.x += 20 * scale;
+            p.y += 20 * scale;
+
+            auto scaled = [p, scale](float x, float y) {
+                return ImVec2{p.x + x * scale, p.y + y * scale};
+            };
+
+            ImVec2 leftStickCenter;
+            ImVec2 rightStickCenter;
+            ImVec2 dpadCenter;
+            ImVec2 startButtonCenter;
+            ImVec2 aButtonCenter;
+            ImVec2 bButtonCenter;
+            ImVec2 xButtonCenter;
+            ImVec2 yButtonCenter;
+            ImVec2 lTrigCenter;
+            ImVec2 rTrigCenter;
+            ImVec2 zButtonCenter;
+
+            switch (getSettings().game.inputViewerLayout.getValue()) {
+            case ControllerOverlayLayout::WiiU:
+                leftStickCenter = scaled(30, 45);
+                rightStickCenter = scaled(168, 90);
+                dpadCenter = scaled(80, 90);
+                startButtonCenter = scaled(124, 70);
+                aButtonCenter = scaled(224, 58);
+                bButtonCenter = scaled(204, 78);
+                xButtonCenter = scaled(204, 38);
+                yButtonCenter = scaled(184, 58);
+                lTrigCenter = scaled(30, -15);
+                rTrigCenter = scaled(214, -15);
+                zButtonCenter = scaled(232, 18);
+                break;
+            case ControllerOverlayLayout::XBox:
+                leftStickCenter = scaled(30, 45);
+                rightStickCenter = scaled(168, 90);
+                dpadCenter = scaled(80, 90);
+                startButtonCenter = scaled(124, 70);
+                aButtonCenter = scaled(204, 78);
+                bButtonCenter = scaled(224, 58);
+                xButtonCenter = scaled(184, 58);
+                yButtonCenter = scaled(204, 38);
+                lTrigCenter = scaled(30, -15);
+                rTrigCenter = scaled(214, -15);
+                zButtonCenter = scaled(232, 18);
+                break;
+            case ControllerOverlayLayout::GameCube:
+            default:
+                leftStickCenter = scaled(30, 45);
+                rightStickCenter = scaled(160, 90);
+                dpadCenter = scaled(80, 90);
+                startButtonCenter = scaled(120, 55);
+                aButtonCenter = scaled(210, 48);
+                bButtonCenter = scaled(186, 64);
+                xButtonCenter = scaled(234, 43);
+                yButtonCenter = scaled(202, 24);
+                lTrigCenter = scaled(30, -15);
+                rTrigCenter = scaled(210, -15);
+                zButtonCenter = scaled(228, 18);
+                break;
+            }
 
             // Left Stick vars
             float leftStickRadius = 30 * scale;
-            p.x += 20 * scale;
-            p.y += 20 * scale;
-            ImVec2 leftStickCenter;
-            leftStickCenter.x = p.x + 30 * scale;
-            leftStickCenter.y = p.y + 45 * scale;
 
             // Right Stick vars
             float rightStickRadius = 20 * scale;
-            ImVec2 rightStickCenter;
-            rightStickCenter.x = p.x + 160 * scale;
-            rightStickCenter.y = p.y + 90 * scale;
 
             // D-Pad vars
             float dpadRadius = 15 * scale;
             float dpadWidth = 8 * scale;
-            ImVec2 dpadCenter;
-            dpadCenter.x = p.x + 80 * scale;
-            dpadCenter.y = p.y + 90 * scale;
 
             // Start Button vars
             float startButtonRadius = 5 * scale;
-            ImVec2 startButtonCenter;
-            startButtonCenter.x = p.x + 120 * scale;
-            startButtonCenter.y = p.y + 55 * scale;
 
             // A Button vars
             float aButtonRadius = 16 * scale;
-            ImVec2 aButtonCenter;
-            aButtonCenter.x = p.x + 210 * scale;
-            aButtonCenter.y = p.y + 48 * scale;
 
             // B Button vars
             float bButtonRadius = 8 * scale;
-            ImVec2 bButtonCenter;
-            bButtonCenter.x = aButtonCenter.x + -24 * scale;
-            bButtonCenter.y = aButtonCenter.y + 16 * scale;
 
             // X Button vars
             ImVec2 xButtonRadius{ 7 * scale, 12 * scale};
-            ImVec2 xButtonCenter;
-            xButtonCenter.x = aButtonCenter.x + 24 * scale;
-            xButtonCenter.y = aButtonCenter.y + -5 * scale;
 
             // Y Button vars
             ImVec2 yButtonRadius{ 12 * scale, 7 * scale };
-            ImVec2 yButtonCenter;
-            yButtonCenter.x = aButtonCenter.x + -8 * scale;
-            yButtonCenter.y = aButtonCenter.y + -24 * scale;
 
             // Trigger vars
             float triggerWidth = leftStickRadius * 2;
             float triggerHeight = 8 * scale;
-            ImVec2 lTrigCenter;
-            lTrigCenter.x = leftStickCenter.x + 0 * scale;
-            lTrigCenter.y = leftStickCenter.y + -60 * scale;
-            ImVec2 rTrigCenter;
-            rTrigCenter.x = aButtonCenter.x * scale;
-            rTrigCenter.y = lTrigCenter.y * scale;
 
             // Z Button vars
             ImVec2 zButtonRadius{ 10 * scale, 5 * scale };
-            ImVec2 zButtonCenter;
-            zButtonCenter.x = aButtonCenter.x + 18 * scale;
-            zButtonCenter.y = aButtonCenter.y + -30 * scale;
 
             const float zButtonHalfWidth = triggerWidth / 2;
             const float zButtonHalfHeight = 4 * scale;

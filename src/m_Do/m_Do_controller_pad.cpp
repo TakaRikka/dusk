@@ -7,6 +7,7 @@
 #include "JSystem/JAWExtSystem/JAWExtSystem.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
+#include "dusk/touch_controls.hpp"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_main.h"
@@ -88,8 +89,11 @@ void mDoCPd_c::read() {
             cLib_memSet(interface, 0, sizeof(interface_of_controller_pad));
         } else {
             convert(interface, *pad);
-            LRlockCheck(interface);
         }
+        if (i == PAD_1) {
+            dusk::touch_controls::MergeToPad(*interface);
+        }
+        LRlockCheck(interface);
 #if DEBUG
         cLib_memSet(interface2, 0, sizeof(interface_of_controller_pad));
 #endif

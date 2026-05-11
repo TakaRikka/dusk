@@ -20,6 +20,7 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "dusk/touch_controls.hpp"
 #include "dusk/ui/ui.hpp"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
@@ -352,6 +353,7 @@ namespace dusk {
             ImGui::End();
         }
 
+        dusk::touch_controls::DrawOverlay();
         m_menuTools.ShowInputViewer();
         m_menuGame.drawSpeedrunTimerOverlay();
 

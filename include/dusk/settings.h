@@ -32,6 +32,12 @@ enum class GyroMode : u8 {
     Mouse = 1,
 };
 
+enum class ControllerOverlayLayout : u8 {
+    GameCube = 0,
+    WiiU = 1,
+    XBox = 2,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -55,6 +61,12 @@ template <>
 struct ConfigEnumRange<GyroMode> {
     static constexpr auto min = GyroMode::Sensor;
     static constexpr auto max = GyroMode::Mouse;
+};
+
+template <>
+struct ConfigEnumRange<ControllerOverlayLayout> {
+    static constexpr auto min = ControllerOverlayLayout::GameCube;
+    static constexpr auto max = ControllerOverlayLayout::XBox;
 };
 }
 
@@ -150,6 +162,11 @@ struct UserSettings {
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
         ConfigVar<bool> allowBackgroundInput;
+        ConfigVar<bool> enableTouchControls;
+        ConfigVar<ControllerOverlayLayout> touchControlsPreset;
+        ConfigVar<float> touchControlsScale;
+        ConfigVar<float> touchControlsOpacity;
+        ConfigVar<bool> touchControlsEditMode;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
@@ -172,6 +189,25 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+        ConfigVar<ControllerOverlayLayout> inputViewerLayout;
+        ConfigVar<float> inputViewerScale;
+        ConfigVar<bool> hudButtonBackground;
+        ConfigVar<int> hudButtonEditTarget;
+        ConfigVar<float> hudButtonAOffsetX;
+        ConfigVar<float> hudButtonAOffsetY;
+        ConfigVar<float> hudButtonAScale;
+        ConfigVar<float> hudButtonBOffsetX;
+        ConfigVar<float> hudButtonBOffsetY;
+        ConfigVar<float> hudButtonBScale;
+        ConfigVar<float> hudButtonXOffsetX;
+        ConfigVar<float> hudButtonXOffsetY;
+        ConfigVar<float> hudButtonXScale;
+        ConfigVar<float> hudButtonYOffsetX;
+        ConfigVar<float> hudButtonYOffsetY;
+        ConfigVar<float> hudButtonYScale;
+        ConfigVar<float> hudButtonZOffsetX;
+        ConfigVar<float> hudButtonZOffsetY;
+        ConfigVar<float> hudButtonZScale;
 
         // Tools
         ConfigVar<bool> speedrunMode;
