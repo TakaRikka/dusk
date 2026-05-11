@@ -937,7 +937,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Speeds up movement while wearing the Iron Boots.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
-        addCheat("ROLL FAST", getSettings().game.rollFast,
+        addCheat("Roll Fast", getSettings().game.rollFast,
             "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");
