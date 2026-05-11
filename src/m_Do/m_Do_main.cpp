@@ -90,6 +90,10 @@
 #include <TargetConditionals.h>
 #endif
 
+#if DUSK_ENABLE_SENTRY_NATIVE
+#include "dusk/ui/reporting.hpp"
+#endif
+
 // --- GLOBALS ---
 s8 mDoMain::developmentMode = -1;
 OSTime mDoMain::sPowerOnTime;
@@ -693,7 +697,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
-    dusk::InitializeCrashReporting();
+    dusk::crash_reporting::initialize();
     EnsureInitialPipelineCache(dusk::ConfigPath);
     // TODO: How to handle this?
     //PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
@@ -744,7 +748,7 @@ int game_main(int argc, char* argv[]) {
     // Run ImGui UI loop if Aurora couldn't initialize a backend
     if (auroraInfo.backend == BACKEND_NULL) {
         launchUILoop();
-        dusk::ShutdownCrashReporting();
+        dusk::crash_reporting::shutdown();
         dusk::ShutdownFileLogging();
         fflush(stdout);
         fflush(stderr);
@@ -822,7 +826,7 @@ int game_main(int argc, char* argv[]) {
 
             // pre game launch ui main loop
             if (!launchUILoop()) {
-                dusk::ShutdownCrashReporting();
+                dusk::crash_reporting::shutdown();
                 dusk::ShutdownFileLogging();
                 fflush(stdout);
                 fflush(stderr);
@@ -852,6 +856,12 @@ int game_main(int argc, char* argv[]) {
 
         dusk::IsGameLaunched = true;
     }
+
+#if DUSK_ENABLE_SENTRY_NATIVE
+    if (dusk::crash_reporting::get_consent() == dusk::crash_reporting::Consent::Unknown) {
+        dusk::ui::push_document(std::make_unique<dusk::ui::CrashReportWindow>());
+    }
+#endif
 
     if (!dusk::getSettings().backend.wasPresetChosen) {
         dusk::ui::push_document(std::make_unique<dusk::ui::PresetWindow>());
@@ -884,7 +894,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::MoviePlayerShutdown();
 
-    dusk::ShutdownCrashReporting();
+    dusk::crash_reporting::shutdown();
     dusk::ShutdownFileLogging();
     fflush(stdout);
     fflush(stderr);
