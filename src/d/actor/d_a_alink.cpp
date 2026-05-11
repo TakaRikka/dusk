@@ -16411,7 +16411,7 @@ int daAlink_c::procSideRollInit(int param_0) {
 #ifdef TARGET_PC        
                    mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed * rollFastMultiplier,
 #else
-                    mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed,
+                   mpHIO->mGuard.mTurnMove.m.mSideRollAnmSpeed,
 #endif
                    mpHIO->mGuard.mTurnMove.m.mTurnAnm.mStartFrame,
                    mpHIO->mGuard.mTurnMove.m.mTurnAnm.mEndFrame,
