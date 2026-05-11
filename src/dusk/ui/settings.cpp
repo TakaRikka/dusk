@@ -602,6 +602,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Enable Mini-Map Shadows",
             });
+        config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
+            {
+                .key = "Disable Cutscene Pillarboxing",
+            });
     });
 
     add_tab("Input", [this](Rml::Element* content) {

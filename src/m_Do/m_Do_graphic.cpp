@@ -636,7 +636,7 @@ u8 mDoGph_gInf_c::isWide() {
 }
 
 void mDoGph_gInf_c::setWideZoomProjection(Mtx44& m) {
-    if (!isWideZoom()) {
+    IF_NOT_DUSK(if (!isWideZoom())) {
         return;
     }
 
@@ -682,7 +682,7 @@ void mDoGph_gInf_c::setWideZoomProjection(Mtx44& m) {
 }
 
 void mDoGph_gInf_c::setWideZoomLightProjection(Mtx& m) {
-    if (!isWideZoom()) {
+    IF_NOT_DUSK(if (!isWideZoom())) {
         return;
     }
 
@@ -1189,14 +1189,24 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
     ZoneScoped;
     UNUSED(param_0);
 
+    #if !TARGET_PC
     s16 y_orig = (int)param_1->y_orig & ~7;
     s16 y_orig_pos = y_orig < 0 ? 0 : y_orig;
     if ((y_orig_pos == 0) && (param_1->scissor.y_orig != param_1->y_orig ||
                               (param_1->scissor.height != param_1->height)))
+    #endif
     {
         #if TARGET_PC
         f32 sc_top = param_1->scissor.y_orig;
-        f32 sc_bottom = param_1->scissor.y_orig + param_1->scissor.height;
+        f32 sc_bottom = sc_top + param_1->scissor.height;
+        
+        f32 sc_left = 0.0f;
+        f32 sc_right = param_1->width;
+
+        if (!dusk::getSettings().game.disableCutscenePillarboxing) {
+            sc_left = param_1->scissor.x_orig;
+            sc_right = sc_left + param_1->scissor.width;
+        }
         #else
         s32 sc_top = (int)param_1->scissor.y_orig;
         s32 sc_bottom = param_1->scissor.y_orig + param_1->scissor.height;
@@ -1232,17 +1242,32 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, DUSK_IF_ELSE(GX_F32, GX_RGBA4), 0);
         GXSetProjection(ortho, GX_ORTHOGRAPHIC);
         GXSetCurrentMtx(0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 8);
+        GXBegin(GX_QUADS, GX_VTXFMT0, DUSK_IF_ELSE(16, 8));
 
         #if TARGET_PC
+        // top trapezoid
         GXPosition3f32(0, 0, -5);
         GXPosition3f32(param_1->width, 0, -5);
-        GXPosition3f32(param_1->width, sc_top, -5);
-        GXPosition3f32(0, sc_top, -5);
-        GXPosition3f32(0, sc_bottom, -5);
-        GXPosition3f32(param_1->width, sc_bottom, -5);
+        GXPosition3f32(sc_right, sc_top, -5);
+        GXPosition3f32(sc_left, sc_top, -5);
+
+        // bottom trapezoid
+        GXPosition3f32(sc_left, sc_bottom, -5);
+        GXPosition3f32(sc_right, sc_bottom, -5);
         GXPosition3f32(param_1->width, param_1->height, -5);
         GXPosition3f32(0, param_1->height, -5);
+
+        // left trapezoid
+        GXPosition3f32(0, 0, -5);
+        GXPosition3f32(sc_left, sc_top, -5);
+        GXPosition3f32(sc_left, sc_bottom, -5);
+        GXPosition3f32(0, param_1->height, -5);
+
+        // right trapezoid
+        GXPosition3f32(sc_right, sc_top, -5);
+        GXPosition3f32(param_1->width, 0, -5);
+        GXPosition3f32(param_1->width, param_1->height, -5);
+        GXPosition3f32(sc_right, sc_bottom, -5);
         #else
         GXPosition3s16(0, 0, -5);
         GXPosition3s16(FB_WIDTH, 0, -5);
