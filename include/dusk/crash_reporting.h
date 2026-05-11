@@ -1,8 +1,17 @@
 #pragma once
 
-namespace dusk {
+namespace dusk::crash_reporting {
 
-void InitializeCrashReporting();
-void ShutdownCrashReporting();
+enum class Consent {
+    Unavailable,
+    Unknown,
+    Given,
+    Revoked,
+};
 
-}  // namespace dusk
+void initialize();
+void shutdown();
+Consent get_consent();
+void set_consent(bool enabled);
+
+}  // namespace dusk::crash_reporting

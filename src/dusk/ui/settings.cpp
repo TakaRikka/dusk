@@ -1028,25 +1028,24 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml("<br/>Choose which notifications can be displayed.");
             });
 #if DUSK_ENABLE_SENTRY_NATIVE
-        config_bool_select(leftPane, rightPane, getSettings().backend.enableCrashReporting,
-            {.key = "Crash Reporting",
-                .helpText = "Enable automatic reporting of crashes to the developers.<br/><br/>"
-                            "Submissions include logs which may contain sensitive information. "
-                            "Refrain from "
-                            "enabling reporting if you do not agree with the following "
-                            "inclusions:<br/><br/> "
-                            "- Operating System<br/>- CPU Architecture<br/>- GPU Model & Driver "
-                            "Version<br/>"
-                            "- Account Username",
-                .onChange = [](bool enabled) {
-                    if(enabled) {
-                        dusk::InitializeCrashReporting();
-                    }
-                    else {
-                        dusk::ShutdownCrashReporting();
-                    }
+        auto& crashReporting = leftPane.add_child<BoolButton>(BoolButton::Props{
+            .key = "Crash Reporting",
+            .getValue =
+                [] { return crash_reporting::get_consent() == crash_reporting::Consent::Given; },
+            .setValue = [](bool enabled) { crash_reporting::set_consent(enabled); },
+            .isDisabled =
+                [] {
+                    return crash_reporting::get_consent() == crash_reporting::Consent::Unavailable;
                 },
-            });
+            .isModified = [] { return false; },
+        });
+        leftPane.register_control(crashReporting, rightPane, [](Pane& pane) {
+            pane.clear();
+            pane.add_rml("Dusk can automatically send crash reports to the developers. Crash "
+                         "reports contain the following:<br/>• Operating system version<br/>• CPU "
+                         "architecture<br/>• GPU model & driver version<br/>• File paths (may "
+                         "include account username)<br/>• Stack trace");
+        });
 #endif
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {

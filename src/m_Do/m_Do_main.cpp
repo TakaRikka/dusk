@@ -697,7 +697,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
-    dusk::InitializeCrashReporting();
+    dusk::crash_reporting::initialize();
     EnsureInitialPipelineCache(dusk::ConfigPath);
     // TODO: How to handle this?
     //PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
@@ -748,7 +748,7 @@ int game_main(int argc, char* argv[]) {
     // Run ImGui UI loop if Aurora couldn't initialize a backend
     if (auroraInfo.backend == BACKEND_NULL) {
         launchUILoop();
-        dusk::ShutdownCrashReporting();
+        dusk::crash_reporting::shutdown();
         dusk::ShutdownFileLogging();
         fflush(stdout);
         fflush(stderr);
@@ -826,7 +826,7 @@ int game_main(int argc, char* argv[]) {
 
             // pre game launch ui main loop
             if (!launchUILoop()) {
-                dusk::ShutdownCrashReporting();
+                dusk::crash_reporting::shutdown();
                 dusk::ShutdownFileLogging();
                 fflush(stdout);
                 fflush(stderr);
@@ -858,7 +858,7 @@ int game_main(int argc, char* argv[]) {
     }
 
 #if DUSK_ENABLE_SENTRY_NATIVE
-    if (!dusk::getSettings().backend.wasCrashReportChosen) {
+    if (dusk::crash_reporting::get_consent() == dusk::crash_reporting::Consent::Unknown) {
         dusk::ui::push_document(std::make_unique<dusk::ui::CrashReportWindow>());
     }
 #endif
@@ -894,7 +894,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::MoviePlayerShutdown();
 
-    dusk::ShutdownCrashReporting();
+    dusk::crash_reporting::shutdown();
     dusk::ShutdownFileLogging();
     fflush(stdout);
     fflush(stderr);

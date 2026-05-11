@@ -3,8 +3,6 @@
 #include "reporting.hpp"
 
 #include "button.hpp"
-#include "dusk/config.hpp"
-#include "dusk/settings.h"
 #include "dusk/crash_reporting.h"
 #include "ui.hpp"
 
@@ -28,10 +26,11 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
     auto* intro = append(mDialog, "div");
     intro->SetClass("modal-body", true);
     intro->SetInnerRML(
-        "Dusk can autometically send crash reports to the developers. "
-        "Submissions may contain sensitive information. Refrain from enabling reporting if you do not agree "
-        "with the following inclusions:<br/>- Operating System<br/>- CPU Architecture<br/>- GPU Model & Driver Version<br/>"
-        "- Account Username<br/><br/>This can be changed in the Settings menu at any time.");
+        "Dusk can automatically send crash reports to the developers. Crash reports contain the "
+        "following:"
+        "<br/>• Operating system version<br/>• CPU architecture<br/>• GPU model & driver version"
+        "<br/>• File paths (may include account username)<br/>• Stack trace<br/><br/>"
+        "This can be changed in the Settings menu at any time.");
 
     auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
@@ -43,17 +42,14 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
     };
 
     static constexpr OptionInfo kOptions[] = {
-        {"Enabled",
-         "Send crash reports to Dusk developers. Reports will include the information described above.",
-         []() {
-            dusk::getSettings().backend.enableCrashReporting.setValue(true);
-         }},
-        {"Disabled",
-         "Do not send crash reports. This may make it more difficult to resolve bugs you encounter.",
-         []() {
-            dusk::getSettings().backend.enableCrashReporting.setValue(false);
-            dusk::ShutdownCrashReporting();
-         }},
+        {"Enable",
+            "Send crash reports to Dusk developers. Reports will include the information described "
+            "above.",
+            [] { crash_reporting::set_consent(true); }},
+        {"Disable",
+            "Do not send crash reports. This may make it more difficult to resolve issues you "
+            "encounter.",
+            [] { crash_reporting::set_consent(false); }},
     };
 
     for (const auto& option : kOptions) {
@@ -64,8 +60,6 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
         btn->on_nav_command([this, apply = option.apply](Rml::Event&, NavCommand cmd) {
             if (cmd == NavCommand::Confirm) {
                 apply();
-                getSettings().backend.wasCrashReportChosen.setValue(true);
-                config::Save();
                 hide(true);
                 return true;
             }
