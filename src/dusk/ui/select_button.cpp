@@ -1,5 +1,6 @@
 #include "select_button.hpp"
 
+#include "i18n.hpp"
 #include "ui.hpp"
 
 #include <fmt/format.h>
@@ -29,26 +30,26 @@ bool SelectButton::modified() const {
     return mProps.modified;
 }
 
+void SelectButton::update() {
+    if (mRenderedLanguage != i18n::language()) {
+        render_key();
+        render_value();
+    }
+    Component::update();
+}
+
 void SelectButton::set_modified(bool value) {
     if (mProps.modified != value) {
         mValueElem->SetClass("modified", value);
-        if (value) {
-            mValueElem->SetInnerRML(fmt::format("•&nbsp;{}", escape(mProps.value)));
-        } else {
-            mValueElem->SetInnerRML(escape(mProps.value));
-        }
         mProps.modified = value;
+        render_value();
     }
 }
 
 void SelectButton::set_value_label(const Rml::String& value) {
     if (mProps.value != value) {
-        if (mProps.modified) {
-            mValueElem->SetInnerRML(fmt::format("•&nbsp;{}", escape(value)));
-        } else {
-            mValueElem->SetInnerRML(escape(value));
-        }
         mProps.value = value;
+        render_value();
     }
 }
 
@@ -67,7 +68,8 @@ SelectButton& SelectButton::on_pressed(SelectButtonCallback callback) {
 
 void SelectButton::update_props(Props props) {
     if (mProps.key != props.key) {
-        mKeyElem->SetInnerRML(escape(props.key));
+        mProps.key = props.key;
+        render_key();
     }
     if (mProps.icon != props.icon) {
         Rml::StringList iconClasses;
@@ -82,6 +84,23 @@ void SelectButton::update_props(Props props) {
     set_value_label(props.value);
     set_modified(props.modified);
     mProps = std::move(props);
+    render_key();
+    render_value();
+}
+
+void SelectButton::render_key() {
+    mKeyElem->SetInnerRML(escape(i18n::tr(mProps.key)));
+    mRenderedLanguage = i18n::language();
+}
+
+void SelectButton::render_value() {
+    const auto value = escape(i18n::tr(mProps.value));
+    if (mProps.modified) {
+        mValueElem->SetInnerRML(fmt::format("•&nbsp;{}", value));
+    } else {
+        mValueElem->SetInnerRML(value);
+    }
+    mRenderedLanguage = i18n::language();
 }
 
 bool SelectButton::handle_nav_command(NavCommand cmd) {

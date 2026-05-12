@@ -1,5 +1,6 @@
 #include "button.hpp"
 
+#include "i18n.hpp"
 #include "ui.hpp"
 
 #include "Z2AudioLib/Z2SeMgr.h"
@@ -25,9 +26,16 @@ Button::Button(Rml::Element* parent, Props props, const Rml::String& tagName)
 
 void Button::set_text(const Rml::String& text) {
     if (mProps.text != text) {
-        mRoot->SetInnerRML(escape(text));
         mProps.text = text;
+        render_text();
     }
+}
+
+void Button::update() {
+    if (mRenderedLanguage != i18n::language()) {
+        render_text();
+    }
+    Component::update();
 }
 
 Button& Button::on_pressed(ButtonCallback callback) {
@@ -48,6 +56,12 @@ Button& Button::on_pressed(ButtonCallback callback) {
 void Button::update_props(Props props) {
     set_text(props.text);
     mProps = std::move(props);
+    render_text();
+}
+
+void Button::render_text() {
+    mRoot->SetInnerRML(escape(i18n::tr(mProps.text)));
+    mRenderedLanguage = i18n::language();
 }
 
 void ControlledButton::update() {

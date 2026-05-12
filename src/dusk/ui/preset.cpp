@@ -3,6 +3,7 @@
 #include "button.hpp"
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
+#include "i18n.hpp"
 #include "ui.hpp"
 
 #include <dolphin/gx/GXAurora.h>
@@ -59,15 +60,15 @@ PresetWindow::PresetWindow() : WindowSmall("modal", "modal-dialog") {
 
     auto* title = append(header, "div");
     title->SetClass("modal-title", true);
-    title->SetInnerRML("Welcome to Dusk");
+    title->SetInnerRML(i18n::tr("Welcome to Dusk"));
 
     auto* headIcon = append(header, "icon");
     headIcon->SetClass("celebration", true);
 
     auto* intro = append(mDialog, "div");
     intro->SetClass("modal-body", true);
-    intro->SetInnerRML(
-        "Choose a preset to get started. You can change any setting later from the Settings menu.");
+    intro->SetInnerRML(i18n::tr(
+        "Choose a preset to get started. You can change any setting later from the Settings menu."));
 
     auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
@@ -108,7 +109,7 @@ PresetWindow::PresetWindow() : WindowSmall("modal", "modal-dialog") {
 
         auto* desc = append(col, "div");
         desc->SetClass("preset-desc", true);
-        desc->SetInnerRML(preset.desc);
+        desc->SetInnerRML(i18n::tr(preset.desc));
     }
 }
 

@@ -12,6 +12,7 @@
 
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
+#include "i18n.hpp"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -47,6 +48,7 @@ bool initialize() noexcept {
     }
 
     load_font("FiraSans-Regular.ttf", true);
+    load_font("NotoMono-Regular.ttf", true);
     load_font("FiraSans-Bold.ttf");
     load_font("FiraSansCondensed-Regular.ttf");
     load_font("FiraSansCondensed-Bold.ttf");
@@ -129,7 +131,7 @@ void handle_event(const SDL_Event& event) noexcept {
             if (getSettings().game.enableControllerToasts) {
                 const char* name = SDL_GetGamepadName(gamepad);
                 Rml::String content = fmt::format("<span>{}</span>", name ? name : "[Unknown]");
-                Rml::String title = "Controller connected";
+                Rml::String title = i18n::tr("Controller connected");
                 if (const char* icon = connection_state_icon(SDL_GetGamepadConnectionState(gamepad))) {
                     title = fmt::format(
                         "<row><span>{}</span> <icon class=\"connection\">&#x{};</icon></row>", title,
@@ -162,7 +164,7 @@ void handle_event(const SDL_Event& event) noexcept {
             const char* name = SDL_GetGamepadNameForID(event.gdevice.which);
             push_toast({
                 .type = "controller",
-                .title = "Controller disconnected",
+                .title = i18n::tr("Controller disconnected"),
                 .content = name ? name : "[Unknown]",
                 .duration = std::chrono::seconds(4),
             });

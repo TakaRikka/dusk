@@ -6,6 +6,7 @@
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "dusk/update_check.hpp"
+#include "i18n.hpp"
 #include "modal.hpp"
 #include "preset.hpp"
 #include "settings.hpp"
@@ -281,23 +282,23 @@ void open_update_release() {
 std::string get_error_msg(iso::ValidationError error) {
     switch (error) {
     default:
-        return "The selected disc image could not be validated.";
+        return i18n::tr("The selected disc image could not be validated.");
     case iso::ValidationError::IOError:
-        return "Unable to read the selected file.";
+        return i18n::tr("Unable to read the selected file.");
     case iso::ValidationError::InvalidImage:
-        return "The selected file is not a valid disc image.";
+        return i18n::tr("The selected file is not a valid disc image.");
     case iso::ValidationError::WrongGame:
-        return "The selected game is not supported by Dusk.";
+        return i18n::tr("The selected game is not supported by Dusk.");
     case iso::ValidationError::WrongVersion:
-        return "Dusk currently supports GameCube USA and PAL disc images only.";
+        return i18n::tr("Dusk currently supports GameCube USA and PAL disc images only.");
     case iso::ValidationError::Canceled:
-        return "Disc verification was canceled. Dusk cannot guarantee the selected disc image "
-               "is compatible.";
+        return i18n::tr("Disc verification was canceled. Dusk cannot guarantee the selected disc "
+                        "image is compatible.");
     case iso::ValidationError::HashMismatch:
-        return "The selected disc image did not pass hash verification. It may be corrupt or "
-               "modified.";
+        return i18n::tr("The selected disc image did not pass hash verification. It may be corrupt "
+                        "or modified.");
     case iso::ValidationError::Success:
-        return "The selected disc image is valid.";
+        return i18n::tr("The selected disc image is valid.");
     }
 }
 
@@ -365,7 +366,7 @@ public:
 
         auto* title = append(header, "div");
         title->SetClass("modal-title", true);
-        title->SetInnerRML("Verifying disc image");
+        title->SetInnerRML(i18n::tr("Verifying disc image"));
 
         auto* icon = append(header, "icon");
         icon->SetClass("verifying", true);
@@ -470,7 +471,7 @@ private:
                 mProgress->SetAttribute("value", 0.f);
             }
             if (mDetail != nullptr) {
-                mDetail->SetInnerRML("Opening disc image...");
+                mDetail->SetInnerRML(i18n::tr("Opening disc image..."));
             }
             return;
         }
@@ -577,7 +578,7 @@ void try_push_verification_modal(Document& host) {
 
     if (!state.pendingDiscPath.empty()) {
         const Rml::String bodyRml =
-            state.errorString + "<br/><br/>You may proceed at your own risk.";
+            state.errorString + "<br/><br/>" + i18n::tr("You may proceed at your own risk.");
         auto acceptHashMismatch = [](Modal& modal) {
             auto& st = prelaunch_state();
             std::string path = std::move(st.pendingDiscPath);
@@ -852,22 +853,22 @@ void Prelaunch::update() {
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
         if (!activeDiscLoaded) {
             mDiscStatus->RemoveAttribute("status");
-            discStatusLabel->SetInnerRML("No disc image found.");
+            discStatusLabel->SetInnerRML(i18n::tr("No disc image found."));
         } else if (discRestartPending) {
             mDiscStatus->SetAttribute("status", "pending");
-            discStatusLabel->SetInnerRML("Pending restart.");
+            discStatusLabel->SetInnerRML(i18n::tr("Pending restart."));
         } else if (state.configuredDiscValidation == iso::ValidationError::Success) {
             mDiscStatus->SetAttribute("status", "good");
-            discStatusLabel->SetInnerRML("Disc ready.");
+            discStatusLabel->SetInnerRML(i18n::tr("Disc ready."));
         } else if (state.configuredDiscValidation == iso::ValidationError::HashMismatch) {
             mDiscStatus->SetAttribute("status", "mismatch");
-            discStatusLabel->SetInnerRML("Disc hash mismatch.");
+            discStatusLabel->SetInnerRML(i18n::tr("Disc hash mismatch."));
         } else if (canLaunchConfiguredDisc) {
             mDiscStatus->SetAttribute("status", "unknown");
-            discStatusLabel->SetInnerRML("Disc not verified.");
+            discStatusLabel->SetInnerRML(i18n::tr("Disc not verified."));
         } else {
             mDiscStatus->SetAttribute("status", "bad");
-            discStatusLabel->SetInnerRML("Disc unavailable.");
+            discStatusLabel->SetInnerRML(i18n::tr("Disc unavailable."));
         }
     }
     if (mDiscDetail != nullptr) {
@@ -897,7 +898,7 @@ void Prelaunch::update() {
 
         if (sUpdateCheckTask != nullptr) {
             mUpdateStatus->SetAttribute("state", "checking");
-            mUpdateMessage->SetInnerRML("Checking for updates...");
+            mUpdateMessage->SetInnerRML(i18n::tr("Checking for updates..."));
         } else if (!sUpdateCheckResult.has_value() ||
                    sUpdateCheckResult->status == update_check::Status::UpToDate)
         {
@@ -905,14 +906,15 @@ void Prelaunch::update() {
             mUpdateMessage->SetInnerRML("");
         } else if (sUpdateCheckResult->status == update_check::Status::UpdateAvailable) {
             mUpdateStatus->SetAttribute("state", "available");
-            mUpdateMessage->SetInnerRML("Update available!");
+            mUpdateMessage->SetInnerRML(i18n::tr("Update available!"));
             if (mUpdateDownloadLabel != nullptr) {
                 mUpdateDownloadLabel->SetInnerRML(escape(
-                    fmt::format("Download {}", update_release_label(sUpdateCheckResult->latest))));
+                    fmt::format("{} {}", i18n::tr("Download"),
+                        update_release_label(sUpdateCheckResult->latest))));
             }
         } else {
             mUpdateStatus->SetAttribute("state", "failed");
-            mUpdateMessage->SetInnerRML("Failed to check for updates");
+            mUpdateMessage->SetInnerRML(i18n::tr("Failed to check for updates"));
         }
     }
 

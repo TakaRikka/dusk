@@ -1,6 +1,7 @@
 #pragma once
 
 #include "component.hpp"
+#include "dusk/settings.h"
 
 namespace dusk::ui {
 
@@ -16,15 +17,18 @@ public:
     Button(Rml::Element* parent, Rml::String text, const Rml::String& tagName = "button")
         : Button(parent, Props{std::move(text)}, tagName) {}
 
+    void update() override;
     void set_text(const Rml::String& text);
     Button& on_pressed(ButtonCallback callback);
 
     const Rml::String& get_text() const { return mProps.text; }
 
 private:
+    void render_text();
     void update_props(Props props);
 
     Props mProps;
+    UiLanguage mRenderedLanguage = UiLanguage::English;
 };
 
 class ControlledButton : public Button {

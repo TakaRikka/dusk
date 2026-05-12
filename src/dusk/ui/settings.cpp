@@ -11,6 +11,7 @@
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "graphics_tuner.hpp"
+#include "i18n.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
 #include "number_button.hpp"
@@ -34,6 +35,11 @@ constexpr std::array kLanguageNames = {
     "French",
     "Spanish",
     "Italian",
+};
+
+constexpr std::array kUiLanguageNames = {
+    "English",
+    "Simplified Chinese",
 };
 
 constexpr std::array kCardFileTypes = {
@@ -955,6 +961,38 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Dusk");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "UI Language",
+                .getValue =
+                    [] {
+                        const u8 idx = static_cast<u8>(getSettings().ui.language.getValue());
+                        return Rml::String{kUiLanguageNames[idx]};
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().ui.language.getValue() !=
+                               getSettings().ui.language.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                for (int i = 0; i < static_cast<int>(kUiLanguageNames.size()); ++i) {
+                    pane.add_button({
+                            .text = kUiLanguageNames[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().ui.language.getValue() ==
+                                           static_cast<UiLanguage>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().ui.language.setValue(static_cast<UiLanguage>(i));
+                            config::Save();
+                        });
+                }
+            });
 #if DUSK_CAN_OPEN_DATA_FOLDER
         leftPane.register_control(
             leftPane.add_button("Open Data Folder").on_pressed([] {

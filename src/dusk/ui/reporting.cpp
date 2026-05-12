@@ -4,6 +4,7 @@
 
 #include "button.hpp"
 #include "dusk/crash_reporting.h"
+#include "i18n.hpp"
 #include "ui.hpp"
 
 #include <dolphin/gx/GXAurora.h>
@@ -18,19 +19,19 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
 
     auto* title = append(header, "div");
     title->SetClass("modal-title", true);
-    title->SetInnerRML("Send Crash Reports");
+    title->SetInnerRML(i18n::tr("Send Crash Reports"));
 
     auto* headIcon = append(header, "icon");
     headIcon->SetClass("question-mark", true);
 
     auto* intro = append(mDialog, "div");
     intro->SetClass("modal-body", true);
-    intro->SetInnerRML(
+    intro->SetInnerRML(i18n::tr(
         "Dusk can automatically send crash reports to the developers. Crash reports contain the "
         "following:"
         "<br/>• Operating system version<br/>• CPU architecture<br/>• GPU model & driver version"
         "<br/>• File paths (may include account username)<br/>• Stack trace<br/><br/>"
-        "This can be changed in the Settings menu at any time.");
+        "This can be changed in the Settings menu at any time."));
 
     auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
@@ -69,7 +70,7 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
 
         auto* desc = append(col, "div");
         desc->SetClass("preset-desc", true);
-        desc->SetInnerRML(option.desc);
+        desc->SetInnerRML(i18n::tr(option.desc));
     }
 }
 

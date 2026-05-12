@@ -32,6 +32,11 @@ enum class GyroMode : u8 {
     Mouse = 1,
 };
 
+enum class UiLanguage : u8 {
+    English = 0,
+    SimplifiedChinese = 1,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -55,6 +60,12 @@ template <>
 struct ConfigEnumRange<GyroMode> {
     static constexpr auto min = GyroMode::Sensor;
     static constexpr auto max = GyroMode::Mouse;
+};
+
+template <>
+struct ConfigEnumRange<UiLanguage> {
+    static constexpr auto min = UiLanguage::English;
+    static constexpr auto max = UiLanguage::SimplifiedChinese;
 };
 }
 
@@ -190,6 +201,10 @@ struct UserSettings {
         ConfigVar<int> cardFileType;
         ConfigVar<bool> enableAdvancedSettings;
     } backend;
+
+    struct {
+        ConfigVar<UiLanguage> language;
+    } ui;
 };
 
 UserSettings& getSettings();

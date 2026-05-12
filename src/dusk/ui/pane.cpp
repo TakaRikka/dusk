@@ -1,5 +1,6 @@
 #include "pane.hpp"
 
+#include "i18n.hpp"
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 #include "ui.hpp"
@@ -166,19 +167,19 @@ bool Pane::focus() {
 Rml::Element* Pane::add_section(const Rml::String& text) {
     auto* elem = append(mRoot, "div");
     elem->SetClass("section-heading", true);
-    elem->SetInnerRML(escape(text));
+    elem->SetInnerRML(escape(i18n::tr(text)));
     return elem;
 }
 
 Rml::Element* Pane::add_text(const Rml::String& text) {
     auto* elem = append(mRoot, "div");
-    elem->SetInnerRML(escape(text));
+    elem->SetInnerRML(escape(i18n::tr(text)));
     return elem;
 }
 
 Rml::Element* Pane::add_rml(const Rml::String& rml) {
     auto* elem = append(mRoot, "div");
-    elem->SetInnerRML(rml);
+    elem->SetInnerRML(i18n::tr_rml(rml));
     return elem;
 }
 

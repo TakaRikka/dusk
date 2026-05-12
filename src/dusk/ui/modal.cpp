@@ -1,5 +1,7 @@
 #include "modal.hpp"
 
+#include "i18n.hpp"
+
 namespace dusk::ui {
 
 Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::move(props)) {
@@ -12,7 +14,7 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
 
     auto* title = append(header, "div");
     title->SetClass("modal-title", true);
-    title->SetInnerRML(mProps.title);
+    title->SetInnerRML(i18n::tr(mProps.title));
 
     if (!mProps.icon.empty()) {
         auto* icon = append(header, "icon");
@@ -21,7 +23,7 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
 
     auto* body = append(mDialog, "div");
     body->SetClass("modal-body", true);
-    body->SetInnerRML(mProps.bodyRml);
+    body->SetInnerRML(i18n::tr_rml(mProps.bodyRml));
 
     auto* actions = append(mDialog, "div");
     actions->SetClass("modal-actions", true);

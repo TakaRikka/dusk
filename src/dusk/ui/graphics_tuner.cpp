@@ -9,6 +9,7 @@
 
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
+#include "i18n.hpp"
 
 #include <algorithm>
 #include <string>
@@ -170,7 +171,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
         u32 height = 0;
         AuroraGetRenderSize(&width, &height);
         if (value <= 0) {
-            return fmt::format("Auto ({}×{})", width, height);
+            return fmt::format("{} ({}×{})", i18n::tr("Auto"), width, height);
         } else {
             return fmt::format("{}× ({}×{})", value, width, height);
         }
@@ -180,11 +181,11 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
     case GraphicsOption::BloomMode:
         switch (static_cast<BloomMode>(value)) {
         case BloomMode::Off:
-            return "Off";
+            return i18n::tr("Off");
         case BloomMode::Classic:
-            return "Classic";
+            return i18n::tr("Classic");
         case BloomMode::Dusk:
-            return "Dusk";
+            return i18n::tr("Dusk");
         }
         break;
     case GraphicsOption::BloomMultiplier:
@@ -201,10 +202,10 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
     }
 
     if (auto* title = mDocument->GetElementById("title")) {
-        title->SetInnerRML(escape(props.title));
+        title->SetInnerRML(escape(i18n::tr(props.title)));
     }
     if (auto* description = mDocument->GetElementById("description")) {
-        description->SetInnerRML(escape(props.helpText));
+        description->SetInnerRML(escape(i18n::tr(props.helpText)));
     }
     if (auto* carouselParent = mDocument->GetElementById("carousel-container")) {
         mCarousel = &add_component<SteppedCarousel>(carouselParent,

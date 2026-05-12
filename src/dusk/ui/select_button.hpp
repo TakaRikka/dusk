@@ -1,6 +1,7 @@
 #pragma once
 
 #include "component.hpp"
+#include "dusk/settings.h"
 #include "ui.hpp"
 
 #include <functional>
@@ -22,12 +23,15 @@ public:
 
     SelectButton(Rml::Element* parent, Props props);
 
+    void update() override;
     virtual bool modified() const;
     void set_modified(bool value);
     void set_value_label(const Rml::String& value);
     SelectButton& on_pressed(SelectButtonCallback callback);
 
 protected:
+    void render_key();
+    void render_value();
     void update_props(Props props);
     virtual bool handle_nav_command(NavCommand cmd);
 
@@ -35,6 +39,7 @@ protected:
     Rml::Element* mKeyElem = nullptr;
     Rml::Element* mIconElem = nullptr;
     Rml::Element* mValueElem = nullptr;
+    UiLanguage mRenderedLanguage = UiLanguage::English;
 };
 
 class BaseControlledSelectButton : public SelectButton {

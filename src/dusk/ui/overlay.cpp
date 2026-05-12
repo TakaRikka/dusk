@@ -2,6 +2,7 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
+#include "i18n.hpp"
 #include "magic_enum.hpp"
 #include "window.hpp"
 
@@ -93,13 +94,13 @@ Rml::Element* create_controller_warning(Rml::Element* parent) {
 
     auto* heading = append(elem, "heading");
     auto* title = append(heading, "span");
-    title->SetInnerRML("No controller assigned");
+    title->SetInnerRML(i18n::tr("No controller assigned"));
     auto* icon = append(heading, "icon");
     icon->SetClass("warning", true);
 
     auto* message = append(elem, "message");
     auto* content = append(message, "span");
-    content->SetInnerRML("Configure controller port 1 in Settings.");
+    content->SetInnerRML(i18n::tr("Configure controller port 1 in Settings."));
 
     return elem;
 }
@@ -146,11 +147,11 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
 
     auto* message = append(elem, "message");
     auto* row = append(message, "row");
-    append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
+    append(row, "span")->SetInnerRML(i18n::tr(kMenuNotificationPrefix));
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
     append(row, "span")->SetInnerRML(escape(back_button_name()));
-    append(row, "span")->SetInnerRML("to open menu");
+    append(row, "span")->SetInnerRML(i18n::tr("to open menu"));
 
     return elem;
 }
