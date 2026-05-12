@@ -1,6 +1,7 @@
 #pragma once
 
 #include "window.hpp"
+#include "dusk/config_var.hpp"
 
 #include <pad.h>
 
@@ -20,6 +21,7 @@ private:
         Triggers,
         Sticks,
         Rumble,
+        Actions,
     };
 
     void build_port_tab(Rml::Element* content, int port);
@@ -50,6 +52,7 @@ private:
     int mPendingKeyAxis = -1;
     bool mRumbleTestActive = false;
     int mRumbleTestPort = -1;
+    ActionBindConfigVar* mPendingActionBinding = nullptr;
 };
 
 }  // namespace dusk::ui

@@ -111,6 +111,13 @@ void Save();
  */
 ConfigVarBase* GetConfigVar(std::string_view name);
 
+/**
+ * \brief Resets all custom action bindings for a specific port to nothing
+ *
+ * @param port The port to be cleared of action bindings
+ */
+void ClearAllActionBindings(int port);
+
 template <ConfigValue T>
 const ConfigImplBase* GetConfigImpl() {
     static ConfigImpl<T> config;

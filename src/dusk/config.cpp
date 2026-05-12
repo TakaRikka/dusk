@@ -11,6 +11,7 @@
 #include <string>
 
 #include "dusk/main.h"
+#include "dusk/action_bindings.h"
 
 using namespace dusk::config;
 
@@ -254,6 +255,13 @@ void dusk::config::Save() {
     }
 
     io::FileStream::WriteAllText(reinterpret_cast<const char*>(configJsonPath.c_str()), j.dump(4));
+}
+
+void dusk::config::ClearAllActionBindings(int port) {
+    for (auto& actionBinding : getActionBinds() | std::views::values) {
+        actionBinding.configVars->at(port).setValue(PAD_NATIVE_BUTTON_INVALID);
+    }
+    Save();
 }
 
 ConfigVarBase* dusk::config::GetConfigVar(std::string_view name) {

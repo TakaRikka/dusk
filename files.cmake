@@ -1411,6 +1411,7 @@ set(DOLPHIN_FILES
 )
 
 set(DUSK_FILES
+        include/dusk/action_bindings.h
         include/dusk/endian_gx.hpp
         include/dusk/config.hpp
         include/dusk/dvd_asset.hpp
@@ -1523,6 +1524,7 @@ set(DUSK_FILES
         src/dusk/discord.hpp
         src/dusk/discord_presence.cpp
         src/dusk/version.cpp
+        src/dusk/action_bindings.cpp
 )
 
 set(DUSK_HTTP_BACKEND_FILES
