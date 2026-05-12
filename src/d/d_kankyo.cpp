@@ -36,6 +36,7 @@
 #include "dusk/imgui/ImGuiBloomWindow.hpp"
 #include "dusk/settings.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/game_clock.h"
 #endif
 
 static void GxXFog_set();
@@ -2268,9 +2269,6 @@ void dKy_calc_color_set(GXColorS10* out_color_p, color_RGB_class* color_a_start_
                                color_b_start_p->b, color_b_end_p->b, blend_ratio, add_col.b, scale);
 }
 
-#if TARGET_PC
-static OSTime s_lastBloomTime = 0;
-#endif
 
 void dScnKy_env_light_c::setLight() {
     f32 color_ratio;
@@ -2519,16 +2517,8 @@ void dScnKy_env_light_c::setLight() {
                 f32 sin = cM_ssin(S_fuwan_sin);
 
                 #if TARGET_PC
-                    OSTime currentTime = OSGetTime();
-                    
-                    if (s_lastBloomTime == 0) {
-                        s_lastBloomTime = currentTime; // first run init
-                    }
-
-                    f32 deltaTimeMs = (f32)OS_TICKS_TO_MSEC(currentTime - s_lastBloomTime);
-                    s_lastBloomTime = currentTime;
-
-                    f32 timeScale = deltaTimeMs / (1000.0f / 30.0f); // normalize to 30fps
+                    const f32 deltaTime = dusk::game_clock::consume_interval(this);
+                    const f32 timeScale = deltaTime / dusk::game_clock::period_for_original_frames(1.0f);
                     S_fuwan_sin += (s16)((cM_rndF(2000.0f) + 500) * timeScale);
                 #else
                     S_fuwan_sin += (s16)cM_rndF(2000.0f) + 500;
