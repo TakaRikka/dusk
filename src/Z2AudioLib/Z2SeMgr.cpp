@@ -1170,9 +1170,10 @@ bool Z2SeMgr::isSoundCulling(JAISoundID soundID) {
         }
         field_0x3c8 = 1;
         break;
+#ifdef TARGET_PC
     case Z2SE_SY_HINT_BUTTON:
-            return (dusk::getSettings().game.noContextAwareSound);
-        break;
+        return dusk::getSettings().game.noContextAwareSound;
+#endif
     case Z2SE_EN_BS_APPEAR:
         break;
     }
