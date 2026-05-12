@@ -22,6 +22,7 @@
 
 namespace dusk::data {
 
+std::filesystem::path host_path_relative(const std::filesystem::path& path);
 std::filesystem::path initialize_data();
 std::filesystem::path configured_data_path();
 bool open_data_path();

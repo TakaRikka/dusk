@@ -96,12 +96,40 @@ std::filesystem::path get_pref_path() {
     return result;
 }
 
+// Returns the directory that contains the running executable or AppImage file.
+// For AppImages, SDL_GetBasePath() points into the temporary mount, not the real location.
+// The APPIMAGE env var holds the actual .AppImage path, so we use its parent instead.
+static std::filesystem::path host_dir() {
+    if (const char* appimage = std::getenv("APPIMAGE");
+        appimage != nullptr && appimage[0] != '\0')
+    {
+        std::error_code ec;
+        auto dir = std::filesystem::path(appimage).parent_path();
+        if (std::filesystem::is_directory(dir, ec)) {
+            return dir;
+        }
+    }
+    const auto* basePath = SDL_GetBasePath();
+    if (!basePath) {
+        return {};
+    }
+    return std::filesystem::path{basePath};
+}
+
 std::filesystem::path base_path_relative(const std::filesystem::path& path) {
     const auto* basePath = SDL_GetBasePath();
     if (!basePath) {
         return path;
     }
     return std::filesystem::path{basePath} / path;
+}
+
+std::filesystem::path host_path_relative(const std::filesystem::path& path) {
+    const auto dir = host_dir();
+    if (dir.empty()) {
+        return {};
+    }
+    return dir / path;
 }
 
 std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
@@ -123,9 +151,9 @@ std::filesystem::path portable_data_path() {
     return base_path_relative("portable");
 }
 
-// Returns the portable path if a 'portable' folder exists next to the executable, otherwise empty.
+// Returns the portable path if a 'portable' folder exists next to the executable/AppImage, otherwise empty.
 std::filesystem::path auto_detect_portable_path() {
-    const auto path = portable_data_path();
+    const auto path = host_path_relative("portable");
     if (path.empty()) {
         return {};
     }

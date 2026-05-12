@@ -42,6 +42,8 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
+#include <algorithm>
+#include <cctype>
 #include <filesystem>
 #include <system_error>
 #include <thread>
@@ -607,6 +609,45 @@ int game_main(int argc, char* argv[]) {
         } else {
             DuskLog.warn("DVD image from command line failed validation: {}, opening prelaunch UI", dvd_path);
             forcePreLaunchUI = true;
+        }
+    }
+
+    // Auto-detect a disc image next to the AppImage/executable when none was specified.
+    if (!dvd_opened && !parsed_arg_options.count("dvd")) {
+        static constexpr std::string_view kDiscExtensions[] = {
+            ".rvz", ".iso", ".gcm", ".wia", ".ciso", ".gcz", ".wbfs",
+        };
+        const auto hostDir = dusk::data::host_path_relative(".");
+        if (!hostDir.empty()) {
+            std::error_code ec;
+            for (const auto& entry : std::filesystem::directory_iterator(hostDir, ec)) {
+                if (!entry.is_regular_file(ec)) {
+                    continue;
+                }
+                const auto ext = entry.path().extension().string();
+                const bool isDisc = std::any_of(std::begin(kDiscExtensions), std::end(kDiscExtensions),
+                    [&ext](std::string_view e) {
+                        return std::equal(ext.begin(), ext.end(), e.begin(), e.end(),
+                            [](char a, char b) { return std::tolower(a) == b; });
+                    });
+                if (!isDisc) {
+                    continue;
+                }
+                const auto candidate = dusk::io::fs_path_to_string(entry.path());
+                if (dusk::iso::inspect(candidate.c_str(), discInfo) == dusk::iso::ValidationError::Success) {
+                    DuskLog.info("Auto-detected disc image: {}", candidate);
+                    dvd_path = candidate;
+                    dvd_opened = aurora_dvd_open(dvd_path.c_str());
+                    if (dvd_opened) {
+                        dusk::getSettings().backend.isoPath.setValue(dvd_path);
+                        dusk::getSettings().backend.isoVerification.setValue(
+                            dusk::DiscVerificationState::Unknown);
+                        dusk::config::Save();
+                        dusk::IsGameLaunched = true;
+                    }
+                    break;
+                }
+            }
         }
     }
 
