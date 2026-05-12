@@ -12,6 +12,7 @@
 #include "dusk/io.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
+#include "dusk/discord_presence.hpp"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
@@ -1248,6 +1249,19 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Check for Updates",
                 .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
                             "No personal information is transmitted or collected.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.enableDiscordPresence,
+            {
+                .key = "Enable Discord Rich Presence",
+                .helpText = "Enable Dusk to integrate with Discord Rich Presence. This allows Discord to show your status in-game.",
+                .onChange = [](bool enabled) {
+                    if(enabled) {
+                        dusk::discord::initialize();
+                    }
+                    else {
+                        dusk::discord::shutdown();
+                    }
+                },
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
             {

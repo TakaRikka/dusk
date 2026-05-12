@@ -549,7 +549,9 @@ int game_main(int argc, char* argv[]) {
     }
 
 #ifdef DUSK_DISCORD
-    dusk::discord::initialize();
+    if(dusk::getSettings().game.enableDiscordPresence) {
+        dusk::discord::initialize();
+    }
 #endif
 
     VISetWindowTitle(
