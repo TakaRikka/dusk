@@ -189,6 +189,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.alwaysGreatspin.setValue(false);
     getSettings().game.enableFastIronBoots.setValue(false);
     getSettings().game.canTransformAnywhere.setValue(false);
+    getSettings().game.fastRoll.setValue(false);
     getSettings().game.fastSpinner.setValue(false);
     getSettings().game.freeMagicArmor.setValue(false);
 
@@ -624,11 +625,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         AuroraSetViewportPolicy(
                             value ? AURORA_VIEWPORT_FIT : AURORA_VIEWPORT_STRETCH);
                     },
-            });
-        config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
-            {
-                .key = "Pause on Focus Lost",
-                .isDisabled = [] { return IsMobile; },
             });
         leftPane.register_control(
             leftPane.add_select_button({
@@ -1085,6 +1081,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Speeds up movement while wearing the Iron Boots.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
+        addCheat("Fast Roll", getSettings().game.fastRoll,
+            "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");
         addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
@@ -1209,12 +1207,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
                             "No personal information is transmitted or collected.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
-            {
-                .key = "Pause On Focus Lost",
-                .helpText = "Pause the game when window focus is lost.",
-                .onChange = [](bool value) { aurora_set_pause_on_focus_lost(value); },
-            });
+        if constexpr (!IsMobile) {
+            config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
+                {
+                    .key = "Pause on Focus Lost",
+                    .helpText = "Pause the game when window focus is lost.",
+                    .onChange = [](bool value) { aurora_set_pause_on_focus_lost(value); },
+                });
+        }
         config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
             {
                 .key = "Enable Advanced Settings",
