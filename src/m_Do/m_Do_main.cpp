@@ -71,6 +71,7 @@
 #include <aurora/dvd.h>
 #include <dolphin/dvd.h>
 
+#include "SDL3/SDL_init.h"
 #include "SDL3/SDL_filesystem.h"
 #include "SDL3/SDL_iostream.h"
 #include "SDL3/SDL_misc.h"
@@ -523,6 +524,9 @@ int game_main(int argc, char* argv[]) {
             DuskLog.warn("Failed to load gamecontrollerdb.txt: {}", SDL_GetError());
         }
     }
+
+    // Set SDL metadata for audio mixers and macOS "About" menu
+    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, "dev.twilitrealm.dusk");
 
     {
         const auto configPathString = dusk::ConfigPath.u8string();
