@@ -124,14 +124,6 @@ std::filesystem::path base_path_relative(const std::filesystem::path& path) {
     return std::filesystem::path{basePath} / path;
 }
 
-std::filesystem::path host_path_relative(const std::filesystem::path& path) {
-    const auto dir = host_dir();
-    if (dir.empty()) {
-        return {};
-    }
-    return dir / path;
-}
-
 std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
 #ifdef __APPLE__
 #if TARGET_OS_IOS && !TARGET_OS_TV
@@ -910,6 +902,14 @@ void ensure_initial_pipeline_cache(const std::filesystem::path& configDir) {
 }
 
 }  // namespace
+
+std::filesystem::path host_path_relative(const std::filesystem::path& path) {
+    const auto dir = host_dir();
+    if (dir.empty()) {
+        return {};
+    }
+    return dir / path;
+}
 
 bool open_data_path() {
 #if DUSK_CAN_OPEN_DATA_FOLDER
