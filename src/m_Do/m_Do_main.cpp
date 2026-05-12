@@ -549,7 +549,7 @@ int game_main(int argc, char* argv[]) {
     }
 
 #ifdef DUSK_DISCORD
-    if(dusk::getSettings().game.enableDiscordPresence) {
+    if (dusk::getSettings().game.enableDiscordPresence) {
         dusk::discord::initialize();
     }
 #endif

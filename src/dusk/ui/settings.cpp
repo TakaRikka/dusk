@@ -1255,7 +1255,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Enable Discord Rich Presence",
                 .helpText = "Enable Dusk to integrate with Discord Rich Presence. This allows Discord to show your status in-game.",
                 .onChange = [](bool enabled) {
-                    if(enabled) {
+                    if (enabled) {
                         dusk::discord::initialize();
                     }
                     else {
