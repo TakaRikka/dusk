@@ -1141,6 +1141,9 @@ dMap_c::dMap_c(int width, int height, int param_2, int param_3) {
     field_0x91 = 0;
     m_mySelfPointer = this;
 #endif
+#if TARGET_PC
+    previousMirror = dusk::getSettings().game.enableMirrorMode;
+#endif
 
     m_res = JKR_NEW_ARGS (0x20) dMap_prm_res_s;
     JUT_ASSERT(2559, m_res != NULL);
@@ -1579,6 +1582,17 @@ bool dMap_c::isDrawRoomIcon(int param_0, int param_1) const {
 }
 
 void dMap_c::_move(f32 i_centerX, f32 i_centerZ, int i_roomNo, f32 param_3) {
+#if TARGET_PC
+    bool currentMirror = dusk::getSettings().game.enableMirrorMode;
+    if (currentMirror != previousMirror) {
+        previousMirror = currentMirror;
+        if (currentMirror) {
+            mCenterX -= 2.0f * mPackX;
+        } else {
+            mCenterX += 2.0f * mPackX;
+        }
+    }
+#endif
     if (mStayRoomNo == -1) {
         mStayRoomNo = i_roomNo;
         field_0x80 = mStayRoomNo;

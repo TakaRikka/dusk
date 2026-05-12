@@ -1420,6 +1420,8 @@ set(DUSK_FILES
         src/dusk/asserts.cpp
         src/dusk/config.cpp
         src/dusk/crash_reporting.cpp
+        src/dusk/data.cpp
+        src/dusk/data.hpp
         src/dusk/endian.cpp
         src/dusk/extras.c
         src/dusk/file_select.cpp

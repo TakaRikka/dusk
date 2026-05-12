@@ -67,9 +67,9 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusk-${{env.DUSK_VERSION}}-linux-${{matrix.preset}}-${{matrix.artifact_arch}}
+          name: dusklight-${{env.DUSK_VERSION}}-linux-${{matrix.preset}}-${{matrix.artifact_arch}}
           path: |
-            build/install/Dusk-*.AppImage
+            build/install/Dusklight-*.AppImage
             build/install/debug.tar.*
 
   build-apple:
@@ -135,9 +135,9 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusk-${{env.DUSK_VERSION}}-${{matrix.artifact_name}}
+          name: dusklight-${{env.DUSK_VERSION}}-${{matrix.artifact_name}}
           path: |
-            build/install/Dusk.app
+            build/install/Dusklight.app
             build/install/debug.tar.*
 
   build-android:
@@ -192,7 +192,7 @@ jobs:
         run: cmake --preset ${{matrix.preset}}
 
       - name: Build native library
-        run: cmake --build --preset ${{matrix.preset}} --target dusk
+        run: cmake --build --preset ${{matrix.preset}} --target dusklight
 
       - name: Stage stripped JNI library
         run: ANDROID_STAGE_ABIS="${{matrix.abi}}" platforms/android/scripts/stage-jni-libs.sh
@@ -204,7 +204,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusk-${{env.DUSK_VERSION}}-android-${{matrix.artifact_arch}}
+          name: dusklight-${{env.DUSK_VERSION}}-android-${{matrix.artifact_arch}}
           path: platforms/android/app/build/outputs/apk/release/app-${{matrix.abi}}-release-unsigned.apk
 
   build-windows:
@@ -266,7 +266,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusk-${{env.DUSK_VERSION}}-win32-msvc-${{matrix.artifact_arch}}
+          name: dusklight-${{env.DUSK_VERSION}}-win32-msvc-${{matrix.artifact_arch}}
           path: |
             build/install/*.exe
             build/install/*.dll
