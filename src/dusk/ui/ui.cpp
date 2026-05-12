@@ -48,6 +48,8 @@ bool initialize() noexcept {
     }
 
     load_font("FiraSans-Regular.ttf", true);
+    load_font("HarmonyOS_Sans_SC_Regular.ttf", true);
+    load_font("HarmonyOS_Sans_SC_Bold.ttf", true);
     load_font("NotoMono-Regular.ttf", true);
     load_font("FiraSans-Bold.ttf");
     load_font("FiraSansCondensed-Regular.ttf");
