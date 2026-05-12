@@ -664,7 +664,7 @@ int game_main(int argc, char* argv[]) {
     cxxopts::ParseResult parsed_arg_options;
 
     try {
-        cxxopts::Options arg_options("Dusk", "PC Port of The Legend of Zelda: Twilight Princess");
+        cxxopts::Options arg_options("Dusklight", "PC Port of a classic adventure game");
 
         arg_options.add_options()
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
@@ -731,7 +731,7 @@ int game_main(int argc, char* argv[]) {
 #endif
 
     VISetWindowTitle(
-        fmt::format("Dusk {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
+        fmt::format("Dusklight {} [{}]", DUSK_WC_DESCRIBE, dusk::backend_name(auroraInfo.backend))
         .c_str());
 
     if (dusk::getSettings().video.lockAspectRatio) {
@@ -764,7 +764,7 @@ int game_main(int argc, char* argv[]) {
     dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
 
-    // Invalidate a bad saved isoPath so that Dusk can't get blocked from starting up.
+    // Invalidate a bad saved isoPath so that Dusklight can't get blocked from starting up.
     // This is only a metadata check; full hash verification is handled by the prelaunch UI.
     bool forcePreLaunchUI = false;
     bool saveConfigBeforePrelaunch = false;

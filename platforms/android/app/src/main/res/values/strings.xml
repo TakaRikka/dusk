@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dusk</string>
-    <string name="documents_provider_root_name">Dusk Data</string>
+    <string name="app_name">Dusklight</string>
+    <string name="documents_provider_root_name">Dusklight Data</string>
     <string name="documents_provider_summary">Saves, texture packs, settings, and logs</string>
 </resources>

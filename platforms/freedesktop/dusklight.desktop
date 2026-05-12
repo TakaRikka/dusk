@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Dusklight
+GenericName=Dusklight
+Comment=PC port of a classic adventure game
+Exec=dusklight
+Icon=dusklight
+Terminal=false
+Type=Application
+Categories=Game;

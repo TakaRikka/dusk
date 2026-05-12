@@ -44,7 +44,7 @@ bool RestartProcess(int argc, char* argv[]) {
     if (!CreateProcessW(nullptr, commandLine.data(), nullptr, nullptr, FALSE, 0, nullptr, nullptr,
             &startupInfo, &processInfo))
     {
-        fprintf(stderr, "Failed to restart Dusk: CreateProcessW error %lu\n", GetLastError());
+        fprintf(stderr, "Failed to restart Dusklight: CreateProcessW error %lu\n", GetLastError());
         return false;
     }
 
@@ -86,7 +86,7 @@ bool RestartProcess(int argc, char* argv[]) {
     }
 
     if (executablePath.empty()) {
-        fprintf(stderr, "Failed to restart Dusk: unable to resolve executable path\n");
+        fprintf(stderr, "Failed to restart Dusklight: unable to resolve executable path\n");
         return false;
     }
 
@@ -105,7 +105,7 @@ bool RestartProcess(int argc, char* argv[]) {
     execArgv.push_back(nullptr);
 
     execv(executablePath.c_str(), execArgv.data());
-    fprintf(stderr, "Failed to restart Dusk: execv failed: %s\n", std::strerror(errno));
+    fprintf(stderr, "Failed to restart Dusklight: execv failed: %s\n", std::strerror(errno));
     return false;
 #endif
 }

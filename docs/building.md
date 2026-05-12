@@ -36,10 +36,10 @@
            sudo dnf groupinstall "Development Tools" "Development Libraries"
            ```
 #### Setup
-Clone and initialize the Dusk repository
+Clone and initialize the Dusklight repository
 ```sh
-git clone --recursive https://github.com/TwilitRealm/dusk.git
-cd dusk
+git clone --recursive https://github.com/TwilitRealm/dusklight.git
+cd dusklight
 git pull
 git submodule update --init --recursive
 ```
@@ -93,6 +93,6 @@ Alternate presets available:
 #### Running
 Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
 ```sh
-build/{preset}/dusk /path/to/game.rvz
+build/{preset}/dusklight/path/to/game.rvz
 ```
-If no path is specified, Dusk defaults to `game.iso` in the current working directory.
+If no path is specified, Dusklight defaults to `game.iso` in the current working directory.

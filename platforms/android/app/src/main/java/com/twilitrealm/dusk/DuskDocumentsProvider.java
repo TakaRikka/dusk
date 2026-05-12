@@ -224,7 +224,7 @@ public class DuskDocumentsProvider extends DocumentsProvider {
     private File getRootDirectory() throws FileNotFoundException {
         final File root = getContext().getFilesDir();
         if (root == null) {
-            throw new FileNotFoundException("Dusk files directory is unavailable");
+            throw new FileNotFoundException("Dusklight files directory is unavailable");
         }
         return root;
     }
@@ -241,7 +241,7 @@ public class DuskDocumentsProvider extends DocumentsProvider {
         final String relativePath = documentId.substring(ROOT_DOCUMENT_ID.length() + 1);
         final File file = new File(root, relativePath);
         if (!isInside(root, file)) {
-            throw new FileNotFoundException("Document escapes Dusk files directory: " + documentId);
+            throw new FileNotFoundException("Document escapes Dusklight files directory: " + documentId);
         }
         if (!file.exists()) {
             throw new FileNotFoundException("Document does not exist: " + documentId);
@@ -255,7 +255,7 @@ public class DuskDocumentsProvider extends DocumentsProvider {
             return ROOT_DOCUMENT_ID;
         }
         if (!isInside(root, file)) {
-            throw new FileNotFoundException("File escapes Dusk files directory: " + file);
+            throw new FileNotFoundException("File escapes Dusklight files directory: " + file);
         }
 
         final String rootPath = canonicalPath(root);
