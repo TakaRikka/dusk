@@ -132,10 +132,16 @@ UserSettings g_userSettings = {
     // Not sure if there's a better way to declare this
     .actionBindings = {
         .firstPersonCamera {
-            ConfigVar<int>{"actionBindings.firstPersonCamera_port0", PAD_NATIVE_BUTTON_INVALID},
-            ConfigVar<int>{"actionBindings.firstPersonCamera_port1", PAD_NATIVE_BUTTON_INVALID},
-            ConfigVar<int>{"actionBindings.firstPersonCamera_port2", PAD_NATIVE_BUTTON_INVALID},
-            ConfigVar<int>{"actionBindings.firstPersonCamera_port3", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .callMidna {
+            ActionBindConfigVar{"actionBindings.callMidna_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.callMidna_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.callMidna_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.callMidna_port3", PAD_NATIVE_BUTTON_INVALID},
         },
     }
 };
@@ -251,6 +257,10 @@ void registerSettings() {
     Register(g_userSettings.actionBindings.firstPersonCamera[1]);
     Register(g_userSettings.actionBindings.firstPersonCamera[2]);
     Register(g_userSettings.actionBindings.firstPersonCamera[3]);
+    Register(g_userSettings.actionBindings.callMidna[0]);
+    Register(g_userSettings.actionBindings.callMidna[1]);
+    Register(g_userSettings.actionBindings.callMidna[2]);
+    Register(g_userSettings.actionBindings.callMidna[3]);
 }
 
 // Transient settings

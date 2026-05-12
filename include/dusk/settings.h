@@ -194,9 +194,10 @@ struct UserSettings {
         ConfigVar<bool> enableAdvancedSettings;
     } backend;
 
-    // Array of size 4 for 4 ports
+    // Arrays of size 4 for 4 ports
     struct {
         std::array<ActionBindConfigVar, 4> firstPersonCamera;
+        std::array<ActionBindConfigVar, 4> callMidna;
     } actionBindings;
 };
 

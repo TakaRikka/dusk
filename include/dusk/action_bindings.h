@@ -8,6 +8,7 @@ namespace dusk {
 
 enum class ActionBinds {
     FIRST_PERSON_CAMERA,
+    CALL_MIDNA,
     COUNT,
 };
 

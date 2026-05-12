@@ -10,6 +10,7 @@ static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::
 ActionBindsMap& getActionBinds() {
     static ActionBindsMap actionBinds = {
         {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera"}},
+        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna"}},
     };
     return actionBinds;
 }
