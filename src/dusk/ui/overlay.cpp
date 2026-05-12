@@ -61,7 +61,7 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
             heading->SetInnerRML(toast.title);
         } else {
             auto* span = append(heading, "span");
-            span->SetInnerRML(toast.title);
+            span->SetInnerRML(i18n::tr(toast.title));
         }
         if (toast.type == "achievement") {
             auto* icon = append(heading, "icon");
@@ -78,7 +78,7 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
             message->SetInnerRML(toast.content);
         } else {
             auto* span = append(message, "span");
-            span->SetInnerRML(toast.content);
+            span->SetInnerRML(i18n::tr(toast.content));
         }
     }
     {
