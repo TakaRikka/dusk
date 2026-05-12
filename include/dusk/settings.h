@@ -129,6 +129,7 @@ struct UserSettings {
         // Audio
         ConfigVar<bool> noLowHpSound;
         ConfigVar<bool> midnasLamentNonStop;
+        ConfigVar<bool> noContextAwareSound;
 
         // Input
         ConfigVar<GyroMode> gyroMode;

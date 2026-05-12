@@ -9,6 +9,7 @@
 #include "Z2AudioLib/Z2Param.h"
 #include "Z2AudioLib/Z2SeqMgr.h"
 #include "JSystem/J3DU/J3DUD.h"
+#include "dusk/settings.h"
 
 Z2SeMgr::Z2SeMgr() : JASGlobalInstance(true), mSoundHandles(mSoundHandle, 24) {
     field_0x3c0 = 0;
@@ -1168,6 +1169,9 @@ bool Z2SeMgr::isSoundCulling(JAISoundID soundID) {
             return true;
         }
         field_0x3c8 = 1;
+        break;
+    case Z2SE_SY_HINT_BUTTON:
+            return (dusk::getSettings().game.noContextAwareSound);
         break;
     case Z2SE_EN_BS_APPEAR:
         break;

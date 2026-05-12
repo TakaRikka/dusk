@@ -66,6 +66,7 @@ UserSettings g_userSettings = {
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
         .midnasLamentNonStop {"game.midnasLamentNonStop", false},
+        .noContextAwareSound {"game.noContextAwareSound", false},
 
         // Input
         .gyroMode {"game.gyroMode", GyroMode::Sensor},
@@ -194,6 +195,7 @@ void registerSettings() {
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
+    Register(g_userSettings.game.noContextAwareSound);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.speedrunMode);
     Register(g_userSettings.game.liveSplitEnabled);

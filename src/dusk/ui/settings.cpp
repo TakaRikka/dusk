@@ -785,6 +785,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Non-Stop Midna's Lament",
                 .helpText = "Prevents enemy music while Midna's Lament is playing.",
             });
+        config_bool_select(leftPane, rightPane, getSettings().game.noContextAwareSound,
+            {
+                .key = "Disable Context Prompt Sound",
+                .helpText = "Disable the faint buzzing sound when a context button poppup appears.",
+            });
     });
 
     add_tab("Gameplay", [this](Rml::Element* content) {
