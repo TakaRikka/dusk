@@ -2,6 +2,8 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
+#include "dusk/action_bindings.h"
+#include "controller_config.hpp"
 #include "magic_enum.hpp"
 #include "window.hpp"
 
@@ -144,12 +146,22 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     auto* elem = append(parent, "toast");
     elem->SetClass("menu-notification", true);
 
+    // Get name of button for action binding if the action is bound
+    Rml::String padButton{};
+    SDL_Gamepad* gamepad = gamepad_for_port(PAD_CHAN0);
+    if (isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, PAD_CHAN0) && gamepad != nullptr) {
+        padButton = native_button_name(gamepad,
+            getActionBindButton(ActionBinds::OPEN_DUSKLIGHT_MENU, PAD_CHAN0));
+    } else {
+        padButton = back_button_name();
+    }
+
     auto* message = append(elem, "message");
     auto* row = append(message, "row");
     append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
-    append(row, "span")->SetInnerRML(escape(back_button_name()));
+    append(row, "span")->SetInnerRML(escape(padButton));
     append(row, "span")->SetInnerRML("to open menu");
 
     return elem;

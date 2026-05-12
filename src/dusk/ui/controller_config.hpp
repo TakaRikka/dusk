@@ -55,4 +55,6 @@ private:
     ActionBindConfigVar* mPendingActionBinding = nullptr;
 };
 
+Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped);
+
 }  // namespace dusk::ui

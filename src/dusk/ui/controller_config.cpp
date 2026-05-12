@@ -111,68 +111,6 @@ const std::vector<ButtonNames> kGamepadButtonNames = {
 };
 // clang-format on
 
-Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped) {
-    if (buttonUntyped == PAD_NATIVE_BUTTON_INVALID) {
-        return "Not bound";
-    }
-
-    auto button = static_cast<SDL_GamepadButton>(buttonUntyped);
-    if (gamepad != nullptr) {
-        switch (SDL_GetGamepadButtonLabel(gamepad, button)) {
-        case SDL_GAMEPAD_BUTTON_LABEL_A:
-            return "A";
-        case SDL_GAMEPAD_BUTTON_LABEL_B:
-            return "B";
-        case SDL_GAMEPAD_BUTTON_LABEL_X:
-            return "X";
-        case SDL_GAMEPAD_BUTTON_LABEL_Y:
-            return "Y";
-        case SDL_GAMEPAD_BUTTON_LABEL_CROSS:
-            return "Cross";
-        case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE:
-            return "Circle";
-        case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE:
-            return "Triangle";
-        case SDL_GAMEPAD_BUTTON_LABEL_SQUARE:
-            return "Square";
-        default:
-            break;
-        }
-    }
-
-    const SDL_GamepadType type =
-        gamepad != nullptr ? SDL_GetGamepadType(gamepad) : SDL_GAMEPAD_TYPE_UNKNOWN;
-    for (const auto& buttonNames : kGamepadButtonNames) {
-        if (buttonNames.button != button) {
-            continue;
-        }
-
-        for (const auto& name : buttonNames.names) {
-            if (name.type == type) {
-                return name.name;
-            }
-        }
-    }
-
-    switch (button) {
-    case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
-        return "D-pad left";
-    case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
-        return "D-pad right";
-    case SDL_GAMEPAD_BUTTON_DPAD_UP:
-        return "D-pad up";
-    case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
-        return "D-pad down";
-    default:
-        break;
-    }
-
-    if (const char* name = PADGetNativeButtonName(buttonUntyped)) {
-        return name;
-    }
-    return "Unknown";
-}
-
 Rml::String native_axis_name(const PADAxisMapping& mapping, SDL_Gamepad* gamepad) {
     if (mapping.nativeAxis.nativeAxis != -1) {
         Rml::String value = PADGetNativeAxisName(mapping.nativeAxis);
@@ -1211,6 +1149,68 @@ void ControllerConfigWindow::stop_rumble_test() {
     }
     mRumbleTestActive = false;
     mRumbleTestPort = -1;
+}
+
+Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped) {
+    if (buttonUntyped == PAD_NATIVE_BUTTON_INVALID) {
+        return "Not bound";
+    }
+
+    auto button = static_cast<SDL_GamepadButton>(buttonUntyped);
+    if (gamepad != nullptr) {
+        switch (SDL_GetGamepadButtonLabel(gamepad, button)) {
+        case SDL_GAMEPAD_BUTTON_LABEL_A:
+            return "A";
+        case SDL_GAMEPAD_BUTTON_LABEL_B:
+            return "B";
+        case SDL_GAMEPAD_BUTTON_LABEL_X:
+            return "X";
+        case SDL_GAMEPAD_BUTTON_LABEL_Y:
+            return "Y";
+        case SDL_GAMEPAD_BUTTON_LABEL_CROSS:
+            return "Cross";
+        case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE:
+            return "Circle";
+        case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE:
+            return "Triangle";
+        case SDL_GAMEPAD_BUTTON_LABEL_SQUARE:
+            return "Square";
+        default:
+            break;
+        }
+    }
+
+    const SDL_GamepadType type =
+        gamepad != nullptr ? SDL_GetGamepadType(gamepad) : SDL_GAMEPAD_TYPE_UNKNOWN;
+    for (const auto& buttonNames : kGamepadButtonNames) {
+        if (buttonNames.button != button) {
+            continue;
+        }
+
+        for (const auto& name : buttonNames.names) {
+            if (name.type == type) {
+                return name.name;
+            }
+        }
+    }
+
+    switch (button) {
+    case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
+        return "D-pad left";
+    case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
+        return "D-pad right";
+    case SDL_GAMEPAD_BUTTON_DPAD_UP:
+        return "D-pad up";
+    case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
+        return "D-pad down";
+    default:
+        break;
+    }
+
+    if (const char* name = PADGetNativeButtonName(buttonUntyped)) {
+        return name;
+    }
+    return "Unknown";
 }
 
 }  // namespace dusk::ui

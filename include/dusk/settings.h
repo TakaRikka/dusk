@@ -198,6 +198,7 @@ struct UserSettings {
     struct {
         std::array<ActionBindConfigVar, 4> firstPersonCamera;
         std::array<ActionBindConfigVar, 4> callMidna;
+        std::array<ActionBindConfigVar, 4> openDusklightMenu;
     } actionBindings;
 };
 

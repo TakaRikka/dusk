@@ -9,6 +9,7 @@ namespace dusk {
 enum class ActionBinds {
     FIRST_PERSON_CAMERA,
     CALL_MIDNA,
+    OPEN_DUSKLIGHT_MENU,
     COUNT,
 };
 
@@ -33,5 +34,7 @@ void updateActionBindings();
 bool getActionBindTrig(ActionBinds action, u32 port);
 
 bool getActionBindHold(ActionBinds action, u32 port);
+
+int getActionBindButton(ActionBinds action, u32 port);
 
 }
