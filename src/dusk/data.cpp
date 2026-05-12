@@ -549,36 +549,6 @@ bool try_rename_migration_entry(
     return true;
 }
 
-bool try_rename_migration_entry(
-    const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath) {
-    std::error_code ec;
-    if (std::filesystem::exists(targetPath, ec) || std::filesystem::is_symlink(targetPath, ec)) {
-        return false;
-    }
-    ec.clear();
-
-    if (!std::filesystem::exists(sourcePath, ec)) {
-        return false;
-    }
-    ec.clear();
-
-    std::filesystem::create_directories(targetPath.parent_path(), ec);
-    if (ec) {
-        Log.debug("Could not create migration target parent '{}' before rename: {}",
-            io::fs_path_to_string(targetPath.parent_path()), ec.message());
-        return false;
-    }
-
-    std::filesystem::rename(sourcePath, targetPath, ec);
-    if (ec) {
-        Log.debug("Could not rename migration entry '{}' to '{}': {}",
-            io::fs_path_to_string(sourcePath), io::fs_path_to_string(targetPath), ec.message());
-        return false;
-    }
-
-    return true;
-}
-
 void migrate_symlink(const std::filesystem::path& sourcePath,
     const std::filesystem::path& targetPath, MigrationStats& stats) {
     std::error_code ec;
