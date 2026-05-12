@@ -9,6 +9,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_meter2_info.h"
 #include "dusk/map_loader_definitions.h"
+#include "i18n.hpp"
 #include "number_button.hpp"
 #include "pane.hpp"
 #include "select_button.hpp"
@@ -22,6 +23,7 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -487,16 +489,29 @@ std::map<int, itemInfo> itemMap = {
 Rml::String get_item_name(u8 id) {
     const auto it = itemMap.find(id);
     if (it == itemMap.end()) {
+        if (i18n::language() == UiLanguage::SimplifiedChinese) {
+            return fmt::format("物品 {}", id);
+        }
         return fmt::format("Item {}", id);
     }
-    return it->second.m_name;
+    return i18n::tr(it->second.m_name);
+}
+
+Rml::String slot_key(int slot) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("槽位 {0:02d}", slot);
+    }
+    return fmt::format("Slot {0:02d}", slot);
 }
 
 Rml::String item_label_for_slot(u8 slot) {
     if (slot == 0xFF) {
-        return "None";
+        return i18n::tr("None");
     }
     const auto id = dComIfGs_getSaveData()->getPlayer().getItem().mItems[slot];
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("槽位 {} ({})", slot, get_item_name(id));
+    }
     return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
 }
 
@@ -731,6 +746,9 @@ void set_max_life(int maxLife) {
 
 Rml::String max_life_label() {
     const int maxLife = dComIfGs_getMaxLife();
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("{} 颗心 + {} 碎片", maxLife / 5, maxLife % 5);
+    }
     return fmt::format("{} hearts + {} pieces", maxLife / 5, maxLife % 5);
 }
 
@@ -859,12 +877,47 @@ Rml::String bug_species_label(const BugSpeciesEntry& bug) {
     if (dComIfGs_isEventBit(bug.femaleTurnInFlag)) {
         ++given;
     }
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("{} / 2 已拥有，{} / 2 已赠送", owned, given);
+    }
     return fmt::format("{} / 2 owned, {} / 2 given", owned, given);
 }
 
 Rml::String fish_species_label(const FishSpeciesEntry& fish) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format(
+            "{} 条，{} cm", dComIfGs_getFishNum(fish.index), dComIfGs_getFishSize(fish.index));
+    }
     return fmt::format(
         "{} caught, {} cm", dComIfGs_getFishNum(fish.index), dComIfGs_getFishSize(fish.index));
+}
+
+Rml::String default_item_label(u8 item) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("默认 ({})", get_item_name(item));
+    }
+    return fmt::format("Default ({})", get_item_name(item));
+}
+
+Rml::String bomb_bag_amount_label(int bag) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("炸弹袋 {} 数量", bag + 1);
+    }
+    return fmt::format("Bomb Bag {} Amount", bag + 1);
+}
+
+Rml::String bottle_amount_label(int bottle) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("瓶子 {} 数量", bottle + 1);
+    }
+    return fmt::format("Bottle {} Amount", bottle + 1);
+}
+
+Rml::String gendered_bug_label(std::string_view gender, std::string_view species) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("{}{}", i18n::tr(gender), i18n::tr(species));
+    }
+    return fmt::format("{} {}", gender, species);
 }
 
 bool can_edit_item_first_bit(int itemId, const itemInfo& item) {
@@ -883,7 +936,7 @@ void set_all_item_first_bits(bool owned) {
 void populate_item_slot_picker(Pane& pane, int slot) {
     pane.clear();
     pane.add_section("Actions");
-    pane.add_button(fmt::format("Default ({})", get_item_name(get_slot_default(slot))))
+    pane.add_button(default_item_label(get_slot_default(slot)))
         .on_pressed([slot] {
             mDoAud_seStartMenu(kSoundItemChange);
             dComIfGs_setItem(slot, get_slot_default(slot));
@@ -1217,14 +1270,14 @@ void populate_bug_species_picker(Pane& pane, const BugSpeciesEntry& bug) {
     pane.add_section("Owned");
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Male {}", bug.name),
+                  .text = gendered_bug_label("Male", bug.name),
                   .isSelected = [item = bug.maleItem] { return dComIfGs_isItemFirstBit(item); },
                   .setSelected = [item = bug.maleItem](
                                      bool selected) { set_item_first_bit(item, selected); },
               });
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Female {}", bug.name),
+                  .text = gendered_bug_label("Female", bug.name),
                   .isSelected = [item = bug.femaleItem] { return dComIfGs_isItemFirstBit(item); },
                   .setSelected = [item = bug.femaleItem](
                                      bool selected) { set_item_first_bit(item, selected); },
@@ -1233,14 +1286,14 @@ void populate_bug_species_picker(Pane& pane, const BugSpeciesEntry& bug) {
     pane.add_section("Given to Agitha");
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Male {}", bug.name),
+                  .text = gendered_bug_label("Male", bug.name),
                   .isSelected = [flag = bug.maleTurnInFlag] { return dComIfGs_isEventBit(flag); },
                   .setSelected = [flag = bug.maleTurnInFlag](
                                      bool selected) { set_event_bit(flag, selected); },
               });
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Female {}", bug.name),
+                  .text = gendered_bug_label("Female", bug.name),
                   .isSelected = [flag = bug.femaleTurnInFlag] { return dComIfGs_isEventBit(flag); },
                   .setSelected = [flag = bug.femaleTurnInFlag](
                                      bool selected) { set_event_bit(flag, selected); },
@@ -1669,7 +1722,7 @@ EditorWindow::EditorWindow() {
         for (int slot = 0; slot < 24; ++slot) {
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = fmt::format("Slot {0:02d}", slot),
+                    .key = slot_key(slot),
                     .getValue = [slot] { return get_item_name(get_player_item()->mItems[slot]); },
                 }),
                 rightPane, [slot](Pane& pane) { populate_item_slot_picker(pane, slot); });
@@ -1699,7 +1752,7 @@ EditorWindow::EditorWindow() {
         for (int bag = 0; bag < 3; ++bag) {
             leftPane.register_control(
                 leftPane.add_child<NumberButton>(NumberButton::Props{
-                    .key = fmt::format("Bomb Bag {} Amount", bag + 1),
+                    .key = bomb_bag_amount_label(bag),
                     .getValue = [bag] { return get_player_item_record()->mBombNum[bag]; },
                     .setValue =
                         [bag](int value) {
@@ -1712,7 +1765,7 @@ EditorWindow::EditorWindow() {
         for (int bottle = 0; bottle < 4; ++bottle) {
             leftPane.register_control(
                 leftPane.add_child<NumberButton>(NumberButton::Props{
-                    .key = fmt::format("Bottle {} Amount", bottle + 1),
+                    .key = bottle_amount_label(bottle),
                     .getValue = [bottle] { return get_player_item_record()->mBottleNum[bottle]; },
                     .setValue =
                         [bottle](int value) {

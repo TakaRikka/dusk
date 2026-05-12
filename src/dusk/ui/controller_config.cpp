@@ -2,6 +2,7 @@
 
 #include "bool_button.hpp"
 #include "button.hpp"
+#include "i18n.hpp"
 #include "pane.hpp"
 #include "number_button.hpp"
 
@@ -28,15 +29,25 @@ Rml::String current_controller_name(int port) {
     if (name != nullptr) {
         return name;
     }
-    return keyboard_active(port) ? "Keyboard" : "None";
+    return i18n::tr(keyboard_active(port) ? "Keyboard" : "None");
 }
 
 Rml::String controller_index_name(u32 index) {
     const char* name = PADGetNameForControllerIndex(index);
     if (name == nullptr) {
+        if (i18n::language() == UiLanguage::SimplifiedChinese) {
+            return fmt::format("控制器 {}", index + 1);
+        }
         return fmt::format("Controller {}", index + 1);
     }
     return name;
+}
+
+Rml::String port_label(int port) {
+    if (i18n::language() == UiLanguage::SimplifiedChinese) {
+        return fmt::format("端口 {}", port + 1);
+    }
+    return fmt::format("Port {}", port + 1);
 }
 
 SDL_Gamepad* gamepad_for_port(int port) {
@@ -318,7 +329,7 @@ ControllerConfigWindow::ControllerConfigWindow() {
     }
 
     for (int port = PAD_CHAN0; port < PAD_CHANMAX; ++port) {
-        add_tab(fmt::format("Port {}", port + 1), [this, port](Rml::Element* content) {
+        add_tab(port_label(port), [this, port](Rml::Element* content) {
             if (mPendingPort != -1 && mPendingPort != port) {
                 cancel_pending_binding();
             }

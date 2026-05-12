@@ -3,9 +3,11 @@
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "dusk/achievements.h"
 #include "fmt/format.h"
+#include "i18n.hpp"
 #include "m_Do/m_Do_audio.h"
 #include "nav_types.hpp"
 #include "pane.hpp"
+#include "ui.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -31,10 +33,10 @@ Rml::String build_achievement_info_rml(const Achievement& a) {
         R"(</div>)"
         R"(<p class="achievement-desc">{}</p>)",
         a.unlocked ? " unlocked" : "",
-        a.name,
+        escape(i18n::tr(a.name)),
         a.unlocked ? " unlocked" : " locked",
-        a.unlocked ? "Unlocked" : "Locked",
-        a.description
+        escape(i18n::tr(a.unlocked ? "Unlocked" : "Locked")),
+        escape(i18n::tr(a.description))
     );
 
     if (a.isCounter) {
@@ -146,7 +148,7 @@ AchievementsWindow::AchievementsWindow() {
 
             auto& pane = add_child<Pane>(content, Pane::Type::Controlled);
 
-            pane.add_section(fmt::format("{} / {} unlocked", unlocked, total));
+            pane.add_section(fmt::format("{} / {} {}", unlocked, total, i18n::tr("unlocked")));
 
             for (const auto& a : achievements) {
                 if (a.category != cat) {
