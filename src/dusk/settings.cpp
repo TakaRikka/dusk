@@ -42,6 +42,7 @@ UserSettings g_userSettings = {
         .no2ndFishForCat {"game.no2ndFishForCat", false},
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
+        .autoSkipDemo{"game.autoSkipDemo", false},
         .sunsSong {"game.sunsSong", false},
         .autoSave {"game.autoSave", false},
 
@@ -168,6 +169,7 @@ void registerSettings() {
     Register(g_userSettings.game.no2ndFishForCat);
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
+    Register(g_userSettings.game.autoSkipDemo);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.autoSave);
     Register(g_userSettings.game.enableMirrorMode);

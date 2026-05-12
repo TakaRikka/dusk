@@ -878,6 +878,13 @@ bool dEvt_control_c::skipper() {
         }
 
         bool is_trig_skipbtn = mDoCPd_c::getTrigStart(PAD_1);
+#if TARGET_PC
+        if (dusk::getSettings().game.autoSkipDemo) {
+            if (canSkip) {
+                is_trig_skipbtn = true;
+            }
+        }
+#endif
         if (is_trig_skipbtn) {
             if (mSkipTimer > 0) {
                 mSkipTimer = -1;

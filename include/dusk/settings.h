@@ -105,6 +105,7 @@ struct UserSettings {
         ConfigVar<bool> no2ndFishForCat;
         ConfigVar<bool> instantSaves;
         ConfigVar<bool> instantText;
+        ConfigVar<bool> autoSkipDemo;
         ConfigVar<bool> sunsSong;
         ConfigVar<bool> autoSave;
 
