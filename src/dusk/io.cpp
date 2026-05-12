@@ -78,7 +78,7 @@ FileStream::~FileStream() {
 }
 
 FileStream FileStream::OpenRead(const char* utf8Path) {
-    return FileStream(OpenCore(utf8Path, MODE("rb"), _SH_DENYNO));
+    return FileStream(OpenCore(utf8Path, MODE("rb"), _SH_DENYWR));
 }
 
 FileStream FileStream::OpenRead(const std::filesystem::path& path) {
