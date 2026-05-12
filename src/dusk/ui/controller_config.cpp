@@ -234,6 +234,14 @@ Rml::String keyboard_key_name(s32 scancode) {
         return "Mouse X1";
     case PAD_KEY_MOUSE_X2:
         return "Mouse X2";
+    case PAD_KEY_MOUSE_AXIS_X_POS:
+        return "Mouse X+";
+    case PAD_KEY_MOUSE_AXIS_X_NEG:
+        return "Mouse X-";
+    case PAD_KEY_MOUSE_AXIS_Y_POS:
+        return "Mouse Y+";
+    case PAD_KEY_MOUSE_AXIS_Y_NEG:
+        return "Mouse Y-";
     default:
         break;
     }
@@ -283,6 +291,14 @@ s32 keyboard_key_pressed() {
         if (mouseButtons & (1u << (btn - 1))) {
             return -(btn + 1);  // maps to PAD_KEY_MOUSE_LEFT (-2), etc.
         }
+    }
+    float relX, relY;
+    SDL_GetRelativeMouseState(&relX, &relY);
+    if (std::abs(relX) > 5.0f) {
+        return relX > 0 ? PAD_KEY_MOUSE_AXIS_X_POS : PAD_KEY_MOUSE_AXIS_X_NEG;
+    }
+    if (std::abs(relY) > 5.0f) {
+        return relY > 0 ? PAD_KEY_MOUSE_AXIS_Y_POS : PAD_KEY_MOUSE_AXIS_Y_NEG;
     }
     return PAD_KEY_INVALID;
 }
@@ -974,6 +990,9 @@ void ControllerConfigWindow::poll_pending_binding() {
     if (!mPendingBindingArmed) {
         if (pending_input_neutral()) {
             mPendingBindingArmed = true;
+            // Flush any mouse movement that occurred during the click/arming process
+            float dummyX, dummyY;
+            SDL_GetRelativeMouseState(&dummyX, &dummyY);
         }
         return;
     }
