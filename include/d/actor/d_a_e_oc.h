@@ -87,6 +87,15 @@ public:
     daE_OC_c* getTalkOc() { return mpTalk; }
     J3DModel* getOcModel() { return mpMorf->getModel(); }
 
+#if TARGET_PC
+    // Accessor for the attack-collision spheres so mods can adjust the
+    // attack-power (Atp) without depending on layout offsets — the original
+    // PowerPC offsets don't survive x64 ABI changes through the multiple-
+    // inheritance chain of dCcD_Sph, and decomp's STATIC_ASSERT is a no-op
+    // on non-MWERKS builds so the mismatch isn't caught at compile time.
+    dCcD_Sph* getSphsAt() { return mSphs_at; }
+#endif
+
 private:
     /* 0x5a0 */ request_of_phase_process_class mPhaseReqs[2];
     /* 0x5bc */ mDoExt_McaMorfSO* mpMorf;
