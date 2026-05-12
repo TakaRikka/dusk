@@ -43,8 +43,8 @@ const Rml::String kDocumentSource = R"RML(
     <content id="root" open>
         <menu>
             <hero class="intro-item delay-0">
-                <div class="eyebrow"><span>Twilit Realm</span> presents</div>
-                <img src="res/logo-mascot.png" />
+                <eyebrow><span>Twilit Realm</span> presents</eyebrow>
+                <img src="res/logo.png" />
             </hero>
             <div id="menu-list" />
         </menu>
@@ -127,7 +127,7 @@ struct UpdateCheckTask {
     UpdateCheckTask() {
         worker = std::thread([this] {
             try {
-                result = update_check::check_latest_github_release("TwilitRealm", "dusk");
+                result = update_check::check_latest_github_release("TwilitRealm", "dusklight");
             } catch (const std::exception& e) {
                 result = {
                     .status = update_check::Status::Failed,
@@ -287,12 +287,12 @@ std::string get_error_msg(iso::ValidationError error) {
     case iso::ValidationError::InvalidImage:
         return "The selected file is not a valid disc image.";
     case iso::ValidationError::WrongGame:
-        return "The selected game is not supported by Dusk.";
+        return "The selected game is not supported by Dusklight.";
     case iso::ValidationError::WrongVersion:
-        return "Dusk currently supports GameCube USA and PAL disc images only.";
+        return "Dusklight currently supports GameCube USA and PAL disc images only.";
     case iso::ValidationError::Canceled:
-        return "Disc verification was canceled. Dusk cannot guarantee the selected disc image "
-               "is compatible.";
+        return "Disc verification was canceled. Dusklight cannot guarantee the selected disc "
+               "image is compatible.";
     case iso::ValidationError::HashMismatch:
         return "The selected disc image did not pass hash verification. It may be corrupt or "
                "modified.";
@@ -798,7 +798,7 @@ void Prelaunch::show() {
                     "A restart is required to apply selected options.<br/><br/>Restart now to "
                     "apply them immediately?" :
                     "A restart is required to apply selected options.<br/><br/>Close and reopen "
-                    "Dusk to apply them.",
+                    "Dusklight to apply them.",
             .actions = std::move(actions),
             .onDismiss = dismiss,
         }));

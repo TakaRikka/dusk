@@ -13,9 +13,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string>Dusk</string>
+	<string>Dusklight</string>
 	<key>CFBundleIconName</key>
-	<string>Dusk</string>
+	<string>Dusklight</string>
 	<key>CFBundleIdentifier</key>
 	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
 	<key>CFBundleName</key>

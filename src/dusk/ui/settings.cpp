@@ -198,7 +198,7 @@ const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
 const Rml::String kBloomHelpText =
-    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusk uses "
+    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
@@ -347,7 +347,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     })
                     .on_pressed([] { open_iso_picker(); }),
                 rightPane, [](Pane& pane) {
-                    pane.add_rml("Set the disc image that Dusk uses to launch the game.<br/><br/>"
+                    pane.add_rml("Set the disc image that Dusklight uses to launch the game.<br/><br/>"
                                  "Changes require a restart.");
                 });
             leftPane.register_control(
@@ -770,8 +770,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_bool_select(leftPane, rightPane, getSettings().audio.menuSounds,
             {
-                .key = "Dusk Menu Sounds",
-                .helpText = "Play sound effects when navigating the Dusk menu.",
+                .key = "Dusklight Menu Sounds",
+                .helpText = "Play sound effects when navigating the Dusklight menu.",
             });
 
         leftPane.add_section("Tweaks");
@@ -954,7 +954,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Dusk");
+        leftPane.add_section("Dusklight");
 #if DUSK_CAN_OPEN_DATA_FOLDER
         leftPane.register_control(
             leftPane.add_button("Open Data Folder").on_pressed([] {
@@ -963,7 +963,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }),
             rightPane, [](Pane& pane) {
                 pane.add_text(
-                    "Open the folder where Dusk stores settings, saves, logs, texture "
+                    "Open the folder where Dusklight stores settings, saves, logs, texture "
                     "replacements, and other app data.");
             });
 #endif
@@ -1045,7 +1045,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         });
         leftPane.register_control(crashReporting, rightPane, [](Pane& pane) {
             pane.clear();
-            pane.add_rml("Dusk can automatically send crash reports to the developers. Crash "
+            pane.add_rml("Dusklight can automatically send crash reports to the developers. Crash "
                          "reports contain the following:<br/>• Operating system version<br/>• CPU "
                          "architecture<br/>• GPU model & driver version<br/>• File paths (may "
                          "include account username)<br/>• Stack trace");
@@ -1053,8 +1053,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 #endif
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
-                .key = "Skip Dusk Main Menu",
-                .helpText = "When starting Dusk, skip the main menu and boot straight into the "
+                .key = "Skip Dusklight Main Menu",
+                .helpText = "When starting Dusklight, skip the main menu and boot straight into the "
                             "game if a disc image is available.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
@@ -1065,7 +1065,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
             {
                 .key = "Check for Updates",
-                .helpText = "Checks GitHub releases for a new Dusk version on startup.<br/><br/>"
+                .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
                             "No personal information is transmitted or collected.",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,

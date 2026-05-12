@@ -335,7 +335,7 @@ Result check_latest_github_release(std::string_view owner, std::string_view repo
     if (!currentVersion) {
         return {
             .status = Status::Failed,
-            .message = fmt::format("Failed to parse Dusk version '{}'", DUSK_WC_DESCRIBE),
+            .message = fmt::format("Failed to parse Dusklight version '{}'", DUSK_WC_DESCRIBE),
             .latest = std::move(latest),
         };
     }
@@ -343,7 +343,7 @@ Result check_latest_github_release(std::string_view owner, std::string_view repo
     const bool updateAvailable = compare_version(*latestVersion, *currentVersion) > 0;
     return {
         .status = updateAvailable ? Status::UpdateAvailable : Status::UpToDate,
-        .message = updateAvailable ? "Update available" : "Dusk is up to date",
+        .message = updateAvailable ? "Update available" : "Dusklight is up to date",
         .latest = std::move(latest),
     };
 }

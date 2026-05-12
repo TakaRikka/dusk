@@ -95,7 +95,7 @@ std::string MakeTimestampedLogName() {
 #endif
 
     std::array<char, 32> buffer{};
-    std::strftime(buffer.data(), buffer.size(), "dusk-%Y%m%d-%H%M%S.log", &localTime);
+    std::strftime(buffer.data(), buffer.size(), "dusklight-%Y%m%d-%H%M%S.log", &localTime);
     return buffer.data();
 }
 

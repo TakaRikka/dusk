@@ -7,7 +7,7 @@ namespace dusk {
      *
      * This gets used for file paths and such, and cannot be changed!
      */
-    constexpr auto AppName = "Dusk";
+    constexpr auto AppName = "Dusklight";
 
     /**
      * \brief The internal organization name for the game.

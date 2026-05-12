@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "dusk-android"
+rootProject.name = "dusklight-android"
 include ':app'
