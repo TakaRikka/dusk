@@ -620,7 +620,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Controller");
         leftPane.register_control(leftPane.add_button("Configure Controller").on_pressed([this] {
-            push(std::make_unique<ControllerConfigWindow>());
+            push(std::make_unique<ControllerConfigWindow>(mPrelaunch));
         }),
             rightPane, [](Pane& pane) {
                 pane.clear();
