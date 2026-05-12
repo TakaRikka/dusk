@@ -5,6 +5,7 @@
 
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_error.h>
+#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_stdinc.h>
 
 #if defined(__ANDROID__) || defined(ANDROID)
@@ -126,6 +127,76 @@ std::string android_display_name(std::string_view path) {
     env->DeleteLocalRef(displayName);
     return result;
 }
+
+struct AndroidFolderDialogState {
+    FileCallback callback;
+    void* userdata;
+    std::string path;
+    std::string error;
+};
+
+void onAndroidFolderDialogFinished(void* userdata) {
+    std::unique_ptr<AndroidFolderDialogState> state(
+        static_cast<AndroidFolderDialogState*>(userdata));
+
+    const char* path = state->path.empty() ? nullptr : state->path.c_str();
+    const char* error = state->error.empty() ? nullptr : state->error.c_str();
+    state->callback(state->userdata, path, error);
+}
+
+bool show_android_folder_select(AndroidFolderDialogState* state) {
+    auto* env = static_cast<JNIEnv*>(SDL_GetAndroidJNIEnv());
+    if (env == nullptr) {
+        return false;
+    }
+
+    jobject activity = static_cast<jobject>(SDL_GetAndroidActivity());
+    if (activity == nullptr || clear_pending_exception(env)) {
+        if (activity != nullptr) {
+            env->DeleteLocalRef(activity);
+        }
+        return false;
+    }
+
+    jclass activityClass = env->GetObjectClass(activity);
+    if (activityClass == nullptr || clear_pending_exception(env)) {
+        env->DeleteLocalRef(activity);
+        return false;
+    }
+
+    jmethodID showFolderDialog =
+        env->GetMethodID(activityClass, "showFolderDialog", "(J)Z");
+    env->DeleteLocalRef(activityClass);
+    if (showFolderDialog == nullptr || clear_pending_exception(env)) {
+        env->DeleteLocalRef(activity);
+        return false;
+    }
+
+    const jboolean shown = env->CallBooleanMethod(
+        activity, showFolderDialog, reinterpret_cast<jlong>(state));
+    env->DeleteLocalRef(activity);
+    if (clear_pending_exception(env)) {
+        return false;
+    }
+
+    return shown == JNI_TRUE;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_dev_twilitrealm_dusk_DuskActivity_nativeFolderDialogResult(
+    JNIEnv* env, jclass, jlong userdata, jstring path, jstring error) {
+    auto* state = reinterpret_cast<AndroidFolderDialogState*>(userdata);
+    if (state == nullptr) {
+        return;
+    }
+
+    state->path = to_string(env, path);
+    state->error = to_string(env, error);
+
+    if (!SDL_RunOnMainThread(&onAndroidFolderDialogFinished, state, false)) {
+        onAndroidFolderDialogFinished(state);
+    }
+}
 #endif
 
 #if USE_IOS_DIALOG
@@ -208,6 +279,17 @@ void ShowFolderSelect(
     callback(userdata, nullptr, "Folder selection is not supported on this platform");
 #elif USE_MACOS_FOLDER_DIALOG
     ShowMacOSFolderSelect(callback, userdata, window, default_location);
+#elif defined(__ANDROID__) || defined(ANDROID)
+    auto state = std::make_unique<AndroidFolderDialogState>();
+    state->callback = callback;
+    state->userdata = userdata;
+
+    if (show_android_folder_select(state.get())) {
+        state.release();
+        return;
+    }
+
+    callback(userdata, nullptr, "Folder selection is not supported on this platform");
 #else
     auto state = std::make_unique<SDLDialogCallbackState>();
     state->callback = callback;

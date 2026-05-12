@@ -1,12 +1,16 @@
 package dev.twilitrealm.dusk;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +26,13 @@ import java.util.List;
 
 public class DuskActivity extends SDLActivity {
     private static final String TAG = "DuskActivity";
+    private static final int FOLDER_DIALOG_REQUEST_CODE = 0x4455;
+    private static final String EXTERNAL_STORAGE_AUTHORITY =
+        "com.android.externalstorage.documents";
+
+    private long folderDialogUserdata = 0;
+
+    private static native void nativeFolderDialogResult(long userdata, String path, String error);
 
     private static String[] splitArgs(String raw) {
         List<String> out = new ArrayList<>();
@@ -147,7 +158,152 @@ public class DuskActivity extends SDLActivity {
         if (resultCode == RESULT_OK) {
             persistUriPermissions(data);
         }
+        if (requestCode == FOLDER_DIALOG_REQUEST_CODE) {
+            finishFolderDialog(resultCode, data);
+            return;
+        }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public boolean showFolderDialog(long userdata) {
+        if (userdata == 0 || folderDialogUserdata != 0) {
+            return false;
+        }
+
+        folderDialogUserdata = userdata;
+        runOnUiThread(() -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION |
+                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
+                Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
+
+            try {
+                startActivityForResult(intent, FOLDER_DIALOG_REQUEST_CODE);
+            } catch (ActivityNotFoundException e) {
+                Log.w(TAG, "Unable to open folder dialog.", e);
+                finishFolderDialog(Activity.RESULT_CANCELED, null);
+            }
+        });
+        return true;
+    }
+
+    private void finishFolderDialog(int resultCode, Intent data) {
+        long userdata = folderDialogUserdata;
+        folderDialogUserdata = 0;
+        if (userdata == 0) {
+            return;
+        }
+
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+            String path = getRealPathForUri(data.getData());
+            if (path != null && !path.isEmpty()) {
+                nativeFolderDialogResult(userdata, path, null);
+            } else {
+                nativeFolderDialogResult(
+                    userdata, null, "Selected folder is not available as a filesystem path");
+            }
+            return;
+        }
+
+        nativeFolderDialogResult(userdata, null, null);
+    }
+
+    private String getRealPathForUri(Uri uri) {
+        if (uri == null) {
+            return null;
+        }
+
+        String scheme = uri.getScheme();
+        if ("file".equals(scheme)) {
+            return uri.getPath();
+        }
+
+        if (!"content".equals(scheme) ||
+            !EXTERNAL_STORAGE_AUTHORITY.equals(uri.getAuthority()) ||
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+        {
+            return null;
+        }
+
+        try {
+            return getExternalStoragePathForDocumentId(getExternalStorageDocumentId(uri));
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG, "Unable to resolve URI: " + uri, e);
+            return null;
+        }
+    }
+
+    private static String getExternalStorageDocumentId(Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isTreeDocumentUri(uri)) {
+            return DocumentsContract.getTreeDocumentId(uri);
+        }
+
+        return DocumentsContract.getDocumentId(uri);
+    }
+
+    private static boolean isTreeDocumentUri(Uri uri) {
+        List<String> segments = uri.getPathSegments();
+        return segments.size() >= 2 && "tree".equals(segments.get(0));
+    }
+
+    private String getExternalStoragePathForDocumentId(String documentId) {
+        if (documentId == null || documentId.isEmpty()) {
+            return null;
+        }
+        if (documentId.startsWith("raw:")) {
+            return documentId.substring("raw:".length());
+        }
+
+        String[] parts = documentId.split(":", 2);
+        String volumeId = parts[0];
+        String relativePath = parts.length > 1 ? parts[1] : "";
+
+        File root = getExternalStorageRoot(volumeId);
+        if (root == null) {
+            return null;
+        }
+
+        return relativePath.isEmpty()
+            ? root.getAbsolutePath()
+            : new File(root, relativePath).getAbsolutePath();
+    }
+
+    private File getExternalStorageRoot(String volumeId) {
+        if ("primary".equalsIgnoreCase(volumeId)) {
+            return Environment.getExternalStorageDirectory();
+        }
+        if ("home".equalsIgnoreCase(volumeId)) {
+            return new File(
+                Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOCUMENTS);
+        }
+
+        File[] externalFilesDirs = getExternalFilesDirs(null);
+        if (externalFilesDirs != null) {
+            for (File externalFilesDir : externalFilesDirs) {
+                File root = getStorageRootForExternalFilesDir(externalFilesDir);
+                if (root != null && volumeId.equalsIgnoreCase(root.getName())) {
+                    return root;
+                }
+            }
+        }
+
+        File fallback = new File("/storage", volumeId);
+        return fallback.exists() ? fallback : null;
+    }
+
+    private File getStorageRootForExternalFilesDir(File externalFilesDir) {
+        if (externalFilesDir == null) {
+            return null;
+        }
+
+        String path = externalFilesDir.getAbsolutePath();
+        int androidDir = path.indexOf("/Android/");
+        if (androidDir <= 0) {
+            return null;
+        }
+
+        return new File(path.substring(0, androidDir));
     }
 
     private void persistUriPermissions(Intent data) {
