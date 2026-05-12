@@ -42,6 +42,11 @@ struct LocationDescriptor {
     std::filesystem::path previousPath;
 };
 
+struct LocatedDescriptor {
+    LocationDescriptor descriptor;
+    std::filesystem::path path;
+};
+
 struct MigrationStats {
     std::uintmax_t directoriesCreated = 0;
     std::uintmax_t filesCopied = 0;
@@ -56,6 +61,7 @@ struct MigrationStats {
 };
 
 std::optional<std::filesystem::path> sConfiguredDataPath;
+std::optional<std::filesystem::path> sActiveDescriptorPath;
 
 std::filesystem::path path_from_utf8(std::string_view value) {
     return std::filesystem::path{
@@ -117,12 +123,19 @@ std::filesystem::path portable_data_path() {
     return base_path_relative("data");
 }
 
-std::filesystem::path descriptor_path(const std::filesystem::path& prefPath) {
-    return prefPath / kLocationDescriptorName;
+std::vector<std::filesystem::path> descriptor_paths(const std::filesystem::path& prefPath) {
+    std::vector<std::filesystem::path> paths;
+    if (const auto basePath = base_path_relative(kLocationDescriptorName); !basePath.empty()) {
+        paths.push_back(basePath);
+    }
+    paths.push_back(prefPath / kLocationDescriptorName);
+    return paths;
 }
 
-std::optional<LocationDescriptor> read_location_descriptor(const std::filesystem::path& prefPath) {
-    const auto path = descriptor_path(prefPath);
+std::optional<LocationDescriptor> read_location_descriptor_file(const std::filesystem::path& path) {
+    if (path.empty()) {
+        return std::nullopt;
+    }
     if (std::error_code ec; !std::filesystem::exists(path, ec)) {
         return std::nullopt;
     }
@@ -165,8 +178,20 @@ std::optional<LocationDescriptor> read_location_descriptor(const std::filesystem
     }
 }
 
+std::optional<LocatedDescriptor> read_location_descriptor(const std::filesystem::path& prefPath) {
+    for (const auto& path : descriptor_paths(prefPath)) {
+        if (auto descriptor = read_location_descriptor_file(path)) {
+            return LocatedDescriptor{
+                .descriptor = *descriptor,
+                .path = path,
+            };
+        }
+    }
+    return std::nullopt;
+}
+
 std::filesystem::path resolve_data_path(
-    const std::filesystem::path& prefPath, const std::optional<LocationDescriptor>& descriptor) {
+    const std::filesystem::path& prefPath, const LocationDescriptor* descriptor) {
     if (!descriptor) {
         return default_data_path(prefPath);
     }
@@ -336,9 +361,45 @@ std::filesystem::path current_data_path() {
     if (!ConfigPath.empty()) {
         return ConfigPath;
     }
-
     const auto prefPath = get_pref_path();
-    return resolve_data_path(prefPath, read_location_descriptor(prefPath));
+    const auto descriptor = read_location_descriptor(prefPath);
+    if (descriptor) {
+        sActiveDescriptorPath = descriptor->path;
+    }
+    return resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
+}
+
+std::vector<std::filesystem::path> descriptor_write_paths(const std::filesystem::path& prefPath) {
+    if (sActiveDescriptorPath && !sActiveDescriptorPath->empty()) {
+        return {*sActiveDescriptorPath};
+    }
+
+    std::vector<std::filesystem::path> paths;
+#if defined(_WIN32)
+    if (const auto basePath = base_descriptor_path(); !basePath.empty()) {
+        paths.push_back(basePath);
+    }
+#endif
+    paths.push_back(prefPath / kLocationDescriptorName);
+    return paths;
+}
+
+bool write_descriptor_json(const std::filesystem::path& path, const nlohmann::json& json) {
+    std::error_code ec;
+    std::filesystem::create_directories(path.parent_path(), ec);
+    if (ec) {
+        Log.warn("Failed to create data location descriptor directory '{}': {}",
+            io::fs_path_to_string(path.parent_path()), ec.message());
+        return false;
+    }
+    try {
+        io::FileStream::WriteAllText(path, json.dump(4));
+    } catch (const std::exception& e) {
+        Log.warn("Failed to write data location descriptor '{}': {}", io::fs_path_to_string(path),
+            e.what());
+        return false;
+    }
+    return true;
 }
 
 bool write_location_descriptor(LocationMode mode, const std::filesystem::path& targetPath) {
@@ -356,17 +417,6 @@ bool write_location_descriptor(LocationMode mode, const std::filesystem::path& t
         descriptor.previousPath = currentPath;
     }
 
-    const auto prefPath = get_pref_path();
-    const auto path = descriptor_path(prefPath);
-
-    std::error_code ec;
-    std::filesystem::create_directories(prefPath, ec);
-    if (ec) {
-        Log.warn("Failed to create data location descriptor directory '{}': {}",
-            io::fs_path_to_string(prefPath), ec.message());
-        return false;
-    }
-
     nlohmann::json json;
     json["version"] = 1;
     json["mode"] = location_mode_id(descriptor.mode);
@@ -377,16 +427,16 @@ bool write_location_descriptor(LocationMode mode, const std::filesystem::path& t
         json["previousPath"] = io::fs_path_to_string(descriptor.previousPath);
     }
 
-    try {
-        io::FileStream::WriteAllText(path, json.dump(4));
-    } catch (const std::exception& e) {
-        Log.warn("Failed to write data location descriptor '{}': {}", io::fs_path_to_string(path),
-            e.what());
-        return false;
+    const auto prefPath = get_pref_path();
+    for (const auto& path : descriptor_write_paths(prefPath)) {
+        if (write_descriptor_json(path, json)) {
+            sActiveDescriptorPath = path;
+            sConfiguredDataPath = resolvedTargetPath;
+            return true;
+        }
     }
 
-    sConfiguredDataPath = resolvedTargetPath;
-    return true;
+    return false;
 }
 
 std::uintmax_t remove_empty_directories(const std::filesystem::path& root, bool includeRoot) {
@@ -466,6 +516,36 @@ bool remove_migrated_source(const std::filesystem::path& sourcePath, MigrationSt
     }
 
     ++stats.sourcesRemoved;
+    return true;
+}
+
+bool try_rename_migration_entry(
+    const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath) {
+    std::error_code ec;
+    if (std::filesystem::exists(targetPath, ec) || std::filesystem::is_symlink(targetPath, ec)) {
+        return false;
+    }
+    ec.clear();
+
+    if (!std::filesystem::exists(sourcePath, ec)) {
+        return false;
+    }
+    ec.clear();
+
+    std::filesystem::create_directories(targetPath.parent_path(), ec);
+    if (ec) {
+        Log.debug("Could not create migration target parent '{}' before rename: {}",
+            io::fs_path_to_string(targetPath.parent_path()), ec.message());
+        return false;
+    }
+
+    std::filesystem::rename(sourcePath, targetPath, ec);
+    if (ec) {
+        Log.debug("Could not rename migration entry '{}' to '{}': {}",
+            io::fs_path_to_string(sourcePath), io::fs_path_to_string(targetPath), ec.message());
+        return false;
+    }
+
     return true;
 }
 
@@ -601,6 +681,10 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
         return;
     }
 
+    if (try_rename_directory_migration(from, to)) {
+        return;
+    }
+
     std::filesystem::create_directories(to, ec);
     if (ec) {
         ++stats.failures;
@@ -704,7 +788,7 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
 }
 
 void migrate_data(const std::filesystem::path& prefPath, const std::filesystem::path& dataPath,
-    const std::optional<LocationDescriptor>& descriptor) {
+    const LocationDescriptor* descriptor) {
     if (descriptor && !descriptor->previousPath.empty()) {
         migrate_directory(descriptor->previousPath, dataPath, prefPath);
     } else if (const auto legacyPath = get_legacy_path(); !legacyPath.empty()) {
@@ -854,6 +938,10 @@ bool set_custom_data_path(const std::filesystem::path& path) {
     return write_location_descriptor(LocationMode::Custom, path);
 }
 
+bool set_custom_data_path(const char* path) {
+    return set_custom_data_path(path_from_utf8(path));
+}
+
 bool set_portable_data_path() {
     return write_location_descriptor(LocationMode::Portable, portable_data_path());
 }
@@ -874,7 +962,12 @@ std::filesystem::path configured_data_path() {
     }
 
     const auto prefPath = get_pref_path();
-    sConfiguredDataPath = resolve_data_path(prefPath, read_location_descriptor(prefPath));
+    const auto descriptor = read_location_descriptor(prefPath);
+    if (descriptor) {
+        sActiveDescriptorPath = descriptor->path;
+    }
+    sConfiguredDataPath =
+        resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
     return *sConfiguredDataPath;
 }
 
@@ -889,10 +982,16 @@ bool is_data_path_restart_pending() {
 std::filesystem::path initialize_data() {
     const auto prefPath = get_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
-    const auto dataPath = resolve_data_path(prefPath, descriptor);
+    if (descriptor) {
+        sActiveDescriptorPath = descriptor->path;
+    } else {
+        sActiveDescriptorPath.reset();
+    }
+    const auto dataPath =
+        resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
     sConfiguredDataPath = dataPath;
 
-    migrate_data(prefPath, dataPath, descriptor);
+    migrate_data(prefPath, dataPath, descriptor ? &descriptor->descriptor : nullptr);
     ensure_data_directory(dataPath);
     ensure_initial_pipeline_cache(dataPath);
 

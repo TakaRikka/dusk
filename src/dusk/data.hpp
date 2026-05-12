@@ -25,6 +25,7 @@ namespace dusk::data {
 std::filesystem::path initialize_data();
 std::filesystem::path configured_data_path();
 bool open_data_path();
+bool set_custom_data_path(const char* path);
 bool set_custom_data_path(const std::filesystem::path& path);
 bool set_portable_data_path();
 bool reset_data_path();
