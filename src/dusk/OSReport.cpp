@@ -53,6 +53,11 @@ static std::string FormatToString(const char* msg, va_list list) {
             size *= 2;
         }
     }
+
+    while (!str.empty() && str[str.size()-1] == '\n') {
+        str.pop_back();
+    }
+
     return str;
 }
 
