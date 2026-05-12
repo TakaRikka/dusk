@@ -243,22 +243,93 @@ bool is_same_or_inside(const std::filesystem::path& root, const std::filesystem:
 }
 
 bool should_skip_migration_path(const std::filesystem::path& path,
-    const std::filesystem::path& from, const std::filesystem::path& to,
-    const std::filesystem::path& prefPath, MigrationStats& stats) {
+    const std::filesystem::path& from, const std::filesystem::path& to, MigrationStats& stats) {
     if (is_same_or_inside(to, path)) {
         ++stats.skippedNestedTargets;
         return true;
     }
 
-    if (normalized_path(from) == normalized_path(prefPath)) {
-        const auto relativePath = path.lexically_relative(from);
-        if (relativePath == kLocationDescriptorName) {
-            ++stats.skippedDescriptorFiles;
-            return true;
-        }
+    const auto relativePath = path.lexically_relative(from);
+    if (relativePath == kLocationDescriptorName) {
+        ++stats.skippedDescriptorFiles;
+        return true;
     }
 
     return false;
+}
+
+bool has_location_descriptor(const std::filesystem::path& path) {
+    std::error_code ec;
+    return std::filesystem::exists(path / kLocationDescriptorName, ec);
+}
+
+bool remove_empty_destination_for_rename(const std::filesystem::path& path) {
+    std::error_code ec;
+    const bool exists = std::filesystem::exists(path, ec);
+    if (ec) {
+        Log.debug("Could not inspect migration destination '{}': {}", io::fs_path_to_string(path),
+            ec.message());
+        return false;
+    }
+    if (!exists) {
+        return true;
+    }
+
+    const bool canRemove = std::filesystem::is_directory(path, ec) &&
+                           std::filesystem::is_empty(path, ec) && !has_location_descriptor(path);
+    if (ec || !canRemove) {
+        if (ec) {
+            Log.debug("Could not inspect migration destination '{}': {}",
+                io::fs_path_to_string(path), ec.message());
+        }
+        return false;
+    }
+
+    std::filesystem::remove(path, ec);
+    if (ec) {
+        Log.debug("Could not remove empty migration destination '{}': {}",
+            io::fs_path_to_string(path), ec.message());
+        return false;
+    }
+
+    return true;
+}
+
+bool try_rename_directory_migration(
+    const std::filesystem::path& from, const std::filesystem::path& to) {
+    std::error_code ec;
+    if (!std::filesystem::is_directory(from, ec)) {
+        return false;
+    }
+    if (ec) {
+        Log.debug("Could not inspect migration source '{}': {}", io::fs_path_to_string(from),
+            ec.message());
+        return false;
+    }
+    if (has_location_descriptor(from)) {
+        return false;
+    }
+    if (!remove_empty_destination_for_rename(to)) {
+        return false;
+    }
+
+    std::filesystem::create_directories(to.parent_path(), ec);
+    if (ec) {
+        Log.debug("Could not create migration destination parent '{}': {}",
+            io::fs_path_to_string(to.parent_path()), ec.message());
+        return false;
+    }
+
+    std::filesystem::rename(from, to, ec);
+    if (ec) {
+        Log.debug("Could not rename data directory '{}' to '{}': {}", io::fs_path_to_string(from),
+            io::fs_path_to_string(to), ec.message());
+        return false;
+    }
+
+    Log.info("Renamed data directory '{}' to '{}'", io::fs_path_to_string(from),
+        io::fs_path_to_string(to));
+    return true;
 }
 
 std::filesystem::path current_data_path() {
@@ -398,6 +469,36 @@ bool remove_migrated_source(const std::filesystem::path& sourcePath, MigrationSt
     return true;
 }
 
+bool try_rename_migration_entry(
+    const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath) {
+    std::error_code ec;
+    if (std::filesystem::exists(targetPath, ec) || std::filesystem::is_symlink(targetPath, ec)) {
+        return false;
+    }
+    ec.clear();
+
+    if (!std::filesystem::exists(sourcePath, ec)) {
+        return false;
+    }
+    ec.clear();
+
+    std::filesystem::create_directories(targetPath.parent_path(), ec);
+    if (ec) {
+        Log.debug("Could not create migration target parent '{}' before rename: {}",
+            io::fs_path_to_string(targetPath.parent_path()), ec.message());
+        return false;
+    }
+
+    std::filesystem::rename(sourcePath, targetPath, ec);
+    if (ec) {
+        Log.debug("Could not rename migration entry '{}' to '{}': {}",
+            io::fs_path_to_string(sourcePath), io::fs_path_to_string(targetPath), ec.message());
+        return false;
+    }
+
+    return true;
+}
+
 void migrate_symlink(const std::filesystem::path& sourcePath,
     const std::filesystem::path& targetPath, MigrationStats& stats) {
     std::error_code ec;
@@ -452,6 +553,12 @@ void migrate_regular_file(const std::filesystem::path& sourcePath,
     }
     ec.clear();
 
+    if (try_rename_migration_entry(sourcePath, targetPath)) {
+        ++stats.filesCopied;
+        ++stats.sourcesRemoved;
+        return;
+    }
+
     if (!ensure_parent_directory(targetPath, stats)) {
         return;
     }
@@ -487,6 +594,10 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
         } else {
             Log.debug("Migration source '{}' does not exist", io::fs_path_to_string(from));
         }
+        return;
+    }
+
+    if (try_rename_directory_migration(from, to)) {
         return;
     }
 
@@ -526,7 +637,7 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
             continue;
         }
 
-        if (should_skip_migration_path(sourcePath, from, to, prefPath, stats)) {
+        if (should_skip_migration_path(sourcePath, from, to, stats)) {
             if (std::filesystem::is_directory(status)) {
                 it.disable_recursion_pending();
             }
@@ -548,15 +659,21 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
         if (std::filesystem::is_symlink(status)) {
             migrate_symlink(sourcePath, targetPath, stats);
         } else if (std::filesystem::is_directory(status)) {
-            std::filesystem::create_directories(targetPath, ec);
-            if (ec) {
-                ++stats.failures;
-                Log.warn("Failed to create migration target directory '{}': {}",
-                    io::fs_path_to_string(targetPath), ec.message());
-                ec.clear();
+            if (try_rename_migration_entry(sourcePath, targetPath)) {
+                ++stats.directoriesCreated;
+                ++stats.sourcesRemoved;
                 it.disable_recursion_pending();
             } else {
-                ++stats.directoriesCreated;
+                std::filesystem::create_directories(targetPath, ec);
+                if (ec) {
+                    ++stats.failures;
+                    Log.warn("Failed to create migration target directory '{}': {}",
+                        io::fs_path_to_string(targetPath), ec.message());
+                    ec.clear();
+                    it.disable_recursion_pending();
+                } else {
+                    ++stats.directoriesCreated;
+                }
             }
         } else if (std::filesystem::is_regular_file(status)) {
             migrate_regular_file(sourcePath, targetPath, stats);
@@ -775,8 +892,8 @@ std::filesystem::path initialize_data() {
     const auto dataPath = resolve_data_path(prefPath, descriptor);
     sConfiguredDataPath = dataPath;
 
-    ensure_data_directory(dataPath);
     migrate_data(prefPath, dataPath, descriptor);
+    ensure_data_directory(dataPath);
     ensure_initial_pipeline_cache(dataPath);
 
     return dataPath;

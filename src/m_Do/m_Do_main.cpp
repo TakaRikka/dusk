@@ -499,9 +499,8 @@ int game_main(int argc, char* argv[]) {
 
     const auto startupLogLevel =
         static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
-    dusk::ConfigPath = dusk::data::configured_data_path();
-    dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
     dusk::ConfigPath = dusk::data::initialize_data();
+    dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
