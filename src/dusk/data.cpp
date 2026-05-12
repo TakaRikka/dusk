@@ -120,7 +120,17 @@ std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
 }
 
 std::filesystem::path portable_data_path() {
-    return base_path_relative("data");
+    return base_path_relative("portable");
+}
+
+// Returns the portable path if a 'portable' folder exists next to the executable, otherwise empty.
+std::filesystem::path auto_detect_portable_path() {
+    const auto path = portable_data_path();
+    if (path.empty()) {
+        return {};
+    }
+    std::error_code ec;
+    return std::filesystem::is_directory(path, ec) ? path : std::filesystem::path{};
 }
 
 std::vector<std::filesystem::path> descriptor_paths(const std::filesystem::path& prefPath) {
@@ -931,6 +941,11 @@ std::filesystem::path configured_data_path() {
         return *sConfiguredDataPath;
     }
 
+    if (const auto portablePath = auto_detect_portable_path(); !portablePath.empty()) {
+        sConfiguredDataPath = portablePath;
+        return *sConfiguredDataPath;
+    }
+
     const auto prefPath = get_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
@@ -950,6 +965,14 @@ bool is_data_path_restart_pending() {
 }
 
 std::filesystem::path initialize_data() {
+    if (const auto portablePath = auto_detect_portable_path(); !portablePath.empty()) {
+        sActiveDescriptorPath.reset();
+        sConfiguredDataPath = portablePath;
+        ensure_data_directory(portablePath);
+        ensure_initial_pipeline_cache(portablePath);
+        return portablePath;
+    }
+
     const auto prefPath = get_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
