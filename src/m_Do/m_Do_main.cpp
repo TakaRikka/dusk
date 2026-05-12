@@ -453,6 +453,14 @@ static void LanguageInit() {
     selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
 }
 
+static std::string asset_path(const char* assetName) {
+    const char* basePath = SDL_GetBasePath();
+    if (basePath != nullptr && basePath[0] != '\0') {
+        return std::string(basePath) + "res/" + assetName;
+    }
+    return std::string("res/") + assetName;
+}
+
 // =========================================================================
 // PC ENTRY POINT
 // =========================================================================
@@ -507,6 +515,14 @@ int game_main(int argc, char* argv[]) {
     dusk::crash_reporting::initialize();
     // TODO: How to handle this?
     // PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
+
+    {
+        // Load mappings from https://github.com/mdqinc/SDL_GameControllerDB
+        const auto mappingsPath = asset_path("gamecontrollerdb.txt");
+        if (SDL_AddGamepadMappingsFromFile(mappingsPath.c_str()) < 0) {
+            DuskLog.warn("Failed to load gamecontrollerdb.txt: {}", SDL_GetError());
+        }
+    }
 
     {
         const auto configPathString = dusk::ConfigPath.u8string();

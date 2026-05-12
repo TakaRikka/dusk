@@ -25,6 +25,7 @@
 
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
+#include "dusk/speedrun.h"
 
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();

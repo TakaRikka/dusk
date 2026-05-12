@@ -109,6 +109,16 @@ void WriteLogLine(FILE* out, const char* levelStr, const char* module, const cha
     std::fputc('\n', out);
     std::fflush(out);
 }
+
+void WriteLogLineToFile(
+    const char* levelStr, const char* module, const char* message, unsigned int len) {
+    if (g_logStateAlive.load(std::memory_order_acquire)) {
+        std::lock_guard lock(g_logState.mutex);
+        if (g_logState.file != nullptr) {
+            WriteLogLine(g_logState.file, levelStr, module, message, len);
+        }
+    }
+}
 }  // namespace
 
 static bool IsForStubLog(const char* message) {
@@ -132,6 +142,11 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
         return;
     }
 
+    if (module == nullptr) {
+        module = "";
+    }
+
+    const char* levelStr = LogLevelString(level);
     int android_log_level = 0;
     switch (level) {
     case LOG_DEBUG:
@@ -151,11 +166,13 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
         break;
     }
 
-    std::stringstream msgStream(message);
+    std::stringstream msgStream(std::string(message, len));
     std::string segment;
     while(std::getline(msgStream, segment)) {
         __android_log_print(android_log_level, module, "%s\n", segment.c_str());
     }
+
+    WriteLogLineToFile(levelStr, module, message, len);
 
     if (level == LOG_FATAL) {
         abort();
@@ -177,13 +194,7 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
     const char* levelStr = LogLevelString(level);
     FILE* out = LogStreamForLevel(level);
     WriteLogLine(out, levelStr, module, message, len);
-
-    if (g_logStateAlive.load(std::memory_order_acquire)) {
-        std::lock_guard lock(g_logState.mutex);
-        if (g_logState.file != nullptr) {
-            WriteLogLine(g_logState.file, levelStr, module, message, len);
-        }
-    }
+    WriteLogLineToFile(levelStr, module, message, len);
 
     if (level == LOG_FATAL) {
         abort();

@@ -274,7 +274,6 @@ namespace dusk {
         // so make the window bg fully transparent temporarily
         ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
         if (showMenu && ImGui::BeginMainMenuBar()) {
-            m_menuGame.draw();
             m_menuTools.draw();
 
             ImGui::EndMainMenuBar();
@@ -283,7 +282,7 @@ namespace dusk {
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
             m_isLaunchInitialized = true;
-            if (getSettings().game.liveSplitEnabled) {
+            if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
                 dusk::speedrun::connectLiveSplit();
             }
         }
@@ -354,15 +353,6 @@ namespace dusk {
         }
 
         m_menuTools.ShowInputViewer();
-        m_menuGame.drawSpeedrunTimerOverlay();
-
-        if (getSettings().game.liveSplitEnabled) {
-            dusk::speedrun::updateLiveSplit();
-            if (dusk::speedrun::consumeConnectedEvent())
-                AddToast("LiveSplit connected");
-            else if (dusk::speedrun::consumeDisconnectedEvent())
-                AddToast("LiveSplit disconnected");
-        }
 
         if (dusk::IsGameLaunched && !dusk::getSettings().game.speedrunMode) {
             m_menuTools.ShowDebugOverlay();

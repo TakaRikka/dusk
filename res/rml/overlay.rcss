@@ -201,6 +201,37 @@ fps {
     white-space: nowrap;
 }
 
+speedrun-timer {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 65%);
+    padding: 2dp 4dp;
+    pointer-events: none;
+    font-family: "Noto Mono";
+    font-size: 16dp;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+speedrun-timer[open] {
+    display: block;
+}
+
+speedrun-rta {
+    display: none;
+}
+
+speedrun-rta[open] {
+    display: block;
+}
+
+speedrun-igt {
+    display: block;
+}
+
 fps[open] {
     display: block;
 }
