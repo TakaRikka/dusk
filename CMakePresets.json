@@ -551,7 +551,7 @@
       "description": "iOS release build with debug info",
       "displayName": "iOS RelWithDebInfo",
       "targets": [
-        "dusk"
+        "dusklight"
       ]
     },
     {
@@ -560,7 +560,7 @@
       "description": "tvOS release build with debug info",
       "displayName": "tvOS RelWithDebInfo",
       "targets": [
-        "dusk"
+        "dusklight"
       ]
     },
     {
@@ -569,7 +569,7 @@
       "description": "Android arm64-v8a release build with debug info",
       "displayName": "Android arm64-v8a RelWithDebInfo",
       "targets": [
-        "dusk"
+        "dusklight"
       ]
     },
     {
@@ -578,7 +578,7 @@
       "description": "Android x86_64 release build with debug info",
       "displayName": "Android x86_64 RelWithDebInfo",
       "targets": [
-        "dusk"
+        "dusklight"
       ]
     },
     {
@@ -587,7 +587,7 @@
       "description": "(Internal) Android CI arm64-v8a",
       "displayName": "(Internal) Android CI arm64-v8a",
       "targets": [
-        "dusk"
+        "dusklight"
       ]
     },
     {

@@ -301,7 +301,11 @@ int rumble_raw_to_percent(u16 raw) {
 
 }  // namespace
 
-ControllerConfigWindow::ControllerConfigWindow() {
+ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
+    if (prelaunch) {
+        mSuppressNavFallback = true;
+    }
+
     listen(
         Rml::EventId::Keydown,
         [this](Rml::Event& event) {

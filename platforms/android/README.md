@@ -1,6 +1,6 @@
 # Android Shell
 
-This directory contains a minimal SDLActivity-based Android app wrapper for Dusk.
+This directory contains a minimal SDLActivity-based Android app wrapper for Dusklight.
 
 ## Prerequisites
 
