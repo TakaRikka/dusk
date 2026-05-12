@@ -116,7 +116,9 @@ UserSettings g_userSettings = {
         .speedrunMode {"game.speedrunMode", false},
         .liveSplitEnabled {"game.liveSplitEnabled", false},
         .showSpeedrunRTATimer {"game.showSpeedrunRTATimer", true},
-        .recordingMode {"game.recordingMode", false}
+        .recordingMode {"game.recordingMode", false},
+        .showInputViewer {"game.showInputViewer", false},
+        .showInputViewerGyro {"game.showInputViewerGyro", false}
     },
 
     .backend = {
@@ -204,6 +206,8 @@ void registerSettings() {
     Register(g_userSettings.game.liveSplitEnabled);
     Register(g_userSettings.game.showSpeedrunRTATimer);
     Register(g_userSettings.game.recordingMode);
+    Register(g_userSettings.game.showInputViewer);
+    Register(g_userSettings.game.showInputViewerGyro);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
     Register(g_userSettings.game.infiniteArrows);

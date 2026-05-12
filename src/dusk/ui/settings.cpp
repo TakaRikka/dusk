@@ -710,7 +710,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml(
                     "<br/>Display the current framerate in a corner of the screen while playing.");
             });
-
         leftPane.add_section("Resolution");
         graphics_tuner_control(*this, leftPane, rightPane,
             getSettings().game.internalResolutionScale,
@@ -1266,6 +1265,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         }
                     },
                 .isDisabled = [] { return getSettings().game.speedrunMode; },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.showInputViewer,
+            {
+                .key = "Show Input Viewer",
+                .helpText = "Display a controller input overlay while playing.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.showInputViewerGyro,
+            {
+                .key = "Show Gyro Input Viewer",
+                .helpText = "Show gyro sensor values in the input viewer.",
+                .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
 
         leftPane.add_section("Game");

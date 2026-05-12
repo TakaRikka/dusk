@@ -180,6 +180,8 @@ struct UserSettings {
         ConfigVar<bool> liveSplitEnabled;
         ConfigVar<bool> showSpeedrunRTATimer;
         ConfigVar<bool> recordingMode;
+        ConfigVar<bool> showInputViewer;
+        ConfigVar<bool> showInputViewerGyro;
     } game;
 
     struct {

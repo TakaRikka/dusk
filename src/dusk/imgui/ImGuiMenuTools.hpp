@@ -69,8 +69,6 @@ namespace dusk {
         bool m_showStateShare = false;
         ImGuiStateShare m_stateShare;
 
-        bool m_showInputViewer = false;
-        bool m_showInputViewerGyro = false;
         bool m_showActorSpawner = false;
         int m_inputOverlayCorner = 3;
         std::string m_controllerName;
