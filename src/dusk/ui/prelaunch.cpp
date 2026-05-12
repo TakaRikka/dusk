@@ -1,6 +1,7 @@
 #include "prelaunch.hpp"
 
 #include "dusk/config.hpp"
+#include "dusk/data.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
@@ -654,6 +655,9 @@ void open_iso_picker() noexcept {
 bool is_restart_pending() noexcept {
     const auto& state = prelaunch_state();
     if (!state.activeDiscPath.empty() && state.configuredDiscPath != state.activeDiscPath) {
+        return true;
+    }
+    if (data::is_data_path_restart_pending()) {
         return true;
     }
     if (getSettings().backend.graphicsBackend.getValue() != state.initialGraphicsBackend) {

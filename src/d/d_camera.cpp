@@ -11234,6 +11234,62 @@ cXyz dCamera_c::Center() {
     return mCenter + mShake.field_0x24;
 }
 
+#ifdef TARGET_PC
+f32 get_target_trim_height(camera_process_class* i_this) {
+    const auto camera = &i_this->mCamera;
+    if (camera->mCurState != 2) {
+        switch (camera->mTrimSize) {
+        case 0:
+        case 4:
+            return 0.0f;
+        case 1:
+            return camera->mCamSetup.VistaTrimHeight();
+        case 2:
+        case 3:
+            return camera->mCamSetup.CinemaScopeTrimHeight();
+        default:
+            return camera->mTrimHeight;
+        }
+    }
+    return camera->mTrimHeight;
+}
+
+void widezoom_correction(camera_process_class* i_this, float trim_height) {
+    camera_class* camera = (camera_class*)i_this;
+    dDlst_window_c* window = get_window(camera);
+    view_port_class* viewport = window->getViewPort();
+
+    auto trim_width = 0.0f;
+
+    if (mDoGph_gInf_c::isWideZoom()) {
+        const auto target_ar = FB_WIDTH_BASE / (FB_HEIGHT_BASE - trim_height * 2.0f);
+        const auto target_ar_real =
+            FB_WIDTH_BASE / (FB_HEIGHT_BASE - get_target_trim_height(i_this) * 2.0f);
+        const auto current_ar = camera->view.aspect;
+
+        if (current_ar < target_ar) {
+            trim_height = FB_HEIGHT_BASE / 2.0f * (1.0f - current_ar / target_ar);
+        } else {
+            trim_height = 0.0f;
+            trim_width = FB_WIDTH_BASE / 2.0f * (1.0f - target_ar_real / current_ar);
+        }
+
+        if (dusk::frame_interp::is_sim_frame()) {
+            constexpr auto base_ar =
+                static_cast<f32>(FB_WIDTH_BASE) / static_cast<f32>(FB_HEIGHT_BASE);
+            const auto ar_corr = base_ar / std::min(current_ar, target_ar_real);
+            camera->view.fovy =
+                MTXRadToDeg(2.0f * atanf(tanf(MTXDegToRad(camera->view.fovy) * 0.5f) * ar_corr));
+        }
+    }
+
+    trim_width *= viewport->width / FB_WIDTH_BASE;
+    trim_height *= viewport->height / FB_HEIGHT_BASE;
+    window->setScissor(trim_width, trim_height, viewport->width - trim_width * 2.0f,
+        viewport->height - trim_height * 2.0f);
+}
+#endif
+
 static int camera_execute(camera_process_class* i_this) {
     preparation(i_this);
 
@@ -11254,6 +11310,28 @@ static int camera_execute(camera_process_class* i_this) {
     store(i_this);
 
 #ifdef TARGET_PC
+    widezoom_correction(i_this, i_this->mCamera.TrimHeight());
+
+    if (dusk::getSettings().game.enableFrameInterpolation) {
+        dusk::frame_interp::add_interpolation_callback([](bool _, void* pUserWork) {
+            const auto i_this = static_cast<camera_process_class*>(pUserWork);
+            const auto camera = &i_this->mCamera;
+
+            const auto trim_size = camera->mTrimSize;
+
+            if (camera->mCurState != 2 && trim_size >= 0 && trim_size <= 3) {
+                // derive trim height at previous tick using current camera state
+                const auto target = get_target_trim_height(i_this);
+                const auto step = dusk::frame_interp::get_interpolation_step();
+                const auto cur = camera->TrimHeight();
+                const auto prev = (4.0f * cur - target) / 3.0f; 
+                const auto trim_height = prev + (cur - prev) * step;
+
+                widezoom_correction(i_this, trim_height);
+            }
+        }, i_this);
+    }
+
     // record new camera for our sim frame
     dusk::frame_interp::record_camera(i_this, get_camera_id(i_this));
     // interpolate the view now so that this sim frame's view matrix matches what
@@ -11264,26 +11342,6 @@ static int camera_execute(camera_process_class* i_this) {
     view_setup(i_this);
     return 1;
 }
-
-#ifdef TARGET_PC
-void set_ar_corrected_trim(dDlst_window_c* window, float trim_height) {
-    const auto viewport = window->getViewPort();
-    
-    if (mDoGph_gInf_c::isWideZoom()) {
-        const auto target_ar = FB_WIDTH / (FB_HEIGHT - trim_height * 2.0f);
-        const auto current_ar = mDoGph_gInf_c::m_safeWidthF / mDoGph_gInf_c::m_safeHeightF;
-
-        if (current_ar < target_ar) {
-            trim_height = FB_HEIGHT / 2.0f * (1.0f - current_ar / target_ar);
-        } else {
-            trim_height = 0.0f;
-        }
-    }
-
-    trim_height *= viewport->height / FB_HEIGHT;
-    window->setScissor(0.0f, trim_height, viewport->width, viewport->height - trim_height * 2.0f);
-}
-#endif
 
 static int camera_draw(camera_process_class* i_this) {
     camera_class* a_this = (camera_class*)i_this;
@@ -11337,42 +11395,8 @@ static int camera_draw(camera_process_class* i_this) {
     }
 #endif
 
-#if TARGET_PC
-    set_ar_corrected_trim(window, body->TrimHeight());
-
-    if (dusk::getSettings().game.enableFrameInterpolation) {
-        dusk::frame_interp::add_interpolation_callback([](bool _, void* pUserWork) {
-            const auto i_this = static_cast<camera_process_class*>(pUserWork);
-            const auto camera = &i_this->mCamera;
-
-            const auto trim_size = camera->mTrimSize;
-
-            if (camera->mCurState != 2 && trim_size >= 0 && trim_size <= 3) {
-                // derive trim height at previous tick using current camera state
-                f32 target;
-                switch (trim_size) {
-                    case 0:
-                        target = 0.0f;
-                        break;
-                    case 1:
-                        target = camera->mCamSetup.VistaTrimHeight();
-                        break;
-                    case 2:
-                    case 3:
-                        target = camera->mCamSetup.CinemaScopeTrimHeight();
-                        break;
-                }
-
-                const auto step = dusk::frame_interp::get_interpolation_step();
-                const auto cur = camera->TrimHeight();
-                const auto prev = (4.0f * cur - target) / 3.0f; 
-                const auto trim_height = prev + (cur - prev) * step;
-
-                set_ar_corrected_trim(get_window((camera_class*)i_this), trim_height);
-            }
-        }, i_this);
-    }
-#else
+#if !TARGET_PC
+    // trim handling moved to camera_execute for PC
     int trim_height = body->TrimHeight();
 
     window->setScissor(0.0f, trim_height, FB_WIDTH, FB_HEIGHT - trim_height * 2.0f);

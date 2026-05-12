@@ -32,17 +32,21 @@ public:
     struct Props {
         Rml::String text;
         std::function<bool()> isSelected;
+        std::function<bool()> isDisabled;
     };
 
     ControlledButton(Rml::Element* parent, Props props, const Rml::String& tagName = "button")
         : Button(parent, {std::move(props.text)}, tagName),
-          mIsSelected(std::move(props.isSelected)) {}
+          mIsSelected(std::move(props.isSelected)),
+          mIsDisabled(std::move(props.isDisabled)) {}
 
     void update() override;
     bool selected() const override;
+    bool disabled() const override;
 
 private:
     std::function<bool()> mIsSelected;
+    std::function<bool()> mIsDisabled;
 };
 
 }  // namespace dusk::ui
