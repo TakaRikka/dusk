@@ -16146,7 +16146,6 @@ int daAlink_c::procFrontRollInit() {
 
     if (checkNoResetFlg0(FLG0_WATER_IN_MOVE)) {
 #if TARGET_PC
-        // Encasing the following statemet in a new block because I've seen precedence for it in the source.
         if (!(dusk::getSettings().game.enableFastIronBoots))
 #endif
         {
