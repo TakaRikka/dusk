@@ -4,6 +4,7 @@
 #include <array>
 #include <cassert>
 #include <span>
+#include <version.h>
 
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASChannel.h"
@@ -45,6 +46,7 @@ static int RenderNewAudioFrame();
 static void RenderAudioSubframe();
 
 static void InitSDL3Output() {
+    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, "dev.twilitrealm.dusklight");
     SDL_Init(SDL_INIT_AUDIO);
 
     constexpr SDL_AudioSpec spec = {
