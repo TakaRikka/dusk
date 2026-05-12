@@ -468,7 +468,43 @@ static void migrate_directory(const std::filesystem::path& from, const std::file
     }
 }
 
-static std::filesystem::path calculate_config_path() {
+static std::filesystem::path executable_base_path() {
+    const char* basePath = SDL_GetBasePath();
+    if (basePath == nullptr || basePath[0] == '\0') {
+        return {};
+    }
+    return reinterpret_cast<const char8_t*>(basePath);
+}
+
+static bool portable_marker_exists(const std::filesystem::path& basePath) {
+    if (basePath.empty()) {
+        return false;
+    }
+
+    std::error_code ec;
+    return std::filesystem::exists(basePath / "portable.txt", ec) ||
+           std::filesystem::is_directory(basePath / "portable", ec);
+}
+
+static std::filesystem::path portable_config_path() {
+    const auto basePath = executable_base_path();
+    if (basePath.empty()) {
+        return {};
+    }
+    return basePath / "portable";
+}
+
+static std::filesystem::path calculate_config_path(bool portableMode) {
+#if !defined(__ANDROID__) && !(defined(TARGET_OS_IOS) && TARGET_OS_IOS) &&                         \
+    !(defined(TARGET_OS_TV) && TARGET_OS_TV)
+    if (portableMode || portable_marker_exists(executable_base_path())) {
+        const auto portablePath = portable_config_path();
+        if (!portablePath.empty()) {
+            return portablePath;
+        }
+    }
+#endif
+
 #ifdef __APPLE__
 #if TARGET_OS_IOS && !TARGET_OS_TV
     const char* documentsPath = SDL_GetUserFolder(SDL_FOLDER_DOCUMENTS);
@@ -670,6 +706,7 @@ int game_main(int argc, char* argv[]) {
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
             ("console", "Show the Windows console window for logs", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+            ("portable", "Store settings, saves, logs, and cache in a portable folder next to the executable", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
@@ -691,7 +728,7 @@ int game_main(int argc, char* argv[]) {
         exit(1);
     }
 
-    dusk::ConfigPath = calculate_config_path();
+    dusk::ConfigPath = calculate_config_path(parsed_arg_options["portable"].as<bool>());
     const auto startupLogLevel = static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
     dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
 

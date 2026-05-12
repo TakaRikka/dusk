@@ -96,3 +96,15 @@ Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ,
 build/{preset}/dusk /path/to/game.rvz
 ```
 If no path is specified, Dusk defaults to `game.iso` in the current working directory.
+
+#### Portable mode
+
+By default, Dusk stores settings, saves, logs, and caches in the system user data directory. To keep
+all app data next to the executable, launch with:
+
+```sh
+build/{preset}/dusk --portable /path/to/game.rvz
+```
+
+You can also create a `portable.txt` file or a `portable` folder next to the executable. Dusk will
+then use the sibling `portable` folder automatically.
