@@ -144,8 +144,8 @@ BOOL daAlink_c::setBodyAngleToCamera() {
             f32 gy_pitch = 0.f;
             dusk::gyro::getAimDeltas(gy_yaw, gy_pitch);
 
-            shape_angle.y = shape_angle.y + cM_rad2s(gy_yaw * gyro_scale * (dusk::getSettings().game.invertFirstPersonXAxis ? -1.0f : 1.0f));
-            sp8 = sp8 + cM_rad2s(gy_pitch * gyro_scale * (dusk::getSettings().game.invertFirstPersonYAxis ? -1.0f : 1.0f));
+            shape_angle.y = shape_angle.y + cM_rad2s(gy_yaw * gyro_scale);
+            sp8 = sp8 + cM_rad2s(gy_pitch * gyro_scale);
 
             if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
                 sp8 = mBodyAngle.x;
