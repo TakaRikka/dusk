@@ -1535,7 +1535,11 @@ void mDoGph_gInf_c::bloom_c::draw2() {
 
         // Successively downsample and apply blurs.
         static int divStart = 2;
-        static int divNum = 6; // inclusive
+
+        int divNum = 6; // inclusive
+        while (divNum < MaxDivNum - 1 && divRects[divNum].h > 8) {
+            divNum++;
+        }
 
         // The original mBlureRatio is multiplied into each sample, of which there are 8 samples originally.
         // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
