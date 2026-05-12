@@ -33,7 +33,7 @@ First, make sure your dump of the game is clean and supported by Dusklight. You 
 
 *Support for other versions of the game is planned in the future.
 
-### 2. Download [Dusklight](https://github.com/TwilitRealm/dusklight/releases)
+### 2. Download [Dusklight](https://github.com/TwilitRealm/dusk/releases)
 
 ### 3. Setup the game
 **Windows / macOS / Linux**
