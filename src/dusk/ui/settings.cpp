@@ -197,6 +197,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
+    getSettings().game.invincibleEnemies.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);
@@ -1133,6 +1134,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Speeds up Spinner movement while holding R.");
         addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
             "Lets the magic armor work without consuming rupees.");
+        addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
+            "Prevents enemies from taking damage.");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
