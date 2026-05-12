@@ -16,11 +16,24 @@
 #include <TargetConditionals.h>
 #endif
 
+#if defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
+#define USE_MACOS_FOLDER_DIALOG 1
+#else
+#define USE_MACOS_FOLDER_DIALOG 0
+#endif
+
 #if defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
 #define USE_IOS_DIALOG 1
 #include "ios/FileSelectDialog.h"
 #else
 #define USE_IOS_DIALOG 0
+#endif
+
+#if USE_MACOS_FOLDER_DIALOG
+namespace dusk {
+bool ShowMacOSFolderSelect(
+    FileCallback callback, void* userdata, SDL_Window* window, const char* default_location);
+}  // namespace dusk
 #endif
 
 namespace dusk {
@@ -32,6 +45,10 @@ std::string fallback_display_name(std::string_view path) {
     }
 
     std::string pathString(path);
+    while (pathString.size() > 1 && (pathString.back() == '/' || pathString.back() == '\\')) {
+        pathString.pop_back();
+    }
+
     const std::size_t slash = pathString.find_last_of("/\\");
     if (slash == std::string::npos || slash + 1 >= pathString.size()) {
         return pathString;
@@ -98,8 +115,7 @@ std::string android_display_name(std::string_view path) {
         return {};
     }
 
-    auto* displayName =
-        static_cast<jstring>(env->CallObjectMethod(activity, getDisplayName, uri));
+    auto* displayName = static_cast<jstring>(env->CallObjectMethod(activity, getDisplayName, uri));
     env->DeleteLocalRef(uri);
     env->DeleteLocalRef(activity);
     if (displayName == nullptr || clear_pending_exception(env)) {
@@ -159,8 +175,8 @@ void onSDLDialogFinished(void* userdata, const char* const* filelist, [[maybe_un
 }  // namespace
 
 void ShowFileSelect(FileCallback callback, void* userdata, SDL_Window* window,
-                    const SDL_DialogFileFilter* filters, int nfilters, const char* default_location,
-                    bool allow_many) {
+    const SDL_DialogFileFilter* filters, int nfilters, const char* default_location,
+    bool allow_many) {
     if (callback == nullptr) {
         return;
     }
@@ -171,14 +187,34 @@ void ShowFileSelect(FileCallback callback, void* userdata, SDL_Window* window,
     state->userdata = userdata;
 
     Dusk_iOS_ShowFileSelect(&onIOSDialogFinished, state.release(), window, filters, nfilters,
-                            default_location, allow_many);
+        default_location, allow_many);
 #else
     auto state = std::make_unique<SDLDialogCallbackState>();
     state->callback = callback;
     state->userdata = userdata;
 
     SDL_ShowOpenFileDialog(&onSDLDialogFinished, state.release(), window, filters, nfilters,
-                           default_location, allow_many);
+        default_location, allow_many);
+#endif
+}
+
+void ShowFolderSelect(
+    FileCallback callback, void* userdata, SDL_Window* window, const char* default_location) {
+    if (callback == nullptr) {
+        return;
+    }
+
+#if USE_IOS_DIALOG
+    callback(userdata, nullptr, "Folder selection is not supported on this platform");
+#elif USE_MACOS_FOLDER_DIALOG
+    ShowMacOSFolderSelect(callback, userdata, window, default_location);
+#else
+    auto state = std::make_unique<SDLDialogCallbackState>();
+    state->callback = callback;
+    state->userdata = userdata;
+
+    SDL_ShowOpenFolderDialog(
+        &onSDLDialogFinished, state.release(), window, default_location, false);
 #endif
 }
 

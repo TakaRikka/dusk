@@ -51,6 +51,9 @@ void Button::update_props(Props props) {
 }
 
 void ControlledButton::update() {
+    if (mIsDisabled) {
+        set_disabled(mIsDisabled());
+    }
     if (mIsSelected) {
         set_selected(mIsSelected());
     }
@@ -62,6 +65,13 @@ bool ControlledButton::selected() const {
         return mIsSelected();
     }
     return Button::selected();
+}
+
+bool ControlledButton::disabled() const {
+    if (mIsDisabled) {
+        return mIsDisabled();
+    }
+    return Button::disabled();
 }
 
 }  // namespace dusk::ui

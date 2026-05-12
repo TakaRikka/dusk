@@ -536,6 +536,13 @@ if (APPLE)
     )
 endif ()
 
+if (APPLE AND NOT IOS AND NOT TVOS)
+    find_library(APPKIT_FRAMEWORK AppKit REQUIRED)
+    target_sources(dusk PRIVATE src/dusk/file_select_macos.mm)
+    set_source_files_properties(src/dusk/file_select_macos.mm PROPERTIES COMPILE_FLAGS -fobjc-arc)
+    target_link_libraries(dusk PRIVATE ${APPKIT_FRAMEWORK})
+endif ()
+
 if (IOS)
     find_library(UIKIT_FRAMEWORK UIKit REQUIRED)
     find_library(UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK UniformTypeIdentifiers REQUIRED)

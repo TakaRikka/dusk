@@ -12,6 +12,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
 #include "d/d_com_inf_game.h"
+#include "dusk/data.hpp"
 #include "dusk/dusk.h"
 #include "dusk/main.h"
 #include "m_Do/m_Do_main.h"
@@ -54,7 +55,7 @@ namespace dusk {
 #if DUSK_CAN_OPEN_DATA_FOLDER
             ImGui::Separator();
             if (ImGui::MenuItem("Open Data Folder")) {
-                OpenDataFolder();
+                data::open_data_path();
             }
 #endif
 

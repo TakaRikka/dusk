@@ -6,8 +6,10 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
+#include "dusk/data.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/io.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "graphics_tuner.hpp"
@@ -19,11 +21,15 @@
 #include "prelaunch.hpp"
 #include "ui.hpp"
 
+#include <aurora/lib/window.hpp>
+#include <SDL3/SDL_filesystem.h>
+
 #if DUSK_ENABLE_SENTRY_NATIVE
 #include "dusk/crash_reporting.h"
 #endif
 
 #include <algorithm>
+#include <filesystem>
 
 namespace dusk::ui {
 namespace {
@@ -191,6 +197,93 @@ void reset_for_speedrun_mode() {
     getSettings().game.autoSave.setValue(false);
 }
 
+std::filesystem::path normalized_display_path(const std::filesystem::path& path) {
+    std::error_code ec;
+    auto normalized = std::filesystem::weakly_canonical(path, ec);
+    if (!ec) {
+        return normalized;
+    }
+
+    normalized = std::filesystem::absolute(path, ec);
+    if (!ec) {
+        return normalized.lexically_normal();
+    }
+
+    return path.lexically_normal();
+}
+
+std::filesystem::path user_home_path() {
+    const char* homePath = SDL_GetUserFolder(SDL_FOLDER_HOME);
+    if (homePath == nullptr || homePath[0] == '\0') {
+        return {};
+    }
+    return std::filesystem::path{reinterpret_cast<const char8_t*>(homePath)};
+}
+
+Rml::String abbreviated_data_path_string() {
+    const auto path = data::configured_data_path();
+    const auto homePath = user_home_path();
+    if (path.empty() || homePath.empty()) {
+        return io::fs_path_to_string(path);
+    }
+
+    const auto normalizedPath = normalized_display_path(path);
+    const auto normalizedHome = normalized_display_path(homePath);
+    if (normalizedPath == normalizedHome) {
+        return "~";
+    }
+
+    const auto relativePath = normalizedPath.lexically_relative(normalizedHome);
+    if (!relativePath.empty() && !relativePath.is_absolute()) {
+        const auto it = relativePath.begin();
+        if (it == relativePath.end() || *it != "..") {
+            return io::fs_path_to_string(std::filesystem::path{"~"} / relativePath);
+        }
+    }
+
+    return io::fs_path_to_string(path);
+}
+
+Rml::String configured_data_path_display_name() {
+    const auto path = abbreviated_data_path_string();
+    if (path.empty()) {
+        return "(none)";
+    }
+
+    auto display = display_name_for_path(path);
+    if (display.empty()) {
+        return path;
+    }
+    return display;
+}
+
+class DataFolderPathText : public Component {
+public:
+    explicit DataFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
+
+    void update() override {
+        const Rml::String rml = "<span class=\"data-folder-current\">Current data folder:<br/>" +
+                                escape(abbreviated_data_path_string()) + "</span>";
+        if (rml != mCurrentRml) {
+            mRoot->SetInnerRML(rml);
+            mCurrentRml = rml;
+        }
+        Component::update();
+    }
+
+private:
+    Rml::String mCurrentRml;
+};
+
+void data_folder_dialog_callback(void*, const char* path, const char* error) {
+    if (error != nullptr || path == nullptr) {
+        return;
+    }
+    if (data::set_custom_data_path(path)) {
+        mDoAud_seStartMenu(kSoundItemChange);
+    }
+}
+
 const Rml::String kInternalResolutionHelpText =
     "Configure the resolution used for rendering the game. Higher values are more demanding on "
     "your graphics hardware.";
@@ -350,6 +443,49 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     pane.add_rml("Set the disc image that Dusk uses to launch the game.<br/><br/>"
                                  "Changes require a restart.");
                 });
+#if DUSK_CAN_CHANGE_DATA_FOLDER
+            leftPane.register_control(
+                leftPane.add_select_button({
+                    .key = "Data Folder",
+                    .getValue = [] { return configured_data_path_display_name(); },
+                    .isModified = [] { return data::is_data_path_restart_pending(); },
+                }),
+                rightPane, [](Pane& pane) {
+                    pane.add_text("The data folder is where Dusklight stores settings, saves, "
+                                  "logs, texture replacements, and other app data.");
+                    pane.add_child<DataFolderPathText>();
+#if DUSK_CAN_OPEN_DATA_FOLDER
+                    pane.add_button("Open Data Folder").on_pressed([] {
+                        if (data::open_data_path()) {
+                            mDoAud_seStartMenu(kSoundClick);
+                        }
+                    });
+#endif
+                    pane.add_button("Change Data Folder").on_pressed([] {
+                        const auto defaultLocation =
+                            io::fs_path_to_string(data::configured_data_path());
+                        ShowFolderSelect(&data_folder_dialog_callback, nullptr,
+                            aurora::window::get_sdl_window(),
+                            defaultLocation.empty() ? nullptr : defaultLocation.c_str());
+                    });
+#if defined(_WIN32)
+                    pane.add_button("Portable Mode").on_pressed([] {
+                        if (data::set_portable_data_path()) {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                        }
+                    });
+#endif
+                    pane.add_button({
+                        .text = "Reset to Default",
+                        .isDisabled = [] { return data::is_default_data_path(); },
+                    }).on_pressed([] {
+                        if (data::reset_data_path()) {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                        }
+                    });
+                    pane.add_rml("Data will be migrated automatically on restart.");
+                });
+#endif
             leftPane.register_control(
                 leftPane.add_select_button({
                     .key = "Language",
@@ -959,7 +1095,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.register_control(
             leftPane.add_button("Open Data Folder").on_pressed([] {
                 mDoAud_seStartMenu(kSoundClick);
-                dusk::OpenDataFolder();
+                data::open_data_path();
             }),
             rightPane, [](Pane& pane) {
                 pane.add_text(
