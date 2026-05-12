@@ -196,7 +196,11 @@ public:
     /* 0x108 */ int mSkipTimer;
     /* 0x10C */ int mSkipParameter;
     /* 0x110 */ BOOL mIsSkipFade;
+#if TARGET_PC
+    /* 0x114 */ char mSkipEventName[21];
+#else
     /* 0x114 */ char mSkipEventName[20];
+#endif
     /* 0x128 */ u8 mCompulsory;
     /* 0x129 */ bool mRoomInfoSet;
     /* 0x12C */ int mRoomNo;
