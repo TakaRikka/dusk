@@ -2,6 +2,7 @@
 #include "dusk/ui/ui.hpp"
 #include "imgui/ImGuiConsole.hpp"
 
+bool shouldAutoSave = false;
 u8 mSaveBuffer[QUEST_LOG_SIZE * 3];
 u8 mAutoSaveProc = 0;
 int autoSaveWriteState = 0;
@@ -14,7 +15,7 @@ static AutoSaveFuncs AutoSaveFuncsProc[] = {
 void noAutoSave() {}
 
 void triggerAutoSave() {
-    if (dusk::getSettings().game.autoSave && mAutoSaveProc == 0 &&
+    if (dusk::getSettings().game.autoSave && shouldAutoSave && mAutoSaveProc == 0 &&
         strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0)
     {
         mAutoSaveProc = 1;
@@ -89,4 +90,8 @@ void endAutoSave() {
         .duration = std::chrono::milliseconds(1500),
     });
     mAutoSaveProc = 0;
+}
+
+void toggleAutoSave(bool enabled) {
+    shouldAutoSave = enabled;
 }
