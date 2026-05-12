@@ -376,7 +376,7 @@ std::vector<std::filesystem::path> descriptor_write_paths(const std::filesystem:
 
     std::vector<std::filesystem::path> paths;
 #if defined(_WIN32)
-    if (const auto basePath = base_descriptor_path(); !basePath.empty()) {
+    if (const auto basePath = base_path_relative(kLocationDescriptorName); !basePath.empty()) {
         paths.push_back(basePath);
     }
 #endif
