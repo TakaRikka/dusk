@@ -14,7 +14,6 @@ constexpr const char* SHOW_DEBUG_OVERLAY = "F3";
 constexpr const char* SHOW_HEAP_VIEWER = "F4";
 constexpr const char* SHOW_PLAYER_INFO = "F5";
 constexpr const char* SHOW_SAVE_EDITOR = "F6";
-constexpr const char* SHOW_MAP_LOADER = "F7";
 constexpr const char* SHOW_STATE_SHARE = "F8";
 constexpr const char* SHOW_DEBUG_CAMERA = "F9";
 constexpr const char* SHOW_AUDIO_DEBUG = "F10";

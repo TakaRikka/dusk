@@ -40,7 +40,6 @@ namespace dusk {
             ImGui::BeginDisabled(getSettings().game.speedrunMode);
 
             ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
-            ImGui::MenuItem("Map Loader", hotkeys::SHOW_MAP_LOADER, &m_showMapLoader);
             ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
 
             ImGui::EndDisabled();
