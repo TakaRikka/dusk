@@ -1,6 +1,7 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
     paths-ignore:
       - '*.md'
@@ -102,6 +103,9 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Apply local Aurora patches
+        run: git -C extern/aurora apply ../../ci/patches/aurora-ios-texture-replacements.patch
+
       - name: Install dependencies
         run: brew install cmake ninja
 
@@ -132,11 +136,19 @@ jobs:
       - name: Build
         run: cmake --build --preset ${{matrix.preset}}
 
+      - name: Package iOS IPA
+        if: matrix.platform == 'ios'
+        run: |
+          mkdir -p build/ipa/Payload
+          cp -R build/install/Dusklight.app build/ipa/Payload/
+          (cd build/ipa && zip -qry "../Dusklight-${DUSK_VERSION}-ios-arm64.ipa" Payload)
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
           name: dusklight-${{env.DUSK_VERSION}}-${{matrix.artifact_name}}
           path: |
+            build/Dusklight-*-ios-arm64.ipa
             build/install/Dusklight.app
             build/install/debug.tar.*
 
