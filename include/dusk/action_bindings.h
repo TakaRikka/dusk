@@ -10,6 +10,7 @@ enum class ActionBinds {
     FIRST_PERSON_CAMERA,
     CALL_MIDNA,
     OPEN_DUSKLIGHT_MENU,
+    TURBO_SPEED_BUTTON,
     COUNT,
 };
 
@@ -34,6 +35,8 @@ void updateActionBindings();
 bool getActionBindTrig(ActionBinds action, u32 port);
 
 bool getActionBindHold(ActionBinds action, u32 port);
+
+bool getActionBindHoldAnyPort(ActionBinds action);
 
 int getActionBindButton(ActionBinds action, u32 port);
 

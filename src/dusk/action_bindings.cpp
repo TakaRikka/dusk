@@ -12,6 +12,7 @@ ActionBindsMap& getActionBinds() {
         {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera"}},
         {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna"}},
         {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
+        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
     };
     return actionBinds;
 }
@@ -73,6 +74,15 @@ bool getActionBindHold(ActionBinds action, u32 port) {
     return isActionBound(action, port) &&
            actionPressData[port][static_cast<int>(action)].pressedCurFrame &&
            actionPressData[port][static_cast<int>(action)].pressedPrevFrame;
+}
+
+bool getActionBindHoldAnyPort(ActionBinds action) {
+    for (u32 port = 0; port < PAD_CHANMAX; ++port) {
+        if (getActionBindHold(action, port)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 int getActionBindButton(ActionBinds action, u32 port) {
