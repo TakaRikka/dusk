@@ -17,6 +17,8 @@ using namespace dusk::io;
 #else
 #define MODE(val) val
 #endif
+#define _SH_DENYNO 0
+#define _SH_DENYWR 0
 #endif
 
 static FILE* ThrowIfNotOpen(const FileStream& file) {
@@ -31,19 +33,19 @@ static FILE* ThrowIfNotOpen(const FileStream& file) {
     throw std::system_error(std::make_error_code(static_cast<std::errc>(code)));
 }
 
-static FILE* OpenCore(const std::filesystem::path& path, const MODE_TYPE* mode) {
+static FILE* OpenCore(const std::filesystem::path& path, const MODE_TYPE* mode, int shareFlag) {
     FILE* file;
 
     int err;
+    errno = 0;
 #if _WIN32
     static_assert(std::is_same_v<std::filesystem::path::value_type, wchar_t>);
-    err = _wfopen_s(&file, path.c_str(), mode);
+    file = _wfsopen(path.c_str(), mode, shareFlag);
 #else
-    errno = 0;
     static_assert(std::is_same_v<std::filesystem::path::value_type, char>);
     file = fopen(path.c_str(), mode);
-    err = errno;
 #endif
+    err = errno;
 
     if (!file) {
         ThrowForError(err);
@@ -52,8 +54,8 @@ static FILE* OpenCore(const std::filesystem::path& path, const MODE_TYPE* mode) 
     return file;
 }
 
-static FILE* OpenCore(const char* path, const MODE_TYPE* mode) {
-    return OpenCore(reinterpret_cast<const char8_t*>(path), mode);
+static FILE* OpenCore(const char* path, const MODE_TYPE* mode, int shareFlag) {
+    return OpenCore(reinterpret_cast<const char8_t*>(path), mode, shareFlag);
 }
 
 FileStream::FileStream() noexcept : file(nullptr) {
@@ -76,19 +78,19 @@ FileStream::~FileStream() {
 }
 
 FileStream FileStream::OpenRead(const char* utf8Path) {
-    return FileStream(OpenCore(utf8Path, MODE("rb")));
+    return FileStream(OpenCore(utf8Path, MODE("rb"), _SH_DENYWR));
 }
 
 FileStream FileStream::OpenRead(const std::filesystem::path& path) {
-    return FileStream(OpenCore(path, MODE("rb")));
+    return FileStream(OpenCore(path, MODE("rb"), _SH_DENYWR));
 }
 
 FileStream FileStream::Create(const char* utf8Path) {
-    return FileStream(OpenCore(utf8Path, MODE("wb")));
+    return FileStream(OpenCore(utf8Path, MODE("wb"), _SH_DENYWR));
 }
 
 FileStream FileStream::Create(const std::filesystem::path& path) {
-    return FileStream(OpenCore(path, MODE("wb")));
+    return FileStream(OpenCore(path, MODE("wb"), _SH_DENYWR));
 }
 
 std::vector<u8> FileStream::ReadFull() {

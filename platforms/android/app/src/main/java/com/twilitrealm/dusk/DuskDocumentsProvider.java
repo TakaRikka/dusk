@@ -14,15 +14,22 @@ import android.provider.DocumentsContract.Root;
 import android.provider.DocumentsProvider;
 import android.webkit.MimeTypeMap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class DuskDocumentsProvider extends DocumentsProvider {
     public static final String AUTHORITY = "dev.twilitrealm.dusk.documents";
 
     private static final String ROOT_ID = "dusk";
     private static final String ROOT_DOCUMENT_ID = "root";
+    private static final String LOCATION_DESCRIPTOR_NAME = "data_location.json";
     private static final String DIRECTORY_MIME_TYPE = Document.MIME_TYPE_DIR;
 
     private static final String[] DEFAULT_ROOT_PROJECTION = new String[] {
@@ -46,13 +53,19 @@ public class DuskDocumentsProvider extends DocumentsProvider {
 
     @Override
     public boolean onCreate() {
-        ensureUserDirectories();
+        if (!isCustomDataPathEnabled()) {
+            ensureUserDirectories();
+        }
         return true;
     }
 
     @Override
     public Cursor queryRoots(String[] projection) throws FileNotFoundException {
         final MatrixCursor result = new MatrixCursor(resolveRootProjection(projection));
+        if (isCustomDataPathEnabled()) {
+            return result;
+        }
+
         final File root = getRootDirectory();
         final MatrixCursor.RowBuilder row = result.newRow();
 
@@ -222,9 +235,14 @@ public class DuskDocumentsProvider extends DocumentsProvider {
     }
 
     private File getRootDirectory() throws FileNotFoundException {
+        if (isCustomDataPathEnabled()) {
+            throw new FileNotFoundException(
+                "Dusk DocumentsProvider is disabled while a custom data path is configured");
+        }
+
         final File root = getContext().getFilesDir();
         if (root == null) {
-            throw new FileNotFoundException("Dusk files directory is unavailable");
+            throw new FileNotFoundException("Dusklight files directory is unavailable");
         }
         return root;
     }
@@ -241,7 +259,7 @@ public class DuskDocumentsProvider extends DocumentsProvider {
         final String relativePath = documentId.substring(ROOT_DOCUMENT_ID.length() + 1);
         final File file = new File(root, relativePath);
         if (!isInside(root, file)) {
-            throw new FileNotFoundException("Document escapes Dusk files directory: " + documentId);
+            throw new FileNotFoundException("Document escapes Dusklight files directory: " + documentId);
         }
         if (!file.exists()) {
             throw new FileNotFoundException("Document does not exist: " + documentId);
@@ -255,7 +273,7 @@ public class DuskDocumentsProvider extends DocumentsProvider {
             return ROOT_DOCUMENT_ID;
         }
         if (!isInside(root, file)) {
-            throw new FileNotFoundException("File escapes Dusk files directory: " + file);
+            throw new FileNotFoundException("File escapes Dusklight files directory: " + file);
         }
 
         final String rootPath = canonicalPath(root);
@@ -271,6 +289,42 @@ public class DuskDocumentsProvider extends DocumentsProvider {
         new File(root, "texture_replacements").mkdirs();
         new File(root, "USA/Card A").mkdirs();
         new File(root, "EUR/Card A").mkdirs();
+    }
+
+    private boolean isCustomDataPathEnabled() {
+        if (getContext() == null) {
+            return false;
+        }
+
+        final File filesDir = getContext().getFilesDir();
+        if (filesDir == null) {
+            return false;
+        }
+
+        final File descriptor = new File(filesDir, LOCATION_DESCRIPTOR_NAME);
+        if (!descriptor.isFile()) {
+            return false;
+        }
+
+        try {
+            final JSONObject json = new JSONObject(readText(descriptor));
+            return "custom".equals(json.optString("mode", "default"));
+        } catch (IOException | JSONException e) {
+            return false;
+        }
+    }
+
+    private static String readText(File file) throws IOException {
+        try (FileInputStream input = new FileInputStream(file);
+             ByteArrayOutputStream output = new ByteArrayOutputStream())
+        {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = input.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
+            }
+            return output.toString(StandardCharsets.UTF_8.name());
+        }
     }
 
     private static String[] resolveRootProjection(String[] projection) {

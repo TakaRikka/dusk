@@ -105,6 +105,12 @@ window content pane:last-of-type > div {
     line-height: 1.625;
 }
 
+.data-folder-current {
+    display: block;
+    font-size: 16dp;
+    color: rgba(224, 219, 200, 65%);
+}
+
 window content pane > spacer {
     display: block;
     /* Completes the 24dp bottom inset after the pane's 8dp gap. */
@@ -197,6 +203,11 @@ button:not(:disabled):active {
     opacity: 1;
     background-color: rgba(204, 184, 119, 40%);
     box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+button:disabled {
+    opacity: 0.35;
+    cursor: default;
 }
 
 button.modal-btn {

@@ -139,7 +139,7 @@ bool dMenu_Fishing_c::isSync() {
 void dMenu_Fishing_c::init() {
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
     BOOL isEnglish = FALSE;
-    if (dusk::version::isRegionUsa() || (dusk::version::isRegionPal() && dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH)) {
+    if (dusk::version::isRegionPal() && dComIfGs_getPalLanguage() == dSv_player_config_c::LANGUAGE_ENGLISH) {
         isEnglish = TRUE;
     }
     #endif

@@ -1,10 +1,10 @@
-# Installing Dusk on iOS via AltStore
+# Installing Dusklight on iOS via AltStore
 
 ## Prerequisites
 
 - Mac with Homebrew installed
 - iPhone connected via USB
-- Dusk IPA file (download the latest `Dusk-vX.X.X-ios-arm64.ipa` from the [releases page](https://github.com/TwilitRealm/dusk/releases))
+- Dusklight IPA file (download the latest `Dusklight-vX.X.X-ios-arm64.ipa` from the [releases page](https://github.com/TwilitRealm/dusk/releases))
 - Game disc - `GZ2E01` (Gamecube USA) or `GZ2PE01` (Gamecube PAL)
 
 ## 1. Install AltServer

@@ -1042,6 +1042,10 @@ static BOOL heapSizeCheck() {
 
 bool dScnPly_c::resetGame() {
     if (fpcM_GetName(this) == fpcNm_OPENING_SCENE_e) {
+        #if TARGET_PC
+        toggleAutoSave(false);
+        #endif
+
         if (!dStage_roomControl_c::resetArchiveBank(0)) {
             return false;
         }

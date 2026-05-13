@@ -13,5 +13,6 @@ void enterAutoSave();
 void autoSaving();
 void waitingForWrite();
 void endAutoSave();
+void toggleAutoSave(bool enabled);
 
 #endif

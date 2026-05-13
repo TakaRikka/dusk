@@ -3,7 +3,7 @@ plugins {
 }
 
 def duskRepoDir = rootProject.projectDir.parentFile.parentFile
-def duskGeneratedAssetsDir = layout.buildDirectory.dir('generated/assets/dusk').get().asFile
+def duskGeneratedAssetsDir = layout.buildDirectory.dir('generated/assets/dusklight').get().asFile
 def syncDuskAssets = tasks.register('syncDuskAssets', Sync) {
     from(new File(duskRepoDir, 'res')) {
         into 'res'

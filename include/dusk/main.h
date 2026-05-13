@@ -1,36 +1,25 @@
 #ifndef DUSK_MAIN_H
 #define DUSK_MAIN_H
 
-#if defined(__APPLE__)
-#include <TargetConditionals.h>
-#endif
-
 #include <filesystem>
 
-#if defined(_WIN32) ||                                                                             \
-    (defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_TV && !TARGET_OS_MACCATALYST) ||           \
-    (defined(__linux__) && !defined(__ANDROID__))
-#define DUSK_CAN_OPEN_DATA_FOLDER 1
-#else
-#define DUSK_CAN_OPEN_DATA_FOLDER 0
-#endif
-
 namespace dusk {
-    extern bool IsRunning;
-    extern bool IsShuttingDown;
-    extern bool IsGameLaunched;
-    extern bool RestartRequested;
-    extern std::filesystem::path ConfigPath;
 
-#if defined(__ANDROID__) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS) || \
+extern bool IsRunning;
+extern bool IsShuttingDown;
+extern bool IsGameLaunched;
+extern bool RestartRequested;
+extern std::filesystem::path ConfigPath;
+
+#if defined(__ANDROID__) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS) ||                           \
     (defined(TARGET_OS_TV) && TARGET_OS_TV)
-    inline constexpr bool SupportsProcessRestart = false;
+inline constexpr bool SupportsProcessRestart = false;
 #else
-    inline constexpr bool SupportsProcessRestart = true;
+inline constexpr bool SupportsProcessRestart = true;
 #endif
 
-    void RequestRestart() noexcept;
-    bool OpenDataFolder();
-}
+void RequestRestart() noexcept;
+
+}  // namespace dusk
 
 #endif  // DUSK_MAIN_H

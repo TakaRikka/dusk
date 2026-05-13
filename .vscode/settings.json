@@ -1,5 +1,5 @@
 {
-  "cmake.buildDirectory": "${workspaceFolder}/build/dusk/${buildType}/${variant:tp_version}",
+  "cmake.buildDirectory": "${workspaceFolder}/build/dusklight/${buildType}/${variant:tp_version}",
   "cmake.generator": "Ninja",
   "cmake.configureSettings": {
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"

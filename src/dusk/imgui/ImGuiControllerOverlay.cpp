@@ -3,12 +3,13 @@
 #include "imgui.h"
 #include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
+#include "dusk/settings.h"
 
 #include <dolphin/pad.h>
 
 namespace dusk {
     void ImGuiMenuTools::ShowInputViewer() {
-        if (!m_showInputViewer) {
+        if (!getSettings().game.showInputViewer) {
             return;
         }
 
@@ -259,10 +260,10 @@ namespace dusk {
             size.y = 130 * scale;
             ImGui::Dummy(size);
 
-            if (PADHasSensor(PAD_1, PAD_SENSOR_GYRO) == TRUE) {
+            if (getSettings().game.showInputViewerGyro)
+            {
                 ImGui::Separator();
-                ImGui::Checkbox("Gyro Values", &m_showInputViewerGyro);
-                if (m_showInputViewerGyro) {
+                {
                     ImGui::TextUnformatted("Gyro");
 
                     constexpr float kBarScale = 4.0f;

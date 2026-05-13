@@ -115,6 +115,7 @@ struct UserSettings {
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementToasts;
         ConfigVar<bool> enableControllerToasts;
+        ConfigVar<bool> enableDiscordPresence;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
@@ -125,6 +126,7 @@ struct UserSettings {
         ConfigVar<int> shadowResolutionMultiplier;
         ConfigVar<bool> enableDepthOfField;
         ConfigVar<bool> enableMapBackground;
+        ConfigVar<bool> disableCutscenePillarboxing;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -144,6 +146,8 @@ struct UserSettings {
         ConfigVar<bool> freeCamera;
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;
+        ConfigVar<bool> invertFirstPersonXAxis;
+        ConfigVar<bool> invertFirstPersonYAxis;
         ConfigVar<float> freeCameraSensitivity;
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
@@ -162,6 +166,7 @@ struct UserSettings {
         ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
+        ConfigVar<bool> fastRoll;
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
 
@@ -170,11 +175,15 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+        ConfigVar<bool> enableResetKeybind;
 
         // Tools
         ConfigVar<bool> speedrunMode;
         ConfigVar<bool> liveSplitEnabled;
+        ConfigVar<bool> showSpeedrunRTATimer;
         ConfigVar<bool> recordingMode;
+        ConfigVar<bool> showInputViewer;
+        ConfigVar<bool> showInputViewerGyro;
     } game;
 
     struct {
@@ -184,7 +193,6 @@ struct UserSettings {
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
-        ConfigVar<bool> enableCrashReporting;
         ConfigVar<bool> checkForUpdates;
         ConfigVar<int> cardFileType;
         ConfigVar<bool> enableAdvancedSettings;

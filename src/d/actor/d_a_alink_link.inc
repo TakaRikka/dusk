@@ -119,8 +119,8 @@ BOOL daAlink_c::setBodyAngleToCamera() {
                 var_f31 /= dComIfGp_getCameraZoomScale(field_0x317c);
             }
 
-            shape_angle.y = shape_angle.y + (var_f31 * cM_ssin(mStickAngle));
-            sp8 = mBodyAngle.x + (var_f31 * cM_scos(mStickAngle));
+            shape_angle.y = shape_angle.y + (var_f31 * cM_ssin(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonXAxis ? -1.0f : 1.0f)));
+            sp8 = mBodyAngle.x + (var_f31 * cM_scos(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonYAxis ? -1.0f : 1.0f)));
 
             if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
                 sp8 = mBodyAngle.x;

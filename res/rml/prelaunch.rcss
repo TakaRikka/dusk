@@ -65,10 +65,10 @@ menu {
     right: auto;
     top: 50%;
     transform: translateY(-50%);
-    /* Scale based on a reference screen width, 428/1216 */
-    width: 35.230264vw;
+    /* Scale based on a reference screen width, 856/1216 */
+    width: 70.394736vw;
     min-width: 428dp;
-    max-width: 856dp;
+    max-width: 50vw;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -83,9 +83,8 @@ body.mirrored menu {
 hero {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: flex-start;
-    gap: 8dp;
+    gap: 4dp;
 }
 
 body.mirrored hero {
@@ -96,19 +95,19 @@ hero img {
     width: 100%;
 }
 
-.eyebrow {
+eyebrow {
     font-family: "Alegreya SC";
     font-size: 32dp;
 }
 
 @media (min-width: 1216dp) {
-    .eyebrow {
+    eyebrow {
         /* Same logic as .menu, 32/1216 */
         font-size: 2.631579vw;
     }
 }
 
-.eyebrow span {
+eyebrow span {
     font-weight: bold;
 }
 
@@ -437,7 +436,7 @@ body.animate-in .intro-item {
         decorator: horizontal-gradient(#FEE685FF #FEE68500);
     }
 
-    .eyebrow {
+    eyebrow {
         display: none;
     }
 

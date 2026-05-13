@@ -6,10 +6,14 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
+#include "dusk/hotkeys.h"
+#include "dusk/data.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/io.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
+#include "dusk/discord_presence.hpp"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
@@ -20,7 +24,15 @@
 #include "ui.hpp"
 #include "lang.hpp"
 
+#include <aurora/lib/window.hpp>
+#include <SDL3/SDL_filesystem.h>
+
+#if DUSK_ENABLE_SENTRY_NATIVE
+#include "dusk/crash_reporting.h"
+#endif
+
 #include <algorithm>
+#include <filesystem>
 
 namespace dusk::ui {
 namespace {
@@ -163,29 +175,134 @@ AuroraBackend configured_backend() {
 void reset_for_speedrun_mode() {
     mDoMain::developmentMode = -1;
 
-    getSettings().game.damageMultiplier.setValue(1);
-    getSettings().game.instantDeath.setValue(false);
-    getSettings().game.noHeartDrops.setValue(false);
+    getSettings().game.enableTurboKeybind.setSpeedrunValue(false);
 
-    getSettings().game.infiniteHearts.setValue(false);
-    getSettings().game.infiniteArrows.setValue(false);
-    getSettings().game.infiniteBombs.setValue(false);
-    getSettings().game.infiniteOil.setValue(false);
-    getSettings().game.infiniteOxygen.setValue(false);
-    getSettings().game.infiniteRupees.setValue(false);
-    getSettings().game.enableIndefiniteItemDrops.setValue(false);
+    getSettings().game.damageMultiplier.setSpeedrunValue(1);
+    getSettings().game.instantDeath.setSpeedrunValue(false);
+    getSettings().game.noHeartDrops.setSpeedrunValue(false);
+    getSettings().game.autoSave.setSpeedrunValue(false);
+    getSettings().game.sunsSong.setSpeedrunValue(false);
 
-    getSettings().game.moonJump.setValue(false);
-    getSettings().game.superClawshot.setValue(false);
-    getSettings().game.alwaysGreatspin.setValue(false);
-    getSettings().game.enableFastIronBoots.setValue(false);
-    getSettings().game.canTransformAnywhere.setValue(false);
-    getSettings().game.fastSpinner.setValue(false);
-    getSettings().game.freeMagicArmor.setValue(false);
+    getSettings().game.infiniteHearts.setSpeedrunValue(false);
+    getSettings().game.infiniteArrows.setSpeedrunValue(false);
+    getSettings().game.infiniteBombs.setSpeedrunValue(false);
+    getSettings().game.infiniteOil.setSpeedrunValue(false);
+    getSettings().game.infiniteOxygen.setSpeedrunValue(false);
+    getSettings().game.infiniteRupees.setSpeedrunValue(false);
+    getSettings().game.enableIndefiniteItemDrops.setSpeedrunValue(false);
+    getSettings().game.moonJump.setSpeedrunValue(false);
+    getSettings().game.superClawshot.setSpeedrunValue(false);
+    getSettings().game.alwaysGreatspin.setSpeedrunValue(false);
+    getSettings().game.enableFastIronBoots.setSpeedrunValue(false);
+    getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
+    getSettings().game.fastRoll.setSpeedrunValue(false);
+    getSettings().game.fastSpinner.setSpeedrunValue(false);
+    getSettings().game.freeMagicArmor.setSpeedrunValue(false);
 
-    getSettings().game.enableTurboKeybind.setValue(false);
-    getSettings().game.debugFlyCam.setValue(false);
-    getSettings().game.autoSave.setValue(false);
+    getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
+    aurora_set_pause_on_focus_lost(false);
+
+    getSettings().backend.enableAdvancedSettings.setSpeedrunValue(false);
+    getSettings().game.recordingMode.setSpeedrunValue(false);
+    getSettings().game.debugFlyCam.setSpeedrunValue(false);
+}
+
+void clear_speedrun_overrides() {
+    config::EnumerateRegistered([](config::ConfigVarBase& cvar) {
+        cvar.clearSpeedrunOverride();
+    });
+}
+
+void restore_from_speedrun_mode() {
+    clear_speedrun_overrides();
+    aurora_set_pause_on_focus_lost(getSettings().game.pauseOnFocusLost.getValue());
+}
+
+std::filesystem::path normalized_display_path(const std::filesystem::path& path) {
+    std::error_code ec;
+    auto normalized = std::filesystem::weakly_canonical(path, ec);
+    if (!ec) {
+        return normalized;
+    }
+
+    normalized = std::filesystem::absolute(path, ec);
+    if (!ec) {
+        return normalized.lexically_normal();
+    }
+
+    return path.lexically_normal();
+}
+
+std::filesystem::path user_home_path() {
+    const char* homePath = SDL_GetUserFolder(SDL_FOLDER_HOME);
+    if (homePath == nullptr || homePath[0] == '\0') {
+        return {};
+    }
+    return std::filesystem::path{reinterpret_cast<const char8_t*>(homePath)};
+}
+
+Rml::String abbreviated_data_path_string() {
+    const auto path = data::configured_data_path();
+    const auto homePath = user_home_path();
+    if (path.empty() || homePath.empty()) {
+        return io::fs_path_to_string(path);
+    }
+
+    const auto normalizedPath = normalized_display_path(path);
+    const auto normalizedHome = normalized_display_path(homePath);
+    if (normalizedPath == normalizedHome) {
+        return "~";
+    }
+
+    const auto relativePath = normalizedPath.lexically_relative(normalizedHome);
+    if (!relativePath.empty() && !relativePath.is_absolute()) {
+        const auto it = relativePath.begin();
+        if (it == relativePath.end() || *it != "..") {
+            return io::fs_path_to_string(std::filesystem::path{"~"} / relativePath);
+        }
+    }
+
+    return io::fs_path_to_string(path);
+}
+
+Rml::String configured_data_path_display_name() {
+    const auto path = abbreviated_data_path_string();
+    if (path.empty()) {
+        return "(none)";
+    }
+
+    auto display = display_name_for_path(path);
+    if (display.empty()) {
+        return path;
+    }
+    return display;
+}
+
+class DataFolderPathText : public Component {
+public:
+    explicit DataFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
+
+    void update() override {
+        const Rml::String rml = "<span class=\"data-folder-current\">Current data folder:<br/>" +
+                                escape(abbreviated_data_path_string()) + "</span>";
+        if (rml != mCurrentRml) {
+            mRoot->SetInnerRML(rml);
+            mCurrentRml = rml;
+        }
+        Component::update();
+    }
+
+private:
+    Rml::String mCurrentRml;
+};
+
+void data_folder_dialog_callback(void*, const char* path, const char* error) {
+    if (error != nullptr || path == nullptr) {
+        return;
+    }
+    if (data::set_custom_data_path(path)) {
+        mDoAud_seStartMenu(kSoundItemChange);
+    }
 }
 
 const Rml::String kInternalResolutionHelpText =
@@ -195,7 +312,7 @@ const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
 const Rml::String kBloomHelpText =
-    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusk uses "
+    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
@@ -247,6 +364,15 @@ SelectButton& config_bool_select(
             pane.add_rml(helpText);
         });
     return button;
+}
+
+void add_speedrun_disabled_option(Pane& leftPane, Pane& rightPane, ConfigVar<bool>& var,
+    const Rml::String& key, const Rml::String& helpText) {
+    config_bool_select(leftPane, rightPane, var, {
+        .key = key,
+        .helpText = helpText,
+        .isDisabled = [] { return getSettings().game.speedrunMode; },
+    });
 }
 
 SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<float>& var,
@@ -344,9 +470,52 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     })
                     .on_pressed([] { open_iso_picker(); }),
                 rightPane, [](Pane& pane) {
-                    pane.add_rml("Set the disc image that Dusk uses to launch the game.<br/><br/>"
+                    pane.add_rml("Set the disc image that Dusklight uses to launch the game.<br/><br/>"
                                  "Changes require a restart.");
                 });
+#if DUSK_CAN_CHANGE_DATA_FOLDER
+            leftPane.register_control(
+                leftPane.add_select_button({
+                    .key = "Data Folder",
+                    .getValue = [] { return configured_data_path_display_name(); },
+                    .isModified = [] { return data::is_data_path_restart_pending(); },
+                }),
+                rightPane, [](Pane& pane) {
+                    pane.add_text("The data folder is where Dusklight stores settings, saves, "
+                                  "logs, texture replacements, and other app data.");
+                    pane.add_child<DataFolderPathText>();
+#if DUSK_CAN_OPEN_DATA_FOLDER
+                    pane.add_button("Open Data Folder").on_pressed([] {
+                        if (data::open_data_path()) {
+                            mDoAud_seStartMenu(kSoundClick);
+                        }
+                    });
+#endif
+                    pane.add_button("Change Data Folder").on_pressed([] {
+                        const auto defaultLocation =
+                            io::fs_path_to_string(data::configured_data_path());
+                        ShowFolderSelect(&data_folder_dialog_callback, nullptr,
+                            aurora::window::get_sdl_window(),
+                            defaultLocation.empty() ? nullptr : defaultLocation.c_str());
+                    });
+#if defined(_WIN32)
+                    pane.add_button("Portable Mode").on_pressed([] {
+                        if (data::set_portable_data_path()) {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                        }
+                    });
+#endif
+                    pane.add_button({
+                        .text = "Reset to Default",
+                        .isDisabled = [] { return data::is_default_data_path(); },
+                    }).on_pressed([] {
+                        if (data::reset_data_path()) {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                        }
+                    });
+                    pane.add_rml("Data will be migrated automatically on restart.");
+                });
+#endif
             leftPane.register_control(
                 leftPane.add_select_button({
                     .key = "Language",
@@ -489,7 +658,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
             {
                 .key = "Pause on Focus Lost",
-                .isDisabled = [] { return IsMobile; },
+                .helpText = "Pause the game when window focus is lost.",
+                .onChange = [](bool value) { aurora_set_pause_on_focus_lost(value); },
+                .isDisabled = [] { return IsMobile || getSettings().game.speedrunMode; },
             });
         leftPane.register_control(
             leftPane.add_select_button({
@@ -542,7 +713,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml(
                     "<br/>Display the current framerate in a corner of the screen while playing.");
             });
-
         leftPane.add_section("Resolution");
         graphics_tuner_control(*this, leftPane, rightPane,
             getSettings().game.internalResolutionScale,
@@ -599,6 +769,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Enable Mini-Map Shadows",
             });
+        config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
+            {
+                .key = "Disable Cutscene Pillarboxing",
+            });
     });
 
     add_tab("Input", [this](Rml::Element* content) {
@@ -617,7 +791,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Controller");
         leftPane.register_control(leftPane.add_button("Configure Controller").on_pressed([this] {
-            push(std::make_unique<ControllerConfigWindow>());
+            push(std::make_unique<ControllerConfigWindow>(mPrelaunch));
         }),
             rightPane, [](Pane& pane) {
                 pane.clear();
@@ -642,6 +816,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
             "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
             [] { return !getSettings().game.freeCamera; });
+        addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
+            "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+        addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
+            "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
 
         leftPane.add_section("Gyro");
         leftPane.register_control(
@@ -716,6 +894,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
             "Hold Tab to increase game speed by up to 4x.",
             [] { return getSettings().game.speedrunMode; });
+        addOption("Reset Key (" + Rml::String{hotkeys::DO_RESET} + ")",
+            getSettings().game.enableResetKeybind,
+            "Press " + Rml::String{hotkeys::DO_RESET} + " to reset the game.");
     });
 
     add_tab("Audio", [this](Rml::Element* content) {
@@ -763,8 +944,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_bool_select(leftPane, rightPane, getSettings().audio.menuSounds,
             {
-                .key = "Dusk Menu Sounds",
-                .helpText = "Play sound effects when navigating the Dusk menu.",
+                .key = "Dusklight Menu Sounds",
+                .helpText = "Play sound effects when navigating the Dusklight menu.",
             });
 
         leftPane.add_section("Tweaks");
@@ -794,12 +975,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         };
         auto addSpeedrunDisabledOption = [&](const Rml::String& key, ConfigVar<bool>& value,
                                              const Rml::String& helpText) {
-            config_bool_select(leftPane, rightPane, value,
-                {
-                    .key = key,
-                    .helpText = helpText,
-                    .isDisabled = [] { return getSettings().game.speedrunMode; },
-                });
+            add_speedrun_disabled_option(leftPane, rightPane, value, key, helpText);
         };
 
         leftPane.add_section("General");
@@ -851,12 +1027,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Quicker climbing on ladders and vines like the HD version.");
         addOption("Faster Tears of Light", getSettings().game.fastTears,
             "Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
-        config_bool_select(leftPane, rightPane, getSettings().game.autoSave,
-            {
-                .key = "Autosave",
-                .helpText = "Autosaves the game when going to a new area, opening a dungeon door, "
-                            "or getting a new item.",
-            });
+        addSpeedrunDisabledOption("Autosave", getSettings().game.autoSave,
+            "Autosaves the game when going to a new area, opening a dungeon door, "
+            "or getting a new item.");
         addOption("Instant Saves", getSettings().game.instantSaves,
             "Skips the delay when writing to the Memory Card.");
         addOption("Hold B for Instant Text", getSettings().game.instantText,
@@ -870,7 +1043,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
-        addOption("Sun's Song (R+X)", getSettings().game.sunsSong,
+        addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
             "Allows Wolf Link to howl and change the time of day.");
         addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
             "Transform instantly by pressing R and Y simultaneously.");
@@ -881,12 +1054,29 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Speedrun Mode",
                 .helpText =
                     "Enables speedrunning options while restricting certain gameplay modifiers.",
-                .onChange = [](bool) { reset_for_speedrun_mode(); },
+                .onChange =
+                    [](bool enabled) {
+                        if (enabled) {
+                            reset_for_speedrun_mode();
+                        } else {
+                            restore_from_speedrun_mode();
+                            if (getSettings().game.liveSplitEnabled) {
+                                speedrun::disconnectLiveSplit();
+                            }
+                        }
+                        for (auto& doc : get_document_stack()) {
+                            if (dynamic_cast<MenuBar*>(doc.get())) {
+                                doc = std::make_unique<MenuBar>();
+                                break;
+                            }
+                        }
+                    },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.liveSplitEnabled,
             {
                 .key = "LiveSplit Connection",
-                .helpText = "Connect to LiveSplit server on localhost:16834.",
+                .helpText = "Connect to LiveSplit server on localhost:16834. For this to work you must right click LiveSplit, and turn on Control -> Start TCP Server."
+                " To see IGT in LiveSplit you must change your comparison to Game Time.",
                 .onChange =
                     [](bool enabled) {
                         if (enabled) {
@@ -895,6 +1085,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             speedrun::disconnectLiveSplit();
                         }
                     },
+                .isDisabled = [] { return IsMobile || !getSettings().game.speedrunMode; },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.showSpeedrunRTATimer,
+            {
+                .key = "Show RTA",
+                .helpText = "Display the RTA timer. IGT is always visible.",
                 .isDisabled = [] { return !getSettings().game.speedrunMode; },
             });
     });
@@ -905,12 +1101,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         auto addCheat = [&](const Rml::String& key, ConfigVar<bool>& value,
                             const Rml::String& helpText) {
-            config_bool_select(leftPane, rightPane, value,
-                {
-                    .key = key,
-                    .helpText = helpText,
-                    .isDisabled = [] { return getSettings().game.speedrunMode; },
-                });
+            add_speedrun_disabled_option(leftPane, rightPane, value, key, helpText);
         };
 
         leftPane.add_section("Resources");
@@ -937,6 +1128,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Speeds up movement while wearing the Iron Boots.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
+        addCheat("Fast Roll", getSettings().game.fastRoll,
+            "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");
         addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
@@ -947,16 +1140,16 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Dusk");
+        leftPane.add_section("Dusklight");
 #if DUSK_CAN_OPEN_DATA_FOLDER
         leftPane.register_control(
             leftPane.add_button("Open Data Folder").on_pressed([] {
                 mDoAud_seStartMenu(kSoundClick);
-                dusk::OpenDataFolder();
+                data::open_data_path();
             }),
             rightPane, [](Pane& pane) {
                 pane.add_text(
-                    "Open the folder where Dusk stores settings, saves, logs, texture "
+                    "Open the folder where Dusklight stores settings, saves, logs, texture "
                     "replacements, and other app data.");
             });
 #endif
@@ -1025,21 +1218,29 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml("<br/>Choose which notifications can be displayed.");
             });
 #if DUSK_ENABLE_SENTRY_NATIVE
-        config_bool_select(leftPane, rightPane, getSettings().backend.enableCrashReporting,
-            {.key = "Crash Reporting",
-                .helpText = "Enable automatic reporting of crashes to the developers.<br/><br/>"
-                            "Submissions include logs which may contain sensitive information. "
-                            "Refrain from "
-                            "enabling reporting if you do not agree with the following "
-                            "inclusions:<br/><br/> "
-                            "- Operating System<br/>- CPU Architecture<br/>- GPU Model & Driver "
-                            "Version<br/>"
-                            "- Account Username"});
+        auto& crashReporting = leftPane.add_child<BoolButton>(BoolButton::Props{
+            .key = "Crash Reporting",
+            .getValue =
+                [] { return crash_reporting::get_consent() == crash_reporting::Consent::Given; },
+            .setValue = [](bool enabled) { crash_reporting::set_consent(enabled); },
+            .isDisabled =
+                [] {
+                    return crash_reporting::get_consent() == crash_reporting::Consent::Unavailable;
+                },
+            .isModified = [] { return false; },
+        });
+        leftPane.register_control(crashReporting, rightPane, [](Pane& pane) {
+            pane.clear();
+            pane.add_rml("Dusklight can automatically send crash reports to the developers. Crash "
+                         "reports contain the following:<br/>• Operating system version<br/>• CPU "
+                         "architecture<br/>• GPU model & driver version<br/>• File paths (may "
+                         "include account username)<br/>• Stack trace");
+        });
 #endif
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
-                .key = "Skip Dusk Main Menu",
-                .helpText = "When starting Dusk, skip the main menu and boot straight into the "
+                .key = "Skip Dusklight Main Menu",
+                .helpText = "When starting Dusklight, skip the main menu and boot straight into the "
                             "game if a disc image is available.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
@@ -1050,15 +1251,23 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
             {
                 .key = "Check for Updates",
-                .helpText = "Checks GitHub releases for a new Dusk version on startup.<br/><br/>"
+                .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
                             "No personal information is transmitted or collected.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
+#ifdef DUSK_DISCORD
+        config_bool_select(leftPane, rightPane, getSettings().game.enableDiscordPresence,
             {
-                .key = "Pause On Focus Lost",
-                .helpText = "Pause the game when window focus is lost.",
-                .onChange = [](bool value) { aurora_set_pause_on_focus_lost(value); },
+                .key = "Enable Discord Rich Presence",
+                .helpText = "Enable Dusk to integrate with Discord Rich Presence. This allows Discord to show your status in-game.",
+                .onChange = [](bool enabled) {
+                    if (enabled) {
+                        dusk::discord::initialize();
+                    } else {
+                        dusk::discord::shutdown();
+                    }
+                },
             });
+#endif
         config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
             {
                 .key = "Enable Advanced Settings",
@@ -1075,6 +1284,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             }
                         }
                     },
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.showInputViewer,
+            {
+                .key = "Show Input Viewer",
+                .helpText = "Display a controller input overlay while playing.",
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.showInputViewerGyro,
+            {
+                .key = "Show Gyro Input Viewer",
+                .helpText = "Show gyro sensor values in the input viewer.",
+                .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
 
         leftPane.add_section("Game");
@@ -1083,12 +1304,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Skip TV Settings Screen",
                 .helpText = "Skips the TV calibration screen shown when loading a save.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.recordingMode,
-            {
-                .key = "Recording Mode",
-                .helpText = "Disables the game HUD and all background music.<br/><br/>Useful for "
-                            "recording footage.",
-            });
+        add_speedrun_disabled_option(leftPane, rightPane, getSettings().game.recordingMode,
+            "Recording Mode",
+            "Disables the game HUD and all background music.<br/><br/>Useful for recording footage.");
     });
 }
 

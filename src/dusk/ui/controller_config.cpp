@@ -208,7 +208,15 @@ bool input_neutral(int port) {
 bool keyboard_escape_pressed() {
     int keyCount = 0;
     const bool* keys = SDL_GetKeyboardState(&keyCount);
-    return keys != nullptr && SDL_SCANCODE_ESCAPE < keyCount && keys[SDL_SCANCODE_ESCAPE];
+    if (keys == nullptr || SDL_SCANCODE_ESCAPE >= keyCount || !keys[SDL_SCANCODE_ESCAPE]) {
+        return false;
+    }
+    for (int i = 0; i < keyCount; ++i) {
+        if (i != SDL_SCANCODE_ESCAPE && keys[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 Rml::String keyboard_key_name(s32 scancode) {
@@ -293,7 +301,11 @@ int rumble_raw_to_percent(u16 raw) {
 
 }  // namespace
 
-ControllerConfigWindow::ControllerConfigWindow() {
+ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
+    if (prelaunch) {
+        mSuppressNavFallback = true;
+    }
+
     listen(
         Rml::EventId::Keydown,
         [this](Rml::Event& event) {

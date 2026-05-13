@@ -81,7 +81,7 @@ void update_presence() {
     rpc::Presence presence{};
     presence.startTimestamp = g_startTime;
     presence.largeImageKey = "icon";
-    presence.largeImageText = "Dusk";
+    presence.largeImageText = "Dusklight";
 
     if (IsGameLaunched) {
         const char* stageName = dComIfGp_getLastPlayStageName();

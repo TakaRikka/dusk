@@ -24,9 +24,9 @@ BEGIN
             VALUE "CompanyName", "@DUSK_COMPANY_NAME@\0"
             VALUE "FileDescription", "@DUSK_FILE_DESCRIPTION@\0"
             VALUE "FileVersion", "@DUSK_VERSION_STRING@\0"
-            VALUE "InternalName", "dusk\0"
+            VALUE "InternalName", "dusklight\0"
             VALUE "LegalCopyright", "@DUSK_COPYRIGHT@\0"
-            VALUE "OriginalFilename", "dusk.exe\0"
+            VALUE "OriginalFilename", "dusklight.exe\0"
             VALUE "ProductName", "@DUSK_PRODUCT_NAME@\0"
             VALUE "ProductVersion", "@DUSK_VERSION_STRING@\0"
         END

@@ -38,9 +38,9 @@
         url = "https://github.com/mikke89/RmlUi/archive/f9b8c9e2935d5df2c7dff2c190d3968e99b0c3dc.tar.gz";
         hash = "sha256-g4O/JZUrrcseOz8o2QJRt+2CeuiLnVeuDJc906xvuIg=";
       };
-      # Dusk Actual
-      dusk = pkgs.stdenv.mkDerivation {
-        name = "dusk";
+      # Dusklight Actual
+      dusklight = pkgs.stdenv.mkDerivation {
+        name = "dusklight";
         src = ./.;
         postUnpack = ''
           mkdir -p $sourceRoot/extern/aurora
@@ -69,7 +69,7 @@
         ];
         installPhase = ''
           mkdir -p $out/bin
-          cp dusk $out/bin/dusk
+          cp dusklight $out/bin/dusklight
           cp -r ./res $out/bin/res
         '';
         nativeBuildInputs = [
@@ -99,6 +99,6 @@
         ];
       };
     in {
-      packages.x86_64-linux.default = dusk;
+      packages.x86_64-linux.default = dusklight;
     };
 }

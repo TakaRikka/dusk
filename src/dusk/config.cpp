@@ -264,3 +264,9 @@ ConfigVarBase* dusk::config::GetConfigVar(std::string_view name) {
 
     return nullptr;
 }
+
+void dusk::config::EnumerateRegistered(std::function<void(ConfigVarBase&)> callback) {
+    for (auto& pair : RegisteredConfigVars) {
+        callback(*pair.second);
+    }
+}
