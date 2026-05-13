@@ -1463,6 +1463,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiStateShare.cpp
         src/dusk/ui/achievements.cpp
         src/dusk/ui/achievements.hpp
+        src/dusk/ui/autosplits.cpp
+        src/dusk/ui/autosplits.hpp
         src/dusk/ui/bool_button.cpp
         src/dusk/ui/bool_button.hpp
         src/dusk/ui/button.cpp
@@ -1513,6 +1515,7 @@ set(DUSK_FILES
         src/dusk/ui/window.cpp
         src/dusk/ui/window.hpp
         src/dusk/achievements.cpp
+        src/dusk/autosplit.cpp
         src/dusk/iso_validate.cpp
         src/dusk/livesplit.cpp
         src/dusk/offset_ptr.cpp

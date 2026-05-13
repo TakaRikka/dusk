@@ -44,6 +44,7 @@
 #endif
 
 #include <cstdio>
+#include "dusk/autosplit.h"
 #include "dusk/livesplit.h"
 #include "f_op/f_op_overlap_mng.h"
 
@@ -130,6 +131,7 @@ void start() {
     startPending = true;
     frameCount = 0;
     wasLoading = false;
+    dusk::autosplit::Manager::get().onSpeedrunStart();
 }
 
 void reset() {
@@ -138,7 +140,12 @@ void reset() {
     frameCount = 0;
     wasLoading = false;
     sendCmd("reset");
+    dusk::autosplit::Manager::get().onSpeedrunReset();
 }
+
+void split() { sendCmd("split"); }
+
+bool isConnected() { return connected; }
 
 static void reconnect() {
     if (sock != INVALID_SOCKET) {
