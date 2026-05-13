@@ -175,6 +175,7 @@ class ConfigVar : public ConfigVarBase {
     T defaultValue;
     T value;
     T overrideValue;
+    ConfigVarLayer priorLayer = ConfigVarLayer::Default;
 
 public:
     /**
@@ -265,6 +266,7 @@ public:
     void setSpeedrunValue(T newValue) {
         checkRegistered();
         if (layer != ConfigVarLayer::Override) {
+            priorLayer = layer;
             overrideValue = std::move(newValue);
             layer = ConfigVarLayer::Speedrun;
         }
@@ -282,7 +284,7 @@ public:
         checkRegistered();
         if (layer == ConfigVarLayer::Speedrun) {
             overrideValue = {};
-            layer = ConfigVarLayer::Value;
+            layer = priorLayer;
         }
     }
 
@@ -293,7 +295,8 @@ public:
      */
     [[nodiscard]] constexpr const T& getValueForSave() const noexcept {
         checkRegistered();
-        return layer == ConfigVarLayer::Default ? defaultValue : value;
+        const ConfigVarLayer effectiveLayer = (layer == ConfigVarLayer::Speedrun) ? priorLayer : layer;
+        return effectiveLayer == ConfigVarLayer::Default ? defaultValue : value;
     }
 };
 

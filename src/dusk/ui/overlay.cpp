@@ -366,6 +366,7 @@ void Overlay::update() {
         }
     }
 
+    u32 count = 0;
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
                                        !touch_controller_active() &&
                                        PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&

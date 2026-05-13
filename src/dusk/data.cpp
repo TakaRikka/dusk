@@ -78,6 +78,7 @@ struct MigrationStats {
 
 std::optional<std::filesystem::path> sConfiguredDataPath;
 std::optional<std::filesystem::path> sActiveDescriptorPath;
+std::optional<std::filesystem::path> sActivePrefPath;
 
 std::filesystem::path path_from_utf8(std::string_view value) {
     return std::filesystem::path{
@@ -86,19 +87,22 @@ std::filesystem::path path_from_utf8(std::string_view value) {
     };
 }
 
-std::filesystem::path get_legacy_path() {
-    if (std::string_view{LegacyAppName}.empty()) {
+std::filesystem::path legacy_path_for_pref_path(const std::filesystem::path& prefPath) {
+    if (std::string_view{LegacyAppName}.empty() || prefPath.empty()) {
         return {};
     }
 
-    char* prefPath = SDL_GetPrefPath(OrgName, LegacyAppName);
-    if (!prefPath) {
-        Log.fatal("Unable to get PrefPath: {}", SDL_GetError());
+    auto normalizedPrefPath = prefPath;
+    if (normalizedPrefPath.filename().empty()) {
+        normalizedPrefPath = normalizedPrefPath.parent_path();
     }
 
-    std::filesystem::path result{reinterpret_cast<const char8_t*>(prefPath)};
-    SDL_free(prefPath);
-    return result;
+    const auto parentPath = normalizedPrefPath.parent_path();
+    if (parentPath.empty()) {
+        return {};
+    }
+
+    return parentPath / LegacyAppName;
 }
 
 std::filesystem::path get_pref_path() {
@@ -110,6 +114,13 @@ std::filesystem::path get_pref_path() {
     std::filesystem::path result{reinterpret_cast<const char8_t*>(prefPath)};
     SDL_free(prefPath);
     return result;
+}
+
+std::filesystem::path active_pref_path() {
+    if (sActivePrefPath) {
+        return *sActivePrefPath;
+    }
+    return get_pref_path();
 }
 
 std::filesystem::path base_path_relative(const std::filesystem::path& path) {
@@ -265,12 +276,12 @@ std::filesystem::path absolute_path(const std::filesystem::path& path) {
     return absolute.lexically_normal();
 }
 
-void rename_legacy_pref_path(
+std::filesystem::path rename_legacy_pref_path(
     const std::filesystem::path& legacyPath, const std::filesystem::path& prefPath) {
     if (legacyPath.empty() || prefPath.empty() ||
         normalized_path(legacyPath) == normalized_path(prefPath))
     {
-        return;
+        return prefPath;
     }
 
     std::error_code ec;
@@ -279,14 +290,14 @@ void rename_legacy_pref_path(
             Log.warn("Failed to inspect legacy data directory '{}': {}",
                 io::fs_path_to_string(legacyPath), ec.message());
         }
-        return;
+        return prefPath;
     }
 
     const bool prefExists = std::filesystem::exists(prefPath, ec);
     if (ec) {
         Log.warn("Failed to inspect data directory '{}': {}", io::fs_path_to_string(prefPath),
             ec.message());
-        return;
+        return prefPath;
     }
     if (prefExists) {
         if (!std::filesystem::is_directory(prefPath, ec) ||
@@ -299,14 +310,14 @@ void rename_legacy_pref_path(
                 Log.info("Skipping legacy data directory rename because '{}' is not empty",
                     io::fs_path_to_string(prefPath));
             }
-            return;
+            return prefPath;
         }
 
         std::filesystem::remove(prefPath, ec);
         if (ec) {
             Log.warn("Failed to remove empty data directory '{}' before legacy rename: {}",
                 io::fs_path_to_string(prefPath), ec.message());
-            return;
+            return prefPath;
         }
     }
 
@@ -314,11 +325,18 @@ void rename_legacy_pref_path(
     if (ec) {
         Log.warn("Failed to rename legacy data directory '{}' to '{}': {}",
             io::fs_path_to_string(legacyPath), io::fs_path_to_string(prefPath), ec.message());
-        return;
+        ec.clear();
+        if (!std::filesystem::exists(prefPath, ec) && !ec) {
+            Log.info("Using legacy data directory '{}' because the new data directory is absent",
+                io::fs_path_to_string(legacyPath));
+            return legacyPath;
+        }
+        return prefPath;
     }
 
     Log.info("Renamed legacy data directory '{}' to '{}'", io::fs_path_to_string(legacyPath),
         io::fs_path_to_string(prefPath));
+    return prefPath;
 }
 
 bool is_same_or_inside(const std::filesystem::path& root, const std::filesystem::path& path) {
@@ -394,7 +412,7 @@ std::filesystem::path current_data_path() {
     if (!ConfigPath.empty()) {
         return ConfigPath;
     }
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
         sActiveDescriptorPath = descriptor->path;
@@ -460,7 +478,7 @@ bool write_location_descriptor(LocationMode mode, const std::filesystem::path& t
         json["previousPath"] = io::fs_path_to_string(descriptor.previousPath);
     }
 
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     for (const auto& path : descriptor_write_paths(prefPath)) {
         if (write_descriptor_json(path, json)) {
             sActiveDescriptorPath = path;
@@ -1013,12 +1031,12 @@ bool set_portable_data_path() {
 }
 
 bool reset_data_path() {
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     return write_location_descriptor(LocationMode::Default, default_data_path(prefPath));
 }
 
 bool is_default_data_path() {
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     return normalized_path(configured_data_path()) == normalized_path(default_data_path(prefPath));
 }
 
@@ -1027,7 +1045,7 @@ std::filesystem::path configured_data_path() {
         return *sConfiguredDataPath;
     }
 
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
         sActiveDescriptorPath = descriptor->path;
@@ -1041,7 +1059,7 @@ std::filesystem::path cache_path() {
     if (!CachePath.empty()) {
         return CachePath;
     }
-    return get_pref_path();
+    return active_pref_path();
 }
 
 bool is_data_path_restart_pending() {
@@ -1053,8 +1071,10 @@ bool is_data_path_restart_pending() {
 }
 
 Paths initialize_data() {
-    const auto prefPath = get_pref_path();
-    rename_legacy_pref_path(get_legacy_path(), prefPath);
+    const auto preferredPrefPath = get_pref_path();
+    const auto prefPath =
+        rename_legacy_pref_path(legacy_path_for_pref_path(preferredPrefPath), preferredPrefPath);
+    sActivePrefPath = prefPath;
 
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {

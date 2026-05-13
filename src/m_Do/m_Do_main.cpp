@@ -585,7 +585,7 @@ int game_main(int argc, char* argv[]) {
     }
     VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
 
-    dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
+    dusk::audio::SetMasterVolume(dusk::audio::MasterVolumeToLinear(dusk::getSettings().audio.masterVolume / 100.0f));
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
     dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 

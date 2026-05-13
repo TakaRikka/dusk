@@ -953,7 +953,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     [](int value) {
                         getSettings().audio.masterVolume.setValue(value);
                         config::Save();
-                        audio::SetMasterVolume(value / 100.f);
+                        audio::SetMasterVolume(audio::MasterVolumeToLinear(value / 100.0f));
                     },
                 .isModified =
                     [] {
