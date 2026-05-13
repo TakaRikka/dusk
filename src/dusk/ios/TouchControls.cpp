@@ -25,9 +25,9 @@ constexpr float kShoulderHeight = 44.0f;
 constexpr float kDeadZone = 0.12f;
 constexpr float kAlphaIdle = 0.34f;
 constexpr float kAlphaActive = 0.66f;
-constexpr int kDefaultStickSensitivityPercent = 300;
+constexpr int kDefaultStickSensitivityPercent = 500;
 constexpr int kMinStickSensitivityPercent = 50;
-constexpr int kMaxStickSensitivityPercent = 500;
+constexpr int kMaxStickSensitivityPercent = 2000;
 constexpr std::uint32_t kSettingsMagic = 0x54434831;  // TCH1
 constexpr std::uint32_t kSettingsVersion = 1;
 constexpr auto kSettingsFileName = "touch_controls.dat";
@@ -294,15 +294,24 @@ ImVec2 stick_value(Control control, const Layout& layout) noexcept {
             continue;
         }
 
-        const ImVec2 center = control == Control::MainStick ? layout.mainStick : layout.cStick;
+        const ImVec2 layoutCenter = control == Control::MainStick ? layout.mainStick : layout.cStick;
+        const ImVec2 center = finger.start;
         const float sensitivityScale = 100.0f / static_cast<float>(stick_sensitivity_percent());
-        const float fullTiltRadius = scaled(kStickRadius * std::clamp(sensitivityScale, 0.20f, 1.20f), layout);
+        const float fullTiltRadius = scaled(kStickRadius * std::clamp(sensitivityScale, 0.05f, 1.20f), layout);
         ImVec2 value = clamp_vector(ImVec2(finger.current.x - center.x, finger.current.y - center.y),
             fullTiltRadius);
         value.x /= fullTiltRadius;
         value.y /= fullTiltRadius;
         if (std::sqrt(value.x * value.x + value.y * value.y) < kDeadZone) {
             return ImVec2(0.0f, 0.0f);
+        }
+        if (distance(finger.start, layoutCenter) <= scaled(kStickRadius * 0.35f, layout) &&
+            distance(finger.current, layoutCenter) > scaled(kStickRadius * 0.35f, layout))
+        {
+            value = clamp_vector(ImVec2(finger.current.x - layoutCenter.x, finger.current.y - layoutCenter.y),
+                fullTiltRadius);
+            value.x /= fullTiltRadius;
+            value.y /= fullTiltRadius;
         }
         return value;
     }

@@ -405,8 +405,8 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
                                   .setValue = [](int value) { set_touch_stick_sensitivity_percent(value); },
                                   .isDisabled = [port] { return !touch_active(port); },
                                   .min = 50,
-                                  .max = 500,
-                                  .step = 10,
+                                  .max = 2000,
+                                  .step = 50,
                                   .suffix = "%",
                               }),
         rightPane, [](Pane& pane) {

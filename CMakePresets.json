@@ -443,7 +443,7 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "sccache",
         "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
-        "DUSK_VERSION_OVERRIDE": "Ale touch beta 0.0.1"
+        "DUSK_VERSION_OVERRIDE": "Alejandro touch beta 0.1.1"
       }
     },
     {

@@ -2,6 +2,10 @@
 
 #include <aurora/rmlui.hpp>
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
 namespace dusk::ui {
 
 BaseStringButton::BaseStringButton(Rml::Element* parent, Props props)
@@ -35,7 +39,13 @@ void BaseStringButton::start_editing() {
     if (mInputElem == nullptr) {
         return;
     }
-    mInputElem->SetAttribute("type", mType);
+    Rml::String inputElementType = mType;
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    if (inputElementType == "number") {
+        inputElementType = "text";
+    }
+#endif
+    mInputElem->SetAttribute("type", inputElementType);
     mInputElem->SetAttribute("value", input_value());
     if (mMaxLength > -1) {
         mInputElem->SetAttribute("maxlength", mMaxLength);
@@ -99,8 +109,12 @@ void BaseStringButton::focus_input() {
         return;
     }
 
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    aurora::rmlui::set_input_type(aurora::rmlui::InputType::Text);
+#else
     aurora::rmlui::set_input_type(
         mType == "number" ? aurora::rmlui::InputType::Number : aurora::rmlui::InputType::Text);
+#endif
 
     if (mInputElem->Focus(true)) {
         const int end = static_cast<int>(Rml::StringUtilities::LengthUTF8(mInputElem->GetValue()));
