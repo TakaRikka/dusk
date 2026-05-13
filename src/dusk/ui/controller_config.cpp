@@ -31,13 +31,13 @@ Rml::String current_controller_name(int port) {
     if (name != nullptr) {
         return name;
     }
-    return keyboard_active(port) ? "Keyboard" : "None";
+    return keyboard_active(port) ? "[KEYBOARD]" : "[NONE]";
 }
 
 Rml::String controller_index_name(u32 index) {
     const char* name = PADGetNameForControllerIndex(index);
     if (name == nullptr) {
-        return fmt::format("Controller {}", index + 1);
+        return fmt::format("[CONTROLLER] {}", index + 1);
     }
     return name;
 }
@@ -124,7 +124,7 @@ Rml::String native_axis_name(const PADAxisMapping& mapping, SDL_Gamepad* gamepad
         return native_button_name(gamepad, static_cast<u32>(mapping.nativeButton));
     }
 
-    return "Not bound";
+    return "[NOT_BOUND]";
 }
 
 bool is_dpad_button(PADButton button) {
@@ -162,28 +162,28 @@ bool keyboard_escape_pressed() {
 
 Rml::String keyboard_key_name(s32 scancode) {
     if (scancode == PAD_KEY_INVALID) {
-        return "Not bound";
+        return "[NOT_BOUND]";
     }
     switch (scancode) {
     case PAD_KEY_MOUSE_LEFT:
-        return "Mouse Left";
+        return "[MOUSE_LEFT]";
     case PAD_KEY_MOUSE_MIDDLE:
-        return "Mouse Middle";
+        return "[MOUSE_MIDDLE]";
     case PAD_KEY_MOUSE_RIGHT:
-        return "Mouse Right";
+        return "[MOUSE_RIGHT]";
     case PAD_KEY_MOUSE_X1:
-        return "Mouse X1";
+        return "[MOUSE_X1]";
     case PAD_KEY_MOUSE_X2:
-        return "Mouse X2";
+        return "[MOUSE_X2]";
     default:
         break;
     }
     if (scancode < 0) {
-        return "Unknown";
+        return "[UNKNOWN]";
     }
     const char* name = SDL_GetScancodeName(static_cast<SDL_Scancode>(scancode));
     if (name == nullptr || name[0] == '\0') {
-        return "Unknown";
+        return "[UNKNOWN]";
     }
     return name;
 }
@@ -263,7 +263,7 @@ ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
     }
 
     for (int port = PAD_CHAN0; port < PAD_CHANMAX; ++port) {
-        add_tab(fmt::format("Port {}", port + 1), [this, port](Rml::Element* content) {
+        add_tab(fmt::format("[PORT] {}", port + 1), [this, port](Rml::Element* content) {
             if (mPendingPort != -1 && mPendingPort != port) {
                 cancel_pending_binding();
             }
@@ -303,16 +303,16 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             });
     };
 
-    addPageButton(Page::Controller, "Controller", [port] { return current_controller_name(port); }, [] { return false; });
-    addPageButton(Page::Buttons, "Buttons", [] { return Rml::String(">"); }, [] { return false; });
-    addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); }, [] { return false; });
-    addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); }, [] { return false; });
-    addPageButton(Page::Rumble, "Rumble", [] { return Rml::String(">"); }, [port] { return !PADSupportsRumbleIntensity(static_cast<u32>(port)); });
-    addPageButton(Page::Actions, "Custom Action Bindings", [] {return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Controller, "[CONTROLLER]", [port] { return current_controller_name(port); }, [] { return false; });
+    addPageButton(Page::Buttons, "[BUTTONS]", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Triggers, "[TRIGGERS]", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Sticks, "[STICKS]", [] { return Rml::String(">"); }, [] { return false; });
+    addPageButton(Page::Rumble, "[RUMBLE]", [] { return Rml::String(">"); }, [port] { return !PADSupportsRumbleIntensity(static_cast<u32>(port)); });
+    addPageButton(Page::Actions, "[CUSTOM_ACTION_BINDINGS]", [] {return Rml::String(">"); }, [] { return false; });
 
-    leftPane.add_section("Options");
+    leftPane.add_section("[OPTIONS]");
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
-                                  .key = "Enable Dead Zones",
+                                  .key = "[ENABLE_DEAD_ZONES]",
                                   .getValue =
                                       [port] {
                                           PADDeadZones* deadZones = PADGetDeadZones(port);
@@ -328,10 +328,10 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
                                   .isDisabled = [port] { return PADGetDeadZones(port) == nullptr; },
                               }),
         rightPane, [](Pane& pane) {
-            pane.add_text("Apply configured dead zones to the sticks and analog triggers.");
+            pane.add_text("[APPLY_CONFIGURED_DEAD_ZONES_TO_THE_STICKS_AND_ANALOG_TRIGGERS]");
         });
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
-                                  .key = "Emulate Triggers",
+                                  .key = "[EMULATE_TRIGGERS]",
                                   .getValue =
                                       [port] {
                                           PADDeadZones* deadZones = PADGetDeadZones(port);
@@ -347,7 +347,7 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
                                   .isDisabled = [port] { return PADGetDeadZones(port) == nullptr; },
                               }),
         rightPane, [](Pane& pane) {
-            pane.add_text("Treat analog trigger movement as digital L and R button input.");
+            pane.add_text("[TREAT_ANALOG_TRIGGER_MOVEMENT_AS_DIGITAL_L_AND_R_BUTTON_INPUT]");
         });
 
     render_page(rightPane, port, mPage);
@@ -360,7 +360,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
     case Page::Controller: {
         pane.add_button(
                 {
-                    .text = "None",
+                    .text = "[NONE]",
                 .isSelected =
                     [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
             })
@@ -374,7 +374,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             });
 
         pane.add_button({
-                            .text = "Keyboard",
+                            .text = "[KEYBOARD]",
                             .isSelected = [port] { return keyboard_active(port); },
                         })
             .on_pressed([this, port] {
@@ -388,7 +388,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
 
         const u32 controllerCount = PADCount();
         if (controllerCount == 0) {
-            pane.add_text("No controllers detected");
+            pane.add_text("[NO_CONTROLLERS_DETECTED]");
             break;
         }
 
@@ -425,14 +425,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                     PADKeyButtonBinding* bindings =
                                         PADGetKeyButtonBindings(static_cast<u32>(port), &count);
                                     if (bindings == nullptr) {
-                                        return Rml::String("Not bound");
+                                        return Rml::String("[NOT_BOUND]");
                                     }
                                     for (u32 i = 0; i < PAD_BUTTON_COUNT; ++i) {
                                         if (bindings[i].padButton == button) {
                                             return keyboard_key_name(bindings[i].scancode);
                                         }
                                     }
-                                    return Rml::String("Not bound");
+                                    return Rml::String("[NOT_BOUND]");
                                 },
                         })
                     .on_pressed([this, port, button] {
@@ -443,7 +443,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             };
 
-            pane.add_section("Buttons");
+            pane.add_section("[BUTTONS]");
             addKeyButton(PAD_BUTTON_A);
             addKeyButton(PAD_BUTTON_B);
             addKeyButton(PAD_BUTTON_X);
@@ -451,7 +451,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             addKeyButton(PAD_BUTTON_START);
             addKeyButton(PAD_TRIGGER_Z);
 
-            pane.add_section("D-Pad");
+            pane.add_section("[D_PAD]");
             addKeyButton(PAD_BUTTON_UP);
             addKeyButton(PAD_BUTTON_DOWN);
             addKeyButton(PAD_BUTTON_LEFT);
@@ -462,12 +462,12 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         u32 buttonCount = 0;
         PADButtonMapping* mappings = PADGetButtonMappings(port, &buttonCount);
         if (mappings == nullptr) {
-            pane.add_text("No controller selected");
+            pane.add_text("[NO_CONTROLLER_SELECTED]");
             break;
         }
 
         SDL_Gamepad* gamepad = gamepad_for_port(port);
-        pane.add_section("Buttons");
+        pane.add_section("[BUTTONS]");
         for (u32 i = 0; i < buttonCount; ++i) {
             PADButtonMapping& mapping = mappings[i];
             if (!is_action_button(mapping.padButton)) {
@@ -493,7 +493,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 });
         }
 
-        pane.add_section("D-Pad");
+        pane.add_section("[D_PAD]");
         for (u32 i = 0; i < buttonCount; ++i) {
             PADButtonMapping& mapping = mappings[i];
             if (!is_dpad_button(mapping.padButton)) {
@@ -535,14 +535,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                     PADKeyButtonBinding* bindings =
                                         PADGetKeyButtonBindings(static_cast<u32>(port), &count);
                                     if (bindings == nullptr) {
-                                        return Rml::String("Not bound");
+                                        return Rml::String("[NOT_BOUND]");
                                     }
                                     for (u32 i = 0; i < PAD_BUTTON_COUNT; ++i) {
                                         if (bindings[i].padButton == button) {
                                             return keyboard_key_name(bindings[i].scancode);
                                         }
                                     }
-                                    return Rml::String("Not bound");
+                                    return Rml::String("[NOT_BOUND]");
                                 },
                         })
                     .on_pressed([this, port, button] {
@@ -566,14 +566,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                     PADKeyAxisBinding* bindings =
                                         PADGetKeyAxisBindings(static_cast<u32>(port), &count);
                                     if (bindings == nullptr) {
-                                        return Rml::String("Not bound");
+                                        return Rml::String("[NOT_BOUND]");
                                     }
                                     for (u32 i = 0; i < PAD_AXIS_COUNT; ++i) {
                                         if (bindings[i].padAxis == axis) {
                                             return keyboard_key_name(bindings[i].scancode);
                                         }
                                     }
-                                    return Rml::String("Not bound");
+                                    return Rml::String("[NOT_BOUND]");
                                 },
                         })
                     .on_pressed([this, port, axis] {
@@ -584,11 +584,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             };
 
-            pane.add_section("Analog");
+            pane.add_section("[ANALOG]");
             addKeyAxis(PAD_AXIS_TRIGGER_L);
             addKeyAxis(PAD_AXIS_TRIGGER_R);
 
-            pane.add_section("Digital");
+            pane.add_section("[DIGITAL]");
             addKeyButton(PAD_TRIGGER_L);
             addKeyButton(PAD_TRIGGER_R);
             break;
@@ -599,12 +599,12 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         u32 buttonCount = 0;
         PADButtonMapping* buttons = PADGetButtonMappings(port, &buttonCount);
         if (axes == nullptr && buttons == nullptr) {
-            pane.add_text("No controller selected");
+            pane.add_text("[NO_CONTROLLER_SELECTED]");
             break;
         }
 
         SDL_Gamepad* gamepad = gamepad_for_port(port);
-        pane.add_section("Analog");
+        pane.add_section("[ANALOG]");
         constexpr std::array<PADAxis, 2> kTriggerAxes = {PAD_AXIS_TRIGGER_L, PAD_AXIS_TRIGGER_R};
         if (axes != nullptr) {
             for (PADAxis axis : kTriggerAxes) {
@@ -631,7 +631,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             }
         }
 
-        pane.add_section("Digital");
+        pane.add_section("[DIGITAL]");
         if (buttons != nullptr) {
             for (u32 i = 0; i < buttonCount; ++i) {
                 PADButtonMapping& mapping = buttons[i];
@@ -659,9 +659,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         }
 
         if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
-            pane.add_section("Emulated Trigger Thresholds");
+            pane.add_section("[EMULATED_TRIGGER_THRESHOLDS]");
             pane.add_child<NumberButton>(NumberButton::Props{
-                .key = "L Threshold",
+                .key = "[L_THRESHOLD]",
                 .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->leftTriggerActivationZone); },
                 .setValue =
                     [deadZones](int value) {
@@ -675,7 +675,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 .suffix = "%",
             });
             pane.add_child<NumberButton>(NumberButton::Props{
-                .key = "R Threshold",
+                .key = "[R_THRESHOLD]",
                 .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->rightTriggerActivationZone); },
                 .setValue =
                     [deadZones](int value) {
@@ -706,14 +706,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                     PADKeyAxisBinding* bindings =
                                         PADGetKeyAxisBindings(static_cast<u32>(port), &count);
                                     if (bindings == nullptr) {
-                                        return Rml::String("Not bound");
+                                        return Rml::String("[NOT_BOUND]");
                                     }
                                     for (u32 i = 0; i < PAD_AXIS_COUNT; ++i) {
                                         if (bindings[i].padAxis == axis) {
                                             return keyboard_key_name(bindings[i].scancode);
                                         }
                                     }
-                                    return Rml::String("Not bound");
+                                    return Rml::String("[NOT_BOUND]");
                                 },
                         })
                     .on_pressed([this, port, axis] {
@@ -724,13 +724,13 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             };
 
-            pane.add_section("Control Stick");
+            pane.add_section("[CONTROL_STICK]");
             addKeyAxis(PAD_AXIS_LEFT_Y_POS);
             addKeyAxis(PAD_AXIS_LEFT_Y_NEG);
             addKeyAxis(PAD_AXIS_LEFT_X_NEG);
             addKeyAxis(PAD_AXIS_LEFT_X_POS);
 
-            pane.add_section("C Stick");
+            pane.add_section("[C_STICK]");
             addKeyAxis(PAD_AXIS_RIGHT_Y_POS);
             addKeyAxis(PAD_AXIS_RIGHT_Y_NEG);
             addKeyAxis(PAD_AXIS_RIGHT_X_NEG);
@@ -741,7 +741,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         u32 axisCount = 0;
         PADAxisMapping* axes = PADGetAxisMappings(port, &axisCount);
         if (axes == nullptr) {
-            pane.add_text("No controller selected");
+            pane.add_text("[NO_CONTROLLER_SELECTED]");
             break;
         }
 
@@ -769,14 +769,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 });
         };
 
-        pane.add_section("Control Stick");
+        pane.add_section("[CONTROL_STICK]");
         addAxis(PAD_AXIS_LEFT_Y_POS);
         addAxis(PAD_AXIS_LEFT_Y_NEG);
         addAxis(PAD_AXIS_LEFT_X_NEG);
         addAxis(PAD_AXIS_LEFT_X_POS);
         if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
             pane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Deadzone",
+                .key = "[DEADZONE]",
                 .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->stickDeadZone); },
                 .setValue =
                     [deadZones](int value) {
@@ -791,14 +791,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             });
         }
 
-        pane.add_section("C Stick");
+        pane.add_section("[C_STICK]");
         addAxis(PAD_AXIS_RIGHT_Y_POS);
         addAxis(PAD_AXIS_RIGHT_Y_NEG);
         addAxis(PAD_AXIS_RIGHT_X_NEG);
         addAxis(PAD_AXIS_RIGHT_X_POS);
         if (PADDeadZones* deadZones = PADGetDeadZones(port)) {
             pane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Deadzone",
+                .key = "[DEADZONE]",
                 .getValue = [deadZones] { return deadzone_raw_to_percent(deadZones->substickDeadZone); },
                 .setValue =
                     [deadZones](int value) {
@@ -817,11 +817,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
     }
     case Page::Rumble: {
         auto& rumbleTest = pane.add_select_button({
-            .key = "Test Rumble",
+            .key = "[TEST_RUMBLE]",
             .getValue =
                 [this, port] {
-                    return (mRumbleTestActive && mRumbleTestPort == port) ? Rml::String("Stop")
-                                                                          : Rml::String("Start");
+                    return (mRumbleTestActive && mRumbleTestPort == port) ? Rml::String("[STOP]")
+                                                                          : Rml::String("[START]");
                 },
         });
         rumbleTest.on_pressed([this, port] {
@@ -843,7 +843,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             }
         });
         pane.add_child<NumberButton>(NumberButton::Props{
-            .key = "Low Rumble Frequency",
+            .key = "[LOW_RUMBLE_FREQUENCY]",
             .getValue =
                 [port] {
                     u16 low = 0;
@@ -866,7 +866,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             .suffix = "%",
         });
         pane.add_child<NumberButton>(NumberButton::Props{
-            .key = "High Rumble Frequency",
+            .key = "[HIGH_RUMBLE_FREQUENCY]",
             .getValue =
                 [port] {
                     u16 low = 0;
@@ -888,7 +888,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             .step = 1,
             .suffix = "%",
         });
-        pane.add_text("Configure your desired rumble intensities, then run a test to check how they feel.");
+        pane.add_text("[CONFIGURE_YOUR_DESIRED_RUMBLE_INTENSITIES_THEN_RUN_A_TEST_TO_CHECK]");
         break;
     }
     case Page::Actions: {
@@ -914,9 +914,8 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             };
 
-            pane.add_section("Custom Action Bindings");
-            pane.add_text("A key bound to any action here will REPLACE the default control for"
-                          " that action. Only bind buttons here that aren't used anywhere else.");
+            pane.add_section("[CUSTOM_ACTION_BINDINGS]");
+            pane.add_text("[A_KEY_BOUND_TO_ANY_ACTION_HERE_WILL_REPLACE_THE_DEFAULT_CONTROL_FOR]");
             for (auto& [configVars, actionName] : getActionBinds() | std::views::values) {
                 addActionBinding(&configVars->at(port), actionName);
             }
@@ -926,16 +925,13 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         u32 buttonCount = 0;
         PADButtonMapping* mappings = PADGetButtonMappings(port, &buttonCount);
         if (mappings == nullptr) {
-            pane.add_text("No controller selected");
+            pane.add_text("[NO_CONTROLLER_SELECTED]");
             break;
         }
 
         SDL_Gamepad* gamepad = gamepad_for_port(port);
-        pane.add_section("Custom Action Bindings");
-        pane.add_text("A button bound to any action here will REPLACE the default control for"
-                      " that action. Only bind buttons here that aren't used anywhere else. The glyphs"
-                      " shown for in game actions will not change. This is not recommended for "
-                      " regular Gamecube controllers.");
+        pane.add_section("[CUSTOM_ACTION_BINDINGS]");
+        pane.add_text("[A_BUTTON_BOUND_TO_ANY_ACTION_HERE_WILL_REPLACE_THE_DEFAULT_CONTROL_FOR]");
         auto addActionBinding = [&](auto actionBind, const std::string& key) {
             pane.add_select_button({
                            .key = key,
@@ -1110,11 +1106,11 @@ bool ControllerConfigWindow::pending_input_neutral() const {
 }
 
 Rml::String ControllerConfigWindow::pending_button_label() const {
-    return mPendingBindingArmed ? "Press a button..." : "Waiting...";
+    return mPendingBindingArmed ? "[PRESS_A_BUTTON]" : "[WAITING]";
 }
 
 Rml::String ControllerConfigWindow::pending_axis_label() const {
-    return mPendingBindingArmed ? "Move axis or press a button..." : "Waiting...";
+    return mPendingBindingArmed ? "[MOVE_AXIS_OR_PRESS_A_BUTTON]" : "[WAITING]";
 }
 
 void ControllerConfigWindow::cancel_pending_binding() {
@@ -1143,7 +1139,7 @@ void ControllerConfigWindow::finish_pending_key_binding() {
 }
 
 Rml::String ControllerConfigWindow::pending_key_label() const {
-    return mPendingBindingArmed ? "Press a key or mouse button..." : "Waiting...";
+    return mPendingBindingArmed ? "[PRESS_A_KEY_OR_MOUSE_BUTTON]" : "[WAITING]";
 }
 
 void ControllerConfigWindow::stop_rumble_test() {
@@ -1159,7 +1155,7 @@ void ControllerConfigWindow::stop_rumble_test() {
 
 Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped) {
     if (buttonUntyped == PAD_NATIVE_BUTTON_INVALID) {
-        return "Not bound";
+        return "[NOT_BOUND]";
     }
 
     auto button = static_cast<SDL_GamepadButton>(buttonUntyped);
@@ -1216,7 +1212,7 @@ Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped) {
     if (const char* name = PADGetNativeButtonName(buttonUntyped)) {
         return name;
     }
-    return "Unknown";
+    return "[UNKNOWN]";
 }
 
 }  // namespace dusk::ui
