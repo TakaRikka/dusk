@@ -260,6 +260,12 @@ namespace dusk {
             config::Save();
         }
 
+        if (getSettings().game.enableResetKeybind && ImGui::GetIO().KeyCtrl &&
+            ImGui::IsKeyPressed(ImGuiKey_R) && !fpcM_SearchByName(fpcNm_LOGO_SCENE_e))
+        {
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }
+
         if (ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_F1)) {
             if (getSettings().backend.enableAdvancedSettings) {
                 m_isHidden = !m_isHidden;

@@ -6,6 +6,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
+#include "dusk/hotkeys.h"
 #include "dusk/data.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
@@ -891,6 +892,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
             "Hold Tab to increase game speed by up to 4x.",
             [] { return getSettings().game.speedrunMode; });
+        addOption("Reset Key (" + Rml::String{hotkeys::DO_RESET} + ")",
+            getSettings().game.enableResetKeybind,
+            "Press " + Rml::String{hotkeys::DO_RESET} + " to reset the game.");
     });
 
     add_tab("Audio", [this](Rml::Element* content) {
