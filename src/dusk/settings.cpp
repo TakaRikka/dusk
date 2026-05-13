@@ -10,6 +10,8 @@ UserSettings g_userSettings = {
         .lockAspectRatio {"video.lockAspectRatio", false},
         .enableFpsOverlay {"game.enableFpsOverlay", false},
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
+        .windowPositionX {"video.windowPositionX", -1},
+        .windowPositionY {"video.windowPositionY", -1},
     },
 
     .audio = {
@@ -175,6 +177,8 @@ void registerSettings() {
     Register(g_userSettings.video.lockAspectRatio);
     Register(g_userSettings.video.enableFpsOverlay);
     Register(g_userSettings.video.fpsOverlayCorner);
+    Register(g_userSettings.video.windowPositionX);
+    Register(g_userSettings.video.windowPositionY);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);

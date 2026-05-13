@@ -72,6 +72,10 @@ struct UserSettings {
         ConfigVar<bool> lockAspectRatio;
         ConfigVar<bool> enableFpsOverlay;
         ConfigVar<int> fpsOverlayCorner;
+        ConfigVar<int> windowPositionX;
+        ConfigVar<int> windowPositionY;
+
+
     } video;
 
     struct {

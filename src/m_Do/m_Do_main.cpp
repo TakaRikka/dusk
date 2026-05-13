@@ -153,9 +153,22 @@ s32 LOAD_COPYDATE(void*) {
     return 1;
 }
 
+
+
 AuroraInfo auroraInfo;
 AuroraStats dusk::lastFrameAuroraStats;
 float dusk::frameUsagePct = 0.0f;
+
+static void SaveWindowPosition() {
+    if (auroraInfo.window) {
+        int x, y;
+        SDL_GetWindowPosition(auroraInfo.window, &x, &y);
+        dusk::getSettings().video.windowPositionX.setValue(x);
+        dusk::getSettings().video.windowPositionY.setValue(y);
+        dusk::config::Save();
+    }
+    return;
+}
 
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
@@ -324,8 +337,10 @@ void main01(void) {
     } while (dusk::IsRunning);
 
     exit:;
+    SaveWindowPosition();
     dusk::ui::shutdown();
 }
+
 
 static bool IsBackendAvailable(AuroraBackend backend) {
     if (backend == BACKEND_AUTO) {
@@ -542,8 +557,8 @@ int game_main(int argc, char* argv[]) {
         config.configPath = reinterpret_cast<const char*>(configPathString.c_str());
         config.vsync = dusk::getSettings().video.enableVsync;
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
-        config.windowPosX = -1;
-        config.windowPosY = -1;
+        config.windowPosX = dusk::getSettings().video.windowPositionX;
+        config.windowPosY = dusk::getSettings().video.windowPositionY;
         config.windowWidth = defaultWindowWidth * 2;
         config.windowHeight = defaultWindowHeight * 2;
         config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
