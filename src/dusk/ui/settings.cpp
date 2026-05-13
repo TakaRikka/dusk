@@ -23,6 +23,7 @@
 #include "menu_bar.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
+#include "i18n.hpp"
 #include "ui.hpp"
 
 #include <aurora/lib/window.hpp>
@@ -34,6 +35,7 @@
 #endif
 
 #include <algorithm>
+#include <cctype>
 #include <filesystem>
 
 namespace dusk::ui {
@@ -47,21 +49,53 @@ constexpr std::array kLanguageNames = {
     "Italian",
 };
 
+constexpr std::array<const char*, 4> kUiLanguageIds = {
+    "en",
+    "zh-cn",
+    "fr",
+    "ja",
+};
+
+constexpr std::array<const char*, 4> kUiLanguageTokenNames = {
+    "[ENGLISH]",
+    "[SIMPLIFIED_CHINESE]",
+    "[FRENCH]",
+    "[JAPANESE]",
+};
+
+int ui_language_index(std::string_view languageId) {
+    std::string lowered;
+    lowered.reserve(languageId.size());
+    for (const char ch : languageId) {
+        lowered.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
+    }
+    if (lowered == "zh-cn" || lowered == "zh-hans") {
+        return 1;
+    }
+    if (lowered == "fr") {
+        return 2;
+    }
+    if (lowered == "ja") {
+        return 3;
+    }
+    return 0;
+}
+
 constexpr std::array kCardFileTypes = {
     "Card Image",
     "GCI Folder",
 };
 
 constexpr std::array kFpsOverlayCornerNames = {
-    "Top Left",
-    "Top Right",
-    "Bottom Left",
-    "Bottom Right",
+    "[TOP_LEFT]",
+    "[TOP_RIGHT]",
+    "[BOTTOM_LEFT]",
+    "[BOTTOM_RIGHT]",
 };
 
 constexpr std::array kGyroInputModeLabels = {
-    "Sensor",
-    "Mouse",
+    "[SENSOR]",
+    "[MOUSE]",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -479,14 +513,14 @@ void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, Con
 SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
     if (prelaunch) {
         mSuppressNavFallback = true;
-        add_tab("Prelaunch", [this](Rml::Element* content) {
+        add_tab("[PRELAUNCH]", [this](Rml::Element* content) {
             auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
             auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
             leftPane.register_control(
                 leftPane
                     .add_select_button({
-                        .key = "Disc Image",
+                        .key = "[DISC_IMAGE]",
                         .getValue =
                             [] {
                                 const auto& path = prelaunch_state().configuredDiscPath;
@@ -510,28 +544,26 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     })
                     .on_pressed([] { open_iso_picker(); }),
                 rightPane, [](Pane& pane) {
-                    pane.add_rml("Set the disc image that Dusklight uses to launch the game.<br/><br/>"
-                                 "Changes require a restart.");
+                    pane.add_rml("[SET_THE_DISC_IMAGE_THAT_DUSKLIGHT_USES_TO_LAUNCH_THE_GAME_CHANGES_REQUIR]");
                 });
 #if DUSK_CAN_CHANGE_DATA_FOLDER
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = "Data Folder",
+                    .key = "[DATA_FOLDER]",
                     .getValue = [] { return configured_data_path_display_name(); },
                     .isModified = [] { return data::is_data_path_restart_pending(); },
                 }),
                 rightPane, [](Pane& pane) {
-                    pane.add_text("The data folder is where Dusklight stores settings, saves, "
-                                  "logs, texture replacements, and other app data.");
+                    pane.add_text("[THE_DATA_FOLDER_IS_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_RE]");
                     pane.add_child<DataFolderPathText>();
 #if DUSK_CAN_OPEN_DATA_FOLDER
-                    pane.add_button("Open Data Folder").on_pressed([] {
+                    pane.add_button("[OPEN_DATA_FOLDER]").on_pressed([] {
                         if (data::open_data_path()) {
                             mDoAud_seStartMenu(kSoundClick);
                         }
                     });
 #endif
-                    pane.add_button("Change Data Folder").on_pressed([] {
+                    pane.add_button("[CHANGE_DATA_FOLDER]").on_pressed([] {
                         const auto defaultLocation =
                             io::fs_path_to_string(data::configured_data_path());
                         ShowFolderSelect(&data_folder_dialog_callback, nullptr,
@@ -539,26 +571,26 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             defaultLocation.empty() ? nullptr : defaultLocation.c_str());
                     });
 #if defined(_WIN32)
-                    pane.add_button("Portable Mode").on_pressed([] {
+                    pane.add_button("[PORTABLE_MODE]").on_pressed([] {
                         if (data::set_portable_data_path()) {
                             mDoAud_seStartMenu(kSoundItemChange);
                         }
                     });
 #endif
                     pane.add_button({
-                        .text = "Reset to Default",
+                        .text = "[RESET_TO_DEFAULT]",
                         .isDisabled = [] { return data::is_default_data_path(); },
                     }).on_pressed([] {
                         if (data::reset_data_path()) {
                             mDoAud_seStartMenu(kSoundItemChange);
                         }
                     });
-                    pane.add_rml("Data will be migrated automatically on restart.");
+                    pane.add_rml("[DATA_WILL_BE_MIGRATED_AUTOMATICALLY_ON_RESTART]");
                 });
 #endif
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = "Language",
+                    .key = "[LANGUAGE]",
                     .getValue =
                         [] {
                             const auto& state = prelaunch_state();
@@ -583,7 +615,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 rightPane, [](Pane& pane) {
                     for (int i = 0; i < kLanguageNames.size(); i++) {
                         pane.add_button({
-                                            .text = kLanguageNames[i],
+                                            .text = i == 0 ? "[ENGLISH]" :
+                                                            i == 1 ? "[GERMAN]" :
+                                                            i == 2 ? "[FRENCH]" :
+                                                            i == 3 ? "[SPANISH]" :
+                                                                     "[ITALIAN]",
                                             .isSelected =
                                                 [i] {
                                                     return getSettings().game.language.getValue() ==
@@ -596,11 +632,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 config::Save();
                             });
                     }
-                    pane.add_rml("<br/>Changes require a restart.");
+                    pane.add_rml("[CHANGES_REQUIRE_A_RESTART]");
                 });
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = "Graphics Backend",
+                    .key = "[GRAPHICS_BACKEND]",
                     .getValue = [] { return Rml::String{backend_name(configured_backend())}; },
                     .isModified =
                         [] {
@@ -623,11 +659,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 config::Save();
                             });
                     }
-                    pane.add_rml("<br/>Changes require a restart.");
+                    pane.add_rml("[CHANGES_REQUIRE_A_RESTART]");
                 });
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = "Save File Type",
+                    .key = "[SAVE_FILE_TYPE]",
                     .getValue =
                         [] {
                             return kCardFileTypes[getSettings().backend.cardFileType.getValue()];
@@ -658,20 +694,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         });
     }
 
-    add_tab("Video", [this](Rml::Element* content) {
+    add_tab("[VIDEO]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Display");
+        leftPane.add_section("[DISPLAY]");
 
-        leftPane.register_control(leftPane.add_button("Toggle Fullscreen").on_pressed([] {
+        leftPane.register_control(leftPane.add_button("[TOGGLE_FULLSCREEN]").on_pressed([] {
             mDoAud_seStartMenu(kSoundItemChange);
             getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);
             VISetWindowFullscreen(getSettings().video.enableFullscreen);
             config::Save();
         }),
             rightPane, [](Pane& pane) { pane.clear(); });
-        leftPane.register_control(leftPane.add_button("Restore Default Window Size").on_pressed([] {
+        leftPane.register_control(leftPane.add_button("[RESTORE_DEFAULT_WINDOW_SIZE]").on_pressed([] {
             mDoAud_seStartMenu(kSoundItemChange);
             getSettings().video.enableFullscreen.setValue(false);
             VISetWindowFullscreen(false);
@@ -681,14 +717,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             rightPane, [](Pane& pane) { pane.clear(); });
         config_bool_select(leftPane, rightPane, getSettings().video.enableVsync,
             {
-                .key = "Enable VSync",
-                .helpText = "Synchronizes the frame rate to your monitor's refresh rate.",
+                .key = "[ENABLE_VSYNC]",
+                .helpText = "[SYNCHRONIZES_THE_FRAME_RATE_TO_YOUR_MONITOR_S_REFRESH_RATE]",
                 .onChange = [](bool value) { aurora_enable_vsync(value); },
             });
         config_bool_select(leftPane, rightPane, getSettings().video.lockAspectRatio,
             {
-                .key = "Lock 4:3 Aspect Ratio",
-                .helpText = "Lock the game's aspect ratio to the original.",
+                .key = "[LOCK_4_3_ASPECT_RATIO]",
+                .helpText = "[LOCK_THE_GAME_S_ASPECT_RATIO_TO_THE_ORIGINAL]",
                 .onChange =
                     [](bool value) {
                         AuroraSetViewportPolicy(
@@ -697,14 +733,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_bool_select(leftPane, rightPane, getSettings().game.pauseOnFocusLost,
             {
-                .key = "Pause on Focus Lost",
-                .helpText = "Pause the game when window focus is lost.",
+                .key = "[PAUSE_ON_FOCUS_LOST]",
+                .helpText = "[PAUSE_THE_GAME_WHEN_WINDOW_FOCUS_IS_LOST]",
                 .onChange = [](bool value) { aurora_set_pause_on_focus_lost(value); },
                 .isDisabled = [] { return IsMobile || getSettings().game.speedrunMode; },
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Show FPS Counter",
+                .key = "[SHOW_FPS_COUNTER]",
                 .getValue =
                     [] {
                         if (!getSettings().video.enableFpsOverlay.getValue()) {
@@ -724,7 +760,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             rightPane, [](Pane& pane) {
                 pane.add_button(
                         {
-                            .text = "Off",
+                            .text = "[OFF]",
                             .isSelected =
                                 [] { return !getSettings().video.enableFpsOverlay.getValue(); },
                         })
@@ -751,14 +787,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         });
                 }
                 pane.add_rml(
-                    "<br/>Display the current framerate in a corner of the screen while playing.");
+                    "[DISPLAY_THE_CURRENT_FRAMERATE_IN_A_CORNER_OF_THE_SCREEN_WHILE_PLAYING]");
             });
-        leftPane.add_section("Resolution");
+        leftPane.add_section("[RESOLUTION]");
         graphics_tuner_control(*this, leftPane, rightPane,
             getSettings().game.internalResolutionScale,
             GraphicsTunerProps{
                 .option = GraphicsOption::InternalResolution,
-                .title = "Internal Resolution",
+                .title = "[INTERNAL_RESOLUTION]",
                 .helpText = kInternalResolutionHelpText,
                 .valueMin = 0,
                 .valueMax = 12,
@@ -768,18 +804,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             getSettings().game.shadowResolutionMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::ShadowResolution,
-                .title = "Shadow Resolution",
+                .title = "[SHADOW_RESOLUTION]",
                 .helpText = kShadowResolutionHelpText,
                 .valueMin = 1,
                 .valueMax = 8,
                 .defaultValue = 1,
             }, mPrelaunch);
 
-        leftPane.add_section("Post-Processing");
+        leftPane.add_section("[POST_PROCESSING]");
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMode,
-                .title = "Bloom",
+                .title = "[BLOOM]",
                 .helpText = kBloomHelpText,
                 .valueMin = static_cast<int>(BloomMode::Off),
                 .valueMax = static_cast<int>(BloomMode::Dusk),
@@ -788,34 +824,34 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
-                .title = "Bloom Brightness",
+                .title = "[BLOOM_BRIGHTNESS]",
                 .helpText = kBloomBrightnessHelpText,
                 .valueMin = 0,
                 .valueMax = 100,
                 .defaultValue = 100,
             }, mPrelaunch);
 
-        leftPane.add_section("Rendering");
+        leftPane.add_section("[RENDERING]");
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
             {
-                .key = "Unlock Framerate",
+                .key = "[UNLOCK_FRAMERATE]",
                 .helpText = kUnlockFramerateHelpText,
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
-                .key = "Enable Depth of Field",
+                .key = "[ENABLE_DEPTH_OF_FIELD]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
-                .key = "Enable Mini-Map Shadows",
+                .key = "[ENABLE_MINI_MAP_SHADOWS]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
-                .key = "Disable Cutscene Pillarboxing",
+                .key = "[DISABLE_CUTSCENE_PILLARBOXING]",
             });
     });
 
-    add_tab("Input", [this](Rml::Element* content) {
+    add_tab("[INPUT]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
@@ -829,42 +865,41 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 });
         };
 
-        leftPane.add_section("Controller");
-        leftPane.register_control(leftPane.add_button("Configure Controller").on_pressed([this] {
+        leftPane.add_section("[CONTROLLER]");
+        leftPane.register_control(leftPane.add_button("[CONFIGURE_CONTROLLER]").on_pressed([this] {
             push(std::make_unique<ControllerConfigWindow>(mPrelaunch));
         }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_text("Open controller binding configuration.");
+                pane.add_text("[OPEN_CONTROLLER_BINDING_CONFIGURATION]");
             });
         config_bool_select(leftPane, rightPane, getSettings().game.allowBackgroundInput,
             {
-                .key = "Allow Background Input",
-                .helpText = "Allow controller input even when the game window is not focused.",
+                .key = "[ALLOW_BACKGROUND_INPUT]",
+                .helpText = "[ALLOW_CONTROLLER_INPUT_EVEN_WHEN_THE_GAME_WINDOW_IS_NOT_FOCUSED]",
                 .onChange = [](bool value) { aurora_set_background_input(value); },
             });
 
-        leftPane.add_section("Camera");
-        addOption("Free Camera", getSettings().game.freeCamera,
-            "Enables twin-stick camera control, letting the C-Stick move the camera vertically as "
-            "well as horizontally.");
-        addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
-            "Invert horizontal camera movement.");
-        addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
-            "Invert vertical camera movement when Free Camera is enabled.",
+        leftPane.add_section("[CAMERA]");
+        addOption("[FREE_CAMERA]", getSettings().game.freeCamera,
+            "[ENABLES_TWIN_STICK_CAMERA_CONTROL_LETTING_THE_C_STICK_MOVE_THE_CAMERA_VE]");
+        addOption("[INVERT_CAMERA_X_AXIS]", getSettings().game.invertCameraXAxis,
+            "[INVERT_HORIZONTAL_CAMERA_MOVEMENT]");
+        addOption("[INVERT_CAMERA_Y_AXIS]", getSettings().game.invertCameraYAxis,
+            "[INVERT_VERTICAL_CAMERA_MOVEMENT_WHEN_FREE_CAMERA_IS_ENABLED]",
             [] { return !getSettings().game.freeCamera; });
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
-            "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
+            "[FREE_CAMERA_SENSITIVITY]", "[ADJUSTS_TWIN_STICK_CAMERA_SENSITIVITY]", 50, 200, 5,
             [] { return !getSettings().game.freeCamera; });
-        addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
-            "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
-        addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
-            "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+        addOption("[INVERT_FIRST_PERSON_X_AXIS]", getSettings().game.invertFirstPersonXAxis,
+            "[INVERT_HORIZONTAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
+        addOption("[INVERT_FIRST_PERSON_Y_AXIS]", getSettings().game.invertFirstPersonYAxis,
+            "[INVERT_VERTICAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
 
-        leftPane.add_section("Gyro");
+        leftPane.add_section("[GYRO]");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Gyro Input Method",
+                .key = "[GYRO_INPUT_METHOD]",
                 .getValue =
                     [] {
                         const auto mode = getSettings().game.gyroMode.getValue();
@@ -895,56 +930,52 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         });
                 }
                 pane.add_rml(
-                    "<br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/>"
-                    "<br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/>"
-                    "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
+                    "[SENSOR_READS_MOTION_DIRECTLY_FROM_A_SUPPORTED_CONTROLLER_S_GYRO_VIA_SDL]");
             });
-        addOption("Gyro Aim", getSettings().game.enableGyroAim,
-            "Enables gyro controls while in look mode, aiming a hawk, and aiming "
-            "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
-            "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
-        addOption("Gyro Rollgoal", getSettings().game.enableGyroRollgoal,
-            "Enables gyro controls for Rollgoal in Hena's Cabin.",
+        addOption("[GYRO_AIM]", getSettings().game.enableGyroAim,
+            "[ENABLES_GYRO_CONTROLS_WHILE_IN_LOOK_MODE_AIMING_A_HAWK_AND_AIMING_SUPPOR]");
+        addOption("[GYRO_ROLLGOAL]", getSettings().game.enableGyroRollgoal,
+            "[ENABLES_GYRO_CONTROLS_FOR_ROLLGOAL_IN_HENA_S_CABIN]",
             [] { return getSettings().game.gyroMode.getValue() == GyroMode::Mouse; });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityY,
-            "Gyro Pitch Sensitivity", "Controls vertical gyro aiming sensitivity.", 25, 400, 5,
+            "[GYRO_PITCH_SENSITIVITY]", "[CONTROLS_VERTICAL_GYRO_AIMING_SENSITIVITY]", 25, 400, 5,
             [] { return !gyro_enabled(); });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityX,
-            "Gyro Yaw Sensitivity", "Controls horizontal gyro aiming sensitivity.", 25, 400, 5,
+            "[GYRO_YAW_SENSITIVITY]", "[CONTROLS_HORIZONTAL_GYRO_AIMING_SENSITIVITY]", 25, 400, 5,
             [] { return !gyro_enabled(); });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
-            "Rollgoal Sensitivity", "Controls how strongly gyro input tilts the Rollgoal table.",
+            "[ROLLGOAL_SENSITIVITY]", "[CONTROLS_HOW_STRONGLY_GYRO_INPUT_TILTS_THE_ROLLGOAL_TABLE]",
             25, 400, 5,
             [] {
                 return !getSettings().game.enableGyroRollgoal ||
                        getSettings().game.gyroMode.getValue() == GyroMode::Mouse;
             });
-        config_percent_select(leftPane, rightPane, getSettings().game.gyroDeadband, "Gyro Deadband",
-            "Ignores small gyro movement to reduce drift and jitter.", 0, 50, 1,
+        config_percent_select(leftPane, rightPane, getSettings().game.gyroDeadband, "[GYRO_DEADBAND]",
+            "[IGNORES_SMALL_GYRO_MOVEMENT_TO_REDUCE_DRIFT_AND_JITTER]", 0, 50, 1,
             [] { return !gyro_enabled(); });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSmoothing,
-            "Gyro Smoothing", "Higher values smooth gyro input over time.", 0, 100, 1,
+            "[GYRO_SMOOTHING]", "[HIGHER_VALUES_SMOOTH_GYRO_INPUT_OVER_TIME]", 0, 100, 1,
             [] { return !gyro_enabled(); });
-        addOption("Invert Gyro Pitch", getSettings().game.gyroInvertPitch,
-            "Invert vertical gyro aiming.", [] { return !gyro_enabled(); });
-        addOption("Invert Gyro Yaw", getSettings().game.gyroInvertYaw,
-            "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
+        addOption("[INVERT_GYRO_PITCH]", getSettings().game.gyroInvertPitch,
+            "[INVERT_VERTICAL_GYRO_AIMING]", [] { return !gyro_enabled(); });
+        addOption("[INVERT_GYRO_YAW]", getSettings().game.gyroInvertYaw,
+            "[INVERT_HORIZONTAL_GYRO_AIMING]", [] { return !gyro_enabled(); });
 
-        leftPane.add_section("Tools");
-        addOption("Turbo Key", getSettings().game.enableTurboKeybind,
-            "Hold Tab to increase game speed by up to 4x.",
+        leftPane.add_section("[TOOLS]");
+        addOption("[TURBO_KEY]", getSettings().game.enableTurboKeybind,
+            "[HOLD_TAB_TO_INCREASE_GAME_SPEED_BY_UP_TO_4X]",
             [] { return getSettings().game.speedrunMode; });
-        addOption("Reset Key (" + Rml::String{hotkeys::DO_RESET} + ")",
+        addOption("[RESET_KEY] " + Rml::String{hotkeys::DO_RESET} + ")",
             getSettings().game.enableResetKeybind,
-            "Press " + Rml::String{hotkeys::DO_RESET} + " to reset the game.");
+            "[PRESS] " + Rml::String{hotkeys::DO_RESET} + " [TO_RESET_THE_GAME]");
     });
 
-    add_tab("Audio", [this](Rml::Element* content) {
+    add_tab("[AUDIO]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         // TODO: Individual sliders for Main Music, Sub Music, Sound Effects, and Fanfare.
-        leftPane.add_section("Volume");
+        leftPane.add_section("[VOLUME]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
                 .key = "Master Volume",
@@ -965,43 +996,42 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_text("Adjusts the volume of all sounds in the game.");
+                pane.add_text("[ADJUSTS_THE_VOLUME_OF_ALL_SOUNDS_IN_THE_GAME]");
             });
 
-        leftPane.add_section("Effects");
+        leftPane.add_section("[EFFECTS]");
         config_bool_select(leftPane, rightPane, getSettings().audio.enableReverb,
             {
-                .key = "Enable Reverb",
-                .helpText = "Enables the reverb effect in game audio.",
+                .key = "[ENABLE_REVERB]",
+                .helpText = "[ENABLES_THE_REVERB_EFFECT_IN_GAME_AUDIO]",
                 .onChange = [](bool value) { audio::SetEnableReverb(value); },
             });
         config_bool_select(leftPane, rightPane, getSettings().audio.enableHrtf,
             {
-                .key = "Enable Spatial Sound",
-                .helpText =
-                    "Emulate surround sound via HRTF. Recommended only for use with headphones!",
+                .key = "[ENABLE_SPATIAL_SOUND]",
+                .helpText = "[EMULATE_SURROUND_SOUND_VIA_HRTF_RECOMMENDED_ONLY_FOR_USE_WITH_HEADPHONES]",
                 .onChange = [](bool value) { audio::EnableHrtf = value; },
             });
         config_bool_select(leftPane, rightPane, getSettings().audio.menuSounds,
             {
-                .key = "Dusklight Menu Sounds",
-                .helpText = "Play sound effects when navigating the Dusklight menu.",
+                .key = "[DUSKLIGHT_MENU_SOUNDS]",
+                .helpText = "[PLAY_SOUND_EFFECTS_WHEN_NAVIGATING_THE_DUSKLIGHT_MENU]",
             });
 
-        leftPane.add_section("Tweaks");
+        leftPane.add_section("[TWEAKS]");
         config_bool_select(leftPane, rightPane, getSettings().game.noLowHpSound,
             {
-                .key = "No Low HP Sound",
-                .helpText = "Disable the beeping sound when having low health.",
+                .key = "[NO_LOW_HP_SOUND]",
+                .helpText = "[DISABLE_THE_BEEPING_SOUND_WHEN_HAVING_LOW_HEALTH]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.midnasLamentNonStop,
             {
-                .key = "Non-Stop Midna's Lament",
-                .helpText = "Prevents enemy music while Midna's Lament is playing.",
+                .key = "[NON_STOP_MIDNA_S_LAMENT]",
+                .helpText = "[PREVENTS_ENEMY_MUSIC_WHILE_MIDNA_S_LAMENT_IS_PLAYING]",
             });
     });
 
-    add_tab("Gameplay", [this](Rml::Element* content) {
+    add_tab("[GAMEPLAY]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
@@ -1018,21 +1048,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             add_speedrun_disabled_option(leftPane, rightPane, value, key, helpText);
         };
 
-        leftPane.add_section("General");
-        addOption("Mirror Mode", getSettings().game.enableMirrorMode,
-            "Mirrors the world horizontally, matching the Wii version of the game.");
-        addOption("Minimal HUD", getSettings().game.minimalHUD,
-            "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive "
-            "experience.");
-        addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
-            "Restores patched glitches from Wii USA 1.0, the first released version.");
-        addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
-            "Enables rotating Link in the collection menu with the C-Stick.");
+        leftPane.add_section("[GENERAL]");
+        addOption("[MIRROR_MODE]", getSettings().game.enableMirrorMode,
+            "[MIRRORS_THE_WORLD_HORIZONTALLY_MATCHING_THE_WII_VERSION_OF_THE_GAME]");
+        addOption("[MINIMAL_HUD]", getSettings().game.minimalHUD,
+            "[DISABLES_THE_ELEMENTS_OF_THE_MAIN_HUD_OF_THE_GAME_USEFUL_FOR_A_MORE_IMME]");
+        addOption("[RESTORE_WII_1_0_GLITCHES]", getSettings().game.restoreWiiGlitches,
+            "[RESTORES_PATCHED_GLITCHES_FROM_WII_USA_1_0_THE_FIRST_RELEASED_VERSION]");
+        addOption("[ENABLE_ROTATING_LINK_DOLL]", getSettings().game.enableLinkDollRotation,
+            "[ENABLES_ROTATING_LINK_IN_THE_COLLECTION_MENU_WITH_THE_C_STICK]");
 
-        leftPane.add_section("Difficulty");
+        leftPane.add_section("[DIFFICULTY]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Damage Multiplier",
+                .key = "[DAMAGE_MULTIPLIER]",
                 .getValue = [] { return getSettings().game.damageMultiplier.getValue(); },
                 .setValue =
                     [](int value) {
@@ -1051,49 +1080,46 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_text("Multiplies incoming damage.");
+                pane.add_text("[MULTIPLIES_INCOMING_DAMAGE]");
             });
         addSpeedrunDisabledOption(
-            "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
-        addSpeedrunDisabledOption("No Heart Drops", getSettings().game.noHeartDrops,
-            "Hearts will never drop from enemies, pots, and various other places.");
+            "[INSTANT_DEATH]", getSettings().game.instantDeath, "[ANY_HIT_WILL_INSTANTLY_KILL_YOU]");
+        addSpeedrunDisabledOption("[NO_HEART_DROPS]", getSettings().game.noHeartDrops,
+            "[HEARTS_WILL_NEVER_DROP_FROM_ENEMIES_POTS_AND_VARIOUS_OTHER_PLACES]");
 
-        leftPane.add_section("Quality of Life");
-        addOption("Bigger Wallets", getSettings().game.biggerWallets,
-            "Wallet sizes are like in the HD version. (500, 1000, 2000)");
-        addOption("Disable Rupee Cutscenes", getSettings().game.disableRupeeCutscenes,
-            "Rupees will not play cutscenes after you have collected them the first time.");
-        addOption("Faster Climbing", getSettings().game.fastClimbing,
-            "Quicker climbing on ladders and vines like the HD version.");
-        addOption("Faster Tears of Light", getSettings().game.fastTears,
-            "Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
-        addSpeedrunDisabledOption("Autosave", getSettings().game.autoSave,
-            "Autosaves the game when going to a new area, opening a dungeon door, "
-            "or getting a new item.");
-        addOption("Instant Saves", getSettings().game.instantSaves,
-            "Skips the delay when writing to the Memory Card.");
-        addOption("Hold B for Instant Text", getSettings().game.instantText,
-            "Makes text scroll immediately by holding B.");
-        addOption("No Climbing Miss Animation", getSettings().game.noMissClimbing,
-            "Prevents Link from playing a struggle animation when grabbing ledges or "
-            "climbing on vines.");
-        addOption("No Rupee Returns", getSettings().game.noReturnRupees,
-            "Always collect Rupees even if your Wallet is too full.");
-        addOption("No Sword Recoil", getSettings().game.noSwordRecoil,
-            "Link will not recoil when his sword hits walls.");
-        addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
-            "Skip needing to catch a second fish for Sera's cat.");
-        addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
-            "Allows Wolf Link to howl and change the time of day.");
-        addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
-            "Transform instantly by pressing R and Y simultaneously.");
+        leftPane.add_section("[QUALITY_OF_LIFE]");
+        addOption("[BIGGER_WALLETS]", getSettings().game.biggerWallets,
+            "[WALLET_SIZES_ARE_LIKE_IN_THE_HD_VERSION_500_1000_2000]");
+        addOption("[DISABLE_RUPEE_CUTSCENES]", getSettings().game.disableRupeeCutscenes,
+            "[RUPEES_WILL_NOT_PLAY_CUTSCENES_AFTER_YOU_HAVE_COLLECTED_THEM_THE_FIRST_T]");
+        addOption("[FASTER_CLIMBING]", getSettings().game.fastClimbing,
+            "[QUICKER_CLIMBING_ON_LADDERS_AND_VINES_LIKE_THE_HD_VERSION]");
+        addOption("[FASTER_TEARS_OF_LIGHT]", getSettings().game.fastTears,
+            "[TEARS_OF_LIGHT_DROPPED_BY_SHADOW_INSECTS_POP_OUT_FASTER_LIKE_THE_HD_VERS]");
+        addSpeedrunDisabledOption("[AUTOSAVE]", getSettings().game.autoSave,
+            "[AUTOSAVES_THE_GAME_WHEN_GOING_TO_A_NEW_AREA_OPENING_A_DUNGEON_DOOR_OR_GE]");
+        addOption("[INSTANT_SAVES]", getSettings().game.instantSaves,
+            "[SKIPS_THE_DELAY_WHEN_WRITING_TO_THE_MEMORY_CARD]");
+        addOption("[HOLD_B_FOR_INSTANT_TEXT]", getSettings().game.instantText,
+            "[MAKES_TEXT_SCROLL_IMMEDIATELY_BY_HOLDING_B]");
+        addOption("[NO_CLIMBING_MISS_ANIMATION]", getSettings().game.noMissClimbing,
+            "[PREVENTS_LINK_FROM_PLAYING_A_STRUGGLE_ANIMATION_WHEN_GRABBING_LEDGES_OR]");
+        addOption("[NO_RUPEE_RETURNS]", getSettings().game.noReturnRupees,
+            "[ALWAYS_COLLECT_RUPEES_EVEN_IF_YOUR_WALLET_IS_TOO_FULL]");
+        addOption("[NO_SWORD_RECOIL]", getSettings().game.noSwordRecoil,
+            "[LINK_WILL_NOT_RECOIL_WHEN_HIS_SWORD_HITS_WALLS]");
+        addOption("[NO_2ND_FISH_FOR_CAT]", getSettings().game.no2ndFishForCat,
+            "[SKIP_NEEDING_TO_CATCH_A_SECOND_FISH_FOR_SERA_S_CAT]");
+        addSpeedrunDisabledOption("[SUN_S_SONG_R_X]", getSettings().game.sunsSong,
+            "[ALLOWS_WOLF_LINK_TO_HOWL_AND_CHANGE_THE_TIME_OF_DAY]");
+        addOption("[QUICK_TRANSFORM_R_Y]", getSettings().game.enableQuickTransform,
+            "[TRANSFORM_INSTANTLY_BY_PRESSING_R_AND_Y_SIMULTANEOUSLY]");
 
-        leftPane.add_section("Speedrunning");
+        leftPane.add_section("[SPEEDRUNNING]");
         config_bool_select(leftPane, rightPane, getSettings().game.speedrunMode,
             {
-                .key = "Speedrun Mode",
-                .helpText =
-                    "Enables speedrunning options while restricting certain gameplay modifiers.",
+                .key = "[SPEEDRUN_MODE]",
+                .helpText = "[ENABLES_SPEEDRUNNING_OPTIONS_WHILE_RESTRICTING_CERTAIN_GAMEPLAY_MODIFIER]",
                 .onChange =
                     [](bool enabled) {
                         if (enabled) {
@@ -1114,9 +1140,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_bool_select(leftPane, rightPane, getSettings().game.liveSplitEnabled,
             {
-                .key = "LiveSplit Connection",
-                .helpText = "Connect to LiveSplit server on localhost:16834. For this to work you must right click LiveSplit, and turn on Control -> Start TCP Server."
-                " To see IGT in LiveSplit you must change your comparison to Game Time.",
+                .key = "[LIVESPLIT_CONNECTION]",
+                .helpText = "[CONNECT_TO_LIVESPLIT_SERVER_ON_LOCALHOST_16834_FOR_THIS_TO_WORK_YOU]",
                 .onChange =
                     [](bool enabled) {
                         if (enabled) {
@@ -1129,13 +1154,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showSpeedrunRTATimer,
             {
-                .key = "Show RTA",
-                .helpText = "Display the RTA timer. IGT is always visible.",
+                .key = "[SHOW_RTA]",
+                .helpText = "[DISPLAY_THE_RTA_TIMER_IGT_IS_ALWAYS_VISIBLE]",
                 .isDisabled = [] { return !getSettings().game.speedrunMode; },
             });
     });
 
-    add_tab("Cheats", [this](Rml::Element* content) {
+    add_tab("[CHEATS]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
@@ -1144,71 +1169,112 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             add_speedrun_disabled_option(leftPane, rightPane, value, key, helpText);
         };
 
-        leftPane.add_section("Resources");
-        addCheat("Infinite Hearts", getSettings().game.infiniteHearts, "Keeps your health full.");
-        addCheat(
-            "Infinite Arrows", getSettings().game.infiniteArrows, "Keeps your arrow count full.");
-        addCheat("Infinite Seeds", getSettings().game.infiniteSeeds, "Keeps your slingshot pellets (seeds) full.");
-        addCheat("Infinite Bombs", getSettings().game.infiniteBombs, "Keeps all bomb bags full.");
-        addCheat("Infinite Oil", getSettings().game.infiniteOil, "Keeps your lantern oil full.");
-        addCheat("Infinite Oxygen", getSettings().game.infiniteOxygen,
-            "Keeps your underwater oxygen meter full.");
-        addCheat(
-            "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
-        addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
-            "Item drops such as rupees and hearts will never disappear after they drop.");
+        leftPane.add_section("[RESOURCES]");
+        addCheat("[CHEAT_INFINITE_HEARTS]", getSettings().game.infiniteHearts,
+            "[CHEAT_INFINITE_HEARTS_HELP]");
+        addCheat("[CHEAT_INFINITE_ARROWS]", getSettings().game.infiniteArrows,
+            "[CHEAT_INFINITE_ARROWS_HELP]");
+        addCheat("[CHEAT_INFINITE_SEEDS]", getSettings().game.infiniteSeeds,
+            "[CHEAT_INFINITE_SEEDS_HELP]");
+        addCheat("[CHEAT_INFINITE_BOMBS]", getSettings().game.infiniteBombs,
+            "[CHEAT_INFINITE_BOMBS_HELP]");
+        addCheat("[CHEAT_INFINITE_OIL]", getSettings().game.infiniteOil,
+            "[CHEAT_INFINITE_OIL_HELP]");
+        addCheat("[CHEAT_INFINITE_OXYGEN]", getSettings().game.infiniteOxygen,
+            "[CHEAT_INFINITE_OXYGEN_HELP]");
+        addCheat("[CHEAT_INFINITE_RUPEES]", getSettings().game.infiniteRupees,
+            "[CHEAT_INFINITE_RUPEES_HELP]");
+        addCheat("[CHEAT_NO_ITEM_TIMER]", getSettings().game.enableIndefiniteItemDrops,
+            "[CHEAT_NO_ITEM_TIMER_HELP]");
 
-        leftPane.add_section("Abilities");
-        addCheat(
-            "Moon Jump (R+A)", getSettings().game.moonJump, "Hold R and A to rise into the air.");
-        addCheat("Super Clawshot", getSettings().game.superClawshot,
-            "Extends Clawshot behavior beyond the normal game rules.");
-        addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
-            "Allows the Great Spin attack without requiring full health.");
-        addCheat("Fast Iron Boots", getSettings().game.enableFastIronBoots,
-            "Speeds up movement while wearing the Iron Boots.");
-        addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
-            "Allows transforming even if NPCs are looking.");
-        addCheat("Fast Roll", getSettings().game.fastRoll,
-            "Makes Link's roll animation and movement twice as fast.");
-        addCheat("Fast Spinner", getSettings().game.fastSpinner,
-            "Speeds up Spinner movement while holding R.");
-        addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
-            "Lets the magic armor work without consuming rupees.");
-        addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
-            "Prevents enemies from taking damage.");
+        leftPane.add_section("[ABILITIES]");
+        addCheat("[CHEAT_MOON_JUMP_R_A]", getSettings().game.moonJump, "[CHEAT_MOON_JUMP_R_A_HELP]");
+        addCheat("[CHEAT_SUPER_CLAWSHOT]", getSettings().game.superClawshot,
+            "[CHEAT_SUPER_CLAWSHOT_HELP]");
+        addCheat("[CHEAT_ALWAYS_GREATSPIN]", getSettings().game.alwaysGreatspin,
+            "[CHEAT_ALWAYS_GREATSPIN_HELP]");
+        addCheat("[CHEAT_FAST_IRON_BOOTS]", getSettings().game.enableFastIronBoots,
+            "[CHEAT_FAST_IRON_BOOTS_HELP]");
+        addCheat("[CHEAT_CAN_TRANSFORM_ANYWHERE]", getSettings().game.canTransformAnywhere,
+            "[CHEAT_CAN_TRANSFORM_ANYWHERE_HELP]");
+        addCheat("[CHEAT_FAST_ROLL]", getSettings().game.fastRoll, "[CHEAT_FAST_ROLL_HELP]");
+        addCheat("[CHEAT_FAST_SPINNER]", getSettings().game.fastSpinner,
+            "[CHEAT_FAST_SPINNER_HELP]");
+        addCheat("[CHEAT_FREE_MAGIC_ARMOR]", getSettings().game.freeMagicArmor,
+            "[CHEAT_FREE_MAGIC_ARMOR_HELP]");
+        addCheat("[CHEAT_INVINCIBLE_ENEMIES]", getSettings().game.invincibleEnemies,
+            "[CHEAT_INVINCIBLE_ENEMIES_HELP]");
     });
 
-    add_tab("Interface", [this](Rml::Element* content) {
+    add_tab("[INTERFACE]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Dusklight");
+        leftPane.add_section("[DUSKLIGHT]");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "[UI_LANGUAGE]",
+                .getValue =
+                    [] {
+                        const int idx =
+                            ui_language_index(getSettings().backend.uiLanguage.getValue());
+                        return Rml::String{kUiLanguageTokenNames[idx]};
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().backend.uiLanguage.getValue() !=
+                               getSettings().backend.uiLanguage.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kUiLanguageIds.size()); ++i) {
+                    pane
+                        .add_button({
+                            .text = kUiLanguageTokenNames[i],
+                            .isSelected =
+                                [i] {
+                                    return ui_language_index(
+                                               getSettings().backend.uiLanguage.getValue()) == i;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().backend.uiLanguage.setValue(kUiLanguageIds[i]);
+                            i18n::set_language(kUiLanguageIds[i]);
+                            config::Save();
+                            for (auto& doc : get_document_stack()) {
+                                if (doc) {
+                                    doc->hide(true);
+                                }
+                            }
+                            push_document(std::make_unique<MenuBar>());
+                        });
+                }
+                pane.add_rml("[APPLIES_TO_DUSKLIGHT_UI_TEXT]");
+            });
 #if DUSK_CAN_OPEN_DATA_FOLDER
         leftPane.register_control(
-            leftPane.add_button("Open Data Folder").on_pressed([] {
+            leftPane.add_button("[OPEN_DATA_FOLDER]").on_pressed([] {
                 mDoAud_seStartMenu(kSoundClick);
                 data::open_data_path();
             }),
             rightPane, [](Pane& pane) {
-                pane.add_text(
-                    "Open the folder where Dusklight stores settings, saves, logs, texture "
-                    "replacements, and other app data.");
+                pane.add_text("[OPEN_THE_FOLDER_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_REPLA]");
             });
 #endif
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Notifications",
+                .key = "[NOTIFICATIONS]",
                 .getValue = [] {
                     const bool ach = getSettings().game.enableAchievementToasts.getValue();
                     const bool ctl = getSettings().game.enableControllerToasts.getValue();
                     if (!ach && !ctl) {
-                        return Rml::String{"Off"};
+                        return Rml::String{"[OFF]"};
                     }
                     if (ach && ctl) {
-                        return Rml::String{"All"};
+                        return Rml::String{"[ALL]"};
                     }
-                    return Rml::String{"Some"};
+                    return Rml::String{"[SOME]"};
                 },
                 .isModified = [] {
                     const auto& ach = getSettings().game.enableAchievementToasts;
@@ -1218,23 +1284,23 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_button("Select All").on_pressed([] {
+                pane.add_button("[SELECT_ALL]").on_pressed([] {
                     mDoAud_seStartMenu(kSoundItemChange);
                     getSettings().game.enableAchievementToasts.setValue(true);
                     getSettings().game.enableControllerToasts.setValue(true);
                     config::Save();
                 });
-                pane.add_button("Select None").on_pressed([] {
+                pane.add_button("[SELECT_NONE]").on_pressed([] {
                     mDoAud_seStartMenu(kSoundItemChange);
                     getSettings().game.enableAchievementToasts.setValue(false);
                     getSettings().game.enableControllerToasts.setValue(false);
                     config::Save();
                 });
 
-                pane.add_section("Types");
+                pane.add_section("[TYPES]");
                 pane.add_button(
                     {
-                        .text = "Achievements",
+                        .text = "[ACHIEVEMENTS]",
                         .isSelected =
                         [] {
                             return getSettings().game.enableAchievementToasts.getValue();
@@ -1248,7 +1314,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     });
                 pane.add_button(
                     {
-                        .text = "Controller",
+                        .text = "[CONTROLLER]",
                         .isSelected =
                             [] { return getSettings().game.enableControllerToasts.getValue(); },
                     })
@@ -1258,11 +1324,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         v.setValue(!v.getValue());
                         config::Save();
                     });
-                pane.add_rml("<br/>Choose which notifications can be displayed.");
+                pane.add_rml("[CHOOSE_WHICH_NOTIFICATIONS_CAN_BE_DISPLAYED]");
             });
 #if DUSK_ENABLE_SENTRY_NATIVE
         auto& crashReporting = leftPane.add_child<BoolButton>(BoolButton::Props{
-            .key = "Crash Reporting",
+            .key = "[CRASH_REPORTING]",
             .getValue =
                 [] { return crash_reporting::get_consent() == crash_reporting::Consent::Given; },
             .setValue = [](bool enabled) { crash_reporting::set_consent(enabled); },
@@ -1274,28 +1340,23 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         });
         leftPane.register_control(crashReporting, rightPane, [](Pane& pane) {
             pane.clear();
-            pane.add_rml("Dusklight can automatically send crash reports to the developers. Crash "
-                         "reports contain the following:<br/>• Operating system version<br/>• CPU "
-                         "architecture<br/>• GPU model & driver version<br/>• File paths (may "
-                         "include account username)<br/>• Stack trace");
+            pane.add_rml("[DUSKLIGHT_CAN_AUTOMATICALLY_SEND_CRASH_REPORTS_TO_THE_DEVELOPERS_CRASH_R]");
         });
 #endif
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
-                .key = "Skip Dusklight Main Menu",
-                .helpText = "When starting Dusklight, skip the main menu and boot straight into the "
-                            "game if a disc image is available.",
+                .key = "[SKIP_DUSKLIGHT_MAIN_MENU]",
+                .helpText = "[WHEN_STARTING_DUSKLIGHT_SKIP_THE_MAIN_MENU_AND_BOOT_STRAIGHT_INTO_THE_GA]",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
             {
-                .key = "Show Pipeline Compilation",
-                .helpText = "Show an overlay when shaders are being compiled for your hardware.",
+                .key = "[SHOW_PIPELINE_COMPILATION]",
+                .helpText = "[SHOW_AN_OVERLAY_WHEN_SHADERS_ARE_BEING_COMPILED_FOR_YOUR_HARDWARE]",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
             {
-                .key = "Check for Updates",
-                .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
-                            "No personal information is transmitted or collected.",
+                .key = "[CHECK_FOR_UPDATES]",
+                .helpText = "[CHECKS_GITHUB_RELEASES_FOR_A_NEW_DUSKLIGHT_VERSION_ON_STARTUP_NO_PERSONA]",
             });
 #ifdef DUSK_DISCORD
         config_bool_select(leftPane, rightPane, getSettings().game.enableDiscordPresence,
@@ -1341,7 +1402,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
 
-        leftPane.add_section("Game");
+        leftPane.add_section("[GAME]");
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",
@@ -1357,6 +1418,8 @@ void SettingsWindow::update() {
     if (mPrelaunch && top_document() == this) {
         try_push_verification_modal(*this);
     }
+
+    i18n::set_language(getSettings().backend.uiLanguage.getValue());
 
     Window::update();
 }

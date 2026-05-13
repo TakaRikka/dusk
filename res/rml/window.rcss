@@ -14,6 +14,13 @@ body {
     color: #E0DBC8;
 }
 
+.lang-zh-cn body,
+.lang-zh-cn body window tab-bar,
+.lang-zh-cn body window content pane,
+.lang-zh-cn body window content pane:last-of-type > div {
+    font-family: "HarmonyOS Sans";
+}
+
 window {
     display: flex;
     flex-flow: column;
