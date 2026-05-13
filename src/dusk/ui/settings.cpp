@@ -24,6 +24,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
+#include "lang.hpp"
 
 #include <aurora/lib/window.hpp>
 #include <SDL3/SDL_filesystem.h>

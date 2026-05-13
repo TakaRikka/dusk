@@ -1,0 +1,10 @@
+{
+    "prelaunch": {
+        "play": "Spill",
+        "select_image": "Select Disc Image",
+        "no_disc": "No disc image found.",
+        "disc_ready": "Disc ready.",
+        "disc_mismatch": "Disk-hasj konflikt.",
+        "settings": "Innstillinger"
+    }
+}

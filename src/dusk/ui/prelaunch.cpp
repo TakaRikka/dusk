@@ -11,6 +11,7 @@
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"
+#include "lang.hpp"
 
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_error.h>
@@ -721,7 +722,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, _("prelaunch.settings")));
         mMenuButtons.back()->on_pressed([this] {
             mRestartSuppressed = false;
             push(std::make_unique<SettingsWindow>(true));
@@ -848,7 +849,7 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(activeDiscLoaded ? "Play" : "Select Disc Image");
+        mMenuButtons[0]->set_text(activeDiscLoaded ? _("prelaunch.play") : _("prelaunch.select_image"));
     }
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
@@ -865,7 +866,7 @@ void Prelaunch::update() {
             discStatusLabel->SetInnerRML("Disc ready.");
         } else if (state.configuredDiscValidation == iso::ValidationError::HashMismatch) {
             mDiscStatus->SetAttribute("status", "mismatch");
-            discStatusLabel->SetInnerRML("Disc hash mismatch.");
+            discStatusLabel->SetInnerRML(_("prelaunch.disc_mismatch"));
         } else if (canLaunchConfiguredDisc) {
             mDiscStatus->SetAttribute("status", "unknown");
             discStatusLabel->SetInnerRML("Disc not verified.");
