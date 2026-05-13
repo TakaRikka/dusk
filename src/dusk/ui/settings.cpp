@@ -895,7 +895,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         });
                 }
                 pane.add_rml(
-                    "<br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/>"
+                    "<br/><b>Sensor</b> reads motion directly from a supported controller gyro or iPhone/iPad gyro via SDL.<br/>"
                     "<br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/>"
                     "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
             });

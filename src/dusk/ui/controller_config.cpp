@@ -17,6 +17,7 @@
 
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
+#include "dusk/settings.h"
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
@@ -45,6 +46,11 @@ bool touch_active(int port) {
 void set_touch_active(int port, bool active) {
 #if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
     dusk::ios::touch_controls::set_enabled_for_port(static_cast<u32>(port), active);
+    if (active) {
+        dusk::getSettings().game.gyroMode.setValue(GyroMode::Sensor);
+        dusk::getSettings().game.enableGyroAim.setValue(true);
+        config::Save();
+    }
 #else
     (void)port;
     (void)active;
