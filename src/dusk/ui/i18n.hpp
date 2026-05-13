@@ -1,6 +1,6 @@
 #pragma once
 
-#include <RmlUi/Core/String.h>
+#include <RmlUi/Core/Types.h>
 
 #include <string>
 #include <string_view>
