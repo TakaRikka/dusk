@@ -647,7 +647,7 @@ void process_axis_direction(
     if (chorded) {
         consume_menu_chord(port, context);
     }
-    const auto key = chorded ? Rml::Input::KI_F1 : map_gamepad_axis(event, sign);
+    const auto key = chorded && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port) ? Rml::Input::KI_F1 : map_gamepad_axis(event, sign);
     if (key == Rml::Input::KI_UNKNOWN) {
         return;
     }
@@ -735,7 +735,7 @@ void handle_event(const SDL_Event& event) noexcept {
         if (chorded) {
             consume_menu_chord(port, *context);
         }
-        const auto key = chorded ? Rml::Input::KI_F1 : map_gamepad_button(event.gbutton);
+        const auto key = chorded && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port) ? Rml::Input::KI_F1 : map_gamepad_button(event.gbutton);
         if (key != Rml::Input::KI_UNKNOWN) {
             bool deferred = false;
             if (repeat != nullptr) {
