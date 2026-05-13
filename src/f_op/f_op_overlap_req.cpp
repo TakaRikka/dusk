@@ -7,7 +7,7 @@
 #include "f_op/f_op_overlap_req.h"
 #include "f_pc/f_pc_manager.h"
 
-#include "dusk/imgui/ImGuiMenuGame.hpp"
+#include "dusk/speedrun.h"
 
 void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 

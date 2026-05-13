@@ -167,6 +167,7 @@ struct UserSettings {
         ConfigVar<bool> alwaysGreatspin;
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
+        ConfigVar<bool> fastRoll;
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
 
@@ -179,6 +180,7 @@ struct UserSettings {
         // Tools
         ConfigVar<bool> speedrunMode;
         ConfigVar<bool> liveSplitEnabled;
+        ConfigVar<bool> showSpeedrunRTATimer;
         ConfigVar<bool> recordingMode;
     } game;
 

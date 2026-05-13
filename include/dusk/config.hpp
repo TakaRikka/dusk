@@ -1,6 +1,7 @@
 #ifndef DUSK_CONFIG_HPP
 #define DUSK_CONFIG_HPP
 
+#include <functional>
 #include <stdexcept>
 #include "nlohmann/json.hpp"
 #include "config_var.hpp"
@@ -117,6 +118,11 @@ ConfigVarBase* GetConfigVar(std::string_view name);
  * @param port The port to be cleared of action bindings
  */
 void ClearAllActionBindings(int port);
+
+/**
+ * \brief Call a function on every registered CVar.
+ */
+void EnumerateRegistered(std::function<void(ConfigVarBase&)> callback);
 
 template <ConfigValue T>
 const ConfigImplBase* GetConfigImpl() {

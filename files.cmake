@@ -1438,6 +1438,7 @@ set(DUSK_FILES
         src/dusk/layout.cpp
         src/dusk/logging.cpp
         src/dusk/settings.cpp
+        src/dusk/speedrun.cpp
         src/dusk/stubs.cpp
         src/dusk/update_check.cpp
         src/dusk/update_check.hpp
@@ -1447,8 +1448,6 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiConsole.cpp
         src/dusk/imgui/ImGuiEngine.cpp
         src/dusk/imgui/ImGuiEngine.hpp
-        src/dusk/imgui/ImGuiMenuGame.cpp
-        src/dusk/imgui/ImGuiMenuGame.hpp
         src/dusk/imgui/ImGuiBloomWindow.cpp
         src/dusk/imgui/ImGuiBloomWindow.hpp
         src/dusk/imgui/ImGuiMenuTools.cpp

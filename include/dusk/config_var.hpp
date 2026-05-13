@@ -48,6 +48,13 @@ enum class ConfigVarLayer : u8 {
      * Will not get saved to config.
      */
     Override,
+
+    /**
+     * The CVar is temporarily overridden by speedrun mode.
+     * Will not get saved to config. Cleared when speedrun mode is disabled.
+     * Lower priority than Override, so launch args still win.
+     */
+    Speedrun,
 };
 
 class ConfigImplBase;
@@ -113,6 +120,12 @@ public:
      * This is necessary to make it legal to access.
      */
     void markRegistered();
+
+    /**
+     * Clear a speedrun-mode override if one is active on this CVar.
+     * Safe to call on any CVar, no-op if not at the Speedrun layer.
+     */
+    virtual void clearSpeedrunOverride() {}
 };
 
 template <typename T>
@@ -189,6 +202,7 @@ public:
         case ConfigVarLayer::Value:
             return value;
         case ConfigVarLayer::Override:
+        case ConfigVarLayer::Speedrun:
             return overrideValue;
         default:
             abort();
@@ -238,6 +252,38 @@ public:
         checkRegistered();
         overrideValue = std::move(newValue);
         layer = ConfigVarLayer::Override;
+    }
+
+    /**
+     * \brief Give a CVar a speedrun-mode override value.
+     *
+     * Lower priority than a launch-arg override. Cleared when speedrun mode is disabled.
+     * The overridden value will not get saved to config.
+     *
+     * @param newValue The new value the CVar will get.
+     */
+    void setSpeedrunValue(T newValue) {
+        checkRegistered();
+        if (layer != ConfigVarLayer::Override) {
+            overrideValue = std::move(newValue);
+            layer = ConfigVarLayer::Speedrun;
+        }
+    }
+
+    void clearOverride() {
+        checkRegistered();
+        if (layer == ConfigVarLayer::Override) {
+            overrideValue = {};
+            layer = ConfigVarLayer::Value;
+        }
+    }
+
+    void clearSpeedrunOverride() override {
+        checkRegistered();
+        if (layer == ConfigVarLayer::Speedrun) {
+            overrideValue = {};
+            layer = ConfigVarLayer::Value;
+        }
     }
 };
 

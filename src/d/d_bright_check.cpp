@@ -11,6 +11,7 @@
 #include "d/d_msg_string.h"
 #include "dusk/livesplit.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/speedrun.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 dBrightCheck_c::dBrightCheck_c(JKRArchive* i_archive) {
@@ -146,7 +147,7 @@ void dBrightCheck_c::modeMove() {
         if (dusk::getSettings().game.speedrunMode && !dusk::getSettings().game.hideTvSettingsScreen) {
             // start a new run if a run isn't already in progress
             if (!dusk::m_speedrunInfo.m_isRunStarted) {
-                dusk::ImGuiMenuGame::resetForSpeedrunMode();
+                dusk::resetForSpeedrunMode();
                 dusk::m_speedrunInfo.startRun();
             }
         }
