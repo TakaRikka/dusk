@@ -51,6 +51,22 @@ void set_touch_active(int port, bool active) {
 #endif
 }
 
+int touch_stick_sensitivity_percent() {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    return dusk::ios::touch_controls::stick_sensitivity_percent();
+#else
+    return 100;
+#endif
+}
+
+void set_touch_stick_sensitivity_percent(int value) {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    dusk::ios::touch_controls::set_stick_sensitivity_percent(value);
+#else
+    (void)value;
+#endif
+}
+
 Rml::String current_controller_name(int port) {
     const char* name = PADGetName(port);
     if (name != nullptr) {
@@ -381,6 +397,22 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
         rightPane, [](Pane& pane) {
             pane.add_text("Treat analog trigger movement as digital L and R button input.");
         });
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    leftPane.register_control(leftPane.add_child<NumberButton>(NumberButton::Props{
+                                  .key = "Touch Stick Sensitivity",
+                                  .getValue = [] { return touch_stick_sensitivity_percent(); },
+                                  .setValue = [](int value) { set_touch_stick_sensitivity_percent(value); },
+                                  .isDisabled = [port] { return !touch_active(port); },
+                                  .min = 50,
+                                  .max = 500,
+                                  .step = 10,
+                                  .suffix = "%",
+                              }),
+        rightPane, [](Pane& pane) {
+            pane.add_text("Adjust how quickly the touch sticks reach full tilt.");
+        });
+#endif
 
     render_page(rightPane, port, mPage);
 }

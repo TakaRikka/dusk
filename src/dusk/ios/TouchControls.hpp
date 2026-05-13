@@ -12,6 +12,8 @@ void draw() noexcept;
 void reset() noexcept;
 bool enabled_for_port(u32 port) noexcept;
 void set_enabled_for_port(u32 port, bool enabled) noexcept;
+int stick_sensitivity_percent() noexcept;
+void set_stick_sensitivity_percent(int value) noexcept;
 const char* controller_name() noexcept;
 
 }  // namespace dusk::ios::touch_controls

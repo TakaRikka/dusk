@@ -25,7 +25,9 @@ constexpr float kShoulderHeight = 44.0f;
 constexpr float kDeadZone = 0.12f;
 constexpr float kAlphaIdle = 0.34f;
 constexpr float kAlphaActive = 0.66f;
-constexpr float kFullTiltRadius = 0.58f;
+constexpr int kDefaultStickSensitivityPercent = 300;
+constexpr int kMinStickSensitivityPercent = 50;
+constexpr int kMaxStickSensitivityPercent = 500;
 constexpr std::uint32_t kSettingsMagic = 0x54434831;  // TCH1
 constexpr std::uint32_t kSettingsVersion = 1;
 constexpr auto kSettingsFileName = "touch_controls.dat";
@@ -74,6 +76,7 @@ struct Layout {
 std::array<FingerState, 10> sFingers;
 std::array<bool, PAD_MAX_CONTROLLERS> sEnabledPorts{};
 bool sSettingsLoaded = false;
+int sStickSensitivityPercent = kDefaultStickSensitivityPercent;
 
 float scaled(float value, const Layout& layout) noexcept {
     return value * layout.scale;
@@ -109,6 +112,7 @@ void load_settings() noexcept {
     sSettingsLoaded = true;
     sEnabledPorts.fill(false);
     sEnabledPorts[PAD_CHAN0] = true;
+    sStickSensitivityPercent = kDefaultStickSensitivityPercent;
 
     const auto path = settings_path();
     std::error_code ec;
@@ -137,9 +141,16 @@ void load_settings() noexcept {
             const std::size_t offset = 8 + i;
             sEnabledPorts[i] = offset < bytes.size() && bytes[offset] != 0;
         }
+        if (bytes.size() >= 14) {
+            const int sensitivity = static_cast<int>(bytes[12]) |
+                                    (static_cast<int>(bytes[13]) << 8);
+            sStickSensitivityPercent = std::clamp(
+                sensitivity, kMinStickSensitivityPercent, kMaxStickSensitivityPercent);
+        }
     } catch (...) {
         sEnabledPorts.fill(false);
         sEnabledPorts[PAD_CHAN0] = true;
+        sStickSensitivityPercent = kDefaultStickSensitivityPercent;
     }
 }
 
@@ -152,7 +163,7 @@ void save_settings() noexcept {
     try {
         std::error_code ec;
         std::filesystem::create_directories(path.parent_path(), ec);
-        std::array<std::uint8_t, 8 + PAD_MAX_CONTROLLERS> bytes{};
+        std::array<std::uint8_t, 14> bytes{};
         const auto write_u32 = [&bytes](std::size_t offset, std::uint32_t value) {
             bytes[offset] = static_cast<std::uint8_t>(value & 0xff);
             bytes[offset + 1] = static_cast<std::uint8_t>((value >> 8) & 0xff);
@@ -164,6 +175,10 @@ void save_settings() noexcept {
         for (std::size_t i = 0; i < sEnabledPorts.size(); ++i) {
             bytes[8 + i] = sEnabledPorts[i] ? 1 : 0;
         }
+        const auto sensitivity = static_cast<std::uint16_t>(std::clamp(
+            sStickSensitivityPercent, kMinStickSensitivityPercent, kMaxStickSensitivityPercent));
+        bytes[12] = static_cast<std::uint8_t>(sensitivity & 0xff);
+        bytes[13] = static_cast<std::uint8_t>((sensitivity >> 8) & 0xff);
         auto stream = dusk::io::FileStream::Create(path);
         stream.Write(reinterpret_cast<const char*>(bytes.data()), bytes.size());
     } catch (...) {
@@ -280,7 +295,8 @@ ImVec2 stick_value(Control control, const Layout& layout) noexcept {
         }
 
         const ImVec2 center = control == Control::MainStick ? layout.mainStick : layout.cStick;
-        const float fullTiltRadius = scaled(kStickRadius * kFullTiltRadius, layout);
+        const float sensitivityScale = 100.0f / static_cast<float>(stick_sensitivity_percent());
+        const float fullTiltRadius = scaled(kStickRadius * std::clamp(sensitivityScale, 0.20f, 1.20f), layout);
         ImVec2 value = clamp_vector(ImVec2(finger.current.x - center.x, finger.current.y - center.y),
             fullTiltRadius);
         value.x /= fullTiltRadius;
@@ -512,6 +528,18 @@ void set_enabled_for_port(u32 port, bool enabled) noexcept {
     if (!enabled) {
         reset();
     }
+    save_settings();
+}
+
+int stick_sensitivity_percent() noexcept {
+    load_settings();
+    return sStickSensitivityPercent;
+}
+
+void set_stick_sensitivity_percent(int value) noexcept {
+    load_settings();
+    sStickSensitivityPercent = std::clamp(
+        value, kMinStickSensitivityPercent, kMaxStickSensitivityPercent);
     save_settings();
 }
 
