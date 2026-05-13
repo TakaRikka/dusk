@@ -16,11 +16,11 @@ struct CategoryInfo {
 };
 
 constexpr CategoryInfo kCategories[] = {
-    {AchievementCategory::Challenge,  "Challenge"},
-    {AchievementCategory::Collection, "Collection"},
-    {AchievementCategory::Minigame,   "Minigame"},
-    {AchievementCategory::Misc,       "Misc"},
-    {AchievementCategory::Glitched,   "Glitched"},
+    {AchievementCategory::Challenge,  "[CHALLENGE]"},
+    {AchievementCategory::Collection, "[COLLECTION]"},
+    {AchievementCategory::Minigame,   "[MINIGAME]"},
+    {AchievementCategory::Misc,       "[MISC]"},
+    {AchievementCategory::Glitched,   "[GLITCHED]"},
 };
 
 Rml::String build_achievement_info_rml(const Achievement& a) {
@@ -33,7 +33,7 @@ Rml::String build_achievement_info_rml(const Achievement& a) {
         a.unlocked ? " unlocked" : "",
         a.name,
         a.unlocked ? " unlocked" : " locked",
-        a.unlocked ? "Unlocked" : "Locked",
+        a.unlocked ? "[UNLOCKED]" : "[LOCKED]",
         a.description
     );
 
@@ -69,7 +69,7 @@ public:
                     resetConfirm();
                 } else {
                     mConfirming = true;
-                    mClearButton->set_text("Clear?");
+                    mClearButton->set_text("[CLEAR_QUESTION]");
                 }
                 return true;
             }
@@ -146,7 +146,7 @@ AchievementsWindow::AchievementsWindow() {
 
             auto& pane = add_child<Pane>(content, Pane::Type::Controlled);
 
-            pane.add_section(fmt::format("{} / {} unlocked", unlocked, total));
+            pane.add_section(fmt::format("{} / {} [UNLOCKED]", unlocked, total));
 
             for (const auto& a : achievements) {
                 if (a.category != cat) {
@@ -155,9 +155,9 @@ AchievementsWindow::AchievementsWindow() {
                 pane.add_child<AchievementRow>(a);
             }
 
-            pane.add_section("Actions");
+            pane.add_section("[ACTIONS]");
 
-            auto& clearAllBtn = pane.add_button("Clear All Achievements");
+            auto& clearAllBtn = pane.add_button("[CLEAR_ALL_ACHIEVEMENTS]");
             auto* clearAllPtr = &clearAllBtn;
             auto confirmingAll = std::make_shared<bool>(false);
 
@@ -167,23 +167,23 @@ AchievementsWindow::AchievementsWindow() {
                         mDoAud_seStartMenu(kSoundClick);
                         AchievementSystem::get().clearAll();
                         *confirmingAll = false;
-                        clearAllPtr->set_text("Clear All Achievements");
+                        clearAllPtr->set_text("[CLEAR_ALL_ACHIEVEMENTS]");
                     } else {
                         *confirmingAll = true;
-                        clearAllPtr->set_text("Are you sure?");
+                        clearAllPtr->set_text("[ARE_YOU_SURE]");
                     }
                     return true;
                 }
                 if (cmd == NavCommand::Cancel && *confirmingAll) {
                     *confirmingAll = false;
-                    clearAllPtr->set_text("Clear All Achievements");
+                    clearAllPtr->set_text("[CLEAR_ALL_ACHIEVEMENTS]");
                     return true;
                 }
                 return false;
             });
             clearAllBtn.listen(Rml::EventId::Blur, [clearAllPtr, confirmingAll](Rml::Event&) {
                 *confirmingAll = false;
-                clearAllPtr->set_text("Clear All Achievements");
+                clearAllPtr->set_text("[CLEAR_ALL_ACHIEVEMENTS]");
             });
 
             pane.finalize();
