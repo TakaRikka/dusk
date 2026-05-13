@@ -915,6 +915,8 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             };
 
             pane.add_section("Custom Action Bindings");
+            pane.add_text("A key bound to any action here will REPLACE the default control for"
+                          " that action. Only bind buttons here that aren't used anywhere else.");
             for (auto& [configVars, actionName] : getActionBinds() | std::views::values) {
                 addActionBinding(&configVars->at(port), actionName);
             }
@@ -930,6 +932,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
 
         SDL_Gamepad* gamepad = gamepad_for_port(port);
         pane.add_section("Custom Action Bindings");
+        pane.add_text("A button bound to any action here will REPLACE the default control for"
+                      " that action. Only bind buttons here that aren't used anywhere else. This is "
+                      "not recommended for regular Gamecube controllers.");
         auto addActionBinding = [&](auto actionBind, const std::string& key) {
             pane.add_select_button({
                            .key = key,
