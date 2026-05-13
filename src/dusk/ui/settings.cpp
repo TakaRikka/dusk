@@ -321,7 +321,7 @@ public:
     explicit DataFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
 
     void update() override {
-        const Rml::String rml = "<span class=\"data-folder-current\">Current data folder:<br/>" +
+        const Rml::String rml = "<span class=\"data-folder-current\">[CURRENT_DATA_FOLDER]<br/>" +
                                 escape(abbreviated_data_path_string()) + "</span>";
         if (rml != mCurrentRml) {
             mRoot->SetInnerRML(rml);
@@ -340,12 +340,12 @@ void show_data_folder_error_modal(std::string_view message) {
         modal.pop();
     };
     push_document(std::make_unique<Modal>(Modal::Props{
-        .title = "Data Folder Not Changed",
+        .title = "[DATA_FOLDER_NOT_CHANGED]",
         .bodyRml = escape(message),
         .actions =
             {
                 ModalAction{
-                    .label = "OK",
+                    .label = "[OK]",
                     .onPressed = dismiss,
                 },
             },
@@ -978,7 +978,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("[VOLUME]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Master Volume",
+                .key = "[MASTER_VOLUME]",
                 .getValue = [] { return getSettings().audio.masterVolume.getValue(); },
                 .setValue =
                     [](int value) {
@@ -1361,8 +1361,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 #ifdef DUSK_DISCORD
         config_bool_select(leftPane, rightPane, getSettings().game.enableDiscordPresence,
             {
-                .key = "Enable Discord Rich Presence",
-                .helpText = "Enable Dusk to integrate with Discord Rich Presence. This allows Discord to show your status in-game.",
+                .key = "[ENABLE_DISCORD_RICH_PRESENCE]",
+                .helpText = "[ENABLE_DUSK_TO_INTEGRATE_WITH_DISCORD_RICH_PRESENCE_THIS_ALLOWS_DISCO]",
                 .onChange = [](bool enabled) {
                     if (enabled) {
                         dusk::discord::initialize();
@@ -1374,11 +1374,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 #endif
         config_bool_select(leftPane, rightPane, getSettings().backend.enableAdvancedSettings,
             {
-                .key = "Enable Advanced Settings",
+                .key = "[ENABLE_ADVANCED_SETTINGS]",
                 .icon = "warning",
-                .helpText = "Show advanced settings and debugging tools with "
-                            "Shift+F1.<br/><br/><icon class=\"warning\"/> WARNING: Debugging tools "
-                            "can easily break your game. Do not use on a regular save!",
+                .helpText = "[SHOW_ADVANCED_SETTINGS_AND_DEBUGGING_TOOLS_WITH_SHIFT_F1_WARNING_DEBUGGING]",
                 .onChange =
                     [](bool) {
                         for (auto& doc : get_document_stack()) {
@@ -1392,25 +1390,25 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showInputViewer,
             {
-                .key = "Show Input Viewer",
-                .helpText = "Display a controller input overlay while playing.",
+                .key = "[SHOW_INPUT_VIEWER]",
+                .helpText = "[DISPLAY_A_CONTROLLER_INPUT_OVERLAY_WHILE_PLAYING]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showInputViewerGyro,
             {
-                .key = "Show Gyro Input Viewer",
-                .helpText = "Show gyro sensor values in the input viewer.",
+                .key = "[SHOW_GYRO_INPUT_VIEWER]",
+                .helpText = "[SHOW_GYRO_SENSOR_VALUES_IN_THE_INPUT_VIEWER]",
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
 
         leftPane.add_section("[GAME]");
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
-                .key = "Skip TV Settings Screen",
-                .helpText = "Skips the TV calibration screen shown when loading a save.",
+                .key = "[SKIP_TV_SETTINGS_SCREEN]",
+                .helpText = "[SKIPS_THE_TV_CALIBRATION_SCREEN_SHOWN_WHEN_LOADING_A_SAVE]",
             });
         add_speedrun_disabled_option(leftPane, rightPane, getSettings().game.recordingMode,
-            "Recording Mode",
-            "Disables the game HUD and all background music.<br/><br/>Useful for recording footage.");
+            "[RECORDING_MODE]",
+            "[DISABLES_THE_GAME_HUD_AND_ALL_BACKGROUND_MUSIC_USEFUL_FOR_RECORDING_FOOTAGE]");
     });
 }
 

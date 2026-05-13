@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <ranges>
 
+#include "aurora/lib/logging.hpp"
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
 #include "dusk/settings.h"
@@ -21,8 +22,12 @@
 namespace dusk::ui {
 namespace {
 
+aurora::Module UiLog{"dusk::ui"};
+
 void load_font(const char* filename, bool fallback = false) {
-    Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback);
+    if (!Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback)) {
+        UiLog.error("Failed to load font '{}'", filename);
+    }
 }
 
 void apply_ui_language_font_class() {
@@ -71,6 +76,8 @@ bool initialize() noexcept {
     load_font("MaterialSymbolsRounded-Regular.ttf");
     load_font("NotoMono-Regular.ttf");
     load_font("HarmonyOS_Sans_Regular.ttf", true);
+    load_font("HarmonyOS_Sans_SC_Regular.ttf", true);
+    load_font("HarmonyOS_Sans_TC_Regular.ttf", true);
 
     aurora::rmlui::set_translate_callback(i18n::translate);
     i18n::initialize();
