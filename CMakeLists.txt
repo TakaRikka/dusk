@@ -556,7 +556,10 @@ endif ()
 if (IOS)
     find_library(UIKIT_FRAMEWORK UIKit REQUIRED)
     find_library(UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK UniformTypeIdentifiers REQUIRED)
-    target_sources(dusklight PRIVATE src/dusk/ios/FileSelectDialog.m)
+    target_sources(dusklight PRIVATE
+        src/dusk/ios/FileSelectDialog.m
+        src/dusk/ios/TouchControls.cpp
+    )
     set_source_files_properties(src/dusk/ios/FileSelectDialog.m PROPERTIES COMPILE_FLAGS -fobjc-arc)
     target_link_libraries(dusklight PRIVATE ${UIKIT_FRAMEWORK} ${UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK})
 endif ()

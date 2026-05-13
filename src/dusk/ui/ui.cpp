@@ -2,6 +2,9 @@
 
 #include <RmlUi/Core.h>
 #include <SDL3/SDL_filesystem.h>
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
 #include <absl/container/flat_hash_set.h>
 #include <aurora/rmlui.hpp>
 #include <fmt/format.h>
@@ -15,6 +18,10 @@
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#include "dusk/ios/TouchControls.hpp"
+#endif
 
 namespace dusk::ui {
 namespace {
@@ -120,6 +127,10 @@ const char* connection_state_icon(SDL_JoystickConnectionState state) noexcept {
 }
 
 void handle_event(const SDL_Event& event) noexcept {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    dusk::ios::touch_controls::handle_event(event);
+#endif
+
     if (!aurora::rmlui::is_initialized()) {
         return;
     }

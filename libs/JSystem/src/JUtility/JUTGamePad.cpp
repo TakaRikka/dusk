@@ -4,8 +4,16 @@
 #include <cmath>
 #include "os_report.h"
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
 #if TARGET_PC
 #include "dusk/action_bindings.h"
+#endif
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#include "dusk/ios/TouchControls.hpp"
 #endif
 
 u32 JUTGamePad::CRumble::sChannelMask[4] = {
@@ -91,6 +99,10 @@ u32 JUTGamePad::read() {
     sRumbleSupported = PADRead(mPadStatus);
 #if TARGET_PC
    dusk::updateActionBindings();
+#endif
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    dusk::ios::touch_controls::apply_pad_state(mPadStatus[0]);
 #endif
 
     switch (sClampMode) {

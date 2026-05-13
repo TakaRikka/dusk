@@ -48,6 +48,9 @@
 
 #if TARGET_PC
 #include <SDL3/SDL_video.h>
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
 #include "aurora/lib/window.hpp"
 #include "d/actor/d_a_horse.h"
 #include "dusk/dusk.h"
@@ -57,6 +60,9 @@
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#include "dusk/ios/TouchControls.hpp"
+#endif
 #endif
 
 class mDoGph_HIO_c : public JORReflexible {
@@ -2743,6 +2749,9 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
     dusk::g_imguiConsole.PostDraw();
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    dusk::ios::touch_controls::draw();
+#endif
 #endif
 
     mDoGph_gInf_c::endRender();
