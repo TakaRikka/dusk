@@ -71,6 +71,7 @@
 #include <aurora/dvd.h>
 #include <dolphin/dvd.h>
 
+#include "SDL3/SDL_init.h"
 #include "SDL3/SDL_filesystem.h"
 #include "SDL3/SDL_iostream.h"
 #include "SDL3/SDL_misc.h"
@@ -453,7 +454,15 @@ static void LanguageInit() {
     selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
 }
 
-static void LogBuildInfo() {
+static std::string asset_path(const char* assetName) {
+    const char* basePath = SDL_GetBasePath();
+    if (basePath != nullptr && basePath[0] != '\0') {
+        return std::string(basePath) + "res/" + assetName;
+    }
+    return std::string("res/") + assetName;
+}
+
+static void log_build_info() {
     DuskLog.info("Build: {} (rev {}, built {}, type {})", DUSK_WC_DESCRIBE, DUSK_WC_REVISION, DUSK_WC_DATE, DUSK_BUILD_TYPE);
     DuskLog.info("Platform: {}", DUSK_PLATFORM_NAME);
 }
@@ -507,13 +516,24 @@ int game_main(int argc, char* argv[]) {
     dusk::ConfigPath = dusk::data::initialize_data();
     dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
 
-    LogBuildInfo();
+    log_build_info();
 
     dusk::config::LoadFromUserPreferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::crash_reporting::initialize();
     // TODO: How to handle this?
     // PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
+
+    {
+        // Load mappings from https://github.com/mdqinc/SDL_GameControllerDB
+        const auto mappingsPath = asset_path("gamecontrollerdb.txt");
+        if (SDL_AddGamepadMappingsFromFile(mappingsPath.c_str()) < 0) {
+            DuskLog.warn("Failed to load gamecontrollerdb.txt: {}", SDL_GetError());
+        }
+    }
+
+    // Set SDL metadata for audio mixers and macOS "About" menu
+    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, "dev.twilitrealm.dusk");
 
     {
         const auto configPathString = dusk::ConfigPath.u8string();
@@ -540,7 +560,9 @@ int game_main(int argc, char* argv[]) {
     }
 
 #ifdef DUSK_DISCORD
-    dusk::discord::initialize();
+    if (dusk::getSettings().game.enableDiscordPresence) {
+        dusk::discord::initialize();
+    }
 #endif
 
     VISetWindowTitle(

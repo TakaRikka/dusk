@@ -2,6 +2,9 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
+#include "dusk/livesplit.h"
+#include "dusk/speedrun.h"
+#include "fmt/format.h"
 #include "magic_enum.hpp"
 #include "window.hpp"
 
@@ -9,6 +12,7 @@
 #include <SDL3/SDL_timer.h>
 #include <algorithm>
 #include <dolphin/pad.h>
+#include <m_Do/m_Do_main.h>
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
@@ -25,6 +29,10 @@ const Rml::String kDocumentSource = R"RML(
 </head>
 <body>
     <fps id="fps" />
+    <speedrun-timer id="speedrun-timer">
+        <speedrun-rta id="speedrun-rta" />
+        <speedrun-igt id="speedrun-igt" />
+    </speedrun-timer>
 </body>
 </rml>
 )RML";
@@ -204,8 +212,17 @@ void Overlay::advance_fps_counter(float& outFps, Uint64 perfFreq) {
     outFps = static_cast<float>(1.0 / avgSeconds);
 }
 
+static std::string FormatTime(OSTime ticks) {
+    OSCalendarTime t;
+    OSTicksToCalendarTime(ticks, &t);
+    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", t.hour, t.min, t.sec, t.msec);
+}
+
 Overlay::Overlay() : Document(kDocumentSource) {
     mFpsCounter = mDocument->GetElementById("fps");
+    mSpeedrunTimer = mDocument->GetElementById("speedrun-timer");
+    mSpeedrunRta = mDocument->GetElementById("speedrun-rta");
+    mSpeedrunIgt = mDocument->GetElementById("speedrun-igt");
 
     listen(mDocument, Rml::EventId::Focus, [](Rml::Event&) { Log.warn("Overlay received focus"); });
     listen(mDocument, Rml::EventId::Transitionend, [this](Rml::Event& event) {
@@ -265,6 +282,63 @@ void Overlay::update() {
             mFpsSumTicks = 0;
             mFpsHavePrevCounter = false;
             mFpsLastUpdate = 0;
+        }
+    }
+
+#if !(defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST))
+    if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
+        dusk::speedrun::updateLiveSplit();
+        if (dusk::speedrun::consumeConnectedEvent()) {
+            push_toast({.title = "LiveSplit connected", .duration = std::chrono::seconds(3)});
+        }
+        if (dusk::speedrun::consumeDisconnectedEvent()) {
+            push_toast({.title = "LiveSplit disconnected", .duration = std::chrono::seconds(3)});
+        }
+    }
+#endif
+
+    if (mSpeedrunTimer != nullptr && mSpeedrunRta != nullptr && mSpeedrunIgt != nullptr) {
+        if (getSettings().game.speedrunMode) {
+            // L+R+A+Start to reset timer
+            if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) &&
+                mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigZ(PAD_1))
+            {
+                m_speedrunInfo.reset();
+            }
+
+            // L+R+A+Y to manually stop timer
+            if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) &&
+                mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigY(PAD_1))
+            {
+                if (m_speedrunInfo.m_isRunStarted) {
+                    m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+                    m_speedrunInfo.m_isRunStarted = false;
+                }
+            }
+
+            OSTime elapsedTime = 0;
+            if (m_speedrunInfo.m_isRunStarted) {
+                elapsedTime = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+            } else if (m_speedrunInfo.m_endTimestamp != 0) {
+                elapsedTime = m_speedrunInfo.m_endTimestamp;
+            }
+
+            if (!m_speedrunInfo.m_isPauseIGT) {
+                m_speedrunInfo.m_igtTimer = elapsedTime - m_speedrunInfo.m_totalLoadTime;
+            }
+
+            mSpeedrunTimer->SetAttribute("open", "");
+
+            if (getSettings().game.showSpeedrunRTATimer) {
+                mSpeedrunRta->SetAttribute("open", "");
+                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatTime(elapsedTime))));
+            } else {
+                mSpeedrunRta->RemoveAttribute("open");
+            }
+
+            mSpeedrunIgt->SetInnerRML(escape(fmt::format("IGT  {}", FormatTime(m_speedrunInfo.m_igtTimer))));
+        } else {
+            mSpeedrunTimer->RemoveAttribute("open");
         }
     }
 
