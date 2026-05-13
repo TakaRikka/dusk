@@ -1,11 +1,13 @@
 #include "fmt/format.h"
 #include "imgui.h"
-#include "aurora/gfx.h"
+#include <aurora/gfx.h>
 
 #include "ImGuiConfig.hpp"
 #include "dusk/hotkeys.h"
 #include "dusk/settings.h"
+#include "ImGuiBloomWindow.hpp"
 #include "ImGuiConsole.hpp"
+#include "ImGuiEnhancedLightingWindow.hpp"
 #include "ImGuiMenuTools.hpp"
 
 #include "ImGuiEngine.hpp"
@@ -104,6 +106,7 @@ namespace dusk {
             ImGui::MenuItem("Debug Camera", hotkeys::SHOW_DEBUG_CAMERA, &m_showCameraOverlay);
             ImGui::MenuItem("Audio Debug", hotkeys::SHOW_AUDIO_DEBUG, &m_showAudioDebug);
             ImGui::MenuItem("Bloom", nullptr, &m_showBloomWindow);
+            ImGui::MenuItem("Enhanced Lighting", nullptr, &m_showEnhancedLightingWindow);
             ImGui::MenuItem("Stub Log", nullptr, &m_showStubLog);
             ImGui::MenuItem("Actor Spawner", nullptr, &m_showActorSpawner);
 
