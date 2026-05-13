@@ -272,3 +272,39 @@ jobs:
             build/install/*.dll
             build/install/res/
             build/install/debug.7z
+
+  release:
+    name: Publish release assets
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - build-linux
+      - build-apple
+      - build-android
+      - build-windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: artifacts
+
+      - name: Package release assets
+        run: |
+          mkdir release-assets
+          for artifact_dir in artifacts/*; do
+            artifact_name="$(basename "$artifact_dir")"
+            (cd "$artifact_dir" && zip -r "../../release-assets/${artifact_name}.zip" .)
+          done
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release view "$GITHUB_REF_NAME" || gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" release-assets/* --clobber
