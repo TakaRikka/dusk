@@ -285,6 +285,16 @@ public:
             layer = ConfigVarLayer::Value;
         }
     }
+
+    /**
+     * \brief Get the user-persisted value, ignoring any temporary overrides.
+     *
+     * Used by Save() to write the correct value even when a speedrun override is active.
+     */
+    [[nodiscard]] constexpr const T& getValueForSave() const noexcept {
+        checkRegistered();
+        return layer == ConfigVarLayer::Default ? defaultValue : value;
+    }
 };
 
 using ActionBindConfigVar = ConfigVar<int>;
