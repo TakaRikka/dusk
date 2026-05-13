@@ -116,6 +116,12 @@ u32 JUTGamePad::read() {
         break;
     }
 
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    for (u32 port = PAD_CHAN0; port < PAD_CHANMAX; ++port) {
+        dusk::ios::touch_controls::apply_post_clamp_stick_state(mPadStatus[port], port);
+    }
+#endif
+
     u32 bittest;
     u32 reset_mask = 0;
     for (int i = 0; i < 4; i++) {

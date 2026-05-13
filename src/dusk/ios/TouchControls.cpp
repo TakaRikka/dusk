@@ -23,6 +23,7 @@ constexpr float kSmallButtonRadius = 25.0f;
 constexpr float kShoulderWidth = 118.0f;
 constexpr float kShoulderHeight = 44.0f;
 constexpr float kDeadZone = 0.12f;
+constexpr float kRunSnapThreshold = 0.16f;
 constexpr float kAlphaIdle = 0.34f;
 constexpr float kAlphaActive = 0.66f;
 constexpr int kDefaultStickSensitivityPercent = 500;
@@ -313,6 +314,11 @@ ImVec2 stick_value(Control control, const Layout& layout) noexcept {
             value.x /= fullTiltRadius;
             value.y /= fullTiltRadius;
         }
+        const float magnitude = std::sqrt(value.x * value.x + value.y * value.y);
+        if (control == Control::MainStick && magnitude >= kRunSnapThreshold) {
+            value.x /= magnitude;
+            value.y /= magnitude;
+        }
         return value;
     }
     return ImVec2(0.0f, 0.0f);
@@ -340,6 +346,10 @@ ImVec2 dpad_value(const Layout& layout) noexcept {
 
 s8 axis_to_pad(float value) noexcept {
     return static_cast<s8>(std::clamp(std::lround(value * 127.0f), -127l, 127l));
+}
+
+s8 axis_to_post_clamp_pad(float value, long max) noexcept {
+    return static_cast<s8>(std::clamp(std::lround(value * static_cast<float>(max)), -max, max));
 }
 
 void draw_circle_button(ImDrawList* drawList, ImVec2 center, float radius, const char* label, bool active, const Layout& layout) noexcept {
@@ -481,6 +491,28 @@ void apply_pad_state(PADStatus& status, u32 port) noexcept {
     if (control_held(Control::CStick)) {
         status.substickX = axis_to_pad(cStick.x);
         status.substickY = axis_to_pad(-cStick.y);
+    }
+}
+
+void apply_post_clamp_stick_state(PADStatus& status, u32 port) noexcept {
+    if (!enabled_for_port(port)) {
+        return;
+    }
+
+    if (!dusk::IsGameLaunched || ImGui::GetCurrentContext() == nullptr || status.err != PAD_ERR_NONE) {
+        return;
+    }
+
+    const Layout layout = make_layout();
+    if (control_held(Control::MainStick)) {
+        const ImVec2 mainStick = stick_value(Control::MainStick, layout);
+        status.stickX = axis_to_post_clamp_pad(mainStick.x, 72);
+        status.stickY = axis_to_post_clamp_pad(-mainStick.y, 72);
+    }
+    if (control_held(Control::CStick)) {
+        const ImVec2 cStick = stick_value(Control::CStick, layout);
+        status.substickX = axis_to_post_clamp_pad(cStick.x, 59);
+        status.substickY = axis_to_post_clamp_pad(-cStick.y, 59);
     }
 }
 
