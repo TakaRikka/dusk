@@ -29,6 +29,7 @@ aurora::Module Log{"dusk::data"};
 constexpr auto kLocationDescriptorName = "data_location.json";
 constexpr auto kPipelineCacheName = "pipeline_cache.db";
 constexpr auto kInitialPipelineCacheName = "initial_pipeline_cache.db";
+constexpr auto kPortableMarkerName = "portable.txt";
 
 enum class LocationMode {
     Default,
@@ -121,6 +122,16 @@ std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
 
 std::filesystem::path portable_data_path() {
     return base_path_relative("data");
+}
+
+bool portable_marker_exists() {
+#if defined(__ANDROID__) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS) ||                           \
+    (defined(TARGET_OS_TV) && TARGET_OS_TV)
+    return false;
+#else
+    std::error_code ec;
+    return std::filesystem::is_regular_file(base_path_relative(kPortableMarkerName), ec);
+#endif
 }
 
 std::vector<std::filesystem::path> descriptor_paths(const std::filesystem::path& prefPath) {
@@ -949,7 +960,16 @@ bool is_data_path_restart_pending() {
     return normalized_path(ConfigPath) != normalized_path(configured_data_path());
 }
 
-std::filesystem::path initialize_data() {
+std::filesystem::path initialize_data(bool portableMode) {
+    if (portableMode || portable_marker_exists()) {
+        const auto dataPath = portable_data_path();
+        sActiveDescriptorPath.reset();
+        sConfiguredDataPath = dataPath;
+        ensure_data_directory(dataPath);
+        ensure_initial_pipeline_cache(dataPath);
+        return dataPath;
+    }
+
     const auto prefPath = get_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {

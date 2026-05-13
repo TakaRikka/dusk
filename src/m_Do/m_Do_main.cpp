@@ -490,6 +490,7 @@ int game_main(int argc, char* argv[]) {
             ("l,log-level", "Log level from " + std::to_string(AuroraLogLevel::LOG_DEBUG) + " to " + std::to_string(AuroraLogLevel::LOG_FATAL), cxxopts::value<uint8_t>()->default_value("0"))
             ("h,help", "Print usage")
             ("console", "Show the Windows console window for logs", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+            ("portable", "Store settings, saves, logs, and cache in a data folder next to the executable", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
@@ -513,7 +514,7 @@ int game_main(int argc, char* argv[]) {
 
     const auto startupLogLevel =
         static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
-    dusk::ConfigPath = dusk::data::initialize_data();
+    dusk::ConfigPath = dusk::data::initialize_data(parsed_arg_options["portable"].as<bool>());
     dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
 
     log_build_info();
