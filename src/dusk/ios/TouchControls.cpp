@@ -4,8 +4,12 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <cstdint>
+#include <filesystem>
+#include <system_error>
 
 #include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/io.hpp"
 #include "dusk/main.h"
 #include "dusk/ui/ui.hpp"
 #include "imgui.h"
@@ -21,6 +25,10 @@ constexpr float kShoulderHeight = 44.0f;
 constexpr float kDeadZone = 0.12f;
 constexpr float kAlphaIdle = 0.34f;
 constexpr float kAlphaActive = 0.66f;
+constexpr float kFullTiltRadius = 0.58f;
+constexpr std::uint32_t kSettingsMagic = 0x54434831;  // TCH1
+constexpr std::uint32_t kSettingsVersion = 1;
+constexpr auto kSettingsFileName = "touch_controls.dat";
 
 enum class Control {
     None,
@@ -64,6 +72,8 @@ struct Layout {
 };
 
 std::array<FingerState, 10> sFingers;
+std::array<bool, PAD_MAX_CONTROLLERS> sEnabledPorts{};
+bool sSettingsLoaded = false;
 
 float scaled(float value, const Layout& layout) noexcept {
     return value * layout.scale;
@@ -82,6 +92,82 @@ ImVec2 clamp_vector(ImVec2 value, float radius) noexcept {
     }
     const float scale = radius / length;
     return ImVec2(value.x * scale, value.y * scale);
+}
+
+std::filesystem::path settings_path() {
+    if (dusk::ConfigPath.empty()) {
+        return {};
+    }
+    return dusk::ConfigPath / kSettingsFileName;
+}
+
+void load_settings() noexcept {
+    if (sSettingsLoaded) {
+        return;
+    }
+
+    sSettingsLoaded = true;
+    sEnabledPorts.fill(false);
+    sEnabledPorts[PAD_CHAN0] = true;
+
+    const auto path = settings_path();
+    std::error_code ec;
+    if (path.empty() || !std::filesystem::exists(path, ec)) {
+        return;
+    }
+
+    try {
+        auto bytes = dusk::io::FileStream::ReadAllBytes(path);
+        if (bytes.size() < 8) {
+            return;
+        }
+
+        const auto read_u32 = [&bytes](std::size_t offset) {
+            return static_cast<std::uint32_t>(bytes[offset]) |
+                   (static_cast<std::uint32_t>(bytes[offset + 1]) << 8) |
+                   (static_cast<std::uint32_t>(bytes[offset + 2]) << 16) |
+                   (static_cast<std::uint32_t>(bytes[offset + 3]) << 24);
+        };
+
+        if (read_u32(0) != kSettingsMagic || read_u32(4) != kSettingsVersion) {
+            return;
+        }
+
+        for (std::size_t i = 0; i < sEnabledPorts.size(); ++i) {
+            const std::size_t offset = 8 + i;
+            sEnabledPorts[i] = offset < bytes.size() && bytes[offset] != 0;
+        }
+    } catch (...) {
+        sEnabledPorts.fill(false);
+        sEnabledPorts[PAD_CHAN0] = true;
+    }
+}
+
+void save_settings() noexcept {
+    const auto path = settings_path();
+    if (path.empty()) {
+        return;
+    }
+
+    try {
+        std::error_code ec;
+        std::filesystem::create_directories(path.parent_path(), ec);
+        std::array<std::uint8_t, 8 + PAD_MAX_CONTROLLERS> bytes{};
+        const auto write_u32 = [&bytes](std::size_t offset, std::uint32_t value) {
+            bytes[offset] = static_cast<std::uint8_t>(value & 0xff);
+            bytes[offset + 1] = static_cast<std::uint8_t>((value >> 8) & 0xff);
+            bytes[offset + 2] = static_cast<std::uint8_t>((value >> 16) & 0xff);
+            bytes[offset + 3] = static_cast<std::uint8_t>((value >> 24) & 0xff);
+        };
+        write_u32(0, kSettingsMagic);
+        write_u32(4, kSettingsVersion);
+        for (std::size_t i = 0; i < sEnabledPorts.size(); ++i) {
+            bytes[8 + i] = sEnabledPorts[i] ? 1 : 0;
+        }
+        auto stream = dusk::io::FileStream::Create(path);
+        stream.Write(reinterpret_cast<const char*>(bytes.data()), bytes.size());
+    } catch (...) {
+    }
 }
 
 Layout make_layout() noexcept {
@@ -194,10 +280,11 @@ ImVec2 stick_value(Control control, const Layout& layout) noexcept {
         }
 
         const ImVec2 center = control == Control::MainStick ? layout.mainStick : layout.cStick;
+        const float fullTiltRadius = scaled(kStickRadius * kFullTiltRadius, layout);
         ImVec2 value = clamp_vector(ImVec2(finger.current.x - center.x, finger.current.y - center.y),
-            scaled(kStickRadius, layout));
-        value.x /= scaled(kStickRadius, layout);
-        value.y /= scaled(kStickRadius, layout);
+            fullTiltRadius);
+        value.x /= fullTiltRadius;
+        value.y /= fullTiltRadius;
         if (std::sqrt(value.x * value.x + value.y * value.y) < kDeadZone) {
             return ImVec2(0.0f, 0.0f);
         }
@@ -276,6 +363,11 @@ void draw_shoulder(ImDrawList* drawList, ImVec2 min, ImVec2 max, const char* lab
 }  // namespace
 
 void handle_event(const SDL_Event& event) noexcept {
+    if (!enabled_for_port(PAD_CHAN0)) {
+        reset();
+        return;
+    }
+
     if (!dusk::IsGameLaunched || dusk::ui::any_document_visible() ||
         ImGui::GetCurrentContext() == nullptr)
     {
@@ -322,7 +414,11 @@ void handle_event(const SDL_Event& event) noexcept {
     }
 }
 
-void apply_pad_state(PADStatus& status) noexcept {
+void apply_pad_state(PADStatus& status, u32 port) noexcept {
+    if (!enabled_for_port(port)) {
+        return;
+    }
+
     if (!dusk::IsGameLaunched || ImGui::GetCurrentContext() == nullptr) {
         return;
     }
@@ -364,6 +460,10 @@ void apply_pad_state(PADStatus& status) noexcept {
 }
 
 void draw() noexcept {
+    if (!enabled_for_port(PAD_CHAN0)) {
+        return;
+    }
+
     if (!dusk::IsGameLaunched || dusk::ui::any_document_visible() ||
         ImGui::GetCurrentContext() == nullptr)
     {
@@ -389,6 +489,34 @@ void reset() noexcept {
     for (auto& finger : sFingers) {
         finger = {};
     }
+}
+
+bool enabled_for_port(u32 port) noexcept {
+    if (port >= sEnabledPorts.size()) {
+        return false;
+    }
+    load_settings();
+    return sEnabledPorts[port];
+}
+
+void set_enabled_for_port(u32 port, bool enabled) noexcept {
+    if (port >= sEnabledPorts.size()) {
+        return;
+    }
+
+    load_settings();
+    if (enabled) {
+        sEnabledPorts.fill(false);
+    }
+    sEnabledPorts[port] = enabled;
+    if (!enabled) {
+        reset();
+    }
+    save_settings();
+}
+
+const char* controller_name() noexcept {
+    return "Touch Controls";
 }
 
 }  // namespace dusk::ios::touch_controls

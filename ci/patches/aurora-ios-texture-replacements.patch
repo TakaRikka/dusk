@@ -1,5 +1,31 @@
+diff --git a/lib/dolphin/pad/pad.cpp b/lib/dolphin/pad/pad.cpp
+index 7dc995d..0076899 100644
+--- a/lib/dolphin/pad/pad.cpp
++++ b/lib/dolphin/pad/pad.cpp
+@@ -1094,7 +1094,9 @@ PADKeyButtonBinding* PADGetKeyButtonBindings(const u32 port, u32* buttonCount) {
+     return nullptr;
+   }
+   auto& state = g_keyboardBindings[port];
+-  *buttonCount = PAD_BUTTON_COUNT;
++  if (buttonCount != nullptr) {
++    *buttonCount = PAD_BUTTON_COUNT;
++  }
+   return state.m_buttonMapping.data();
+ }
+ 
+@@ -1126,7 +1128,9 @@ PADKeyAxisBinding* PADGetKeyAxisBindings(const u32 port, u32* axisCount) {
+     return nullptr;
+   }
+   auto& state = g_keyboardBindings[port];
+-  *axisCount = PAD_AXIS_COUNT;
++  if (axisCount != nullptr) {
++    *axisCount = PAD_AXIS_COUNT;
++  }
+   return state.m_axisMapping.data();
+ }
+ 
 diff --git a/lib/gfx/texture_replacement.cpp b/lib/gfx/texture_replacement.cpp
-index bd5c91b..a59b0e6 100644
+index bd5c91b..c325e10 100644
 --- a/lib/gfx/texture_replacement.cpp
 +++ b/lib/gfx/texture_replacement.cpp
 @@ -24,6 +24,10 @@
@@ -26,7 +52,15 @@ index bd5c91b..a59b0e6 100644
  constexpr uint64_t kReplacementWildcardTextureHash = 0xFFFFFFFFFFFFFFFFull;
  constexpr uint64_t kReplacementWildcardTlutHash = 0xFFFFFFFFFFFFFFFEull;
  
-@@ -388,6 +397,217 @@ static std::optional<ConvertedTexture> load_texture_file(const std::filesystem::
+@@ -381,13 +390,224 @@ std::optional<RuntimeTextureKey> parse_replacement_filename(std::string_view fil
+ }
+ 
+ static std::optional<ConvertedTexture> load_texture_file(const std::filesystem::path& path) {
+-  if (path.extension() == ".png") {
++  if (iequals_ascii(fs_path_to_string(path.extension()), ".png")) {
+     return png::load_png_file(path);
+   } else {
+     return dds::load_dds_file(path);
    }
  }
  

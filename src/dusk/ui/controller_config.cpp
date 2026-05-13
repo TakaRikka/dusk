@@ -18,6 +18,14 @@
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#include "dusk/ios/TouchControls.hpp"
+#endif
+
 namespace dusk::ui {
 namespace {
 
@@ -26,10 +34,34 @@ bool keyboard_active(int port) {
     return PADGetKeyButtonBindings(static_cast<u32>(port), &count) != nullptr;
 }
 
+bool touch_active(int port) {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    return dusk::ios::touch_controls::enabled_for_port(static_cast<u32>(port));
+#else
+    return false;
+#endif
+}
+
+void set_touch_active(int port, bool active) {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    dusk::ios::touch_controls::set_enabled_for_port(static_cast<u32>(port), active);
+#else
+    (void)port;
+    (void)active;
+#endif
+}
+
 Rml::String current_controller_name(int port) {
     const char* name = PADGetName(port);
     if (name != nullptr) {
         return name;
+    }
+    if (touch_active(port)) {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+        return dusk::ios::touch_controls::controller_name();
+#else
+        return "Touch Controls";
+#endif
     }
     return keyboard_active(port) ? "Keyboard" : "None";
 }
@@ -362,16 +394,33 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 {
                     .text = "None",
                 .isSelected =
-                    [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
+                    [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port) && !touch_active(port); },
             })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
+                set_touch_active(port, false);
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                 PADSerializeMappings();
                 ClearAllActionBindings(port);
             });
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+        pane.add_button({
+                            .text = "Touch Controls",
+                            .isSelected = [port] { return touch_active(port); },
+                        })
+            .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                cancel_pending_binding();
+                PADClearPort(port);
+                PADSetKeyboardActive(static_cast<u32>(port), FALSE);
+                set_touch_active(port, true);
+                PADSerializeMappings();
+                ClearAllActionBindings(port);
+            });
+#endif
 
         pane.add_button({
                             .text = "Keyboard",
@@ -380,6 +429,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundItemChange);
                 cancel_pending_binding();
+                set_touch_active(port, false);
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
                 PADSerializeMappings();
@@ -402,6 +452,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 .on_pressed([this, port, i] {
                     mDoAud_seStartMenu(kSoundItemChange);
                     cancel_pending_binding();
+                    set_touch_active(port, false);
                     PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();
@@ -411,6 +462,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Buttons: {
+        if (touch_active(port)) {
+            pane.add_text("Touch controls use the on-screen GameCube layout.");
+            break;
+        }
+
         if (keyboard_active(port)) {
             auto addKeyButton = [&](PADButton button) {
                 pane.add_select_button(
@@ -521,6 +577,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Triggers: {
+        if (touch_active(port)) {
+            pane.add_text("Touch controls use the on-screen L and R buttons.");
+            break;
+        }
+
         if (keyboard_active(port)) {
             auto addKeyButton = [&](PADButton button) {
                 pane.add_select_button(
@@ -692,6 +753,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Sticks: {
+        if (touch_active(port)) {
+            pane.add_text("Touch controls use the on-screen control stick and C-stick.");
+            break;
+        }
+
         if (keyboard_active(port)) {
             auto addKeyAxis = [&](PADAxis axis) {
                 pane.add_select_button(
@@ -816,6 +882,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Rumble: {
+        if (touch_active(port)) {
+            pane.add_text("Touch controls do not support rumble.");
+            break;
+        }
+
         auto& rumbleTest = pane.add_select_button({
             .key = "Test Rumble",
             .getValue =
@@ -892,6 +963,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Actions: {
+        if (touch_active(port)) {
+            pane.add_text("Touch controls use the default in-game action layout.");
+            break;
+        }
+
         if (keyboard_active(port)) {
             auto addActionBinding = [&](auto actionBind, const std::string& key) {
                 pane.add_select_button(

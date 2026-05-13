@@ -20,6 +20,10 @@
 #include <TargetConditionals.h>
 #endif
 
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#include "dusk/ios/TouchControls.hpp"
+#endif
+
 namespace dusk::ui {
 namespace {
 aurora::Module Log{"dusk::ui::overlay"};
@@ -142,6 +146,14 @@ Rml::String back_button_name() {
         }
     }
     return "Back";
+}
+
+bool touch_controller_active() noexcept {
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    return dusk::ios::touch_controls::enabled_for_port(PAD_CHAN0);
+#else
+    return false;
+#endif
 }
 
 #if defined(TARGET_ANDROID) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
@@ -355,6 +367,7 @@ void Overlay::update() {
     }
 
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
+                                       !touch_controller_active() &&
                                        PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&
                                        dynamic_cast<Window*>(top_document()) == nullptr &&
                                        dynamic_cast<WindowSmall*>(top_document()) == nullptr;

@@ -102,7 +102,9 @@ u32 JUTGamePad::read() {
 #endif
 
 #if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
-    dusk::ios::touch_controls::apply_pad_state(mPadStatus[0]);
+    for (u32 port = PAD_CHAN0; port < PAD_CHANMAX; ++port) {
+        dusk::ios::touch_controls::apply_pad_state(mPadStatus[port], port);
+    }
 #endif
 
     switch (sClampMode) {
