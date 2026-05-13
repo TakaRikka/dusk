@@ -12,6 +12,7 @@
 
 #if TARGET_PC
 #include "dusk/gyro.h"
+#include "dusk/action_bindings.h"
 #endif
 
 bool daAlink_c::checkNoSubjectModeCamera() {
@@ -192,7 +193,9 @@ BOOL daAlink_c::subjectCancelTrigger() {
 BOOL daAlink_c::checkSubjectEnd(BOOL i_isPlaySe) {
     setDoStatus(BUTTON_STATUS_BACK);
 
-    if (checkEventRun() || checkEquipAnime() || doTrigger() || checkSetItemTrigger(dItemNo_HAWK_EYE_e) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
+    // Allow pressing the first person binding to also leave first person
+    if (IF_DUSK(dusk::getActionBindTrig(dusk::ActionBinds::FIRST_PERSON_CAMERA, 0)) ||
+        checkEventRun() || checkEquipAnime() || doTrigger() || checkSetItemTrigger(dItemNo_HAWK_EYE_e) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
         if (i_isPlaySe) {
             seStartSystem(Z2SE_SUBJ_VIEW_OUT);
         }

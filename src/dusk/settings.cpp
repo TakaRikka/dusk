@@ -13,7 +13,7 @@ UserSettings g_userSettings = {
     },
 
     .audio = {
-        .masterVolume {"audio.masterVolume", 80},
+        .masterVolume {"audio.masterVolume", 60},
         .mainMusicVolume {"audio.mainMusicVolume", 100},
         .subMusicVolume {"audio.subMusicVolume", 100},
         .soundEffectsVolume {"audio.soundEffectsVolume", 100},
@@ -93,6 +93,7 @@ UserSettings g_userSettings = {
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
         .infiniteArrows {"game.infiniteArrows", false},
+        .infiniteSeeds {"game.infiniteSeeds", false},
         .infiniteBombs {"game.infiniteBombs", false},
         .infiniteOil {"game.infiniteOil", false},
         .infiniteOxygen {"game.infiniteOxygen", false},
@@ -106,6 +107,7 @@ UserSettings g_userSettings = {
         .fastRoll {"game.fastRoll", false},
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
+        .invincibleEnemies {"game.invincibleEnemies", false},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -133,6 +135,34 @@ UserSettings g_userSettings = {
         .checkForUpdates {"backend.checkForUpdates", true},
         .cardFileType {"backend.cardFileType", static_cast<int>(CARD_GCIFOLDER)},
         .enableAdvancedSettings {"backend.enableAdvancedSettings", false},
+    },
+
+    // Not sure if there's a better way to declare this
+    .actionBindings = {
+        .firstPersonCamera {
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.firstPersonCamera_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .callMidna {
+            ActionBindConfigVar{"actionBindings.callMidna_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.callMidna_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.callMidna_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.callMidna_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .openDusklightMenu {
+            ActionBindConfigVar{"actionBindings.openDusklightMenu_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.openDusklightMenu_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.openDusklightMenu_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.openDusklightMenu_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .turboSpeedButton {
+            ActionBindConfigVar{"actionBindings.turboButton_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.turboButton_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.turboButton_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.turboButton_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
     }
 };
 
@@ -215,6 +245,7 @@ void registerSettings() {
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
     Register(g_userSettings.game.infiniteArrows);
+    Register(g_userSettings.game.infiniteSeeds);
     Register(g_userSettings.game.infiniteBombs);
     Register(g_userSettings.game.infiniteOil);
     Register(g_userSettings.game.infiniteOxygen);
@@ -223,6 +254,7 @@ void registerSettings() {
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);
+    Register(g_userSettings.game.invincibleEnemies);
     Register(g_userSettings.game.enableFrameInterpolation);
     Register(g_userSettings.game.gyroMode);
     Register(g_userSettings.game.enableGyroAim);
@@ -248,6 +280,23 @@ void registerSettings() {
     Register(g_userSettings.backend.checkForUpdates);
     Register(g_userSettings.backend.cardFileType);
     Register(g_userSettings.backend.enableAdvancedSettings);
+
+    Register(g_userSettings.actionBindings.firstPersonCamera[0]);
+    Register(g_userSettings.actionBindings.firstPersonCamera[1]);
+    Register(g_userSettings.actionBindings.firstPersonCamera[2]);
+    Register(g_userSettings.actionBindings.firstPersonCamera[3]);
+    Register(g_userSettings.actionBindings.callMidna[0]);
+    Register(g_userSettings.actionBindings.callMidna[1]);
+    Register(g_userSettings.actionBindings.callMidna[2]);
+    Register(g_userSettings.actionBindings.callMidna[3]);
+    Register(g_userSettings.actionBindings.openDusklightMenu[0]);
+    Register(g_userSettings.actionBindings.openDusklightMenu[1]);
+    Register(g_userSettings.actionBindings.openDusklightMenu[2]);
+    Register(g_userSettings.actionBindings.openDusklightMenu[3]);
+    Register(g_userSettings.actionBindings.turboSpeedButton[0]);
+    Register(g_userSettings.actionBindings.turboSpeedButton[1]);
+    Register(g_userSettings.actionBindings.turboSpeedButton[2]);
+    Register(g_userSettings.actionBindings.turboSpeedButton[3]);
 }
 
 // Transient settings

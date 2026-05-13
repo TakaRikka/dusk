@@ -175,6 +175,7 @@ class ConfigVar : public ConfigVarBase {
     T defaultValue;
     T value;
     T overrideValue;
+    ConfigVarLayer priorLayer = ConfigVarLayer::Default;
 
 public:
     /**
@@ -265,6 +266,7 @@ public:
     void setSpeedrunValue(T newValue) {
         checkRegistered();
         if (layer != ConfigVarLayer::Override) {
+            priorLayer = layer;
             overrideValue = std::move(newValue);
             layer = ConfigVarLayer::Speedrun;
         }
@@ -282,10 +284,23 @@ public:
         checkRegistered();
         if (layer == ConfigVarLayer::Speedrun) {
             overrideValue = {};
-            layer = ConfigVarLayer::Value;
+            layer = priorLayer;
         }
     }
+
+    /**
+     * \brief Get the user-persisted value, ignoring any temporary overrides.
+     *
+     * Used by Save() to write the correct value even when a speedrun override is active.
+     */
+    [[nodiscard]] constexpr const T& getValueForSave() const noexcept {
+        checkRegistered();
+        const ConfigVarLayer effectiveLayer = (layer == ConfigVarLayer::Speedrun) ? priorLayer : layer;
+        return effectiveLayer == ConfigVarLayer::Default ? defaultValue : value;
+    }
 };
+
+using ActionBindConfigVar = ConfigVar<int>;
 
 }
 

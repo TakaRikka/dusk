@@ -31,6 +31,7 @@
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
+#include "dusk/action_bindings.h"
 #include "imgui.h"
 #endif
 
@@ -838,6 +839,12 @@ void dCamera_c::updatePad() {
     mTrigB = mDoCPd_c::getTrigB(mPadID) ? true : false;
 
     #if TARGET_PC
+    // If our custom action binding is triggered, and we're not already in first person, go into first person
+    if (dusk::getActionBindTrig(dusk::ActionBinds::FIRST_PERSON_CAMERA, mPadID) && mGear != -1) {
+        setComStat(0x1000);
+        mGear = 0;
+    }
+
     if (mCamParam.mManualMode) {
         return;
     }
@@ -877,7 +884,8 @@ void dCamera_c::updatePad() {
 
         if (mPadInfo.mCStick.mLastPosY < -mCamSetup.mCStick.SwTHH()) {
             if (mCStickYState != -1) {
-                if (mGear == -1 && mCurMode == 4) {
+                // Don't use regular first person trigger if custom mapping is set
+                if (mGear == -1 && mCurMode == 4 IF_DUSK(&& !dusk::isActionBound(dusk::ActionBinds::FIRST_PERSON_CAMERA, mPadID))) {
                     mGear = 0;
                     setComStat(0x2000);
                 } else if (mGear == 0 && sp6C) {
@@ -888,7 +896,8 @@ void dCamera_c::updatePad() {
             mCStickYState = -1;
         } else if (mPadInfo.mCStick.mLastPosY > mCamSetup.mCStick.SwTHH()) {
             if (mCStickYState != 1) {
-                if (mGear == 0 && sp6B) {
+                // Don't use regular first person trigger if custom mapping is set
+                if (mGear == 0 && sp6B IF_DUSK(&& !dusk::isActionBound(dusk::ActionBinds::FIRST_PERSON_CAMERA, mPadID))) {
                     setComStat(0x1000);
                 } else if (mGear == 1) {
                     mGear = 0;
@@ -7649,9 +7658,10 @@ bool dCamera_c::freeCamera() {
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
 
     // If we aren't in manual cam mode, don't trigger it if the player tries to hit C-up
-    // for first person
-    if (mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY < 0 ||
-        (mCamParam.mManualMode == 1 && mPadInfo.mCStick.mLastPosY != 0)) {
+    // for first person unless they have first person bound to a custom binding
+    if ((dusk::isActionBound(dusk::ActionBinds::FIRST_PERSON_CAMERA, mPadID) && mPadInfo.mCStick.mLastPosY != 0) ||
+        mPadInfo.mCStick.mLastPosX != 0 || mPadInfo.mCStick.mLastPosY < 0 || (mCamParam.mManualMode == 1 && mPadInfo.mCStick.mLastPosY != 0))
+    {
         mCamParam.mManualMode = 1;
         camMovement = camMovement.normalize();
         camMovement.y *= dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f;

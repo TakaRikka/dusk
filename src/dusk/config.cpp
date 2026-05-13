@@ -11,6 +11,7 @@
 #include <string>
 
 #include "dusk/main.h"
+#include "dusk/action_bindings.h"
 
 using namespace dusk::config;
 
@@ -60,7 +61,7 @@ void ConfigImpl<T>::loadFromJson(ConfigVar<T>& cVar, const json& jsonValue) {
 
 template<ConfigValue T>
 nlohmann::json ConfigImpl<T>::dumpToJson(const ConfigVar<T>& cVar) {
-    return cVar.getValue();
+    return cVar.getValueForSave();
 }
 
 template<ConfigValue T> requires std::is_integral_v<T> && std::is_signed_v<T>
@@ -248,12 +249,20 @@ void dusk::config::Save() {
     json j;
 
     for (const auto& pair : RegisteredConfigVars) {
-        if (pair.second->getLayer() == ConfigVarLayer::Value) {
+        const auto layer = pair.second->getLayer();
+        if (layer == ConfigVarLayer::Value || layer == ConfigVarLayer::Speedrun) {
             j[pair.first] = pair.second->getImpl()->dumpToJson(*pair.second);
         }
     }
 
     io::FileStream::WriteAllText(reinterpret_cast<const char*>(configJsonPath.c_str()), j.dump(4));
+}
+
+void dusk::config::ClearAllActionBindings(int port) {
+    for (auto& actionBinding : getActionBinds() | std::views::values) {
+        actionBinding.configVars->at(port).setValue(PAD_NATIVE_BUTTON_INVALID);
+    }
+    Save();
 }
 
 ConfigVarBase* dusk::config::GetConfigVar(std::string_view name) {

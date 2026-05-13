@@ -4,6 +4,10 @@
 #include <cmath>
 #include "os_report.h"
 
+#if TARGET_PC
+#include "dusk/action_bindings.h"
+#endif
+
 u32 JUTGamePad::CRumble::sChannelMask[4] = {
     PAD_CHAN0_BIT,
     PAD_CHAN1_BIT,
@@ -85,6 +89,9 @@ u32 JUTGamePad::sRumbleSupported;
 
 u32 JUTGamePad::read() {
     sRumbleSupported = PADRead(mPadStatus);
+#if TARGET_PC
+   dusk::updateActionBindings();
+#endif
 
     switch (sClampMode) {
     case EClampStick:

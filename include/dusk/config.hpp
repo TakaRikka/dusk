@@ -113,6 +113,13 @@ void Save();
 ConfigVarBase* GetConfigVar(std::string_view name);
 
 /**
+ * \brief Resets all custom action bindings for a specific port to nothing
+ *
+ * @param port The port to be cleared of action bindings
+ */
+void ClearAllActionBindings(int port);
+
+/**
  * \brief Call a function on every registered CVar.
  */
 void EnumerateRegistered(std::function<void(ConfigVarBase&)> callback);

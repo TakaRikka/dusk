@@ -792,6 +792,10 @@ static void duskExecute() {
         dComIfGs_setArrowNum(dComIfGs_getArrowMax());
     }
 
+    if (dusk::getSettings().game.infiniteSeeds) {
+        dComIfGs_setPachinkoNum(dComIfGs_getPachinkoMax());
+    }
+
     if (dusk::getSettings().game.infiniteBombs) {
         dComIfGs_setBombNum(0, 99);
         dComIfGs_setBombNum(1, 99);

@@ -2,6 +2,8 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
+#include "dusk/action_bindings.h"
+#include "controller_config.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/speedrun.h"
 #include "fmt/format.h"
@@ -152,12 +154,22 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     auto* elem = append(parent, "toast");
     elem->SetClass("menu-notification", true);
 
+    // Get name of button for action binding if the action is bound
+    Rml::String padButton{};
+    SDL_Gamepad* gamepad = gamepad_for_port(PAD_CHAN0);
+    if (isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, PAD_CHAN0) && gamepad != nullptr) {
+        padButton = native_button_name(gamepad,
+            getActionBindButton(ActionBinds::OPEN_DUSKLIGHT_MENU, PAD_CHAN0));
+    } else {
+        padButton = back_button_name();
+    }
+
     auto* message = append(elem, "message");
     auto* row = append(message, "row");
     append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
-    append(row, "span")->SetInnerRML(escape(back_button_name()));
+    append(row, "span")->SetInnerRML(escape(padButton));
     append(row, "span")->SetInnerRML("to open menu");
 
     return elem;
@@ -342,8 +354,9 @@ void Overlay::update() {
         }
     }
 
+    u32 count = 0;
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
-                                       PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&
+                                       PADGetKeyButtonBindings(PAD_CHAN0, &count) == nullptr &&
                                        dynamic_cast<Window*>(top_document()) == nullptr &&
                                        dynamic_cast<WindowSmall*>(top_document()) == nullptr;
     if (showControllerWarning && mControllerWarning == nullptr) {

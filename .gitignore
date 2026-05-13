@@ -41,6 +41,10 @@ compile_commands.json
 # MacOS
 .DS_Store
 
+# direnv / nix
+.direnv/
+.envrc
+
 # ISOs
 *.iso
 

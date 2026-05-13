@@ -15,6 +15,9 @@
 #include <utility>
 #include <vector>
 
+#include "dusk/action_bindings.h"
+#include "dusk/config.hpp"
+
 namespace dusk::ui {
 namespace {
 
@@ -107,68 +110,6 @@ const std::vector<ButtonNames> kGamepadButtonNames = {
     }},
 };
 // clang-format on
-
-Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped) {
-    if (buttonUntyped == PAD_NATIVE_BUTTON_INVALID) {
-        return "Not bound";
-    }
-
-    auto button = static_cast<SDL_GamepadButton>(buttonUntyped);
-    if (gamepad != nullptr) {
-        switch (SDL_GetGamepadButtonLabel(gamepad, button)) {
-        case SDL_GAMEPAD_BUTTON_LABEL_A:
-            return "A";
-        case SDL_GAMEPAD_BUTTON_LABEL_B:
-            return "B";
-        case SDL_GAMEPAD_BUTTON_LABEL_X:
-            return "X";
-        case SDL_GAMEPAD_BUTTON_LABEL_Y:
-            return "Y";
-        case SDL_GAMEPAD_BUTTON_LABEL_CROSS:
-            return "Cross";
-        case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE:
-            return "Circle";
-        case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE:
-            return "Triangle";
-        case SDL_GAMEPAD_BUTTON_LABEL_SQUARE:
-            return "Square";
-        default:
-            break;
-        }
-    }
-
-    const SDL_GamepadType type =
-        gamepad != nullptr ? SDL_GetGamepadType(gamepad) : SDL_GAMEPAD_TYPE_UNKNOWN;
-    for (const auto& buttonNames : kGamepadButtonNames) {
-        if (buttonNames.button != button) {
-            continue;
-        }
-
-        for (const auto& name : buttonNames.names) {
-            if (name.type == type) {
-                return name.name;
-            }
-        }
-    }
-
-    switch (button) {
-    case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
-        return "D-pad left";
-    case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
-        return "D-pad right";
-    case SDL_GAMEPAD_BUTTON_DPAD_UP:
-        return "D-pad up";
-    case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
-        return "D-pad down";
-    default:
-        break;
-    }
-
-    if (const char* name = PADGetNativeButtonName(buttonUntyped)) {
-        return name;
-    }
-    return "Unknown";
-}
 
 Rml::String native_axis_name(const PADAxisMapping& mapping, SDL_Gamepad* gamepad) {
     if (mapping.nativeAxis.nativeAxis != -1) {
@@ -367,6 +308,7 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); }, [] { return false; });
     addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); }, [] { return false; });
     addPageButton(Page::Rumble, "Rumble", [] { return Rml::String(">"); }, [port] { return !PADSupportsRumbleIntensity(static_cast<u32>(port)); });
+    addPageButton(Page::Actions, "Custom Action Bindings", [] {return Rml::String(">"); }, [] { return false; });
 
     leftPane.add_section("Options");
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
@@ -428,6 +370,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                 PADSerializeMappings();
+                ClearAllActionBindings(port);
             });
 
         pane.add_button({
@@ -440,6 +383,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
                 PADSerializeMappings();
+                ClearAllActionBindings(port);
             });
 
         const u32 controllerCount = PADCount();
@@ -461,6 +405,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();
+                    ClearAllActionBindings(port);
                 });
         }
         break;
@@ -946,6 +891,77 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         pane.add_text("Configure your desired rumble intensities, then run a test to check how they feel.");
         break;
     }
+    case Page::Actions: {
+        if (keyboard_active(port)) {
+            auto addActionBinding = [&](auto actionBind, const std::string& key) {
+                pane.add_select_button(
+                        {
+                            .key = key,
+                            .getValue =
+                                [this, actionBind] {
+                                    if (mPendingActionBinding == actionBind) {
+                                        return pending_key_label();
+                                    }
+
+                                    return keyboard_key_name(actionBind->getValue());
+                                },
+                        })
+                    .on_pressed([this, port, actionBind] {
+                        cancel_pending_binding();
+                        mPendingPort = port;
+                        mPendingBindingArmed = false;
+                        mPendingActionBinding = actionBind;
+                    });
+            };
+
+            pane.add_section("Custom Action Bindings");
+            pane.add_text("A key bound to any action here will REPLACE the default control for"
+                          " that action. Only bind buttons here that aren't used anywhere else.");
+            for (auto& [configVars, actionName] : getActionBinds() | std::views::values) {
+                addActionBinding(&configVars->at(port), actionName);
+            }
+            break;
+        }
+
+        u32 buttonCount = 0;
+        PADButtonMapping* mappings = PADGetButtonMappings(port, &buttonCount);
+        if (mappings == nullptr) {
+            pane.add_text("No controller selected");
+            break;
+        }
+
+        SDL_Gamepad* gamepad = gamepad_for_port(port);
+        pane.add_section("Custom Action Bindings");
+        pane.add_text("A button bound to any action here will REPLACE the default control for"
+                      " that action. Only bind buttons here that aren't used anywhere else. The glyphs"
+                      " shown for in game actions will not change. This is not recommended for "
+                      " regular Gamecube controllers.");
+        auto addActionBinding = [&](auto actionBind, const std::string& key) {
+            pane.add_select_button({
+                           .key = key,
+                           .getValue =
+                               [this, gamepad, actionBind] {
+                                   if (mPendingActionBinding == actionBind) {
+                                       return pending_button_label();
+                                   }
+
+                                   return native_button_name(
+                                       gamepad, actionBind->getValue());
+                               },
+                       })
+                .on_pressed([this, port, actionBind] {
+                    cancel_pending_binding();
+                    mPendingPort = port;
+                    mPendingBindingArmed = false;
+                    mPendingActionBinding = actionBind;
+                });
+        };
+
+        for (auto& [configVars, actionName] : getActionBinds() | std::views::values) {
+            addActionBinding(&configVars->at(port), actionName);
+        }
+        break;
+    }
     }
 }
 
@@ -1020,12 +1036,31 @@ void ControllerConfigWindow::poll_pending_binding() {
             mPendingAxisMapping->nativeButton = nativeButton;
             finish_pending_binding(completedPort);
         }
+        return;
+    }
+
+    if (mPendingActionBinding != nullptr) {
+        int button{};
+        if (keyboard_active(mPendingPort)) {
+            button = keyboard_key_pressed();
+        } else {
+            button = PADGetNativeButtonPressed(mPendingPort);
+        }
+
+        if (button != -1) {
+            const int completedPort = mPendingPort;
+            mPendingActionBinding->setValue(button);
+            config::Save();
+            finish_pending_binding(completedPort);
+        }
+        return;
     }
 }
 
 void ControllerConfigWindow::finish_pending_binding(int completedPort) {
     mPendingButtonMapping = nullptr;
     mPendingAxisMapping = nullptr;
+    mPendingActionBinding = nullptr;
     mPendingPort = -1;
     mPendingBindingArmed = false;
     mSuppressNavigationUntilNeutral = true;
@@ -1035,7 +1070,7 @@ void ControllerConfigWindow::finish_pending_binding(int completedPort) {
 
 void ControllerConfigWindow::unmap_pending_binding() {
     if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr &&
-        mPendingKeyButton < 0 && mPendingKeyAxis < 0)
+        mPendingActionBinding == nullptr && mPendingKeyButton < 0 && mPendingKeyAxis < 0)
     {
         return;
     }
@@ -1047,6 +1082,9 @@ void ControllerConfigWindow::unmap_pending_binding() {
     } else if (mPendingAxisMapping != nullptr) {
         mPendingAxisMapping->nativeAxis = {-1, AXIS_SIGN_POSITIVE};
         mPendingAxisMapping->nativeButton = -1;
+        finish_pending_binding(completedPort);
+    } else if (mPendingActionBinding != nullptr) {
+        mPendingActionBinding->setValue(PAD_NATIVE_BUTTON_INVALID);
         finish_pending_binding(completedPort);
     } else if (mPendingKeyButton >= 0) {
         PADSetKeyButtonBinding(static_cast<u32>(completedPort),
@@ -1061,7 +1099,7 @@ void ControllerConfigWindow::unmap_pending_binding() {
 
 bool ControllerConfigWindow::capture_active() const {
     return mPendingButtonMapping != nullptr || mPendingAxisMapping != nullptr ||
-           mPendingKeyButton >= 0 || mPendingKeyAxis >= 0;
+           mPendingActionBinding != nullptr || mPendingKeyButton >= 0 || mPendingKeyAxis >= 0;
 }
 
 bool ControllerConfigWindow::pending_input_neutral() const {
@@ -1080,13 +1118,14 @@ Rml::String ControllerConfigWindow::pending_axis_label() const {
 }
 
 void ControllerConfigWindow::cancel_pending_binding() {
-    if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr &&
+    if (mPendingButtonMapping == nullptr && mPendingAxisMapping == nullptr && mPendingActionBinding == nullptr &&
         !mSuppressNavigationUntilNeutral && mPendingKeyButton < 0 && mPendingKeyAxis < 0)
     {
         return;
     }
     mPendingButtonMapping = nullptr;
     mPendingAxisMapping = nullptr;
+    mPendingActionBinding = nullptr;
     mPendingKeyButton = -1;
     mPendingKeyAxis = -1;
     mPendingPort = -1;
@@ -1116,6 +1155,68 @@ void ControllerConfigWindow::stop_rumble_test() {
     }
     mRumbleTestActive = false;
     mRumbleTestPort = -1;
+}
+
+Rml::String native_button_name(SDL_Gamepad* gamepad, u32 buttonUntyped) {
+    if (buttonUntyped == PAD_NATIVE_BUTTON_INVALID) {
+        return "Not bound";
+    }
+
+    auto button = static_cast<SDL_GamepadButton>(buttonUntyped);
+    if (gamepad != nullptr) {
+        switch (SDL_GetGamepadButtonLabel(gamepad, button)) {
+        case SDL_GAMEPAD_BUTTON_LABEL_A:
+            return "A";
+        case SDL_GAMEPAD_BUTTON_LABEL_B:
+            return "B";
+        case SDL_GAMEPAD_BUTTON_LABEL_X:
+            return "X";
+        case SDL_GAMEPAD_BUTTON_LABEL_Y:
+            return "Y";
+        case SDL_GAMEPAD_BUTTON_LABEL_CROSS:
+            return "Cross";
+        case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE:
+            return "Circle";
+        case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE:
+            return "Triangle";
+        case SDL_GAMEPAD_BUTTON_LABEL_SQUARE:
+            return "Square";
+        default:
+            break;
+        }
+    }
+
+    const SDL_GamepadType type =
+        gamepad != nullptr ? SDL_GetGamepadType(gamepad) : SDL_GAMEPAD_TYPE_UNKNOWN;
+    for (const auto& buttonNames : kGamepadButtonNames) {
+        if (buttonNames.button != button) {
+            continue;
+        }
+
+        for (const auto& name : buttonNames.names) {
+            if (name.type == type) {
+                return name.name;
+            }
+        }
+    }
+
+    switch (button) {
+    case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
+        return "D-pad left";
+    case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
+        return "D-pad right";
+    case SDL_GAMEPAD_BUTTON_DPAD_UP:
+        return "D-pad up";
+    case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
+        return "D-pad down";
+    default:
+        break;
+    }
+
+    if (const char* name = PADGetNativeButtonName(buttonUntyped)) {
+        return name;
+    }
+    return "Unknown";
 }
 
 }  // namespace dusk::ui

@@ -51,10 +51,13 @@
 #include "d/actor/d_a_ni.h"
 #include "d/d_s_play.h"
 
+#if TARGET_PC
+#include "dusk/action_bindings.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #include "res/Object/Alink.h"
 #include <cstring>
+#endif
 
 static int daAlink_Create(fopAc_ac_c* i_this);
 static int daAlink_Delete(daAlink_c* i_this);
@@ -9363,6 +9366,12 @@ BOOL daAlink_c::spActionTrigger() {
 }
 
 BOOL daAlink_c::midnaTalkTrigger() const {
+#if TARGET_PC
+    // If we have a custom bind for Midna, check that instead
+    if (dusk::isActionBound(dusk::ActionBinds::CALL_MIDNA, 0)) {
+        return dusk::getActionBindTrig(dusk::ActionBinds::CALL_MIDNA, 0);
+    }
+#endif
     return mItemTrigger & BTN_Z;
 }
 
