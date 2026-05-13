@@ -131,6 +131,7 @@ UserSettings g_userSettings = {
     .backend = {
         .isoPath {"backend.isoPath", ""},
         .isoVerification {"backend.isoVerification", DiscVerificationState::Unknown},
+        .uiLanguage {"backend.uiLanguage", "en"},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
@@ -279,6 +280,7 @@ void registerSettings() {
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);
+    Register(g_userSettings.backend.uiLanguage);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);

@@ -103,13 +103,13 @@ Rml::Element* create_controller_warning(Rml::Element* parent) {
 
     auto* heading = append(elem, "heading");
     auto* title = append(heading, "span");
-    title->SetInnerRML("No Device Assigned");
+    title->SetInnerRML("[NO_CONTROLLER_ASSIGNED]");
     auto* icon = append(heading, "icon");
     icon->SetClass("warning", true);
 
     auto* message = append(elem, "message");
     auto* content = append(message, "span");
-    content->SetInnerRML("Configure <b>Port 1</b> in Settings.");
+    content->SetInnerRML("[CONFIGURE_CONTROLLER_PORT_1_IN_SETTINGS]");
 
     return elem;
 }
@@ -145,9 +145,9 @@ Rml::String back_button_name() {
 }
 
 #if defined(TARGET_ANDROID) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
-constexpr auto kMenuNotificationPrefix = "3-finger tap or";
+constexpr auto kMenuNotificationPrefix = "[THREE_FINGER_TAP_OR]";
 #else
-constexpr auto kMenuNotificationPrefix = "Press <b>F1</b> or";
+constexpr auto kMenuNotificationPrefix = "[PRESS_F1_OR]";
 #endif
 
 Rml::Element* create_menu_notification(Rml::Element* parent) {
@@ -169,8 +169,8 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
-    append(row, "span")->SetInnerRML("<b>" + escape(padButton) + "</b>");
-    append(row, "span")->SetInnerRML("to open menu");
+    append(row, "span")->SetInnerRML(escape(padButton));
+    append(row, "span")->SetInnerRML("[TO_OPEN_MENU]");
 
     return elem;
 }
@@ -301,10 +301,11 @@ void Overlay::update() {
     if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
         dusk::speedrun::updateLiveSplit();
         if (dusk::speedrun::consumeConnectedEvent()) {
-            push_toast({.title = "LiveSplit connected", .duration = std::chrono::seconds(3)});
+            push_toast({.title = "[LIVESPLIT_CONNECTED]", .duration = std::chrono::seconds(3)});
         }
         if (dusk::speedrun::consumeDisconnectedEvent()) {
-            push_toast({.title = "LiveSplit disconnected", .duration = std::chrono::seconds(3)});
+            push_toast(
+                {.title = "[LIVESPLIT_DISCONNECTED]", .duration = std::chrono::seconds(3)});
         }
     }
 #endif
@@ -354,9 +355,8 @@ void Overlay::update() {
         }
     }
 
-    u32 count = 0;
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
-                                       PADGetKeyButtonBindings(PAD_CHAN0, &count) == nullptr &&
+                                       PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&
                                        dynamic_cast<Window*>(top_document()) == nullptr &&
                                        dynamic_cast<WindowSmall*>(top_document()) == nullptr;
     if (showControllerWarning && mControllerWarning == nullptr) {

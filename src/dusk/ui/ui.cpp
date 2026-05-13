@@ -12,6 +12,8 @@
 
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
+#include "dusk/settings.h"
+#include "i18n.hpp"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -21,6 +23,20 @@ namespace {
 
 void load_font(const char* filename, bool fallback = false) {
     Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback);
+}
+
+void apply_ui_language_font_class() {
+    auto* context = aurora::rmlui::get_context();
+    if (context == nullptr) {
+        return;
+    }
+    const bool useChineseFont = i18n::use_harmonyos_font();
+
+    auto* root = context->GetRootElement();
+    if (root == nullptr) {
+        return;
+    }
+    root->SetClass("lang-zh-cn", useChineseFont);
 }
 
 bool sInitialized = false;
@@ -54,12 +70,20 @@ bool initialize() noexcept {
     load_font("AlegreyaSC-Bold.ttf");
     load_font("MaterialSymbolsRounded-Regular.ttf");
     load_font("NotoMono-Regular.ttf");
+    load_font("HarmonyOS_Sans_Regular.ttf", true);
+
+    aurora::rmlui::set_translate_callback(i18n::translate);
+    i18n::initialize();
+    i18n::set_language(getSettings().backend.uiLanguage.getValue());
+    apply_ui_language_font_class();
 
     sInitialized = true;
     return true;
 }
 
 void shutdown() noexcept {
+    aurora::rmlui::set_translate_callback({});
+    i18n::shutdown();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();
@@ -219,6 +243,8 @@ void update() noexcept {
     if (!aurora::rmlui::is_initialized()) {
         return;
     }
+
+    apply_ui_language_font_class();
 
     input::update_input();
     const auto update_documents = [](auto& documents) {
