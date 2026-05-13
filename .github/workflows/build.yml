@@ -104,7 +104,9 @@ jobs:
           submodules: recursive
 
       - name: Apply local Aurora patches
-        run: git -C extern/aurora apply ../../ci/patches/aurora-ios-texture-replacements.patch
+        run: |
+          cp ci/third_party/bcdec.h extern/aurora/lib/gfx/bcdec.h
+          git -C extern/aurora apply ../../ci/patches/aurora-ios-texture-replacements.patch
 
       - name: Install dependencies
         run: brew install cmake ninja

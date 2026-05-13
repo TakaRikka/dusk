@@ -25,10 +25,10 @@ index 7dc995d..0076899 100644
  }
  
 diff --git a/lib/gfx/texture_replacement.cpp b/lib/gfx/texture_replacement.cpp
-index bd5c91b..c325e10 100644
+index bd5c91b..773e0b4 100644
 --- a/lib/gfx/texture_replacement.cpp
 +++ b/lib/gfx/texture_replacement.cpp
-@@ -24,6 +24,10 @@
+@@ -24,6 +24,16 @@
  #include "png_io.hpp"
  #include "../fs_helper.hpp"
  
@@ -36,10 +36,16 @@ index bd5c91b..c325e10 100644
 +#include <TargetConditionals.h>
 +#endif
 +
++#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
++#define BCDEC_STATIC
++#define BCDEC_IMPLEMENTATION
++#include "bcdec.h"
++#endif
++
  using namespace aurora::gx;
  using aurora::webgpu::g_device;
  
-@@ -75,7 +79,12 @@ std::list<RuntimeTextureKey> s_replacementLru;
+@@ -75,7 +85,12 @@ std::list<RuntimeTextureKey> s_replacementLru;
  std::filesystem::path s_replacementRoot;
  std::filesystem::path s_dumpRoot;
  uint64_t s_replacementCacheBytes = 0;
@@ -52,7 +58,7 @@ index bd5c91b..c325e10 100644
  constexpr uint64_t kReplacementWildcardTextureHash = 0xFFFFFFFFFFFFFFFFull;
  constexpr uint64_t kReplacementWildcardTlutHash = 0xFFFFFFFFFFFFFFFEull;
  
-@@ -381,13 +390,224 @@ std::optional<RuntimeTextureKey> parse_replacement_filename(std::string_view fil
+@@ -381,13 +396,240 @@ std::optional<RuntimeTextureKey> parse_replacement_filename(std::string_view fil
  }
  
  static std::optional<ConvertedTexture> load_texture_file(const std::filesystem::path& path) {
@@ -169,6 +175,23 @@ index bd5c91b..c325e10 100644
 +  }
 +}
 +
++void copy_decoded_rgba_block(const uint8_t* block, uint8_t* dst, uint32_t width, uint32_t height, uint32_t blockX,
++                             uint32_t blockY) noexcept {
++  for (uint32_t y = 0; y < 4; ++y) {
++    const uint32_t dstY = blockY * 4 + y;
++    if (dstY >= height) {
++      continue;
++    }
++    for (uint32_t x = 0; x < 4; ++x) {
++      const uint32_t dstX = blockX * 4 + x;
++      if (dstX >= width) {
++        continue;
++      }
++      std::memcpy(dst + (static_cast<size_t>(dstY) * width + dstX) * 4, block + (y * 4 + x) * 4, 4);
++    }
++  }
++}
++
 +ByteBuffer decode_bc_to_rgba8(const ConvertedTexture& texture) noexcept {
 +  const uint64_t outSize = calc_texture_size(wgpu::TextureFormat::RGBA8Unorm, texture.width, texture.height, texture.mips);
 +  if (outSize == 0 || outSize > kMaxMobileReplacementBytes) {
@@ -220,6 +243,10 @@ index bd5c91b..c325e10 100644
 +              pixel[3] = 255;
 +            }
 +          }
++        } else if (texture.format == wgpu::TextureFormat::BC7RGBAUnorm) {
++          std::array<uint8_t, 64> decoded{};
++          bcdec_bc7(block, decoded.data(), 16);
++          copy_decoded_rgba_block(decoded.data(), mipDst, width, height, bx, by);
 +        }
 +      }
 +    }
@@ -230,11 +257,6 @@ index bd5c91b..c325e10 100644
 +}
 +
 +bool prepare_mobile_replacement(ConvertedTexture& replacement, const RuntimeTextureKey& key) noexcept {
-+  if (replacement.format == wgpu::TextureFormat::BC7RGBAUnorm) {
-+    Log.warn("texture_replacement: skipping BC7 replacement on iOS: {}", format_replacement_filename(key));
-+    return false;
-+  }
-+
 +  if (is_bc_format(replacement.format)) {
 +    ByteBuffer rgba = decode_bc_to_rgba8(replacement);
 +    if (rgba.empty()) {
@@ -278,7 +300,7 @@ index bd5c91b..c325e10 100644
  std::optional<ConvertedTexture> load_replacement(const ReplacementIndexEntry& entry) noexcept {
    auto base = load_texture_file(entry.path);
    if (!base.has_value()) {
-@@ -579,11 +799,15 @@ const gfx::TextureHandle* find_cached_replacement(const RuntimeTextureKey& key)
+@@ -579,11 +821,15 @@ const gfx::TextureHandle* find_cached_replacement(const RuntimeTextureKey& key)
  }
  
  gfx::TextureHandle load_replacement_texture(const RuntimeTextureKey& key, const ReplacementIndexEntry& entry) noexcept {
