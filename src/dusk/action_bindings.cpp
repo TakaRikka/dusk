@@ -2,6 +2,7 @@
 
 #include "aurora/lib/input.hpp"
 #include "dusk/settings.h"
+#include "dusk/ui/ui.hpp"
 
 namespace dusk {
 
@@ -37,7 +38,11 @@ void updateActionBindings() {
 
         // Update current frame with whether action button is pressed
         for (auto& [action, boundAction] : getActionBinds()) {
-            if (!isActionBound(action, port)) {
+            // If the action isn't bound, or if documents are visible and the action isn't
+            // opening the dusklight menu, don't update. Otherwise, we may accidentally
+            // perform actions while the dusklight menu is open.
+            if (!isActionBound(action, port) ||
+                (ui::any_document_visible() && action != ActionBinds::OPEN_DUSKLIGHT_MENU)) {
                 continue;
             }
 
