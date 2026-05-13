@@ -339,7 +339,7 @@ ImVec2 dpad_value(const Layout& layout) noexcept {
 }
 
 s8 axis_to_pad(float value) noexcept {
-    return static_cast<s8>(std::clamp(std::lround(value * 72.0f), -72l, 72l));
+    return static_cast<s8>(std::clamp(std::lround(value * 127.0f), -127l, 127l));
 }
 
 void draw_circle_button(ImDrawList* drawList, ImVec2 center, float radius, const char* label, bool active, const Layout& layout) noexcept {
