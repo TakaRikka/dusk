@@ -692,6 +692,12 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     return;
                 }
 
+                // prevent stuff like https://github.com/TwilitRealm/dusklight/issues/949
+                if (link->getDemoMode() != 0) {
+                    inJump = false;
+                    return;
+                }
+
                 if (!inJump) {
                     if (link->mProcID == daAlink_c::PROC_CUT_JUMP) {
                         inJump = true;
