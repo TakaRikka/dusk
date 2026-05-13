@@ -19,7 +19,7 @@ body {
 .lang-zh-cn body menu button,
 .lang-zh-cn body disc-info,
 .lang-zh-cn body version-info {
-    font-family: "HarmonyOS Sans";
+    font-family: "HarmonyOS Sans SC", "HarmonyOS Sans TC", "Microsoft YaHei", "Microsoft JhengHei", "Yu Gothic UI", "Malgun Gothic", "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP", "Noto Sans CJK KR", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", "Noto Sans KR", "SimHei", sans-serif;
 }
 
 .gradient {
@@ -501,4 +501,15 @@ body.animate-in .intro-item {
     body.mirrored #disc-status {
         justify-content: flex-start;
     }
+}
+
+/* Keep CJK font override at end so it wins over per-widget font-family rules. */
+.lang-zh-cn body eyebrow,
+.lang-zh-cn body #menu-list button,
+.lang-zh-cn body disc-info,
+.lang-zh-cn body version-info,
+.lang-zh-cn body #disc-version,
+.lang-zh-cn body .update,
+.lang-zh-cn body .detail {
+    font-family: "HarmonyOS Sans SC", "HarmonyOS Sans TC", "Microsoft YaHei", "Microsoft JhengHei", "Yu Gothic UI", "Malgun Gothic", "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP", "Noto Sans CJK KR", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", "Noto Sans KR", "SimHei", sans-serif;
 }
