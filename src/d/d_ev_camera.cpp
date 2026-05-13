@@ -3882,7 +3882,11 @@ bool dCamera_c::hintTalkEvCamera() {
 
         cSAngle acStack_1fc(20.0f);
         for (i = 0; i < 2; i++) {
+#if AVOID_UB
+            for (j = 0; j < 10; j++) {
+#else
             for (j = 0; j < 12; j++) {
+#endif
                 cSAngle acStack_200(local_b0[j] * fVar22);
                 hintTalk->mDirection.U(acStack_1f8 + acStack_200);
                 hintTalk->mDirection.V(((hintTalk->field_0x28.V() * acStack_200.Cos()) * 0.2f) + acStack_1fc);
