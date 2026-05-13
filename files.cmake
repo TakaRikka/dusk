@@ -1509,6 +1509,8 @@ set(DUSK_FILES
         src/dusk/ui/tab_bar.hpp
         src/dusk/ui/ui.cpp
         src/dusk/ui/ui.hpp
+        src/dusk/ui/warp.cpp
+        src/dusk/ui/warp.hpp
         src/dusk/ui/window.cpp
         src/dusk/ui/window.hpp
         src/dusk/achievements.cpp
