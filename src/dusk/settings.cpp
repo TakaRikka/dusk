@@ -13,7 +13,7 @@ UserSettings g_userSettings = {
     },
 
     .audio = {
-        .masterVolume {"audio.masterVolume", 80},
+        .masterVolume {"audio.masterVolume", 60},
         .mainMusicVolume {"audio.mainMusicVolume", 100},
         .subMusicVolume {"audio.subMusicVolume", 100},
         .soundEffectsVolume {"audio.soundEffectsVolume", 100},

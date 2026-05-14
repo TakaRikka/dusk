@@ -3,6 +3,7 @@
 #include "aurora/gfx.h"
 #include "bool_button.hpp"
 #include "controller_config.hpp"
+#include "dusk/app_info.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
@@ -17,6 +18,7 @@
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
+#include "modal.hpp"
 #include "number_button.hpp"
 #include "menu_bar.hpp"
 #include "pane.hpp"
@@ -25,6 +27,7 @@
 
 #include <aurora/lib/window.hpp>
 #include <SDL3/SDL_filesystem.h>
+#include <fmt/format.h>
 
 #if DUSK_ENABLE_SENTRY_NATIVE
 #include "dusk/crash_reporting.h"
@@ -298,13 +301,49 @@ private:
     Rml::String mCurrentRml;
 };
 
+void show_data_folder_error_modal(std::string_view message) {
+    auto dismiss = [](Modal& modal) {
+        mDoAud_seStartMenu(kSoundWindowClose);
+        modal.pop();
+    };
+    push_document(std::make_unique<Modal>(Modal::Props{
+        .title = "Data Folder Not Changed",
+        .bodyRml = escape(message),
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismiss,
+                },
+            },
+        .onDismiss = dismiss,
+        .icon = "warning",
+    }));
+    if (auto* doc = top_document()) {
+        doc->focus();
+    }
+}
+
 void data_folder_dialog_callback(void*, const char* path, const char* error) {
-    if (error != nullptr || path == nullptr) {
+    if (error != nullptr) {
+        show_data_folder_error_modal(error);
         return;
     }
-    if (data::set_custom_data_path(path)) {
-        mDoAud_seStartMenu(kSoundItemChange);
+    if (path == nullptr) {
+        return;
     }
+
+    std::string dataPathError;
+    if (data::set_custom_data_path(path, &dataPathError)) {
+        mDoAud_seStartMenu(kSoundItemChange);
+        return;
+    }
+
+    if (dataPathError.empty()) {
+        dataPathError =
+            fmt::format("{} could not use the selected folder as its data folder.", AppName);
+    }
+    show_data_folder_error_modal(dataPathError);
 }
 
 const Rml::String kInternalResolutionHelpText =
@@ -915,7 +954,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     [](int value) {
                         getSettings().audio.masterVolume.setValue(value);
                         config::Save();
-                        audio::SetMasterVolume(value / 100.f);
+                        audio::SetMasterVolume(audio::MasterVolumeToLinear(value / 100.0f));
                     },
                 .isModified =
                     [] {

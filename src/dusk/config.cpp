@@ -61,7 +61,7 @@ void ConfigImpl<T>::loadFromJson(ConfigVar<T>& cVar, const json& jsonValue) {
 
 template<ConfigValue T>
 nlohmann::json ConfigImpl<T>::dumpToJson(const ConfigVar<T>& cVar) {
-    return cVar.getValue();
+    return cVar.getValueForSave();
 }
 
 template<ConfigValue T> requires std::is_integral_v<T> && std::is_signed_v<T>
@@ -249,7 +249,8 @@ void dusk::config::Save() {
     json j;
 
     for (const auto& pair : RegisteredConfigVars) {
-        if (pair.second->getLayer() == ConfigVarLayer::Value) {
+        const auto layer = pair.second->getLayer();
+        if (layer == ConfigVarLayer::Value || layer == ConfigVarLayer::Speedrun) {
             j[pair.first] = pair.second->getImpl()->dumpToJson(*pair.second);
         }
     }

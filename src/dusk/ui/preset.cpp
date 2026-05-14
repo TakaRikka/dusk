@@ -83,7 +83,7 @@ PresetWindow::PresetWindow() : WindowSmall("modal", "modal-dialog") {
          "Enhancements disabled to match the GameCube version. "
          "Good for speedrunning or simple nostalgia!",
          applyPresetClassic},
-        {"Dusk",
+        {"Dusklight",
          "Graphics & quality of life tweaks, including some from the Wii U version. "
          "Our recommended way to play!",
          applyPresetDusk},

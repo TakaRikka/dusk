@@ -354,8 +354,9 @@ void Overlay::update() {
         }
     }
 
+    u32 count = 0;
     const bool showControllerWarning = PADGetIndexForPort(PAD_CHAN0) < 0 &&
-                                       PADGetKeyButtonBindings(PAD_CHAN0, nullptr) == nullptr &&
+                                       PADGetKeyButtonBindings(PAD_CHAN0, &count) == nullptr &&
                                        dynamic_cast<Window*>(top_document()) == nullptr &&
                                        dynamic_cast<WindowSmall*>(top_document()) == nullptr;
     if (showControllerWarning && mControllerWarning == nullptr) {

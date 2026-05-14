@@ -26,8 +26,12 @@ void updateAutoSave() {
     (AutoSaveFuncsProc[mAutoSaveProc])();
 }
 
-void writeAutoSave() {
-    int stageNo = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo());
+bool writeAutoSave() {
+    stage_stag_info_class* stagInfo = dComIfGp_getStageStagInfo();
+    if (stagInfo == nullptr) {
+        return false;
+    }
+    int stageNo = dStage_stagInfo_GetSaveTbl(stagInfo);
 
     dComIfGs_putSave(stageNo);
     dComIfGs_setMemoryToCard(mSaveBuffer, dComIfGs_getDataNum());
@@ -40,6 +44,7 @@ void writeAutoSave() {
     }
 
     g_mDoMemCd_control.save(mSaveBuffer, sizeof(mSaveBuffer), 0);
+    return true;
 }
 
 void autoSaving() {
@@ -48,8 +53,9 @@ void autoSaving() {
         if (cardState == 2) {
             mAutoSaveProc = 1;
         } else if (cardState == 1) {
-            writeAutoSave();
-            mAutoSaveProc = 3;
+            if (writeAutoSave()) {
+                mAutoSaveProc = 3;
+            }
         }
     }
 }
