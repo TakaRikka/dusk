@@ -79,6 +79,12 @@ std::array<bool, PAD_MAX_CONTROLLERS> sEnabledPorts{};
 bool sSettingsLoaded = false;
 int sStickSensitivityPercent = kDefaultStickSensitivityPercent;
 
+void apply_default_settings() noexcept {
+    sEnabledPorts.fill(false);
+    sEnabledPorts[PAD_CHAN0] = true;
+    sStickSensitivityPercent = kDefaultStickSensitivityPercent;
+}
+
 float scaled(float value, const Layout& layout) noexcept {
     return value * layout.scale;
 }
@@ -105,19 +111,20 @@ std::filesystem::path settings_path() {
     return dusk::ConfigPath / kSettingsFileName;
 }
 
+void save_settings() noexcept;
+
 void load_settings() noexcept {
     if (sSettingsLoaded) {
         return;
     }
 
     sSettingsLoaded = true;
-    sEnabledPorts.fill(false);
-    sEnabledPorts[PAD_CHAN0] = true;
-    sStickSensitivityPercent = kDefaultStickSensitivityPercent;
+    apply_default_settings();
 
     const auto path = settings_path();
     std::error_code ec;
     if (path.empty() || !std::filesystem::exists(path, ec)) {
+        save_settings();
         return;
     }
 
@@ -149,9 +156,8 @@ void load_settings() noexcept {
                 sensitivity, kMinStickSensitivityPercent, kMaxStickSensitivityPercent);
         }
     } catch (...) {
-        sEnabledPorts.fill(false);
-        sEnabledPorts[PAD_CHAN0] = true;
-        sStickSensitivityPercent = kDefaultStickSensitivityPercent;
+        apply_default_settings();
+        save_settings();
     }
 }
 
