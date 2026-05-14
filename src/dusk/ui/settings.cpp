@@ -82,8 +82,8 @@ int ui_language_index(std::string_view languageId) {
 }
 
 constexpr std::array kCardFileTypes = {
-    "Card Image",
-    "GCI Folder",
+    "[CARD_IMAGE]",
+    "[GCI_FOLDER]",
 };
 
 constexpr std::array kFpsOverlayCornerNames = {
@@ -380,19 +380,15 @@ void data_folder_dialog_callback(void*, const char* path, const char* error) {
 }
 
 const Rml::String kInternalResolutionHelpText =
-    "Configure the resolution used for rendering the game. Higher values are more demanding on "
-    "your graphics hardware.";
+    "[CONFIGURE_THE_RESOLUTION_USED_FOR_RENDERING_THE_GAME_HIGHER_VALUES_ARE_MORE_DE]";
 const Rml::String kShadowResolutionHelpText =
-    "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
-    "and memory usage.";
+    "[CONFIGURE_THE_SHADOW_MAP_RESOLUTION_HIGHER_VALUES_IMPROVE_SHADOW_QUALITY_BUT]";
 const Rml::String kBloomHelpText =
-    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
-    "a higher-quality bloom pass.";
+    "[CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO]";
 const Rml::String kBloomBrightnessHelpText =
-    "Configure bloom intensity. Higher values make bright areas glow more strongly.";
+    "[CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE]";
 const Rml::String kUnlockFramerateHelpText =
-    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
-    "visual artifacts or animation glitches.";
+    "[USES_INTER_FRAME_INTERPOLATION_TO_ENABLE_HIGHER_FRAME_RATES_MAY_INTRODUCE_MINOR]";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);

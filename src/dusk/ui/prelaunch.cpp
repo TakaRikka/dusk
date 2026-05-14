@@ -11,6 +11,7 @@
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"
+#include "i18n.hpp"
 
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_error.h>
@@ -44,7 +45,7 @@ const Rml::String kDocumentSource = R"RML(
     <content id="root" open>
         <menu>
             <hero class="intro-item delay-0">
-                <eyebrow><span>Twilit Realm</span> presents</eyebrow>
+                <eyebrow><span>[TWILIT_REALM]</span> [PRESENTS]</eyebrow>
                 <img src="res/logo.png" />
             </hero>
             <div id="menu-list" />
@@ -57,7 +58,7 @@ const Rml::String kDocumentSource = R"RML(
             <span id="disc-version" class="detail" />
         </disc-info>
         <version-info class="intro-item delay-5">
-            <div class="version">Version <span id="version-text"></span></div>
+            <div class="version">[VERSION] <span id="version-text"></span></div>
             <div id="update-status" class="update">
                 <span id="update-message"></span>
                 <button id="update-download">
@@ -71,10 +72,13 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
-constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
-    {"Game Disc Images", "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc"},
-    {"All Files", "*"},
+constexpr std::array<const char*, 2> kDiscFileFilterPatterns{{
+    "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc",
+    "*",
 }};
+
+std::array<Rml::String, 2> sDiscFileFilterLabels;
+std::array<SDL_DialogFileFilter, 2> sDiscFileFilters;
 
 struct DiscVerificationResult {
     std::string path;
@@ -262,6 +266,18 @@ std::string update_release_label(const update_check::Release& release) {
     return std::string(tagName);
 }
 
+const SDL_DialogFileFilter* disc_file_filters() {
+    i18n::translate(sDiscFileFilterLabels[0], "[GAME_DISC_IMAGES]");
+    i18n::translate(sDiscFileFilterLabels[1], "[ALL_FILES]");
+    for (std::size_t i = 0; i < sDiscFileFilters.size(); ++i) {
+        sDiscFileFilters[i] = SDL_DialogFileFilter{
+            sDiscFileFilterLabels[i].c_str(),
+            kDiscFileFilterPatterns[i],
+        };
+    }
+    return sDiscFileFilters.data();
+}
+
 void open_update_release() {
     if (!sUpdateCheckResult.has_value() ||
         sUpdateCheckResult->status != update_check::Status::UpdateAvailable)
@@ -282,23 +298,21 @@ void open_update_release() {
 std::string get_error_msg(iso::ValidationError error) {
     switch (error) {
     default:
-        return "The selected disc image could not be validated.";
+        return "[THE_SELECTED_DISC_IMAGE_COULD_NOT_BE_VALIDATED]";
     case iso::ValidationError::IOError:
-        return "Unable to read the selected file.";
+        return "[UNABLE_TO_READ_THE_SELECTED_FILE]";
     case iso::ValidationError::InvalidImage:
-        return "The selected file is not a valid disc image.";
+        return "[THE_SELECTED_FILE_IS_NOT_A_VALID_DISC_IMAGE]";
     case iso::ValidationError::WrongGame:
-        return "The selected game is not supported by Dusklight.";
+        return "[THE_SELECTED_GAME_IS_NOT_SUPPORTED_BY_DUSKLIGHT]";
     case iso::ValidationError::WrongVersion:
-        return "Dusklight currently supports GameCube USA and PAL disc images only.";
+        return "[DUSKLIGHT_CURRENTLY_SUPPORTS_GAMECUBE_USA_AND_PAL_DISC_IMAGES_ONLY]";
     case iso::ValidationError::Canceled:
-        return "Disc verification was canceled. Dusklight cannot guarantee the selected disc "
-               "image is compatible.";
+        return "[DISC_VERIFICATION_WAS_CANCELED_DUSKLIGHT_CANNOT_GUARANTEE_THE_SELECTED]";
     case iso::ValidationError::HashMismatch:
-        return "The selected disc image did not pass hash verification. It may be corrupt or "
-               "modified.";
+        return "[THE_SELECTED_DISC_IMAGE_DID_NOT_PASS_HASH_VERIFICATION_IT_MAY_BE_COR]";
     case iso::ValidationError::Success:
-        return "The selected disc image is valid.";
+        return "[THE_SELECTED_DISC_IMAGE_IS_VALID]";
     }
 }
 
@@ -649,7 +663,7 @@ void ensure_initialized() noexcept {
 void open_iso_picker() noexcept {
     ensure_initialized();
     ShowFileSelect(&file_dialog_callback, nullptr, aurora::window::get_sdl_window(),
-        kDiscFileFilters.data(), kDiscFileFilters.size(), nullptr, false);
+        disc_file_filters(), sDiscFileFilters.size(), nullptr, false);
 }
 
 bool is_restart_pending() noexcept {
@@ -910,8 +924,8 @@ void Prelaunch::update() {
             mUpdateStatus->SetAttribute("state", "available");
             mUpdateMessage->SetInnerRML("[UPDATE_AVAILABLE]");
             if (mUpdateDownloadLabel != nullptr) {
-                mUpdateDownloadLabel->SetInnerRML(escape(
-                    fmt::format("Download {}", update_release_label(sUpdateCheckResult->latest))));
+                mUpdateDownloadLabel->SetInnerRML(
+                    "[DOWNLOAD] " + escape(update_release_label(sUpdateCheckResult->latest)));
             }
         } else {
             mUpdateStatus->SetAttribute("state", "failed");
