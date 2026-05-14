@@ -18,8 +18,8 @@
         aurora-src = pkgs.fetchFromGitHub {
           owner = "encounter";
           repo = "aurora";
-          rev = "63606a43265a3bc18dafd500ab4d7a2108f109e6";
-          hash = "sha256-xBvnAwGwNzav67Ac6oUz7RqDUwqgL2bsME3OOMn8Tqw=";
+          rev = "3643a369ad47d8acca8d73dba462eab2ee2bd150";
+          hash = "sha256-eWLKgj5VNmgF4KH0RFoCEhaPAy0c/8CnVvkuIAsG1AY=";
         };
         dawn-src = pkgs.fetchzip {
           url = "https://github.com/encounter/dawn-build/releases/download/v20260423.175430/dawn-linux-x86_64.tar.gz";
