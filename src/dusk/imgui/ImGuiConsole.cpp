@@ -263,7 +263,7 @@ namespace dusk {
         }
 
         if (getSettings().game.enableResetKeybind && ImGui::GetIO().KeyCtrl &&
-            ImGui::IsKeyPressed(ImGuiKey_R) && !fpcM_SearchByName(fpcNm_LOGO_SCENE_e))
+            ImGui::IsKeyReleased(ImGuiKey_R) && !fpcM_SearchByName(fpcNm_LOGO_SCENE_e))
         {
             JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         }
