@@ -6,6 +6,7 @@
 
 #if TARGET_PC
 #include "dusk/action_bindings.h"
+#include "dusk/rumble.hpp"
 #endif
 
 u32 JUTGamePad::CRumble::sChannelMask[4] = {
@@ -454,20 +455,28 @@ void JUTGamePad::CRumble::clear(JUTGamePad* pad) {
 
 void JUTGamePad::CRumble::startMotor(int port) {
     if (isEnabledPort(port)) {
+#if TARGET_PC
+        dusk::rumble::startMotor(port);
+#else
         PADControlMotor(port, PAD_MOTOR_RUMBLE);
+#endif
         mStatus[port] = true;
     }
 }
 
 void JUTGamePad::CRumble::stopMotor(int port, bool hard_stop) {
-    u8 command;
     if (isEnabledPort(port)) {
+#if TARGET_PC
+        dusk::rumble::stopMotor(port, hard_stop);
+#else
+        u8 command;
         if (hard_stop) {
             command = PAD_MOTOR_STOP_HARD;
         } else {
             command = PAD_MOTOR_STOP;
         }
         PADControlMotor(port, command);
+#endif
         mStatus[port] = false;
     }
 }

@@ -17,6 +17,10 @@
 
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
+#include "dusk/rumble.hpp"
+#include "dusk/settings.h"
+
+#include <algorithm>
 
 namespace dusk::ui {
 namespace {
@@ -48,6 +52,14 @@ SDL_Gamepad* gamepad_for_port(int port) {
         return nullptr;
     }
     return PADGetSDLGamepadForIndex(static_cast<u32>(index));
+}
+
+bool rumble_page_available(int port) {
+    return PADSupportsRumbleIntensity(static_cast<u32>(port)) || rumble::supportsIphoneRumble();
+}
+
+int iphone_rumble_percent() {
+    return static_cast<int>(getSettings().game.iphoneRumbleIntensity.getValue() * 100.0f + 0.5f);
 }
 
 struct SpecificButtonName {
@@ -307,7 +319,7 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     addPageButton(Page::Buttons, "Buttons", [] { return Rml::String(">"); }, [] { return false; });
     addPageButton(Page::Triggers, "Triggers", [] { return Rml::String(">"); }, [] { return false; });
     addPageButton(Page::Sticks, "Sticks", [] { return Rml::String(">"); }, [] { return false; });
-    addPageButton(Page::Rumble, "Rumble", [] { return Rml::String(">"); }, [port] { return !PADSupportsRumbleIntensity(static_cast<u32>(port)); });
+    addPageButton(Page::Rumble, "Rumble", [] { return Rml::String(">"); }, [port] { return !rumble_page_available(port); });
     addPageButton(Page::Actions, "Custom Action Bindings", [] {return Rml::String(">"); }, [] { return false; });
 
     leftPane.add_section("Options");
@@ -816,6 +828,51 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Rumble: {
+        const bool controllerRumbleAvailable = PADSupportsRumbleIntensity(static_cast<u32>(port));
+        const bool iphoneRumbleAvailable = rumble::supportsIphoneRumble();
+
+        if (iphoneRumbleAvailable) {
+            pane.add_section("iPhone Haptics");
+            pane.add_child<BoolButton>(BoolButton::Props{
+                .key = "Use iPhone Haptics",
+                .getValue = [] { return getSettings().game.useIphoneRumble.getValue(); },
+                .setValue =
+                    [](bool value) {
+                        if (value == getSettings().game.useIphoneRumble.getValue()) {
+                            return;
+                        }
+                        getSettings().game.useIphoneRumble.setValue(value);
+                        config::Save();
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.useIphoneRumble.getValue() !=
+                               getSettings().game.useIphoneRumble.getDefaultValue();
+                    },
+            });
+            pane.add_child<NumberButton>(NumberButton::Props{
+                .key = "iPhone Rumble Intensity",
+                .getValue = [] { return iphone_rumble_percent(); },
+                .setValue =
+                    [](int value) {
+                        value = std::clamp(value, 0, 100);
+                        getSettings().game.iphoneRumbleIntensity.setValue(value / 100.0f);
+                        config::Save();
+                    },
+                .isDisabled = [] { return !getSettings().game.useIphoneRumble.getValue(); },
+                .isModified =
+                    [] {
+                        return getSettings().game.iphoneRumbleIntensity.getValue() !=
+                               getSettings().game.iphoneRumbleIntensity.getDefaultValue();
+                    },
+                .min = 0,
+                .max = 100,
+                .step = 5,
+                .suffix = "%",
+            });
+            pane.add_text("When enabled, game rumble is played through this iPhone instead of the connected controller.");
+        }
+
         auto& rumbleTest = pane.add_select_button({
             .key = "Test Rumble",
             .getValue =
@@ -824,24 +881,30 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                                                           : Rml::String("Start");
                 },
         });
-        rumbleTest.on_pressed([this, port] {
-            if (!PADSupportsRumbleIntensity(static_cast<u32>(port))) {
+        rumbleTest.on_pressed([this, port, controllerRumbleAvailable] {
+            if (!controllerRumbleAvailable && !rumble::usingIphoneRumble()) {
                 return;
             }
             mDoAud_seStartMenu(kSoundItemChange);
             if (mRumbleTestActive && mRumbleTestPort == port) {
-                PADControlMotor(port, PAD_MOTOR_STOP_HARD);
+                rumble::stopMotor(port, true);
                 mRumbleTestActive = false;
                 mRumbleTestPort = -1;
             } else {
                 if (mRumbleTestActive) {
-                    PADControlMotor(mRumbleTestPort, PAD_MOTOR_STOP_HARD);
+                    rumble::stopMotor(mRumbleTestPort, true);
                 }
-                PADControlMotor(port, PAD_MOTOR_RUMBLE);
+                rumble::startMotor(port);
                 mRumbleTestActive = true;
                 mRumbleTestPort = port;
             }
         });
+        if (!controllerRumbleAvailable) {
+            pane.add_text("This controller does not expose configurable rumble through SDL.");
+            break;
+        }
+
+        pane.add_section("Controller Rumble");
         pane.add_child<NumberButton>(NumberButton::Props{
             .key = "Low Rumble Frequency",
             .getValue =
@@ -859,7 +922,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     PADSetRumbleIntensity(static_cast<u32>(port), percent_to_raw(value), high);
                     PADSerializeMappings();
                 },
-            .isDisabled = [this] { return mRumbleTestActive; },
+            .isDisabled = [this] { return mRumbleTestActive || rumble::usingIphoneRumble(); },
             .min = 0,
             .max = 100,
             .step = 1,
@@ -882,7 +945,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     PADSetRumbleIntensity(static_cast<u32>(port), low, percent_to_raw(value));
                     PADSerializeMappings();
                 },
-            .isDisabled = [this] { return mRumbleTestActive; },
+            .isDisabled = [this] { return mRumbleTestActive || rumble::usingIphoneRumble(); },
             .min = 0,
             .max = 100,
             .step = 1,
@@ -1151,7 +1214,7 @@ void ControllerConfigWindow::stop_rumble_test() {
         return;
     }
     if (mRumbleTestPort >= PAD_CHAN0 && mRumbleTestPort < PAD_CHANMAX) {
-        PADControlMotor(mRumbleTestPort, PAD_MOTOR_STOP_HARD);
+        rumble::stopMotor(mRumbleTestPort, true);
     }
     mRumbleTestActive = false;
     mRumbleTestPort = -1;

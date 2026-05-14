@@ -1437,6 +1437,9 @@ set(DUSK_FILES
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp
+        src/dusk/rumble.cpp
+        include/dusk/rumble.hpp
+        include/dusk/iphone_haptics.hpp
         src/dusk/settings.cpp
         src/dusk/speedrun.cpp
         src/dusk/stubs.cpp

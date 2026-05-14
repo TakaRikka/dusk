@@ -154,6 +154,8 @@ struct UserSettings {
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
         ConfigVar<bool> allowBackgroundInput;
+        ConfigVar<bool> useIphoneRumble;
+        ConfigVar<float> iphoneRumbleIntensity;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
