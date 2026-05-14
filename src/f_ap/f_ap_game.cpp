@@ -9,6 +9,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "SSystem/SComponent/c_counter.h"
+#include "SSystem/SComponent/c_math.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_grass.h"
 #include "d/actor/d_a_midna.h"
@@ -771,6 +772,28 @@ static void duskExecute() {
     if (dusk::getSettings().game.moonJump && (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1))) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             link->speed.y = 56.0f;
+
+            if (const auto alink = dynamic_cast<daAlink_c*>(link)) {
+                constexpr f32 kMoonJumpHSpeed = 40.0f;
+                constexpr f32 kMoonJumpDeadzone = 0.1f;
+
+                const f32 stickValue = alink->mStickValue;
+                if (stickValue > kMoonJumpDeadzone) {
+                    const s16 moveAngle = alink->mMoveAngle;
+                    const f32 hSpeed = kMoonJumpHSpeed * stickValue;
+
+                    // World-space horizontal velocity. procFall recomputes
+                    // speed.x/z from mNormalSpeed + current.angle.y, so keep
+                    // all three in sync to survive the state-machine pass.
+                    link->speed.x = hSpeed * cM_ssin(moveAngle);
+                    link->speed.z = hSpeed * cM_scos(moveAngle);
+                    link->speedF = hSpeed;
+                    alink->mNormalSpeed = hSpeed;
+
+                    link->current.angle.y = moveAngle;
+                    link->shape_angle.y = moveAngle;
+                }
+            }
         }
     }
 
