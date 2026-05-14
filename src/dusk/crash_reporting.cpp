@@ -61,7 +61,7 @@ std::string release_name() {
 }
 
 std::filesystem::path sentry_database_path() {
-    return dusk::ConfigPath / "sentry";
+    return dusk::CachePath / "sentry";
 }
 
 std::filesystem::path log_attachment_path() {

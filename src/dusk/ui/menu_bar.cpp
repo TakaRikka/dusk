@@ -18,6 +18,7 @@
 #include "modal.hpp"
 #include "settings.hpp"
 #include "ui.hpp"
+#include "warp.hpp"
 #include "window.hpp"
 
 #include <chrono>
@@ -51,11 +52,9 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                                                   .autoSelect = false,
                                               });
     mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
-    // mTabBar->add_tab("Warp", [] {
-    //     // TODO
-    // });
 
     if (getSettings().backend.enableAdvancedSettings) {
+        mTabBar->add_tab("Warp", [this] { push(std::make_unique<WarpWindow>()); });
         mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
     }
 

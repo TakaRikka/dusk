@@ -1458,7 +1458,6 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiHeapOverlay.cpp
         src/dusk/imgui/ImGuiControllerOverlay.cpp
         src/dusk/imgui/ImGuiStubLog.cpp
-        src/dusk/imgui/ImGuiMapLoader.cpp
         src/dusk/imgui/ImGuiSaveEditor.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStateShare.cpp
@@ -1509,6 +1508,8 @@ set(DUSK_FILES
         src/dusk/ui/tab_bar.hpp
         src/dusk/ui/ui.cpp
         src/dusk/ui/ui.hpp
+        src/dusk/ui/warp.cpp
+        src/dusk/ui/warp.hpp
         src/dusk/ui/window.cpp
         src/dusk/ui/window.hpp
         src/dusk/achievements.cpp

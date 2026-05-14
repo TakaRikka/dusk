@@ -15,6 +15,7 @@
 #include "f_op/f_op_actor_mng.h"
 #if TARGET_PC
 #include "dusk/achievements.h"
+#include "dusk/settings.h"
 #endif
 
 static int plCutLRC[58] = {
@@ -428,6 +429,13 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
                 i_AtInfo->mHitStatus = 1;
             }
         }
+
+#if TARGET_PC
+        if (dusk::getSettings().game.invincibleEnemies &&
+            fopAcM_GetGroup(i_enemy) == fopAc_ENEMY_e) {
+            i_AtInfo->mAttackPower = 0;
+        }
+#endif
 
         if (i_AtInfo->mAttackPower != 0) {
             i_enemy->health -= i_AtInfo->mAttackPower;
