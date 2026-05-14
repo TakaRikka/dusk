@@ -7,19 +7,19 @@ class SettingsWindow : public Window {
 public:
     SettingsWindow(bool prelaunch = false);
 
-    void AddPrelaunchTab();
+    void add_prelaunch_tab();
 
-    void AddVideoTab();
+    void add_video_tab();
 
-    void AddInputTab();
+    void add_input_tab();
 
-    void AddAudioTab();
+    void add_audio_tab();
 
-    void AddGameplayTab();
+    void add_gameplay_tab();
 
-    void AddCheatsTab();
+    void add_cheats_tab();
 
-    void AddInterfaceTab();
+    void add_interface_tab();
 
     void update() override;
 

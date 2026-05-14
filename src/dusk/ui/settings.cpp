@@ -478,17 +478,17 @@ void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, Con
 SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
     if (prelaunch)
-        AddPrelaunchTab();
+        add_prelaunch_tab();
 
-    AddVideoTab();
-    AddInputTab();
-    AddAudioTab();
-    AddGameplayTab();
-    AddCheatsTab();
-    AddInterfaceTab();
+    add_video_tab();
+    add_input_tab();
+    add_audio_tab();
+    add_gameplay_tab();
+    add_cheats_tab();
+    add_interface_tab();
 }
 
-void SettingsWindow::AddPrelaunchTab() {
+void SettingsWindow::add_prelaunch_tab() {
     mSuppressNavFallback = true;
     add_tab("Prelaunch", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
@@ -665,7 +665,7 @@ void SettingsWindow::AddPrelaunchTab() {
     });
 }
 
-void SettingsWindow::AddVideoTab() {
+void SettingsWindow::add_video_tab() {
     add_tab("Video", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
@@ -834,7 +834,7 @@ void SettingsWindow::AddVideoTab() {
     });
 }
 
-void SettingsWindow::AddInputTab() {
+void SettingsWindow::add_input_tab() {
     add_tab("Input", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
@@ -981,7 +981,7 @@ void SettingsWindow::AddInputTab() {
     });
 }
 
-void SettingsWindow::AddAudioTab() {
+void SettingsWindow::add_audio_tab() {
     add_tab("Audio", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
@@ -1050,7 +1050,7 @@ void SettingsWindow::AddAudioTab() {
     });
 }
 
-void SettingsWindow::AddGameplayTab() {
+void SettingsWindow::add_gameplay_tab() {
     add_tab("Gameplay", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
@@ -1210,7 +1210,7 @@ void SettingsWindow::AddGameplayTab() {
     });
 }
 
-void SettingsWindow::AddCheatsTab() {
+void SettingsWindow::add_cheats_tab() {
     add_tab("Cheats", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
@@ -1258,7 +1258,7 @@ void SettingsWindow::AddCheatsTab() {
     });
 }
 
-void SettingsWindow::AddInterfaceTab() {
+void SettingsWindow::add_interface_tab() {
     add_tab("Interface", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
