@@ -201,6 +201,10 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     return;
                 }
 
+                if (!dComIfGs_isItemFirstBit(dItemNo_ANCIENT_DOCUMENT2_e)) {
+                    return;
+                }
+
                 static const u8 requiredWheelItems[] = {
                     dItemNo_BOOMERANG_e,
                     dItemNo_BOW_e,
@@ -212,7 +216,6 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     dItemNo_KANTERA_e,
                     dItemNo_PACHINKO_e,
                     dItemNo_HAWK_EYE_e,
-                    dItemNo_ANCIENT_DOCUMENT_e,
                     dItemNo_HORSE_FLUTE_e,
                 };
                 for (u8 required : requiredWheelItems) {
