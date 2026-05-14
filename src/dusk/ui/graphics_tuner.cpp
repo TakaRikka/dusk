@@ -184,7 +184,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
         case BloomMode::Classic:
             return "[CLASSIC]";
         case BloomMode::Dusk:
-            return "[DUSK]";
+            return "Dusklight";
         }
         break;
     case GraphicsOption::BloomMultiplier:

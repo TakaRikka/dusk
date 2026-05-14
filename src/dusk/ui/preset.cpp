@@ -81,8 +81,9 @@ PresetWindow::PresetWindow() : WindowSmall("modal", "modal-dialog") {
         {"[CLASSIC]",
          "[ENHANCEMENTS_DISABLED_TO_MATCH_THE_GAMECUBE_VERSION_GOOD_FOR_SPEEDRUNNING_OR]",
          applyPresetClassic},
-        {"[DUSK]",
-         "[GRAPHICS_QUALITY_OF_LIFE_TWEAKS_INCLUDING_SOME_FROM_THE_WII_U_VERSION_OUR]",
+        {"Dusklight",
+         "Graphics & quality of life tweaks, including some from the Wii U version. "
+         "Our recommended way to play!",
          applyPresetDusk},
     };
 
