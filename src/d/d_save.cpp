@@ -30,7 +30,6 @@
 #if TARGET_PC
 #include "dusk/settings.h"
 #include <f_ap/f_ap_game.h>
-#include <dusk/autosave.h>
 
 #include "dusk/string.hpp"
 #define strcpy dusk::SafeStringCopy
