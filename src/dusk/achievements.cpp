@@ -191,13 +191,17 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
 
                 bool hasJewelRod = false;
-                for (int slot = 0; slot < 24 && !hasJewelRod; ++slot) {
+                bool hasAncientDoc = false;
+                for (int slot = 0; slot < 24; ++slot) {
                     const u8 item = dComIfGs_getItem(slot, false);
                     if (item == dItemNo_JEWEL_ROD_e || item == dItemNo_JEWEL_BEE_ROD_e || item == dItemNo_JEWEL_WORM_ROD_e) {
                         hasJewelRod = true;
                     }
+                    if (item == dItemNo_ANCIENT_DOCUMENT_e || item == dItemNo_ANCIENT_DOCUMENT2_e || item == dItemNo_AIR_LETTER_e) {
+                        hasAncientDoc = true;
+                    }
                 }
-                if (!hasJewelRod) {
+                if (!hasJewelRod || !hasAncientDoc) {
                     return;
                 }
 
@@ -212,7 +216,6 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     dItemNo_KANTERA_e,
                     dItemNo_PACHINKO_e,
                     dItemNo_HAWK_EYE_e,
-                    dItemNo_ANCIENT_DOCUMENT_e,
                     dItemNo_HORSE_FLUTE_e,
                 };
                 for (u8 required : requiredWheelItems) {
