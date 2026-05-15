@@ -1,10 +1,10 @@
 name: Build
 
 on:
-  push:
-    paths-ignore:
-      - '*.md'
-      - '*LICENSE'
+  #  push:
+  #  paths-ignore:
+  #    - '*.md'
+  #    - '*LICENSE'
   pull_request:
 
 env:
