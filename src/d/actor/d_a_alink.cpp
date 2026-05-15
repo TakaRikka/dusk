@@ -9843,6 +9843,11 @@ void daAlink_c::setNormalSpeedF(f32 i_speed, f32 i_deceleration) {
         max_speed = mMoveValue * (mMaxSpeed * mMoveValue);
     } else {
         max_speed = mStickValue * (mMaxSpeed * mStickValue);
+#if TARGET_PC
+        if (dusk::getSettings().game.fastWalk && !checkWolf() && mProcID == PROC_MOVE) {
+            max_speed *= 2.0f;
+        }
+#endif
     }
 
     if (checkWolfSwimDashAnime() || checkUnderMove0BckNoArc(ANM_SWIM_DASH) || getZoraSwim()) {
