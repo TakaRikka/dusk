@@ -596,7 +596,11 @@ void daObjDmElevator_c::moveInit() {
 
 int daObjDmElevator_c::moveProc() {
     dPath* path = dPath_GetRoomPath(getPathID(), fopAcM_GetRoomNo(this));
+#ifdef TARGET_PC
+    dPnt* pdVar3 = dPath_GetPnt(path, field_0x5e0 + (s8)field_0x5e1);
+#else
     dPnt* pdVar3 = dPath_GetPnt(path, field_0x5e0 + (char)field_0x5e1);
+#endif
 
     cXyz path_point(pdVar3->m_position);
     if (path_point.y > current.pos.y) {
@@ -607,7 +611,11 @@ int daObjDmElevator_c::moveProc() {
 
     int uVar1 = cLib_chasePos(&current.pos, path_point, fabsf(speedF));
 
+#ifdef TARGET_PC
+    if (field_0x5e0 + (int)(s8)field_0x5e1 == 1) {
+#else
     if (field_0x5e0 + (int)(char)field_0x5e1 == 1) {
+#endif
         const float fVar6 = current.pos.abs(path_point);
         uVar1 = ((u32)(char)((fVar6 < 200.0f) << 3) << 0x1c) >> 0x1f;
     }
