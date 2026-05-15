@@ -5,6 +5,7 @@
 #include "button.hpp"
 #include "dusk/crash_reporting.h"
 #include "ui.hpp"
+#include "lang.hpp"
 
 #include <dolphin/gx/GXAurora.h>
 
@@ -18,19 +19,14 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
 
     auto* title = append(header, "div");
     title->SetClass("modal-title", true);
-    title->SetInnerRML("Send Crash Reports");
+    title->SetInnerRML(_("reporting.reporting-h01"));
 
     auto* headIcon = append(header, "icon");
     headIcon->SetClass("question-mark", true);
 
     auto* intro = append(mDialog, "div");
     intro->SetClass("modal-body", true);
-    intro->SetInnerRML(
-        "Dusklight can automatically send crash reports to the developers. Crash reports contain the "
-        "following:"
-        "<br/>• Operating system version<br/>• CPU architecture<br/>• GPU model & driver version"
-        "<br/>• File paths (may include account username)<br/>• Stack trace<br/><br/>"
-        "This can be changed in the Settings menu at any time.");
+    intro->SetInnerRML(_("reporting.rh01-desc"));
 
     auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
@@ -42,13 +38,11 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
     };
 
     static constexpr OptionInfo kOptions[] = {
-        {"Enable",
-            "Send crash reports to Dusklight developers. Reports will include the information described "
-            "above.",
+        {_("reporting.rh01-btn1"),
+            _("reporting.rh01-btn1-desc"),
             [] { crash_reporting::set_consent(true); }},
-        {"Disable",
-            "Do not send crash reports. This may make it more difficult to resolve issues you "
-            "encounter.",
+        {_("reporting.rh01-btn2"),
+            _("reporting.rh01-btn2-desc"),
             [] { crash_reporting::set_consent(false); }},
     };
 

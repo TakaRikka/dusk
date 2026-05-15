@@ -1,4 +1,5 @@
 #include "overlay.hpp"
+#include "lang.hpp"
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
@@ -103,13 +104,13 @@ Rml::Element* create_controller_warning(Rml::Element* parent) {
 
     auto* heading = append(elem, "heading");
     auto* title = append(heading, "span");
-    title->SetInnerRML("No controller assigned");
+    title->SetInnerRML(_("tooltip.no-controller"));
     auto* icon = append(heading, "icon");
     icon->SetClass("warning", true);
 
     auto* message = append(elem, "message");
     auto* content = append(message, "span");
-    content->SetInnerRML("Configure controller port 1 in Settings.");
+    content->SetInnerRML(_("tooltip.no-controller-desc"));
 
     return elem;
 }
@@ -145,9 +146,9 @@ Rml::String back_button_name() {
 }
 
 #if defined(TARGET_ANDROID) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
-constexpr auto kMenuNotificationPrefix = "3-finger tap or";
+const auto kMenuNotificationPrefix = _("tooltip.menu-mobile");
 #else
-constexpr auto kMenuNotificationPrefix = "Press F1 or";
+const auto kMenuNotificationPrefix = _("tooltip.menu-desktop");
 #endif
 
 Rml::Element* create_menu_notification(Rml::Element* parent) {
@@ -170,7 +171,7 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
     append(row, "span")->SetInnerRML(escape(padButton));
-    append(row, "span")->SetInnerRML("to open menu");
+    append(row, "span")->SetInnerRML(_("tooltip.menu-p2"));
 
     return elem;
 }
@@ -301,10 +302,10 @@ void Overlay::update() {
     if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
         dusk::speedrun::updateLiveSplit();
         if (dusk::speedrun::consumeConnectedEvent()) {
-            push_toast({.title = "LiveSplit connected", .duration = std::chrono::seconds(3)});
+            push_toast({.title = _("tooltip.livesplit1"), .duration = std::chrono::seconds(3)});
         }
         if (dusk::speedrun::consumeDisconnectedEvent()) {
-            push_toast({.title = "LiveSplit disconnected", .duration = std::chrono::seconds(3)});
+            push_toast({.title = _("tooltip.livesplit2"), .duration = std::chrono::seconds(3)});
         }
     }
 #endif
@@ -343,12 +344,12 @@ void Overlay::update() {
 
             if (getSettings().game.showSpeedrunRTATimer) {
                 mSpeedrunRta->SetAttribute("open", "");
-                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatTime(elapsedTime))));
+                mSpeedrunRta->SetInnerRML(escape(fmt::format(fmt::runtime(_("tooltip.rta")), FormatTime(elapsedTime))));
             } else {
                 mSpeedrunRta->RemoveAttribute("open");
             }
 
-            mSpeedrunIgt->SetInnerRML(escape(fmt::format("IGT  {}", FormatTime(m_speedrunInfo.m_igtTimer))));
+            mSpeedrunIgt->SetInnerRML(escape(fmt::format(fmt::runtime(_("tooltip.igt")), FormatTime(m_speedrunInfo.m_igtTimer))));
         } else {
             mSpeedrunTimer->RemoveAttribute("open");
         }

@@ -1,4 +1,5 @@
 #include "bool_button.hpp"
+#include "lang.hpp"
 
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
@@ -29,7 +30,7 @@ bool BoolButton::disabled() const {
 }
 
 Rml::String BoolButton::format_value() {
-    return mGetValue() ? "On" : "Off";
+    return mGetValue() ? _("settings_menu.bool-on") : _("settings_menu.bool-off");
 }
 
 bool BoolButton::handle_nav_command(NavCommand cmd) {

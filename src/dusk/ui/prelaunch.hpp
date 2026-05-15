@@ -31,6 +31,9 @@ private:
     Rml::Element* mDiscStatus = nullptr;
     Rml::Element* mDiscDetail = nullptr;
     Rml::Element* mVersion = nullptr;
+    Rml::Element* mVersionLocale = nullptr;
+    Rml::Element* mEyebrow = nullptr;
+    Rml::Element* mEyebrowAlt = nullptr;
     Rml::Element* mUpdateStatus = nullptr;
     Rml::Element* mUpdateMessage = nullptr;
     Rml::Element* mUpdateDownload = nullptr;

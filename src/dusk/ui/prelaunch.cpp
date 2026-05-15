@@ -11,6 +11,7 @@
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"
+#include "lang.hpp"
 
 #include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_error.h>
@@ -44,7 +45,7 @@ const Rml::String kDocumentSource = R"RML(
     <content id="root" open>
         <menu>
             <hero class="intro-item delay-0">
-                <eyebrow><span>Twilit Realm</span> presents</eyebrow>
+                <eyebrow><span id="eyebrow"></span> <p id="eyebrow-alt"></p></eyebrow>
                 <img src="res/logo.png" />
             </hero>
             <div id="menu-list" />
@@ -57,7 +58,7 @@ const Rml::String kDocumentSource = R"RML(
             <span id="disc-version" class="detail" />
         </disc-info>
         <version-info class="intro-item delay-5">
-            <div class="version">Version <span id="version-text"></span></div>
+            <div class="version"><span id="version-locale"></span> <span id="version-text"></span></div>
             <div id="update-status" class="update">
                 <span id="update-message"></span>
                 <button id="update-download">
@@ -721,14 +722,14 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, _("main_menu.settings")));
         mMenuButtons.back()->on_pressed([this] {
             mRestartSuppressed = false;
             push(std::make_unique<SettingsWindow>(true));
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, _("main_menu.quit")));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
@@ -736,10 +737,28 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     mDiscStatus = mDocument->GetElementById("disc-status");
     mDiscDetail = mDocument->GetElementById("disc-version");
     mVersion = mDocument->GetElementById("version-text");
+    mVersionLocale = mDocument->GetElementById("version-locale");
+    mEyebrow = mDocument->GetElementById("eyebrow");
+    mEyebrowAlt = mDocument->GetElementById("eyebrow-alt");
     mUpdateStatus = mDocument->GetElementById("update-status");
     mUpdateMessage = mDocument->GetElementById("update-message");
     mUpdateDownload = mDocument->GetElementById("update-download");
     mUpdateDownloadLabel = mDocument->GetElementById("update-download-label");
+    
+    if (mVersionLocale != nullptr) {
+        std::string_view localeStr(_("main_menu.version"));
+        mVersionLocale->SetInnerRML(escape(localeStr));
+    }
+
+    if (mEyebrow != nullptr) {
+        std::string_view eyebrowStr(_("main_menu.eyebrow"));
+        mEyebrow->SetInnerRML(escape(eyebrowStr));
+    }
+
+    if (mEyebrowAlt != nullptr) {
+        std::string_view eyebrowAltStr(_("main_menu.eyebrow_alt"));
+        mEyebrowAlt->SetInnerRML(escape(eyebrowAltStr));
+    }
 
     if (mUpdateDownload != nullptr) {
         listen(mUpdateDownload, Rml::EventId::Click, [](Rml::Event& event) {
@@ -848,7 +867,7 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(activeDiscLoaded ? "Play" : "Select Disc Image");
+        mMenuButtons[0]->set_text(activeDiscLoaded ? _("main_menu.play") : _("main_menu.select_image"));
     }
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
@@ -856,22 +875,22 @@ void Prelaunch::update() {
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
         if (!activeDiscLoaded) {
             mDiscStatus->RemoveAttribute("status");
-            discStatusLabel->SetInnerRML("No disc image found.");
+            discStatusLabel->SetInnerRML(_("main_menu.no_disc"));
         } else if (discRestartPending) {
             mDiscStatus->SetAttribute("status", "pending");
-            discStatusLabel->SetInnerRML("Pending restart.");
+            discStatusLabel->SetInnerRML(_("main_menu.pending"));
         } else if (state.configuredDiscValidation == iso::ValidationError::Success) {
             mDiscStatus->SetAttribute("status", "good");
-            discStatusLabel->SetInnerRML("Disc ready.");
+            discStatusLabel->SetInnerRML(_("main_menu.disc_ready"));
         } else if (state.configuredDiscValidation == iso::ValidationError::HashMismatch) {
             mDiscStatus->SetAttribute("status", "mismatch");
-            discStatusLabel->SetInnerRML("Disc hash mismatch.");
+            discStatusLabel->SetInnerRML(_("main_menu.disc_mismatch"));
         } else if (canLaunchConfiguredDisc) {
             mDiscStatus->SetAttribute("status", "unknown");
-            discStatusLabel->SetInnerRML("Disc not verified.");
+            discStatusLabel->SetInnerRML(_("main_menu.disc_verification"));
         } else {
             mDiscStatus->SetAttribute("status", "bad");
-            discStatusLabel->SetInnerRML("Disc unavailable.");
+            discStatusLabel->SetInnerRML(_("main_menu.disc_unavailable"));
         }
     }
     if (mDiscDetail != nullptr) {
@@ -916,7 +935,7 @@ void Prelaunch::update() {
             }
         } else {
             mUpdateStatus->SetAttribute("state", "failed");
-            mUpdateMessage->SetInnerRML("Failed to check for updates");
+            mUpdateMessage->SetInnerRML(_("main_menu.update_fail"));
         }
     }
 

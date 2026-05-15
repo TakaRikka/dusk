@@ -13,6 +13,7 @@
 #include "pane.hpp"
 #include "select_button.hpp"
 #include "string_button.hpp"
+#include "lang.hpp"
 
 #include <algorithm>
 #include <array>
@@ -28,7 +29,7 @@
 namespace dusk::ui {
 
 Rml::String stage_option_label(const MapEntry& map, bool showInternalNames) {
-    return showInternalNames ? fmt::format("{} ({})", map.mapName, map.mapFile) : map.mapName;
+    return showInternalNames ? fmt::format("{} ({})", _(map.mapName), map.mapFile) : _(map.mapName);
 }
 
 Rml::String stage_label_for_file(const Rml::String& stageFile, bool showInternalNames) {
@@ -265,11 +266,11 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_DUNGEON_EXIT_e, {"Ooccoo Sr. (First Time)", ITEMTYPE_EQUIP_e}},
     {dItemNo_BOSS_KEY_e, {"Boss Key"}},
     {dItemNo_DUNGEON_BACK_e, {"Ooccoo Jr.", ITEMTYPE_EQUIP_e}},
-    {dItemNo_SWORD_e, {"Ordon Sword"}},
-    {dItemNo_MASTER_SWORD_e, {"Master Sword"}},
-    {dItemNo_WOOD_SHIELD_e, {"Ordon Shield"}},
-    {dItemNo_SHIELD_e, {"Wooden Shield"}},
-    {dItemNo_HYLIA_SHIELD_e, {"Hylian Shield"}},
+    {dItemNo_SWORD_e, {_("editor-menu.inventory-e39")}},
+    {dItemNo_MASTER_SWORD_e, {_("editor-menu.inventory-e40")}},
+    {dItemNo_WOOD_SHIELD_e, {_("editor-menu.inventory-e41")}},
+    {dItemNo_SHIELD_e, {_("editor-menu.inventory-e42")}},
+    {dItemNo_HYLIA_SHIELD_e, {_("editor-menu.inventory-e43")}},
     {dItemNo_TKS_LETTER_e, {"Ooccoo's Note", ITEMTYPE_EQUIP_e}},
     {dItemNo_WEAR_CASUAL_e, {"Ordon Clothes"}},
     {dItemNo_WEAR_KOKIRI_e, {"Hero's Clothes"}},
@@ -288,7 +289,7 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_60_e, {"Reserved"}},
     {dItemNo_ZORAS_JEWEL_e, {"Coral Earring", ITEMTYPE_EQUIP_e}},
     {dItemNo_HAWK_EYE_e, {"Hawkeye", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WOOD_STICK_e, {"Wooden Sword"}},
+    {dItemNo_WOOD_STICK_e, {_("editor-menu.inventory-e56")}},
     {dItemNo_BOOMERANG_e, {"Gale Boomerang", ITEMTYPE_EQUIP_e}},
     {dItemNo_SPINNER_e, {"Spinner", ITEMTYPE_EQUIP_e}},
     {dItemNo_IRONBALL_e, {"Ball and Chain", ITEMTYPE_EQUIP_e}},
@@ -298,7 +299,7 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_COPY_ROD_e, {"Dominion Rod", ITEMTYPE_EQUIP_e}},
     {dItemNo_W_HOOKSHOT_e, {"Double Clawshots", ITEMTYPE_EQUIP_e}},
     {dItemNo_KANTERA_e, {"Lantern", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LIGHT_SWORD_e, {"Light Sword"}},
+    {dItemNo_LIGHT_SWORD_e, {_("editor-menu.inventory-e66")}},
     {dItemNo_FISHING_ROD_1_e, {"Fishing Rod", ITEMTYPE_EQUIP_e}},
     {dItemNo_PACHINKO_e, {"Slingshot", ITEMTYPE_EQUIP_e}},
     {dItemNo_COPY_ROD_2_e, {"Dominion Rod (Uncharged)"}},
@@ -401,12 +402,12 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_173_e, {"Reserved"}},
     {dItemNo_NOENTRY_174_e, {"Reserved"}},
     {dItemNo_NOENTRY_175_e, {"Reserved"}},
-    {dItemNo_SMELL_YELIA_POUCH_e, {"Scent of Ilia"}},
-    {dItemNo_SMELL_PUMPKIN_e, {"Pumpkin Scent"}},
-    {dItemNo_SMELL_POH_e, {"Poe Scent"}},
-    {dItemNo_SMELL_FISH_e, {"Reekfish Scent"}},
-    {dItemNo_SMELL_CHILDREN_e, {"Youth's Scent"}},
-    {dItemNo_SMELL_MEDICINE_e, {"Medicine Scent"}},
+    {dItemNo_SMELL_YELIA_POUCH_e, {_("editor-menu.inventory-e134")}},
+    {dItemNo_SMELL_PUMPKIN_e, {_("editor-menu.inventory-e135")}},
+    {dItemNo_SMELL_POH_e, {_("editor-menu.inventory-e136")}},
+    {dItemNo_SMELL_FISH_e, {_("editor-menu.inventory-e137")}},
+    {dItemNo_SMELL_CHILDREN_e, {_("editor-menu.inventory-e138")}},
+    {dItemNo_SMELL_MEDICINE_e, {_("editor-menu.inventory-e139")}},
     {dItemNo_NOENTRY_182_e, {"Reserved"}},
     {dItemNo_NOENTRY_183_e, {"Reserved"}},
     {dItemNo_NOENTRY_184_e, {"Reserved"}},
@@ -480,7 +481,7 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_KEY_OF_CARAVAN_e, {"Bulblin Camp Key"}},
     {dItemNo_LV2_BOSS_KEY_e, {"Goron Mines Boss Key"}},
     {dItemNo_KEY_OF_FILONE_e, {"South Faron Gate Key"}},
-    {dItemNo_NONE_e, {"None"}},
+    {dItemNo_NONE_e, {_("editor-menu.inventory-e187")}},
 };
 
 Rml::String get_item_name(u8 id) {
@@ -493,10 +494,10 @@ Rml::String get_item_name(u8 id) {
 
 Rml::String item_label_for_slot(u8 slot) {
     if (slot == 0xFF) {
-        return "None";
+        return _("editor-menu.editor-none");
     }
     const auto id = dComIfGs_getSaveData()->getPlayer().getItem().mItems[slot];
-    return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
+    return fmt::format(fmt::runtime(_("editor-menu.ph02-d01-slot2")), slot, get_item_name(id));
 }
 
 struct NamedIndexEntry {
@@ -891,7 +892,7 @@ void populate_item_slot_picker(Pane& pane, int slot) {
     pane.add_section("Items");
     pane.add_button(
             {
-                .text = "None",
+                .text = _("editor-menu.editor-none"),
                 .isSelected = [slot] { return get_player_item()->mItems[slot] == dItemNo_NONE_e; },
             })
         .on_pressed([slot] {
@@ -947,7 +948,7 @@ void populate_select_item_picker(Pane& pane, u8& selectItemData) {
     pane.clear();
     pane.add_button(
             {
-                .text = "None",
+                .text = _("editor-menu.editor-none"),
                 .isSelected = [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
             })
         .on_pressed([&selectItemData] {
@@ -1134,13 +1135,13 @@ void populate_collect_clothes_picker(Pane& pane) {
     populate_toggle_group(pane,
         {
             ToggleEntry{
-                .text = "Ordon Clothes",
+                .text = _("editor-menu.inventory-e45"),
                 .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e); },
                 .setSelected =
                     [](bool selected) { set_item_first_bit(dItemNo_WEAR_CASUAL_e, selected); },
             },
             ToggleEntry{
-                .text = "Hero's Clothes",
+                .text = _("editor-menu.inventory-e46"),
                 .isSelected = [] { return dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG); },
                 .setSelected =
                     [](bool selected) {
@@ -1152,13 +1153,13 @@ void populate_collect_clothes_picker(Pane& pane) {
                     },
             },
             ToggleEntry{
-                .text = "Zora Armor",
+                .text = _("editor-menu.inventory-e48"),
                 .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e); },
                 .setSelected =
                     [](bool selected) { set_item_first_bit(dItemNo_WEAR_ZORA_e, selected); },
             },
             ToggleEntry{
-                .text = "Magic Armor",
+                .text = _("editor-menu.inventory-e47"),
                 .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_ARMOR_e); },
                 .setSelected = [](bool selected) { set_item_first_bit(dItemNo_ARMOR_e, selected); },
             },
@@ -1346,20 +1347,20 @@ void set_clock_time(int hour, int minute) {
 }  // namespace
 
 EditorWindow::EditorWindow() {
-    add_tab("Player Status", [this](Rml::Element* content) {
+    add_tab(_("editor-menu.tab-player-status"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Player");
+        leftPane.add_section(_("editor-menu.player-h01"));
         leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
-                                      .key = "Player Name",
+                                      .key = _("editor-menu.ph01-t01"),
                                       .getValue = get_player_name,
                                       .setValue = set_player_name,
                                       .maxLength = 16,
                                   }),
             rightPane, {});
         leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
-                                      .key = "Horse Name",
+                                      .key = _("editor-menu.ph01-t02"),
                                       .getValue = get_horse_name,
                                       .setValue = set_horse_name,
                                       .maxLength = 16,
@@ -1367,7 +1368,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Max Health",
+                .key = _("editor-menu.ph01-i01"),
                 .getValue = [] { return get_player_status()->getMaxLife(); },
                 .setValue = [](int value) { return get_player_status()->setMaxLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
@@ -1375,7 +1376,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Health",
+                .key = _("editor-menu.ph01-i02"),
                 .getValue = [] { return get_player_status()->getLife(); },
                 .setValue = [](int value) { return get_player_status()->setLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
@@ -1383,7 +1384,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Rupees",
+                .key = _("editor-menu.ph01-i03"),
                 .getValue = [] { return get_player_status()->getRupee(); },
                 .setValue = [](int value) { return get_player_status()->setRupee(value); },
                 .max = get_player_status()->getRupeeMax(),
@@ -1391,7 +1392,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Max Oil",
+                .key = _("editor-menu.ph01-i04"),
                 .getValue = [] { return get_player_status()->getMaxOil(); },
                 .setValue = [](int value) { return get_player_status()->setMaxOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
@@ -1399,14 +1400,14 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Oil",
+                .key = _("editor-menu.ph01-i05"),
                 .getValue = [] { return get_player_status()->getOil(); },
                 .setValue = [](int value) { return get_player_status()->setOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
             }),
             rightPane, {});
 
-        leftPane.add_section("Equipment");
+        leftPane.add_section(_("editor-menu.player-h02"));
         const auto genSelectItemComboBox = [&leftPane, &rightPane](
                                                const Rml::String& label, u8& selectItemData) {
             leftPane.register_control(
@@ -1418,20 +1419,20 @@ EditorWindow::EditorWindow() {
                     populate_select_item_picker(pane, selectItemData);
                 });
         };
-        genSelectItemComboBox("Equip X", get_player_status()->mSelectItem[0]);
-        genSelectItemComboBox("Equip Y", get_player_status()->mSelectItem[1]);
-        genSelectItemComboBox("Combo Equip X", get_player_status()->mMixItem[0]);
-        genSelectItemComboBox("Combo Equip Y", get_player_status()->mMixItem[1]);
+        genSelectItemComboBox(_("editor-menu.ph02-d01"), get_player_status()->mSelectItem[0]);
+        genSelectItemComboBox(_("editor-menu.ph02-d02"), get_player_status()->mSelectItem[1]);
+        genSelectItemComboBox(_("editor-menu.ph02-d03"), get_player_status()->mMixItem[0]);
+        genSelectItemComboBox(_("editor-menu.ph02-d04"), get_player_status()->mMixItem[1]);
 
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Clothes",
+                .key = _("editor-menu.ph02-d05"),
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[0]); },
             }),
             rightPane, [](Pane& pane) { populate_select_clothes_picker(pane); });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Sword",
+                .key = _("editor-menu.ph02-d06"),
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[1]); },
             }),
             rightPane, [](Pane& pane) {
@@ -1440,7 +1441,7 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Shield",
+                .key = _("editor-menu.ph02-d07"),
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[2]); },
             }),
             rightPane, [](Pane& pane) {
@@ -1449,7 +1450,7 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Scent",
+                .key = _("editor-menu.ph02-d08"),
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[3]); },
             }),
             rightPane, [](Pane& pane) {
@@ -1458,21 +1459,21 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Wallet Size",
+                .key = _("editor-menu.ph02-d09"),
                 .getValue = [] { return walletSizeNames[get_player_status()->getWalletSize()]; },
             }),
             rightPane, [](Pane& pane) { populate_wallet_picker(pane); });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Form",
+                .key = _("editor-menu.ph02-d10"),
                 .getValue = [] { return formNames[get_player_status()->getTransformStatus()]; },
             }),
             rightPane, [](Pane& pane) { populate_form_picker(pane); });
 
-        leftPane.add_section("World");
+        leftPane.add_section(_("editor-menu.player-h03"));
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Day",
+                .key = _("editor-menu.ph03-t01"),
                 .getValue = [] { return get_player_status_b()->getDate(); },
                 .setValue =
                     [](int value) { get_player_status_b()->setDate(static_cast<u16>(value)); },
@@ -1481,7 +1482,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Hour",
+                .key = _("editor-menu.ph03-t02"),
                 .getValue = [] { return dKy_getdaytime_hour(); },
                 .setValue = [](int value) { set_clock_time(value, dKy_getdaytime_minute()); },
                 .max = 23,
@@ -1489,7 +1490,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Minute",
+                .key = _("editor-menu.ph03-t03"),
                 .getValue = [] { return dKy_getdaytime_minute(); },
                 .setValue = [](int value) { set_clock_time(dKy_getdaytime_hour(), value); },
                 .max = 59,
@@ -1497,7 +1498,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Transform Level",
+                .key = _("editor-menu.ph03-t04"),
                 .getValue =
                     [] {
                         return std::popcount(static_cast<unsigned>(
@@ -1513,7 +1514,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Twilight Clear Level",
+                .key = _("editor-menu.ph03-t05"),
                 .getValue =
                     [] {
                         return std::popcount(static_cast<unsigned>(
@@ -1668,7 +1669,7 @@ EditorWindow::EditorWindow() {
         for (int slot = 0; slot < 24; ++slot) {
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = fmt::format("Slot {0:02d}", slot),
+                    .key = fmt::format(fmt::runtime(_("editor-menu.ph02-d01-slot1")), slot),
                     .getValue = [slot] { return get_item_name(get_player_item()->mItems[slot]); },
                 }),
                 rightPane, [slot](Pane& pane) { populate_item_slot_picker(pane, slot); });

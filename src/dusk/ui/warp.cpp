@@ -2,6 +2,7 @@
 
 #include "editor.hpp"
 #include "pane.hpp"
+#include "lang.hpp"
 
 #include "dusk/map_loader_definitions.h"
 #include "fmt/format.h"
@@ -118,7 +119,7 @@ void populate_map_picker(Pane& pane, WarpSelectionState& state) {
     }
 
     pane.add_button({
-                    .text = "Show Internal Names",
+                    .text = _("warp-menu.wh01-d02-btn1"),
                     .isSelected = [&state] { return state.showInternalNames; },
                 })
         .on_pressed([&pane, &state] {
@@ -127,7 +128,7 @@ void populate_map_picker(Pane& pane, WarpSelectionState& state) {
             populate_map_picker(pane, state);
         });
 
-    pane.add_section("Maps");
+    pane.add_section(_("warp-menu.tab-warp"));
     const auto& region = gameRegions[state.regionIdx];
     for (int i = 0; i < static_cast<int>(region.maps.size()); ++i) {
         pane.add_button({
@@ -147,29 +148,29 @@ void populate_map_picker(Pane& pane, WarpSelectionState& state) {
 }  // namespace
 
 WarpWindow::WarpWindow() {
-    add_tab("Warp", [this](Rml::Element* content) {
+    add_tab(_("warp-menu.tab-warp"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
         auto& state = selection_state();
         clamp_indices(state);
 
-        leftPane.add_section("Destination");
+        leftPane.add_section(_("warp-menu.warp-h01"));
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Region",
+                .key = _("warp-menu.wh01-d01"),
                 .getValue =
                     [&state] {
                         clamp_indices(state);
                         const auto* region = selected_region(state);
                         return region == nullptr ? Rml::String{"None"} :
-                                                   Rml::String{region->regionName};
+                                                   Rml::String{_(region->regionName)};
                     },
             }),
             rightPane, [&state](Pane& pane) {
                 pane.clear();
                 for (int i = 0; i < static_cast<int>(gameRegions.size()); ++i) {
                     pane.add_button({
-                                    .text = gameRegions[i].regionName,
+                                    .text = _(gameRegions[i].regionName),
                                     .isSelected = [i, &state] { return state.regionIdx == i; },
                                 })
                         .on_pressed([i, &state] {
@@ -185,7 +186,7 @@ WarpWindow::WarpWindow() {
 
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Map",
+                .key = _("warp-menu.wh01-d02"),
                 .getValue =
                     [&state] {
                         clamp_indices(state);
@@ -198,7 +199,7 @@ WarpWindow::WarpWindow() {
 
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Room",
+                .key = _("warp-menu.wh01-i01"),
                 .getValue = [&state] {
                         clamp_indices(state);
                         const auto* room = selected_room(state);
@@ -240,7 +241,7 @@ WarpWindow::WarpWindow() {
 
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Point",
+                .key = _("warp-menu.wh01-i02"),
                 .getValue = [&state] {
                         clamp_indices(state);
                         const auto* point = selected_point(state);
@@ -284,7 +285,7 @@ WarpWindow::WarpWindow() {
 
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Layer",
+                .key = _("warp-menu.wh01-i03"),
                 .getValue = [&state] { return fmt::format("{}", state.layer); },
             }),
             rightPane, [&state](Pane& pane) {
@@ -303,10 +304,10 @@ WarpWindow::WarpWindow() {
                 }
             });
 
-        leftPane.add_section("Action");
+        leftPane.add_section(_("warp-menu.warp-h02"));
         leftPane.register_control(
             leftPane.add_button({
-                        .text = "Warp",
+                        .text = _("warp-menu.wh02-btn"),
                         .isDisabled = [&state] {
                             clamp_indices(state);
                             return !can_warp(state);
@@ -326,7 +327,7 @@ WarpWindow::WarpWindow() {
                 }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_text("Warp to the selected destination.");
+                pane.add_text(_("warp-menu.wh02-btn-desc"));
             });
     });
 }
