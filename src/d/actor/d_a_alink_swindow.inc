@@ -77,7 +77,12 @@ int daAlink_c::loadModelDVD() {
             mpWlMidnaHairModel = NULL;
 
             if (!checkNoResetFlg2(FLG2_UNK_280000)) {
-                dComIfG_resDelete(&mPhaseReq, mArcName);
+                if (!dComIfG_resDelete(&mPhaseReq, mArcName)) {
+#if TARGET_PC
+                    // resDelete no-ops if load was in-progress; force-unregister before freeAll
+                    dComIfG_deleteObjectResMain(mArcName);
+#endif
+                }
                 cPhs_Reset(&mPhaseReq);
                 mpArcHeap->freeAll();
 

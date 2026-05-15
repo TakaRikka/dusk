@@ -6,6 +6,7 @@
 #include "dusk/main.h"
 
 #include <array>
+#include <chrono>
 #include <filesystem>
 #include <optional>
 #include <ranges>
@@ -29,6 +30,21 @@ aurora::Module Log{"dusk::data"};
 constexpr auto kLocationDescriptorName = "data_location.json";
 constexpr auto kPipelineCacheName = "pipeline_cache.db";
 constexpr auto kInitialPipelineCacheName = "initial_pipeline_cache.db";
+
+constexpr std::array<std::string_view, 4> kUserDataDirectories = {
+    "texture_replacements",
+    "USA",
+    "EUR",
+    "JAP",
+};
+constexpr std::array<std::string_view, 6> kUserDataFiles = {
+    "achievements.json",
+    "config.json",
+    "controller_ports.dat",
+    "imgui.ini",
+    "keyboard_bindings.dat",
+    "states.json",
+};
 
 enum class LocationMode {
     Default,
@@ -62,6 +78,7 @@ struct MigrationStats {
 
 std::optional<std::filesystem::path> sConfiguredDataPath;
 std::optional<std::filesystem::path> sActiveDescriptorPath;
+std::optional<std::filesystem::path> sActivePrefPath;
 
 std::filesystem::path path_from_utf8(std::string_view value) {
     return std::filesystem::path{
@@ -70,19 +87,22 @@ std::filesystem::path path_from_utf8(std::string_view value) {
     };
 }
 
-std::filesystem::path get_legacy_path() {
-    if (std::string_view{LegacyAppName}.empty()) {
+std::filesystem::path legacy_path_for_pref_path(const std::filesystem::path& prefPath) {
+    if (std::string_view{LegacyAppName}.empty() || prefPath.empty()) {
         return {};
     }
 
-    char* prefPath = SDL_GetPrefPath(OrgName, LegacyAppName);
-    if (!prefPath) {
-        Log.fatal("Unable to get PrefPath: {}", SDL_GetError());
+    auto normalizedPrefPath = prefPath;
+    if (normalizedPrefPath.filename().empty()) {
+        normalizedPrefPath = normalizedPrefPath.parent_path();
     }
 
-    std::filesystem::path result{reinterpret_cast<const char8_t*>(prefPath)};
-    SDL_free(prefPath);
-    return result;
+    const auto parentPath = normalizedPrefPath.parent_path();
+    if (parentPath.empty()) {
+        return {};
+    }
+
+    return parentPath / LegacyAppName;
 }
 
 std::filesystem::path get_pref_path() {
@@ -94,6 +114,13 @@ std::filesystem::path get_pref_path() {
     std::filesystem::path result{reinterpret_cast<const char8_t*>(prefPath)};
     SDL_free(prefPath);
     return result;
+}
+
+std::filesystem::path active_pref_path() {
+    if (sActivePrefPath) {
+        return *sActivePrefPath;
+    }
+    return get_pref_path();
 }
 
 std::filesystem::path base_path_relative(const std::filesystem::path& path) {
@@ -249,6 +276,69 @@ std::filesystem::path absolute_path(const std::filesystem::path& path) {
     return absolute.lexically_normal();
 }
 
+std::filesystem::path rename_legacy_pref_path(
+    const std::filesystem::path& legacyPath, const std::filesystem::path& prefPath) {
+    if (legacyPath.empty() || prefPath.empty() ||
+        normalized_path(legacyPath) == normalized_path(prefPath))
+    {
+        return prefPath;
+    }
+
+    std::error_code ec;
+    if (!std::filesystem::exists(legacyPath, ec)) {
+        if (ec) {
+            Log.warn("Failed to inspect legacy data directory '{}': {}",
+                io::fs_path_to_string(legacyPath), ec.message());
+        }
+        return prefPath;
+    }
+
+    const bool prefExists = std::filesystem::exists(prefPath, ec);
+    if (ec) {
+        Log.warn("Failed to inspect data directory '{}': {}", io::fs_path_to_string(prefPath),
+            ec.message());
+        return prefPath;
+    }
+    if (prefExists) {
+        if (!std::filesystem::is_directory(prefPath, ec) ||
+            !std::filesystem::is_empty(prefPath, ec))
+        {
+            if (ec) {
+                Log.warn("Failed to inspect data directory '{}': {}",
+                    io::fs_path_to_string(prefPath), ec.message());
+            } else {
+                Log.info("Skipping legacy data directory rename because '{}' is not empty",
+                    io::fs_path_to_string(prefPath));
+            }
+            return prefPath;
+        }
+
+        std::filesystem::remove(prefPath, ec);
+        if (ec) {
+            Log.warn("Failed to remove empty data directory '{}' before legacy rename: {}",
+                io::fs_path_to_string(prefPath), ec.message());
+            return prefPath;
+        }
+    }
+
+    std::filesystem::rename(legacyPath, prefPath, ec);
+    if (ec) {
+        Log.warn("Failed to rename legacy data directory '{}' to '{}': {}",
+            io::fs_path_to_string(legacyPath), io::fs_path_to_string(prefPath), ec.message());
+        ec.clear();
+        if (!std::filesystem::exists(prefPath, ec) && !ec) {
+            Log.info("Using legacy data directory '{}' because the new data directory is absent",
+                io::fs_path_to_string(legacyPath));
+            return legacyPath;
+        }
+        return prefPath;
+    }
+
+    Log.info("Renamed legacy data directory '{}' to '{}'", io::fs_path_to_string(legacyPath),
+        io::fs_path_to_string(prefPath));
+    return prefPath;
+}
+
 bool is_same_or_inside(const std::filesystem::path& root, const std::filesystem::path& path) {
     const auto normalizedRoot = normalized_path(root);
     const auto normalizedPath = normalized_path(path);
@@ -283,85 +373,46 @@ bool should_skip_migration_path(const std::filesystem::path& path,
     return false;
 }
 
-bool has_location_descriptor(const std::filesystem::path& path) {
-    std::error_code ec;
-    return std::filesystem::exists(path / kLocationDescriptorName, ec);
+bool matches_name(std::string_view name, const auto& names) {
+    return std::ranges::find(names, name) != names.end();
 }
 
-bool remove_empty_destination_for_rename(const std::filesystem::path& path) {
-    std::error_code ec;
-    const bool exists = std::filesystem::exists(path, ec);
-    if (ec) {
-        Log.debug("Could not inspect migration destination '{}': {}", io::fs_path_to_string(path),
-            ec.message());
+bool should_migrate_user_data_path(
+    const std::filesystem::path& sourcePath, const std::filesystem::path& from) {
+    const auto relativePath = sourcePath.lexically_relative(from);
+    if (relativePath.empty() || relativePath.is_absolute()) {
         return false;
     }
-    if (!exists) {
+
+    auto it = relativePath.begin();
+    if (it == relativePath.end() || *it == "..") {
+        return false;
+    }
+
+    const auto first = io::fs_path_to_string(*it);
+    if (matches_name(first, kUserDataDirectories)) {
         return true;
     }
 
-    const bool canRemove = std::filesystem::is_directory(path, ec) &&
-                           std::filesystem::is_empty(path, ec) && !has_location_descriptor(path);
-    if (ec || !canRemove) {
-        if (ec) {
-            Log.debug("Could not inspect migration destination '{}': {}",
-                io::fs_path_to_string(path), ec.message());
-        }
+    ++it;
+    if (it != relativePath.end()) {
         return false;
     }
 
-    std::filesystem::remove(path, ec);
-    if (ec) {
-        Log.debug("Could not remove empty migration destination '{}': {}",
-            io::fs_path_to_string(path), ec.message());
-        return false;
+    const auto filename = io::fs_path_to_string(relativePath.filename());
+    if (matches_name(filename, kUserDataFiles)) {
+        return true;
     }
 
-    return true;
-}
-
-bool try_rename_directory_migration(
-    const std::filesystem::path& from, const std::filesystem::path& to) {
-    std::error_code ec;
-    if (!std::filesystem::is_directory(from, ec)) {
-        return false;
-    }
-    if (ec) {
-        Log.debug("Could not inspect migration source '{}': {}", io::fs_path_to_string(from),
-            ec.message());
-        return false;
-    }
-    if (has_location_descriptor(from)) {
-        return false;
-    }
-    if (!remove_empty_destination_for_rename(to)) {
-        return false;
-    }
-
-    std::filesystem::create_directories(to.parent_path(), ec);
-    if (ec) {
-        Log.debug("Could not create migration destination parent '{}': {}",
-            io::fs_path_to_string(to.parent_path()), ec.message());
-        return false;
-    }
-
-    std::filesystem::rename(from, to, ec);
-    if (ec) {
-        Log.debug("Could not rename data directory '{}' to '{}': {}", io::fs_path_to_string(from),
-            io::fs_path_to_string(to), ec.message());
-        return false;
-    }
-
-    Log.info("Renamed data directory '{}' to '{}'", io::fs_path_to_string(from),
-        io::fs_path_to_string(to));
-    return true;
+    return relativePath.extension() == ".controller" || relativePath.extension() == ".gci" ||
+           (filename.starts_with("MemoryCard") && filename.ends_with(".raw"));
 }
 
 std::filesystem::path current_data_path() {
     if (!ConfigPath.empty()) {
         return ConfigPath;
     }
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
         sActiveDescriptorPath = descriptor->path;
@@ -427,7 +478,7 @@ bool write_location_descriptor(LocationMode mode, const std::filesystem::path& t
         json["previousPath"] = io::fs_path_to_string(descriptor.previousPath);
     }
 
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     for (const auto& path : descriptor_write_paths(prefPath)) {
         if (write_descriptor_json(path, json)) {
             sActiveDescriptorPath = path;
@@ -437,6 +488,61 @@ bool write_location_descriptor(LocationMode mode, const std::filesystem::path& t
     }
 
     return false;
+}
+
+void set_error(std::string* errorOut, std::string error) {
+    if (errorOut != nullptr) {
+        *errorOut = std::move(error);
+    }
+}
+
+bool validate_writable_data_path(const std::filesystem::path& path, std::string* errorOut) {
+    if (path.empty()) {
+        set_error(errorOut, "Choose a folder.");
+        return false;
+    }
+
+    std::error_code ec;
+    std::filesystem::create_directories(path, ec);
+    if (ec) {
+        set_error(errorOut, fmt::format("{} could not create the selected folder.", AppName));
+        Log.warn("Failed to create custom data folder '{}': {}", io::fs_path_to_string(path),
+            ec.message());
+        return false;
+    }
+
+    if (!std::filesystem::is_directory(path, ec)) {
+        set_error(errorOut, "The selected path is not a folder.");
+        if (ec) {
+            Log.warn("Failed to inspect custom data folder '{}': {}", io::fs_path_to_string(path),
+                ec.message());
+        }
+        return false;
+    }
+
+    const auto probePath = path / fmt::format(".write-probe-{}.tmp",
+                                      std::chrono::steady_clock::now().time_since_epoch().count());
+    try {
+        io::FileStream::WriteAllText(probePath, "dusk");
+    } catch (const std::exception& e) {
+        set_error(errorOut, fmt::format("{} could not write to the selected folder.", AppName));
+        Log.warn("Failed write probe for custom data folder '{}': {}", io::fs_path_to_string(path),
+            e.what());
+        return false;
+    }
+
+    std::filesystem::remove(probePath, ec);
+    if (ec) {
+        set_error(
+            errorOut, fmt::format("{} could write to the selected folder, but could not remove "
+                                  "the test file it created.",
+                          AppName));
+        Log.warn("Failed to remove custom data folder write probe '{}': {}",
+            io::fs_path_to_string(probePath), ec.message());
+        return false;
+    }
+
+    return true;
 }
 
 std::uintmax_t remove_empty_directories(const std::filesystem::path& root, bool includeRoot) {
@@ -647,14 +753,6 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
         return;
     }
 
-    if (try_rename_directory_migration(from, to)) {
-        return;
-    }
-
-    if (try_rename_directory_migration(from, to)) {
-        return;
-    }
-
     std::filesystem::create_directories(to, ec);
     if (ec) {
         ++stats.failures;
@@ -692,6 +790,16 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
         }
 
         if (should_skip_migration_path(sourcePath, from, to, stats)) {
+            if (std::filesystem::is_directory(status)) {
+                it.disable_recursion_pending();
+            }
+            ec.clear();
+            it.increment(ec);
+            continue;
+        }
+
+        if (!should_migrate_user_data_path(sourcePath, from)) {
+            ++stats.skippedUnsupportedEntries;
             if (std::filesystem::is_directory(status)) {
                 it.disable_recursion_pending();
             }
@@ -761,8 +869,6 @@ void migrate_data(const std::filesystem::path& prefPath, const std::filesystem::
     const LocationDescriptor* descriptor) {
     if (descriptor && !descriptor->previousPath.empty()) {
         migrate_directory(descriptor->previousPath, dataPath, prefPath);
-    } else if (const auto legacyPath = get_legacy_path(); !legacyPath.empty()) {
-        migrate_directory(legacyPath, dataPath, prefPath);
     }
 }
 
@@ -899,17 +1005,25 @@ bool open_data_path() {
 #endif
 }
 
-bool set_custom_data_path(const std::filesystem::path& path) {
-    if (path.empty()) {
-        Log.warn("Ignoring empty custom data path");
+bool set_custom_data_path(const std::filesystem::path& path, std::string* errorOut) {
+    if (!validate_writable_data_path(path, errorOut)) {
         return false;
     }
 
-    return write_location_descriptor(LocationMode::Custom, path);
+    if (!write_location_descriptor(LocationMode::Custom, path)) {
+        set_error(errorOut, fmt::format("{} could not save the data folder setting.", AppName));
+        return false;
+    }
+
+    return true;
 }
 
-bool set_custom_data_path(const char* path) {
-    return set_custom_data_path(path_from_utf8(path));
+bool set_custom_data_path(const char* path, std::string* errorOut) {
+    if (path == nullptr) {
+        set_error(errorOut, "Choose a folder.");
+        return false;
+    }
+    return set_custom_data_path(path_from_utf8(path), errorOut);
 }
 
 bool set_portable_data_path() {
@@ -917,12 +1031,12 @@ bool set_portable_data_path() {
 }
 
 bool reset_data_path() {
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     return write_location_descriptor(LocationMode::Default, default_data_path(prefPath));
 }
 
 bool is_default_data_path() {
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     return normalized_path(configured_data_path()) == normalized_path(default_data_path(prefPath));
 }
 
@@ -931,7 +1045,7 @@ std::filesystem::path configured_data_path() {
         return *sConfiguredDataPath;
     }
 
-    const auto prefPath = get_pref_path();
+    const auto prefPath = active_pref_path();
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
         sActiveDescriptorPath = descriptor->path;
@@ -939,6 +1053,13 @@ std::filesystem::path configured_data_path() {
     sConfiguredDataPath =
         resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
     return *sConfiguredDataPath;
+}
+
+std::filesystem::path cache_path() {
+    if (!CachePath.empty()) {
+        return CachePath;
+    }
+    return active_pref_path();
 }
 
 bool is_data_path_restart_pending() {
@@ -949,8 +1070,12 @@ bool is_data_path_restart_pending() {
     return normalized_path(ConfigPath) != normalized_path(configured_data_path());
 }
 
-std::filesystem::path initialize_data() {
-    const auto prefPath = get_pref_path();
+Paths initialize_data() {
+    const auto preferredPrefPath = get_pref_path();
+    const auto prefPath =
+        rename_legacy_pref_path(legacy_path_for_pref_path(preferredPrefPath), preferredPrefPath);
+    sActivePrefPath = prefPath;
+
     const auto descriptor = read_location_descriptor(prefPath);
     if (descriptor) {
         sActiveDescriptorPath = descriptor->path;
@@ -963,9 +1088,13 @@ std::filesystem::path initialize_data() {
 
     migrate_data(prefPath, dataPath, descriptor ? &descriptor->descriptor : nullptr);
     ensure_data_directory(dataPath);
-    ensure_initial_pipeline_cache(dataPath);
+    ensure_data_directory(prefPath);
+    ensure_initial_pipeline_cache(prefPath);
 
-    return dataPath;
+    return Paths{
+        .userPath = dataPath,
+        .cachePath = prefPath,
+    };
 }
 
 }  // namespace dusk::data

@@ -80,6 +80,7 @@
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 #include "dusk/config.hpp"
+#include "dusk/speedrun.h"
 #include "dusk/settings.h"
 #include "dusk/io.hpp"
 #include "dusk/version.hpp"
@@ -119,6 +120,7 @@ bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
 bool dusk::RestartRequested = false;
 std::filesystem::path dusk::ConfigPath;
+std::filesystem::path dusk::CachePath;
 #endif
 
 void dusk::RequestRestart() noexcept {
@@ -528,12 +530,17 @@ int game_main(int argc, char* argv[]) {
 
     const auto startupLogLevel =
         static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
-    dusk::ConfigPath = dusk::data::initialize_data();
-    dusk::InitializeFileLogging(dusk::ConfigPath, startupLogLevel);
+    const auto dataPaths = dusk::data::initialize_data();
+    dusk::ConfigPath = dataPaths.userPath;
+    dusk::CachePath = dataPaths.cachePath;
+    dusk::InitializeFileLogging(dusk::CachePath, startupLogLevel);
 
     log_build_info();
 
     dusk::config::LoadFromUserPreferences();
+    if (dusk::getSettings().game.speedrunMode) {
+        dusk::resetForSpeedrunMode();
+    }
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::crash_reporting::initialize();
     // TODO: How to handle this?
@@ -551,10 +558,12 @@ int game_main(int argc, char* argv[]) {
     SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, "dev.twilitrealm.dusk");
 
     {
-        const auto configPathString = dusk::ConfigPath.u8string();
+        const auto userPathString = dusk::ConfigPath.u8string();
+        const auto cachePathString = dusk::CachePath.u8string();
         AuroraConfig config{};
         config.appName = dusk::AppName;
-        config.configPath = reinterpret_cast<const char*>(configPathString.c_str());
+        config.userPath = reinterpret_cast<const char*>(userPathString.c_str());
+        config.cachePath = reinterpret_cast<const char*>(cachePathString.c_str());
         config.vsync = dusk::getSettings().video.enableVsync;
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
         config.windowPosX = dusk::getSettings().video.windowPositionX;
@@ -591,7 +600,7 @@ int game_main(int argc, char* argv[]) {
     }
     VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
 
-    dusk::audio::SetMasterVolume(dusk::getSettings().audio.masterVolume / 100.0f);
+    dusk::audio::SetMasterVolume(dusk::audio::MasterVolumeToLinear(dusk::getSettings().audio.masterVolume / 100.0f));
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
     dusk::audio::EnableHrtf = dusk::getSettings().audio.enableHrtf;
 

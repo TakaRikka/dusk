@@ -7053,6 +7053,12 @@ static int daE_RD_IsDelete(e_rd_class*) {
 }
 
 static int daE_RD_Delete(e_rd_class* i_this) {
+#if TARGET_PC
+    if (boss == i_this) {
+        boss = NULL;
+    }
+#endif
+
     fopEn_enemy_c* enemy = (fopEn_enemy_c*)&i_this->enemy;
     fopAcM_RegisterDeleteID(i_this, "E_RD");
 

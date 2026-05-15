@@ -8723,6 +8723,12 @@ int daAlink_c::procWolfCargoCarry() {
             return checkNextActionWolf(0);
         }
 
+#if TARGET_PC
+        if (field_0x280c.getActor() == NULL) {
+            return checkNextActionWolf(0);
+        }
+#endif
+
         mDoMtx_stack_c::copy(((e_yc_class*)field_0x280c.getActor())->getLegR3Mtx());
         mDoMtx_stack_c::transM(-9.0f, -7.0f, -30.0f);
         mDoMtx_stack_c::multVecZero(&current.pos);

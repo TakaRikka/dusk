@@ -15,7 +15,7 @@ UserSettings g_userSettings = {
     },
 
     .audio = {
-        .masterVolume {"audio.masterVolume", 80},
+        .masterVolume {"audio.masterVolume", 60},
         .mainMusicVolume {"audio.mainMusicVolume", 100},
         .subMusicVolume {"audio.subMusicVolume", 100},
         .soundEffectsVolume {"audio.soundEffectsVolume", 100},
@@ -95,6 +95,7 @@ UserSettings g_userSettings = {
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
         .infiniteArrows {"game.infiniteArrows", false},
+        .infiniteSeeds {"game.infiniteSeeds", false},
         .infiniteBombs {"game.infiniteBombs", false},
         .infiniteOil {"game.infiniteOil", false},
         .infiniteOxygen {"game.infiniteOxygen", false},
@@ -108,6 +109,7 @@ UserSettings g_userSettings = {
         .fastRoll {"game.fastRoll", false},
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
+        .invincibleEnemies {"game.invincibleEnemies", false},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -247,6 +249,7 @@ void registerSettings() {
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
     Register(g_userSettings.game.infiniteArrows);
+    Register(g_userSettings.game.infiniteSeeds);
     Register(g_userSettings.game.infiniteBombs);
     Register(g_userSettings.game.infiniteOil);
     Register(g_userSettings.game.infiniteOxygen);
@@ -255,6 +258,7 @@ void registerSettings() {
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);
+    Register(g_userSettings.game.invincibleEnemies);
     Register(g_userSettings.game.enableFrameInterpolation);
     Register(g_userSettings.game.gyroMode);
     Register(g_userSettings.game.enableGyroAim);
