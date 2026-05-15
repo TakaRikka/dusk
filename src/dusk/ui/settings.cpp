@@ -853,8 +853,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
             "Invert vertical camera movement when Free Camera is enabled.",
             [] { return !getSettings().game.freeCamera; });
-        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
-            "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraXSensitivity,
+            "Free Camera X Sensitivity", "Adjusts twin-stick camera X axis sensitivity.", 50, 200, 5,
+            [] { return !getSettings().game.freeCamera; });
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraYSensitivity,
+            "Free Camera Y Sensitivity", "Adjusts twin-stick camera Y axis sensitivity.", 50, 200, 5,
             [] { return !getSettings().game.freeCamera; });
         addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
             "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
