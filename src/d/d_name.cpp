@@ -295,6 +295,7 @@ void dName_c::_move() {
         }
     } else {
     #endif
+#if !TARGET_PC
     if (mDoCPd_c::getTrigRight(PAD_1)) {
         // BUG: this check only fails if the cursor is at exactly 7
         // setMoji allows the cursor to reach 8, which is out of bounds here
@@ -311,7 +312,9 @@ void dName_c::_move() {
             mCurPos--;
             nameCursorMove();
         }
-    } else if (mDoCPd_c::getTrigB(PAD_1)) {
+    } else
+#endif
+    if (mDoCPd_c::getTrigB(PAD_1)) {
         if (mCurPos == 0) {
             mDoAud_seStart(Z2SE_SY_MENU_BACK, 0, 0, 0);
             field_0x2ac = mSelProc;
