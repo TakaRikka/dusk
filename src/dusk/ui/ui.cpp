@@ -171,7 +171,7 @@ void handle_event(const SDL_Event& event) noexcept {
             });
         }
         sConnectedGamepads.erase(event.gdevice.which);
-    } else if (event.type == SDL_EVENT_WINDOW_MOVED) {
+    } else if (event.type == SDL_EVENT_WINDOW_MOVED || event.type == SDL_EVENT_WINDOW_RESIZED) {
         if (auroraInfo.window) {
             int x, y;
             SDL_GetWindowPosition(auroraInfo.window, &x, &y);

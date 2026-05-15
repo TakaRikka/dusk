@@ -74,8 +74,6 @@ struct UserSettings {
         ConfigVar<int> fpsOverlayCorner;
         ConfigVar<int> windowPositionX;
         ConfigVar<int> windowPositionY;
-
-
     } video;
 
     struct {

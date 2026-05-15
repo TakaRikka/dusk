@@ -1,3 +1,4 @@
+#include <SDL3/SDL_video.h>
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
 
@@ -10,8 +11,8 @@ UserSettings g_userSettings = {
         .lockAspectRatio {"video.lockAspectRatio", false},
         .enableFpsOverlay {"game.enableFpsOverlay", false},
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
-        .windowPositionX {"video.windowPositionX", -1},
-        .windowPositionY {"video.windowPositionY", -1},
+        .windowPositionX {"video.windowPositionX", SDL_WINDOWPOS_UNDEFINED},
+        .windowPositionY {"video.windowPositionY", SDL_WINDOWPOS_UNDEFINED},
     },
 
     .audio = {
