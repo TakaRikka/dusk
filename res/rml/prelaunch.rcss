@@ -14,6 +14,14 @@ body {
     z-index: -1;
 }
 
+.lang-zh-cn body,
+.lang-zh-cn body menu,
+.lang-zh-cn body menu button,
+.lang-zh-cn body disc-info,
+.lang-zh-cn body version-info {
+    font-family: "HarmonyOS Sans";
+}
+
 .gradient {
     position: absolute;
     width: 100%;

@@ -20,6 +20,14 @@ body {
     pointer-events: none;
 }
 
+.lang-zh-cn body,
+.lang-zh-cn body toast,
+.lang-zh-cn body toast heading,
+.lang-zh-cn body toast message,
+.lang-zh-cn body fps {
+    font-family: "HarmonyOS Sans";
+}
+
 fps,
 toast {
     position: absolute;

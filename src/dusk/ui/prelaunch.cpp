@@ -137,7 +137,7 @@ struct UpdateCheckTask {
             } catch (...) {
                 result = {
                     .status = update_check::Status::Failed,
-                    .message = "Update check failed with an unknown exception",
+                    .message = "[UPDATE_CHECK_FAILED_WITH_AN_UNKNOWN_EXCEPTION]",
                 };
             }
             done.store(true, std::memory_order_release);
@@ -366,7 +366,7 @@ public:
 
         auto* title = append(header, "div");
         title->SetClass("modal-title", true);
-        title->SetInnerRML("Verifying disc image");
+        title->SetInnerRML("[DISC_VERIFYING_TITLE]");
 
         auto* icon = append(header, "icon");
         icon->SetClass("verifying", true);
@@ -439,7 +439,7 @@ private:
         mCancelRequested = true;
         sDiscVerificationTask->status.shouldCancel.store(true, std::memory_order_relaxed);
         if (mCancelButton != nullptr) {
-            mCancelButton->set_text("Cancelling...");
+            mCancelButton->set_text("[ACTION_CANCELLING]");
             mCancelButton->set_disabled(true);
         }
     }
@@ -471,7 +471,7 @@ private:
                 mProgress->SetAttribute("value", 0.f);
             }
             if (mDetail != nullptr) {
-                mDetail->SetInnerRML("Opening disc image...");
+                mDetail->SetInnerRML("[DISC_OPENING]");
             }
             return;
         }
@@ -578,7 +578,7 @@ void try_push_verification_modal(Document& host) {
 
     if (!state.pendingDiscPath.empty()) {
         const Rml::String bodyRml =
-            state.errorString + "<br/><br/>You may proceed at your own risk.";
+            state.errorString + "[YOU_MAY_PROCEED_AT_YOUR_OWN_RISK]";
         auto acceptHashMismatch = [](Modal& modal) {
             auto& st = prelaunch_state();
             std::string path = std::move(st.pendingDiscPath);
@@ -593,16 +593,16 @@ void try_push_verification_modal(Document& host) {
             modal.pop();
         };
         host.push(std::make_unique<Modal>(Modal::Props{
-            .title = "Disc verification warning",
+            .title = "[DISC_VERIFICATION_WARNING]",
             .bodyRml = bodyRml,
             .actions =
                 {
                     ModalAction{
-                        .label = "Cancel",
+                        .label = "[CANCEL]",
                         .onPressed = dismiss,
                     },
                     ModalAction{
-                        .label = "Continue anyway",
+                        .label = "[CONTINUE_ANYWAY]",
                         .onPressed = acceptHashMismatch,
                     },
                 },
@@ -614,12 +614,12 @@ void try_push_verification_modal(Document& host) {
     }
 
     host.push(std::make_unique<Modal>(Modal::Props{
-        .title = "Disc verification error",
+        .title = "[DISC_VERIFICATION_ERROR]",
         .bodyRml = state.errorString,
         .actions =
             {
                 ModalAction{
-                    .label = "OK",
+                    .label = "[OK]",
                     .onPressed = dismiss,
                 },
             },
@@ -691,8 +691,8 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
     if (auto* menuList = mDocument->GetElementById("menu-list")) {
         auto& state = prelaunch_state();
         const bool activeDiscLoaded = !state.activeDiscPath.empty();
-        mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, activeDiscLoaded ? "Play" : "Select Disc Image"));
+        mMenuButtons.push_back(std::make_unique<Button>(
+            menuList, activeDiscLoaded ? "[PLAY]" : "[SELECT_DISC_IMAGE]"));
         mMenuButtons.back()->on_pressed([this] {
             if (prelaunch_state().activeDiscPath.empty()) {
                 open_iso_picker();
@@ -721,14 +721,14 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "[SETTINGS]"));
         mMenuButtons.back()->on_pressed([this] {
             mRestartSuppressed = false;
             push(std::make_unique<SettingsWindow>(true));
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "[QUIT]"));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
@@ -782,27 +782,25 @@ void Prelaunch::show() {
         std::vector<ModalAction> actions;
         if constexpr (dusk::SupportsProcessRestart) {
             actions.push_back(ModalAction{
-                .label = "Restart later",
+                .label = "[RESTART_LATER]",
                 .onPressed = dismiss,
             });
             actions.push_back(ModalAction{
-                .label = "Restart now",
+                .label = "[RESTART_NOW]",
                 .onPressed = [](Modal&) { dusk::RequestRestart(); },
             });
         } else {
             actions.push_back(ModalAction{
-                .label = "OK",
+                .label = "[OK]",
                 .onPressed = dismiss,
             });
         }
         push(std::make_unique<Modal>(Modal::Props{
-            .title = "Apply Options",
+            .title = "[APPLY_OPTIONS]",
             .bodyRml =
                 dusk::SupportsProcessRestart ?
-                    "A restart is required to apply selected options.<br/><br/>Restart now to "
-                    "apply them immediately?" :
-                    "A restart is required to apply selected options.<br/><br/>Close and reopen "
-                    "Dusklight to apply them.",
+                    "[A_RESTART_IS_REQUIRED_TO_APPLY_SELECTED_OPTIONS_RESTART_NOW_TO_APPLY_THE]" :
+                    "[A_RESTART_IS_REQUIRED_TO_APPLY_SELECTED_OPTIONS_CLOSE_AND_REOPEN_DUSKLIG]",
             .actions = std::move(actions),
             .onDismiss = dismiss,
         }));
@@ -848,7 +846,8 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(activeDiscLoaded ? "Play" : "Select Disc Image");
+        mMenuButtons[0]->set_text(
+            activeDiscLoaded ? "[PLAY]" : "[SELECT_DISC_IMAGE]");
     }
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
@@ -856,22 +855,22 @@ void Prelaunch::update() {
     if (mDiscStatus != nullptr && discStatusLabel != nullptr) {
         if (!activeDiscLoaded) {
             mDiscStatus->RemoveAttribute("status");
-            discStatusLabel->SetInnerRML("No disc image found.");
+            discStatusLabel->SetInnerRML("[NO_DISC_IMAGE_FOUND]");
         } else if (discRestartPending) {
             mDiscStatus->SetAttribute("status", "pending");
-            discStatusLabel->SetInnerRML("Pending restart.");
+            discStatusLabel->SetInnerRML("[PENDING_RESTART]");
         } else if (state.configuredDiscValidation == iso::ValidationError::Success) {
             mDiscStatus->SetAttribute("status", "good");
-            discStatusLabel->SetInnerRML("Disc ready.");
+            discStatusLabel->SetInnerRML("[DISC_READY]");
         } else if (state.configuredDiscValidation == iso::ValidationError::HashMismatch) {
             mDiscStatus->SetAttribute("status", "mismatch");
-            discStatusLabel->SetInnerRML("Disc hash mismatch.");
+            discStatusLabel->SetInnerRML("[DISC_HASH_MISMATCH]");
         } else if (canLaunchConfiguredDisc) {
             mDiscStatus->SetAttribute("status", "unknown");
-            discStatusLabel->SetInnerRML("Disc not verified.");
+            discStatusLabel->SetInnerRML("[DISC_NOT_VERIFIED]");
         } else {
             mDiscStatus->SetAttribute("status", "bad");
-            discStatusLabel->SetInnerRML("Disc unavailable.");
+            discStatusLabel->SetInnerRML("[DISC_UNAVAILABLE]");
         }
     }
     if (mDiscDetail != nullptr) {
@@ -901,7 +900,7 @@ void Prelaunch::update() {
 
         if (sUpdateCheckTask != nullptr) {
             mUpdateStatus->SetAttribute("state", "checking");
-            mUpdateMessage->SetInnerRML("Checking for updates...");
+            mUpdateMessage->SetInnerRML("[CHECKING_FOR_UPDATES]");
         } else if (!sUpdateCheckResult.has_value() ||
                    sUpdateCheckResult->status == update_check::Status::UpToDate)
         {
@@ -909,14 +908,14 @@ void Prelaunch::update() {
             mUpdateMessage->SetInnerRML("");
         } else if (sUpdateCheckResult->status == update_check::Status::UpdateAvailable) {
             mUpdateStatus->SetAttribute("state", "available");
-            mUpdateMessage->SetInnerRML("Update available!");
+            mUpdateMessage->SetInnerRML("[UPDATE_AVAILABLE]");
             if (mUpdateDownloadLabel != nullptr) {
                 mUpdateDownloadLabel->SetInnerRML(escape(
                     fmt::format("Download {}", update_release_label(sUpdateCheckResult->latest))));
             }
         } else {
             mUpdateStatus->SetAttribute("state", "failed");
-            mUpdateMessage->SetInnerRML("Failed to check for updates");
+            mUpdateMessage->SetInnerRML("[FAILED_TO_CHECK_FOR_UPDATES]");
         }
     }
 

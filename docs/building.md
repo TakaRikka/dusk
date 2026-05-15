@@ -93,6 +93,17 @@ Alternate presets available:
 #### Running
 Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
 ```sh
-build/{preset}/dusklight/path/to/game.rvz
+build/{preset}/dusklight /path/to/game.rvz
 ```
 If no path is specified, Dusklight defaults to `game.iso` in the current working directory.
+
+#### Portable
+To keep settings, saves, logs, and cache next to the executable, launch with `--portable`.
+Portable mode uses a sibling `data` folder.
+
+```sh
+build/{preset}/dusklight --portable /path/to/game.rvz
+```
+
+You can also create a `portable.txt` file next to the executable to enable portable mode
+automatically.

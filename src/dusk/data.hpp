@@ -28,7 +28,7 @@ struct Paths {
     std::filesystem::path cachePath;
 };
 
-Paths initialize_data();
+Paths initialize_data(bool portableMode = false);
 std::filesystem::path configured_data_path();
 std::filesystem::path cache_path();
 bool open_data_path();
