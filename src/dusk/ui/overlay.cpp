@@ -169,7 +169,7 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
-    append(row, "span")->SetInnerRML(escape(padButton));
+    append(row, "span")->SetInnerRML("<b>" + escape(padButton) + "</b>");
     append(row, "span")->SetInnerRML("[TO_OPEN_MENU]");
 
     return elem;
