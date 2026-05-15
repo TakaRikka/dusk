@@ -58,6 +58,10 @@ toast:active {
     background-color: rgba(45, 43, 26, 80%);
 }*/
 
+b {
+    font-weight: bold;
+}
+
 toast heading {
     display: flex;
     gap: 18dp;

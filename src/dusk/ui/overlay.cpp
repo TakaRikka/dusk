@@ -147,7 +147,7 @@ Rml::String back_button_name() {
 #if defined(TARGET_ANDROID) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
 constexpr auto kMenuNotificationPrefix = "3-finger tap or";
 #else
-constexpr auto kMenuNotificationPrefix = "Press F1 or";
+constexpr auto kMenuNotificationPrefix = "Press <b>F1</b> or";
 #endif
 
 Rml::Element* create_menu_notification(Rml::Element* parent) {
@@ -169,7 +169,7 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
-    append(row, "span")->SetInnerRML(escape(padButton));
+    append(row, "span")->SetInnerRML("<b>" + escape(padButton) + "</b>");
     append(row, "span")->SetInnerRML("to open menu");
 
     return elem;
