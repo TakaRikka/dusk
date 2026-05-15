@@ -96,8 +96,8 @@ void mDoLib_project(Vec* src, Vec* dst) {
         xSize = FB_WIDTH;
     } else {
 #if TARGET_PC
-        xOffset = mDoGph_gInf_c::getSafeMinXF();
-        xSize = viewPort->width * mDoGph_gInf_c::hudAspectScaleUp;
+        xOffset = mDoGph_gInf_c::getMinXF();
+        xSize = mDoGph_gInf_c::getWidthF();
 #else
         xOffset = viewPort->x_orig;
         xSize = viewPort->width;

@@ -352,10 +352,6 @@ void dSv_player_item_c::setItem(int i_slotNo, u8 i_itemNo) {
             dComIfGp_setSelectItem(i);
         }
     }
-
-    #if TARGET_PC
-    triggerAutoSave();
-    #endif
 }
 
 u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {
