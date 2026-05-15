@@ -30,7 +30,9 @@
 #if TARGET_PC
 #include "dusk/settings.h"
 #include <f_ap/f_ap_game.h>
-#include <dusk/autosave.h>
+
+#include "dusk/string.hpp"
+#define strcpy dusk::SafeStringCopy
 #endif
 
 static u8 dSv_item_rename(u8 i_itemNo) {
@@ -349,10 +351,6 @@ void dSv_player_item_c::setItem(int i_slotNo, u8 i_itemNo) {
             dComIfGp_setSelectItem(i);
         }
     }
-
-    #if TARGET_PC
-    triggerAutoSave();
-    #endif
 }
 
 u8 dSv_player_item_c::getItem(int i_slotNo, bool i_checkCombo) const {

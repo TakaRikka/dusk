@@ -1967,7 +1967,11 @@ static void demo_camera_shop(npc_henna_class* i_this) {
                         i_this->mMsgFlow.init(actor, 0x365, 0, NULL);
                         /* dSv_event_flag_c::KORO2_ALLCLEAR - Fishing - After all stages (8-8) of roll goal game cleared */
                         dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[0x335]);
+#if TARGET_PC
+                        dComIfGp_setItemRupeeCount(dComIfGs_getRupeeMax());
+#else
                         dComIfGp_setItemRupeeCount(1000);
+#endif
                     } else if ((lbl_82_bss_91 & 0x38) == 0) {
                         i_this->mMsgFlow.init(actor, 0x34f, 0, NULL);
                         /* dSv_event_flag_c::F_0469 - Fishing Pond - Reserved for fishing */
