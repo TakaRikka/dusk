@@ -1511,18 +1511,6 @@ void mDoGph_gInf_c::bloom_c::draw2() {
 
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
-
-        u32 texMtxID = GX_TEXMTX0;
-        int angle = 0;
-        for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
-            GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
-            mDoMtx_stack_c::transS((blurScale * cM_scos(angle)) * getInvScale(),
-                                   blurScale * cM_ssin(angle), 0.0f);
-            GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
-            texMtxID += 3;
-            angle += 0x2000;
-        }
-
         GXSetNumTevStages(8);
         for (int stage = 0; stage < 8; stage++) {
             GXTevStageID tevStage = (GXTevStageID)stage;
@@ -1552,6 +1540,19 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass / 8)});
 
         for (int i = divStart; i < divNum; i++) {
+            f32 texelRadius = 1.5f;
+            f32 blurU = texelRadius / (f32)divRects[i].w;
+            f32 blurV = texelRadius / (f32)divRects[i].h;
+
+            u32 texMtxID = GX_TEXMTX0;
+            int angle = 0;
+            for (int texCoord = (int)GX_TEXCOORD0; texCoord < (int)GX_MAX_TEXCOORD; texCoord++) {
+                GXSetTexCoordGen((GXTexCoordID)texCoord, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
+                mDoMtx_stack_c::transS(blurU * cM_scos(angle), blurV * cM_ssin(angle), 0.0f);
+                GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
+                texMtxID += 3;
+                angle += 0x2000;
+            }
             // Apply blur filter.
             divQuad(i);
 
