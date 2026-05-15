@@ -14,9 +14,23 @@ static AutoSaveFuncs AutoSaveFuncsProc[] = {
 
 void noAutoSave() {}
 
+bool canAutoSave() {
+    daAlink_c* player = (daAlink_c*)daAlink_getAlinkActorClass();
+    if (player == nullptr) {
+        return false;
+    }
+
+    if (player->checkCargoCarry() || player->checkCanoeRide()) {
+        return false;
+    }
+
+    return dusk::getSettings().game.autoSave && shouldAutoSave && mAutoSaveProc == 0 &&
+           strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0 &&
+           strcmp(dComIfGp_getStartStageName(), "F_SP112") != 0;
+}
+
 void triggerAutoSave() {
-    if (dusk::getSettings().game.autoSave && shouldAutoSave && mAutoSaveProc == 0 &&
-        strcmp(dComIfGp_getStartStageName(), "F_SP102") != 0)
+    if (canAutoSave())
     {
         mAutoSaveProc = 1;
     }
