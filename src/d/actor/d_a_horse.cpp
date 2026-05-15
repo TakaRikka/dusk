@@ -22,6 +22,7 @@
 
 #if TARGET_PC
 #include "dusk/dusk.h"
+#include "dusk/frame_interpolation.h"
 
 namespace {
 // FRAME INTERP NOTE: Sim tick control point snapshots for interpolation
@@ -32,6 +33,7 @@ int s_horseReinSimNumPrev;
 int s_horseReinSimNumCurr;
 bool s_horseReinSimPrevValid;
 bool s_horseReinSimCurrValid;
+uint64_t s_horseReinSimRolledSeq;
 }  // namespace
 #endif
 
@@ -3033,10 +3035,14 @@ void daHorse_c::copyReinPos() {
     }
 #if TARGET_PC
     if (field_0x1204 > 0) {
-        if (s_horseReinSimCurrValid && s_horseReinSimNumCurr > 0) {
-            memcpy(s_horseReinSimPrev, s_horseReinSimCurr, s_horseReinSimNumCurr * sizeof(cXyz));
-            s_horseReinSimNumPrev = s_horseReinSimNumCurr;
-            s_horseReinSimPrevValid = true;
+        const uint64_t simSeq = dusk::frame_interp::sim_tick_seq();
+        if (simSeq != s_horseReinSimRolledSeq) {
+            s_horseReinSimRolledSeq = simSeq;
+            if (s_horseReinSimCurrValid && s_horseReinSimNumCurr > 0) {
+                memcpy(s_horseReinSimPrev, s_horseReinSimCurr, s_horseReinSimNumCurr * sizeof(cXyz));
+                s_horseReinSimNumPrev = s_horseReinSimNumCurr;
+                s_horseReinSimPrevValid = true;
+            }
         }
         memcpy(s_horseReinSimCurr, m_reinLine.getPos(0), field_0x1204 * sizeof(cXyz));
         s_horseReinSimNumCurr = field_0x1204;
