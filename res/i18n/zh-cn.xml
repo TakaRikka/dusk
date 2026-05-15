@@ -448,8 +448,8 @@
   <entry key="SKIPS_THE_TV_CALIBRATION_SCREEN_SHOWN_WHEN_LOADING_A_SAVE">跳过加载存档时<br/>显示的电视校准画面。</entry>
   <entry key="RECORDING_MODE">录制模式</entry>
   <entry key="DISABLES_THE_GAME_HUD_AND_ALL_BACKGROUND_MUSIC_USEFUL_FOR_RECORDING_FOOTAGE">禁用游戏 HUD 和所有背景音乐。<br/><br/>适用于录制视频。</entry>
-  <entry key="AUTO">Auto</entry>
-  <entry key="RETURN">Return</entry>
+  <entry key="AUTO">自动</entry>
+  <entry key="RETURN">返回</entry>
   <entry key="TWILIT_REALM">Twilit Realm</entry>
   <entry key="PRESENTS">presents</entry>
   <entry key="VERSION">Version</entry>
