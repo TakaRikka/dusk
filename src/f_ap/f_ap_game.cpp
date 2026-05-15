@@ -26,6 +26,8 @@
 #include "m_Do/m_Do_main.h"
 
 #if TARGET_PC
+#include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_horse.h"
 #include "tracy/Tracy.hpp"
 #include <dusk/gamepad_color.h>
 #include <dusk/autosave.h>
@@ -769,8 +771,13 @@ static void duskExecute() {
     }
 
     if (dusk::getSettings().game.moonJump && (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1))) {
-        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+        if (const auto link = (daAlink_c *)(g_dComIfG_gameInfo.play.getPlayerPtr(0))) {
             link->speed.y = 56.0f;
+            const auto epona = g_dComIfG_gameInfo.play.getHorseActor();
+            if(epona && link->checkModeFlg(link->MODE_RIDING))
+            {
+                epona->speed.y = 56.0f;
+            }
         }
     }
 
