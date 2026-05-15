@@ -19,6 +19,7 @@
 #include "d/d_timer.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene_mng.h"
+#include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
@@ -1236,6 +1237,13 @@ BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     if (mDoRst::isReturnToMenu() || !mDoRst::isReset() || mDoGph_gInf_c::getFader()->getStatus() == 2) {
         return 0;
     }
+    #endif
+
+    #ifdef TARGET_PC
+    if (!mDoMemCd_isCardCommNone()) {
+        return 0;
+    }
+    g_mDoMemCd_control.SaveSync();
     #endif
 
     dComIfG_changeOpeningScene(i_scene, fpcNm_OPENING_SCENE_e);
