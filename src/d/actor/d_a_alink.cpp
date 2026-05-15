@@ -9844,7 +9844,7 @@ void daAlink_c::setNormalSpeedF(f32 i_speed, f32 i_deceleration) {
     } else {
         max_speed = mStickValue * (mMaxSpeed * mStickValue);
 #if TARGET_PC
-        if (dusk::getSettings().game.fastWalk && !checkWolf() && mProcID == PROC_MOVE) {
+        if (dusk::getSettings().game.fastRun && !checkWolf() && mProcID == PROC_MOVE) {
             max_speed *= 2.0f;
         }
 #endif
