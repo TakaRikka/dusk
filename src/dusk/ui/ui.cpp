@@ -11,7 +11,9 @@
 #include <ranges>
 
 #include "aurora/lib/window.hpp"
+#include "dusk/dusk.h"
 #include "dusk/io.hpp"
+#include "dusk/config.hpp"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -169,8 +171,18 @@ void handle_event(const SDL_Event& event) noexcept {
             });
         }
         sConnectedGamepads.erase(event.gdevice.which);
+    } else if (event.type == SDL_EVENT_WINDOW_MOVED) {
+        if (auroraInfo.window) {
+            int x, y;
+            SDL_GetWindowPosition(auroraInfo.window, &x, &y);
+            dusk::getSettings().video.windowPositionX.setValue(x);
+            dusk::getSettings().video.windowPositionY.setValue(y);
+            dusk::config::Save();
+        }
+        return;
+    } else {
+        input::handle_event(event);
     }
-    input::handle_event(event);
 }
 
 Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) noexcept {

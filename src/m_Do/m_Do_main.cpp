@@ -337,7 +337,7 @@ void main01(void) {
     } while (dusk::IsRunning);
 
     exit:;
-    SaveWindowPosition();
+    //SaveWindowPosition(); /// REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     dusk::ui::shutdown();
 }
 
