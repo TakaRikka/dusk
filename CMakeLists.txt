@@ -113,11 +113,90 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_cmake")
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
   set(DAWN_USE_WAYLAND ON CACHE BOOL "Enable support for Wayland surface" FORCE)
 endif ()
+# Force-enable Dawn's D3D backends on Windows. Aurora's vendor branch leaves
+# these to Dawn's defaults, which silently disable D3D12 in some host
+# configurations (observed on Windows ARM64), leaving only the Vulkan
+# backend. Aurora's package/system branches call _aurora_dawn_set_platform_backends()
+# which sets these to ON — mirror that for the vendor path here.
+if (WIN32)
+    set(DAWN_ENABLE_D3D11 ON CACHE BOOL "Enable Dawn D3D11 backend" FORCE)
+    set(DAWN_ENABLE_D3D12 ON CACHE BOOL "Enable Dawn D3D12 backend" FORCE)
+endif ()
+# Additional Dawn vendor-build options that Aurora's branch leaves unset.
+# These mirror a known-working standalone Dawn build config; without them,
+# vendored Dawn on Windows ARM64 ships with a non-functional D3D12 backend.
+set(DAWN_USE_GLFW OFF CACHE BOOL "" FORCE)
+set(TINT_BUILD_IR_BINARY OFF CACHE BOOL "" FORCE)
+if (WIN32)
+    # Ensure Dawn (built via add_subdirectory) honors
+    # CMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded set by our CI preset, so its
+    # debug info format matches the rest of the project.
+    set(CMAKE_POLICY_CMP0141 NEW CACHE STRING "" FORCE)
+endif ()
+# On Windows-on-ARM hosts CMake can leave CMAKE_SYSTEM_PROCESSOR=AMD64 when
+# cmake.exe runs as x64 under emulation, which makes aurora's prebuilt-package
+# providers fetch the wrong architecture. Trust the toolchain instead.
+if (WIN32)
+    set(_dusk_arm64_target FALSE)
+    if (MSVC_C_ARCHITECTURE_ID STREQUAL "ARM64"
+            OR MSVC_CXX_ARCHITECTURE_ID STREQUAL "ARM64"
+            OR CMAKE_C_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64"
+            OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64"
+            OR CMAKE_GENERATOR_PLATFORM MATCHES "^[Aa][Rr][Mm]64$"
+            OR "$ENV{VSCMD_ARG_TGT_ARCH}" STREQUAL "arm64"
+            OR VCPKG_TARGET_TRIPLET MATCHES "^arm64-")
+        set(_dusk_arm64_target TRUE)
+    endif ()
+    message(STATUS "dusklight: WIN32 arch detection — "
+        "CMAKE_SYSTEM_PROCESSOR='${CMAKE_SYSTEM_PROCESSOR}', "
+        "MSVC_C_ARCHITECTURE_ID='${MSVC_C_ARCHITECTURE_ID}', "
+        "VSCMD_ARG_TGT_ARCH='$ENV{VSCMD_ARG_TGT_ARCH}', "
+        "arm64_target=${_dusk_arm64_target}")
+    if (_dusk_arm64_target AND NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+        message(STATUS "dusklight: forcing CMAKE_SYSTEM_PROCESSOR=ARM64 "
+            "(was '${CMAKE_SYSTEM_PROCESSOR}')")
+        set(CMAKE_SYSTEM_PROCESSOR "ARM64" CACHE STRING "Processor architecture" FORCE)
+    endif ()
+endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
 set(AURORA_ENABLE_RMLUI ON CACHE BOOL "Enable RmlUi UI support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 target_compile_definitions(aurora_mtx PRIVATE MTX_USE_PS=1)
+
+# When Dawn is built from source as a monolithic SHARED library on Windows,
+# CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON would auto-export every internal symbol
+# (Dawn + Tint + Abseil + SPIRV-Tools), blowing past MSVC's 65535-object
+# import library limit (LNK1189). Dawn already annotates its public API with
+# __declspec(dllexport), so suppress the global auto-export on this target.
+# Also enable link-time dead-code stripping and COMDAT folding: CMake's default
+# RelWithDebInfo flags include /INCREMENTAL, which disables /OPT:REF and
+# /OPT:ICF — without these the vendored Dawn DLL is ~4x larger than necessary.
+if (WIN32 AND TARGET webgpu_dawn)
+    get_target_property(_dusk_webgpu_dawn_type webgpu_dawn TYPE)
+    if (_dusk_webgpu_dawn_type STREQUAL "SHARED_LIBRARY")
+        set_target_properties(webgpu_dawn PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS OFF)
+        target_link_options(webgpu_dawn PRIVATE
+            $<$<NOT:$<CONFIG:Debug>>:/INCREMENTAL:NO>
+            $<$<NOT:$<CONFIG:Debug>>:/OPT:REF>
+            $<$<NOT:$<CONFIG:Debug>>:/OPT:ICF>
+        )
+    endif ()
+endif ()
+
+# aurora.cpp builds its PreferredBackendOrder array from #ifdef
+# DAWN_ENABLE_BACKEND_* macros set by aurora_core.cmake. That CMake gate
+# reads DAWN_ENABLE_D3D12 from cache — when Dawn is vendored, the value
+# can be missing or out of scope at aurora_core configure time, leaving
+# only the Vulkan/Null backends in the renderer picker even though the
+# D3D backends are compiled into webgpu_dawn.dll. Force the macros on
+# aurora_core directly so the picker matches the DLL's actual contents.
+if (WIN32 AND TARGET aurora_core)
+    target_compile_definitions(aurora_core PRIVATE
+        DAWN_ENABLE_BACKEND_D3D11
+        DAWN_ENABLE_BACKEND_D3D12
+    )
+endif ()
 
 add_subdirectory(libs/freeverb)
 
@@ -569,6 +648,39 @@ endif ()
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)
 aurora_copy_runtime_dlls(dusklight)
+
+# When Dawn is built from source on Windows, dxcompiler.dll and dxil.dll
+# (LoadLibrary'd by Dawn's D3D backend for HLSL→DXIL compilation) are not
+# produced. Fetch official Microsoft DXC binaries for the target architecture
+# and stage them next to dusklight.exe.
+if (WIN32 AND AURORA_DAWN_PROVIDER STREQUAL "vendor")
+    set(_dusk_dxc_arch "")
+    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+        set(_dusk_dxc_arch "arm64")
+    elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(AMD64|amd64|x86_64)$")
+        set(_dusk_dxc_arch "x64")
+    elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(X86|x86|i686)$")
+        set(_dusk_dxc_arch "x86")
+    endif ()
+    if (_dusk_dxc_arch)
+        message(STATUS "dusklight: Fetching Microsoft DXC binaries (${_dusk_dxc_arch})")
+        include(FetchContent)
+        FetchContent_Declare(dusk_dxc
+            URL "https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.9.2602/dxc_2026_02_20.zip"
+            URL_HASH SHA256=a1e89031421cf3c1fca6627766ab3020ca4f962ac7e2caa7fab2b33a8436151e
+            DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        )
+        FetchContent_MakeAvailable(dusk_dxc)
+        foreach (_dll IN ITEMS dxcompiler.dll dxil.dll)
+            add_custom_command(TARGET dusklight POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${dusk_dxc_SOURCE_DIR}/bin/${_dusk_dxc_arch}/${_dll}"
+                    $<TARGET_FILE_DIR:dusklight>
+                COMMENT "Staging ${_dll} (${_dusk_dxc_arch}) for Dawn D3D backend"
+            )
+        endforeach ()
+    endif ()
+endif ()
 
 if (DUSK_SELECTED_OPT)
     if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")

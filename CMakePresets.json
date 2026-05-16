@@ -490,7 +490,14 @@
       "inherits": [
         "x-windows-ci",
         "windows-arm64-msvc"
-      ]
+      ],
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "ARM64",
+        "CMAKE_TOOLCHAIN_FILE": "",
+        "AURORA_NOD_PROVIDER": "vendor",
+        "AURORA_DAWN_PROVIDER": "vendor",
+        "DAWN_USE_BUILT_DXC": "ON"
+      }
     }
   ],
   "buildPresets": [

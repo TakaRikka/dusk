@@ -17,6 +17,19 @@ inline void denormals_restore(denormal_state saved) { _mm_setcsr(saved); }
 
 #include <cstdint>
 using denormal_state = uint64_t;
+#if defined(_MSC_VER) && !defined(__clang__)
+#include <intrin.h>
+inline denormal_state denormals_enable()
+{
+    denormal_state saved = static_cast<denormal_state>(_ReadStatusReg(ARM64_FPCR));
+    _WriteStatusReg(ARM64_FPCR, saved | (1ULL << 24)); // FZ
+    return saved;
+}
+inline void denormals_restore(denormal_state saved)
+{
+    _WriteStatusReg(ARM64_FPCR, saved);
+}
+#else
 inline denormal_state denormals_enable()
 {
     denormal_state saved;
@@ -28,6 +41,7 @@ inline void denormals_restore(denormal_state saved)
 {
     asm volatile("msr fpcr, %0" :: "r"(saved));
 }
+#endif
 
 #elif defined(__arm__) || defined(_M_ARM)
 

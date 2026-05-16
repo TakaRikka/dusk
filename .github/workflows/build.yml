@@ -221,12 +221,12 @@ jobs:
             msvc_arch: amd64
             vcpkg_arch: x64
             artifact_arch: x86_64
-          # - name: MSVC arm64
-          #   runner: windows-11-arm
-          #   preset: arm64-msvc
-          #   msvc_arch: arm64
-          #   vcpkg_arch: arm64
-          #   artifact_arch: arm64
+          - name: MSVC arm64
+            runner: windows-11-arm
+            preset: arm64-msvc
+            msvc_arch: arm64
+            vcpkg_arch: arm64
+            artifact_arch: arm64
           # - name: Clang x86_64
           #   runner: windows-latest
           #   preset: clang
