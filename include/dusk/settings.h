@@ -72,6 +72,7 @@ struct UserSettings {
         ConfigVar<bool> lockAspectRatio;
         ConfigVar<bool> enableFpsOverlay;
         ConfigVar<int> fpsOverlayCorner;
+        ConfigVar<int> maxFrameRate;
     } video;
 
     struct {

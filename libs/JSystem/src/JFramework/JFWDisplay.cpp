@@ -380,7 +380,14 @@ static void waitPrecise(Limiter& limiter, Limiter::duration_t targetNs) {
 static void waitForTick(u32 p1, u16 p2) {
 #if TARGET_PC
     if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
-        dusk::frameUsagePct = 0.f;
+        const int frameRateCap = dusk::getSettings().video.maxFrameRate.getValue();
+        if (frameRateCap > 0) {
+            static Limiter limiter;
+            waitPrecise(limiter, static_cast<Limiter::duration_t>(
+                                     1000000000ULL / static_cast<u32>(frameRateCap)));
+        } else {
+            dusk::frameUsagePct = 0.f;
+        }
         return;
     }
     if (dusk::getTransientSettings().skipFrameRateLimit) {

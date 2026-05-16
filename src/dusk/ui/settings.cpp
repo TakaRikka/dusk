@@ -59,6 +59,8 @@ constexpr std::array kFpsOverlayCornerNames = {
     "Bottom Right",
 };
 
+constexpr std::array kFrameRateCapValues = {60, 120, 144, 240, 360};
+
 constexpr std::array kGyroInputModeLabels = {
     "Sensor",
     "Mouse",
@@ -800,6 +802,54 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Unlock Framerate",
                 .helpText = kUnlockFramerateHelpText,
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Max Frame Rate",
+                .getValue =
+                    [] {
+                        const int cap = getSettings().video.maxFrameRate.getValue();
+                        if (cap <= 0) {
+                            return Rml::String{"Unlimited"};
+                        }
+                        return Rml::String{std::to_string(cap) + " FPS"};
+                    },
+                .isDisabled =
+                    [] { return !getSettings().game.enableFrameInterpolation.getValue(); },
+                .isModified =
+                    [] {
+                        const auto& cap = getSettings().video.maxFrameRate;
+                        return cap.getValue() != cap.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.add_button(
+                        {
+                            .text = "Unlimited",
+                            .isSelected =
+                                [] { return getSettings().video.maxFrameRate.getValue() <= 0; },
+                        })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().video.maxFrameRate.setValue(0);
+                        config::Save();
+                    });
+                for (const int value : kFrameRateCapValues) {
+                    pane.add_button(
+                            {
+                                .text = std::to_string(value) + " FPS",
+                                .isSelected =
+                                    [value] {
+                                        return getSettings().video.maxFrameRate.getValue() == value;
+                                    },
+                            })
+                        .on_pressed([value] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.maxFrameRate.setValue(value);
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>Cap the interpolated frame rate.");
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
