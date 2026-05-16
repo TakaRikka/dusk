@@ -1165,7 +1165,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
             "Allows the Great Spin attack without requiring full health.");
         addCheat("Fast Iron Boots", getSettings().game.enableFastIronBoots,
-            "Speeds up movement while wearing the Iron Boots.");
+            "Speeds up movement while heavy, including wearing the Iron Boots, holding the Ball and Chain, wearing Magic Armor without rupees, etc.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
         addCheat("Fast Roll", getSettings().game.fastRoll,

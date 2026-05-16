@@ -77,16 +77,16 @@ static const char* l_mojiEisu[65] = {
 // That can't work on a modern platform, so instead I've filled them out ahead of time.
 static const char* l_mojiEisuPal_1[65] = {
     "A", "N", "\xC0", "\xCF", "1", "B", "O", "\xC1", "\xD0", "2", "C", "P", "\xC2", "\xD1", "3", "D", "Q",
-    "\xC3", "\xD2", "4", "E", "R", "\xC4", "\xD3", "5", "F", "S", "\xC5", "\xD4", "6", "G", "T", "\xC6", "\xD5",
-    "7", "H", "U", "\xC7", "\xD6", "8", "I", "V", "\xC8", "\xD7", "9", "J", "W", "\xC9", "\xD8", "0", "K",
-    "X", "\xCA", "\xD9", ",", "L", "Y", "\xCB", "\xDA", ".", "M", "Z", "\xCC", "\xDB", " ",
+    "\xC4", "\xD2", "4", "E", "R", "\xC6", "\xD3", "5", "F", "S", "\xC7", "\xD4", "6", "G", "T", "\xC8", "\xD6",
+    "7", "H", "U", "\xC9", "\x8C", "8", "I", "V", "\xCA", "\xD9", "9", "J", "W", "\xCB", "\xDA", "0", "K",
+    "X", "\xCC", "\xDB", ",", "L", "Y", "\xCD", "\xDC", ".", "M", "Z", "\xCE", "\x2D", " ",
 };
 
 static const char* l_mojiEisuPal_2[65] = {
     "a", "n", "\xE0", "\xEF", "1", "b", "o", "\xE1", "\xF0", "2", "c", "p", "\xE2", "\xF1", "3", "d", "q",
-    "\xE3", "\xF2", "4", "e", "r", "\xE4", "\xF3", "5", "f", "s", "\xE5", "\xF4", "6", "g", "t", "\xE6",
-    "\xF5", "7", "h", "u", "\xE7", "\xF6", "8", "i", "v", "\xE8", "\xF7", "9", "j", "w", "\xE9", "\xF8", "0",
-    "k", "x", "\xEA", "\xF9", ",", "l", "y", "\xEB", "\xFA", ".", "m", "z", "\xEC", "\xFB", " ",
+    "\xE4", "\xF2", "4", "e", "r", "\xE6", "\xF3", "5", "f", "s", "\xE7", "\xF4", "6", "g", "t", "\xE8",
+    "\xF6", "7", "h", "u", "\xE9", "\x9C", "8", "i", "v", "\xEA", "\xF9", "9", "j", "w", "\xEB", "\xFA", "0",
+    "k", "x", "\xEC", "\xFB", ",", "l", "y", "\xED", "\xFC", ".", "m", "z", "\xEE", "\xDF", " ",
 };
 #elif REGION_PAL
 static const char* l_mojiEisuPal_1[65] = {
