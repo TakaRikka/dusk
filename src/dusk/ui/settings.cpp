@@ -358,7 +358,15 @@ const Rml::String kBloomHelpText =
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
 const Rml::String kUnlockFramerateHelpText =
-    _("settings_menu.vh04-b01-desc");
+    _("settings_menu.vh04-b01-desc")
+const Rml::String kEnableDephOfFHelpText =
+    "A post-processing effect that mimics real-world camera lenses by keeping objects at a specific"
+    "distance in sharp focus while blurring the foreground and background."
+    "Enabling this may reduce performance on your graphics hardware. ";
+const Rml::String kEnableMini-MapShadowsHelpText =
+    "Adds a shadow effect to the mini-map's background, improving its visibility against bright colors in the Hyrule.";
+const Rml::String kDisableCutscenePillarboxingHelpText =
+    "Disables pillarboxing during cutscenes. Enabling this may reduce performance on your graphics hardware.  ";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -802,14 +810,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = _("settings_menu.vh04-b02"),
+                .helpText = kEnableDephOfFHelpText,
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = _("settings_menu.vh04-b03"),
+                .helpText = kEnableMini-MapShadowsHelpText,
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = _("settings_menu.vh04-b04"),
+                .helpText = kDisableCutscenePillarboxingHelpText,
+        
             });
     });
 
