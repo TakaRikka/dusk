@@ -19,6 +19,7 @@
 #endif
 #ifdef __APPLE__
 #include <pthread/qos.h>
+#include <mach/mach_time.h>
 #endif
 
 class Limiter {
@@ -81,7 +82,8 @@ private:
     if (!initialized || numSleeps++ % 1000 == 0) {
       LARGE_INTEGER freq;
       if (QueryPerformanceFrequency(&freq) == 0) {
-        DuskLog.warn("QueryPerformanceFrequency failed: {}", GetLastError());
+        /// Todo: Make this log work again possibly.
+        //DuskLog.warn("QueryPerformanceFrequency failed: {}", GetLastError());
         return;
       }
       countPerNs = static_cast<double>(freq.QuadPart) / 1e9;
@@ -108,14 +110,30 @@ private:
 #else
   void NanoSleep(const duration_t duration) { 
 #if defined(__APPLE__)
-    const Uint64 start = SDL_GetTicksNS();
-    while ((SDL_GetTicksNS() - start) < duration) {
-        #if defined(__arm__) || defined(__aarch64__)
-        asm volatile("yield" ::: "memory"); // yields to the hardware, not the scheduler.
-        #else
-        _mm_pause();
-        #endif
-    }
+      // Hybrid approach using Apple Mach
+      uint64_t start_mach = mach_absolute_time();
+      
+      mach_timebase_info_data_t timebase_info;
+      mach_timebase_info(&timebase_info);
+      
+      uint64_t total_mach_ticks = (duration * timebase_info.denom) / timebase_info.numer;
+      uint64_t target_mach = start_mach + total_mach_ticks;
+      
+      uint64_t buffer_ns = 2'000'000ULL;
+      uint64_t buffer_mach_ticks = (buffer_ns * timebase_info.denom) / timebase_info.numer;
+
+      if (total_mach_ticks > buffer_mach_ticks) {
+          uint64_t sleep_until_mach = target_mach - buffer_mach_ticks;
+          mach_wait_until(sleep_until_mach);
+      }
+
+      while (mach_absolute_time() < target_mach) {
+          #if defined(__aarch64__) || defined(__arm__)
+          asm volatile("yield" ::: "memory"); // Hardware hint, not a scheduler hint.
+          #else
+          _mm_pause();
+          #endif
+      }
 #else
     SDL_DelayPrecise(duration); 
 #endif
