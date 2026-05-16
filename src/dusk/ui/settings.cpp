@@ -876,7 +876,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             mDoAud_seStartMenu(kSoundItemChange);
                             getSettings().video.maxFrameRatePreset.setValue(idx);
 
-                            if (idx != 6) {
+                            if (idx != kMaxFrameRatePresets.size()-1) {
                                 getSettings().video.maxFrameRate.setValue(kMaxFrameRateValues[idx]);
                             }
 
@@ -891,7 +891,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 getSettings().video.maxFrameRate.setValue(std::clamp(value, 60, 1000));
                                 config::Save();
                             },
-                        .isDisabled = [] { return getSettings().video.maxFrameRatePreset != 6; },
+                        .isDisabled = [] { return getSettings().video.maxFrameRatePreset != kMaxFrameRatePresets.size()-1; },
                         .isModified = [] { 
                             return getSettings().video.maxFrameRate.getValue() !=
                                getSettings().video.maxFrameRate.getDefaultValue();
