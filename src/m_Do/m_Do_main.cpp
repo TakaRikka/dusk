@@ -316,8 +316,6 @@ void main01(void) {
             mDoAud_Execute();
         }
 
-        aurora_end_frame();
-
         static Limiter main_loop_limiter;
         static double last_fps_setting = 0.0;
         static Limiter::duration_t outer_target_ns = 0;
@@ -339,6 +337,9 @@ void main01(void) {
         } else {
             main_loop_limiter.Reset();
         }
+
+        aurora_end_frame();
+
 
         FrameMark;
 
