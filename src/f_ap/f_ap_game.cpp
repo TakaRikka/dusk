@@ -788,26 +788,90 @@ static void duskExecute() {
         dComIfGs_setLife((dComIfGs_getMaxLife() / 5) * 4);
     }
 
-    if (dusk::getSettings().game.infiniteArrows) {
-        dComIfGs_setArrowNum(dComIfGs_getArrowMax());
+    {
+        static bool sInfiniteArrowsWasEnabled = false;
+        static s16 sArrowBackup = 0;
+        
+        if (dusk::getSettings().game.infiniteArrows) {
+            if (!sInfiniteArrowsWasEnabled) {
+                sArrowBackup = dComIfGs_getArrowNum();
+                sInfiniteArrowsWasEnabled = true;
+            }
+            dComIfGs_setArrowNum(dComIfGs_getArrowMax());
+        } else if (sInfiniteArrowsWasEnabled) {
+            dComIfGs_setArrowNum(sArrowBackup);
+            sInfiniteArrowsWasEnabled = false;
+        }
     }
 
-    if (dusk::getSettings().game.infiniteSeeds) {
-        dComIfGs_setPachinkoNum(dComIfGs_getPachinkoMax());
+    {
+        static bool sInfiniteSeedsWasEnabled = false;
+        static s16 sSeedsBackup = 0;
+        
+        if (dusk::getSettings().game.infiniteSeeds) {
+            if (!sInfiniteSeedsWasEnabled) {
+                sSeedsBackup = dComIfGs_getPachinkoNum();
+                sInfiniteSeedsWasEnabled = true;
+            }
+            dComIfGs_setPachinkoNum(dComIfGs_getPachinkoMax());
+        } else if (sInfiniteSeedsWasEnabled) {
+            dComIfGs_setPachinkoNum(sSeedsBackup);
+            sInfiniteSeedsWasEnabled = false;
+        }
     }
 
-    if (dusk::getSettings().game.infiniteBombs) {
-        dComIfGs_setBombNum(0, 99);
-        dComIfGs_setBombNum(1, 99);
-        dComIfGs_setBombNum(2, 99);
+    {
+        static bool sInfiniteBombsWasEnabled = false;
+        static s16 sBombBackup[3] = {0, 0, 0};
+        
+        if (dusk::getSettings().game.infiniteBombs) {
+            if (!sInfiniteBombsWasEnabled) {
+                sBombBackup[0] = dComIfGs_getBombNum(0);
+                sBombBackup[1] = dComIfGs_getBombNum(1);
+                sBombBackup[2] = dComIfGs_getBombNum(2);
+                sInfiniteBombsWasEnabled = true;
+            }
+            dComIfGs_setBombNum(0, 99);
+            dComIfGs_setBombNum(1, 99);
+            dComIfGs_setBombNum(2, 99);
+        } else if (sInfiniteBombsWasEnabled) {
+            dComIfGs_setBombNum(0, sBombBackup[0]);
+            dComIfGs_setBombNum(1, sBombBackup[1]);
+            dComIfGs_setBombNum(2, sBombBackup[2]);
+            sInfiniteBombsWasEnabled = false;
+        }
     }
 
-    if (dusk::getSettings().game.infiniteOil) {
-        dComIfGs_setOil(dComIfGs_getMaxOil());
+    {
+        static bool sInfiniteOilWasEnabled = false;
+        static s16 sOilBackup = 0;
+        
+        if (dusk::getSettings().game.infiniteOil) {
+            if (!sInfiniteOilWasEnabled) {
+                sOilBackup = dComIfGs_getOil();
+                sInfiniteOilWasEnabled = true;
+            }
+            dComIfGs_setOil(dComIfGs_getMaxOil());
+        } else if (sInfiniteOilWasEnabled) {
+            dComIfGs_setOil(sOilBackup);
+            sInfiniteOilWasEnabled = false;
+        }
     }
 
-    if (dusk::getSettings().game.infiniteRupees) {
-        dComIfGs_setRupee(dComIfGs_getRupeeMax());
+    {
+        static bool sInfiniteRupeesWasEnabled = false;
+        static s32 sRupeeBackup = 0;
+        
+        if (dusk::getSettings().game.infiniteRupees) {
+            if (!sInfiniteRupeesWasEnabled) {
+                sRupeeBackup = dComIfGs_getRupee();
+                sInfiniteRupeesWasEnabled = true;
+            }
+            dComIfGs_setRupee(dComIfGs_getRupeeMax());
+        } else if (sInfiniteRupeesWasEnabled) {
+            dComIfGs_setRupee(sRupeeBackup);
+            sInfiniteRupeesWasEnabled = false;
+        }
     }
 
     if (dusk::getSettings().game.infiniteOxygen) {
