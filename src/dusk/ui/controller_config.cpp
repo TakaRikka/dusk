@@ -17,6 +17,12 @@
 
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
+#include "dusk/settings.h"
+#include "dusk/touch_controls.h"
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
 
 namespace dusk::ui {
 namespace {
@@ -26,10 +32,36 @@ bool keyboard_active(int port) {
     return PADGetKeyButtonBindings(static_cast<u32>(port), &count) != nullptr;
 }
 
+bool touch_active(int port) {
+    return dusk::touch_controls::enabled_for_port(static_cast<u32>(port));
+}
+
+void set_touch_active(int port, bool active) {
+    dusk::touch_controls::set_enabled_for_port(static_cast<u32>(port), active);
+#if defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    if (active) {
+        dusk::getSettings().game.gyroMode.setValue(GyroMode::Sensor);
+        dusk::getSettings().game.enableGyroAim.setValue(true);
+        config::Save();
+    }
+#endif
+}
+
+int touch_stick_sensitivity_percent() {
+    return dusk::touch_controls::stick_sensitivity_percent();
+}
+
+void set_touch_stick_sensitivity_percent(int value) {
+    dusk::touch_controls::set_stick_sensitivity_percent(value);
+}
+
 Rml::String current_controller_name(int port) {
     const char* name = PADGetName(port);
     if (name != nullptr) {
         return name;
+    }
+    if (touch_active(port)) {
+        return dusk::touch_controls::controller_name();
     }
     return keyboard_active(port) ? "Keyboard" : "None";
 }
@@ -357,6 +389,21 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
                 pane.clear();
                 pane.add_text("Restores all binding configurations for the currently selected device to their defaults.");
         });
+
+    leftPane.register_control(leftPane.add_child<NumberButton>(NumberButton::Props{
+                                  .key = "Touch Stick Sensitivity",
+                                  .getValue = [] { return touch_stick_sensitivity_percent(); },
+                                  .setValue = [](int value) { set_touch_stick_sensitivity_percent(value); },
+                                  .isDisabled = [port] { return !touch_active(port); },
+                                  .min = 50,
+                                  .max = 2000,
+                                  .step = 50,
+                                  .suffix = "%",
+                              }),
+        rightPane, [](Pane& pane) {
+            pane.add_text("Adjust how quickly the touch sticks reach full tilt.");
+        });
+
     render_page(rightPane, port, mPage);
 }
 
@@ -369,13 +416,31 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 {
                     .text = "None",
                 .isSelected =
-                    [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
+                    [port] {
+                        return PADGetIndexForPort(port) < 0 && !keyboard_active(port) &&
+                               !touch_active(port);
+                    },
             })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundClick);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
+                set_touch_active(port, false);
+                PADSerializeMappings();
+                ClearAllActionBindings(port);
+            });
+
+        pane.add_button({
+                            .text = "Touch Controls",
+                            .isSelected = [port] { return touch_active(port); },
+                        })
+            .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundItemChange);
+                cancel_pending_binding();
+                PADClearPort(port);
+                PADSetKeyboardActive(static_cast<u32>(port), FALSE);
+                set_touch_active(port, true);
                 PADSerializeMappings();
                 ClearAllActionBindings(port);
             });
@@ -389,6 +454,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
+                set_touch_active(port, false);
                 PADSerializeMappings();
                 ClearAllActionBindings(port);
             });
@@ -410,6 +476,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     mDoAud_seStartMenu(kSoundClick);
                     cancel_pending_binding();
                     PADSetKeyboardActive(static_cast<u32>(port), FALSE);
+                    set_touch_active(port, false);
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();
                     ClearAllActionBindings(port);

@@ -3,6 +3,7 @@
 #include "aurora/lib/logging.hpp"
 #include "dusk/achievements.h"
 #include "dusk/action_bindings.h"
+#include "dusk/touch_controls.h"
 #include "controller_config.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/speedrun.h"
@@ -144,11 +145,20 @@ Rml::String back_button_name() {
     return "Back";
 }
 
+bool touch_controller_active() noexcept {
+    return dusk::touch_controls::enabled_for_port(PAD_CHAN0);
+}
+
+const char* menu_notification_prefix() noexcept {
+    if (touch_controller_active()) {
+        return "3-finger tap or";
+    }
 #if defined(TARGET_ANDROID) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
-constexpr auto kMenuNotificationPrefix = "3-finger tap or";
+    return "3-finger tap or";
 #else
-constexpr auto kMenuNotificationPrefix = "Press <b>F1</b> or";
+    return "Press <b>F1</b> or";
 #endif
+}
 
 Rml::Element* create_menu_notification(Rml::Element* parent) {
     auto* elem = append(parent, "toast");
@@ -166,7 +176,7 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
 
     auto* message = append(elem, "message");
     auto* row = append(message, "row");
-    append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
+    append(row, "span")->SetInnerRML(menu_notification_prefix());
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
     append(row, "span")->SetInnerRML("<b>" + escape(padButton) + "</b>");

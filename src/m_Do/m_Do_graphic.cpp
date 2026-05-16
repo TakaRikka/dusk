@@ -57,6 +57,7 @@
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
+#include "dusk/touch_controls.h"
 #endif
 
 class mDoGph_HIO_c : public JORReflexible {
@@ -2743,6 +2744,7 @@ int mDoGph_Painter() {
 
 #if TARGET_PC
     dusk::g_imguiConsole.PostDraw();
+    dusk::touch_controls::draw();
 #endif
 
     mDoGph_gInf_c::endRender();

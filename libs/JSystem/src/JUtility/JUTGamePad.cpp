@@ -6,6 +6,7 @@
 
 #if TARGET_PC
 #include "dusk/action_bindings.h"
+#include "dusk/touch_controls.h"
 #endif
 
 u32 JUTGamePad::CRumble::sChannelMask[4] = {
@@ -91,6 +92,10 @@ u32 JUTGamePad::read() {
     sRumbleSupported = PADRead(mPadStatus);
 #if TARGET_PC
    dusk::updateActionBindings();
+
+    for (u32 port = PAD_CHAN0; port < PAD_CHANMAX; ++port) {
+        dusk::touch_controls::apply_pad_state(mPadStatus[port], port);
+    }
 #endif
 
     switch (sClampMode) {
@@ -101,6 +106,12 @@ u32 JUTGamePad::read() {
         PADClampCircle(mPadStatus);
         break;
     }
+
+#if TARGET_PC
+    for (u32 port = PAD_CHAN0; port < PAD_CHANMAX; ++port) {
+        dusk::touch_controls::apply_post_clamp_stick_state(mPadStatus[port], port);
+    }
+#endif
 
     u32 bittest;
     u32 reset_mask = 0;

@@ -1,10 +1,21 @@
 #include "dusk/gyro.h"
 #include "dusk/ui/ui.hpp"
+#include "dusk/touch_controls.h"
 #include "d/actor/d_a_alink.h"
 
 #include <aurora/lib/window.hpp>
+#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_video.h>
 #include <cmath>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#include <SDL3/SDL_sensor.h>
+#endif
 
 namespace dusk::gyro {
 namespace {
@@ -37,6 +48,130 @@ float s_roll_rad              = 0.0f;
 s32   s_rollgoal_ax           = 0;
 s32   s_rollgoal_az           = 0;
 
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+bool        s_device_sensors_scanned = false;
+SDL_Sensor* s_device_gyro            = nullptr;
+SDL_Sensor* s_device_accel           = nullptr;
+
+void close_device_sensors() {
+    if (s_device_gyro != nullptr) {
+        SDL_CloseSensor(s_device_gyro);
+        s_device_gyro = nullptr;
+    }
+    if (s_device_accel != nullptr) {
+        SDL_CloseSensor(s_device_accel);
+        s_device_accel = nullptr;
+    }
+    s_device_sensors_scanned = false;
+}
+
+SDL_Sensor* open_device_sensor(SDL_SensorType type) {
+    int count = 0;
+    SDL_SensorID* sensors = SDL_GetSensors(&count);
+    if (sensors == nullptr) {
+        return nullptr;
+    }
+
+    SDL_Sensor* selected = nullptr;
+    for (int i = 0; i < count; ++i) {
+        SDL_Sensor* sensor = SDL_OpenSensor(sensors[i]);
+        if (sensor == nullptr) {
+            continue;
+        }
+        if (SDL_GetSensorType(sensor) == type) {
+            selected = sensor;
+            break;
+        }
+        SDL_CloseSensor(sensor);
+    }
+
+    SDL_free(sensors);
+    return selected;
+}
+
+bool ensure_device_sensors() {
+    if (!dusk::touch_controls::enabled_for_port(PAD_CHAN0)) {
+        close_device_sensors();
+        return false;
+    }
+
+    if (!s_device_sensors_scanned) {
+        s_device_sensors_scanned = true;
+        if (!SDL_InitSubSystem(SDL_INIT_SENSOR)) {
+            return false;
+        }
+        s_device_gyro = open_device_sensor(SDL_SENSOR_GYRO);
+        s_device_accel = open_device_sensor(SDL_SENSOR_ACCEL);
+    }
+
+    return s_device_gyro != nullptr;
+}
+
+SDL_DisplayOrientation current_display_orientation() {
+    SDL_Window* window = aurora::window::get_sdl_window();
+    if (window == nullptr) {
+        return SDL_ORIENTATION_UNKNOWN;
+    }
+
+    const SDL_DisplayID display_id = SDL_GetDisplayForWindow(window);
+    if (display_id == 0) {
+        return SDL_ORIENTATION_UNKNOWN;
+    }
+
+    return SDL_GetCurrentDisplayOrientation(display_id);
+}
+
+void remap_ios_sensor_axes(float values[3]) {
+    const float x = values[0];
+    const float y = values[1];
+
+    switch (current_display_orientation()) {
+    case SDL_ORIENTATION_LANDSCAPE:
+        values[0] = -y;
+        values[1] = x;
+        break;
+    case SDL_ORIENTATION_LANDSCAPE_FLIPPED:
+        values[0] = y;
+        values[1] = -x;
+        break;
+    case SDL_ORIENTATION_PORTRAIT_FLIPPED:
+        values[0] = -x;
+        values[1] = -y;
+        break;
+    case SDL_ORIENTATION_PORTRAIT:
+    case SDL_ORIENTATION_UNKNOWN:
+    default:
+        break;
+    }
+}
+
+bool read_device_sensor(SDL_Sensor* sensor, float data[3]) {
+    if (sensor == nullptr) {
+        return false;
+    }
+
+    if (!SDL_GetSensorData(sensor, data, 3)) {
+        return false;
+    }
+
+    remap_ios_sensor_axes(data);
+    return true;
+}
+
+bool read_device_gyro(float gyro[3]) {
+    if (!ensure_device_sensors()) {
+        return false;
+    }
+
+    SDL_UpdateSensors();
+    return read_device_sensor(s_device_gyro, gyro);
+}
+
+bool read_device_accel(float accel[3]) {
+    return read_device_sensor(s_device_accel, accel);
+}
+#endif
+
 void reset_filter_state() {
     s_smooth_gx = s_smooth_gy = s_smooth_gz = 0.0f;
     s_gravity_y = s_gravity_z = 0.0f;
@@ -64,6 +199,9 @@ void disable_pad_sensors() {
         PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_ACCEL, FALSE);
         s_accel_enabled = false;
     }
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    close_device_sensors();
+#endif
 }
 }  // namespace
 
@@ -151,7 +289,21 @@ void read(float dt) {
         return;
     }
 
-    if (!s_sensor_enabled) {
+    f32 gyro[3] = {};
+    bool has_gyro = false;
+    bool has_accel = false;
+    bool using_device_gyro = false;
+    f32 accel[3] = {};
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+    if (read_device_gyro(gyro)) {
+        has_gyro = true;
+        using_device_gyro = true;
+        has_accel = read_device_accel(accel);
+    }
+#endif
+
+    if (!has_gyro && !s_sensor_enabled) {
         if (!PADHasSensor(PAD_CHAN0, PAD_SENSOR_GYRO)) {
             return;
         }
@@ -161,16 +313,20 @@ void read(float dt) {
         s_sensor_enabled = true;
     }
 
-    if (!s_accel_enabled && PADHasSensor(PAD_CHAN0, PAD_SENSOR_ACCEL) &&
+    if (!has_gyro && !s_accel_enabled && PADHasSensor(PAD_CHAN0, PAD_SENSOR_ACCEL) &&
         PADSetSensorEnabled(PAD_CHAN0, PAD_SENSOR_ACCEL, TRUE))
     {
         // We only need accel for the gravity-aware yaw/roll mix.
         s_accel_enabled = true;
     }
 
-    f32 gyro[3];
-    if (!PADGetSensorData(PAD_CHAN0, PAD_SENSOR_GYRO, gyro, 3)) {
+    if (!has_gyro && !PADGetSensorData(PAD_CHAN0, PAD_SENSOR_GYRO, gyro, 3)) {
         return;
+    }
+    has_gyro = true;
+
+    if (!has_accel && !using_device_gyro && s_accel_enabled) {
+        has_accel = PADGetSensorData(PAD_CHAN0, PAD_SENSOR_ACCEL, accel, 3);
     }
 
     const float smooth_alpha = kGyroEmaAlphaMax + getSettings().game.gyroSmoothing * (kGyroEmaAlphaMin - kGyroEmaAlphaMax);
@@ -188,38 +344,35 @@ void read(float dt) {
     s_roll_rad  = roll_rate * dt * getSettings().game.gyroSensitivityX; // GYRO NOTE: Exposing Z sensitivity seems unusual, so I'm just using X
 
     float horizontal_rate = yaw_rate;
-    if (aim_active && s_accel_enabled) {
-        f32 accel[3];
-        if (PADGetSensorData(PAD_CHAN0, PAD_SENSOR_ACCEL, accel, 3)) {
+    if (aim_active && has_accel) {
+        if (!s_have_gravity_baseline) {
+            s_gravity_y = accel[1];
+            s_gravity_z = accel[2];
+        } else {
+            s_gravity_y += kGravityEmaAlpha * (accel[1] - s_gravity_y);
+            s_gravity_z += kGravityEmaAlpha * (accel[2] - s_gravity_z);
+        }
+
+        // Compare the current gravity projection against the gravity vector from
+        // aim start so the user's resting hold angle becomes the neutral baseline.
+        const float gravity_yz_len = std::sqrt((s_gravity_y * s_gravity_y) + (s_gravity_z * s_gravity_z));
+        if (gravity_yz_len >= kMinGravityProjection) {
+            const float current_gravity_y = s_gravity_y / gravity_yz_len;
+            const float current_gravity_z = s_gravity_z / gravity_yz_len;
+
             if (!s_have_gravity_baseline) {
-                s_gravity_y = accel[1];
-                s_gravity_z = accel[2];
-            } else {
-                s_gravity_y += kGravityEmaAlpha * (accel[1] - s_gravity_y);
-                s_gravity_z += kGravityEmaAlpha * (accel[2] - s_gravity_z);
+                s_baseline_gravity_y = current_gravity_y;
+                s_baseline_gravity_z = current_gravity_z;
+                s_have_gravity_baseline = true;
             }
 
-            // Compare the current gravity projection against the gravity vector from
-            // aim start so the user's resting hold angle becomes the neutral baseline.
-            const float gravity_yz_len = std::sqrt((s_gravity_y * s_gravity_y) + (s_gravity_z * s_gravity_z));
-            if (gravity_yz_len >= kMinGravityProjection) {
-                const float current_gravity_y = s_gravity_y / gravity_yz_len;
-                const float current_gravity_z = s_gravity_z / gravity_yz_len;
-
-                if (!s_have_gravity_baseline) {
-                    s_baseline_gravity_y = current_gravity_y;
-                    s_baseline_gravity_z = current_gravity_z;
-                    s_have_gravity_baseline = true;
-                }
-
-                const float yaw_weight =
-                    (s_baseline_gravity_y * current_gravity_y) + (s_baseline_gravity_z * current_gravity_z);
-                const float roll_weight =
-                    (s_baseline_gravity_y * current_gravity_z) - (s_baseline_gravity_z * current_gravity_y);
-                const float roll_mix = std::fabs(roll_weight);
-                const float roll_boost = 1.0f + (roll_mix * (kRollAimBoostMax - 1.0f));
-                horizontal_rate = (yaw_rate * yaw_weight) + (roll_rate * roll_weight * roll_boost);
-            }
+            const float yaw_weight =
+                (s_baseline_gravity_y * current_gravity_y) + (s_baseline_gravity_z * current_gravity_z);
+            const float roll_weight =
+                (s_baseline_gravity_y * current_gravity_z) - (s_baseline_gravity_z * current_gravity_y);
+            const float roll_mix = std::fabs(roll_weight);
+            const float roll_boost = 1.0f + (roll_mix * (kRollAimBoostMax - 1.0f));
+            horizontal_rate = (yaw_rate * yaw_weight) + (roll_rate * roll_weight * roll_boost);
         }
     }
 

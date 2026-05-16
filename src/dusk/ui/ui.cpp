@@ -12,6 +12,7 @@
 
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
+#include "dusk/touch_controls.h"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -120,6 +121,8 @@ const char* connection_state_icon(SDL_JoystickConnectionState state) noexcept {
 }
 
 void handle_event(const SDL_Event& event) noexcept {
+    dusk::touch_controls::handle_event(event);
+
     if (!aurora::rmlui::is_initialized()) {
         return;
     }
