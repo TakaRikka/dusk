@@ -69,6 +69,7 @@ UserSettings g_userSettings = {
         .enableFrameInterpolation {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
+        .resampler {"game.resampler", Resampler::Bilinear},
         .enableDepthOfField {"game.enableDepthOfField", true},
         .enableMapBackground {"game.enableMapBackground", true},
         .disableCutscenePillarboxing {"game.disableCutscenePillarboxing", false},
@@ -232,6 +233,7 @@ void registerSettings() {
     Register(g_userSettings.game.disableWaterRefraction);
     Register(g_userSettings.game.enableTextureReplacements);
     Register(g_userSettings.game.internalResolutionScale);
+    Register(g_userSettings.game.resampler);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableDepthOfField);
     Register(g_userSettings.game.enableMapBackground);

@@ -351,6 +351,8 @@ const Rml::String kInternalResolutionHelpText =
 const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
+const Rml::String kResamplerHelpText =
+    "Configure the sampling method used when scaling the internal resolution for final presentation.";
 const Rml::String kBloomHelpText =
     "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
     "a higher-quality bloom pass.";
@@ -773,6 +775,15 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 1,
                 .valueMax = 8,
                 .defaultValue = 1,
+            }, mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+            GraphicsTunerProps{
+                .option = GraphicsOption::Resampler,
+                .title = "Output Resampling",
+                .helpText = kResamplerHelpText,
+                .valueMin = static_cast<int>(Resampler::Bilinear),
+                .valueMax = static_cast<int>(Resampler::Area),
+                .defaultValue = static_cast<int>(Resampler::Bilinear),
             }, mPrelaunch);
 
         leftPane.add_section("Post-Processing");

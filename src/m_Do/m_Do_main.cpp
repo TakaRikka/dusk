@@ -584,6 +584,15 @@ int game_main(int argc, char* argv[]) {
         AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
     }
     VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
+    switch (dusk::getSettings().game.resampler.getValue()) {
+    case dusk::Resampler::Area:
+        aurora_set_resampler(SAMPLER_AREA);
+        break;
+    case dusk::Resampler::Bilinear:
+    default:
+        aurora_set_resampler(SAMPLER_BILINEAR);
+        break;
+    }
 
     dusk::audio::SetMasterVolume(dusk::audio::MasterVolumeToLinear(dusk::getSettings().audio.masterVolume / 100.0f));
     dusk::audio::SetEnableReverb(dusk::getSettings().audio.enableReverb);
