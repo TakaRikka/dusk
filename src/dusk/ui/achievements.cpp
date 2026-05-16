@@ -6,6 +6,7 @@
 #include "m_Do/m_Do_audio.h"
 #include "nav_types.hpp"
 #include "pane.hpp"
+#include "lang.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -16,11 +17,11 @@ struct CategoryInfo {
 };
 
 constexpr CategoryInfo kCategories[] = {
-    {AchievementCategory::Challenge,  "Challenge"},
-    {AchievementCategory::Collection, "Collection"},
-    {AchievementCategory::Minigame,   "Minigame"},
-    {AchievementCategory::Misc,       "Misc"},
-    {AchievementCategory::Glitched,   "Glitched"},
+    {AchievementCategory::Challenge,  "achievements-menu.tab-challenge"},
+    {AchievementCategory::Collection, "achievements-menu.tab-collection"},
+    {AchievementCategory::Minigame,   "achievements-menu.tab-minigame"},
+    {AchievementCategory::Misc,       "achievements-menu.tab-misc"},
+    {AchievementCategory::Glitched,   "achievements-menu.tab-glitched"},
 };
 
 Rml::String build_achievement_info_rml(const Achievement& a) {
@@ -31,10 +32,10 @@ Rml::String build_achievement_info_rml(const Achievement& a) {
         R"(</div>)"
         R"(<p class="achievement-desc">{}</p>)",
         a.unlocked ? " unlocked" : "",
-        a.name,
+        _(a.name),
         a.unlocked ? " unlocked" : " locked",
-        a.unlocked ? "Unlocked" : "Locked",
-        a.description
+        a.unlocked ? _("achievements-menu.bool-unlocked") : _("achievements-menu.bool-locked"),
+        _(a.description)
     );
 
     if (a.isCounter) {
@@ -69,7 +70,7 @@ public:
                     resetConfirm();
                 } else {
                     mConfirming = true;
-                    mClearButton->set_text("Clear?");
+                    mClearButton->set_text(_("achievements-menu.clear-btn"));
                 }
                 return true;
             }
@@ -131,7 +132,7 @@ AchievementsWindow::AchievementsWindow() {
             continue;
         }
 
-        add_tab(catInfo.label, [this, cat = catInfo.cat](Rml::Element* content) {
+        add_tab(_(catInfo.label), [this, cat = catInfo.cat](Rml::Element* content) {
             const auto achievements = AchievementSystem::get().getAchievements();
 
             int total = 0, unlocked = 0;
@@ -146,7 +147,7 @@ AchievementsWindow::AchievementsWindow() {
 
             auto& pane = add_child<Pane>(content, Pane::Type::Controlled);
 
-            pane.add_section(fmt::format("{} / {} unlocked", unlocked, total));
+            pane.add_section(fmt::format(fmt::runtime(_("achievements-menu.unlocked-hdr")), unlocked, total));
 
             for (const auto& a : achievements) {
                 if (a.category != cat) {
@@ -155,9 +156,9 @@ AchievementsWindow::AchievementsWindow() {
                 pane.add_child<AchievementRow>(a);
             }
 
-            pane.add_section("Actions");
+            pane.add_section(_("achievements-menu.glitched-h02"));
 
-            auto& clearAllBtn = pane.add_button("Clear All Achievements");
+            auto& clearAllBtn = pane.add_button(_("achievements-menu.gh02-s01"));
             auto* clearAllPtr = &clearAllBtn;
             auto confirmingAll = std::make_shared<bool>(false);
 
@@ -167,23 +168,23 @@ AchievementsWindow::AchievementsWindow() {
                         mDoAud_seStartMenu(kSoundClick);
                         AchievementSystem::get().clearAll();
                         *confirmingAll = false;
-                        clearAllPtr->set_text("Clear All Achievements");
+                        clearAllPtr->set_text(_("achievements-menu.gh02-s01"));
                     } else {
                         *confirmingAll = true;
-                        clearAllPtr->set_text("Are you sure?");
+                        clearAllPtr->set_text(_("achievements-menu.gh02-s02"));
                     }
                     return true;
                 }
                 if (cmd == NavCommand::Cancel && *confirmingAll) {
                     *confirmingAll = false;
-                    clearAllPtr->set_text("Clear All Achievements");
+                    clearAllPtr->set_text(_("achievements-menu.gh02-s01"));
                     return true;
                 }
                 return false;
             });
             clearAllBtn.listen(Rml::EventId::Blur, [clearAllPtr, confirmingAll](Rml::Event&) {
                 *confirmingAll = false;
-                clearAllPtr->set_text("Clear All Achievements");
+                clearAllPtr->set_text(_("achievements-menu.gh02-s01"));
             });
 
             pane.finalize();

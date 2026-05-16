@@ -66,12 +66,12 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
         mTabBar->set_active_tab(-1);
         const auto dismiss = [](Modal& modal) { modal.pop(); };
         push(std::make_unique<Modal>(Modal::Props{
-            .title = _("tooltip.reset-h01"),
-            .bodyRml = _("tooltip.reset-h01-desc"),
+            .title = _("tab-bar.reset-h01"),
+            .bodyRml = _("tab-bar.rh01-desc"),
             .actions =
                 {
                     ModalAction{
-                        .label = _("tooltip.reset-h01-btn1"),
+                        .label = _("tab-bar.rh01-btn1"),
                         .onPressed =
                             [this, dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundWindowClose);
@@ -79,7 +79,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                             },
                     },
                     ModalAction{
-                        .label = _("tooltip.reset-h01-btn2"),
+                        .label = _("tab-bar.rh01-btn2"),
                         .onPressed =
                             [this, dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundClick);
@@ -101,12 +101,12 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
         mTabBar->set_active_tab(-1);
         const auto dismiss = [](Modal& modal) { modal.pop(); };
         push(std::make_unique<Modal>(Modal::Props{
-            .title = _("tooltip.quit-h01"),
-            .bodyRml = _("tooltip.quit-h01-desc"),
+            .title = _("tab-bar.quit-h01"),
+            .bodyRml = _("tab-bar.qh01-desc"),
             .actions =
                 {
                     ModalAction{
-                        .label = _("tooltip.quit-h01-btn1"),
+                        .label = _("tab-bar.qh01-btn1"),
                         .onPressed =
                             [dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundWindowClose);
@@ -114,7 +114,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                             },
                     },
                     ModalAction{
-                        .label = _("tooltip.quit-h01-btn2"),
+                        .label = _("tab-bar.qh01-btn2"),
                         .onPressed =
                             [dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundClick);

@@ -226,139 +226,139 @@ struct itemInfo {
 };
 
 std::map<int, itemInfo> itemMap = {
-    {dItemNo_HEART_e, {"Heart"}},
-    {dItemNo_GREEN_RUPEE_e, {"Green Rupee"}},
-    {dItemNo_BLUE_RUPEE_e, {"Blue Rupee"}},
-    {dItemNo_YELLOW_RUPEE_e, {"Yellow Rupee"}},
-    {dItemNo_RED_RUPEE_e, {"Red Rupee"}},
-    {dItemNo_PURPLE_RUPEE_e, {"Purple Rupee"}},
-    {dItemNo_ORANGE_RUPEE_e, {"Orange Rupee"}},
-    {dItemNo_SILVER_RUPEE_e, {"Silver Rupee"}},
-    {dItemNo_S_MAGIC_e, {"Small Magic"}},
-    {dItemNo_L_MAGIC_e, {"Large Magic"}},
-    {dItemNo_BOMB_5_e, {"Bombs (5)"}},
-    {dItemNo_BOMB_10_e, {"Bombs (10)"}},
-    {dItemNo_BOMB_20_e, {"Bombs (20)"}},
-    {dItemNo_BOMB_30_e, {"Bombs (30)"}},
-    {dItemNo_ARROW_10_e, {"Arrows (10)"}},
-    {dItemNo_ARROW_20_e, {"Arrows (20)"}},
-    {dItemNo_ARROW_30_e, {"Arrows (30)"}},
-    {dItemNo_ARROW_1_e, {"Arrows (1)"}},
-    {dItemNo_PACHINKO_SHOT_e, {"Pumpkin Seeds"}},
+    {dItemNo_HEART_e, {_("editor-menu.inventory-e01")}},
+    {dItemNo_GREEN_RUPEE_e, {_("editor-menu.inventory-e02")}},
+    {dItemNo_BLUE_RUPEE_e, {_("editor-menu.inventory-e03")}},
+    {dItemNo_YELLOW_RUPEE_e, {_("editor-menu.inventory-e04")}},
+    {dItemNo_RED_RUPEE_e, {_("editor-menu.inventory-e05")}},
+    {dItemNo_PURPLE_RUPEE_e, {_("editor-menu.inventory-e06")}},
+    {dItemNo_ORANGE_RUPEE_e, {_("editor-menu.inventory-e07")}},
+    {dItemNo_SILVER_RUPEE_e, {_("editor-menu.inventory-e08")}},
+    {dItemNo_S_MAGIC_e, {_("editor-menu.inventory-e09")}},
+    {dItemNo_L_MAGIC_e, {_("editor-menu.inventory-e10")}},
+    {dItemNo_BOMB_5_e, {_("editor-menu.inventory-e11")}},
+    {dItemNo_BOMB_10_e, {_("editor-menu.inventory-e12")}},
+    {dItemNo_BOMB_20_e, {_("editor-menu.inventory-e13")}},
+    {dItemNo_BOMB_30_e, {_("editor-menu.inventory-e15")}},
+    {dItemNo_ARROW_10_e, {_("editor-menu.inventory-e16")}},
+    {dItemNo_ARROW_20_e, {_("editor-menu.inventory-e17")}},
+    {dItemNo_ARROW_30_e, {_("editor-menu.inventory-e18")}},
+    {dItemNo_ARROW_1_e, {_("editor-menu.inventory-e19")}},
+    {dItemNo_PACHINKO_SHOT_e, {_("editor-menu.inventory-e20")}},
     {dItemNo_NOENTRY_19_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_20_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_21_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_WATER_BOMB_5_e, {"Water Bombs (5)"}},
-    {dItemNo_WATER_BOMB_10_e, {"Water Bombs (10)"}},
-    {dItemNo_WATER_BOMB_20_e, {"Water Bombs (20)"}},
-    {dItemNo_WATER_BOMB_30_e, {"Water Bombs (30)"}},
-    {dItemNo_BOMB_INSECT_5_e, {"Bomblings (5)"}},
-    {dItemNo_BOMB_INSECT_10_e, {"Bomblings (10)"}},
-    {dItemNo_BOMB_INSECT_20_e, {"Bomblings (20)"}},
-    {dItemNo_BOMB_INSECT_30_e, {"Bomblings (30)"}},
-    {dItemNo_RECOVERY_FAILY_e, {"Fairy"}},
-    {dItemNo_TRIPLE_HEART_e, {"Triple Hearts"}},
-    {dItemNo_SMALL_KEY_e, {"Small Key"}},
-    {dItemNo_KAKERA_HEART_e, {"Piece of Heart"}},
-    {dItemNo_UTAWA_HEART_e, {"Heart Container"}},
-    {dItemNo_MAP_e, {"Dungeon Map"}},
-    {dItemNo_COMPUS_e, {"Compass"}},
-    {dItemNo_DUNGEON_EXIT_e, {"Ooccoo Sr. (First Time)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_BOSS_KEY_e, {"Boss Key"}},
-    {dItemNo_DUNGEON_BACK_e, {"Ooccoo Jr.", ITEMTYPE_EQUIP_e}},
+    {dItemNo_WATER_BOMB_5_e, {_("editor-menu.inventory-e22")}},
+    {dItemNo_WATER_BOMB_10_e, {_("editor-menu.inventory-e23")}},
+    {dItemNo_WATER_BOMB_20_e, {_("editor-menu.inventory-e24")}},
+    {dItemNo_WATER_BOMB_30_e, {_("editor-menu.inventory-e188")}},
+    {dItemNo_BOMB_INSECT_5_e, {_("editor-menu.inventory-e25")}},
+    {dItemNo_BOMB_INSECT_10_e, {_("editor-menu.inventory-e26")}},
+    {dItemNo_BOMB_INSECT_20_e, {_("editor-menu.inventory-e27")}},
+    {dItemNo_BOMB_INSECT_30_e, {_("editor-menu.inventory-e28")}},
+    {dItemNo_RECOVERY_FAILY_e, {_("editor-menu.inventory-e29")}},
+    {dItemNo_TRIPLE_HEART_e, {_("editor-menu.inventory-e30")}},
+    {dItemNo_SMALL_KEY_e, {_("editor-menu.inventory-e31")}},
+    {dItemNo_KAKERA_HEART_e, {_("editor-menu.inventory-e32")}},
+    {dItemNo_UTAWA_HEART_e, {_("editor-menu.inventory-e33")}},
+    {dItemNo_MAP_e, {_("editor-menu.inventory-e34")}},
+    {dItemNo_COMPUS_e, {_("editor-menu.inventory-e35")}},
+    {dItemNo_DUNGEON_EXIT_e, {_("editor-menu.inventory-e36"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_BOSS_KEY_e, {_("editor-menu.inventory-e37")}},
+    {dItemNo_DUNGEON_BACK_e, {_("editor-menu.inventory-e38"), ITEMTYPE_EQUIP_e}},
     {dItemNo_SWORD_e, {_("editor-menu.inventory-e39")}},
     {dItemNo_MASTER_SWORD_e, {_("editor-menu.inventory-e40")}},
     {dItemNo_WOOD_SHIELD_e, {_("editor-menu.inventory-e41")}},
     {dItemNo_SHIELD_e, {_("editor-menu.inventory-e42")}},
     {dItemNo_HYLIA_SHIELD_e, {_("editor-menu.inventory-e43")}},
-    {dItemNo_TKS_LETTER_e, {"Ooccoo's Note", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WEAR_CASUAL_e, {"Ordon Clothes"}},
-    {dItemNo_WEAR_KOKIRI_e, {"Hero's Clothes"}},
-    {dItemNo_ARMOR_e, {"Magic Armor"}},
-    {dItemNo_WEAR_ZORA_e, {"Zora Armor"}},
-    {dItemNo_MAGIC_LV1_e, {"Magic Level 1"}},
-    {dItemNo_DUNGEON_EXIT_2_e, {"Ooccoo Sr.", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WALLET_LV1_e, {"Wallet"}},
-    {dItemNo_WALLET_LV2_e, {"Big Wallet"}},
-    {dItemNo_WALLET_LV3_e, {"Giant Wallet"}},
+    {dItemNo_TKS_LETTER_e, {_("editor-menu.inventory-e44"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WEAR_CASUAL_e, {_("editor-menu.inventory-e45")}},
+    {dItemNo_WEAR_KOKIRI_e, {_("editor-menu.inventory-e46")}},
+    {dItemNo_ARMOR_e, {_("editor-menu.inventory-e47")}},
+    {dItemNo_WEAR_ZORA_e, {_("editor-menu.inventory-e48")}},
+    {dItemNo_MAGIC_LV1_e, {_("editor-menu.inventory-e49")}},
+    {dItemNo_DUNGEON_EXIT_2_e, {_("editor-menu.inventory-e50"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WALLET_LV1_e, {_("editor-menu.inventory-e51")}},
+    {dItemNo_WALLET_LV2_e, {_("editor-menu.inventory-e52")}},
+    {dItemNo_WALLET_LV3_e, {_("editor-menu.inventory-e53")}},
     {dItemNo_NOENTRY_55_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_56_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_57_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_58_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_59_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_60_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_ZORAS_JEWEL_e, {"Coral Earring", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HAWK_EYE_e, {"Hawkeye", ITEMTYPE_EQUIP_e}},
+    {dItemNo_ZORAS_JEWEL_e, {_("editor-menu.inventory-e54"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HAWK_EYE_e, {_("editor-menu.inventory-e55"), ITEMTYPE_EQUIP_e}},
     {dItemNo_WOOD_STICK_e, {_("editor-menu.inventory-e56")}},
-    {dItemNo_BOOMERANG_e, {"Gale Boomerang", ITEMTYPE_EQUIP_e}},
-    {dItemNo_SPINNER_e, {"Spinner", ITEMTYPE_EQUIP_e}},
-    {dItemNo_IRONBALL_e, {"Ball and Chain", ITEMTYPE_EQUIP_e}},
-    {dItemNo_BOW_e, {"Hero's Bow", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HOOKSHOT_e, {"Clawshot", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HVY_BOOTS_e, {"Iron Boots", ITEMTYPE_EQUIP_e}},
-    {dItemNo_COPY_ROD_e, {"Dominion Rod", ITEMTYPE_EQUIP_e}},
-    {dItemNo_W_HOOKSHOT_e, {"Double Clawshots", ITEMTYPE_EQUIP_e}},
-    {dItemNo_KANTERA_e, {"Lantern", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LIGHT_SWORD_e, {_("editor-menu.inventory-e66")}},
-    {dItemNo_FISHING_ROD_1_e, {"Fishing Rod", ITEMTYPE_EQUIP_e}},
-    {dItemNo_PACHINKO_e, {"Slingshot", ITEMTYPE_EQUIP_e}},
-    {dItemNo_COPY_ROD_2_e, {"Dominion Rod (Uncharged)"}},
+    {dItemNo_BOOMERANG_e, {_("editor-menu.inventory-e57"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_SPINNER_e, {_("editor-menu.inventory-e58"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_IRONBALL_e, {_("editor-menu.inventory-e59"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_BOW_e, {_("editor-menu.inventory-e60"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HOOKSHOT_e, {_("editor-menu.inventory-e61"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HVY_BOOTS_e, {_("editor-menu.inventory-e62"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_COPY_ROD_e, {_("editor-menu.inventory-e63"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_W_HOOKSHOT_e, {_("editor-menu.inventory-e64"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_KANTERA_e, {_("editor-menu.inventory-e65"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LIGHT_SWORD_e, {_(_("editor-menu.inventory-e66"))}},
+    {dItemNo_FISHING_ROD_1_e, {_("editor-menu.inventory-e67"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_PACHINKO_e, {_("editor-menu.inventory-e68"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_COPY_ROD_2_e, {_("editor-menu.inventory-e69")}},
     {dItemNo_NOENTRY_77_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_78_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_BOMB_BAG_LV2_e, {"Giant Bomb Bag"}},
-    {dItemNo_BOMB_BAG_LV1_e, {"Empty Bomb Bag", ITEMTYPE_EQUIP_e}},
-    {dItemNo_BOMB_IN_BAG_e, {"Bomb Bag"}},
+    {dItemNo_BOMB_BAG_LV2_e, {_("editor-menu.inventory-e70")}},
+    {dItemNo_BOMB_BAG_LV1_e, {_("editor-menu.inventory-e71"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_BOMB_IN_BAG_e, {_("editor-menu.inventory-e72")}},
     {dItemNo_NOENTRY_82_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_LIGHT_ARROW_e, {"Light Arrow"}},
-    {dItemNo_ARROW_LV1_e, {"Quiver"}},
-    {dItemNo_ARROW_LV2_e, {"Big Quiver"}},
-    {dItemNo_ARROW_LV3_e, {"Giant Quiver"}},
+    {dItemNo_LIGHT_ARROW_e, {_("editor-menu.inventory-e73")}},
+    {dItemNo_ARROW_LV1_e, {_("editor-menu.inventory-e74")}},
+    {dItemNo_ARROW_LV2_e, {_("editor-menu.inventory-e75")}},
+    {dItemNo_ARROW_LV3_e, {_("editor-menu.inventory-e76")}},
     {dItemNo_NOENTRY_87_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_LURE_ROD_e, {"Fishing Rod (Lure)"}},
-    {dItemNo_BOMB_ARROW_e, {"Bomb Arrow"}},
-    {dItemNo_HAWK_ARROW_e, {"Hawk Arrow"}},
-    {dItemNo_BEE_ROD_e, {"Fishing Rod (Bee Larva)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_JEWEL_ROD_e, {"Fishing Rod (Earring)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WORM_ROD_e, {"Fishing Rod (Worm)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_JEWEL_BEE_ROD_e, {"Fishing Rod (Earring + Bee Larva)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_JEWEL_WORM_ROD_e, {"Fishing Rod (Earring + Worm)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_EMPTY_BOTTLE_e, {"Empty Bottle", ITEMTYPE_EQUIP_e}},
-    {dItemNo_RED_BOTTLE_e, {"Red Potion", ITEMTYPE_EQUIP_e}},
-    {dItemNo_GREEN_BOTTLE_e, {"Green Potion", ITEMTYPE_EQUIP_e}},
-    {dItemNo_BLUE_BOTTLE_e, {"Blue Potion", ITEMTYPE_EQUIP_e}},
-    {dItemNo_MILK_BOTTLE_e, {"Milk Bottle", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HALF_MILK_BOTTLE_e, {"Half Milk Bottle", ITEMTYPE_EQUIP_e}},
-    {dItemNo_OIL_BOTTLE_e, {"Lantern Oil", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WATER_BOTTLE_e, {"Water Bottle", ITEMTYPE_EQUIP_e}},
-    {dItemNo_OIL_BOTTLE_2_e, {"Lantern Oil (Scooped)"}},
-    {dItemNo_RED_BOTTLE_2_e, {"Red Potion (Scooped)"}},
-    {dItemNo_UGLY_SOUP_e, {"Nasty Soup", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HOT_SPRING_e, {"Hotspring Water", ITEMTYPE_EQUIP_e}},
-    {dItemNo_FAIRY_e, {"Fairy", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HOT_SPRING_2_e, {"Hotspring Water (Shop)"}},
-    {dItemNo_OIL2_e, {"Lantern Refill (Scooped)"}},
-    {dItemNo_OIL_e, {"Lantern Refill (Shop)"}},
-    {dItemNo_NORMAL_BOMB_e, {"Bombs", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WATER_BOMB_e, {"Water Bombs", ITEMTYPE_EQUIP_e}},
-    {dItemNo_POKE_BOMB_e, {"Bomblings", ITEMTYPE_EQUIP_e}},
-    {dItemNo_FAIRY_DROP_e, {"Great Fairy's Tears", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WORM_e, {"Worm", ITEMTYPE_EQUIP_e}},
-    {dItemNo_DROP_BOTTLE_e, {"Great Fairy Tears (Jovani)"}},
-    {dItemNo_BEE_CHILD_e, {"Bee Larva", ITEMTYPE_EQUIP_e}},
-    {dItemNo_CHUCHU_RARE_e, {"Rare Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_CHUCHU_RED_e, {"Red Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_CHUCHU_BLUE_e, {"Blue Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_CHUCHU_GREEN_e, {"Green Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_CHUCHU_YELLOW_e, {"Yellow Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_CHUCHU_PURPLE_e, {"Purple Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LV1_SOUP_e, {"Simple Soup", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LV2_SOUP_e, {"Good Soup", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LV3_SOUP_e, {"Superb Soup", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LETTER_e, {"Renado's Letter", ITEMTYPE_EQUIP_e}},
-    {dItemNo_BILL_e, {"Invoice", ITEMTYPE_EQUIP_e}},
-    {dItemNo_WOOD_STATUE_e, {"Wooden Statue", ITEMTYPE_EQUIP_e}},
-    {dItemNo_IRIAS_PENDANT_e, {"Ilia's Charm", ITEMTYPE_EQUIP_e}},
-    {dItemNo_HORSE_FLUTE_e, {"Horse Call", ITEMTYPE_EQUIP_e}},
+    {dItemNo_LURE_ROD_e, {_("editor-menu.inventory-e77")}},
+    {dItemNo_BOMB_ARROW_e, {_("editor-menu.inventory-e78")}},
+    {dItemNo_HAWK_ARROW_e, {_("editor-menu.inventory-e79")}},
+    {dItemNo_BEE_ROD_e, {_("editor-menu.inventory-e80"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_JEWEL_ROD_e, {_("editor-menu.inventory-e81"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WORM_ROD_e, {_("editor-menu.inventory-e82"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_JEWEL_BEE_ROD_e, {_("editor-menu.inventory-e83"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_JEWEL_WORM_ROD_e, {_("editor-menu.inventory-e84"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_EMPTY_BOTTLE_e, {_("editor-menu.inventory-e85"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_RED_BOTTLE_e, {_("editor-menu.inventory-e86"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_GREEN_BOTTLE_e, {_("editor-menu.inventory-e87"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_BLUE_BOTTLE_e, {_("editor-menu.inventory-e88"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_MILK_BOTTLE_e, {_("editor-menu.inventory-e89"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HALF_MILK_BOTTLE_e, {_("editor-menu.inventory-e90"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_OIL_BOTTLE_e, {_("editor-menu.inventory-e91"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WATER_BOTTLE_e, {_("editor-menu.inventory-e92"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_OIL_BOTTLE_2_e, {_("editor-menu.inventory-e93")}},
+    {dItemNo_RED_BOTTLE_2_e, {_("editor-menu.inventory-e94")}},
+    {dItemNo_UGLY_SOUP_e, {_("editor-menu.inventory-e95"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HOT_SPRING_e, {_("editor-menu.inventory-e96"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_FAIRY_e, {_("editor-menu.inventory-e29"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HOT_SPRING_2_e, {_("editor-menu.inventory-e97")}},
+    {dItemNo_OIL2_e, {_("editor-menu.inventory-e98")}},
+    {dItemNo_OIL_e, {_("editor-menu.inventory-e99")}},
+    {dItemNo_NORMAL_BOMB_e, {_("editor-menu.inventory-e100"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WATER_BOMB_e, {_("editor-menu.inventory-e101"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_POKE_BOMB_e, {_("editor-menu.inventory-e102"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_FAIRY_DROP_e, {_("editor-menu.inventory-e103"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WORM_e, {_("editor-menu.inventory-e104"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_DROP_BOTTLE_e, {_("editor-menu.inventory-e105")}},
+    {dItemNo_BEE_CHILD_e, {_("editor-menu.inventory-e106"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_CHUCHU_RARE_e, {_("editor-menu.inventory-e107"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_CHUCHU_RED_e, {_("editor-menu.inventory-e108"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_CHUCHU_BLUE_e, {_("editor-menu.inventory-e109"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_CHUCHU_GREEN_e, {_("editor-menu.inventory-e110"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_CHUCHU_YELLOW_e, {_("editor-menu.inventory-e111"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_CHUCHU_PURPLE_e, {_("editor-menu.inventory-e112"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LV1_SOUP_e, {_("editor-menu.inventory-e113"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LV2_SOUP_e, {_("editor-menu.inventory-e114"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LV3_SOUP_e, {_("editor-menu.inventory-e115"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LETTER_e, {_("editor-menu.inventory-e116"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_BILL_e, {_("editor-menu.inventory-e117"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_WOOD_STATUE_e, {_("editor-menu.inventory-e118"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_IRIAS_PENDANT_e, {_("editor-menu.inventory-e119"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_HORSE_FLUTE_e, {_("editor-menu.inventory-e120"), ITEMTYPE_EQUIP_e}},
     {dItemNo_NOENTRY_133_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_134_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_135_e, {_("editor-menu.inventory-e21")}},
@@ -370,8 +370,8 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_141_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_142_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_143_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_RAFRELS_MEMO_e, {"Auru's Memo", ITEMTYPE_EQUIP_e}},
-    {dItemNo_ASHS_SCRIBBLING_e, {"Ashei's Sketch", ITEMTYPE_EQUIP_e}},
+    {dItemNo_RAFRELS_MEMO_e, {_("editor-menu.inventory-e121"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_ASHS_SCRIBBLING_e, {_("editor-menu.inventory-e122"), ITEMTYPE_EQUIP_e}},
     {dItemNo_NOENTRY_146_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_147_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_148_e, {_("editor-menu.inventory-e21")}},
@@ -382,18 +382,18 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_153_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_154_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_155_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_CHUCHU_YELLOW2_e, {"Lantern Refill (Yellow Chu)"}},
-    {dItemNo_OIL_BOTTLE3_e, {"Lantern Oil (Coro)"}},
-    {dItemNo_SHOP_BEE_CHILD_e, {"Bee Larve (Shop)"}},
-    {dItemNo_CHUCHU_BLACK_e, {"Black Chu Jelly", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LIGHT_DROP_e, {"Tear of Light"}},
-    {dItemNo_DROP_CONTAINER_e, {"Vessel of Light (Faron)"}},
-    {dItemNo_DROP_CONTAINER02_e, {"Vessel of Light (Eldin)"}},
-    {dItemNo_DROP_CONTAINER03_e, {"Vessel of Light (Lanayru)"}},
-    {dItemNo_FILLED_CONTAINER_e, {"Vessel of Light (Filled)"}},
-    {dItemNo_MIRROR_PIECE_2_e, {"Mirror Shard (Snowpeak Ruins)"}},
-    {dItemNo_MIRROR_PIECE_3_e, {"Mirror Shard (Temple of Time)"}},
-    {dItemNo_MIRROR_PIECE_4_e, {"Mirror Shard (City in the Sky)"}},
+    {dItemNo_CHUCHU_YELLOW2_e, {_("editor-menu.inventory-e123")}},
+    {dItemNo_OIL_BOTTLE3_e, {_("editor-menu.inventory-e189")}},
+    {dItemNo_SHOP_BEE_CHILD_e, {_("editor-menu.inventory-e124")}},
+    {dItemNo_CHUCHU_BLACK_e, {_("editor-menu.inventory-e125"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LIGHT_DROP_e, {_("editor-menu.inventory-e126")}},
+    {dItemNo_DROP_CONTAINER_e, {_("editor-menu.inventory-e127")}},
+    {dItemNo_DROP_CONTAINER02_e, {_("editor-menu.inventory-e128")}},
+    {dItemNo_DROP_CONTAINER03_e, {_("editor-menu.inventory-e129")}},
+    {dItemNo_FILLED_CONTAINER_e, {_("editor-menu.inventory-e130")}},
+    {dItemNo_MIRROR_PIECE_2_e, {_("editor-menu.inventory-e131")}},
+    {dItemNo_MIRROR_PIECE_3_e, {_("editor-menu.inventory-e132")}},
+    {dItemNo_MIRROR_PIECE_4_e, {_("editor-menu.inventory-e133")}},
     {dItemNo_NOENTRY_168_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_169_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_170_e, {_("editor-menu.inventory-e21")}},
@@ -418,30 +418,30 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_189_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_190_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_191_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_M_BEETLE_e, {"Beetle (M)"}},
-    {dItemNo_F_BEETLE_e, {"Beetle (F)"}},
-    {dItemNo_M_BUTTERFLY_e, {"Butterfly (M)"}},
-    {dItemNo_F_BUTTERFLY_e, {"Butterfly (F)"}},
-    {dItemNo_M_STAG_BEETLE_e, {"Stag Beetle (M)"}},
-    {dItemNo_F_STAG_BEETLE_e, {"Stag Beetle (F)"}},
-    {dItemNo_M_GRASSHOPPER_e, {"Grasshopper (M)"}},
-    {dItemNo_F_GRASSHOPPER_e, {"Grasshopper (F)"}},
-    {dItemNo_M_NANAFUSHI_e, {"Phasmid (M)"}},
-    {dItemNo_F_NANAFUSHI_e, {"Phasmid (F)"}},
-    {dItemNo_M_DANGOMUSHI_e, {"Pill Bug (M)"}},
-    {dItemNo_F_DANGOMUSHI_e, {"Pill Bug (F)"}},
-    {dItemNo_M_MANTIS_e, {"Mantis (M)"}},
-    {dItemNo_F_MANTIS_e, {"Mantis (F)"}},
-    {dItemNo_M_LADYBUG_e, {"Ladybug (M)"}},
-    {dItemNo_F_LADYBUG_e, {"Ladybug (F)"}},
-    {dItemNo_M_SNAIL_e, {"Snail (M)"}},
-    {dItemNo_F_SNAIL_e, {"Snail (F)"}},
-    {dItemNo_M_DRAGONFLY_e, {"Dragonfly (M)"}},
-    {dItemNo_F_DRAGONFLY_e, {"Dragonfly (F)"}},
-    {dItemNo_M_ANT_e, {"Ant (M)"}},
-    {dItemNo_F_ANT_e, {"Ant (F)"}},
-    {dItemNo_M_MAYFLY_e, {"Mayfly (M)"}},
-    {dItemNo_F_MAYFLY_e, {"Mayfly (F)"}},
+    {dItemNo_M_BEETLE_e, {_("editor-menu.inventory-e140")}},
+    {dItemNo_F_BEETLE_e, {_("editor-menu.inventory-e141")}},
+    {dItemNo_M_BUTTERFLY_e, {_("editor-menu.inventory-e142")}},
+    {dItemNo_F_BUTTERFLY_e, {_("editor-menu.inventory-e143")}},
+    {dItemNo_M_STAG_BEETLE_e, {_("editor-menu.inventory-e144")}},
+    {dItemNo_F_STAG_BEETLE_e, {_("editor-menu.inventory-e145")}},
+    {dItemNo_M_GRASSHOPPER_e, {_("editor-menu.inventory-e146")}},
+    {dItemNo_F_GRASSHOPPER_e, {_("editor-menu.inventory-e147")}},
+    {dItemNo_M_NANAFUSHI_e, {_("editor-menu.inventory-e148")}},
+    {dItemNo_F_NANAFUSHI_e, {_("editor-menu.inventory-e149")}},
+    {dItemNo_M_DANGOMUSHI_e, {_("editor-menu.inventory-e150")}},
+    {dItemNo_F_DANGOMUSHI_e, {_("editor-menu.inventory-e151")}},
+    {dItemNo_M_MANTIS_e, {_("editor-menu.inventory-e152")}},
+    {dItemNo_F_MANTIS_e, {_("editor-menu.inventory-e153")}},
+    {dItemNo_M_LADYBUG_e, {_("editor-menu.inventory-e154")}},
+    {dItemNo_F_LADYBUG_e, {_("editor-menu.inventory-e155")}},
+    {dItemNo_M_SNAIL_e, {_("editor-menu.inventory-e156")}},
+    {dItemNo_F_SNAIL_e, {_("editor-menu.inventory-e157")}},
+    {dItemNo_M_DRAGONFLY_e, {_("editor-menu.inventory-e158")}},
+    {dItemNo_F_DRAGONFLY_e, {_("editor-menu.inventory-e159")}},
+    {dItemNo_M_ANT_e, {_("editor-menu.inventory-e160")}},
+    {dItemNo_F_ANT_e, {_("editor-menu.inventory-e161")}},
+    {dItemNo_M_MAYFLY_e, {_("editor-menu.inventory-e162")}},
+    {dItemNo_F_MAYFLY_e, {_("editor-menu.inventory-e163")}},
     {dItemNo_NOENTRY_216_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_217_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_218_e, {_("editor-menu.inventory-e21")}},
@@ -450,7 +450,7 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_221_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_222_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_223_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_POU_SPIRIT_e, {"Poe Soul"}},
+    {dItemNo_POU_SPIRIT_e, {_("editor-menu.inventory-e164")}},
     {dItemNo_NOENTRY_225_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_226_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_227_e, {_("editor-menu.inventory-e21")}},
@@ -459,35 +459,35 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_NOENTRY_230_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_231_e, {_("editor-menu.inventory-e21")}},
     {dItemNo_NOENTRY_232_e, {_("editor-menu.inventory-e21")}},
-    {dItemNo_ANCIENT_DOCUMENT_e, {"Ancient Sky Book", ITEMTYPE_EQUIP_e}},
-    {dItemNo_AIR_LETTER_e, {"Ancient Sky Book (Partial)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_ANCIENT_DOCUMENT2_e, {"Ancient Sky Book (Filled)", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LV7_DUNGEON_EXIT_e, {"Ooccoo Sr. (City in the Sky)"}},
-    {dItemNo_LINKS_SAVINGS_e, {"Purple Rupee (Link's Savings)"}},
-    {dItemNo_SMALL_KEY2_e, {"Small Key (North Faron Gate)"}},
-    {dItemNo_POU_FIRE1_e, {"Poe Fire 1"}},
-    {dItemNo_POU_FIRE2_e, {"Poe Fire 2"}},
-    {dItemNo_POU_FIRE3_e, {"Poe Fire 3"}},
-    {dItemNo_POU_FIRE4_e, {"Poe Fire 4"}},
-    {dItemNo_BOSSRIDER_KEY_e, {"Hyrule Field Keys"}},
-    {dItemNo_TOMATO_PUREE_e, {"Ordon Pumpkin", ITEMTYPE_EQUIP_e}},
-    {dItemNo_TASTE_e, {"Ordon Goat Cheese", ITEMTYPE_EQUIP_e}},
-    {dItemNo_LV5_BOSS_KEY_e, {"Bedroom Key"}},
-    {dItemNo_SURFBOARD_e, {"Surf Leaf"}},
-    {dItemNo_KANTERA2_e, {"Lantern (Reclaimed)"}},
-    {dItemNo_L2_KEY_PIECES1_e, {"Key Shard (1)"}},
-    {dItemNo_L2_KEY_PIECES2_e, {"Key Shard (2)"}},
-    {dItemNo_L2_KEY_PIECES3_e, {"Key Shard (3)"}},
-    {dItemNo_KEY_OF_CARAVAN_e, {"Bulblin Camp Key"}},
-    {dItemNo_LV2_BOSS_KEY_e, {"Goron Mines Boss Key"}},
-    {dItemNo_KEY_OF_FILONE_e, {"South Faron Gate Key"}},
+    {dItemNo_ANCIENT_DOCUMENT_e, {_("editor-menu.inventory-e165"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_AIR_LETTER_e, {_("editor-menu.inventory-e166"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_ANCIENT_DOCUMENT2_e, {_("editor-menu.inventory-e167"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LV7_DUNGEON_EXIT_e, {_("editor-menu.inventory-e168")}},
+    {dItemNo_LINKS_SAVINGS_e, {_("editor-menu.inventory-e169")}},
+    {dItemNo_SMALL_KEY2_e, {_("editor-menu.inventory-e170")}},
+    {dItemNo_POU_FIRE1_e, {_("editor-menu.inventory-e171")}},
+    {dItemNo_POU_FIRE2_e, {_("editor-menu.inventory-e172")}},
+    {dItemNo_POU_FIRE3_e, {_("editor-menu.inventory-e173")}},
+    {dItemNo_POU_FIRE4_e, {_("editor-menu.inventory-e174")}},
+    {dItemNo_BOSSRIDER_KEY_e, {_("editor-menu.inventory-e175")}},
+    {dItemNo_TOMATO_PUREE_e, {_("editor-menu.inventory-e176"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_TASTE_e, {_("editor-menu.inventory-e177"), ITEMTYPE_EQUIP_e}},
+    {dItemNo_LV5_BOSS_KEY_e, {_("editor-menu.inventory-e178")}},
+    {dItemNo_SURFBOARD_e, {_("editor-menu.inventory-e179")}},
+    {dItemNo_KANTERA2_e, {_("editor-menu.inventory-e180")}},
+    {dItemNo_L2_KEY_PIECES1_e, {_("editor-menu.inventory-e181")}},
+    {dItemNo_L2_KEY_PIECES2_e, {_("editor-menu.inventory-e182")}},
+    {dItemNo_L2_KEY_PIECES3_e, {_("editor-menu.inventory-e183")}},
+    {dItemNo_KEY_OF_CARAVAN_e, {_("editor-menu.inventory-e184")}},
+    {dItemNo_LV2_BOSS_KEY_e, {_("editor-menu.inventory-e185")}},
+    {dItemNo_KEY_OF_FILONE_e, {_("editor-menu.inventory-e186")}},
     {dItemNo_NONE_e, {_("editor-menu.inventory-e187")}},
 };
 
 Rml::String get_item_name(u8 id) {
     const auto it = itemMap.find(id);
     if (it == itemMap.end()) {
-        return fmt::format("Item {}", id);
+        return fmt::format(fmt::runtime(_("editor-menu.inventory-item")), id);
     }
     return it->second.m_name;
 }
@@ -545,91 +545,91 @@ constexpr std::array<u8, 5> smellEntries = {
 };
 
 constexpr std::array fusedShadowEntries = {
-    NamedIndexEntry{"Forest Temple", 0},
-    NamedIndexEntry{"Goron Mines", 1},
-    NamedIndexEntry{"Lakebed Temple", 2},
+    NamedIndexEntry{"editor-menu.collection-fused01", 0},
+    NamedIndexEntry{"editor-menu.collection-fused02", 1},
+    NamedIndexEntry{"editor-menu.collection-fused03", 2},
 };
 
 constexpr std::array mirrorShardEntries = {
-    NamedIndexEntry{"Snowpeak Ruins", 1},
-    NamedIndexEntry{"Temple of Time", 2},
-    NamedIndexEntry{"City in the Sky", 3},
+    NamedIndexEntry{"editor-menu.collection-mirror01", 1},
+    NamedIndexEntry{"editor-menu.collection-mirror02", 2},
+    NamedIndexEntry{"editor-menu.collection-mirror03", 3},
 };
 
 constexpr std::array bugSpeciesEntries = {
-    BugSpeciesEntry{"Ant", dItemNo_M_ANT_e, dItemNo_F_ANT_e, dSv_event_flag_c::F_0421,
+    BugSpeciesEntry{"editor-menu.collection-bugs01", dItemNo_M_ANT_e, dItemNo_F_ANT_e, dSv_event_flag_c::F_0421,
         dSv_event_flag_c::F_0422},
-    BugSpeciesEntry{"Dayfly", dItemNo_M_MAYFLY_e, dItemNo_F_MAYFLY_e, dSv_event_flag_c::F_0423,
+    BugSpeciesEntry{"editor-menu.collection-bugs02", dItemNo_M_MAYFLY_e, dItemNo_F_MAYFLY_e, dSv_event_flag_c::F_0423,
         dSv_event_flag_c::F_0424},
-    BugSpeciesEntry{"Beetle", dItemNo_M_BEETLE_e, dItemNo_F_BEETLE_e, dSv_event_flag_c::F_0401,
+    BugSpeciesEntry{"editor-menu.collection-bugs03", dItemNo_M_BEETLE_e, dItemNo_F_BEETLE_e, dSv_event_flag_c::F_0401,
         dSv_event_flag_c::F_0402},
-    BugSpeciesEntry{"Mantis", dItemNo_M_MANTIS_e, dItemNo_F_MANTIS_e, dSv_event_flag_c::F_0413,
+    BugSpeciesEntry{"editor-menu.collection-bugs04", dItemNo_M_MANTIS_e, dItemNo_F_MANTIS_e, dSv_event_flag_c::F_0413,
         dSv_event_flag_c::F_0414},
-    BugSpeciesEntry{"Stag Beetle", dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
+    BugSpeciesEntry{"editor-menu.collection-bugs05", dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
         dSv_event_flag_c::F_0405, dSv_event_flag_c::F_0406},
-    BugSpeciesEntry{"Pill Bug", dItemNo_M_DANGOMUSHI_e, dItemNo_F_DANGOMUSHI_e,
+    BugSpeciesEntry{"editor-menu.collection-bugs06", dItemNo_M_DANGOMUSHI_e, dItemNo_F_DANGOMUSHI_e,
         dSv_event_flag_c::F_0411, dSv_event_flag_c::F_0412},
-    BugSpeciesEntry{"Butterfly", dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e,
+    BugSpeciesEntry{"editor-menu.collection-bugs07", dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e,
         dSv_event_flag_c::F_0403, dSv_event_flag_c::F_0404},
-    BugSpeciesEntry{"Ladybug", dItemNo_M_LADYBUG_e, dItemNo_F_LADYBUG_e, dSv_event_flag_c::F_0415,
+    BugSpeciesEntry{"editor-menu.collection-bugs08", dItemNo_M_LADYBUG_e, dItemNo_F_LADYBUG_e, dSv_event_flag_c::F_0415,
         dSv_event_flag_c::F_0416},
-    BugSpeciesEntry{"Snail", dItemNo_M_SNAIL_e, dItemNo_F_SNAIL_e, dSv_event_flag_c::F_0417,
+    BugSpeciesEntry{"editor-menu.collection-bugs09", dItemNo_M_SNAIL_e, dItemNo_F_SNAIL_e, dSv_event_flag_c::F_0417,
         dSv_event_flag_c::F_0418},
-    BugSpeciesEntry{"Phasmid", dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e,
+    BugSpeciesEntry{"editor-menu.collection-bugs10", dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e,
         dSv_event_flag_c::F_0409, dSv_event_flag_c::F_0410},
-    BugSpeciesEntry{"Grasshopper", dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e,
+    BugSpeciesEntry{"editor-menu.collection-bugs11", dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e,
         dSv_event_flag_c::F_0407, dSv_event_flag_c::F_0408},
-    BugSpeciesEntry{"Dragonfly", dItemNo_M_DRAGONFLY_e, dItemNo_F_DRAGONFLY_e,
+    BugSpeciesEntry{"editor-menu.collection-bugs12", dItemNo_M_DRAGONFLY_e, dItemNo_F_DRAGONFLY_e,
         dSv_event_flag_c::F_0419, dSv_event_flag_c::F_0420},
 };
 
 constexpr std::array<NamedFlagEntry, 7> hiddenSkillEntries = {
-    NamedFlagEntry{"Ending Blow", dSv_event_flag_c::F_0339},
-    NamedFlagEntry{"Shield Attack", dSv_event_flag_c::F_0338},
-    NamedFlagEntry{"Back Slice", dSv_event_flag_c::F_0340},
-    NamedFlagEntry{"Helm Splitter", dSv_event_flag_c::F_0341},
-    NamedFlagEntry{"Mortal Draw", dSv_event_flag_c::F_0342},
-    NamedFlagEntry{"Jump Strike", dSv_event_flag_c::F_0343},
-    NamedFlagEntry{"Great Spin", dSv_event_flag_c::F_0344},
+    NamedFlagEntry{"editor-menu.collection-skill01", dSv_event_flag_c::F_0339},
+    NamedFlagEntry{"editor-menu.collection-skill02", dSv_event_flag_c::F_0338},
+    NamedFlagEntry{"editor-menu.collection-skill03", dSv_event_flag_c::F_0340},
+    NamedFlagEntry{"editor-menu.collection-skill04", dSv_event_flag_c::F_0341},
+    NamedFlagEntry{"editor-menu.collection-skill05", dSv_event_flag_c::F_0342},
+    NamedFlagEntry{"editor-menu.collection-skill06", dSv_event_flag_c::F_0343},
+    NamedFlagEntry{"editor-menu.collection-skill07", dSv_event_flag_c::F_0344},
 };
 
 constexpr std::array<const char*, 16> letterSenders = {
-    "Renado",
-    "Ooccoo 1",
-    "Ooccoo 2",
-    "The Postman",
-    "Kakariko Goods",
-    "Barnes 1",
-    "Barnes 2",
-    "Barnes Bombs",
-    "Malo Mart",
-    "Telma",
-    "Purlo",
-    "From Jr.",
-    "Princess Agitha",
-    "Lanayru Tourism",
-    "Shad",
-    "Yeta",
+    "editor-menu.collection-sender01",
+    "editor-menu.collection-sender02",
+    "editor-menu.collection-sender03",
+    "editor-menu.collection-sender04",
+    "editor-menu.collection-sender05",
+    "editor-menu.collection-sender06",
+    "editor-menu.collection-sender07",
+    "editor-menu.collection-sender08",
+    "editor-menu.collection-sender09",
+    "editor-menu.collection-sender10",
+    "editor-menu.collection-sender11",
+    "editor-menu.collection-sender12",
+    "editor-menu.collection-sender13",
+    "editor-menu.collection-sender14",
+    "editor-menu.collection-sender15",
+    "editor-menu.collection-sender16",
 };
 
 constexpr std::array<FishSpeciesEntry, 6> fishSpeciesEntries = {
-    FishSpeciesEntry{"Ordon Catfish", 3},
-    FishSpeciesEntry{"Greengill", 5},
-    FishSpeciesEntry{"Reekfish", 4},
-    FishSpeciesEntry{"Hyrule Bass", 0},
-    FishSpeciesEntry{"Hylian Pike", 2},
-    FishSpeciesEntry{"Hylian Loach", 1},
+    FishSpeciesEntry{"editor-menu.collection-fish01", 3},
+    FishSpeciesEntry{"editor-menu.collection-fish02", 5},
+    FishSpeciesEntry{"editor-menu.collection-fish03", 4},
+    FishSpeciesEntry{"editor-menu.collection-fish04", 0},
+    FishSpeciesEntry{"editor-menu.collection-fish05", 2},
+    FishSpeciesEntry{"editor-menu.collection-fish06", 1},
 };
 
 constexpr std::array<const char*, 2> targetTypeNames = {
-    "Hold",
-    "Switch",
+    "editor-menu.config-ctrl01",
+    "editor-menu.config-ctrl02",
 };
 
 constexpr std::array<const char*, 3> soundModeNames = {
-    "Mono",
-    "Stereo",
-    "Surround",
+    "editor-menu.config-sound01",
+    "editor-menu.config-sound02",
+    "editor-menu.config-sound03",
 };
 
 struct DefaultInventoryEntry {
@@ -759,7 +759,7 @@ void populate_toggle_group(Pane& pane, const std::vector<ToggleEntry>& entries) 
     pane.add_section("Items");
     for (const auto& entry : entries) {
         pane.add_button({
-                            .text = entry.text,
+                            .text = _(entry.text),
                             .isSelected = entry.isSelected,
                         })
             .on_pressed([isSelected = entry.isSelected, setSelected = entry.setSelected] {
@@ -859,16 +859,16 @@ Rml::String bug_species_label(const BugSpeciesEntry& bug) {
     if (dComIfGs_isEventBit(bug.femaleTurnInFlag)) {
         ++given;
     }
-    return fmt::format("{} / 2 owned, {} / 2 given", owned, given);
+    return fmt::format(fmt::runtime(_("editor-menu.ch04-btn-desc")), owned, given);
 }
 
 Rml::String fish_species_label(const FishSpeciesEntry& fish) {
     return fmt::format(
-        "{} caught, {} cm", dComIfGs_getFishNum(fish.index), dComIfGs_getFishSize(fish.index));
+        fmt::runtime(_("editor-menu.ch07-btn-desc")), dComIfGs_getFishNum(fish.index), dComIfGs_getFishSize(fish.index));
 }
 
 bool can_edit_item_first_bit(int itemId, const itemInfo& item) {
-    return itemId < 254 && item.m_name != "Reserved";
+    return itemId < 254 && item.m_name != _("editor-menu.ch07-res");
 }
 
 void set_all_item_first_bits(bool owned) {
@@ -882,14 +882,14 @@ void set_all_item_first_bits(bool owned) {
 
 void populate_item_slot_picker(Pane& pane, int slot) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button(fmt::format("Default ({})", get_item_name(get_slot_default(slot))))
+    pane.add_section(_("editor-menu.inventory-h05"));
+    pane.add_button(fmt::format(fmt::runtime(_("editor-menu.invh05-btn1")), get_item_name(get_slot_default(slot))))
         .on_pressed([slot] {
             mDoAud_seStartMenu(kSoundItemChange);
             dComIfGs_setItem(slot, get_slot_default(slot));
         });
 
-    pane.add_section("Items");
+    pane.add_section(_("editor-menu.inventory-h06"));
     pane.add_button(
             {
                 .text = _("editor-menu.editor-none"),
@@ -917,17 +917,17 @@ void populate_item_slot_picker(Pane& pane, int slot) {
 
 void populate_item_flag_picker(Pane& pane) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("Select All").on_pressed([] {
+    pane.add_section(_("editor-menu.inventory-h05"));
+    pane.add_button(_("editor-menu.editor-sa")).on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         set_all_item_first_bits(true);
     });
-    pane.add_button("Clear None").on_pressed([] {
+    pane.add_button(_("editor-menu.editor-cn")).on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         set_all_item_first_bits(false);
     });
 
-    pane.add_section("Items");
+    pane.add_section(_("editor-menu.inventory-h06"));
     for (const auto& [itemId, item] : itemMap) {
         if (!can_edit_item_first_bit(itemId, item)) {
             continue;
@@ -1007,16 +1007,16 @@ void populate_select_equip_picker(Pane& pane, u8& equip, const std::array<u8, Si
 }
 
 static const std::array<Rml::String, 3> walletSizeNames = {
-    "Normal",
-    "Big",
-    "Giant",
+    "editor-menu.collection-size01",
+    "editor-menu.collection-size02",
+    "editor-menu.collection-size03",
 };
 
 void populate_wallet_picker(Pane& pane) {
     pane.clear();
     for (int i = 0; i < walletSizeNames.size(); ++i) {
         pane.add_button({
-                            .text = walletSizeNames[i],
+                            .text = _(walletSizeNames[i]),
                             .isSelected = [i] { return get_player_status()->getWalletSize() == i; },
                         })
             .on_pressed([i] {
@@ -1027,8 +1027,8 @@ void populate_wallet_picker(Pane& pane) {
 }
 
 static const std::array<Rml::String, 2> formNames = {
-    "Human",
-    "Wolf",
+    "editor-menu.collection-form01",
+    "editor-menu.collection-form02",
 };
 
 void populate_form_picker(Pane& pane) {
@@ -1036,7 +1036,7 @@ void populate_form_picker(Pane& pane) {
     for (int i = 0; i < formNames.size(); ++i) {
         pane.add_button(
                 {
-                    .text = formNames[i],
+                    .text = _(formNames[i]),
                     .isSelected = [i] { return get_player_status()->getTransformStatus() == i; },
                 })
             .on_pressed([i] {
@@ -1050,7 +1050,7 @@ void add_toggle_button(Pane& pane, ToggleEntry entry) {
     auto isSelected = std::move(entry.isSelected);
     auto setSelected = std::move(entry.setSelected);
     pane.add_button({
-                        .text = entry.text,
+                        .text = _(entry.text),
                         .isSelected = isSelected,
                     })
         .on_pressed([isSelected, setSelected] {
@@ -1168,19 +1168,19 @@ void populate_collect_clothes_picker(Pane& pane) {
 
 void populate_poe_souls_picker(Pane& pane) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("All 60").on_pressed([] {
+    pane.add_section(_("editor-menu.collection-actions-hdr"));
+    pane.add_button(_("editor-menu.ch03-d01-btn1")).on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setPohSpiritNum(60);
     });
-    pane.add_button("Clear").on_pressed([] {
+    pane.add_button(_("editor-menu.ch03-d01-btn2")).on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setPohSpiritNum(0);
     });
 
-    pane.add_section("Value");
+    pane.add_section(_("editor-menu.collection-value-hdr"));
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Collected",
+        .key = _("editor-menu.ch03-d01-i01"),
         .getValue = [] { return dComIfGs_getPohSpiritNum(); },
         .setValue =
             [](int value) { dComIfGs_setPohSpiritNum(static_cast<u8>(std::clamp(value, 0, 60))); },
@@ -1190,21 +1190,21 @@ void populate_poe_souls_picker(Pane& pane) {
 
 void populate_max_life_picker(Pane& pane) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("3 Hearts").on_pressed([] {
+    pane.add_section(_("editor-menu.collection-actions-hdr"));
+    pane.add_button(_("editor-menu.ch03-d02-btn1")).on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setMaxLife(15);
         dComIfGs_setLife(12);
     });
-    pane.add_button("20 Hearts").on_pressed([] {
+    pane.add_button(_("editor-menu.ch03-d02-btn2")).on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setMaxLife(100);
         dComIfGs_setLife(80);
     });
 
-    pane.add_section("Value");
+    pane.add_section(_("editor-menu.collection-value-hdr"));
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Max Life",
+        .key = _("editor-menu.ch03-d02"),
         .getValue = [] { return dComIfGs_getMaxLife(); },
         .setValue = [](int value) { set_max_life(value); },
         .min = 15,
@@ -1214,33 +1214,33 @@ void populate_max_life_picker(Pane& pane) {
 
 void populate_bug_species_picker(Pane& pane, const BugSpeciesEntry& bug) {
     pane.clear();
-    pane.add_section("Owned");
+    pane.add_section(_("editor-menu.ch04-h01"));
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Male {}", bug.name),
+                  .text = fmt::format(fmt::runtime(_("editor-menu.collection-male")), _(bug.name)),
                   .isSelected = [item = bug.maleItem] { return dComIfGs_isItemFirstBit(item); },
                   .setSelected = [item = bug.maleItem](
                                      bool selected) { set_item_first_bit(item, selected); },
               });
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Female {}", bug.name),
+                  .text = fmt::format(fmt::runtime(_("editor-menu.collection-female")), _(bug.name)),
                   .isSelected = [item = bug.femaleItem] { return dComIfGs_isItemFirstBit(item); },
                   .setSelected = [item = bug.femaleItem](
                                      bool selected) { set_item_first_bit(item, selected); },
               });
 
-    pane.add_section("Given to Agitha");
+    pane.add_section(_("editor-menu.ch04-h02"));
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Male {}", bug.name),
+                  .text = fmt::format(fmt::runtime(_("editor-menu.collection-male")), _(bug.name)),
                   .isSelected = [flag = bug.maleTurnInFlag] { return dComIfGs_isEventBit(flag); },
                   .setSelected = [flag = bug.maleTurnInFlag](
                                      bool selected) { set_event_bit(flag, selected); },
               });
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Female {}", bug.name),
+                  .text = fmt::format(fmt::runtime(_("editor-menu.collection-female")), _(bug.name)),
                   .isSelected = [flag = bug.femaleTurnInFlag] { return dComIfGs_isEventBit(flag); },
                   .setSelected = [flag = bug.femaleTurnInFlag](
                                      bool selected) { set_event_bit(flag, selected); },
@@ -1262,9 +1262,9 @@ void populate_letters_picker(Pane& pane) {
 
 void populate_fish_species_picker(Pane& pane, const FishSpeciesEntry& fish) {
     pane.clear();
-    pane.add_section(fish.name);
+    pane.add_section(_(fish.name));
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Caught",
+        .key = _("editor-menu.ch07-i01"),
         .getValue = [index = fish.index] { return dComIfGs_getFishNum(index); },
         .setValue =
             [index = fish.index](int value) {
@@ -1274,7 +1274,7 @@ void populate_fish_species_picker(Pane& pane, const FishSpeciesEntry& fish) {
         .max = 999,
     });
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Biggest",
+        .key = _("editor-menu.ch07-i02"),
         .getValue = [index = fish.index] { return dComIfGs_getFishSize(index); },
         .setValue =
             [index = fish.index](int value) {
@@ -1287,17 +1287,17 @@ void populate_fish_species_picker(Pane& pane, const FishSpeciesEntry& fish) {
 Rml::String target_type_label() {
     const auto type = get_player_config()->getAttentionType();
     if (type >= targetTypeNames.size()) {
-        return fmt::format("Unknown ({})", type);
+        return fmt::format(fmt::runtime(_("editor-menu.collection-unknown")), type);
     }
-    return targetTypeNames[type];
+    return _(targetTypeNames[type]);
 }
 
 Rml::String sound_mode_label() {
     const auto mode = get_player_config()->getSound();
     if (mode >= soundModeNames.size()) {
-        return fmt::format("Unknown ({})", mode);
+        return fmt::format(fmt::runtime(_("editor-menu.collection-unknown")), mode);
     }
-    return soundModeNames[mode];
+    return _(soundModeNames[mode]);
 }
 
 void populate_target_type_picker(Pane& pane) {
@@ -1305,7 +1305,7 @@ void populate_target_type_picker(Pane& pane) {
     for (u8 type = 0; type < targetTypeNames.size(); ++type) {
         pane
             .add_button({
-                .text = targetTypeNames[type],
+                .text = _(targetTypeNames[type]),
                 .isSelected = [type] { return get_player_config()->getAttentionType() == type; },
             })
             .on_pressed([type] {
@@ -1320,7 +1320,7 @@ void populate_sound_mode_picker(Pane& pane) {
     for (u8 mode = 0; mode < soundModeNames.size(); ++mode) {
         pane.add_button(
                 {
-                    .text = soundModeNames[mode],
+                    .text = _(soundModeNames[mode]),
                     .isSelected = [mode] { return get_player_config()->getSound() == mode; },
                 })
             .on_pressed([mode] {
@@ -1460,13 +1460,13 @@ EditorWindow::EditorWindow() {
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = _("editor-menu.ph02-d09"),
-                .getValue = [] { return walletSizeNames[get_player_status()->getWalletSize()]; },
+                .getValue = [] { return _(walletSizeNames[get_player_status()->getWalletSize()]); },
             }),
             rightPane, [](Pane& pane) { populate_wallet_picker(pane); });
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = _("editor-menu.ph02-d10"),
-                .getValue = [] { return formNames[get_player_status()->getTransformStatus()]; },
+                .getValue = [] { return _(formNames[get_player_status()->getTransformStatus()]); },
             }),
             rightPane, [](Pane& pane) { populate_form_picker(pane); });
 
@@ -1530,14 +1530,14 @@ EditorWindow::EditorWindow() {
             rightPane, {});
     });
 
-    add_tab("Location", [this](Rml::Element* content) {
+    add_tab(_("editor-menu.tab-location"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Save Location");
+        leftPane.add_section(_("editor-menu.location-h01"));
         leftPane
             .register_control(leftPane.add_select_button({
-                                  .key = "Stage",
+                                  .key = _("editor-menu.lh01-d01"),
                                   .getValue =
                                       [] {
                                           return stage_label_for_file(
@@ -1556,7 +1556,7 @@ EditorWindow::EditorWindow() {
             .set_disabled(true);
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Room",
+                .key = _("editor-menu.lh01-i01"),
                 .getValue = [] { return get_player_return_place()->mRoomNo; },
                 .setValue =
                     [](int value) { get_player_return_place()->mRoomNo = static_cast<s8>(value); },
@@ -1566,7 +1566,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Spawn ID",
+                .key = _("editor-menu.lh01-i02"),
                 .getValue = [] { return get_player_return_place()->mPlayerStatus; },
                 .setValue =
                     [](int value) {
@@ -1576,9 +1576,9 @@ EditorWindow::EditorWindow() {
             }),
             rightPane, {});
 
-        leftPane.add_section("Horse Location");
+        leftPane.add_section(_("editor-menu.location-h02"));
         leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
-                                      .key = "Horse Position",
+                                      .key = _("editor-menu.lh02-i01"),
                                       .getValue =
                                           [] {
                                               const auto* horsePlace = get_horse_place();
@@ -1603,7 +1603,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Horse Angle",
+                .key = _("editor-menu.lh02-i02"),
                 .getValue = [] { return get_horse_place()->mAngleY; },
                 .setValue = [](int value) { get_horse_place()->mAngleY = static_cast<s16>(value); },
                 .min = std::numeric_limits<s16>::min(),
@@ -1613,7 +1613,7 @@ EditorWindow::EditorWindow() {
         leftPane
             .register_control(
                 leftPane.add_select_button({
-                    .key = "Horse Stage",
+                    .key = _("editor-menu.lh02-d01"),
                     .getValue =
                         [] { return stage_label_for_file(fixed_string(get_horse_place()->mName)); },
                 }),
@@ -1628,7 +1628,7 @@ EditorWindow::EditorWindow() {
             .set_disabled(true);
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Horse Room",
+                .key = _("editor-menu.lh02-i03"),
                 .getValue = [] { return get_horse_place()->mRoomNo; },
                 .setValue = [](int value) { get_horse_place()->mRoomNo = static_cast<s8>(value); },
                 .min = std::numeric_limits<s8>::min(),
@@ -1637,7 +1637,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Horse Spawn ID",
+                .key = _("editor-menu.lh02-i04"),
                 .getValue = [] { return get_horse_place()->mSpawnId; },
                 .setValue = [](int value) { get_horse_place()->mSpawnId = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
@@ -1645,12 +1645,12 @@ EditorWindow::EditorWindow() {
             rightPane, {});
     });
 
-    add_tab("Inventory", [this](Rml::Element* content) {
+    add_tab(_("editor-menu.tab-inventory"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Item Wheel");
-        leftPane.register_control(leftPane.add_button("Default All").on_pressed([&rightPane] {
+        leftPane.add_section(_("editor-menu.inventory-h01"));
+        leftPane.register_control(leftPane.add_button(_("editor-menu.inventory-da")).on_pressed([&rightPane] {
             mDoAud_seStartMenu(kSoundItemChange);
             for (int slot = 0; slot < 24; ++slot) {
                 dComIfGs_setItem(slot, get_slot_default(slot));
@@ -1658,7 +1658,7 @@ EditorWindow::EditorWindow() {
             rightPane.clear();
         }),
             rightPane, {});
-        leftPane.register_control(leftPane.add_button("Clear All").on_pressed([&rightPane] {
+        leftPane.register_control(leftPane.add_button(_("editor-menu.inventory-ca")).on_pressed([&rightPane] {
             mDoAud_seStartMenu(kSoundItemChange);
             for (int slot = 0; slot < 24; ++slot) {
                 dComIfGs_setItem(slot, dItemNo_NONE_e);
@@ -1675,10 +1675,10 @@ EditorWindow::EditorWindow() {
                 rightPane, [slot](Pane& pane) { populate_item_slot_picker(pane, slot); });
         }
 
-        leftPane.add_section("Amounts");
+        leftPane.add_section(_("editor-menu.inventory-h02"));
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Arrows Amount",
+                .key = _("editor-menu.invh02-i01"),
                 .getValue = [] { return get_player_item_record()->mArrowNum; },
                 .setValue =
                     [](int value) { get_player_item_record()->mArrowNum = static_cast<u8>(value); },
@@ -1687,7 +1687,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Slingshot Amount",
+                .key = _("editor-menu.invh02-i02"),
                 .getValue = [] { return get_player_item_record()->mPachinkoNum; },
                 .setValue =
                     [](int value) {
@@ -1699,7 +1699,7 @@ EditorWindow::EditorWindow() {
         for (int bag = 0; bag < 3; ++bag) {
             leftPane.register_control(
                 leftPane.add_child<NumberButton>(NumberButton::Props{
-                    .key = fmt::format("Bomb Bag {} Amount", bag + 1),
+                    .key = fmt::format(fmt::runtime(_("editor-menu.invh02-i03")), bag + 1),
                     .getValue = [bag] { return get_player_item_record()->mBombNum[bag]; },
                     .setValue =
                         [bag](int value) {
@@ -1712,7 +1712,7 @@ EditorWindow::EditorWindow() {
         for (int bottle = 0; bottle < 4; ++bottle) {
             leftPane.register_control(
                 leftPane.add_child<NumberButton>(NumberButton::Props{
-                    .key = fmt::format("Bottle {} Amount", bottle + 1),
+                    .key = fmt::format(fmt::runtime(_("editor-menu.invh02-i04")), bottle + 1),
                     .getValue = [bottle] { return get_player_item_record()->mBottleNum[bottle]; },
                     .setValue =
                         [bottle](int value) {
@@ -1723,10 +1723,10 @@ EditorWindow::EditorWindow() {
                 rightPane, {});
         }
 
-        leftPane.add_section("Capacities");
+        leftPane.add_section(_("editor-menu.inventory-h03"));
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Arrows Max",
+                .key = _("editor-menu.invh03-i01"),
                 .getValue = [] { return get_player_item_max()->mItemMax[0]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[0] = static_cast<u8>(value); },
@@ -1735,7 +1735,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Normal Bombs Max",
+                .key = _("editor-menu.invh03-i02"),
                 .getValue = [] { return get_player_item_max()->mItemMax[1]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[1] = static_cast<u8>(value); },
@@ -1744,7 +1744,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Water Bombs Max",
+                .key = _("editor-menu.invh03-i03"),
                 .getValue = [] { return get_player_item_max()->mItemMax[2]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[2] = static_cast<u8>(value); },
@@ -1753,7 +1753,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Bomblings Max",
+                .key = _("editor-menu.invh03-i04"),
                 .getValue = [] { return get_player_item_max()->mItemMax[3]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[3] = static_cast<u8>(value); },
@@ -1761,21 +1761,21 @@ EditorWindow::EditorWindow() {
             }),
             rightPane, {});
 
-        leftPane.add_section("Flags");
+        leftPane.add_section(_("editor-menu.inventory-h04"));
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Obtained Items",
-                                      .getValue = [] { return "Edit"; },
+                                      .key = _("editor-menu.invh04-s01"),
+                                      .getValue = [] { return _("editor-menu.invh04-s01-edit"); },
                                   }),
             rightPane, [](Pane& pane) { populate_item_flag_picker(pane); });
     });
-    add_tab("Collection", [this](Rml::Element* content) {
+    add_tab(_("editor-menu.tab-collection"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Equipment");
+        leftPane.add_section(_("editor-menu.collection-h01"));
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Swords",
+                .key = _("editor-menu.ch01-d01"),
                 .getValue =
                     [] {
                         return count_label(
@@ -1786,7 +1786,7 @@ EditorWindow::EditorWindow() {
             [](Pane& pane) { populate_toggle_group(pane, item_toggle_entries(swordEntries)); });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Shields",
+                .key = _("editor-menu.ch01-d02"),
                 .getValue =
                     [] {
                         return count_label(
@@ -1796,15 +1796,15 @@ EditorWindow::EditorWindow() {
             rightPane,
             [](Pane& pane) { populate_toggle_group(pane, item_toggle_entries(shieldEntries)); });
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Clothing",
+                                      .key = _("editor-menu.ch01-d03"),
                                       .getValue = [] { return count_label(count_clothing(), 4); },
                                   }),
             rightPane, [](Pane& pane) { populate_collect_clothes_picker(pane); });
 
-        leftPane.add_section("Key Items");
+        leftPane.add_section(_("editor-menu.inventory-h02"));
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Fused Shadows",
+                .key = _("editor-menu.ch02-d01"),
                 .getValue =
                     [] {
                         return count_label(
@@ -1816,7 +1816,7 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Mirror Shards",
+                .key = _("editor-menu.ch02-d02"),
                 .getValue =
                     [] {
                         return count_label(
@@ -1827,15 +1827,15 @@ EditorWindow::EditorWindow() {
                 populate_toggle_group(pane, collect_mirror_toggle_entries(mirrorShardEntries));
             });
 
-        leftPane.add_section("Health & Souls");
+        leftPane.add_section(_("editor-menu.inventory-h03"));
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Poe Souls",
+                .key = _("editor-menu.ch03-d01"),
                 .getValue = [] { return fmt::format("{} / 60", dComIfGs_getPohSpiritNum()); },
             }),
             rightPane, [](Pane& pane) { populate_poe_souls_picker(pane); });
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Max Life",
+                                      .key = _("editor-menu.ch03-d02"),
                                       .getValue = [] { return max_life_label(); },
                                   }),
             rightPane, [](Pane& pane) { populate_max_life_picker(pane); });
@@ -1843,16 +1843,16 @@ EditorWindow::EditorWindow() {
         leftPane.add_section("Golden Bugs");
         for (const auto& bug : bugSpeciesEntries) {
             leftPane.register_control(leftPane.add_select_button({
-                                          .key = bug.name,
+                                          .key = _(bug.name),
                                           .getValue = [bug] { return bug_species_label(bug); },
                                       }),
                 rightPane, [bug](Pane& pane) { populate_bug_species_picker(pane, bug); });
         }
 
-        leftPane.add_section("Skills");
+        leftPane.add_section(_("editor-menu.collection-h05"));
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Hidden Skills",
+                .key = _("editor-menu.ch05-d01"),
                 .getValue =
                     [] {
                         return count_label(
@@ -1863,18 +1863,18 @@ EditorWindow::EditorWindow() {
                 populate_toggle_group(pane, event_toggle_entries(hiddenSkillEntries));
             });
 
-        leftPane.add_section("Logs");
+        leftPane.add_section(_("editor-menu.collection-h06"));
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Postman Letters",
+                .key = _("editor-menu.ch06-d01"),
                 .getValue = [] { return count_label(count_letters(), letterSenders.size()); },
             }),
             rightPane, [](Pane& pane) { populate_letters_picker(pane); });
 
-        leftPane.add_section("Fishing Log");
+        leftPane.add_section(_("editor-menu.collection-h07"));
         for (const auto& fish : fishSpeciesEntries) {
             leftPane.register_control(leftPane.add_select_button({
-                                          .key = fish.name,
+                                          .key = _(fish.name),
                                           .getValue = [fish] { return fish_species_label(fish); },
                                       }),
                 rightPane, [fish](Pane& pane) { populate_fish_species_picker(pane, fish); });
@@ -1885,14 +1885,14 @@ EditorWindow::EditorWindow() {
     //    // TODO
     //});
 
-    add_tab("Minigame", [this](Rml::Element* content) {
+    add_tab(_("editor-menu.tab-minigame"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Records");
+        leftPane.add_section(_("editor-menu.minigame-h01"));
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "STAR Game Time (ms)",
+                .key = _("editor-menu.mh01-i01"),
                 .getValue =
                     [] {
                         return static_cast<int>(std::min<u32>(
@@ -1907,7 +1907,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Snowboard Race Time (ms)",
+                .key = _("editor-menu.mh01-i02"),
                 .getValue =
                     [] {
                         return static_cast<int>(std::min<u32>(
@@ -1922,7 +1922,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Fruit-Pop-Flight Score",
+                .key = _("editor-menu.mh01-i03"),
                 .getValue =
                     [] {
                         return static_cast<int>(std::min<u32>(
@@ -1937,25 +1937,25 @@ EditorWindow::EditorWindow() {
             rightPane, {});
     });
 
-    add_tab("Config", [this](Rml::Element* content) {
+    add_tab(_("editor-menu.tab-config"), [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Options");
+        leftPane.add_section(_("editor-menu.config-h01"));
         leftPane.register_control(
             leftPane.add_child<BoolButton>(BoolButton::Props{
-                .key = "Enable Vibration",
+                .key = _("editor-menu.coh01-b01"),
                 .getValue = [] { return get_player_config()->getVibration() != 0; },
                 .setValue = [](bool value) { get_player_config()->setVibration(value); },
             }),
             rightPane, {});
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Target Type",
+                                      .key = _("editor-menu.coh01-d01"),
                                       .getValue = [] { return target_type_label(); },
                                   }),
             rightPane, [](Pane& pane) { populate_target_type_picker(pane); });
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Sound",
+                                      .key = _("editor-menu.coh01-d02"),
                                       .getValue = [] { return sound_mode_label(); },
                                   }),
             rightPane, [](Pane& pane) { populate_sound_mode_picker(pane); });
