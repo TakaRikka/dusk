@@ -21,6 +21,7 @@ bool g_sync_presentation = false;
 float g_step = 0.0f;
 bool g_is_sim_frame = false;
 bool g_ui_tick_pending = false;
+uint64_t g_sim_tick_seq = 0;
 
 Recording g_current_recording;
 Recording g_previous_recording;
@@ -66,19 +67,18 @@ void copy_view_to_snap(CameraSnapshot* dst, const view_class& v) {
 }
 
 inline void lerp_matrix(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
-    const float old_weight = 1.0f - step;
     for (size_t row = 0; row < 3; ++row) {
         for (size_t col = 0; col < 4; ++col) {
-            out[row][col] = lhs[row][col] * old_weight + rhs[row][col] * step;
+            const float l = lhs[row][col];
+            out[row][col] = l + (rhs[row][col] - l) * step;
         }
     }
 }
 
 inline void lerp_xyz(cXyz* out, const cXyz& lhs, const cXyz& rhs, float step) {
-    const float old_weight = 1.0f - step;
-    out->x = lhs.x * old_weight + rhs.x * step;
-    out->y = lhs.y * old_weight + rhs.y * step;
-    out->z = lhs.z * old_weight + rhs.z * step;
+    out->x = lhs.x + (rhs.x - lhs.x) * step;
+    out->y = lhs.y + (rhs.y - lhs.y) * step;
+    out->z = lhs.z + (rhs.z - lhs.z) * step;
 }
 
 static s16 lerp_bank(s16 a, s16 b, f32 t) {
@@ -135,6 +135,11 @@ void begin_sim_tick() {
 
     s_interpolationCallBackWork.clear();
     s_cam_prev = std::move(s_cam_curr);
+    ++g_sim_tick_seq;
+}
+
+uint64_t sim_tick_seq() {
+    return g_sim_tick_seq;
 }
 
 void begin_frame(bool enabled, bool is_sim_frame, float step) {

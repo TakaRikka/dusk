@@ -1129,9 +1129,8 @@ void SettingsWindow::add_gameplay_tab() {
             "Tears of Light dropped by Shadow Insects pop out faster like the HD version.");
 
         addSpeedrunDisabledOption("Autosave", getSettings().game.autoSave,
-            "Autosaves the game when going to a new area, opening a dungeon door, "
-            "or getting a new item.");
-
+            "Autosaves the game when going to a new area or opening a dungeon door.");
+      
         addOption("Instant Saves", getSettings().game.instantSaves,
             "Skips the delay when writing to the Memory Card.");
 
@@ -1244,7 +1243,7 @@ void SettingsWindow::add_cheats_tab() {
         addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
             "Allows the Great Spin attack without requiring full health.");
         addCheat("Fast Iron Boots", getSettings().game.enableFastIronBoots,
-            "Speeds up movement while wearing the Iron Boots.");
+            "Speeds up movement while heavy, including wearing the Iron Boots, holding the Ball and Chain, wearing Magic Armor without rupees, etc.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
         addCheat("Fast Roll", getSettings().game.fastRoll,
@@ -1386,16 +1385,14 @@ void SettingsWindow::add_interface_tab() {
         config_bool_select(leftPane, rightPane, getSettings().game.enableDiscordPresence,
             {
                 .key = "Enable Discord Rich Presence",
-                .helpText = "Enable Dusk to integrate with Discord Rich Presence. This allows "
-                            "Discord to show your status in-game.",
-                .onChange =
-                    [](bool enabled) {
-                        if (enabled) {
-                            dusk::discord::initialize();
-                        } else {
-                            dusk::discord::shutdown();
-                        }
-                    },
+                .helpText = "Enable Dusklight to integrate with Discord Rich Presence. This allows Discord to show your status in-game.",
+                .onChange = [](bool enabled) {
+                    if (enabled) {
+                        dusk::discord::initialize();
+                    } else {
+                        dusk::discord::shutdown();
+                    }
+                },
             });
 #endif
 

@@ -299,7 +299,8 @@ int daObjDrop_c::modeParentWait() {
 
 #if TARGET_PC
 static inline BOOL checkGetCargoRide() {
-    if ((daPy_getPlayerActorClass()->checkCargoCarry() && strcmp(dComIfGp_getStartStageName(), "F_SP112") == 0) ||
+    if (daPy_getPlayerActorClass()->checkCargoCarry() &&
+        strcmp(dComIfGp_getStartStageName(), "F_SP112") == 0 &&
         dComIfGs_isLightDropGetFlag(dComIfGp_getStartStageDarkArea()))
     {
         return true;

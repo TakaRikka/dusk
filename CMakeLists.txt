@@ -276,6 +276,12 @@ if (DUSK_ENABLE_SENTRY_NATIVE)
     endif ()
 endif ()
 
+# Use signed char on ARM to match the original game (and x86)
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" _arch)
+if(_arch MATCHES "^(arm|aarch64)" AND CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+    add_compile_options(-fsigned-char)
+endif()
+
 if (CMAKE_SYSTEM_NAME STREQUAL Windows)
     set(PLATFORM_NAME win32)
 elseif (CMAKE_SYSTEM_NAME STREQUAL Darwin)

@@ -108,7 +108,7 @@ struct fopAcM_search_prm {
 struct fOpAcm_HIO_entry_c : public mDoHIO_entry_c {
     virtual ~fOpAcm_HIO_entry_c() {}
 
-    #if DEBUG
+    #if DEBUG && !TARGET_PC
     void removeHIO(const fopAc_ac_c* i_this) { removeHIO(*i_this); }
     void removeHIO(const fopAc_ac_c& i_this) { removeHIO(i_this.base); }
     void removeHIO(const fopEn_enemy_c& i_this) { removeHIO(i_this.base); }
