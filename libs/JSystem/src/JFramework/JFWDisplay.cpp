@@ -370,35 +370,30 @@ constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanosecond
 constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
 
 static void waitPrecise(Limiter& limiter, Limiter::duration_t targetNs) {
-    const auto sleepTime = limiter.SleepTime(targetNs);
+    Limiter::duration_t sleepTime = limiter.Sleep(targetNs);
     dusk::frameUsagePct =
         100.0f * (1.0f - static_cast<float>(sleepTime) / static_cast<float>(targetNs));
-    limiter.Sleep(targetNs);
 }
 #endif
 
 static void waitForTick(u32 p1, u16 p2) {
 #if TARGET_PC
+    static Limiter limiter;
+
+    // RULE 1: If we are interpolating, the OUTER main loop handles the frame rate cap.
+    // Inner JFWDisplay ticks must return immediately to keep the simulation pacing accurate!
     if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
-        const int frameRateCap = dusk::getSettings().video.maxFrameRate.getValue();
-        if (frameRateCap > 0) {
-            static Limiter limiter;
-            waitPrecise(limiter, static_cast<Limiter::duration_t>(
-                                     1000000000ULL / static_cast<u32>(frameRateCap)));
-        } else {
-            dusk::frameUsagePct = 0.f;
-        }
-        return;
+        dusk::frameUsagePct = 0.f; 
+        return; 
     }
+
     if (dusk::getTransientSettings().skipFrameRateLimit) {
         p1 = OS_TIMER_CLOCK / 120;
     }
     
-    #if TARGET_PC
     if (fopOvlpM_IsPeek() && dusk::getTransientSettings().stateShareLoadActive) {
         return;
     }
-    #endif
 
     ZoneScopedC(tracy::Color::DimGray);
 #endif

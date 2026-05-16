@@ -17,16 +17,21 @@
 #include <shellapi.h>
 #include <intrin.h>
 #endif
+#ifdef __APPLE__
+#include <pthread/qos.h>
+#endif
 
 class Limiter {
 public:
   using duration_t = Uint64;
 
-  void Reset() { m_oldTime = SDL_GetTicksNS(); }
+  void Reset() { 
+    m_oldTime = SDL_GetTicksNS(); 
+  }
 
-  void Sleep(duration_t targetFrameTime) {
+  duration_t Sleep(duration_t targetFrameTime) {
     if (targetFrameTime == 0) {
-      return;
+      return 0;
     }
 
     const Uint64 start = SDL_GetTicksNS();
@@ -41,6 +46,8 @@ public:
       }
     }
     Reset();
+
+    return adjustedSleepTime;
   }
 
   duration_t SleepTime(duration_t targetFrameTime) {
@@ -99,7 +106,20 @@ private:
     } while (current.QuadPart - start.QuadPart < ticksToWait);
   }
 #else
-  void NanoSleep(const duration_t duration) { SDL_DelayPrecise(duration); }
+  void NanoSleep(const duration_t duration) { 
+#if defined(__APPLE__)
+    const Uint64 start = SDL_GetTicksNS();
+    while ((SDL_GetTicksNS() - start) < duration) {
+        #if defined(__arm__) || defined(__aarch64__)
+        asm volatile("yield" ::: "memory"); // yields to the hardware, not the scheduler.
+        #else
+        _mm_pause();
+        #endif
+    }
+#else
+    SDL_DelayPrecise(duration); 
+#endif
+  }
 #endif
 };
 

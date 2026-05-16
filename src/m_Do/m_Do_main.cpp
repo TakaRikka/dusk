@@ -28,6 +28,7 @@
 #include "d/d_s_logo.h"
 #include "d/d_s_menu.h"
 #include "d/d_s_play.h"
+#include "dusk/time.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_msg.h"
 #include "m_Do/m_Do_MemCard.h"
@@ -316,6 +317,28 @@ void main01(void) {
         }
 
         aurora_end_frame();
+
+        static Limiter main_loop_limiter;
+        static double last_fps_setting = 0.0;
+        static Limiter::duration_t outer_target_ns = 0;
+
+        if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
+            double current_fps = dusk::getSettings().video.maxFrameRate.getValue();
+            if (current_fps != last_fps_setting) {
+                last_fps_setting = current_fps;
+                outer_target_ns = static_cast<Limiter::duration_t>(1'000'000'000.0 / current_fps);
+            }
+
+            if (outer_target_ns > 0 && current_fps != 0.0) {
+                Limiter::duration_t sleepTime = main_loop_limiter.Sleep(outer_target_ns);
+                dusk::frameUsagePct =
+                    100.0f * (1.0f - static_cast<float>(sleepTime) / static_cast<float>(outer_target_ns));
+            } else {
+                main_loop_limiter.Reset();
+            }
+        } else {
+            main_loop_limiter.Reset();
+        }
 
         FrameMark;
 
