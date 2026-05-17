@@ -208,10 +208,69 @@ struct UserSettings {
 
     // Arrays of size 4 for 4 ports
     struct {
-        std::array<ActionBindConfigVar, 4> firstPersonCamera;
-        std::array<ActionBindConfigVar, 4> callMidna;
         std::array<ActionBindConfigVar, 4> openDusklightMenu;
         std::array<ActionBindConfigVar, 4> turboSpeedButton;
+        std::array<ActionBindConfigVar, 4> menuUp;
+        std::array<ActionBindConfigVar, 4> menuLeft;
+        std::array<ActionBindConfigVar, 4> menuDown;
+        std::array<ActionBindConfigVar, 4> menuRight;
+        std::array<ActionBindConfigVar, 4> menuConfirm;
+        std::array<ActionBindConfigVar, 4> menuReject;
+        std::array<ActionBindConfigVar, 4> menuX;
+        std::array<ActionBindConfigVar, 4> menuY;
+
+        std::array<ActionBindConfigVar, 4> swordAttack;
+        std::array<ActionBindConfigVar, 4> itemAccessX;
+        std::array<ActionBindConfigVar, 4> itemAccessY;
+        std::array<ActionBindConfigVar, 4> shieldUse;
+        std::array<ActionBindConfigVar, 4> interact;
+        std::array<ActionBindConfigVar, 4> roll;
+        std::array<ActionBindConfigVar, 4> moveModifierToggle;
+        std::array<ActionBindConfigVar, 4> target;
+        std::array<ActionBindConfigVar, 4> grabHeavy;
+        std::array<ActionBindConfigVar, 4> grabLight;
+        std::array<ActionBindConfigVar, 4> callMidna;
+        std::array<ActionBindConfigVar, 4> ingamePause;
+        std::array<ActionBindConfigVar, 4> firstPersonCamera;
+        std::array<ActionBindConfigVar, 4> mapCycleUp;
+        std::array<ActionBindConfigVar, 4> mapCycleDown;
+        std::array<ActionBindConfigVar, 4> peekMap;
+        std::array<ActionBindConfigVar, 4> toggleMapScreen;
+        std::array<ActionBindConfigVar, 4> hudVisibility;
+        std::array<ActionBindConfigVar, 4> itemCycleNext;
+        std::array<ActionBindConfigVar, 4> itemCyclePrev;
+        std::array<ActionBindConfigVar, 4> grabAll;
+
+        std::array<ActionBindConfigVar, 4> moveX;
+        std::array<ActionBindConfigVar, 4> moveY;
+        std::array<ActionBindConfigVar, 4> camX;
+        std::array<ActionBindConfigVar, 4> camY;
+        std::array<ActionBindConfigVar, 4> aimX;
+        std::array<ActionBindConfigVar, 4> aimY;
+        std::array<ActionBindConfigVar, 4> wheelX;
+        std::array<ActionBindConfigVar, 4> wheelY;
+        std::array<ActionBindConfigVar, 4> allcamX;
+        std::array<ActionBindConfigVar, 4> allcamY;
+
+        std::array<ActionBindConfigVar, 4> buttonA;
+        std::array<ActionBindConfigVar, 4> buttonB;
+        std::array<ActionBindConfigVar, 4> buttonX;
+        std::array<ActionBindConfigVar, 4> buttonY;
+        std::array<ActionBindConfigVar, 4> buttonZ;
+        std::array<ActionBindConfigVar, 4> buttonStart;
+        std::array<ActionBindConfigVar, 4> dpadUp;
+        std::array<ActionBindConfigVar, 4> dpadLeft;
+        std::array<ActionBindConfigVar, 4> dpadDown;
+        std::array<ActionBindConfigVar, 4> dpadRight;
+        std::array<ActionBindConfigVar, 4> digitalL;
+        std::array<ActionBindConfigVar, 4> digitalR;
+
+        std::array<ActionBindConfigVar, 4> mainStickX;
+        std::array<ActionBindConfigVar, 4> mainStickY;
+        std::array<ActionBindConfigVar, 4> cStickX;
+        std::array<ActionBindConfigVar, 4> cStickY;
+        std::array<ActionBindConfigVar, 4> triggerL;
+        std::array<ActionBindConfigVar, 4> triggerR;
     } actionBindings;
 };
 

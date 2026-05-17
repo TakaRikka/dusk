@@ -144,33 +144,83 @@ UserSettings g_userSettings = {
         .enableAdvancedSettings {"backend.enableAdvancedSettings", false},
     },
 
+#define ADD_FULL_ACTIONBINDCONFIGVAR(varname, bindingdefault)    .varname    {   \
+            ActionBindConfigVar{"actionBindings." #varname "_port0", bindingdefault},   \
+            ActionBindConfigVar{"actionBindings." #varname "_port1", bindingdefault},   \
+            ActionBindConfigVar{"actionBindings." #varname "_port2", bindingdefault},   \
+            ActionBindConfigVar{"actionBindings." #varname "_port3", bindingdefault},   \
+        }
+
     // Not sure if there's a better way to declare this
     .actionBindings = {
-        .firstPersonCamera {
-            ActionBindConfigVar{"actionBindings.firstPersonCamera_port0", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.firstPersonCamera_port1", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.firstPersonCamera_port2", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.firstPersonCamera_port3", PAD_NATIVE_BUTTON_INVALID},
-        },
-        .callMidna {
-            ActionBindConfigVar{"actionBindings.callMidna_port0", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.callMidna_port1", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.callMidna_port2", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.callMidna_port3", PAD_NATIVE_BUTTON_INVALID},
-        },
-        .openDusklightMenu {
-            ActionBindConfigVar{"actionBindings.openDusklightMenu_port0", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.openDusklightMenu_port1", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.openDusklightMenu_port2", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.openDusklightMenu_port3", PAD_NATIVE_BUTTON_INVALID},
-        },
-        .turboSpeedButton {
-            ActionBindConfigVar{"actionBindings.turboButton_port0", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.turboButton_port1", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.turboButton_port2", PAD_NATIVE_BUTTON_INVALID},
-            ActionBindConfigVar{"actionBindings.turboButton_port3", PAD_NATIVE_BUTTON_INVALID},
-        },
+        ADD_FULL_ACTIONBINDCONFIGVAR(openDusklightMenu, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(turboSpeedButton, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuUp, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuLeft, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuDown, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuRight, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuConfirm, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuReject, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(menuY, PAD_NATIVE_BUTTON_INVALID),
+
+        ADD_FULL_ACTIONBINDCONFIGVAR(swordAttack, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(itemAccessX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(itemAccessY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(shieldUse, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(interact, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(roll, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(moveModifierToggle, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(target, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(grabHeavy, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(grabLight, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(callMidna, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(ingamePause, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(firstPersonCamera, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(mapCycleUp, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(mapCycleDown, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(peekMap, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(toggleMapScreen, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(hudVisibility, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(itemCycleNext, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(itemCyclePrev, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(grabAll, PAD_NATIVE_BUTTON_INVALID),
+
+        // Will figure out analog input later
+        ADD_FULL_ACTIONBINDCONFIGVAR(moveX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(moveY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(camX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(camY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(aimX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(aimY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(wheelX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(wheelY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(allcamX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(allcamY, PAD_NATIVE_BUTTON_INVALID),
+
+        ADD_FULL_ACTIONBINDCONFIGVAR(buttonA, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(buttonB, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(buttonX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(buttonY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(buttonZ, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(buttonStart, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(dpadUp, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(dpadLeft, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(dpadDown, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(dpadRight, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(digitalL, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(digitalR, PAD_NATIVE_BUTTON_INVALID),
+
+        ADD_FULL_ACTIONBINDCONFIGVAR(mainStickX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(mainStickY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(cStickX, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(cStickY, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(triggerL, PAD_NATIVE_BUTTON_INVALID),
+        ADD_FULL_ACTIONBINDCONFIGVAR(triggerR, PAD_NATIVE_BUTTON_INVALID),
     }
+
+#undef ADD_FULL_ACTIONBINDCONFIGVAR
+
 };
 
 UserSettings& getSettings() {
@@ -292,22 +342,76 @@ void registerSettings() {
     Register(g_userSettings.backend.cardFileType);
     Register(g_userSettings.backend.enableAdvancedSettings);
 
-    Register(g_userSettings.actionBindings.firstPersonCamera[0]);
-    Register(g_userSettings.actionBindings.firstPersonCamera[1]);
-    Register(g_userSettings.actionBindings.firstPersonCamera[2]);
-    Register(g_userSettings.actionBindings.firstPersonCamera[3]);
-    Register(g_userSettings.actionBindings.callMidna[0]);
-    Register(g_userSettings.actionBindings.callMidna[1]);
-    Register(g_userSettings.actionBindings.callMidna[2]);
-    Register(g_userSettings.actionBindings.callMidna[3]);
-    Register(g_userSettings.actionBindings.openDusklightMenu[0]);
-    Register(g_userSettings.actionBindings.openDusklightMenu[1]);
-    Register(g_userSettings.actionBindings.openDusklightMenu[2]);
-    Register(g_userSettings.actionBindings.openDusklightMenu[3]);
-    Register(g_userSettings.actionBindings.turboSpeedButton[0]);
-    Register(g_userSettings.actionBindings.turboSpeedButton[1]);
-    Register(g_userSettings.actionBindings.turboSpeedButton[2]);
-    Register(g_userSettings.actionBindings.turboSpeedButton[3]);
+#define REGISTER_ACTION_BINDINGS(bindingname) Register(g_userSettings.actionBindings.bindingname[0]); \
+    Register(g_userSettings.actionBindings.bindingname[1]); \
+    Register(g_userSettings.actionBindings.bindingname[2]); \
+    Register(g_userSettings.actionBindings.bindingname[3]);
+
+    REGISTER_ACTION_BINDINGS(openDusklightMenu)
+    REGISTER_ACTION_BINDINGS(turboSpeedButton)
+    REGISTER_ACTION_BINDINGS(menuUp)
+    REGISTER_ACTION_BINDINGS(menuLeft)
+    REGISTER_ACTION_BINDINGS(menuDown)
+    REGISTER_ACTION_BINDINGS(menuRight)
+    REGISTER_ACTION_BINDINGS(menuConfirm)
+    REGISTER_ACTION_BINDINGS(menuReject)
+    REGISTER_ACTION_BINDINGS(menuX)
+    REGISTER_ACTION_BINDINGS(menuY)
+
+    REGISTER_ACTION_BINDINGS(swordAttack)
+    REGISTER_ACTION_BINDINGS(itemAccessX)
+    REGISTER_ACTION_BINDINGS(itemAccessY)
+    REGISTER_ACTION_BINDINGS(shieldUse)
+    REGISTER_ACTION_BINDINGS(interact)
+    REGISTER_ACTION_BINDINGS(roll)
+    REGISTER_ACTION_BINDINGS(moveModifierToggle)
+    REGISTER_ACTION_BINDINGS(target)
+    REGISTER_ACTION_BINDINGS(grabHeavy)
+    REGISTER_ACTION_BINDINGS(grabLight)
+    REGISTER_ACTION_BINDINGS(callMidna)
+    REGISTER_ACTION_BINDINGS(ingamePause)
+    REGISTER_ACTION_BINDINGS(firstPersonCamera)
+    REGISTER_ACTION_BINDINGS(mapCycleUp)
+    REGISTER_ACTION_BINDINGS(mapCycleDown)
+    REGISTER_ACTION_BINDINGS(peekMap)
+    REGISTER_ACTION_BINDINGS(toggleMapScreen)
+    REGISTER_ACTION_BINDINGS(hudVisibility)
+    REGISTER_ACTION_BINDINGS(itemCycleNext)
+    REGISTER_ACTION_BINDINGS(itemCyclePrev)
+    REGISTER_ACTION_BINDINGS(grabAll)
+
+    REGISTER_ACTION_BINDINGS(moveX)
+    REGISTER_ACTION_BINDINGS(moveY)
+    REGISTER_ACTION_BINDINGS(camX)
+    REGISTER_ACTION_BINDINGS(camY)
+    REGISTER_ACTION_BINDINGS(aimX)
+    REGISTER_ACTION_BINDINGS(aimY)
+    REGISTER_ACTION_BINDINGS(wheelX)
+    REGISTER_ACTION_BINDINGS(wheelY)
+    REGISTER_ACTION_BINDINGS(allcamX)
+    REGISTER_ACTION_BINDINGS(allcamY)
+
+    REGISTER_ACTION_BINDINGS(buttonA)
+    REGISTER_ACTION_BINDINGS(buttonB)
+    REGISTER_ACTION_BINDINGS(buttonX)
+    REGISTER_ACTION_BINDINGS(buttonY)
+    REGISTER_ACTION_BINDINGS(buttonZ)
+    REGISTER_ACTION_BINDINGS(buttonStart)
+    REGISTER_ACTION_BINDINGS(dpadUp)
+    REGISTER_ACTION_BINDINGS(dpadLeft)
+    REGISTER_ACTION_BINDINGS(dpadDown)
+    REGISTER_ACTION_BINDINGS(dpadRight)
+    REGISTER_ACTION_BINDINGS(digitalL)
+    REGISTER_ACTION_BINDINGS(digitalR)
+
+    REGISTER_ACTION_BINDINGS(mainStickX)
+    REGISTER_ACTION_BINDINGS(mainStickY)
+    REGISTER_ACTION_BINDINGS(cStickX)
+    REGISTER_ACTION_BINDINGS(cStickY)
+    REGISTER_ACTION_BINDINGS(triggerL)
+    REGISTER_ACTION_BINDINGS(triggerR)
+
+#undef REGISTER_ACTION_BINDINGS
 }
 
 // Transient settings
