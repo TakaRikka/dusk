@@ -10,12 +10,48 @@
 #include <cstring>
 
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include "dusk/settings.h"
 #include "dusk/version.hpp"
 #include "f_op/f_op_msg_mng.h"
 
 static bool isPalOrJpn() {
     return dusk::version::isRegionPal() || dusk::version::isRegionJpn();
 }
+
+#if TARGET_PC
+static bool useChineseNameKeyboard() {
+    return dusk::version::isRegionPal() && dusk::getSettings().game.enableChineseNameKeyboard.getValue();
+}
+
+static bool isShiftJisLeadByte(u8 c) {
+    return (c >= 0x81 && c <= 0x9F) || (c >= 0xE0 && c <= 0xFC);
+}
+
+static int twoByteCode(const char* str) {
+    return (static_cast<u8>(str[0]) << 8) | static_cast<u8>(str[1]);
+}
+
+static bool isTwoByteNameCharacter(int character) {
+    return character > 0xFF;
+}
+
+static constexpr int CHINESE_NAME_PAGE_COUNT = 10;
+static constexpr int CHINESE_NAME_PAGE_CHARS = 65;
+static u8 sChineseNamePage = 0;
+static bool sShowingChineseNamePage = false;
+
+static int getActiveNameMenu() {
+    return (useChineseNameKeyboard() && sShowingChineseNamePage) ? 1 : 0;
+}
+
+static bool isChineseNameMenu(int menu) {
+    return useChineseNameKeyboard() && menu == 1;
+}
+#else
+static bool useChineseNameKeyboard() {
+    return false;
+}
+#endif
 
 static const char* l_mojiHira[65] = {
     "あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す",
@@ -88,6 +124,148 @@ static const char* l_mojiEisuPal_2[65] = {
     "\xF6", "7", "h", "u", "\xE9", "\x9C", "8", "i", "v", "\xEA", "\xF9", "9", "j", "w", "\xEB", "\xFA", "0",
     "k", "x", "\xEC", "\xFB", ",", "l", "y", "\xED", "\xFC", ".", "m", "z", "\xEE", "\xDF", " ",
 };
+
+static const char* l_mojiEisuPalChinese_1[65] = {
+    "A", "B", "C", "D", "1", "E", "F", "G", "H", "2", "I", "J", "K", "L", "3", "M", "N",
+    "O", "P", "4", "Q", "R", "S", "T", "5", "U", "V", "W", "X", "6", "Y", "Z", "a", "b",
+    "7", "c", "d", "e", "f", "8", "g", "h", "i", "j", "9", "k", "l", "m", "n", "0", "o",
+    "p", "q", "r", ",", "s", "t", "u", "v", ".", "w", "x", "y", "z", " ",
+};
+
+static const char* l_mojiEisuPalChinese_2[65] = {
+    "A", "B", "C", "D", "1", "E", "F", "G", "H", "2", "I", "J", "K", "L", "3", "M", "N",
+    "O", "P", "4", "Q", "R", "S", "T", "5", "U", "V", "W", "X", "6", "Y", "Z", "a", "b",
+    "7", "c", "d", "e", "f", "8", "g", "h", "i", "j", "9", "k", "l", "m", "n", "0", "o",
+    "p", "q", "r", ",", "s", "t", "u", "v", ".", "w", "x", "y", "z", " ",
+};
+
+static const u16 l_mojiZh[CHINESE_NAME_PAGE_COUNT][CHINESE_NAME_PAGE_CHARS] = {
+    {
+        0x97D1, 0x8D8E, 0x8DC7, 0x8A6C, 0x0000, 0x8E64, 0x8A43, 0x9D66, 0x8F9F, 0x0000, 0x89C1, 0x8FE6, 0x88E4,
+        0x95C4, 0x0000, 0x91BD, 0x9B50, 0x88C9, 0x9798, 0x0000, 0x88BE, 0x8965, 0x9456, 0x8ED1, 0x0000, 0x89A9,
+        0x8DA8, 0x8CF5, 0x96BE, 0x0000, 0x9142, 0x88C3, 0x8CF6, 0x8EE5, 0x0000, 0x9745, 0x8ED2, 0x8951, 0x8F82,
+        0x0000, 0x8B7C, 0x90FB, 0x92DC, 0x8EAB, 0x0000, 0x8EC7, 0x9394, 0x96FB, 0x9572, 0x0000, 0x8FCF, 0x8A93,
+        0x89F1, 0x90F9, 0x8ECF, 0x8EB1, 0x8C43, 0x93B2, 0x9854, 0x8FBA, 0x944C, 0x8BE7, 0x8F9E, 0x928E, 0x8FB4
+    },
+    {
+        0x90B8, 0x8BAD, 0x8DB0, 0x905F, 0x0000, 0x9361, 0x9058, 0x89CE, 0x8E52, 0x0000, 0x8CCE, 0x8DB9, 0x9499,
+        0x90E1, 0x0000, 0x8FE9, 0x9AC6, 0x91BA, 0x8FAF, 0x0000, 0x9671, 0x89EB, 0x9356, 0x8BF3, 0x0000, 0x926E,
+        0x89BA, 0x93B4, 0x8C8A, 0x0000, 0x96C0, 0x8A64, 0x9383, 0x8B62, 0x0000, 0x8ED9, 0x8EA4, 0x8DFA, 0x95F3,
+        0x0000, 0x94A0, 0x89E8, 0x8E77, 0x93EC, 0x0000, 0x8E99, 0x8FF5, 0x95D0, 0x9053, 0x0000, 0x90B6, 0x96BD,
+        0x9682, 0x9640, 0x8963, 0x94E4, 0x8C6B, 0x8C9E, 0x8CEF, 0x8E87, 0x9492, 0x8BE0, 0x8EB4, 0x96D8, 0x90CE
+    },
+    {
+        0x9085, 0x8F70, 0x978B, 0x9975, 0x0000, 0x9379, 0x9190, 0x89D4, 0x8B5F, 0x0000, 0x8C8E, 0x93FA, 0x90AF,
+        0x96E9, 0x0000, 0x88A5, 0x90BC, 0x966B, 0x8FE3, 0x0000, 0x9286, 0x8DB6, 0x8945, 0x914F, 0x0000, 0x8D40,
+        0x93E0, 0x8A4F, 0x91E5, 0x0000, 0x8FAC, 0x8D82, 0x92E1, 0x8ED4, 0x0000, 0x925A, 0x9056, 0x8B8C, 0x8A8F,
+        0x0000, 0x88F7, 0x8AF7, 0x919C, 0x95C7, 0x0000, 0x89E6, 0x88D7, 0x8DA7, 0x89A4, 0x0000, 0x8D91, 0x89C6,
+        0x91B0, 0x95FC, 0x9746, 0x8B40, 0x906C, 0x89F6, 0x95A8, 0x8EF1, 0x8F63, 0x9590, 0x8AED, 0x9195, 0x8A4A
+    },
+    {
+        0x93B9, 0x8BEF, 0x8CEB, 0x9358, 0x0000, 0x8FA4, 0x8E6D, 0x95BA, 0x8F93, 0x0000, 0x8ECD, 0x89CD, 0x97AC,
+        0x8FCA, 0x0000, 0x957A, 0x90F2, 0x89B7, 0x8BF8, 0x0000, 0x8A49, 0x8C59, 0x8A8D, 0x9AD0, 0x0000, 0x8B42,
+        0x9140, 0x8E73, 0x95BD, 0x0000, 0x8CB4, 0x899C, 0x92F3, 0x8DE2, 0x0000, 0x8CAC, 0x93F2, 0x8CB0, 0x90A2,
+        0x0000, 0x8A45, 0x8C85, 0x8FBB, 0x975A, 0x0000, 0x8D87, 0x88FC, 0x89BB, 0x8C60, 0x0000, 0x8A9C, 0x896F,
+        0x9067, 0x9197, 0x93FC, 0x8CFB, 0x8F6F, 0x8BE4, 0x9765, 0x8C57, 0x8EB9, 0x8EBE, 0x8F76, 0x8E9B, 0x8AC6
+    },
+    {
+        0x8F7E, 0x8E71, 0x8B8D, 0x8A59, 0x0000, 0x9748, 0x8B53, 0x9467, 0x9476, 0x0000, 0x8AE1, 0x916F, 0x8FD0,
+        0x934A, 0x0000, 0x895A, 0x9649, 0x8A7B, 0x96A8, 0x0000, 0x90D7, 0x8EC0, 0x97C0, 0x92F2, 0x0000, 0x8C96,
+        0x8DF5, 0x9463, 0x8BB8, 0x0000, 0x91E4, 0x8EA2, 0x984F, 0x9144, 0x0000, 0x91FC, 0x89B1, 0x9051, 0x8AE2,
+        0x0000, 0x88A4, 0x8B4F, 0x8E4A, 0x9772, 0x0000, 0x8FD9, 0x8F9B, 0x8F9D, 0x9A46, 0x0000, 0x8AB0, 0x8A4D,
+        0x96DA, 0x8EE7, 0x8967, 0x97B7, 0x8F88, 0x8E92, 0x8DB7, 0x88E3, 0x93B6, 0x96AF, 0x9856, 0x9B77, 0x8FAD
+    },
+    {
+        0x8F97, 0x944E, 0x95EA, 0x88C1, 0x0000, 0x9583, 0x88B7, 0x92ED, 0x93AF, 0x0000, 0x94BA, 0x95DB, 0x91B6,
+        0x8DAF, 0x0000, 0x8EE6, 0x8E6E, 0x91A9, 0x8E8D, 0x0000, 0x8ACC, 0x8FC1, 0x8C45, 0x92E8, 0x0000, 0x95D4,
+        0x96BC, 0x8E9A, 0x8E5E, 0x0000, 0x9349, 0x88EA, 0x90A5, 0x8DDD, 0x0000, 0x9573, 0x97B9, 0x974C, 0x9861,
+        0x0000, 0x8E79, 0x88AF, 0x98A2, 0x89E4, 0x0000, 0x88C8, 0x9776, 0x91BC, 0x9788, 0x0000, 0x9770, 0x88CC,
+        0x939E, 0x8DEC, 0x98B0, 0x8F41, 0x95AA, 0x8A68, 0x90AC, 0x89EF, 0x89C2, 0x896E, 0x8957, 0x8D48, 0x96E7
+    },
+    {
+        0x945C, 0x8E66, 0x88BF, 0x8C49, 0x0000, 0x96CA, 0x8EA7, 0x95FB, 0x8D73, 0x0000, 0x8A77, 0x8F8A, 0x93BE,
+        0x8C82, 0x0000, 0x8E4F, 0x8E81, 0x9285, 0x9399, 0x0000, 0x9594, 0x9378, 0x8BD2, 0x97CD, 0x0000, 0x97A2,
+        0x9440, 0x8EA9, 0x93F1, 0x0000, 0x979D, 0x8B4E, 0x8BD0, 0x8A62, 0x0000, 0x97CA, 0x88A9, 0x91CC, 0x90A7,
+        0x0000, 0x9396, 0x8E67, 0x935F, 0x98B8, 0x0000, 0x88A1, 0x967B, 0x8B8E, 0x90AB, 0x0000, 0x8D44, 0x8A89,
+        0x9B80, 0x8E74, 0x88F6, 0x9752, 0x91B4, 0x8DB1, 0x9152, 0x8E6C, 0x93DF, 0x8E96, 0x918A, 0x9153, 0x955C
+    },
+    {
+        0x8EE0, 0x8B60, 0x975E, 0x8A65, 0x0000, 0x8F64, 0x8C77, 0x9094, 0x90B3, 0x0000, 0x94BD, 0x8AC5, 0x9241,
+        0x9F83, 0x0000, 0x91E6, 0x8CFC, 0x8D9F, 0x9676, 0x0000, 0x89F0, 0x8EDD, 0x88D3, 0x8C9A, 0x0000, 0x9DD9,
+        0x8C6E, 0x8942, 0x8FEE, 0x0000, 0x8DC5, 0x97A7, 0x889F, 0x917A, 0x0000, 0x9BDF, 0x92CA, 0x9BF3, 0x92F1,
+        0x0000, 0x92BC, 0x9357, 0x8CDC, 0x89CA, 0x0000, 0x8FDB, 0x88CA, 0x8FED, 0x95B6, 0x0000, 0x8A9D, 0x8E9F,
+        0x9569, 0x8EAE, 0x8A88, 0x8D80, 0x8B79, 0x8AC7, 0x93C1, 0x8C8F, 0x8B81, 0x8AEE, 0x8E61, 0x9848, 0x8C6F
+    },
+    {
+        0x8C8D, 0x90DA, 0x926D, 0x8E5B, 0x0000, 0x8FAB, 0x8C7A, 0x8D5C, 0x8D68, 0x0000, 0x8950, 0x8EE8, 0x8A70,
+        0x8AFA, 0x0000, 0x8DAA, 0x8E72, 0x8BE3, 0x8BE6, 0x0000, 0x8A94, 0x95FA, 0x9972, 0x94ED, 0x0000, 0x8AB1,
+        0x98F4, 0x954B, 0x90E6, 0x0000, 0x9443, 0x9188, 0x8B8B, 0x8E76, 0x0000, 0x8B54, 0x8CF0, 0x8EF3, 0x8CB2,
+        0x0000, 0x8D6A, 0x985A, 0x8BA4, 0x8B52, 0x0000, 0x9DBE, 0x89FC, 0x90B4, 0x94FC, 0x0000, 0x8DC4, 0x8E4C,
+        0x8D58, 0x8960, 0x90D8, 0x91C5, 0x8BB3, 0x91AC, 0x8A81, 0x88C0, 0x97E1, 0x905E, 0x8956, 0x969C, 0x8B6B
+    },
+    {
+        0x8E8A, 0x9196, 0x8EA6, 0x90BA, 0x0000, 0x8AAE, 0x8C5D, 0x94AA, 0x895E, 0x0000, 0x89C8, 0x8A92, 0x904D,
+        0x9146, 0x0000, 0x8D99, 0x90AE, 0x8DA1, 0x8F57, 0x0000, 0x8D7B, 0x8B69, 0x8C51, 0x9BF6, 0x0000, 0x8D77,
+        0x9269, 0x97A5, 0x8BA9, 0x0000, 0x8D5D, 0x897A, 0x8E9D, 0x89B9, 0x0000, 0x88D1, 0x88BA, 0x8A4B, 0x9958,
+        0x0000, 0x8F92, 0x8E85, 0x9266, 0x905B, 0x0000, 0x8F4F, 0x8BDF, 0x90E7, 0x8EFC, 0x0000, 0x9166, 0x8B5A,
+        0x94BC, 0x8955, 0x90C2, 0x97F1, 0x88B8, 0x8995, 0x8E78, 0x8E6A, 0x8AB4, 0x8959, 0x95D6, 0x899D, 0x89BD
+    },
+};
+
+static int getChinesePageKey(int idx) {
+    switch (idx) {
+    case 4:
+        return 0;
+    case 9:
+        return 1;
+    case 14:
+        return 2;
+    case 19:
+        return 3;
+    case 24:
+        return 4;
+    case 29:
+        return 5;
+    case 34:
+        return 6;
+    case 39:
+        return 7;
+    case 44:
+        return 8;
+    case 49:
+        return 9;
+    default:
+        return -1;
+    }
+}
+
+static const char* getChineseNameKeyboardCell(u16 code) {
+    static char buf[3];
+    if (code == 0) {
+        return " ";
+    }
+
+    buf[0] = (code >> 8) & 0xFF;
+    buf[1] = code & 0xFF;
+    buf[2] = 0;
+    return buf;
+}
+
+static const char* getPalNameKeyboardCell(const char** eisuSet, int idx) {
+    if (!useChineseNameKeyboard() || !sShowingChineseNamePage) {
+        return eisuSet[idx];
+    }
+
+    return getChinesePageKey(idx) >= 0 ? eisuSet[idx] : getChineseNameKeyboardCell(l_mojiZh[sChineseNamePage][idx]);
+}
+
+static const char* getPalNameKeyboardTableCell(bool upper, int idx) {
+    if (!useChineseNameKeyboard()) {
+        return upper ? l_mojiEisuPal_1[idx] : l_mojiEisuPal_2[idx];
+    }
+
+    return upper ? l_mojiEisuPalChinese_1[idx] : l_mojiEisuPalChinese_2[idx];
+}
 #elif REGION_PAL
 static const char* l_mojiEisuPal_1[65] = {
     "A", "N", "AA", "BB", "1", "B", "O", "CC", "DD", "2", "C", "P", "EE", "FF", "3", "D", "Q",
@@ -213,6 +391,12 @@ void dName_c::init() {
     mSelMenu = MENU_END;
     mPrevSelMenu = MENU_END;
     #endif
+    #if TARGET_PC
+    if (useChineseNameKeyboard()) {
+        sChineseNamePage = 0;
+        sShowingChineseNamePage = false;
+    }
+    #endif
     mojiListChange();
 }
 
@@ -227,11 +411,17 @@ void dName_c::initial() {
     #if TARGET_PC || REGION_PAL || REGION_JPN
     IF_DUSK_BLOCK(isPalOrJpn())
     if (mSelProc == PROC_MOJI_SELECT) {
-        mMenuIcon[mMojiSet]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
-        mMenuText[mMojiSet]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+        int mojiSet_i = getMenuPosIdx(DUSK_IF_ELSE(getActiveNameMenu(), mMojiSet));
+        if (mMenuIcon[mojiSet_i] != NULL && mMenuText[mojiSet_i] != NULL) {
+            mMenuIcon[mojiSet_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
+            mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+        }
         if (mPrevMojiSet != 255) {
-            mMenuIcon[mPrevMojiSet]->scale(1.0f, 1.0f);
-            mMenuText[mPrevMojiSet]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+            int prevMojiSet_i = getMenuPosIdx(mPrevMojiSet);
+            if (mMenuIcon[prevMojiSet_i] != NULL && mMenuText[prevMojiSet_i] != NULL) {
+                mMenuIcon[prevMojiSet_i]->scale(1.0f, 1.0f);
+                mMenuText[prevMojiSet_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+            }
         }
     }
     IF_DUSK_BLOCK_END
@@ -255,6 +445,9 @@ void dName_c::showIcon() {
     case PROC_MENU_SELECT:
         if (mSelMenu != 255) {
             int menu_i = getMenuPosIdx(mSelMenu);
+            if (mMenuIcon[menu_i] == NULL || mMenuText[menu_i] == NULL) {
+                break;
+            }
 
             pos = mMenuIcon[menu_i]->getGlobalVtxCenter(false, 0);
             mSelIcon->setPos(pos.x, pos.y, mMenuIcon[menu_i]->getPanePtr(), true);
@@ -274,6 +467,11 @@ void dName_c::_move() {
         mDoAud_seStart(Z2SE_SY_DUMMY, 0, 0, 0);
         mPrevMojiSet = mMojiSet;
         mMojiSet++;
+        #if TARGET_PC
+        if (useChineseNameKeyboard()) {
+            sShowingChineseNamePage = false;
+        }
+        #endif
         #if REGION_JPN
         if (mMojiSet > MOJI_EIGO) {
         #else
@@ -387,8 +585,18 @@ void dName_c::playNameSet(int nameLength) {
     char* str = mInputStr;
 
     for (int i = 0; i < nameLength; i++) {
-        #if TARGET_PC || REGION_JPN
-        if (!dusk::version::isRegionJpn() || mChrInfo[i].mMojiSet == 2) {
+        #if TARGET_PC
+        if (!isTwoByteNameCharacter(mChrInfo[i].mCharacter) &&
+            (!dusk::version::isRegionJpn() || mChrInfo[i].mMojiSet == 2))
+        {
+            *str = mChrInfo[i].mCharacter;
+            str += 1;
+        } else {
+            *str++ = (mChrInfo[i].mCharacter & 0xff00) >> 8;
+            *str++ = mChrInfo[i].mCharacter & 0xff;
+        }
+        #elif REGION_JPN
+        if (mChrInfo[i].mMojiSet == 2) {
             *str = mChrInfo[i].mCharacter;
             str += 1;
         } else {
@@ -625,6 +833,19 @@ int dName_c::mojiChange(u8 idx) {
 }
 
 void dName_c::selectMojiSet() {
+    #if TARGET_PC
+    if (useChineseNameKeyboard() && mCharRow == 4) {
+        int page = getChinesePageKey(mCharRow + mCharColumn * 5);
+        if (page >= 0) {
+            mDoAud_seStart(Z2SE_SY_DUMMY, NULL, 0, 0);
+            sChineseNamePage = page;
+            sShowingChineseNamePage = true;
+            mojiListChange();
+            return;
+        }
+    }
+    #endif
+
     #if REGION_JPN
     int moji = getMoji();
     if (moji != -1) {
@@ -769,15 +990,16 @@ int dName_c::setDakuon(int param_1, u8 param_2) {
 int dName_c::getMoji() {
     int result = -1;
     const char* moji;
+    int idx = mCharRow + mCharColumn * 5;
 
     #if TARGET_PC
     if (dusk::version::isRegionPal()) {
         switch (mMojiSet) {
         case MOJI_HIRA:
-            moji = l_mojiEisuPal_1[mCharRow + mCharColumn * 5];
+            moji = getPalNameKeyboardCell(useChineseNameKeyboard() ? l_mojiEisuPalChinese_1 : l_mojiEisuPal_1, idx);
             break;
         case MOJI_KATA:
-            moji = l_mojiEisuPal_2[mCharRow + mCharColumn * 5];
+            moji = getPalNameKeyboardCell(useChineseNameKeyboard() ? l_mojiEisuPalChinese_2 : l_mojiEisuPal_2, idx);
             break;
         default:
             abort();
@@ -821,7 +1043,13 @@ int dName_c::getMoji() {
     #endif
 
     #if TARGET_PC
-    if (dusk::version::isRegionJpn()) {
+    if (useChineseNameKeyboard() && sShowingChineseNamePage) {
+        if (l_mojiZh[sChineseNamePage][idx] != 0 && isShiftJisLeadByte(*(u8*)moji)) {
+            result = twoByteCode(moji);
+        } else {
+            result = *moji;
+        }
+    } else if (dusk::version::isRegionJpn()) {
         if (*(u8*)moji >> 4 == 0x8 || *(u8*)moji >> 4 == 0x9) {
             result = *(u16*)moji;
         } else {
@@ -844,7 +1072,7 @@ int dName_c::getMoji() {
 }
 
 #if TARGET_PC
-#define CHAR_TRUNC(val) (dusk::version::isRegionPal() ? val & 0xFF : val)
+#define CHAR_TRUNC(val) (isTwoByteNameCharacter(val) ? val : (dusk::version::isRegionPal() ? val & 0xFF : val))
 #elif REGION_PAL
 #define CHAR_TRUNC(val) (val & 0xFF)
 #else
@@ -905,8 +1133,14 @@ void dName_c::setNameText() {
         //"\x1bCD\x1bCR\x1bCC[000000]\x1bGM[0]%c\x1bHM\x1bCC[ffffff]\x1bGM[0]%c"
         //"\x1bCD\x1bCR\x1bCC[000000]\x1bGM[0]%c%c\x1bHM\x1bCC[ffffff]\x1bGM[0]%c%c"
         if (mChrInfo[i].field_0x3 != 0) {
-            #if REGION_JPN
-            if (mChrInfo[i].mMojiSet == 2) {
+            #if TARGET_PC
+            if (!isTwoByteNameCharacter(mChrInfo[i].mCharacter) &&
+                (!dusk::version::isRegionJpn() || mChrInfo[i].mMojiSet == 2))
+            #elif REGION_JPN
+            if (mChrInfo[i].mMojiSet == 2)
+            #endif
+            #if TARGET_PC || REGION_JPN
+            {
             #endif
                 sprintf(mNameText[i],
                         "\x1b"
@@ -917,7 +1151,7 @@ void dName_c::setNameText() {
                         CHAR_TRUNC((u8)mChrInfo[i].mCharacter),
                         CHAR_TRUNC((u8)mChrInfo[i].mCharacter)
                 );
-            #if REGION_JPN
+            #if TARGET_PC || REGION_JPN
             } else {
                 sprintf(mNameText[i],
                         "\x1b"
@@ -956,12 +1190,24 @@ void dName_c::selectCursorMove() {
     int idx;
     #if TARGET_PC
     if (dusk::version::isRegionPal()) {
-        if (mCharColumn < 3) {
-            idx = 0;
-        } else if (mCharColumn < 6) {
-            idx = 1;
-        } else if (mCharColumn >= 6) {
-            idx = 2;
+        if (useChineseNameKeyboard()) {
+            if (sShowingChineseNamePage) {
+                idx = MENU_KATA;
+            } else if (mCharColumn < 3) {
+                idx = MENU_HIRA;
+            } else if (mCharColumn < 8) {
+                idx = MENU_KATA;
+            } else {
+                idx = MENU_EIGO;
+            }
+        } else {
+            if (mCharColumn < 3) {
+                idx = 0;
+            } else if (mCharColumn < 6) {
+                idx = 1;
+            } else if (mCharColumn >= 6) {
+                idx = 2;
+            }
         }
     } else if (dusk::version::isRegionJpn()) {
         if (mCharColumn < 3) {
@@ -1019,6 +1265,19 @@ void dName_c::menuCursorPosSet() {
     mPrevSelMenu = mSelMenu;
     #if TARGET_PC
     if (dusk::version::isRegionPal()) {
+        if (useChineseNameKeyboard()) {
+            if (sShowingChineseNamePage) {
+                mSelMenu = MENU_KATA;
+            } else if (mCharColumn < 3) {
+                mSelMenu = MENU_HIRA;
+            } else if (mCharColumn < 8) {
+                mSelMenu = MENU_KATA;
+            } else {
+                mSelMenu = MENU_EIGO;
+            }
+            return;
+        }
+
         if (mCharColumn < 3) {
             mSelMenu = MENU_HIRA;
         } else if (mCharColumn < 6) {
@@ -1082,6 +1341,13 @@ void dName_c::MenuSelect() {
         mDoAud_seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0);
         mPrevSelMenu = mSelMenu;
         mSelMenu++;
+        #if TARGET_PC
+        if (useChineseNameKeyboard()) {
+            if (mSelMenu > MENU_EIGO) {
+                mSelMenu = MENU_HIRA;
+            }
+        } else
+        #endif
         #if REGION_PAL
         if (mSelMenu > MENU_EIGO) {
         #else
@@ -1103,6 +1369,11 @@ void dName_c::MenuSelect() {
         } else {
             mSelMenu--;
         }
+        #if TARGET_PC
+        if (useChineseNameKeyboard() && mSelMenu > MENU_EIGO) {
+            mSelMenu = MENU_EIGO;
+        }
+        #endif
         MenuSelectAnmInit();
         mSelProc = PROC_MENU_SEL_ANM;
     } else {
@@ -1122,11 +1393,18 @@ void dName_c::MenuSelect() {
             MenuSelectAnmInit();
             mSelProc = PROC_MENU_SEL_ANM2;
         } else if (mDoCPd_c::getTrigA(PAD_1)) {
-            #if REGION_PAL
-            if (mSelMenu == MENU_EIGO) {
-            #else
-            if (mSelMenu == EIGO_OR_END) {
+            #if TARGET_PC
+            if (useChineseNameKeyboard() ? mSelMenu == MENU_EIGO :
             #endif
+            #if REGION_PAL
+                mSelMenu == MENU_EIGO
+            #else
+                mSelMenu == EIGO_OR_END
+            #endif
+            #if TARGET_PC
+            )
+            #endif
+            {
                 if (nameCheck() != 0) {
                     mDoAud_seStart(Z2SE_SY_NAME_OK, NULL, 0, 0);
                 } else {
@@ -1137,11 +1415,18 @@ void dName_c::MenuSelect() {
             }
             menuAbtnSelect();
         } else if (mDoCPd_c::getTrigStart(PAD_1)) {
-            #if REGION_PAL
-            if (mSelMenu == MENU_EIGO) {
-            #else
-            if (mSelMenu == EIGO_OR_END) {
+            #if TARGET_PC
+            if (useChineseNameKeyboard() ? mSelMenu == MENU_EIGO :
             #endif
+            #if REGION_PAL
+                mSelMenu == MENU_EIGO
+            #else
+                mSelMenu == EIGO_OR_END
+            #endif
+            #if TARGET_PC
+            )
+            #endif
+            {
                 if (nameCheck() != 0) {
                     mDoAud_seStart(Z2SE_SY_NAME_OK, NULL, 0, 0);
                 } else {
@@ -1157,14 +1442,20 @@ void dName_c::MenuSelectAnmInit() {
     mSelIcon->setAlphaRate(0.0f);
 
     int prevMenu_i = getMenuPosIdx(mPrevSelMenu);
-    mMenuIcon[prevMenu_i]->scaleAnimeStart(0);
+    if (mMenuIcon[prevMenu_i] != NULL) {
+        mMenuIcon[prevMenu_i]->scaleAnimeStart(0);
+    }
 }
 
 void dName_c::MenuSelectAnm() {
     int prevMenu_i = getMenuPosIdx(mPrevSelMenu);
 
-    if (mMenuIcon[prevMenu_i]->scaleAnime(mCursorDelay, g_nmHIO.mMenuScale, 1.0f, 0) == 1) {
-        mMenuText[prevMenu_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+    if (mMenuIcon[prevMenu_i] == NULL ||
+        mMenuIcon[prevMenu_i]->scaleAnime(mCursorDelay, g_nmHIO.mMenuScale, 1.0f, 0) == 1)
+    {
+        if (mMenuText[prevMenu_i] != NULL) {
+            mMenuText[prevMenu_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+        }
         menuCursorMove();
         mSelProc = PROC_MENU_SELECT;
         field_0x2ad = mSelProc;
@@ -1173,20 +1464,24 @@ void dName_c::MenuSelectAnm() {
 
 void dName_c::MenuSelectAnm2() {
     int prevMenu_i = getMenuPosIdx(mPrevSelMenu);
-    int mojiSet_i = getMenuPosIdx(mMojiSet);
+    int mojiSet_i = getMenuPosIdx(DUSK_IF_ELSE(getActiveNameMenu(), mMojiSet));
 
     bool canMove = true;
-    if (prevMenu_i != mojiSet_i) {
+    if (prevMenu_i != mojiSet_i && mMenuIcon[prevMenu_i] != NULL) {
         canMove = mMenuIcon[prevMenu_i]->scaleAnime(mCursorDelay, g_nmHIO.mMenuScale, 1.0f, 0);
     }
 
     if (canMove == true) {
         if (prevMenu_i != mojiSet_i) {
-            mMenuText[prevMenu_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+            if (mMenuText[prevMenu_i] != NULL) {
+                mMenuText[prevMenu_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+            }
             #if TARGET_PC || REGION_PAL || REGION_JPN
             IF_DUSK_BLOCK(isPalOrJpn())
-            mMenuIcon[mojiSet_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
-            mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+            if (mMenuIcon[mojiSet_i] != NULL && mMenuText[mojiSet_i] != NULL) {
+                mMenuIcon[mojiSet_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
+                mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+            }
             IF_DUSK_BLOCK_END
             #endif
         }
@@ -1200,7 +1495,15 @@ void dName_c::MenuSelectAnm3() {}
 
 void dName_c::menuAbtnSelect() {
 #if TARGET_PC
-    if (dusk::version::isRegionPal() && mSelMenu == MENU_EIGO) {
+    if (useChineseNameKeyboard() && isChineseNameMenu(mSelMenu)) {
+        mPrevMojiSet = mMojiSet;
+        mMojiSet = MOJI_KATA;
+        sShowingChineseNamePage = true;
+        mojiListChange();
+        return;
+    }
+
+    if (dusk::version::isRegionPal() && !useChineseNameKeyboard() && mSelMenu == MENU_EIGO) {
         goto pal_eigo;
     }
 #endif
@@ -1210,10 +1513,19 @@ void dName_c::menuAbtnSelect() {
     #if !REGION_PAL
     case MENU_EIGO:
     #endif
+        #if TARGET_PC
+        if (useChineseNameKeyboard()) {
+            sShowingChineseNamePage = false;
+        }
+        #endif
         if (mSelMenu != mMojiSet) {
             mPrevMojiSet = mMojiSet;
             mMojiSet = mSelMenu;
             mojiListChange();
+        #if TARGET_PC
+        } else if (useChineseNameKeyboard()) {
+            mojiListChange();
+        #endif
         }
         break;
     #if REGION_PAL
@@ -1282,10 +1594,10 @@ void dName_c::mojiListChange() {
     if (dusk::version::isRegionPal()) {
         switch (mMojiSet) {
         case MOJI_HIRA:
-            mojiSet = l_mojiEisuPal_1;
+            mojiSet = useChineseNameKeyboard() ? l_mojiEisuPalChinese_1 : l_mojiEisuPal_1;
             break;
         case MOJI_KATA:
-            mojiSet = l_mojiEisuPal_2;
+            mojiSet = useChineseNameKeyboard() ? l_mojiEisuPalChinese_2 : l_mojiEisuPal_2;
             break;
         }
     } else {
@@ -1330,6 +1642,12 @@ void dName_c::mojiListChange() {
 
     char buf[74];
     for (int i = 0; i < 65; i++) {
+        #if TARGET_PC
+        const char* moji = dusk::version::isRegionPal() ? getPalNameKeyboardCell(mojiSet, i) : mojiSet[i];
+        #else
+        const char* moji = mojiSet[i];
+        #endif
+
         strcpy(buf, "\x1B"
                     "CD"
                     "\x1B"
@@ -1338,25 +1656,31 @@ void dName_c::mojiListChange() {
                     "CC[000000]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, mojiSet[i]);
+        strcat(buf, moji);
         strcat(buf, "\x1B"
                     "HM"
                     "\x1B"
                     "CC[ffffff]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, mojiSet[i]);
+        strcat(buf, moji);
         strcpy(mMojiText[i], buf);
     }
 
     #if TARGET_PC || REGION_PAL || REGION_JPN
     IF_DUSK_BLOCK(isPalOrJpn())
     if (mSelProc == PROC_MOJI_SELECT) {
-        mMenuIcon[mMojiSet]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
-        mMenuText[mMojiSet]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+        int mojiSet_i = getMenuPosIdx(DUSK_IF_ELSE(getActiveNameMenu(), mMojiSet));
+        if (mMenuIcon[mojiSet_i] != NULL && mMenuText[mojiSet_i] != NULL) {
+            mMenuIcon[mojiSet_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
+            mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
+        }
         if (mPrevMojiSet != 255) {
-            mMenuIcon[mPrevMojiSet]->scale(1.0f, 1.0f);
-            mMenuText[mPrevMojiSet]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+            int prevMojiSet_i = getMenuPosIdx(mPrevMojiSet);
+            if (mMenuIcon[prevMojiSet_i] != NULL && mMenuText[prevMojiSet_i] != NULL) {
+                mMenuIcon[prevMojiSet_i]->scale(1.0f, 1.0f);
+                mMenuText[prevMojiSet_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+            }
         }
     }
     IF_DUSK_BLOCK_END
@@ -1365,6 +1689,11 @@ void dName_c::mojiListChange() {
 
 void dName_c::menuCursorMove() {
     int menu_i = getMenuPosIdx(mSelMenu);
+    if (mMenuIcon[menu_i] == NULL || mMenuText[menu_i] == NULL) {
+        mSelIcon->setAlphaRate(0.0f);
+        return;
+    }
+
     mMenuIcon[menu_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
     mMenuText[menu_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
 
@@ -1375,15 +1704,22 @@ void dName_c::menuCursorMove() {
 
 void dName_c::menuCursorMove2() {
     int menu_i = getMenuPosIdx(mSelMenu);
-    int mojiSet_i = getMenuPosIdx(mMojiSet);
+    int mojiSet_i = getMenuPosIdx(DUSK_IF_ELSE(getActiveNameMenu(), mMojiSet));
+
+    if (mMenuIcon[menu_i] == NULL || mMenuText[menu_i] == NULL) {
+        mSelIcon->setAlphaRate(0.0f);
+        return;
+    }
 
     if (menu_i != mojiSet_i) {
         mMenuIcon[menu_i]->scale(g_nmHIO.mMenuScale, g_nmHIO.mMenuScale);
         mMenuText[menu_i]->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
         #if TARGET_PC || REGION_PAL || REGION_JPN
         IF_DUSK_BLOCK(isPalOrJpn())
-        mMenuIcon[mojiSet_i]->scale(1.0f, 1.0f);
-        mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+        if (mMenuIcon[mojiSet_i] != NULL && mMenuText[mojiSet_i] != NULL) {
+            mMenuIcon[mojiSet_i]->scale(1.0f, 1.0f);
+            mMenuText[mojiSet_i]->setWhite(JUtility::TColor(0x96, 0x96, 0x96, 0xFF));
+        }
         IF_DUSK_BLOCK_END
         #endif
     }
@@ -1414,11 +1750,13 @@ void dName_c::selectCursorPosSet(int row) {
             mCharColumn = 6;
             #endif
             break;
-        #if !REGION_PAL
         case MENU_END:
+            #if TARGET_PC
+            mCharColumn = useChineseNameKeyboard() ? 9 : 8;
+            #else
             mCharColumn = 8;
+            #endif
             break;
-        #endif
         }
 
         mCharRow = row;
@@ -1512,7 +1850,7 @@ void dName_c::screenSet() {
         0x388,
         0x38A,
     };
-#else
+    #else
     static u64 l_menu_icon_tag[4] = {
         MULTI_CHAR('p_ABC_n'),
         MULTI_CHAR('p_abc_n'),
@@ -1598,21 +1936,28 @@ void dName_c::screenSet() {
 
     J2DTextBox* menuPane[3];
     for (int i = 0; i < 4; i++) {
+        mMenuIcon[i] = NULL;
+        mMenuText[i] = NULL;
         #if !REGION_JPN
         if (i == 2) {
-            mMenuIcon[i] = NULL;
-            mMenuText[i] = NULL;
         } else {
         #endif
             mMenuIcon[i] = JKR_NEW CPaneMgr(nameIn.NameInScr, l_menu_icon_tag[i], 1, NULL);
 
             char buf[16];
-            fopMsgM_messageGet(buf, l_menu_msg[i]);
+            if (useChineseNameKeyboard() && i == 1) {
+                strcpy(buf, "\x92\x86\x95\xB6");
+            } else {
+                fopMsgM_messageGet(buf, l_menu_msg[i]);
+            }
 
             for (int j = 0; j < 3; j++) {
                 menuPane[j] = (J2DTextBox*)nameIn.NameInScr->search(l_menu_tag[i][j]);
+                if (menuPane[j] == NULL) {
+                    continue;
+                }
 
-                if (j == 0) {
+                if (mMenuText[i] == NULL) {
                     mMenuText[i] = menuPane[j];
                 }
 
@@ -1654,7 +1999,7 @@ void dName_c::screenSet() {
         mNameText[i] = ((J2DTextBox*)nameTagPane[i])->getStringPtr();
     }
 
-    #if REGION_PAL // DUSK version note: this code mutates strings. We just edit the table.
+    #if REGION_PAL && !TARGET_PC // DUSK version note: this code mutates strings. We just edit the table.
     IF_DUSK_BLOCK(dusk::version::isRegionPal())
     int idx = 2;
 
@@ -1743,12 +2088,30 @@ void dName_c::NameStrSet() {
     int i = 0;
     while (*moji != 0) {
         #if TARGET_PC
-        if (dusk::version::isRegionPal()) {
+        if (useChineseNameKeyboard() && isShiftJisLeadByte(*(u8*)moji)) {
+            mChrInfo[i].mCharacter = twoByteCode(moji);
+
+            for (int page = 0; page < CHINESE_NAME_PAGE_COUNT; page++) {
+                for (int j = 0; j < CHINESE_NAME_PAGE_CHARS; j++) {
+                    if (mChrInfo[i].mCharacter == l_mojiZh[page][j]) {
+                        sChineseNamePage = page;
+                        sShowingChineseNamePage = true;
+                        mChrInfo[i].mColumn = j / 5;
+                        mChrInfo[i].mRow = j % 5;
+                        mChrInfo[i].mMojiSet = MOJI_KATA;
+                        goto found_chinese_name_char;
+                    }
+                }
+            }
+found_chinese_name_char:
+            moji += 2;
+            i++;
+        } else if (dusk::version::isRegionPal()) {
             mChrInfo[i].mCharacter = static_cast<u8>(*moji);
 
             for (int j = 0; j < 65; j++) {
-                if (mChrInfo[i].mCharacter == *(u8*)l_mojiEisuPal_1[j] ||
-                    mChrInfo[i].mCharacter == *(u16*)l_mojiEisuPal_2[j])
+                if (mChrInfo[i].mCharacter == *(u8*)getPalNameKeyboardTableCell(true, j) ||
+                    mChrInfo[i].mCharacter == *(u8*)getPalNameKeyboardTableCell(false, j))
                 {
                     mChrInfo[i].mColumn = j / 5;
                     mChrInfo[i].mRow = j % 5;
@@ -1879,11 +2242,9 @@ s32 dName_c::getMenuPosIdx(u8 selPos) {
         result = 2;
         #endif
         break;
-    #if !REGION_PAL
     case 3:
         result = 3;
         break;
-    #endif
     }
     return result;
     //!@bug UB: uninitialized default return

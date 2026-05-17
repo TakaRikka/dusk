@@ -118,6 +118,7 @@ struct UserSettings {
         ConfigVar<bool> enableAchievementToasts;
         ConfigVar<bool> enableControllerToasts;
         ConfigVar<bool> enableDiscordPresence;
+        ConfigVar<bool> enableChineseNameKeyboard;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
