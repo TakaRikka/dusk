@@ -140,7 +140,7 @@ private:
     /* 0x02C */ J2DAnmTextureSRTKey* mCursorTexKey;
     /* 0x030 */ int mCurTexAnmF;
     /* 0x034 */ CPaneMgrAlpha* mNameCursor[8];
-    /* 0x054 */ char* mNameText[8];
+    /* 0x054 */ TEXT_SPAN mNameText[8];
     /* 0x074 */ CPaneMgr* mMojiIcon[65];
     /* 0x178 */ TEXT_SPAN mMojiText[65];
     /* 0x27C */ J2DPane* mMojiPane;

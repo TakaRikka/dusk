@@ -1093,14 +1093,14 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
             int number = dComIfGp_getMessageCountNumber() / 100;
-            sprintf(buffer, "%d", number);
+            SAFE_SPRINTF(buffer, "%d", number);
             push_word(buffer);
             return true;
         }
         case MSGTAG_MAX_LETTER_PAGE: {
             char buffer[4];
             int number = dComIfGp_getMessageCountNumber() % 100;
-            sprintf(buffer, "%d", number);
+            SAFE_SPRINTF(buffer, "%d", number);
             push_word(buffer);
             return true;
         }
@@ -3501,7 +3501,7 @@ void jmessage_tRenderingProcessor::do_color(u8 i_colorNo) {
     mGCColor = getFontGCColorTable(i_colorNo, reference_p->getFukiKind());
 
     char buffer[40];
-    sprintf(buffer,
+    SAFE_SPRINTF(buffer,
             "\x1B"
             "CC[%08x]"
             "\x1B"
@@ -3529,7 +3529,7 @@ void jmessage_tRenderingProcessor::do_scale(f32 param_1) {
     }
 
     char buffer[32];
-    sprintf(buffer,
+    SAFE_SPRINTF(buffer,
             "\x1B"
             "FX[%d]"
             "\x1B"
@@ -3541,7 +3541,7 @@ void jmessage_tRenderingProcessor::do_scale(f32 param_1) {
 void jmessage_tRenderingProcessor::do_linedown(s16 param_0) {
     char buffer[16];
 
-    sprintf(buffer, "\x1B" "CD[%d]", param_0);
+    SAFE_SPRINTF(buffer, "\x1B" "CD[%d]", param_0);
     do_strcat(buffer, false, true, false);
 }
 
@@ -3551,11 +3551,11 @@ void jmessage_tRenderingProcessor::do_transY(s16 i_transY, bool unused) {
         char buffer1[16];
 
         if (i_transY < 0) {
-            sprintf(buffer0, "\x1B" "CU[%d]", -i_transY);
-            sprintf(buffer1, "\x1B" "CD[%d]", -i_transY);
+            SAFE_SPRINTF(buffer0, "\x1B" "CU[%d]", -i_transY);
+            SAFE_SPRINTF(buffer1, "\x1B" "CD[%d]", -i_transY);
         } else {
-            sprintf(buffer0, "\x1B" "CD[%d]", i_transY);
-            sprintf(buffer1, "\x1B" "CU[%d]", i_transY);
+            SAFE_SPRINTF(buffer0, "\x1B" "CD[%d]", i_transY);
+            SAFE_SPRINTF(buffer1, "\x1B" "CU[%d]", i_transY);
         }
 
         field_0x4c -= i_transY;
@@ -3677,7 +3677,7 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                         u32 charColor = (mCCColor & 0xFFFFFF00) | ((int)pReference->getCharAlpha() & 0xFF);
                         u32 gradColor = (mGCColor & 0xFFFFFF00) | ((int)pReference->getCharAlpha() & 0xFF);
                         char buffer[36];
-                        sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", charColor, gradColor);
+                        SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", charColor, gradColor);
 
                         int length = 0;
                         length = strlen(buffer);
@@ -4046,13 +4046,13 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             break;
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
             stack_pushCurrent(buffer);
             break;
         }
         case MSGTAG_MAX_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
             stack_pushCurrent(buffer);
             break;
         }
@@ -4604,13 +4604,13 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             break;
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
             push_word(buffer);
             break;
         }
         case MSGTAG_MAX_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
             push_word(buffer);
             break;
         }
@@ -5209,7 +5209,7 @@ void jmessage_string_tRenderingProcessor::do_color(u8 i_colorNo) {
     }
 
     char buffer[32];
-    sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
+    SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
     do_strcat(buffer);
 }
 
@@ -5220,13 +5220,13 @@ void jmessage_string_tRenderingProcessor::do_scale(f32 i_scale) {
     s16 scaleY = 0.5f + fontSize.mSizeY * i_scale;
 
     char buffer[32];
-    sprintf(buffer, "\x1b" "FX[%d]" "\x1b" "FY[%d]", scaleX, scaleY);
+    SAFE_SPRINTF(buffer, "\x1b" "FX[%d]" "\x1b" "FY[%d]", scaleX, scaleY);
     do_strcat(buffer);
 }
 
 void jmessage_string_tRenderingProcessor::do_linedown(s16 i_lineNo) {
     char buffer[16];
-    sprintf(buffer, "\x1B" "CD[%d]", i_lineNo);
+    SAFE_SPRINTF(buffer, "\x1B" "CD[%d]", i_lineNo);
     do_strcat(buffer);
 }
 

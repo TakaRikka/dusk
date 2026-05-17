@@ -20,10 +20,10 @@ static const char* getBmdName(int param_0, int param_1) {
 
     switch (param_1) {
     case 0:
-        sprintf(l_bmdName, "model%d.bmd", param_0);
+        SAFE_SPRINTF(l_bmdName, "model%d.bmd", param_0);
         break;
     default:
-        sprintf(l_bmdName, "model%d_%d.bmd", param_0, param_1);
+        SAFE_SPRINTF(l_bmdName, "model%d_%d.bmd", param_0, param_1);
         break;
     }
 
@@ -35,10 +35,10 @@ static const char* getBtkName(int param_0, int param_1) {
 
     switch (param_1) {
     case 0:
-        sprintf(l_btkName, "model%d.btk", param_0);
+        SAFE_SPRINTF(l_btkName, "model%d.btk", param_0);
         break;
     default:
-        sprintf(l_btkName, "model%d_%d.btk", param_0, param_1);
+        SAFE_SPRINTF(l_btkName, "model%d_%d.btk", param_0, param_1);
         break;
     }
 
@@ -50,10 +50,10 @@ static const char* getBrkName(int param_0, int param_1) {
 
     switch (param_1) {
     case 0:
-        sprintf(l_brkName, "model%d.brk", param_0);
+        SAFE_SPRINTF(l_brkName, "model%d.brk", param_0);
         break;
     default:
-        sprintf(l_brkName, "model%d_%d.brk", param_0, param_1);
+        SAFE_SPRINTF(l_brkName, "model%d_%d.brk", param_0, param_1);
         break;
     }
 
@@ -63,7 +63,7 @@ static const char* getBrkName(int param_0, int param_1) {
 static const char* getDzbName(int param_0) {
     static char l_dzbName[16];
 
-    sprintf(l_dzbName, "model%d.dzb", param_0);
+    SAFE_SPRINTF(l_dzbName, "model%d.dzb", param_0);
     return l_dzbName;
 }
 

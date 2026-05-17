@@ -2738,7 +2738,7 @@ void* dComIfG_getOldStageRes(char const* i_resName) {
 
 char* dComIfG_getRoomArcName(int i_roomNo) {
     static char buf[32];
-    sprintf(buf, "R%02d_00", i_roomNo);
+    SAFE_SPRINTF(buf, "R%02d_00", i_roomNo);
     return buf;
 }
 

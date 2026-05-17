@@ -908,7 +908,7 @@ void dName_c::setNameText() {
             #if REGION_JPN
             if (mChrInfo[i].mMojiSet == 2) {
             #endif
-                sprintf(mNameText[i],
+                SAFE_SPRINTF(mNameText[i],
                         "\x1b"
                         "CD\x1b"
                         "CR\x1b"
@@ -919,7 +919,7 @@ void dName_c::setNameText() {
                 );
             #if REGION_JPN
             } else {
-                sprintf(mNameText[i],
+                SAFE_SPRINTF(mNameText[i],
                         "\x1b"
                         "CD\x1b"
                         "CR\x1b"

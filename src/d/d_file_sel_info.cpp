@@ -176,13 +176,13 @@ void dFile_info_c::setSaveDate(dSv_save_c* i_savedata) {
 
     #if TARGET_PC
     if (dusk::version::isRegionJpn()) {
-        sprintf(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
+        SAFE_SPRINTF(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
             time.hour, time.min);
     } else if (dusk::version::isRegionPal() && dComIfGs_getPalLanguage() != dSv_player_config_c::LANGUAGE_ENGLISH) {
-        sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mday, time.mon + 1, time.year, time.hour,
+        SAFE_SPRINTF(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mday, time.mon + 1, time.year, time.hour,
             time.min);
     } else {
-        sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
+        SAFE_SPRINTF(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
             time.min);
     }
     #elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
@@ -207,11 +207,11 @@ void dFile_info_c::setPlayTime(dSv_save_c* i_savedata) {
 
     // 3599940 = 999:59 in seconds
     if (time >= 3599940) {
-        sprintf(mPlayTime, "999:59");
+        SAFE_SPRINTF(mPlayTime, "999:59");
     } else {
         u32 min = (time % 3600) / 60;
         u32 hours = time / 3600;
-        sprintf(mPlayTime, "%d:%02d", hours, min);
+        SAFE_SPRINTF(mPlayTime, "%d:%02d", hours, min);
     }
 }
 

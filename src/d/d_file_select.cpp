@@ -4247,7 +4247,7 @@ void dFile_select_c::MemCardLoadWait() {
         if (mDoMemCd_getDataVersion() != 6) {
             char errmsg[264];
             // "Savedata version is different\n\nVersion %d\n\nFormatting data."
-            sprintf(errmsg, "セーブデータのバージョンが違います\n\nバージョン %d\n\nデータを初期化します。", mDoMemCd_getDataVersion());
+            SAFE_SPRINTF(errmsg, "セーブデータのバージョンが違います\n\nバージョン %d\n\nデータを初期化します。", mDoMemCd_getDataVersion());
             errDispInitSet(errmsg);
             field_0x0280 = false;
             mWindowCloseMsgDispCb = NULL;

@@ -838,7 +838,7 @@ s16 dEvent_manager_c::getEventIdx(const char* eventName, u8 mapToolID, s32 roomN
             case dStage_MapEvent_dt_TYPE_STB:
                 return getEventIdx(mapdata->data.event_name, 0xFF, roomNo);
             case dStage_MapEvent_dt_TYPE_MAPTOOLCAMERA:
-                sprintf(map_tool_name, "MapToolCamera%d", mapToolID);
+                SAFE_SPRINTF(map_tool_name, "MapToolCamera%d", mapToolID);
                 return getEventIdx(map_tool_name, 0xFF, roomNo);
             default:
                 JUT_ASSERT(1278, FALSE);
@@ -878,7 +878,7 @@ s16 dEvent_manager_c::getEventIdx(fopAc_ac_c* actor, u8 mapToolID) {
         case dStage_MapEvent_dt_TYPE_STB:
             return getEventIdx(actor, mapdata->data.event_name, 0xFF);
         case dStage_MapEvent_dt_TYPE_MAPTOOLCAMERA:
-            sprintf(map_tool_name, "MapToolCamera%d", mapToolID);
+            SAFE_SPRINTF(map_tool_name, "MapToolCamera%d", mapToolID);
             return getEventIdx(actor, map_tool_name, 0xFF);
         default:
             JUT_ASSERT(1341, FALSE);
@@ -903,7 +903,7 @@ s16 dEvent_manager_c::getEventIdx(fopAc_ac_c* actor, const char* eventName, u8 m
             case dStage_MapEvent_dt_TYPE_STB:
                 return getEventIdx(actor, mapdata->data.event_name, 0xFF);
             case dStage_MapEvent_dt_TYPE_MAPTOOLCAMERA:
-                sprintf(map_tool_name, "MapToolCamera%d", mapToolID);
+                SAFE_SPRINTF(map_tool_name, "MapToolCamera%d", mapToolID);
                 return getEventIdx(actor, map_tool_name, 0xFF);
             default:
                 JUT_ASSERT(1376, FALSE);

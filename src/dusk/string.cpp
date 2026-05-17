@@ -74,4 +74,12 @@ void SafeStringCat(char* buffer, size_t bufSize, const char* src) {
     buffer[dstSize + srcSize] = 0;
 }
 
+int SafeStringVPrintf(char* buffer, size_t bufSize, const char* src, std::va_list args) {
+    if (bufSize == 0) [[unlikely]] {
+        CRASH("Target buffer cannot be size zero");
+    }
+
+    return vsnprintf(buffer, bufSize, src, args);
+}
+
 }  // namespace dusk

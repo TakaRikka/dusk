@@ -501,7 +501,7 @@ void dMenu_Letter_c::read_open_init() {
     field_0x3e2 = mpString->getPageMax(D_MENU_LETTER_LINE_MAX);
     if (field_0x3e2 > 1) {
         char acStack_30[20];
-        sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
+        SAFE_SPRINTF(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
         for (int i = 0; i < 2; i++) {
             field_0x1e4[i]->show();
             SAFE_STRCPY(field_0x1e4[i]->getStringPtr(), acStack_30);
@@ -654,7 +654,7 @@ void dMenu_Letter_c::read_next_fadein_init() {
                                 D_MENU_LETTER_LINE_MAX, text2, text1, NULL, NULL, 0);
     }
     char acStack_30[10];
-    sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
+    SAFE_SPRINTF(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
     for (int i = 0; i < 2; i++) {
         field_0x1e4[i]->show();
         SAFE_STRCPY(field_0x1e4[i]->getStringPtr(), acStack_30);

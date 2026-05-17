@@ -2204,7 +2204,7 @@ bool dMenu_Fmap_c::readRoomData(char const* i_stageName, dMenu_Fmap_stage_data_c
     dMenu_Fmap_stage_arc_data_c* room_data = NULL;
     
     char stage_path[20];
-    sprintf(stage_path, "%s/stage.dat", i_stageName);
+    SAFE_SPRINTF(stage_path, "%s/stage.dat", i_stageName);
     if (readFieldMapData((void**)&room_data, stage_path, false, false)) {
         ((dMenuMapCommon_c::RoomData_c*)o_roomData)->setRoomData(room_data);
     }
@@ -2218,7 +2218,7 @@ bool dMenu_Fmap_c::readRoomData(char const* i_stageName, dMenu_Fmap_stage_data_c
             void* dzs_data = NULL;
 
             char room_path[20];
-            sprintf(room_path, "%s/room%d.dzs", i_stageName, room_nos[i]);
+            SAFE_SPRINTF(room_path, "%s/room%d.dzs", i_stageName, room_nos[i]);
 
             if (readRoomDzsData(&dzs_data, 0x1500, room_path)) {
                 dMenu_Fmap_data_c* map_data = JKR_NEW dMenu_Fmap_data_c();
@@ -2309,9 +2309,9 @@ void dMenu_Fmap_c::decodeFieldMapData() {
                 bool local_3f = false;
                 if (j == 7) {
                     local_3f = true;
-                    sprintf(tex_path, "tex/region8.bti");
+                    SAFE_SPRINTF(tex_path, "tex/region8.bti");
                 } else {
-                    sprintf(tex_path, "tex/region%d.bti", regions[i].mTextureReadNum);
+                    SAFE_SPRINTF(tex_path, "tex/region%d.bti", regions[i].mTextureReadNum);
                 }
 
                 if (readFieldMapData((void**)&mRegionTexture[j], tex_path, true, local_3f)) {

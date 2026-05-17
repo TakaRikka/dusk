@@ -1,5 +1,6 @@
 #ifndef DUSK_STRING_HPP
 #define DUSK_STRING_HPP
+#include <cstdarg>
 
 namespace dusk {
 
@@ -62,6 +63,7 @@ void SafeStringCopyTruncate(char (&buffer)[BufSize], const char* src) {
 
 void SafeStringCopy(char* buffer, size_t bufSize, const char* src);
 void SafeStringCat(char* buffer, size_t bufSize, const char* src);
+int SafeStringVPrintf(char* buffer, size_t bufSize, const char* src, std::va_list args);
 
 inline void SafeStringCopy(TextSpan dst, const char* src) {
     SafeStringCopy(dst.buffer, dst.size, src);
@@ -69,6 +71,15 @@ inline void SafeStringCopy(TextSpan dst, const char* src) {
 
 inline void SafeStringCat(TextSpan dst, const char* src) {
     SafeStringCat(dst.buffer, dst.size, src);
+}
+
+inline int SafeStringPrintf(TextSpan dst, const char* format, ...) {
+    std::va_list args;
+    va_start(args, format);
+    const auto ret = SafeStringVPrintf(dst.buffer, dst.size, format, args);
+    va_end(args);
+
+    return ret;
 }
 
 /**
@@ -87,14 +98,28 @@ void SafeStringCat(char (&buffer)[BufSize], const char* src) {
     SafeStringCat(buffer, BufSize, src);
 }
 
+template <size_t BufSize>
+int SafeStringPrintf(char (&buffer)[BufSize], const char* format, ...) {
+    static_assert(BufSize > 0, "Target buffer cannot be size zero");
+
+    std::va_list args;
+    va_start(args, format);
+    const auto ret = SafeStringVPrintf(buffer, BufSize, format, args);
+    va_end(args);
+
+    return ret;
+}
+
 #if TARGET_PC
 #define SAFE_STRCPY(dst, src) dusk::SafeStringCopy(dst, src)
 #define SAFE_STRCAT(dst, src) dusk::SafeStringCat(dst, src)
+#define SAFE_SPRINTF(dst, format, ...) dusk::SafeStringPrintf(dst, format, __VA_ARGS__)
 #define SAFE_STRCPY_BOUNDED(dst, size, src) dusk::SafeStringCopy(dst, size, src)
 #define SAFE_STRCAT_BOUNDED(dst, size, src) dusk::SafeStringCat(dst, size, src)
 #else
 #define SAFE_STRCPY(dst, src) strcpy(dst, src)
 #define SAFE_STRCAT(dst, src) strcat(dst, src)
+#define SAFE_SPRINTF(dst, format, ...) sprintf(dst, format, __VA_ARGS__)
 #define SAFE_STRCPY_BOUNDED(dst, size, src) strcpy(dst, src)
 #define SAFE_STRCPY_BOUNDED(dst, size, src) strcat(dst, src)
 #endif
