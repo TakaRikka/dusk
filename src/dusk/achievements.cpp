@@ -280,7 +280,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "all_fish",
                 "Gone Fishin'",
-                "Catch all 6 species of fish.",
+                "Obtain all 6 species of fish in your fishing journal.",
                 AchievementCategory::Collection,
                 true, 6, 0, false
             },
