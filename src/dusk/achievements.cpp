@@ -265,7 +265,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "hylian_loach",
                 "Legendary Catch",
-                "Catch a Hylian Loach.",
+                "Obtain the Hylian Loach in your fishing journal.",
                 AchievementCategory::Collection,
                 false, 0, 0, false
             },
