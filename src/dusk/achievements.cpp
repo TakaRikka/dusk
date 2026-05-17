@@ -1035,6 +1035,26 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 a.progress = 1;
             },
             {}
+        },
+        {
+            {
+                "early_kakariko",
+                "Gorge Skip",
+                "Collect the Kakariko warp portal without warping the gorge bridge.",
+                AchievementCategory::Glitched,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::M_018)) {
+                    return;
+                }
+                const bool savedPortal = g_dComIfG_gameInfo.info.getSavedata().getSave(dStage_SaveTbl_ELDIN).getBit().isSwitch(31);
+                const bool livePortal = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_ELDIN && dComIfGs_isSaveSwitch(31);
+                if (savedPortal || livePortal) {
+                    a.progress = 1;
+                }
+            },
+            {}
         }
     };
 }
