@@ -563,7 +563,7 @@ int game_main(int argc, char* argv[]) {
         config.allowJoystickBackgroundEvents = dusk::getSettings().game.allowBackgroundInput;
         config.pauseOnFocusLost = dusk::getSettings().game.pauseOnFocusLost;
         config.imGuiInitCallback = &aurora_imgui_init_callback;
-        config.allowTextureReplacements = true;
+        config.allowTextureReplacements = dusk::getSettings().game.enableTextureReplacements;
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);
     }

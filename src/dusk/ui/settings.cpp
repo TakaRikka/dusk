@@ -796,6 +796,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }, mPrelaunch);
 
         leftPane.add_section("Rendering");
+        config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
+            {
+                .key = "Use Texture Pack",
+                .helpText = "Enable installed texture replacements.",
+                .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
             {
                 .key = "Unlock Framerate",
