@@ -214,10 +214,10 @@ Alternate presets available:
 
 **Windows / Linux**
 
-* Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
+* Pass the disc image as a positional argument using the `--dvd` flag. Supported formats are: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
 
 ```sh
-build/{preset}/dusklight /path/to/game.iso
+build/{preset}/dusklight --dvd /path/to/game.iso
 ```
 
 * **Note**: If no path is specified for the disc image, Dusklight defaults to `game.iso` in the current working directory.
@@ -230,10 +230,10 @@ build/{preset}/dusklight
 
 macOS builds an `.app` bundle which contains the executable and all necessary resources.
 
-* Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
+* Pass the disc image as a positional argument using the `--dvd` flag. Supported formats are: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
 
 ```sh
-build/{preset}/Dusklight.app/Contents/MacOS/Dusklight /path/to/game.iso
+build/{preset}/Dusklight.app/Contents/MacOS/Dusklight --dvd /path/to/game.iso
 ```
 
 * **Note**: If no path is specified for the disc image, Dusklight defaults to `game.iso` in the current working directory.
