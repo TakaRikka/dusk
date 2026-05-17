@@ -839,7 +839,7 @@ void daAlink_c::setSwimMoveAnime() {
             s16 var_r24;
             if (checkInputOnR() && !checkEventRun()) {
 #if TARGET_PC
-                if (dusk::GetConfigs().game.invertSwimYAxis) {
+                if (dusk::getSettings().game.invertSwimYAxis) {
                     var_r24 = -13653.0f * cM_scos(mStickAngle);
                 } else {
                     var_r24 = 13653.0f * cM_scos(mStickAngle);

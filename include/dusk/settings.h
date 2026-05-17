@@ -238,10 +238,6 @@ struct TransientSettings {
 
 TransientSettings& getTransientSettings();
 
-// Helper function to get the user settings
-inline UserSettings& GetConfigs() {
-    return getSettings();
-}
 
 }
 
