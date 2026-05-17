@@ -111,17 +111,17 @@ int SafeStringPrintf(char (&buffer)[BufSize], const char* format, ...) {
 }
 
 #if TARGET_PC
-#define SAFE_STRCPY(dst, src) dusk::SafeStringCopy(dst, src)
-#define SAFE_STRCAT(dst, src) dusk::SafeStringCat(dst, src)
-#define SAFE_SPRINTF(dst, format, ...) dusk::SafeStringPrintf(dst, format, __VA_ARGS__)
-#define SAFE_STRCPY_BOUNDED(dst, size, src) dusk::SafeStringCopy(dst, size, src)
-#define SAFE_STRCAT_BOUNDED(dst, size, src) dusk::SafeStringCat(dst, size, src)
+#define SAFE_STRCPY dusk::SafeStringCopy
+#define SAFE_STRCAT dusk::SafeStringCat
+#define SAFE_SPRINTF dusk::SafeStringPrintf
+#define SAFE_STRCPY_BOUNDED dusk::SafeStringCopy
+#define SAFE_STRCAT_BOUNDED dusk::SafeStringCat
 #else
-#define SAFE_STRCPY(dst, src) strcpy(dst, src)
-#define SAFE_STRCAT(dst, src) strcat(dst, src)
-#define SAFE_SPRINTF(dst, format, ...) sprintf(dst, format, __VA_ARGS__)
-#define SAFE_STRCPY_BOUNDED(dst, size, src) strcpy(dst, src)
-#define SAFE_STRCPY_BOUNDED(dst, size, src) strcat(dst, src)
+#define SAFE_STRCPY strcpy
+#define SAFE_STRCAT strcat
+#define SAFE_SPRINTF sprintf
+#define SAFE_STRCPY_BOUNDED strcpy
+#define SAFE_STRCPY_BOUNDED strcat
 #endif
 }
 
