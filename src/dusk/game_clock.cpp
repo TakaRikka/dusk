@@ -45,7 +45,7 @@ MainLoopPacer advance_main_loop() {
     MainLoopPacer out{};
     out.presentation_dt_seconds = presentation_dt;
 
-    const bool should_interpolate = dusk::getSettings().game.enableFrameInterpolation &&
+    const bool should_interpolate = dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off &&
                                     !dusk::getTransientSettings().skipFrameRateLimit;
     out.is_interpolating = should_interpolate;
     out.sim_pace = sim_pace();

@@ -154,7 +154,7 @@ static int daE_S1_Draw(e_s1_class* i_this) {
     dComIfGd_set3DlineMatDark(&i_this->mLineMat);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off) {
         if (i_this->mHairInterpCurrValid) {
             memcpy(i_this->mHairInterpPrev, i_this->mHairInterpCurr, sizeof(i_this->mHairInterpCurr));
             i_this->mHairInterpPrevValid = true;

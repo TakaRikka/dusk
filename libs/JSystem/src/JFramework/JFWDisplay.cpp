@@ -382,7 +382,7 @@ static void waitForTick(u32 p1, u16 p2) {
 
     // RULE 1: If we are interpolating, the OUTER main loop handles the frame rate cap.
     // Inner JFWDisplay ticks must return immediately to keep the simulation pacing accurate!
-    if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
+    if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off && !dusk::getTransientSettings().skipFrameRateLimit) {
         dusk::frameUsagePct = 0.f; 
         return; 
     }
