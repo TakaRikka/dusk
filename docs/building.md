@@ -155,6 +155,7 @@ Recommended IDEs:
 
 ```sh
 git clone --recursive https://github.com/TwilitRealm/dusklight.git
+git pull
 cd dusklight
 git submodule update --init --recursive
 ```
