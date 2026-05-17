@@ -665,3 +665,31 @@ foreach (target IN LISTS BINARY_TARGETS)
         endif ()
     endforeach ()
 endforeach ()
+# cmake/Modules/FindENet.cmake should be added, or manage package parsing directly:
+find_package(Threads REQUIRED)
+
+# Include directories for our custom network source files
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
+
+# Gather all multiplayer component implementations
+set(MULTIPLAYER_SOURCES
+    src/network/NetworkManager.cpp
+    src/network/NetworkManager.hpp
+    src/network/NetworkPackets.hpp
+    src/network/NetworkSmoothing.hpp
+    src/network/WorldSync.cpp
+)
+
+# Fetch and link static libenet binaries depending on operating system architecture
+if(WIN32)
+    set(ENET_LIBRARIES "ws2_32" "winmm") # ENet dependencies on Windows environment platforms
+else()
+    set(ENET_LIBRARIES "enet") # Assumes standard libenet-dev package installation on Linux/macOS
+endif()
+
+# Append multiplayer modules directly into the primary executable target configuration
+# (Assuming the original binary target defined in the repo is named 'dusklight')
+target_sources(dusklight PRIVATE ${MULTIPLAYER_SOURCES})
+target_link_libraries(dusklight PRIVATE ${ENET_LIBRARIES} Threads::Threads)
+
+message(STATUS "Native Twilight Princess Multiplayer Mod Core Framework Injected Successfully.")
