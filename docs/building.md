@@ -46,79 +46,103 @@ Recommended IDEs:
 
 Actively tested on Ubuntu 24.04, Arch Linux & derivatives.
 
-* Ubuntu 24.04+ packages
+**Ubuntu 24.04+ packages**
 
-    ```sh
-    sudo apt update && sudo apt install -y \
-        build-essential \
-        clang \
-        cmake \
-        curl \
-        git \
-        libasound2-dev \
-        libclang-dev \
-        libcurl4-openssl-dev \
-        libdbus-1-dev \
-        libfreetype-dev \
-        libglu1-mesa-dev \
-        libgtk-3-dev \
-        libncurses5-dev \
-        libpng-dev \
-        libpulse-dev \
-        libudev-dev \
-        libvulkan-dev \
-        libx11-xcb-dev \
-        libxcursor-dev \
-        libxi-dev \
-        libxinerama-dev \
-        libxrandr-dev \
-        libxss-dev \
-        libxtst-dev \
-        lld \
-        ninja-build \
-        python-is-python3 \
-        python3 \
-        python3-markupsafe \
-        zlib1g-dev
-    ```
+<details>
+<summary>Click to expand</summary>
 
-* Arch Linux packages
+* Run the following command to install the required dependencies:
 
-    ```sh
-    sudo pacman -S --needed \
-        alsa-lib \
-        base-devel \
-        clang \
-        cmake \
-        freetype2 \
-        libpulse \
-        libxrandr \
-        lld \
-        llvm \
-        ninja \
-        python \
-        python-markupsafe \
-        vulkan-headers
-    ```
+```sh
+sudo apt update && sudo apt install -y \
+    build-essential \
+    clang \
+    cmake \
+    curl \
+    git \
+    libasound2-dev \
+    libclang-dev \
+    libcurl4-openssl-dev \
+    libdbus-1-dev \
+    libfreetype-dev \
+    libglu1-mesa-dev \
+    libgtk-3-dev \
+    libncurses5-dev \
+    libpng-dev \
+    libpulse-dev \
+    libudev-dev \
+    libvulkan-dev \
+    libx11-xcb-dev \
+    libxcursor-dev \
+    libxi-dev \
+    libxinerama-dev \
+    libxrandr-dev \
+    libxss-dev \
+    libxtst-dev \
+    lld \
+    ninja-build \
+    python-is-python3 \
+    python3 \
+    python3-markupsafe \
+    zlib1g-dev
+```
 
-* Fedora packages
+</details>
+<br>
 
-    ```sh
-    sudo dnf install -y \
-        clang-devel \
-        cmake \
-        libpng-devel \
-        llvm-devel \
-        ninja-build \
-        vulkan-headers
-    ```
+**Arch Linux packages**
 
-  * It's also important that you install the developer tools and libraries
+<details>
+<summary>Click to expand</summary>
 
-    ```sh
-    sudo dnf groupinstall \
-        "Development Libraries" "Development Tools"
-    ```
+* Run the following command to install the required dependencies:
+
+```sh
+sudo pacman -S --needed \
+    alsa-lib \
+    base-devel \
+    clang \
+    cmake \
+    freetype2 \
+    libpulse \
+    libxrandr \
+    lld \
+    llvm \
+    ninja \
+    python \
+    python-markupsafe \
+    vulkan-headers
+```
+
+</details>
+<br>
+
+**Fedora packages**
+
+<details>
+<summary>Click to expand</summary>
+
+* Run the following command to install the required dependencies:
+
+```sh
+sudo dnf install -y \
+    clang-devel \
+    cmake \
+    libpng-devel \
+    llvm-devel \
+    ninja-build \
+    vulkan-headers
+```
+
+* It's also important that you install the developer tools and libraries
+
+```sh
+sudo dnf groupinstall \
+    "Development Libraries" "Development Tools"
+```
+
+</details>
+<br>
 
 Recommended IDEs:
 
