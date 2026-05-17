@@ -2410,7 +2410,7 @@ void mDoExt_3DlineMat0_c::draw() {
     }
 
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() == dusk::FrameInterpMode::Off)
+    if (!dusk::frame_interp::is_enabled())
 #endif
     {
         field_0x16 ^= (u8)1;
@@ -2740,7 +2740,7 @@ void mDoExt_3DlineMat1_c::draw() {
     }
     GXSetTexCoordScaleManually(GX_TEXCOORD0, 0, 0, 0);
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() == dusk::FrameInterpMode::Off)
+    if (!dusk::frame_interp::is_enabled())
 #endif
     {
         mIsDrawn ^= (u8)1;
@@ -3077,7 +3077,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 
 #if TARGET_PC
 void mDoExt_3DlineMat1_c::refreshGeometryForPresentationEye(const cXyz& eye) {
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() == dusk::FrameInterpMode::Off) {
+    if (!dusk::frame_interp::is_enabled()) {
         return;
     }
     if (mInterpLineKind == 1) {

@@ -36,8 +36,8 @@ enum class GyroMode : u8 {
 
 enum class FrameInterpMode : u8 {
     Off = 0,
-    Unlimited = 1,
-    Capped = 2,
+    Capped = 1,
+    Unlimited = 2,
 };
 
 namespace config {

@@ -57,14 +57,17 @@ static T sanitizeEnumValue(const ConfigVar<T>& cVar, T value) {
 template<ConfigValue T>
 void ConfigImpl<T>::loadFromJson(ConfigVar<T>& cVar, const json& jsonValue) {
     if constexpr (std::is_enum_v<T>) {
-        using Underlying = std::underlying_type_t<T>;
-
-        // Backwards-compatibility: if this CVar used to be a bool and the saved
-        // config contains a boolean for it, accept the boolean and map it to
-        // the enum (false->0, true->1).
         if (jsonValue.is_boolean()) {
+            using Underlying = std::underlying_type_t<T>;
             const bool b = jsonValue.get<bool>();
-            const Underlying raw = b ? static_cast<Underlying>(1) : static_cast<Underlying>(0);
+
+            Underlying raw;
+            if constexpr (std::is_same_v<T, dusk::FrameInterpMode>) {
+                raw = b ? static_cast<Underlying>(2) : static_cast<Underlying>(0);
+            } else {
+                raw = b ? static_cast<Underlying>(1) : static_cast<Underlying>(0);
+            }
+
             cVar.setValue(sanitizeEnumValue(cVar, static_cast<T>(raw)), false);
             return;
         }

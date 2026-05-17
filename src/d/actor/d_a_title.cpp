@@ -170,7 +170,7 @@ int daTitle_c::Execute() {
     }
 
 #ifdef TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() == dusk::FrameInterpMode::Off) {
+    if (!dusk::frame_interp::is_enabled()) {
 #endif
         dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
 #ifdef TARGET_PC

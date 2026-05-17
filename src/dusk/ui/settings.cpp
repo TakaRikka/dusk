@@ -61,8 +61,8 @@ constexpr std::array kFpsOverlayCornerNames = {
 
 constexpr std::array kInterpolationModes = {
     "Off",
-    "Unlimited",
     "Capped",
+    "Unlimited",
 };
 
 constexpr std::array kGyroInputModeLabels = {
