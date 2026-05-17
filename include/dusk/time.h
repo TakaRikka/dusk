@@ -115,7 +115,7 @@ private:
       uint64_t total_mach_ticks = (duration * timebase_info.denom) / timebase_info.numer;
       uint64_t target_mach = start_mach + total_mach_ticks;
 
-      uint64_t buffer_ns = 2 '000' 000ULL;
+      uint64_t buffer_ns = 2'000'000ULL;
       uint64_t buffer_mach_ticks = (buffer_ns * timebase_info.denom) / timebase_info.numer;
 
       if (total_mach_ticks > buffer_mach_ticks) {
