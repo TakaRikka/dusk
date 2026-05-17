@@ -148,6 +148,7 @@ struct UserSettings {
         ConfigVar<bool> freeCamera;
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;
+        ConfigVar<bool> invertSwimYAxis;
         ConfigVar<bool> invertFirstPersonXAxis;
         ConfigVar<bool> invertFirstPersonYAxis;
         ConfigVar<float> freeCameraSensitivity;
@@ -236,6 +237,11 @@ struct TransientSettings {
 };
 
 TransientSettings& getTransientSettings();
+
+// Helper function to get the user settings
+inline UserSettings& GetConfigs() {
+    return getSettings();
+}
 
 }
 
