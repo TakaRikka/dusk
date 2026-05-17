@@ -3422,9 +3422,9 @@ bool dCamera_c::fixedFramesEvCamera() {
         fframes_p->field_0x0 = getEvIntData(&fframes_p->mTimer, "Timer", const_1_val);
         getEvStringData(fframes_p->mRelUseMask, "RelUseMask", "oo");
 #if DEBUG
-        if (strlen(&fframes_p->mRelUseMask) != 2) {
+        if (strlen(fframes_p->mRelUseMask) != 2) {
             OSReport("camera: event:                   bad length -> xx\n");
-            strcpy(&fframes_p->mRelUseMask, "xx");
+            strcpy(fframes_p->mRelUseMask, "xx");
             JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x129c, "Halt");
             OSPanic("d_ev_camera.cpp", 0x129c, "Halt");
         }
@@ -4003,9 +4003,9 @@ bool dCamera_c::bspTransEvCamera() {
             getEvStringData(bspTrans->mRelUseMask, "RelUseMask", "oo");
 
 #if DEBUG
-            if (strlen(&bspTrans->mRelUseMask) != 2) {
+            if (strlen(bspTrans->mRelUseMask) != 2) {
                 OSReport_Error("camera: event:                   bad length -> xx\n");
-                strcpy(&bspTrans->mRelUseMask, "xx");
+                strcpy(bspTrans->mRelUseMask, "xx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x1515, "0");
                 OSPanic("d_ev_camera.cpp", 0x1515, "Halt");
             }
