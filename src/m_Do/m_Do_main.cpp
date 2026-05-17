@@ -551,10 +551,10 @@ int game_main(int argc, char* argv[]) {
         config.cachePath = reinterpret_cast<const char*>(cachePathString.c_str());
         config.vsync = dusk::getSettings().video.enableVsync;
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
-        config.windowPosX = -1;
-        config.windowPosY = -1;
-        config.windowWidth = defaultWindowWidth * 2;
-        config.windowHeight = defaultWindowHeight * 2;
+        config.windowPosX = dusk::getSettings().video.windowPositionX;
+        config.windowPosY = dusk::getSettings().video.windowPositionY;
+        config.windowWidth = dusk::getSettings().video.windowWidth;
+        config.windowHeight = dusk::getSettings().video.windowHeight;
         config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
         config.logCallback = &aurora_log_callback;
         config.logLevel = startupLogLevel;
