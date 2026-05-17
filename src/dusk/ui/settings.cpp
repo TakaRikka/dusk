@@ -64,6 +64,17 @@ constexpr std::array kGyroInputModeLabels = {
     "Mouse",
 };
 
+constexpr std::array kIngameHudModeLabels = {
+    "Health",
+    "Rupees",
+    "Action Buttons",
+    "D-Pad",
+    "Lamp Meter",
+    "Oxygen Meter",
+    "Keys",
+    "Vessel of Light"
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -1021,9 +1032,82 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("General");
         addOption("Mirror Mode", getSettings().game.enableMirrorMode,
             "Mirrors the world horizontally, matching the Wii version of the game.");
-        addOption("Minimal HUD", getSettings().game.minimalHUD,
-            "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive "
-            "experience.");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Ingame HUD",
+                .getValue =
+                    [] {
+                        const int val = static_cast<int>(getSettings().game.ingameHudMode.getValue());
+                        if (val == static_cast<int>(IngameHudMode::On)) {
+                            return "On";
+                        } else if (val) {
+                            return "Custom";
+                        } else {
+                            return "Off";
+                        }
+                    },
+                .isModified =
+                    [] {
+                        const auto& hudMode = getSettings().game.ingameHudMode;
+                        return hudMode.getValue() != hudMode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.add_button({
+                        .text = "All On",
+                        .isSelected = 
+                            [] {
+                                return getSettings().game.ingameHudMode.getValue() 
+                                        == IngameHudMode::On;
+                            },
+                        })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().game.ingameHudMode.setValue(IngameHudMode::On);
+                        config::Save();
+                });
+                pane.add_button({
+                        .text = "All Off",
+                        .isSelected = 
+                            [] {
+                                return getSettings().game.ingameHudMode.getValue() 
+                                        == IngameHudMode::Off;
+                            },
+                        })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().game.ingameHudMode.setValue(IngameHudMode::Off);
+                        config::Save();
+                });
+                pane.add_rml("<br/>"); // Spacer
+                for (int i = 0; i < kIngameHudModeLabels.size(); i++) {
+                    pane.add_button({
+                        .text = kIngameHudModeLabels[i],
+                        .isSelected = 
+                            [i] {
+                                return static_cast<int>(getSettings().game.ingameHudMode.getValue()) 
+                                        & (1 << i);
+                            },
+                        })
+                    .on_pressed([i] {
+                        int val = static_cast<int>(getSettings().game.ingameHudMode.getValue());
+                        if (val & (1 << i)) {
+                            val &= ~(1 << i);
+                        } else {
+                            val |= (1 << i);
+                        }
+
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().game.ingameHudMode.setValue(static_cast<IngameHudMode>(val));
+                        config::Save();
+                    });
+                }
+                pane.add_rml(
+                    "Toggle various elements of the main HUD of the game. Useful for a more immersive "
+                    "experience."
+                );
+            }
+        );
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,

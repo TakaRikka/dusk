@@ -253,6 +253,37 @@ int dMeter2_c::_create() {
 int dMeter2_c::_execute() {
     JKRHeap* heap = mDoExt_setCurrentHeap(mpHeap);
 
+    if (dusk::getSettings().game.ingameHudMode != dusk::IngameHudMode::On) {
+        dusk::IngameHudMode hudMode = dusk::getSettings().game.ingameHudMode;
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::Health))){
+            g_drawHIO.mLifeGaugePosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::Rupees))){
+            g_drawHIO.mRupeePosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::ActionButtons))){
+            g_drawHIO.mMainHUDButtonsPosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::DPad))){
+            g_drawHIO.mButtonCrossOFFPosX = 1E5;
+            g_drawHIO.mButtonCrossONPosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::LampMeter))){
+            g_drawHIO.mLanternMeterPosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::OxygenMeter))){
+            g_drawHIO.mOxygenMeterPosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::Keys))){
+            g_drawHIO.mKeyPosX = 1E5;
+        }
+        if (!(static_cast<int>(hudMode) & static_cast<int>(dusk::IngameHudMode::LightVessel))){
+            for (auto& alpha : g_drawHIO.mLightDrop.mVesselAlpha) {
+                alpha = 0;
+            }
+        }
+    } 
+
     if (!dComIfGs_isCollectMirror(0)
            /* dSv_event_flag_c::F_0685 - Cutscene - (Cutscene 32) Sage appears, get first Mirror of Twilight shard */
         && dComIfGs_isEventBit(dSv_event_flag_c::F_0685)) {
@@ -318,9 +349,7 @@ int dMeter2_c::_execute() {
 
 int dMeter2_c::_draw() {
     #if TARGET_PC
-    if (dusk::getSettings().game.recordingMode || dusk::getSettings().game.minimalHUD ||
-        dusk::getSettings().game.debugFlyCam)
-    {
+    if (dusk::getSettings().game.recordingMode || dusk::getSettings().game.debugFlyCam) {
         return 1;
     }
     #endif

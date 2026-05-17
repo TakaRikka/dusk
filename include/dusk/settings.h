@@ -34,6 +34,19 @@ enum class GyroMode : u8 {
     Mouse = 1,
 };
 
+enum class IngameHudMode : int {
+    Off = 0,
+    Health = 1,
+    Rupees = 2,
+    ActionButtons = 4,
+    DPad = 8,
+    LampMeter = 16,
+    OxygenMeter = 32,
+    Keys = 64,
+    LightVessel = 128,
+    On = 255,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -112,7 +125,7 @@ struct UserSettings {
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
-        ConfigVar<bool> minimalHUD;
+        ConfigVar<IngameHudMode> ingameHudMode;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementToasts;
