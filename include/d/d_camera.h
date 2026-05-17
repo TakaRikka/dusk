@@ -444,8 +444,7 @@ public:
         /* 0x1C */ f32 mFovy;
         /* 0x20 */ f32 mBank;
         /* 0x24 */ fopAc_ac_c* mRelActor;
-        /* 0x28 */ char mRelUseMask;
-        /* 0x29 */ char field_0x29;
+        /* 0x28 */ char mRelUseMask[4];
         /* 0x2C */ int mTimer;
         /* 0x30 */ bool field_0x30;
         /* 0x34 */ cXyz mBasePos;
@@ -541,11 +540,7 @@ public:
         /* 0x3C */ f32 field_0x3c;
         /* 0x40 */ fopAc_ac_c* mRelActor;
         /* 0x44 */ fpc_ProcID mRelActorID;
-        /* 0x48 */ char mRelUseMask;
-        /* 0x49 */ char field_0x49;
-        /* 0x4A */ char field_0x4a;
-        /* 0x4B */ char field_0x4b;
-        /* 0x4C */ u8 field_0x4c[4];
+        /* 0x48 */ char mRelUseMask[8];
         /* 0x50 */ int mTimer;
         /* 0x54 */ int mTransType;
         /* 0x58 */ f32 mCushion;
@@ -696,8 +691,7 @@ public:
         /* 0x24 */ f32* field_0x24;
         /* 0x28 */ f32 field_0x28;
         /* 0x2C */ fopAc_ac_c* mRelActor;
-        /* 0x30 */ char mRelUseMask;
-        /* 0x31 */ char field_0x31;
+        /* 0x30 */ char mRelUseMask[4];
         /* 0x34 */ int mTimer;
         /* 0x38 */ int field_0x38;
         /* 0x3C */ int mChoice;
@@ -780,8 +774,7 @@ public:
         /* 0xAC */ f32 field_0xac;
         /* 0xB0 */ fopAc_ac_c* mRelActor;
         /* 0xB4 */ fpc_ProcID mRelActorID;
-        /* 0xB8 */ char mRelUseMask;
-        /* 0xB9 */ char field_0xb9;
+        /* 0xB8 */ char mRelUseMask[4];
         /* 0xBC */ f32 mCushion;
         /* 0xC0 */ u32 field_0xc0[6];
     };
