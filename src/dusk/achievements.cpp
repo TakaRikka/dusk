@@ -681,7 +681,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "long_jump_attack",
                 "Long Jump Attack",
-                "Travel more than 20 meters in a single jump attack before landing.",
+                "Travel more than 15 meters in a single jump attack before landing.",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -711,7 +711,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     inJump = false;
                     const float dx = link->current.pos.x - startX;
                     const float dz = link->current.pos.z - startZ;
-                    if (dx * dx + dz * dz >= 2000.0f * 2000.0f) {
+                    if (dx * dx + dz * dz >= 1500.0f * 1500.0f) {
                         a.progress = 1;
                     }
                 } else if (link->mProcID != daAlink_c::PROC_CUT_JUMP) {
