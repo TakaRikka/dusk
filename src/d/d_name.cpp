@@ -1503,7 +1503,7 @@ void dName_c::menuAbtnSelect() {
         return;
     }
 
-    if (dusk::version::isRegionPal() && !useChineseNameKeyboard() && mSelMenu == MENU_EIGO) {
+    if (dusk::version::isRegionPal() && mSelMenu == MENU_EIGO) {
         goto pal_eigo;
     }
 #endif
