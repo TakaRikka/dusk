@@ -103,13 +103,13 @@ Rml::Element* create_controller_warning(Rml::Element* parent) {
 
     auto* heading = append(elem, "heading");
     auto* title = append(heading, "span");
-    title->SetInnerRML("No controller assigned");
+    title->SetInnerRML("No Device Assigned");
     auto* icon = append(heading, "icon");
     icon->SetClass("warning", true);
 
     auto* message = append(elem, "message");
     auto* content = append(message, "span");
-    content->SetInnerRML("Configure controller port 1 in Settings.");
+    content->SetInnerRML("Configure <b>Port 1</b> in Settings.");
 
     return elem;
 }

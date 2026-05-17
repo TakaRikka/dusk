@@ -11,7 +11,9 @@
 #include <ranges>
 
 #include "aurora/lib/window.hpp"
+#include "dusk/dusk.h"
 #include "dusk/io.hpp"
+#include "dusk/config.hpp"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -130,7 +132,7 @@ void handle_event(const SDL_Event& event) noexcept {
             if (getSettings().game.enableControllerToasts) {
                 const char* name = SDL_GetGamepadName(gamepad);
                 Rml::String content = fmt::format("<span>{}</span>", name ? name : "[Unknown]");
-                Rml::String title = "Controller connected";
+                Rml::String title = "Device Connected";
                 if (const char* icon = connection_state_icon(SDL_GetGamepadConnectionState(gamepad))) {
                     title = fmt::format(
                         "<row><span>{}</span> <icon class=\"connection\">&#x{};</icon></row>", title,
@@ -163,12 +165,24 @@ void handle_event(const SDL_Event& event) noexcept {
             const char* name = SDL_GetGamepadNameForID(event.gdevice.which);
             push_toast({
                 .type = "controller",
-                .title = "Controller disconnected",
+                .title = "Device Disconnected",
                 .content = name ? name : "[Unknown]",
                 .duration = std::chrono::seconds(4),
             });
         }
         sConnectedGamepads.erase(event.gdevice.which);
+    } else if (event.type == SDL_EVENT_WINDOW_MOVED || event.type == SDL_EVENT_WINDOW_RESIZED) {
+        int x, y;
+        if (SDL_GetWindowPosition(aurora::window::get_sdl_window(), &x, &y)) {
+            getSettings().video.windowPositionX.setValue(x);
+            getSettings().video.windowPositionY.setValue(y);
+        }
+        int width, height;
+        if (SDL_GetWindowSize(aurora::window::get_sdl_window(), &width, &height)) {
+            getSettings().video.windowWidth.setValue(width);
+            getSettings().video.windowHeight.setValue(height);
+        }
+        config::Save();
     }
     input::handle_event(event);
 }

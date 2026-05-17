@@ -1,5 +1,8 @@
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
+#include "dusk/dusk.h"
+
+#include <SDL3/SDL_video.h>
 
 namespace dusk {
 
@@ -10,6 +13,10 @@ UserSettings g_userSettings = {
         .lockAspectRatio {"video.lockAspectRatio", false},
         .enableFpsOverlay {"game.enableFpsOverlay", false},
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
+        .windowPositionX {"video.windowPositionX", SDL_WINDOWPOS_UNDEFINED},
+        .windowPositionY {"video.windowPositionY", SDL_WINDOWPOS_UNDEFINED},
+        .windowWidth {"video.windowWidth", defaultWindowWidth * 2},
+        .windowHeight {"video.windowHeight", defaultWindowHeight * 2},
     },
 
     .audio = {
@@ -58,6 +65,7 @@ UserSettings g_userSettings = {
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
+        .enableTextureReplacements {"game.enableTextureReplacements", true},
         .enableFrameInterpolation {"game.enableFrameInterpolation", false},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
@@ -178,6 +186,10 @@ void registerSettings() {
     Register(g_userSettings.video.lockAspectRatio);
     Register(g_userSettings.video.enableFpsOverlay);
     Register(g_userSettings.video.fpsOverlayCorner);
+    Register(g_userSettings.video.windowPositionX);
+    Register(g_userSettings.video.windowPositionY);
+    Register(g_userSettings.video.windowWidth);
+    Register(g_userSettings.video.windowHeight);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
@@ -220,6 +232,7 @@ void registerSettings() {
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.disableWaterRefraction);
+    Register(g_userSettings.game.enableTextureReplacements);
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableDepthOfField);

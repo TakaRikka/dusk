@@ -72,6 +72,10 @@ struct UserSettings {
         ConfigVar<bool> lockAspectRatio;
         ConfigVar<bool> enableFpsOverlay;
         ConfigVar<int> fpsOverlayCorner;
+        ConfigVar<int> windowPositionX;
+        ConfigVar<int> windowPositionY;
+        ConfigVar<int> windowWidth;
+        ConfigVar<int> windowHeight;
     } video;
 
     struct {
@@ -123,6 +127,7 @@ struct UserSettings {
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
         ConfigVar<bool> disableWaterRefraction;
+        ConfigVar<bool> enableTextureReplacements;
         ConfigVar<bool> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;

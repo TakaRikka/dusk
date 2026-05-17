@@ -211,7 +211,7 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
             SteppedCarousel::Props{
                 .min = mValueMin,
                 .max = mValueMax,
-                .step = 1,
+                .step = props.step,
                 .getValue = [this] { return get_value(mOption); },
                 .onChange = [this](int value) { set_value(mOption, value); },
                 .formatValue =
