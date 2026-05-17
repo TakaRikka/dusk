@@ -13,6 +13,8 @@
 #include "d/actor/d_a_alink.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 #ifdef __MWERKS__
 #define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))
 #else
@@ -46,7 +48,7 @@ int dCamera_c::StartEventCamera(int param_0, int param_1, ...) {
     for (int i = 0; i < 8; i++) {
         char* param_name = va_arg(args, char*);
         if (param_name != NULL) {
-            strcpy(mEventData.mEventParams[i].name, param_name);
+            SAFE_STRCPY(mEventData.mEventParams[i].name, param_name);
             mEventData.mEventParams[i].field_0x10 = va_arg(args, int);
             mEventData.mEventParams[i].value = va_arg(args, uintptr_t);
         } else {
@@ -341,18 +343,23 @@ bool dCamera_c::getEvXyzData(cXyz* i_data, char* i_event, cXyz param_2) {
     return 1;
 }
 
+#if TARGET_PC
+template<size_t N>
+bool dCamera_c::getEvStringData(char (&i_data)[N], char* i_event, char* param_2) {
+#else
 bool dCamera_c::getEvStringData(char* i_data, char* i_event, char* param_2) {
+#endif
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
-            strcpy(i_data, param_2);
+            SAFE_STRCPY(i_data, param_2);
         } else {
-            strcpy(i_data, (char*)mEventData.mEventParams[index].value);
+            SAFE_STRCPY(i_data, (char*)mEventData.mEventParams[index].value);
         }
     } else if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_event) != 0) {
-        strcpy(i_data, dComIfGp_evmng_getMyStringP(mEventData.mStaffIdx, i_event));
+        SAFE_STRCPY(i_data, dComIfGp_evmng_getMyStringP(mEventData.mStaffIdx, i_event));
     } else {
-        strcpy(i_data, param_2);
+        SAFE_STRCPY(i_data, param_2);
 #if DEBUG
         if (mCurCamStyleTimer == 0 && mCamSetup.CheckFlag(0x40)) {
             OS_REPORT("camera: event: %16s: %s (d)\n", i_event, i_data);
@@ -368,6 +375,11 @@ bool dCamera_c::getEvStringData(char* i_data, char* i_event, char* param_2) {
 
     return 1;
 }
+
+#if TARGET_PC
+// Used in another TU, so force instantiation to avoid linker issues.
+template bool dCamera_c::getEvStringData(char (&i_data)[12], char* i_event, char* param_2);
+#endif
 
 char* dCamera_c::getEvStringPntData(char* i_event, char* param_1) {
     char* string = NULL;
@@ -520,7 +532,7 @@ bool dCamera_c::fixedFrameEvCamera() {
 #if DEBUG
         if (strlen(fframe_p->mRelUseMask) != 2) {
             OSReport("camera: event:                   bad length -> xx\n");
-            strcpy(fframe_p->mRelUseMask, "xx");
+            SAFE_STRCPY(fframe_p->mRelUseMask, "xx");
             JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x32e, "0");
             OSPanic("d_ev_camera.cpp", 0x32e, "Halt");
         }
@@ -866,7 +878,7 @@ bool dCamera_c::fixedPositionEvCamera() {
         getEvFloatData(&fpos_p->field_0x38, "Radius", 100000.0f);
         getEvFloatData(&fpos_p->field_0x34, "StartRadius", fpos_p->field_0x38);
         fpos_p->field_0x1 = getEvFloatData(&fpos_p->field_0x2c, "Bank", 0.0f);
-        getEvStringData(&fpos_p->field_0x48, "RelUseMask", "o");
+        getEvStringData(fpos_p->field_0x48, "RelUseMask", "o");
         fpos_p->field_0x0 = getEvIntData(&fpos_p->field_0x4c, "Timer", -1);
 
         if ((fpos_p->field_0x40 = getEvActor("Target", "@PLAYER")) == NULL) {
@@ -877,7 +889,7 @@ bool dCamera_c::fixedPositionEvCamera() {
         fpos_p->field_0x44 = fopAcM_GetID(fpos_p->field_0x40);
         fpos_p->field_0x3c = getEvActor("RelActor");
 
-        if (fpos_p->field_0x3c && isRelChar(fpos_p->field_0x48)) {
+        if (fpos_p->field_0x3c && isRelChar(fpos_p->field_0x48[0])) {
             fpos_p->field_0x4 = relationalPos(fpos_p->field_0x3c, &sp24);
         } else {
             fpos_p->field_0x4 = sp24;        
@@ -3424,7 +3436,7 @@ bool dCamera_c::fixedFramesEvCamera() {
 #if DEBUG
         if (strlen(fframes_p->mRelUseMask) != 2) {
             OSReport("camera: event:                   bad length -> xx\n");
-            strcpy(fframes_p->mRelUseMask, "xx");
+            SAFE_STRCPY(fframes_p->mRelUseMask, "xx");
             JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x129c, "Halt");
             OSPanic("d_ev_camera.cpp", 0x129c, "Halt");
         }
@@ -3959,7 +3971,7 @@ bool dCamera_c::bspTransEvCamera() {
 
         bspTrans->mSet1 = 0;
         char use1[8];
-        strcpy(use1, "xxxxxx");
+        SAFE_STRCPY(use1, "xxxxxx");
 
         iVar1 = getEvFloatListData(&bspTrans->mSet1, "Set1");
         if (iVar1 != 0) {
@@ -3970,7 +3982,7 @@ bool dCamera_c::bspTransEvCamera() {
 #if DEBUG
             if (strlen(use1) != 6) {
                 OSReport("camera: event:                   bad length -> xxxxxx\n");
-                strcpy(use1, "xxxxxx");
+                SAFE_STRCPY(use1, "xxxxxx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x14f9, "0");
                 OSPanic("d_ev_camera.cpp", 0x14f9, "Halt");
             }
@@ -3979,7 +3991,7 @@ bool dCamera_c::bspTransEvCamera() {
 
         bspTrans->mSet2 = 0;
         char use2[8];
-        strcpy(use2, "xxxxxx");
+        SAFE_STRCPY(use2, "xxxxxx");
 
         iVar1 = getEvFloatListData(&bspTrans->mSet2, "Set2");
         if (iVar1 != 0) {
@@ -3990,7 +4002,7 @@ bool dCamera_c::bspTransEvCamera() {
 #if DEBUG
             if (strlen(use2) != 6) {
                 OSReport_Error("camera: event:                   bad length -> xxxxxx\n");
-                strcpy(use2, "xxxxxx");
+                SAFE_STRCPY(use2, "xxxxxx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x1509, "0");
                 OSPanic("d_ev_camera.cpp", 0x1509, "Halt");
             }
@@ -4005,7 +4017,7 @@ bool dCamera_c::bspTransEvCamera() {
 #if DEBUG
             if (strlen(bspTrans->mRelUseMask) != 2) {
                 OSReport_Error("camera: event:                   bad length -> xx\n");
-                strcpy(bspTrans->mRelUseMask, "xx");
+                SAFE_STRCPY(bspTrans->mRelUseMask, "xx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x1515, "0");
                 OSPanic("d_ev_camera.cpp", 0x1515, "Halt");
             }

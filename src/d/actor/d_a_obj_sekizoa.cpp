@@ -8,6 +8,8 @@
 #include "d/actor/d_a_tag_kmsg.h"
 #include <types.h>
 #include <cstring>
+
+#include "dusk/string.hpp"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg.h"
 
@@ -1364,7 +1366,7 @@ int daObj_Sekizoa_c::cutStart(int i_staffIdx) {
                 daObj_SMTile_c* actor_4 = (daObj_SMTile_c*)mActorMngrs[4].getActorP();
                 actor_4->reset();
                 dComIfGp_getEvent()->setPt2(actor_4);
-                strcpy(acStack_90, l_evtList[2].eventName);
+                SAFE_STRCPY(acStack_90, l_evtList[2].eventName);
                 strcat(acStack_90, "@");
                 dComIfGp_getEvent()->setSkipZev(this, acStack_90);
                 dComIfGp_getEvent()->onSkipFade();
@@ -1856,7 +1858,7 @@ int daObj_Sekizoa_c::cutGoal(int i_staffIdx) {
         switch (prm) {
         case 0:
             if (mType == TYPE_0) {
-                strcpy(acStack_9c, l_evtList[6].eventName);
+                SAFE_STRCPY(acStack_9c, l_evtList[6].eventName);
                 strcat(acStack_9c, "@");
                 dComIfGp_getEvent()->setSkipZev(this, acStack_9c);
                 dComIfGp_getEvent()->onSkipFade();
@@ -2222,7 +2224,7 @@ int daObj_Sekizoa_c::cutExtinction(int i_staffIdx) {
             cStack_b0 += actor_0->current.pos;
             daPy_getPlayerActorClass()->setPlayerPosAndAngle(&cStack_b0,
                                                              actor_0->shape_angle.y - -0x8000, 0);
-            strcpy(acStack_a4, l_evtList[9].eventName);
+            SAFE_STRCPY(acStack_a4, l_evtList[9].eventName);
             strcat(acStack_a4, "@");
             dComIfGp_getEvent()->setSkipZev(actor_0, acStack_a4);
             dComIfGp_getEvent()->onSkipFade();

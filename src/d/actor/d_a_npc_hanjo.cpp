@@ -15,6 +15,8 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 static int l_bmdData[4][2] = {
     {14, 1}, {26, 2},
     {25, 2}, {3, 4},
@@ -1336,7 +1338,7 @@ int daNpc_Hanjo_c::cutAppearHawker(int param_1) {
             home.angle.y += 0x8000;
             setAngle(home.angle.y);
             initTalk(0xcf, NULL);
-            strcpy(acStack_98, l_evtList[9].eventName);
+            SAFE_STRCPY(acStack_98, l_evtList[9].eventName);
             strcat(acStack_98, "@");
             dComIfGp_getEvent()->setSkipZev(this, acStack_98);
             dComIfGp_getEvent()->onSkipFade();

@@ -1330,7 +1330,7 @@ void dName_c::mojiListChange() {
 
     char buf[74];
     for (int i = 0; i < 65; i++) {
-        strcpy(buf, "\x1B"
+        SAFE_STRCPY(buf, "\x1B"
                     "CD"
                     "\x1B"
                     "CR"
@@ -1346,7 +1346,7 @@ void dName_c::mojiListChange() {
                     "\x1B"
                     "GM[0]");
         strcat(buf, mojiSet[i]);
-        strcpy(mMojiText[i], buf);
+        SAFE_STRCPY(mMojiText[i], buf);
     }
 
     #if TARGET_PC || REGION_PAL || REGION_JPN

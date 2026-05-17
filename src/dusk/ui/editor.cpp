@@ -196,7 +196,7 @@ Rml::String get_player_name() {
     if (!has_save_data()) {
         return "";
     }
-    return dComIfGs_getPlayerName();
+    return dComIfGs_getPlayerName().buffer;
 }
 
 void set_player_name(Rml::String name) {
@@ -207,7 +207,7 @@ Rml::String get_horse_name() {
     if (!has_save_data()) {
         return "";
     }
-    return dComIfGs_getHorseName();
+    return dComIfGs_getHorseName().buffer;
 }
 
 void set_horse_name(Rml::String name) {

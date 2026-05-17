@@ -5,14 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_bg_obj.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include <cstdio>
-#include <os.h>
 #include <cstring>
+#include <os.h>
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_bg_obj.h"
 #include "d/actor/d_a_set_bgobj.h"
 #include "d/d_s_play.h"
-#include "SSystem/SComponent/c_math.h"
+#include "dusk/string.hpp"
 
 static const char* getBmdName(int param_0, int param_1) {
     static char l_bmdName[16];
@@ -95,12 +96,12 @@ u8* daBgObj_c::spec_data_c::initTexShareBlock(u8* i_dataPtr) {
     u8* dataPos = i_dataPtr + 8;
 
     for (; i < mTexShareNum; i++) {
-        strcpy(sp48, (char*)dataPos);
+        SAFE_STRCPY(sp48, (char*)dataPos);
         int len = strlen((char*)dataPos);
 
         dataPos += len + 1;
         if (*dataPos != 0) {
-            strcpy(sp8, (char*)dataPos);
+            SAFE_STRCPY(sp8, (char*)dataPos);
             dataPos += strlen((char*)dataPos) + 1;
         } else if (*dataPos == 0 && dataPos[1] == 1) {
             dataPos += 2;
@@ -646,14 +647,14 @@ void daBgObj_c::doShareTexture() {
     u8* spec_res_name = mSpecData.mpTexShareBlock + 8;
 
     for (int i = 0; i < mSpecData.mTexShareNum; i++) {
-        strcpy(res_name, (char*)spec_res_name);
+        SAFE_STRCPY(res_name, (char*)spec_res_name);
         spec_res_name += strlen((char*)spec_res_name) + 1;
 
         J3DModelData* modelData =
             (J3DModelData*)dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), res_name);
 
         if (*spec_res_name != 0) {
-            strcpy(share_res_name, (char*)spec_res_name);
+            SAFE_STRCPY(share_res_name, (char*)spec_res_name);
             spec_res_name += strlen((char*)spec_res_name) + 1;
 
             J3DModelData* shareModelData =

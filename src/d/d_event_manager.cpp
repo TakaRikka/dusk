@@ -15,6 +15,8 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 #if DEBUG
 static dEvM_HIO_c l_HIO;
 #endif
@@ -388,7 +390,7 @@ void dEvent_manager_c::roomInit(int roomNo) {
     }
 
     char arcname[8];
-    strcpy(arcname, dComIfG_getRoomArcName(roomNo));
+    SAFE_STRCPY(arcname, dComIfG_getRoomArcName(roomNo));
     char* res = (char*)dComIfG_getStageRes(arcname, DataFileName);
 
     int i;
@@ -1040,7 +1042,7 @@ int dEvent_manager_c::getMyStaffId(const char* staffName, fopAc_ac_c* actor, int
             dEvDtStaff_c* staff = getBase().getStaffP(staff_id);
             if (staff->getType() != dEvDtStaff_c::TYPE_ALL) {
                 char buf[20];
-                strcpy(buf, staff->getName());
+                SAFE_STRCPY(buf, staff->getName());
 
                 char* ptr = NULL;
                 if (!hasDp) {
@@ -1310,7 +1312,7 @@ void dEvent_manager_c::issueStaff(const char* staffname) {
         fopAcM_Search((fopAcIt_JudgeFunc)extraOnObjectCallBack, NULL);
     } else {
         char nameBuf[32];
-        strcpy(nameBuf, staffname);
+        SAFE_STRCPY(nameBuf, staffname);
         fopAc_ac_c* actor = fopAcM_searchFromName4Event(nameBuf, -1);
         fopAcM_OnStatus(actor, fopAcStts_STAFF_EXTRA_e);
     }
@@ -1321,7 +1323,7 @@ void dEvent_manager_c::cancelStaff(const char* staffname) {
         fopAcM_Search((fopAcIt_JudgeFunc)extraOffObjectCallBack, NULL);
     } else {
         char nameBuf[32];
-        strcpy(nameBuf, staffname);
+        SAFE_STRCPY(nameBuf, staffname);
         fopAc_ac_c* actor = fopAcM_searchFromName4Event(nameBuf, -1);
         fopAcM_OffStatus(actor, fopAcStts_STAFF_EXTRA_e);
     }

@@ -550,7 +550,7 @@ namespace dusk {
         char nameBuffer[8];
         snprintf(nameBuffer, sizeof(nameBuffer), "%s", playerName);
         if (ImGui::InputText("##PlayerNameInput", nameBuffer, 8)) {
-            strcpy(dComIfGs_getPlayerName(), nameBuffer);
+            SAFE_STRCPY(dComIfGs_getPlayerName(), nameBuffer);
         }
 
         const char* horseName = dComIfGs_getHorseName();
@@ -559,7 +559,7 @@ namespace dusk {
         char horseNameBuffer[8];
         snprintf(horseNameBuffer, sizeof(horseNameBuffer), "%s", horseName);
         if (ImGui::InputText("##HorseNameInput", horseNameBuffer, 8)) {
-            strcpy(dComIfGs_getHorseName(), horseNameBuffer);
+            SAFE_STRCPY(dComIfGs_getHorseName(), horseNameBuffer);
         }
 
         ImGui::Separator();
@@ -745,8 +745,8 @@ namespace dusk {
         ImGui::SameLine();
         char nameBuffer[8];
         snprintf(nameBuffer, sizeof(nameBuffer), "%s", returnPlace.mName);
-        if (ImGui::InputText("##SaveStageNameInput", nameBuffer, 8)) {
-            strcpy(returnPlace.mName, nameBuffer);
+        if (ImGui::InputText("##SaveStageNameInput", nameBuffer, sizeof(nameBuffer))) {
+            SAFE_STRCPY(returnPlace.mName, nameBuffer);
         }
 
         ImGui::Text("Room:     ");
@@ -787,8 +787,8 @@ namespace dusk {
         ImGui::SameLine();
         char horseStageBuffer[8];
         snprintf(horseStageBuffer, sizeof(horseStageBuffer), "%s", horsePlace.mName);
-        if (ImGui::InputText("##HorseStageNameInput", horseStageBuffer, 8)) {
-            strcpy(horsePlace.mName, horseStageBuffer);
+        if (ImGui::InputText("##HorseStageNameInput", horseStageBuffer, sizeof(horseStageBuffer))) {
+            SAFE_STRCPY(horsePlace.mName, horseStageBuffer);
         }
 
         ImGui::Text("Room:     ");

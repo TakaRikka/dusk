@@ -26,6 +26,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 void dComIfG_play_c::ct() {
     mWindowNum = 0;
     mParticle = NULL;
@@ -2649,7 +2651,7 @@ static void dComIfGs_setWarpItemData(int param_0, char const* i_stage, cXyz i_po
 
 void dComIfG_play_c::setWarpItemData(char const* i_stage, cXyz i_pos, s16 i_angle, s8 i_roomNo,
                                      u8 param_4, u8 param_5) {
-    strcpy(mItemInfo.mWarpItemData.mWarpItemStage, i_stage);
+    SAFE_STRCPY(mItemInfo.mWarpItemData.mWarpItemStage, i_stage);
     mItemInfo.mWarpItemData.mWarpItemPos.set(i_pos);
     mItemInfo.mWarpItemData.mWarpItemAngle = i_angle;
     mItemInfo.mWarpItemData.mWarpItemRoom = i_roomNo;

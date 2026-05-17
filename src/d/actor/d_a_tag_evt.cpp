@@ -8,6 +8,8 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 static char* l_evtNameList[] = {
     NULL,
     "JUMP_DEMOSTAGE",
@@ -26,7 +28,7 @@ int daTag_Evt_c::create() {
     cPhs_Step phase = dComIfG_resLoad(&mPhase, l_resFileName);
     if (phase == cPhs_COMPLEATE_e) {
         eventInfo.setArchiveName(l_resFileName);
-        strcpy(field_0x568, "TagEvt");
+        SAFE_STRCPY(field_0x568, "TagEvt");
         getParam();
         field_0x572 = -1;
     }

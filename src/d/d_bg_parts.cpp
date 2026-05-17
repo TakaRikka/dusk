@@ -8,6 +8,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 void dBgp_c::material_c::draw() {
     material_c* material = this;
     do {
@@ -430,7 +432,7 @@ dBgp_c::packet_c::packet_c() {
 void dBgp_c::create(s8 i_roomNo, void* i_data) {
     mPointer = i_data;
     mPacket.setRoomNo(i_roomNo);
-    strcpy(mArcName, dComIfG_getRoomArcName(i_roomNo));
+    SAFE_STRCPY(mArcName, dComIfG_getRoomArcName(i_roomNo));
 
     if (mPointer != NULL) {
         JKRExpHeap* block = dStage_roomControl_c::getMemoryBlock(i_roomNo);
