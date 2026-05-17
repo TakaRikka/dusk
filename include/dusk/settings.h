@@ -238,7 +238,6 @@ struct TransientSettings {
 
 TransientSettings& getTransientSettings();
 
-
 }
 
 #endif // DUSK_CONFIG_H
