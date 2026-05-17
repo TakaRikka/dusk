@@ -12,6 +12,7 @@ namespace dusk {
     void InitializeFileLogging(const std::filesystem::path& configDir, AuroraLogLevel logLevel);
     void ShutdownFileLogging();
     const char* GetLogFilePath();
+    int GetLogFileDescriptor();
     void SendToStubLog(AuroraLogLevel level, const char* module, const char* message);
 }
 
