@@ -35,6 +35,9 @@ static void* s_cucco_play_search(void* i_actor, void*) {
 }
 
 static void checkGoatHerding(Achievement& a, int32_t threshMs) {
+    if (strcmp(dComIfGp_getStartStageName(), "F_SP00") != 0) {
+        return;
+    }
     if (dMeter2Info_getMaxCount() != 20 || dMeter2Info_getNowCount() != 20) {
         return;
     }
@@ -623,6 +626,9 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
+                if (strcmp(dComIfGp_getStartStageName(), "F_SP114") != 0) {
+                    return;
+                }
                 const int32_t bestMs = dComIfGs_getRaceGameTime();
                 if (dComIfGs_isEventBit(dSv_event_flag_c::F_0481) &&
                     bestMs > 0 && bestMs <= 70000) {
