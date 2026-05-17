@@ -807,7 +807,7 @@ static void duskExecute() {
     }
 
     if (dusk::getSettings().game.infiniteRupees) {
-        dComIfGs_setRupee(9999);
+        dComIfGs_setRupee(dComIfGs_getRupeeMax());
     }
 
     if (dusk::getSettings().game.infiniteOxygen) {
