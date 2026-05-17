@@ -1417,7 +1417,7 @@ int daNpc_ykW_c::cutGoIntoBossRoom(int param_0) {
             } else {
                 SAFE_STRCPY(unkStrBuf1, l_evtList[5].eventName);
             }
-            strcat(unkStrBuf1, "@");
+            SAFE_STRCAT(unkStrBuf1, "@");
             dComIfGp_getEvent()->setSkipZev(this, unkStrBuf1);
         }
     }

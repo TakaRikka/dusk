@@ -314,9 +314,9 @@ static void setPlayerName(TEXT_SPAN i_player_name, u8 param_2) {
         u32 name_length = strlen(i_player_name);
         char last = i_player_name[name_length - 1];
         if (last == 0x73 || last == 0x53 || last == 0x7a || last == 0x5a || last == 0x78 || last == 0x58 || last == 0xdf) {
-            strcat(i_player_name, "'");
+            SAFE_STRCAT(i_player_name, "'");
         } else {
-            strcat(i_player_name, "s");
+            SAFE_STRCAT(i_player_name, "s");
         }
     } else {
         SAFE_STRCPY(i_player_name, dComIfGs_getPlayerName());
@@ -329,9 +329,9 @@ static void setHorseName(TEXT_SPAN i_horse_name, u8 param_2) {
         u32 name_length = strlen(i_horse_name);
         char last = i_horse_name[name_length - 1];
         if (last == 0x73 || last == 0x53 || last == 0x7a || last == 0x5a || last == 0x78 || last == 0x58 || last == 0xdf) {
-            strcat(i_horse_name, "'");
+            SAFE_STRCAT(i_horse_name, "'");
         } else {
-            strcat(i_horse_name, "s");
+            SAFE_STRCAT(i_horse_name, "s");
         }
     } else {
         SAFE_STRCPY(i_horse_name, dComIfGs_getHorseName());
@@ -2794,9 +2794,9 @@ void jmessage_tRenderingProcessor::do_end() {
             SAFE_STRCPY(buffer, dMsgObject_getSelectWord(i));
 
             if (pReference->getSelectNum() == 2) {
-                strcat(pReference->getSelTextPtr(i + 1), buffer);
+                SAFE_STRCAT(pReference->getSelTextPtr(i + 1), buffer);
             } else if (pReference->getSelectNum() == 3) {
-                strcat(pReference->getSelTextPtr(i), buffer);
+                SAFE_STRCAT(pReference->getSelTextPtr(i), buffer);
             }
         }
     }
@@ -3643,7 +3643,7 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
         field_0x11c += strlen(i_str);
         if (field_0x14e != 0) {
             if (field_0x11c < 50) {
-                strcat(pReference->getSelTextPtr(field_0x14e - 1), i_str);
+                SAFE_STRCAT(pReference->getSelTextPtr(field_0x14e - 1), i_str);
             } else {
                 JUT_WARN(5316, "%s", "TextBox Alloc Byte Over!!");
             }
@@ -3662,15 +3662,15 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                     if (pReference->getCharAlpha() < 255.0f) {
                         pReference->addCharAlpha();
                         if (field_0x148 != 0) {
-                            char* textPtr = pReference->getTextPtr();
+                            TEXT_SPAN textPtr = pReference->getTextPtr();
                             textPtr[field_0x148] = 0;
-                            strcat(textPtr, field_0x184);
+                            SAFE_STRCAT(textPtr, field_0x184);
                         }
 
                         if (field_0x14a != 0) {
-                            char* textPtr = pReference->getTextSPtr();
+                            TEXT_SPAN textPtr = pReference->getTextSPtr();
                             textPtr[field_0x14a] = 0;
-                            strcat(textPtr, field_0x184);
+                            SAFE_STRCAT(textPtr, field_0x184);
                         }
 
 
@@ -3687,8 +3687,8 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                             field_0x14a = strlen(pReference->getTextSPtr());
 
                             SAFE_STRCPY(field_0x184, i_str);
-                            strcat(pReference->getTextPtr(), buffer);
-                            strcat(pReference->getTextSPtr(), buffer);
+                            SAFE_STRCAT(pReference->getTextPtr(), buffer);
+                            SAFE_STRCAT(pReference->getTextSPtr(), buffer);
                         } else {
                             JUT_WARN(5362, "%s", "TextBox Alloc Byte Over!!");
                         }
@@ -3699,9 +3699,9 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                 field_0x14a = 0;
             }
             
-            strcat(pReference->getTextPtr(), i_str);
+            SAFE_STRCAT(pReference->getTextPtr(), i_str);
             if (param_3) {
-                strcat(pReference->getTextSPtr(), i_str);
+                SAFE_STRCAT(pReference->getTextSPtr(), i_str);
             }
         } else {
             JUT_WARN(5380, "%s", "TextBox Alloc Byte Over!!");
@@ -3729,7 +3729,7 @@ void jmessage_tRenderingProcessor::do_rubyset(void const* i_data, u32 i_size) {
         buffer[0] = pRuby[index++];
         buffer[1] = pRuby[index++];
         buffer[2] = 0;
-        strcat(field_0x152, (const char*)buffer);
+        SAFE_STRCAT(field_0x152, (const char*)buffer);
     
         int character = (((char)buffer[0] & 0xFF) << 8) | ((char)buffer[1] & 0xFF);
         if (field_0x14e != 0) {
@@ -3751,7 +3751,7 @@ void jmessage_tRenderingProcessor::do_rubyset(void const* i_data, u32 i_size) {
     }
 }
 
-void jmessage_tRenderingProcessor::do_rubystrcat(char* i_src, char* i_dst, f32 i_charSpace, f32 param_4) {
+void jmessage_tRenderingProcessor::do_rubystrcat(char* i_src, TEXT_SPAN i_dst, f32 i_charSpace, f32 param_4) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
     if (pReference->isCharSend()) {
         if (0.0f != param_4) {
@@ -3760,18 +3760,18 @@ void jmessage_tRenderingProcessor::do_rubystrcat(char* i_src, char* i_dst, f32 i
             if (cursor_trans >= 1.0f) {
                 char buffer[16];
                 snprintf(buffer, sizeof(buffer) - 1, "\x1B" "CR[%d]", (int)cursor_trans);
-                strcat(i_dst, buffer);
+                SAFE_STRCAT(i_dst, buffer);
                 field_0x12c += (int)cursor_trans;
             } else if (cursor_trans <= -1.0f) {
                 char buffer[16];
                 snprintf(buffer, sizeof(buffer) - 1, "\x1B" "CL[%d]", (int)-cursor_trans);
-                strcat(i_dst, buffer);
+                SAFE_STRCAT(i_dst, buffer);
                 field_0x12c += (int)cursor_trans;
             }
             field_0x12c += field_0x128 + i_charSpace;
         }
 
-        strcat(i_dst, i_src);
+        SAFE_STRCAT(i_dst, i_src);
     }
 }
 
@@ -5086,7 +5086,7 @@ void jmessage_string_tRenderingProcessor::do_strcat(char* i_str) {
     if (getLineCountNowPage() >= 0) {
         field_0x54e += strlen(i_str);
         if (field_0x54e < ARRAY_SIZE(field_0x54)) {
-            strcat(field_0x54, i_str);
+            SAFE_STRCAT(field_0x54, i_str);
         } else {
             JUT_WARN(7531, "%s", "Message Alloc Byte Over!!");
         }
@@ -5117,7 +5117,7 @@ void jmessage_string_tRenderingProcessor::do_rubyset(void const* i_data, u32 i_s
                 bytes[0] = pRuby[i++];
                 bytes[1] = pRuby[i++];
                 bytes[2] = 0;
-                strcat(field_0x454, (const char*)bytes);
+                SAFE_STRCAT(field_0x454, (const char*)bytes);
 
                 int character = (((char)bytes[0] & 0xFF) << 8) | ((char)bytes[1] & 0xFF);
                 field_0x44 += charSpace + fontSize.mSizeX * ((f32)pFont->getWidth(character) / pFont->getCellWidth());
@@ -5135,7 +5135,7 @@ void jmessage_string_tRenderingProcessor::do_rubystrcat(char* i_str) {
     if (getLineCountNowPage() >= 0) {
         field_0x550 += strlen(i_str);
         if (field_0x550 < ARRAY_SIZE(field_0x254)) {
-            strcat(field_0x254, i_str);
+            SAFE_STRCAT(field_0x254, i_str);
         } else {
             JUT_WARN(7613, "%s", "Message Alloc Byte Over!!");
         }

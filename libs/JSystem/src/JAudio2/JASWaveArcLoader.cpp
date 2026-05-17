@@ -173,7 +173,7 @@ void JASWaveArc::setFileName(char const* fileName) {
     char* path = JKR_NEW_ARRAY_ARGS(char, length + 1, JASKernel::getSystemHeap(), -4);
     JUT_ASSERT(322, path);
     SAFE_STRCPY_BOUNDED(path, length + 1, currentDir);
-    strcat(path, fileName);
+    SAFE_STRCAT_BOUNDED(path, length + 1, fileName);
     path[length] = '\0';
     int entryNum = DVDConvertPathToEntrynum(path);
     JKR_DELETE_ARRAY(path);

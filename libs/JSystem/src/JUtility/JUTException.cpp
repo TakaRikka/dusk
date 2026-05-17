@@ -848,7 +848,7 @@ bool JUTException::queryMapAddress(char* mapPath, u32 address, s32 section_id, u
     if (mapPath) {
         char buffer[80];
         SAFE_STRCPY(buffer, mapPath);
-        strcat(buffer, ".map");
+        SAFE_STRCAT(buffer, ".map");
         if (queryMapAddress_single(buffer, address, section_id, out_addr, out_size, out_line,
                                    line_length, print, begin_with_newline) == true)
         {

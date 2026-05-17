@@ -1140,7 +1140,7 @@ BOOL daNpc_Yelia_c::cutTakeWoodStatue(int i_staffId) {
             mEventTimer = timer;
             Z2GetAudioMgr()->muteSceneBgm(90, 0.0f);
             SAFE_STRCPY(name, l_evtList[EVENT_TAKE_WOODSTATUE].eventName);
-            strcat(name, "@");
+            SAFE_STRCAT(name, "@");
             dComIfGp_getEvent()->setSkipZev(this, name);
             dComIfGp_getEvent()->onSkipFade();
             break;

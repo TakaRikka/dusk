@@ -1338,14 +1338,14 @@ void dName_c::mojiListChange() {
                     "CC[000000]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, mojiSet[i]);
-        strcat(buf, "\x1B"
+        SAFE_STRCAT(buf, mojiSet[i]);
+        SAFE_STRCAT(buf, "\x1B"
                     "HM"
                     "\x1B"
                     "CC[ffffff]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, mojiSet[i]);
+        SAFE_STRCAT(buf, mojiSet[i]);
         SAFE_STRCPY(mMojiText[i], buf);
     }
 

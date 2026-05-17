@@ -187,7 +187,7 @@ static char l_fileName[21];
 
 J3DAnmTransform* daNpc_Shop0_c::getTrnsfrmAnmP(int i_fileIndex, char** i_fileName) {
     SAFE_STRCPY(l_fileName, i_fileName[i_fileIndex]);
-    strcat(l_fileName, ".bck");
+    SAFE_STRCAT(l_fileName, ".bck");
     return (J3DAnmTransform*) dComIfG_getObjectRes(getResName(), l_fileName);
 }
 

@@ -42,7 +42,7 @@ dMsgUnit_c::dMsgUnit_c() {}
 dMsgUnit_c::~dMsgUnit_c() {}
 
 #if REGION_JPN
-void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
+void dMsgUnit_c::setTag(int i_type, int i_value, TEXT_SPAN o_buffer, bool param_4) {
     *o_buffer = 0;
     bool stack9 = false;
     bool stack8 = false;
@@ -170,7 +170,7 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
         int uVar5Len = strlen(uVar5);
         if (uVar5Len == 0) {
             if (stack8) {
-                strcat(o_buffer, value2);
+                SAFE_STRCAT(o_buffer, value2);
             } else {
                 sprintf(o_buffer, "%d%s", i_value, value2);
             }
@@ -185,9 +185,9 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             unkCharArr[6] = 0;
 
             if (stack8) {
-                strcat(o_buffer, unkCharArr);
-                strcat(o_buffer, uVar5);
-                strcat(o_buffer, value2);
+                SAFE_STRCAT(o_buffer, unkCharArr);
+                SAFE_STRCAT(o_buffer, uVar5);
+                SAFE_STRCAT(o_buffer, value2);
             } else {
                 sprintf(o_buffer, "%d%s%s%s", i_value, unkCharArr, uVar5, value2);
             }
@@ -197,17 +197,17 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
     if (i_type == 3 && param_4 == true) {
         char buffer[20];
         setTag(4, 0, buffer, false);
-        strcat(o_buffer, buffer);
+        SAFE_STRCAT(o_buffer, buffer);
     }
 
     if (i_type == 4 && param_4 == true) {
         char buffer[20];
         setTag(5, value, buffer, false);
-        strcat(o_buffer, buffer);
+        SAFE_STRCAT(o_buffer, buffer);
     }
 }
 #else
-void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
+void dMsgUnit_c::setTag(int i_type, int i_value, TEXT_SPAN o_buffer, bool param_4) {
     *o_buffer = 0;
     bool stack9 = false;
     bool stack8 = false;
@@ -367,13 +367,13 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
         if (i_type == 3 && param_4 == true) {
             char buffer[20];
             setTag(4, 0, buffer, false);
-            strcat(o_buffer, buffer);
+            SAFE_STRCAT(o_buffer, buffer);
         }
 
         if (i_type == 4 && param_4 == true) {
             char buffer[20];
             setTag(5, param_2b, buffer, false);
-            strcat(o_buffer, buffer);
+            SAFE_STRCAT(o_buffer, buffer);
         }
     }
 }

@@ -55,4 +55,23 @@ void SafeStringCopy(char* buffer, size_t bufSize, const char* src) {
     buffer[bufSize - 1] = 0;
 }
 
+void SafeStringCat(char* buffer, size_t bufSize, const char* src) {
+    if (bufSize == 0) [[unlikely]] {
+        CRASH("Target buffer cannot be size zero");
+    }
+
+    if (buffer == src) [[unlikely]] {
+        CRASH("Cannot copy string to same buffer");
+    }
+
+    const auto dstSize = strnlen(buffer, bufSize);
+    const auto srcSize = strlen(src);
+    if (dstSize + srcSize + 1 > bufSize) [[unlikely]] {
+        CRASH("Destination buffer too small!");
+    }
+
+    memcpy(buffer + dstSize, src, srcSize);
+    buffer[dstSize + srcSize] = 0;
+}
+
 }  // namespace dusk

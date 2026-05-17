@@ -1367,7 +1367,7 @@ int daObj_Sekizoa_c::cutStart(int i_staffIdx) {
                 actor_4->reset();
                 dComIfGp_getEvent()->setPt2(actor_4);
                 SAFE_STRCPY(acStack_90, l_evtList[2].eventName);
-                strcat(acStack_90, "@");
+                SAFE_STRCAT(acStack_90, "@");
                 dComIfGp_getEvent()->setSkipZev(this, acStack_90);
                 dComIfGp_getEvent()->onSkipFade();
                 if (daNpcT_getPlayerInfoFromPlayerList(1, fopAcM_GetRoomNo(this), &c_stack_9c,
@@ -1859,7 +1859,7 @@ int daObj_Sekizoa_c::cutGoal(int i_staffIdx) {
         case 0:
             if (mType == TYPE_0) {
                 SAFE_STRCPY(acStack_9c, l_evtList[6].eventName);
-                strcat(acStack_9c, "@");
+                SAFE_STRCAT(acStack_9c, "@");
                 dComIfGp_getEvent()->setSkipZev(this, acStack_9c);
                 dComIfGp_getEvent()->onSkipFade();
             }
@@ -2225,7 +2225,7 @@ int daObj_Sekizoa_c::cutExtinction(int i_staffIdx) {
             daPy_getPlayerActorClass()->setPlayerPosAndAngle(&cStack_b0,
                                                              actor_0->shape_angle.y - -0x8000, 0);
             SAFE_STRCPY(acStack_a4, l_evtList[9].eventName);
-            strcat(acStack_a4, "@");
+            SAFE_STRCAT(acStack_a4, "@");
             dComIfGp_getEvent()->setSkipZev(actor_0, acStack_a4);
             dComIfGp_getEvent()->onSkipFade();
             actor_0->pullMasterSword();

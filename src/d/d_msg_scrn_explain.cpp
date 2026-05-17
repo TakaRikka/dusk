@@ -483,12 +483,12 @@ void dMsgScrnExplain_c::move_select_init() {
              "\x1B"
              "CR[%d]",
              (int)var_f28);
-    strcat(string_buf_yes, msg_buf_yes);
+    SAFE_STRCAT(string_buf_yes, msg_buf_yes);
     snprintf(string_buf_no, 20,
              "\x1B"
              "CR[%d]",
              (int)var_f27);
-    strcat(string_buf_no, msg_buf_no);
+    SAFE_STRCAT(string_buf_no, msg_buf_no);
 
     mpSelect_c->setString("", string_buf_yes, string_buf_no);
     mpSelect_c->setRubyString("", "", "");

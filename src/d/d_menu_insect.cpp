@@ -352,12 +352,12 @@ void dMenu_Insect_c::explain_open_init() {
                      "\x1B"
                      "CR[%d]",
                      (int)(0.5f * (length - stringLength1)));
-            strcat(local_b8, local_78);
+            SAFE_STRCAT(local_b8, local_78);
             snprintf(cStack_d8, 32,
                      "\x1B"
                      "CR[%d]",
                      (int)(0.5f * (length - stringLength2)));
-            strcat(cStack_d8, local_98);
+            SAFE_STRCAT(cStack_d8, local_98);
             mpSelect_c->setString("", local_b8, cStack_d8);
             mpSelect_c->setRubyString("", "", "");
             mpSelect_c->selAnimeInit(2, field_0xf7 + 1, 0, length, 0);

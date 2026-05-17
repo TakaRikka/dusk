@@ -464,7 +464,7 @@ struct jmessage_tRenderingProcessor : public JMessage::TRenderingProcessor {
     f32 getLineLength(int);
     void do_strcat(char*, bool, bool, bool);
     void do_rubyset(void const*, u32);
-    void do_rubystrcat(char*, char*, f32, f32);
+    void do_rubystrcat(char*, TEXT_SPAN, f32, f32);
     void do_name1();
     void do_numset(s16);
     void push_word();

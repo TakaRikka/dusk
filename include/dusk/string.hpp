@@ -61,9 +61,14 @@ void SafeStringCopyTruncate(char (&buffer)[BufSize], const char* src) {
 }
 
 void SafeStringCopy(char* buffer, size_t bufSize, const char* src);
+void SafeStringCat(char* buffer, size_t bufSize, const char* src);
 
 inline void SafeStringCopy(TextSpan dst, const char* src) {
     SafeStringCopy(dst.buffer, dst.size, src);
+}
+
+inline void SafeStringCat(TextSpan dst, const char* src) {
+    SafeStringCat(dst.buffer, dst.size, src);
 }
 
 /**
@@ -76,12 +81,22 @@ void SafeStringCopy(char (&buffer)[BufSize], const char* src) {
     SafeStringCopy(buffer, BufSize, src);
 }
 
+template <size_t BufSize>
+void SafeStringCat(char (&buffer)[BufSize], const char* src) {
+    static_assert(BufSize > 0, "Target buffer cannot be size zero");
+    SafeStringCat(buffer, BufSize, src);
+}
+
 #if TARGET_PC
 #define SAFE_STRCPY(dst, src) dusk::SafeStringCopy(dst, src)
+#define SAFE_STRCAT(dst, src) dusk::SafeStringCat(dst, src)
 #define SAFE_STRCPY_BOUNDED(dst, size, src) dusk::SafeStringCopy(dst, size, src)
+#define SAFE_STRCAT_BOUNDED(dst, size, src) dusk::SafeStringCat(dst, size, src)
 #else
 #define SAFE_STRCPY(dst, src) strcpy(dst, src)
+#define SAFE_STRCAT(dst, src) strcat(dst, src)
 #define SAFE_STRCPY_BOUNDED(dst, size, src) strcpy(dst, src)
+#define SAFE_STRCPY_BOUNDED(dst, size, src) strcat(dst, src)
 #endif
 }
 

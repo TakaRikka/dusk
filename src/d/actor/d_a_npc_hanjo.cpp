@@ -1339,7 +1339,7 @@ int daNpc_Hanjo_c::cutAppearHawker(int param_1) {
             setAngle(home.angle.y);
             initTalk(0xcf, NULL);
             SAFE_STRCPY(acStack_98, l_evtList[9].eventName);
-            strcat(acStack_98, "@");
+            SAFE_STRCAT(acStack_98, "@");
             dComIfGp_getEvent()->setSkipZev(this, acStack_98);
             dComIfGp_getEvent()->onSkipFade();
             dComIfGp_getVibration().StartShock( 9, 15, cXyz(0.0f, 1.0f, 0.0f));
