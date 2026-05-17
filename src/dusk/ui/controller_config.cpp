@@ -1013,8 +1013,8 @@ void ControllerConfigWindow::poll_pending_binding() {
         const s32 nativeButton = PADGetNativeButtonPressed(mPendingPort);
         if (nativeButton != -1) {
             const int completedPort = mPendingPort;
-            if (mPendingButtonMapping->nativeButton == static_cast<u32>(nativeButton) and
-                (mPendingButtonMapping->padButton != PAD_BUTTON_A and
+            if (mPendingButtonMapping->nativeButton == static_cast<u32>(nativeButton) &&
+                (mPendingButtonMapping->padButton != PAD_BUTTON_A &&
                  mPendingButtonMapping->padButton != PAD_BUTTON_B)) {
                 unmap_pending_binding();
                 return;
