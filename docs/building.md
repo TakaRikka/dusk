@@ -160,9 +160,6 @@ cd dusklight
 git submodule update --init --recursive
 ```
 
-* Copy the game disc image to the project directory and name it `game.iso`.
-  * Alternatively, you can specify the path to the disc image when running the executable.
-
 **CLion (Windows / macOS / Linux)**
 
 Open the project directory in CLion. Enable the appropriate presets for your platform:
@@ -220,12 +217,6 @@ Alternate presets available:
 build/{preset}/dusklight --dvd /path/to/game.iso
 ```
 
-* **Note**: If no path is specified for the disc image, Dusklight defaults to `game.iso` in the current working directory.
-
-```sh
-build/{preset}/dusklight
-```
-
 **macOS**
 
 macOS builds an `.app` bundle which contains the executable and all necessary resources.
@@ -234,10 +225,4 @@ macOS builds an `.app` bundle which contains the executable and all necessary re
 
 ```sh
 build/{preset}/Dusklight.app/Contents/MacOS/Dusklight --dvd /path/to/game.iso
-```
-
-* **Note**: If no path is specified for the disc image, Dusklight defaults to `game.iso` in the current working directory.
-
-```sh
-build/{preset}/Dusklight.app/Contents/MacOS/Dusklight
 ```
