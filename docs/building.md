@@ -1,50 +1,142 @@
-### Building
-#### Prerequisites
+# Building Dusklight
+
+## Dependencies
+
+The following dependencies are required:
+
 * [CMake 3.25+](https://cmake.org)
-    * Windows: Install `CMake Tools` in Visual Studio
-    * macOS: `brew install cmake`
 * [Python 3+](https://python.org)
-    * Windows: [Microsoft Store](https://go.microsoft.com/fwlink?linkID=2082640)
-        * Verify it's added to `%PATH%` by typing `python` in `cmd`.
-    * macOS: `brew install python@3`
-* **[Windows]** [Visual Studio 2026 Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
-    * Select `C++ Development` and verify the following packages are included:
-        * `Windows 11 SDK`
-        * `CMake Tools`
-        * `C++ Clang Compiler`
-        * `C++ Clang-cl`
-* **[macOS]** [Xcode 16.4+](https://developer.apple.com/xcode/download/)
-* **[Linux]** Actively tested on Ubuntu 24.04, Arch Linux & derivatives.
-    * Ubuntu 24.04+ packages
-      ```
-      build-essential curl git ninja-build clang lld zlib1g-dev libcurl4-openssl-dev \
-      libglu1-mesa-dev libdbus-1-dev libvulkan-dev libxi-dev libxrandr-dev libasound2-dev libpulse-dev \
-      libudev-dev libpng-dev libncurses5-dev cmake libx11-xcb-dev python3 python-is-python3 \
-      libclang-dev libfreetype-dev libxinerama-dev libxcursor-dev python3-markupsafe libgtk-3-dev \
-      libxss-dev libxtst-dev
-      ```
-     * Arch Linux packages
-       ```
-       base-devel cmake ninja llvm vulkan-headers python python-markupsafe clang lld alsa-lib libpulse libxrandr freetype2
-       ```
-     * Fedora packages
-       ```
-       cmake vulkan-headers ninja-build clang-devel llvm-devel libpng-devel
-       ```
-         * It's also important that you install the developer tools and libraries
-           ```
-           sudo dnf groupinstall "Development Tools" "Development Libraries"
-           ```
-#### Setup
-Clone and initialize the Dusklight repository
+
+### Windows
+
+* Install [CMake 3.25+](https://cmake.org) by searching `CMake Tools` in Visual Studio
+* Install Python 3 from the [Microsoft Store](https://go.microsoft.com/fwlink?linkID=2082640) and verify it's added to `%PATH%` by typing `python` in `cmd`.
+
+Recommended IDEs:
+
+* [Visual Studio 2026 Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx). During installation:
+  * Select `C++ Development` and verify the following packages are included:
+    * `Windows 11 SDK`
+    * `CMake Tools`
+    * `C++ Clang Compiler`
+    * `C++ Clang-cl`
+
+### macOS
+
+* Make sure [Homebrew](https://brew.sh) is installed
+* Install [CMake 3.25+](https://cmake.org)
+
+```sh
+brew install cmake
+```
+
+* Install Python 3
+
+```sh
+brew install python@3
+```
+
+Recommended IDEs:
+
+* [Xcode 16.4 or later](https://developer.apple.com/xcode/)
+* [Visual Studio Code](https://code.visualstudio.com/download/)
+* [CLion](https://www.jetbrains.com/clion/)
+
+### Linux
+
+Actively tested on Ubuntu 24.04, Arch Linux & derivatives.
+
+* Ubuntu 24.04+ packages
+
+    ```sh
+    sudo apt update && sudo apt install -y \
+        build-essential \
+        clang \
+        cmake \
+        curl \
+        git \
+        libasound2-dev \
+        libclang-dev \
+        libcurl4-openssl-dev \
+        libdbus-1-dev \
+        libfreetype-dev \
+        libglu1-mesa-dev \
+        libgtk-3-dev \
+        libncurses5-dev \
+        libpng-dev \
+        libpulse-dev \
+        libudev-dev \
+        libvulkan-dev \
+        libx11-xcb-dev \
+        libxcursor-dev \
+        libxi-dev \
+        libxinerama-dev \
+        libxrandr-dev \
+        libxss-dev \
+        libxtst-dev \
+        lld \
+        ninja-build \
+        python-is-python3 \
+        python3 \
+        python3-markupsafe \
+        zlib1g-dev
+    ```
+
+* Arch Linux packages
+
+    ```sh
+    sudo pacman -S --needed \
+        alsa-lib \
+        base-devel \
+        clang \
+        cmake \
+        freetype2 \
+        libpulse \
+        libxrandr \
+        lld \
+        llvm \
+        ninja \
+        python \
+        python-markupsafe \
+        vulkan-headers
+    ```
+
+* Fedora packages
+
+    ```sh
+    sudo dnf install -y \
+        clang-devel \
+        cmake \
+        libpng-devel \
+        llvm-devel \
+        ninja-build \
+        vulkan-headers
+    ```
+
+  * It's also important that you install the developer tools and libraries
+
+    ```sh
+    sudo dnf groupinstall \
+        "Development Libraries" "Development Tools"
+    ```
+
+Recommended IDEs:
+
+* [CLion](https://www.jetbrains.com/clion/)
+* [Visual Studio Code](https://code.visualstudio.com/download/)
+
+## Building
+
+* Clone and initialize the Dusklight repository:
+
 ```sh
 git clone --recursive https://github.com/TwilitRealm/dusklight.git
 cd dusklight
-git pull
 git submodule update --init --recursive
 ```
 
-#### Building
+* Copy the game disc image to the project directory and name it `game.iso`.
+  * Alternatively, you can specify the path to the disc image when running the executable.
 
 **CLion (Windows / macOS / Linux)**
 
@@ -64,7 +156,8 @@ cmake --build --preset macos-default-relwithdebinfo
 ```
 
 Alternate presets available:
-- `macos-default-debug`: Clang, Debug
+
+* `macos-default-debug`: Clang, Debug
 
 **ninja (Linux)**
 
@@ -74,9 +167,10 @@ cmake --build --preset linux-default-relwithdebinfo
 ```
 
 Alternate presets available:
-- `linux-default-debug`: GCC, Debug
-- `linux-clang-relwithdebinfo`: Clang, RelWithDebInfo
-- `linux-clang-debug`: Clang, Debug
+
+* `linux-default-debug`: GCC, Debug
+* `linux-clang-relwithdebinfo`: Clang, RelWithDebInfo
+* `linux-clang-debug`: Clang, Debug
 
 **ninja (Windows)**
 
@@ -86,13 +180,39 @@ cmake --build --preset windows-msvc-relwithdebinfo
 ```
 
 Alternate presets available:
-- `windows-msvc-debug`: MSVC, Debug
-- `windows-clang-relwithdebinfo`: Clang-cl, RelWithDebInfo
-- `windows-clang-debug`: Clang-cl, Debug
 
-#### Running
-Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
+* `windows-msvc-debug`: MSVC, Debug
+* `windows-clang-relwithdebinfo`: Clang-cl, RelWithDebInfo
+* `windows-clang-debug`: Clang-cl, Debug
+
+## Running
+
+**Windows / Linux**
+
+* Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
+
 ```sh
-build/{preset}/dusklight/path/to/game.rvz
+build/{preset}/dusklight /path/to/game.iso
 ```
-If no path is specified, Dusklight defaults to `game.iso` in the current working directory.
+
+* **Note**: If no path is specified for the disc image, Dusklight defaults to `game.iso` in the current working directory.
+
+```sh
+build/{preset}/dusklight
+```
+
+**macOS**
+
+macOS builds an `.app` bundle which contains the executable and all necessary resources.
+
+* Pass the disc image as a positional argument. Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, GCZ
+
+```sh
+build/{preset}/Dusklight.app/Contents/MacOS/Dusklight /path/to/game.iso
+```
+
+* **Note**: If no path is specified for the disc image, Dusklight defaults to `game.iso` in the current working directory.
+
+```sh
+build/{preset}/Dusklight.app/Contents/MacOS/Dusklight
+```
