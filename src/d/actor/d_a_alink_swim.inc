@@ -6,6 +6,9 @@
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_kankyo_mng.h"
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
 
 BOOL daAlink_c::checkZoraWearMaskDraw() {
     return checkZoraWearAbility() && !checkNoResetFlg0(FLG0_SWIM_UP);
@@ -835,7 +838,15 @@ void daAlink_c::setSwimMoveAnime() {
         } else {
             s16 var_r24;
             if (checkInputOnR() && !checkEventRun()) {
-                var_r24 = 13653.0f * cM_scos(mStickAngle);
+#if TARGET_PC
+                if (dusk::getSettings().game.invertSwimYAxis) {
+                    var_r24 = -13653.0f * cM_scos(mStickAngle);
+                } else {
+                    var_r24 = 13653.0f * cM_scos(mStickAngle);
+                }
+#else
+                    var_r24 = 13653.0f * cM_scos(mStickAngle);
+#endif
             } else {
                 var_r24 = 0;
             }
