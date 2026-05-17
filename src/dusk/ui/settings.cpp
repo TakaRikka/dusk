@@ -1204,7 +1204,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[CHEAT_FREE_MAGIC_ARMOR_HELP]");
         addCheat("[CHEAT_INVINCIBLE_ENEMIES]", getSettings().game.invincibleEnemies,
             "[CHEAT_INVINCIBLE_ENEMIES_HELP]");
-    });
 
     add_tab("[INTERFACE]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
