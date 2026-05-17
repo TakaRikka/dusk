@@ -183,9 +183,8 @@ void handle_event(const SDL_Event& event) noexcept {
             getSettings().video.windowHeight.setValue(height);
         }
         config::Save();
-    } else {
-        input::handle_event(event);
     }
+    input::handle_event(event);
 }
 
 Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) noexcept {
