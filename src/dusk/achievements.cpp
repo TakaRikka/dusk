@@ -1038,6 +1038,35 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
+                "early_city",
+                "Early City",
+                "Obtain the Double Clawshots without obtaining the Dominion Rod.",
+                AchievementCategory::Glitched,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (daPy_getPlayerActorClass() == nullptr) {
+                    return;
+                }
+                bool hasDoubleClawshot = false;
+                bool hasDominionRod = false;
+                for (int i = 0; i < 24; ++i) {
+                    const auto item = dComIfGs_getItem(i, false);
+                    if (item == dItemNo_W_HOOKSHOT_e) {
+                        hasDoubleClawshot = true;
+                    }
+                    if (item == dItemNo_COPY_ROD_e || item == dItemNo_COPY_ROD_2_e) {
+                        hasDominionRod = true;
+                    }
+                }
+                if (hasDoubleClawshot && !hasDominionRod) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
                 "early_kakariko",
                 "Gorge Skip",
                 "Collect the Kakariko warp portal without warping the gorge bridge.",
