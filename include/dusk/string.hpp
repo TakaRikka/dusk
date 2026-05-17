@@ -1,10 +1,6 @@
 #ifndef DUSK_STRING_HPP
 #define DUSK_STRING_HPP
 
-#include "global.h"
-#include <cstring>
-#include <dolphin/os.h>
-
 namespace dusk {
 
 struct TextSpan {
@@ -26,7 +22,7 @@ struct TextSpan {
     constexpr TextSpan operator++(int) {
         const auto prev = *this;
 
-        if (size > 0) {
+        if (size > 0) [[likely]] {
             size--;
         }
         buffer++;
@@ -35,12 +31,15 @@ struct TextSpan {
     }
 
     constexpr char& operator*() const {
-        if (size == 0) {
-            CRASH("Span is empty!");
+        if (size == 0) [[unlikely]] {
+            CrashSpawnEmpty();
         }
 
         return *buffer;
     }
+
+private:
+    static void CrashSpawnEmpty();
 };
 
 #if TARGET_PC
@@ -49,16 +48,7 @@ struct TextSpan {
 #define TEXT_SPAN char*
 #endif
 
-inline void strncpyProxy(char* dst, const char* src, size_t count) {
-#if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-    strncpy(dst, src, count);
-#if _MSC_VER
-#pragma warning(pop)
-#endif
-}
+void SafeStringCopyTruncate(char* buffer, size_t bufSize, const char* src);
 
 /**
  * Copy a string to a fixed-size array.
@@ -67,31 +57,10 @@ inline void strncpyProxy(char* dst, const char* src, size_t count) {
 template <size_t BufSize>
 void SafeStringCopyTruncate(char (&buffer)[BufSize], const char* src) {
     static_assert(BufSize > 0, "Target buffer cannot be size zero");
-
-    if (buffer == src) {
-        CRASH("Cannot copy string to same buffer");
-    }
-
-    strncpyProxy(buffer, src, BufSize);
-    buffer[BufSize - 1] = 0;
+    SafeStringCopyTruncate(buffer, BufSize, src);
 }
 
-inline void SafeStringCopy(char* buffer, size_t bufSize, const char* src) {
-    if (bufSize == 0) {
-        CRASH("Target buffer cannot be size zero");
-    }
-
-    if (buffer == src) {
-        CRASH("Cannot copy string to same buffer");
-    }
-
-    if (strlen(src) > bufSize - 1) {
-        CRASH("Destination buffer too small!");
-    }
-
-    strncpyProxy(buffer, src, bufSize);
-    buffer[bufSize - 1] = 0;
-}
+void SafeStringCopy(char* buffer, size_t bufSize, const char* src);
 
 inline void SafeStringCopy(TextSpan dst, const char* src) {
     SafeStringCopy(dst.buffer, dst.size, src);

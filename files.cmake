@@ -1439,6 +1439,7 @@ set(DUSK_FILES
         src/dusk/logging.cpp
         src/dusk/settings.cpp
         src/dusk/speedrun.cpp
+        src/dusk/string.cpp
         src/dusk/stubs.cpp
         src/dusk/update_check.cpp
         src/dusk/update_check.hpp
