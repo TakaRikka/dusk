@@ -34,6 +34,12 @@ enum class GyroMode : u8 {
     Mouse = 1,
 };
 
+enum class FrameInterpMode : u8 {
+    Off = 0,
+    Capped = 1,
+    Unlimited = 2,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -58,6 +64,12 @@ struct ConfigEnumRange<GyroMode> {
     static constexpr auto min = GyroMode::Sensor;
     static constexpr auto max = GyroMode::Mouse;
 };
+
+template <>
+struct ConfigEnumRange<FrameInterpMode> {
+    static constexpr auto min = FrameInterpMode::Off;
+    static constexpr auto max = FrameInterpMode::Unlimited;
+};
 }
 
 // Persistent user settings
@@ -73,7 +85,6 @@ struct UserSettings {
         ConfigVar<bool> enableFpsOverlay;
         ConfigVar<int> fpsOverlayCorner;
         ConfigVar<int> maxFrameRate;
-        ConfigVar<int> maxFrameRatePreset;
     } video;
 
     struct {
@@ -125,7 +136,7 @@ struct UserSettings {
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
         ConfigVar<bool> disableWaterRefraction;
-        ConfigVar<bool> enableFrameInterpolation;
+        ConfigVar<FrameInterpMode> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
         ConfigVar<bool> enableDepthOfField;

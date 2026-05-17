@@ -5990,7 +5990,7 @@ void daAlink_c::setItemMatrix(int param_0) {
 
         mDoMtx_stack_c::XrotS(-0x8000);
 #ifdef TARGET_PC
-        if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off) {
             Mtx boot_mtx;
             mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), boot_mtx);
             mpLinkBootModels[1]->setAnmMtx(1, boot_mtx);
@@ -19772,7 +19772,7 @@ int daAlink_c::draw() {
                 dComIfGd_getOpaListDark()->entryImm(mpHookChain, 0);
 
 #if TARGET_PC
-                if (dusk::getSettings().game.enableFrameInterpolation &&
+                if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off &&
                     mEquipItem == dItemNo_IRONBALL_e &&
                     mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
                 {

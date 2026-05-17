@@ -59,24 +59,10 @@ constexpr std::array kFpsOverlayCornerNames = {
     "Bottom Right",
 };
 
-constexpr std::array kMaxFrameRatePresets = {
-    "Unlimited",
-    "60 FPS",
-    "120 FPS",
-    "144 FPS",
-    "240 FPS",
-    "360 FPS",
-    "Custom"
-};
-
-constexpr std::array kMaxFrameRateValues = {
-    0,
-    60,
-    120,
-    144,
-    240,
-    360,
-    69,
+constexpr std::array kInterpolationModes = {
+    "Off",
+    "Capped",
+    "Unlimited"
 };
 
 constexpr std::array kGyroInputModeLabels = {
@@ -377,7 +363,7 @@ const Rml::String kBloomHelpText =
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
 const Rml::String kUnlockFramerateHelpText =
-    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
+    "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
 
 int float_setting_percent(ConfigVar<float>& var) {
@@ -841,74 +827,39 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }, mPrelaunch);
 
         leftPane.add_section("Rendering");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
-            {
-                .key = "Unlock Framerate",
-                .helpText = kUnlockFramerateHelpText,
-            });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Max Frame Rate",
+                .key = "Unlock Framerate",
                 .getValue =
                     [] {
-                        const int capPreset = getSettings().video.maxFrameRatePreset.getValue();
-                        return kMaxFrameRatePresets[capPreset];
+                        return kInterpolationModes[static_cast<u8>(getSettings().game.enableFrameInterpolation.getValue())];
                     },
-                .isDisabled =
-                    [] { return !getSettings().game.enableFrameInterpolation.getValue(); },
                 .isModified =
                     [] {
-                        const auto& cap = getSettings().video.maxFrameRatePreset;
-                        return cap.getValue() != cap.getDefaultValue();
+                        return getSettings().game.enableFrameInterpolation.getValue() !=
+                               getSettings().game.enableFrameInterpolation.getDefaultValue();
                     },
             }),
             rightPane, [](Pane& pane) {
-                for (size_t idx = 0; idx < kMaxFrameRatePresets.size(); idx++) {
-                    pane.add_button(
-                            {
-                                .text = kMaxFrameRatePresets[idx],
-                                .isSelected =
-                                    [idx] {
-                                        return getSettings().video.maxFrameRatePreset.getValue() == idx;
-                                    },
-                            })
-                        .on_pressed([idx] {
+                for (int i = 0; i < kInterpolationModes.size(); i++) {
+                    pane.add_button({
+                            .text = kInterpolationModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.enableFrameInterpolation.getValue() == static_cast<FrameInterpMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
-                            getSettings().video.maxFrameRatePreset.setValue(idx);
-
-                            if (idx != kMaxFrameRatePresets.size()-1) {
-                                getSettings().video.maxFrameRate.setValue(kMaxFrameRateValues[idx]);
-                            }
-
+                            getSettings().game.enableFrameInterpolation.setValue(static_cast<FrameInterpMode>(i));
                             config::Save();
                         });
                 }
-                pane.add_child<NumberButton>(NumberButton::Props{
-                        .key = "Custom FPS Cap",
-                        .getValue = [] { return getSettings().video.maxFrameRate.getValue(); },
-                        .setValue =
-                            [](int value) {
-                                getSettings().video.maxFrameRate.setValue(std::clamp(value, 60, 1000));
-                                config::Save();
-                            },
-                        .isDisabled = [] { return getSettings().video.maxFrameRatePreset != kMaxFrameRatePresets.size()-1; },
-                        .isModified = [] { 
-                            return getSettings().video.maxFrameRate.getValue() !=
-                               getSettings().video.maxFrameRate.getDefaultValue();
-                        },
-                        .min = 60,
-                        .max = 999,
-                        .step = 1,
-                        .suffix = " FPS",
-                    });
-
-                    /*
-                    leftPane, rightPane, getSettings().game.freeCameraSensitivity,
-                    "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
-                    [] { return !getSettings().game.freeCamera; }
-                    */
-                pane.add_rml("<br/>Cap the interpolated frame rate.");
+                pane.add_rml(kUnlockFramerateHelpText);
             });
+        config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
+            "Framerate Cap", "Limit the framerate to the specified value.", 30, 540, 1,
+            [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "Enable Depth of Field",

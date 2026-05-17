@@ -493,7 +493,7 @@ int daObjKLift00_c::Draw() {
     dComIfGd_setList();
 
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off) {
         if (mChainInterpCurrValid) {
             memcpy(mChainInterpPrev, mChainInterpCurr, mNumChains * sizeof(cXyz));
             mChainInterpPrevValid = true;
