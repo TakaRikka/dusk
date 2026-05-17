@@ -1,3 +1,32 @@
+## 双许可声明
+
+本仓库包含两种许可：
+
+1. **上游代码**（源自 [TwilitRealm/dusklight](https://github.com/TwilitRealm/dusklight)）— **CC0 1.0 Universal**（见下文）
+2. **本仓库新增修改**（包括 `i18` 和 `portable` 分支的所有变更，由 snnh 贡献）— **GNU General Public License v3.0**
+
+使用本仓库时，CC0 部分按 CC0 条款使用，GPL 部分按 GPL-3.0 条款使用。两者相互独立。
+
+---
+
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+Preamble
+
+The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+...
+
+[完整的 GPL-3.0 协议文本请见 https://www.gnu.org/licenses/gpl-3.0.txt]
+
+---
+
 Creative Commons Legal Code
 
 CC0 1.0 Universal
