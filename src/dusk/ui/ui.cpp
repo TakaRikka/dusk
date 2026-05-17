@@ -172,14 +172,17 @@ void handle_event(const SDL_Event& event) noexcept {
         }
         sConnectedGamepads.erase(event.gdevice.which);
     } else if (event.type == SDL_EVENT_WINDOW_MOVED || event.type == SDL_EVENT_WINDOW_RESIZED) {
-        if (auroraInfo.window) {
-            int x, y;
-            SDL_GetWindowPosition(auroraInfo.window, &x, &y);
-            dusk::getSettings().video.windowPositionX.setValue(x);
-            dusk::getSettings().video.windowPositionY.setValue(y);
-            dusk::config::Save();
+        int x, y;
+        if (SDL_GetWindowPosition(aurora::window::get_sdl_window(), &x, &y)) {
+            getSettings().video.windowPositionX.setValue(x);
+            getSettings().video.windowPositionY.setValue(y);
         }
-        return;
+        int width, height;
+        if (SDL_GetWindowSize(aurora::window::get_sdl_window(), &width, &height)) {
+            getSettings().video.windowWidth.setValue(width);
+            getSettings().video.windowHeight.setValue(height);
+        }
+        config::Save();
     } else {
         input::handle_event(event);
     }

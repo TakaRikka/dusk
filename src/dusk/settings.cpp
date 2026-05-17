@@ -1,6 +1,8 @@
-#include <SDL3/SDL_video.h>
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
+#include "dusk/dusk.h"
+
+#include <SDL3/SDL_video.h>
 
 namespace dusk {
 
@@ -13,6 +15,8 @@ UserSettings g_userSettings = {
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
         .windowPositionX {"video.windowPositionX", SDL_WINDOWPOS_UNDEFINED},
         .windowPositionY {"video.windowPositionY", SDL_WINDOWPOS_UNDEFINED},
+        .windowWidth {"video.windowWidth", defaultWindowWidth * 2},
+        .windowHeight {"video.windowHeight", defaultWindowHeight * 2},
     },
 
     .audio = {
@@ -182,6 +186,8 @@ void registerSettings() {
     Register(g_userSettings.video.fpsOverlayCorner);
     Register(g_userSettings.video.windowPositionX);
     Register(g_userSettings.video.windowPositionY);
+    Register(g_userSettings.video.windowWidth);
+    Register(g_userSettings.video.windowHeight);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);

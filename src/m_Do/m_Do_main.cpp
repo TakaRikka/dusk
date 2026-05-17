@@ -553,8 +553,8 @@ int game_main(int argc, char* argv[]) {
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
         config.windowPosX = dusk::getSettings().video.windowPositionX;
         config.windowPosY = dusk::getSettings().video.windowPositionY;
-        config.windowWidth = defaultWindowWidth * 2;
-        config.windowHeight = defaultWindowHeight * 2;
+        config.windowWidth = dusk::getSettings().video.windowWidth;
+        config.windowHeight = dusk::getSettings().video.windowHeight;
         config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
         config.logCallback = &aurora_log_callback;
         config.logLevel = startupLogLevel;
