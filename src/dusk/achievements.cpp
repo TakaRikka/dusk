@@ -506,6 +506,29 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             },
             {}
         },
+        {
+            {
+                "rollstab_triple",
+                "Surgical Skewer",
+                "Kill 3 enemies with a single rollstab.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                static int rollstabKills = 0;
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                const bool inRollstab = link != nullptr && link->mProcID == daAlink_c::PROC_CUT_FINISH && link->mIsRollstab;
+                if (!inRollstab) {
+                    rollstabKills = 0;
+                    return;
+                }
+                rollstabKills += AchievementSystem::get().signalCount("rollstab_kill");
+                if (rollstabKills >= 3) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
         // Minigame
         {
             {
@@ -1088,11 +1111,17 @@ void AchievementSystem::clearAll() {
 }
 
 void AchievementSystem::signal(const char* key) {
-    m_signals.insert(key);
+    m_signals[key]++;
 }
 
 bool AchievementSystem::hasSignal(const char* key) const {
-    return m_signals.count(key) > 0;
+    const auto it = m_signals.find(key);
+    return it != m_signals.end() && it->second > 0;
+}
+
+int AchievementSystem::signalCount(const char* key) const {
+    const auto it = m_signals.find(key);
+    return it != m_signals.end() ? it->second : 0;
 }
 
 void AchievementSystem::clearOne(const char* key) {
