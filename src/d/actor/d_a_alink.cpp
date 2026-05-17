@@ -11903,8 +11903,17 @@ BOOL daAlink_c::checkRAction() {
     return false;
 }
 
+BOOL daAlink_c::rollTrigger() const {
+#if TARGET_PC
+    if (dusk::isActionBound(dusk::ActionBinds::ROLL, 0)) {
+        return dusk::getActionBindTrig(dusk::ActionBinds::ROLL, 0);
+    }
+#endif
+    return doTrigger();
+}
+
 BOOL daAlink_c::checkMoveDoAction() {
-    if (doTrigger()) {
+    if (rollTrigger()) {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
             if (checkWolf()) {
                 return procWolfSideStepInit(0);

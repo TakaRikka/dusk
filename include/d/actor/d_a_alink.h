@@ -3544,6 +3544,7 @@ public:
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     bool checkFisingRodLure() const { return mEquipItem == 0x105; }
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL rollTrigger() const;
     BOOL swordTrigger() { return itemTriggerCheck(BTN_B); }
     BOOL grassCancelTrigger() { return itemTriggerCheck(BTN_B); }
     BOOL arrowChangeTrigger() { return itemActionTrigger(); }
