@@ -280,8 +280,9 @@ void main01(void) {
         const auto pacing = dusk::game_clock::advance_main_loop();
         if (pacing.is_interpolating) {
             if (pacing.sim_ticks_to_run > 0) {
-                dusk::frame_interp::begin_frame(true, true, 0.0f);
+                dusk::frame_interp::begin_frame(dusk::getSettings().game.enableFrameInterpolation, true, 0.0f);
                 dusk::frame_interp::set_ui_tick_pending(true);
+
                 for (int sim_tick = 0; sim_tick < pacing.sim_ticks_to_run; ++sim_tick) {
                     dusk::frame_interp::begin_sim_tick();
                     mDoCPd_c::read();
@@ -292,7 +293,7 @@ void main01(void) {
                 }
             }
 
-            dusk::frame_interp::begin_frame(true, false,
+            dusk::frame_interp::begin_frame(dusk::getSettings().game.enableFrameInterpolation, false,
                                             dusk::game_clock::sample_interpolation_step());
             dusk::frame_interp::interpolate();
             dusk::frame_interp::begin_presentation_camera();
@@ -302,7 +303,7 @@ void main01(void) {
             dusk::frame_interp::end_presentation_camera();
             dusk::frame_interp::set_ui_tick_pending(false);
         } else {
-            dusk::frame_interp::begin_frame(false, true, 0.0f);
+            dusk::frame_interp::begin_frame(dusk::FrameInterpMode::Off, true, 0.0f);
             dusk::frame_interp::set_ui_tick_pending(true);
 
             // Game Inputs

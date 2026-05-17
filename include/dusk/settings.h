@@ -36,8 +36,8 @@ enum class GyroMode : u8 {
 
 enum class FrameInterpMode : u8 {
     Off = 0,
-    Capped = 1,
-    Unlimited = 2,
+    Unlimited = 1,
+    Capped = 2,
 };
 
 namespace config {
@@ -70,7 +70,7 @@ struct ConfigEnumRange<FrameInterpMode> {
     static constexpr auto min = FrameInterpMode::Off;
     static constexpr auto max = FrameInterpMode::Unlimited;
 };
-}
+}  // namespace config
 
 // Persistent user settings
 

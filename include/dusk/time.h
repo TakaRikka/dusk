@@ -81,8 +81,6 @@ private:
     if (!initialized || numSleeps++ % 1000 == 0) {
       LARGE_INTEGER freq;
       if (QueryPerformanceFrequency(&freq) == 0) {
-        /// Todo: Make this log work again possibly.
-        //DuskLog.warn("QueryPerformanceFrequency failed: {}", GetLastError());
         return;
       }
       countPerNs = static_cast<double>(freq.QuadPart) / 1e9;
@@ -106,19 +104,18 @@ private:
 #endif
     } while (current.QuadPart - start.QuadPart < ticksToWait);
   }
-#else
-  void NanoSleep(const duration_t duration) { 
-#if defined(__APPLE__)
+#elif defined (__APPLE__)
+  void NanoSleep(const duration_t duration) {
       // Hybrid approach using Apple Mach
       uint64_t start_mach = mach_absolute_time();
-      
+
       mach_timebase_info_data_t timebase_info;
       mach_timebase_info(&timebase_info);
-      
+
       uint64_t total_mach_ticks = (duration * timebase_info.denom) / timebase_info.numer;
       uint64_t target_mach = start_mach + total_mach_ticks;
-      
-      uint64_t buffer_ns = 2'000'000ULL;
+
+      uint64_t buffer_ns = 2 '000' 000ULL;
       uint64_t buffer_mach_ticks = (buffer_ns * timebase_info.denom) / timebase_info.numer;
 
       if (total_mach_ticks > buffer_mach_ticks) {
@@ -127,16 +124,15 @@ private:
       }
 
       while (mach_absolute_time() < target_mach) {
-          #if defined(__aarch64__) || defined(__arm__)
-          asm volatile("yield" ::: "memory"); // Hardware hint, not a scheduler hint.
-          #else
-          _mm_pause();
-          #endif
-      }
+#if defined(__aarch64__) || defined(__arm__)
+          asm volatile("yield" ::: "memory");  // Hardware hint, not a scheduler hint.
 #else
-    SDL_DelayPrecise(duration); 
+          _mm_pause();
 #endif
+      }
   }
+#else
+  void NanoSleep(const duration_t duration) { SDL_DelayPrecise(duration); }
 #endif
 };
 

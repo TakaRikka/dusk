@@ -2624,7 +2624,7 @@ void dMenu_Dmap_c::zoomIn_proc() {
 
 void dMenu_Dmap_c::zoomOut_init_proc() {
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off) {
+    if (dusk::frame_interp::is_enabled()) {
         mpDrawBg->resetScrollArrowMask();
     }
 #endif

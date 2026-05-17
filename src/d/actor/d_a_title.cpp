@@ -354,7 +354,7 @@ void daTitle_c::fastLogoDispInit() {
     mProcID = 5;
 
 #ifdef TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off) {
+    if (dusk::frame_interp::is_enabled()) {
         dusk::frame_interp::request_presentation_sync();
     }
 #endif

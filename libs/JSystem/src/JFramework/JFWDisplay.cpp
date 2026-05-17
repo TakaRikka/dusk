@@ -370,7 +370,7 @@ constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanosecond
 constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
 
 static void waitPrecise(Limiter& limiter, Limiter::duration_t targetNs) {
-    Limiter::duration_t sleepTime = limiter.Sleep(targetNs);
+   const auto sleepTime = limiter.Sleep(targetNs);
     dusk::frameUsagePct =
         100.0f * (1.0f - static_cast<float>(sleepTime) / static_cast<float>(targetNs));
 }
@@ -380,9 +380,7 @@ static void waitForTick(u32 p1, u16 p2) {
 #if TARGET_PC
     static Limiter limiter;
 
-    // RULE 1: If we are interpolating, the OUTER main loop handles the frame rate cap.
-    // Inner JFWDisplay ticks must return immediately to keep the simulation pacing accurate!
-    if (dusk::getSettings().game.enableFrameInterpolation.getValue() != dusk::FrameInterpMode::Off && !dusk::getTransientSettings().skipFrameRateLimit) {
+    if (dusk::frame_interp::is_enabled() && !dusk::getTransientSettings().skipFrameRateLimit) {
         dusk::frameUsagePct = 0.f; 
         return; 
     }
