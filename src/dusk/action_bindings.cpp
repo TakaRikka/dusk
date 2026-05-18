@@ -14,6 +14,7 @@ ActionBindsMap& getActionBinds() {
         {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna"}},
         {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
         {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
+        {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack"}},
     };
     return actionBinds;
 }
