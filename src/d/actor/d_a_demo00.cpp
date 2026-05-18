@@ -18,6 +18,9 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/actor/d_a_movie_player.h"
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
 #if DEBUG
 #include "d/d_debug_viewer.h"
 #include <cstring>
@@ -695,6 +698,17 @@ int daDemo00_c::actPerformance(dDemo_actor_c* actor) {
                     }
                 }
             }
+#if TARGET_PC
+            if (mDemoFramePrevValid && mDemoFramePrev - fVar1 > 2.0f) {
+                mDemoSyncTicks = 2;
+            }
+            mDemoFramePrev = fVar1;
+            mDemoFramePrevValid = true;
+            if (mDemoSyncTicks > 0) {
+                dusk::frame_interp::request_presentation_sync();
+                mDemoSyncTicks--;
+            }
+#endif
         } else if (mModel.mpModelMorf != NULL) {
             mModel.mpModelMorf->play(0, 0);
         } else if (mModel.mpBtpAnm != NULL) {

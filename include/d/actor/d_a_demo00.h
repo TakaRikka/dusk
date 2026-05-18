@@ -132,6 +132,11 @@ public:
     /* 0x2900 */ mDoExt_3DlineMat0_c field_0x2900;
     /* 0x291C */ cXyz field_0x291c;
     /* 0x2928 */ u8 field_0x2928[0x292c - 0x2928];
+#if TARGET_PC
+    f32 mDemoFramePrev;
+    bool mDemoFramePrevValid;
+    s8 mDemoSyncTicks;
+#endif
 };
 
 STATIC_ASSERT(sizeof(daDemo00_c) == 0x292c);
