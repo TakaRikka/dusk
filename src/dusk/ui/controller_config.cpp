@@ -2,6 +2,7 @@
 
 #include "bool_button.hpp"
 #include "button.hpp"
+#include "dusk/settings.h"
 #include "pane.hpp"
 #include "number_button.hpp"
 
@@ -488,8 +489,18 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 }
             }
 
+            if(getSettings().game.enableClassicKeybinds)
+            {
+                pane.add_section("Classic Buttons and D-Pad");
+                for (const auto& [action, bindData] : getActionBinds()) {
+                    if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::CLASSICAL && bindData.actionType == ActionBindType::BUTTON) {
+                        addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
+                    }
+                }
+            }
+
             // TODO: Replace with the action bindings, once complete
-            pane.add_section("Classic Buttons");
+            pane.add_section("Classic Buttons(PAD.H)");
             addKeyButton(PAD_BUTTON_A);
             addKeyButton(PAD_BUTTON_B);
             addKeyButton(PAD_BUTTON_X);
@@ -497,7 +508,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             addKeyButton(PAD_BUTTON_START);
             addKeyButton(PAD_TRIGGER_Z);
 
-            pane.add_section("Classic D-Pad");
+            pane.add_section("Classic D-Pad(PAD.H)");
             addKeyButton(PAD_BUTTON_UP);
             addKeyButton(PAD_BUTTON_DOWN);
             addKeyButton(PAD_BUTTON_LEFT);
@@ -542,7 +553,17 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             }
         }
 
-        pane.add_section("Classic Buttons");
+        if(getSettings().game.enableClassicKeybinds)
+        {
+            pane.add_section("Classic Buttons and D-Pad");
+            for (const auto& [action, bindData] : getActionBinds()) {
+                if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::CLASSICAL && bindData.actionType == ActionBindType::BUTTON) {
+                    addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
+                }
+            }
+        }
+
+        pane.add_section("Classic Buttons(PAD.H)");
         for (u32 i = 0; i < buttonCount; ++i) {
             PADButtonMapping& mapping = mappings[i];
             if (!is_action_button(mapping.padButton)) {
@@ -569,7 +590,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 });
         }
 
-        pane.add_section("Classic D-Pad");
+        pane.add_section("Classic D-Pad(PAD.H)");
         for (u32 i = 0; i < buttonCount; ++i) {
             PADButtonMapping& mapping = mappings[i];
             if (!is_dpad_button(mapping.padButton)) {

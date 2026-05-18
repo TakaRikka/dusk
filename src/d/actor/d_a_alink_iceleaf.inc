@@ -274,6 +274,7 @@ int daAlink_c::checkNextActionBoard() {
         return 1;
     }
 
+    // TODO: Revisit this.
     if ((!doButton() && (mProcID == PROC_BOARD_ROW || mProcID == PROC_BOARD_TURN)) ||
          mProcID == PROC_BOARD_CUT || mProcID == PROC_BOARD_ROW || mProcID == PROC_BOARD_JUMP) {
         return 0;
@@ -454,7 +455,7 @@ int daAlink_c::procBoardWait() {
             if (!checkModeFlg(2) && mProcID != PROC_BOARD_ROW) {
                 setDoStatus(BUTTON_STATUS_CROUCH);
 
-                if (doButton()) {
+                if (DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doButton())) {
                     f32 blend_ratio;
                     if (field_0x2f8c == 0xB) {
                         blend_ratio = mNowAnmPackUnder[1].getRatio();
@@ -472,7 +473,7 @@ int daAlink_c::procBoardWait() {
                 setDoStatus(BUTTON_STATUS_JUMP);
             }
 
-            if (!doButton()) {
+            if (!DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), (doButton()))) {
                 mProcVar5.field_0x3012 = 0;
 
                 if (mNormalSpeed > 15.0f) {

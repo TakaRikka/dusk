@@ -563,7 +563,8 @@ void daAlink_c::getBaseHorseAnime(daAlink_c::daAlink_ANM* i_anmList) {
                 setRStatus(BUTTON_STATUS_COVER);
             }
 
-            if (spActionButton()) {
+            // TODO: Introduce separate Horse Binds?
+            if (IF_DUSK(VERB_BUTTON_ALONE(dusk::ActionBinds::ROLL) ||) spActionButton()) {
                 resetUpperAnime(UPPER_2, -1.0f);
                 i_anmList[0] = ANM_HORSE_CROUCH;
                 i_anmList[1] = ANM_HORSE_CROUCH;
@@ -692,7 +693,7 @@ int daAlink_c::setSyncHorse(int param_0) {
         resetUnderAnime(UNDER_2, 4.0f);
     }
 
-    if (checkHorseWalkStartAnm() && spActionButton()) {
+    if (checkHorseWalkStartAnm() && (spActionButton() IF_DUSK(|| VERB_BUTTON_ALONE(dusk::ActionBinds::ROLL)))) {
         if (checkNoUpperAnime()) {
             setUpperAnimeBase(getMainBckData(ANM_HORSE_CROUCH)->m_upperID);
         }
@@ -710,7 +711,7 @@ int daAlink_c::setSyncHorse(int param_0) {
             if (checkHorseNoUpperAnime()) {
                 setDoStatus(BUTTON_STATUS_WHOOP);
 
-                if (doTrigger()) {
+                if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
                     onResetFlg0(RFLG0_COW_GAME_LEASH);
                     voiceStart(Z2SE_AL_V_RUSH_HORSE);
                     field_0x30a6 = mpHIO->mHorse.m.mWhipWaitTime;
@@ -721,7 +722,8 @@ int daAlink_c::setSyncHorse(int param_0) {
         } else if (checkHorseDashAccept()) {
             setDoStatus(BUTTON_STATUS_DASH);
 
-            if (doTrigger()) {
+            // TODO: Consider introducing a new verb for DASH
+            if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
                 field_0x3004 = mpHIO->mHorse.m.mWalkOutProhibitionTime;
                 daAlink_ANM anm = ANM_HORSE_LASH;
                 const daAlinkHIO_anm_c* anmparam_p = &mpHIO->mHorse.m.mWhipAnm;
@@ -788,7 +790,7 @@ int daAlink_c::setSyncHorse(int param_0) {
 
     if (((var_r28 || anmList[0] == ANM_HORSE_TURN_LEFT || anmList[0] == ANM_HORSE_TURN_RIGHT ||
           anmList[0] == ANM_HORSE_DASH_START ||
-          (spActionButton() && !checkHorseWalkStartAnm() && !checkHorseWaitLashAnime()))
+          ((IF_DUSK(VERB_BUTTON_ALONE(dusk::ActionBinds::ROLL) ||) spActionButton()) && !checkHorseWalkStartAnm() && !checkHorseWaitLashAnime()))
           && mProcID != PROC_HORSE_CUT_TURN
         )
         || field_0x2f8c == 10
@@ -854,7 +856,7 @@ int daAlink_c::setSyncBoar(int param_0) {
 
     if (param_0 && boar->getWaitRollAngle() == 0 && checkHorseNoUpperAnime()) {
         setDoStatus(BUTTON_STATUS_DASH);
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             changeBoarRunRide();
         }
     }
@@ -1243,7 +1245,7 @@ int daAlink_c::checkHorseGetOffAndSetDoStatus() {
 int daAlink_c::setHorseGetOff(int param_0) {
     daHorse_c* horse_p = dComIfGp_getHorseActor();
 
-    if (dComIfGp_getDoStatus() == BUTTON_STATUS_DISMOUNT && doTrigger()) {
+    if (dComIfGp_getDoStatus() == BUTTON_STATUS_DISMOUNT && DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
         if ((checkHorseRide() && horse_p->checkEnemySearch()) || checkHorseLieAnime()) {
             resetUpperAnime(UPPER_2, -1.0f);
             procBackJumpInit(0);
@@ -1762,7 +1764,7 @@ int daAlink_c::procHorseTurn() {
                 setRStatus(BUTTON_STATUS_COVER);
             }
 
-            if (spActionButton()) {
+            if (IF_DUSK(VERB_BUTTON_ALONE(dusk::ActionBinds::ROLL) ||) spActionButton()) {
                 resetUpperAnime(UPPER_2, -1.0f);
                 setSingleAnimeBase(ANM_HORSE_CROUCH);
             } else {
@@ -1794,10 +1796,10 @@ int daAlink_c::procHorseTurn() {
             if (horse->getAnmFrame(0) >= 30.0f) {
                 return procCoLargeDamageInit(-4, TRUE, 0, 0, NULL, 0);
             }
-        } else if (spActionButton() && !checkSpecialHorseRide()) {
+        } else if ((IF_DUSK(VERB_BUTTON_ALONE(dusk::ActionBinds::ROLL) ||) spActionButton()) && !checkSpecialHorseRide()) {
             setDoStatus(BUTTON_STATUS_DISMOUNT);
 
-            if (doTrigger()) {
+            if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
                 resetUpperAnime(UPPER_2, -1.0f);
 
                 if (horse->checkTurnStand()) {
@@ -2776,7 +2778,7 @@ int daAlink_c::procHorseRun() {
     } else if (horse->getRodeoPointCnt() && horse->checkTurnStand()) {
         setDoStatus(BUTTON_STATUS_SEIZE);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             field_0x32cc = 1;
             onSceneChangeArea(17, 0xFF, NULL);
             horse->offRodeoMode();
