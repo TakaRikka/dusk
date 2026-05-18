@@ -397,7 +397,7 @@ static int daB_GND_Draw(b_gnd_class* i_this) {
         i_this->field_0x21e8.update(2, l_color, &a_this->tevStr);
         dComIfGd_set3DlineMat(&i_this->field_0x21e8);
 #if TARGET_PC
-        if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (dusk::frame_interp::is_enabled()) {
             if (i_this->mReinsInterpCurrValid) {
                 memcpy(i_this->mReinsInterpPrev, i_this->mReinsInterpCurr, sizeof(i_this->mReinsInterpCurr));
                 memcpy(i_this->mReinsTexInterpPrev, i_this->mReinsTexInterpCurr, sizeof(i_this->mReinsTexInterpCurr));

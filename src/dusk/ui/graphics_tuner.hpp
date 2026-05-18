@@ -42,6 +42,7 @@ private:
 enum class GraphicsOption {
     InternalResolution,
     ShadowResolution,
+    Resampler,
     BloomMode,
     BloomMultiplier,
 };
@@ -55,6 +56,7 @@ struct GraphicsTunerProps {
     int valueMin = 0;
     int valueMax = 0;
     int defaultValue = 0;
+    int step = 1;
 };
 
 class GraphicsTuner : public Document {

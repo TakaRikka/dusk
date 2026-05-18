@@ -10,6 +10,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_s_name.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/livesplit.h"
 #include "dusk/memory.h"
 #include "dusk/speedrun.h"
 #include "dusk/settings.h"
@@ -422,6 +423,7 @@ void dScnName_c::changeGameScene() {
             if (!dusk::m_speedrunInfo.m_isRunStarted) {
                 dusk::resetForSpeedrunMode();
                 dusk::m_speedrunInfo.startRun();
+                dusk::speedrun::start();
             }
         }
 

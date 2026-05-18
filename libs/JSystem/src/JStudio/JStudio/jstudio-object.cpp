@@ -655,7 +655,7 @@ value_or_fun:
 
 value:
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation && u <= 5 &&
+    if (dusk::frame_interp::is_enabled() && u <= 5 &&
         (operation == data::UNK_0x2 || operation == data::UNK_0x3 || operation == data::UNK_0x12))
     {
         dusk::frame_interp::request_presentation_sync();
@@ -666,7 +666,7 @@ value:
 
 value_n:
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation &&
+    if (dusk::frame_interp::is_enabled() &&
         (pN == TAdaptor_camera::sauVariableValue_3_POSITION_XYZ || pN == TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ) &&
         (operation == data::UNK_0x2 || operation == data::UNK_0x3 || operation == data::UNK_0x12))
     {

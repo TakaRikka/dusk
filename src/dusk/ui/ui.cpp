@@ -130,7 +130,7 @@ void handle_event(const SDL_Event& event) noexcept {
             if (getSettings().game.enableControllerToasts) {
                 const char* name = SDL_GetGamepadName(gamepad);
                 Rml::String content = fmt::format("<span>{}</span>", name ? name : "[Unknown]");
-                Rml::String title = "Controller connected";
+                Rml::String title = "Device Connected";
                 if (const char* icon = connection_state_icon(SDL_GetGamepadConnectionState(gamepad))) {
                     title = fmt::format(
                         "<row><span>{}</span> <icon class=\"connection\">&#x{};</icon></row>", title,
@@ -163,7 +163,7 @@ void handle_event(const SDL_Event& event) noexcept {
             const char* name = SDL_GetGamepadNameForID(event.gdevice.which);
             push_toast({
                 .type = "controller",
-                .title = "Controller disconnected",
+                .title = "Device Disconnected",
                 .content = name ? name : "[Unknown]",
                 .duration = std::chrono::seconds(4),
             });

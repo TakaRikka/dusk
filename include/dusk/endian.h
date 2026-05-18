@@ -227,6 +227,28 @@ struct BE<Mtx> {
     }
 };
 
+typedef f32 Mtx23[2][3];
+template <>
+struct BE<Mtx23> {
+    BE<f32> contents[2][3];
+
+    auto& operator[](int x) {
+        return contents[x];
+    }
+
+    auto& operator[](int x) const {
+        return contents[x];
+    }
+
+    void to_host(Mtx23& mtx) const {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                mtx[i][j] = contents[i][j];
+            }
+        }
+    }
+};
+
 template<typename T>
 void be_swap(T& val) {
     val = BE<T>::swap(val);
