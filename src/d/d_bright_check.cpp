@@ -143,13 +143,12 @@ void dBrightCheck_c::modeMove() {
     if (mDoCPd_c::getTrigA(PAD_1) || mDoCPd_c::getTrigStart(PAD_1)) {
         mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
 #ifdef TARGET_PC
-        dusk::speedrun::start();
-
         if (dusk::getSettings().game.speedrunMode && !dusk::getSettings().game.hideTvSettingsScreen) {
             // start a new run if a run isn't already in progress
             if (!dusk::m_speedrunInfo.m_isRunStarted) {
                 dusk::resetForSpeedrunMode();
                 dusk::m_speedrunInfo.startRun();
+                dusk::speedrun::start();
             }
         }
 

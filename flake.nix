@@ -15,12 +15,6 @@
 
       # Dependencies that are not packaged in nixpkgs (used by the Linux package build):
       buildSources = pkgs: {
-        aurora-src = pkgs.fetchFromGitHub {
-          owner = "encounter";
-          repo = "aurora";
-          rev = "63606a43265a3bc18dafd500ab4d7a2108f109e6";
-          hash = "sha256-xBvnAwGwNzav67Ac6oUz7RqDUwqgL2bsME3OOMn8Tqw=";
-        };
         dawn-src = pkgs.fetchzip {
           url = "https://github.com/encounter/dawn-build/releases/download/v20260423.175430/dawn-linux-x86_64.tar.gz";
           hash = "sha256-HXfKTLHtMPwupnFnaflCARtXVPuS/0PoCePXidjE5xs=";
@@ -59,9 +53,6 @@
           name = "dusklight";
           src = ./.;
           postUnpack = ''
-            mkdir -p $sourceRoot/extern/aurora
-            cp -r ${srcs.aurora-src}/. $sourceRoot/extern/aurora/
-            chmod -R u+w $sourceRoot/extern/aurora
             sed -i '/add_subdirectory(tests)/d' $sourceRoot/extern/aurora/CMakeLists.txt
           '';
           # Remove last line to re-enable tests

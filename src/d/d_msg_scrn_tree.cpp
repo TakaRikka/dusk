@@ -188,6 +188,14 @@ void dMsgScrnTree_c::exec() {
         fukiAlpha(1.0f);
     }
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxWoodScaleX, g_MsgObject_HIO_c.mBoxWoodScaleY);
+
+#if TARGET_PC
+    const f32 hudScale = mDoGph_gInf_c::hudAspectScaleUp;
+    if (hudScale > 1.0f) {
+        field_0xc4->getPanePtr()->setBasePosition(J2DBasePosition_4);
+        field_0xc4->getPanePtr()->scale(hudScale, 1.0f);
+    }
+#endif
 }
 
 void dMsgScrnTree_c::draw() {
