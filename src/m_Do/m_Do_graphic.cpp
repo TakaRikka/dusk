@@ -1199,7 +1199,7 @@ static void trimming(view_class* param_0, view_port_class* param_1) {
         #if TARGET_PC
         f32 sc_top = param_1->scissor.y_orig;
         f32 sc_bottom = sc_top + param_1->scissor.height;
-        
+
         f32 sc_left = 0.0f;
         f32 sc_right = param_1->width;
 
@@ -1379,7 +1379,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
 
     // Set up viewports for our pyramid.
-    enum { MaxDivNum = 10 };
+    enum { MaxDivNum = 14 };
     enum {
         Pass0,
         FinalPass,
@@ -1507,8 +1507,6 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXTexObj* texPass0 = divCopyTex(Pass0, 2);
         GXLoadTexObj(texPass0, GX_TEXMAP0);
 
-        f32 blurScale = mBlureSize * ((448.0f / height) / 6400.0f);
-
         // Setup blur filter TEV.
         GXSetNumTexGens(8);
         GXSetNumTevStages(8);
@@ -1532,7 +1530,8 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // The original mBlureRatio is multiplied into each sample, of which there are 8 samples originally.
         // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
         // so we do the same thing, letting it clip.
-        float brightnessF32 = (mBlureRatio * 16 / 255.0f);
+        float userMult = dusk::getSettings().game.bloomMultiplier.getValue();
+        float brightnessF32 = (mBlureRatio * userMult * 16.0f / 255.0f);
 
         // Distribute the brightness through the total number of passes.
         f32 totalNumPasses = (divNum - divStart + 1);
@@ -1572,8 +1571,17 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(255)});
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_OR);
+
+        // N is the actual number of upsample passes happening at the current resolution
+        // D is the total decay factor we want over a baseline of 4 passes (1x resolution).
+        // Normalize the per-pass decay so that after N passes, the total weight matches the baseline.
+        int N = divNum - divStart;
+        if (N <= 0) N = 1;
+        float D = std::clamp((f32)mBlureSize / 128.0f, 0.01f, 0.99f);
+        float perPassDecay = powf(D, 4.0f / (f32)N);
+        float alpha = std::clamp(255.0f * perPassDecay, 0.0f, 255.0f);
+
         for (int i = divNum; i > divStart; i--) {
-            float alpha = 255.0f * powf(0.25f * dusk::getSettings().game.bloomMultiplier.getValue(), 1.0f / (i - divStart + 1));
             GXSetTevColorS10(GX_TEVREG0, {0, 0, 0, s16(alpha)});
 
             divCopySrc(i);
