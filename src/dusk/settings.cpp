@@ -10,6 +10,7 @@ UserSettings g_userSettings = {
         .lockAspectRatio {"video.lockAspectRatio", false},
         .enableFpsOverlay {"game.enableFpsOverlay", false},
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
+        .maxFrameRate {"video.maxFrameRate", 240},
     },
 
     .audio = {
@@ -58,9 +59,11 @@ UserSettings g_userSettings = {
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
-        .enableFrameInterpolation {"game.enableFrameInterpolation", false},
+        .enableTextureReplacements {"game.enableTextureReplacements", true},
+        .enableFrameInterpolation {"game.enableFrameInterpolation", FrameInterpMode::Off},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
+        .resampler {"game.resampler", Resampler::Bilinear},
         .enableDepthOfField {"game.enableDepthOfField", true},
         .enableMapBackground {"game.enableMapBackground", true},
         .disableCutscenePillarboxing {"game.disableCutscenePillarboxing", false},
@@ -177,6 +180,7 @@ void registerSettings() {
     Register(g_userSettings.video.lockAspectRatio);
     Register(g_userSettings.video.enableFpsOverlay);
     Register(g_userSettings.video.fpsOverlayCorner);
+    Register(g_userSettings.video.maxFrameRate);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
@@ -218,7 +222,9 @@ void registerSettings() {
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.disableWaterRefraction);
+    Register(g_userSettings.game.enableTextureReplacements);
     Register(g_userSettings.game.internalResolutionScale);
+    Register(g_userSettings.game.resampler);
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableDepthOfField);
     Register(g_userSettings.game.enableMapBackground);

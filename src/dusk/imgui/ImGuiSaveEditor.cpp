@@ -713,7 +713,7 @@ namespace dusk {
                 transformLevel++;
             }
         }
-        if (ImGui::SliderInt("Transform Level", &transformLevel, 0, 3)) {
+        if (ImGui::SliderInt("Transform Level", &transformLevel, 0, 4)) {
             u8 newFlags = 0;
             for (int i = 0; i < transformLevel; i++) {
                 newFlags |= (1 << i);

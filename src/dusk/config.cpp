@@ -56,6 +56,23 @@ static T sanitizeEnumValue(const ConfigVar<T>& cVar, T value) {
 
 template<ConfigValue T>
 void ConfigImpl<T>::loadFromJson(ConfigVar<T>& cVar, const json& jsonValue) {
+    if constexpr (std::is_enum_v<T>) {
+        if (jsonValue.is_boolean()) {
+            using Underlying = std::underlying_type_t<T>;
+            const bool b = jsonValue.get<bool>();
+
+            Underlying raw;
+            if constexpr (std::is_same_v<T, dusk::FrameInterpMode>) {
+                raw = b ? static_cast<Underlying>(2) : static_cast<Underlying>(0);
+            } else {
+                raw = b ? static_cast<Underlying>(1) : static_cast<Underlying>(0);
+            }
+
+            cVar.setValue(sanitizeEnumValue(cVar, static_cast<T>(raw)), false);
+            return;
+        }
+    }
+
     cVar.setValue(sanitizeEnumValue(cVar, jsonValue.get<T>()), false);
 }
 
@@ -158,6 +175,8 @@ namespace dusk::config {
     template class ConfigImpl<dusk::DiscVerificationState>;
     template class ConfigImpl<dusk::GameLanguage>;
     template class ConfigImpl<dusk::GyroMode>;
+    template class ConfigImpl<dusk::FrameInterpMode>;
+    template class ConfigImpl<dusk::Resampler>;
 }
 
 void dusk::config::Register(ConfigVarBase& configVar) {

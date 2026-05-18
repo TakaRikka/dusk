@@ -325,7 +325,7 @@ int daObjFchain_c::draw() {
         dComIfGd_getOpaListDark()->entryImm(&mShape, 0);
 
 #if TARGET_PC
-        if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (dusk::frame_interp::is_enabled()) {
             if (mChainInterpCurrValid) {
                 memcpy(mChainInterpPrev, mChainInterpCurr, sizeof(mChainInterpCurr));
                 mChainInterpPrevValid = true;

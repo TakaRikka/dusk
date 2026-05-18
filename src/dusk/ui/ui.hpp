@@ -26,6 +26,8 @@ struct Toast {
 constexpr u32 kSoundClick = Z2SE_SY_CURSOR_OK;
 // "Play" button clicked/pressed
 constexpr u32 kSoundPlay = Z2SE_SY_ITEM_COMBINE_ON;
+// Input binding changed
+constexpr u32 kSoundBindingChanged = Z2SE_SY_ITEM_SET_X;
 
 // Menu button pressed (open/close menu bar or hide/show the active window)
 constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_SUB_IN;
@@ -49,6 +51,8 @@ constexpr u32 kSoundItemDisable = Z2SE_SUBJ_VIEW_OUT;
 
 // Achievement unlocked
 constexpr u32 kSoundAchievementUnlock = Z2SE_NAVI_FLY;
+// Warning prompt
+constexpr u32 kSoundWarning = Z2SE_SY_COW_GET_IN;
 
 struct Insets {
     float top = 0.0f;

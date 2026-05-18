@@ -454,10 +454,18 @@ bool touch_moved_too_far(
     return delta.SquaredMagnitude() > threshold * threshold;
 }
 
-void dispatch_menu_key(Rml::Context& context) noexcept {
+void emit_key_press(Rml::Context& context, Rml::Input::KeyIdentifier key) noexcept {
     context.ProcessMouseLeave();
-    context.ProcessKeyDown(Rml::Input::KI_F1, 0);
-    context.ProcessKeyUp(Rml::Input::KI_F1, 0);
+    context.ProcessKeyDown(key, 0);
+}
+
+void emit_key_tap(Rml::Context& context, Rml::Input::KeyIdentifier key) noexcept {
+    emit_key_press(context, key);
+    context.ProcessKeyUp(key, 0);
+}
+
+void dispatch_menu_key(Rml::Context& context) noexcept {
+    emit_key_tap(context, Rml::Input::KI_F1);
 }
 
 bool handle_touch_menu_tap(Rml::Context& context, const SDL_Event& event) noexcept {
@@ -627,7 +635,9 @@ void process_axis_direction(
 
     if (repeat->held) {
         if (released) {
-            if (!repeat->pending) {
+            if (repeat->pending) {
+                emit_key_tap(context, repeat->key);
+            } else {
                 context.ProcessKeyUp(repeat->key, 0);
             }
             set_pad_button_held(port, heldPadButton, false);
@@ -658,8 +668,7 @@ void process_axis_direction(
     }
 
     begin_gamepad_key(*repeat, key);
-    context.ProcessMouseLeave();
-    context.ProcessKeyDown(key, 0);
+    emit_key_press(context, key);
 }
 
 }  // namespace
@@ -747,8 +756,7 @@ void handle_event(const SDL_Event& event) noexcept {
                 }
             }
             if (!deferred) {
-                context->ProcessMouseLeave();
-                context->ProcessKeyDown(key, 0);
+                emit_key_press(*context, key);
             }
         }
     } else {
@@ -760,7 +768,9 @@ void handle_event(const SDL_Event& event) noexcept {
             if (repeat != nullptr) {
                 *repeat = {};
             }
-            if (!wasPending) {
+            if (wasPending) {
+                emit_key_tap(*context, key);
+            } else {
                 context->ProcessKeyUp(key, 0);
             }
         }
@@ -787,8 +797,7 @@ void update_input() noexcept {
                     repeat.pressedAt = now;
                     repeat.nextRepeatAt =
                         repeat.repeatable ? now + kGamepadRepeatInitialDelay : 0.0;
-                    context->ProcessMouseLeave();
-                    context->ProcessKeyDown(repeat.key, 0);
+                    emit_key_press(*context, repeat.key);
                     continue;
                 }
 

@@ -237,11 +237,11 @@ enum class JKRHeapToken {
     Dummy
 };
 
-inline void* operator new(size_t, JKRHeapToken, void* where) {
+inline void* operator new(size_t, JKRHeapToken, void* where) noexcept {
     return where;
 }
 
-inline void* operator new[](size_t, JKRHeapToken, void* where) {
+inline void* operator new[](size_t, JKRHeapToken, void* where) noexcept {
     return where;
 }
 
@@ -264,21 +264,21 @@ inline void* operator new[](size_t, JKRHeapToken, void* where) {
 #define JKR_HEAP_TOKEN_PARAM
 #endif
 
-void* operator new(size_t size JKR_HEAP_TOKEN_PARAM);
-void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
-void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
+void* operator new(size_t size JKR_HEAP_TOKEN_PARAM) IF_DUSK(noexcept);
+void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, int alignment) IF_DUSK(noexcept);
+void* operator new(size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment) IF_DUSK(noexcept);
 
 // On PC, these new[] overloads are only used to catch usages of JKR_NEW with [].
-void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM);
-void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment);
-void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment);
+void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM) IF_DUSK(noexcept);
+void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, int alignment) IF_DUSK(noexcept);
+void* operator new[](size_t size JKR_HEAP_TOKEN_PARAM, JKRHeap* heap, int alignment) IF_DUSK(noexcept);
 
-void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM);
-void operator delete[](void* ptr JKR_HEAP_TOKEN_PARAM);
+void operator delete(void* ptr JKR_HEAP_TOKEN_PARAM) IF_DUSK(noexcept);
+void operator delete[](void* ptr JKR_HEAP_TOKEN_PARAM) IF_DUSK(noexcept);
 
 #if TARGET_PC
 template<typename T>
-void jkrDelete(T* ptr) {
+void jkrDelete(T* ptr) IF_DUSK(noexcept) {
     if (ptr == nullptr) {
         return;
     }
@@ -298,7 +298,7 @@ void jkrDelete(T* ptr) {
 }
 
 template<>
-inline void jkrDelete(void* ptr) {
+inline void jkrDelete(void* ptr) IF_DUSK(noexcept) {
     if (ptr == nullptr) {
         return;
     }
@@ -322,7 +322,7 @@ constexpr bool newArgsHasCustomAlignment() {
 }
 
 template<typename T, typename... Args>
-T* jkrNewArray(size_t count, std::in_place_type_t<T>, Args&&... args) {
+T* jkrNewArray(size_t count, std::in_place_type_t<T>, Args&&... args) IF_DUSK(noexcept) {
     size_t allocSize = count * sizeof(T);
     if constexpr (!std::is_trivially_destructible<T>()) {
         static_assert(
@@ -333,6 +333,10 @@ T* jkrNewArray(size_t count, std::in_place_type_t<T>, Args&&... args) {
     }
 
     void* ptr = operator new(allocSize, JKRHeapToken::Dummy, args...);
+    if (!ptr) {
+        return nullptr;
+    }
+
     T* dataPtr;
     if constexpr (!std::is_trivially_destructible<T>()) {
         auto length = static_cast<size_t*>(ptr);
@@ -352,7 +356,7 @@ T* jkrNewArray(size_t count, std::in_place_type_t<T>, Args&&... args) {
 }
 
 template<typename T>
-void jkrDeleteArray(T* pointer) {
+void jkrDeleteArray(T* pointer) IF_DUSK(noexcept) {
     if (pointer == nullptr) {
         return;
     }
@@ -372,7 +376,7 @@ void jkrDeleteArray(T* pointer) {
 }
 
 template<>
-inline void jkrDeleteArray(void* pointer) {
+inline void jkrDeleteArray(void* pointer) IF_DUSK(noexcept) {
     if (pointer == nullptr) {
         return;
     }

@@ -370,28 +370,28 @@ constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanosecond
 constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
 
 static void waitPrecise(Limiter& limiter, Limiter::duration_t targetNs) {
-    const auto sleepTime = limiter.SleepTime(targetNs);
+   const auto sleepTime = limiter.Sleep(targetNs);
     dusk::frameUsagePct =
         100.0f * (1.0f - static_cast<float>(sleepTime) / static_cast<float>(targetNs));
-    limiter.Sleep(targetNs);
 }
 #endif
 
 static void waitForTick(u32 p1, u16 p2) {
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation && !dusk::getTransientSettings().skipFrameRateLimit) {
-        dusk::frameUsagePct = 0.f;
-        return;
+    static Limiter limiter;
+
+    if (dusk::frame_interp::is_enabled() && !dusk::getTransientSettings().skipFrameRateLimit) {
+        dusk::frameUsagePct = 0.f; 
+        return; 
     }
+
     if (dusk::getTransientSettings().skipFrameRateLimit) {
         p1 = OS_TIMER_CLOCK / 120;
     }
     
-    #if TARGET_PC
     if (fopOvlpM_IsPeek() && dusk::getTransientSettings().stateShareLoadActive) {
         return;
     }
-    #endif
 
     ZoneScopedC(tracy::Color::DimGray);
 #endif
