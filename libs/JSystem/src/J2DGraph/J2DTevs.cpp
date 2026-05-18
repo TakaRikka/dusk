@@ -68,8 +68,14 @@ void J2DIndTevStage::load(u8 tevStage) {
 }
 
 void J2DIndTexMtx::load(u8 indTexMtx) {
+#ifdef TARGET_PC
+    Mtx23 mtx;
+    mIndTexMtxInfo.mMtx.to_host(mtx);
+    GXSetIndTexMtx((GXIndTexMtxID)(GX_ITM_0 + indTexMtx), mtx, mIndTexMtxInfo.mScaleExp);
+#else
     GXSetIndTexMtx((GXIndTexMtxID)(GX_ITM_0 + indTexMtx), mIndTexMtxInfo.mMtx,
                    mIndTexMtxInfo.mScaleExp);
+#endif
 }
 
 void J2DIndTexCoordScale::load(u8 indTexStage) {

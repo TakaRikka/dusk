@@ -18,6 +18,9 @@
 #include "d/d_pane_class.h"
 #include "dusk/frame_interpolation.h"
 #include <cstring>
+#if TARGET_PC
+#include "dusk/string.hpp"
+#endif
 
 #if VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528
@@ -2927,6 +2930,12 @@ bool dMeterButton_c::isClose() {
 }
 
 void dMeterButton_c::setString(char* i_string, u8 i_button, u8 param_2, u8 param_3) {
+#if TARGET_PC
+    char* i_string_full = i_string;
+    char i_string_buf[sizeof(mButtonText[0])];
+    dusk::SafeStringCopyTruncate(i_string_buf, i_string);
+    i_string = i_string_buf;
+#endif
     if (strcmp(mButtonText[param_2], i_string) != 0 || field_0x4be[param_2] != i_button) {
         if (param_2 == 0 && strcmp(mButtonText[1], i_string) == 0 &&
             ((i_button == BUTTON_A_e && field_0x4be[1] == BUTTON_A_e) ||
@@ -3021,6 +3030,10 @@ void dMeterButton_c::setString(char* i_string, u8 i_button, u8 param_2, u8 param
     }
 
     strcpy(mButtonText[param_2], i_string);
+
+#if TARGET_PC
+    i_string = i_string_full;
+#endif
 
     if (param_2 == 0) {
         if (param_3 != 0) {

@@ -116,7 +116,7 @@ private:
  * 
  */
 struct J2DIndTexMtxInfo {
-    /* 0x00 */ Mtx23 mMtx;
+    /* 0x00 */ BE(Mtx23) mMtx;
     /* 0x18 */ s8 mScaleExp;
 
     J2DIndTexMtxInfo& operator=(const J2DIndTexMtxInfo& other) {

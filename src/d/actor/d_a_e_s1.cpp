@@ -117,6 +117,13 @@ static void daE_S1_interp_callback(bool isSimFrame, void* pUserWork) {
             dst[i] = p0 + (p1 - p0) * alpha;
         }
     }
+    GXColor line_color;
+    line_color.r = JREG_S(0) + 5;
+    line_color.g = JREG_S(1) + 10;
+    line_color.b = JREG_S(2) + 10;
+    line_color.a = 0xFF;
+
+    i_this->mLineMat.update(16, line_color, &i_this->tevStr);
 }
 #endif
 
