@@ -920,6 +920,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Allow inputs even when the game window is not focused.",
                 .onChange = [](bool value) { aurora_set_background_input(value); },
             });
+        addOption("DualSense Adaptive Triggers", getSettings().game.enableDualSenseTriggers,
+            "Enables dynamic haptic feedback and resistance for the PS5 DualSense controller triggers during gameplay (e.g. Z-Targeting, Archery tension, and Iron Boots weight).");
 
         leftPane.add_section("Camera");
         addOption("Free Camera", getSettings().game.freeCamera,

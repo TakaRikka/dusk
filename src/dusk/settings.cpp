@@ -54,6 +54,7 @@ UserSettings g_userSettings = {
         .enableAchievementToasts {"game.enableAchievementToasts", true},
         .enableControllerToasts {"game.enableControllerToasts", true},
         .enableDiscordPresence {"game.enableDiscordPresence", true},
+        .enableDualSenseTriggers {"game.enableDualSenseTriggers", true},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
@@ -219,6 +220,7 @@ void registerSettings() {
     Register(g_userSettings.game.minimalHUD);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.enableDiscordPresence);
+    Register(g_userSettings.game.enableDualSenseTriggers);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.disableWaterRefraction);

@@ -14,6 +14,13 @@ Dusklight is a reverse-engineered reimplementation of Twilight Princess.
 
 It aims to be as accurate as possible to the original while also providing new options, enhancements, and tools to customize your experience.
 
+# Features
+
+- **PS5 DualSense Controller Enhancements (Native):**
+  - **Adaptive Triggers (L2 / R2):** Heavy mechanical pull tension during Iron Boots walking, tactical resistance on Left Trigger during target lock (Z-targeting), and dynamic string pull tension during archery/slingshot (Right Trigger) with realistic snap release.
+  - **Dynamic Health LED Lightbar:** Gamepad LEDs pulse breathing red when health drops to 2 hearts ($dComIfGs\_getLife() \le 8$) or lower, matching tunic colors and targeting reticles under normal conditions.
+  - **Settings Toggle & Compatibility Fallback:** Toggleable at will via the *Input* Settings menu; automatically disables and falls back to standard trigger behaviors if using a non-PS5 gamepad.
+
 # Setup
 
 > [!IMPORTANT]
