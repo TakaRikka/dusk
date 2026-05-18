@@ -11,6 +11,7 @@ enum class ActionBinds {
     CALL_MIDNA,
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
+    TOGGLE_TEXTURE_PACK,
     COUNT,
 };
 
