@@ -3,7 +3,8 @@
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       inherit (nixpkgs) lib;
 
@@ -20,18 +21,37 @@
       versionSuffix = "nix-" + (self.shortRev or self.dirtyShortRev or "dirty");
 
       dawnInfo = {
-        "x86_64-linux"   = { triple = "linux-x86_64";  hash = "sha256-HXfKTLHtMPwupnFnaflCARtXVPuS/0PoCePXidjE5xs="; };
-        "aarch64-linux"  = { triple = "linux-aarch64"; hash = "sha256-34yyFpfqBZUwoFXQ41F0AwAU78FaNihOSY0oriwn6B0="; };
-        "aarch64-darwin" = { triple = "darwin-arm64";  hash = "sha256-eQnzrBp6gjiBek1VYQ9A5W13ClYWrDDKjIqv/7eNTR4="; };
-        "x86_64-darwin"  = { triple = "darwin-x86_64"; hash = "sha256-QGWiGdxiI9kci3NPXH6QFFirxn16851zB/w3jqhIBJ4="; };
+        "x86_64-linux" = {
+          triple = "linux-x86_64";
+          hash = "sha256-HXfKTLHtMPwupnFnaflCARtXVPuS/0PoCePXidjE5xs=";
+        };
+        "aarch64-linux" = {
+          triple = "linux-aarch64";
+          hash = "sha256-34yyFpfqBZUwoFXQ41F0AwAU78FaNihOSY0oriwn6B0=";
+        };
+        "aarch64-darwin" = {
+          triple = "darwin-arm64";
+          hash = "sha256-eQnzrBp6gjiBek1VYQ9A5W13ClYWrDDKjIqv/7eNTR4=";
+        };
+        "x86_64-darwin" = {
+          triple = "darwin-x86_64";
+          hash = "sha256-QGWiGdxiI9kci3NPXH6QFFirxn16851zB/w3jqhIBJ4=";
+        };
       };
 
       nodPrebuiltInfo = {
-        "x86_64-linux"   = { triple = "linux-x86_64"; hash = "sha256-mUqvLsbsqaZ+HAjMmHYPYO+MgtanGRTw7Gzn5uXR5rE="; };
-        "aarch64-darwin" = { triple = "macos-arm64";  hash = "sha256-UPy1ywCcv0K6VJOU3uUelJuUdBh3UNaPRlyP5LOBeDw="; };
+        "x86_64-linux" = {
+          triple = "linux-x86_64";
+          hash = "sha256-mUqvLsbsqaZ+HAjMmHYPYO+MgtanGRTw7Gzn5uXR5rE=";
+        };
+        "aarch64-darwin" = {
+          triple = "macos-arm64";
+          hash = "sha256-UPy1ywCcv0K6VJOU3uUelJuUdBh3UNaPRlyP5LOBeDw=";
+        };
       };
 
-      perSystem = system:
+      perSystem =
+        system:
         let
           pkgs = import nixpkgs { inherit system; };
           inherit (pkgs.stdenv.hostPlatform) isDarwin;
@@ -93,7 +113,9 @@
           nod =
             if hasNodPrebuilt then
               pkgs.fetchzip {
-                url = "https://github.com/encounter/nod/releases/download/${nodVersion}/libnod-${nodPrebuiltInfo.${system}.triple}.tar.gz";
+                url = "https://github.com/encounter/nod/releases/download/${nodVersion}/libnod-${
+                  nodPrebuiltInfo.${system}.triple
+                }.tar.gz";
                 hash = nodPrebuiltInfo.${system}.hash;
                 stripRoot = false;
               }
@@ -211,28 +233,29 @@
               "-DAURORA_NOD_LINKAGE=static"
               "-DAURORA_SDL3_PROVIDER=system"
             ]
-            ++ lib.mapAttrsToList
-              (key: src: "-DFETCHCONTENT_SOURCE_DIR_${key}=${src}")
-              fetchContentDirs;
+            ++ lib.mapAttrsToList (key: src: "-DFETCHCONTENT_SOURCE_DIR_${key}=${src}") fetchContentDirs;
 
             installPhase =
-              if isDarwin then ''
-                runHook preInstall
-                mkdir -p "$out/Applications"
-                cp -r Dusklight.app "$out/Applications/Dusklight.app"
-                runHook postInstall
-              '' else ''
-                runHook preInstall
-                install -Dm755 Dusklight "$out/bin/dusklight"
-                cp -r "$src/res" "$out/bin/res"
-                install -Dm644 "$src/platforms/freedesktop/dusklight.desktop" \
-                  "$out/share/applications/dusklight.desktop"
-                for size in 16 32 48 64 128 256 512 1024; do
-                  install -Dm644 "$src/platforms/freedesktop/''${size}x''${size}/apps/dusklight.png" \
-                    "$out/share/icons/hicolor/''${size}x''${size}/apps/dusklight.png"
-                done
-                runHook postInstall
-              '';
+              if isDarwin then
+                ''
+                  runHook preInstall
+                  mkdir -p "$out/Applications"
+                  cp -r Dusklight.app "$out/Applications/Dusklight.app"
+                  runHook postInstall
+                ''
+              else
+                ''
+                  runHook preInstall
+                  install -Dm755 dusklight "$out/bin/dusklight"
+                  cp -r "$src/res" "$out/bin/res"
+                  install -Dm644 "$src/platforms/freedesktop/dusklight.desktop" \
+                    "$out/share/applications/dusklight.desktop"
+                  for size in 16 32 48 64 128 256 512 1024; do
+                    install -Dm644 "$src/platforms/freedesktop/''${size}x''${size}/apps/dusklight.png" \
+                      "$out/share/icons/hicolor/''${size}x''${size}/apps/dusklight.png"
+                  done
+                  runHook postInstall
+                '';
 
             dontStrip = true;
 
@@ -333,12 +356,11 @@
           };
         in
         {
-          packages =
-            {
-              default = dusklight;
-              dusklight = dusklight;
-            }
-            // lib.optionalAttrs (!hasNodPrebuilt) { nod = nodFromSource; };
+          packages = {
+            default = dusklight;
+            dusklight = dusklight;
+          }
+          // lib.optionalAttrs (!hasNodPrebuilt) { nod = nodFromSource; };
 
           devShells.default = if isDarwin then darwinShell else linuxShell;
         };
