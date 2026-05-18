@@ -3165,7 +3165,7 @@ void daHorse_c::setReinPosNormalSubstance() {
 #if TARGET_PC
 void daHorse_c::lerpControlPoints(f32 alpha) {
     // FRAME INTERP NOTE: Currently only lerping points for Epona's reins. Need a more global solution.
-    if (!dusk::getSettings().game.enableFrameInterpolation || !s_horseReinSimPrevValid || !s_horseReinSimCurrValid) {
+    if (!dusk::frame_interp::is_enabled() || !s_horseReinSimPrevValid || !s_horseReinSimCurrValid) {
         return;
     }
     const int nCurr = s_horseReinSimNumCurr;

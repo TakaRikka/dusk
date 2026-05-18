@@ -10431,7 +10431,7 @@ bool dCamera_c::eventCamera(s32 param_0) {
 #endif
 
 #if TARGET_PC
-        if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (dusk::frame_interp::is_enabled()) {
             switch (var_r29) {
                 case 3:
                 case 4:
@@ -11322,7 +11322,7 @@ static int camera_execute(camera_process_class* i_this) {
 #ifdef TARGET_PC
     widezoom_correction(i_this, i_this->mCamera.TrimHeight());
 
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         dusk::frame_interp::add_interpolation_callback([](bool _, void* pUserWork) {
             const auto i_this = static_cast<camera_process_class*>(pUserWork);
             const auto camera = &i_this->mCamera;

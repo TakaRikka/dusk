@@ -116,7 +116,7 @@ static int daE_DB_Draw(e_db_class* i_this) {
     i_this->stalkLine.update(12, l_color, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->stalkLine);
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         if (i_this->mStalkLineInterpCurrValid) {
             memcpy(i_this->mStalkLineInterpPrev, i_this->mStalkLineInterpCurr, sizeof(i_this->mStalkLineInterpCurr));
             i_this->mStalkLineInterpPrevValid = true;

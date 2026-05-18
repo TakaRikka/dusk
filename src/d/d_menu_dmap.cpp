@@ -991,7 +991,7 @@ void dMenu_DmapBg_c::draw() {
             -35.0f + (local_224.x - local_218.x),
             -35.0f + (local_224.y - local_218.y));
 #if TARGET_PC
-        if (!dusk::getSettings().game.enableFrameInterpolation) {
+        if (!dusk::frame_interp::is_enabled()) {
             field_0xdda = 0;
         }
 #else
@@ -2624,7 +2624,7 @@ void dMenu_Dmap_c::zoomIn_proc() {
 
 void dMenu_Dmap_c::zoomOut_init_proc() {
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         mpDrawBg->resetScrollArrowMask();
     }
 #endif

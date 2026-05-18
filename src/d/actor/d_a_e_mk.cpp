@@ -157,6 +157,21 @@ static void* s_h_sub(void* i_actor, void* i_data) {
     return NULL;
 }
 
+#if TARGET_PC
+static void sort_target_info_by_id() {
+    for (int i = 1; i < target_info_count; i++) {
+        void* key = target_info[i];
+        fpc_ProcID key_id = fopAcM_GetID(key);
+        int j = i - 1;
+        while (j >= 0 && fopAcM_GetID(target_info[j]) > key_id) {
+            target_info[j + 1] = target_info[j];
+            j--;
+        }
+        target_info[j + 1] = key;
+    }
+}
+#endif
+
 static daPillar_c* search_hasira(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     daPillar_c* pillar_p;
@@ -170,6 +185,9 @@ static daPillar_c* search_hasira(e_mk_class* i_this) {
 
     if (i_this->firstHasiraFlag == 0) {
         i_this->firstHasiraFlag++;
+#if TARGET_PC
+        sort_target_info_by_id();
+#endif
         return (daPillar_c*)target_info[TREG_S(7) + 5];
     }
 

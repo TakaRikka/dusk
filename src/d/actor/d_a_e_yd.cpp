@@ -107,7 +107,7 @@ static s32 daE_YD_Draw(e_yd_class* i_this) {
     i_this->mLineMat.update(12, l_color, &i_this->actor.tevStr);
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         if (i_this->mLineMatInterpCurrValid) {
             memcpy(i_this->mLineMatInterpPrev, i_this->mLineMatInterpCurr, sizeof(i_this->mLineMatInterpCurr));
             i_this->mLineMatInterpPrevValid = true;

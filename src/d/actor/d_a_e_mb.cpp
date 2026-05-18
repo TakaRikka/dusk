@@ -105,7 +105,7 @@ static int daE_MB_Draw(e_mb_class* i_this) {
     i_this->mRopeMat.update(16, l_color, &a_this->tevStr);
     dComIfGd_set3DlineMat(&i_this->mRopeMat);
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         if (i_this->mRopeInterpCurrValid) {
             memcpy(i_this->mRopeInterpPrev, i_this->mRopeInterpCurr, sizeof(i_this->mRopeInterpCurr));
             i_this->mRopeInterpPrevValid = true;
