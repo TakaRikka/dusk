@@ -135,7 +135,7 @@ static int daE_YH_Draw(e_yh_class* i_this) {
     i_this->mLine.update(12, l_color, &a_this->tevStr);
     dComIfGd_set3DlineMat(&i_this->mLine);
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         if (i_this->mLineInterpCurrValid) {
             memcpy(i_this->mLineInterpPrev, i_this->mLineInterpCurr, sizeof(i_this->mLineInterpCurr));
             i_this->mLineInterpPrevValid = true;

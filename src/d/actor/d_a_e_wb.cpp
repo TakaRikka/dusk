@@ -535,7 +535,7 @@ static int daE_WB_Draw(e_wb_class* i_this) {
         i_this->himo_tex.update(2, l_color, &actor->tevStr);
         dComIfGd_set3DlineMat(&i_this->himo_tex);
 #if TARGET_PC
-        if (dusk::getSettings().game.enableFrameInterpolation) {
+        if (dusk::frame_interp::is_enabled()) {
             if (i_this->himo_interp_curr_valid) {
                 memcpy(i_this->himo_mat_interp_prev, i_this->himo_mat_interp_curr, sizeof(i_this->himo_mat_interp_curr));
                 memcpy(i_this->himo_tex_interp_prev, i_this->himo_tex_interp_curr, sizeof(i_this->himo_tex_interp_curr));
