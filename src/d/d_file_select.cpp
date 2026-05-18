@@ -3808,29 +3808,35 @@ void dFile_select_c::fileSelectWide() {
     };
 
     constexpr f32 minAspect = 4.0f / 3.0f;
-    constexpr f32 maxAspect = 16.0f / 9.0 + 0.05f;
-    f32 screenAspect = mDoGph_gInf_c::getAspect();
+    constexpr f32 maxAspect = 16.0f / 9.0f + 0.05f;
+    const f32 screenAspect = mDoGph_gInf_c::getAspect();
+    const f32 gray_nScaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);
+    const f32 gray_nShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (gray_nScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
 
-    // Pane holding Icons and slots escape the intended box at Ultrawide/Portrait due to non-linear
-    // stretching, so revert to default behavior
-    if (screenAspect >= minAspect && screenAspect <= maxAspect) { 
-        f32 gray_nScaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);
-        f32 gray_nShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (gray_nScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
-
-        for (IconPaneCache& entry : s_Panes) {
-            J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
-            if (!entry.cached) {
-                entry.origTransX = pane->getTranslateX(); // // Get pre-scale value
-                entry.cached = true;
-            }
+    for (IconPaneCache& entry : s_Panes) {
+        J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
+        if (!entry.cached) {
+            entry.origTransX = pane->getTranslateX(); // Get pre-scale value
+            entry.cached = true;
+        }
+        // Pane holding icons and slots escape the intended box at Ultrawide/Portrait due to
+        // non-linear stretching, so revert to default behavior
+        if (screenAspect >= minAspect && screenAspect <= maxAspect) {
             pane->setBasePosition(J2DBasePosition_0);
-            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f); // Scale Equipment Icons/Slots
-            if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
-                pane->translate(entry.origTransX * gray_nScaleFactor, pane->getTranslateY());  // Move
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+            if (entry.tag == MULTI_CHAR('gray_n')) {
+                pane->translate(entry.origTransX * gray_nScaleFactor, pane->getTranslateY());
+            } else {
+                pane->translate(
+                    mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + gray_nShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
             }
-            else { // Shift Items
-                pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + gray_nShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());  // Move
-
+        } else { // Default behavior
+            pane->setBasePosition(J2DBasePosition_4);
+            pane->translate(entry.origTransX, pane->getTranslateY());
+            if (entry.tag == MULTI_CHAR('gray_n')) {
+                pane->scale(1.0f, 1.0f);
+            } else {
+                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
             }
         }
     }

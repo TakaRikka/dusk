@@ -116,23 +116,21 @@ void dMenu_Collect2D_c::menuCollectWide() {
     mpScreen->search(MULTI_CHAR('center_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
     // Item Name/Description
-    f32 leftShift = 48.0f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);  // Shifting certain items left to keep center (> 4:3 only)
+    f32 leftShift = 48.0f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f); // Shifting certain items left to keep center (> 4:3 only)
     J2DPane* info_n = mpScreen->search(MULTI_CHAR('info_n'));
     static f32 infoTransX_orig = info_n->getTranslateX();
-    info_n->translate(infoTransX_orig - leftShift, info_n->getTranslateY()); // Move
+    info_n->translate(infoTransX_orig - leftShift, info_n->getTranslateY());
 
-    // Designs
     J2DPane* lavel_n = mpScreen->search(MULTI_CHAR('lavel_n'));
     static f32 lavelTransX_orig = lavel_n->getTranslateX();
-    lavel_n->translate(lavelTransX_orig - leftShift, lavel_n->getTranslateY()); // Move
+    lavel_n->translate(lavelTransX_orig - leftShift, lavel_n->getTranslateY());
 
-    // Fused Shadow/Mirror Background
     J2DPane* modelbgn = mpScreen->search(MULTI_CHAR('modelbgn'));
     static f32 modelbgnTransX_orig = modelbgn->getTranslateX(); // Get pre-scale value
     modelbgn->setBasePosition(J2DBasePosition_0);
     modelbgn->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     f32 modelbgn_scaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleDown - 1.0f);
-    modelbgn->translate(modelbgnTransX_orig * modelbgn_scaleFactor, modelbgn->getTranslateY());  // Move
+    modelbgn->translate(modelbgnTransX_orig * modelbgn_scaleFactor, modelbgn->getTranslateY());
 
     // Stretches the selection cursor to the aspect ratio, but this menu works at any aspect so this is un-needed? Looks bad on Ultrawide
     // #if TARGET_PC
