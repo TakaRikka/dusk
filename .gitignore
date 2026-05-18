@@ -1,7 +1,6 @@
 # IDE folders
 .idea/
 .vs/
-.zed/
 
 # Caches
 __pycache__

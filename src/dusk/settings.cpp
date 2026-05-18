@@ -1,8 +1,5 @@
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
-#include "dusk/dusk.h"
-
-#include <SDL3/SDL_video.h>
 
 namespace dusk {
 
@@ -13,10 +10,7 @@ UserSettings g_userSettings = {
         .lockAspectRatio {"video.lockAspectRatio", false},
         .enableFpsOverlay {"game.enableFpsOverlay", false},
         .fpsOverlayCorner {"game.fpsOverlayCorner", 0},
-        .windowPositionX {"video.windowPositionX", SDL_WINDOWPOS_UNDEFINED},
-        .windowPositionY {"video.windowPositionY", SDL_WINDOWPOS_UNDEFINED},
-        .windowWidth {"video.windowWidth", defaultWindowWidth * 2},
-        .windowHeight {"video.windowHeight", defaultWindowHeight * 2},
+        .maxFrameRate {"video.maxFrameRate", 240},
     },
 
     .audio = {
@@ -66,7 +60,7 @@ UserSettings g_userSettings = {
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
         .enableTextureReplacements {"game.enableTextureReplacements", true},
-        .enableFrameInterpolation {"game.enableFrameInterpolation", false},
+        .enableFrameInterpolation {"game.enableFrameInterpolation", FrameInterpMode::Off},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
         .resampler {"game.resampler", Resampler::Bilinear},
@@ -186,10 +180,7 @@ void registerSettings() {
     Register(g_userSettings.video.lockAspectRatio);
     Register(g_userSettings.video.enableFpsOverlay);
     Register(g_userSettings.video.fpsOverlayCorner);
-    Register(g_userSettings.video.windowPositionX);
-    Register(g_userSettings.video.windowPositionY);
-    Register(g_userSettings.video.windowWidth);
-    Register(g_userSettings.video.windowHeight);
+    Register(g_userSettings.video.maxFrameRate);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
