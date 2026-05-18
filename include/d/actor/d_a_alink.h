@@ -3553,18 +3553,19 @@ public:
     int checkWolfEyeUp() const { return mWolfEyeUp; }
     void onModeFlg(u32 flag) { mModeFlg |= flag; }
     void offModeFlg(u32 flag) { mModeFlg &= ~flag; }
-    BOOL swordButton() { return itemButtonCheck(BTN_B); }
+    BOOL swordButton() { return DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::SWORD_ATTACK, dusk::ActionBinds::BUTTON_B), itemButtonCheck(BTN_B)); }
     daPy_actorKeep_c* getThrowBoomerangAcKeep() { return &mThrowBoomerangAcKeep; }
     int getStartRoomNo() { return fopAcM_GetParam(this) & 0x3F; }
     bool checkFisingRodLure() const { return mEquipItem == 0x105; }
-    BOOL doTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL doTrigger() const { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::INTERACT, dusk::ActionBinds::BUTTON_A), mItemTrigger & BTN_A); }
     BOOL rollTrigger() const;
     BOOL swordTrigger() { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::SWORD_ATTACK, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
-    BOOL grassCancelTrigger() { return itemTriggerCheck(BTN_B); }
+    BOOL grassCancelTrigger() { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::REJECT, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
     BOOL arrowChangeTrigger() { return itemActionTrigger(); }
     BOOL peepSubjectCancelTrigger() { return itemTriggerCheck(BTN_B); }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0xC) & 0x1F; }
-    bool checkInputOnR() const { return mMoveValue > 0.05f; }
+    // TODO: Update this to check Analog R value and remove the Digital R input
+    bool checkInputOnR() const { return CLASSIC_BUTTON(dusk::ActionBinds::DIGITAL_R) || mMoveValue > 0.05f; }
     static u16 getSightBti() { return 0x5B; }
     bool checkBoomerangChargeEndWait() const {
         return mEquipItem != 0x102 && checkBoomerangAnime();
@@ -3779,11 +3780,11 @@ public:
 
     BOOL checkSwimDashMode() const { return checkNoResetFlg1(FLG1_DASH_MODE); }
 
-    BOOL talkTrigger() const { return mItemTrigger & BTN_A; }
+    BOOL talkTrigger() const { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::INTERACT, dusk::ActionBinds::BUTTON_A), mItemTrigger & BTN_A); }
     J3DAnmTransform* getNowAnmPackUnder(daAlink_UNDER i_idx) {
         return mNowAnmPackUnder[i_idx].getAnmTransform();
     }
-    BOOL doButton() const { return mItemButton & BTN_A; }
+    BOOL doButton() const { return DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::INTERACT, dusk::ActionBinds::BUTTON_A), mItemButton & BTN_A); }
     void setGrassCancelStatus(u8 i_status) { setBStatus(i_status); }
 
     void seStartSystem(u32 i_soundID) { mDoAud_seStart(i_soundID, NULL, 0, 0); }
@@ -3795,8 +3796,12 @@ public:
     }
 
     BOOL escapeTrigger() {
+#if TARGET_PC
+        return swordTrigger() || rollTrigger();
+#else
         mUseButtonFlags |= (u8)BTN_B;
         return mItemTrigger & (BTN_A | BTN_B);
+#endif
     }
 
     void clearComboReserb() { offNoResetFlg2(FLG2_COMBO_RESERB); }

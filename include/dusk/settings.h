@@ -244,13 +244,17 @@ struct UserSettings {
         std::array<ActionBindConfigVar, 4> menuY;
 
         std::array<ActionBindConfigVar, 4> swordAttack;
+        std::array<ActionBindConfigVar, 4> quickSpin;
         std::array<ActionBindConfigVar, 4> itemAccessX;
         std::array<ActionBindConfigVar, 4> itemAccessY;
         std::array<ActionBindConfigVar, 4> shieldUse;
         std::array<ActionBindConfigVar, 4> interact;
+        std::array<ActionBindConfigVar, 4> reject;
         std::array<ActionBindConfigVar, 4> roll;
         std::array<ActionBindConfigVar, 4> moveModifierToggle;
         std::array<ActionBindConfigVar, 4> target;
+        std::array<ActionBindConfigVar, 4> dig;
+        std::array<ActionBindConfigVar, 4> sense;
         std::array<ActionBindConfigVar, 4> grabHeavy;
         std::array<ActionBindConfigVar, 4> grabLight;
         std::array<ActionBindConfigVar, 4> callMidna;
@@ -264,6 +268,7 @@ struct UserSettings {
         std::array<ActionBindConfigVar, 4> itemCycleNext;
         std::array<ActionBindConfigVar, 4> itemCyclePrev;
         std::array<ActionBindConfigVar, 4> grabAll;
+        std::array<ActionBindConfigVar, 4> dusklightSpecial;
 
         std::array<ActionBindConfigVar, 4> moveX;
         std::array<ActionBindConfigVar, 4> moveY;

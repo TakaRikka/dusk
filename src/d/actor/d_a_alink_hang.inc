@@ -204,7 +204,7 @@ int daAlink_c::changeHangEndProc() {
 
     setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
-    if (doTrigger()) {
+    if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::INTERACT) || VERB_TRIGGER_ALONE(dusk::ActionBinds::ROLL) || VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_HEAVY) || VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::REJECT, dusk::ActionBinds::BUTTON_B), doTrigger())) {
         speed.y = 0.0f;
         return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
     }
@@ -1041,13 +1041,13 @@ int daAlink_c::procBossBodyHang() {
         }
 
         if (mProcVar2.field_0x300c != 0 &&
-            ((dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH && doTrigger()) || swordSwingTrigger()))
+            ((dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH && DUSK_IF_ELSE(rollTrigger(), doTrigger())) || swordSwingTrigger()))
         {
             if (mEquipItem != 0x103) {
                 setSwordModel();
             }
 
-            if (dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH && doTrigger()) {
+            if (dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH && DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
                 if (field_0x32cc != 0) {
                     setSingleAnimeBaseMorf(ANM_DRAGON_CUT_FINAL, 3.0f);
                 } else {
@@ -1301,7 +1301,7 @@ int daAlink_c::setMoveBGLadderCorrect() {
 int daAlink_c::checkLadderFall() {
     setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
-    if (doTrigger()) {
+    if (DUSK_IF_ELSE(rollTrigger() || VERB_TRIGGER_ALONE(dusk::ActionBinds::INTERACT) || VERB_TRIGGER_ALONE(dusk::ActionBinds::REJECT), doTrigger())) {
         field_0x2f99 = 0;
         return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
     }
@@ -2594,7 +2594,7 @@ int daAlink_c::commonRoofHangProc() {
 
     setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
-    if (doTrigger()) {
+    if (DUSK_IF_ELSE(rollTrigger() || VERB_TRIGGER_ALONE(dusk::ActionBinds::INTERACT) || VERB_TRIGGER_ALONE(dusk::ActionBinds::REJECT), doTrigger())) {
         return procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
     }
 
@@ -3007,7 +3007,7 @@ int daAlink_c::procRoofSwitchHang() {
     } else if (mProcVar2.field_0x300c != 0) {
         setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger() || VERB_TRIGGER_ALONE(dusk::ActionBinds::INTERACT) || VERB_TRIGGER_ALONE(dusk::ActionBinds::REJECT), doTrigger())) {
             procFallInit(1, mpHIO->mAutoJump.m.mFallInterpolation);
         }
     }

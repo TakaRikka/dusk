@@ -33,12 +33,15 @@ enum class ActionBinds {
     ITEM_ACCESS_Y, /* Access Second Quick Item slot */
     SHIELD_USE, /* For Shield attacks */
 
-    INTERACT, /* Talk or Examine */
+    INTERACT, /* Talk or Examine. Also Ingame confirm. */
+    REJECT, /* Reject Ingame Options */
 
     ROLL, /* Roll on Ground */
     MOVE_MODIFIER_TOGGLE, /* For Players using Digital Movement Input */
 
     TARGET, /* Target to perform techs */
+    DIG, /* Dig as Wolf Link */
+    SENSE, /* Sense as Wolf Link */
 
     GRAB_HEAVY, /* Grab Blocks and chains to push or pull */
     GRAB_LIGHT, /* Pickup lighter items (Boulder, Pots, Pets) */
@@ -127,6 +130,7 @@ using ActionBindsMap = std::unordered_map<ActionBinds, ActionBindData>;
 ActionBindsMap& getActionBinds();
 
 ActionBinds getActionItemVerb(size_t item_index);
+
 ActionBinds getActionItemClassic(size_t item_index);
 
 bool isActionBound(ActionBinds action, u32 port);

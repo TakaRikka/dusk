@@ -433,7 +433,8 @@ int daAlink_c::procGuardAttack() {
     BOOL var_r29;
     if (mEquipItem == 0x103 && !checkMagneBootsOn()) {
         var_r29 = TRUE;
-        if (doTrigger()) {
+        // TODO: Just taking a guess. Revisit this.
+        if (DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doTrigger())) {
             mProcVar3.field_0x300e = 1;
         }
     } else {

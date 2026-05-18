@@ -573,7 +573,7 @@ void daAlink_c::setSwordComboVoice() {
 }
 
 bool daAlink_c::checkCutTurnInputTrigger() {
-    return swordSwingTrigger() && checkCutTurnInput();
+    return (swordSwingTrigger() && checkCutTurnInput()) IF_DUSK(|| VERB_TRIGGER_ALONE(dusk::ActionBinds::QUICK_SPIN));
 }
 
 int daAlink_c::checkCutAction() {
@@ -761,7 +761,7 @@ BOOL daAlink_c::checkCutCancelNextMode(int param_0) {
 BOOL daAlink_c::checkDoCutAction() {
     fopAc_ac_c* enemy = mTargetedActor;
 
-    if (doButton() && (dComIfGs_isEventBit(dSv_event_flag_c::F_0343) || checkNoResetFlg3(FLG3_TRANING_CUT_LARGE_JUMP))) {
+    if (DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doButton()) && (dComIfGs_isEventBit(dSv_event_flag_c::F_0343) || checkNoResetFlg3(FLG3_TRANING_CUT_LARGE_JUMP))) {
         return procCutLargeJumpChargeInit();
     } else if (checkDownAttackState()) {
         return procCutDownInit();

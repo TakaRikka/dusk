@@ -9364,13 +9364,7 @@ BOOL daAlink_c::spActionTrigger() {
 }
 
 BOOL daAlink_c::midnaTalkTrigger() const {
-#if TARGET_PC
-    // If we have a custom bind for Midna, check that instead
-    if (dusk::isActionBound(dusk::ActionBinds::CALL_MIDNA, 0)) {
-        return dusk::getActionBindTrig(dusk::ActionBinds::CALL_MIDNA, 0);
-    }
-#endif
-    return mItemTrigger & BTN_Z;
+    return DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::CALL_MIDNA, dusk::ActionBinds::BUTTON_Z), mItemTrigger & BTN_Z);
 }
 
 BOOL daAlink_c::swordSwingTrigger() {
@@ -9382,7 +9376,7 @@ void daAlink_c::setItemActionButtonStatus(u8 i_status) {
 }
 
 BOOL daAlink_c::itemActionTrigger() {
-    return spActionTrigger();
+    return IF_DUSK(VERB_TRIGGER_ALONE(dusk::ActionBinds::ITEM_CYCLE_NEXT) || VERB_TRIGGER_ALONE(dusk::ActionBinds::ITEM_CYCLE_PREV) ||) spActionTrigger();
 }
 
 void daAlink_c::setStickData() {
@@ -11367,7 +11361,7 @@ BOOL daAlink_c::checkUpperItemAction() {
             setBStatus(btn_status);
             setDoStatus(btn_status);
 
-            if ((btn_status == dComIfGp_getDoStatus() && doTrigger()) || (btn_status == getBStatus() && swordTrigger())) {
+            if ((btn_status == dComIfGp_getDoStatus() && doTrigger()) || (btn_status == getBStatus() && DUSK_IF_ELSE(VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_LIGHT) || swordTrigger(), swordTrigger()))) {
                 if (btn_status == BUTTON_STATUS_THROW) {
                     return procWolfGrabThrowInit();
                 }
@@ -11855,7 +11849,7 @@ BOOL daAlink_c::checkItemAction() {
                 return procFishingCastInit();
             }
         } else if (mEquipItem == 0x102) {
-            if (doTrigger()) {
+            if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A), doTrigger())) {
                 if (dComIfGp_getDoStatus() == BUTTON_STATUS_THROW) {
                     setThrowBoomerangAnime();
                     return true;
@@ -11865,7 +11859,7 @@ BOOL daAlink_c::checkItemAction() {
                     return procPickPutInit(0);
                 }
             }
-        } else if (doTrigger() && dComIfGp_getDoStatus() == BUTTON_STATUS_QUIT && mCopyRodAcKeep.getActor() != NULL) {
+        } else if (DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::REJECT, dusk::ActionBinds::BUTTON_A), doTrigger()) && dComIfGp_getDoStatus() == BUTTON_STATUS_QUIT && mCopyRodAcKeep.getActor() != NULL) {
             ((daCrod_c*)mCopyRodAcKeep.getActor())->offControll();
             resetUpperAnime(UPPER_2, 3.0f);
             return true;
@@ -11907,14 +11901,7 @@ BOOL daAlink_c::checkRAction() {
 }
 
 BOOL daAlink_c::rollTrigger() const {
-#if TARGET_PC
-    if (dusk::isActionBound(dusk::ActionBinds::ROLL, 0)) {
-        return dusk::getActionBindTrigAnyPort(dusk::ActionBinds::ROLL);
-    }
-    return doTrigger();
-#else
-    return doTrigger();
-#endif
+    return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doTrigger());
 }
 
 BOOL daAlink_c::checkMoveDoAction() {
@@ -12164,6 +12151,7 @@ BOOL daAlink_c::checkItemChangeFromButton() {
                     && !checkCanoeSlider()
                     && !checkFisingRodLure()
                     && swordTrigger())
+                    // TODO: Looks like this is about equipping the fishing rod while lure fishing. Investigate and separate out controls?
         {
             itemEquip(0x105);
         } else {
@@ -14409,7 +14397,7 @@ int daAlink_c::checkSetItemTrigger(int i_itemNo) {
 }
 
 int daAlink_c::checkItemSetButton(int i_itemNo) {
-    // TODO: Update CheckGroupItem to deal with a possibly greater number of items than 2
+    // TODO: Update dComIfGp_getSelectItem to deal with a possibly greater number of items than 2
     for (u8 i = 0; i < DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2); i++) {
         if (checkGroupItem(i_itemNo, dComIfGp_getSelectItem(i))) {
             return i;
@@ -15893,7 +15881,7 @@ int daAlink_c::procSideStep() {
         }
     }
 
-    if (doTrigger() && mProcVar1.field_0x300a != 0) {
+    if (DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doTrigger()) && mProcVar1.field_0x300a != 0) {
         mProcVar2.field_0x300c = 1;
     }
 
@@ -15970,7 +15958,7 @@ int daAlink_c::procSideStepLand() {
         field_0x2fcc = 10;
     }
 
-    if (doTrigger() && mProcVar1.field_0x300a != 0) {
+    if (DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doTrigger()) && mProcVar1.field_0x300a != 0) {
         mProcVar2.field_0x300c = 1;
     }
 
@@ -16902,7 +16890,7 @@ int daAlink_c::procAutoJump() {
     if (mProcVar2.field_0x300c != 0) {
         setDoStatus(BUTTON_STATUS_LET_GO);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A), doTrigger())) {
             freeGrabItem();
             onModeFlg(4);
         }
@@ -17171,7 +17159,7 @@ int daAlink_c::procFall() {
                 setFrontWallType();
 
                 if ((field_0x32cc != 0 ||
-                     ((checkInputOnR() && getDirectionFromShapeAngle() == DIR_FORWARD) || doTrigger())) &&
+                     ((checkInputOnR() && getDirectionFromShapeAngle() == DIR_FORWARD) || DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger()))) &&
                     checkFrontWallTypeAction())
                 {
                     return 1;
@@ -17586,7 +17574,7 @@ int daAlink_c::procCoMetamorphose() {
         }
     } else if (checkAnmEnd(framectrl)
                 || ((mDemo.getParam0() == 1) && (mDemo.getDemoMode() == daPy_demo_c::DEMO_METAMORPHOSE_UNK1_e || mDemo.getDemoMode() == daPy_demo_c::DEMO_METAMORPHOSE_UNK2_e))
-                || (mProcVar5.field_0x3012 != 0 && framectrl->getFrame() > field_0x3480 && (checkInputOnR() || doTrigger() || grassCancelTrigger())))
+                || (mProcVar5.field_0x3012 != 0 && framectrl->getFrame() > field_0x3480 && (checkInputOnR() || DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger() || grassCancelTrigger()))))
     {
         if (mProcVar5.field_0x3012 != 0) {
             deleteEquipItem(FALSE, FALSE);

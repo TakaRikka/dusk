@@ -528,7 +528,7 @@ BOOL daAlink_c::checkNextActionGrab() {
         }
     }
 
-    if (doTrigger() && dComIfGp_getDoStatus() == BUTTON_STATUS_OPEN) {
+    if (DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::INTERACT, dusk::ActionBinds::BUTTON_A), doTrigger()) && dComIfGp_getDoStatus() == BUTTON_STATUS_OPEN) {
         fopAcM_orderDoorEvent(this, field_0x27f4, 0, 0);
         return 1;
     }
@@ -538,7 +538,7 @@ BOOL daAlink_c::checkNextActionGrab() {
     }
 
     daNbomb_c* var_r28 = (daNbomb_c*)grabActor;
-    if (doTrigger()
+    if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A), doTrigger())
         || (fopAcM_GetName(grabActor) == fpcNm_NBOMB_e
             && var_r28->checkPlayerMake()
             && (checkSetItemTrigger(0x50) || (var_r28->checkWaterBomb() && checkSetItemTrigger(0x71)) || (!var_r28->checkWaterBomb() && checkSetItemTrigger(0x70)))
@@ -1528,11 +1528,11 @@ int daAlink_c::getWallGrabStatus() {
 }
 
 BOOL daAlink_c::wallGrabTrigger() {
-    return itemTriggerCheck(BTN_R);
+    return DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::DIGITAL_R), itemTriggerCheck(BTN_R));
 }
 
 BOOL daAlink_c::wallGrabButton() {
-    return itemButtonCheck(BTN_R);
+    return DUSK_IF_ELSE(VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_BUTTON(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::DIGITAL_R), itemButtonCheck(BTN_R));
 }
 
 int daAlink_c::setPushPullKeepData(dBgW_Base::PushPullLabel i_label, BOOL param_1) {
@@ -2067,7 +2067,7 @@ int daAlink_c::procGoatMove() {
     if (sp14.z < 700.0f) {
         if (sp14.z > 0.0f) {
             if (fabsf(sp14.x) < 70.0f) {
-                if (doTrigger() || doButton()) {
+                if (DUSK_IF_ELSE(VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_BUTTON(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A) || VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A), doTrigger() || doButton())) {
                     mProcVar3.field_0x300e = 1;
                     ((daCow_c*)temp_r3)->setCrazyBeforeCatch();
                 }
@@ -2082,7 +2082,7 @@ int daAlink_c::procGoatMove() {
         }
     }
 
-    if (!doButton()) {
+    if (DUSK_IF_ELSE(!(VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_BUTTON(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A)), !doButton())) {
         mProcVar3.field_0x300e = 0;
     }
 
@@ -2334,7 +2334,8 @@ int daAlink_c::procGoatCatch() {
         return 1;
     }
 
-    if (!doButton() || (!mLinkAcch.ChkGroundHit() && (!checkMagneBootsOn() || !checkNoResetFlg0(FLG0_UNK_2000))) || (field_0x3198 > 0 && mNormalSpeed >= 30.0f)) {
+    // TODO: Will have to revisit after testing. Might be more appropriate for a Roll
+    if (!DUSK_IF_ELSE(VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_BUTTON(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A), doButton()) || (!mLinkAcch.ChkGroundHit() && (!checkMagneBootsOn() || !checkNoResetFlg0(FLG0_UNK_2000))) || (field_0x3198 > 0 && mNormalSpeed >= 30.0f)) {
         if (checkMagneBootsOn()) {
             cancelMagneBootsOn();
         }
@@ -2519,9 +2520,9 @@ int daAlink_c::procGoronMove() {
     if (mAttention->getActionBtnB() != NULL && mAttention->getActionBtnB()->mType == fopAc_attn_CARRY_e) {
         setDoStatus(BUTTON_STATUS_UNK_145);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger())) {
             mProcVar3.field_0x300e = 1;
-        } else if (!doButton()) {
+        } else if (DUSK_IF_ELSE(!(VERB_BUTTON_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_BUTTON(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A)), !doButton())) {
             mProcVar3.field_0x300e = 0;
         }
         if (mProcVar3.field_0x300e != 0) {

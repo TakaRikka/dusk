@@ -184,7 +184,7 @@ BOOL daAlink_c::subjectCancelTrigger() {
     if (checkWolf() || checkNotBattleStage() || !checkSwordGet() ||
         (checkModeFlg(0x40000) && !checkEquipHeavyBoots()))
     {
-        return itemTriggerCheck(BTN_B);
+        return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::REJECT, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B));
     }
 
     return false;

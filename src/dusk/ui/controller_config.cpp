@@ -21,6 +21,14 @@
 namespace dusk::ui {
 namespace {
 
+// For Mapping the position in configs rather than functionality. Useful for mapping special verbs in Special Config that don't fit well with standard verbs
+static std::unordered_map<ActionBinds, ActionBindContext> configActionContextMap = {
+    {ActionBinds::TURBO_SPEED_BUTTON, ActionBindContext::DUSK},
+    {ActionBinds::DUSKLIGHT_SPECIAL, ActionBindContext::DUSK},
+};
+
+#define CONFIG_ACTION_CONTEXT(action, context) ((configActionContextMap.contains(action)) ? (configActionContextMap[action]) : context)
+
 bool keyboard_active(int port) {
     u32 count = 0;
     return PADGetKeyButtonBindings(static_cast<u32>(port), &count) != nullptr;
@@ -474,9 +482,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             };
 
             pane.add_section("Game Controls");
-            for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
-                if(actionContext == ActionBindContext::VERB && actionType == ActionBindType::BUTTON) {
-                    addActionBinding(&configVars->at(port), actionName);
+            for (const auto& [action, bindData] : getActionBinds()) {
+                if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::VERB && bindData.actionType == ActionBindType::BUTTON) {
+                    addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
                 }
             }
 
@@ -528,9 +536,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         };
 
         pane.add_section("Game Controls");
-        for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
-            if(actionContext == ActionBindContext::VERB && actionType == ActionBindType::BUTTON) {
-                addActionBinding(&configVars->at(port), actionName);
+        for (const auto& [action, bindData] : getActionBinds()) {
+            if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::VERB && bindData.actionType == ActionBindType::BUTTON) {
+                addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
             }
         }
 
@@ -995,9 +1003,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             pane.add_section("Custom Action Bindings");
             pane.add_text("A key bound to any action here will REPLACE the default control for"
                           " that action. Only bind buttons here that aren't used anywhere else.");
-            for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
-                if(actionContext == ActionBindContext::DUSK) {
-                    addActionBinding(&configVars->at(port), actionName);
+            for (const auto& [action, bindData] : getActionBinds()) {
+                if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::DUSK) {
+                    addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
                 }
             }
             break;
@@ -1038,9 +1046,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 });
         };
 
-        for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
-            if(actionContext == ActionBindContext::DUSK) {
-                addActionBinding(&configVars->at(port), actionName);
+        for (const auto& [action, bindData] : getActionBinds()) {
+            if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::DUSK) {
+                addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
             }
         }
         break;

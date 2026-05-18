@@ -609,7 +609,7 @@ void daAlink_c::offWolfEyeUp() {
 }
 
 BOOL daAlink_c::wolfSenseTrigger() {
-    return itemTriggerCheck(BTN_X);
+    return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::SENSE, dusk::ActionBinds::BUTTON_X), itemTriggerCheck(BTN_X));
 }
 
 void daAlink_c::setWolfSenceStatus(u8 i_status) {
@@ -617,7 +617,7 @@ void daAlink_c::setWolfSenceStatus(u8 i_status) {
 }
 
 BOOL daAlink_c::wolfClawTrigger() {
-    return itemTriggerCheck(BTN_Y);
+    return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::DIG, dusk::ActionBinds::BUTTON_Y), itemTriggerCheck(BTN_Y));
 }
 
 void daAlink_c::setWolfDigStatus(u8 i_flag) {
