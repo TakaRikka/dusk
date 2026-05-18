@@ -6,7 +6,12 @@
 
 namespace dusk {
 
+const std::size_t ITEM_ACCESS_SLOTS=2;
+
 enum class ActionBinds {
+    /* Do nothing */
+    NOBIND,
+
     /* Dusk Controls */
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
@@ -23,6 +28,7 @@ enum class ActionBinds {
 
     /* Button Presses */
     SWORD_ATTACK, /* Attack with Sword */
+    QUICK_SPIN, /* Quick bind for the C stick quick spin */
     ITEM_ACCESS_X, /* Access FIrst Quick Item slot */
     ITEM_ACCESS_Y, /* Access Second Quick Item slot */
     SHIELD_USE, /* For Shield attacks */
@@ -52,6 +58,7 @@ enum class ActionBinds {
 
     /* Minimimal Button Bindings */
     GRAB_ALL, /* Both GRAB_HEAVY and GRAB_LIGHT */
+    DUSKLIGHT_SPECIAL, /* Special Keybind for Dusklight Things (Reset/Cheats etc.) */
 
     /* Classical Button Bindings */
     BUTTON_A,
@@ -119,11 +126,18 @@ using ActionBindsMap = std::unordered_map<ActionBinds, ActionBindData>;
 
 ActionBindsMap& getActionBinds();
 
+ActionBinds getActionItemVerb(size_t item_index);
+ActionBinds getActionItemClassic(size_t item_index);
+
 bool isActionBound(ActionBinds action, u32 port);
+
+bool isActionBoundAnyPort(ActionBinds action);
 
 void updateActionBindings();
 
 bool getActionBindTrig(ActionBinds action, u32 port);
+
+bool getActionBindTrigAnyPort(ActionBinds action);
 
 bool getActionBindHold(ActionBinds action, u32 port);
 

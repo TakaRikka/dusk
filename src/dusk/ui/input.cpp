@@ -7,6 +7,7 @@
 #include <SDL3/SDL_timer.h>
 #include <SDL3/SDL_touch.h>
 #include <aurora/rmlui.hpp>
+#include "dusk/settings.h"
 #include <dolphin/pad.h>
 
 #include <algorithm>
@@ -674,7 +675,7 @@ void process_axis_direction(
 }  // namespace
 
 void sync_input_block() noexcept {
-    const bool shouldBlock = any_document_visible();
+    const bool shouldBlock = any_document_visible() && !getSettings().game.dusklightMenuInputFallthrough;
     if (sPadInputBlocked == shouldBlock) {
         return;
     }

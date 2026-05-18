@@ -3,10 +3,15 @@
 #include "aurora/lib/input.hpp"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
+#include "pad.h"
 
 namespace dusk {
 
 static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::COUNT)>, PAD_CHANMAX> actionPressData{};
+
+// Useful if there are ever plans to add more item slots
+static std::array<ActionBinds, dusk::ITEM_ACCESS_SLOTS> actionItemVerbs = {ActionBinds::ITEM_ACCESS_X, ActionBinds::ITEM_ACCESS_Y};
+static std::array<ActionBinds, 2> actionItemClassic = {ActionBinds::BUTTON_X, ActionBinds::BUTTON_Y};
 
 ActionBindsMap& getActionBinds() {
     static ActionBindsMap actionBinds = {
@@ -88,6 +93,15 @@ bool isActionBound(ActionBinds action, u32 port) {
     return getActionBindButton(action, port) != PAD_NATIVE_BUTTON_INVALID;
 }
 
+bool isActionBoundAnyPort(ActionBinds action) {
+    for (u32 port = 0; port < PAD_CHANMAX; ++port) {
+        if (isActionBound(action, port)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void updateActionBindings() {
     for (u32 port = 0; port < PAD_CHANMAX; ++port) {
         // Move the current press to the previous frame
@@ -103,8 +117,9 @@ void updateActionBindings() {
             // perform actions while the dusklight menu is open.
             // Also skip updating Analog bindings for now
             if (!isActionBound(action, port) ||
-                (ui::any_document_visible() && getActionBinds()[action].actionContext != ActionBindContext::DUSK) ||
-                (getActionBinds()[action].actionType != ActionBindType::BUTTON)) {
+                (ui::any_document_visible() && getActionBinds()[action].actionContext != ActionBindContext::DUSK && !getSettings().game.dusklightMenuInputFallthrough) ||
+                (getActionBinds()[action].actionType != ActionBindType::BUTTON) ||
+                (getActionBinds()[action].actionContext == ActionBindContext::CLASSICAL && !getSettings().game.enableClassicKeybinds)) {
                 continue;
             }
 
@@ -128,14 +143,38 @@ void updateActionBindings() {
                 }
             }
         }
-        fprintf(stderr, "\rFirst Person Camera Pressed: %d", getActionBindHoldAnyPort(ActionBinds::FIRST_PERSON_CAMERA));
     }
+}
+
+ActionBinds getActionItemVerb(size_t item_index)
+{
+    if(item_index < dusk::ITEM_ACCESS_SLOTS) {
+        return actionItemVerbs[item_index];
+    }
+    return ActionBinds::NOBIND;
+}
+
+ActionBinds getActionItemClassic(size_t item_index)
+{
+    if(item_index < 2) {
+        return actionItemClassic[item_index];
+    }
+    return ActionBinds::NOBIND;
 }
 
 bool getActionBindTrig(ActionBinds action, u32 port) {
     return isActionBound(action, port) &&
            actionPressData[port][static_cast<int>(action)].pressedCurFrame &&
           !actionPressData[port][static_cast<int>(action)].pressedPrevFrame;
+}
+
+bool getActionBindTrigAnyPort(ActionBinds action) {
+    for (u32 port = 0; port < PAD_CHANMAX; ++port) {
+        if (getActionBindTrig(action, port)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool getActionBindHold(ActionBinds action, u32 port) {

@@ -37,6 +37,7 @@
 #include "d/actor/d_a_tag_mmsg.h"
 #include "d/actor/d_a_tag_lantern.h"
 #include "d/actor/d_a_horse.h"
+#include "global.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_bomb.h"
 #include "d/d_meter2_info.h"
@@ -9345,19 +9346,21 @@ BOOL daAlink_c::itemButtonCheck(u8 i_btnFlag) {
 }
 
 BOOL daAlink_c::itemButton() {
-    return itemButtonCheck(1 << mSelectItemId);
+    return DUSK_IF_ELSE(VERB_BUTTON(dusk::getActionItemVerb(mSelectItemId % (dusk::ITEM_ACCESS_SLOTS)), dusk::getActionItemClassic(mSelectItemId & 1)), itemButtonCheck(1 << mSelectItemId));
 }
 
 BOOL daAlink_c::itemTrigger() {
-    return itemTriggerCheck(1 << mSelectItemId);
+    return DUSK_IF_ELSE(VERB_TRIGGER(dusk::getActionItemVerb(mSelectItemId % (dusk::ITEM_ACCESS_SLOTS)), dusk::getActionItemClassic(mSelectItemId & 1)), itemTriggerCheck(1 << mSelectItemId));
 }
 
 BOOL daAlink_c::spActionButton() {
-    return itemButtonCheck(BTN_R);
+    // TODO: Replace Digital R with analog trigger R
+    return DUSK_IF_ELSE(CLASSIC_TRIGGER(dusk::ActionBinds::DIGITAL_R),itemButtonCheck(BTN_R));
 }
 
 BOOL daAlink_c::spActionTrigger() {
-    return itemTriggerCheck(BTN_R);
+    // TODO: Replace Digital R with analog trigger R
+    return DUSK_IF_ELSE(CLASSIC_TRIGGER(dusk::ActionBinds::DIGITAL_R), itemTriggerCheck(BTN_R));
 }
 
 BOOL daAlink_c::midnaTalkTrigger() const {
@@ -9384,7 +9387,7 @@ BOOL daAlink_c::itemActionTrigger() {
 
 void daAlink_c::setStickData() {
     BOOL var_r31 = false;
-    field_0x2f8f = mItemButton;
+    mLastItemButton = mItemButton;
     mItemTrigger = 0;
     mItemButton = 0;
     mHeavySpeedMultiplier = 1.0f;
@@ -9417,7 +9420,7 @@ void daAlink_c::setStickData() {
             } else {
                 mStickValue = 0.0f;
             }
-            mItemButton = field_0x2f8f;
+            mItemButton = mLastItemButton;
         } else {
             mStickValue = 0.0f;
         }
@@ -11463,9 +11466,9 @@ int daAlink_c::orderTalk(int i_checkZTalk) {
     }
 
     if (!checkWolf() && checkRequestTalkActor(mAttList2, field_0x27f8)) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2); i++) {
             // check if pressed X or Y and if item on button is a trade item
-            if (checkTradeItem(dComIfGp_getSelectItem(i)) && itemTriggerCheck(1 << i)) {
+            if (checkTradeItem(dComIfGp_getSelectItem(i)) && DUSK_IF_ELSE(VERB_TRIGGER(dusk::getActionItemVerb(i), dusk::getActionItemClassic(i & 1)), itemTriggerCheck(1 << i))) {
                 fopAcM_orderTalkItemBtnEvent(itemTalkType[i], this, field_0x27f8, 0, 0);
                 return 1;
             }
@@ -11890,7 +11893,7 @@ BOOL daAlink_c::checkItemAction() {
         {
             setRStatus(BUTTON_STATUS_SHIELD_ATTACK);
 
-            if (spActionTrigger()) {
+            if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::SHIELD_USE) || (dusk::getSettings().game.enableClassicKeybinds && spActionTrigger()), spActionTrigger())) {
                 return procGuardAttackInit();
             }
         }
@@ -11906,10 +11909,12 @@ BOOL daAlink_c::checkRAction() {
 BOOL daAlink_c::rollTrigger() const {
 #if TARGET_PC
     if (dusk::isActionBound(dusk::ActionBinds::ROLL, 0)) {
-        return dusk::getActionBindTrig(dusk::ActionBinds::ROLL, 0);
+        return dusk::getActionBindTrigAnyPort(dusk::ActionBinds::ROLL);
     }
-#endif
     return doTrigger();
+#else
+    return doTrigger();
+#endif
 }
 
 BOOL daAlink_c::checkMoveDoAction() {
@@ -12163,9 +12168,9 @@ BOOL daAlink_c::checkItemChangeFromButton() {
             itemEquip(0x105);
         } else {
             u8 i;
-            for (i = 0; i < 2; i++) {
+            for (i = 0; i < DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2); i++) {
                 int proc_type = checkNewItemChange(i);
-                if (proc_type != 0 && itemTriggerCheck(1 << i)) {
+                if (proc_type != 0 && DUSK_IF_ELSE(VERB_TRIGGER(dusk::getActionItemVerb(i), dusk::getActionItemClassic(i & 1)), itemTriggerCheck(1 << i))) {
                     BOOL var_r27 = changeItemTriggerKeepProc(i, proc_type);
                     return var_r27;
                 }
@@ -12196,7 +12201,7 @@ BOOL daAlink_c::checkItemChangeFromButton() {
                        mEquipItem != 0x102 && (!checkCanoeRide() || !checkFisingRodLure()))
             {
                 if (!checkEventRun() || strcmp(dComIfGp_getEventManager().getRunEventName(), "ANGER") != 0) {
-                    if (strcmp(dComIfGp_getEventManager().getRunEventName(), "ANGER2") != 0 && checkItemSetButton(mEquipItem) == 2) {
+                    if (strcmp(dComIfGp_getEventManager().getRunEventName(), "ANGER2") != 0 && checkItemSetButton(mEquipItem) == DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2)) {
                         allUnequip(1);
                     }
                 }
@@ -14390,8 +14395,9 @@ BOOL daAlink_c::checkGroupItem(int i_itemNo, int i_selItem) const {
 }
 
 int daAlink_c::checkSetItemTrigger(int i_itemNo) {
-    for (u8 i = 0; i < 2; i++) {
-        if (checkGroupItem(i_itemNo, dComIfGp_getSelectItem(i)) && itemTriggerCheck(1 << i)) {
+    for (u8 i = 0; i < DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2); i++) {
+        // TODO: Ensure dComIfGp_getSelectItem can handle dusk::ITEM_ACCESS_SLOTS amount of items
+        if (checkGroupItem(i_itemNo, dComIfGp_getSelectItem(i)) && DUSK_IF_ELSE(VERB_TRIGGER(dusk::getActionItemVerb(i), dusk::getActionItemClassic(i & 1)), itemTriggerCheck(1 << i))) {
             if (i_itemNo != dItemNo_HVY_BOOTS_e) {
                 mSelectItemId = i;
             }
@@ -14403,13 +14409,14 @@ int daAlink_c::checkSetItemTrigger(int i_itemNo) {
 }
 
 int daAlink_c::checkItemSetButton(int i_itemNo) {
-    for (u8 i = 0; i < 2; i++) {
+    // TODO: Update CheckGroupItem to deal with a possibly greater number of items than 2
+    for (u8 i = 0; i < DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2); i++) {
         if (checkGroupItem(i_itemNo, dComIfGp_getSelectItem(i))) {
             return i;
         }
     }
 
-    return 2;
+    return DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2);
 }
 
 bool daAlink_c::checkField() {
@@ -14609,7 +14616,7 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
                 return ITEM_PROC_BOTTLE_DRINK;
             }
 
-            if (checkOilBottleItem(sel_item) && checkItemSetButton(dItemNo_KANTERA_e) != 2) {
+            if (checkOilBottleItem(sel_item) && checkItemSetButton(dItemNo_KANTERA_e) != DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2)) {
                 return ITEM_PROC_KANDELAAR_POUR;
             }
         } else if (sel_item == dItemNo_HVY_BOOTS_e) {
@@ -14654,9 +14661,10 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
                     return ITEM_PROC_SPINNER_READY;
                 } else if (checkDungeonWarpItem(sel_item)) {
                     return ITEM_PROC_DUNGEON_WARP_READY;
-                } else if (checkItemSetButton(0x108) != 2 &&
+                } else if (checkItemSetButton(0x108) != DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2) &&
                            (sel_item == dItemNo_WORM_e || sel_item == dItemNo_BEE_CHILD_e))
                 {
+                    // TODO: Update dComIfGp_getSelectItem to make sure it can handle dusk::ITEM_ACCESS_SLOTS amount of items
                     int itemNo = dComIfGp_getSelectItem(checkItemSetButton(0x108));
                     if (itemNo == dItemNo_WORM_ROD_e || itemNo == dItemNo_JEWEL_WORM_ROD_e) {
                         if (sel_item == dItemNo_BEE_CHILD_e) {
@@ -14678,7 +14686,7 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
                     return ITEM_PROC_NOT_USE_ITEM;
                 } else if (sel_item == dItemNo_HORSE_FLUTE_e) {
                     return ITEM_PROC_GRASS_WHISTLE;
-                } else if (checkOilBottleItem(sel_item) && checkItemSetButton(0x48) != 2) {
+                } else if (checkOilBottleItem(sel_item) && checkItemSetButton(0x48) != DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2)) {
                     return ITEM_PROC_KANDELAAR_POUR;
                 } else if (sel_item == dItemNo_HAWK_EYE_e) {
                     if (acceptSubjectModeChange()) {
@@ -17830,7 +17838,7 @@ int daAlink_c::execute() {
 
     if (checkNoResetFlg2(FLG2_UNK_1) != FALSE &&
         mEquipItem != dItemNo_KANTERA_e &&
-        checkItemSetButton(dItemNo_KANTERA_e) == 2) {
+        checkItemSetButton(dItemNo_KANTERA_e) == DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2)) {
         offKandelaarModel();
     }
 
@@ -18219,11 +18227,12 @@ int daAlink_c::execute() {
 
         if (checkEquipHeavyBoots()) {
             int itemButton = checkItemSetButton(dItemNo_HVY_BOOTS_e);
-            if (itemButton == 2 || checkNotHeavyBootsStage()) {
+            if (itemButton == DUSK_IF_ELSE(dusk::ITEM_ACCESS_SLOTS, 2) || checkNotHeavyBootsStage()) {
                 if (!dComIfGp_checkPlayerStatus1(0, 0x10000) || !checkHookshotRoofLv7Boss()) {
                     setHeavyBoots(0);
                 }
             } else {
+                // TODO: Update dMeter2Info_onDirectUseItem to make sure it can handle dusk::ITEM_ACCESS_SLOTS amount of items
                 dMeter2Info_onDirectUseItem(itemButton);
             }
         }

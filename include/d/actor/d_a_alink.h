@@ -11,11 +11,25 @@
 #include "d/d_msg_flow.h"
 #include "d/d_particle_copoly.h"
 #include "d/d_save.h"
+#include "dusk/action_bindings.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 
 #include "res/Object/AlAnm.h"
 #include "res/Object/Always.h"
+
+#if TARGET_PC
+#define CLASSIC_TRIGGER(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindTrigAnyPort(action))
+
+#define CLASSIC_BUTTON(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindHoldAnyPort(action))
+
+#define VERB_BUTTON_ALONE(action) (dusk::getActionBindHoldAnyPort(action))
+#define VERB_TRIGGER_ALONE(action) (dusk::getActionBindTrigAnyPort(action))
+
+#define VERB_TRIGGER(action, classic) (dusk::getActionBindTrigAnyPort(action) || CLASSIC_TRIGGER(classic))
+
+#define VERB_BUTTON(action, classic) (dusk::getActionBindHoldAnyPort(action) || CLASSIC_BUTTON(classic))
+#endif
 
 class J2DAnmColorKey;
 class J2DAnmTransformKey;
@@ -3545,7 +3559,7 @@ public:
     bool checkFisingRodLure() const { return mEquipItem == 0x105; }
     BOOL doTrigger() const { return mItemTrigger & BTN_A; }
     BOOL rollTrigger() const;
-    BOOL swordTrigger() { return itemTriggerCheck(BTN_B); }
+    BOOL swordTrigger() { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::SWORD_ATTACK, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
     BOOL grassCancelTrigger() { return itemTriggerCheck(BTN_B); }
     BOOL arrowChangeTrigger() { return itemActionTrigger(); }
     BOOL peepSubjectCancelTrigger() { return itemTriggerCheck(BTN_B); }
@@ -4126,7 +4140,7 @@ public:
     /* 0x02F8C */ u8 field_0x2f8c;
     /* 0x02F8D */ u8 mItemTrigger;
     /* 0x02F8E */ u8 mItemButton;
-    /* 0x02F8F */ u8 field_0x2f8f;
+    /* 0x02F8F */ u8 mLastItemButton;
     /* 0x02F90 */ u8 field_0x2f90;
     /* 0x02F91 */ u8 field_0x2f91;
     /* 0x02F92 */ u8 mLeftHandIndex;

@@ -120,6 +120,8 @@ UserSettings g_userSettings = {
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
 
         // Controls
+        .enableClassicKeybinds {"game.enableClassicKeybinds", true},
+        .dusklightMenuInputFallthrough {"game.dusklightMenuInputFallthrough", false},
         .enableTurboKeybind {"game.enableTurboKeybind", false},
         .enableResetKeybind {"game.enableResetKeybind", false},
 
@@ -295,6 +297,8 @@ void registerSettings() {
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
+    Register(g_userSettings.game.enableClassicKeybinds);
+    Register(g_userSettings.game.dusklightMenuInputFallthrough);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.enableResetKeybind);
     Register(g_userSettings.game.speedrunMode);
