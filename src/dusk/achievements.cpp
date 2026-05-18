@@ -70,6 +70,25 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
+                "three_heart_clear",
+                "Hero Mode",
+                "Defeat Ganondorf with only 3 heart containers.",
+                AchievementCategory::Challenge,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr || link->mProcID != daAlink_c::PROC_GANON_FINISH) {
+                    return;
+                }
+                if (dComIfGs_getMaxLife() < 20) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
                 "completionist",
                 "Completionist",
                 "Complete the game after collecting all equipment, heart containers, portals, bugs, poes, and hidden skills.",
@@ -395,7 +414,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                if (daNpcF_chkEvtBit(0x1F9) && dComIfGs_getMaxLife() <= 15) {
+                if (daNpcF_chkEvtBit(0x1F9) && dComIfGs_getMaxLife() < 20) {
                     a.progress = 1;
                 }
             },
