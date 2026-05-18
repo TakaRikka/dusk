@@ -7,8 +7,6 @@
 namespace dusk {
 
 enum class ActionBinds {
-    COUNT, /* Press Count */
-
     /* Dusk Controls */
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
@@ -89,6 +87,8 @@ enum class ActionBinds {
     MAIN_STICK_X, MAIN_STICK_Y,
     C_STICK_X, C_STICK_Y,
     TRIGGER_L, TRIGGER_R,
+
+    COUNT, /* Member Count. This is very hacky. I didn't realize it's purpose there for a bit. */
 };
 
 enum class ActionBindContext {

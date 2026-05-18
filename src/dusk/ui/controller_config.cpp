@@ -451,7 +451,37 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     });
             };
 
-            pane.add_section("Buttons");
+            auto addActionBinding = [&](auto actionBind, const std::string& key) {
+                pane.add_select_button(
+                    {
+                        .key = key,
+                        .getValue =
+                        [this, actionBind] {
+                            if (mPendingActionBinding == actionBind) {
+                                return pending_key_label();
+                            }
+
+                            return keyboard_key_name(actionBind->getValue());
+                        },
+                    })
+                .on_pressed([this, port, actionBind] {
+                    mDoAud_seStartMenu(kSoundClick);
+                    cancel_pending_binding();
+                    mPendingPort = port;
+                    mPendingBindingArmed = false;
+                    mPendingActionBinding = actionBind;
+                });
+            };
+
+            pane.add_section("Game Controls");
+            for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
+                if(actionContext == ActionBindContext::VERB && actionType == ActionBindType::BUTTON) {
+                    addActionBinding(&configVars->at(port), actionName);
+                }
+            }
+
+            // TODO: Replace with the action bindings, once complete
+            pane.add_section("Classic Buttons");
             addKeyButton(PAD_BUTTON_A);
             addKeyButton(PAD_BUTTON_B);
             addKeyButton(PAD_BUTTON_X);
@@ -459,7 +489,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             addKeyButton(PAD_BUTTON_START);
             addKeyButton(PAD_TRIGGER_Z);
 
-            pane.add_section("D-Pad");
+            pane.add_section("Classic D-Pad");
             addKeyButton(PAD_BUTTON_UP);
             addKeyButton(PAD_BUTTON_DOWN);
             addKeyButton(PAD_BUTTON_LEFT);
@@ -475,7 +505,36 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         }
 
         SDL_Gamepad* gamepad = gamepad_for_port(port);
-        pane.add_section("Buttons");
+        auto addActionBinding = [&](auto actionBind, const std::string& key) {
+            pane.add_select_button({
+                .key = key,
+                .getValue =
+                [this, gamepad, actionBind] {
+                    if (mPendingActionBinding == actionBind) {
+                        return pending_button_label();
+                    }
+
+                    return native_button_name(
+                        gamepad, actionBind->getValue());
+                },
+            })
+            .on_pressed([this, port, actionBind] {
+                mDoAud_seStartMenu(kSoundClick);
+                cancel_pending_binding();
+                mPendingPort = port;
+                mPendingBindingArmed = false;
+                mPendingActionBinding = actionBind;
+            });
+        };
+
+        pane.add_section("Game Controls");
+        for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
+            if(actionContext == ActionBindContext::VERB && actionType == ActionBindType::BUTTON) {
+                addActionBinding(&configVars->at(port), actionName);
+            }
+        }
+
+        pane.add_section("Classic Buttons");
         for (u32 i = 0; i < buttonCount; ++i) {
             PADButtonMapping& mapping = mappings[i];
             if (!is_action_button(mapping.padButton)) {
@@ -502,7 +561,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 });
         }
 
-        pane.add_section("D-Pad");
+        pane.add_section("Classic D-Pad");
         for (u32 i = 0; i < buttonCount; ++i) {
             PADButtonMapping& mapping = mappings[i];
             if (!is_dpad_button(mapping.padButton)) {
@@ -937,7 +996,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             pane.add_text("A key bound to any action here will REPLACE the default control for"
                           " that action. Only bind buttons here that aren't used anywhere else.");
             for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
-                addActionBinding(&configVars->at(port), actionName);
+                if(actionContext == ActionBindContext::DUSK) {
+                    addActionBinding(&configVars->at(port), actionName);
+                }
             }
             break;
         }
@@ -978,7 +1039,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         };
 
         for (auto& [actionContext, actionType, configVars, actionName] : getActionBinds() | std::views::values) {
-            addActionBinding(&configVars->at(port), actionName);
+            if(actionContext == ActionBindContext::DUSK) {
+                addActionBinding(&configVars->at(port), actionName);
+            }
         }
         break;
     }

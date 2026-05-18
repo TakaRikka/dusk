@@ -128,6 +128,7 @@ void updateActionBindings() {
                 }
             }
         }
+        fprintf(stderr, "\rFirst Person Camera Pressed: %d", getActionBindHoldAnyPort(ActionBinds::FIRST_PERSON_CAMERA));
     }
 }
 
