@@ -139,6 +139,7 @@ static BOOL pl_check(e_yg_class* i_this, f32 i_dist) {
 #if TARGET_PC
 static void daE_YG_interp_callback(bool isSimFrame, void* pUserWork) {
     e_yg_class* i_this = (e_yg_class*)pUserWork;
+    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     if (!i_this->mTentacleInterpPrevValid || !i_this->mTentacleInterpCurrValid) {
         return;
     }
@@ -152,6 +153,13 @@ static void daE_YG_interp_callback(bool isSimFrame, void* pUserWork) {
             dst[i] = p0 + (p1 - p0) * alpha;
         }
     }
+    GXColor color;
+    color.r = JREG_S(0) + 20;
+    color.g = JREG_S(1) + 20;
+    color.b = JREG_S(2) + 20;
+    color.a = 0xFF;
+
+    i_this->mLineMat.update(10, color, &actor->tevStr);
 }
 #endif
 
