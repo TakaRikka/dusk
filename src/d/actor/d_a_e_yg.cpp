@@ -191,7 +191,7 @@ static int daE_YG_Draw(e_yg_class* i_this) {
     dComIfGd_set3DlineMatDark(&i_this->mLineMat);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         if (i_this->mTentacleInterpCurrValid) {
             memcpy(i_this->mTentacleInterpPrev, i_this->mTentacleInterpCurr, sizeof(i_this->mTentacleInterpCurr));
             i_this->mTentacleInterpPrevValid = true;

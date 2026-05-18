@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "settings.h"
 
 class camera_process_class;
 class view_class;
@@ -18,7 +19,7 @@ void begin_record();
 void end_record();
 void begin_sim_tick();
 uint64_t sim_tick_seq();
-void begin_frame(bool enabled, bool is_sim_frame, float step);
+void begin_frame(FrameInterpMode mode, bool is_sim_frame, float step);
 void interpolate();
 float get_interpolation_step();
 

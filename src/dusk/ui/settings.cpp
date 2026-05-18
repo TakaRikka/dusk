@@ -59,6 +59,12 @@ constexpr std::array kFpsOverlayCornerNames = {
     "Bottom Right",
 };
 
+constexpr std::array kInterpolationModes = {
+    "Off",
+    "Capped",
+    "Unlimited",
+};
+
 constexpr std::array kGyroInputModeLabels = {
     "Sensor",
     "Mouse",
@@ -351,13 +357,15 @@ const Rml::String kInternalResolutionHelpText =
 const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
+const Rml::String kResamplerHelpText =
+    "Configure the sampling method used when scaling the internal resolution for final presentation.";
 const Rml::String kBloomHelpText =
     "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
 const Rml::String kUnlockFramerateHelpText =
-    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
+    "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
 
 int float_setting_percent(ConfigVar<float>& var) {
@@ -432,6 +440,31 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
         .max = max,
         .step = step,
         .suffix = "%",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+SelectButton& config_int_select(Pane& leftPane, Pane& rightPane, ConfigVar<int>& var,
+    Rml::String key, Rml::String helpText, int min, int max, int step = 5,
+    std::function<bool()> isDisabled = {}, std::string suffix = "") {
+    auto& button = leftPane.add_child<NumberButton>(NumberButton::Props{
+        .key = std::move(key),
+        .getValue = [&var] { return var; },
+        .setValue =
+            [&var, min, max](int value) {
+                var.setValue(std::clamp(value, min, max));
+                config::Save();
+            },
+        .isDisabled = std::move(isDisabled),
+        .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+        .min = min,
+        .max = max,
+        .step = step,
+        .suffix = suffix,
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
@@ -774,6 +807,15 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 8,
                 .defaultValue = 1,
             }, mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+            GraphicsTunerProps{
+                .option = GraphicsOption::Resampler,
+                .title = "Output Resampling",
+                .helpText = kResamplerHelpText,
+                .valueMin = static_cast<int>(Resampler::Bilinear),
+                .valueMax = static_cast<int>(Resampler::Area),
+                .defaultValue = static_cast<int>(Resampler::Bilinear),
+            }, mPrelaunch);
 
         leftPane.add_section("Post-Processing");
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
@@ -803,11 +845,39 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Enable installed texture replacements.",
                 .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
-            {
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "Unlock Framerate",
-                .helpText = kUnlockFramerateHelpText,
+                .getValue =
+                    [] {
+                        return kInterpolationModes[static_cast<u8>(getSettings().game.enableFrameInterpolation.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.enableFrameInterpolation.getValue() !=
+                               getSettings().game.enableFrameInterpolation.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kInterpolationModes.size(); i++) {
+                    pane.add_button({
+                            .text = kInterpolationModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.enableFrameInterpolation.getValue() == static_cast<FrameInterpMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.enableFrameInterpolation.setValue(static_cast<FrameInterpMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml(kUnlockFramerateHelpText);
             });
+        config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
+            "Framerate Cap", "Limit the framerate to the specified value.", 30, 540, 1,
+            [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "Enable Depth of Field",
