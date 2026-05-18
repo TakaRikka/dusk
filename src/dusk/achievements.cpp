@@ -223,7 +223,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                         hasAncientDoc = true;
                     }
                 }
-                if (!hasJewelRod || !hasAncientDoc) {
+                if (!hasJewelRod || (!hasAncientDoc && !dComIfGs_isEventBit(dSv_event_flag_c::F_0302))) {
                     return;
                 }
 
