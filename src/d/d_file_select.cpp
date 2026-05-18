@@ -3789,13 +3789,51 @@ void dFile_select_c::fileSelectWide() {
     mCpSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mCpSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
-    mSelDt.ScrDt->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mSelDt.ScrDt->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mSelDt.ScrDt->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mSelDt.ScrDt->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mSelDt.ScrDt->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    // Equipment Icons/Slots
+    struct IconPaneCache {
+        u64 tag;
+        f32 origTransX;
+        bool cached;
+    };
+
+    static IconPaneCache s_Panes[] = {
+        {MULTI_CHAR('gray_n'), 0.0f, false},
+        {MULTI_CHAR('tate_n0'), 0.0f, false},
+        {MULTI_CHAR('tate_n1'), 0.0f, false},
+        {MULTI_CHAR('ken_n0'), 0.0f, false},
+        {MULTI_CHAR('ken_n1'), 0.0f, false},
+        {MULTI_CHAR('fuku_n0'), 0.0f, false},
+        {MULTI_CHAR('fuku_n1'), 0.0f, false},
+        {MULTI_CHAR('fuku_n2'), 0.0f, false},
+    };
+
+    constexpr f32 minAspect = 4.0f / 3.0f;
+    constexpr f32 maxAspect = 16.0f / 9.0 + 0.05f;
+    f32 screenAspect = mDoGph_gInf_c::getAspect();
+
+    // Pane holding Icons and slots escape the intended box at Ultrawide/Portrait due to non-linear
+    // stretching, so revert to default behavior
+    if (screenAspect >= minAspect && screenAspect <= maxAspect) { 
+        f32 gray_nScaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);
+        f32 gray_nShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (gray_nScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
+
+        for (IconPaneCache& entry : s_Panes) {
+            J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX(); // // Get pre-scale value
+                entry.cached = true;
+            }
+            pane->setBasePosition(J2DBasePosition_0);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f); // Scale Equipment Icons/Slots
+            if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
+                pane->translate(entry.origTransX * gray_nScaleFactor, pane->getTranslateY());  // Move
+            }
+            else { // Shift Items
+                pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + gray_nShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());  // Move
+
+            }
+        }
+    }
 
     // Spirals
     fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
