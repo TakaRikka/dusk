@@ -4140,7 +4140,7 @@ public:
     /* 0x02F8C */ u8 field_0x2f8c;
     /* 0x02F8D */ u8 mItemTrigger;
     /* 0x02F8E */ u8 mItemButton;
-    /* 0x02F8F */ u8 mLastItemButton;
+    /* 0x02F8F */ u8 field_2f8f;
     /* 0x02F90 */ u8 field_0x2f90;
     /* 0x02F91 */ u8 field_0x2f91;
     /* 0x02F92 */ u8 mLeftHandIndex;

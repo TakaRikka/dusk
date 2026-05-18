@@ -9387,7 +9387,7 @@ BOOL daAlink_c::itemActionTrigger() {
 
 void daAlink_c::setStickData() {
     BOOL var_r31 = false;
-    mLastItemButton = mItemButton;
+    field_2f8f = mItemButton;
     mItemTrigger = 0;
     mItemButton = 0;
     mHeavySpeedMultiplier = 1.0f;
@@ -9420,7 +9420,7 @@ void daAlink_c::setStickData() {
             } else {
                 mStickValue = 0.0f;
             }
-            mItemButton = mLastItemButton;
+            mItemButton = field_2f8f;
         } else {
             mStickValue = 0.0f;
         }
