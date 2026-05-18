@@ -573,6 +573,11 @@ void daAlink_c::setSwordComboVoice() {
 }
 
 bool daAlink_c::checkCutTurnInputTrigger() {
+    #if TARGET_PC
+    if (dusk::getSettings().game.spinAttackShortcut && mDoCPd_c::getHoldR(PAD_1)) {
+        return swordSwingTrigger();
+    }
+    #endif
     return swordSwingTrigger() && checkCutTurnInput();
 }
 

@@ -116,6 +116,7 @@ struct UserSettings {
         ConfigVar<GameLanguage> language;
 
         // QoL
+        ConfigVar<bool> spinAttackShortcut;sett
         ConfigVar<bool> enableQuickTransform;
         ConfigVar<bool> hideTvSettingsScreen;
         ConfigVar<bool> biggerWallets;

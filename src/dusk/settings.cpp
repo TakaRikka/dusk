@@ -28,6 +28,7 @@ UserSettings g_userSettings = {
         .language { "game.language", GameLanguage::English },
 
         // Quality of Life
+        .spinAttackShortcut {"game.spinAttackShortcut", false},
         .enableQuickTransform {"game.enableQuickTransform", false},
         .hideTvSettingsScreen {"game.hideTvSettingsScreen", true},
         .biggerWallets {"game.biggerWallets", false},
@@ -194,6 +195,7 @@ void registerSettings() {
 
     // Game
     Register(g_userSettings.game.language);
+    Register(g_userSettings.game.spinAttackShortcut);
     Register(g_userSettings.game.enableQuickTransform);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.biggerWallets);

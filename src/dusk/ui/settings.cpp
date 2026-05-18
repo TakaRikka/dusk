@@ -1136,6 +1136,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Hearts will never drop from enemies, pots, and various other places.");
 
         leftPane.add_section("Quality of Life");
+        addOption("Spin Attack Shortcut", getSettings().game.spinAttackShortcut, 
+        "Hold R and Attack to perform a Spin Attack without rotating the analog stick... RDB aura monster");
         addOption("Bigger Wallets", getSettings().game.biggerWallets,
             "Wallet sizes are like in the HD version. (500, 1000, 2000)");
         addOption("Disable Rupee Cutscenes", getSettings().game.disableRupeeCutscenes,
