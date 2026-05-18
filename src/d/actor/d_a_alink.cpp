@@ -11568,6 +11568,172 @@ int daAlink_c::checkNormalAction() {
         return 1;
     }
 
+
+// TODO: Rework All Button Statuses (conditionally based on if classical keybinds are enabled, to convey difference)
+#if TARGET_PC
+    if (doTrigger()) {
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_137) {
+            orderPeep();
+            return 1;
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_ENTER) {
+            if (checkWolf()) {
+                return procWolfLieStartInit(1);
+            } else {
+                return procCrawlStartInit();
+            }
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_GET_ON) {
+            if (fopAcM_GetName(field_0x27f4) == fpcNm_Obj_IceLeaf_e) {
+                return procBoardRideInit();
+            }
+
+            if (fopAcM_GetName(field_0x27f4) == fpcNm_CANOE_e) {
+                if (checkModeFlg(0x40000)) {
+                    return procCanoeRideInit();
+                } else {
+                    return procSmallJumpInit(1);
+                }
+            }
+
+            if (checkStageName("F_SP103") &&
+                fopAcIt_Judge((fopAcIt_JudgeFunc)daAlink_searchKolin, NULL))
+            {
+                return procWaitInit();
+            } else {
+                return procHorseRideInit();
+            }
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_OPEN) {
+            if (mAttList->mType == fopAc_attn_DOOR_e) {
+                if (!checkStageName("F_SP103") ||
+                    !fopAcIt_Judge((fopAcIt_JudgeFunc)daAlink_searchBouDoor, NULL))
+                {
+                    fopAcM_orderDoorEvent(this, field_0x27f4, 0, 0);
+                }
+                checkWaitAction();
+            } else {
+                fopAcM_orderTreasureEvent(this, field_0x27f4, 0, 0);
+            }
+
+            return 1;
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_PET) {
+            return procGoatStrokeInit();
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_HOWL) {
+            return procWolfHowlDemoInit();
+        }
+    }
+
+    if (VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_LIGHT, dusk::ActionBinds::BUTTON_A)) {
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_PICK_UP) {
+            return procWolfGrabUpInit();
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_PICK) {
+            return procGrassWhistleGetInit();
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_152) {
+            return procInsectCatchInit();
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_31 || dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_57 ||
+            dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_52)
+        {
+            if (checkWolf()) {
+                return procWolfGrabUpInit();
+            } else {
+                if (fopAcM_CheckCarryType(field_0x27f4, fopAcM_CARRY_ITEM)) {
+                    return procPickUpInit();
+                } else {
+                    return procGrabReadyInit();
+                }
+            }
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_SNIFF) {
+            return procWolfGetSmellInit();
+        }
+    }
+
+    if (VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) || VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A)) {
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_123) {
+            return procWolfChainReadyInit();
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_145) {
+            onNoResetFlg0(FLG0_UNK_10000000);
+
+            if (field_0x27f4->current.pos.abs2XZ(current.pos) < getGoatCatchDistance2()) {
+                if (checkWolf()) {
+                    return procWolfGanonCatchInit();
+                } else {
+                    return procGoatCatchInit(field_0x27f4, 0.0f);
+                }
+            }
+        }
+    }
+
+    if(rollTrigger()) {
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_ROLL) {
+            return procWolfPushInit();
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_32) {
+            if (checkWolf()) {
+                return procWolfHangReadyInit();
+            } else {
+                if (field_0x2f91 == 7) {
+                    return procHangWallCatchInit();
+                } else {
+                    return procHangReadyInit();
+                }
+            }
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_STRIKE) {
+            if (fopAcM_GetName(field_0x27f4) == fpcNm_Tag_Lv6Gate_e) {
+                static_cast<daTagLv6Gate_c*>(field_0x27f4)->stabMasterSword();
+            } else {
+                static_cast<daTag_KMsg_c*>(field_0x27f4)->stabMasterSword();
+            }
+
+            procWaitInit();
+            return 1;
+        }
+
+        if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_153) {
+            return procHangLeverDownInit();
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_FINISH) {
+            if (checkWolf()) {
+                return procWolfDownAttackInit();
+            } else {
+                return checkDoCutAction();
+            }
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_HELM_SPLITTER) {
+            if (checkWolf()) {
+                return procWolfJumpAttackInit(1);
+            } else {
+                return checkDoCutAction();
+            }
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_139) {
+            return procWolfJumpAttackInit(1);
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_DRAW) {
+            changeCutFast();
+            return 1;
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_134) {
+            return checkDoCutAction();
+        } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_147) {
+            return procWolfTagJumpInit(field_0x27f4);
+        }
+    }
+#else
     if (doTrigger()) {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_137) {
             orderPeep();
@@ -11714,7 +11880,9 @@ int daAlink_c::checkNormalAction() {
         } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_147) {
             return procWolfTagJumpInit(field_0x27f4);
         }
-    } else if (checkNoResetFlg0(FLG0_UNK_10000000) && dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_145) {
+    }
+#endif
+    else if (checkNoResetFlg0(FLG0_UNK_10000000) && dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_145) {
         if (field_0x27f4->current.pos.abs2XZ(current.pos) < getGoatCatchDistance2()) {
             if (checkWolf()) {
                 return procWolfGanonCatchInit();
