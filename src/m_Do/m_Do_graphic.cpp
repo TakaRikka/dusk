@@ -1527,15 +1527,27 @@ void mDoGph_gInf_c::bloom_c::draw2() {
             divNum++;
         }
 
+        // Originally mBlureSize would be used to set the sample spread. But since this is a blur pyramid,
+        // changing the sample spread introduces artifacts. Fortunately, we compute multiple levels of blur
+        // anyway through the downsampling and upsampling process. We can convert the spread to change
+        // the blend weight of later (wider blur) layers in the pyramid, producing the same effect
+        // but with some nice high-resolution hot spots.
+        // However, to match the original bloom intensity, we must also lower the brightness of the bloom
+        // as the bloom gets wider, otherwise the bloom becomes too bright.
+        float sizeFactor = std::clamp(static_cast<float>(mBlureSize) / 255.0f, 0.0f, 1.0f);
+        float ratioFactor = std::clamp(static_cast<float>(mBlureRatio) / 255.0f, 0.0f, 1.0f);
+        float densityFalloff = 1.0f / (1.0f + (sizeFactor * 1.5f));
+
         // The original mBlureRatio is multiplied into each sample, of which there are 8 samples originally.
         // This is applied over two passes, the second one with an alpha of 25%; however, the clipping that this introduces is a bit integral to the look,
         // so we do the same thing, letting it clip.
         float userMult = dusk::getSettings().game.bloomMultiplier.getValue();
-        float brightnessF32 = (mBlureRatio * userMult * 16.0f / 255.0f);
+        float brightnessF32 = (mBlureRatio * userMult * densityFalloff * 16.0f / 255.0f);
 
         // Distribute the brightness through the total number of passes.
         f32 totalNumPasses = (divNum - divStart + 1);
         float brightnessPerPass = 255.0f * powf(brightnessF32, 1.0f / totalNumPasses);
+        brightnessPerPass *= 1.0f + (static_cast<float>(mPoint) / 255.0f);
         GXSetTevColorS10(GX_TEVREG1, {0, 0, 0, s16(brightnessPerPass / 8)});
 
         for (int i = divStart; i < divNum; i++) {
@@ -1577,7 +1589,7 @@ void mDoGph_gInf_c::bloom_c::draw2() {
         // Normalize the per-pass decay so that after N passes, the total weight matches the baseline.
         int N = divNum - divStart;
         if (N <= 0) N = 1;
-        float D = std::clamp((f32)mBlureSize / 128.0f, 0.01f, 0.99f);
+        float D = 0.33f + ratioFactor * sizeFactor * 0.66f;
         float perPassDecay = powf(D, 4.0f / (f32)N);
         float alpha = std::clamp(255.0f * perPassDecay, 0.0f, 255.0f);
 
