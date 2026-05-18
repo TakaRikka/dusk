@@ -392,7 +392,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                if (daNpcF_chkEvtBit(0x1F9) && dComIfGs_getMaxLife() <= 15) {
+                if (daNpcF_chkEvtBit(0x1F9) && dComIfGs_getMaxLife() <= 19) {
                     a.progress = 1;
                 }
             },
