@@ -498,6 +498,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     }
                 }
             }
+            break;
         }
 
         u32 buttonCount = 0;
@@ -545,6 +546,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 }
             }
         }
+        break;
     }
     case Page::Triggers: {
         if (keyboard_active(port)) {

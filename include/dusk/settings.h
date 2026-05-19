@@ -233,7 +233,6 @@ struct UserSettings {
     // Arrays of size 4 for 4 ports
     struct {
         std::array<ActionBindConfigVar, 4> openDusklightMenu;
-        std::array<ActionBindConfigVar, 4> turboSpeedButton;
         std::array<ActionBindConfigVar, 4> menuUp;
         std::array<ActionBindConfigVar, 4> menuLeft;
         std::array<ActionBindConfigVar, 4> menuDown;
@@ -242,6 +241,8 @@ struct UserSettings {
         std::array<ActionBindConfigVar, 4> menuReject;
         std::array<ActionBindConfigVar, 4> menuX;
         std::array<ActionBindConfigVar, 4> menuY;
+        std::array<ActionBindConfigVar, 4> turboSpeedButton;
+        std::array<ActionBindConfigVar, 4> dusklightSpecial;
 
         std::array<ActionBindConfigVar, 4> swordAttack;
         std::array<ActionBindConfigVar, 4> quickSpin;
@@ -268,7 +269,6 @@ struct UserSettings {
         std::array<ActionBindConfigVar, 4> itemCycleNext;
         std::array<ActionBindConfigVar, 4> itemCyclePrev;
         std::array<ActionBindConfigVar, 4> grabAll;
-        std::array<ActionBindConfigVar, 4> dusklightSpecial;
 
         std::array<ActionBindConfigVar, 4> moveX;
         std::array<ActionBindConfigVar, 4> moveY;
