@@ -1501,14 +1501,14 @@ EditorWindow::EditorWindow() {
                 .getValue =
                     [] {
                         return std::popcount(static_cast<unsigned>(
-                            get_player_status_b()->mTransformLevelFlag & 0x7));
+                            get_player_status_b()->mTransformLevelFlag & 0xF));
                     },
                 .setValue =
                     [](int value) {
                         get_player_status_b()->mTransformLevelFlag =
                             static_cast<u8>((1u << value) - 1u);
                     },
-                .max = 3,
+                .max = 4,
             }),
             rightPane, {});
         leftPane.register_control(

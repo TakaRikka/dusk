@@ -88,6 +88,8 @@
   <entry key="OPEN_THE_FOLDER_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_REPLA">打开暮色之光存储设置、存档、<br/>日志、纹理替换和<br/>其他应用数据的文件夹。</entry>
   <entry key="NOTIFICATIONS">通知</entry>
   <entry key="OFF">关闭</entry>
+  <entry key="CAPPED">限制</entry>
+  <entry key="UNLIMITED">无限制</entry>
   <entry key="ALL">全部</entry>
   <entry key="SOME">部分</entry>
   <entry key="SELECT_ALL">全选</entry>
@@ -130,6 +132,8 @@
   <entry key="APPLY_CONFIGURED_DEAD_ZONES_TO_THE_STICKS_AND_ANALOG_TRIGGERS">将配置的死区应用到摇杆<br/>和模拟扳机。</entry>
   <entry key="EMULATE_TRIGGERS">模拟扳机键</entry>
   <entry key="TREAT_ANALOG_TRIGGER_MOVEMENT_AS_DIGITAL_L_AND_R_BUTTON_INPUT">将摇杆模拟触发视为<br/>L/R按键数字输入。</entry>
+  <entry key="RESTORE_DEFAULT_CONTROLS">恢复默认控制</entry>
+  <entry key="RESTORES_ALL_BINDING_CONFIGURATIONS_FOR_THE_CURRENTLY_SELECTED_DEVICE_TO_THEIR_DEFAULTS">将当前所选设备的所有按键绑定恢复为默认值。</entry>
   <entry key="NO_CONTROLLERS_DETECTED">未检测到控制器</entry>
   <entry key="D_PAD">十字键</entry>
   <entry key="NO_CONTROLLER_SELECTED">未选择控制器</entry>
@@ -470,8 +474,16 @@
   <entry key="GCI_FOLDER">GCI文件夹</entry>
   <entry key="CONFIGURE_THE_RESOLUTION_USED_FOR_RENDERING_THE_GAME_HIGHER_VALUES_ARE_MORE_DE">设置游戏渲染分辨率，数值越高对显卡性能要求越高。</entry>
   <entry key="CONFIGURE_THE_SHADOW_MAP_RESOLUTION_HIGHER_VALUES_IMPROVE_SHADOW_QUALITY_BUT">设置阴影贴图分辨率，数值越高阴影画质越好，<br/>但会增加显卡与内存占用。</entry>
+  <entry key="OUTPUT_RESAMPLING">输出重采样</entry>
+  <entry key="CONFIGURE_THE_SAMPLING_METHOD_USED_WHEN_SCALING_THE_INTERNAL_RESOLUTION_FOR_FINAL_PRESENTATION">设置将内部分辨率缩放到最终画面时使用的采样方式。</entry>
+  <entry key="BILINEAR">双线性</entry>
+  <entry key="AREA">区域</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO">设置后期泛光特效：经典模式为原版泛光，<br/>暮色之光模式采用更高画质泛光。</entry>
   <entry key="CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE">设置泛光强度，数值越高，高亮区域发光效果越强烈。</entry>
+  <entry key="USE_TEXTURE_PACK">使用纹理包</entry>
+  <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">启用已安装的纹理替换。</entry>
+  <entry key="FRAMERATE_CAP">帧率上限</entry>
+  <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">将帧率限制为指定数值。</entry>
   <entry key="USES_INTER_FRAME_INTERPOLATION_TO_ENABLE_HIGHER_FRAME_RATES_MAY_INTRODUCE_MINOR">启用帧间插值提升帧率，可能会出现轻微画面异常，<br/>或动画卡顿。</entry>
   <entry key="CONTROLLER_CONNECTED">手柄已连接</entry>
   <entry key="CONTROLLER_DISCONNECTED">手柄已断开连接</entry>

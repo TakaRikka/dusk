@@ -88,6 +88,8 @@
   <entry key="OPEN_THE_FOLDER_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_REPLA">Open the folder where Dusklight stores settings, saves, logs, texture replacements, and other app data.</entry>
   <entry key="NOTIFICATIONS">Notifications</entry>
   <entry key="OFF">Off</entry>
+  <entry key="CAPPED">Capped</entry>
+  <entry key="UNLIMITED">Unlimited</entry>
   <entry key="ALL">All</entry>
   <entry key="SOME">Some</entry>
   <entry key="SELECT_ALL">Select All</entry>
@@ -128,6 +130,8 @@
   <entry key="APPLY_CONFIGURED_DEAD_ZONES_TO_THE_STICKS_AND_ANALOG_TRIGGERS">Apply configured dead zones to the sticks and analog triggers.</entry>
   <entry key="EMULATE_TRIGGERS">Emulate Triggers</entry>
   <entry key="TREAT_ANALOG_TRIGGER_MOVEMENT_AS_DIGITAL_L_AND_R_BUTTON_INPUT">Treat analog trigger movement as digital L and R button input.</entry>
+  <entry key="RESTORE_DEFAULT_CONTROLS">Restore Default Controls</entry>
+  <entry key="RESTORES_ALL_BINDING_CONFIGURATIONS_FOR_THE_CURRENTLY_SELECTED_DEVICE_TO_THEIR_DEFAULTS">Restores all binding configurations for the currently selected device to their defaults.</entry>
   <entry key="NO_CONTROLLERS_DETECTED">No controllers detected</entry>
   <entry key="D_PAD">D-Pad</entry>
   <entry key="NO_CONTROLLER_SELECTED">No controller selected</entry>
@@ -468,8 +472,16 @@
   <entry key="GCI_FOLDER">GCI Folder</entry>
   <entry key="CONFIGURE_THE_RESOLUTION_USED_FOR_RENDERING_THE_GAME_HIGHER_VALUES_ARE_MORE_DE">Configure the resolution used for rendering the game. Higher values are more demanding on your graphics hardware.</entry>
   <entry key="CONFIGURE_THE_SHADOW_MAP_RESOLUTION_HIGHER_VALUES_IMPROVE_SHADOW_QUALITY_BUT">Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU and memory usage.</entry>
+  <entry key="OUTPUT_RESAMPLING">Output Resampling</entry>
+  <entry key="CONFIGURE_THE_SAMPLING_METHOD_USED_WHEN_SCALING_THE_INTERNAL_RESOLUTION_FOR_FINAL_PRESENTATION">Configure the sampling method used when scaling the internal resolution for final presentation.</entry>
+  <entry key="BILINEAR">Bilinear</entry>
+  <entry key="AREA">Area</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO">Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses a higher-quality bloom pass.</entry>
   <entry key="CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE">Configure bloom intensity. Higher values make bright areas glow more strongly.</entry>
+  <entry key="USE_TEXTURE_PACK">Use Texture Pack</entry>
+  <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">Enable installed texture replacements.</entry>
+  <entry key="FRAMERATE_CAP">Framerate Cap</entry>
+  <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">Limit the framerate to the specified value.</entry>
   <entry key="USES_INTER_FRAME_INTERPOLATION_TO_ENABLE_HIGHER_FRAME_RATES_MAY_INTRODUCE_MINOR">Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor visual artifacts or animation glitches.</entry>
   <entry key="CONTROLLER_CONNECTED">Controller connected</entry>
   <entry key="CONTROLLER_DISCONNECTED">Controller disconnected</entry>

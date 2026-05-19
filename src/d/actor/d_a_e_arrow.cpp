@@ -674,7 +674,29 @@ static int daE_ARROW_Create(fopAc_ac_c* i_this) {
     }
 
     int phase_state = dComIfG_resLoad(&a_this->mPhase, a_this->mResName);
+#if TARGET_PC
+    static int s_create_frames = 0;
+    static bool s_first_arrow = true;
+    static fpc_ProcID s_last_scene_id = 0;
+
+    s_create_frames++;
+    fpc_ProcID cur_scene_id = dStage_roomControl_c::getProcID();
+
+    if (cur_scene_id != s_last_scene_id) {
+        s_first_arrow = true;
+        s_last_scene_id = cur_scene_id;
+    }
+
+    if (phase_state == cPhs_COMPLEATE_e && s_first_arrow && s_create_frames < 4) {
+        return cPhs_INIT_e;
+    }
+#endif
     if (phase_state == cPhs_COMPLEATE_e) {
+#if TARGET_PC
+        s_create_frames = 0;
+        s_first_arrow = false;
+#endif
+
         a_this->mArrowType = fopAcM_GetParam(a_this) & 0xF;
         a_this->mFlags = fopAcM_GetParam(a_this) & 0xF0;
 

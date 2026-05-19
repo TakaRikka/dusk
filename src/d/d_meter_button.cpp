@@ -18,6 +18,9 @@
 #include "d/d_pane_class.h"
 #include "dusk/frame_interpolation.h"
 #include <cstring>
+#if TARGET_PC
+#include "dusk/string.hpp"
+#endif
 
 #if VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528

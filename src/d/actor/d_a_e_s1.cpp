@@ -117,6 +117,13 @@ static void daE_S1_interp_callback(bool isSimFrame, void* pUserWork) {
             dst[i] = p0 + (p1 - p0) * alpha;
         }
     }
+    GXColor line_color;
+    line_color.r = JREG_S(0) + 5;
+    line_color.g = JREG_S(1) + 10;
+    line_color.b = JREG_S(2) + 10;
+    line_color.a = 0xFF;
+
+    i_this->mLineMat.update(16, line_color, &i_this->tevStr);
 }
 #endif
 
@@ -154,7 +161,7 @@ static int daE_S1_Draw(e_s1_class* i_this) {
     dComIfGd_set3DlineMatDark(&i_this->mLineMat);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         if (i_this->mHairInterpCurrValid) {
             memcpy(i_this->mHairInterpPrev, i_this->mHairInterpCurr, sizeof(i_this->mHairInterpCurr));
             i_this->mHairInterpPrevValid = true;

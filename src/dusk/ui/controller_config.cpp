@@ -349,7 +349,14 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
         rightPane, [](Pane& pane) {
             pane.add_text("[TREAT_ANALOG_TRIGGER_MOVEMENT_AS_DIGITAL_L_AND_R_BUTTON_INPUT]");
         });
-
+    leftPane.register_control(leftPane.add_button("[RESTORE_DEFAULT_CONTROLS]").on_pressed([this, port] {
+            mDoAud_seStartMenu(kSoundClick);
+            PADRestoreDefaultMapping(port);
+        }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("[RESTORES_ALL_BINDING_CONFIGURATIONS_FOR_THE_CURRENTLY_SELECTED_DEVICE_TO_THEIR_DEFAULTS]");
+        });
     render_page(rightPane, port, mPage);
 }
 
@@ -365,7 +372,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
             })
             .on_pressed([this, port] {
-                mDoAud_seStartMenu(kSoundItemChange);
+                mDoAud_seStartMenu(kSoundClick);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
@@ -378,7 +385,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             .isSelected = [port] { return keyboard_active(port); },
                         })
             .on_pressed([this, port] {
-                mDoAud_seStartMenu(kSoundItemChange);
+                mDoAud_seStartMenu(kSoundClick);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
@@ -400,7 +407,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             [port, i] { return PADGetIndexForPort(port) == static_cast<s32>(i); },
                     })
                 .on_pressed([this, port, i] {
-                    mDoAud_seStartMenu(kSoundItemChange);
+                    mDoAud_seStartMenu(kSoundClick);
                     cancel_pending_binding();
                     PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                     PADSetPortForIndex(i, port);
@@ -436,6 +443,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, button] {
+                        mDoAud_seStartMenu(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -486,6 +494,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                            },
                                    })
                 .on_pressed([this, port, &mapping] {
+                    mDoAud_seStartMenu(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -512,6 +521,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                            },
                                    })
                 .on_pressed([this, port, &mapping] {
+                    mDoAud_seStartMenu(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -546,6 +556,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, button] {
+                        mDoAud_seStartMenu(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -577,6 +588,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, axis] {
+                        mDoAud_seStartMenu(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -623,6 +635,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                                },
                                        })
                     .on_pressed([this, port, &mapping] {
+                        mDoAud_seStartMenu(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -631,30 +644,33 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             }
         }
 
-        pane.add_section("[DIGITAL]");
-        if (buttons != nullptr) {
-            for (u32 i = 0; i < buttonCount; ++i) {
-                PADButtonMapping& mapping = buttons[i];
-                if (mapping.padButton != PAD_TRIGGER_L && mapping.padButton != PAD_TRIGGER_R) {
-                    continue;
+        if (getSettings().backend.enableAdvancedSettings) {
+            pane.add_section("[DIGITAL]");
+            if (buttons != nullptr) {
+                for (u32 i = 0; i < buttonCount; ++i) {
+                    PADButtonMapping& mapping = buttons[i];
+                    if (mapping.padButton != PAD_TRIGGER_L && mapping.padButton != PAD_TRIGGER_R) {
+                        continue;
+                    }
+                    pane.add_select_button({
+                                               .key = PADGetButtonName(mapping.padButton),
+                                               .getValue =
+                                                   [this, &mapping, gamepad] {
+                                                       if (mPendingButtonMapping == &mapping) {
+                                                           return pending_button_label();
+                                                       }
+                                                       return native_button_name(
+                                                           gamepad, mapping.nativeButton);
+                                                   },
+                                           })
+                        .on_pressed([this, port, &mapping] {
+                            mDoAud_seStartMenu(kSoundClick);
+                            cancel_pending_binding();
+                            mPendingPort = port;
+                            mPendingBindingArmed = false;
+                            mPendingButtonMapping = &mapping;
+                        });
                 }
-                pane.add_select_button({
-                                           .key = PADGetButtonName(mapping.padButton),
-                                           .getValue =
-                                               [this, &mapping, gamepad] {
-                                                   if (mPendingButtonMapping == &mapping) {
-                                                       return pending_button_label();
-                                                   }
-                                                   return native_button_name(
-                                                       gamepad, mapping.nativeButton);
-                                               },
-                                       })
-                    .on_pressed([this, port, &mapping] {
-                        cancel_pending_binding();
-                        mPendingPort = port;
-                        mPendingBindingArmed = false;
-                        mPendingButtonMapping = &mapping;
-                    });
             }
         }
 
@@ -717,6 +733,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, axis] {
+                        mDoAud_seStartMenu(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -762,6 +779,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                            },
                                    })
                 .on_pressed([this, port, &mapping] {
+                    mDoAud_seStartMenu(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -907,6 +925,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, actionBind] {
+                        mDoAud_seStartMenu(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -946,6 +965,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                },
                        })
                 .on_pressed([this, port, actionBind] {
+                    mDoAud_seStartMenu(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -1009,6 +1029,12 @@ void ControllerConfigWindow::poll_pending_binding() {
         const s32 nativeButton = PADGetNativeButtonPressed(mPendingPort);
         if (nativeButton != -1) {
             const int completedPort = mPendingPort;
+            if (mPendingButtonMapping->nativeButton == static_cast<u32>(nativeButton) &&
+                (mPendingButtonMapping->padButton != PAD_BUTTON_A &&
+                 mPendingButtonMapping->padButton != PAD_BUTTON_B)) {
+                unmap_pending_binding();
+                return;
+            }
             mPendingButtonMapping->nativeButton = static_cast<u32>(nativeButton);
             finish_pending_binding(completedPort);
         }
@@ -1019,6 +1045,10 @@ void ControllerConfigWindow::poll_pending_binding() {
         const PADSignedNativeAxis nativeAxis = PADGetNativeAxisPulled(mPendingPort);
         if (nativeAxis.nativeAxis != -1) {
             const int completedPort = mPendingPort;
+            if (mPendingAxisMapping->nativeAxis.nativeAxis == nativeAxis.nativeAxis) {
+                unmap_pending_binding();
+                return;
+            }
             mPendingAxisMapping->nativeAxis = nativeAxis;
             mPendingAxisMapping->nativeButton = -1;
             finish_pending_binding(completedPort);
@@ -1045,6 +1075,10 @@ void ControllerConfigWindow::poll_pending_binding() {
 
         if (button != -1) {
             const int completedPort = mPendingPort;
+            if (mPendingActionBinding->getValue() == button) {
+                unmap_pending_binding();
+                return;
+            }
             mPendingActionBinding->setValue(button);
             config::Save();
             finish_pending_binding(completedPort);
@@ -1054,6 +1088,7 @@ void ControllerConfigWindow::poll_pending_binding() {
 }
 
 void ControllerConfigWindow::finish_pending_binding(int completedPort) {
+    mDoAud_seStartMenu(kSoundBindingChanged);
     mPendingButtonMapping = nullptr;
     mPendingAxisMapping = nullptr;
     mPendingActionBinding = nullptr;
