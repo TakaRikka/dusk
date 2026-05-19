@@ -11913,20 +11913,20 @@ BOOL daAlink_c::rollTrigger() const {
 }
 
 BOOL daAlink_c::checkMoveDoAction() {
-    if (rollTrigger()) {
-        if (dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
-            if (checkWolf()) {
-                return procWolfSideStepInit(0);
-            }
-
-            int direction = getDirectionFromShapeAngle();
-            if (field_0x2fb0 != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
-                return true;
-            }
-
-            return procSideStepInit(direction);
+    if (doTrigger() && dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
+        if (checkWolf()) {
+            return procWolfSideStepInit(0);
         }
 
+        int direction = getDirectionFromShapeAngle();
+        if (field_0x2fb0 != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
+            return true;
+        }
+
+        return procSideStepInit(direction);
+    }
+
+    if (rollTrigger()) {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_121) {
             if (!checkAttentionLock() && checkInputOnR()) {
                 shape_angle.y = mMoveAngle;
