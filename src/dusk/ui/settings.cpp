@@ -98,6 +98,12 @@ constexpr std::array kGyroInputModeLabels = {
     "[MOUSE]",
 };
 
+constexpr std::array kInterpolationModes = {
+    "[OFF]",
+    "[CAPPED]",
+    "[UNLIMITED]",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -853,10 +859,44 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }, mPrelaunch);
 
         leftPane.add_section("[RENDERING]");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
-            {
+        leftPane.register_control(
+            leftPane.add_select_button({
                 .key = "[UNLOCK_FRAMERATE]",
-                .helpText = kUnlockFramerateHelpText,
+                .getValue =
+                    [] {
+                        return kInterpolationModes[static_cast<u8>(
+                            getSettings().game.enableFrameInterpolation.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.enableFrameInterpolation.getValue() !=
+                               getSettings().game.enableFrameInterpolation.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kInterpolationModes.size(); i++) {
+                    pane.add_button({
+                            .text = kInterpolationModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.enableFrameInterpolation.getValue() ==
+                                           static_cast<FrameInterpMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.enableFrameInterpolation.setValue(
+                                static_cast<FrameInterpMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml(kUnlockFramerateHelpText);
+            });
+        config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
+            "[FRAMERATE_CAP]", "[LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE]", 30, 540, 1,
+            [] {
+                return getSettings().game.enableFrameInterpolation.getValue() !=
+                       FrameInterpMode::Capped;
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
