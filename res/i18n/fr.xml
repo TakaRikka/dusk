@@ -72,6 +72,7 @@
   <entry key="SET_THE_DISC_IMAGE_THAT_DUSKLIGHT_USES_TO_LAUNCH_THE_GAME_CHANGES_REQUIR">Set the disc image that Dusklight uses to launch the game.<br/><br/>Changes require a restart.</entry>
   <entry key="DATA_FOLDER">Data Folder</entry>
   <entry key="THE_DATA_FOLDER_IS_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_RE">The data folder is where Dusklight stores settings, saves, logs, texture replacements, and other app data.</entry>
+  <entry key="USE_TEXTURE_PACK">Use Texture Pack</entry>
   <entry key="OPEN_DATA_FOLDER">Open Data Folder</entry>
   <entry key="OUTPUT_RESAMPLING">Output Resampling</entry>
   <entry key="CHANGE_DATA_FOLDER">Change Data Folder</entry>
@@ -87,6 +88,7 @@
   <entry key="GRAPHICS_BACKEND">Graphics Backend</entry>
   <entry key="SAVE_FILE_TYPE">Save File Type</entry>
   <entry key="OPEN_THE_FOLDER_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_REPLA">Open the folder where Dusklight stores settings, saves, logs, texture replacements, and other app data.</entry>
+  <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">Enable installed texture replacements.</entry>
   <entry key="NOTIFICATIONS">Notifications</entry>
   <entry key="OFF">Off</entry>
   <entry key="ALL">All</entry>

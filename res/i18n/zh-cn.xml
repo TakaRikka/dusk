@@ -72,6 +72,7 @@
   <entry key="SET_THE_DISC_IMAGE_THAT_DUSKLIGHT_USES_TO_LAUNCH_THE_GAME_CHANGES_REQUIR">设置暮色之光用于启动游戏的光盘镜像。<br/>更改需要重启。</entry>
   <entry key="DATA_FOLDER">数据文件夹</entry>
   <entry key="THE_DATA_FOLDER_IS_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_RE">数据文件夹是暮色之光存储设置、<br/>存档、日志、纹理替换<br/>和其他应用数据的地方。</entry>
+  <entry key="USE_TEXTURE_PACK">使用纹理包</entry>
   <entry key="OPEN_DATA_FOLDER">打开数据文件夹</entry>
   <entry key="OUTPUT_RESAMPLING">输出重采样</entry>
   <entry key="CHANGE_DATA_FOLDER">更改数据文件夹</entry>
@@ -87,6 +88,7 @@
   <entry key="GRAPHICS_BACKEND">图形后端</entry>
   <entry key="SAVE_FILE_TYPE">存档文件类型</entry>
   <entry key="OPEN_THE_FOLDER_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_REPLA">打开暮色之光存储设置、存档、<br/>日志、纹理替换和<br/>其他应用数据的文件夹。</entry>
+  <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">启用已安装的纹理替换。</entry>
   <entry key="NOTIFICATIONS">通知</entry>
   <entry key="OFF">关闭</entry>
   <entry key="ALL">全部</entry>
