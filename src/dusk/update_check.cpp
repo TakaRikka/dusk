@@ -1,5 +1,6 @@
 #include "update_check.hpp"
 
+#include "aurora/lib/logging.hpp"
 #include "dusk/http/http.hpp"
 #include "fmt/format.h"
 #include "nlohmann/json.hpp"
@@ -14,6 +15,8 @@
 
 namespace dusk::update_check {
 namespace {
+
+aurora::Module UpdateCheckLog{"dusk::update_check"};
 
 using json = nlohmann::json;
 
@@ -346,6 +349,18 @@ Result check_latest_github_release(std::string_view owner, std::string_view repo
         .message = updateAvailable ? "Update available" : "Dusklight is up to date",
         .latest = std::move(latest),
     };
+}
+
+std::optional<Asset> get_platform_asset(const Release& release) {
+    for (const auto& asset : release.assets) {
+        UpdateCheckLog.info("Asset link: {}", asset.name);
+
+        if (asset.name.find(DUSKLIGHT_PLATFORM_ID) != std::string::npos) {
+            return asset; // Found it
+        }
+    }
+
+    return std::nullopt; // Nothing matched our platform
 }
 
 }  // namespace dusk::update_check

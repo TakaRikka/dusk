@@ -262,6 +262,10 @@ std::string update_release_label(const update_check::Release& release) {
     return std::string(tagName);
 }
 
+void download_update(Modal& modal) {
+    
+}
+
 void open_update_release() {
     if (!sUpdateCheckResult.has_value() ||
         sUpdateCheckResult->status != update_check::Status::UpdateAvailable)
@@ -269,14 +273,38 @@ void open_update_release() {
         return;
     }
 
-    const std::string url = sUpdateCheckResult->latest.htmlUrl;
-    if (url.empty()) {
-        PrelaunchLog.warn("Update is available, but the release did not include a download URL");
-        return;
+    std::string updateTag = sUpdateCheckResult->latest.tagName;
+    std::string msg = std::format(
+        "Do you want to download and update to {}? Dusklight will close and restart.", 
+        updateTag
+    );
+
+
+    push_document(std::make_unique<Modal>(Modal::Props{
+        .title = "Updater",
+        .bodyRml = escape(msg),
+        .actions =
+            {
+                ModalAction{
+                    .label = "YES",
+                    .onPressed = download_update,
+                },
+            },
+        .onDismiss = download_update,
+        .icon = "info",
+    }));
+    if (auto* doc = top_document()) {
+        doc->focus();
     }
-    if (!SDL_OpenURL(url.c_str())) {
-        PrelaunchLog.warn("Failed to open update URL '{}': {}", url, SDL_GetError());
-    }
+
+    // const std::string url = sUpdateCheckResult->latest.htmlUrl;
+    // if (url.empty()) {
+    //     PrelaunchLog.warn("Update is available, but the release did not include a download URL");
+    //     return;
+    // }
+    // if (!SDL_OpenURL(url.c_str())) {
+    //     PrelaunchLog.warn("Failed to open update URL '{}': {}", url, SDL_GetError());
+    // }
 }
 
 std::string get_error_msg(iso::ValidationError error) {
@@ -897,6 +925,14 @@ void Prelaunch::update() {
                 PrelaunchLog.error("Failed to check for updates: {}", result->message);
             }
             sUpdateCheckResult = std::move(*result);
+
+            std::optional<update_check::Asset> correctAsset = update_check::get_platform_asset(sUpdateCheckResult->latest);
+            
+            if (correctAsset.has_value()) {
+                PrelaunchLog.info("Platform asset download: {}", correctAsset->browserDownloadUrl);
+            } else {
+                PrelaunchLog.info("Could not find correct Asset for Platform ID \"{}\"", update_check::DUSKLIGHT_PLATFORM_ID);
+            }
         }
 
         if (sUpdateCheckTask != nullptr) {

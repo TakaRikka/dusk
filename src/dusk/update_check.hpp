@@ -4,6 +4,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include "version.h"
 
 namespace dusk::update_check {
 
@@ -35,6 +36,9 @@ struct Result {
 };
 
 Result check_latest_github_release(std::string_view owner, std::string_view repo);
+inline const std::string DUSKLIGHT_PLATFORM_ID = DUSK_PLATFORM_ID;
+
+std::optional<Asset> get_platform_asset(const Release& release);
 
 }  // namespace dusk::update_check
 
