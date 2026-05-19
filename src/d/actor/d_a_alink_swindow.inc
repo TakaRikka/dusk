@@ -11,6 +11,29 @@ static int daAlink_modelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_headModelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_wolfModelCallBack(J3DJoint* i_joint, int param_1);
 
+#if TARGET_PC
+void daAlink_c::setArcName(BOOL i_isWolf) {
+    if (i_isWolf) {
+        mArcName = l_wArcName;
+    } else {
+        if (dusk::getSettings().game.modelOverride.getValue() == 0) {
+            if (checkCasualWearFlg()) {
+                mArcName = l_bArcName;
+            } else if (checkZoraWearFlg()) {
+                mArcName = l_zArcName;
+            } else if (checkMagicArmorWearFlg()) {
+                mArcName = l_mArcName;
+            } else {
+                mArcName = l_kArcName;
+            }
+        } else {
+            int modelOverride = dusk::getSettings().game.modelOverride.getValue();
+            auto modelConfig = sLinkModelLUT[modelOverride];
+            mArcName = modelConfig.arcName;
+        }
+    }
+}
+#else
 void daAlink_c::setArcName(BOOL i_isWolf) {
     if (i_isWolf) {
         mArcName = l_wArcName;
@@ -24,6 +47,8 @@ void daAlink_c::setArcName(BOOL i_isWolf) {
         mArcName = l_kArcName;
     }
 }
+#endif
+
 
 void daAlink_c::setShieldArcName() {
     if (checkCarvingWoodShieldEquip() || !checkShieldGet()) {

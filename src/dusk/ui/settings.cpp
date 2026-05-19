@@ -29,6 +29,8 @@
 #include <SDL3/SDL_filesystem.h>
 #include <fmt/format.h>
 
+#include "d/actor/d_a_alink.h"
+
 #if DUSK_ENABLE_SENTRY_NATIVE
 #include "dusk/crash_reporting.h"
 #endif
@@ -63,6 +65,14 @@ constexpr std::array kInterpolationModes = {
     "Off",
     "Capped",
     "Unlimited",
+};
+
+constexpr std::array kModelOverrides = {
+    "Off",
+    "Casual",
+    "Zora",
+    "Magic Armor",
+    "Kokiri"
 };
 
 constexpr std::array kGyroInputModeLabels = {
@@ -367,6 +377,8 @@ const Rml::String kBloomBrightnessHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
+const Rml::String kOverrideModelHelpText =
+    "<br/>Overrides Links model with the selected one.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -1233,6 +1245,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
         addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
             "Item drops such as rupees and hearts will never disappear after they drop.");
+        addCheat("Infinite Epona Dashes", getSettings().game.infiniteEpona, "Keeps Epona's dash meter full.");
 
         leftPane.add_section("Abilities");
         addCheat(
@@ -1253,6 +1266,44 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
+
+        leftPane.add_section("Visual");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Model Override",
+                .getValue =
+                    [] {
+                        return kModelOverrides[static_cast<u8>(getSettings().game.modelOverride.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.modelOverride.getValue() !=
+                               getSettings().game.modelOverride.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kModelOverrides.size(); i++) {
+                    pane.add_button({
+                            .text = kModelOverrides[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.modelOverride.getValue() == i;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.modelOverride.setValue(i);
+
+                            daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
+
+                            if (player != nullptr) {
+                                player->setClothesChange(0);
+                            }
+                            config::Save();
+                        });
+                }
+                pane.add_rml(kOverrideModelHelpText);
+            });
     });
 
     add_tab("Interface", [this](Rml::Element* content) {

@@ -111,6 +111,8 @@ UserSettings g_userSettings = {
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
         .invincibleEnemies {"game.invincibleEnemies", false},
+        .infiniteEpona {"game.infiniteEpona", false},
+        .modelOverride {"game.modelOverride", 0},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -276,6 +278,8 @@ void registerSettings() {
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);
     Register(g_userSettings.game.allowBackgroundInput);
+    Register(g_userSettings.game.infiniteEpona);
+    Register(g_userSettings.game.modelOverride);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);

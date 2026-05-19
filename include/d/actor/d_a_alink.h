@@ -4555,6 +4555,29 @@ public:
 
     void onIronBallChainInterpCallback();
 
+    struct LinkModelConfig {
+        bool useCreateFunc;      // Uses mDoExt_J3DModel__create instead of initModel
+
+        // Filenames (nullptr if using ID)
+        const char* arcName;
+        const char* modelFile;
+        const char* hatFile;
+        const char* handFile;
+
+        int modelId;
+        int hatId;
+        int handId;
+
+        u32 modelFlag;
+        u32 modelDifferedFlags;
+        u32 hatDifferedFlags;
+        u32 handDifferedFlags;
+
+        void (*preInit)(daAlink_c* context);       // Optional callback for specialized logic
+        void (*postInit)(daAlink_c* context);       // Optional callback for specialized logic
+    };
+    void loadModel(const LinkModelConfig& modelConfig, JKRHeap* heap);
+
     static const int IRON_BALL_CHAIN_COUNT = 102;
     cXyz mIBChainInterpPrevPos[IRON_BALL_CHAIN_COUNT];
     cXyz mIBChainInterpCurrPos[IRON_BALL_CHAIN_COUNT];
