@@ -101,6 +101,8 @@
   <entry key="SHOW_AN_OVERLAY_WHEN_SHADERS_ARE_BEING_COMPILED_FOR_YOUR_HARDWARE">Show an overlay when shaders are being compiled for your hardware.</entry>
   <entry key="CHECK_FOR_UPDATES">Check for Updates</entry>
   <entry key="CHECKS_GITHUB_RELEASES_FOR_A_NEW_DUSKLIGHT_VERSION_ON_STARTUP_NO_PERSONA">Checks GitHub releases for a new Dusklight version on startup.<br/><br/>No personal information is transmitted or collected.</entry>
+  <entry key="CHINESE_NAME_KEYBOARD">Chinese Name Keyboard</entry>
+  <entry key="REPLACES_THE_NAME_ENTRY_KEYBOARD_WITH_COMMON_CHINESE_CHARACTERS">Replaces the in-game name entry keyboard with common Chinese characters. Use this with disc images that include a Chinese game font.</entry>
   <entry key="NO_CONTROLLER_ASSIGNED">No controller assigned</entry>
   <entry key="CONFIGURE_CONTROLLER_PORT_1_IN_SETTINGS">Configure controller port 1 in Settings.</entry>
   <entry key="THREE_FINGER_TAP_OR">3-finger tap or</entry>

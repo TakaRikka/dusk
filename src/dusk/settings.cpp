@@ -54,6 +54,7 @@ UserSettings g_userSettings = {
         .enableAchievementToasts {"game.enableAchievementToasts", true},
         .enableControllerToasts {"game.enableControllerToasts", true},
         .enableDiscordPresence {"game.enableDiscordPresence", true},
+        .enableChineseNameKeyboard {"game.enableChineseNameKeyboard", false},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
@@ -238,6 +239,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.enableAchievementToasts);
     Register(g_userSettings.game.enableControllerToasts);
+    Register(g_userSettings.game.enableChineseNameKeyboard);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);

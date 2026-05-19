@@ -961,7 +961,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("[TURBO_KEY]", getSettings().game.enableTurboKeybind,
             "[HOLD_TAB_TO_INCREASE_GAME_SPEED_BY_UP_TO_4X]",
             [] { return getSettings().game.speedrunMode; });
-        addOption("[RESET_KEY] " + Rml::String{hotkeys::DO_RESET} + ")",
+        addOption(Rml::String{"[RESET_KEY] ("} + Rml::String{hotkeys::DO_RESET} + ")",
             getSettings().game.enableResetKeybind,
             "[PRESS] " + Rml::String{hotkeys::DO_RESET} + " [TO_RESET_THE_GAME]");
     });
@@ -1397,6 +1397,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
 
         leftPane.add_section("[GAME]");
+        config_bool_select(leftPane, rightPane, getSettings().game.enableChineseNameKeyboard,
+            {
+                .key = "[CHINESE_NAME_KEYBOARD]",
+                .helpText = "[REPLACES_THE_NAME_ENTRY_KEYBOARD_WITH_COMMON_CHINESE_CHARACTERS]",
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "[SKIP_TV_SETTINGS_SCREEN]",
