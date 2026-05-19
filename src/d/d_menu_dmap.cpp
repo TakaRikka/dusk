@@ -943,7 +943,11 @@ void dMenu_DmapBg_c::draw() {
         mpBackTexture->setBlackWhite(color_black, color_white);
         mpBackTexture->draw(local_28c, field_0xd94 + mpBackTexture->getBounds().i.y, mpBackTexture->getWidth(),
                             mpBackTexture->getHeight(),
+                            #if TARGET_PC
                             IF_DUSK(dusk::getSettings().game.enableMirrorMode ? true :) false,
+                            #else 
+                            false,
+                            #endif
                             false,
                             false);
 
