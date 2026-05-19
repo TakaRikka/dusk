@@ -3789,57 +3789,78 @@ void dFile_select_c::fileSelectWide() {
     mCpSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mCpSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
-    // Equipment Icons/Slots
-    struct IconPaneCache {
-        u64 tag;
-        f32 origTransX;
-        bool cached;
-    };
+    #if TARGET_PC
+        // Equipment Icons/Slots
+        struct IconPaneCache {
+            u64 tag;
+            f32 origTransX;
+            bool cached;
+        };
 
-    static IconPaneCache s_Panes[] = {
-        {MULTI_CHAR('gray_n'), 0.0f, false},
-        {MULTI_CHAR('tate_n0'), 0.0f, false},
-        {MULTI_CHAR('tate_n1'), 0.0f, false},
-        {MULTI_CHAR('ken_n0'), 0.0f, false},
-        {MULTI_CHAR('ken_n1'), 0.0f, false},
-        {MULTI_CHAR('fuku_n0'), 0.0f, false},
-        {MULTI_CHAR('fuku_n1'), 0.0f, false},
-        {MULTI_CHAR('fuku_n2'), 0.0f, false},
-    };
+        static IconPaneCache s_Panes[] = {
+            {MULTI_CHAR('gray_n'), 0.0f, false},
+            {MULTI_CHAR('tate_n0'), 0.0f, false},
+            {MULTI_CHAR('tate_n1'), 0.0f, false},
+            {MULTI_CHAR('ken_n0'), 0.0f, false},
+            {MULTI_CHAR('ken_n1'), 0.0f, false},
+            {MULTI_CHAR('fuku_n0'), 0.0f, false},
+            {MULTI_CHAR('fuku_n1'), 0.0f, false},
+            {MULTI_CHAR('fuku_n2'), 0.0f, false},
+        };
 
-    constexpr f32 minAspect = 4.0f / 3.0f;
-    constexpr f32 maxAspect = 16.0f / 9.0f + 0.05f;
-    const f32 screenAspect = mDoGph_gInf_c::getAspect();
-    const f32 gray_nScaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);
-    const f32 gray_nShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (gray_nScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
+        constexpr f32 minAspect = 4.0f / 3.0f;
+        constexpr f32 wideAspect = 16.0f / 9.0f + 0.05f;
+        constexpr f32 ultraAspect = 21.0f / 9.0f + 0.05f;
+        const f32 screenAspect = mDoGph_gInf_c::getAspect();
 
-    for (IconPaneCache& entry : s_Panes) {
-        J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
-        if (!entry.cached) {
-            entry.origTransX = pane->getTranslateX(); // Get pre-scale value
-            entry.cached = true;
-        }
-        // Pane holding icons and slots escape the intended box at Ultrawide/Portrait due to
-        // non-linear stretching, so revert to default behavior
-        if (screenAspect >= minAspect && screenAspect <= maxAspect) {
-            pane->setBasePosition(J2DBasePosition_0);
-            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-            if (entry.tag == MULTI_CHAR('gray_n')) {
-                pane->translate(entry.origTransX * gray_nScaleFactor, pane->getTranslateY());
-            } else {
-                pane->translate(
-                    mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + gray_nShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
+        const f32 wideScaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);
+        const f32 ultraScaleFactor = 1.0f + 0.115f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);
+
+        const f32 wideShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (wideScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
+        const f32 ultraShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (ultraScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
+
+        for (IconPaneCache& entry : s_Panes) {
+            J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX(); // Get pre-scale value
+                entry.cached = true;
             }
-        } else { // Default behavior
-            pane->setBasePosition(J2DBasePosition_4);
-            pane->translate(entry.origTransX, pane->getTranslateY());
-            if (entry.tag == MULTI_CHAR('gray_n')) {
-                pane->scale(1.0f, 1.0f);
-            } else {
+            if (screenAspect >= minAspect && screenAspect <= wideAspect) { // Handle widescreen
+                pane->setBasePosition(J2DBasePosition_0);
                 pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+                if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
+                    pane->translate(entry.origTransX * wideScaleFactor, pane->getTranslateY());
+                } else { // Icons
+                    pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + wideShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
+                }
+            } else if (screenAspect >= minAspect && screenAspect <= ultraAspect) { // Handle ultrawide
+                pane->setBasePosition(J2DBasePosition_0);
+                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+                if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
+                    pane->translate(entry.origTransX * ultraScaleFactor, pane->getTranslateY());
+                } else { // Icons
+                    pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + ultraShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
+                }
+            }
+            else { // 4:3/default behavior
+                pane->setBasePosition(J2DBasePosition_4);
+                pane->translate(entry.origTransX, pane->getTranslateY());
+                if (entry.tag == MULTI_CHAR('gray_n')) {
+                    pane->scale(1.0f, 1.0f); // Slots
+                } else { // Icons
+                    pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+                }
             }
         }
-    }
+    #else
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    #endif
 
     // Spirals
     fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
