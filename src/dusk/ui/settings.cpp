@@ -1008,11 +1008,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
 
         leftPane.add_section("Tools");
+        addOption("Enable Experimental Keybinds", getSettings().game.enableExperimentalKeybinds,
+                  "Use the WIP Experimental Verb Keybinds",
+                  [] { return false; });
         addOption("Enable Classic Keybinds", getSettings().game.enableClassicKeybinds,
                   "Map Verbs to the original Gamecube Input(Configurable)",
                   [] { return false; });
         addOption("Menu Input Fallthrough", getSettings().game.dusklightMenuInputFallthrough,
-                  "Allow Game Inputs to fall through in dusklight menus.",
+                  "Allow Game Inputs to fall through in dusklight menus",
                   [] { return false; });
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
             "Hold Tab to increase game speed by up to 4x.",

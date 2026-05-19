@@ -9,16 +9,25 @@ namespace dusk {
 const std::size_t ITEM_ACCESS_SLOTS=2;
 
 #if TARGET_PC
-#define CLASSIC_TRIGGER(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindTrigAnyPort(action))
 
-#define CLASSIC_BUTTON(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindHoldAnyPort(action))
+#define CLASSIC_TRIGGER(action) (isActionBindContextActive(dusk::ActionBindContext::CLASSICAL) && dusk::getActionBindTrigAnyPort(action))
 
-#define VERB_BUTTON_ALONE(action) (dusk::getActionBindHoldAnyPort(action))
-#define VERB_TRIGGER_ALONE(action) (dusk::getActionBindTrigAnyPort(action))
+#define CLASSIC_BUTTON(action) (isActionBindContextActive(dusk::ActionBindContext::CLASSICAL) && dusk::getActionBindHoldAnyPort(action))
 
-#define VERB_TRIGGER(action, classic) (dusk::getActionBindTrigAnyPort(action) || CLASSIC_TRIGGER(classic))
+#define VERB_TRIGGER_ALONE(action) (isActionBindContextActive(dusk::ActionBindContext::VERB) && dusk::getActionBindTrigAnyPort(action))
 
-#define VERB_BUTTON(action, classic) (dusk::getActionBindHoldAnyPort(action) || CLASSIC_BUTTON(classic))
+#define VERB_BUTTON_ALONE(action) (isActionBindContextActive(dusk::ActionBindContext::VERB) && dusk::getActionBindHoldAnyPort(action))
+
+#define VERB_TRIGGER(action, classic) (VERB_TRIGGER_ALONE(action) || CLASSIC_TRIGGER(classic))
+
+#define VERB_BUTTON(action, classic) (VERB_BUTTON_ALONE(action) || CLASSIC_BUTTON(classic))
+
+#ifdef ACTION_BINDINGS_SHORTEN_MACROS
+    #define ACBI(action) (dusk::ActionBinds::action)
+    #define ACBC(context) (dusk::ActionBindContext::context)
+    #define ACBT(type) (dusk::ActionBindType::type)
+#endif
+
 #endif
 
 enum class ActionBinds {
@@ -161,5 +170,7 @@ bool getActionBindHold(ActionBinds action, u32 port);
 bool getActionBindHoldAnyPort(ActionBinds action);
 
 int getActionBindButton(ActionBinds action, u32 port);
+
+bool isActionBindContextActive(ActionBindContext context);
 
 }

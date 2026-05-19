@@ -9,12 +9,6 @@
 #include "dusk/settings.h"
 #include "pad.h"
 
-#if TARGET_PC
-#define CLASSIC_TRIGGER(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindTrigAnyPort(action))
-
-#define CLASSIC_BUTTON(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindHoldAnyPort(action))
-#endif
-
 // Controller Ports 1 - 4
 enum { PAD_1, PAD_2, PAD_3, PAD_4 };
 

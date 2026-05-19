@@ -204,6 +204,7 @@ struct UserSettings {
         ConfigVar<bool> restoreWiiGlitches;
 
         // Controls
+        ConfigVar<bool> enableExperimentalKeybinds;
         ConfigVar<bool> enableClassicKeybinds;
         ConfigVar<bool> dusklightMenuInputFallthrough;
         ConfigVar<bool> enableTurboKeybind;

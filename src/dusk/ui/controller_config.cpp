@@ -482,10 +482,12 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 });
             };
 
-            pane.add_section("Game Controls");
-            for (const auto& [action, bindData] : getActionBinds()) {
-                if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::VERB && bindData.actionType == ActionBindType::BUTTON) {
+            if(getSettings().game.enableExperimentalKeybinds) {
+                pane.add_section("Game Controls");
+                for (const auto& [action, bindData] : getActionBinds()) {
+                    if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::VERB && bindData.actionType == ActionBindType::BUTTON) {
                     addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
+                    }
                 }
             }
 
@@ -497,6 +499,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                         addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
                     }
                 }
+            }
+
+            if(!(getSettings().game.enableClassicKeybinds || getSettings().game.enableExperimentalKeybinds))
+            {
+                pane.add_text("Enable Classic or Experimental Keybinds in Input Settings.");
             }
             break;
         }
@@ -531,10 +538,12 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             });
         };
 
-        pane.add_section("Game Controls");
-        for (const auto& [action, bindData] : getActionBinds()) {
-            if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::VERB && bindData.actionType == ActionBindType::BUTTON) {
+        if(getSettings().game.enableExperimentalKeybinds) {
+            pane.add_section("Game Controls");
+            for (const auto& [action, bindData] : getActionBinds()) {
+                if(CONFIG_ACTION_CONTEXT(action, bindData.actionContext) == ActionBindContext::VERB && bindData.actionType == ActionBindType::BUTTON) {
                 addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
+                }
             }
         }
 
@@ -545,6 +554,11 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     addActionBinding(&(bindData.configVars)->at(port), bindData.actionName);
                 }
             }
+        }
+
+        if(!(getSettings().game.enableClassicKeybinds || getSettings().game.enableExperimentalKeybinds))
+        {
+            pane.add_text("Enable Classic or Experimental Keybinds in Input Settings.");
         }
         break;
     }

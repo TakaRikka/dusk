@@ -200,4 +200,18 @@ bool getActionBindHoldAnyPort(ActionBinds action) {
 int getActionBindButton(ActionBinds action, u32 port) {
     return (*getActionBinds()[action].configVars)[port];
 }
+
+bool isActionBindContextActive(ActionBindContext context)
+{
+    switch(context)
+    {
+        case ActionBindContext::VERB:
+            return getSettings().game.enableExperimentalKeybinds;
+        case ActionBindContext::CLASSICAL:
+            return getSettings().game.enableClassicKeybinds;
+        case ActionBindContext::DUSK:
+        default:
+            return true;
+    }
+}
 }
