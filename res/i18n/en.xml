@@ -73,6 +73,7 @@
   <entry key="DATA_FOLDER">Data Folder</entry>
   <entry key="THE_DATA_FOLDER_IS_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_RE">The data folder is where Dusklight stores settings, saves, logs, texture replacements, and other app data.</entry>
   <entry key="OPEN_DATA_FOLDER">Open Data Folder</entry>
+  <entry key="OUTPUT_RESAMPLING">Output Resampling</entry>
   <entry key="CHANGE_DATA_FOLDER">Change Data Folder</entry>
   <entry key="PORTABLE_MODE">Portable Mode</entry>
   <entry key="RESET_TO_DEFAULT">Reset to Default</entry>
@@ -348,6 +349,8 @@
   <entry key="QUICKER_CLIMBING_ON_LADDERS_AND_VINES_LIKE_THE_HD_VERSION">Quicker climbing on ladders and vines like the HD version.</entry>
   <entry key="RESET_KEY">Reset Key</entry>
   <entry key="RESTORE_DEFAULT_WINDOW_SIZE">Restore Default Window Size</entry>
+  <entry key="RESTORE_DEFAULT_CONTROLS">Restore Default Controls</entry>
+  <entry key="RESTORES_ALL_BINDING_CONFIGURATIONS_FOR_THE_CURRENTLY_SELECTED_DEVICE_TO_THEIR_DEFAULTS">Restores all binding configurations for the currently selected device to their defaults.</entry>
   <entry key="RESTORE_WII_1_0_GLITCHES">Restore Wii 1.0 Glitches</entry>
   <entry key="RESTORES_PATCHED_GLITCHES_FROM_WII_USA_1_0_THE_FIRST_RELEASED_VERSION">Restores patched glitches from Wii USA 1.0, the first released version.</entry>
   <entry key="ROLLGOAL_SENSITIVITY">Rollgoal Sensitivity</entry>
@@ -368,7 +371,10 @@
   <entry key="TOP_RIGHT">Top Right</entry>
   <entry key="TRANSFORM_INSTANTLY_BY_PRESSING_R_AND_Y_SIMULTANEOUSLY">Transform instantly by pressing R and Y simultaneously.</entry>
   <entry key="TURBO_KEY">Turbo Key</entry>
+  <entry key="FRAMERATE_CAP">Framerate Cap</entry>
+  <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">Limit the frame rate to the specified value.</entry>
   <entry key="UNLOCK_FRAMERATE">Unlock Framerate</entry>
+  <entry key="UNLIMITED">Unlimited</entry>
   <entry key="WALLET_SIZES_ARE_LIKE_IN_THE_HD_VERSION_500_1000_2000">Wallet sizes are like in the HD version. (500, 1000, 2000)</entry>
   <entry key="JAPANESE">Japanese</entry>
   <entry key="ANY_HIT_WILL_INSTANTLY_KILL_YOU">Any hit will instantly kill you.</entry>
@@ -376,6 +382,7 @@
   <entry key="TO_RESET_THE_GAME">to reset the game.</entry>
   <entry key="ADJUSTS_TWIN_STICK_CAMERA_SENSITIVITY">Adjusts twin-stick camera sensitivity.</entry>
   <entry key="CONTROLS_VERTICAL_GYRO_AIMING_SENSITIVITY">Controls vertical gyro aiming sensitivity.</entry>
+  <entry key="CONFIGURE_THE_SAMPLING_METHOD_USED_WHEN_SCALING_THE_INTERNAL_RESOLUTION_FOR_FINAL_PRESENTATION">Configure the sampling method used when scaling the internal resolution for final presentation.</entry>
   <entry key="CONTROLS_HORIZONTAL_GYRO_AIMING_SENSITIVITY">Controls horizontal gyro aiming sensitivity.</entry>
   <entry key="HIGHER_VALUES_SMOOTH_GYRO_INPUT_OVER_TIME">Higher values smooth gyro input over time.</entry>
   <entry key="CHEAT_INFINITE_HEARTS">Infinite Hearts</entry>
@@ -412,6 +419,7 @@
   <entry key="CHEAT_FREE_MAGIC_ARMOR_HELP">Lets the magic armor work without consuming rupees.</entry>
   <entry key="CHEAT_INVINCIBLE_ENEMIES">Invincible Enemies</entry>
   <entry key="CHEAT_INVINCIBLE_ENEMIES_HELP">Prevents enemies from taking damage.</entry>
+  <entry key="CAPPED">Capped</entry>
   <entry key="ON">On</entry>
   <entry key="NONE">None</entry>
   <entry key="SHOW_INTERNAL_NAMES">Show Internal Names</entry>

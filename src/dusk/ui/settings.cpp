@@ -389,6 +389,8 @@ const Rml::String kInternalResolutionHelpText =
     "[CONFIGURE_THE_RESOLUTION_USED_FOR_RENDERING_THE_GAME_HIGHER_VALUES_ARE_MORE_DE]";
 const Rml::String kShadowResolutionHelpText =
     "[CONFIGURE_THE_SHADOW_MAP_RESOLUTION_HIGHER_VALUES_IMPROVE_SHADOW_QUALITY_BUT]";
+const Rml::String kResamplerHelpText =
+    "[CONFIGURE_THE_SAMPLING_METHOD_USED_WHEN_SCALING_THE_INTERNAL_RESOLUTION_FOR_FINAL_PRESENTATION]";
 const Rml::String kBloomHelpText =
     "[CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO]";
 const Rml::String kBloomBrightnessHelpText =
@@ -836,6 +838,15 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 1,
                 .valueMax = 8,
                 .defaultValue = 1,
+            }, mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+            GraphicsTunerProps{
+                .option = GraphicsOption::Resampler,
+                .title = "[OUTPUT_RESAMPLING]",
+                .helpText = kResamplerHelpText,
+                .valueMin = static_cast<int>(Resampler::Bilinear),
+                .valueMax = static_cast<int>(Resampler::Area),
+                .defaultValue = static_cast<int>(Resampler::Bilinear),
             }, mPrelaunch);
 
         leftPane.add_section("[POST_PROCESSING]");

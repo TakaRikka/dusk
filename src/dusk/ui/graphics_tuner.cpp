@@ -3,6 +3,7 @@
 #include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
+#include <aurora/aurora.h>
 #include <dolphin/gx/GXAurora.h>
 #include <dolphin/vi.h>
 #include <fmt/format.h>
@@ -43,6 +44,8 @@ int get_value(GraphicsOption option) {
         return getSettings().game.internalResolutionScale.getValue();
     case GraphicsOption::ShadowResolution:
         return getSettings().game.shadowResolutionMultiplier.getValue();
+    case GraphicsOption::Resampler:
+        return static_cast<int>(getSettings().game.resampler.getValue());
     case GraphicsOption::BloomMode:
         return static_cast<int>(getSettings().game.bloomMode.getValue());
     case GraphicsOption::BloomMultiplier:
@@ -62,6 +65,22 @@ void set_value(GraphicsOption option, int value) {
     case GraphicsOption::ShadowResolution:
         getSettings().game.shadowResolutionMultiplier.setValue(value);
         break;
+    case GraphicsOption::Resampler: {
+        const auto sampler = static_cast<Resampler>(std::clamp(value,
+            static_cast<int>(Resampler::Bilinear),
+            static_cast<int>(Resampler::Area)));
+        getSettings().game.resampler.setValue(sampler);
+        switch (sampler) {
+        case Resampler::Area:
+            aurora_set_resampler(SAMPLER_AREA);
+            break;
+        case Resampler::Bilinear:
+        default:
+            aurora_set_resampler(SAMPLER_BILINEAR);
+            break;
+        }
+        break;
+    }
     case GraphicsOption::BloomMode:
         getSettings().game.bloomMode.setValue(static_cast<BloomMode>(std::clamp(
             value, static_cast<int>(BloomMode::Off), static_cast<int>(BloomMode::Dusk))));
@@ -177,6 +196,14 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
     }
     case GraphicsOption::ShadowResolution:
         return fmt::format("{}×", value);
+    case GraphicsOption::Resampler:
+        switch (static_cast<Resampler>(value)) {
+        case Resampler::Bilinear:
+            return "Bilinear";
+        case Resampler::Area:
+            return "Area";
+        }
+        break;
     case GraphicsOption::BloomMode:
         switch (static_cast<BloomMode>(value)) {
         case BloomMode::Off:
@@ -211,7 +238,7 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
             SteppedCarousel::Props{
                 .min = mValueMin,
                 .max = mValueMax,
-                .step = 1,
+                .step = props.step,
                 .getValue = [this] { return get_value(mOption); },
                 .onChange = [this](int value) { set_value(mOption, value); },
                 .formatValue =
