@@ -1,5 +1,4 @@
 #include "dusk/mouse.h"
-#include "dusk/gyro.h"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
 #include "d/actor/d_a_alink.h"
@@ -57,14 +56,8 @@ void read() {
     }
     s_mouse_enabled = aim_active;
 
-    if (!dusk::gyro::get_sensor_keep_alive() && !aim_active) {
-        reset_aim_state();
-        return;
-    }
-
     if (!aim_active) {
-        s_pitch_rad = 0.0f;
-        s_yaw_rad = 0.0f;
+        reset_aim_state();
         return;
     }
 
