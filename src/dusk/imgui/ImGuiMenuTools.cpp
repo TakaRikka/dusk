@@ -208,6 +208,20 @@ namespace dusk {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
             daHorse_c* horse = dComIfGp_getHorseActor();
 
+            ImGui::Text("Global");
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Stage: {}\n", dComIfGp_getStartStageName()) 
+                : "Stage: ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Layer: {}\n", dComIfG_play_c::getLayerNo(0)) 
+                : "Layer: ?\n"
+            );
+
+            ImGui::Separator();
             ImGui::Text("Link");
             ImGuiStringViewText(
                 player != nullptr
@@ -225,6 +239,18 @@ namespace dusk {
                 player != nullptr
                 ? fmt::format("Speed: {: .4f}\n", player->speedF)
                 : "Speed: ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Room: {}\n", fopAcM_GetRoomNo(player)) 
+                : "Room: ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Entry: {}\n", dComIfGp_getStartStagePoint()) 
+                : "Entry: ?\n"
             );
 
             ImGui::Separator();
@@ -245,6 +271,24 @@ namespace dusk {
                 horse != nullptr
                 ? fmt::format("Speed: {: .4f}\n", horse->speedF)
                 : "Speed: ?\n"
+            );
+
+            ImGuiStringViewText(
+                horse != nullptr
+                ? fmt::format("Room: {}\n", fopAcM_GetRoomNo(horse)) 
+                : "Room: ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Saved Stage: {}\n", dComIfGs_getHorseRestartStageName())
+                : "Saved Stage: ?\n"
+            );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Saved Room: {}\n", dComIfGs_getHorseRestartRoomNo())
+                : "Saved Room: ?\n"
             );
 
             ShowCornerContextMenu(m_playerInfoOverlayCorner, m_debugOverlayCorner);
