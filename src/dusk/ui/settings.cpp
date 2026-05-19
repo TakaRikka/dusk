@@ -871,6 +871,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             }, mPrelaunch);
 
         leftPane.add_section("[RENDERING]");
+        config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
+            {
+                .key = "[USE_TEXTURE_PACK]",
+                .helpText = "[ENABLE_INSTALLED_TEXTURE_REPLACEMENTS]",
+                .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
+            });
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "[UNLOCK_FRAMERATE]",
