@@ -24,6 +24,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "i18n.hpp"
+#include "i18n.hpp"
 #include "ui.hpp"
 
 #include <aurora/lib/window.hpp>
@@ -93,15 +94,15 @@ constexpr std::array kFpsOverlayCornerNames = {
     "[BOTTOM_RIGHT]",
 };
 
+constexpr std::array kGyroInputModeLabels = {
+    "[SENSOR]",
+    "[MOUSE]",
+};
+
 constexpr std::array kInterpolationModes = {
     "[OFF]",
     "[CAPPED]",
     "[UNLIMITED]",
-};
-
-constexpr std::array kGyroInputModeLabels = {
-    "[SENSOR]",
-    "[MOUSE]",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -389,8 +390,6 @@ const Rml::String kInternalResolutionHelpText =
     "[CONFIGURE_THE_RESOLUTION_USED_FOR_RENDERING_THE_GAME_HIGHER_VALUES_ARE_MORE_DE]";
 const Rml::String kShadowResolutionHelpText =
     "[CONFIGURE_THE_SHADOW_MAP_RESOLUTION_HIGHER_VALUES_IMPROVE_SHADOW_QUALITY_BUT]";
-const Rml::String kResamplerHelpText =
-    "[CONFIGURE_THE_SAMPLING_METHOD_USED_WHEN_SCALING_THE_INTERNAL_RESOLUTION_FOR_FINAL_PRESENTATION]";
 const Rml::String kBloomHelpText =
     "[CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO]";
 const Rml::String kBloomBrightnessHelpText =
@@ -839,15 +838,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 8,
                 .defaultValue = 1,
             }, mPrelaunch);
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
-            GraphicsTunerProps{
-                .option = GraphicsOption::Resampler,
-                .title = "[OUTPUT_RESAMPLING]",
-                .helpText = kResamplerHelpText,
-                .valueMin = static_cast<int>(Resampler::Bilinear),
-                .valueMax = static_cast<int>(Resampler::Area),
-                .defaultValue = static_cast<int>(Resampler::Bilinear),
-            }, mPrelaunch);
 
         leftPane.add_section("[POST_PROCESSING]");
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
@@ -867,22 +857,16 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 100,
                 .defaultValue = 100,
-                .step = 10,
             }, mPrelaunch);
 
         leftPane.add_section("[RENDERING]");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
-            {
-                .key = "[USE_TEXTURE_PACK]",
-                .helpText = "[ENABLE_INSTALLED_TEXTURE_REPLACEMENTS]",
-                .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
-            });
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "[UNLOCK_FRAMERATE]",
                 .getValue =
                     [] {
-                        return kInterpolationModes[static_cast<u8>(getSettings().game.enableFrameInterpolation.getValue())];
+                        return kInterpolationModes[static_cast<u8>(
+                            getSettings().game.enableFrameInterpolation.getValue())];
                     },
                 .isModified =
                     [] {
@@ -896,12 +880,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             .text = kInterpolationModes[i],
                             .isSelected =
                                 [i] {
-                                    return getSettings().game.enableFrameInterpolation.getValue() == static_cast<FrameInterpMode>(i);
+                                    return getSettings().game.enableFrameInterpolation.getValue() ==
+                                           static_cast<FrameInterpMode>(i);
                                 },
                         })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
-                            getSettings().game.enableFrameInterpolation.setValue(static_cast<FrameInterpMode>(i));
+                            getSettings().game.enableFrameInterpolation.setValue(
+                                static_cast<FrameInterpMode>(i));
                             config::Save();
                         });
                 }
@@ -909,7 +895,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
             "[FRAMERATE_CAP]", "[LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE]", 30, 540, 1,
-            [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
+            [] {
+                return getSettings().game.enableFrameInterpolation.getValue() !=
+                       FrameInterpMode::Capped;
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "[ENABLE_DEPTH_OF_FIELD]",
@@ -1057,7 +1046,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     [](int value) {
                         getSettings().audio.masterVolume.setValue(value);
                         config::Save();
-                        audio::SetMasterVolume(audio::MasterVolumeToLinear(value / 100.0f));
+                        audio::SetMasterVolume(value / 100.f);
                     },
                 .isModified =
                     [] {

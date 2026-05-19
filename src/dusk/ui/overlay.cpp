@@ -104,11 +104,13 @@ Rml::Element* create_controller_warning(Rml::Element* parent) {
     auto* heading = append(elem, "heading");
     auto* title = append(heading, "span");
     title->SetInnerRML("[NO_CONTROLLER_ASSIGNED]");
+    title->SetInnerRML("[NO_CONTROLLER_ASSIGNED]");
     auto* icon = append(heading, "icon");
     icon->SetClass("warning", true);
 
     auto* message = append(elem, "message");
     auto* content = append(message, "span");
+    content->SetInnerRML("[CONFIGURE_CONTROLLER_PORT_1_IN_SETTINGS]");
     content->SetInnerRML("[CONFIGURE_CONTROLLER_PORT_1_IN_SETTINGS]");
 
     return elem;
@@ -169,7 +171,7 @@ Rml::Element* create_menu_notification(Rml::Element* parent) {
     append(row, "span")->SetInnerRML(kMenuNotificationPrefix);
     auto* icon = append(row, "icon");
     icon->SetClass("controller", true);
-    append(row, "span")->SetInnerRML("<b>" + escape(padButton) + "</b>");
+    append(row, "span")->SetInnerRML(escape(padButton));
     append(row, "span")->SetInnerRML("[TO_OPEN_MENU]");
 
     return elem;
