@@ -191,8 +191,8 @@ std::vector<AuroraBackend> available_backends() {
     size_t backendCount = 0;
     const AuroraBackend* raw = aurora_get_available_backends(&backendCount);
     for (size_t i = 0; i < backendCount; ++i) {
-        // Do not expose NULL or D3D11
-        if (raw[i] != BACKEND_NULL && raw[i] != BACKEND_D3D11) {
+        // Do not expose NULL
+        if (raw[i] != BACKEND_NULL) {
             backends.emplace_back(raw[i]);
         }
     }
@@ -462,6 +462,31 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
         .max = max,
         .step = step,
         .suffix = "%",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+SelectButton& config_int_select(Pane& leftPane, Pane& rightPane, ConfigVar<int>& var,
+    Rml::String key, Rml::String helpText, int min, int max, int step = 5,
+    std::function<bool()> isDisabled = {}, std::string suffix = "") {
+    auto& button = leftPane.add_child<NumberButton>(NumberButton::Props{
+        .key = std::move(key),
+        .getValue = [&var] { return var; },
+        .setValue =
+            [&var, min, max](int value) {
+                var.setValue(std::clamp(value, min, max));
+                config::Save();
+            },
+        .isDisabled = std::move(isDisabled),
+        .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+        .min = min,
+        .max = max,
+        .step = step,
+        .suffix = suffix,
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
