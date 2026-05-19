@@ -11919,7 +11919,7 @@ BOOL daAlink_c::checkMoveDoAction() {
         }
 
         int direction = getDirectionFromShapeAngle();
-        if (field_0x2fb0 != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
+        if (mSideStepLandComboTimer != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
             return true;
         }
 
@@ -15919,7 +15919,7 @@ int daAlink_c::procSideStepLandInit() {
         field_0x3478 = mpHIO->mSideStep.m.mBackLandAnm.mCancelFrame;
         field_0x2f98 = 2;
         mProcVar1.field_0x300a = 0;
-        field_0x2fb0 = 0;
+        mSideStepLandComboTimer = 0;
         field_0x2fcc = 10;
     } else {
         daAlink_ANM anm_id;
@@ -15935,7 +15935,7 @@ int daAlink_c::procSideStepLandInit() {
         setSingleAnimeParam(anm_id, &mpHIO->mSideStep.m.mSideLandAnm);
         field_0x3478 = mpHIO->mSideStep.m.mSideLandAnm.mCancelFrame;
         mProcVar1.field_0x300a = 1;
-        field_0x2fb0 = 8;
+        mSideStepLandComboTimer = 8;
         field_0x2fcc = 0;
 
         if (checkEnemyGroup(mTargetedActor) && mEquipItem == 0x103 && checkNoUpperAnime()) {
@@ -18531,8 +18531,8 @@ int daAlink_c::execute() {
             if (!checkWolf()) {
                 setHatAngle();
 
-                if (field_0x2fb0 != 0) {
-                    field_0x2fb0--;
+                if (mSideStepLandComboTimer != 0) {
+                    mSideStepLandComboTimer--;
                 }
 
                 footBgCheck();

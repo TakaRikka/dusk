@@ -553,7 +553,7 @@ void daAlink_c::changeLink(int param_0) {
         resetWolfAtCollision();
         resetWolfBallGrab();
         deleteEquipItem(FALSE, FALSE);
-        field_0x2fb0 = 0;
+        mSideStepLandComboTimer = 0;
 
         for (int i = 0; i < 10; i++) {
             mWolfLockAcKeep[i].clearData();

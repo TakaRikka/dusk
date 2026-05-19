@@ -4159,7 +4159,7 @@ public:
     /* 0x02FAD */ u8 mPeepExitID;
     /* 0x02FAE */ u8 mUseButtonFlags;
     /* 0x02FAF */ u8 field_0x2faf;
-    /* 0x02FB0 */ u8 field_0x2fb0;
+    /* 0x02FB0 */ u8 mSideStepLandComboTimer;
     /* 0x02FB1 */ u8 mWolfLockNum;
     /* 0x02FB2 */ u8 mMidnaTalkDelayTimer;
     /* 0x02FB3 */ u8 field_0x2fb3;
