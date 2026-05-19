@@ -3825,21 +3825,19 @@ void dFile_select_c::fileSelectWide() {
                 entry.origTransX = pane->getTranslateX(); // Get pre-scale value
                 entry.cached = true;
             }
+            pane->setBasePosition(J2DBasePosition_0);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
             if (screenAspect >= minAspect && screenAspect <= wideAspect) { // Handle widescreen
-                pane->setBasePosition(J2DBasePosition_0);
-                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
                 if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
                     pane->translate(entry.origTransX * wideScaleFactor, pane->getTranslateY());
                 } else { // Icons
                     pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + wideShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
                 }
             } else if (screenAspect >= minAspect && screenAspect <= ultraAspect) { // Handle ultrawide
-                pane->setBasePosition(J2DBasePosition_0);
-                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
                 if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
                     pane->translate(entry.origTransX * ultraScaleFactor, pane->getTranslateY());
                 } else { // Icons
-                    pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + ultraShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
+                    pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + ultraShiftFactor - 57.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
                 }
             }
             else { // 4:3/default behavior
