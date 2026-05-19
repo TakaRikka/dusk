@@ -18,19 +18,14 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
 
     auto* title = append(header, "div");
     title->SetClass("modal-title", true);
-    title->SetInnerRML("Send Crash Reports");
+    title->SetInnerRML("[SEND_CRASH_REPORTS]");
 
     auto* headIcon = append(header, "icon");
     headIcon->SetClass("question-mark", true);
 
     auto* intro = append(mDialog, "div");
     intro->SetClass("modal-body", true);
-    intro->SetInnerRML(
-        "Dusklight can automatically send crash reports to the developers. Crash reports contain the "
-        "following:"
-        "<br/>• Operating system version<br/>• CPU architecture<br/>• GPU model & driver version"
-        "<br/>• File paths (may include account username)<br/>• Stack trace<br/><br/>"
-        "This can be changed in the Settings menu at any time.");
+    intro->SetInnerRML("[CRASH_REPORTING_INTRO]");
 
     auto* grid = append(mDialog, "div");
     grid->SetClass("preset-grid", true);
@@ -42,13 +37,11 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
     };
 
     static constexpr OptionInfo kOptions[] = {
-        {"Enable",
-            "Send crash reports to Dusklight developers. Reports will include the information described "
-            "above.",
+        {"[ENABLE]",
+            "[SEND_CRASH_REPORTS_TO_DUSKLIGHT_DEVELOPERS_REPORTS_WILL_INCLUDE_THE_INFOR]",
             [] { crash_reporting::set_consent(true); }},
-        {"Disable",
-            "Do not send crash reports. This may make it more difficult to resolve issues you "
-            "encounter.",
+        {"[DISABLE]",
+            "[DO_NOT_SEND_CRASH_REPORTS_THIS_MAY_MAKE_IT_MORE_DIFFICULT_TO_RESOLVE_ISS]",
             [] { crash_reporting::set_consent(false); }},
     };
 

@@ -20,6 +20,14 @@ body {
     pointer-events: none;
 }
 
+.lang-zh-cn body,
+.lang-zh-cn body toast,
+.lang-zh-cn body toast heading,
+.lang-zh-cn body toast message,
+.lang-zh-cn body fps {
+    font-family: "HarmonyOS Sans SC", "HarmonyOS Sans TC", "Microsoft YaHei", "Microsoft JhengHei", "Yu Gothic UI", "Malgun Gothic", "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP", "Noto Sans CJK KR", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", "Noto Sans KR", "SimHei", sans-serif;
+}
+
 fps,
 toast {
     position: absolute;
@@ -323,4 +331,11 @@ logo img.outer {
     toast.menu-notification {
         top: 20dp;
     }
+}
+
+/* Keep CJK font override at end so it wins over per-widget font-family rules. */
+.lang-zh-cn body toast heading,
+.lang-zh-cn body speedrun-timer,
+.lang-zh-cn body fps {
+    font-family: "HarmonyOS Sans SC", "HarmonyOS Sans TC", "Microsoft YaHei", "Microsoft JhengHei", "Yu Gothic UI", "Malgun Gothic", "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP", "Noto Sans CJK KR", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", "Noto Sans KR", "SimHei", sans-serif;
 }

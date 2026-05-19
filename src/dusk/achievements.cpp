@@ -52,8 +52,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "hero_of_twilight",
-                "Hero of Twilight",
-                "Deliver the finishing blow to Ganondorf.",
+                "[ACHIEVEMENT_HERO_OF_TWILIGHT_NAME]",
+                "[ACHIEVEMENT_HERO_OF_TWILIGHT_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -68,8 +68,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "completionist",
-                "Completionist",
-                "Complete the game after collecting all equipment, heart containers, portals, bugs, poes, and hidden skills.",
+                "[ACHIEVEMENT_COMPLETIONIST_NAME]",
+                "[ACHIEVEMENT_COMPLETIONIST_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -238,8 +238,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "princess_of_bugs",
-                "The Princess of Bugs",
-                "Deliver all 24 golden bugs to Agitha.",
+                "[ACHIEVEMENT_PRINCESS_OF_BUGS_NAME]",
+                "[ACHIEVEMENT_PRINCESS_OF_BUGS_DESC]",
                 AchievementCategory::Collection,
                 true, 24, 0, false
             },
@@ -251,8 +251,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "all_poes",
-                "Poe Collector",
-                "Collect all 60 Poe Souls.",
+                "[ACHIEVEMENT_ALL_POES_NAME]",
+                "[ACHIEVEMENT_ALL_POES_DESC]",
                 AchievementCategory::Collection,
                 true, 60, 0, false
             },
@@ -264,8 +264,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "hylian_loach",
-                "Legendary Catch",
-                "Catch a Hylian Loach.",
+                "[ACHIEVEMENT_HYLIAN_LOACH_NAME]",
+                "[ACHIEVEMENT_HYLIAN_LOACH_DESC]",
                 AchievementCategory::Collection,
                 false, 0, 0, false
             },
@@ -279,8 +279,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "all_fish",
-                "Gone Fishin'",
-                "Catch all 6 species of fish.",
+                "[ACHIEVEMENT_ALL_FISH_NAME]",
+                "[ACHIEVEMENT_ALL_FISH_DESC]",
                 AchievementCategory::Collection,
                 true, 6, 0, false
             },
@@ -298,8 +298,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "a_big_heart",
-                "A Big Heart",
-                "Reach maximum health with all 20 heart containers.",
+                "[ACHIEVEMENT_A_BIG_HEART_NAME]",
+                "[ACHIEVEMENT_A_BIG_HEART_DESC]",
                 AchievementCategory::Collection,
                 true, 20, 0, false
             },
@@ -311,8 +311,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "all_bottles",
-                "Glassware Guardian",
-                "Obtain all 4 bottles.",
+                "[ACHIEVEMENT_ALL_BOTTLES_NAME]",
+                "[ACHIEVEMENT_ALL_BOTTLES_DESC]",
                 AchievementCategory::Collection,
                 true, 4, 0, false
             },
@@ -333,8 +333,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "all_hidden_skills",
-                "Master of Secrets",
-                "Learn all 7 Hidden Skills.",
+                "[ACHIEVEMENT_ALL_HIDDEN_SKILLS_NAME]",
+                "[ACHIEVEMENT_ALL_HIDDEN_SKILLS_DESC]",
                 AchievementCategory::Collection,
                 true, 7, 0, false
             },
@@ -358,8 +358,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "all_letters",
-                "We Deliver!",
-                "Collect all 16 postman letters.",
+                "[ACHIEVEMENT_ALL_LETTERS_NAME]",
+                "[ACHIEVEMENT_ALL_LETTERS_DESC]",
                 AchievementCategory::Collection,
                 true, 16, 0, false
             },
@@ -371,8 +371,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "cave_of_ordeals",
-                "Conqueror of Ordeals",
-                "Clear all 50 floors of the Cave of Ordeals.",
+                "[ACHIEVEMENT_CAVE_OF_ORDEALS_NAME]",
+                "[ACHIEVEMENT_CAVE_OF_ORDEALS_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -386,8 +386,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "cave_of_ordeals_heartless",
-                "Indomitable",
-                "Clear all 50 floors of the Cave of Ordeals with only 3 heart containers.",
+                "[ACHIEVEMENT_CAVE_OF_ORDEALS_HEARTLESS_NAME]",
+                "[ACHIEVEMENT_CAVE_OF_ORDEALS_HEARTLESS_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -401,8 +401,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "speedrun_12h",
-                "Been There Done That",
-                "Defeat Ganondorf with a total save file play time under 12 hours.",
+                "[ACHIEVEMENT_SPEEDRUN_12H_NAME]",
+                "[ACHIEVEMENT_SPEEDRUN_12H_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -421,8 +421,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "speedrun_8h",
-                "Swift Blade",
-                "Defeat Ganondorf with a total save file play time under 6 hours.",
+                "[ACHIEVEMENT_SPEEDRUN_8H_NAME]",
+                "[ACHIEVEMENT_SPEEDRUN_8H_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -441,8 +441,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "dark_hammer_one_hit",
-                "Mortal Edge",
-                "Defeat Dark Hammer in a single hit.",
+                "[ACHIEVEMENT_DARK_HAMMER_ONE_HIT_NAME]",
+                "[ACHIEVEMENT_DARK_HAMMER_ONE_HIT_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -456,8 +456,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "no_deaths_clear",
-                "Deathless",
-                "Defeat Ganondorf with 0 deaths on your save file.",
+                "[ACHIEVEMENT_NO_DEATHS_CLEAR_NAME]",
+                "[ACHIEVEMENT_NO_DEATHS_CLEAR_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -475,8 +475,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "untouchable",
-                "Untouchable",
-                "Kill 25 enemies in a row without taking damage.",
+                "[ACHIEVEMENT_UNTOUCHABLE_NAME]",
+                "[ACHIEVEMENT_UNTOUCHABLE_DESC]",
                 AchievementCategory::Challenge,
                 true, 25, 0, false
             },
@@ -494,8 +494,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "bow_100m_hit",
-                "Long Shot",
-                "Hit an enemy from over 100 meters away with the bow.",
+                "[ACHIEVEMENT_BOW_100M_HIT_NAME]",
+                "[ACHIEVEMENT_BOW_100M_HIT_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -510,8 +510,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "plumm_max",
-                "Thank You Berry Much",
-                "Score 61,454 points in the Plumm minigame.",
+                "[ACHIEVEMENT_PLUMM_MAX_NAME]",
+                "[ACHIEVEMENT_PLUMM_MAX_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -525,8 +525,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "rollgoal_8",
-                "Rollgoal Novice",
-                "Complete the first 8 rollgoal stages.",
+                "[ACHIEVEMENT_ROLLGOAL_8_NAME]",
+                "[ACHIEVEMENT_ROLLGOAL_8_DESC]",
                 AchievementCategory::Minigame,
                 true, 8, 0, false
             },
@@ -538,8 +538,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "rollgoal_all",
-                "Lost Your Marbles",
-                "Complete all rollgoal stages.",
+                "[ACHIEVEMENT_ROLLGOAL_ALL_NAME]",
+                "[ACHIEVEMENT_ROLLGOAL_ALL_DESC]",
                 AchievementCategory::Minigame,
                 true, 64, 0, false
             },
@@ -555,8 +555,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "goat_30s",
-                "Ranch Hand",
-                "Herd all 20 goats into the pen in under 30 seconds.",
+                "[ACHIEVEMENT_GOAT_30S_NAME]",
+                "[ACHIEVEMENT_GOAT_30S_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -568,8 +568,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "goat_20s",
-                "Bane of Howard",
-                "Herd all 20 goats into the pen in under 20 seconds.",
+                "[ACHIEVEMENT_GOAT_20S_NAME]",
+                "[ACHIEVEMENT_GOAT_20S_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -581,8 +581,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "goat_18s",
-                "King of the Ranch",
-                "Herd all 20 goats into the pen in under 18 seconds.",
+                "[ACHIEVEMENT_GOAT_18S_NAME]",
+                "[ACHIEVEMENT_GOAT_18S_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -594,8 +594,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "snowboard_70s",
-                "Downhill Dash",
-                "Finish the snowboarding minigame in under 70 seconds.",
+                "[ACHIEVEMENT_SNOWBOARD_70S_NAME]",
+                "[ACHIEVEMENT_SNOWBOARD_70S_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -611,8 +611,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "canoe_perfect",
-                "River Raider",
-                "Achieve a perfect score in the canoe minigame.",
+                "[ACHIEVEMENT_CANOE_PERFECT_NAME]",
+                "[ACHIEVEMENT_CANOE_PERFECT_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -634,8 +634,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "star_2_under_40s",
-                "Rising Star",
-                "Complete the STAR Prize 2 minigame in under 40 seconds.",
+                "[ACHIEVEMENT_STAR_2_UNDER_40S_NAME]",
+                "[ACHIEVEMENT_STAR_2_UNDER_40S_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -649,8 +649,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "star_2_under_30s",
-                "Shooting Star",
-                "Complete the STAR Prize 2 minigame in under 30 seconds.",
+                "[ACHIEVEMENT_STAR_2_UNDER_30S_NAME]",
+                "[ACHIEVEMENT_STAR_2_UNDER_30S_DESC]",
                 AchievementCategory::Minigame,
                 false, 0, 0, false
             },
@@ -665,8 +665,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "friendly_fire",
-                "Friendly Fire",
-                "Get hit by your own cannonball.",
+                "[ACHIEVEMENT_FRIENDLY_FIRE_NAME]",
+                "[ACHIEVEMENT_FRIENDLY_FIRE_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -680,8 +680,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "long_jump_attack",
-                "Long Jump Attack",
-                "Travel more than 20 meters in a single jump attack before landing.",
+                "[ACHIEVEMENT_LONG_JUMP_ATTACK_NAME]",
+                "[ACHIEVEMENT_LONG_JUMP_ATTACK_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -723,8 +723,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "email_me",
-                "Email Me",
-                "Read a letter during the Dark Beast Ganon fight.",
+                "[ACHIEVEMENT_EMAIL_ME_NAME]",
+                "[ACHIEVEMENT_EMAIL_ME_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -739,8 +739,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "heavy_hitter",
-                "Heavy Hitter",
-                "Wear the Iron Boots during the end credits.",
+                "[ACHIEVEMENT_HEAVY_HITTER_NAME]",
+                "[ACHIEVEMENT_HEAVY_HITTER_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -758,8 +758,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "fishing_rod_ganondorf",
-                "Here Fishy Fishy",
-                "Confuse Ganondorf with the fishing rod.",
+                "[ACHIEVEMENT_FISHING_ROD_GANONDORF_NAME]",
+                "[ACHIEVEMENT_FISHING_ROD_GANONDORF_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -773,8 +773,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "steal_from_trill",
-                "Petty Theft",
-                "Steal from Trill.",
+                "[ACHIEVEMENT_STEAL_FROM_TRILL_NAME]",
+                "[ACHIEVEMENT_STEAL_FROM_TRILL_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -788,8 +788,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "cucco_control",
-                "Cucco Whisperer",
-                "Take control of a cucco.",
+                "[ACHIEVEMENT_CUCCO_CONTROL_NAME]",
+                "[ACHIEVEMENT_CUCCO_CONTROL_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -804,8 +804,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "back_in_time",
-                "Back in Time",
-                "Perform the Back in Time glitch to play on the title screen.",
+                "[ACHIEVEMENT_BACK_IN_TIME_NAME]",
+                "[ACHIEVEMENT_BACK_IN_TIME_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -824,8 +824,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "early_master_sword",
-                "Early Master Sword",
-                "Obtain the Master Sword before completing Midna's Desperate Hour.",
+                "[ACHIEVEMENT_EARLY_MASTER_SWORD_NAME]",
+                "[ACHIEVEMENT_EARLY_MASTER_SWORD_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -839,8 +839,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "earliest_master_sword",
-                "Earliest Master Sword",
-                "Obtain the Master Sword before meeting Midna.",
+                "[ACHIEVEMENT_EARLIEST_MASTER_SWORD_NAME]",
+                "[ACHIEVEMENT_EARLIEST_MASTER_SWORD_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -854,8 +854,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "speedrun_4h",
-                "Hero of Time",
-                "Defeat Ganondorf with a total save file play time under 4 hours.",
+                "[ACHIEVEMENT_SPEEDRUN_4H_NAME]",
+                "[ACHIEVEMENT_SPEEDRUN_4H_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -874,8 +874,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "no_fish_suit",
-                "No Fish Suit No Problem",
-                "Defeat Morpheel without equipping Zora Armor.",
+                "[ACHIEVEMENT_NO_FISH_SUIT_NAME]",
+                "[ACHIEVEMENT_NO_FISH_SUIT_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -910,8 +910,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "null_item",
-                "Null Item",
-                "Obtain the mysterious black rupee in the item wheel.",
+                "[ACHIEVEMENT_NULL_ITEM_NAME]",
+                "[ACHIEVEMENT_NULL_ITEM_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -931,8 +931,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "stallord_skip",
-                "Stallord Skip",
-                "Leave Stallord's arena through the exit without defeating Stallord.",
+                "[ACHIEVEMENT_STALLORD_SKIP_NAME]",
+                "[ACHIEVEMENT_STALLORD_SKIP_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -960,8 +960,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "lakebed_before_lanayru",
-                "White Midna Glitch",
-                "Clear the Lakebed Temple before clearing Lanayru's Twilight.",
+                "[ACHIEVEMENT_LAKEBED_BEFORE_LANAYRU_NAME]",
+                "[ACHIEVEMENT_LAKEBED_BEFORE_LANAYRU_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -976,8 +976,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "early_hidden_village",
-                "Quick Detour",
-                "Rescue the Hidden Village before clearing Goron Mines.",
+                "[ACHIEVEMENT_EARLY_HIDDEN_VILLAGE_NAME]",
+                "[ACHIEVEMENT_EARLY_HIDDEN_VILLAGE_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -992,8 +992,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "forest_temple_no_boomerang",
-                "Must Have Been The Wind",
-                "Complete the Forest Temple without obtaining the Gale Boomerang.",
+                "[ACHIEVEMENT_FOREST_TEMPLE_NO_BOOMERANG_NAME]",
+                "[ACHIEVEMENT_FOREST_TEMPLE_NO_BOOMERANG_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -1125,7 +1125,7 @@ void AchievementSystem::processEntry(Entry& e) {
         if (getSettings().game.enableAchievementToasts) {
             ui::push_toast({
                 .type = "achievement",
-                .title = "Achievement Unlocked!",
+                .title = "[ACHIEVEMENT_UNLOCKED_TOAST]",
                 .content = e.achievement.name,
                 .duration = std::chrono::seconds(5),
             });

@@ -12,7 +12,8 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
 
     auto* title = append(header, "div");
     title->SetClass("modal-title", true);
-    title->SetInnerRML(mProps.title);
+    // Keep title as plain text so translated tokens cannot accidentally alter layout.
+    title->SetInnerRML(escape(mProps.title));
 
     if (!mProps.icon.empty()) {
         auto* icon = append(header, "icon");

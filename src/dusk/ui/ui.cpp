@@ -10,8 +10,11 @@
 #include <filesystem>
 #include <ranges>
 
+#include "aurora/lib/logging.hpp"
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
+#include "dusk/settings.h"
+#include "i18n.hpp"
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
@@ -19,8 +22,26 @@
 namespace dusk::ui {
 namespace {
 
+aurora::Module UiLog{"dusk::ui"};
+
 void load_font(const char* filename, bool fallback = false) {
-    Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback);
+    if (!Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback)) {
+        UiLog.error("Failed to load font '{}'", filename);
+    }
+}
+
+void apply_ui_language_font_class() {
+    auto* context = aurora::rmlui::get_context();
+    if (context == nullptr) {
+        return;
+    }
+    const bool useChineseFont = i18n::use_harmonyos_font();
+
+    auto* root = context->GetRootElement();
+    if (root == nullptr) {
+        return;
+    }
+    root->SetClass("lang-zh-cn", useChineseFont);
 }
 
 bool sInitialized = false;
@@ -54,12 +75,22 @@ bool initialize() noexcept {
     load_font("AlegreyaSC-Bold.ttf");
     load_font("MaterialSymbolsRounded-Regular.ttf");
     load_font("NotoMono-Regular.ttf");
+    load_font("HarmonyOS_Sans_Regular.ttf", true);
+    load_font("HarmonyOS_Sans_SC_Regular.ttf", true);
+    load_font("HarmonyOS_Sans_TC_Regular.ttf", true);
+
+    aurora::rmlui::set_translate_callback(i18n::translate);
+    i18n::initialize();
+    i18n::set_language(getSettings().backend.uiLanguage.getValue());
+    apply_ui_language_font_class();
 
     sInitialized = true;
     return true;
 }
 
 void shutdown() noexcept {
+    aurora::rmlui::set_translate_callback({});
+    i18n::shutdown();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();
@@ -129,8 +160,8 @@ void handle_event(const SDL_Event& event) noexcept {
         if (SDL_GamepadConnected(gamepad)) {
             if (getSettings().game.enableControllerToasts) {
                 const char* name = SDL_GetGamepadName(gamepad);
-                Rml::String content = fmt::format("<span>{}</span>", name ? name : "[Unknown]");
-                Rml::String title = "Device Connected";
+                Rml::String content = fmt::format("<span>{}</span>", name ? name : "[UNKNOWN]");
+                Rml::String title = "[CONTROLLER_CONNECTED]";
                 if (const char* icon = connection_state_icon(SDL_GetGamepadConnectionState(gamepad))) {
                     title = fmt::format(
                         "<row><span>{}</span> <icon class=\"connection\">&#x{};</icon></row>", title,
@@ -163,8 +194,8 @@ void handle_event(const SDL_Event& event) noexcept {
             const char* name = SDL_GetGamepadNameForID(event.gdevice.which);
             push_toast({
                 .type = "controller",
-                .title = "Device Disconnected",
-                .content = name ? name : "[Unknown]",
+                .title = "[CONTROLLER_DISCONNECTED]",
+                .content = name ? name : "[UNKNOWN]",
                 .duration = std::chrono::seconds(4),
             });
         }
@@ -219,6 +250,8 @@ void update() noexcept {
     if (!aurora::rmlui::is_initialized()) {
         return;
     }
+
+    apply_ui_language_font_class();
 
     input::update_input();
     const auto update_documents = [](auto& documents) {

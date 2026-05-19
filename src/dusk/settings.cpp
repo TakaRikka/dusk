@@ -54,6 +54,7 @@ UserSettings g_userSettings = {
         .enableAchievementToasts {"game.enableAchievementToasts", true},
         .enableControllerToasts {"game.enableControllerToasts", true},
         .enableDiscordPresence {"game.enableDiscordPresence", true},
+        .enableChineseNameKeyboard {"game.enableChineseNameKeyboard", false},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
@@ -131,6 +132,7 @@ UserSettings g_userSettings = {
     .backend = {
         .isoPath {"backend.isoPath", ""},
         .isoVerification {"backend.isoVerification", DiscVerificationState::Unknown},
+        .uiLanguage {"backend.uiLanguage", "en"},
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
@@ -237,6 +239,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.enableAchievementToasts);
     Register(g_userSettings.game.enableControllerToasts);
+    Register(g_userSettings.game.enableChineseNameKeyboard);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
     Register(g_userSettings.game.midnasLamentNonStop);
@@ -279,6 +282,7 @@ void registerSettings() {
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);
+    Register(g_userSettings.backend.uiLanguage);
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);

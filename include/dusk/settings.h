@@ -142,6 +142,7 @@ struct UserSettings {
         ConfigVar<bool> enableAchievementToasts;
         ConfigVar<bool> enableControllerToasts;
         ConfigVar<bool> enableDiscordPresence;
+        ConfigVar<bool> enableChineseNameKeyboard;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;
@@ -219,6 +220,7 @@ struct UserSettings {
     struct {
         ConfigVar<std::string> isoPath;
         ConfigVar<DiscVerificationState> isoVerification;
+        ConfigVar<std::string> uiLanguage;
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
