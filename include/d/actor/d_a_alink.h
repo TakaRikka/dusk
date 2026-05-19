@@ -18,19 +18,6 @@
 #include "res/Object/AlAnm.h"
 #include "res/Object/Always.h"
 
-#if TARGET_PC
-#define CLASSIC_TRIGGER(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindTrigAnyPort(action))
-
-#define CLASSIC_BUTTON(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindHoldAnyPort(action))
-
-#define VERB_BUTTON_ALONE(action) (dusk::getActionBindHoldAnyPort(action))
-#define VERB_TRIGGER_ALONE(action) (dusk::getActionBindTrigAnyPort(action))
-
-#define VERB_TRIGGER(action, classic) (dusk::getActionBindTrigAnyPort(action) || CLASSIC_TRIGGER(classic))
-
-#define VERB_BUTTON(action, classic) (dusk::getActionBindHoldAnyPort(action) || CLASSIC_BUTTON(classic))
-#endif
-
 class J2DAnmColorKey;
 class J2DAnmTransformKey;
 class J2DScreen;
@@ -3559,10 +3546,12 @@ public:
     bool checkFisingRodLure() const { return mEquipItem == 0x105; }
     BOOL doTrigger() const { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::INTERACT, dusk::ActionBinds::BUTTON_A), mItemTrigger & BTN_A); }
     BOOL rollTrigger() const;
-    BOOL swordTrigger() { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::SWORD_ATTACK, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
+    BOOL rollButton() const;
+    BOOL swordTrigger() const { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::SWORD_ATTACK, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
+    BOOL quickSpinTrigger() const { return DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::QUICK_SPIN), false); }
     BOOL grassCancelTrigger() { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::REJECT, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
     BOOL arrowChangeTrigger() { return itemActionTrigger(); }
-    BOOL peepSubjectCancelTrigger() { return itemTriggerCheck(BTN_B); }
+    BOOL peepSubjectCancelTrigger() { return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::REJECT, dusk::ActionBinds::BUTTON_B), itemTriggerCheck(BTN_B)); }
     int getStartMode() { return (fopAcM_GetParam(this) >> 0xC) & 0x1F; }
     // TODO: Update this to check Analog R value and remove the Digital R input
     bool checkInputOnR() const { return CLASSIC_BUTTON(dusk::ActionBinds::DIGITAL_R) || mMoveValue > 0.05f; }

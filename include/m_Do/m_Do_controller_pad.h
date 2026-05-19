@@ -1,13 +1,25 @@
 #ifndef M_DO_M_DO_CONTROLLER_PAD_H
 #define M_DO_M_DO_CONTROLLER_PAD_H
 
+#include "global.h"
+
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
+#include "dusk/action_bindings.h"
 #include "dusk/settings.h"
+#include "pad.h"
+
+#if TARGET_PC
+#define CLASSIC_TRIGGER(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindTrigAnyPort(action))
+
+#define CLASSIC_BUTTON(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindHoldAnyPort(action))
+#endif
 
 // Controller Ports 1 - 4
 enum { PAD_1, PAD_2, PAD_3, PAD_4 };
 
+// TODO: This is a Temporary Transition Layer
+// TODO: Handling Analog Controls later
 class mDoCPd_c {
 public:
     static void create();
@@ -21,33 +33,33 @@ public:
     static u32 getTrig(u32 pad) { return getCpadInfo(pad).mPressedButtonFlags; }
     static u32 getTrigLockL(u32 pad) { return getCpadInfo(pad).mTrigLockL; }
     static u32 getTrigLockR(u32 pad) { return getCpadInfo(pad).mTrigLockR; }
-    static u32 getTrigUp(u32 pad) { return getTrig(pad) & PAD_BUTTON_UP; }
-    static u32 getTrigDown(u32 pad) { return getTrig(pad) & PAD_BUTTON_DOWN; }
-    static u32 getTrigLeft(u32 pad) { return getTrig(pad) & PAD_BUTTON_LEFT; }
-    static u32 getTrigRight(u32 pad) { return getTrig(pad) & PAD_BUTTON_RIGHT; }
-    static u32 getTrigL(u32 pad) { return getTrig(pad) & PAD_TRIGGER_L; }
-    static u32 getTrigR(u32 pad) { return getTrig(pad) & PAD_TRIGGER_R; }
-    static u32 getTrigA(u32 pad) { return getTrig(pad) & PAD_BUTTON_A; }
-    static u32 getTrigB(u32 pad) { return getTrig(pad) & PAD_BUTTON_B; }
-    static u32 getTrigZ(u32 pad) { return getTrig(pad) & PAD_TRIGGER_Z; }
-    static u32 getTrigY(u32 pad) { return getTrig(pad) & PAD_BUTTON_Y; }
-    static u32 getTrigX(u32 pad) { return getTrig(pad) & PAD_BUTTON_X; }
-    static u32 getTrigStart(u32 pad) { return getTrig(pad) & PAD_BUTTON_START; }
+    static u32 getTrigUp(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::DPAD_UP) ? PAD_BUTTON_UP : 0), getTrig(pad) & PAD_BUTTON_UP); }
+    static u32 getTrigDown(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::DPAD_DOWN) ? PAD_BUTTON_DOWN : 0), getTrig(pad) & PAD_BUTTON_DOWN); }
+    static u32 getTrigLeft(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::DPAD_LEFT) ? PAD_BUTTON_LEFT : 0), getTrig(pad) & PAD_BUTTON_LEFT); }
+    static u32 getTrigRight(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::DPAD_RIGHT) ? PAD_BUTTON_RIGHT : 0), getTrig(pad) & PAD_BUTTON_RIGHT); }
+    static u32 getTrigL(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::DIGITAL_L) ? PAD_TRIGGER_L : 0) , getTrig(pad) & PAD_TRIGGER_L); }
+    static u32 getTrigR(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::DIGITAL_R) ? PAD_TRIGGER_R : 0), getTrig(pad) & PAD_TRIGGER_R); }
+    static u32 getTrigA(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::BUTTON_A) ? PAD_BUTTON_A : 0), getTrig(pad) & PAD_BUTTON_A); }
+    static u32 getTrigB(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::BUTTON_B) ? PAD_BUTTON_B : 0), getTrig(pad) & PAD_BUTTON_B); }
+    static u32 getTrigZ(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::BUTTON_Z) ? PAD_TRIGGER_Z : 0), getTrig(pad) & PAD_TRIGGER_L); }
+    static u32 getTrigY(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::BUTTON_X) ? PAD_BUTTON_X : 0), getTrig(pad) & PAD_BUTTON_X); }
+    static u32 getTrigX(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::BUTTON_Y) ? PAD_BUTTON_Y : 0), getTrig(pad) & PAD_BUTTON_Y); }
+    static u32 getTrigStart(u32 pad) { return DUSK_IF_ELSE((CLASSIC_TRIGGER(dusk::ActionBinds::BUTTON_START) ? PAD_BUTTON_START : 0), getTrig(pad) & PAD_BUTTON_START); }
     static u32 getHold(u32 pad) { return getCpadInfo(pad).mButtonFlags; }
     static u32 getHoldLockL(u32 pad) { return getCpadInfo(pad).mHoldLockL; }
     static u32 getHoldLockR(u32 pad) { return getCpadInfo(pad).mHoldLockR; }
-    static u32 getHoldUp(u32 pad) { return getHold(pad) & PAD_BUTTON_UP; }
-    static u32 getHoldDown(u32 pad) { return getHold(pad) & PAD_BUTTON_DOWN; }
-    static u32 getHoldLeft(u32 pad) { return getHold(pad) & PAD_BUTTON_LEFT; }
-    static u32 getHoldRight(u32 pad) { return getHold(pad) & PAD_BUTTON_RIGHT; }
-    static u32 getHoldL(u32 pad) { return getHold(pad) & PAD_TRIGGER_L; }
-    static u32 getHoldR(u32 pad) { return getHold(pad) & PAD_TRIGGER_R; }
-    static u32 getHoldA(u32 pad) { return getHold(pad) & PAD_BUTTON_A; }
-    static u32 getHoldB(u32 pad) { return getHold(pad) & PAD_BUTTON_B; }
-    static u32 getHoldZ(u32 pad) { return getHold(pad) & PAD_TRIGGER_Z; }
-    static u32 getHoldY(u32 pad) { return getHold(pad) & PAD_BUTTON_Y; }
-    static u32 getHoldX(u32 pad) { return getHold(pad) & PAD_BUTTON_X; }
-    static u32 getHoldStart(u32 pad) { return getHold(pad) & PAD_BUTTON_START; }
+    static u32 getHoldUp(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::DPAD_UP) ? PAD_BUTTON_UP : 0), getHold(pad) & PAD_BUTTON_UP); }
+    static u32 getHoldDown(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::DPAD_DOWN) ? PAD_BUTTON_DOWN : 0), getHold(pad) & PAD_BUTTON_DOWN); }
+    static u32 getHoldLeft(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::DPAD_LEFT) ? PAD_BUTTON_LEFT : 0), getHold(pad) & PAD_BUTTON_LEFT); }
+    static u32 getHoldRight(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::DPAD_RIGHT) ? PAD_BUTTON_RIGHT : 0), getHold(pad) & PAD_BUTTON_RIGHT); }
+    static u32 getHoldL(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::DIGITAL_L) ? PAD_TRIGGER_L : 0) , getHold(pad) & PAD_TRIGGER_L); }
+    static u32 getHoldR(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::DIGITAL_R) ? PAD_TRIGGER_R : 0), getHold(pad) & PAD_TRIGGER_R); }
+    static u32 getHoldA(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::BUTTON_A) ? PAD_BUTTON_A : 0), getHold(pad) & PAD_BUTTON_A); }
+    static u32 getHoldB(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::BUTTON_B) ? PAD_BUTTON_B : 0), getHold(pad) & PAD_BUTTON_B); }
+    static u32 getHoldZ(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::BUTTON_Z) ? PAD_TRIGGER_Z : 0), getHold(pad) & PAD_TRIGGER_L); }
+    static u32 getHoldY(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::BUTTON_X) ? PAD_BUTTON_X : 0), getHold(pad) & PAD_BUTTON_X); }
+    static u32 getHoldX(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::BUTTON_Y) ? PAD_BUTTON_Y : 0), getHold(pad) & PAD_BUTTON_Y); }
+    static u32 getHoldStart(u32 pad) { return DUSK_IF_ELSE((CLASSIC_BUTTON(dusk::ActionBinds::BUTTON_START) ? PAD_BUTTON_START : 0), getHold(pad) & PAD_BUTTON_START); }
     static f32 getStickX(u32 pad) { return getCpadInfo(pad).mMainStickPosX; }
     static f32 getStickY(u32 pad) { return getCpadInfo(pad).mMainStickPosY; }
     static f32 getStickX3D(u32 pad) { return getCpadInfo(pad).mMainStickPosX; }

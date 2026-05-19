@@ -8,6 +8,19 @@ namespace dusk {
 
 const std::size_t ITEM_ACCESS_SLOTS=2;
 
+#if TARGET_PC
+#define CLASSIC_TRIGGER(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindTrigAnyPort(action))
+
+#define CLASSIC_BUTTON(action) (dusk::getSettings().game.enableClassicKeybinds && dusk::getActionBindHoldAnyPort(action))
+
+#define VERB_BUTTON_ALONE(action) (dusk::getActionBindHoldAnyPort(action))
+#define VERB_TRIGGER_ALONE(action) (dusk::getActionBindTrigAnyPort(action))
+
+#define VERB_TRIGGER(action, classic) (dusk::getActionBindTrigAnyPort(action) || CLASSIC_TRIGGER(classic))
+
+#define VERB_BUTTON(action, classic) (dusk::getActionBindHoldAnyPort(action) || CLASSIC_BUTTON(classic))
+#endif
+
 enum class ActionBinds {
     /* Do nothing */
     NOBIND,

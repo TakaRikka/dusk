@@ -3456,6 +3456,7 @@ int daAlink_c::procWolfSit() {
                 checkWolfDashMode() ? mpHIO->mWolf.mWlMove.m.mDeceleration :
                                       mpHIO->mWolf.mWlMoveNoP.m.mDeceleration);
 
+    // TODO: Revisit this: Not sure what this does. Doesn't seem to make wolf link break out of his sitting proc.
     if (!spActionButton() && mDemo.getDemoMode() != daPy_demo_c::DEMO_UNK_15_e) {
         checkNextActionWolfFromLie();
     } else if (checkAnmEnd(frameCtrl)) {
@@ -4477,7 +4478,7 @@ int daAlink_c::procWolfRopeMove() {
     } else if (mTargetedActor != NULL) {
         setDoStatus(BUTTON_STATUS_UNK_139);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             return procWolfJumpAttackInit(1);
         }
     }
@@ -4709,7 +4710,7 @@ int daAlink_c::procWolfRopeHang() {
     if (mProcVar3.field_0x300e == 0 || temp_f31 < 22.0f) {
         setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
-        if (doTrigger()) {
+        if (doTrigger() IF_DUSK(|| VERB_TRIGGER_ALONE(dusk::ActionBinds::REJECT))) {
             rope->setCoCancelTimer();
 
             current.pos.x -= 80.0f * cM_ssin(shape_angle.y);
@@ -5168,7 +5169,7 @@ int daAlink_c::procWolfTagJump() {
             cLib_addCalcAngleS(&shape_angle.y, cLib_targetAngleY(&current.pos, &field_0x3738), 2, 0x2000, 0x800);
             current.angle.y = shape_angle.y;
 
-            if (doTrigger()) {
+            if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
                 mProcVar5.field_0x3012 = 1;
             }
 
@@ -5277,7 +5278,7 @@ int daAlink_c::procWolfTagJumpLand() {
         if (frameCtrl_p->getFrame() > mpHIO->mWolf.mWlPoint.m.mTagLandingAnm.mCancelFrame) {
             setDoStatus(BUTTON_STATUS_UNK_147);
 
-            if (doTrigger()) {
+            if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
                 return procWolfTagJumpInit(field_0x280c.getActor());
             }
         }
@@ -5427,7 +5428,7 @@ int daAlink_c::changeWolfHangEndProc() {
     } else {
         setDoStatus(BUTTON_STATUS_DROP_DOWN);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             current.pos.x -= cM_ssin(shape_angle.y) * 50.0f;
             current.pos.z -= cM_scos(shape_angle.y) * 50.0f;
 
@@ -6578,7 +6579,7 @@ int daAlink_c::decideDoStatusSwimWolf() {
     {
         setDoStatus(BUTTON_STATUS_DASH);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             onNoResetFlg1(FLG1_DASH_MODE);
 
             if (field_0x2fc7 == 1 || field_0x2fc7 == 3) {
@@ -7136,7 +7137,7 @@ int daAlink_c::procWolfRollAttackCharge() {
     }
 
     #if PLATFORM_GCN
-    if (!itemButtonCheck(BTN_B)) {
+    if (DUSK_IF_ELSE(!swordButton(), !itemButtonCheck(BTN_B))) {
         checkWolfAttackAction();
     } else
     #endif
@@ -8357,7 +8358,7 @@ int daAlink_c::procWolfEnemyHangBite() {
     current.angle.y = shape_angle.y;
     setDoStatusContinuation(3);
 
-    if (doTrigger()) {
+    if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
         mProcVar3.field_0x300e = 1;
         mProcVar0.field_0x3008 = mpHIO->mWolf.mWlAttack.mWlAtBite.m.mBiteAttachTime;
     } else if (mProcVar0.field_0x3008 != 0) {
@@ -8379,7 +8380,7 @@ int daAlink_c::procWolfEnemyHangBite() {
             return procWolfJumpAttackKickInit();
         }
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             cLib_chaseF(&field_0x3478, mpHIO->mWolf.mWlAttack.mWlAtBite.m.mHangingBiteMidAnmSpeedMax,
                         mpHIO->mWolf.mWlAttack.mWlAtBite.m.mHangingBiteMidAnmSpeedAcceleration);
         } else {

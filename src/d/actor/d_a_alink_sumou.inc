@@ -73,7 +73,7 @@ int daAlink_c::procSumouReady() {
         setDoStatusEmphasys(BUTTON_STATUS_GRAB);
         dComIfGp_setAdvanceDirection(5);
 
-        if (doTrigger()) {
+        if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) ||VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger())) {
             mProcVar2.field_0x300c = 1;
         }
 
@@ -200,7 +200,7 @@ int daAlink_c::procSumouMove() {
 
         sp8 = frameCtrl_p->getRate();
         if (mProcVar0.field_0x3008 != 0) {
-            if (doTrigger()) {
+            if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) ||VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger())) {
                 mProcVar0.field_0x3008--;
             }
 
@@ -224,7 +224,7 @@ int daAlink_c::procSumouMove() {
             field_0x3198 = ANM_SUMOU_PUSH_BACK;
         }
     } else if (mProcVar3.field_0x300e == 0) {
-        if (mProcVar2.field_0x300c > 0 && doTrigger()) {
+        if (mProcVar2.field_0x300c > 0 && DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) ||VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger())) {
             mProcVar2.field_0x300c--;
         }
 
@@ -232,7 +232,7 @@ int daAlink_c::procSumouMove() {
         if (mSpeedModifier > 0.0f) {
             sp8 = frameCtrl_p->getRate();
 
-            if (doTrigger()) {
+            if (DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) ||VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger())) {
                 cLib_chaseF(&sp8, 1.5f, 0.1f);
             } else {
                 cLib_addCalc(&sp8, 1.0f, 0.5f, 0.05f, 0.02f);
@@ -360,11 +360,11 @@ int daAlink_c::procSumouSideMove() {
     }
 
     int temp_r30_2 = cLib_distanceAngleS(mMoveAngle, shape_angle.y);
-    if (mMode == 0x1C || mMode == 0x1B || doTrigger() || sumouPunchTrigger() ||
+    if (mMode == 0x1C || mMode == 0x1B || DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) ||VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger()) || sumouPunchTrigger() ||
         (static_cast<daNpcWrestler_c*>(mCargoCarryAcKeep.getActor())->getWrestlerAction() == 3 &&
          !checkZeroSpeedF()))
     {
-        return procSumouActionInit(doTrigger(), sumouPunchTrigger(), mProcVar0.field_0x3008);
+        return procSumouActionInit(DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::GRAB_ALL) ||VERB_TRIGGER(dusk::ActionBinds::GRAB_HEAVY, dusk::ActionBinds::BUTTON_A), doTrigger()), sumouPunchTrigger(), mProcVar0.field_0x3008);
     }
 
     setSumouPunchStatus();

@@ -1165,10 +1165,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
-        addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
-            "Allows Wolf Link to howl and change the time of day.");
-        addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
-            "Transform instantly by pressing R and Y simultaneously.");
+        addSpeedrunDisabledOption("Sun's Song (Special+Sense(X))", getSettings().game.sunsSong,
+            "Allows Wolf Link to howl and change the time of day after pressing Special and tapping Sense(or Classic X).");
+        addOption("Quick Transform (Special+Dig(Y))", getSettings().game.enableQuickTransform,
+            "Transform instantly by pressing Special and Dig(or Classic Y) simultaneously.");
 
         leftPane.add_section("Speedrunning");
         config_bool_select(leftPane, rightPane, getSettings().game.speedrunMode,
@@ -1242,7 +1242,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Abilities");
         addCheat(
-            "Moon Jump (R+A)", getSettings().game.moonJump, "Hold R and A to rise into the air.");
+            "Moon Jump (Special+Roll(A))", getSettings().game.moonJump, "Hold Special and Roll/Jump(or Classic A) to rise into the air.");
         addCheat("Super Clawshot", getSettings().game.superClawshot,
             "Extends Clawshot behavior beyond the normal game rules.");
         addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
@@ -1254,7 +1254,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat("Fast Roll", getSettings().game.fastRoll,
             "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
-            "Speeds up Spinner movement while holding R.");
+            "Speeds up Spinner movement while holding Special.");
         addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
             "Lets the magic armor work without consuming rupees.");
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,

@@ -194,8 +194,8 @@ BOOL daAlink_c::checkSubjectEnd(BOOL i_isPlaySe) {
     setDoStatus(BUTTON_STATUS_BACK);
 
     // Allow pressing the first person binding to also leave first person
-    if (IF_DUSK(dusk::getActionBindTrig(dusk::ActionBinds::FIRST_PERSON_CAMERA, 0)) ||
-        checkEventRun() || checkEquipAnime() || doTrigger() || checkSetItemTrigger(dItemNo_HAWK_EYE_e) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
+    if (IF_DUSK(dusk::getActionBindTrig(dusk::ActionBinds::FIRST_PERSON_CAMERA, 0) ||)
+        checkEventRun() || checkEquipAnime() || DUSK_IF_ELSE(VERB_TRIGGER_ALONE(dusk::ActionBinds::REJECT) || VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doTrigger()) || checkSetItemTrigger(dItemNo_HAWK_EYE_e) || subjectCancelTrigger() || checkEndResetFlg0(ERFLG0_FORCE_SUBJECT_CANCEL) || dComIfGp_checkCameraAttentionStatus(field_0x317c, 0x2000)) {
         if (i_isPlaySe) {
             seStartSystem(Z2SE_SUBJ_VIEW_OUT);
         }

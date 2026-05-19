@@ -27,6 +27,8 @@
 
 #if TARGET_PC
 #include "tracy/Tracy.hpp"
+#include "dusk/action_bindings.h"
+#include "dusk/settings.h"
 #include <dusk/gamepad_color.h>
 #include <dusk/autosave.h>
 #endif
@@ -756,25 +758,25 @@ static void duskExecute() {
         isRecording = false;
     }
 
-    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1)) {
+    if (VERB_BUTTON_ALONE(dusk::ActionBinds::DUSKLIGHT_SPECIAL) && VERB_TRIGGER(dusk::ActionBinds::SENSE, dusk::ActionBinds::BUTTON_X)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleWolfHowl();
         }
     }
 
-    if ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1)) {
+    if (VERB_BUTTON_ALONE(dusk::ActionBinds::DUSKLIGHT_SPECIAL) && VERB_TRIGGER(dusk::ActionBinds::DIG, dusk::ActionBinds::BUTTON_Y)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
         }
     }
 
-    if (dusk::getSettings().game.moonJump && (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1))) {
+    if (dusk::getSettings().game.moonJump && (VERB_BUTTON_ALONE(dusk::ActionBinds::DUSKLIGHT_SPECIAL) && VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A))) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             link->speed.y = 56.0f;
         }
     }
 
-    if (dusk::getSettings().game.fastSpinner && mDoCPd_c::getHoldR(PAD_1)) {
+    if (dusk::getSettings().game.fastSpinner && VERB_BUTTON_ALONE(dusk::ActionBinds::DUSKLIGHT_SPECIAL)) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             auto spinnerActor = (fopAc_ac_c*)dynamic_cast<daAlink_c*>(link)->getSpinnerActor();
             if (spinnerActor) {

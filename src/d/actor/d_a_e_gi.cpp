@@ -741,12 +741,14 @@ void daE_GI_c::executeBiteDamage() {
     }
 }
 
+
+// TODO: Needs Complete Rework
 void daE_GI_c::PushButtonCount() {
     if (mPlayerStunTimer != 0) {
         if (abs((s16)(mPrevStickAngle - mDoCPd_c::getStickAngle3D(PAD_1))) > 0x1000) {
             mPushButtonCount++;
         }
-    
+
         if (mDoCPd_c::getTrigA(PAD_1)) {
             mPushButtonCount += 2;
         }

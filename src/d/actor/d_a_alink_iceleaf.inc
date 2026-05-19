@@ -275,7 +275,7 @@ int daAlink_c::checkNextActionBoard() {
     }
 
     // TODO: Revisit this.
-    if ((!doButton() && (mProcID == PROC_BOARD_ROW || mProcID == PROC_BOARD_TURN)) ||
+    if ((DUSK_IF_ELSE(!(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A)), !(doButton())) && (mProcID == PROC_BOARD_ROW || mProcID == PROC_BOARD_TURN)) ||
          mProcID == PROC_BOARD_CUT || mProcID == PROC_BOARD_ROW || mProcID == PROC_BOARD_JUMP) {
         return 0;
     }
@@ -473,7 +473,7 @@ int daAlink_c::procBoardWait() {
                 setDoStatus(BUTTON_STATUS_JUMP);
             }
 
-            if (!DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), (doButton()))) {
+            if (DUSK_IF_ELSE(!(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A)), !(doButton()))) {
                 mProcVar5.field_0x3012 = 0;
 
                 if (mNormalSpeed > 15.0f) {

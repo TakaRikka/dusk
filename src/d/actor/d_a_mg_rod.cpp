@@ -22,8 +22,14 @@
 #include "c/c_damagereaction.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include "global.h"
 #include <cmath>
 #include <cstring>
+
+#if TARGET_PC
+#include "dusk/action_bindings.h"
+#include "dusk/settings.h"
+#endif
 
 #include "dusk/version.hpp"
 
@@ -5793,6 +5799,7 @@ static int dmg_rod_Execute(dmg_rod_class* i_this) {
     i_this->rod_substick_y = mDoCPd_c::getSubStickY(PAD_1);
 
     i_this->reel_speed = 5.0f;
+    // TODO: Introduce Fishing Controls in action_bindings.h
     i_this->reel_btn_flags = mDoCPd_c::getHoldB(PAD_1) | mDoCPd_c::getHoldDown(PAD_1);
     if (mDoCPd_c::getHoldDown(PAD_1)) {
         i_this->reel_speed = 15.0f;

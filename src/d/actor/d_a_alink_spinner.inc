@@ -211,8 +211,8 @@ int daAlink_c::procSpinnerWait() {
             mProcVar3.field_0x300e = shape_angle.y;
         }
     } else {
-        if (checkSetItemTrigger(dItemNo_SPINNER_e) || swordSwingTrigger() || itemSetBtn == 2) {
-            if (swordSwingTrigger()) {
+        if (checkSetItemTrigger(dItemNo_SPINNER_e) || DUSK_IF_ELSE(swordSwingTrigger() || VERB_TRIGGER_ALONE(dusk::ActionBinds::QUICK_SPIN), swordSwingTrigger()) || itemSetBtn == 2) {
+            if (DUSK_IF_ELSE(swordSwingTrigger() || VERB_TRIGGER_ALONE(dusk::ActionBinds::QUICK_SPIN), swordSwingTrigger())) {
                 swordEquip(0);
             }
             setJumpMode();

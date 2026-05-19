@@ -10,7 +10,7 @@ namespace dusk {
 static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::COUNT)>, PAD_CHANMAX> actionPressData{};
 
 // Useful if there are ever plans to add more item slots
-static std::array<ActionBinds, dusk::ITEM_ACCESS_SLOTS> actionItemVerbs = {ActionBinds::ITEM_ACCESS_X, ActionBinds::ITEM_ACCESS_Y};
+static std::array<ActionBinds, dusk::ITEM_ACCESS_SLOTS> actionItemVerbs = {ActionBinds::ITEM_ACCESS_Y, ActionBinds::ITEM_ACCESS_X};
 static std::array<ActionBinds, 2> actionItemClassic = {ActionBinds::BUTTON_X, ActionBinds::BUTTON_Y};
 
 ActionBindsMap& getActionBinds() {

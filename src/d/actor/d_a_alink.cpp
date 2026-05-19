@@ -12072,6 +12072,10 @@ BOOL daAlink_c::rollTrigger() const {
     return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doTrigger());
 }
 
+BOOL daAlink_c::rollButton() const {
+    return DUSK_IF_ELSE(VERB_TRIGGER(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doButton());
+}
+
 BOOL daAlink_c::checkMoveDoAction() {
     if (rollTrigger()) {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
@@ -12307,7 +12311,7 @@ BOOL daAlink_c::checkItemChangeFromButton() {
             && !checkCanoeRide()
             && (!checkModeFlg(0x40000) || checkEquipHeavyBoots())
             && mEquipItem != 0x103
-            && swordTrigger())
+            && (swordTrigger() IF_DUSK(|| quickSpinTrigger())))
         {
             if (checkEndResetFlg1(ERFLG1_SWORD_TRIGGER_NON)) {
                 return 0;

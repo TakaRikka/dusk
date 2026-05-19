@@ -662,7 +662,7 @@ void daAlink_c::setSwimMoveAnime() {
 
         if (mMaxSpeed < mpHIO->mSwim.m.mUnderwaterMaxSpeed) {
             mMaxSpeed = mpHIO->mSwim.m.mUnderwaterMaxSpeed;
-        } else if (doTrigger()) {
+        } else if (DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
             mMaxSpeed += 0.75f;
             if (mMaxSpeed > temp_f29) {
                 mMaxSpeed = temp_f29;
@@ -863,7 +863,7 @@ bool daAlink_c::checkUpSwimButtonAccept() {
 
 BOOL daAlink_c::checkSwimButtonMove() {
     return !checkNoResetFlg0(FLG0_SWIM_UP) &&
-           (checkSwimButtonAccept() || checkUpSwimButtonAccept()) && doButton();
+           (checkSwimButtonAccept() || checkUpSwimButtonAccept()) && DUSK_IF_ELSE(VERB_BUTTON(dusk::ActionBinds::ROLL, dusk::ActionBinds::BUTTON_A), doButton());
 }
 
 BOOL daAlink_c::checkZoraSwimMove() {
@@ -1031,12 +1031,12 @@ int daAlink_c::procSwimWait() {
         return 1;
     }
 
-    if (checkSwimButtonAccept() && doTrigger()) {
+    if (checkSwimButtonAccept() && DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
         procSwimDiveInit();
     } else if ((checkInputOnR() && mNormalSpeed >= mpHIO->mSwim.m.mForwardMinSpeed) ||
-               (checkUpSwimButtonAccept() && doButton()))
+               (checkUpSwimButtonAccept() && DUSK_IF_ELSE(rollButton(), doButton())))
     {
-        if (checkUpSwimButtonAccept() && doButton()) {
+        if (checkUpSwimButtonAccept() && DUSK_IF_ELSE(rollButton(), doButton())) {
             field_0x3000 = 30;
         }
 
@@ -1094,7 +1094,7 @@ int daAlink_c::procSwimMove() {
 
     daPy_frameCtrl_c* framectrl = mUnderFrameCtrl;
 
-    if (checkUpSwimButtonAccept() && doButton()) {
+    if (checkUpSwimButtonAccept() && DUSK_IF_ELSE(rollButton(), doButton())) {
         field_0x3000 = 30;
     }
 
@@ -1113,14 +1113,14 @@ int daAlink_c::procSwimMove() {
         return 1;
     }
 
-    if (checkSwimButtonAccept() && doTrigger() && !getZoraSwim()) {
+    if (checkSwimButtonAccept() && DUSK_IF_ELSE(rollTrigger(), doTrigger()) && !getZoraSwim()) {
         procSwimDiveInit();
-    } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_DASH && doTrigger()) {
+    } else if (dComIfGp_getDoStatus() == BUTTON_STATUS_DASH && DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
         onNoResetFlg1(FLG1_DASH_MODE);
         field_0x30d0 = mpHIO->mSwim.m.field_0x5c;
         setSingleAnimeParam(ANM_SWIM_DASH, &mpHIO->mSwim.m.mDashAnm);
         field_0x3198 = ANM_SWIM_DASH;
-    } else if (!checkZoraSwimMove() && (!checkUpSwimButtonAccept() || !doButton()) &&
+    } else if (!checkZoraSwimMove() && (!checkUpSwimButtonAccept() || DUSK_IF_ELSE(!rollButton(), !doButton())) &&
                mNormalSpeed < mpHIO->mSwim.m.mForwardMinSpeed)
     {
         procSwimWaitInit(0);
@@ -1331,11 +1331,11 @@ int daAlink_c::procSwimHookshotMove() {
         return 1;
     }
 
-    if (checkSwimButtonAccept() && doTrigger()) {
+    if (checkSwimButtonAccept() && DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
         return procSwimDiveInit();
     }
 
-    if (checkUpSwimButtonAccept() && doTrigger()) {
+    if (checkUpSwimButtonAccept() && DUSK_IF_ELSE(rollTrigger(), doTrigger())) {
         field_0x3000 = 30;
         return procSwimMoveInit();
     }
