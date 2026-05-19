@@ -1,0 +1,94 @@
+diff --git a/include/aurora/rmlui.hpp b/include/aurora/rmlui.hpp
+index 3b13abe..46a8925 100644
+--- a/include/aurora/rmlui.hpp
++++ b/include/aurora/rmlui.hpp
+@@ -3,6 +3,7 @@
+ #ifdef AURORA_ENABLE_RMLUI
+ 
+ #include <RmlUi/Core/Context.h>
++#include <functional>
+ 
+ namespace aurora::rmlui {
+ 
+@@ -16,6 +17,8 @@ bool is_initialized() noexcept;
+ void set_input_type(InputType type) noexcept;
+ void set_ui_scale(float scale) noexcept;
+ float get_ui_scale() noexcept;
++void set_translate_callback(
++    std::function<int(Rml::String&, const Rml::String&)> callback) noexcept;
+ 
+ } // namespace aurora::rmlui
+ 
+diff --git a/lib/rmlui.cpp b/lib/rmlui.cpp
+index 876e425..ac3a41c 100644
+--- a/lib/rmlui.cpp
++++ b/lib/rmlui.cpp
+@@ -313,6 +313,14 @@ void set_input_type(InputType type) noexcept {
+   }
+ }
+ 
++void set_translate_callback(
++    std::function<int(Rml::String&, const Rml::String&)> callback) noexcept {
++  auto* systemInterface = static_cast<SystemInterface_Aurora*>(Backend::GetSystemInterface());
++  if (systemInterface != nullptr) {
++    systemInterface->SetTranslateCallback(std::move(callback));
++  }
++}
++
+ void handle_event(SDL_Event& event) noexcept {
+   if (g_context == nullptr || imgui::wants_capture_event(event)) {
+     return;
+diff --git a/lib/rmlui/SystemInterface_Aurora.cpp b/lib/rmlui/SystemInterface_Aurora.cpp
+index 3ed6322..4ea9cc1 100644
+--- a/lib/rmlui/SystemInterface_Aurora.cpp
++++ b/lib/rmlui/SystemInterface_Aurora.cpp
+@@ -125,4 +125,17 @@ bool SystemInterface_Aurora::LogMessage(Rml::Log::Type type, const Rml::String&
+     return true;
+   }
+ }
++
++int SystemInterface_Aurora::TranslateString(Rml::String& translated, const Rml::String& input) {
++  if (!mTranslateCallback) {
++    translated = input;
++    return 0;
++  }
++  return mTranslateCallback(translated, input);
++}
++
++void SystemInterface_Aurora::SetTranslateCallback(
++    std::function<int(Rml::String&, const Rml::String&)> callback) noexcept {
++  mTranslateCallback = std::move(callback);
++}
+ } // namespace aurora::rmlui
+diff --git a/lib/rmlui/SystemInterface_Aurora.h b/lib/rmlui/SystemInterface_Aurora.h
+index 9fc6703..0bae9a8 100644
+--- a/lib/rmlui/SystemInterface_Aurora.h
++++ b/lib/rmlui/SystemInterface_Aurora.h
+@@ -2,6 +2,7 @@
+ 
+ #include <aurora/rmlui.hpp>
+ #include <RmlUi_Platform_SDL.h>
++#include <functional>
+ 
+ namespace aurora::rmlui {
+ 
+@@ -10,16 +11,19 @@ public:
+   SystemInterface_Aurora();
+   ~SystemInterface_Aurora() override = default;
+   bool LogMessage(Rml::Log::Type type, const Rml::String& message) override;
++  int TranslateString(Rml::String& translated, const Rml::String& input) override;
+   void ActivateKeyboard(Rml::Vector2f caret_position, float line_height) override;
+   void DeactivateKeyboard() override;
+ 
+   // Custom API
+   void SetInputType(InputType type) noexcept;
++  void SetTranslateCallback(std::function<int(Rml::String&, const Rml::String&)> callback) noexcept;
+ 
+ private:
+   InputType mTextInputType = InputType::Text;
+   InputType mActiveTextInputType = InputType::Text;
+   bool mHasActiveTextInputType = false;
++  std::function<int(Rml::String&, const Rml::String&)> mTranslateCallback;
+ };
+ 
+ } // namespace aurora::rmlui
