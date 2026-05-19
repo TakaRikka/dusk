@@ -73,6 +73,7 @@
   <entry key="DATA_FOLDER">数据文件夹</entry>
   <entry key="THE_DATA_FOLDER_IS_WHERE_DUSKLIGHT_STORES_SETTINGS_SAVES_LOGS_TEXTURE_RE">数据文件夹是暮色之光存储设置、<br/>存档、日志、纹理替换<br/>和其他应用数据的地方。</entry>
   <entry key="OPEN_DATA_FOLDER">打开数据文件夹</entry>
+  <entry key="OUTPUT_RESAMPLING">输出重采样</entry>
   <entry key="CHANGE_DATA_FOLDER">更改数据文件夹</entry>
   <entry key="PORTABLE_MODE">便携模式</entry>
   <entry key="RESET_TO_DEFAULT">重置为默认</entry>
@@ -348,6 +349,8 @@
   <entry key="QUICKER_CLIMBING_ON_LADDERS_AND_VINES_LIKE_THE_HD_VERSION">在梯子和藤蔓上攀爬更快，<br/>与HD版本一样。</entry>
   <entry key="RESET_KEY">重置键（</entry>
   <entry key="RESTORE_DEFAULT_WINDOW_SIZE">恢复默认窗口大小</entry>
+  <entry key="RESTORE_DEFAULT_CONTROLS">恢复默认控制</entry>
+  <entry key="RESTORES_ALL_BINDING_CONFIGURATIONS_FOR_THE_CURRENTLY_SELECTED_DEVICE_TO_THEIR_DEFAULTS">将当前所选设备的所有绑定配置恢复为默认值。</entry>
   <entry key="RESTORE_WII_1_0_GLITCHES">恢复Wii 1.0漏洞</entry>
   <entry key="RESTORES_PATCHED_GLITCHES_FROM_WII_USA_1_0_THE_FIRST_RELEASED_VERSION">恢复Wii美版1.0<br/>（首个发布版本）中<br/>已被修复的漏洞。</entry>
   <entry key="ROLLGOAL_SENSITIVITY">滚弹珠灵敏度</entry>
@@ -368,7 +371,10 @@
   <entry key="TOP_RIGHT">右上角</entry>
   <entry key="TRANSFORM_INSTANTLY_BY_PRESSING_R_AND_Y_SIMULTANEOUSLY">同时按下R键和Y键立即变身。</entry>
   <entry key="TURBO_KEY">连发键</entry>
+  <entry key="FRAMERATE_CAP">帧率上限</entry>
+  <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">将帧率限制为指定数值。</entry>
   <entry key="UNLOCK_FRAMERATE">解锁帧率</entry>
+  <entry key="UNLIMITED">无限制</entry>
   <entry key="WALLET_SIZES_ARE_LIKE_IN_THE_HD_VERSION_500_1000_2000">钱包容量与HD版本一样。<br/>（500、1000、2000）</entry>
   <entry key="JAPANESE">日语</entry>
   <entry key="ANY_HIT_WILL_INSTANTLY_KILL_YOU">任何攻击都会立即杀死你。</entry>
@@ -376,6 +382,7 @@
   <entry key="TO_RESET_THE_GAME">重置游戏。</entry>
   <entry key="ADJUSTS_TWIN_STICK_CAMERA_SENSITIVITY">调整双摇杆视角灵敏度。</entry>
   <entry key="CONTROLS_VERTICAL_GYRO_AIMING_SENSITIVITY">控制垂直陀螺仪瞄准灵敏度。</entry>
+  <entry key="CONFIGURE_THE_SAMPLING_METHOD_USED_WHEN_SCALING_THE_INTERNAL_RESOLUTION_FOR_FINAL_PRESENTATION">设置将内部分辨率缩放到最终画面时使用的采样方式。</entry>
   <entry key="CONTROLS_HORIZONTAL_GYRO_AIMING_SENSITIVITY">控制水平陀螺仪瞄准灵敏度。</entry>
   <entry key="HIGHER_VALUES_SMOOTH_GYRO_INPUT_OVER_TIME">这个数值越高，陀螺仪输入越平滑。</entry>
   <entry key="CHEAT_INFINITE_HEARTS">无限生命之心</entry>
@@ -412,6 +419,7 @@
   <entry key="CHEAT_FREE_MAGIC_ARMOR_HELP">魔法铠甲无需消耗卢比。</entry>
   <entry key="CHEAT_INVINCIBLE_ENEMIES">敌人无敌</entry>
   <entry key="CHEAT_INVINCIBLE_ENEMIES_HELP">敌人不会受到伤害。</entry>
+  <entry key="CAPPED">上限</entry>
   <entry key="ON">开启</entry>
   <entry key="NONE">无</entry>
   <entry key="SHOW_INTERNAL_NAMES">显示内部名称</entry>
