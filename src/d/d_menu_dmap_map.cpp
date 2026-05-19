@@ -359,7 +359,14 @@ f32 dMenu_StageMapCtrl_c::getPixelStageSizeZ() const {
 
 f32 dMenu_StageMapCtrl_c::getPixelCenterX() const {
     f32 var_f31 = dMpath_c::getCenterX();
+    #if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return (1.0f / field_0xbc) * (field_0x9c + var_f31);
+    }
+    else return (1.0f / field_0xbc) * (field_0x9c - var_f31);
+    #else
     return (1.0f / field_0xbc) * (field_0x9c - var_f31);
+    #endif
 }
 
 f32 dMenu_StageMapCtrl_c::getPixelCenterZ() const {
@@ -375,7 +382,7 @@ void dMenu_StageMapCtrl_c::initGetTreasureList(u8 param_0, s8 param_1) {
 }
 
 inline static s16 rightModeCnvRot(s16 param_0) {
-    return IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -param_0 :) param_0;
+    return param_0;
 }
 
 bool dMenu_StageMapCtrl_c::getTreasureList(f32* o_posX, f32* o_posY, s8* param_2, u8* o_swbit,
@@ -412,7 +419,7 @@ bool dMenu_StageMapCtrl_c::getTreasureList(f32* o_posX, f32* o_posY, s8* param_2
 }
 
 inline static f32 rightModeCnvPos(f32 param_0) {
-    return IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -param_0 :) param_0;
+    return param_0;
 }
 
 void dMenu_StageMapCtrl_c::cnvPosTo2Dpos(f32 param_0, f32 param_1, f32* param_2,
@@ -915,7 +922,13 @@ void dMenu_StageMapCtrl_c::move() {
 
 void dMenu_DmapMapCtrl_c::draw() {
     if (field_0xef != 0) {
-        setPos(field_0xeb, field_0xec, field_0x9c, field_0xa0, field_0xbc, true, field_0xd8);
+        setPos(field_0xeb, field_0xec,
+            #if TARGET_PC
+            IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -field_0x9c :) field_0x9c,
+            #else
+            field_0x9c,
+            #endif
+            field_0xa0, field_0xbc, true, field_0xd8);
     }
 }
 
