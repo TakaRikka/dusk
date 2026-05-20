@@ -208,6 +208,16 @@ namespace dusk {
             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
             daHorse_c* horse = dComIfGp_getHorseActor();
 
+            double speedXzy = 0.0;
+            double speedXz = 0.0;
+            if (player != nullptr) {
+                speedXzy = sqrtf(player->speed.x * player->speed.x
+                    + player->speed.z * player->speed.z
+                    + player->speed.y * player->speed.y);
+                speedXz = sqrtf(player->speed.x * player->speed.x
+                    + player->speed.z * player->speed.z);
+            }
+
             ImGui::Text("Global");
             ImGuiStringViewText(
                 player != nullptr
@@ -231,15 +241,27 @@ namespace dusk {
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Angle: {0}\n", player->shape_angle.y)
-                : "Angle: ?\n"
+                ? fmt::format("Velocity (XYZ): {: .4f}, {: .4f}, {: .4f}\n", player->speed.x, player->speed.y, player->speed.z)
+                : "Velocity (XYZ): ?, ?, ?\n"
             );
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Speed: {: .4f}\n", player->speedF)
-                : "Speed: ?\n"
+                ? fmt::format("Speed (SpeedF): {: .4f}\n", player->speedF)
+                : "Speed (SpeedF): ?\n"
             );
+
+            ImGuiStringViewText(
+                player != nullptr
+                ? fmt::format("Speed (3D): {: .4f}\n", speedXzy)
+                : "Speed (3D): ?\n"
+            );
+
+            ImGuiStringViewText(
+                 player != nullptr
+                 ? fmt::format("Angle: {0}\n", player->shape_angle.y)
+                 : "Angle: ?\n"
+             );
 
             ImGuiStringViewText(
                 player != nullptr
