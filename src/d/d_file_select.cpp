@@ -3922,7 +3922,7 @@ void dFile_select_c::fileSelectWide() {
                     pane->translate(entry.origTransX * ultraScaleFactor, pane->getTranslateY());
                 }
                 if (index <= 6) { // Icons
-                    pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + ultraShiftFactor - 57.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
+                    pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + ultraShiftFactor - 62.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
                 }
             } else { // 4:3/default behavior
                 pane->setBasePosition(J2DBasePosition_4);
