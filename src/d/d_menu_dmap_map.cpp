@@ -425,7 +425,18 @@ inline static f32 rightModeCnvPos(f32 param_0) {
 void dMenu_StageMapCtrl_c::cnvPosTo2Dpos(f32 param_0, f32 param_1, f32* param_2,
                                          f32* param_3) const {
     if (param_2 != NULL) {
+        #if TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            *param_2 =
+                (0.5f * field_0x94) + rightModeCnvPos((1.0f / field_0xbc) * (field_0x9c + param_0));
+        } else {
+            *param_2 =
+                (0.5f * field_0x94) + rightModeCnvPos((1.0f / field_0xbc) * (param_0 - field_0x9c));
+        }
+        #else
         *param_2 = (0.5f * field_0x94) + rightModeCnvPos((1.0f / field_0xbc) * (param_0 - field_0x9c));
+        #endif
+
     }
 
     if (param_3 != NULL) {
