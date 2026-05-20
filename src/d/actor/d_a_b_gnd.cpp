@@ -2192,7 +2192,9 @@ static void damage_check(b_gnd_class* i_this) {
                             i_this->mDamageInvulnerabilityTimer = 100;
                         }
                     }
-                    dusk::AchievementSystem::get().signal("ganondorf_foot_hit");
+                    #if TARGET_PC
+                    dusk::AchievementSystem::get().signal("ganondorf_hit");
+                    #endif
                 }
 
                 cXyz hitmark_size(1.0f, 1.0f, 1.0f);

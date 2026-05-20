@@ -19,6 +19,7 @@
 #include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_name.h"
+#include "dusk/logging.h"
 
 #include <filesystem>
 #include <algorithm>
@@ -849,13 +850,12 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             },
             {}
         },
-        // Glitched
         {
             {
                 "ganondorf_3hit",
-                "The Triforce of Skill",
-                "Defeat Ganondorf in the final duel with only 3 sword hits.",
-                AchievementCategory::Glitched,
+                "Autospin Annihilation",
+                "Finish off Ganondorf in the final duel after only 3 attacks.",
+                AchievementCategory::Misc,
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
@@ -881,11 +881,11 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     return;
                 }
 
-                const bool hitOccurred = sys.hasSignal("ganondorf_foot_hit");
+                const bool hitOccurred = sys.hasSignal("ganondorf_hit");
                 const bool knockedDown = sys.hasSignal("ganondorf_knocked_down");
 
                 if (hitOccurred && knockedDown) {
-                    // Spin completing an autospin: pendingHits should be exactly 1 (the jump attack)
+                    // Spin completing an autospin: pendingHits should be exactly 1 (the spin attack)
                     if (pendingHits == 1) {
                         autospinCount++;
                         pendingHits = 0;
@@ -910,6 +910,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             },
             {}
         },
+        // Glitched
         {
             {
                 "back_in_time",
