@@ -2600,6 +2600,13 @@ void dMenu_Fmap_c::drawLightDropIcon() {
 }
 
 void dMenu_Fmap_c::drawBatsumarkIcon() {
+#if TARGET_PC
+    if (dusk::getSettings().game.removeQuestMapMarkers &&
+        dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x190]))
+    {
+        return;
+    }
+#endif
     drawIcon(5, 0x12);
 }
 

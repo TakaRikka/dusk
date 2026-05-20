@@ -931,6 +931,13 @@ bool renderingAmap_c::isDrawIconSingle2(dTres_c::data_s const* i_data, bool para
         }
         break;
     case 5:
+#if TARGET_PC
+        if (dusk::getSettings().game.removeQuestMapMarkers &&
+            dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x190]))
+        {
+            break;
+        }
+#endif
         if (((i_data->mNo == 255 || (i_data->mNo != 255 && !dComIfGs_isTbox(i_data->mNo))) &&
              (i_data->mSwBit == 255 ||
               (i_data->mSwBit != 255 && dComIfGs_isSwitch(i_data->mSwBit, i_data->mRoomNo)))) &&

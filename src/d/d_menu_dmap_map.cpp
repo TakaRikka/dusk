@@ -69,6 +69,13 @@ bool renderingDmap_c::isDrawIconSingle2(dTres_c::data_s const* i_data, bool para
         JUT_ASSERT(1044, FALSE);
         break;
     case 5:
+#if TARGET_PC
+        if (dusk::getSettings().game.removeQuestMapMarkers &&
+            dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x190]))
+        {
+            break;
+        }
+#endif
         if ((i_data->mNo == 0xFF || (i_data->mNo != 0xFF && !dComIfGs_isTbox(i_data->mNo))) && (i_data->mSwBit == 0xFF || (i_data->mSwBit != 0xFF && dComIfGs_isSwitch(i_data->mSwBit, i_data->mRoomNo))) && param_1) {
             rt = true;
         }

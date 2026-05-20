@@ -1,6 +1,7 @@
 #ifndef D_METER_D_METER_BUTTON_H
 #define D_METER_D_METER_BUTTON_H
 
+#include "global.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_drawlist.h"
@@ -194,7 +195,7 @@ public:
     /* 0x0FC */ CPaneMgr* field_0x0fc[4];
     /* 0x10C */ JKRHeap* mpHeap;
     /* 0x110 */ void* mpFishingTex;
-    /* 0x114 */ char mButtonText[2][15];
+    /* 0x114 */ char mButtonText[2][DUSK_IF_ELSE(32, 15)];
     /* 0x132 */ u8 field_0x132[0x134 - 0x132];
     /* 0x134 */ f32 field_0x134;
     /* 0x138 */ f32 field_0x138;
