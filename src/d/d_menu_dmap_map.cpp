@@ -934,11 +934,7 @@ void dMenu_StageMapCtrl_c::move() {
 void dMenu_DmapMapCtrl_c::draw() {
     if (field_0xef != 0) {
         setPos(field_0xeb, field_0xec,
-            #if TARGET_PC
             IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -field_0x9c :) field_0x9c,
-            #else
-            field_0x9c,
-            #endif
             field_0xa0, field_0xbc, true, field_0xd8);
     }
 }
