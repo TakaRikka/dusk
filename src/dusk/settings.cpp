@@ -113,6 +113,7 @@ UserSettings g_userSettings = {
         .invincibleEnemies {"game.invincibleEnemies", false},
         .infiniteEpona {"game.infiniteEpona", false},
         .unbreakableWoodShield = {"game.unbreakableWoodShield", false},
+        .stopDaylightCycle = {"game.stopDaylightCycle", false},
         .modelOverride {"game.modelOverride", 0},
 
         // Technical
@@ -281,6 +282,7 @@ void registerSettings() {
     Register(g_userSettings.game.allowBackgroundInput);
     Register(g_userSettings.game.infiniteEpona);
     Register(g_userSettings.game.unbreakableWoodShield);
+    Register(g_userSettings.game.stopDaylightCycle);
     Register(g_userSettings.game.modelOverride);
 
     Register(g_userSettings.backend.isoPath);

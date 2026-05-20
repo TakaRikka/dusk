@@ -201,6 +201,7 @@ struct UserSettings {
         ConfigVar<bool> invincibleEnemies;
         ConfigVar<bool> infiniteEpona;
         ConfigVar<bool> unbreakableWoodShield;
+        ConfigVar<bool> stopDaylightCycle;
         ConfigVar<int> modelOverride;
 
         // Technical

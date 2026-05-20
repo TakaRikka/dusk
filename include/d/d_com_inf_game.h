@@ -1397,7 +1397,12 @@ inline f32 dComIfGs_getTime() {
 }
 
 inline void dComIfGs_setTime(f32 i_time) {
+#if TARGET_PC
+    if (!dusk::getSettings().game.stopDaylightCycle)
+        return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusB().setTime(i_time);
+#else
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusB().setTime(i_time);
+#endif
 }
 
 inline u16 dComIfGs_getDate() {

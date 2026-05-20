@@ -1271,6 +1271,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Prevents enemies from taking damage.");
 
         leftPane.add_section("Visual");
+        addCheat("Stop Daylight Cycle", getSettings().game.stopDaylightCycle,
+        "Freezes the daylight cycle in place.");
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Model Override",
@@ -1301,7 +1303,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             if (player != nullptr) {
                                 // Don't accept user change when in Sumo mode.
                                 // Otherwise, we crash.
-                                if (player->checkNoResetFlg2(daPy_py_c::FLG2_UNK_200000)) {
+                                if (!player->checkNoResetFlg2(daPy_py_c::FLG2_UNK_200000)) {
                                     getSettings().game.modelOverride.setValue(i);
                                     player->setClothesChange(0);
                                 }
