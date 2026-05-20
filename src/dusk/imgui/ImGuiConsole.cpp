@@ -61,10 +61,6 @@ namespace dusk {
         ImGui::TextUnformatted(text.data(), text.data() + text.size());
     }
 
-    void DuskToast(std::string_view message, float duration) {
-        g_imguiConsole.AddToast(message, duration);
-    }
-
     void ImGuiTextCenter(std::string_view text) {
         ImGui::NewLine();
         float fontSize = ImGui::CalcTextSize(
@@ -390,8 +386,6 @@ namespace dusk {
                 SDL_HideCursor();
             }
         }
-
-        ShowToasts();
     }
 
     void ImGuiConsole::PostDraw() {
@@ -543,50 +537,6 @@ namespace dusk {
         }
 
         return false;
-    }
-
-    void ImGuiConsole::AddToast(std::string_view message, float duration) {
-        m_toasts.emplace_back(std::string(message), duration);
-    }
-
-    void ImGuiConsole::ShowToasts() {
-        if (m_toasts.empty()) {
-            return;
-        }
-        auto& toast = m_toasts.front();
-        const float dt = ImGui::GetIO().DeltaTime;
-        toast.remain -= dt;
-        toast.current += dt;
-
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        const ImVec2 workPos = viewport->WorkPos;
-        const ImVec2 workSize = viewport->WorkSize;
-        constexpr float padding = 10.0f;
-        const ImVec2 windowPos{workPos.x + workSize.x / 2, workPos.y + workSize.y - padding};
-        ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always, ImVec2{0.5f, 1.f});
-
-        const float alpha = std::min({toast.remain, toast.current, 1.f});
-        ImGui::SetNextWindowBgAlpha(alpha * 0.65f);
-        ImVec4 textColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
-        textColor.w *= alpha;
-        ImVec4 borderColor = ImGui::GetStyleColorVec4(ImGuiCol_Border);
-        borderColor.w *= alpha;
-        ImGui::PushStyleColor(ImGuiCol_Text, textColor);
-        ImGui::PushStyleColor(ImGuiCol_Border, borderColor);
-        if (ImGui::Begin("Toast", nullptr,
-                         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
-                             ImGuiWindowFlags_NoSavedSettings |
-                             ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav |
-                             ImGuiWindowFlags_NoMove))
-        {
-            ImGuiStringViewText(toast.message);
-        }
-        ImGui::End();
-        ImGui::PopStyleColor(2);
-
-        if (toast.remain <= 0.f) {
-            m_toasts.pop_front();
-        }
     }
 
     void ImGuiConsole::ShowPipelineProgress() {
