@@ -11,6 +11,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_ni.h"
 #include "d/actor/d_a_npc4.h"
+#include "d/actor/d_a_b_gnd.h"
 #include "d/actor/d_a_b_ob.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_demo.h"
@@ -849,6 +850,66 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {}
         },
         // Glitched
+        {
+            {
+                "ganondorf_3hit",
+                "The Triforce of Skill",
+                "Defeat Ganondorf in the final duel with only 3 sword hits.",
+                AchievementCategory::Glitched,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                auto& sys = AchievementSystem::get();
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+
+                static int autospinCount = 0;
+                static int pendingHits = 0;
+                static bool invalidated = false;
+                static bool wasInFight = false;
+
+                auto* gnd = static_cast<b_gnd_class*>(fopAcM_SearchByName(fpcNm_B_GND_e));
+                const bool inFight = gnd != nullptr && !gnd->checkRide();
+
+                if (inFight && !wasInFight) {
+                    autospinCount = 0;
+                    pendingHits = 0;
+                    invalidated = false;
+                }
+                wasInFight = inFight;
+
+                if (!inFight) {
+                    return;
+                }
+
+                const bool hitOccurred = sys.hasSignal("ganondorf_foot_hit");
+                const bool knockedDown = sys.hasSignal("ganondorf_knocked_down");
+
+                if (hitOccurred && knockedDown) {
+                    // Spin completing an autospin: pendingHits should be exactly 1 (the jump attack)
+                    if (pendingHits == 1) {
+                        autospinCount++;
+                        pendingHits = 0;
+                    } else {
+                        invalidated = true;
+                    }
+                } else if (hitOccurred) {
+                    pendingHits++;
+                    if (pendingHits > 1) {
+                        invalidated = true;
+                    }
+                }
+
+                if (link != nullptr && link->mProcID == daAlink_c::PROC_GANON_FINISH) {
+                    if (!invalidated && autospinCount == 3) {
+                        a.progress = 1;
+                    }
+                    autospinCount = 0;
+                    pendingHits = 0;
+                    invalidated = false;
+                }
+            },
+            {}
+        },
         {
             {
                 "back_in_time",
