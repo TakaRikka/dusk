@@ -3787,7 +3787,7 @@ void dFile_select_c::fileSelectWide() {
         pane->translate(entry.origTransX, entry.origTransY);
     }
 
-    const bool wideScaling = dusk::getSettings().game.collectionScalingMode != dusk::CollectionScreenScaling::GameCube;
+    bool wideScaling = dusk::getSettings().game.collectionScalingMode != dusk::CollectionScreenScaling::GameCube;
     const f32 rootScale = wideScaling ? mDoGph_gInf_c::hudAspectScaleUp : 1.0f;
     const f32 childScale = wideScaling ? mDoGph_gInf_c::hudAspectScaleDown : 1.0f;
     const f32 rootTransX = wideScaling ? mDoGph_gInf_c::getSafeMinXF() : 0.0f;
