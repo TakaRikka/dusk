@@ -261,7 +261,7 @@ namespace dusk {
                  player != nullptr
                  ? fmt::format("Angle: {0}\n", player->shape_angle.y)
                  : "Angle: ?\n"
-             );
+            );
 
             ImGuiStringViewText(
                 player != nullptr
@@ -284,15 +284,21 @@ namespace dusk {
             );
 
             ImGuiStringViewText(
-                horse != nullptr
-                ? fmt::format("Angle: {0}\n", horse->shape_angle.y)
-                : "Angle: ?\n"
+                 horse != nullptr
+                 ? fmt::format("Velocity (XYZ): {: .4f}, {: .4f}, {: .4f}\n", horse->speed.x, horse->speed.y, horse->speed.z)
+                 : "Velocity (XYZ): ?, ?, ?\n"
             );
 
             ImGuiStringViewText(
                 horse != nullptr
-                ? fmt::format("Speed: {: .4f}\n", horse->speedF)
-                : "Speed: ?\n"
+                ? fmt::format("Speed (SpeedF): {: .4f}\n", horse->speedF)
+                : "Speed (SpeedF): ?\n"
+            );
+
+            ImGuiStringViewText(
+                horse != nullptr
+                ? fmt::format("Angle: {0}\n", horse->shape_angle.y)
+                : "Angle: ?\n"
             );
 
             ImGuiStringViewText(
