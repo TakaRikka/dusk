@@ -167,6 +167,7 @@ bool launchUILoop() {
         while (event != nullptr && event->type != AURORA_NONE) {
             switch (event->type) {
             case AURORA_SDL_EVENT:
+                dusk::mouse::handle_event(event->sdl);
                 dusk::ui::handle_event(event->sdl);
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;
@@ -245,12 +246,15 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_PAUSED:
                 dusk::audio::SetPaused(true);
+                dusk::mouse::onFocusLost();
                 break;
             case AURORA_UNPAUSED:
                 dusk::audio::SetPaused(false);
                 dusk::game_clock::reset_frame_timer();
+                dusk::mouse::onFocusGained();
                 break;
             case AURORA_SDL_EVENT:
+                dusk::mouse::handle_event(event->sdl);
                 dusk::ui::handle_event(event->sdl);
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;

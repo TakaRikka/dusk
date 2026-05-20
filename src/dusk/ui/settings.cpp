@@ -979,11 +979,21 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Enables mouse input while in look mode, aiming a hawk, and aiming "
             "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
             "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
-        config_percent_select(leftPane, rightPane, getSettings().game.mouseSensitivityX,
-            "Mouse X Sensitivity", "Controls horizontal mouse sensitivity.", 25, 400, 5,
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivityX,
+            "Mouse Camera X Sensitivity", "Controls horizontal mouse camera sensitivity.", 25, 400, 5,
+            [] {
+                return !getSettings().game.enableMouseCamera || !getSettings().game.freeCamera;
+            });
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivityY,
+            "Mouse Camera Y Sensitivity", "Controls vertical mouse camera sensitivity.", 25, 400, 5,
+            [] {
+                return !getSettings().game.enableMouseCamera || !getSettings().game.freeCamera;
+            });
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivityX,
+            "Mouse Aim X Sensitivity", "Controls horizontal mouse aim sensitivity.", 25, 400, 5,
             [] { return !getSettings().game.enableMouseAim; });
-        config_percent_select(leftPane, rightPane, getSettings().game.mouseSensitivityY,
-            "Mouse Y Sensitivity", "Controls vertical mouse sensitivity.", 25, 400, 5,
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivityY,
+            "Mouse Aim Y Sensitivity", "Controls vertical mouse aim sensitivity.", 25, 400, 5,
             [] { return !getSettings().game.enableMouseAim; });
 
         leftPane.add_section("Tools");
