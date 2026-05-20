@@ -1292,12 +1292,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
-                            getSettings().game.modelOverride.setValue(i);
 
                             daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
 
                             if (player != nullptr) {
-                                player->setClothesChange(0);
+                                // Don't accept user change when in Sumo mode.
+                                // Otherwise, we crash.
+                                if (player->checkNoResetFlg2(daPy_py_c::FLG2_UNK_200000)) {
+                                    getSettings().game.modelOverride.setValue(i);
+                                    player->setClothesChange(0);
+                                }
+                            } else {
+                                getSettings().game.modelOverride.setValue(i);
                             }
                             config::Save();
                         });
