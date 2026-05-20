@@ -110,13 +110,16 @@ int daItemShield_c::create() {
     fopAcM_ct(this, daItemShield_c);
     m_itemNo = dItemNo_WOOD_SHIELD_e;
     if (fopAcM_isSwitch(this, getSwBit2())) {
+        // Wooden Shield: We've already obtained it, so it won't appear.
         OS_REPORT("木の盾：もう取ったので出ません\n");
         return cPhs_ERROR_e;
     }
     if (getSwBit2() == 0xff) {
+        // Wooden Shield: No Switch Bit 2 specified
         OS_REPORT("[43;30m木の盾：スイッチビット２指定がありません！\n\x1b[m");
     }
     if (getSwBit() == 0xff) {
+        // Wooden Shield: No switch bit specified
         OS_REPORT("[43;30m木の盾：スイッチビット指定がありません！\n\x1b[m");
     }
     int rv = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));

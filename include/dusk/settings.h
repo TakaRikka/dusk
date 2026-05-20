@@ -200,6 +200,7 @@ struct UserSettings {
         ConfigVar<bool> freeMagicArmor;
         ConfigVar<bool> invincibleEnemies;
         ConfigVar<bool> infiniteEpona;
+        ConfigVar<bool> unbreakableWoodShield;
         ConfigVar<int> modelOverride;
 
         // Technical

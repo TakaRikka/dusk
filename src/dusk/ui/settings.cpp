@@ -1246,6 +1246,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
             "Item drops such as rupees and hearts will never disappear after they drop.");
         addCheat("Infinite Epona Dashes", getSettings().game.infiniteEpona, "Keeps Epona's dash meter full.");
+        addCheat("Unbreakable Wooden Shield", getSettings().game.unbreakableWoodShield,
+            "Prevents the wooden shield from breaking.");
+
 
         leftPane.add_section("Abilities");
         addCheat(
