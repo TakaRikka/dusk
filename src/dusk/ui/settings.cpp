@@ -70,6 +70,12 @@ constexpr std::array kGyroInputModeLabels = {
     "Mouse",
 };
 
+constexpr std::array kCollectionMenuModeLabels = {
+    "GameCube",
+    "Wii",
+    "Dusklight",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -1420,6 +1426,43 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
 
         leftPane.add_section("Game");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Collection Menu Scaling",
+                .getValue =
+                    [] {
+                        return kCollectionMenuModeLabels[static_cast<u8>(
+                            getSettings().game.collectionScalingMode.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        const auto& mode = getSettings().game.collectionScalingMode;
+                        return mode.getValue() != mode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kCollectionMenuModeLabels.size()); ++i) {
+                    pane
+                        .add_button({
+                            .text = kCollectionMenuModeLabels[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.collectionScalingMode.getValue() ==
+                                           static_cast<CollectionScreenScaling>(i);
+                                    ;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.collectionScalingMode.setValue(
+                                static_cast<CollectionScreenScaling>(i));
+                            ;
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>Changes how the Collection menu scales to your aspect ratio. "
+                             "Also affects the collection on the file select screen.");
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",

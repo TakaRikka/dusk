@@ -54,6 +54,7 @@ UserSettings g_userSettings = {
         .enableAchievementToasts {"game.enableAchievementToasts", true},
         .enableControllerToasts {"game.enableControllerToasts", true},
         .enableDiscordPresence {"game.enableDiscordPresence", true},
+        .collectionScalingMode {"game.collectionScalingMode", CollectionScreenScaling::Wii},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
@@ -247,6 +248,7 @@ void registerSettings() {
     Register(g_userSettings.game.liveSplitEnabled);
     Register(g_userSettings.game.showSpeedrunRTATimer);
     Register(g_userSettings.game.recordingMode);
+    Register(g_userSettings.game.collectionScalingMode);
     Register(g_userSettings.game.removeQuestMapMarkers);
     Register(g_userSettings.game.showInputViewer);
     Register(g_userSettings.game.showInputViewerGyro);

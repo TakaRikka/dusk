@@ -3750,65 +3750,130 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 
 #if TARGET_PC
 void dFile_select_c::fileSelectWide() {
-    mYnSel.ScrYn->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mYnSel.ScrYn->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+    // Get pre-scale values for each pane
+    if (!cachedPanes) {
+        for (PaneCache& entry : mSelDtPanes) {
+            J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX(); 
+                entry.origTransY = pane->getTranslateY();
+                entry.cached = true;
+            }
+        }
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX();
+                entry.origTransY = pane->getTranslateY(); 
+                entry.cached = true;
+            }
+        }
+        cachedPanes = true;
+    }
 
-    mYnSel.ScrYn->search(MULTI_CHAR('w_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mYnSel.ScrYn->search(MULTI_CHAR('f_no_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mYnSel.ScrYn->search(MULTI_CHAR('w_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mYnSel.ScrYn->search(MULTI_CHAR('f_yes_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    // Reset all panes
+    mSelDt.ScrDt->scale(1.0f, 1.0f);
+    mSelDt.ScrDt->translate(0.0f, 0.0f);
+    for (PaneCache& entry : mSelDtPanes) {
+        J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
+        pane->setBasePosition(J2DBasePosition_4);
+        pane->scale(1.0f, 1.0f);
+        pane->translate(entry.origTransX, entry.origTransY);
+    }
+    for (PaneCache& entry : fileSelPanes) {
+        J2DPane* pane = fileSel.Scr->search(entry.tag);
+        pane->setBasePosition(J2DBasePosition_4);
+        pane->scale(1.0f, 1.0f);
+        pane->translate(entry.origTransX, entry.origTransY);
+    }
 
-    m3mSel.Scr3m->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    m3mSel.Scr3m->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+    const bool wideScaling = dusk::getSettings().game.collectionScalingMode != dusk::CollectionScreenScaling::GameCube;
+    const f32 rootScale = wideScaling ? mDoGph_gInf_c::hudAspectScaleUp : 1.0f;
+    const f32 childScale = wideScaling ? mDoGph_gInf_c::hudAspectScaleDown : 1.0f;
+    const f32 rootTransX = wideScaling ? mDoGph_gInf_c::getSafeMinXF() : 0.0f;
 
-    m3mSel.Scr3m->search(MULTI_CHAR('w_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    m3mSel.Scr3m->search(MULTI_CHAR('f_sta'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    m3mSel.Scr3m->search(MULTI_CHAR('w_del'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    m3mSel.Scr3m->search(MULTI_CHAR('f_del'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    m3mSel.Scr3m->search(MULTI_CHAR('w_cop_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    m3mSel.Scr3m->search(MULTI_CHAR('f_cop_t'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    mYnSel.ScrYn->scale(rootScale, 1.0f);
+    mYnSel.ScrYn->translate(rootTransX, 0.0f);
 
-    fileSel.Scr->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    fileSel.Scr->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('w_no_t'))->scale(childScale, 1.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('f_no_t'))->scale(childScale, 1.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('w_yes_t'))->scale(childScale, 1.0f);
+    mYnSel.ScrYn->search(MULTI_CHAR('f_yes_t'))->scale(childScale, 1.0f);
 
-    fileSel.Scr->search(MULTI_CHAR('t_for'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('t_for1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->scale(rootScale, 1.0f);
+    m3mSel.Scr3m->translate(rootTransX, 0.0f);
 
-    fileSel.Scr->search(MULTI_CHAR('w_btn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('w_sta'))->scale(childScale, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('f_sta'))->scale(childScale, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('w_del'))->scale(childScale, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('f_del'))->scale(childScale, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('w_cop_t'))->scale(childScale, 1.0f);
+    m3mSel.Scr3m->search(MULTI_CHAR('f_cop_t'))->scale(childScale, 1.0f);
 
-    fileSel.Scr->search(MULTI_CHAR('w_n_bk00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->scale(rootScale, 1.0f);
+    fileSel.Scr->translate(rootTransX, 0.0f);
 
-    fileSel.Scr->search(MULTI_CHAR('w_dat_i0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('t_for'))->scale(childScale, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('t_for1'))->scale(childScale, 1.0f);
 
-    mCpSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mCpSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mCpSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mCpSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_btn_n'))->scale(childScale, 1.0f);
 
-    #if TARGET_PC
-        // Equipment Icons/Slots
-        struct IconPaneCache {
-            u64 tag;
-            f32 origTransX;
-            bool cached;
-        };
+    fileSel.Scr->search(MULTI_CHAR('w_n_bk00'))->scale(childScale, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(childScale, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(childScale, 1.0f);
 
-        static IconPaneCache s_Panes[] = {
-            {MULTI_CHAR('gray_n'), 0.0f, false},
-            {MULTI_CHAR('tate_n0'), 0.0f, false},
-            {MULTI_CHAR('tate_n1'), 0.0f, false},
-            {MULTI_CHAR('ken_n0'), 0.0f, false},
-            {MULTI_CHAR('ken_n1'), 0.0f, false},
-            {MULTI_CHAR('fuku_n0'), 0.0f, false},
-            {MULTI_CHAR('fuku_n1'), 0.0f, false},
-            {MULTI_CHAR('fuku_n2'), 0.0f, false},
-        };
+    fileSel.Scr->search(MULTI_CHAR('w_dat_i0'))->scale(childScale, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(childScale, 1.0f);
+    fileSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(childScale, 1.0f);
 
-        constexpr f32 minAspect = 4.0f / 3.0f;
+    mCpSel.Scr->search(MULTI_CHAR('w_dat_i1'))->scale(childScale, 1.0f);
+    mCpSel.Scr->search(MULTI_CHAR('w_dat_i2'))->scale(childScale, 1.0f);
+    mCpSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(childScale, 1.0f);
+    mCpSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(childScale, 1.0f);
+
+    switch (dusk::getSettings().game.collectionScalingMode) {
+    case (dusk::CollectionScreenScaling::GameCube):
+        // Selection Cursor
+        if (mSelIcon) {
+            mSelIcon->refreshAspectScale(1.0f);
+        }
+        if (mSelIcon2) {
+            mSelIcon2->refreshAspectScale(1.0f);
+        }
+        break;
+    case (dusk::CollectionScreenScaling::Wii):
+        // Icons
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Spirals
+        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Selection Cursor
+        if (mSelIcon) {
+            mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
+        }
+
+        if (mSelIcon2) {
+            mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
+        }
+        break;
+    case (dusk::CollectionScreenScaling::Dusklight):
+        constexpr f32 minAspect = 4.0f / 2.94f;
         constexpr f32 wideAspect = 16.0f / 9.0f + 0.05f;
         constexpr f32 ultraAspect = 21.0f / 9.0f + 0.05f;
         const f32 screenAspect = mDoGph_gInf_c::getAspect();
@@ -3819,68 +3884,86 @@ void dFile_select_c::fileSelectWide() {
         const f32 wideShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (wideScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
         const f32 ultraShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (ultraScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
 
-        for (IconPaneCache& entry : s_Panes) {
+        for (PaneCache& entry : mSelDtPanes) {
+            const size_t index = &entry - mSelDtPanes;
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
-            if (!entry.cached) {
-                entry.origTransX = pane->getTranslateX(); // Get pre-scale value
-                entry.cached = true;
-            }
             pane->setBasePosition(J2DBasePosition_0);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
             if (screenAspect >= minAspect && screenAspect <= wideAspect) { // Handle widescreen
+                if (entry.tag == MULTI_CHAR('b_base')) { // Slots BG
+                    if (screenAspect > 1.75f) {
+                        pane->translate((entry.origTransX + 11.0f) * wideScaleFactor, pane->getTranslateY());
+                    } else { // Between 4:3 and 16:9
+                        pane->translate((entry.origTransX + 8.0f) * wideScaleFactor, pane->getTranslateY());
+                    }
+                }
+                if (entry.tag == MULTI_CHAR('b_base1')) { // Magic Armor Slot BG
+                    if (screenAspect > 1.75f) {
+                        pane->translate((entry.origTransX - 21.5f) * wideScaleFactor, pane->getTranslateY());
+                    } else { // Between 4:3 and 16:9
+                        pane->translate((entry.origTransX - 12.0f) * wideScaleFactor, pane->getTranslateY());
+                    }
+                }
                 if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
                     pane->translate(entry.origTransX * wideScaleFactor, pane->getTranslateY());
-                } else { // Icons
+                }
+                if (index <= 6) { // Icons
                     pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + wideShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
                 }
-            } else if (screenAspect >= minAspect && screenAspect <= ultraAspect) { // Handle ultrawide
+            } else if (screenAspect >= minAspect && screenAspect >= wideAspect && screenAspect <= ultraAspect) // Handle ultrawide
+            { 
+                if (entry.tag == MULTI_CHAR('b_base')) { // Slots BG
+                    pane->translate((entry.origTransX + 18.0f) * ultraScaleFactor, pane->getTranslateY());
+                }
+                if (entry.tag == MULTI_CHAR('b_base1')) { // Magic Armor Slot BG
+                    pane->translate((entry.origTransX - 40.0f) * ultraScaleFactor, pane->getTranslateY());
+                }
                 if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
                     pane->translate(entry.origTransX * ultraScaleFactor, pane->getTranslateY());
-                } else { // Icons
+                }
+                if (index <= 6) { // Icons
                     pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + ultraShiftFactor - 57.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
                 }
-            }
-            else { // 4:3/default behavior
+            } else { // 4:3/default behavior
                 pane->setBasePosition(J2DBasePosition_4);
                 pane->translate(entry.origTransX, pane->getTranslateY());
-                if (entry.tag == MULTI_CHAR('gray_n')) {
-                    pane->scale(1.0f, 1.0f); // Slots
-                } else { // Icons
+                if (entry.tag == MULTI_CHAR('gray_n')) { // Slots
+                    pane->scale(1.0f, 1.0f);
+                }
+                if (entry.tag == MULTI_CHAR('b_base')) { // Slots BG
+                    pane->scale(1.0f, 1.0f);
+                }
+                if (entry.tag == MULTI_CHAR('b_base1')) { // Magic Armor Slot BG
+                    pane->scale(1.0f, 1.0f);
+                }
+                if (index <= 6) { // Icons
                     pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
                 }
             }
         }
-    #else
-        mSelDt.ScrDt->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        mSelDt.ScrDt->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        mSelDt.ScrDt->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        mSelDt.ScrDt->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    #endif
 
-    // Spirals
-    fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Selection Cursor
+        if (mSelIcon) {
+            mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
+        }
 
-    #if TARGET_PC
-    if (mSelIcon) {
-        mSelIcon->refreshAspectScale();
+        if (mSelIcon2) {
+            mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
+        }
+
+        // Spirals
+        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        break;
     }
-    
-    if (mSelIcon2) {
-        mSelIcon2->refreshAspectScale();
-    }
-    #endif
 }
 #endif
 
