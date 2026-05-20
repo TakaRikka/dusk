@@ -18534,7 +18534,12 @@ int daAlink_c::execute() {
 
                 if (field_0x2fcb != 0) {
                     if (checkWoodShieldEquip() && mWaterY < mShieldModel->getBaseTRMtx()[1][3]) {
+#if TARGET_PC
+                        if (!dusk::getSettings().game.unbreakableWoodShield)
+                            field_0x2fcb--;
+#else
                         field_0x2fcb--;
+#endif
 
                         if (field_0x2fcb == 0) {
                             dMeter2Info_setShield(dItemNo_NONE_e, true);

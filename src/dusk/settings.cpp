@@ -111,6 +111,9 @@ UserSettings g_userSettings = {
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
         .invincibleEnemies {"game.invincibleEnemies", false},
+        .infiniteEpona {"game.infiniteEpona", false},
+        .unbreakableWoodShield = {"game.unbreakableWoodShield", false},
+        .stopDaylightCycle = {"game.stopDaylightCycle", false},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -278,6 +281,9 @@ void registerSettings() {
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);
     Register(g_userSettings.game.allowBackgroundInput);
+    Register(g_userSettings.game.infiniteEpona);
+    Register(g_userSettings.game.unbreakableWoodShield);
+    Register(g_userSettings.game.stopDaylightCycle);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);

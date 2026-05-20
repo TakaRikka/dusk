@@ -199,6 +199,9 @@ struct UserSettings {
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
         ConfigVar<bool> invincibleEnemies;
+        ConfigVar<bool> infiniteEpona;
+        ConfigVar<bool> unbreakableWoodShield;
+        ConfigVar<bool> stopDaylightCycle;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;

@@ -29,6 +29,8 @@
 #include <SDL3/SDL_filesystem.h>
 #include <fmt/format.h>
 
+#include "d/actor/d_a_alink.h"
+
 #if DUSK_ENABLE_SENTRY_NATIVE
 #include "dusk/crash_reporting.h"
 #endif
@@ -367,6 +369,8 @@ const Rml::String kBloomBrightnessHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
+const Rml::String kOverrideModelHelpText =
+    "<br/>Overrides Links model with the selected one.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -1235,6 +1239,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
         addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
             "Item drops such as rupees and hearts will never disappear after they drop.");
+        addCheat("Infinite Epona Dashes", getSettings().game.infiniteEpona, "Keeps Epona's dash meter full.");
+        addCheat("Unbreakable Wooden Shield", getSettings().game.unbreakableWoodShield,
+            "Prevents the wooden shield from breaking.");
+
 
         leftPane.add_section("Abilities");
         addCheat(
@@ -1255,6 +1263,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
+
+        leftPane.add_section("Visual");
+        addCheat("Stop Daylight Cycle", getSettings().game.stopDaylightCycle,
+        "Freezes the daylight cycle in place.");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {

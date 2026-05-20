@@ -316,7 +316,6 @@ void daAlink_c::changeLink(int param_0) {
     mMagicArmorHeadBrk = NULL;
 
     J3DModelData* modelData;
-
     if (checkNoResetFlg2(FLG2_UNK_200000)) {
         offNoResetFlg2(FLG2_UNK_200000);
         onNoResetFlg2(FLG2_UNK_80000);
@@ -347,11 +346,7 @@ void daAlink_c::changeLink(int param_0) {
         mpLinkHandModel =
             initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(l_mArcName, "al_hands.bmd")), 0);
 
-#if TARGET_PC
         if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor)
-#else
-        if (dComIfGs_getRupee() != 0)
-#endif
         {
             setMagicArmorBrk(1);
         } else {
@@ -389,7 +384,9 @@ void daAlink_c::changeLink(int param_0) {
                      strcmp(tex_name, "eye_kage01") == 0))
                 {
                     ResTIMG* timg = tex->getResTIMG(i);
-                    timg->maxLOD = 0;
+                    if (timg != nullptr) {
+                        timg->maxLOD = 0;
+                    }
                 }
             }
         }
@@ -423,6 +420,7 @@ void daAlink_c::changeLink(int param_0) {
     field_0x06e4 = NULL;
 
     u8 var_r27;
+
     if (checkNoResetFlg2(FLG2_UNK_80000)) {
         field_0x06d8 = field_0x064C->getMaterialNodePointer(4)->getShape();
         field_0x06dc = field_0x064C->getMaterialNodePointer(5)->getShape();
@@ -456,12 +454,7 @@ void daAlink_c::changeLink(int param_0) {
         field_0x06e8 = field_0x064C->getMaterialNodePointer(3)->getShape();
         field_0x06ec = field_0x064C->getMaterialNodePointer(1)->getShape();
         field_0x06f0 = field_0x064C->getMaterialNodePointer(2)->getShape();
-
-#if TARGET_PC
         if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor) {
-#else
-        if (dComIfGs_getRupee() != 0) {
-#endif
             var_r27 = 4;
         } else {
             var_r27 = 5;
