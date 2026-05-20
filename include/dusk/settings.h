@@ -184,6 +184,7 @@ struct UserSettings {
         ConfigVar<float> gyroDeadband;
         ConfigVar<bool> gyroInvertPitch;
         ConfigVar<bool> gyroInvertYaw;
+        ConfigVar<bool> enableMouseCamera;
         ConfigVar<bool> enableMouseAim;
         ConfigVar<float> mouseSensitivityX;
         ConfigVar<float> mouseSensitivityY;

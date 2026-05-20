@@ -84,6 +84,7 @@ UserSettings g_userSettings = {
         .gyroDeadband {"game.gyroDeadband", 0.04f},
         .gyroInvertPitch {"game.gyroInvertPitch", false},
         .gyroInvertYaw {"game.gyroInvertYaw", false},
+        .enableMouseCamera {"game.enableMouseCamera", false},
         .enableMouseAim {"game.enableMouseAim", false},
         .mouseSensitivityX {"game.mouseSensitivityX", 1.0f},
         .mouseSensitivityY {"game.mouseSensitivityY", 1.0f},
@@ -279,6 +280,7 @@ void registerSettings() {
     Register(g_userSettings.game.gyroSmoothing);
     Register(g_userSettings.game.gyroInvertPitch);
     Register(g_userSettings.game.gyroInvertYaw);
+    Register(g_userSettings.game.enableMouseCamera);
     Register(g_userSettings.game.enableMouseAim);
     Register(g_userSettings.game.mouseSensitivityX);
     Register(g_userSettings.game.mouseSensitivityY);

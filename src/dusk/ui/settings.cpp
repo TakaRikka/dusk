@@ -971,6 +971,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
 
         leftPane.add_section("Mouse");
+        addOption("Mouse Camera", getSettings().game.enableMouseCamera,
+            "Enables mouse input to rotate the third-person camera.<br/><br/>"
+            "Requires the Free Camera option to be enabled.",
+            [] { return !getSettings().game.freeCamera; });
         addOption("Mouse Aim", getSettings().game.enableMouseAim,
             "Enables mouse input while in look mode, aiming a hawk, and aiming "
             "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
