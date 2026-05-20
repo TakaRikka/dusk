@@ -114,7 +114,6 @@ UserSettings g_userSettings = {
         .infiniteEpona {"game.infiniteEpona", false},
         .unbreakableWoodShield = {"game.unbreakableWoodShield", false},
         .stopDaylightCycle = {"game.stopDaylightCycle", false},
-        .modelOverride {"game.modelOverride", 0},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -283,7 +282,6 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteEpona);
     Register(g_userSettings.game.unbreakableWoodShield);
     Register(g_userSettings.game.stopDaylightCycle);
-    Register(g_userSettings.game.modelOverride);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);

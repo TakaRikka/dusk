@@ -67,14 +67,6 @@ constexpr std::array kInterpolationModes = {
     "Unlimited",
 };
 
-constexpr std::array kModelOverrides = {
-    "Off",
-    "Casual",
-    "Zora",
-    "Magic Armor",
-    "Kokiri"
-};
-
 constexpr std::array kGyroInputModeLabels = {
     "Sensor",
     "Mouse",
@@ -1273,48 +1265,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Visual");
         addCheat("Stop Daylight Cycle", getSettings().game.stopDaylightCycle,
         "Freezes the daylight cycle in place.");
-        leftPane.register_control(
-            leftPane.add_select_button({
-                .key = "Model Override",
-                .getValue =
-                    [] {
-                        return kModelOverrides[static_cast<u8>(getSettings().game.modelOverride.getValue())];
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.modelOverride.getValue() !=
-                               getSettings().game.modelOverride.getDefaultValue();
-                    },
-            }),
-            rightPane, [](Pane& pane) {
-                for (int i = 0; i < kModelOverrides.size(); i++) {
-                    pane.add_button({
-                            .text = kModelOverrides[i],
-                            .isSelected =
-                                [i] {
-                                    return getSettings().game.modelOverride.getValue() == i;
-                                },
-                        })
-                        .on_pressed([i] {
-                            mDoAud_seStartMenu(kSoundItemChange);
-
-                            daAlink_c* player = (daAlink_c*)dComIfGp_getPlayer(0);
-
-                            if (player != nullptr) {
-                                // Don't accept user change when in Sumo mode.
-                                // Otherwise, we crash.
-                                if (!player->checkNoResetFlg2(daPy_py_c::FLG2_UNK_200000)) {
-                                    getSettings().game.modelOverride.setValue(i);
-                                    player->setClothesChange(0);
-                                }
-                            } else {
-                                getSettings().game.modelOverride.setValue(i);
-                            }
-                            config::Save();
-                        });
-                }
-                pane.add_rml(kOverrideModelHelpText);
-            });
     });
 
     add_tab("Interface", [this](Rml::Element* content) {

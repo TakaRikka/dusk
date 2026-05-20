@@ -309,160 +309,6 @@ void daAlink_c::changeWolf() {
     field_0x2fc7 = dStage_stagInfo_GetWolfDashType(dComIfGp_getStage()->getStagInfo());
 }
 
-#if TARGET_PC
-
-void initMagicArmorBRK(daAlink_c* ctx) {
-    if (ctx == nullptr)
-        return;
-
-    if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor) {
-        ctx->setMagicArmorBrk(1);
-    } else {
-        ctx->setMagicArmorBrk(0);
-    }
-    ctx->mMagicArmorBodyBrk->setFrame(ctx->mMagicArmorBodyBrk->getFrameMax());
-    ctx->mMagicArmorHeadBrk->setFrame(ctx->mMagicArmorHeadBrk->getFrameMax());
-}
-
-static constexpr daAlink_c::LinkModelConfig sLinkModelLUT[] = {
-    // Sumo
-    {
-        true,
-        "alSumou",
-        nullptr,
-        nullptr,
-        nullptr,
-        0x31,
-        0x33,
-        0x32,
-        0x80000,
-        0x11000084,
-        0,
-        0,
-        [](daAlink_c* ctx) {
-            ctx->offNoResetFlg2(daPy_py_c::FLG2_UNK_200000);
-            ctx->onNoResetFlg2(daPy_py_c::FLG2_UNK_80000);
-        },
-        nullptr,
-    },
-    // Casual
-    {
-        false,
-        l_bArcName,
-        "bl.bmd",
-        "bl_head.bmd",
-        "bl_hands.bmd",
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        [](daAlink_c* ctx) {
-            ctx->onNoResetFlg2(daPy_py_c::FLG2_UNK_100000);
-        },
-        nullptr
-    },
-    // Zora
-    {
-        false,
-        l_zArcName,
-        "zl.bmd",
-        "zl_head.bmd",
-        "al_hands.bmd",
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        nullptr,
-        nullptr,
-    },
-    // Magic Armor
-    {
-        false,
-        l_mArcName,
-        "ml.bmd",
-        "ml_head.bmd",
-        "al_hands.bmd",
-        0,
-        0,
-        0,
-        0,
-        0x1000000,
-        0x1000000,
-        0,
-        nullptr,
-        initMagicArmorBRK,
-    },
-    // Kokiri
-    {
-        false,
-        l_kArcName,
-        "al.bmd",
-        "al_head.bmd",
-        "al_hands.bmd",
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        nullptr,
-        nullptr
-    }
-};
-
-void daAlink_c::loadModel(const LinkModelConfig& modelConfig, JKRHeap* heap) {
-    auto getModelData = [&](const char* file, int id) {
-        void* res = (file != nullptr)
-            ? dComIfG_getObjectRes(modelConfig.arcName, file)
-            : dComIfG_getObjectRes(modelConfig.arcName, id);
-
-        return static_cast<J3DModelData*>(res);
-    };
-
-    if (modelConfig.preInit != nullptr) {
-        modelConfig.preInit(this);
-    }
-
-    J3DModelData* bodyData = getModelData(modelConfig.modelFile, modelConfig.modelId);
-    if (modelConfig.useCreateFunc) {
-        mpLinkModel = mDoExt_J3DModel__create(bodyData, modelConfig.modelFlag, modelConfig.modelDifferedFlags);
-    } else {
-        mpLinkModel = initModel(bodyData, modelConfig.modelDifferedFlags);
-    }
-
-    J3DModelData* hatData = getModelData(modelConfig.hatFile, modelConfig.hatId);
-    J3DModelData* handData = getModelData(modelConfig.handFile, modelConfig.handId);
-
-    mpLinkHatModel  = initModel(hatData, modelConfig.hatDifferedFlags);
-    mpLinkHandModel = initModel(handData, modelConfig.handDifferedFlags);
-
-    if (modelConfig.postInit != nullptr) {
-        modelConfig.postInit(this);
-    }
-
-    J3DModelData* faceData = nullptr;
-    const u8 modelOverride = dusk::getSettings().game.modelOverride.getValue();
-
-    const bool useNormalFace = (modelOverride == 0)
-       ? (checkNoResetFlg2(FLG2_UNK_200000) || !checkZoraWearFlg())
-       : (modelOverride != 2);
-
-    faceData = static_cast<J3DModelData*>(
-        dComIfG_getObjectRes(mArcName, useNormalFace ? "al_face.bmd" : "zl_face.bmd")
-    );
-
-    mpLinkFaceModel = initModel(faceData, 0x20200);
-}
-
-#endif
-
 void daAlink_c::changeLink(int param_0) {
     JKRHeap* current_heap = mAnmHeap3.setAnimeHeap();
     offNoResetFlg2(daPy_FLG2(FLG2_UNK_100000 | FLG2_UNK_80000));
@@ -470,26 +316,6 @@ void daAlink_c::changeLink(int param_0) {
     mMagicArmorHeadBrk = NULL;
 
     J3DModelData* modelData;
-
-#if TARGET_PC
-    u8 activeModelId = 4;
-
-    if (dusk::getSettings().game.modelOverride.getValue() == 0) {
-        if (checkNoResetFlg2(FLG2_UNK_200000)) {
-            activeModelId = 0;
-        } else if (checkCasualWearFlg()) {
-            activeModelId = 1;
-        } else if (checkZoraWearFlg()) {
-            activeModelId = 2;
-        } else if (checkMagicArmorWearFlg()) {
-            activeModelId = 3;
-        }
-    } else {
-        activeModelId = dusk::getSettings().game.modelOverride.getValue();
-    }
-
-    loadModel(sLinkModelLUT[activeModelId], current_heap);
-#else
     if (checkNoResetFlg2(FLG2_UNK_200000)) {
         offNoResetFlg2(FLG2_UNK_200000);
         onNoResetFlg2(FLG2_UNK_80000);
@@ -544,7 +370,6 @@ void daAlink_c::changeLink(int param_0) {
         mpLinkFaceModel =
             initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(mArcName, "zl_face.bmd")), 0x20200);
     }
-#endif
 
 #ifdef TARGET_PC
     // Update Adult Link's eye maxLOD to prevent the eyes from disappearing
@@ -596,61 +421,6 @@ void daAlink_c::changeLink(int param_0) {
 
     u8 var_r27;
 
-
-#if TARGET_PC
-    switch (activeModelId) {
-    case 0: // Sumo
-        field_0x06d8 = field_0x064C->getMaterialNodePointer(4)->getShape();
-        field_0x06dc = field_0x064C->getMaterialNodePointer(5)->getShape();
-        field_0x06e0 = NULL;
-        field_0x06e8 = field_0x064C->getMaterialNodePointer(3)->getShape();
-        field_0x06ec = NULL;
-        field_0x06f0 = field_0x064C->getMaterialNodePointer(2)->getShape();
-        var_r27 = 2;
-        break;
-    case 1: // Casual
-        field_0x06d8 = field_0x064C->getMaterialNodePointer(3)->getShape();
-        field_0x06dc = field_0x064C->getMaterialNodePointer(4)->getShape();
-        field_0x06e0 = NULL;
-        field_0x06e8 = field_0x064C->getMaterialNodePointer(2)->getShape();
-        field_0x06ec = field_0x064C->getMaterialNodePointer(0)->getShape();
-        field_0x06f0 = field_0x064C->getMaterialNodePointer(1)->getShape();
-        var_r27 = 2;
-        break;
-    case 2: // Zora
-        field_0x06d8 = field_0x064C->getMaterialNodePointer(4)->getShape();
-        field_0x06dc = field_0x064C->getMaterialNodePointer(5)->getShape();
-        field_0x06e0 = field_0x064C->getMaterialNodePointer(8)->getShape();
-        field_0x06e4 = field_0x064C->getMaterialNodePointer(9)->getShape();
-        field_0x06e4->hide();
-        field_0x06e8 = NULL;
-        field_0x06ec = field_0x064C->getMaterialNodePointer(2)->getShape();
-        field_0x06f0 = field_0x064C->getMaterialNodePointer(11)->getShape();
-        var_r27 = 3;
-    case 3: // Magic Armor
-        field_0x06d8 = field_0x064C->getMaterialNodePointer(4)->getShape();
-        field_0x06dc = field_0x064C->getMaterialNodePointer(5)->getShape();
-        field_0x06e0 = field_0x064C->getMaterialNodePointer(10)->getShape();
-        field_0x06e8 = field_0x064C->getMaterialNodePointer(3)->getShape();
-        field_0x06ec = field_0x064C->getMaterialNodePointer(1)->getShape();
-        field_0x06f0 = field_0x064C->getMaterialNodePointer(2)->getShape();
-        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor) {
-            var_r27 = 4;
-        } else {
-            var_r27 = 5;
-        }
-        break;
-    case 4: // Kokiri
-        field_0x064C->getMaterialNodePointer(16)->getShape()->hide();
-        field_0x06d8 = field_0x064C->getMaterialNodePointer(11)->getShape();
-        field_0x06dc = field_0x064C->getMaterialNodePointer(12)->getShape();
-        field_0x06e0 = field_0x064C->getMaterialNodePointer(6)->getShape();
-        field_0x06e8 = field_0x064C->getMaterialNodePointer(8)->getShape();
-        field_0x06ec = field_0x064C->getMaterialNodePointer(4)->getShape();
-        field_0x06f0 = field_0x064C->getMaterialNodePointer(7)->getShape();
-        var_r27 = 0;
-    }
-#else
     if (checkNoResetFlg2(FLG2_UNK_80000)) {
         field_0x06d8 = field_0x064C->getMaterialNodePointer(4)->getShape();
         field_0x06dc = field_0x064C->getMaterialNodePointer(5)->getShape();
@@ -699,7 +469,6 @@ void daAlink_c::changeLink(int param_0) {
         field_0x06f0 = field_0x064C->getMaterialNodePointer(7)->getShape();
         var_r27 = 0;
     }
-#endif TARGET_PC
 
     if (field_0x06e0 != NULL) {
         if (checkEquipHeavyBoots()) {

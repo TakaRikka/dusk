@@ -202,7 +202,6 @@ struct UserSettings {
         ConfigVar<bool> infiniteEpona;
         ConfigVar<bool> unbreakableWoodShield;
         ConfigVar<bool> stopDaylightCycle;
-        ConfigVar<int> modelOverride;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;
