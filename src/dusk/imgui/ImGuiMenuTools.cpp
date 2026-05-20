@@ -209,13 +209,10 @@ namespace dusk {
             daHorse_c* horse = dComIfGp_getHorseActor();
 
             double speedXzy = 0.0;
-            double speedXz = 0.0;
             if (player != nullptr) {
                 speedXzy = sqrtf(player->speed.x * player->speed.x
                     + player->speed.z * player->speed.z
                     + player->speed.y * player->speed.y);
-                speedXz = sqrtf(player->speed.x * player->speed.x
-                    + player->speed.z * player->speed.z);
             }
 
             ImGui::Text("Global");
@@ -227,7 +224,7 @@ namespace dusk {
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Layer: {}\n", dComIfG_play_c::getLayerNo(0)) 
+                ? fmt::format("Layer: {0}\n", dComIfG_play_c::getLayerNo(0))
                 : "Layer: ?\n"
             );
 
@@ -265,13 +262,13 @@ namespace dusk {
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Room: {}\n", fopAcM_GetRoomNo(player)) 
+                ? fmt::format("Room: {0}\n", fopAcM_GetRoomNo(player))
                 : "Room: ?\n"
             );
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Entry: {}\n", dComIfGp_getStartStagePoint()) 
+                ? fmt::format("Entry: {0}\n", dComIfGp_getStartStagePoint())
                 : "Entry: ?\n"
             );
 
@@ -303,7 +300,7 @@ namespace dusk {
 
             ImGuiStringViewText(
                 horse != nullptr
-                ? fmt::format("Room: {}\n", fopAcM_GetRoomNo(horse)) 
+                ? fmt::format("Room: {0}\n", fopAcM_GetRoomNo(horse))
                 : "Room: ?\n"
             );
 
@@ -315,7 +312,7 @@ namespace dusk {
 
             ImGuiStringViewText(
                 player != nullptr
-                ? fmt::format("Saved Room: {}\n", dComIfGs_getHorseRestartRoomNo())
+                ? fmt::format("Saved Room: {0}\n", dComIfGs_getHorseRestartRoomNo())
                 : "Saved Room: ?\n"
             );
 
