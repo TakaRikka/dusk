@@ -122,14 +122,14 @@ void dMenu_Collect2D_c::menuCollectWide() {
     // Reset button overlay
     mpScreenIcon->translate(0.0f, 0.0f);
 
-    switch (dusk::getSettings().game.collectionScalingMode) {
-    case dusk::CollectionScreenScaling::GameCube:
+    switch (dusk::getSettings().game.menuScalingMode) {
+    case dusk::MenuScaling::GameCube:
         // Selection Cursor
         if (mpDrawCursor) {
             mpDrawCursor->refreshAspectScale(1.0f);
         }
         break;
-    case dusk::CollectionScreenScaling::Wii:
+    case dusk::MenuScaling::Wii:
         // Main Canvas
         mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
         mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
@@ -206,16 +206,13 @@ void dMenu_Collect2D_c::menuCollectWide() {
             mpDrawCursor->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
         break;
-    case dusk::CollectionScreenScaling::Dusklight:
+    case dusk::MenuScaling::Dusklight:
         // Main Canvas
         mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
         mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
 
-        // "Save" Text
-        mpScreen->search(MULTI_CHAR('sa_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-        // "Options" Text
-        mpScreen->search(MULTI_CHAR('op_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Save/Options Buttons
+        mpScreen->search(MULTI_CHAR('sa_op_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
         // "Collection" Title Bar
         mpScreen->search(MULTI_CHAR('title_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);

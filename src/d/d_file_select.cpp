@@ -3787,7 +3787,7 @@ void dFile_select_c::fileSelectWide() {
         pane->translate(entry.origTransX, entry.origTransY);
     }
 
-    bool wideScaling = dusk::getSettings().game.collectionScalingMode.getValue() != dusk::CollectionScreenScaling::GameCube;
+    bool wideScaling = dusk::getSettings().game.menuScalingMode.getValue() != dusk::MenuScaling::GameCube;
     const f32 rootScale = wideScaling ? mDoGph_gInf_c::hudAspectScaleUp : 1.0f;
     const f32 childScale = wideScaling ? mDoGph_gInf_c::hudAspectScaleDown : 1.0f;
     const f32 rootTransX = wideScaling ? mDoGph_gInf_c::getSafeMinXF() : 0.0f;
@@ -3831,8 +3831,8 @@ void dFile_select_c::fileSelectWide() {
     mCpSel.Scr->search(MULTI_CHAR('w_n_bk01'))->scale(childScale, 1.0f);
     mCpSel.Scr->search(MULTI_CHAR('w_n_bk02'))->scale(childScale, 1.0f);
 
-    switch (dusk::getSettings().game.collectionScalingMode) {
-    case (dusk::CollectionScreenScaling::GameCube):
+    switch (dusk::getSettings().game.menuScalingMode) {
+    case (dusk::MenuScaling::GameCube):
         // Selection Cursor
         if (mSelIcon) {
             mSelIcon->refreshAspectScale(1.0f);
@@ -3841,7 +3841,7 @@ void dFile_select_c::fileSelectWide() {
             mSelIcon2->refreshAspectScale(1.0f);
         }
         break;
-    case (dusk::CollectionScreenScaling::Wii):
+    case (dusk::MenuScaling::Wii):
         // Icons
         mSelDt.ScrDt->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         mSelDt.ScrDt->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
@@ -3872,7 +3872,7 @@ void dFile_select_c::fileSelectWide() {
             mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
         break;
-    case (dusk::CollectionScreenScaling::Dusklight):
+    case (dusk::MenuScaling::Dusklight):
         constexpr f32 minAspect = 4.0f / 2.94f;
         constexpr f32 wideAspect = 16.0f / 9.0f + 0.05f;
         constexpr f32 ultraAspect = 21.0f / 9.0f + 0.05f;

@@ -15,6 +15,7 @@ class dMenu_Fishing_c;
 class dMenu_Skill_c;
 class dMenu_Insect_c;
 class dSelect_cursor_c;
+#if TARGET_PC
 static bool cachedPanes = false;
 
 struct PaneCache {
@@ -47,6 +48,7 @@ static PaneCache mpScreenPanes[] = {
     {MULTI_CHAR('f_t00'), 0.0f, false},
     {MULTI_CHAR('itemn_n'), 0.0f, false},
     {MULTI_CHAR('infotxtn'), 0.0f, false},
+    {MULTI_CHAR('sa_op_n'), 0.0f, false},
     {MULTI_CHAR('title_n'), 0.0f, false},
     {MULTI_CHAR('menu_n'), 0.0f, false},
     {MULTI_CHAR('w_er_n'), 0.0f, false},
@@ -55,6 +57,7 @@ static PaneCache mpScreenPanes[] = {
     {MULTI_CHAR('lavel_n'), 0.0f, false},
     {MULTI_CHAR('modelbgn'), 0.0f, false},
 };
+#endif
 
 class dMenu_Collect2D_c;
 class dMenu_Collect2DTop_c : public dDlst_base_c {

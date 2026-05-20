@@ -45,7 +45,7 @@ enum class FrameInterpMode : u8 {
     Unlimited = 2,
 };
 
-enum class CollectionScreenScaling : u8 {
+enum class MenuScaling : u8 {
     GameCube = 0,
     Wii = 1,
     Dusklight = 2,
@@ -89,9 +89,9 @@ struct ConfigEnumRange<FrameInterpMode> {
 };
 
 template <>
-struct ConfigEnumRange<CollectionScreenScaling> {
-    static constexpr auto min = CollectionScreenScaling::GameCube;
-    static constexpr auto max = CollectionScreenScaling::Dusklight;
+struct ConfigEnumRange<MenuScaling> {
+    static constexpr auto min = MenuScaling::GameCube;
+    static constexpr auto max = MenuScaling::Dusklight;
 };
 }  // namespace config
 
@@ -154,7 +154,7 @@ struct UserSettings {
         ConfigVar<bool> enableAchievementToasts;
         ConfigVar<bool> enableControllerToasts;
         ConfigVar<bool> enableDiscordPresence;
-        ConfigVar<CollectionScreenScaling> collectionScalingMode;
+        ConfigVar<MenuScaling> menuScalingMode;
 
         // Graphics
         ConfigVar<BloomMode> bloomMode;

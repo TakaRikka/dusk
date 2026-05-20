@@ -70,7 +70,7 @@ constexpr std::array kGyroInputModeLabels = {
     "Mouse",
 };
 
-constexpr std::array kCollectionMenuModeLabels = {
+constexpr std::array kMenuScalingModeLabels = {
     "GameCube",
     "Wii",
     "Dusklight",
@@ -1424,45 +1424,46 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Show gyro sensor values in the input viewer.",
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
-
+        #if TARGET_PC
         leftPane.add_section("Game");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Collection Menu Scaling",
+                .key = "Menu Scaling Mode",
                 .getValue =
                     [] {
-                        return kCollectionMenuModeLabels[static_cast<u8>(
-                            getSettings().game.collectionScalingMode.getValue())];
+                        return kMenuScalingModeLabels[static_cast<u8>(
+                            getSettings().game.menuScalingMode.getValue())];
                     },
                 .isModified =
                     [] {
-                        const auto& mode = getSettings().game.collectionScalingMode;
+                        const auto& mode = getSettings().game.menuScalingMode;
                         return mode.getValue() != mode.getDefaultValue();
                     },
             }),
             rightPane, [](Pane& pane) {
-                for (int i = 0; i < static_cast<int>(kCollectionMenuModeLabels.size()); ++i) {
+                for (int i = 0; i < static_cast<int>(kMenuScalingModeLabels.size()); ++i) {
                     pane
                         .add_button({
-                            .text = kCollectionMenuModeLabels[i],
+                            .text = kMenuScalingModeLabels[i],
                             .isSelected =
                                 [i] {
-                                    return getSettings().game.collectionScalingMode.getValue() ==
-                                           static_cast<CollectionScreenScaling>(i);
+                                    return getSettings().game.menuScalingMode.getValue() ==
+                                           static_cast<MenuScaling>(i);
                                     ;
                                 },
                         })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
-                            getSettings().game.collectionScalingMode.setValue(
-                                static_cast<CollectionScreenScaling>(i));
+                            getSettings().game.menuScalingMode.setValue(
+                                static_cast<MenuScaling>(i));
                             ;
                             config::Save();
                         });
                 }
-                pane.add_rml("<br/>Changes how the Collection menu scales to your aspect ratio. "
-                             "Also affects the collection on the file select screen.");
+                pane.add_rml("<br/>Changes how the Collection and File Select menus scale to your "
+                             "aspect ratio.");
             });
+        #endif
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",
