@@ -33,8 +33,8 @@ namespace {
     };
 
     const ColorSetting kColorTable[] = {
-        /* 0: NO_COLOR         */ { {0, 0, 0},       1.0f },
-        /* 1: DUSK_COLOR       */ { {50, 50, -50},   1.0f },
+        /* 0: NO_COLOR         */ { {0, 0, 0},       2.0f },
+        /* 1: DUSK_COLOR       */ { {50, 50, -50},   2.0f },
         /* 2: ZHINT            */ { {50, 50, 175},   2.0f },
         /* 3: LINK_WOLF        */ { {115, 115, 75},  5.0f },
         /* 4: LINK_CASUAL      */ { {235, 230, 115}, 5.0f },
