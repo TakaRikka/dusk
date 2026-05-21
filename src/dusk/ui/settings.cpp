@@ -1304,7 +1304,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             pane.add_rml(kEnemyHealthModeHelpText);
         });
 
-        leftPane.add_section("Visual");
+        leftPane.add_section("World");
         addCheat("Stop Daylight Cycle", getSettings().game.stopDaylightCycle,
         "Freezes the daylight cycle in place.");
     });
