@@ -39,6 +39,7 @@ void resetForSpeedrunMode() {
     getSettings().game.enemyHealthMode.setSpeedrunValue(EnemyHealthMode::Normal);
     getSettings().game.stopDaylightCycle.setSpeedrunValue(false);
     getSettings().game.unbreakableWoodShield.setSpeedrunValue(false);
+    getSettings().game.noRollCrash.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);

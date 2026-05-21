@@ -221,6 +221,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.enemyHealthMode.setSpeedrunValue(EnemyHealthMode::Normal);
     getSettings().game.stopDaylightCycle.setSpeedrunValue(false);
     getSettings().game.unbreakableWoodShield.setSpeedrunValue(false);
+    getSettings().game.noRollCrash.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);
@@ -1298,6 +1299,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Allows transforming even if NPCs are looking.");
         addCheat("Fast Roll", getSettings().game.fastRoll,
             "Makes Link's roll animation and movement twice as fast.");
+        addCheat("Prevent Roll Crash", getSettings().game.noRollCrash,
+            "Prevents Link from crashing into walls.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");
         addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,

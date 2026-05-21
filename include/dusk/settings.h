@@ -214,6 +214,7 @@ struct UserSettings {
         ConfigVar<bool> infiniteEpona;
         ConfigVar<bool> unbreakableWoodShield;
         ConfigVar<float> swimSpeedScale;
+        ConfigVar<bool> noRollCrash;
         ConfigVar<bool> stopDaylightCycle;
 
         // Technical
