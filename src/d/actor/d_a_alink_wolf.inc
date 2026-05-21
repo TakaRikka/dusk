@@ -1452,6 +1452,10 @@ int daAlink_c::checkNextActionWolf(int param_0) {
 
     setFrontWallType();
 
+#if TARGET_PC
+    const f32 dashMul = dusk::getSettings().game.fastDash ? 2.0f : 1.0f;
+#endif
+
     if (checkSlope()) {
         if (checkWolfDashMode()) {
             mMaxSpeed = mpHIO->mWolf.mWlSlide.m.mClimbingMaxSpeed;
@@ -1472,8 +1476,14 @@ int daAlink_c::checkNextActionWolf(int param_0) {
         } else {
             mMaxSpeed = mpHIO->mWolf.mWlMove.m.mADashMaxSpeed;
         }
+#if TARGET_PC
+        mMaxSpeed *= dashMul;
+#endif
     } else if (checkWolfDashMode()) {
         mMaxSpeed = mpHIO->mWolf.mWlMove.m.mMaxSpeed;
+#if TARGET_PC
+        mMaxSpeed *= dashMul;
+#endif
     } else {
         mMaxSpeed = mpHIO->mWolf.mWlMoveNoP.m.mMaxSpeed;
     }
@@ -2613,7 +2623,15 @@ int daAlink_c::procWolfMove() {
 
 int daAlink_c::procWolfDashInit() {
     commonProcInit(PROC_WOLF_DASH);
+#if TARGET_PC
+    constexpr daAlink_WANM i_anmID = WANM_DASH_START;
+    const daAlinkHIO_anm_c* i_anmData = &daAlinkHIO_wlMove_c0::m.mADashAnm;
+    const f32 mul = dusk::getSettings().game.fastDash ? 2.0f : 1.0f;
+    setSingleAnimeWolf(i_anmID, i_anmData->mSpeed * mul, i_anmData->mStartFrame, i_anmData->mEndFrame,
+                       i_anmData->mInterpolation);
+#else
     setSingleAnimeWolfParam(WANM_DASH_START, &mpHIO->mWolf.mWlMove.m.mADashAnm);
+#endif
     setFootEffectProcType(3);
     current.angle.y = shape_angle.y;
 
@@ -2621,6 +2639,29 @@ int daAlink_c::procWolfDashInit() {
     mProcVar2.field_0x300c = 0;
     mProcVar3.field_0x300e = 0;
 
+#if TARGET_PC
+    if (checkWolfSlowDash()) {
+        field_0x30d0 = mpHIO->mWolf.mWlMove.m.mADashDurationSlow;
+        mMaxSpeed = mpHIO->mWolf.mWlMove.m.mADashMaxSpeedSlow * mul;
+
+        if (mNormalSpeed < mpHIO->mWolf.mWlMove.m.mADashInitSpeedSlow * mul) {
+            mNormalSpeed = mpHIO->mWolf.mWlMove.m.mADashInitSpeedSlow * mul;
+        }
+    } else if (field_0x2fc7 == 2) {
+        mMaxSpeed = mpHIO->mWolf.mWlMove.m.mADashMaxSpeedSlow2 * mul;
+
+        if (mNormalSpeed < mpHIO->mWolf.mWlMove.m.mADashInitSpeedSlow2 * mul) {
+            mNormalSpeed = mpHIO->mWolf.mWlMove.m.mADashInitSpeedSlow2 * mul;
+        }
+    } else {
+        field_0x30d0 = mpHIO->mWolf.mWlMove.m.mADashDuration;
+        mMaxSpeed = mpHIO->mWolf.mWlMove.m.mADashMaxSpeed * mul;
+
+        if (mNormalSpeed < mpHIO->mWolf.mWlMove.m.mADashInitSpeed * mul) {
+            mNormalSpeed = mpHIO->mWolf.mWlMove.m.mADashInitSpeed * mul;
+        }
+    }
+#else
     if (checkWolfSlowDash()) {
         field_0x30d0 = mpHIO->mWolf.mWlMove.m.mADashDurationSlow;
         mMaxSpeed = mpHIO->mWolf.mWlMove.m.mADashMaxSpeedSlow;
@@ -2643,6 +2684,7 @@ int daAlink_c::procWolfDashInit() {
             mNormalSpeed = mpHIO->mWolf.mWlMove.m.mADashInitSpeed;
         }
     }
+#endif
 
     return 1;
 }
@@ -2663,7 +2705,12 @@ int daAlink_c::procWolfDash() {
     } else {
         step_amount = mpHIO->mWolf.mWlMove.m.mADashAcceleration;
     }
+#if TARGET_PC
+    const f32 mul = dusk::getSettings().game.fastDash ? 2.0f : 1.0f;
+    cLib_chaseF(&mNormalSpeed, mMaxSpeed, step_amount * mul);
+#else
     cLib_chaseF(&mNormalSpeed, mMaxSpeed, step_amount);
+#endif
 
     if (checkInputOnR()) {
         cLib_addCalcAngleS(&current.angle.y, mMoveAngle, mpHIO->mWolf.mWlMove.m.mTurnAngleRate,

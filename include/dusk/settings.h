@@ -208,6 +208,7 @@ struct UserSettings {
         ConfigVar<bool> enableFastIronBoots;
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastRoll;
+        ConfigVar<bool> fastDash;
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
         ConfigVar<EnemyHealthMode> enemyHealthMode;

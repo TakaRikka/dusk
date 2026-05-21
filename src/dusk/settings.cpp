@@ -108,6 +108,7 @@ UserSettings g_userSettings = {
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastRoll {"game.fastRoll", false},
+        .fastDash {"game.fastDash", false},
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
         .enemyHealthMode {"game.enemyHealthMode", EnemyHealthMode::Normal},
@@ -237,6 +238,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.fastRoll);
+    Register(g_userSettings.game.fastDash);
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
     Register(g_userSettings.game.enableLinkDollRotation);

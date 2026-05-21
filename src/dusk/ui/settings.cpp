@@ -214,6 +214,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.enableFastIronBoots.setSpeedrunValue(false);
     getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
     getSettings().game.fastRoll.setSpeedrunValue(false);
+    getSettings().game.fastDash.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
     getSettings().game.swimSpeedScale.setSpeedrunValue(1.0f);
@@ -1299,6 +1300,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Allows transforming even if NPCs are looking.");
         addCheat("Fast Roll", getSettings().game.fastRoll,
             "Makes Link's roll animation and movement twice as fast.");
+        addCheat("Fast Dash", getSettings().game.fastDash,
+            "Makes Wolflink's dash animation and movement twice as fast.");
         addCheat("Roll/Dash Crash Quick Recovery", getSettings().game.rollCrashQuickRecovery,
             "Speeds up the animation when Link/Wolflink crash into a Wall.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,

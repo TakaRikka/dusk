@@ -32,6 +32,7 @@ void resetForSpeedrunMode() {
     getSettings().game.enableFastIronBoots.setSpeedrunValue(false);
     getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
     getSettings().game.fastRoll.setSpeedrunValue(false);
+    getSettings().game.fastDash.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
     getSettings().game.swimSpeedScale.setSpeedrunValue(1.0f);
