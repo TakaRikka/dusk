@@ -17,10 +17,10 @@
 
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
+#include "dusk/gamepad_color.h"
 
 namespace dusk::ui {
 namespace {
-std::array<bool, PAD_MAX_CONTROLLERS> sPadHasLED;
 
 bool keyboard_active(int port) {
     u32 count = 0;
@@ -241,33 +241,7 @@ int rumble_raw_to_percent(u16 raw) {
     return static_cast<int>((static_cast<float>(raw) / 32767.f) * 100.f + 0.5f);
 }
 
-bool check_led_capability(SDL_Gamepad* pad) noexcept {
-    if (pad == nullptr)
-        return false;
-
-    SDL_PropertiesID gamepadProps = SDL_GetGamepadProperties(pad);
-    return SDL_GetBooleanProperty(
-        gamepadProps,
-        SDL_PROP_GAMEPAD_CAP_RGB_LED_BOOLEAN,
-        false
-    );
-}
-
-void set_pad_has_led(const int port, const bool value) noexcept {
-    if (port > PAD_MAX_CONTROLLERS || port < 0)
-        return;
-
-    sPadHasLED[port] = value;
-}
-
 }  // namespace
-
-bool pad_has_led(const int port) noexcept {
-    if (port > PAD_MAX_CONTROLLERS || port < 0)
-        return false;
-
-    return sPadHasLED[port];
-}
 
 ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
     if (prelaunch) {
@@ -281,7 +255,9 @@ ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
                 event.StopPropagation();
             }
         },
-        true);
+        true
+    );
+
     if (auto* context = mDocument != nullptr ? mDocument->GetContext() : nullptr) {
         if (auto* root = context->GetRootElement()) {
             mListeners.emplace_back(std::make_unique<ScopedEventListener>(
@@ -345,12 +321,15 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
                                       return getSettings().game.enableLED[port].getValue();
                                   },
                               .setValue =
-                                  [port](bool value) {
+                                  [port](const bool value) {
                                       getSettings().game.enableLED[port].setValue(value);
                                   },
                               .isDisabled = [port] {
-                                  return !pad_has_led(port);
+                                  return !input::gamepadLed::pad_has_led(port);
                               },
+                              .isSupported = [port] {
+                                  return input::gamepadLed::pad_has_led(port);
+                              }
                           }),
     rightPane, [](Pane& pane) {
         pane.add_text("Sets the controller's lighting color based on the game's state.");
@@ -422,7 +401,6 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                 PADSerializeMappings();
                 ClearAllActionBindings(port);
-                set_pad_has_led(port, false);
             });
 
         pane.add_button({
@@ -436,7 +414,6 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
                 PADSerializeMappings();
                 ClearAllActionBindings(port);
-                set_pad_has_led(port, false);
             });
 
         const u32 controllerCount = PADCount();
@@ -459,10 +436,6 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     PADSetPortForIndex(i, port);
                     PADSerializeMappings();
                     ClearAllActionBindings(port);
-
-                    SDL_Gamepad* pad = PADGetSDLGamepadForIndex(i);
-                    const bool hasLED = check_led_capability(pad);
-                    set_pad_has_led(port, hasLED);
                 });
         }
         break;

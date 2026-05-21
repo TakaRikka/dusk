@@ -7,111 +7,146 @@
 
 #include "ui/controller_config.hpp"
 
-cXyz currentGamepadColor = {0, 0, 0};
-cXyz finalGamepadColor = {0, 0, 0};
-cXyz additionalGamepadColor = {0, 0, 0};
+namespace dusk::input::gamepadLed {
 
-float lerpSpeed = 0.0f;
+namespace {
+    std::array<bool, PAD_MAX_CONTROLLERS> sPadHasLED;
 
-const cXyz duskColor = {50, 50, -50};
-const cXyz noColor = {0, 0, 0};
+    cXyz currentColor = {0, 0, 0};
+    float lerpSpeed = 0.0f;
 
-cXyz LerpColor(cXyz a, cXyz b, float t) {
-    return {std::lerp(a.x, b.x, t), std::lerp(a.y, b.y, t), std::lerp(a.z, b.z, t)};
-}
+    enum ColorVariations : u8 {
+        NO_COLOR = 0,
+        DUSK_COLOR = 1,
+        ZHINT = 2,
+        LINK_WOLF = 3,
+        LINK_CASUAL = 4,
+        LINK_KOKIRI = 5,
+        LINK_ZORA = 6,
+        LINK_MAGIC = 7,
+        LINK_MAGIC_HEAVY = 8,
+    };
 
-void FadeLED(cXyz newColor, float speed) {
-    finalGamepadColor = newColor;
-    lerpSpeed = speed / 30.0f;
-}
+    struct ColorSetting {
+        cXyz color;
+        float speed;
+    };
 
-void SetLED(cXyz newColor) {
-    currentGamepadColor = newColor;
-    finalGamepadColor = newColor;
-}
+    const ColorSetting kColorTable[] = {
+        /* 0: NO_COLOR         */ { {0, 0, 0},       1.0f },
+        /* 1: DUSK_COLOR       */ { {50, 50, -50},   1.0f },
+        /* 2: ZHINT            */ { {50, 50, 175},   2.0f },
+        /* 3: LINK_WOLF        */ { {115, 115, 75},  5.0f },
+        /* 4: LINK_CASUAL      */ { {235, 230, 115}, 5.0f },
+        /* 5: LINK_KOKIRI      */ { {0, 100, 0},     5.0f },
+        /* 6: LINK_ZORA        */ { {0, 0, 100},     5.0f },
+        /* 7: LINK_MAGIC       */ { {100, 0, 5},     5.0f },
+        /* 8: LINK_MAGIC_HEAVY */ { {5, 100, 100},   5.0f },
+    };
 
-void SetGamepadAdditionalColor(cXyz addColor) {
-    additionalGamepadColor.x = addColor.x;
-    additionalGamepadColor.y = addColor.y;
-    additionalGamepadColor.z = addColor.z;
-}
-
-void handleGamepadColor() {
-    bool setColor = false;
-
-    fopAc_ac_c* zhint = dComIfGp_att_getZHint();
-    if (zhint != NULL) {
-        FadeLED({50, 50, 175}, 2.0f);
-        setColor = true;
+    cXyz LerpColor(const cXyz a, const cXyz b, const float t) {
+        return {std::lerp(a.x, b.x, t), std::lerp(a.y, b.y, t), std::lerp(a.z, b.z, t)};
     }
 
-    daPy_py_c* player = daPy_getPlayerActorClass();
-    daAlink_c* link = daAlink_getAlinkActorClass();
+    void clamp(cXyz& color) {
+        color.x = std::clamp(color.x, 0.0f, 255.0f);
+        color.y = std::clamp(color.y, 0.0f, 255.0f);
+        color.z = std::clamp(color.z, 0.0f, 255.0f);
+    }
 
-    if (link != nullptr && !setColor) {
+    ColorSetting getColorSetting() {
+        const fopAc_ac_c* zHint = dComIfGp_att_getZHint();
+        if (zHint != nullptr) {
+            return kColorTable[ZHINT];
+        }
+
+        const daAlink_c* link = daAlink_getAlinkActorClass();
+
+        if (link == nullptr)
+            return kColorTable[DUSK_COLOR];
+
         if (link->checkWolf()) {
-            FadeLED({115, 115, 75}, 5.0f);
-            setColor = true;
-        } else {
-            switch (dComIfGs_getSelectEquipClothes()) {
-            case dItemNo_WEAR_KOKIRI_e:
-                FadeLED({0, 100, 0}, 5.0f);
-                setColor = true;
-                break;
-            case dItemNo_WEAR_ZORA_e:
-                FadeLED({0, 0, 100}, 5.0f);
-                setColor = true;
-                break;
-            case dItemNo_ARMOR_e:
-                if (link->checkMagicArmorHeavy()) {
-                    FadeLED({5, 100, 100}, 5.0f);
-                } else {
-                    FadeLED({100, 0, 5}, 5.0f);
-                }
-                setColor = true;
-                break;
-            case dItemNo_WEAR_CASUAL_e:
-                FadeLED({235, 230, 115}, 5.0f);
-                setColor = true;
-                break;
+            return kColorTable[LINK_WOLF];
+        }
+
+        switch (dComIfGs_getSelectEquipClothes()) {
+        case dItemNo_WEAR_KOKIRI_e:
+            return kColorTable[LINK_KOKIRI];
+        case dItemNo_WEAR_ZORA_e:
+            return kColorTable[LINK_ZORA];
+        case dItemNo_ARMOR_e:
+            if (link->checkMagicArmorHeavy()) {
+                return kColorTable[LINK_MAGIC_HEAVY];
             }
+
+            return kColorTable[LINK_MAGIC];
+        case dItemNo_WEAR_CASUAL_e:
+            return kColorTable[LINK_CASUAL];
+        default:
+            return kColorTable[LINK_KOKIRI];
         }
     }
 
-    if (dKy_darkworld_check()) {
-        SetGamepadAdditionalColor(duskColor);
-    } else {
-        SetGamepadAdditionalColor(noColor);
+    cXyz getAdditionalColor() {
+        if (dKy_darkworld_check()) {
+            return kColorTable[DUSK_COLOR].color;
+        }
+
+        return kColorTable[NO_COLOR].color;
     }
 
-    f32 finalRed = finalGamepadColor.x + additionalGamepadColor.x;
-    f32 finalGreen = finalGamepadColor.y + additionalGamepadColor.y;
-    f32 finalBlue = finalGamepadColor.z + additionalGamepadColor.z;
+    void handle_led_capability(const int port) noexcept {
+        if (port > PAD_MAX_CONTROLLERS || port < 0)
+            return;
 
-    if (finalRed > 255)
-        finalRed = 255;
-    if (finalRed < 0)
-        finalRed = 0;
+        const int currentPadIndex = PADGetIndexForPort(port);
+        SDL_Gamepad* pad = PADGetSDLGamepadForIndex(currentPadIndex);
 
-    if (finalGreen > 255)
-        finalGreen = 255;
-    if (finalGreen < 0)
-        finalGreen = 0;
+        if (pad == nullptr) {
+            sPadHasLED[port] = false;
+            return;
+        }
 
-    if (finalBlue > 255)
-        finalBlue = 255;
-    if (finalBlue < 0)
-        finalBlue = 0;
+        const SDL_PropertiesID gamepadProps = SDL_GetGamepadProperties(pad);
+        const bool hasLED = SDL_GetBooleanProperty(
+            gamepadProps,
+            SDL_PROP_GAMEPAD_CAP_RGB_LED_BOOLEAN,
+            false
+        );
 
-    currentGamepadColor = LerpColor(currentGamepadColor, cXyz{finalRed, finalGreen, finalBlue}, lerpSpeed);
+        sPadHasLED[port] = hasLED;
+    }
+
+}  // namespace
+
+bool pad_has_led(const int port) noexcept {
+    if (port > PAD_MAX_CONTROLLERS || port < 0)
+        return false;
+
+    return sPadHasLED[port];
+}
+
+void handleGamepadColor() {
+    auto [color, speed] = getColorSetting();
+    const cXyz additionalColor = getAdditionalColor();
+    cXyz finalColor = color + additionalColor;
+    lerpSpeed = speed / 30.0f;
+
+    clamp(finalColor);
+    currentColor = LerpColor(currentColor, finalColor, lerpSpeed);
 
     for (int i = 0; i < 4; i++) {
-        if (dusk::ui::pad_has_led(i) && dusk::getSettings().game.enableLED[i])
+        handle_led_capability(i);
+
+        if (pad_has_led(i) && dusk::getSettings().game.enableLED[i]) {
             PADSetColor(
                 i,
-                static_cast<u8>(currentGamepadColor.x),
-                static_cast<u8>(currentGamepadColor.y),
-                static_cast<u8>(currentGamepadColor.z)
+                static_cast<u8>(currentColor.x),
+                static_cast<u8>(currentColor.y),
+                static_cast<u8>(currentColor.z)
             );
+        }
     }
 }
+
+}  // namespace dusk::input::gamepadLed

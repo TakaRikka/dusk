@@ -95,10 +95,10 @@ UserSettings g_userSettings = {
         .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
         .allowBackgroundInput {"game.allowBackgroundInput", true},
         .enableLED {
-            ConfigVar<bool>{"game.enableLED_port0"},
-            ConfigVar<bool>{"game.enableLED_port1"},
-            ConfigVar<bool>{"game.enableLED_port2"},
-            ConfigVar<bool>{"game.enableLED_port3"},
+            ConfigVar<bool>{"game.enableLED_port0", true},
+            ConfigVar<bool>{"game.enableLED_port1", true},
+            ConfigVar<bool>{"game.enableLED_port2", true},
+            ConfigVar<bool>{"game.enableLED_port3", true},
         },
 
         // Cheats
