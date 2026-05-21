@@ -49,6 +49,7 @@ void applyPresetDusk() {
     s.game.enableGyroAim.setValue(true);
     s.game.autoSave.setValue(true);
     s.game.menuScalingMode.setValue(MenuScaling::Dusklight);
+    s.game.enhancedMapMenus.setValue(true);
 }
 
 }  // namespace

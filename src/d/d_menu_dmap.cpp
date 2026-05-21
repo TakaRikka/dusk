@@ -135,6 +135,16 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
     memset(&field_0xd80, 0, 20);
     buttonIconScreenInit();
     field_0xdd0 = 0;
+
+#if TARGET_PC
+    mpPoeCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("ni_item_icon_pou.bti", dComIfGp_getItemIconArchive()));
+
+    mpPoeCountPane = JKR_NEW J2DTextBox();
+    if (mpPoeCountPane != nullptr) {
+        mpPoeCountPane->setFontSize(15.0f, 15.0f);
+        mpPoeCountPane->setFont(mDoExt_getMesgFont());
+    }
+#endif
 }
 
 void dMenu_DmapBg_c::mapScreenInit() {
@@ -762,6 +772,14 @@ dMenu_DmapBg_c::~dMenu_DmapBg_c() {
         mDoExt_destroyExpHeap(mpTalkHeap);
         mpTalkHeap = NULL;
     }
+
+#if TARGET_PC
+    JKR_DELETE(mpPoeCountIcon);
+    mpPoeCountIcon = NULL;
+
+    JKR_DELETE(mpPoeCountPane);
+    mpPoeCountPane = NULL;
+#endif
 }
 
 void dMenu_DmapBg_c::setAllAlphaRate(f32 i_rate, bool param_2) {
@@ -1014,6 +1032,35 @@ void dMenu_DmapBg_c::draw() {
     }
 
     mButtonScreen->draw(field_0xd94, field_0xd98, grafContext);
+
+#if TARGET_PC
+    if (dusk::getSettings().game.enhancedMapMenus) {
+        int nowPoeCount = 0;
+        int totalPoeCount = 0;
+        dMenuMapCommon_c::getDmapPoeCount(dComIfGp_getStartStageName(), nowPoeCount, totalPoeCount);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
+            const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f);
+            const f32 y = 410.0f;
+            constexpr f32 iconsize = 48.0f * 0.8f;
+
+            if (mpPoeCountIcon != nullptr)
+                mpPoeCountIcon->draw(x - 35.0f, y - 25.0f, iconsize, iconsize, false, false, false);
+
+            char counter_text[6];
+            snprintf(counter_text, sizeof(counter_text), "%d/%d", nowPoeCount, totalPoeCount);
+            mpPoeCountPane->setString(counter_text);
+
+            mpPoeCountPane->setCharColor(0x000000FF);
+            mpPoeCountPane->setGradColor(0x000000FF);
+            mpPoeCountPane->draw(x + 1, y + 1, FB_WIDTH, HBIND_LEFT);
+
+            mpPoeCountPane->setCharColor(0xC8C8C8FF);
+            mpPoeCountPane->setGradColor(0xC8C8C8FF);
+            mpPoeCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
+        }
+    }
+#endif
+
     grafContext->scissor(scissor_left, scissor_top, scissor_width, scissor_height);
     grafContext->setScissor();
     grafContext->setup2D();

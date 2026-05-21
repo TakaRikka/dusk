@@ -1167,6 +1167,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
+        addOption("Show Poe Count on Map", getSettings().game.enhancedMapMenus,
+            "Displays collected/total number of Poe Souls for a region on the map.");
         addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
             "Allows Wolf Link to howl and change the time of day.");
         addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
