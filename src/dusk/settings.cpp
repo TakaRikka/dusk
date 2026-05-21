@@ -114,7 +114,7 @@ UserSettings g_userSettings = {
         .infiniteEpona {"game.infiniteEpona", false},
         .unbreakableWoodShield = {"game.unbreakableWoodShield", false},
         .swimSpeedScale = {"game.swimSpeedScale", 1.0},
-        .noRollCrash = {"game.noRollCrash", false},
+        .rollCrashQuickRecovery = {"game.rollCrashQuickRecovery", false},
         .stopDaylightCycle = {"game.stopDaylightCycle", false},
 
         // Technical
@@ -284,7 +284,7 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteEpona);
     Register(g_userSettings.game.unbreakableWoodShield);
     Register(g_userSettings.game.swimSpeedScale);
-    Register(g_userSettings.game.noRollCrash);
+    Register(g_userSettings.game.rollCrashQuickRecovery);
     Register(g_userSettings.game.stopDaylightCycle);
 
     Register(g_userSettings.backend.isoPath);

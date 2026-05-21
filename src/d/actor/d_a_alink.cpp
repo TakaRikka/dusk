@@ -16245,12 +16245,7 @@ int daAlink_c::procFrontRoll() {
                 && speedF >= mpHIO->mFrontRoll.m.mCrashSpeedThreshold
                 &&
                (checkNoResetFlg0(daPy_FLG0(FLG0_UNK_10 | FLG0_UNK_8))
-#if TARGET_PC
-               || ((mAcchCir[0].ChkWallHit() && !dComIfG_Bgsp().GetPolyAttackThrough(mAcchCir[0])
-                   && !dusk::getSettings().game.noRollCrash)
-#else
                 || ((mAcchCir[0].ChkWallHit() && !dComIfG_Bgsp().GetPolyAttackThrough(mAcchCir[0]))
-#endif
                     && dComIfG_Bgsp().GetWallCode(mAcchCir[0]) != 7
                     && cLib_distanceAngleS(current.angle.y + 0x8000, mAcchCir[0].GetWallAngleY()) <= mpHIO->mFrontRoll.m.mCrashAngleThreshold
                     && frameCtrl_p->getFrame() >= mpHIO->mFrontRoll.m.mCrashInitF
@@ -16343,7 +16338,13 @@ int daAlink_c::procFrontRollCrash() {
                checkModeFlg(2))
     {
         mNormalSpeed = 0.0f;
+#if TARGET_PC
+        // I found a 3x speedup to be more optimal for link.
+        const f32 mul = dusk::getSettings().game.rollCrashQuickRecovery ? 3.0f : 1.0f;
+        setWaterInAnmRate(frameCtrl, mpHIO->mFrontRoll.m.mCrashAnm.mSpeed * mul);
+#else
         setWaterInAnmRate(frameCtrl, mpHIO->mFrontRoll.m.mCrashAnm.mSpeed);
+#endif
         frameCtrl->offEndFlg();
 
         #if DEBUG

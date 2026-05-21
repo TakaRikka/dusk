@@ -2722,9 +2722,16 @@ int daAlink_c::procWolfDash() {
 
 int daAlink_c::procWolfDashReverseInit(int param_0) {
     commonProcInit(PROC_WOLF_DASH_REVERSE);
+#if TARGET_PC
+    const f32 mul = dusk::getSettings().game.rollCrashQuickRecovery ? 2.0f : 1.0f;
+    setSingleAnimeWolf(WANM_ATTACK_RECOIL_GROUND, mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mSpeed * mul,
+                   mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mStartFrame, 5,
+                   mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mInterpolation);
+#else
     setSingleAnimeWolf(WANM_ATTACK_RECOIL_GROUND, mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mSpeed,
                        mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mStartFrame, 5,
                        mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mInterpolation);
+#endif
 
     if (param_0) {
         current.angle.y = field_0x3102 + 0x8000;
@@ -2777,7 +2784,12 @@ int daAlink_c::procWolfDashReverse() {
         mNormalSpeed = 0.0f;
         frameCtrl_p->setFrame(mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mSpeed + frameCtrl_p->getFrame());
         getNowAnmPackUnder(UNDER_0)->setFrame(frameCtrl_p->getFrame());
+#if TARGET_PC
+        const f32 mul = dusk::getSettings().game.rollCrashQuickRecovery ? 3.0f : 1.0f;
+        frameCtrl_p->setRate(mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mSpeed * mul);
+#else
         frameCtrl_p->setRate(mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mSpeed);
+#endif
         frameCtrl_p->setEnd(mpHIO->mWolf.mWlMove.m.mDashReboundAnm.mEndFrame);
 
         #if DEBUG
