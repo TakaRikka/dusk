@@ -110,9 +110,10 @@ UserSettings g_userSettings = {
         .fastRoll {"game.fastRoll", false},
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
-        .enemyHealthMode {"game.enemyHealthMode", EnemyHealthMode::Off},
+        .enemyHealthMode {"game.enemyHealthMode", EnemyHealthMode::Normal},
         .infiniteEpona {"game.infiniteEpona", false},
         .unbreakableWoodShield = {"game.unbreakableWoodShield", false},
+        .swimSpeedScale = {"game.swimSpeedScale", 1.0},
         .stopDaylightCycle = {"game.stopDaylightCycle", false},
 
         // Technical
@@ -281,6 +282,7 @@ void registerSettings() {
     Register(g_userSettings.game.allowBackgroundInput);
     Register(g_userSettings.game.infiniteEpona);
     Register(g_userSettings.game.unbreakableWoodShield);
+    Register(g_userSettings.game.swimSpeedScale);
     Register(g_userSettings.game.stopDaylightCycle);
 
     Register(g_userSettings.backend.isoPath);

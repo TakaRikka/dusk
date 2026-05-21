@@ -46,7 +46,7 @@ enum class FrameInterpMode : u8 {
 };
 
 enum class EnemyHealthMode : u8 {
-    Off = 0,
+    Normal = 0,
     Invincible = 1,
     Instakill = 2
 };
@@ -90,7 +90,7 @@ struct ConfigEnumRange<FrameInterpMode> {
 
 template <>
 struct ConfigEnumRange<EnemyHealthMode> {
-    static constexpr auto min = EnemyHealthMode::Off;
+    static constexpr auto min = EnemyHealthMode::Normal;
     static constexpr auto max = EnemyHealthMode::Instakill;
 };
 }  // namespace config
@@ -213,6 +213,7 @@ struct UserSettings {
         ConfigVar<EnemyHealthMode> enemyHealthMode;
         ConfigVar<bool> infiniteEpona;
         ConfigVar<bool> unbreakableWoodShield;
+        ConfigVar<float> swimSpeedScale;
         ConfigVar<bool> stopDaylightCycle;
 
         // Technical

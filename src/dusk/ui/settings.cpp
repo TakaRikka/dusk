@@ -30,6 +30,7 @@
 #include <fmt/format.h>
 
 #include "d/actor/d_a_alink.h"
+#include "number_button_float.hpp"
 
 #if DUSK_ENABLE_SENTRY_NATIVE
 #include "dusk/crash_reporting.h"
@@ -73,7 +74,7 @@ constexpr std::array kGyroInputModeLabels = {
 };
 
 constexpr std::array kEnemyHealthMode = {
-    "Off",
+    "Normal",
     "Invincible",
     "Instakill",
 };
@@ -215,9 +216,11 @@ void reset_for_speedrun_mode() {
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
-    getSettings().game.enemyHealthMode.setSpeedrunValue(EnemyHealthMode::Off);
+    getSettings().game.swimSpeedScale.setSpeedrunValue(1.0f);
     getSettings().game.infiniteEpona.setSpeedrunValue(false);
-    getSettings().game.unbreakableWoodShield.setOverrideValue(false);
+    getSettings().game.enemyHealthMode.setSpeedrunValue(EnemyHealthMode::Normal);
+    getSettings().game.stopDaylightCycle.setSpeedrunValue(false);
+    getSettings().game.unbreakableWoodShield.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);
@@ -379,7 +382,7 @@ const Rml::String kUnlockFramerateHelpText =
     "visual artifacts or animation glitches.";
 const Rml::String kEnemyHealthModeHelpText =
     "Configure enemy health behavior.<br/><br/>"
-    "<b>Off:</b> Standard health rules.<br/>"
+    "<b>Normal:</b> Normal health rules.<br/>"
     "<b>Invincible:</b> Enemies take knockback but cannot die.<br/>"
     "<b>One-Hit Kill:</b> Any damage instantly defeats enemies.";
 
@@ -455,6 +458,31 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
         .max = max,
         .step = step,
         .suffix = "%",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+SelectButton& config_float_select(Pane& leftPane, Pane& rightPane, ConfigVar<float>& var,
+    Rml::String key, Rml::String helpText, float min, float max, const float step = 0.5f,
+    std::function<bool()> isDisabled = {}, const Rml::String& suffix = "%") {
+    auto& button = leftPane.add_child<NumberButtonFloat>(NumberButtonFloat::Props{
+        .key = std::move(key),
+        .getValue = [&var] { return var.getValue(); },
+        .setValue =
+            [&var, min, max](const float value) {
+                var.setValue(std::clamp(value, min, max));
+                config::Save();
+            },
+        .isDisabled = std::move(isDisabled),
+        .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+        .min = min,
+        .max = max,
+        .step = step,
+        .suffix = suffix,
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
@@ -1262,6 +1290,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Allows the Great Spin attack without requiring full health.");
         addCheat("Fast Iron Boots", getSettings().game.enableFastIronBoots,
             "Speeds up movement while heavy, including wearing the Iron Boots, holding the Ball and Chain, wearing Magic Armor without rupees, etc.");
+        config_float_select(leftPane, rightPane, getSettings().game.swimSpeedScale, "Swim Speed Scale",
+            "Multiply the swimming speed by the selected value", 1.0f, 10.0f, 0.5f,
+            [] { return getSettings().game.speedrunMode; }, "x");
+
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,
             "Allows transforming even if NPCs are looking.");
         addCheat("Fast Roll", getSettings().game.fastRoll,

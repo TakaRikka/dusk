@@ -7,6 +7,19 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_kankyo_mng.h"
 
+#if TARGET_PC
+// I separated these incase we want to adjust acceleration
+// by itself later down the line.
+
+static inline f32 getSwimAccelMul() {
+    return std::clamp(dusk::getSettings().game.swimSpeedScale.getValue(), 1.0f, FLT_MAX);
+}
+
+static inline f32 GetSwimMaxSpeedMul() {
+    return std::clamp(dusk::getSettings().game.swimSpeedScale.getValue(), 1.0f, FLT_MAX);
+}
+#endif
+
 BOOL daAlink_c::checkZoraWearMaskDraw() {
     return checkZoraWearAbility() && !checkNoResetFlg0(FLG0_SWIM_UP);
 }
@@ -29,6 +42,19 @@ bool daAlink_c::getZoraSwim() const {
     return checkUnderMove0BckNoArc(ANM_SWIM_C) || checkUnderMove0BckNoArc(ANM_SWIM_ZORA_START);
 }
 
+#if TARGET_PC
+f32 daAlink_c::getSwimFrontMaxSpeed() const {
+    if (checkBootsOrArmorHeavy()) {
+        return mpHIO->mSwim.m.mUnderwaterFallMaxSpeed * GetSwimMaxSpeedMul();
+    } else if (checkZoraWearAbility()) {
+        return 14.0f * GetSwimMaxSpeedMul();
+    } else if (checkSwimDashMode()) {
+        return mpHIO->mSwim.m.mDashMaxSpeed * GetSwimMaxSpeedMul();
+    } else {
+        return mpHIO->mSwim.m.mForwardMaxSpeed * GetSwimMaxSpeedMul();
+    }
+}
+#else
 f32 daAlink_c::getSwimFrontMaxSpeed() const {
     if (checkBootsOrArmorHeavy()) {
         return mpHIO->mSwim.m.mUnderwaterFallMaxSpeed;
@@ -40,7 +66,21 @@ f32 daAlink_c::getSwimFrontMaxSpeed() const {
         return mpHIO->mSwim.m.mForwardMaxSpeed;
     }
 }
+#endif
 
+#if TARGET_PC
+f32 daAlink_c::getSwimMaxFallSpeed() const {
+    if (mProcID == PROC_DIVE_JUMP) {
+        return -(mpHIO->mSwim.m.mUnderwaterMaxSpeed * GetSwimMaxSpeedMul());
+    } else if (checkBootsOrArmorHeavy()) {
+        return mpHIO->mSwim.m.mBootsMaxFallSpeed * GetSwimMaxSpeedMul();
+    } else if (getZoraSwim()) {
+        return mpHIO->mSwim.m.mMaxFallSpeed * GetSwimMaxSpeedMul();
+    } else {
+        return mpHIO->mSwim.m.mStandingMaxFallSpeed * GetSwimMaxSpeedMul();
+    }
+}
+#else
 f32 daAlink_c::getSwimMaxFallSpeed() const {
     if (mProcID == PROC_DIVE_JUMP) {
         return -mpHIO->mSwim.m.mUnderwaterMaxSpeed;
@@ -52,6 +92,7 @@ f32 daAlink_c::getSwimMaxFallSpeed() const {
         return mpHIO->mSwim.m.mStandingMaxFallSpeed;
     }
 }
+#endif
 
 void daAlink_c::checkOxygenTimer() {
     BOOL is_hide_timer;
@@ -276,12 +317,19 @@ void daAlink_c::setSpeedAndAngleSwim() {
     }
 
     f32 var_f28;
+#if TARGET_PC
+    if (mpHIO->mSwim.m.mForwardMaxSpeed * GetSwimMaxSpeedMul() < mNormalSpeed && !checkZoraWearAbility()) {
+#else
     if (mpHIO->mSwim.m.mForwardMaxSpeed < mNormalSpeed && !checkZoraWearAbility()) {
+#endif
         var_f28 = mpHIO->mSwim.m.mDashDeceleration;
     } else {
         var_f28 = mpHIO->mSwim.m.mDeceleration;
     }
-
+#if TARGET_PC
+    var_f30 *= getSwimAccelMul();
+    var_f28 *= getSwimAccelMul();
+#endif
     setNormalSpeedF(var_f30, var_f28);
 
     if (dComIfGp_checkPlayerStatus0(0, 0x10)) {
@@ -655,6 +703,19 @@ void daAlink_c::setSwimMoveAnime() {
     BOOL var_r25 = FALSE;
 
     if (field_0x2f98 == 4) {
+#if TARGET_PC
+        f32 temp_f29 = (mpHIO->mSwim.m.mUnderwaterMaxSpeed
+            + mpHIO->mSwim.m.mUnderwaterButtonAdditionalSpeed)
+            * GetSwimMaxSpeedMul();
+
+        f32 mUnderwaterMaxSpeed = mpHIO->mSwim.m.mUnderwaterMaxSpeed * GetSwimMaxSpeedMul();
+
+        field_0x3478 = mpHIO->mSwim.m.mUnderwaterMinAnmSpeed;
+        field_0x347c = mpHIO->mSwim.m.mUnderwaterMaxAnmSpeed;
+
+        if (mMaxSpeed < mUnderwaterMaxSpeed) {
+            mMaxSpeed = mUnderwaterMaxSpeed;
+#else
         f32 temp_f29 = mpHIO->mSwim.m.mUnderwaterMaxSpeed + mpHIO->mSwim.m.mUnderwaterButtonAdditionalSpeed;
 
         field_0x3478 = mpHIO->mSwim.m.mUnderwaterMinAnmSpeed;
@@ -662,6 +723,7 @@ void daAlink_c::setSwimMoveAnime() {
 
         if (mMaxSpeed < mpHIO->mSwim.m.mUnderwaterMaxSpeed) {
             mMaxSpeed = mpHIO->mSwim.m.mUnderwaterMaxSpeed;
+#endif
         } else if (doTrigger()) {
             mMaxSpeed += 0.75f;
             if (mMaxSpeed > temp_f29) {
@@ -710,6 +772,17 @@ void daAlink_c::setSwimMoveAnime() {
             anm = ANM_SWIM_A;
         }
 
+#if TARGET_PC
+        if (checkSwimDashMode()) {
+            field_0x3478 = mpHIO->mSwim.m.mDashMinAnmSpeed * GetSwimMaxSpeedMul();
+            field_0x347c = mpHIO->mSwim.m.mDashMaxAnmSpeed * GetSwimMaxSpeedMul();
+            mMaxSpeed = mpHIO->mSwim.m.mDashMaxSpeed * GetSwimMaxSpeedMul();
+        } else {
+            field_0x3478 = mpHIO->mSwim.m.mForwardMinAnmSpeed * GetSwimMaxSpeedMul();
+            field_0x347c = mpHIO->mSwim.m.mForwardMaxAnmSpeed * GetSwimMaxSpeedMul();
+            mMaxSpeed = getSwimFrontMaxSpeed();
+        }
+#else
         if (checkSwimDashMode()) {
             field_0x3478 = mpHIO->mSwim.m.mDashMinAnmSpeed;
             field_0x347c = mpHIO->mSwim.m.mDashMaxAnmSpeed;
@@ -719,6 +792,7 @@ void daAlink_c::setSwimMoveAnime() {
             field_0x347c = mpHIO->mSwim.m.mForwardMaxAnmSpeed;
             mMaxSpeed = getSwimFrontMaxSpeed();
         }
+#endif
 
         var_f31 = 1.0f / mMaxSpeed;
     } else if (field_0x2f98 == 1) {
@@ -1121,7 +1195,11 @@ int daAlink_c::procSwimMove() {
         setSingleAnimeParam(ANM_SWIM_DASH, &mpHIO->mSwim.m.mDashAnm);
         field_0x3198 = ANM_SWIM_DASH;
     } else if (!checkZoraSwimMove() && (!checkUpSwimButtonAccept() || !doButton()) &&
+#if TARGET_PC
+               mNormalSpeed < (mpHIO->mSwim.m.mForwardMinSpeed * GetSwimMaxSpeedMul()))
+#else
                mNormalSpeed < mpHIO->mSwim.m.mForwardMinSpeed)
+#endif
     {
         procSwimWaitInit(0);
     }

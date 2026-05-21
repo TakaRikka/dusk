@@ -34,6 +34,11 @@ void resetForSpeedrunMode() {
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
+    getSettings().game.swimSpeedScale.setSpeedrunValue(1.0f);
+    getSettings().game.infiniteEpona.setSpeedrunValue(false);
+    getSettings().game.enemyHealthMode.setSpeedrunValue(EnemyHealthMode::Normal);
+    getSettings().game.stopDaylightCycle.setSpeedrunValue(false);
+    getSettings().game.unbreakableWoodShield.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);

@@ -1486,6 +1486,8 @@ set(DUSK_FILES
         src/dusk/ui/nav_types.hpp
         src/dusk/ui/number_button.cpp
         src/dusk/ui/number_button.hpp
+        src/dusk/ui/number_button_float.cpp
+        src/dusk/ui/number_button_float.hpp
         src/dusk/ui/overlay.cpp
         src/dusk/ui/overlay.hpp
         src/dusk/ui/pane.cpp
