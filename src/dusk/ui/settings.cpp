@@ -70,6 +70,12 @@ constexpr std::array kGyroInputModeLabels = {
     "Mouse",
 };
 
+constexpr std::array kMenuScalingModeLabels = {
+    "GameCube",
+    "Wii",
+    "Dusklight",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -1105,6 +1111,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
             "Enables rotating Link in the collection menu with the C-Stick.");
+        addOption("Hide Owl Statue Markers", getSettings().game.removeQuestMapMarkers,
+            "Removes completed Owl Statue markers from the map and Minimap.");
 
         leftPane.add_section("Difficulty");
         leftPane.register_control(
@@ -1416,8 +1424,44 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Show gyro sensor values in the input viewer.",
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
-
         leftPane.add_section("Game");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Menu Scaling Mode",
+                .getValue =
+                    [] {
+                        return kMenuScalingModeLabels[static_cast<u8>(
+                            getSettings().game.menuScalingMode.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        const auto& mode = getSettings().game.menuScalingMode;
+                        return mode.getValue() != mode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kMenuScalingModeLabels.size()); ++i) {
+                    pane
+                        .add_button({
+                            .text = kMenuScalingModeLabels[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.menuScalingMode.getValue() ==
+                                           static_cast<MenuScaling>(i);
+                                    ;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.menuScalingMode.setValue(
+                                static_cast<MenuScaling>(i));
+                            ;
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>Changes how the Collection and File Select menus scale to your "
+                             "aspect ratio.");
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",

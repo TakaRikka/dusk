@@ -176,6 +176,7 @@ namespace dusk::config {
     template class ConfigImpl<dusk::GameLanguage>;
     template class ConfigImpl<dusk::GyroMode>;
     template class ConfigImpl<dusk::FrameInterpMode>;
+    template class ConfigImpl<dusk::MenuScaling>;
     template class ConfigImpl<dusk::Resampler>;
 }
 
