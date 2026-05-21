@@ -5,6 +5,8 @@
 #include <d/actor/d_a_alink.h>
 #include <dusk/gamepad_color.h>
 
+#include "ui/controller_config.hpp"
+
 cXyz currentGamepadColor = {0, 0, 0};
 cXyz finalGamepadColor = {0, 0, 0};
 cXyz additionalGamepadColor = {0, 0, 0};
@@ -35,9 +37,6 @@ void SetGamepadAdditionalColor(cXyz addColor) {
 }
 
 void handleGamepadColor() {
-    if (!dusk::getSettings().game.enableStatusLighting)
-        return;
-
     bool setColor = false;
 
     fopAc_ac_c* zhint = dComIfGp_att_getZHint();
@@ -105,5 +104,14 @@ void handleGamepadColor() {
         finalBlue = 0;
 
     currentGamepadColor = LerpColor(currentGamepadColor, cXyz{finalRed, finalGreen, finalBlue}, lerpSpeed);
-    PADSetColor(PAD_CHAN0, (u8)currentGamepadColor.x, (u8)currentGamepadColor.y, (u8)currentGamepadColor.z);
+
+    for (int i = 0; i < 4; i++) {
+        if (dusk::ui::pad_has_led(i) && dusk::getSettings().game.enableLED[i])
+            PADSetColor(
+                i,
+                static_cast<u8>(currentGamepadColor.x),
+                static_cast<u8>(currentGamepadColor.y),
+                static_cast<u8>(currentGamepadColor.z)
+            );
+    }
 }

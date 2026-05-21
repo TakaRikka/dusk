@@ -7,6 +7,8 @@
 
 namespace dusk::ui {
 
+bool pad_has_led(int port) noexcept;
+
 class ControllerConfigWindow : public Window {
 public:
     ControllerConfigWindow(bool prelaunch);

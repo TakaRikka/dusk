@@ -926,9 +926,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Allow inputs even when the game window is not focused.",
                 .onChange = [](bool value) { aurora_set_background_input(value); },
             });
-        addOption("Enable Controller LED", getSettings().game.enableStatusLighting,
-        "Sets the controller's lighting color based on the game's state.<br/><b>"
-        "Only works on supported controllers.");
 
         leftPane.add_section("Camera");
         addOption("Free Camera", getSettings().game.freeCamera,

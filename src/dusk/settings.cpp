@@ -94,7 +94,12 @@ UserSettings g_userSettings = {
         .debugFlyCam {"game.debugFlyCam", false},
         .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
         .allowBackgroundInput {"game.allowBackgroundInput", true},
-        .enableStatusLighting = {"game.enableStatusLighting", true},
+        .enableLED {
+            ConfigVar<bool>{"game.enableLED_port0"},
+            ConfigVar<bool>{"game.enableLED_port1"},
+            ConfigVar<bool>{"game.enableLED_port2"},
+            ConfigVar<bool>{"game.enableLED_port3"},
+        },
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -283,7 +288,10 @@ void registerSettings() {
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);
     Register(g_userSettings.game.allowBackgroundInput);
-    Register(g_userSettings.game.enableStatusLighting);
+    Register(g_userSettings.game.enableLED[0]);
+    Register(g_userSettings.game.enableLED[1]);
+    Register(g_userSettings.game.enableLED[2]);
+    Register(g_userSettings.game.enableLED[3]);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);
