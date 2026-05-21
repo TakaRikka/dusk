@@ -431,9 +431,12 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
         }
 
 #if TARGET_PC
-        if (dusk::getSettings().game.invincibleEnemies &&
+        if (dusk::getSettings().game.enemyHealthMode != dusk::EnemyHealthMode::Off &&
             fopAcM_GetGroup(i_enemy) == fopAc_ENEMY_e) {
-            i_AtInfo->mAttackPower = 0;
+            if (dusk::getSettings().game.enemyHealthMode == dusk::EnemyHealthMode::Invincible)
+                i_AtInfo->mAttackPower = 0;
+            else
+                i_AtInfo->mAttackPower = INT16_MAX; // Enemy health is S16, not U16.
         }
 #endif
 

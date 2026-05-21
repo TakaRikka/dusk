@@ -177,6 +177,7 @@ namespace dusk::config {
     template class ConfigImpl<dusk::GyroMode>;
     template class ConfigImpl<dusk::FrameInterpMode>;
     template class ConfigImpl<dusk::Resampler>;
+    template class ConfigImpl<dusk::EnemyHealthMode>;
 }
 
 void dusk::config::Register(ConfigVarBase& configVar) {

@@ -72,6 +72,12 @@ constexpr std::array kGyroInputModeLabels = {
     "Mouse",
 };
 
+constexpr std::array kEnemyHealthMode = {
+    "Off",
+    "Invincible",
+    "Instakill",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -209,7 +215,9 @@ void reset_for_speedrun_mode() {
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
-    getSettings().game.invincibleEnemies.setSpeedrunValue(false);
+    getSettings().game.enemyHealthMode.setSpeedrunValue(EnemyHealthMode::Off);
+    getSettings().game.infiniteEpona.setSpeedrunValue(false);
+    getSettings().game.unbreakableWoodShield.setOverrideValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);
@@ -369,8 +377,11 @@ const Rml::String kBloomBrightnessHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
-const Rml::String kOverrideModelHelpText =
-    "<br/>Overrides Links model with the selected one.";
+const Rml::String kEnemyHealthModeHelpText =
+    "Configure enemy health behavior.<br/><br/>"
+    "<b>Off:</b> Standard health rules.<br/>"
+    "<b>Invincible:</b> Enemies take knockback but cannot die.<br/>"
+    "<b>One-Hit Kill:</b> Any damage instantly defeats enemies.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -1259,8 +1270,39 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Speeds up Spinner movement while holding R.");
         addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
             "Lets the magic armor work without consuming rupees.");
-        addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
-            "Prevents enemies from taking damage.");
+        leftPane.register_control(
+        leftPane.add_select_button({
+            .key = "Enemy Health Mode",
+            .getValue =
+                [] {
+                    return kEnemyHealthMode[static_cast<u8>(getSettings().game.enemyHealthMode.getValue())];
+                },
+            .isDisabled = [] {
+                return getSettings().game.speedrunMode;
+            },
+            .isModified =
+                [] {
+                    return getSettings().game.enemyHealthMode.getValue() !=
+                           getSettings().game.enemyHealthMode.getDefaultValue();
+                },
+        }),
+        rightPane, [](Pane& pane) {
+            for (int i = 0; i < kEnemyHealthMode.size(); i++) {
+                pane.add_button({
+                        .text = kEnemyHealthMode[i],
+                        .isSelected =
+                            [i] {
+                                return getSettings().game.enemyHealthMode.getValue() == static_cast<EnemyHealthMode>(i);
+                            },
+                    })
+                    .on_pressed([i] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().game.enemyHealthMode.setValue(static_cast<EnemyHealthMode>(i));
+                        config::Save();
+                    });
+            }
+            pane.add_rml(kEnemyHealthModeHelpText);
+        });
 
         leftPane.add_section("Visual");
         addCheat("Stop Daylight Cycle", getSettings().game.stopDaylightCycle,
