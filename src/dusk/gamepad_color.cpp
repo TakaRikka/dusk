@@ -35,6 +35,9 @@ void SetGamepadAdditionalColor(cXyz addColor) {
 }
 
 void handleGamepadColor() {
+    if (!dusk::getSettings().game.enableStatusLighting)
+        return;
+
     bool setColor = false;
 
     fopAc_ac_c* zhint = dComIfGp_att_getZHint();

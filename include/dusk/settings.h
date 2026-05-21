@@ -194,6 +194,7 @@ struct UserSettings {
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
         ConfigVar<bool> allowBackgroundInput;
+        ConfigVar<bool> enableStatusLighting;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
