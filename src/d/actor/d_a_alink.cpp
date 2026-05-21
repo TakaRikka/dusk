@@ -11913,17 +11913,19 @@ BOOL daAlink_c::rollTrigger() const {
 }
 
 BOOL daAlink_c::checkMoveDoAction() {
-    if (doTrigger() && dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
-        if (checkWolf()) {
+    if (dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
+        if (checkWolf() && rollTrigger()) {
             return procWolfSideStepInit(0);
         }
 
-        int direction = getDirectionFromShapeAngle();
-        if (mSideStepLandComboTimer != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
-            return true;
-        }
+        if (doTrigger() && !checkWolf()) {
+            int direction = getDirectionFromShapeAngle();
+            if (mSideStepLandComboTimer != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
+                return true;
+            }
 
-        return procSideStepInit(direction);
+            return procSideStepInit(direction);
+        }
     }
 
     if (rollTrigger()) {
@@ -11938,6 +11940,10 @@ BOOL daAlink_c::checkMoveDoAction() {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_DASH) {
             return procWolfDashInit();
         }
+    }
+
+    if (doTrigger() && dComIfGp_getDoStatus() == BUTTON_STATUS_DASH) {
+        return procWolfDashInit();
     }
 
     return false;
