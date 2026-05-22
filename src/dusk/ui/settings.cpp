@@ -447,7 +447,7 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
-        pane.add_text(helpText);
+        pane.add_rml(helpText);
     });
     return button;
 }
@@ -927,16 +927,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Camera");
         addOption("Free Camera", getSettings().game.freeCamera,
-            "Enables twin-stick camera control, letting the C-Stick move the camera vertically as "
-            "well as horizontally.");
-        addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
-            "Invert horizontal camera movement.");
-        addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
-            "Invert vertical camera movement when Free Camera is enabled.",
+            "Enables free camera control, letting you control the camera fully with the C-Stick."
+            "<br/><br/>Must be enabled in order to use Mouse Camera.");
+        addOption("Invert Free Camera X Axis", getSettings().game.invertCameraXAxis,
+            "Invert horizontal free camera movement.<br/><br/>Applies to joystick input only.",
+            [] { return !getSettings().game.freeCamera; });
+        addOption("Invert Free Camera Y Axis", getSettings().game.invertCameraYAxis,
+            "Invert vertical free camera movement.<br/><br/>Applies to joystick input only.",
             [] { return !getSettings().game.freeCamera; });
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
-            "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
-            [] { return !getSettings().game.freeCamera; });
+            "Free Camera Sensitivity",
+            "Adjusts free camera sensitivity.<br/><br/>Applies to joystick input only.",
+            50, 200, 5, [] { return !getSettings().game.freeCamera; });
         addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
             "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
