@@ -15,7 +15,7 @@ enum class ActionBinds {
     COUNT,
 };
 
-enum class Type {
+enum class ActionBindType {
     GAMEPLAY,
     INTERFACE,
 };
@@ -23,7 +23,7 @@ enum class Type {
 struct ActionBindData {
     std::array<config::ActionBindConfigVar, 4>* configVars{};
     std::string actionName{};
-    Type type{};
+    ActionBindType type{};
 };
 
 struct ActionBindPressData {
@@ -47,6 +47,6 @@ bool getActionBindHoldAnyPort(ActionBinds action);
 
 int getActionBindButton(ActionBinds action, u32 port);
 
-Type getActionBindType(ActionBinds action);
+ActionBindType getActionBindType(ActionBinds action);
 
 }

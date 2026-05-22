@@ -12,11 +12,11 @@ static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::
 
 ActionBindsMap& getActionBinds() {
     static ActionBindsMap actionBinds = {
-        {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera", Type::GAMEPLAY}},
-        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna", Type::GAMEPLAY}},
-        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button", Type::GAMEPLAY}},
-        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu", Type::INTERFACE}},
-        {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack", Type::INTERFACE}},
+        {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera", ActionBindType::GAMEPLAY}},
+        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna",          ActionBindType::GAMEPLAY}},
+        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button",  ActionBindType::GAMEPLAY}},
+        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu", ActionBindType::INTERFACE}},
+        {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack", ActionBindType::INTERFACE}},
     };
     return actionBinds;
 }
