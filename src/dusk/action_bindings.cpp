@@ -10,8 +10,6 @@ namespace dusk {
 
 static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::COUNT)>, PAD_CHANMAX> actionPressData{};
 
-static void handleActionTriggers();
-
 ActionBindsMap& getActionBinds() {
     static ActionBindsMap actionBinds = {
         {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera"}},
@@ -70,10 +68,17 @@ void updateActionBindings() {
                     }
                 }
             }
+
+            // Handle action triggers
+            if (getActionBindTrig(ActionBinds::TOGGLE_TEXTURE_PACK, port)) {
+                const bool enabled = !getSettings().game.enableTextureReplacements.getValue();
+                getSettings().game.enableTextureReplacements.setValue(enabled);
+                aurora_set_texture_replacements_enabled(enabled);
+                config::Save();
+                break;
+            }
         }
     }
-
-    handleActionTriggers();
 }
 
 bool getActionBindTrig(ActionBinds action, u32 port) {
@@ -95,20 +100,6 @@ bool getActionBindHoldAnyPort(ActionBinds action) {
         }
     }
     return false;
-}
-
-static void handleActionTriggers() {
-    for (u32 port = 0; port < PAD_CHANMAX; ++port) {
-        if (!getActionBindTrig(ActionBinds::TOGGLE_TEXTURE_PACK, port)) {
-            continue;
-        }
-
-        const bool enabled = !getSettings().game.enableTextureReplacements.getValue();
-        getSettings().game.enableTextureReplacements.setValue(enabled);
-        aurora_set_texture_replacements_enabled(enabled);
-        config::Save();
-        break;
-    }
 }
 
 int getActionBindButton(ActionBinds action, u32 port) {
