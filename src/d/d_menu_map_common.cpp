@@ -750,7 +750,7 @@ void dMenuMapCommon_c::debugIcon() {
 
 #if TARGET_PC
 static constexpr struct {
-    std::string stagename;
+    std::string_view stagename;
     u8 switch_no;
     s8 region_id;
     u8 save_id;
