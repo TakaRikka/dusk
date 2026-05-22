@@ -80,6 +80,15 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     #if !PLATFORM_SHIELD
     CARDSetLoadType((CARDFileType)dusk::getSettings().backend.cardFileType.getValue());
 
+#if TARGET_PC
+    if (!dusk::SavePath.empty() &&
+        dusk::SavePath.lexically_normal() != dusk::ConfigPath.lexically_normal())
+    {
+        const auto savePathUtf8 = dusk::SavePath.u8string();
+        CARDSetBasePath(reinterpret_cast<const char*>(savePathUtf8.c_str()), -1);
+    }
+#endif
+
     char version[5] = {};
     char maker[3] = {};
     std::memcpy(version, dusk::version::getDiskID().gameName, 4);

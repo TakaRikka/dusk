@@ -26,6 +26,7 @@ namespace dusk::data {
 struct Paths {
     std::filesystem::path userPath;
     std::filesystem::path cachePath;
+    std::filesystem::path savePath;
 };
 
 Paths initialize_data();
@@ -38,5 +39,13 @@ bool set_portable_data_path();
 bool reset_data_path();
 bool is_default_data_path();
 bool is_data_path_restart_pending();
+
+std::filesystem::path configured_save_path();
+bool open_save_path();
+bool set_custom_save_path(const char* path, std::string* errorOut);
+bool set_custom_save_path(const std::filesystem::path& path, std::string* errorOut);
+bool reset_save_path();
+bool is_default_save_path();
+bool is_save_path_restart_pending();
 
 }  // namespace dusk::data

@@ -122,6 +122,7 @@ bool dusk::IsGameLaunched = false;
 bool dusk::RestartRequested = false;
 std::filesystem::path dusk::ConfigPath;
 std::filesystem::path dusk::CachePath;
+std::filesystem::path dusk::SavePath;
 #endif
 
 void dusk::RequestRestart() noexcept {
@@ -538,6 +539,7 @@ int game_main(int argc, char* argv[]) {
     const auto dataPaths = dusk::data::initialize_data();
     dusk::ConfigPath = dataPaths.userPath;
     dusk::CachePath = dataPaths.cachePath;
+    dusk::SavePath = dataPaths.savePath;
     dusk::InitializeFileLogging(dusk::CachePath, startupLogLevel);
 
     log_build_info();

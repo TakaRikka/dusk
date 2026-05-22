@@ -11,6 +11,7 @@ extern bool IsGameLaunched;
 extern bool RestartRequested;
 extern std::filesystem::path ConfigPath;
 extern std::filesystem::path CachePath;
+extern std::filesystem::path SavePath;
 
 #if defined(__ANDROID__) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS) ||                           \
     (defined(TARGET_OS_TV) && TARGET_OS_TV)

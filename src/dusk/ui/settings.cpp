@@ -294,6 +294,46 @@ Rml::String configured_data_path_display_name() {
     return display;
 }
 
+Rml::String abbreviated_save_path_string() {
+    const auto path = data::configured_save_path();
+    const auto homePath = user_home_path();
+    if (path.empty() || homePath.empty()) {
+        return io::fs_path_to_string(path);
+    }
+
+    const auto normalizedPath = normalized_display_path(path);
+    const auto normalizedHome = normalized_display_path(homePath);
+    if (normalizedPath == normalizedHome) {
+        return "~";
+    }
+
+    const auto relativePath = normalizedPath.lexically_relative(normalizedHome);
+    if (!relativePath.empty() && !relativePath.is_absolute()) {
+        const auto it = relativePath.begin();
+        if (it == relativePath.end() || *it != "..") {
+            return io::fs_path_to_string(std::filesystem::path{"~"} / relativePath);
+        }
+    }
+
+    return io::fs_path_to_string(path);
+}
+
+Rml::String configured_save_path_display_name() {
+    if (data::is_default_save_path()) {
+        return "(default — same as data folder)";
+    }
+    const auto path = abbreviated_save_path_string();
+    if (path.empty()) {
+        return "(default — same as data folder)";
+    }
+
+    auto display = display_name_for_path(path);
+    if (display.empty()) {
+        return path;
+    }
+    return display;
+}
+
 class DataFolderPathText : public Component {
 public:
     explicit DataFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
@@ -301,6 +341,24 @@ public:
     void update() override {
         const Rml::String rml = "<span class=\"data-folder-current\">Current data folder:<br/>" +
                                 escape(abbreviated_data_path_string()) + "</span>";
+        if (rml != mCurrentRml) {
+            mRoot->SetInnerRML(rml);
+            mCurrentRml = rml;
+        }
+        Component::update();
+    }
+
+private:
+    Rml::String mCurrentRml;
+};
+
+class SaveFolderPathText : public Component {
+public:
+    explicit SaveFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
+
+    void update() override {
+        const Rml::String rml = "<span class=\"data-folder-current\">Current save folder:<br/>" +
+                                escape(abbreviated_save_path_string()) + "</span>";
         if (rml != mCurrentRml) {
             mRoot->SetInnerRML(rml);
             mCurrentRml = rml;
@@ -355,6 +413,51 @@ void data_folder_dialog_callback(void*, const char* path, const char* error) {
             fmt::format("{} could not use the selected folder as its data folder.", AppName);
     }
     show_data_folder_error_modal(dataPathError);
+}
+
+void show_save_folder_error_modal(std::string_view message) {
+    auto dismiss = [](Modal& modal) {
+        mDoAud_seStartMenu(kSoundWindowClose);
+        modal.pop();
+    };
+    push_document(std::make_unique<Modal>(Modal::Props{
+        .title = "Save Folder Not Changed",
+        .bodyRml = escape(message),
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismiss,
+                },
+            },
+        .onDismiss = dismiss,
+        .icon = "warning",
+    }));
+    if (auto* doc = top_document()) {
+        doc->focus();
+    }
+}
+
+void save_folder_dialog_callback(void*, const char* path, const char* error) {
+    if (error != nullptr) {
+        show_save_folder_error_modal(error);
+        return;
+    }
+    if (path == nullptr) {
+        return;
+    }
+
+    std::string savePathError;
+    if (data::set_custom_save_path(path, &savePathError)) {
+        mDoAud_seStartMenu(kSoundItemChange);
+        return;
+    }
+
+    if (savePathError.empty()) {
+        savePathError =
+            fmt::format("{} could not use the selected folder as its save folder.", AppName);
+    }
+    show_save_folder_error_modal(savePathError);
 }
 
 const Rml::String kInternalResolutionHelpText =
@@ -593,6 +696,40 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         }
                     });
                     pane.add_rml("Data will be migrated automatically on restart.");
+                });
+            leftPane.register_control(
+                leftPane.add_select_button({
+                    .key = "Save Folder",
+                    .getValue = [] { return configured_save_path_display_name(); },
+                    .isModified = [] { return data::is_save_path_restart_pending(); },
+                }),
+                rightPane, [](Pane& pane) {
+                    pane.add_text("Store GameCube memory card files in a separate folder. "
+                                  "Leave at default to keep them in the data folder.");
+                    pane.add_child<SaveFolderPathText>();
+#if DUSK_CAN_OPEN_DATA_FOLDER
+                    pane.add_button("Open Save Folder").on_pressed([] {
+                        if (data::open_save_path()) {
+                            mDoAud_seStartMenu(kSoundClick);
+                        }
+                    });
+#endif
+                    pane.add_button("Change Save Folder").on_pressed([] {
+                        const auto defaultLocation =
+                            io::fs_path_to_string(data::configured_save_path());
+                        ShowFolderSelect(&save_folder_dialog_callback, nullptr,
+                            aurora::window::get_sdl_window(),
+                            defaultLocation.empty() ? nullptr : defaultLocation.c_str());
+                    });
+                    pane.add_button({
+                        .text = "Reset to Default",
+                        .isDisabled = [] { return data::is_default_save_path(); },
+                    }).on_pressed([] {
+                        if (data::reset_save_path()) {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                        }
+                    });
+                    pane.add_rml("Card files will be migrated automatically on restart.");
                 });
 #endif
             leftPane.register_control(

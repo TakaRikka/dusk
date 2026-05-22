@@ -56,7 +56,11 @@ struct LocationDescriptor {
     LocationMode mode = LocationMode::Default;
     std::filesystem::path customPath;
     std::filesystem::path previousPath;
+    std::filesystem::path saveCustomPath;
+    std::filesystem::path previousSavePath;
 };
+
+constexpr std::array<std::string_view, 3> kSaveRegions = {"USA", "EUR", "JAP"};
 
 struct LocatedDescriptor {
     LocationDescriptor descriptor;
@@ -77,6 +81,7 @@ struct MigrationStats {
 };
 
 std::optional<std::filesystem::path> sConfiguredDataPath;
+std::optional<std::filesystem::path> sConfiguredSavePath;
 std::optional<std::filesystem::path> sActiveDescriptorPath;
 std::optional<std::filesystem::path> sActivePrefPath;
 
@@ -196,6 +201,16 @@ std::optional<LocationDescriptor> read_location_descriptor_file(const std::files
         {
             descriptor.previousPath = path_from_utf8(previousPath->get<std::string>());
         }
+        if (const auto saveCustomPath = json.find("saveCustomPath");
+            saveCustomPath != json.end() && saveCustomPath->is_string())
+        {
+            descriptor.saveCustomPath = path_from_utf8(saveCustomPath->get<std::string>());
+        }
+        if (const auto previousSavePath = json.find("previousSavePath");
+            previousSavePath != json.end() && previousSavePath->is_string())
+        {
+            descriptor.previousSavePath = path_from_utf8(previousSavePath->get<std::string>());
+        }
 
         return descriptor;
     } catch (const std::exception& e) {
@@ -237,6 +252,14 @@ std::filesystem::path resolve_data_path(
     }
 
     return default_data_path(prefPath);
+}
+
+std::filesystem::path resolve_save_path(
+    const std::filesystem::path& dataPath, const LocationDescriptor* descriptor) {
+    if (descriptor && !descriptor->saveCustomPath.empty()) {
+        return descriptor->saveCustomPath;
+    }
+    return dataPath;
 }
 
 const char* location_mode_id(LocationMode mode) {
@@ -420,6 +443,19 @@ std::filesystem::path current_data_path() {
     return resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
 }
 
+std::filesystem::path current_save_path() {
+    if (!SavePath.empty()) {
+        return SavePath;
+    }
+    const auto prefPath = active_pref_path();
+    const auto descriptor = read_location_descriptor(prefPath);
+    if (descriptor) {
+        sActiveDescriptorPath = descriptor->path;
+    }
+    const auto dataPath = resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
+    return resolve_save_path(dataPath, descriptor ? &descriptor->descriptor : nullptr);
+}
+
 std::vector<std::filesystem::path> descriptor_write_paths(const std::filesystem::path& prefPath) {
     if (sActiveDescriptorPath && !sActiveDescriptorPath->empty()) {
         return {*sActiveDescriptorPath};
@@ -453,21 +489,17 @@ bool write_descriptor_json(const std::filesystem::path& path, const nlohmann::js
     return true;
 }
 
-bool write_location_descriptor(LocationMode mode, const std::filesystem::path& targetPath) {
-    LocationDescriptor descriptor;
-    descriptor.mode = mode;
-    if (mode == LocationMode::Custom) {
-        descriptor.customPath = absolute_path(targetPath);
+LocationDescriptor load_current_descriptor() {
+    const auto prefPath = active_pref_path();
+    const auto located = read_location_descriptor(prefPath);
+    if (located) {
+        sActiveDescriptorPath = located->path;
+        return located->descriptor;
     }
+    return LocationDescriptor{};
+}
 
-    const auto currentPath = current_data_path();
-    const auto resolvedTargetPath =
-        mode == LocationMode::Custom ? descriptor.customPath : targetPath;
-    if (!currentPath.empty() && normalized_path(currentPath) != normalized_path(resolvedTargetPath))
-    {
-        descriptor.previousPath = currentPath;
-    }
-
+bool persist_descriptor(const LocationDescriptor& descriptor) {
     nlohmann::json json;
     json["version"] = 1;
     json["mode"] = location_mode_id(descriptor.mode);
@@ -477,17 +509,46 @@ bool write_location_descriptor(LocationMode mode, const std::filesystem::path& t
     if (!descriptor.previousPath.empty()) {
         json["previousPath"] = io::fs_path_to_string(descriptor.previousPath);
     }
+    if (!descriptor.saveCustomPath.empty()) {
+        json["saveCustomPath"] = io::fs_path_to_string(descriptor.saveCustomPath);
+    }
+    if (!descriptor.previousSavePath.empty()) {
+        json["previousSavePath"] = io::fs_path_to_string(descriptor.previousSavePath);
+    }
 
     const auto prefPath = active_pref_path();
     for (const auto& path : descriptor_write_paths(prefPath)) {
         if (write_descriptor_json(path, json)) {
             sActiveDescriptorPath = path;
-            sConfiguredDataPath = resolvedTargetPath;
             return true;
         }
     }
 
     return false;
+}
+
+bool write_location_descriptor(LocationMode mode, const std::filesystem::path& targetPath) {
+    auto descriptor = load_current_descriptor();
+    descriptor.mode = mode;
+    descriptor.customPath.clear();
+    if (mode == LocationMode::Custom) {
+        descriptor.customPath = absolute_path(targetPath);
+    }
+
+    const auto currentPath = current_data_path();
+    const auto resolvedTargetPath =
+        mode == LocationMode::Custom ? descriptor.customPath : targetPath;
+    descriptor.previousPath.clear();
+    if (!currentPath.empty() && normalized_path(currentPath) != normalized_path(resolvedTargetPath))
+    {
+        descriptor.previousPath = currentPath;
+    }
+
+    if (!persist_descriptor(descriptor)) {
+        return false;
+    }
+    sConfiguredDataPath = resolvedTargetPath;
+    return true;
 }
 
 void set_error(std::string* errorOut, std::string error) {
@@ -865,8 +926,132 @@ void migrate_directory(const std::filesystem::path& from, const std::filesystem:
     }
 }
 
+void migrate_one(const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath,
+    MigrationStats& stats) {
+    std::error_code ec;
+    const auto sourceStatus = std::filesystem::symlink_status(sourcePath, ec);
+    if (ec || !std::filesystem::exists(sourceStatus)) {
+        return;
+    }
+
+    if (std::filesystem::is_directory(sourceStatus)) {
+        std::filesystem::create_directories(targetPath, ec);
+        if (ec) {
+            ++stats.failures;
+            Log.warn("Failed to create save migration target '{}': {}",
+                io::fs_path_to_string(targetPath), ec.message());
+            return;
+        }
+        for (auto it = std::filesystem::directory_iterator(sourcePath, ec);
+             !ec && it != std::filesystem::directory_iterator(); it.increment(ec))
+        {
+            migrate_one(it->path(), targetPath / it->path().filename(), stats);
+        }
+        ec.clear();
+        if (std::filesystem::is_empty(sourcePath, ec)) {
+            if (std::filesystem::remove(sourcePath, ec)) {
+                ++stats.emptyDirectoriesRemoved;
+            }
+        }
+        ec.clear();
+        return;
+    }
+
+    if (std::filesystem::exists(targetPath, ec) || std::filesystem::is_symlink(targetPath, ec)) {
+        ++stats.skippedExistingTargets;
+        return;
+    }
+    ec.clear();
+
+    if (try_rename_migration_entry(sourcePath, targetPath)) {
+        ++stats.filesCopied;
+        ++stats.sourcesRemoved;
+        return;
+    }
+
+    if (!ensure_parent_directory(targetPath, stats)) {
+        return;
+    }
+
+    std::filesystem::copy_file(
+        sourcePath, targetPath, std::filesystem::copy_options::skip_existing, ec);
+    if (ec) {
+        ++stats.failures;
+        Log.warn("Failed to migrate save entry '{}' to '{}': {}", io::fs_path_to_string(sourcePath),
+            io::fs_path_to_string(targetPath), ec.message());
+        return;
+    }
+
+    ++stats.filesCopied;
+    std::filesystem::remove(sourcePath, ec);
+    if (ec) {
+        ++stats.failures;
+        Log.warn("Migrated '{}' but failed to remove source: {}",
+            io::fs_path_to_string(sourcePath), ec.message());
+        return;
+    }
+    ++stats.sourcesRemoved;
+}
+
+void migrate_save_directory(
+    const std::filesystem::path& from, const std::filesystem::path& to) {
+    if (from.empty() || to.empty() || normalized_path(from) == normalized_path(to)) {
+        return;
+    }
+
+    std::error_code ec;
+    if (!std::filesystem::exists(from, ec)) {
+        return;
+    }
+
+    std::filesystem::create_directories(to, ec);
+    if (ec) {
+        Log.warn("Failed to create save directory '{}' for migration: {}",
+            io::fs_path_to_string(to), ec.message());
+        return;
+    }
+
+    MigrationStats stats;
+    constexpr std::array<std::pair<std::string_view, std::string_view>, 2> kSlots = {{
+        {"Card A", "A"},
+        {"Card B", "B"},
+    }};
+
+    for (const auto& region : kSaveRegions) {
+        for (const auto& [folderName, letter] : kSlots) {
+            migrate_one(from / region / folderName, to / region / folderName, stats);
+            const auto rawName = fmt::format("MemoryCard{}.{}.raw", letter, region);
+            migrate_one(from / rawName, to / rawName, stats);
+        }
+
+        const auto regionDir = from / region;
+        if (std::filesystem::exists(regionDir, ec) &&
+            std::filesystem::is_empty(regionDir, ec))
+        {
+            if (std::filesystem::remove(regionDir, ec)) {
+                ++stats.emptyDirectoriesRemoved;
+            }
+        }
+        ec.clear();
+    }
+
+    const bool migratedAnything = stats.filesCopied > 0 || stats.sourcesRemoved > 0 ||
+                                  stats.emptyDirectoriesRemoved > 0 || stats.failures > 0;
+    if (migratedAnything) {
+        Log.info(
+            "Finished save migration from '{}' to '{}': {} files copied, {} sources removed, {} "
+            "empty directories removed, {} existing targets skipped, {} failures",
+            io::fs_path_to_string(from), io::fs_path_to_string(to), stats.filesCopied,
+            stats.sourcesRemoved, stats.emptyDirectoriesRemoved, stats.skippedExistingTargets,
+            stats.failures);
+    }
+}
+
 void migrate_data(const std::filesystem::path& prefPath, const std::filesystem::path& dataPath,
-    const LocationDescriptor* descriptor) {
+    const std::filesystem::path& savePath, const LocationDescriptor* descriptor) {
+    if (descriptor && !descriptor->previousSavePath.empty()) {
+        migrate_save_directory(descriptor->previousSavePath, savePath);
+    }
     if (descriptor && !descriptor->previousPath.empty()) {
         migrate_directory(descriptor->previousPath, dataPath, prefPath);
     }
@@ -1070,6 +1255,136 @@ bool is_data_path_restart_pending() {
     return normalized_path(ConfigPath) != normalized_path(configured_data_path());
 }
 
+bool open_save_path() {
+#if DUSK_CAN_OPEN_DATA_FOLDER
+    const auto savePath = SavePath.empty() ? configured_save_path() : SavePath;
+    std::error_code ec;
+    std::filesystem::path path = std::filesystem::absolute(savePath, ec);
+    if (ec) {
+        Log.warn("Failed to resolve absolute save folder path '{}': {}",
+            io::fs_path_to_string(savePath), ec.message());
+        path = savePath;
+    }
+
+#if defined(_WIN32)
+    const std::string url = "file:///" + path.generic_string();
+#else
+    const std::string url = "file://" + path.generic_string();
+#endif
+    if (!SDL_OpenURL(url.c_str())) {
+        Log.warn(
+            "Failed to open save folder '{}': {}", io::fs_path_to_string(path), SDL_GetError());
+        return false;
+    }
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool set_custom_save_path(const std::filesystem::path& path, std::string* errorOut) {
+    if (!validate_writable_data_path(path, errorOut)) {
+        return false;
+    }
+
+    const auto absoluteTarget = absolute_path(path);
+    const auto currentDataPath = current_data_path();
+    auto descriptor = load_current_descriptor();
+
+    if (!currentDataPath.empty() &&
+        normalized_path(absoluteTarget) == normalized_path(currentDataPath))
+    {
+        const auto previousEffective = current_save_path();
+        descriptor.saveCustomPath.clear();
+        descriptor.previousSavePath.clear();
+        if (!previousEffective.empty() &&
+            normalized_path(previousEffective) != normalized_path(absoluteTarget))
+        {
+            descriptor.previousSavePath = previousEffective;
+        }
+        if (!persist_descriptor(descriptor)) {
+            set_error(
+                errorOut, fmt::format("{} could not save the save folder setting.", AppName));
+            return false;
+        }
+        sConfiguredSavePath = absoluteTarget;
+        return true;
+    }
+
+    const auto previousEffective = current_save_path();
+    descriptor.saveCustomPath = absoluteTarget;
+    descriptor.previousSavePath.clear();
+    if (!previousEffective.empty() &&
+        normalized_path(previousEffective) != normalized_path(absoluteTarget))
+    {
+        descriptor.previousSavePath = previousEffective;
+    }
+
+    if (!persist_descriptor(descriptor)) {
+        set_error(errorOut, fmt::format("{} could not save the save folder setting.", AppName));
+        return false;
+    }
+    sConfiguredSavePath = absoluteTarget;
+    return true;
+}
+
+bool set_custom_save_path(const char* path, std::string* errorOut) {
+    if (path == nullptr) {
+        set_error(errorOut, "Choose a folder.");
+        return false;
+    }
+    return set_custom_save_path(path_from_utf8(path), errorOut);
+}
+
+bool reset_save_path() {
+    auto descriptor = load_current_descriptor();
+    const auto previousEffective = current_save_path();
+    const auto resolvedTarget = current_data_path();
+
+    descriptor.saveCustomPath.clear();
+    descriptor.previousSavePath.clear();
+    if (!previousEffective.empty() && !resolvedTarget.empty() &&
+        normalized_path(previousEffective) != normalized_path(resolvedTarget))
+    {
+        descriptor.previousSavePath = previousEffective;
+    }
+
+    if (!persist_descriptor(descriptor)) {
+        return false;
+    }
+    sConfiguredSavePath = resolvedTarget;
+    return true;
+}
+
+bool is_default_save_path() {
+    return normalized_path(configured_save_path()) == normalized_path(configured_data_path());
+}
+
+std::filesystem::path configured_save_path() {
+    if (sConfiguredSavePath) {
+        return *sConfiguredSavePath;
+    }
+
+    const auto prefPath = active_pref_path();
+    const auto descriptor = read_location_descriptor(prefPath);
+    if (descriptor) {
+        sActiveDescriptorPath = descriptor->path;
+    }
+    const auto dataPath =
+        resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
+    sConfiguredSavePath =
+        resolve_save_path(dataPath, descriptor ? &descriptor->descriptor : nullptr);
+    return *sConfiguredSavePath;
+}
+
+bool is_save_path_restart_pending() {
+    if (SavePath.empty()) {
+        return false;
+    }
+
+    return normalized_path(SavePath) != normalized_path(configured_save_path());
+}
+
 Paths initialize_data() {
     const auto preferredPrefPath = get_pref_path();
     const auto prefPath =
@@ -1086,14 +1401,33 @@ Paths initialize_data() {
         resolve_data_path(prefPath, descriptor ? &descriptor->descriptor : nullptr);
     sConfiguredDataPath = dataPath;
 
-    migrate_data(prefPath, dataPath, descriptor ? &descriptor->descriptor : nullptr);
+    auto savePath = resolve_save_path(dataPath, descriptor ? &descriptor->descriptor : nullptr);
+    sConfiguredSavePath = savePath;
+
+    migrate_data(prefPath, dataPath, savePath, descriptor ? &descriptor->descriptor : nullptr);
     ensure_data_directory(dataPath);
     ensure_data_directory(prefPath);
+
+    if (!savePath.empty() &&
+        normalized_path(savePath) != normalized_path(dataPath))
+    {
+        std::error_code ec;
+        std::filesystem::create_directories(savePath, ec);
+        if (ec) {
+            Log.warn(
+                "Failed to create save directory '{}': {}. Falling back to data folder for this "
+                "session.",
+                io::fs_path_to_string(savePath), ec.message());
+            savePath = dataPath;
+        }
+    }
+
     ensure_initial_pipeline_cache(prefPath);
 
     return Paths{
         .userPath = dataPath,
         .cachePath = prefPath,
+        .savePath = savePath,
     };
 }
 
