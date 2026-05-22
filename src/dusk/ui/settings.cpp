@@ -373,6 +373,9 @@ const Rml::String kBloomBrightnessHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
+const Rml::String kUnlockFramerateHelpText =
+    "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
+    "visual artifacts or animation glitches.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -887,14 +890,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "Enable Depth of Field",
+                .helpText = "Enables a Depth of Field effect when obtaining an item",
+
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
+                .helpText = "Adds a shadow effect to the Mini-Map",
+
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = "Disable Cutscene Pillarboxing",
+                .helpText = "Removes Pillarboxing in some cutscenes",
+
             });
     });
 
