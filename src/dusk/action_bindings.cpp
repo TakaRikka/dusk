@@ -15,7 +15,6 @@ ActionBindsMap& getActionBindsGameplay() {
     static ActionBindsMap actionBinds = {
         {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera"}},
         {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna"}},
-        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
         {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
     };
     return actionBinds;
@@ -24,6 +23,7 @@ ActionBindsMap& getActionBindsGameplay() {
 // Action Bindings that affect the interface (menus, etc.)
 ActionBindsMap& getActionBindsInterface() {
     static ActionBindsMap actionBinds = {
+        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
         {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack"}},
     };
     return actionBinds;
