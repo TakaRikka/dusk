@@ -986,9 +986,9 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
 
         SDL_Gamepad* gamepad = gamepad_for_port(port);
         pane.add_section("Custom Action Bindings");
-        pane.add_text("A button bound to any action here will REPLACE the default control for"
+        pane.add_rml("A button bound to any action here will REPLACE the default control for"
                       " that action. Only bind buttons here that aren't used anywhere else."
-                      " Note: The glyphs shown for in game actions will not change."
+                      " <br/><br/> Note: The glyphs shown for in game actions will not change."
                       " This is not recommended for regular Gamecube controllers.");
 
         auto addActionBinding = [&](auto actionBind, const std::string& key) {
