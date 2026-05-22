@@ -939,14 +939,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
 
             pane.add_section("Gameplay");
             for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
-                if (type == Type::GAMEPLAY) {
+                if (type == ActionBindType::GAMEPLAY) {
                     addActionBinding(&configVars->at(port), actionName);
                 }
             }
 
             pane.add_section("Interface");
             for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
-                if (type == Type::INTERFACE) {
+                if (type == ActionBindType::INTERFACE) {
                     addActionBinding(&configVars->at(port), actionName);
                 }
             }
@@ -992,14 +992,14 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
 
         pane.add_section("Gameplay");
         for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
-            if (type == Type::GAMEPLAY) {
+            if (type == ActionBindType::GAMEPLAY) {
                 addActionBinding(&configVars->at(port), actionName);
             }
         }
 
         pane.add_section("Interface");
         for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
-            if (type == Type::INTERFACE) {
+            if (type == ActionBindType::INTERFACE) {
                 addActionBinding(&configVars->at(port), actionName);
             }
         }
