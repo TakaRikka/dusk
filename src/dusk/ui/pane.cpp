@@ -176,6 +176,10 @@ Rml::Element* Pane::add_text(const Rml::String& text) {
     return elem;
 }
 
+Rml::Element* Pane::add_break() {
+    return append(mRoot, "line-break");
+}
+
 Rml::Element* Pane::add_rml(const Rml::String& rml) {
     auto* elem = append(mRoot, "div");
     elem->SetInnerRML(rml);

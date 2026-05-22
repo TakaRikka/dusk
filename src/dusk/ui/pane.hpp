@@ -31,6 +31,7 @@ public:
         return add_child<ControlledSelectButton>(std::move(props));
     }
     Rml::Element* add_text(const Rml::String& text);
+    Rml::Element* add_break();
     Rml::Element* add_rml(const Rml::String& rml);
     void finalize();
     void clear();

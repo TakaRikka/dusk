@@ -123,6 +123,13 @@ window content pane > spacer {
     pointer-events: none;
 }
 
+window content pane > line-break {
+    display: block;
+    flex: 0 0 8dp;
+    height: 8dp;
+    pointer-events: none;
+}
+
 scrollbarvertical {
     width: 8dp;
     margin: 4dp 4dp 4dp 0;
