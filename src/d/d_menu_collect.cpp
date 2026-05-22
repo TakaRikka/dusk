@@ -97,79 +97,157 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
 
 #if TARGET_PC
 void dMenu_Collect2D_c::menuCollectWide() {
-    // Main Canvas
-    mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
-    mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
-
-    // Pieces of Heart
-    mpScreen->search(MULTI_CHAR('heart_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Scents
-    mpScreen->search(MULTI_CHAR('wolf_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Quiver
-    mpScreen->search(MULTI_CHAR('item_0_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Wallet
-    mpScreen->search(MULTI_CHAR('item_1_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Poes
-    mpScreen->search(MULTI_CHAR('item_2_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Fish Bestiary
-    mpScreen->search(MULTI_CHAR('fish_3_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Letters
-    mpScreen->search(MULTI_CHAR('lett_4_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Hidden Skills
-    mpScreen->search(MULTI_CHAR('maki_5_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Green Tunic
-    mpScreen->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Zora Armor
-    mpScreen->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Magic Armor
-    mpScreen->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Ordon Shield
-    mpScreen->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Hylian Shield
-    mpScreen->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Ordon Sword
-    mpScreen->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Master Sword
-    mpScreen->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Bugs
-    mpScreen->search(MULTI_CHAR('kabu_6n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // "Collection" Text
-    mpScreen->search(MULTI_CHAR('t_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mpScreen->search(MULTI_CHAR('f_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // "Save" Text
-    mpScreen->search(MULTI_CHAR('sa_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // "Options" Text
-    mpScreen->search(MULTI_CHAR('op_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Item Name Text
-    mpScreen->search(MULTI_CHAR('itemn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Item Description Text
-    mpScreen->search(MULTI_CHAR('infotxtn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    #if TARGET_PC
-    if (mpDrawCursor) {
-        mpDrawCursor->refreshAspectScale();
+    // Get pre-scale values for each pane
+    if (!cachedPanes) {
+        for (PaneCache& entry : mpScreenPanes) {
+            J2DPane* pane = mpScreen->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX();
+                entry.origTransY = pane->getTranslateY();
+                entry.cached = true;
+            }
+        }
+        cachedPanes = true;
     }
-    #endif
+
+    // Reset all panes
+    mpScreen->scale(1.0f, 1.0f);
+    mpScreen->translate(0.0f, 0.0f);
+    for (PaneCache& entry : mpScreenPanes) {
+        J2DPane* pane = mpScreen->search(entry.tag);
+        pane->scale(1.0f, 1.0f);
+        pane->translate(entry.origTransX, entry.origTransY);
+    }
+
+    // Reset button overlay
+    mpScreenIcon->translate(0.0f, 0.0f);
+
+    switch (dusk::getSettings().game.menuScalingMode) {
+    case dusk::MenuScaling::GameCube:
+        // Selection Cursor
+        if (mpDrawCursor) {
+            mpDrawCursor->refreshAspectScale(1.0f);
+        }
+        break;
+    case dusk::MenuScaling::Wii:
+        // Main Canvas
+        mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+        mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+
+        // Button Overlay
+        mpScreenIcon->translate(-mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+
+        // "Save" Text
+        mpScreen->search(MULTI_CHAR('sa_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // "Options" Text
+        mpScreen->search(MULTI_CHAR('op_tex_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Pieces of Heart
+        mpScreen->search(MULTI_CHAR('heart_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Scents
+        mpScreen->search(MULTI_CHAR('wolf_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Quiver
+        mpScreen->search(MULTI_CHAR('item_0_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Wallet
+        mpScreen->search(MULTI_CHAR('item_1_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Poes
+        mpScreen->search(MULTI_CHAR('item_2_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Fish Bestiary
+        mpScreen->search(MULTI_CHAR('fish_3_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Letters
+        mpScreen->search(MULTI_CHAR('lett_4_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Hidden Skills
+        mpScreen->search(MULTI_CHAR('maki_5_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Green Tunic
+        mpScreen->search(MULTI_CHAR('fuku_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Zora Armor
+        mpScreen->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Magic Armor
+        mpScreen->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Ordon Shield
+        mpScreen->search(MULTI_CHAR('tate_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Hylian Shield
+        mpScreen->search(MULTI_CHAR('tate_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Ordon Sword
+        mpScreen->search(MULTI_CHAR('ken_n0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Master Sword
+        mpScreen->search(MULTI_CHAR('ken_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Bugs
+        mpScreen->search(MULTI_CHAR('kabu_6n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // "Collection" Text
+        mpScreen->search(MULTI_CHAR('t_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mpScreen->search(MULTI_CHAR('f_t00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Item Name Text
+        mpScreen->search(MULTI_CHAR('itemn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Item Description Text
+        mpScreen->search(MULTI_CHAR('infotxtn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Selection Cursor
+        if (mpDrawCursor) {
+            mpDrawCursor->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
+        }
+        break;
+    case dusk::MenuScaling::Dusklight:
+        // Main Canvas
+        mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
+        mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);
+
+        // Save/Options Buttons
+        mpScreen->search(MULTI_CHAR('sa_op_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // "Collection" Title Bar
+        mpScreen->search(MULTI_CHAR('title_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        // Main Central Elements
+        mpScreen->search(MULTI_CHAR('menu_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mpScreen->search(MULTI_CHAR('w_er_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mpScreen->search(MULTI_CHAR('center_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+
+        const f32 leftShift = 48.0f * (mDoGph_gInf_c::hudAspectScaleUp - 1.0f);  // Shifting certain items left to keep center (> 4:3 only)
+
+        // Item Name/Description Text
+        J2DPane* info_n = mpScreen->search(MULTI_CHAR('info_n'));
+        static f32 infoTransX_orig = info_n->getTranslateX();
+        info_n->translate(infoTransX_orig - leftShift, info_n->getTranslateY());
+
+        // Designs
+        J2DPane* lavel_n = mpScreen->search(MULTI_CHAR('lavel_n'));
+        static f32 lavelTransX_orig = lavel_n->getTranslateX();
+        lavel_n->translate(lavelTransX_orig - leftShift, lavel_n->getTranslateY());
+
+        // Fused Shadow/Mirror Background
+        J2DPane* modelbgn = mpScreen->search(MULTI_CHAR('modelbgn'));
+        static f32 modelbgnTransX_orig = modelbgn->getTranslateX();  // Get pre-scale value
+        modelbgn->setBasePosition(J2DBasePosition_0);
+        modelbgn->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.3f);
+        f32 modelbgn_scaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleDown - 1.0f);
+        modelbgn->translate((modelbgnTransX_orig - 12.0f) * modelbgn_scaleFactor, modelbgn->getTranslateY());
+
+        // Selection Cursor
+        if (mpDrawCursor) {
+            mpDrawCursor->refreshAspectScale(1.0f);
+        }
+        break;
+    }
 }
 #endif
 

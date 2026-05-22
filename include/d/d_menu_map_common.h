@@ -76,6 +76,11 @@ public:
     }
 #endif
 
+#if TARGET_PC
+    static void getDmapPoeCount(const std::string& stageName, int& nowCount, int& totalCount);
+    static void getFmapPoeCount(const int regionNo, int& nowCount, int& totalCount);
+#endif
+
     struct Stage_c {
         // Incomplete class
 
