@@ -179,9 +179,15 @@ int daE_HP_c::draw() {
     if (field_0x77c != 0xff && fopAcM_isSwitch(this, field_0x77c) == 0) {
         return 1;
     }
-
+    
     if (mNight == 1 && !dKy_daynight_check()) {
+#if TARGET_PC
+        if (!dusk::getSettings().game.daytimePoes) {
+            return 1;
+        }
+#else
         return 1;
+#endif        
     }
 
     if (attention_info.distances[fopAc_attn_BATTLE_e] == 0) {
@@ -1065,6 +1071,25 @@ int daE_HP_c::execute() {
         return 1;
     }
 
+#if TARGET_PC
+    if (!dusk::getSettings().game.daytimePoes && mNight == 1 && !dKy_daynight_check()) {
+        attention_info.distances[fopAc_attn_BATTLE_e] = 0;
+
+        fopAcM_SetGroup(this, 0);
+        fopAcM_OffStatus(this, 0);
+
+        attention_info.flags &= ~fopAc_AttnFlag_BATTLE_e;
+
+        if (field_0x78b == 0) {
+            field_0x790 = 0.0f;
+            field_0x78b = 1;
+
+            mSound1.setEnemyName(NULL);
+        }
+
+        return 1;
+    }
+#else
     if (mNight == 1 && !dKy_daynight_check()) {
         attention_info.distances[fopAc_attn_BATTLE_e] = 0;
 
@@ -1082,6 +1107,7 @@ int daE_HP_c::execute() {
 
         return 1;
     }
+#endif
 
     if (attention_info.distances[fopAc_attn_BATTLE_e] == 0) {
         attention_info.distances[fopAc_attn_BATTLE_e] = 0x04;
@@ -1275,8 +1301,15 @@ int daE_HP_c::create() {
         if (field_0x77c != 0xff && !fopAcM_isSwitch(this, field_0x77c) ||
             mNight == 1 && !dKy_daynight_check())
         {
+#if TARGET_PC
+            if (dusk::getSettings().game.daytimePoes) {
+                field_0x78b = 0;
+                mSound1.setEnemyName("E_hp");
+            }
+#else
             field_0x78b = 1;
             mSound1.setEnemyName(NULL);
+#endif
         } else {
             field_0x78b = 0;
             mSound1.setEnemyName("E_hp");
