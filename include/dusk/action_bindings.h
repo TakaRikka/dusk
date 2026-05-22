@@ -27,7 +27,9 @@ struct ActionBindPressData {
 
 using ActionBindsMap = std::unordered_map<ActionBinds, ActionBindData>;
 
-ActionBindsMap& getActionBinds();
+ActionBindsMap& getActionBindsGameplay();
+
+ActionBindsMap& getActionBindsInterface();
 
 bool isActionBound(ActionBinds action, u32 port);
 
