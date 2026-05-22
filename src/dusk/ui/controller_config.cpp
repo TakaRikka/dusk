@@ -965,13 +965,17 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                           " that action. Only bind buttons here that aren't used anywhere else.");
 
             pane.add_section("Gameplay");
-            for (auto& [configVars, actionName] : getActionBindsGameplay() | std::views::values) {
-                addActionBinding(&configVars->at(port), actionName);
+            for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
+                if (type == Type::GAMEPLAY) {
+                    addActionBinding(&configVars->at(port), actionName);
+                }
             }
 
             pane.add_section("Interface");
-            for (auto& [configVars, actionName] : getActionBindsInterface() | std::views::values) {
-                addActionBinding(&configVars->at(port), actionName);
+            for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
+                if (type == Type::INTERFACE) {
+                    addActionBinding(&configVars->at(port), actionName);
+                }
             }
 
             break;
@@ -1014,13 +1018,17 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         };
 
         pane.add_section("Gameplay");
-        for (auto& [configVars, actionName] : getActionBindsGameplay() | std::views::values) {
-            addActionBinding(&configVars->at(port), actionName);
+        for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
+            if (type == Type::GAMEPLAY) {
+                addActionBinding(&configVars->at(port), actionName);
+            }
         }
 
         pane.add_section("Interface");
-        for (auto& [configVars, actionName] : getActionBindsInterface() | std::views::values) {
-            addActionBinding(&configVars->at(port), actionName);
+        for (auto& [configVars, actionName, type] : getActionBinds() | std::views::values) {
+            if (type == Type::INTERFACE) {
+                addActionBinding(&configVars->at(port), actionName);
+            }
         }
         break;
     }
