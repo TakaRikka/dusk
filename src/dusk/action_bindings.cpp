@@ -10,30 +10,21 @@ namespace dusk {
 
 static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::COUNT)>, PAD_CHANMAX> actionPressData{};
 
-// Action Bindings that affect gameplay
-ActionBindsMap& getActionBindsGameplay() {
+ActionBindsMap& getActionBinds() {
     static ActionBindsMap actionBinds = {
-        {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera"}},
-        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna"}},
-        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
-    };
-    return actionBinds;
-}
-
-// Action Bindings that affect the interface (menus, etc.)
-ActionBindsMap& getActionBindsInterface() {
-    static ActionBindsMap actionBinds = {
-        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
-        {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack"}},
+        {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera", Type::GAMEPLAY}},
+        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna", Type::GAMEPLAY}},
+        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button", Type::GAMEPLAY}},
+        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu", Type::INTERFACE}},
+        {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack", Type::INTERFACE}},
     };
     return actionBinds;
 }
 
 bool isActionBound(ActionBinds action, u32 port) {
-    auto& actionBindsGameplay = getActionBindsGameplay();
-    auto& actionBindsInterface = getActionBindsInterface();
+    auto& actionBinds = getActionBinds();
     // Check to make sure action is properly bound
-    if (!actionBindsGameplay.contains(action) && !actionBindsInterface.contains(action)) {
+    if (!actionBinds.contains(action)) {
         return false;
     }
 
@@ -48,8 +39,8 @@ void updateActionBindings() {
             pressData.pressedCurFrame = false;
         }
 
-        // Update current frame with whether gameplay action button is pressed
-        for (auto& [action, boundAction] : getActionBindsGameplay()) {
+        // Update current frame with whether action button is pressed
+        for (auto& [action, boundAction] : getActionBinds()) {
             // If the action isn't bound, or if documents are visible and the action isn't
             // opening the dusklight menu, don't update. Otherwise, we may accidentally
             // perform actions while the dusklight menu is open.
@@ -77,35 +68,8 @@ void updateActionBindings() {
                     }
                 }
             }
-        }
 
-        // Update current frame for interface binds and handle their triggers separately
-        for (auto& [action, boundAction] : getActionBindsInterface()) {
-            // Interface binds should update regardless of UI visibility
-            if (!isActionBound(action, port) ||
-                (ui::any_document_visible() && action != ActionBinds::OPEN_DUSKLIGHT_MENU)) {
-                continue;
-            }
-
-            int button = boundAction.configVars->at(port);
-
-            u32 count = 0;
-            if (PADGetKeyButtonBindings(port, &count) != nullptr) {
-                int numKeys = 0;
-                const bool* kbState = SDL_GetKeyboardState(&numKeys);
-                if (kbState[button]) {
-                    actionPressData[port][static_cast<int>(action)].pressedCurFrame = true;
-                }
-            } else {
-                auto controller = aurora::input::get_controller_for_player(port);
-                if (controller) {
-                    if (SDL_GetGamepadButton(controller->m_controller, static_cast<SDL_GamepadButton>(button))) {
-                        actionPressData[port][static_cast<int>(action)].pressedCurFrame = true;
-                    }
-                }
-            }
-
-            // Interface-specific triggers (do not apply gameplay UI visibility gating)
+            // Interface-specific triggers
             if (getActionBindTrig(ActionBinds::TOGGLE_TEXTURE_PACK, port)) {
                 const bool enabled = !getSettings().game.enableTextureReplacements.getValue();
                 getSettings().game.enableTextureReplacements.setValue(enabled);
@@ -139,17 +103,6 @@ bool getActionBindHoldAnyPort(ActionBinds action) {
 }
 
 int getActionBindButton(ActionBinds action, u32 port) {
-    auto& gameplayBinds = getActionBindsGameplay();
-    auto& interfaceBinds = getActionBindsInterface();
-
-    if (gameplayBinds.contains(action)) {
-        return (*gameplayBinds[action].configVars)[port];
-    }
-
-    if (interfaceBinds.contains(action)) {
-        return (*interfaceBinds[action].configVars)[port];
-    }
-
-    return PAD_NATIVE_BUTTON_INVALID;
+    return (*getActionBinds()[action].configVars)[port];
 }
 }
