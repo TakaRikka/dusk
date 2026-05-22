@@ -370,6 +370,9 @@ const Rml::String kBloomHelpText =
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
+const Rml::String kDepthOfFieldHelpText =
+    "Configure the post-processing depth-of-field effect. Classic uses the original depth-of-field pass;"
+    " Dusklight uses a higher-quality depth-of-field pass.";
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
@@ -842,7 +845,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 100,
                 .defaultValue = 100,
                 .step = 10,
-            }, mPrelaunch);
+            },
+            mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+            GraphicsTunerProps{
+                .option = GraphicsOption::DepthOfFieldMode,
+                .title = "Depth of Field",
+                .helpText = kDepthOfFieldHelpText,
+                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
+                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
+                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
+            },
+            mPrelaunch);
 
         leftPane.add_section("Rendering");
         config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
@@ -884,11 +898,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
             "Framerate Cap", "Limit the framerate to the specified value.", 30, 540, 1,
             [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
-        config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
-            {
-                .key = "Enable Depth of Field",
-                .helpText = "Render a blurring effect for out-of-focus areas in some situations. May impact performance."
-            });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
