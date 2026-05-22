@@ -1973,6 +1973,11 @@ void dMenu_Fmap2DBack_c::stageMapMove(STControl* i_stick, u8 param_1, bool param
     if (stick_value >= slow_bound && param_2 && field_0x1238 != 2) {
         bVar6 = true;
         s16 angle = i_stick->getAngleStick();
+#if TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            angle = -angle;
+        }
+#endif
         f32 local_68 = mTexMaxX - mTexMinX;
         f32 spot_zoom = getSpotMapZoomRate();
         f32 region_zoom = getRegionMapZoomRate(mRegionCursor);
