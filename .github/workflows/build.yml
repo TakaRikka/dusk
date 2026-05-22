@@ -2,10 +2,23 @@ name: Build
 
 on:
   push:
+    branches:
+      - main
     paths-ignore:
       - '*.md'
       - '*LICENSE'
   pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   SCCACHE_GHA_ENABLED: "true"
