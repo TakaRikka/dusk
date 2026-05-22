@@ -376,6 +376,8 @@ const Rml::String kDepthOfFieldHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
+const Rml::String kTextureReplacementHelpText =
+    "Enable installed texture replacements.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
