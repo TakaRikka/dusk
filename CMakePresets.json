@@ -489,7 +489,10 @@
       "inherits": [
         "x-windows-ci",
         "windows-arm64-msvc"
-      ]
+      ],
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "arm64-windows"
+      }
     }
   ],
   "buildPresets": [
