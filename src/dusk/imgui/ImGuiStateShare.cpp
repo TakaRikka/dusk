@@ -424,6 +424,9 @@ void ImGuiStateShare::loadLastState() {
     if (!m_loaded) {
         loadStatesFile();
     }
+    if (m_states.empty()) {
+        return;
+    }
     const size_t lastIdx = m_states.size() - 1;
     applyEncodedState(m_states[lastIdx].encoded, m_states[lastIdx].name);
 }
