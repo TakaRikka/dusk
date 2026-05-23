@@ -2817,7 +2817,7 @@ void dMenu_save_c::menuSaveWide() {
     
     #if TARGET_PC
     if (mSelIcon) {
-        mSelIcon->refreshAspectScale();
+        mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
     }
     #endif
 }

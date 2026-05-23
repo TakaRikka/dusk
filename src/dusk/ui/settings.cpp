@@ -59,9 +59,21 @@ constexpr std::array kFpsOverlayCornerNames = {
     "Bottom Right",
 };
 
+constexpr std::array kInterpolationModes = {
+    "Off",
+    "Capped",
+    "Unlimited",
+};
+
 constexpr std::array kGyroInputModeLabels = {
     "Sensor",
     "Mouse",
+};
+
+constexpr std::array kMenuScalingModeLabels = {
+    "GameCube",
+    "Wii",
+    "Dusklight",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -157,8 +169,8 @@ std::vector<AuroraBackend> available_backends() {
     size_t backendCount = 0;
     const AuroraBackend* raw = aurora_get_available_backends(&backendCount);
     for (size_t i = 0; i < backendCount; ++i) {
-        // Do not expose NULL or D3D11
-        if (raw[i] != BACKEND_NULL && raw[i] != BACKEND_D3D11) {
+        // Do not expose NULL
+        if (raw[i] != BACKEND_NULL) {
             backends.emplace_back(raw[i]);
         }
     }
@@ -351,13 +363,15 @@ const Rml::String kInternalResolutionHelpText =
 const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
+const Rml::String kResamplerHelpText =
+    "Configure the sampling method used when scaling the internal resolution for final presentation.";
 const Rml::String kBloomHelpText =
     "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
 const Rml::String kUnlockFramerateHelpText =
-    "Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
+    "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
 
 int float_setting_percent(ConfigVar<float>& var) {
@@ -432,6 +446,31 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
         .max = max,
         .step = step,
         .suffix = "%",
+    });
+    leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
+        pane.clear();
+        pane.add_text(helpText);
+    });
+    return button;
+}
+
+SelectButton& config_int_select(Pane& leftPane, Pane& rightPane, ConfigVar<int>& var,
+    Rml::String key, Rml::String helpText, int min, int max, int step = 5,
+    std::function<bool()> isDisabled = {}, std::string suffix = "") {
+    auto& button = leftPane.add_child<NumberButton>(NumberButton::Props{
+        .key = std::move(key),
+        .getValue = [&var] { return var; },
+        .setValue =
+            [&var, min, max](int value) {
+                var.setValue(std::clamp(value, min, max));
+                config::Save();
+            },
+        .isDisabled = std::move(isDisabled),
+        .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+        .min = min,
+        .max = max,
+        .step = step,
+        .suffix = suffix,
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
@@ -774,6 +813,15 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 8,
                 .defaultValue = 1,
             }, mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+            GraphicsTunerProps{
+                .option = GraphicsOption::Resampler,
+                .title = "Output Resampling",
+                .helpText = kResamplerHelpText,
+                .valueMin = static_cast<int>(Resampler::Bilinear),
+                .valueMax = static_cast<int>(Resampler::Area),
+                .defaultValue = static_cast<int>(Resampler::Bilinear),
+            }, mPrelaunch);
 
         leftPane.add_section("Post-Processing");
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
@@ -793,25 +841,65 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 100,
                 .defaultValue = 100,
+                .step = 10,
             }, mPrelaunch);
 
         leftPane.add_section("Rendering");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
+        config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
             {
-                .key = "Unlock Framerate",
-                .helpText = kUnlockFramerateHelpText,
+                .key = "Use Texture Pack",
+                .helpText = "Enable installed texture replacements.",
+                .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
             });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Unlock Framerate",
+                .getValue =
+                    [] {
+                        return kInterpolationModes[static_cast<u8>(getSettings().game.enableFrameInterpolation.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.enableFrameInterpolation.getValue() !=
+                               getSettings().game.enableFrameInterpolation.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kInterpolationModes.size(); i++) {
+                    pane.add_button({
+                            .text = kInterpolationModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.enableFrameInterpolation.getValue() == static_cast<FrameInterpMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.enableFrameInterpolation.setValue(static_cast<FrameInterpMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml(kUnlockFramerateHelpText);
+            });
+        config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
+            "Framerate Cap", "Limit the framerate to the specified value.", 30, 540, 1,
+            [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "Enable Depth of Field",
+                .helpText = "Render a blurring effect for out-of-focus areas in some situations. May impact performance."
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
+                .helpText = "Render a thick shadow around the mini-map. May impact performance."
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = "Disable Cutscene Pillarboxing",
+                .helpText = "Disable black bars on the left and right sides of the screen "
+                            "during some cutscenes, particularly on ultra-wide displays. "
+                            "Visuals beyond the original intended framing may appear buggy."
             });
     });
 
@@ -829,18 +917,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 });
         };
 
-        leftPane.add_section("Controller");
-        leftPane.register_control(leftPane.add_button("Configure Controller").on_pressed([this] {
+        leftPane.add_section("Inputs");
+        leftPane.register_control(leftPane.add_button("Configure Inputs").on_pressed([this] {
             push(std::make_unique<ControllerConfigWindow>(mPrelaunch));
         }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_text("Open controller binding configuration.");
+                pane.add_text("Open input binding configuration.");
             });
         config_bool_select(leftPane, rightPane, getSettings().game.allowBackgroundInput,
             {
-                .key = "Allow Background Input",
-                .helpText = "Allow controller input even when the game window is not focused.",
+                .key = "Allow Background Inputs",
+                .helpText = "Allow inputs even when the game window is not focused.",
                 .onChange = [](bool value) { aurora_set_background_input(value); },
             });
 
@@ -1028,6 +1116,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
             "Enables rotating Link in the collection menu with the C-Stick.");
+        addOption("Hide Owl Statue Markers", getSettings().game.removeQuestMapMarkers,
+            "Removes completed Owl Statue markers from the map and Minimap.");
 
         leftPane.add_section("Difficulty");
         leftPane.register_control(
@@ -1082,6 +1172,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
+        addOption("Show Poe Count on Map", getSettings().game.enhancedMapMenus,
+            "Displays collected/total number of Poe Souls for a region on the map.");
         addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
             "Allows Wolf Link to howl and change the time of day.");
         addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
@@ -1247,7 +1339,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     });
                 pane.add_button(
                     {
-                        .text = "Controller",
+                        .text = "Missing Device",
                         .isSelected =
                             [] { return getSettings().game.enableControllerToasts.getValue(); },
                     })
@@ -1339,8 +1431,44 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Show gyro sensor values in the input viewer.",
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
-
         leftPane.add_section("Game");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Menu Scaling Mode",
+                .getValue =
+                    [] {
+                        return kMenuScalingModeLabels[static_cast<u8>(
+                            getSettings().game.menuScalingMode.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        const auto& mode = getSettings().game.menuScalingMode;
+                        return mode.getValue() != mode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kMenuScalingModeLabels.size()); ++i) {
+                    pane
+                        .add_button({
+                            .text = kMenuScalingModeLabels[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.menuScalingMode.getValue() ==
+                                           static_cast<MenuScaling>(i);
+                                    ;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.menuScalingMode.setValue(
+                                static_cast<MenuScaling>(i));
+                            ;
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>Changes how the Collection and File Select menus scale to your "
+                             "aspect ratio.");
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",

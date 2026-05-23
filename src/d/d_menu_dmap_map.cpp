@@ -69,6 +69,13 @@ bool renderingDmap_c::isDrawIconSingle2(dTres_c::data_s const* i_data, bool para
         JUT_ASSERT(1044, FALSE);
         break;
     case 5:
+#if TARGET_PC
+        if (dusk::getSettings().game.removeQuestMapMarkers &&
+            dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x190]))
+        {
+            break;
+        }
+#endif
         if ((i_data->mNo == 0xFF || (i_data->mNo != 0xFF && !dComIfGs_isTbox(i_data->mNo))) && (i_data->mSwBit == 0xFF || (i_data->mSwBit != 0xFF && dComIfGs_isSwitch(i_data->mSwBit, i_data->mRoomNo))) && param_1) {
             rt = true;
         }
@@ -352,7 +359,14 @@ f32 dMenu_StageMapCtrl_c::getPixelStageSizeZ() const {
 
 f32 dMenu_StageMapCtrl_c::getPixelCenterX() const {
     f32 var_f31 = dMpath_c::getCenterX();
+    #if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return (1.0f / field_0xbc) * (field_0x9c + var_f31);
+    }
+    else return (1.0f / field_0xbc) * (field_0x9c - var_f31);
+    #else
     return (1.0f / field_0xbc) * (field_0x9c - var_f31);
+    #endif
 }
 
 f32 dMenu_StageMapCtrl_c::getPixelCenterZ() const {
@@ -411,7 +425,18 @@ inline static f32 rightModeCnvPos(f32 param_0) {
 void dMenu_StageMapCtrl_c::cnvPosTo2Dpos(f32 param_0, f32 param_1, f32* param_2,
                                          f32* param_3) const {
     if (param_2 != NULL) {
+        #if TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            *param_2 =
+                (0.5f * field_0x94) + rightModeCnvPos((1.0f / field_0xbc) * (field_0x9c + param_0));
+        } else {
+            *param_2 =
+                (0.5f * field_0x94) + rightModeCnvPos((1.0f / field_0xbc) * (param_0 - field_0x9c));
+        }
+        #else
         *param_2 = (0.5f * field_0x94) + rightModeCnvPos((1.0f / field_0xbc) * (param_0 - field_0x9c));
+        #endif
+
     }
 
     if (param_3 != NULL) {
@@ -908,7 +933,9 @@ void dMenu_StageMapCtrl_c::move() {
 
 void dMenu_DmapMapCtrl_c::draw() {
     if (field_0xef != 0) {
-        setPos(field_0xeb, field_0xec, field_0x9c, field_0xa0, field_0xbc, true, field_0xd8);
+        setPos(field_0xeb, field_0xec,
+            IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -field_0x9c :) field_0x9c,
+            field_0xa0, field_0xbc, true, field_0xd8);
     }
 }
 

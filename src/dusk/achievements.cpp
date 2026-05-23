@@ -442,7 +442,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "dark_hammer_one_hit",
                 "Mortal Edge",
-                "Defeat Dark Hammer in a single hit.",
+                "Defeat Darkhammer in a single hit.",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },

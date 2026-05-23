@@ -2063,7 +2063,7 @@ static void captureScreenPerspDrawInfo(JPADrawInfo& info) {
 static void drawItem3D() {
     ZoneScoped;
 #ifdef TARGET_PC
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         // FRAME INTERP NOTE: Title screen needs 0.0f while everything else that runs through this is -100.0f.
         if (fopAcM_SearchByName(fpcNm_TITLE_e) != nullptr) {
             dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
@@ -2241,7 +2241,7 @@ int mDoGph_Painter() {
 #endif
             dKy_setLight();
 #if TARGET_PC
-            if (dusk::getSettings().game.enableFrameInterpolation) {
+            if (dusk::frame_interp::is_enabled()) {
                 dKy_setLight_again();
             }
 #endif
@@ -2296,7 +2296,7 @@ int mDoGph_Painter() {
             }
 
 #if TARGET_PC
-            if (dusk::getSettings().game.enableFrameInterpolation) {
+            if (dusk::frame_interp::is_enabled()) {
                 // FRAME INTERP NOTE: Currently only recalculating points for Epona's reins. Need a more global solution.
                 if (daHorse_c* horse = dComIfGp_getHorseActor()) {
                     horse->lerpControlPoints(dusk::frame_interp::get_interpolation_step());

@@ -1430,10 +1430,10 @@ void dName_c::selectCursorPosSet(int row) {
 
 #if TARGET_PC
 void dName_c::nameWide() {
-    //Resize Select Icon
+    // Resize Select Icon
     #if TARGET_PC
     if (mSelIcon) {
-        mSelIcon->refreshAspectScale();
+        mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
     }
     #endif
 

@@ -577,7 +577,7 @@ void dSelect_cursor_c::moveCenter(J2DPane* i_pane, f32 i_x, f32 i_y) {
 }
 
 #ifdef TARGET_PC
-void dSelect_cursor_c::refreshAspectScale() {
-    mParam1 = mBaseParam1 * mDoGph_gInf_c::hudAspectScaleUp;
+void dSelect_cursor_c::refreshAspectScale(f32 param_0) {
+    mParam1 = mBaseParam1 * param_0;
 }
 #endif

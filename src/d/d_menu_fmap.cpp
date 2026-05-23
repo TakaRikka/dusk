@@ -525,6 +525,16 @@ void dMenu_Fmap_c::_move() {
         }
         mpDraw2DBack->setSpotTextureFadeAlpha(mSpotTextureFadeAlpha);
     }
+
+#if TARGET_PC
+    u8 region = mpDraw2DBack->getSelectRegion();
+    if (region != 0xFF && mpDraw2DBack->isShowRegion(region)) {
+        mpDraw2DTop->mSelectRegionNo = region;
+    } else {
+        mpDraw2DTop->mSelectRegionNo = 0xFF;
+    }
+
+#endif
 }
 
 void dMenu_Fmap_c::_draw() {
@@ -1146,7 +1156,7 @@ void dMenu_Fmap_c::zoom_spot_to_region_init() {
     field_0x1ec = 1.0f;
 #if TARGET_PC
     // Frame interp note: field_0x122d used to be set every draw, causing flickering. Do it here instead.
-    if (dusk::getSettings().game.enableFrameInterpolation) {
+    if (dusk::frame_interp::is_enabled()) {
         mpDraw2DBack->resetScrollArrowMask();
     }
 #endif
@@ -2600,6 +2610,13 @@ void dMenu_Fmap_c::drawLightDropIcon() {
 }
 
 void dMenu_Fmap_c::drawBatsumarkIcon() {
+#if TARGET_PC
+    if (dusk::getSettings().game.removeQuestMapMarkers &&
+        dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x190]))
+    {
+        return;
+    }
+#endif
     drawIcon(5, 0x12);
 }
 

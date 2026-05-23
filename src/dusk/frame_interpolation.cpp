@@ -142,8 +142,8 @@ uint64_t sim_tick_seq() {
     return g_sim_tick_seq;
 }
 
-void begin_frame(bool enabled, bool is_sim_frame, float step) {
-    g_enabled = enabled;
+void begin_frame(FrameInterpMode mode, bool is_sim_frame, float step) {
+    g_enabled = mode != FrameInterpMode::Off;
     g_is_sim_frame = is_sim_frame;
     g_step = std::clamp(step, 0.0f, 1.0f);
 }
