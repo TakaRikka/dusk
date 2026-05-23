@@ -317,7 +317,7 @@ include(files.cmake)
 # TODO: version handling for res includes
 
 set(DUSK_BUNDLE_NAME Dusklight)
-set(DUSK_BUNDLE_IDENTIFIER dev.twilitrealm.Dusklight)
+set(DUSK_BUNDLE_IDENTIFIER dev.twilitrealm.dusk)
 set(DUSK_COMPANY_NAME "Twilit Realm")
 set(DUSK_FILE_DESCRIPTION "Dusklight")
 set(DUSK_PRODUCT_NAME "Dusklight")
