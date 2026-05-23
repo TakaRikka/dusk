@@ -29,7 +29,6 @@
 #include "JSystem/JAudio2/JASCriticalSection.h"
 
 #if TARGET_PC
-#include <chrono>
 #include "dusk/gx_helper.h"
 #include "dusk/os.h"
 #include "dusk/layout.hpp"
