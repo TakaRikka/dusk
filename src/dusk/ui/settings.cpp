@@ -887,14 +887,19 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "Enable Depth of Field",
+                .helpText = "Render a blurring effect for out-of-focus areas in some situations. May impact performance."
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
+                .helpText = "Render a thick shadow around the mini-map. May impact performance."
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = "Disable Cutscene Pillarboxing",
+                .helpText = "Disable black bars on the left and right sides of the screen "
+                            "during some cutscenes, particularly on ultra-wide displays. "
+                            "Visuals beyond the original intended framing may appear buggy."
             });
     });
 
