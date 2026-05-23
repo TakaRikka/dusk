@@ -108,8 +108,6 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "cl",
-        "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
       },
       "vendor": {
@@ -146,8 +144,6 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "cl",
-        "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
       },
       "vendor": {
