@@ -25,11 +25,14 @@
   <entry key="RESOURCES">Resources</entry>
   <entry key="ABILITIES">Abilities</entry>
   <entry key="DUSKLIGHT">Dusklight</entry>
+  <entry key="GAMECUBE">GameCube</entry>
   <entry key="TYPES">Types</entry>
   <entry key="GAME">Game</entry>
+  <entry key="MENU_SCALING_MODE">Menu Scaling Mode</entry>
   <entry key="UI_LANGUAGE">UI Language</entry>
   <entry key="ENGLISH">English</entry>
   <entry key="SIMPLIFIED_CHINESE">Simplified Chinese</entry>
+  <entry key="WII">Wii</entry>
   <entry key="APPLIES_TO_DUSKLIGHT_UI_TEXT"><br/>Applies to Dusklight UI text.</entry>
   <entry key="SETTINGS">Settings</entry>
   <entry key="WARP">Warp</entry>
@@ -104,6 +107,7 @@
   <entry key="SHOW_AN_OVERLAY_WHEN_SHADERS_ARE_BEING_COMPILED_FOR_YOUR_HARDWARE">Show an overlay when shaders are being compiled for your hardware.</entry>
   <entry key="CHECK_FOR_UPDATES">Check for Updates</entry>
   <entry key="CHECKS_GITHUB_RELEASES_FOR_A_NEW_DUSKLIGHT_VERSION_ON_STARTUP_NO_PERSONA">Checks GitHub releases for a new Dusklight version on startup.<br/><br/>No personal information is transmitted or collected.</entry>
+  <entry key="CHINESE_NAME_KEYBOARD">Chinese Name Keyboard</entry>
   <entry key="NO_CONTROLLER_ASSIGNED">No controller assigned</entry>
   <entry key="CONFIGURE_CONTROLLER_PORT_1_IN_SETTINGS">Configure controller port 1 in Settings.</entry>
   <entry key="THREE_FINGER_TAP_OR">3-finger tap or</entry>
@@ -272,10 +276,12 @@
   <entry key="CONNECT_TO_LIVESPLIT_SERVER_ON_LOCALHOST_16834_FOR_THIS_TO_WORK_YOU">Connect to LiveSplit server on localhost:16834. For this to work you must right click LiveSplit, and turn on Control -&gt; Start TCP Server. To see IGT in LiveSplit you must change your comparison to Game Time.</entry>
   <entry key="DAMAGE_MULTIPLIER">Damage Multiplier</entry>
   <entry key="DISABLE_CUTSCENE_PILLARBOXING">Disable Cutscene Pillarboxing</entry>
+  <entry key="DISABLE_BLACK_BARS_ON_THE_LEFT_AND_RIGHT_SIDES_OF_THE_SCREEN_DURING_SOME">Disable black bars on the left and right sides of the screen during some cutscenes, particularly on ultra-wide displays. Visuals beyond the original intended framing may appear buggy.</entry>
   <entry key="DISABLE_RUPEE_CUTSCENES">Disable Rupee Cutscenes</entry>
   <entry key="DISABLE_THE_BEEPING_SOUND_WHEN_HAVING_LOW_HEALTH">Disable the beeping sound when having low health.</entry>
   <entry key="DISABLES_THE_ELEMENTS_OF_THE_MAIN_HUD_OF_THE_GAME_USEFUL_FOR_A_MORE_IMME">Disables the elements of the main HUD of the game.<br/>Useful for a more immersive experience.</entry>
   <entry key="DISPLAY_THE_CURRENT_FRAMERATE_IN_A_CORNER_OF_THE_SCREEN_WHILE_PLAYING"><br/>Display the current framerate in a corner of the screen while playing.</entry>
+  <entry key="DISPLAYS_COLLECTED_TOTAL_NUMBER_OF_POE_SOULS_FOR_A_REGION_ON_THE_MAP">Displays collected/total number of Poe Souls for a region on the map.</entry>
   <entry key="DISPLAY_THE_RTA_TIMER_IGT_IS_ALWAYS_VISIBLE">Display the RTA timer. IGT is always visible.</entry>
   <entry key="DUSKLIGHT_MENU_SOUNDS">Dusklight Menu Sounds</entry>
   <entry key="EMULATE_SURROUND_SOUND_VIA_HRTF_RECOMMENDED_ONLY_FOR_USE_WITH_HEADPHONES">Emulate surround sound via HRTF. Recommended only for use with headphones!</entry>
@@ -303,6 +309,7 @@
   <entry key="GYRO_SMOOTHING">Gyro Smoothing</entry>
   <entry key="GYRO_YAW_SENSITIVITY">Gyro Yaw Sensitivity</entry>
   <entry key="HEARTS_WILL_NEVER_DROP_FROM_ENEMIES_POTS_AND_VARIOUS_OTHER_PLACES">Hearts will never drop from enemies, pots, and various other places.</entry>
+  <entry key="HIDE_OWL_STATUE_MARKERS">Hide Owl Statue Markers</entry>
   <entry key="HOLD_B_FOR_INSTANT_TEXT">Hold B for Instant Text</entry>
   <entry key="HOLD_TAB_TO_INCREASE_GAME_SPEED_BY_UP_TO_4X">Hold Tab to increase game speed by up to 4x.</entry>
   <entry key="IGNORES_SMALL_GYRO_MOVEMENT_TO_REDUCE_DRIFT_AND_JITTER">Ignores small gyro movement to reduce drift and jitter.</entry>
@@ -337,6 +344,9 @@
   <entry key="NO_LOW_HP_SOUND">No Low HP Sound</entry>
   <entry key="NO_RUPEE_RETURNS">No Rupee Returns</entry>
   <entry key="NO_SWORD_RECOIL">No Sword Recoil</entry>
+  <entry key="REMOVES_COMPLETED_OWL_STATUE_MARKERS_FROM_THE_MAP_AND_MINIMAP">Removes completed Owl Statue markers from the map and Minimap.</entry>
+  <entry key="RENDER_A_BLURRING_EFFECT_FOR_OUT_OF_FOCUS_AREAS_IN_SOME_SITUATIONS_MAY">Render a blurring effect for out-of-focus areas in some situations. May impact performance.</entry>
+  <entry key="RENDER_A_THICK_SHADOW_AROUND_THE_MINI_MAP_MAY_IMPACT_PERFORMANCE">Render a thick shadow around the mini-map. May impact performance.</entry>
   <entry key="NON_STOP_MIDNA_S_LAMENT">Non-Stop Midna's Lament</entry>
   <entry key="OPEN_CONTROLLER_BINDING_CONFIGURATION">Open controller binding configuration.</entry>
   <entry key="PAUSE_ON_FOCUS_LOST">Pause on Focus Lost</entry>
@@ -359,6 +369,7 @@
   <entry key="SENSOR_READS_MOTION_DIRECTLY_FROM_A_SUPPORTED_CONTROLLER_S_GYRO_VIA_SDL"><br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/><br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/><br/>Mouse input cannot currently be used with Gyro Rollgoal.</entry>
   <entry key="SHADOW_RESOLUTION">Shadow Resolution</entry>
   <entry key="SHOW_FPS_COUNTER">Show FPS Counter</entry>
+  <entry key="SHOW_POE_COUNT_ON_MAP">Show Poe Count on Map</entry>
   <entry key="SHOW_RTA">Show RTA</entry>
   <entry key="SKIP_NEEDING_TO_CATCH_A_SECOND_FISH_FOR_SERA_S_CAT">Skip needing to catch a second fish for Sera's cat.</entry>
   <entry key="SKIPS_THE_DELAY_WHEN_WRITING_TO_THE_MEMORY_CARD">Skips the delay when writing to the Memory Card.</entry>
@@ -370,6 +381,7 @@
   <entry key="TOP_LEFT">Top Left</entry>
   <entry key="TOP_RIGHT">Top Right</entry>
   <entry key="TRANSFORM_INSTANTLY_BY_PRESSING_R_AND_Y_SIMULTANEOUSLY">Transform instantly by pressing R and Y simultaneously.</entry>
+  <entry key="CHANGES_HOW_THE_COLLECTION_AND_FILE_SELECT_MENUS_SCALE_TO_YOUR_ASPECT_RATIO"><br/>Changes how the Collection and File Select menus scale to your aspect ratio.</entry>
   <entry key="TURBO_KEY">Turbo Key</entry>
   <entry key="FRAMERATE_CAP">フレームレート上限</entry>
   <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">Limit the frame rate to the specified value.</entry>
@@ -423,6 +435,7 @@
   <entry key="ON">On</entry>
   <entry key="NONE">None</entry>
   <entry key="SHOW_INTERNAL_NAMES">Show Internal Names</entry>
+  <entry key="REPLACES_THE_NAME_ENTRY_KEYBOARD_WITH_COMMON_CHINESE_CHARACTERS">Replaces the name entry keyboard with common Chinese characters.</entry>
   <entry key="MAPS">Maps</entry>
   <entry key="DESTINATION">Destination</entry>
   <entry key="REGION">Region</entry>
@@ -511,11 +524,14 @@
   <entry key="RESOURCES">Resources</entry>
   <entry key="ABILITIES">Abilities</entry>
   <entry key="DUSKLIGHT">Dusklight</entry>
+  <entry key="GAMECUBE">GameCube</entry>
   <entry key="TYPES">Types</entry>
   <entry key="GAME">Game</entry>
+  <entry key="MENU_SCALING_MODE">Menu Scaling Mode</entry>
   <entry key="UI_LANGUAGE">UI Language</entry>
   <entry key="ENGLISH">English</entry>
   <entry key="SIMPLIFIED_CHINESE">Simplified Chinese</entry>
+  <entry key="WII">Wii</entry>
   <entry key="APPLIES_TO_DUSKLIGHT_UI_TEXT"><br/>Applies to Dusklight UI text.</entry>
   <entry key="SETTINGS">Settings</entry>
   <entry key="WARP">Warp</entry>
@@ -589,6 +605,7 @@
   <entry key="SHOW_AN_OVERLAY_WHEN_SHADERS_ARE_BEING_COMPILED_FOR_YOUR_HARDWARE">Show an overlay when shaders are being compiled for your hardware.</entry>
   <entry key="CHECK_FOR_UPDATES">Check for Updates</entry>
   <entry key="CHECKS_GITHUB_RELEASES_FOR_A_NEW_DUSKLIGHT_VERSION_ON_STARTUP_NO_PERSONA">Checks GitHub releases for a new Dusklight version on startup.<br/><br/>No personal information is transmitted or collected.</entry>
+  <entry key="CHINESE_NAME_KEYBOARD">Chinese Name Keyboard</entry>
   <entry key="NO_CONTROLLER_ASSIGNED">No controller assigned</entry>
   <entry key="CONFIGURE_CONTROLLER_PORT_1_IN_SETTINGS">Configure controller port 1 in Settings.</entry>
   <entry key="THREE_FINGER_TAP_OR">3-finger tap or</entry>
@@ -759,10 +776,12 @@
   <entry key="CONNECT_TO_LIVESPLIT_SERVER_ON_LOCALHOST_16834_FOR_THIS_TO_WORK_YOU">Connect to LiveSplit server on localhost:16834. For this to work you must right click LiveSplit, and turn on Control -&gt; Start TCP Server. To see IGT in LiveSplit you must change your comparison to Game Time.</entry>
   <entry key="DAMAGE_MULTIPLIER">Damage Multiplier</entry>
   <entry key="DISABLE_CUTSCENE_PILLARBOXING">Disable Cutscene Pillarboxing</entry>
+  <entry key="DISABLE_BLACK_BARS_ON_THE_LEFT_AND_RIGHT_SIDES_OF_THE_SCREEN_DURING_SOME">Disable black bars on the left and right sides of the screen during some cutscenes, particularly on ultra-wide displays. Visuals beyond the original intended framing may appear buggy.</entry>
   <entry key="DISABLE_RUPEE_CUTSCENES">Disable Rupee Cutscenes</entry>
   <entry key="DISABLE_THE_BEEPING_SOUND_WHEN_HAVING_LOW_HEALTH">Disable the beeping sound when having low health.</entry>
   <entry key="DISABLES_THE_ELEMENTS_OF_THE_MAIN_HUD_OF_THE_GAME_USEFUL_FOR_A_MORE_IMME">Disables the elements of the main HUD of the game.<br/>Useful for a more immersive experience.</entry>
   <entry key="DISPLAY_THE_CURRENT_FRAMERATE_IN_A_CORNER_OF_THE_SCREEN_WHILE_PLAYING"><br/>Display the current framerate in a corner of the screen while playing.</entry>
+  <entry key="DISPLAYS_COLLECTED_TOTAL_NUMBER_OF_POE_SOULS_FOR_A_REGION_ON_THE_MAP">Displays collected/total number of Poe Souls for a region on the map.</entry>
   <entry key="DISPLAY_THE_RTA_TIMER_IGT_IS_ALWAYS_VISIBLE">Display the RTA timer. IGT is always visible.</entry>
   <entry key="DUSKLIGHT_MENU_SOUNDS">Dusklight Menu Sounds</entry>
   <entry key="EMULATE_SURROUND_SOUND_VIA_HRTF_RECOMMENDED_ONLY_FOR_USE_WITH_HEADPHONES">Emulate surround sound via HRTF. Recommended only for use with headphones!</entry>
@@ -790,6 +809,7 @@
   <entry key="GYRO_SMOOTHING">Gyro Smoothing</entry>
   <entry key="GYRO_YAW_SENSITIVITY">Gyro Yaw Sensitivity</entry>
   <entry key="HEARTS_WILL_NEVER_DROP_FROM_ENEMIES_POTS_AND_VARIOUS_OTHER_PLACES">Hearts will never drop from enemies, pots, and various other places.</entry>
+  <entry key="HIDE_OWL_STATUE_MARKERS">Hide Owl Statue Markers</entry>
   <entry key="HOLD_B_FOR_INSTANT_TEXT">Hold B for Instant Text</entry>
   <entry key="HOLD_TAB_TO_INCREASE_GAME_SPEED_BY_UP_TO_4X">Hold Tab to increase game speed by up to 4x.</entry>
   <entry key="IGNORES_SMALL_GYRO_MOVEMENT_TO_REDUCE_DRIFT_AND_JITTER">Ignores small gyro movement to reduce drift and jitter.</entry>
@@ -824,6 +844,9 @@
   <entry key="NO_LOW_HP_SOUND">No Low HP Sound</entry>
   <entry key="NO_RUPEE_RETURNS">No Rupee Returns</entry>
   <entry key="NO_SWORD_RECOIL">No Sword Recoil</entry>
+  <entry key="REMOVES_COMPLETED_OWL_STATUE_MARKERS_FROM_THE_MAP_AND_MINIMAP">Removes completed Owl Statue markers from the map and Minimap.</entry>
+  <entry key="RENDER_A_BLURRING_EFFECT_FOR_OUT_OF_FOCUS_AREAS_IN_SOME_SITUATIONS_MAY">Render a blurring effect for out-of-focus areas in some situations. May impact performance.</entry>
+  <entry key="RENDER_A_THICK_SHADOW_AROUND_THE_MINI_MAP_MAY_IMPACT_PERFORMANCE">Render a thick shadow around the mini-map. May impact performance.</entry>
   <entry key="NON_STOP_MIDNA_S_LAMENT">Non-Stop Midna's Lament</entry>
   <entry key="OPEN_CONTROLLER_BINDING_CONFIGURATION">Open controller binding configuration.</entry>
   <entry key="PAUSE_ON_FOCUS_LOST">Pause on Focus Lost</entry>
@@ -844,6 +867,7 @@
   <entry key="SENSOR_READS_MOTION_DIRECTLY_FROM_A_SUPPORTED_CONTROLLER_S_GYRO_VIA_SDL"><br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/><br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/><br/>Mouse input cannot currently be used with Gyro Rollgoal.</entry>
   <entry key="SHADOW_RESOLUTION">Shadow Resolution</entry>
   <entry key="SHOW_FPS_COUNTER">Show FPS Counter</entry>
+  <entry key="SHOW_POE_COUNT_ON_MAP">Show Poe Count on Map</entry>
   <entry key="SHOW_RTA">Show RTA</entry>
   <entry key="SKIP_NEEDING_TO_CATCH_A_SECOND_FISH_FOR_SERA_S_CAT">Skip needing to catch a second fish for Sera's cat.</entry>
   <entry key="SKIPS_THE_DELAY_WHEN_WRITING_TO_THE_MEMORY_CARD">Skips the delay when writing to the Memory Card.</entry>
@@ -855,6 +879,7 @@
   <entry key="TOP_LEFT">Top Left</entry>
   <entry key="TOP_RIGHT">Top Right</entry>
   <entry key="TRANSFORM_INSTANTLY_BY_PRESSING_R_AND_Y_SIMULTANEOUSLY">Transform instantly by pressing R and Y simultaneously.</entry>
+  <entry key="CHANGES_HOW_THE_COLLECTION_AND_FILE_SELECT_MENUS_SCALE_TO_YOUR_ASPECT_RATIO"><br/>Changes how the Collection and File Select menus scale to your aspect ratio.</entry>
   <entry key="TURBO_KEY">Turbo Key</entry>
   <entry key="UNLOCK_FRAMERATE">Unlock Framerate</entry>
   <entry key="WALLET_SIZES_ARE_LIKE_IN_THE_HD_VERSION_500_1000_2000">Wallet sizes are like in the HD version. (500, 1000, 2000)</entry>
@@ -903,6 +928,7 @@
   <entry key="ON">On</entry>
   <entry key="NONE">None</entry>
   <entry key="SHOW_INTERNAL_NAMES">Show Internal Names</entry>
+  <entry key="REPLACES_THE_NAME_ENTRY_KEYBOARD_WITH_COMMON_CHINESE_CHARACTERS">Replaces the name entry keyboard with common Chinese characters.</entry>
   <entry key="MAPS">Maps</entry>
   <entry key="DESTINATION">Destination</entry>
   <entry key="REGION">Region</entry>

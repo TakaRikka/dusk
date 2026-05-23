@@ -3,6 +3,8 @@
 
 #include <types.h>
 
+#include <string>
+
 class J2DPicture;
 class JKRArchive;
 class dSelect_cursor_c;
@@ -74,6 +76,11 @@ public:
 
         return param_0;
     }
+#endif
+
+#if TARGET_PC
+    static void getDmapPoeCount(const std::string& stageName, int& nowCount, int& totalCount);
+    static void getFmapPoeCount(const int regionNo, int& nowCount, int& totalCount);
 #endif
 
     struct Stage_c {

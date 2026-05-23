@@ -19,6 +19,7 @@ void applyPresetClassic() {
     s.game.internalResolutionScale.setValue(1);
     s.game.shadowResolutionMultiplier.setValue(1);
     s.game.hideTvSettingsScreen.setValue(false);
+    s.game.menuScalingMode.setValue(MenuScaling::GameCube);
     AuroraSetViewportPolicy(AURORA_VIEWPORT_FIT);
 }
 
@@ -47,6 +48,8 @@ void applyPresetDusk() {
     s.game.shadowResolutionMultiplier.setValue(4);
     s.game.enableGyroAim.setValue(true);
     s.game.autoSave.setValue(true);
+    s.game.menuScalingMode.setValue(MenuScaling::Dusklight);
+    s.game.enhancedMapMenus.setValue(true);
 }
 
 }  // namespace

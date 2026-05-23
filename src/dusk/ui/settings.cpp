@@ -105,6 +105,12 @@ constexpr std::array kInterpolationModes = {
     "[UNLIMITED]",
 };
 
+constexpr std::array kMenuScalingModeLabels = {
+    "[GAMECUBE]",
+    "[WII]",
+    "[DUSKLIGHT]",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -919,14 +925,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
             {
                 .key = "[ENABLE_DEPTH_OF_FIELD]",
+                .helpText = "[RENDER_A_BLURRING_EFFECT_FOR_OUT_OF_FOCUS_AREAS_IN_SOME_SITUATIONS_MAY]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "[ENABLE_MINI_MAP_SHADOWS]",
+                .helpText = "[RENDER_A_THICK_SHADOW_AROUND_THE_MINI_MAP_MAY_IMPACT_PERFORMANCE]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = "[DISABLE_CUTSCENE_PILLARBOXING]",
+                .helpText = "[DISABLE_BLACK_BARS_ON_THE_LEFT_AND_RIGHT_SIDES_OF_THE_SCREEN_DURING_SOME]",
             });
     });
 
@@ -1136,6 +1145,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[RESTORES_PATCHED_GLITCHES_FROM_WII_USA_1_0_THE_FIRST_RELEASED_VERSION]");
         addOption("[ENABLE_ROTATING_LINK_DOLL]", getSettings().game.enableLinkDollRotation,
             "[ENABLES_ROTATING_LINK_IN_THE_COLLECTION_MENU_WITH_THE_C_STICK]");
+        addOption("[HIDE_OWL_STATUE_MARKERS]", getSettings().game.removeQuestMapMarkers,
+            "[REMOVES_COMPLETED_OWL_STATUE_MARKERS_FROM_THE_MAP_AND_MINIMAP]");
 
         leftPane.add_section("[DIFFICULTY]");
         leftPane.register_control(
@@ -1189,6 +1200,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[LINK_WILL_NOT_RECOIL_WHEN_HIS_SWORD_HITS_WALLS]");
         addOption("[NO_2ND_FISH_FOR_CAT]", getSettings().game.no2ndFishForCat,
             "[SKIP_NEEDING_TO_CATCH_A_SECOND_FISH_FOR_SERA_S_CAT]");
+        addOption("[SHOW_POE_COUNT_ON_MAP]", getSettings().game.enhancedMapMenus,
+            "[DISPLAYS_COLLECTED_TOTAL_NUMBER_OF_POE_SOULS_FOR_A_REGION_ON_THE_MAP]");
         addSpeedrunDisabledOption("[SUN_S_SONG_R_X]", getSettings().game.sunsSong,
             "[ALLOWS_WOLF_LINK_TO_HOWL_AND_CHANGE_THE_TIME_OF_DAY]");
         addOption("[QUICK_TRANSFORM_R_Y]", getSettings().game.enableQuickTransform,
@@ -1484,6 +1497,42 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "[CHINESE_NAME_KEYBOARD]",
                 .helpText = "[REPLACES_THE_NAME_ENTRY_KEYBOARD_WITH_COMMON_CHINESE_CHARACTERS]",
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "[MENU_SCALING_MODE]",
+                .getValue =
+                    [] {
+                        return kMenuScalingModeLabels[static_cast<u8>(
+                            getSettings().game.menuScalingMode.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        const auto& mode = getSettings().game.menuScalingMode;
+                        return mode.getValue() != mode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kMenuScalingModeLabels.size()); ++i) {
+                    pane
+                        .add_button({
+                            .text = kMenuScalingModeLabels[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.menuScalingMode.getValue() ==
+                                           static_cast<MenuScaling>(i);
+                                    ;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.menuScalingMode.setValue(
+                                static_cast<MenuScaling>(i));
+                            ;
+                            config::Save();
+                        });
+                }
+                pane.add_rml("[CHANGES_HOW_THE_COLLECTION_AND_FILE_SELECT_MENUS_SCALE_TO_YOUR_ASPECT_RATIO]");
             });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {

@@ -45,6 +45,7 @@ UserSettings g_userSettings = {
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
         .autoSave {"game.autoSave", false},
+        .enhancedMapMenus {"game.enhancedMapMenus", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
@@ -55,6 +56,7 @@ UserSettings g_userSettings = {
         .enableControllerToasts {"game.enableControllerToasts", true},
         .enableDiscordPresence {"game.enableDiscordPresence", true},
         .enableChineseNameKeyboard {"game.enableChineseNameKeyboard", false},
+        .menuScalingMode {"game.menuScalingMode", MenuScaling::Wii},
 
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
@@ -125,6 +127,7 @@ UserSettings g_userSettings = {
         .liveSplitEnabled {"game.liveSplitEnabled", false},
         .showSpeedrunRTATimer {"game.showSpeedrunRTATimer", true},
         .recordingMode {"game.recordingMode", false},
+        .removeQuestMapMarkers {"game.removeQuestMapMarkers", false},
         .showInputViewer {"game.showInputViewer", false},
         .showInputViewerGyro {"game.showInputViewerGyro", false}
     },
@@ -212,6 +215,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.autoSave);
+    Register(g_userSettings.game.enhancedMapMenus);
     Register(g_userSettings.game.enableMirrorMode);
     Register(g_userSettings.game.invertCameraXAxis);
     Register(g_userSettings.game.invertCameraYAxis);
@@ -249,6 +253,8 @@ void registerSettings() {
     Register(g_userSettings.game.liveSplitEnabled);
     Register(g_userSettings.game.showSpeedrunRTATimer);
     Register(g_userSettings.game.recordingMode);
+    Register(g_userSettings.game.menuScalingMode);
+    Register(g_userSettings.game.removeQuestMapMarkers);
     Register(g_userSettings.game.showInputViewer);
     Register(g_userSettings.game.showInputViewerGyro);
     Register(g_userSettings.game.fastSpinner);
