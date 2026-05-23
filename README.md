@@ -35,6 +35,12 @@ First, make sure your dump of the game is clean and supported by Dusklight. You 
 
 ### 2. Download [Dusklight](https://github.com/TwilitRealm/dusklight/releases)
 
+**macOS users:** can alternatively install via Homebrew with the following command
+
+```
+brew install --cask dusklight
+```
+
 ### 3. Setup the game
 **Windows / macOS / Linux**
 - Extract the .zip file
