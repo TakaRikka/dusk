@@ -6,6 +6,7 @@ fi
 
 build_dir="$PWD/build"
 linuxdeploy="$build_dir/linuxdeploy-$(uname -m).AppImage"
+lib_dir="/usr/lib/$(uname -m)-linux-gnu"
 
 # Get linuxdeploy
 mkdir -p "$build_dir"
@@ -23,4 +24,4 @@ cp platforms/freedesktop/dusklight.desktop build/appdir/usr/share/applications
 
 cd build/install
 VERSION="$DUSK_VERSION" NO_STRIP=1 "$linuxdeploy" \
-  -l /usr/lib/x86_64-linux-gnu/libusb-1.0.so --appdir "$build_dir/appdir" --output appimage
+  -l "$lib_dir/libusb-1.0.so" --appdir "$build_dir/appdir" --output appimage
