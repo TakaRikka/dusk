@@ -7,11 +7,11 @@
 
 #include "ui/controller_config.hpp"
 
-namespace dusk::input::gamepadLed {
+#include <pad.h>
+
+namespace dusk::input {
 
 namespace {
-    std::array<bool, PAD_MAX_CONTROLLERS> sPadHasLED;
-
     cXyz currentColor = {0, 0, 0};
     float lerpSpeed = 0.0f;
 
@@ -95,35 +95,13 @@ namespace {
         return kColorTable[NO_COLOR].color;
     }
 
-    void handle_led_capability(const int port) noexcept {
-        if (port > PAD_MAX_CONTROLLERS || port < 0)
-            return;
-
-        const int currentPadIndex = PADGetIndexForPort(port);
-        SDL_Gamepad* pad = PADGetSDLGamepadForIndex(currentPadIndex);
-
-        if (pad == nullptr) {
-            sPadHasLED[port] = false;
-            return;
-        }
-
-        const SDL_PropertiesID gamepadProps = SDL_GetGamepadProperties(pad);
-        const bool hasLED = SDL_GetBooleanProperty(
-            gamepadProps,
-            SDL_PROP_GAMEPAD_CAP_RGB_LED_BOOLEAN,
-            false
-        );
-
-        sPadHasLED[port] = hasLED;
-    }
-
 }  // namespace
 
 bool pad_has_led(const int port) noexcept {
     if (port > PAD_MAX_CONTROLLERS || port < 0)
         return false;
 
-    return sPadHasLED[port];
+    return PADHasLED(port);
 }
 
 void handleGamepadColor() {
@@ -136,9 +114,7 @@ void handleGamepadColor() {
     currentColor = LerpColor(currentColor, finalColor, lerpSpeed);
 
     for (int i = 0; i < 4; i++) {
-        handle_led_capability(i);
-
-        if (pad_has_led(i) && dusk::getSettings().game.enableLED[i]) {
+        if (pad_has_led(i) && getSettings().game.enableLED[i]) {
             PADSetColor(
                 i,
                 static_cast<u8>(currentColor.x),

@@ -325,10 +325,10 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
                                       getSettings().game.enableLED[port].setValue(value);
                                   },
                               .isDisabled = [port] {
-                                  return !input::gamepadLed::pad_has_led(port);
+                                  return !input::pad_has_led(port);
                               },
                               .isSupported = [port] {
-                                  return input::gamepadLed::pad_has_led(port);
+                                  return input::pad_has_led(port);
                               }
                           }),
     rightPane, [](Pane& pane) {
