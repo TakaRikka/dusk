@@ -705,6 +705,7 @@ int daDemo00_c::actPerformance(dDemo_actor_c* actor) {
             mDemoFramePrev = fVar1;
             mDemoFramePrevValid = true;
             if (mDemoSyncTicks > 0) {
+                // FRAME INTERP TODO: I want to think of a better way of solving this.
                 dusk::frame_interp::request_presentation_sync();
                 mDemoSyncTicks--;
             }
