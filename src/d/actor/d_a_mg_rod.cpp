@@ -5063,15 +5063,12 @@ static void play_camera(dmg_rod_class* i_this) {
             if (dusk::getSettings().game.enableMirrorMode) {
                 stick_x = -stick_x;
             }
-            f32 substick_x = mDoCPd_c::getSubStickX3D(PAD_1);
-#else
-            f32 substick_x = mDoCPd_c::getSubStickX(PAD_1);
 #endif
 
             if (
                 (stick_x >= 0.8f && old_stick_x < 0.8f) || (stick_x <= -0.8f && old_stick_x > -0.8f)
                 #if VERSION != VERSION_SHIELD_DEBUG
-                || (substick_x >= 0.8f && old_stick_sx < 0.8f) || (substick_x <= -0.8f && old_stick_sx > -0.8f)
+                || (mDoCPd_c::getSubStickX3D(PAD_1) >= 0.8f && old_stick_sx < 0.8f) || (mDoCPd_c::getSubStickX3D(PAD_1) <= -0.8f && old_stick_sx > -0.8f)
                 #endif
             ) {
                 int sp20 = 0;
@@ -5087,7 +5084,7 @@ static void play_camera(dmg_rod_class* i_this) {
                 if (i_this->play_cam_timer >= 15) {
                     if (stick_x >= 0.5f
                         #if VERSION != VERSION_SHIELD_DEBUG
-                        || substick_x >= 0.5f
+                        || mDoCPd_c::getSubStickX3D(PAD_1) >= 0.5f
                         #endif
                     ) {
                         i_this->field_0xf81++;
@@ -5108,7 +5105,7 @@ static void play_camera(dmg_rod_class* i_this) {
             }
 
             old_stick_x = stick_x;
-            old_stick_sx = substick_x;
+            old_stick_sx = mDoCPd_c::getSubStickX3D(PAD_1);
 
             if (i_this->play_cam_timer == 1) {
                 if (i_this->field_0xf81 == 0) {
