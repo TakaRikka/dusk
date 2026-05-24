@@ -1,22 +1,55 @@
 #ifndef DUSK_STRING_HPP
 #define DUSK_STRING_HPP
-
-#include "global.h"
-#include <cstring>
-#include <dolphin/os.h>
+#include <cstdarg>
 
 namespace dusk {
 
-inline void strncpyProxy(char* dst, const char* src, size_t count) {
-#if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4996)
+struct TextSpan {
+    char* buffer;
+    size_t size;
+
+    constexpr operator char*() const {
+        return buffer;
+    }
+
+    constexpr TextSpan(char* buffer, size_t size) : buffer(buffer), size(size) { }
+
+    template<size_t BufSize>
+    constexpr TextSpan(char (&buffer)[BufSize]) : buffer(buffer), size(BufSize) {
+    }
+
+    constexpr TextSpan() : buffer(nullptr), size(0) { }
+
+    constexpr TextSpan operator++(int) {
+        const auto prev = *this;
+
+        if (size > 0) [[likely]] {
+            size--;
+        }
+        buffer++;
+
+        return prev;
+    }
+
+    constexpr char& operator*() const {
+        if (size == 0) [[unlikely]] {
+            CrashSpawnEmpty();
+        }
+
+        return *buffer;
+    }
+
+private:
+    static void CrashSpawnEmpty();
+};
+
+#if TARGET_PC
+#define TEXT_SPAN dusk::TextSpan
+#else
+#define TEXT_SPAN char*
 #endif
-    strncpy(dst, src, count);
-#if _MSC_VER
-#pragma warning(pop)
-#endif
-}
+
+void SafeStringCopyTruncate(char* buffer, size_t bufSize, const char* src);
 
 /**
  * Copy a string to a fixed-size array.
@@ -25,13 +58,28 @@ inline void strncpyProxy(char* dst, const char* src, size_t count) {
 template <size_t BufSize>
 void SafeStringCopyTruncate(char (&buffer)[BufSize], const char* src) {
     static_assert(BufSize > 0, "Target buffer cannot be size zero");
+    SafeStringCopyTruncate(buffer, BufSize, src);
+}
 
-    if (buffer == src) {
-        CRASH("Cannot copy string to same buffer");
-    }
+void SafeStringCopy(char* buffer, size_t bufSize, const char* src);
+void SafeStringCat(char* buffer, size_t bufSize, const char* src);
+int SafeStringVPrintf(char* buffer, size_t bufSize, const char* src, std::va_list args);
 
-    strncpyProxy(buffer, src, BufSize);
-    buffer[BufSize - 1] = 0;
+inline void SafeStringCopy(TextSpan dst, const char* src) {
+    SafeStringCopy(dst.buffer, dst.size, src);
+}
+
+inline void SafeStringCat(TextSpan dst, const char* src) {
+    SafeStringCat(dst.buffer, dst.size, src);
+}
+
+inline int SafeStringPrintf(TextSpan dst, const char* format, ...) {
+    std::va_list args;
+    va_start(args, format);
+    const auto ret = SafeStringVPrintf(dst.buffer, dst.size, format, args);
+    va_end(args);
+
+    return ret;
 }
 
 /**
@@ -41,18 +89,40 @@ void SafeStringCopyTruncate(char (&buffer)[BufSize], const char* src) {
 template <size_t BufSize>
 void SafeStringCopy(char (&buffer)[BufSize], const char* src) {
     static_assert(BufSize > 0, "Target buffer cannot be size zero");
-    if (buffer == src) {
-        CRASH("Cannot copy string to same buffer");
-    }
-
-    if (strlen(src) > BufSize - 1) {
-        CRASH("Destination buffer too small!");
-    }
-
-    strncpyProxy(buffer, src, BufSize);
-    buffer[BufSize - 1] = 0;
+    SafeStringCopy(buffer, BufSize, src);
 }
 
+template <size_t BufSize>
+void SafeStringCat(char (&buffer)[BufSize], const char* src) {
+    static_assert(BufSize > 0, "Target buffer cannot be size zero");
+    SafeStringCat(buffer, BufSize, src);
+}
+
+template <size_t BufSize>
+int SafeStringPrintf(char (&buffer)[BufSize], const char* format, ...) {
+    static_assert(BufSize > 0, "Target buffer cannot be size zero");
+
+    std::va_list args;
+    va_start(args, format);
+    const auto ret = SafeStringVPrintf(buffer, BufSize, format, args);
+    va_end(args);
+
+    return ret;
+}
+
+#if TARGET_PC
+#define SAFE_STRCPY dusk::SafeStringCopy
+#define SAFE_STRCAT dusk::SafeStringCat
+#define SAFE_SPRINTF dusk::SafeStringPrintf
+#define SAFE_STRCPY_BOUNDED dusk::SafeStringCopy
+#define SAFE_STRCAT_BOUNDED dusk::SafeStringCat
+#else
+#define SAFE_STRCPY strcpy
+#define SAFE_STRCAT strcat
+#define SAFE_SPRINTF sprintf
+#define SAFE_STRCPY_BOUNDED strcpy
+#define SAFE_STRCPY_BOUNDED strcat
+#endif
 }
 
 #endif  // DUSK_STRING_HPP

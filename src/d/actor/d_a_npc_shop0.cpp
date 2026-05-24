@@ -8,6 +8,8 @@
 #include "d/actor/d_a_npc_shop0.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Shop0_c*>(i_this)->createHeap();
 }
@@ -184,8 +186,8 @@ int daNpc_Shop0_c::init() {
 static char l_fileName[21];
 
 J3DAnmTransform* daNpc_Shop0_c::getTrnsfrmAnmP(int i_fileIndex, char** i_fileName) {
-    strcpy(l_fileName, i_fileName[i_fileIndex]);
-    strcat(l_fileName, ".bck");
+    SAFE_STRCPY(l_fileName, i_fileName[i_fileIndex]);
+    SAFE_STRCAT(l_fileName, ".bck");
     return (J3DAnmTransform*) dComIfG_getObjectRes(getResName(), l_fileName);
 }
 

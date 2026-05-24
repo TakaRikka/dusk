@@ -7,6 +7,10 @@ on:
       - '*LICENSE'
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
   SCCACHE_GHA_ENABLED: "true"
   RUSTC_WRAPPER: "sccache"
@@ -22,13 +26,13 @@ jobs:
       matrix:
         include:
           - name: GCC x86_64
-            runner: ubuntu-latest
+            runner: ubuntu-24.04
             preset: gcc
             artifact_arch: x86_64
-          # - name: GCC aarch64
-          #   runner: ubuntu-24.04-arm
-          #   preset: gcc
-          #   artifact_arch: aarch64
+          - name: GCC aarch64
+            runner: ubuntu-24.04-arm
+            preset: gcc
+            artifact_arch: aarch64
           # - name: Clang x86_64
           #   runner: ubuntu-latest
           #   preset: clang
@@ -221,12 +225,12 @@ jobs:
             msvc_arch: amd64
             vcpkg_arch: x64
             artifact_arch: x86_64
-          # - name: MSVC arm64
-          #   runner: windows-11-arm
-          #   preset: arm64-msvc
-          #   msvc_arch: arm64
-          #   vcpkg_arch: arm64
-          #   artifact_arch: arm64
+          - name: MSVC arm64
+            runner: windows-latest
+            preset: arm64-msvc
+            msvc_arch: amd64_arm64
+            vcpkg_arch: arm64
+            artifact_arch: arm64
           # - name: Clang x86_64
           #   runner: windows-latest
           #   preset: clang
@@ -255,7 +259,7 @@ jobs:
       - name: Install dependencies
         run: |
           choco install ninja
-          vcpkg install freetype:${{matrix.vcpkg_arch}}-windows-static zstd:${{matrix.vcpkg_arch}}-windows-static
+          vcpkg install freetype:${{matrix.vcpkg_arch}}-windows zstd:${{matrix.vcpkg_arch}}-windows
 
       - name: Configure CMake
         run: cmake --preset x-windows-ci-${{matrix.preset}}

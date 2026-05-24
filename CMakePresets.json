@@ -33,7 +33,11 @@
           "value": true
         },
         "DUSK_SENTRY_DSN": "$env{SENTRY_DSN}",
-        "DUSK_SENTRY_ENVIRONMENT": "production"
+        "DUSK_SENTRY_ENVIRONMENT": "production",
+        "Rust_RUSTUP_INSTALL_MISSING_TARGET": {
+          "type": "BOOL",
+          "value": true
+        }
       }
     },
     {
@@ -430,7 +434,6 @@
         "x-macos-ci"
       ],
       "cacheVariables": {
-        "AURORA_DAWN_PROVIDER": "vendor",
         "CMAKE_OSX_ARCHITECTURES": "x86_64",
         "Rust_CARGO_TARGET": "x86_64-apple-darwin"
       }
@@ -490,7 +493,10 @@
       "inherits": [
         "x-windows-ci",
         "windows-arm64-msvc"
-      ]
+      ],
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "arm64-windows"
+      }
     }
   ],
   "buildPresets": [

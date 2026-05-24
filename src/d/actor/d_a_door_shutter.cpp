@@ -65,10 +65,10 @@ char* daDoor20_c::getBmdName() {
     case 10:
     case 12:
     default:
-        sprintf(bmdName, "door-shutter_%02d.bmd", door_param2_c::getDoorModel(this));
+        SAFE_SPRINTF(bmdName, "door-shutter_%02d.bmd", door_param2_c::getDoorModel(this));
         break;
     case 9:
-        sprintf(bmdName, "door-knob_%02d.bmd", door_param2_c::getDoorModel(this));
+        SAFE_SPRINTF(bmdName, "door-knob_%02d.bmd", door_param2_c::getDoorModel(this));
         break;
     }
     return bmdName;
