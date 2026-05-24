@@ -11,6 +11,8 @@ enum class ActionBinds {
     CALL_MIDNA,
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
+    QUICK_TRANSFORM,
+    SUN_SONG,
     COUNT,
 };
 

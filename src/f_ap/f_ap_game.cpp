@@ -29,6 +29,7 @@
 #include "tracy/Tracy.hpp"
 #include <dusk/gamepad_color.h>
 #include <dusk/autosave.h>
+#include <dusk/action_bindings.h>
 #endif
 
 fapGm_HIO_c::fapGm_HIO_c() {
@@ -756,13 +757,13 @@ static void duskExecute() {
         isRecording = false;
     }
 
-    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1)) {
+    if (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getTrigX(PAD_1) || IF_DUSK(dusk::getActionBindTrig(dusk::ActionBinds::SUN_SONG, 0))) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleWolfHowl();
         }
     }
 
-    if ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1)) {
+    if ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1) || IF_DUSK(dusk::getActionBindTrig(dusk::ActionBinds::QUICK_TRANSFORM, 0))) {
         if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
             dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
         }
