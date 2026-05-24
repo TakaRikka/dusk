@@ -16,6 +16,7 @@ ActionBindsMap& getActionBinds() {
         {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
         {ActionBinds::QUICK_TRANSFORM,     {&getSettings().actionBindings.quickTransform,    "Quick Transform"}},
         {ActionBinds::SUN_SONG,            {&getSettings().actionBindings.sunSong,           "Sun's Song"}},
+        {ActionBinds::MOON_JUMP,           {&getSettings().actionBindings.moonJump,          "Moon Jump"}},
     };
     return actionBinds;
 }

@@ -13,6 +13,7 @@ enum class ActionBinds {
     TURBO_SPEED_BUTTON,
     QUICK_TRANSFORM,
     SUN_SONG,
+    MOON_JUMP,
     COUNT,
 };
 
