@@ -430,7 +430,6 @@
         "x-macos-ci"
       ],
       "cacheVariables": {
-        "AURORA_DAWN_PROVIDER": "vendor",
         "CMAKE_OSX_ARCHITECTURES": "x86_64",
         "Rust_CARGO_TARGET": "x86_64-apple-darwin"
       }
