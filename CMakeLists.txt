@@ -100,16 +100,8 @@ project(dusklight LANGUAGES C CXX VERSION ${DUSK_VERSION_STRING})
 if (APPLE)
     enable_language(OBJC OBJCXX)
 endif ()
-if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    # Adjust CMAKE_SYSTEM_PROCESSOR on Windows to match compiler target
-    if (CMAKE_C_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64" OR CMAKE_C_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64EC")
-        set(CMAKE_SYSTEM_PROCESSOR "ARM64")
-    elseif (CMAKE_C_COMPILER_ARCHITECTURE_ID STREQUAL "x64")
-        set(CMAKE_SYSTEM_PROCESSOR "AMD64")
-    elseif (CMAKE_C_COMPILER_ARCHITECTURE_ID STREQUAL "X86")
-        set(CMAKE_SYSTEM_PROCESSOR "X86")
-    endif ()
-endif ()
+# Adjust CMAKE_SYSTEM_PROCESSOR on Windows to match compiler target
+include(cmake/WindowsTargetProcessor.cmake)
 if (APPLE AND NOT TVOS AND CMAKE_SYSTEM_NAME STREQUAL tvOS)
     # ios.toolchain.cmake hack for SDL
     set(TVOS ON)
@@ -178,6 +170,7 @@ if (DUSK_MOVIE_SUPPORT)
         endif ()
         set(_jpeg_cmake_args
             -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
+            -DCMAKE_PROJECT_INCLUDE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/WindowsTargetProcessor.cmake
             -DENABLE_SHARED=OFF
             -DWITH_TURBOJPEG=ON
             -DWITH_JAVA=OFF
