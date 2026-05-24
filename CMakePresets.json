@@ -33,7 +33,11 @@
           "value": true
         },
         "DUSK_SENTRY_DSN": "$env{SENTRY_DSN}",
-        "DUSK_SENTRY_ENVIRONMENT": "production"
+        "DUSK_SENTRY_ENVIRONMENT": "production",
+        "Rust_RUSTUP_INSTALL_MISSING_TARGET": {
+          "type": "BOOL",
+          "value": true
+        }
       }
     },
     {
