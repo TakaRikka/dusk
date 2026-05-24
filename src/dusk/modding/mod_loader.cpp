@@ -351,7 +351,7 @@ static std::string_view getFileNameWithoutExtension(const std::string_view fileN
 static DllLocateResult LocateDllInBundle(ModBundle& bundle) {
     std::string dllEntry, dllFallback;
     for (const auto name : bundle.getFileNames()) {
-        if (!name.ends_with(".dll"sv)) {
+        if (!name.ends_with(".dll"sv) && !name.ends_with(".dylib"sv) && !name.ends_with(".so"sv)) {
             continue;
         }
 
