@@ -754,7 +754,7 @@ void myGXVerifyCallback(GXWarningLevel param_1, u32 param_2, const char* param_3
 #endif
 
 int mDoMch_Create() {
-#if !TARGET_PC // We want crash logs.
+#ifdef NDEBUG
     if (mDoMain::developmentMode == 0 || !(OSGetConsoleType() & 0x10000000)) {
         OSReportDisable();
     }

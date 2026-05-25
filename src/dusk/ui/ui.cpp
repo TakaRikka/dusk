@@ -15,6 +15,7 @@
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
+#include "dusk/config.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -60,6 +61,7 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
+    config::Save();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();
@@ -315,6 +317,7 @@ NavCommand map_nav_event(const Rml::Event& event) noexcept {
     case Rml::Input::KeyIdentifier::KI_ESCAPE:
         return NavCommand::Cancel;
     case Rml::Input::KeyIdentifier::KI_RETURN:
+    case Rml::Input::KeyIdentifier::KI_NUMPADENTER:
         return NavCommand::Confirm;
     case Rml::Input::KeyIdentifier::KI_F1:
         return event.GetParameter<int>("shift_key", 0) ? NavCommand::None : NavCommand::Menu;

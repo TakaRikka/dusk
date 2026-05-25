@@ -3530,6 +3530,15 @@ void daKago_c::action() {
 #endif
     mStickY = mDoCPd_c::getStickY(PAD_1);
 
+#ifdef TARGET_PC
+    if(dusk::getSettings().game.invertAirSwimX) {
+        mStickX = -mStickX;
+    }
+    if(dusk::getSettings().game.invertAirSwimY) {
+        mStickY = -mStickY;
+    }
+#endif
+
     u8 prevIsWaterfall = mIsWaterfall;
     mIsWaterfall = FALSE;
     fpcM_Search(s_waterfall, this);

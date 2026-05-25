@@ -1263,7 +1263,7 @@ bool dPa_control_c::readScene(u8 param_0, mDoDvdThd_toMainRam_c** param_1) {
     JUT_ASSERT(2647, !mSceneCount++);
     field_0x18 = param_0;
     static char jpcName[32];
-    sprintf(jpcName, "/res/Particle/Pscene%03d.jpc", param_0);
+    SAFE_SPRINTF(jpcName, "/res/Particle/Pscene%03d.jpc", param_0);
     *param_1 = mDoDvdThd_toMainRam_c::create(jpcName, 0, m_resHeap);
     return 1;
 }

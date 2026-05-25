@@ -26,7 +26,7 @@ int daSetBgObj_c::CreateInit() {
 int daSetBgObj_c::create() {
     fopAcM_ct(this, daSetBgObj_c);
 
-    sprintf(mArcName, "%s", getArcName(this));
+    SAFE_SPRINTF(mArcName, "%s", getArcName(this));
 
     int phase = dComIfG_resLoad(&mPhase, mArcName);
     if (phase == cPhs_COMPLEATE_e) {

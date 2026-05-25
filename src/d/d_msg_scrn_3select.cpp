@@ -294,15 +294,15 @@ void dMsgScrn3Select_c::setString(char* mpText0, char* mpText1, char* mpText2) {
     }
 
     if (mpTmSel_c[0] != NULL) {
-        strcpy(((J2DTextBox*)(mpTmSel_c[0]->getPanePtr()))->getStringPtr(), mpText0);
+        SAFE_STRCPY(((J2DTextBox*)(mpTmSel_c[0]->getPanePtr()))->getStringPtr(), mpText0);
     }
 
     if (mpTmSel_c[1] != NULL) {
-        strcpy(((J2DTextBox*)(mpTmSel_c[1]->getPanePtr()))->getStringPtr(), mpText1);
+        SAFE_STRCPY(((J2DTextBox*)(mpTmSel_c[1]->getPanePtr()))->getStringPtr(), mpText1);
     }
 
     if (mpTmSel_c[2] != NULL) {
-        strcpy(((J2DTextBox*)(mpTmSel_c[2]->getPanePtr()))->getStringPtr(), mpText2);
+        SAFE_STRCPY(((J2DTextBox*)(mpTmSel_c[2]->getPanePtr()))->getStringPtr(), mpText2);
     }
 }
 
@@ -323,15 +323,15 @@ void dMsgScrn3Select_c::setRubyString(char* pText0, char* pText1, char* pText2) 
     }
 
     if (mpTmrSel_c[0] != NULL) {
-        strcpy(((J2DTextBox*)(mpTmrSel_c[0]->getPanePtr()))->getStringPtr(), pText0);
+        SAFE_STRCPY(((J2DTextBox*)(mpTmrSel_c[0]->getPanePtr()))->getStringPtr(), pText0);
     }
 
     if (mpTmrSel_c[1] != NULL) {
-        strcpy(((J2DTextBox*)(mpTmrSel_c[1]->getPanePtr()))->getStringPtr(), pText1);
+        SAFE_STRCPY(((J2DTextBox*)(mpTmrSel_c[1]->getPanePtr()))->getStringPtr(), pText1);
     }
 
     if (mpTmrSel_c[2] != NULL) {
-        strcpy(((J2DTextBox*)(mpTmrSel_c[2]->getPanePtr()))->getStringPtr(), pText2);
+        SAFE_STRCPY(((J2DTextBox*)(mpTmrSel_c[2]->getPanePtr()))->getStringPtr(), pText2);
     }
 }
 

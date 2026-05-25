@@ -928,6 +928,103 @@ void mDoGph_drawFilterQuad(s8 param_0, s8 param_1) {
     GXTexCoord2s8(0, 1);
     GXEnd();
 }
+
+static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, u16 dstWidth, u16 dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
+    GXSetTexCopyDst(dstWidth, dstHeight, dstFmt, FALSE);
+    GXCopyTex((void*)texID, false);
+    GXInitTexObj(pDst, (void*)texID, dstWidth, dstHeight, dstFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(pDst, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+}
+
+static void drawDepth_blurTex(TGXTexObj &dst) {
+    u32 hw = u32(JUTVideo::getManager()->getRenderWidth()) >> 1;
+    u32 hh = u32(JUTVideo::getManager()->getRenderHeight()) >> 1;
+
+    Mtx44 ortho;
+    C_MTXOrtho(ortho, 0.0f, hh, 0.0f, hw, 0.0f, 10.0f);
+    GXLoadPosMtxImm(cMtx_getIdentity(), GX_PNMTX0);
+    GXSetProjection(ortho, GX_ORTHOGRAPHIC);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
+
+    GXCreateFrameBuffer(hw, hh);
+
+    auto divCopySrc = [&](int divNo) {
+        u32 w = u32(hw) >> divNo, h = u32(hh) >> divNo;
+        GXSetTexCopySrc(0, 0, w, h);
+    };
+
+    enum { MaxTexNum = 4 };
+    TGXTexObj tmpTex[MaxTexNum];
+    auto divCopyTex = [&](uintptr_t texNo, int divNo) -> GXTexObj* {
+        u32 w = u32(hw) >> divNo, h = u32(hh) >> divNo;
+        CopyToTexObj(&tmpTex[texNo], texNo, w, h);
+        return &tmpTex[texNo];
+    };
+
+    auto divQuad = [&](int divNo) {
+        u32 w = u32(hw) >> divNo, h = u32(hh) >> divNo;
+        f32 x0 = 0.0f, y0 = 0.0f;
+        f32 x1 = w, y1 = h;
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(x0, y0, -5);
+        GXTexCoord2s8(0, 0);
+        GXPosition3f32(x1, y0, -5);
+        GXTexCoord2s8(1, 0);
+        GXPosition3f32(x1, y1, -5);
+        GXTexCoord2s8(1, 1);
+        GXPosition3f32(x0, y1, -5);
+        GXTexCoord2s8(0, 1);
+        GXEnd();
+    };
+
+    u32 texMtxID = GX_TEXMTX0;
+    int angle = 0;
+    float blurScale = 0.003f;
+    GXSetNumTexGens(8);
+    GXSetNumTevStages(8);
+    for (int stage = 0; stage < 8; stage++) {
+        GXSetTexCoordGen((GXTexCoordID)stage, GX_TG_MTX2x4, GX_TG_TEX0, texMtxID);
+        mDoMtx_stack_c::transS(
+            (blurScale * cM_scos(angle)) * mDoGph_gInf_c::getInvScale(), blurScale * cM_ssin(angle), 0.0f);
+        GXLoadTexMtxImm(mDoMtx_stack_c::get(), texMtxID, GX_MTX2x4);
+        texMtxID += 3;
+        angle += 0x2000;
+
+        GXTevStageID tevStage = (GXTevStageID)stage;
+        GXSetTevOrder(tevStage, (GXTexCoordID)stage, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorIn(tevStage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_A1, stage == 0 ? GX_CC_ZERO : GX_CC_CPREV);
+        GXSetTevColorOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(tevStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevAlphaOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    }
+    GXSetTevColor(GX_TEVREG1, {0, 0, 0, 256 / 8});
+
+    // assume the input tex obj is in GX_TEXMAP1
+    int divNum = 3;
+    for (int i = 0; i < divNum; i++) {
+        // Apply blur filter.
+        divQuad(i);
+
+        // Copy to next layer.
+        divCopySrc(i);
+
+        // Set up for the next pass down.
+        GXTexObj* blurTex = divCopyTex(i, i + 1);
+        GXLoadTexObj(blurTex, GX_TEXMAP1);
+    }
+
+    // upsample back to half-res buffer 0
+    divQuad(0);
+    divCopySrc(0);
+    CopyToTexObj(&dst, 100, hw, hh);
+
+    GXRestoreFrameBuffer();
+}
 #endif
 
 static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_2) {
@@ -1081,6 +1178,21 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
             }
             #endif
 
+#if TARGET_PC
+            if (dusk::getSettings().game.depthOfFieldMode.getValue() == dusk::DepthOfFieldMode::Off)
+                return;
+
+            if (!(l_tevColor0.a > -255 && sp8 == 1))
+                return;
+
+            TGXTexObj blurTex;
+            if (dusk::getSettings().game.depthOfFieldMode.getValue() == dusk::DepthOfFieldMode::Dusk)
+            {
+                drawDepth_blurTex(blurTex);
+                GXLoadTexObj(&blurTex, GX_TEXMAP1);
+            }
+#endif
+
             GXSetTevColorS10(GX_TEVREG0, l_tevColor0);
             GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_ALPHA, GX_CH_GREEN, GX_CH_BLUE, GX_CH_RED);
             GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP3);
@@ -1129,37 +1241,42 @@ static void drawDepth2(view_class* param_0, view_port_class* param_1, int param_
                     param_1->x_orig + param_1->width, 0.0f, 10.0f);
             GXLoadPosMtxImm(cMtx_getIdentity(), 0);
 
-            #if DEBUG
+#if DEBUG
             mDoMtx_stack_c::transS(g_kankyoHIO.navy.demo_focus_offset_x, g_kankyoHIO.navy.demo_focus_offset_y, 0.0f);
-            #else
+#else
             mDoMtx_stack_c::transS(0.0025f, 0.0025f, 0.0f);
-            #endif
-            GXLoadTexMtxImm(mDoMtx_stack_c::get(), 0x1e, GX_MTX2x4);
+#endif
+            GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX0, GX_MTX2x4);
 
-            #if DEBUG
+#if DEBUG
             mDoMtx_stack_c::transS(-g_kankyoHIO.navy.demo_focus_offset_x, -g_kankyoHIO.navy.demo_focus_offset_y, 0.0f);
-            #else
+#else
             mDoMtx_stack_c::transS(-0.0025f, -0.0025f, 0.0f);
-            #endif
-            GXLoadTexMtxImm(mDoMtx_stack_c::get(), 0x21, GX_MTX2x4);
+#endif
+            GXLoadTexMtxImm(mDoMtx_stack_c::get(), GX_TEXMTX1, GX_MTX2x4);
 
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_POS_XYZ, GX_S8, 0);
-            GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c);
-            GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x1e);
-            GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, 0x21);
+            GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+            GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
+            GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
             GXSetNumChans(0);
             GXSetNumTexGens(3);
             GXSetNumTevStages(4);
-            GXSetProjection(ortho, GX_ORTHOGRAPHIC);
-            GXSetCurrentMtx(0);
 
-#ifdef TARGET_PC
-            if (dusk::getSettings().game.enableDepthOfField)
+            GXSetProjection(ortho, GX_ORTHOGRAPHIC);
+            GXSetCurrentMtx(GX_PNMTX0);
+
+#if TARGET_PC
+            if (dusk::getSettings().game.depthOfFieldMode.getValue() == dusk::DepthOfFieldMode::Dusk) {
+                GXSetNumTevStages(3);
+                GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
+            }
 #endif
+
             if (l_tevColor0.a > -255 && sp8 == 1) {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3s16(x_orig, y_orig_pos, -5);
@@ -1334,19 +1451,8 @@ void mDoGph_gInf_c::bloom_c::remove() {
 }
 
 #if TARGET_PC
-static void CopyToTexObj(GXTexObj* pDst, uintptr_t texID, u16 dstWidth, u16 dstHeight, GXTexFmt dstFmt = GX_TF_RGBA8) {
-    GXSetTexCopyDst(dstWidth, dstHeight, dstFmt, FALSE);
-    GXCopyTex((void*)texID, false);
-    GXInitTexObj(pDst, (void*)texID, dstWidth, dstHeight, dstFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GXInitTexObjLOD(pDst, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-}
-
 void mDoGph_gInf_c::bloom_c::draw2() {
     ZoneScoped;
-    // if (!dusk::getSettings().game.enableBloom) {
-    //     return;
-    // }
-
     bool enabled = mEnable;
     if (mMonoColor.a == 0 && !enabled)
         return;

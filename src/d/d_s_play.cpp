@@ -163,22 +163,22 @@ void dScnPly_reg_childHIO_c::genMessage(JORMContext* mctx) {
     char textbuf[8];
 
     for (int i = 0; i < 20; i++) {
-        sprintf(textbuf, " F(%02d)", i);
+        SAFE_SPRINTF(textbuf, " F(%02d)", i);
         mctx->genSlider(textbuf, &mFloatReg[i], -100000.0f, 100000.0f);
     }
 
     for (int i = 20; i < 25; i++) {
-        sprintf(textbuf, " F(%02d)", i);
+        SAFE_SPRINTF(textbuf, " F(%02d)", i);
         mctx->genSlider(textbuf, &mFloatReg[i], 0.0f, 1.0f);
     }
 
     for (int i = 25; i < 30; i++) {
-        sprintf(textbuf, " F(%02d)", i);
+        SAFE_SPRINTF(textbuf, " F(%02d)", i);
         mctx->genSlider(textbuf, &mFloatReg[i], -1.0f, 1.0f);
     }
 
     for (int i = 0; i < 10; i++) {
-        sprintf(textbuf, " S(%02d)", i);
+        SAFE_SPRINTF(textbuf, " S(%02d)", i);
         mctx->genSlider(textbuf, &mShortReg[i], -0x8000, 0x7FFF);
     }
 }

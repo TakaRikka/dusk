@@ -1224,8 +1224,8 @@ BOOL dDlst_TimerScrnDraw_c::closeAnime() {
 int dDlst_TimerScrnDraw_c::createGetIn(cXyz i_pos) {
     char string[104];
     dMeter2Info_getString(0x3E4, string, NULL);  // "GOAT IN!"
-    strcpy(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), string);
-    strcpy(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), string);
+    SAFE_STRCPY(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), string);
+    SAFE_STRCPY(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), string);
 
     if (mCowID < 50) {
         m_getin_info[mCowID].bck_frame = 40.0f;
@@ -1313,8 +1313,8 @@ int dDlst_TimerScrnDraw_c::createGetIn(cXyz i_pos) {
 s32 dDlst_TimerScrnDraw_c::createStart(u16 i_messageID) {
     char string[112];
     dMeter2Info_getString(i_messageID, string, NULL);
-    strcpy(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), string);
-    strcpy(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), string);
+    SAFE_STRCPY(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), string);
+    SAFE_STRCPY(static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), string);
 
     if (mCowID == 0) {
         m_getin_info[mCowID].bck_frame = 40.0f;

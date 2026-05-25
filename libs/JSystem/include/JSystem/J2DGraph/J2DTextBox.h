@@ -4,6 +4,7 @@
 #include "JSystem/J2DGraph/J2DMaterial.h"
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "dusk/endian.h"
+#include "dusk/string.hpp"
 
 class J2DMaterial;
 class JUTFont;
@@ -98,7 +99,8 @@ public:
     void initiate(ResFONT const*, char const*, s16, J2DTextBoxHBinding,
                                  J2DTextBoxVBinding);
     void private_readStream(J2DPane*, JSURandomInputStream*, JKRArchive*);
-    char* getStringPtr() const;
+    TEXT_SPAN getStringPtr() const;
+    dusk::TextSpan getSpan() const;
     s32 setString(s16, char const*, ...);
     s32 setString(char const*, ...);
 

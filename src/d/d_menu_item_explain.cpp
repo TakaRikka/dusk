@@ -508,12 +508,12 @@ void dMenu_ItemExplain_c::move_select_init() {
              "\x1B"
              "CR[%d]",
              (int)(0.5f * (length - stringLength1)));
-    strcat(local_64, local_88);
+    SAFE_STRCAT(local_64, local_88);
     snprintf(cStack78, 20,
              "\x1B"
              "CR[%d]",
              (int)(0.5f * (length - stringLength2)));
-    strcat(cStack78, local_80);
+    SAFE_STRCAT(cStack78, local_80);
     mpSelect_c->setString("", local_64, cStack78);
     mpSelect_c->setRubyString("", "", "");
     mpSelect_c->selAnimeInit(2, field_0xe2 + 1, 0, length, 0);

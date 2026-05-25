@@ -317,7 +317,7 @@ void dMsgScrnExplain_c::draw(J2DOrthoGraph* i_graf) {
     }
 
     char string_buf[STR_BUF_LEN];
-    strcpy(string_buf, ((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr());
+    SAFE_STRCPY(string_buf, ((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr());
 
     mpTxScreen->draw(0.0f, 0.0f, (J2DGrafContext*)i_graf);
 #if VERSION == VERSION_GCN_JPN
@@ -327,7 +327,7 @@ void dMsgScrnExplain_c::draw(J2DOrthoGraph* i_graf) {
 #endif
     mpString_c->drawOutFont((J2DTextBox*)mpTm_c[0]->getPanePtr(), -1.0f);
 
-    strcpy(((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr(), string_buf);
+    SAFE_STRCPY(((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr(), string_buf);
 
     if (mpSelect_c != NULL && (field_0x64 == 1 || field_0x64 == 2)) {
         // the magic numbers here are relative to the framebuffer size, but were likely
@@ -370,11 +370,11 @@ void dMsgScrnExplain_c::open_request_proc() {
     bool rt = dMsgObject_getString(mOpenMsgId, tbox, rubyTbox, mDoExt_getMesgFont(), mpOutFont, text,
                                    ruby, textShadow, &field_0x5c);
     if (rt) {
-        strcpy(((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr(), text);
-        strcpy(((J2DTextBox*)mpTm_c[1]->getPanePtr())->getStringPtr(), textShadow);
+        SAFE_STRCPY(((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr(), text);
+        SAFE_STRCPY(((J2DTextBox*)mpTm_c[1]->getPanePtr())->getStringPtr(), textShadow);
         for (int i = 0; i < 2; i++) {
             if (mpTmr_c[i] != NULL) {
-                strcpy(((J2DTextBox*)mpTmr_c[i]->getPanePtr())->getStringPtr(), ruby);
+                SAFE_STRCPY(((J2DTextBox*)mpTmr_c[i]->getPanePtr())->getStringPtr(), ruby);
             }
         }
 
@@ -483,12 +483,12 @@ void dMsgScrnExplain_c::move_select_init() {
              "\x1B"
              "CR[%d]",
              (int)var_f28);
-    strcat(string_buf_yes, msg_buf_yes);
+    SAFE_STRCAT(string_buf_yes, msg_buf_yes);
     snprintf(string_buf_no, 20,
              "\x1B"
              "CR[%d]",
              (int)var_f27);
-    strcat(string_buf_no, msg_buf_no);
+    SAFE_STRCAT(string_buf_no, msg_buf_no);
 
     mpSelect_c->setString("", string_buf_yes, string_buf_no);
     mpSelect_c->setRubyString("", "", "");

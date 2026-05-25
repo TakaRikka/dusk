@@ -2192,6 +2192,9 @@ static void damage_check(b_gnd_class* i_this) {
                             i_this->mDamageInvulnerabilityTimer = 100;
                         }
                     }
+                    #if TARGET_PC
+                    dusk::AchievementSystem::get().signal("ganondorf_hit");
+                    #endif
                 }
 
                 cXyz hitmark_size(1.0f, 1.0f, 1.0f);
@@ -2218,6 +2221,7 @@ static void damage_check(b_gnd_class* i_this) {
                     i_this->field_0xc7c = 0;
                     dScnPly_c::setPauseTimer(7);
                     a_this->health = 100;
+                    dusk::AchievementSystem::get().signal("ganondorf_knocked_down");
                 }
                 break;
             }

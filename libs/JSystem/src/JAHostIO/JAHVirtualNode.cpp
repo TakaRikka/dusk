@@ -2,6 +2,8 @@
 #include <JSystem/JUtility/JUTAssert.h>
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 u32 JAHVirtualNode::smVirNodeNum;
 
 void JAHVirtualNode::virtualMessage(JAHControl& control) {
@@ -77,7 +79,7 @@ void JAHVirtualNode::setVirNodeName(const char* name) {
     // clang-format off
     JUT_ASSERT(141, size<32);
     // clang-format on
-    strcpy(mName, name);
+    SAFE_STRCPY(mName, name);
 }
 
 JAHVirtualNode::JAHVirtualNode(const char* name) : mTree(this) {

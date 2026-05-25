@@ -15,6 +15,12 @@ enum class BloomMode : int {
     Dusk = 2,
 };
 
+enum class DepthOfFieldMode : int {
+    Off = 0,
+    Classic = 1,
+    Dusk = 2,
+};
+
 enum class Resampler : int {
     Bilinear = 0,
     Area = 1,
@@ -56,6 +62,12 @@ template <>
 struct ConfigEnumRange<BloomMode> {
     static constexpr auto min = BloomMode::Off;
     static constexpr auto max = BloomMode::Dusk;
+};
+
+template <>
+struct ConfigEnumRange<DepthOfFieldMode> {
+    static constexpr auto min = DepthOfFieldMode::Off;
+    static constexpr auto max = DepthOfFieldMode::Dusk;
 };
 
 template <>
@@ -160,13 +172,13 @@ struct UserSettings {
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
+        ConfigVar<DepthOfFieldMode> depthOfFieldMode;
         ConfigVar<bool> disableWaterRefraction;
         ConfigVar<bool> enableTextureReplacements;
         ConfigVar<FrameInterpMode> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
         ConfigVar<Resampler> resampler;
-        ConfigVar<bool> enableDepthOfField;
         ConfigVar<bool> enableMapBackground;
         ConfigVar<bool> disableCutscenePillarboxing;
 
@@ -195,6 +207,8 @@ struct UserSettings {
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<bool> invertFirstPersonXAxis;
         ConfigVar<bool> invertFirstPersonYAxis;
+        ConfigVar<bool> invertAirSwimX;
+        ConfigVar<bool> invertAirSwimY;
         ConfigVar<float> freeCameraSensitivity;
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
