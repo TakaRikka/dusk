@@ -48,6 +48,7 @@
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
 #include "dusk/app_info.hpp"
+#include "dusk/crash_handler.h"
 #include "dusk/crash_reporting.h"
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
@@ -548,6 +549,7 @@ int game_main(int argc, char* argv[]) {
     }
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::crash_reporting::initialize();
+    dusk::crash_handler::install();
     // TODO: How to handle this?
     // PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
 

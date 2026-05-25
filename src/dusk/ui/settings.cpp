@@ -957,6 +957,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
             "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
+            "Invert horizontal movement while flying or swimming.");
+        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
+            "Invert vertical movement while flying or swimming.");
 
         leftPane.add_section("Gyro");
         leftPane.register_control(

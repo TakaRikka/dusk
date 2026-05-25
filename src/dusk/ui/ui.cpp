@@ -15,6 +15,7 @@
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
+#include "dusk/config.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -60,6 +61,7 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
+    config::Save();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();

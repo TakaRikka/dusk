@@ -355,6 +355,10 @@ endif ()
 
 if (WIN32)
     list(APPEND GAME_LIBS Ws2_32)
+    if (CMAKE_BUILD_TYPE STREQUAL Debug)
+        list(APPEND GAME_LIBS dbghelp)
+        list(APPEND GAME_COMPILE_DEFS DUSK_CRASH_DBGHELP=1)
+    endif ()
 endif ()
 
 set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/no_backend.cpp)
@@ -489,6 +493,10 @@ if (ANDROID)
     # SDLActivity loads SDL_main via dlsym on Android. Since aurora::main is a static
     # archive, force an undefined reference so the linker keeps the SDL_main object.
     target_link_options(dusklight PRIVATE "-Wl,-u,SDL_main")
+endif ()
+
+if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+    target_link_options(dusklight PRIVATE "-Wl,--build-id=sha1")
 endif ()
 
 if (NOT APPLE)
