@@ -125,4 +125,4 @@ void handleGamepadColor() {
     }
 }
 
-}  // namespace dusk::input::gamepadLed
+}  // namespace dusk::input

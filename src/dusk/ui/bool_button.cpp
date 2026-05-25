@@ -12,8 +12,7 @@ BoolButton::BoolButton(Rml::Element* parent, Props props)
               .icon = std::move(props.icon),
           }),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
-      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)),
-      mIsSupported(std::move(props.isSupported)) {}
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)) {}
 
 bool BoolButton::modified() const {
     if (mIsModified) {
@@ -30,10 +29,7 @@ bool BoolButton::disabled() const {
 }
 
 Rml::String BoolButton::format_value() {
-    if (this->mIsSupported())
-        return mGetValue() ? "On" : "Off";
-
-    return "Not Supported";
+    return mGetValue() ? "On" : "Off";
 }
 
 bool BoolButton::handle_nav_command(NavCommand cmd) {

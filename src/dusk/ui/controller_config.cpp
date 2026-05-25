@@ -314,26 +314,26 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     addPageButton(Page::Actions, "Custom Action Bindings", [] {return Rml::String(">"); }, [] { return false; });
 
     leftPane.add_section("Options");
-    leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
-                              .key = "Enable LED Status",
-                              .getValue =
-                                  [port] {
-                                      return getSettings().game.enableLED[port].getValue();
-                                  },
-                              .setValue =
-                                  [port](const bool value) {
-                                      getSettings().game.enableLED[port].setValue(value);
-                                  },
-                              .isDisabled = [port] {
-                                  return !input::pad_has_led(port);
+    if (input::pad_has_led(port)) {
+        leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
+                          .key = "Enable LED Status",
+                          .getValue =
+                              [port] {
+                                  return getSettings().game.enableLED[port].getValue();
                               },
-                              .isSupported = [port] {
-                                  return input::pad_has_led(port);
-                              }
-                          }),
-    rightPane, [](Pane& pane) {
-        pane.add_text("Sets the controller's lighting color based on the game's state.");
-    });
+                          .setValue =
+                              [port](const bool value) {
+                                  getSettings().game.enableLED[port].setValue(value);
+                              },
+                          .isDisabled = [port] {
+                              return !input::pad_has_led(port);
+                          }
+        }),rightPane, [](Pane& pane) {
+            pane.add_text("Sets the controller's lighting color based on the game's state.");
+        });
+    }
+
+
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
                                   .key = "Enable Dead Zones",
                                   .getValue =

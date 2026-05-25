@@ -12,7 +12,6 @@ public:
         std::function<void(bool)> setValue;
         std::function<bool()> isDisabled;
         std::function<bool()> isModified;
-        std::function<bool()> isSupported = [] { return true; };
     };
 
     BoolButton(Rml::Element* parent, Props props);
