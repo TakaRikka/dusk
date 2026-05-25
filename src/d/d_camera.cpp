@@ -9372,6 +9372,10 @@ bool dCamera_c::rideCamera(s32 param_0) {
             mStyleSettle.mFinished = true;
         }
 
+#if TARGET_PC
+        freeCamera();
+#endif
+
         return true;
     }
 
@@ -9500,6 +9504,10 @@ bool dCamera_c::rideCamera(s32 param_0) {
         mViewCache.mBank += (cSAngle::_0 - mViewCache.mBank) * 0.05f;
         setFlag(0x400);
     }
+
+#if TARGET_PC
+    freeCamera();
+#endif
 
     return true;
 }
