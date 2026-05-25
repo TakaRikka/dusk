@@ -227,12 +227,6 @@ namespace dusk {
                 : "Speed: ?\n"
             );
 
-            ImGuiStringViewText(
-                player != nullptr
-                ? fmt::format("Speed Vector: {: .4f}, {: .4f}, {: .4f}\n", player->speed.x, player->speed.y, player->speed.z)
-                : "Speed Vector: ?, ?, ?\n"
-            );
-
             ImGui::Separator();
             ImGui::Text("Epona");
             ImGuiStringViewText(
@@ -252,13 +246,6 @@ namespace dusk {
                 ? fmt::format("Speed: {: .4f}\n", horse->speedF)
                 : "Speed: ?\n"
             );
-
-            ImGuiStringViewText(
-                horse != nullptr
-                ? fmt::format("Speed Vector: {: .4f}, {: .4f}, {: .4f}\n", horse->speed.x, horse->speed.y, horse->speed.z)
-                : "Speed Vector: ?, ?, ?\n"
-            );
-
 
             ShowCornerContextMenu(m_playerInfoOverlayCorner, m_debugOverlayCorner);
         }
