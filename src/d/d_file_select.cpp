@@ -23,6 +23,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 static s32 SelStartFrameTbl[3] = {
     59,
     99,
@@ -3507,7 +3509,7 @@ void dFile_select_c::headerTxtSet(u16 i_msgId, u8 i_type, u8 param_3) {
     }
 
     if (i_msgId == 0xFFFF) {
-        strcpy(mHeaderStringPtr[dispIdx], "");
+        SAFE_STRCPY(mHeaderStringPtr[dispIdx], "");
     } else {
         static f32 fontsize[2] = {21.0f, 27.0f};
         #if VERSION == VERSION_GCN_JPN
@@ -4182,7 +4184,7 @@ void dFile_select_c::errDispInitSet(char* i_errMesg) {
     mErrorMsgTxtPane[mErrorTxtDispIdx]->setAlpha(0xFF);
     mErrorMsgTxtPane[mErrorTxtDispIdx ^ 1]->setAlpha(0);
 
-    strcpy(mErrorMsgStringPtr[mErrorTxtDispIdx], i_errMesg);
+    SAFE_STRCPY_BOUNDED(mErrorMsgStringPtr[mErrorTxtDispIdx], i_errMesg);
 
     if (field_0x014a) {
         errorMoveAnmInitSet(2859, 2849);
@@ -4391,7 +4393,7 @@ void dFile_select_c::MemCardLoadWait() {
         if (mDoMemCd_getDataVersion() != 6) {
             char errmsg[264];
             // "Savedata version is different\n\nVersion %d\n\nFormatting data."
-            sprintf(errmsg, "セーブデータのバージョンが違います\n\nバージョン %d\n\nデータを初期化します。", mDoMemCd_getDataVersion());
+            SAFE_SPRINTF(errmsg, "セーブデータのバージョンが違います\n\nバージョン %d\n\nデータを初期化します。", mDoMemCd_getDataVersion());
             errDispInitSet(errmsg);
             field_0x0280 = false;
             mWindowCloseMsgDispCb = NULL;
@@ -5237,7 +5239,7 @@ void dFile_select_c::MemCardErrYesNoCursorMoveAnm() {
 
 void dFile_select_c::errorTxtSet(u16 i_msgId) {
     if (i_msgId == 0xffff) {
-        strcpy(mErrorMsgStringPtr[mErrorTxtDispIdx ^ 1], "");
+        SAFE_STRCPY(mErrorMsgStringPtr[mErrorTxtDispIdx ^ 1], "");
     } else {
         fileSel.mMessageString->getString(
             i_msgId, (J2DTextBox*)mErrorMsgTxtPane[mErrorTxtDispIdx ^ 1]->getPanePtr(), NULL,

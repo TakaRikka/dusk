@@ -11,6 +11,8 @@
 #include "d/d_debug_viewer.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     daTag_Msg_c* msg = (daTag_Msg_c*)i_this;
     return msg->createHeap();
@@ -219,7 +221,7 @@ void daTag_Msg_c::getParam() {
 
     scale.x *= 100.0f;
     scale.y *= 100.0f;
-    strcpy(mStaffName, "Tag_ms");
+    SAFE_STRCPY(mStaffName, "Tag_ms");
 }
 
 char* daTag_Msg_c::mEvtCutTBL[2] = {

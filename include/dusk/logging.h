@@ -19,7 +19,11 @@ extern bool StubLogEnabled;
 
 extern aurora::Module DuskLog;
 
+#ifndef NDEBUG
 #define STUB_LOG() DuskLog.debug("{} is a stub", __FUNCTION__)
+#else
+#define STUB_LOG()
+#endif
 
 #if TARGET_PC
 #define STUB_RET(...) \

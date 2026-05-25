@@ -326,7 +326,9 @@
         "BUILD_SHARED_LIBS": {
           "type": "BOOL",
           "value": false
-        }
+        },
+        "AURORA_SDL3_VERSION": "3.4.8",
+        "AURORA_SDL3_REF": "refs/tags/release-3.4.8"
       }
     },
     {

@@ -5,7 +5,7 @@
 #include <queue>
 #include <string>
 #include <string_view>
-#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 #include "nlohmann/json.hpp"
 
@@ -47,6 +47,7 @@ public:
     // Signals are visible to all achievement checks within the same tick, then cleared.
     void signal(const char* key);
     bool hasSignal(const char* key) const;
+    int signalCount(const char* key) const;
 
     std::vector<Achievement> getAchievements() const;
 
@@ -62,7 +63,7 @@ private:
     void processEntry(Entry& e);
 
     std::vector<Entry> m_entries;
-    std::unordered_set<std::string_view> m_signals;
+    std::unordered_map<std::string_view, int> m_signals;
     bool m_loaded = false;
     bool m_dirty = false;
 };

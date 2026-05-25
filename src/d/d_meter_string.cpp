@@ -186,8 +186,8 @@ int dMeterString_c::_delete() {
 int dMeterString_c::createString(int i_stringID) {
     char str_buf[32];
     dMeter2Info_getString(i_stringID, str_buf, NULL);
-    strcpy(static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), str_buf);
-    strcpy(static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), str_buf);
+    SAFE_STRCPY(static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in_s')))->getStringPtr(), str_buf);
+    SAFE_STRCPY(static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('get_in')))->getStringPtr(), str_buf);
 
     mAnimFrame = 40.0f;
     mPikariAnimFrame = -1.0f;

@@ -145,7 +145,7 @@ s32 LOAD_COPYDATE(void*) {
         memcpy(buffer, readBuf, readLen);
         buffer[readLen] = '\0';
     } else {
-        strcpy(buffer, "PC PORT BUILD");
+        SAFE_STRCPY(buffer, "PC PORT BUILD");
         DuskLog.warn("COPYDATE file not found at {}", COPYDATE_PATH);
     }
 

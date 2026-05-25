@@ -16,6 +16,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
 #include "dusk/version.hpp"
 
 typedef void (dMenu_Fishing_c::*initFunc)();
@@ -372,7 +373,7 @@ void dMenu_Fishing_c::screenSetDoIcon() {
 void dMenu_Fishing_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpAButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpAButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {
@@ -384,7 +385,7 @@ void dMenu_Fishing_c::setAButtonString(u16 i_stringID) {
 void dMenu_Fishing_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpBButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpBButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {
@@ -419,29 +420,29 @@ void dMenu_Fishing_c::setFishParam(int i_fishIdx, u16 i_fishCount, u8 i_fishSize
         dComIfGp_setMessageCountNumber(i_fishSize);
         mpString->getString(0x597, field_0x10c[i][i_fishIdx], NULL, NULL, NULL, 0); // "inches"
         char* stringPtr = field_0x10c[i][i_fishIdx]->getStringPtr();
-        strcpy(strBuff1, stringPtr);
+        SAFE_STRCPY(strBuff1, stringPtr);
         int j;
         for (j = 0; strBuff1[j + fishSizeFigure] != 0; j++) {
             strBuff2[j] = strBuff1[j + fishSizeFigure];
         }
         strBuff2[j] = 0;
         strBuff1[fishSizeFigure] = 0;
-        strcpy(field_0x10c[i][i_fishIdx]->getStringPtr(), strBuff1);
-        strcpy(field_0x16c[i][i_fishIdx]->getStringPtr(), strBuff2);
+        SAFE_STRCPY(field_0x10c[i][i_fishIdx]->getStringPtr(), strBuff1);
+        SAFE_STRCPY(field_0x16c[i][i_fishIdx]->getStringPtr(), strBuff2);
 
         // part two, i_fishCount
         dComIfGp_setMessageCountNumber(i_fishCount);
         mpString->getString(0x598, field_0x13c[i][i_fishIdx], NULL, NULL, NULL, 0); // "fish"
         stringPtr = field_0x13c[i][i_fishIdx]->getStringPtr();
-        strcpy(strBuff1, stringPtr);
+        SAFE_STRCPY(strBuff1, stringPtr);
         int k;
         for (k = 0; strBuff1[k + fishCountFigure] != 0; k++) {
             strBuff2[k] = strBuff1[k + fishCountFigure];
         }
         strBuff2[k] = 0;
         strBuff1[fishCountFigure] = 0;
-        strcpy(field_0x13c[i][i_fishIdx]->getStringPtr(), strBuff1);
-        strcpy(field_0x19c[i][i_fishIdx]->getStringPtr(), strBuff2);
+        SAFE_STRCPY(field_0x13c[i][i_fishIdx]->getStringPtr(), strBuff1);
+        SAFE_STRCPY(field_0x19c[i][i_fishIdx]->getStringPtr(), strBuff2);
     }
 }
 

@@ -2289,7 +2289,7 @@ fopAc_ac_c* fopAcM_findObject4EventCB(fopAc_ac_c* i_actor, void* i_data) {
 fopAc_ac_c* fopAcM_searchFromName4Event(char const* i_name, s16 i_eventID) {
     fopAcM_search4ev_prm prm;
     prm.event_id = i_eventID;
-    strcpy(prm.name, i_name);
+    SAFE_STRCPY(prm.name, i_name);
 
     char* chr = std::strchr(prm.name, ':');
     if (chr != NULL) {
@@ -2436,8 +2436,8 @@ bool fopAcM_wt_c::waterCheck(cXyz const* i_pos) {
     return false;
 }
 
-BOOL fopAcM_getNameString(const fopAc_ac_c* i_actor, char* o_name) {
-    strcpy(o_name, dStage_getName(fopAcM_GetProfName(i_actor), i_actor->argument));
+BOOL fopAcM_getNameString(const fopAc_ac_c* i_actor, TEXT_SPAN o_name) {
+    SAFE_STRCPY(o_name, dStage_getName(fopAcM_GetProfName(i_actor), i_actor->argument));
     return TRUE;
 }
 

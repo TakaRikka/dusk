@@ -4494,7 +4494,7 @@ int daMP_c::daMP_c_Init() {
     JUT_ASSERT(9507, 0 <= movieNo && movieNo <= 99);
 
     char path[32];
-    sprintf(path, "/Movie/demo_movie%02d_%02d.thp", demoNo, movieNo);
+    SAFE_SPRINTF(path, "/Movie/demo_movie%02d_%02d.thp", demoNo, movieNo);
 
     if (!daMP_ActivePlayer_Init(path)) {
         daMP_Fail_alloc = TRUE;

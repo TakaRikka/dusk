@@ -461,12 +461,12 @@ int dMsgObject_c::_execute() {
             mpCtrl->setMessageCode(mpRefer->getRevoMessageID());
             mpRefer->setRevoMessageID(0);
             jmessage_tReference* pRef = (jmessage_tReference*)mpRenProc->getReference();
-            strcpy(pRef->getTextPtr(), "");
-            strcpy(pRef->getTextSPtr(), "");
-            strcpy(pRef->getRubyPtr(), "");
+            SAFE_STRCPY(pRef->getTextPtr(), "");
+            SAFE_STRCPY(pRef->getTextSPtr(), "");
+            SAFE_STRCPY(pRef->getRubyPtr(), "");
             for (int i = 0; i < 3; i++) {
-                strcpy(pRef->getSelTextPtr(i), "");
-                strcpy(pRef->getSelRubyPtr(i), "");
+                SAFE_STRCPY(pRef->getSelTextPtr(i), "");
+                SAFE_STRCPY(pRef->getSelRubyPtr(i), "");
             }
         }
         field_0x4ca = mpCtrl->update();
@@ -1021,12 +1021,12 @@ void dMsgObject_c::continueProc() {
         offAutoMessageFlagLocal();
         setMessageIndex(field_0x100->msg_idx, field_0x100->field_0xf0, true);
         mpScrnDraw->fukiPosCalc(pRef->getFukiPosType());
-        strcpy(pRef->getTextPtr(), "");
-        strcpy(pRef->getTextSPtr(), "");
-        strcpy(pRef->getRubyPtr(), "");
+        SAFE_STRCPY(pRef->getTextPtr(), "");
+        SAFE_STRCPY(pRef->getTextSPtr(), "");
+        SAFE_STRCPY(pRef->getRubyPtr(), "");
         for (int i = 0; i < 3; i++) {
-            strcpy(pRef->getSelTextPtr(i), "");
-            strcpy(pRef->getSelRubyPtr(i), "");
+            SAFE_STRCPY(pRef->getSelTextPtr(i), "");
+            SAFE_STRCPY(pRef->getSelRubyPtr(i), "");
         }
         mpScrnDraw->arwAnimeInit();
         mpRenProc->setTextInitPos(mpScrnDraw->getTextBoxPosX(), mpScrnDraw->getTextBoxPosY());
@@ -1737,8 +1737,8 @@ void dMsgObject_c::changeGroupLocal(s16 param_1) {
 }
 
 bool dMsgObject_c::getStringLocal(u32 param_1, J2DTextBox* param_2, J2DTextBox* param_3,
-                                  JUTFont* param_4, COutFont_c* param_5, char* param_6,
-                                  char* param_7, char* param_8, s16* param_9) {
+                                  JUTFont* param_4, COutFont_c* param_5, TEXT_SPAN param_6,
+                                  TEXT_SPAN param_7, TEXT_SPAN param_8, s16* param_9) {
     if (field_0x4cd == 0) {
         if (getStatusLocal() == 1) {
             s16 groupID = getMessageGroup(param_1);
@@ -1781,13 +1781,13 @@ bool dMsgObject_c::getStringLocal(u32 param_1, J2DTextBox* param_2, J2DTextBox* 
                 *param_9 = mpRefer->getCharSoundInfo().field_0x40e;
             }
             if (param_6 != NULL) {
-                strcpy(param_6, pRef->getTextPtr());
+                SAFE_STRCPY(param_6, pRef->getTextPtr());
             }
             if (param_7 != NULL) {
-                strcpy(param_7, pRef->getRubyPtr());
+                SAFE_STRCPY(param_7, pRef->getRubyPtr());
             }
             if (param_8 != NULL) {
-                strcpy(param_8, pRef->getTextSPtr());
+                SAFE_STRCPY(param_8, pRef->getTextSPtr());
             }
             mpCtrl->reset();
             mpCtrl->resetResourceCache();
@@ -2309,8 +2309,8 @@ void dMsgObject_c::changeGroup(s16 param_0) {
 }
 
 bool dMsgObject_c::getString(u32 param_0, J2DTextBox* param_1, J2DTextBox* param_2,
-                             JUTFont* param_3, COutFont_c* param_4, char* param_5, char* param_6,
-                             char* param_7, s16* param_8) {
+                             JUTFont* param_3, COutFont_c* param_4, TEXT_SPAN param_5, TEXT_SPAN param_6,
+                             TEXT_SPAN param_7, s16* param_8) {
     return dMsgObject_getMsgObjectClass()->getStringLocal(
         param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
 }
