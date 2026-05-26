@@ -941,13 +941,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Camera");
         addOption("Free Camera", getSettings().game.freeCamera,
-            "Enables free camera control, letting you control the camera fully with the C-Stick."
-            "<br/><br/>Must be enabled in order to use Mouse Camera.");
+            "Enables free camera control, letting you control the camera fully with the C-Stick.");
         addOption("Invert Free Camera X Axis", getSettings().game.invertCameraXAxis,
-            "Invert horizontal free camera movement.<br/><br/>Applies to joystick input only.",
+            "Invert horizontal free camera movement.<br/><br/>Applies to the control stick only.",
             [] { return !getSettings().game.freeCamera; });
         addOption("Invert Free Camera Y Axis", getSettings().game.invertCameraYAxis,
-            "Invert vertical free camera movement.<br/><br/>Applies to joystick input only.",
+            "Invert vertical free camera movement.<br/><br/>Applies to the control stick only.",
             [] { return !getSettings().game.freeCamera; });
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
             "Free Camera Sensitivity",
@@ -992,9 +991,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Mouse");
         addOption("Mouse Camera", getSettings().game.enableMouseCamera,
-            "Enables mouse input to rotate the third-person camera.<br/><br/>"
-            "Requires the Free Camera option to be enabled.",
-            [] { return !getSettings().game.freeCamera; });
+            "Enables mouse input for controlling the third-person camera.");
         addOption("Mouse Aim", getSettings().game.enableMouseAim,
             "Enables mouse input while in look mode, aiming a hawk, and aiming "
             "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
@@ -1002,12 +999,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivityX,
             "Mouse Camera X Sensitivity", "Controls horizontal mouse camera sensitivity.", 25, 400, 5,
             [] {
-                return !getSettings().game.enableMouseCamera || !getSettings().game.freeCamera;
+                return !getSettings().game.enableMouseCamera;
             });
         config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivityY,
             "Mouse Camera Y Sensitivity", "Controls vertical mouse camera sensitivity.", 25, 400, 5,
             [] {
-                return !getSettings().game.enableMouseCamera || !getSettings().game.freeCamera;
+                return !getSettings().game.enableMouseCamera;
             });
         config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivityX,
             "Mouse Aim X Sensitivity", "Controls horizontal mouse aim sensitivity.", 25, 400, 5,

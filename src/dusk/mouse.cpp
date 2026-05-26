@@ -36,9 +36,8 @@ bool queryMouseAimContext() {
 }
 
 bool wantMouseCapture() {
-    return (static_cast<bool>(getSettings().game.enableMouseCamera) &&
-            static_cast<bool>(getSettings().game.freeCamera)) ||
-            static_cast<bool>(getSettings().game.enableMouseAim);
+    const auto game = getSettings().game;
+    return game.enableMouseCamera.getValue() || game.enableMouseAim.getValue();
 }
 
 bool isWindowFocused(SDL_Window* window) {
@@ -128,9 +127,7 @@ void read() {
     }
 
     const bool aim_active = capture_active && queryMouseAimContext();
-    const bool camera_active = capture_active &&
-                               static_cast<bool>(getSettings().game.enableMouseCamera) &&
-                               static_cast<bool>(getSettings().game.freeCamera);
+    const bool camera_active = capture_active && getSettings().game.enableMouseCamera;
 
     float mx_rel = 0.0f;
     float my_rel = 0.0f;
@@ -147,8 +144,7 @@ void getCameraDeltas(float& out_yaw, float& out_pitch) {
     out_yaw = 0.0f;
     out_pitch = 0.0f;
 
-    if (!static_cast<bool>(getSettings().game.enableMouseCamera) ||
-        !static_cast<bool>(getSettings().game.freeCamera))
+    if (!getSettings().game.enableMouseCamera)
     {
         return;
     }

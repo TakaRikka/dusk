@@ -7640,12 +7640,16 @@ void dCamera_c::deactivateDebugFlyCam() {
     mDebugFlyCam.initialized = false;
 }
 
+bool dCamera_c::canUseFreeCam() {
+    return dusk::getSettings().game.freeCamera || dusk::getSettings().game.enableMouseCamera;
+}
+
 bool dCamera_c::freeCamera() {
-    if (dusk::getSettings().game.freeCamera && mGear == 1) {
+    if (canUseFreeCam() && mGear == 1) {
         mGear = 0;
     }
 
-    if (!dusk::getSettings().game.freeCamera || mCamStyle == 70)
+    if (!canUseFreeCam() || mCamStyle == 70)
     {
         mCamParam.mManualMode = 0;
         return false;
