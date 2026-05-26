@@ -3853,17 +3853,11 @@ void dFile_select_c::fileSelectWide() {
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
-        // Spirals
-        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Spirals & Memory Card Text
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        }
 
         // Selection Cursor
         if (mSelIcon) {
@@ -3953,17 +3947,11 @@ void dFile_select_c::fileSelectWide() {
             mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
 
-        // Spirals
-        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Spirals & Memory Card Text
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        }
         break;
     }
 }

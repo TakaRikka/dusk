@@ -236,7 +236,7 @@ void dMenu_Collect2D_c::menuCollectWide() {
 
         // Fused Shadow/Mirror Background
         J2DPane* modelbgn = mpScreen->search(MULTI_CHAR('modelbgn'));
-        static f32 modelbgnTransX_orig = modelbgn->getTranslateX();  // Get pre-scale value
+        static f32 modelbgnTransX_orig = modelbgn->getTranslateX();
         modelbgn->setBasePosition(J2DBasePosition_0);
         modelbgn->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.3f);
         f32 modelbgn_scaleFactor = 1.0f + 0.16f * (mDoGph_gInf_c::hudAspectScaleDown - 1.0f);
