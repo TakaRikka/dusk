@@ -943,6 +943,11 @@ static int ni_play(ni_class* i_this) {
     s16 var_r28 = 0x4000;
 
     i_this->mPadMainStickX = mDoCPd_c::getStickX3D(PAD_1);
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        i_this->mPadMainStickX = -i_this->mPadMainStickX;
+    }
+#endif
     i_this->mPadMainStickY = mDoCPd_c::getStickY(PAD_1);
     i_this->mPadSubStickY = mDoCPd_c::getSubStickY(PAD_1);
     i_this->mPadSubStickX = mDoCPd_c::getSubStickX(PAD_1);

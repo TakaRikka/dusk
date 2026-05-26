@@ -370,6 +370,9 @@ const Rml::String kBloomHelpText =
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
+const Rml::String kDepthOfFieldHelpText =
+    "Configure the post-processing depth-of-field effect. Classic uses the original depth-of-field pass;"
+    " Dusklight uses a higher-quality depth-of-field pass.";
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
@@ -842,7 +845,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 100,
                 .defaultValue = 100,
                 .step = 10,
-            }, mPrelaunch);
+            },
+            mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+            GraphicsTunerProps{
+                .option = GraphicsOption::DepthOfFieldMode,
+                .title = "Depth of Field",
+                .helpText = kDepthOfFieldHelpText,
+                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
+                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
+                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
+            },
+            mPrelaunch);
 
         leftPane.add_section("Rendering");
         config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
@@ -884,17 +898,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
             "Framerate Cap", "Limit the framerate to the specified value.", 30, 540, 1,
             [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
-        config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
-            {
-                .key = "Enable Depth of Field",
-            });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
+                .helpText = "Render a thick shadow around the mini-map. May impact performance."
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = "Disable Cutscene Pillarboxing",
+                .helpText = "Disable black bars on the left and right sides of the screen "
+                            "during some cutscenes, particularly on ultra-wide displays. "
+                            "Visuals beyond the original intended framing may appear buggy."
             });
     });
 
@@ -943,6 +957,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
             "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
+            "Invert horizontal movement while flying or swimming.");
+        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
+            "Invert vertical movement while flying or swimming.");
 
         leftPane.add_section("Gyro");
         leftPane.register_control(
@@ -1167,6 +1185,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
+        addOption("Show Poe Count on Map", getSettings().game.enhancedMapMenus,
+            "Displays collected/total number of Poe Souls for a region on the map.");
         addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
             "Allows Wolf Link to howl and change the time of day.");
         addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,

@@ -275,6 +275,7 @@ ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
 void ControllerConfigWindow::hide(bool close) {
     stop_rumble_test();
     cancel_pending_binding();
+    config::Save();
     Window::hide(close);
 }
 

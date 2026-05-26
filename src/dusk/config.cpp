@@ -172,6 +172,7 @@ namespace dusk::config {
     template class ConfigImpl<f64>;
     template class ConfigImpl<std::string>;
     template class ConfigImpl<dusk::BloomMode>;
+    template class ConfigImpl<dusk::DepthOfFieldMode>;
     template class ConfigImpl<dusk::DiscVerificationState>;
     template class ConfigImpl<dusk::GameLanguage>;
     template class ConfigImpl<dusk::GyroMode>;

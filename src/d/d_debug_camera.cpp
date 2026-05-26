@@ -1349,11 +1349,11 @@ void dDbgCamera_c::monitor() {
 
         for (var_r27 = 0; var_r27 < 4; var_r27++) {
             if (var_r27 == mCmdMode) {
-                strcat(spC0, "____ ");
+                SAFE_STRCAT(spC0, "____ ");
                 break;
             }
 
-            strcat(spC0, "     ");
+            SAFE_STRCAT(spC0, "     ");
         }
 
         Report(pos_x, pos_y, 7, "    %s", spC0);

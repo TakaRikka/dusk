@@ -8,6 +8,7 @@
 
 #include <cctype>
 #include <cstring>
+#include "dusk/string.hpp"
 #include "global.h"
 
 JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* param_3) {

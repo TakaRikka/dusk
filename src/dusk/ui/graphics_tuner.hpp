@@ -45,6 +45,7 @@ enum class GraphicsOption {
     Resampler,
     BloomMode,
     BloomMultiplier,
+    DepthOfFieldMode,
 };
 
 Rml::String format_graphics_setting_value(GraphicsOption option, int value);

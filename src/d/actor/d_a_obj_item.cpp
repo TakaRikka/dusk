@@ -268,6 +268,11 @@ int daItem_c::_daItem_create() {
     }
 
     m_itemNo = daItem_prm::getItemNo(this);
+#if TARGET_PC
+    if (dusk::getSettings().game.noHeartDrops && isHeart(m_itemNo)) {
+        return cPhs_ERROR_e;
+    }
+#endif
     BOOL flag = dItem_data::chkFlag(m_itemNo, 2);
 
 #if DEBUG

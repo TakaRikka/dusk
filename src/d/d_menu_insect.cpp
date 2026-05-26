@@ -352,12 +352,12 @@ void dMenu_Insect_c::explain_open_init() {
                      "\x1B"
                      "CR[%d]",
                      (int)(0.5f * (length - stringLength1)));
-            strcat(local_b8, local_78);
+            SAFE_STRCAT(local_b8, local_78);
             snprintf(cStack_d8, 32,
                      "\x1B"
                      "CR[%d]",
                      (int)(0.5f * (length - stringLength2)));
-            strcat(cStack_d8, local_98);
+            SAFE_STRCAT(cStack_d8, local_98);
             mpSelect_c->setString("", local_b8, cStack_d8);
             mpSelect_c->setRubyString("", "", "");
             mpSelect_c->selAnimeInit(2, field_0xf7 + 1, 0, length, 0);
@@ -730,7 +730,7 @@ u8 dMenu_Insect_c::dpdMove() {
 void dMenu_Insect_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpAButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpAButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {
@@ -742,7 +742,7 @@ void dMenu_Insect_c::setAButtonString(u16 i_stringID) {
 void dMenu_Insect_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpBButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpBButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {

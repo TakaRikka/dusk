@@ -22,6 +22,7 @@
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_stage.h"
 #include "dusk/memory.h"
+#include "dusk/string.hpp"
 #include "f_op/f_op_msg_mng.h"
 
 static dMf_HIO_c g_fmHIO;
@@ -126,7 +127,7 @@ const char* dMenuFmap_getStartStageName(void* i_fieldData) {
             if (!strcmp(dComIfGp_getStartStageName(), data[i].mStageName)) {
                 // !@bug: probably supposed to be data[i].mVirtualStageName, but doesn't matter
                 // because the two entries have the same virtual stage name
-                strcpy(virtual_stage, data->mVirtualStageName);
+                SAFE_STRCPY(virtual_stage, data->mVirtualStageName);
                 return virtual_stage;
             }
         }
@@ -197,7 +198,7 @@ dMenu_Fmap_c::dMenu_Fmap_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     mIsWarpMap = false;
 
     mProcess = PROC_REGION_MAP;
-    strcpy(mMarkedStageName, "");
+    SAFE_STRCPY(mMarkedStageName, "");
     if (g_fmapHIO.mpArcData != NULL && g_fmapHIO.mpArcData->isMounted()) {
         mProcess = i_process;
         mpMapArchive = g_fmapHIO.mpArcData;
@@ -525,6 +526,16 @@ void dMenu_Fmap_c::_move() {
         }
         mpDraw2DBack->setSpotTextureFadeAlpha(mSpotTextureFadeAlpha);
     }
+
+#if TARGET_PC
+    u8 region = mpDraw2DBack->getSelectRegion();
+    if (region != 0xFF && mpDraw2DBack->isShowRegion(region)) {
+        mpDraw2DTop->mSelectRegionNo = region;
+    } else {
+        mpDraw2DTop->mSelectRegionNo = 0xFF;
+    }
+
+#endif
 }
 
 void dMenu_Fmap_c::_draw() {
@@ -1853,7 +1864,7 @@ bool dMenu_Fmap_c::isRoomCheck(int i_stageNo, int i_roomNo) {
     for (; i < mDataNumMax; i++) {
         if (checked_data[i]) continue;
 
-        strcpy(stage_name, stages[i].mName);
+        SAFE_STRCPY(stage_name, stages[i].mName);
 
         for (int k = 0; k < 64; k++) {
             local_e0[k] = false;
@@ -2072,14 +2083,14 @@ bool dMenu_Fmap_c::readAreaData(u8 i_regionNo, bool i_isSelectedRegion) {
     for (; i < mDataNumMax; i++) {
         if (checked_data[i]) continue;
 
-        strcpy(tmp_stage_name, mTmpStageName);
+        SAFE_STRCPY(tmp_stage_name, mTmpStageName);
         resetRoomDataBit();
         if (i_isSelectedRegion) {
-            strcpy(mTmpStageName, stages[i].mName);
+            SAFE_STRCPY(mTmpStageName, stages[i].mName);
         } else {
-            strcpy(mTmpStageName, tmp_stage_name);
+            SAFE_STRCPY(mTmpStageName, tmp_stage_name);
         }
-        strcpy(tmp_stage_name, stages[i].mName);
+        SAFE_STRCPY(tmp_stage_name, stages[i].mName);
 
         for (int k = 0; k < 64; k++) {
             local_e0[k] = false;
@@ -2155,7 +2166,7 @@ bool dMenu_Fmap_c::readAreaData(u8 i_regionNo, bool i_isSelectedRegion) {
                 mpDraw2DBack->setStageOriginXZ(mSpotNum, stages[stage_index].mOffsetX,
                                                stages[stage_index].mOffsetZ);
                 mAreaName[mSpotNum] = stages[stage_index].mAreaName;
-                strcpy(mStageName[mSpotNum], stage_name);
+                SAFE_STRCPY(mStageName[mSpotNum], stage_name);
                 mSpotNum++;
             }
 
@@ -2203,7 +2214,7 @@ bool dMenu_Fmap_c::readRoomData(char const* i_stageName, dMenu_Fmap_stage_data_c
     dMenu_Fmap_stage_arc_data_c* room_data = NULL;
     
     char stage_path[20];
-    sprintf(stage_path, "%s/stage.dat", i_stageName);
+    SAFE_SPRINTF(stage_path, "%s/stage.dat", i_stageName);
     if (readFieldMapData((void**)&room_data, stage_path, false, false)) {
         ((dMenuMapCommon_c::RoomData_c*)o_roomData)->setRoomData(room_data);
     }
@@ -2217,7 +2228,7 @@ bool dMenu_Fmap_c::readRoomData(char const* i_stageName, dMenu_Fmap_stage_data_c
             void* dzs_data = NULL;
 
             char room_path[20];
-            sprintf(room_path, "%s/room%d.dzs", i_stageName, room_nos[i]);
+            SAFE_SPRINTF(room_path, "%s/room%d.dzs", i_stageName, room_nos[i]);
 
             if (readRoomDzsData(&dzs_data, 0x1500, room_path)) {
                 dMenu_Fmap_data_c* map_data = JKR_NEW dMenu_Fmap_data_c();
@@ -2308,9 +2319,9 @@ void dMenu_Fmap_c::decodeFieldMapData() {
                 bool local_3f = false;
                 if (j == 7) {
                     local_3f = true;
-                    sprintf(tex_path, "tex/region8.bti");
+                    SAFE_SPRINTF(tex_path, "tex/region8.bti");
                 } else {
-                    sprintf(tex_path, "tex/region%d.bti", regions[i].mTextureReadNum);
+                    SAFE_SPRINTF(tex_path, "tex/region%d.bti", regions[i].mTextureReadNum);
                 }
 
                 if (readFieldMapData((void**)&mRegionTexture[j], tex_path, true, local_3f)) {
@@ -2428,7 +2439,7 @@ bool dMenu_Fmap_c::removeAreaData() {
     }
 
     for (int i = 0; i < 20; i++) {
-        strcpy(mStageName[i], "");
+        SAFE_STRCPY(mStageName[i], "");
     }
 
     field_0x305 = false;
@@ -2539,11 +2550,11 @@ void dMenu_Fmap_c::drawIcon(f32 param_0, bool param_1) {
         fopAc_ac_c* player = daPy_getPlayerActorClass();
         pos.set(dMapInfo_n::getMapPlayerPos());
         angle = player->shape_angle.y;
-        strcpy(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
+        SAFE_STRCPY(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
     } else {
         pos = dComIfGs_getPlayerFieldLastStayPos();
         angle = dComIfGs_getPlayerFieldLastStayAngleY();
-        strcpy(stage_name, dComIfGs_getPlayerFieldLastStayName());
+        SAFE_STRCPY(stage_name, dComIfGs_getPlayerFieldLastStayName());
     }
 
     u8 is_portal_demo1 = 0;
@@ -2632,11 +2643,11 @@ void dMenu_Fmap_c::drawPlayEnterIcon() {
         if (dComIfGs_isPlayerFieldLastStayFieldDataExistFlag()) {
             pos.set(dMapInfo_n::getMapRestartPos());
             angle = dComIfGs_getRestartRoomAngleY();
-            strcpy(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
+            SAFE_STRCPY(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
         } else {
             pos = dComIfGs_getPlayerFieldLastStayPos();
             angle = dComIfGs_getPlayerFieldLastStayAngleY();
-            strcpy(stage_name, dComIfGs_getPlayerFieldLastStayName());
+            SAFE_STRCPY(stage_name, dComIfGs_getPlayerFieldLastStayName());
         }
         mpDraw2DBack->setIcon2DPos(0x15, stage_name, pos.x, pos.z, cM_sht2d(angle), 0, false);
     }
@@ -2778,10 +2789,10 @@ void dMenu_Fmap_c::arrowPosInit() {
         char stage_name[8];
         if (dComIfGs_isPlayerFieldLastStayFieldDataExistFlag()) {
             pos.set(dMapInfo_n::getMapPlayerPos());
-            strcpy(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
+            SAFE_STRCPY(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
         } else {
             pos = dComIfGs_getPlayerFieldLastStayPos();
-            strcpy(stage_name, dComIfGs_getPlayerFieldLastStayName());
+            SAFE_STRCPY(stage_name, dComIfGs_getPlayerFieldLastStayName());
         }
         
         f32 fVar1 = 0.0f;
@@ -2834,7 +2845,7 @@ void dMenu_Fmap_c::tableArrowPosInit(bool param_0) {
     }
 
     static char* stage_name[4] = {"F_SP115", "F_SP113", "F_SP109", "F_SP108"};
-    strcpy(mMarkedStageName, stage_name[iVar5]);
+    SAFE_STRCPY(mMarkedStageName, stage_name[iVar5]);
 
     if (param_0) {
         f32 pos1_x, pos2_x, pos1_z, pos2_z, icon_x, icon_z;
@@ -2863,7 +2874,7 @@ void dMenu_Fmap_c::yamibossArrowPosInit() {
 void dMenu_Fmap_c::howlArrowPosInit() {
     u8 type = dMeter2Info_getGoldWolfMapType();
     static char* stage_name[6] = {"F_SP104", "F_SP122", "F_SP122", "F_SP124", "F_SP111", "F_SP116"};
-    strcpy(mMarkedStageName, stage_name[type - 2]);
+    SAFE_STRCPY(mMarkedStageName, stage_name[type - 2]);
     static const int i_swBit[6] = {0x41, 0x29, 0x2a, 0x32, 0x79, 0x32};
     f32 icon_x, icon_z;
     if (searchIcon(6, i_swBit[type - 2], &icon_x, &icon_z)) {
@@ -2900,10 +2911,10 @@ cXyz* dMenu_Fmap_c::getPlayerPos2D() {
     char stage_name[8];
     if (dComIfGs_isPlayerFieldLastStayFieldDataExistFlag()) {
         pos.set(dMapInfo_n::getMapPlayerPos());
-        strcpy(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
+        SAFE_STRCPY(stage_name, dMenuFmap_getStartStageName(mpFieldDat));
     } else {
         pos = dComIfGs_getPlayerFieldLastStayPos();
-        strcpy(stage_name, dComIfGs_getPlayerFieldLastStayName());
+        SAFE_STRCPY(stage_name, dComIfGs_getPlayerFieldLastStayName());
     }
     mpDraw2DBack->calcAllMapPos2D(stage_name, pos.x - mpDraw2DBack->getStageTransX(),
                                   pos.z - mpDraw2DBack->getStageTransZ(),

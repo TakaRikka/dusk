@@ -250,7 +250,7 @@ void daTitle_c::loadWait_proc() {
             text[i]->setFont(mpFont);
             text[i]->setString(0x80, "");
 
-            char* msg = text[i]->getStringPtr();
+            TEXT_SPAN msg = text[i]->getStringPtr();
             fopMsgM_messageGet(msg, 100);
         }
 

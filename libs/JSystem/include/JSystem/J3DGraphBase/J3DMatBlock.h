@@ -1575,6 +1575,12 @@ struct J3DAlphaComp {
     u8 getRef1() const { return mRef1; }
 
     void load() const {
+#ifdef AVOID_UB
+    if (mID > 255) {
+            J3DGDSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+            return;
+        }
+#endif
         J3DGDSetAlphaCompare((GXCompare)getComp0(), mRef0, (GXAlphaOp)getOp(), (GXCompare)getComp1(), mRef1);
     }
 

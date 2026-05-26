@@ -1225,7 +1225,7 @@ public:
 #endif
     }
     static JKRExpHeap* getMemoryBlockHeap(int i_no) { return mMemoryBlock[i_no]; }
-    static char* getDemoArcName() { return mDemoArcName; }
+    static TEXT_SPAN getDemoArcName() { return mDemoArcName; }
     static void offNoChangeRoom() { mNoChangeRoom = false; }
     static void onNoChangeRoom() { mNoChangeRoom = true; }
 

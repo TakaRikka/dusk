@@ -275,7 +275,7 @@ static int fopAc_Draw(void* i_this) {
     char message[40];
     char name[dStage_NAME_LENGTH];
     fopAcM_getNameString(actor, name);
-    sprintf(message, "%s（描画処理）", name);
+    SAFE_SPRINTF(message, "%s（描画処理）", name);
     fapGm_HIO_c::stopCpuTimer(message);
     #endif
 
@@ -368,7 +368,7 @@ static int fopAc_Execute(void* i_this) {
     char message[40];
     char name[dStage_NAME_LENGTH];
     fopAcM_getNameString(actor, name);
-    sprintf(message, "%s（計算処理）", name);
+    SAFE_SPRINTF(message, "%s（計算処理）", name);
     fapGm_HIO_c::stopCpuTimer(message);
     #endif
 

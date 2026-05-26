@@ -11,6 +11,8 @@
 #include "d/actor/d_a_e_ym.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 enum saru_TW_RES_File_ID {
     /* BMDR */
     /* 0x4 */ BMDR_SARU_BARA_TW = 0x4,
@@ -956,8 +958,8 @@ int daNpc_Saru_c::cutYmLook(int param_1) {
     if (dComIfGp_getEventManager().getIsAddvance(param_1) != 0) {
         switch (iVar1) {
             case 0:
-                strcpy(acStack_88, l_evtList[2].eventName);
-                strcat(acStack_88, "@");
+                SAFE_STRCPY(acStack_88, l_evtList[2].eventName);
+                SAFE_STRCAT(acStack_88, "@");
                 dComIfGp_getEvent()->setSkipZev(this, acStack_88);
                 dComIfGp_getEvent()->onSkipFade();
                 field_0xfd9 = 1;

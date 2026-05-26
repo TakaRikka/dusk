@@ -178,7 +178,7 @@ static int loadDemoArchive(int i_roomNo) {
                     int bank2 = entries[dComIfG_play_c::getLayerNo(i_roomNo)].bank2;
                     JUT_ASSERT(353, 0 <= bank2 && bank2 < 100);
 
-                    sprintf(dStage_roomControl_c::getDemoArcName(), "Demo%02d_%02d", bank, bank2);
+                    SAFE_SPRINTF(dStage_roomControl_c::getDemoArcName(), "Demo%02d_%02d", bank, bank2);
                     if (!dComIfG_setObjectRes(dStage_roomControl_c::getDemoArcName(), 0, (JKRHeap*)NULL)) {
                         const char* name = dStage_roomControl_c::getDemoArcName();
                         *dStage_roomControl_c::getDemoArcName() = 0;

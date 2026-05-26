@@ -5,13 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_obj_gra2.h"
 #include "d/actor/d_a_npc4.h"
+#include "d/actor/d_a_obj_gra2.h"
 #include "d/actor/d_a_tag_gra.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_uty.h"
-#include "d/d_com_inf_game.h"
 #include "d/d_com_inf_actor.h"
+#include "d/d_com_inf_game.h"
+#include "dusk/string.hpp"
 #if DEBUG
 #include "d/d_debug_viewer.h"
 #endif
@@ -539,7 +540,7 @@ const char* daObj_GrA_c::getResName() {
 
 u8 daObj_GrA_c::getMode() {
     u32 uVar1 = fopAcM_GetParam(this) >> 28 & 3;
-    strcpy(field_0x744, "Obj_grA");
+    SAFE_STRCPY(field_0x744, "Obj_grA");
 
     switch (uVar1) {
         case 1:
