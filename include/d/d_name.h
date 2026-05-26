@@ -11,6 +11,7 @@ class J2DAnmTextureSRTKey;
 class J2DTextBox;
 class JUTFont;
 class STControl;
+
 #if TARGET_PC
 static bool cachedPanesName = false;
 
@@ -31,7 +32,7 @@ static PaneCache l_tagName[] = {
     {MULTI_CHAR('m_10_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_11_0'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_11_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_11_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_11_3'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_11_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('m12_0'), 0.0f, 0.0f, false},  {MULTI_CHAR('m12_1'), 0.0f, 0.0f, false},  {MULTI_CHAR('m12_2'), 0.0f, 0.0f, false},
     {MULTI_CHAR('m12_3'), 0.0f, 0.0f, false},  {MULTI_CHAR('m12_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('p_end_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('p_end_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('p_end_0'), 0.0f, 0.0f, false},
 };                                             
-                                               
+
 static PaneCache l_nameTagName[] = {
     {MULTI_CHAR('name_00'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_01'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_02'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_03'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_04'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_05'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_06'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_07'), 0.0f, 0.0f, false},
 };

@@ -11,6 +11,7 @@
 
 class dFile_info_c;
 class J2DPicture;
+
 #if TARGET_PC
 static bool cachedPanes = false;
 
@@ -43,9 +44,9 @@ static PaneCache fileSelPanes[] = {
     {MULTI_CHAR('w_er_msR'), 0.0f, 0.0f, false},
     {MULTI_CHAR('er_for0'), 0.0f, 0.0f, false},
     {MULTI_CHAR('er_for1'), 0.0f, 0.0f, false},
-
 };
 #endif
+
 class dDlst_FileSel_c : public dDlst_base_c {
 public:
     void draw();
