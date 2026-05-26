@@ -12,6 +12,7 @@ public:
         std::function<void(bool)> setValue;
         std::function<bool()> isDisabled;
         std::function<bool()> isModified;
+        std::function<Rml::String()> valueOverride;
     };
 
     BoolButton(Rml::Element* parent, Props props);
@@ -29,6 +30,7 @@ private:
     std::function<bool()> mIsDisabled;
     std::function<bool()> mIsModified;
     std::function<bool()> mIsSupported;
+    std::function<Rml::String()> mValueOverride;
 };
 
 }  // namespace dusk::ui
