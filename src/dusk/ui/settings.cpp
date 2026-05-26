@@ -402,6 +402,8 @@ const Rml::String kBloomHelpText =
     "[CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO]";
 const Rml::String kBloomBrightnessHelpText =
     "[CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE]";
+const Rml::String kDepthOfFieldHelpText =
+    "[CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL]";
 const Rml::String kUnlockFramerateHelpText =
     "[USES_INTER_FRAME_INTERPOLATION_TO_ENABLE_HIGHER_FRAME_RATES_MAY_INTRODUCE_MINOR]";
 
@@ -874,7 +876,19 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 100,
                 .defaultValue = 100,
-            }, mPrelaunch);
+                .step = 10,
+            },
+            mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+            GraphicsTunerProps{
+                .option = GraphicsOption::DepthOfFieldMode,
+                .title = "[DEPTH_OF_FIELD]",
+                .helpText = kDepthOfFieldHelpText,
+                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
+                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
+                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
+            },
+            mPrelaunch);
 
         leftPane.add_section("[RENDERING]");
         config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
@@ -921,11 +935,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             [] {
                 return getSettings().game.enableFrameInterpolation.getValue() !=
                        FrameInterpMode::Capped;
-            });
-        config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
-            {
-                .key = "[ENABLE_DEPTH_OF_FIELD]",
-                .helpText = "[RENDER_A_BLURRING_EFFECT_FOR_OUT_OF_FOCUS_AREAS_IN_SOME_SITUATIONS_MAY]",
             });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
@@ -983,6 +992,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[INVERT_HORIZONTAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
         addOption("[INVERT_FIRST_PERSON_Y_AXIS]", getSettings().game.invertFirstPersonYAxis,
             "[INVERT_VERTICAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
+        addOption("[INVERT_AIR_SWIM_X_AXIS]", getSettings().game.invertAirSwimX,
+            "[INVERT_HORIZONTAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
+        addOption("[INVERT_AIR_SWIM_Y_AXIS]", getSettings().game.invertAirSwimY,
+            "[INVERT_VERTICAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
 
         leftPane.add_section("[GYRO]");
         leftPane.register_control(

@@ -5,6 +5,7 @@
 #include <thp.h>
 #else
 #include <atomic>
+#include <chrono>
 #endif
 #include "f_op/f_op_actor.h"
 #include "d/d_drawlist.h"
@@ -125,6 +126,7 @@ struct daMP_THPPlayer {
 	/* 0x0D4 */ s32 curCount;
 #if TARGET_PC
 	/* 0x0D8 */ std::atomic<s32> videoDecodeCount;
+	std::chrono::steady_clock::time_point thpPlaybackClock;
 #else
 	/* 0x0D8 */ s32 videoDecodeCount;
 #endif

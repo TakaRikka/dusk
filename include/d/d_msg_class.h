@@ -5,6 +5,7 @@
 #include "JSystem/JMessage/JMessage.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "dusk/endian.h"
+#include "dusk/string.hpp"
 
 #if REGION_JPN
 #define D_MSG_CLASS_PAGE_CNT_MAX 30
@@ -67,7 +68,7 @@ struct jmessage_tReference : public JMessage::TReference {
     void pageSend();
     void selectMessage();
     void inputNumber();
-    char* getWord(int);
+    TEXT_SPAN getWord(int);
     void resetWord();
     void setCharactor(u16);
     void addCharactor(u16);
@@ -228,11 +229,11 @@ struct jmessage_tReference : public JMessage::TReference {
     f32 getSelRubyCharSpace() { return mSelRubyCharSpace; }
     f32 getRubySize() { return mRubySize; }
     f32 getRubyCharSpace() { return mRubyCharSpace; }
-    char* getSelTextPtr(int idx) { return mSelText[idx]; }
-    char* getSelRubyPtr(int idx) { return mSelRuby[idx]; }
-    char* getTextPtr() { return mText; }
-    char* getTextSPtr() { return mTextS; }
-    char* getRubyPtr() { return mRuby; }
+    TEXT_SPAN getSelTextPtr(int idx) { return mSelText[idx]; }
+    TEXT_SPAN getSelRubyPtr(int idx) { return mSelRuby[idx]; }
+    TEXT_SPAN getTextPtr() { return mText; }
+    TEXT_SPAN getTextSPtr() { return mTextS; }
+    TEXT_SPAN getRubyPtr() { return mRuby; }
     u8 getSelectRubyFlag() { return mSelectRubyFlag; }
     f32 getSelTBoxWidth() { return mSelTBoxWidth; }
     u8 getSelectPos() { return mSelectPos; }
@@ -463,7 +464,7 @@ struct jmessage_tRenderingProcessor : public JMessage::TRenderingProcessor {
     f32 getLineLength(int);
     void do_strcat(char*, bool, bool, bool);
     void do_rubyset(void const*, u32);
-    void do_rubystrcat(char*, char*, f32, f32);
+    void do_rubystrcat(char*, TEXT_SPAN, f32, f32);
     void do_name1();
     void do_numset(s16);
     void push_word();

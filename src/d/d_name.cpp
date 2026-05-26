@@ -1142,7 +1142,7 @@ void dName_c::setNameText() {
             #if TARGET_PC || REGION_JPN
             {
             #endif
-                sprintf(mNameText[i],
+                SAFE_SPRINTF(mNameText[i],
                         "\x1b"
                         "CD\x1b"
                         "CR\x1b"
@@ -1153,7 +1153,7 @@ void dName_c::setNameText() {
                 );
             #if TARGET_PC || REGION_JPN
             } else {
-                sprintf(mNameText[i],
+                SAFE_SPRINTF(mNameText[i],
                         "\x1b"
                         "CD\x1b"
                         "CR\x1b"
@@ -1648,7 +1648,7 @@ void dName_c::mojiListChange() {
         const char* moji = mojiSet[i];
         #endif
 
-        strcpy(buf, "\x1B"
+        SAFE_STRCPY(buf, "\x1B"
                     "CD"
                     "\x1B"
                     "CR"
@@ -1656,15 +1656,15 @@ void dName_c::mojiListChange() {
                     "CC[000000]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, moji);
-        strcat(buf, "\x1B"
+        SAFE_STRCAT(buf, moji);
+        SAFE_STRCAT(buf, "\x1B"
                     "HM"
                     "\x1B"
                     "CC[ffffff]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, moji);
-        strcpy(mMojiText[i], buf);
+        SAFE_STRCAT(buf, moji);
+        SAFE_STRCPY(mMojiText[i], buf);
     }
 
     #if TARGET_PC || REGION_PAL || REGION_JPN

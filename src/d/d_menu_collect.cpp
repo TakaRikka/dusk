@@ -2245,18 +2245,18 @@ void dMenu_Collect2D_c::_draw() {
 
     if (mItemNameString == 0) {
 #if REGION_JPN
-        char* stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->getStringPtr();
+        TEXT_SPAN stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->getStringPtr();
 #else
-        char* stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->getStringPtr();
+        TEXT_SPAN stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->getStringPtr();
 #endif
-        strcpy(stringPtr1, "");
+        SAFE_STRCPY(stringPtr1, "");
 
 #if REGION_JPN
-        char* stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->getStringPtr();
+        TEXT_SPAN stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->getStringPtr();
 #else
-        char* stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->getStringPtr();
+        TEXT_SPAN stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->getStringPtr();
 #endif
-        strcpy(stringPtr0, "");
+        SAFE_STRCPY(stringPtr0, "");
     } else {
 #if REGION_JPN
         J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')));
@@ -2307,13 +2307,13 @@ void dMenu_Collect2D_c::setAButtonString(u16 i_stringID) {
 
         if (i_stringID == 0) {
             for (int i = 0; i < 5; i++) {
-                char* stringPtr =
+                TEXT_SPAN stringPtr =
                     static_cast<J2DTextBox*>(mpScreenIcon->search(text_a_tag[i]))->getStringPtr();
-                strcpy(stringPtr, "");
+                SAFE_STRCPY(stringPtr, "");
             }
         } else {
             for (int i = 0; i < 5; i++) {
-                char* stringPtr =
+                TEXT_SPAN stringPtr =
                     static_cast<J2DTextBox*>(mpScreenIcon->search(text_a_tag[i]))->getStringPtr();
                 dMeter2Info_getStringKanji(i_stringID, stringPtr, NULL);
             }
@@ -2331,13 +2331,13 @@ void dMenu_Collect2D_c::setBButtonString(u16 i_stringID) {
 
         if (i_stringID == 0) {
             for (int i = 0; i < 5; i++) {
-                char* stringPtr =
+                TEXT_SPAN stringPtr =
                     static_cast<J2DTextBox*>(mpScreenIcon->search(text_b_tag[i]))->getStringPtr();
-                strcpy(stringPtr, "");
+                SAFE_STRCPY(stringPtr, "");
             }
         } else {
             for (int i = 0; i < 5; i++) {
-                char* stringPtr =
+                TEXT_SPAN stringPtr =
                     static_cast<J2DTextBox*>(mpScreenIcon->search(text_b_tag[i]))->getStringPtr();
                 dMeter2Info_getStringKanji(i_stringID, stringPtr, NULL);
             }
@@ -2356,7 +2356,7 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
             setItemNameStringNull();
         } else {
 #if REGION_JPN
-            char* stringPtr =
+            TEXT_SPAN stringPtr =
                 static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
             stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->getStringPtr();
@@ -2366,7 +2366,7 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
             stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
 #else
-            char* stringPtr =
+            TEXT_SPAN stringPtr =
                 static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
             stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->getStringPtr();
@@ -2384,22 +2384,22 @@ void dMenu_Collect2D_c::setItemNameStringNull() {
     mItemNameString = 0;
 #if REGION_JPN
     J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n00'));
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n01'));
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n02'));
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n03'));
 #else
     J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n04'));
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n05'));
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n06'));
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n07'));
 #endif
-    strcpy(textBox->getStringPtr(), "");
+    SAFE_STRCPY(textBox->getStringPtr(), "");
 }
 
 dMenu_Collect3D_c::dMenu_Collect3D_c(JKRExpHeap* param_0, dMenu_Collect2D_c* param_1,

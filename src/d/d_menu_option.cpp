@@ -2107,7 +2107,7 @@ void dMenu_Option_c::setAButtonString(u16 i_stringID) {
         if (stringId == 0) {
             for (int i = 0; i < 5; i++) {
                 J2DTextBox* textBox = (J2DTextBox*)mpScreenIcon->search(text_a_tag[i]);
-                strcpy(textBox->getStringPtr(), "");
+                SAFE_STRCPY(textBox->getStringPtr(), "");
             }
         } else {
             for (int i = 0; i < 5; i++) {
@@ -2127,7 +2127,7 @@ void dMenu_Option_c::setBButtonString(u16 i_stringID) {
         if (stringId == 0) {
             for (int i = 0; i < 5; i++) {
                 J2DTextBox* textBox = (J2DTextBox*)mpScreenIcon->search(text_b_tag[i]);
-                strcpy(textBox->getStringPtr(), "");
+                SAFE_STRCPY(textBox->getStringPtr(), "");
             }
         } else {
             for (int i = 0; i < 5; i++) {

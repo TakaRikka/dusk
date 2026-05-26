@@ -394,8 +394,21 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                     icon_size_y *= _c7c;
                 }
 
+#if TARGET_PC
+                f32 rotation = mIconInfo[info_idx].rotation;
+                if (dusk::getSettings().game.enableMirrorMode &&
+                    (mIconInfo[info_idx].icon_no == ICON_LINK_e ||
+                     mIconInfo[info_idx].icon_no == ICON_LINK_ENTER_e))
+                {
+                    rotation = -rotation;
+                }
+
+                mPictures[mIconInfo[info_idx].icon_no]->rotate(icon_size_x / 2, icon_size_y / 2, ROTATE_Z,
+                                                               rotation);
+#else
                 mPictures[mIconInfo[info_idx].icon_no]->rotate(icon_size_x / 2, icon_size_y / 2, ROTATE_Z,
                                                         mIconInfo[info_idx].rotation);
+#endif
 
                 if (mIconInfo[info_idx].icon_no == ICON_LIGHT_DROP_e) {
                     mPictures[mIconInfo[info_idx].icon_no]->setAlpha((180.0f * _c80) / 255.0f);
@@ -750,7 +763,7 @@ void dMenuMapCommon_c::debugIcon() {
 
 #if TARGET_PC
 static constexpr struct {
-    std::string stagename;
+    std::string_view stagename;
     u8 switch_no;
     s8 region_id;
     u8 save_id;

@@ -1203,7 +1203,7 @@ void dMenu_Ring_c::setNameString(u32 i_stringID) {
     if (mNameStringID != i_stringID) {
         for (int i = 0; i < 4; i++) {
             if (i_stringID == 0) {
-                strcpy(textBox[i]->getStringPtr(), "");
+                SAFE_STRCPY(textBox[i]->getStringPtr(), "");
             } else {
                 mpString->getString(i_stringID, textBox[i], NULL, NULL, NULL, 0);
             }

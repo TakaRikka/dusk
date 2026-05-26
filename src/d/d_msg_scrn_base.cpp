@@ -108,9 +108,9 @@ void dMsgScrnBase_c::setString(char* mpText, char* i_stringB) {
         if (mpTm_c[i] != NULL) {
             JUT_ASSERT(262, ((J2DTextBox*)(mpTm_c[i]->getPanePtr()))->getStringAllocByte() > strlen(mpText));
             if (i == 0) {
-                strcpy(((J2DTextBox*)mpTm_c[i]->getPanePtr())->getStringPtr(), mpText);
+                SAFE_STRCPY(((J2DTextBox*)mpTm_c[i]->getPanePtr())->getStringPtr(), mpText);
             } else {
-                strcpy(((J2DTextBox*)mpTm_c[i]->getPanePtr())->getStringPtr(), i_stringB);
+                SAFE_STRCPY(((J2DTextBox*)mpTm_c[i]->getPanePtr())->getStringPtr(), i_stringB);
             }
         }
     }
@@ -120,7 +120,7 @@ void dMsgScrnBase_c::setRubyString(char* mpText) {
     for (int i = 0; i < 3; i++) {
         if (mpTmr_c[i] != NULL) {
             JUT_ASSERT(288, ((J2DTextBox*)(mpTmr_c[i]->getPanePtr()))->getStringAllocByte() > strlen(mpText));
-            strcpy(((J2DTextBox*)mpTmr_c[i]->getPanePtr())->getStringPtr(), mpText);
+            SAFE_STRCPY(((J2DTextBox*)mpTmr_c[i]->getPanePtr())->getStringPtr(), mpText);
         }
     }
 }

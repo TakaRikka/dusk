@@ -55,7 +55,7 @@ static char* l_bmd_base_name = "door-knob_";
 char* daKnob20_c::getBmd() {
     static char l_bmdName[32];
 
-    sprintf(l_bmdName, "%s%02d.bmd", l_bmd_base_name, knob_param_c::getDoorModel(this));
+    SAFE_SPRINTF(l_bmdName, "%s%02d.bmd", l_bmd_base_name, knob_param_c::getDoorModel(this));
     return l_bmdName;
 }
 

@@ -13,6 +13,8 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 namespace {
 static u8 event_debug_evnt() {
 #if DEBUG
@@ -756,8 +758,8 @@ int dEv_defaultSkipZev(void* actor, int parameter) {
     char* skipName;
     switch (parameter) {
     case 0:
-        strcpy(eventName, data->data.event_name);
-        strcat(eventName, "$0");
+        SAFE_STRCPY(eventName, data->data.event_name);
+        SAFE_STRCAT(eventName, "$0");
         eventID = dComIfGp_getEventManager().getEventIdx(eventName, 0xFF, -1);
         OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, eventName);
         break;
@@ -804,8 +806,8 @@ int dEv_defaultSkipStb(void* actor, int parameter) {
     char* skipName;
     switch (parameter) {
     case 0:
-        strcpy(eventName, data->data.event_name);
-        strcat(eventName, "$0");
+        SAFE_STRCPY(eventName, data->data.event_name);
+        SAFE_STRCAT(eventName, "$0");
         eventID = dComIfGp_getEventManager().getEventIdx(eventName, 0xFF, -1);
         OS_REPORT("%06d: event:   [%d] %s!\n", g_Counter.mCounter0, eventID, eventName);
         break;
@@ -851,7 +853,7 @@ void dEvt_control_c::setSkipProc(void* skipActor, dEvt_SkipCb skipCb, int skipPa
 
 void dEvt_control_c::setSkipZev(void* skipActor, char* eventName) {
     setSkipProc(skipActor, dEv_defaultSkipZev, 1);
-    strcpy(mSkipEventName, eventName);
+    SAFE_STRCPY(mSkipEventName, eventName);
 }
 
 void dEvt_control_c::onSkipFade() {

@@ -370,7 +370,7 @@ int daObjFlag2_c::createHeap() {
     s8 flagNum = (u8)shape_angle.x;
     if (mFlagValid) {
         char acStack_40[16];
-        sprintf(acStack_40, "flag%02d.bti", flagNum);
+        SAFE_SPRINTF(acStack_40, "flag%02d.bti", flagNum);
         shape_angle.setall(0);
         current.angle.setall(0);
         ResTIMG* image = (ResTIMG*)dComIfG_getObjectRes(mFlagName, "flag.bti");
@@ -409,7 +409,7 @@ int daObjFlag2_c::create() {
         mFlagValid = false;
     } else {
         mFlagValid = true;
-        sprintf(mFlagName, "FlagObj%02d", flagNum);
+        SAFE_SPRINTF(mFlagName, "FlagObj%02d", flagNum);
         int rv = dComIfG_resLoad(&mFlagPhase, mFlagName);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;

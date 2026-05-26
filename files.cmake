@@ -1420,6 +1420,7 @@ set(DUSK_FILES
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
         src/dusk/config.cpp
+        src/dusk/crash_handler.cpp
         src/dusk/crash_reporting.cpp
         src/dusk/data.cpp
         src/dusk/data.hpp
@@ -1439,6 +1440,7 @@ set(DUSK_FILES
         src/dusk/logging.cpp
         src/dusk/settings.cpp
         src/dusk/speedrun.cpp
+        src/dusk/string.cpp
         src/dusk/stubs.cpp
         src/dusk/update_check.cpp
         src/dusk/update_check.hpp

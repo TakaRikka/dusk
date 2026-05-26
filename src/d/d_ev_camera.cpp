@@ -13,6 +13,8 @@
 #include "d/actor/d_a_alink.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 #ifdef __MWERKS__
 #define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))
 #else
@@ -46,7 +48,7 @@ int dCamera_c::StartEventCamera(int param_0, int param_1, ...) {
     for (int i = 0; i < 8; i++) {
         char* param_name = va_arg(args, char*);
         if (param_name != NULL) {
-            strcpy(mEventData.mEventParams[i].name, param_name);
+            SAFE_STRCPY(mEventData.mEventParams[i].name, param_name);
             mEventData.mEventParams[i].field_0x10 = va_arg(args, int);
             mEventData.mEventParams[i].value = va_arg(args, uintptr_t);
         } else {
@@ -341,18 +343,23 @@ bool dCamera_c::getEvXyzData(cXyz* i_data, char* i_event, cXyz param_2) {
     return 1;
 }
 
+#if TARGET_PC
+template<size_t N>
+bool dCamera_c::getEvStringData(char (&i_data)[N], char* i_event, char* param_2) {
+#else
 bool dCamera_c::getEvStringData(char* i_data, char* i_event, char* param_2) {
+#endif
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
-            strcpy(i_data, param_2);
+            SAFE_STRCPY(i_data, param_2);
         } else {
-            strcpy(i_data, (char*)mEventData.mEventParams[index].value);
+            SAFE_STRCPY(i_data, (char*)mEventData.mEventParams[index].value);
         }
     } else if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_event) != 0) {
-        strcpy(i_data, dComIfGp_evmng_getMyStringP(mEventData.mStaffIdx, i_event));
+        SAFE_STRCPY(i_data, dComIfGp_evmng_getMyStringP(mEventData.mStaffIdx, i_event));
     } else {
-        strcpy(i_data, param_2);
+        SAFE_STRCPY(i_data, param_2);
 #if DEBUG
         if (mCurCamStyleTimer == 0 && mCamSetup.CheckFlag(0x40)) {
             OS_REPORT("camera: event: %16s: %s (d)\n", i_event, i_data);
@@ -368,6 +375,11 @@ bool dCamera_c::getEvStringData(char* i_data, char* i_event, char* param_2) {
 
     return 1;
 }
+
+#if TARGET_PC
+// Used in another TU, so force instantiation to avoid linker issues.
+template bool dCamera_c::getEvStringData(char (&i_data)[12], char* i_event, char* param_2);
+#endif
 
 char* dCamera_c::getEvStringPntData(char* i_event, char* param_1) {
     char* string = NULL;
@@ -520,7 +532,7 @@ bool dCamera_c::fixedFrameEvCamera() {
 #if DEBUG
         if (strlen(fframe_p->mRelUseMask) != 2) {
             OSReport("camera: event:                   bad length -> xx\n");
-            strcpy(fframe_p->mRelUseMask, "xx");
+            SAFE_STRCPY(fframe_p->mRelUseMask, "xx");
             JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x32e, "0");
             OSPanic("d_ev_camera.cpp", 0x32e, "Halt");
         }
@@ -613,7 +625,7 @@ bool dCamera_c::fixedFrameEvCamera() {
             }
 
             fframe_p->field_0x4 = relationalPos(fframe_p->mpRelActor, &sp44);
-        } else if (fframe_p->mRelUseMask[1] == 116) {
+        } else if (fframe_p->mRelUseMask[1] == 't') {
             fframe_p->field_0x4 = attentionPos(fframe_p->mpRelActor) + sp44;
         } else {
             fframe_p->field_0x4 = sp44;
@@ -866,7 +878,7 @@ bool dCamera_c::fixedPositionEvCamera() {
         getEvFloatData(&fpos_p->field_0x38, "Radius", 100000.0f);
         getEvFloatData(&fpos_p->field_0x34, "StartRadius", fpos_p->field_0x38);
         fpos_p->field_0x1 = getEvFloatData(&fpos_p->field_0x2c, "Bank", 0.0f);
-        getEvStringData(&fpos_p->field_0x48, "RelUseMask", "o");
+        getEvStringData(fpos_p->field_0x48, "RelUseMask", "o");
         fpos_p->field_0x0 = getEvIntData(&fpos_p->field_0x4c, "Timer", -1);
 
         if ((fpos_p->field_0x40 = getEvActor("Target", "@PLAYER")) == NULL) {
@@ -877,7 +889,7 @@ bool dCamera_c::fixedPositionEvCamera() {
         fpos_p->field_0x44 = fopAcM_GetID(fpos_p->field_0x40);
         fpos_p->field_0x3c = getEvActor("RelActor");
 
-        if (fpos_p->field_0x3c && isRelChar(fpos_p->field_0x48)) {
+        if (fpos_p->field_0x3c && isRelChar(fpos_p->field_0x48[0])) {
             fpos_p->field_0x4 = relationalPos(fpos_p->field_0x3c, &sp24);
         } else {
             fpos_p->field_0x4 = sp24;        
@@ -1021,7 +1033,7 @@ bool dCamera_c::transEvCamera(int param_1) {
 
         getEvIntData(&trans->mTransType, "TransType", 0);
         trans->mRelActor = getEvActor("RelActor");
-        getEvStringData(&trans->mRelUseMask, "RelUseMask", "--oo");
+        getEvStringData(trans->mRelUseMask, "RelUseMask", "--oo");
         getEvFloatData(&trans->mCushion, "Cushion", 1.0f);
 
         if (trans->mRelActor) {
@@ -1034,36 +1046,36 @@ bool dCamera_c::transEvCamera(int param_1) {
                     mAdditionVec = MidnaAdditionVec;
                 }
 
-                if (trans->mRelUseMask == 119) {
+                if (trans->mRelUseMask[0] == 'w') {
                     trans->mStartCenter += mAdditionVec;
                 }
-                if (trans->mRelUseMask == 87) {
+                if (trans->mRelUseMask[0] == 'W') {
                     trans->mStartCenter -= mAdditionVec;
                 }
 
-                if (trans->field_0x49 == 119) {
+                if (trans->mRelUseMask[1] == 'w') {
                     trans->mStartEye += mAdditionVec;
                 }
-                if (trans->field_0x49 == 87) {
+                if (trans->mRelUseMask[1] == 'W') {
                     trans->mStartEye -= mAdditionVec;
                 }
 
-                if (trans->field_0x4a == 119) {
+                if (trans->mRelUseMask[2] == 'w') {
                     trans->mCenter += mAdditionVec;
                 }
-                if (trans->field_0x4a == 87) {
+                if (trans->mRelUseMask[2] == 'W') {
                     trans->mCenter -= mAdditionVec;
                 }
 
-                if (trans->field_0x4b == 119) {
+                if (trans->mRelUseMask[3] == 'w') {
                     trans->mEye += mAdditionVec;
                 }
-                if (trans->field_0x4b == 87) {
+                if (trans->mRelUseMask[3] == 'W') {
                     trans->mEye -= mAdditionVec;
                 }
             }
 
-            if (trans->field_0x49 == 114) {
+            if (trans->mRelUseMask[1] == 'r') {
                 my_vec_0 = relationalPos(trans->mRelActor, &trans->mStartCenter);
                 if ((mTicks & 1) != 0) {
                     trans->mStartEye.x = -trans->mStartEye.x;
@@ -1075,14 +1087,14 @@ bool dCamera_c::transEvCamera(int param_1) {
                 }
             }
 
-            if (trans->mRelUseMask == 110 || trans->field_0x49 == 110) {
+            if (trans->mRelUseMask[0] == 'n' || trans->mRelUseMask[1] == 'n') {
                 cSGlobe cStack_7b8(mEye - positionOf(trans->mRelActor));
                 cSAngle acStack_898 = cStack_7b8.U() - directionOf(trans->mRelActor);
                 if (acStack_898 < cSAngle::_0) {
-                    if (trans->mRelUseMask == 110) {
+                    if (trans->mRelUseMask[0] == 'n') {
                         trans->mStartCenter.x = -trans->mStartCenter.x;
                     }
-                    if (trans->field_0x49 == 110) {
+                    if (trans->mRelUseMask[1] == 'n') {
                         trans->mStartEye.x = -trans->mStartEye.x;
                     }
                 }
@@ -1094,15 +1106,15 @@ bool dCamera_c::transEvCamera(int param_1) {
                 }
             }
 
-            if (trans->field_0x4a == 110 || trans->field_0x4b == 110) {
+            if (trans->mRelUseMask[2] == 'n' || trans->mRelUseMask[3] == 'n') {
                 cSGlobe cStack_7c0(mEye - positionOf(trans->mRelActor));
                 cSAngle acStack_89c = cStack_7c0.U() - directionOf(trans->mRelActor);
                 if (acStack_89c < cSAngle::_0) {
-                    if (trans->field_0x4a == 110) {
+                    if (trans->mRelUseMask[2] == 'n') {
                         trans->mCenter.x = -trans->mCenter.x;
                     }
 
-                    if (trans->field_0x4b == 110) {
+                    if (trans->mRelUseMask[3] == 'n') {
                         trans->mEye.x = -trans->mEye.x;
                     }
                 }
@@ -1114,15 +1126,15 @@ bool dCamera_c::transEvCamera(int param_1) {
                 }
             }
 
-            if (trans->mRelUseMask == 78 || trans->field_0x49 == 78) {
+            if (trans->mRelUseMask[0] == 'N' || trans->mRelUseMask[1] == 'N') {
                 cSGlobe cStack_7c8(mEye - positionOf(trans->mRelActor));
                 cSAngle acStack_8a0 = cStack_7c8.U() - directionOf(trans->mRelActor);
                 if (acStack_8a0 > cSAngle::_0) {
-                    if (trans->mRelUseMask == 78) {
+                    if (trans->mRelUseMask[0] == 'N') {
                         trans->mStartCenter.x = -trans->mStartCenter.x;
                     }
 
-                    if (trans->field_0x49 == 78) {
+                    if (trans->mRelUseMask[1] == 'N') {
                         trans->mStartEye.x = -trans->mStartEye.x;
                     }
                 }
@@ -1134,15 +1146,15 @@ bool dCamera_c::transEvCamera(int param_1) {
                 }
             }
 
-            if (trans->field_0x4a == 78 || trans->field_0x4b == 78) {
+            if (trans->mRelUseMask[2] == 'N' || trans->mRelUseMask[3] == 'N') {
                 cSGlobe cStack_7d0(mEye - positionOf(trans->mRelActor));
                 cSAngle acStack_8a4 = cStack_7d0.U() - directionOf(trans->mRelActor);
                 if (acStack_8a4 > cSAngle::_0) {
-                    if (trans->field_0x4a == 78) {
+                    if (trans->mRelUseMask[2] == 'N') {
                         trans->mCenter.x = -trans->mCenter.x;
                     }
 
-                    if (trans->field_0x4b == 78) {
+                    if (trans->mRelUseMask[3] == 'N') {
                         trans->mEye.x = -trans->mEye.x;
                     }
                 }
@@ -1154,21 +1166,21 @@ bool dCamera_c::transEvCamera(int param_1) {
                 }
             }
 
-            if (trans->mRelUseMask == 102) {
+            if (trans->mRelUseMask[0] == 'f') {
                 cSGlobe cStack_7d8(trans->mStartCenter);
                 cStack_7d8.U(directionOf(trans->mRelActor) + cStack_7d8.U());
                 trans->mStartCenter = attentionPos(trans->mRelActor) + cStack_7d8.Xyz();
-                trans->mRelUseMask = 120;
+                trans->mRelUseMask[0] = 'x';
             }
 
-            if (trans->field_0x49 == 102) {
+            if (trans->mRelUseMask[1] == 'f') {
                 cSGlobe cStack_7e0(trans->mStartEye);
                 cStack_7e0.U(directionOf(trans->mRelActor) + cStack_7e0.U());
                 trans->mStartEye = attentionPos(trans->mRelActor) + cStack_7e0.Xyz();
-                trans->field_0x49 = 120;
+                trans->mRelUseMask[1] = 'x';
             }
 
-            if (trans->field_0x4a == 112) {
+            if (trans->mRelUseMask[2] == 'p') {
                 cXyz sp114(trans->mCenter);
                 cXyz sp120 = relationalPos(trans->mRelActor, &sp114);
                 f32 fVar1 = cXyz(sp120 - positionOf(mpPlayerActor)).abs();
@@ -1178,14 +1190,14 @@ bool dCamera_c::transEvCamera(int param_1) {
                 if (fVar1 < fVar2) {
                     trans->mCenter.x = -trans->mCenter.x;
                 }
-            } else if (trans->field_0x4a == 102) {
+            } else if (trans->mRelUseMask[2] == 'f') {
                 cSGlobe cStack_7e8(trans->mCenter);
                 cStack_7e8.U(directionOf(trans->mRelActor) + cStack_7e8.U());
                 trans->mCenter = attentionPos(trans->mRelActor) + cStack_7e8.Xyz();
-                trans->field_0x4a = 120;
+                trans->mRelUseMask[2] = 'x';
             }
 
-            if (trans->field_0x4b == 112) {
+            if (trans->mRelUseMask[3] == 'p') {
                 cXyz sp12c = trans->mEye;
                 cXyz sp138(relationalPos(trans->mRelActor, &sp12c));
                 f32 fVar3 = cXyz(sp138 - positionOf(mpPlayerActor)).abs();
@@ -1195,7 +1207,7 @@ bool dCamera_c::transEvCamera(int param_1) {
                 if (fVar3 < fVar4) {
                     trans->mEye.x = -trans->mEye.x;
                 }
-            } else if (trans->field_0x4b == 114) {
+            } else if (trans->mRelUseMask[3] == 'r') {
                 my_vec_0 = relationalPos(trans->mRelActor, &trans->mCenter);
                 if ((mTicks & 1) != 0) {
                     trans->mEye.x = -trans->mEye.x;
@@ -1205,19 +1217,19 @@ bool dCamera_c::transEvCamera(int param_1) {
                 if (lineBGCheck(&my_vec_0, &my_vec_1, 0x4007)) {
                     trans->mEye.x = -trans->mEye.x;
                 }
-            } else if (trans->field_0x4b == 102) {
+            } else if (trans->mRelUseMask[3] == 'f') {
                 cSGlobe cStack_7f0(trans->mEye);
                 cStack_7f0.U(directionOf(trans->mRelActor) + cStack_7f0.U());
                 trans->mEye = attentionPos(trans->mRelActor) + cStack_7f0.Xyz();
-                trans->field_0x4b = 120;
+                trans->mRelUseMask[3] = 'x';
             }
         } else {
-            if (trans->field_0x4a == 97) {
+            if (trans->mRelUseMask[2] == 'a') {
                 cXyz cStack_320 = dCamMath::xyzRotateY(trans->mCenter, cSAngle(mViewCache.mDirection.U().Inv()));
                 trans->mCenter = mViewCache.mCenter + cStack_320;
             }
 
-            if (trans->field_0x4b == 97) {
+            if (trans->mRelUseMask[3] == 'a') {
                 cXyz cStack_32c = dCamMath::xyzRotateY(trans->mEye, cSAngle(mViewCache.mDirection.U().Inv()));
                 trans->mEye = mViewCache.mEye + cStack_32c;
             }
@@ -1246,47 +1258,47 @@ bool dCamera_c::transEvCamera(int param_1) {
         }
 
         if (trans->mRelActor) {
-            if (trans->mRelUseMask == 116) {
+            if (trans->mRelUseMask[0] == 't') {
                 pos.mXyz_1 = attentionPos(trans->mRelActor) + trans->mStartCenter;
-            } else if (trans->mRelUseMask == 99) {
+            } else if (trans->mRelUseMask[0] == 'c') {
                 cSGlobe cStack_7f8(trans->mStartCenter);
                 cStack_7f8.U(trans->field_0x60.U() + cStack_7f8.U());
                 pos.mXyz_1 = attentionPos(trans->mRelActor) + cStack_7f8.Xyz();
-            } else if (trans->mRelUseMask == 119 || trans->mRelUseMask == 87) {
+            } else if (trans->mRelUseMask[0] == 'w' || trans->mRelUseMask[0] == 'W') {
                 pos.mXyz_1 = relationalPos(trans->mRelActor, &trans->mStartCenter);
             } else {
-                if (isRelChar(trans->mRelUseMask)) {
+                if (isRelChar(trans->mRelUseMask[0])) {
                     pos.mXyz_1 = relationalPos(trans->mRelActor, &trans->mStartCenter);
                 } else {
                     pos.mXyz_1 = trans->mStartCenter;
                 }
             }
 
-            if (trans->field_0x49 == 116) {
+            if (trans->mRelUseMask[1] == 't') {
                 pos.mXyz_0 = attentionPos(trans->mRelActor) + trans->mStartEye;
-            } else if (trans->field_0x49 == 99) {
+            } else if (trans->mRelUseMask[1] == 'c') {
                 cSGlobe cStack_800(trans->mStartEye);
                 cStack_800.U(trans->field_0x60.U() + cStack_800.U());
                 pos.mXyz_0 = attentionPos(trans->mRelActor) + cStack_800.Xyz();
-            } else if (trans->field_0x49 == 119 || trans->field_0x49 == 87) {
+            } else if (trans->mRelUseMask[1] == 'w' || trans->mRelUseMask[1] == 'W') {
                 pos.mXyz_0 = relationalPos(trans->mRelActor, &trans->mStartEye);
             } else {
-                if (isRelChar(trans->field_0x49)) {
+                if (isRelChar(trans->mRelUseMask[1])) {
                     pos.mXyz_0 = relationalPos(trans->mRelActor, &trans->mStartEye);
                 } else {
                     pos.mXyz_0 = trans->mStartEye;
                 }
             }
 
-            if (trans->field_0x4a == 116) {
+            if (trans->mRelUseMask[2] == 't') {
                 pos2.mXyz_1 = attentionPos(trans->mRelActor) + trans->mCenter;
-            } else if (trans->field_0x4a == 99) {
+            } else if (trans->mRelUseMask[2] == 'c') {
                 cSGlobe cStack_808(trans->mCenter);
                 cStack_808.U(trans->field_0x60.U() + cStack_808.U());
                 pos2.mXyz_1 = attentionPos(trans->mRelActor) + cStack_808.Xyz();
-            } else if (trans->field_0x4a == 119 || trans->field_0x4a == 87) {
+            } else if (trans->mRelUseMask[2] == 'w' || trans->mRelUseMask[2] == 'W') {
                 pos2.mXyz_1 = relationalPos(trans->mRelActor, &trans->mCenter);
-            } else if (isRelChar(trans->field_0x4a)) {
+            } else if (isRelChar(trans->mRelUseMask[2])) {
                 pos2.mXyz_1 = relationalPos(trans->mRelActor, &trans->mCenter);
             } else if (trans->mTransType == 2) {
                 pos2.mXyz_1 = dCamMath::xyzRotateY(trans->mCenter, directionOf(trans->mRelActor));
@@ -1294,16 +1306,16 @@ bool dCamera_c::transEvCamera(int param_1) {
                 pos2.mXyz_1 = trans->mCenter;
             }
 
-            if (trans->field_0x4b == 116) {
+            if (trans->mRelUseMask[3] == 't') {
                 pos2.mXyz_0 = attentionPos(trans->mRelActor) + trans->mEye;
-            } else if (trans->field_0x4b == 99) {
+            } else if (trans->mRelUseMask[3] == 'c') {
                 cSGlobe cStack_810(trans->mEye);
                 cStack_810.U(trans->field_0x60.U() + cStack_810.U());
                 pos2.mXyz_0 = attentionPos(trans->mRelActor) + cStack_810.Xyz();
             } else {
-                if (trans->field_0x4b == 119 || trans->field_0x4b == 87) {
+                if (trans->mRelUseMask[3] == 'w' || trans->mRelUseMask[3] == 'W') {
                     pos2.mXyz_0 = relationalPos(trans->mRelActor, &trans->mEye);
-                } else if (isRelChar(trans->field_0x4b)) {
+                } else if (isRelChar(trans->mRelUseMask[3])) {
                     pos2.mXyz_0 = relationalPos(trans->mRelActor, &trans->mEye);
                 } else if (trans->mTransType == 2) {
                     pos2.mXyz_0 = dCamMath::xyzRotateY(trans->mEye, directionOf(trans->mRelActor));
@@ -3420,11 +3432,11 @@ bool dCamera_c::fixedFramesEvCamera() {
 
 
         fframes_p->field_0x0 = getEvIntData(&fframes_p->mTimer, "Timer", const_1_val);
-        getEvStringData(&fframes_p->mRelUseMask, "RelUseMask", "oo");
+        getEvStringData(fframes_p->mRelUseMask, "RelUseMask", "oo");
 #if DEBUG
-        if (strlen(&fframes_p->mRelUseMask) != 2) {
+        if (strlen(fframes_p->mRelUseMask) != 2) {
             OSReport("camera: event:                   bad length -> xx\n");
-            strcpy(&fframes_p->mRelUseMask, "xx");
+            SAFE_STRCPY(fframes_p->mRelUseMask, "xx");
             JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x129c, "Halt");
             OSPanic("d_ev_camera.cpp", 0x129c, "Halt");
         }
@@ -3442,13 +3454,13 @@ bool dCamera_c::fixedFramesEvCamera() {
             sp30 = fframes_p->field_0x1c[1][iVar1];
             sp3c = fframes_p->field_0x1c[0][iVar1];
 
-            if (fframes_p->mRelActor && fframes_p->mRelUseMask == 111) {
+            if (fframes_p->mRelActor && fframes_p->mRelUseMask[0] == 111) {
                 fframes_p->field_0x4 = relationalPos(fframes_p->mRelActor, &sp30);
             } else {
                 fframes_p->field_0x4 = sp30;
             }
 
-            if (fframes_p->mRelActor && fframes_p->field_0x31 == 111) {
+            if (fframes_p->mRelActor && fframes_p->mRelUseMask[1] == 111) {
                 fframes_p->field_0x10 = relationalPos(fframes_p->mRelActor, &sp3c);
             } else {
                 fframes_p->field_0x10 = sp3c;
@@ -3959,7 +3971,7 @@ bool dCamera_c::bspTransEvCamera() {
 
         bspTrans->mSet1 = 0;
         char use1[8];
-        strcpy(use1, "xxxxxx");
+        SAFE_STRCPY(use1, "xxxxxx");
 
         iVar1 = getEvFloatListData(&bspTrans->mSet1, "Set1");
         if (iVar1 != 0) {
@@ -3970,7 +3982,7 @@ bool dCamera_c::bspTransEvCamera() {
 #if DEBUG
             if (strlen(use1) != 6) {
                 OSReport("camera: event:                   bad length -> xxxxxx\n");
-                strcpy(use1, "xxxxxx");
+                SAFE_STRCPY(use1, "xxxxxx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x14f9, "0");
                 OSPanic("d_ev_camera.cpp", 0x14f9, "Halt");
             }
@@ -3979,7 +3991,7 @@ bool dCamera_c::bspTransEvCamera() {
 
         bspTrans->mSet2 = 0;
         char use2[8];
-        strcpy(use2, "xxxxxx");
+        SAFE_STRCPY(use2, "xxxxxx");
 
         iVar1 = getEvFloatListData(&bspTrans->mSet2, "Set2");
         if (iVar1 != 0) {
@@ -3990,7 +4002,7 @@ bool dCamera_c::bspTransEvCamera() {
 #if DEBUG
             if (strlen(use2) != 6) {
                 OSReport_Error("camera: event:                   bad length -> xxxxxx\n");
-                strcpy(use2, "xxxxxx");
+                SAFE_STRCPY(use2, "xxxxxx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x1509, "0");
                 OSPanic("d_ev_camera.cpp", 0x1509, "Halt");
             }
@@ -4000,12 +4012,12 @@ bool dCamera_c::bspTransEvCamera() {
         bspTrans->mRelActorID = -1;
         bspTrans->mRelActor = getEvActor("RelActor");
         if (bspTrans->mRelActor) {
-            getEvStringData(&bspTrans->mRelUseMask, "RelUseMask", "oo");
+            getEvStringData(bspTrans->mRelUseMask, "RelUseMask", "oo");
 
 #if DEBUG
-            if (strlen(&bspTrans->mRelUseMask) != 2) {
+            if (strlen(bspTrans->mRelUseMask) != 2) {
                 OSReport_Error("camera: event:                   bad length -> xx\n");
-                strcpy(&bspTrans->mRelUseMask, "xx");
+                SAFE_STRCPY(bspTrans->mRelUseMask, "xx");
                 JUTAssertion::showAssert(JUTAssertion::getSDevice(), "d_ev_camera.cpp", 0x1515, "0");
                 OSPanic("d_ev_camera.cpp", 0x1515, "Halt");
             }
@@ -4041,13 +4053,13 @@ bool dCamera_c::bspTransEvCamera() {
         } pos;
 
         if (bspTrans->mRelActor != NULL) {
-            if (isRelChar(bspTrans->mRelUseMask)) {
+            if (isRelChar(bspTrans->mRelUseMask[0])) {
                 pos.sp48 = relationalPos(bspTrans->mRelActor, &bspTrans->field_0x94);
             } else {
                 pos.sp48 = bspTrans->field_0x94;
             }
 
-            if (isRelChar(bspTrans->field_0xb9)) {
+            if (isRelChar(bspTrans->mRelUseMask[1])) {
                 pos.sp3c = relationalPos(bspTrans->mRelActor, &bspTrans->field_0xa0);
             } else {
                 pos.sp3c = bspTrans->field_0xa0;

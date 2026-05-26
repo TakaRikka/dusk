@@ -11,6 +11,7 @@ if (DUSK_VERSION_OVERRIDE)
     set(DUSK_WC_DESCRIBE "${DUSK_VERSION_OVERRIDE}")
     set(DUSK_VERSION_STRING "0.0.0.0")
     set(DUSK_SHORT_VERSION_STRING "0.0.0")
+    set(DUSK_VERSION_CODE "1")
     set(DUSK_WC_REVISION "")
     set(DUSK_WC_BRANCH "")
     set(DUSK_WC_DATE "")
@@ -61,6 +62,9 @@ endif ()
 
 if (DUSK_WC_DESCRIBE MATCHES "^v([0-9]+)\\.([0-9]+)\\.([0-9]+)([-+].*)?$")
     set(DUSK_SHORT_VERSION_STRING "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}")
+    set(_ver_major ${CMAKE_MATCH_1})
+    set(_ver_minor ${CMAKE_MATCH_2})
+    set(_ver_patch ${CMAKE_MATCH_3})
     set(DUSK_VERSION_TWEAK "0")
     if (DUSK_WC_DESCRIBE MATCHES "^v[0-9]+\\.[0-9]+\\.[0-9]+-([0-9]+)(-dirty)?$")
         set(DUSK_VERSION_TWEAK "${CMAKE_MATCH_1}")
@@ -68,10 +72,19 @@ if (DUSK_WC_DESCRIBE MATCHES "^v([0-9]+)\\.([0-9]+)\\.([0-9]+)([-+].*)?$")
         set(DUSK_VERSION_TWEAK "${CMAKE_MATCH_1}")
     endif ()
     set(DUSK_VERSION_STRING "${DUSK_SHORT_VERSION_STRING}.${DUSK_VERSION_TWEAK}")
+    if(DUSK_VERSION_TWEAK GREATER 999)
+        set(_tweak 999)
+    else()
+        set(_tweak ${DUSK_VERSION_TWEAK})
+    endif()
+    # encoding: major*1e7 + minor*1e5 + patch*1e3 + tweak; collision-free for major<210, minor<100, patch<100, tweak<=999
+    math(EXPR DUSK_VERSION_CODE
+        "${_ver_major} * 10000000 + ${_ver_minor} * 100000 + ${_ver_patch} * 1000 + ${_tweak}")
 else ()
     set(DUSK_WC_DESCRIBE "UNKNOWN-VERSION")
     set(DUSK_VERSION_STRING "0.0.0.0")
     set(DUSK_SHORT_VERSION_STRING "0.0.0")
+    set(DUSK_VERSION_CODE "1")
 endif ()
 
 endif ()
@@ -79,6 +92,7 @@ endif ()
 # Add version information to CI environment variables
 if(DEFINED ENV{GITHUB_ENV})
     file(APPEND "$ENV{GITHUB_ENV}" "DUSK_VERSION=${DUSK_WC_DESCRIBE}\n")
+    file(APPEND "$ENV{GITHUB_ENV}" "DUSK_VERSION_CODE=${DUSK_VERSION_CODE}\n")
 endif()
 message(STATUS "Dusklight version set to ${DUSK_WC_DESCRIBE}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
@@ -86,6 +100,8 @@ project(dusklight LANGUAGES C CXX VERSION ${DUSK_VERSION_STRING})
 if (APPLE)
     enable_language(OBJC OBJCXX)
 endif ()
+# Adjust CMAKE_SYSTEM_PROCESSOR on Windows to match compiler target
+include(cmake/WindowsTargetProcessor.cmake)
 if (APPLE AND NOT TVOS AND CMAKE_SYSTEM_NAME STREQUAL tvOS)
     # ios.toolchain.cmake hack for SDL
     set(TVOS ON)
@@ -154,6 +170,7 @@ if (DUSK_MOVIE_SUPPORT)
         endif ()
         set(_jpeg_cmake_args
             -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
+            -DCMAKE_PROJECT_INCLUDE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/WindowsTargetProcessor.cmake
             -DENABLE_SHARED=OFF
             -DWITH_TURBOJPEG=ON
             -DWITH_JAVA=OFF
@@ -338,6 +355,10 @@ endif ()
 
 if (WIN32)
     list(APPEND GAME_LIBS Ws2_32)
+    if (CMAKE_BUILD_TYPE STREQUAL Debug)
+        list(APPEND GAME_LIBS dbghelp)
+        list(APPEND GAME_COMPILE_DEFS DUSK_CRASH_DBGHELP=1)
+    endif ()
 endif ()
 
 set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/no_backend.cpp)
@@ -472,6 +493,10 @@ if (ANDROID)
     # SDLActivity loads SDL_main via dlsym on Android. Since aurora::main is a static
     # archive, force an undefined reference so the linker keeps the SDL_main object.
     target_link_options(dusklight PRIVATE "-Wl,-u,SDL_main")
+endif ()
+
+if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+    target_link_options(dusklight PRIVATE "-Wl,--build-id=sha1")
 endif ()
 
 if (NOT APPLE)

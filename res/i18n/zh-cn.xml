@@ -286,6 +286,7 @@
   <entry key="DISPLAY_THE_RTA_TIMER_IGT_IS_ALWAYS_VISIBLE">显示RTA计时器。IGT始终可见。</entry>
   <entry key="DUSKLIGHT_MENU_SOUNDS">暮色之光菜单音效</entry>
   <entry key="EMULATE_SURROUND_SOUND_VIA_HRTF_RECOMMENDED_ONLY_FOR_USE_WITH_HEADPHONES">通过HRTF模拟环绕声。<br/>建议配合耳机使用！</entry>
+  <entry key="DEPTH_OF_FIELD">景深</entry>
   <entry key="ENABLE_DEPTH_OF_FIELD">启用景深</entry>
   <entry key="ENABLE_MINI_MAP_SHADOWS">启用小地图阴影</entry>
   <entry key="ENABLE_REVERB">启用混响</entry>
@@ -308,6 +309,10 @@
   <entry key="GYRO_PITCH_SENSITIVITY">陀螺仪俯仰灵敏度</entry>
   <entry key="GYRO_ROLLGOAL">陀螺仪滚弹珠</entry>
   <entry key="GYRO_SMOOTHING">陀螺仪平滑</entry>
+  <entry key="INVERT_AIR_SWIM_X_AXIS">反转空中/游泳 X 轴</entry>
+  <entry key="INVERT_AIR_SWIM_Y_AXIS">反转空中/游泳 Y 轴</entry>
+  <entry key="INVERT_HORIZONTAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING">飞行或游泳时反转水平移动。</entry>
+  <entry key="INVERT_VERTICAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING">飞行或游泳时反转垂直移动。</entry>
   <entry key="GYRO_YAW_SENSITIVITY">陀螺仪偏航灵敏度</entry>
   <entry key="HEARTS_WILL_NEVER_DROP_FROM_ENEMIES_POTS_AND_VARIOUS_OTHER_PLACES">敌人、罐子和其他地方<br/>将不会掉落生命之心。</entry>
   <entry key="HIDE_OWL_STATUE_MARKERS">隐藏猫头鹰石像标记</entry>
@@ -493,6 +498,7 @@
   <entry key="CONFIGURE_THE_SHADOW_MAP_RESOLUTION_HIGHER_VALUES_IMPROVE_SHADOW_QUALITY_BUT">设置阴影贴图分辨率，数值越高阴影画质越好，<br/>但会增加显卡与内存占用。</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO">设置后期泛光特效：经典模式为原版泛光，<br/>暮色之光模式采用更高画质泛光。</entry>
   <entry key="CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE">设置泛光强度，数值越高，高亮区域发光效果越强烈。</entry>
+  <entry key="CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL">设置后期景深效果：经典模式为原版景深，<br/>暮色之光模式采用更高画质景深。</entry>
   <entry key="USES_INTER_FRAME_INTERPOLATION_TO_ENABLE_HIGHER_FRAME_RATES_MAY_INTRODUCE_MINOR">启用帧间插值提升帧率，可能会出现轻微画面异常，<br/>或动画卡顿。</entry>
   <entry key="CONTROLLER_CONNECTED">手柄已连接</entry>
   <entry key="CONTROLLER_DISCONNECTED">手柄已断开连接</entry>
@@ -786,6 +792,7 @@
   <entry key="DISPLAY_THE_RTA_TIMER_IGT_IS_ALWAYS_VISIBLE">显示RTA计时器。IGT始终可见。</entry>
   <entry key="DUSKLIGHT_MENU_SOUNDS">暮色之光菜单音效</entry>
   <entry key="EMULATE_SURROUND_SOUND_VIA_HRTF_RECOMMENDED_ONLY_FOR_USE_WITH_HEADPHONES">通过HRTF模拟环绕声。<br/>建议配合耳机使用！</entry>
+  <entry key="DEPTH_OF_FIELD">景深</entry>
   <entry key="ENABLE_DEPTH_OF_FIELD">启用景深</entry>
   <entry key="ENABLE_MINI_MAP_SHADOWS">启用小地图阴影</entry>
   <entry key="ENABLE_REVERB">启用混响</entry>
@@ -808,6 +815,10 @@
   <entry key="GYRO_PITCH_SENSITIVITY">陀螺仪俯仰灵敏度</entry>
   <entry key="GYRO_ROLLGOAL">陀螺仪滚弹珠</entry>
   <entry key="GYRO_SMOOTHING">陀螺仪平滑</entry>
+  <entry key="INVERT_AIR_SWIM_X_AXIS">反转空中/游泳 X 轴</entry>
+  <entry key="INVERT_AIR_SWIM_Y_AXIS">反转空中/游泳 Y 轴</entry>
+  <entry key="INVERT_HORIZONTAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING">飞行或游泳时反转水平移动。</entry>
+  <entry key="INVERT_VERTICAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING">飞行或游泳时反转垂直移动。</entry>
   <entry key="GYRO_YAW_SENSITIVITY">陀螺仪偏航灵敏度</entry>
   <entry key="HEARTS_WILL_NEVER_DROP_FROM_ENEMIES_POTS_AND_VARIOUS_OTHER_PLACES">敌人、罐子和其他地方<br/>将不会掉落生命之心。</entry>
   <entry key="HIDE_OWL_STATUE_MARKERS">隐藏猫头鹰石像标记</entry>
@@ -990,6 +1001,7 @@
   <entry key="AREA">区域</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_BLOOM_EFFECT_CLASSIC_USES_THE_ORIGINAL_BLO">设置后期泛光特效：经典模式为原版泛光，<br/>暮色之光模式采用更高画质泛光。</entry>
   <entry key="CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE">设置泛光强度，数值越高，高亮区域发光效果越强烈。</entry>
+  <entry key="CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL">设置后期景深效果：经典模式为原版景深，<br/>暮色之光模式采用更高画质景深。</entry>
   <entry key="USE_TEXTURE_PACK">使用纹理包</entry>
   <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">启用已安装的纹理替换。</entry>
   <entry key="FRAMERATE_CAP">帧率上限</entry>

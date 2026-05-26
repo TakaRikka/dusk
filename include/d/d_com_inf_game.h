@@ -1851,7 +1851,7 @@ inline u16 dComIfGs_getDeathCount() {
 }
 #endif
 
-inline char* dComIfGs_getPlayerName() {
+inline TEXT_SPAN dComIfGs_getPlayerName() {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerInfo().getPlayerName();
 }
 
@@ -1859,7 +1859,7 @@ inline void dComIfGs_setPlayerName(const char* i_name) {
     g_dComIfG_gameInfo.info.getPlayer().getPlayerInfo().setPlayerName(i_name);
 }
 
-inline char* dComIfGs_getHorseName() {
+inline TEXT_SPAN dComIfGs_getHorseName() {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerInfo().getHorseName();
 }
 

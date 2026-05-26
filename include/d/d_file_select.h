@@ -565,7 +565,7 @@ public:
     /* 0x0130 */ int field_0x0130;
     /* 0x0134 */ int field_0x0134;
     /* 0x0138 */ CPaneMgrAlpha* mErrorMsgTxtPane[2];
-    /* 0x0140 */ char* mErrorMsgStringPtr[2];
+    /* 0x0140 */ TEXT_SPAN mErrorMsgStringPtr[2];
     /* 0x0148 */ u8 mErrorTxtDispIdx;
     /* 0x0149 */ u8 field_0x0149;
     /* 0x014A */ bool field_0x014a;
@@ -609,7 +609,7 @@ public:
     /* 0x020A */ u8 mFadeTimer;
     /* 0x020B */ u8 field_0x020b;
     /* 0x020C */ CPaneMgrAlpha* mHeaderTxtPane[2];
-    /* 0x0214 */ char* mHeaderStringPtr[2];
+    /* 0x0214 */ TEXT_SPAN mHeaderStringPtr[2];
     /* 0x021C */ u8 mHeaderTxtDispIdx;
     /* 0x021D */ u8 field_0x021d;
     /* 0x021E */ u8 field_0x021e;
@@ -626,7 +626,7 @@ public:
     /* 0x024B */ u8 field_0x024b;
     /* 0x024C */ u8 field_0x024c;
     /* 0x024B */ u8 field_0x024d[3];
-    /* 0x0250 */ char* mModoruStringPtr;
+    /* 0x0250 */ TEXT_SPAN mModoruStringPtr;
     /* 0x0254 */ STControl* stick;
     /* 0x0258 */ u8 mIsDataNew[3];
     /* 0x025B */ u8 mIsNoData[3];

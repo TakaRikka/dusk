@@ -94,9 +94,9 @@ const char* daSpiral_c::getBmd(int i_type) {
 const char* daSpiral_c::getBmd2(int i_type) {
     static char bmdName[32];
     if (i_type == daSpiral_TYPE_DOWN_e) {
-        sprintf(bmdName, "door-stairSpiralU.bmd");
+        SAFE_SPRINTF(bmdName, "door-stairSpiralU.bmd");
     } else {
-        sprintf(bmdName, "door-stairSpiralD.bmd");
+        SAFE_SPRINTF(bmdName, "door-stairSpiralD.bmd");
     }
 
     return bmdName;

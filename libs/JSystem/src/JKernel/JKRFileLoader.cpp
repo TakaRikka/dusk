@@ -4,10 +4,11 @@
 
 #define MSL_USE_INLINES 1  // needed to inline tolower call. not inlined elsewhere in the repo
 
-#include <cstring>
 #include <cctype>
+#include <cstring>
 #include <string>
 #include "JSystem/JKernel/JKRHeap.h"
+#include "dusk/string.hpp"
 #include "global.h"
 
 JKRFileLoader* JKRFileLoader::sCurrentVolume;
@@ -104,7 +105,7 @@ const char* JKRFileLoader::fetchVolumeName(char* buffer, s32 bufferSize, const c
     static char rootPath[2] = "/";
 
     if (strcmp(path, "/") == 0) {
-        strcpy(buffer, rootPath);
+        SAFE_STRCPY_BOUNDED(buffer, bufferSize, rootPath);
         return rootPath;
     }
 
