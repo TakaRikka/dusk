@@ -447,6 +447,7 @@ body.animate-in .intro-item {
         top: auto;
         text-align: right;
         font-size: 16dp;
+        gap: 8dp;
     }
 
     #disc-status {
@@ -468,6 +469,7 @@ body.animate-in .intro-item {
         top: 32dp;
         text-align: right;
         font-size: 16dp;
+        gap: 8dp;
     }
 
     .update {
