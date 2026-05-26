@@ -53,6 +53,7 @@ void BaseStringButton::start_editing() {
     // However, mark it as "handled" to ensure that we don't steal focus away
     mRoot->DispatchEvent(Rml::EventId::Submit, {{"handled", Rml::Variant{true}}});
 
+    // Register input listeners
     mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
         mInputElem, Rml::EventId::Textinput, [this](Rml::Event& event) {
             if (event.GetTargetElement() == mInputElem) {
