@@ -74,6 +74,15 @@ namespace randomizer::logic::entrance
 
         void SetID(const int& id);
         int GetID() const;
+        /**
+         * @brief Set the in-game warp data parsed from entrance_shuffle_data.
+         */
+        void SetWarpData(int stage, int room, int spawn, int layer);
+        bool HasWarpData() const;
+        int GetWarpStage() const;
+        int GetWarpRoom() const;
+        int GetWarpSpawn() const;
+        int GetWarpLayer() const;
         std::string GetCurrentName() const;
         std::string GetOriginalName() const;
         void SetAlias(const std::string& alias);
@@ -169,6 +178,15 @@ namespace randomizer::logic::entrance
          * world graph.
          */
         requirement::Requirement _computedRequirement;
+
+        /**
+         * @brief In-game warp data parsed from entrance_shuffle_data.
+         */
+        bool _hasWarpData = false;
+        int _warpStage = -1;
+        int _warpRoom = -1;
+        int _warpSpawn = 0;
+        int _warpLayer = -1;
 
         // Variables used for entrance shuffling
         bool _canStartAt = false;

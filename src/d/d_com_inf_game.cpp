@@ -33,6 +33,7 @@
 #include "dusk/randomizer/game/stages.h"
 #include "dusk/randomizer/game/flags.h"
 #include "dusk/randomizer/game/randomizer_context.hpp"
+#include "dusk/randomizer/generator/randomizer.hpp"
 #endif
 
 
@@ -2982,6 +2983,11 @@ void dComIfGs_setupRandomizerSave() {
     // Set starting inventory
     for (const auto& itemId: randoData.mStartingInventory) {
         execItemGet(itemId);
+    }
+
+    // Set random spawn check (success)
+    if (randoData.mStartLocation.has_value()) {
+        g_randomizerState.mPendingStartLocation = true;
     }
 
     DuskLog.debug("Created Rando Save");

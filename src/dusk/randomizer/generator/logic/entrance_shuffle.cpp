@@ -35,6 +35,80 @@ namespace randomizer::logic::entrance_shuffle
         ValidateWorld(world, worlds, nullptr, completeItemPool);
     }
 
+    namespace
+    {
+        // Parse decimal values from YAML
+        int ReadDecimalField(const YAML::Node& node, int fallback)
+        {
+            if (!node)
+            {
+                return fallback;
+            }
+            try
+            {
+                return node.as<int>();
+            }
+            catch (const std::exception&)
+            {
+                return fallback;
+            }
+        }
+
+        // Parse hex string Spawn values from YAML
+        int ReadSpawnHexField(const YAML::Node& node, int fallback)
+        {
+            if (!node || !node.IsScalar())
+            {
+                return fallback;
+            }
+            auto str = node.as<std::string>();
+            if (str.empty())
+            {
+                return fallback;
+            }
+            try
+            {
+                return static_cast<int>(std::stoul(str, nullptr, 16));
+            }
+            catch (const std::exception&)
+            {
+                return fallback;
+            }
+        }
+
+        // Parse hex string Layer/State values from YAML
+        int ReadLayerHexField(const YAML::Node& node, int fallback)
+        {
+            if (!node || !node.IsScalar())
+            {
+                return fallback;
+            }
+            auto str = node.as<std::string>();
+            if (str.empty())
+            {
+                return fallback;
+            }
+            try
+            {
+                auto raw = std::stoul(str, nullptr, 16);
+                return static_cast<int>(static_cast<int8_t>(raw));
+            }
+            catch (const std::exception&)
+            {
+                return fallback;
+            }
+        }
+
+        void ApplyWarpDataFromYaml(entrance::Entrance* entrance, const YAML::Node& entry)
+        {
+            const int stage = ReadDecimalField(entry["Stage"], -1);
+            const int room = ReadDecimalField(entry["Room"], -1);
+            const int spawn = ReadSpawnHexField(entry["Spawn"], 0);
+            const int layer = ReadLayerHexField(entry["State"], -1);
+            entrance->SetWarpData(stage, room, spawn, layer);
+        }
+    }
+
     void SetAllEntrancesData(world::World* world)
     {
         // Keep track of which double door entrances are together
@@ -60,7 +134,7 @@ namespace randomizer::logic::entrance_shuffle
 
             auto forwardEntrance = world->GetEntrance(forwardEntry["Connection"].as<std::string>());
             forwardEntrance->SetType(type);
-            // TODO: Set actual entrance data
+            ApplyWarpDataFromYaml(forwardEntrance, forwardEntry);
             forwardEntrance->SetID(world->GetNewEntranceID());
             forwardEntrance->SetPrimary(true);
             forwardEntrance->SetAlias(
@@ -73,7 +147,7 @@ namespace randomizer::logic::entrance_shuffle
 
                 auto returnEntrance = world->GetEntrance(returnEntry["Connection"].as<std::string>());
                 returnEntrance->SetType(type);
-                // TODO: Set actual entrance data
+                ApplyWarpDataFromYaml(returnEntrance, returnEntry);
                 returnEntrance->SetID(world->GetNewEntranceID());
                 returnEntrance->SetAlias(
                     returnEntry["Alias"] ? returnEntry["Alias"].as<std::string>() : "");
@@ -305,6 +379,13 @@ namespace randomizer::logic::entrance_shuffle
                 {
                     for (const auto& entrance : world->GetShuffleableEntrances(typeForSpawn))
                     {
+                        if (!entrance->HasWarpData()) // Never pick an empty warp for spawn point
+                        {
+                            LOG_TO_DEBUG("Skipping spawn candidate without warp data: " +
+                                         entrance->GetOriginalName());
+                            continue;
+                        }
+
                         auto newTarget = entrance->GetNewTarget();
                         spawnPool.push_back(newTarget);
 

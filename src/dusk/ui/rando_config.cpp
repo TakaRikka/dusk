@@ -12,6 +12,7 @@
 #include "pane.hpp"
 #include "string_button.hpp"
 #include "dusk/randomizer/game/tools.h"
+#include "dusk/randomizer/game/stages.h"
 #include "dusk/randomizer/generator/seedgen/seed.hpp"
 
 namespace dusk::ui {
@@ -464,7 +465,13 @@ RandomizerWindow::RandomizerWindow() {
             leftPane.register_control(leftPane.add_button("Warp to Start").on_pressed([] {
                 mDoAud_seStartMenu(kSoundClick);
                 auto& locData = randomizer_GetContext().mStartLocation;
-                dComIfGp_setNextStage(locData.mapName.c_str(), locData.pointNo, locData.roomNo, locData.mapLayer);
+                const int stageCount = static_cast<int>(sizeof(allStages) / sizeof(allStages[0]));
+                if (locData.has_value() && locData->stage >= 0 && locData->stage < stageCount) {
+                    dComIfGp_setNextStage(
+                        allStages[locData->stage], locData->point, locData->room, locData->layer);
+                } else {
+                    dComIfGp_setNextStage("F_SP108", 21, 1, 13);
+                }
             }), rightPane, [](Pane& pane) {
                 pane.clear();
                 pane.add_rml("Respawns the player at their appropriate starting location.");

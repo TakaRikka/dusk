@@ -109,6 +109,40 @@ namespace randomizer::logic::entrance
         return this->_id;
     }
 
+    void Entrance::SetWarpData(int stage, int room, int spawn, int layer)
+    {
+        this->_warpStage = stage;
+        this->_warpRoom = room;
+        this->_warpSpawn = spawn;
+        this->_warpLayer = layer;
+        this->_hasWarpData = stage >= 0 && room >= 0;
+    }
+
+    bool Entrance::HasWarpData() const
+    {
+        return this->_hasWarpData;
+    }
+
+    int Entrance::GetWarpStage() const
+    {
+        return this->_warpStage;
+    }
+
+    int Entrance::GetWarpRoom() const
+    {
+        return this->_warpRoom;
+    }
+
+    int Entrance::GetWarpSpawn() const
+    {
+        return this->_warpSpawn;
+    }
+
+    int Entrance::GetWarpLayer() const
+    {
+        return this->_warpLayer;
+    }
+
     std::string Entrance::GetCurrentName() const
     {
         std::string parentName = this->_parentArea ? this->_parentArea->GetName() : "None";

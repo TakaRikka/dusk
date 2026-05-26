@@ -68,14 +68,14 @@ public:
     // };
     std::unordered_map<u32, std::string> mTextOverrides{};
 
-    // TODO: hook this up to generator data
-    struct {
-        // for now use hardcoded values for this
-        std::string mapName = "F_SP103"; // (Ordon) Outside Link's House
-        int pointNo = 1;
-        int roomNo = 1;
-        int mapLayer = -1;
-    } mStartLocation;
+    // Overrides Link's spawn point when a new randomizer save is created
+    struct StartLocation {
+        s16 stage{-1};  // game::allStages[]
+        s16 point{0};
+        s8 room{0};
+        s8 layer{-1};
+    };
+    std::optional<StartLocation> mStartLocation{};
 
     std::optional<std::string> WriteToFile();
     std::optional<std::string> LoadFromHash(const std::string& hash);
@@ -173,6 +173,10 @@ public:
     u8 mTimeChange{};
     u8 mEventItemQueue[EVENT_ITEM_QUEUE_SIZE];
     bool mRoomReloadingState{false};
+
+    // setupRandomizerSave sets this when a save is made
+    // with a starting spawn override, dComIfGs_gameStart unsets
+    bool mPendingStartLocation{false};
 
     // Used to store an item id for a flow message override so that we can give the item
     // once the textbox is closed instead of when the message appears. This lines up

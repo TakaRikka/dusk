@@ -5,11 +5,11 @@
 - Type: Spawn
   Forward:
     Connection: Links Spawn -> Outside Links House
-    Stage: -1
-    Room: -1
-    Spawn: ""
-    Spawn Type: ""
-    Parameters: ""
+    Stage: 43
+    Room: 1
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
     State: "FF"
 
 ###############################
@@ -1019,11 +1019,11 @@
 - Type: Interior
   Forward:
     Connection: Ordon Village -> Ordon Shield House Upper Ledge
-    Stage: 
-    Room: 
-    Spawn: ""
-    Spawn Type: ""
-    Parameters: ""
+    Stage: 43
+    Room: 2
+    Spawn: "01"
+    Spawn Type: "B0"
+    Parameters: "F09F"
     State: "FF"
   Return:
     Connection: Ordon Shield House Upper Ledge -> Ordon Village
@@ -1045,11 +1045,11 @@
     State: "FF"
   Return:
     Connection: Ordon Fados House -> Ordon Village
-    Stage: 
-    Room: 
-    Spawn: ""
-    Spawn Type: ""
-    Parameters: ""
+    Stage: 43
+    Room: 0
+    Spawn: "07"
+    Spawn Type: "A0"
+    Parameters: "F09F"
     State: "FF"
 
 - Type: Interior
@@ -1222,7 +1222,7 @@
   Forward:
     Connection: Kakariko Renados Sanctuary -> Kakariko Renados Sanctuary Basement
     Stage: 75
-    Room: 5
+    Room: 7
     Spawn: "00"
     Spawn Type: "FF"
     Parameters: "FFFF"
@@ -2369,7 +2369,7 @@
     Stage: 56
     Room: 10
     Spawn: "02"
-    Spawn Type: D0""
+    Spawn Type: "D0"
     Parameters: "00FF"
     State: "FF"
   Return:

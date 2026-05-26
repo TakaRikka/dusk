@@ -10,6 +10,8 @@
 #include "dusk/randomizer/game/verify_item_functions.h"
 #include "dusk/randomizer/generator/utility/endian.hpp"
 #include "dusk/randomizer/generator/utility/yaml.hpp"
+#include "dusk/randomizer/generator/logic/entrance.hpp"
+#include "dusk/randomizer/generator/logic/world.hpp"
 #include "dusk/randomizer/generator/randomizer.hpp"
 #include "dusk/randomizer/generator/utility/text.hpp"
 
@@ -86,6 +88,14 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
 
     out["mStartHour"] = static_cast<u16>(this->mStartHour);
     out["mMapBits"] = static_cast<u16>(this->mMapBits);
+
+    if (this->mStartLocation.has_value()) {
+        const auto& s = this->mStartLocation.value();
+        out["mStartLocation"]["stage"] = static_cast<int>(s.stage);
+        out["mStartLocation"]["point"] = static_cast<int>(s.point);
+        out["mStartLocation"]["room"] = static_cast<int>(s.room);
+        out["mStartLocation"]["layer"] = static_cast<int>(s.layer);
+    }
 
     for (const auto& [stageRoomLayer, actorPatches] : this->mObjectPatches) {
         for (const auto& [actorCRC, actorPatch] : actorPatches) {
@@ -228,6 +238,16 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
     this->mStartHour = in["mStartHour"].as<u8>();
     // Starting map bits
     this->mMapBits = in["mMapBits"].as<u8>();
+
+    // Starting spawn override (optional)
+    if (in["mStartLocation"]) {
+        StartLocation s;
+        s.stage = static_cast<s16>(in["mStartLocation"]["stage"].as<int>());
+        s.point = static_cast<s16>(in["mStartLocation"]["point"].as<int>());
+        s.room = static_cast<s8>(in["mStartLocation"]["room"].as<int>());
+        s.layer = static_cast<s8>(in["mStartLocation"]["layer"].as<int>());
+        this->mStartLocation = s;
+    }
 
     // Object Patches
     for (const auto& stageRoomLayerNode: in["mObjectPatches"]) {
@@ -1164,6 +1184,29 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         randoData.mStartHour = 18;
     else if (startTimeSetting == "Night")
         randoData.mStartHour = 24;
+
+    // Starting spawn override
+    if (world->Setting("Randomize Starting Spawn") == "On") {
+        auto* spawnEntrance = world->GetEntrance("Links Spawn -> Outside Links House");
+        if (spawnEntrance != nullptr) {
+            auto* replacement = spawnEntrance->GetReplaces();
+            if (replacement != nullptr && replacement->HasWarpData()) {
+                RandomizerContext::StartLocation spawn{};
+                spawn.stage = static_cast<s16>(replacement->GetWarpStage());
+                spawn.room = static_cast<s8>(replacement->GetWarpRoom());
+                spawn.point = static_cast<s16>(replacement->GetWarpSpawn());
+                spawn.layer = static_cast<s8>(replacement->GetWarpLayer());
+                randoData.mStartLocation = spawn;
+                DuskLog.debug("Randomizer starting spawn: stage={} room={} point={} layer={}",
+                              spawn.stage, spawn.room, spawn.point, spawn.layer);
+            } else {
+                // Shouldn't really happen, a different spawn is chosen
+                // when there's no warp data (a few are invalid in the yaml)
+                DuskLog.debug("Randomizer starting spawn enabled but the chosen entrance has "
+                              "no warp data populated; using vanilla spawn.");
+            }
+        }
+    }
 
     // Actor Patches
     auto actorPatches = LOAD_EMBED_YAML(RANDO_DATA_PATH "object_patches.yaml");

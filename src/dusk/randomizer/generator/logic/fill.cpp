@@ -122,9 +122,10 @@ namespace randomizer::logic::fill
                 // Loop through the shuffled locations until we find a valid one.
                 // If a world is only checking for beatable logic, then we can ignore
                 // any access checks and just choose a random location if the world is already beatable
+                auto noLogic = itemToPlace->GetWorld()->Setting("Logic Rules") == "No Logic";
                 auto beatableOnlyLogic = itemToPlace->GetWorld()->Setting("Logic Rules") == "Beatable Only";
                 bool canChooseAnyLocation =
-                    search._ownedItems.contains(itemToPlace->GetWorld()->GetGameWinningItem()) && beatableOnlyLogic;
+                    noLogic || search._ownedItems.contains(itemToPlace->GetWorld()->GetGameWinningItem()) && beatableOnlyLogic;
 
                 for (const auto& location : allowedLocations)
                 {

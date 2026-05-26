@@ -14,6 +14,8 @@
 #include "dusk/memory.h"
 #include "dusk/speedrun.h"
 #include "dusk/settings.h"
+#include "dusk/randomizer/game/randomizer_context.hpp"
+#include "dusk/randomizer/game/stages.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_Reset.h"
@@ -410,7 +412,21 @@ void dScnName_c::changeGameScene() {
         dComIfGp_offEnableNextStage();
 
         if (dFs_c->isDataNew(dFs_c->getSelectNum())) {
+#if TARGET_PC
+            // Set random starting spawn and unset mPendingStartLocation
+            auto& randoData = randomizer_GetContext();
+            const auto& spawn = randoData.mStartLocation;
+            const int stageCount = static_cast<int>(sizeof(allStages) / sizeof(allStages[0]));
+            if (spawn.has_value() && spawn->stage >= 0 && spawn->stage < stageCount) {
+                g_randomizerState.mPendingStartLocation = false;
+                dComIfGp_setNextStage(
+                    allStages[spawn->stage], spawn->point, spawn->room, spawn->layer);
+            } else {
+                dComIfGp_setNextStage("F_SP108", 21, 1, 13);
+            }
+#else
             dComIfGp_setNextStage("F_SP108", 21, 1, 13);
+#endif
         }
         
         dKy_clear_game_init();
