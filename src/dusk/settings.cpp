@@ -86,10 +86,8 @@ UserSettings g_userSettings = {
         .gyroInvertYaw {"game.gyroInvertYaw", false},
         .enableMouseCamera {"game.enableMouseCamera", false},
         .enableMouseAim {"game.enableMouseAim", false},
-        .mouseAimSensitivityX {"game.mouseAimSensitivityX", 1.0f},
-        .mouseAimSensitivityY {"game.mouseAimSensitivityY", 1.0f},
-        .mouseCameraSensitivityX {"game.mouseCameraSensitivityX", 1.0f},
-        .mouseCameraSensitivityY {"game.mouseCameraSensitivityY", 1.0f},
+        .mouseAimSensitivity {"game.mouseAimSensitivity", 1.0f},
+        .mouseCameraSensitivity {"game.mouseCameraSensitivity", 1.0f},
         .freeCamera {"game.freeCamera", false},
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .invertCameraYAxis {"game.invertCameraYAxis", false},
@@ -288,10 +286,8 @@ void registerSettings() {
     Register(g_userSettings.game.gyroInvertYaw);
     Register(g_userSettings.game.enableMouseCamera);
     Register(g_userSettings.game.enableMouseAim);
-    Register(g_userSettings.game.mouseAimSensitivityX);
-    Register(g_userSettings.game.mouseAimSensitivityY);
-    Register(g_userSettings.game.mouseCameraSensitivityX);
-    Register(g_userSettings.game.mouseCameraSensitivityY);
+    Register(g_userSettings.game.mouseAimSensitivity);
+    Register(g_userSettings.game.mouseCameraSensitivity);
     Register(g_userSettings.game.freeCamera);
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);

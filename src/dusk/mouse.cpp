@@ -101,16 +101,16 @@ void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_a
     const auto& game = getSettings().game;
 
     if (camera_active) {
-        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseCameraSensitivityX.getValue();
-        s_camera_pitch_rad = -my_rel * kMousePixelToRad * game.mouseCameraSensitivityY.getValue();
+        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
+        s_camera_pitch_rad = -my_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
         s_camera_yaw_rad = game.enableMirrorMode.getValue() ? -s_camera_yaw_rad : s_camera_yaw_rad;
     } else {
         s_camera_yaw_rad = s_camera_pitch_rad = 0.0f;
     }
 
     if (aim_active) {
-        s_aim_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseAimSensitivityX.getValue();
-        s_aim_pitch_rad = my_rel * kMousePixelToRad * game.mouseAimSensitivityY.getValue();
+        s_aim_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseAimSensitivity.getValue();
+        s_aim_pitch_rad = my_rel * kMousePixelToRad * game.mouseAimSensitivity.getValue();
         s_aim_yaw_rad = game.enableMirrorMode.getValue() ? -s_aim_yaw_rad : s_aim_yaw_rad;
     } else {
         s_aim_yaw_rad = s_aim_pitch_rad = 0.0f;

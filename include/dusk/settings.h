@@ -198,10 +198,8 @@ struct UserSettings {
         ConfigVar<bool> gyroInvertYaw;
         ConfigVar<bool> enableMouseCamera;
         ConfigVar<bool> enableMouseAim;
-        ConfigVar<float> mouseAimSensitivityX;
-        ConfigVar<float> mouseAimSensitivityY;
-        ConfigVar<float> mouseCameraSensitivityX;
-        ConfigVar<float> mouseCameraSensitivityY;
+        ConfigVar<float> mouseAimSensitivity;
+        ConfigVar<float> mouseCameraSensitivity;
         ConfigVar<bool> freeCamera;
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;

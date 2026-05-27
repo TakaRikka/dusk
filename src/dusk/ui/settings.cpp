@@ -990,28 +990,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
 
         leftPane.add_section("Mouse");
-        addOption("Mouse Camera", getSettings().game.enableMouseCamera,
-            "Enables mouse input for controlling the third-person camera.");
         addOption("Mouse Aim", getSettings().game.enableMouseAim,
             "Enables mouse input while in look mode, aiming a hawk, and aiming "
             "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
             "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
-        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivityX,
-            "Mouse Camera X Sensitivity", "Controls horizontal mouse camera sensitivity.", 25, 400, 5,
-            [] {
-                return !getSettings().game.enableMouseCamera;
-            });
-        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivityY,
-            "Mouse Camera Y Sensitivity", "Controls vertical mouse camera sensitivity.", 25, 400, 5,
-            [] {
-                return !getSettings().game.enableMouseCamera;
-            });
-        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivityX,
-            "Mouse Aim X Sensitivity", "Controls horizontal mouse aim sensitivity.", 25, 400, 5,
+        addOption("Mouse Camera", getSettings().game.enableMouseCamera,
+            "Enables mouse input for controlling the third-person camera.");
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivity,
+            "Mouse Aim Sensitivity", "Controls mouse aim sensitivity.", 25, 400, 5,
             [] { return !getSettings().game.enableMouseAim; });
-        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivityY,
-            "Mouse Aim Y Sensitivity", "Controls vertical mouse aim sensitivity.", 25, 400, 5,
-            [] { return !getSettings().game.enableMouseAim; });
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivity,
+            "Mouse Camera Sensitivity", "Controls mouse camera sensitivity.", 25, 400, 5,
+            [] { return !getSettings().game.enableMouseCamera; });
 
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
