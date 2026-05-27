@@ -1430,8 +1430,9 @@ void dName_c::selectCursorPosSet(int row) {
 
 #if TARGET_PC
 void dName_c::nameWide() {
+    static bool cachedPanes = false;
     // Get pre-scale values for each pane
-    if (!cachedPanesName) {
+    if (!cachedPanes) {
         for (PaneCache& entry : l_tagName) {
             J2DPane* pane = nameIn.NameInScr->search(entry.tag);
             if (!entry.cached) {
@@ -1456,6 +1457,7 @@ void dName_c::nameWide() {
                 entry.cached = true;
             }
         }
+        cachedPanes = true;
     }
 
     // Reset all panes

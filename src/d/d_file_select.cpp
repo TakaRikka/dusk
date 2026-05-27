@@ -3752,6 +3752,7 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 
 #if TARGET_PC
 void dFile_select_c::fileSelectWide() {
+    static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
         for (PaneCache& entry : mSelDtPanes) {

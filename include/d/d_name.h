@@ -13,8 +13,6 @@ class JUTFont;
 class STControl;
 
 #if TARGET_PC
-static bool cachedPanesName = false;
-
 struct PaneCache {
     u64 tag;
     f32 origTransX;

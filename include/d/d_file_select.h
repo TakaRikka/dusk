@@ -13,8 +13,6 @@ class dFile_info_c;
 class J2DPicture;
 
 #if TARGET_PC
-static bool cachedPanes = false;
-
 static PaneCache mSelDtPanes[] = {
     {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
     {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},

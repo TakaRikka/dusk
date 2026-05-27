@@ -97,6 +97,7 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
 
 #if TARGET_PC
 void dMenu_Collect2D_c::menuCollectWide() {
+    static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
         for (PaneCache& entry : mpScreenPanes) {
