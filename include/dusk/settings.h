@@ -9,19 +9,19 @@ namespace dusk {
 
 using namespace config;
 
-enum class BloomMode : int {
+enum class BloomMode : u8 {
     Off = 0,
     Classic = 1,
     Dusk = 2,
 };
 
-enum class DepthOfFieldMode : int {
+enum class DepthOfFieldMode : u8 {
     Off = 0,
     Classic = 1,
     Dusk = 2,
 };
 
-enum class Resampler : int {
+enum class Resampler : u8 {
     Bilinear = 0,
     Area = 1,
 };
