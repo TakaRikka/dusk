@@ -1501,4 +1501,9 @@ void SettingsWindow::update() {
     Window::update();
 }
 
+void SettingsWindow::hide(bool close) {
+    config::Save();
+    Window::hide(close);
+}
+
 }  // namespace dusk::ui
