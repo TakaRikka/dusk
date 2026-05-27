@@ -100,20 +100,22 @@ bool syncCaptureState(SDL_Window* window, bool should_capture) {
 void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_active) {
     const auto& game = getSettings().game;
 
-    if (camera_active) {
-        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
-        s_camera_pitch_rad = -my_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
-        s_camera_yaw_rad = game.enableMirrorMode.getValue() ? -s_camera_yaw_rad : s_camera_yaw_rad;
-    } else {
-        s_camera_yaw_rad = s_camera_pitch_rad = 0.0f;
-    }
-
     if (aim_active) {
         s_aim_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseAimSensitivity.getValue();
         s_aim_pitch_rad = my_rel * kMousePixelToRad * game.mouseAimSensitivity.getValue();
         s_aim_yaw_rad = game.enableMirrorMode.getValue() ? -s_aim_yaw_rad : s_aim_yaw_rad;
+        s_aim_pitch_rad = game.invertMouseY.getValue() ? -s_aim_pitch_rad : s_aim_pitch_rad;
     } else {
         s_aim_yaw_rad = s_aim_pitch_rad = 0.0f;
+    }
+
+    if (camera_active) {
+        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
+        s_camera_pitch_rad = -my_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
+        s_camera_yaw_rad = game.enableMirrorMode.getValue() ? -s_camera_yaw_rad : s_camera_yaw_rad;
+        s_camera_pitch_rad = game.invertMouseY.getValue() ? -s_camera_pitch_rad : s_camera_pitch_rad;
+    } else {
+        s_camera_yaw_rad = s_camera_pitch_rad = 0.0f;
     }
 }
 }  // namespace

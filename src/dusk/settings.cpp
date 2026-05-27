@@ -88,6 +88,7 @@ UserSettings g_userSettings = {
         .enableMouseAim {"game.enableMouseAim", false},
         .mouseAimSensitivity {"game.mouseAimSensitivity", 1.0f},
         .mouseCameraSensitivity {"game.mouseCameraSensitivity", 1.0f},
+        .invertMouseY {"game.invertMouseY", false},
         .freeCamera {"game.freeCamera", false},
         .invertCameraXAxis {"game.invertCameraXAxis", false},
         .invertCameraYAxis {"game.invertCameraYAxis", false},
@@ -288,6 +289,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableMouseAim);
     Register(g_userSettings.game.mouseAimSensitivity);
     Register(g_userSettings.game.mouseCameraSensitivity);
+    Register(g_userSettings.game.invertMouseY);
     Register(g_userSettings.game.freeCamera);
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);

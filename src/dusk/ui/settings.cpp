@@ -1002,6 +1002,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivity,
             "Mouse Camera Sensitivity", "Controls mouse camera sensitivity.", 25, 400, 5,
             [] { return !getSettings().game.enableMouseCamera; });
+        addOption("Invert Mouse Y", getSettings().game.invertMouseY,
+            "Invert vertical mouse control for both aiming and camera.",
+            [] { return !getSettings().game.enableMouseAim || !getSettings().game.enableMouseCamera; });
 
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
