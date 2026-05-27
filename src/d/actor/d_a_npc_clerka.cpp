@@ -783,13 +783,13 @@ static int daNpc_clerkA_IsDelete(void* i_this) {
 
 static NPC_CLERKA_HIO_CLASS l_HIO;
 
-static actor_method_class daNpc_clerkA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_clerkA_MethodTable = {
     (process_method_func)daNpc_clerkA_Create,  (process_method_func)daNpc_clerkA_Delete,
     (process_method_func)daNpc_clerkA_Execute, (process_method_func)daNpc_clerkA_IsDelete,
     (process_method_func)daNpc_clerkA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CLERKA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CLERKA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

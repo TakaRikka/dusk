@@ -493,7 +493,7 @@ static void dummy() {
     JKR_DELETE((cCcD_GStts*)NULL);
 }
 
-static actor_method_class daObjSwHang_METHODS = {
+static DUSK_CONST actor_method_class daObjSwHang_METHODS = {
     (process_method_func)daObjSwHang_create1st,
     (process_method_func)daObjSwHang_MoveBGDelete,
     (process_method_func)daObjSwHang_MoveBGExecute,
@@ -501,7 +501,7 @@ static actor_method_class daObjSwHang_METHODS = {
     (process_method_func)daObjSwHang_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwHang = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwHang = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

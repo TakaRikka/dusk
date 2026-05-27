@@ -1506,13 +1506,13 @@ static int daNpc_Lud_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Lud_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Lud_MethodTable = {
     (process_method_func)daNpc_Lud_Create,  (process_method_func)daNpc_Lud_Delete,
     (process_method_func)daNpc_Lud_Execute, (process_method_func)daNpc_Lud_IsDelete,
     (process_method_func)daNpc_Lud_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_LUD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_LUD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

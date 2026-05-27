@@ -5863,13 +5863,13 @@ static int daE_WB_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-static actor_method_class l_daE_WB_Method = {
+static DUSK_CONST actor_method_class l_daE_WB_Method = {
     (process_method_func)daE_WB_Create,  (process_method_func)daE_WB_Delete,
     (process_method_func)daE_WB_Execute, (process_method_func)daE_WB_IsDelete,
     (process_method_func)daE_WB_Draw,
 };
 
-actor_process_profile_definition g_profile_E_WB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_WB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

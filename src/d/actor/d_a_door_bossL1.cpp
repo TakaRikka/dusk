@@ -972,7 +972,7 @@ static int daBdoorL1_Create(fopAc_ac_c* i_this) {
     return static_cast<daBdoorL1_c*>(i_this)->create();
 }
 
-static actor_method_class l_daBdoorL1_Method = {
+static DUSK_CONST actor_method_class l_daBdoorL1_Method = {
     (process_method_func)daBdoorL1_Create,
     (process_method_func)daBdoorL1_Delete,
     (process_method_func)daBdoorL1_Execute,
@@ -980,7 +980,7 @@ static actor_method_class l_daBdoorL1_Method = {
     (process_method_func)daBdoorL1_Draw,
 };
 
-actor_process_profile_definition g_profile_L1BOSS_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_L1BOSS_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

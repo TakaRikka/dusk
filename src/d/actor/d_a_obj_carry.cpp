@@ -4300,12 +4300,12 @@ static int daObjCarry_Create(fopAc_ac_c* i_this) {
     return ((daObjCarry_c*)i_this)->create();
 }
 
-static actor_method_class l_daObjCarry_Method = {
+static DUSK_CONST actor_method_class l_daObjCarry_Method = {
     (process_method_func)daObjCarry_Create, (process_method_func)daObjCarry_Delete,
     (process_method_func)daObjCarry_Execute, (process_method_func)NULL,
     (process_method_func)daObjCarry_Draw};
 
-actor_process_profile_definition g_profile_Obj_Carry = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Carry = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

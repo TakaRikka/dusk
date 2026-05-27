@@ -498,7 +498,7 @@ static int daBdoorL5_Create(fopAc_ac_c* i_this) {
 }
 
 
-static actor_method_class l_daBdoorL5_Method = {
+static DUSK_CONST actor_method_class l_daBdoorL5_Method = {
     (process_method_func)daBdoorL5_Create,
     (process_method_func)daBdoorL5_Delete,
     (process_method_func)daBdoorL5_Execute,
@@ -506,7 +506,7 @@ static actor_method_class l_daBdoorL5_Method = {
     (process_method_func)daBdoorL5_Draw,
 };
 
-actor_process_profile_definition g_profile_L5BOSS_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_L5BOSS_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

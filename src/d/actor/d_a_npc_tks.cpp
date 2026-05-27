@@ -3047,7 +3047,7 @@ void daNpcTks_c::drawOtherMdls() {
     }
 }
 
-static actor_method_class daNpcTks_MethodTable = {
+static DUSK_CONST actor_method_class daNpcTks_MethodTable = {
     (process_method_func)daNpcTks_Create,
     (process_method_func)daNpcTks_Delete,
     (process_method_func)daNpcTks_Execute,
@@ -3055,7 +3055,7 @@ static actor_method_class daNpcTks_MethodTable = {
     (process_method_func)daNpcTks_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_TKS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_TKS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

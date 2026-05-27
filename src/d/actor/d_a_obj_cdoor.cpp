@@ -288,7 +288,7 @@ static int daObjCdoor_Draw(daObjCdoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class l_daObjCdoor_Method = {
+static DUSK_CONST actor_method_class l_daObjCdoor_Method = {
     (process_method_func)daObjCdoor_Create,
     (process_method_func)daObjCdoor_Delete,
     (process_method_func)daObjCdoor_Execute,
@@ -296,7 +296,7 @@ static actor_method_class l_daObjCdoor_Method = {
     (process_method_func)daObjCdoor_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Cdoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Cdoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -1163,7 +1163,7 @@ static int daNpc_Kakashi_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Kakashi_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Create,
     (process_method_func)daNpc_Kakashi_Delete,
     (process_method_func)daNpc_Kakashi_Execute,
@@ -1171,7 +1171,7 @@ static actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_KAKASHI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_KAKASHI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -168,11 +168,11 @@ static int daTagMstop_Draw(daTagMstop_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagMstop_Method = {
+static DUSK_CONST actor_method_class l_daTagMstop_Method = {
     (process_method_func)daTagMstop_Create, (process_method_func)daTagMstop_Delete,
     (process_method_func)daTagMstop_Execute, NULL, (process_method_func)daTagMstop_Draw};
 
-actor_process_profile_definition g_profile_Tag_Mstop = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Mstop = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

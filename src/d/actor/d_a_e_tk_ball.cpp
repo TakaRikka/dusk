@@ -470,13 +470,13 @@ static int daE_TK_BALL_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-static actor_method_class l_daE_TK_BALL_Method = {
+static DUSK_CONST actor_method_class l_daE_TK_BALL_Method = {
     (process_method_func)daE_TK_BALL_Create,  (process_method_func)daE_TK_BALL_Delete,
     (process_method_func)daE_TK_BALL_Execute, (process_method_func)daE_TK_BALL_IsDelete,
     (process_method_func)daE_TK_BALL_Draw,
 };
 
-actor_process_profile_definition g_profile_E_TK_BALL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_TK_BALL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

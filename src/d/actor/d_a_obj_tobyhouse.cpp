@@ -592,7 +592,7 @@ static int daObjTobyHouse_MoveBGDraw(daObjTobyHouse_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjTobyHouse_METHODS = {
+static DUSK_CONST actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_create1st,
     (process_method_func)daObjTobyHouse_MoveBGDelete,
     (process_method_func)daObjTobyHouse_MoveBGExecute,
@@ -600,7 +600,7 @@ static actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_TobyHouse = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_TobyHouse = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

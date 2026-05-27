@@ -121,13 +121,13 @@ static int daObjOnsen_MoveBGDraw(daObjOnsen_c* i_this) {
     return static_cast<dBgS_MoveBgActor*>(i_this)->MoveBGDraw();
 }
 
-static actor_method_class daObjOnsen_METHODS = {
+static DUSK_CONST actor_method_class daObjOnsen_METHODS = {
     (process_method_func)daObjOnsen_create1st,     (process_method_func)daObjOnsen_MoveBGDelete,
     (process_method_func)daObjOnsen_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjOnsen_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Onsen = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Onsen = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

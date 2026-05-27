@@ -1245,13 +1245,13 @@ static int daNpc_Grd_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Grd_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Grd_MethodTable = {
     (process_method_func)daNpc_Grd_Create,  (process_method_func)daNpc_Grd_Delete,
     (process_method_func)daNpc_Grd_Execute, (process_method_func)daNpc_Grd_IsDelete,
     (process_method_func)daNpc_Grd_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GRD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GRD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

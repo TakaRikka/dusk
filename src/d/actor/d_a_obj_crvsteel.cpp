@@ -140,7 +140,7 @@ int daObjCRVSTEEL_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjCRVSTEEL_Method = {
+static DUSK_CONST actor_method_class l_daObjCRVSTEEL_Method = {
     (process_method_func)daObjCRVSTEEL_Create,
     (process_method_func)daObjCRVSTEEL_Delete,
     (process_method_func)daObjCRVSTEEL_Execute,
@@ -148,7 +148,7 @@ static actor_method_class l_daObjCRVSTEEL_Method = {
     (process_method_func)daObjCRVSTEEL_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_CRVSTEEL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_CRVSTEEL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -348,11 +348,11 @@ static int daNpc_Shop0_IsDelete(void*) {
     return true;
 }
 
-static actor_method_class daNpc_Shop0_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Shop0_MethodTable = {
     daNpc_Shop0_Create, daNpc_Shop0_Delete, daNpc_Shop0_Execute, daNpc_Shop0_IsDelete, daNpc_Shop0_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SHOP0 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SHOP0 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -15,7 +15,7 @@ struct actor_method_class {
 };
 struct actor_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
-    /* 0x24 */ actor_method_class* sub_method;
+    /* 0x24 */ DUSK_CONST actor_method_class* sub_method;
     /* 0x28 */ u32 status;
     /* 0x2C */ u8 group;
     /* 0x2D */ u8 cullType;
@@ -279,7 +279,7 @@ public:
     /* 0x0C0 */ int actor_type;
     /* 0x0C4 */ create_tag_class actor_tag;
     /* 0x0D8 */ create_tag_class draw_tag;
-    /* 0x0EC */ profile_method_class* sub_method;
+    /* 0x0EC */ profile_method_class DUSK_CONST* sub_method;
     /* 0x0F0 */ JKRSolidHeap* heap;
     /* 0x0F4 */ dEvt_info_c eventInfo;
     /* 0x10C */ dKy_tevstr_c tevStr;

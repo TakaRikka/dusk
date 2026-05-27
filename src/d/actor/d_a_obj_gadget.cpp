@@ -601,7 +601,7 @@ static int daObj_Gadget_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daObj_Gadget_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Gadget_MethodTable = {
     (process_method_func)daObj_Gadget_Create,
     (process_method_func)daObj_Gadget_Delete,
     (process_method_func)daObj_Gadget_Execute,
@@ -609,7 +609,7 @@ static actor_method_class daObj_Gadget_MethodTable = {
     (process_method_func)daObj_Gadget_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_GADGET = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_GADGET = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

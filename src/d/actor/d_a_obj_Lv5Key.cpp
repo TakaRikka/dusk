@@ -333,13 +333,13 @@ static int daObjLv5Key_IsDelete(daObjLv5Key_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjLv5Key_Method = {
+static DUSK_CONST actor_method_class l_daObjLv5Key_Method = {
     (process_method_func)daObjLv5Key_Create,  (process_method_func)daObjLv5Key_Delete,
     (process_method_func)daObjLv5Key_Execute, (process_method_func)daObjLv5Key_IsDelete,
     (process_method_func)daObjLv5Key_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv5Key = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv5Key = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

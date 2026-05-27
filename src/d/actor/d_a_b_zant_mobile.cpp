@@ -500,7 +500,7 @@ static int daB_ZANTZ_Create(daB_ZANTZ_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daB_ZANTZ_Method = {
+static DUSK_CONST actor_method_class l_daB_ZANTZ_Method = {
     (process_method_func)daB_ZANTZ_Create,
     (process_method_func)daB_ZANTZ_Delete,
     (process_method_func)daB_ZANTZ_Execute,
@@ -508,7 +508,7 @@ static actor_method_class l_daB_ZANTZ_Method = {
     (process_method_func)daB_ZANTZ_Draw,
 };
 
-actor_process_profile_definition g_profile_B_ZANTZ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_ZANTZ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

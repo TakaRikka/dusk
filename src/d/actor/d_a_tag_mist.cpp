@@ -198,7 +198,7 @@ static int daTagMist_Create(fopAc_ac_c* i_this) {
     return mist->create();
 }
 
-static actor_method_class l_daTagMist_Method = {
+static DUSK_CONST actor_method_class l_daTagMist_Method = {
     (process_method_func)daTagMist_Create,
     (process_method_func)daTagMist_Delete,
     (process_method_func)daTagMist_Execute,
@@ -210,7 +210,7 @@ static actor_method_class l_daTagMist_Method = {
 #endif
 };
 
-actor_process_profile_definition g_profile_Tag_Mist = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Mist = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -822,7 +822,7 @@ static int daB_OH_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daB_OH_Method = {
+static DUSK_CONST actor_method_class l_daB_OH_Method = {
     (process_method_func)daB_OH_Create,
     (process_method_func)daB_OH_Delete,
     (process_method_func)daB_OH_Execute,
@@ -830,7 +830,7 @@ static actor_method_class l_daB_OH_Method = {
     (process_method_func)daB_OH_Draw,
 };
 
-actor_process_profile_definition g_profile_B_OH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_OH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

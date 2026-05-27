@@ -330,7 +330,7 @@ static int daObj_AutoMata_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_AutoMata_MethodTable = {
+static DUSK_CONST actor_method_class daObj_AutoMata_MethodTable = {
     (process_method_func)daObj_AutoMata_Create,
     (process_method_func)daObj_AutoMata_Delete,
     (process_method_func)daObj_AutoMata_Execute,
@@ -338,7 +338,7 @@ static actor_method_class daObj_AutoMata_MethodTable = {
     (process_method_func)daObj_AutoMata_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_AUTOMATA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_AUTOMATA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

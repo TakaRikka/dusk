@@ -514,7 +514,7 @@ static int daObjPDtile_MoveBGDraw(daObjPDtile_c* i_this) {
 }
 
 
-static actor_method_class daObjPDtile_METHODS = {
+static DUSK_CONST actor_method_class daObjPDtile_METHODS = {
     (process_method_func)daObjPDtile_create1st,
     (process_method_func)daObjPDtile_MoveBGDelete,
     (process_method_func)daObjPDtile_MoveBGExecute,
@@ -522,7 +522,7 @@ static actor_method_class daObjPDtile_METHODS = {
     (process_method_func)daObjPDtile_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_PDtile = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_PDtile = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

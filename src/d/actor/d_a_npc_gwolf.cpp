@@ -1916,7 +1916,7 @@ static int daNpc_GWolf_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_GWolf_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_GWolf_MethodTable = {
     (process_method_func)daNpc_GWolf_Create,
     (process_method_func)daNpc_GWolf_Delete,
     (process_method_func)daNpc_GWolf_Execute,
@@ -1924,7 +1924,7 @@ static actor_method_class daNpc_GWolf_MethodTable = {
     (process_method_func)daNpc_GWolf_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GWOLF = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GWOLF = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

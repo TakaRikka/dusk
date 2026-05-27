@@ -1895,7 +1895,7 @@ static int daTbox_MoveBGDraw(daTbox_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daTbox_METHODS = {
+static DUSK_CONST actor_method_class daTbox_METHODS = {
     (process_method_func)daTbox_create1st,
     (process_method_func)daTbox_MoveBGDelete,
     (process_method_func)daTbox_MoveBGExecute,
@@ -1903,7 +1903,7 @@ static actor_method_class daTbox_METHODS = {
     (process_method_func)daTbox_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_TBOX = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TBOX = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

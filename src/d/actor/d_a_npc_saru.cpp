@@ -1225,7 +1225,7 @@ static int daNpc_Saru_IsDelete(void* param_1) {
     return 1;
 }
 
-static actor_method_class daNpc_Saru_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Saru_MethodTable = {
     (process_method_func)daNpc_Saru_Create,
     (process_method_func)daNpc_Saru_Delete,
     (process_method_func)daNpc_Saru_Execute,
@@ -1233,7 +1233,7 @@ static actor_method_class daNpc_Saru_MethodTable = {
     (process_method_func)daNpc_Saru_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SARU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SARU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

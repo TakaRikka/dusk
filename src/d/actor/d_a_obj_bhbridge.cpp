@@ -190,7 +190,7 @@ inline int daObjBhbridge_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjBhbridge_Method = {
+static DUSK_CONST actor_method_class l_daObjBhbridge_Method = {
     (process_method_func)daObjBhbridge_Create,
     (process_method_func)daObjBhbridge_Delete,
     (process_method_func)daObjBhbridge_Execute,
@@ -198,7 +198,7 @@ static actor_method_class l_daObjBhbridge_Method = {
     (process_method_func)daObjBhbridge_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Bhbridge = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Bhbridge = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -235,13 +235,13 @@ static int daObjMGate_MoveBGDraw(daObjMGate_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjMGate_METHODS = {
+static DUSK_CONST actor_method_class daObjMGate_METHODS = {
     (process_method_func)daObjMGate_create1st,     (process_method_func)daObjMGate_MoveBGDelete,
     (process_method_func)daObjMGate_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjMGate_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_MGate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MGate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

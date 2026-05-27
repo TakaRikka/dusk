@@ -1242,7 +1242,7 @@ static int daNpc_Sha_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Sha_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Sha_MethodTable = {
     (process_method_func)daNpc_Sha_Create,
     (process_method_func)daNpc_Sha_Delete,
     (process_method_func)daNpc_Sha_Execute,
@@ -1250,7 +1250,7 @@ static actor_method_class daNpc_Sha_MethodTable = {
     (process_method_func)daNpc_Sha_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SHAMAN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SHAMAN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

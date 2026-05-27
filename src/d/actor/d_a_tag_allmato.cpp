@@ -584,7 +584,7 @@ static int daTag_AllMato_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daTag_AllMato_MethodTable = {
+static DUSK_CONST actor_method_class daTag_AllMato_MethodTable = {
     (process_method_func)daTag_AllMato_Create,
     (process_method_func)daTag_AllMato_Delete,
     (process_method_func)daTag_AllMato_Execute,
@@ -592,7 +592,7 @@ static actor_method_class daTag_AllMato_MethodTable = {
     (process_method_func)daTag_AllMato_Draw
 };
 
-actor_process_profile_definition g_profile_TAG_ALLMATO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_ALLMATO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 10,
     /* List Prio    */ fpcPi_CURRENT_e,

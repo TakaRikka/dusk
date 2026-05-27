@@ -130,13 +130,13 @@ static int daObjVGnd_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-static actor_method_class l_daObjVGnd_Method = {
+static DUSK_CONST actor_method_class l_daObjVGnd_Method = {
     (process_method_func)daObjVGnd_Create,  (process_method_func)daObjVGnd_Delete,
     (process_method_func)daObjVGnd_Execute, (process_method_func)NULL,
     (process_method_func)daObjVGnd_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_VolcGnd = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_VolcGnd = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -511,7 +511,7 @@ static scene_method_class l_dScnRoom_Method = {
     (process_method_func)dScnRoom_Draw,
 };
 
-scene_process_profile_definition g_profile_ROOM_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_ROOM_SCENE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 0,
     /* List Prio    */ fpcPi_CURRENT_e,

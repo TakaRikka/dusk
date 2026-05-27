@@ -166,13 +166,13 @@ static int daScExit_Create(daScExit_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daScExit_Method = {
+static DUSK_CONST actor_method_class l_daScExit_Method = {
     (process_method_func)daScExit_Create,  (process_method_func)daScExit_Delete,
     (process_method_func)daScExit_Execute, (process_method_func)NULL,
     (process_method_func)daScExit_Draw,
 };
 
-actor_process_profile_definition g_profile_SCENE_EXIT2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SCENE_EXIT2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

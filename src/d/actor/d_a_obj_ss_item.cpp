@@ -365,13 +365,13 @@ static int daObj_SSItem_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_SSItem_MethodTable = {
+static DUSK_CONST actor_method_class daObj_SSItem_MethodTable = {
     (process_method_func)daObj_SSItem_Create,  (process_method_func)daObj_SSItem_Delete,
     (process_method_func)daObj_SSItem_Execute, (process_method_func)daObj_SSItem_IsDelete,
     (process_method_func)daObj_SSItem_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SSITEM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SSITEM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

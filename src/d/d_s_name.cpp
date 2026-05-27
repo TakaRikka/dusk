@@ -472,7 +472,7 @@ static scene_method_class l_dScnName_Method = {
     (process_method_func)dScnName_Draw,
 };
 
-scene_process_profile_definition g_profile_NAME_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_NAME_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,
@@ -486,7 +486,7 @@ scene_process_profile_definition g_profile_NAME_SCENE = {
                        0,
 };
 
-scene_process_profile_definition g_profile_NAMEEX_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_NAMEEX_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,

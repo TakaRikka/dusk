@@ -4135,7 +4135,7 @@ static int daNpcChat_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpcChat_MethodTable = {
+static DUSK_CONST actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Create,
     (process_method_func)daNpcChat_Delete,
     (process_method_func)daNpcChat_Execute,
@@ -4143,7 +4143,7 @@ static actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CHAT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CHAT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

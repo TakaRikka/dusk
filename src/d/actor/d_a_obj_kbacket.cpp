@@ -685,7 +685,7 @@ static int daObj_KBacket_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_KBacket_MethodTable = {
+static DUSK_CONST actor_method_class daObj_KBacket_MethodTable = {
     (process_method_func)daObj_KBacket_Create,
     (process_method_func)daObj_KBacket_Delete,
     (process_method_func)daObj_KBacket_Execute,
@@ -693,7 +693,7 @@ static actor_method_class daObj_KBacket_MethodTable = {
     (process_method_func)daObj_KBacket_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KBACKET = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KBACKET = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -465,7 +465,7 @@ static int daObj_ItaMato_IsDelete(void* a_this) {
     return 1;
 }
 
-static actor_method_class daObj_ItaMato_MethodTable = {
+static DUSK_CONST actor_method_class daObj_ItaMato_MethodTable = {
     (process_method_func)daObj_ItaMato_Create,
     (process_method_func)daObj_ItaMato_Delete,
     (process_method_func)daObj_ItaMato_Execute,
@@ -473,7 +473,7 @@ static actor_method_class daObj_ItaMato_MethodTable = {
     (process_method_func)daObj_ItaMato_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_ITAMATO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_ITAMATO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

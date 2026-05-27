@@ -1090,7 +1090,7 @@ static int daObjMarm_MoveBGDraw(daObjMarm_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjMarm_METHODS = {
+static DUSK_CONST actor_method_class daObjMarm_METHODS = {
     (process_method_func)daObjMarm_create1st,
     (process_method_func)daObjMarm_MoveBGDelete,
     (process_method_func)daObjMarm_MoveBGExecute,
@@ -1098,7 +1098,7 @@ static actor_method_class daObjMarm_METHODS = {
     (process_method_func)daObjMarm_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_MagneArm = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MagneArm = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

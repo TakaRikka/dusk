@@ -1582,7 +1582,7 @@ static int daNpc_Yelia_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Yelia_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Yelia_MethodTable = {
     (process_method_func)daNpc_Yelia_Create,
     (process_method_func)daNpc_Yelia_Delete,
     (process_method_func)daNpc_Yelia_Execute,
@@ -1590,7 +1590,7 @@ static actor_method_class daNpc_Yelia_MethodTable = {
     (process_method_func)daNpc_Yelia_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_YELIA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_YELIA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

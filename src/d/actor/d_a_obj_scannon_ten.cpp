@@ -460,7 +460,7 @@ static int daObjSCannonTen_draw(daObjSCannonTen_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daObjSCannonTen_METHODS = {
+static DUSK_CONST actor_method_class daObjSCannonTen_METHODS = {
     (process_method_func)daObjSCannonTen_create,
     (process_method_func)daObjSCannonTen_Delete,
     (process_method_func)daObjSCannonTen_execute,
@@ -468,7 +468,7 @@ static actor_method_class daObjSCannonTen_METHODS = {
     (process_method_func)daObjSCannonTen_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SCannonTen = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SCannonTen = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

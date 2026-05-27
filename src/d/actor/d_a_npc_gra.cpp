@@ -4101,7 +4101,7 @@ static BOOL daNpc_grA_IsDelete(void* i_this) {
     return true;
 }
 
-static actor_method_class daNpc_grA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_grA_MethodTable = {
     (process_method_func)daNpc_grA_Create,
     (process_method_func)daNpc_grA_Delete,
     (process_method_func)daNpc_grA_Execute,
@@ -4109,7 +4109,7 @@ static actor_method_class daNpc_grA_MethodTable = {
     (process_method_func)daNpc_grA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GRA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GRA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -205,7 +205,7 @@ static int daObjSakuita_Create(fopAc_ac_c* i_actor) {
     return static_cast<daObjSakuita_c*>(i_actor)->create();
 }
 
-static actor_method_class l_daObjSakuita_Method = {
+static DUSK_CONST actor_method_class l_daObjSakuita_Method = {
     (process_method_func)daObjSakuita_Create,
     (process_method_func)daObjSakuita_Delete,
     (process_method_func)daObjSakuita_Execute,
@@ -213,7 +213,7 @@ static actor_method_class l_daObjSakuita_Method = {
     (process_method_func)daObjSakuita_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Sakuita = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Sakuita = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

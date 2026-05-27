@@ -764,7 +764,7 @@ static int daLv6TogeTrap_Create(fopAc_ac_c* i_this) {
     return ((daLv6TogeTrap_c*)i_this)->create();
 }
 
-static actor_method_class l_daLv6TogeTrap_Method = {
+static DUSK_CONST actor_method_class l_daLv6TogeTrap_Method = {
     (process_method_func)daLv6TogeTrap_Create,
     (process_method_func)daLv6TogeTrap_Delete,
     (process_method_func)daLv6TogeTrap_Execute,
@@ -772,7 +772,7 @@ static actor_method_class l_daLv6TogeTrap_Method = {
     (process_method_func)daLv6TogeTrap_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6TogeTrap = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6TogeTrap = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

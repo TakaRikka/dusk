@@ -2114,7 +2114,7 @@ static int daNpcChin_IsDelete(void* param_0) {
     return TRUE;
 }
 
-static actor_method_class daNpcChin_MethodTable = {
+static DUSK_CONST actor_method_class daNpcChin_MethodTable = {
     (process_method_func)daNpcChin_Create,
     (process_method_func)daNpcChin_Delete,
     (process_method_func)daNpcChin_Execute,
@@ -2122,7 +2122,7 @@ static actor_method_class daNpcChin_MethodTable = {
     (process_method_func)daNpcChin_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CHIN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CHIN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

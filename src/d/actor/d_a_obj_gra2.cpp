@@ -2125,7 +2125,7 @@ daObj_GrA_c::MotionFunc daObj_GrA_c::mFaceMotionList[14] = {
     &daObj_GrA_c::face999,
 };
 
-static actor_method_class daObj_GrA_MethodTable = {
+static DUSK_CONST actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Create,
     (process_method_func)daObj_GrA_Delete,
     (process_method_func)daObj_GrA_Execute,
@@ -2133,7 +2133,7 @@ static actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_GRA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_GRA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

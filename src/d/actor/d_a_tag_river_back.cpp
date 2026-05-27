@@ -153,11 +153,11 @@ static int daTagRiverBack_Create(daTagRiverBack_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daTagRiverBack_Method = {(process_method_func)daTagRiverBack_Create,
+static DUSK_CONST actor_method_class l_daTagRiverBack_Method = {(process_method_func)daTagRiverBack_Create,
                                                      (process_method_func)daTagRiverBack_Delete,
                                                      (process_method_func)daTagRiverBack_Execute};
 
-actor_process_profile_definition g_profile_Tag_RiverBack = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_RiverBack = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

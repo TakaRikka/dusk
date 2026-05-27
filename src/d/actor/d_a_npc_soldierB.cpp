@@ -974,13 +974,13 @@ static int daNpc_SoldierB_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_SoldierB_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_SoldierB_MethodTable = {
     (process_method_func)daNpc_SoldierB_Create,  (process_method_func)daNpc_SoldierB_Delete,
     (process_method_func)daNpc_SoldierB_Execute, (process_method_func)daNpc_SoldierB_IsDelete,
     (process_method_func)daNpc_SoldierB_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SOLDIERb = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SOLDIERb = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

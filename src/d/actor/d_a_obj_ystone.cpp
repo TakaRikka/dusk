@@ -284,7 +284,7 @@ static cPhs_Step daObj_Ystone_Create(fopAc_ac_c* i_this) {
 }
 
 
-static actor_method_class l_daObj_Ystone_Method = {
+static DUSK_CONST actor_method_class l_daObj_Ystone_Method = {
     (process_method_func)daObj_Ystone_Create,
     (process_method_func)daObj_Ystone_Delete,
     (process_method_func)daObj_Ystone_Execute,
@@ -292,7 +292,7 @@ static actor_method_class l_daObj_Ystone_Method = {
     (process_method_func)daObj_Ystone_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_YSTONE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_YSTONE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

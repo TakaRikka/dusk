@@ -447,7 +447,7 @@ void dDlst_daTitle_c::draw() {
     Scr->draw(0.0f, 0.0f, ctx);
 }
 
-static actor_method_class l_daTitle_Method = {
+static DUSK_CONST actor_method_class l_daTitle_Method = {
     (process_method_func)daTitle_Create,
     (process_method_func)daTitle_Delete,
     (process_method_func)daTitle_Execute,
@@ -455,7 +455,7 @@ static actor_method_class l_daTitle_Method = {
     (process_method_func)daTitle_Draw,
 };
 
-actor_process_profile_definition g_profile_TITLE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TITLE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

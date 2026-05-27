@@ -191,7 +191,7 @@ static cPhs_Step daZraFreeze_create(fopAc_ac_c* i_this) {
     return static_cast<daZraFreeze_c*>(i_this)->Create();
 }
 
-static actor_method_class l_daZraFreeze_Method = {
+static DUSK_CONST actor_method_class l_daZraFreeze_Method = {
     (process_method_func)daZraFreeze_create,
     (process_method_func)daZraFreeze_Delete,
     (process_method_func)daZraFreeze_Execute,
@@ -199,7 +199,7 @@ static actor_method_class l_daZraFreeze_Method = {
     (process_method_func)daZraFreeze_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_ZRAFREEZE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_ZRAFREEZE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

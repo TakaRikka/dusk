@@ -815,7 +815,7 @@ static int daObjWarpKBrg_MoveBGDraw(daObjWarpKBrg_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjWarpKBrg_METHODS = {
+static DUSK_CONST actor_method_class daObjWarpKBrg_METHODS = {
     (process_method_func)daObjWarpKBrg_create1st,
     (process_method_func)daObjWarpKBrg_MoveBGDelete,
     (process_method_func)daObjWarpKBrg_MoveBGExecute,
@@ -823,7 +823,7 @@ static actor_method_class daObjWarpKBrg_METHODS = {
     (process_method_func)daObjWarpKBrg_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_KakarikoBrg = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_KakarikoBrg = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

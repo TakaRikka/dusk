@@ -681,7 +681,7 @@ static int daObjGeyser_MoveBGDraw(daObjGeyser_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjGeyser_METHODS = {
+static DUSK_CONST actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_create1st,
     (process_method_func)daObjGeyser_MoveBGDelete,
     (process_method_func)daObjGeyser_MoveBGExecute,
@@ -689,7 +689,7 @@ static actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Geyser = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Geyser = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

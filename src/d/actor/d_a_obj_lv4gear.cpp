@@ -154,13 +154,13 @@ static int daObjLv4Gear_Create(daObjLv4Gear_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObjLv4Gear_Method = {
+static DUSK_CONST actor_method_class l_daObjLv4Gear_Method = {
     (process_method_func)daObjLv4Gear_Create,  (process_method_func)daObjLv4Gear_Delete,
     (process_method_func)daObjLv4Gear_Execute, (process_method_func)NULL,
     (process_method_func)daObjLv4Gear_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4Gear = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4Gear = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

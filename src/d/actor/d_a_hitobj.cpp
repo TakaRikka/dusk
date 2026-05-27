@@ -65,7 +65,7 @@ static int daHitobj_Create(fopAc_ac_c* i_this) {
     return ret;
 }
 
-static actor_method_class l_daHitobj_Method = {
+static DUSK_CONST actor_method_class l_daHitobj_Method = {
     (process_method_func)daHitobj_Create,
     (process_method_func)daHitobj_Delete,
     (process_method_func)daHitobj_Execute,
@@ -73,7 +73,7 @@ static actor_method_class l_daHitobj_Method = {
     (process_method_func)daHitobj_Draw
 };
 
-actor_process_profile_definition g_profile_HITOBJ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_HITOBJ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

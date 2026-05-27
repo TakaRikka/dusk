@@ -456,13 +456,13 @@ void _GlSph_Mng_c::incSphSe() {
     }
 }
 
-static actor_method_class l_daGlwSph_Method = {
+static DUSK_CONST actor_method_class l_daGlwSph_Method = {
     (process_method_func)daGlwSph_Create,  (process_method_func)daGlwSph_Delete,
     (process_method_func)daGlwSph_Execute, (process_method_func)NULL,
     (process_method_func)daGlwSph_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_glowSphere = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_glowSphere = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -153,7 +153,7 @@ static int daObjGrzRock_create(fopAc_ac_c* a_this) {
     return static_cast<daObjGrzRock_c*>(a_this)->create();
 }
 
-static actor_method_class l_daObjGrzRock_Method = {
+static DUSK_CONST actor_method_class l_daObjGrzRock_Method = {
     (process_method_func)daObjGrzRock_create,
     (process_method_func)daObjGrzRock_Delete,
     (process_method_func)daObjGrzRock_Execute,
@@ -161,7 +161,7 @@ static actor_method_class l_daObjGrzRock_Method = {
     (process_method_func)daObjGrzRock_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_GrzRock = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_GrzRock = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

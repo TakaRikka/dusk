@@ -192,7 +192,7 @@ static int daObjPDwall_MoveBGDraw(daObjPDwall_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjPDwall_METHODS = {
+static DUSK_CONST actor_method_class daObjPDwall_METHODS = {
     (process_method_func)daObjPDwall_create1st,
     (process_method_func)daObjPDwall_MoveBGDelete,
     (process_method_func)daObjPDwall_MoveBGExecute,
@@ -200,7 +200,7 @@ static actor_method_class daObjPDwall_METHODS = {
     (process_method_func)daObjPDwall_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_PDwall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_PDwall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

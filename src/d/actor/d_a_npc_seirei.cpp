@@ -815,7 +815,7 @@ static int daNpc_Seirei_IsDelete(void* a_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Seirei_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Seirei_MethodTable = {
     (process_method_func)daNpc_Seirei_Create,
     (process_method_func)daNpc_Seirei_Delete,
     (process_method_func)daNpc_Seirei_Execute,
@@ -823,7 +823,7 @@ static actor_method_class daNpc_Seirei_MethodTable = {
     (process_method_func)daNpc_Seirei_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SEIREI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SEIREI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

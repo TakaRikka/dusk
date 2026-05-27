@@ -169,7 +169,7 @@ static int daObjWindow_MoveBGDraw(daObjWindow_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjWindow_METHODS = {
+static DUSK_CONST actor_method_class daObjWindow_METHODS = {
     (process_method_func)daObjWindow_create1st,
     (process_method_func)daObjWindow_MoveBGDelete,
     (process_method_func)daObjWindow_MoveBGExecute,
@@ -177,7 +177,7 @@ static actor_method_class daObjWindow_METHODS = {
     (process_method_func)daObjWindow_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Window = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Window = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

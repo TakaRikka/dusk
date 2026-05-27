@@ -1187,13 +1187,13 @@ BOOL daNpcAshB_c::drawDbgInfo() {
     return false;
 }
 
-static actor_method_class daNpcAshB_MethodTable = {
+static DUSK_CONST actor_method_class daNpcAshB_MethodTable = {
     (process_method_func)daNpcAshB_Create,  (process_method_func)daNpcAshB_Delete,
     (process_method_func)daNpcAshB_Execute, (process_method_func)daNpcAshB_IsDelete,
     (process_method_func)daNpcAshB_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ASHB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ASHB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

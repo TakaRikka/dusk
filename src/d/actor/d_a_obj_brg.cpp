@@ -1829,7 +1829,7 @@ static int daObj_Brg_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daObj_Brg_Method = {
+static DUSK_CONST actor_method_class l_daObj_Brg_Method = {
     (process_method_func)daObj_Brg_Create,
     (process_method_func)daObj_Brg_Delete,
     (process_method_func)daObj_Brg_Execute,
@@ -1837,7 +1837,7 @@ static actor_method_class l_daObj_Brg_Method = {
     (process_method_func)daObj_Brg_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_BRG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_BRG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

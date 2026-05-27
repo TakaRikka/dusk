@@ -488,13 +488,13 @@ static int daNpc_solA_IsDelete(void* param_0) {
     return 1;
 }
 
-static actor_method_class daNpc_solA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_solA_MethodTable = {
     (process_method_func)daNpc_solA_Create,  (process_method_func)daNpc_solA_Delete,
     (process_method_func)daNpc_solA_Execute, (process_method_func)daNpc_solA_IsDelete,
     (process_method_func)daNpc_solA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SOLA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SOLA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

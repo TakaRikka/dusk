@@ -2206,7 +2206,7 @@ static int daNpc_Aru_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Aru_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Aru_MethodTable = {
     (process_method_func)daNpc_Aru_Create,
     (process_method_func)daNpc_Aru_Delete,
     (process_method_func)daNpc_Aru_Execute,
@@ -2214,7 +2214,7 @@ static actor_method_class daNpc_Aru_MethodTable = {
     (process_method_func)daNpc_Aru_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ARU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ARU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

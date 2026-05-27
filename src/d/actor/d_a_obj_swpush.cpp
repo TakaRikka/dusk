@@ -853,7 +853,7 @@ namespace {
         return 1;
     }
 
-    static actor_method_class Mthd_Table = {
+    static DUSK_CONST actor_method_class Mthd_Table = {
         (process_method_func)Mthd_Create,
         (process_method_func)Mthd_Delete,
         (process_method_func)Mthd_Execute,
@@ -865,7 +865,7 @@ namespace {
 
 AUDIO_INSTANCES;
 
-actor_process_profile_definition g_profile_Obj_Swpush = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Swpush = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

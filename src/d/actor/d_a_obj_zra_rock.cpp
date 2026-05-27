@@ -140,7 +140,7 @@ static cPhs_Step daObjZraRock_create(fopAc_ac_c* i_this) {
     return static_cast<daObjZraRock_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjZraRock_Method = {
+static DUSK_CONST actor_method_class l_daObjZraRock_Method = {
     (process_method_func)daObjZraRock_create,
     (process_method_func)daObjZraRock_Delete,
     (process_method_func)daObjZraRock_Execute,
@@ -149,7 +149,7 @@ static actor_method_class l_daObjZraRock_Method = {
 
 };
 
-actor_process_profile_definition g_profile_Obj_ZraRock = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_ZraRock = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

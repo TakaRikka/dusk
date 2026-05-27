@@ -415,7 +415,7 @@ int daObjCRVFENCE_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjCRVFENCE_Method = {
+static DUSK_CONST actor_method_class l_daObjCRVFENCE_Method = {
     (process_method_func)daObjCRVFENCE_Create,
     (process_method_func)daObjCRVFENCE_Delete,
     (process_method_func)daObjCRVFENCE_Execute,
@@ -423,7 +423,7 @@ static actor_method_class l_daObjCRVFENCE_Method = {
     (process_method_func)daObjCRVFENCE_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_CRVFENCE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_CRVFENCE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

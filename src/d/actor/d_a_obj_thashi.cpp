@@ -239,7 +239,7 @@ static int daObjTHASHI_IsDelete(daObjTHASHI_c* param_0) {
     return TRUE;
 }
 
-static actor_method_class l_daObjTHASHI_Method = {
+static DUSK_CONST actor_method_class l_daObjTHASHI_Method = {
     (process_method_func)daObjTHASHI_Create,
     (process_method_func)daObjTHASHI_Delete,
     (process_method_func)daObjTHASHI_Execute,
@@ -247,7 +247,7 @@ static actor_method_class l_daObjTHASHI_Method = {
     (process_method_func)daObjTHASHI_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_THASHI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_THASHI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

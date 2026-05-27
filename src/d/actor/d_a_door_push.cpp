@@ -364,13 +364,13 @@ static int daDoorPush_MoveBGDraw(daDoorPush_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daDoorPush_METHODS = {
+static DUSK_CONST actor_method_class daDoorPush_METHODS = {
     (process_method_func)daDoorPush_create1st,     (process_method_func)daDoorPush_MoveBGDelete,
     (process_method_func)daDoorPush_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daDoorPush_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_PushDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_PushDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

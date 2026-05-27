@@ -372,13 +372,13 @@ static int daTagLv6Gate_Delete(daTagLv6Gate_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagLv6Gate_Method = {
+static DUSK_CONST actor_method_class l_daTagLv6Gate_Method = {
     (process_method_func)daTagLv6Gate_Create,  (process_method_func)daTagLv6Gate_Delete,
     (process_method_func)daTagLv6Gate_Execute, (process_method_func)daTagLv6Gate_IsDelete,
     (process_method_func)daTagLv6Gate_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_Lv6Gate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Lv6Gate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

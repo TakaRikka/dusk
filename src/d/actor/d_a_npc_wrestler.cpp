@@ -5212,7 +5212,7 @@ void daNpcWrestler_c::drawOtherMdls() {
     /* empty function */
 }
 
-static actor_method_class daNpcWrestler_MethodTable = {
+static DUSK_CONST actor_method_class daNpcWrestler_MethodTable = {
     (process_method_func)daNpcWrestler_Create,
     (process_method_func)daNpcWrestler_Delete,
     (process_method_func)daNpcWrestler_Execute,
@@ -5220,7 +5220,7 @@ static actor_method_class daNpcWrestler_MethodTable = {
     (process_method_func)daNpcWrestler_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_WRESTLER = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_WRESTLER = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

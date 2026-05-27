@@ -11627,7 +11627,7 @@ static leafdraw_method_class method = {
     (process_method_func)camera_draw,
 };
 
-camera_process_profile_definition g_profile_CAMERA = {
+DUSK_PROFILE camera_process_profile_definition DUSK_CONST g_profile_CAMERA = {
     /* Layer ID           */ fpcLy_CURRENT_e,
     /* List ID            */ 11,
     /* List Prio          */ fpcPi_CURRENT_e,
@@ -11648,7 +11648,7 @@ camera_process_profile_definition g_profile_CAMERA = {
                              0,
 };
 
-camera_process_profile_definition g_profile_CAMERA2 = {
+DUSK_PROFILE camera_process_profile_definition DUSK_CONST g_profile_CAMERA2 = {
     /* Layer ID           */ fpcLy_CURRENT_e,
     /* List ID            */ 11,
     /* List Prio          */ fpcPi_CURRENT_e,

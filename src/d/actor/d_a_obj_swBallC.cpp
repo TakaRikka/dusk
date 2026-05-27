@@ -402,7 +402,7 @@ static int daObjSwBallC_Create(daObjSwBallC_c* param_0) {
     return param_0->create();
 }
 
-static actor_method_class l_daObjSwBallC_Method = {
+static DUSK_CONST actor_method_class l_daObjSwBallC_Method = {
     (process_method_func)daObjSwBallC_Create,
     (process_method_func)daObjSwBallC_Delete,
     (process_method_func)daObjSwBallC_Execute,
@@ -410,7 +410,7 @@ static actor_method_class l_daObjSwBallC_Method = {
     (process_method_func)daObjSwBallC_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwBallC = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwBallC = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

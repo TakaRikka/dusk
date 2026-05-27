@@ -2166,7 +2166,7 @@ void daNpcCoach_c::initCoachBlazing() {
 
 daNpcCoach_c::daNpcCoach_c() {}
 
-static actor_method_class l_daNpcCoach_Method = {
+static DUSK_CONST actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Create,
     (process_method_func)daNpcCoach_Delete,
     (process_method_func)daNpcCoach_Execute,
@@ -2174,7 +2174,7 @@ static actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_COACH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_COACH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

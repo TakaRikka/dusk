@@ -2455,12 +2455,12 @@ static int daObj_Sekizoa_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_Sekizoa_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Sekizoa_MethodTable = {
     daObj_Sekizoa_Create,   daObj_Sekizoa_Delete, daObj_Sekizoa_Execute,
     daObj_Sekizoa_IsDelete, daObj_Sekizoa_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SEKIZOA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SEKIZOA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

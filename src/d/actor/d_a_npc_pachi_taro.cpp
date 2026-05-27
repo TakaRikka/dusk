@@ -2550,7 +2550,7 @@ static int daNpc_Pachi_Taro_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Pachi_Taro_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Pachi_Taro_MethodTable = {
     (process_method_func)daNpc_Pachi_Taro_Create,
     (process_method_func)daNpc_Pachi_Taro_Delete,
     (process_method_func)daNpc_Pachi_Taro_Execute,
@@ -2558,7 +2558,7 @@ static actor_method_class daNpc_Pachi_Taro_MethodTable = {
     (process_method_func)daNpc_Pachi_Taro_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_PACHI_TARO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_PACHI_TARO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

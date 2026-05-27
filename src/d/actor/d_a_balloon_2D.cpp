@@ -687,7 +687,7 @@ void daBalloon2D_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static actor_method_class daBalloon2D_METHODS = {
+static DUSK_CONST actor_method_class daBalloon2D_METHODS = {
     (process_method_func)daBalloon2D_create,
     (process_method_func)daBalloon2D_destroy,
     (process_method_func)daBalloon2D_execute,
@@ -695,7 +695,7 @@ static actor_method_class daBalloon2D_METHODS = {
     (process_method_func)daBalloon2D_draw,
 };
 
-actor_process_profile_definition g_profile_BALLOON2D = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BALLOON2D = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

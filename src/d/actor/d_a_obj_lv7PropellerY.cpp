@@ -289,7 +289,7 @@ static int daPropY_Create(fopAc_ac_c* i_this) {
     return ((daPropY_c*)i_this)->create();
 }
 
-static actor_method_class l_daPropY_Method = {
+static DUSK_CONST actor_method_class l_daPropY_Method = {
     (process_method_func)daPropY_Create,
     (process_method_func)daPropY_Delete,
     (process_method_func)daPropY_Execute,
@@ -297,7 +297,7 @@ static actor_method_class l_daPropY_Method = {
     (process_method_func)daPropY_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv7PropY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv7PropY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

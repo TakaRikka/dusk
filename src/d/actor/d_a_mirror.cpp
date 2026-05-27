@@ -646,13 +646,13 @@ int daMirror_c::entryModel(J3DModel* i_model) {
     return mPacket.entryModel(i_model);
 }
 
-static actor_method_class daMirror_METHODS = {
+static DUSK_CONST actor_method_class daMirror_METHODS = {
     (process_method_func)daMirror_create,  (process_method_func)daMirror_Delete,
     (process_method_func)daMirror_execute, (process_method_func)NULL,
     (process_method_func)daMirror_draw,
 };
 
-actor_process_profile_definition g_profile_MIRROR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MIRROR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

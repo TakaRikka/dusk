@@ -2331,7 +2331,7 @@ static int daNpc_zrA_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daNpc_zrA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_zrA_MethodTable = {
     (process_method_func)daNpc_zrA_Create,
     (process_method_func)daNpc_zrA_Delete,
     (process_method_func)daNpc_zrA_Execute,
@@ -2339,7 +2339,7 @@ static actor_method_class daNpc_zrA_MethodTable = {
     (process_method_func)daNpc_zrA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ZRA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ZRA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

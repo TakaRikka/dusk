@@ -236,7 +236,7 @@ static int daObjMasterSword_IsDelete(daObjMasterSword_c* param_0) {
     return 1;
 }
 
-static actor_method_class l_daObjMasterSword_Method = {
+static DUSK_CONST actor_method_class l_daObjMasterSword_Method = {
     (process_method_func)daObjMasterSword_Create,
     (process_method_func)daObjMasterSword_Delete,
     (process_method_func)daObjMasterSword_Execute,
@@ -244,7 +244,7 @@ static actor_method_class l_daObjMasterSword_Method = {
     (process_method_func)daObjMasterSword_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_MasterSword = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MasterSword = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,
