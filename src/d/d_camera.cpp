@@ -7655,26 +7655,14 @@ bool dCamera_c::freeCamera() {
         return false;
     }
 
-    const bool mouse_camera_enabled = dusk::getSettings().game.enableMouseCamera.getValue();
-    const bool is_targeting = dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 0x8);
-
     if (!mCamParam.mManualMode) {
         mCamParam.freeXAngle = mViewCache.mDirection.mAzimuth.Degree();
         mCamParam.freeYAngle = mViewCache.mDirection.mInclination.Degree();
     }
 
-    // Force freecam as active when mouse camera is enabled
-    if (mouse_camera_enabled && !is_targeting) {
-        mCamParam.mManualMode = 1;
-    } else {
-        mCamParam.mManualMode = 0;
-    }
-
     cXyz camMovement = {mPadInfo.mCStick.mLastPosX, mPadInfo.mCStick.mLastPosY, 0.0f};
     f32 magnitude = sqrt(mPadInfo.mCStick.mLastPosX * mPadInfo.mCStick.mLastPosX + mPadInfo.mCStick.mLastPosY * mPadInfo.mCStick.mLastPosY);
 
-    // TODO: Refactor this so mouse and joystick can work together. Disabled for now.
-    /*
     // If we aren't in manual cam mode, don't trigger it if the player tries to hit C-up
     // for first person unless they have first person bound to a custom binding
     if ((dusk::isActionBound(dusk::ActionBinds::FIRST_PERSON_CAMERA, mPadID) && mPadInfo.mCStick.mLastPosY != 0) ||
@@ -7686,19 +7674,22 @@ bool dCamera_c::freeCamera() {
         mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraSensitivity * 5.0f;
         mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraSensitivity * 5.0f;
     }
-    */
+
+    f32 yaw_rad = 0.0f;
+    f32 pitch_rad = 0.0f;
+    dusk::mouse::getCameraDeltas(yaw_rad, pitch_rad);
+    if (dusk::getSettings().game.enableMouseCamera && (yaw_rad != 0.0f || pitch_rad != 0.0f) &&
+        !dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 0x8))
+    {
+        mCamParam.mManualMode = 1;
+        mCamParam.freeXAngle += MTXRadToDeg(yaw_rad);
+        mCamParam.freeYAngle += -MTXRadToDeg(pitch_rad);
+    }
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (!mCamParam.mManualMode || player == nullptr) {
         return false;
     }
-
-    f32 yaw_rad = 0.0f;
-    f32 pitch_rad = 0.0f;
-    dusk::mouse::getCameraDeltas(yaw_rad, pitch_rad);
-
-    mCamParam.freeXAngle += MTXRadToDeg(yaw_rad) * 1.0f;
-    mCamParam.freeYAngle += MTXRadToDeg(pitch_rad) * -1.0f;
 
     f32 minYAngle = -30.0f;
     f32 maxAngle = 50.0f;
