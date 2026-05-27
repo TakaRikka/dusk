@@ -376,6 +376,8 @@ const Rml::String kDepthOfFieldHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
+const Rml::String kMenuScalingModeHelpText =
+    "Configure how the Collection and File Select menus scale to your aspect ratio.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -1445,43 +1447,15 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
         leftPane.add_section("Game");
-        leftPane.register_control(
-            leftPane.add_select_button({
-                .key = "Menu Scaling Mode",
-                .getValue =
-                    [] {
-                        return kMenuScalingModeLabels[static_cast<u8>(
-                            getSettings().game.menuScalingMode.getValue())];
-                    },
-                .isModified =
-                    [] {
-                        const auto& mode = getSettings().game.menuScalingMode;
-                        return mode.getValue() != mode.getDefaultValue();
-                    },
-            }),
-            rightPane, [](Pane& pane) {
-                for (int i = 0; i < static_cast<int>(kMenuScalingModeLabels.size()); ++i) {
-                    pane
-                        .add_button({
-                            .text = kMenuScalingModeLabels[i],
-                            .isSelected =
-                                [i] {
-                                    return getSettings().game.menuScalingMode.getValue() ==
-                                           static_cast<MenuScaling>(i);
-                                    ;
-                                },
-                        })
-                        .on_pressed([i] {
-                            mDoAud_seStartMenu(kSoundItemChange);
-                            getSettings().game.menuScalingMode.setValue(
-                                static_cast<MenuScaling>(i));
-                            ;
-                            config::Save();
-                        });
-                }
-                pane.add_rml("<br/>Changes how the Collection and File Select menus scale to your "
-                             "aspect ratio.");
-            });
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.menuScalingMode,
+            GraphicsTunerProps{
+                .option = GraphicsOption::MenuScaling,
+                .title = "Menu Scaling Mode",
+                .helpText = kMenuScalingModeHelpText,
+                .valueMin = static_cast<int>(MenuScaling::GameCube),
+                .valueMax = static_cast<int>(MenuScaling::Dusklight),
+                .defaultValue = static_cast<int>(MenuScaling::Wii),
+            }, mPrelaunch);
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",
