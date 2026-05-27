@@ -98,7 +98,7 @@ void set_value(GraphicsOption option, int value) {
         break;
     case GraphicsOption::MenuScaling:
         getSettings().game.menuScalingMode.setValue(static_cast<MenuScaling>(std::clamp(
-            value, static_cast<int>(MenuScaling::GameCube), static_cast<int>(MenuScaling::Dusklight))));
+            value, static_cast<int>(MenuScaling::GameCube), static_cast<int>(MenuScaling::Dusk))));
         break;
     }
 }
@@ -243,7 +243,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
             return "GameCube";
         case MenuScaling::Wii:
             return "Wii";
-        case MenuScaling::Dusklight:
+        case MenuScaling::Dusk:
             return "Dusklight";
         }
         break;

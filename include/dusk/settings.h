@@ -54,7 +54,7 @@ enum class FrameInterpMode : u8 {
 enum class MenuScaling : u8 {
     GameCube = 0,
     Wii = 1,
-    Dusklight = 2,
+    Dusk = 2,
 };
 
 namespace config {
@@ -103,7 +103,7 @@ struct ConfigEnumRange<FrameInterpMode> {
 template <>
 struct ConfigEnumRange<MenuScaling> {
     static constexpr auto min = MenuScaling::GameCube;
-    static constexpr auto max = MenuScaling::Dusklight;
+    static constexpr auto max = MenuScaling::Dusk;
 };
 }  // namespace config
 

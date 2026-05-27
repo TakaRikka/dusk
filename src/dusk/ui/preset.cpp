@@ -50,7 +50,7 @@ void applyPresetDusk() {
     s.game.shadowResolutionMultiplier.setValue(4);
     s.game.enableGyroAim.setValue(true);
     s.game.autoSave.setValue(true);
-    s.game.menuScalingMode.setValue(MenuScaling::Dusklight);
+    s.game.menuScalingMode.setValue(MenuScaling::Dusk);
     s.game.enhancedMapMenus.setValue(true);
 }
 

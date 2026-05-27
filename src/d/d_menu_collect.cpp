@@ -206,7 +206,7 @@ void dMenu_Collect2D_c::menuCollectWide() {
             mpDrawCursor->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
         break;
-    case dusk::MenuScaling::Dusklight:
+    case dusk::MenuScaling::Dusk:
         // Main Canvas
         mpScreen->scale(mDoGph_gInf_c::hudAspectScaleUp, 1.0f);
         mpScreen->translate(mDoGph_gInf_c::getSafeMinXF(), 0.0f);

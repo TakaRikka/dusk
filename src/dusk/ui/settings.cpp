@@ -1453,7 +1453,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .title = "Menu Scaling Mode",
                 .helpText = kMenuScalingModeHelpText,
                 .valueMin = static_cast<int>(MenuScaling::GameCube),
-                .valueMax = static_cast<int>(MenuScaling::Dusklight),
+                .valueMax = static_cast<int>(MenuScaling::Dusk),
                 .defaultValue = static_cast<int>(MenuScaling::Wii),
             }, mPrelaunch);
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,

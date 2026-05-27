@@ -225,7 +225,7 @@ dFile_select_c::~dFile_select_c() {
 
     mpFileSelect3d->_delete();
     JKR_DELETE(mpFileSelect3d);
-    
+
     #if PLATFORM_GCN
     JKR_DELETE(mpFadePict);
     dComIfGp_getMain2DArchive()->removeResourceAll();
@@ -240,7 +240,7 @@ void dFile_select_c::_create() {
     int i;
 
     mDoGph_gInf_c::setFadeColor(static_cast<JUtility::TColor&>(g_blackColor));
-    
+
     stick = JKR_NEW STControl(2, 2, 1, 1, 0.9f, 0.5f, 0, 0x2000);
     JUT_ASSERT(355, stick != NULL);
 
@@ -1166,7 +1166,7 @@ void dFile_select_c::menuSelect() {
     // if a was pressed, do the menu selection process
     if (mDoCPd_c::getTrigA(PAD_1)) {
         menuSelectStart();
-    } 
+    }
     // if b was pressed, do the menu cancel process
     else if (mDoCPd_c::getTrigB(PAD_1)) {
         menuSelectCansel();
@@ -1691,7 +1691,7 @@ void dFile_select_c::setSaveDataForCopySel() {
             datBase->show();
             noDatBase->hide();
         }
- 
+
         pSave++;
         notSelectedIndex++;
     }
@@ -2178,7 +2178,7 @@ void dFile_select_c::yesNoSelectStart() {
             field_0x0209 = 1;
             break;
         }
-    
+
         modoruTxtDispAnmInit(0);
         ketteiTxtDispAnmInit(0);
         mDataSelProc = DATASELPROC_CMD_EXEC_PANE_MOVE0;
@@ -3757,7 +3757,7 @@ void dFile_select_c::fileSelectWide() {
         for (PaneCache& entry : mSelDtPanes) {
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             if (!entry.cached) {
-                entry.origTransX = pane->getTranslateX(); 
+                entry.origTransX = pane->getTranslateX();
                 entry.origTransY = pane->getTranslateY();
                 entry.cached = true;
             }
@@ -3766,7 +3766,7 @@ void dFile_select_c::fileSelectWide() {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
-                entry.origTransY = pane->getTranslateY(); 
+                entry.origTransY = pane->getTranslateY();
                 entry.cached = true;
             }
         }
@@ -3874,7 +3874,7 @@ void dFile_select_c::fileSelectWide() {
             mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
         break;
-    case (dusk::MenuScaling::Dusklight):
+    case (dusk::MenuScaling::Dusk):
         constexpr f32 minAspect = 4.0f / 2.94f;
         constexpr f32 wideAspect = 16.0f / 9.0f + 0.05f;
         constexpr f32 ultraAspect = 21.0f / 9.0f + 0.05f;
@@ -3913,7 +3913,7 @@ void dFile_select_c::fileSelectWide() {
                     pane->translate(mDoGph_gInf_c::hudAspectScaleDown * entry.origTransX + wideShiftFactor - 60.0f * (1.0f - mDoGph_gInf_c::hudAspectScaleDown), pane->getTranslateY());
                 }
             } else if (screenAspect >= minAspect && screenAspect >= wideAspect && screenAspect <= ultraAspect) // Handle ultrawide
-            { 
+            {
                 if (entry.tag == MULTI_CHAR('b_base')) { // Slots BG
                     pane->translate((entry.origTransX + 18.0f) * ultraScaleFactor, pane->getTranslateY());
                 }
@@ -4410,7 +4410,7 @@ void dFile_select_c::MemCardLoadWait() {
             #endif
 
             dataSelectInAnmSet();
-            
+
             #if PLATFORM_GCN
             if (field_0x014a || field_0x014b)
             #else
@@ -4800,7 +4800,7 @@ void dFile_select_c::MemCardErrMsgWaitNoSaveSel() {
 
         headerTxtSet(901, 1, 0);
         mSelIcon->setAlphaRate(1.0f);
-    
+
         char namebuf[32];
         dMeter2Info_getString(0x382, namebuf, 0);
         dComIfGs_setPlayerName(namebuf);
@@ -4808,7 +4808,7 @@ void dFile_select_c::MemCardErrMsgWaitNoSaveSel() {
         dComIfGs_setHorseName(namebuf);
         mpName->setNextNameStr(dComIfGs_getPlayerName());
         mpName->initial();
-    
+
         modoruTxtChange(1);
         nameMoveAnmInitSet(3359, 3369);
         yesnoMenuMoveAnmInitSet(1149, 1139);
@@ -4953,13 +4953,13 @@ void dFile_select_c::MemCardMakeGameFileSel() {
             #else
             errorTxtSet(27);
             field_0x03b1 = 1;
-            #endif 
+            #endif
         } else {
             #if PLATFORM_WII
             errorTxtSet(0xEEB);
             #else
             errorTxtSet(25);
-            #endif 
+            #endif
         }
         ketteiTxtDispAnmInit(0);
         yesnoMenuMoveAnmInitSet(0x47d, 0x473);
@@ -5012,13 +5012,13 @@ void dFile_select_c::MemCardMakeGameFileWait() {
             errorTxtSet(0xEEE);
             #else
             errorTxtSet(0x1C);
-            #endif 
+            #endif
         } else if (field_0x03b4 == 2) {
             #if PLATFORM_WII
             errorTxtSet(0xEED);
             #else
             errorTxtSet(0x1A);
-            #endif 
+            #endif
         }
         mCardCheckProc = MEMCARDCHECKPROC_MAKE_GAMEFILE_CHECK;
     }
@@ -5060,7 +5060,7 @@ void dFile_select_c::gameFileInitSel() {
 void dFile_select_c::gameFileInitSelDisp() {
     bool isErrorTxtChange = errorTxtChangeAnm();
     bool isYnMenuMove = yesnoMenuMoveAnm();
-    
+
     if (isErrorTxtChange == true && isYnMenuMove == true) {
         mWaitTimer = g_fsHIO.card_wait_frames;
         setInitSaveData();
