@@ -20,7 +20,7 @@ const static dCcD_SrcSph ccSphSrc = {
     }  // mSphAttr
 };
 
-static char* l_arcName = "CrvGate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvGate";
 
 namespace {
 static u16 s_CoCount = 0;

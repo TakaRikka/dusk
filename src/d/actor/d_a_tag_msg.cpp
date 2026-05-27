@@ -18,9 +18,9 @@ static int createHeapCallBack(fopAc_ac_c* i_this) {
     return msg->createHeap();
 }
 
-static char* l_resName = "TagMsg";
+static DUSK_CONST char* l_resName = "TagMsg";
 
-static char* l_evtNameTBL[2] = {
+static DUSK_CONST char* l_evtNameTBL[2] = {
     NULL,
     "SPEAK",
 };
@@ -200,7 +200,7 @@ BOOL daTag_Msg_c::otherCheck() {
     }
 }
 
-char* daTag_Msg_c::getResName() {
+DUSK_CONST char* daTag_Msg_c::getResName() {
     return l_resName;
 }
 
@@ -224,7 +224,7 @@ void daTag_Msg_c::getParam() {
     SAFE_STRCPY(mStaffName, "Tag_ms");
 }
 
-char* daTag_Msg_c::mEvtCutTBL[2] = {
+DUSK_CONST char* daTag_Msg_c::mEvtCutTBL[2] = {
     "SPEAK",
     "PAUSE",
 };

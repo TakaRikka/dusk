@@ -683,7 +683,7 @@ static int daE_IS_Create(fopAc_ac_c* i_this) {
             } // mSphAttr
         };
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

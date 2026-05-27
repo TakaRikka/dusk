@@ -107,7 +107,7 @@ void daObjLv7Brg_c::setBaseMtx() {
     }
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "Obj_l7brg",
     "K_bridge",
 };

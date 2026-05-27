@@ -11,7 +11,7 @@ static int daObjNagaisu_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjNagaisu_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "Nagaisu";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Nagaisu";
 
 daObjNagaisu_c::daObjNagaisu_c() {}
 

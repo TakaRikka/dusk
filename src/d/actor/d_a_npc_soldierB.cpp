@@ -68,50 +68,50 @@ enum Event_Cut_Nums {
 
 static NPC_SOLDIERB_HIO_CLASS l_HIO;
 
-static daNpc_GetParam1 l_bmdGetParamList[2] = {{10, 0}, {9, 0}};
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[2] = {{10, 0}, {9, 0}};
 
-static daNpc_GetParam1 l_bckGetParamList[4] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[4] = {
     {-1, 0},
     {4, 0},
     {6, 0},
     {5, 0},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[1] = {
     {0, 0},
 };
 
-static char* l_evtNames[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
     NULL,
 };
 
-static int l_loadRes_SOLDIERba[3] = {
+static DUSK_CONSTEXPR int l_loadRes_SOLDIERba[3] = {
     0,
     -1,
     -1,
 };
 
-static int l_loadRes_SOLDIERb0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_SOLDIERb0[3] = {
     0,
     -1,
     -1,
 };
 
-static int* l_loadRes_list[2] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[2] = {
     l_loadRes_SOLDIERba,
     l_loadRes_SOLDIERb0,
 };
 
-static char* l_resNames[1] = {"chtSolB"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[1] = {"chtSolB"};
 
-static char* l_myName = "chtSolB";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "chtSolB";
 
-char* daNpc_SoldierB_c::mEvtCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_SoldierB_c::mEvtCutNameList[2] = {
     "",
     "LISTEN_LAKE",
 };
 
-daNpc_SoldierB_c::cutFunc daNpc_SoldierB_c::mEvtCutList[2] = {
+daNpc_SoldierB_c::cutFunc DUSK_CONST daNpc_SoldierB_c::mEvtCutList[2] = {
     NULL,
     &daNpc_SoldierB_c::ECut_listenLake,
 };

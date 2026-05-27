@@ -77,7 +77,7 @@ public:
 
     s16 getMessageNo() { return (fopAcM_GetParam(this) >> 8) & 0xFFFF; } 
 
-    static EvtSeq mEvtSeqList[];
+    static EvtSeq DUSK_CONST mEvtSeqList[];
 
 private:
     /* 0xB48 */ Z2CreatureCitizen mSound;

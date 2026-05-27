@@ -26,7 +26,7 @@ public:
     /* 0xC */ f32 mSinkingAmount;
 };
 
-static char* l_arcName = "V_Ice_s";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_Ice_s";
 
 daOBJ_ICE_S_HIO_c::daOBJ_ICE_S_HIO_c() {
     mId = -1;

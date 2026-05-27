@@ -28,9 +28,9 @@ const static dCcD_SrcCyl l_cyl_src = {
     }
 };
 
-static char* l_arcName = "O_wood";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "O_wood";
 
-static char* l_eventName = "GET_WOOD_STATUE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName = "GET_WOOD_STATUE";
 
 class daObjWStatue_HIO_c : public fOpAcm_HIO_entry_c {
 public:
@@ -351,7 +351,7 @@ int daObjWStatue_c::actionBoomerangCarry() {
 }
 
 void daObjWStatue_c::demoProc() {
-    static char* action_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[4] = {
         "WAIT",
         "MOVE",
         "SETPOS",

@@ -10,19 +10,19 @@
 #include <cstring>
 
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     {4, 3},
     {17, 2},
 };
 
-static daNpcT_evtData_c l_evtList[4] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[4] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"CONVERSATION_ABOUT_SARU01", 3},
     {"CONVERSATION_ABOUT_SARU02", 3},
 };
 
-static char* l_resNameList[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[5] = {
     "",
     "Seira",
     "SeraBtl",
@@ -30,16 +30,16 @@ static char* l_resNameList[5] = {
     "Seira_p1",
 };
 
-static s8 l_loadResPtrn0[4] = {3, 1, 2, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[4] = {3, 1, 2, -1};
 
-static s8 l_loadResPtrn1[3] = {3, 4, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {3, 4, -1};
 
-static s8* l_loadResPtrnList[7] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[7] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {-1, 0, 0, 67, 2, 1, 1},
     {14, 0, 1, 67, 2, 1, 1},
     {11, 0, 1, 75, 0, 1, 0},
@@ -56,7 +56,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {18, 2, 1, 81, 2, 1, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[26] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[26] = {
     {42, 2, 1, 45, 0, 1, 1, 12},
     {37, 2, 1, 55, 0, 1, 0, 12},
     {41, 2, 1, 45, 0, 1, 1, 12},
@@ -85,7 +85,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[26] = {
     {38, 0, 1, 45, 0, 1, 1, 12},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {8, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -95,7 +95,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] =
     {13, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[104] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[104] = {
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {10, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -111,12 +111,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[104] = {
     {25, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Seira_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_Seira_c::mCutNameList[2] = {
     "",
     "CONVERSATION_ABOUT_SARU",
 };
 
-daNpc_Seira_c::cutFunc daNpc_Seira_c::mCutList[2] = {
+daNpc_Seira_c::cutFunc DUSK_CONST daNpc_Seira_c::mCutList[2] = {
     NULL,
     &daNpc_Seira_c::cutConversationAboutSaru,
 };

@@ -54,7 +54,7 @@ int daObjMasterSword_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObjMasterSword_c*>(i_this)->CreateHeap();
 }
 
-static char* l_arcName = "MstrSword";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "MstrSword";
 
 int daObjMasterSword_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);

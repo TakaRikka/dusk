@@ -103,7 +103,7 @@ void dMsgScrnBase_c::drawOutFont(f32 param_0, f32 param_1, f32 param_2) {
     mpOutFont->draw(NULL, param_0, param_1, param_2);
 }
 
-void dMsgScrnBase_c::setString(char* mpText, char* i_stringB) {
+void dMsgScrnBase_c::setString(char DUSK_CONST* mpText, char DUSK_CONST* i_stringB) {
     for (int i = 0; i < 7; i++) {
         if (mpTm_c[i] != NULL) {
             JUT_ASSERT(262, ((J2DTextBox*)(mpTm_c[i]->getPanePtr()))->getStringAllocByte() > strlen(mpText));
@@ -116,7 +116,7 @@ void dMsgScrnBase_c::setString(char* mpText, char* i_stringB) {
     }
 }
 
-void dMsgScrnBase_c::setRubyString(char* mpText) {
+void dMsgScrnBase_c::setRubyString(char DUSK_CONST* mpText) {
     for (int i = 0; i < 3; i++) {
         if (mpTmr_c[i] != NULL) {
             JUT_ASSERT(288, ((J2DTextBox*)(mpTmr_c[i]->getPanePtr()))->getStringAllocByte() > strlen(mpText));

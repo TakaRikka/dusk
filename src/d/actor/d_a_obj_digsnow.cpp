@@ -34,7 +34,7 @@ int daObjDigSnow_c::Create() {
     return TRUE;
 }
 
-static char* l_arcName = "Y_horiyuk";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Y_horiyuk";
 
 int daObjDigSnow_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

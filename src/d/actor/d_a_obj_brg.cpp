@@ -1426,7 +1426,7 @@ static void CreateInit(fopAc_ac_c* i_this) {
 
     a_this->mCcStts.Init(0xFF, 0xFF, i_this);
 
-    static dCcD_SrcCyl himo_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl himo_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -1442,7 +1442,7 @@ static void CreateInit(fopAc_ac_c* i_this) {
         } // mCylAttr
     };
 
-    static dCcD_SrcCyl wire_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl wire_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

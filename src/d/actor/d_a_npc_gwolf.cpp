@@ -89,11 +89,11 @@ enum Motion {
 
 static NPC_GWOLF_HIO_CLASS l_HIO;
 
-static daNpc_GetParam1 l_bmdGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[1] = {
     {BMDR_GW, GWOLF},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[12] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[12] = {
     {-1, GWOLF},
     {-1, GWOLF},
     {BCK_WL_WAITSIT, GWOLF},
@@ -108,15 +108,15 @@ static daNpc_GetParam1 l_bckGetParamList[12] = {
     {BCK_WL_DASHA, GWOLF},
 };
 
-static daNpc_GetParam1 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[1] = {
     {BTK_GW, GWOLF},
 };
 
-static daNpc_GetParam1 l_brkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_brkGetParamList[1] = {
     {BRK_GW, GWOLF},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[15] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[15] = {
     {EVT_NONE, GWOLF},
     {EVT_ATTACK_WARP, GWOLF},
     {EVT_ATTACK_WARP_HORSE, GWOLF},
@@ -134,7 +134,7 @@ static daNpc_GetParam1 l_evtGetParamList[15] = {
     {EVT_MEET_GWOLFF, GWOLF},
 };
 
-static char* l_evtNames[15] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[15] = {
     NULL,
     "ATTACK_WARP",
     "ATTACK_WARP_HORSE",
@@ -152,26 +152,26 @@ static char* l_evtNames[15] = {
     "MEET_GWOLFF",
 };
 
-static int l_loadRes_GWOLFa[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GWOLFa[3] = {
     GWOLF, -1, -1,
 };
 
-static int l_loadRes_GWOLF0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GWOLF0[3] = {
     GWOLF, -1, -1,
 };
 
-static int* l_loadRes_list[4] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[4] = {
     l_loadRes_GWOLFa,
     l_loadRes_GWOLFa,
     l_loadRes_GWOLFa,
     l_loadRes_GWOLF0,
 };
 
-static char* l_resNames[1] = {"GWolf"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[1] = {"GWolf"};
 
-static char* l_myName = "GWolf";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "GWolf";
 
-static s16 l_appearTmpFlag[7] = {
+static DUSK_CONSTEXPR s16 l_appearTmpFlag[7] = {
     -1,
     0x005C, // dSv_event_tmp_flag_c::T_0092 - Hero's spirit - Gold wolf identification 2
     0x005D, // dSv_event_tmp_flag_c::T_0093 - Hero's spirit - Gold wolf identification 3
@@ -181,7 +181,7 @@ static s16 l_appearTmpFlag[7] = {
     0x0061, // dSv_event_tmp_flag_c::T_0097 - Hero's spirit - Gold wolf identification 7
 };
 
-static s16 l_warpAppearFlag[7] = {
+static DUSK_CONSTEXPR s16 l_warpAppearFlag[7] = {
     -1,
     0x01D8, // dSv_event_flag_c::F_0472 - Secret techniques - Distant howling complete (for secret technique 2)
     0x01D9, // dSv_event_flag_c::F_0473 - Secret techniques - Distant howling complete (for secret technique 3)
@@ -191,7 +191,7 @@ static s16 l_warpAppearFlag[7] = {
     0x01DD, // dSv_event_flag_c::F_0477 - Secret techniques - Distant howling complete (for secret technique 7)
 };
 
-char* daNpc_GWolf_c::mEvtCutNameList[5] = {
+char DUSK_CONST* DUSK_CONST daNpc_GWolf_c::mEvtCutNameList[5] = {
     "",
     "ATTACK_WARP",
     "ATTACK_WARP_HORSE",
@@ -199,7 +199,7 @@ char* daNpc_GWolf_c::mEvtCutNameList[5] = {
     "MEET_GWOLFA",
 };
 
-daNpc_GWolf_c::cutFunc daNpc_GWolf_c::mEvtCutList[5] = {
+daNpc_GWolf_c::cutFunc DUSK_CONST daNpc_GWolf_c::mEvtCutList[5] = {
     NULL,
     &daNpc_GWolf_c::ECut_attackWarp,
     &daNpc_GWolf_c::ECut_attackWarpHorse,

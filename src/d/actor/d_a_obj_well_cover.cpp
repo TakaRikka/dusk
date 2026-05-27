@@ -28,7 +28,7 @@ int daObjWCover_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "H_Idohuta";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Idohuta";
 
 int daObjWCover_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, 4));

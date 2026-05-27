@@ -10,7 +10,7 @@
 
 static int useHeapInit(fopAc_ac_c*);
 
-static char* l_arcName = "Lv5_KEY";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv5_KEY";
 
 int daObjLv5Key_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 7);

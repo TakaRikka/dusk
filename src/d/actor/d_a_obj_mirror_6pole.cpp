@@ -9,7 +9,7 @@
 #include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 
-static char* l_arcName = "MR-6Pole";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "MR-6Pole";
 
 const actionFunc daObjMirror6Pole_c::ActionTable[][2] = {
     {&daObjMirror6Pole_c::initWait, &daObjMirror6Pole_c::executeWait},

@@ -14,7 +14,7 @@ static int daPPolamp_c_createHeap(fopAc_ac_c* i_this) {
     return ((daPPolamp_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "PPolamp";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "PPolamp";
 
 daPPolamp_c::~daPPolamp_c() {
     dComIfG_resDelete(this, l_arcName);

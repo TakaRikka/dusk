@@ -18,7 +18,7 @@ static struct {
     u32 resIdx;
 } l_dzbData[1] = {7, 1};
 
-static char* l_resNameList[2] = {"", "SekiDoor"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {"", "SekiDoor"};
 
 static OBJ_SEKIDOOR_HIO_CLASS l_HIO;
 

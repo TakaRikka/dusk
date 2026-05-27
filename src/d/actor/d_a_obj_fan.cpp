@@ -111,7 +111,7 @@ int daObjFan_c::Create() {
     return 1;
 }
 
-static char* l_arcName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {
     "Obj_prop1",
     "Obj_prop0",
     "Obj_prop2",

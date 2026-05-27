@@ -16,7 +16,7 @@ static const cull_box l_cull_box = {
     {750.0f, 500.0f, 300.0f},
 };
 
-static char* l_arcName = "P_Dwall";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Dwall";
 
 int daObjPDwall_c::create1st() {
     int phase_state = dComIfG_resLoad(this, l_arcName);

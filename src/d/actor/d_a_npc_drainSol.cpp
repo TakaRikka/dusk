@@ -8,17 +8,17 @@
 #include "d/actor/d_a_npc_drainSol.h"
 #include "d/actor/d_a_npc.h"
 
-static int l_bmdGetParamList[] = {
+static DUSK_CONSTEXPR int l_bmdGetParamList[] = {
     9, 7
 };
 
-static daNpc_GetParam3 l_bckGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam3 l_bckGetParamList[] = {
     {5, 2},
     {4, 2},
     {4, 0},
 };
 
-static char* l_arcNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[2] = {
     "DrainSol1",
     "DrainSol2",
 };
@@ -453,7 +453,7 @@ BOOL daNpcDrSol_c::drawDbgInfo() {
     return false;
 }
 
-static char* dummyString() {
+static DUSK_CONSTEXPR char DUSK_CONST* dummyString() {
     return "Shoe";
 };
 

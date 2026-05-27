@@ -51,9 +51,9 @@ void daObjPDoor_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "V_OsuDoor";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_OsuDoor";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {0.0f, 0.0f, -600.0f},
     {600.0f, 1000.0f, 600.0f},
 };

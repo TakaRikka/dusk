@@ -58,7 +58,7 @@ s16 const daObjSwpush::Act_c::M_bmd[3] = {BMDR_KBOTA_00, BMDR_S_LV3BOTA, BMDR_S_
 
 s16 const daObjSwpush::Act_c::M_dzb[3] = {DZB_KBOTA_00, DZB_KBOTA2_00, DZB_KBOTA3_00};
 
-char* daObjSwpush::Act_c::M_arcname[3] = {
+DUSK_CONST char* daObjSwpush::Act_c::M_arcname[3] = {
     "Kbota_00",
     "S_lv3bota",
     "S_lv6bota",

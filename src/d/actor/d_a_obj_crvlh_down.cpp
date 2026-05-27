@@ -13,7 +13,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_s_play.h"
 
-static char* l_arcName = "CrvLH_Dw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvLH_Dw";
 
 void daObjCRVLH_DW_c::initCcCylinder() {
     const static dCcD_SrcCyl ccCylSrc = {

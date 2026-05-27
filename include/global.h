@@ -244,4 +244,7 @@ using std::isnan;
 #define DUSK_IF_ELSE(dusk, orig) orig
 #endif
 
+#define DUSK_CONST IF_DUSK(const)
+#define DUSK_CONSTEXPR IF_DUSK(constexpr)
+
 #endif

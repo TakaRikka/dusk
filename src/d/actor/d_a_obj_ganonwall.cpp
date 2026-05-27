@@ -32,9 +32,9 @@ static const GXColor l_color[24] = {
     {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xB4, 0xB4, 0xB4, 0xFF},
 };
 
-static char* l_arcName = "Y_gwall";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Y_gwall";
 
-static char* l_matName = "mat00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_matName = "mat00";
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjGWall_c*>(i_this)->CreateHeap();

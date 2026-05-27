@@ -518,7 +518,7 @@ void daNpcKasi_Mng_c::chgWeightLight() {
     }
 }
 
-static daNpc_GetParam2 l_bckGetParamList[15] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[15] = {
     {BCK_MICH_IYAN_WAIT, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_KYA_TALK, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_OUEN_WAIT_A, J3DFrameCtrl::EMode_LOOP, GIRLS},
@@ -536,17 +536,17 @@ static daNpc_GetParam2 l_bckGetParamList[15] = {
     {BCK_W_2NORMALTALK_B, J3DFrameCtrl::EMode_NONE, WGENERAL},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {BTP_HANA, J3DFrameCtrl::EMode_LOOP, KASI_HANA},
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "kasi_hana",
     "girls",
     "Wgeneral",
 };
 
-static char* l_evtNames[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[6] = {
     NULL,
     "KASIMASI_APPEAR",
     "KASIMASI_TALK",
@@ -555,7 +555,7 @@ static char* l_evtNames[6] = {
     "KASIMASI_CHEER2",
 };
 
-static char* l_myName = "kasi_hana";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "kasi_hana";
 
 daNpcKasiHana_HIOParam const daNpcKasiHana_Param_c::m = {
     55.0f,

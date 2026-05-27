@@ -42,7 +42,7 @@ static const dCcD_SrcCyl l_sph_src = {
 
 static const int l_arcIdx[] = {3, 6, 5, 4};
 
-static char* l_arcName[1] = {"buoy"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[1] = {"buoy"};
 
 int daObjZraMark_c::Create() {
     fopAcM_ct(this, daObjZraMark_c);

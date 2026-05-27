@@ -8,16 +8,16 @@
 #include "d/actor/d_a_obj_stopper2.h"
 #include "d/actor/d_a_player.h"
 
-static char* l_arcName = "Stop00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Stop00";
 
-static char* l_evName[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName[4] = {
     "STOP_OPEN",
     "STOP_CLOSE",
     "STOP_OPEN2",
     "STOP_CLOSE2",
 };
 
-static char* l_staffName = "dstop";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "dstop";
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjStopper2_c*)i_this)->CreateHeap();
@@ -205,7 +205,7 @@ void daObjStopper2_c::actionEvent() {
 void daObjStopper2_c::actionDead() {}
 
 int daObjStopper2_c::demoProc() {
-    static char* action_table[3] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[3] = {
         "WAIT",
         "STOP_OPEN",
         "STOP_CLOSE",

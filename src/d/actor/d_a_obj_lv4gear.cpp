@@ -47,7 +47,7 @@ int daObjLv4Gear_c::Create() {
 
 static int const l_bmd[] = {4, 3};
 
-static char* l_arcName = "P_Gear";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Gear";
 
 int daObjLv4Gear_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, l_bmd[mType]);

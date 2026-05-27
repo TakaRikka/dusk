@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_carry.h"
 
-static char* l_arcName = "YIblltray";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "YIblltray";
 
 int daObjYIblltray_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName);

@@ -72,7 +72,7 @@ static int daObjCRVSTEEL_Execute(daObjCRVSTEEL_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-static char* l_arcName = "CrvSteel";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvSteel";
 
 int daObjCRVSTEEL_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "U_CrvSteelGate.bmd");

@@ -15,7 +15,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
-static char* l_stageName[20] = {
+static DUSK_CONST char* l_stageName[20] = {
     "D_MN05",
     "D_MN05A",
     "D_MN04",
@@ -50,7 +50,7 @@ static int getNowLevel() {
     return -1;
 }
 
-char* daBdoorL1_c::getDoorEventName() {
+DUSK_CONST char* daBdoorL1_c::getDoorEventName() {
     switch (getNowLevel()) {
     case 1:
         return "DEFAULT_BS_SHUTTER_L1_F";
@@ -71,7 +71,7 @@ char* daBdoorL1_c::getDoorEventName() {
     }
 }
 
-char* daBdoorL1_c::getDoorEventName2() {
+DUSK_CONST char* daBdoorL1_c::getDoorEventName2() {
     switch (getNowLevel()) {
     case 1:
         return "DEFAULT_BS_SHUTTER_L1_F_2";
@@ -230,7 +230,7 @@ int daBdoorL1_c::CreateHeap() {
     return 1;
 }
 
-static char* action_table[18] = {
+static DUSK_CONST char* action_table[18] = {
     "WAIT",
     "SETANGLE",
     "UNLOCK",

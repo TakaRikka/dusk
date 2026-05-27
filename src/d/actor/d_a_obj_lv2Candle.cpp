@@ -55,7 +55,7 @@ dCcD_SrcCyl daLv2Candle_c::mCcDCyl = {
     }
 };
 
-static char* l_resNameIdx[3] = {
+static DUSK_CONST char* l_resNameIdx[3] = {
     "L2candl",
     "L4candl",
     "L9Candle",

@@ -44,12 +44,12 @@ static cXyz l_chainOffset(0.0f, 105.0f, 30.0f);
 
 static cXyz l_smokeSetOffset(0.0f, 0.0f, -200.0f);
 
-static cull_box const l_cull_box = {
+static DUSK_CONSTEXPR cull_box const l_cull_box = {
     {-250.0f, 0.0f, -450.0f},
     {250.0f, 250.0f, 400.0f},
 };
 
-static char* l_arcName = "P_Cblock";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Cblock";
 
 static f32 l_side_co_offset[12] = {
     -255.0f, 0.0f, -30.0f, -135.0f,

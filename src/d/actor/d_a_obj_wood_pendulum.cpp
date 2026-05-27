@@ -69,7 +69,7 @@ int daObjWPndlm_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "A_Turuki";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "A_Turuki";
 
 int daObjWPndlm_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 3);

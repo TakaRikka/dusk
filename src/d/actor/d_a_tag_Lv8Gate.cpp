@@ -9,7 +9,7 @@
 #include "d/actor/d_a_obj_mirror_table.h"
 #include <cstring>
 
-static char* l_arcName = "Lv8Gate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv8Gate";
 
 static int createSolidHeap(fopAc_ac_c* i_this) {
     daTagLv8Gate_c* gate = static_cast<daTagLv8Gate_c*>(i_this);

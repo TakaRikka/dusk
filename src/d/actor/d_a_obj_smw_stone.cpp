@@ -10,7 +10,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_arcName = "WStoneF";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "WStoneF";
 
 static int daSmWStone_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daSmWStone_c*>(i_this)->createHeap();

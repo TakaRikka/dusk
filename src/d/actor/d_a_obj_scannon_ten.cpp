@@ -11,11 +11,11 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
-static char* l_arcName = "SCanTen";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "SCanTen";
 
-static char* l_staffName = "SCanTen";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "SCanTen";
 
-static char* l_eventName = "SKY_CANNON_TEN_FIRE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName = "SKY_CANNON_TEN_FIRE";
 
 static int eventCallBack(void* i_proc, int param_1) {
     daObjSCannonTen_c* proc = (daObjSCannonTen_c*)i_proc;
@@ -217,7 +217,7 @@ void daObjSCannonTen_c::exeModeActionEvt() {
 void daObjSCannonTen_c::exeModeEnd() {}
 
 void daObjSCannonTen_c::demoExe() {
-    static char* CUT_TYPE_TABLE_FIRE_SECOND[6] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_FIRE_SECOND[6] = {
         "LINK_IN",
         "SET",
         "MOVE",

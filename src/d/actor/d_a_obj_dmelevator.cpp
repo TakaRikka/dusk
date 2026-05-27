@@ -529,7 +529,7 @@ void daObjDmElevator_c::actionDead() {
 }
 
 int daObjDmElevator_c::demoProc() {
-    static char* action_table[2] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[2] = {
         "WAIT",
         "MOVE",
     };

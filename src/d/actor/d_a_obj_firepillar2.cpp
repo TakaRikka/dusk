@@ -38,9 +38,9 @@ void daObjFPillar2_c::setBaseMtx() {
     }
 }
 
-static char* l_arcName = "Obj_yogan";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_yogan";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-150.0f, -10.0f, -150.0f},
     {150.0f, 1200.0f, 150.0f},
 };

@@ -16,7 +16,7 @@ dCcD_SrcSph daObj_Nougu_c::mCcDSph = {
     },
 };
 
-static char* l_resName = "Jagar4";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "Jagar4";
 
 const daObj_Nougu_HIOParam daObj_Nougu_Param_c::m = {
     0.0f,

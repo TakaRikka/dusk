@@ -27,9 +27,9 @@ static const GXColor l_color[24] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xB4, 0xB4, 0xB4, 0xFF,
 };
 
-static char* l_arcName = "V_CTGWall";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_CTGWall";
 
-static char* l_matName = "mat00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_matName = "mat00";
 
 void daObjGWall2_c::initBaseMtx() {
     mpModel->setBaseScale(scale);

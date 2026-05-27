@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_resNameIdx[2] = {
+static DUSK_CONST char* l_resNameIdx[2] = {
     "P_Rgate",
     "SDGate",
 };

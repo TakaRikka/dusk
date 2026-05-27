@@ -55,7 +55,7 @@ daObjSakuita_Attr_c const daObjSakuita_c::M_attr = {
     20.0f, 12.0f, 70.0f, -50.0f, 0.8f, 0.5f, -6.0f, 900.0f, 20000.0f, 100.0f, 0x1400, 0x14,
 };
 
-static char* l_arcName = "A_Sakuita";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "A_Sakuita";
 
 void daObjSakuita_c::create_init() {
     fopAcM_setCullSizeBox(this, -30.0f, -90.0f, -10.0f, 30.0f, 20.0f, 10.0f);

@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_h_saku.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-static char* l_arcName = "H_Saku";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Saku";
 
 void daObjH_Saku_c::BreakSet() {
     cXyz pos(240.0f, 0.0f, -30.0f);

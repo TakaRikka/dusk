@@ -1668,7 +1668,7 @@ void dFile_select_c::copySelMoveAnmInitSet(int param_0, int param_1) {
 
 void dFile_select_c::setSaveDataForCopySel() {
     static u64 l_tagName101[2] = {MULTI_CHAR('w_nun01'), MULTI_CHAR('w_nun02')};
-    static char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
+    static DUSK_CONST char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
                                 "tt_3_metal_40x40.bti"};
     SaveDataBuf* pSave = mSaveData;
     int notSelectedIndex = 0;

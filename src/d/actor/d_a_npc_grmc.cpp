@@ -75,28 +75,28 @@ enum Motion {
     /* 0x8 */ MOT_SAD_WAIT = 0x8,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_GRC_A, GRC_MDL},
 };  
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "grC",
     "grC_Mdl",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     1, 2, -1,
 };
 
-static s8* l_loadResPtrnList[1] = {l_loadResPtrn0};
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[1] = {l_loadResPtrn0};
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[9] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[9] = {
     {-1, 0, J3DFrameCtrl::EMode_NONE, BTP_GRC_A, J3DFrameCtrl::EMode_LOOP, GRC, 1},
     {BCK_GRC_F_WAIT_A, J3DFrameCtrl::EMode_LOOP, GRC, BTP_GRC_A, J3DFrameCtrl::EMode_LOOP, GRC, 1},
     {BCK_GRC_GRUMPY, J3DFrameCtrl::EMode_LOOP, GRC, BTP_GRC_A, J3DFrameCtrl::EMode_LOOP, GRC, 1},
@@ -108,7 +108,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[9] = {
     {BCK_GRC_F_SAD_TALK, J3DFrameCtrl::EMode_NONE, GRC, BTP_GRC_F_SAD_TALK, J3DFrameCtrl::EMode_NONE, GRC, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[9] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[9] = {
     {BCK_GRC_WAIT_A, J3DFrameCtrl::EMode_LOOP, GRC, BTK_GRC_A, J3DFrameCtrl::EMode_NONE, GRC, 0, 0},
     {BCK_GRC_TALK_A, J3DFrameCtrl::EMode_LOOP, GRC, BTK_GRC_A, J3DFrameCtrl::EMode_NONE, GRC, 0, 0},
     {BCK_GRC_TALK_B, J3DFrameCtrl::EMode_LOOP, GRC, BTK_GRC_A, J3DFrameCtrl::EMode_NONE, GRC, 0, 0},
@@ -120,7 +120,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[9] = {
     {BCK_GRC_STEP, J3DFrameCtrl::EMode_NONE, GRC, BTK_GRC_A, J3DFrameCtrl::EMode_NONE, GRC, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
     {5, -1, 1}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 1}, {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -137,7 +137,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] =
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -149,9 +149,9 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_grMC_c::mCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_grMC_c::mCutNameList = "";
 
-daNpc_grMC_c::cutFunc daNpc_grMC_c::mCutList[1] = {
+daNpc_grMC_c::cutFunc DUSK_CONST daNpc_grMC_c::mCutList[1] = {
     NULL,
 };
 

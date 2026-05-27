@@ -908,7 +908,7 @@ static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
         actor->health = 30;
         actor->field_0x560 = 30;
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x79}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

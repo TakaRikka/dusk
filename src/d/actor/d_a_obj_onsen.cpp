@@ -39,7 +39,7 @@ static const u32 l_dzb[2] = {12, 12};
 
 static const u32 l_heap_size[2] = {10240, 6880};
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "H_Onsen",
     "H_KaOnsen",
 };

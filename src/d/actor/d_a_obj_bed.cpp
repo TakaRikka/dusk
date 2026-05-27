@@ -12,7 +12,7 @@
 #include "d/actor/d_a_npc.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_resName = "KH_Bed";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "KH_Bed";
 
 static OBJ_BED_HIO_CLASS l_HIO;
 
@@ -149,7 +149,7 @@ u8 daObj_Bed_c::getType() {
     return 0;
 }
 
-char* daObj_Bed_c::getResName() {
+char DUSK_CONST* daObj_Bed_c::getResName() {
     return l_resName;
 }
 

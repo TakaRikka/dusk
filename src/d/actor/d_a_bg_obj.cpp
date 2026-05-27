@@ -499,7 +499,7 @@ static dCcD_SrcTri l_tri_src = {
     },
 };
 
-static char* l_specName = "spec.dat";
+static DUSK_CONST char* l_specName = "spec.dat";
 
 createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
     &daBgObj_c::CreateHeapType0,

@@ -80,7 +80,7 @@ static int daObjBhbridge_Delete(daObjBhbridge_c* i_this) {
     return 1;
 }
 
-static char* l_arcName = "BHBridge";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "BHBridge";
 
 inline int daObjBhbridge_c::create() {
     fopAcM_ct(this, daObjBhbridge_c);

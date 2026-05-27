@@ -70,7 +70,7 @@ int daObjRotStair_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "K_spkai00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "K_spkai00";
 
 static Vec l_water_check_offset = {
     0.0f, 2000.0f, -2000.0f,

@@ -12,7 +12,7 @@
 //
 // Declarations:
 //
-static char* l_arcName = "Lv6ElevtA";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv6ElevtA";
 static const int l_dzbidx = {7};
 static const int l_bmdidx = {4};
 

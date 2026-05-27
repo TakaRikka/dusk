@@ -12,7 +12,7 @@
 #include "d/actor/d_a_player.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "zrF";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "zrF";
 
 static f32 const l_DATA[2] = { 800.0f, 0.0f };
 
@@ -80,7 +80,7 @@ cPhs_Step daZraFreeze_c::Create() {
 }
 
 int daZraFreeze_c::CreateHeap() {
-    static char* l_bmdName[3] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* l_bmdName[3] = {
         "zrA_a_TW.bmd",
         "zrA_pain_TW.bmd",
         "zrA_sol_TW.bmd",

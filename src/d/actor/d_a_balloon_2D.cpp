@@ -154,7 +154,7 @@ static int daBalloon2D_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daBalloon2D_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "Balloon2D";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Balloon2D";
 
 int daBalloon2D_c::createHeap() {
     mScreen = JKR_NEW J2DScreen();

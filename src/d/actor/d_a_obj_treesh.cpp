@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_treesh.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_arcName = "M_TreeSh";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_TreeSh";
 
 daTreeSh_HIO_c::daTreeSh_HIO_c() {
     shake_strength = 800;

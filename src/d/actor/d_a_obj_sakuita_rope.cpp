@@ -134,7 +134,7 @@ void Sakuita_c::calcAngle() {
     mRotation.z = -cM_atan2s(local_28.x, local_28.y);
 }
 
-static char* l_arcName = "A_Sakuita";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "A_Sakuita";
 
 #if DEBUG
 daObjItaRope_Hio_c M_hio;

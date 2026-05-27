@@ -14,7 +14,7 @@ static f32 const l_minRelative[] = {-700.0f, -300.0f, -2000.0f};
 
 static f32 const l_maxRelative[] = {700.0f, 0.0f, 1000.0f};
 
-static char* l_arcName = "Lv6Gate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv6Gate";
 
 static int createSolidHeap(fopAc_ac_c* i_this) {
     daTagLv6Gate_c* gate = static_cast<daTagLv6Gate_c*>(i_this);

@@ -34,48 +34,48 @@ enum Motion {
     /* 0x1 */ MOT_SIT,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {9, ZANB},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "zanB",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0, l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, -1, J3DFrameCtrl::EMode_NONE, 0, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[2] = {
     {BCK_ZANB_WAIT_A, J3DFrameCtrl::EMode_LOOP, ZANB, BTK_ZANB, J3DFrameCtrl::EMode_NONE, ZANB, 1, 0},
     {BCK_ZANB_SIT, J3DFrameCtrl::EMode_LOOP, ZANB, BTK_ZANB, J3DFrameCtrl::EMode_NONE, ZANB, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_zanB_c::mCutNameList[1] = {""};
+char DUSK_CONST* DUSK_CONST daNpc_zanB_c::mCutNameList[1] = {""};
 
-daNpc_zanB_c::cutFunc daNpc_zanB_c::mCutList[1] = {NULL};
+daNpc_zanB_c::cutFunc DUSK_CONST daNpc_zanB_c::mCutList[1] = {NULL};
 
 daNpc_zanB_c::~daNpc_zanB_c() {
     OS_REPORT("|%06d:%x|daNpc_zanB_c -> デストラクト\n", g_Counter.mCounter0, this);

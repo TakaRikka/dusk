@@ -54,7 +54,7 @@ static char const l_door_open_demo_1st[26] = "DEFAULT_BS_SHUTTER_L5_1ST";
 
 static char const l_staff_name[13] = "SHUTTER_DOOR";
 
-static char* action_table[14] = {
+static DUSK_CONSTEXPR char DUSK_CONST* action_table[14] = {
     "WAIT",
     "UNLOCK",
     "OPEN",

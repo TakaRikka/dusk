@@ -11,7 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "Cdoor",
     "J_Suimon",
 };

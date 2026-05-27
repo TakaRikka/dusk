@@ -33,7 +33,7 @@ int daObjVGnd_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "M_VolcGnd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_VolcGnd";
 
 int daObjVGnd_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 0x5);

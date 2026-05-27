@@ -13,7 +13,7 @@
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 
-static char* l_arcName = "Table";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Table";
 
 void daObjTable_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());

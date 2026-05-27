@@ -50,7 +50,7 @@ void daTenbin_HIO_c::genMessage(JORMContext* context) {
 }
 #endif
 
-static cull_box l_cull_box = {-300.0f, -500.0f, -400.0f, 1200.0f, 300.0f, 1300.0f};
+static DUSK_CONSTEXPR cull_box l_cull_box = {-300.0f, -500.0f, -400.0f, 1200.0f, 300.0f, 1300.0f};
 
 static daTenbin_HIO_c l_HIO;
 

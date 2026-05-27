@@ -93,7 +93,7 @@ enum Motion {
     /* 0xB */ MOT_SIT_TO_WOLF_A,
 };
 
-static daNpc_GetParam2 l_bckGetParamList[6] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[6] = {
     {BCK_M_WAIT_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
     {BCK_M_TALK_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
     {BCK_M_TALK_B, J3DFrameCtrl::EMode_LOOP, MGENERAL},
@@ -102,22 +102,22 @@ static daNpc_GetParam2 l_bckGetParamList[6] = {
     {BCK_M_SIT_TO_WOLF_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {BTP_DOORBOY, J3DFrameCtrl::EMode_LOOP, DOORBOY},
 };
 
-static char* l_arcNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[2] = {
     "DoorBoy",
     "Mgeneral",
 };
 
-static char* l_evtNames[1] = {NULL};
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
-static char* l_myName = "DoorBoy";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "DoorBoy";
 
 static NPC_DOORBOY_HIO_CLASS l_HIO;
 
-daNpcDoorBoy_c::EventFn daNpcDoorBoy_c::mEvtSeqList[1] = {
+daNpcDoorBoy_c::EventFn DUSK_CONST daNpcDoorBoy_c::mEvtSeqList[1] = {
     NULL
 };
 

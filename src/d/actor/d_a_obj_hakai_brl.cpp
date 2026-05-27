@@ -12,7 +12,7 @@ static int daObjHBarrel_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjHBarrel_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "HBarrel";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "HBarrel";
 
 daObjHBarrel_c::daObjHBarrel_c() {}
 

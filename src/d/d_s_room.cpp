@@ -47,7 +47,7 @@ static int getResetArchiveBank(int i_roomNo, const u8** o_bankIDList) {
     const u8* pbank = *o_bankIDList;
     for (int i = 0; i < bankNum; pbank++, i++) {
         char* arcBank = dStage_roomControl_c::getArcBank(i);
-        char* name = "";
+        DUSK_CONST char* name = "";
 
         int id = *pbank;
         if (id != 0xFF) {

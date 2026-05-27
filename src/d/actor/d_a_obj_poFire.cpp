@@ -380,7 +380,7 @@ bool daPoFire_c::eventStart() {
 }
 
 bool daPoFire_c::eventRun() {
-    static char* action_table[1] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[1] = {
         "MOVE_END",
     };
 

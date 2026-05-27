@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_lv4sand.h"
 #include "d/d_s_play.h"
 
-static char* l_arcName = "P_L4Sand";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_L4Sand";
 
 void daObjLv4Sand_c::initBaseMtx() {
     mpModel->setBaseScale(scale);

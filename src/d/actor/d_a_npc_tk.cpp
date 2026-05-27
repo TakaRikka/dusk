@@ -679,14 +679,14 @@ bool daNPC_TK_c::executePerchDemo(int param_0) {
 }
 
 void daNPC_TK_c::executePerch() {
-    static char* action_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[4] = {
         "Wait",
         "Circle",
         "Nearly",
         "Land",
     };
 
-    static char* action_table_w[2] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table_w[2] = {
         "Wait",
         "Circle",
     };

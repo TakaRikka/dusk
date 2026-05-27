@@ -346,7 +346,7 @@ static int daObjBHASHI_Execute(daObjBHASHI_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-static char* l_arcName = "B_Hashi";
+static DUSK_CONST char* l_arcName = "B_Hashi";
 
 int daObjBHASHI_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "Lv9_R07_pillar.bmd");

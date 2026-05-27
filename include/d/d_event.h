@@ -84,7 +84,7 @@ public:
     void clearSkipSystem();
     char* getSkipEventName();
     void setSkipProc(void* skipActor, dEvt_SkipCb skipCb, int skipParameter);
-    void setSkipZev(void* skipActor, char* eventName);
+    void setSkipZev(void* skipActor, DUSK_CONST char* eventName);
     void onSkipFade();
     void offSkipFade();
     bool skipper();

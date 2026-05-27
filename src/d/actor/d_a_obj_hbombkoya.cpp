@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_w.h"
 
-static char* l_arcName = "H_Bombkoy";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Bombkoy";
 
 int daObjHBombkoya_c::create1st() {
     if (fopAcM_isSwitch(this, getSw2No())) {

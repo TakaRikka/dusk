@@ -104,8 +104,8 @@ public:
     void setHowlingEndFlag() { field_0xe1c = 2; }
     void setHowlingFlag() { field_0xe1c = 1; }
 
-    static char* mEvtCutNameList[5];
-    static cutFunc mEvtCutList[5];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[5];
+    static cutFunc DUSK_CONST mEvtCutList[5];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

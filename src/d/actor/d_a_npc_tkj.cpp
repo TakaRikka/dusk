@@ -9,40 +9,40 @@
 #include "d/actor/d_a_npc4.h"
 #include <cstring>
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {12, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Tkj",
 };
 
-static s8 l_loadResPtrn0[] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[] = {
     1, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, 18, 2, 1, 1},
     {6, 0, 1, 18, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[2] = {
     {9, 2, 1, 15, 0, 1, 0, 0},
     {8, 2, 1, 15, 0, 1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
@@ -53,7 +53,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = 
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
     {0, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
@@ -64,12 +64,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
     {-1, 0, 0},
 };
 
-char* daNpcTkj_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpcTkj_c::mCutNameList[2] = {
     "",
     "LV7_FIRST_START",
 };
 
-int (daNpcTkj_c::*daNpcTkj_c::mCutList[])(int) = {
+int (daNpcTkj_c::* DUSK_CONST daNpcTkj_c::mCutList[])(int) = {
     NULL,
     &daNpcTkj_c::cutLv7Start,
 };

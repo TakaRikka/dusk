@@ -7,17 +7,17 @@
 #include <cstring>
 
 struct EventListItem {
-    char* mEventName;
+    DUSK_CONST char* mEventName;
     u32 field_0x4;
 };
 
-static EventListItem l_evtList[3] = {
+static DUSK_CONSTEXPR EventListItem l_evtList[3] = {
     {"", 0},
     {"EXTINCTION", 2},
     {"PURCHASE", 1},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONST char* l_resNameList[3] = {
     "",
     "Bans1",
     "sekizoA",

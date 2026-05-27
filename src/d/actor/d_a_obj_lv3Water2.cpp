@@ -39,7 +39,7 @@ void daLv3Water2_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static char* l_resNameIdx[] = {"Kr03wat04"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {"Kr03wat04"};
 
 void daLv3Water2_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);

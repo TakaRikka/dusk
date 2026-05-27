@@ -10,7 +10,7 @@
 #include "d/d_path.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "Lv7Gate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv7Gate";
 
 int daTagLv7Gate_c::createHeap() {
     // Watched City in the Sky start cutscene

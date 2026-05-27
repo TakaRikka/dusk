@@ -42,11 +42,11 @@ const dCcD_SrcGObjInf l_ccDObjData = {
     {0} // mGObjCo
 };
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     { 3, 1 }, { 4, 1 },
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "uri_kago"
 };

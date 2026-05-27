@@ -7,15 +7,15 @@
 
 #include "d/actor/d_a_obj_oiltubo.h"
 
-static char* l_resFileName = "Obj_otubo";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName = "Obj_otubo";
 
-static char* l_bmdFileName = "x_oiltubo_00.bmd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdFileName = "x_oiltubo_00.bmd";
 
-static char* l_bbmdFileName = "x_oiltubo_00b.bmd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bbmdFileName = "x_oiltubo_00b.bmd";
 
-static char* l_bbtkFileName = "x_oiltubo_00b.btk";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bbtkFileName = "x_oiltubo_00b.btk";
 
-dCcD_SrcCyl daObj_Oiltubo_c::mCcDCyl = {
+dCcD_SrcCyl DUSK_CONST daObj_Oiltubo_c::mCcDCyl = {
     daObj_Oiltubo_c::mCcDObjInfo,
     {
         {

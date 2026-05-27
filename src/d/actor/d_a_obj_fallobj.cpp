@@ -13,9 +13,9 @@
 #include "d/d_s_play.h"
 
 
-static char* l_arcName = "K_drock00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "K_drock00";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-200.0f, -10000.0f, -200.0f},
     {200.0f, 600.0f, 200.0f},
 };

@@ -25,7 +25,7 @@ const static dCcD_SrcSph ccSphSrc = {
     } // mSphAttr
 };
 
-static char* l_arcName[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[1] = {
     "Octhashi"
 };
 

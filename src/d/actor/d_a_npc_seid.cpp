@@ -9,49 +9,49 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {5, 1}
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE",0 }
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "seiD",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, 0, 0, -1, 0, 0, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {-1, 2, 0, -1, 0, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_seiD_c::mCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_seiD_c::mCutNameList = "";
 
-daNpc_seiD_c::cutFunc daNpc_seiD_c::mCutList[1] = {
+daNpc_seiD_c::cutFunc DUSK_CONST daNpc_seiD_c::mCutList[1] = {
     0
 };
 

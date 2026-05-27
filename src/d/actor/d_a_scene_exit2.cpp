@@ -18,9 +18,9 @@ void daScExit_c::setBaseMtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 }
 
-static char* l_arcName = "SceneExit";
+static DUSK_CONST char* l_arcName = "SceneExit";
 
-static char* l_evName = "SCENE_EXIT";
+static DUSK_CONST char* l_evName = "SCENE_EXIT";
 
 int daScExit_c::Create() {
     mRadius = scale.x * 100.0f;
@@ -90,7 +90,7 @@ void daScExit_c::actionEvent() {
 void daScExit_c::actionDead() {}
 
 int daScExit_c::demoProc() {
-    static char* action_table[3] = {"WAIT", "START", "SCENE_CHG"};
+    static DUSK_CONST char* action_table[3] = {"WAIT", "START", "SCENE_CHG"};
 
     u8 scene_id = getSceneID();
     int act_id = dComIfGp_evmng_getMyActIdx(mStaffID, action_table, 3, 0, 0);

@@ -10,14 +10,14 @@
 
 #include "dusk/string.hpp"
 
-static char* l_evtNameList[] = {
+static DUSK_CONST char* l_evtNameList[] = {
     NULL,
     "JUMP_DEMOSTAGE",
 };
 
-static char* l_resFileName = "TAGEVT";
+static DUSK_CONST char* l_resFileName = "TAGEVT";
 
-char* daTag_Evt_c::mEvtCutList[] = {
+DUSK_CONST char* daTag_Evt_c::mEvtCutList[] = {
     "WAIT",
     "TALK",
     "NEXT",

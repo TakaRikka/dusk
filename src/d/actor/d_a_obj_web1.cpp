@@ -242,7 +242,7 @@ static int daObj_Web1_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_web1_class);
     obj_web1_class* _this = static_cast<obj_web1_class*>(i_this);
 
-    static dCcD_SrcCyl cc_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
         {
             {0, {{0, 0, 0}, {0xD8FBFFFF, 17}, 0}},
             {dCcD_SE_NONE, 0, 0, 0, {0}},

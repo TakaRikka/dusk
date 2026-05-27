@@ -29,7 +29,7 @@ void daTwGate_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static char* l_resNameIdx[13] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[13] = {
     "twGtFiro",
     "twGtK0102",
     "twGtK0709",

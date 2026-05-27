@@ -105,7 +105,7 @@ static int daCoach2D_createHeap(fopAc_ac_c* i_this) {
     return ((daCoach2D_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "Coach2D";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Coach2D";
 
 static daCoach2D_HIO_c l_HOSTIO;
 

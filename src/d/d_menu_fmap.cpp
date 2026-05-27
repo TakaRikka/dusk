@@ -2844,7 +2844,7 @@ void dMenu_Fmap_c::tableArrowPosInit(bool param_0) {
         break;
     }
 
-    static char* stage_name[4] = {"F_SP115", "F_SP113", "F_SP109", "F_SP108"};
+    static DUSK_CONST char* stage_name[4] = {"F_SP115", "F_SP113", "F_SP109", "F_SP108"};
     SAFE_STRCPY(mMarkedStageName, stage_name[iVar5]);
 
     if (param_0) {
@@ -2873,7 +2873,7 @@ void dMenu_Fmap_c::yamibossArrowPosInit() {
 
 void dMenu_Fmap_c::howlArrowPosInit() {
     u8 type = dMeter2Info_getGoldWolfMapType();
-    static char* stage_name[6] = {"F_SP104", "F_SP122", "F_SP122", "F_SP124", "F_SP111", "F_SP116"};
+    static DUSK_CONST char* stage_name[6] = {"F_SP104", "F_SP122", "F_SP122", "F_SP124", "F_SP111", "F_SP116"};
     SAFE_STRCPY(mMarkedStageName, stage_name[type - 2]);
     static const int i_swBit[6] = {0x41, 0x29, 0x2a, 0x32, 0x79, 0x32};
     f32 icon_x, icon_z;

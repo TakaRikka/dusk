@@ -113,7 +113,7 @@ int daObjSwTurn_c::Create() {
     return 1;
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "P_Lv4tsw",
     "P_Lv4tswD",
 };

@@ -27,7 +27,7 @@ void daObjTHASHI_c::initCcCylinder() {
     #if !DEBUG
     const
     #endif
-    static dCcD_SrcCyl ccCylSrc = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl ccCylSrc = {
         {
             {0x0, {{AT_TYPE_0, 0x0, 0x0}, {0x00100000, 0x1f}, 0x75}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

@@ -13,7 +13,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-static char* l_arcName = "A_IwaAto";
+static DUSK_CONST char* l_arcName = "A_IwaAto";
 
 void daObjSMark_c::initBaseMtx() {
     setBaseMtx();

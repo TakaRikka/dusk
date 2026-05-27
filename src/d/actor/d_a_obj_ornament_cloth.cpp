@@ -205,7 +205,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-static char* l_arcName = "J_Necktie";
+static DUSK_CONST char* l_arcName = "J_Necktie";
 
 int daObjOnCloth_c::createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcName, "J_Necktie.bmd"));

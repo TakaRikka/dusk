@@ -8,9 +8,9 @@
 #include "d/actor/d_a_bullet.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_resFileNameList[] = {"Hanjo1"};
+static DUSK_CONST char* l_resFileNameList[] = {"Hanjo1"};
 
-static char* l_bmdFileNameList[] = {"hanjo_stone.bmd"};
+static DUSK_CONST char* l_bmdFileNameList[] = {"hanjo_stone.bmd"};
 
 static BULLET_HIO_CLASS l_HIO;
 

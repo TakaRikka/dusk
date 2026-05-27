@@ -14,11 +14,11 @@ static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Shop0_c*>(i_this)->createHeap();
 }
 
-static char* l_resName = "Shop0";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "Shop0";
 
-static char* l_bmdFileName = "grA_a.bmd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdFileName = "grA_a.bmd";
 
-static char* l_bckFileNameTBL = "grA_wait_a";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bckFileNameTBL = "grA_wait_a";
 
 daNpc_Shop0_c::~daNpc_Shop0_c() {
     dComIfG_resLoad(&mPhaseReq, getResName());
@@ -135,7 +135,7 @@ int daNpc_Shop0_c::draw() {
     return 1;
 }
 
-char* daNpc_Shop0_c::getResName() {
+char DUSK_CONST* daNpc_Shop0_c::getResName() {
     return l_resName;
 }
 
@@ -185,7 +185,7 @@ int daNpc_Shop0_c::init() {
 
 static char l_fileName[21];
 
-J3DAnmTransform* daNpc_Shop0_c::getTrnsfrmAnmP(int i_fileIndex, char** i_fileName) {
+J3DAnmTransform* daNpc_Shop0_c::getTrnsfrmAnmP(int i_fileIndex, char DUSK_CONST* DUSK_CONST* i_fileName) {
     SAFE_STRCPY(l_fileName, i_fileName[i_fileIndex]);
     SAFE_STRCAT(l_fileName, ".bck");
     return (J3DAnmTransform*) dComIfG_getObjectRes(getResName(), l_fileName);

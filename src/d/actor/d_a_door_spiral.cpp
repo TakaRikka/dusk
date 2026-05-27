@@ -432,7 +432,7 @@ void daSpiral_c::initOpenDemo(int param_0) {
 }
 
 int daSpiral_c::getDemoAction() {
-    static char* action_table[] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[] = {
         "WAIT",
         "START",
         "SETGOAL",

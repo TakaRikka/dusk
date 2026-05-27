@@ -19,9 +19,9 @@ void daObjGeyser_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-static char* l_arcName = "H_knktsn";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_knktsn";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-100.0f, -10.0f, -100.0f},
     {100.0f, 550.0f, 100.0f},
 };

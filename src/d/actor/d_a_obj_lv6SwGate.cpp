@@ -46,7 +46,7 @@ dCcD_SrcCyl daLv6SwGate_c::mCcDCyl = {
     }  // mCylAttr
 };
 
-static cull_box l_cull_box = {-1200.0f, -300.0f, -100.0f, 1200.0f, 300.0f, 100.0f};
+static DUSK_CONSTEXPR cull_box l_cull_box = {-1200.0f, -300.0f, -100.0f, 1200.0f, 300.0f, 100.0f};
 
 void daLv6SwGate_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);

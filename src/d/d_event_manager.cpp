@@ -330,7 +330,7 @@ int dEvent_manager_c::create() {
     return 1;
 }
 
-bool dEvent_manager_c::setObjectArchive(char* arcname) {
+bool dEvent_manager_c::setObjectArchive(DUSK_CONST char* arcname) {
     void* rt = NULL;
 
     if (arcname != NULL) {
@@ -920,7 +920,7 @@ s16 dEvent_manager_c::getEventIdx(fopAc_ac_c* actor, const char* eventName, u8 m
         dEvDtBase_c actor_event;
         if (type < BASE_ROOM0 || BASE_ROOM5 < type || actorRoomNo == mEventList[type].roomNo()) {
             if (actor != NULL && type == BASE_ACTOR) {
-                char* arcname = actor->eventInfo.getArchiveName();
+                DUSK_CONST char* arcname = actor->eventInfo.getArchiveName();
                 if (arcname != NULL) {
                     char* data = (char*)dComIfG_getObjectRes(arcname, DataFileName);
                     actor_event.init(data, -1);
@@ -1288,7 +1288,7 @@ int dEvent_manager_c::getEventPrio(fopAc_ac_c* actor, s16 evCompositId) {
     dEvDtBase_c eventBase;
 
     if (getTypeCompositId(evCompositId) == 2 && actor != NULL) {
-        char* arcname = actor->eventInfo.getArchiveName();
+        DUSK_CONST char* arcname = actor->eventInfo.getArchiveName();
         if (arcname != NULL) {
             char* data = (char*)dComIfG_getObjectRes(arcname, DataFileName);
             eventBase.init(data, -1);

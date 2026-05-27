@@ -68,9 +68,9 @@ int daObj_Roten_c::Create() {
     return 1;
 }
 
-static char* l_resFileName = "Obj_roten";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName = "Obj_roten";
 
-static u32 l_bmdFileIdx = 4;
+static DUSK_CONSTEXPR u32 l_bmdFileIdx = 4;
 
 int daObj_Roten_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(getResName(), l_bmdFileIdx);
@@ -79,7 +79,7 @@ int daObj_Roten_c::CreateHeap() {
     return mModel != NULL;
 }
 
-static u32 l_dzbFileIdx = 7;
+static DUSK_CONSTEXPR u32 l_dzbFileIdx = 7;
 
 int daObj_Roten_c::create() {
     fopAcM_ct(this, daObj_Roten_c);
@@ -142,7 +142,7 @@ int daObj_Roten_c::Delete() {
     return 1;
 }
 
-char* daObj_Roten_c::getResName() {
+char DUSK_CONST* daObj_Roten_c::getResName() {
     return l_resFileName;
 }
 

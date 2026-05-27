@@ -38,7 +38,7 @@ void daObjKKanban_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-static char* l_arcName = "H_KKanban";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_KKanban";
 
 static dCcD_SrcTri l_tri_src = {
     {

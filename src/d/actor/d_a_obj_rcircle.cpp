@@ -12,7 +12,7 @@ static int daObjRCircle_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjRCircle_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "RCircle";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "RCircle";
 
 daObjRCircle_c::daObjRCircle_c() {}
 

@@ -28,7 +28,7 @@ void daObjCrystal_c::setBaseMtx() {
     mpModel[1]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-static char* l_arcName = "H_Suisho";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Suisho";
 
 int daObjCrystal_c::Create() {
     initBaseMtx();

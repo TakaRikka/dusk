@@ -277,7 +277,7 @@ bool dMsgScrn3Select_c::isSelect() {
     return mProcess == PROC_SELECT_e ? TRUE : FALSE;
 }
 
-void dMsgScrn3Select_c::setString(char* mpText0, char* mpText1, char* mpText2) {
+void dMsgScrn3Select_c::setString(DUSK_CONST char* mpText0, DUSK_CONST char* mpText1, DUSK_CONST char* mpText2) {
     if (mpTmSel_c[0] != NULL) {
         JUT_ASSERT(0, ((J2DTextBox*)(mpTmSel_c[0]->getPanePtr()))->getStringAllocByte() >
                    strlen(mpText0));
@@ -306,7 +306,7 @@ void dMsgScrn3Select_c::setString(char* mpText0, char* mpText1, char* mpText2) {
     }
 }
 
-void dMsgScrn3Select_c::setRubyString(char* pText0, char* pText1, char* pText2) {
+void dMsgScrn3Select_c::setRubyString(DUSK_CONST char* pText0, DUSK_CONST char* pText1, DUSK_CONST char* pText2) {
     if (mpTmrSel_c[0] != NULL) {
         JUT_ASSERT(0, ((J2DTextBox*)(mpTmrSel_c[0]->getPanePtr()))->getStringAllocByte() >
                    strlen(pText0));

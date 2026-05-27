@@ -12,7 +12,7 @@
 
 void daWarpBug_c::create_init() {}
 
-static char* l_arcName = "WarpBug";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "WarpBug";
 
 int daWarpBug_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "kisei.bmd");

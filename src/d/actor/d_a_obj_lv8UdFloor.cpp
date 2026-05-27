@@ -27,7 +27,7 @@ public:
     /* 0x14 */ u8 up_framecount;
 };
 
-static char* l_resNameIdx[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[2] = {
     "L8Step",
     "L8StepX",
 };

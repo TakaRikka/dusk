@@ -143,11 +143,11 @@ const dCcD_SrcGObjInf l_ccDObjData = {
 };
 
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {3, 1},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "pumpkin",
 };

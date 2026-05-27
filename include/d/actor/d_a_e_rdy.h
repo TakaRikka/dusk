@@ -36,7 +36,7 @@ public:
     /* 0x05C8 */ s16 mTargetAngleY;
     /* 0x05CC */ mDoExt_McaMorfSO* mpMorf;
     /* 0x05D0 */ Z2CreatureEnemy mSound;
-    /* 0x0674 */ char* mpArcName;
+    /* 0x0674 */ char DUSK_CONST* mpArcName;
     /* 0x0678 */ int mAnm;
     /* 0x067C */ u8 field_0x67c[0x680 - 0x67c];
     /* 0x0680 */ dJntCol_c mJntCol;

@@ -36,7 +36,7 @@ static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* param_2, fopAc_ac_c* param_3) 
     ((daObjLv4Chan_c*)param_2)->rideActor(param_3);
 }
 
-static char* l_arcName = "P_Lv4Chan";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Lv4Chan";
 
 int daObjLv4Chan_c::create1st() {
     int rv = dComIfG_resLoad(this, l_arcName);

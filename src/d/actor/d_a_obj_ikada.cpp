@@ -85,7 +85,7 @@ static int daObjIkada_Delete(daObjIkada_c* i_this) {
     return 1;
 }
 
-static char* l_arcName = "M_Ikada";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_Ikada";
 
 int daObjIkada_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_Ikada.bmd");

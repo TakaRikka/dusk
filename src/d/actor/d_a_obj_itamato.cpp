@@ -81,7 +81,7 @@ static dCcD_SrcSph l_ccDSph = {
 
 static OBJ_ITAMATO_HIO_CLASS l_HIO;
 
-static char* l_resName = "H_ItaMato";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "H_ItaMato";
 
 daObj_ItaMato_c::~daObj_ItaMato_c() {
     OS_REPORT("|%06d:%x|daObj_ItaMato_c -> デストラクト\n", g_Counter.mCounter0, this);

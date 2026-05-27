@@ -16,7 +16,7 @@ static int daBkyRock_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daBkyRock_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "BYRock";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "BYRock";
 
 daBkyRock_c::exeProc daBkyRock_c::s_exeProc[3] = {
     &daBkyRock_c::exeModeNoDamage,

@@ -228,7 +228,7 @@ void daObjNameplate_c::messageProc() {
     }
 }
 
-char* daObjNameplate_c::l_arcName = "J_Hyosatu";
+char DUSK_CONST* DUSK_CONST daObjNameplate_c::l_arcName = "J_Hyosatu";
 
 int daObjNameplate_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "J_Hyousatu.bmd");

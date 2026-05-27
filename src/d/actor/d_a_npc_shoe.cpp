@@ -82,7 +82,7 @@ bool daNpcShoe_c::chkFindPlayer() {
     return ret;
 }
 
-static daNpc_GetParam2 l_bckGetParamList[5] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[5] = {
     {17, 2, 1},  // m_sitwait_a
     {13, 0, 1},  // m_sittalk_a
     {14, 0, 1},  // m_sittalk_a_b
@@ -90,21 +90,21 @@ static daNpc_GetParam2 l_bckGetParamList[5] = {
     {11, 2, 1}   // m_sit_to_wolf_a
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {12, 2, 0},  // shoe
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "shoe",
     "Mgeneral",
     "object",
 };
 
-static char* l_evtNames[1] = {NULL};
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
-static char* l_myName = "Shoe";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Shoe";
 
-daNpcShoe_c::EventFn daNpcShoe_c::mEvtSeqList[1] = {NULL};
+daNpcShoe_c::EventFn DUSK_CONST daNpcShoe_c::mEvtSeqList[1] = {NULL};
 
 daNpcShoe_c::daNpcShoe_c() {}
 

@@ -9,7 +9,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-static cull_box l_cull_box = {{-1200.0f, -300.0f, -100.0f}, {1200.0f, 300.0f, 100.0f}};
+static DUSK_CONSTEXPR cull_box l_cull_box = {{-1200.0f, -300.0f, -100.0f}, {1200.0f, 300.0f, 100.0f}};
 
 static daLv6SzGate_HIO_c l_HIO;
 

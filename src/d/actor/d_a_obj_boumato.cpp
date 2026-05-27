@@ -37,7 +37,7 @@ static dCcD_SrcCyl l_ccDCyl = {
     }
 };
 
-static char* l_resName = "H_BouMato";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "H_BouMato";
 
 static daArrow_c* l_findActorPtrs[100];
 
@@ -278,7 +278,7 @@ void daObj_BouMato_c::deleteStuckArrow() {
     }
 }
 
-char* daObj_BouMato_c::getResName() {
+char DUSK_CONST* daObj_BouMato_c::getResName() {
     return l_resName;
 }
 

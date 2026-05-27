@@ -990,9 +990,9 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static cPhs_Step daE_BA_Create(fopAc_ac_c* i_this) {
-    static char* arc_name[3] = {"E_ba", "E_fb", "E_ib"};
+    static DUSK_CONST char* arc_name[3] = {"E_ba", "E_fb", "E_ib"};
 
-    static dCcD_SrcSph cc_sph_src = {
+    static DUSK_CONSTEXPR dCcD_SrcSph cc_sph_src = {
         {
             {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0xd}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
             {dCcD_SE_HARD_BODY, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

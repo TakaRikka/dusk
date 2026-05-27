@@ -122,7 +122,7 @@ static s16 GetActorName(cBgS_PolyInfo& param_0) {
     return fpcNm_Obj_SwChain_e;
 }
 
-static char* l_arcName = "P_Chain";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Chain";
 
 static dCcD_SrcSph l_sph_src = {
     {

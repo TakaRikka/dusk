@@ -83,7 +83,7 @@ dCcD_SrcCyl daLv6TogeTrap_c::mCcDCyl = {
     }
 };
 
-static char* l_resNameIdx[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[3] = {
     "L6TogeTp",
     "L4TogeTp",
     "L9Toge",

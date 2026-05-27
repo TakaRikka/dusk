@@ -20,13 +20,13 @@ void daObjBoard_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "Obj_Board";
+static DUSK_CONST char* l_arcName = "Obj_Board";
 
-static char* l_dzbName[5] = {
+static DUSK_CONST char* l_dzbName[5] = {
     "ClearB00.dzb", "ClearB01.dzb", "ClearB02.dzb", "ClearB03.dzb", "ClearB04.dzb",
 };
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-100.0f, -10.0f, -100.0f},
     {100.0f, 10.0f, 100.0f},
 };

@@ -59,7 +59,7 @@ static const daPillar_c::sdata_t l_shake_data[] = {
     /* CRASH       */ {5, 0, 800, 120, 7000, 30, 15},
 };
 
-static char* l_arcName[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[] = {
     "K_mbhasi0",
     "K_mbhasi1",
 };

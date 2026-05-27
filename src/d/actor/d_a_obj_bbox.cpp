@@ -25,7 +25,7 @@ const static dCcD_SrcCyl l_cyl_src = {
     }
 };
 
-static char* l_arcName = "M_BBox";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_BBox";
 
 void daObjBBox_c::initBaseMtx() {
     mpModel->setBaseScale(scale);

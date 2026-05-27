@@ -36,7 +36,7 @@ int daObjGake_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "A_TGake";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "A_TGake";
 
 int daObjGake_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

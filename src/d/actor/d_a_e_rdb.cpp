@@ -1801,7 +1801,7 @@ static int daE_RDB_Create(fopAc_ac_c* actor) {
         }  // mSphAttr
     };
 
-    static dCcD_SrcCyl co_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl co_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x75}},  // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},          // mGObjAt

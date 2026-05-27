@@ -20,12 +20,12 @@ static int l_loadRes_YBAG0[3] = {
     0, -1, -1,
 };
 
-static int* l_loadRes_list[2] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[2] = {
     l_loadRes_YBAG0,
     l_loadRes_YBAG0,
 };
 
-static char* l_resNames[] = {"yel_bag"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[] = {"yel_bag"};
 
 dCcD_SrcCyl daObj_YBag_c::mCcDCyl = {
     daNpcT_c::mCcDObjData,

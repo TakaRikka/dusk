@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-static char* l_arcName[] = {
+static DUSK_CONST char* l_arcName[] = {
     "K_tetd",
     "S_bsaku00",
     "S_lv7saku",

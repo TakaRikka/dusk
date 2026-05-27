@@ -103,7 +103,7 @@ void daObjKazeNeko_c::getFirstVec(cXyz* param_1, int param_2) {
     param_1->set((attr().field_0x20 * cM_ssin(sVar4)), 30.0f, attr().field_0x20 * cM_scos(sVar4));
 }
 
-static char* l_arcName = "J_Kazami";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "J_Kazami";
 
 inline int daObjKazeNeko_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "pole.bmd");

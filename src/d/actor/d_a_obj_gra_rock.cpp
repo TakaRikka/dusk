@@ -171,7 +171,7 @@ int daObjGraRock_c::Create() {
     return 1;
 }
 
-static char* l_arcName[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[5] = {
     "M_VBom",
     "grA_base",
     "grA_mdl",

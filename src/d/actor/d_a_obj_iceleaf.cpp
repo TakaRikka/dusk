@@ -20,7 +20,7 @@ void daObjIceLeaf_c::initBaseMtx() {
     setBaseMtx();
 }
 
-static char* l_arcName = "V_IceLeaf";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_IceLeaf";
 
 void daObjIceLeaf_c::setBaseMtx() {
     if (mRide) {

@@ -10,9 +10,9 @@
 #include "d/d_s_play.h"
 #include <cstring>
 
-static char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
+static DUSK_CONST char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
 
-static char* l_ropeArcName = "L_Ropest";
+static DUSK_CONST char* l_ropeArcName = "L_Ropest";
 
 void daObjRBridge_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
@@ -244,12 +244,12 @@ BOOL daObjRBridge_c::checkTight() {
     return FALSE;
 }
 
-static cull_box l_cull_sizeS = {
+static DUSK_CONSTEXPR cull_box l_cull_sizeS = {
     {-250.0f, 0.0f, -100.0f},
     {250.0f, 1100.0f, 1000.0f},
 };
 
-static cull_box l_cull_sizeL = {
+static DUSK_CONSTEXPR cull_box l_cull_sizeL = {
     {-400.0f, 0.0f, -100.0f},
     {400.0f, 1500.0f, 1500.0f},
 };
@@ -321,8 +321,8 @@ int daObjRBridge_c::Create() {
         mCcCps[i].SetStts(&mCcStts);
     }
 
-    Vec* cull_min;
-    Vec* cull_max;
+    Vec DUSK_CONST* cull_min;
+    Vec DUSK_CONST* cull_max;
     if (mType == 0) {
         cull_min = &l_cull_sizeS.min;
         cull_max = &l_cull_sizeS.max;

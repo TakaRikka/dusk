@@ -10,7 +10,7 @@
 
 static daKiPot_HIO_c l_HIO;
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-50.0f, 0.0f, -50.0f},
     {50.0f, 100.0f, 50.0f},
 };

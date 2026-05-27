@@ -35,7 +35,7 @@ static int daIzumiGate_Delete(daIzumiGate_c* i_this) {
     return 1;
 }
 
-static char* l_arcName = "M_IzmGate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_IzmGate";
 
 int daIzumiGate_c::create() {
     fopAcM_ct(this, daIzumiGate_c);

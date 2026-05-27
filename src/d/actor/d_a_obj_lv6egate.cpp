@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_lv6egate.h"
 
-static char* l_arcName = "LV6EGATE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "LV6EGATE";
 
 const int l_dzbidx = 3;
 

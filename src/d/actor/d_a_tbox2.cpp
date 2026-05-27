@@ -46,9 +46,9 @@ static const cM3dGCylS l_cyl_info[] = {
     },
 };
 
-static char* l_arcName = "Tbox2";
+static DUSK_CONST char* l_arcName = "Tbox2";
 
-static char* l_staff_name = "TREASURE";
+static DUSK_CONST char* l_staff_name = "TREASURE";
 
 static dCcD_SrcCyl l_cyl_src = {
     {
@@ -158,7 +158,7 @@ int daTbox2_c::create1st() {
 }
 
 int daTbox2_c::demoProc() {
-    static char* action_table[] = {"WAIT", "OPEN", "APPEAR", "OPEN_SHORT"};
+    static DUSK_CONST char* action_table[] = {"WAIT", "OPEN", "APPEAR", "OPEN_SHORT"};
     int act_idx =
         dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, ARRAY_SIZEU(action_table), 0, 0);
 

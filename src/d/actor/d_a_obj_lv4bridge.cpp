@@ -41,7 +41,7 @@ int daObjLv4Brg_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "Obj_l4brg";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_l4brg";
 
 int daObjLv4Brg_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

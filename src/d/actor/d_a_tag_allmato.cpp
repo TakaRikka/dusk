@@ -8,7 +8,7 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
-static daNpcT_evtData_c l_evtList[8] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[8] = {
     {"", 0},
     {"FOCUS_BOUMATO", 2},
     {"FOCUS_ITAMATO", 2},
@@ -28,7 +28,7 @@ static daNpcT_evtData_c l_evtList[8] = {
 #define EVT_HIT_BOUMATO3          6
 #define EVT_NEARPIN_BOUMATO       7
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "Taro1",
     "Taro2",

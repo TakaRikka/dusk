@@ -11,7 +11,7 @@
 #include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_mtx.h"
 
-static char* l_arcName[] = {"Obj_saka", "Obj_saka2"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[] = {"Obj_saka", "Obj_saka2"};
 
 #if DEBUG
 class daObjLv3saka_HIO_c : public mDoHIO_entry_c {

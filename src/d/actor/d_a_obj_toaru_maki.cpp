@@ -12,7 +12,7 @@ static int daObjToaruMaki_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjToaruMaki_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName[2] = {"T_Maki1", "T_Maki2"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {"T_Maki1", "T_Maki2"};
 
 daObjToaruMaki_c::daObjToaruMaki_c() {
     mpBgW = NULL;

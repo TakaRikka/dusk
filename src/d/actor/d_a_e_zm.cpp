@@ -70,7 +70,7 @@ static u8 hio_set;
 static daE_ZM_HIO_c l_HIO;
 
 namespace {
-    static dCcD_SrcCyl cc_zm_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_zm_src = {
         {
             {0, {{AT_TYPE_0, 0, 0}, {0xD8FBFDFF, 0x43}, 0x45}},
             {dCcD_SE_13, 0, 0, 0, 0},

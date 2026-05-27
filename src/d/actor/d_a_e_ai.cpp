@@ -71,7 +71,7 @@ void e_ai_class::initCcCylinder() {
     m_ccShieldSph.SetStts(&m_ccShieldStts);
     m_ccShieldSph.OnCoSetBit();
 
-    static dCcD_SrcCyl cc_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xdafbf9ff, 0x43}, 0x75}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

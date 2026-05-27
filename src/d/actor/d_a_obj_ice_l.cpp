@@ -127,7 +127,7 @@ static int daObjIce_l_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjIce_l_c*>(i_this)->create();
 }
 
-static char* l_arcName = "V_Ice_l";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_Ice_l";
 
 int daObjIce_l_c::create() {
     fopAcM_ct(this, daObjIce_l_c);

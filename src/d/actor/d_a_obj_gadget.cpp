@@ -52,7 +52,7 @@ static u32 l_bmdData[2][2] = {
     35, 1, 34, 1,
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "ykM1",
 };

@@ -30,7 +30,7 @@ static int target_info_count;
 const char* l_arcName = "sample";
 
 #if DEBUG
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-200.0f, -100.0f, -200.0f},
     {200.0f, 100.0f, 200.0f}
 };

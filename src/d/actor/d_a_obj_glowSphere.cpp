@@ -17,7 +17,7 @@ daGlwSph_HIO_c::daGlwSph_HIO_c() {
 
 static daGlwSph_HIO_c l_HIO;
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-30.0f, -10.0f, -30.0f},
     {30.0f, 60.0f, 30.0f}
 };

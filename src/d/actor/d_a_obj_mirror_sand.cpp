@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_mirror_sand.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "MR-Sand";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "MR-Sand";
 
 int daObjMirrorSand_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 8);

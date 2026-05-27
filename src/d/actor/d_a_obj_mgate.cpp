@@ -74,24 +74,24 @@ int daObjMGate_c::Create() {
     return 1;
 }
 
-static char* l_arcName[] = {
+static DUSK_CONST char* l_arcName[] = {
     "M_IGate",
     "M_HGate",
 };
 
-static char* l_bmdName[] = {
+static DUSK_CONST char* l_bmdName[] = {
     "M_IzumiGate.bmd",
     "M_HashiGate.bmd",
 };
 
-static char* l_dzbName[] = {
+static DUSK_CONST char* l_dzbName[] = {
     "M_IzumiGate.dzb",
     "M_HashiGate.dzb",
 };
 
-static char* l_keyArcName = "M_GateKey";
+static DUSK_CONST char* l_keyArcName = "M_GateKey";
 
-static char* l_keyBmdName = "M_IGateKey.bmd";
+static DUSK_CONST char* l_keyBmdName = "M_IGateKey.bmd";
 
 int daObjMGate_c::CreateHeap() {
     J3DModelData* modelData =

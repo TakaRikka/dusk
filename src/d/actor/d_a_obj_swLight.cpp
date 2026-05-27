@@ -78,9 +78,9 @@ const static dCcD_SrcSph l_sph_src_tg = {
     }  // mSphAttr
 };
 
-static char* l_arcName = "Obj_l8sw0";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_l8sw0";
 
-static cull_box l_cull_box = {{
+static DUSK_CONSTEXPR cull_box l_cull_box = {{
                                 -500.0f,
                                 0.0f,
                                 -500.0f,

@@ -19,7 +19,7 @@ static struct {
     u32 resIdx;
 } l_dzbData[1] = {7, 1};
 
-static char* l_resNameList[2] = {"", "Sekizo"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {"", "Sekizo"};
 
 static u8 lit_3800[12];
 

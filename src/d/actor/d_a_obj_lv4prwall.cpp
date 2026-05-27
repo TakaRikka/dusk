@@ -20,7 +20,7 @@ static const int l_bmdidx[] = {
     4,
 };
 
-static char* l_arcName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {
     "PRWallR09",
     "P_Rwall",
     "PRWallR04",

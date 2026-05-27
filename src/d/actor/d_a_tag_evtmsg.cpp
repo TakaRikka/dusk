@@ -17,7 +17,7 @@ enum evt_cut_e {
     NUM_EVT_CUTS_e,
 };
 
-char* daTag_EvtMsg_c::mEvtCutNameList[] = {"", "TALK", "WAIT"};
+DUSK_CONST char* daTag_EvtMsg_c::mEvtCutNameList[] = {"", "TALK", "WAIT"};
 
 EvtCutFunc daTag_EvtMsg_c::mEvtCutList[] = {
     NULL,
@@ -25,7 +25,7 @@ EvtCutFunc daTag_EvtMsg_c::mEvtCutList[] = {
     &daTag_EvtMsg_c::ECut_wait,
 };
 
-static char* l_myName = "EvtMsg";
+static DUSK_CONST char* l_myName = "EvtMsg";
 
 int daTag_EvtMsg_c::create() {
     int var_r28 = 0;

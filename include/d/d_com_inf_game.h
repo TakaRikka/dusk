@@ -2830,27 +2830,27 @@ inline int dComIfGp_evmng_getIsAddvance(int i_staffId) {
     return dComIfGp_getPEvtManager()->getIsAddvance(i_staffId);
 }
 
-inline int dComIfGp_evmng_getMyActIdx(int i_staffId, char** i_actions, int i_actionNum, BOOL param_3, BOOL param_4) {
+inline int dComIfGp_evmng_getMyActIdx(int i_staffId, DUSK_CONST char* DUSK_CONST* i_actions, int i_actionNum, BOOL param_3, BOOL param_4) {
     return dComIfGp_getPEvtManager()->getMyActIdx(i_staffId, i_actions, i_actionNum, param_3, param_4);
 }
 
-inline f32* dComIfGp_evmng_getMyFloatP(int i_staffId, char* i_dataname) {
+inline f32* dComIfGp_evmng_getMyFloatP(int i_staffId, DUSK_CONST char* i_dataname) {
     return (f32*)dComIfGp_getPEvtManager()->getMySubstanceP(i_staffId, i_dataname, dEvDtData_c::TYPE_FLOAT);
 }
 
-inline cXyz* dComIfGp_evmng_getMyXyzP(int i_staffId, char* i_dataname) {
+inline cXyz* dComIfGp_evmng_getMyXyzP(int i_staffId, DUSK_CONST char* i_dataname) {
     return (cXyz*)dComIfGp_getPEvtManager()->getMySubstanceP(i_staffId, i_dataname, dEvDtData_c::TYPE_VEC);
 }
 
-inline int* dComIfGp_evmng_getMyIntegerP(int i_staffId, char* i_dataname) {
+inline int* dComIfGp_evmng_getMyIntegerP(int i_staffId, DUSK_CONST char* i_dataname) {
     return (int*)dComIfGp_getPEvtManager()->getMySubstanceP(i_staffId, i_dataname, dEvDtData_c::TYPE_INT);
 }
 
-inline char* dComIfGp_evmng_getMyStringP(int i_staffId, char* i_dataname) {
+inline char* dComIfGp_evmng_getMyStringP(int i_staffId, DUSK_CONST char* i_dataname) {
     return (char*)dComIfGp_getPEvtManager()->getMySubstanceP(i_staffId, i_dataname, dEvDtData_c::TYPE_STRING);
 }
 
-inline int dComIfGp_evmng_getMySubstanceNum(int i_staffId, char* i_dataname) {
+inline int dComIfGp_evmng_getMySubstanceNum(int i_staffId, DUSK_CONST char* i_dataname) {
     return dComIfGp_getPEvtManager()->getMySubstanceNum(i_staffId, i_dataname);
 }
 

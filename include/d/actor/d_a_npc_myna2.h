@@ -87,8 +87,8 @@ public:
 
     int getType() { return mType; }
 
-    static char* mEvtCutNameList[5];
-    static EventFn mEvtCutList[];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[5];
+    static EventFn DUSK_CONST mEvtCutList[];
 
     /* 0xB48 */ u8 field_0xB48[0xB4C - 0xB48];
     /* 0xB4C */ daNpcF_Lookat_c mLookat;

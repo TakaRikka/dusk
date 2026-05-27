@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item_data.h"
 
-static cull_box l_cull_box = {{-200.0f, 0.0f, -200.0f}, {200.0f, 100.0f, 200.0f}};
+static DUSK_CONSTEXPR cull_box l_cull_box = {{-200.0f, 0.0f, -200.0f}, {200.0f, 100.0f, 200.0f}};
 
 void daObjSword_c::initBaseMtx() {
     mpModel->setBaseScale(scale);

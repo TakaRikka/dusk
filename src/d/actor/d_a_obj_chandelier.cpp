@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "L9Chand";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "L9Chand";
 
 daObjChandelier_proc daObjChandelier_c::s_exeProc[5] = {
     &daObjChandelier_c::exeModeWait,

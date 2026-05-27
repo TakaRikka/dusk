@@ -980,7 +980,7 @@ static int useHeapInit(fopAc_ac_c* a_this) {
 }
 
 static int daObj_So_Create(fopAc_ac_c* a_this) {
-    static dCcD_SrcCyl cc_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fafd3f, 0x1f}, 0x79}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

@@ -37,52 +37,52 @@ void daNpc_yamiS_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {12, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"STOPPER", 1},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "yamiS",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8* l_loadResPtrnList[3] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, 18, 2, 1, 1},
     {7, 0, 1, 18, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[2] = {
     {9, 2, 1, 15, 0, 1, 1, 0},
     {8, 0, 1, 15, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_yamiS_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_yamiS_c::mCutNameList[2] = {
     "",
     "STOPPER",
 };
 
-daNpc_yamiS_c::cutFunc daNpc_yamiS_c::mCutList[2] = {
+daNpc_yamiS_c::cutFunc DUSK_CONST daNpc_yamiS_c::mCutList[2] = {
     NULL,
     &daNpc_yamiS_c::cutStopper,
 };

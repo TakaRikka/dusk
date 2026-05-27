@@ -12,7 +12,7 @@ static int daObjPicture_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjPicture_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "L9Picture";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "L9Picture";
 
 static Vec l_LINE_OFFSET_POS[] = {
     {-100.0f, 200.0f, -2.0f},

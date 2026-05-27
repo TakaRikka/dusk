@@ -98,38 +98,38 @@ enum TYPE {
     /* 0x3 */ TYPE_3,
 };
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     {BMDR_KOLINB, KOLINB},
     {BMDR_SRCB, ZRCB},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"", 0},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "Kolinb",
     "zrCb",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     KOLINB, -1
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     KOLINB, ZRCB, -1,
 };
 
-static s8* l_loadResPtrnList[4] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn1,
     NULL,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_KOLINB, J3DFrameCtrl::EMode_LOOP, KOLINB, 1},
     {BCK_KOLINB_F_WAIT_A, J3DFrameCtrl::EMode_LOOP, KOLINB, BTP_KOLINB_F_WAIT_A, J3DFrameCtrl::EMode_LOOP, KOLINB, 0},
     {BCK_KOLINB_F_SUFFER_A, J3DFrameCtrl::EMode_LOOP, KOLINB, BTP_KOLINB_F_SUFFER_A, J3DFrameCtrl::EMode_LOOP, KOLINB, 0},
@@ -142,7 +142,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {BCK_ZRCB_F_SUFFER_B, J3DFrameCtrl::EMode_LOOP, ZRCB, BTP_ZRCB_F_SUFFER_B, J3DFrameCtrl::EMode_LOOP, ZRCB, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[9] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[9] = {
     {BCK_KOLINB_WAIT_A, J3DFrameCtrl::EMode_LOOP, KOLINB, BTK_KOLINB, J3DFrameCtrl::EMode_NONE, KOLINB, 0, 0},
     {BCK_KOLINB_SUFFER_A, J3DFrameCtrl::EMode_LOOP, KOLINB, BTK_KOLINB, J3DFrameCtrl::EMode_NONE, KOLINB, 0, 0},
     {BCK_KOLINB_SUFFER_B, J3DFrameCtrl::EMode_LOOP, KOLINB, BTK_KOLINB, J3DFrameCtrl::EMode_NONE, KOLINB, 0, 0},
@@ -154,7 +154,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[9] = {
     {BCK_ZRCB_SUFFER_B, J3DFrameCtrl::EMode_LOOP, ZRCB, -1, J3DFrameCtrl::EMode_NONE, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {6, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -166,7 +166,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[32] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[32] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 1}, {5, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -177,7 +177,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[32] = {
     {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Kolinb_c::mCutNameList[7] = {
+char DUSK_CONST* DUSK_CONST daNpc_Kolinb_c::mCutNameList[7] = {
     "",
     "CONVERSATION_IN_HOTEL",
     "CONVERSATION_ABOUT_DEATHMT",
@@ -187,7 +187,7 @@ char* daNpc_Kolinb_c::mCutNameList[7] = {
     "THANK_YOU",
 };
 
-daNpc_Kolinb_c::cutFunc daNpc_Kolinb_c::mCutList[7] = {
+daNpc_Kolinb_c::cutFunc DUSK_CONST daNpc_Kolinb_c::mCutList[7] = {
     NULL,
     &daNpc_Kolinb_c::cutConversationInHotel,
     &daNpc_Kolinb_c::cutConversationAboutDeathMt,

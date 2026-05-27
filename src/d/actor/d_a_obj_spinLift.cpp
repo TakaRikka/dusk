@@ -50,7 +50,7 @@ void daSpinLift_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static char* l_resNameIdx[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {
     "L4_N_Entr", "L4_N_SlpH", "L4_N_SlpL", "L4_Center", "L4_Switch",
     "L4_S_Slp",  "L4_Wal_ZE", "L4_Wal_ZW", "L4_Wal_X",
 };

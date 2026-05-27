@@ -33,7 +33,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-static char* l_arcName = "Hata";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Hata";
 
 daObjHata_c::daObjHata_c() {}
 

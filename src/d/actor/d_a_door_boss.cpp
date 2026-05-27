@@ -12,19 +12,19 @@
 #include "d/d_door_param2.h"
 #include "SSystem/SComponent/c_math.h"
 
-char* daBdoor_c::getArcName() {
+DUSK_CONST char* daBdoor_c::getArcName() {
     return "Z_bdor00";
 }
 
-char* daBdoor_c::getBmd() {
+DUSK_CONST char* daBdoor_c::getBmd() {
     return "Z_bdor00.bmd";
 }
 
-char* daBdoor_c::getDzb() {
+DUSK_CONST char* daBdoor_c::getDzb() {
     return "door30.dzb";
 }
 
-char* daBdoor_c::getBmd2() {
+DUSK_CONST char* daBdoor_c::getBmd2() {
     return "door_shutterBoss.bmd";
 }
 
@@ -119,7 +119,7 @@ cPhs_Step daBdoor_c::create() {
 }
 
 int daBdoor_c::getDemoAction() {
-    static char* action_table[11] = {
+    static DUSK_CONST char* action_table[11] = {
         "WAIT",
         "UNLOCK",
         "OPEN",

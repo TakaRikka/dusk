@@ -25,9 +25,9 @@ static BOOL daMirror_c_createHeap(fopAc_ac_c* i_this) {
     return ((daMirror_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "Mirror";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Mirror";
 
-static char* l_arcName2 = "MR-Table";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName2 = "MR-Table";
 
 dMirror_packet_c::dMirror_packet_c() {
 #ifdef TARGET_PC

@@ -93,8 +93,8 @@ public:
     BOOL ECut_earringGet(int);
     void adjustShapeAngle() {}
 
-    static char* mEvtCutNameList[2];
-    static EventFn mEvtCutList[2];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[2];
+    static EventFn DUSK_CONST mEvtCutList[2];
 
 private:
     /* 0xB48 */ Z2Creature mCreatureSound;

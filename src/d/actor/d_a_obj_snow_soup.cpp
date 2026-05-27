@@ -15,7 +15,7 @@ static int daObjSnowSoup_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjSnowSoup_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "SnowSoup";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "SnowSoup";
 
 static Vec const SOUP_MODEL_OFFSET = {3317.86f, 214.73f, 323.3f};
 

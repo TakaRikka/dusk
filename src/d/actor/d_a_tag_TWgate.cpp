@@ -13,12 +13,12 @@
 #include "f_op/f_op_actor_mng.h"
 
 struct daTagTWGate_zevParam {
-    /* 0x00 */ char* mArcName;
-    /* 0x04 */ char* mEventName;
-    /* 0x08 */ char* mTalkEventName;
-    /* 0x0C */ char* mInEventName;
+    /* 0x00 */ DUSK_CONST char* mArcName;
+    /* 0x04 */ DUSK_CONST char* mEventName;
+    /* 0x08 */ DUSK_CONST char* mTalkEventName;
+    /* 0x0C */ DUSK_CONST char* mInEventName;
     /* 0x10 */ int mLv;
-    /* 0x14 */ char* mStage;
+    /* 0x14 */ DUSK_CONST char* mStage;
     /* 0x18 */ s16 mPoint;
     /* 0x1A */ s8 mRoomNo;
     /* 0x1B */ s8 mLayer;
@@ -77,7 +77,7 @@ static daTagTWGate_zevParam const l_zevParamTbl[4] = {
     },
 };
 
-static const char* l_myName = "Gate";
+static DUSK_CONSTEXPR const char* l_myName = "Gate";
 
 const actionFunc daTagTWGate_c::ActionTable[][2] = {
     {&daTagTWGate_c::initWait, &daTagTWGate_c::executeWait},

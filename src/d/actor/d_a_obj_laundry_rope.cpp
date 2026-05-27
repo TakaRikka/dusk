@@ -207,7 +207,7 @@ void daObjLndRope_c::setNormalRopePos() {
     }
 }
 
-static char* l_arcName = "Obj_SRope";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_SRope";
 
 int daObjLndRope_c::createHeap() {
     ResTIMG* resTimg = (ResTIMG*)dComIfG_getObjectRes(l_arcName, "Obj_ItaRope.bti");

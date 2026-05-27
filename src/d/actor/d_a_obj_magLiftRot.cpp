@@ -14,7 +14,7 @@
 #include "d/d_bg_w.h"
 #include "SSystem/SComponent/c_math.h"
 
-static char* l_arcName[3] = {"MagLiftS", "MagLiftM", "MagLiftL"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {"MagLiftS", "MagLiftM", "MagLiftL"};
 
 daMagLiftRot_HIO_c::daMagLiftRot_HIO_c() {
     mWaitTime = 60;

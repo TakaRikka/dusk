@@ -73,9 +73,9 @@ static f32 const l_cull_size[] = {-150.0f, 0.0f, -150.0f, 150.0f, 150.0f, 150.0f
 // This was used for this object's HIO, which was removed in retail
 static s16 const l_r00_rot_time[] = {190, 148, 100};
 
-static char* l_arcName[] = {"K_prop00", "Lv9_puro"};
+static DUSK_CONST char* l_arcName[] = {"K_prop00", "Lv9_puro"};
 
-static char* l_joint_name = "kaiten";
+static DUSK_CONST char* l_joint_name = "kaiten";
 
 int daObjSwPr_c::Create() {
 #if AVOID_UB

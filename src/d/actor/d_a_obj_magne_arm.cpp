@@ -141,15 +141,15 @@ void rideCallBack(dBgW* param_0, fopAc_ac_c* i_this, fopAc_ac_c* i_rideActor) {
     }
 }
 
-static char* l_arcName = "D_Marm";
+static DUSK_CONST char* l_arcName = "D_Marm";
 
 static void dummyStrings() {
     DEAD_STRING("D_MN54");
 }
 
-static cull_box l_cull_box = {{-500.0f, -3000.0f, -500.0f}, {500.0f, 3000.0f, 2500.0f}};
+static DUSK_CONSTEXPR cull_box l_cull_box = {{-500.0f, -3000.0f, -500.0f}, {500.0f, 3000.0f, 2500.0f}};
 
-static cull_box l_cull_box2 = {{-500.0f, -4000.0f, -500.0f}, {500.0f, 3000.0f, 2500.0f}};
+static DUSK_CONSTEXPR cull_box l_cull_box2 = {{-500.0f, -4000.0f, -500.0f}, {500.0f, 3000.0f, 2500.0f}};
 
 static Vec const l_offsetB = {-150.0f, 1200.0f, 0.0f};  // unused
 

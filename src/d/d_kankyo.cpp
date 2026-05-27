@@ -8361,8 +8361,8 @@ kankyo_process_profile_definition g_profile_KANKYO = {
 };
 
 static void dummy_str_0x40a0() {
-    char* str1 = "ステージが変わったときかなぁ～？？？";
-    char* str2 = "POINTLIGHT RECALL![%f][%f][%f]";
+    DUSK_CONST char* str1 = "ステージが変わったときかなぁ～？？？";
+    DUSK_CONST char* str2 = "POINTLIGHT RECALL![%f][%f][%f]";
 }
 
 void dKy_setLight_init() {

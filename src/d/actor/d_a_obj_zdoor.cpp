@@ -237,13 +237,13 @@ int daZdoor_c::Create() {
     return 1;
 }
 
-static char* l_arcName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {
     "J_Zdoor",
     "J_Rdoor",
     "J_STdoa",
 };
 
-static char* l_bmdName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdName[3] = {
     "J_Zdoor.bmd",
     "J_Rdoor.bmd",
     "J_STdoa.bmd",
@@ -267,7 +267,7 @@ static const u16 estimateSizeTbl[2] = {
     0x0D30,
 };
 
-static char* l_dzbName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_dzbName[3] = {
     "J_Zdoor.dzb",
     "J_Rdoor.dzb",
     "J_STdoa.dzb",

@@ -14,7 +14,7 @@ static int daWindStone_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daWindStone_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "WindStone";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "WindStone";
 
 daWindStone_c::daWindStone_c() : mpBgW(NULL), field_0x5c4(0) {}
 

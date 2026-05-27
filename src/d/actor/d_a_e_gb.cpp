@@ -1632,7 +1632,7 @@ static cPhs_Step daE_GB_Create(fopAc_ac_c* actor) {
         } // mSphAttr
     };
 
-    static dCcD_SrcCyl body_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl body_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x79}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

@@ -85,7 +85,7 @@ namespace {
         }
     };
 
-    static dCcD_SrcCyl cc_zhCyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_zhCyl_src = {
         {
             {0, {{AT_TYPE_0, 0, 0}, {0xD84860BA, 3}, 0x15}},
             {dCcD_SE_METAL, 0, 0, 0, 0},
@@ -99,7 +99,7 @@ namespace {
         }
     };
 
-    static dCcD_SrcCyl cc_zhCyl_at_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_zhCyl_at_src = {
         {
             {0, {{AT_TYPE_CSTATUE_SWING, 4, 0xD}, {0, 0}, 0}},
             {dCcD_SE_METAL, 0, 2, 0, 0},

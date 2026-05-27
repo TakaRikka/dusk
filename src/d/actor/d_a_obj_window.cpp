@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "J_KazeD";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "J_KazeD";
 
 static int const l_bck[3] = {5, 6, -1};
 

@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_rotBridge.h"
 
-static char* l_resNameIdx[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[3] = {
     "P_Mbridge",
     "P_Mbridge",
     "P_Mbrid9",

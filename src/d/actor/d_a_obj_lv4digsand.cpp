@@ -33,7 +33,7 @@ int daObjL4DigSand_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "P_DSand";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_DSand";
 
 int daObjL4DigSand_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

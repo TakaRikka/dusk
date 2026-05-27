@@ -90,63 +90,63 @@ enum Type {
     /* 0x3 */ TYPE_3,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDE_SEIA, SEIREI},
 };
 
-static daNpcT_evtData_c l_evtList[4] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[4] = {
     {"", 0},
     {"CONVERSATION_ABOUT_YM", 2},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "Seirei",
     "Seirei1",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     SEIREI, -1,
 };
 
-static s8 l_loadResPtrn1[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[2] = {
     SEIREI1, -1,
 };
 
- static s8* l_loadResPtrnList[4] = {
+ static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn1,
     l_loadResPtrn1,
     l_loadResPtrn1,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, -1, J3DFrameCtrl::EMode_NONE, NONE, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[2] = {
     {BCK_SEIA_WAIT_A, J3DFrameCtrl::EMode_LOOP, SEIREI, -1, J3DFrameCtrl::EMode_NONE, NONE, 0, 0},
     {BCK_SEIA_WAIT_B, J3DFrameCtrl::EMode_NONE, SEIREI, -1, J3DFrameCtrl::EMode_NONE, NONE, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[12] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[12] = {
     {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, 0, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Seirei_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_Seirei_c::mCutNameList[2] = {
     "",
     "CONVERSATION",
 };
 
-daNpc_Seirei_c::cutFunc daNpc_Seirei_c::mCutList[2] = {
+daNpc_Seirei_c::cutFunc DUSK_CONST daNpc_Seirei_c::mCutList[2] = {
     NULL,
     &daNpc_Seirei_c::cutConversation,
 };

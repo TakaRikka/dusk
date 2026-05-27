@@ -72,7 +72,7 @@ int daObjStair_c::Create() {
     return 1;
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "K_mvkai00",
     "Lv9_mvkai",
 };

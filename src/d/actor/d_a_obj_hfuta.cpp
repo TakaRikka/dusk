@@ -40,7 +40,7 @@ int daObjFuta_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "Obj_hfuta";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_hfuta";
 
 int daObjFuta_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

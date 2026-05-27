@@ -762,7 +762,7 @@ static cPhs_Step daE_Bee_Create(fopAc_ac_c* i_this) {
         _this->mCounter = fopAcM_GetID(i_this);
 
         _this->mCcStts.Init(0, 0, i_this);
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0x410022, 0x23}, 0x0}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

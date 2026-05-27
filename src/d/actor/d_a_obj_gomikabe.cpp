@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 
-static char* l_arcName = "GomiKabe";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "GomiKabe";
 
 daObjGOMIKABE_HIO_c::daObjGOMIKABE_HIO_c() {
     mId = -1;

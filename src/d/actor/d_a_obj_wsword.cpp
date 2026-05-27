@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-static char* l_arcName = "Obj_brksw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_brksw";
 
 static dCcD_SrcCyl l_cyl_src = {
     {

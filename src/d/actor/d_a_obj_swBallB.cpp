@@ -156,7 +156,7 @@ int daObjSwBallB_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "P_LBswBC";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_LBswBC";
 
 int daObjSwBallB_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);

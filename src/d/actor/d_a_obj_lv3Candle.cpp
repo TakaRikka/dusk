@@ -43,7 +43,7 @@ dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
 
 dCcD_SrcSph daLv3Candle_c::mCcDSph = {daLv3Candle_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 0.0f}}};
 
-static char* l_resNameIdx[] = {"L3candl", "L3candl2"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {"L3candl", "L3candl2"};
 
 void daLv3Candle_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);

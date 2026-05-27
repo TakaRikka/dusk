@@ -114,7 +114,7 @@ const static s16 l_rot_angle[2] = {35, 18};
 
 const static s16 l_walk_rot_angle[2] = {40, 40};
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "D_Srock",  // small rock
     "D_Brock",  // big rock
 };

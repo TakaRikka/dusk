@@ -14,7 +14,7 @@ public:
     /* 0x1 */ u8 mType;
     /* 0x2 */ s16 mJntNum;
     /* 0x4 */ f32 field_0x4;
-    /* 0x8 */ Vec* field_0x8;
+    /* 0x8 */ DUSK_CONST Vec* field_0x8;
 };
 
 class dJntCol_c {

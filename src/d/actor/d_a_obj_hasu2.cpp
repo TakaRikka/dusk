@@ -24,7 +24,7 @@ static const cull_box l_cull_box = {
     {133.0f, 29.0f, 127.0f}
 };
 
-static char* l_arcName = "M_Hasu";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_Hasu";
 
 nObjMHasu::daObjMHasu_c::daObjMHasu_c() :
     mConst1(25.5f),

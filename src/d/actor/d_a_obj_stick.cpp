@@ -22,7 +22,7 @@ dCcD_SrcSph daObj_Stick_c::mCcDSph = {
     }  // mSphAttr
 };
 
-static char* l_resName = "Taro6";
+static DUSK_CONST char* l_resName = "Taro6";
 
 static OBJ_STICK_HIO_CLASS l_HIO;
 

@@ -8,11 +8,11 @@
 #include "d/actor/d_a_tag_river_back.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "RvBack";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "RvBack";
 
-static char* l_evName = "RIVER_BACK";
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "RIVER_BACK";
 
-static char* l_staffName = "rvback";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "rvback";
 
 int daTagRiverBack_c::Create() {
     mMapToolID = -1;
@@ -97,7 +97,7 @@ void daTagRiverBack_c::actionEvent() {
 void daTagRiverBack_c::actionDead() {}
 
 int daTagRiverBack_c::demoProc() {
-    static char* action_table[] = {"WAIT", "SCENE_CHG"};
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[] = {"WAIT", "SCENE_CHG"};
 
     daPy_py_c* player = daPy_getPlayerActorClass();
     int act_id = dComIfGp_evmng_getMyActIdx(mStaffID, action_table, ARRAY_SIZEU(action_table), 0, 0);

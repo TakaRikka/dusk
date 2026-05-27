@@ -112,7 +112,7 @@ int daObjSw5_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "D_Hfsw00";
+static DUSK_CONST char* l_arcName = "D_Hfsw00";
 
 int daObjSw5_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

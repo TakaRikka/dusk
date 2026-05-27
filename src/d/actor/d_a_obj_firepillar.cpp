@@ -20,7 +20,7 @@ void daObjFPillar_c::setBaseMtx() {
     mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 }
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-30.0f, -10.0f, -30.0f},
     {30.0f, 60.0f, 30.0f},
 };

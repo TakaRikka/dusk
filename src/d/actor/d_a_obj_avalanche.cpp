@@ -35,13 +35,13 @@ void daObjAvalanche_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx2);
 }
 
-static char* l_arcName = "V_Yuki";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_Yuki";
 
-static char* l_evName = "SNOW_COLLAPSE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "SNOW_COLLAPSE";
 
-static char* l_staffName = "Obj_ava";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "Obj_ava";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-500.0f, -500.0f, -700.0f},
     {500.0f, 1000.0f, 700.0f},
 };
@@ -204,7 +204,7 @@ void daObjAvalanche_c::actionEvent() {
 void daObjAvalanche_c::actionDead() {
 }
 
-static char* action_table[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* action_table[2] = {
     "WAIT",
     "COLLAPSE",
 };

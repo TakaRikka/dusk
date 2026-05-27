@@ -37,7 +37,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 typedef void (dMenu_Collect2D_c::*initFunc)();
-static initFunc init[] = {
+static DUSK_CONSTEXPR initFunc init[] = {
     &dMenu_Collect2D_c::wait_init,          &dMenu_Collect2D_c::save_open_init,
     &dMenu_Collect2D_c::save_move_init,     &dMenu_Collect2D_c::save_close_init,
     &dMenu_Collect2D_c::option_open_init,   &dMenu_Collect2D_c::option_move_init,
@@ -50,7 +50,7 @@ static initFunc init[] = {
     &dMenu_Collect2D_c::insect_close_init};
 
 typedef void (dMenu_Collect2D_c::*processFunc)();
-static processFunc process[] = {
+static DUSK_CONSTEXPR processFunc process[] = {
     &dMenu_Collect2D_c::wait_proc,          &dMenu_Collect2D_c::save_open_proc,
     &dMenu_Collect2D_c::save_move_proc,     &dMenu_Collect2D_c::save_close_proc,
     &dMenu_Collect2D_c::option_open_proc,   &dMenu_Collect2D_c::option_move_proc,
@@ -2644,13 +2644,13 @@ void dMenu_Collect3D_c::createMaskModel() {
     static const f32 m_kamen_offset_x[5] = {-14.0f, -14.0f, -14.0f, 1.3f, 6.5f};
     static const f32 m_kamen_offset_y[5] = {0.0f, 0.0f, 0.0f, 22.0f, 30.0f};
     static const f32 m_kamen_scale[5] = {2.6f, 2.6f, 2.2f, 1.8f, 1.8f};
-    static char* bck_name[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* bck_name[4] = {
         "md_mask_parts_spin_1.bck",
         "md_mask_parts_spin_2.bck",
         "md_mask_parts_spin_3.bck",
         "md_mask_parts_spin_4.bck",
     };
-    static char* brk_name[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* brk_name[4] = {
         "md_mask_parts_spin_1.brk",
         "md_mask_parts_spin_2_3.brk",
         "md_mask_parts_spin_2_3.brk",
@@ -2687,13 +2687,13 @@ void dMenu_Collect3D_c::createMirrorModel() {
     static const f32 m_mirror_offset_x[5] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     static const f32 m_mirror_offset_y[5] = {4.0f, 4.0f, 4.0f, 4.0f, 4.0f};
     static const f32 m_mirror_scale[5] = {0.6f, 0.6f, 0.6f, 0.6f, 0.6f};
-    static char* bck_name[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* bck_name[4] = {
         "kageri_mirrer_spin_1.bck",
         "kageri_mirrer_spin_2.bck",
         "kageri_mirrer_spin_3.bck",
         "kageri_mirrer_spin_4.bck",
     };
-    static char* brk_name[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* brk_name[4] = {
         "kageri_mirrer_spin_1.brk",
         "kageri_mirrer_spin_2_3_4.brk",
         "kageri_mirrer_spin_2_3_4.brk",

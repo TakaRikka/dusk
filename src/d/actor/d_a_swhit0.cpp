@@ -14,7 +14,7 @@
 #define COLOR_RED    2
 #define COLOR_GREEN  3
 
-static char* l_arcName = "S_swHit00";
+static DUSK_CONST char* l_arcName = "S_swHit00";
 
 int daSwhit0_c::getSwNo() {
     return fopAcM_GetParam(this) & 0xFF;
@@ -196,7 +196,7 @@ void daSwhit0_c::offSwitch() {
 }
 
 int daSwhit0_c::DemoProc() {
-    static char* action_table[2] = {
+    static DUSK_CONST char* action_table[2] = {
         "WAIT",
         "CHANGE",
     };

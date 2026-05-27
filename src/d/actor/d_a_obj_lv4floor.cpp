@@ -27,7 +27,7 @@ int daObjLv4Floor_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "P_L4Floor";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_L4Floor";
 
 int daObjLv4Floor_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);

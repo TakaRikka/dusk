@@ -10,7 +10,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_arcName = "RiverRock";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "RiverRock";
 
 daObjRIVERROCK_HIO_c::daObjRIVERROCK_HIO_c() {
     field_0x4 = -1;

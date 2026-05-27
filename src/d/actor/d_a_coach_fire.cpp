@@ -155,7 +155,7 @@ static int daCoachFire_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-static char* stringBase_80658454 = "Coach";
+static DUSK_CONST char* stringBase_80658454 = "Coach";
 
 static actor_method_class l_daCoachFire_Method = {
     (process_method_func)daCoachFire_Create,  (process_method_func)daCoachFire_Delete,

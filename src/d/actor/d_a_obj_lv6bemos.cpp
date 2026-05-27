@@ -108,9 +108,9 @@ void daObjL6Bm_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "Obj_lv6bm";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_lv6bm";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-200.0f, -100.0f, -200.0f},
     {200.0f, 100.0f, 200.0f},
 };

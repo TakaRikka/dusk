@@ -124,11 +124,11 @@ enum Event_Cut_Nums {
 
 static NPC_GRR_HIO_CLASS l_HIO;
 
-static int l_bmdGetParamList[1][2] = {
+static DUSK_CONSTEXPR int l_bmdGetParamList[1][2] = {
     {BMDR_GRR, GRR},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[19] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[19] = {
     {-1, GRR},
     {BCK_GRR_F_TALK_A, GRR},
     {BCK_GRR_F_LAUGH, GRR},
@@ -150,7 +150,7 @@ static daNpc_GetParam1 l_bckGetParamList[19] = {
     {BCK_GRR_SWING, GRR1},
 };
 
-static daNpc_GetParam1 l_btpGetParamList[6] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[6] = {
     {BTP_GRR, GRR},
     {BTP_GRR_F_LAUGH, GRR},
     {BTP_GRR_F_KEEE, GRR},
@@ -159,49 +159,49 @@ static daNpc_GetParam1 l_btpGetParamList[6] = {
     {BTP_GRR_FH_LAUGH, GRR},
 };
 
-static daNpc_GetParam1 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[1] = {
     {BTK_GRR, GRR},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[1] = {
     {0, GRR},
 };
 
-static int l_loadRes_GRRa[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRRa[3] = {
     GRR, -1, -1,
 };
 
-static int l_loadRes_GRR_SPAWATER[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRR_SPAWATER[3] = {
     GRR, GRR1, -1,
 };
 
-static int l_loadRes_GRR_MARO[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRR_MARO[3] = {
     GRR, GRR1, -1,
 };
 
-static int l_loadRes_GRR0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRR0[3] = {
     GRR, -1, -1,
 };
 
-static int* l_loadRes_list[4] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[4] = {
     l_loadRes_GRRa,
     l_loadRes_GRR_SPAWATER,
     l_loadRes_GRR_MARO,
     l_loadRes_GRR0,
 };
 
-static char* l_resNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[2] = {
     "grR",
     "grR1",
 };
 
-static char* l_evtNames[1] = {NULL};
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
-static char* l_myName = "grR";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grR";
 
-char* daNpc_grR_c::mEvtCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_grR_c::mEvtCutNameList = "";
 
-daNpc_grR_c::cutFunc daNpc_grR_c::mEvtCutList[1] = {
+daNpc_grR_c::cutFunc DUSK_CONST daNpc_grR_c::mEvtCutList[1] = {
     NULL,
 };
 

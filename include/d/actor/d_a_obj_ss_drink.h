@@ -21,7 +21,7 @@ public:
     int Execute();
     int Draw();
     static int createHeapCallBack(fopAc_ac_c*);
-    char* getResName();
+    char DUSK_CONST* getResName();
     u8 getTypeFromParam();
     u8 getSwitchFromParam();
     u8 getCapacityFromParam();
@@ -48,7 +48,7 @@ public:
     virtual void setSoldOut();
 
     static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static dCcD_SrcCyl DUSK_CONST mCcDCyl;
 
 private:
     /* 0x578 */ mDoExt_btpAnm* mpBtpAnm;

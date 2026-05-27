@@ -19,7 +19,7 @@ static int daObjCRVLH_UP_Delete(daObjCRVLH_UP_c* i_this) {
     return 1;
 }
 
-static char* l_arcName = "CrvLH_Up";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvLH_Up";
 
 void daObjCRVLH_UP_c::HakaiSet() {
     fopAcM_GetPosition(daPy_getPlayerActorClass());

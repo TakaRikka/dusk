@@ -43,7 +43,7 @@ void daObj_ITA_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static char* l_arcName = "M_Ita";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_Ita";
 
 static f32 dummy() {
     return 0.0f;

@@ -10,7 +10,7 @@
 #include "d/actor/d_a_b_ds.h"
 #include "d/d_s_play.h"
 
-static char* l_arcName = "P_L4Rwall";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_L4Rwall";
 
 static void* s_BossSearch(void* i_actor, void* i_data) {
     if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_B_DS_e) {

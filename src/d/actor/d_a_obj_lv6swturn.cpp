@@ -10,7 +10,7 @@
 #include "d/actor/d_a_obj_lv6swturn.h"
 #include "d/actor/d_a_player.h"
 
-static char* l_arcName = "Obj_l6tsw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_l6tsw";
 
 #if DEBUG
 daObjLv6SwTurn_HIO_c::daObjLv6SwTurn_HIO_c() {

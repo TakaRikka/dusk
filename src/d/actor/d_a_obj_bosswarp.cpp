@@ -14,7 +14,7 @@
 #include "d/actor/d_a_obj_ystone.h"
 #include <cstring>
 
-static char* l_arcName = "ef_Portal";
+static DUSK_CONST char* l_arcName = "ef_Portal";
 
 static char const* l_clearEvName[9] = {
     "BOSSCLEAR01",
@@ -415,7 +415,7 @@ void daObjBossWarp_c::actionCancelEvent() {
 }
 
 int daObjBossWarp_c::demoProc() {
-    static char* action_table[15] = {
+    static DUSK_CONST char* action_table[15] = {
         "WAIT",
         "APPEAR",
         "DISAPPEAR",

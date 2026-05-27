@@ -33,11 +33,11 @@ static int eventCallBack(void* i_proc, int param_1) {
     return 1;
 }
 
-static char* l_arcName = "SCanCrs";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "SCanCrs";
 
-static char* l_eventName = "SKY_CANNON_WARP_START";
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName = "SKY_CANNON_WARP_START";
 
-static char* l_staffName = "SCanCrs";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "SCanCrs";
 
 daSCannonCrs_c::daSCannonCrs_c() {
     mpBgW = NULL;
@@ -277,7 +277,7 @@ void (daSCannonCrs_c::*daSCannonCrs_c::s_exeProc[])(daMidna_c*) = {
 };
 
 void daSCannonCrs_c::demoExe() {
-    static char* CUT_TYPE_TABLE[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE[4] = {
         "WAIT",
         "BEAM_HIT",
         "READY",

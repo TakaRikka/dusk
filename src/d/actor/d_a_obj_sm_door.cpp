@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_e_pm.h"
 
-static char* l_arcName = "sm_door";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "sm_door";
 
 static cPhs_Step daObjSM_DOOR_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSM_DOOR_c*>(i_this)->create();

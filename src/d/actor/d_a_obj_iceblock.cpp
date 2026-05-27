@@ -199,7 +199,7 @@ void daObjIceBlk_c::disablePushPull() {
     }
 }
 
-static char* l_arcName = "Y_icecube";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Y_icecube";
 
 int daObjIceBlk_c::Create() {
     mpPath = dPath_GetRoomPath(getPathId(), fopAcM_GetRoomNo(this));

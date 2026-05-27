@@ -36,7 +36,7 @@ void daObjBkDoor_c::setBaseMtx() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "A_BkDoor";
+static DUSK_CONST char* l_arcName = "A_BkDoor";
 
 static int const l_bmd[] = {0x04, 0x05};
 static int const l_dzb[] = {0x08, 0x09};

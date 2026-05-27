@@ -182,7 +182,7 @@ static int nodeCallBack(J3DJoint* i_joint, int i_callbackCondition) {
     return 1;
 }
 
-static char* l_arcName = "J_Sentaku";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "J_Sentaku";
 
 int daObjLdy_c::getObjType() {
     return fopAcM_GetParam(this) & 0xff;

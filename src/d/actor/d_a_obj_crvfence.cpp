@@ -28,7 +28,7 @@ enum Action {
     /* 0x1 */ ACTION_BROKEN,
 };
 
-static char* l_arcName = "CrvFence";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvFence";
 
 BOOL daObjCRVFENCE_c::CheckVec() {
     cXyz vec(fopAcM_GetPosition((fopAc_ac_c*)daPy_getPlayerActorClass()));

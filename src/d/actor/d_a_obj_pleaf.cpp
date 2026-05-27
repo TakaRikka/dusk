@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_pleaf.h"
 
-static char* l_resName = "J_Hatake";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "J_Hatake";
 
 daObj_Pleaf_HIOParam const daObj_Pleaf_Param_c::m = {0, -3.0f, 1.0f, 900.0f};
 
@@ -123,7 +123,7 @@ int daObj_Pleaf_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObj_Pleaf_c*>(i_this)->CreateHeap();
 }
 
-char* daObj_Pleaf_c::getResName() {
+char DUSK_CONST* daObj_Pleaf_c::getResName() {
     return l_resName;
 }
 

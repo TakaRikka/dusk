@@ -2947,7 +2947,7 @@ static int daE_PO_Create(fopAc_ac_c* i_act_this) {
         i_this->mAcchCir.SetWall(80.0f, 100.0f);
         i_this->mColliderStts.Init(150, 0, i_act_this);
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8000000, 0x3}, 0x0}},  // mObj
                 {dCcD_SE_13, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt

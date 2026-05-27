@@ -13,9 +13,9 @@
 #include "d/d_bg_w.h"
 #include <cstring>
 
-static char* l_arcName = "Obj_obrg";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_obrg";
 
-static char* l_portal_warp_name[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_portal_warp_name[2] = {
     "PORTAL_WARP_OBRIDGE",
     "PORTAL_WARP_OUT_OBRIDGE",
 };
@@ -36,7 +36,7 @@ static const u16 l_app_eff[] = {0x8B34, 0x8B36, 0x8B37};
 
 static const Vec l_midna_wait_offset = {100.0f, -1265.0f, -760.0f};
 
-static char* l_staff_name[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_staff_name[2] = {
     "WarpOB1",
     "WarpOB2",
 };
@@ -346,7 +346,7 @@ void daObjWarpOBrg_c::actionWarpEventDst() {
 void daObjWarpOBrg_c::actionDead() {}
 
 void daObjWarpOBrg_c::demoProc() {
-    static char* action_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[4] = {
         "WAIT",
         "OBJ_DISAPP",
         "OBJ_APP",

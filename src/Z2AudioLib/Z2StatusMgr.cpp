@@ -91,7 +91,7 @@ bool Z2StatusMgr::isMovieDemo() {
     return mDemoStatus == 2 || mDemoStatus == 8 || mDemoStatus == 9;
 }
 
-void Z2StatusMgr::setDemoName(char* demoName) {
+void Z2StatusMgr::setDemoName(DUSK_CONST char* demoName) {
     if (mDemoStatus == 11) {
         mDemoStatus = 0;
         if (Z2GetSceneMgr()->isInGame()) {

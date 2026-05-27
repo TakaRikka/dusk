@@ -263,8 +263,8 @@ bool daObjYobikusa_c::setNewLeaf() {
 }
 
 int daObjYobikusa_c::createHeap() {
-    char* res_name1;
-    char* res_name2;
+    DUSK_CONST char* res_name1;
+    DUSK_CONST char* res_name2;
     J3DModelData* model_data1;
     J3DModelData* model_data2;
 

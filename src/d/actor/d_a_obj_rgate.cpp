@@ -210,10 +210,10 @@ void daObjRgate_c::setBaseMtx() {
     }
 }
 
-static char* l_arcName = "M_RGate00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_RGate00";
 
 int daObjRgate_c::Create() {
-    static char* l_evName = "RIDER_GATE_OPEN00";
+    static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "RIDER_GATE_OPEN00";
 
     u8 sw_no = getSwNo();
     if (sw_no != 0xFF && !fopAcM_isSwitch(this, sw_no) &&
@@ -803,7 +803,7 @@ void daObjRgate_c::demoProc() {
 }
 
 int daObjRgate_c::getDemoAction() {
-    static char* action_table[] = {"WAIT", "ADJUSTMENT", "UNLOCK", "OPEN"};
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[] = {"WAIT", "ADJUSTMENT", "UNLOCK", "OPEN"};
 
     return dComIfGp_evmng_getMyActIdx(mStaffID, action_table, ARRAY_SIZEU(action_table), 0, 0);
 }

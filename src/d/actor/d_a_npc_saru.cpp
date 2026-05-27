@@ -63,37 +63,37 @@ enum Material {
     /* 0x2 */ MAT_SARU_FACE_M,
 };
 
-static int l_bmdData[4][2] = {
+static DUSK_CONSTEXPR int l_bmdData[4][2] = {
     { npc_ks_class::BMDR_SARU, 1 }, { BMDR_SARU_TW, 2 }, { npc_ks_class::BMDR_SARU_BARA, 1 }, { BMDR_SARU_BARA_TW, 2 },
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"YM_LOOK", 2},
 };
 
-static char* l_resNameList[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[4] = {
     "", "Npc_ks", "saru_TW", "saru"
 };
 
-static s8 l_loadResPtrn0[4] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[4] = {
     NPC_KS, SARU_TW, SARU, -1,
 };
 
-static s8* l_loadResPtrnList[4] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0,
         npc_ks_class::BTP_SARU, J3DFrameCtrl::EMode_LOOP, NPC_KS, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[51] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[51] = {
     {npc_ks_class::BCK_SARU_WAIT_A, J3DFrameCtrl::EMode_LOOP, NPC_KS, 
         -1, J3DFrameCtrl::EMode_NONE, 0, 0, 0},
     {npc_ks_class::BCK_SARU_WAIT_B, J3DFrameCtrl::EMode_LOOP, NPC_KS, 
@@ -198,11 +198,11 @@ static daNpcT_motionAnmData_c l_motionAnmData[51] = {
         -1, J3DFrameCtrl::EMode_NONE, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -216,14 +216,14 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Saru_c::mCutNameList[4] = {
+char DUSK_CONST* DUSK_CONST daNpc_Saru_c::mCutNameList[4] = {
     "",
     "FIND_MONKEY",
     "HELP_ME",
     "YM_LOOK",
 };
 
-daNpc_Saru_c::cutFunc daNpc_Saru_c::mCutList[4] = {
+daNpc_Saru_c::cutFunc DUSK_CONST daNpc_Saru_c::mCutList[4] = {
     NULL,
     &daNpc_Saru_c::cutFindMonkey,
     &daNpc_Saru_c::cutHelpMe,
