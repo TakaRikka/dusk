@@ -220,12 +220,11 @@ void handle_event(const SDL_Event& event) noexcept {
 void onFocusLost() {
     SDL_Window* window = aurora::window::get_sdl_window();
     if (window != nullptr) {
-        SDL_SetWindowRelativeMouseMode(window, false);
+        syncCaptureState(window, false);
         syncGrabState(window, false);
     }
     s_idle_frames = 0;
     set_cursor_visible(true);
-    reset_deltas();
 }
 
 void onFocusGained() {
