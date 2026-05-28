@@ -31,8 +31,9 @@ bool BoolButton::disabled() const {
 
 Rml::String BoolButton::format_value() {
     if (mValueOverride) {
-        if (std::string override = mValueOverride(); !override.empty())
-            return override;
+        if (std::string value = mValueOverride(); !value.empty()) {
+            return value;
+        }
     }
 
     return mGetValue() ? "On" : "Off";

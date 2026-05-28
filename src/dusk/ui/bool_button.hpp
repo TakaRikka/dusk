@@ -29,7 +29,6 @@ private:
     std::function<void(int)> mSetValue;
     std::function<bool()> mIsDisabled;
     std::function<bool()> mIsModified;
-    std::function<bool()> mIsSupported;
     std::function<Rml::String()> mValueOverride;
 };
 
