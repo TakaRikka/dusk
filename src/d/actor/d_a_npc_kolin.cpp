@@ -167,13 +167,13 @@ enum Event {
     /* 0x8 */ EVENT_CLOTH_TRY,
 };
 
-static int l_bmdData[3][2] = {
+static DUSK_CONSTEXPR int l_bmdData[3][2] = {
     {BMDR_KOLIN, KOLIN},
     {BMDR_KOLIN_TW, KOLIN_TW},
     {BMDR_KOLIN_CLOTH, KOLIN2},
 };
 
-static daNpcT_evtData_c l_evtList[9] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"NO_RIDE_L", 3},
@@ -185,7 +185,7 @@ static daNpcT_evtData_c l_evtList[9] = {
     {"CLOTH_TRY", 3},
 };
 
-static char* l_resNameList[8] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[8] = {
     "",
     "Kolin",
     "Kolin_TW",
@@ -196,38 +196,38 @@ static char* l_resNameList[8] = {
     "Taro1",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     KOLIN, KOLIN1, -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     KOLIN, KOLIN_TW, -1,
 };
 
-static s8 l_loadResPtrn2[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {
     KOLIN, KOLIN2, -1,
 };
 
-static s8 l_loadResPtrn3[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[5] = {
     KOLIN, KOLIN1, KOLIN2, KOLIN_TW, -1,
 };
 
-static s8 l_loadResPtrn4[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[3] = {
     KOLIN, KOLIN_P1, -1,
 };
 
-static s8 l_loadResPtrn9[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {
     KOLIN, KOLIN1, KOLIN2, KOLIN_TW, -1,
 };
 
-static s8* l_loadResPtrnList[15] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[15] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn1, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn3, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn4, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_KOLIN, J3DFrameCtrl::EMode_LOOP, KOLIN, 1},
     {BCK_KOLIN_F_WALK_A, J3DFrameCtrl::EMode_LOOP, KOLIN1, BTP_KOLIN_F_WALK_A, J3DFrameCtrl::EMode_LOOP, KOLIN1, 0},
     {BCK_KOLIN_F_STONE, J3DFrameCtrl::EMode_NONE, KOLIN1, BTP_KOLIN_F_STONE, J3DFrameCtrl::EMode_NONE, KOLIN1, 0},
@@ -244,7 +244,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {BCK_KOLIN_F_CLUP, J3DFrameCtrl::EMode_NONE, KOLIN1, BTP_KOLIN_F_CLUP, J3DFrameCtrl::EMode_NONE, KOLIN1, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[21] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[21] = {
     {BCK_KOLIN_WAIT_A, J3DFrameCtrl::EMode_LOOP, KOLIN, BTK_KOLIN, J3DFrameCtrl::EMode_NONE, KOLIN, 1, 0},
     {BCK_KOLIN_WAIT_B, J3DFrameCtrl::EMode_LOOP, KOLIN1, BTK_KOLIN, J3DFrameCtrl::EMode_NONE, KOLIN, 1, 0},
     {BCK_KOLIN_WAIT_C, J3DFrameCtrl::EMode_LOOP, KOLIN1, BTK_KOLIN, J3DFrameCtrl::EMode_NONE, KOLIN, 1, 0},
@@ -268,7 +268,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[21] = {
     {BCK_KOLIN_CLOTH_TRY, J3DFrameCtrl::EMode_NONE, KOLIN2, BTK_KOLIN_CLOTH_TRY, J3DFrameCtrl::EMode_NONE, KOLIN2, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
     {10, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -285,7 +285,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -308,7 +308,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {20, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Kolin_c::mCutNameList[11] = {
+char DUSK_CONST* DUSK_CONST daNpc_Kolin_c::mCutNameList[11] = {
     "",
     "NO_RIDE",
     "HAIL",
@@ -322,7 +322,7 @@ char* daNpc_Kolin_c::mCutNameList[11] = {
     "THANK_YOU",
 };
 
-daNpc_Kolin_c::cutFunc daNpc_Kolin_c::mCutList[11] = {
+daNpc_Kolin_c::cutFunc DUSK_CONST daNpc_Kolin_c::mCutList[11] = {
     NULL,
     &daNpc_Kolin_c::cutNoRide,
     &daNpc_Kolin_c::cutHail,
@@ -2243,7 +2243,7 @@ static int daNpc_Kolin_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Kolin_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Kolin_MethodTable = {
     (process_method_func)daNpc_Kolin_Create,
     (process_method_func)daNpc_Kolin_Delete,
     (process_method_func)daNpc_Kolin_Execute,
@@ -2251,7 +2251,7 @@ static actor_method_class daNpc_Kolin_MethodTable = {
     (process_method_func)daNpc_Kolin_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_KOLIN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_KOLIN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

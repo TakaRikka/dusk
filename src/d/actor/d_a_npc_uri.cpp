@@ -79,9 +79,9 @@ void daNpc_Uri_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[2][2] = {{12, 1}, {33, 2}};
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {{12, 1}, {33, 2}};
 
-static daNpcT_evtData_c l_evtList[11] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[11] = {
     {"", 0},
     {"DEFAULT_GETITEM", 2},
     {"NO_RESPONSE", 0},
@@ -95,42 +95,42 @@ static daNpcT_evtData_c l_evtList[11] = {
     {"MEETING_AGAIN", 4},
 };
 
-static char* l_resNameList[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[6] = {
     "", "Uri", "Uri1", "Uri2", "Uri3", "Uri_P1",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     1,
     2,
     -1,
 };
 
-static s8 l_loadResPtrn2[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {
     1,
     3,
     -1,
 };
 
-static s8 l_loadResPtrn3[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[5] = {
     1, 2, 3, 4, -1,
 };
 
-static s8 l_loadResPtrn4[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[3] = {
     1,
     5,
     -1,
 };
 
-static s8 l_loadResPtrn9[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {
     1, 2, 3, 4, -1,
 };
 
-static s8* l_loadResPtrnList[7] = {l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn0, l_loadResPtrn2,
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[7] = {l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn0, l_loadResPtrn2,
                                    l_loadResPtrn3, l_loadResPtrn4, l_loadResPtrn9};
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[19] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[19] = {
     {-1, 0, 0, 18, 2, 1, TRUE},  {-1, 0, 0, -1, 0, 0, FALSE}, {6, 0, 1, 18, 2, 1, TRUE},
     {10, 0, 2, 43, 0, 2, FALSE}, {11, 0, 2, 44, 0, 2, FALSE}, {9, 0, 2, 42, 0, 2, FALSE},
     {12, 0, 2, 45, 0, 2, FALSE}, {6, 0, 3, 21, 0, 3, FALSE},  {8, 0, 3, 23, 0, 3, FALSE},
@@ -140,7 +140,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[19] = {
     {8, 2, 1, 21, 2, 1, FALSE},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[34] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[34] = {
     {9, 2, 1, 15, 0, 1, 1, 0},  {-1, 0, 0, -1, 0, 0, 0, 0}, {9, 2, 3, 18, 2, 3, 0, 0},
     {-1, 0, 0, -1, 0, 0, 0, 0}, {-1, 0, 0, -1, 0, 0, 0, 0}, {-1, 0, 0, -1, 0, 0, 0, 0},
     {-1, 0, 0, -1, 0, 0, 0, 0}, {-1, 0, 0, -1, 0, 0, 0, 0}, {30, 0, 2, 15, 0, 1, 1, 0},
@@ -155,7 +155,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[34] = {
     {19, 0, 2, 15, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] = {
     {2, -1, 1},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {7, -1, 1}, {14, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {3, -1, 1},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}, {4, -1, 1},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {5, -1, 1},  {11, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {12, -1, 0},
@@ -169,7 +169,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] =
     {-1, 0, 0},  {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {28, -1, 1}, {29, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {30, -1, 1}, {26, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {31, -1, 0}, {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {32, -1, 1}, {31, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {9, -1, 0},
@@ -200,7 +200,7 @@ const char* daNpc_Uri_c::mCutNameList[7] = {
     "MEETING_AGAIN",
 };
 
-daNpc_Uri_c::cutFunc daNpc_Uri_c::mCutList[7] = {
+daNpc_Uri_c::cutFunc DUSK_CONST daNpc_Uri_c::mCutList[7] = {
     NULL,
     &daNpc_Uri_c::cutConversation,
     &daNpc_Uri_c::cutStartCarryTutorial,
@@ -1913,13 +1913,13 @@ static int daNpc_Uri_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Uri_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Uri_MethodTable = {
     (process_method_func)daNpc_Uri_Create,  (process_method_func)daNpc_Uri_Delete,
     (process_method_func)daNpc_Uri_Execute, (process_method_func)daNpc_Uri_IsDelete,
     (process_method_func)daNpc_Uri_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_URI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_URI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

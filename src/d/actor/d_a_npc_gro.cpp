@@ -193,17 +193,17 @@ enum Mode {
 
 static NPC_GRO_HIO_CLASS l_HIO;
 
-static daNpc_Maro_c::actionFunc dummy_lit_3931() {
+static DUSK_CONSTEXPR daNpc_Maro_c::actionFunc dummy_lit_3931() {
     return &daNpc_Maro_c::choccai;
 }
 
-static daNpc_GetParam1 l_bmdGetParamList[3] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[3] = {
     {BMDR_GRO_A, GRO},
     {BMDR_GRO_PIPE, GRO},
     {BMDR_MARO_BOKIN, GRO1},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[23] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[23] = {
     {-1, GRO},
     {BCK_GRO_F_WAIT_A, GRO},
     {BCK_GRO_F_WALK_A, GRO},
@@ -229,7 +229,7 @@ static daNpc_GetParam1 l_bckGetParamList[23] = {
     {BCK_GRO_SWING, GRO1},
 };
 
-static daNpc_GetParam1 l_btpGetParamList[6] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[6] = {
     {BTP_GRO_A, GRO},
     {BTP_GRO_F_TALK_B, GRO},
     {BTP_GRO_F_CALL, GRO1},
@@ -238,57 +238,57 @@ static daNpc_GetParam1 l_btpGetParamList[6] = {
     {BTP_GRO_F_BOW, GRO1},
 };
 
-static daNpc_GetParam1 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[1] = {
     {BTK_GRO_A, GRO},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[3] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[3] = {
     {0, GRO},
     {1, GRO1D},
     {2, GRO},
 };
 
-static int l_loadRes_GROa[4] = {
+static DUSK_CONSTEXPR int l_loadRes_GROa[4] = {
     GRO, -1, -1, -1,
 };
 
-static int l_loadRes_GRO_BOKIN[4] = {
+static DUSK_CONSTEXPR int l_loadRes_GRO_BOKIN[4] = {
     GRO, GRO1, GRO1D, -1,
 };
 
-static int l_loadRes_GRO_MARO[4] = {
+static DUSK_CONSTEXPR int l_loadRes_GRO_MARO[4] = {
     GRO, GRO1, -1, -1,
 };
 
-static int l_loadRes_GRO0[4] = {
+static DUSK_CONSTEXPR int l_loadRes_GRO0[4] = {
     GRO, -1, -1, -1,
 };
 
-static int* l_loadRes_list[4] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[4] = {
     l_loadRes_GROa,
     l_loadRes_GRO_BOKIN,
     l_loadRes_GRO_MARO,
     l_loadRes_GRO0,
 };
 
-static int l_loadObj_list[2][2] = {
+static DUSK_CONSTEXPR int l_loadObj_list[2][2] = {
     {1, 2},
     {-1, 1},
 };
 
-static char* l_resNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[3] = {
     "grO",
     "grO1",
     "grO1D",
 };
 
-static char* l_evtNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[3] = {
     NULL,
     "BOKIN_FINISH",
     "PUSHOUT",
 };
 
-static char* l_myName = "grO";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grO";
 
 #if DEBUG
 daNpc_grO_HIO_c::daNpc_grO_HIO_c() {
@@ -325,13 +325,13 @@ void daNpc_grO_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-char* daNpc_grO_c::mEvtCutNameList[3] = {
+char DUSK_CONST* DUSK_CONST daNpc_grO_c::mEvtCutNameList[3] = {
     "",
     "BOKIN_FINISH",
     "PUSHOUT",
 };
 
-daNpc_grO_c::cutFunc daNpc_grO_c::mEvtCutList[3] = {
+daNpc_grO_c::cutFunc DUSK_CONST daNpc_grO_c::mEvtCutList[3] = {
     NULL,
     &daNpc_grO_c::ECut_bokinFinish,
     &daNpc_grO_c::cutPushOut,
@@ -1907,7 +1907,7 @@ static int daNpc_grO_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_grO_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_grO_MethodTable = {
     (process_method_func)daNpc_grO_Create,
     (process_method_func)daNpc_grO_Delete,
     (process_method_func)daNpc_grO_Execute,
@@ -1915,7 +1915,7 @@ static actor_method_class daNpc_grO_MethodTable = {
     (process_method_func)daNpc_grO_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GRO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GRO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

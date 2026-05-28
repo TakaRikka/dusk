@@ -127,7 +127,7 @@ public:
     u8 isInputEnd() { return mIsInputEnd; }
     char* getInputStrPtr() { return mInputStr; }
     void hideIcon() { mSelIcon->setAlphaRate(0.0f); }
-    void setNextNameStr(char* i_name) { strcpy(mNextNameStr,i_name); }
+    void setNextNameStr(char* i_name) { SAFE_STRCPY(mNextNameStr,i_name); }
     void draw() { _draw(); }
 
 private:
@@ -140,9 +140,9 @@ private:
     /* 0x02C */ J2DAnmTextureSRTKey* mCursorTexKey;
     /* 0x030 */ int mCurTexAnmF;
     /* 0x034 */ CPaneMgrAlpha* mNameCursor[8];
-    /* 0x054 */ char* mNameText[8];
+    /* 0x054 */ TEXT_SPAN mNameText[8];
     /* 0x074 */ CPaneMgr* mMojiIcon[65];
-    /* 0x178 */ char* mMojiText[65];
+    /* 0x178 */ TEXT_SPAN mMojiText[65];
     /* 0x27C */ J2DPane* mMojiPane;
     /* 0x280 */ J2DPane* mMenuPane;
     /* 0x284 */ CPaneMgr* mMenuIcon[4];

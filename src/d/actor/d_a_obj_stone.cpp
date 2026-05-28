@@ -114,7 +114,7 @@ const static s16 l_rot_angle[2] = {35, 18};
 
 const static s16 l_walk_rot_angle[2] = {40, 40};
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "D_Srock",  // small rock
     "D_Brock",  // big rock
 };
@@ -1011,7 +1011,7 @@ static int daObjStone_Create(fopAc_ac_c* param_0) {
     return static_cast<daObjStone_c*>(param_0)->create();
 }
 
-static actor_method_class l_daObjStone_Method = {
+static DUSK_CONST actor_method_class l_daObjStone_Method = {
     (process_method_func)daObjStone_Create,
     (process_method_func)daObjStone_Delete,
     (process_method_func)daObjStone_Execute,
@@ -1019,7 +1019,7 @@ static actor_method_class l_daObjStone_Method = {
     (process_method_func)daObjStone_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Stone = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Stone = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

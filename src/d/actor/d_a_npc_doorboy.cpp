@@ -93,7 +93,7 @@ enum Motion {
     /* 0xB */ MOT_SIT_TO_WOLF_A,
 };
 
-static daNpc_GetParam2 l_bckGetParamList[6] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[6] = {
     {BCK_M_WAIT_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
     {BCK_M_TALK_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
     {BCK_M_TALK_B, J3DFrameCtrl::EMode_LOOP, MGENERAL},
@@ -102,22 +102,22 @@ static daNpc_GetParam2 l_bckGetParamList[6] = {
     {BCK_M_SIT_TO_WOLF_A, J3DFrameCtrl::EMode_LOOP, MGENERAL},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {BTP_DOORBOY, J3DFrameCtrl::EMode_LOOP, DOORBOY},
 };
 
-static char* l_arcNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[2] = {
     "DoorBoy",
     "Mgeneral",
 };
 
-static char* l_evtNames[1] = {NULL};
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
-static char* l_myName = "DoorBoy";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "DoorBoy";
 
 static NPC_DOORBOY_HIO_CLASS l_HIO;
 
-daNpcDoorBoy_c::EventFn daNpcDoorBoy_c::mEvtSeqList[1] = {
+daNpcDoorBoy_c::EventFn DUSK_CONST daNpcDoorBoy_c::mEvtSeqList[1] = {
     NULL
 };
 
@@ -877,7 +877,7 @@ BOOL daNpcDoorBoy_c::drawDbgInfo() {
     return FALSE;
 }
 
-static actor_method_class daNpcDoorBoy_MethodTable = {
+static DUSK_CONST actor_method_class daNpcDoorBoy_MethodTable = {
     (process_method_func)daNpcDoorBoy_Create,
     (process_method_func)daNpcDoorBoy_Delete,
     (process_method_func)daNpcDoorBoy_Execute,
@@ -885,7 +885,7 @@ static actor_method_class daNpcDoorBoy_MethodTable = {
     (process_method_func)daNpcDoorBoy_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_DOORBOY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_DOORBOY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

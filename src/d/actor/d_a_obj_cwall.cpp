@@ -66,12 +66,12 @@ static Vec const l_check_max_wolf = {
     120.0f, 0.0f, 160.0f,
 };
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "P_Cwall",
     "P_L4Cwall",
 };
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-300.0f, -100.0f, -650.0f},
     {300.0f, 500.0f, 300.0f},
 };
@@ -830,7 +830,7 @@ static int daObjCwall_MoveBGDraw(daObjCwall_c* i_this) {
     return i_this->Draw();
 }
 
-static actor_method_class daObjCwall_METHODS = {
+static DUSK_CONST actor_method_class daObjCwall_METHODS = {
     (process_method_func)daObjCwall_create1st,
     (process_method_func)daObjCwall_MoveBGDelete,
     (process_method_func)daObjCwall_MoveBGExecute,
@@ -838,7 +838,7 @@ static actor_method_class daObjCwall_METHODS = {
     (process_method_func)daObjCwall_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_ChainWall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_ChainWall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

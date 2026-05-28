@@ -482,7 +482,7 @@ void daNpc_Pachi_Taro_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[5][2] = {
+static DUSK_CONSTEXPR int l_bmdData[5][2] = {
     {BMDR_TARO, TARO},
     {BMDR_TARO_STICK_A, TARO1},
     {BMDR_TARO_SWB, TARO1},
@@ -490,7 +490,7 @@ static int l_bmdData[5][2] = {
     {BMDR_GM_TARO, TAROB},
 };
 
-static daNpcT_evtData_c l_evtList[11] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[11] = {
     {"", NONE},
     {"TUTRIAL_BEGIN", EVT_PACHI},
     {"TUTRIAL_BEGIN_SKIP", EVT_PACHI},
@@ -504,7 +504,7 @@ static daNpcT_evtData_c l_evtList[11] = {
     {"TUTRIAL_CAUTION", EVT_PACHI},
 };
 
-static char* l_resNameList[12] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[12] = {
     "",
     "Taro",
     "Taro_TW",
@@ -519,20 +519,20 @@ static char* l_resNameList[12] = {
     "evt_pachi",
 };
 
-static s8 l_loadResPtrn0[7] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[7] = {
     TARO, TARO0, TARO1, TARO2, TARO3, EVT_PACHI, -1,
 };
 
-static s8 l_loadResPtrn4[8] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[8] = {
     TARO, TARO_TW, TARO0, TARO1, TARO2, TARO3, TARO4, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn4,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_TARO_F_NORMAL, J3DFrameCtrl::EMode_LOOP, TARO, 1},
     {BCK_TARO_F_NORMAL, J3DFrameCtrl::EMode_NONE, TARO0,BTP_TARO_F_NORMAL, J3DFrameCtrl::EMode_LOOP, TARO, 1},
     {BCK_TARO_F_SAD, J3DFrameCtrl::EMode_NONE, TARO1, BTP_TARO_F_SAD, J3DFrameCtrl::EMode_NONE, TARO1, 0},
@@ -565,7 +565,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {BCK_TARO_F_CRY, J3DFrameCtrl::EMode_LOOP, TARO5, BTP_TARO_F_CRY, J3DFrameCtrl::EMode_LOOP, TARO5, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[41] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[41] = {
     {BCK_TARO_WAIT_A, J3DFrameCtrl::EMode_LOOP, TARO0,BTK_TARO, J3DFrameCtrl::EMode_NONE, TARO0, 1, 0},
     {BCK_TARO_WAIT_B, J3DFrameCtrl::EMode_LOOP, TARO1, BTK_TARO, J3DFrameCtrl::EMode_NONE, TARO0, 1, 0},
     {BCK_TARO_WAIT_C, J3DFrameCtrl::EMode_LOOP, TARO3, BTK_TARO, J3DFrameCtrl::EMode_NONE, TARO0, 1, 0},
@@ -609,7 +609,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[41] = {
     {BCK_TAROB_SAVED, J3DFrameCtrl::EMode_NONE, TARO5, BTK_TARO, J3DFrameCtrl::EMode_NONE, TARO0, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[128] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[128] = {
     {FACE_MOT_ANM_NORMAL, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {FACE_MOT_ANM_SAD, -1, 1}, {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {FACE_MOT_ANM_SMILE, -1, 1}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -644,7 +644,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[128] 
     {FACE_MOT_ANM_NONE, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[164] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[164] = {
     {MOT_ANM_WAIT_A, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {MOT_ANM_CALL, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {MOT_ANM_WAVE, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -688,7 +688,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[164] = {
     {MOT_ANM_SAVED, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Pachi_Taro_c::mCutNameList[11] = {
+char DUSK_CONST* DUSK_CONST daNpc_Pachi_Taro_c::mCutNameList[11] = {
     "",
     "TUTRIAL_BEGIN",
     "TUTRIAL_BEGIN_SKIP",
@@ -702,7 +702,7 @@ char* daNpc_Pachi_Taro_c::mCutNameList[11] = {
     "TUTRIAL_CAUTION",
 };
 
-daNpc_Pachi_Taro_c::cutFunc daNpc_Pachi_Taro_c::mCutList[11] = {
+daNpc_Pachi_Taro_c::cutFunc DUSK_CONST daNpc_Pachi_Taro_c::mCutList[11] = {
     NULL,
     &daNpc_Pachi_Taro_c::cutTutrialBegin,
     &daNpc_Pachi_Taro_c::cutTutrialBegin_Skip,
@@ -1970,7 +1970,7 @@ BOOL daNpc_Pachi_Taro_c::cutTalk(int i_staffId) {
         return TRUE;
     }
 
-    char* mesNos[5] = {
+    DUSK_CONSTEXPR char DUSK_CONST* mesNos[5] = {
         "MesNo0",
         "MesNo1",
         "MesNo2",
@@ -2085,7 +2085,7 @@ BOOL daNpc_Pachi_Taro_c::cutTalk2(int i_staffId) {
         return TRUE;
     }
 
-    char* mesNos[5] = {
+    DUSK_CONSTEXPR char DUSK_CONST* mesNos[5] = {
         "MesNo0",
         "MesNo1",
         "MesNo2",
@@ -2550,7 +2550,7 @@ static int daNpc_Pachi_Taro_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Pachi_Taro_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Pachi_Taro_MethodTable = {
     (process_method_func)daNpc_Pachi_Taro_Create,
     (process_method_func)daNpc_Pachi_Taro_Delete,
     (process_method_func)daNpc_Pachi_Taro_Execute,
@@ -2558,7 +2558,7 @@ static actor_method_class daNpc_Pachi_Taro_MethodTable = {
     (process_method_func)daNpc_Pachi_Taro_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_PACHI_TARO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_PACHI_TARO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

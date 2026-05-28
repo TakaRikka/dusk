@@ -10233,7 +10233,7 @@ bool dCamera_c::eventCamera(s32 param_0) {
     int var_r29 = -1;
 
     typedef bool (dCamera_c::*func)();
-    func l_func[] = {
+    DUSK_CONSTEXPR func l_func[] = {
         &dCamera_c::pauseEvCamera,
         &dCamera_c::pauseEvCamera,
         &dCamera_c::talktoEvCamera,
@@ -10270,7 +10270,7 @@ bool dCamera_c::eventCamera(s32 param_0) {
         &dCamera_c::maptoolIdEvCamera,
     };
 
-    static char* ActionNames[34] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* ActionNames[34] = {
         "PAUSE",
         "WAIT",
         "TALK",
@@ -11627,7 +11627,7 @@ static leafdraw_method_class method = {
     (process_method_func)camera_draw,
 };
 
-camera_process_profile_definition g_profile_CAMERA = {
+DUSK_PROFILE camera_process_profile_definition DUSK_CONST g_profile_CAMERA = {
     /* Layer ID           */ fpcLy_CURRENT_e,
     /* List ID            */ 11,
     /* List Prio          */ fpcPi_CURRENT_e,
@@ -11648,7 +11648,7 @@ camera_process_profile_definition g_profile_CAMERA = {
                              0,
 };
 
-camera_process_profile_definition g_profile_CAMERA2 = {
+DUSK_PROFILE camera_process_profile_definition DUSK_CONST g_profile_CAMERA2 = {
     /* Layer ID           */ fpcLy_CURRENT_e,
     /* List ID            */ 11,
     /* List Prio          */ fpcPi_CURRENT_e,

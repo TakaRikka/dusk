@@ -227,7 +227,7 @@ f32 daNpc_zrA_Path_c::chkPassDst(u16 i_idx, cXyz i_pos) {
     }
 }
 
-static daNpc_GetParam1 l_bmdGetParamList[6] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[6] = {
     {3, 4},   // zra
     {13, 5},  // zra_tw
     {3, 7},   // zra_met
@@ -236,7 +236,7 @@ static daNpc_GetParam1 l_bmdGetParamList[6] = {
     {4, 10},  // zra_sp_tw
 };
 
-static daNpc_GetParam1 l_bckGetParamList[63] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[63] = {
     {-1, 0},
     {8, 0},   // zra_f_talk_a
     {9, 0},   // zra_f_talk_a_sp
@@ -302,7 +302,7 @@ static daNpc_GetParam1 l_bckGetParamList[63] = {
     {12, 3},  // zra_step_sp
 };
 
-static daNpc_GetParam1 l_btpGetParamList[8] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[8] = {
     {34, 0},  // zra
     {16, 5},  // zra_fh_sadsit_a
     {10, 6},  // zra_fh_sadsit_b
@@ -313,24 +313,24 @@ static daNpc_GetParam1 l_btpGetParamList[8] = {
     {18, 9},  // zra_fh_spa_wait_b
 };
 
-static daNpc_GetParam1 l_btkGetParamList[4] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[4] = {
     {28, 0},  // zra
     {31, 0},  // zra_water02
     {29, 0},  // zra_reset
     {30, 0},  // zra_w_eyeball
 };
 
-static daNpc_GetParam1 l_brkGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_brkGetParamList[2] = {
     {24, 0},  // zra
     {25, 0},  // zra_water02
 };
 
-static daNpc_GetParam1 l_bpkGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bpkGetParamList[2] = {
     {20, 0},  // zra
     {21, 0},  // zra_water02
 };
 
-static daNpc_GetParam1 l_evtGetParamList[13] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[13] = {
     {0, 0},
     {1, 0},
     {2, 0},
@@ -346,7 +346,7 @@ static daNpc_GetParam1 l_evtGetParamList[13] = {
     {12, 0},
 };
 
-static char* l_evtNames[13] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[13] = {
     NULL,
     "TALK_SWIM",
     "BEFORE_BLAST_ZRR",
@@ -362,34 +362,34 @@ static char* l_evtNames[13] = {
     "TALK_MULTI2",
 };
 
-static int l_loadObj_list[3][3] = {
+static DUSK_CONSTEXPR int l_loadObj_list[3][3] = {
     {2, 3, -1},
     {2, -1, -1},
     {-1, -1, -1},
 };
 
-static int l_loadObj_listTW[3][3] = {
+static DUSK_CONSTEXPR int l_loadObj_listTW[3][3] = {
     {4, 5, -1},
     {4, -1, -1},
     {-1, -1, -1},
 };
 
-static int l_loadRes_ZRAa[8] = {0, 1, 2, 4, 6, -1, -1, -1};
+static DUSK_CONSTEXPR int l_loadRes_ZRAa[8] = {0, 1, 2, 4, 6, -1, -1, -1};
 
-static int l_loadRes_Swim[8] = {0, 1, 2, 4, -1, -1, -1, -1};
+static DUSK_CONSTEXPR int l_loadRes_Swim[8] = {0, 1, 2, 4, -1, -1, -1, -1};
 
-static int l_loadRes_Tobi[8] = {0, 1, 2, 4, 8, -1, -1, -1};
+static DUSK_CONSTEXPR int l_loadRes_Tobi[8] = {0, 1, 2, 4, 8, -1, -1, -1};
 
-static int l_loadRes_Spa[8] = {0, 2, 4, 9, -1, -1, -1, -1};
+static DUSK_CONSTEXPR int l_loadRes_Spa[8] = {0, 2, 4, 9, -1, -1, -1, -1};
 
-static int l_loadRes_ZRA0[8] = {0, 1, 2, 4, -1, -1, -1, -1};
+static DUSK_CONSTEXPR int l_loadRes_ZRA0[8] = {0, 1, 2, 4, -1, -1, -1, -1};
 
-static int* l_loadRes_list[8] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[8] = {
     l_loadRes_ZRAa, l_loadRes_Swim, l_loadRes_Swim, l_loadRes_Swim,
     l_loadRes_Tobi, l_loadRes_Tobi, l_loadRes_Spa,  l_loadRes_ZRA0,
 };
 
-static char* l_resNames[11] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[11] = {
     "zrA",
     "zrA_nml",
     "zrA_nml2",
@@ -403,14 +403,14 @@ static char* l_resNames[11] = {
     "zrA_objTW",
 };
 
-static char* l_myName[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName[4] = {
     "zrA",
     "zrA_talk",
     "zrR",
     "zrWF",
 };
 
-char* daNpc_zrA_c::mEvtCutNameList[11] = {
+char DUSK_CONST* DUSK_CONST daNpc_zrA_c::mEvtCutNameList[11] = {
     "",
     "TALK_SWIM",
     "BEFORE_BLAST_ZRR",
@@ -424,7 +424,7 @@ char* daNpc_zrA_c::mEvtCutNameList[11] = {
     "TALK_MULTI",
 };
 
-daNpc_zrA_c::EventFn daNpc_zrA_c::mEvtCutList[11] = {
+daNpc_zrA_c::EventFn DUSK_CONST daNpc_zrA_c::mEvtCutList[11] = {
     NULL,
     &daNpc_zrA_c::ECut_talkSwim,
     &daNpc_zrA_c::ECut_beforeBlastzrR,
@@ -2331,7 +2331,7 @@ static int daNpc_zrA_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daNpc_zrA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_zrA_MethodTable = {
     (process_method_func)daNpc_zrA_Create,
     (process_method_func)daNpc_zrA_Delete,
     (process_method_func)daNpc_zrA_Execute,
@@ -2339,7 +2339,7 @@ static actor_method_class daNpc_zrA_MethodTable = {
     (process_method_func)daNpc_zrA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ZRA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ZRA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

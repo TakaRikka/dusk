@@ -1048,13 +1048,13 @@ static int daBd_Create(fopAc_ac_c* i_act_this) {
     return phase_state;
 }
 
-static actor_method_class l_daBd_Method = {
+static DUSK_CONST actor_method_class l_daBd_Method = {
     (process_method_func)daBd_Create,  (process_method_func)daBd_Delete,
     (process_method_func)daBd_Execute, (process_method_func)daBd_IsDelete,
     (process_method_func)daBd_Draw,
 };
 
-actor_process_profile_definition g_profile_BD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

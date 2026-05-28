@@ -413,7 +413,7 @@ static cPhs_Step daNpc_Df_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daNpc_Df_Method = {
+static DUSK_CONST actor_method_class l_daNpc_Df_Method = {
     (process_method_func)daNpc_Df_Create,
     (process_method_func)daNpc_Df_Delete,
     (process_method_func)daNpc_Df_Execute,
@@ -421,7 +421,7 @@ static actor_method_class l_daNpc_Df_Method = {
     (process_method_func)daNpc_Df_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_DF = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_DF = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 9,
     /* List Prio    */ fpcPi_CURRENT_e,

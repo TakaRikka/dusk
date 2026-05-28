@@ -59,13 +59,13 @@ static int daTagAJnot_Draw(daTagAJnot_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagAJnot_Method = {
+static DUSK_CONST actor_method_class l_daTagAJnot_Method = {
     (process_method_func)daTagAJnot_Create,  (process_method_func)daTagAJnot_Delete,
     (process_method_func)daTagAJnot_Execute, (process_method_func)NULL,
     (process_method_func)daTagAJnot_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_AJnot = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_AJnot = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

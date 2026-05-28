@@ -351,13 +351,13 @@ const char* daSetBgObj_c::getArcName(fopAc_ac_c* i_this) {
 
     u32 r30 = fopAcM_GetParam(i_this);
     u16 r29 = fopAcM_GetParam(i_this);
-    sprintf(arcName, "@bg%04x", r29);
+    SAFE_SPRINTF(arcName, "@bg%04x", r29);
 
     if (DEBUG && r30 & 0x80000000) {
         OS_REPORT("\e[43;30m旧仕様の地形ユニットMoveBGが残っています！！！\n\e[m");
         u16 r28 = r30 >> 12 & 0x1FF;
         u16 r27 = r30 & 0xFFF;
-        sprintf(arcName, "@%03x%03x", r28, (u16)r27);
+        SAFE_SPRINTF(arcName, "@%03x%03x", r28, (u16)r27);
     }
     return arcName;
 }

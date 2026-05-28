@@ -20,35 +20,35 @@ dSelect_cursorHIO_c::dSelect_cursorHIO_c() {
 }
 
 dSelect_cursor_c::dSelect_cursor_c(u8 param_0, f32 param_1, JKRArchive* param_2) {
-    static char* blo_name[4] = {
+    static DUSK_CONST char* blo_name[4] = {
         "zelda_select_cursor_4parts.blo",
         "zelda_store_select_icon.blo",
         "zelda_map_screen_portal_icon.blo",
         "zelda_map_screen_batsumark.blo",
     };
 
-    static char* bck_name[4] = {
+    static DUSK_CONST char* bck_name[4] = {
         "",
         "zelda_store_select_icon.bck",
         "",
         "",
     };
 
-    static char* bpk_name[4] = {
+    static DUSK_CONST char* bpk_name[4] = {
         "zelda_select_cursor_4parts.bpk",
         "zelda_store_select_icon.bpk",
         "zelda_map_screen_portal_icon.bpk",
         "zelda_map_screen_batsumark.bpk",
     };
 
-    static char* btk_name[4] = {
+    static DUSK_CONST char* btk_name[4] = {
         "zelda_select_cursor_4parts.btk",
         "zelda_store_select_icon.btk",
         "",
         "",
     };
 
-    static char* btk2_name[4] = {
+    static DUSK_CONST char* btk2_name[4] = {
         "",
         "zelda_store_select_icon_02.btk",
         "",
@@ -577,7 +577,7 @@ void dSelect_cursor_c::moveCenter(J2DPane* i_pane, f32 i_x, f32 i_y) {
 }
 
 #ifdef TARGET_PC
-void dSelect_cursor_c::refreshAspectScale() {
-    mParam1 = mBaseParam1 * mDoGph_gInf_c::hudAspectScaleUp;
+void dSelect_cursor_c::refreshAspectScale(f32 param_0) {
+    mParam1 = mBaseParam1 * param_0;
 }
 #endif

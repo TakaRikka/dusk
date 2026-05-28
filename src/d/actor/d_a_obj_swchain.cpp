@@ -122,7 +122,7 @@ static s16 GetActorName(cBgS_PolyInfo& param_0) {
     return fpcNm_Obj_SwChain_e;
 }
 
-static char* l_arcName = "P_Chain";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Chain";
 
 static dCcD_SrcSph l_sph_src = {
     {
@@ -1184,13 +1184,13 @@ static int daObjSwChain_Create(fopAc_ac_c* i_this) {
     return a_this->create1st();
 }
 
-static actor_method_class l_daObjSwChain_Method = {
+static DUSK_CONST actor_method_class l_daObjSwChain_Method = {
     (process_method_func)daObjSwChain_Create,  (process_method_func)daObjSwChain_Delete,
     (process_method_func)daObjSwChain_Execute, 0,
     (process_method_func)daObjSwChain_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwChain = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwChain = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

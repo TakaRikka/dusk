@@ -2245,11 +2245,11 @@ void dMeter2Draw_c::drawButtonA(u8 i_action, f32 i_posX, f32 i_posY, f32 i_textP
         mp_string = getActionString(0x15, 1, NULL);
 
         for (int i = 0; i < 5; i++) {
-            strcpy(static_cast<J2DTextBox*>(mpAText[i]->getPanePtr())->getStringPtr(), mp_string);
+            SAFE_STRCPY(static_cast<J2DTextBox*>(mpAText[i]->getPanePtr())->getStringPtr(), mp_string);
         }
     } else {
         for (int i = 0; i < 5; i++) {
-            strcpy(static_cast<J2DTextBox*>(mpAText[i]->getPanePtr())->getStringPtr(), mp_string);
+            SAFE_STRCPY(static_cast<J2DTextBox*>(mpAText[i]->getPanePtr())->getStringPtr(), mp_string);
         }
     }
 
@@ -2308,7 +2308,7 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
     JUT_ASSERT(0, strlen(mp_string) < (64));
 
     for (int i = 0; i < 5; i++) {
-        strcpy(static_cast<J2DTextBox*>(mpBText[i]->getPanePtr())->getStringPtr(), mp_string);
+        SAFE_STRCPY(static_cast<J2DTextBox*>(mpBText[i]->getPanePtr())->getStringPtr(), mp_string);
     }
 
     if (i_action == 0x26 || i_action == 0x2E) {
@@ -2391,7 +2391,7 @@ void dMeter2Draw_c::drawButtonZ(u8 i_action) {
     JUT_ASSERT(0, strlen(mp_string) < (64));
 
     for (int i = 0; i < 5; i++) {
-        strcpy(static_cast<J2DTextBox*>(mpXYText[i][2]->getPanePtr())->getStringPtr(), mp_string);
+        SAFE_STRCPY(static_cast<J2DTextBox*>(mpXYText[i][2]->getPanePtr())->getStringPtr(), mp_string);
     }
 
     mpButtonXY[2]->scale(g_drawHIO.mButtonZScale, g_drawHIO.mButtonZScale);
@@ -2490,7 +2490,7 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
         JUT_ASSERT(0, strlen(mp_string) < (64));
 
         for (int i = 0; i < 5; i++) {
-            strcpy(static_cast<J2DTextBox*>(mpXYText[i][i_no]->getPanePtr())->getStringPtr(),
+            SAFE_STRCPY(static_cast<J2DTextBox*>(mpXYText[i][i_no]->getPanePtr())->getStringPtr(),
                    mp_string);
         }
 
@@ -3243,7 +3243,7 @@ char* dMeter2Draw_c::getActionString(u8 i_action, u8 i_type, u8* param_2) {
     };
 
     static char i_text_buf[32];
-    strcpy(i_text_buf, "");
+    SAFE_STRCPY(i_text_buf, "");
 
     if (param_2 != NULL) {
         *param_2 = 1;

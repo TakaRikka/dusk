@@ -8,7 +8,7 @@
 #include "d/actor/d_a_path_line.h"
 #include "f_op/f_op_actor_mng.h"
 
-actor_process_profile_definition2 g_profile_PATH_LINE = {
+DUSK_PROFILE actor_process_profile_definition2 DUSK_CONST g_profile_PATH_LINE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 9,
     /* List Prio    */ fpcPi_CURRENT_e,

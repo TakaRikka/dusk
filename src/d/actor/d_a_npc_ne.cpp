@@ -3311,7 +3311,7 @@ npc_ne_class::npc_ne_class() {
     /* empty function */
 }
 
-static actor_method_class l_daNpc_Ne_Method = {
+static DUSK_CONST actor_method_class l_daNpc_Ne_Method = {
     (process_method_func)daNpc_Ne_Create,
     (process_method_func)daNpc_Ne_Delete,
     (process_method_func)daNpc_Ne_Execute,
@@ -3319,7 +3319,7 @@ static actor_method_class l_daNpc_Ne_Method = {
     (process_method_func)daNpc_Ne_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_NE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_NE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -51,7 +51,7 @@ public:
     f32 getPositionX() const { return mPositionX; }
     f32 getPositionY() const { return mPositionY; }
 
-    void refreshAspectScale();
+    void refreshAspectScale(f32 param_0);
 #endif
 
     void onUpdateFlag() { mUpdateFlag = true; }

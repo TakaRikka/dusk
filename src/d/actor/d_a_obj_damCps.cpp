@@ -12,7 +12,7 @@
 
 static daObjDamCps_HIO_c l_HIO;
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-20.0f, 0.0f, -20.0f},
     {20.0f, 100.0f, 20.0f},
 };
@@ -193,14 +193,14 @@ static int daObjDamCps_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-static actor_method_class l_daObjDamCps_Method = {
+static DUSK_CONST actor_method_class l_daObjDamCps_Method = {
     (process_method_func)daObjDamCps_Create,  (process_method_func)daObjDamCps_Delete,
     (process_method_func)daObjDamCps_Execute, (process_method_func)NULL,
     (process_method_func)daObjDamCps_Draw,
 };
 #endif
 
-actor_process_profile_definition g_profile_Obj_DamCps = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_DamCps = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

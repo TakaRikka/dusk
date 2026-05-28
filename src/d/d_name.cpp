@@ -908,7 +908,7 @@ void dName_c::setNameText() {
             #if REGION_JPN
             if (mChrInfo[i].mMojiSet == 2) {
             #endif
-                sprintf(mNameText[i],
+                SAFE_SPRINTF(mNameText[i],
                         "\x1b"
                         "CD\x1b"
                         "CR\x1b"
@@ -919,7 +919,7 @@ void dName_c::setNameText() {
                 );
             #if REGION_JPN
             } else {
-                sprintf(mNameText[i],
+                SAFE_SPRINTF(mNameText[i],
                         "\x1b"
                         "CD\x1b"
                         "CR\x1b"
@@ -1330,7 +1330,7 @@ void dName_c::mojiListChange() {
 
     char buf[74];
     for (int i = 0; i < 65; i++) {
-        strcpy(buf, "\x1B"
+        SAFE_STRCPY(buf, "\x1B"
                     "CD"
                     "\x1B"
                     "CR"
@@ -1338,15 +1338,15 @@ void dName_c::mojiListChange() {
                     "CC[000000]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, mojiSet[i]);
-        strcat(buf, "\x1B"
+        SAFE_STRCAT(buf, mojiSet[i]);
+        SAFE_STRCAT(buf, "\x1B"
                     "HM"
                     "\x1B"
                     "CC[ffffff]"
                     "\x1B"
                     "GM[0]");
-        strcat(buf, mojiSet[i]);
-        strcpy(mMojiText[i], buf);
+        SAFE_STRCAT(buf, mojiSet[i]);
+        SAFE_STRCPY(mMojiText[i], buf);
     }
 
     #if TARGET_PC || REGION_PAL || REGION_JPN
@@ -1430,10 +1430,10 @@ void dName_c::selectCursorPosSet(int row) {
 
 #if TARGET_PC
 void dName_c::nameWide() {
-    //Resize Select Icon
+    // Resize Select Icon
     #if TARGET_PC
     if (mSelIcon) {
-        mSelIcon->refreshAspectScale();
+        mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
     }
     #endif
 

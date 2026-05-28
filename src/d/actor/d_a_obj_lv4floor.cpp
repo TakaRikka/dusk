@@ -27,7 +27,7 @@ int daObjLv4Floor_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "P_L4Floor";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_L4Floor";
 
 int daObjLv4Floor_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -132,7 +132,7 @@ static int daObjLv4Floor_MoveBGDraw(daObjLv4Floor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv4Floor_METHODS = {
+static DUSK_CONST actor_method_class daObjLv4Floor_METHODS = {
     (process_method_func)daObjLv4Floor_create1st,
     (process_method_func)daObjLv4Floor_MoveBGDelete,
     (process_method_func)daObjLv4Floor_MoveBGExecute,
@@ -140,7 +140,7 @@ static actor_method_class daObjLv4Floor_METHODS = {
     (process_method_func)daObjLv4Floor_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4Floor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4Floor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -14,6 +14,7 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/string.hpp"
 #include "dusk/version.hpp"
 
 dFile_info_c::dFile_info_c(JKRArchive* i_archive, u8 param_1) {
@@ -80,9 +81,11 @@ void dFile_info_c::screenSet() {
     info_text[2] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_time01'));
     info_text[3] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_ptim01'));
 
+#define INFO_TEXT_SIZE 0x40
+
     for (int i = 0; i < 4; i++) {
         info_text[i]->setFont(mFileInfo.mFont);
-        info_text[i]->setString(0x40, "");
+        info_text[i]->setString(INFO_TEXT_SIZE, "");
     }
     mPlayerName = info_text[0]->getStringPtr();
     mSaveStatus = info_text[1]->getStringPtr();
@@ -99,9 +102,9 @@ int dFile_info_c::setSaveData(dSv_save_c* i_savedata, BOOL i_validChksum, u8 i_d
                 i_savedata->getPlayer().getPlayerStatusA().setLife(dComIfGs_getLife());
                 setHeartCnt(i_savedata);
                 i_savedata->getPlayer().getPlayerStatusA().setLife(12);
-                strcpy(mPlayerName, dComIfGs_getPlayerName());
-                strcpy(mSaveDate, "");
-                strcpy(mPlayTime, "");
+                SAFE_STRCPY(mPlayerName, dComIfGs_getPlayerName());
+                SAFE_STRCPY(mSaveDate, "");
+                SAFE_STRCPY(mPlayTime, "");
                 dMeter2Info_getString(0x4D, mSaveStatus, NULL);  // New Quest Log
                 result = 2;
             } else {
@@ -110,7 +113,7 @@ int dFile_info_c::setSaveData(dSv_save_c* i_savedata, BOOL i_validChksum, u8 i_d
             }
         } else {
             setHeartCnt(i_savedata);
-            strcpy(mPlayerName, player_name);
+            SAFE_STRCPY(mPlayerName, player_name);
             setSaveDate(i_savedata);
             setPlayTime(i_savedata);
             result = 0;
@@ -173,13 +176,13 @@ void dFile_info_c::setSaveDate(dSv_save_c* i_savedata) {
 
     #if TARGET_PC
     if (dusk::version::isRegionJpn()) {
-        sprintf(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
+        SAFE_SPRINTF(mSaveDate, "%d.%02d.%02d %02d:%02d", time.year, time.mon + 1, time.mday,
             time.hour, time.min);
     } else if (dusk::version::isRegionPal() && dComIfGs_getPalLanguage() != dSv_player_config_c::LANGUAGE_ENGLISH) {
-        sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mday, time.mon + 1, time.year, time.hour,
+        SAFE_SPRINTF(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mday, time.mon + 1, time.year, time.hour,
             time.min);
     } else {
-        sprintf(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
+        SAFE_SPRINTF(mSaveDate, "%02d/%02d/%d %02d:%02d", time.mon + 1, time.mday, time.year, time.hour,
             time.min);
     }
     #elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
@@ -204,11 +207,11 @@ void dFile_info_c::setPlayTime(dSv_save_c* i_savedata) {
 
     // 3599940 = 999:59 in seconds
     if (time >= 3599940) {
-        sprintf(mPlayTime, "999:59");
+        SAFE_SPRINTF(mPlayTime, "999:59");
     } else {
         u32 min = (time % 3600) / 60;
         u32 hours = time / 3600;
-        sprintf(mPlayTime, "%d:%02d", hours, min);
+        SAFE_SPRINTF(mPlayTime, "%d:%02d", hours, min);
     }
 }
 

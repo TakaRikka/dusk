@@ -184,7 +184,7 @@ public:
     void lookat();
     BOOL drawDbgInfo();
 
-    static EventFn mEvtSeqList[14];
+    static EventFn DUSK_CONST mEvtSeqList[14];
 
     u8 getPathID() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
     s16 getMessageNo() { return shape_angle.x; }

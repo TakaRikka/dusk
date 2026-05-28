@@ -46,10 +46,10 @@ private:
     /* 0x22 */ u8 field_0x22;
     /* 0x24 */ CPaneMgrAlpha* mDatBase;
     /* 0x28 */ CPaneMgrAlpha* mNoDatBase;
-    /* 0x2C */ char* mPlayerName;
-    /* 0x30 */ char* mSaveDate;
-    /* 0x34 */ char* mPlayTime;
-    /* 0x38 */ char* mSaveStatus;
+    /* 0x2C */ TEXT_SPAN mPlayerName;
+    /* 0x30 */ TEXT_SPAN mSaveDate;
+    /* 0x34 */ TEXT_SPAN mPlayTime;
+    /* 0x38 */ TEXT_SPAN mSaveStatus;
 };
 
 typedef void (dFile_info_c::*warningFunc)(void);

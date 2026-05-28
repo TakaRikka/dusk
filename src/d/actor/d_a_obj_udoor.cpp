@@ -156,7 +156,7 @@ static cPhs_Step daObj_Udoor_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-static actor_method_class l_daObj_Udoor_Method = {
+static DUSK_CONST actor_method_class l_daObj_Udoor_Method = {
     (process_method_func)daObj_Udoor_Create,
     (process_method_func)daObj_Udoor_Delete,
     (process_method_func)daObj_Udoor_Execute,
@@ -164,7 +164,7 @@ static actor_method_class l_daObj_Udoor_Method = {
     (process_method_func)daObj_Udoor_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_UDOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_UDOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

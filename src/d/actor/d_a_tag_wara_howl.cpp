@@ -77,13 +77,13 @@ static int daTagWrHowl_draw(daTagWrHowl_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daTagWrHowl_METHODS = {
+static DUSK_CONST actor_method_class daTagWrHowl_METHODS = {
     (process_method_func)daTagWrHowl_create,  (process_method_func)daTagWrHowl_Delete,
     (process_method_func)daTagWrHowl_execute, (process_method_func)NULL,
     (process_method_func)daTagWrHowl_draw,
 };
 
-actor_process_profile_definition g_profile_Tag_WaraHowl = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_WaraHowl = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

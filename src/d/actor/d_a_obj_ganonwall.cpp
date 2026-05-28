@@ -32,9 +32,9 @@ static const GXColor l_color[24] = {
     {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xB4, 0xB4, 0xB4, 0xFF},
 };
 
-static char* l_arcName = "Y_gwall";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Y_gwall";
 
-static char* l_matName = "mat00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_matName = "mat00";
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjGWall_c*>(i_this)->CreateHeap();
@@ -180,7 +180,7 @@ static int daObjGWall_Create(daObjGWall_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObjGWall_Method = {
+static DUSK_CONST actor_method_class l_daObjGWall_Method = {
     (process_method_func)daObjGWall_Create,  
     (process_method_func)daObjGWall_Delete,
     (process_method_func)daObjGWall_Execute, 
@@ -188,7 +188,7 @@ static actor_method_class l_daObjGWall_Method = {
     (process_method_func)daObjGWall_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_GanonWall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_GanonWall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

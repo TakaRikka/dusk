@@ -408,7 +408,7 @@ namespace {
         return ((Act_c*)i_this)->MoveBGIsDelete();
     }
 
-    static actor_method_class Mthd_Table = {
+    static DUSK_CONST actor_method_class Mthd_Table = {
         (process_method_func)Mthd_Create, 
         (process_method_func)Mthd_Delete, 
         (process_method_func)Mthd_Execute, 
@@ -419,7 +419,7 @@ namespace {
 
 }
 
-actor_process_profile_definition g_profile_Obj_Ladder = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Ladder = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

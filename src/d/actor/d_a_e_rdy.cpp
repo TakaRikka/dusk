@@ -5070,7 +5070,7 @@ e_rdy_class::e_rdy_class() {
 
 AUDIO_INSTANCES
 
-static actor_method_class l_daE_RDY_Method = {
+static DUSK_CONST actor_method_class l_daE_RDY_Method = {
     (process_method_func)daE_RDY_Create,
     (process_method_func)daE_RDY_Delete,
     (process_method_func)daE_RDY_Execute,
@@ -5078,7 +5078,7 @@ static actor_method_class l_daE_RDY_Method = {
     (process_method_func)daE_RDY_Draw,
 };
 
-actor_process_profile_definition g_profile_E_RDY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_RDY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

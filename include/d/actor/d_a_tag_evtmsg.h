@@ -32,7 +32,7 @@ public:
 
     virtual ~daTag_EvtMsg_c();
 
-    static char* mEvtCutNameList[];
+    static DUSK_CONST char* mEvtCutNameList[];
     static EvtCutFunc mEvtCutList[];
 };
 

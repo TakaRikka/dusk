@@ -26,7 +26,7 @@ int daSetBgObj_c::CreateInit() {
 int daSetBgObj_c::create() {
     fopAcM_ct(this, daSetBgObj_c);
 
-    sprintf(mArcName, "%s", getArcName(this));
+    SAFE_SPRINTF(mArcName, "%s", getArcName(this));
 
     int phase = dComIfG_resLoad(&mPhase, mArcName);
     if (phase == cPhs_COMPLEATE_e) {
@@ -50,12 +50,12 @@ static int daSetBgObj_Create(fopAc_ac_c* i_this) {
     return static_cast<daSetBgObj_c*>(i_this)->create();
 }
 
-static actor_method_class l_daSetBgObj_Method = {
+static DUSK_CONST actor_method_class l_daSetBgObj_Method = {
     (process_method_func)daSetBgObj_Create,
     (process_method_func)daSetBgObj_Delete,
 };
 
-actor_process_profile_definition g_profile_SET_BG_OBJ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SET_BG_OBJ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

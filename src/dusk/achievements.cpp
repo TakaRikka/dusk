@@ -11,6 +11,7 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_ni.h"
 #include "d/actor/d_a_npc4.h"
+#include "d/actor/d_a_b_gnd.h"
 #include "d/actor/d_a_b_ob.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_demo.h"
@@ -18,6 +19,7 @@
 #include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_name.h"
+#include "dusk/logging.h"
 
 #include <filesystem>
 #include <algorithm>
@@ -35,6 +37,9 @@ static void* s_cucco_play_search(void* i_actor, void*) {
 }
 
 static void checkGoatHerding(Achievement& a, int32_t threshMs) {
+    if (strcmp(dComIfGp_getStartStageName(), "F_SP00") != 0) {
+        return;
+    }
     if (dMeter2Info_getMaxCount() != 20 || dMeter2Info_getNowCount() != 20) {
         return;
     }
@@ -60,6 +65,25 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             [](Achievement& a, json&) {
                 const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
                 if (link != nullptr && link->mProcID == daAlink_c::PROC_GANON_FINISH) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "three_heart_clear",
+                "Hero Mode",
+                "Defeat Ganondorf with only 3 heart containers.",
+                AchievementCategory::Challenge,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                if (link == nullptr || link->mProcID != daAlink_c::PROC_GANON_FINISH) {
+                    return;
+                }
+                if (dComIfGs_getMaxLife() < 20) {
                     a.progress = 1;
                 }
             },
@@ -201,7 +225,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                         hasAncientDoc = true;
                     }
                 }
-                if (!hasJewelRod || !hasAncientDoc) {
+                if (!hasJewelRod || (!hasAncientDoc && !dComIfGs_isEventBit(dSv_event_flag_c::F_0302))) {
                     return;
                 }
 
@@ -265,7 +289,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "hylian_loach",
                 "Legendary Catch",
-                "Catch a Hylian Loach.",
+                "Obtain the Hylian Loach in your fishing journal.",
                 AchievementCategory::Collection,
                 false, 0, 0, false
             },
@@ -280,7 +304,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "all_fish",
                 "Gone Fishin'",
-                "Catch all 6 species of fish.",
+                "Obtain all 6 species of fish in your fishing journal.",
                 AchievementCategory::Collection,
                 true, 6, 0, false
             },
@@ -392,7 +416,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                if (daNpcF_chkEvtBit(0x1F9) && dComIfGs_getMaxLife() <= 15) {
+                if (daNpcF_chkEvtBit(0x1F9) && dComIfGs_getMaxLife() < 20) {
                     a.progress = 1;
                 }
             },
@@ -442,7 +466,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "dark_hammer_one_hit",
                 "Mortal Edge",
-                "Defeat Dark Hammer in a single hit.",
+                "Defeat Darkhammer in a single hit.",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -501,6 +525,29 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             },
             [](Achievement& a, json&) {
                 if (AchievementSystem::get().hasSignal("arrow_hit_100m")) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "rollstab_triple",
+                "Surgical Skewer",
+                "Kill 3 enemies with a single rollstab.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                static int rollstabKills = 0;
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+                const bool inRollstab = link != nullptr && link->mProcID == daAlink_c::PROC_CUT_FINISH && link->mIsRollstab;
+                if (!inRollstab) {
+                    rollstabKills = 0;
+                    return;
+                }
+                rollstabKills += AchievementSystem::get().signalCount("rollstab_kill");
+                if (rollstabKills >= 3) {
                     a.progress = 1;
                 }
             },
@@ -600,6 +647,9 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
+                if (strcmp(dComIfGp_getStartStageName(), "F_SP114") != 0) {
+                    return;
+                }
                 const int32_t bestMs = dComIfGs_getRaceGameTime();
                 if (dComIfGs_isEventBit(dSv_event_flag_c::F_0481) &&
                     bestMs > 0 && bestMs <= 70000) {
@@ -681,7 +731,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             {
                 "long_jump_attack",
                 "Long Jump Attack",
-                "Travel more than 20 meters in a single jump attack before landing.",
+                "Travel more than 15 meters in a single jump attack before landing.",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -711,7 +761,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                     inJump = false;
                     const float dx = link->current.pos.x - startX;
                     const float dz = link->current.pos.z - startZ;
-                    if (dx * dx + dz * dz >= 2000.0f * 2000.0f) {
+                    if (dx * dx + dz * dz >= 1500.0f * 1500.0f) {
                         a.progress = 1;
                     }
                 } else if (link->mProcID != daAlink_c::PROC_CUT_JUMP) {
@@ -796,6 +846,66 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             [](Achievement& a, json&) {
                 if (fopAcM_Search(s_cucco_play_search, nullptr) != nullptr) {
                     a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "ganondorf_3hit",
+                "Autospin Annihilation",
+                "Finish off Ganondorf in the final duel after only 3 attacks.",
+                AchievementCategory::Misc,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                auto& sys = AchievementSystem::get();
+                const auto* link = static_cast<const daAlink_c*>(daPy_getPlayerActorClass());
+
+                static int autospinCount = 0;
+                static int pendingHits = 0;
+                static bool invalidated = false;
+                static bool wasInFight = false;
+
+                auto* gnd = static_cast<b_gnd_class*>(fopAcM_SearchByName(fpcNm_B_GND_e));
+                const bool inFight = gnd != nullptr && !gnd->checkRide();
+
+                if (inFight && !wasInFight) {
+                    autospinCount = 0;
+                    pendingHits = 0;
+                    invalidated = false;
+                }
+                wasInFight = inFight;
+
+                if (!inFight) {
+                    return;
+                }
+
+                const bool hitOccurred = sys.hasSignal("ganondorf_hit");
+                const bool knockedDown = sys.hasSignal("ganondorf_knocked_down");
+
+                if (hitOccurred && knockedDown) {
+                    // Spin completing an autospin: pendingHits should be exactly 1 (the spin attack)
+                    if (pendingHits == 1) {
+                        autospinCount++;
+                        pendingHits = 0;
+                    } else {
+                        invalidated = true;
+                    }
+                } else if (hitOccurred) {
+                    pendingHits++;
+                    if (pendingHits > 1) {
+                        invalidated = true;
+                    }
+                }
+
+                if (link != nullptr && link->mProcID == daAlink_c::PROC_GANON_FINISH) {
+                    if (!invalidated && autospinCount == 3) {
+                        a.progress = 1;
+                    }
+                    autospinCount = 0;
+                    pendingHits = 0;
+                    invalidated = false;
                 }
             },
             {}
@@ -1012,6 +1122,55 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 a.progress = 1;
             },
             {}
+        },
+        {
+            {
+                "early_city",
+                "Early City",
+                "Obtain the Double Clawshots without obtaining the Dominion Rod.",
+                AchievementCategory::Glitched,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (daPy_getPlayerActorClass() == nullptr) {
+                    return;
+                }
+                bool hasDoubleClawshot = false;
+                bool hasDominionRod = false;
+                for (int i = 0; i < 24; ++i) {
+                    const auto item = dComIfGs_getItem(i, false);
+                    if (item == dItemNo_W_HOOKSHOT_e) {
+                        hasDoubleClawshot = true;
+                    }
+                    if (item == dItemNo_COPY_ROD_e || item == dItemNo_COPY_ROD_2_e) {
+                        hasDominionRod = true;
+                    }
+                }
+                if (hasDoubleClawshot && !hasDominionRod) {
+                    a.progress = 1;
+                }
+            },
+            {}
+        },
+        {
+            {
+                "early_kakariko",
+                "Gorge Skip",
+                "Collect the Kakariko warp portal without warping the gorge bridge.",
+                AchievementCategory::Glitched,
+                false, 0, 0, false
+            },
+            [](Achievement& a, json&) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::M_018) || dComIfGp_getStageStagInfo() == nullptr) {
+                    return;
+                }
+                const bool savedPortal = g_dComIfG_gameInfo.info.getSavedata().getSave(dStage_SaveTbl_ELDIN).getBit().isSwitch(31);
+                const bool livePortal = dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dStage_SaveTbl_ELDIN && dComIfGs_isSaveSwitch(31);
+                if (savedPortal || livePortal) {
+                    a.progress = 1;
+                }
+            },
+            {}
         }
     };
 }
@@ -1088,11 +1247,17 @@ void AchievementSystem::clearAll() {
 }
 
 void AchievementSystem::signal(const char* key) {
-    m_signals.insert(key);
+    m_signals[key]++;
 }
 
 bool AchievementSystem::hasSignal(const char* key) const {
-    return m_signals.count(key) > 0;
+    const auto it = m_signals.find(key);
+    return it != m_signals.end() && it->second > 0;
+}
+
+int AchievementSystem::signalCount(const char* key) const {
+    const auto it = m_signals.find(key);
+    return it != m_signals.end() ? it->second : 0;
 }
 
 void AchievementSystem::clearOne(const char* key) {

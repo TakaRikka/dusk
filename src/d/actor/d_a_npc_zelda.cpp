@@ -14,47 +14,47 @@
 
 static u32 l_bmdData[2] = { 11, 1 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Zelda"
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     &l_loadResPtrn0[0],
     &l_loadResPtrn0[0],
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[3] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[3] = {
     {-1, 0, 0, 17, 2, 1, 1},
     {-1, 0, 0, 18, 2, 1, 0},
     {6, 0, 1, 17, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[2] = {
     {8, 2, 1, 14, 0, 1, 1, 0},
     {7, 2, 1, 14, 0, 1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[12] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[12] = {
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[8] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
 const char* daNpc_Zelda_c::mCutNameList = "";
-daNpc_Zelda_c::cutFunc daNpc_Zelda_c::mCutList[1] = { 0 };
+daNpc_Zelda_c::cutFunc DUSK_CONST daNpc_Zelda_c::mCutList[1] = { 0 };
 
 static NPC_ZELDA_HIO_CLASS l_HIO;
 
@@ -778,7 +778,7 @@ static int daNpc_Zelda_IsDelete(void* param_0) {
     return 1;
 }
 
-static actor_method_class daNpc_Zelda_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Zelda_MethodTable = {
     (process_method_func)daNpc_Zelda_Create,
     (process_method_func)daNpc_Zelda_Delete,
     (process_method_func)daNpc_Zelda_Execute,
@@ -786,7 +786,7 @@ static actor_method_class daNpc_Zelda_MethodTable = {
     (process_method_func)daNpc_Zelda_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ZELDA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ZELDA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

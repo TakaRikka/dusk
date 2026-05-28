@@ -156,7 +156,7 @@ int daObjSwBallB_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "P_LBswBC";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_LBswBC";
 
 int daObjSwBallB_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 5);
@@ -402,7 +402,7 @@ static int daObjSwBallB_Create(fopAc_ac_c* param_0) {
     return ((daObjSwBallB_c*)param_0)->create();
 }
 
-static actor_method_class l_daObjSwBallB_Method = {
+static DUSK_CONST actor_method_class l_daObjSwBallB_Method = {
     (process_method_func)daObjSwBallB_Create,
     (process_method_func)daObjSwBallB_Delete,
     (process_method_func)daObjSwBallB_Execute,
@@ -410,7 +410,7 @@ static actor_method_class l_daObjSwBallB_Method = {
     (process_method_func)daObjSwBallB_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwBallB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwBallB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

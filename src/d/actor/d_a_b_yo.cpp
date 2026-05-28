@@ -3426,7 +3426,7 @@ static u32 m_common_count;
 
 }  // namespace
 
-static actor_method_class l_daB_YO_Method = {
+static DUSK_CONST actor_method_class l_daB_YO_Method = {
     (process_method_func)daB_YO_Create,
     (process_method_func)daB_YO_Delete,
     (process_method_func)daB_YO_Execute,
@@ -3434,7 +3434,7 @@ static actor_method_class l_daB_YO_Method = {
     (process_method_func)daB_YO_Draw,
 };
 
-actor_process_profile_definition g_profile_B_YO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_YO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -124,7 +124,7 @@ public:
         return var_r30;
     }
 
-    static EventFn mEvtSeqList[];
+    static EventFn DUSK_CONST mEvtSeqList[];
 
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ u8 field_0xBD8[0xBDC - 0xBD8];

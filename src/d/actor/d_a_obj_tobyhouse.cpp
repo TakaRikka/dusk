@@ -125,13 +125,13 @@ void daObjTobyHouse_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "M_THouse",
     "U_THouse",
 };
-static char* l_staff_name = "thouse";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staff_name = "thouse";
 
-static char* l_event_name[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_event_name[2] = {
     "TOBY_HOUSE_FIRE_TO_RAKKA",
     "TOBY_HOUSE_FIRE_TO_DESERT",
 };
@@ -254,7 +254,7 @@ int daObjTobyHouse_c::Execute(Mtx** i_mtx) {
 }
 
 void daObjTobyHouse_c::action() {
-    static daObjTobyHouse_c::actionFunc l_func[4] = {
+    static DUSK_CONSTEXPR daObjTobyHouse_c::actionFunc l_func[4] = {
         &daObjTobyHouse_c::actionWait,
         &daObjTobyHouse_c::actionOrderEvent,
         &daObjTobyHouse_c::actionEvent,
@@ -322,8 +322,8 @@ void daObjTobyHouse_c::demoProc() {
     };
 
     daPy_py_c* player = daPy_getPlayerActorClass();
-    static cXyz l_shotSmokeScale(8.0f, 8.0f, 8.0f);
-    static Vec l_shotSmokeOffset = {0.0f, 2500.0f, -600.0f};
+    static DUSK_CONSTEXPR cXyz l_shotSmokeScale(8.0f, 8.0f, 8.0f);
+    static DUSK_CONSTEXPR Vec l_shotSmokeOffset = {0.0f, 2500.0f, -600.0f};
     cXyz cStack_24;
     csXyz cStack_98;
     fopAcM_SearchByName(fpcNm_NPC_TOBY_e);
@@ -592,7 +592,7 @@ static int daObjTobyHouse_MoveBGDraw(daObjTobyHouse_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjTobyHouse_METHODS = {
+static DUSK_CONST actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_create1st,
     (process_method_func)daObjTobyHouse_MoveBGDelete,
     (process_method_func)daObjTobyHouse_MoveBGExecute,
@@ -600,7 +600,7 @@ static actor_method_class daObjTobyHouse_METHODS = {
     (process_method_func)daObjTobyHouse_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_TobyHouse = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_TobyHouse = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

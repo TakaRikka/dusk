@@ -39,7 +39,7 @@ dCcD_SrcCyl daFireWood2_c::mCcDCyl = {
     }
 };
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-50.0f, 0.0f, -50.0f},
     {50.0f, 100.0f, 50.0f},
 };
@@ -268,13 +268,13 @@ static int daFireWood2_Create(fopAc_ac_c* i_this) {
     return ((daFireWood2_c*)i_this)->create();
 }
 
-static actor_method_class l_daFireWood2_Method = {
+static DUSK_CONST actor_method_class l_daFireWood2_Method = {
     (process_method_func)daFireWood2_Create,  (process_method_func)daFireWood2_Delete,
     (process_method_func)daFireWood2_Execute, (process_method_func)NULL,
     (process_method_func)daFireWood2_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_FireWood2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_FireWood2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

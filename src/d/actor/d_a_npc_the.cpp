@@ -64,12 +64,12 @@ void daNpcThe_HIO_c::genMessage(JORMContext* ctext) {
 
 static NPC_THE_HIO_CLASS l_HIO;
 
-static daNpc_GetParam1 l_bmdGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[2] = {
     {23, 0},  // the
     {24, 0},  // the_tw
 };
 
-static daNpc_GetParam1 l_bckGetParamList[27] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[27] = {
     {-1, 0},  // <none>
     {10, 0},  // the_f_talk_a
     {9, 0},   // the_f_smile
@@ -99,7 +99,7 @@ static daNpc_GetParam1 l_bckGetParamList[27] = {
     {3, 2},   // the_kune_shishi
 };
 
-static daNpc_GetParam1 l_btpGetParamList[14] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[14] = {
     {30, 0},  // the
     {34, 0},  // the_f_talk_a
     {33, 0},  // the_f_smile
@@ -116,53 +116,53 @@ static daNpc_GetParam1 l_btpGetParamList[14] = {
     {43, 0},  // the_fh_talk_r
 };
 
-static daNpc_GetParam1 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[1] = {
     {27, 0},  // the
 };
 
-static int l_loadRes_THE0[3] = {0, 1, -1};
+static DUSK_CONSTEXPR int l_loadRes_THE0[3] = {0, 1, -1};
 
-static int l_loadRes_THE1[3] = {0, 1, -1};
+static DUSK_CONSTEXPR int l_loadRes_THE1[3] = {0, 1, -1};
 
-static int l_loadRes_THE2[3] = {0, 2, -1};
+static DUSK_CONSTEXPR int l_loadRes_THE2[3] = {0, 2, -1};
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_THE0,
     l_loadRes_THE1,
     l_loadRes_THE2,
 };
 
-static char* l_resNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[4] = {
     "The",
     "The1",
     "The2",
     "yelB_TW",
 };
 
-static int l_evtGetParamList[4] = {
+static DUSK_CONSTEXPR int l_evtGetParamList[4] = {
     0,
     3,
     3,
     0,
 };
 
-static char* l_evtNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[4] = {
     NULL,
     "TW_RESISTANCE1",
     "TW_RESISTANCE2",
     "THE_INTRODUCTION",
 };
 
-static char* l_myName = "The";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "The";
 
-char* daNpcThe_c::mEvtCutNameList[4] = {
+char DUSK_CONST* DUSK_CONST daNpcThe_c::mEvtCutNameList[4] = {
     "",
     "TW_RESISTANCE",
     "TW_RESISTANCE",
     "THE_INTRODUCTION",
 };
 
-daNpcThe_c::EventFn daNpcThe_c::mEvtCutList[4] = {
+daNpcThe_c::EventFn DUSK_CONST daNpcThe_c::mEvtCutList[4] = {
     NULL,
     &daNpcThe_c::EvCut_TwResistance,
     &daNpcThe_c::EvCut_TwResistance,
@@ -1336,13 +1336,13 @@ BOOL daNpcThe_c::drawDbgInfo() {
     return false;
 }
 
-static actor_method_class daNpcThe_MethodTable = {
+static DUSK_CONST actor_method_class daNpcThe_MethodTable = {
     (process_method_func)daNpcThe_Create,  (process_method_func)daNpcThe_Delete,
     (process_method_func)daNpcThe_Execute, (process_method_func)daNpcThe_IsDelete,
     (process_method_func)daNpcThe_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_THE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_THE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -22,7 +22,7 @@ public:
     int Execute(Mtx**);
     int Draw();
     int Delete();
-    char* getResName();
+    char DUSK_CONST* getResName();
     virtual ~daObj_Roten_c();
 
 private:

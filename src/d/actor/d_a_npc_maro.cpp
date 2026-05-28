@@ -113,11 +113,11 @@ void daNpc_Maro_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     {11, 1}, {5, 2},
 };
 
-static daNpcT_evtData_c l_evtList[15] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[15] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
@@ -135,7 +135,7 @@ static daNpcT_evtData_c l_evtList[15] = {
     {"TALK_TO_KAKASHI", 3},
 };
 
-static char* l_resNameList[10] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[10] = {
     "",
     "Maro",
     "Maro_TW",
@@ -148,15 +148,15 @@ static char* l_resNameList[10] = {
     "Besu1",
 };
 
-static s8 l_loadResPtrn0[3] = {1, 3, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {1, 3, -1};
 
-static s8 l_loadResPtrn1[3] = {1, 2, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {1, 2, -1};
 
-static s8 l_loadResPtrn2[4] = {1, 3, 4, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[4] = {1, 3, 4, -1};
 
-static s8 l_loadResPtrn3[5] = {1, 2, 3, 4, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[5] = {1, 2, 3, 4, -1};
 
-static s8* l_loadResPtrnList[17] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[17] = {
     l_loadResPtrn2, l_loadResPtrn2, l_loadResPtrn0, l_loadResPtrn1,
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn2,
     l_loadResPtrn2, l_loadResPtrn0, l_loadResPtrn2, l_loadResPtrn2,
@@ -164,7 +164,7 @@ static s8* l_loadResPtrnList[17] = {
     l_loadResPtrn3,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, 0, 0, 17, 2, 1, 1},
     {6, 0, 1, 18, 0, 1, 0},
     {7, 0, 3, 22, 0, 3, 0},
@@ -177,7 +177,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {7, 2, 5, 11, 2, 5, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {8, 2, 1, 14, 0, 1, 1, 0},
     {5, 2, 4, 14, 0, 1, 1, 0},
     {5, 2, 5, 14, 0, 1, 1, 0},
@@ -190,7 +190,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {10, 2, 3, 14, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {5, -1, 1}, {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 1}, {9, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -198,7 +198,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] =
     {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {2, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -206,7 +206,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Maro_c::mCutNameList[17] = {
+char DUSK_CONST* DUSK_CONST daNpc_Maro_c::mCutNameList[17] = {
     "",
     "CONVERSATION_ABOUT_PACHINKO",
     "CONVERSATION_ABOUT_WOODSWD",
@@ -226,7 +226,7 @@ char* daNpc_Maro_c::mCutNameList[17] = {
     "TALK_TO_KAKASHI",
 };
 
-daNpc_Maro_c::cutFunc daNpc_Maro_c::mCutList[17] = {
+daNpc_Maro_c::cutFunc DUSK_CONST daNpc_Maro_c::mCutList[17] = {
     NULL,
     &daNpc_Maro_c::cutConversationAboutPachinko,
     &daNpc_Maro_c::cutConversationAboutWoodSwd,
@@ -3507,7 +3507,7 @@ static int daNpc_Maro_IsDelete(void*) {
     return 1;
 }
 
-static actor_method_class daNpc_Maro_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Maro_MethodTable = {
     (process_method_func)daNpc_Maro_Create,
     (process_method_func)daNpc_Maro_Delete,
     (process_method_func)daNpc_Maro_Execute,
@@ -3515,7 +3515,7 @@ static actor_method_class daNpc_Maro_MethodTable = {
     (process_method_func)daNpc_Maro_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_MARO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_MARO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

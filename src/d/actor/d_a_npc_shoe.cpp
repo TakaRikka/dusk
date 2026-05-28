@@ -82,7 +82,7 @@ bool daNpcShoe_c::chkFindPlayer() {
     return ret;
 }
 
-static daNpc_GetParam2 l_bckGetParamList[5] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[5] = {
     {17, 2, 1},  // m_sitwait_a
     {13, 0, 1},  // m_sittalk_a
     {14, 0, 1},  // m_sittalk_a_b
@@ -90,21 +90,21 @@ static daNpc_GetParam2 l_bckGetParamList[5] = {
     {11, 2, 1}   // m_sit_to_wolf_a
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {12, 2, 0},  // shoe
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "shoe",
     "Mgeneral",
     "object",
 };
 
-static char* l_evtNames[1] = {NULL};
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
-static char* l_myName = "Shoe";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Shoe";
 
-daNpcShoe_c::EventFn daNpcShoe_c::mEvtSeqList[1] = {NULL};
+daNpcShoe_c::EventFn DUSK_CONST daNpcShoe_c::mEvtSeqList[1] = {NULL};
 
 daNpcShoe_c::daNpcShoe_c() {}
 
@@ -736,13 +736,13 @@ BOOL daNpcShoe_c::drawDbgInfo() {
     return FALSE;
 }
 
-static actor_method_class daNpcShoe_MethodTable = {
+static DUSK_CONST actor_method_class daNpcShoe_MethodTable = {
     (process_method_func)daNpcShoe_Create,  (process_method_func)daNpcShoe_Delete,
     (process_method_func)daNpcShoe_Execute, (process_method_func)daNpcShoe_IsDelete,
     (process_method_func)daNpcShoe_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SHOE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SHOE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

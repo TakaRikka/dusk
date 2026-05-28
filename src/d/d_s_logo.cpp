@@ -1796,7 +1796,7 @@ static scene_method_class l_dScnLogo_Method = {
     (process_method_func)dScnLogo_Draw,
 };
 
-scene_process_profile_definition g_profile_LOGO_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_LOGO_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,

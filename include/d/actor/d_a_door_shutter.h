@@ -45,12 +45,12 @@ public:
         ACTION_DEMO,
     };
 
-    char* getStopBmdName();
+    char DUSK_CONST* getStopBmdName();
     J3DModelData* getStopModelData();
-    char* getAlwaysArcName();
-    char* getArcName();
-    char* getBmdName();
-    char* getBtk();
+    char DUSK_CONST* getAlwaysArcName();
+    char DUSK_CONST* getArcName();
+    char DUSK_CONST* getBmdName();
+    char DUSK_CONST* getBtk();
     J3DModelData* getModelData();
     f32 getSize2X();
     int CreateHeap();
@@ -115,7 +115,7 @@ public:
     int chkStopOpen();
     int chkMakeKey();
 
-    virtual char* getDzbName();
+    virtual char DUSK_CONST* getDzbName();
     virtual int getDemoAction();
 
     void onFlag(u16 flag) { field_0x68e |= flag; }

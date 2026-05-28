@@ -11,11 +11,11 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
-static char* l_arcName = "SCanTen";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "SCanTen";
 
-static char* l_staffName = "SCanTen";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "SCanTen";
 
-static char* l_eventName = "SKY_CANNON_TEN_FIRE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName = "SKY_CANNON_TEN_FIRE";
 
 static int eventCallBack(void* i_proc, int param_1) {
     daObjSCannonTen_c* proc = (daObjSCannonTen_c*)i_proc;
@@ -217,7 +217,7 @@ void daObjSCannonTen_c::exeModeActionEvt() {
 void daObjSCannonTen_c::exeModeEnd() {}
 
 void daObjSCannonTen_c::demoExe() {
-    static char* CUT_TYPE_TABLE_FIRE_SECOND[6] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_FIRE_SECOND[6] = {
         "LINK_IN",
         "SET",
         "MOVE",
@@ -460,7 +460,7 @@ static int daObjSCannonTen_draw(daObjSCannonTen_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daObjSCannonTen_METHODS = {
+static DUSK_CONST actor_method_class daObjSCannonTen_METHODS = {
     (process_method_func)daObjSCannonTen_create,
     (process_method_func)daObjSCannonTen_Delete,
     (process_method_func)daObjSCannonTen_execute,
@@ -468,7 +468,7 @@ static actor_method_class daObjSCannonTen_METHODS = {
     (process_method_func)daObjSCannonTen_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SCannonTen = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SCannonTen = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

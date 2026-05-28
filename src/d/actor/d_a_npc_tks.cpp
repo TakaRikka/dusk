@@ -136,7 +136,7 @@ enum RES_Name {
 
 static NPC_TKS_HIO_CLASS l_HIO;
 
-static daNpc_GetParam3 l_bckGetParamList[22] = {
+static DUSK_CONSTEXPR daNpc_GetParam3 l_bckGetParamList[22] = {
     {-1, J3DFrameCtrl::EMode_LOOP},
     {BCK_TKS_F_TALK_A, J3DFrameCtrl::EMode_NONE},
     {BCK_TKS_WAIT_A, J3DFrameCtrl::EMode_LOOP},
@@ -161,46 +161,46 @@ static daNpc_GetParam3 l_bckGetParamList[22] = {
     {BCK_TKS_SWIM, J3DFrameCtrl::EMode_LOOP},
 };
 
-static daNpc_GetParam3 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam3 l_btpGetParamList[1] = {
     {BTP_TKS, J3DFrameCtrl::EMode_LOOP},
 };
 
-static daNpc_GetParam3 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam3 l_btkGetParamList[1] = {
     {BTK_TKS, J3DFrameCtrl::EMode_LOOP},
 };
 
-static int l_loadRes_TKS0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_TKS0[3] = {
     TKS, J_TUBO_00, -1,
 };
 
-static int l_loadRes_TKS1[3] = {
+static DUSK_CONSTEXPR int l_loadRes_TKS1[3] = {
     TKS, K_TUBO02, -1,
 };
 
-static int l_loadRes_TKS2[3] = {
+static DUSK_CONSTEXPR int l_loadRes_TKS2[3] = {
     TKS, -1, -1,
 };
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_TKS0,
     l_loadRes_TKS1,
     l_loadRes_TKS2,
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "TKS",
     "J_tubo_00",
     "K_tubo02",
 };
 
-static char* l_evtNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[2] = {
     NULL,
     "TKS_ENCOUNTER",
 };
 
-static char* l_arcName = "TKS";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "TKS";
 
-static char* l_myName = "Tks";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Tks";
 
 daNpcTks_HIOParam const daNpcTks_Param_c::m = {
     90.0f,
@@ -3047,7 +3047,7 @@ void daNpcTks_c::drawOtherMdls() {
     }
 }
 
-static actor_method_class daNpcTks_MethodTable = {
+static DUSK_CONST actor_method_class daNpcTks_MethodTable = {
     (process_method_func)daNpcTks_Create,
     (process_method_func)daNpcTks_Delete,
     (process_method_func)daNpcTks_Execute,
@@ -3055,7 +3055,7 @@ static actor_method_class daNpcTks_MethodTable = {
     (process_method_func)daNpcTks_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_TKS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_TKS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

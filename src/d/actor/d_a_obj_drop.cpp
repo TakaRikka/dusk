@@ -630,7 +630,7 @@ static int daObjDrop_Create(fopAc_ac_c* i_this) {
     return ((daObjDrop_c*)i_this)->create();
 }
 
-static actor_method_class l_daObjDrop_Method = {
+static DUSK_CONST actor_method_class l_daObjDrop_Method = {
     (process_method_func)daObjDrop_Create,
     (process_method_func)daObjDrop_Delete,
     (process_method_func)daObjDrop_Execute,
@@ -638,7 +638,7 @@ static actor_method_class l_daObjDrop_Method = {
     (process_method_func)NULL,
 };
 
-actor_process_profile_definition g_profile_Obj_Drop = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Drop = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

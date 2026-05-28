@@ -59,14 +59,14 @@ static int daGuardMng_Create(fopAc_ac_c* i_this) {
     return static_cast<daGuardMng_c*>(i_this)->create();
 }
 
-static actor_method_class l_daGuardMng_Method = {
+static DUSK_CONST actor_method_class l_daGuardMng_Method = {
     (process_method_func)daGuardMng_Create,
     (process_method_func)daGuardMng_Delete,
     (process_method_func)daGuardMng_Execute,
     (process_method_func)daGuardMng_IsDelete
 };
 
-actor_process_profile_definition g_profile_GUARD_MNG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_GUARD_MNG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

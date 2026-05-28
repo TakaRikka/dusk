@@ -816,8 +816,8 @@ void dMenu_save_c::saveQuestion() {
             field_0x9c = 0;
             field_0x17a = 0;
 
-            strcpy(mpHeaderTxt[mHeaderTxtType], "");
-            strcpy(mpHeaderTxt[mHeaderTxtType ^ 1], "");
+            SAFE_STRCPY(mpHeaderTxt[mHeaderTxtType], "");
+            SAFE_STRCPY(mpHeaderTxt[mHeaderTxtType ^ 1], "");
             field_0x64 = 0;
             field_0x50 = 1;
             field_0x40->setFrame(field_0x50);
@@ -2033,7 +2033,7 @@ void dMenu_save_c::saveYesNoCancelMove() {
 
 void dMenu_save_c::headerTxtSet(u16 msgID) {
     if (msgID == 0xFFFF) {
-        strcpy(mpHeaderTxt[mHeaderTxtType ^ 1], "");
+        SAFE_STRCPY(mpHeaderTxt[mHeaderTxtType ^ 1], "");
     } else {
         mSaveSel.mMsgString->getString(
             msgID, (J2DTextBox*)mpHeaderTxtPane[mHeaderTxtType ^ 1]->getPanePtr(), NULL,
@@ -2230,7 +2230,7 @@ void dMenu_save_c::errYesNoCursorMoveAnm() {
 
 void dMenu_save_c::errorTxtSet(u16 msgID) {
     if (msgID == 0xFFFF) {
-        strcpy(mpErrTxt[mErrTxtType ^ 1], "");
+        SAFE_STRCPY(mpErrTxt[mErrTxtType ^ 1], "");
     } else {
         J2DTextBox* tbox = (J2DTextBox*)mpErrTxtPane[mErrTxtType ^ 1]->getPanePtr();
         mSaveSel.mMsgString->getString(msgID, tbox, NULL, mSaveSel.font[0], NULL, 0);
@@ -2817,7 +2817,7 @@ void dMenu_save_c::menuSaveWide() {
     
     #if TARGET_PC
     if (mSelIcon) {
-        mSelIcon->refreshAspectScale();
+        mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
     }
     #endif
 }

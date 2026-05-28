@@ -70,6 +70,12 @@ constexpr std::array kGyroInputModeLabels = {
     "Mouse",
 };
 
+constexpr std::array kMenuScalingModeLabels = {
+    "GameCube",
+    "Wii",
+    "Dusklight",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -364,6 +370,9 @@ const Rml::String kBloomHelpText =
     "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
+const Rml::String kDepthOfFieldHelpText =
+    "Configure the post-processing depth-of-field effect. Classic uses the original depth-of-field pass;"
+    " Dusklight uses a higher-quality depth-of-field pass.";
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
@@ -836,7 +845,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMax = 100,
                 .defaultValue = 100,
                 .step = 10,
-            }, mPrelaunch);
+            },
+            mPrelaunch);
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+            GraphicsTunerProps{
+                .option = GraphicsOption::DepthOfFieldMode,
+                .title = "Depth of Field",
+                .helpText = kDepthOfFieldHelpText,
+                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
+                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
+                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
+            },
+            mPrelaunch);
 
         leftPane.add_section("Rendering");
         config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
@@ -878,17 +898,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_int_select(leftPane, rightPane, getSettings().video.maxFrameRate,
             "Framerate Cap", "Limit the framerate to the specified value.", 30, 540, 1,
             [] { return getSettings().game.enableFrameInterpolation.getValue() != FrameInterpMode::Capped; });
-        config_bool_select(leftPane, rightPane, getSettings().game.enableDepthOfField,
-            {
-                .key = "Enable Depth of Field",
-            });
         config_bool_select(leftPane, rightPane, getSettings().game.enableMapBackground,
             {
                 .key = "Enable Mini-Map Shadows",
+                .helpText = "Render a thick shadow around the mini-map. May impact performance."
             });
         config_bool_select(leftPane, rightPane, getSettings().game.disableCutscenePillarboxing,
             {
                 .key = "Disable Cutscene Pillarboxing",
+                .helpText = "Disable black bars on the left and right sides of the screen "
+                            "during some cutscenes, particularly on ultra-wide displays. "
+                            "Visuals beyond the original intended framing may appear buggy."
             });
     });
 
@@ -940,6 +960,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
             "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
+            "Invert horizontal movement while flying or swimming.");
+        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
+            "Invert vertical movement while flying or swimming.");
 
         leftPane.add_section("Gyro");
         leftPane.register_control(
@@ -1009,6 +1033,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert vertical gyro aiming.", [] { return !gyro_enabled(); });
         addOption("Invert Gyro Yaw", getSettings().game.gyroInvertYaw,
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
+        
+        leftPane.add_section("Gameplay");
+        addOption("Swap Direct Select Input", getSettings().game.swapDirectSelect,
+            "Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.");
 
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
@@ -1108,6 +1136,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
             "Enables rotating Link in the collection menu with the C-Stick.");
+        addOption("Hide Owl Statue Markers", getSettings().game.removeQuestMapMarkers,
+            "Removes completed Owl Statue markers from the map and Minimap.");
 
         leftPane.add_section("Difficulty");
         leftPane.register_control(
@@ -1162,6 +1192,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
+        addOption("Show Poe Count on Map", getSettings().game.enhancedMapMenus,
+            "Displays collected/total number of Poe Souls for a region on the map.");
         addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
             "Allows Wolf Link to howl and change the time of day.");
         addOption("Quick Transform (R+Y)", getSettings().game.enableQuickTransform,
@@ -1419,8 +1451,44 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Show gyro sensor values in the input viewer.",
                 .isDisabled = [] { return !getSettings().game.showInputViewer; },
             });
-
         leftPane.add_section("Game");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Menu Scaling Mode",
+                .getValue =
+                    [] {
+                        return kMenuScalingModeLabels[static_cast<u8>(
+                            getSettings().game.menuScalingMode.getValue())];
+                    },
+                .isModified =
+                    [] {
+                        const auto& mode = getSettings().game.menuScalingMode;
+                        return mode.getValue() != mode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kMenuScalingModeLabels.size()); ++i) {
+                    pane
+                        .add_button({
+                            .text = kMenuScalingModeLabels[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.menuScalingMode.getValue() ==
+                                           static_cast<MenuScaling>(i);
+                                    ;
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.menuScalingMode.setValue(
+                                static_cast<MenuScaling>(i));
+                            ;
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>Changes how the Collection and File Select menus scale to your "
+                             "aspect ratio.");
+            });
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",
@@ -1438,6 +1506,11 @@ void SettingsWindow::update() {
     }
 
     Window::update();
+}
+
+void SettingsWindow::hide(bool close) {
+    config::Save();
+    Window::hide(close);
 }
 
 }  // namespace dusk::ui

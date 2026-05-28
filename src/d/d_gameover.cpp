@@ -517,7 +517,7 @@ static leafdraw_method_class l_dGameover_Method = {
     (process_method_func)dGameover_Draw,
 };
 
-msg_process_profile_definition g_profile_GAMEOVER = {
+DUSK_PROFILE msg_process_profile_definition DUSK_CONST g_profile_GAMEOVER = {
     /* Layer ID    */ fpcLy_CURRENT_e,
     /* List ID     */ 12,
     /* List Prio   */ fpcPi_CURRENT_e,
