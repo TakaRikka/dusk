@@ -128,7 +128,7 @@ std::filesystem::path base_path_relative(const std::filesystem::path& path) {
     if (!basePath) {
         return path;
     }
-    return std::filesystem::path{basePath} / path;
+    return std::filesystem::path{reinterpret_cast<const char8_t*>(basePath)} / path;
 }
 
 std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
