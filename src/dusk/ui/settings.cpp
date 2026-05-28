@@ -13,17 +13,14 @@
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/io.hpp"
 #include "dusk/livesplit.h"
-#include "dusk/main.h"
 #include "dusk/discord_presence.hpp"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
 #include "modal.hpp"
 #include "number_button.hpp"
-#include "menu_bar.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
-#include "i18n.hpp"
 #include "i18n.hpp"
 #include "ui.hpp"
 
@@ -406,6 +403,8 @@ const Rml::String kDepthOfFieldHelpText =
     "[CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL]";
 const Rml::String kUnlockFramerateHelpText =
     "[USES_INTER_FRAME_INTERPOLATION_TO_ENABLE_HIGHER_FRAME_RATES_MAY_INTRODUCE_MINOR]";
+const Rml::String kTextureReplacementHelpText =
+    "[ENABLE_INSTALLED_TEXTURE_REPLACEMENTS]";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -891,12 +890,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             mPrelaunch);
 
         leftPane.add_section("[RENDERING]");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
-            {
-                .key = "[USE_TEXTURE_PACK]",
-                .helpText = "[ENABLE_INSTALLED_TEXTURE_REPLACEMENTS]",
-                .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
-            });
+        graphics_tuner_control(*this, leftPane, rightPane,
+            getSettings().game.enableTextureReplacements,
+            GraphicsTunerProps{
+                .option = GraphicsOption::TextureReplacements,
+                .title = "[USE_TEXTURE_PACK]",
+                .helpText = kTextureReplacementHelpText,
+                .valueMin = static_cast<int>(false),
+                .valueMax = static_cast<int>(true),
+                .defaultValue = static_cast<int>(false),
+            },
+            mPrelaunch);
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "[UNLOCK_FRAMERATE]",
@@ -985,8 +989,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("[INVERT_CAMERA_Y_AXIS]", getSettings().game.invertCameraYAxis,
             "[INVERT_VERTICAL_CAMERA_MOVEMENT_WHEN_FREE_CAMERA_IS_ENABLED]",
             [] { return !getSettings().game.freeCamera; });
-        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
-            "[FREE_CAMERA_SENSITIVITY]", "[ADJUSTS_TWIN_STICK_CAMERA_SENSITIVITY]", 50, 200, 5,
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraXSensitivity,
+            "[FREE_CAMERA_X_SENSITIVITY]", "[ADJUSTS_TWIN_STICK_CAMERA_X_AXIS_SENSITIVITY]", 50, 200, 5,
+            [] { return !getSettings().game.freeCamera; });
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraYSensitivity,
+            "[FREE_CAMERA_Y_SENSITIVITY]", "[ADJUSTS_TWIN_STICK_CAMERA_Y_AXIS_SENSITIVITY]", 50, 200, 5,
             [] { return !getSettings().game.freeCamera; });
         addOption("[INVERT_FIRST_PERSON_X_AXIS]", getSettings().game.invertFirstPersonXAxis,
             "[INVERT_HORIZONTAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
@@ -1061,6 +1068,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[INVERT_VERTICAL_GYRO_AIMING]", [] { return !gyro_enabled(); });
         addOption("[INVERT_GYRO_YAW]", getSettings().game.gyroInvertYaw,
             "[INVERT_HORIZONTAL_GYRO_AIMING]", [] { return !gyro_enabled(); });
+
+        leftPane.add_section("[GAMEPLAY]");
+        addOption("[SWAP_DIRECT_SELECT_INPUT]", getSettings().game.swapDirectSelect,
+            "[SWAP_THE_CONTROLS_FOR_USING_DIRECT_SELECT_ON_THE_ITEM_WHEEL_MAKING_DIRECT]");
 
         leftPane.add_section("[TOOLS]");
         addOption("[TURBO_KEY]", getSettings().game.enableTurboKeybind,
@@ -1309,6 +1320,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[CHEAT_FREE_MAGIC_ARMOR_HELP]");
         addCheat("[CHEAT_INVINCIBLE_ENEMIES]", getSettings().game.invincibleEnemies,
             "[CHEAT_INVINCIBLE_ENEMIES_HELP]");
+        addCheat("[CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL]",
+            getSettings().game.transformWithoutShadowCrystal,
+            "[CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL_HELP]");
     });
 
     add_tab("[INTERFACE]", [this](Rml::Element* content) {

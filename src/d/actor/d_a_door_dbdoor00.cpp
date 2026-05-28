@@ -27,29 +27,29 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
-static char* dummyStringFunc() {
+static DUSK_CONST char* dummyStringFunc() {
     return "door-pushDouble_";
 }
 
-char* daDbDoor00_c::getAlwaysArcName() {
+DUSK_CONST char* daDbDoor00_c::getAlwaysArcName() {
     return "static";
 }
 
-char* daDbDoor00_c::getDzb() {
+DUSK_CONST char* daDbDoor00_c::getDzb() {
     return "door-pushDouble.dzb";
 }
 
-char* daDbDoor00_c::getDummyBmdName() {
+DUSK_CONST char* daDbDoor00_c::getDummyBmdName() {
     return "door-pushDoubleDummy.bmd";
 }
 
-char* daDbDoor00_c::getBmdArcName() {
+DUSK_CONST char* daDbDoor00_c::getBmdArcName() {
     return "DbDoor0";
 }
 
-static char* l_bmd_base_name = "door-pushDouble_";
+static DUSK_CONST char* l_bmd_base_name = "door-pushDouble_";
 
-char* daDbDoor00_c::getBmdName() {
+DUSK_CONST char* daDbDoor00_c::getBmdName() {
     static char l_bmdName[32];
     SAFE_SPRINTF(l_bmdName, "%s%02d.bmd", l_bmd_base_name, door_param2_c::getDoorModel(this));
     return l_bmdName;
@@ -167,7 +167,7 @@ int daDbDoor00_c::create() {
 }
 
 int daDbDoor00_c::getDemoAction() {
-    static char* action_table[9] = {
+    static DUSK_CONST char* action_table[9] = {
         "WAIT",      "SET_START", "SET_ANGLE", "END",        "OPEN",
         "STOP_OPEN", "SET_GOAL",  "SET_GOAL2", "ADJUSTMENT",
     };
@@ -408,13 +408,13 @@ static int daDbdoor00_Create(fopAc_ac_c* i_this) {
     return static_cast<daDbDoor00_c*>(i_this)->create();
 }
 
-static actor_method_class l_daDbdoor00_Method = {
+static DUSK_CONST actor_method_class l_daDbdoor00_Method = {
     (process_method_func)daDbdoor00_Create,  (process_method_func)daDbdoor00_Delete,
     (process_method_func)daDbdoor00_Execute, (process_method_func)daDbdoor00_IsDelete,
     (process_method_func)daDbdoor00_Draw,
 };
 
-actor_process_profile_definition g_profile_DBDOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_DBDOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

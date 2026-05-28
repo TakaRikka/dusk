@@ -11,6 +11,7 @@
 
 class dFile_info_c;
 class J2DPicture;
+
 #if TARGET_PC
 static bool sFileSelectCachedPanes = false;
 
@@ -45,8 +46,14 @@ static FileSelectPaneCache sFileSelectPanes[] = {
     {MULTI_CHAR('w_uzu07'), 0.0f, 0.0f, false},
     {MULTI_CHAR('w_uzu08'), 0.0f, 0.0f, false},
     {MULTI_CHAR('w_uzu09'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msg'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msE'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msR'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for1'), 0.0f, 0.0f, false},
 };
 #endif
+
 class dDlst_FileSel_c : public dDlst_base_c {
 public:
     void draw();

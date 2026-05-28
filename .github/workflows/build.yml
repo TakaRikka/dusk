@@ -1,6 +1,16 @@
 name: Build
 
 on:
+  push:
+    paths-ignore:
+      - '*.md'
+      - '*LICENSE'
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - '*LICENSE'
+      - 'docs/**'
   workflow_dispatch:
     inputs:
       tag_name:

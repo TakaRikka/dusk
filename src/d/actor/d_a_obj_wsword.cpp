@@ -9,7 +9,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-static char* l_arcName = "Obj_brksw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_brksw";
 
 static dCcD_SrcCyl l_cyl_src = {
     {
@@ -106,7 +106,7 @@ static int daObjWSword_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjWSword_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjWSword_Method = {
+static DUSK_CONST actor_method_class l_daObjWSword_Method = {
     (process_method_func)daObjWSword_Create,
     (process_method_func)daObjWSword_Delete,
     (process_method_func)daObjWSword_Execute,
@@ -114,7 +114,7 @@ static actor_method_class l_daObjWSword_Method = {
     (process_method_func)daObjWSword_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_WoodenSword = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_WoodenSword = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

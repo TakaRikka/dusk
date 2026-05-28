@@ -909,7 +909,7 @@ static int daCanoe_Draw(daCanoe_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class l_daCanoe_Method = {
+static DUSK_CONST actor_method_class l_daCanoe_Method = {
     (process_method_func)daCanoe_Create,
     (process_method_func)daCanoe_Delete,
     (process_method_func)daCanoe_Execute,
@@ -917,7 +917,7 @@ static actor_method_class l_daCanoe_Method = {
     (process_method_func)daCanoe_Draw,
 };
 
-actor_process_profile_definition g_profile_CANOE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_CANOE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

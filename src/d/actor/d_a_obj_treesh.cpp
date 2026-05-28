@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_treesh.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_arcName = "M_TreeSh";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_TreeSh";
 
 daTreeSh_HIO_c::daTreeSh_HIO_c() {
     shake_strength = 800;
@@ -151,7 +151,7 @@ static int daTreeSh_MoveBGDraw(daTreeSh_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daTreeSh_METHODS = {
+static DUSK_CONST actor_method_class daTreeSh_METHODS = {
     (process_method_func)daTreeSh_create1st,
     (process_method_func)daTreeSh_MoveBGDelete,
     (process_method_func)daTreeSh_MoveBGExecute,
@@ -159,7 +159,7 @@ static actor_method_class daTreeSh_METHODS = {
     (process_method_func)daTreeSh_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_TREESH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TREESH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

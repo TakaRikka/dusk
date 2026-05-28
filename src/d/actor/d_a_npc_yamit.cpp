@@ -38,54 +38,54 @@ void daNpc_yamiT_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {12, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"STOPPER", 1},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "yamiT",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8* l_loadResPtrnList[3] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, 15, 2, 1, 1},
     {6, 0, 1, 15, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[3] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[3] = {
     {9, 2, 1, -1, 0, 0, 0, 0},
     {8, 0, 1, -1, 0, 0, 0, 0},
     {7, 0, 1, -1, 0, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[12] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[12] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 1}, {0, -1, 0},
     {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_yamiT_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_yamiT_c::mCutNameList[2] = {
     "",
     "STOPPER",
 };
 
-daNpc_yamiT_c::cutFunc daNpc_yamiT_c::mCutList[2] = {
+daNpc_yamiT_c::cutFunc DUSK_CONST daNpc_yamiT_c::mCutList[2] = {
     NULL,
     &daNpc_yamiT_c::cutStopper,
 };
@@ -749,13 +749,13 @@ static int daNpc_yamiT_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_yamiT_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_yamiT_MethodTable = {
     (process_method_func)daNpc_yamiT_Create,  (process_method_func)daNpc_yamiT_Delete,
     (process_method_func)daNpc_yamiT_Execute, (process_method_func)daNpc_yamiT_IsDelete,
     (process_method_func)daNpc_yamiT_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_YAMIT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_YAMIT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

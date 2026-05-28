@@ -27,7 +27,7 @@ public:
     /* 0x14 */ u8 up_framecount;
 };
 
-static char* l_resNameIdx[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[2] = {
     "L8Step",
     "L8StepX",
 };
@@ -279,7 +279,7 @@ static int daUdFloor_Create(fopAc_ac_c* i_this) {
     return ((daUdFloor_c*)i_this)->create();
 }
 
-static actor_method_class l_daUdFloor_Method = {
+static DUSK_CONST actor_method_class l_daUdFloor_Method = {
     (process_method_func)daUdFloor_Create,
     (process_method_func)daUdFloor_Delete,
     (process_method_func)daUdFloor_Execute,
@@ -287,7 +287,7 @@ static actor_method_class l_daUdFloor_Method = {
     (process_method_func)daUdFloor_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv8UdFloor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv8UdFloor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -17,6 +17,7 @@
 
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
+#include "dusk/gamepad_color.h"
 #include "dusk/settings.h"
 
 namespace dusk::ui {
@@ -255,7 +256,9 @@ ControllerConfigWindow::ControllerConfigWindow(bool prelaunch) {
                 event.StopPropagation();
             }
         },
-        true);
+        true
+    );
+
     if (auto* context = mDocument != nullptr ? mDocument->GetContext() : nullptr) {
         if (auto* root = context->GetRootElement()) {
             mListeners.emplace_back(std::make_unique<ScopedEventListener>(
@@ -313,6 +316,28 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     addPageButton(Page::Actions, "[CUSTOM_ACTION_BINDINGS]", [] {return Rml::String(">"); }, [] { return false; });
 
     leftPane.add_section("[OPTIONS]");
+    leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
+                                  .key = "[ENABLE_LED_STATUS]",
+                                  .getValue =
+                                      [port] {
+                                          return getSettings().game.enableLED[port].getValue();
+                                      },
+                                  .setValue =
+                                      [port](const bool value) {
+                                          getSettings().game.enableLED[port].setValue(value);
+                                      },
+                                  .isDisabled = [port] {
+                                      return !input::pad_has_led(port);
+                                  },
+                                  .valueOverride = [port] {
+                                      if (!input::pad_has_led(port))
+                                          return "[NOT_SUPPORTED]";
+
+                                      return "";
+                                  }}),
+        rightPane, [](Pane& pane) {
+            pane.add_text("[SETS_THE_CONTROLLERS_LIGHTING_COLOR_BASED_ON_THE_GAMES_STATE]");
+        });
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
                                   .key = "[ENABLE_DEAD_ZONES]",
                                   .getValue =
@@ -382,6 +407,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                 PADSerializeMappings();
                 ClearAllActionBindings(port);
+                refresh_controller_page();
             });
 
         pane.add_button({

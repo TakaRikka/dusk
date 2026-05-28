@@ -110,7 +110,7 @@ static BOOL set_pos_check(obj_tatigi_class* i_this, int param_2) {
 }
 
 static int daObj_Tatigi_Create(fopAc_ac_c* a_this) {
-    static dCcD_SrcCyl cc_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x11}, 0x79}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -206,7 +206,7 @@ static int daObj_Tatigi_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-static actor_method_class l_daObj_Tatigi_Method = {
+static DUSK_CONST actor_method_class l_daObj_Tatigi_Method = {
     (process_method_func)daObj_Tatigi_Create,
     (process_method_func)daObj_Tatigi_Delete,
     (process_method_func)daObj_Tatigi_Execute,
@@ -214,7 +214,7 @@ static actor_method_class l_daObj_Tatigi_Method = {
     (process_method_func)daObj_Tatigi_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_TATIGI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_TATIGI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

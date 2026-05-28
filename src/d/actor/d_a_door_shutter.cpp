@@ -22,7 +22,7 @@
 #include <dusk/autosave.h>
 #endif
 
-char* daDoor20_c::getStopBmdName() {
+char DUSK_CONST* daDoor20_c::getStopBmdName() {
     switch (door_param2_c::getKind(this)) {
         case 3:
         case 11:
@@ -35,11 +35,11 @@ J3DModelData* daDoor20_c::getStopModelData() {
     return (J3DModelData*)dComIfG_getStageRes(getStopBmdName());
 }
 
-char* daDoor20_c::getAlwaysArcName() {
+char DUSK_CONST* daDoor20_c::getAlwaysArcName() {
     return "static";
 }
 
-char* daDoor20_c::getArcName() {
+char DUSK_CONST* daDoor20_c::getArcName() {
     switch (door_param2_c::getKind(this)) {
     default:
         return "DoorT00";
@@ -56,7 +56,7 @@ char* daDoor20_c::getArcName() {
     }
 }
 
-char* daDoor20_c::getBmdName() {
+char DUSK_CONST* daDoor20_c::getBmdName() {
     static char bmdName[32];
     switch(door_param2_c::getKind(this)) {
     case 0:
@@ -74,11 +74,11 @@ char* daDoor20_c::getBmdName() {
     return bmdName;
 }
 
-char* daDoor20_c::getBtk() {
+char DUSK_CONST* daDoor20_c::getBtk() {
     return "door-shutter_00.btk";
 }
 
-char* daDoor20_c::getDzbName() {
+char DUSK_CONST* daDoor20_c::getDzbName() {
     switch(door_param2_c::getKind(this)) {
     case 0:
     case 1:
@@ -1536,7 +1536,7 @@ void daDoor20_c::startDemoProc() {
 }
 
 void daDoor20_c::makeEventId() {
-    static char* table[19] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* table[19] = {
         "DEFAULT_STOP_OPEN",
         "DEFAULT_STOP_OPEN",
         NULL,
@@ -1558,49 +1558,49 @@ void daDoor20_c::makeEventId() {
         NULL,
     };
 
-    static char* tate_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* tate_table[4] = {
         "DEFAULT_SHUTTER_DOOR_10",
         "DEFAULT_SHUTTER_DOOR_10",
         "DEFAULT_SHUTTER_DOOR_F_STOP",
         "DEFAULT_SHUTTER_DOOR_F_STOP",
     };
 
-    static char* tate_w_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* tate_w_table[4] = {
         "WOLF_SHUTTER_DOOR_10",
         "WOLF_SHUTTER_DOOR_10",
         "WOLF_SHUTTER_DOOR_F_STOP",
         "WOLF_SHUTTER_DOOR_F_STOP",
     };
 
-    static char* yoko_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* yoko_table[4] = {
         "DEFAULT_SHUTTER_DOOR_14",
         "DEFAULT_SHUTTER_DOOR_14",
         "DEFAULT_SHUTTER_DOOR_F_STOP_14",
         "DEFAULT_SHUTTER_DOOR_F_STOP_14",
     };
 
-    static char* yoko_w_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* yoko_w_table[4] = {
         "WOLF_SHUTTER_DOOR_14",
         "WOLF_SHUTTER_DOOR_14",
         "WOLF_SHUTTER_DOOR_F_STOP_14",
         "WOLF_SHUTTER_DOOR_F_STOP_14",
     };
 
-    static char* lv8_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* lv8_table[4] = {
         "DEFAULT_SHUTTER_DOOR_18",
         "DEFAULT_SHUTTER_DOOR_18",
         "DEFAULT_SHUTTER_DOOR_F_STOP_18",
         "DEFAULT_SHUTTER_DOOR_F_STOP_18",
     };
 
-    static char* lv8_w_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* lv8_w_table[4] = {
         "WOLF_SHUTTER_DOOR_18",
         "WOLF_SHUTTER_DOOR_18",
         "WOLF_SHUTTER_DOOR_F_STOP_18",
         "WOLF_SHUTTER_DOOR_F_STOP_18",
     };
 
-    static char* knob_table[7] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* knob_table[7] = {
         "DEFAULT_KNOB_DOOR_F",
         "DEFAULT_KNOB_DOOR_B",
         "DEFAULT_KNOB_DOOR_F_STOP",
@@ -1610,28 +1610,28 @@ void daDoor20_c::makeEventId() {
         "DEFAULT_KNOB_DOOR_TALK_NOTOPEN_F",
     };
 
-    static char* lv7_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* lv7_table[4] = {
         "DEFAULT_SHUTTER_DOOR_20",
         "DEFAULT_SHUTTER_DOOR_20",
         "DEFAULT_SHUTTER_DOOR_F_STOP_20",
         "DEFAULT_SHUTTER_DOOR_F_STOP_20",
     };
 
-    static char* lv7_w_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* lv7_w_table[4] = {
         "WOLF_SHUTTER_DOOR_20",
         "WOLF_SHUTTER_DOOR_20",
         "WOLF_SHUTTER_DOOR_F_STOP_20",
         "WOLF_SHUTTER_DOOR_F_STOP_20",
     };
 
-    static char* lv9_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* lv9_table[4] = {
         "DEFAULT_SHUTTER_DOOR_22",
         "DEFAULT_SHUTTER_DOOR_22",
         "DEFAULT_SHUTTER_DOOR_F_STOP_22",
         "DEFAULT_SHUTTER_DOOR_F_STOP_22",
     };
 
-    static char* lv9_w_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* lv9_w_table[4] = {
         "WOLF_SHUTTER_DOOR_22",
         "WOLF_SHUTTER_DOOR_22",
         "WOLF_SHUTTER_DOOR_F_STOP_22",
@@ -1842,7 +1842,7 @@ void daDoor20_c::getRestartPos(cXyz* param_1) {
 }
 
 int daDoor20_c::getDemoAction() {
-    static char* action_table[29] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[29] = {
         "WAIT",
         "STOP_OPEN",
         "STOP_CLOSE",
@@ -2151,13 +2151,13 @@ static int daDoor20_Create(fopAc_ac_c* i_this) {
     return static_cast<daDoor20_c*>(i_this)->create();
 }
 
-static actor_method_class l_daDoor20_Method = {
+static DUSK_CONST actor_method_class l_daDoor20_Method = {
     (process_method_func)daDoor20_Create,  (process_method_func)daDoor20_Delete,
     (process_method_func)daDoor20_Execute, (process_method_func)NULL,
     (process_method_func)daDoor20_Draw,
 };
 
-actor_process_profile_definition g_profile_DOOR20 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_DOOR20 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

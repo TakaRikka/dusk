@@ -125,33 +125,33 @@ public:
 };
 #endif
 
-static char* l_resFileNameList[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileNameList[4] = {
     "grA",
     "grA",
     "grA",
     "grA",
 };
 
-static int l_exLoadRes_GRAa[4] = {
+static DUSK_CONSTEXPR int l_exLoadRes_GRAa[4] = {
     1, 2, -1, -1,
 };
 
-static int l_exLoadRes_GRA_jump[4] = {
+static DUSK_CONSTEXPR int l_exLoadRes_GRA_jump[4] = {
     1, 2, 4, -1,
 };
 
-static int l_exLoadRes_GRA_demo[4] = {
+static DUSK_CONSTEXPR int l_exLoadRes_GRA_demo[4] = {
     1, 2, 3, -1,
 };
 
-static int* l_exloadRes_list[4] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_exloadRes_list[4] = {
     l_exLoadRes_GRAa,
     l_exLoadRes_GRA_jump,
     l_exLoadRes_GRAa,
     l_exLoadRes_GRA_demo,
 };
 
-static char* l_resNames[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[5] = {
     "grA",
     "grA_base",
     "grA_mdl",
@@ -159,11 +159,11 @@ static char* l_resNames[5] = {
     "grA_Look",
 };
 
-static int l_bmdGetParamList[2] = {
+static DUSK_CONSTEXPR int l_bmdGetParamList[2] = {
     3, 2,
 };
 
-static int l_bckGetParamList[35][2] = {
+static DUSK_CONSTEXPR int l_bckGetParamList[35][2] = {
     {21, 1}, {18, 0},
     {22, 1}, {11, 0},
     {18, 1}, {19, 1},
@@ -184,27 +184,27 @@ static int l_bckGetParamList[35][2] = {
     {9, 0},
 };
 
-static int l_btpGetParamList[4][2] = {
+static DUSK_CONSTEXPR int l_btpGetParamList[4][2] = {
     {28, 1}, {32, 1},
     {31, 1}, {21, 0},
 };
 
-static u16 l_eventMotionChangeTable[11] = {
+static DUSK_CONSTEXPR u16 l_eventMotionChangeTable[11] = {
     0, 1, 0, 2,
     3, 0, 0, 0,
     0, 0, 0,
 };
 
-static u16 l_eventFaceChangeTable[4] = {
+static DUSK_CONSTEXPR u16 l_eventFaceChangeTable[4] = {
     1, 2, 6, 7,
 };
 
-static char* l_evtNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNameList[2] = {
     NULL,
     "GRA_THROWN",
 };
 
-static u16 l_entryJntNoList[4] = {
+static DUSK_CONSTEXPR u16 l_entryJntNoList[4] = {
     5, 6, 7, 0xFFFF,
 };
 
@@ -365,7 +365,7 @@ daObj_GrA_HIO_Param_c const daObj_GrA_Param_c::m = {
     30.0f,
 };
 
-static const f32 l_bgcParam[20] = {
+static DUSK_CONSTEXPR const f32 l_bgcParam[20] = {
     0.0f, 0.0f, 0.0f, 0.0f,
     -0.5f, 1.0f, -0.5f, 1.0f,
     0.5f, -1.0f, -0.5f, 1.0f,
@@ -655,7 +655,7 @@ void daObj_GrA_c::restart() {
     field_0x209c = 0;
 }
 
-static cXyz l_centerOfst(0.0f, 67.0f, 26.0f);
+static DUSK_CONSTEXPR cXyz l_centerOfst(0.0f, 67.0f, 26.0f);
 
 static OBJ_GRA_HIO_CLASS l_HIO;
 
@@ -1048,7 +1048,7 @@ void daObj_GrA_c::adjustShapeAngle() {
 }
 
 void daObj_GrA_c::setMtx(int param_1) {
-    static cXyz aTrembleTrans[15] = {
+    static DUSK_CONSTEXPR cXyz aTrembleTrans[15] = {
         cXyz(0.0f, 0.0f, 0.0f),
         cXyz(1.154554f, -0.052719f, 1.018953f),
         cXyz(0.722208f, -0.14003f, 1.333208f),
@@ -1149,7 +1149,7 @@ void daObj_GrA_c::setCollisions() {
                 field_0xf50.OnTgNoConHit();
             }
 
-            static cXyz aOfst(0.0f, 0.0f, 20.0f);
+            static DUSK_CONSTEXPR cXyz aOfst(0.0f, 0.0f, 20.0f);
 
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::YrotM(field_0x91a.y);
@@ -1198,7 +1198,7 @@ void daObj_GrA_c::setCollisions() {
 void daObj_GrA_c::setAttnPos() {
     lookat();
 
-    static cXyz aEyeOfst(15.0f, 25.0f, 0.0f);
+    static DUSK_CONSTEXPR cXyz aEyeOfst(15.0f, 25.0f, 0.0f);
 
     cXyz sp18;
     mDoMtx_stack_c::copy(mpModelMorf->getModel()->getAnmMtx(4));
@@ -2125,7 +2125,7 @@ daObj_GrA_c::MotionFunc daObj_GrA_c::mFaceMotionList[14] = {
     &daObj_GrA_c::face999,
 };
 
-static actor_method_class daObj_GrA_MethodTable = {
+static DUSK_CONST actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Create,
     (process_method_func)daObj_GrA_Delete,
     (process_method_func)daObj_GrA_Execute,
@@ -2133,7 +2133,7 @@ static actor_method_class daObj_GrA_MethodTable = {
     (process_method_func)daObj_GrA_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_GRA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_GRA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

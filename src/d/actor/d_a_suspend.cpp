@@ -38,11 +38,11 @@ static int daSus_create(daSus_c* i_this) {
 
     return i_this->create();
 }
-static actor_method_class daSus_METHODS = {
+static DUSK_CONST actor_method_class daSus_METHODS = {
     (process_method_func)daSus_create, NULL, NULL, NULL, NULL,
 };
 
-actor_process_profile_definition g_profile_SUSPEND = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SUSPEND = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 11,
     /* List Prio    */ fpcPi_CURRENT_e,

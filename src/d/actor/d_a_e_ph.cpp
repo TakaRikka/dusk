@@ -1303,13 +1303,13 @@ static int daE_PH_IsDelete(daE_PH_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daE_PH_Method = {
+static DUSK_CONST actor_method_class l_daE_PH_Method = {
     (process_method_func)daE_PH_Create,  (process_method_func)daE_PH_Delete,
     (process_method_func)daE_PH_Execute, (process_method_func)daE_PH_IsDelete,
     (process_method_func)daE_PH_Draw,
 };
 
-actor_process_profile_definition g_profile_E_PH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_PH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

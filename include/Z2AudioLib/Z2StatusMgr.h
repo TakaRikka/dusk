@@ -14,7 +14,7 @@ struct Z2StatusMgr : public JASGlobalInstance<Z2StatusMgr> {
     void menuIn();
     void menuOut();
     bool isMovieDemo();
-    void setDemoName(char* demoName);
+    void setDemoName(DUSK_CONST char* demoName);
     void processTime();
     bool checkDayTime();
     void setEventBit(void* eventBit);

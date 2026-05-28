@@ -392,13 +392,13 @@ static int daObjTrnd2_Create(daObjTrnd2_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObjTrnd2_Method = {
+static DUSK_CONST actor_method_class l_daObjTrnd2_Method = {
     (process_method_func)daObjTrnd2_Create,  (process_method_func)daObjTrnd2_Delete,
     (process_method_func)daObjTrnd2_Execute, (process_method_func)NULL,
     (process_method_func)daObjTrnd2_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Tornado2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Tornado2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

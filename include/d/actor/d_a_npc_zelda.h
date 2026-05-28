@@ -88,7 +88,7 @@ public:
                                  daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_2,
                                  int param_3,
                                  daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_4,
-                                 int param_5, daNpcT_evtData_c const* param_6, char** param_7) :
+                                 int param_5, daNpcT_evtData_c const* param_6, char DUSK_CONST* DUSK_CONST* param_7) :
     daNpcT_c(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7) {
         OS_REPORT("|%06d:%x|daNpc_Zelda_c -> コンストラクト\n", g_Counter.mCounter0, this);
     }
@@ -101,7 +101,7 @@ public:
     int checkRemoveJoint(int param_0) { return param_0 == 17; }
 
     static const char* mCutNameList;
-    static cutFunc mCutList[1];
+    static cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0xE40 */ NPC_ZELDA_HIO_CLASS* mpHIO;

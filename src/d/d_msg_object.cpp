@@ -2555,7 +2555,7 @@ static leafdraw_method_class l_dMsgObject_Method = {
     (process_method_func)dMsgObject_Draw,
 };
 
-msg_process_profile_definition g_profile_MSG_OBJECT = {
+DUSK_PROFILE msg_process_profile_definition DUSK_CONST g_profile_MSG_OBJECT = {
     /* Layer ID    */ fpcLy_CURRENT_e,
     /* List ID     */ 12,
     /* List Prio   */ fpcPi_CURRENT_e,

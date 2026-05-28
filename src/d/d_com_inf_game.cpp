@@ -2843,7 +2843,11 @@ BOOL dComIfGs_Wolf_Change_Check() {
     BOOL is_wolf = false;
 
     // Transforming Unlocked
-    if (dComIfGs_isEventBit(0x0D04)) {
+    if (dComIfGs_isEventBit(0x0D04)
+#if TARGET_PC
+    || dusk::getSettings().game.transformWithoutShadowCrystal
+#endif
+    ) {
         is_wolf = dComIfGs_getTransformStatus();
     } else if (dComIfGs_isTransformLV(0) && !dComIfGs_isDarkClearLV(0)) {
         is_wolf = true;

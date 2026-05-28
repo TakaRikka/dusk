@@ -229,7 +229,7 @@ static int daObj_Gb_Create(fopAc_ac_c* actor) {
     return rv;
 }
 
-static actor_method_class l_daObj_Gb_Method = {
+static DUSK_CONST actor_method_class l_daObj_Gb_Method = {
     (process_method_func)daObj_Gb_Create,
     (process_method_func)daObj_Gb_Delete,
     (process_method_func)daObj_Gb_Execute,
@@ -237,7 +237,7 @@ static actor_method_class l_daObj_Gb_Method = {
     (process_method_func)daObj_Gb_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_GB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_GB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

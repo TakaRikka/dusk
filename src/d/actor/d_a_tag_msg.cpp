@@ -18,9 +18,9 @@ static int createHeapCallBack(fopAc_ac_c* i_this) {
     return msg->createHeap();
 }
 
-static char* l_resName = "TagMsg";
+static DUSK_CONST char* l_resName = "TagMsg";
 
-static char* l_evtNameTBL[2] = {
+static DUSK_CONST char* l_evtNameTBL[2] = {
     NULL,
     "SPEAK",
 };
@@ -200,7 +200,7 @@ BOOL daTag_Msg_c::otherCheck() {
     }
 }
 
-char* daTag_Msg_c::getResName() {
+DUSK_CONST char* daTag_Msg_c::getResName() {
     return l_resName;
 }
 
@@ -224,7 +224,7 @@ void daTag_Msg_c::getParam() {
     SAFE_STRCPY(mStaffName, "Tag_ms");
 }
 
-char* daTag_Msg_c::mEvtCutTBL[2] = {
+DUSK_CONST char* daTag_Msg_c::mEvtCutTBL[2] = {
     "SPEAK",
     "PAUSE",
 };
@@ -271,13 +271,13 @@ static void dummyString() {
     DEAD_STRING("Timer");
 }
 
-static actor_method_class daTag_Msg_MethodTable = {
+static DUSK_CONST actor_method_class daTag_Msg_MethodTable = {
     (process_method_func)daTag_Msg_Create,  (process_method_func)daTag_Msg_Delete,
     (process_method_func)daTag_Msg_Execute, (process_method_func)daTag_Msg_IsDelete,
     (process_method_func)daTag_Msg_Draw,
 };
 
-actor_process_profile_definition g_profile_TAG_MSG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_MSG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

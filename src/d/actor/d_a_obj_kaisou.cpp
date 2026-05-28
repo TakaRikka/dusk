@@ -66,7 +66,7 @@ static int JointCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-static char* l_arcName = "M_kaisou";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_kaisou";
 
 int daObjKaisou_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "M_kaisou.bmd");
@@ -295,7 +295,7 @@ static int daObjKaisou_IsDelete(daObjKaisou_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjKaisou_Method = {
+static DUSK_CONST actor_method_class l_daObjKaisou_Method = {
     (process_method_func)daObjKaisou_Create,
     (process_method_func)daObjKaisou_Delete,
     (process_method_func)daObjKaisou_Execute,
@@ -303,7 +303,7 @@ static actor_method_class l_daObjKaisou_Method = {
     (process_method_func)daObjKaisou_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Kaisou = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Kaisou = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

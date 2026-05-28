@@ -11,7 +11,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_arcName = "Ychandelr";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Ychandelr";
 
 int daObjYchndlr_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName);
@@ -354,13 +354,13 @@ static int daObjYchndlr_MoveBGDraw(daObjYchndlr_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjYchndlr_METHODS = {
+static DUSK_CONST actor_method_class daObjYchndlr_METHODS = {
     (process_method_func)daObjYchndlr_create1st,     (process_method_func)daObjYchndlr_MoveBGDelete,
     (process_method_func)daObjYchndlr_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjYchndlr_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Ychndlr = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Ychndlr = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -2264,12 +2264,12 @@ void daHorse_c::setRoomInfo(int param_0) {
     }
 }
 
-static cXyz l_frontFootOffset(23.5f, -20.0f, 0.0f);
+static DUSK_CONSTEXPR cXyz l_frontFootOffset(23.5f, -20.0f, 0.0f);
 
-static cXyz l_backFootOffset(25.5f, 12.0f, 0.0f);
+static DUSK_CONSTEXPR cXyz l_backFootOffset(25.5f, 12.0f, 0.0f);
 
 void daHorse_c::setBodyPart() {
-    static cXyz localEyePos(25.0f, -15.0f, 0.0f);
+    static DUSK_CONSTEXPR cXyz localEyePos(25.0f, -15.0f, 0.0f);
 
     mDoMtx_multVec(m_model->getAnmMtx(15), &localEyePos, &eyePos);
     mDoMtx_multVecZero(m_model->getAnmMtx(0), &m_bodyEyePos);
@@ -2427,10 +2427,10 @@ void daHorse_c::setEffect() {
                                    speedF);
     }
 
-    static cXyz runScale(2.0f, 2.0f, 2.0f);
-    static cXyz landScale(1.5f, 1.5f, 1.5f);
-    static cXyz grassRunScale(1.8f, 1.8f, 1.8f);
-    static cXyz waterDirection(0.0f, 1.0f, -0.75f);
+    static DUSK_CONSTEXPR cXyz runScale(2.0f, 2.0f, 2.0f);
+    static DUSK_CONSTEXPR cXyz landScale(1.5f, 1.5f, 1.5f);
+    static DUSK_CONSTEXPR cXyz grassRunScale(1.8f, 1.8f, 1.8f);
+    static DUSK_CONSTEXPR cXyz waterDirection(0.0f, 1.0f, -0.75f);
     
     int j;
     int i;
@@ -2942,10 +2942,10 @@ void daHorse_c::footBgCheck() {
 }
 
 void daHorse_c::setReinPosMoveInit(int param_0) {
-    static cXyz reinLeftStart(63.0f, 17.0f, 11.0f);
-    static cXyz reinRightStart(63.0f, 17.0f, -11.0f);
-    static cXyz localNeckLeft(10.0f, 10.0f, 35.0f);
-    static cXyz localNeckRight(10.0f, 10.0f, -35.0f);
+    static DUSK_CONSTEXPR cXyz reinLeftStart(63.0f, 17.0f, 11.0f);
+    static DUSK_CONSTEXPR cXyz reinRightStart(63.0f, 17.0f, -11.0f);
+    static DUSK_CONSTEXPR cXyz localNeckLeft(10.0f, 10.0f, 35.0f);
+    static DUSK_CONSTEXPR cXyz localNeckRight(10.0f, 10.0f, -35.0f);
 
     static const f32 sideOffset = 10.0f;
     static const f32 onHandSideOffset = 1.0f;
@@ -3128,8 +3128,8 @@ void daHorse_c::setReinPosHandSubstance(int param_0) {
 }
 
 void daHorse_c::setReinPosNormalSubstance() {
-    static cXyz saddleLeft(29.0f, -2.0f, 30.0f);
-    static cXyz saddleRight(29.0f, 2.0f, 30.0f);
+    static DUSK_CONSTEXPR cXyz saddleLeft(29.0f, -2.0f, 30.0f);
+    static DUSK_CONSTEXPR cXyz saddleRight(29.0f, 2.0f, 30.0f);
     static const int sideCount = 24;
 
     if (!checkStateFlg0(FLG0_UNK_1) && getZeldaActor() != NULL) {
@@ -3188,9 +3188,9 @@ void daHorse_c::lerpControlPoints(f32 alpha) {
 
 void daHorse_c::bgCheck() {
     if (m_procID != PROC_LARGE_DAMAGE_e) {
-        static cXyz localCenterPos(0.0f, 100.0f, 0.0f);
-        static cXyz localFrontPos(0.0f, 100.0f, 220.0f);
-        static cXyz localBackPos(0.0f, 100.0f, -170.0f);
+        static DUSK_CONSTEXPR cXyz localCenterPos(0.0f, 100.0f, 0.0f);
+        static DUSK_CONSTEXPR cXyz localFrontPos(0.0f, 100.0f, 220.0f);
+        static DUSK_CONSTEXPR cXyz localBackPos(0.0f, 100.0f, -170.0f);
 
         cXyz line_start;
         cXyz line_end;
@@ -4750,7 +4750,7 @@ static int daHorse_Delete(daHorse_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daHorse_Method = {
+static DUSK_CONST actor_method_class l_daHorse_Method = {
     (process_method_func)daHorse_Create,
     (process_method_func)daHorse_Delete,
     (process_method_func)daHorse_Execute,
@@ -4758,7 +4758,7 @@ static actor_method_class l_daHorse_Method = {
     (process_method_func)daHorse_Draw,
 };
 
-actor_process_profile_definition g_profile_HORSE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_HORSE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

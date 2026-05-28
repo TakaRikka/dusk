@@ -20,12 +20,12 @@ static int l_loadRes_YBAG0[3] = {
     0, -1, -1,
 };
 
-static int* l_loadRes_list[2] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[2] = {
     l_loadRes_YBAG0,
     l_loadRes_YBAG0,
 };
 
-static char* l_resNames[] = {"yel_bag"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[] = {"yel_bag"};
 
 dCcD_SrcCyl daObj_YBag_c::mCcDCyl = {
     daNpcT_c::mCcDObjData,
@@ -534,7 +534,7 @@ static int daObj_YBag_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_YBag_MethodTable = {
+static DUSK_CONST actor_method_class daObj_YBag_MethodTable = {
     (process_method_func)daObj_YBag_Create,
     (process_method_func)daObj_YBag_Delete,
     (process_method_func)daObj_YBag_Execute,
@@ -542,7 +542,7 @@ static actor_method_class daObj_YBag_MethodTable = {
     (process_method_func)daObj_YBag_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_YBAG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_YBAG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

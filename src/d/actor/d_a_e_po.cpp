@@ -2947,7 +2947,7 @@ static int daE_PO_Create(fopAc_ac_c* i_act_this) {
         i_this->mAcchCir.SetWall(80.0f, 100.0f);
         i_this->mColliderStts.Init(150, 0, i_act_this);
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8000000, 0x3}, 0x0}},  // mObj
                 {dCcD_SE_13, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt
@@ -3157,13 +3157,13 @@ e_po_class::e_po_class() {
     // empty method
 }
 
-static actor_method_class l_daE_PO_Method = {
+static DUSK_CONST actor_method_class l_daE_PO_Method = {
     (process_method_func)daE_PO_Create,  (process_method_func)daE_PO_Delete,
     (process_method_func)daE_PO_Execute, (process_method_func)daE_PO_IsDelete,
     (process_method_func)daE_PO_Draw,
 };
 
-actor_process_profile_definition g_profile_E_PO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_PO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

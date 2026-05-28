@@ -83,7 +83,7 @@ int dCamera_c::EndEventCamera(int param_1) {
     return 0;
 }
 
-int dCamera_c::searchEventArgData(char* i_eventName) {
+int dCamera_c::searchEventArgData(DUSK_CONST char* i_eventName) {
     int i;
     bool found_event = false;
 
@@ -101,7 +101,7 @@ int dCamera_c::searchEventArgData(char* i_eventName) {
     return found_event ? i : -1;
 }
 
-bool dCamera_c::getEvIntData(int* i_data, char* i_event) {
+bool dCamera_c::getEvIntData(int* i_data, DUSK_CONST char* i_event) {
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
@@ -134,7 +134,7 @@ bool dCamera_c::getEvIntData(int* i_data, char* i_event) {
     return 1;
 }
 
-bool dCamera_c::getEvFloatData(f32* i_data, char* i_event) {
+bool dCamera_c::getEvFloatData(f32* i_data, DUSK_CONST char* i_event) {
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
@@ -163,7 +163,7 @@ bool dCamera_c::getEvFloatData(f32* i_data, char* i_event) {
     return 1;
 }
 
-int dCamera_c::getEvFloatListData(f32** i_data, char* i_event) {
+int dCamera_c::getEvFloatListData(f32** i_data, DUSK_CONST char* i_event) {
     int num = 0;
 
     if (chkFlag(0x20000000)) {
@@ -195,7 +195,7 @@ int dCamera_c::getEvFloatListData(f32** i_data, char* i_event) {
     return num;
 }
 
-int dCamera_c::getEvXyzListData(cXyz** i_data, char* i_event) {
+int dCamera_c::getEvXyzListData(cXyz** i_data, DUSK_CONST char* i_event) {
     int num = 0;
 
     if (chkFlag(0x20000000)) {
@@ -227,8 +227,8 @@ int dCamera_c::getEvXyzListData(cXyz** i_data, char* i_event) {
     return num;
 }
 
-char* dCamera_c::getEvStringPntData(char* i_event) {
-    char* string = NULL;
+char DUSK_CONST* dCamera_c::getEvStringPntData(DUSK_CONST char* i_event) {
+    char DUSK_CONST* string = NULL;
 
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
@@ -258,7 +258,7 @@ char* dCamera_c::getEvStringPntData(char* i_event) {
     return string;
 }
 
-bool dCamera_c::getEvIntData(int* i_data, char* i_event, int param_2) {
+bool dCamera_c::getEvIntData(int* i_data, DUSK_CONST char* i_event, int param_2) {
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
@@ -287,7 +287,7 @@ bool dCamera_c::getEvIntData(int* i_data, char* i_event, int param_2) {
     return 1;
 }
 
-bool dCamera_c::getEvFloatData(f32* i_data, char* i_event, f32 param_2) {
+bool dCamera_c::getEvFloatData(f32* i_data, DUSK_CONST char* i_event, f32 param_2) {
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
@@ -315,7 +315,7 @@ bool dCamera_c::getEvFloatData(f32* i_data, char* i_event, f32 param_2) {
     return 1;
 }
 
-bool dCamera_c::getEvXyzData(cXyz* i_data, char* i_event, cXyz param_2) {
+bool dCamera_c::getEvXyzData(cXyz* i_data, DUSK_CONST char* i_event, cXyz param_2) {
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
         if (index == -1) {
@@ -345,9 +345,9 @@ bool dCamera_c::getEvXyzData(cXyz* i_data, char* i_event, cXyz param_2) {
 
 #if TARGET_PC
 template<size_t N>
-bool dCamera_c::getEvStringData(char (&i_data)[N], char* i_event, char* param_2) {
+bool dCamera_c::getEvStringData(char (&i_data)[N], char DUSK_CONST* i_event, char DUSK_CONST* param_2) {
 #else
-bool dCamera_c::getEvStringData(char* i_data, char* i_event, char* param_2) {
+bool dCamera_c::getEvStringData(char* i_data, char DUSK_CONST* i_event, char DUSK_CONST* param_2) {
 #endif
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
@@ -378,11 +378,11 @@ bool dCamera_c::getEvStringData(char* i_data, char* i_event, char* param_2) {
 
 #if TARGET_PC
 // Used in another TU, so force instantiation to avoid linker issues.
-template bool dCamera_c::getEvStringData(char (&i_data)[12], char* i_event, char* param_2);
+template bool dCamera_c::getEvStringData(char (&i_data)[12], DUSK_CONST char* i_event, char DUSK_CONST* param_2);
 #endif
 
-char* dCamera_c::getEvStringPntData(char* i_event, char* param_1) {
-    char* string = NULL;
+char DUSK_CONST* dCamera_c::getEvStringPntData(DUSK_CONST char* i_event, char DUSK_CONST* param_1) {
+    char DUSK_CONST* string = NULL;
 
     if (chkFlag(0x20000000)) {
         int index = searchEventArgData(i_event);
@@ -412,8 +412,8 @@ char* dCamera_c::getEvStringPntData(char* i_event, char* param_1) {
     return string;
 }
 
-fopAc_ac_c* dCamera_c::getEvActor(char* i_event) {
-    char* string = getEvStringPntData(i_event);
+fopAc_ac_c* dCamera_c::getEvActor(DUSK_CONST char* i_event) {
+    char DUSK_CONST* string = getEvStringPntData(i_event);
     if (string == NULL) {
         return NULL;
     }
@@ -452,7 +452,7 @@ fopAc_ac_c* dCamera_c::getEvActor(char* i_event) {
     return actor;
 }
 
-fopAc_ac_c* dCamera_c::getEvActor(char* i_event, char* param_1) {
+fopAc_ac_c* dCamera_c::getEvActor(DUSK_CONST char* i_event, char DUSK_CONST* param_1) {
     char string[16];
     string[0] = 0;
     getEvStringData(string, i_event, param_1);
@@ -3397,7 +3397,7 @@ bool dCamera_c::fixedFramesEvCamera() {
         fframes_p->field_0x38 = 9999;
 
         int substanceNum;
-        char* key = "Centers";
+        char DUSK_CONST* key = "Centers";
         if ((substanceNum = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, key)) != 0) {
             fframes_p->field_0x1c[1] = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, key);
             if (fframes_p->field_0x38 > substanceNum) {
@@ -3500,7 +3500,7 @@ bool dCamera_c::bSplineEvCamera() {
     if (mCurCamStyleTimer == 0) {
         bSpline->field_0x1c = 0;
         bSpline->field_0x10 = 9999;
-        char* key = "Centers";
+        char DUSK_CONST* key = "Centers";
         int iVar1 = getEvXyzListData(&bSpline->mCenters, key);
         if (iVar1 != 0) {
             if (bSpline->field_0x10 > iVar1) {

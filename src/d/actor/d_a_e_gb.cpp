@@ -1632,7 +1632,7 @@ static cPhs_Step daE_GB_Create(fopAc_ac_c* actor) {
         } // mSphAttr
     };
 
-    static dCcD_SrcCyl body_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl body_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x79}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -1721,7 +1721,7 @@ static cPhs_Step daE_GB_Create(fopAc_ac_c* actor) {
 
 e_gb_class::e_gb_class() {}
 
-static actor_method_class l_daE_GB_Method = {
+static DUSK_CONST actor_method_class l_daE_GB_Method = {
     (process_method_func)daE_GB_Create,
     (process_method_func)daE_GB_Delete,
     (process_method_func)daE_GB_Execute,
@@ -1729,7 +1729,7 @@ static actor_method_class l_daE_GB_Method = {
     (process_method_func)daE_GB_Draw,
 };
 
-actor_process_profile_definition g_profile_E_GB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_GB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -45,10 +45,10 @@ void SafeStringCopy(char* buffer, size_t bufSize, const char* src) {
     const auto srcSize = strlen(src);
     if (srcSize > bufSize - 1) [[unlikely]] {
         const auto msg = fmt::format(
-            "Destination buffer too small! Need %d, have %d",
+            "Destination buffer too small! Need {}, have {}",
             srcSize + 1,
             bufSize);
-        CRASH("%s", msg.c_str());
+        CRASH(msg.c_str());
     }
 
     strncpyProxy(buffer, src, bufSize);

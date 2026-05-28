@@ -20,7 +20,7 @@ const static dCcD_SrcSph ccSphSrc = {
     }  // mSphAttr
 };
 
-static char* l_arcName = "CrvGate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvGate";
 
 namespace {
 static u16 s_CoCount = 0;
@@ -827,13 +827,13 @@ int daObjCRVGATE_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjCRVGATE_Method = {
+static DUSK_CONST actor_method_class l_daObjCRVGATE_Method = {
     (process_method_func)daObjCRVGATE_Create,  (process_method_func)daObjCRVGATE_Delete,
     (process_method_func)daObjCRVGATE_Execute, (process_method_func)daObjCRVGATE_IsDelete,
     (process_method_func)daObjCRVGATE_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_CRVGATE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_CRVGATE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

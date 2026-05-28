@@ -199,7 +199,7 @@ void daObjIceBlk_c::disablePushPull() {
     }
 }
 
-static char* l_arcName = "Y_icecube";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Y_icecube";
 
 int daObjIceBlk_c::Create() {
     mpPath = dPath_GetRoomPath(getPathId(), fopAcM_GetRoomNo(this));
@@ -830,13 +830,13 @@ static int daObjIceBlk_MoveBGDraw(daObjIceBlk_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjIceBlk_METHODS = {
+static DUSK_CONST actor_method_class daObjIceBlk_METHODS = {
     (process_method_func)daObjIceBlk_create1st,     (process_method_func)daObjIceBlk_MoveBGDelete,
     (process_method_func)daObjIceBlk_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjIceBlk_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_IceBlock = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_IceBlock = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

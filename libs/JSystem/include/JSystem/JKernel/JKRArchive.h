@@ -39,13 +39,13 @@ struct SArcDataInfo {
     /* 0x1B */ u8 field_1b[5];
 };
 
-inline u32 read_big_endian_u32(void* ptr) {
-    u8* uptr = (u8*)ptr;
+inline u32 read_big_endian_u32(void DUSK_CONST* ptr) {
+    u8 DUSK_CONST* uptr = (u8 DUSK_CONST*)ptr;
     return ((u32)uptr[0] << 0x18) | ((u32)uptr[1] << 0x10) | ((u32)uptr[2] << 8) | (u32)uptr[3];
 }
 
-inline u16 read_big_endian_u16(void* ptr) {
-    u8* uptr = (u8*)ptr;
+inline u16 read_big_endian_u16(void DUSK_CONST* ptr) {
+    u8 DUSK_CONST* uptr = (u8 DUSK_CONST*)ptr;
     return ((u16)uptr[0] << 8) | ((u16)uptr[1]);
 }
 

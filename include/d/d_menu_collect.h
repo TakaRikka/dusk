@@ -15,6 +15,7 @@ class dMenu_Fishing_c;
 class dMenu_Skill_c;
 class dMenu_Insect_c;
 class dSelect_cursor_c;
+
 #if TARGET_PC
 static bool sMenuCollectCachedPanes = false;
 

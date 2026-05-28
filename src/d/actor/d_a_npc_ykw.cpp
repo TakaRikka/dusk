@@ -38,11 +38,11 @@ public:
 };
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {11, 1},
 };
 
-static daNpcT_evtData_c l_evtList[10] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[10] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
@@ -63,16 +63,16 @@ static const char* l_resNameList[5] = {
     "ykM2",
 };
 
-static s8 l_loadResPtrn0[2] = {0x01, -1};
-static s8 l_loadResPtrn1[3] = {0x01, 0x02, -1};
-static s8 l_loadResPtrn2[3] = {0x01, 0x03, -1};
-static s8 l_loadResPtrn9[4] = {0x01, 0x02, 0x03, -1};
-static s8* l_loadResPtrnList[8] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {0x01, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {0x01, 0x02, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {0x01, 0x03, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[4] = {0x01, 0x02, 0x03, -1};
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[8] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn2,
     l_loadResPtrn1, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {-1, 0, 0, 17, 2, 1, 1},
     {6, 0, 1, 17, 2, 1, 1},
     {9, 0, 2, 37, 0, 2, 0},
@@ -89,7 +89,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[14] = {
     {-1, 0, 0, 41, 2, 2, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[35] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[35] = {
     {8, 2, 1, 14, 0, 1, 1, 0},
     {22, 2, 2, 14, 0, 1, 1, 0},
     {14, 2, 3, 14, 0, 1, 1, 0},
@@ -127,7 +127,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[35] = {
     {26, 0, 3, 29, 0, 3, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -137,7 +137,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[56] =
     {13, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[132] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[132] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {25, -1, 1}, {1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {29, -1, 1}, {2, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {30, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -168,7 +168,7 @@ const char* daNpc_ykW_c::mCutNameList[8] = {
     "HUG",
 };
 
-daNpc_ykW_c::cutFunc daNpc_ykW_c::mCutList[8] = {
+daNpc_ykW_c::cutFunc DUSK_CONST daNpc_ykW_c::mCutList[8] = {
     NULL,
     &daNpc_ykW_c::cutShowDoor,
     &daNpc_ykW_c::cutGoIntoBossRoom,
@@ -3021,7 +3021,7 @@ static int daNpc_ykW_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daNpc_ykW_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_ykW_MethodTable = {
     (process_method_func)daNpc_ykW_Create,
     (process_method_func)daNpc_ykW_Delete,
     (process_method_func)daNpc_ykW_Execute,
@@ -3029,7 +3029,7 @@ static actor_method_class daNpc_ykW_MethodTable = {
     (process_method_func)daNpc_ykW_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_YKW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_YKW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

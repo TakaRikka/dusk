@@ -1003,6 +1003,17 @@
   <entry key="CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE">设置泛光强度，数值越高，高亮区域发光效果越强烈。</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL">设置后期景深效果：经典模式为原版景深，<br/>暮色之光模式采用更高画质景深。</entry>
   <entry key="USE_TEXTURE_PACK">使用纹理包</entry>
+  <entry key="ENABLE_LED_STATUS">Enable LED Status</entry>
+  <entry key="SETS_THE_CONTROLLERS_LIGHTING_COLOR_BASED_ON_THE_GAMES_STATE">Sets the controller's lighting color based on the game's state.</entry>
+  <entry key="NOT_SUPPORTED">Not Supported</entry>
+  <entry key="FREE_CAMERA_X_SENSITIVITY">Free Camera X Sensitivity</entry>
+  <entry key="ADJUSTS_TWIN_STICK_CAMERA_X_AXIS_SENSITIVITY">Adjusts twin-stick camera X axis sensitivity.</entry>
+  <entry key="FREE_CAMERA_Y_SENSITIVITY">Free Camera Y Sensitivity</entry>
+  <entry key="ADJUSTS_TWIN_STICK_CAMERA_Y_AXIS_SENSITIVITY">Adjusts twin-stick camera Y axis sensitivity.</entry>
+  <entry key="SWAP_DIRECT_SELECT_INPUT">Swap Direct Select Input</entry>
+  <entry key="SWAP_THE_CONTROLS_FOR_USING_DIRECT_SELECT_ON_THE_ITEM_WHEEL_MAKING_DIRECT">Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.</entry>
+  <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL">Transform without Shadow Crystal</entry>
+  <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL_HELP">Allows Link to transform without the Shadow Crystal (Only using Quick Transform.)</entry>
   <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">启用已安装的纹理替换。</entry>
   <entry key="FRAMERATE_CAP">帧率上限</entry>
   <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">将帧率限制为指定数值。</entry>

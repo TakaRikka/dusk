@@ -272,7 +272,7 @@ static int daObjHHASHI_Execute(daObjHHASHI_c* i_this) {
     return i_this->MoveBGExecute();
 }
 
-static char* l_arcName = "L_hhashi";
+static DUSK_CONST char* l_arcName = "L_hhashi";
 
 int daObjHHASHI_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "L_hhashi00.bmd");
@@ -373,7 +373,7 @@ int daObjHHASHI_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjHHASHI_Method = {
+static DUSK_CONST actor_method_class l_daObjHHASHI_Method = {
     (process_method_func)daObjHHASHI_Create,
     (process_method_func)daObjHHASHI_Delete,
     (process_method_func)daObjHHASHI_Execute,
@@ -381,7 +381,7 @@ static actor_method_class l_daObjHHASHI_Method = {
     (process_method_func)daObjHHASHI_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_HHASHI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_HHASHI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

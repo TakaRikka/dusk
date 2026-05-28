@@ -28,7 +28,7 @@ void daObjCrystal_c::setBaseMtx() {
     mpModel[1]->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-static char* l_arcName = "H_Suisho";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Suisho";
 
 int daObjCrystal_c::Create() {
     initBaseMtx();
@@ -131,13 +131,13 @@ static int daObjCrystal_Create(daObjCrystal_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObjCrystal_Method = {
+static DUSK_CONST actor_method_class l_daObjCrystal_Method = {
     (process_method_func)daObjCrystal_Create,  (process_method_func)daObjCrystal_Delete,
     (process_method_func)daObjCrystal_Execute, (process_method_func)NULL,
     (process_method_func)daObjCrystal_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Crystal = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Crystal = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

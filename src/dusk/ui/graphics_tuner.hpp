@@ -46,6 +46,7 @@ enum class GraphicsOption {
     BloomMode,
     BloomMultiplier,
     DepthOfFieldMode,
+    TextureReplacements,
 };
 
 Rml::String format_graphics_setting_value(GraphicsOption option, int value);

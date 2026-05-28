@@ -47,7 +47,7 @@ static int getResetArchiveBank(int i_roomNo, const u8** o_bankIDList) {
     const u8* pbank = *o_bankIDList;
     for (int i = 0; i < bankNum; pbank++, i++) {
         char* arcBank = dStage_roomControl_c::getArcBank(i);
-        char* name = "";
+        DUSK_CONST char* name = "";
 
         int id = *pbank;
         if (id != 0xFF) {
@@ -511,7 +511,7 @@ static scene_method_class l_dScnRoom_Method = {
     (process_method_func)dScnRoom_Draw,
 };
 
-scene_process_profile_definition g_profile_ROOM_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_ROOM_SCENE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 0,
     /* List Prio    */ fpcPi_CURRENT_e,

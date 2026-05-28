@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_rotBridge.h"
 
-static char* l_resNameIdx[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[3] = {
     "P_Mbridge",
     "P_Mbridge",
     "P_Mbrid9",
@@ -252,7 +252,7 @@ static int daRotBridge_Create(fopAc_ac_c* i_this) {
     return ((daRotBridge_c*)i_this)->create();
 }
 
-static actor_method_class l_daRotBridge_Method = {
+static DUSK_CONST actor_method_class l_daRotBridge_Method = {
     (process_method_func)daRotBridge_Create,
     (process_method_func)daRotBridge_Delete,
     (process_method_func)daRotBridge_Execute,
@@ -260,7 +260,7 @@ static actor_method_class l_daRotBridge_Method = {
     (process_method_func)daRotBridge_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_RotBridge = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RotBridge = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

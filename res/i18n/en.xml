@@ -1003,6 +1003,17 @@
   <entry key="CONFIGURE_BLOOM_INTENSITY_HIGHER_VALUES_MAKE_BRIGHT_AREAS_GLOW_MORE">Configure bloom intensity. Higher values make bright areas glow more strongly.</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL">Configure the post-processing depth-of-field effect. Classic uses the original depth-of-field pass; Dusklight uses a higher-quality depth-of-field pass.</entry>
   <entry key="USE_TEXTURE_PACK">Use Texture Pack</entry>
+  <entry key="ENABLE_LED_STATUS">Enable LED Status</entry>
+  <entry key="SETS_THE_CONTROLLERS_LIGHTING_COLOR_BASED_ON_THE_GAMES_STATE">Sets the controller's lighting color based on the game's state.</entry>
+  <entry key="NOT_SUPPORTED">Not Supported</entry>
+  <entry key="FREE_CAMERA_X_SENSITIVITY">Free Camera X Sensitivity</entry>
+  <entry key="ADJUSTS_TWIN_STICK_CAMERA_X_AXIS_SENSITIVITY">Adjusts twin-stick camera X axis sensitivity.</entry>
+  <entry key="FREE_CAMERA_Y_SENSITIVITY">Free Camera Y Sensitivity</entry>
+  <entry key="ADJUSTS_TWIN_STICK_CAMERA_Y_AXIS_SENSITIVITY">Adjusts twin-stick camera Y axis sensitivity.</entry>
+  <entry key="SWAP_DIRECT_SELECT_INPUT">Swap Direct Select Input</entry>
+  <entry key="SWAP_THE_CONTROLS_FOR_USING_DIRECT_SELECT_ON_THE_ITEM_WHEEL_MAKING_DIRECT">Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.</entry>
+  <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL">Transform without Shadow Crystal</entry>
+  <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL_HELP">Allows Link to transform without the Shadow Crystal (Only using Quick Transform.)</entry>
   <entry key="ENABLE_INSTALLED_TEXTURE_REPLACEMENTS">Enable installed texture replacements.</entry>
   <entry key="FRAMERATE_CAP">Framerate Cap</entry>
   <entry key="LIMIT_THE_FRAMERATE_TO_THE_SPECIFIED_VALUE">Limit the framerate to the specified value.</entry>

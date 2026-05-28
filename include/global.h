@@ -225,7 +225,7 @@ using std::isnan;
 #define IS_REF_NONNULL(r) (1)
 #endif
 
-#define CRASH(msg, ...) OSPanic(__FILE__, __LINE__, "%s", msg, ##__VA_ARGS__)
+#define CRASH(msg) OSPanic(__FILE__, __LINE__, "%s", msg)
 
 // Some basic macros that are more convenient than putting down #if blocks for one-line changes.
 #if TARGET_PC
@@ -243,5 +243,8 @@ using std::isnan;
 #define IF_NOT_DUSK(statement) statement
 #define DUSK_IF_ELSE(dusk, orig) orig
 #endif
+
+#define DUSK_CONST IF_DUSK(const)
+#define DUSK_CONSTEXPR IF_DUSK(constexpr)
 
 #endif

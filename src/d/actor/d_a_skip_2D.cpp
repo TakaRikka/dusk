@@ -72,13 +72,13 @@ static int daSkip2D_IsDelete(void*) {
     return 1;
 }
 
-static actor_method_class daSkip2D_MethodTable = {
+static DUSK_CONST actor_method_class daSkip2D_MethodTable = {
     (process_method_func)daSkip2D_Create,  (process_method_func)daSkip2D_Delete,
     (process_method_func)daSkip2D_Execute, (process_method_func)daSkip2D_IsDelete,
     (process_method_func)daSkip2D_Draw,
 };
 
-actor_process_profile_definition g_profile_SKIP2D = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SKIP2D = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

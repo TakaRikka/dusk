@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-static char* l_arcName[] = {
+static DUSK_CONST char* l_arcName[] = {
     "K_tetd",
     "S_bsaku00",
     "S_lv7saku",
@@ -247,13 +247,13 @@ static int daDsh_Create(fopAc_ac_c* i_this) {
     return static_cast<daDsh_c*>(i_this)->create();
 }
 
-static actor_method_class l_daDsh_Method = {
+static DUSK_CONST actor_method_class l_daDsh_Method = {
     (process_method_func)daDsh_Create,  (process_method_func)daDsh_Delete,
     (process_method_func)daDsh_Execute, (process_method_func)daDsh_IsDelete,
     (process_method_func)daDsh_Draw,
 };
 
-actor_process_profile_definition2 g_profile_DSHUTTER = {
+DUSK_PROFILE actor_process_profile_definition2 DUSK_CONST g_profile_DSHUTTER = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

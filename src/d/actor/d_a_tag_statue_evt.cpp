@@ -54,13 +54,13 @@ static const u16 l_event_bit[6] = {
     dSv_event_flag_c::F_0812, /* N/A - N/A */
 };
 
-static char* l_arcName = "Obj_cs_f";
+static DUSK_CONST char* l_arcName = "Obj_cs_f";
 
-static u16 l_eff_id[3] = {
+static DUSK_CONSTEXPR u16 l_eff_id[3] = {
     0x8C7E, 0x8C7F, 0x8C84
 };
 
-static char* l_eventName[6] = {
+static DUSK_CONST char* l_eventName[6] = {
     "SKY_LETTERS_00",   // Faron Woods
     "SKY_LETTERS_01",   // Gerudo Desert
     "SKY_LETTERS_02",   // Kakariko Gorge
@@ -69,7 +69,7 @@ static char* l_eventName[6] = {
     "SKY_LETTERS_05"    // Ruined Theatre
 };
 
-static char* l_evArcName[6] = {
+static DUSK_CONST char* l_evArcName[6] = {
     NULL,               // Faron Woods
     "cs_ev_01",         // Gerudo Desert
     "cs_ev_02",         // Kakariko Gorge
@@ -78,7 +78,7 @@ static char* l_evArcName[6] = {
     "cs_ev_05"          // Ruined Theatre
 };
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-300.0f, -100.0f, -300.0f}, // Min
     {300.0f, 400.0f, 300.0f}     // Max
 };
@@ -290,14 +290,14 @@ void daTagStatue_c::actionDead() {
 }
 
 int daTagStatue_c::demoProc() {
-    static char* action_table[3] = {
+    static DUSK_CONST char* action_table[3] = {
         "WAIT",
         "ST_MOVE",
         "ITEM"
     };
 
     // Saved positions of Owl Statues for cutscenes
-    static Vec l_statue_pos[6] = {
+    static DUSK_CONSTEXPR Vec l_statue_pos[6] = {
         {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Faron Woods
         {-17312.3007812f, -349.100006104f, -20523.1992188f},    // Gerudo Desert
         {-9675.59960938f, -4800.0f, 39693.8984375f},            // Kakariko Gorge
@@ -307,7 +307,7 @@ int daTagStatue_c::demoProc() {
     };
 
     // Saved y orientations of Owl Statues for cutscenes
-    static s16 l_statue_ang[6] = {
+    static DUSK_CONSTEXPR s16 l_statue_ang[6] = {
         16384,  // Faron Woods
         16384,  // Gerudo Desert
         8485,   // Kakariko Gorge
@@ -529,7 +529,7 @@ static int daTagStatue_Create(daTagStatue_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daTagStatue_Method = {
+static DUSK_CONST actor_method_class l_daTagStatue_Method = {
 reinterpret_cast<process_method_func>(daTagStatue_Create),
 reinterpret_cast<process_method_func>(daTagStatue_Delete),
 reinterpret_cast<process_method_func>(daTagStatue_Execute),
@@ -537,7 +537,7 @@ NULL,
 reinterpret_cast<process_method_func>(daTagStatue_Draw),
 };
 
-actor_process_profile_definition g_profile_Tag_Statue = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Statue = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

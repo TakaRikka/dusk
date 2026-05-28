@@ -176,11 +176,11 @@ void daNpc_Jagar_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_JAGAR, 1},
 };
 
-static daNpcT_evtData_c l_evtList[9] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"CLIMBUP", 2},
@@ -192,7 +192,7 @@ static daNpcT_evtData_c l_evtList[9] = {
     {"FIND_WOLF_VER2", 3},
 };
 
-static char* l_resNameList[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[5] = {
     "",
     "Jagar",
     "Jagar1",
@@ -200,26 +200,26 @@ static char* l_resNameList[5] = {
     "Jagar3",
 };
 
-static s8 l_loadResPtrn0[4] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[4] = {
     1, 2, 4, -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     1, 3, -1
 };
 
-static s8 l_loadResPtrn9[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {
     1, 2, 3, 4, -1
 };
 
-static s8* l_loadResPtrnList[4] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn1,
     l_loadResPtrn9,
     l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0,
         BTP_JAGA, J3DFrameCtrl::EMode_LOOP, Jagar, 1},
     {BCK_JAGA_F_TALK_A, J3DFrameCtrl::EMode_NONE, Jagar,
@@ -242,7 +242,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
         BTP_JAGA_F_SURPRISE_WAIT, J3DFrameCtrl::EMode_LOOP, Jagar2, 0},
 };
 
-daNpcT_motionAnmData_c l_motionAnmData[18] = {
+DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[18] = {
     {BCK_JAGAR_WAIT_A, J3DFrameCtrl::EMode_LOOP, Jagar,
         BTK_JAGA, J3DFrameCtrl::EMode_NONE, Jagar, 1, 0},
     {BCK_JAGA_CHU, J3DFrameCtrl::EMode_LOOP, Jagar1,
@@ -281,7 +281,7 @@ daNpcT_motionAnmData_c l_motionAnmData[18] = {
         BTK_JAGA, J3DFrameCtrl::EMode_NONE, Jagar, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
     {1, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {8, -1, 1}, {9, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {6, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
@@ -293,7 +293,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
     {8, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
@@ -315,7 +315,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {13, -1, 1}, {12, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Jagar_c::mCutNameList[7] = {
+char DUSK_CONST* DUSK_CONST daNpc_Jagar_c::mCutNameList[7] = {
     "",
     "CLIMBUP",
     "NEED_YOUR_HELP",
@@ -325,7 +325,7 @@ char* daNpc_Jagar_c::mCutNameList[7] = {
     "FIND_WOLF",
 };
 
-daNpc_Jagar_c::cutFunc daNpc_Jagar_c::mCutList[7] = {
+daNpc_Jagar_c::cutFunc DUSK_CONST daNpc_Jagar_c::mCutList[7] = {
     NULL,
     &daNpc_Jagar_c::cutClimbUp,
     &daNpc_Jagar_c::cutNeedYourHelp,
@@ -1783,7 +1783,7 @@ static int daNpc_Jagar_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Jagar_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Jagar_MethodTable = {
     (process_method_func)daNpc_Jagar_Create,
     (process_method_func)daNpc_Jagar_Delete,
     (process_method_func)daNpc_Jagar_Execute,
@@ -1791,7 +1791,7 @@ static actor_method_class daNpc_Jagar_MethodTable = {
     (process_method_func)daNpc_Jagar_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_JAGAR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_JAGAR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

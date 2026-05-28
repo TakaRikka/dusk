@@ -111,7 +111,7 @@ int daObjFan_c::Create() {
     return 1;
 }
 
-static char* l_arcName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {
     "Obj_prop1",
     "Obj_prop0",
     "Obj_prop2",
@@ -327,7 +327,7 @@ static int daObjFan_MoveBGDraw(daObjFan_c* param_0) {
     return param_0->MoveBGDraw();
 }
 
-static actor_method_class daObjFan_METHODS = {
+static DUSK_CONST actor_method_class daObjFan_METHODS = {
     (process_method_func)daObjFan_create1st,
     (process_method_func)daObjFan_MoveBGDelete,
     (process_method_func)daObjFan_MoveBGExecute,
@@ -335,7 +335,7 @@ static actor_method_class daObjFan_METHODS = {
     (process_method_func)daObjFan_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Fan = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Fan = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

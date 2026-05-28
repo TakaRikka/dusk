@@ -200,13 +200,13 @@ void daNpc_Kn_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[3][2] = {
+static DUSK_CONSTEXPR int l_bmdData[3][2] = {
     {47, 1},
     {48, 1},
     {49, 1},
 };
 
-static daNpcT_evtData_c l_evtList[26] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[26] = {
     {"", 0},
     {"NONE_EQUIP_CHANGE_TALK", 1},
     {"NONE_EQUIP_CHANGE_TALK_WAIT", 1},
@@ -235,7 +235,7 @@ static daNpcT_evtData_c l_evtList[26] = {
     {"SEVENTH_SKILL_GET_STAND", 8},
 };
 
-static char* l_resNameList[9] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[9] = {
     "",          "KN_a",      "KN_tch01D", "KN_tch02D", "KN_tch03D",
     "KN_tch04D", "KN_tch05D", "KN_tch06D", "KN_tch07D",
 };
@@ -287,17 +287,17 @@ static s8 l_loadResPtrnTeach07[3] = {
     -1,
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1,
     -1,
 };
 
-static s8* l_loadResPtrnList[8] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[8] = {
     l_loadResPtrnTeach01, l_loadResPtrnTeach02, l_loadResPtrnTeach03, l_loadResPtrnTeach04,
     l_loadResPtrnTeach05, l_loadResPtrnTeach06, l_loadResPtrnTeach07, l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, -1, 0, 0, 0},
     {21, 0, 1, -1, 0, 0, 0},
 };
@@ -322,7 +322,7 @@ static int l_podBckData[5][2] = {
     {32, 1},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
@@ -333,7 +333,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = 
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[132] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[132] = {
     {0, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
@@ -468,7 +468,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[132] = {
     {-1, 0, 0},
 };
 
-char* daNpc_Kn_c::mCutNameList[21] = {
+char DUSK_CONST* DUSK_CONST daNpc_Kn_c::mCutNameList[21] = {
     "",
     "NONE_EQUIP_CHANGE_TALK",
     "NO_EQ_CHNGE_TLK_STD",
@@ -492,7 +492,7 @@ char* daNpc_Kn_c::mCutNameList[21] = {
     "SEVENTH_SKILL_GET",
 };
 
-daNpc_Kn_c::cutFunc daNpc_Kn_c::mCutList[21] = {
+daNpc_Kn_c::cutFunc DUSK_CONST daNpc_Kn_c::mCutList[21] = {
     NULL,
     &daNpc_Kn_c::ECut_noneEquipChangeTalk,
     &daNpc_Kn_c::ECut_noneEquipChangeTalkStand,
@@ -783,10 +783,10 @@ u8 daNpc_Kn_c::getPath() {
 }
 
 BOOL daNpc_Kn_c::isDelete() {
-    static s16 l_appearFlag[7] = {
+    static DUSK_CONSTEXPR s16 l_appearFlag[7] = {
         -1, 0x0153, 0x0152, 0x0154, 0x0155, 0x0156, 0x0157,
     };
-    static s16 l_delFlag[7] = {
+    static DUSK_CONSTEXPR s16 l_delFlag[7] = {
         0x0153, 0x0152, 0x0154, 0x0155, 0x0156, 0x0157, 0x0158,
     };
 
@@ -1224,7 +1224,7 @@ void daNpc_Kn_c::setCollision() {
 }
 
 void daNpc_Kn_c::setCollisionSword() {
-    static f32 l_swordOffset[2] = {60.0f, 120.0f};
+    static DUSK_CONSTEXPR f32 l_swordOffset[2] = {60.0f, 120.0f};
 
     if (mMotionSeqMngr.getNo() == 0x19 && mMotionSeqMngr.getStepNo() == 0 &&
         mMotionSeqMngr.checkEntryNewMotion() == 0)
@@ -5035,8 +5035,8 @@ void daNpc_Kn_c::setSwordChargePtcl() {
     {
         f32 frame = mpModelMorf[0]->getFrame();
         if (frame >= 17.0f && frame < 37.0f) {
-            static cXyz lightAParticleScale(1.5223f, 1.3f, 1.3f);
-            static cXyz lightALocalTrans(88.399994f, 0.0f, 0.0f);
+            static DUSK_CONSTEXPR cXyz lightAParticleScale(1.5223f, 1.3f, 1.3f);
+            static DUSK_CONSTEXPR cXyz lightALocalTrans(88.399994f, 0.0f, 0.0f);
 
             f32 temp_f29 = 156.0f;
             f32 var_f30 = frame;
@@ -5258,13 +5258,13 @@ static int daNpc_Kn_IsDelete(void* i_this) {
 
 #include "d/actor/d_a_npc_kn_teach02.inc"
 
-static actor_method_class daNpc_Kn_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Kn_MethodTable = {
     (process_method_func)daNpc_Kn_Create,  (process_method_func)daNpc_Kn_Delete,
     (process_method_func)daNpc_Kn_Execute, (process_method_func)daNpc_Kn_IsDelete,
     (process_method_func)daNpc_Kn_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_KN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_KN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

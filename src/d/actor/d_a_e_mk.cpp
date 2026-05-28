@@ -2958,7 +2958,7 @@ static int daE_MK_Create(fopAc_ac_c* i_actor) {
 
 AUDIO_INSTANCES
 
-static actor_method_class l_daE_MK_Method = {
+static DUSK_CONST actor_method_class l_daE_MK_Method = {
     (process_method_func)daE_MK_Create,
     (process_method_func)daE_MK_Delete,
     (process_method_func)daE_MK_Execute,
@@ -2966,7 +2966,7 @@ static actor_method_class l_daE_MK_Method = {
     (process_method_func)daE_MK_Draw,
 };
 
-actor_process_profile_definition g_profile_E_MK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_MK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

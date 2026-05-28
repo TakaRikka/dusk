@@ -9,7 +9,7 @@
 #include "d/actor/d_a_obj_mirror_table.h"
 #include <cstring>
 
-static char* l_arcName = "Lv8Gate";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv8Gate";
 
 static int createSolidHeap(fopAc_ac_c* i_this) {
     daTagLv8Gate_c* gate = static_cast<daTagLv8Gate_c*>(i_this);
@@ -228,13 +228,13 @@ static int daTagLv8Gate_Delete(daTagLv8Gate_c* i_this) {
     return TRUE;
 }
 
-static actor_method_class l_daTagLv8Gate_Method = {
+static DUSK_CONST actor_method_class l_daTagLv8Gate_Method = {
     (process_method_func)daTagLv8Gate_Create,  (process_method_func)daTagLv8Gate_Delete,
     (process_method_func)daTagLv8Gate_Execute, (process_method_func)daTagLv8Gate_IsDelete,
     (process_method_func)daTagLv8Gate_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_Lv8Gate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Lv8Gate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

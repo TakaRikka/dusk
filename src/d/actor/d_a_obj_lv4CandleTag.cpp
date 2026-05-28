@@ -140,7 +140,7 @@ static int dalv4CandleTag_Create(fopAc_ac_c* i_this) {
     return ((dalv4CandleTag_c*)i_this)->create();
 }
 
-static actor_method_class l_dalv4CandleTag_Method = {
+static DUSK_CONST actor_method_class l_dalv4CandleTag_Method = {
     (process_method_func)dalv4CandleTag_Create,
     (process_method_func)dalv4CandleTag_Delete,
     (process_method_func)dalv4CandleTag_Execute,
@@ -148,7 +148,7 @@ static actor_method_class l_dalv4CandleTag_Method = {
     (process_method_func)dalv4CandleTag_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_Lv4Candle = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Lv4Candle = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

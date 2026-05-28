@@ -50,7 +50,7 @@ void daTenbin_HIO_c::genMessage(JORMContext* context) {
 }
 #endif
 
-static cull_box l_cull_box = {-300.0f, -500.0f, -400.0f, 1200.0f, 300.0f, 1300.0f};
+static DUSK_CONSTEXPR cull_box l_cull_box = {-300.0f, -500.0f, -400.0f, 1200.0f, 300.0f, 1300.0f};
 
 static daTenbin_HIO_c l_HIO;
 
@@ -346,7 +346,7 @@ static int daTenbin_Create(fopAc_ac_c* i_this) {
     return this_tenbin->create();
 }
 
-static actor_method_class l_daTenbin_Method = {
+static DUSK_CONST actor_method_class l_daTenbin_Method = {
     (process_method_func)daTenbin_Create,  
     (process_method_func)daTenbin_Delete,
     (process_method_func)daTenbin_Execute, 
@@ -354,7 +354,7 @@ static actor_method_class l_daTenbin_Method = {
     (process_method_func)daTenbin_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6Tenbin = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6Tenbin = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,
