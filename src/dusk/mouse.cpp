@@ -67,36 +67,18 @@ bool shouldGrabMouse(SDL_Window* window) {
     return wantMouseGrab() && isWindowFocused(window);
 }
 
-bool queryActualCaptureState(SDL_Window* window) {
-    if (window == nullptr) {
-        return false;
-    }
-    return SDL_GetWindowRelativeMouseMode(window);
-}
-
-bool queryActualGrabState(SDL_Window* window) {
-    if (window == nullptr) {
-        return false;
-    }
-    return SDL_GetWindowMouseGrab(window);
-}
-
 bool syncCaptureState(SDL_Window* window, bool should_capture) {
     if (window == nullptr) {
         reset_deltas();
         return false;
     }
 
-    if (!isWindowFocused(window)) {
-        should_capture = false;
-    }
-
-    const bool was_captured = queryActualCaptureState(window);
+    const bool was_captured = SDL_GetWindowRelativeMouseMode(window);
     if (was_captured != should_capture) {
         SDL_SetWindowRelativeMouseMode(window, should_capture);
     }
 
-    const bool is_captured = queryActualCaptureState(window);
+    const bool is_captured = SDL_GetWindowRelativeMouseMode(window);
     if (is_captured && !was_captured) {
         const AuroraWindowSize sz = aurora::window::get_window_size();
         const float cx = static_cast<float>(sz.width) * 0.5f;
@@ -119,7 +101,7 @@ void syncGrabState(SDL_Window* window, bool should_grab) {
         return;
     }
 
-    const bool was_grabbed = queryActualGrabState(window);
+    const bool was_grabbed = SDL_GetWindowMouseGrab(window);
     if (was_grabbed != should_grab) {
         SDL_SetWindowMouseGrab(window, should_grab);
     }
@@ -127,21 +109,25 @@ void syncGrabState(SDL_Window* window, bool should_grab) {
 
 void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_active) {
     const auto& game = getSettings().game;
+    const bool mirror_mode = game.enableMirrorMode.getValue();
+    const bool invert_y = game.invertMouseY.getValue();
 
     if (aim_active) {
-        s_aim_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseAimSensitivity.getValue();
-        s_aim_pitch_rad = my_rel * kMousePixelToRad * game.mouseAimSensitivity.getValue();
-        s_aim_yaw_rad = game.enableMirrorMode.getValue() ? -s_aim_yaw_rad : s_aim_yaw_rad;
-        s_aim_pitch_rad = game.invertMouseY.getValue() ? -s_aim_pitch_rad : s_aim_pitch_rad;
+        const bool sensitivity = game.mouseAimSensitivity.getValue();
+        s_aim_yaw_rad = -mx_rel * kMousePixelToRad * sensitivity;
+        s_aim_pitch_rad = my_rel * kMousePixelToRad * sensitivity;
+        s_aim_yaw_rad = mirror_mode ? -s_aim_yaw_rad : s_aim_yaw_rad;
+        s_aim_pitch_rad = invert_y ? -s_aim_pitch_rad : s_aim_pitch_rad;
     } else {
         s_aim_yaw_rad = s_aim_pitch_rad = 0.0f;
     }
 
     if (camera_active) {
-        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
-        s_camera_pitch_rad = -my_rel * kMousePixelToRad * game.mouseCameraSensitivity.getValue();
-        s_camera_yaw_rad = game.enableMirrorMode.getValue() ? -s_camera_yaw_rad : s_camera_yaw_rad;
-        s_camera_pitch_rad = game.invertMouseY.getValue() ? -s_camera_pitch_rad : s_camera_pitch_rad;
+        const bool sensitivity = game.mouseCameraSensitivity.getValue();
+        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * sensitivity;
+        s_camera_pitch_rad = -my_rel * kMousePixelToRad * sensitivity;
+        s_camera_yaw_rad = mirror_mode ? -s_camera_yaw_rad : s_camera_yaw_rad;
+        s_camera_pitch_rad = invert_y ? -s_camera_pitch_rad : s_camera_pitch_rad;
     } else {
         s_camera_yaw_rad = s_camera_pitch_rad = 0.0f;
     }
@@ -212,8 +198,7 @@ void getCameraDeltas(float& out_yaw, float& out_pitch) {
     out_yaw = 0.0f;
     out_pitch = 0.0f;
 
-    if (!getSettings().game.enableMouseCamera)
-    {
+    if (!getSettings().game.enableMouseCamera) {
         return;
     }
 
