@@ -26,7 +26,7 @@ void reset_deltas() {
 }
 
 bool queryMouseAimContext() {
-    if (!static_cast<bool>(getSettings().game.enableMouseAim)) {
+    if (!getSettings().game.enableMouseAim) {
         return false;
     }
 
@@ -39,8 +39,11 @@ bool queryMouseAimContext() {
 }
 
 bool wantMouseCapture() {
-    const auto game = getSettings().game;
-    return game.enableMouseCamera.getValue() || game.enableMouseAim.getValue();
+    return getSettings().game.enableMouseCamera.getValue() || queryMouseAimContext();
+}
+
+bool wantMouseGrab() {
+    return getSettings().game.enableMouseCamera.getValue() || getSettings().game.enableMouseAim.getValue();
 }
 
 bool isWindowFocused(SDL_Window* window) {
@@ -51,13 +54,17 @@ bool isWindowFocused(SDL_Window* window) {
 }
 
 bool shouldCaptureMouse(SDL_Window* window) {
-    if (window == nullptr) {
-        return false;
-    }
-    if (ui::any_document_visible()) {
+    if (window == nullptr || ui::any_document_visible()) {
         return false;
     }
     return wantMouseCapture() && isWindowFocused(window);
+}
+
+bool shouldGrabMouse(SDL_Window* window) {
+    if (window == nullptr) {
+        return false;
+    }
+    return wantMouseGrab() && isWindowFocused(window);
 }
 
 bool queryActualCaptureState(SDL_Window* window) {
@@ -65,6 +72,13 @@ bool queryActualCaptureState(SDL_Window* window) {
         return false;
     }
     return SDL_GetWindowRelativeMouseMode(window);
+}
+
+bool queryActualGrabState(SDL_Window* window) {
+    if (window == nullptr) {
+        return false;
+    }
+    return SDL_GetWindowMouseGrab(window);
 }
 
 bool syncCaptureState(SDL_Window* window, bool should_capture) {
@@ -98,6 +112,17 @@ bool syncCaptureState(SDL_Window* window, bool should_capture) {
     }
 
     return is_captured;
+}
+
+void syncGrabState(SDL_Window* window, bool should_grab) {
+    if (window == nullptr) {
+        return;
+    }
+
+    const bool was_grabbed = queryActualGrabState(window);
+    if (was_grabbed != should_grab) {
+        SDL_SetWindowMouseGrab(window, should_grab);
+    }
 }
 
 void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_active) {
@@ -163,6 +188,7 @@ void read() {
     SDL_Window* window = aurora::window::get_sdl_window();
     const bool capture_active = syncCaptureState(window, shouldCaptureMouse(window));
     update_cursor_visibility(window, capture_active);
+    syncGrabState(window, shouldGrabMouse(window));
 
     if (!capture_active) {
         return;
@@ -210,6 +236,7 @@ void onFocusLost() {
     SDL_Window* window = aurora::window::get_sdl_window();
     if (window != nullptr) {
         SDL_SetWindowRelativeMouseMode(window, false);
+        syncGrabState(window, false);
     }
     s_idle_frames = 0;
     set_cursor_visible(true);
@@ -219,5 +246,6 @@ void onFocusLost() {
 void onFocusGained() {
     SDL_Window* window = aurora::window::get_sdl_window();
     syncCaptureState(window, shouldCaptureMouse(window));
+    syncGrabState(window, shouldGrabMouse(window));
 }
 }  // namespace dusk::mouse
