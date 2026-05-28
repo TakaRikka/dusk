@@ -95,7 +95,6 @@ void set_value(GraphicsOption option, int value) {
         getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
         break;
     }
-    config::Save();
 }
 
 Rml::Element* create_stepped_carousel_root(Rml::Element* parent) {
@@ -293,6 +292,7 @@ void GraphicsTuner::show() {
 }
 
 void GraphicsTuner::hide(bool close) {
+    config::Save();
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;
