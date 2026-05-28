@@ -3,9 +3,9 @@
   <id>dev.twilitrealm.dusk</id>
   <launchable type="desktop-id">dev.twilitrealm.dusk.desktop</launchable>
   <name>Dusklight</name>
-  <summary>PC port of a classic adventure game</summary>
+  <summary>Native port of a classic adventure game</summary>
   <developer id="dev.twilitrealm">
-    <name>TwilitRealm Team</name>
+    <name>Twilit Realm</name>
   </developer>
   <url type="homepage">https://twilitrealm.dev</url>
   <url type="bugtracker">https://github.com/TwilitRealm/dusklight/issues</url>
