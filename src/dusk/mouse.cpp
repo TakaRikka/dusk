@@ -113,9 +113,9 @@ void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_a
     const bool invert_y = game.invertMouseY.getValue();
 
     if (aim_active) {
-        const bool sensitivity = game.mouseAimSensitivity.getValue();
-        s_aim_yaw_rad = -mx_rel * kMousePixelToRad * sensitivity;
-        s_aim_pitch_rad = my_rel * kMousePixelToRad * sensitivity;
+        const float aimSens = game.mouseAimSensitivity.getValue();
+        s_aim_yaw_rad = -mx_rel * kMousePixelToRad * aimSens;
+        s_aim_pitch_rad = my_rel * kMousePixelToRad * aimSens;
         s_aim_yaw_rad = mirror_mode ? -s_aim_yaw_rad : s_aim_yaw_rad;
         s_aim_pitch_rad = invert_y ? -s_aim_pitch_rad : s_aim_pitch_rad;
     } else {
@@ -123,9 +123,9 @@ void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_a
     }
 
     if (camera_active) {
-        const bool sensitivity = game.mouseCameraSensitivity.getValue();
-        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * sensitivity;
-        s_camera_pitch_rad = -my_rel * kMousePixelToRad * sensitivity;
+        const float camSens = game.mouseCameraSensitivity.getValue();
+        s_camera_yaw_rad = -mx_rel * kMousePixelToRad * camSens;
+        s_camera_pitch_rad = -my_rel * kMousePixelToRad * camSens;
         s_camera_yaw_rad = mirror_mode ? -s_camera_yaw_rad : s_camera_yaw_rad;
         s_camera_pitch_rad = invert_y ? -s_camera_pitch_rad : s_camera_pitch_rad;
     } else {
