@@ -948,25 +948,23 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Camera");
         addOption("Free Camera", getSettings().game.freeCamera,
             "Enables free camera control, letting you control the camera fully with the C-Stick.");
-        addOption("Invert Free Camera X Axis", getSettings().game.invertCameraXAxis,
-            "Invert horizontal free camera movement.<br/><br/>Applies to the control stick only.",
-            [] { return !getSettings().game.freeCamera; });
-        addOption("Invert Free Camera Y Axis", getSettings().game.invertCameraYAxis,
-            "Invert vertical free camera movement.<br/><br/>Applies to the control stick only.",
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraXSensitivity,
-            "Free Camera X Sensitivity", "Adjusts horizontal free camera sensitivity.<br/><br/>Applies to the control stick only.", 50, 200, 5,
-            [] { return !getSettings().game.freeCamera; });
+            "Free Camera X Sensitivity",
+            "Adjusts horizontal free camera sensitivity.<br/><br/>Applies to the control stick only.",
+            50, 200, 5, [] { return !getSettings().game.freeCamera; });
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraYSensitivity,
-            "Free Camera Y Sensitivity", "Adjusts vertical free camera sensitivity.<br/><br/>Applies to the control stick only.", 50, 200, 5,
+            "Free Camera Y Sensitivity",
+            "Adjusts vertical free camera sensitivity.<br/><br/>Applies to the control stick only.",
+            50, 200, 5, [] { return !getSettings().game.freeCamera; });
+        addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
+            "Invert horizontal camera movement.<br/><br/>Applies to the control stick only.");
+        addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
+            "Invert vertical camera movement.<br/><br/>Applies to the control stick only.",
             [] { return !getSettings().game.freeCamera; });
         addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
-            "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+            "Invert horizontal movement while aiming with items or first person camera.<br/><br/>Applies to the control stick only.");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
-            "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
-        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
-            "Invert horizontal movement while flying or swimming.");
-        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
-            "Invert vertical movement while flying or swimming.");
+            "Invert vertical movement while aiming with items or first person camera.<br/><br/>Applies to the control stick only.");
 
         leftPane.add_section("Gyro");
         addOption("Gyro Aim", getSettings().game.enableGyroAim,
@@ -995,10 +993,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert vertical gyro aiming.", [] { return !gyro_enabled(); });
         addOption("Invert Gyro Yaw", getSettings().game.gyroInvertYaw,
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
-        
-        leftPane.add_section("Gameplay");
-        addOption("Swap Direct Select Input", getSettings().game.swapDirectSelect,
-            "Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.");
 
         leftPane.add_section("Mouse");
         addOption("Mouse Aim", getSettings().game.enableMouseAim,
@@ -1016,6 +1010,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Invert Mouse Y", getSettings().game.invertMouseY,
             "Invert vertical mouse control for both aiming and camera.",
             [] { return !getSettings().game.enableMouseAim || !getSettings().game.enableMouseCamera; });
+
+        leftPane.add_section("Gameplay");
+        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
+            "Invert horizontal movement while flying or swimming.");
+        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
+            "Invert vertical movement while flying or swimming.");
+        addOption("Swap Direct Select Input", getSettings().game.swapDirectSelect,
+            "Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.");
 
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
