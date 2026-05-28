@@ -5,17 +5,20 @@
 #include "d/d_com_inf_game.h"
 
 #include <aurora/lib/window.hpp>
+#include <imgui.h>
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_video.h>
 
 namespace dusk::mouse {
 namespace {
 constexpr float kMousePixelToRad = 0.0025f;
+constexpr int kIdleHideFrames = 99; // Approx. 3 seconds with 33ms ticks
 
 float s_aim_yaw_rad      = 0.0f;
 float s_aim_pitch_rad    = 0.0f;
 float s_camera_yaw_rad   = 0.0f;
 float s_camera_pitch_rad = 0.0f;
+int s_idle_frames = 0;
 
 void reset_deltas() {
     s_aim_yaw_rad = s_aim_pitch_rad = 0.0f;
@@ -118,11 +121,48 @@ void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_a
         s_camera_yaw_rad = s_camera_pitch_rad = 0.0f;
     }
 }
+
+void set_cursor_visible(bool visible) {
+    if (visible) {
+        ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+        SDL_ShowCursor();
+    } else {
+        ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+        SDL_HideCursor();
+    }
+}
+
+void update_cursor_visibility(SDL_Window* window, bool captured) {
+    if (window == nullptr || !isWindowFocused(window)) {
+        return;
+    }
+
+    if (captured) {
+        s_idle_frames = 0;
+        set_cursor_visible(false);
+        return;
+    }
+
+    const ImGuiIO& io = ImGui::GetIO();
+    if (io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f) {
+        s_idle_frames = 0;
+        set_cursor_visible(true);
+        return;
+    }
+
+    if (s_idle_frames < kIdleHideFrames) {
+        ++s_idle_frames;
+        set_cursor_visible(true);
+    } else {
+        set_cursor_visible(false);
+    }
+}
 }  // namespace
 
 void read() {
     SDL_Window* window = aurora::window::get_sdl_window();
     const bool capture_active = syncCaptureState(window, shouldCaptureMouse(window));
+    update_cursor_visibility(window, capture_active);
 
     if (!capture_active) {
         return;
@@ -171,7 +211,8 @@ void onFocusLost() {
     if (window != nullptr) {
         SDL_SetWindowRelativeMouseMode(window, false);
     }
-    SDL_ShowCursor();
+    s_idle_frames = 0;
+    set_cursor_visible(true);
     reset_deltas();
 }
 

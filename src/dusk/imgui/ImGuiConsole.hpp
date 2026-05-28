@@ -26,7 +26,6 @@ public:
     static bool CheckMenuViewToggle(ImGuiKey key, bool& active);
 
 private:
-    float mouseHideTimer = 0.0f;
 
     bool m_isHidden = true;
     bool m_isLaunchInitialized = false;
