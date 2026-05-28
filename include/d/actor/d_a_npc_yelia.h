@@ -82,7 +82,7 @@ public:
                         int i_faceMotionStepNum,
                         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
                         int i_motionStepNum,
-                        daNpcT_evtData_c const* i_evtData, char** i_arcNames)
+                        daNpcT_evtData_c const* i_evtData, char DUSK_CONST* DUSK_CONST* i_arcNames)
                         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                         i_arcNames) {}
@@ -102,7 +102,7 @@ public:
         return no;
     }
 
-    static char* mCutNameList[6];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[6];
     static int (daNpc_Yelia_c::*mCutList[6])(int);
 private:
     /* 0xE40 */ NPC_YELIA_HIO_CLASS* mpHIO;

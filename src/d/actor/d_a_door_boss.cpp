@@ -12,19 +12,19 @@
 #include "d/d_door_param2.h"
 #include "SSystem/SComponent/c_math.h"
 
-char* daBdoor_c::getArcName() {
+DUSK_CONST char* daBdoor_c::getArcName() {
     return "Z_bdor00";
 }
 
-char* daBdoor_c::getBmd() {
+DUSK_CONST char* daBdoor_c::getBmd() {
     return "Z_bdor00.bmd";
 }
 
-char* daBdoor_c::getDzb() {
+DUSK_CONST char* daBdoor_c::getDzb() {
     return "door30.dzb";
 }
 
-char* daBdoor_c::getBmd2() {
+DUSK_CONST char* daBdoor_c::getBmd2() {
     return "door_shutterBoss.bmd";
 }
 
@@ -119,7 +119,7 @@ cPhs_Step daBdoor_c::create() {
 }
 
 int daBdoor_c::getDemoAction() {
-    static char* action_table[11] = {
+    static DUSK_CONST char* action_table[11] = {
         "WAIT",
         "UNLOCK",
         "OPEN",
@@ -412,7 +412,7 @@ static cPhs_Step daBdoor_Create(fopAc_ac_c* i_this) {
     return static_cast<daBdoor_c*>(i_this)->create();
 }
 
-static actor_method_class l_daBdoor_Method = {
+static DUSK_CONST actor_method_class l_daBdoor_Method = {
     (process_method_func)daBdoor_Create,
     (process_method_func)daBdoor_Delete,
     (process_method_func)daBdoor_Execute,
@@ -420,7 +420,7 @@ static actor_method_class l_daBdoor_Method = {
     (process_method_func)daBdoor_Draw,
 };
 
-actor_process_profile_definition g_profile_BOSS_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BOSS_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

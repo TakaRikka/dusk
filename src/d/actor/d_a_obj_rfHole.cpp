@@ -193,7 +193,7 @@ static int daRfHole_Create(fopAc_ac_c* i_this) {
     return static_cast<daRfHole_c*>(i_this)->create();
 }
 
-static actor_method_class l_daRfHole_Method = {
+static DUSK_CONST actor_method_class l_daRfHole_Method = {
     (process_method_func)daRfHole_Create,
     (process_method_func)daRfHole_Delete,
     (process_method_func)daRfHole_Execute,
@@ -201,7 +201,7 @@ static actor_method_class l_daRfHole_Method = {
     (process_method_func)daRfHole_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_RfHole = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RfHole = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

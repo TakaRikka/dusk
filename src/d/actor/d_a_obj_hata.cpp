@@ -33,7 +33,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-static char* l_arcName = "Hata";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Hata";
 
 daObjHata_c::daObjHata_c() {}
 
@@ -172,7 +172,7 @@ static int daObjHata_draw(daObjHata_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daObjHata_METHODS = {
+static DUSK_CONST actor_method_class daObjHata_METHODS = {
     (process_method_func)daObjHata_create,
     (process_method_func)daObjHata_Delete,
     (process_method_func)daObjHata_execute,
@@ -180,7 +180,7 @@ static actor_method_class daObjHata_METHODS = {
     (process_method_func)daObjHata_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Hata = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Hata = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -13,12 +13,12 @@
 #include "f_op/f_op_actor_mng.h"
 
 struct daTagTWGate_zevParam {
-    /* 0x00 */ char* mArcName;
-    /* 0x04 */ char* mEventName;
-    /* 0x08 */ char* mTalkEventName;
-    /* 0x0C */ char* mInEventName;
+    /* 0x00 */ DUSK_CONST char* mArcName;
+    /* 0x04 */ DUSK_CONST char* mEventName;
+    /* 0x08 */ DUSK_CONST char* mTalkEventName;
+    /* 0x0C */ DUSK_CONST char* mInEventName;
     /* 0x10 */ int mLv;
-    /* 0x14 */ char* mStage;
+    /* 0x14 */ DUSK_CONST char* mStage;
     /* 0x18 */ s16 mPoint;
     /* 0x1A */ s8 mRoomNo;
     /* 0x1B */ s8 mLayer;
@@ -77,7 +77,7 @@ static daTagTWGate_zevParam const l_zevParamTbl[4] = {
     },
 };
 
-static const char* l_myName = "Gate";
+static DUSK_CONSTEXPR const char* l_myName = "Gate";
 
 const actionFunc daTagTWGate_c::ActionTable[][2] = {
     {&daTagTWGate_c::initWait, &daTagTWGate_c::executeWait},
@@ -1170,13 +1170,13 @@ static int daTagTWGate_IsDelete(daTagTWGate_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagTWGate_Method = {
+static DUSK_CONST actor_method_class l_daTagTWGate_Method = {
     (process_method_func)daTagTWGate_Create,  (process_method_func)daTagTWGate_Delete,
     (process_method_func)daTagTWGate_Execute, (process_method_func)daTagTWGate_IsDelete,
     (process_method_func)daTagTWGate_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_TWGate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_TWGate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

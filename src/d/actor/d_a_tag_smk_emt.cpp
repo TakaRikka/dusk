@@ -76,7 +76,7 @@ static int daTagSmkEmt_draw(daTagSmkEmt_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daTagSmkEmt_METHODS = {
+static DUSK_CONST actor_method_class daTagSmkEmt_METHODS = {
     (process_method_func)daTagSmkEmt_create,
     (process_method_func)daTagSmkEmt_Delete,
     (process_method_func)daTagSmkEmt_execute,
@@ -84,7 +84,7 @@ static actor_method_class daTagSmkEmt_METHODS = {
     (process_method_func)daTagSmkEmt_draw
 };
 
-actor_process_profile_definition g_profile_Tag_SmkEmt = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_SmkEmt = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

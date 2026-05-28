@@ -380,7 +380,7 @@ static int daKytag13_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-static actor_method_class l_daKytag13_Method = {
+static DUSK_CONST actor_method_class l_daKytag13_Method = {
     (process_method_func)daKytag13_Create,
     (process_method_func)daKytag13_Delete,
     (process_method_func)daKytag13_Execute,
@@ -388,7 +388,7 @@ static actor_method_class l_daKytag13_Method = {
     (process_method_func)daKytag13_Draw,
 };
 
-actor_process_profile_definition g_profile_KYTAG13 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_KYTAG13 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

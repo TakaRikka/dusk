@@ -125,13 +125,13 @@ int daTagYami_Delete(daTagYami_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagYami_Method = {
+static DUSK_CONST actor_method_class l_daTagYami_Method = {
     (process_method_func)daTagYami_Create,
     (process_method_func)daTagYami_Delete,
     (process_method_func)daTagYami_Execute,
 };
 
-actor_process_profile_definition g_profile_TAG_YAMI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_YAMI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

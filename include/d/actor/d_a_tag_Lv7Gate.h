@@ -31,7 +31,7 @@ public:
     /* 0x57C */ cXyz mPos2;
     /* 0x588 */ cXyz mPos1;
     /* 0x594 */ csXyz field_0x594;
-    /* 0x59C */ char* mEvName;
+    /* 0x59C */ char DUSK_CONST* mEvName;
     /* 0x5A0 */ int field_0x5a0;
     /* 0x5A4 */ f32 mDistance;
     /* 0x5A8 */ f32 mLastFrame;

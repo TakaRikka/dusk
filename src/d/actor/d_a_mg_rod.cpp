@@ -6464,7 +6464,7 @@ static int dmg_rod_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-static actor_method_class l_dmg_rod_Method = {
+static DUSK_CONST actor_method_class l_dmg_rod_Method = {
     (process_method_func)dmg_rod_Create,
     (process_method_func)dmg_rod_Delete,
     (process_method_func)dmg_rod_Execute,
@@ -6472,7 +6472,7 @@ static actor_method_class l_dmg_rod_Method = {
     (process_method_func)dmg_rod_Draw,
 };
 
-actor_process_profile_definition g_profile_MG_ROD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MG_ROD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

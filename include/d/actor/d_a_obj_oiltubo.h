@@ -34,7 +34,7 @@ public:
     int wait(void*);
 
     static const dCcD_SrcGObjInf mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static dCcD_SrcCyl DUSK_CONST mCcDCyl;
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhase;

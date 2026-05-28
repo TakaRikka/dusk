@@ -98,13 +98,13 @@ static int daObj_Suisya_Create(daObj_Suisya_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObj_Suisya_Method = {
+static DUSK_CONST actor_method_class l_daObj_Suisya_Method = {
     (process_method_func)daObj_Suisya_Create,  (process_method_func)daObj_Suisya_Delete,
     (process_method_func)daObj_Suisya_Execute, (process_method_func)daObj_Suisya_IsDelete,
     (process_method_func)daObj_Suisya_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SUISYA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SUISYA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

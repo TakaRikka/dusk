@@ -930,7 +930,7 @@ static int daHoZelda_Draw(daHoZelda_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class l_daHoZelda_Method = {
+static DUSK_CONST actor_method_class l_daHoZelda_Method = {
     (process_method_func)daHoZelda_Create,
     (process_method_func)daHoZelda_Delete,
     (process_method_func)daHoZelda_Execute,
@@ -938,7 +938,7 @@ static actor_method_class l_daHoZelda_Method = {
     (process_method_func)daHoZelda_Draw,
 };
 
-actor_process_profile_definition g_profile_HOZELDA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_HOZELDA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

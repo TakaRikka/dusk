@@ -907,13 +907,13 @@ static int daE_Warpappear_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-static actor_method_class l_daE_Warpappear_Method = {
+static DUSK_CONST actor_method_class l_daE_Warpappear_Method = {
     (process_method_func)daE_Warpappear_Create,  (process_method_func)daE_Warpappear_Delete,
     (process_method_func)daE_Warpappear_Execute, (process_method_func)daE_Warpappear_IsDelete,
     (process_method_func)daE_Warpappear_Draw,
 };
 
-actor_process_profile_definition g_profile_E_WAP = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_WAP = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

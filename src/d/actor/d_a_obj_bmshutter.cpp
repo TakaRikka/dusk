@@ -288,7 +288,7 @@ int daObjBmSh_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjBmSh_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjBmSh_Method = {
+static DUSK_CONST actor_method_class l_daObjBmSh_Method = {
     (process_method_func)daObjBmSh_Create,
     (process_method_func)daObjBmSh_Delete,
     (process_method_func)daObjBmSh_Execute,
@@ -296,7 +296,7 @@ static actor_method_class l_daObjBmSh_Method = {
     (process_method_func)daObjBmSh_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_BoomShutter = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_BoomShutter = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

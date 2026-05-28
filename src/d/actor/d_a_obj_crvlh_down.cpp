@@ -13,7 +13,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_s_play.h"
 
-static char* l_arcName = "CrvLH_Dw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvLH_Dw";
 
 void daObjCRVLH_DW_c::initCcCylinder() {
     const static dCcD_SrcCyl ccCylSrc = {
@@ -233,13 +233,13 @@ int daObjCRVLH_DW_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjCRVLH_DW_Method = {
+static DUSK_CONST actor_method_class l_daObjCRVLH_DW_Method = {
     (process_method_func)daObjCRVLH_DW_Create,  (process_method_func)daObjCRVLH_DW_Delete,
     (process_method_func)daObjCRVLH_DW_Execute, (process_method_func)daObjCRVLH_DW_IsDelete,
     (process_method_func)daObjCRVLH_DW_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_CRVLH_DW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_CRVLH_DW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

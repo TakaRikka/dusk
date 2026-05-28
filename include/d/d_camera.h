@@ -900,24 +900,24 @@ public:
 
     int StartEventCamera(int, int, ...);
     int EndEventCamera(int);
-    int searchEventArgData(char*);
-    bool getEvIntData(int*, char*, int);
-    bool getEvIntData(int*, char*);
-    bool getEvFloatData(f32*, char*);
-    bool getEvFloatData(f32*, char*, f32);
-    int getEvFloatListData(f32**, char*);
-    int getEvXyzListData(cXyz**, char*);
-    char* getEvStringPntData(char*, char*);
-    char* getEvStringPntData(char*);
-    bool getEvXyzData(cXyz*, char*, cXyz);
+    int searchEventArgData(DUSK_CONST char*);
+    bool getEvIntData(int*, DUSK_CONST char*, int);
+    bool getEvIntData(int*, DUSK_CONST char*);
+    bool getEvFloatData(f32*, DUSK_CONST char*);
+    bool getEvFloatData(f32*, DUSK_CONST char*, f32);
+    int getEvFloatListData(f32**, DUSK_CONST char*);
+    int getEvXyzListData(cXyz**, DUSK_CONST char*);
+    char DUSK_CONST* getEvStringPntData(DUSK_CONST char*, char DUSK_CONST*);
+    char DUSK_CONST* getEvStringPntData(DUSK_CONST char*);
+    bool getEvXyzData(cXyz*, DUSK_CONST char*, cXyz);
 #if TARGET_PC
     template<size_t N>
-    bool getEvStringData(char (&)[N], char*, char*);
+    bool getEvStringData(char (&)[N], DUSK_CONST char*, char DUSK_CONST*);
 #else
-    bool getEvStringData(char*, char*, char*);
+    bool getEvStringData(char*, DUSK_CONST char*, char DUSK_CONST*);
 #endif
-    fopAc_ac_c* getEvActor(char*);
-    fopAc_ac_c* getEvActor(char*, char*);
+    fopAc_ac_c* getEvActor(DUSK_CONST char*);
+    fopAc_ac_c* getEvActor(DUSK_CONST char*, char DUSK_CONST*);
     bool pauseEvCamera();
     bool fixedFrameEvCamera();
     bool stokerEvCamera();

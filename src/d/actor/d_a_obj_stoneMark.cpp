@@ -13,7 +13,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-static char* l_arcName = "A_IwaAto";
+static DUSK_CONST char* l_arcName = "A_IwaAto";
 
 void daObjSMark_c::initBaseMtx() {
     setBaseMtx();
@@ -75,7 +75,7 @@ static int daObjSMark_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSMark_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjSMark_Method = {
+static DUSK_CONST actor_method_class l_daObjSMark_Method = {
     (process_method_func)daObjSMark_Create,
     (process_method_func)daObjSMark_Delete,
     (process_method_func)NULL,
@@ -83,7 +83,7 @@ static actor_method_class l_daObjSMark_Method = {
     (process_method_func)daObjSMark_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_StoneMark = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_StoneMark = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

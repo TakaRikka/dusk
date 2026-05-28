@@ -870,7 +870,7 @@ static int daObjKAT_IsDelete(daObjKAT_c* param_0) {
     return 1;
 }
 
-static actor_method_class l_daObjKAT_Method = {
+static DUSK_CONST actor_method_class l_daObjKAT_Method = {
     (process_method_func)daObjKAT_Create,
     (process_method_func)daObjKAT_Delete,
     (process_method_func)daObjKAT_Execute,
@@ -878,7 +878,7 @@ static actor_method_class l_daObjKAT_Method = {
     (process_method_func)daObjKAT_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Kat = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Kat = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

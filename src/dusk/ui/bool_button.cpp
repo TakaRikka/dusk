@@ -12,7 +12,8 @@ BoolButton::BoolButton(Rml::Element* parent, Props props)
               .icon = std::move(props.icon),
           }),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
-      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)) {}
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)),
+      mValueOverride(std::move(props.valueOverride)) {}
 
 bool BoolButton::modified() const {
     if (mIsModified) {
@@ -29,6 +30,12 @@ bool BoolButton::disabled() const {
 }
 
 Rml::String BoolButton::format_value() {
+    if (mValueOverride) {
+        if (std::string value = mValueOverride(); !value.empty()) {
+            return value;
+        }
+    }
+
     return mGetValue() ? "On" : "Off";
 }
 

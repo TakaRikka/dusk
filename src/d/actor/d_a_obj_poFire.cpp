@@ -380,7 +380,7 @@ bool daPoFire_c::eventStart() {
 }
 
 bool daPoFire_c::eventRun() {
-    static char* action_table[1] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[1] = {
         "MOVE_END",
     };
 
@@ -431,13 +431,13 @@ static int daPoFire_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-static actor_method_class l_daPoFire_Method = {
+static DUSK_CONST actor_method_class l_daPoFire_Method = {
     (process_method_func)daPoFire_Create,  (process_method_func)daPoFire_Delete,
     (process_method_func)daPoFire_Execute, NULL,
     (process_method_func)daPoFire_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_poFire = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_poFire = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

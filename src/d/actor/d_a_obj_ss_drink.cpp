@@ -11,9 +11,9 @@
 #include "d/d_msg_object.h"
 #include "d/d_s_play.h"
 
-static char* l_resFileName = "Obj_btl";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName = "Obj_btl";
 
-static char* l_bmdName = "al_bottle.bmd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdName = "al_bottle.bmd";
 
 dCcD_SrcGObjInf const daObj_SSDrink_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
@@ -22,7 +22,7 @@ dCcD_SrcGObjInf const daObj_SSDrink_c::mCcDObjInfo = {
     {{0}},
 };
 
-dCcD_SrcCyl daObj_SSDrink_c::mCcDCyl = {mCcDObjInfo, {}};
+dCcD_SrcCyl DUSK_CONST daObj_SSDrink_c::mCcDCyl = {mCcDObjInfo, {}};
 
 daObj_SSDrink_c::~daObj_SSDrink_c() {
     dComIfG_resDelete(&mPhase, getResName());
@@ -170,7 +170,7 @@ void daObj_SSDrink_c::setSoldOut() {
     }
 }
 
-char* daObj_SSDrink_c::getResName() {
+char DUSK_CONST* daObj_SSDrink_c::getResName() {
     return l_resFileName;
 }
 
@@ -479,13 +479,13 @@ static int daObj_SSDrink_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_SSDrink_MethodTable = {
+static DUSK_CONST actor_method_class daObj_SSDrink_MethodTable = {
     (process_method_func)daObj_SSDrink_Create,  (process_method_func)daObj_SSDrink_Delete,
     (process_method_func)daObj_SSDrink_Execute, (process_method_func)daObj_SSDrink_IsDelete,
     (process_method_func)daObj_SSDrink_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SSDRINK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SSDRINK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

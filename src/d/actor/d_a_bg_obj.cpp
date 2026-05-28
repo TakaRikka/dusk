@@ -499,7 +499,7 @@ static dCcD_SrcTri l_tri_src = {
     },
 };
 
-static char* l_specName = "spec.dat";
+static DUSK_CONST char* l_specName = "spec.dat";
 
 createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
     &daBgObj_c::CreateHeapType0,
@@ -1355,7 +1355,7 @@ static int daBgObj_MoveBGDraw(daBgObj_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daBgObj_METHODS = {
+static DUSK_CONST actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_create1st,
     (process_method_func)daBgObj_MoveBGDelete,
     (process_method_func)daBgObj_MoveBGExecute,
@@ -1363,7 +1363,7 @@ static actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_BG_OBJ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BG_OBJ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -1668,7 +1668,7 @@ void dFile_select_c::copySelMoveAnmInitSet(int param_0, int param_1) {
 
 void dFile_select_c::setSaveDataForCopySel() {
     static u64 l_tagName101[2] = {MULTI_CHAR('w_nun01'), MULTI_CHAR('w_nun02')};
-    static char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
+    static DUSK_CONST char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
                                 "tt_3_metal_40x40.bti"};
     SaveDataBuf* pSave = mSaveData;
     int notSelectedIndex = 0;
@@ -3752,6 +3752,7 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 
 #if TARGET_PC
 void dFile_select_c::fileSelectWide() {
+    static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
         for (PaneCache& entry : mSelDtPanes) {
@@ -3853,17 +3854,11 @@ void dFile_select_c::fileSelectWide() {
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
-        // Spirals
-        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Spirals & Memory Card Text
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        }
 
         // Selection Cursor
         if (mSelIcon) {
@@ -3953,17 +3948,11 @@ void dFile_select_c::fileSelectWide() {
             mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
 
-        // Spirals
-        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Spirals & Memory Card Text
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        }
         break;
     }
 }

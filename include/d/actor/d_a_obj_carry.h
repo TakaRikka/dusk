@@ -111,8 +111,8 @@ public:
     static void setRoomNo(int, s8);
     static s8 getRoomNo(int);
     const daObjCarry_dt_t& data();
-    char* getArcName();
-    char* getBmdName();
+    DUSK_CONST char* getArcName();
+    DUSK_CONST char* getBmdName();
     BOOL checkFlag(u8);
     void initBaseMtx();
     void setBaseMtx();

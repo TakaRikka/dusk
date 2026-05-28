@@ -234,13 +234,13 @@ static int daObjCRVHAHEN_IsDelete(daObjCRVHAHEN_c* i_this) {
     return true;
 }
 
-static actor_method_class l_daObjCRVHAHEN_Method = {
+static DUSK_CONST actor_method_class l_daObjCRVHAHEN_Method = {
     (process_method_func)daObjCRVHAHEN_Create,  (process_method_func)daObjCRVHAHEN_Delete,
     (process_method_func)daObjCRVHAHEN_Execute, (process_method_func)daObjCRVHAHEN_IsDelete,
     (process_method_func)daObjCRVHAHEN_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_CRVHAHEN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_CRVHAHEN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

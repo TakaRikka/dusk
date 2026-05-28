@@ -89,12 +89,12 @@ enum Event_Cut_Nums {
 
 static NPC_SOLDIERA_HIO_CLASS l_HIO;
 
-static daNpc_GetParam1 l_bmdGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[2] = {
     {BMDR_SOLA_TW, CHTSOLA},
     {BMDR_SOLA_SPEAR, CHTSOLA},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[7] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[7] = {
     {-1, CHTSOLA},
     {BCK_SOLA_WAIT_A, CHTSOLA},
     {BCK_SOLA_FEAR_WAIT, CHTSOLA},
@@ -104,42 +104,42 @@ static daNpc_GetParam1 l_bckGetParamList[7] = {
     {BCK_SOLA_TALK_B, CHTSOLA},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[2] = {
     {0, CHTSOLA},
     {1, CHTSOLA},
 };
 
-static char* l_evtNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[2] = {
     NULL,
     "TALK_LAKE",
 };
 
-static int l_loadRes_SOLDIERaa[3] = {
+static DUSK_CONSTEXPR int l_loadRes_SOLDIERaa[3] = {
     CHTSOLA, -1, -1,
 };
 
-static int l_loadRes_SOLDIERa0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_SOLDIERa0[3] = {
     CHTSOLA, -1, -1,
 };
 
-static int* l_loadRes_list[4] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[4] = {
     l_loadRes_SOLDIERaa,
     l_loadRes_SOLDIERaa,
     l_loadRes_SOLDIERaa,
     l_loadRes_SOLDIERa0,
 };
 
-static char* l_resNames[1] = {"chtSolA"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[1] = {"chtSolA"};
 
-static char* l_myName = "chtSolA";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "chtSolA";
 
-char* daNpc_SoldierA_c::mEvtCutNameList[3] = {
+char DUSK_CONST* DUSK_CONST daNpc_SoldierA_c::mEvtCutNameList[3] = {
     "",
     "TALK_LAKE",
     "LISTEN_LAKE",
 };
 
-daNpc_SoldierA_c::cutFunc daNpc_SoldierA_c::mEvtCutList[3] = {
+daNpc_SoldierA_c::cutFunc DUSK_CONST daNpc_SoldierA_c::mEvtCutList[3] = {
     NULL,
     &daNpc_SoldierA_c::ECut_talkLake,
     &daNpc_SoldierA_c::ECut_listenLake,
@@ -1144,7 +1144,7 @@ static int daNpc_SoldierA_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_SoldierA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_SoldierA_MethodTable = {
     (process_method_func)daNpc_SoldierA_Create,
     (process_method_func)daNpc_SoldierA_Delete,
     (process_method_func)daNpc_SoldierA_Execute,
@@ -1152,7 +1152,7 @@ static actor_method_class daNpc_SoldierA_MethodTable = {
     (process_method_func)daNpc_SoldierA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SOLDIERa = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SOLDIERa = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

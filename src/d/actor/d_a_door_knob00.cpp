@@ -30,29 +30,29 @@ u8 knob_param_c::getExitNo(fopAc_ac_c* i_this) {
     return fopAcM_GetParamBit(i_this, 25, 6);
 }
 
-static char* dummyStringFunc() {
+static DUSK_CONST char* dummyStringFunc() {
     return "door-knob_";
 }
 
-char* daKnob20_c::getAlwaysArcName() {
+DUSK_CONST char* daKnob20_c::getAlwaysArcName() {
     return "static";
 }
 
-char* daKnob20_c::getEvArcName() {
+DUSK_CONST char* daKnob20_c::getEvArcName() {
     return "DoorK10";
 }
 
-char* daKnob20_c::getDzb() {
+DUSK_CONST char* daKnob20_c::getDzb() {
     return "door-knob.dzb";
 }
 
-char* daKnob20_c::getDummyBmd() {
+DUSK_CONST char* daKnob20_c::getDummyBmd() {
     return "door-knobDummy.bmd";
 }
 
-static char* l_bmd_base_name = "door-knob_";
+static DUSK_CONST char* l_bmd_base_name = "door-knob_";
 
-char* daKnob20_c::getBmd() {
+DUSK_CONST char* daKnob20_c::getBmd() {
     static char l_bmdName[32];
 
     SAFE_SPRINTF(l_bmdName, "%s%02d.bmd", l_bmd_base_name, knob_param_c::getDoorModel(this));
@@ -194,7 +194,7 @@ void daKnob20_c::setActionFromFlow() {
 }
 
 void daKnob20_c::setEventId() {
-    static char* ev_name_table[7] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* ev_name_table[7] = {
         "DEFAULT_KNOB_DOOR_F_OPEN",
         "DEFAULT_KNOB_DOOR_B_OPEN",
         "DEFAULT_KNOB_TALK",
@@ -296,7 +296,7 @@ int daKnob20_c::frontCheck() {
 }
 
 int daKnob20_c::getDemoAction() {
-    static char* action_table[16] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[16] = {
         "WAIT",
         "SETSTART",
         "SETANGLE",
@@ -463,7 +463,7 @@ int daKnob20_c::adjustmentProc() {
 }
 
 int daKnob20_c::openInit(int param_1) {
-    static char* bck_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* bck_table[4] = {
         "FDoorA.bck",
         "FDoorB.bck",
         "FDoorA.bck",
@@ -694,13 +694,13 @@ static int daKnob20_Create(fopAc_ac_c* i_this) {
     return static_cast<daKnob20_c*>(i_this)->create();
 }
 
-static actor_method_class l_daKnob20_Method = {
+static DUSK_CONST actor_method_class l_daKnob20_Method = {
     (process_method_func)daKnob20_Create,  (process_method_func)daKnob20_Delete,
     (process_method_func)daKnob20_Execute, (process_method_func)NULL,
     (process_method_func)daKnob20_Draw,
 };
 
-actor_process_profile_definition g_profile_KNOB20 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_KNOB20 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

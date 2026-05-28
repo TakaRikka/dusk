@@ -71,7 +71,7 @@ void e_ai_class::initCcCylinder() {
     m_ccShieldSph.SetStts(&m_ccShieldStts);
     m_ccShieldSph.OnCoSetBit();
 
-    static dCcD_SrcCyl cc_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xdafbf9ff, 0x43}, 0x75}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -942,7 +942,7 @@ static int daE_AI_Create(fopAc_ac_c* i_this) {
     return ((e_ai_class*)i_this)->Create();
 }
 
-static actor_method_class l_daE_AI_Method = {
+static DUSK_CONST actor_method_class l_daE_AI_Method = {
     (process_method_func)daE_AI_Create,
     (process_method_func)daE_AI_Delete,
     (process_method_func)daE_AI_Execute,
@@ -950,7 +950,7 @@ static actor_method_class l_daE_AI_Method = {
     (process_method_func)daE_AI_Draw,
 };
 
-actor_process_profile_definition g_profile_E_AI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_AI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -65,8 +65,8 @@ extern Vec const l_crawlSideOffset;
 extern Vec const l_wolfLieSideOffset;
 extern Vec const l_crawlMinSideOffset;
 extern f32 const l_wolfFootOnFrame[][4];
-extern cXyz l_wolfBaseAnime;
-extern cXyz l_wolfRopeBaseAnime;
+extern cXyz DUSK_CONST l_wolfBaseAnime;
+extern cXyz DUSK_CONST l_wolfRopeBaseAnime;
 
 
 void daAlink_c::changeCommon() {

@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
 
-static char* l_arcName = "GomiKabe";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "GomiKabe";
 
 daObjGOMIKABE_HIO_c::daObjGOMIKABE_HIO_c() {
     mId = -1;
@@ -385,7 +385,7 @@ int daObjGOMIKABE_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjGOMIKABE_Method = {
+static DUSK_CONST actor_method_class l_daObjGOMIKABE_Method = {
     (process_method_func)daObjGOMIKABE_Create,
     (process_method_func)daObjGOMIKABE_Delete,
     (process_method_func)daObjGOMIKABE_Execute,
@@ -393,7 +393,7 @@ static actor_method_class l_daObjGOMIKABE_Method = {
     (process_method_func)daObjGOMIKABE_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_GOMIKABE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_GOMIKABE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

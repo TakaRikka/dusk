@@ -52,13 +52,13 @@ static int daSwTime_Create(daSwTime_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daSwTime_Method = {
+static DUSK_CONST actor_method_class l_daSwTime_Method = {
     (process_method_func)daSwTime_Create,
     (process_method_func)daSwTime_Delete,
     (process_method_func)daSwTime_Execute
 };
 
-actor_process_profile_definition g_profile_SwTime = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SwTime = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

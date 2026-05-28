@@ -120,7 +120,7 @@ public:
     void chgWeightLight() { mCcStts.SetWeight(0xD8); }
     BOOL pl_front_check() { return actor_front_check(daPy_getPlayerActorClass()); }
 
-    static EventFn mEvtSeqList[1];
+    static EventFn DUSK_CONST mEvtSeqList[1];
     static daTagEscape_c* mTargetTag;
     static f32 mTargetTagDist;
     static s16 mWolfAngle;

@@ -40,7 +40,7 @@ int daObjFuta_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "Obj_hfuta";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_hfuta";
 
 int daObjFuta_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -188,7 +188,7 @@ static int daObjFuta_MoveBGDraw(daObjFuta_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjFuta_METHODS = {
+static DUSK_CONST actor_method_class daObjFuta_METHODS = {
     (process_method_func)daObjFuta_create1st,
     (process_method_func)daObjFuta_MoveBGDelete,
     (process_method_func)daObjFuta_MoveBGExecute,
@@ -196,7 +196,7 @@ static actor_method_class daObjFuta_METHODS = {
     (process_method_func)daObjFuta_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Hfuta = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Hfuta = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

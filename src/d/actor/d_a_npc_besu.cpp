@@ -369,7 +369,7 @@ void daNpc_Besu_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[6][2] = {
+static DUSK_CONSTEXPR int l_bmdData[6][2] = {
     {3, 1},
     {11, 2},
     {37, 5},
@@ -378,7 +378,7 @@ static int l_bmdData[6][2] = {
     {38, 5},
 };
 
-static daNpcT_evtData_c l_evtList[13] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[13] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"CONVERSATION_ABOUT_SARU01", 11},
@@ -394,7 +394,7 @@ static daNpcT_evtData_c l_evtList[13] = {
     {"CONVERSATION_ABOUT_ZORA", 5},
 };
 
-static char* l_resNameList[12] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[12] = {
     "",
     "Besu",
     "Besu_TW",
@@ -409,33 +409,33 @@ static char* l_resNameList[12] = {
     "Sera",
 };
 
-static s8 l_loadResPtrn0[4] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[4] = {
     1, 3, 4, -1
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     3, 2, -1,
 };
 
-static s8 l_loadResPtrn2[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {
     3, 5, -1,
 };
 
-static s8 l_loadResPtrn3[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[3] = {
     3, 6, -1,
 };
 
-static s8 l_loadResPtrn4[4] = {3, 4, 6, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[4] = {3, 4, 6, -1};
 
-static s8 l_loadResPtrn5[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn5[3] = {
     1, 7, -1,
 };
 
-static s8 l_loadResPtrn9[7] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[7] = {
     1, 2, 3, 4, 5, 6, -1,
 };
 
-static s8* l_loadResPtrnList[19] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[19] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn4,
     l_loadResPtrn0, l_loadResPtrn3, l_loadResPtrn2, l_loadResPtrn2,
     l_loadResPtrn2, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
@@ -443,7 +443,7 @@ static s8* l_loadResPtrnList[19] = {
     l_loadResPtrn0, l_loadResPtrn5, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_BESU, J3DFrameCtrl::EMode_LOOP, BESU0, 1},
     {BCK_BESU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BESU1, BTP_BESU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BESU1, 0},
     {BCK_BESU_F_TALK_B, J3DFrameCtrl::EMode_NONE, BESU1, BTP_BESU_F_TALK_B, J3DFrameCtrl::EMode_NONE, BESU1, 0},
@@ -476,7 +476,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {BCK_BESU_FH_BIKKURI, J3DFrameCtrl::EMode_LOOP, BESU0, BTP_BESU_FH_BIKKURI, J3DFrameCtrl::EMode_LOOP, BESU0, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[33] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[33] = {
     {BCK_BESU_WAIT_A, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
     {BCK_BESU_WAIT_B, J3DFrameCtrl::EMode_LOOP, BESU1, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
     {BCK_BESU_WAIT_C, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
@@ -512,7 +512,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[33] = {
     {BCK_BESU_BODY_WAIT, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] = {
     {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
     {1, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, 
@@ -544,7 +544,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] 
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 1}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, 
@@ -577,7 +577,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {9, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Besu_c::mCutNameList[15] = {
+char DUSK_CONST* DUSK_CONST daNpc_Besu_c::mCutNameList[15] = {
     "",
     "CONVERSATION_ABOUT_SARU",
     "CONVERSATION_ABOUT_PACHINKO",
@@ -595,7 +595,7 @@ char* daNpc_Besu_c::mCutNameList[15] = {
     "THANK_YOU",
 };
 
-daNpc_Besu_c::cutFunc daNpc_Besu_c::mCutList[15] = {
+daNpc_Besu_c::cutFunc DUSK_CONST daNpc_Besu_c::mCutList[15] = {
     NULL,
     &daNpc_Besu_c::cutConversationAboutSaru,
     &daNpc_Besu_c::cutConversationAboutPachinko,
@@ -3060,7 +3060,7 @@ static int daNpc_Besu_IsDelete(void*) {
     return true;
 }
 
-static actor_method_class daNpc_Besu_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Besu_MethodTable = {
     (process_method_func)daNpc_Besu_Create,
     (process_method_func)daNpc_Besu_Delete,
     (process_method_func)daNpc_Besu_Execute,
@@ -3068,7 +3068,7 @@ static actor_method_class daNpc_Besu_MethodTable = {
     (process_method_func)daNpc_Besu_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_BESU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_BESU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

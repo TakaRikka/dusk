@@ -1220,7 +1220,7 @@ AUDIO_INSTANCES;
 template<>
 JAUSectionHeap* JASGlobalInstance<JAUSectionHeap>::sInstance;
 
-static actor_method_class l_daArrowMethodTable = {
+static DUSK_CONST actor_method_class l_daArrowMethodTable = {
     (process_method_func)daArrow_create,
     (process_method_func)daArrow_delete,
     (process_method_func)daArrow_execute,
@@ -1228,7 +1228,7 @@ static actor_method_class l_daArrowMethodTable = {
     (process_method_func)daArrow_draw,
 };
 
-actor_process_profile_definition g_profile_ARROW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_ARROW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 9,
     /* List Prio    */ fpcPi_CURRENT_e,

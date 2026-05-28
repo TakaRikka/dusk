@@ -1,0 +1,116 @@
+name: Bug Report
+description: Report an issue with Dusklight
+type: Bug
+body:
+- type: checkboxes
+  id: official-build-certification
+  attributes:
+    label: Mods and Forks
+    description: Certify that this issue exists on the official builds of Dusklight
+    options:
+    - label: The bug occurs on an **official release** of Dusklight, without any forks or third-party patches installed
+      required: true
+  validations:
+    required: true
+
+- type: input
+  id: dusklight-version
+  attributes:
+    label: Dusklight Version
+    placeholder: ex. 1.3.1
+  validations:
+    required: true
+
+- type: textarea
+  id: bug-description
+  attributes:
+    label: Bug Description
+    placeholder: Describe the bug you are encountering
+  validations:
+    required: true
+
+- type: textarea
+  id: repro-steps
+  attributes:
+    label: Steps to Reproduce
+    placeholder: |
+      1. Load save
+      2. Go to Hyrule Field
+      3. See bug
+
+- type: textarea
+  id: expected-behavior
+  attributes:
+    label: Expected Behavior
+    placeholder: Describe what should be happening
+
+- type: textarea
+  id: current-behavior
+  attributes:
+    label: Current Behavior
+    placeholder: Describe what is happening instead
+
+- type: dropdown
+  id: system-os-architecture
+  attributes:
+    label: OS / Architecture
+    description: The operating system and architecture you are running Dusklight on
+    options:
+    - Windows x86-64
+    - Windows ARM64
+    - MacOS ARM64
+    - MacOS x86-64
+    - Linux ARM64
+    - Linux x84-64
+    - Android ARM64
+    - iOS ARM64
+  validations:
+    required: true
+
+- type: dropdown
+  id: game-region
+  attributes:
+    label: Game Region
+    description: The game region you are playing on
+    options:
+    - NTSC-U (North America)
+    - PAL (Europe)
+  validations:
+    required: true
+
+- type: input
+  id: game-language
+  attributes:
+    label: Game Language
+    description: The language you are playing the game in
+    placeholder: ex. English, Spanish, etc.
+
+- type: dropdown
+  attributes:
+    label: Graphics Backend
+    options:
+    - Vulkan
+    - D3D12
+    - Metal
+    - D3D11
+    - OpenGL ES
+    - Unsure / Default
+    default: 5
+
+- type: textarea
+  id: texture-packs-mods
+  attributes:
+    label: Texture Packs and Mods
+    placeholder: List any texture packs or mods you had installed
+
+- type: upload
+  id: logs-upload
+  attributes:
+    label: Logs and Other Files
+    description: Include any relevant logs, config files, or saves to reproduce the bug
+
+- type: textarea
+  id: additional-context
+  attributes:
+    label: Additional Context
+    placeholder: Any other information that might be helpful

@@ -22,49 +22,49 @@ enum midP_RES_File_ID {
     /* 0xF */ BTP_MIDP = 0xF,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_MIDP, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "midP"
 };
 
-static s8 l_loadResPtrn0[1 + 1 /* padding */] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[1 + 1 /* padding */] = {
     1,
     -1
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData = {
     -1, 0, 0, 15, 2, 1, 1
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData = {
     6, 2, 1, 12, 0, 1, 1, 0
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}
 };
 
-char* daNpc_midP_c::mCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_midP_c::mCutNameList = "";
 
-daNpc_midP_c::cutFunc daNpc_midP_c::mCutList[1] = { 0 };
+daNpc_midP_c::cutFunc DUSK_CONST daNpc_midP_c::mCutList[1] = { 0 };
 
 daNpc_midP_HIOParam const daNpc_midP_Param_c::m = {
     210.0f, 
@@ -638,7 +638,7 @@ static int daNpc_midP_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_midP_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_midP_MethodTable = {
     (process_method_func)daNpc_midP_Create,
     (process_method_func)daNpc_midP_Delete,
     (process_method_func)daNpc_midP_Execute,
@@ -646,7 +646,7 @@ static actor_method_class daNpc_midP_MethodTable = {
     (process_method_func)daNpc_midP_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_MIDP = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_MIDP = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

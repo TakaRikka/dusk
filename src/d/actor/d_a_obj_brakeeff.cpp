@@ -235,7 +235,7 @@ actor_method_class l_daObj_Brakeeff_Method = {
     (process_method_func)daObj_Brakeeff_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_BEF = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_BEF = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

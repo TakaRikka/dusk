@@ -14,7 +14,7 @@
 #include "d/actor/d_a_obj_ystone.h"
 #include <cstring>
 
-static char* l_arcName = "ef_Portal";
+static DUSK_CONST char* l_arcName = "ef_Portal";
 
 static char const* l_clearEvName[9] = {
     "BOSSCLEAR01",
@@ -415,7 +415,7 @@ void daObjBossWarp_c::actionCancelEvent() {
 }
 
 int daObjBossWarp_c::demoProc() {
-    static char* action_table[15] = {
+    static DUSK_CONST char* action_table[15] = {
         "WAIT",
         "APPEAR",
         "DISAPPEAR",
@@ -662,7 +662,7 @@ static cPhs_Step daObjBossWarp_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjBossWarp_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjBossWarp_Method = {
+static DUSK_CONST actor_method_class l_daObjBossWarp_Method = {
     (process_method_func)daObjBossWarp_Create,
     (process_method_func)daObjBossWarp_Delete,
     (process_method_func)daObjBossWarp_Execute,
@@ -670,7 +670,7 @@ static actor_method_class l_daObjBossWarp_Method = {
     (process_method_func)daObjBossWarp_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_BossWarp = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_BossWarp = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

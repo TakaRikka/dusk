@@ -3106,14 +3106,18 @@ void daMidna_c::setMidnaNoDrawFlg() {
 
 BOOL daMidna_c::checkMetamorphoseEnableBase() {
     BOOL tmp;
-    if (!daAlink_getAlinkActorClass()->checkMidnaRide() || (g_env_light.mEvilInitialized & 0x80) ||
-        /* dSv_event_flag_c::M_077 - Main Event - Get shadow crystal (can now transform) */
-        !dComIfGs_isEventBit(0xD04) ||
 #if TARGET_PC
-        (fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp) &&
-         !dusk::getSettings().game.canTransformAnywhere)
+    if (((!daAlink_getAlinkActorClass()->checkMidnaRide()  || (g_env_light.mEvilInitialized & 0x80) ||
+          /* dSv_event_flag_c::M_077 - Main Event - Get shadow crystal (can now transform) */
+          !dComIfGs_isEventBit(0xD04)) &&
+          !dusk::getSettings().game.transformWithoutShadowCrystal) ||
+          (fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp) &&
+           !dusk::getSettings().game.canTransformAnywhere)
 #else
-        fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp)
+    if (!daAlink_getAlinkActorClass()->checkMidnaRide()  || (g_env_light.mEvilInitialized & 0x80) ||
+          /* dSv_event_flag_c::M_077 - Main Event - Get shadow crystal (can now transform) */
+          !dComIfGs_isEventBit(0xD04) || 
+          fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &tmp)
 #endif
     )
     {
@@ -3654,7 +3658,7 @@ static void dummy() {
 }
 template unsigned char cLib_calcTimer<unsigned char>(unsigned char*);
 
-static actor_method_class l_daMidna_Method = {
+static DUSK_CONST actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Create,
     (process_method_func)daMidna_Delete,
     (process_method_func)daMidna_Execute,
@@ -3662,7 +3666,7 @@ static actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Draw,
 };
 
-actor_process_profile_definition g_profile_MIDNA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MIDNA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 6,
     /* List Prio    */ fpcPi_CURRENT_e,

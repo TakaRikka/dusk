@@ -157,14 +157,14 @@ static int daTagRetRm_draw(daTagRetRm_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daTagRetRm_METHODS = {
+static DUSK_CONST actor_method_class daTagRetRm_METHODS = {
     (process_method_func)daTagRetRm_create,  (process_method_func)daTagRetRm_Delete,
     (process_method_func)daTagRetRm_execute, (process_method_func)NULL,
     (process_method_func)daTagRetRm_draw,
 
 };
 
-actor_process_profile_definition g_profile_Tag_RetRoom = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_RetRoom = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

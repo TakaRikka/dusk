@@ -2674,13 +2674,13 @@ static int daB_BQ_Create(fopAc_ac_c* i_this) {
 
 b_bq_class::b_bq_class() {}
 
-static actor_method_class l_daB_BQ_Method = {
+static DUSK_CONST actor_method_class l_daB_BQ_Method = {
     (process_method_func)daB_BQ_Create,  (process_method_func)daB_BQ_Delete,
     (process_method_func)daB_BQ_Execute, (process_method_func)daB_BQ_IsDelete,
     (process_method_func)daB_BQ_Draw,
 };
 
-actor_process_profile_definition g_profile_B_BQ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_BQ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

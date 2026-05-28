@@ -11,13 +11,13 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
-static int l_bmdData[3][2] = {
+static DUSK_CONSTEXPR int l_bmdData[3][2] = {
     {10, 1},
     {8, 1},
     {9, 1},
 };
 
-static daNpcT_evtData_c l_evtList[21] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[21] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"MAROS_WHISPER", 1},
@@ -41,48 +41,48 @@ static daNpcT_evtData_c l_evtList[21] = {
     {"SWDTUTORIAL_JUMPGIRI_CLEAR2", 1},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Kakashi",
 };
 
-static s8 l_loadResPtrn0[] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[] = {1, -1};
 
-static s8* l_loadResPtrnList[6] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[6] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn0, NULL,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, 0, 0, -1, 0, 0, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {-1, 0, 0, -1, 0, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-char* daNpc_Kakashi_c::mCutNameList[4] = {
+char DUSK_CONST* DUSK_CONST daNpc_Kakashi_c::mCutNameList[4] = {
     "",
     "SWDTUTORIAL",
     "GET_WOODSWD",
     "MAROS_WHISPER",
 };
 
-int (daNpc_Kakashi_c::*daNpc_Kakashi_c::mCutList[])(int) = {
+int (daNpc_Kakashi_c::* DUSK_CONST daNpc_Kakashi_c::mCutList[])(int) = {
     NULL,
     &daNpc_Kakashi_c::cutSwdTutorial,
     &daNpc_Kakashi_c::cutGetWoodSwd,
@@ -1163,7 +1163,7 @@ static int daNpc_Kakashi_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Kakashi_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Create,
     (process_method_func)daNpc_Kakashi_Delete,
     (process_method_func)daNpc_Kakashi_Execute,
@@ -1171,7 +1171,7 @@ static actor_method_class daNpc_Kakashi_MethodTable = {
     (process_method_func)daNpc_Kakashi_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_KAKASHI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_KAKASHI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

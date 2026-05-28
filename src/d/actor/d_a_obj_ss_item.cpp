@@ -11,15 +11,15 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_myna.h"
 
-static char* l_resFileName[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName[] = {
     "Always",
     "Always",
     "Pumpkin",
 };
 
-static int l_bmdIdxName[] = {0x23, 0x23, 0x00};
+static DUSK_CONSTEXPR int l_bmdIdxName[] = {0x23, 0x23, 0x00};
 
-static char* l_bmdFileName[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdFileName[] = {
     "",
     "",
     "pumpkin.bmd",
@@ -32,7 +32,7 @@ dCcD_SrcGObjInf const daObj_SSItem_c::mCcDObjInfo = {
     {{0}},
 };
 
-dCcD_SrcCyl daObj_SSItem_c::mCcDCyl = {mCcDObjInfo, {}};
+dCcD_SrcCyl DUSK_CONST daObj_SSItem_c::mCcDCyl = {mCcDObjInfo, {}};
 
 daObj_SSItem_c::~daObj_SSItem_c() {
     dComIfG_resDelete(&mPhase, getResName());
@@ -180,7 +180,7 @@ daObj_SSItem_c* daObj_SSItem_c::getExchangeItemPtr() {
     return this;
 }
 
-char* daObj_SSItem_c::getResName() {
+char DUSK_CONST* daObj_SSItem_c::getResName() {
     return l_resFileName[field_0xB0E];
 }
 
@@ -365,13 +365,13 @@ static int daObj_SSItem_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_SSItem_MethodTable = {
+static DUSK_CONST actor_method_class daObj_SSItem_MethodTable = {
     (process_method_func)daObj_SSItem_Create,  (process_method_func)daObj_SSItem_Delete,
     (process_method_func)daObj_SSItem_Execute, (process_method_func)daObj_SSItem_IsDelete,
     (process_method_func)daObj_SSItem_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SSITEM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SSITEM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,
