@@ -1973,6 +1973,11 @@ void dMenu_Fmap2DBack_c::stageMapMove(STControl* i_stick, u8 param_1, bool param
     if (stick_value >= slow_bound && param_2 && field_0x1238 != 2) {
         bVar6 = true;
         s16 angle = i_stick->getAngleStick();
+#if TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            angle = -angle;
+        }
+#endif
         f32 local_68 = mTexMaxX - mTexMinX;
         f32 spot_zoom = getSpotMapZoomRate();
         f32 region_zoom = getRegionMapZoomRate(mRegionCursor);
@@ -2730,7 +2735,7 @@ void dMenu_Fmap2DTop_c::setTitleNameString(u32 param_0) {
 #endif
     for (int i = 0; i < 7; i++) {
         if (param_0 == 0) {
-            strcpy(((J2DTextBox*)(mpTitleScreen->search(setTitleNameString_font_name[i])))
+            SAFE_STRCPY(((J2DTextBox*)(mpTitleScreen->search(setTitleNameString_font_name[i])))
                        ->getStringPtr(),
                    "");
         } else {
@@ -2753,7 +2758,7 @@ void dMenu_Fmap2DTop_c::setAreaNameString(u32 param_0) {
 #endif
     for (int i = 0; i < 3; i++) {
         if (param_0 == 0) {
-            strcpy(((J2DTextBox*)(mpTitleScreen->search(setAreaNameString_area_name[i])))
+            SAFE_STRCPY(((J2DTextBox*)(mpTitleScreen->search(setAreaNameString_area_name[i])))
                        ->getStringPtr(),
                    "");
         } else {
@@ -2866,7 +2871,7 @@ void dMenu_Fmap2DTop_c::setCrossLRString(u32 param_0) {
     if (param_0 == 0) {
         for (int i = 0; i < 5; i++) {
             J2DTextBox* text_box = static_cast<J2DTextBox*>(mpTitleScreen->search(juji_c[i]));
-            strcpy(text_box->getStringPtr(), "");
+            SAFE_STRCPY(text_box->getStringPtr(), "");
         }
         mpTitleScreen->search(MULTI_CHAR('juy_sha0'))->show();
         mAlphaDpad = 1;
@@ -2891,7 +2896,7 @@ void dMenu_Fmap2DTop_c::set3DStickString(u32 param_0) {
     if (param_0 == 0) {
         for (int i = 0; i < 5; i++) {
             J2DTextBox* text_box = static_cast<J2DTextBox*>(mpTitleScreen->search(ast_c[i]));
-            strcpy(text_box->getStringPtr(), "");
+            SAFE_STRCPY(text_box->getStringPtr(), "");
         }
         mpTitleScreen->search(MULTI_CHAR('as_sha0'))->show();
         mAlphaAnalogStick = 1;

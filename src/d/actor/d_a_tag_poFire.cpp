@@ -70,13 +70,13 @@ static u8 lit_3617[12];
 
 static daTagPoFire_HIO_c l_HIO;
 
-static actor_method_class l_daTagPoFire_Method = {
+static DUSK_CONST actor_method_class l_daTagPoFire_Method = {
     (process_method_func)daTagPoFire_Create,  (process_method_func)daTagPoFire_Delete,
     (process_method_func)daTagPoFire_Execute, (process_method_func)NULL,
     (process_method_func)daTagPoFire_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_poFire = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_poFire = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

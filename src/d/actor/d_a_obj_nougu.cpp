@@ -16,7 +16,7 @@ dCcD_SrcSph daObj_Nougu_c::mCcDSph = {
     },
 };
 
-static char* l_resName = "Jagar4";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "Jagar4";
 
 const daObj_Nougu_HIOParam daObj_Nougu_Param_c::m = {
     0.0f,
@@ -227,7 +227,7 @@ static int daObj_Nougu_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_Nougu_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Nougu_MethodTable = {
     (process_method_func)daObj_Nougu_Create,
     (process_method_func)daObj_Nougu_Delete,
     (process_method_func)daObj_Nougu_Execute,
@@ -235,7 +235,7 @@ static actor_method_class daObj_Nougu_MethodTable = {
     (process_method_func)daObj_Nougu_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_NOUGU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_NOUGU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

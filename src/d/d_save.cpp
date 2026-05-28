@@ -2034,7 +2034,7 @@ void flagFile_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
 
         const char* start_stage_name = dComIfGp_getStartStageName();
         char filename[64];
-        sprintf(filename, "_%02d%02d%02d%02d%02d-%s.zff", time.mon + 1, time.mday, time.hour, time.min, time.sec, start_stage_name);
+        SAFE_SPRINTF(filename, "_%02d%02d%02d%02d%02d-%s.zff", time.mon + 1, time.mday, time.hour, time.min, time.sec, start_stage_name);
         OS_REPORT("write to %s\n", filename);
 
         JORFile file;

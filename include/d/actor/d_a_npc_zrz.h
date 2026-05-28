@@ -160,8 +160,8 @@ private:
     /* 0x14C0 */ BOOL mMusicSet;
     /* 0x14C4 */ bool mSealReleased;
 
-    static char* mEvtCutNameList[8];
-    static EventFn mEvtCutList[8];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[8];
+    static EventFn DUSK_CONST mEvtCutList[8];
 
     enum Animation {
         /* 0x0 */ ANM_NONE,

@@ -103,8 +103,8 @@ public:
     void animePlay();
     int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
     void setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
-    J3DAnmTransformKey* getTrnsfrmKeyAnm(char*);
-    J3DAnmTexPattern* getTexPtrnAnm(char*);
+    J3DAnmTransformKey* getTrnsfrmKeyAnm(DUSK_CONST char*);
+    J3DAnmTexPattern* getTexPtrnAnm(DUSK_CONST char*);
     int checkEndAnm(J3DFrameCtrl*);
     int checkEndAnm(f32);
     u8 getItemNumMax();

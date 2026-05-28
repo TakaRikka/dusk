@@ -12,7 +12,7 @@ static int daObjHBarrel_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjHBarrel_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "HBarrel";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "HBarrel";
 
 daObjHBarrel_c::daObjHBarrel_c() {}
 
@@ -189,7 +189,7 @@ static int daObjHBarrel_draw(daObjHBarrel_c* param_0) {
     return param_0->draw();
 }
 
-static actor_method_class daObjHBarrel_METHODS = {
+static DUSK_CONST actor_method_class daObjHBarrel_METHODS = {
     (process_method_func)daObjHBarrel_create,
     (process_method_func)daObjHBarrel_Delete,
     (process_method_func)daObjHBarrel_execute,
@@ -197,7 +197,7 @@ static actor_method_class daObjHBarrel_METHODS = {
     (process_method_func)daObjHBarrel_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_HBarrel = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_HBarrel = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

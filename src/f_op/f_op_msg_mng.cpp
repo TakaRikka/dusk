@@ -226,7 +226,7 @@ fpc_ProcID fopMsgM_messageSetDemo(u32 i_msgidx) {
     return 0;
 }
 
-char* fopMsgM_messageGet(char* i_stringBuf, u32 i_msgId) {
+TEXT_SPAN fopMsgM_messageGet(TEXT_SPAN i_stringBuf, u32 i_msgId) {
     dMeter2Info_getString(i_msgId, i_stringBuf, NULL);
     return i_stringBuf;
 }

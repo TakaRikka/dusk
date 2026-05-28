@@ -165,7 +165,7 @@ enum Event {
     /* 0x3 */ EVENT_INTRO_SUMO3,
 };
 
-static daNpc_GetParam2 l_bckGetParamList[23] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[23] = {
     {-1, J3DFrameCtrl::EMode_LOOP, BOU},
     {BCK_BOU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BOU},
     {BCK_BOU4_F_TALK_A, J3DFrameCtrl::EMode_NONE, BOU4},
@@ -191,7 +191,7 @@ static daNpc_GetParam2 l_bckGetParamList[23] = {
     {BCK_BOU4_THINKING_B, J3DFrameCtrl::EMode_LOOP, BOU4},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[5] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[5] = {
     {BTP_BOU, J3DFrameCtrl::EMode_LOOP, BOU},
     {BTP_BOU4_F_CONSIDER, J3DFrameCtrl::EMode_NONE, BOU4},
     {BTP_BOU4_F_CONSIDERING, J3DFrameCtrl::EMode_LOOP, BOU4},
@@ -199,25 +199,25 @@ static daNpc_GetParam2 l_btpGetParamList[5] = {
     {BTP_BOU4_FH_TALK_B, J3DFrameCtrl::EMode_LOOP, BOU4},
 };
 
-static daNpc_GetParam2 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[1] = {
     {BTK_BOU, J3DFrameCtrl::EMode_LOOP, BOU},
 };
 
-static char* l_arcNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[2] = {
     "Bou",
     "Bou4",
 };
 
-static char* l_evtNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[4] = {
     NULL,
     "BOUS_INTRO_SUMO1",
     "BOUS_INTRO_SUMO2",
     "BOUS_INTRO_SUMO3",
 };
 
-static char* l_myName = "BouS";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "BouS";
 
-static cXyz l_createPos(1000000000.0f, 1000000000.0f, 1000000000.0f);
+static DUSK_CONSTEXPR cXyz l_createPos(1000000000.0f, 1000000000.0f, 1000000000.0f);
 
 static NPC_BOUS_HIO_CLASS l_HIO;
 
@@ -1616,7 +1616,7 @@ inline void daNpcBouS_c::drawOtherMdls() {}
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpcBouS_MethodTable = {
+static DUSK_CONST actor_method_class daNpcBouS_MethodTable = {
     (process_method_func)daNpcBouS_Create,
     (process_method_func)daNpcBouS_Delete,
     (process_method_func)daNpcBouS_Execute,
@@ -1624,7 +1624,7 @@ static actor_method_class daNpcBouS_MethodTable = {
     (process_method_func)daNpcBouS_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_BOU_S = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_BOU_S = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

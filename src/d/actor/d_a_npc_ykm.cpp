@@ -317,7 +317,7 @@ void daNpc_ykM_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[6][2] = {
+static DUSK_CONSTEXPR int l_bmdData[6][2] = {
     {BMDR_YKM, YKM},
     {BMDR_YKM_TOMATO, YKM1},
     {BMDR_YKM_LEAF, YKM2},
@@ -335,7 +335,7 @@ enum BmdIndex {
     BMD_INDEX_LEAF,
 };
 
-static daNpcT_evtData_c l_evtList[10] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[10] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"SLIDEDOWN", 4},
@@ -348,7 +348,7 @@ static daNpcT_evtData_c l_evtList[10] = {
     {"HUG", 2},
 };
 
-static char* l_resNameList[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[5] = {
     "",
     "ykM",
     "ykM1",
@@ -356,20 +356,20 @@ static char* l_resNameList[5] = {
     "ykM3",
 };
 
-static s8 l_loadResPtrn0[3] = {YKM, YKM1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {YKM, YKM1, -1};
 
-static s8 l_loadResPtrn1[3] = {YKM, YKM2, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {YKM, YKM2, -1};
 
-static s8 l_loadResPtrn2[5] = {YKM, YKM1, YKM2, YKM3, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[5] = {YKM, YKM1, YKM2, YKM3, -1};
 
-static s8 l_loadResPtrn9[5] = {YKM, YKM1, YKM2, YKM3, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {YKM, YKM1, YKM2, YKM3, -1};
 
-static s8* l_loadResPtrnList[8] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[8] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn2, l_loadResPtrn0,
     l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_YKM, J3DFrameCtrl::EMode_LOOP, YKM, TRUE},
     {BCK_YKM_F_TALK_A, J3DFrameCtrl::EMode_NONE, YKM, BTP_YKM, J3DFrameCtrl::EMode_LOOP, YKM, TRUE},
     {BCK_YKM_F_TALK_B, J3DFrameCtrl::EMode_NONE, YKM, BTP_YKM, J3DFrameCtrl::EMode_LOOP, YKM, TRUE},
@@ -388,7 +388,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {BCK_YKM_FH_HAPPY, J3DFrameCtrl::EMode_LOOP, YKM1, BTP_YKM_FH_HAPPY, J3DFrameCtrl::EMode_LOOP, YKM1, FALSE},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[51] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[51] = {
     {BCK_YKM_WAIT_A, J3DFrameCtrl::EMode_LOOP, YKM, BTK_YKM, J3DFrameCtrl::EMode_NONE, YKM, 1, 0},
     {BCK_YKM_WAIT_B, J3DFrameCtrl::EMode_LOOP, YKM1, BTK_YKM_WAIT_B, J3DFrameCtrl::EMode_NONE, YKM1, 0, 0},
     {BCK_YKM_WAIT_C, J3DFrameCtrl::EMode_LOOP, YKM1, BTK_YKM, J3DFrameCtrl::EMode_NONE, YKM, 1, 0},
@@ -442,7 +442,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[51] = {
     {BCK_YKM_WAITHOLD_B_B, J3DFrameCtrl::EMode_LOOP, YKM1, BTK_YKM, J3DFrameCtrl::EMode_NONE, YKM, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -461,7 +461,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[188] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[188] = {
     {0, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -511,7 +511,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[188] = {
     {0x27, -1, 1}, {0x28, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_ykM_c::mCutNameList[10] = {
+char DUSK_CONST* DUSK_CONST daNpc_ykM_c::mCutNameList[10] = {
     "",
     "SLIDEDOWN",
     "MEETING_AGAIN",
@@ -524,7 +524,7 @@ char* daNpc_ykM_c::mCutNameList[10] = {
     "HUG"
 };
 
-daNpc_ykM_c::cutFunc daNpc_ykM_c::mCutList[10] = {
+daNpc_ykM_c::cutFunc DUSK_CONST daNpc_ykM_c::mCutList[10] = {
     NULL,
     &daNpc_ykM_c::cutSlideDown,
     &daNpc_ykM_c::cutMeetingAgain,
@@ -3727,7 +3727,7 @@ static int daNpc_ykM_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_ykM_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_ykM_MethodTable = {
     (process_method_func)daNpc_ykM_Create,
     (process_method_func)daNpc_ykM_Delete,
     (process_method_func)daNpc_ykM_Execute,
@@ -3735,7 +3735,7 @@ static actor_method_class daNpc_ykM_MethodTable = {
     (process_method_func)daNpc_ykM_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_YKM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_YKM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

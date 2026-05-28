@@ -58,7 +58,7 @@ s16 const daObjSwpush::Act_c::M_bmd[3] = {BMDR_KBOTA_00, BMDR_S_LV3BOTA, BMDR_S_
 
 s16 const daObjSwpush::Act_c::M_dzb[3] = {DZB_KBOTA_00, DZB_KBOTA2_00, DZB_KBOTA3_00};
 
-char* daObjSwpush::Act_c::M_arcname[3] = {
+DUSK_CONST char* daObjSwpush::Act_c::M_arcname[3] = {
     "Kbota_00",
     "S_lv3bota",
     "S_lv6bota",
@@ -853,7 +853,7 @@ namespace {
         return 1;
     }
 
-    static actor_method_class Mthd_Table = {
+    static DUSK_CONST actor_method_class Mthd_Table = {
         (process_method_func)Mthd_Create,
         (process_method_func)Mthd_Delete,
         (process_method_func)Mthd_Execute,
@@ -865,7 +865,7 @@ namespace {
 
 AUDIO_INSTANCES;
 
-actor_process_profile_definition g_profile_Obj_Swpush = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Swpush = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

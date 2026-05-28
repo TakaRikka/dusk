@@ -244,11 +244,11 @@ enum Event_Cut_Nums {
 
 static NPC_GRZ_HIO_CLASS l_HIO;
 
-static int l_bmdGetParamList[1][2] = {
+static DUSK_CONSTEXPR int l_bmdGetParamList[1][2] = {
     {BMDR_GRZ, GRZ},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[34] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[34] = {
     {-1, GRZ},
     {BCK_GRZ_F_MUKIDASHI, GRZ},
     {BCK_GRZ_F_RECOVER, GRZ3},
@@ -285,7 +285,7 @@ static daNpc_GetParam1 l_bckGetParamList[34] = {
     {BCK_GRZ_PUNCH, GRZ3},
 };
 
-static daNpc_GetParam1 l_btpGetParamList[10] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[10] = {
     {BTP_GRZ, GRZ},
     {BTP_GRZ_F_LIEDOWN, GRZ1},
     {BTP_GRZ_F_GETUP, GRZ1},
@@ -298,52 +298,52 @@ static daNpc_GetParam1 l_btpGetParamList[10] = {
     {BTP_GRZ_F_RECOVER, GRZ3}, 
 };
 
-static daNpc_GetParam1 l_btkGetParamList[3] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[3] = {
     {BTK_GRZ, GRZ},
     {BTK_GRZ_GETUP, GRZ1},
     {BTK_GRZ_SNIFF, GRZ2},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[4] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[4] = {
     {0, GRZ},
     {1, GRZD1},
     {2, GRZD3},
     {3, GRZD3},
 };
 
-static char* l_evtNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[4] = {
     NULL,
     "TALK_STAND",
     "STONE_SMASH",
     "STONE_SMASH_SKIP",
 };
 
-static int l_loadRes_YELIA[5] = {
+static DUSK_CONSTEXPR int l_loadRes_YELIA[5] = {
     GRZ, GRZ2, -1, -1, -1,
 };
 
-static int l_loadRes_LieDown[5] = {
+static DUSK_CONSTEXPR int l_loadRes_LieDown[5] = {
     GRZ, GRZ1, GRZD1, -1, -1,
 };
 
-static int l_loadRes_Smash[5] = {
+static DUSK_CONSTEXPR int l_loadRes_Smash[5] = {
     GRZ, GRZ2, GRZ3, GRZD3, -1,
 };
 
-static int l_loadRes_GRZa[5] = {
+static DUSK_CONSTEXPR int l_loadRes_GRZa[5] = {
     GRZ, GRZ2, -1, -1, -1,
 };
 
-static int l_loadRes_GRZ0[5] = {
+static DUSK_CONSTEXPR int l_loadRes_GRZ0[5] = {
     GRZ, -1, -1, -1, -1,
 };
 
-static int* l_loadRes_list[5] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[5] = {
     l_loadRes_YELIA, l_loadRes_LieDown, l_loadRes_Smash,
     l_loadRes_GRZa,  l_loadRes_GRZ0,
 };
 
-static char* l_resNames[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[6] = {
     "grZ",
     "grZ1",
     "grZ2",
@@ -352,9 +352,9 @@ static char* l_resNames[6] = {
     "grZD3",
 };
 
-static char* l_myName = "grZ";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grZ";
 
-char* daNpc_Grz_c::mEvtCutNameList[7] = {
+char DUSK_CONST* DUSK_CONST daNpc_Grz_c::mEvtCutNameList[7] = {
     "",
     "WAIT",
     "REBIRTH",
@@ -364,7 +364,7 @@ char* daNpc_Grz_c::mEvtCutNameList[7] = {
     "STONE_SMASH_SKIP",
 };
 
-daNpc_Grz_c::cutFunc daNpc_Grz_c::mEvtCutList[7] = {
+daNpc_Grz_c::cutFunc DUSK_CONST daNpc_Grz_c::mEvtCutList[7] = {
     NULL,
     &daNpc_Grz_c::doWaitCut,
     &daNpc_Grz_c::doRebirthCut,
@@ -2539,7 +2539,7 @@ static int daNpc_Grz_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Grz_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Grz_MethodTable = {
     (process_method_func)daNpc_Grz_Create,
     (process_method_func)daNpc_Grz_Delete,
     (process_method_func)daNpc_Grz_Execute,
@@ -2547,7 +2547,7 @@ static actor_method_class daNpc_Grz_MethodTable = {
     (process_method_func)daNpc_Grz_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GRZ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GRZ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

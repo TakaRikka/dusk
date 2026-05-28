@@ -246,7 +246,7 @@ static int daSwLBall_Create(fopAc_ac_c* i_this) {
     return static_cast<daSwLBall_c*>(i_this)->create();
 }
 
-static actor_method_class l_daSwLBall_Method = {
+static DUSK_CONST actor_method_class l_daSwLBall_Method = {
     (process_method_func)daSwLBall_Create,
     (process_method_func)daSwLBall_Delete,
     (process_method_func)daSwLBall_Execute,
@@ -254,7 +254,7 @@ static actor_method_class l_daSwLBall_Method = {
     NULL,
 };
 
-actor_process_profile_definition g_profile_SwLBall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SwLBall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

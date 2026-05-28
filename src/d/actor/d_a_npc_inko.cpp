@@ -484,7 +484,7 @@ static int daNpc_Inko_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-static actor_method_class l_daNpc_Inko_Method = {
+static DUSK_CONST actor_method_class l_daNpc_Inko_Method = {
     (process_method_func)daNpc_Inko_Create,
     (process_method_func)daNpc_Inko_Delete,
     (process_method_func)daNpc_Inko_Execute,
@@ -492,7 +492,7 @@ static actor_method_class l_daNpc_Inko_Method = {
     (process_method_func)daNpc_Inko_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_INKO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_INKO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

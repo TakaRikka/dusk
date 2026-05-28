@@ -267,13 +267,13 @@ static int daKytag08_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-static actor_method_class l_daKytag08_Method = {
+static DUSK_CONST actor_method_class l_daKytag08_Method = {
     (process_method_func)daKytag08_Create,  (process_method_func)daKytag08_Delete,
     (process_method_func)daKytag08_Execute, (process_method_func)daKytag08_IsDelete,
     (process_method_func)daKytag08_Draw,
 };
 
-actor_process_profile_definition g_profile_KYTAG08 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_KYTAG08 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

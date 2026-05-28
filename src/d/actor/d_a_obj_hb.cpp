@@ -710,7 +710,7 @@ static cPhs_Step daOBJ_HB_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-static actor_method_class l_daOBJ_HB_Method = {
+static DUSK_CONST actor_method_class l_daOBJ_HB_Method = {
     (process_method_func)daOBJ_HB_Create,
     (process_method_func)daOBJ_HB_Delete,
     (process_method_func)daOBJ_HB_Execute,
@@ -718,7 +718,7 @@ static actor_method_class l_daOBJ_HB_Method = {
     (process_method_func)daOBJ_HB_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_HB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_HB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

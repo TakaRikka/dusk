@@ -73,9 +73,9 @@ static f32 const l_cull_size[] = {-150.0f, 0.0f, -150.0f, 150.0f, 150.0f, 150.0f
 // This was used for this object's HIO, which was removed in retail
 static s16 const l_r00_rot_time[] = {190, 148, 100};
 
-static char* l_arcName[] = {"K_prop00", "Lv9_puro"};
+static DUSK_CONST char* l_arcName[] = {"K_prop00", "Lv9_puro"};
 
-static char* l_joint_name = "kaiten";
+static DUSK_CONST char* l_joint_name = "kaiten";
 
 int daObjSwPr_c::Create() {
 #if AVOID_UB
@@ -329,13 +329,13 @@ static int daObjSwPr_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSwPr_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjSwPr_Method = {
+static DUSK_CONST actor_method_class l_daObjSwPr_Method = {
     (process_method_func)daObjSwPr_Create,  (process_method_func)daObjSwPr_Delete,
     (process_method_func)daObjSwPr_Execute, (process_method_func)NULL,
     (process_method_func)daObjSwPr_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Swpropeller = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Swpropeller = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -42,7 +42,7 @@ static const dCcD_SrcCyl l_sph_src = {
 
 static const int l_arcIdx[] = {3, 6, 5, 4};
 
-static char* l_arcName[1] = {"buoy"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[1] = {"buoy"};
 
 int daObjZraMark_c::Create() {
     fopAcM_ct(this, daObjZraMark_c);
@@ -529,7 +529,7 @@ void _ZraMark_Hahen_Mng_c::draw() {
     }
 }
 
-static actor_method_class l_daObjZraMark_Method = {
+static DUSK_CONST actor_method_class l_daObjZraMark_Method = {
     (process_method_func)daObjZraMark_create,
     (process_method_func)daObjZraMark_Delete,
     (process_method_func)daObjZraMark_Execute,
@@ -537,7 +537,7 @@ static actor_method_class l_daObjZraMark_Method = {
     (process_method_func)daObjZraMark_Draw,
 };
 
-actor_process_profile_definition g_profile_ZRA_MARK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_ZRA_MARK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

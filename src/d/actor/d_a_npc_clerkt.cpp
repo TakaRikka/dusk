@@ -67,50 +67,50 @@ void daNpcClerkt_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {12, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Tkj",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, 18, 2, 1, 1},
     {6, 0, 1, 18, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {9, 2, 1, 15, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-char* daNpcClerkT_c::mCutNameList[1] = {""};
+char DUSK_CONST* DUSK_CONST daNpcClerkT_c::mCutNameList[1] = {""};
 
-daNpcClerkT_c::cutFunc daNpcClerkT_c::mCutList[1] = {NULL};
+daNpcClerkT_c::cutFunc DUSK_CONST daNpcClerkT_c::mCutList[1] = {NULL};
 
 daNpcClerkT_c::~daNpcClerkT_c() {
     deleteObject();
@@ -696,13 +696,13 @@ void daNpcClerkT_c::setCollision() {
 
 static NPC_CLERKT_HIO_CLASS l_HIO;
 
-static actor_method_class daNpcClerkt_MethodTable = {
+static DUSK_CONST actor_method_class daNpcClerkt_MethodTable = {
     (process_method_func)daNpcClerkt_Create,  (process_method_func)daNpcClerkt_Delete,
     (process_method_func)daNpcClerkt_Execute, (process_method_func)daNpcClerkt_IsDelete,
     (process_method_func)daNpcClerkt_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CLERKT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CLERKT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -15,12 +15,14 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
-static int l_bmdData[4][2] = {
+#include "dusk/string.hpp"
+
+static DUSK_CONSTEXPR int l_bmdData[4][2] = {
     {14, 1}, {26, 2},
     {25, 2}, {3, 4},
 };
 
-static daNpcT_evtData_c l_evtList[11] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[11] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"CONVERSATION_ABOUT_SARU01", 5},
@@ -36,7 +38,7 @@ static daNpcT_evtData_c l_evtList[11] = {
 
 
 
-static char* l_resNameList[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[6] = {
     "",
     "Hanjo",
     "Hanjo1",
@@ -45,13 +47,13 @@ static char* l_resNameList[6] = {
     "Sera",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     1,
     2,
     -1,
 };
 
-static s8 l_loadResPtrn1[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[5] = {
     1,
     2,
     3,
@@ -59,11 +61,11 @@ static s8 l_loadResPtrn1[5] = {
     -1,
 };
 
-static s8 l_loadResPtrn2[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[2] = {
     1, -1
 };
 
-static s8 l_loadResPtrn9[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {
     1,
     2,
     3,
@@ -71,12 +73,12 @@ static s8 l_loadResPtrn9[5] = {
     -1,
 };
 
-static s8* l_loadResPtrnList[5] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[5] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn1,
     l_loadResPtrn2, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, 0, 0, 20, 2, 1, 1}, 
     {7, 0, 1, 20, 2, 1, 1}, 
     {7, 0, 2, 34, 0, 2, 0},
@@ -89,7 +91,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
      { 11, 2, 2, 38, 2, 2, 0},
 };
 
-static int l_motionAnmData[161] = {
+static DUSK_CONSTEXPR int l_motionAnmData[161] = {
     11, 2, 1, 17, 0, 1, 65536, 22, 2, 2, 17, 0, 1, 65536, 16, 2, 2, 17, 0, 1, 65536,
     13, 2, 2, 17, 0, 1, 65536, 21, 2, 2, 31, 2, 2, 0,     20, 0, 2, 30, 0, 2, 0,
     14, 0, 2, 29, 0, 2, 0,     8,  2, 1, 17, 0, 1, 65536, 6,  0, 1, 17, 0, 1, 65536,
@@ -99,13 +101,13 @@ static int l_motionAnmData[161] = {
     10, 0, 3, 17, 0, 1, 65536, 9,  0, 1, 17, 0, 1, 65536, 11, 0, 3, 17, 0, 1, 65536,
     10, 0, 1, 17, 0, 1, 65536, -1, 0, 0, 17, 0, 1, 65536};
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {4, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
     {8, -1, 1}, {9, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 1}, {7, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}};
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {21, -1, 1}, {0, 0, 0},   {-1, 0, 0},
     {-1, 0, 0},  {4, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {11, -1, 1}, {9, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {12, -1, 1}, {2, 0, 0},   {-1, 0, 0},  {-1, 0, 0},  {1, -1, 0},
@@ -119,7 +121,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {-1, 0, 0},  {-1, 0, 0},  {8, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {9, -1, 0},
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}};
 
-char* daNpc_Hanjo_c::mCutNameList[6] = {
+char DUSK_CONST* DUSK_CONST daNpc_Hanjo_c::mCutNameList[6] = {
     "",
     "CONVERSATION_ABOUT_SARU",
     "CONVERSATION",
@@ -128,7 +130,7 @@ char* daNpc_Hanjo_c::mCutNameList[6] = {
     "DIVE",
 };
 
-daNpc_Hanjo_c::cutFunc daNpc_Hanjo_c::mCutList[6] = {
+daNpc_Hanjo_c::cutFunc DUSK_CONST daNpc_Hanjo_c::mCutList[6] = {
     NULL,
     &daNpc_Hanjo_c::cutConversationAboutSaru,
     &daNpc_Hanjo_c::cutConversation,
@@ -137,7 +139,7 @@ daNpc_Hanjo_c::cutFunc daNpc_Hanjo_c::mCutList[6] = {
     &daNpc_Hanjo_c::cutDive,
 };
 
-dCcD_SrcSph daNpc_Hanjo_c::mStoneCcDSph = {
+dCcD_SrcSph DUSK_CONST daNpc_Hanjo_c::mStoneCcDSph = {
     daNpc_Hanjo_c::mStoneCcDObjInfo, {}
 };
 
@@ -1336,8 +1338,8 @@ int daNpc_Hanjo_c::cutAppearHawker(int param_1) {
             home.angle.y += 0x8000;
             setAngle(home.angle.y);
             initTalk(0xcf, NULL);
-            strcpy(acStack_98, l_evtList[9].eventName);
-            strcat(acStack_98, "@");
+            SAFE_STRCPY(acStack_98, l_evtList[9].eventName);
+            SAFE_STRCAT(acStack_98, "@");
             dComIfGp_getEvent()->setSkipZev(this, acStack_98);
             dComIfGp_getEvent()->onSkipFade();
             dComIfGp_getVibration().StartShock( 9, 15, cXyz(0.0f, 1.0f, 0.0f));
@@ -1951,7 +1953,7 @@ static int daNpc_Hanjo_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Hanjo_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Hanjo_MethodTable = {
     (process_method_func)daNpc_Hanjo_Create,
     (process_method_func)daNpc_Hanjo_Delete,
     (process_method_func)daNpc_Hanjo_Execute,
@@ -1959,7 +1961,7 @@ static actor_method_class daNpc_Hanjo_MethodTable = {
     (process_method_func)daNpc_Hanjo_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_HANJO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_HANJO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

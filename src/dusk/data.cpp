@@ -525,7 +525,14 @@ bool validate_writable_data_path(const std::filesystem::path& path, std::string*
     try {
         io::FileStream::WriteAllText(probePath, "dusk");
     } catch (const std::exception& e) {
+#if defined(__ANDROID__)
+        set_error(errorOut,
+            fmt::format("{} could not write to the selected folder. On Android, allow "
+                        "\"All files access\" for Dusklight and try again.",
+                AppName));
+#else
         set_error(errorOut, fmt::format("{} could not write to the selected folder.", AppName));
+#endif
         Log.warn("Failed write probe for custom data folder '{}': {}", io::fs_path_to_string(path),
             e.what());
         return false;

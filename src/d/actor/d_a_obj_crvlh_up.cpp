@@ -19,7 +19,7 @@ static int daObjCRVLH_UP_Delete(daObjCRVLH_UP_c* i_this) {
     return 1;
 }
 
-static char* l_arcName = "CrvLH_Up";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "CrvLH_Up";
 
 void daObjCRVLH_UP_c::HakaiSet() {
     fopAcM_GetPosition(daPy_getPlayerActorClass());
@@ -192,13 +192,13 @@ int daObjCRVLH_UP_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjCRVLH_UP_Method = {
+static DUSK_CONST actor_method_class l_daObjCRVLH_UP_Method = {
     (process_method_func)daObjCRVLH_UP_Create,  (process_method_func)daObjCRVLH_UP_Delete,
     (process_method_func)daObjCRVLH_UP_Execute, (process_method_func)daObjCRVLH_UP_IsDelete,
     (process_method_func)daObjCRVLH_UP_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_CRVLH_UP = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_CRVLH_UP = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

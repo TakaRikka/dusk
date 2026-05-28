@@ -192,7 +192,7 @@ inline int daObjFlag_c::createHeap() {
         tmp = true;
 
         char resName[12];
-        sprintf(resName, "flag%02d.bmd", angle);
+        SAFE_SPRINTF(resName, "flag%02d.bmd", angle);
 
         shape_angle.setall(0);
         current.angle.setall(0);
@@ -297,7 +297,7 @@ static int daObjFlag_Create(fopAc_ac_c* param_0) {
 
 FlagJoint_c::FlagJoint_c() {}
 
-static actor_method_class l_daObjFlag_Method = {
+static DUSK_CONST actor_method_class l_daObjFlag_Method = {
     (process_method_func)daObjFlag_Create,
     (process_method_func)daObjFlag_Delete,
     (process_method_func)daObjFlag_Execute,
@@ -305,7 +305,7 @@ static actor_method_class l_daObjFlag_Method = {
     (process_method_func)daObjFlag_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Flag = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Flag = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

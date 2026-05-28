@@ -26,14 +26,15 @@
 
 #include "f_op/f_op_overlap_mng.h"
 
+#include "JSystem/JAudio2/JASCriticalSection.h"
+
+#if TARGET_PC
 #include "dusk/gx_helper.h"
 #include "dusk/os.h"
 #include "dusk/layout.hpp"
-
-#include "JSystem/JAudio2/JASCriticalSection.h"
-
 #if MOVIE_SUPPORT
 #include "turbojpeg.h"
+#endif
 #endif
 
 inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
@@ -3912,13 +3913,20 @@ static BOOL daMP_ProperTimingForGettingNextFrame() {
 			return TRUE;
 		}
 	} else {
-		s32 frameRate = daMP_ActivePlayer.header.frameRate * 100.0f;
 #if TARGET_PC
-	    // DUSK HACK: We only fire retrace callbacks *half* as often as the game expects,
-	    // because we only run them once per frame, and normally there should be two scans
-	    // per game frame.
-	    frameRate *= 2;
-#endif
+		const f32 fps = daMP_ActivePlayer.header.frameRate;
+		if (fps > 0.0f) {
+			const f32 elapsed = std::chrono::duration<f32>(
+			    std::chrono::steady_clock::now() - daMP_ActivePlayer.thpPlaybackClock).count();
+			const s32 desired = static_cast<s32>(elapsed * fps);
+			if (desired != daMP_ActivePlayer.prevCount) {
+				daMP_ActivePlayer.prevCount = desired;
+				daMP_ActivePlayer.curCount = desired;
+				return TRUE;
+			}
+		}
+#else
+		s32 frameRate = daMP_ActivePlayer.header.frameRate * 100.0f;
 		if (VIGetTvFormat() == VI_PAL) {
 			daMP_ActivePlayer.curCount = daMP_ActivePlayer.retaceCount * frameRate / 5000;
 		} else {
@@ -3929,6 +3937,7 @@ static BOOL daMP_ProperTimingForGettingNextFrame() {
 			daMP_ActivePlayer.prevCount = daMP_ActivePlayer.curCount;
 			return TRUE;
 		}
+#endif
 	}
 
 	return FALSE;
@@ -4133,6 +4142,9 @@ static BOOL daMP_THPPlayerPlay() {
         daMP_ActivePlayer.prevCount = 0;
         daMP_ActivePlayer.curCount = 0;
         daMP_ActivePlayer.retaceCount = -1;
+#if TARGET_PC
+        daMP_ActivePlayer.thpPlaybackClock = std::chrono::steady_clock::now();
+#endif
         return TRUE;
     }
 
@@ -4482,7 +4494,7 @@ int daMP_c::daMP_c_Init() {
     JUT_ASSERT(9507, 0 <= movieNo && movieNo <= 99);
 
     char path[32];
-    sprintf(path, "/Movie/demo_movie%02d_%02d.thp", demoNo, movieNo);
+    SAFE_SPRINTF(path, "/Movie/demo_movie%02d_%02d.thp", demoNo, movieNo);
 
     if (!daMP_ActivePlayer_Init(path)) {
         daMP_Fail_alloc = TRUE;
@@ -4554,7 +4566,7 @@ static int daMP_Callback_Dummy(daMP_c* i_this) {
     return 1;
 }
 
-static actor_method_class daMP_METHODS = {
+static DUSK_CONST actor_method_class daMP_METHODS = {
     (process_method_func)daMP_c::daMP_c_Callback_Init,
     (process_method_func)daMP_c::daMP_c_Callback_Finish,
     (process_method_func)daMP_c::daMP_c_Callback_Main,
@@ -4562,7 +4574,7 @@ static actor_method_class daMP_METHODS = {
     (process_method_func)daMP_c::daMP_c_Callback_Draw,
 };
 
-actor_process_profile_definition g_profile_MOVIE_PLAYER = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MOVIE_PLAYER = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -52,7 +52,7 @@ static int daTagSetBall_Create(daTagSetBall_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daTagSetBall_Method = {
+static DUSK_CONST actor_method_class l_daTagSetBall_Method = {
     (process_method_func)daTagSetBall_Create,
     (process_method_func)daTagSetBall_Delete,
     (process_method_func)daTagSetBall_Execute,
@@ -60,7 +60,7 @@ static actor_method_class l_daTagSetBall_Method = {
     (process_method_func)NULL,
 };
 
-actor_process_profile_definition g_profile_Tag_SetBall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_SetBall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

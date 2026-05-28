@@ -161,13 +161,13 @@ static int daObj_Myogan_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-static actor_method_class l_daObj_Myogan_Method = {
+static DUSK_CONST actor_method_class l_daObj_Myogan_Method = {
     (process_method_func)daObj_Myogan_Create,  (process_method_func)daObj_Myogan_Delete,
     (process_method_func)daObj_Myogan_Execute, (process_method_func)daObj_Myogan_IsDelete,
     (process_method_func)daObj_Myogan_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_MYOGAN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_MYOGAN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

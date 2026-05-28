@@ -122,7 +122,7 @@ enum Joint {
     /* 0x19 */ JNT_FOOTR
 };
 
-static daNpc_GetParam2 l_bckGetParamList[39] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[39] = {
     {-1, J3DFrameCtrl::EMode_NONE, MoiR},
     {BCK_MOIR_F_TALK_A, J3DFrameCtrl::EMode_NONE, MoiR},
     {BCK_MOIR_F_HOLD_S, J3DFrameCtrl::EMode_NONE, MoiR},
@@ -164,48 +164,48 @@ static daNpc_GetParam2 l_bckGetParamList[39] = {
     {BCK_MOIR_RUN, J3DFrameCtrl::EMode_LOOP, MoiR3},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[2] = {
     {BTP_MOIR, J3DFrameCtrl::EMode_LOOP, MoiR},
     {BTP_MOIR_FH_SERIOUS, J3DFrameCtrl::EMode_LOOP, MoiR},
 };
 
-static daNpc_GetParam2 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[1] = {
     {BTK_MOIR, J3DFrameCtrl::EMode_LOOP, MoiR},
 };
 
-static int l_loadRes_MOIR0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_MOIR0[3] = {
     0, 1, -1,
 };
 
-static int l_loadRes_MOIR1[3] = {
+static DUSK_CONSTEXPR int l_loadRes_MOIR1[3] = {
     0, 2, -1,
 };
 
-static int l_loadRes_MOIR2[3] = {
+static DUSK_CONSTEXPR int l_loadRes_MOIR2[3] = {
     0, 3, -1,
 };
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_MOIR0,
     l_loadRes_MOIR1,
     l_loadRes_MOIR2,
 };
 
-static char* l_arcNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[4] = {
     "MoiR",
     "MoiR1",
     "MoiR2",
     "MoiR3",
 };
 
-static char* l_evtNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[4] = {
     "",
     "THE_INTRODUCTION",
     "MOIR_APPEAR",
     "MOIR_APPEAR2",
 };
 
-static char* l_myName = "MoiR";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "MoiR";
 
 daNpcMoiR_HIOParam const daNpcMoiR_Param_c::m = {
     35.0f,
@@ -2011,7 +2011,7 @@ BOOL daNpcMoiR_c::drawDbgInfo() {
     return FALSE;
 }
 
-static actor_method_class daNpcMoiR_MethodTable = {
+static DUSK_CONST actor_method_class daNpcMoiR_MethodTable = {
     (process_method_func)daNpcMoiR_Create,
     (process_method_func)daNpcMoiR_Delete,
     (process_method_func)daNpcMoiR_Execute,
@@ -2019,7 +2019,7 @@ static actor_method_class daNpcMoiR_MethodTable = {
     (process_method_func)daNpcMoiR_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_MOIR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_MOIR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

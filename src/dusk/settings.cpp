@@ -60,13 +60,13 @@ UserSettings g_userSettings = {
         // Graphics
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
+        .depthOfFieldMode{"game.depthOfFieldMode", DepthOfFieldMode::Dusk},
         .disableWaterRefraction {"game.disableWaterRefraction", false},
         .enableTextureReplacements {"game.enableTextureReplacements", true},
         .enableFrameInterpolation {"game.enableFrameInterpolation", FrameInterpMode::Off},
         .internalResolutionScale {"game.internalResolutionScale", 0},
         .shadowResolutionMultiplier {"game.shadowResolutionMultiplier", 1},
         .resampler {"game.resampler", Resampler::Bilinear},
-        .enableDepthOfField {"game.enableDepthOfField", true},
         .enableMapBackground {"game.enableMapBackground", true},
         .disableCutscenePillarboxing {"game.disableCutscenePillarboxing", false},
 
@@ -90,7 +90,10 @@ UserSettings g_userSettings = {
         .invertCameraYAxis {"game.invertCameraYAxis", false},
         .invertFirstPersonXAxis {"game.invertFirstPersonXAxis", false},
         .invertFirstPersonYAxis {"game.invertFirstPersonYAxis", false},
-        .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
+        .invertAirSwimX {"game.invertAirSwimX", false},
+        .invertAirSwimY {"game.invertAirSwimY", false},
+        .freeCameraXSensitivity {"game.freeCameraXSensitivity", 1.0f},
+        .freeCameraYSensitivity {"game.freeCameraYSensitivity", 1.0f},
         .debugFlyCam {"game.debugFlyCam", false},
         .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
         .allowBackgroundInput {"game.allowBackgroundInput", true},
@@ -100,6 +103,7 @@ UserSettings g_userSettings = {
             ConfigVar<bool>{"game.enableLED_port2", true},
             ConfigVar<bool>{"game.enableLED_port3", true},
         },
+        .swapDirectSelect {"game.swapDirectSelect", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -225,18 +229,21 @@ void registerSettings() {
     Register(g_userSettings.game.invertCameraYAxis);
     Register(g_userSettings.game.invertFirstPersonXAxis);
     Register(g_userSettings.game.invertFirstPersonYAxis);
-    Register(g_userSettings.game.freeCameraSensitivity);
+    Register(g_userSettings.game.invertAirSwimX);
+    Register(g_userSettings.game.invertAirSwimY);
+    Register(g_userSettings.game.freeCameraXSensitivity);
+    Register(g_userSettings.game.freeCameraYSensitivity);
     Register(g_userSettings.game.minimalHUD);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.enableDiscordPresence);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
+    Register(g_userSettings.game.depthOfFieldMode);
     Register(g_userSettings.game.disableWaterRefraction);
     Register(g_userSettings.game.enableTextureReplacements);
     Register(g_userSettings.game.internalResolutionScale);
     Register(g_userSettings.game.resampler);
     Register(g_userSettings.game.shadowResolutionMultiplier);
-    Register(g_userSettings.game.enableDepthOfField);
     Register(g_userSettings.game.enableMapBackground);
     Register(g_userSettings.game.disableCutscenePillarboxing);
     Register(g_userSettings.game.enableFastIronBoots);
@@ -292,6 +299,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableLED[1]);
     Register(g_userSettings.game.enableLED[2]);
     Register(g_userSettings.game.enableLED[3]);
+    Register(g_userSettings.game.swapDirectSelect);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);

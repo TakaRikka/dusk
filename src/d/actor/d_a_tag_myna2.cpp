@@ -66,13 +66,13 @@ static s32 daTagMyna2_Delete(daTagMyna2_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagMyna2_Method = {
+static DUSK_CONST actor_method_class l_daTagMyna2_Method = {
     (process_method_func)daTagMyna2_Create,
     (process_method_func)daTagMyna2_Delete,
     (process_method_func)daTagMyna2_Execute,
 };
 
-actor_process_profile_definition g_profile_TAG_MYNA2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_MYNA2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

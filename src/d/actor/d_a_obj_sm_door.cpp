@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_e_pm.h"
 
-static char* l_arcName = "sm_door";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "sm_door";
 
 static cPhs_Step daObjSM_DOOR_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjSM_DOOR_c*>(i_this)->create();
@@ -284,7 +284,7 @@ inline int daObjSM_DOOR_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjSM_DOOR_Method = {
+static DUSK_CONST actor_method_class l_daObjSM_DOOR_Method = {
     (process_method_func)daObjSM_DOOR_Create,
     (process_method_func)daObjSM_DOOR_Delete,
     (process_method_func)daObjSM_DOOR_Execute,
@@ -292,7 +292,7 @@ static actor_method_class l_daObjSM_DOOR_Method = {
     (process_method_func)daObjSM_DOOR_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SM_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SM_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -1165,6 +1165,10 @@ int daAlink_c::procCutFinishInit(int i_type) {
     const daAlink_cutParamTbl* cutParams = &cutParamTable[i_type];
     BOOL is_proc_frontRoll = mProcID == PROC_FRONT_ROLL;
 
+#if TARGET_PC
+    mIsRollstab = (is_proc_frontRoll != FALSE) && (i_type == CUT_FINISH_PARAM_STAB);
+#endif
+
     commonProcInit(PROC_CUT_FINISH);
     setCutType(cutParams->m_cutType);
     field_0x3198 = cutParams->m_recoilAnmID;

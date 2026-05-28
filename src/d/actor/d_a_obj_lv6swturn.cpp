@@ -10,7 +10,7 @@
 #include "d/actor/d_a_obj_lv6swturn.h"
 #include "d/actor/d_a_player.h"
 
-static char* l_arcName = "Obj_l6tsw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_l6tsw";
 
 #if DEBUG
 daObjLv6SwTurn_HIO_c::daObjLv6SwTurn_HIO_c() {
@@ -335,7 +335,7 @@ static int daObjLv6SwTurn_MoveBGDraw(daObjLv6SwTurn_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv6SwTurn_METHODS = {
+static DUSK_CONST actor_method_class daObjLv6SwTurn_METHODS = {
     (process_method_func)daObjLv6SwTurn_create1st,
     (process_method_func)daObjLv6SwTurn_MoveBGDelete,
     (process_method_func)daObjLv6SwTurn_MoveBGExecute,
@@ -343,7 +343,7 @@ static actor_method_class daObjLv6SwTurn_METHODS = {
     (process_method_func)daObjLv6SwTurn_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6SwTurn = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6SwTurn = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

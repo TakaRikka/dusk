@@ -29,11 +29,11 @@ public:
 
     typedef int (daKnob20_c::*actionFunc)();
 
-    char* getAlwaysArcName();
-    char* getEvArcName();
-    char* getDzb();
-    char* getDummyBmd();
-    char* getBmd();
+    DUSK_CONST char* getAlwaysArcName();
+    DUSK_CONST char* getEvArcName();
+    DUSK_CONST char* getDzb();
+    DUSK_CONST char* getDummyBmd();
+    DUSK_CONST char* getBmd();
     J3DModelData* getDoorModelData();
     int CreateHeap();
     void calcMtx();

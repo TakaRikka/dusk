@@ -108,9 +108,9 @@ void daObjL6Bm_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "Obj_lv6bm";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_lv6bm";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-200.0f, -100.0f, -200.0f},
     {200.0f, 100.0f, 200.0f},
 };
@@ -407,7 +407,7 @@ static int daObjL6Bm_MoveBGDraw(daObjL6Bm_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjL6Bm_METHODS = {
+static DUSK_CONST actor_method_class daObjL6Bm_METHODS = {
     (process_method_func)daObjL6Bm_create1st,
     (process_method_func)daObjL6Bm_MoveBGDelete,
     (process_method_func)daObjL6Bm_MoveBGExecute,
@@ -415,7 +415,7 @@ static actor_method_class daObjL6Bm_METHODS = {
     (process_method_func)daObjL6Bm_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6bemos = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6bemos = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

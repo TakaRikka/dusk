@@ -26,6 +26,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 #if (PLATFORM_WII || PLATFORM_SHIELD)
 #define POINTER_OPT dComIfGs_getOptPointer()
 #else
@@ -116,9 +118,9 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
     mapScreenInit();
 
     char archive_path[32];
-    strcpy(archive_path, "/res/FieldMap/D_MN10.arc");
+    SAFE_STRCPY(archive_path, "/res/FieldMap/D_MN10.arc");
     char stage_name[8];
-    strcpy(stage_name, dComIfGp_getStartStageName());
+    SAFE_STRCPY(stage_name, dComIfGp_getStartStageName());
     archive_path[18] = stage_name[4];
     archive_path[19] = stage_name[5];
 
@@ -392,7 +394,7 @@ void dMenu_DmapBg_c::setAButtonString(u32 i_msgNo) {
     };
     for (int i = 0; i < 5; i++) {
         if (i_msgNo == 0) {
-            strcpy(((J2DTextBox*)mButtonScreen->search(cont_at[i]))->getStringPtr(), "");
+            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(cont_at[i]))->getStringPtr(), "");
         } else {
             dMeter2Info_getStringKanji(i_msgNo, ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->getStringPtr(), NULL);
         }
@@ -409,7 +411,7 @@ void dMenu_DmapBg_c::setBButtonString(u32 i_msgNo) {
     };
     for (int i = 0; i < 5; i++) {
         if (i_msgNo == 0) {
-            strcpy(((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->getStringPtr(), "");
+            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->getStringPtr(), "");
         } else {
             dMeter2Info_getStringKanji(i_msgNo, ((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->getStringPtr(), NULL);
         }
@@ -441,7 +443,7 @@ void dMenu_DmapBg_c::setCButtonString(u32 i_msgNo) {
 
     if (msgNo == 0) {
         for (i = 0; i < 2; i++) {
-            strcpy(((J2DTextBox*)mButtonScreen->search(c_tag[i]))->getStringPtr(), "");
+            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(c_tag[i]))->getStringPtr(), "");
         }
         mpCButton->setAlphaRate(0.5f);
     } else {

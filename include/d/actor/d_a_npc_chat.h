@@ -102,7 +102,7 @@ public:
     void setFear() { mFear = true; }
     void setTalkFlag() { mTalkFlag = true; }
 
-    static eventFunc mEvtSeqList[1];
+    static eventFunc DUSK_CONST mEvtSeqList[1];
 
 private:
     /* 0xB48 */ Z2CreatureCitizen mSound;

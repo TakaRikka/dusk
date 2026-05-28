@@ -23,6 +23,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 static s32 SelStartFrameTbl[3] = {
     59,
     99,
@@ -1666,7 +1668,7 @@ void dFile_select_c::copySelMoveAnmInitSet(int param_0, int param_1) {
 
 void dFile_select_c::setSaveDataForCopySel() {
     static u64 l_tagName101[2] = {MULTI_CHAR('w_nun01'), MULTI_CHAR('w_nun02')};
-    static char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
+    static DUSK_CONST char* l_numTex[3] = {"tt_1_metal_40x40.bti", "tt_2_metal_40x40.bti",
                                 "tt_3_metal_40x40.bti"};
     SaveDataBuf* pSave = mSaveData;
     int notSelectedIndex = 0;
@@ -3507,7 +3509,7 @@ void dFile_select_c::headerTxtSet(u16 i_msgId, u8 i_type, u8 param_3) {
     }
 
     if (i_msgId == 0xFFFF) {
-        strcpy(mHeaderStringPtr[dispIdx], "");
+        SAFE_STRCPY(mHeaderStringPtr[dispIdx], "");
     } else {
         static f32 fontsize[2] = {21.0f, 27.0f};
         #if VERSION == VERSION_GCN_JPN
@@ -3750,6 +3752,7 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 
 #if TARGET_PC
 void dFile_select_c::fileSelectWide() {
+    static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
         for (PaneCache& entry : mSelDtPanes) {
@@ -3851,17 +3854,11 @@ void dFile_select_c::fileSelectWide() {
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
-        // Spirals
-        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Spirals & Memory Card Text
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        }
 
         // Selection Cursor
         if (mSelIcon) {
@@ -3951,17 +3948,11 @@ void dFile_select_c::fileSelectWide() {
             mSelIcon2->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
         }
 
-        // Spirals
-        fileSel.Scr->search(MULTI_CHAR('w_uzu00'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu01'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu02'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu03'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu04'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu05'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu06'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu07'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu08'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-        fileSel.Scr->search(MULTI_CHAR('w_uzu09'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        // Spirals & Memory Card Text
+        for (PaneCache& entry : fileSelPanes) {
+            J2DPane* pane = fileSel.Scr->search(entry.tag);
+            pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        }
         break;
     }
 }
@@ -4182,7 +4173,7 @@ void dFile_select_c::errDispInitSet(char* i_errMesg) {
     mErrorMsgTxtPane[mErrorTxtDispIdx]->setAlpha(0xFF);
     mErrorMsgTxtPane[mErrorTxtDispIdx ^ 1]->setAlpha(0);
 
-    strcpy(mErrorMsgStringPtr[mErrorTxtDispIdx], i_errMesg);
+    SAFE_STRCPY_BOUNDED(mErrorMsgStringPtr[mErrorTxtDispIdx], i_errMesg);
 
     if (field_0x014a) {
         errorMoveAnmInitSet(2859, 2849);
@@ -4391,7 +4382,7 @@ void dFile_select_c::MemCardLoadWait() {
         if (mDoMemCd_getDataVersion() != 6) {
             char errmsg[264];
             // "Savedata version is different\n\nVersion %d\n\nFormatting data."
-            sprintf(errmsg, "セーブデータのバージョンが違います\n\nバージョン %d\n\nデータを初期化します。", mDoMemCd_getDataVersion());
+            SAFE_SPRINTF(errmsg, "セーブデータのバージョンが違います\n\nバージョン %d\n\nデータを初期化します。", mDoMemCd_getDataVersion());
             errDispInitSet(errmsg);
             field_0x0280 = false;
             mWindowCloseMsgDispCb = NULL;
@@ -5237,7 +5228,7 @@ void dFile_select_c::MemCardErrYesNoCursorMoveAnm() {
 
 void dFile_select_c::errorTxtSet(u16 i_msgId) {
     if (i_msgId == 0xffff) {
-        strcpy(mErrorMsgStringPtr[mErrorTxtDispIdx ^ 1], "");
+        SAFE_STRCPY(mErrorMsgStringPtr[mErrorTxtDispIdx ^ 1], "");
     } else {
         fileSel.mMessageString->getString(
             i_msgId, (J2DTextBox*)mErrorMsgTxtPane[mErrorTxtDispIdx ^ 1]->getPanePtr(), NULL,

@@ -493,7 +493,7 @@ static cPhs_Step daObj_Food_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-static actor_method_class l_daObj_Food_Method = {
+static DUSK_CONST actor_method_class l_daObj_Food_Method = {
     (process_method_func)daObj_Food_Create,
     (process_method_func)daObj_Food_Delete,
     (process_method_func)daObj_Food_Execute,
@@ -501,7 +501,7 @@ static actor_method_class l_daObj_Food_Method = {
     (process_method_func)daObj_Food_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_FOOD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_FOOD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

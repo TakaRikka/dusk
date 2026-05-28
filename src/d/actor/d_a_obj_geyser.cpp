@@ -19,9 +19,9 @@ void daObjGeyser_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
-static char* l_arcName = "H_knktsn";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_knktsn";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-100.0f, -10.0f, -100.0f},
     {100.0f, 550.0f, 100.0f},
 };
@@ -681,7 +681,7 @@ static int daObjGeyser_MoveBGDraw(daObjGeyser_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjGeyser_METHODS = {
+static DUSK_CONST actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_create1st,
     (process_method_func)daObjGeyser_MoveBGDelete,
     (process_method_func)daObjGeyser_MoveBGExecute,
@@ -689,7 +689,7 @@ static actor_method_class daObjGeyser_METHODS = {
     (process_method_func)daObjGeyser_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Geyser = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Geyser = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

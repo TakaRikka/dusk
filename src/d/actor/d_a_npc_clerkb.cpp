@@ -70,41 +70,41 @@ void daNpc_clerkB_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {26, 1},
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "clerkB",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[9] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[9] = {
     {-1, 0, 0, 35, 2, 1, 1}, {12, 0, 1, 40, 0, 1, 0}, {8, 0, 1, 36, 0, 1, 0},
     {10, 0, 1, 38, 0, 1, 0}, {11, 0, 1, 39, 0, 1, 0}, {9, 0, 1, 37, 0, 1, 0},
     {14, 2, 1, 42, 2, 1, 0}, {15, 2, 1, 43, 2, 1, 0}, {13, 2, 1, 35, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[9] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[9] = {
     {23, 2, 1, 32, 0, 1, 1, 0}, {22, 2, 1, 32, 0, 1, 1, 0}, {20, 2, 1, 32, 0, 1, 1, 0},
     {7, 0, 1, 32, 0, 1, 1, 0},  {21, 0, 1, 32, 0, 1, 1, 0}, {17, 2, 1, 32, 0, 1, 1, 0},
     {16, 2, 1, 32, 0, 1, 1, 0}, {19, 0, 1, 32, 0, 1, 1, 0}, {18, 0, 1, 32, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] = {
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {6, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {7, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {8, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -112,7 +112,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[36] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {0, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, 0, 1},  {1, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {4, 0, 1},  {2, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -120,9 +120,9 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {8, -1, 1}, {2, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_clerkB_c::mCutNameList[1] = {""};
+char DUSK_CONST* DUSK_CONST daNpc_clerkB_c::mCutNameList[1] = {""};
 
-daNpc_clerkB_c::cutFunc daNpc_clerkB_c::mCutList[1] = {NULL};
+daNpc_clerkB_c::cutFunc DUSK_CONST daNpc_clerkB_c::mCutList[1] = {NULL};
 
 daNpc_clerkB_c::~daNpc_clerkB_c() {
     deleteObject();
@@ -935,13 +935,13 @@ static int daNpc_clerkB_IsDelete(void* i_this) {
 
 static NPC_CLERKB_HIO_CLASS l_HIO;
 
-static actor_method_class daNpc_clerkB_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_clerkB_MethodTable = {
     (process_method_func)daNpc_clerkB_Create,  (process_method_func)daNpc_clerkB_Delete,
     (process_method_func)daNpc_clerkB_Execute, (process_method_func)daNpc_clerkB_IsDelete,
     (process_method_func)daNpc_clerkB_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CLERKB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CLERKB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -89,11 +89,11 @@ enum RES_Name {
     /* 0x1 */ SHA,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_SHA, SHA},
 };
 
-static daNpcT_evtData_c l_evtList[6] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[6] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"PERFORM_AUGURY", 1},
@@ -102,22 +102,22 @@ static daNpcT_evtData_c l_evtList[6] = {
     {"RETURN", 1},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Sha",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     SHA, -1,
 };
 
-static s8* l_loadResPtrnList[3] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, 32, J3DFrameCtrl::EMode_LOOP, SHA, 1},
     {10, J3DFrameCtrl::EMode_NONE, SHA, 32, J3DFrameCtrl::EMode_LOOP, SHA, 1},
     {9, J3DFrameCtrl::EMode_NONE, SHA, 35, J3DFrameCtrl::EMode_NONE, SHA, 0},
@@ -130,7 +130,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {13, J3DFrameCtrl::EMode_LOOP, SHA, 38, J3DFrameCtrl::EMode_LOOP, SHA, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[8] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[8] = {
     {23, J3DFrameCtrl::EMode_LOOP, SHA, 29, J3DFrameCtrl::EMode_NONE, SHA, 1, 0},
     {19, J3DFrameCtrl::EMode_NONE, SHA, 29, J3DFrameCtrl::EMode_NONE, SHA, 1, 0},
     {21, J3DFrameCtrl::EMode_NONE, SHA, 29, J3DFrameCtrl::EMode_NONE, SHA, 1, 0},
@@ -141,7 +141,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[8] = {
     {20, J3DFrameCtrl::EMode_NONE, SHA, 29, J3DFrameCtrl::EMode_NONE, SHA, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, 0, 1}, {8, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -154,7 +154,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[32] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[32] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {3, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -165,12 +165,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[32] = {
     {7, 0, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Sha_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_Sha_c::mCutNameList[2] = {
     "",
     "PERFORM_AUGURY",
 };
 
-daNpc_Sha_c::cutFunc daNpc_Sha_c::mCutList[2] = {
+daNpc_Sha_c::cutFunc DUSK_CONST daNpc_Sha_c::mCutList[2] = {
     NULL,
     &daNpc_Sha_c::cutPerformAugury,
 };
@@ -1242,7 +1242,7 @@ static int daNpc_Sha_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Sha_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Sha_MethodTable = {
     (process_method_func)daNpc_Sha_Create,
     (process_method_func)daNpc_Sha_Delete,
     (process_method_func)daNpc_Sha_Execute,
@@ -1250,7 +1250,7 @@ static actor_method_class daNpc_Sha_MethodTable = {
     (process_method_func)daNpc_Sha_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SHAMAN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SHAMAN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

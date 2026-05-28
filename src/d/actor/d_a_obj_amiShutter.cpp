@@ -293,7 +293,7 @@ actor_method_class l_daAmiShutter_Method = {
 };
 
 
-actor_process_profile_definition g_profile_Obj_AmiShutter = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_AmiShutter = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

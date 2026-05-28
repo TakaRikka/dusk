@@ -78,9 +78,9 @@ const static dCcD_SrcSph l_sph_src_tg = {
     }  // mSphAttr
 };
 
-static char* l_arcName = "Obj_l8sw0";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_l8sw0";
 
-static cull_box l_cull_box = {{
+static DUSK_CONSTEXPR cull_box l_cull_box = {{
                                 -500.0f,
                                 0.0f,
                                 -500.0f,
@@ -470,13 +470,13 @@ static int daObjSwLight_MoveBGDraw(daObjSwLight_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjSwLight_METHODS = {
+static DUSK_CONST actor_method_class daObjSwLight_METHODS = {
     (process_method_func)daObjSwLight_create1st,     (process_method_func)daObjSwLight_MoveBGDelete,
     (process_method_func)daObjSwLight_MoveBGExecute, 0,
     (process_method_func)daObjSwLight_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwLight = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwLight = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

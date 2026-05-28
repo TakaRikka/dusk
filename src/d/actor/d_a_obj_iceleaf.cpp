@@ -20,7 +20,7 @@ void daObjIceLeaf_c::initBaseMtx() {
     setBaseMtx();
 }
 
-static char* l_arcName = "V_IceLeaf";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_IceLeaf";
 
 void daObjIceLeaf_c::setBaseMtx() {
     if (mRide) {
@@ -405,13 +405,13 @@ static int daObjIceLeaf_Create(daObjIceLeaf_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObjIceLeaf_Method = {
+static DUSK_CONST actor_method_class l_daObjIceLeaf_Method = {
     (process_method_func)daObjIceLeaf_Create,  (process_method_func)daObjIceLeaf_Delete,
     (process_method_func)daObjIceLeaf_Execute, (process_method_func)NULL,
     (process_method_func)daObjIceLeaf_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_IceLeaf = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_IceLeaf = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

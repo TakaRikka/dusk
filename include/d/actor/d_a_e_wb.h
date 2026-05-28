@@ -99,7 +99,7 @@ public:
     /* 0x0000 */ fopEn_enemy_c enemy;                   ///< @brief Base enemy class instance.
     /* 0x05AC */ request_of_phase_process_class phase;  ///< @brief Phase process request handler.
     /* 0x05B4 */ s16 ride_mode;  ///< @brief Current sub-action mode within the run action.
-    /* 0x05B8 */ char* resName;   ///< @brief Resource name for loading models/animations.
+    /* 0x05B8 */ char DUSK_CONST* resName;   ///< @brief Resource name for loading models/animations.
     /* 0x05BC */ u8 arg0;        ///< @brief Creation parameter 1.
     /* 0x05BD */ u8 arg1;       ///< @brief Creation parameter 2.
     /* 0x05BE */ u8 field_0x5be;

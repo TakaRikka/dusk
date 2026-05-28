@@ -7,7 +7,7 @@ namespace dusk::ui {
 BaseStringButton::BaseStringButton(Rml::Element* parent, Props props)
     : BaseControlledSelectButton(parent, {std::move(props.key)}), mType(std::move(props.type)),
       mMaxLength(props.maxLength) {
-    mInputListeners.reserve(3);
+    mInputListeners.reserve(4);
 }
 
 void BaseStringButton::update() {
@@ -54,6 +54,15 @@ void BaseStringButton::start_editing() {
     mRoot->DispatchEvent(Rml::EventId::Submit, {{"handled", Rml::Variant{true}}});
 
     // Register input listeners
+    mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
+        mInputElem, Rml::EventId::Textinput, [this](Rml::Event& event) {
+            if (event.GetTargetElement() == mInputElem) {
+                const Rml::String text = event.GetParameter("text", Rml::String{});
+                if (!text.empty() && std::ranges::all_of(text, [](const char c) { return c == '\r' || c == '\n' || c == '\t'; })) {
+                    event.StopImmediatePropagation();
+                }
+            }
+        }));
     mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
         mInputElem, Rml::EventId::Keydown, [this](Rml::Event& event) {
             const auto cmd = map_nav_event(event);

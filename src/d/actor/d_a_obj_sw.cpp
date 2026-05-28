@@ -820,13 +820,13 @@ static int daObj_Sw_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-static actor_method_class l_daObj_Sw_Method = {
+static DUSK_CONST actor_method_class l_daObj_Sw_Method = {
     (process_method_func)daObj_Sw_Create,  (process_method_func)daObj_Sw_Delete,
     (process_method_func)daObj_Sw_Execute, (process_method_func)daObj_Sw_IsDelete,
     (process_method_func)daObj_Sw_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

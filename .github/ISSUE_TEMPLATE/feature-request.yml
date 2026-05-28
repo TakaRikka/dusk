@@ -1,0 +1,24 @@
+name: Feature Request
+description: Request a new Dusklight feature. Not all requests can/will be included, but we will take these ideas into consideration.
+type: Feature
+body:
+- type: textarea
+  id: feature-description
+  attributes:
+    label: Feature Description
+    placeholder: Describe the feature you are requesting
+  validations:
+    required: true
+
+- type: input
+  id: feature-platform
+  attributes:
+    label: Platform
+    description: If applicable, list the platforms this feature applies to. If it is for all platforms, feel free to leave this field blank.
+    placeholder: ex. Mac, Android, Steam Deck, etc.
+
+- type: textarea
+  id: feature-related-info
+  attributes:
+    label: Additional Information
+    placeholder: Any other information that might be helpful (related features, existing implementations, open pull requests or issues, etc.)

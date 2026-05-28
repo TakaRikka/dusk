@@ -42,21 +42,21 @@ dMsgUnit_c::dMsgUnit_c() {}
 dMsgUnit_c::~dMsgUnit_c() {}
 
 #if REGION_JPN
-void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
+void dMsgUnit_c::setTag(int i_type, int i_value, TEXT_SPAN o_buffer, bool param_4) {
     *o_buffer = 0;
     bool stack9 = false;
     bool stack8 = false;
     int value = i_value;
 
     if (i_type == 0x10000) {
-        sprintf(o_buffer, "%d", i_value);
+        SAFE_SPRINTF(o_buffer, "%d", i_value);
         return;
     }
 
     if (i_type == 0x10001) {
         int tens_digit = i_value / 10;
         int ones_digit = i_value % 10;
-        sprintf(o_buffer, "%d-%d", tens_digit, ones_digit);
+        SAFE_SPRINTF(o_buffer, "%d-%d", tens_digit, ones_digit);
         return;
     }
 
@@ -108,7 +108,7 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
     }
 
     if (i_type == 9 && param_4 == true) {
-        sprintf(o_buffer, "%d", i_value);
+        SAFE_SPRINTF(o_buffer, "%d", i_value);
         stack8 = true;
     }
 
@@ -170,9 +170,9 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
         int uVar5Len = strlen(uVar5);
         if (uVar5Len == 0) {
             if (stack8) {
-                strcat(o_buffer, value2);
+                SAFE_STRCAT(o_buffer, value2);
             } else {
-                sprintf(o_buffer, "%d%s", i_value, value2);
+                SAFE_SPRINTF(o_buffer, "%d%s", i_value, value2);
             }
         } else {
             char unkCharArr[7];
@@ -185,11 +185,11 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             unkCharArr[6] = 0;
 
             if (stack8) {
-                strcat(o_buffer, unkCharArr);
-                strcat(o_buffer, uVar5);
-                strcat(o_buffer, value2);
+                SAFE_STRCAT(o_buffer, unkCharArr);
+                SAFE_STRCAT(o_buffer, uVar5);
+                SAFE_STRCAT(o_buffer, value2);
             } else {
-                sprintf(o_buffer, "%d%s%s%s", i_value, unkCharArr, uVar5, value2);
+                SAFE_SPRINTF(o_buffer, "%d%s%s%s", i_value, unkCharArr, uVar5, value2);
             }
         }
     }
@@ -197,17 +197,17 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
     if (i_type == 3 && param_4 == true) {
         char buffer[20];
         setTag(4, 0, buffer, false);
-        strcat(o_buffer, buffer);
+        SAFE_STRCAT(o_buffer, buffer);
     }
 
     if (i_type == 4 && param_4 == true) {
         char buffer[20];
         setTag(5, value, buffer, false);
-        strcat(o_buffer, buffer);
+        SAFE_STRCAT(o_buffer, buffer);
     }
 }
 #else
-void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
+void dMsgUnit_c::setTag(int i_type, int i_value, TEXT_SPAN o_buffer, bool param_4) {
     *o_buffer = 0;
     bool stack9 = false;
     bool stack8 = false;
@@ -218,14 +218,14 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
     int minutes; // sp34
 
     if (i_type == 0x10000) {
-        sprintf(o_buffer, "%d", i_value);
+        SAFE_SPRINTF(o_buffer, "%d", i_value);
         return;
     }
 
     if (i_type == 0x10001) {
         tens_digit = i_value / 10;
         ones_digit = i_value % 10;
-        sprintf(o_buffer, "%d-%d", tens_digit, ones_digit);
+        SAFE_SPRINTF(o_buffer, "%d-%d", tens_digit, ones_digit);
         return;
     }
 
@@ -238,7 +238,7 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             seconds = 59;
         }
         if (minutes != 0 || seconds != 0) {
-            sprintf(o_buffer, "%d:%02d", minutes, seconds);
+            SAFE_SPRINTF(o_buffer, "%d:%02d", minutes, seconds);
         }
 
         return;
@@ -254,11 +254,11 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
 
         iVar8b = ((s32)(1000000.0f * dayTime) % 250000) / 1000000.0f;
         f32 iVar9 = 60.0f * (iVar8b / 0.25f);
-        sprintf(o_buffer, "%d:%02d", (s32)hour, (s32)minute);
+        SAFE_SPRINTF(o_buffer, "%d:%02d", (s32)hour, (s32)minute);
     } else {
         if (i_type == 9 && param_4 == true) {
             int value = i_value;
-            sprintf(o_buffer, "%d", value);
+            SAFE_SPRINTF(o_buffer, "%d", value);
             stack8 = true;
         }
 
@@ -359,21 +359,21 @@ void dMsgUnit_c::setTag(int i_type, int i_value, char* o_buffer, bool param_4) {
             }
 
             if (strcmp(uVar5, "") == 0) {
-                sprintf(o_buffer, "%d%s", i_value, uVar5);
+                SAFE_SPRINTF(o_buffer, "%d%s", i_value, uVar5);
             } else {
-                sprintf(o_buffer, "%d %s", i_value, uVar5);
+                SAFE_SPRINTF(o_buffer, "%d %s", i_value, uVar5);
             }
         }
         if (i_type == 3 && param_4 == true) {
             char buffer[20];
             setTag(4, 0, buffer, false);
-            strcat(o_buffer, buffer);
+            SAFE_STRCAT(o_buffer, buffer);
         }
 
         if (i_type == 4 && param_4 == true) {
             char buffer[20];
             setTag(5, param_2b, buffer, false);
-            strcat(o_buffer, buffer);
+            SAFE_STRCAT(o_buffer, buffer);
         }
     }
 }

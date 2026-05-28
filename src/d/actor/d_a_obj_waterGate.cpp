@@ -206,7 +206,7 @@ static int daWtGate_Create(fopAc_ac_c* i_this) {
     return waterGate->create();
 }
 
-static actor_method_class l_daWtGate_Method = {
+static DUSK_CONST actor_method_class l_daWtGate_Method = {
     (process_method_func)daWtGate_Create,
     (process_method_func)daWtGate_Delete,
     (process_method_func)daWtGate_Execute,
@@ -214,7 +214,7 @@ static actor_method_class l_daWtGate_Method = {
     (process_method_func)daWtGate_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_WtGate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_WtGate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

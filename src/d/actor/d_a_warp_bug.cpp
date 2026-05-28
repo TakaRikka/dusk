@@ -12,7 +12,7 @@
 
 void daWarpBug_c::create_init() {}
 
-static char* l_arcName = "WarpBug";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "WarpBug";
 
 int daWarpBug_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "kisei.bmd");
@@ -152,13 +152,13 @@ static int daWarpBug_Create(fopAc_ac_c* i_this) {
     return static_cast<daWarpBug_c*>(i_this)->create();
 }
 
-static actor_method_class l_daWarpBug_Method = {
+static DUSK_CONST actor_method_class l_daWarpBug_Method = {
     (process_method_func)daWarpBug_Create,  (process_method_func)daWarpBug_Delete,
     (process_method_func)daWarpBug_Execute, (process_method_func)daWarpBug_IsDelete,
     (process_method_func)daWarpBug_Draw,
 };
 
-actor_process_profile_definition g_profile_WarpBug = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_WarpBug = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

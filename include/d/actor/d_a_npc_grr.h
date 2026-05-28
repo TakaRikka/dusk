@@ -83,8 +83,8 @@ public:
     int test(void*);
     void adjustShapeAngle() {}
 
-    static char* mEvtCutNameList;
-    static cutFunc mEvtCutList[1];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList;
+    static cutFunc DUSK_CONST mEvtCutList[1];
 
 private:
     /* 0xB48 */ Z2Creature mSound;
