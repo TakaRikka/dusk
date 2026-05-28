@@ -4,11 +4,7 @@
 #include <d/actor/d_a_player.h>
 #include <d/actor/d_a_alink.h>
 #include <dusk/gamepad_color.h>
-
-#include "ui/controller_config.hpp"
-
-#include <SDL3/SDL_gamepad.h>
-#include <SDL3/SDL_properties.h>
+#include <dusk/settings.h>
 #include <pad.h>
 
 namespace dusk::input {
@@ -103,22 +99,7 @@ bool pad_has_led(const int port) noexcept {
     if (port >= PAD_MAX_CONTROLLERS || port < 0)
         return false;
 
-    const s32 index = PADGetIndexForPort(static_cast<u32>(port));
-    if (index < 0) {
-        return false;
-    }
-
-    SDL_Gamepad* gamepad = PADGetSDLGamepadForIndex(static_cast<u32>(index));
-    if (gamepad == nullptr) {
-        return false;
-    }
-
-    const SDL_PropertiesID props = SDL_GetGamepadProperties(gamepad);
-    if (props == 0) {
-        return false;
-    }
-
-    return SDL_GetBooleanProperty(props, SDL_PROP_GAMEPAD_CAP_RGB_LED_BOOLEAN, false);
+    return PADGetIndexForPort(static_cast<u32>(port)) >= 0;
 }
 
 void handleGamepadColor() {
