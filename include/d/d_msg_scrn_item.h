@@ -17,8 +17,8 @@ struct dMsgScrnItem_c : public dMsgScrnBase_c {
     void arwAnimeMove();
     void dotAnimeInit();
     void dotAnimeMove();
-    void setSelectString(char*, char*, char*);
-    void setSelectRubyString(char*, char*, char*);
+    void setSelectString(char DUSK_CONST*, char DUSK_CONST*, char DUSK_CONST*);
+    void setSelectRubyString(char DUSK_CONST*, char DUSK_CONST*, char DUSK_CONST*);
     bool isSelect();
     void selectAnimeInit(u8, u8, f32, u8);
     bool selectAnimeMove(u8, u8, bool);
