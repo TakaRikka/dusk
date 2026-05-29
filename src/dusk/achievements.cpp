@@ -933,29 +933,6 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         },
         {
             {
-                 "sword_and_shield_skip", "Sword and Shield Skip",
-                 "Pass through the Twilight Wall in Ordon Spring before obtaining both the Ordon Sword "
-                 "and Shield.",
-                 AchievementCategory::Glitched, false, 0, 0, false
-            },
-            [](Achievement& a, json&) {
-                bool hasOrdonSword = false;
-                bool hasOrdonShield = false;
-                if (dComIfGs_isCollectSword(COLLECT_ORDON_SWORD)) {
-                    hasOrdonSword = true;
-                }
-                if (dComIfGs_isCollectShield(COLLECT_ORDON_SHIELD)) {
-                    hasOrdonShield = true;
-                }
-                if ((!hasOrdonSword || !hasOrdonShield) &&
-                    dComIfGs_isEventBit(dSv_event_flag_c::M_013)) {
-                    a.progress = 1;
-                }
-            },
-            {}
-        },
-        {
-            {
                 "early_master_sword",
                 "Early Master Sword",
                 "Obtain the Master Sword before completing Midna's Desperate Hour.",
