@@ -1069,13 +1069,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         return getSettings().game.swordMultiplier.getValue() !=
                                getSettings().game.swordMultiplier.getDefaultValue();
                     },
-                .min = 10,
-                .max = 500,
+                .min = 0,
+                .max = 1000,
+                .step = 10,
                 .suffix = "%",
             }),
             rightPane, [](Pane& pane) {
                 pane.clear();
-                pane.add_text("Percentage of Link's sword damage dealt.");
+                pane.add_text("Multiplies the damage Link's sword will do to most enemies. Set to 0 to make most enemies invulnerable to the sword, except for Ending Blow.");
             });
         addSpeedrunDisabledOption(
             "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");
