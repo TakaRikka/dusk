@@ -254,7 +254,7 @@ static int fopAc_Draw(void* i_this) {
             print_error_check_c error_check(actor, print_error_check_c::sDRAW);
             #endif
 
-            ret = fpcLf_DrawMethod((leafdraw_method_class*)actor->sub_method, actor);
+            ret = fpcLf_DrawMethod((leafdraw_method_class DUSK_CONST*)actor->sub_method, actor);
 
             #if DEBUG
             }
@@ -335,7 +335,7 @@ static int fopAc_Execute(void* i_this) {
             print_error_check_c error_check(actor, print_error_check_c::sEXECUTE);
             #endif
 
-            ret = fpcMtd_Execute((process_method_class*)actor->sub_method, actor);
+            ret = fpcMtd_Execute((process_method_class DUSK_CONST*)actor->sub_method, actor);
 
             #if DEBUG
             }
@@ -443,7 +443,7 @@ static int fopAc_Create(void* i_this) {
         actor_process_profile_definition* profile =
             (actor_process_profile_definition*)fpcM_GetProfile(i_this);
         actor->actor_type = fpcM_MakeOfType(&g_fopAc_type);
-        actor->sub_method = (profile_method_class*)profile->sub_method;
+        actor->sub_method = (profile_method_class DUSK_CONST*)profile->sub_method;
 
         fopAcTg_Init(&actor->actor_tag, actor);
         fopAcTg_ToActorQ(&actor->actor_tag);

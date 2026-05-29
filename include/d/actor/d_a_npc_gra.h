@@ -138,9 +138,9 @@ public:
     void addCarryNum() { field_0x1692++; }
     u8 getPathNoFromParam() { return home.angle.z; }
     void setGateWalk() { field_0x14D0 = 1; }
-    static char* mEvtCutNameList[12];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[12];
     typedef BOOL (daNpc_grA_c::*cut_type)(int);
-    static cut_type mEvtCutList[];
+    static cut_type DUSK_CONST mEvtCutList[];
 
 private:
     typedef BOOL (daNpc_grA_c::*daNpc_grA_c_Action)(void*);

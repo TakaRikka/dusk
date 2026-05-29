@@ -155,15 +155,15 @@ static int daCoachFire_Create(fopAc_ac_c* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-static char* stringBase_80658454 = "Coach";
+static DUSK_CONST char* stringBase_80658454 = "Coach";
 
-static actor_method_class l_daCoachFire_Method = {
+static DUSK_CONST actor_method_class l_daCoachFire_Method = {
     (process_method_func)daCoachFire_Create,  (process_method_func)daCoachFire_Delete,
     (process_method_func)daCoachFire_Execute, (process_method_func)daCoachFire_IsDelete,
     (process_method_func)daCoachFire_Draw,
 };
 
-actor_process_profile_definition g_profile_COACH_FIRE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_COACH_FIRE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

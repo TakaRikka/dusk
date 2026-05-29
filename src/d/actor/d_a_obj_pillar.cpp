@@ -59,7 +59,7 @@ static const daPillar_c::sdata_t l_shake_data[] = {
     /* CRASH       */ {5, 0, 800, 120, 7000, 30, 15},
 };
 
-static char* l_arcName[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[] = {
     "K_mbhasi0",
     "K_mbhasi1",
 };
@@ -479,7 +479,7 @@ static int daPillar_MoveBGDraw(daPillar_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daPillar_METHODS = {
+static DUSK_CONST actor_method_class daPillar_METHODS = {
     (process_method_func)daPillar_create1st,
     (process_method_func)daPillar_MoveBGDelete,
     (process_method_func)daPillar_MoveBGExecute,
@@ -487,7 +487,7 @@ static actor_method_class daPillar_METHODS = {
     (process_method_func)daPillar_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Pillar = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Pillar = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

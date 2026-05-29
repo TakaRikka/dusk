@@ -8,17 +8,17 @@
 #include "d/actor/d_a_npc_drainSol.h"
 #include "d/actor/d_a_npc.h"
 
-static int l_bmdGetParamList[] = {
+static DUSK_CONSTEXPR int l_bmdGetParamList[] = {
     9, 7
 };
 
-static daNpc_GetParam3 l_bckGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam3 l_bckGetParamList[] = {
     {5, 2},
     {4, 2},
     {4, 0},
 };
 
-static char* l_arcNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[2] = {
     "DrainSol1",
     "DrainSol2",
 };
@@ -453,11 +453,11 @@ BOOL daNpcDrSol_c::drawDbgInfo() {
     return false;
 }
 
-static char* dummyString() {
+static DUSK_CONSTEXPR char DUSK_CONST* dummyString() {
     return "Shoe";
 };
 
-static actor_method_class daNpcDrSol_MethodTable = {
+static DUSK_CONST actor_method_class daNpcDrSol_MethodTable = {
     (process_method_func)daNpcDrSol_Create,
     (process_method_func)daNpcDrSol_Delete,
     (process_method_func)daNpcDrSol_Execute,
@@ -465,7 +465,7 @@ static actor_method_class daNpcDrSol_MethodTable = {
     (process_method_func)daNpcDrSol_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_DRSOL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_DRSOL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

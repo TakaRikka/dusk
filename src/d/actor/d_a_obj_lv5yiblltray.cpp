@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_obj_carry.h"
 
-static char* l_arcName = "YIblltray";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "YIblltray";
 
 int daObjYIblltray_c::create1st() {
     int phase = dComIfG_resLoad(this, l_arcName);
@@ -572,7 +572,7 @@ static int daObjYIblltray_MoveBGDraw(daObjYIblltray_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjYIblltray_METHODS = {
+static DUSK_CONST actor_method_class daObjYIblltray_METHODS = {
     (process_method_func)daObjYIblltray_create1st,
     (process_method_func)daObjYIblltray_MoveBGDelete,
     (process_method_func)daObjYIblltray_MoveBGExecute,
@@ -580,7 +580,7 @@ static actor_method_class daObjYIblltray_METHODS = {
     (process_method_func)daObjYIblltray_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_YIblltray = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_YIblltray = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

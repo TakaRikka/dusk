@@ -10,7 +10,7 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 
-static daNpc_GetParam1 l_bckGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[] = {
     {-1, 2},
     {7, 0},
     {11, 2},
@@ -19,11 +19,11 @@ static daNpc_GetParam1 l_bckGetParamList[] = {
     {9, 0},
 };
 
-static daNpc_GetParam1 l_btpGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[] = {
     {20, 2},
 };
 
-static daNpc_GetParam1 l_btkGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[] = {
     {17, 2},
 };
 
@@ -35,9 +35,9 @@ static u8 l_evtNames[4] = {
     0x00,
 };
 
-static char* l_arcName = "TKS2";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "TKS2";
 
-static char* l_myName = "ObjTks";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "ObjTks";
 
 daObjTks_c::daObjTks_c() {}
 
@@ -896,7 +896,7 @@ BOOL daObjTks_c::drawDbgInfo() {
 
 void daObjTks_c::drawOtherMdls() {}
 
-static actor_method_class daObjTks_MethodTable = {
+static DUSK_CONST actor_method_class daObjTks_MethodTable = {
     (process_method_func)daObjTks_Create,
     (process_method_func)daObjTks_Delete,
     (process_method_func)daObjTks_Execute,
@@ -904,7 +904,7 @@ static actor_method_class daObjTks_MethodTable = {
     (process_method_func)daObjTks_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_TKS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_TKS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

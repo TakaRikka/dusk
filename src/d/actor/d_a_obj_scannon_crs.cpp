@@ -33,11 +33,11 @@ static int eventCallBack(void* i_proc, int param_1) {
     return 1;
 }
 
-static char* l_arcName = "SCanCrs";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "SCanCrs";
 
-static char* l_eventName = "SKY_CANNON_WARP_START";
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName = "SKY_CANNON_WARP_START";
 
-static char* l_staffName = "SCanCrs";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "SCanCrs";
 
 daSCannonCrs_c::daSCannonCrs_c() {
     mpBgW = NULL;
@@ -277,7 +277,7 @@ void (daSCannonCrs_c::*daSCannonCrs_c::s_exeProc[])(daMidna_c*) = {
 };
 
 void daSCannonCrs_c::demoExe() {
-    static char* CUT_TYPE_TABLE[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE[4] = {
         "WAIT",
         "BEAM_HIT",
         "READY",
@@ -509,7 +509,7 @@ static int daSCannonCrs_draw(daSCannonCrs_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daSCannonCrs_METHODS = {
+static DUSK_CONST actor_method_class daSCannonCrs_METHODS = {
     (process_method_func)daSCannonCrs_create,
     (process_method_func)daSCannonCrs_Delete,
     (process_method_func)daSCannonCrs_execute,
@@ -517,7 +517,7 @@ static actor_method_class daSCannonCrs_METHODS = {
     (process_method_func)daSCannonCrs_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SCannonCrs = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SCannonCrs = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

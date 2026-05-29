@@ -2558,7 +2558,7 @@ static cPhs_Step daE_DT_Create(daE_DT_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daE_DT_Method = {
+static DUSK_CONST actor_method_class l_daE_DT_Method = {
     (process_method_func)daE_DT_Create,
     (process_method_func)daE_DT_Delete,
     (process_method_func)daE_DT_Execute,
@@ -2566,7 +2566,7 @@ static actor_method_class l_daE_DT_Method = {
     (process_method_func)daE_DT_Draw,
 };
 
-actor_process_profile_definition g_profile_E_DT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_DT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

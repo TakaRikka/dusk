@@ -399,7 +399,7 @@ public:
     /* 0x14F0 */ int mBtkID;
     /* 0x14F4 */ int mBpkID;
     /* 0x14F8 */ u32 mWaterAnmFlags;
-    /* 0x14FC */ char* mStaffName;
+    /* 0x14FC */ DUSK_CONST char* mStaffName;
     /* 0x1500 */ cXyz field_0x1500;
     /* 0x150C */ u8 mMeterCount;
     /* 0x150D */ u8 mGameMode;
@@ -443,8 +443,8 @@ public:
     /* 0x15C0 */ u8 field_0x15c0;
     /* 0x15C1 */ bool mBlastFlag;
 
-    static char* mEvtCutNameList[11];
-    static EventFn mEvtCutList[11];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[11];
+    static EventFn DUSK_CONST mEvtCutList[11];
 };
 
 STATIC_ASSERT(sizeof(daNpc_zrA_c) == 0x15C4);

@@ -1430,51 +1430,86 @@ void dName_c::selectCursorPosSet(int row) {
 
 #if TARGET_PC
 void dName_c::nameWide() {
-    // Resize Select Icon
-    #if TARGET_PC
-    if (mSelIcon) {
-        mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
-    }
-    #endif
-
-    // List of Characters Box
-    static u64 l_tagName[65] = {
-        MULTI_CHAR('m_00_0'), MULTI_CHAR('m_00_1'), MULTI_CHAR('m_00_2'), MULTI_CHAR('m_00_3'), MULTI_CHAR('m_00_4'), MULTI_CHAR('m_01_0'), MULTI_CHAR('m_01_1'), MULTI_CHAR('m_01_2'), MULTI_CHAR('m_01_3'),
-        MULTI_CHAR('m_01_4'), MULTI_CHAR('m_02_0'), MULTI_CHAR('m_02_1'), MULTI_CHAR('m_02_2'), MULTI_CHAR('m_02_3'), MULTI_CHAR('m_02_4'), MULTI_CHAR('m03_0'),  MULTI_CHAR('m03_1'),  MULTI_CHAR('m03_2'),
-        MULTI_CHAR('m03_3'),  MULTI_CHAR('m03_4'),  MULTI_CHAR('m_04_0'), MULTI_CHAR('m_04_1'), MULTI_CHAR('m_04_2'), MULTI_CHAR('m_04_3'), MULTI_CHAR('m_04_4'), MULTI_CHAR('m_05_0'), MULTI_CHAR('m_05_1'),
-        MULTI_CHAR('m_05_2'), MULTI_CHAR('m_05_3'), MULTI_CHAR('m_05_4'), MULTI_CHAR('m_06_0'), MULTI_CHAR('m_06_1'), MULTI_CHAR('m_06_2'), MULTI_CHAR('m_06_3'), MULTI_CHAR('m_06_4'), MULTI_CHAR('m_07_0'),
-        MULTI_CHAR('m_07_1'), MULTI_CHAR('m_07_2'), MULTI_CHAR('m_07_3'), MULTI_CHAR('m_07_4'), MULTI_CHAR('m_08_0'), MULTI_CHAR('m_08_1'), MULTI_CHAR('m_08_2'), MULTI_CHAR('m_08_3'), MULTI_CHAR('m_08_4'),
-        MULTI_CHAR('m_09_0'), MULTI_CHAR('m_09_1'), MULTI_CHAR('m_09_2'), MULTI_CHAR('m_09_3'), MULTI_CHAR('m_09_4'), MULTI_CHAR('m_10_0'), MULTI_CHAR('m_10_1'), MULTI_CHAR('m_10_2'), MULTI_CHAR('m_10_3'),
-        MULTI_CHAR('m_10_4'), MULTI_CHAR('m_11_0'), MULTI_CHAR('m_11_1'), MULTI_CHAR('m_11_2'), MULTI_CHAR('m_11_3'), MULTI_CHAR('m_11_4'), MULTI_CHAR('m12_0'),  MULTI_CHAR('m12_1'),  MULTI_CHAR('m12_2'),
-        MULTI_CHAR('m12_3'),  MULTI_CHAR('m12_4'),
-    };
-
-    for (u32 i = 0; i < 65; i++) {
-        nameIn.NameInScr->search(l_tagName[i])->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    }
-
-    // "END" Text
-    nameIn.NameInScr->search(MULTI_CHAR('p_end_2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    nameIn.NameInScr->search(MULTI_CHAR('p_end_1'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    nameIn.NameInScr->search(MULTI_CHAR('p_end_0'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-
-    // Letters being typed
-    static u64 l_nameTagName[8] = {
-        MULTI_CHAR('name_00'), MULTI_CHAR('name_01'), MULTI_CHAR('name_02'), MULTI_CHAR('name_03'), MULTI_CHAR('name_04'), MULTI_CHAR('name_05'), MULTI_CHAR('name_06'), MULTI_CHAR('name_07'),
-    };
-
-    for (u32 i = 0; i < 8; i++) {
-        nameIn.NameInScr->search(l_nameTagName[i])->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    static bool cachedPanes = false;
+    // Get pre-scale values for each pane
+    if (!cachedPanes) {
+        for (PaneCache& entry : l_tagName) {
+            J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX(); 
+                entry.origTransY = pane->getTranslateY();
+                entry.cached = true;
+            }
+        }
+        for (PaneCache& entry : l_nameTagName) {
+            J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX(); 
+                entry.origTransY = pane->getTranslateY();
+                entry.cached = true;
+            }
+        }
+        for (PaneCache& entry : l_nameCurTagName) {
+            J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+            if (!entry.cached) {
+                entry.origTransX = pane->getTranslateX(); 
+                entry.origTransY = pane->getTranslateY();
+                entry.cached = true;
+            }
+        }
+        cachedPanes = true;
     }
 
-    // Underscores when typing below letters
-    static u64 l_nameCurTagName[8] = {
-        MULTI_CHAR('s__n_00'), MULTI_CHAR('s__n_01'), MULTI_CHAR('s__n_02'), MULTI_CHAR('s__n_03'), MULTI_CHAR('s__n_04'), MULTI_CHAR('s__n_05'), MULTI_CHAR('s__n_06'), MULTI_CHAR('s__n_07'),
-    };
+    // Reset all panes
+    nameIn.NameInScr->scale(1.0f, 1.0f);
+    nameIn.NameInScr->translate(0.0f, 0.0f);
+    for (PaneCache& entry : l_tagName) {
+        J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+        pane->setBasePosition(J2DBasePosition_4);
+        pane->scale(1.0f, 1.0f);
+        pane->translate(entry.origTransX, entry.origTransY);
+    }
+    for (PaneCache& entry : l_nameTagName) {
+        J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+        pane->setBasePosition(J2DBasePosition_4);
+        pane->scale(1.0f, 1.0f);
+        pane->translate(entry.origTransX, entry.origTransY);
+    }
+    for (PaneCache& entry : l_nameCurTagName) {
+        J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+        pane->setBasePosition(J2DBasePosition_4);
+        pane->scale(1.0f, 1.0f);
+        pane->translate(entry.origTransX, entry.origTransY);
+    }
 
-    for (u32 i = 0; i < 8; i++) {
-        nameIn.NameInScr->search(l_nameCurTagName[i])
-            ->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    switch (dusk::getSettings().game.menuScalingMode) {
+        case (dusk::MenuScaling::GameCube):
+            // Selection Cursor
+            if (mSelIcon) {
+                mSelIcon->refreshAspectScale(1.0f);
+            }
+            break;
+        default: // Wii and Dusklight
+            // List of Characters Box
+            for (PaneCache& entry : l_tagName) {
+                J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+            }
+            // Letters being typed
+            for (PaneCache& entry : l_nameTagName) {
+                J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+            }
+            // Underscores when typing below letters
+            for (PaneCache& entry : l_nameCurTagName) {
+                J2DPane* pane = nameIn.NameInScr->search(entry.tag);
+                pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+            }
+            // Selection Cursor
+            if (mSelIcon) {
+                mSelIcon->refreshAspectScale(mDoGph_gInf_c::hudAspectScaleUp);
+            }
+            break;
     }
 }
 #endif

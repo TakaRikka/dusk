@@ -14,7 +14,7 @@ static int daWindStone_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daWindStone_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "WindStone";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "WindStone";
 
 daWindStone_c::daWindStone_c() : mpBgW(NULL), field_0x5c4(0) {}
 
@@ -241,13 +241,13 @@ static int daWindStone_draw(daWindStone_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daWindStone_METHODS = {
+static DUSK_CONST actor_method_class daWindStone_METHODS = {
     (process_method_func)daWindStone_create,  (process_method_func)daWindStone_Delete,
     (process_method_func)daWindStone_execute, (process_method_func)NULL,
     (process_method_func)daWindStone_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_WindStone = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_WindStone = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

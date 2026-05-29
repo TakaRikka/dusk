@@ -78,7 +78,7 @@ static const int l_btkIdrIdx[] = {
     10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, -1, -1,
 };
 
-static char* l_resNameIdx[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {
     "Kr10water", "Kr10wat01", "Kr02wat00", "Kr03wat00", "Kr03wat01", "Kr03wat02", "Kr03wat03",
     "Kr03wat04", "Kr07wat00", "Kr08wat00", "Kr08wat01", "Kr02wat01", "Kr02wat02", "Kr02wat03",
     "Kr11wat00", "Kr12wat00", "Kr13wat00", "Kr13wat01", "Kr13wat02", "Kr03wat05", "Kr03wat06",
@@ -452,13 +452,13 @@ static int daLv3Water_Create(fopAc_ac_c* i_this) {
     return actor->create();
 }
 
-static actor_method_class l_daLv3Water_Method = {
+static DUSK_CONST actor_method_class l_daLv3Water_Method = {
     (process_method_func)daLv3Water_Create,  (process_method_func)daLv3Water_Delete,
     (process_method_func)daLv3Water_Execute, 0,
     (process_method_func)daLv3Water_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv3Water = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv3Water = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

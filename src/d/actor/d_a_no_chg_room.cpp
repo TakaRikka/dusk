@@ -150,13 +150,13 @@ static int daNocrm_draw(daNocrm_c* i_this) {
     return 1;
 }
 
-static actor_method_class daNocrm_METHODS = {
+static DUSK_CONST actor_method_class daNocrm_METHODS = {
     (process_method_func)daNocrm_create,  (process_method_func)daNocrm_Delete,
     (process_method_func)daNocrm_execute, (process_method_func)NULL,
     (process_method_func)daNocrm_draw,
 };
 
-actor_process_profile_definition g_profile_NO_CHG_ROOM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NO_CHG_ROOM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

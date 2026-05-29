@@ -13,7 +13,6 @@
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/io.hpp"
 #include "dusk/livesplit.h"
-#include "dusk/main.h"
 #include "dusk/discord_presence.hpp"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
@@ -376,6 +375,8 @@ const Rml::String kDepthOfFieldHelpText =
 const Rml::String kUnlockFramerateHelpText =
     "<br/>Uses inter-frame interpolation to enable higher frame rates.<br/><br/>May introduce minor "
     "visual artifacts or animation glitches.";
+const Rml::String kTextureReplacementHelpText =
+    "Enable installed texture replacements.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -859,12 +860,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             mPrelaunch);
 
         leftPane.add_section("Rendering");
-        config_bool_select(leftPane, rightPane, getSettings().game.enableTextureReplacements,
-            {
-                .key = "Use Texture Pack",
-                .helpText = "Enable installed texture replacements.",
-                .onChange = [](bool value) { aurora_set_texture_replacements_enabled(value); },
-            });
+        graphics_tuner_control(*this, leftPane, rightPane,
+            getSettings().game.enableTextureReplacements,
+            GraphicsTunerProps{
+                .option = GraphicsOption::TextureReplacements,
+                .title = "Enable Texture Replacements",
+                .helpText = kTextureReplacementHelpText,
+                .valueMin = static_cast<int>(false),
+                .valueMax = static_cast<int>(true),
+                .defaultValue = static_cast<int>(false),
+            },
+            mPrelaunch);
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Unlock Framerate",
@@ -950,8 +956,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
             "Invert vertical camera movement when Free Camera is enabled.",
             [] { return !getSettings().game.freeCamera; });
-        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraSensitivity,
-            "Free Camera Sensitivity", "Adjusts twin-stick camera sensitivity.", 50, 200, 5,
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraXSensitivity,
+            "Free Camera X Sensitivity", "Adjusts twin-stick camera X axis sensitivity.", 50, 200, 5,
+            [] { return !getSettings().game.freeCamera; });
+        config_percent_select(leftPane, rightPane, getSettings().game.freeCameraYSensitivity,
+            "Free Camera Y Sensitivity", "Adjusts twin-stick camera Y axis sensitivity.", 50, 200, 5,
             [] { return !getSettings().game.freeCamera; });
         addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
             "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
@@ -1030,6 +1039,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert vertical gyro aiming.", [] { return !gyro_enabled(); });
         addOption("Invert Gyro Yaw", getSettings().game.gyroInvertYaw,
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
+        
+        leftPane.add_section("Gameplay");
+        addOption("Swap Direct Select Input", getSettings().game.swapDirectSelect,
+            "Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.");
 
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
@@ -1281,6 +1294,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
+        addCheat("Transform without Shadow Crystal", getSettings().game.transformWithoutShadowCrystal,
+            "Allows Link to transform without the Shadow Crystal (Only using Quick Transform.)");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
@@ -1499,6 +1514,11 @@ void SettingsWindow::update() {
     }
 
     Window::update();
+}
+
+void SettingsWindow::hide(bool close) {
+    config::Save();
+    Window::hide(close);
 }
 
 }  // namespace dusk::ui

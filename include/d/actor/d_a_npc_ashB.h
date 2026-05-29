@@ -135,7 +135,7 @@ public:
     inline bool step(s16, int, f32);
     inline void playExpression();
 
-    static EventFn mEvtSeqList[2];
+    static EventFn DUSK_CONST mEvtSeqList[2];
 
 private:
     /* 0xB48 */ Z2Creature mCreatureSound;

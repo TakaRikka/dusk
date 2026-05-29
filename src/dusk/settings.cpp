@@ -92,10 +92,18 @@ UserSettings g_userSettings = {
         .invertFirstPersonYAxis {"game.invertFirstPersonYAxis", false},
         .invertAirSwimX {"game.invertAirSwimX", false},
         .invertAirSwimY {"game.invertAirSwimY", false},
-        .freeCameraSensitivity {"game.freeCameraSensitivity", 1.0f},
+        .freeCameraXSensitivity {"game.freeCameraXSensitivity", 1.0f},
+        .freeCameraYSensitivity {"game.freeCameraYSensitivity", 1.0f},
         .debugFlyCam {"game.debugFlyCam", false},
         .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
         .allowBackgroundInput {"game.allowBackgroundInput", true},
+        .enableLED {
+            ConfigVar<bool>{"game.enableLED_port0", true},
+            ConfigVar<bool>{"game.enableLED_port1", true},
+            ConfigVar<bool>{"game.enableLED_port2", true},
+            ConfigVar<bool>{"game.enableLED_port3", true},
+        },
+        .swapDirectSelect {"game.swapDirectSelect", false},
 
         // Cheats
         .infiniteHearts {"game.infiniteHearts", false},
@@ -115,6 +123,7 @@ UserSettings g_userSettings = {
         .fastSpinner {"game.fastSpinner", false},
         .freeMagicArmor {"game.freeMagicArmor", false},
         .invincibleEnemies {"game.invincibleEnemies", false},
+        .transformWithoutShadowCrystal {"game.transformWithoutShadowCrystal", false},
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
@@ -200,6 +209,7 @@ void registerSettings() {
     // Game
     Register(g_userSettings.game.language);
     Register(g_userSettings.game.enableQuickTransform);
+    Register(g_userSettings.game.transformWithoutShadowCrystal);
     Register(g_userSettings.game.hideTvSettingsScreen);
     Register(g_userSettings.game.biggerWallets);
     Register(g_userSettings.game.noReturnRupees);
@@ -223,7 +233,8 @@ void registerSettings() {
     Register(g_userSettings.game.invertFirstPersonYAxis);
     Register(g_userSettings.game.invertAirSwimX);
     Register(g_userSettings.game.invertAirSwimY);
-    Register(g_userSettings.game.freeCameraSensitivity);
+    Register(g_userSettings.game.freeCameraXSensitivity);
+    Register(g_userSettings.game.freeCameraYSensitivity);
     Register(g_userSettings.game.minimalHUD);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.enableDiscordPresence);
@@ -286,6 +297,11 @@ void registerSettings() {
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);
     Register(g_userSettings.game.allowBackgroundInput);
+    Register(g_userSettings.game.enableLED[0]);
+    Register(g_userSettings.game.enableLED[1]);
+    Register(g_userSettings.game.enableLED[2]);
+    Register(g_userSettings.game.enableLED[3]);
+    Register(g_userSettings.game.swapDirectSelect);
 
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);

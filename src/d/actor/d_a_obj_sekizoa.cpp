@@ -14,42 +14,42 @@
 #include "f_op/f_op_msg.h"
 
 
-static daNpc_GetParam1 l_bmdData[9] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdData[9] = {
     {36, 1}, {36, 1}, {35, 1}, {37, 1}, {38, 1}, {3, 2}, {3, 2}, {4, 2}, {5, 2},
 };
 
-static daNpcT_evtData_c l_evtList[10] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[10] = {
     {"", 1},     {"NO_RESPONSE", 1}, {"START", 1}, {"RESTART", 1}, {"TURN", 1},
     {"JUMP", 1}, {"GOAL", 1},        {"EXIT", 1},  {"FREE", 1},    {"EXTINCTION", 1},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "sekizoA",
     "seki_1k",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1,
     -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     1,
     2,
     -1,
 };
 
-static s8* l_loadResPtrnList[8] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[8] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn1,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData = {
     -1, 0, 0, -1, 0, 0, 0,
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[24] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[24] = {
     {daObj_Sekizoa_c::ANM_SEKI_WAIT_A, 2, 1, -1, 0, 0, 0},
     {daObj_Sekizoa_c::ANM_SEKI_WAIT_R, 2, 1, -1, 0, 0, 0},
     {daObj_Sekizoa_c::ANM_SEKI_STILL_R, 2, 1, -1, 0, 0, 0},
@@ -75,14 +75,14 @@ static daNpcT_motionAnmData_c l_motionAnmData[24] = {
     {daObj_Sekizoa_c::ANM_SEKI_STEP_L, 0, 1, -1, 0, 0, 0},
     {daObj_Sekizoa_c::ANM_SEKI_WAIT_A, 2, 1, -1, 0, 0, 0}};
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {0, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[96] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[96] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {1, -1, 0},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {2, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {3, -1, 1},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {4, -1, 1},  {2, 0, 0},   {-1, 0, 0},  {-1, 0, 0},  {5, -1, 0},
@@ -98,11 +98,11 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[96] = {
     {21, -1, 1}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {22, 4, 1},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {23, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}};
 
-char* daObj_Sekizoa_c::mCutNameList[9] = {
+char DUSK_CONST* DUSK_CONST daObj_Sekizoa_c::mCutNameList[9] = {
     "", "START", "START", "TURN", "JUMP", "GOAL", "EXIT", "FREE", "EXTINCTION",
 };
 
-daObj_Sekizoa_c::cutFunc daObj_Sekizoa_c::mCutList[9] = {
+daObj_Sekizoa_c::cutFunc DUSK_CONST daObj_Sekizoa_c::mCutList[9] = {
     NULL,
     &daObj_Sekizoa_c::cutStart,
     &daObj_Sekizoa_c::cutStart,
@@ -114,9 +114,9 @@ daObj_Sekizoa_c::cutFunc daObj_Sekizoa_c::mCutList[9] = {
     &daObj_Sekizoa_c::cutExtinction,
 };
 
-static cXyz l_srcPosR(-600.0f, 1000.0f, 1800.0f);
+static DUSK_CONSTEXPR cXyz l_srcPosR(-600.0f, 1000.0f, 1800.0f);
 
-static cXyz l_srcPosL(600.0f, 1000.0f, 1800.0f);
+static DUSK_CONSTEXPR cXyz l_srcPosL(600.0f, 1000.0f, 1800.0f);
 
 daObj_Sekizoa_HIOParam const daObj_Sekizoa_Param_c::m = {
     600.0f, -10.0f, 1.0f,   1100.0f, 255.0f,   550.0f, 100.0f, 70.0f, 0.0f, 0.0f, 30.0f,
@@ -865,7 +865,7 @@ void daObj_Sekizoa_c::drawOtherMdl() {
 
 
 int daObj_Sekizoa_c::setYariAnm(int i_frame, int i_mode, f32 i_morf) {
-    static struct {
+    static DUSK_CONSTEXPR struct {
         u32 param_0;
         u32 param_1;
     } yariAnmData[24] = {
@@ -929,7 +929,7 @@ void daObj_Sekizoa_c::drawGhost() {
 
 bool daObj_Sekizoa_c::afterSetMotionAnm(int i_frame, int i_mode, f32 i_morf, int param_3) {
     f32 var1;
-    static struct {
+    static DUSK_CONSTEXPR struct {
         int field_0x0;
         u32 field_0x4;
         u32 field_0x8;
@@ -937,7 +937,7 @@ bool daObj_Sekizoa_c::afterSetMotionAnm(int i_frame, int i_mode, f32 i_morf, int
         {0x2A, 0, 1}, {0x2B, 0, 1}, {0x2C, 0, 1}, {0x2D, 0, 1}, {0x2E, 0, 1}, {0x29, 0, 1},
     };
 
-    static struct {
+    static DUSK_CONSTEXPR struct {
         int field_0x0;
         u32 field_0x4;
         u32 field_0x8;
@@ -2455,12 +2455,12 @@ static int daObj_Sekizoa_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_Sekizoa_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Sekizoa_MethodTable = {
     daObj_Sekizoa_Create,   daObj_Sekizoa_Delete, daObj_Sekizoa_Execute,
     daObj_Sekizoa_IsDelete, daObj_Sekizoa_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_SEKIZOA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SEKIZOA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

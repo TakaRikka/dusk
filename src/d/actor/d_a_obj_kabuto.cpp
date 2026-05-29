@@ -855,7 +855,7 @@ static int daObjKABUTO_IsDelete(daObjKABUTO_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjKABUTO_Method = {
+static DUSK_CONST actor_method_class l_daObjKABUTO_Method = {
     (process_method_func)daObjKABUTO_Create,
     (process_method_func)daObjKABUTO_Delete,
     (process_method_func)daObjKABUTO_Execute,
@@ -863,7 +863,7 @@ static actor_method_class l_daObjKABUTO_Method = {
     (process_method_func)daObjKABUTO_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Kabuto = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Kabuto = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

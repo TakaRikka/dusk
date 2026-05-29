@@ -15,7 +15,7 @@ static int daObjSnowSoup_c_createHeap(fopAc_ac_c* i_this) {
     return static_cast<daObjSnowSoup_c*>(i_this)->createHeap();
 }
 
-static char* l_arcName = "SnowSoup";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "SnowSoup";
 
 static Vec const SOUP_MODEL_OFFSET = {3317.86f, 214.73f, 323.3f};
 
@@ -185,7 +185,7 @@ static int daObjSnowSoup_draw(daObjSnowSoup_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daObjSnowSoup_METHODS = {
+static DUSK_CONST actor_method_class daObjSnowSoup_METHODS = {
     (process_method_func)daObjSnowSoup_create,
     (process_method_func)daObjSnowSoup_Delete,
     (process_method_func)daObjSnowSoup_execute,
@@ -193,7 +193,7 @@ static actor_method_class daObjSnowSoup_METHODS = {
     (process_method_func)daObjSnowSoup_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SnowSoup = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SnowSoup = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

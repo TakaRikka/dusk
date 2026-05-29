@@ -383,7 +383,7 @@ static int daB_GOS_Create(fopAc_ac_c* i_this) {
         a_this->gravity = -7.0f;
         a_this->mAction = ACTION_WAIT;
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}},  // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                 // mGObjAt
@@ -411,13 +411,13 @@ static int daB_GOS_Create(fopAc_ac_c* i_this) {
 
 b_gos_class::b_gos_class() {}
 
-static actor_method_class l_daB_GOS_Method = {
+static DUSK_CONST actor_method_class l_daB_GOS_Method = {
     (process_method_func)daB_GOS_Create,  (process_method_func)daB_GOS_Delete,
     (process_method_func)daB_GOS_Execute, (process_method_func)daB_GOS_IsDelete,
     (process_method_func)daB_GOS_Draw,
 };
 
-actor_process_profile_definition g_profile_B_GOS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_GOS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

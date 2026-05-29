@@ -274,7 +274,7 @@ static leafdraw_method_class l_dThunder_Method = {
     (process_method_func)dThunder_Draw,
 };
 
-kankyo_process_profile_definition g_profile_KY_THUNDER = {
+DUSK_PROFILE kankyo_process_profile_definition DUSK_CONST g_profile_KY_THUNDER = {
     /* Layer ID      */ fpcLy_CURRENT_e,
     /* List ID       */ 7,
     /* List Prio     */ fpcPi_CURRENT_e,

@@ -2394,7 +2394,7 @@ static int daE_GOB_Create(fopAc_ac_c* i_this) {
 
 e_gob_class::e_gob_class() {}
 
-static actor_method_class l_daE_GOB_Method = {
+static DUSK_CONST actor_method_class l_daE_GOB_Method = {
     (process_method_func)daE_GOB_Create,
     (process_method_func)daE_GOB_Delete,
     (process_method_func)daE_GOB_Execute,
@@ -2402,7 +2402,7 @@ static actor_method_class l_daE_GOB_Method = {
     (process_method_func)daE_GOB_Draw,
 };
 
-actor_process_profile_definition g_profile_E_GOB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_GOB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

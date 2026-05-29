@@ -113,31 +113,31 @@ static void daAlink_coHitCallback(fopAc_ac_c* i_coActorA, dCcD_GObjInf* i_coObjI
     static_cast<daAlink_c*>(i_coActorA)->coHitCallback(i_coActorB, i_coObjInfA);
 }
 
-static cXyz l_waitBaseAnime(1.24279f, 102.00054f, 5.0f);
+static DUSK_CONSTEXPR cXyz l_waitBaseAnime(1.24279f, 102.00054f, 5.0f);
 
-static cXyz l_ironBallBaseAnime(-4.248938f, 89.0f, -5.267045f);
+static DUSK_CONSTEXPR cXyz l_ironBallBaseAnime(-4.248938f, 89.0f, -5.267045f);
 
-static cXyz l_halfAtnWaitBaseAnime(3.5f, 97.0f, -7.0f);
+static DUSK_CONSTEXPR cXyz l_halfAtnWaitBaseAnime(3.5f, 97.0f, -7.0f);
 
-static cXyz l_rWaitBaseAnime(4.313951f, 93.94436f, -5.207283f);
+static DUSK_CONSTEXPR cXyz l_rWaitBaseAnime(4.313951f, 93.94436f, -5.207283f);
 
-static cXyz l_lWaitBaseAnime(-4.300988f, 93.95595f, -5.218504f);
+static DUSK_CONSTEXPR cXyz l_lWaitBaseAnime(-4.300988f, 93.95595f, -5.218504f);
 
-static cXyz l_horseBaseAnime(-l_waitBaseAnime.x, 225.7f, 1.81f - l_waitBaseAnime.z);
+static DUSK_CONSTEXPR cXyz l_horseBaseAnime(-l_waitBaseAnime.x, 225.7f, 1.81f - l_waitBaseAnime.z);
 
-static cXyz l_boarBaseAnime(-l_waitBaseAnime.x, 186.17f, -20.29f - l_waitBaseAnime.z);
+static DUSK_CONSTEXPR cXyz l_boarBaseAnime(-l_waitBaseAnime.x, 186.17f, -20.29f - l_waitBaseAnime.z);
 
-static cXyz l_localHorseRidePos(-68.208984f, 41.609924f, 0.883789f);
+static DUSK_CONSTEXPR cXyz l_localHorseRidePos(-68.208984f, 41.609924f, 0.883789f);
 
-static cXyz l_localBoarRidePos(0.0f, 15.0f, 0.0f);
+static DUSK_CONSTEXPR cXyz l_localBoarRidePos(0.0f, 15.0f, 0.0f);
 
-static cXyz l_canoeBaseAnime(1.24279f - l_waitBaseAnime.x, 56.0f, -72.0f - l_waitBaseAnime.z);
+static DUSK_CONSTEXPR cXyz l_canoeBaseAnime(1.24279f - l_waitBaseAnime.x, 56.0f, -72.0f - l_waitBaseAnime.z);
 
-static cXyz l_sumouBaseAnimeSp(0.0f, 0.0f, 32.0f - l_waitBaseAnime.z);
+static DUSK_CONSTEXPR cXyz l_sumouBaseAnimeSp(0.0f, 0.0f, 32.0f - l_waitBaseAnime.z);
 
-static cXyz l_wolfBaseAnime(1.0f, 88.63934f, -28.497932f);
+static cXyz DUSK_CONST l_wolfBaseAnime(1.0f, 88.63934f, -28.497932f);
 
-static cXyz l_wolfRopeBaseAnime(0.115164f, 68.336296f, -7.667817f);
+static cXyz DUSK_CONST l_wolfRopeBaseAnime(0.115164f, 68.336296f, -7.667817f);
 
 static void dummy_lit_3757() {
     Vec temp = { 0.0f, 0.0f, 0.0f };
@@ -19890,13 +19890,13 @@ static int daAlink_Delete(daAlink_c* i_this) {
     }
 }
 
-static actor_method_class l_daAlink_Method = {
+static DUSK_CONST actor_method_class l_daAlink_Method = {
     (process_method_func)daAlink_Create,  (process_method_func)daAlink_Delete,
     (process_method_func)daAlink_Execute, (process_method_func)NULL,
     (process_method_func)daAlink_Draw,
 };
 
-actor_process_profile_definition g_profile_ALINK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_ALINK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 5,
     /* List Prio    */ fpcPi_CURRENT_e,

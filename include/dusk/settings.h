@@ -204,10 +204,13 @@ struct UserSettings {
         ConfigVar<bool> invertFirstPersonYAxis;
         ConfigVar<bool> invertAirSwimX;
         ConfigVar<bool> invertAirSwimY;
-        ConfigVar<float> freeCameraSensitivity;
+        ConfigVar<float> freeCameraXSensitivity;
+        ConfigVar<float> freeCameraYSensitivity;
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
         ConfigVar<bool> allowBackgroundInput;
+        std::array<ConfigVar<bool>, 4> enableLED;
+        ConfigVar<bool> swapDirectSelect;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;
@@ -227,6 +230,7 @@ struct UserSettings {
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
         ConfigVar<bool> invincibleEnemies;
+        ConfigVar<bool> transformWithoutShadowCrystal;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;

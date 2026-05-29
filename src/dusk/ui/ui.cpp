@@ -61,7 +61,6 @@ bool initialize() noexcept {
 }
 
 void shutdown() noexcept {
-    config::Save();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();

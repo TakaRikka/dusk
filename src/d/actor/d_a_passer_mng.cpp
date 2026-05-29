@@ -601,14 +601,14 @@ void daPasserMng_c::create_init() {
     }
 }
 
-static actor_method_class l_daPasserMng_Method = {
+static DUSK_CONST actor_method_class l_daPasserMng_Method = {
     (process_method_func)daPasserMng_Create,
     (process_method_func)daPasserMng_Delete,
     (process_method_func)daPasserMng_Execute,
     (process_method_func)daPasserMng_IsDelete,
 };
 
-actor_process_profile_definition g_profile_PASSER_MNG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_PASSER_MNG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -192,7 +192,7 @@ actor_method_class daObjBurnBox_METHODS = {
     (process_method_func) daObjBurnBox_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_BurnBox = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_BurnBox = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

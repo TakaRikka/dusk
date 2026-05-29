@@ -47,7 +47,7 @@ int Mthd_IsDelete(void* i_this) {
 
 namespace daObjEff {
 namespace {
-static actor_method_class Mthd_Table = {
+static DUSK_CONST actor_method_class Mthd_Table = {
     (process_method_func)Mthd_Create,  (process_method_func)Mthd_Delete,
     (process_method_func)Mthd_Execute, (process_method_func)Mthd_IsDelete,
     (process_method_func)Mthd_Draw,
@@ -55,7 +55,7 @@ static actor_method_class Mthd_Table = {
 };
 };  // namespace daObjEff
 
-actor_process_profile_definition g_profile_Obj_Eff = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Eff = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 9,
     /* List Prio    */ fpcPi_CURRENT_e,

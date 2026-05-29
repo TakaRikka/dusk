@@ -170,7 +170,7 @@ static leafdraw_method_class l_dkWmark_Method = {
     (process_method_func)dkWmark_Draw,
 };
 
-kankyo_process_profile_definition g_profile_WMARK = {
+DUSK_PROFILE kankyo_process_profile_definition DUSK_CONST g_profile_WMARK = {
     /* Layer ID      */ fpcLy_CURRENT_e,
     /* List ID       */ 9,
     /* List Prio     */ fpcPi_CURRENT_e,

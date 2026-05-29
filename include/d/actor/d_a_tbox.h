@@ -22,7 +22,7 @@ protected:
 STATIC_ASSERT(sizeof(daTboxBase_c) == 0x718);
 
 struct daTbox_ModelInfo {
-    /* 0x00 */ char* mArcName;
+    /* 0x00 */ DUSK_CONST char* mArcName;
     /* 0x04 */ int mModelResNo;
     /* 0x08 */ int mBckResNo;
     /* 0x0C */ int mClosedDzbResNo;
@@ -58,7 +58,7 @@ public:
         MODE_EXEC = 1,
     };
 
-    daTbox_ModelInfo* getModelInfo();
+    DUSK_CONST daTbox_ModelInfo* getModelInfo();
     cPhs_Step commonShapeSet();
     cPhs_Step effectShapeSet();
     cPhs_Step envShapeSet();

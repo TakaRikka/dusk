@@ -12,7 +12,7 @@ static int daObjPicture_c_createHeap(fopAc_ac_c* i_this) {
     return ((daObjPicture_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "L9Picture";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "L9Picture";
 
 static Vec l_LINE_OFFSET_POS[] = {
     {-100.0f, 200.0f, -2.0f},
@@ -548,7 +548,7 @@ dCcD_SrcCyl daObjPicture_c::s_CcDCyl_pic_at = {
     }
 };
 
-static actor_method_class daObjPicture_METHODS = {
+static DUSK_CONST actor_method_class daObjPicture_METHODS = {
     (process_method_func)daObjPicture_create,
     (process_method_func)daObjPicture_Delete,
     (process_method_func)daObjPicture_execute,
@@ -556,7 +556,7 @@ static actor_method_class daObjPicture_METHODS = {
     (process_method_func)daObjPicture_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Picture = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Picture = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

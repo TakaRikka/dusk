@@ -42,11 +42,11 @@ const dCcD_SrcGObjInf l_ccDObjData = {
     {0} // mGObjCo
 };
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     { 3, 1 }, { 4, 1 },
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "uri_kago"
 };
@@ -676,7 +676,7 @@ static int daObj_Kago_IsDelete(void* param_1) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daObj_Kago_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Kago_MethodTable = {
     (process_method_func)daObj_Kago_Create,
     (process_method_func)daObj_Kago_Delete,
     (process_method_func)daObj_Kago_Execute,
@@ -684,7 +684,7 @@ static actor_method_class daObj_Kago_MethodTable = {
     (process_method_func)daObj_Kago_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KAGO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KAGO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -168,13 +168,13 @@ static int daStairBlock_Create(fopAc_ac_c* i_this) {
 
 dCcD_SrcSph daStairBlock_c::mCcDSph = {daStairBlock_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 4.0f}}};
 
-static actor_method_class l_daStairBlock_Method = {
+static DUSK_CONST actor_method_class l_daStairBlock_Method = {
     (process_method_func)daStairBlock_Create,  (process_method_func)daStairBlock_Delete,
     (process_method_func)daStairBlock_Execute, 0,
     (process_method_func)daStairBlock_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_StairBlock = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_StairBlock = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

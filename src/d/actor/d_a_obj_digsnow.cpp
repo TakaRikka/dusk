@@ -34,7 +34,7 @@ int daObjDigSnow_c::Create() {
     return TRUE;
 }
 
-static char* l_arcName = "Y_horiyuk";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Y_horiyuk";
 
 int daObjDigSnow_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -173,13 +173,13 @@ static int daObjDigSnow_MoveBGDraw(daObjDigSnow_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjDigSnow_METHODS = {
+static DUSK_CONST actor_method_class daObjDigSnow_METHODS = {
     (process_method_func)daObjDigSnow_create1st,     (process_method_func)daObjDigSnow_MoveBGDelete,
     (process_method_func)daObjDigSnow_MoveBGExecute, NULL,
     (process_method_func)daObjDigSnow_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_DigSnow = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_DigSnow = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -19,7 +19,7 @@ static struct {
     u32 resIdx;
 } l_dzbData[1] = {7, 1};
 
-static char* l_resNameList[2] = {"", "Sekizo"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {"", "Sekizo"};
 
 static u8 lit_3800[12];
 
@@ -149,12 +149,12 @@ static int daObj_Sekizo_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_Sekizo_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Sekizo_MethodTable = {
     (process_method_func)daObj_Sekizo_Create, (process_method_func)daObj_Sekizo_Delete,
     (process_method_func)daObj_Sekizo_Execute, (process_method_func)daObj_Sekizo_IsDelete,
     (process_method_func)daObj_Sekizo_Draw};
 
-actor_process_profile_definition g_profile_OBJ_SEKIZO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_SEKIZO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

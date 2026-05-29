@@ -48,36 +48,36 @@ daNpcImpal_HIOParam const daNpcImpal_Param_c::m = {
 
 static NPC_IMPAL_HIO_CLASS l_HIO;
 
-static daNpc_GetParam2 l_bckGetParamList[18] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[18] = {
     {-1, 2, 0}, {14, 0, 0}, {8, 0, 0},  {7, 2, 0},  {11, 0, 0}, {13, 0, 0},
     {12, 0, 0}, {15, 2, 0}, {17, 2, 0}, {16, 2, 0}, {22, 2, 0}, {19, 2, 0},
     {23, 2, 0}, {18, 0, 0}, {21, 0, 0}, {20, 0, 0}, {10, 0, 0}, {9, 2, 0},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[10] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[10] = {
     {35, 2, 0}, {41, 2, 0}, {37, 0, 0}, {36, 2, 0}, {38, 2, 0},
     {40, 2, 0}, {39, 0, 0}, {42, 2, 0}, {44, 2, 0}, {43, 2, 0},
 };
 
-static daNpc_GetParam2 l_btkGetParamList[4] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[4] = {
     {29, 2, 0},
     {32, 2, 0},
     {31, 0, 0},
     {30, 2, 0},
 };
 
-static char* l_arcNames[1] = {"impal"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[1] = {"impal"};
 
-static char* l_evtNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[4] = {
     NULL,
     "IMPAL_APPEAR1",
     "IMPAL_APPEAR2",
     "IMPAL_COPYROD",
 };
 
-static Vec l_resetPos = {2536.763671875f, 99.99166107177734f, -1154.2318115234375f};
+static DUSK_CONSTEXPR Vec l_resetPos = {2536.763671875f, 99.99166107177734f, -1154.2318115234375f};
 
-static char* l_myName = "impal";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "impal";
 
 #if DEBUG
 daNpcImpal_HIO_c::daNpcImpal_HIO_c() {
@@ -1231,13 +1231,13 @@ BOOL daNpcImpal_c::drawDbgInfo() {
     return FALSE;
 }
 
-static actor_method_class daNpcImpal_MethodTable = {
+static DUSK_CONST actor_method_class daNpcImpal_MethodTable = {
     (process_method_func)daNpcImpal_Create,  (process_method_func)daNpcImpal_Delete,
     (process_method_func)daNpcImpal_Execute, (process_method_func)daNpcImpal_IsDelete,
     (process_method_func)daNpcImpal_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_IMPAL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_IMPAL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -64,6 +64,15 @@ struct CrashContext {
 };
 CrashContext g_ctx;
 
+struct ModuleInfo {
+    uintptr_t base = 0;
+    uintptr_t size = 0;
+    char path[1024] = {};
+    uint8_t buildId[64] = {};
+    unsigned buildIdLen = 0;
+    unsigned pdbAge = 0;
+};
+
 void rawWrite(int fd, const char* data, size_t len) {
     if (fd < 0) {
         return;
@@ -119,14 +128,68 @@ void writeHexBytes(int fd, const uint8_t* data, unsigned len) {
     }
 }
 
-const char* moduleName() {
-    const char* name = g_ctx.modulePath;
-    for (const char* p = g_ctx.modulePath; *p != '\0'; ++p) {
+void writeHexByte(int fd, uint8_t value) {
+    char buf[2];
+    buf[0] = kHexDigits[value >> 4];
+    buf[1] = kHexDigits[value & 0xF];
+    rawWrite(fd, buf, 2);
+}
+
+void writeQuoted(int fd, const char* s) {
+    writeStr(fd, "\"");
+    if (s != nullptr) {
+        for (const char* p = s; *p != '\0'; ++p) {
+            if (*p == '"' || *p == '\\') {
+                rawWrite(fd, "\\", 1);
+            }
+            rawWrite(fd, p, 1);
+        }
+    }
+    writeStr(fd, "\"");
+}
+
+const char* baseName(const char* path) {
+    const char* name = path;
+    for (const char* p = path; p != nullptr && *p != '\0'; ++p) {
         if (*p == '/' || *p == '\\') {
             name = p + 1;
         }
     }
     return name[0] != '\0' ? name : "(unknown)";
+}
+
+void writeBuildId(int fd, const uint8_t* buildId, unsigned buildIdLen, unsigned pdbAge) {
+    if (buildIdLen == 0) {
+        writeStr(fd, "(unavailable)");
+        return;
+    }
+#if defined(_WIN32)
+    if (buildIdLen == 16) {
+        writeHexByte(fd, buildId[3]);
+        writeHexByte(fd, buildId[2]);
+        writeHexByte(fd, buildId[1]);
+        writeHexByte(fd, buildId[0]);
+        writeStr(fd, "-");
+        writeHexByte(fd, buildId[5]);
+        writeHexByte(fd, buildId[4]);
+        writeStr(fd, "-");
+        writeHexByte(fd, buildId[7]);
+        writeHexByte(fd, buildId[6]);
+        writeStr(fd, "-");
+        writeHexByte(fd, buildId[8]);
+        writeHexByte(fd, buildId[9]);
+        writeStr(fd, "-");
+        writeHexBytes(fd, buildId + 10, 6);
+        if (pdbAge != 0) {
+            writeStr(fd, "-");
+            writeDec(fd, pdbAge);
+        }
+        return;
+    }
+#else
+    (void)pdbAge;
+#endif
+    writeHexBytes(fd, buildId, buildIdLen);
 }
 
 const char* symbolFor(uintptr_t pc, unsigned long long* disp) {
@@ -156,7 +219,47 @@ const char* symbolFor(uintptr_t pc, unsigned long long* disp) {
 #endif
 }
 
+void fallbackModuleInfo(ModuleInfo& info) {
+    info = {};
+    info.base = g_ctx.moduleBase;
+    std::strncpy(info.path, g_ctx.modulePath, sizeof(info.path) - 1);
+    if (g_ctx.buildIdLen > sizeof(info.buildId)) {
+        info.buildIdLen = sizeof(info.buildId);
+    } else {
+        info.buildIdLen = g_ctx.buildIdLen;
+    }
+    if (info.buildIdLen != 0) {
+        std::memcpy(info.buildId, g_ctx.buildId, info.buildIdLen);
+    }
+    info.pdbAge = g_ctx.pdbAge;
+}
+
+bool findModuleInfo(uintptr_t pc, ModuleInfo& info);
+
+void emitAddressDetail(int fd, uintptr_t pc) {
+    ModuleInfo info;
+    findModuleInfo(pc, info);
+    const uintptr_t rva = pc >= info.base ? pc - info.base : 0ull;
+    writeHex(fd, pc);
+    writeStr(fd, " module_base=");
+    writeHex(fd, info.base);
+    if (info.size != 0) {
+        writeStr(fd, " image_size=");
+        writeHex(fd, info.size);
+    }
+    writeStr(fd, " rva=");
+    writeHex(fd, rva);
+    writeStr(fd, " module=");
+    writeQuoted(fd, info.path[0] != '\0' ? info.path : baseName(g_ctx.modulePath));
+    writeStr(fd, " build_id=");
+    writeBuildId(fd, info.buildId, info.buildIdLen, info.pdbAge);
+}
+
 void emitFrame(int fd, int index, uintptr_t pc) {
+    ModuleInfo info;
+    findModuleInfo(pc, info);
+    const uintptr_t rva = pc >= info.base ? pc - info.base : 0ull;
+
     writeStr(fd, "#");
     if (index < 10) {
         writeStr(fd, "0");
@@ -164,10 +267,18 @@ void emitFrame(int fd, int index, uintptr_t pc) {
     writeDec(fd, static_cast<unsigned int>(index));
     writeStr(fd, " abs=");
     writeHex(fd, pc);
+    writeStr(fd, " module_base=");
+    writeHex(fd, info.base);
+    if (info.size != 0) {
+        writeStr(fd, " image_size=");
+        writeHex(fd, info.size);
+    }
     writeStr(fd, " rva=");
-    writeHex(fd, pc >= g_ctx.moduleBase ? pc - g_ctx.moduleBase : 0ull);
-    writeStr(fd, " ");
-    writeStr(fd, moduleName());
+    writeHex(fd, rva);
+    writeStr(fd, " module=");
+    writeQuoted(fd, info.path[0] != '\0' ? info.path : baseName(g_ctx.modulePath));
+    writeStr(fd, " build_id=");
+    writeBuildId(fd, info.buildId, info.buildIdLen, info.pdbAge);
     unsigned long long disp = 0;
     const char* sym = symbolFor(pc, &disp);
     if (sym != nullptr && sym[0] != '\0') {
@@ -191,18 +302,7 @@ void emitHeader(int fd, const char* reason, unsigned long long code, bool hasCod
     writeStr(fd, "\nModule base: ");
     writeHex(fd, g_ctx.moduleBase);
     writeStr(fd, "\nBuild-ID:    ");
-    if (g_ctx.buildIdLen != 0) {
-        writeHexBytes(fd, g_ctx.buildId, g_ctx.buildIdLen);
-#if defined(_WIN32)
-        if (g_ctx.pdbAge != 0) {
-            writeStr(fd, " (Age=");
-            writeDec(fd, g_ctx.pdbAge);
-            writeStr(fd, ")");
-        }
-#endif
-    } else {
-        writeStr(fd, "(unavailable)");
-    }
+    writeBuildId(fd, g_ctx.buildId, g_ctx.buildIdLen, g_ctx.pdbAge);
     writeStr(fd, "\nReason:      ");
     writeStr(fd, reason);
     if (hasCode) {
@@ -214,9 +314,7 @@ void emitHeader(int fd, const char* reason, unsigned long long code, bool hasCod
     writeHex(fd, faultAddr);
     writeStr(fd, "\nCrash PC:    ");
     if (crashPcKnown) {
-        writeHex(fd, crashPc);
-        writeStr(fd, " rva=");
-        writeHex(fd, crashPc >= g_ctx.moduleBase ? crashPc - g_ctx.moduleBase : 0ull);
+        emitAddressDetail(fd, crashPc);
     } else {
         writeStr(fd, "(unavailable on this platform)");
     }
@@ -233,23 +331,25 @@ void emitFooter(int fd) {
 LONG g_inHandler = 0;
 LPTOP_LEVEL_EXCEPTION_FILTER g_prevFilter = nullptr;
 
-void captureBuildId() {
-    const auto* base = reinterpret_cast<const uint8_t*>(g_ctx.moduleBase);
+bool readPeModuleInfo(uintptr_t moduleBase, ModuleInfo& info) {
+    const auto* base = reinterpret_cast<const uint8_t*>(moduleBase);
     if (base == nullptr) {
-        return;
+        return false;
     }
     const auto* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(base);
     if (dos->e_magic != IMAGE_DOS_SIGNATURE) {
-        return;
+        return false;
     }
     const auto* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(base + dos->e_lfanew);
     if (nt->Signature != IMAGE_NT_SIGNATURE) {
-        return;
+        return false;
     }
+    info.base = moduleBase;
+    info.size = nt->OptionalHeader.SizeOfImage;
     const IMAGE_DATA_DIRECTORY& dir =
         nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG];
     if (dir.VirtualAddress == 0 || dir.Size == 0) {
-        return;
+        return true;
     }
     const auto* dbg = reinterpret_cast<const IMAGE_DEBUG_DIRECTORY*>(base + dir.VirtualAddress);
     const unsigned count = dir.Size / sizeof(IMAGE_DEBUG_DIRECTORY);
@@ -261,11 +361,40 @@ void captureBuildId() {
         if (std::memcmp(cv, "RSDS", 4) != 0) {
             continue;
         }
-        std::memcpy(g_ctx.buildId, cv + 4, sizeof(GUID));
-        g_ctx.buildIdLen = sizeof(GUID);
-        std::memcpy(&g_ctx.pdbAge, cv + 4 + sizeof(GUID), sizeof(g_ctx.pdbAge));
+        std::memcpy(info.buildId, cv + 4, sizeof(GUID));
+        info.buildIdLen = sizeof(GUID);
+        std::memcpy(&info.pdbAge, cv + 4 + sizeof(GUID), sizeof(info.pdbAge));
         break;
     }
+    return true;
+}
+
+void captureBuildId() {
+    ModuleInfo info;
+    if (!readPeModuleInfo(g_ctx.moduleBase, info)) {
+        return;
+    }
+    g_ctx.buildIdLen = info.buildIdLen;
+    if (g_ctx.buildIdLen != 0) {
+        std::memcpy(g_ctx.buildId, info.buildId, g_ctx.buildIdLen);
+    }
+    g_ctx.pdbAge = info.pdbAge;
+}
+
+bool findModuleInfo(uintptr_t pc, ModuleInfo& info) {
+    fallbackModuleInfo(info);
+    MEMORY_BASIC_INFORMATION mbi;
+    if (VirtualQuery(reinterpret_cast<LPCVOID>(pc), &mbi, sizeof(mbi)) == 0 ||
+        mbi.AllocationBase == nullptr) {
+        return false;
+    }
+    const auto moduleBase = reinterpret_cast<uintptr_t>(mbi.AllocationBase);
+    info = {};
+    info.base = moduleBase;
+    GetModuleFileNameA(reinterpret_cast<HMODULE>(moduleBase), info.path,
+        static_cast<DWORD>(sizeof(info.path) - 1));
+    readPeModuleInfo(moduleBase, info);
+    return true;
 }
 
 const char* exceptionName(DWORD code) {
@@ -512,22 +641,34 @@ void prewarmUnwinder() {
 
 #if defined(__APPLE__)
 
-void captureBuildId() {
-    const auto* header = reinterpret_cast<const struct mach_header_64*>(g_ctx.moduleBase);
+bool readMachBuildId(uintptr_t moduleBase, ModuleInfo& info) {
+    const auto* header = reinterpret_cast<const struct mach_header_64*>(moduleBase);
     if (header == nullptr || header->magic != MH_MAGIC_64) {
-        return;
+        return false;
     }
     const auto* lc = reinterpret_cast<const struct load_command*>(
         reinterpret_cast<const char*>(header) + sizeof(struct mach_header_64));
     for (uint32_t i = 0; i < header->ncmds; ++i) {
         if (lc->cmd == LC_UUID) {
             const auto* uuid = reinterpret_cast<const struct uuid_command*>(lc);
-            std::memcpy(g_ctx.buildId, uuid->uuid, sizeof(uuid->uuid));
-            g_ctx.buildIdLen = sizeof(uuid->uuid);
-            return;
+            std::memcpy(info.buildId, uuid->uuid, sizeof(uuid->uuid));
+            info.buildIdLen = sizeof(uuid->uuid);
+            return true;
         }
         lc = reinterpret_cast<const struct load_command*>(
             reinterpret_cast<const char*>(lc) + lc->cmdsize);
+    }
+    return true;
+}
+
+void captureBuildId() {
+    ModuleInfo info;
+    if (!readMachBuildId(g_ctx.moduleBase, info)) {
+        return;
+    }
+    g_ctx.buildIdLen = info.buildIdLen;
+    if (g_ctx.buildIdLen != 0) {
+        std::memcpy(g_ctx.buildId, info.buildId, g_ctx.buildIdLen);
     }
 }
 
@@ -547,7 +688,28 @@ bool segmentContains(const dl_phdr_info* info, uintptr_t addr) {
     return false;
 }
 
-bool readGnuBuildId(const dl_phdr_info* info) {
+void readElfModuleInfo(const dl_phdr_info* info, ModuleInfo& module) {
+    uintptr_t minAddr = ~static_cast<uintptr_t>(0);
+    uintptr_t maxAddr = 0;
+    for (int i = 0; i < info->dlpi_phnum; ++i) {
+        const ElfW(Phdr)& ph = info->dlpi_phdr[i];
+        if (ph.p_type != PT_LOAD) {
+            continue;
+        }
+        const uintptr_t start = info->dlpi_addr + ph.p_vaddr;
+        const uintptr_t end = start + ph.p_memsz;
+        if (start < minAddr) {
+            minAddr = start;
+        }
+        if (end > maxAddr) {
+            maxAddr = end;
+        }
+    }
+    if (minAddr <= maxAddr && maxAddr != 0) {
+        module.base = minAddr;
+        module.size = maxAddr - minAddr;
+    }
+
     for (int i = 0; i < info->dlpi_phnum; ++i) {
         const ElfW(Phdr)& ph = info->dlpi_phdr[i];
         if (ph.p_type != PT_NOTE) {
@@ -563,17 +725,16 @@ bool readGnuBuildId(const dl_phdr_info* info) {
             if (nh->n_type == NT_GNU_BUILD_ID && nh->n_namesz == 4 &&
                 std::memcmp(name, "GNU", 4) == 0) {
                 unsigned n = nh->n_descsz;
-                if (n > sizeof(g_ctx.buildId)) {
-                    n = sizeof(g_ctx.buildId);
+                if (n > sizeof(module.buildId)) {
+                    n = sizeof(module.buildId);
                 }
-                std::memcpy(g_ctx.buildId, desc, n);
-                g_ctx.buildIdLen = n;
-                return true;
+                std::memcpy(module.buildId, desc, n);
+                module.buildIdLen = n;
+                return;
             }
             p = desc + ((nh->n_descsz + 3) & ~3u);
         }
     }
-    return false;
 }
 
 int elfBuildIdCallback(dl_phdr_info* info, size_t, void* arg) {
@@ -581,7 +742,12 @@ int elfBuildIdCallback(dl_phdr_info* info, size_t, void* arg) {
     if (!segmentContains(info, self)) {
         return 0;
     }
-    readGnuBuildId(info);
+    ModuleInfo module;
+    readElfModuleInfo(info, module);
+    g_ctx.buildIdLen = module.buildIdLen;
+    if (g_ctx.buildIdLen != 0) {
+        std::memcpy(g_ctx.buildId, module.buildId, g_ctx.buildIdLen);
+    }
     return 1;
 }
 
@@ -591,6 +757,50 @@ void captureBuildId() {
 }
 
 #endif
+
+#if !defined(__APPLE__)
+struct ElfModuleSearch {
+    uintptr_t pc;
+    ModuleInfo* module;
+};
+
+int elfModuleInfoCallback(dl_phdr_info* info, size_t, void* arg) {
+    auto* search = static_cast<ElfModuleSearch*>(arg);
+    if (!segmentContains(info, search->pc)) {
+        return 0;
+    }
+    if (info->dlpi_name != nullptr && info->dlpi_name[0] != '\0') {
+        std::strncpy(search->module->path, info->dlpi_name,
+            sizeof(search->module->path) - 1);
+    }
+    readElfModuleInfo(info, *search->module);
+    return 1;
+}
+#endif
+
+bool findModuleInfo(uintptr_t pc, ModuleInfo& info) {
+    fallbackModuleInfo(info);
+    Dl_info moduleInfo;
+    if (dladdr(reinterpret_cast<void*>(pc), &moduleInfo) == 0) {
+        return false;
+    }
+    if (moduleInfo.dli_fbase != nullptr) {
+        info.base = reinterpret_cast<uintptr_t>(moduleInfo.dli_fbase);
+    }
+    if (moduleInfo.dli_fname != nullptr && moduleInfo.dli_fname[0] != '\0') {
+        info.path[0] = '\0';
+        std::strncpy(info.path, moduleInfo.dli_fname, sizeof(info.path) - 1);
+    }
+    info.buildIdLen = 0;
+    info.pdbAge = 0;
+#if defined(__APPLE__)
+    readMachBuildId(info.base, info);
+#else
+    ElfModuleSearch search{pc, &info};
+    dl_iterate_phdr(&elfModuleInfoCallback, &search);
+#endif
+    return true;
+}
 
 const char* signalName(int sig) {
     switch (sig) {

@@ -4937,7 +4937,7 @@ static int daB_GND_Create(fopAc_ac_c* a_this) {
             } // mSphAttr
         };
     
-        static dCcD_SrcCyl co_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl co_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x75}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -5018,7 +5018,7 @@ static int daB_GND_Create(fopAc_ac_c* a_this) {
 
 b_gnd_class::b_gnd_class() {}
 
-static actor_method_class l_daB_GND_Method = {
+static DUSK_CONST actor_method_class l_daB_GND_Method = {
     (process_method_func)daB_GND_Create,
     (process_method_func)daB_GND_Delete,
     (process_method_func)daB_GND_Execute,
@@ -5026,7 +5026,7 @@ static actor_method_class l_daB_GND_Method = {
     (process_method_func)daB_GND_Draw,
 };
 
-actor_process_profile_definition g_profile_B_GND = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_GND = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

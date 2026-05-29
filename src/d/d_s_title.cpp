@@ -9,7 +9,7 @@
 #include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_leaf.h"
 
-scene_process_profile_definition g_profile_WARNING_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_WARNING_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,
@@ -22,7 +22,7 @@ scene_process_profile_definition g_profile_WARNING_SCENE = {
     /* Scene SubMtd */ NULL,
 };
 
-scene_process_profile_definition g_profile_WARNING2_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_WARNING2_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,

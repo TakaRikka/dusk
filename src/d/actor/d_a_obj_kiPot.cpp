@@ -10,7 +10,7 @@
 
 static daKiPot_HIO_c l_HIO;
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-50.0f, 0.0f, -50.0f},
     {50.0f, 100.0f, 50.0f},
 };
@@ -108,13 +108,13 @@ static int daKiPot_Create(fopAc_ac_c* i_this) {
     return static_cast<daKiPot_c*>(i_this)->create();
 }
 
-static actor_method_class l_daKiPot_Method = {
+static DUSK_CONST actor_method_class l_daKiPot_Method = {
     (process_method_func)daKiPot_Create,  (process_method_func)daKiPot_Delete,
     (process_method_func)daKiPot_Execute, 0,
     (process_method_func)daKiPot_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_KiPot = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_KiPot = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

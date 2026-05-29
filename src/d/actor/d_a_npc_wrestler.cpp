@@ -244,9 +244,9 @@ enum Bou3_Joint {
     /* 0x24 */ JNT_OBIR,
 };
 
-static char* l_resALink = "alSumou";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resALink = "alSumou";
 
-static char* l_resName[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName[5] = {
     "Bou3",
     "grDS",
     NULL,
@@ -254,11 +254,11 @@ static char* l_resName[5] = {
     NULL,
 };
 
-static int l_bmdGetParamList[5] = {
+static DUSK_CONSTEXPR int l_bmdGetParamList[5] = {
     BMDR_BOUS, BMDR_GRD, 0, 0, 0,
 };
 
-static daNpc_GetParam1 l_BouBckParamList[63] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_BouBckParamList[63] = {
     {-1, 2}, {BCK_BOUS_F_DOWN, 2}, {BCK_BOUS_F_HEAD_UP, 0}, 
     {BCK_BOUS_F_LOSE, 0}, {BCK_BOUS_F_LOSE2, 0}, {BCK_BOUS_F_PULLBACK, 0}, 
     {BCK_BOUS_F_PUNCH, 0}, {BCK_BOUS_F_PUNCH_SHOCK, 0}, {BCK_BOUS_F_PUNCHMISS_TACKLESHOCK, 0}, 
@@ -282,7 +282,7 @@ static daNpc_GetParam1 l_BouBckParamList[63] = {
     {-1, 2}, {-1, 2}, {-1, 2},
 };
 
-static daNpc_GetParam2 l_BouFaceParamList[23] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_BouFaceParamList[23] = {
     {-1, 0x44, 2}, {7, 0x45, 2}, {8, 0x46, 0},
     {9, 0x47, 0}, {10, 0x48, 0}, {11, 0x49, 0}, 
     {12, 0x4A, 0}, {13, 0x4B, 0}, {14, 0x4C, 0},
@@ -293,7 +293,7 @@ static daNpc_GetParam2 l_BouFaceParamList[23] = {
     {27, 0x58, 0}, {28, 0x59, 0},
 };
 
-static daNpc_GetParam1 l_BouBtpParamList[23] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_BouBtpParamList[23] = {
     {BTP_BOUS, 2}, {BTP_BOUS_F_DOWN, 0}, 
     {BTP_BOUS_F_HEAD_UP, 0}, {BTP_BOUS_F_LOSE, 0}, 
     {BTP_BOUS_F_LOSE2, 0}, {BTP_BOUS_F_PULLBACK, 0},
@@ -308,18 +308,18 @@ static daNpc_GetParam1 l_BouBtpParamList[23] = {
     {BTP_BOUS_F_WIN_POSE, 0},
 };
 
-static daNpc_GetParam1 l_BouBtkParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_BouBtkParamList[1] = {
     {BTK_BOUS, 2},
 };
 
-static WrestlerParamList l_BouAnmParamList = {
+static DUSK_CONSTEXPR WrestlerParamList l_BouAnmParamList = {
     l_BouBckParamList,
     l_BouFaceParamList,
     l_BouBtpParamList,
     l_BouBtkParamList,
 };
 
-static daNpc_GetParam1 l_GrdBckParamList[63] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_GrdBckParamList[63] = {
     {-1, 2}, {8, 2}, {9, 0}, {10, 0},
     {0x0B, 0}, {0x0D, 0}, {0x0E, 0}, {0x0F, 0},
     {0x10, 0}, {0x11, 0}, {0x12, 0}, {0x14, 2},
@@ -338,7 +338,7 @@ static daNpc_GetParam1 l_GrdBckParamList[63] = {
     {0x3C, 0}, {0x3D, 0}, {0x42, 2},
 };
 
-static daNpc_GetParam2 l_GrdFaceParamList[23] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_GrdFaceParamList[23] = {
     {-1, 0x4D, 2}, {8, 0x4E, 2}, {9, 0x4F, 0},
     {0x0A, 0x50, 0}, {0x0B, 0x51, 0}, {0x0D, 0x52, 0}, 
     {0x0E, -1, 0}, {0x0F, 0x53, 0}, {0x10, 0x54, 0}, 
@@ -349,7 +349,7 @@ static daNpc_GetParam2 l_GrdFaceParamList[23] = {
     {0x1E, 0x5F, 0}, {0x1F, -1, 0},
 };
 
-static daNpc_GetParam1 l_GrdBtpParamList[23] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_GrdBtpParamList[23] = {
     {0x4D, 2}, {0x4E, 2}, {0x4F, 0}, {0x50, 0},
     {0x51, 0}, {0x52, 0}, {-1, 0}, {0x53, 0},
     {0x54, 0}, {0x55, 0}, {0x56, 0}, {0x57, 2},
@@ -358,23 +358,23 @@ static daNpc_GetParam1 l_GrdBtpParamList[23] = {
     {0x5E, 2}, {0x5F, 0}, {-1, 0},
 };
 
-static daNpc_GetParam1 l_GrdBtkParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_GrdBtkParamList[1] = {
     {0x4A, 2},
 };
 
-static WrestlerParamList l_GrdAnmParamList = {
+static DUSK_CONSTEXPR WrestlerParamList l_GrdAnmParamList = {
     l_GrdBckParamList,
     l_GrdFaceParamList,
     l_GrdBtpParamList,
     l_GrdBtkParamList,
 };
 
-static WrestlerParamList* l_anmList[2] = {
+static DUSK_CONSTEXPR WrestlerParamList DUSK_CONST* l_anmList[2] = {
     &l_BouAnmParamList,
     &l_GrdAnmParamList,
 };
 
-static char* l_evtNames[7] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[7] = {
     NULL,
     "GRDS_ENTRY",
     "GRDS_ENTRY2",
@@ -384,7 +384,7 @@ static char* l_evtNames[7] = {
     "GRDS_LOSE",
 };
 
-static char* l_myName = "Wrestler";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Wrestler";
 
 static NPC_WRESTLER_HIO_CLASS l_HIO;
 
@@ -646,7 +646,7 @@ void daNpcWrestler_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-daNpcWrestler_c::EventFn daNpcWrestler_c::mEvtSeqList[7] = {
+daNpcWrestler_c::EventFn DUSK_CONST daNpcWrestler_c::mEvtSeqList[7] = {
     NULL,
     &daNpcWrestler_c::EvCut_grDSEntry,
     &daNpcWrestler_c::EvCut_grDSEntry2,
@@ -5212,7 +5212,7 @@ void daNpcWrestler_c::drawOtherMdls() {
     /* empty function */
 }
 
-static actor_method_class daNpcWrestler_MethodTable = {
+static DUSK_CONST actor_method_class daNpcWrestler_MethodTable = {
     (process_method_func)daNpcWrestler_Create,
     (process_method_func)daNpcWrestler_Delete,
     (process_method_func)daNpcWrestler_Execute,
@@ -5220,7 +5220,7 @@ static actor_method_class daNpcWrestler_MethodTable = {
     (process_method_func)daNpcWrestler_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_WRESTLER = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_WRESTLER = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

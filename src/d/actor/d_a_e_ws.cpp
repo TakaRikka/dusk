@@ -996,7 +996,7 @@ static int daE_WS_Create(daE_WS_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daE_WS_Method = {
+static DUSK_CONST actor_method_class l_daE_WS_Method = {
     (process_method_func)daE_WS_Create,
     (process_method_func)daE_WS_Delete,
     (process_method_func)daE_WS_Execute,
@@ -1004,7 +1004,7 @@ static actor_method_class l_daE_WS_Method = {
     (process_method_func)daE_WS_Draw,
 };
 
-actor_process_profile_definition g_profile_E_WS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_WS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

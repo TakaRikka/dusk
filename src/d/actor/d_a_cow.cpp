@@ -3283,11 +3283,11 @@ static int daCow_IsDelete(void* actor) {
     return true;
 }
 
-static actor_method_class daCow_MethodTable = {
+static DUSK_CONST actor_method_class daCow_MethodTable = {
     daCow_Create, daCow_Delete, daCow_Execute, daCow_IsDelete, daCow_Draw,
 };
 
-actor_process_profile_definition g_profile_COW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_COW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

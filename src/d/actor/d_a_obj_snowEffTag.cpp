@@ -124,13 +124,13 @@ daSnowEffTag_HIO_c::~daSnowEffTag_HIO_c() {}
 
 static daSnowEffTag_HIO_c l_HIO;
 
-static actor_method_class l_daSnowEffTag_Method = {
+static DUSK_CONST actor_method_class l_daSnowEffTag_Method = {
     (process_method_func)daSnowEffTag_Create,  (process_method_func)daSnowEffTag_Delete,
     (process_method_func)daSnowEffTag_Execute, (process_method_func)NULL,
     (process_method_func)daSnowEffTag_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_SnowEff = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_SnowEff = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

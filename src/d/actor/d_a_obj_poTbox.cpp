@@ -18,16 +18,16 @@ public:
     /* 0x8 */ f32 close_speed;
 };
 
-static char* l_type[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_type[2] = {
     "pouBox0",
     "pouBox1",
 };
 
-static int l_bmdIdx[] = {
+static DUSK_CONSTEXPR int l_bmdIdx[] = {
     10, 8,
 };
 
-static int l_dzbIdx[] = {
+static DUSK_CONSTEXPR int l_dzbIdx[] = {
     21, 11,
 };
 
@@ -157,7 +157,7 @@ int daPoTbox_c::create() {
 static daPoTbox_HIO_c l_HIO;
 
 int daPoTbox_c::Execute(Mtx** param_0) {
-    static void (daPoTbox_c::*mode_proc[])() = {
+    static DUSK_CONSTEXPR void (daPoTbox_c::*mode_proc[])() = {
         &daPoTbox_c::modeWait,
         &daPoTbox_c::modeOpen,
         &daPoTbox_c::modeOpenEnd,
@@ -295,7 +295,7 @@ static int daPoTbox_Create(fopAc_ac_c* i_this) {
     return ((daPoTbox_c*)i_this)->create();
 }
 
-static actor_method_class l_daPoTbox_Method = {
+static DUSK_CONST actor_method_class l_daPoTbox_Method = {
     (process_method_func)daPoTbox_Create,
     (process_method_func)daPoTbox_Delete,
     (process_method_func)daPoTbox_Execute,
@@ -303,7 +303,7 @@ static actor_method_class l_daPoTbox_Method = {
     (process_method_func)daPoTbox_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_poTbox = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_poTbox = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

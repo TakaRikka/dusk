@@ -1280,13 +1280,13 @@ static int daItem_Create(fopAc_ac_c* i_this) {
     return static_cast<daItem_c*>(i_this)->_daItem_create();
 }
 
-static actor_method_class l_daItem_Method = {
+static DUSK_CONST actor_method_class l_daItem_Method = {
     (process_method_func)daItem_Create,  (process_method_func)daItem_Delete,
     (process_method_func)daItem_Execute, (process_method_func)NULL,
     (process_method_func)daItem_Draw,
 };
 
-actor_process_profile_definition g_profile_ITEM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_ITEM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

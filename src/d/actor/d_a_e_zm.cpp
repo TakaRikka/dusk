@@ -70,7 +70,7 @@ static u8 hio_set;
 static daE_ZM_HIO_c l_HIO;
 
 namespace {
-    static dCcD_SrcCyl cc_zm_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_zm_src = {
         {
             {0, {{AT_TYPE_0, 0, 0}, {0xD8FBFDFF, 0x43}, 0x45}},
             {dCcD_SE_13, 0, 0, 0, 0},
@@ -1025,7 +1025,7 @@ static int daE_ZM_Create(daE_ZM_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daE_ZM_Method = {
+static DUSK_CONST actor_method_class l_daE_ZM_Method = {
     (process_method_func)daE_ZM_Create,
     (process_method_func)daE_ZM_Delete,
     (process_method_func)daE_ZM_Execute,
@@ -1033,7 +1033,7 @@ static actor_method_class l_daE_ZM_Method = {
     (process_method_func)daE_ZM_Draw,
 };
 
-actor_process_profile_definition g_profile_E_ZM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_ZM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

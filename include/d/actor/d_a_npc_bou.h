@@ -89,7 +89,7 @@ public:
     daNpc_Bou_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
-                daNpcT_evtData_c const* param_7, char** param_8)
+                daNpcT_evtData_c const* param_7, char DUSK_CONST* DUSK_CONST* param_8)
         :
                                daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                 {}
@@ -114,8 +114,8 @@ public:
     virtual int drawDbgInfo();
     virtual void changeAnm(int*, int*);
 
-    static char* mCutNameList[9];
-    static cutFunc mCutList[9];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[9];
+    static cutFunc DUSK_CONST mCutList[9];
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

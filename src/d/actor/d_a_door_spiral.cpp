@@ -432,7 +432,7 @@ void daSpiral_c::initOpenDemo(int param_0) {
 }
 
 int daSpiral_c::getDemoAction() {
-    static char* action_table[] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[] = {
         "WAIT",
         "START",
         "SETGOAL",
@@ -1178,7 +1178,7 @@ int daSpiral_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-static actor_method_class l_daSpiral_Method = {
+static DUSK_CONST actor_method_class l_daSpiral_Method = {
     (process_method_func)daSpiral_Create,  (process_method_func)daSpiral_Delete,
     (process_method_func)daSpiral_Execute, (process_method_func)NULL,
     (process_method_func)daSpiral_Draw,
@@ -1191,7 +1191,7 @@ static actor_method_class l_daSpiral_Method = {
 #define DASPIRAL_METHODS NULL
 #endif
 
-actor_process_profile_definition g_profile_SPIRAL_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SPIRAL_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

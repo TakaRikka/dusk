@@ -581,7 +581,7 @@ static int daGpTaru_Create(fopAc_ac_c* i_this) {
     return ((daGpTaru_c*)i_this)->create();
 }
 
-static actor_method_class l_daGpTaru_Method = {
+static DUSK_CONST actor_method_class l_daGpTaru_Method = {
     (process_method_func)daGpTaru_Create,
     (process_method_func)daGpTaru_Delete,
     (process_method_func)daGpTaru_Execute,
@@ -589,7 +589,7 @@ static actor_method_class l_daGpTaru_Method = {
     (process_method_func)daGpTaru_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_GpTaru = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_GpTaru = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -85,7 +85,7 @@ namespace {
         }
     };
 
-    static dCcD_SrcCyl cc_zhCyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_zhCyl_src = {
         {
             {0, {{AT_TYPE_0, 0, 0}, {0xD84860BA, 3}, 0x15}},
             {dCcD_SE_METAL, 0, 0, 0, 0},
@@ -99,7 +99,7 @@ namespace {
         }
     };
 
-    static dCcD_SrcCyl cc_zhCyl_at_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_zhCyl_at_src = {
         {
             {0, {{AT_TYPE_CSTATUE_SWING, 4, 0xD}, {0, 0}, 0}},
             {dCcD_SE_METAL, 0, 2, 0, 0},
@@ -2327,7 +2327,7 @@ static int daE_ZH_Create(daE_ZH_c* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daE_ZH_Method = {
+static DUSK_CONST actor_method_class l_daE_ZH_Method = {
     (process_method_func)daE_ZH_Create,
     (process_method_func)daE_ZH_Delete,
     (process_method_func)daE_ZH_Execute,
@@ -2335,7 +2335,7 @@ static actor_method_class l_daE_ZH_Method = {
     (process_method_func)daE_ZH_Draw,
 };
 
-actor_process_profile_definition g_profile_E_ZH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_ZH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,
