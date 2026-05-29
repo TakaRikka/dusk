@@ -306,7 +306,7 @@ namespace dusk {
     }
 
     static std::string slotItemLabel(int slot, int itemNo) {
-        return fmt::format(tx("[SAVE_EDITOR_SLOT_ITEM_FORMAT]"), slot, itemName(itemNo));
+        return fmt::format(fmt::runtime(tx("[SAVE_EDITOR_SLOT_ITEM_FORMAT]")), slot, itemName(itemNo));
     }
 
     static constexpr int BUG_SPECIES_COUNT = 12;
@@ -979,7 +979,7 @@ namespace dusk {
 
                 for (int i = 0; i < 4; i++) {
                     bool got = dComIfGs_isItemFirstBit(sword_list[i]) != 0;
-                    if (ImGui::Checkbox(.c_str(), &got)) {
+                    if (ImGui::Checkbox(fmt::format("{}##sword_{}", itemName(sword_list[i]), i).c_str(), &got)) {
                         if (got) dComIfGs_onItemFirstBit(sword_list[i]);
                         else     dComIfGs_offItemFirstBit(sword_list[i]);
                     }
@@ -996,7 +996,7 @@ namespace dusk {
 
                 for (int i = 0; i < 3; i++) {
                     bool got = dComIfGs_isItemFirstBit(shield_list[i]) != 0;
-                    if (ImGui::Checkbox(.c_str(), &got)) {
+                    if (ImGui::Checkbox(fmt::format("{}##shield_{}", itemName(shield_list[i]), i).c_str(), &got)) {
                         if (got) dComIfGs_onItemFirstBit(shield_list[i]);
                         else     dComIfGs_offItemFirstBit(shield_list[i]);
                     }
