@@ -159,7 +159,7 @@ f32 daAlink_c::damageMagnification(BOOL i_checkZoraMag, int param_1) {
     #if TARGET_PC
     base_mag *= dusk::getSettings().game.damageMultiplier;
     if (dusk::getSettings().game.instantDeath) {
-        base_mag = 9999.0f;
+        base_mag = 999.0f;
     }
     #endif
 
