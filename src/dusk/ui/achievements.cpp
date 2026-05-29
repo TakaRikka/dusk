@@ -6,6 +6,7 @@
 #include "m_Do/m_Do_audio.h"
 #include "nav_types.hpp"
 #include "pane.hpp"
+#include "dusk/i18n.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -31,10 +32,10 @@ Rml::String build_achievement_info_rml(const Achievement& a) {
         R"(</div>)"
         R"(<p class="achievement-desc">{}</p>)",
         a.unlocked ? " unlocked" : "",
-        a.name,
+        tr(a.name),
         a.unlocked ? " unlocked" : " locked",
-        a.unlocked ? "Unlocked" : "Locked",
-        a.description
+        a.unlocked ? tr("Unlocked") : tr("Locked"),
+        tr(a.description)
     );
 
     if (a.isCounter) {
@@ -69,7 +70,7 @@ public:
                     resetConfirm();
                 } else {
                     mConfirming = true;
-                    mClearButton->set_text("Clear?");
+                    mClearButton->set_text(tr("Clear?"));
                 }
                 return true;
             }
@@ -96,7 +97,7 @@ private:
         auto* doc = parent->GetOwnerDocument();
         auto elem = doc->CreateElement("div");
         elem->SetClass("achievement-row", true);
-        return parent->AppendChild(std::move(elem));
+        return parent->AppendChild(move(elem));
     }
 
     void resetConfirm() {
@@ -116,7 +117,7 @@ AchievementsWindow::AchievementsWindow() {
     {
         auto elem = mDocument->CreateElement("div");
         elem->SetClass("achievement-total", true);
-        mTotalEl = mRoot->AppendChild(std::move(elem));
+        mTotalEl = mRoot->AppendChild(move(elem));
         updateTotal();
     }
 
@@ -131,7 +132,7 @@ AchievementsWindow::AchievementsWindow() {
             continue;
         }
 
-        add_tab(catInfo.label, [this, cat = catInfo.cat](Rml::Element* content) {
+        add_tab(tr(catInfo.label), [this, cat = catInfo.cat](Rml::Element* content) {
             const auto achievements = AchievementSystem::get().getAchievements();
 
             int total = 0, unlocked = 0;
@@ -146,7 +147,7 @@ AchievementsWindow::AchievementsWindow() {
 
             auto& pane = add_child<Pane>(content, Pane::Type::Controlled);
 
-            pane.add_section(fmt::format("{} / {} unlocked", unlocked, total));
+            pane.add_section(fmt::format(fmt::runtime(tr("{} / {} unlocked")), unlocked, total));
 
             for (const auto& a : achievements) {
                 if (a.category != cat) {
@@ -155,9 +156,9 @@ AchievementsWindow::AchievementsWindow() {
                 pane.add_child<AchievementRow>(a);
             }
 
-            pane.add_section("Actions");
+            pane.add_section(tr("Actions"));
 
-            auto& clearAllBtn = pane.add_button("Clear All Achievements");
+            auto& clearAllBtn = pane.add_button(tr("Clear All Achievements"));
             auto* clearAllPtr = &clearAllBtn;
             auto confirmingAll = std::make_shared<bool>(false);
 
@@ -167,23 +168,23 @@ AchievementsWindow::AchievementsWindow() {
                         mDoAud_seStartMenu(kSoundClick);
                         AchievementSystem::get().clearAll();
                         *confirmingAll = false;
-                        clearAllPtr->set_text("Clear All Achievements");
+                        clearAllPtr->set_text(tr("Clear All Achievements"));
                     } else {
                         *confirmingAll = true;
-                        clearAllPtr->set_text("Are you sure?");
+                        clearAllPtr->set_text(tr("Are you sure?"));
                     }
                     return true;
                 }
                 if (cmd == NavCommand::Cancel && *confirmingAll) {
                     *confirmingAll = false;
-                    clearAllPtr->set_text("Clear All Achievements");
+                    clearAllPtr->set_text(tr("Clear All Achievements"));
                     return true;
                 }
                 return false;
             });
             clearAllBtn.listen(Rml::EventId::Blur, [clearAllPtr, confirmingAll](Rml::Event&) {
                 *confirmingAll = false;
-                clearAllPtr->set_text("Clear All Achievements");
+                clearAllPtr->set_text(tr("Clear All Achievements"));
             });
 
             pane.finalize();

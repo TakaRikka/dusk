@@ -1701,19 +1701,16 @@ u8 dScnLogo_c::getPalLanguage() {
 
     #if PLATFORM_WII || PLATFORM_SHIELD
     switch (SCGetLanguage()) {
-    case SC_LANG_JAPANESE:
-        language = 6;
-        break;
     case SC_LANG_ENGLISH:
         language = 0;
         break;
-    case SC_LANG_GERMAN:
+    case SC_LANG_SPANISH:
         language = 1;
         break;
-    case SC_LANG_FRENCH:
+    case SC_LANG_GERMAN:
         language = 2;
         break;
-    case SC_LANG_SPANISH:
+    case SC_LANG_FRENCH:
         language = 3;
         break;
     case SC_LANG_ITALIAN:
@@ -1722,19 +1719,28 @@ u8 dScnLogo_c::getPalLanguage() {
     case SC_LANG_DUTCH:
         language = 5;
         break;
+    case SC_LANG_JAPANESE:
+        language = 6;
+        break;
+    case SC_LANG_KOREAN:
+        language = 7;
+        break;
+    case SC_LANG_CHINESE:
+        language = 8;
+        break;
     }
     #else
     switch (OSGetLanguage()) {
     case OS_LANGUAGE_ENGLISH:
         language = 0;
         break;
-    case OS_LANGUAGE_GERMAN:
+    case OS_LANGUAGE_SPANISH:
         language = 1;
         break;
-    case OS_LANGUAGE_FRENCH:
+    case OS_LANGUAGE_GERMAN:
         language = 2;
         break;
-    case OS_LANGUAGE_SPANISH:
+    case OS_LANGUAGE_FRENCH:
         language = 3;
         break;
     case OS_LANGUAGE_ITALIAN:
@@ -1742,6 +1748,15 @@ u8 dScnLogo_c::getPalLanguage() {
         break;
     case OS_LANGUAGE_DUTCH:
         language = 5;
+        break;
+    case OS_LANGUAGE_JAPANESE:
+        language = 6;
+        break;
+    case OS_LANGUAGE_KOREAN:
+        language = 7;
+        break;
+    case OS_LANGUAGE_CHINESE:
+        language = 8;
         break;
     }
     #endif

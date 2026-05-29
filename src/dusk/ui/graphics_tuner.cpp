@@ -10,6 +10,7 @@
 
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
+#include "dusk/i18n.hpp"
 
 #include <algorithm>
 #include <string>
@@ -112,7 +113,7 @@ Rml::Element* create_stepped_carousel_arrow(
     button->SetClass("stepped-carousel-arrow", true);
     button->SetClass(className, true);
     button->SetInnerRML(label);
-    return parent->AppendChild(std::move(button));
+    return parent->AppendChild(move(button));
 }
 
 void update_carousel_arrow_color(Rml::Element* arrow, bool dim) {
@@ -194,7 +195,7 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
         u32 height = 0;
         AuroraGetRenderSize(&width, &height);
         if (value <= 0) {
-            return fmt::format("Auto ({}×{})", width, height);
+            return fmt::format("{} ({}×{})", tr("Auto"), width, height);
         } else {
             return fmt::format("{}× ({}×{})", value, width, height);
         }
@@ -204,29 +205,29 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
     case GraphicsOption::Resampler:
         switch (static_cast<Resampler>(value)) {
         case Resampler::Bilinear:
-            return "Bilinear";
+            return tr("Bilinear");
         case Resampler::Area:
-            return "Area";
+            return tr("Area");
         }
         break;
     case GraphicsOption::BloomMode:
         switch (static_cast<BloomMode>(value)) {
         case BloomMode::Off:
-            return "Off";
+            return tr("Off");
         case BloomMode::Classic:
-            return "Classic";
+            return tr("Classic");
         case BloomMode::Dusk:
-            return "Dusklight";
+            return tr("Dusklight");
         }
         break;
     case GraphicsOption::DepthOfFieldMode:
         switch (static_cast<DepthOfFieldMode>(value)) {
         case DepthOfFieldMode::Off:
-            return "Off";
+            return tr("Off");
         case DepthOfFieldMode::Classic:
-            return "Classic";
+            return tr("Classic");
         case DepthOfFieldMode::Dusk:
-            return "Dusklight";
+            return tr("Dusklight");
         }
         break;
     case GraphicsOption::BloomMultiplier:
@@ -262,11 +263,11 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props, bool prelaunch)
     }
 
     if (auto* footer = mDocument->GetElementById("footer")) {
-        auto& returnButton = add_component<Button>(footer, "\xE2\x86\x90 Return", "footer-button")
+        auto& returnButton = add_component<Button>(footer, tr("\xE2\x86\x90 Return"), "footer-button")
                                  .on_pressed([this] { pop(); });
         returnButton.root()->SetClass("return", true);
         auto& resetButton =
-            add_component<Button>(footer, "Reset to default", "footer-button").on_pressed([this] {
+            add_component<Button>(footer, tr("Reset to default"), "footer-button").on_pressed([this] {
                 mDoAud_seStartMenu(kSoundItemChange);
                 reset_default();
             });

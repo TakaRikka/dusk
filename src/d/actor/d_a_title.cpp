@@ -66,16 +66,18 @@ daTit_HIO_c::daTit_HIO_c() {
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
     switch (OSGetLanguage()) {
     case OS_LANGUAGE_ENGLISH:
-    case OS_LANGUAGE_GERMAN:
     case OS_LANGUAGE_SPANISH:
+    case OS_LANGUAGE_GERMAN:
+    case OS_LANGUAGE_FRENCH:
     case OS_LANGUAGE_ITALIAN:
     case OS_LANGUAGE_DUTCH:
-        mPSPosX = 303.0f;
-        break;
-    case OS_LANGUAGE_FRENCH:
+    case OS_LANGUAGE_JAPANESE:
+    case OS_LANGUAGE_KOREAN:
+    case OS_LANGUAGE_CHINESE:
         mPSPosX = FB_WIDTH / 2;
-        break;
+        break; 
     }
+    
     #else
     mPSPosX = 303.0f;
     #endif

@@ -20,9 +20,11 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_name.h"
 #include "dusk/logging.h"
+#include "dusk/i18n.hpp"
 
 #include <filesystem>
 #include <algorithm>
+#include <string>
 
 namespace dusk {
 
@@ -37,7 +39,7 @@ static void* s_cucco_play_search(void* i_actor, void*) {
 }
 
 static void checkGoatHerding(Achievement& a, int32_t threshMs) {
-    if (strcmp(dComIfGp_getStartStageName(), "F_SP00") != 0) {
+    if (std::strcmp(dComIfGp_getStartStageName(), "F_SP00") != 0) {
         return;
     }
     if (dMeter2Info_getMaxCount() != 20 || dMeter2Info_getNowCount() != 20) {
@@ -647,7 +649,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 false, 0, 0, false
             },
             [](Achievement& a, json&) {
-                if (strcmp(dComIfGp_getStartStageName(), "F_SP114") != 0) {
+                if (std::strcmp(dComIfGp_getStartStageName(), "F_SP114") != 0) {
                     return;
                 }
                 const int32_t bestMs = dComIfGs_getRaceGameTime();
@@ -1048,7 +1050,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
             },
             [](Achievement& a, json&) {
                 static bool seenStallord = false;
-                if (strcmp(dComIfGp_getStartStageName(), "D_MN10A") != 0) {
+                if (std::strcmp(dComIfGp_getStartStageName(), "D_MN10A") != 0) {
                     seenStallord = false;
                     return;
                 }
@@ -1061,7 +1063,7 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
                 }
                 if (seenStallord &&
                     dComIfGp_isEnableNextStage() &&
-                    strcmp(dComIfGp_getNextStageName(), "F_SP125") == 0) {
+                    std::strcmp(dComIfGp_getNextStageName(), "F_SP125") == 0) {
                     a.progress = 1;
                 }
             },
@@ -1290,8 +1292,8 @@ void AchievementSystem::processEntry(Entry& e) {
         if (getSettings().game.enableAchievementToasts) {
             ui::push_toast({
                 .type = "achievement",
-                .title = "Achievement Unlocked!",
-                .content = e.achievement.name,
+                .title = tr("Achievement Unlocked!"),
+                .content = tr(e.achievement.name),
                 .duration = std::chrono::seconds(5),
             });
         }

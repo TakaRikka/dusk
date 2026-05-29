@@ -442,6 +442,7 @@ set(GAME_BASE_FILES
         ${REL_FILES}
         ${DUSK_FILES}
         ${DOLPHIN_FILES}
+        src/dusk/i18n.cpp
 )
 set_source_files_properties(
         ${GAME_BASE_FILES}
@@ -506,6 +507,28 @@ if (NOT APPLE)
             "$<TARGET_FILE_DIR:dusklight>/res"
         COMMENT "Copying resources"
     )
+
+    file(GLOB ALL_LANG_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/res/Languages/*.json")
+    set(COPY_LANG_TARGET_FILES "")
+    
+    foreach(LANG_FILE ${ALL_LANG_FILES})
+        get_filename_component(FILE_NAME ${LANG_FILE} NAME)
+        set(OUTPUT_MARKER "${CMAKE_CURRENT_BINARY_DIR}/res_sync_${FILE_NAME}.done")
+        
+        add_custom_command(
+            OUTPUT "${OUTPUT_MARKER}"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${LANG_FILE}" "$<TARGET_FILE_DIR:dusklight>/res/Languages/${FILE_NAME}"
+            COMMAND ${CMAKE_COMMAND} -E touch "${OUTPUT_MARKER}"
+            DEPENDS "${LANG_FILE}"
+            COMMENT "Syncing translation file: ${FILE_NAME}"
+        )
+        list(APPEND COPY_LANG_TARGET_FILES "${OUTPUT_MARKER}")
+    endforeach()
+    
+    if(COPY_LANG_TARGET_FILES)
+        add_custom_target(SyncLanguageFiles DEPENDS ${COPY_LANG_TARGET_FILES})
+        add_dependencies(dusklight SyncLanguageFiles)
+    endif()
 endif ()
 
 if (WIN32)

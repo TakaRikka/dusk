@@ -20,9 +20,11 @@
 #include "ui.hpp"
 #include "warp.hpp"
 #include "window.hpp"
+#include "dusk/i18n.hpp"
 
 #include <chrono>
 #include <cmath>
+
 
 namespace dusk::ui {
 namespace {
@@ -51,27 +53,27 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                                                       },
                                                   .autoSelect = false,
                                               });
-    mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
+    mTabBar->add_tab(tr("Settings"), [this] { push(std::make_unique<SettingsWindow>()); });
 
     if (getSettings().backend.enableAdvancedSettings) {
-        mTabBar->add_tab("Warp", [this] { push(std::make_unique<WarpWindow>()); });
-        mTabBar->add_tab("Editor", [this] { push(std::make_unique<EditorWindow>()); });
+        mTabBar->add_tab(tr("Warp"), [this] { push(std::make_unique<WarpWindow>()); });
+        mTabBar->add_tab(tr("Editor"), [this] { push(std::make_unique<EditorWindow>()); });
     }
 
-    mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
+    mTabBar->add_tab(tr("Achievements"), [this] { push(std::make_unique<AchievementsWindow>()); });
 
 
-    mTabBar->add_tab("Reset", [this] {
+    mTabBar->add_tab(tr("Reset"), [this] {
         mTabBar->set_active_tab(-1);
         const auto dismiss = [](Modal& modal) { modal.pop(); };
         push(std::make_unique<Modal>(Modal::Props{
-            .title = "Reset Game",
-            .bodyRml = "Unsaved progress will be lost.<br/>"
-                       "<span class=\"tip\">Tip: You can also reset by holding Start+X+B</span>",
+            .title = tr("Reset Game"),
+            .bodyRml = tr("Unsaved progress will be lost.<br/>") +
+                       tr("<span class=\"tip\">Tip: You can also reset by holding Start+X+B</span>"),
             .actions =
                 {
                     ModalAction{
-                        .label = "Cancel",
+                        .label = tr("Cancel"),
                         .onPressed =
                             [this, dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundWindowClose);
@@ -79,7 +81,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                             },
                     },
                     ModalAction{
-                        .label = "Reset",
+                        .label = tr("Reset"),
                         .onPressed =
                             [this, dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundClick);
@@ -97,16 +99,16 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
             .icon = "question-mark",
         }));
     });
-    mTabBar->add_tab("Quit", [this] {
+    mTabBar->add_tab(tr("Quit"), [this] {
         mTabBar->set_active_tab(-1);
         const auto dismiss = [](Modal& modal) { modal.pop(); };
         push(std::make_unique<Modal>(Modal::Props{
-            .title = "Quit Dusklight",
-            .bodyRml = "Unsaved progress will be lost.",
+            .title = tr("Quit Dusklight"),
+            .bodyRml = tr("Unsaved progress will be lost."),
             .actions =
                 {
                     ModalAction{
-                        .label = "Cancel",
+                        .label = tr("Cancel"),
                         .onPressed =
                             [dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundWindowClose);
@@ -114,7 +116,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                             },
                     },
                     ModalAction{
-                        .label = "Quit",
+                        .label = tr("Quit"),
                         .onPressed =
                             [dismiss](Modal& modal) {
                                 mDoAud_seStartMenu(kSoundClick);
@@ -129,7 +131,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
     });
 
     if (getSettings().game.speedrunMode) {
-        mTabBar->add_tab("Reset Timer", [this] {
+        mTabBar->add_tab(tr("Reset Timer"), [this] {
             mTabBar->set_active_tab(-1);
             mDoAud_seStartMenu(kSoundClick);
             m_speedrunInfo.reset();

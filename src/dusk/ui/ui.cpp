@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <ranges>
 
+#include "dusk/i18n.hpp"
 #include "aurora/lib/window.hpp"
 #include "dusk/io.hpp"
 #include "input.hpp"
@@ -46,6 +47,8 @@ bool initialize() noexcept {
     if (!aurora::rmlui::is_initialized()) {
         return false;
     }
+    
+    dusk::load_translations();
 
     load_font("FiraSans-Regular.ttf", true);
     load_font("FiraSans-Bold.ttf");
@@ -55,6 +58,12 @@ bool initialize() noexcept {
     load_font("AlegreyaSC-Bold.ttf");
     load_font("MaterialSymbolsRounded-Regular.ttf");
     load_font("NotoMono-Regular.ttf");
+    load_font("NotoSansJP-Regular.ttf", true);
+    load_font("NotoSansJP-Bold.ttf", true);
+    load_font("NotoSansSC-Regular.ttf", true);
+    load_font("NotoSansSC-Bold.ttf", true);
+    load_font("Pretendard-Regular.ttf", true);
+    load_font("Pretendard-Bold.ttf", true);
 
     sInitialized = true;
     return true;

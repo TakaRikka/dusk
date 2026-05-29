@@ -27,11 +27,15 @@ enum class Resampler : int {
 };
 
 enum class GameLanguage : u8 {
-    English = OS_LANGUAGE_ENGLISH,
-    German = OS_LANGUAGE_GERMAN,
-    French = OS_LANGUAGE_FRENCH,
-    Spanish = OS_LANGUAGE_SPANISH,
-    Italian = OS_LANGUAGE_ITALIAN,
+    English     =   OS_LANGUAGE_ENGLISH,
+    Spanish     =   OS_LANGUAGE_SPANISH,
+    German      =   OS_LANGUAGE_GERMAN,
+    French      =   OS_LANGUAGE_FRENCH,
+    Italian     =   OS_LANGUAGE_ITALIAN,
+    Dutch       =   OS_LANGUAGE_DUTCH,
+    Japanese    =   OS_LANGUAGE_JAPANESE,
+    Korean      =   OS_LANGUAGE_KOREAN,
+    Chinese     =   OS_LANGUAGE_CHINESE,
 };
 
 enum class DiscVerificationState : u8 {
@@ -79,7 +83,7 @@ struct ConfigEnumRange<Resampler> {
 template <>
 struct ConfigEnumRange<GameLanguage> {
     static constexpr auto min = GameLanguage::English;
-    static constexpr auto max = GameLanguage::Italian;
+    static constexpr auto max = GameLanguage::Chinese;
 };
 
 template <>
