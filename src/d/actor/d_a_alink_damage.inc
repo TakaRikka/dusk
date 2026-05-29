@@ -182,6 +182,13 @@ int daAlink_c::setDamagePoint(int i_dmgAmount, BOOL i_checkZoraMag, BOOL i_setDm
 
     f32 magnified_dmgF = (f32)i_dmgAmount * damageMagnification(i_checkZoraMag, param_3);
     i_dmgAmount = magnified_dmgF;
+
+#if TARGET_PC
+    if(i_dmgAmount < 0 || i_dmgAmount > 999.0f) {
+        i_dmgAmount = 999.0f;
+    }
+#endif
+
     if ((int)(magnified_dmgF * 10.0f) % 10 != 0) {
         i_dmgAmount++;
     }
@@ -326,7 +333,7 @@ int daAlink_c::checkPolyDamage() {
 
     if (mLinkAcch.ChkWallHit()) {
         dBgS_AcchCir* acch_cir = mAcchCir;
-        
+
         for (int i = 0; i < 3; i++, acch_cir++) {
             if (acch_cir->ChkWallHit()) {
                 if (dComIfG_Bgsp().ChkPolySafe(*acch_cir) && (dKy_pol_argument_get(acch_cir) & 0x60)) {
@@ -416,19 +423,19 @@ BOOL daAlink_c::checkDamageAction() {
         if (getSumouMode()) {
             cancelSumouMode();
         }
-    
+
         if (checkEndResetFlg1(ERFLG1_UNK_80)) {
             return procOctaIealSpitInit();
         }
-    
+
         if (checkEndResetFlg0(ERFLG0_UNK_40000000)) {
             return commonFallInit(4);
         }
-    
+
         if (mProcID == PROC_WOLF_CARGO_CARRY && mProcVar2.field_0x300c == 0) {
             offNoResetFlg0(FLG0_UNK_100000);
         }
-    
+
         return procCoLargeDamageInit(-3, TRUE, 0, 0, NULL, 0);
     }
 
@@ -617,11 +624,11 @@ BOOL daAlink_c::checkDamageAction() {
             at_spl = mCcStts.GetAtSpl();
             at_mtrl = dCcD_MTRL_NONE;
         }
-    
+
         if (at_spl == 8 && checkWolf()) {
             at_spl = 1;
         }
-    
+
         if (var_r29->ChkTgShieldHit()) {
             setGuardSe(var_r29);
 
@@ -634,7 +641,7 @@ BOOL daAlink_c::checkDamageAction() {
             } else {
                 dComIfGp_getVibration().StartShock(VIBMODE_S_POWER3, 1, cXyz(0.0f, 1.0f, 0.0f));
             }
-    
+
             if (!armor_no_dmg && at_mtrl == dCcD_MTRL_FIRE && checkWoodShieldEquip() && field_0x2fcb == 0 && !field_0x2e44.checkPassNum(15)) {
                 field_0x2fcb = 120;
                 seStartOnlyReverb(Z2SE_AL_BURN_START);
@@ -684,7 +691,7 @@ BOOL daAlink_c::checkDamageAction() {
             }
 
             setDamagePoint(dmg, at_mtrl == dCcD_MTRL_FIRE || at_mtrl == dCcD_MTRL_ICE, TRUE, 0);
-            
+
 #ifdef TARGET_PC
             if (tghit_ac_name == fpcNm_Obj_Carry_e) {
                 auto* carry = static_cast<daObjCarry_c*>(tghit_ac);
@@ -787,7 +794,7 @@ BOOL daAlink_c::checkDamageAction() {
                 dComIfGp_getVibration().StartShock(VIBMODE_S_POWER8, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
                 return procCoLargeDamageInit(-1, FALSE, 0, 0, NULL, 0);
             }
-    
+
             dComIfGp_getVibration().StartShock(VIBMODE_S_POWER4, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
             return procCoLargeDamageInit(-1, TRUE, 0, 0, NULL, 0);
         }
@@ -808,7 +815,7 @@ int daAlink_c::procDamageInit(dCcD_GObjInf* i_tgObj, BOOL param_1) {
     } else {
         seStartOnlyReverb(Z2SE_AL_DAMAGE_NORMAL);
         isFreezePlayer = false;
-        
+
         if (!param_1) {
             voiceStart(Z2SE_AL_V_DAMAGE_S);
         }
@@ -827,7 +834,7 @@ int daAlink_c::procDamageInit(dCcD_GObjInf* i_tgObj, BOOL param_1) {
 
     cXyz* var_r29;
     if (i_tgObj != NULL) {
-        var_r29 = getDamageVec(i_tgObj);   
+        var_r29 = getDamageVec(i_tgObj);
     } else if (param_1) {
         s16 var_r24 = field_0x3102 + 0x8000;
         sp7C.set(cM_ssin(var_r24), 0.0f, cM_scos(var_r24));
@@ -841,7 +848,7 @@ int daAlink_c::procDamageInit(dCcD_GObjInf* i_tgObj, BOOL param_1) {
     cXyz sp88(var_r29->z * -var_f30 + var_r29->x * var_f29,
               var_r29->y,
               var_r29->z * var_f29 + var_r29->x * var_f30);
-    
+
     mProcVar2.field_0x300c = cLib_minMaxLimit<s16>(cM_atan2s(sp88.z, sp88.y), -mpHIO->mDamage.mDamNormal.m.mFrontBackBodyMaxAngle, mpHIO->mDamage.mDamNormal.m.mFrontBackBodyMaxAngle);
     mProcVar3.field_0x300e = cLib_minMaxLimit<s16>(cM_atan2s(sp88.x, -JMAFastSqrt(sp88.y * sp88.y + sp88.z * sp88.z)), -mpHIO->mDamage.mDamNormal.m.mLeftRightBodyMaxAngle, mpHIO->mDamage.mDamNormal.m.mLeftRightBodyMaxAngle);
 
@@ -955,7 +962,7 @@ int daAlink_c::procCoLargeDamageInit(int i_type, BOOL i_isLargeDmg, s16 param_2,
     if (i_type == -3) {
         current.angle.y = field_0x2ffe;
         direction = getDirectionFromAngle((current.angle.y - shape_angle.y));
-    
+
         dComIfGp_getVibration().StartShock(6, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
         setDamagePointNormal(field_0x318c);
         onNoResetFlg1(FLG1_THROW_DAMAGE);
@@ -1457,7 +1464,7 @@ int daAlink_c::procCoLargeDamageWallInit(int i_type, BOOL i_isLargeDmg, s16 para
     commonProcInit(PROC_LARGE_DAMAGE_WALL);
 
     s16 temp_r29 = cM_atan2s(tripla.mNormal.y, tripla.mNormal.absXZ());
-    
+
     current.angle.y = temp_r26;
     current.pos.x = mLinkLinChk.GetCross().x;
     current.pos.z = mLinkLinChk.GetCross().z;
@@ -1997,7 +2004,7 @@ int daAlink_c::procCoLavaReturnInit(BOOL i_isSandReturn) {
         field_0x3198 = 4;
     } else {
         seStartOnlyReverb(Z2SE_AL_SINK_MAGMA);
-        
+
         cXyz particle_pos(current.pos.x, mWaterY, current.pos.z);
         dComIfGp_particle_set(dPa_RM(ID_ZI_S_YOGANSHIBUKI_A), &particle_pos, &tevStr, NULL, NULL);
         dComIfGp_particle_set(dPa_RM(ID_ZI_S_YOGANSHIBUKI_B), &particle_pos, &tevStr, NULL, NULL);
