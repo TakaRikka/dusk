@@ -171,6 +171,12 @@ f32 daAlink_c::damageMagnification(BOOL i_checkZoraMag, int param_1) {
         return 10.0f * base_mag;
     }
 
+    #if TARGET_PC
+    if(base_mag < 0 || base_mag > 999.0f) {
+        base_mag = 999.0f;
+    }
+    #endif
+
     return base_mag;
 }
 
@@ -181,14 +187,11 @@ int daAlink_c::setDamagePoint(int i_dmgAmount, BOOL i_checkZoraMag, BOOL i_setDm
     }
 
     f32 magnified_dmgF = (f32)i_dmgAmount * damageMagnification(i_checkZoraMag, param_3);
-    i_dmgAmount = magnified_dmgF;
-
 #if TARGET_PC
-    if(i_dmgAmount < 0 || i_dmgAmount > 999.0f) {
-        i_dmgAmount = 999.0f;
-    }
+    if(magnified_dmgF < 0.0f || magnified_dmgF > 999.0f)
+        magnified_dmgF = 999.0f;
 #endif
-
+    i_dmgAmount = magnified_dmgF;
     if ((int)(magnified_dmgF * 10.0f) % 10 != 0) {
         i_dmgAmount++;
     }
