@@ -15,10 +15,13 @@
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
 #include "dusk/main.h"
+#include "dusk/ui/i18n.hpp"
 #include "m_Do/m_Do_main.h"
 
 #include <aurora/lib/internal.hpp>
 #include <SDL3/SDL_misc.h>
+#include <string>
+#include <string_view>
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
@@ -29,17 +32,25 @@ extern bool enableLodBias;
 }
 
 namespace dusk {
+    namespace {
+    std::string tx(std::string_view input) {
+        Rml::String translated;
+        ui::i18n::translate(translated, Rml::String(input.data(), input.size()));
+        return translated;
+    }
+    }  // namespace
+
     ImGuiMenuTools::ImGuiMenuTools() {}
 
     void ImGuiMenuTools::draw() {
-        if (ImGui::BeginMenu("Tools")) {
+        if (ImGui::BeginMenu(tx("[TOOLS]").c_str())) {
             if (!dusk::IsGameLaunched) {
                 ImGui::BeginDisabled();
             }
 
             ImGui::BeginDisabled(getSettings().game.speedrunMode);
 
-            ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
+            ImGui::MenuItem(tx("[SAVE_EDITOR_SAVE_EDITOR]").c_str(), hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
             ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
 
             ImGui::EndDisabled();

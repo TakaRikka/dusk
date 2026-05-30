@@ -39,6 +39,11 @@ namespace dusk {
         return label;
     }
 
+    static void TextTx(std::string_view input) {
+        const std::string label = tx(input);
+        ImGui::TextUnformatted(label.c_str());
+    }
+
     static std::string itemName(int itemNo);
 
     std::map<int, itemInfo> itemMap = {
@@ -570,7 +575,7 @@ namespace dusk {
 
     void ImGuiSaveEditor::drawPlayerStatusTab() {
         const char* playerName = dComIfGs_getPlayerName();
-        ImGui::Text(tx("[SAVE_EDITOR_PLAYER_NAME]").c_str());
+        TextTx("[SAVE_EDITOR_PLAYER_NAME]");
         ImGui::SameLine();
         char nameBuffer[8];
         snprintf(nameBuffer, sizeof(nameBuffer), "%s", playerName);
@@ -579,7 +584,7 @@ namespace dusk {
         }
 
         const char* horseName = dComIfGs_getHorseName();
-        ImGui::Text(tx("[SAVE_EDITOR_HORSE_NAME]").c_str());
+        TextTx("[SAVE_EDITOR_HORSE_NAME]");
         ImGui::SameLine();
         char horseNameBuffer[8];
         snprintf(horseNameBuffer, sizeof(horseNameBuffer), "%s", horseName);
@@ -764,9 +769,9 @@ namespace dusk {
     void ImGuiSaveEditor::drawLocationTab() {
         dSv_player_return_place_c& returnPlace = dComIfGs_getSaveData()->getPlayer().getPlayerReturnPlace();
         dSv_horse_place_c& horsePlace = dComIfGs_getSaveData()->getPlayer().getHorsePlace();
-        ImGui::Text(tx("[SAVE_EDITOR_SAVE_LOCATION]").c_str());
+        TextTx("[SAVE_EDITOR_SAVE_LOCATION]");
 
-        ImGui::Text(tx("[SAVE_EDITOR_STAGE]").c_str());
+        TextTx("[SAVE_EDITOR_STAGE]");
         ImGui::SameLine();
         char nameBuffer[8];
         snprintf(nameBuffer, sizeof(nameBuffer), "%s", returnPlace.mName);
@@ -774,14 +779,14 @@ namespace dusk {
             SAFE_STRCPY(returnPlace.mName, nameBuffer);
         }
 
-        ImGui::Text(tx("[SAVE_EDITOR_ROOM]").c_str());
+        TextTx("[SAVE_EDITOR_ROOM]");
         ImGui::SameLine();
         int tempRoom = returnPlace.mRoomNo;
         if (ImGui::InputInt("##SaveRoomInput", &tempRoom)) {
             returnPlace.mRoomNo = tempRoom;
         }
 
-        ImGui::Text(tx("[SAVE_EDITOR_SPAWN_ID]").c_str());
+        TextTx("[SAVE_EDITOR_SPAWN_ID]");
         ImGui::SameLine();
         int tempSpawn = returnPlace.mPlayerStatus;
         if (ImGui::InputInt("##SaveSpawnInput", &tempSpawn)) {
@@ -790,9 +795,9 @@ namespace dusk {
 
         ImGui::Separator();
 
-        ImGui::Text(tx("[SAVE_EDITOR_HORSE_LOCATION]").c_str());
+        TextTx("[SAVE_EDITOR_HORSE_LOCATION]");
 
-        ImGui::Text(tx("[SAVE_EDITOR_POSITION]").c_str());
+        TextTx("[SAVE_EDITOR_POSITION]");
         ImGui::SameLine();
         Vec tempPos = horsePlace.mPos;
         if (ImGui::InputFloat3("##HorsePosition", &tempPos.x)) {
@@ -801,14 +806,14 @@ namespace dusk {
             horsePlace.mPos.z = tempPos.z;
         }
 
-        ImGui::Text(tx("[SAVE_EDITOR_ANGLE]").c_str());
+        TextTx("[SAVE_EDITOR_ANGLE]");
         ImGui::SameLine();
         int tempAngle = horsePlace.mAngleY;
         if (ImGui::InputInt("##HorsePosition", &tempAngle)) {
             horsePlace.mAngleY = tempAngle;
         }
 
-        ImGui::Text(tx("[SAVE_EDITOR_STAGE]").c_str());
+        TextTx("[SAVE_EDITOR_STAGE]");
         ImGui::SameLine();
         char horseStageBuffer[8];
         snprintf(horseStageBuffer, sizeof(horseStageBuffer), "%s", horsePlace.mName);
@@ -816,14 +821,14 @@ namespace dusk {
             SAFE_STRCPY(horsePlace.mName, horseStageBuffer);
         }
 
-        ImGui::Text(tx("[SAVE_EDITOR_ROOM]").c_str());
+        TextTx("[SAVE_EDITOR_ROOM]");
         ImGui::SameLine();
         int tempHorseRoom = horsePlace.mRoomNo;
         if (ImGui::InputInt("##HorseRoomInput", &tempHorseRoom)) {
             horsePlace.mRoomNo = tempHorseRoom;
         }
 
-        ImGui::Text(tx("[SAVE_EDITOR_SPAWN_ID]").c_str());
+        TextTx("[SAVE_EDITOR_SPAWN_ID]");
         ImGui::SameLine();
         int tempHorseSpawn = horsePlace.mSpawnId;
         if (ImGui::InputInt("##HorseSpawnInput", &tempHorseSpawn)) {
@@ -1079,7 +1084,7 @@ namespace dusk {
         if (ImGui::TreeNode(tx("[SAVE_EDITOR_HEART_PIECES_POE_SOULS]").c_str())) {
             if (ImGui::TreeNode(tx("[SAVE_EDITOR_POE_SOULS]").c_str())) {
                 int poeCount = dComIfGs_getPohSpiritNum();
-                ImGui::Text(tx("[SAVE_EDITOR_COLLECTED]").c_str());
+                TextTx("[SAVE_EDITOR_COLLECTED]");
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(100.0f);
                 if (ImGui::InputInt("##poe_count", &poeCount)) {
@@ -1104,7 +1109,7 @@ namespace dusk {
                 int maxLife = dComIfGs_getMaxLife();
                 int hearts  = maxLife / 5;
                 int pieces  = maxLife % 5;
-                ImGui::Text(tx("[SAVE_EDITOR_MAX_LIFE]").c_str());
+                TextTx("[SAVE_EDITOR_MAX_LIFE]");
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(160.0f);
                 if (ImGui::InputInt("##max_life", &maxLife, 1, 5)) {

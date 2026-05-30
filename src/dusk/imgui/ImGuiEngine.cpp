@@ -8,6 +8,8 @@
 #include <cmath>
 #include <cstring>
 #include <fmt/format.h>
+#include <fstream>
+#include <iterator>
 #include <string>
 
 #include "aurora/lib/window.hpp"
@@ -53,6 +55,49 @@ ImVec2 GetDisplaySafeAreaPadding() {
 
     return ImVec2(static_cast<float>(safeRect.x), static_cast<float>(safeRect.y));
 }
+
+const ImWchar* GetLocalizedGlyphRanges() {
+    static ImVector<ImWchar> sGlyphRanges;
+    if (!sGlyphRanges.empty()) {
+        return sGlyphRanges.Data;
+    }
+
+    ImGuiIO& io = ImGui::GetIO();
+    ImFontGlyphRangesBuilder builder;
+    builder.AddRanges(io.Fonts->GetGlyphRangesDefault());
+
+    std::ifstream zhXml(GetAssetPath("i18n/zh-cn.xml"), std::ios::binary);
+    if (zhXml) {
+        const std::string text((std::istreambuf_iterator<char>(zhXml)), std::istreambuf_iterator<char>());
+        builder.AddText(text.c_str(), text.c_str() + text.size());
+    } else {
+        builder.AddRanges(io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+    }
+
+    builder.BuildRanges(&sGlyphRanges);
+    return sGlyphRanges.Data;
+}
+
+void AddLocalizedFallbackFont(float size) {
+    const std::string fontPath = GetAssetPath("HarmonyOS_Sans_SC_Regular.ttf");
+    if (!AssetExists(fontPath)) {
+        return;
+    }
+
+    ImFontConfig fontConfig{};
+    fontConfig.MergeMode = true;
+    fontConfig.SizePixels = size;
+    auto name = fmt::format_to_n(fontConfig.Name, sizeof(fontConfig.Name) - 1,
+                                 "HarmonyOS Sans SC, {}px", static_cast<int>(fontConfig.SizePixels));
+    *name.out = '\0';
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontConfig.SizePixels, &fontConfig,
+                                     GetLocalizedGlyphRanges()) == nullptr)
+    {
+        DuskLog.warn("Failed to load fallback font '{}': {}", fontPath, SDL_GetError());
+    }
+}
 }  // namespace
 
 ImFont* ImGuiEngine::fontNormal;
@@ -80,6 +125,7 @@ inline ImFont* CreateFont(float size, const std::string& fontPath, std::string_v
         }
         outFont = io.Fonts->AddFontDefault(&fontConfig);
     }
+    AddLocalizedFallbackFont(size);
     return outFont;
 }
 

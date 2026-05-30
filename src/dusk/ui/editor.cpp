@@ -493,7 +493,7 @@ Rml::String get_item_name(u8 id) {
 
 Rml::String item_label_for_slot(u8 slot) {
     if (slot == 0xFF) {
-        return "None";
+        return "[SAVE_EDITOR_NONE]";
     }
     const auto id = dComIfGs_getSaveData()->getPlayer().getItem().mItems[slot];
     return fmt::format("Slot {0} ({1})", slot, get_item_name(id));
@@ -621,14 +621,14 @@ constexpr std::array<FishSpeciesEntry, 6> fishSpeciesEntries = {
 };
 
 constexpr std::array<const char*, 2> targetTypeNames = {
-    "Hold",
-    "Switch",
+    "[SAVE_EDITOR_HOLD]",
+    "[SAVE_EDITOR_SWITCH]",
 };
 
 constexpr std::array<const char*, 3> soundModeNames = {
-    "Mono",
-    "Stereo",
-    "Surround",
+    "[SAVE_EDITOR_MONO]",
+    "[SAVE_EDITOR_STEREO]",
+    "[SAVE_EDITOR_SURROUND]",
 };
 
 struct DefaultInventoryEntry {
@@ -741,21 +741,21 @@ struct ToggleEntry {
 
 void populate_toggle_group(Pane& pane, const std::vector<ToggleEntry>& entries) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("Select All").on_pressed([entries] {
+    pane.add_section("[SAVE_EDITOR_ACTIONS]");
+    pane.add_button("[SAVE_EDITOR_SELECT_ALL]").on_pressed([entries] {
         mDoAud_seStartMenu(kSoundItemChange);
         for (const auto& entry : entries) {
             entry.setSelected(true);
         }
     });
-    pane.add_button("Select None").on_pressed([entries] {
+    pane.add_button("[SAVE_EDITOR_SELECT_NONE]").on_pressed([entries] {
         mDoAud_seStartMenu(kSoundItemChange);
         for (const auto& entry : entries) {
             entry.setSelected(false);
         }
     });
 
-    pane.add_section("Items");
+    pane.add_section("[SAVE_EDITOR_ITEMS]");
     for (const auto& entry : entries) {
         pane.add_button({
                             .text = entry.text,
@@ -881,17 +881,17 @@ void set_all_item_first_bits(bool owned) {
 
 void populate_item_slot_picker(Pane& pane, int slot) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button(fmt::format("Default ({})", get_item_name(get_slot_default(slot))))
+    pane.add_section("[SAVE_EDITOR_ACTIONS]");
+    pane.add_button(fmt::format("[SAVE_EDITOR_DEFAULT] ({})", get_item_name(get_slot_default(slot))))
         .on_pressed([slot] {
             mDoAud_seStartMenu(kSoundItemChange);
             dComIfGs_setItem(slot, get_slot_default(slot));
         });
 
-    pane.add_section("Items");
+    pane.add_section("[SAVE_EDITOR_ITEMS]");
     pane.add_button(
             {
-                .text = "None",
+                .text = "[SAVE_EDITOR_NONE]",
                 .isSelected = [slot] { return get_player_item()->mItems[slot] == dItemNo_NONE_e; },
             })
         .on_pressed([slot] {
@@ -916,17 +916,17 @@ void populate_item_slot_picker(Pane& pane, int slot) {
 
 void populate_item_flag_picker(Pane& pane) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("Select All").on_pressed([] {
+    pane.add_section("[SAVE_EDITOR_ACTIONS]");
+    pane.add_button("[SAVE_EDITOR_SELECT_ALL]").on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         set_all_item_first_bits(true);
     });
-    pane.add_button("Clear None").on_pressed([] {
+    pane.add_button("[SAVE_EDITOR_CLEAR_NONE]").on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         set_all_item_first_bits(false);
     });
 
-    pane.add_section("Items");
+    pane.add_section("[SAVE_EDITOR_ITEMS]");
     for (const auto& [itemId, item] : itemMap) {
         if (!can_edit_item_first_bit(itemId, item)) {
             continue;
@@ -947,7 +947,7 @@ void populate_select_item_picker(Pane& pane, u8& selectItemData) {
     pane.clear();
     pane.add_button(
             {
-                .text = "None",
+                .text = "[SAVE_EDITOR_NONE]",
                 .isSelected = [&selectItemData] { return selectItemData == dItemNo_NONE_e; },
             })
         .on_pressed([&selectItemData] {
@@ -1006,9 +1006,9 @@ void populate_select_equip_picker(Pane& pane, u8& equip, const std::array<u8, Si
 }
 
 static const std::array<Rml::String, 3> walletSizeNames = {
-    "Normal",
-    "Big",
-    "Giant",
+    "[SAVE_EDITOR_NORMAL]",
+    "[SAVE_EDITOR_BIG]",
+    "[SAVE_EDITOR_GIANT]",
 };
 
 void populate_wallet_picker(Pane& pane) {
@@ -1026,8 +1026,8 @@ void populate_wallet_picker(Pane& pane) {
 }
 
 static const std::array<Rml::String, 2> formNames = {
-    "Human",
-    "Wolf",
+    "[SAVE_EDITOR_HUMAN]",
+    "[SAVE_EDITOR_WOLF]",
 };
 
 void populate_form_picker(Pane& pane) {
@@ -1134,13 +1134,13 @@ void populate_collect_clothes_picker(Pane& pane) {
     populate_toggle_group(pane,
         {
             ToggleEntry{
-                .text = "Ordon Clothes",
+                .text = "[SAVE_EDITOR_ORDON_CLOTHES]",
                 .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_WEAR_CASUAL_e); },
                 .setSelected =
                     [](bool selected) { set_item_first_bit(dItemNo_WEAR_CASUAL_e, selected); },
             },
             ToggleEntry{
-                .text = "Hero's Clothes",
+                .text = "[SAVE_EDITOR_HERO_S_CLOTHES]",
                 .isSelected = [] { return dComIfGs_isCollectClothes(KOKIRI_CLOTHES_FLAG); },
                 .setSelected =
                     [](bool selected) {
@@ -1152,13 +1152,13 @@ void populate_collect_clothes_picker(Pane& pane) {
                     },
             },
             ToggleEntry{
-                .text = "Zora Armor",
+                .text = "[SAVE_EDITOR_ZORA_ARMOR]",
                 .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_WEAR_ZORA_e); },
                 .setSelected =
                     [](bool selected) { set_item_first_bit(dItemNo_WEAR_ZORA_e, selected); },
             },
             ToggleEntry{
-                .text = "Magic Armor",
+                .text = "[SAVE_EDITOR_MAGIC_ARMOR]",
                 .isSelected = [] { return dComIfGs_isItemFirstBit(dItemNo_ARMOR_e); },
                 .setSelected = [](bool selected) { set_item_first_bit(dItemNo_ARMOR_e, selected); },
             },
@@ -1167,19 +1167,19 @@ void populate_collect_clothes_picker(Pane& pane) {
 
 void populate_poe_souls_picker(Pane& pane) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("All 60").on_pressed([] {
+    pane.add_section("[SAVE_EDITOR_ACTIONS]");
+    pane.add_button("[SAVE_EDITOR_ALL_60]").on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setPohSpiritNum(60);
     });
-    pane.add_button("Clear").on_pressed([] {
+    pane.add_button("[SAVE_EDITOR_CLEAR]").on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setPohSpiritNum(0);
     });
 
-    pane.add_section("Value");
+    pane.add_section("[SAVE_EDITOR_VALUE]");
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Collected",
+        .key = "[SAVE_EDITOR_COLLECTED]",
         .getValue = [] { return dComIfGs_getPohSpiritNum(); },
         .setValue =
             [](int value) { dComIfGs_setPohSpiritNum(static_cast<u8>(std::clamp(value, 0, 60))); },
@@ -1189,21 +1189,21 @@ void populate_poe_souls_picker(Pane& pane) {
 
 void populate_max_life_picker(Pane& pane) {
     pane.clear();
-    pane.add_section("Actions");
-    pane.add_button("3 Hearts").on_pressed([] {
+    pane.add_section("[SAVE_EDITOR_ACTIONS]");
+    pane.add_button("[SAVE_EDITOR_3_HEARTS]").on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setMaxLife(15);
         dComIfGs_setLife(12);
     });
-    pane.add_button("20 Hearts").on_pressed([] {
+    pane.add_button("[SAVE_EDITOR_20_HEARTS]").on_pressed([] {
         mDoAud_seStartMenu(kSoundItemChange);
         dComIfGs_setMaxLife(100);
         dComIfGs_setLife(80);
     });
 
-    pane.add_section("Value");
+    pane.add_section("[SAVE_EDITOR_VALUE]");
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Max Life",
+        .key = "[SAVE_EDITOR_MAX_LIFE]",
         .getValue = [] { return dComIfGs_getMaxLife(); },
         .setValue = [](int value) { set_max_life(value); },
         .min = 15,
@@ -1213,33 +1213,33 @@ void populate_max_life_picker(Pane& pane) {
 
 void populate_bug_species_picker(Pane& pane, const BugSpeciesEntry& bug) {
     pane.clear();
-    pane.add_section("Owned");
+    pane.add_section("[SAVE_EDITOR_OWNED]");
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Male {}", bug.name),
+                  .text = fmt::format("[SAVE_EDITOR_MALE] {}", bug.name),
                   .isSelected = [item = bug.maleItem] { return dComIfGs_isItemFirstBit(item); },
                   .setSelected = [item = bug.maleItem](
                                      bool selected) { set_item_first_bit(item, selected); },
               });
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Female {}", bug.name),
+                  .text = fmt::format("[SAVE_EDITOR_FEMALE] {}", bug.name),
                   .isSelected = [item = bug.femaleItem] { return dComIfGs_isItemFirstBit(item); },
                   .setSelected = [item = bug.femaleItem](
                                      bool selected) { set_item_first_bit(item, selected); },
               });
 
-    pane.add_section("Given to Agitha");
+    pane.add_section("[SAVE_EDITOR_GIVEN_TO_AGITHA]");
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Male {}", bug.name),
+                  .text = fmt::format("[SAVE_EDITOR_MALE] {}", bug.name),
                   .isSelected = [flag = bug.maleTurnInFlag] { return dComIfGs_isEventBit(flag); },
                   .setSelected = [flag = bug.maleTurnInFlag](
                                      bool selected) { set_event_bit(flag, selected); },
               });
     add_toggle_button(
         pane, {
-                  .text = fmt::format("Female {}", bug.name),
+                  .text = fmt::format("[SAVE_EDITOR_FEMALE] {}", bug.name),
                   .isSelected = [flag = bug.femaleTurnInFlag] { return dComIfGs_isEventBit(flag); },
                   .setSelected = [flag = bug.femaleTurnInFlag](
                                      bool selected) { set_event_bit(flag, selected); },
@@ -1263,7 +1263,7 @@ void populate_fish_species_picker(Pane& pane, const FishSpeciesEntry& fish) {
     pane.clear();
     pane.add_section(fish.name);
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Caught",
+        .key = "[SAVE_EDITOR_CAUGHT]",
         .getValue = [index = fish.index] { return dComIfGs_getFishNum(index); },
         .setValue =
             [index = fish.index](int value) {
@@ -1273,7 +1273,7 @@ void populate_fish_species_picker(Pane& pane, const FishSpeciesEntry& fish) {
         .max = 999,
     });
     pane.add_child<NumberButton>(NumberButton::Props{
-        .key = "Biggest",
+        .key = "[SAVE_EDITOR_BIGGEST_CM]",
         .getValue = [index = fish.index] { return dComIfGs_getFishSize(index); },
         .setValue =
             [index = fish.index](int value) {
@@ -1346,20 +1346,20 @@ void set_clock_time(int hour, int minute) {
 }  // namespace
 
 EditorWindow::EditorWindow() {
-    add_tab("Player Status", [this](Rml::Element* content) {
+    add_tab("[SAVE_EDITOR_PLAYER_STATUS]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Player");
+        leftPane.add_section("[SAVE_EDITOR_PLAYER]");
         leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
-                                      .key = "Player Name",
+                                      .key = "[SAVE_EDITOR_PLAYER_NAME]",
                                       .getValue = get_player_name,
                                       .setValue = set_player_name,
                                       .maxLength = 16,
                                   }),
             rightPane, {});
         leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
-                                      .key = "Horse Name",
+                                      .key = "[SAVE_EDITOR_HORSE_NAME]",
                                       .getValue = get_horse_name,
                                       .setValue = set_horse_name,
                                       .maxLength = 16,
@@ -1367,7 +1367,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Max Health",
+                .key = "[SAVE_EDITOR_MAX_HEALTH]",
                 .getValue = [] { return get_player_status()->getMaxLife(); },
                 .setValue = [](int value) { return get_player_status()->setMaxLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
@@ -1375,7 +1375,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Health",
+                .key = "[SAVE_EDITOR_HEALTH]",
                 .getValue = [] { return get_player_status()->getLife(); },
                 .setValue = [](int value) { return get_player_status()->setLife(value); },
                 .max = UINT16_MAX,  // TODO: actual max
@@ -1383,7 +1383,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Rupees",
+                .key = "[SAVE_EDITOR_RUPEES]",
                 .getValue = [] { return get_player_status()->getRupee(); },
                 .setValue = [](int value) { return get_player_status()->setRupee(value); },
                 .max = get_player_status()->getRupeeMax(),
@@ -1391,7 +1391,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Max Oil",
+                .key = "[SAVE_EDITOR_MAX_OIL]",
                 .getValue = [] { return get_player_status()->getMaxOil(); },
                 .setValue = [](int value) { return get_player_status()->setMaxOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
@@ -1399,14 +1399,14 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Oil",
+                .key = "[SAVE_EDITOR_OIL]",
                 .getValue = [] { return get_player_status()->getOil(); },
                 .setValue = [](int value) { return get_player_status()->setOil(value); },
                 .max = UINT16_MAX,  // TODO: actual max
             }),
             rightPane, {});
 
-        leftPane.add_section("Equipment");
+        leftPane.add_section("[SAVE_EDITOR_EQUIPMENT]");
         const auto genSelectItemComboBox = [&leftPane, &rightPane](
                                                const Rml::String& label, u8& selectItemData) {
             leftPane.register_control(
@@ -1418,20 +1418,20 @@ EditorWindow::EditorWindow() {
                     populate_select_item_picker(pane, selectItemData);
                 });
         };
-        genSelectItemComboBox("Equip X", get_player_status()->mSelectItem[0]);
-        genSelectItemComboBox("Equip Y", get_player_status()->mSelectItem[1]);
-        genSelectItemComboBox("Combo Equip X", get_player_status()->mMixItem[0]);
-        genSelectItemComboBox("Combo Equip Y", get_player_status()->mMixItem[1]);
+        genSelectItemComboBox("[SAVE_EDITOR_EQUIP_X]", get_player_status()->mSelectItem[0]);
+        genSelectItemComboBox("[SAVE_EDITOR_EQUIP_Y]", get_player_status()->mSelectItem[1]);
+        genSelectItemComboBox("[SAVE_EDITOR_COMBO_EQUIP_X]", get_player_status()->mMixItem[0]);
+        genSelectItemComboBox("[SAVE_EDITOR_COMBO_EQUIP_Y]", get_player_status()->mMixItem[1]);
 
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Clothes",
+                .key = "[SAVE_EDITOR_CLOTHES]",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[0]); },
             }),
             rightPane, [](Pane& pane) { populate_select_clothes_picker(pane); });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Sword",
+                .key = "[SAVE_EDITOR_SWORD]",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[1]); },
             }),
             rightPane, [](Pane& pane) {
@@ -1440,7 +1440,7 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Shield",
+                .key = "[SAVE_EDITOR_SHIELD]",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[2]); },
             }),
             rightPane, [](Pane& pane) {
@@ -1449,7 +1449,7 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Scent",
+                .key = "[SAVE_EDITOR_SCENT]",
                 .getValue = [] { return get_item_name(get_player_status()->mSelectEquip[3]); },
             }),
             rightPane, [](Pane& pane) {
@@ -1458,21 +1458,21 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Wallet Size",
+                .key = "[SAVE_EDITOR_WALLET_SIZE]",
                 .getValue = [] { return walletSizeNames[get_player_status()->getWalletSize()]; },
             }),
             rightPane, [](Pane& pane) { populate_wallet_picker(pane); });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Form",
+                .key = "[SAVE_EDITOR_FORM]",
                 .getValue = [] { return formNames[get_player_status()->getTransformStatus()]; },
             }),
             rightPane, [](Pane& pane) { populate_form_picker(pane); });
 
-        leftPane.add_section("World");
+        leftPane.add_section("[SAVE_EDITOR_WORLD]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Day",
+                .key = "[SAVE_EDITOR_DAY]",
                 .getValue = [] { return get_player_status_b()->getDate(); },
                 .setValue =
                     [](int value) { get_player_status_b()->setDate(static_cast<u16>(value)); },
@@ -1481,7 +1481,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Hour",
+                .key = "[SAVE_EDITOR_HOUR]",
                 .getValue = [] { return dKy_getdaytime_hour(); },
                 .setValue = [](int value) { set_clock_time(value, dKy_getdaytime_minute()); },
                 .max = 23,
@@ -1489,7 +1489,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Minute",
+                .key = "[SAVE_EDITOR_MINUTE]",
                 .getValue = [] { return dKy_getdaytime_minute(); },
                 .setValue = [](int value) { set_clock_time(dKy_getdaytime_hour(), value); },
                 .max = 59,
@@ -1497,7 +1497,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Transform Level",
+                .key = "[SAVE_EDITOR_TRANSFORM_LEVEL]",
                 .getValue =
                     [] {
                         return std::popcount(static_cast<unsigned>(
@@ -1513,7 +1513,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Twilight Clear Level",
+                .key = "[SAVE_EDITOR_TWILIGHT_CLEAR_LEVEL]",
                 .getValue =
                     [] {
                         return std::popcount(static_cast<unsigned>(
@@ -1529,14 +1529,14 @@ EditorWindow::EditorWindow() {
             rightPane, {});
     });
 
-    add_tab("Location", [this](Rml::Element* content) {
+    add_tab("[SAVE_EDITOR_LOCATION]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Save Location");
+        leftPane.add_section("[SAVE_EDITOR_SAVE_LOCATION]");
         leftPane
             .register_control(leftPane.add_select_button({
-                                  .key = "Stage",
+                                  .key = "[SAVE_EDITOR_STAGE]",
                                   .getValue =
                                       [] {
                                           return stage_label_for_file(
@@ -1555,7 +1555,7 @@ EditorWindow::EditorWindow() {
             .set_disabled(true);
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Room",
+                .key = "[SAVE_EDITOR_ROOM]",
                 .getValue = [] { return get_player_return_place()->mRoomNo; },
                 .setValue =
                     [](int value) { get_player_return_place()->mRoomNo = static_cast<s8>(value); },
@@ -1565,7 +1565,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Spawn ID",
+                .key = "[SAVE_EDITOR_SPAWN_ID]",
                 .getValue = [] { return get_player_return_place()->mPlayerStatus; },
                 .setValue =
                     [](int value) {
@@ -1575,9 +1575,9 @@ EditorWindow::EditorWindow() {
             }),
             rightPane, {});
 
-        leftPane.add_section("Horse Location");
+        leftPane.add_section("[SAVE_EDITOR_HORSE_LOCATION]");
         leftPane.register_control(leftPane.add_child<StringButton>(StringButton::Props{
-                                      .key = "Horse Position",
+                                      .key = "[SAVE_EDITOR_HORSE_POSITION]",
                                       .getValue =
                                           [] {
                                               const auto* horsePlace = get_horse_place();
@@ -1602,7 +1602,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Horse Angle",
+                .key = "[SAVE_EDITOR_HORSE_ANGLE]",
                 .getValue = [] { return get_horse_place()->mAngleY; },
                 .setValue = [](int value) { get_horse_place()->mAngleY = static_cast<s16>(value); },
                 .min = std::numeric_limits<s16>::min(),
@@ -1612,7 +1612,7 @@ EditorWindow::EditorWindow() {
         leftPane
             .register_control(
                 leftPane.add_select_button({
-                    .key = "Horse Stage",
+                    .key = "[SAVE_EDITOR_HORSE_STAGE]",
                     .getValue =
                         [] { return stage_label_for_file(fixed_string(get_horse_place()->mName)); },
                 }),
@@ -1627,7 +1627,7 @@ EditorWindow::EditorWindow() {
             .set_disabled(true);
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Horse Room",
+                .key = "[SAVE_EDITOR_HORSE_ROOM]",
                 .getValue = [] { return get_horse_place()->mRoomNo; },
                 .setValue = [](int value) { get_horse_place()->mRoomNo = static_cast<s8>(value); },
                 .min = std::numeric_limits<s8>::min(),
@@ -1636,7 +1636,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Horse Spawn ID",
+                .key = "[SAVE_EDITOR_HORSE_SPAWN_ID]",
                 .getValue = [] { return get_horse_place()->mSpawnId; },
                 .setValue = [](int value) { get_horse_place()->mSpawnId = static_cast<u8>(value); },
                 .max = std::numeric_limits<u8>::max(),
@@ -1644,12 +1644,12 @@ EditorWindow::EditorWindow() {
             rightPane, {});
     });
 
-    add_tab("Inventory", [this](Rml::Element* content) {
+    add_tab("[SAVE_EDITOR_INVENTORY]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Item Wheel");
-        leftPane.register_control(leftPane.add_button("Default All").on_pressed([&rightPane] {
+        leftPane.add_section("[SAVE_EDITOR_ITEM_WHEEL]");
+        leftPane.register_control(leftPane.add_button("[SAVE_EDITOR_DEFAULT_ALL]").on_pressed([&rightPane] {
             mDoAud_seStartMenu(kSoundItemChange);
             for (int slot = 0; slot < 24; ++slot) {
                 dComIfGs_setItem(slot, get_slot_default(slot));
@@ -1657,7 +1657,7 @@ EditorWindow::EditorWindow() {
             rightPane.clear();
         }),
             rightPane, {});
-        leftPane.register_control(leftPane.add_button("Clear All").on_pressed([&rightPane] {
+        leftPane.register_control(leftPane.add_button("[SAVE_EDITOR_CLEAR_ALL]").on_pressed([&rightPane] {
             mDoAud_seStartMenu(kSoundItemChange);
             for (int slot = 0; slot < 24; ++slot) {
                 dComIfGs_setItem(slot, dItemNo_NONE_e);
@@ -1674,10 +1674,10 @@ EditorWindow::EditorWindow() {
                 rightPane, [slot](Pane& pane) { populate_item_slot_picker(pane, slot); });
         }
 
-        leftPane.add_section("Amounts");
+        leftPane.add_section("[SAVE_EDITOR_AMOUNTS]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Arrows Amount",
+                .key = "[SAVE_EDITOR_ARROWS_AMOUNT]",
                 .getValue = [] { return get_player_item_record()->mArrowNum; },
                 .setValue =
                     [](int value) { get_player_item_record()->mArrowNum = static_cast<u8>(value); },
@@ -1686,7 +1686,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Slingshot Amount",
+                .key = "[SAVE_EDITOR_SLINGSHOT_AMOUNT]",
                 .getValue = [] { return get_player_item_record()->mPachinkoNum; },
                 .setValue =
                     [](int value) {
@@ -1722,10 +1722,10 @@ EditorWindow::EditorWindow() {
                 rightPane, {});
         }
 
-        leftPane.add_section("Capacities");
+        leftPane.add_section("[SAVE_EDITOR_CAPACITIES]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Arrows Max",
+                .key = "[SAVE_EDITOR_ARROWS_MAX]",
                 .getValue = [] { return get_player_item_max()->mItemMax[0]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[0] = static_cast<u8>(value); },
@@ -1734,7 +1734,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Normal Bombs Max",
+                .key = "[SAVE_EDITOR_NORMAL_BOMBS_MAX]",
                 .getValue = [] { return get_player_item_max()->mItemMax[1]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[1] = static_cast<u8>(value); },
@@ -1743,7 +1743,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Water Bombs Max",
+                .key = "[SAVE_EDITOR_WATER_BOMBS_MAX]",
                 .getValue = [] { return get_player_item_max()->mItemMax[2]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[2] = static_cast<u8>(value); },
@@ -1752,7 +1752,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Bomblings Max",
+                .key = "[SAVE_EDITOR_BOMBLINGS_MAX]",
                 .getValue = [] { return get_player_item_max()->mItemMax[3]; },
                 .setValue =
                     [](int value) { get_player_item_max()->mItemMax[3] = static_cast<u8>(value); },
@@ -1760,21 +1760,21 @@ EditorWindow::EditorWindow() {
             }),
             rightPane, {});
 
-        leftPane.add_section("Flags");
+        leftPane.add_section("[SAVE_EDITOR_FLAGS]");
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Obtained Items",
-                                      .getValue = [] { return "Edit"; },
+                                      .key = "[SAVE_EDITOR_OBTAINED_ITEMS]",
+                                      .getValue = [] { return "[SAVE_EDITOR_EDIT]"; },
                                   }),
             rightPane, [](Pane& pane) { populate_item_flag_picker(pane); });
     });
-    add_tab("Collection", [this](Rml::Element* content) {
+    add_tab("[SAVE_EDITOR_COLLECTION]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Equipment");
+        leftPane.add_section("[SAVE_EDITOR_EQUIPMENT]");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Swords",
+                .key = "[SAVE_EDITOR_SWORDS]",
                 .getValue =
                     [] {
                         return count_label(
@@ -1785,7 +1785,7 @@ EditorWindow::EditorWindow() {
             [](Pane& pane) { populate_toggle_group(pane, item_toggle_entries(swordEntries)); });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Shields",
+                .key = "[SAVE_EDITOR_SHIELDS]",
                 .getValue =
                     [] {
                         return count_label(
@@ -1795,15 +1795,15 @@ EditorWindow::EditorWindow() {
             rightPane,
             [](Pane& pane) { populate_toggle_group(pane, item_toggle_entries(shieldEntries)); });
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Clothing",
+                                      .key = "[SAVE_EDITOR_CLOTHING]",
                                       .getValue = [] { return count_label(count_clothing(), 4); },
                                   }),
             rightPane, [](Pane& pane) { populate_collect_clothes_picker(pane); });
 
-        leftPane.add_section("Key Items");
+        leftPane.add_section("[SAVE_EDITOR_KEY_ITEMS]");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Fused Shadows",
+                .key = "[SAVE_EDITOR_FUSED_SHADOWS]",
                 .getValue =
                     [] {
                         return count_label(
@@ -1815,7 +1815,7 @@ EditorWindow::EditorWindow() {
             });
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Mirror Shards",
+                .key = "[SAVE_EDITOR_MIRROR_SHARDS]",
                 .getValue =
                     [] {
                         return count_label(
@@ -1826,20 +1826,20 @@ EditorWindow::EditorWindow() {
                 populate_toggle_group(pane, collect_mirror_toggle_entries(mirrorShardEntries));
             });
 
-        leftPane.add_section("Health & Souls");
+        leftPane.add_section("[SAVE_EDITOR_HEALTH_AND_SOULS]");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Poe Souls",
+                .key = "[SAVE_EDITOR_POE_SOULS]",
                 .getValue = [] { return fmt::format("{} / 60", dComIfGs_getPohSpiritNum()); },
             }),
             rightPane, [](Pane& pane) { populate_poe_souls_picker(pane); });
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Max Life",
+                                      .key = "[SAVE_EDITOR_MAX_LIFE]",
                                       .getValue = [] { return max_life_label(); },
                                   }),
             rightPane, [](Pane& pane) { populate_max_life_picker(pane); });
 
-        leftPane.add_section("Golden Bugs");
+        leftPane.add_section("[SAVE_EDITOR_GOLDEN_BUGS]");
         for (const auto& bug : bugSpeciesEntries) {
             leftPane.register_control(leftPane.add_select_button({
                                           .key = bug.name,
@@ -1848,10 +1848,10 @@ EditorWindow::EditorWindow() {
                 rightPane, [bug](Pane& pane) { populate_bug_species_picker(pane, bug); });
         }
 
-        leftPane.add_section("Skills");
+        leftPane.add_section("[SAVE_EDITOR_SKILLS]");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Hidden Skills",
+                .key = "[SAVE_EDITOR_HIDDEN_SKILLS]",
                 .getValue =
                     [] {
                         return count_label(
@@ -1862,15 +1862,15 @@ EditorWindow::EditorWindow() {
                 populate_toggle_group(pane, event_toggle_entries(hiddenSkillEntries));
             });
 
-        leftPane.add_section("Logs");
+        leftPane.add_section("[SAVE_EDITOR_LOGS]");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Postman Letters",
+                .key = "[SAVE_EDITOR_POSTMAN_LETTERS]",
                 .getValue = [] { return count_label(count_letters(), letterSenders.size()); },
             }),
             rightPane, [](Pane& pane) { populate_letters_picker(pane); });
 
-        leftPane.add_section("Fishing Log");
+        leftPane.add_section("[SAVE_EDITOR_FISHING_LOG]");
         for (const auto& fish : fishSpeciesEntries) {
             leftPane.register_control(leftPane.add_select_button({
                                           .key = fish.name,
@@ -1884,14 +1884,14 @@ EditorWindow::EditorWindow() {
     //    // TODO
     //});
 
-    add_tab("Minigame", [this](Rml::Element* content) {
+    add_tab("[SAVE_EDITOR_MINIGAME]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Records");
+        leftPane.add_section("[SAVE_EDITOR_RECORDS]");
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "STAR Game Time (ms)",
+                .key = "[SAVE_EDITOR_STAR_GAME_TIME_MS]",
                 .getValue =
                     [] {
                         return static_cast<int>(std::min<u32>(
@@ -1906,7 +1906,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Snowboard Race Time (ms)",
+                .key = "[SAVE_EDITOR_SNOWBOARD_RACE_TIME_MS]",
                 .getValue =
                     [] {
                         return static_cast<int>(std::min<u32>(
@@ -1921,7 +1921,7 @@ EditorWindow::EditorWindow() {
             rightPane, {});
         leftPane.register_control(
             leftPane.add_child<NumberButton>(NumberButton::Props{
-                .key = "Fruit-Pop-Flight Score",
+                .key = "[SAVE_EDITOR_FRUIT_POP_FLIGHT_SCORE]",
                 .getValue =
                     [] {
                         return static_cast<int>(std::min<u32>(
@@ -1936,25 +1936,25 @@ EditorWindow::EditorWindow() {
             rightPane, {});
     });
 
-    add_tab("Config", [this](Rml::Element* content) {
+    add_tab("[SAVE_EDITOR_CONFIG]", [this](Rml::Element* content) {
         auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
-        leftPane.add_section("Options");
+        leftPane.add_section("[SAVE_EDITOR_OPTIONS]");
         leftPane.register_control(
             leftPane.add_child<BoolButton>(BoolButton::Props{
-                .key = "Enable Vibration",
+                .key = "[SAVE_EDITOR_ENABLE_VIBRATION]",
                 .getValue = [] { return get_player_config()->getVibration() != 0; },
                 .setValue = [](bool value) { get_player_config()->setVibration(value); },
             }),
             rightPane, {});
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Target Type",
+                                      .key = "[SAVE_EDITOR_TARGET_TYPE]",
                                       .getValue = [] { return target_type_label(); },
                                   }),
             rightPane, [](Pane& pane) { populate_target_type_picker(pane); });
         leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Sound",
+                                      .key = "[SAVE_EDITOR_SOUND]",
                                       .getValue = [] { return sound_mode_label(); },
                                   }),
             rightPane, [](Pane& pane) { populate_sound_mode_picker(pane); });
