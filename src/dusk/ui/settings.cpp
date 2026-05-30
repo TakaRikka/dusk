@@ -1294,8 +1294,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
-        addCheat("Transform without Shadow Crystal", getSettings().game.transformWithoutShadowCrystal,
-            "Allows Link to transform without the Shadow Crystal (Only using Quick Transform.)");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
