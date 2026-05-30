@@ -6882,6 +6882,10 @@ static int daNpc_Ks_Delete(npc_ks_class* i_this) {
         i_this->model->stopZelAnime();
     }
 
+    if (saru_p[i_this->set_id] == i_this) {
+        saru_p[i_this->set_id] = NULL;
+    }
+
     return 1;
 }
 
