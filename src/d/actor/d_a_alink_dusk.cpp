@@ -72,7 +72,7 @@ void daAlink_c::handleQuickTransform() {
     }
 
     // Check to see if Link has the ability to transform.
-    if (!dComIfGs_isEventBit(dSv_event_flag_c::M_077) && !dusk::getSettings().game.transformWithoutShadowCrystal) {
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::M_077)) {
         return;
     }
 
@@ -102,7 +102,7 @@ void daAlink_c::handleQuickTransform() {
     }
 
     // Ensure that the Z Button is not dimmed
-    if (meterDrawPtr->getButtonZAlpha() != 1.f && !dusk::getSettings().game.transformWithoutShadowCrystal) {
+    if (meterDrawPtr->getButtonZAlpha() != 1.f) {
         Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         return;
     }
@@ -122,7 +122,7 @@ void daAlink_c::handleQuickTransform() {
     bool canTransform = false;
 
     if (mLinkAcch.ChkGroundHit() && !checkModeFlg(MODE_PLAYER_FLY) && !checkMagneBootsOn()) {
-        if (checkMidnaRide() || dusk::getSettings().game.transformWithoutShadowCrystal) {
+        if (checkMidnaRide()) {
             if ((checkWolf() &&
                  (checkModeFlg(MODE_UNK_1000) || dComIfGp_checkPlayerStatus0(0, 0x10))) ||
                 (!checkWolf() &&
