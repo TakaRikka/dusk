@@ -84,6 +84,7 @@
 #include "dusk/config.hpp"
 #include "dusk/speedrun.h"
 #include "dusk/settings.h"
+#include "dusk/texture_replacements.hpp"
 #include "dusk/io.hpp"
 #include "dusk/version.hpp"
 #include "dusk/discord_presence.hpp"
@@ -585,7 +586,6 @@ int game_main(int argc, char* argv[]) {
         config.allowJoystickBackgroundEvents = dusk::getSettings().game.allowBackgroundInput;
         config.pauseOnFocusLost = dusk::getSettings().game.pauseOnFocusLost;
         config.imGuiInitCallback = &aurora_imgui_init_callback;
-        config.allowTextureReplacements = dusk::getSettings().game.enableTextureReplacements;
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);
     }
@@ -635,6 +635,7 @@ int game_main(int argc, char* argv[]) {
         return 0;
     }
 
+    dusk::texture_replacements::reload();
     dusk::ui::initialize();
     dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
@@ -783,6 +784,7 @@ int game_main(int argc, char* argv[]) {
     dusk::discord::shutdown();
 #endif
     dusk::ui::shutdown();
+    dusk::texture_replacements::shutdown();
     aurora_shutdown();
 
     return 0;
