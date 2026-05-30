@@ -457,7 +457,7 @@
   <entry key="DISABLES_THE_GAME_HUD_AND_ALL_BACKGROUND_MUSIC_USEFUL_FOR_RECORDING_FOOTAGE">禁用游戏HUD和所有背景音乐。适用于录<br/>制视频。</entry>
   <entry key="AUTO">自动</entry>
   <entry key="RETURN">返回</entry>
-  <entry key="TWILIT_REALM">Twilit Realm</entry>
+  <entry key="TWILIT_REALM">黄昏领域</entry>
   <entry key="PRESENTS">出品</entry>
   <entry key="VERSION">版本</entry>
   <entry key="GAME_DISC_IMAGES">游戏光盘镜像</entry>
@@ -748,7 +748,7 @@
   <entry key="SAVE_EDITOR_NASTY_SOUP">恶心的汤</entry>
   <entry key="SAVE_EDITOR_NONE">无</entry>
   <entry key="SAVE_EDITOR_NORMAL_BOMBS_MAX">普通炸弹最大值</entry>
-  <entry key="SAVE_EDITOR_OIL">Oil</entry>
+  <entry key="SAVE_EDITOR_OIL">灯油</entry>
   <entry key="SAVE_EDITOR_OOCCOO_1">阿姨1</entry>
   <entry key="SAVE_EDITOR_OOCCOO_2">阿姨2</entry>
   <entry key="SAVE_EDITOR_OOCCOO_JR">阿姨Jr.</entry>
@@ -920,6 +920,19 @@
   <entry key="DISPLAYS_COLLECTED_TOTAL_NUMBER_OF_POE_SOULS_FOR_A_REGION_ON_THE_MAP">在地图上显示某区域已收集/总数的幽灵之<br/>魂数量。</entry>
   <entry key="HIDE_OWL_STATUE_MARKERS">隐藏猫头鹰石像标记。</entry>
   <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL">变身无需Shadow Crystal</entry>
-  <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL_HELP">Allows Link to transform without the Shadow Crystal (Only using Quick Transform.)</entry>
+  <entry key="CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL_HELP">允许林克无需Shadow Crystal即可变身（仅使用快速变身）。</entry>
   <entry key="CONFIGURE_THE_POST_PROCESSING_DEPTH_OF_FIELD_EFFECT_CLASSIC_USES_THE_ORIGINAL">设置后期景深效果：经典模式为原版景深，<br/>暮色之光模式采用更高画质景深。</entry>
+  <entry key="ADJUSTS_TWIN_STICK_CAMERA_X_AXIS_SENSITIVITY">调整双摇杆视角X轴灵敏度。</entry>
+  <entry key="ADJUSTS_TWIN_STICK_CAMERA_Y_AXIS_SENSITIVITY">调整双摇杆视角Y轴灵敏度。</entry>
+  <entry key="AREA">区域</entry>
+  <entry key="BILINEAR">双线性</entry>
+  <entry key="DEPTH_OF_FIELD">景深</entry>
+  <entry key="DISABLE_BLACK_BARS_ON_THE_LEFT_AND_RIGHT_SIDES_OF_THE_SCREEN_DURING_SOME">在部分过场动画中禁用屏幕左右两侧的黑边，<br/>特别是在超宽显示器上。超出原始构图范围的<br/>画面可能出现异常。</entry>
+  <entry key="ENABLE_LED_STATUS">启用LED状态</entry>
+  <entry key="FREE_CAMERA_X_SENSITIVITY">自由视角X灵敏度</entry>
+  <entry key="FREE_CAMERA_Y_SENSITIVITY">自由视角Y灵敏度</entry>
+  <entry key="NOT_SUPPORTED">不支持</entry>
+  <entry key="SETS_THE_CONTROLLERS_LIGHTING_COLOR_BASED_ON_THE_GAMES_STATE">根据游戏状态设置手柄灯光颜色。</entry>
+  <entry key="SWAP_DIRECT_SELECT_INPUT">交换快捷选择输入</entry>
+  <entry key="SWAP_THE_CONTROLS_FOR_USING_DIRECT_SELECT_ON_THE_ITEM_WHEEL_MAKING_DIRECT">交换物品轮盘上使用快捷选择的控制方式，<br/>使快捷选择成为默认操作，按住L键滚动轮盘。</entry>
 </localization>
