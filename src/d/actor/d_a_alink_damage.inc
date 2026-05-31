@@ -202,7 +202,12 @@ int daAlink_c::setDamagePoint(int i_dmgAmount, BOOL i_checkZoraMag, BOOL i_setDm
     if (!mpHIO->mDamage.m.mInvincible && g_debugHpMode == 0)
     #endif
     {
-        dComIfGp_setItemLifeCount(-i_dmgAmount, 0);
+#if TARGET_PC
+        if (!dusk::getSettings().game.invincibleLink)
+#endif
+        {
+            dComIfGp_setItemLifeCount(-i_dmgAmount, 0);
+        }
     }
 
 #if TARGET_PC
@@ -489,6 +494,12 @@ BOOL daAlink_c::checkDamageAction() {
         }
         return 0;
     }
+
+#if TARGET_PC
+    if (dusk::getSettings().game.invincibleLink) {
+        return checkWolfBarrierHitReverse();
+    }
+#endif
 
     if (mDamageTimer != 0) {
         return checkWolfBarrierHitReverse();

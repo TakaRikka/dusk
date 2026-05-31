@@ -230,6 +230,7 @@ struct UserSettings {
         ConfigVar<bool> fastSpinner;
         ConfigVar<bool> freeMagicArmor;
         ConfigVar<bool> invincibleEnemies;
+        ConfigVar<bool> invincibleLink;
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;
