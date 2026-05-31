@@ -1296,7 +1296,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
         addCheat("Invincible Link", getSettings().game.invincibleLink,
-            "Makes Link ignore all incoming damage");
+            "Makes Link ignore all incoming damage.");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
