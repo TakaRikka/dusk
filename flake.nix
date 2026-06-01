@@ -57,12 +57,22 @@
           inherit (pkgs.stdenv.hostPlatform) isDarwin;
           hasNodPrebuilt = nodPrebuiltInfo ? ${system};
 
-          aurora = pkgs.fetchFromGitHub {
-            owner = "encounter";
-            repo = "aurora";
-            rev = "10006618ee493f248b8597e4dfa1d2871d76a1d9";
-            hash = "sha256-lY2xuVyB7aPJ9+2wwLRB3F5U/BuPSxdSpegdG+qNd9o=";
-          };
+          aurora = builtins.pathExists "${self}/extern/aurora/CMakeLists.txt";
+          needSubmodules = ''
+            dusklight: The aurora submodule is not vendored. Add submodules=1 to build.
+
+            As a flake input:
+
+            dusklight.url = "git+https://github.com/TwilitRealm/dusklight?ref=main&submodules=1";
+
+            nix command:
+
+            nix run 'git+https://github.com/TwilitRealm/dusklight?submodules=1'
+
+            Local checkout:
+
+            nix run '.?submodules=1#dusklight'
+          '';
 
           dawn = pkgs.fetchzip {
             url = "https://github.com/encounter/dawn-build/releases/download/${dawnVersion}/dawn-${dawnInfo.${system}.triple}.tar.gz";
@@ -153,17 +163,17 @@
             };
           };
 
-          dusklight = pkgs.stdenv.mkDerivation {
+          dusklight =
+            if !aurora then
+              throw needSubmodules
+            else
+              pkgs.stdenv.mkDerivation {
             pname = "dusklight";
             version = versionSuffix;
             src = ./.;
 
             postUnpack = ''
               chmod -R u+w "$sourceRoot"
-              rm -rf "$sourceRoot/extern/aurora"
-              mkdir -p "$sourceRoot/extern"
-              cp -r ${aurora} "$sourceRoot/extern/aurora"
-              chmod -R u+w "$sourceRoot/extern/aurora"
               substituteInPlace "$sourceRoot/extern/aurora/CMakeLists.txt" \
                 --replace-warn "add_subdirectory(tests)" ""
             '';
