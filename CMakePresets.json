@@ -335,6 +335,10 @@
           "type": "BOOL",
           "value": false
         },
+        "CMAKE_DISABLE_FIND_PACKAGE_zstd": {
+          "type": "BOOL",
+          "value": true
+        },
         "AURORA_SDL3_VERSION": "3.4.8",
         "AURORA_SDL3_REF": "refs/tags/release-3.4.8"
       }
