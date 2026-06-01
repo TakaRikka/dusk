@@ -168,114 +168,114 @@
               throw needSubmodules
             else
               pkgs.stdenv.mkDerivation {
-            pname = "dusklight";
-            version = versionSuffix;
-            src = ./.;
+                pname = "dusklight";
+                version = versionSuffix;
+                src = ./.;
 
-            postUnpack = ''
-              chmod -R u+w "$sourceRoot"
-              substituteInPlace "$sourceRoot/extern/aurora/CMakeLists.txt" \
-                --replace-warn "add_subdirectory(tests)" ""
-            '';
-
-            nativeBuildInputs = [
-              pkgs.cmake
-              pkgs.ninja
-              pkgs.pkg-config
-              pkgs.python3
-              pkgs.python3Packages.markupsafe
-            ]
-            ++ lib.optionals (!isDarwin) [ pkgs.autoPatchelfHook ];
-
-            buildInputs = [
-              pkgs.sdl3
-              pkgs.freetype
-              pkgs.zstd
-              pkgs.cxxopts
-              pkgs.nlohmann_json
-              pkgs.xxHash
-              pkgs.abseil-cpp
-              pkgs.zlib
-              pkgs.libpng
-              pkgs.libjpeg_turbo
-              pkgs.curl
-              pkgs.openssl
-            ]
-            ++ lib.optionals isDarwin [
-              pkgs.apple-sdk_15
-              pkgs.libiconv
-            ]
-            ++ lib.optionals (!isDarwin) [
-              pkgs.libGL
-              pkgs.libGLU
-              pkgs.libglvnd
-              pkgs.vulkan-loader
-              pkgs.libX11
-              pkgs.libxcb
-              pkgs.libXcursor
-              pkgs.libxi
-              pkgs.libxrandr
-              pkgs.libxscrnsaver
-              pkgs.libxtst
-              pkgs.libxinerama
-              pkgs.libxkbcommon
-              pkgs.wayland
-              pkgs.libdecor
-              pkgs.alsa-lib
-              pkgs.libpulseaudio
-              pkgs.pipewire
-              pkgs.dbus
-              pkgs.udev
-              pkgs.libusb1
-              pkgs.libunwind
-              pkgs.gtk3
-            ];
-
-            cmakeBuildType = "RelWithDebInfo";
-            ninjaFlags = [ "dusklight" ];
-
-            cmakeFlags = [
-              "-DDUSK_VERSION_OVERRIDE=${versionSuffix}"
-              "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
-              "-DAURORA_DAWN_PROVIDER=package"
-              "-DAURORA_DAWN_LINKAGE=static"
-              "-DAURORA_NOD_PROVIDER=package"
-              "-DAURORA_NOD_LINKAGE=static"
-              "-DAURORA_SDL3_PROVIDER=system"
-            ]
-            ++ lib.mapAttrsToList (key: src: "-DFETCHCONTENT_SOURCE_DIR_${key}=${src}") fetchContentDirs;
-
-            installPhase =
-              if isDarwin then
-                ''
-                  runHook preInstall
-                  mkdir -p "$out/Applications"
-                  cp -r Dusklight.app "$out/Applications/Dusklight.app"
-                  runHook postInstall
-                ''
-              else
-                ''
-                  runHook preInstall
-                  install -Dm755 dusklight "$out/bin/dusklight"
-                  cp -r "$src/res" "$out/bin/res"
-                  install -Dm644 "$src/platforms/freedesktop/dev.twilitrealm.dusk.desktop" \
-                    "$out/share/applications/dev.twilitrealm.dusk.desktop"
-                  for size in 16 32 48 64 128 256 512 1024; do
-                    install -Dm644 "$src/platforms/freedesktop/''${size}x''${size}/apps/dev.twilitrealm.dusk.png" \
-                      "$out/share/icons/hicolor/''${size}x''${size}/apps/dev.twilitrealm.dusk.png"
-                  done
-                  runHook postInstall
+                postUnpack = ''
+                  chmod -R u+w "$sourceRoot"
+                  substituteInPlace "$sourceRoot/extern/aurora/CMakeLists.txt" \
+                    --replace-warn "add_subdirectory(tests)" ""
                 '';
 
-            dontStrip = true;
+                nativeBuildInputs = [
+                  pkgs.cmake
+                  pkgs.ninja
+                  pkgs.pkg-config
+                  pkgs.python3
+                  pkgs.python3Packages.markupsafe
+                ]
+                ++ lib.optionals (!isDarwin) [ pkgs.autoPatchelfHook ];
 
-            meta = {
-              description = "Dusklight — native PC port of the Twilight Princess decompilation";
-              homepage = "https://github.com/zeldaret/tp";
-              platforms = supportedSystems;
-              mainProgram = "dusklight";
-            };
-          };
+                buildInputs = [
+                  pkgs.sdl3
+                  pkgs.freetype
+                  pkgs.zstd
+                  pkgs.cxxopts
+                  pkgs.nlohmann_json
+                  pkgs.xxHash
+                  pkgs.abseil-cpp
+                  pkgs.zlib
+                  pkgs.libpng
+                  pkgs.libjpeg_turbo
+                  pkgs.curl
+                  pkgs.openssl
+                ]
+                ++ lib.optionals isDarwin [
+                  pkgs.apple-sdk_15
+                  pkgs.libiconv
+                ]
+                ++ lib.optionals (!isDarwin) [
+                  pkgs.libGL
+                  pkgs.libGLU
+                  pkgs.libglvnd
+                  pkgs.vulkan-loader
+                  pkgs.libX11
+                  pkgs.libxcb
+                  pkgs.libXcursor
+                  pkgs.libxi
+                  pkgs.libxrandr
+                  pkgs.libxscrnsaver
+                  pkgs.libxtst
+                  pkgs.libxinerama
+                  pkgs.libxkbcommon
+                  pkgs.wayland
+                  pkgs.libdecor
+                  pkgs.alsa-lib
+                  pkgs.libpulseaudio
+                  pkgs.pipewire
+                  pkgs.dbus
+                  pkgs.udev
+                  pkgs.libusb1
+                  pkgs.libunwind
+                  pkgs.gtk3
+                ];
+
+                cmakeBuildType = "RelWithDebInfo";
+                ninjaFlags = [ "dusklight" ];
+
+                cmakeFlags = [
+                  "-DDUSK_VERSION_OVERRIDE=${versionSuffix}"
+                  "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+                  "-DAURORA_DAWN_PROVIDER=package"
+                  "-DAURORA_DAWN_LINKAGE=static"
+                  "-DAURORA_NOD_PROVIDER=package"
+                  "-DAURORA_NOD_LINKAGE=static"
+                  "-DAURORA_SDL3_PROVIDER=system"
+                ]
+                ++ lib.mapAttrsToList (key: src: "-DFETCHCONTENT_SOURCE_DIR_${key}=${src}") fetchContentDirs;
+
+                installPhase =
+                  if isDarwin then
+                    ''
+                      runHook preInstall
+                      mkdir -p "$out/Applications"
+                      cp -r Dusklight.app "$out/Applications/Dusklight.app"
+                      runHook postInstall
+                    ''
+                  else
+                    ''
+                      runHook preInstall
+                      install -Dm755 dusklight "$out/bin/dusklight"
+                      cp -r "$src/res" "$out/bin/res"
+                      install -Dm644 "$src/platforms/freedesktop/dev.twilitrealm.dusk.desktop" \
+                        "$out/share/applications/dev.twilitrealm.dusk.desktop"
+                      for size in 16 32 48 64 128 256 512 1024; do
+                        install -Dm644 "$src/platforms/freedesktop/''${size}x''${size}/apps/dev.twilitrealm.dusk.png" \
+                          "$out/share/icons/hicolor/''${size}x''${size}/apps/dev.twilitrealm.dusk.png"
+                      done
+                      runHook postInstall
+                    '';
+
+                dontStrip = true;
+
+                meta = {
+                  description = "Dusklight — native PC port of the Twilight Princess decompilation";
+                  homepage = "https://github.com/zeldaret/tp";
+                  platforms = supportedSystems;
+                  mainProgram = "dusklight";
+                };
+              };
 
           # Tooling common to every supported host (Linux and macOS).
           commonDevTools = [
