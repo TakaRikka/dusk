@@ -344,7 +344,7 @@ set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::p
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads)
 
-list(APPEND GAME_LIBS libzstd_static)
+list(APPEND GAME_LIBS zstd::libzstd)
 
 if (DUSK_ENABLE_SENTRY_NATIVE)
     list(APPEND GAME_LIBS sentry)
