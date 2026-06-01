@@ -46,6 +46,10 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
+        "BUILD_SHARED_LIBS": {
+          "type": "BOOL",
+          "value": false
+        },
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
       },
       "vendor": {
@@ -201,6 +205,10 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
+        "BUILD_SHARED_LIBS": {
+          "type": "BOOL",
+          "value": false
+        },
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
       },
       "vendor": {
@@ -414,11 +422,7 @@
           "value": true
         },
         "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
-        "CMAKE_IGNORE_PREFIX_PATH": "/opt/homebrew",
-        "BUILD_SHARED_LIBS": {
-          "type": "BOOL",
-          "value": false
-        }
+        "CMAKE_IGNORE_PREFIX_PATH": "/opt/homebrew"
       }
     },
     {
