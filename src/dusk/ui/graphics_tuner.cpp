@@ -230,17 +230,17 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
     case GraphicsOption::DepthOfFieldMode:
         switch (static_cast<DepthOfFieldMode>(value)) {
         case DepthOfFieldMode::Off:
-            return "Off";
+            return "[OFF]";
         case DepthOfFieldMode::Classic:
-            return "Classic";
+            return "[CLASSIC]";
         case DepthOfFieldMode::Dusk:
-            return "Dusklight";
+            return "[DUSK]";
         }
         break;
     case GraphicsOption::BloomMultiplier:
         return fmt::format("{}%", value);
     case GraphicsOption::TextureReplacements:
-        return static_cast<bool>(value) ? "On" : "Off";
+        return static_cast<bool>(value) ? "[ON]" : "[OFF]";
     }
     return "";
 }
