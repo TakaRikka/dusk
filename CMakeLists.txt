@@ -121,6 +121,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+if (MSVC)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/EHsc>)
+endif ()
+
 # Folder-based instead of target-based organization
 # in Visual Studio and Xcode generators
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

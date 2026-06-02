@@ -1,3 +1,29 @@
+diff --git a/extern/CMakeLists.txt b/extern/CMakeLists.txt
+index 9fdd928..cec1db2 100644
+--- a/extern/CMakeLists.txt
++++ b/extern/CMakeLists.txt
+@@ -3,8 +3,8 @@ include(FetchContent)
+ # Don't build tests for third party dependencies
+ set(BUILD_TESTING OFF CACHE INTERNAL "Build tests")
+ set(SKIP_INSTALL_ALL ON)
+-if (NOT DEFINED BUILD_SHARED_LIBS)
+-  set(_USE_SHARED ON)
++if (DEFINED BUILD_SHARED_LIBS)
++  set(_USE_SHARED ${BUILD_SHARED_LIBS})
+ else ()
+-  set(_USE_SHARED OFF)
++  set(_USE_SHARED ON)
+ endif ()
+@@ -123,6 +123,9 @@ if (AURORA_ENABLE_GX)
+       EXCLUDE_FROM_ALL
+     )
+     FetchContent_MakeAvailable(ZLIB)
++    if (NOT TARGET ZLIB::ZLIB AND TARGET zlibstatic)
++      add_library(ZLIB::ZLIB ALIAS zlibstatic)
++    endif ()
+     if (NOT TARGET ZLIB::ZLIB)
+       message(FATAL_ERROR "Failed to make zlib available")
+     endif ()
 diff --git a/include/aurora/rmlui.hpp b/include/aurora/rmlui.hpp
 index 7d901b2..7c83792 100644
 --- a/include/aurora/rmlui.hpp

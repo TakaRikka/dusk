@@ -91,11 +91,6 @@ constexpr std::array kFpsOverlayCornerNames = {
     "[BOTTOM_RIGHT]",
 };
 
-constexpr std::array kGyroInputModeLabels = {
-    "[SENSOR]",
-    "[MOUSE]",
-};
-
 constexpr std::array kInterpolationModes = {
     "[OFF]",
     "[CAPPED]",
@@ -411,9 +406,7 @@ int float_setting_percent(ConfigVar<float>& var) {
 }
 
 bool gyro_enabled() {
-    return getSettings().game.enableGyroAim ||
-           (getSettings().game.enableGyroRollgoal &&
-            getSettings().game.gyroMode.getValue() != GyroMode::Mouse);
+    return getSettings().game.enableGyroAim || getSettings().game.enableGyroRollgoal;
 }
 
 struct ConfigBoolProps {
@@ -1001,46 +994,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[INVERT_VERTICAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
 
         leftPane.add_section("[GYRO]");
-        leftPane.register_control(
-            leftPane.add_select_button({
-                .key = "[GYRO_INPUT_METHOD]",
-                .getValue =
-                    [] {
-                        const auto mode = getSettings().game.gyroMode.getValue();
-                        const auto idx = static_cast<size_t>(mode);
-                        return Rml::String{kGyroInputModeLabels[idx]};
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.gyroMode.getValue() !=
-                               getSettings().game.gyroMode.getDefaultValue();
-                    },
-            }),
-            rightPane, [](Pane& pane) {
-                for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
-                    pane
-                        .add_button({
-                            .text = Rml::String{kGyroInputModeLabels[i]},
-                            .isSelected =
-                                [i] {
-                                    return getSettings().game.gyroMode.getValue() == static_cast<GyroMode>(i);
-                                },
-                        })
-                        .on_pressed([i] {
-                            mDoAud_seStartMenu(kSoundItemChange);
-                            const GyroMode mode = static_cast<GyroMode>(i);
-                            getSettings().game.gyroMode.setValue(mode);
-                            config::Save();
-                        });
-                }
-                pane.add_rml(
-                    "[SENSOR_READS_MOTION_DIRECTLY_FROM_A_SUPPORTED_CONTROLLER_S_GYRO_VIA_SDL]");
-            });
         addOption("[GYRO_AIM]", getSettings().game.enableGyroAim,
             "[ENABLES_GYRO_CONTROLS_WHILE_IN_LOOK_MODE_AIMING_A_HAWK_AND_AIMING_SUPPOR]");
         addOption("[GYRO_ROLLGOAL]", getSettings().game.enableGyroRollgoal,
-            "[ENABLES_GYRO_CONTROLS_FOR_ROLLGOAL_IN_HENA_S_CABIN]",
-            [] { return getSettings().game.gyroMode.getValue() == GyroMode::Mouse; });
+            "[ENABLES_GYRO_CONTROLS_FOR_ROLLGOAL_IN_HENA_S_CABIN]");
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityY,
             "[GYRO_PITCH_SENSITIVITY]", "[CONTROLS_VERTICAL_GYRO_AIMING_SENSITIVITY]", 25, 400, 5,
             [] { return !gyro_enabled(); });
@@ -1050,10 +1007,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
             "[ROLLGOAL_SENSITIVITY]", "[CONTROLS_HOW_STRONGLY_GYRO_INPUT_TILTS_THE_ROLLGOAL_TABLE]",
             25, 400, 5,
-            [] {
-                return !getSettings().game.enableGyroRollgoal ||
-                       getSettings().game.gyroMode.getValue() == GyroMode::Mouse;
-            });
+            [] { return !getSettings().game.enableGyroRollgoal; });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroDeadband, "[GYRO_DEADBAND]",
             "[IGNORES_SMALL_GYRO_MOVEMENT_TO_REDUCE_DRIFT_AND_JITTER]", 0, 50, 1,
             [] { return !gyro_enabled(); });
@@ -1335,9 +1289,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[CHEAT_FREE_MAGIC_ARMOR_HELP]");
         addCheat("[CHEAT_INVINCIBLE_ENEMIES]", getSettings().game.invincibleEnemies,
             "[CHEAT_INVINCIBLE_ENEMIES_HELP]");
-        addCheat("[CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL]",
-            getSettings().game.transformWithoutShadowCrystal,
-            "[CHEAT_TRANSFORM_WITHOUT_SHADOW_CRYSTAL_HELP]");
     });
 
     add_tab("[INTERFACE]", [this](Rml::Element* content) {
