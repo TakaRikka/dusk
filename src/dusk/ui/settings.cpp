@@ -481,7 +481,7 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
-        pane.add_text(helpText);
+        pane.add_rml(helpText);
     });
     return button;
 }
@@ -999,10 +999,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[INVERT_HORIZONTAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
         addOption("[INVERT_FIRST_PERSON_Y_AXIS]", getSettings().game.invertFirstPersonYAxis,
             "[INVERT_VERTICAL_MOVEMENT_WHILE_AIMING_WITH_ITEMS_OR_FIRST_PERSON_CAMERA]");
-        addOption("[INVERT_AIR_SWIM_X_AXIS]", getSettings().game.invertAirSwimX,
-            "[INVERT_HORIZONTAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
-        addOption("[INVERT_AIR_SWIM_Y_AXIS]", getSettings().game.invertAirSwimY,
-            "[INVERT_VERTICAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
 
         leftPane.add_section("[GYRO]");
         leftPane.register_control(
@@ -1069,7 +1065,26 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("[INVERT_GYRO_YAW]", getSettings().game.gyroInvertYaw,
             "[INVERT_HORIZONTAL_GYRO_AIMING]", [] { return !gyro_enabled(); });
 
+        leftPane.add_section("[MOUSE]");
+        addOption("[MOUSE_AIM]", getSettings().game.enableMouseAim,
+            "[ENABLES_MOUSE_INPUT_WHILE_IN_LOOK_MODE_AIMING_A_HAWK_AND_AIMING_SUPPORTED_ITEMS]");
+        addOption("[MOUSE_CAMERA]", getSettings().game.enableMouseCamera,
+            "[ENABLES_MOUSE_INPUT_FOR_CONTROLLING_THE_THIRD_PERSON_CAMERA]");
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivity,
+            "[MOUSE_AIM_SENSITIVITY]", "[CONTROLS_MOUSE_AIM_SENSITIVITY]", 25, 400, 5,
+            [] { return !getSettings().game.enableMouseAim; });
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivity,
+            "[MOUSE_CAMERA_SENSITIVITY]", "[CONTROLS_MOUSE_CAMERA_SENSITIVITY]", 25, 400, 5,
+            [] { return !getSettings().game.enableMouseCamera; });
+        addOption("[INVERT_MOUSE_Y]", getSettings().game.invertMouseY,
+            "[INVERT_VERTICAL_MOUSE_CONTROL_FOR_BOTH_AIMING_AND_CAMERA]",
+            [] { return !getSettings().game.enableMouseAim || !getSettings().game.enableMouseCamera; });
+
         leftPane.add_section("[GAMEPLAY]");
+        addOption("[INVERT_AIR_SWIM_X_AXIS]", getSettings().game.invertAirSwimX,
+            "[INVERT_HORIZONTAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
+        addOption("[INVERT_AIR_SWIM_Y_AXIS]", getSettings().game.invertAirSwimY,
+            "[INVERT_VERTICAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
         addOption("[SWAP_DIRECT_SELECT_INPUT]", getSettings().game.swapDirectSelect,
             "[SWAP_THE_CONTROLS_FOR_USING_DIRECT_SELECT_ON_THE_ITEM_WHEEL_MAKING_DIRECT]");
 

@@ -1,29 +1,21 @@
 diff --git a/include/aurora/rmlui.hpp b/include/aurora/rmlui.hpp
-index 3b13abe..46a8925 100644
+index 7d901b2..7c83792 100644
 --- a/include/aurora/rmlui.hpp
 +++ b/include/aurora/rmlui.hpp
-@@ -3,6 +3,7 @@
- #ifdef AURORA_ENABLE_RMLUI
- 
- #include <RmlUi/Core/Context.h>
-+#include <functional>
- 
- namespace aurora::rmlui {
- 
-@@ -16,6 +17,8 @@ bool is_initialized() noexcept;
+@@ -29,6 +29,8 @@ bool is_initialized() noexcept;
  void set_input_type(InputType type) noexcept;
  void set_ui_scale(float scale) noexcept;
  float get_ui_scale() noexcept;
 +void set_translate_callback(
 +    std::function<int(Rml::String&, const Rml::String&)> callback) noexcept;
  
- } // namespace aurora::rmlui
- 
+ struct RuntimeTexture {
+   uint32_t width = 0;
 diff --git a/lib/rmlui.cpp b/lib/rmlui.cpp
-index 876e425..ac3a41c 100644
+index 2183f1e..0d27c39 100644
 --- a/lib/rmlui.cpp
 +++ b/lib/rmlui.cpp
-@@ -313,6 +313,14 @@ void set_input_type(InputType type) noexcept {
+@@ -363,6 +363,14 @@ void set_input_type(InputType type) noexcept {
    }
  }
  
@@ -61,18 +53,10 @@ index 3ed6322..4ea9cc1 100644
 +}
  } // namespace aurora::rmlui
 diff --git a/lib/rmlui/SystemInterface_Aurora.h b/lib/rmlui/SystemInterface_Aurora.h
-index 9fc6703..0bae9a8 100644
+index 9fc6703..be33f47 100644
 --- a/lib/rmlui/SystemInterface_Aurora.h
 +++ b/lib/rmlui/SystemInterface_Aurora.h
-@@ -2,6 +2,7 @@
- 
- #include <aurora/rmlui.hpp>
- #include <RmlUi_Platform_SDL.h>
-+#include <functional>
- 
- namespace aurora::rmlui {
- 
-@@ -10,16 +11,19 @@ public:
+@@ -10,16 +10,19 @@ public:
    SystemInterface_Aurora();
    ~SystemInterface_Aurora() override = default;
    bool LogMessage(Rml::Log::Type type, const Rml::String& message) override;

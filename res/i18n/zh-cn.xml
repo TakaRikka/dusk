@@ -935,4 +935,14 @@
   <entry key="SETS_THE_CONTROLLERS_LIGHTING_COLOR_BASED_ON_THE_GAMES_STATE">根据游戏状态设置手柄灯光颜色。</entry>
   <entry key="SWAP_DIRECT_SELECT_INPUT">交换快捷选择输入</entry>
   <entry key="SWAP_THE_CONTROLS_FOR_USING_DIRECT_SELECT_ON_THE_ITEM_WHEEL_MAKING_DIRECT">交换物品轮盘上使用快捷选择的控制方式，<br/>使快捷选择成为默认操作，按住L键滚动轮盘。</entry>
+  <entry key="MOUSE_AIM">Mouse Aim</entry>
+  <entry key="ENABLES_MOUSE_INPUT_WHILE_IN_LOOK_MODE_AIMING_A_HAWK_AND_AIMING_SUPPORTED_ITEMS">Enables mouse input while in look mode, aiming a hawk, and aiming supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, Hero&apos;s Bow, Clawshot(s), Ball and Chain, and Dominion Rod.</entry>
+  <entry key="MOUSE_CAMERA">Mouse Camera</entry>
+  <entry key="ENABLES_MOUSE_INPUT_FOR_CONTROLLING_THE_THIRD_PERSON_CAMERA">Enables mouse input for controlling the third-person camera.</entry>
+  <entry key="MOUSE_AIM_SENSITIVITY">Mouse Aim Sensitivity</entry>
+  <entry key="CONTROLS_MOUSE_AIM_SENSITIVITY">Controls mouse aim sensitivity.</entry>
+  <entry key="MOUSE_CAMERA_SENSITIVITY">Mouse Camera Sensitivity</entry>
+  <entry key="CONTROLS_MOUSE_CAMERA_SENSITIVITY">Controls mouse camera sensitivity.</entry>
+  <entry key="INVERT_MOUSE_Y">Invert Mouse Y</entry>
+  <entry key="INVERT_VERTICAL_MOUSE_CONTROL_FOR_BOTH_AIMING_AND_CAMERA">Invert vertical mouse control for both aiming and camera.</entry>
 </localization>

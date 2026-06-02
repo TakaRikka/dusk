@@ -13461,12 +13461,7 @@ void daAlink_c::autoGroundHit() {
             }
         }
     } else if (checkModeFlg(0x40000) && checkNoResetFlg0(FLG0_UNK_80) && current.pos.y > mWaterY && current.pos.y - mWaterY < 1000.0f) {
-#if TARGET_PC
-        if(!(dusk::getSettings().game.moonJump && (mDoCPd_c::getHoldR(PAD_1) && mDoCPd_c::getHoldA(PAD_1))))
-#endif
-        {
-            current.pos.y = mWaterY;
-        }
+        current.pos.y = mWaterY;
     }
 
     if (checkReinRide() || checkSpinnerRide()) {

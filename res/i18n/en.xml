@@ -1436,4 +1436,14 @@
   <entry key="SAVE_EDITOR_STAR_GAME_TIME_MS">STAR Game Time (ms)</entry>
   <entry key="SAVE_EDITOR_VALUE">Value</entry>
   <entry key="SAVE_EDITOR_WORLD">World</entry>
+  <entry key="MOUSE_AIM">Mouse Aim</entry>
+  <entry key="ENABLES_MOUSE_INPUT_WHILE_IN_LOOK_MODE_AIMING_A_HAWK_AND_AIMING_SUPPORTED_ITEMS">Enables mouse input while in look mode, aiming a hawk, and aiming supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, Hero&apos;s Bow, Clawshot(s), Ball and Chain, and Dominion Rod.</entry>
+  <entry key="MOUSE_CAMERA">Mouse Camera</entry>
+  <entry key="ENABLES_MOUSE_INPUT_FOR_CONTROLLING_THE_THIRD_PERSON_CAMERA">Enables mouse input for controlling the third-person camera.</entry>
+  <entry key="MOUSE_AIM_SENSITIVITY">Mouse Aim Sensitivity</entry>
+  <entry key="CONTROLS_MOUSE_AIM_SENSITIVITY">Controls mouse aim sensitivity.</entry>
+  <entry key="MOUSE_CAMERA_SENSITIVITY">Mouse Camera Sensitivity</entry>
+  <entry key="CONTROLS_MOUSE_CAMERA_SENSITIVITY">Controls mouse camera sensitivity.</entry>
+  <entry key="INVERT_MOUSE_Y">Invert Mouse Y</entry>
+  <entry key="INVERT_VERTICAL_MOUSE_CONTROL_FOR_BOTH_AIMING_AND_CAMERA">Invert vertical mouse control for both aiming and camera.</entry>
 </localization>
