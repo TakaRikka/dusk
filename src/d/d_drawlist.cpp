@@ -18,7 +18,6 @@
 #include <typeindex>
 #include "JSystem/JKernel/JKRHeap.h"
 #include "absl/container/flat_hash_map.h"
-#include "client/TracyScoped.hpp"
 #include "dusk/frame_interpolation.h"
 #include "dusk/gx_helper.h"
 #include "dusk/logging.h"
