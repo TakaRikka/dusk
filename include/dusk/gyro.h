@@ -1,5 +1,4 @@
-#ifndef DUSK_GYRO_H
-#define DUSK_GYRO_H
+#pragma once
 
 namespace dusk::gyro {
 void read(float dt);
@@ -14,5 +13,3 @@ bool get_sensor_keep_alive();
 void set_sensor_keep_alive(bool value);
 bool rollgoal_gyro_enabled();
 }  // namespace dusk::gyro
-
-#endif

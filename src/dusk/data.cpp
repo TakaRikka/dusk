@@ -111,7 +111,7 @@ std::filesystem::path get_pref_path() {
         Log.fatal("Unable to get PrefPath: {}", SDL_GetError());
     }
 
-    std::filesystem::path result{reinterpret_cast<const char8_t*>(prefPath)};
+    std::filesystem::path result = path_from_utf8(prefPath);
     SDL_free(prefPath);
     return result;
 }
@@ -128,7 +128,7 @@ std::filesystem::path base_path_relative(const std::filesystem::path& path) {
     if (!basePath) {
         return path;
     }
-    return std::filesystem::path{basePath} / path;
+    return path_from_utf8(basePath) / path;
 }
 
 std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {

@@ -32,6 +32,8 @@
 #include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
 #include "dusk/action_bindings.h"
+#include "dusk/mouse.h"
+#include "dusk/settings.h"
 #include "imgui.h"
 #endif
 
@@ -7638,12 +7640,16 @@ void dCamera_c::deactivateDebugFlyCam() {
     mDebugFlyCam.initialized = false;
 }
 
+bool dCamera_c::canUseFreeCam() {
+    return dusk::getSettings().game.freeCamera || dusk::getSettings().game.enableMouseCamera;
+}
+
 bool dCamera_c::freeCamera() {
-    if (dusk::getSettings().game.freeCamera && mGear == 1) {
+    if (canUseFreeCam() && mGear == 1) {
         mGear = 0;
     }
 
-    if (!dusk::getSettings().game.freeCamera || mCamStyle == 70)
+    if (!canUseFreeCam() || mCamStyle == 70)
     {
         mCamParam.mManualMode = 0;
         return false;
@@ -7667,6 +7673,17 @@ bool dCamera_c::freeCamera() {
         camMovement.y *= dusk::getSettings().game.invertCameraYAxis ? 1.0f : -1.0f;
         mCamParam.freeXAngle += camMovement.x * magnitude * dusk::getSettings().game.freeCameraXSensitivity * 5.0f;
         mCamParam.freeYAngle += camMovement.y * magnitude * dusk::getSettings().game.freeCameraYSensitivity * 5.0f;
+    }
+
+    f32 yaw_rad = 0.0f;
+    f32 pitch_rad = 0.0f;
+    dusk::mouse::getCameraDeltas(yaw_rad, pitch_rad);
+    if (dusk::getSettings().game.enableMouseCamera && (yaw_rad != 0.0f || pitch_rad != 0.0f) &&
+        !dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 0x8))
+    {
+        mCamParam.mManualMode = 1;
+        mCamParam.freeXAngle += MTXRadToDeg(yaw_rad);
+        mCamParam.freeYAngle += -MTXRadToDeg(pitch_rad);
     }
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
@@ -9350,6 +9367,10 @@ bool dCamera_c::rideCamera(s32 param_0) {
             mStyleSettle.mFinished = true;
         }
 
+#if TARGET_PC
+        freeCamera();
+#endif
+
         return true;
     }
 
@@ -9478,6 +9499,10 @@ bool dCamera_c::rideCamera(s32 param_0) {
         mViewCache.mBank += (cSAngle::_0 - mViewCache.mBank) * 0.05f;
         setFlag(0x400);
     }
+
+#if TARGET_PC
+    freeCamera();
+#endif
 
     return true;
 }
