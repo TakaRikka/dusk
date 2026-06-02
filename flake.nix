@@ -242,6 +242,7 @@
                   "-DAURORA_NOD_PROVIDER=package"
                   "-DAURORA_NOD_LINKAGE=static"
                   "-DAURORA_SDL3_PROVIDER=system"
+                  "-DBUILD_SHARED_LIBS=OFF"
                 ]
                 ++ lib.mapAttrsToList (key: src: "-DFETCHCONTENT_SOURCE_DIR_${key}=${src}") fetchContentDirs;
 
