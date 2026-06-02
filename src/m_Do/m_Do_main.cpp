@@ -486,7 +486,11 @@ static void LanguageInit() {
 }
 
 static std::string asset_path(const char* assetName) {
+#ifdef DUSK_ASSET_DIR
+    const char* basePath = DUSK_ASSET_DIR;
+#else
     const char* basePath = SDL_GetBasePath();
+#endif
     if (basePath != nullptr && basePath[0] != '\0') {
         return std::string(basePath) + "res/" + assetName;
     }
@@ -579,6 +583,9 @@ int game_main(int argc, char* argv[]) {
         config.appName = dusk::AppName;
         config.userPath = reinterpret_cast<const char*>(userPathString.c_str());
         config.cachePath = reinterpret_cast<const char*>(cachePathString.c_str());
+#ifdef DUSK_ASSET_DIR
+        config.resourcesPath = DUSK_ASSET_DIR;
+#endif
         config.vsync = dusk::getSettings().video.enableVsync;
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
         config.windowPosX = -1;
