@@ -73,8 +73,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "three_heart_clear",
-                "Hero Mode",
-                "Defeat Ganondorf with only 3 heart containers.",
+                "[ACHIEVEMENT_THREE_HEART_CLEAR_NAME]",
+                "[ACHIEVEMENT_THREE_HEART_CLEAR_DESC]",
                 AchievementCategory::Challenge,
                 false, 0, 0, false
             },
@@ -533,8 +533,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "rollstab_triple",
-                "Surgical Skewer",
-                "Kill 3 enemies with a single rollstab.",
+                "[ACHIEVEMENT_ROLLSTAB_TRIPLE_NAME]",
+                "[ACHIEVEMENT_ROLLSTAB_TRIPLE_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -853,8 +853,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "ganondorf_3hit",
-                "Autospin Annihilation",
-                "Finish off Ganondorf in the final duel after only 3 attacks.",
+                "[ACHIEVEMENT_GANONDORF_3HIT_NAME]",
+                "[ACHIEVEMENT_GANONDORF_3HIT_DESC]",
                 AchievementCategory::Misc,
                 false, 0, 0, false
             },
@@ -1126,8 +1126,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "early_city",
-                "Early City",
-                "Obtain the Double Clawshots without obtaining the Dominion Rod.",
+                "[ACHIEVEMENT_EARLY_CITY_NAME]",
+                "[ACHIEVEMENT_EARLY_CITY_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },
@@ -1155,8 +1155,8 @@ std::vector<AchievementSystem::Entry> AchievementSystem::makeEntries() {
         {
             {
                 "early_kakariko",
-                "Gorge Skip",
-                "Collect the Kakariko warp portal without warping the gorge bridge.",
+                "[ACHIEVEMENT_EARLY_KAKARIKO_NAME]",
+                "[ACHIEVEMENT_EARLY_KAKARIKO_DESC]",
                 AchievementCategory::Glitched,
                 false, 0, 0, false
             },

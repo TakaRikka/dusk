@@ -171,6 +171,16 @@
   <entry key="CLEAR_ALL_ACHIEVEMENTS">Clear All Achievements</entry>
   <entry key="ARE_YOU_SURE">Are you sure?</entry>
   <entry key="ACHIEVEMENT_UNLOCKED_TOAST">Achievement Unlocked!</entry>
+  <entry key="ACHIEVEMENT_THREE_HEART_CLEAR_NAME">Hero Mode</entry>
+  <entry key="ACHIEVEMENT_THREE_HEART_CLEAR_DESC">Defeat Ganondorf with only 3 heart containers.</entry>
+  <entry key="ACHIEVEMENT_ROLLSTAB_TRIPLE_NAME">Surgical Skewer</entry>
+  <entry key="ACHIEVEMENT_ROLLSTAB_TRIPLE_DESC">Kill 3 enemies with a single rollstab.</entry>
+  <entry key="ACHIEVEMENT_GANONDORF_3HIT_NAME">Autospin Annihilation</entry>
+  <entry key="ACHIEVEMENT_GANONDORF_3HIT_DESC">Finish off Ganondorf in the final duel after only 3 attacks.</entry>
+  <entry key="ACHIEVEMENT_EARLY_CITY_NAME">Early City</entry>
+  <entry key="ACHIEVEMENT_EARLY_CITY_DESC">Obtain the Double Clawshots without obtaining the Dominion Rod.</entry>
+  <entry key="ACHIEVEMENT_EARLY_KAKARIKO_NAME">Gorge Skip</entry>
+  <entry key="ACHIEVEMENT_EARLY_KAKARIKO_DESC">Collect the Kakariko warp portal without warping the gorge bridge.</entry>
   <entry key="ACHIEVEMENT_HERO_OF_TWILIGHT_NAME">Hero of Twilight</entry>
   <entry key="ACHIEVEMENT_HERO_OF_TWILIGHT_DESC">Deliver the finishing blow to Ganondorf.</entry>
   <entry key="ACHIEVEMENT_COMPLETIONIST_NAME">Completionist</entry>
@@ -1446,4 +1456,8 @@
   <entry key="CONTROLS_MOUSE_CAMERA_SENSITIVITY">Controls mouse camera sensitivity.</entry>
   <entry key="INVERT_MOUSE_Y">Invert Mouse Y</entry>
   <entry key="INVERT_VERTICAL_MOUSE_CONTROL_FOR_BOTH_AIMING_AND_CAMERA">Invert vertical mouse control for both aiming and camera.</entry>
+  <entry key="SAVE_EDITOR_SLOT">Slot</entry>
+  <entry key="SAVE_EDITOR_HEARTS">hearts</entry>
+  <entry key="SAVE_EDITOR_PIECES">pieces</entry>
+  <entry key="SAVE_EDITOR_CM">cm</entry>
 </localization>
