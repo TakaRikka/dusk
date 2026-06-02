@@ -756,15 +756,13 @@ u32 dMsgObject_c::getMessageIndex(u32 param_0) {
 }
 
 u32 dMsgObject_c::getRevoMessageIndex(u32 param_1) {
-#if TARGET_PC
-    if (dusk::getSettings().game.enableMirrorMode) {
-        return getMirrorMsgOverride(param_1);
-    }
+#if TARGET_PC 
+    if (!dusk::getSettings().game.enableMirrorMode) { 
+        if (!g_MsgObject_HIO_c.mMessageDisplay) { return param_1; } } 
+    if (param_1 == getMirrorMsgOverride(param_1)) { return param_1; } 
+#else 
+    if (!g_MsgObject_HIO_c.mMessageDisplay) { return param_1; } 
 #endif
-
-    if (!g_MsgObject_HIO_c.mMessageDisplay) {
-        return param_1;
-    }
 
     u32 msgIndexCount;
     JMSMesgInfo_c* pMsg;
