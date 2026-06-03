@@ -2025,13 +2025,23 @@ void vrkumo_move() {
     }
 }
 
-static void dKr_cullVtx_Set() {
+static void dKr_cullVtx_Set(IF_DUSK(bool const vtxColor = false)) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
+#if TARGET_PC
+    if (vtxColor) {
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    }
+#endif
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+#if TARGET_PC
+    if (vtxColor) {
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    }
+#endif
 }
 
 static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
@@ -3472,17 +3482,22 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
 
             for (int i = 0; i < 1; i++) {
                 dKyr_set_btitex(&spDC, (ResTIMG*)*tex);
+#if TARGET_PC
+                GXSetNumChans(1);
+                GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+#else
                 GXSetNumChans(0);
                 GXSetTevColor(GX_TEVREG0, color_reg0);
+#endif
                 GXSetTevColor(GX_TEVREG1, color_reg1);
                 GXSetNumTexGens(1);
                 GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
                 GXSetNumTevStages(1);
-                GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+                GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, DUSK_IF_ELSE(GX_COLOR0A0, GX_COLOR_NULL));
+                GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, DUSK_IF_ELSE(GX_CC_RASC, GX_CC_C0), GX_CC_TEXC, GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
                                 GX_TEVPREV);
-                GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+                GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, DUSK_IF_ELSE(GX_CA_RASA, GX_CA_CA), GX_CA_TEXA, GX_CA_ZERO);
                 GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE,
                                 GX_TEVPREV);
 
@@ -3505,7 +3520,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
 
                 GXSetClipMode(GX_CLIP_DISABLE);
                 GXSetNumIndStages(0);
-                dKr_cullVtx_Set();
+                dKr_cullVtx_Set(IF_DUSK(true));
 
                 rot += 1.2f;
                 MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
@@ -3514,7 +3529,12 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                 GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
                 GXSetCurrentMtx(GX_PNMTX0);
 
-                for (int j = 0; j < housi_packet->field_0x5dec; j++) {
+#if TARGET_PC
+                // Dusklight optimization: we submit a single large draw call, rather than hundreds.
+                u32 vertCount = 4 * housi_packet->mHousiCount;
+                GXBegin(GX_QUADS, GX_VTXFMT0, vertCount);
+#endif
+
                 for (int j = 0; j < housi_packet->mHousiCount; j++) {
                     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -3526,6 +3546,10 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                         housi_packet->mHousiEff[j].mBasePos.z + housi_packet->mHousiEff[j].mPosition.z;
 
                     if (i == 1 && j == 0) {
+#if TARGET_PC
+                        // Never gets hit I think?
+                        abort();
+#endif
                         color_reg0.r = 0;
                         color_reg0.g = 0;
                         color_reg0.b = 0;
@@ -3554,8 +3578,10 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                         color_reg0.a = housi_packet->mHousiEff[j].mAlpha * var_f25;
 
                     block_14:
+#if !TARGET_PC // GXLoadTextObj does nothing, TEV colors replaced with vertex colors
                         GXLoadTexObj(&spDC, GX_TEXMAP0);
                         GXSetTevColor(GX_TEVREG0, color_reg0);
+#endif
 
                         f32 var_f27 = housi_packet->mHousiEff[j].field_0x48 * 9.0f;
                         if (g_env_light.field_0xea9 == 1) {
@@ -3712,7 +3738,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                             pos[3].z = spD0.z + spB8.z;
                         }
 
-                        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                        IF_NOT_DUSK(GXBegin(GX_QUADS, GX_VTXFMT0, 4));
 
                         s16 var_r17 = 0x1FF;
                         if (dKy_darkworld_check() == true || isPalaceOfTwilight == 1) {
@@ -3720,16 +3746,26 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                         }
 
                         GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(0, 0);
                         GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(var_r17, 0);
                         GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(var_r17, var_r17);
                         GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+                        IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                         GXTexCoord2s16(0, var_r17);
-                        GXEnd();
+
+
+                        IF_NOT_DUSK(GXEnd());
                     }
                 }
+
+#if TARGET_PC
+                GXEnd();
+#endif
             }
 
             GXSetClipMode(GX_CLIP_ENABLE);

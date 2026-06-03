@@ -103,7 +103,7 @@ HOUSI_EFF::~HOUSI_EFF() {}
 HOUSI_EFF::HOUSI_EFF() {}
 
 void dKankyo_housi_Packet::draw() {
-    dKyr_drawHousi(j3dSys.getViewMtx(), &mpResTex);
+    GX_DEBUG_GROUP(dKyr_drawHousi, j3dSys.getViewMtx(), &mpResTex);
 }
 
 VRKUMO_EFF::~VRKUMO_EFF() {}
