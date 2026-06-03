@@ -429,7 +429,7 @@
           "type": "BOOL",
           "value": true
         },
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
         "CMAKE_IGNORE_PREFIX_PATH": "/opt/homebrew"
       }
     },
