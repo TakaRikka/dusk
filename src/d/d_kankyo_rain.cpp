@@ -3840,23 +3840,30 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
                 if (tex[0] != NULL) {
                     TGXTexObj spA0;
                     dKyr_set_btitex(&spA0, (ResTIMG*)tex[0]);
+#if TARGET_PC
+                    // Dusklight optimization: enable draw call merging
+                    // by using vertex color instead of GX_TEVREG0
+                    GXSetNumChans(1);
+                    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+#else
                     GXSetNumChans(0);
                     GXSetTevColor(GX_TEVREG0, color_reg0);
+#endif
                     GXSetTevColor(GX_TEVREG1, color_reg1);
                     GXSetNumTexGens(1);
                     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
                     GXSetNumTevStages(1);
-                    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-                    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+                    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, DUSK_IF_ELSE(GX_COLOR0A0, GX_COLOR_NULL));
+                    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, DUSK_IF_ELSE(GX_CC_RASC, GX_CC_C0), GX_CC_TEXC, GX_CC_ZERO);
                     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-                    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+                    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, DUSK_IF_ELSE(GX_CA_RASA, GX_CA_CA), GX_CA_TEXA, GX_CA_ZERO);
                     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
                     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_COPY);
                     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
                     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
                     GXSetClipMode(GX_CLIP_DISABLE);
                     GXSetNumIndStages(0);
-                    dKr_cullVtx_Set();
+                    dKr_cullVtx_Set(IF_DUSK(true));
 
                     Mtx rotMtx;
                     MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
@@ -3933,7 +3940,7 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
                                     }
                                 }
 
-                                GXSetTevColor(GX_TEVREG0, color_reg0);
+                                IF_NOT_DUSK(GXSetTevColor(GX_TEVREG0, color_reg0));
                                 f32 sp38 = 2.0f * (i / 500.0f) * snow_packet->field_0x6d80;
                                 f32 sp68 = sp50 * (camera->view.lookat.eye.abs(sp7C) / 1000.0f);
                                 if (sp68 > 1.0f) {
@@ -3981,19 +3988,23 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
                                 for (int k = 0; k < spC; k++) {
                                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                                     GXPosition3f32(pos[0].x + (temp_f31 * add_table[k].x), pos[0].y + (temp_f31 * add_table[k].y), pos[0].z + (temp_f31 * add_table[k].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0, 0);
                                     GXPosition3f32(pos[1].x + (temp_f31 * add_table[k].x), pos[1].y + (temp_f31 * add_table[k].y), pos[1].z + (temp_f31 * add_table[k].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0xFF, 0);
                                     GXPosition3f32(pos[2].x + (temp_f31 * add_table[k].x), pos[2].y + (temp_f31 * add_table[k].y), pos[2].z + (temp_f31 * add_table[k].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0xFF, 0xFF);
                                     GXPosition3f32(pos[3].x + (temp_f31 * add_table[k].x), pos[3].y + (temp_f31 * add_table[k].y), pos[3].z + (temp_f31 * add_table[k].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0, 0xFF);
                                     GXEnd();
                                 }
 
                                 if ((g_env_light.field_0xe90 != 0 && dComIfGp_roomControl_getStayNo() == 0 && sp7C.z < 3000.0f) || dComIfGp_roomControl_getStayNo() == 3 || dComIfGp_roomControl_getStayNo() == 6 || dComIfGp_roomControl_getStayNo() == 9 || dComIfGp_roomControl_getStayNo() == 13) {
                                     color_reg0.a = 255.0f * ((0.4f * snow_packet->mSnowEff[i].field_0x30) + temp_f29);
-                                    GXSetTevColor(GX_TEVREG0, color_reg0);
+                                    IF_NOT_DUSK(GXSetTevColor(GX_TEVREG0, color_reg0));
 
                                     f32 sp34;
                                     f32 sp30;
@@ -4049,12 +4060,16 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
                                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                                     int var_r27 = 0;
                                     GXPosition3f32(pos[0].x + (temp_f31 * add_table[var_r27].x), pos[0].y + (temp_f31 * add_table[var_r27].y), pos[0].z + (temp_f31 * add_table[var_r27].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0, 0);
                                     GXPosition3f32(pos[1].x + (temp_f31 * add_table[var_r27].x), pos[1].y + (temp_f31 * add_table[var_r27].y), pos[1].z + (temp_f31 * add_table[var_r27].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0xFF, 0);
                                     GXPosition3f32(pos[2].x + (temp_f31 * add_table[var_r27].x), pos[2].y + (temp_f31 * add_table[var_r27].y), pos[2].z + (temp_f31 * add_table[var_r27].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0xFF, 0xFF);
                                     GXPosition3f32(pos[3].x + (temp_f31 * add_table[var_r27].x), pos[3].y + (temp_f31 * add_table[var_r27].y), pos[3].z + (temp_f31 * add_table[var_r27].z));
+                                    IF_DUSK(GXColor4u8(color_reg0.r, color_reg0.g, color_reg0.b, color_reg0.a));
                                     GXTexCoord2s16(0, 0xFF);
                                     GXEnd();
                                 }

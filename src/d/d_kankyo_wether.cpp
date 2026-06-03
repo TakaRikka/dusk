@@ -79,7 +79,7 @@ SNOW_EFF::~SNOW_EFF() {}
 SNOW_EFF::SNOW_EFF() {}
 
 void dKankyo_snow_Packet::draw() {
-    dKyr_drawSnow(j3dSys.getViewMtx(), &mpTex);
+    GX_DEBUG_GROUP(dKyr_drawSnow, j3dSys.getViewMtx(), &mpTex);
 }
 
 STAR_EFF::~STAR_EFF() {}
