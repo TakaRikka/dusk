@@ -1996,7 +1996,7 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
     return 1;
 }
 
-#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+#if DUSK_GFX_DEBUG_GROUPS
 static absl::flat_hash_map<std::type_index, const char*> typeDrawNames;
 
 static const char* getTypeDrawName(dDlst_base_c* dlst) {
@@ -2019,7 +2019,7 @@ void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     for (; p_start < p_end; p_start++) {
         dDlst_base_c* dlst = *p_start;
 
-#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+#if DUSK_GFX_DEBUG_GROUPS
         const auto name = getTypeDrawName(dlst);
         GXScopedDebugGroup scope(name);
 #endif

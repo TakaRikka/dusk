@@ -7,12 +7,16 @@
 #include <dolphin/gx/GXExtra.h>
 #include "tracy/Tracy.hpp"
 
+#if DUSK_GFX_DEBUG_GROUPS
 #define GX_DEBUG_GROUP(name, ...) \
     do {                          \
         GXPushDebugGroup(#name);  \
         name(__VA_ARGS__);        \
         GXPopDebugGroup();        \
     } while (0)
+#else
+#define GX_DEBUG_GROUP(name, ...) name(__VA_ARGS__)
+#endif
 
 #ifdef TARGET_PC
 class GXTexObjRAII : public GXTexObj {
@@ -45,10 +49,14 @@ typedef GXTexObj TGXTexObj;
 
 struct GXScopedDebugGroup {
     explicit GXScopedDebugGroup(const char* text) {
+#if DUSK_GFX_DEBUG_GROUPS
         GXPushDebugGroup(text);
+#endif
     }
     ~GXScopedDebugGroup() {
+#if DUSK_GFX_DEBUG_GROUPS
         GXPopDebugGroup();
+#endif
     }
 };
 

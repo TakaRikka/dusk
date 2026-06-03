@@ -137,11 +137,18 @@ target_compile_definitions(aurora_mtx PRIVATE MTX_USE_PS=1)
 
 add_subdirectory(libs/freeverb)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(DUSK_GFX_DEBUG_GROUPS_DEFAULT ON)
+else ()
+    set(DUSK_GFX_DEBUG_GROUPS_DEFAULT OFF)
+endif ()
+
 option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 option(DUSK_ENABLE_UPDATE_CHECKER "Enable update checking support" ON)
 option(DUSK_ENABLE_SENTRY_NATIVE "Enable sentry-native crash reporting support" OFF)
+option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
 set(DUSK_SENTRY_DSN "" CACHE STRING "Sentry DSN")
 set(DUSK_SENTRY_ENVIRONMENT "development" CACHE STRING "Sentry environment")
 
@@ -416,6 +423,11 @@ endif ()
 
 if(ANDROID)
     list(APPEND GAME_COMPILE_DEFS TARGET_ANDROID=1)
+endif ()
+
+if (DUSK_GFX_DEBUG_GROUPS)
+    list(APPEND GAME_COMPILE_DEFS DUSK_GFX_DEBUG_GROUPS=1)
+    target_compile_definitions(aurora_gx PRIVATE AURORA_GFX_DEBUG_GROUPS)
 endif ()
 
 # game_debug is for game code files that we know work when compiled with DEBUG=1
