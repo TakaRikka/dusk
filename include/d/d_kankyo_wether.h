@@ -198,6 +198,7 @@ struct HOUSI_EFF {
     /* 0x4C */ u16 field_0x4c;
 };  // Size: 0x50
 
+// Housi is the rising square particles in Twilight
 class dKankyo_housi_Packet : public J3DPacket {
 public:
     virtual void draw();
@@ -208,7 +209,7 @@ public:
     /* 0x0020 */ HOUSI_EFF mHousiEff[300];
     /* 0x5DE0 */ u8 field_0x5de0[8];
     /* 0x5DE8 */ f32 field_0x5de8;
-    /* 0x5DEC */ s16 field_0x5dec;
+    /* 0x5DEC */ s16 mHousiCount;
 };  // Size: 0x5DF0
 
 struct CLOUD_EFF {

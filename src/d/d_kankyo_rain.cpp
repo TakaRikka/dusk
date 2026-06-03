@@ -929,7 +929,7 @@ void dKyr_housi_move() {
     if (g_env_light.mHousiCount != 0 ||
         (g_env_light.mHousiCount == 0 && housi_packet->field_0x5de8 <= 0.0f))
     {
-        housi_packet->field_0x5dec = g_env_light.mHousiCount;
+        housi_packet->mHousiCount = g_env_light.mHousiCount;
     }
 
     if (g_env_light.mHousiCount != 0) {
@@ -938,7 +938,7 @@ void dKyr_housi_move() {
         cLib_addCalc(&housi_packet->field_0x5de8, 0.0f, 0.2f, 0.05f, 0.01f);
     }
 
-    if (housi_packet->field_0x5dec == 0) {
+    if (housi_packet->mHousiCount == 0) {
         return;
     }
 
@@ -977,7 +977,7 @@ void dKyr_housi_move() {
         }
     }
 
-    for (int i = housi_packet->field_0x5dec - 1; i >= 0; i--) {
+    for (int i = housi_packet->mHousiCount - 1; i >= 0; i--) {
         f32 var_f26 = 0.4f * housi_packet->field_0x5de8;
         effect = &housi_packet->mHousiEff[i];
 
@@ -3389,10 +3389,10 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
     Vec spC4;
     Vec spB8;
 
-    bool var_r28 = 0;
-    if (housi_packet->field_0x5dec != 0) {
+    bool isPalaceOfTwilight = 0;
+    if (housi_packet->mHousiCount != 0) {
         if (strcmp(dComIfGp_getStartStageName(), "D_MN08") == 0) {
-            var_r28 = 1;
+            isPalaceOfTwilight = 1;
         }
 
         if (strcmp(dComIfGp_getStartStageName(), "D_MN08") != 0 ||
@@ -3419,7 +3419,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
             color_reg1.b = 0xCA;
             color_reg1.a = 0xFF;
 
-            if (dKy_darkworld_check() == 1 || var_r28 == 1) {
+            if (dKy_darkworld_check() == 1 || isPalaceOfTwilight == 1) {
                 color_reg0.r = 0;
                 color_reg0.g = 0;
                 color_reg0.b = 0;
@@ -3515,6 +3515,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                 GXSetCurrentMtx(GX_PNMTX0);
 
                 for (int j = 0; j < housi_packet->field_0x5dec; j++) {
+                for (int j = 0; j < housi_packet->mHousiCount; j++) {
                     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
                     spD0.x =
@@ -3566,7 +3567,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                         f32 temp_f30 =
                             (var_f27 * 0.2f) * cM_fcos(housi_packet->mHousiEff[j].mScale.y * 6.0f);
 
-                        if (dKy_darkworld_check() == 1 || var_r28 == 1) {
+                        if (dKy_darkworld_check() == 1 || isPalaceOfTwilight == 1) {
                             cXyz sp7C[] = {
                                 cXyz(-1.0f, -0.5f, 0.0f),
                                 cXyz(-1.0f, 1.5f, 0.0f),
@@ -3714,7 +3715,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
                         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
                         s16 var_r17 = 0x1FF;
-                        if (dKy_darkworld_check() == true || var_r28 == 1) {
+                        if (dKy_darkworld_check() == true || isPalaceOfTwilight == 1) {
                             var_r17 = 0xFA;
                         }
 
