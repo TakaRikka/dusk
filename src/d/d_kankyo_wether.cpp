@@ -119,7 +119,7 @@ EF_ODOUR_EFF::~EF_ODOUR_EFF() {}
 EF_ODOUR_EFF::EF_ODOUR_EFF() {}
 
 void dKankyo_odour_Packet::draw() {
-    dKyr_odour_draw(j3dSys.getViewMtx(), &mpResTex);
+    GX_DEBUG_GROUP(dKyr_odour_draw, j3dSys.getViewMtx(), &mpResTex);
 }
 
 EF_MUD_EFF::~EF_MUD_EFF() {}
