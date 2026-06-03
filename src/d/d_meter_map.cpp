@@ -16,6 +16,7 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_camera.h"
+#include "dusk/settings.h"
 #include <cstring>
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
@@ -444,6 +445,11 @@ void dMeterMap_c::_create(J2DScreen* unused) {
     mSizeW = (s16)sizeX;
     mSizeH = (s16)sizeY;
 
+#if TARGET_PC
+    mBaseSizeW = mSizeW;
+    mBaseSizeH = mSizeH;
+#endif
+
     mMap = JKR_NEW dMap_c(sizeX, sizeY, dispSizeW, dispSizeH);
     JUT_ASSERT(999, mMap != NULL);
 
@@ -577,6 +583,20 @@ void dMeterMap_c::_move(u32 param_0) {
 
     mSizeW = (s16)sizeW;
     mSizeH = (s16)sizeH;
+    #endif
+
+    #if TARGET_PC
+    {
+        f32 scale = dusk::getSettings().game.minimapSize;
+        if (scale < 0.10f) {
+            scale = 0.10f;
+        } else if (scale > 3.0f) {
+            scale = 3.0f;
+        }
+
+        mSizeW = mBaseSizeW * scale;
+        mSizeH = mBaseSizeH * scale;
+    }
     #endif
 
     mDrawPosX = mSlidePositionOffset + getMapDispEdgeLeftX_Layout();

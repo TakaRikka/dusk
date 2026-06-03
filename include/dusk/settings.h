@@ -162,6 +162,7 @@ struct UserSettings {
         // Preferences
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> minimalHUD;
+        ConfigVar<float> minimapSize;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementToasts;

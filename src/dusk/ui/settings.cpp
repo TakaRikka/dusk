@@ -1470,6 +1470,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml("<br/>Changes how the Collection and File Select menus scale to your "
                              "aspect ratio.");
             });
+        config_percent_select(leftPane, rightPane, getSettings().game.minimapSize, "Minimap Size",
+            "Scales the Minimap.<br/><br/>"
+            "Lower it if the Minimap feels too large, such as on a big TV.", 20, 150);
         config_bool_select(leftPane, rightPane, getSettings().game.hideTvSettingsScreen,
             {
                 .key = "Skip TV Settings Screen",

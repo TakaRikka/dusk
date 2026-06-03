@@ -119,6 +119,10 @@ private:
     /* 0x2D */ u8 mMapIsInside;
     /* 0x2E */ u8 field_0x2e;
     /* 0x30 */ int field_0x30;
+#if TARGET_PC
+    f32 mBaseSizeW;
+    f32 mBaseSizeH;
+#endif
 };
 
 #endif /* D_METER_D_METER_MAP_H */
