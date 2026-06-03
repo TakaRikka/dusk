@@ -4,7 +4,9 @@
 #include "JSystem/JAHostIO/JAHioMessage.h"
 #include "JSystem/JAHostIO/JAHioMgr.h"
 #include "JSystem/JAHostIO/JAHioNode.h"
+
 #include "JSystem/JHostIO/JORServer.h"
+#include "dusk/string.hpp"
 
 JAHioNode* JAHioNode::smCurrentNode;
 
@@ -32,7 +34,7 @@ void JAHioNode::updateNode() {
 void JAHioNode::setNodeName(const char* name) {
     int size = strlen(name) + 1;
     JUT_ASSERT(51, size < 32);
-    strcpy(mName, name);
+    SAFE_STRCPY(mName, name);
 }
 
 void JAHioNode::genMessage(JORMContext* mctx) {

@@ -65,7 +65,7 @@ BOOL daNpc_Kn_c::setBtkAnm(J3DAnmTextureSRTKey* i_btk, J3DModelData* i_modelData
     return mBtkAnm.init(i_modelData, i_btk, TRUE, i_mode, i_speed, 0, -1);
 }
 
-int daNpc_Kn_c::loadRes(const s8* i_ptrn_list, const char** i_arcname_list) {
+int daNpc_Kn_c::loadRes(const s8* i_ptrn_list, const char* DUSK_CONST* i_arcname_list) {
     int phase;
     int resLoad_cnt = 0;
 
@@ -91,7 +91,7 @@ int daNpc_Kn_c::loadRes(const s8* i_ptrn_list, const char** i_arcname_list) {
     return cPhs_INIT_e;
 }
 
-void daNpc_Kn_c::deleteRes(const s8* i_ptrn_list, const char** i_arcname_list) {
+void daNpc_Kn_c::deleteRes(const s8* i_ptrn_list, const char* DUSK_CONST* i_arcname_list) {
     for (int i = 0; i < 8 && i_ptrn_list[i] != -1; i++) {
         dComIfG_resDelete(&mPhase[i], i_arcname_list[i_ptrn_list[i]]);
     }

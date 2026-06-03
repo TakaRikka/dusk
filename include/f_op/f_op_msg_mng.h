@@ -50,7 +50,7 @@ fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_talkActor, u32 param_2
 fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, u32 param_1);
 fpc_ProcID fopMsgM_messageSetDemo(u32 i_msgidx);
 msg_class* fopMsgM_SearchByID(fpc_ProcID i_id);
-char* fopMsgM_messageGet(char* i_stringBuf, u32 i_msgId);
+TEXT_SPAN fopMsgM_messageGet(TEXT_SPAN i_stringBuf, u32 i_msgId);
 fpc_ProcID fop_Timer_create(s16 i_procName, u8 i_mode, u32 i_limitMs, u8 i_type, u8 param_4,
                             f32 param_5, f32 param_6, f32 param_7, f32 param_8,
                             fopMsgCreateFunc i_createFunc);

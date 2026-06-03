@@ -731,7 +731,7 @@ static int daObjARI_IsDelete(daObjARI_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjARI_Method = {
+static DUSK_CONST actor_method_class l_daObjARI_Method = {
     (process_method_func)daObjARI_Create,
     (process_method_func)daObjARI_Delete,
     (process_method_func)daObjARI_Execute,
@@ -739,7 +739,7 @@ static actor_method_class l_daObjARI_Method = {
     (process_method_func)daObjARI_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Ari = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Ari = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -210,10 +210,10 @@ void daObjRgate_c::setBaseMtx() {
     }
 }
 
-static char* l_arcName = "M_RGate00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_RGate00";
 
 int daObjRgate_c::Create() {
-    static char* l_evName = "RIDER_GATE_OPEN00";
+    static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "RIDER_GATE_OPEN00";
 
     u8 sw_no = getSwNo();
     if (sw_no != 0xFF && !fopAcM_isSwitch(this, sw_no) &&
@@ -803,7 +803,7 @@ void daObjRgate_c::demoProc() {
 }
 
 int daObjRgate_c::getDemoAction() {
-    static char* action_table[] = {"WAIT", "ADJUSTMENT", "UNLOCK", "OPEN"};
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[] = {"WAIT", "ADJUSTMENT", "UNLOCK", "OPEN"};
 
     return dComIfGp_evmng_getMyActIdx(mStaffID, action_table, ARRAY_SIZEU(action_table), 0, 0);
 }
@@ -872,13 +872,13 @@ static int daObjRgate_MoveBGDraw(daObjRgate_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjRgate_METHODS = {
+static DUSK_CONST actor_method_class daObjRgate_METHODS = {
     (process_method_func)daObjRgate_create1st,     (process_method_func)daObjRgate_MoveBGDelete,
     (process_method_func)daObjRgate_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjRgate_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_RiderGate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RiderGate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

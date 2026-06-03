@@ -32,7 +32,7 @@ public:
     /* 0x5B4 */ J3DModel* mpModel;
     /* 0x5B8 */ u8 mArrowType;
     /* 0x5B9 */ u8 mFlags;
-    /* 0x5BC */ char* mResName;
+    /* 0x5BC */ char DUSK_CONST* mResName;
     /* 0x5C0 */ s16 field_0x5c0;
     /* 0x5C2 */ s16 mAction;
     /* 0x5C4 */ s16 mMode;

@@ -79,8 +79,8 @@ public:
 
     u8 getType() { return mType; }
 
-    static char* mEvtCutNameList[3];
-    static cutFunc mEvtCutList[3];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[3];
+    static cutFunc DUSK_CONST mEvtCutList[3];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

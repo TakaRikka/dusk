@@ -66,13 +66,13 @@ static u16 const l_bind_eff[4] = {
     0x8B47, 0x8B48, 0x8B49, 0x8B4A,
 };
 
-static char* l_arcName = "M_VolcBom";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_VolcBom";
 
-static char* l_portal_warp_name = "PORTAL_WARP_BIGVOLC";
+static DUSK_CONSTEXPR char DUSK_CONST* l_portal_warp_name = "PORTAL_WARP_BIGVOLC";
 
-static char* l_staff_name = "BigVolc";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staff_name = "BigVolc";
 
-static dCcD_SrcCyl l_cyl_src = {
+static DUSK_CONSTEXPR dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x1f}, {0x0, 0x10}, 0x78}}, // mObj
         {dCcD_SE_NONE, 0x0, 0xc, 0x0, 0x0}, // mGObjAt
@@ -252,7 +252,7 @@ int daObjVolcBom_c::Execute(Mtx** i_mtx) {
 }
 
 void daObjVolcBom_c::mode_proc_call() {
-    static daObjVolcBom_c::modeFunc mode_proc[4] = {
+    static DUSK_CONSTEXPR daObjVolcBom_c::modeFunc mode_proc[4] = {
         &daObjVolcBom_c::modeWaitAppear,
         &daObjVolcBom_c::modeFall,
         &daObjVolcBom_c::modeWaitEndFallDemo,
@@ -553,7 +553,7 @@ void daObjVolcBom_c::endSrcEffect() {
 }
 
 void daObjVolcBom_c::event_proc_call() {
-    static daObjVolcBom_c::actionFunc l_func[6] = {
+    static DUSK_CONSTEXPR daObjVolcBom_c::actionFunc l_func[6] = {
         &daObjVolcBom_c::actionWait,
         &daObjVolcBom_c::actionOrderEvent,
         &daObjVolcBom_c::actionTalkEvent,
@@ -875,7 +875,7 @@ static int daObjVolcBom_MoveBGDraw(daObjVolcBom_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjVolcBom_METHODS = {
+static DUSK_CONST actor_method_class daObjVolcBom_METHODS = {
     (process_method_func)daObjVolcBom_create1st,
     (process_method_func)daObjVolcBom_MoveBGDelete,
     (process_method_func)daObjVolcBom_MoveBGExecute,
@@ -883,7 +883,7 @@ static actor_method_class daObjVolcBom_METHODS = {
     (process_method_func)daObjVolcBom_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_VolcanicBomb = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_VolcanicBomb = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

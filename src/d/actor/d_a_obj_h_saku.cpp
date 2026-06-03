@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_h_saku.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-static char* l_arcName = "H_Saku";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Saku";
 
 void daObjH_Saku_c::BreakSet() {
     cXyz pos(240.0f, 0.0f, -30.0f);
@@ -294,7 +294,7 @@ static cXyz s_pos_r;
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daObjH_Saku_Method = {
+static DUSK_CONST actor_method_class l_daObjH_Saku_Method = {
     (process_method_func)daObjH_Saku_Create,
     (process_method_func)daObjH_Saku_Delete,
     (process_method_func)daObjH_Saku_Execute,
@@ -302,7 +302,7 @@ static actor_method_class l_daObjH_Saku_Method = {
     (process_method_func)daObjH_Saku_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_H_Saku = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_H_Saku = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -115,7 +115,7 @@ public:
     daNpc_Saru_c(daNpcT_faceMotionAnmData_c const* param_1, daNpcT_motionAnmData_c const* param_2,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3, int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5, int param_6,
-                                daNpcT_evtData_c const* param_7, char** param_8) :
+                                daNpcT_evtData_c const* param_7, char DUSK_CONST* DUSK_CONST* param_8) :
                                 daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8)
                                 {}
     s32 getHeadJointNo() { return JNT_HEAD; }
@@ -133,8 +133,8 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xff0000) >> 16; }
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
 
-    static char* mCutNameList[4];
-    static cutFunc mCutList[4];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[4];
+    static cutFunc DUSK_CONST mCutList[4];
 private:
     /* 0xE40 */ NPC_SARU_HIO_CLASS* mpHIO;
     /* 0xE44 */ J3DModel* mpRoseModels[2];

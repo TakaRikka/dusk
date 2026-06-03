@@ -571,7 +571,7 @@ static int daCstaF_Draw(daCstaF_c* a_this) {
     return a_this->MoveBGDraw();
 }
 
-static actor_method_class l_daCstaF_Method = {
+static DUSK_CONST actor_method_class l_daCstaF_Method = {
     (process_method_func)daCstaF_Create,
     (process_method_func)daCstaF_Delete,
     (process_method_func)daCstaF_Execute,
@@ -579,7 +579,7 @@ static actor_method_class l_daCstaF_Method = {
     (process_method_func)daCstaF_Draw,
 };
 
-actor_process_profile_definition g_profile_CSTAF = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_CSTAF = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

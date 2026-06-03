@@ -51,27 +51,27 @@ enum RES_Name {
     /* 0x2 */ GRA_MDL,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_GRA_A, GRA_MDL},
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {NULL, 0},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "grA_base",
     "grA_mdl",
 };
 
-static s8 l_loadResPtrn0[3] = {2, 1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {2, 1, -1};
 
-static s8* l_loadResPtrnList[1] = {l_loadResPtrn0};
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[1] = {l_loadResPtrn0};
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_GRA_A, J3DFrameCtrl::EMode_LOOP, GRA_BASE, TRUE},
     {BCK_GRA_F_WAIT_A, J3DFrameCtrl::EMode_LOOP, GRA_BASE, BTP_GRA_A, J3DFrameCtrl::EMode_LOOP,
      GRA_BASE, TRUE},
@@ -101,7 +101,7 @@ enum Motion {
     /* 0x4 */ MOT_TALK_B,
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[3] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[3] = {
     {BCK_GRA_WAIT_A, J3DFrameCtrl::EMode_LOOP, GRA_BASE, BTK_GRA_A, J3DFrameCtrl::EMode_NONE,
      GRA_BASE, 0, 0},
     {BCK_GRA_TALK_A, J3DFrameCtrl::EMode_NONE, GRA_BASE, BTK_GRA_A, J3DFrameCtrl::EMode_NONE,
@@ -110,24 +110,24 @@ static daNpcT_motionAnmData_c l_motionAnmData[3] = {
      GRA_BASE, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {2, -1, 1}, {1, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0}, {7, -1, 1}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {5, -1, 1}, {4, -1, 0},
     {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 
 };
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[20] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[20] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 1}, {0, 0, 0},
     {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_grM_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_grM_c::mCutNameList[2] = {
     "",
     "TALK_SPA",
 };
 
-daNpc_grM_c::cutFunc daNpc_grM_c::mCutList[2] = {
+daNpc_grM_c::cutFunc DUSK_CONST daNpc_grM_c::mCutList[2] = {
     NULL,
     &daNpc_grM_c::cutTalkSpa,
 };
@@ -812,13 +812,13 @@ static BOOL daNpc_grM_IsDelete(void* param_0) {
     return TRUE;
 }
 
-static actor_method_class daNpc_grM_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_grM_MethodTable = {
     (process_method_func)daNpc_grM_Create,  (process_method_func)daNpc_grM_Delete,
     (process_method_func)daNpc_grM_Execute, (process_method_func)daNpc_grM_IsDelete,
     (process_method_func)daNpc_grM_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GRM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GRM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

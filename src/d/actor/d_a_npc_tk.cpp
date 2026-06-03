@@ -679,14 +679,14 @@ bool daNPC_TK_c::executePerchDemo(int param_0) {
 }
 
 void daNPC_TK_c::executePerch() {
-    static char* action_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[4] = {
         "Wait",
         "Circle",
         "Nearly",
         "Land",
     };
 
-    static char* action_table_w[2] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table_w[2] = {
         "Wait",
         "Circle",
     };
@@ -3302,13 +3302,13 @@ static int daNPC_TK_Create(daNPC_TK_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daNPC_TK_Method = {
+static DUSK_CONST actor_method_class l_daNPC_TK_Method = {
     (process_method_func)daNPC_TK_Create,  (process_method_func)daNPC_TK_Delete,
     (process_method_func)daNPC_TK_Execute, (process_method_func)daNPC_TK_IsDelete,
     (process_method_func)daNPC_TK_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_TK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_TK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 6,
     /* List Prio    */ fpcPi_CURRENT_e,

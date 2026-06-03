@@ -9,32 +9,32 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "d/actor/d_a_obj_catdoor.h"
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     24, 1,
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"PERU_APPEAR", 1},
     {"PERU_APPEAR_SKIP", 1},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Peru",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-static s8* l_loadResPtrnList[3] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {-1, 0, 0, 30, 2, 1, 1},
     {10, 0, 1, 30, 2, 1, 1},
     {8, 2, 1, 32, 2, 1, 0},
@@ -42,7 +42,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {7, 0, 1, 31, 0, 1, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[11] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[11] = {
     {20, 2, 1, 27, 0, 1, 1, 0},
     {17, 2, 1, 27, 0, 1, 1, 0},
     {18, 2, 1, 27, 0, 1, 1, 0},
@@ -56,13 +56,13 @@ static daNpcT_motionAnmData_c l_motionAnmData[11] = {
     {11, 0, 1, 27, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, 
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[40] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[40] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {7, -1, 0}, {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -1242,7 +1242,7 @@ static int daPeru_IsDelete(void* i_this) {
 AUDIO_INSTANCES
 
 
-static actor_method_class daPeru_MethodTable = {
+static DUSK_CONST actor_method_class daPeru_MethodTable = {
     (process_method_func)daPeru_Create,
     (process_method_func)daPeru_Delete,
     (process_method_func)daPeru_Execute,
@@ -1250,7 +1250,7 @@ static actor_method_class daPeru_MethodTable = {
     (process_method_func)daPeru_Draw,
 };
 
-actor_process_profile_definition g_profile_PERU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_PERU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

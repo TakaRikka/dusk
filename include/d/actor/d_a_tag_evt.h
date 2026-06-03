@@ -17,7 +17,7 @@ public:
     int doEvtCutTalk(int);
     int doEvtCutNext(int);
 
-    static char* mEvtCutList[3];
+    static DUSK_CONST char* mEvtCutList[3];
 
     /* 0x568 */ char field_0x568[8];
     /* 0x570 */ u16 field_0x570;

@@ -68,9 +68,9 @@ int daObj_Roten_c::Create() {
     return 1;
 }
 
-static char* l_resFileName = "Obj_roten";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName = "Obj_roten";
 
-static u32 l_bmdFileIdx = 4;
+static DUSK_CONSTEXPR u32 l_bmdFileIdx = 4;
 
 int daObj_Roten_c::CreateHeap() {
     J3DModelData* mdlData_p = (J3DModelData*)dComIfG_getObjectRes(getResName(), l_bmdFileIdx);
@@ -79,7 +79,7 @@ int daObj_Roten_c::CreateHeap() {
     return mModel != NULL;
 }
 
-static u32 l_dzbFileIdx = 7;
+static DUSK_CONSTEXPR u32 l_dzbFileIdx = 7;
 
 int daObj_Roten_c::create() {
     fopAcM_ct(this, daObj_Roten_c);
@@ -142,7 +142,7 @@ int daObj_Roten_c::Delete() {
     return 1;
 }
 
-char* daObj_Roten_c::getResName() {
+char DUSK_CONST* daObj_Roten_c::getResName() {
     return l_resFileName;
 }
 
@@ -169,7 +169,7 @@ static int daObj_Roten_IsDelete(void* i_this) {
 daObj_Roten_c::~daObj_Roten_c() {
 }
 
-static actor_method_class daObj_Roten_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Roten_MethodTable = {
     (process_method_func)daObj_Roten_Create,
     (process_method_func)daObj_Roten_Delete,
     (process_method_func)daObj_Roten_Execute,
@@ -177,7 +177,7 @@ static actor_method_class daObj_Roten_MethodTable = {
     (process_method_func)daObj_Roten_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_ROTEN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_ROTEN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

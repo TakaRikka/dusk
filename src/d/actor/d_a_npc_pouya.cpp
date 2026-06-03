@@ -66,13 +66,13 @@ void daNpc_Pouya_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[3][2] = {
+static DUSK_CONSTEXPR int l_bmdData[3][2] = {
     {26, 1},
     {23, 1},
     {34, 2},
 };
 
-static daNpcT_evtData_c l_evtList[9] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
@@ -84,21 +84,21 @@ static daNpcT_evtData_c l_evtList[9] = {
     {"RETURN_FAVOR_2_02", 2},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "pouyaA",
     "pouyaB",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8 l_loadResPtrn1[2] = {2, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[2] = {2, -1};
 
-static s8* l_loadResPtrnList[6] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[6] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn1, l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {-1, 0, 0, -1, 0, 0, 0}, {11, 0, 1, -1, 0, 0, 0}, {8, 2, 1, -1, 0, 0, 0},
     {9, 0, 1, -1, 0, 0, 0},  {10, 0, 1, -1, 0, 0, 0}, {12, 2, 1, -1, 0, 0, 0},
     {14, 2, 2, 47, 2, 2, 0}, {10, 0, 2, 43, 0, 2, 0}, {16, 2, 2, 49, 2, 2, 0},
@@ -107,7 +107,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[16] = {
     {18, 2, 2, 51, 2, 2, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[26] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[26] = {
     {18, 2, 1, 36, 2, 1, 0, 0}, {19, 2, 1, 36, 2, 1, 0, 0}, {20, 2, 1, 36, 2, 1, 0, 0},
     {13, 0, 1, 36, 2, 1, 0, 0}, {16, 0, 1, 36, 2, 1, 0, 0}, {17, 2, 1, 36, 2, 1, 0, 0},
     {14, 0, 1, 36, 2, 1, 0, 0}, {15, 2, 1, 36, 2, 1, 0, 0}, {16, 0, 1, 36, 2, 1, 0, 0},
@@ -119,7 +119,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[26] = {
     {26, 0, 2, 37, 0, 2, 1, 0}, {23, 0, 2, 37, 0, 2, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] = {
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {1, -1, 1},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {3, -1, 1},  {2, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {4, -1, 1},
@@ -133,7 +133,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[72] =
     {-1, 0, 0},  {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {1, -1, 0},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {3, -1, 1},  {1, 0, 0},   {-1, 0, 0},  {-1, 0, 0},  {4, -1, 1},  {5, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {2, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {6, -1, 1},
@@ -147,13 +147,13 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[76] = {
     {-1, 0, 0},  {-1, 0, 0},  {25, -1, 1}, {10, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char* daNpc_Pouya_c::mCutNameList[3] = {
+char DUSK_CONST* DUSK_CONST daNpc_Pouya_c::mCutNameList[3] = {
     "",
     "HAVE_FAVORTO_ASK",
     "RETURN_FAVOR",
 };
 
-daNpc_Pouya_c::cutFunc daNpc_Pouya_c::mCutList[3] = {
+daNpc_Pouya_c::cutFunc DUSK_CONST daNpc_Pouya_c::mCutList[3] = {
     NULL,
     &daNpc_Pouya_c::cutHaveFavorToAsk,
     &daNpc_Pouya_c::cutHaveFavorToAsk,
@@ -1192,13 +1192,13 @@ static BOOL daNpc_Pouya_IsDelete(void* i_this) {
 
 static NPC_POUYA_HIO_CLASS l_HIO;
 
-static actor_method_class daNpc_Pouya_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Pouya_MethodTable = {
     (process_method_func)daNpc_Pouya_Create,  (process_method_func)daNpc_Pouya_Delete,
     (process_method_func)daNpc_Pouya_Execute, (process_method_func)daNpc_Pouya_IsDelete,
     (process_method_func)daNpc_Pouya_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_POUYA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_POUYA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

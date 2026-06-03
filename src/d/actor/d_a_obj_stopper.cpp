@@ -508,13 +508,13 @@ static int daObjStopper_Create(fopAc_ac_c* param_0) {
     return static_cast<daObjStopper_c*>(param_0)->create();
 }
 
-static actor_method_class l_daObjStopper_Method = {
+static DUSK_CONST actor_method_class l_daObjStopper_Method = {
     (process_method_func)daObjStopper_Create,  (process_method_func)daObjStopper_Delete,
     (process_method_func)daObjStopper_Execute, 0,
     (process_method_func)daObjStopper_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Stopper = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Stopper = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

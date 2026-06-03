@@ -43,7 +43,7 @@ public:
     static M_attrs const M_attr;
     static M_attrs const& attr() { return M_attr; }
 
-    static char* l_arcName;
+    static char DUSK_CONST* DUSK_CONST l_arcName;
 
     ~daObjNameplate_c() { dComIfG_resDelete(&this->mPhase, l_arcName); }
 

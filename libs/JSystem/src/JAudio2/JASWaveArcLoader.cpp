@@ -9,6 +9,8 @@
 #include <os.h>
 #include <stdint.h>
 
+#include "dusk/string.hpp"
+
 JASHeap* JASWaveArcLoader::sAramHeap;
 
 JASHeap* JASWaveArcLoader::getRootHeap() {
@@ -22,7 +24,7 @@ char JASWaveArcLoader::sCurrentDir[DIR_MAX] = "/AudioRes/Waves/";
 
 void JASWaveArcLoader::setCurrentDir(char const* dir) {
     JUT_ASSERT(40, std::strlen(dir) < DIR_MAX - 1);
-    strcpy(sCurrentDir, dir);
+    SAFE_STRCPY(sCurrentDir, dir);
     u32 len = strlen(sCurrentDir);
     if (sCurrentDir[len - 1] != '/') {
         JUT_ASSERT(45, len + 1 < DIR_MAX);
@@ -170,8 +172,8 @@ void JASWaveArc::setFileName(char const* fileName) {
     length = length + strlen(fileName);
     char* path = JKR_NEW_ARRAY_ARGS(char, length + 1, JASKernel::getSystemHeap(), -4);
     JUT_ASSERT(322, path);
-    strcpy(path, currentDir);
-    strcat(path, fileName);
+    SAFE_STRCPY_BOUNDED(path, length + 1, currentDir);
+    SAFE_STRCAT_BOUNDED(path, length + 1, fileName);
     path[length] = '\0';
     int entryNum = DVDConvertPathToEntrynum(path);
     JKR_DELETE_ARRAY(path);

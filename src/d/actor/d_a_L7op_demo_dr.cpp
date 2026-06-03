@@ -835,7 +835,7 @@ static int daL7ODR_Create(daL7ODR_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daL7ODR_Method = {
+static DUSK_CONST actor_method_class l_daL7ODR_Method = {
     (process_method_func)daL7ODR_Create,
     (process_method_func)daL7ODR_Delete,
     (process_method_func)daL7ODR_Execute,
@@ -843,7 +843,7 @@ static actor_method_class l_daL7ODR_Method = {
     (process_method_func)daL7ODR_Draw,
 };
 
-actor_process_profile_definition g_profile_L7ODR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_L7ODR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

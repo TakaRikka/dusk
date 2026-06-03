@@ -33,10 +33,17 @@ static constexpr std::string_view StubFragments[] = {
     "but selective updates are not implemented"sv,
 };
 
+#if _WIN32
+#define DUSK_FILENO _fileno
+#else
+#define DUSK_FILENO fileno
+#endif
+
 namespace {
 // On macOS, std::mutex becomes poisoned when its dtor is run.
 // We use this to check if the LogState is destroyed before attempting to acquire it.
 std::atomic g_logStateAlive(true);
+std::atomic<int> g_logFd(-1);
 
 struct LogState {
     std::mutex mutex;
@@ -54,6 +61,7 @@ struct LogState {
         }
         std::lock_guard lock(mutex);
         if (file != nullptr) {
+            g_logFd.store(-1, std::memory_order_release);
             std::fflush(file);
             std::fclose(file);
             file = nullptr;
@@ -232,6 +240,7 @@ void dusk::InitializeFileLogging(const std::filesystem::path& configDir, AuroraL
     }
 
     g_logState.filePath = logPath.u8string();
+    g_logFd.store(DUSK_FILENO(g_logState.file), std::memory_order_release);
     aurora::g_config.logCallback = &aurora_log_callback;
     aurora::g_config.logLevel = logLevel;
     WriteLogLine(g_logState.file, "INFO", "dusk", "File logging initialized", 24);
@@ -251,4 +260,8 @@ const char* dusk::GetLogFilePath() {
     std::lock_guard lock(g_logState.mutex);
     return reinterpret_cast<const char*>(
         g_logState.filePath.empty() ? nullptr : g_logState.filePath.c_str());
+}
+
+int dusk::GetLogFileDescriptor() {
+    return g_logFd.load(std::memory_order_acquire);
 }

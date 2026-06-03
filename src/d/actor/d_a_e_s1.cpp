@@ -2292,13 +2292,13 @@ static int daE_S1_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-static actor_method_class l_daE_S1_Method = {
+static DUSK_CONST actor_method_class l_daE_S1_Method = {
     (process_method_func)daE_S1_Create,  (process_method_func)daE_S1_Delete,
     (process_method_func)daE_S1_Execute, (process_method_func)daE_S1_IsDelete,
     (process_method_func)daE_S1_Draw,
 };
 
-actor_process_profile_definition g_profile_E_S1 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_S1 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

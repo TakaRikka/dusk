@@ -23,14 +23,14 @@ public:
     /* 0x1C */ f32 y_offset;
 };
 
-static char* l_type[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_type[2] = {
     "stickwl00",
     "stickwl01",
 };
 
-static int l_bmdIdx[] = {4, 4};
+static DUSK_CONSTEXPR int l_bmdIdx[] = {4, 4};
 
-static int l_dzbIdx[] = {7, 7};
+static DUSK_CONSTEXPR int l_dzbIdx[] = {7, 7};
 
 daPropY_HIO_c::daPropY_HIO_c() {
     rot_speed = 0.0f;
@@ -128,7 +128,7 @@ int daPropY_c::Execute(Mtx** param_0) {
 }
 
 void daPropY_c::procMain() {
-    static void (daPropY_c::*mode_proc[])() = {
+    static DUSK_CONSTEXPR void (daPropY_c::*mode_proc[])() = {
         &daPropY_c::modeMoveWait,
         &daPropY_c::modeMove,
         &daPropY_c::modeWait,
@@ -289,7 +289,7 @@ static int daPropY_Create(fopAc_ac_c* i_this) {
     return ((daPropY_c*)i_this)->create();
 }
 
-static actor_method_class l_daPropY_Method = {
+static DUSK_CONST actor_method_class l_daPropY_Method = {
     (process_method_func)daPropY_Create,
     (process_method_func)daPropY_Delete,
     (process_method_func)daPropY_Execute,
@@ -297,7 +297,7 @@ static actor_method_class l_daPropY_Method = {
     (process_method_func)daPropY_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv7PropY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv7PropY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

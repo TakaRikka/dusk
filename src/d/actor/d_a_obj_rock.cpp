@@ -195,12 +195,12 @@ rock_ss::~rock_ss() {}
 
 rock_ss::rock_ss() {}
 
-static actor_method_class l_daObj_Rock_Method = {
+static DUSK_CONST actor_method_class l_daObj_Rock_Method = {
     (process_method_func)daObj_Rock_Create, (process_method_func)daObj_Rock_Delete,
     (process_method_func)daObj_Rock_Execute, (process_method_func)daObj_Rock_IsDelete,
     (process_method_func)daObj_Rock_Draw};
 
-actor_process_profile_definition g_profile_OBJ_ROCK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_ROCK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

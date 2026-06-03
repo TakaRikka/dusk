@@ -51,9 +51,9 @@ void daObjPDoor_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "V_OsuDoor";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_OsuDoor";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {0.0f, 0.0f, -600.0f},
     {600.0f, 1000.0f, 600.0f},
 };
@@ -270,7 +270,7 @@ static int daObjPDoor_MoveBGDraw(daObjPDoor_c* i_this) {
     return i_this->Draw();
 }
 
-static actor_method_class daObjPDoor_METHODS = {
+static DUSK_CONST actor_method_class daObjPDoor_METHODS = {
     (process_method_func)daObjPDoor_create1st,
     (process_method_func)daObjPDoor_MoveBGDelete,
     (process_method_func)daObjPDoor_MoveBGExecute,
@@ -278,7 +278,7 @@ static actor_method_class daObjPDoor_METHODS = {
     (process_method_func)daObjPDoor_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_PushDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_PushDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

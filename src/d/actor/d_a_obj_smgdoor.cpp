@@ -70,24 +70,24 @@ void daObjSmgDoor_c::setBaseMtx() {
     cMtx_copy(field_0x5b8, mBgMtx);
 }
 
-static char* l_arcName[2] = {"A_SMGDoor", "A_SMKDoor"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {"A_SMGDoor", "A_SMKDoor"};
 
-static char* l_bmd[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmd[2] = {
     "A_SMGDoor.bmd",
     "A_SMKDoor.bmd",
 };
 
-static char* l_dzb[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_dzb[2] = {
     "A_SMGDoor.dzb",
     "A_SMKDoor.dzb",
 };
 
-static char* l_eventName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName[2] = {
     "NOW_DOOR_IN",
     "OLD_DOOR_IN",
 };
 
-static cull_box l_cull_box = {{-200.0f, 0.0f, -50.0f}, {200.0f, 400.0f, 50.0f}};
+static DUSK_CONSTEXPR cull_box l_cull_box = {{-200.0f, 0.0f, -50.0f}, {200.0f, 400.0f, 50.0f}};
 
 int daObjSmgDoor_c::Create() {
     initBaseMtx();
@@ -148,7 +148,7 @@ int daObjSmgDoor_c::Execute(Mtx** param_0) {
 }
 
 int daObjSmgDoor_c::getDemoAction() {
-    static char* action_table[6] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[6] = {
         "WAIT", "OPEN", "SETGOAL", "SETPOS", "SCENE_CHG", "COLOR_CHG",
     };
 
@@ -419,13 +419,13 @@ static int daObjSmgDoor_MoveBGDraw(daObjSmgDoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjSmgDoor_METHODS = {
+static DUSK_CONST actor_method_class daObjSmgDoor_METHODS = {
     (process_method_func)daObjSmgDoor_create1st,     (process_method_func)daObjSmgDoor_MoveBGDelete,
     (process_method_func)daObjSmgDoor_MoveBGExecute, 0,
     (process_method_func)daObjSmgDoor_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_SmgDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SmgDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

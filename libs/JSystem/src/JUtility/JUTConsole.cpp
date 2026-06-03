@@ -1,13 +1,14 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/JUtility/JUTConsole.h"
+#include <cstdio>
+#include <vi.h>
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include <vi.h>
-#include <cstdio>
+#include "dusk/string.hpp"
 #include "global.h"
 
 JUTConsoleManager* JUTConsoleManager::sManager;
@@ -204,10 +205,10 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
                 mFont->drawString_scale((int)f31, sp94, mFontSizeX, mFontSizeY, spA8, TRUE);
                 f31 += mFontSizeX * 13.0f;
                 if (sp88) {
-                    sprintf(spB8, "ALL");
+                    SAFE_SPRINTF(spB8, "ALL");
                 } else {
                     f32 f29 = sp8C / (f32)(sp90 - mHeight);
-                    sprintf(spB8, "%3d%%(%dL)", (int)(100.0 * f29), sp90);
+                    SAFE_SPRINTF(spB8, "%3d%%(%dL)", (int)(100.0 * f29), sp90);
                 }
                 mFont->drawString_scale(f31, sp94, mFontSizeX, mFontSizeY, spB8, TRUE);
             }

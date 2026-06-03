@@ -11,7 +11,7 @@
 #include "d/actor/d_a_npc_yamid.h"
 #include "d/actor/d_a_npc_yamit.h"
 
-static daNpc_GetParam2 l_bckGetParamList[9] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[9] = {
     {11, 2, 0},
     {12, 2, 0},
     {13, 2, 0},
@@ -23,9 +23,9 @@ static daNpc_GetParam2 l_bckGetParamList[9] = {
     {7, 0, 0},
 };
 
-static char* l_arcNames[1] = {"Blue_NS"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[1] = {"Blue_NS"};
 
-static char* l_evtNames[7] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[7] = {
     NULL,
     "CHG_YAMI_CHIBI",
     "CHG_YAMI_DEBU",
@@ -35,11 +35,11 @@ static char* l_evtNames[7] = {
     "CHG_YAMI_NOPPO_STOPPER",
 };
 
-static char* l_myName = "Blue_NS";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Blue_NS";
 
 static NPC_BLUE_NS_HIO_CLASS l_HIO;
 
-daNpcBlueNS_c::EventFn daNpcBlueNS_c::mEvtSeqList[] = {
+daNpcBlueNS_c::EventFn DUSK_CONST daNpcBlueNS_c::mEvtSeqList[] = {
     NULL,
     &daNpcBlueNS_c::_Evt_ChgYami_Chibi,
     &daNpcBlueNS_c::_Evt_ChgYami_Debu,
@@ -1419,7 +1419,7 @@ static int daNpcBlueNS_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpcBlueNS_MethodTable = {
+static DUSK_CONST actor_method_class daNpcBlueNS_MethodTable = {
     (process_method_func)daNpcBlueNS_Create,
     (process_method_func)daNpcBlueNS_Delete,
     (process_method_func)daNpcBlueNS_Execute,
@@ -1427,7 +1427,7 @@ static actor_method_class daNpcBlueNS_MethodTable = {
     (process_method_func)daNpcBlueNS_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_BLUENS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_BLUENS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

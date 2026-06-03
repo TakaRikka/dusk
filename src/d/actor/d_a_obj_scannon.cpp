@@ -11,17 +11,17 @@
 #include "d/d_s_play.h"
 #include <cstring>
 
-char* l_arcName_Comp = "SkyCannon";
+DUSK_CONSTEXPR char DUSK_CONST* l_arcName_Comp = "SkyCannon";
 
-char* l_arcName_Crash = "SCanHai";
+DUSK_CONSTEXPR char DUSK_CONST* l_arcName_Crash = "SCanHai";
 
-char* l_arcName_Zev = "SCanZev";
+DUSK_CONSTEXPR char DUSK_CONST* l_arcName_Zev = "SCanZev";
 
-char* l_arcName_Ptl = "SCanPtl";
+DUSK_CONSTEXPR char DUSK_CONST* l_arcName_Ptl = "SCanPtl";
 
-char* l_staffName = "SCannon";
+DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "SCannon";
 
-char* l_eventName[4] = {
+DUSK_CONSTEXPR char DUSK_CONST* l_eventName[4] = {
     "SKY_CANNON_WARP_END",
     "SKY_CANNON_FIRE_FIRST",
     "SKY_CANNON_FIRE_TKS",
@@ -53,7 +53,7 @@ daSCannon_c::daSCannon_c() {
 }
 
 daSCannon_c::~daSCannon_c() {
-    char* arcname;
+    char DUSK_CONST* arcname;
     if (mLayerNo == 3 || mLayerNo == 10) {
         arcname = l_arcName_Comp;
     } else if (mLayerNo == 1) {
@@ -93,7 +93,7 @@ int daSCannon_c::create() {
         return cPhs_ERROR_e;
     }
 
-    char* arcname = l_arcName_Comp;
+    char DUSK_CONST* arcname = l_arcName_Comp;
     int ptl_phase_state = cPhs_COMPLEATE_e;
     if (layerNo == 1) {
         arcname = l_arcName_Crash;
@@ -264,7 +264,7 @@ void daSCannon_c::setPtlModelMtx() {
 }
 
 int daSCannon_c::createHeap() {
-    char* arcname;
+    char DUSK_CONST* arcname;
     int bmd_index;
     int dzb_index;
 
@@ -436,51 +436,51 @@ void daSCannon_c::exeModeOrderEvt() {
     eventInfo.onCondition(dEvtCnd_CANDEMO_e);
 }
 
-void (daSCannon_c::*daSCannon_c::s_exeProc[])() = {
+void (daSCannon_c::*DUSK_CONST daSCannon_c::s_exeProc[])() = {
     &daSCannon_c::exeModeWait,
     &daSCannon_c::exeModeOrderEvt,
     &daSCannon_c::exeModeActionEvt,
     &daSCannon_c::exeModeEnd,
 };
 
-char* CUT_TYPE_TABLE_WARP_END[2] = {
+DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_WARP_END[2] = {
     "WAIT",
     "MOVE",
 };
 
-char* CUT_TYPE_TABLE_FIRE_TKS[3] = {
+DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_FIRE_TKS[3] = {
     "0001_WAIT",
     "0002_RUN",
     "0003_JUMP",
 };
 
-char* CUT_TYPE_TABLE_FIRE_FIRST[1] = {
+DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_FIRE_FIRST[1] = {
     "LINK_IN",
 };
 
-char* CUT_TYPE_TABLE_FIRE_SECOND[4] = {
+DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_FIRE_SECOND[4] = {
     "SET",
     "MOVE",
     "FIRE",
     "FINISH",
 };
 
-void (daSCannon_c::*daSCannon_c::s_demoExeProc_WarpEnd[][2])() = {
+void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_WarpEnd[][2])() = {
     {&daSCannon_c::demoInitWarpEndWait, &daSCannon_c::demoExeWarpEndWait},
     {&daSCannon_c::demoInitWarpEndMove, &daSCannon_c::demoExeWarpEndMove},
 };
 
-void (daSCannon_c::*daSCannon_c::s_demoExeProc_FireTks[][2])() = {
+void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireTks[][2])() = {
     {NULL, NULL},
     {NULL, NULL},
     {NULL, NULL},
 };
 
-void (daSCannon_c::*daSCannon_c::s_demoExeProc_FireFirst[][2])() = {
+void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireFirst[][2])() = {
     {&daSCannon_c::demoInitLinkIn, &daSCannon_c::demoExeLinkIn},
 };
 
-void (daSCannon_c::*daSCannon_c::s_demoExeProc_FireSecond[][2])() = {
+void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireSecond[][2])() = {
     {&daSCannon_c::demoInitSet, &daSCannon_c::demoExeSet},
     {&daSCannon_c::demoInitMove, &daSCannon_c::demoExeMove},
     {&daSCannon_c::demoInitFire, &daSCannon_c::demoExeFire},
@@ -533,7 +533,7 @@ const daSCannon_c::demoTable_s daSCannon_c::s_demoTable[] = {
 };
 
 void daSCannon_c::demoExe() {
-    char** cut_table = s_demoTable[mDemoType].cut_table;
+    char DUSK_CONST* DUSK_CONST* cut_table = s_demoTable[mDemoType].cut_table;
     int cut_num = s_demoTable[mDemoType].cut_num;
     int act_idx = dComIfGp_evmng_getMyActIdx(mStaffId, cut_table, cut_num, 0, 0);
     if (act_idx != -1) {
@@ -566,7 +566,7 @@ void daSCannon_c::demoExeLinkIn() {
             player_p->onPlayerNoDraw();
             player_p->onPlayerShadowNoDraw();
 
-            cXyz pos(-102065.44f, -17973.893f, 53981.64f);
+            DUSK_CONSTEXPR cXyz pos(-102065.44f, -17973.893f, 53981.64f);
             player_p->setPlayerPosAndAngle(&pos, player_p->shape_angle.y, 0);
             mpBgW->OffRoofRegist();
         }
@@ -842,7 +842,7 @@ static int daSCannon_draw(daSCannon_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daSCannon_METHODS = {
+static DUSK_CONST actor_method_class daSCannon_METHODS = {
     (process_method_func)daSCannon_create,
     (process_method_func)daSCannon_Delete,
     (process_method_func)daSCannon_execute,
@@ -850,7 +850,7 @@ static actor_method_class daSCannon_METHODS = {
     (process_method_func)daSCannon_draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SCannon = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SCannon = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

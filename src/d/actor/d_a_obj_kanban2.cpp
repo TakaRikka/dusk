@@ -89,7 +89,7 @@ enum daObj_Kanban2_DamageType {
 };
 
 namespace {
-static char* l_kn2_bmdidx[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_kn2_bmdidx[] = {
     "J_kanban00.bmd",
     "J_kanban00_01.bmd",
     "J_kanban00_02.bmd",
@@ -111,7 +111,7 @@ static char* l_kn2_bmdidx[] = {
     "J_kanban00_18.bmd",
 };
 
-static s16 dKn2_CarryOffset[] = {
+static DUSK_CONSTEXPR s16 dKn2_CarryOffset[] = {
     -0x2f83,
     -0x45df,
     -0x45df,
@@ -122,7 +122,7 @@ static s16 dKn2_CarryOffset[] = {
     -0x3993,
 };
 
-static struct {
+static DUSK_CONSTEXPR struct {
     f32 speed_y;
     f32 speed_f;
 } dKb2_BAN_SPEED[] = {
@@ -146,7 +146,7 @@ static struct {
     { 0.0f, 30.0f },
 };
 
-static u16 dKb2_BAN_ANGLE[] = {
+static DUSK_CONSTEXPR u16 dKb2_BAN_ANGLE[] = {
     0x6800,
     0x7800,
     0x8800,
@@ -167,7 +167,7 @@ static u16 dKb2_BAN_ANGLE[] = {
     0x9000,
 };
 
-static u32 dKb2_BAN_PARTS[] = {
+static DUSK_CONSTEXPR u32 dKb2_BAN_PARTS[] = {
     PART_TOP_LEFT_UNDER,
     PART_SPINE_LEFT_UPPER | PART_TOP_LEFT_UPPER,
     PART_SPINE_RIGHT_UPPER | PART_TOP_RIGHT_UPPER,
@@ -188,7 +188,7 @@ static u32 dKb2_BAN_PARTS[] = {
     0,
 };
 
-static dCcD_SrcSph cc_kn2_src = {
+static DUSK_CONSTEXPR dCcD_SrcSph cc_kn2_src = {
     {
         {0x0, {{AT_TYPE_1000, 0x2, 0x13}, {0xD8FBFDFF, 0x11}, 0x79}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -200,7 +200,7 @@ static dCcD_SrcSph cc_kn2_src = {
     } // mSphAttr
 };
 
-static struct {
+static DUSK_CONSTEXPR struct {
     f32 x;
     f32 y;
 } d_KANBAN_OFFSET[] = {
@@ -1770,7 +1770,7 @@ static int daObj_Kanban2_Create(daObj_Kanban2_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObj_Kanban2_Method = {
+static DUSK_CONST actor_method_class l_daObj_Kanban2_Method = {
     (process_method_func)daObj_Kanban2_Create,
     (process_method_func)daObj_Kanban2_Delete,
     (process_method_func)daObj_Kanban2_Execute,
@@ -1778,7 +1778,7 @@ static actor_method_class l_daObj_Kanban2_Method = {
     (process_method_func)daObj_Kanban2_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KANBAN2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KANBAN2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

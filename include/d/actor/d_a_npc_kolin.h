@@ -93,7 +93,7 @@ public:
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
             int i_motionStepNum,
             daNpcT_evtData_c const* i_evtData,
-            char** i_arcNames)
+            char DUSK_CONST* DUSK_CONST* i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}
@@ -120,8 +120,8 @@ public:
     virtual void changeAnm(int*, int*);
     virtual void changeBck(int*, int*);
 
-    static char* mCutNameList[11];
-    static cutFunc mCutList[11];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[11];
+    static cutFunc DUSK_CONST mCutList[11];
 
     u32 getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

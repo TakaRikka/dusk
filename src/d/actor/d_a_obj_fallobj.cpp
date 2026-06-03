@@ -13,9 +13,9 @@
 #include "d/d_s_play.h"
 
 
-static char* l_arcName = "K_drock00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "K_drock00";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-200.0f, -10000.0f, -200.0f},
     {200.0f, 600.0f, 200.0f},
 };
@@ -440,7 +440,7 @@ static int daObjFallObj_MoveBGDraw(daObjFallObj_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjFallObj_METHODS = {
+static DUSK_CONST actor_method_class daObjFallObj_METHODS = {
     (process_method_func)daObjFallObj_create1st,
     (process_method_func)daObjFallObj_MoveBGDelete,
     (process_method_func)daObjFallObj_MoveBGExecute,
@@ -448,7 +448,7 @@ static actor_method_class daObjFallObj_METHODS = {
     (process_method_func)daObjFallObj_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_FallObj = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_FallObj = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

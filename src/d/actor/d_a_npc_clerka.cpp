@@ -69,55 +69,55 @@ void daNpc_clerkA_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {19, 1},
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "clerkA",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {-1, 0, 0, 25, 2, 1, 1}, {6, 0, 1, 26, 0, 1, 0}, {7, 0, 1, 27, 0, 1, 0},
     {8, 0, 1, 28, 0, 1, 0},  {9, 2, 1, 29, 2, 1, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[7] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[7] = {
     {15, 2, 1, 22, 0, 1, 1, 0}, {16, 2, 1, 22, 0, 1, 1, 0}, {10, 0, 1, 22, 0, 1, 1, 0},
     {11, 0, 1, 22, 0, 1, 1, 0}, {12, 0, 1, 22, 0, 1, 1, 0}, {13, 0, 1, 22, 0, 1, 1, 0},
     {14, 0, 1, 22, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, -1, 0}, {-1, 0, 0},
     {-1, 0, 0}, {3, -1, 1}, {4, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {4, -1, 0}, {-1, 0, 0},
     {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[28] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[28] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {0, 0, 0},  {-1, 0, 0},
     {-1, 0, 0}, {4, -1, 1}, {0, 0, 0},  {-1, 0, 0}, {-1, 0, 0}, {5, -1, 1}, {1, 0, 0},
     {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1},
     {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -9, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_clerkA_c::mCutNameList[1] = {""};
+char DUSK_CONST* DUSK_CONST daNpc_clerkA_c::mCutNameList[1] = {""};
 
-daNpc_clerkA_c::cutFunc daNpc_clerkA_c::mCutList[1] = {NULL};
+daNpc_clerkA_c::cutFunc DUSK_CONST daNpc_clerkA_c::mCutList[1] = {NULL};
 
 daNpc_clerkA_c::~daNpc_clerkA_c() {
     deleteObject();
@@ -783,13 +783,13 @@ static int daNpc_clerkA_IsDelete(void* i_this) {
 
 static NPC_CLERKA_HIO_CLASS l_HIO;
 
-static actor_method_class daNpc_clerkA_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_clerkA_MethodTable = {
     (process_method_func)daNpc_clerkA_Create,  (process_method_func)daNpc_clerkA_Delete,
     (process_method_func)daNpc_clerkA_Execute, (process_method_func)daNpc_clerkA_IsDelete,
     (process_method_func)daNpc_clerkA_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CLERKA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CLERKA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

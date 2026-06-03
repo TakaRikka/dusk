@@ -268,7 +268,7 @@ static int daB_ZANTM_Create(daB_ZANTM_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daB_ZANTM_Method = {
+static DUSK_CONST actor_method_class l_daB_ZANTM_Method = {
     (process_method_func)daB_ZANTM_Create,
     (process_method_func)daB_ZANTM_Delete,
     (process_method_func)daB_ZANTM_Execute,
@@ -276,7 +276,7 @@ static actor_method_class l_daB_ZANTM_Method = {
     (process_method_func)daB_ZANTM_Draw,
 };
 
-actor_process_profile_definition g_profile_B_ZANTM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_ZANTM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

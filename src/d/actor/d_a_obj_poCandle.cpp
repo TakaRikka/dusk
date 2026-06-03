@@ -241,7 +241,7 @@ static int daPoCandle_Create(fopAc_ac_c* i_this) {
     return ((daPoCandle_c*)i_this)->create();
 }
 
-static actor_method_class l_daPoCandle_Method = {
+static DUSK_CONST actor_method_class l_daPoCandle_Method = {
     (process_method_func)daPoCandle_Create,
     (process_method_func)daPoCandle_Delete,
     (process_method_func)daPoCandle_Execute,
@@ -249,7 +249,7 @@ static actor_method_class l_daPoCandle_Method = {
     (process_method_func)daPoCandle_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_poCandle = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_poCandle = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

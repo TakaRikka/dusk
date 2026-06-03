@@ -10,7 +10,7 @@
 #include "d/d_debug_viewer.h"
 #include <cstring>
 
-static daNpc_GetParam2 l_bckGetParamList[29] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[29] = {
     {-1, 2, 0},
     {9, 0, 0},
     {7, 0, 0},
@@ -42,13 +42,13 @@ static daNpc_GetParam2 l_bckGetParamList[29] = {
     {5, 2, 3},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[4] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[4] = {
     {23, 2, 0},
     {24, 0, 0},
     {25, 2, 0},
     {30, 2, 0},
 };
-static daNpc_GetParam2 l_btkGetParamList[5] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[5] = {
     {20, 2, 0},
     {24, 0, 1},
     {25, 2, 1},
@@ -56,38 +56,38 @@ static daNpc_GetParam2 l_btkGetParamList[5] = {
     {27, 2, 1},
 };
 
-static int l_loadRes_RAFREL0[] = {
+static DUSK_CONSTEXPR int l_loadRes_RAFREL0[] = {
     0,
     2,
     -1,
 };
 
-static int l_loadRes_RAFREL1[] = {
+static DUSK_CONSTEXPR int l_loadRes_RAFREL1[] = {
     0,
     1,
     -1,
 };
 
-static int l_loadRes_RAFREL2[] = {
+static DUSK_CONSTEXPR int l_loadRes_RAFREL2[] = {
     0,
     3,
     -1,
 };
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_RAFREL0,
     l_loadRes_RAFREL1,
     l_loadRes_RAFREL2,
 };
 
-static char* l_arcNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[4] = {
     "Rafrel",
     "Rafrel1",
     "Rafrel2",
     "Rafrel3",
 };
 
-static char* l_evtNames[7] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[7] = {
     "",
     "THE_INTRODUCTION",
     "RESIST_MEETING",
@@ -135,7 +135,7 @@ const daNpcRafrel_HIOParam daNpcRafrel_Param_c::m = {
     0,
 };
 
-static char* l_myName = "Rafrel";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Rafrel";
 
 #if DEBUG
 daNpcRafrel_HIO_c::daNpcRafrel_HIO_c() {
@@ -1749,7 +1749,7 @@ static int daNpcRafrel_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpcRafrel_MethodTable = {
+static DUSK_CONST actor_method_class daNpcRafrel_MethodTable = {
     (process_method_func)daNpcRafrel_Create,
     (process_method_func)daNpcRafrel_Delete,
     (process_method_func)daNpcRafrel_Execute,
@@ -1757,7 +1757,7 @@ static actor_method_class daNpcRafrel_MethodTable = {
     (process_method_func)daNpcRafrel_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_RAFREL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_RAFREL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

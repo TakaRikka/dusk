@@ -26,8 +26,8 @@ public:
     dMsgScrn3Select_c();
     virtual ~dMsgScrn3Select_c();
     bool isSelect();
-    void setString(char*, char*, char*);
-    void setRubyString(char*, char*, char*);
+    void setString(DUSK_CONST char*, DUSK_CONST char*, DUSK_CONST char*);
+    void setRubyString(DUSK_CONST char*, DUSK_CONST char*, DUSK_CONST char*);
     void translate(f32, f32);
     void draw(f32, f32);
     void selAnimeInit(u8, u8, u8, f32, u8);

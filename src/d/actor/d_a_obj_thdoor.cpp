@@ -62,11 +62,11 @@ void daObjThDoor_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "V_CTDoor";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_CTDoor";
 
-static char* l_evName = "CHASE_AWAY_WOLF";
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "CHASE_AWAY_WOLF";
 
-static char* l_staffName = "thdoor";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "thdoor";
 
 static dCcD_SrcCyl l_cyl_src = {
     {
@@ -243,7 +243,7 @@ void daObjThDoor_c::actionDead() {}
 
 
 int daObjThDoor_c::demoProc() {
-    static char* action_table[3] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[3] = {
         "WAIT",
         "MSG",
         "CLOSE",
@@ -355,7 +355,7 @@ static int daObjThDoor_MoveBGDraw(daObjThDoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjThDoor_METHODS = {
+static DUSK_CONST actor_method_class daObjThDoor_METHODS = {
     (process_method_func)daObjThDoor_create1st,
     (process_method_func)daObjThDoor_MoveBGDelete,
     (process_method_func)daObjThDoor_MoveBGExecute,
@@ -363,7 +363,7 @@ static actor_method_class daObjThDoor_METHODS = {
     (process_method_func)daObjThDoor_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_TDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_TDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

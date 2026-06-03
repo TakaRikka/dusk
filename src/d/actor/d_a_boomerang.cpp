@@ -1489,7 +1489,7 @@ static int daBoomerang_Create(fopAc_ac_c* i_this) {
     return ((daBoomerang_c*)i_this)->create();
 }
 
-static actor_method_class l_daBoomerang_Method = {
+static DUSK_CONST actor_method_class l_daBoomerang_Method = {
     (process_method_func)daBoomerang_Create,
     (process_method_func)daBoomerang_Delete,
     (process_method_func)daBoomerang_Execute,
@@ -1497,7 +1497,7 @@ static actor_method_class l_daBoomerang_Method = {
     (process_method_func)daBoomerang_Draw,
 };
 
-actor_process_profile_definition g_profile_BOOMERANG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BOOMERANG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 6,
     /* List Prio    */ fpcPi_CURRENT_e,

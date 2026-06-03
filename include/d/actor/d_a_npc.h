@@ -519,7 +519,7 @@ public:
     /* 0x568 */ daNpcT_faceMotionAnmData_c const* mpFaceMotionAnmData;
     /* 0x56C */ daNpcT_motionAnmData_c const* mpMotionAnmData;
     /* 0x570 */ daNpcT_evtData_c const* mpEvtData;
-    /* 0x574 */ char** mpArcNames;
+    /* 0x574 */ DUSK_CONST char* DUSK_CONST* mpArcNames;
     /* 0x578 */ mDoExt_McaMorfSO* mpMorf[2];
     /* 0x580 */ Z2Creature mSound;
     /* 0x610 */ mDoExt_bckAnm mBckAnm;
@@ -627,7 +627,7 @@ public:
              daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
              int i_faceMotionStepNum,
              daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
-             int i_motionStepNum, daNpcT_evtData_c const* i_evtData, char** i_arcNames)
+             int i_motionStepNum, daNpcT_evtData_c const* i_evtData, DUSK_CONST char* DUSK_CONST* i_arcNames)
         :
         mpFaceMotionAnmData(i_faceMotionAnmData),
         mpMotionAnmData(i_motionAnmData),
@@ -654,8 +654,8 @@ public:
     int setBtkAnm(J3DAnmTextureSRTKey*, J3DModelData*, f32, int);
     int setBrkAnm(J3DAnmTevRegKey*, J3DModelData*, f32, int);
     int setBpkAnm(J3DAnmColor*, J3DModelData*, f32, int);
-    int loadRes(s8 const*, char const**);
-    void deleteRes(s8 const*, char const**);
+    int loadRes(s8 const*, char const* DUSK_CONST*);
+    void deleteRes(s8 const*, char const* DUSK_CONST*);
     int execute();
     int draw(BOOL, BOOL, f32, GXColorS10*, f32, BOOL, BOOL, BOOL);
     void setEnvTevColor();

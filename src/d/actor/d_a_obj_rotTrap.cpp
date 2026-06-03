@@ -311,7 +311,7 @@ static int daRotTrap_Create(fopAc_ac_c* i_this) {
     return ((daRotTrap_c*)i_this)->create();
 }
 
-static actor_method_class l_daRotTrap_Method = {
+static DUSK_CONST actor_method_class l_daRotTrap_Method = {
     (process_method_func)daRotTrap_Create,
     (process_method_func)daRotTrap_Delete,
     (process_method_func)daRotTrap_Execute,
@@ -319,7 +319,7 @@ static actor_method_class l_daRotTrap_Method = {
     (process_method_func)daRotTrap_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_RotTrap = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RotTrap = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

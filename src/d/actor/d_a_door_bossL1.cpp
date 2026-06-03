@@ -15,7 +15,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
-static char* l_stageName[20] = {
+static DUSK_CONST char* l_stageName[20] = {
     "D_MN05",
     "D_MN05A",
     "D_MN04",
@@ -50,7 +50,7 @@ static int getNowLevel() {
     return -1;
 }
 
-char* daBdoorL1_c::getDoorEventName() {
+DUSK_CONST char* daBdoorL1_c::getDoorEventName() {
     switch (getNowLevel()) {
     case 1:
         return "DEFAULT_BS_SHUTTER_L1_F";
@@ -71,7 +71,7 @@ char* daBdoorL1_c::getDoorEventName() {
     }
 }
 
-char* daBdoorL1_c::getDoorEventName2() {
+DUSK_CONST char* daBdoorL1_c::getDoorEventName2() {
     switch (getNowLevel()) {
     case 1:
         return "DEFAULT_BS_SHUTTER_L1_F_2";
@@ -230,7 +230,7 @@ int daBdoorL1_c::CreateHeap() {
     return 1;
 }
 
-static char* action_table[18] = {
+static DUSK_CONST char* action_table[18] = {
     "WAIT",
     "SETANGLE",
     "UNLOCK",
@@ -972,7 +972,7 @@ static int daBdoorL1_Create(fopAc_ac_c* i_this) {
     return static_cast<daBdoorL1_c*>(i_this)->create();
 }
 
-static actor_method_class l_daBdoorL1_Method = {
+static DUSK_CONST actor_method_class l_daBdoorL1_Method = {
     (process_method_func)daBdoorL1_Create,
     (process_method_func)daBdoorL1_Delete,
     (process_method_func)daBdoorL1_Execute,
@@ -980,7 +980,7 @@ static actor_method_class l_daBdoorL1_Method = {
     (process_method_func)daBdoorL1_Draw,
 };
 
-actor_process_profile_definition g_profile_L1BOSS_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_L1BOSS_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -488,21 +488,25 @@ public:
     }
 #if TARGET_PC
     u16 getDeathCount() const { return mDeathCount; }
-#endif
+    TEXT_SPAN getPlayerName() const { return const_cast<char(&)[17]>(mPlayerName); }
+#else
     char* getPlayerName() const { return const_cast<char*>(mPlayerName); }
+#endif
     void setPlayerName(const char* i_name) {
 #if AVOID_UB
-        strncpy(mPlayerName, i_name, sizeof(mPlayerName) - 1);
-        mPlayerName[sizeof(mPlayerName) - 1] = '\0';
+        dusk::SafeStringCopyTruncate(mPlayerName, i_name);
 #else
         strcpy(mPlayerName, i_name);
 #endif
     }
+#if TARGET_PC
+    TEXT_SPAN getHorseName() const { return const_cast<char(&)[17]>(mHorseName); }
+#else
     char* getHorseName() const { return const_cast<char*>(mHorseName); }
+#endif
     void setHorseName(const char* i_name) {
 #if AVOID_UB
-        strncpy(mHorseName, i_name, sizeof(mHorseName) - 1);
-        mHorseName[sizeof(mHorseName) - 1] = '\0';
+        dusk::SafeStringCopyTruncate(mHorseName, i_name);
 #else
         strcpy(mHorseName, i_name);
 #endif

@@ -4,12 +4,14 @@
 #include "m_Do/m_Do_audio.h"
 
 #include <aurora/aurora.h>
+#include <aurora/gfx.h>
 #include <dolphin/gx/GXAurora.h>
 #include <dolphin/vi.h>
 #include <fmt/format.h>
 
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
+#include "dusk/texture_replacements.hpp"
 
 #include <algorithm>
 #include <string>
@@ -52,6 +54,10 @@ int get_value(GraphicsOption option) {
         return std::clamp(
             static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0,
             100);
+    case GraphicsOption::DepthOfFieldMode:
+        return static_cast<int>(getSettings().game.depthOfFieldMode.getValue());
+    case GraphicsOption::TextureReplacements:
+        return getSettings().game.enableTextureReplacements.getValue();
     }
     return 0;
 }
@@ -85,11 +91,17 @@ void set_value(GraphicsOption option, int value) {
         getSettings().game.bloomMode.setValue(static_cast<BloomMode>(std::clamp(
             value, static_cast<int>(BloomMode::Off), static_cast<int>(BloomMode::Dusk))));
         break;
+    case GraphicsOption::DepthOfFieldMode:
+        getSettings().game.depthOfFieldMode.setValue(static_cast<DepthOfFieldMode>(std::clamp(
+            value, static_cast<int>(DepthOfFieldMode::Off), static_cast<int>(DepthOfFieldMode::Dusk))));
+        break;
     case GraphicsOption::BloomMultiplier:
         getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
         break;
+    case GraphicsOption::TextureReplacements:
+        texture_replacements::set_enabled(static_cast<bool>(value));
+        break;
     }
-    config::Save();
 }
 
 Rml::Element* create_stepped_carousel_root(Rml::Element* parent) {
@@ -214,8 +226,20 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
             return "Dusklight";
         }
         break;
+    case GraphicsOption::DepthOfFieldMode:
+        switch (static_cast<DepthOfFieldMode>(value)) {
+        case DepthOfFieldMode::Off:
+            return "Off";
+        case DepthOfFieldMode::Classic:
+            return "Classic";
+        case DepthOfFieldMode::Dusk:
+            return "Dusklight";
+        }
+        break;
     case GraphicsOption::BloomMultiplier:
         return fmt::format("{}%", value);
+    case GraphicsOption::TextureReplacements:
+        return static_cast<bool>(value) ? "On" : "Off";
     }
     return "";
 }
@@ -276,6 +300,7 @@ void GraphicsTuner::show() {
 }
 
 void GraphicsTuner::hide(bool close) {
+    config::Save();
     mRoot->RemoveAttribute("open");
     if (close) {
         mPendingClose = true;

@@ -501,10 +501,10 @@ void dMenu_Letter_c::read_open_init() {
     field_0x3e2 = mpString->getPageMax(D_MENU_LETTER_LINE_MAX);
     if (field_0x3e2 > 1) {
         char acStack_30[20];
-        sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
+        SAFE_SPRINTF(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
         for (int i = 0; i < 2; i++) {
             field_0x1e4[i]->show();
-            strcpy(field_0x1e4[i]->getStringPtr(), acStack_30);
+            SAFE_STRCPY(field_0x1e4[i]->getStringPtr(), acStack_30);
         }
     } else {
         for (int i = 0; i < 2; i++) {
@@ -654,10 +654,10 @@ void dMenu_Letter_c::read_next_fadein_init() {
                                 D_MENU_LETTER_LINE_MAX, text2, text1, NULL, NULL, 0);
     }
     char acStack_30[10];
-    sprintf(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
+    SAFE_SPRINTF(acStack_30, "%d/%d", field_0x3e3, field_0x3e2);
     for (int i = 0; i < 2; i++) {
         field_0x1e4[i]->show();
-        strcpy(field_0x1e4[i]->getStringPtr(), acStack_30);
+        SAFE_STRCPY(field_0x1e4[i]->getStringPtr(), acStack_30);
     }
 }
 
@@ -1273,7 +1273,7 @@ void dMenu_Letter_c::copyDMYMenu() {
 void dMenu_Letter_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpAButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpAButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {
@@ -1286,7 +1286,7 @@ void dMenu_Letter_c::setAButtonString(u16 i_stringID) {
 void dMenu_Letter_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpBButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpBButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {

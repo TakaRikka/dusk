@@ -313,7 +313,7 @@ private:
     /* 0x00B8 */ int field_0xb8;
     /* 0x00BC */ int field_0xbc;
     /* 0x00C0 */ CPaneMgrAlpha* mpErrTxtPane[2];
-    /* 0x00C8 */ char* mpErrTxt[2];
+    /* 0x00C8 */ TEXT_SPAN mpErrTxt[2];
     /* 0x00D0 */ u8 mErrTxtType;
     /* 0x00D1 */ u8 mErrTxtAnmComplete;
     /* 0x00D2 */ u8 field_0xd2;
@@ -344,7 +344,7 @@ private:
     /* 0x0160 */ J2DAnmTevRegKey* field_0x160;
     /* 0x0164 */ int field_0x164;
     /* 0x0168 */ CPaneMgrAlpha* mpHeaderTxtPane[2];
-    /* 0x0170 */ char* mpHeaderTxt[2];
+    /* 0x0170 */ TEXT_SPAN mpHeaderTxt[2];
     /* 0x0178 */ u8 mHeaderTxtType;  // 0: Select Menu  1: YesNo Menu
     /* 0x0179 */ u8 mHeaderAnmComplete;
     /* 0x017A */ u8 field_0x17a;

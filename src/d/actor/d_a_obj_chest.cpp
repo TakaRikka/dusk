@@ -93,7 +93,7 @@ int daObjChest_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "H_Tansu";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "H_Tansu";
 
 int daObjChest_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -242,13 +242,13 @@ static int daObjChest_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjChest_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjChest_Method = {
+static DUSK_CONST actor_method_class l_daObjChest_Method = {
     (process_method_func)daObjChest_Create,  (process_method_func)daObjChest_Delete,
     (process_method_func)daObjChest_Execute, (process_method_func)NULL,
     (process_method_func)daObjChest_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Chest = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Chest = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

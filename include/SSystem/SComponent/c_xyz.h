@@ -45,17 +45,17 @@ struct cXyz : Vec {
     ~cXyz() = default;
     cXyz(const cXyz& vec) = default;
 #endif
-    cXyz(f32 x, f32 y, f32 z) {
+    DUSK_CONSTEXPR cXyz(f32 x, f32 y, f32 z) {
         this->x = x;
         this->y = y;
         this->z = z;
     }
-    cXyz(const Vec& vec) {
+    DUSK_CONSTEXPR cXyz(const Vec& vec) {
         this->x = vec.x;
         this->y = vec.y;
         this->z = vec.z;
     }
-    cXyz& operator=(const Vec& vec) {
+    DUSK_CONSTEXPR cXyz& operator=(const Vec& vec) {
         this->x = vec.x;
         this->y = vec.y;
         this->z = vec.z;

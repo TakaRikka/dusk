@@ -43,7 +43,7 @@ void daObj_ITA_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static char* l_arcName = "M_Ita";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_Ita";
 
 static f32 dummy() {
     return 0.0f;
@@ -288,7 +288,7 @@ int daObjIta_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjIta_Method = {
+static DUSK_CONST actor_method_class l_daObjIta_Method = {
     (process_method_func)daObjIta_Create,
     (process_method_func)daObjIta_Delete,
     (process_method_func)daObjIta_Execute,
@@ -296,7 +296,7 @@ static actor_method_class l_daObjIta_Method = {
     (process_method_func)daObjIta_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_ITA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_ITA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

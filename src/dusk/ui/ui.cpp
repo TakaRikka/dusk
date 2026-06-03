@@ -15,6 +15,7 @@
 #include "input.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
+#include "dusk/config.hpp"
 
 namespace dusk::ui {
 namespace {

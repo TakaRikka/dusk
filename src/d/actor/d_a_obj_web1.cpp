@@ -242,7 +242,7 @@ static int daObj_Web1_Create(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, obj_web1_class);
     obj_web1_class* _this = static_cast<obj_web1_class*>(i_this);
 
-    static dCcD_SrcCyl cc_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
         {
             {0, {{0, 0, 0}, {0xD8FBFFFF, 17}, 0}},
             {dCcD_SE_NONE, 0, 0, 0, {0}},
@@ -309,13 +309,13 @@ static int daObj_Web1_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-static actor_method_class l_daObj_Web1_Method = {
+static DUSK_CONST actor_method_class l_daObj_Web1_Method = {
     (process_method_func)daObj_Web1_Create,  (process_method_func)daObj_Web1_Delete,
     (process_method_func)daObj_Web1_Execute, (process_method_func)daObj_Web1_IsDelete,
     (process_method_func)daObj_Web1_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_WEB1 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_WEB1 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

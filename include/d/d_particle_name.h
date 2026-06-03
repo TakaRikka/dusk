@@ -8,11 +8,11 @@
 #define dPa_RM(id) (0x8000 | (id))
 
 struct dPa_name {
-    static char* getName(u32 i_id);
+    static DUSK_CONST char* getName(u32 i_id);
 
     static u16 j_o_id[5];
     static u16 s_o_id[14];
-    static char* jpaName[];
+    static DUSK_CONST char* jpaName[];
 };
 
 // enum names made up based on debug strings

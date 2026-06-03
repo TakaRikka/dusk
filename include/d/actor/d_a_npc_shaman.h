@@ -94,7 +94,7 @@ public:
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
             int i_motionStepNum,
             daNpcT_evtData_c const* i_evtData,
-            char** i_arcNames)
+            char DUSK_CONST* DUSK_CONST* i_arcNames)
             : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
             i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
             i_arcNames) { OS_REPORT("|%06d:%x|daNpc_Sha_c -> コンストラクト\n", g_Counter.mCounter0, this); }
@@ -110,8 +110,8 @@ public:
         return nodeNo == 0xFFFF ? -1 : nodeNo;
     }
 
-    static char* mCutNameList[2];
-    static cutFunc mCutList[2];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static cutFunc DUSK_CONST mCutList[2];
     static const u16 mEvtBitLabels[6];
     static const u16 mTmpBitLabels[6];
     static const int mSceneChangeNoTable[48];

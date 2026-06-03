@@ -391,7 +391,7 @@ static int daGrass_draw(daGrass_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daGrass_METHODS = {
+static DUSK_CONST actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_create,
     (process_method_func)daGrass_Delete,
     (process_method_func)daGrass_execute,
@@ -399,7 +399,7 @@ static actor_method_class daGrass_METHODS = {
     (process_method_func)daGrass_draw,
 };
 
-actor_process_profile_definition g_profile_GRASS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_GRASS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 11,
     /* List Prio    */ fpcPi_CURRENT_e,

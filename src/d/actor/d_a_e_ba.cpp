@@ -990,9 +990,9 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 }
 
 static cPhs_Step daE_BA_Create(fopAc_ac_c* i_this) {
-    static char* arc_name[3] = {"E_ba", "E_fb", "E_ib"};
+    static DUSK_CONST char* arc_name[3] = {"E_ba", "E_fb", "E_ib"};
 
-    static dCcD_SrcSph cc_sph_src = {
+    static DUSK_CONSTEXPR dCcD_SrcSph cc_sph_src = {
         {
             {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0xd}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
             {dCcD_SE_HARD_BODY, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -1096,7 +1096,7 @@ static cPhs_Step daE_BA_Create(fopAc_ac_c* i_this) {
     return step;
 }
 
-static actor_method_class l_daE_BA_Method = {
+static DUSK_CONST actor_method_class l_daE_BA_Method = {
     (process_method_func)daE_BA_Create,
     (process_method_func)daE_BA_Delete,
     (process_method_func)daE_BA_Execute,
@@ -1104,7 +1104,7 @@ static actor_method_class l_daE_BA_Method = {
     (process_method_func)daE_BA_Draw,
 };
 
-actor_process_profile_definition g_profile_E_BA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_BA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

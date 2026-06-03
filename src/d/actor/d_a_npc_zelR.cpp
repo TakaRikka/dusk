@@ -13,51 +13,51 @@ enum RES_Name {
     /* 0x1 */ ZELRF,
 };
 
-static daNpc_GetParam1 l_bmdData[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdData[1] = {
     {10, 1}
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0}
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "zelRf"
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, 0, 0, 16, 2, 1, 1},
     {6, 0, 1, 16, 2, 1, 1}
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData = {
     7, 2, 1, 13, 0, 1, 1, 0
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, 
     {-1, 0, 0}, {-1, 0, 0}, 
     {0, -1, 0}, {-1, 0, 0}, 
     {-1, 0, 0}, {-1, 0, 0}
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, 
     {-1, 0, 0}, {-1, 0, 0}
 };
 
-char* daNpc_ZelR_c::mCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_ZelR_c::mCutNameList = "";
 
 daNpc_ZelR_c::EventFn daNpc_ZelR_c::mCutList[1] = {
     NULL
@@ -623,7 +623,7 @@ static int daNpc_ZelR_IsDelete(void* a_this) {
     return 1;
 }
 
-static actor_method_class daNpc_ZelR_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_ZelR_MethodTable = {
     (process_method_func)daNpc_ZelR_Create,
     (process_method_func)daNpc_ZelR_Delete,
     (process_method_func)daNpc_ZelR_Execute,
@@ -631,7 +631,7 @@ static actor_method_class daNpc_ZelR_MethodTable = {
     (process_method_func)daNpc_ZelR_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ZELR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ZELR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

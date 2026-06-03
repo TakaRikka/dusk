@@ -806,13 +806,13 @@ static int daE_TK_Create(fopAc_ac_c* actor) {
     return phase;
 }
 
-static actor_method_class l_daE_TK_Method = {
+static DUSK_CONST actor_method_class l_daE_TK_Method = {
     (process_method_func)daE_TK_Create,  (process_method_func)daE_TK_Delete,
     (process_method_func)daE_TK_Execute, (process_method_func)daE_TK_IsDelete,
     (process_method_func)daE_TK_Draw,
 };
 
-actor_process_profile_definition g_profile_E_TK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_TK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

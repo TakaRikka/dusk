@@ -22,6 +22,8 @@
 #include "dusk/string.hpp"
 #endif
 
+#include "dusk/string.hpp"
+
 #if VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528
 #else
@@ -257,7 +259,7 @@ void dMeterButton_c::draw() {
 
     if (mMsgID != 0xFFFF) {
         char tmp_buf[STR_BUF_LEN];
-        strcpy(tmp_buf, static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr());
+        SAFE_STRCPY(tmp_buf, static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr());
         mpTextScreen->draw(0.0f, 0.0f, graf_ctx);
 
 #if VERSION == VERSION_GCN_JPN
@@ -268,7 +270,7 @@ void dMeterButton_c::draw() {
                               NULL, 8);
 #endif
         mpString_c->drawOutFont(static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr()), -1.0f);
-        strcpy(static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr(), tmp_buf);
+        SAFE_STRCPY(static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr(), tmp_buf);
     }
 
     for (int i = 0; i < 2; i++) {
@@ -1210,7 +1212,7 @@ void dMeterButton_c::screenInitButton() {
     field_0x360 = mpTextBox[0]->getBounds().i.x;
 
     for (int i = 0; i < 2; i++) {
-        strcpy(mButtonText[i], "");
+        SAFE_STRCPY(mButtonText[i], "");
         field_0x2e8[i] = 0.0f;
         field_0x4be[i] = BUTTON_NONE_e;
         field_0x2f4[i] = 0.0f;
@@ -1906,12 +1908,12 @@ void dMeterButton_c::updateText(u32 i_flags) {
             if (getString)
             {
                 mMsgID = dMeter2Info_getFloatingMessageID();
-                strcpy(static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr(), buf1);
-                strcpy(static_cast<J2DTextBox*>(mpTm_c[1]->getPanePtr())->getStringPtr(), buf3);
+                SAFE_STRCPY(static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr(), buf1);
+                SAFE_STRCPY(static_cast<J2DTextBox*>(mpTm_c[1]->getPanePtr())->getStringPtr(), buf3);
 
                 for (int i = 0; i < 2; i++) {
                     if (field_0x0ec[i] != NULL) {
-                        strcpy(
+                        SAFE_STRCPY(
                             static_cast<J2DTextBox*>(field_0x0ec[i]->getPanePtr())->getStringPtr(),
                             buf2);
                     }
@@ -3023,7 +3025,7 @@ void dMeterButton_c::setString(char* i_string, u8 i_button, u8 param_2, u8 param
         }
     }
 
-    strcpy(mButtonText[param_2], i_string);
+    SAFE_STRCPY(mButtonText[param_2], i_string);
 
     if (param_2 == 0) {
         if (param_3 != 0) {
@@ -3033,7 +3035,7 @@ void dMeterButton_c::setString(char* i_string, u8 i_button, u8 param_2, u8 param
         }
 
         for (int i = 0; i < 5; i++) {
-            strcpy(mpTextBox[i]->getStringPtr(), i_string);
+            SAFE_STRCPY(mpTextBox[i]->getStringPtr(), i_string);
         }
         return;
     }
@@ -3045,7 +3047,7 @@ void dMeterButton_c::setString(char* i_string, u8 i_button, u8 param_2, u8 param
     }
 
     for (int i = 0; i < 5; i++) {
-        strcpy(mpTextBox[5 + i]->getStringPtr(), i_string);
+        SAFE_STRCPY(mpTextBox[5 + i]->getStringPtr(), i_string);
     }
 }
 
@@ -3300,7 +3302,7 @@ void dMeterButton_c::hide_button(u8 i_button) {
             field_0x4b8[1] = 0;
             field_0x4bc[1] = 0;
 
-            strcpy(mButtonText[1], "");
+            SAFE_STRCPY(mButtonText[1], "");
             mpText[0]->alphaAnimeStart(mpText[1]->getAlphaTimer());
             mpText[0]->setAlphaRate(mpText[1]->getAlphaRate());
             mpText[1]->alphaAnimeStart(0);
@@ -3310,14 +3312,14 @@ void dMeterButton_c::hide_button(u8 i_button) {
             field_0x4be[0] = BUTTON_NONE_e;
             field_0x4b8[0] = 0;
             field_0x4bc[0] = 0;
-            strcpy(mButtonText[0], "");
+            SAFE_STRCPY(mButtonText[0], "");
         }
     } else if (field_0x4be[1] == i_button) {
         field_0x4be[1] = BUTTON_NONE_e;
         field_0x4b8[1] = 0;
         field_0x4bc[1] = 0;
         field_0x2f4[0] = 0.0f;
-        strcpy(mButtonText[1], "");
+        SAFE_STRCPY(mButtonText[1], "");
     }
 }
 

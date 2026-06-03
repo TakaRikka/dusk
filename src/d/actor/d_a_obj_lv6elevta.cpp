@@ -12,7 +12,7 @@
 //
 // Declarations:
 //
-static char* l_arcName = "Lv6ElevtA";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Lv6ElevtA";
 static const int l_dzbidx = {7};
 static const int l_bmdidx = {4};
 
@@ -263,7 +263,7 @@ static int daObjLv6ElevtA_MoveBGDraw(daObjLv6ElevtA_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv6ElevtA_METHODS = {
+static DUSK_CONST actor_method_class daObjLv6ElevtA_METHODS = {
     (process_method_func)daObjLv6ElevtA_create1st,
     (process_method_func)daObjLv6ElevtA_MoveBGDelete,
     (process_method_func)daObjLv6ElevtA_MoveBGExecute,
@@ -271,7 +271,7 @@ static actor_method_class daObjLv6ElevtA_METHODS = {
     (process_method_func)daObjLv6ElevtA_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6ElevtA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6ElevtA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

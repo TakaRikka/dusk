@@ -520,7 +520,7 @@ static int daObj_Kbox_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-static actor_method_class l_daObj_Kbox_Method = {
+static DUSK_CONST actor_method_class l_daObj_Kbox_Method = {
     (process_method_func)daObj_Kbox_Create,
     (process_method_func)daObj_Kbox_Delete,
     (process_method_func)daObj_Kbox_Execute,
@@ -528,7 +528,7 @@ static actor_method_class l_daObj_Kbox_Method = {
     (process_method_func)daObj_Kbox_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KBOX = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KBOX = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

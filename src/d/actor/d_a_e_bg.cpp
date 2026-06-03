@@ -1429,7 +1429,7 @@ static int daE_BG_Create(daE_BG_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daE_BG_Method = {
+static DUSK_CONST actor_method_class l_daE_BG_Method = {
     (process_method_func)daE_BG_Create,
     (process_method_func)daE_BG_Delete,
     (process_method_func)daE_BG_Execute,
@@ -1437,7 +1437,7 @@ static actor_method_class l_daE_BG_Method = {
     (process_method_func)daE_BG_Draw,
 };
 
-actor_process_profile_definition g_profile_E_BG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_BG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

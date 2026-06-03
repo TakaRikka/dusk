@@ -49,13 +49,13 @@ static int daTagTheBHint_Execute(daTagTheBHint_c* i_this) {
     return i_this->execute();
 }
 
-static actor_method_class l_daTagTheBHint_Method = {
+static DUSK_CONST actor_method_class l_daTagTheBHint_Method = {
     (process_method_func)daTagTheBHint_Create,
     (process_method_func)daTagTheBHint_Delete,
     (process_method_func)daTagTheBHint_Execute
 };
 
-actor_process_profile_definition g_profile_Tag_TheBHint = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_TheBHint = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

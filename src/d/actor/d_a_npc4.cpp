@@ -891,22 +891,22 @@ void daNpcF_c::initialize() {
     field_0x9d2 = cM_rndF(0x10000);
 }
 
-J3DAnmTransformKey* daNpcF_c::getTrnsfrmKeyAnmP(char* i_arcName, int i_resIdx) {
+J3DAnmTransformKey* daNpcF_c::getTrnsfrmKeyAnmP(char DUSK_CONST* i_arcName, int i_resIdx) {
     J3DAnmTransformKey* key = (J3DAnmTransformKey*)dComIfG_getObjectRes(i_arcName, i_resIdx);
     return key;
 }
 
-J3DAnmTexPattern* daNpcF_c::getTexPtrnAnmP(char* i_arcName, int i_resIdx) {
+J3DAnmTexPattern* daNpcF_c::getTexPtrnAnmP(char DUSK_CONST* i_arcName, int i_resIdx) {
     J3DAnmTexPattern* pattern = (J3DAnmTexPattern*)dComIfG_getObjectRes(i_arcName, i_resIdx);
     return pattern;
 }
 
-J3DAnmTextureSRTKey* daNpcF_c::getTexSRTKeyAnmP(char* i_arcName, int i_resIdx) {
+J3DAnmTextureSRTKey* daNpcF_c::getTexSRTKeyAnmP(char DUSK_CONST* i_arcName, int i_resIdx) {
     J3DAnmTextureSRTKey* key = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(i_arcName, i_resIdx);
     return key;
 }
 
-J3DAnmTevRegKey* daNpcF_c::getTevRegKeyAnmP(char* i_arcName, int i_resIdx) {
+J3DAnmTevRegKey* daNpcF_c::getTevRegKeyAnmP(char DUSK_CONST* i_arcName, int i_resIdx) {
     J3DAnmTevRegKey* key = (J3DAnmTevRegKey*)dComIfG_getObjectRes(i_arcName, i_resIdx);
     return key;
 }
@@ -1280,7 +1280,7 @@ int daNpcF_c::ctrlMsgAnm(int& o_expression, int& o_motion, fopAc_ac_c* param_2, 
     return mMsgTimer;
 }
 
-void daNpcF_c::orderEvent(int i_speak, char* i_evtName, u16 param_2, u16 i_priority,
+void daNpcF_c::orderEvent(int i_speak, DUSK_CONST char* i_evtName, u16 param_2, u16 i_priority,
                           u8 i_mapToolID,
                           u16 i_flag) {
     if (i_evtName != NULL) {
@@ -1302,7 +1302,7 @@ void daNpcF_c::orderEvent(int i_speak, char* i_evtName, u16 param_2, u16 i_prior
     }
 }
 
-void daNpcF_c::changeEvent(char* i_arcName, char* i_evtName, u16 param_2, u16 param_3) {
+void daNpcF_c::changeEvent(DUSK_CONST char* i_arcName, DUSK_CONST char* i_evtName, u16 param_2, u16 param_3) {
     if (i_arcName != NULL) {
         eventInfo.setArchiveName(i_arcName);
         dComIfGp_getEventManager().setObjectArchive(eventInfo.getArchiveName());

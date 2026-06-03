@@ -23,10 +23,10 @@ public:
         /* 3 */ ACT_END,
     };
 
-    char* getArcName();
-    char* getBmd();
-    char* getDzb();
-    char* getBmd2();
+    DUSK_CONST char* getArcName();
+    DUSK_CONST char* getBmd();
+    DUSK_CONST char* getDzb();
+    DUSK_CONST char* getBmd2();
     J3DModelData* getDoorModelData();
     int CreateHeap();
     void calcMtx();

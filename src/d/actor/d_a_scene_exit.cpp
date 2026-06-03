@@ -98,13 +98,13 @@ int daScex_c::execute() {
     return 1;
 }
 
-static actor_method_class l_daScex_Method = {
+static DUSK_CONST actor_method_class l_daScex_Method = {
     (process_method_func)daScex_Create,
     NULL,
     (process_method_func)daScex_Execute,
 };
 
-actor_process_profile_definition2 g_profile_SCENE_EXIT = {
+DUSK_PROFILE actor_process_profile_definition2 DUSK_CONST g_profile_SCENE_EXIT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 10,
     /* List Prio    */ fpcPi_CURRENT_e,

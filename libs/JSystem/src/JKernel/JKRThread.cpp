@@ -7,6 +7,8 @@
 #include "global.h"
 #include <stdint.h>
 
+#include "dusk/string.hpp"
+
 #if TARGET_PC
 #include "dusk/os.h"
 #endif
@@ -274,7 +276,7 @@ void JKRThreadSwitch::draw(JKRThreadName_* thread_name_list, JUTConsole* console
 
             if (!thread_print_name) {
                 char buffer[16];
-                sprintf(buffer, "%d", loadInfo->getId());
+                SAFE_SPRINTF(buffer, "%d", loadInfo->getId());
                 thread_print_name = buffer;
             }
 

@@ -1801,7 +1801,7 @@ static int daE_RDB_Create(fopAc_ac_c* actor) {
         }  // mSphAttr
     };
 
-    static dCcD_SrcCyl co_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl co_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0x0, 0x0}, 0x75}},  // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},          // mGObjAt
@@ -1914,13 +1914,13 @@ static s32 unused_bss_29c = 0;
 
 AUDIO_INSTANCES
 
-static actor_method_class l_daE_RDB_Method = {
+static DUSK_CONST actor_method_class l_daE_RDB_Method = {
     (process_method_func)daE_RDB_Create,  (process_method_func)daE_RDB_Delete,
     (process_method_func)daE_RDB_Execute, (process_method_func)daE_RDB_IsDelete,
     (process_method_func)daE_RDB_Draw,
 };
 
-actor_process_profile_definition g_profile_E_RDB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_RDB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

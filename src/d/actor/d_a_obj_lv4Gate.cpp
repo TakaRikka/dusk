@@ -173,13 +173,13 @@ static int daLv4Gate_Create(fopAc_ac_c* i_this) {
     return static_cast<daLv4Gate_c*>(i_this)->create();
 }
 
-static actor_method_class l_daLv4Gate_Method = {
+static DUSK_CONST actor_method_class l_daLv4Gate_Method = {
     (process_method_func)daLv4Gate_Create,  (process_method_func)daLv4Gate_Delete,
     (process_method_func)daLv4Gate_Execute, (process_method_func)NULL,
     (process_method_func)daLv4Gate_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4Gate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4Gate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

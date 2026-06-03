@@ -60,7 +60,7 @@ public:
     /* 0x5B5 */ u8 mDistanceParam;
     /* 0x5B6 */ u8 mType;
     /* 0x5B7 */ u8 mPathIndex;
-    /* 0x5B8 */ char* mArcName;
+    /* 0x5B8 */ DUSK_CONST char* mArcName;
     /* 0x5BC */ u8 field_0x5bc;
     /* 0x5BD */ s8 mPathPoint;
     /* 0x5BE */ s8 mPathStep;

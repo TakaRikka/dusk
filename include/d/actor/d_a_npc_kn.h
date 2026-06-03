@@ -88,7 +88,7 @@ public:
     /* 0x05AC */ const daNpcT_faceMotionAnmData_c* mpFaceMotionAnmData;
     /* 0x05B0 */ const daNpcT_motionAnmData_c* mpMotionAnmData;
     /* 0x05B4 */ const daNpcT_evtData_c* mpEventData;
-    /* 0x05B8 */ char** mpArcNames;
+    /* 0x05B8 */ char DUSK_CONST* DUSK_CONST* mpArcNames;
     /* 0x05BC */ mDoExt_McaMorfSO* mpModelMorf[2];
     /* 0x05C4 */ Z2Creature mSound;
     /* 0x0654 */ mDoExt_bckAnm mBckAnm;
@@ -322,8 +322,8 @@ public:
     int setMcaMorfAnm(J3DAnmTransformKey*, f32, f32, int, int, int);
     BOOL setBtpAnm(J3DAnmTexPattern*, J3DModelData*, f32, int);
     BOOL setBtkAnm(J3DAnmTextureSRTKey*, J3DModelData*, f32, int);
-    int loadRes(s8 const*, char const**);
-    void deleteRes(s8 const*, char const**);
+    int loadRes(s8 const*, char const* DUSK_CONST*);
+    void deleteRes(s8 const*, char const* DUSK_CONST*);
     int execute();
     int draw(int, int, f32, GXColorS10*, f32, int, int, int);
     void setEnvTevColor();
@@ -355,7 +355,7 @@ public:
                               daNpcT_motionAnmData_c const* param_1,
                               daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_2, int param_3,
                               daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_4, int param_5,
-                              daNpcT_evtData_c const* param_6, char** param_7)
+                              daNpcT_evtData_c const* param_6, char DUSK_CONST* DUSK_CONST* param_7)
                         : mpFaceMotionAnmData(param_0), mpMotionAnmData(param_1), mFaceMotionSeqMngr(param_2, param_3),
                           mMotionSeqMngr(param_4, param_5), mpEventData(param_6), mpArcNames(param_7)
                     {
@@ -413,8 +413,8 @@ public:
     virtual bool afterSetMotionAnm(int, int, f32, int);
     
     static const dCcD_SrcGObjInf mCcDObjData;
-    static char* mCutNameList[21];
-    static cutFunc mCutList[21];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[21];
+    static cutFunc DUSK_CONST mCutList[21];
     static dCcD_SrcCyl mCcDCyl;
     static dCcD_SrcSph mCcDSph;
     static s16 mSrchName;

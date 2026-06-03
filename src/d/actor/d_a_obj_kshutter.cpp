@@ -129,11 +129,11 @@ static u32 const l_heap_size[5] = {
     0x1300, 0x1300, 0x1300, 0x1300, 0x20D0,
 };
 
-static cull_box const l_cull_box = {
+static DUSK_CONSTEXPR cull_box const l_cull_box = {
     {-450.0f, 0.0f, -50.0f}, {450.0f, 700.0f, 150.0f},
 };
 
-static char* l_arcName[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[5] = {
     "S_shut00",
     "S_shut00",
     "Lv3shut00",
@@ -141,7 +141,7 @@ static char* l_arcName[5] = {
     "V_Shutter",
 };
 
-static char* l_anmName[10] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_anmName[10] = {
     "oj_DoorOpC.bck",
     "md_oj_DoorOpC.bck",
     "oj_DoorOpC.bck",
@@ -154,7 +154,7 @@ static char* l_anmName[10] = {
     "V_Shutter.bck",
 };
 
-static char* l_eventName[10] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_eventName[10] = {
     "KEY_JAIL_00",
     "KEY_JAIL_WOLF_00",
     "KEY_JAIL_00",
@@ -234,7 +234,7 @@ void daObjKshtr_c::offDzb() {
     }
 }
 
-static char* l_anmArcName[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_anmArcName[5] = {
     "DoorY00",
     "DoorY00",
     "DoorT00",
@@ -381,7 +381,7 @@ cPhs_Step daObjKshtr_c::phase_2() {
 }
 
 cPhs_Step daObjKshtr_c::create1st() {
-    static daObjKshtr_c::PhaseFunc l_ct_func[3] = {
+    static DUSK_CONSTEXPR daObjKshtr_c::PhaseFunc l_ct_func[3] = {
         &daObjKshtr_c::phase_0,
         &daObjKshtr_c::phase_1,
         &daObjKshtr_c::phase_2,
@@ -391,7 +391,7 @@ cPhs_Step daObjKshtr_c::create1st() {
 }
 
 void daObjKshtr_c::event_proc_call() {
-    static daObjKshtr_c::ActionFunc l_func[3] = {
+    static DUSK_CONSTEXPR daObjKshtr_c::ActionFunc l_func[3] = {
         &daObjKshtr_c::actionWaitEvent,
         &daObjKshtr_c::actionEvent,
         &daObjKshtr_c::actionDead,
@@ -401,7 +401,7 @@ void daObjKshtr_c::event_proc_call() {
 }
 
 void daObjKshtr_c::event_proc_call2() {
-    static daObjKshtr_c::ActionFunc l_func[4] = {
+    static DUSK_CONSTEXPR daObjKshtr_c::ActionFunc l_func[4] = {
         &daObjKshtr_c::actionWaitEvent2,
         &daObjKshtr_c::actionEvent2,
         &daObjKshtr_c::actionDead2,
@@ -474,7 +474,7 @@ BOOL daObjKshtr_c::checkOpen() {
 }
 
 int daObjKshtr_c::getDemoAction() {
-    static char* action_table[6] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[6] = {
         "WAIT",
         "ADJUSTMENT",
         "UNLOCK",
@@ -667,7 +667,7 @@ BOOL daObjKshtr_c::openProc_type1() {
 }
 
 BOOL daObjKshtr_c::openProc_type2() {
-    static u16 const l_eff_id[5] = {
+    static DUSK_CONSTEXPR u16 const l_eff_id[5] = {
         0x8762,
         0x8763,
         0x8764,
@@ -698,12 +698,12 @@ BOOL daObjKshtr_c::openProc_typeL3Boss() {
 }
 
 void daObjKshtr_c::demoProc() {
-    static daObjKshtr_c::DemoFunc l_demoProc[2] = {
+    static DUSK_CONSTEXPR daObjKshtr_c::DemoFunc l_demoProc[2] = {
         &daObjKshtr_c::demoJail1,
         &daObjKshtr_c::demoJail2,
     };
 
-    static daObjKshtr_c::DemoFunc l_demoProc2[2] = {
+    static DUSK_CONSTEXPR daObjKshtr_c::DemoFunc l_demoProc2[2] = {
         &daObjKshtr_c::demoJail11,
         &daObjKshtr_c::demoJail21,
     };
@@ -963,7 +963,7 @@ static int daObjKshtr_MoveBGDraw(daObjKshtr_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjKshtr_METHODS = {
+static DUSK_CONST actor_method_class daObjKshtr_METHODS = {
     (process_method_func)daObjKshtr_create1st,
     (process_method_func)daObjKshtr_MoveBGDelete,
     (process_method_func)daObjKshtr_MoveBGExecute,
@@ -971,7 +971,7 @@ static actor_method_class daObjKshtr_METHODS = {
     (process_method_func)daObjKshtr_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Kshutter = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Kshutter = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -37,7 +37,7 @@ static dCcD_SrcCyl l_ccDCyl = {
     }
 };
 
-static char* l_resName = "H_BouMato";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "H_BouMato";
 
 static daArrow_c* l_findActorPtrs[100];
 
@@ -278,7 +278,7 @@ void daObj_BouMato_c::deleteStuckArrow() {
     }
 }
 
-char* daObj_BouMato_c::getResName() {
+char DUSK_CONST* daObj_BouMato_c::getResName() {
     return l_resName;
 }
 
@@ -359,7 +359,7 @@ static int daObj_BouMato_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_BouMato_MethodTable = {
+static DUSK_CONST actor_method_class daObj_BouMato_MethodTable = {
     (process_method_func)daObj_BouMato_Create,
     (process_method_func)daObj_BouMato_Delete,
     (process_method_func)daObj_BouMato_Execute,
@@ -367,7 +367,7 @@ static actor_method_class daObj_BouMato_MethodTable = {
     (process_method_func)daObj_BouMato_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_BOUMATO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_BOUMATO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

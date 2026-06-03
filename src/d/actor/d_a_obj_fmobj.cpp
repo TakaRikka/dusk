@@ -112,13 +112,13 @@ static int daObj_Fmobj_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-static actor_method_class l_daObj_Fmobj_Method = {
+static DUSK_CONST actor_method_class l_daObj_Fmobj_Method = {
     (process_method_func)daObj_Fmobj_Create,  (process_method_func)daObj_Fmobj_Delete,
     (process_method_func)daObj_Fmobj_Execute, (process_method_func)daObj_Fmobj_IsDelete,
     (process_method_func)daObj_Fmobj_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_FMOBJ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_FMOBJ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

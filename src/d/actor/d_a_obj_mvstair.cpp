@@ -72,7 +72,7 @@ int daObjStair_c::Create() {
     return 1;
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "K_mvkai00",
     "Lv9_mvkai",
 };
@@ -454,7 +454,7 @@ static int daObjStair_MoveBGDraw(daObjStair_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjStair_METHODS = {
+static DUSK_CONST actor_method_class daObjStair_METHODS = {
     (process_method_func)daObjStair_create1st,
     (process_method_func)daObjStair_MoveBGDelete,
     (process_method_func)daObjStair_MoveBGExecute,
@@ -462,7 +462,7 @@ static actor_method_class daObjStair_METHODS = {
     (process_method_func)daObjStair_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_MvStair = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MvStair = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -6,6 +6,7 @@ fi
 
 build_dir="$PWD/build"
 linuxdeploy="$build_dir/linuxdeploy-$(uname -m).AppImage"
+lib_dir="/usr/lib/$(uname -m)-linux-gnu"
 
 # Get linuxdeploy
 mkdir -p "$build_dir"
@@ -19,8 +20,8 @@ for install_path in build/install/*; do
   cp -r "$install_path" build/appdir/usr/bin
 done
 cp -r platforms/freedesktop/{16x16,32x32,48x48,64x64,128x128,256x256,512x512,1024x1024} build/appdir/usr/share/icons/hicolor
-cp platforms/freedesktop/dusklight.desktop build/appdir/usr/share/applications
+cp platforms/freedesktop/dev.twilitrealm.dusk.desktop build/appdir/usr/share/applications
 
 cd build/install
 VERSION="$DUSK_VERSION" NO_STRIP=1 "$linuxdeploy" \
-  -l /usr/lib/x86_64-linux-gnu/libusb-1.0.so --appdir "$build_dir/appdir" --output appimage
+  -l "$lib_dir/libusb-1.0.so" --appdir "$build_dir/appdir" --output appimage

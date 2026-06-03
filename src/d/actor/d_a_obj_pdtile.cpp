@@ -16,39 +16,39 @@ static void rideCallBack(dBgW* param_1, fopAc_ac_c* param_2, fopAc_ac_c* param_3
     static_cast<daObjPDtile_c*>(param_2)->rideActor(param_3);
 }
 
-static char* l_arcName4 = "P_Dtile";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName4 = "P_Dtile";
 
-static u32 l_dzbidx4[2] = {
+static DUSK_CONSTEXPR u32 l_dzbidx4[2] = {
     9, 8,
 };
 
-static u32 l_bmdidx4[2] = {
+static DUSK_CONSTEXPR u32 l_bmdidx4[2] = {
     5, 4,
 };
 
-static cull_box l_cull_box4[2] = {
+static DUSK_CONSTEXPR cull_box l_cull_box4[2] = {
     {{-50.0f, -100.0f, -50.0f}, {50.0f, 20.49f, 50.0f}},
     {{-160.0f, -460.0f, -160.0f}, {160.0f, 20.0f, 160.0f}},
 };
 
-static char* l_arcName7 = "P_Dtile00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName7 = "P_Dtile00";
 
-static u32 l_dzbidx7 = 7;
+static DUSK_CONSTEXPR u32 l_dzbidx7 = 7;
 
-static u32 l_bmdidx7 = 4;
+static DUSK_CONSTEXPR u32 l_bmdidx7 = 4;
 
-static cull_box l_cull_box7 = {
+static DUSK_CONSTEXPR cull_box l_cull_box7 = {
     {-200.0f, -700.0f, -200.0f},
     {200.0f, 50.0f, 200.0f},
 };
 
-static char* l_arcName9 = "Lv9_Dtile";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName9 = "Lv9_Dtile";
 
-static u32 l_dzbidx9 = 7;
+static DUSK_CONSTEXPR u32 l_dzbidx9 = 7;
 
-static u32 l_bmdidx9 = 4;
+static DUSK_CONSTEXPR u32 l_bmdidx9 = 4;
 
-static cull_box l_cull_box9 = {
+static DUSK_CONSTEXPR cull_box l_cull_box9 = {
     {-200.0f, -650.0f, -200.0f},
     {200.0f, 50.0f, 200.0f},
 };
@@ -185,7 +185,7 @@ int daObjPDtile_c::CreateHeap() {
     return mModel != 0 ? TRUE : FALSE;
 }
 
-static dCcD_SrcCyl cc_cyl_src = {
+static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x8020, 0x11}, 0x0}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -514,7 +514,7 @@ static int daObjPDtile_MoveBGDraw(daObjPDtile_c* i_this) {
 }
 
 
-static actor_method_class daObjPDtile_METHODS = {
+static DUSK_CONST actor_method_class daObjPDtile_METHODS = {
     (process_method_func)daObjPDtile_create1st,
     (process_method_func)daObjPDtile_MoveBGDelete,
     (process_method_func)daObjPDtile_MoveBGExecute,
@@ -522,7 +522,7 @@ static actor_method_class daObjPDtile_METHODS = {
     (process_method_func)daObjPDtile_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_PDtile = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_PDtile = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

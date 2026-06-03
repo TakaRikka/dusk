@@ -98,7 +98,7 @@ static int daObjMBox_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjMBox_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjMBox_Method = {
+static DUSK_CONST actor_method_class l_daObjMBox_Method = {
     (process_method_func)daObjMBox_Create,
     (process_method_func)daObjMBox_Delete,
     (process_method_func)daObjMBox_Execute,
@@ -106,7 +106,7 @@ static actor_method_class l_daObjMBox_Method = {
     (process_method_func)daObjMBox_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_MetalBox = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MetalBox = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

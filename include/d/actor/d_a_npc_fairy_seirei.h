@@ -71,7 +71,7 @@ public:
                                        daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3,
                                        int param_4,
                                        daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5,
-                                       int param_6, daNpcT_evtData_c const* param_7, char** param_8)
+                                       int param_6, daNpcT_evtData_c const* param_7, DUSK_CONST char* DUSK_CONST* param_8)
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
 
     u8 getType() { return fopAcM_GetParam(this) & 0xFF; }
@@ -90,8 +90,8 @@ public:
 
     int getSeneNo() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
 
-    static char* mCutNameList[1];
-    static cutFunc mCutList[1];
+    static DUSK_CONST char* mCutNameList[1];
+    static DUSK_CONST cutFunc mCutList[1];
 
 private:
     /* 0xE40 */ NPC_FAIRY_SEIREI_HIO_CLASS* mpHIO;

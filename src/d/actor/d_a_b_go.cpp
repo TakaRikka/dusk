@@ -284,13 +284,13 @@ static int daB_GO_Create(fopAc_ac_c* i_this) {
 
 b_go_class::b_go_class() {}
 
-static actor_method_class l_daB_GO_Method = {
+static DUSK_CONST actor_method_class l_daB_GO_Method = {
     (process_method_func)daB_GO_Create,  (process_method_func)daB_GO_Delete,
     (process_method_func)daB_GO_Execute, (process_method_func)daB_GO_IsDelete,
     (process_method_func)daB_GO_Draw,
 };
 
-actor_process_profile_definition g_profile_B_GO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_GO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

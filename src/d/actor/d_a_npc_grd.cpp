@@ -50,71 +50,71 @@ enum Type {
 
 static NPC_GRD_HIO_CLASS l_HIO;
 
-static daNpc_GetParam1 l_bmdGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[1] = {
     {11, 0},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[12] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[12] = {
     {-1, 0}, {6, 0},  {5, 1},  {6, 1}, {4, 1}, {8, 0},
     {7, 0},  {10, 1}, {11, 1}, {8, 1}, {7, 1}, {9, 1},
 };
 
-static daNpc_GetParam1 l_btpGetParamList[4] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[4] = {
     {17, 0},
     {15, 1},
     {16, 1},
     {14, 1},
 };
 
-static daNpc_GetParam1 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[1] = {
     {14, 0},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[1] = {
     {0, 0},
 };
 
-static int l_loadRes_GRD_YELIA[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRD_YELIA[3] = {
     0,
     1,
     -1,
 };
 
-static int l_loadRes_GRDa[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRDa[3] = {
     0,
     1,
     -1,
 };
 
-static int l_loadRes_GRD0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_GRD0[3] = {
     0,
     -1,
     -1,
 };
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_GRD_YELIA,
     l_loadRes_GRDa,
     l_loadRes_GRD0,
 };
 
-static char* l_resNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[2] = {
     "grD",
     "grD1",
 };
 
-static char* l_evtNames[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
     NULL,
 };
 
-static char* l_myName = "grD";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grD";
 
-char* daNpc_Grd_c::mEvtCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_Grd_c::mEvtCutNameList[2] = {
     "",
     "NOD_TO_GRZ",
 };
 
-daNpc_Grd_c::cutFunc daNpc_Grd_c::mEvtCutList[2] = {
+daNpc_Grd_c::cutFunc DUSK_CONST daNpc_Grd_c::mEvtCutList[2] = {
     NULL,
     &daNpc_Grd_c::ECut_nodToGrz,
 };
@@ -1245,13 +1245,13 @@ static int daNpc_Grd_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Grd_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Grd_MethodTable = {
     (process_method_func)daNpc_Grd_Create,  (process_method_func)daNpc_Grd_Delete,
     (process_method_func)daNpc_Grd_Execute, (process_method_func)daNpc_Grd_IsDelete,
     (process_method_func)daNpc_Grd_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GRD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GRD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -15,6 +15,8 @@
 
 #include <cstring>
 
+#include "dusk/string.hpp"
+
 enum ITEMICON_RES_FILE_ID {
     ITEMICON_BTI_ARI_MESU_00=0x3,
     ITEMICON_BTI_ARI_OSU_00=0x4,
@@ -350,8 +352,8 @@ void dMeter2Info_c::decMsgKeyWaitTimer() {
     }
 }
 
-void dMeter2Info_c::getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
-    strcpy(o_string, "");
+void dMeter2Info_c::getString(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
+    SAFE_STRCPY(o_string, "");
 
     u8* msgRes;
     if (mMsgResource == NULL) {
@@ -372,7 +374,7 @@ void dMeter2Info_c::getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_
         // check if i_stringID equals the message entry "Message ID"
         if (i_stringID == bmg_inf->entries[i].message_id) {
             string_ptr = (char*)(string_data + bmg_inf->entries[i].string_offset);  // use entry "String Offset" to get string pointer
-            strcpy(o_string, string_ptr);
+            SAFE_STRCPY(o_string, string_ptr);
 
             if (i_msgEntry != NULL) {
                 memcpy(i_msgEntry, &bmg_inf->entries[i], sizeof(JMSMesgEntry_c));
@@ -387,8 +389,8 @@ void dMeter2Info_c::getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_
     }
 }
 
-void dMeter2Info_c::getStringKana(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
-    strcpy(o_string, "");
+void dMeter2Info_c::getStringKana(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
+    SAFE_STRCPY(o_string, "");
 
     u8* msgRes;
     if (mMsgResource == NULL) {
@@ -456,8 +458,8 @@ void dMeter2Info_c::getStringKana(u32 i_stringID, char* o_string, JMSMesgEntry_c
     }
 }
 
-void dMeter2Info_c::getStringKanji(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
-    strcpy(o_string, "");
+void dMeter2Info_c::getStringKanji(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
+    SAFE_STRCPY(o_string, "");
 
     u8* msgRes;
     if (mMsgResource == NULL) {
@@ -668,7 +670,7 @@ void dMeter2Info_c::resetMeterString() {
 
 void dMeter2Info_c::setWarpInfo(const char* i_stageName, const cXyz& i_position, s16 i_angle,
                                 u8 i_roomNo, u8 param_4, u8 i_warpPlayerNo) {
-    strcpy(mWarpInfo.mStageName, i_stageName);
+    SAFE_STRCPY(mWarpInfo.mStageName, i_stageName);
     mWarpInfo.mPosition = i_position;
     mWarpInfo.mAngle = (s16)i_angle;
     mWarpInfo.mRoomNo = (u8)i_roomNo;
@@ -1592,7 +1594,7 @@ void dMeter2Info_c::setMiniGameCount(s8 i_count) {
 }
 
 void dMeter2Info_c::setSaveStageName(const char* i_stageName) {
-    strcpy(mSaveStageName, i_stageName);
+    SAFE_STRCPY(mSaveStageName, i_stageName);
 }
 
 s16 dMeter2Info_getNowLifeGauge() {

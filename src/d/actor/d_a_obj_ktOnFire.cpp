@@ -20,7 +20,7 @@ public:
 
 static daKtOnFire_HIO_c l_HIO;
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-50.0f, 0.0f, -50.0f},
     {50.0f, 100.0f, 50.0f},
 };
@@ -194,7 +194,7 @@ static int daKtOnFire_Create(fopAc_ac_c* i_this) {
     return ((daKtOnFire_c*)i_this)->create();
 }
 
-static actor_method_class l_daKtOnFire_Method = {
+static DUSK_CONST actor_method_class l_daKtOnFire_Method = {
     (process_method_func)daKtOnFire_Create,
     (process_method_func)daKtOnFire_Delete,
     (process_method_func)daKtOnFire_Execute,
@@ -202,7 +202,7 @@ static actor_method_class l_daKtOnFire_Method = {
     (process_method_func)daKtOnFire_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_KtOnFire = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_KtOnFire = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

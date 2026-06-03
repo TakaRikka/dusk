@@ -383,13 +383,13 @@ void dMsgScrnTalk_c::dotAnimeMove() {
     mpArrow_c->dotAnimeMove();
 }
 
-void dMsgScrnTalk_c::setSelectString(char* param_0, char* param_1, char* param_2) {
+void dMsgScrnTalk_c::setSelectString(char DUSK_CONST* param_0, char DUSK_CONST* param_1, char DUSK_CONST* param_2) {
     if (mpSelect_c != NULL) {
         mpSelect_c->setString(param_0, param_1, param_2);
     }
 }
 
-void dMsgScrnTalk_c::setSelectRubyString(char* param_0, char* param_1, char* param_2) {
+void dMsgScrnTalk_c::setSelectRubyString(char DUSK_CONST* param_0, char DUSK_CONST* param_1, char DUSK_CONST* param_2) {
     if (mpSelect_c != NULL) {
         mpSelect_c->setRubyString(param_0, param_1, param_2);
     }

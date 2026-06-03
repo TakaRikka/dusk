@@ -76,6 +76,7 @@ void JPARegistAlpha(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
 }
 
 void JPARegistPrmAlpha(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
+    ZoneScoped;
     JPABaseEmitter* emtr = work->mpEmtr;
     GXColor prm = ptcl->mPrmClr;
     prm.r = COLOR_MULTI(prm.r, emtr->mGlobalPrmClr.r);
@@ -87,6 +88,7 @@ void JPARegistPrmAlpha(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
 }
 
 void JPARegistPrmAlphaEnv(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
+    ZoneScoped;
     JPABaseEmitter* emtr = work->mpEmtr;
     GXColor prm = ptcl->mPrmClr;
     GXColor env = ptcl->mEnvClr;
@@ -225,6 +227,7 @@ void JPAGenTexCrdMtxPrj(JPAEmitterWorkData* param_0) {
 }
 
 void JPAGenCalcTexCrdMtxAnm(JPAEmitterWorkData* work) {
+    ZoneScoped;
     JPABaseShape* shape = work->mpRes->getBsp();
     f32 dVar16 = work->mpEmtr->mTick;
     f32 dVar15 = 0.5f * (1.0f + shape->getTilingS());
@@ -256,6 +259,7 @@ void JPAGenCalcTexCrdMtxAnm(JPAEmitterWorkData* work) {
 }
 
 void JPALoadCalcTexCrdMtxAnm(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
+    ZoneScoped;
     JPABaseShape* shape = work->mpRes->getBsp();
     f32 dVar16 = param_1->mAge;
     f32 dVar15 = 0.5f * (1.0f + shape->getTilingS());
@@ -286,14 +290,17 @@ void JPALoadCalcTexCrdMtxAnm(JPAEmitterWorkData* work, JPABaseParticle* param_1)
 }
 
 void JPALoadTex(JPAEmitterWorkData* work) {
+    ZoneScoped;
     work->mpResMgr->load(work->mpRes->getTexIdx(work->mpRes->getBsp()->getTexIdx()), GX_TEXMAP0);
 }
 
 void JPALoadTexAnm(JPAEmitterWorkData* work) {
+    ZoneScoped;
     work->mpResMgr->load(work->mpRes->getTexIdx(work->mpEmtr->mTexAnmIdx), GX_TEXMAP0);
 }
 
 void JPALoadTexAnm(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
+    ZoneScoped;
     work->mpResMgr->load(work->mpRes->getTexIdx(ptcl->mTexAnmIdx), GX_TEXMAP0);
 }
 
@@ -446,6 +453,7 @@ void JPADrawBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
         return;
     }
 
+    ZoneScoped;
     JGeometry::TVec3<f32> pos;
 #if TARGET_PC
     Mtx ptclPosMtx;
@@ -475,6 +483,7 @@ void JPADrawRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
         return;
     }
 
+    ZoneScoped;
     if (work->mpRes->getUsrIdx() == 0x89d7) {
         int a = 0;
     }
@@ -518,6 +527,7 @@ void JPADrawYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
         return;
     }
 
+    ZoneScoped;
     JGeometry::TVec3<f32> local_48;
     MTXMultVec(work->mPosCamMtx, &param_1->mPosition, &local_48);
     Mtx local_38;
@@ -542,6 +552,7 @@ void JPADrawRotYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
         return;
     }
 
+    ZoneScoped;
     JGeometry::TVec3<f32> local_48;
     MTXMultVec(work->mPosCamMtx, &param_1->mPosition, &local_48);
     f32 sinRot = JMASSin(param_1->mRotateAngle);
@@ -1268,6 +1279,8 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
 }
 
 void JPADrawEmitterCallBackB(JPAEmitterWorkData* work) {
+    ZoneScoped;
+
     JPABaseEmitter* emtr = work->mpEmtr;
     if (emtr->mpEmtrCallBack == NULL) {
         return;
@@ -1282,6 +1295,7 @@ void JPADrawParticleCallBack(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
         return;
     }
 
+    ZoneScoped;
     emtr->mpPtclCallBack->draw(emtr, ptcl);
 }
 

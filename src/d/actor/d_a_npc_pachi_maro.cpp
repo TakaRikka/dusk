@@ -364,17 +364,17 @@ void daNpc_Pachi_Maro_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     {11, 1},
     {5, 2},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"TUTRIAL_TALK", 10},
 };
 
-static char* l_resNameList[11] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[11] = {
     "",
     "Maro",
     "Maro_TW",
@@ -388,28 +388,28 @@ static char* l_resNameList[11] = {
     "evt_pachi",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     MARO, MARO1, -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     MARO, MARO_TW, -1,
 };
 
-static s8 l_loadResPtrn2[6] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[6] = {
     MARO, MARO1, MARO2, MARO3, EVT_PACHI, -1,
 };
 
-static s8 l_loadResPtrn3[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[5] = {
     MARO, MARO_TW, MARO1, MARO2, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn2,
     l_loadResPtrn3,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_MARO, J3DFrameCtrl::EMode_LOOP, MARO, 1},
     {BCK_MARO_F_TALK_A, J3DFrameCtrl::EMode_NONE, MARO, BTP_MARO_F_TALK_A, J3DFrameCtrl::EMode_NONE, MARO, 0},
     {BCK_MARO_F_TALK_B, J3DFrameCtrl::EMode_NONE, MARO1, BTP_MARO_F_TALK_B, J3DFrameCtrl::EMode_NONE, MARO1, 0},
@@ -422,7 +422,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {BCK_MARO_FH_BESUTALK, J3DFrameCtrl::EMode_LOOP, MARO3, BTP_MARO_FH_BESUTALK, J3DFrameCtrl::EMode_LOOP, MARO3, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_MARO_WAIT_A, J3DFrameCtrl::EMode_LOOP, MARO, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
     {BCK_MARO_CROUCH, J3DFrameCtrl::EMode_LOOP, MARO2, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
     {BCK_MARO_ASKING, J3DFrameCtrl::EMode_LOOP, MARO3, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
@@ -435,7 +435,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_MARO_RUN, J3DFrameCtrl::EMode_LOOP, MARO1, BTK_MARO, J3DFrameCtrl::EMode_NONE, MARO, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
     {FACE_MOT_ANM_TALK_A, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {FACE_MOT_ANM_SURPRISE, -1, 1}, {FACE_MOT_ANM_H_SURPRISE, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {FACE_MOT_ANM_TALK_B, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -448,7 +448,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] =
     {FACE_MOT_ANM_NONE, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {MOT_ANM_WAIT_A, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {MOT_ANM_TALK_A, -1, 1}, {MOT_ANM_WAIT_A, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {MOT_ANM_CROUCH, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -460,7 +460,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {MOT_ANM_RUN, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Pachi_Maro_c::mCutNameList[11] = {
+char DUSK_CONST* DUSK_CONST daNpc_Pachi_Maro_c::mCutNameList[11] = {
     "",
     "TUTRIAL_BEGIN",
     "TUTRIAL_BEGIN_SKIP",
@@ -474,7 +474,7 @@ char* daNpc_Pachi_Maro_c::mCutNameList[11] = {
     "TUTRIAL_CAUTION",
 };
 
-daNpc_Pachi_Maro_c::cutFunc daNpc_Pachi_Maro_c::mCutList[11] = {
+daNpc_Pachi_Maro_c::cutFunc DUSK_CONST daNpc_Pachi_Maro_c::mCutList[11] = {
     NULL,
     &daNpc_Pachi_Maro_c::cutTutrialBegin,
     &daNpc_Pachi_Maro_c::cutTutrialBegin_Skip,
@@ -1668,7 +1668,7 @@ static int daNpc_Pachi_Maro_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Pachi_Maro_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Pachi_Maro_MethodTable = {
     (process_method_func)daNpc_Pachi_Maro_Create,
     (process_method_func)daNpc_Pachi_Maro_Delete,
     (process_method_func)daNpc_Pachi_Maro_Execute,
@@ -1676,7 +1676,7 @@ static actor_method_class daNpc_Pachi_Maro_MethodTable = {
     (process_method_func)daNpc_Pachi_Maro_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_PACHI_MARO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_PACHI_MARO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

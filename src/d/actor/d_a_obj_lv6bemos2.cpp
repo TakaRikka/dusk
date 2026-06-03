@@ -107,21 +107,21 @@ void daObjLv6Bm_c::setBaseMtx() {
     mBeamEffectModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-static char* l_arcName = "E_bm6";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "E_bm6";
 
-static char* l_eye_matName = "bm6_eye";
+static DUSK_CONSTEXPR char DUSK_CONST* l_eye_matName = "bm6_eye";
 
-static char* l_head_joint = "head";
+static DUSK_CONSTEXPR char DUSK_CONST* l_head_joint = "head";
 
-static char* l_bigGear_joint = "cogRed";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bigGear_joint = "cogRed";
 
-static char* l_smallGear0_joint = "cogBlue";
+static DUSK_CONSTEXPR char DUSK_CONST* l_smallGear0_joint = "cogBlue";
 
-static char* l_smallGear1_joint = "cogGreen";
+static DUSK_CONSTEXPR char DUSK_CONST* l_smallGear1_joint = "cogGreen";
 
-static char* l_smallGear2_joint = "cogYellow";
+static DUSK_CONSTEXPR char DUSK_CONST* l_smallGear2_joint = "cogYellow";
 
-static char* l_joint_table[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_joint_table[5] = {
     l_head_joint,
     l_bigGear_joint,
     l_smallGear0_joint,
@@ -129,12 +129,12 @@ static char* l_joint_table[5] = {
     l_smallGear2_joint,
 };
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-1200.0f, -100.0f, -1200.0f},
     {1200.0f, 400.0f, 1200.0f},
 };
 
-static dCcD_SrcSph l_sph_src = {
+static DUSK_CONSTEXPR dCcD_SrcSph l_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x402420, 0x11}, 0x58}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -146,7 +146,7 @@ static dCcD_SrcSph l_sph_src = {
     } // mSphAttr
 };
 
-static dCcD_SrcCps l_cps_src = {
+static DUSK_CONSTEXPR dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{0x100, 0x1, 0x1d}, {0x0, 0x0}, 0x0}}, // mObj
         {dCcD_SE_SWORD, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -158,7 +158,7 @@ static dCcD_SrcCps l_cps_src = {
     } // mCpsAttr
 };
 
-static dCcD_SrcCyl l_cyl_src = {
+static DUSK_CONSTEXPR dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x1e}, {0x400, 0x11}, 0x18}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -368,7 +368,7 @@ int daObjLv6Bm_c::Execute(f32 (**param_1)[3][4]) {
 }
 
 void daObjLv6Bm_c::action() {
-    static daObjLv6Bm_c::actionFunc l_func[6] = {
+    static DUSK_CONSTEXPR daObjLv6Bm_c::actionFunc l_func[6] = {
         &daObjLv6Bm_c::actionSwWait,
         &daObjLv6Bm_c::actionWarning,
         &daObjLv6Bm_c::actionFindPlayer,
@@ -587,7 +587,7 @@ f32 daObjLv6Bm_c::getBeamSearchDistance() {
 }
 
 void daObjLv6Bm_c::effect_proc() {
-    static daObjLv6Bm_c::effectFunc l_eff_func[2] = {
+    static DUSK_CONSTEXPR daObjLv6Bm_c::effectFunc l_eff_func[2] = {
         &daObjLv6Bm_c::effectWait,
         &daObjLv6Bm_c::effectSet0,
     };
@@ -1167,7 +1167,7 @@ static int daObjLv6Bm_MoveBGDraw(daObjLv6Bm_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv6Bm_METHODS = {
+static DUSK_CONST actor_method_class daObjLv6Bm_METHODS = {
     (process_method_func)daObjLv6Bm_create1st,
     (process_method_func)daObjLv6Bm_MoveBGDelete,
     (process_method_func)daObjLv6Bm_MoveBGExecute,
@@ -1175,7 +1175,7 @@ static actor_method_class daObjLv6Bm_METHODS = {
     (process_method_func)daObjLv6Bm_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6bemos2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6bemos2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

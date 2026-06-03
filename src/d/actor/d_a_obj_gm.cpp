@@ -719,7 +719,7 @@ static cPhs_Step daObj_Gm_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-static actor_method_class l_daObj_Gm_Method = {
+static DUSK_CONST actor_method_class l_daObj_Gm_Method = {
     (process_method_func)daObj_Gm_Create,
     (process_method_func)daObj_Gm_Delete,
     (process_method_func)daObj_Gm_Execute,
@@ -727,7 +727,7 @@ static actor_method_class l_daObj_Gm_Method = {
     (process_method_func)daObj_Gm_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_GM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_GM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

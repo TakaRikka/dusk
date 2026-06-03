@@ -46,7 +46,7 @@ namespace dusk {
         ImGui::TableNextColumn();
 
         char id_buf[32];
-        sprintf(id_buf, "%d", proc->id);
+        SAFE_SPRINTF(id_buf, "%d", proc->id);
 
         int flags = ImGuiTreeNodeFlags_SpanAllColumns;
         bool isLayer = fpcBs_Is_JustOfType(g_fpcNd_type, proc->subtype);

@@ -39,7 +39,7 @@ static const u32 l_dzb[2] = {12, 12};
 
 static const u32 l_heap_size[2] = {10240, 6880};
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "H_Onsen",
     "H_KaOnsen",
 };
@@ -121,13 +121,13 @@ static int daObjOnsen_MoveBGDraw(daObjOnsen_c* i_this) {
     return static_cast<dBgS_MoveBgActor*>(i_this)->MoveBGDraw();
 }
 
-static actor_method_class daObjOnsen_METHODS = {
+static DUSK_CONST actor_method_class daObjOnsen_METHODS = {
     (process_method_func)daObjOnsen_create1st,     (process_method_func)daObjOnsen_MoveBGDelete,
     (process_method_func)daObjOnsen_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjOnsen_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Onsen = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Onsen = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

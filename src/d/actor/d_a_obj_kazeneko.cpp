@@ -103,7 +103,7 @@ void daObjKazeNeko_c::getFirstVec(cXyz* param_1, int param_2) {
     param_1->set((attr().field_0x20 * cM_ssin(sVar4)), 30.0f, attr().field_0x20 * cM_scos(sVar4));
 }
 
-static char* l_arcName = "J_Kazami";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "J_Kazami";
 
 inline int daObjKazeNeko_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "pole.bmd");
@@ -219,7 +219,7 @@ static int daObjKazeNeko_Create(fopAc_ac_c* i_this) {
 }
 
 
-static actor_method_class l_daObjKazeNeko_Method = {
+static DUSK_CONST actor_method_class l_daObjKazeNeko_Method = {
     (process_method_func)daObjKazeNeko_Create,
     (process_method_func)daObjKazeNeko_Delete,
     (process_method_func)daObjKazeNeko_Execute,
@@ -227,7 +227,7 @@ static actor_method_class l_daObjKazeNeko_Method = {
     (process_method_func)daObjKazeNeko_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_KazeNeko = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_KazeNeko = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

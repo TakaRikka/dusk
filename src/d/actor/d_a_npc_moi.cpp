@@ -86,56 +86,56 @@ void daNpc_Moi_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-static int l_bmdData[8][2] = {
+static DUSK_CONSTEXPR int l_bmdData[8][2] = {
     {11, 1}, {29, 3}, {30, 3}, {31, 3}, {13, 1}, {33, 3}, {12, 1}, {32, 3},
 };
 
-static daNpcT_evtData_c l_evtList[4] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[4] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
     {"DELIVERED_SW", 2},
 };
 
-static char* l_resNameList[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[6] = {
     "", "Moi", "Moi1", "Moi2", "Moi3", "Moi_p1",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     1,
     2,
     -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     1,
     3,
     -1,
 };
 
-static s8 l_loadResPtrn3[4] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[4] = {
     1,
     3,
     4,
     -1,
 };
 
-static s8 l_loadResPtrn4[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[3] = {
     1,
     5,
     -1,
 };
 
-static s8 l_loadResPtrn9[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {
     1, 2, 3, 4, -1,
 };
 
-static s8* l_loadResPtrnList[7] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[7] = {
     l_loadResPtrn0, l_loadResPtrn4, l_loadResPtrn1, l_loadResPtrn3,
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[20] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[20] = {
     {-1, 0, 0, 19, 2, 1, TRUE},  {6, 0, 1, 19, 2, 1, TRUE},   {9, 0, 2, 41, 0, 2, FALSE},
     {10, 0, 2, 42, 0, 2, FALSE}, {8, 0, 2, 40, 0, 2, FALSE},  {7, 0, 2, 39, 0, 2, FALSE},
     {11, 0, 2, 43, 0, 2, FALSE}, {7, 0, 3, 40, 0, 3, FALSE},  {8, 0, 3, 41, 0, 3, FALSE},
@@ -145,7 +145,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[20] = {
     {6, 2, 3, 39, 2, 3, FALSE},  {18, 0, 2, 49, 0, 2, FALSE},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[35] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[35] = {
     {8, 2, 1, 16, 0, 1, 1, 0},  {29, 2, 2, 16, 0, 1, 1, 0}, {30, 2, 2, 16, 0, 1, 1, 0},
     {6, 0, 2, 16, 0, 1, 1, 0},  {17, 2, 2, 35, 2, 2, 0, 0}, {31, 2, 2, 16, 0, 1, 1, 0},
     {23, 0, 2, 16, 0, 1, 1, 0}, {28, 0, 2, 16, 0, 1, 1, 0}, {24, 0, 2, 16, 0, 1, 1, 0},
@@ -160,7 +160,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[35] = {
     {3, 2, 4, 16, 0, 1, 1, 0},  {21, 2, 3, 16, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[88] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[88] = {
     {1, -1, 1},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {2, -1, 1},  {12, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {3, -1, 1},  {13, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {4, -1, 1},  {14, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {5, -1, 1},  {9, 0, 0},   {-1, 0, 0},  {-1, 0, 0},  {6, -1, 1},
@@ -176,7 +176,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[88] =
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[196] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[196] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {8, -1, 1},  {2, 0, 0},   {-1, 0, 0},
     {-1, 0, 0},  {1, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {9, -1, 1},  {1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {4, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {10, -1, 1},
@@ -207,11 +207,11 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[196] = {
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {18, 4, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char* daNpc_Moi_c::mCutNameList[5] = {
+char DUSK_CONST* DUSK_CONST daNpc_Moi_c::mCutNameList[5] = {
     "", "DELIVERED_SW", "APPEARANCE_MOI", "CONVERSATION_WITH_URI", "FIND_WOLF",
 };
 
-daNpc_Moi_c::cutFunc daNpc_Moi_c::mCutList[5] = {
+daNpc_Moi_c::cutFunc DUSK_CONST daNpc_Moi_c::mCutList[5] = {
     NULL,
     &daNpc_Moi_c::cutDeliveredSw,
     &daNpc_Moi_c::cutAppearanceMoi,
@@ -1984,13 +1984,13 @@ static int daNpc_Moi_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Moi_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Moi_MethodTable = {
     (process_method_func)daNpc_Moi_Create,  (process_method_func)daNpc_Moi_Delete,
     (process_method_func)daNpc_Moi_Execute, (process_method_func)daNpc_Moi_IsDelete,
     (process_method_func)daNpc_Moi_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_MOI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_MOI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

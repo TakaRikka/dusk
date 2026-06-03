@@ -34,12 +34,12 @@ public:
     int destroy();
     int execute();
     int draw();
-    char* getResName();
+    char DUSK_CONST* getResName();
     void getParam();
     int getFlowNodeNum();
     int isDelete();
     int init();
-    J3DAnmTransform* getTrnsfrmAnmP(int, char**);
+    J3DAnmTransform* getTrnsfrmAnmP(int, char DUSK_CONST* DUSK_CONST*);
     int setBckAnm(J3DAnmTransform*, f32, int, int, int, bool);
     int setCollision();
     int checkEvent();

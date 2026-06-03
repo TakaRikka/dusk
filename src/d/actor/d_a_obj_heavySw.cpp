@@ -283,13 +283,13 @@ static int daHeavySw_Create(fopAc_ac_c* i_this) {
     return static_cast<daHeavySw_c*>(i_this)->create();
 }
 
-static actor_method_class l_daHeavySw_Method = {
+static DUSK_CONST actor_method_class l_daHeavySw_Method = {
     (process_method_func)daHeavySw_Create,  (process_method_func)daHeavySw_Delete,
     (process_method_func)daHeavySw_Execute, (process_method_func)NULL,
     (process_method_func)daHeavySw_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_HeavySw = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_HeavySw = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

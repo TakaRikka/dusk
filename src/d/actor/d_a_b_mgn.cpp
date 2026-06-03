@@ -3576,13 +3576,13 @@ static int daB_MGN_Create(daB_MGN_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daB_MGN_Method = {
+static DUSK_CONST actor_method_class l_daB_MGN_Method = {
     (process_method_func)daB_MGN_Create,  (process_method_func)daB_MGN_Delete,
     (process_method_func)daB_MGN_Execute, (process_method_func)daB_MGN_IsDelete,
     (process_method_func)daB_MGN_Draw,
 };
 
-actor_process_profile_definition g_profile_B_MGN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_MGN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

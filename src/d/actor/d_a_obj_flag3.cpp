@@ -299,7 +299,7 @@ int daObjFlag3_c::createHeap() {
     s8 flagNum = (u8)shape_angle.x;
     if (mFlagValid) {
         char acStack_40[16];
-        sprintf(acStack_40, "flag%02d.bti", flagNum);
+        SAFE_SPRINTF(acStack_40, "flag%02d.bti", flagNum);
         shape_angle.setall(0);
         current.angle.setall(0);
         ResTIMG* image = (ResTIMG*)dComIfG_getObjectRes(mFlagName, "flag.bti");
@@ -486,7 +486,7 @@ int daObjFlag3_c::create() {
         mFlagValid = false;
     } else {
         mFlagValid = true;
-        sprintf(mFlagName, "FlagObj%02d", flagNum);
+        SAFE_SPRINTF(mFlagName, "FlagObj%02d", flagNum);
         int rv = dComIfG_resLoad(&mFlagPhase, mFlagName);
         if (rv != cPhs_COMPLEATE_e) {
             return rv;
@@ -503,7 +503,7 @@ int daObjFlag3_c::create() {
     return rv;
 }
 
-static actor_method_class l_daObjFlag3_Method = {
+static DUSK_CONST actor_method_class l_daObjFlag3_Method = {
     (process_method_func)daObjFlag3_Create,
     (process_method_func)daObjFlag3_Delete,
     (process_method_func)daObjFlag3_Execute,
@@ -511,7 +511,7 @@ static actor_method_class l_daObjFlag3_Method = {
     (process_method_func)daObjFlag3_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Flag3 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Flag3 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

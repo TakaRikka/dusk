@@ -52,40 +52,40 @@ const daNpc_Kyury_HIOParam daNpc_Kyury_Param_c::m = {
     0.0f,    // box_offset
 };
 
-static int l_bmdData[3][2] = {
+static DUSK_CONSTEXPR int l_bmdData[3][2] = {
     {41, 1},
     {42, 1},
     {43, 1},
 };
 
-static daNpcT_evtData_c l_evtList[3] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[3] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"FIRST_CONVERSATION", 2},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "Kyury",
     "Kyury1",
 };
 
-static s8 l_loadResPtrn0[2] = {1, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {1, -1};
 
-static s8 l_loadResPtrn9[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[3] = {
     1,
     2,
     -1,
 };
 
-static s8* l_loadResPtrnList[4] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn9,
     l_loadResPtrn9,
     l_loadResPtrn9,
     l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[17] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[17] = {
     {-1, 0, 0, 50, 2, 1, 1}, {22, 0, 1, 50, 2, 1, 1}, {23, 0, 1, 56, 0, 1, 0},
     {24, 0, 1, 57, 0, 1, 0}, {19, 0, 1, 53, 0, 1, 0}, {21, 0, 1, 55, 0, 1, 0},
     {25, 2, 1, 50, 2, 1, 1}, {27, 2, 1, 59, 2, 1, 0}, {11, 2, 1, 50, 2, 1, 1},
@@ -94,7 +94,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[17] = {
     {20, 0, 1, 54, 0, 1, 0}, {26, 2, 1, 58, 2, 1, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[16] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[16] = {
     {36, 2, 1, 46, 0, 1, 1, 0}, {37, 2, 1, 46, 0, 1, 1, 0}, {33, 0, 1, 46, 0, 1, 1, 0},
     {34, 0, 1, 46, 0, 1, 1, 0}, {35, 0, 1, 46, 0, 1, 1, 0}, {38, 2, 1, 46, 0, 1, 1, 0},
     {28, 0, 1, 46, 0, 1, 1, 0}, {29, 0, 1, 46, 0, 1, 1, 0}, {18, 2, 1, 46, 0, 1, 1, 0},
@@ -103,7 +103,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[16] = {
     {31, 0, 1, 46, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] = {
     {1, -1, 1},  {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},  {2, -1, 1},  {7, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {4, -1, 1}, {-1, 0, 0}, {-1, 0, 0},  {-1, 0, 0},  {5, -1, 1}, {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0}, {3, -1, 1}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}, {15, -1, 1},
@@ -116,7 +116,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[64] =
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[52] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[52] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {2, -1, 1},  {0, 0, 0},   {-1, 0, 0},
     {-1, 0, 0},  {1, -1, 0},  {-1, 0, 0}, {-1, 0, 0},  {-1, 0, 0},  {3, -1, 1},  {0, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {4, -1, 1}, {0, 0, 0},   {-1, 0, 0},  {-1, 0, 0},  {9, -1, 0},
@@ -127,12 +127,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[52] = {
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char* daNpc_Kyury_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_Kyury_c::mCutNameList[2] = {
     "",
     "CONVERSATION",
 };
 
-daNpc_Kyury_c::cutFunc daNpc_Kyury_c::mCutList[2] = {
+daNpc_Kyury_c::cutFunc DUSK_CONST daNpc_Kyury_c::mCutList[2] = {
     NULL,
     &daNpc_Kyury_c::cutConversation,
 };
@@ -884,13 +884,13 @@ static int daNpc_Kyury_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Kyury_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Kyury_MethodTable = {
     (process_method_func)daNpc_Kyury_Create,  (process_method_func)daNpc_Kyury_Delete,
     (process_method_func)daNpc_Kyury_Execute, (process_method_func)daNpc_Kyury_IsDelete,
     (process_method_func)daNpc_Kyury_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_KYURY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_KYURY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

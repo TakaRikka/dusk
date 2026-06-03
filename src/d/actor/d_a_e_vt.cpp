@@ -3919,7 +3919,7 @@ static int daE_VA_Create(daE_VA_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daE_VA_Method = {
+static DUSK_CONST actor_method_class l_daE_VA_Method = {
     (process_method_func)daE_VA_Create,
     (process_method_func)daE_VA_Delete,
     (process_method_func)daE_VA_Execute,
@@ -3927,7 +3927,7 @@ static actor_method_class l_daE_VA_Method = {
     (process_method_func)daE_VA_Draw,
 };
 
-actor_process_profile_definition g_profile_E_VT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_VT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

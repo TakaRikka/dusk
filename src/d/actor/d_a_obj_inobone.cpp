@@ -277,7 +277,7 @@ static int daObjIBone_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjIBone_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjIBone_Method = {
+static DUSK_CONST actor_method_class l_daObjIBone_Method = {
     (process_method_func)daObjIBone_Create,
     (process_method_func)daObjIBone_Delete,
     (process_method_func)daObjIBone_Execute,
@@ -285,7 +285,7 @@ static actor_method_class l_daObjIBone_Method = {
     (process_method_func)daObjIBone_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_InoBone = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_InoBone = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

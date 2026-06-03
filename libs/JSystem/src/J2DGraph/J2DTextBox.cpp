@@ -309,8 +309,12 @@ void J2DTextBox::draw(f32 posX, f32 posY, f32 param_2, J2DTextBoxHBinding hBind)
     }
 }
 
-char* J2DTextBox::getStringPtr() const {
+TEXT_SPAN J2DTextBox::getStringPtr() const {
+#if TARGET_PC
+    return { mStringPtr, mStringLength };
+#else
     return mStringPtr;
+#endif
 }
 
 s32 J2DTextBox::setString(char const* string, ...) {
@@ -330,7 +334,7 @@ s32 J2DTextBox::setString(char const* string, ...) {
 
     if (mStringPtr) {
         mStringLength = len + 1;
-        strcpy(mStringPtr, string);
+        SAFE_STRCPY_BOUNDED(mStringPtr, mStringLength, string);
     }
 
     va_end(args);

@@ -14,7 +14,7 @@
 #define COLOR_RED    2
 #define COLOR_GREEN  3
 
-static char* l_arcName = "S_swHit00";
+static DUSK_CONST char* l_arcName = "S_swHit00";
 
 int daSwhit0_c::getSwNo() {
     return fopAcM_GetParam(this) & 0xFF;
@@ -196,7 +196,7 @@ void daSwhit0_c::offSwitch() {
 }
 
 int daSwhit0_c::DemoProc() {
-    static char* action_table[2] = {
+    static DUSK_CONST char* action_table[2] = {
         "WAIT",
         "CHANGE",
     };
@@ -469,7 +469,7 @@ static int daSwhit0_Create(fopAc_ac_c* i_this) {
     return ((daSwhit0_c*)i_this)->create();
 }
 
-static actor_method_class l_daSwhit0_Method = {
+static DUSK_CONST actor_method_class l_daSwhit0_Method = {
     (process_method_func)daSwhit0_Create,
     (process_method_func)daSwhit0_Delete,
     (process_method_func)daSwhit0_Execute,
@@ -477,7 +477,7 @@ static actor_method_class l_daSwhit0_Method = {
     (process_method_func)daSwhit0_Draw,
 };
 
-actor_process_profile_definition g_profile_SWHIT0 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_SWHIT0 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

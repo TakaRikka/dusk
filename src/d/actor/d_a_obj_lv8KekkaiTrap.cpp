@@ -24,11 +24,11 @@ public:
 
 static daKekaiTrap_HIO_c l_HIO;
 
-static char* l_type[] = {"Lv8Kekkai"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_type[] = {"Lv8Kekkai"};
 
-static int l_bmdIdx[] = {4};
+static DUSK_CONSTEXPR int l_bmdIdx[] = {4};
 
-static int l_dzbIdx[] = {7};
+static DUSK_CONSTEXPR int l_dzbIdx[] = {7};
 
 daKekaiTrap_HIO_c::daKekaiTrap_HIO_c() {
     appear_init_speed = 0.0f;
@@ -100,7 +100,7 @@ int daKekaiTrap_c::Execute(Mtx** param_0) {
 }
 
 void daKekaiTrap_c::moveMain() {
-    static void (daKekaiTrap_c::*mode_proc[])() = {
+    static DUSK_CONSTEXPR void (daKekaiTrap_c::*mode_proc[])() = {
         &daKekaiTrap_c::modeWait,
         &daKekaiTrap_c::modeMoveUp,
         &daKekaiTrap_c::modeMoveDown,
@@ -203,7 +203,7 @@ static int daKekaiTrap_Create(fopAc_ac_c* i_this) {
     return ((daKekaiTrap_c*)i_this)->create();
 }
 
-static actor_method_class l_daKekaiTrap_Method = {
+static DUSK_CONST actor_method_class l_daKekaiTrap_Method = {
     (process_method_func)daKekaiTrap_Create,
     (process_method_func)daKekaiTrap_Delete,
     (process_method_func)daKekaiTrap_Execute,
@@ -211,7 +211,7 @@ static actor_method_class l_daKekaiTrap_Method = {
     (process_method_func)daKekaiTrap_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv8KekkaiTrap = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv8KekkaiTrap = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

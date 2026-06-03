@@ -244,11 +244,11 @@ void daNpc_Aru_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_ARU, ARU},
 };
 
-static daNpcT_evtData_c l_evtList[12] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[12] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
@@ -263,26 +263,26 @@ static daNpcT_evtData_c l_evtList[12] = {
     {"NO_ENTRANCE", 2},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "Aru",
     "Aru1",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     ARU, -1
 };
 
-static s8 l_loadResPtrn9[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[3] = {
     ARU, ARU1, -1,
 };
 
-static s8* l_loadResPtrnList[6] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[6] = {
     l_loadResPtrn9, l_loadResPtrn9, l_loadResPtrn9,
     l_loadResPtrn9, l_loadResPtrn9, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[13] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[13] = {
     {-1, J3DFrameCtrl::EMode_NONE, 0, BTP_ARU, J3DFrameCtrl::EMode_LOOP, ARU, 1},
     {BCK_ARU_F_NORMAL, J3DFrameCtrl::EMode_NONE, ARU, BTP_ARU, J3DFrameCtrl::EMode_LOOP, ARU, 1},
     {BCK_ARU_F_GRUMPY, J3DFrameCtrl::EMode_NONE, ARU1, BTP_ARU_F_GRUMPY, J3DFrameCtrl::EMode_NONE, ARU1, 0},
@@ -298,7 +298,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[13] = {
     {BCK_ARU_FH_NORMAL, J3DFrameCtrl::EMode_LOOP, ARU, BTP_ARU_FH_NORMAL, J3DFrameCtrl::EMode_LOOP, ARU, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[13] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[13] = {
     {BCK_ARU_WAIT_A, J3DFrameCtrl::EMode_LOOP, ARU, BTK_ARU,J3DFrameCtrl::EMode_NONE, ARU, 1, 0},
     {BCK_ARU_WAIT_C, J3DFrameCtrl::EMode_LOOP, ARU1, BTK_ARU, J3DFrameCtrl::EMode_NONE, ARU, 1, 0},
     {BCK_ARU_WAIT_D, J3DFrameCtrl::EMode_LOOP, ARU1, BTK_ARU, J3DFrameCtrl::EMode_NONE, ARU, 1, 0},
@@ -314,7 +314,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[13] = {
     {BCK_ARU_RUN, J3DFrameCtrl::EMode_LOOP, ARU1, BTK_ARU, J3DFrameCtrl::EMode_NONE, ARU, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[52] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[52] = {
     {1, -1, 1}, {12, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {8, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -330,7 +330,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[52] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[48] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[48] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -345,7 +345,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[48] = {
     {11, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Aru_c::mCutNameList[7] = {
+char DUSK_CONST* DUSK_CONST daNpc_Aru_c::mCutNameList[7] = {
     "",
     "RIDEON_HORSE",
     "GOTO_BULLRUNNING_STAGE",
@@ -355,7 +355,7 @@ char* daNpc_Aru_c::mCutNameList[7] = {
     "NO_ENTRANCE",
 };
 
-daNpc_Aru_c::cutFunc daNpc_Aru_c::mCutList[7] = {
+daNpc_Aru_c::cutFunc DUSK_CONST daNpc_Aru_c::mCutList[7] = {
     NULL,
     &daNpc_Aru_c::cutRideOnHorse,
     &daNpc_Aru_c::cutGotoBullRunningStage,
@@ -2206,7 +2206,7 @@ static int daNpc_Aru_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Aru_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Aru_MethodTable = {
     (process_method_func)daNpc_Aru_Create,
     (process_method_func)daNpc_Aru_Delete,
     (process_method_func)daNpc_Aru_Execute,
@@ -2214,7 +2214,7 @@ static actor_method_class daNpc_Aru_MethodTable = {
     (process_method_func)daNpc_Aru_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ARU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ARU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

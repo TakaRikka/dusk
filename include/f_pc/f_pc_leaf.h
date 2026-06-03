@@ -23,7 +23,7 @@ typedef struct leafdraw_class {
 
 typedef struct leafdraw_class : base_process_class {
 #endif
-    /* 0xB8 */ leafdraw_method_class* leaf_methods;
+    /* 0xB8 */ leafdraw_method_class DUSK_CONST* leaf_methods;
     /* 0xBC */ s8 unk_0xBC;
     /* 0xBD */ u8 draw_interp_frame;
     /* 0xBE */ draw_priority_class draw_priority;
@@ -31,12 +31,12 @@ typedef struct leafdraw_class : base_process_class {
 
 typedef struct leaf_process_profile_definition {
     /* 0x00 */ process_profile_definition base;
-    /* 0x1C */ leafdraw_method_class* sub_method; // Subclass methods
+    /* 0x1C */ leafdraw_method_class DUSK_CONST* sub_method; // Subclass methods
     /* 0x20 */ s16 priority; // mDrawPriority
 } leaf_process_profile_definition;
 
 s16 fpcLf_GetPriority(const leafdraw_class* i_leaf);
-int fpcLf_DrawMethod(leafdraw_method_class* i_method, void* i_process);
+int fpcLf_DrawMethod(leafdraw_method_class DUSK_CONST* i_method, void* i_process);
 int fpcLf_Draw(leafdraw_class* i_method);
 int fpcLf_Execute(leafdraw_class* i_leaf);
 int fpcLf_IsDelete(leafdraw_class* i_leaf);
@@ -44,6 +44,6 @@ int fpcLf_Delete(leafdraw_class* i_leaf);
 int fpcLf_Create(leafdraw_class* i_leaf);
 
 extern int g_fpcLf_type;
-extern leafdraw_method_class g_fpcLf_Method;
+extern leafdraw_method_class DUSK_CONST g_fpcLf_Method;
 
 #endif

@@ -716,32 +716,32 @@ const static dCcD_SrcCyl l_tg_cyl = {
 
 static const GXColor l_light_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
-static char* l_arcName[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[] = {
     "J_tubo_00", "J_tubo_01", "Kkiba_00",  "Y_ironbal", "J_taru00", "J_doku00", "Obj_bkl",
     "K_tubo02",  "Obj_ballS", "Obj_ballS", "D_aotubo0", "Obj_tama", "O_tuboS",  "O_tuboB",
 };
 
-static char* l_bmdName[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdName[] = {
     "J_tubo_00.bmd",       "J_tubo_01.bmd",       "J_hako_00.bmd",  "Yironball.bmd",
     "J_taru_00.bmd",       "J_doku_00.bmd",       "K_hb00.bmd",     "K_tubo02.bmd",
     "LV8_OBJ_HikariS.bmd", "LV8_OBJ_HikariS.bmd", "D_aotubo00.bmd", "LV8_tama.bmd",
     "O_tuboS_LV8.bmd",     "O_tuboB_LV8.bmd",
 };
 
-static Vec kibako_jv_offset[] = {
+static DUSK_CONSTEXPR Vec kibako_jv_offset[] = {
     {0.0f, 0.0f, 0.0f},
     {0.0f, 150.0f, 0.0f},
 };
 
-static Vec taru_jv_offset[] = {
+static DUSK_CONSTEXPR Vec taru_jv_offset[] = {
     {0.0f, 0.0f, 0.0f},
     {0.0f, 100.0f, 0.0f},
 };
 
 // box joint col data
-static dJntColData_c kibako_jc_data = {1, 1, 0, 45.0f, kibako_jv_offset};
+static DUSK_CONSTEXPR dJntColData_c kibako_jc_data = {1, 1, 0, 45.0f, kibako_jv_offset};
 
-static dJntColData_c taru_jc_data = {1, 1, 0, 45.0f, taru_jv_offset};
+static DUSK_CONSTEXPR dJntColData_c taru_jc_data = {1, 1, 0, 45.0f, taru_jv_offset};
 
 static f32 bound(cXyz* param_0, const cBgS_PolyInfo& param_1, f32 param_2) {
     cM3dGPla plane;
@@ -858,11 +858,11 @@ const daObjCarry_dt_t& daObjCarry_c::data() {
     return mData[mType];
 }
 
-char* daObjCarry_c::getArcName() {
+DUSK_CONST char* daObjCarry_c::getArcName() {
     return l_arcName[mType];
 }
 
-char* daObjCarry_c::getBmdName() {
+DUSK_CONST char* daObjCarry_c::getBmdName() {
     return l_bmdName[mType];
 }
 
@@ -4300,12 +4300,12 @@ static int daObjCarry_Create(fopAc_ac_c* i_this) {
     return ((daObjCarry_c*)i_this)->create();
 }
 
-static actor_method_class l_daObjCarry_Method = {
+static DUSK_CONST actor_method_class l_daObjCarry_Method = {
     (process_method_func)daObjCarry_Create, (process_method_func)daObjCarry_Delete,
     (process_method_func)daObjCarry_Execute, (process_method_func)NULL,
     (process_method_func)daObjCarry_Draw};
 
-actor_process_profile_definition g_profile_Obj_Carry = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Carry = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

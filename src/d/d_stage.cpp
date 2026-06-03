@@ -482,7 +482,7 @@ void* dStage_roomControl_c::roomDzs_c::add(u8 i_no, u8 roomNo) {
     void** dzs = m_dzs + i_no;
     if (*dzs == NULL) {
         char dzsName[20];
-        sprintf(dzsName, "%s/room%d.dzs", dComIfGp_getStartStageName(), roomNo);
+        SAFE_SPRINTF(dzsName, "%s/room%d.dzs", dComIfGp_getStartStageName(), roomNo);
         JUT_ASSERT(1167, strlen(dzsName) <= sizeof(dzsName));
 
         u32 expandSize =
@@ -2396,7 +2396,7 @@ static void readMult(dStage_dt_c* i_stage, dStage_Multi_c* multi, bool useOldRes
 
             if (dzs == NULL) {
                 char dzsName[11];
-                sprintf(dzsName, "room%d.dzs", info->mRoomNo);
+                SAFE_SPRINTF(dzsName, "room%d.dzs", info->mRoomNo);
                 JUT_ASSERT(3548, strlen(dzsName) <= sizeof(dzsName));
 
                 if (useOldRes) {

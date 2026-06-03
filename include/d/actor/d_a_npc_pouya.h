@@ -121,7 +121,7 @@ public:
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
         int i_faceMotionStepNum,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData, int i_motionStepNum,
-        daNpcT_evtData_c const* i_evtData, char** i_arcNames)
+        daNpcT_evtData_c const* i_evtData, char DUSK_CONST* DUSK_CONST* i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                    i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                    i_arcNames) {}
@@ -146,8 +146,8 @@ public:
 
     MtxP getHeadMtx() { return mpMorf[0]->getModel()->getAnmMtx(4); }
 
-    static char* mCutNameList[3];
-    static cutFunc mCutList[3];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[3];
+    static cutFunc DUSK_CONST mCutList[3];
 
 private:
     /* 0xE40 */ NPC_POUYA_HIO_CLASS* mpHIO;

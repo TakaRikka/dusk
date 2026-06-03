@@ -215,7 +215,7 @@ enum Type {
 
 static NPC_INS_HIO_CLASS l_HIO;
 
-static daNpc_GetParam2 l_bckGetParamList[24] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[24] = {
     {-1, J3DFrameCtrl::EMode_LOOP, INS},
     {BCK_INS_F_TALK_A, J3DFrameCtrl::EMode_NONE, INS},
     {BCK_INS_F_SNIFF, J3DFrameCtrl::EMode_NONE, INS},
@@ -242,7 +242,7 @@ static daNpc_GetParam2 l_bckGetParamList[24] = {
     {BCK_INS_K_STEP, J3DFrameCtrl::EMode_NONE, INS2},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[8] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[8] = {
     {BTP_INS, J3DFrameCtrl::EMode_LOOP, INS},
     {BTP_INS_F_SNIFF, J3DFrameCtrl::EMode_NONE, INS},
     {BTP_INS_F_SURPRISED, J3DFrameCtrl::EMode_NONE, INS},
@@ -253,7 +253,7 @@ static daNpc_GetParam2 l_btpGetParamList[8] = {
     {BTP_INS_FH_MAD, J3DFrameCtrl::EMode_LOOP, INS},
 };
 
-static daNpc_GetParam2 l_btkGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[2] = {
     {BTK_INS, J3DFrameCtrl::EMode_LOOP, INS},
     {BTK_INS_SNIFF, J3DFrameCtrl::EMode_NONE, INS1},
 };
@@ -270,23 +270,23 @@ static int l_loadRes_INS2[3] = {
     INS, INS2, -1,
 };
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_INS0,
     l_loadRes_INS1,
     l_loadRes_INS2,
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "Ins",
     "Ins1",
     "Ins2",
 };
 
-static char* l_evtNames[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
     NULL,
 };
 
-static char* l_myName = "ins";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "ins";
 
 daNpcIns_c::eventFunc daNpcIns_c::mEvtSeqList[1] = {
     NULL,
@@ -1803,7 +1803,7 @@ static int daNpcIns_IsDelete(void* a_this) {
     return 1;
 }
 
-static actor_method_class daNpcIns_MethodTable = {
+static DUSK_CONST actor_method_class daNpcIns_MethodTable = {
     (process_method_func)daNpcIns_Create,
     (process_method_func)daNpcIns_Delete,
     (process_method_func)daNpcIns_Execute,
@@ -1811,7 +1811,7 @@ static actor_method_class daNpcIns_MethodTable = {
     (process_method_func)daNpcIns_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_INS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_INS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

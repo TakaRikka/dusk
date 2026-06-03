@@ -251,25 +251,25 @@ BOOL _Fairy_Feather_c::create() {
     return TRUE;
 }
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "fairy",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-static s8* l_loadResPtrnList[5] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[5] = {
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn0,
     l_loadResPtrn0, l_loadResPtrn0,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDV_FAIRY, FAIRY},
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE,BTP_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1},
     {BCK_FAIRY_F_SAD, J3DFrameCtrl::EMode_LOOP, FAIRY, BTP_FAIRY_F_SAD, J3DFrameCtrl::EMode_LOOP, FAIRY, 1},
     {BCK_FAIRY_F_SMILE, J3DFrameCtrl::EMode_NONE, FAIRY, BTP_FAIRY_F_SMILE, J3DFrameCtrl::EMode_NONE, FAIRY, 1},
@@ -277,7 +277,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {BCK_FAIRY_FH_SMILE, J3DFrameCtrl::EMode_LOOP, FAIRY, BTP_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[12] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[12] = {
     {BCK_FAIRY_WAIT, J3DFrameCtrl::EMode_LOOP, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
     {BCK_FAIRY_GO, J3DFrameCtrl::EMode_NONE, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
     {BCK_FAIRY_GOWAIT, J3DFrameCtrl::EMode_LOOP, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
@@ -292,7 +292,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[12] = {
     {BCK_FAIRY_HOPPE_WAIT, J3DFrameCtrl::EMode_LOOP, FAIRY, BTK_FAIRY, J3DFrameCtrl::EMode_LOOP, FAIRY, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -300,7 +300,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -351,7 +351,7 @@ BOOL _Fairy_Feather_c::setAnm(int i_idx) {
         return TRUE;
     }
 
-    static daNpc_GetParam2 const sBckPrm[6] = {
+    static DUSK_CONSTEXPR daNpc_GetParam2 const sBckPrm[6] = {
         {BCK_FAIRY_HANE_NON, J3DFrameCtrl::EMode_LOOP, FAIRY},
         {BCK_FAIRY_HANE_SYUTU, J3DFrameCtrl::EMode_NONE, FAIRY},
         {BCK_FAIRY_HANE_SITWAIT, J3DFrameCtrl::EMode_LOOP, FAIRY},
@@ -383,7 +383,7 @@ BOOL _Fairy_Feather_c::setAnm(int i_idx) {
 }
 
 BOOL _Fairy_Feather_c::setBrk(int i_idx) {
-    static daNpc_GetParam2 const sBrkPrm[1] = {
+    static DUSK_CONSTEXPR daNpc_GetParam2 const sBrkPrm[1] = {
         {BRK_FAIRY_FEATHER_GT, J3DFrameCtrl::EMode_LOOP, FAIRY},
     };
 
@@ -397,7 +397,7 @@ BOOL _Fairy_Feather_c::setBrk(int i_idx) {
 }
 
 BOOL _Fairy_Feather_c::setBtk(int i_idx) {
-    static daNpc_GetParam2 const sBtkPrm[1] = {
+    static DUSK_CONSTEXPR daNpc_GetParam2 const sBtkPrm[1] = {
         {BTK_FAIRY_FEATHER_GT, J3DFrameCtrl::EMode_LOOP, FAIRY},
     };
 
@@ -438,7 +438,7 @@ void _Fairy_Feather_c::draw(daNpc_Fairy_c* i_this) {
     mBtkAnm.remove(mdlData_p);
 }
 
-static daNpcT_evtData_c l_evtList[18] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[18] = {
     {"", 0},
     {"APPEAR_10F_01", 1},
     {"APPEAR_10F_02", 1},
@@ -459,7 +459,7 @@ static daNpcT_evtData_c l_evtList[18] = {
     {"RETURN_CANCEL", 1},
 };
 
-char* daNpc_Fairy_c::mCutNameList[18] = {
+char DUSK_CONST* DUSK_CONST daNpc_Fairy_c::mCutNameList[18] = {
     "",
     "APPEAR_10F_01",
     "APPEAR_10F_02",
@@ -480,7 +480,7 @@ char* daNpc_Fairy_c::mCutNameList[18] = {
     "RETURN_CANCEL",
 };
 
-daNpc_Fairy_c::cutFunc daNpc_Fairy_c::mCutList[18] = {
+daNpc_Fairy_c::cutFunc DUSK_CONST daNpc_Fairy_c::mCutList[18] = {
     NULL,
     &daNpc_Fairy_c::cutAppear_10F_01,
     &daNpc_Fairy_c::cutAppear_10F_02,
@@ -3051,7 +3051,7 @@ static int daNpc_Fairy_IsDelete(void* i_this) {
     return true;
 }
 
-static actor_method_class daNpc_Fairy_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Fairy_MethodTable = {
     (process_method_func)daNpc_Fairy_Create,
     (process_method_func)daNpc_Fairy_Delete,
     (process_method_func)daNpc_Fairy_Execute,
@@ -3059,7 +3059,7 @@ static actor_method_class daNpc_Fairy_MethodTable = {
     (process_method_func)daNpc_Fairy_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_FAIRY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_FAIRY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -173,7 +173,7 @@ static int daTagRestart_Create(fopAc_ac_c* i_this) {
     return restart->create();
 }
 
-static actor_method_class l_daTagRestart_Method = {
+static DUSK_CONST actor_method_class l_daTagRestart_Method = {
     (process_method_func)daTagRestart_Create,
     (process_method_func)daTagRestart_Delete,
     (process_method_func)daTagRestart_Execute,
@@ -185,7 +185,7 @@ static actor_method_class l_daTagRestart_Method = {
 #endif
 };
 
-actor_process_profile_definition g_profile_Tag_Restart = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Restart = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

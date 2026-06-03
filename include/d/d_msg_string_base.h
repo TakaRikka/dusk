@@ -20,12 +20,12 @@ public:
     f32 getStringPageLocal(u32, u8, u8, J2DTextBox*, J2DTextBox*, JUTFont*,
                                            COutFont_c*, u8);
     u8 getPageMax(int);
-    f32 getMessageLocal(u32, char*);
+    f32 getMessageLocal(u32, TEXT_SPAN);
 
     virtual f32 getString(u32, J2DTextBox*, J2DTextBox*, JUTFont*, COutFont_c*, u8);
     virtual f32 getStringPage(u32, u8, u8, J2DTextBox*, J2DTextBox*, JUTFont*, COutFont_c*,
                                       u8);
-    virtual f32 getMessage(u32, char*);
+    virtual f32 getMessage(u32, TEXT_SPAN);
     virtual void resetStringLocal(J2DTextBox*);
     virtual void drawOutFontLocal(J2DTextBox*, f32);
     virtual void drawFontLocal(J2DTextBox*, u8, f32, f32, f32, f32, u32, u8);

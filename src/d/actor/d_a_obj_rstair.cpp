@@ -70,7 +70,7 @@ int daObjRotStair_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "K_spkai00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "K_spkai00";
 
 static Vec l_water_check_offset = {
     0.0f, 2000.0f, -2000.0f,
@@ -354,7 +354,7 @@ static int daObjRotStair_MoveBGDraw(daObjRotStair_c* i_this) {
 }
 
 
-static actor_method_class daObjRotStair_METHODS = {
+static DUSK_CONST actor_method_class daObjRotStair_METHODS = {
     (process_method_func)daObjRotStair_create1st,
     (process_method_func)daObjRotStair_MoveBGDelete,
     (process_method_func)daObjRotStair_MoveBGExecute,
@@ -362,7 +362,7 @@ static actor_method_class daObjRotStair_METHODS = {
     (process_method_func)daObjRotStair_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_RotStair = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RotStair = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

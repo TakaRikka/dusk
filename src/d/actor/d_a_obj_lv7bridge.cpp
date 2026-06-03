@@ -107,7 +107,7 @@ void daObjLv7Brg_c::setBaseMtx() {
     }
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "Obj_l7brg",
     "K_bridge",
 };
@@ -465,7 +465,7 @@ static int daObjLv7Brg_MoveBGDraw(daObjLv7Brg_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv7Brg_METHODS = {
+static DUSK_CONST actor_method_class daObjLv7Brg_METHODS = {
     (process_method_func)daObjLv7Brg_create1st,
     (process_method_func)daObjLv7Brg_MoveBGDelete,
     (process_method_func)daObjLv7Brg_MoveBGExecute,
@@ -473,7 +473,7 @@ static actor_method_class daObjLv7Brg_METHODS = {
     (process_method_func)daObjLv7Brg_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv7Bridge = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv7Bridge = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

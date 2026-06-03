@@ -55,13 +55,13 @@ static int daTagGstart_Draw(daTagGstart_c*) {
     return 1;
 }
 
-static actor_method_class l_daTagGstart_Method = {
+static DUSK_CONST actor_method_class l_daTagGstart_Method = {
     (process_method_func)daTagGstart_Create,  (process_method_func)daTagGstart_Delete,
     (process_method_func)daTagGstart_Execute, (process_method_func)NULL,
     (process_method_func)daTagGstart_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_Gstart = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Gstart = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

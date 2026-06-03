@@ -3654,7 +3654,7 @@ static void dummy() {
 }
 template unsigned char cLib_calcTimer<unsigned char>(unsigned char*);
 
-static actor_method_class l_daMidna_Method = {
+static DUSK_CONST actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Create,
     (process_method_func)daMidna_Delete,
     (process_method_func)daMidna_Execute,
@@ -3662,7 +3662,7 @@ static actor_method_class l_daMidna_Method = {
     (process_method_func)daMidna_Draw,
 };
 
-actor_process_profile_definition g_profile_MIDNA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MIDNA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 6,
     /* List Prio    */ fpcPi_CURRENT_e,

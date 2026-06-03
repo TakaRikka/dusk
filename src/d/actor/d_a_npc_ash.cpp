@@ -135,7 +135,7 @@ bool daNpcAsh_c::step(s16 i_angY, bool i_animate) {
     return mTurnMode > 1;
 }
 
-static daNpc_GetParam2 l_bckGetParamList[18] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[18] = {
     {-1, 2, 0},  // <none>
     {7, 0, 0},   // ash_f_talk_a
     {12, 0, 1},  // ash_f_talk_b
@@ -156,38 +156,38 @@ static daNpc_GetParam2 l_bckGetParamList[18] = {
     {4, 2, 2},   // ash_bowrun
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {17, 2, 0},  // ash
 };
 
-static daNpc_GetParam2 l_btkGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[1] = {
     {14, 2, 0},  // ash
 };
 
-static int l_loadRes_ASH0[3] = {
+static DUSK_CONSTEXPR int l_loadRes_ASH0[3] = {
     0,
     1,
     -1,
 };
 
-static int l_loadRes_ASH1[3] = {
+static DUSK_CONSTEXPR int l_loadRes_ASH1[3] = {
     0,
     2,
     -1,
 };
 
-static int* l_loadRes_list[2] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[2] = {
     l_loadRes_ASH0,
     l_loadRes_ASH1,
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "Ash",
     "Ash1",
     "Ash2",
 };
 
-static char* l_evtNames[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[6] = {
     "",
     "THE_INTRODUCTION",
     "RESIST_MEETING",
@@ -196,7 +196,7 @@ static char* l_evtNames[6] = {
     "RESIST_WIRETAP_RAFREL",
 };
 
-static char* l_myName = "Ash";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Ash";
 
 daNpcAsh_c::EventFn daNpcAsh_c::mEvtSeqList[6] = {
     NULL,
@@ -1329,13 +1329,13 @@ BOOL daNpcAsh_c::drawDbgInfo() {
     return false;
 }
 
-static actor_method_class daNpcAsh_MethodTable = {
+static DUSK_CONST actor_method_class daNpcAsh_MethodTable = {
     (process_method_func)daNpcAsh_Create,  (process_method_func)daNpcAsh_Delete,
     (process_method_func)daNpcAsh_Execute, (process_method_func)daNpcAsh_IsDelete,
     (process_method_func)daNpcAsh_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ASH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ASH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

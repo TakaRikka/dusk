@@ -19,12 +19,12 @@ static int daTagSchedule_Delete(daTagSchedule_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagSchedule_Method = {
+static DUSK_CONST actor_method_class l_daTagSchedule_Method = {
     (process_method_func)daTagSchedule_Create,
     (process_method_func)daTagSchedule_Delete
 };
 
-actor_process_profile_definition g_profile_Tag_Schedule = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Schedule = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

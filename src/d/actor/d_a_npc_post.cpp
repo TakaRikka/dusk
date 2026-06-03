@@ -247,14 +247,14 @@ void daNpc_Post_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[4][2] = {
+static DUSK_CONSTEXPR int l_bmdData[4][2] = {
     {BMDR_POST, POST},
     {BMDR_POST_FLAG, POST},
     {BMDR_POST_LETTER, POST},
     {BMDR_POST_LETTER_B, POST2},
 };
 
-static daNpcT_evtData_c l_evtList[5] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[5] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"DELIVER", 2},
@@ -262,33 +262,33 @@ static daNpcT_evtData_c l_evtList[5] = {
     {"DELIVERTO_WOLF", 2},
 };
 
-static char* l_resNameList[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[4] = {
     "",
     "post",
     "post1",
     "post2",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     POST, POST1, -1
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     POST, POST2, -1,
 };
 
-static s8 l_loadResPtrn9[4] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[4] = {
     POST, POST1, POST2, -1,
 };
 
-static s8* l_loadResPtrnList[4] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn1,
     l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[15] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[15] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_POST, J3DFrameCtrl::EMode_LOOP, POST, 1},
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_POST_RUN, J3DFrameCtrl::EMode_LOOP, POST1, 0},
     {BCK_POST_F_TALK_A, J3DFrameCtrl::EMode_NONE, POST, BTP_POST_F_TALK_A, J3DFrameCtrl::EMode_NONE, POST, 0},
@@ -306,7 +306,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[15] = {
     {BCK_POST_FH_ANGRY, J3DFrameCtrl::EMode_LOOP, POST2, BTP_POST_FH_ANGRY, J3DFrameCtrl::EMode_LOOP, POST2, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[13] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[13] = {
     {BCK_POST_WAIT_A, J3DFrameCtrl::EMode_LOOP, POST, BTK_POST, J3DFrameCtrl::EMode_NONE, POST, 1, 0},
     {BCK_POST_RUN, J3DFrameCtrl::EMode_LOOP, POST1, BTK_POST_RUN, J3DFrameCtrl::EMode_LOOP, POST1, 0, 0},
     {BCK_POST_STEP, J3DFrameCtrl::EMode_NONE, POST, BTK_POST, J3DFrameCtrl::EMode_NONE, POST, 1, 0},
@@ -322,7 +322,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[13] = {
     {BCK_POST_SIT_NOD, J3DFrameCtrl::EMode_NONE, POST2, BTK_POST_SIT_NOD, J3DFrameCtrl::EMode_NONE, POST2, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[60] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[60] = {
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -340,7 +340,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[60] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {4, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -354,12 +354,12 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[44] = {
     {2, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Post_c::mCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_Post_c::mCutNameList[2] = {
     "",
     "DELIVER",
 };
 
-daNpc_Post_c::cutFunc daNpc_Post_c::mCutList[2] = {
+daNpc_Post_c::cutFunc DUSK_CONST daNpc_Post_c::mCutList[2] = {
     NULL,
     &daNpc_Post_c::cutDeliver,
 };
@@ -988,7 +988,7 @@ void daNpc_Post_c::drawOtherMdl() {
 }
 
 bool daNpc_Post_c::setFlagAnm(int i_idx, int i_attr, f32 i_morf) {
-    static daNpc_GetParam1 flagAnmData[13] = {
+    static DUSK_CONSTEXPR daNpc_GetParam1 flagAnmData[13] = {
         {BCK_POST_FLAG_WAIT_A, POST},
         {BCK_POST_FLAG_RUN, POST1},
         {BCK_POST_FLAG_STEP, POST},
@@ -1558,7 +1558,7 @@ static int daNpc_Post_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Post_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Post_MethodTable = {
     (process_method_func)daNpc_Post_Create,
     (process_method_func)daNpc_Post_Delete,
     (process_method_func)daNpc_Post_Execute,
@@ -1566,7 +1566,7 @@ static actor_method_class daNpc_Post_MethodTable = {
     (process_method_func)daNpc_Post_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_POST = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_POST = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

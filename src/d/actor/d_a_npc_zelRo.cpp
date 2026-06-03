@@ -42,50 +42,50 @@ enum Type {
     /* 0x1 */ TYPE_1,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_ZELRO, ZELRO},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "zelRo",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[2] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, 16, J3DFrameCtrl::EMode_LOOP, ZELRO, 1},
     {BCK_ZELRO_F_TALK_A, J3DFrameCtrl::EMode_NONE, ZELRO, 16, J3DFrameCtrl::EMode_LOOP, ZELRO, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {BCK_ZELRO_WAIT_A, J3DFrameCtrl::EMode_LOOP, ZELRO, BTK_ZELRO, J3DFrameCtrl::EMode_NONE, ZELRO, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[8] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_ZelRo_c::mCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_ZelRo_c::mCutNameList = "";
 
-daNpc_ZelRo_c::cutFunc daNpc_ZelRo_c::mCutList[1] = {
+daNpc_ZelRo_c::cutFunc DUSK_CONST daNpc_ZelRo_c::mCutList[1] = {
     NULL
 };
 
@@ -673,7 +673,7 @@ static int daNpc_ZelRo_IsDelete(void* a_this) {
     return 1;
 }
 
-static actor_method_class daNpc_ZelRo_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_ZelRo_MethodTable = {
     (process_method_func)daNpc_ZelRo_Create,
     (process_method_func)daNpc_ZelRo_Delete,
     (process_method_func)daNpc_ZelRo_Execute,
@@ -681,7 +681,7 @@ static actor_method_class daNpc_ZelRo_MethodTable = {
     (process_method_func)daNpc_ZelRo_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ZELRO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ZELRO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

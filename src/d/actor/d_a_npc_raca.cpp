@@ -80,30 +80,30 @@ enum Type {
     /* 0x1 */ TYPE_1,
 };
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {BMDR_RACA, RACA},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Raca",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, 32, J3DFrameCtrl::EMode_LOOP, RACA, 1},
     {BCK_RACA_F_TALK_A, J3DFrameCtrl::EMode_NONE, RACA, BTP_RACA, J3DFrameCtrl::EMode_LOOP, RACA, 1},
     {BCK_RACA_F_TALK_B, J3DFrameCtrl::EMode_NONE, RACA, BTP_RACA_F_TALK_B, J3DFrameCtrl::EMode_NONE, RACA, 0},
@@ -114,7 +114,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[8] = {
     {BCK_RACA_FH_BITTERSMILE, J3DFrameCtrl::EMode_LOOP, RACA, BTP_RACA_FH_BITTERSMILE, J3DFrameCtrl::EMode_LOOP, RACA, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_RACA_WAIT_A, J3DFrameCtrl::EMode_LOOP, RACA, BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
     {BCK_RACA_GIVEME, J3DFrameCtrl::EMode_LOOP, RACA, BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
     {BCK_RACA_TALK_A, J3DFrameCtrl::EMode_NONE, RACA, BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
@@ -127,7 +127,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[10] = {
     {BCK_RACA_STEP, J3DFrameCtrl::EMode_NONE, RACA,BTK_RACA, J3DFrameCtrl::EMode_NONE, RACA, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {5, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {6, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -138,7 +138,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[32] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -150,9 +150,9 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[36] = {
     {9, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Raca_c::mCutNameList = "";
+char DUSK_CONST* DUSK_CONST daNpc_Raca_c::mCutNameList = "";
 
-daNpc_Raca_c::cutFunc daNpc_Raca_c::mCutList[1] = {
+daNpc_Raca_c::cutFunc DUSK_CONST daNpc_Raca_c::mCutList[1] = {
     NULL,
 };
 
@@ -843,7 +843,7 @@ static int daNpc_Raca_IsDelete(void* a_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Raca_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Raca_MethodTable = {
     (process_method_func)daNpc_Raca_Create,
     (process_method_func)daNpc_Raca_Delete,
     (process_method_func)daNpc_Raca_Execute,
@@ -851,7 +851,7 @@ static actor_method_class daNpc_Raca_MethodTable = {
     (process_method_func)daNpc_Raca_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_RACA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_RACA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

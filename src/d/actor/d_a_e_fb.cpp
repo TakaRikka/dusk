@@ -993,7 +993,7 @@ static int daE_FB_Create(daE_FB_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daE_FB_Method = {
+static DUSK_CONST actor_method_class l_daE_FB_Method = {
     (process_method_func)daE_FB_Create,
     (process_method_func)daE_FB_Delete,
     (process_method_func)daE_FB_Execute,
@@ -1001,7 +1001,7 @@ static actor_method_class l_daE_FB_Method = {
     (process_method_func)daE_FB_Draw,
 };
 
-actor_process_profile_definition g_profile_E_FB = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_FB = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

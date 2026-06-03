@@ -423,7 +423,7 @@ static void* s_sub(void* i_actor, void* i_data) {
 }
 
 void daNpcCoach_c::initCollision() {
-    static dCcD_SrcCyl const ccCylSrc = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl const ccCylSrc = {
         {
             {0, {{0, 0, 0}, {0x2420, 0x11}, 0x79}},
             {dCcD_SE_NONE, 0, 0, 0, 0},
@@ -437,7 +437,7 @@ void daNpcCoach_c::initCollision() {
         }
     };
 
-    static dCcD_SrcSph const ccSphSrc = {
+    static DUSK_CONSTEXPR dCcD_SrcSph const ccSphSrc = {
         {
             {0, {{0, 0, 0}, {0x10000, 0x11}, 0}},
             {dCcD_SE_NONE, 0, 0, 0, 0},
@@ -570,9 +570,9 @@ static int createSolidHeap(fopAc_ac_c* a_this) {
     return i_this->createHeap();
 }
 
-static char* l_arcName = "Coach";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Coach";
 
-static struct {
+static DUSK_CONSTEXPR struct {
     int field_0x0;
     f32 field_0x4;
     f32 field_0x8;
@@ -2166,7 +2166,7 @@ void daNpcCoach_c::initCoachBlazing() {
 
 daNpcCoach_c::daNpcCoach_c() {}
 
-static actor_method_class l_daNpcCoach_Method = {
+static DUSK_CONST actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Create,
     (process_method_func)daNpcCoach_Delete,
     (process_method_func)daNpcCoach_Execute,
@@ -2174,7 +2174,7 @@ static actor_method_class l_daNpcCoach_Method = {
     (process_method_func)daNpcCoach_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_COACH = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_COACH = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

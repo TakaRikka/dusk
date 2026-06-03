@@ -113,7 +113,7 @@ public:
                                daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3,
                                int param_4,
                                daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5,
-                               int param_6, daNpcT_evtData_c const* param_7, char** param_8)
+                               int param_6, daNpcT_evtData_c const* param_7, char DUSK_CONST* DUSK_CONST* param_8)
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
     u16 getEyeballMaterialNo() { return 2; }
     s32 getHeadJointNo() { return 4; }
@@ -137,7 +137,7 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
 
     static const char* mCutNameList[7];
-    static cutFunc mCutList[7];
+    static cutFunc DUSK_CONST mCutList[7];
 
 private:
     /* 0x0E40 */ NPC_URI_HIO_CLASS* mpHIO;

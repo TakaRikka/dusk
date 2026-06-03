@@ -33,7 +33,7 @@ typedef struct base_process_class {
     /* 0x34 */ line_tag line_tag_;
     /* 0x4C */ delete_tag_class delete_tag;
     /* 0x68 */ process_priority_class priority;
-    /* 0xA8 */ process_method_class* methods;
+    /* 0xA8 */ process_method_class DUSK_CONST* methods;
     /* 0xAC */ void* append;
     /* 0xB0 */ u32 parameters;
     /* 0xB4 */ int subtype;

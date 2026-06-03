@@ -8,16 +8,16 @@
 #include "d/actor/d_a_obj_stopper2.h"
 #include "d/actor/d_a_player.h"
 
-static char* l_arcName = "Stop00";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Stop00";
 
-static char* l_evName[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName[4] = {
     "STOP_OPEN",
     "STOP_CLOSE",
     "STOP_OPEN2",
     "STOP_CLOSE2",
 };
 
-static char* l_staffName = "dstop";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "dstop";
 
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daObjStopper2_c*)i_this)->CreateHeap();
@@ -205,7 +205,7 @@ void daObjStopper2_c::actionEvent() {
 void daObjStopper2_c::actionDead() {}
 
 int daObjStopper2_c::demoProc() {
-    static char* action_table[3] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[3] = {
         "WAIT",
         "STOP_OPEN",
         "STOP_CLOSE",
@@ -299,7 +299,7 @@ static int daObjStopper2_Create(daObjStopper2_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daObjStopper2_Method = {
+static DUSK_CONST actor_method_class l_daObjStopper2_Method = {
     (process_method_func)daObjStopper2_Create,
     (process_method_func)daObjStopper2_Delete,
     (process_method_func)daObjStopper2_Execute,
@@ -307,7 +307,7 @@ static actor_method_class l_daObjStopper2_Method = {
     (process_method_func)daObjStopper2_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Stopper2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Stopper2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -1091,7 +1091,7 @@ static cPhs_Step daB_YOI_Create(daB_YOI_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daB_YOI_Method = {
+static DUSK_CONST actor_method_class l_daB_YOI_Method = {
     (process_method_func)daB_YOI_Create,
     (process_method_func)daB_YOI_Delete,
     (process_method_func)daB_YOI_Execute,
@@ -1099,7 +1099,7 @@ static actor_method_class l_daB_YOI_Method = {
     (process_method_func)daB_YOI_Draw,
 };
 
-actor_process_profile_definition g_profile_B_YOI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_YOI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -390,7 +390,7 @@ static BOOL ep_switch_event_begin(ep_class* i_this) {
 }
 
 static int ep_switch_event_move(ep_class* i_this) {
-    static char* actions[2] = {
+    static DUSK_CONST char* actions[2] = {
         "WAIT",
         "FIRE",
     };
@@ -851,7 +851,7 @@ static int daEp_Create(fopAc_ac_c* a_this) {
         } // mSphAttr
     };
 
-    static dCcD_SrcCyl co_cyl_src = {
+    static DUSK_CONSTEXPR dCcD_SrcCyl co_cyl_src = {
         {
             {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdbf, 0x1f}, 0x79}}, // mObj
             {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -948,7 +948,7 @@ static int daEp_Create(fopAc_ac_c* a_this) {
     return rv;
 }
 
-static actor_method_class l_daEp_Method = {
+static DUSK_CONST actor_method_class l_daEp_Method = {
     (process_method_func)daEp_Create,
     (process_method_func)daEp_Delete,
     (process_method_func)daEp_Execute,
@@ -956,7 +956,7 @@ static actor_method_class l_daEp_Method = {
     (process_method_func)daEp_Draw,
 };
 
-actor_process_profile_definition g_profile_EP = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_EP = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

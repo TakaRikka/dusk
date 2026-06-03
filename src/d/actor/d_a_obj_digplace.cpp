@@ -169,13 +169,13 @@ static int daObjDigpl_Draw(daObjDigpl_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjDigpl_Method = {
+static DUSK_CONST actor_method_class l_daObjDigpl_Method = {
     (process_method_func)daObjDigpl_Create,  (process_method_func)daObjDigpl_Delete,
     (process_method_func)daObjDigpl_Execute, (process_method_func)NULL,
     (process_method_func)daObjDigpl_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Digpl = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Digpl = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

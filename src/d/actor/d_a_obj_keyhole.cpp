@@ -261,7 +261,7 @@ static void chain_move(obj_keyhole_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
-    static cXyz lock_pos[] = {
+    static DUSK_CONSTEXPR cXyz lock_pos[] = {
         cXyz(140.0f, 130.0f, 0.0f),
         cXyz(-140.0f, 130.0f, 0.0f),
         cXyz(170.0f, 30.0f, 0.0f),
@@ -648,19 +648,19 @@ static int useHeapInit(fopAc_ac_c* i_this) {
     obj_keyhole_class* a_this = (obj_keyhole_class*)i_this;
     void* modelData;
 
-    static int bmd_d[] = {
+    static DUSK_CONSTEXPR int bmd_d[] = {
         7, 11, 11, 7, 11, 11, 11, 11, 11, 11,
     };
 
-    static u32 mdl_f[] = {
+    static DUSK_CONSTEXPR u32 mdl_f[] = {
         0x80000, 0, 0x80000, 0, 0, 0, 0, 0, 0, 0,
     };
 
-    static int bck_d[] = {
+    static DUSK_CONSTEXPR int bck_d[] = {
         0, 5, 5, 0, 5, 5, 5, 5, 5, 5,
     };
 
-    static int cbmd_d[] = {
+    static DUSK_CONSTEXPR int cbmd_d[] = {
         4, 8, 8, 4, 8, 8, 8, 8, 8, 8,
     };
 
@@ -709,7 +709,7 @@ static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
     obj_keyhole_class* i_this = (obj_keyhole_class*)a_this;
     fopAcM_ct(a_this, obj_keyhole_class);
 
-    static char* arc_name[] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* arc_name[] = {
         "Obj_keyh",  "Obj_bkey", "Obj_bkey2", "Obj_bkey3", "Obj_bkey",
         "Obj_bkey5", "Obj_bkey", "Obj_bkey",  "Obj_bkey",  "Obj_bkey",
     };
@@ -771,7 +771,7 @@ static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
         fopAcM_SetMin(a_this, -400.0f, -400.0f, -400.0f);
         fopAcM_SetMax(a_this, 400.0f, 400.0f, 400.0f);
 
-        static dCcD_SrcSph cc_sph_src = {
+        static DUSK_CONSTEXPR dCcD_SrcSph cc_sph_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdbf, 0x3}, 0x75}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -833,7 +833,7 @@ static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
     return phase_state;
 }
 
-static actor_method_class l_daObj_Keyhole_Method = {
+static DUSK_CONST actor_method_class l_daObj_Keyhole_Method = {
     (process_method_func)daObj_Keyhole_Create,
     (process_method_func)daObj_Keyhole_Delete,
     (process_method_func)daObj_Keyhole_Execute,
@@ -841,7 +841,7 @@ static actor_method_class l_daObj_Keyhole_Method = {
     (process_method_func)daObj_Keyhole_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KEYHOLE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KEYHOLE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

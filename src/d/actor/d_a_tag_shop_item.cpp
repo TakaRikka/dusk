@@ -178,13 +178,13 @@ static int daTag_ShopItem_IsDelete(void* i_this) {
 
 daTag_ShopItem_c::~daTag_ShopItem_c() {}
 
-static actor_method_class daTag_ShopItem_MethodTable = {
+static DUSK_CONST actor_method_class daTag_ShopItem_MethodTable = {
     (process_method_func)daTag_ShopItem_Create,  (process_method_func)daTag_ShopItem_Delete,
     (process_method_func)daTag_ShopItem_Execute, (process_method_func)daTag_ShopItem_IsDelete,
     (process_method_func)daTag_ShopItem_Draw,
 };
 
-actor_process_profile_definition g_profile_TAG_SHOPITM = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_SHOPITM = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

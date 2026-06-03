@@ -105,7 +105,7 @@ enum Motion {
 
 static NPC_KASI_KYU_HIO_CLASS l_HIO;
 
-static daNpc_GetParam2 l_bckGetParamList[16] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[16] = {
     {BCK_MICH_IYAN_WAIT, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_KYA_TALK, J3DFrameCtrl::EMode_LOOP, GIRLS},
     {BCK_MICH_OUEN_WAIT_A, J3DFrameCtrl::EMode_LOOP, GIRLS},
@@ -124,23 +124,23 @@ static daNpc_GetParam2 l_bckGetParamList[16] = {
     {BCK_W_2NORMALTALK_A, J3DFrameCtrl::EMode_NONE, WGENERAL},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[1] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[1] = {
     {BTP_KYU, J3DFrameCtrl::EMode_LOOP, KASI_KYU},
 };
 
-static char* l_arcNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[3] = {
     "kasi_kyu",
     "girls",
     "Wgeneral",
 };
 
-static char* l_evtNames[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
     NULL,
 };
 
-static char* l_myName = "kasi_kyu";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "kasi_kyu";
 
-daNpcKasiKyu_c::EventFn daNpcKasiKyu_c::mEvtSeqList[1] = {
+daNpcKasiKyu_c::EventFn DUSK_CONST daNpcKasiKyu_c::mEvtSeqList[1] = {
     NULL
 };
 
@@ -1416,7 +1416,7 @@ static int daNpcKasiKyu_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpcKasiKyu_MethodTable = {
+static DUSK_CONST actor_method_class daNpcKasiKyu_MethodTable = {
     (process_method_func)daNpcKasiKyu_Create,
     (process_method_func)daNpcKasiKyu_Delete,
     (process_method_func)daNpcKasiKyu_Execute,
@@ -1424,7 +1424,7 @@ static actor_method_class daNpcKasiKyu_MethodTable = {
     (process_method_func)daNpcKasiKyu_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_KASIKYU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_KASIKYU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

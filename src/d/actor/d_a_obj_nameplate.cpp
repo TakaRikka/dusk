@@ -228,7 +228,7 @@ void daObjNameplate_c::messageProc() {
     }
 }
 
-char* daObjNameplate_c::l_arcName = "J_Hyosatu";
+char DUSK_CONST* DUSK_CONST daObjNameplate_c::l_arcName = "J_Hyosatu";
 
 int daObjNameplate_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, "J_Hyousatu.bmd");
@@ -300,13 +300,13 @@ static int daObjNameplate_Create(fopAc_ac_c* i_this) {
 
 /* ##############################################################################################
  */
-static actor_method_class l_daObjNameplate_Method = {
+static DUSK_CONST actor_method_class l_daObjNameplate_Method = {
     (process_method_func)daObjNameplate_Create,  (process_method_func)daObjNameplate_Delete,
     (process_method_func)daObjNameplate_Execute, (process_method_func)daObjNameplate_IsDelete,
     (process_method_func)daObjNameplate_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_NamePlate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_NamePlate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

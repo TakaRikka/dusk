@@ -144,7 +144,7 @@ void daAlink_c::handleQuickTransform() {
     procCoMetamorphoseInit();
 }
 
-bool daAlink_c::checkGyroAimContext() {
+bool daAlink_c::checkAimContext() {
     switch (mProcID) {
     case PROC_SUBJECTIVITY:
     case PROC_SWIM_SUBJECTIVITY:

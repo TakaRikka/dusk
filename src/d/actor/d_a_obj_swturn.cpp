@@ -113,7 +113,7 @@ int daObjSwTurn_c::Create() {
     return 1;
 }
 
-static char* l_arcName[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[2] = {
     "P_Lv4tsw",
     "P_Lv4tswD",
 };
@@ -428,7 +428,7 @@ static int daObjSwTurn_MoveBGDraw(daObjSwTurn_c* i_this) {
     return i_this->Draw();
 }
 
-static actor_method_class daObjSwTurn_METHODS = {
+static DUSK_CONST actor_method_class daObjSwTurn_METHODS = {
     (process_method_func)daObjSwTurn_create1st,
     (process_method_func)daObjSwTurn_MoveBGDelete,
     (process_method_func)daObjSwTurn_MoveBGExecute,
@@ -436,7 +436,7 @@ static actor_method_class daObjSwTurn_METHODS = {
     (process_method_func)daObjSwTurn_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwTurn = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwTurn = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

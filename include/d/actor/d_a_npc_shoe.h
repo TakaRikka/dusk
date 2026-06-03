@@ -110,7 +110,7 @@ public:
     inline bool chkFindPlayer();
     inline void playMotion();
 
-    static EventFn mEvtSeqList[1];
+    static EventFn DUSK_CONST mEvtSeqList[1];
 
 private:
     /* 0xB48 */ J3DModel* mpModel1;

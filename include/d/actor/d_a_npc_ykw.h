@@ -132,7 +132,7 @@ public:
     }
 
     static const char* mCutNameList[8];
-    static cutFunc mCutList[8];
+    static cutFunc DUSK_CONST mCutList[8];
 
     void setDialogueTmr1(int param_1) {
         field_0x1024 = param_1;

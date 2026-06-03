@@ -9,6 +9,8 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+
+#include "dusk/string.hpp"
 #ifdef __REVOLUTION_SDK__
 #include <revolution.h>
 #else
@@ -845,8 +847,8 @@ bool JUTException::queryMapAddress(char* mapPath, u32 address, s32 section_id, u
                                    bool begin_with_newline) {
     if (mapPath) {
         char buffer[80];
-        strcpy(buffer, mapPath);
-        strcat(buffer, ".map");
+        SAFE_STRCPY(buffer, mapPath);
+        SAFE_STRCAT(buffer, ".map");
         if (queryMapAddress_single(buffer, address, section_id, out_addr, out_size, out_line,
                                    line_length, print, begin_with_newline) == true)
         {

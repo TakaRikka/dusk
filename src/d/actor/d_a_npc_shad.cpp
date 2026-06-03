@@ -186,7 +186,7 @@ enum Joint {
     /* 0x1E */ JNT_FOOTR,
 };
 
-static daNpc_GetParam2 l_bckGetParamList[36] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[36] = {
     {-1, J3DFrameCtrl::EMode_LOOP, SHAD},
     {BCK_SHAD_F_TALK_A, J3DFrameCtrl::EMode_NONE, SHAD},
     {BCK_SHAD_F_HAPPY, J3DFrameCtrl::EMode_NONE, SHAD},
@@ -225,7 +225,7 @@ static daNpc_GetParam2 l_bckGetParamList[36] = {
     {BCK_SHAD_SURPRISE_WAIT, J3DFrameCtrl::EMode_LOOP, SHAD1},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[11] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[11] = {
     {BTP_SHAD, J3DFrameCtrl::EMode_LOOP, SHAD},
     {BTP_SHAD_F_ANGER, J3DFrameCtrl::EMode_NONE, SHAD1},
     {BTP_SHAD_F_DISCOURAGED, J3DFrameCtrl::EMode_NONE, SHAD},
@@ -239,7 +239,7 @@ static daNpc_GetParam2 l_btpGetParamList[11] = {
     {BTP_SHAD_FH_HAPPY, J3DFrameCtrl::EMode_LOOP, SHAD},
 };
 
-static daNpc_GetParam2 l_btkGetParamList[5] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[5] = {
     {BTK_SHAD, J3DFrameCtrl::EMode_LOOP, SHAD},
     {BTK_SHAD_DISCOURAGED, J3DFrameCtrl::EMode_NONE, SHAD1},
     {BTK_SHAD_DISCOURAGED_WAIT, J3DFrameCtrl::EMode_LOOP, SHAD1},
@@ -259,20 +259,20 @@ static int l_loadRes_SHAD2[3] = {
     0, 3, -1,
 };
 
-static int* l_loadRes_list[3] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[3] = {
     l_loadRes_SHAD0,
     l_loadRes_SHAD1,
     l_loadRes_SHAD2,
 };
 
-static char* l_arcNames[4] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[4] = {
     "Shad",
     "Shad1",
     "Shad2",
     "Shad3",
 };
 
-static char* l_evtNames[14] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[14] = {
     "",
     "THE_INTRODUCTION",
     "RESIST_MEETING",
@@ -289,7 +289,7 @@ static char* l_evtNames[14] = {
     "RESIST_WIRETAP_RAFREL"
 };
 
-static char* l_evtArcs[14] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtArcs[14] = {
     NULL,
     NULL,
     NULL,
@@ -306,11 +306,11 @@ static char* l_evtArcs[14] = {
     NULL,
 };
 
-static char* l_myName = "Shad";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Shad";
 
 static NPC_SHAD_HIO_CLASS l_HIO;
 
-daNpcShad_c::EventFn daNpcShad_c::mEvtSeqList[14] = {
+daNpcShad_c::EventFn DUSK_CONST daNpcShad_c::mEvtSeqList[14] = {
     NULL,
     &daNpcShad_c::EvCut_Introduction,
     &daNpcShad_c::EvCut_Meeting,
@@ -1204,7 +1204,7 @@ bool daNpcShad_c::wait_type0(void* param_1) {
                     eventInfo.setArchiveName(l_evtArcs[mOrderEvtNo]);
                 }
 
-                char* event;
+                char DUSK_CONST* event;
                 if (mOrderEvtNo != 0) {
                     event = l_evtNames[mOrderEvtNo];
                 } else {
@@ -1376,7 +1376,7 @@ bool daNpcShad_c::wait_type1(void* param_1) {
                     eventInfo.setArchiveName(l_evtArcs[mOrderEvtNo]);
                 }
 
-                char* event;
+                char DUSK_CONST* event;
                 if (mOrderEvtNo != 0) {
                     event = l_evtNames[mOrderEvtNo];
                 } else {
@@ -2638,7 +2638,7 @@ inline BOOL daNpcShad_c::drawDbgInfo() {
     return FALSE;
 }
 
-static actor_method_class daNpcShad_MethodTable = {
+static DUSK_CONST actor_method_class daNpcShad_MethodTable = {
     (process_method_func)daNpcShad_Create,
     (process_method_func)daNpcShad_Delete,
     (process_method_func)daNpcShad_Execute,
@@ -2646,7 +2646,7 @@ static actor_method_class daNpcShad_MethodTable = {
     (process_method_func)daNpcShad_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_SHAD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_SHAD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

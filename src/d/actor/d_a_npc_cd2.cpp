@@ -14,128 +14,128 @@ static int jntNodeCallBack(J3DJoint* i_jnt, int param_1) {
     return 1;
 }
 
-static char* const l_resMANa[6] = {
+static DUSK_CONST char* const l_resMANa[6] = {
     "MAN_a", "MAN_a_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMADa[6] = {
+static DUSK_CONST char* const l_resMADa[6] = {
     "MAD_a", "MAD_a_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMCNa[6] = {
+static DUSK_CONST char* const l_resMCNa[6] = {
     "MCN_a", "MCN_a_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMONa[6] = {
+static DUSK_CONST char* const l_resMONa[6] = {
     "MON_a", "MON_a_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMANb[6] = {
+static DUSK_CONST char* const l_resMANb[6] = {
     "MAN_b", "MAN_b_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMANc[6] = {
+static DUSK_CONST char* const l_resMANc[6] = {
     "MAN_c", "MAN_c_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMASa[6] = {
+static DUSK_CONST char* const l_resMASa[6] = {
     "MAS_a", "MAS_a_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMBNa[6] = {
+static DUSK_CONST char* const l_resMBNa[6] = {
     "MBN_a", "MBN_a_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMANa2[6] = {
+static DUSK_CONST char* const l_resMANa2[6] = {
     "MAN_a2", "MAN_a2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMADa2[6] = {
+static DUSK_CONST char* const l_resMADa2[6] = {
     "MAD_a2", "MAD_a2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMCNa2[6] = {
+static DUSK_CONST char* const l_resMCNa2[6] = {
     "MCN_a2", "MCN_a2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMONa2[6] = {
+static DUSK_CONST char* const l_resMONa2[6] = {
     "MON_a2", "MON_a2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMANb2[6] = {
+static DUSK_CONST char* const l_resMANb2[6] = {
     "MAN_b2", "MAN_b2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMANc2[6] = {
+static DUSK_CONST char* const l_resMANc2[6] = {
     "MAN_c2", "MAN_c2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMASa2[6] = {
+static DUSK_CONST char* const l_resMASa2[6] = {
     "MAS_a2", "MAS_a2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resMBNa2[6] = {
+static DUSK_CONST char* const l_resMBNa2[6] = {
     "MBN_a2", "MBN_a2_TW", "Mgeneral", "Mspecial", "object", "objectTW",
 };
 
-static char* const l_resWANa[6] = {
+static DUSK_CONST char* const l_resWANa[6] = {
     "WAN_a", "WAN_a_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWADa[6] = {
+static DUSK_CONST char* const l_resWADa[6] = {
     "WAD_a", "WAD_a_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resMATa[6] = {
+static DUSK_CONST char* const l_resMATa[6] = {
     "MAT_a", "MAT_a_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWCNa[6] = {
+static DUSK_CONST char* const l_resWCNa[6] = {
     "WCN_a", "WCN_a_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWONa[6] = {
+static DUSK_CONST char* const l_resWONa[6] = {
     "WON_a", "WON_a_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWGNa[6] = {
+static DUSK_CONST char* const l_resWGNa[6] = {
     "WGN_a", "WGN_a_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWANb[6] = {
+static DUSK_CONST char* const l_resWANb[6] = {
     "WAN_b", "WAN_b_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWANa2[6] = {
+static DUSK_CONST char* const l_resWANa2[6] = {
     "WAN_a2", "WAN_a2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWADa2[6] = {
+static DUSK_CONST char* const l_resWADa2[6] = {
     "WAD_a2", "WAD_a2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resMATa2[6] = {
+static DUSK_CONST char* const l_resMATa2[6] = {
     "MAT_a2", "MAT_a2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWCNa2[6] = {
+static DUSK_CONST char* const l_resWCNa2[6] = {
     "WCN_a2", "WCN_a2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWONa2[6] = {
+static DUSK_CONST char* const l_resWONa2[6] = {
     "WON_a2", "WON_a2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWGNa2[6] = {
+static DUSK_CONST char* const l_resWGNa2[6] = {
     "WGN_a2", "WGN_a2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
-static char* const l_resWANb2[6] = {
+static DUSK_CONST char* const l_resWANb2[6] = {
     "WAN_b2", "WAN_b2_TW", "Wgeneral", "Wspecial", "object", "objectTW",
 };
 
 struct anmTblPrm {
-    char* name;
+    DUSK_CONST char* name;
     int index;
 };
 
@@ -195,7 +195,7 @@ dCcD_SrcCyl const daNpcCd2_c::m_cylDat = {
     }
 };
 
-static char* const* l_resNameTbl[30] = {
+static DUSK_CONST char* const* l_resNameTbl[30] = {
     l_resMANa,  l_resMADa,  l_resMCNa,  l_resMONa,  l_resMANb,  l_resMANc,  l_resMASa,  l_resMBNa,
     l_resMANa2, l_resMADa2, l_resMCNa2, l_resMONa2, l_resMANb2, l_resMANc2, l_resMASa2, l_resMBNa2,
     l_resWANa,  l_resWADa,  l_resMATa,  l_resWCNa,  l_resWONa,  l_resWGNa,  l_resWANb,  l_resWANa2,

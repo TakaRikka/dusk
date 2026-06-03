@@ -113,7 +113,7 @@ public:
             daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData,
             int i_motionStepNum,
             daNpcT_evtData_c const* i_evtData,
-            char** i_arcNames)
+            char DUSK_CONST* DUSK_CONST* i_arcNames)
         : dShopSystem_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
         i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
         i_arcNames) {}
@@ -124,8 +124,8 @@ public:
     BOOL checkRemoveJoint(int param_1) { return param_1 == JNT_MOUTH; }
     u16 getEyeballMaterialNo() { return 1; };
 
-    static char* mCutNameList;
-    static cutFunc mCutList[1];
+    static char DUSK_CONST* DUSK_CONST mCutNameList;
+    static cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0x0F7C */ NPC_GRMC_HIO_CLASS* mpHIO;

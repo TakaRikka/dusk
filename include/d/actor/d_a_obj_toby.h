@@ -38,7 +38,7 @@ class obj_toby_class {
 public:
     /* 0x0000 */ fopAc_ac_c mBase;
     /* 0x0568 */ request_of_phase_process_class mPhase;
-    /* 0x0570 */ char* mArcName;
+    /* 0x0570 */ char DUSK_CONST* mArcName;
     /* 0x0574 */ u8 field_0x574;
     /* 0x0575 */ u8 field_0x575;
     /* 0x0576 */ u8 field_0x576;

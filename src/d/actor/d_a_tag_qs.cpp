@@ -403,13 +403,13 @@ static int daTagQs_Create(fopAc_ac_c* i_this) {
     return qs->create();
 }
 
-static actor_method_class l_daTagQs_Method = {
+static DUSK_CONST actor_method_class l_daTagQs_Method = {
     (process_method_func)daTagQs_Create,     (process_method_func)daTagQs_Delete,
     (process_method_func)daTagQs_Execute, (process_method_func)daTagQs_IsDelete,
     (process_method_func)daTagQs_Draw,
 };
 
-actor_process_profile_definition g_profile_TAG_QS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_QS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

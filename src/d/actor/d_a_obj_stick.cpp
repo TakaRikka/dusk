@@ -22,7 +22,7 @@ dCcD_SrcSph daObj_Stick_c::mCcDSph = {
     }  // mSphAttr
 };
 
-static char* l_resName = "Taro6";
+static DUSK_CONST char* l_resName = "Taro6";
 
 static OBJ_STICK_HIO_CLASS l_HIO;
 
@@ -218,7 +218,7 @@ static int daObj_Stick_IsDelete(void* param_0) {
     return 1;
 }
 
-static actor_method_class daObj_Stick_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Stick_MethodTable = {
     (process_method_func)daObj_Stick_Create,
     (process_method_func)daObj_Stick_Delete,
     (process_method_func)daObj_Stick_Execute,
@@ -226,7 +226,7 @@ static actor_method_class daObj_Stick_MethodTable = {
     (process_method_func)daObj_Stick_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_STICK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_STICK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

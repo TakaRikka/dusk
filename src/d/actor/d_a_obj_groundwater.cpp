@@ -335,7 +335,7 @@ static int daGrdWater_Create(fopAc_ac_c* i_this) {
     return static_cast<daGrdWater_c*>(i_this)->create();
 }
 
-static actor_method_class l_daGrdWater_Method = {
+static DUSK_CONST actor_method_class l_daGrdWater_Method = {
     (process_method_func)daGrdWater_Create,
     (process_method_func)daGrdWater_Delete,
     (process_method_func)daGrdWater_Execute,
@@ -343,7 +343,7 @@ static actor_method_class l_daGrdWater_Method = {
     (process_method_func)daGrdWater_Draw,
 };
 
-actor_process_profile_definition g_profile_GRDWATER = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_GRDWATER = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

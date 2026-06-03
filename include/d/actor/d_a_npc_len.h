@@ -86,7 +86,7 @@ public:
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_faceMotionSequenceData,
         int i_faceMotionStepNum,
         daNpcT_MotionSeqMngr_c::sequenceStepData_c const* i_motionSequenceData, int i_motionStepNum,
-        daNpcT_evtData_c const* i_evtData, char** i_arcNames)
+        daNpcT_evtData_c const* i_evtData, char DUSK_CONST* DUSK_CONST* i_arcNames)
         : daNpcT_c(i_faceMotionAnmData, i_motionAnmData, i_faceMotionSequenceData,
                    i_faceMotionStepNum, i_motionSequenceData, i_motionStepNum, i_evtData,
                    i_arcNames) {}
@@ -100,8 +100,8 @@ public:
     s32 getFootRJointNo() { return 32; }
     BOOL chkXYItems() { return TRUE; }
 
-    static char* mCutNameList[4];
-    static cutFunc mCutList[4];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[4];
+    static cutFunc DUSK_CONST mCutList[4];
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

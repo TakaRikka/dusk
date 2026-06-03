@@ -15,7 +15,7 @@
 
 static s32 l_bmdData[4] = { 8, 0, 9, 0 };
 
-static char* l_resNameList[1] = {"Kakashi"};
+static DUSK_CONST char* l_resNameList[1] = {"Kakashi"};
 
 const daObj_KBacket_HIOParam daObj_KBacket_Param_c::m = {
     0.0f, -5.0f, 1.0f, 400.0f, 73.0f, 30.0f, 30.0f, 30.0f, 37.0f, 45.0f, 0.0f
@@ -685,7 +685,7 @@ static int daObj_KBacket_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_KBacket_MethodTable = {
+static DUSK_CONST actor_method_class daObj_KBacket_MethodTable = {
     (process_method_func)daObj_KBacket_Create,
     (process_method_func)daObj_KBacket_Delete,
     (process_method_func)daObj_KBacket_Execute,
@@ -693,7 +693,7 @@ static actor_method_class daObj_KBacket_MethodTable = {
     (process_method_func)daObj_KBacket_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KBACKET = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KBACKET = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

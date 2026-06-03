@@ -3,6 +3,9 @@
 #ifndef GAMEPAD_COLOR_H
 #define GAMEPAD_COLOR_H
 
-void handleGamepadColor();
+namespace dusk::input {
+    void handleGamepadColor();
+    bool pad_has_led(int port) noexcept;
+}
 
 #endif

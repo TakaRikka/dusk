@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_resNameIdx[2] = {
+static DUSK_CONST char* l_resNameIdx[2] = {
     "P_Rgate",
     "SDGate",
 };
@@ -231,13 +231,13 @@ static int daSwShutter_Create(fopAc_ac_c* i_this) {
     return ((daSwShutter_c*)i_this)->create();
 }
 
-static actor_method_class l_daSwShutter_Method = {
+static DUSK_CONST actor_method_class l_daSwShutter_Method = {
     (process_method_func)daSwShutter_Create,  (process_method_func)daSwShutter_Delete,
     (process_method_func)daSwShutter_Execute, (process_method_func)NULL,
     (process_method_func)daSwShutter_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwallShutter = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwallShutter = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

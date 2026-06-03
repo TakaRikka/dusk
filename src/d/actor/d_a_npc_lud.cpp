@@ -123,47 +123,47 @@ enum Motion {
     /* 0x13 */ MOT_UNK_19 = 19,
 };
 
-static int l_bmdData[5][2] = {
+static DUSK_CONSTEXPR int l_bmdData[5][2] = {
     {11, 1}, {11, 2}, {39, 4}, {40, 4}, {38, 4},
 };
 
-static daNpcT_evtData_c l_evtList[6] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[6] = {
     {"", 0},      {"NO_RESPONSE", 0}, {"DEMO13_STB", 0}, {"CONVERSATION_ABOUT_GORON", 4},
     {"NURSE", 4}, {"GO_AHEAD", 4},
 };
 
-static char* l_resNameList[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[6] = {
     "", "Lud", "Lud_TW", "Lud1", "Lud2", "Len1",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     1,
     3,
     -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     1,
     2,
     -1,
 };
 
-static s8 l_loadResPtrn2[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {
     1,
     4,
     -1,
 };
 
-s8 l_loadResPtrn9[5] = {
+DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {
     1, 2, 3, 4, -1,
 };
 
-static s8* l_loadResPtrnList[9] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[9] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn2,
     l_loadResPtrn2, l_loadResPtrn2, l_loadResPtrn0, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[20] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[20] = {
     {-1, 0, 0, 17, 2, 1, 1}, {6, 0, 1, 17, 2, 1, 1},  {18, 2, 4, 51, 2, 4, 0},
     {15, 0, 4, 48, 0, 4, 0}, {16, 2, 4, 49, 2, 4, 0}, {17, 0, 4, 50, 0, 4, 0},
     {21, 0, 4, 54, 0, 4, 0}, {22, 0, 4, 55, 0, 4, 0}, {24, 2, 4, 57, 2, 4, 0},
@@ -173,7 +173,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[20] = {
     {8, 2, 2, 15, 2, 2, 0},  {7, 2, 2, 14, 2, 2, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[21] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[21] = {
     {8, 2, 1, 14, 0, 1, 1, 0},  {6, 0, 3, 14, 0, 1, 1, 0},  {7, 0, 3, 14, 0, 1, 1, 0},
     {7, 0, 1, 14, 0, 1, 1, 0},  {30, 2, 4, 14, 0, 1, 1, 0}, {33, 0, 4, 14, 0, 1, 1, 0},
     {34, 2, 4, 14, 0, 1, 1, 0}, {35, 0, 4, 14, 0, 1, 1, 0}, {25, 0, 4, 14, 0, 1, 0, 0},
@@ -183,7 +183,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[21] = {
     {5, 2, 3, 14, 0, 1, 0, 0},  {6, 2, 2, -1, 0, 0, 0, 0},  {5, 2, 2, -1, 0, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[76] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[76] = {
     {1, -1, 1},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {7, -1, 1},  {8, -1, 0},  {-1, 0, 0},
     {-1, 0, 0},  {15, -1, 0}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {2, -1, 0},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {3, 0, 1},   {5, 0, 1},   {-1, 0, 0},  {-1, 0, 0},  {3, 0, 1},
@@ -197,7 +197,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[76] =
     {-1, 0, 0},  {-1, 0, 0},  {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {0, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {1, -1, 1},  {0, -1, 0},  {-1, 0, 0},
     {-1, 0, 0},  {4, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {6, -1, 0},  {-1, 0, 0},
     {-1, 0, 0},  {-1, 0, 0},  {16, -1, 0}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {2, -1, 1},
@@ -212,7 +212,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[80] = {
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char* daNpc_Lud_c::mCutNameList[8] = {
+char DUSK_CONST* DUSK_CONST daNpc_Lud_c::mCutNameList[8] = {
     "",
     "HURRY",
     "CONVERSATION_IN_HOTEL",
@@ -223,7 +223,7 @@ char* daNpc_Lud_c::mCutNameList[8] = {
     "THANK_YOU",
 };
 
-daNpc_Lud_c::cutFunc daNpc_Lud_c::mCutList[8] = {
+daNpc_Lud_c::cutFunc DUSK_CONST daNpc_Lud_c::mCutList[8] = {
     NULL,
     &daNpc_Lud_c::cutHurry,
     &daNpc_Lud_c::cutConversationInHotel,
@@ -1506,13 +1506,13 @@ static int daNpc_Lud_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Lud_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Lud_MethodTable = {
     (process_method_func)daNpc_Lud_Create,  (process_method_func)daNpc_Lud_Delete,
     (process_method_func)daNpc_Lud_Execute, (process_method_func)daNpc_Lud_IsDelete,
     (process_method_func)daNpc_Lud_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_LUD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_LUD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

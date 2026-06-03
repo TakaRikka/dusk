@@ -121,13 +121,13 @@ static int daLv6CstaSw_Create(fopAc_ac_c* i_this) {
     return cStaSw->create();
 }
 
-static actor_method_class l_daLv6CstaSw_Method = {
+static DUSK_CONST actor_method_class l_daLv6CstaSw_Method = {
     (process_method_func)daLv6CstaSw_Create,  (process_method_func)daLv6CstaSw_Delete,
     (process_method_func)daLv6CstaSw_Execute, (process_method_func)NULL,
     (process_method_func)daLv6CstaSw_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_Lv6CstaSw = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Lv6CstaSw = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

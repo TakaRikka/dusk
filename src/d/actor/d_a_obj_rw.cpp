@@ -335,7 +335,7 @@ static int daOBJ_RW_Create(fopAc_ac_c* actor) {
             } // mSphAttr
         };
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x75}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -386,7 +386,7 @@ static int daOBJ_RW_Create(fopAc_ac_c* actor) {
     return phase_state;
 }
 
-static actor_method_class l_daOBJ_RW_Method = {
+static DUSK_CONST actor_method_class l_daOBJ_RW_Method = {
     (process_method_func)daOBJ_RW_Create,
     (process_method_func)daOBJ_RW_Delete,
     (process_method_func)daOBJ_RW_Execute,
@@ -394,7 +394,7 @@ static actor_method_class l_daOBJ_RW_Method = {
     (process_method_func)daOBJ_RW_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_RW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_RW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

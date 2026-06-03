@@ -257,7 +257,7 @@ enum Event {
     /* 0x1 */ EVT_TUTRIAL_TALK2,
 };
 
-static int l_bmdData[6][2] = {
+static DUSK_CONSTEXPR int l_bmdData[6][2] = {
     {BMDR_BESU, BESU},
     {BMDR_BESU_TW, BESU_TW},
     {BMDR_BESU_CLOTH, BESU2},
@@ -266,12 +266,12 @@ static int l_bmdData[6][2] = {
     {BMDR_BESU_CUP, BESU2},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"TUTRIAL_TALK2", 7},
 };
 
-static char* l_resNameList[8] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[8] = {
     "",
     "Besu",
     "Besu_TW",
@@ -282,32 +282,32 @@ static char* l_resNameList[8] = {
     "evt_pachi",
 };
 
-static s8 l_loadResPtrn0[6] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[6] = {
     BESU, BESU0, BESU2, BESU1, EVT_PACHI, -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     BESU0, BESU_TW, -1,
 };
 
-static s8 l_loadResPtrn2[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {
     BESU2, BESU0, -1,
 };
 
-static s8 l_loadResPtrn3[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[3] = {
     BESU0, BESU3, -1,
 };
 
-static s8 l_loadResPtrn4[7] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[7] = {
     BESU, BESU_TW, BESU0, BESU1, BESU2, BESU3, -1,
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0,
     l_loadResPtrn4,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, 25, J3DFrameCtrl::EMode_LOOP, BESU0, 1},
     {BCK_BESU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BESU1, BTP_BESU_F_TALK_A, J3DFrameCtrl::EMode_NONE, BESU1, 0},
     {BCK_BESU_F_TALK_B, J3DFrameCtrl::EMode_NONE, BESU1, BTP_BESU_F_TALK_B, J3DFrameCtrl::EMode_NONE, BESU1, 0},
@@ -340,7 +340,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {BCK_BESU_FH_BIKKURI, J3DFrameCtrl::EMode_LOOP, BESU0, BTP_BESU_FH_BIKKURI, J3DFrameCtrl::EMode_LOOP, BESU0, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[33] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[33] = {
     {BCK_BESU_WAIT_A, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
     {BCK_BESU_WAIT_B, J3DFrameCtrl::EMode_LOOP, BESU1, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
     {BCK_BESU_WAIT_C, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
@@ -376,7 +376,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[33] = {
     {BCK_BESU_BODY_WAIT, J3DFrameCtrl::EMode_LOOP, BESU0, BTK_BESU, J3DFrameCtrl::EMode_NONE, BESU0, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] = {
     {3, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -408,7 +408,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[116] 
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 1}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -441,7 +441,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[120] = {
     {9, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Pachi_Besu_c::mCutNameList[11] = {
+char DUSK_CONST* DUSK_CONST daNpc_Pachi_Besu_c::mCutNameList[11] = {
     "",
     "TUTRIAL_BEGIN",
     "TUTRIAL_BEGIN_SKIP",
@@ -455,7 +455,7 @@ char* daNpc_Pachi_Besu_c::mCutNameList[11] = {
     "TUTRIAL_CAUTION",
 };
 
-daNpc_Pachi_Besu_c::cutFunc daNpc_Pachi_Besu_c::mCutList[11] = {
+daNpc_Pachi_Besu_c::cutFunc DUSK_CONST daNpc_Pachi_Besu_c::mCutList[11] = {
     NULL,
     &daNpc_Pachi_Besu_c::cutTutrialBegin,
     &daNpc_Pachi_Besu_c::cutTutrialBegin_Skip,
@@ -1554,7 +1554,7 @@ static int daNpc_Pachi_Besu_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpc_Pachi_Besu_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Pachi_Besu_MethodTable = {
     (process_method_func)daNpc_Pachi_Besu_Create,
     (process_method_func)daNpc_Pachi_Besu_Delete,
     (process_method_func)daNpc_Pachi_Besu_Execute,
@@ -1562,7 +1562,7 @@ static actor_method_class daNpc_Pachi_Besu_MethodTable = {
     (process_method_func)daNpc_Pachi_Besu_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_PACHI_BESU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_PACHI_BESU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

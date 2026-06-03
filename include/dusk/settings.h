@@ -15,6 +15,12 @@ enum class BloomMode : int {
     Dusk = 2,
 };
 
+enum class DepthOfFieldMode : int {
+    Off = 0,
+    Classic = 1,
+    Dusk = 2,
+};
+
 enum class Resampler : int {
     Bilinear = 0,
     Area = 1,
@@ -56,6 +62,12 @@ template <>
 struct ConfigEnumRange<BloomMode> {
     static constexpr auto min = BloomMode::Off;
     static constexpr auto max = BloomMode::Dusk;
+};
+
+template <>
+struct ConfigEnumRange<DepthOfFieldMode> {
+    static constexpr auto min = DepthOfFieldMode::Off;
+    static constexpr auto max = DepthOfFieldMode::Dusk;
 };
 
 template <>
@@ -160,13 +172,13 @@ struct UserSettings {
         // Graphics
         ConfigVar<BloomMode> bloomMode;
         ConfigVar<float> bloomMultiplier;
+        ConfigVar<DepthOfFieldMode> depthOfFieldMode;
         ConfigVar<bool> disableWaterRefraction;
         ConfigVar<bool> enableTextureReplacements;
         ConfigVar<FrameInterpMode> enableFrameInterpolation;
         ConfigVar<int> internalResolutionScale;
         ConfigVar<int> shadowResolutionMultiplier;
         ConfigVar<Resampler> resampler;
-        ConfigVar<bool> enableDepthOfField;
         ConfigVar<bool> enableMapBackground;
         ConfigVar<bool> disableCutscenePillarboxing;
 
@@ -175,7 +187,6 @@ struct UserSettings {
         ConfigVar<bool> midnasLamentNonStop;
 
         // Input
-        ConfigVar<GyroMode> gyroMode;
         ConfigVar<bool> enableGyroAim;
         ConfigVar<bool> enableGyroRollgoal;
         ConfigVar<float> gyroSensitivityX;
@@ -185,15 +196,25 @@ struct UserSettings {
         ConfigVar<float> gyroDeadband;
         ConfigVar<bool> gyroInvertPitch;
         ConfigVar<bool> gyroInvertYaw;
+        ConfigVar<bool> enableMouseCamera;
+        ConfigVar<bool> enableMouseAim;
+        ConfigVar<float> mouseAimSensitivity;
+        ConfigVar<float> mouseCameraSensitivity;
+        ConfigVar<bool> invertMouseY;
         ConfigVar<bool> freeCamera;
         ConfigVar<bool> invertCameraXAxis;
         ConfigVar<bool> invertCameraYAxis;
         ConfigVar<bool> invertFirstPersonXAxis;
         ConfigVar<bool> invertFirstPersonYAxis;
-        ConfigVar<float> freeCameraSensitivity;
+        ConfigVar<bool> invertAirSwimX;
+        ConfigVar<bool> invertAirSwimY;
+        ConfigVar<float> freeCameraXSensitivity;
+        ConfigVar<float> freeCameraYSensitivity;
         ConfigVar<bool> debugFlyCam;
         ConfigVar<bool> debugFlyCamLockEvents;
         ConfigVar<bool> allowBackgroundInput;
+        std::array<ConfigVar<bool>, 4> enableLED;
+        ConfigVar<bool> swapDirectSelect;
 
         // Cheats
         ConfigVar<bool> infiniteHearts;

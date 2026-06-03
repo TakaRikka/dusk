@@ -183,7 +183,7 @@ bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JG
         return streamMgr_.startSound(soundID, handle, posPtr);
     default:
         char error[64];
-        sprintf(error, "Unknown Sound-Type id :%08x\n", (u32)soundID);
+        SAFE_SPRINTF(error, "Unknown Sound-Type id :%08x\n", (u32)soundID);
         JUT_WARN(277, "%s", error);
     }
 

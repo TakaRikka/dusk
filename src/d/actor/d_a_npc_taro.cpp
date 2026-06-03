@@ -31,11 +31,11 @@ enum TaroEvent {
     /* 0x18 */ EVENT_18 = 0x18,
 };
 
-static int l_bmdData[5][2] = {
+static DUSK_CONSTEXPR int l_bmdData[5][2] = {
     4, 1, 31, 4, 32, 4, 10, 2, 4, 9,
 };
 
-static daNpcT_evtData_c l_evtList[27] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[27] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"HAIL", 4},
@@ -65,39 +65,39 @@ static daNpcT_evtData_c l_evtList[27] = {
     {"TAG_PUSH4", 4},
 };
 
-static char* l_resNameList[11] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[11] = {
     "", "Taro", "Taro_TW", "Taro0", "Taro1", "Taro2", "Taro3", "Taro4", "Taro5", "TaroB", "Len1",
 };
 
-static s8 l_loadResPtrn0[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[5] = {
     0x01, 0x03, 0x04, 0x06, -1,
 };
 
-static s8 l_loadResPtrn1[4] = {0x01, 0x03, 0x02, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[4] = {0x01, 0x03, 0x02, -1};
 
-static s8 l_loadResPtrn2[6] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[6] = {
     0x01, 0x03, 0x05, 0x06, 0x07, -1,
 };
 
-static s8 l_loadResPtrn3[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[5] = {
     0x01, 0x03, 0x04, 0x07, -1,
 };
 
-static s8 l_loadResPtrn4[4] = {0x01, 0x03, 0x08, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[4] = {0x01, 0x03, 0x08, -1};
 
-static s8 l_loadResPtrn5[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn5[5] = {
     0x09, 0x03, 0x04, 0x08, -1,
 };
 
-static s8 l_loadResPtrn6[6] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn6[6] = {
     0x01, 0x03, 0x04, 0x05, 0x06, -1,
 };
 
-static s8 l_loadResPtrn9[9] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[9] = {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, -1,
 };
 
-static s8* l_loadResPtrnList[17] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[17] = {
     l_loadResPtrn6, l_loadResPtrn6, l_loadResPtrn0, l_loadResPtrn1,
     l_loadResPtrn0, l_loadResPtrn0, l_loadResPtrn3, l_loadResPtrn6,
     l_loadResPtrn2, l_loadResPtrn0, l_loadResPtrn6, l_loadResPtrn6,
@@ -105,7 +105,7 @@ static s8* l_loadResPtrnList[17] = {
     l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {-1, 0, 0, 7, 2, 1, 1},
     {7, 0, 3, 7, 2, 1, 1},
     {11, 0, 4, 43, 0, 4, 0},
@@ -138,7 +138,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[30] = {
     {7, 2, 8, 25, 2, 8, 0},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[42] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[42] = {
     9,  2, 3, 12, 0, 3, 1, 0, 25, 2, 4, 12, 0, 3, 1, 0, 10, 2, 6, 12, 0, 3, 1, 0,
     26, 2, 4, 12, 0, 3, 1, 0, 27, 2, 4, 12, 0, 3, 1, 0, 28, 2, 4, 12, 0, 3, 1, 0,
     8,  0, 6, 12, 0, 3, 1, 0, -1, 0, 0, -1, 0, 0, 0, 0, 17, 2, 4, 12, 0, 3, 1, 0,
@@ -155,7 +155,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[42] = {
     6,  2, 8, 22, 2, 8, 0, 0, 17, 0, 8, 12, 0, 3, 1, 0, 18, 2, 8, 12, 0, 3, 1, 0,
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[128] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[128] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 1}, {10, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {11, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {12, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -174,7 +174,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[128] 
     {29, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[168] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[168] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {21, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {22, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {17, -1, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {24, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -198,7 +198,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[168] = {
     {40, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {40, -1, 1}, {41, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Taro_c::mCutNameList[17] = {
+char DUSK_CONST* DUSK_CONST daNpc_Taro_c::mCutNameList[17] = {
     "",
     "CONVERSATION_ABOUT_PACHINKO",
     "CONVERSATION_ABOUT_WOODSWD",
@@ -218,7 +218,7 @@ char* daNpc_Taro_c::mCutNameList[17] = {
     "TAG_PUSH4",
 };
 
-daNpc_Taro_c::cutFunc daNpc_Taro_c::mCutList[17] = {
+daNpc_Taro_c::cutFunc DUSK_CONST daNpc_Taro_c::mCutList[17] = {
     NULL,
     &daNpc_Taro_c::cutConversationAboutPachinko,
     &daNpc_Taro_c::cutConversationAboutWoodSwd,
@@ -3389,7 +3389,7 @@ static int daNpc_Taro_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daNpc_Taro_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Taro_MethodTable = {
     (process_method_func)daNpc_Taro_Create,
     (process_method_func)daNpc_Taro_Delete,
     (process_method_func)daNpc_Taro_Execute,
@@ -3397,7 +3397,7 @@ static actor_method_class daNpc_Taro_MethodTable = {
     (process_method_func)daNpc_Taro_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_TARO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_TARO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

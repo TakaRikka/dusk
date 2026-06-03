@@ -8346,7 +8346,7 @@ static leafdraw_method_class l_dKy_Method = {
     (process_method_func)dKy_Draw,
 };
 
-kankyo_process_profile_definition g_profile_KANKYO = {
+DUSK_PROFILE kankyo_process_profile_definition DUSK_CONST g_profile_KANKYO = {
     /* Layer ID      */ fpcLy_CURRENT_e,
     /* List ID       */ 1,
     /* List Prio     */ fpcPi_CURRENT_e,
@@ -8361,8 +8361,8 @@ kankyo_process_profile_definition g_profile_KANKYO = {
 };
 
 static void dummy_str_0x40a0() {
-    char* str1 = "ステージが変わったときかなぁ～？？？";
-    char* str2 = "POINTLIGHT RECALL![%f][%f][%f]";
+    DUSK_CONST char* str1 = "ステージが変わったときかなぁ～？？？";
+    DUSK_CONST char* str2 = "POINTLIGHT RECALL![%f][%f][%f]";
 }
 
 void dKy_setLight_init() {

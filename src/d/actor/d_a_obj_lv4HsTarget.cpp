@@ -84,13 +84,13 @@ static int daLv4HsTarget_Create(fopAc_ac_c* i_this) {
 
 static daLv4HsTarget_HIO_c l_HIO;
 
-static actor_method_class l_daLv4HsTarget_Method = {
+static DUSK_CONST actor_method_class l_daLv4HsTarget_Method = {
     (process_method_func)daLv4HsTarget_Create,  (process_method_func)daLv4HsTarget_Delete,
     (process_method_func)daLv4HsTarget_Execute, (process_method_func)NULL,
     (process_method_func)daLv4HsTarget_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4HsTarget = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4HsTarget = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

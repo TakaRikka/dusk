@@ -1794,7 +1794,7 @@ void daE_SW_c::d_setAction(void (daE_SW_c::*action)()) {
     (this->*field_0xafc)();
 }
 
-static actor_method_class l_daE_SW_Method = {
+static DUSK_CONST actor_method_class l_daE_SW_Method = {
     (process_method_func)daE_SW_Create,
     (process_method_func)daE_SW_Delete,
     (process_method_func)daE_SW_Execute,
@@ -1802,7 +1802,7 @@ static actor_method_class l_daE_SW_Method = {
     (process_method_func)daE_SW_Draw,
 };
 
-actor_process_profile_definition g_profile_E_SW = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_SW = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

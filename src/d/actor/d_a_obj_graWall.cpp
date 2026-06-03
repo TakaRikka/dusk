@@ -95,7 +95,7 @@ static int daObjGraWall_create(fopAc_ac_c* i_this) {
     return static_cast<daObjGraWall_c*>(i_this)->Create();
 }
 
-static actor_method_class l_daObjGraWall_Method = {
+static DUSK_CONST actor_method_class l_daObjGraWall_Method = {
     (process_method_func)daObjGraWall_create,
     (process_method_func)daObjGraWall_Delete,
     (process_method_func)daObjGraWall_Execute,
@@ -103,7 +103,7 @@ static actor_method_class l_daObjGraWall_Method = {
     (process_method_func)NULL,
 };
 
-actor_process_profile_definition g_profile_GRA_WALL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_GRA_WALL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

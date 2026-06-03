@@ -25,7 +25,7 @@ const static dCcD_SrcSph ccSphSrc = {
     } // mSphAttr
 };
 
-static char* l_arcName[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[1] = {
     "Octhashi"
 };
 
@@ -376,7 +376,7 @@ int daObjOCTHASHI_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjOCTHASHI_Method = {
+static DUSK_CONST actor_method_class l_daObjOCTHASHI_Method = {
     (process_method_func)daObjOCTHASHI_Create,
     (process_method_func)daObjOCTHASHI_Delete,
     (process_method_func)daObjOCTHASHI_Execute,
@@ -384,7 +384,7 @@ static actor_method_class l_daObjOCTHASHI_Method = {
     (process_method_func)daObjOCTHASHI_Draw,
 };
 
-actor_process_profile_definition g_profile_OCTHASHI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OCTHASHI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

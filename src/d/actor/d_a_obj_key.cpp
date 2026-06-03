@@ -641,7 +641,7 @@ static int daObj_Key_Create(fopAc_ac_c* i_this) {
     return phase_state;
 }
 
-static actor_method_class l_daObj_Key_Method = {
+static DUSK_CONST actor_method_class l_daObj_Key_Method = {
     (process_method_func)daObj_Key_Create,
     (process_method_func)daObj_Key_Delete,
     (process_method_func)daObj_Key_Execute,
@@ -649,7 +649,7 @@ static actor_method_class l_daObj_Key_Method = {
     (process_method_func)daObj_Key_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_KEY = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_KEY = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -898,13 +898,13 @@ static BOOL daObjKAM_IsDelete(daObjKAM_c* param_0) {
     return TRUE;
 }
 
-static actor_method_class l_daObjKAM_Method = {
+static DUSK_CONST actor_method_class l_daObjKAM_Method = {
     (process_method_func)daObjKAM_Create,  (process_method_func)daObjKAM_Delete,
     (process_method_func)daObjKAM_Execute, (process_method_func)daObjKAM_IsDelete,
     (process_method_func)daObjKAM_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Kam = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Kam = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

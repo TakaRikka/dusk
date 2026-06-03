@@ -65,7 +65,7 @@ public:
     int Execute();
     int Draw();
     static int createHeapCallBack(fopAc_ac_c*);
-    char* getResName();
+    char DUSK_CONST* getResName();
     int isDelete();
     void setEnvTevColor();
     void setRoomNo();

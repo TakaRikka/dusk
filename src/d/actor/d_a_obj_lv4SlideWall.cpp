@@ -167,7 +167,7 @@ static int daSldWall_Create(fopAc_ac_c* i_this) {
     return ((daSldWall_c*)i_this)->create();
 }
 
-static actor_method_class l_daSldWall_Method = {
+static DUSK_CONST actor_method_class l_daSldWall_Method = {
     (process_method_func)daSldWall_Create,
     (process_method_func)daSldWall_Delete,
     (process_method_func)daSldWall_Execute,
@@ -175,7 +175,7 @@ static actor_method_class l_daSldWall_Method = {
     (process_method_func)daSldWall_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4SlideWall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4SlideWall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

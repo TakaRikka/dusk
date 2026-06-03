@@ -53,8 +53,8 @@ public:
     void demoMessageGroupLocal();
     void endFlowGroupLocal();
     void changeGroupLocal(s16);
-    bool getStringLocal(u32, J2DTextBox*, J2DTextBox*, JUTFont*, COutFont_c*, char*,
-                                       char*, char*, s16*);
+    bool getStringLocal(u32, J2DTextBox*, J2DTextBox*, JUTFont*, COutFont_c*, TEXT_SPAN,
+                                       TEXT_SPAN, TEXT_SPAN, s16*);
     bool isGetItemMessage();
     bool isKanbanMessage();
     bool isHowlMessage();
@@ -121,7 +121,7 @@ public:
     static void endFlowGroup();
     static void changeGroup(s16);
     static bool getString(u32, J2DTextBox*, J2DTextBox*, JUTFont*, COutFont_c*,
-                                         char*, char*, char*, s16*);
+                                         TEXT_SPAN, TEXT_SPAN, TEXT_SPAN, s16*);
     static void* getMsgDtPtr();
     static void setProcessID(fpc_ProcID);
     static msg_class* getActor();
@@ -246,12 +246,12 @@ public:
 
     static void setWord(const char* i_word);
     void setWordLocal(const char* i_word) {
-        strcpy(mWord, i_word);
+        SAFE_STRCPY(mWord, i_word);
     }
 
     static void setSelectWord(int i_no, const char* i_word);
     void setSelectWordLocal(int i_no, const char* i_word) {
-        strcpy(mSelectWord[i_no], i_word);
+        SAFE_STRCPY(mSelectWord[i_no], i_word);
     }
 
     jmessage_tSequenceProcessor* getSequenceProcessor() { return mpSeqProc; }
@@ -426,8 +426,8 @@ inline void dMsgObject_setTalkActor(fopAc_ac_c* actor) {
 }
 
 inline bool dMsgObject_getString(u32 i_msgId, J2DTextBox* i_tbox, J2DTextBox* i_rubyTbox,
-                                 JUTFont* i_font, COutFont_c* i_outFont, char* o_text,
-                                 char* o_ruby, char* o_textS, s16* param_8) {
+                                 JUTFont* i_font, COutFont_c* i_outFont, TEXT_SPAN o_text,
+                                 TEXT_SPAN o_ruby, TEXT_SPAN o_textS, s16* param_8) {
     return dMsgObject_getMsgObjectClass()->getString(i_msgId, i_tbox, i_rubyTbox, i_font, i_outFont, o_text, o_ruby,
                                    o_textS, param_8);
 }

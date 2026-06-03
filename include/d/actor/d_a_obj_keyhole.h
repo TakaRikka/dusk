@@ -34,7 +34,7 @@ public:
 
     /* 0x0000 */ fopAc_ac_c actor;
     /* 0x0568 */ request_of_phase_process_class phase;
-    /* 0x0570 */ char* arcname;
+    /* 0x0570 */ DUSK_CONST char* arcname;
     /* 0x0574 */ mDoExt_McaMorf* lock_modelMorf;
     /* 0x0578 */ J3DModel* lock_model;
     /* 0x057C */ int chain_num;

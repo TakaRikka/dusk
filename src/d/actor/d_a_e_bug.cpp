@@ -893,7 +893,7 @@ static cPhs_Step daE_Bug_Create(fopAc_ac_c* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daE_Bug_Method = {
+static DUSK_CONST actor_method_class l_daE_Bug_Method = {
     (process_method_func)daE_Bug_Create,
     (process_method_func)daE_Bug_Delete,
     (process_method_func)daE_Bug_Execute,
@@ -901,7 +901,7 @@ static actor_method_class l_daE_Bug_Method = {
     (process_method_func)daE_Bug_Draw,
 };
 
-actor_process_profile_definition g_profile_E_BUG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_BUG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -126,7 +126,7 @@ u8 dMsgStringBase_c::getPageMax(int param_0) {
     return pageMax;
 }
 
-f32 dMsgStringBase_c::getMessageLocal(u32 param_1, char* param_2) {
+f32 dMsgStringBase_c::getMessageLocal(u32 param_1, TEXT_SPAN param_2) {
     if (dMeter2Info_getMsgResource() != NULL) {
         if (param_1 > 5000) {
             if (field_0x1c != dMeter2Info_getStageMsgResource()) {
@@ -146,7 +146,7 @@ f32 dMsgStringBase_c::getMessageLocal(u32 param_1, char* param_2) {
     mpCtrl->render();
     mpCtrl->reset();
     mpCtrl->resetResourceCache();
-    strcpy(param_2, mpRenProc->getString());
+    SAFE_STRCPY(param_2, mpRenProc->getString());
     return 0.0f;
 }
 
@@ -165,7 +165,7 @@ f32 dMsgStringBase_c::getStringPage(u32 param_0, u8 param_1, u8 param_2, J2DText
     return getStringPageLocal(param_0, param_1, param_2, param_3, param_4, param_5, param_6, param_7);
 }
 
-f32 dMsgStringBase_c::getMessage(u32 param_0, char* param_1) {
+f32 dMsgStringBase_c::getMessage(u32 param_0, TEXT_SPAN param_1) {
     return getMessageLocal(param_0, param_1);
 }
 

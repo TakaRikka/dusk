@@ -14,11 +14,11 @@
  */
 class daDbDoor00_c : public fopAc_ac_c {
 public:
-    char* getAlwaysArcName();
-    char* getDzb();
-    char* getDummyBmdName();
-    char* getBmdArcName();
-    char* getBmdName();
+    DUSK_CONST char* getAlwaysArcName();
+    DUSK_CONST char* getDzb();
+    DUSK_CONST char* getDummyBmdName();
+    DUSK_CONST char* getBmdArcName();
+    DUSK_CONST char* getBmdName();
     J3DModelData* getDoorModelData();
     int CreateHeap();
     void calcMtx();

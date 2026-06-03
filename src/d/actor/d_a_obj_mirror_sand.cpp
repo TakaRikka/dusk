@@ -8,7 +8,7 @@
 #include "d/actor/d_a_obj_mirror_sand.h"
 #include "f_pc/f_pc_name.h"
 
-static char* l_arcName = "MR-Sand";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "MR-Sand";
 
 int daObjMirrorSand_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 8);
@@ -163,13 +163,13 @@ static int daObjMirrorSand_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjMirrorSand_c*>(i_this)->create();
 }
 
-static actor_method_class l_daObjMirrorSand_Method = {
+static DUSK_CONST actor_method_class l_daObjMirrorSand_Method = {
     (process_method_func)daObjMirrorSand_Create,  (process_method_func)daObjMirrorSand_Delete,
     (process_method_func)daObjMirrorSand_Execute, (process_method_func)daObjMirrorSand_IsDelete,
     (process_method_func)daObjMirrorSand_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_MirrorSand = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MirrorSand = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -308,33 +308,33 @@ static u8 getOutFontNumberType(int param_0) {
 }
 
 #if TARGET_PC || VERSION == VERSION_GCN_PAL
-static void setPlayerName(char* i_player_name, u8 param_2) {
+static void setPlayerName(TEXT_SPAN i_player_name, u8 param_2) {
     if (param_2 != 0) {
-        strcpy(i_player_name, dComIfGs_getPlayerName());
+        SAFE_STRCPY(i_player_name, dComIfGs_getPlayerName());
         u32 name_length = strlen(i_player_name);
         char last = i_player_name[name_length - 1];
         if (last == 0x73 || last == 0x53 || last == 0x7a || last == 0x5a || last == 0x78 || last == 0x58 || last == 0xdf) {
-            strcat(i_player_name, "'");
+            SAFE_STRCAT(i_player_name, "'");
         } else {
-            strcat(i_player_name, "s");
+            SAFE_STRCAT(i_player_name, "s");
         }
     } else {
-        strcpy(i_player_name, dComIfGs_getPlayerName());
+        SAFE_STRCPY(i_player_name, dComIfGs_getPlayerName());
     }
 }
 
-static void setHorseName(char* i_horse_name, u8 param_2) {
+static void setHorseName(TEXT_SPAN i_horse_name, u8 param_2) {
     if (param_2 != 0) {
-        strcpy(i_horse_name, dComIfGs_getHorseName());
+        SAFE_STRCPY(i_horse_name, dComIfGs_getHorseName());
         u32 name_length = strlen(i_horse_name);
         char last = i_horse_name[name_length - 1];
         if (last == 0x73 || last == 0x53 || last == 0x7a || last == 0x5a || last == 0x78 || last == 0x58 || last == 0xdf) {
-            strcat(i_horse_name, "'");
+            SAFE_STRCAT(i_horse_name, "'");
         } else {
-            strcat(i_horse_name, "s");
+            SAFE_STRCAT(i_horse_name, "s");
         }
     } else {
-        strcpy(i_horse_name, dComIfGs_getHorseName());
+        SAFE_STRCPY(i_horse_name, dComIfGs_getHorseName());
     }
 }
 #endif
@@ -707,7 +707,7 @@ void jmessage_tReference::inputNumber() {
     getObjectPtr()->setInputValue(new_input_val);
 }
 
-char* jmessage_tReference::getWord(int i_no) {
+TEXT_SPAN jmessage_tReference::getWord(int i_no) {
     if (i_no >= 10) {
         JUT_WARN(1093, "%s", "message stack over!!");
         JUT_ASSERT(1094, i_no < (10));
@@ -1093,14 +1093,14 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
             int number = dComIfGp_getMessageCountNumber() / 100;
-            sprintf(buffer, "%d", number);
+            SAFE_SPRINTF(buffer, "%d", number);
             push_word(buffer);
             return true;
         }
         case MSGTAG_MAX_LETTER_PAGE: {
             char buffer[4];
             int number = dComIfGp_getMessageCountNumber() % 100;
-            sprintf(buffer, "%d", number);
+            SAFE_SPRINTF(buffer, "%d", number);
             push_word(buffer);
             return true;
         }
@@ -1120,7 +1120,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             }
 
             char player_name[100];
-            strcpy(player_name, dComIfGs_getPlayerName());
+            SAFE_STRCPY(player_name, dComIfGs_getPlayerName());
             push_word(player_name);
             return true;
         }
@@ -1130,7 +1130,7 @@ bool jmessage_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_siz
             }
 
             char horse_name[100];
-            strcpy(horse_name, dComIfGs_getHorseName());
+            SAFE_STRCPY(horse_name, dComIfGs_getHorseName());
             push_word(horse_name);
             return true;
         }
@@ -1779,7 +1779,7 @@ void jmessage_tMeasureProcessor::do_rubyset(void const* i_data, u32 i_size) {
 
 void jmessage_tMeasureProcessor::push_word(char* i_word) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
-    strcpy(pReference->getWord(field_0x4b), i_word);
+    SAFE_STRCPY(pReference->getWord(field_0x4b), i_word);
     stack_pushCurrent(pReference->getWord(field_0x4b));
     field_0x4b++;
 }
@@ -2403,7 +2403,7 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
 
             u8 sel_bomb_num = objectPtr->getSelectBombNum();
             dMsgUnit_setTag(7, sel_bomb_num, buffer);
-            strcpy((char*)pReference->getWord(field_0xb5), buffer);
+            SAFE_STRCPY((TEXT_SPAN)pReference->getWord(field_0xb5), buffer);
             push_word();
             return true;
         }
@@ -2413,7 +2413,7 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
 
             s16 sel_bomb_price = objectPtr->getSelectBombPrice();
             dMsgUnit_setTag(1, sel_bomb_price, buffer);
-            strcpy((char*)pReference->getWord(field_0xb5), buffer);
+            SAFE_STRCPY((TEXT_SPAN)pReference->getWord(field_0xb5), buffer);
             push_word();
             return true;
         }
@@ -2760,13 +2760,13 @@ void jmessage_tRenderingProcessor::do_begin(void const* pEntry, char const* pszT
     }
 
     field_0x11c = 0;
-    strcpy(pReference->getTextPtr(), "");
-    strcpy(pReference->getTextSPtr(), "");
-    strcpy(pReference->getRubyPtr(), "");
+    SAFE_STRCPY(pReference->getTextPtr(), "");
+    SAFE_STRCPY(pReference->getTextSPtr(), "");
+    SAFE_STRCPY(pReference->getRubyPtr(), "");
 
     for (int i = 0; i < 3; i++) {
-        strcpy(pReference->getSelTextPtr(i), "");
-        strcpy(pReference->getSelRubyPtr(i), "");
+        SAFE_STRCPY(pReference->getSelTextPtr(i), "");
+        SAFE_STRCPY(pReference->getSelRubyPtr(i), "");
     }
 
     if (1.0f != pReference->getDistanceScale()) {
@@ -2791,12 +2791,12 @@ void jmessage_tRenderingProcessor::do_end() {
     if (dMsgObject_getSelectWordFlag() != 0) {
         for (int i = 0; i < dMsgObject_getSelectWordFlag(); i++) {
             char buffer[200];
-            strcpy(buffer, dMsgObject_getSelectWord(i));
+            SAFE_STRCPY(buffer, dMsgObject_getSelectWord(i));
 
             if (pReference->getSelectNum() == 2) {
-                strcat(pReference->getSelTextPtr(i + 1), buffer);
+                SAFE_STRCAT(pReference->getSelTextPtr(i + 1), buffer);
             } else if (pReference->getSelectNum() == 3) {
-                strcat(pReference->getSelTextPtr(i), buffer);
+                SAFE_STRCAT(pReference->getSelTextPtr(i), buffer);
             }
         }
     }
@@ -3108,7 +3108,7 @@ bool jmessage_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_s
             char buffer[40];
             u8 bombNum = pReference->getObjectPtr()->getSelectBombNum();
             dMsgUnit_setTag(7, bombNum, buffer);
-            strcpy(pReference->getWord(field_0x14f), buffer);
+            SAFE_STRCPY(pReference->getWord(field_0x14f), buffer);
             push_word();
             return 1;
         }
@@ -3116,7 +3116,7 @@ bool jmessage_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_s
             char buffer[40];
             s16 bombPrice = pReference->getObjectPtr()->getSelectBombPrice();
             dMsgUnit_setTag(1, bombPrice, buffer);
-            strcpy(pReference->getWord(field_0x14f), buffer);
+            SAFE_STRCPY(pReference->getWord(field_0x14f), buffer);
             push_word();
             return 1;
         }
@@ -3501,7 +3501,7 @@ void jmessage_tRenderingProcessor::do_color(u8 i_colorNo) {
     mGCColor = getFontGCColorTable(i_colorNo, reference_p->getFukiKind());
 
     char buffer[40];
-    sprintf(buffer,
+    SAFE_SPRINTF(buffer,
             "\x1B"
             "CC[%08x]"
             "\x1B"
@@ -3529,7 +3529,7 @@ void jmessage_tRenderingProcessor::do_scale(f32 param_1) {
     }
 
     char buffer[32];
-    sprintf(buffer,
+    SAFE_SPRINTF(buffer,
             "\x1B"
             "FX[%d]"
             "\x1B"
@@ -3541,7 +3541,7 @@ void jmessage_tRenderingProcessor::do_scale(f32 param_1) {
 void jmessage_tRenderingProcessor::do_linedown(s16 param_0) {
     char buffer[16];
 
-    sprintf(buffer, "\x1B" "CD[%d]", param_0);
+    SAFE_SPRINTF(buffer, "\x1B" "CD[%d]", param_0);
     do_strcat(buffer, false, true, false);
 }
 
@@ -3551,11 +3551,11 @@ void jmessage_tRenderingProcessor::do_transY(s16 i_transY, bool unused) {
         char buffer1[16];
 
         if (i_transY < 0) {
-            sprintf(buffer0, "\x1B" "CU[%d]", -i_transY);
-            sprintf(buffer1, "\x1B" "CD[%d]", -i_transY);
+            SAFE_SPRINTF(buffer0, "\x1B" "CU[%d]", -i_transY);
+            SAFE_SPRINTF(buffer1, "\x1B" "CD[%d]", -i_transY);
         } else {
-            sprintf(buffer0, "\x1B" "CD[%d]", i_transY);
-            sprintf(buffer1, "\x1B" "CU[%d]", i_transY);
+            SAFE_SPRINTF(buffer0, "\x1B" "CD[%d]", i_transY);
+            SAFE_SPRINTF(buffer1, "\x1B" "CU[%d]", i_transY);
         }
 
         field_0x4c -= i_transY;
@@ -3643,7 +3643,7 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
         field_0x11c += strlen(i_str);
         if (field_0x14e != 0) {
             if (field_0x11c < 50) {
-                strcat(pReference->getSelTextPtr(field_0x14e - 1), i_str);
+                SAFE_STRCAT(pReference->getSelTextPtr(field_0x14e - 1), i_str);
             } else {
                 JUT_WARN(5316, "%s", "TextBox Alloc Byte Over!!");
             }
@@ -3662,22 +3662,22 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                     if (pReference->getCharAlpha() < 255.0f) {
                         pReference->addCharAlpha();
                         if (field_0x148 != 0) {
-                            char* textPtr = pReference->getTextPtr();
+                            TEXT_SPAN textPtr = pReference->getTextPtr();
                             textPtr[field_0x148] = 0;
-                            strcat(textPtr, field_0x184);
+                            SAFE_STRCAT(textPtr, field_0x184);
                         }
 
                         if (field_0x14a != 0) {
-                            char* textPtr = pReference->getTextSPtr();
+                            TEXT_SPAN textPtr = pReference->getTextSPtr();
                             textPtr[field_0x14a] = 0;
-                            strcat(textPtr, field_0x184);
+                            SAFE_STRCAT(textPtr, field_0x184);
                         }
 
 
                         u32 charColor = (mCCColor & 0xFFFFFF00) | ((int)pReference->getCharAlpha() & 0xFF);
                         u32 gradColor = (mGCColor & 0xFFFFFF00) | ((int)pReference->getCharAlpha() & 0xFF);
                         char buffer[36];
-                        sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", charColor, gradColor);
+                        SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", charColor, gradColor);
 
                         int length = 0;
                         length = strlen(buffer);
@@ -3686,9 +3686,9 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                             field_0x148 = strlen(pReference->getTextPtr());
                             field_0x14a = strlen(pReference->getTextSPtr());
 
-                            strcpy(field_0x184, i_str);
-                            strcat(pReference->getTextPtr(), buffer);
-                            strcat(pReference->getTextSPtr(), buffer);
+                            SAFE_STRCPY(field_0x184, i_str);
+                            SAFE_STRCAT(pReference->getTextPtr(), buffer);
+                            SAFE_STRCAT(pReference->getTextSPtr(), buffer);
                         } else {
                             JUT_WARN(5362, "%s", "TextBox Alloc Byte Over!!");
                         }
@@ -3699,9 +3699,9 @@ void jmessage_tRenderingProcessor::do_strcat(char* i_str, bool param_2, bool par
                 field_0x14a = 0;
             }
             
-            strcat(pReference->getTextPtr(), i_str);
+            SAFE_STRCAT(pReference->getTextPtr(), i_str);
             if (param_3) {
-                strcat(pReference->getTextSPtr(), i_str);
+                SAFE_STRCAT(pReference->getTextSPtr(), i_str);
             }
         } else {
             JUT_WARN(5380, "%s", "TextBox Alloc Byte Over!!");
@@ -3729,7 +3729,7 @@ void jmessage_tRenderingProcessor::do_rubyset(void const* i_data, u32 i_size) {
         buffer[0] = pRuby[index++];
         buffer[1] = pRuby[index++];
         buffer[2] = 0;
-        strcat(field_0x152, (const char*)buffer);
+        SAFE_STRCAT(field_0x152, (const char*)buffer);
     
         int character = (((char)buffer[0] & 0xFF) << 8) | ((char)buffer[1] & 0xFF);
         if (field_0x14e != 0) {
@@ -3751,7 +3751,7 @@ void jmessage_tRenderingProcessor::do_rubyset(void const* i_data, u32 i_size) {
     }
 }
 
-void jmessage_tRenderingProcessor::do_rubystrcat(char* i_src, char* i_dst, f32 i_charSpace, f32 param_4) {
+void jmessage_tRenderingProcessor::do_rubystrcat(char* i_src, TEXT_SPAN i_dst, f32 i_charSpace, f32 param_4) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
     if (pReference->isCharSend()) {
         if (0.0f != param_4) {
@@ -3760,18 +3760,18 @@ void jmessage_tRenderingProcessor::do_rubystrcat(char* i_src, char* i_dst, f32 i
             if (cursor_trans >= 1.0f) {
                 char buffer[16];
                 snprintf(buffer, sizeof(buffer) - 1, "\x1B" "CR[%d]", (int)cursor_trans);
-                strcat(i_dst, buffer);
+                SAFE_STRCAT(i_dst, buffer);
                 field_0x12c += (int)cursor_trans;
             } else if (cursor_trans <= -1.0f) {
                 char buffer[16];
                 snprintf(buffer, sizeof(buffer) - 1, "\x1B" "CL[%d]", (int)-cursor_trans);
-                strcat(i_dst, buffer);
+                SAFE_STRCAT(i_dst, buffer);
                 field_0x12c += (int)cursor_trans;
             }
             field_0x12c += field_0x128 + i_charSpace;
         }
 
-        strcat(i_dst, i_src);
+        SAFE_STRCAT(i_dst, i_src);
     }
 }
 
@@ -4046,13 +4046,13 @@ bool jmessage_string_tMeasureProcessor::do_tag(u32 i_tag, void const* i_data, u3
             break;
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
             stack_pushCurrent(buffer);
             break;
         }
         case MSGTAG_MAX_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
             stack_pushCurrent(buffer);
             break;
         }
@@ -4469,11 +4469,11 @@ void jmessage_string_tRenderingProcessor::do_begin(void const* pEntry, char cons
 
 void jmessage_string_tRenderingProcessor::do_end() {
     if (mpReference->getPanePtr() != NULL) {
-        strcpy(mpReference->getPanePtr()->getStringPtr(), field_0x54);
+        SAFE_STRCPY(mpReference->getPanePtr()->getStringPtr(), field_0x54);
     }
 
     if (mpReference->getRubyPanePtr() != NULL) {
-        strcpy(mpReference->getRubyPanePtr()->getStringPtr(), field_0x254);
+        SAFE_STRCPY(mpReference->getRubyPanePtr()->getStringPtr(), field_0x254);
     }
 }
 
@@ -4604,13 +4604,13 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
             break;
         case MSGTAG_CURRENT_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() / 100);
             push_word(buffer);
             break;
         }
         case MSGTAG_MAX_LETTER_PAGE: {
             char buffer[4];
-            sprintf(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
+            SAFE_SPRINTF(buffer, "%d", dComIfGp_getMessageCountNumber() % 100);
             push_word(buffer);
             break;
         }
@@ -5086,7 +5086,7 @@ void jmessage_string_tRenderingProcessor::do_strcat(char* i_str) {
     if (getLineCountNowPage() >= 0) {
         field_0x54e += strlen(i_str);
         if (field_0x54e < ARRAY_SIZE(field_0x54)) {
-            strcat(field_0x54, i_str);
+            SAFE_STRCAT(field_0x54, i_str);
         } else {
             JUT_WARN(7531, "%s", "Message Alloc Byte Over!!");
         }
@@ -5117,7 +5117,7 @@ void jmessage_string_tRenderingProcessor::do_rubyset(void const* i_data, u32 i_s
                 bytes[0] = pRuby[i++];
                 bytes[1] = pRuby[i++];
                 bytes[2] = 0;
-                strcat(field_0x454, (const char*)bytes);
+                SAFE_STRCAT(field_0x454, (const char*)bytes);
 
                 int character = (((char)bytes[0] & 0xFF) << 8) | ((char)bytes[1] & 0xFF);
                 field_0x44 += charSpace + fontSize.mSizeX * ((f32)pFont->getWidth(character) / pFont->getCellWidth());
@@ -5135,7 +5135,7 @@ void jmessage_string_tRenderingProcessor::do_rubystrcat(char* i_str) {
     if (getLineCountNowPage() >= 0) {
         field_0x550 += strlen(i_str);
         if (field_0x550 < ARRAY_SIZE(field_0x254)) {
-            strcat(field_0x254, i_str);
+            SAFE_STRCAT(field_0x254, i_str);
         } else {
             JUT_WARN(7613, "%s", "Message Alloc Byte Over!!");
         }
@@ -5209,7 +5209,7 @@ void jmessage_string_tRenderingProcessor::do_color(u8 i_colorNo) {
     }
 
     char buffer[32];
-    sprintf(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
+    SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
     do_strcat(buffer);
 }
 
@@ -5220,13 +5220,13 @@ void jmessage_string_tRenderingProcessor::do_scale(f32 i_scale) {
     s16 scaleY = 0.5f + fontSize.mSizeY * i_scale;
 
     char buffer[32];
-    sprintf(buffer, "\x1b" "FX[%d]" "\x1b" "FY[%d]", scaleX, scaleY);
+    SAFE_SPRINTF(buffer, "\x1b" "FX[%d]" "\x1b" "FY[%d]", scaleX, scaleY);
     do_strcat(buffer);
 }
 
 void jmessage_string_tRenderingProcessor::do_linedown(s16 i_lineNo) {
     char buffer[16];
-    sprintf(buffer, "\x1B" "CD[%d]", i_lineNo);
+    SAFE_SPRINTF(buffer, "\x1B" "CD[%d]", i_lineNo);
     do_strcat(buffer);
 }
 
@@ -5245,6 +5245,6 @@ void jmessage_string_tRenderingProcessor::do_numset(s16 i_num) {
 }
 
 void jmessage_string_tRenderingProcessor::push_word(char const* i_word) {
-    strcpy(field_0x486, i_word);
+    SAFE_STRCPY(field_0x486, i_word);
     stack_pushCurrent(field_0x486);
 }

@@ -908,7 +908,7 @@ static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
         actor->health = 30;
         actor->field_0x560 = 30;
 
-        static dCcD_SrcCyl cc_cyl_src = {
+        static DUSK_CONSTEXPR dCcD_SrcCyl cc_cyl_src = {
             {
                 {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x3}, 0x79}}, // mObj
                 {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -987,7 +987,7 @@ static cPhs_Step daE_BI_Create(fopAc_ac_c* actor) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daE_BI_Method = {
+static DUSK_CONST actor_method_class l_daE_BI_Method = {
     (process_method_func)daE_BI_Create,
     (process_method_func)daE_BI_Delete,
     (process_method_func)daE_BI_Execute,
@@ -995,7 +995,7 @@ static actor_method_class l_daE_BI_Method = {
     (process_method_func)daE_BI_Draw,
 };
 
-actor_process_profile_definition g_profile_E_BI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_BI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 9,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -243,7 +243,7 @@ int daObjDust_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjDust_Method = {
+static DUSK_CONST actor_method_class l_daObjDust_Method = {
     (process_method_func)daObjDust_Create,
     (process_method_func)daObjDust_Delete,
     (process_method_func)daObjDust_Execute,
@@ -252,7 +252,7 @@ static actor_method_class l_daObjDust_Method = {
 };
 
 
-actor_process_profile_definition g_profile_Obj_DUST = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_DUST = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -2492,7 +2492,7 @@ static cPhs_Step daDo_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daDo_Method = {
+static DUSK_CONST actor_method_class l_daDo_Method = {
     (process_method_func)daDo_Create,
     (process_method_func)daDo_Delete,
     (process_method_func)daDo_Execute,
@@ -2500,7 +2500,7 @@ static actor_method_class l_daDo_Method = {
     (process_method_func)daDo_Draw,
 };
 
-actor_process_profile_definition g_profile_DO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_DO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

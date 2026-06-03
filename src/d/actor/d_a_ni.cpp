@@ -943,6 +943,11 @@ static int ni_play(ni_class* i_this) {
     s16 var_r28 = 0x4000;
 
     i_this->mPadMainStickX = mDoCPd_c::getStickX3D(PAD_1);
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        i_this->mPadMainStickX = -i_this->mPadMainStickX;
+    }
+#endif
     i_this->mPadMainStickY = mDoCPd_c::getStickY(PAD_1);
     i_this->mPadSubStickY = mDoCPd_c::getSubStickY(PAD_1);
     i_this->mPadSubStickX = mDoCPd_c::getSubStickX(PAD_1);
@@ -1989,7 +1994,7 @@ static int daNi_Create(fopAc_ac_c* i_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class l_daNi_Method = {
+static DUSK_CONST actor_method_class l_daNi_Method = {
     (process_method_func)daNi_Create,
     (process_method_func)daNi_Delete,
     (process_method_func)daNi_Execute,
@@ -1997,7 +2002,7 @@ static actor_method_class l_daNi_Method = {
     (process_method_func)daNi_Draw,
 };
 
-actor_process_profile_definition g_profile_NI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

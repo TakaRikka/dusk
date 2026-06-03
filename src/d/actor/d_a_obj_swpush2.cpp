@@ -714,7 +714,7 @@ actor_method_class Mthd_Table = {
 }
 }
 
-actor_process_profile_definition g_profile_Obj_Swpush2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Swpush2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

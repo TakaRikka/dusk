@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_lv6egate.h"
 
-static char* l_arcName = "LV6EGATE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "LV6EGATE";
 
 const int l_dzbidx = 3;
 
@@ -226,7 +226,7 @@ static int daObjLv6EGate_MoveBGDraw(daObjLv6EGate_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv6EGate_METHODS = {
+static DUSK_CONST actor_method_class daObjLv6EGate_METHODS = {
     (process_method_func)daObjLv6EGate_create1st,
     (process_method_func)daObjLv6EGate_MoveBGDelete,
     (process_method_func)daObjLv6EGate_MoveBGExecute,
@@ -234,7 +234,7 @@ static actor_method_class daObjLv6EGate_METHODS = {
     (process_method_func)daObjLv6EGate_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv6EGate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv6EGate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

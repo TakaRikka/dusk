@@ -57,7 +57,7 @@ static u16 const l_stop_heap_size[12] = {
     0x0EA0, 0x0800, 0x0EB0, 0x0800, 0x0800, 0x1BD0,
 };
 
-static char* l_door_open_demo[11] = {
+static DUSK_CONST char* l_door_open_demo[11] = {
     NULL,
     "DEFAULT_MBS_SHUTTER_L1_F",
     "DEFAULT_MBS_SHUTTER_L1_F",
@@ -71,7 +71,7 @@ static char* l_door_open_demo[11] = {
     "DEFAULT_MBS_SHUTTER_L7_F",
 };
 
-static char* l_door_open_demoB[11] = {
+static DUSK_CONST char* l_door_open_demoB[11] = {
     NULL,
     "DEFAULT_MBS_SHUTTER_L1_B",
     "DEFAULT_MBS_SHUTTER_L1_B",
@@ -85,7 +85,7 @@ static char* l_door_open_demoB[11] = {
     "DEFAULT_MBS_SHUTTER_L7_B",
 };
 
-static char* l_door_open_demoLv5[4] = {
+static DUSK_CONST char* l_door_open_demoLv5[4] = {
     "DEFAULT_MBS_KNOB_OPEN_B",
     "DEFAULT_MBS_KNOB_OPEN_F",
     "DEFAULT_MBS_KNOB_NOTOPEN_B",
@@ -193,7 +193,7 @@ f32 dDoor_stop2_c::getHeight() {
 }
 
 
-char* daMBdoorL1_c::getAnmArcName() {
+DUSK_CONST char* daMBdoorL1_c::getAnmArcName() {
     switch(getDoorType()) {
     case 0:
         return "DoorY00";
@@ -205,7 +205,7 @@ char* daMBdoorL1_c::getAnmArcName() {
     return "DoorT00";
 }
 
-char* daMBdoorL1_c::getArcName() {
+DUSK_CONST char* daMBdoorL1_c::getArcName() {
     switch (getNowLevel(this)) {
     case 0:
     case 1:
@@ -228,7 +228,7 @@ char* daMBdoorL1_c::getArcName() {
     }
 }
 
-char* daMBdoorL1_c::getAlwaysArcName() {
+DUSK_CONST char* daMBdoorL1_c::getAlwaysArcName() {
     return "static";
 }
 
@@ -245,7 +245,7 @@ int daMBdoorL1_c::getDoorType() {
     }
 }
 
-char* daMBdoorL1_c::getOpenAnm() {
+DUSK_CONST char* daMBdoorL1_c::getOpenAnm() {
     if (getDoorType() == DOOR_TYPE_1) {
         return "oj_DoorOpD.bck";
     }
@@ -255,7 +255,7 @@ char* daMBdoorL1_c::getOpenAnm() {
     return NULL;
 }
 
-char* daMBdoorL1_c::getCloseAnm() {
+DUSK_CONST char* daMBdoorL1_c::getCloseAnm() {
     if (getDoorType() == DOOR_TYPE_1) {
         return "oj_DoorCloseD.bck";
     }
@@ -265,7 +265,7 @@ char* daMBdoorL1_c::getCloseAnm() {
     return NULL;
 }
 
-char* daMBdoorL1_c::getBmd() {
+DUSK_CONST char* daMBdoorL1_c::getBmd() {
     switch(getNowLevel(this)) {
     case 5:
     case 11:
@@ -275,11 +275,11 @@ char* daMBdoorL1_c::getBmd() {
     }
 }
 
-char* daMBdoorL1_c::getBtk() {
+DUSK_CONST char* daMBdoorL1_c::getBtk() {
     return "door-shutter_00.btk";
 }
 
-char* daMBdoorL1_c::getDzb() {
+DUSK_CONST char* daMBdoorL1_c::getDzb() {
     if (getNowLevel(this) == 5) {
         return "door-shutter.dzb";
     }
@@ -529,7 +529,7 @@ int daMBdoorL1_c::create() {
 }
 
 int daMBdoorL1_c::getDemoAction() {
-    static char* action_table[26] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[26] = {
         "WAIT",
         "SETANGLE",
         "UNLOCK",
@@ -1066,7 +1066,7 @@ int daMBdoorL1_c::unlock() {
 }
 
 int daMBdoorL1_c::openInitKnob(int param_1) {
-    static char* bck_table[4] = {
+    static DUSK_CONSTEXPR char DUSK_CONST* bck_table[4] = {
         "FDoorA.bck",
         "FDoorB.bck",
         "FDoorA.bck",
@@ -1723,7 +1723,7 @@ static int daMBdoorL1_Create(fopAc_ac_c* i_this) {
     return static_cast<daMBdoorL1_c*>(i_this)->create();
 }
 
-static actor_method_class l_daMBdoorL1_Method = {
+static DUSK_CONST actor_method_class l_daMBdoorL1_Method = {
     (process_method_func)daMBdoorL1_Create,
     (process_method_func)daMBdoorL1_Delete,
     (process_method_func)daMBdoorL1_Execute,
@@ -1731,7 +1731,7 @@ static actor_method_class l_daMBdoorL1_Method = {
     (process_method_func)daMBdoorL1_Draw,
 };
 
-actor_process_profile_definition g_profile_L1MBOSS_DOOR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_L1MBOSS_DOOR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

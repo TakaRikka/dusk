@@ -46,7 +46,7 @@ void dSn_HIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-static s32 phase_1(char* i_resName) {
+static s32 phase_1(DUSK_CONST char* i_resName) {
     mDoAud_bgmStart(-1);
     if (dComIfG_setObjectRes(i_resName, (u8)0, NULL) == 0) {
         return cPhs_ERROR_e;
@@ -55,7 +55,7 @@ static s32 phase_1(char* i_resName) {
     return cPhs_NEXT_e;
 }
 
-static s32 phase_2(char* i_resName) {
+static s32 phase_2(DUSK_CONST char* i_resName) {
     int rt = dComIfG_syncObjectRes(i_resName);
     if (rt < 0) {
         return cPhs_ERROR_e;
@@ -68,13 +68,13 @@ static s32 phase_2(char* i_resName) {
     }
 }
 
-static s32 resLoad(request_of_phase_process_class* i_phase, char* i_resName) {
+static s32 resLoad(request_of_phase_process_class* i_phase, char DUSK_CONST* i_resName) {
     static request_of_phase_process_fn l_method[2] = {
         (request_of_phase_process_fn)phase_1, 
         (request_of_phase_process_fn)phase_2
     };
 
-    return dComLbG_PhaseHandler(i_phase, l_method, i_resName);
+    return dComLbG_PhaseHandler(i_phase, l_method, IF_DUSK((void*)) i_resName);
 }
 
 s32 dScnName_c::create() {
@@ -472,7 +472,7 @@ static scene_method_class l_dScnName_Method = {
     (process_method_func)dScnName_Draw,
 };
 
-scene_process_profile_definition g_profile_NAME_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_NAME_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,
@@ -486,7 +486,7 @@ scene_process_profile_definition g_profile_NAME_SCENE = {
                        0,
 };
 
-scene_process_profile_definition g_profile_NAMEEX_SCENE = {
+DUSK_PROFILE scene_process_profile_definition DUSK_CONST g_profile_NAMEEX_SCENE = {
     /* Layer ID     */ fpcLy_ROOT_e,
     /* List ID      */ 1,
     /* List Prio    */ fpcPi_CURRENT_e,

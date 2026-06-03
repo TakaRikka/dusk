@@ -8,6 +8,8 @@
 #include <cstring>
 #include <types.h>
 
+#include "dusk/string.hpp"
+
 J2DMaterialFactory::J2DMaterialFactory(J2DMaterialBlock const& param_0) {
     mMaterialNum = param_0.field_0x8;
     mpMaterialInitData = JSUConvertOffsetToPtr<J2DMaterialInitData>(&param_0, param_0.field_0xc);
@@ -92,7 +94,7 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
             }
             if (local_380 == NULL && J2DScreen::getDataManage() != NULL) {
                 char acStack_230[257];
-                strcpy(acStack_230, param_3->getName(texNo));
+                SAFE_STRCPY(acStack_230, param_3->getName(texNo));
                 local_380 = J2DScreen::getDataManage()->get(acStack_230);
             }
         }
@@ -111,7 +113,7 @@ J2DMaterial* J2DMaterialFactory::create(J2DMaterial* param_0, int index, u32 par
         }
         if (local_388 == NULL && J2DScreen::getDataManage() != NULL) {
             char acStack_334[257];
-            strcpy(acStack_334, param_4->getName(param_0->getTevBlock()->getFontNo()));
+            SAFE_STRCPY(acStack_334, param_4->getName(param_0->getTevBlock()->getFontNo()));
             local_388 = J2DScreen::getDataManage()->get(acStack_334);
         }
     }

@@ -66,14 +66,14 @@ static int daTagHinit_Draw(daTagHinit_c*) {
     return 1;
 }
 
-static actor_method_class l_daTagHinit_Method = {
+static DUSK_CONST actor_method_class l_daTagHinit_Method = {
     (process_method_func)daTagHinit_Create,  (process_method_func)daTagHinit_Delete,
     (process_method_func)daTagHinit_Execute, (process_method_func)NULL,
     (process_method_func)daTagHinit_Draw,
 
 };
 
-actor_process_profile_definition g_profile_Tag_Hinit = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_Hinit = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

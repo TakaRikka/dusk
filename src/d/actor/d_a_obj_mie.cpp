@@ -18,7 +18,7 @@ static u32 l_bmdData[1][2] = {
     23, 1,
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "pouyaA",
 };
@@ -512,7 +512,7 @@ static int daObj_Mie_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daObj_Mie_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Mie_MethodTable = {
     (process_method_func)daObj_Mie_Create,
     (process_method_func)daObj_Mie_Delete,
     (process_method_func)daObj_Mie_Execute,
@@ -520,7 +520,7 @@ static actor_method_class daObj_Mie_MethodTable = {
     (process_method_func)daObj_Mie_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_MIE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_MIE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

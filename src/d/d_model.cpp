@@ -45,6 +45,20 @@ void dMdl_c::create(J3DModelData* i_modelData, u16 i_materialId, dKy_tevstr_c* i
 }
 
 void dMdl_c::entryObj(dMdl_obj_c* i_obj) {
+#ifdef TARGET_PC
+    // if field_0x1a is false, this dMdl_c is not in the drawlist
+    // if true, we need to make sure with interp enabled
+    if (dusk::frame_interp::is_enabled() && field_0x1a) {
+        auto pkt = dComIfGd_getListPacket()->mpBuffer[0];
+        while (pkt && pkt != this) {
+            pkt = pkt->getNextPacket();
+        }
+        if (!pkt) {
+            field_0x1a = false;
+        }
+    }
+#endif
+
     if (!field_0x1a) {
         dComIfGd_getListPacket()->entryImm(this, 0);
         field_0x1a = true;

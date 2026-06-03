@@ -1198,7 +1198,7 @@ static cPhs_Step daNpc_Tkj2_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-static actor_method_class l_daNpc_Tkj2_Method = {
+static DUSK_CONST actor_method_class l_daNpc_Tkj2_Method = {
     (process_method_func)daNpc_Tkj2_Create,
     (process_method_func)daNpc_Tkj2_Delete,
     (process_method_func)daNpc_Tkj2_Execute,
@@ -1206,7 +1206,7 @@ static actor_method_class l_daNpc_Tkj2_Method = {
     (process_method_func)daNpc_Tkj2_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_TKJ2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_TKJ2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

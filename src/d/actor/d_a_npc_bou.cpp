@@ -13,11 +13,11 @@
 #include "d/d_meter2_info.h"
 #include <cstring>
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {11, 1},
 };
 
-static daNpcT_evtData_c l_evtList[11] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[11] = {
     {"", 0},
     {"NO_RESPONSE", 0},
     {"WILDGOAT", 2},
@@ -31,7 +31,7 @@ static daNpcT_evtData_c l_evtList[11] = {
     {"MEETING_AGAIN_NEAR", 4},
 };
 
-static char* l_resNameList[7] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[7] = {
     "",
     "Bou",
     "Bou1",
@@ -41,22 +41,22 @@ static char* l_resNameList[7] = {
     "Jagar2"
 };
 
-static s8 l_loadResPtrn0[4] = {1, 2, 4, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[4] = {1, 2, 4, -1};
 
-static s8 l_loadResPtrn1[3] = {1, 3, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {1, 3, -1};
 
-static s8 l_loadResPtrn2[3] = {1, 4, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[3] = {1, 4, -1};
 
-static s8 l_loadResPtrn3[3] = {1, 5, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[3] = {1, 5, -1};
 
-static s8 l_loadResPtrn9[5] = {1, 2, 3, 4, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn9[5] = {1, 2, 3, 4, -1};
 
-static s8* l_loadResPtrnList[6] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[6] = {
     l_loadResPtrn0, l_loadResPtrn1, l_loadResPtrn2,
     l_loadResPtrn3, l_loadResPtrn0, l_loadResPtrn9,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[11] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[11] = {
     {-1, 0, 0, 17, 2, 1, 1},
     {6, 0, 1, 17, 2, 1, 1},
     {4, 0, 2, 17, 2, 1, 1},
@@ -70,7 +70,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[11] = {
     {10, 0, 4, 27, 0, 4, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[23] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[23] = {
     {8, 2, 1, 14, 0, 1, 1, 0},
     {5, 0, 2, 14, 0, 1, 1, 0},
     {7, 2, 3, 14, 0, 1, 1, 0},
@@ -96,7 +96,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[23] = {
     {18, 2, 4, 14, 0, 1, 1, 0}
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[44] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[44] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, 0, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {9, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {10, -1, 1}, {8, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -105,7 +105,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[44] =
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[88] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[88] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {8, 0, 1}, {10, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {9, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {10, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -119,7 +119,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[88] = {
     {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Bou_c::mCutNameList[9] = {
+char DUSK_CONST* DUSK_CONST daNpc_Bou_c::mCutNameList[9] = {
     "",
     "WILDGOAT",
     "WILDGOAT_SUCCESS",
@@ -131,7 +131,7 @@ char* daNpc_Bou_c::mCutNameList[9] = {
     "MEETING_AGAIN"
 };
 
-daNpc_Bou_c::cutFunc daNpc_Bou_c::mCutList[9] = {
+daNpc_Bou_c::cutFunc DUSK_CONST daNpc_Bou_c::mCutList[9] = {
     NULL,
     &daNpc_Bou_c::cutWildGoat,
     &daNpc_Bou_c::cutWildGoatSuccess,
@@ -185,7 +185,7 @@ void daNpc_Bou_HIO_c::genMessage(JORMContext* ctx) {
 #endif
 
 int daNpc_Bou_c::create() {
-    static int const heapSize[6] = {15696, 15696, 15696, 15696, 15696, 0};
+    static DUSK_CONSTEXPR int const heapSize[6] = {15696, 15696, 15696, 15696, 15696, 0};
     daNpcT_ct(this, daNpc_Bou_c, l_faceMotionAnmData, l_motionAnmData,
                        l_faceMotionSequenceData, 4, l_motionSequenceData, 4,
                        l_evtList, l_resNameList
@@ -1665,7 +1665,7 @@ static int daNpc_Bou_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Bou_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Bou_MethodTable = {
     (process_method_func)daNpc_Bou_Create,
     (process_method_func)daNpc_Bou_Delete,
     (process_method_func)daNpc_Bou_Execute,
@@ -1673,7 +1673,7 @@ static actor_method_class daNpc_Bou_MethodTable = {
     (process_method_func)daNpc_Bou_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_BOU = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_BOU = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

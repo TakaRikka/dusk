@@ -78,7 +78,7 @@ public:
     inline int getTimeHour();
     inline bool isDummyTalk();
 
-    static EventFn mEvtSeqList[1];
+    static EventFn DUSK_CONST mEvtSeqList[1];
 
 private:
     /* 0xB48 */ Z2CreatureCitizen mSound;

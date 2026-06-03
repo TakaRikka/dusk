@@ -179,7 +179,7 @@ static int daAlldie_Create(fopAc_ac_c* i_this) {
     return static_cast<daAlldie_c*>(i_this)->create();
 }
 
-static actor_method_class l_daAlldie_Method = {
+static DUSK_CONST actor_method_class l_daAlldie_Method = {
     (process_method_func)daAlldie_Create,
     (process_method_func)daAlldie_Delete,
     (process_method_func)daAlldie_Execute,
@@ -187,7 +187,7 @@ static actor_method_class l_daAlldie_Method = {
     (process_method_func)daAlldie_Draw,
 };
 
-actor_process_profile_definition g_profile_ALLDIE = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_ALLDIE = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 2,
     /* List Prio    */ fpcPi_CURRENT_e,

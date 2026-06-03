@@ -594,7 +594,7 @@ static int daObjDAN_IsDelete(daObjDAN_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjDAN_Method = {
+static DUSK_CONST actor_method_class l_daObjDAN_Method = {
     (process_method_func)daObjDAN_Create,
     (process_method_func)daObjDAN_Delete,
     (process_method_func)daObjDAN_Execute,
@@ -602,7 +602,7 @@ static actor_method_class l_daObjDAN_Method = {
     (process_method_func)daObjDAN_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Dan = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Dan = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

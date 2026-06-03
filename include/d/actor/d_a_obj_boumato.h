@@ -89,7 +89,7 @@ public:
     static void tgHitCallBack(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*);
     static void* srchArrow(void*, void*);
     void deleteStuckArrow();
-    char* getResName();
+    char DUSK_CONST* getResName();
     void setSwayParam(fopAc_ac_c*);
     void setEnvTevColor();
     void setRoomNo();

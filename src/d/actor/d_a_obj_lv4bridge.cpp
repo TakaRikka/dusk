@@ -41,7 +41,7 @@ int daObjLv4Brg_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "Obj_l4brg";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Obj_l4brg";
 
 int daObjLv4Brg_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -162,7 +162,7 @@ static int daObjLv4Brg_MoveBGDraw(daObjLv4Brg_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv4Brg_METHODS = {
+static DUSK_CONST actor_method_class daObjLv4Brg_METHODS = {
     (process_method_func)daObjLv4Brg_create1st,
     (process_method_func)daObjLv4Brg_MoveBGDelete,
     (process_method_func)daObjLv4Brg_MoveBGExecute,
@@ -170,7 +170,7 @@ static actor_method_class daObjLv4Brg_METHODS = {
     (process_method_func)daObjLv4Brg_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4Bridge = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4Bridge = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

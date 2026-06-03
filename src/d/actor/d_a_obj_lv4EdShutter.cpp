@@ -214,7 +214,7 @@ static int daLv4EdShutter_Create(fopAc_ac_c* i_this) {
     return ((daLv4EdShutter_c*)i_this)->create();
 }
 
-static actor_method_class l_daLv4EdShutter_Method = {
+static DUSK_CONST actor_method_class l_daLv4EdShutter_Method = {
     (process_method_func)daLv4EdShutter_Create,
     (process_method_func)daLv4EdShutter_Delete,
     (process_method_func)daLv4EdShutter_Execute,
@@ -222,7 +222,7 @@ static actor_method_class l_daLv4EdShutter_Method = {
     (process_method_func)daLv4EdShutter_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4EdShutter = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4EdShutter = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

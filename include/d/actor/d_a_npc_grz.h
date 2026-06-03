@@ -116,8 +116,8 @@ public:
 
     u8 getPathNoFromParam() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 
-    static char* mEvtCutNameList[7];
-    static cutFunc mEvtCutList[7];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[7];
+    static cutFunc DUSK_CONST mEvtCutList[7];
 
 private:
     /* 0x0B48 */ Z2Creature mSound;

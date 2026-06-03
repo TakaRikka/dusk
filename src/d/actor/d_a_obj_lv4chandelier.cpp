@@ -36,7 +36,7 @@ static void rideCallBack(dBgW* i_bgw, fopAc_ac_c* param_2, fopAc_ac_c* param_3) 
     ((daObjLv4Chan_c*)param_2)->rideActor(param_3);
 }
 
-static char* l_arcName = "P_Lv4Chan";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_Lv4Chan";
 
 int daObjLv4Chan_c::create1st() {
     int rv = dComIfG_resLoad(this, l_arcName);
@@ -869,7 +869,7 @@ static int daObjLv4Chan_MoveBGDraw(daObjLv4Chan_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjLv4Chan_METHODS = {
+static DUSK_CONST actor_method_class daObjLv4Chan_METHODS = {
     (process_method_func)daObjLv4Chan_create1st,
     (process_method_func)daObjLv4Chan_MoveBGDelete,
     (process_method_func)daObjLv4Chan_MoveBGExecute,
@@ -877,7 +877,7 @@ static actor_method_class daObjLv4Chan_METHODS = {
     (process_method_func)daObjLv4Chan_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv4Chan = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv4Chan = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -27,7 +27,7 @@ u16 dPa_name::s_o_id[14] = {
     dPa_RM(ID_ZI_S_O_WAKIMIZU_C),
 };
 
-char* dPa_name::getName(u32 i_id) {
+DUSK_CONST char* dPa_name::getName(u32 i_id) {
     if ((i_id & 0xFFFF1FFF) >= ID_PARTICLE_MAX) {
         return NULL;
     }
@@ -35,7 +35,7 @@ char* dPa_name::getName(u32 i_id) {
     return jpaName[i_id];
 }
 
-char* dPa_name::jpaName[] = {
+DUSK_CONST char* dPa_name::jpaName[] = {
     "AK_JN_M_breakFaceRock00.jpa",
     "AK_JN_M_breakGreatRock00.jpa",
     "AK_JN_M_breakLittleRock00.jpa",

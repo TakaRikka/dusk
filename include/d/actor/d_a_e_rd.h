@@ -38,7 +38,7 @@ public:
     /* 0x05CC */ s16 target_ya;
     /* 0x05D0 */ mDoExt_McaMorfSO* anm_p;
     /* 0x05D4 */ Z2CreatureEnemy sound;
-    /* 0x0678 */ char* resName;
+    /* 0x0678 */ DUSK_CONST char* resName;
     /* 0x067C */ int anm;
     /* 0x0680 */ int field_0x680;
     /* 0x0684 */ dJntCol_c mJntCol;

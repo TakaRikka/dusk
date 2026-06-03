@@ -20,9 +20,9 @@ static const cM3dGCylS l_cyl_info[3] = {
     { 0.0f, 0.0f, -60.0f, 70.0f, 80.0f },
 };
 
-static char* l_staff_name = "TREASURE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staff_name = "TREASURE";
 
-static dCcD_SrcCyl l_cyl_src = {
+static DUSK_CONSTEXPR dCcD_SrcCyl l_cyl_src = {
     {
         {0x0, {{0x0, 0x0, 0x1e}, {0x0, 0x0}, 0x79}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -38,13 +38,13 @@ static dCcD_SrcCyl l_cyl_src = {
     }
 };
 
-static daTbox_ModelInfo l_modelInfo[3] = {
+static DUSK_CONSTEXPR daTbox_ModelInfo l_modelInfo[3] = {
     { "Dalways", 12, 7, 25, 26, 14, 19 },
     { "Dalways", 13, 8, 27, 28, 14, 19 },
     { "BoxC", 14, 8, 20, 21, 11, 17 },
 };
 
-static cXyz l_light_offset(0.0f, 35.0f, 0.0f);
+static DUSK_CONSTEXPR cXyz l_light_offset(0.0f, 35.0f, 0.0f);
 
 class daTbox_HIO_c : public mDoHIO_entry_c {
 public:
@@ -96,14 +96,14 @@ daTbox_HIO_c::daTbox_HIO_c() {
     mForPlacementCheck = 0;
 }
 
-daTbox_ModelInfo* daTbox_c::getModelInfo() {
+DUSK_CONST daTbox_ModelInfo* daTbox_c::getModelInfo() {
     return &l_modelInfo[getShapeType()];
 }
 
 static const u32 l_open_se_id[3] = { Z2SE_OBJ_TBOX_OPEN_A, Z2SE_OBJ_TBOX_OPEN_B, Z2SE_OBJ_TBOX_OPEN_C };
 
 cPhs_Step daTbox_c::commonShapeSet() {
-    daTbox_ModelInfo* model_info = getModelInfo();
+    DUSK_CONST daTbox_ModelInfo* model_info = getModelInfo();
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(model_info->mArcName, model_info->mModelResNo);
     JUT_ASSERT(0x191, modelData != NULL);
@@ -180,7 +180,7 @@ cPhs_Step daTbox_c::envShapeSet() {
 }
 
 cPhs_Step daTbox_c::bgCheckSet() {
-    daTbox_ModelInfo* model_info = getModelInfo();
+    DUSK_CONST daTbox_ModelInfo* model_info = getModelInfo();
 
     cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(model_info->mArcName, model_info->mOpenDzbResNo);
     JUT_ASSERT(528, bgd != NULL);
@@ -845,7 +845,7 @@ void daTbox_c::demoProcAppear() {
 }
 
 int daTbox_c::demoProc() {
-    static char* action_table[] = {"WAIT", "OPEN", "APPEAR", "OPEN_SHORT", "DROP"};
+    static DUSK_CONSTEXPR char DUSK_CONST* action_table[] = {"WAIT", "OPEN", "APPEAR", "OPEN_SHORT", "DROP"};
     int act_idx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZEU(action_table), 0, 0);
     int tbox_no;
 
@@ -1796,7 +1796,7 @@ cPhs_Step daTbox_c::create1st() {
         JUT_ASSERT(3544, FALSE);
     }
 
-    daTbox_ModelInfo* model_info = getModelInfo();
+    DUSK_CONST daTbox_ModelInfo* model_info = getModelInfo();
     cPhs_Step step = dComIfG_resLoad(&mPhase, model_info->mArcName);
     if (step != cPhs_COMPLEATE_e) {
         return step;
@@ -1895,7 +1895,7 @@ static int daTbox_MoveBGDraw(daTbox_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daTbox_METHODS = {
+static DUSK_CONST actor_method_class daTbox_METHODS = {
     (process_method_func)daTbox_create1st,
     (process_method_func)daTbox_MoveBGDelete,
     (process_method_func)daTbox_MoveBGExecute,
@@ -1903,7 +1903,7 @@ static actor_method_class daTbox_METHODS = {
     (process_method_func)daTbox_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_TBOX = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TBOX = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

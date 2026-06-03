@@ -55,7 +55,7 @@ daObjSakuita_Attr_c const daObjSakuita_c::M_attr = {
     20.0f, 12.0f, 70.0f, -50.0f, 0.8f, 0.5f, -6.0f, 900.0f, 20000.0f, 100.0f, 0x1400, 0x14,
 };
 
-static char* l_arcName = "A_Sakuita";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "A_Sakuita";
 
 void daObjSakuita_c::create_init() {
     fopAcM_setCullSizeBox(this, -30.0f, -90.0f, -10.0f, 30.0f, 20.0f, 10.0f);
@@ -205,7 +205,7 @@ static int daObjSakuita_Create(fopAc_ac_c* i_actor) {
     return static_cast<daObjSakuita_c*>(i_actor)->create();
 }
 
-static actor_method_class l_daObjSakuita_Method = {
+static DUSK_CONST actor_method_class l_daObjSakuita_Method = {
     (process_method_func)daObjSakuita_Create,
     (process_method_func)daObjSakuita_Delete,
     (process_method_func)daObjSakuita_Execute,
@@ -213,7 +213,7 @@ static actor_method_class l_daObjSakuita_Method = {
     (process_method_func)daObjSakuita_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Sakuita = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Sakuita = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -36,7 +36,7 @@ void daObjBkDoor_c::setBaseMtx() {
     mDoMtx_copy(mDoMtx_stack_c::get(), mBgMtx);
 }
 
-static char* l_arcName = "A_BkDoor";
+static DUSK_CONST char* l_arcName = "A_BkDoor";
 
 static int const l_bmd[] = {0x04, 0x05};
 static int const l_dzb[] = {0x08, 0x09};
@@ -198,13 +198,13 @@ static int daObjBkDoor_MoveBGDraw(daObjBkDoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjBkDoor_METHODS = {
+static DUSK_CONST actor_method_class daObjBkDoor_METHODS = {
     (process_method_func)daObjBkDoor_create1st,     (process_method_func)daObjBkDoor_MoveBGDelete,
     (process_method_func)daObjBkDoor_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjBkDoor_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_BkDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_BkDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

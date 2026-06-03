@@ -33,8 +33,8 @@ public:
 
     typedef int (daBdoorL1_c::*actionFunc)();
 
-    char* getDoorEventName();
-    char* getDoorEventName2();
+    DUSK_CONST char* getDoorEventName();
+    DUSK_CONST char* getDoorEventName2();
     const char* getArcName();
     const char* getAnmArcName();
     int getDoorType();

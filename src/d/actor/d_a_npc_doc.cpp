@@ -9,34 +9,34 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {14, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[3] = {
     "",
     "Doc",
     "Doc1",
 };
 
-static s8 l_loadResPtrn0[] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[] = {
     1,
     2,
     -1,
 };
 
-static s8* l_loadResPtrnList[3] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[3] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {-1, 0, 0, 20, 2, 1, 1},
     {6, 0, 1, 20, 2, 1, 1},
     {9, 0, 2, 34, 0, 2, 0},
@@ -49,7 +49,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[10] = {
     {8, 2, 2, 20, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[14] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[14] = {
     {11, 2, 1, 17, 0, 1, 1, 0},
     {8, 0, 1, 17, 0, 1, 1, 0},
     {7, 0, 1, 17, 0, 1, 1, 0},
@@ -66,7 +66,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[14] = {
     {6, 2, 2, 25, 2, 2, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] = {
     {1, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {3, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 1}, {3, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {5, -1, 1}, {6, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {8, -1, 1}, {9, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -74,7 +74,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[40] =
     {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[52] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[52] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {4, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {7, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {9, -1, 1}, {10, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -84,9 +84,9 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[52] = {
     {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Doc_c::mCutNameList[1] = {""};
+char DUSK_CONST* DUSK_CONST daNpc_Doc_c::mCutNameList[1] = {""};
 
-daNpc_Doc_c::cutFunc daNpc_Doc_c::mCutList[1] = {
+daNpc_Doc_c::cutFunc DUSK_CONST daNpc_Doc_c::mCutList[1] = {
     NULL,
 };
 
@@ -865,7 +865,7 @@ static int daNpc_Doc_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Doc_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Doc_MethodTable = {
     (process_method_func)daNpc_Doc_Create,
     (process_method_func)daNpc_Doc_Delete,
     (process_method_func)daNpc_Doc_Execute,
@@ -873,7 +873,7 @@ static actor_method_class daNpc_Doc_MethodTable = {
     (process_method_func)daNpc_Doc_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_DOC = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_DOC = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

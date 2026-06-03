@@ -105,14 +105,14 @@ public:
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_3,
                                 int param_4,
                                 daNpcT_MotionSeqMngr_c::sequenceStepData_c const* param_5,
-                                int param_6, daNpcT_evtData_c const* param_7, char** param_8)
+                                int param_6, daNpcT_evtData_c const* param_7, char DUSK_CONST* DUSK_CONST* param_8)
         : daNpcT_c(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8) {}
     s32 getHeadJointNo() { return JNT_HEAD; }
     s32 getNeckJointNo() { return JNT_NECK; }
     s32 getBackboneJointNo() { return JNT_BACKBONE1; }
 
-    static char* mCutNameList[1];
-    static cutFunc mCutList[1];
+    static char DUSK_CONST* DUSK_CONST mCutNameList[1];
+    static cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0xE40 */ NPC_SOLA_HIO_CLASS* mpHIO;

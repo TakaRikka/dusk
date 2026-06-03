@@ -147,7 +147,7 @@ namespace daObjSwpush {
         static u32 const M_heap_size[3];
         static Hio_c::Attr_c const M_attr[5];
         static u8 const M_op_vtx[4];
-        static char* M_arcname[3];
+        static DUSK_CONST char* M_arcname[3];
 
         /* 0x568 */ request_of_phase_process_class mPhase;
         /* 0x570 */ dBgWSv* mpBgW;

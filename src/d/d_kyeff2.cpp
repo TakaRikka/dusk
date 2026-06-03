@@ -43,7 +43,7 @@ static leafdraw_method_class l_dKyeff2_Method = {
     (process_method_func)dKyeff2_Draw,
 };
 
-kankyo_process_profile_definition g_profile_KYEFF2 = {
+DUSK_PROFILE kankyo_process_profile_definition DUSK_CONST g_profile_KYEFF2 = {
     /* Layer ID      */ fpcLy_CURRENT_e,
     /* List ID       */ 12,
     /* List Prio     */ fpcPi_CURRENT_e,

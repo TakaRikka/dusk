@@ -13,20 +13,33 @@ inline denormal_state denormals_enable()
 }
 inline void denormals_restore(denormal_state saved) { _mm_setcsr(saved); }
 
-#elif defined(__aarch64__) || defined(_M_ARM64)
+#elif defined(__aarch64__) || defined(_M_ARM64) || defined(_M_ARM64EC)
 
 #include <cstdint>
+#if defined(_MSC_VER) && !defined(__clang__) && (defined(_M_ARM64) || defined(_M_ARM64EC))
+#include <intrin.h>
+#endif
 using denormal_state = uint64_t;
 inline denormal_state denormals_enable()
 {
+#if defined(_MSC_VER) && !defined(__clang__) && (defined(_M_ARM64) || defined(_M_ARM64EC))
+    denormal_state saved = static_cast<denormal_state>(_ReadStatusReg(ARM64_FPCR));
+    _WriteStatusReg(ARM64_FPCR, static_cast<__int64>(saved | (1ULL << 24))); // FZ
+    return saved;
+#else
     denormal_state saved;
     asm volatile("mrs %0, fpcr" : "=r"(saved));
     asm volatile("msr fpcr, %0" :: "r"(saved | (1ULL << 24))); // FZ
     return saved;
+#endif
 }
 inline void denormals_restore(denormal_state saved)
 {
+#if defined(_MSC_VER) && !defined(__clang__) && (defined(_M_ARM64) || defined(_M_ARM64EC))
+    _WriteStatusReg(ARM64_FPCR, static_cast<__int64>(saved));
+#else
     asm volatile("msr fpcr, %0" :: "r"(saved));
+#endif
 }
 
 #elif defined(__arm__) || defined(_M_ARM)

@@ -19,12 +19,12 @@ static int daTagGra_Delete(daTagGra_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daTagGra_Method = {
+static DUSK_CONST actor_method_class l_daTagGra_Method = {
     (process_method_func)daTagGra_Create,
     (process_method_func)daTagGra_Delete
 };
 
-actor_process_profile_definition g_profile_TAG_GRA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_GRA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

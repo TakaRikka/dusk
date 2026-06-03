@@ -8,50 +8,50 @@
 #include "d/actor/d_a_npc_gnd.h"
 #include <cstring>
 
-static int l_bmdData[1][2] = {
+static DUSK_CONSTEXPR int l_bmdData[1][2] = {
     {11, 1},
 };
 
-static daNpcT_evtData_c l_evtList[2] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[2] = {
     {"", 0},
     {"NO_RESPONSE", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "",
     "Gnd",
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1, -1
 };
 
-static s8* l_loadResPtrnList[2] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[2] = {
     l_loadResPtrn0, l_loadResPtrn0
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[1] = {
     {-1, 0, 0, 23, 2, 1, 1}
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {8, 2, 1, 20, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {0, -1, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}
 };
 
-char* daNpc_Gnd_c::mCutNameList[1] = {""};
+char DUSK_CONST* DUSK_CONST daNpc_Gnd_c::mCutNameList[1] = {""};
 
-daNpc_Gnd_c::cutFunc daNpc_Gnd_c::mCutList[1] = {NULL};
+daNpc_Gnd_c::cutFunc DUSK_CONST daNpc_Gnd_c::mCutList[1] = {NULL};
 
 const daNpc_Gnd_HIOParam daNpc_Gnd_Param_c::m = {
     280.0f,
@@ -676,7 +676,7 @@ static int daNpc_Gnd_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_Gnd_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Gnd_MethodTable = {
     (process_method_func)daNpc_Gnd_Create,
     (process_method_func)daNpc_Gnd_Delete,
     (process_method_func)daNpc_Gnd_Execute,
@@ -684,7 +684,7 @@ static actor_method_class daNpc_Gnd_MethodTable = {
     (process_method_func)daNpc_Gnd_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_GND = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_GND = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

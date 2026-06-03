@@ -55,12 +55,12 @@ daNpc_zrC_HIOParam const daNpc_zrC_Param_c::m = {
     2300.0f,
 };
 
-static daNpc_GetParam1 l_bmdGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[2] = {
     {3, 3},   // zrc
     {3, 4},   // zrc_sick_tw
 };
 
-static daNpc_GetParam1 l_bckGetParamList[32] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[32] = {
     {9, 0},   // zrc_f_wait_a
     {5, 2},   // zrc_f_sit_talk
     {8, 0},   // zrc_f_talk_a
@@ -95,7 +95,7 @@ static daNpc_GetParam1 l_bckGetParamList[32] = {
     {5, 5},   // zrc_sick_demo_wait
 };
 
-static daNpc_GetParam1 l_btpGetParamList[15] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[15] = {
     {19, 0},  // zrc
     {10, 2},  // zrc_f_sit_talk
     {23, 0},  // zrc_f_talk_a
@@ -113,7 +113,7 @@ static daNpc_GetParam1 l_btpGetParamList[15] = {
     {8, 5},   // zrc_f_sick_demo_wait
 };
 
-static daNpc_GetParam1 l_btkGetParamList[5] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btkGetParamList[5] = {
     {16, 0},  // zrc
     {26, 1},  // zrc_sad_talk
     {27, 1},  // zrc_sad_wait
@@ -121,37 +121,37 @@ static daNpc_GetParam1 l_btkGetParamList[5] = {
     {25, 1},  // zrc_kizuku_wait
 };
 
-static daNpc_GetParam1 l_evtGetParamList[2] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[2] = {
     {0, 0},
     {1, 6},
 };
 
-static char* l_evtNames[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[2] = {
     NULL,
     "EARRING_GET",
 };
 
-static int l_loadRes_ZRCa[5] = {
+static DUSK_CONSTEXPR int l_loadRes_ZRCa[5] = {
     0, 3, -1, -1, 0,
 };
 
-static int l_loadRes_ZRC_SICK[5] = {
+static DUSK_CONSTEXPR int l_loadRes_ZRC_SICK[5] = {
     3, 5, 0, -1, 0,
 };
 
-static int l_loadRes_ZRC0[5] = {
+static DUSK_CONSTEXPR int l_loadRes_ZRC0[5] = {
     0, 3, -1, -1, 0,
 };
 
-static int l_loadRes_ZRC_PRAY[5] = {
+static DUSK_CONSTEXPR int l_loadRes_ZRC_PRAY[5] = {
     0, 3, 1, 6, -1,
 };
 
-static int l_loadRes_ZRC_SIT[5] = {
+static DUSK_CONSTEXPR int l_loadRes_ZRC_SIT[5] = {
     0, 2, 3, -1, 0,
 };
 
-static int* l_loadRes_list[5] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[5] = {
     l_loadRes_ZRCa,
     l_loadRes_ZRC_SICK,
     l_loadRes_ZRC_PRAY,
@@ -159,7 +159,7 @@ static int* l_loadRes_list[5] = {
     l_loadRes_ZRC0,
 };
 
-static char* l_resNames[7] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[7] = {
     "zrC",
     "zrC1",
     "zrC2",
@@ -169,14 +169,14 @@ static char* l_resNames[7] = {
     "zrC_EGD",
 };
 
-static char* l_myName = "zrC";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "zrC";
 
-char* daNpc_zrC_c::mEvtCutNameList[2] = {
+char DUSK_CONST* DUSK_CONST daNpc_zrC_c::mEvtCutNameList[2] = {
     "",
     "EARRING_GET",
 };
 
-daNpc_zrC_c::EventFn daNpc_zrC_c::mEvtCutList[2] = {
+daNpc_zrC_c::EventFn DUSK_CONST daNpc_zrC_c::mEvtCutList[2] = {
     NULL,
     &daNpc_zrC_c::ECut_earringGet,
 };
@@ -1791,7 +1791,7 @@ static int daNpc_zrC_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES
 
-static actor_method_class daNpc_zrC_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_zrC_MethodTable = {
     (process_method_func)daNpc_zrC_Create,
     (process_method_func)daNpc_zrC_Delete,
     (process_method_func)daNpc_zrC_Execute,
@@ -1799,7 +1799,7 @@ static actor_method_class daNpc_zrC_MethodTable = {
     (process_method_func)daNpc_zrC_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_ZRC = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_ZRC = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

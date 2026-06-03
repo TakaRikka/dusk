@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_pleaf.h"
 
-static char* l_resName = "J_Hatake";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "J_Hatake";
 
 daObj_Pleaf_HIOParam const daObj_Pleaf_Param_c::m = {0, -3.0f, 1.0f, 900.0f};
 
@@ -123,7 +123,7 @@ int daObj_Pleaf_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daObj_Pleaf_c*>(i_this)->CreateHeap();
 }
 
-char* daObj_Pleaf_c::getResName() {
+char DUSK_CONST* daObj_Pleaf_c::getResName() {
     return l_resName;
 }
 
@@ -172,13 +172,13 @@ static int daObj_Pleaf_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_Pleaf_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Pleaf_MethodTable = {
     (process_method_func)daObj_Pleaf_Create,  (process_method_func)daObj_Pleaf_Delete,
     (process_method_func)daObj_Pleaf_Execute, (process_method_func)daObj_Pleaf_IsDelete,
     (process_method_func)daObj_Pleaf_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_PLEAF = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_PLEAF = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

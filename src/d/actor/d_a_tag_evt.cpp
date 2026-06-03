@@ -8,14 +8,16 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
-static char* l_evtNameList[] = {
+#include "dusk/string.hpp"
+
+static DUSK_CONST char* l_evtNameList[] = {
     NULL,
     "JUMP_DEMOSTAGE",
 };
 
-static char* l_resFileName = "TAGEVT";
+static DUSK_CONST char* l_resFileName = "TAGEVT";
 
-char* daTag_Evt_c::mEvtCutList[] = {
+DUSK_CONST char* daTag_Evt_c::mEvtCutList[] = {
     "WAIT",
     "TALK",
     "NEXT",
@@ -26,7 +28,7 @@ int daTag_Evt_c::create() {
     cPhs_Step phase = dComIfG_resLoad(&mPhase, l_resFileName);
     if (phase == cPhs_COMPLEATE_e) {
         eventInfo.setArchiveName(l_resFileName);
-        strcpy(field_0x568, "TagEvt");
+        SAFE_STRCPY(field_0x568, "TagEvt");
         getParam();
         field_0x572 = -1;
     }
@@ -236,13 +238,13 @@ static int daTag_Evt_IsDelete(void* i_this) {
 
 daTag_Evt_c::~daTag_Evt_c() {}
 
-static actor_method_class daTag_Evt_MethodTable = {
+static DUSK_CONST actor_method_class daTag_Evt_MethodTable = {
     (process_method_func)daTag_Evt_Create,  (process_method_func)daTag_Evt_Delete,
     (process_method_func)daTag_Evt_Execute, (process_method_func)daTag_Evt_IsDelete,
     (process_method_func)daTag_Evt_Draw,
 };
 
-actor_process_profile_definition g_profile_TAG_EVT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_EVT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -237,13 +237,13 @@ int daZdoor_c::Create() {
     return 1;
 }
 
-static char* l_arcName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {
     "J_Zdoor",
     "J_Rdoor",
     "J_STdoa",
 };
 
-static char* l_bmdName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdName[3] = {
     "J_Zdoor.bmd",
     "J_Rdoor.bmd",
     "J_STdoa.bmd",
@@ -267,7 +267,7 @@ static const u16 estimateSizeTbl[2] = {
     0x0D30,
 };
 
-static char* l_dzbName[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_dzbName[3] = {
     "J_Zdoor.dzb",
     "J_Rdoor.dzb",
     "J_STdoa.dzb",
@@ -377,7 +377,7 @@ static int daZdoor_MoveBGDraw(daZdoor_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daZdoor_METHODS = {
+static DUSK_CONST actor_method_class daZdoor_METHODS = {
     (process_method_func)daZdoor_create1st,
     (process_method_func)daZdoor_MoveBGDelete,
     (process_method_func)daZdoor_MoveBGExecute,
@@ -385,7 +385,7 @@ static actor_method_class daZdoor_METHODS = {
     (process_method_func)daZdoor_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_ZDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_ZDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

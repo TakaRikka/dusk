@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_npc_henna0.h"
-actor_process_profile_definition g_profile_NPC_HENNA0 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_HENNA0 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

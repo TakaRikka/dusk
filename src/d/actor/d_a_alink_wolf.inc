@@ -65,8 +65,8 @@ extern Vec const l_crawlSideOffset;
 extern Vec const l_wolfLieSideOffset;
 extern Vec const l_crawlMinSideOffset;
 extern f32 const l_wolfFootOnFrame[][4];
-extern cXyz l_wolfBaseAnime;
-extern cXyz l_wolfRopeBaseAnime;
+extern cXyz DUSK_CONST l_wolfBaseAnime;
+extern cXyz DUSK_CONST l_wolfRopeBaseAnime;
 
 
 void daAlink_c::changeCommon() {
@@ -4005,7 +4005,13 @@ int daAlink_c::procWolfHowlDemoInit() {
         } else if (name == fpcNm_Tag_WaraHowl_e) {
             mZ2WolfHowlMgr.setCorrectCurve(static_cast<daTagWrHowl_c*>(field_0x27f4)->getTuneId());
         } else {
+            #if TARGET_PC
+            if (mZ2WolfHowlMgr.getCorrectCurveID() != 9) {
+                mZ2WolfHowlMgr.setCorrectCurve(-1);
+            }
+            #else
             mZ2WolfHowlMgr.setCorrectCurve(-1);
+            #endif
         }
     } else {
         #if TARGET_PC

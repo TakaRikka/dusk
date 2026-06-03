@@ -26,7 +26,7 @@ public:
     /* 0xC */ f32 mSinkingAmount;
 };
 
-static char* l_arcName = "V_Ice_s";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_Ice_s";
 
 daOBJ_ICE_S_HIO_c::daOBJ_ICE_S_HIO_c() {
     mId = -1;
@@ -292,7 +292,7 @@ int daObjIce_s_c::Delete() {
 }
 
 
-static actor_method_class l_daObjIce_s_Method = {
+static DUSK_CONST actor_method_class l_daObjIce_s_Method = {
     (process_method_func)daObjIce_s_Create,
     (process_method_func)daObjIce_s_Delete,
     (process_method_func)daObjIce_s_Execute,
@@ -300,7 +300,7 @@ static actor_method_class l_daObjIce_s_Method = {
     (process_method_func)daObjIce_s_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Ice_s = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Ice_s = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -339,7 +339,7 @@ bool daObjKWheel01_c::eventStart() {
     return true;
 }
 
-static actor_method_class daObjKWheel01_METHODS = {
+static DUSK_CONST actor_method_class daObjKWheel01_METHODS = {
     (process_method_func)daObjKWheel01_create1st,
     (process_method_func)daObjKWheel01_MoveBGDelete,
     (process_method_func)daObjKWheel01_MoveBGExecute,
@@ -347,7 +347,7 @@ static actor_method_class daObjKWheel01_METHODS = {
     (process_method_func)daObjKWheel01_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_KWheel01 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_KWheel01 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

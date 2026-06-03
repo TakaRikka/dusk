@@ -43,11 +43,11 @@ public:
     int draw();
     BOOL rangeCheck();
     BOOL otherCheck();
-    char* getResName();
+    DUSK_CONST char* getResName();
     void getParam();
     BOOL cut_speak(int, BOOL);
 
-    static char* mEvtCutTBL[2];
+    static DUSK_CONST char* mEvtCutTBL[2];
 
     /* 0x56C */ char mStaffName[8];
     /* 0x574 */ request_of_phase_process_class mPhase;

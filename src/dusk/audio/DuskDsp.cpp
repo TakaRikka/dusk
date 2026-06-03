@@ -85,10 +85,9 @@ static bool ValidateChannelWaveFormat(const JASDsp::TChannel& channel) {
  */
 static void ValidateChannel(const JASDsp::TChannel& channel) {
     if (!ValidateChannelWaveFormat(channel)) {
-        CRASH(
-            "Unable to handle channel format: %02x, %02x\n",
-            channel.mSamplesPerBlock,
-            channel.mBytesPerBlock);
+        const auto msg = fmt::format("Unable to handle channel format: {:02x}, {:02x}\n",
+            channel.mSamplesPerBlock, channel.mBytesPerBlock);
+        CRASH(msg.c_str());
     }
 }
 

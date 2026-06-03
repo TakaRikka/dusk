@@ -24,7 +24,7 @@ static const cull_box l_cull_box = {
     {133.0f, 29.0f, 127.0f}
 };
 
-static char* l_arcName = "M_Hasu";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "M_Hasu";
 
 nObjMHasu::daObjMHasu_c::daObjMHasu_c() :
     mConst1(25.5f),
@@ -184,7 +184,7 @@ actor_method_class daObjMHasu_METHODS = {
     (process_method_func)&daObjMHasu_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_MHasu = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MHasu = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

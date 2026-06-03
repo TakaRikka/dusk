@@ -43,7 +43,7 @@ dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
 
 dCcD_SrcSph daLv3Candle_c::mCcDSph = {daLv3Candle_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 0.0f}}};
 
-static char* l_resNameIdx[] = {"L3candl", "L3candl2"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {"L3candl", "L3candl2"};
 
 void daLv3Candle_c::setBaseMtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
@@ -238,13 +238,13 @@ static int daLv3Candle_Create(fopAc_ac_c* i_this) {
     return actor->create();
 }
 
-static actor_method_class l_daLv3Candle_Method = {
+static DUSK_CONST actor_method_class l_daLv3Candle_Method = {
     (process_method_func)daLv3Candle_Create,  (process_method_func)daLv3Candle_Delete,
     (process_method_func)daLv3Candle_Execute, NULL,
     (process_method_func)daLv3Candle_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv3Candle = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv3Candle = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

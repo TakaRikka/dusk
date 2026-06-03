@@ -610,7 +610,7 @@ void dMenu_Skill_c::setPageText() {
 void dMenu_Skill_c::setAButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpAButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpAButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {
@@ -622,7 +622,7 @@ void dMenu_Skill_c::setAButtonString(u16 i_stringID) {
 void dMenu_Skill_c::setBButtonString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 5; i++) {
-            strcpy(mpBButtonString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpBButtonString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 5; i++) {
@@ -634,7 +634,7 @@ void dMenu_Skill_c::setBButtonString(u16 i_stringID) {
 void dMenu_Skill_c::setNameString(u16 i_stringID) {
     if (i_stringID == 0) {
         for (int i = 0; i < 4; i++) {
-            strcpy(mpNameString[i]->getStringPtr(), "");
+            SAFE_STRCPY(mpNameString[i]->getStringPtr(), "");
         }
     } else {
         for (int i = 0; i < 4; i++) {

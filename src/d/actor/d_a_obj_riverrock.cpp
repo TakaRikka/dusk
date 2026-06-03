@@ -10,7 +10,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_arcName = "RiverRock";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "RiverRock";
 
 daObjRIVERROCK_HIO_c::daObjRIVERROCK_HIO_c() {
     field_0x4 = -1;
@@ -312,7 +312,7 @@ int daObjRIVERROCK_c::Delete() {
     return 1;
 }
 
-static actor_method_class l_daObjRIVERROCK_Method = {
+static DUSK_CONST actor_method_class l_daObjRIVERROCK_Method = {
     (process_method_func)daObjRIVERROCK_Create,
     (process_method_func)daObjRIVERROCK_Delete,
     (process_method_func)daObjRIVERROCK_Execute,
@@ -320,7 +320,7 @@ static actor_method_class l_daObjRIVERROCK_Method = {
     (process_method_func)daObjRIVERROCK_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_RIVERROCK = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RIVERROCK = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

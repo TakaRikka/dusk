@@ -17,11 +17,11 @@ enum {
 
 static NPC_MYNA2_HIO_CLASS l_HIO;
 
-static daNpc_GetParam1 l_bmdGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdGetParamList[] = {
     {0x17, 0},
 };
 
-static daNpc_GetParam1 l_bckGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_bckGetParamList[] = {
     {17, 0},
     {10, 0},
     {11, 0},
@@ -39,11 +39,11 @@ static daNpc_GetParam1 l_bckGetParamList[] = {
     {20, 0},
 };
 
-static daNpc_GetParam1 l_btpGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_btpGetParamList[] = {
     {26, 0},
 };
 
-static daNpc_GetParam1 l_evtGetParamList[] = {
+static DUSK_CONSTEXPR daNpc_GetParam1 l_evtGetParamList[] = {
     {0, 0},
     {1, 0},
     {2, 1},
@@ -51,7 +51,7 @@ static daNpc_GetParam1 l_evtGetParamList[] = {
     {4, 2},
 };
 
-static char* l_evtNames[5] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[5] = {
     NULL,
     "FIRST_TALK",
     "GAME_FAILURE",
@@ -59,23 +59,23 @@ static char* l_evtNames[5] = {
     "GAME_GOAL_SUCCESS",
 };
 
-static int l_loadRes_MYNA2a[] = {
+static DUSK_CONSTEXPR int l_loadRes_MYNA2a[] = {
     0, -1, -1,
 };
 
-static int l_loadRes_MYNA2_GAME_FAILURE[] = {
+static DUSK_CONSTEXPR int l_loadRes_MYNA2_GAME_FAILURE[] = {
     0, 1, -1,
 };
 
-static int l_loadRes_MYNA2_GAME_GOAL[] = {
+static DUSK_CONSTEXPR int l_loadRes_MYNA2_GAME_GOAL[] = {
     0, 2, -1,
 };
 
-static int l_loadRes_MYNA20[] = {
+static DUSK_CONSTEXPR int l_loadRes_MYNA20[] = {
     0, -1, -1,
 };
 
-static int* l_loadRes_list[5] = {
+static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[5] = {
     l_loadRes_MYNA2a,
     l_loadRes_MYNA2a,
     l_loadRes_MYNA2_GAME_FAILURE,
@@ -83,15 +83,15 @@ static int* l_loadRes_list[5] = {
     l_loadRes_MYNA20,
 };
 
-static char* l_resNames[3] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[3] = {
     "MYNA_b",
     "MYNA_b_f",
     "MYNA_b_g",
 };
 
-static char* l_myName = "myna2";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "myna2";
 
-char* daNpc_myna2_c::mEvtCutNameList[5] = {
+char DUSK_CONST* DUSK_CONST daNpc_myna2_c::mEvtCutNameList[5] = {
     "",
     "FIRST_TALK",
     "GAME_FAILURE",
@@ -99,7 +99,7 @@ char* daNpc_myna2_c::mEvtCutNameList[5] = {
     "GAME_GOAL_SUCCESS",
 };
 
-daNpc_myna2_c::EventFn daNpc_myna2_c::mEvtCutList[] = {
+daNpc_myna2_c::EventFn DUSK_CONST daNpc_myna2_c::mEvtCutList[] = {
     NULL,
     &daNpc_myna2_c::ECut_firstTalk,
     &daNpc_myna2_c::ECut_gameFailure,
@@ -1356,7 +1356,7 @@ static int daNpc_myna2_IsDelete(void* i_this) {
     return TRUE;
 }
 
-static actor_method_class daNpc_myna2_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_myna2_MethodTable = {
     (process_method_func)daNpc_myna2_Create,
     (process_method_func)daNpc_myna2_Delete,
     (process_method_func)daNpc_myna2_Execute,
@@ -1364,7 +1364,7 @@ static actor_method_class daNpc_myna2_MethodTable = {
     (process_method_func)daNpc_myna2_Draw,
 };
 
-actor_process_profile_definition g_profile_MYNA2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MYNA2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

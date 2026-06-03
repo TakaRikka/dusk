@@ -952,45 +952,70 @@ if(DEFINED APPLE_TARGET_TRIPLE)
   set(APPLE_TARGET_TRIPLE_FLAG "-target ${APPLE_TARGET_TRIPLE}")
 endif()
 
+function(ios_toolchain_set_cached_flags variable description)
+  set(clean_flags "${${variable}}")
+  foreach(toolchain_flag IN LISTS ARGN)
+    if(NOT "${toolchain_flag}" STREQUAL "")
+      string(REPLACE "${toolchain_flag}" "" clean_flags "${clean_flags}")
+    endif()
+  endforeach()
+  string(REGEX REPLACE "[ \t]+" " " clean_flags "${clean_flags}")
+  string(STRIP "${clean_flags}" clean_flags)
+
+  set(final_flags "")
+  foreach(toolchain_flag IN LISTS ARGN)
+    if(NOT "${toolchain_flag}" STREQUAL "")
+      string(APPEND final_flags " ${toolchain_flag}")
+    endif()
+  endforeach()
+  if(NOT "${clean_flags}" STREQUAL "")
+    string(APPEND final_flags " ${clean_flags}")
+  endif()
+  string(REGEX REPLACE "[ \t]+" " " final_flags "${final_flags}")
+  string(STRIP "${final_flags}" final_flags)
+
+  set(${variable} "${final_flags}" CACHE INTERNAL "${description}")
+endfunction()
+
 #Check if Xcode generator is used since that will handle these flags automagically
 if(CMAKE_GENERATOR MATCHES "Xcode")
   message(STATUS "Not setting any manual command-line buildflags, since Xcode is selected as the generator. Modifying the Xcode build-settings directly instead.")
 else()
-  set(CMAKE_C_FLAGS "${C_TARGET_FLAGS} ${APPLE_TARGET_TRIPLE_FLAG} ${SDK_NAME_VERSION_FLAGS} ${OBJC_LEGACY_VARS} ${BITCODE} ${VISIBILITY} ${CMAKE_C_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler during all C build types.")
+  ios_toolchain_set_cached_flags(CMAKE_C_FLAGS "Flags used by the compiler during all C build types."
+      "${C_TARGET_FLAGS}" "${APPLE_TARGET_TRIPLE_FLAG}" "${SDK_NAME_VERSION_FLAGS}" "${OBJC_LEGACY_VARS}" "${BITCODE}" "${VISIBILITY}")
   set(CMAKE_C_FLAGS_DEBUG "-O0 -g ${CMAKE_C_FLAGS_DEBUG}")
   set(CMAKE_C_FLAGS_MINSIZEREL "-DNDEBUG -Os ${CMAKE_C_FLAGS_MINSIZEREL}")
   set(CMAKE_C_FLAGS_RELWITHDEBINFO "-DNDEBUG -O2 -g ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
   set(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3 ${CMAKE_C_FLAGS_RELEASE}")
-  set(CMAKE_CXX_FLAGS "${C_TARGET_FLAGS} ${APPLE_TARGET_TRIPLE_FLAG} ${SDK_NAME_VERSION_FLAGS} ${OBJC_LEGACY_VARS} ${BITCODE} ${VISIBILITY} ${CMAKE_CXX_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler during all CXX build types.")
+  ios_toolchain_set_cached_flags(CMAKE_CXX_FLAGS "Flags used by the compiler during all CXX build types."
+      "${C_TARGET_FLAGS}" "${APPLE_TARGET_TRIPLE_FLAG}" "${SDK_NAME_VERSION_FLAGS}" "${OBJC_LEGACY_VARS}" "${BITCODE}" "${VISIBILITY}")
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${CMAKE_CXX_FLAGS_DEBUG}")
   set(CMAKE_CXX_FLAGS_MINSIZEREL "-DNDEBUG -Os ${CMAKE_CXX_FLAGS_MINSIZEREL}")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-DNDEBUG -O2 -g ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
   set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3 ${CMAKE_CXX_FLAGS_RELEASE}")
   if(NAMED_LANGUAGE_SUPPORT_INT)
-    set(CMAKE_OBJC_FLAGS "${C_TARGET_FLAGS} ${APPLE_TARGET_TRIPLE_FLAG} ${SDK_NAME_VERSION_FLAGS} ${BITCODE} ${VISIBILITY} ${FOBJC_ARC} ${OBJC_VARS} ${CMAKE_OBJC_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler during all OBJC build types.")
+    ios_toolchain_set_cached_flags(CMAKE_OBJC_FLAGS "Flags used by the compiler during all OBJC build types."
+        "${C_TARGET_FLAGS}" "${APPLE_TARGET_TRIPLE_FLAG}" "${SDK_NAME_VERSION_FLAGS}" "${BITCODE}" "${VISIBILITY}" "${FOBJC_ARC}" "${OBJC_VARS}")
     set(CMAKE_OBJC_FLAGS_DEBUG "-O0 -g ${CMAKE_OBJC_FLAGS_DEBUG}")
     set(CMAKE_OBJC_FLAGS_MINSIZEREL "-DNDEBUG -Os ${CMAKE_OBJC_FLAGS_MINSIZEREL}")
     set(CMAKE_OBJC_FLAGS_RELWITHDEBINFO "-DNDEBUG -O2 -g ${CMAKE_OBJC_FLAGS_RELWITHDEBINFO}")
     set(CMAKE_OBJC_FLAGS_RELEASE "-DNDEBUG -O3 ${CMAKE_OBJC_FLAGS_RELEASE}")
-    set(CMAKE_OBJCXX_FLAGS "${C_TARGET_FLAGS} ${APPLE_TARGET_TRIPLE_FLAG} ${SDK_NAME_VERSION_FLAGS} ${BITCODE} ${VISIBILITY} ${FOBJC_ARC} ${OBJC_VARS} ${CMAKE_OBJCXX_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler during all OBJCXX build types.")
+    ios_toolchain_set_cached_flags(CMAKE_OBJCXX_FLAGS "Flags used by the compiler during all OBJCXX build types."
+        "${C_TARGET_FLAGS}" "${APPLE_TARGET_TRIPLE_FLAG}" "${SDK_NAME_VERSION_FLAGS}" "${BITCODE}" "${VISIBILITY}" "${FOBJC_ARC}" "${OBJC_VARS}")
     set(CMAKE_OBJCXX_FLAGS_DEBUG "-O0 -g ${CMAKE_OBJCXX_FLAGS_DEBUG}")
     set(CMAKE_OBJCXX_FLAGS_MINSIZEREL "-DNDEBUG -Os ${CMAKE_OBJCXX_FLAGS_MINSIZEREL}")
     set(CMAKE_OBJCXX_FLAGS_RELWITHDEBINFO "-DNDEBUG -O2 -g ${CMAKE_OBJCXX_FLAGS_RELWITHDEBINFO}")
     set(CMAKE_OBJCXX_FLAGS_RELEASE "-DNDEBUG -O3 ${CMAKE_OBJCXX_FLAGS_RELEASE}")
   endif()
-  set(CMAKE_C_LINK_FLAGS "${C_TARGET_FLAGS} ${SDK_NAME_VERSION_FLAGS} -Wl,-search_paths_first ${CMAKE_C_LINK_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler for all C link types.")
-  set(CMAKE_CXX_LINK_FLAGS "${C_TARGET_FLAGS} ${SDK_NAME_VERSION_FLAGS}  -Wl,-search_paths_first ${CMAKE_CXX_LINK_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler for all CXX link types.")
+  ios_toolchain_set_cached_flags(CMAKE_C_LINK_FLAGS "Flags used by the compiler for all C link types."
+      "${C_TARGET_FLAGS}" "${SDK_NAME_VERSION_FLAGS}" "-Wl,-search_paths_first")
+  ios_toolchain_set_cached_flags(CMAKE_CXX_LINK_FLAGS "Flags used by the compiler for all CXX link types."
+      "${C_TARGET_FLAGS}" "${SDK_NAME_VERSION_FLAGS}" "-Wl,-search_paths_first")
   if(NAMED_LANGUAGE_SUPPORT_INT)
-    set(CMAKE_OBJC_LINK_FLAGS "${C_TARGET_FLAGS} ${SDK_NAME_VERSION_FLAGS} -Wl,-search_paths_first ${CMAKE_OBJC_LINK_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler for all OBJC link types.")
-    set(CMAKE_OBJCXX_LINK_FLAGS "${C_TARGET_FLAGS} ${SDK_NAME_VERSION_FLAGS} -Wl,-search_paths_first ${CMAKE_OBJCXX_LINK_FLAGS}" CACHE INTERNAL
-     "Flags used by the compiler for all OBJCXX link types.")
+    ios_toolchain_set_cached_flags(CMAKE_OBJC_LINK_FLAGS "Flags used by the compiler for all OBJC link types."
+        "${C_TARGET_FLAGS}" "${SDK_NAME_VERSION_FLAGS}" "-Wl,-search_paths_first")
+    ios_toolchain_set_cached_flags(CMAKE_OBJCXX_LINK_FLAGS "Flags used by the compiler for all OBJCXX link types."
+        "${C_TARGET_FLAGS}" "${SDK_NAME_VERSION_FLAGS}" "-Wl,-search_paths_first")
   endif()
   set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -x assembler-with-cpp" CACHE INTERNAL
      "Flags used by the compiler for all ASM build types.")

@@ -37,7 +37,7 @@ daNpcChin_HIOParam const daNpcChin_Param_c::m = {
     FALSE, FALSE,
 };
 
-static daNpc_GetParam2 l_bckGetParamList[33] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_bckGetParamList[33] = {
     {-1, 2, 0},
     {8, 0, 0},
     {7, 0, 0},
@@ -73,7 +73,7 @@ static daNpc_GetParam2 l_bckGetParamList[33] = {
     {29, 2, 1},
 };
 
-static daNpc_GetParam2 l_btpGetParamList[15] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btpGetParamList[15] = {
     {18, 2, 0},
     {20, 0, 0},
     {19, 0, 0},
@@ -91,7 +91,7 @@ static daNpc_GetParam2 l_btpGetParamList[15] = {
     {50, 2, 1},
 };
 
-static daNpc_GetParam2 l_btkGetParamList[9] = {
+static DUSK_CONSTEXPR daNpc_GetParam2 l_btkGetParamList[9] = {
     {13, 2, 0},
     {14, 0, 0},
     {15, 2, 0},
@@ -103,7 +103,7 @@ static daNpc_GetParam2 l_btkGetParamList[9] = {
     {7, 2, 5},
 };
 
-static char* l_arcNames[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[6] = {
     "Chin",
     "chin1",
     "chin_mdl",
@@ -117,7 +117,7 @@ static s16* sLoadResInfo[2] = {
     (s16*)sLoadResPat_Tw,
 };
 
-static char* l_evtNames[8] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[8] = {
     NULL,
     "GAME_START",
     "GAME_FAILED",
@@ -143,7 +143,7 @@ daNpcChin_c::eventFunc daNpcChin_c::mEvtSeqList[8] = {
 
 static NPC_CHIN_HIO_CLASS l_HIO;
 
-static char* l_myName = "chin";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "chin";
 
 #if DEBUG
 daNpcChin_HIO_c::daNpcChin_HIO_c() {
@@ -2114,7 +2114,7 @@ static int daNpcChin_IsDelete(void* param_0) {
     return TRUE;
 }
 
-static actor_method_class daNpcChin_MethodTable = {
+static DUSK_CONST actor_method_class daNpcChin_MethodTable = {
     (process_method_func)daNpcChin_Create,
     (process_method_func)daNpcChin_Delete,
     (process_method_func)daNpcChin_Execute,
@@ -2122,7 +2122,7 @@ static actor_method_class daNpcChin_MethodTable = {
     (process_method_func)daNpcChin_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CHIN = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CHIN = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

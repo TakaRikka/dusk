@@ -1335,7 +1335,7 @@ int daNpcT_c::setBpkAnm(J3DAnmColor* i_bpk, J3DModelData* i_modelData, f32 i_spe
     return mBpkAnm.init(i_modelData, i_bpk, TRUE, i_mode, i_speed, 0, -1);
 }
 
-int daNpcT_c::loadRes(s8 const* i_resNoList, char const** i_resNameList) {
+int daNpcT_c::loadRes(s8 const* i_resNoList, char const* DUSK_CONST* i_resNameList) {
     int phase_state;
     int resLoad_cnt = 0;
     for (int i = 0; i < 10; i++) {
@@ -1359,7 +1359,7 @@ int daNpcT_c::loadRes(s8 const* i_resNoList, char const** i_resNameList) {
     return cPhs_INIT_e;
 }
 
-void daNpcT_c::deleteRes(s8 const* i_resNoList, char const** i_resNameList) {
+void daNpcT_c::deleteRes(s8 const* i_resNoList, char const* DUSK_CONST* i_resNameList) {
     for (int i = 0; i < 10 && i_resNoList[i] != -1; i++) {
         dComIfG_resDelete(&mPhase[i], i_resNameList[i_resNoList[i]]);
     }

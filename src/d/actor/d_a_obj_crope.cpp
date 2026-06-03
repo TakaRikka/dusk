@@ -371,7 +371,7 @@ static int daObjCrope_Draw(daObjCrope_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class l_daObjCrope_Method = {
+static DUSK_CONST actor_method_class l_daObjCrope_Method = {
     (process_method_func)daObjCrope_Create,
     (process_method_func)daObjCrope_Delete,
     (process_method_func)daObjCrope_Execute,
@@ -379,7 +379,7 @@ static actor_method_class l_daObjCrope_Method = {
     (process_method_func)daObjCrope_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Crope = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Crope = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

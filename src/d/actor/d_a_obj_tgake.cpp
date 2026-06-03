@@ -36,7 +36,7 @@ int daObjGake_c::Create() {
     return 1;
 }
 
-static char* l_arcName = "A_TGake";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "A_TGake";
 
 int daObjGake_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 4);
@@ -125,13 +125,13 @@ static int daObjGake_MoveBGDraw(daObjGake_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjGake_METHODS = {
+static DUSK_CONST actor_method_class daObjGake_METHODS = {
     (process_method_func)daObjGake_create1st,     (process_method_func)daObjGake_MoveBGDelete,
     (process_method_func)daObjGake_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjGake_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Gake = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Gake = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

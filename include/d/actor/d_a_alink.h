@@ -4546,13 +4546,13 @@ public:
     /* 0x03840 */ cXyz* mIronBallChainPos;
     /* 0x03844 */ csXyz* mIronBallChainAngle;
     /* 0x03848 */ cXyz* field_0x3848;
-    /* 0x0384C */ cXyz* field_0x384c;
+    /* 0x0384C */ cXyz DUSK_CONST* field_0x384c;
     /* 0x03850 */ daAlink_procFunc mpProcFunc;
 
 #if TARGET_PC
     void handleWolfHowl();
     void handleQuickTransform();
-    bool checkGyroAimContext();
+    bool checkAimContext();
 
     void onIronBallChainInterpCallback();
 
@@ -4565,6 +4565,7 @@ public:
     cXyz mIBChainInterpCurrHandRoot;
     bool mIBChainInterpPrevValid;
     bool mIBChainInterpCurrValid;
+    bool mIsRollstab = false;
 #endif
 };  // Size: 0x385C
 

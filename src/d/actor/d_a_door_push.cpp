@@ -74,9 +74,9 @@ void daDoorPush_c::setBaseMtx() {
     }
 }
 
-static char* l_arcName = "V_OsuDoor";
+static DUSK_CONST char* l_arcName = "V_OsuDoor";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-600.0f, 0.0f, -600.0f},
     {600.0f, 1000.0f, 600.0f},
 };
@@ -233,7 +233,7 @@ void daDoorPush_c::actionEvent() {
 }
 
 int daDoorPush_c::demoProc() {
-    static char* action_table[3] = {"WAIT", "OPEN", "SCENE_CHG"};
+    static DUSK_CONST char* action_table[3] = {"WAIT", "OPEN", "SCENE_CHG"};
 
     daPy_py_c* player = daPy_getPlayerActorClass();
 
@@ -364,13 +364,13 @@ static int daDoorPush_MoveBGDraw(daDoorPush_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daDoorPush_METHODS = {
+static DUSK_CONST actor_method_class daDoorPush_METHODS = {
     (process_method_func)daDoorPush_create1st,     (process_method_func)daDoorPush_MoveBGDelete,
     (process_method_func)daDoorPush_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daDoorPush_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_PushDoor = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_PushDoor = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

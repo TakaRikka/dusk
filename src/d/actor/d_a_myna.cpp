@@ -15,7 +15,7 @@
 #include "d/d_s_play.h"
 #include <cstring>
 
-static daMyna_c::ProcFunc init_proc[] = {
+static DUSK_CONSTEXPR daMyna_c::ProcFunc init_proc[] = {
     &daMyna_c::attack_wait_init,
     &daMyna_c::attack_before_talk_init,
     &daMyna_c::attack_fly_init,
@@ -40,7 +40,7 @@ static daMyna_c::ProcFunc init_proc[] = {
     &daMyna_c::attack2_talk_init,
 };
 
-static daMyna_c::ProcFunc move_proc[] = {
+static DUSK_CONSTEXPR daMyna_c::ProcFunc move_proc[] = {
     &daMyna_c::attack_wait_move,
     &daMyna_c::attack_before_talk_move,
     &daMyna_c::attack_fly_move,
@@ -65,14 +65,14 @@ static daMyna_c::ProcFunc move_proc[] = {
     &daMyna_c::attack2_talk_move,
 };
 
-static char* l_bckFileNameTBL[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_bckFileNameTBL[] = {
     "MYNA_hovering.bck", "MYNA_wait_a.bck",    "MYNA_pick_a.bck",    "MYNA_pick_b.bck",
     "MYNA_jump.bck",     "MYNA_sidestepL.bck", "MYNA_sidestepR.bck", "MYNA_lightup.bck",
     "MYNA_attack.bck",   "MYNA_talk_a.bck",    "MYNA_talk_b.bck",    "MYNA_wait_b.bck",
     "MYNA_wait_c.bck",   "MYNA_talk_c.bck",    "MYNA_wait_d.bck",
 };
 
-static char* l_btpFileNameTBL[] = {"MYNA.btp"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_btpFileNameTBL[] = {"MYNA.btp"};
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     daMyna_c* a_this = static_cast<daMyna_c*>(i_this);
@@ -1475,7 +1475,7 @@ void daMyna_c::setBtpAnm(J3DAnmTexPattern* i_btk, J3DModelData* param_1, f32 i_r
     mBtpAnm.init(param_1, i_btk, 1, i_attribute, i_rate, 0, -1);
 }
 
-J3DAnmTransformKey* daMyna_c::getTrnsfrmKeyAnm(char* i_resName) {
+J3DAnmTransformKey* daMyna_c::getTrnsfrmKeyAnm(DUSK_CONST char* i_resName) {
     if (i_resName != NULL) {
         return static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes("Npc_myna", i_resName));
     } else {
@@ -1483,7 +1483,7 @@ J3DAnmTransformKey* daMyna_c::getTrnsfrmKeyAnm(char* i_resName) {
     }
 }
 
-J3DAnmTexPattern* daMyna_c::getTexPtrnAnm(char* i_resName) {
+J3DAnmTexPattern* daMyna_c::getTexPtrnAnm(DUSK_CONST char* i_resName) {
     if (i_resName != NULL) {
         return static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Npc_myna", i_resName));
     } else {
@@ -1820,13 +1820,13 @@ static int daMyna_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daMyna_MethodTable = {
+static DUSK_CONST actor_method_class daMyna_MethodTable = {
     (process_method_func)daMyna_Create,  (process_method_func)daMyna_Delete,
     (process_method_func)daMyna_Execute, (process_method_func)daMyna_IsDelete,
     (process_method_func)daMyna_Draw,
 };
 
-actor_process_profile_definition g_profile_MYNA = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_MYNA = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

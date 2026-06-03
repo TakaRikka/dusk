@@ -6,6 +6,8 @@
 #include <gx.h>
 
 void JPALoadExTex(JPAEmitterWorkData* work) {
+    ZoneScoped;
+
     JPAExTexShape* ets = work->mpRes->getEts();
 
     GXTexCoordID secTexCoordID = GX_TEXCOORD1;

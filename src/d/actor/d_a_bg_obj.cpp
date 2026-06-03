@@ -5,24 +5,25 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_bg_obj.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include <cstdio>
-#include <os.h>
 #include <cstring>
+#include <os.h>
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "SSystem/SComponent/c_math.h"
+#include "d/actor/d_a_bg_obj.h"
 #include "d/actor/d_a_set_bgobj.h"
 #include "d/d_s_play.h"
-#include "SSystem/SComponent/c_math.h"
+#include "dusk/string.hpp"
 
 static const char* getBmdName(int param_0, int param_1) {
     static char l_bmdName[16];
 
     switch (param_1) {
     case 0:
-        sprintf(l_bmdName, "model%d.bmd", param_0);
+        SAFE_SPRINTF(l_bmdName, "model%d.bmd", param_0);
         break;
     default:
-        sprintf(l_bmdName, "model%d_%d.bmd", param_0, param_1);
+        SAFE_SPRINTF(l_bmdName, "model%d_%d.bmd", param_0, param_1);
         break;
     }
 
@@ -34,10 +35,10 @@ static const char* getBtkName(int param_0, int param_1) {
 
     switch (param_1) {
     case 0:
-        sprintf(l_btkName, "model%d.btk", param_0);
+        SAFE_SPRINTF(l_btkName, "model%d.btk", param_0);
         break;
     default:
-        sprintf(l_btkName, "model%d_%d.btk", param_0, param_1);
+        SAFE_SPRINTF(l_btkName, "model%d_%d.btk", param_0, param_1);
         break;
     }
 
@@ -49,10 +50,10 @@ static const char* getBrkName(int param_0, int param_1) {
 
     switch (param_1) {
     case 0:
-        sprintf(l_brkName, "model%d.brk", param_0);
+        SAFE_SPRINTF(l_brkName, "model%d.brk", param_0);
         break;
     default:
-        sprintf(l_brkName, "model%d_%d.brk", param_0, param_1);
+        SAFE_SPRINTF(l_brkName, "model%d_%d.brk", param_0, param_1);
         break;
     }
 
@@ -62,7 +63,7 @@ static const char* getBrkName(int param_0, int param_1) {
 static const char* getDzbName(int param_0) {
     static char l_dzbName[16];
 
-    sprintf(l_dzbName, "model%d.dzb", param_0);
+    SAFE_SPRINTF(l_dzbName, "model%d.dzb", param_0);
     return l_dzbName;
 }
 
@@ -95,12 +96,12 @@ u8* daBgObj_c::spec_data_c::initTexShareBlock(u8* i_dataPtr) {
     u8* dataPos = i_dataPtr + 8;
 
     for (; i < mTexShareNum; i++) {
-        strcpy(sp48, (char*)dataPos);
+        SAFE_STRCPY(sp48, (char*)dataPos);
         int len = strlen((char*)dataPos);
 
         dataPos += len + 1;
         if (*dataPos != 0) {
-            strcpy(sp8, (char*)dataPos);
+            SAFE_STRCPY(sp8, (char*)dataPos);
             dataPos += strlen((char*)dataPos) + 1;
         } else if (*dataPos == 0 && dataPos[1] == 1) {
             dataPos += 2;
@@ -498,7 +499,7 @@ static dCcD_SrcTri l_tri_src = {
     },
 };
 
-static char* l_specName = "spec.dat";
+static DUSK_CONST char* l_specName = "spec.dat";
 
 createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
     &daBgObj_c::CreateHeapType0,
@@ -646,14 +647,14 @@ void daBgObj_c::doShareTexture() {
     u8* spec_res_name = mSpecData.mpTexShareBlock + 8;
 
     for (int i = 0; i < mSpecData.mTexShareNum; i++) {
-        strcpy(res_name, (char*)spec_res_name);
+        SAFE_STRCPY(res_name, (char*)spec_res_name);
         spec_res_name += strlen((char*)spec_res_name) + 1;
 
         J3DModelData* modelData =
             (J3DModelData*)dComIfG_getObjectRes(daSetBgObj_c::getArcName(this), res_name);
 
         if (*spec_res_name != 0) {
-            strcpy(share_res_name, (char*)spec_res_name);
+            SAFE_STRCPY(share_res_name, (char*)spec_res_name);
             spec_res_name += strlen((char*)spec_res_name) + 1;
 
             J3DModelData* shareModelData =
@@ -1354,7 +1355,7 @@ static int daBgObj_MoveBGDraw(daBgObj_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daBgObj_METHODS = {
+static DUSK_CONST actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_create1st,
     (process_method_func)daBgObj_MoveBGDelete,
     (process_method_func)daBgObj_MoveBGExecute,
@@ -1362,7 +1363,7 @@ static actor_method_class daBgObj_METHODS = {
     (process_method_func)daBgObj_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_BG_OBJ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BG_OBJ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

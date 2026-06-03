@@ -1270,7 +1270,7 @@ int daAlink_c::procHorseRideInit() {
 
     daAlink_ANM anm;
     MtxP rideMtx;
-    Vec* localRidePos_p;
+    Vec DUSK_CONST* localRidePos_p;
     u32 mode;
     if (fopAcM_GetName(field_0x27f4) == fpcNm_HORSE_e) {
         daHorse_c* horse = (daHorse_c*)field_0x27f4;

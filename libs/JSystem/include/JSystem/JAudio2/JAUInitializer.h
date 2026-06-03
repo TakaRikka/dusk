@@ -2,6 +2,7 @@
 #define JAUINITIALIZER_H
 
 #include <types.h>
+#include "global.h"
 
 class JKRSolidHeap;
 
@@ -26,7 +27,7 @@ public:
     /* 0x24 */ int aramBlockSize_;
     /* 0x28 */ int aramChannelNum_;
     /* 0x2C */ f32 dspLevel_;
-    /* 0x30 */ char* waveArcDir_;
+    /* 0x30 */ DUSK_CONST char* waveArcDir_;
 };
 
 /**

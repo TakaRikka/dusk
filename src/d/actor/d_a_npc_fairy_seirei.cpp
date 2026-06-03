@@ -10,54 +10,54 @@
 #include <cstring>
 
 
-static daNpcT_evtData_c l_evtList[1] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[1] = {
     {"", 0},
 };
 
-static char* l_resNameList[2] = {
+static DUSK_CONST char* l_resNameList[2] = {
     "",
     NULL,
 };
 
-static s8 l_loadResPtrn0[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[2] = {
     1,
     -1,
 };
 
-static s8* l_loadResPtrnList[4] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[4] = {
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
     l_loadResPtrn0,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData = {
     -1, 0, 0, -1, 0, 0, 0,
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[1] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[1] = {
     {-1, 0, 0, -1, 0, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[4] = {
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[4] = {
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
     {-1, 0, 0},
 };
 
-char* daNpc_FairySeirei_c::mCutNameList[1] = {
+DUSK_CONST char* daNpc_FairySeirei_c::mCutNameList[1] = {
     "",
 };
 
-daNpc_FairySeirei_c::cutFunc daNpc_FairySeirei_c::mCutList[1] = {
+DUSK_CONST daNpc_FairySeirei_c::cutFunc daNpc_FairySeirei_c::mCutList[1] = {
     NULL,
 };
 
@@ -412,12 +412,12 @@ static int daNpc_FairySeirei_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daNpc_FairySeirei_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_FairySeirei_MethodTable = {
     daNpc_FairySeirei_Create,   daNpc_FairySeirei_Delete, daNpc_FairySeirei_Execute,
     daNpc_FairySeirei_IsDelete, daNpc_FairySeirei_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_FAIRY_SEIREI = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_FAIRY_SEIREI = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

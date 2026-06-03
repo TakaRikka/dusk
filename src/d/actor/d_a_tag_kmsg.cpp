@@ -7,17 +7,17 @@
 #include <cstring>
 
 struct EventListItem {
-    char* mEventName;
+    DUSK_CONST char* mEventName;
     u32 field_0x4;
 };
 
-static EventListItem l_evtList[3] = {
+static DUSK_CONSTEXPR EventListItem l_evtList[3] = {
     {"", 0},
     {"EXTINCTION", 2},
     {"PURCHASE", 1},
 };
 
-static char* l_resNameList[3] = {
+static DUSK_CONST char* l_resNameList[3] = {
     "",
     "Bans1",
     "sekizoA",
@@ -261,7 +261,7 @@ static int daTag_KMsg_IsDelete(void* param_0) {
     return 1;
 }
 
-static actor_method_class daTag_KMsg_MethodTable = {
+static DUSK_CONST actor_method_class daTag_KMsg_MethodTable = {
     (process_method_func)daTag_KMsg_Create,
     (process_method_func)daTag_KMsg_Delete,
     (process_method_func)daTag_KMsg_Execute,
@@ -269,7 +269,7 @@ static actor_method_class daTag_KMsg_MethodTable = {
     (process_method_func)daTag_KMsg_Draw,
 };
 
-actor_process_profile_definition g_profile_TAG_KMSG = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TAG_KMSG = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

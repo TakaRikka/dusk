@@ -58,9 +58,9 @@ void daObjSwBallC_c::setBaseMtx() {
 
 static GXColor const l_color = {0x03, 0x96, 0xFF, 0xFF};
 
-static char* l_arcName = "P_LBswBC";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "P_LBswBC";
 
-static char* l_evName = "REVIVE_MASTER_SWORD";
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "REVIVE_MASTER_SWORD";
 
 static f32 dummyFloat() {
     return -1.0f;
@@ -93,7 +93,7 @@ int daObjSwBallC_c::Create() {
     return 1;
 }
 
-static char* l_staffName = "lbsw";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "lbsw";
 
 int daObjSwBallC_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 6);
@@ -136,7 +136,7 @@ void daObjSwBallC_c::event_proc_call() {
     (this->*l_func[field_0x57f])(); 
 }
 
-static char* action_table[13] = {
+static DUSK_CONSTEXPR char DUSK_CONST* action_table[13] = {
     "WAIT",    "ON",   "OFF",     "ON_ALL_B", "OFF_ALL_B", "DEL_BALL",  "SOUND",
     "SCALING", "INIT", "MESSAGE", "ST_CUT2",  "LINK_INIT", "EQUIP_SWD",
 };
@@ -402,7 +402,7 @@ static int daObjSwBallC_Create(daObjSwBallC_c* param_0) {
     return param_0->create();
 }
 
-static actor_method_class l_daObjSwBallC_Method = {
+static DUSK_CONST actor_method_class l_daObjSwBallC_Method = {
     (process_method_func)daObjSwBallC_Create,
     (process_method_func)daObjSwBallC_Delete,
     (process_method_func)daObjSwBallC_Execute,
@@ -410,7 +410,7 @@ static actor_method_class l_daObjSwBallC_Method = {
     (process_method_func)daObjSwBallC_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SwBallC = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SwBallC = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

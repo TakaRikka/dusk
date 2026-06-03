@@ -14,7 +14,7 @@
 #include "d/d_bg_w.h"
 #include "SSystem/SComponent/c_math.h"
 
-static char* l_arcName[3] = {"MagLiftS", "MagLiftM", "MagLiftL"};
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName[3] = {"MagLiftS", "MagLiftM", "MagLiftL"};
 
 daMagLiftRot_HIO_c::daMagLiftRot_HIO_c() {
     mWaitTime = 60;
@@ -354,7 +354,7 @@ static int daMagLiftRot_Create(fopAc_ac_c* i_this) {
     return static_cast<daMagLiftRot_c*>(i_this)->create();
 }
 
-static actor_method_class l_daMagLiftRot_Method = {
+static DUSK_CONST actor_method_class l_daMagLiftRot_Method = {
     (process_method_func)daMagLiftRot_Create,
     (process_method_func)daMagLiftRot_Delete,
     (process_method_func)daMagLiftRot_Execute,
@@ -362,7 +362,7 @@ static actor_method_class l_daMagLiftRot_Method = {
     (process_method_func)daMagLiftRot_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_MagLiftRot = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_MagLiftRot = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

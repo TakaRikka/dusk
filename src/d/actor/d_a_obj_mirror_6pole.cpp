@@ -9,7 +9,7 @@
 #include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 
-static char* l_arcName = "MR-6Pole";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "MR-6Pole";
 
 const actionFunc daObjMirror6Pole_c::ActionTable[][2] = {
     {&daObjMirror6Pole_c::initWait, &daObjMirror6Pole_c::executeWait},
@@ -167,13 +167,13 @@ static int daObjMirror6Pole_IsDelete(daObjMirror6Pole_c* i_this) {
     return 1;
 }
 
-static actor_method_class l_daObjMirror6Pole_Method = {
+static DUSK_CONST actor_method_class l_daObjMirror6Pole_Method = {
     (process_method_func)daObjMirror6Pole_Create,  (process_method_func)daObjMirror6Pole_Delete,
     (process_method_func)daObjMirror6Pole_Execute, (process_method_func)daObjMirror6Pole_IsDelete,
     (process_method_func)daObjMirror6Pole_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Mirror6Pole = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Mirror6Pole = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

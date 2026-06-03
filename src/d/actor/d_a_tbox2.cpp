@@ -46,9 +46,9 @@ static const cM3dGCylS l_cyl_info[] = {
     },
 };
 
-static char* l_arcName = "Tbox2";
+static DUSK_CONST char* l_arcName = "Tbox2";
 
-static char* l_staff_name = "TREASURE";
+static DUSK_CONST char* l_staff_name = "TREASURE";
 
 static dCcD_SrcCyl l_cyl_src = {
     {
@@ -158,7 +158,7 @@ int daTbox2_c::create1st() {
 }
 
 int daTbox2_c::demoProc() {
-    static char* action_table[] = {"WAIT", "OPEN", "APPEAR", "OPEN_SHORT"};
+    static DUSK_CONST char* action_table[] = {"WAIT", "OPEN", "APPEAR", "OPEN_SHORT"};
     int act_idx =
         dComIfGp_evmng_getMyActIdx(mStaffIdx, action_table, ARRAY_SIZEU(action_table), 0, 0);
 
@@ -449,13 +449,13 @@ static int daTbox2_MoveBGDraw(daTbox2_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daTbox2_METHODS = {
+static DUSK_CONST actor_method_class daTbox2_METHODS = {
     (process_method_func)daTbox2_create1st,     (process_method_func)daTbox2_MoveBGDelete,
     (process_method_func)daTbox2_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daTbox2_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_TBOX2 = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_TBOX2 = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

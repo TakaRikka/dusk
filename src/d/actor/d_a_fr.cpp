@@ -732,7 +732,7 @@ static int daFr_Create(fopAc_ac_c* a_this) {
     return phase_state;
 }
 
-static actor_method_class l_daFr_Method = {
+static DUSK_CONST actor_method_class l_daFr_Method = {
     (process_method_func)daFr_Create,
     (process_method_func)daFr_Delete,
     (process_method_func)daFr_Execute,
@@ -740,7 +740,7 @@ static actor_method_class l_daFr_Method = {
     (process_method_func)daFr_Draw,
 };
 
-actor_process_profile_definition g_profile_FR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_FR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

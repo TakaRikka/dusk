@@ -11,12 +11,12 @@
 #include "d/d_meter2_info.h"
 #include <cstring>
 
-static int l_bmdData[2][2] = {
+static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     {13, 1},
     {3, 2},
 };
 
-static daNpcT_evtData_c l_evtList[9] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"BOAT_RACE", 1},
     {"BOAT_RACE_RETURN", 1},
@@ -28,7 +28,7 @@ static daNpcT_evtData_c l_evtList[9] = {
     {"TALK_BREAK", 1},
 };
 
-static char* l_resNameList[7] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[7] = {
     "",
     "Hoz",
     "Hoz_TW",
@@ -38,7 +38,7 @@ static char* l_resNameList[7] = {
     "Hoz2_3",
 };
 
-static s8 l_loadResPtrn0[] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[] = {
     1,
     2,
     -1,
@@ -46,7 +46,7 @@ static s8 l_loadResPtrn0[] = {
 
 static s8 l_loadResPtrnTW[] = {1, 2, 3, -1};
 
-static s8 l_loadResPtrn1[] = {1, 4, 6, -1};
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[] = {1, 4, 6, -1};
 
 static s8 l_loadResPtrnBattle[] = {
     1,
@@ -56,13 +56,13 @@ static s8 l_loadResPtrnBattle[] = {
     -1,
 };
 
-static s8* l_loadResPtrnList[7] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[7] = {
     l_loadResPtrn0,      l_loadResPtrn1,  l_loadResPtrn1,
     l_loadResPtrnBattle, l_loadResPtrnTW, l_loadResPtrn1,
     l_loadResPtrnTW,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[39] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[39] = {
     {-1, 0, 0, 19, 2, 1, 1},
     {8, 0, 1, 19, 2, 1, 1},
     {7, 2, 1, 19, 2, 1, 1},
@@ -104,7 +104,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[39] = {
     {22, 2, 4, 19, 2, 1, 1},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[39] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[39] = {
     {10, 2, 1, 16, 0, 1, 1, 0},
     {9, 0, 1, 16, 0, 1, 1, 0},
     {19, 2, 3, 16, 0, 1, 1, 0},
@@ -146,7 +146,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[39] = {
     {7, 2, 4, 16, 0, 1, 1, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[140] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[140] = {
     {1, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 1}, {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {7, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {8, -1, 1}, {10, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -167,7 +167,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[140] 
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[144] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[144] = {
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {3, -1, 1}, {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, -1, 1}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -188,7 +188,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[144] = {
     {29, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Hoz_c::mCutNameList[8] = {
+char DUSK_CONST* DUSK_CONST daNpc_Hoz_c::mCutNameList[8] = {
     "",
     "BOAT_RACE",
     "BEFORE_BATTLE",
@@ -199,7 +199,7 @@ char* daNpc_Hoz_c::mCutNameList[8] = {
     "TALK_BREAK",
 };
 
-daNpc_Hoz_c::cutFunc daNpc_Hoz_c::mCutList[] = {
+daNpc_Hoz_c::cutFunc DUSK_CONST daNpc_Hoz_c::mCutList[] = {
     NULL,
     &daNpc_Hoz_c::ECut_boatRace,
     &daNpc_Hoz_c::ECut_beforeBattle,
@@ -1686,7 +1686,7 @@ static int daNpc_Hoz_IsDelete(void* i_this) {
     return true;
 }
 
-static actor_method_class daNpc_Hoz_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Hoz_MethodTable = {
     (process_method_func)daNpc_Hoz_Create,
     (process_method_func)daNpc_Hoz_Delete,
     (process_method_func)daNpc_Hoz_Execute,
@@ -1694,7 +1694,7 @@ static actor_method_class daNpc_Hoz_MethodTable = {
     (process_method_func)daNpc_Hoz_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_HOZ = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_HOZ = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

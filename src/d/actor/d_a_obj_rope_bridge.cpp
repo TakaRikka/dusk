@@ -10,9 +10,9 @@
 #include "d/d_s_play.h"
 #include <cstring>
 
-static char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
+static DUSK_CONST char* l_arcName[2] = {"L_RopeB_S", "L_RopeB_L"};
 
-static char* l_ropeArcName = "L_Ropest";
+static DUSK_CONST char* l_ropeArcName = "L_Ropest";
 
 void daObjRBridge_c::initBaseMtx() {
     mDoMtx_stack_c::transS(current.pos);
@@ -244,12 +244,12 @@ BOOL daObjRBridge_c::checkTight() {
     return FALSE;
 }
 
-static cull_box l_cull_sizeS = {
+static DUSK_CONSTEXPR cull_box l_cull_sizeS = {
     {-250.0f, 0.0f, -100.0f},
     {250.0f, 1100.0f, 1000.0f},
 };
 
-static cull_box l_cull_sizeL = {
+static DUSK_CONSTEXPR cull_box l_cull_sizeL = {
     {-400.0f, 0.0f, -100.0f},
     {400.0f, 1500.0f, 1500.0f},
 };
@@ -321,8 +321,8 @@ int daObjRBridge_c::Create() {
         mCcCps[i].SetStts(&mCcStts);
     }
 
-    Vec* cull_min;
-    Vec* cull_max;
+    Vec DUSK_CONST* cull_min;
+    Vec DUSK_CONST* cull_max;
     if (mType == 0) {
         cull_min = &l_cull_sizeS.min;
         cull_max = &l_cull_sizeS.max;
@@ -629,7 +629,7 @@ static int daObjRBridge_MoveBGDraw(daObjRBridge_c* a_this) {
     return a_this->MoveBGDraw();
 }
 
-static actor_method_class daObjRBridge_METHODS = {
+static DUSK_CONST actor_method_class daObjRBridge_METHODS = {
     (process_method_func)daObjRBridge_create1st,
     (process_method_func)daObjRBridge_MoveBGDelete,
     (process_method_func)daObjRBridge_MoveBGExecute,
@@ -637,7 +637,7 @@ static actor_method_class daObjRBridge_METHODS = {
     (process_method_func)daObjRBridge_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_RopeBridge = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_RopeBridge = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

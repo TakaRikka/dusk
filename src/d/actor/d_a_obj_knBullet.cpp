@@ -194,7 +194,7 @@ static int daObjKnBullet_create(fopAc_ac_c* i_this) {
     return ((daObjKnBullet_c*)i_this)->Create();
 }
 
-static actor_method_class l_daObjKnBullet_Method = {
+static DUSK_CONST actor_method_class l_daObjKnBullet_Method = {
     (process_method_func)daObjKnBullet_create,
     (process_method_func)daObjKnBullet_Delete,
     (process_method_func)daObjKnBullet_Execute,
@@ -202,7 +202,7 @@ static actor_method_class l_daObjKnBullet_Method = {
     (process_method_func)daObjKnBullet_Draw,
 };
 
-actor_process_profile_definition g_profile_KN_BULLET = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_KN_BULLET = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -219,14 +219,14 @@ void daNpc_Bans_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static int l_bmdData[4][2] = {
+static DUSK_CONSTEXPR int l_bmdData[4][2] = {
     {BMDE_BANS, BANS},
     {BMDR_BANS_TW, BANS_TW},
     {BMDR_BANS_SCOOP, BANS2},
     {BMDR_BANS_TUB, BANS2},
 };
 
-static daNpcT_evtData_c l_evtList[9] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[9] = {
     {"", 0},
     {"DEFAULT_GETITEM", 0},
     {"NO_RESPONSE", 0},
@@ -238,7 +238,7 @@ static daNpcT_evtData_c l_evtList[9] = {
     {"GOBACK", 3},
 };
 
-static char* l_resNameList[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[6] = {
     "",
     "Bans",
     "Bans_TW",
@@ -247,32 +247,32 @@ static char* l_resNameList[6] = {
     "Len1",
 };
 
-static s8 l_loadResPtrn0[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn0[3] = {
     BANS, BANS1, -1,
 };
 
-static s8 l_loadResPtrn1[3] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn1[3] = {
     BANS, BANS2, -1,
 };
 
-static s8 l_loadResPtrn2[2] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn2[2] = {
     BANS_TW, -1,
 };
 
-static s8 l_loadResPtrn3[4] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn3[4] = {
     BANS, BANS1, BANS2, -1,
 };
 
-static s8 l_loadResPtrn4[5] = {
+static DUSK_CONSTEXPR s8 l_loadResPtrn4[5] = {
     BANS, BANS_TW, BANS1, BANS2, -1,
 };
 
-static s8* l_loadResPtrnList[6] = {
+static DUSK_CONSTEXPR s8 DUSK_CONST* l_loadResPtrnList[6] = {
     l_loadResPtrn3, l_loadResPtrn2, l_loadResPtrn1,
     l_loadResPtrn1, l_loadResPtrn0, l_loadResPtrn4,
 };
 
-static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
+static DUSK_CONSTEXPR daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {-1, J3DFrameCtrl::EMode_NONE, NONE, BTP_BANS, J3DFrameCtrl::EMode_LOOP, BANS, TRUE},
     {-1, J3DFrameCtrl::EMode_NONE, NONE, -1, J3DFrameCtrl::EMode_NONE, NONE, FALSE},
     {BCK_BANS_F_TALK_A, J3DFrameCtrl::EMode_NONE, BANS, BTP_BANS, J3DFrameCtrl::EMode_LOOP, BANS, TRUE},
@@ -280,7 +280,7 @@ static daNpcT_faceMotionAnmData_c l_faceMotionAnmData[5] = {
     {BCK_BANS_FH_TALK_B, J3DFrameCtrl::EMode_LOOP, BANS, BTP_BANS, J3DFrameCtrl::EMode_LOOP, BANS, TRUE},
 };
 
-static daNpcT_motionAnmData_c l_motionAnmData[20] = {
+static DUSK_CONSTEXPR daNpcT_motionAnmData_c l_motionAnmData[20] = {
     {BCK_BANS_WAIT_A, J3DFrameCtrl::EMode_LOOP, BANS, BTK_BANS, J3DFrameCtrl::EMode_NONE, BANS, 1, 0},
     {BCK_BANS_WAIT_B, J3DFrameCtrl::EMode_LOOP, BANS1, BTK_BANS, J3DFrameCtrl::EMode_NONE, BANS, 1, 0},
     {BCK_BANS_WAIT_C, J3DFrameCtrl::EMode_LOOP, BANS1, BTK_BANS, J3DFrameCtrl::EMode_NONE, BANS, 1, 0},
@@ -303,7 +303,7 @@ static daNpcT_motionAnmData_c l_motionAnmData[20] = {
     {BCK_BANS_FAINT, J3DFrameCtrl::EMode_LOOP, BANS2, BTK_BANS, J3DFrameCtrl::EMode_NONE, BANS, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] = {
     {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {3, -1, 1}, {4, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -311,7 +311,7 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_faceMotionSequenceData[20] =
     {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[84] = {
+static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[84] = {
     {0, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {1, -9, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
     {5, 0, 1}, {1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
@@ -335,14 +335,14 @@ static daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenceData[84] = {
     {9, 0, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char* daNpc_Bans_c::mCutNameList[4] = {
+char DUSK_CONST* DUSK_CONST daNpc_Bans_c::mCutNameList[4] = {
     "",
     "ANGER",
     "PURCHASE",
     "GO_BACK",
 };
 
-daNpc_Bans_c::cutFunc daNpc_Bans_c::mCutList[4] = {
+daNpc_Bans_c::cutFunc DUSK_CONST daNpc_Bans_c::mCutList[4] = {
     NULL,
     &daNpc_Bans_c::cutAnger,
     &daNpc_Bans_c::cutPurchase,
@@ -1852,7 +1852,7 @@ static int daNpc_Bans_IsDelete(void*) {
     return 1;
 }
 
-static actor_method_class daNpc_Bans_MethodTable = {
+static DUSK_CONST actor_method_class daNpc_Bans_MethodTable = {
     (process_method_func)daNpc_Bans_Create,
     (process_method_func)daNpc_Bans_Delete,
     (process_method_func)daNpc_Bans_Execute,
@@ -1860,7 +1860,7 @@ static actor_method_class daNpc_Bans_MethodTable = {
     (process_method_func)daNpc_Bans_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_BANS = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_BANS = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -50,7 +50,7 @@ void daSpinLift_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-static char* l_resNameIdx[] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {
     "L4_N_Entr", "L4_N_SlpH", "L4_N_SlpL", "L4_Center", "L4_Switch",
     "L4_S_Slp",  "L4_Wal_ZE", "L4_Wal_ZW", "L4_Wal_X",
 };
@@ -272,13 +272,13 @@ static int daSpinLift_Create(fopAc_ac_c* i_this) {
     return a_this->create();
 }
 
-static actor_method_class l_daSpinLift_Method = {
+static DUSK_CONST actor_method_class l_daSpinLift_Method = {
     (process_method_func)daSpinLift_Create,  (process_method_func)daSpinLift_Delete,
     (process_method_func)daSpinLift_Execute, 0,
     (process_method_func)daSpinLift_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_SpinLift = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_SpinLift = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

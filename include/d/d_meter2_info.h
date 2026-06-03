@@ -67,9 +67,9 @@ public:
     s16 decFloatingMessageTimer();
     void resetFloatingMessage();
     void decMsgKeyWaitTimer();
-    void getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry);
-    void getStringKana(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry);
-    void getStringKanji(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry);
+    void getString(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry);
+    void getStringKana(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry);
+    void getStringKanji(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry);
     f32 getStringLength(J2DTextBox* i_textbox, char* i_string);
     f32 getStringLength(JUTFont* i_font, f32 param_2, f32 param_3, char* i_string);
     void onDirectUseItem(int);
@@ -348,15 +348,15 @@ inline CPaneMgr* dMeter2Info_getMeterItemPanePtr(s32 i_idx) {
     return g_meter2_info.getMeterItemPanePtr(i_idx);
 }
 
-inline void dMeter2Info_getString(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
+inline void dMeter2Info_getString(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
     g_meter2_info.getString(i_stringID, o_string, i_msgEntry);
 }
 
-inline void dMeter2Info_getStringKanji(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
+inline void dMeter2Info_getStringKanji(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
     g_meter2_info.getStringKanji(i_stringID, o_string, i_msgEntry);
 }
 
-inline void dMeter2Info_getStringKana(u32 i_stringID, char* o_string, JMSMesgEntry_c* i_msgEntry) {
+inline void dMeter2Info_getStringKana(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
     g_meter2_info.getStringKana(i_stringID, o_string, i_msgEntry);
 }
 

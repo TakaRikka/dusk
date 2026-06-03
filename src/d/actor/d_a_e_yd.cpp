@@ -1515,7 +1515,7 @@ static int daE_YD_Create(fopAc_ac_c* i_this) {
     return loadRv;
 }
 
-static actor_method_class l_daE_YD_Method = {
+static DUSK_CONST actor_method_class l_daE_YD_Method = {
     (process_method_func)daE_YD_Create,
     (process_method_func)daE_YD_Delete,
     (process_method_func)daE_YD_Execute,
@@ -1523,7 +1523,7 @@ static actor_method_class l_daE_YD_Method = {
     (process_method_func)daE_YD_Draw,
 };
 
-actor_process_profile_definition g_profile_E_YD = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_E_YD = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -8,9 +8,9 @@
 #include "d/actor/d_a_bullet.h"
 #include "d/d_com_inf_game.h"
 
-static char* l_resFileNameList[] = {"Hanjo1"};
+static DUSK_CONST char* l_resFileNameList[] = {"Hanjo1"};
 
-static char* l_bmdFileNameList[] = {"hanjo_stone.bmd"};
+static DUSK_CONST char* l_bmdFileNameList[] = {"hanjo_stone.bmd"};
 
 static BULLET_HIO_CLASS l_HIO;
 
@@ -267,7 +267,7 @@ static int daBullet_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daBullet_MethodTable = {
+static DUSK_CONST actor_method_class daBullet_MethodTable = {
     (process_method_func)daBullet_Create,
     (process_method_func)daBullet_Delete,
     (process_method_func)daBullet_Execute,
@@ -275,7 +275,7 @@ static actor_method_class daBullet_MethodTable = {
     (process_method_func)daBullet_Draw,
 };
 
-actor_process_profile_definition g_profile_BULLET = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_BULLET = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 8,
     /* List Prio    */ fpcPi_CURRENT_e,

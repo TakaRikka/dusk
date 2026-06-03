@@ -490,7 +490,7 @@ const char* daBaseNpc_c::getResName() {
     return NULL;
 }
 
-J3DAnmTransform* daBaseNpc_c::getTrnsfrmKeyAnmP(char* i_arcName, int i_resIdx) {
+J3DAnmTransform* daBaseNpc_c::getTrnsfrmKeyAnmP(char DUSK_CONST* i_arcName, int i_resIdx) {
     void* objectRes = dComIfG_getObjectRes(i_arcName, i_resIdx);
     return (J3DAnmTransform*)objectRes;
 }
@@ -510,7 +510,7 @@ int daBaseNpc_c::setBckAnm(J3DAnmTransform* i_anm, f32 i_speed, int i_mode, int 
     return mBck.init(i_anm, TRUE, i_mode, i_speed, start, end, i_modify);
 }
 
-J3DAnmTransform* daBaseNpc_c::getTexPtrnAnmP(char* i_arcName, int i_resIdx) {
+J3DAnmTransform* daBaseNpc_c::getTexPtrnAnmP(char DUSK_CONST* i_arcName, int i_resIdx) {
     void* objectRes = dComIfG_getObjectRes(i_arcName, i_resIdx);
     return (J3DAnmTransform*)objectRes;
 }
@@ -540,7 +540,7 @@ void daBaseNpc_c::attnSttsOn(int param_0, int param_1) {
 
 void daBaseNpc_c::setParam() {}
 
-void daBaseNpc_c::orderEvent(int param_0, char* i_evtName) {
+void daBaseNpc_c::orderEvent(int param_0, char DUSK_CONST* i_evtName) {
     if (i_evtName != NULL) {
         mEvtIdx = dComIfGp_getEventManager().getEventIdx(this, i_evtName, -1);
         fopAcM_orderOtherEventId(this, mEvtIdx, 0xFF, 0xFFFF, 0, 1);

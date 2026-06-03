@@ -530,7 +530,7 @@ void MtxScale(f32 x_trans, f32 y_trans, f32 z_trans, u8 param_3) {
  * @param src The src position to be multiplied
  * @param dest The resulting multiplied position
  */
-void MtxPosition(cXyz* src, cXyz* dest) {
+void MtxPosition(cXyz DUSK_CONST* src, cXyz* dest) {
     MTXMultVec(*calc_mtx, src, dest);
 }
 

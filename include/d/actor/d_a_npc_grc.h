@@ -89,8 +89,8 @@ public:
     void setPrtcl();
     void adjustShapeAngle() {}
 
-    static char* mEvtCutNameList;
-    static EventFn mEvtCutList[1];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList;
+    static EventFn DUSK_CONST mEvtCutList[1];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

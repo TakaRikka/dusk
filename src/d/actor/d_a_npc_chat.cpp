@@ -795,7 +795,7 @@ enum Type {
     /* 0x1D */ MdlWANb2_e,
 };
 
-static char* const l_resMANa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMANa[6] = {
     "MAN_a",
     "MAN_a_TW",
     "Mgeneral",
@@ -804,7 +804,7 @@ static char* const l_resMANa[6] = {
     "objectTW",
 };
 
-static char* const l_resMADa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMADa[6] = {
     "MAD_a",
     "MAD_a_TW",
     "Mgeneral",
@@ -813,7 +813,7 @@ static char* const l_resMADa[6] = {
     "objectTW",
 };
 
-static char* const l_resMCNa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMCNa[6] = {
     "MCN_a",
     "MCN_a_TW",
     "Mgeneral",
@@ -822,7 +822,7 @@ static char* const l_resMCNa[6] = {
     "objectTW",
 };
 
-static char* const l_resMONa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMONa[6] = {
     "MON_a",
     "MON_a_TW",
     "Mgeneral",
@@ -831,7 +831,7 @@ static char* const l_resMONa[6] = {
     "objectTW",
 };
 
-static char* const l_resMANb[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMANb[6] = {
     "MAN_b",
     "MAN_b_TW",
     "Mgeneral",
@@ -840,7 +840,7 @@ static char* const l_resMANb[6] = {
     "objectTW",
 };
 
-static char* const l_resMANc[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMANc[6] = {
     "MAN_c",
     "MAN_c_TW",
     "Mgeneral",
@@ -849,7 +849,7 @@ static char* const l_resMANc[6] = {
     "objectTW",
 };
 
-static char* const l_resMASa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMASa[6] = {
     "MAS_a",
     "MAS_a_TW",
     "Mgeneral",
@@ -858,7 +858,7 @@ static char* const l_resMASa[6] = {
     "objectTW",
 };
 
-static char* const l_resMBNa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMBNa[6] = {
     "MBN_a",
     "MBN_a_TW",
     "Mgeneral",
@@ -867,7 +867,7 @@ static char* const l_resMBNa[6] = {
     "objectTW",
 };
 
-static char* const l_resMANa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMANa2[6] = {
     "MAN_a2",
     "MAN_a2_TW",
     "Mgeneral",
@@ -876,7 +876,7 @@ static char* const l_resMANa2[6] = {
     "objectTW",
 };
 
-static char* const l_resMADa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMADa2[6] = {
     "MAD_a2",
     "MAD_a2_TW",
     "Mgeneral",
@@ -885,7 +885,7 @@ static char* const l_resMADa2[6] = {
     "objectTW",
 };
 
-static char* const l_resMCNa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMCNa2[6] = {
     "MCN_a2",
     "MCN_a2_TW",
     "Mgeneral",
@@ -894,7 +894,7 @@ static char* const l_resMCNa2[6] = {
     "objectTW",
 };
 
-static char* const l_resMONa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMONa2[6] = {
     "MON_a2",
     "MON_a2_TW",
     "Mgeneral",
@@ -903,7 +903,7 @@ static char* const l_resMONa2[6] = {
     "objectTW",
 };
 
-static char* const l_resMANb2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMANb2[6] = {
     "MAN_b2",
     "MAN_b2_TW",
     "Mgeneral",
@@ -912,7 +912,7 @@ static char* const l_resMANb2[6] = {
     "objectTW",
 };
 
-static char* const l_resMANc2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMANc2[6] = {
     "MAN_c2",
     "MAN_c2_TW",
     "Mgeneral",
@@ -921,7 +921,7 @@ static char* const l_resMANc2[6] = {
     "objectTW",
 };
 
-static char* const l_resMASa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMASa2[6] = {
     "MAS_a2",
     "MAS_a2_TW",
     "Mgeneral",
@@ -930,7 +930,7 @@ static char* const l_resMASa2[6] = {
     "objectTW",
 };
 
-static char* const l_resMBNa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMBNa2[6] = {
     "MBN_a2",
     "MBN_a2_TW",
     "Mgeneral",
@@ -939,7 +939,7 @@ static char* const l_resMBNa2[6] = {
     "objectTW",
 };
 
-static char* const l_resWANa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWANa[6] = {
     "WAN_a",
     "WAN_a_TW",
     "Wgeneral",
@@ -948,7 +948,7 @@ static char* const l_resWANa[6] = {
     "objectTW",
 };
 
-static char* const l_resWADa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWADa[6] = {
     "WAD_a",
     "WAD_a_TW",
     "Wgeneral",
@@ -957,7 +957,7 @@ static char* const l_resWADa[6] = {
     "objectTW",
 };
 
-static char* const l_resMATa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMATa[6] = {
     "MAT_a",
     "MAT_a_TW",
     "Wgeneral",
@@ -966,7 +966,7 @@ static char* const l_resMATa[6] = {
     "objectTW",
 };
 
-static char* const l_resWCNa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWCNa[6] = {
     "WCN_a",
     "WCN_a_TW",
     "Wgeneral",
@@ -975,7 +975,7 @@ static char* const l_resWCNa[6] = {
     "objectTW",
 };
 
-static char* const l_resWONa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWONa[6] = {
     "WON_a",
     "WON_a_TW",
     "Wgeneral",
@@ -984,7 +984,7 @@ static char* const l_resWONa[6] = {
     "objectTW",
 };
 
-static char* const l_resWGNa[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWGNa[6] = {
     "WGN_a",
     "WGN_a_TW",
     "Wgeneral",
@@ -993,7 +993,7 @@ static char* const l_resWGNa[6] = {
     "objectTW",
 };
 
-static char* const l_resWANb[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWANb[6] = {
     "WAN_b",
     "WAN_b_TW",
     "Wgeneral",
@@ -1002,7 +1002,7 @@ static char* const l_resWANb[6] = {
     "objectTW",
 };
 
-static char* const l_resWANa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWANa2[6] = {
     "WAN_a2",
     "WAN_a2_TW",
     "Wgeneral",
@@ -1011,7 +1011,7 @@ static char* const l_resWANa2[6] = {
     "objectTW",
 };
 
-static char* const l_resWADa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWADa2[6] = {
     "WAD_a2",
     "WAD_a2_TW",
     "Wgeneral",
@@ -1020,7 +1020,7 @@ static char* const l_resWADa2[6] = {
     "objectTW",
 };
 
-static char* const l_resMATa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resMATa2[6] = {
     "MAT_a2",
     "MAT_a2_TW",
     "Wgeneral",
@@ -1029,7 +1029,7 @@ static char* const l_resMATa2[6] = {
     "objectTW",
 };
 
-static char* const l_resWCNa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWCNa2[6] = {
     "WCN_a2",
     "WCN_a2_TW",
     "Wgeneral",
@@ -1038,7 +1038,7 @@ static char* const l_resWCNa2[6] = {
     "objectTW",
 };
 
-static char* const l_resWONa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWONa2[6] = {
     "WON_a2",
     "WON_a2_TW",
     "Wgeneral",
@@ -1047,7 +1047,7 @@ static char* const l_resWONa2[6] = {
     "objectTW",
 };
 
-static char* const l_resWGNa2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWGNa2[6] = {
     "WGN_a2",
     "WGN_a2_TW",
     "Wgeneral",
@@ -1056,7 +1056,7 @@ static char* const l_resWGNa2[6] = {
     "objectTW",
 };
 
-static char* const l_resWANb2[6] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const l_resWANb2[6] = {
     "WAN_b2",
     "WAN_b2_TW",
     "Wgeneral",
@@ -1065,7 +1065,7 @@ static char* const l_resWANb2[6] = {
     "objectTW",
 };
 
-static char* const* l_resNameTbl[30] = {
+static DUSK_CONSTEXPR char DUSK_CONST* const* l_resNameTbl[30] = {
     l_resMANa,  l_resMADa,  l_resMCNa,  l_resMONa,
     l_resMANb,  l_resMANc,  l_resMASa,  l_resMBNa,
     l_resMANa2, l_resMADa2, l_resMCNa2, l_resMONa2,
@@ -1077,11 +1077,11 @@ static char* const* l_resNameTbl[30] = {
 };
 
 struct anmTblPrm {
-    char* arc_name;
+    DUSK_CONST char* arc_name;
     int resource_index;
 };
 
- static anmTblPrm l_bmdTbl[30] = {
+ static DUSK_CONSTEXPR anmTblPrm l_bmdTbl[30] = {
     l_resMANa[0], BMDR_MAN_A,
     l_resMADa[0], BMDR_MAD_A,
     l_resMCNa[0], BMDR_MCN_A,
@@ -1114,7 +1114,7 @@ struct anmTblPrm {
     l_resWANb2[0], BMDR_WAN_B2,
 };
 
-static anmTblPrm l_bmdTWTbl[30] = {
+static DUSK_CONSTEXPR anmTblPrm l_bmdTWTbl[30] = {
     l_resMANa[1], BMDR_MAN_A_TW,
     l_resMADa[1], BMDR_MAD_A_TW,
     l_resMCNa[1], BMDR_MCN_A_TW,
@@ -1147,7 +1147,7 @@ static anmTblPrm l_bmdTWTbl[30] = {
     l_resWANb2[1], BMDR_WAN_B2_TW,
 };
 
-static anmTblPrm l_btpTbl[30] = {
+static DUSK_CONSTEXPR anmTblPrm l_btpTbl[30] = {
     l_resMANa[0], -1,
     l_resMADa[0], -1,
     l_resMCNa[0], BTP_MCN_A,
@@ -1180,7 +1180,7 @@ static anmTblPrm l_btpTbl[30] = {
     l_resWANb2[0], BTP_WAN_B2,
 };
 
-static anmTblPrm l_btpTWTbl[30] = {
+static DUSK_CONSTEXPR anmTblPrm l_btpTWTbl[30] = {
     l_resMANa[1], -1,
     l_resMADa[1], -1,
     l_resMCNa[1], BTP_MCN_A_TW,
@@ -1213,7 +1213,7 @@ static anmTblPrm l_btpTWTbl[30] = {
     l_resWANb2[1], BTP_WAN_B2_TW,
 };
 
-static anmTblPrm l_bckTbl_M[54] = {
+static DUSK_CONSTEXPR anmTblPrm l_bckTbl_M[54] = {
     {"Mgeneral",  BCK_M_WAIT_A},
     {"Mgeneral",  BCK_M_WAIT_B},
     {"Mgeneral",  BCK_M_WALK_A},
@@ -1270,7 +1270,7 @@ static anmTblPrm l_bckTbl_M[54] = {
     {"Mgeneral",  BCK_M_SING},
 };
 
-static anmTblPrm l_bckTbl_W[54] = {
+static DUSK_CONSTEXPR anmTblPrm l_bckTbl_W[54] = {
     {"Wgeneral", BCK_W_WAIT_A},
     {"Wgeneral", BCK_W_WAIT_B},
     {"Wgeneral", BCK_W_WALK_A},
@@ -1342,7 +1342,7 @@ struct jntTblWPrm {
     /* 0x0 */ jnt jntPrm[21];
 };
 
-static jntTblMPrm a_jntTbl_M[16] = {
+static DUSK_CONSTEXPR jntTblMPrm a_jntTbl_M[16] = {
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -1712,7 +1712,7 @@ struct prmTbl {
     /* 0x3C */ f32 field_0x3c;
 };
 
-static prmTbl a_prmTbl_M[16] = {
+static DUSK_CONSTEXPR prmTbl a_prmTbl_M[16] = {
     -852593.0f, 0xB9, 0xB0, 0xD8, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x0F, 0xA0, 0x3A, 0x98, 0xE0, 0xC0, 0xC5, 0x68, 1.0f, 0xC8, 0x00, 0x00,
     1.5f, 1.8f, 16.0f, 6.0f, 180.0f, 30.0f, 50.1f, 35.0f,
@@ -1778,7 +1778,7 @@ static prmTbl a_prmTbl_M[16] = {
     1.5f, 1.8f, 16.0f, 6.0f, 180.0f, 30.0f, 50.1f, 35.0f,
 };
 
-static jntTblWPrm a_jntTbl_W[14] = {
+static DUSK_CONSTEXPR jntTblWPrm a_jntTbl_W[14] = {
     {
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
     0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0,
@@ -2116,7 +2116,7 @@ static jntTblWPrm a_jntTbl_W[14] = {
     },
 };
 
-static prmTbl a_prmTbl_W[14] = {
+static DUSK_CONSTEXPR prmTbl a_prmTbl_W[14] = {
     -852593.0f, 0xB9, 0xB0, 0xD8, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x0F, 0xA0, 0x3A, 0x98, 0xE0, 0xC0, 0xC5, 0x68, 1.0f, 0xC8, 0x00, 0x00,
     1.4f, 1.5f, 10.0f, 4.0f, 180.0f, 30.0f, 50.1f, 35.0f,
@@ -2174,19 +2174,19 @@ static prmTbl a_prmTbl_W[14] = {
     1.5f, 1.6f, 10.0f, 4.4f, 180.0f, 30.0f, 50.1f, 35.0f,
 };
 
-static char* l_evtNames[1] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
     NULL,
 };
 
-static char* l_myName = "Chat";
+static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Chat";
 
 static NPC_CHAT_HIO_CLASS l_HIO;
 
-daNpcChat_c::eventFunc daNpcChat_c::mEvtSeqList[1] = {
+daNpcChat_c::eventFunc DUSK_CONST daNpcChat_c::mEvtSeqList[1] = {
     NULL,
 };
 
-static anmTblPrm const l_objTbl[13] = {
+static DUSK_CONSTEXPR anmTblPrm const l_objTbl[13] = {
     {"object", BMDR_B_TUBO},
     {"object", BMDR_B_TUBO},
     {"object", BMDR_B_SPEAR},
@@ -2202,7 +2202,7 @@ static anmTblPrm const l_objTbl[13] = {
     {"object", BMDR_MARO_BAG_W},
 };
 
-static anmTblPrm const l_objTWTbl[13] = {
+static DUSK_CONSTEXPR anmTblPrm const l_objTWTbl[13] = {
     {"objectTW", BMDR_B_TUBO_TW},
     {"objectTW", BMDR_B_TUBO_TW},
     {"objectTW", BMDR_B_SPEAR_TW},
@@ -3448,7 +3448,7 @@ void daNpcChat_c::setMotionAnm(int i_index, f32 i_morf) {
     }
 
     int resIdx;
-    char* arcName;
+    DUSK_CONST char* arcName;
     if (isM_()) {
         arcName = l_bckTbl_M[index].arc_name;
         resIdx = l_bckTbl_M[index].resource_index;
@@ -4135,7 +4135,7 @@ static int daNpcChat_IsDelete(void* a_this) {
 
 AUDIO_INSTANCES;
 
-static actor_method_class daNpcChat_MethodTable = {
+static DUSK_CONST actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Create,
     (process_method_func)daNpcChat_Delete,
     (process_method_func)daNpcChat_Execute,
@@ -4143,7 +4143,7 @@ static actor_method_class daNpcChat_MethodTable = {
     (process_method_func)daNpcChat_Draw,
 };
 
-actor_process_profile_definition g_profile_NPC_CHAT = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_NPC_CHAT = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

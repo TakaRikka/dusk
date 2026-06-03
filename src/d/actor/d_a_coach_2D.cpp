@@ -105,7 +105,7 @@ static int daCoach2D_createHeap(fopAc_ac_c* i_this) {
     return ((daCoach2D_c*)i_this)->createHeap();
 }
 
-static char* l_arcName = "Coach2D";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "Coach2D";
 
 static daCoach2D_HIO_c l_HOSTIO;
 
@@ -349,7 +349,7 @@ static int daCoach2D_draw(daCoach2D_c* i_this) {
     return i_this->draw();
 }
 
-static actor_method_class daCoach2D_METHODS = {
+static DUSK_CONST actor_method_class daCoach2D_METHODS = {
     (process_method_func)daCoach2D_create,
     (process_method_func)daCoach2D_destroy,
     (process_method_func)daCoach2D_execute,
@@ -357,7 +357,7 @@ static actor_method_class daCoach2D_METHODS = {
     (process_method_func)daCoach2D_draw,
 };
 
-actor_process_profile_definition g_profile_COACH2D = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_COACH2D = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -231,8 +231,8 @@ private:
     /* 0xE1D */ bool field_0xe1d;
     /* 0xE1E */ u8 mType;
 
-    static char* mEvtCutNameList[4];
-    static EventFn mEvtCutList[4];
+    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[4];
+    static EventFn DUSK_CONST mEvtCutList[4];
 };
 
 STATIC_ASSERT(sizeof(daNpcThe_c) == 0xE20);

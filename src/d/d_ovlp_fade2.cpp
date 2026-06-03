@@ -245,7 +245,7 @@ static leafdraw_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Draw,
 };
 
-overlap_process_profile_definition g_profile_OVERLAP2 = {
+DUSK_PROFILE overlap_process_profile_definition DUSK_CONST g_profile_OVERLAP2 = {
     /* Layer ID    */ fpcLy_ROOT_e,
     /* List ID     */ 2,
     /* List Prio   */ fpcPi_CURRENT_e,

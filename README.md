@@ -22,16 +22,11 @@ It aims to be as accurate as possible to the original while also providing new o
 > [!IMPORTANT]
 > At a minimum, Dusklight requires a GPU with support for either D3D12, Vulkan, or Metal. Your experience with specific hardware, operating systems, and drivers may vary. In particular, older Intel iGPUs have a high likelihood of incompatibility. We are also aware of a number of issues on devices with Adreno GPUs and are working to resolve them.
 
-### 1. Verify your dump
+### 1. Dump your game
 
-First, make sure your dump of the game is clean and supported by Dusklight. You can do this by checking the SHA-1 hash of your dump against this list of supported versions:
+You must dump your own copy of the game, please see [this article](https://wiki.dolphin-emu.org/index.php?title=Ripping_Games) for instructions. After dumping, you can use a program like [Dolphin](https://dolphin-emu.org/) or [nodtool](https://github.com/encounter/nod/releases) to convert the `.iso` to a `.rvz` to save space.
 
-| Version      | SHA-1 hash                                 |
-|--------------| ------------------------------------------ |
-| GameCube USA | `75edd3ddff41f125d1b4ce1a40378f1b565519e7` |
-| GameCube EUR | `2601822a488eeb86fb89db16ca8f29c2c953e1ca` |
-
-*Support for other versions of the game is planned in the future.
+Currently, only the GameCube USA and EUR releases are supported. Support for other versions of the game is planned in the future.
 
 ### 2. Download [Dusklight](https://github.com/TwilitRealm/dusklight/releases)
 

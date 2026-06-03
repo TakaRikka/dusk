@@ -182,13 +182,13 @@ static int daStartAndGoal_create(fopAc_ac_c* i_this) {
     return static_cast<daStartAndGoal_c*>(i_this)->Create();
 }
 
-static actor_method_class l_daStartAndGoal_Method = {
+static DUSK_CONST actor_method_class l_daStartAndGoal_Method = {
     (process_method_func)daStartAndGoal_create,  (process_method_func)daStartAndGoal_Delete,
     (process_method_func)daStartAndGoal_Execute, (process_method_func)daStartAndGoal_IsDelete,
     (process_method_func)daStartAndGoal_Draw,
 };
 
-actor_process_profile_definition g_profile_START_AND_GOAL = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_START_AND_GOAL = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 9,
     /* List Prio    */ fpcPi_CURRENT_e,

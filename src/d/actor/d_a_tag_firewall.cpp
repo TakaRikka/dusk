@@ -212,13 +212,13 @@ static int daTag_FWall_Create(daTag_FWall_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daTag_FWall_Method = {
+static DUSK_CONST actor_method_class l_daTag_FWall_Method = {
     (process_method_func)daTag_FWall_Create,  (process_method_func)daTag_FWall_Delete,
     (process_method_func)daTag_FWall_Execute, (process_method_func)daTag_FWall_IsDelete,
     (process_method_func)daTag_FWall_Draw,
 };
 
-actor_process_profile_definition g_profile_Tag_FWall = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Tag_FWall = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

@@ -7,15 +7,15 @@
 
 #include "d/actor/d_a_obj_oiltubo.h"
 
-static char* l_resFileName = "Obj_otubo";
+static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName = "Obj_otubo";
 
-static char* l_bmdFileName = "x_oiltubo_00.bmd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bmdFileName = "x_oiltubo_00.bmd";
 
-static char* l_bbmdFileName = "x_oiltubo_00b.bmd";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bbmdFileName = "x_oiltubo_00b.bmd";
 
-static char* l_bbtkFileName = "x_oiltubo_00b.btk";
+static DUSK_CONSTEXPR char DUSK_CONST* l_bbtkFileName = "x_oiltubo_00b.btk";
 
-dCcD_SrcCyl daObj_Oiltubo_c::mCcDCyl = {
+dCcD_SrcCyl DUSK_CONST daObj_Oiltubo_c::mCcDCyl = {
     daObj_Oiltubo_c::mCcDObjInfo,
     {
         {
@@ -284,13 +284,13 @@ static int daObj_Oiltubo_IsDelete(void* i_this) {
     return 1;
 }
 
-static actor_method_class daObj_Oiltubo_MethodTable = {
+static DUSK_CONST actor_method_class daObj_Oiltubo_MethodTable = {
     (process_method_func)daObj_Oiltubo_Create,  (process_method_func)daObj_Oiltubo_Delete,
     (process_method_func)daObj_Oiltubo_Execute, (process_method_func)daObj_Oiltubo_IsDelete,
     (process_method_func)daObj_Oiltubo_Draw,
 };
 
-actor_process_profile_definition g_profile_OBJ_OILTUBO = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_OBJ_OILTUBO = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 7,
     /* List Prio    */ fpcPi_CURRENT_e,

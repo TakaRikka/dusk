@@ -4285,7 +4285,7 @@ static int daB_DR_Create(daB_DR_c* i_this) {
     return i_this->create();
 }
 
-static actor_method_class l_daB_DR_Method = {
+static DUSK_CONST actor_method_class l_daB_DR_Method = {
     (process_method_func)daB_DR_Create,
     (process_method_func)daB_DR_Delete,
     (process_method_func)daB_DR_Execute,
@@ -4293,7 +4293,7 @@ static actor_method_class l_daB_DR_Method = {
     (process_method_func)daB_DR_Draw,
 };
 
-actor_process_profile_definition g_profile_B_DR = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_B_DR = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 4,
     /* List Prio    */ fpcPi_CURRENT_e,

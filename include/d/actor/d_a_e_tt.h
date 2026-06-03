@@ -63,7 +63,7 @@ private:
     /* 0x6D4 */ f32 field_0x6d4;
     /* 0x6D8 */ s16 mFootJoints[4];
     /* 0x6E0 */ s16 field_0x6e0;
-    /* 0x6E4 */ char* mpResName;
+    /* 0x6E4 */ char DUSK_CONST* mpResName;
     /* 0x6E8 */ u16 mDamageCooldownTimer;
     /* 0x6EA */ u8 mGenericTimer;
     /* 0x6EC */ int mAttackTimer;

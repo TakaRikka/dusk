@@ -35,13 +35,13 @@ void daObjAvalanche_c::setBaseMtx() {
     MTXCopy(mDoMtx_stack_c::get(), mMtx2);
 }
 
-static char* l_arcName = "V_Yuki";
+static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "V_Yuki";
 
-static char* l_evName = "SNOW_COLLAPSE";
+static DUSK_CONSTEXPR char DUSK_CONST* l_evName = "SNOW_COLLAPSE";
 
-static char* l_staffName = "Obj_ava";
+static DUSK_CONSTEXPR char DUSK_CONST* l_staffName = "Obj_ava";
 
-static cull_box l_cull_box = {
+static DUSK_CONSTEXPR cull_box l_cull_box = {
     {-500.0f, -500.0f, -700.0f},
     {500.0f, 1000.0f, 700.0f},
 };
@@ -134,7 +134,7 @@ int daObjAvalanche_c::checkCollapse() {
     local_28 = l_check_pos[0];
     local_1c = l_check_pos[1];
     cXyz playerDist = player->current.pos - current.pos;
-    mDoMtx_stack_c::YrotM(-shape_angle.y);
+    DUSK_IF_ELSE(mDoMtx_stack_c::YrotS(-shape_angle.y), mDoMtx_stack_c::YrotM(-shape_angle.y));
     mDoMtx_stack_c::multVec(&playerDist, &playerDist);
     if (player->current.pos.y > current.pos.y && player->current.pos.y < current.pos.y + 300.0f &&
         playerDist.x > local_28.x && playerDist.x < local_1c.x && playerDist.z > local_28.z &&
@@ -204,7 +204,7 @@ void daObjAvalanche_c::actionEvent() {
 void daObjAvalanche_c::actionDead() {
 }
 
-static char* action_table[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* action_table[2] = {
     "WAIT",
     "COLLAPSE",
 };
@@ -292,13 +292,13 @@ static int daObjAvalanche_MoveBGDraw(daObjAvalanche_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-static actor_method_class daObjAvalanche_METHODS = {
+static DUSK_CONST actor_method_class daObjAvalanche_METHODS = {
     (process_method_func)daObjAvalanche_create1st,  (process_method_func)daObjAvalanche_MoveBGDelete,
     (process_method_func)daObjAvalanche_MoveBGExecute, (process_method_func)NULL,
     (process_method_func)daObjAvalanche_MoveBGDraw,
 };
 
-actor_process_profile_definition g_profile_Obj_Avalanche = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Avalanche = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,

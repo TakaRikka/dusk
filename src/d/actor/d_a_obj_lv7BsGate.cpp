@@ -21,14 +21,14 @@ public:
 
 static daLv7BsGate_HIO_c l_HIO;
 
-static char* l_type[2] = {
+static DUSK_CONSTEXPR char DUSK_CONST* l_type[2] = {
     "L7Gate",
     "L7GateL",
 };
 
-static int l_bmdIdx[] = {4, 4};
+static DUSK_CONSTEXPR int l_bmdIdx[] = {4, 4};
 
-static int l_dzbIdx[] = {7, 7};
+static DUSK_CONSTEXPR int l_dzbIdx[] = {7, 7};
 
 daLv7BsGate_HIO_c::daLv7BsGate_HIO_c() {
     open_speed = 2.0f;
@@ -103,7 +103,7 @@ int daLv7BsGate_c::Execute(Mtx** param_0) {
 }
 
 void daLv7BsGate_c::moveGate() {
-    static void (daLv7BsGate_c::*mode_proc[])() = {
+    static DUSK_CONSTEXPR void (daLv7BsGate_c::*mode_proc[])() = {
         &daLv7BsGate_c::modeWait,
         &daLv7BsGate_c::modeOpen,
         &daLv7BsGate_c::modeClose,
@@ -199,7 +199,7 @@ static int daLv7BsGate_Create(fopAc_ac_c* i_this) {
     return ((daLv7BsGate_c*)i_this)->create();
 }
 
-static actor_method_class l_daLv7BsGate_Method = {
+static DUSK_CONST actor_method_class l_daLv7BsGate_Method = {
     (process_method_func)daLv7BsGate_Create,
     (process_method_func)daLv7BsGate_Delete,
     (process_method_func)daLv7BsGate_Execute,
@@ -207,7 +207,7 @@ static actor_method_class l_daLv7BsGate_Method = {
     (process_method_func)daLv7BsGate_Draw,
 };
 
-actor_process_profile_definition g_profile_Obj_Lv7BsGate = {
+DUSK_PROFILE actor_process_profile_definition DUSK_CONST g_profile_Obj_Lv7BsGate = {
     /* Layer ID     */ fpcLy_CURRENT_e,
     /* List ID      */ 3,
     /* List Prio    */ fpcPi_CURRENT_e,
