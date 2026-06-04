@@ -363,6 +363,9 @@ const Rml::String kUnlockFramerateHelpText =
     "visual artifacts or animation glitches.";
 const Rml::String kTextureReplacementHelpText =
     "Enable installed texture replacements.";
+const Rml::String kCameraFOVHelpText =
+    "Configure the default field of view for the camera. Lower values zoom in, higher values zoom out. "
+    "This may be overridden during cutscenes or specific gameplay moments. May introduce visual glitches.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -835,6 +838,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = static_cast<int>(Resampler::Bilinear),
                 .valueMax = static_cast<int>(Resampler::Area),
                 .defaultValue = static_cast<int>(Resampler::Bilinear),
+            });
+
+        leftPane.add_section("Camera");
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.cameraFieldOfView,
+            GraphicsTunerProps{
+                .option = GraphicsOption::CameraFOV,
+                .title = "Field of View",
+                .helpText = kCameraFOVHelpText,
+                .valueMin = 45,
+                .valueMax = 90,
+                .defaultValue = 60,
+                .step = 1,
             });
 
         leftPane.add_section("Post-Processing");
