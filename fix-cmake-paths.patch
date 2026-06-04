@@ -1,0 +1,32 @@
+From f69d29614644f9963f5cb3f828b58575d60a1c5a Mon Sep 17 00:00:00 2001
+From: Joshua Trees <gh@jtrees.io>
+Date: Thu, 4 Jun 2026 01:04:04 +0100
+Subject: [PATCH] fix cmake paths
+
+---
+ cmake/nodConfig.cmake.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/nodConfig.cmake.in b/cmake/nodConfig.cmake.in
+index 0969382..2a24a88 100644
+--- a/cmake/nodConfig.cmake.in
++++ b/cmake/nodConfig.cmake.in
+@@ -1,12 +1,12 @@
+ @PACKAGE_INIT@
+ 
+-set(_nod_libdir "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@")
+-set(_nod_incdir "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
++set(_nod_libdir "@CMAKE_INSTALL_FULL_LIBDIR@")
++set(_nod_incdir "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
+ 
+ if (NOT TARGET nod::nod_shared AND NOT TARGET nod::nod_static)
+     # Shared library
+     if (WIN32)
+-        set(_nod_dll "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_BINDIR@/${CMAKE_SHARED_LIBRARY_PREFIX}nod${CMAKE_SHARED_LIBRARY_SUFFIX}")
++        set(_nod_dll "@CMAKE_INSTALL_FULL_BINDIR@/${CMAKE_SHARED_LIBRARY_PREFIX}nod${CMAKE_SHARED_LIBRARY_SUFFIX}")
+         set(_nod_implib "${_nod_libdir}/${CMAKE_IMPORT_LIBRARY_PREFIX}nod${CMAKE_IMPORT_LIBRARY_SUFFIX}")
+         if (EXISTS "${_nod_dll}")
+             add_library(nod::nod_shared SHARED IMPORTED)
+-- 
+2.53.0
+
