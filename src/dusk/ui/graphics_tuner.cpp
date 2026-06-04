@@ -48,6 +48,8 @@ int get_value(GraphicsOption option) {
         return getSettings().game.shadowResolutionMultiplier.getValue();
     case GraphicsOption::Resampler:
         return static_cast<int>(getSettings().game.resampler.getValue());
+    case GraphicsOption::CameraFOV:
+        return getSettings().game.cameraFieldOfView.getValue();
     case GraphicsOption::BloomMode:
         return static_cast<int>(getSettings().game.bloomMode.getValue());
     case GraphicsOption::BloomMultiplier:
@@ -87,6 +89,9 @@ void set_value(GraphicsOption option, int value) {
         }
         break;
     }
+    case GraphicsOption::CameraFOV:
+        getSettings().game.cameraFieldOfView.setValue(std::clamp(value, 45, 90));
+        break;
     case GraphicsOption::BloomMode:
         getSettings().game.bloomMode.setValue(static_cast<BloomMode>(std::clamp(
             value, static_cast<int>(BloomMode::Off), static_cast<int>(BloomMode::Dusk))));
@@ -240,6 +245,8 @@ Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
         return fmt::format("{}%", value);
     case GraphicsOption::TextureReplacements:
         return static_cast<bool>(value) ? "On" : "Off";
+    case GraphicsOption::CameraFOV:
+        return fmt::format("{}°", value);
     }
     return "";
 }

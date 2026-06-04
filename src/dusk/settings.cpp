@@ -64,6 +64,7 @@ UserSettings g_userSettings = {
         .menuScalingMode {"game.menuScalingMode", MenuScaling::Wii},
 
         // Graphics
+        .cameraFieldOfView {"game.cameraFieldOfView", 60},
         .bloomMode {"game.bloomMode", BloomMode::Dusk},
         .bloomMultiplier {"game.bloomMultiplier", 1.0f},
         .depthOfFieldMode{"game.depthOfFieldMode", DepthOfFieldMode::Dusk},
@@ -271,6 +272,7 @@ void registerSettings() {
     Register(g_userSettings.game.pauseOnFocusLost,
         [](const bool& value, const bool&) { aurora_set_pause_on_focus_lost(value); });
     Register(g_userSettings.game.enableDiscordPresence);
+    Register(g_userSettings.game.cameraFieldOfView);
     Register(g_userSettings.game.bloomMode);
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.depthOfFieldMode);
