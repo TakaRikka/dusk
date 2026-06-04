@@ -1,7 +1,7 @@
 #include "dusk/action_bindings.h"
 
-#include "aurora/gfx.h"
 #include "aurora/lib/input.hpp"
+#include "dusk/texture_replacements.hpp"
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
@@ -73,7 +73,7 @@ void updateActionBindings() {
             if (getActionBindTrig(ActionBinds::TOGGLE_TEXTURE_PACK, port)) {
                 const bool enabled = !getSettings().game.enableTextureReplacements.getValue();
                 getSettings().game.enableTextureReplacements.setValue(enabled);
-                aurora_set_texture_replacements_enabled(enabled);
+                texture_replacements::set_enabled(enabled);
                 config::Save();
                 break;
             }
