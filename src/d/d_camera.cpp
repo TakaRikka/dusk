@@ -1248,10 +1248,12 @@ bool dCamera_c::Run() {
 #endif
     }
 
-    mFovy = mViewCache.mFovy;
     // Apply user's FOV setting during normal gameplay (not during events/cutscenes)
     if (!dComIfGp_event_runCheck() && !dComIfGp_isPauseFlag()) {
-        mViewCache.mFovy = mFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue());
+        mFovy = mViewCache.mFovy =
+            static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue());
+    } else {
+        mFovy = mViewCache.mFovy;
     }
     mBank = mViewCache.mBank;
     bumpCheck(mBumpCheckFlags);
