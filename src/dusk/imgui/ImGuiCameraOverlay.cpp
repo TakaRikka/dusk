@@ -49,7 +49,9 @@ namespace dusk {
             dCam->Reset(center, eye);
         }
 
-        ImGui::InputFloat("Camera FOV", &dCam->mFovy);
+        if (ImGui::InputFloat("Camera FOV", &dCam->mFovy)) {
+            dCam->mFovy = std::clamp(dCam->mFovy, 0.1f, 179.9f);
+        }
 
         ImGui::SeparatorText("Options");
 
