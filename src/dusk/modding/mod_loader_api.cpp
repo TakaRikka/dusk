@@ -234,6 +234,22 @@ void* cb_service_get(const char* name) {
     return it != g_services.end() ? it->second : nullptr;
 }
 
+void cb_define_settings(const DuskSetting* settings, uint32_t count) {
+    if (g_currentMod && settings) {
+        dusk::ModLoader::instance().modDefineSettings(*g_currentMod, settings, count);
+    }
+}
+
+double cb_setting_get(const char* key) {
+    return g_currentMod ? dusk::ModLoader::instance().modGetSetting(*g_currentMod, key) : 0.0;
+}
+
+void cb_setting_set(const char* key, double value) {
+    if (g_currentMod) {
+        dusk::ModLoader::instance().modSetSetting(*g_currentMod, key, value);
+    }
+}
+
 void api_hook_pre(void* addr, int32_t (*fn)(void* args)) {
     dusk::hookRegisterPre(addr, g_currentMod, fn);
 }
@@ -280,6 +296,9 @@ void ModLoader::buildAPI(LoadedMod& mod) {
     native.api.hook_dispatch_post = hookDispatchPost;
     native.api.service_publish = cb_service_publish;
     native.api.service_get = cb_service_get;
+    native.api.define_settings = cb_define_settings;
+    native.api.setting_get = cb_setting_get;
+    native.api.setting_set = cb_setting_set;
 }
 
 }

@@ -14,6 +14,26 @@
 typedef void* DuskPanelHandle;
 typedef void* DuskElemHandle;
 
+// A user-configurable setting a mod declares once (in mod_init) via
+// define_settings. The host persists values per mod and renders a control for
+// each in the game's Mods tab.
+typedef enum DuskSettingType {
+    DUSK_SETTING_BOOL = 0,
+    DUSK_SETTING_INT = 1,
+    DUSK_SETTING_FLOAT = 2,
+} DuskSettingType;
+
+typedef struct DuskSetting {
+    const char* key;   // stable id, unique within the mod
+    const char* label; // display name
+    const char* help;  // short description (may be NULL)
+    DuskSettingType type;
+    double default_value;
+    double min_value; // INT/FLOAT
+    double max_value; // INT/FLOAT
+    double step;      // INT/FLOAT UI increment (0 -> sensible default)
+} DuskSetting;
+
 // Place this once at file scope in your mod to declare the minimum API version required.
 // The loader will refuse to initialize the mod if the engine's API version is older.
 #define DUSK_REQUIRE_API_VERSION                                                                   \
@@ -55,6 +75,15 @@ struct DuskModAPIv1 {
 
     void (*service_publish)(const char* name, void* ptr);
     void* (*service_get)(const char* name);
+
+    // Settings. Declare the calling mod's settings once from mod_init; the host
+    // stores them, overlays any saved values, and shows a control per setting in
+    // the Mods tab. setting_get/_set read/write the calling mod's live value by
+    // key. These resolve the "current mod" the same way the UI/log callbacks do,
+    // so call them from mod_init / mod_tick (cache values for use in hooks).
+    void (*define_settings)(const DuskSetting* settings, uint32_t count);
+    double (*setting_get)(const char* key);
+    void (*setting_set)(const char* key, double value);
 };
 
 using DuskModAPI = DuskModAPIv1;
