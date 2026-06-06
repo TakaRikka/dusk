@@ -230,7 +230,6 @@ struct UserSettings {
 
         // Technical
         ConfigVar<bool> restoreWiiGlitches;
-        ConfigVar<bool> restoreGreenChuMerging;
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;

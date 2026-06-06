@@ -924,7 +924,7 @@ static void damage_check(e_sm2_class* i_this) {
 
                         u8 new_color_type = new_col_d[(sm_hit_actor->type * 7) + i_this->type];
                         #if TARGET_PC
-                        if (dusk::getSettings().game.restoreGreenChuMerging &&
+                        if (dusk::getSettings().game.restoreWiiGlitches &&
                             ((sm_hit_actor->type == TYPE_BLUE && i_this->type == TYPE_YELLOW) ||
                             (sm_hit_actor->type == TYPE_YELLOW && i_this->type == TYPE_BLUE)))
                         {

@@ -1127,8 +1127,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "experience.");
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
-        addOption("Restore Green Chu Merging", getSettings().game.restoreGreenChuMerging,
-            "Restores Green Chu merging, matching the Wii/HD version of the game.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
             "Enables rotating Link in the collection menu with the C-Stick.");
         addOption("Hide Owl Statue Markers", getSettings().game.removeQuestMapMarkers,

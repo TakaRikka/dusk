@@ -118,7 +118,6 @@ UserSettings g_userSettings = {
 
         // Technical
         .restoreWiiGlitches {"game.restoreWiiGlitches", false},
-        .restoreGreenChuMerging {"game.restoreGreenChuMerging", false},
 
         // Controls
         .enableTurboKeybind {"game.enableTurboKeybind", false},
@@ -243,7 +242,6 @@ void registerSettings() {
     Register(g_userSettings.game.fastRoll);
     Register(g_userSettings.game.freeMagicArmor);
     Register(g_userSettings.game.restoreWiiGlitches);
-    Register(g_userSettings.game.restoreGreenChuMerging);
     Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.enableAchievementToasts);
     Register(g_userSettings.game.enableControllerToasts);
