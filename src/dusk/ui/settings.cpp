@@ -213,6 +213,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.freeMagicArmor.setSpeedrunValue(false);
     getSettings().game.invincibleEnemies.setSpeedrunValue(false);
+    getSettings().game.invincibleLink.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
     aurora_set_pause_on_focus_lost(false);
@@ -1276,6 +1277,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Lets the magic armor work without consuming rupees.");
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
+        addCheat("Invincible Link", getSettings().game.invincibleLink,
+            "Makes Link ignore all incoming damage.");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
