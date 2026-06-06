@@ -30,7 +30,9 @@ std::string pl_dlerror() {
 #else
 #include <dlfcn.h>
 static void* pl_dlopen(const std::filesystem::path& p) {
-#if defined(__linux__)
+    // RTLD_DEEPBIND is a glibc extension; it doesn't exist on Android (Bionic),
+    // macOS, or iOS even though they're all dlopen platforms.
+#ifdef RTLD_DEEPBIND
     return dlopen(p.c_str(), RTLD_LAZY | RTLD_LOCAL | RTLD_DEEPBIND);
 #else
     return dlopen(p.c_str(), RTLD_LAZY | RTLD_LOCAL);

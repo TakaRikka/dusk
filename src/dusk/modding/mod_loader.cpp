@@ -26,8 +26,6 @@
 #include <poll.h>
 #include <sys/inotify.h>
 #include <unistd.h>
-#elif defined(__APPLE__)
-#include <CoreServices/CoreServices.h>
 #elif defined(_WIN32)
 #include <windows.h>
 #endif
@@ -216,59 +214,9 @@ static void stopWatcher() {
     }
 }
 
-#elif defined(__APPLE__)
-static FSEventStreamRef g_stream = nullptr;
-static CFRunLoopRef g_runLoop = nullptr;
-
-static void fsevents_cb(ConstFSEventStreamRef, void*, size_t, void*,
-    const FSEventStreamEventFlags*, const FSEventStreamEventId*) {
-    g_libsChanged.store(true);
-}
-
-static void watch_thread(std::string root) {
-    CFStringRef cfRoot = CFStringCreateWithCString(nullptr, root.c_str(), kCFStringEncodingUTF8);
-    CFArrayRef paths = CFArrayCreate(nullptr, reinterpret_cast<const void**>(&cfRoot), 1,
-        &kCFTypeArrayCallBacks);
-    FSEventStreamContext ctx = {0, nullptr, nullptr, nullptr, nullptr};
-    g_stream = FSEventStreamCreate(nullptr, &fsevents_cb, &ctx, paths,
-        kFSEventStreamEventIdSinceNow, 0.2, kFSEventStreamCreateFlagFileEvents);
-    CFRelease(paths);
-    CFRelease(cfRoot);
-    if (g_stream == nullptr) {
-        return;
-    }
-    g_runLoop = CFRunLoopGetCurrent();
-    FSEventStreamScheduleWithRunLoop(g_stream, g_runLoop, kCFRunLoopDefaultMode);
-    FSEventStreamStart(g_stream);
-    CFRunLoopRun();  // blocks until CFRunLoopStop from stopWatcher
-    FSEventStreamStop(g_stream);
-    FSEventStreamInvalidate(g_stream);
-    FSEventStreamRelease(g_stream);
-    g_stream = nullptr;
-    g_runLoop = nullptr;
-}
-
-static void startWatcher(const std::string& root) {
-    g_watchStop.store(false);
-    g_watchThread = std::thread(watch_thread, root);
-}
-
-static void stopWatcher() {
-    if (!g_watchThread.joinable()) {
-        return;
-    }
-    g_watchStop.store(true);
-    // Wait for the run loop to come up, then stop it so the thread can exit.
-    for (int i = 0; i < 200 && g_runLoop == nullptr; ++i) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
-    if (g_runLoop) {
-        CFRunLoopStop(g_runLoop);
-    }
-    g_watchThread.join();
-}
-
 #else
+// No file watcher on other platforms (e.g. macOS/iOS): mods still load and can
+// be enabled/disabled + refreshed; rebuilt libraries just need a Refresh/restart.
 static void startWatcher(const std::string&) {}
 static void stopWatcher() {}
 #endif
