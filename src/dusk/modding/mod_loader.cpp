@@ -26,6 +26,12 @@
 #include <poll.h>
 #include <sys/inotify.h>
 #include <unistd.h>
+#elif defined(__APPLE__)
+#include <cerrno>
+#include <fcntl.h>
+#include <sys/event.h>
+#include <sys/time.h>
+#include <unistd.h>
 #elif defined(_WIN32)
 #include <windows.h>
 #endif
@@ -214,9 +220,98 @@ static void stopWatcher() {
     }
 }
 
+#elif defined(__APPLE__)
+// kqueue watcher (works on macOS + iOS; plain BSD, no CoreServices/Carbon).
+static int g_kq = -1;
+static std::vector<int> g_watchedFds;
+static constexpr uintptr_t kStopIdent = 1;
+
+static void watch_thread(std::string root) {
+    g_kq = kqueue();
+    if (g_kq < 0) {
+        return;
+    }
+    // A user event we can trigger from stopWatcher() to wake the kevent() wait.
+    struct kevent stopEv;
+    EV_SET(&stopEv, kStopIdent, EVFILT_USER, EV_ADD | EV_CLEAR, 0, 0, nullptr);
+    kevent(g_kq, &stopEv, 1, nullptr, 0, nullptr);
+
+    const auto addWatch = [&](const std::string& path) {
+        const int fd = open(path.c_str(), O_EVTONLY);
+        if (fd < 0) {
+            return;
+        }
+        struct kevent kev;
+        EV_SET(&kev, fd, EVFILT_VNODE, EV_ADD | EV_CLEAR,
+            NOTE_WRITE | NOTE_EXTEND | NOTE_DELETE | NOTE_RENAME | NOTE_ATTRIB, 0, nullptr);
+        if (kevent(g_kq, &kev, 1, nullptr, 0, nullptr) == 0) {
+            g_watchedFds.push_back(fd);
+        } else {
+            close(fd);
+        }
+    };
+
+    // Watch the mods root, each mod entry, and the files within each mod folder.
+    std::error_code ec;
+    if (fs::exists(root, ec)) {
+        addWatch(root);
+        for (const auto& e : fs::directory_iterator(root, ec)) {
+            addWatch(e.path().string());
+            if (e.is_directory(ec)) {
+                for (const auto& f : fs::directory_iterator(e.path(), ec)) {
+                    addWatch(f.path().string());
+                }
+            }
+        }
+    }
+
+    while (!g_watchStop.load()) {
+        struct kevent out;
+        const int n = kevent(g_kq, nullptr, 0, &out, 1, nullptr);
+        if (n < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
+            break;
+        }
+        if (n == 0) {
+            continue;
+        }
+        if (out.filter == EVFILT_USER) {
+            break;  // stop requested
+        }
+        g_libsChanged.store(true);
+    }
+
+    for (const int fd : g_watchedFds) {
+        close(fd);
+    }
+    g_watchedFds.clear();
+    close(g_kq);
+    g_kq = -1;
+}
+
+static void startWatcher(const std::string& root) {
+    g_watchStop.store(false);
+    g_watchThread = std::thread(watch_thread, root);
+}
+
+static void stopWatcher() {
+    if (!g_watchThread.joinable()) {
+        return;
+    }
+    g_watchStop.store(true);
+    if (g_kq >= 0) {
+        struct kevent kev;
+        EV_SET(&kev, kStopIdent, EVFILT_USER, 0, NOTE_TRIGGER, 0, nullptr);
+        kevent(g_kq, &kev, 1, nullptr, 0, nullptr);
+    }
+    g_watchThread.join();
+}
+
 #else
-// No file watcher on other platforms (e.g. macOS/iOS): mods still load and can
-// be enabled/disabled + refreshed; rebuilt libraries just need a Refresh/restart.
+// No file watcher on other platforms: mods still load and can be enabled/disabled
+// + refreshed; rebuilt libraries just need a Refresh/restart.
 static void startWatcher(const std::string&) {}
 static void stopWatcher() {}
 #endif
