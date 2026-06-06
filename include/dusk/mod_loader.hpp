@@ -34,6 +34,8 @@ struct ModMetadata {
     std::string author;
     std::string description;
     bool hasCode;
+    int priority = 0;                       // load order; lower priority loads first
+    std::vector<std::string> dependencies;  // mod ids that must load before this one
 };
 
 enum class SettingType { Bool, Int, Float };
@@ -112,6 +114,7 @@ struct LoadedMod {
     bool fromDir = true;       // bundle source kind (dir vs .dusk), for hot-reload
     bool active = false;       // currently loaded + initialized
     bool load_failed = false;
+    std::string load_error;    // reason shown in the UI when load_failed
 
     std::string source_lib;                       // on-disk file to watch for hot-reload
     std::filesystem::file_time_type lib_mtime{};  // its mtime when last (re)loaded
@@ -156,6 +159,8 @@ public:
     // Lookup + live enable/disable + settings, addressed by mod id (used by UI).
     LoadedMod* find(std::string_view id);
     [[nodiscard]] bool isEnabled(std::string_view id);
+    // True when every dependency is installed and currently active (loaded ok).
+    [[nodiscard]] bool depsSatisfied(const LoadedMod& mod);
     void setEnabled(std::string_view id, bool enabled);
     [[nodiscard]] double getSetting(std::string_view id, std::string_view key);
     void setSetting(std::string_view id, std::string_view key, double value);
@@ -172,6 +177,8 @@ private:
 
     void tryLoadDusk(const std::filesystem::path& modPath, bool fromDir);
     void tryLoadNativeMod(LoadedMod& mod);
+    void computeLoadOrder();  // reorder m_mods: dependencies first, then priority
+    bool checkDependencies(LoadedMod& mod);  // verify deps active; sets load_error on fail
     void buildAPI(LoadedMod& mod);
     void initOverlayFiles();
 

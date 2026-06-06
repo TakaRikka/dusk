@@ -559,6 +559,13 @@ endif ()
 
 target_compile_definitions(${DUSK_MAIN_TARGET} PRIVATE ${GAME_COMPILE_DEFS} DUSK_BUILDING_GAME=1)
 target_include_directories(${DUSK_MAIN_TARGET} PRIVATE ${GAME_INCLUDE_DIRS})
+
+# Keep game functions patchable by code-mod hooks (funchook): GCC's partial
+# inlining splits functions into ".part.0" wrappers whose prologue funchook
+# can't relocate (FUNCHOOK_ERROR_CANNOT_FIX_IP_RELATIVE), so hooks on them fail.
+if (DUSK_ENABLE_CODE_MODS AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(${DUSK_MAIN_TARGET} PRIVATE -fno-partial-inlining)
+endif ()
 target_link_libraries(${DUSK_MAIN_TARGET} PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBRARIES})
 target_precompile_headers(${DUSK_MAIN_TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_LIST_DIR}/include/dusk_pch.hpp>")
 

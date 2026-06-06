@@ -1,5 +1,6 @@
 #include "dusk/hook_system.hpp"
 #include "dusk/logging.h"
+#include "dusk/mod_loader.hpp"
 
 #include <cstdint>
 #include <cstring>
@@ -78,6 +79,14 @@ void hookInstallByAddr(void* fn_addr, void* tramp_fn, void** orig_store) {
         DuskLog.warn(
             "HookSystem: funchook failed for {:p} (prepare={} install={})", fn_addr, prep, inst);
         funchook_destroy(fh);
+        // Surface the failure on the mod so it shows as failed (toast + UI marker)
+        // instead of silently running with a dead hook.
+        if (auto* mod = static_cast<LoadedMod*>(modding::g_dusk_hook_current_mod)) {
+            mod->load_failed = true;
+            if (mod->load_error.empty()) {
+                mod->load_error = "a hook could not be installed (function not patchable)";
+            }
+        }
         return;
     }
 

@@ -12,10 +12,12 @@
 #include <set>
 #include <string>
 #include <thread>
+#include <unordered_map>
 
 #include "aurora/dvd.h"
 #include "dusk/config.hpp"
 #include "dusk/io.hpp"
+#include "dusk/ui/ui.hpp"
 #include "miniz.h"
 #include "native_module.hpp"
 #include "nlohmann/json.hpp"
@@ -62,6 +64,17 @@ static std::vector<std::unique_ptr<dusk::ConfigVarBase>> OrphanedConfigVars;
 // charset, so no escaping/mangling is needed).
 static std::string modEnabledCVarName(std::string_view id) {
     return fmt::format("mod.{}.enabled", id);
+}
+
+// On-screen notification (uses the game's toast overlay) so mod reloads/errors
+// are visible without watching the log.
+static void modToast(const std::string& title, const std::string& content, int seconds) {
+    dusk::ui::push_toast({
+        .type = "menu-notification",
+        .title = title,
+        .content = content,
+        .duration = std::chrono::seconds(seconds),
+    });
 }
 
 // ---- hot-reload file watcher -----------------------------------------------
@@ -346,6 +359,16 @@ static ModMetadata loadMetadata(const fs::path& modPath, ModBundle& bundle) {
     // Accept "description" (this branch) or "about" (our older mods) interchangeably.
     std::string metaDescription = j.value("description", j.value("about", ""s));
     const bool hasCode = j.value("has_code", false);
+    const int priority = j.value("priority", 0);
+
+    std::vector<std::string> deps;
+    if (auto it = j.find("dependencies"); it != j.end() && it->is_array()) {
+        for (const auto& d : *it) {
+            if (d.is_string()) {
+                deps.push_back(d.get<std::string>());
+            }
+        }
+    }
 
     validateModId(metaId);
 
@@ -360,8 +383,8 @@ static ModMetadata loadMetadata(const fs::path& modPath, ModBundle& bundle) {
     }
 
     return ModMetadata{
-        std::move(metaId),    std::move(metaName),        std::move(metaVersion),
-        std::move(metaAuthor), std::move(metaDescription), hasCode,
+        std::move(metaId), std::move(metaName), std::move(metaVersion), std::move(metaAuthor),
+        std::move(metaDescription), hasCode, priority, std::move(deps),
     };
 }
 
@@ -389,10 +412,16 @@ void ModLoader::tryLoadNativeMod(LoadedMod& mod) {
         return;
     }
 
+    std::error_code ec;
+    // Record the on-disk source file the watcher follows *before* attempting the
+    // load, so even a failed load is hot-reload-retried when the file is rebuilt.
+    mod.source_lib =
+        mod.fromDir ? io::fs_path_to_string(fs::path(mod.mod_path) / dllEntry) : mod.mod_path;
+    mod.lib_mtime = fs::last_write_time(mod.source_lib, ec);
+
     // Fresh cache dir each load so hot-reload always maps a new inode (avoids
     // dlopen returning the previously-loaded image).
     const fs::path cacheDir = m_modsDir / ".cache" / mod.metadata.id;
-    std::error_code ec;
     fs::remove_all(cacheDir, ec);
     fs::create_directories(cacheDir, ec);
 
@@ -445,11 +474,7 @@ void ModLoader::tryLoadNativeMod(LoadedMod& mod) {
     mod.dir = io::fs_path_to_string(fs::absolute(cacheDir));
     mod.native = std::move(nativeMod);
     mod.native_status = NativeModStatus::Loaded;
-
-    // Remember the on-disk source file so the watcher can detect rebuilds.
-    mod.source_lib =
-        mod.fromDir ? io::fs_path_to_string(fs::path(mod.mod_path) / dllEntry) : mod.mod_path;
-    mod.lib_mtime = fs::last_write_time(mod.source_lib, ec);
+    mod.lib_mtime = fs::last_write_time(mod.source_lib, ec);  // refresh to the loaded mtime
 }
 
 void ModLoader::tryLoadDusk(const fs::path& modPath, bool fromDir) {
@@ -697,6 +722,7 @@ bool ModLoader::initMod(LoadedMod& mod) {
         mod.native->fn_init(&mod.native->api);
         ok = !mod.load_failed;
         if (ok) {
+            mod.load_error.clear();
             Log.info("'{}' initialized", mod.metadata.id);
         } else {
             Log.error("'{}' failed to load due to hook conflicts", mod.metadata.id);
@@ -736,19 +762,126 @@ void ModLoader::reloadMod(LoadedMod& mod) {
         mod.bundle = loadBundle(mod.mod_path, mod.fromDir);
     } catch (const std::runtime_error& e) {
         Log.error("hot-reload '{}': can't reopen bundle: {}", mod.metadata.id, e.what());
+        modToast("Mod reload failed", mod.metadata.name, 6);
         return;
     }
     mod.native_status = NativeModStatus::Unknown;
     tryLoadNativeMod(mod);
     if (mod.native_status != NativeModStatus::Loaded) {
         Log.error("hot-reload '{}': native load failed", mod.metadata.id);
+        modToast("Mod reload failed", mod.metadata.name, 6);
         return;
     }
-    initMod(mod);
+    const bool ok = initMod(mod);
     Log.info("hot-reloaded '{}'", mod.metadata.id);
+    if (ok) {
+        modToast("Mod reloaded", mod.metadata.name, 3);
+    } else {
+        modToast("Mod reload failed", mod.metadata.name + " (init error)", 6);
+    }
 }
 
 // ---- public lifecycle ------------------------------------------------------
+
+// Reorder m_mods so every mod comes after its dependencies, breaking ties by
+// priority (lower first) then id. Kahn's algorithm; cyclic mods are marked failed
+// and appended. Only the unique_ptrs move -- LoadedMod addresses stay stable.
+void ModLoader::computeLoadOrder() {
+    const std::size_t n = m_mods.size();
+    if (n < 2) {
+        return;
+    }
+    std::unordered_map<std::string, std::size_t> index;
+    for (std::size_t i = 0; i < n; ++i) {
+        index[m_mods[i]->metadata.id] = i;
+    }
+    std::vector<int> indeg(n, 0);
+    std::vector<std::vector<std::size_t>> dependents(n);
+    for (std::size_t i = 0; i < n; ++i) {
+        for (const std::string& dep : m_mods[i]->metadata.dependencies) {
+            if (auto it = index.find(dep); it != index.end()) {
+                dependents[it->second].push_back(i);
+                indeg[i]++;
+            }
+        }
+    }
+    const auto better = [&](std::size_t a, std::size_t b) {
+        if (m_mods[a]->metadata.priority != m_mods[b]->metadata.priority) {
+            return m_mods[a]->metadata.priority < m_mods[b]->metadata.priority;
+        }
+        return m_mods[a]->metadata.id < m_mods[b]->metadata.id;
+    };
+    std::vector<std::size_t> ready;
+    for (std::size_t i = 0; i < n; ++i) {
+        if (indeg[i] == 0) {
+            ready.push_back(i);
+        }
+    }
+    std::vector<std::size_t> order;
+    order.reserve(n);
+    while (!ready.empty()) {
+        auto best = std::min_element(ready.begin(), ready.end(), better);
+        const std::size_t i = *best;
+        ready.erase(best);
+        order.push_back(i);
+        for (const std::size_t j : dependents[i]) {
+            if (--indeg[j] == 0) {
+                ready.push_back(j);
+            }
+        }
+    }
+    if (order.size() < n) {  // leftovers are in a dependency cycle
+        std::vector<bool> placed(n, false);
+        for (const std::size_t i : order) {
+            placed[i] = true;
+        }
+        std::vector<std::size_t> leftover;
+        for (std::size_t i = 0; i < n; ++i) {
+            if (!placed[i]) {
+                leftover.push_back(i);
+            }
+        }
+        std::sort(leftover.begin(), leftover.end(), better);
+        for (const std::size_t i : leftover) {
+            m_mods[i]->load_failed = true;
+            m_mods[i]->load_error = "dependency cycle";
+            order.push_back(i);
+        }
+    }
+    std::vector<std::unique_ptr<LoadedMod>> reordered;
+    reordered.reserve(n);
+    for (const std::size_t i : order) {
+        reordered.push_back(std::move(m_mods[i]));
+    }
+    m_mods = std::move(reordered);
+}
+
+bool ModLoader::depsSatisfied(const LoadedMod& mod) {
+    for (const std::string& dep : mod.metadata.dependencies) {
+        const LoadedMod* d = find(dep);
+        if (d == nullptr || !d->active) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool ModLoader::checkDependencies(LoadedMod& mod) {
+    for (const std::string& dep : mod.metadata.dependencies) {
+        const LoadedMod* d = find(dep);
+        if (d == nullptr) {
+            mod.load_failed = true;
+            mod.load_error = fmt::format("missing dependency '{}'", dep);
+            return false;
+        }
+        if (!d->active) {
+            mod.load_failed = true;
+            mod.load_error = fmt::format("dependency '{}' not enabled", dep);
+            return false;
+        }
+    }
+    return true;
+}
 
 void ModLoader::init() {
     if (m_initialized) {
@@ -781,6 +914,8 @@ void ModLoader::init() {
         tryLoadDusk(entry.path(), entry.is_directory());
     }
 
+    computeLoadOrder();  // dependencies first, then priority
+
     // Always start the watcher so newly-added mods can be picked up via Refresh
     // and rebuilt libraries hot-reload.
     startWatcher(io::fs_path_to_string(m_modsDir));
@@ -803,6 +938,13 @@ void ModLoader::init() {
     for (auto& mod : mods()) {
         if (!mod.enabled) {
             Log.info("Mod '{}' is disabled by config", mod.metadata.id);
+            continue;
+        }
+        if (mod.load_failed) {
+            continue;  // already failed (e.g. dependency cycle)
+        }
+        if (!checkDependencies(mod)) {  // deps load earlier in order, so this is final
+            Log.error("Mod '{}': {}", mod.metadata.id, mod.load_error);
             continue;
         }
         if (mod.metadata.hasCode) {
@@ -833,9 +975,11 @@ void ModLoader::tick() {
         } catch (const std::exception& e) {
             Log.error("exception in {}.mod_tick(): {} — disabling", mod.metadata.id, e.what());
             mod.active = false;
+            modToast("Mod crashed (disabled)", mod.metadata.name, 6);
         } catch (...) {
             Log.error("unknown exception in {}.mod_tick() — disabling", mod.metadata.id);
             mod.active = false;
+            modToast("Mod crashed (disabled)", mod.metadata.name, 6);
         }
     }
 }
@@ -891,6 +1035,10 @@ void ModLoader::refresh() {
         if (!mod.enabled) {
             continue;
         }
+        if (!checkDependencies(mod)) {
+            Log.error("Mod '{}': {}", mod.metadata.id, mod.load_error);
+            continue;
+        }
         if (mod.metadata.hasCode) {
             if (mod.native) {
                 initMod(mod);
@@ -938,6 +1086,11 @@ void ModLoader::setEnabled(std::string_view id, bool enabled) {
     if (m == nullptr || m->enabled == enabled) {
         return;
     }
+    if (enabled && !checkDependencies(*m)) {
+        // Can't enable until dependencies are installed + enabled. Leave it off.
+        modToast("Can't enable mod", m->metadata.name + ": " + m->load_error, 6);
+        return;
+    }
     m->enabled = enabled;
     if (m->cvarIsEnabled) {
         m->cvarIsEnabled->setValue(enabled);  // game-owned, persisted by config::Save
@@ -954,8 +1107,8 @@ void ModLoader::setEnabled(std::string_view id, bool enabled) {
                     Log.error("enable '{}': can't open bundle: {}", m->metadata.id, e.what());
                 }
             }
-            if (m->native) {
-                initMod(*m);
+            if (m->native && !initMod(*m)) {
+                modToast("Mod failed to enable", m->metadata.name, 6);
             }
         } else {
             m->active = true;

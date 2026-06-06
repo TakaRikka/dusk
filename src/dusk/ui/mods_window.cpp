@@ -40,12 +40,18 @@ ModsWindow::ModsWindow() {
         leftPane.add_section("Installed Mods");
         for (const dusk::LoadedMod& entry : modsView) {
             const std::string id = entry.metadata.id;
-            auto& item = leftPane.add_button(Rml::String{entry.metadata.name});
+            // Mark mods that failed to load right in the list.
+            Rml::String label = entry.metadata.name;
+            if (entry.load_failed) {
+                label += "  [failed]";
+            }
+            auto& item = leftPane.add_button(label);
 
             // Focusing a mod fills the right pane with its details + settings.
             leftPane.register_control(item, rightPane, [this, id](Pane& pane) {
                 mFocusedModId = id;
-                dusk::LoadedMod* mod = dusk::ModLoader::instance().find(id);
+                auto& loader = dusk::ModLoader::instance();
+                dusk::LoadedMod* mod = loader.find(id);
                 if (mod == nullptr) {
                     return;
                 }
@@ -56,6 +62,22 @@ ModsWindow::ModsWindow() {
                     mod->metadata.version.empty() ? "?" : mod->metadata.version,
                     mod->metadata.author.empty() ? "Unknown" : mod->metadata.author));
 
+                if (mod->load_failed && !mod->load_error.empty()) {
+                    pane.add_rml(fmt::format("<br/><b>Failed to load:</b> {}", mod->load_error));
+                }
+
+                // Dependencies + their status.
+                if (!mod->metadata.dependencies.empty()) {
+                    pane.add_section("Dependencies");
+                    for (const std::string& dep : mod->metadata.dependencies) {
+                        const dusk::LoadedMod* d = loader.find(dep);
+                        const char* status = (d == nullptr)  ? "not installed"
+                                             : d->active      ? "ready"
+                                                              : "disabled";
+                        pane.add_rml(fmt::format("<b>{}</b> — {}", dep, status));
+                    }
+                }
+
                 pane.add_section("Options");
                 pane.add_child<BoolButton>(BoolButton::Props{
                     .key = "Enabled",
@@ -64,6 +86,13 @@ ModsWindow::ModsWindow() {
                         [id](bool value) {
                             mDoAud_seStartMenu(kSoundItemChange);
                             dusk::ModLoader::instance().setEnabled(id, value);
+                        },
+                    // Can't enable a disabled mod whose dependencies aren't met.
+                    .isDisabled =
+                        [id] {
+                            auto& l = dusk::ModLoader::instance();
+                            dusk::LoadedMod* m = l.find(id);
+                            return m != nullptr && !m->enabled && !l.depsSatisfied(*m);
                         },
                     .isModified = [] { return false; },
                 });
