@@ -36,6 +36,20 @@
 #include <windows.h>
 #endif
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#if !TARGET_OS_OSX
+// funchook (arm64) emits calls to the __clear_cache libcall to flush the
+// instruction cache for its trampolines, but clang's compiler-rt builtins aren't
+// linked on iOS/tvOS (macOS provides __clear_cache itself, hence guarded out).
+// Provide it via Apple's instruction-cache invalidation.
+#include <libkern/OSCacheControl.h>
+extern "C" void __clear_cache(void* start, void* end) {
+    sys_icache_invalidate(start, static_cast<char*>(end) - static_cast<char*>(start));
+}
+#endif
+#endif
+
 static aurora::Module Log("dusk::modLoader");
 
 using namespace dusk::modding;
