@@ -28,7 +28,6 @@
 #include <thread>
 
 #include "m_Do/m_Do_MemCard.h"
-#include "mods_window.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -727,16 +726,9 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Mods"));
-        mMenuButtons.back()->on_pressed([this] {
-            mRestartSuppressed = false;
-            push(std::make_unique<ModsWindow>());
-        });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
-
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-4");
+        apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
 
     mDiscStatus = mDocument->GetElementById("disc-status");
