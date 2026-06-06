@@ -1,12 +1,14 @@
 #pragma once
 
 #include <filesystem>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
 #include <ranges>
 
 #include "dusk/mod_api.h"
+#include "dusk/config_var.hpp"
 
 namespace dusk::modding {
 class ModBundle;
@@ -103,7 +105,10 @@ struct LoadedMod {
     std::string mod_path;
     std::string dir;
 
-    bool enabled = true;       // user intent, persisted in config.json
+    // Enabled state is owned by the game (persisted as a CVar), not the mod.
+    // `enabled` is the live mirror of cvarIsEnabled.
+    std::unique_ptr<ConfigVar<bool>> cvarIsEnabled;
+    bool enabled = true;
     bool fromDir = true;       // bundle source kind (dir vs .dusk), for hot-reload
     bool active = false;       // currently loaded + initialized
     bool load_failed = false;
@@ -176,7 +181,7 @@ private:
 
     [[nodiscard]] std::filesystem::path configPath(const LoadedMod& mod) const;
     [[nodiscard]] std::filesystem::path schemaPath(const LoadedMod& mod) const;
-    void readConfig(LoadedMod& mod);
+    void readConfig(LoadedMod& mod);  // settings values only (enabled is a CVar)
     void writeConfig(const LoadedMod& mod);
     void writeSchema(const LoadedMod& mod);
     void parseSchema(LoadedMod& mod);

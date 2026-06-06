@@ -7,12 +7,14 @@
 #include <atomic>
 #include <chrono>
 #include <filesystem>
+#include <memory>
 #include <fstream>
 #include <set>
 #include <string>
 #include <thread>
 
 #include "aurora/dvd.h"
+#include "dusk/config.hpp"
 #include "dusk/io.hpp"
 #include "miniz.h"
 #include "native_module.hpp"
@@ -51,6 +53,16 @@ static dusk::ModLoader g_modLoader;
 // True only while a mod's mod_init() runs, so a mod touching its settings during
 // init can't persist transient state to config.json.
 static bool g_loadingMod = false;
+
+// A mod's enabled state is a game-owned CVar (so the game manages + saves it,
+// not the mod). CVars can't be deleted until full shutdown, so orphan them.
+static std::vector<std::unique_ptr<dusk::ConfigVarBase>> OrphanedConfigVars;
+
+// The enabled CVar key embeds the mod id verbatim (ids are validated to a safe
+// charset, so no escaping/mangling is needed).
+static std::string modEnabledCVarName(std::string_view id) {
+    return fmt::format("mod.{}.enabled", id);
+}
 
 // ---- hot-reload file watcher -----------------------------------------------
 // A background thread waits on OS file-change events for the mods directory and
@@ -469,6 +481,8 @@ void ModLoader::tryLoadDusk(const fs::path& modPath, bool fromDir) {
     mod.mod_path = io::fs_path_to_string(fs::absolute(modPath));
     mod.metadata = std::move(metadata);
     mod.bundle = std::move(bundle);
+    mod.cvarIsEnabled =
+        std::make_unique<ConfigVar<bool>>(modEnabledCVarName(mod.metadata.id), true);
 
     if (mod.metadata.hasCode) {
         mod.native_status = NativeModStatus::Unknown;
@@ -528,9 +542,7 @@ void ModLoader::readConfig(LoadedMod& mod) {
         if (!j.is_object()) {
             return;
         }
-        if (auto it = j.find("enabled"); it != j.end() && it->is_boolean()) {
-            mod.enabled = it->get<bool>();
-        }
+        // config.json holds only the mod's setting values; enabled is a CVar.
         if (auto settings = j.find("settings"); settings != j.end() && settings->is_object()) {
             for (ModSetting& s : mod.settings) {
                 if (auto v = settings->find(s.key); v != settings->end() && v->is_number()) {
@@ -548,7 +560,7 @@ void ModLoader::writeConfig(const LoadedMod& mod) {
     for (const ModSetting& s : mod.settings) {
         settings[s.key] = s.value;
     }
-    const json j = json{{"enabled", mod.enabled}, {"settings", settings}};
+    const json j = json{{"settings", settings}};  // enabled is a game-owned CVar
     std::error_code ec;
     fs::create_directories(configPath(mod).parent_path(), ec);
     try {
@@ -656,7 +668,7 @@ void ModLoader::modDefineSettings(LoadedMod& mod, const DuskSetting* arr, uint32
         rebuilt.push_back(std::move(s));
     }
     mod.settings = std::move(rebuilt);
-    readConfig(mod);   // overlay saved values from config.json
+    readConfig(mod);   // overlay saved setting values
     writeSchema(mod);  // (re)generate the schema for the UI
 }
 
@@ -778,8 +790,11 @@ void ModLoader::init() {
         return;
     }
 
-    // Settings descriptors (from a prior run) + enabled state + saved values.
+    // Enabled state is a game-owned CVar; settings descriptors + saved values
+    // come from the per-mod config.
     for (auto& mod : mods()) {
+        config::Register(*mod.cvarIsEnabled);
+        mod.enabled = mod.cvarIsEnabled->getValue();
         parseSchema(mod);
         readConfig(mod);
     }
@@ -869,6 +884,8 @@ void ModLoader::refresh() {
     bool addedOverlay = false;
     for (std::size_t i = before; i < m_mods.size(); ++i) {
         LoadedMod& mod = *m_mods[i];
+        config::Register(*mod.cvarIsEnabled);
+        mod.enabled = mod.cvarIsEnabled->getValue();
         parseSchema(mod);
         readConfig(mod);
         if (!mod.enabled) {
@@ -893,6 +910,7 @@ void ModLoader::shutdown() {
     stopWatcher();
     for (auto& mod : mods()) {
         unloadMod(mod);
+        OrphanedConfigVars.emplace_back(std::move(mod.cvarIsEnabled));
     }
     m_mods.clear();
     g_services.clear();
@@ -921,6 +939,9 @@ void ModLoader::setEnabled(std::string_view id, bool enabled) {
         return;
     }
     m->enabled = enabled;
+    if (m->cvarIsEnabled) {
+        m->cvarIsEnabled->setValue(enabled);  // game-owned, persisted by config::Save
+    }
 
     if (enabled) {
         if (m->metadata.hasCode) {
@@ -943,7 +964,7 @@ void ModLoader::setEnabled(std::string_view id, bool enabled) {
     } else {
         unloadMod(*m);
     }
-    writeConfig(*m);
+    config::Save();
 }
 
 double ModLoader::getSetting(std::string_view id, std::string_view key) {
