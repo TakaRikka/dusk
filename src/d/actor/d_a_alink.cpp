@@ -14796,6 +14796,8 @@ void daAlink_c::deleteEquipItem(BOOL i_isPlaySound, BOOL i_isDeleteKantera) {
 #if TARGET_PC
     mIBChainInterpPrevValid = false;
     mIBChainInterpCurrValid = false;
+    mHsChainInterpPrevValid = false;
+    mHsChainInterpCurrValid = false;
 #endif
     field_0x0774 = NULL;
     field_0x0778 = NULL;
@@ -19768,23 +19770,37 @@ int daAlink_c::draw() {
                 dComIfGd_getOpaListDark()->entryImm(mpHookChain, 0);
 
 #if TARGET_PC
-                if (dusk::frame_interp::is_enabled() &&
-                    mEquipItem == dItemNo_IRONBALL_e &&
-                    mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
-                {
-                    if (mIBChainInterpCurrValid) {
-                        memcpy(mIBChainInterpPrevPos, mIBChainInterpCurrPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
-                        memcpy(mIBChainInterpPrevAngle, mIBChainInterpCurrAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
-                        mIBChainInterpPrevHandRoot = mIBChainInterpCurrHandRoot;
-                        mIBChainInterpPrevValid = true;
+                if (dusk::frame_interp::is_enabled()) {
+                    if (mEquipItem == dItemNo_IRONBALL_e &&
+                        mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
+                    {
+                        if (mIBChainInterpCurrValid) {
+                            memcpy(mIBChainInterpPrevPos, mIBChainInterpCurrPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
+                            memcpy(mIBChainInterpPrevAngle, mIBChainInterpCurrAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
+                            mIBChainInterpPrevHandRoot = mIBChainInterpCurrHandRoot;
+                            mIBChainInterpPrevValid = true;
+                        }
+
+                        memcpy(mIBChainInterpCurrPos, mIronBallChainPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
+                        memcpy(mIBChainInterpCurrAngle, mIronBallChainAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
+                        mIBChainInterpCurrHandRoot = mHookshotTopPos;
+                        mIBChainInterpCurrValid = true;
+
+                        dusk::frame_interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
+                    } else {
+                        if (mHsChainInterpCurrValid) {
+                            mHsChainInterpPrevTop = mHsChainInterpCurrTop;
+                            mHsChainInterpPrevRoot = mHsChainInterpCurrRoot;
+                            mHsChainInterpPrevSubRoot = mHsChainInterpCurrSubRoot;
+                            mHsChainInterpPrevSubTop = mHsChainInterpCurrSubTop;
+                            mHsChainInterpPrevValid = true;
+                        }
+                        mHsChainInterpCurrTop = mHookshotTopPos;
+                        mHsChainInterpCurrRoot = mHeldItemRootPos;
+                        mHsChainInterpCurrSubRoot = field_0x3810;
+                        mHsChainInterpCurrSubTop = mIronBallBgChkPos;
+                        mHsChainInterpCurrValid = true;
                     }
-
-                    memcpy(mIBChainInterpCurrPos, mIronBallChainPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
-                    memcpy(mIBChainInterpCurrAngle, mIronBallChainAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
-                    mIBChainInterpCurrHandRoot = mHookshotTopPos;
-                    mIBChainInterpCurrValid = true;
-
-                    dusk::frame_interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
                 }
 #endif
             }
