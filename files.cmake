@@ -1520,6 +1520,7 @@ set(DUSK_FILES
         src/dusk/achievements.cpp
         src/dusk/iso_validate.cpp
         src/dusk/livesplit.cpp
+        src/dusk/archipelago.cpp
         src/dusk/offset_ptr.cpp
         src/dusk/OSContext.cpp
         src/dusk/OSReport.cpp

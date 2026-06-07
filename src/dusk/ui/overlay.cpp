@@ -5,6 +5,7 @@
 #include "dusk/action_bindings.h"
 #include "controller_config.hpp"
 #include "dusk/livesplit.h"
+#include "dusk/archipelago.h"
 #include "dusk/speedrun.h"
 #include "fmt/format.h"
 #include "magic_enum.hpp"
@@ -307,6 +308,8 @@ void Overlay::update() {
             push_toast({.title = "LiveSplit disconnected", .duration = std::chrono::seconds(3)});
         }
     }
+
+    dusk::archipelago::update();
 #endif
 
     if (mSpeedrunTimer != nullptr && mSpeedrunRta != nullptr && mSpeedrunIgt != nullptr) {

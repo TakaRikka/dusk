@@ -17,6 +17,7 @@
 #include "dusk/achievements.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/livesplit.h"
+#include "dusk/archipelago.h"
 #include "dusk/logging.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
@@ -841,6 +842,7 @@ void fapGm_Execute() {
     cCt_Counter(0);
 #ifdef TARGET_PC
     dusk::speedrun::onGameFrame();
+    dusk::archipelago::onGameFrame();
     dusk::AchievementSystem::get().tick();
 #endif
 }

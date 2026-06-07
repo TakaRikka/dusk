@@ -15,6 +15,7 @@
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
 #include "dusk/main.h"
+#include "dusk/archipelago.h"
 #include "m_Do/m_Do_main.h"
 
 #include <aurora/lib/internal.hpp>
@@ -47,6 +48,9 @@ namespace dusk {
             if (!dusk::IsGameLaunched) {
                 ImGui::EndDisabled();
             }
+
+            ImGui::Separator();
+            ImGui::MenuItem("Archipelago", nullptr, &m_showArchipelago);
 
 #if DUSK_CAN_OPEN_DATA_FOLDER
             ImGui::Separator();
@@ -116,6 +120,19 @@ namespace dusk {
 
             ImGui::EndMenu();
         }
+    }
+
+    void ImGuiMenuTools::ShowArchipelago() {
+        if (!m_showArchipelago) {
+            return;
+        }
+        if (ImGui::Begin("Archipelago", &m_showArchipelago)) {
+            ImGui::Text("Bridge: %s", dusk::archipelago::isListening() ? "listening" : "down");
+            ImGui::Text("Endpoint: 127.0.0.1:%d", dusk::archipelago::listenPort());
+            ImGui::Text("AP client: %s",
+                dusk::archipelago::isClientConnected() ? "connected" : "waiting");
+        }
+        ImGui::End();
     }
 
     void ImGuiMenuTools::ShowDebugOverlay() {
