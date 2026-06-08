@@ -1,0 +1,327 @@
+app-id: dev.twilitrealm.Dusklight
+runtime: org.freedesktop.Platform
+runtime-version: "25.08"
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm22
+  - org.freedesktop.Sdk.Extension.rust-stable
+
+command: dusklight
+
+build-options:
+  cflags: "-O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+  cxxflags: "-O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
+  # Note that rustflags isn't supported until flatpak-builder 1.5 which hasn't been released yet. Expect a warning about that during the build
+  rustflags: "-C force-frame-pointers -C opt-level=2 -C codegen-units=16 -C strip=none"
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm22/bin
+  env:
+    CC: clang
+    CXX: clang++
+    # Every new build is a new directory/checkout and the file inodes will never match
+    CCACHE_INODE_CACHE: "false"
+    LD: ld.lld
+    # TODO: Remove with flatpak-builder 1.5 as this is redundant with setting it with `build-options.rustflags`
+    RUSTFLAGS: "-C force-frame-pointers -C opt-level=2 -C codegen-units=16 -C strip=none"
+
+finish-args:
+  # Graphical output
+  - --socket=wayland
+  - --socket=fallback-x11
+
+  # Audio Support
+  - --socket=pulseaudio
+  - --filesystem=xdg-run/pipewire-0
+
+  # GPU Support
+  - --device=dri
+
+  # Read ISO from downloads
+  - --filesystem=xdg-download:ro
+
+  # Controller Support
+  #- --device=input #Gyro not working
+  - --device=all
+  # Filesystem: Udev information (read‑only, for inputs)
+  - --filesystem=/run/udev:ro
+
+  # D-Bus: Share IPC namespace for inter-process communication
+  - --share=ipc
+
+  # Discord integration
+  - --filesystem=xdg-run/discord-ipc-0
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create
+
+modules:
+  # Ensure that the flatpak-builder `--ccache` argument works with the llvm22 extension
+  - name: ccache-shim
+    buildsystem: simple
+    build-commands:
+      - |
+        if command -v ccache &> /dev/null; then
+          ccache --zero-stats
+        fi
+      - |
+        if [[ ":$PATH:" == *":/run/ccache/bin:"* ]]; then
+          mkdir /app/bin
+          ln -s /usr/bin/ccache /app/bin/clang
+          ln -s /usr/bin/ccache /app/bin/clang++
+        fi
+        which clang
+      - |
+        version_output=$(clang --version)
+        echo ${version_output}
+        if [[ "$version_output" != *"version 22.1."* ]]; then
+          exit 1
+        fi
+    cleanup:
+      - /bin
+
+  - name: dev.twilitrealm.Dusklight
+    buildsystem: cmake-ninja
+    build-options:
+      # Dusklight fails to build with CMAKE_DISABLE_PRECOMPILE_HEADERS=ON so adjust ccache to work with PCH
+      cflags: "-Xclang -fno-pch-timestamp"
+      cxxflags: "-Xclang -fno-pch-timestamp"
+      env:
+        CCACHE_SLOPPINESS: pch_defines,time_macros
+      make-args:
+        - --verbose
+    config-opts:
+      # The flatpak-builder cmake generator sets the build to build shared libraries by default. This includes vendored libs like rmlui.
+      # The result of this is that the dusklight binary is linked against librmlui.so which is then not installed along with the binary, causing a runtime failure
+      - -D BUILD_SHARED_LIBS=OFF
+
+      - -D DUSK_ENABLE_UPDATE_CHECKER=OFF
+      - -D DUSK_PACKAGE_INSTALL=ON
+
+      # Various settings to get the build to happen offline
+      - -D AURORA_DAWN_PROVIDER=system
+      - -D AURORA_NOD_PROVIDER=system
+      - -D FETCHCONTENT_FULLY_DISCONNECTED=ON
+      - -D FETCHCONTENT_SOURCE_DIR_IMGUI=fetched/imgui
+      - -D FETCHCONTENT_SOURCE_DIR_RMLUI=fetched/rmlui
+      - -D FETCHCONTENT_SOURCE_DIR_TRACY=fetched/tracy
+      - -D FETCHCONTENT_SOURCE_DIR_CXXOPTS=fetched/cxxopts
+      - -D FETCHCONTENT_SOURCE_DIR_FMT=fetched/fmt
+      - -D FETCHCONTENT_SOURCE_DIR_JSON=fetched/nlohmann
+      - -D FETCHCONTENT_SOURCE_DIR_XXHASH=fetched/xxhash
+
+    sources:
+      # For use in the dusklight repo
+      - type: dir
+        path: ../
+        skip:
+          - flatpak/
+          - build/
+
+      # For releases
+      # - type: git
+      #   url: https://github.com/TwilitRealm/dusklight
+      #   # tag: v1.2.0
+      #   commit: cedda774724c7a555c8b2d0d9dc89f57b9ec6856
+
+      - type: archive
+        url: https://github.com/ocornut/imgui/archive/refs/tags/v1.91.9b-docking.tar.gz
+        sha256: 466fdef9b18de15f0bb6e288e3d00ffa3d82200ec458ce5e4f724a161d9528a5
+        dest: fetched/imgui
+      - type: archive
+        url: https://github.com/mikke89/RmlUi/archive/f9b8c9e2935d5df2c7dff2c190d3968e99b0c3dc.tar.gz
+        sha256: 42b830abc2509a8c07cf02ba3313505de3a4642725654f489402022d8fefdd79
+        dest: fetched/rmlui
+      - type: archive
+        url: https://github.com/wolfpld/tracy/archive/a64b9a20294d59421a2f57aeca3c6383d8c48169.tar.gz
+        sha256: 24d342b5127d7f659dc3cf94f24347b348cc736f25b17a691fd7f69541937658
+        dest: fetched/tracy
+
+      - type: archive
+        url: https://github.com/jarro2783/cxxopts/archive/refs/tags/v3.3.1.tar.gz
+        sha256: 3bfc70542c521d4b55a46429d808178916a579b28d048bd8c727ee76c39e2072
+        dest: fetched/cxxopts
+      - type: archive
+        url: https://github.com/fmtlib/fmt/archive/refs/tags/11.2.0.tar.gz
+        sha256: bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
+        dest: fetched/fmt
+      - type: archive
+        url: https://github.com/nlohmann/json/archive/refs/tags/v3.12.0.tar.gz
+        sha256: 4b92eb0c06d10683f7447ce9406cb97cd4b453be18d7279320f7b2f025c10187
+        dest: fetched/nlohmann
+      - type: archive
+        url: https://github.com/Cyan4973/xxHash/archive/refs/tags/v0.8.3.tar.gz
+        sha256: aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
+        dest: fetched/xxhash
+
+    modules:
+    - name: SDL3
+      buildsystem: cmake-ninja
+      config-opts:
+        - -D SDL_CAMERA=OFF
+        - -D SDL_EXAMPLES=OFF
+        - -D SDL_SHARED=OFF
+        - -D SDL_STATIC=ON
+        - -D SDL_TESTS=OFF
+        - -D SDL_TEST_LIBRARY=OFF
+
+        # Various SDL features that we want to ensure are enabled
+        - -D SDL_HIDAPI=ON
+        - -D SDL_HIDAPI_LIBUSB=ON
+        - -D SDL_LIBUDEV=ON
+        - -D SDL_PIPEWIRE=ON
+        - -D SDL_PULSEAUDIO=ON
+        - -D SDL_RENDER_GPU=ON
+        - -D SDL_RENDER_VULKAN=ON
+        - -D SDL_X11=ON # Set this to OFF for a wayland-only build
+        - -D SDL_WAYLAND=ON
+        - -D SDL_WAYLAND_LIBDECOR=ON
+        - -D SDL_VULKAN=ON
+
+        # And shrink the binary size by disabling everything we don't need or don't want to support
+        - -D SDL_ALSA=OFF
+        - -D SDL_DISKAUDIO=OFF
+        - -D SDL_DUMMYAUDIO=OFF
+        - -D SDL_DUMMYVIDEO=OFF
+        - -D SDL_JACK=OFF
+        - -D SDL_KMSDRM=OFF
+        - -D SDL_OFFSCREEN=OFF
+        - -D SDL_OPENGL=OFF
+        - -D SDL_OPENGLES=OFF
+        - -D SDL_OSS=OFF
+        - -D SDL_SNDIO=OFF
+
+        # SDL uses dlopen() extensively to load various system libraries. For the feature support we must have we can disable that so that they are linked normally and some potential issues can be surfaced at compile-time
+        - -D SDL_HIDAPI_LIBUSB_SHARED=OFF
+        - -D SDL_PIPEWIRE_SHARED=OFF
+        - -D SDL_PULSEAUDIO_SHARED=OFF
+        - -D SDL_WAYLAND_SHARED=OFF
+        - -D SDL_WAYLAND_LIBDECOR_SHARED=OFF
+
+        # Without this ccache can't cache anything from this build. I tried CACHE_SLOPPINESS=time_macros as an alternative but it didn't work
+        # Note that there is a slight increase in build times if ccache is disabled or the cache is empty but it's very small
+        - -D CMAKE_DISABLE_PRECOMPILE_HEADERS=ON
+      sources:
+        - type: archive
+          url: https://libsdl.org/release/SDL3-3.4.10.tar.gz
+          sha256: 12b34280415ec8418c864408b93d008a20a6530687ee613d60bfbd20411f2785
+      cleanup:
+        - /include/SDL3
+        - /lib/lib*.a
+        - /lib/cmake
+        - /lib/pkgconfig
+
+    # TODO: Prevent the example binary from being built. That wouldn't take very long except for the fact that we're using full LTO
+    - name: libnod
+      buildsystem: cmake-ninja
+      config-opts:
+        - -D BUILD_SHARED_LIBS=OFF
+        - -D FETCHCONTENT_FULLY_DISCONNECTED=ON
+        - -D FETCHCONTENT_SOURCE_DIR_CORROSION=deps/corrosion
+
+        # This doesn't currently work. Nod doesn't appear to add the system deps to the linker properties so the build fails when linking dusklight
+        # - -D NOD_USE_CMAKE_COMPRESSION=ON
+      sources:
+        - type: archive
+          url: https://github.com/ReillyBrogan/nod/archive/refs/tags/v2.0.0-alpha.11.tar.gz
+          sha256: af36bfd4f7551a1db3805d146c988565ee30ce6523d3fff30bf6929ecdc9c0d6
+        - type: archive
+          url: https://github.com/ReillyBrogan/nod/releases/download/v2.0.0-alpha.11/vendored-crates-v2.0.0-alpha.11.tar.zst
+          sha256: a22cb449b7c37929787397ce4ca8756eaf48eb98008037989b480ba4cf6d23a2
+          strip-components: 0
+        - type: archive
+          url: https://github.com/corrosion-rs/corrosion/archive/refs/tags/v0.6.1.tar.gz
+          sha256: e9e95b1ee2bad52681f347993fb1a5af5cce458c5ce8a2636c9e476e4babf8e3
+          dest: deps/corrosion
+      cleanup:
+        - /include
+        - /lib/lib*.a
+        - /lib/cmake
+
+    - name: Dawn
+      buildsystem: cmake-ninja
+      config-opts:
+        - -D DAWN_BUILD_MONOLITHIC_LIBRARY=STATIC
+        - -D DAWN_ENABLE_INSTALL=ON
+
+        # Dawn/tint components we don't need
+        - -D DAWN_BUILD_BENCHMARKS=OFF
+        - -D DAWN_BUILD_PROTOBUF=OFF
+        - -D DAWN_BUILD_SAMPLES=OFF
+        - -D TINT_BUILD_CMD_TOOLS=OFF
+        - -D TINT_BUILD_IR_BINARY=OFF
+        - -D TINT_BUILD_TESTS=OFF
+
+        # Disable all windowing/graphics support except for Vulkan
+        - -D DAWN_ENABLE_DESKTOP_GL=OFF
+        - -D DAWN_ENABLE_NULL=OFF
+        - -D DAWN_ENABLE_OPENGLES=OFF
+        - -D DAWN_ENABLE_VULKAN=ON
+        - -D DAWN_SUPPORTS_GLFW_FOR_WINDOWING=OFF
+        - -D DAWN_USE_GLFW=OFF
+
+        # Build support explicitly for both X11 and Wayland
+        - -D DAWN_USE_WAYLAND=ON
+        - -D DAWN_USE_X11=ON # Set this to OFF for a wayland-only build
+
+      sources:
+        - type: git
+          url: https://dawn.googlesource.com/dawn
+          # tag: chromium/7850
+          commit: 13abc3bc8ea2d3c2050f9e77a12d012108ceee24
+          disable-submodules: true
+
+      # Submodules
+        - type: git
+          url: https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp
+          dest: "third_party/abseil-cpp"
+          commit: d16e32215c3ab90ba57c2e904a5344d85c7353e4
+          disable-submodules: true
+        - type: git
+          url: https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Headers
+          dest: "third_party/spirv-headers/src"
+          commit: 1e770e7de8373a8dd49f23416cf7ca4001d01040
+          disable-submodules: true
+        - type: git
+          url: https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Tools
+          dest: "third_party/spirv-tools/src"
+          commit: b38c4f83024546d4000b2db8e2294cf81b7f26e0
+          disable-submodules: true
+        - type: git
+          url: https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Headers
+          dest: "third_party/vulkan-headers/src"
+          commit: 015e25c3c91b70eb1a754d36fb14c4ba6ad9b0b9
+          disable-submodules: true
+        - type: git
+          url: https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Utility-Libraries
+          dest: "third_party/vulkan-utility-libraries/src"
+          commit: 8383c46b129c2b3a5f3833e602d946d2fcc57e39
+          disable-submodules: true
+      cleanup:
+        - /include
+        - /lib/lib*.a
+        - /lib/cmake
+      modules:
+      # https://docs.flatpak.org/en/latest/python.html
+      # `./flatpak-pip-generator --runtime='org.freedesktop.Sdk//25.08' jinja2`
+      # and then converted to yaml and inserted here
+      - name: python3-jinja2
+        buildsystem: simple
+        build-commands:
+          - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "jinja2" --no-build-isolation
+        sources:
+          - type: file
+            url: https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl
+            sha256: 85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
+          - type: file
+            url: https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz
+            sha256: 722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698
+        cleanup:
+          - /lib/python*
+
+  # See how effective ccache was, if at all
+  - name: ccache-stats
+    buildsystem: simple
+    build-commands:
+      - |
+        if command -v ccache &> /dev/null; then
+          ccache --show-stats
+          # Enable if you want detailed ccache statistics
+          # ccache -s -vv
+        fi
