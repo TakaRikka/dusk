@@ -452,6 +452,7 @@ endif ()
 
 if (DUSK_PACKAGE_INSTALL)
     include(GNUInstallDirs)
+    include(cmake/LinuxPackageInstall.cmake)
     list(APPEND GAME_COMPILE_DEFS DUSK_ASSET_DIR="${CMAKE_INSTALL_FULL_DATADIR}/dusklight/")
 endif ()
 

@@ -19,7 +19,7 @@ for install_path in build/install/*; do
   [[ "$(basename "$install_path")" == *.* ]] && continue
   cp -r "$install_path" build/appdir/usr/bin
 done
-cp -r platforms/freedesktop/{16x16,32x32,48x48,64x64,128x128,256x256,512x512,1024x1024} build/appdir/usr/share/icons/hicolor
+cp -r platforms/freedesktop/{16x16,32x32,48x48,64x64,128x128,256x256,512x512} build/appdir/usr/share/icons/hicolor
 cp platforms/freedesktop/dev.twilitrealm.Dusklight.desktop build/appdir/usr/share/applications
 
 cd build/install
