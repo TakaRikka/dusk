@@ -26,6 +26,7 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #include "dusk/version.hpp"
 #endif
@@ -180,6 +181,25 @@ static int Worm_nodeCallBack(J3DJoint* i_joint, int param_1) {
     return 1;
 }
 
+#if TARGET_PC
+static void dmg_rod_interp_callback(bool isSimFrame, void* pUserWork) {
+    dmg_rod_class* i_this = (dmg_rod_class*)pUserWork;
+    if (!i_this->mLineInterpPrevValid || !i_this->mLineInterpCurrValid) {
+        return;
+    }
+    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const int count = i_this->kind == MG_ROD_KIND_LURE ? MG_ROD_LURE_LINE_LEN : MG_ROD_UKI_LINE_LEN;
+    cXyz* dst = i_this->linemat.getPos(0);
+    for (int i = 0; i < count; i++) {
+        const cXyz& p0 = i_this->mLineInterpPrev[i];
+        const cXyz& p1 = i_this->mLineInterpCurr[i];
+        dst[i] = p0 + (p1 - p0) * alpha;
+    }
+    static GXColor l_color = {0xFF, 0xFF, 0x96, 0xFF};
+    i_this->linemat.update(count, l_color, &i_this->actor.tevStr);
+}
+#endif
+
 static int dmg_rod_Draw(dmg_rod_class* i_this) {
     int unused;
     fopAc_ac_c* actor = &i_this->actor;
@@ -220,6 +240,18 @@ static int dmg_rod_Draw(dmg_rod_class* i_this) {
         i_this->linemat.update(MG_ROD_LURE_LINE_LEN, l_color, &i_this->actor.tevStr);
         dComIfGd_set3DlineMat(&i_this->linemat);
 
+#if TARGET_PC
+        if (dusk::frame_interp::is_enabled()) {
+            if (i_this->mLineInterpCurrValid) {
+                memcpy(i_this->mLineInterpPrev, i_this->mLineInterpCurr, MG_ROD_LURE_LINE_LEN * sizeof(cXyz));
+                i_this->mLineInterpPrevValid = true;
+            }
+            memcpy(i_this->mLineInterpCurr, i_this->linemat.getPos(0), MG_ROD_LURE_LINE_LEN * sizeof(cXyz));
+            i_this->mLineInterpCurrValid = true;
+            dusk::frame_interp::add_interpolation_callback(&dmg_rod_interp_callback, i_this);
+        }
+#endif
+
         model = i_this->rod_modelMorf->getModel();
         g_env_light.setLightTevColorType_MAJI(model, &i_this->actor.tevStr);
         i_this->rod_modelMorf->entryDL();
@@ -243,6 +275,18 @@ static int dmg_rod_Draw(dmg_rod_class* i_this) {
         static GXColor l_color = {0xFF, 0xFF, 0x96, 0xFF};
         i_this->linemat.update(MG_ROD_UKI_LINE_LEN, l_color, &i_this->actor.tevStr);
         dComIfGd_set3DlineMat(&i_this->linemat);
+
+#if TARGET_PC
+        if (dusk::frame_interp::is_enabled()) {
+            if (i_this->mLineInterpCurrValid) {
+                memcpy(i_this->mLineInterpPrev, i_this->mLineInterpCurr, MG_ROD_UKI_LINE_LEN * sizeof(cXyz));
+                i_this->mLineInterpPrevValid = true;
+            }
+            memcpy(i_this->mLineInterpCurr, i_this->linemat.getPos(0), MG_ROD_UKI_LINE_LEN * sizeof(cXyz));
+            i_this->mLineInterpCurrValid = true;
+            dusk::frame_interp::add_interpolation_callback(&dmg_rod_interp_callback, i_this);
+        }
+#endif
 
         for (int i = 0; i < 15; i++) {
             g_env_light.setLightTevColorType_MAJI(i_this->rod_uki_model[i], &actor->tevStr);
@@ -5755,6 +5799,12 @@ static void play_camera_u(dmg_rod_class* i_this) {
     }
 }
 
+#if TARGET_PC
+BOOL item_any_fishing_rod(int itemId) {
+    return itemId == dItemNo_FISHING_ROD_1_e || (itemId >= dItemNo_BEE_ROD_e && itemId <= dItemNo_JEWEL_WORM_ROD_e);
+}
+#endif
+
 static int dmg_rod_Execute(dmg_rod_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
@@ -5820,6 +5870,17 @@ static int dmg_rod_Execute(dmg_rod_class* i_this) {
 #endif
     i_this->prev_rod_substick_y = i_this->rod_substick_y;
     i_this->rod_substick_y = mDoCPd_c::getSubStickY(PAD_1);
+
+    #if TARGET_PC
+    if (dusk::getSettings().game.buttonFishing) {
+        if ((item_any_fishing_rod(dComIfGp_getSelectItem(0)) && mDoCPd_c::getHoldX(PAD_1)) ||
+            (item_any_fishing_rod(dComIfGp_getSelectItem(1)) && mDoCPd_c::getHoldY(PAD_1)))
+        {
+            i_this->rod_stick_y = -1.0f;
+            i_this->rod_substick_y = -1.0f;
+        }
+    }
+    #endif
 
     i_this->reel_speed = 5.0f;
     i_this->reel_btn_flags = mDoCPd_c::getHoldB(PAD_1) | mDoCPd_c::getHoldDown(PAD_1);
@@ -6387,6 +6448,11 @@ static int dmg_rod_Create(fopAc_ac_c* i_this) {
             OS_REPORT("//////////////MG_ROD SET NON !!\n");
             return cPhs_ERROR_e;
         }
+
+#if TARGET_PC
+        rod->mLineInterpPrevValid = false;
+        rod->mLineInterpCurrValid = false;
+#endif
 
         OS_REPORT("//////////////MG_ROD SET 2 !!\n");
         if (!hio_set) {

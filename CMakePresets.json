@@ -19,7 +19,19 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDLL"
+      }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDLL",
+        "CMAKE_INTERPROCEDURAL_OPTIMIZATION": {
+          "type": "BOOL",
+          "value": true
+        }
       }
     },
     {
@@ -292,24 +304,21 @@
           "type": "BOOL",
           "value": false
         },
+        "ENABLE_ARC": {
+          "type": "BOOL",
+          "value": false
+        },
         "Rust_CARGO_TARGET": "aarch64-apple-tvos",
         "Rust_TOOLCHAIN": "nightly",
         "BUILD_SHARED_LIBS": {
           "type": "BOOL",
           "value": false
         },
-        "CMAKE_DISABLE_FIND_PACKAGE_BZip2": {
+        "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
           "type": "BOOL",
           "value": true
         },
-        "CMAKE_DISABLE_FIND_PACKAGE_LibLZMA": {
-          "type": "BOOL",
-          "value": true
-        },
-        "CMAKE_DISABLE_FIND_PACKAGE_zstd": {
-          "type": "BOOL",
-          "value": true
-        }
+        "CMAKE_IGNORE_PREFIX_PATH": "/opt/homebrew"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -342,9 +351,7 @@
         "CMAKE_DISABLE_FIND_PACKAGE_zstd": {
           "type": "BOOL",
           "value": true
-        },
-        "AURORA_SDL3_VERSION": "3.4.8",
-        "AURORA_SDL3_REF": "refs/tags/release-3.4.8"
+        }
       }
     },
     {
@@ -372,7 +379,8 @@
       "hidden": true,
       "inherits": [
         "android-base",
-        "ci"
+        "ci",
+        "release"
       ],
       "cacheVariables": {
         "DUSK_ENABLE_SENTRY_NATIVE": {
@@ -400,7 +408,8 @@
         "ci"
       ],
       "cacheVariables": {
-        "AURORA_SDL3_PROVIDER": "vendor"
+        "AURORA_SDL3_PROVIDER": "vendor",
+        "CMAKE_LINKER_TYPE": "MOLD"
       }
     },
     {
@@ -429,7 +438,7 @@
           "type": "BOOL",
           "value": true
         },
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
         "CMAKE_IGNORE_PREFIX_PATH": "/opt/homebrew"
       }
     },

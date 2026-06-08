@@ -16,6 +16,10 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/d_camera.h"
+#if TARGET_PC
+#include "dusk/settings.h"
+#include <algorithm>
+#endif
 #include <cstring>
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
@@ -621,8 +625,16 @@ void dMeterMap_c::draw() {
         mMapJ2DPicture->setAlpha(alpha);
 
         #if TARGET_PC
-        mMapJ2DPicture->draw(mDoGph_gInf_c::ScaleHUDXLeft(drawPosX), drawPosY, sizeX, sizeY, false,
-                             false, false);
+        // Scale the minimap with the user HUD scale and shift down so its bottom-left
+        // corner stays anchored to the same screen position as at scale 1.0.
+        const f32 userHudScale =
+            std::clamp(dusk::getSettings().game.hudScale.getValue(), 0.5f, 2.0f);
+        const f32 scaledSizeX = sizeX * userHudScale;
+        const f32 scaledSizeY = sizeY * userHudScale;
+        const f32 mapBottomShift = sizeY - scaledSizeY;
+        mMapJ2DPicture->draw(mDoGph_gInf_c::ScaleHUDXLeft(drawPosX),
+                             drawPosY + mapBottomShift, scaledSizeX, scaledSizeY,
+                             false, false, false);
         #else
         mMapJ2DPicture->draw(drawPosX, drawPosY, sizeX, sizeY, false, false, false);
         #endif

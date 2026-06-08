@@ -7,12 +7,16 @@
 #include <dolphin/gx/GXExtra.h>
 #include "tracy/Tracy.hpp"
 
+#if DUSK_GFX_DEBUG_GROUPS
 #define GX_DEBUG_GROUP(name, ...) \
     do {                          \
         GXPushDebugGroup(#name);  \
         name(__VA_ARGS__);        \
         GXPopDebugGroup();        \
     } while (0)
+#else
+#define GX_DEBUG_GROUP(name, ...) name(__VA_ARGS__)
+#endif
 
 #ifdef TARGET_PC
 class GXTexObjRAII : public GXTexObj {
@@ -39,16 +43,37 @@ public:
 static_assert(sizeof(GXTexObjRAII) == sizeof(GXTexObj),
               "GXTexObjRAII should have the same size as GXTexObj");
 typedef GXTexObjRAII TGXTexObj;
+
+class GXTlutObjRAII : public GXTlutObj {
+public:
+    GXTlutObjRAII() : GXTlutObj() {}
+    ~GXTlutObjRAII() { GXDestroyTlutObj(this); }
+
+    void reset() { GXDestroyTlutObj(this); }
+
+    GXTlutObjRAII(const GXTlutObjRAII&) = delete;
+    GXTlutObjRAII& operator=(const GXTlutObjRAII&) = delete;
+    GXTlutObjRAII(GXTlutObjRAII&&) = delete;
+    GXTlutObjRAII& operator=(GXTlutObjRAII&&) = delete;
+};
+static_assert(sizeof(GXTlutObjRAII) == sizeof(GXTlutObj),
+              "GXTlutObjRAII should have the same size as GXTlutObj");
+typedef GXTlutObjRAII TGXTlutObj;
 #else
 typedef GXTexObj TGXTexObj;
+typedef GXTlutObj TGXTlutObj;
 #endif
 
 struct GXScopedDebugGroup {
     explicit GXScopedDebugGroup(const char* text) {
+#if DUSK_GFX_DEBUG_GROUPS
         GXPushDebugGroup(text);
+#endif
     }
     ~GXScopedDebugGroup() {
+#if DUSK_GFX_DEBUG_GROUPS
         GXPopDebugGroup();
+#endif
     }
 };
 

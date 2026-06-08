@@ -348,7 +348,7 @@ void daAlink_c::changeLink(int param_0) {
             initModel(static_cast<J3DModelData*>(dComIfG_getObjectRes(l_mArcName, "al_hands.bmd")), 0);
 
 #if TARGET_PC
-        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor)
+        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.armorRupeeDrain.getValue() != dusk::MagicArmorMode::NORMAL)
 #else
         if (dComIfGs_getRupee() != 0)
 #endif
@@ -458,7 +458,7 @@ void daAlink_c::changeLink(int param_0) {
         field_0x06f0 = field_0x064C->getMaterialNodePointer(2)->getShape();
 
 #if TARGET_PC
-        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.freeMagicArmor) {
+        if (dComIfGs_getRupee() != 0 || dusk::getSettings().game.armorRupeeDrain.getValue() != dusk::MagicArmorMode::NORMAL) {
 #else
         if (dComIfGs_getRupee() != 0) {
 #endif

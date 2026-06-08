@@ -3,6 +3,8 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include <gx.h>
 
+#include <tracy/Tracy.hpp>
+
 J2DGrafContext::J2DGrafContext(f32 x, f32 y, f32 width, f32 height)
     : mBounds(x, y, x + width, y + height), mScissorBounds(x, y, x + width, y + height) {
     if (x < 0.0f || y < 0.0f) {
@@ -137,6 +139,7 @@ void J2DGrafContext::setLineWidth(u8 lineWidth) {
 }
 
 void J2DGrafContext::fillBox(JGeometry::TBox2<f32> const& box) {
+    ZoneScoped;
     GXSetBlendMode((GXBlendMode)mBoxPart.mType, (GXBlendFactor)mBoxPart.mSrcFactor,
                    (GXBlendFactor)mBoxPart.mDstFactor, GX_LO_SET);
     GXLoadPosMtxImm(mPosMtx, 0);
@@ -155,6 +158,7 @@ void J2DGrafContext::fillBox(JGeometry::TBox2<f32> const& box) {
 }
 
 void J2DGrafContext::drawFrame(JGeometry::TBox2<f32> const& box) {
+    ZoneScoped;
     GXSetBlendMode((GXBlendMode)mBoxPart.mType, (GXBlendFactor)mBoxPart.mSrcFactor,
                    (GXBlendFactor)mBoxPart.mDstFactor, GX_LO_SET);
     GXLoadPosMtxImm(mPosMtx, 0);
@@ -175,6 +179,7 @@ void J2DGrafContext::drawFrame(JGeometry::TBox2<f32> const& box) {
 }
 
 void J2DGrafContext::line(JGeometry::TVec2<f32> start, JGeometry::TVec2<f32> end) {
+    ZoneScoped;
     GXSetBlendMode((GXBlendMode)mLinePart.mType, (GXBlendFactor)mLinePart.mSrcFactor,
                    (GXBlendFactor)mLinePart.mDstFactor, GX_LO_SET);
     GXLoadPosMtxImm(mPosMtx, 0);

@@ -49,7 +49,9 @@ namespace dusk {
             dCam->Reset(center, eye);
         }
 
-        ImGui::InputFloat("Camera FOV", &dCam->mFovy);
+        if (ImGui::InputFloat("Camera FOV", &dCam->mFovy)) {
+            dCam->mFovy = std::clamp(dCam->mFovy, 0.1f, 179.9f);
+        }
 
         ImGui::SeparatorText("Options");
 
@@ -75,12 +77,12 @@ namespace dusk {
         if (!getSettings().game.debugFlyCam) {
             ImGui::BeginDisabled();
         }
-        config::ImGuiCheckbox("Lock Events", getSettings().game.debugFlyCamLockEvents);
+        config::ImGuiCheckbox("Freeze Time", getSettings().game.debugFlyCamLockEvents);
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
             if (!getSettings().game.debugFlyCam) {
                 ImGui::SetTooltip("Enable Fly Mode first.");
             } else {
-                ImGui::SetTooltip("Freeze game events while flying.");
+                ImGui::SetTooltip("Freezes the game while flying.");
             }
         }
         if (!getSettings().game.debugFlyCam) {

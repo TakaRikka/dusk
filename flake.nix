@@ -96,6 +96,7 @@
               rev = nodVersion;
               hash = "sha256-+zrtVzjo0+X/6uMcNUn1+FaSR+jOhrcQSDNBFjw0NDs=";
             };
+            patches = [ ./fix-cmake-paths.patch ];
             cargoDeps = pkgs.rustPlatform.importCargoLock {
               lockFile = "${finalAttrs.src}/Cargo.lock";
             };
@@ -229,6 +230,7 @@
                   pkgs.libusb1
                   pkgs.libunwind
                   pkgs.gtk3
+                  nod
                 ];
 
                 cmakeBuildType = "RelWithDebInfo";
@@ -239,8 +241,7 @@
                   "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
                   "-DAURORA_DAWN_PROVIDER=package"
                   "-DAURORA_DAWN_LINKAGE=static"
-                  "-DAURORA_NOD_PROVIDER=package"
-                  "-DAURORA_NOD_LINKAGE=static"
+                  "-DAURORA_NOD_PROVIDER=system"
                   "-DAURORA_SDL3_PROVIDER=system"
                   "-DBUILD_SHARED_LIBS=OFF"
                 ]

@@ -518,6 +518,7 @@ dGrass_packet_c::dGrass_packet_c() {
 }
 
 void dGrass_packet_c::draw() {
+    ZoneScoped;
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     cXyz spB4;
     cXyz spA8;

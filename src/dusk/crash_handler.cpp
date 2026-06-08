@@ -34,6 +34,7 @@
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 #include <mach-o/loader.h>
+#include <TargetConditionals.h>
 #else
 #include <elf.h>
 #include <link.h>
@@ -929,7 +930,7 @@ void install() {
     SymInitialize(GetCurrentProcess(), nullptr, TRUE);
 #endif
     g_prevFilter = SetUnhandledExceptionFilter(&windowsHandler);
-#else
+#elif !defined(__APPLE__) || !TARGET_OS_TV
     Dl_info moduleInfo;
     if (dladdr(reinterpret_cast<void*>(&install), &moduleInfo) != 0) {
         g_ctx.moduleBase = reinterpret_cast<uintptr_t>(moduleInfo.dli_fbase);
