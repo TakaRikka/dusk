@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>dev.twilitrealm.dusk</id>
-  <launchable type="desktop-id">dev.twilitrealm.dusk.desktop</launchable>
+  <id>dev.twilitrealm.Dusklight</id>
+  <launchable type="desktop-id">dev.twilitrealm.Dusklight.desktop</launchable>
   <name>Dusklight</name>
   <summary>Native port of a classic adventure game</summary>
   <developer id="dev.twilitrealm">
@@ -25,7 +25,7 @@
   
   <provides>
     <binary>dusklight</binary>
-    <id>dev.twilitrealm.dusk.desktop</id>
+    <id>dev.twilitrealm.Dusklight.desktop</id>
   </provides>
 
   <releases>

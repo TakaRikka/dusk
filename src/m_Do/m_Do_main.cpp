@@ -77,6 +77,7 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_iostream.h"
 #include "SDL3/SDL_misc.h"
+#include "SDL3/SDL_platform_defines.h"
 #include "cxxopts.hpp"
 #include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
@@ -568,7 +569,13 @@ int game_main(int argc, char* argv[]) {
     }
 
     // Set SDL metadata for audio mixers and macOS "About" menu
-    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, "dev.twilitrealm.dusk");
+    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING,
+#if defined(SDL_PLATFORM_LINUX)
+        "dev.twilitrealm.Dusklight"
+#else
+        "dev.twilitrealm.dusk"
+#endif
+        );
 
     {
         const auto userPathString = dusk::ConfigPath.u8string();
