@@ -75,6 +75,12 @@ constexpr std::array kMenuScalingModeLabels = {
     "Dusklight",
 };
 
+constexpr std::array kBattleBGMModeLabels = {
+    "On",
+    "Off",
+    "Off During MDH"
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -1083,10 +1089,41 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "No Low HP Sound",
                 .helpText = "Disable the beeping sound when having low health.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.midnasLamentNonStop,
-            {
-                .key = "Non-Stop Midna's Lament",
-                .helpText = "Prevents enemy music while Midna's Lament is playing.",
+         leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Battle Music",
+                                      .getValue =
+                                          [] {
+                                              const auto mode =
+                                                  getSettings().game.battleBGM.getValue();
+                                              const auto idx = static_cast<size_t>(mode);
+                                              return Rml::String{kBattleBGMModeLabels[idx]};
+                                          },
+                                      .isModified =
+                                          [] {
+                                              return getSettings().game.battleBGM.getValue() !=
+                                                     getSettings().game.battleBGM.getDefaultValue();
+                                          },
+                                  }),
+            rightPane, [](Pane& pane) {
+                for (size_t i = 0; i < kBattleBGMModeLabels.size(); i++) {
+                    pane.add_button({
+                                        .text = Rml::String{kBattleBGMModeLabels[i]},
+                                        .isSelected =
+                                            [i] {
+                                                return getSettings().game.battleBGM.getValue() ==
+                                                       static_cast<BattleBGMMode>(i);
+                                            },
+                                    })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.battleBGM.setValue(static_cast<BattleBGMMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>On: Plays enemy music normally.<br/>"
+                             "<br/>Off: Disables enemy music entirely.<br/>"
+                             "<br/>Off During MDH: Prevents enemy music while MDH "
+                             "is playing. ");
             });
     });
 

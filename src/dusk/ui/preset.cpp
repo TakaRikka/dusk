@@ -42,7 +42,7 @@ void applyPresetDusk() {
     s.game.enableControllerToasts.setValue(true);
     s.game.enableQuickTransform.setValue(true);
     s.game.instantSaves.setValue(true);
-    s.game.midnasLamentNonStop.setValue(true);
+    s.game.battleBGM.setValue(BattleBGMMode::Off_MDH);
     s.game.enableFrameInterpolation.setValue(FrameInterpMode::Unlimited);
     s.game.sunsSong.setValue(true);
     s.game.bloomMode.setValue(BloomMode::Dusk);

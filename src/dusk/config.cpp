@@ -197,6 +197,7 @@ namespace dusk::config {
     template class ConfigImpl<dusk::FrameInterpMode>;
     template class ConfigImpl<dusk::MenuScaling>;
     template class ConfigImpl<dusk::Resampler>;
+    template class ConfigImpl<dusk::BattleBGMMode>;
 }
 
 void dusk::config::Register(ConfigVarBase& configVar) {
