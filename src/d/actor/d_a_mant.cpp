@@ -16,12 +16,22 @@
 
 using GameVersion = dusk::version::GameVersion;
 
-static u8* l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}, {GameVersion::GcnPal, 0x1C00}}, 0x4000), true); return buf; }
+// keep the original version of the cape texture const so we don't need to reload the file
+static u8 const * l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}, {GameVersion::GcnPal, 0x1C00}}, 0x4000), true); return buf; }
 static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x5C00}, {GameVersion::GcnPal, 0x5C00}}, 0x4000), true); return buf; }
 static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C00}, {GameVersion::GcnPal, 0x9C00}}, 0x60),   true); return buf; }
 #define l_Egnd_mantTEX   (l_Egnd_mantTEX_get())
 #define l_Egnd_mantTEX_U (l_Egnd_mantTEX_U_get())
 #define l_Egnd_mantPAL   (l_Egnd_mantPAL_get())
+
+// make a copy of the cape texture that can be overwritten with the tears
+static u8 l_Egnd_mantTEX_copy[0x4000];
+
+// keep our cached texture objects out here so that we can update them from multiple places
+static bool textureObjsInitialized = false;
+static TGXTlutObj tlutObj;
+static TGXTexObj mainTexObj;
+static TGXTexObj undersideTexObj;
 
 // l_pos is unused
 //static f32* l_pos_get()      { alignas(32) static f32 buf[507];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA44C}, {GameVersion::GcnPal, 0xA44C}}, sizeof(buf)),   true); return buf; }
@@ -93,7 +103,7 @@ static void mant_build_anchor_frame(const cXyz& anchor_a, const cXyz& anchor_b, 
 void daMant_packet_c::draw() {
     ZoneScoped;
 #if TARGET_PC
-    void* image = l_Egnd_mantTEX;
+    void* image = l_Egnd_mantTEX_copy;
     void* lut = l_Egnd_mantPAL;
 #else
     void* image = tex_d[0];
@@ -206,10 +216,6 @@ void daMant_packet_c::draw() {
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
 
 #if TARGET_PC
-    static bool textureObjsInitialized = false;
-    static TGXTlutObj tlutObj;
-    static TGXTexObj mainTexObj;
-    static TGXTexObj undersideTexObj;
     if (!textureObjsInitialized) {
         GXInitTlutObj(&tlutObj, lut, GX_TL_RGB5A3, 0x100);
         GXInitTexObjCI(&mainTexObj, image, 0x80, 0x80, GX_TF_C8, GX_CLAMP, GX_CLAMP, 0, 0);
@@ -703,8 +709,14 @@ static int daMant_Execute(mant_class* i_this) {
 
             if (0 <= uVar1 && uVar1 < 0x4000) {
                 int iVar5 = (uVar1 & 7) + (uVar1 & 0x78) * 4 + (uVar1 >> 4 & 0x18) + (uVar1 & 0x3e00);
-                l_Egnd_mantTEX[iVar5] = l_Egnd_mantTEX_U[iVar5] = 0;
+                DUSK_IF_ELSE(l_Egnd_mantTEX_copy[iVar5], l_Egnd_mantTEX[iVar5]) = l_Egnd_mantTEX_U[iVar5] = 0;
             }
+
+#if TARGET_PC
+            if(textureObjsInitialized) {
+                GXInitTlutObjData(&tlutObj, l_Egnd_mantPAL);  // make sure the cached textures are updated
+            }
+#endif
         }
     }
 
@@ -741,6 +753,14 @@ static int daMant_Create(fopAc_ac_c* i_this) {
     for (int i = 0; i < 0x4000; i++) {
         l_Egnd_mantTEX_U[i] = 6;
     }
+
+#if TARGET_PC
+    memcpy(l_Egnd_mantTEX_copy, l_Egnd_mantTEX, sizeof(l_Egnd_mantTEX_copy));
+
+    if(textureObjsInitialized) {
+        GXInitTlutObjData(&tlutObj, l_Egnd_mantPAL); // make sure the cached textures are updated
+    }
+#endif
 
     lbl_277_bss_0 = 0;
     daMant_Execute(m_this);
