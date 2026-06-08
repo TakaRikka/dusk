@@ -259,6 +259,13 @@ void main01(void) {
                 dusk::ui::handle_event(event->sdl);
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;
+            case AURORA_WINDOW_RESIZED:
+                if (dusk::getSettings().video.memorizeWindowSize && !dusk::getSettings().video.enableFullscreen) {
+                    dusk::getSettings().video.lastWindowWidth.setValue(event->windowSize.width);
+                    dusk::getSettings().video.lastWindowHeight.setValue(event->windowSize.height);
+                    dusk::config::Save();
+                }
+                break;
             case AURORA_DISPLAY_SCALE_CHANGED:
                 dusk::ImGuiEngine_Initialize(event->windowSize.scale);
                 break;
@@ -586,6 +593,17 @@ int game_main(int argc, char* argv[]) {
         config.windowPosY = -1;
         config.windowWidth = defaultWindowWidth * 2;
         config.windowHeight = defaultWindowHeight * 2;
+
+        if (dusk::getSettings().video.memorizeWindowSize) {
+            int width = dusk::getSettings().video.lastWindowWidth.getValue();
+            int height = dusk::getSettings().video.lastWindowHeight.getValue();
+
+            if (width > 0 && height > 0) {
+                config.windowWidth = width;
+                config.windowHeight = height;
+            }
+        }
+
         config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
         config.logCallback = &aurora_log_callback;
         config.logLevel = startupLogLevel;

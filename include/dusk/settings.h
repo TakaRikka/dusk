@@ -134,6 +134,9 @@ struct UserSettings {
         ConfigVar<bool> enableFpsOverlay;
         ConfigVar<int> fpsOverlayCorner;
         ConfigVar<int> maxFrameRate;
+        ConfigVar<bool> memorizeWindowSize;
+        ConfigVar<int> lastWindowWidth;
+        ConfigVar<int> lastWindowHeight;
     } video;
 
     struct {
