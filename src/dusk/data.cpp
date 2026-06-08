@@ -34,10 +34,11 @@ constexpr std::array<std::string_view, 4> kUserDataDirectories = {
     "EUR",
     "JAP",
 };
-constexpr std::array<std::string_view, 6> kUserDataFiles = {
+constexpr std::array<std::string_view, 7> kUserDataFiles = {
     "achievements.json",
     "config.json",
     "controller_ports.dat",
+    "gamecontrollerdb.txt",
     "imgui.ini",
     "keyboard_bindings.dat",
     "states.json",

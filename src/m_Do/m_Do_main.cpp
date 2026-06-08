@@ -75,7 +75,6 @@
 #include <dolphin/dvd.h>
 
 #include "SDL3/SDL_init.h"
-#include "SDL3/SDL_filesystem.h"
 #include "SDL3/SDL_iostream.h"
 #include "SDL3/SDL_misc.h"
 #include "cxxopts.hpp"
@@ -485,14 +484,6 @@ static void LanguageInit() {
     selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
 }
 
-static std::string asset_path(const char* assetName) {
-    const char* basePath = SDL_GetBasePath();
-    if (basePath != nullptr && basePath[0] != '\0') {
-        return std::string(basePath) + "res/" + assetName;
-    }
-    return std::string("res/") + assetName;
-}
-
 static void log_build_info() {
     DuskLog.info("Build: {} (rev {}, built {}, type {})", DUSK_WC_DESCRIBE, DUSK_WC_REVISION, DUSK_WC_DATE, DUSK_BUILD_TYPE);
     DuskLog.info("Platform: {}", DUSK_PLATFORM_NAME);
@@ -562,10 +553,17 @@ int game_main(int argc, char* argv[]) {
     // PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
 
     {
-        // Load mappings from https://github.com/mdqinc/SDL_GameControllerDB
-        const auto mappingsPath = asset_path("gamecontrollerdb.txt");
-        if (SDL_AddGamepadMappingsFromFile(mappingsPath.c_str()) < 0) {
-            DuskLog.warn("Failed to load gamecontrollerdb.txt: {}", SDL_GetError());
+        const auto mappingsPath = dusk::ConfigPath / "gamecontrollerdb.txt";
+        std::error_code ec;
+        if (std::filesystem::exists(mappingsPath, ec)) {
+            const auto mappingsPathString = dusk::io::fs_path_to_string(mappingsPath);
+            if (SDL_AddGamepadMappingsFromFile(mappingsPathString.c_str()) < 0) {
+                DuskLog.warn("Failed to load gamecontrollerdb.txt from '{}': {}",
+                    mappingsPathString, SDL_GetError());
+            }
+        } else if (ec) {
+            DuskLog.warn("Failed to inspect gamecontrollerdb.txt in data folder '{}': {}",
+                dusk::io::fs_path_to_string(mappingsPath), ec.message());
         }
     }
 
