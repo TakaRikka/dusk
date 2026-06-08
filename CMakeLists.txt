@@ -344,7 +344,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL Darwin)
         set(PLATFORM_NAME macos)
     endif ()
 else ()
-    string(TOLOWER CMAKE_SYSTEM_NAME PLATFORM_NAME)
+    string(TOLOWER ${CMAKE_SYSTEM_NAME} PLATFORM_NAME)
 endif ()
 
 configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_BINARY_DIR}/version.h)
