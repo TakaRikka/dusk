@@ -353,6 +353,13 @@ set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::p
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads)
 
+find_package(zstd CONFIG REQUIRED)
+if (NOT TARGET zstd::libzstd)
+  add_library(zstd::libzstd INTERFACE IMPORTED)
+  set_property(TARGET zstd::libzstd PROPERTY
+    INTERFACE_LINK_LIBRARIES zstd)
+endif()
+
 list(APPEND GAME_LIBS zstd::libzstd)
 
 if (DUSK_ENABLE_SENTRY_NATIVE)
