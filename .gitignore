@@ -53,8 +53,3 @@ compile_commands.json
 pipeline_cache.bin
 
 extract
-
-# flatpak-builder
-flatpak/.flatpak-builder
-flatpak/builddir
-flatpak/repo
