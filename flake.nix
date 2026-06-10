@@ -260,10 +260,12 @@
                       runHook preInstall
                       install -Dm755 dusklight "$out/bin/dusklight"
                       cp -r "$src/res" "$out/bin/res"
-                      install -Dm644 "$src/platforms/freedesktop/dev.twilitrealm.Dusklight.desktop" \
+                      install -Dm644 "$src/platforms/freedesktop/dusklight.desktop.in" \
                         "$out/share/applications/dev.twilitrealm.Dusklight.desktop"
+                      sed -i "s|@DUSK_APP_ID@|dev.twilitrealm.Dusklight|g" "$out/share/applications/dev.twilitrealm.Dusklight.desktop"
+                      sed -i 's|Exec=.*|Exec=dusklight|' "$out/share/applications/dev.twilitrealm.Dusklight.desktop"
                       for size in 16 32 48 64 128 256 512; do
-                        install -Dm644 "$src/platforms/freedesktop/''${size}x''${size}/apps/dev.twilitrealm.Dusklight.png" \
+                        install -Dm644 "$src/platforms/freedesktop/''${size}x''${size}/apps/dusklight.png" \
                           "$out/share/icons/hicolor/''${size}x''${size}/apps/dev.twilitrealm.Dusklight.png"
                       done
                       runHook postInstall
