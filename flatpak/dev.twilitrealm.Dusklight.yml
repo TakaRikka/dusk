@@ -6,7 +6,7 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm22
   - org.freedesktop.Sdk.Extension.rust-stable
 
-command: dusklight
+command: dev.twilitrealm.Dusklight
 
 build-options:
   cflags: "-O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"
