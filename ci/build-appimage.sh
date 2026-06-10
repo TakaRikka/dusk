@@ -23,6 +23,7 @@ cp -r platforms/freedesktop/{16x16,32x32,48x48,64x64,128x128,256x256,512x512} bu
 find build/appdir/usr/share/icons/hicolor -name 'dusklight.png' -exec bash -c 'mv $0 ${0/dusklight.png/dev.twilitrealm.Dusklight.png}' {} \;
 cp platforms/freedesktop/dusklight.desktop.in build/appdir/usr/share/applications/dusklight.desktop
 sed -i "s|@DUSK_APP_ID@|dusklight|g" dusklight.desktop
+sed -i 's|Exec=.*|Exec=dusklight|' dusklight.desktop
 
 cd build/install
 VERSION="$DUSK_VERSION" NO_STRIP=1 "$linuxdeploy" \
