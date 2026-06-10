@@ -20,10 +20,10 @@ for install_path in build/install/*; do
   cp -r "$install_path" build/appdir/usr/bin
 done
 cp -r platforms/freedesktop/{16x16,32x32,48x48,64x64,128x128,256x256,512x512} build/appdir/usr/share/icons/hicolor
-find build/appdir/usr/share/icons/hicolor -name 'dusklight.png' -exec bash -c 'mv $0 ${0/dusklight.png/dev.twilitrealm.Dusklight.png}' {} \;
-cp platforms/freedesktop/dusklight.desktop.in build/appdir/usr/share/applications/dusklight.desktop
-sed -i "s|@DUSK_APP_ID@|dusklight|g" build/appdir/usr/share/applications/dusklight.desktop
-sed -i 's|Exec=.*|Exec=dusklight|' build/appdir/usr/share/applications/dusklight.desktop
+find build/appdir/usr/share/icons/hicolor -name 'dusklight.png' -print -exec bash -c 'mv $0 ${0/dusklight.png/dev.twilitrealm.Dusklight.png}' {} \;
+cp platforms/freedesktop/dusklight.desktop.in build/appdir/usr/share/applications/dev.twilitrealm.Dusklight.desktop
+sed -i "s|@DUSK_APP_ID@|dev.twilitrealm.Dusklight|g" build/appdir/usr/share/applications/dev.twilitrealm.Dusklight.desktop
+sed -i 's|Exec=.*|Exec=dusklight|' build/appdir/usr/share/applications/dev.twilitrealm.Dusklight.desktop
 
 cd build/install
 VERSION="$DUSK_VERSION" NO_STRIP=1 "$linuxdeploy" \
