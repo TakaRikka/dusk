@@ -77,7 +77,6 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_iostream.h"
 #include "SDL3/SDL_misc.h"
-#include "SDL3/SDL_platform_defines.h"
 #include "cxxopts.hpp"
 #include "d/actor/d_a_movie_player.h"
 #include "dusk/audio/DuskAudioSystem.h"
