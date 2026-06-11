@@ -249,6 +249,7 @@ f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, i
     f32 x2;
     f32 y1;
 
+    ZoneScoped;
     JUT_ASSERT(378, mValid);
     JUTFont::TWidth width;
     loadFont(str_int, GX_TEXMAP0, &width FONT_DRAW_CTX_ARG);

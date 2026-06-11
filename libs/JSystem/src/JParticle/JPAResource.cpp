@@ -18,9 +18,21 @@
 #include "global.h"
 #include "tracy/Tracy.hpp"
 
+#if TARGET_PC
+#define JPA_DRAW_CTX_ARG , &ctx
+#else
+#define JPA_DRAW_CTX_ARG
+#endif
+
 JPAResource::JPAResource() {
     mpCalcEmitterFuncList = mpDrawEmitterFuncList = mpDrawEmitterChildFuncList = NULL;
+#if TARGET_PC
+    mpCalcParticleFuncList = mpCalcParticleChildFuncList = NULL;
+    mpDrawParticleFuncList = mpDrawParticleChildFuncList = NULL;
+    mBatchInfo = {};
+#else
     mpCalcParticleFuncList = mpDrawParticleFuncList = mpCalcParticleChildFuncList = mpDrawParticleChildFuncList = NULL;
+#endif
     pBsp = NULL;
     pEsp = NULL;
     pCsp = NULL;
@@ -60,6 +72,60 @@ static u8 jpa_crd[32] ATTRIBUTE_ALIGN(32) = {
     0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x00, 0x02, 0x01, 0x00, 0x01,
     0x00, 0x00, 0x01, 0x00, 0x01, 0x02, 0x00, 0x02, 0x00, 0x00, 0x02, 0x00, 0x02, 0x02, 0x00, 0x02,
 };
+
+#if TARGET_PC
+void JPAResource::initBatchInfo() {
+    mBatchInfo = {};
+
+    bool hasDrawFunc = false;
+    for (int i = 0; i < mpDrawParticleFuncListNum; i++) {
+        DrawParticleFunc func = mpDrawParticleFuncList[i];
+        if (func == JPADrawBillboard || func == JPADrawRotBillboard ||
+            func == JPADrawYBillboard || func == JPADrawRotYBillboard ||
+            func == JPADrawDirection || func == JPADrawRotDirection || func == JPADrawRotation)
+        {
+            hasDrawFunc = true;
+        } else if (func == JPADrawParticleCallBack) {
+            // Batchable only for emitters without a particle callback; checked per draw
+        } else if (func == JPALoadCalcTexCrdMtxAnm) {
+            mBatchInfo.hasPtclTexMtx = true;
+        } else if (func == JPARegistAlpha || func == JPARegistPrmAlpha ||
+                   func == JPARegistPrmAlphaEnv || func == JPARegistAlphaEnv ||
+                   func == static_cast<DrawParticleFunc>(JPARegistEnv)) // overloaded
+        {
+            mBatchInfo.hasPtclColor = true;
+        } else {
+            // JPADrawPoint, JPADrawLine, JPADrawDBillboard, JPALoadTexAnm,
+            // JPASetPointSize, JPASetLineWidth
+            return;
+        }
+    }
+    if (!hasDrawFunc) {
+        return;
+    }
+
+    // Template array offsets, same math as setPTev
+    int base_plane_type = (pBsp->getType() == 3 || pBsp->getType() == 7) ?
+        pBsp->getBasePlaneType() : 0;
+    int center_offset = pEsp != nullptr ? (pEsp->getScaleCenterX() + 3 * pEsp->getScaleCenterY()) * 0xC : 0x30;
+    const s8* pos = reinterpret_cast<const s8*>(jpa_pos) + center_offset + base_plane_type * 0x6C;
+    const s8* crd = reinterpret_cast<const s8*>(jpa_crd) + (pBsp->getTilingS() + 2 * pBsp->getTilingT()) * 8;
+
+    bool cross = pBsp->getType() == 4 || pBsp->getType() == 8;
+    mBatchInfo.vtxCount = cross ? 8 : 4;
+    for (int i = 0; i < mBatchInfo.vtxCount; i++) {
+        int posIdx = i < 4 ? i : 72 + (i - 4);
+        int crdIdx = i & 3;
+        mBatchInfo.vtxPos[i][0] = pos[posIdx * 3 + 0];
+        mBatchInfo.vtxPos[i][1] = pos[posIdx * 3 + 1];
+        mBatchInfo.vtxPos[i][2] = pos[posIdx * 3 + 2];
+        mBatchInfo.vtxUv[i][0] = crd[crdIdx * 2 + 0];
+        mBatchInfo.vtxUv[i][1] = crd[crdIdx * 2 + 1];
+    }
+
+    mBatchInfo.supported = true;
+}
+#endif
 
 void JPAResource::init(JKRHeap* heap) {
     BOOL is_glbl_clr_anm = pBsp->isGlblClrAnm();
@@ -525,7 +591,10 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpDrawParticleFuncListNum != 0) {
         mpDrawParticleFuncList =
-            (ParticleFunc*)JKRAllocFromHeap(heap, mpDrawParticleFuncListNum * sizeof(ParticleFunc), alignof(ParticleFunc));
+            (DrawParticleFunc*)JKRAllocFromHeap(
+                heap,
+                mpDrawParticleFuncListNum * sizeof(DrawParticleFunc),
+                alignof(DrawParticleFunc));
     }
 
     func_no = 0;
@@ -635,7 +704,10 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpDrawParticleChildFuncListNum != 0) {
         mpDrawParticleChildFuncList =
-            (ParticleFunc*)JKRAllocFromHeap(heap, mpDrawParticleChildFuncListNum * sizeof(ParticleFunc), sizeof(EmitterFunc));
+            (DrawParticleFunc*)JKRAllocFromHeap(
+                heap,
+                mpDrawParticleChildFuncListNum * sizeof(DrawParticleFunc),
+                alignof(DrawParticleFunc));
     }
 
     func_no = 0;
@@ -699,6 +771,10 @@ void JPAResource::init(JKRHeap* heap) {
         mpDrawParticleChildFuncList[func_no] = &JPARegistPrmAlphaEnv;
         func_no++;
     }
+
+#if TARGET_PC
+    initBatchInfo();
+#endif
 }
 
 bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
@@ -761,6 +837,15 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
             }
         }
 
+#ifdef TARGET_PC
+        if (((pBsp && pBsp->getDirType() == 3) || (pCsp && pCsp->getDirType() == 3)) &&
+            dusk::frame_interp::is_enabled())
+        {
+            // ensure mGlobalEmtrDir is valid
+            calcWorkData_d(work);
+        }
+#endif
+
         JPANode<JPABaseParticle>* next = NULL;
         for (JPANode<JPABaseParticle>* node = emtr->mAlivePtclBase.getFirst(); node != emtr->mAlivePtclBase.getEnd(); node = next) {
             next = node->getNext();
@@ -799,6 +884,183 @@ void JPAResource::draw(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
     }
 }
 
+#if TARGET_PC
+static GXTevAlphaArg to_vtx_alpha_arg(GXTevAlphaArg arg) {
+    return arg == GX_CA_A0 ? GX_CA_RASA : arg;
+}
+
+static void batch_set_tev_op(GXTevStageID stage) {
+    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+}
+
+static void batch_setup_tev(JPAEmitterWorkData* work, bool useClr1) {
+    JPABaseShape* shape = work->mpRes->getBsp();
+    JPAExTexShape* ets = work->mpRes->getEts();
+    bool useIndirect = ets != nullptr && ets->isUseIndirect();
+
+    // JPAEmitterManager::draw configures both channels to pass vertex color through
+    GXSetNumChans(useClr1 ? 2 : 1);
+
+    const GXTevAlphaArg* alphaArg = shape->getTevAlphaArg();
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, to_vtx_alpha_arg(alphaArg[0]), to_vtx_alpha_arg(alphaArg[1]),
+                    to_vtx_alpha_arg(alphaArg[2]), to_vtx_alpha_arg(alphaArg[3]));
+    batch_set_tev_op(GX_TEVSTAGE0);
+    if (!useIndirect) {
+        GXSetTevDirect(GX_TEVSTAGE0);
+    }
+    GXTevStageID nextStage = GX_TEVSTAGE1;
+
+    switch (shape->getTevColorArgSel()) {
+    case 0: // TEXC
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_ONE, GX_CC_ZERO);
+        break;
+    case 1: // C0 * TEXC
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_TEXC, GX_CC_ZERO);
+        break;
+    case 2: // lerp(C0, 1, TEXC)
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_RASC, GX_CC_ONE, GX_CC_TEXC, GX_CC_ZERO);
+        break;
+    case 3: // lerp(C1, C0, TEXC) = C0 * TEXC (stage 0) + C1 * (1 - TEXC) (stage 1)
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevOrder(nextStage, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR1A1);
+        GXSetTevColorIn(nextStage, GX_CC_RASC, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV);
+        GXSetTevAlphaIn(nextStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+        batch_set_tev_op(nextStage);
+        GXSetTevDirect(nextStage);
+        nextStage = static_cast<GXTevStageID>(nextStage + 1);
+        break;
+    case 4: // TEXC * C0 + C1: C0 * TEXC (stage 0), + C1 (stage 1)
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevOrder(nextStage, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR1A1);
+        GXSetTevColorIn(nextStage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+        GXSetTevAlphaIn(nextStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+        batch_set_tev_op(nextStage);
+        GXSetTevDirect(nextStage);
+        nextStage = static_cast<GXTevStageID>(nextStage + 1);
+        break;
+    case 5: // C0
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+        break;
+    }
+
+    if (ets != nullptr && ets->isUseSecTex()) {
+        // Mirrors setPTev's secondary texture stage, at the next free stage
+        GXTexCoordID texCoord = useIndirect ? GX_TEXCOORD2 : GX_TEXCOORD1;
+        GXSetTevOrder(nextStage, texCoord, GX_TEXMAP3, GX_COLOR_NULL);
+        GXSetTevColorIn(nextStage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+        GXSetTevAlphaIn(nextStage, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
+        batch_set_tev_op(nextStage);
+        GXSetTevDirect(nextStage);
+        nextStage = static_cast<GXTevStageID>(nextStage + 1);
+    }
+
+    GXSetNumTevStages(nextStage);
+}
+
+static void batch_setup_vtx_desc(bool useClr0, bool useClr1) {
+    static Mtx identityMtx = {
+        {1.0f, 0.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f, 0.0f},
+    };
+
+    GXLoadPosMtxImm(identityMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    if (useClr0) {
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    }
+    if (useClr1) {
+        GXSetVtxDesc(GX_VA_CLR1, GX_DIRECT);
+    }
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    if (useClr0) {
+        GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    }
+    if (useClr1) {
+        GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_CLR1, GX_CLR_RGBA, GX_RGBA8, 0);
+    }
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+}
+
+static void batch_restore_gx(JPAEmitterWorkData* work, bool changedTev, bool changedTexMtx) {
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    if (changedTexMtx) {
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
+    }
+
+    if (changedTev) {
+        GXSetNumChans(0);
+        work->mpRes->getBsp()->setGX(work);
+        work->mpRes->setPTev();
+    }
+}
+
+static bool draw_particle_batch(JPAEmitterWorkData* work) {
+    ZoneScoped;
+
+    JPAResource* res = work->mpRes;
+    const JPAResource::BatchInfo& info = res->mBatchInfo;
+    if (!info.supported || work->mPrjType != 0 || work->mpEmtr->mpPtclCallBack != nullptr) {
+        return false;
+    }
+
+    bool useClr0 = false;
+    bool useClr1 = false;
+    if (info.hasPtclColor) {
+        u32 colorSel = res->getBsp()->getTevColorArgSel();
+        if (colorSel >= 6) {
+            return false;
+        }
+        useClr0 = true;
+        useClr1 = colorSel == 3 || colorSel == 4;
+        batch_setup_tev(work, useClr1);
+    }
+
+    if (info.hasPtclTexMtx) {
+        // UVs are CPU-transformed; drop the texgen
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    }
+
+    batch_setup_vtx_desc(useClr0, useClr1);
+
+    ParticleDrawCtx ctx{};
+    ctx.batch = true;
+    ctx.useTexMtx = info.hasPtclTexMtx;
+    ctx.useClr0 = useClr0;
+    ctx.useClr1 = useClr1;
+
+    bool fwdAhead = res->getBsp()->isDrawFwdAhead();
+    JPANode<JPABaseParticle>* node = fwdAhead ? work->mpEmtr->mAlivePtclBase.getLast() :
+                                                work->mpEmtr->mAlivePtclBase.getFirst();
+
+    GXBegin(GX_QUADS, GX_VTXFMT1, GX_AUTO);
+    while (node != work->mpEmtr->mAlivePtclBase.getEnd()) {
+        work->mpCurNode = node;
+        for (int i = res->mpDrawParticleFuncListNum - 1; i >= 0; i--) {
+            (*res->mpDrawParticleFuncList[i])(work, node->getObject(), &ctx);
+        }
+        node = fwdAhead ? node->getPrev() : node->getNext();
+    }
+    GXEnd();
+
+    batch_restore_gx(work, useClr0, info.hasPtclTexMtx);
+    return true;
+}
+#endif
+
 void JPAResource::drawP(JPAEmitterWorkData* work) {
     ZoneScoped;
     work->mpEmtr->clearStatus(0x80);
@@ -833,13 +1095,25 @@ void JPAResource::drawP(JPAEmitterWorkData* work) {
         (*mpDrawEmitterFuncList[i])(work);
     }
 
+#if TARGET_PC
+    if (draw_particle_batch(work)) {
+        GXSetMisc(GX_MT_XF_FLUSH, 0);
+        if (work->mpEmtr->mpEmtrCallBack != nullptr) {
+            work->mpEmtr->mpEmtrCallBack->drawAfter(work->mpEmtr);
+        }
+        return;
+    }
+
+    ParticleDrawCtx ctx{}; // immediate mode
+#endif
+
     if (pBsp->isDrawFwdAhead()) {
         JPANode<JPABaseParticle>* node = work->mpEmtr->mAlivePtclBase.getLast();
         for (; node != work->mpEmtr->mAlivePtclBase.getEnd(); node = node->getPrev()) {
             work->mpCurNode = node;
             if (mpDrawParticleFuncList != NULL) {
                 for (int i = mpDrawParticleFuncListNum - 1; i >= 0; i--) {
-                    (*mpDrawParticleFuncList[i])(work, node->getObject());
+                    (*mpDrawParticleFuncList[i])(work, node->getObject() JPA_DRAW_CTX_ARG);
                 }
             }
         }
@@ -849,7 +1123,7 @@ void JPAResource::drawP(JPAEmitterWorkData* work) {
             work->mpCurNode = node;
             if (mpDrawParticleFuncList != NULL) {
                 for (int i = mpDrawParticleFuncListNum - 1; i >= 0; i--) {
-                    (*mpDrawParticleFuncList[i])(work, node->getObject());
+                    (*mpDrawParticleFuncList[i])(work, node->getObject() JPA_DRAW_CTX_ARG);
                 }
             }
         }
@@ -896,13 +1170,17 @@ void JPAResource::drawC(JPAEmitterWorkData* work) {
         (*mpDrawEmitterChildFuncList[i])(work);
     }
 
+#if TARGET_PC
+    ParticleDrawCtx ctx{}; // immediate mode
+#endif
+
     if (pBsp->isDrawFwdAhead()) {
         JPANode<JPABaseParticle>* node = work->mpEmtr->mAlivePtclChld.getLast();
         for (; node != work->mpEmtr->mAlivePtclChld.getEnd(); node = node->getPrev()) {
             work->mpCurNode = node;
             if (mpDrawParticleChildFuncList != NULL) {
                 for (int i = mpDrawParticleChildFuncListNum - 1; i >= 0; i--) {
-                    (*mpDrawParticleChildFuncList[i])(work, node->getObject());
+                    (*mpDrawParticleChildFuncList[i])(work, node->getObject() JPA_DRAW_CTX_ARG);
                 }
             }
         }
@@ -912,7 +1190,7 @@ void JPAResource::drawC(JPAEmitterWorkData* work) {
             work->mpCurNode = node;
             if (mpDrawParticleChildFuncList != NULL) {
                 for (int i = mpDrawParticleChildFuncListNum - 1; i >= 0; i--) {
-                    (*mpDrawParticleChildFuncList[i])(work, node->getObject());
+                    (*mpDrawParticleChildFuncList[i])(work, node->getObject() JPA_DRAW_CTX_ARG);
                 }
             }
         }

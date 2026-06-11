@@ -17,6 +17,10 @@ class JPADynamicsBlock;
 class JPAFieldBlock;
 class JPAKeyBlock;
 
+#if TARGET_PC
+struct ParticleDrawCtx;
+#endif
+
 /**
  * @ingroup jsystem-jparticle
  * 
@@ -50,13 +54,19 @@ public:
 public:
     typedef void (*EmitterFunc)(JPAEmitterWorkData*);
     typedef void (*ParticleFunc)(JPAEmitterWorkData*, JPABaseParticle*);
+#if TARGET_PC
+    typedef void (*DrawParticleFunc)(JPAEmitterWorkData*, JPABaseParticle*,
+                                     ParticleDrawCtx*);
+#else
+    typedef ParticleFunc DrawParticleFunc;
+#endif
     /* 0x00 */ EmitterFunc* mpCalcEmitterFuncList;
     /* 0x04 */ EmitterFunc* mpDrawEmitterFuncList;
     /* 0x08 */ EmitterFunc* mpDrawEmitterChildFuncList;
     /* 0x0C */ ParticleFunc* mpCalcParticleFuncList;
-    /* 0x10 */ ParticleFunc* mpDrawParticleFuncList;
+    /* 0x10 */ DrawParticleFunc* mpDrawParticleFuncList;
     /* 0x14 */ ParticleFunc* mpCalcParticleChildFuncList;
-    /* 0x18 */ ParticleFunc* mpDrawParticleChildFuncList;
+    /* 0x18 */ DrawParticleFunc* mpDrawParticleChildFuncList;
 
     /* 0x1C */ JPABaseShape* pBsp;
     /* 0x20 */ JPAExtraShape* pEsp;
@@ -77,6 +87,20 @@ public:
     /* 0x45 */ u8 mpDrawParticleFuncListNum;
     /* 0x46 */ u8 mpCalcParticleChildFuncListNum;
     /* 0x47 */ u8 mpDrawParticleChildFuncListNum;
+
+#if TARGET_PC
+    struct BatchInfo {
+        f32 vtxPos[8][3];
+        f32 vtxUv[8][2];
+        u8 vtxCount;        // 4 (quad) or 8 (cross)
+        bool supported;     // draw func list contains only batchable funcs
+        bool hasPtclColor;  // per-particle JPARegist* func is present
+        bool hasPtclTexMtx; // JPALoadCalcTexCrdMtxAnm is present
+    };
+    BatchInfo mBatchInfo;
+
+    void initBatchInfo();
+#endif
 };
 
 #endif /* JPARESOURCE_H */

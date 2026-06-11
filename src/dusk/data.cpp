@@ -16,7 +16,6 @@
 #include <vector>
 
 #include <SDL3/SDL_filesystem.h>
-#include <SDL3/SDL_iostream.h>
 #include <SDL3/SDL_misc.h>
 #include <SDL3/SDL_stdinc.h>
 
@@ -28,8 +27,6 @@ namespace {
 aurora::Module Log{"dusk::data"};
 
 constexpr auto kLocationDescriptorName = "data_location.json";
-constexpr auto kPipelineCacheName = "pipeline_cache.db";
-constexpr auto kInitialPipelineCacheName = "initial_pipeline_cache.db";
 
 constexpr std::array<std::string_view, 4> kUserDataDirectories = {
     "texture_replacements",
@@ -37,10 +34,11 @@ constexpr std::array<std::string_view, 4> kUserDataDirectories = {
     "EUR",
     "JAP",
 };
-constexpr std::array<std::string_view, 6> kUserDataFiles = {
+constexpr std::array<std::string_view, 7> kUserDataFiles = {
     "achievements.json",
     "config.json",
     "controller_ports.dat",
+    "gamecontrollerdb.txt",
     "imgui.ini",
     "keyboard_bindings.dat",
     "states.json",
@@ -111,7 +109,7 @@ std::filesystem::path get_pref_path() {
         Log.fatal("Unable to get PrefPath: {}", SDL_GetError());
     }
 
-    std::filesystem::path result{reinterpret_cast<const char8_t*>(prefPath)};
+    std::filesystem::path result = path_from_utf8(prefPath);
     SDL_free(prefPath);
     return result;
 }
@@ -128,7 +126,7 @@ std::filesystem::path base_path_relative(const std::filesystem::path& path) {
     if (!basePath) {
         return path;
     }
-    return std::filesystem::path{basePath} / path;
+    return path_from_utf8(basePath) / path;
 }
 
 std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
@@ -888,102 +886,6 @@ void ensure_data_directory(const std::filesystem::path& dataPath) {
     }
 }
 
-SDL_IOStream* open_initial_pipeline_cache_source(std::string& sourcePathString) {
-    const auto basePath = base_path_relative(kInitialPipelineCacheName);
-    sourcePathString = io::fs_path_to_string(basePath);
-    auto* source = SDL_IOFromFile(sourcePathString.c_str(), "rb");
-    if (source != nullptr) {
-        return source;
-    }
-
-    sourcePathString = std::string{kInitialPipelineCacheName};
-    return SDL_IOFromFile(sourcePathString.c_str(), "rb");
-}
-
-void ensure_initial_pipeline_cache(const std::filesystem::path& configDir) {
-    if (configDir.empty()) {
-        return;
-    }
-
-    std::error_code ec;
-    std::filesystem::create_directories(configDir, ec);
-    if (ec) {
-        Log.warn("Failed to create config directory '{}' for pipeline cache: {}",
-            io::fs_path_to_string(configDir), ec.message());
-        return;
-    }
-
-    const auto pipelineCachePath = configDir / kPipelineCacheName;
-    if (std::filesystem::exists(pipelineCachePath, ec)) {
-        return;
-    }
-
-    std::string sourcePathString;
-    SDL_IOStream* source = open_initial_pipeline_cache_source(sourcePathString);
-    if (source == nullptr) {
-        Log.info("No bundled initial pipeline cache found");
-        return;
-    }
-
-    const auto pipelineCacheString = io::fs_path_to_string(pipelineCachePath);
-    SDL_IOStream* destination = SDL_IOFromFile(pipelineCacheString.c_str(), "wb");
-    if (destination == nullptr) {
-        Log.warn("Failed to open '{}' for seeded pipeline cache: {}", pipelineCacheString,
-            SDL_GetError());
-        SDL_CloseIO(source);
-        return;
-    }
-
-    bool copied = true;
-    std::array<char, 64 * 1024> buffer{};
-    while (true) {
-        const size_t bytesRead = SDL_ReadIO(source, buffer.data(), buffer.size());
-        if (bytesRead > 0) {
-            size_t bytesWritten = 0;
-            while (bytesWritten < bytesRead) {
-                const size_t written = SDL_WriteIO(
-                    destination, buffer.data() + bytesWritten, bytesRead - bytesWritten);
-                if (written == 0) {
-                    Log.warn("Failed to write seeded pipeline cache '{}': {}", pipelineCacheString,
-                        SDL_GetError());
-                    copied = false;
-                    break;
-                }
-                bytesWritten += written;
-            }
-        }
-
-        if (!copied) {
-            break;
-        }
-
-        if (bytesRead < buffer.size()) {
-            if (SDL_GetIOStatus(source) == SDL_IO_STATUS_EOF) {
-                break;
-            }
-
-            Log.warn(
-                "Failed to read bundled pipeline cache '{}': {}", sourcePathString, SDL_GetError());
-            copied = false;
-            break;
-        }
-    }
-
-    if (!SDL_CloseIO(destination)) {
-        Log.warn(
-            "Failed to close seeded pipeline cache '{}': {}", pipelineCacheString, SDL_GetError());
-        copied = false;
-    }
-    SDL_CloseIO(source);
-
-    if (!copied) {
-        std::filesystem::remove(pipelineCachePath, ec);
-        return;
-    }
-
-    Log.info("Seeded pipeline cache from '{}'", sourcePathString);
-}
-
 }  // namespace
 
 bool open_data_path() {
@@ -1096,7 +998,6 @@ Paths initialize_data() {
     migrate_data(prefPath, dataPath, descriptor ? &descriptor->descriptor : nullptr);
     ensure_data_directory(dataPath);
     ensure_data_directory(prefPath);
-    ensure_initial_pipeline_cache(prefPath);
 
     return Paths{
         .userPath = dataPath,

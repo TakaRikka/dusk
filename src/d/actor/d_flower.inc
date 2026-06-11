@@ -598,6 +598,7 @@ dFlower_packet_c::dFlower_packet_c() {
 }
 
 void dFlower_packet_c::draw() {
+    ZoneScoped;
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
     j3dSys.reinitGX();
 

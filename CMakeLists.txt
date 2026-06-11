@@ -126,6 +126,33 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_cmake")
 
+option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+if (ENABLE_ASAN)
+    if (CMAKE_C_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC" AND
+            CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+        add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/fsanitize=address>)
+        add_link_options(/fsanitize=address /INCREMENTAL:NO)
+        set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "ProgramDatabase")
+        foreach (_lang C CXX)
+            foreach (_rtc_flag /RTC1 /RTCc /RTCs /RTCu)
+                string(REPLACE "${_rtc_flag}" "" CMAKE_${_lang}_FLAGS_DEBUG "${CMAKE_${_lang}_FLAGS_DEBUG}")
+            endforeach ()
+        endforeach ()
+    elseif (CMAKE_C_COMPILER_FRONTEND_VARIANT STREQUAL "GNU" AND
+            CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+        add_compile_options(
+                $<$<COMPILE_LANGUAGE:C,CXX,OBJC,OBJCXX>:-fsanitize=address>
+                $<$<COMPILE_LANGUAGE:C,CXX,OBJC,OBJCXX>:-fno-omit-frame-pointer>
+        )
+        add_link_options(-fsanitize=address)
+    else ()
+        message(FATAL_ERROR "ENABLE_ASAN requires GNU-like or MSVC-like C/C++ compiler frontends")
+    endif ()
+
+    add_compile_definitions(NDEBUG_SANITIZER) # Avoids absl issue with SwissTable debug code
+    message(STATUS "dusklight: Enabled AddressSanitizer")
+endif ()
+
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
   set(DAWN_USE_WAYLAND ON CACHE BOOL "Enable support for Wayland surface" FORCE)
 endif ()
@@ -137,11 +164,19 @@ target_compile_definitions(aurora_mtx PRIVATE MTX_USE_PS=1)
 
 add_subdirectory(libs/freeverb)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(DUSK_GFX_DEBUG_GROUPS_DEFAULT ON)
+else ()
+    set(DUSK_GFX_DEBUG_GROUPS_DEFAULT OFF)
+endif ()
+
 option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 option(DUSK_ENABLE_UPDATE_CHECKER "Enable update checking support" ON)
 option(DUSK_ENABLE_SENTRY_NATIVE "Enable sentry-native crash reporting support" OFF)
+option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structure" OFF)
+option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
 set(DUSK_SENTRY_DSN "" CACHE STRING "Sentry DSN")
 set(DUSK_SENTRY_ENVIRONMENT "development" CACHE STRING "Sentry environment")
 
@@ -189,6 +224,8 @@ if (DUSK_MOVIE_SUPPORT)
             CMAKE_MSVC_RUNTIME_LIBRARY
             CMAKE_MSVC_DEBUG_INFORMATION_FORMAT
             CMAKE_OSX_ARCHITECTURES
+            CMAKE_OSX_DEPLOYMENT_TARGET
+            CMAKE_OSX_SYSROOT
             DEPLOYMENT_TARGET
             ENABLE_ARC
             ENABLE_BITCODE
@@ -246,7 +283,6 @@ elseif (MSVC)
     endif ()
     add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
 endif ()
-
 
 include(FetchContent)
 
@@ -342,9 +378,7 @@ set(GAME_INCLUDE_DIRS
 find_package(Threads REQUIRED)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
-    Threads::Threads)
-
-list(APPEND GAME_LIBS libzstd_static)
+    Threads::Threads zstd::libzstd)
 
 if (DUSK_ENABLE_SENTRY_NATIVE)
     list(APPEND GAME_LIBS sentry)
@@ -416,6 +450,16 @@ if(ANDROID)
     list(APPEND GAME_COMPILE_DEFS TARGET_ANDROID=1)
 endif ()
 
+if (DUSK_PACKAGE_INSTALL)
+    include(GNUInstallDirs)
+    list(APPEND GAME_COMPILE_DEFS DUSK_ASSET_DIR="${CMAKE_INSTALL_FULL_DATADIR}/dusklight/")
+endif ()
+
+if (DUSK_GFX_DEBUG_GROUPS)
+    list(APPEND GAME_COMPILE_DEFS DUSK_GFX_DEBUG_GROUPS=1)
+    target_compile_definitions(aurora_gx PRIVATE AURORA_GFX_DEBUG_GROUPS)
+endif ()
+
 # game_debug is for game code files that we know work when compiled with DEBUG=1
 # Of course, if building a release build, this distinction is irrelevant
 set(GAME_DEBUG_FILES
@@ -471,6 +515,9 @@ if(ANDROID)
     set_target_properties(dusklight PROPERTIES OUTPUT_NAME main)
 else ()
     add_executable(dusklight ${DUSK_FILES})
+endif ()
+if (ENABLE_ASAN)
+    target_sources(dusklight PRIVATE src/dusk/asan_options.c)
 endif ()
 
 target_compile_definitions(dusklight PRIVATE ${GAME_COMPILE_DEFS})
@@ -634,12 +681,20 @@ set(EXTRA_TARGETS "")
 if (TARGET crashpad_handler)
     list(APPEND EXTRA_TARGETS crashpad_handler)
 endif ()
-install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_PREFIX})
+if (DUSK_PACKAGE_INSTALL)
+    install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_BINDIR})
+else()
+    install(TARGETS ${BINARY_TARGETS} ${EXTRA_TARGETS} DESTINATION ${CMAKE_INSTALL_PREFIX})
+endif()
 aurora_install_runtime_dlls(dusklight ${CMAKE_INSTALL_PREFIX})
 if (NOT APPLE)
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
+    if (DUSK_PACKAGE_INSTALL)
+        install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/dusklight)
+    else()
+        install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_INSTALL_PREFIX})
+    endif()
 endif ()
-if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
+if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo AND NOT DUSK_PACKAGE_INSTALL)
     set(DEBUG_FILES_LIST "")
     foreach (target IN LISTS BINARY_TARGETS EXTRA_TARGETS)
         get_target_output_name(${target} output_name)

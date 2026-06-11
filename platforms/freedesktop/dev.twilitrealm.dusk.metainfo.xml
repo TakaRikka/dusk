@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>dev.twilitrealm.dusk</id>
+  <launchable type="desktop-id">dev.twilitrealm.dusk.desktop</launchable>
+  <name>Dusklight</name>
+  <summary>Native port of a classic adventure game</summary>
+  <developer id="dev.twilitrealm">
+    <name>Twilit Realm</name>
+  </developer>
+  <url type="homepage">https://twilitrealm.dev</url>
+  <url type="bugtracker">https://github.com/TwilitRealm/dusklight/issues</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>CC0-1.0</project_license>
+  <content_rating type="oars-1.0"/>
+  <supports>
+      <control>console</control>
+      <control>gamepad</control>
+  </supports>
+  <description>
+    <p>
+      Dusklight is a reverse-engineered reimplementation of a classic adventure game.
+      It aims to be as accurate as possible to the original while also providing new options, enhancements, and tools to customize your experience.
+    </p>
+  </description>
+  
+  <provides>
+    <binary>dusklight</binary>
+    <id>dev.twilitrealm.dusk.desktop</id>
+  </provides>
+
+  <releases>
+    <release version="UNRELEASED" date="2026-12-31">
+      <description>
+        <p>Initial Flatpak release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

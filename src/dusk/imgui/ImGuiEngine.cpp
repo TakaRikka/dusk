@@ -20,7 +20,11 @@
 namespace dusk {
 namespace {
 std::string GetAssetPath(const char* assetName) {
+#ifdef DUSK_ASSET_DIR
+    const char* basePath = DUSK_ASSET_DIR;
+#else
     const char* basePath = SDL_GetBasePath();
+#endif
     if (basePath != nullptr && basePath[0] != '\0') {
         return std::string(basePath) + "res/" + assetName;
     }

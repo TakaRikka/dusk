@@ -75,6 +75,14 @@ constexpr std::array kMenuScalingModeLabels = {
     "Dusklight",
 };
 
+constexpr std::array kMagicArmorModes = {
+    "Normal",
+    "On Damage",
+    "Double Defense",
+    "Invincible",
+    "Cosmetic",
+};
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;
@@ -211,7 +219,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
-    getSettings().game.freeMagicArmor.setSpeedrunValue(false);
+    getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);
     getSettings().game.invincibleEnemies.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
@@ -383,9 +391,7 @@ int float_setting_percent(ConfigVar<float>& var) {
 }
 
 bool gyro_enabled() {
-    return getSettings().game.enableGyroAim ||
-           (getSettings().game.enableGyroRollgoal &&
-            getSettings().game.gyroMode.getValue() != GyroMode::Mouse);
+    return getSettings().game.enableGyroAim || getSettings().game.enableGyroRollgoal;
 }
 
 struct ConfigBoolProps {
@@ -453,7 +459,7 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
     });
     leftPane.register_control(button, rightPane, [helpText = std::move(helpText)](Pane& pane) {
         pane.clear();
-        pane.add_text(helpText);
+        pane.add_rml(helpText);
     });
     return button;
 }
@@ -949,73 +955,32 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Camera");
         addOption("Free Camera", getSettings().game.freeCamera,
-            "Enables twin-stick camera control, letting the C-Stick move the camera vertically as "
-            "well as horizontally.");
-        addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
-            "Invert horizontal camera movement.");
-        addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
-            "Invert vertical camera movement when Free Camera is enabled.",
-            [] { return !getSettings().game.freeCamera; });
+            "Enables free camera control, letting you control the camera fully with the C-Stick.");
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraXSensitivity,
-            "Free Camera X Sensitivity", "Adjusts twin-stick camera X axis sensitivity.", 50, 200, 5,
-            [] { return !getSettings().game.freeCamera; });
+            "Free Camera X Sensitivity",
+            "Adjusts horizontal free camera sensitivity.<br/><br/>Applies to the control stick only.",
+            50, 200, 5, [] { return !getSettings().game.freeCamera; });
         config_percent_select(leftPane, rightPane, getSettings().game.freeCameraYSensitivity,
-            "Free Camera Y Sensitivity", "Adjusts twin-stick camera Y axis sensitivity.", 50, 200, 5,
+            "Free Camera Y Sensitivity",
+            "Adjusts vertical free camera sensitivity.<br/><br/>Applies to the control stick only.",
+            50, 200, 5, [] { return !getSettings().game.freeCamera; });
+        addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
+            "Invert horizontal camera movement.<br/><br/>Applies to the control stick only.");
+        addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
+            "Invert vertical camera movement.<br/><br/>Applies to the control stick only.",
             [] { return !getSettings().game.freeCamera; });
         addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
-            "Invert horizontal movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
+            "Invert horizontal movement while aiming with items or first person camera.<br/><br/>Applies to the control stick only.");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
-            "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
-        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
-            "Invert horizontal movement while flying or swimming.");
-        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
-            "Invert vertical movement while flying or swimming.");
+            "Invert vertical movement while aiming with items or first person camera.<br/><br/>Applies to the control stick only.");
 
         leftPane.add_section("Gyro");
-        leftPane.register_control(
-            leftPane.add_select_button({
-                .key = "Gyro Input Method",
-                .getValue =
-                    [] {
-                        const auto mode = getSettings().game.gyroMode.getValue();
-                        const auto idx = static_cast<size_t>(mode);
-                        return Rml::String{kGyroInputModeLabels[idx]};
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.gyroMode.getValue() !=
-                               getSettings().game.gyroMode.getDefaultValue();
-                    },
-            }),
-            rightPane, [](Pane& pane) {
-                for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
-                    pane
-                        .add_button({
-                            .text = Rml::String{kGyroInputModeLabels[i]},
-                            .isSelected =
-                                [i] {
-                                    return getSettings().game.gyroMode.getValue() == static_cast<GyroMode>(i);
-                                },
-                        })
-                        .on_pressed([i] {
-                            mDoAud_seStartMenu(kSoundItemChange);
-                            const GyroMode mode = static_cast<GyroMode>(i);
-                            getSettings().game.gyroMode.setValue(mode);
-                            config::Save();
-                        });
-                }
-                pane.add_rml(
-                    "<br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/>"
-                    "<br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/>"
-                    "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
-            });
         addOption("Gyro Aim", getSettings().game.enableGyroAim,
             "Enables gyro controls while in look mode, aiming a hawk, and aiming "
             "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
             "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
         addOption("Gyro Rollgoal", getSettings().game.enableGyroRollgoal,
-            "Enables gyro controls for Rollgoal in Hena's Cabin.",
-            [] { return getSettings().game.gyroMode.getValue() == GyroMode::Mouse; });
+            "Enables gyro controls for Rollgoal in Hena's Cabin.");
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityY,
             "Gyro Pitch Sensitivity", "Controls vertical gyro aiming sensitivity.", 25, 400, 5,
             [] { return !gyro_enabled(); });
@@ -1025,10 +990,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
             "Rollgoal Sensitivity", "Controls how strongly gyro input tilts the Rollgoal table.",
             25, 400, 5,
-            [] {
-                return !getSettings().game.enableGyroRollgoal ||
-                       getSettings().game.gyroMode.getValue() == GyroMode::Mouse;
-            });
+            [] { return !getSettings().game.enableGyroRollgoal; });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroDeadband, "Gyro Deadband",
             "Ignores small gyro movement to reduce drift and jitter.", 0, 50, 1,
             [] { return !gyro_enabled(); });
@@ -1039,8 +1001,29 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert vertical gyro aiming.", [] { return !gyro_enabled(); });
         addOption("Invert Gyro Yaw", getSettings().game.gyroInvertYaw,
             "Invert horizontal gyro aiming.", [] { return !gyro_enabled(); });
-        
+
+        leftPane.add_section("Mouse");
+        addOption("Mouse Aim", getSettings().game.enableMouseAim,
+            "Enables mouse input while in look mode, aiming a hawk, and aiming "
+            "supported items.<br/><br/>Supported items include the Slingshot, Gale Boomerang, "
+            "Hero's Bow, Clawshot(s), Ball and Chain, and Dominion Rod.");
+        addOption("Mouse Camera", getSettings().game.enableMouseCamera,
+            "Enables mouse input for controlling the third-person camera.");
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseAimSensitivity,
+            "Mouse Aim Sensitivity", "Controls mouse aim sensitivity.", 25, 400, 5,
+            [] { return !getSettings().game.enableMouseAim; });
+        config_percent_select(leftPane, rightPane, getSettings().game.mouseCameraSensitivity,
+            "Mouse Camera Sensitivity", "Controls mouse camera sensitivity.", 25, 400, 5,
+            [] { return !getSettings().game.enableMouseCamera; });
+        addOption("Invert Mouse Y", getSettings().game.invertMouseY,
+            "Invert vertical mouse control for both aiming and camera.",
+            [] { return !getSettings().game.enableMouseAim || !getSettings().game.enableMouseCamera; });
+
         leftPane.add_section("Gameplay");
+        addOption("Invert Air/Swim X Axis", getSettings().game.invertAirSwimX,
+            "Invert horizontal movement while flying or swimming.");
+        addOption("Invert Air/Swim Y Axis", getSettings().game.invertAirSwimY,
+            "Invert vertical movement while flying or swimming.");
         addOption("Swap Direct Select Input", getSettings().game.swapDirectSelect,
             "Swap the controls for using Direct Select on the item wheel, making Direct Select the default and holding L to scroll the wheel.");
 
@@ -1138,6 +1121,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Minimal HUD", getSettings().game.minimalHUD,
             "Disables the elements of the main HUD of the game.<br/>Useful for a more immersive "
             "experience.");
+        config_percent_select(leftPane, rightPane, getSettings().game.hudScale,
+            "HUD Scale",
+            "Scales the size of the gameplay HUD (hearts, buttons, mini-map, etc.). Does not affect dialog boxes or menus.",
+            50, 200, 5,
+            [] { return getSettings().game.minimalHUD.getValue(); });
         addOption("Restore Wii 1.0 Glitches", getSettings().game.restoreWiiGlitches,
             "Restores patched glitches from Wii USA 1.0, the first released version.");
         addOption("Enable Rotating Link Doll", getSettings().game.enableLinkDollRotation,
@@ -1198,6 +1186,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Link will not recoil when his sword hits walls.");
         addOption("No 2nd Fish for Cat", getSettings().game.no2ndFishForCat,
             "Skip needing to catch a second fish for Sera's cat.");
+        addOption("Button Fishing", getSettings().game.buttonFishing,
+            "Allow fishing with the Fishing Rod using the button the item is assigned to.");
         addOption("Show Poe Count on Map", getSettings().game.enhancedMapMenus,
             "Displays collected/total number of Poe Souls for a region on the map.");
         addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,
@@ -1290,8 +1280,38 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");
-        addCheat("Free Magic Armor", getSettings().game.freeMagicArmor,
-            "Lets the magic armor work without consuming rupees.");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Magic Armor Behavior",
+                .getValue =
+                    [] {
+                        return kMagicArmorModes[static_cast<u8>(getSettings().game.armorRupeeDrain.getValue())];
+                    },
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .isModified =
+                    [] {
+                        return getSettings().game.armorRupeeDrain.getValue() !=
+                               getSettings().game.armorRupeeDrain.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kMagicArmorModes.size(); i++) {
+                    pane.add_button({
+                            .text = kMagicArmorModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.armorRupeeDrain.getValue() == static_cast<MagicArmorMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.armorRupeeDrain.setValue(static_cast<MagicArmorMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml(
+                    "<br/>Control the behavior of the Magic Armor.");
+            });
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
     });

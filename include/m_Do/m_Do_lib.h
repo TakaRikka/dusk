@@ -44,7 +44,7 @@ struct mDoLib_clipper {
 
 void mDoLib_project(Vec* src, Vec* dst);
 u32 mDoLib_setResTimgObj(ResTIMG const* res, TGXTexObj* o_texObj, u32 tlut_name,
-                          GXTlutObj* o_tlutObj);
+                         TGXTlutObj* o_tlutObj);
 void mDoLib_pos2camera(Vec* src, Vec* dst);
 
 #if PLATFORM_WII

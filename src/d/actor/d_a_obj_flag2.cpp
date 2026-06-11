@@ -261,6 +261,7 @@ void FlagCloth_c::execute() {
 }
 
 void FlagCloth_c::draw() {
+    ZoneScoped;
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
     dKy_setLight_again();

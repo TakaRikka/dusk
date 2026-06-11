@@ -328,13 +328,13 @@ int daNpcImpal_c::step(s16 i_angle, int i_animate) {
 }
 
 void daNpcImpal_c::playExpression() {
-    daNpcF_anmPlayData dat0 = {ANM_1, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat0 = {ANM_1, mpHIO->m.common.morf_frame, DUSK_IF_ELSE(0, 1)};
     daNpcF_anmPlayData* pDat0[1] = {&dat0};
-    daNpcF_anmPlayData dat1 = {ANM_5, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat1 = {ANM_5, mpHIO->m.common.morf_frame, DUSK_IF_ELSE(0, 1)};
     daNpcF_anmPlayData* pDat1[1] = {&dat1};
-    daNpcF_anmPlayData dat2 = {ANM_4, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat2 = {ANM_4, mpHIO->m.common.morf_frame, DUSK_IF_ELSE(0, 1)};
     daNpcF_anmPlayData* pDat2[1] = {&dat2};
-    daNpcF_anmPlayData dat3 = {ANM_6, mpHIO->m.common.morf_frame, 1};
+    daNpcF_anmPlayData dat3 = {ANM_6, mpHIO->m.common.morf_frame, DUSK_IF_ELSE(0, 1)};
     daNpcF_anmPlayData* pDat3[1] = {&dat3};
     daNpcF_anmPlayData dat4 = {ANM_8, mpHIO->m.common.morf_frame, 0};
     daNpcF_anmPlayData* pDat4[1] = {&dat4};

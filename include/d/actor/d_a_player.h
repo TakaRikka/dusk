@@ -50,6 +50,10 @@ public:
     /* 0x14 */ Mtx mProjMtx;
     /* 0x44 */ ResTIMG* mpImg;
     /* 0x48 */ u8* mpData;
+#if TARGET_PC
+    TGXTexObj mTexObj;
+    ResTIMG* mpCachedImg = nullptr;
+#endif
 };
 
 class daPy_boomerangMove_c {

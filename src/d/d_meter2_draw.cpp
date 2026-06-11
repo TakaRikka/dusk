@@ -23,6 +23,39 @@
 #include "dusk/frame_interpolation.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#include <algorithm>
+
+namespace {
+
+// Reads the user HUD scale setting, clamped to a safe range.
+f32 dGetUserHudScale() {
+    return std::clamp(dusk::getSettings().game.hudScale.getValue(), 0.5f, 2.0f);
+}
+
+// The screen corner each HUD group is anchored to. A pane scales around its own origin,
+// so without correction it drifts away from the screen edge; this names the corner that
+// must stay put.
+enum class HudCorner { TopLeft, TopRight, BottomLeft, BottomRight };
+
+// Adds the paneTrans offset that keeps i_corner pinned in place while the user HUD scale
+// grows or shrinks the pane. The shift is half the change in size pushed toward the
+// anchor corner, so it depends only on the pane's size (not its on-screen position) and
+// works whether the HUD is scaled down or up. i_pull < 1 applies a partial horizontal
+// push for a pane whose content sits inset from its box edge (the heart row).
+void dAnchorHudScale(CPaneMgr* i_pane, HudCorner i_corner, f32* io_x, f32* io_y, f32 i_pull = 1.0f) {
+    const f32 half = (1.0f - dGetUserHudScale()) * 0.5f;
+    const f32 dirX =
+        (i_corner == HudCorner::TopRight || i_corner == HudCorner::BottomRight) ? 1.0f : -1.0f;
+    const f32 dirY =
+        (i_corner == HudCorner::BottomLeft || i_corner == HudCorner::BottomRight) ? 1.0f : -1.0f;
+    *io_x += dirX * i_pane->getInitSizeX() * half * i_pull;
+    *io_y += dirY * i_pane->getInitSizeY() * half;
+}
+
+}  // namespace
+#endif
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");
 
@@ -536,6 +569,12 @@ void dMeter2Draw_c::init() {
 }
 
 void dMeter2Draw_c::exec(u32 i_status) {
+#if TARGET_PC
+    // n_all keeps the vanilla scale. Scaling the root pane shrinks every child toward
+    // its centred origin; per-child scaling in each drawXxx() path keeps each HUD group
+    // anchored to its own pane origin and also pulls it toward the screen corner.
+    const f32 userHudScale = dGetUserHudScale();
+#endif
     if (mParentScale != g_drawHIO.mParentScale) {
         mParentScale = g_drawHIO.mParentScale;
         mpParent->scale(g_drawHIO.mParentScale, g_drawHIO.mParentScale);
@@ -546,6 +585,39 @@ void dMeter2Draw_c::exec(u32 i_status) {
         mpParent->setAlphaRate(g_drawHIO.mParentAlpha);
     }
 
+#if TARGET_PC
+    if (i_status & 0x1000000) {
+        f32 ringPosX = g_drawHIO.mRingHUDButtonsPosX;
+        f32 ringPosY = g_drawHIO.mRingHUDButtonsPosY;
+        dAnchorHudScale(mpButtonParent, HudCorner::TopRight, &ringPosX, &ringPosY);
+        if (mButtonsPosX != ringPosX || mButtonsPosY != ringPosY) {
+            mButtonsPosX = ringPosX;
+            mButtonsPosY = ringPosY;
+            mpButtonParent->paneTrans(ringPosX, ringPosY);
+        }
+
+        const f32 ringButtonsScale = g_drawHIO.mRingHUDButtonsScale * userHudScale;
+        if (mButtonsScale != ringButtonsScale) {
+            mButtonsScale = ringButtonsScale;
+            mpButtonParent->scale(ringButtonsScale, ringButtonsScale);
+        }
+    } else {
+        f32 mainPosX = g_drawHIO.mMainHUDButtonsPosX;
+        f32 mainPosY = g_drawHIO.mMainHUDButtonsPosY;
+        dAnchorHudScale(mpButtonParent, HudCorner::TopRight, &mainPosX, &mainPosY);
+        if (mButtonsPosX != mainPosX || mButtonsPosY != mainPosY) {
+            mButtonsPosX = mainPosX;
+            mButtonsPosY = mainPosY;
+            mpButtonParent->paneTrans(mainPosX, mainPosY);
+        }
+
+        const f32 mainButtonsScale = g_drawHIO.mMainHUDButtonsScale * userHudScale;
+        if (mButtonsScale != mainButtonsScale) {
+            mButtonsScale = mainButtonsScale;
+            mpButtonParent->scale(mainButtonsScale, mainButtonsScale);
+        }
+    }
+#else
     if (i_status & 0x1000000) {
         if (mButtonsPosX != g_drawHIO.mRingHUDButtonsPosX ||
             mButtonsPosY != g_drawHIO.mRingHUDButtonsPosY)
@@ -574,6 +646,7 @@ void dMeter2Draw_c::exec(u32 i_status) {
             mpButtonParent->scale(g_drawHIO.mMainHUDButtonsScale, g_drawHIO.mMainHUDButtonsScale);
         }
     }
+#endif
 }
 
 void dMeter2Draw_c::draw() {
@@ -588,6 +661,9 @@ void dMeter2Draw_c::draw() {
         if (mpItemXY[i] != NULL) {
             for (int j = 0; j < 3; j++) {
                 f32 temp_f30 = mItemParams[i].num_scale * 16.0f;
+#if TARGET_PC
+                temp_f30 *= dGetUserHudScale();
+#endif
 
                 Vec vtx0 = mpItemXY[i]->getPanePtr()->getGlbVtx(0);
                 Vec vtx3 = mpItemXY[i]->getPanePtr()->getGlbVtx(3);
@@ -1478,7 +1554,12 @@ void dMeter2Draw_c::drawLife(s16 i_maxLife, s16 i_life, f32 i_posX, f32 i_posY) 
         }
     }
 
+#if TARGET_PC
+    const f32 lifeParentScale = g_drawHIO.mLifeParentScale * dGetUserHudScale();
+    mpLifeParent->scale(lifeParentScale, lifeParentScale);
+#else
     mpLifeParent->scale(g_drawHIO.mLifeParentScale, g_drawHIO.mLifeParentScale);
+#endif
 
     for (int i = 0; i < 20; i++) {
         mpHeartMark[i]->scale(g_drawHIO.mHeartMarkScale, g_drawHIO.mHeartMarkScale);
@@ -1488,7 +1569,16 @@ void dMeter2Draw_c::drawLife(s16 i_maxLife, s16 i_life, f32 i_posX, f32 i_posY) 
         mpBigHeart->scale(g_drawHIO.mBigHeartScale, g_drawHIO.mBigHeartScale);
     }
 
+#if TARGET_PC
+    f32 lifePosX = i_posX;
+    f32 lifePosY = i_posY;
+    // The heart row sits inset from its box's left edge, so use a partial horizontal pull
+    // to keep it from jamming against the screen edge.
+    dAnchorHudScale(mpLifeParent, HudCorner::TopLeft, &lifePosX, &lifePosY, 0.6f);
+    mpLifeParent->paneTrans(lifePosX, lifePosY);
+#else
     mpLifeParent->paneTrans(i_posX, i_posY);
+#endif
 }
 
 void dMeter2Draw_c::setAlphaLifeChange(bool param_0) {
@@ -1601,9 +1691,22 @@ void dMeter2Draw_c::drawKanteraScreen(u8 i_meterType) {
     mpMagicMeter->resize(field_0x584[i_meterType], field_0x590[i_meterType]);
     mpMagicFrameR->move(field_0x59c[i_meterType], field_0x5a8[i_meterType]);
     mpMagicBase->resize(field_0x5b4[i_meterType], field_0x5c0[i_meterType]);
+#if TARGET_PC
+    const f32 magicUserScale = dGetUserHudScale();
+    mpMagicParent->scale(field_0x5cc[i_meterType] * magicUserScale,
+                         field_0x5d8[i_meterType] * magicUserScale);
+
+    f32 magicPosX = field_0x5e4[i_meterType];
+    f32 magicPosY = field_0x5f0[i_meterType];
+    // The oil/magic bar sits inset within its pane box, so use a reduced horizontal pull
+    // (like the heart row) to keep it from overshooting off the left edge when shrunk.
+    dAnchorHudScale(mpMagicParent, HudCorner::TopLeft, &magicPosX, &magicPosY, 0.3f);
+    mpMagicParent->paneTrans(magicPosX, magicPosY);
+#else
     mpMagicParent->scale(field_0x5cc[i_meterType], field_0x5d8[i_meterType]);
 
     mpMagicParent->paneTrans(field_0x5e4[i_meterType], field_0x5f0[i_meterType]);
+#endif
 
     mpKanteraScreen->draw(0.0f, 0.0f, graf_ctx);
 }
@@ -1867,10 +1970,21 @@ void dMeter2Draw_c::drawLightDrop(u8 i_num, u8 i_needNum, f32 i_posX, f32 i_posY
 
     field_0x6fc = param_5;
     mLightDropVesselScale = i_vesselScale;
+#if TARGET_PC
+    const f32 lightDropUserScale = dGetUserHudScale();
+    const f32 lightDropScale = mLightDropVesselScale * field_0x6f8 * lightDropUserScale;
+    mpLightDropParent->scale(lightDropScale, lightDropScale);
+
+    f32 lightDropPosX = i_posX;
+    f32 lightDropPosY = i_posY;
+    dAnchorHudScale(mpLightDropParent, HudCorner::TopRight, &lightDropPosX, &lightDropPosY);
+    mpLightDropParent->paneTrans(lightDropPosX, lightDropPosY);
+#else
     mpLightDropParent->scale(mLightDropVesselScale * field_0x6f8,
                              mLightDropVesselScale * field_0x6f8);
 
     mpLightDropParent->paneTrans(i_posX, i_posY);
+#endif
 }
 
 void dMeter2Draw_c::setAlphaLightDropChange(bool unused) {}
@@ -1943,8 +2057,13 @@ void dMeter2Draw_c::setAlphaLightDropAnimeMax() {
             field_0x6f8 = 1.0f;
         }
 
+#if TARGET_PC
+        const f32 dropAnimScale = mLightDropVesselScale * field_0x6f8 * dGetUserHudScale();
+        mpLightDropParent->scale(dropAnimScale, dropAnimScale);
+#else
         mpLightDropParent->scale(mLightDropVesselScale * field_0x6f8,
                                  mLightDropVesselScale * field_0x6f8);
+#endif
 
         if (g_drawHIO.mLightDrop.mDropGetScaleAnimFrameNum == mpLightDropParent->getAlphaTimer()) {
             dMeter2Info_setLightDropGetFlag(dComIfGp_getStartStageDarkArea(), 0xFF);
@@ -2015,10 +2134,22 @@ void dMeter2Draw_c::drawRupee(s16 i_rupeeNum) {
     static_cast<J2DPicture*>(mpRupeeTexture[0][0]->getPanePtr())->changeTexture(timg, 0);
     static_cast<J2DPicture*>(mpRupeeTexture[0][1]->getPanePtr())->changeTexture(timg, 0);
 
+#if TARGET_PC
+    const f32 rupeeKeyUserScale = dGetUserHudScale();
+    const f32 rupeeKeyScale = g_drawHIO.mRupeeKeyScale * field_0x718 * rupeeKeyUserScale;
+    mpRupeeKeyParent->scale(rupeeKeyScale, rupeeKeyScale);
+
+    f32 rupeeKeyPosX = g_drawHIO.mRupeeKeyPosX;
+    f32 rupeeKeyPosY = g_drawHIO.mRupeeKeyPosY;
+    // Rupees/keys read better anchored to the bottom-right corner than the top-right.
+    dAnchorHudScale(mpRupeeKeyParent, HudCorner::BottomRight, &rupeeKeyPosX, &rupeeKeyPosY);
+    mpRupeeKeyParent->paneTrans(rupeeKeyPosX, rupeeKeyPosY);
+#else
     mpRupeeKeyParent->scale(g_drawHIO.mRupeeKeyScale * field_0x718,
                             g_drawHIO.mRupeeKeyScale * field_0x718);
 
     mpRupeeKeyParent->paneTrans(g_drawHIO.mRupeeKeyPosX, g_drawHIO.mRupeeKeyPosY);
+#endif
 
     mpRupeeParent[0]->scale(g_drawHIO.mRupeeScale, g_drawHIO.mRupeeScale);
     mpRupeeParent[0]->paneTrans(g_drawHIO.mRupeePosX, g_drawHIO.mRupeePosY);
@@ -2137,8 +2268,18 @@ void dMeter2Draw_c::drawKey(s16 i_keyNum) {
         }
     }
 
+#if TARGET_PC
+    const f32 keyScale = g_drawHIO.mKeyScale * dGetUserHudScale();
+    mpKeyParent->scale(keyScale, keyScale);
+
+    f32 keyPosX = g_drawHIO.mKeyPosX;
+    f32 keyPosY = g_drawHIO.mKeyPosY;
+    dAnchorHudScale(mpKeyParent, HudCorner::BottomRight, &keyPosX, &keyPosY);
+    mpKeyParent->paneTrans(keyPosX, keyPosY);
+#else
     mpKeyParent->scale(g_drawHIO.mKeyScale, g_drawHIO.mKeyScale);
     mpKeyParent->paneTrans(g_drawHIO.mKeyPosX, g_drawHIO.mKeyPosY);
+#endif
 }
 
 void dMeter2Draw_c::setAlphaKeyChange(bool param_0) {
@@ -2596,11 +2737,24 @@ f32 dMeter2Draw_c::getButtonCrossParentInitTransY() {
 }
 
 void dMeter2Draw_c::drawButtonCross(f32 i_posX, f32 i_posY) {
+#if TARGET_PC
+    const f32 buttonCrossUserScale = dGetUserHudScale();
+    const f32 buttonCrossScale = g_drawHIO.mButtonCrossScale * buttonCrossUserScale;
+    mpButtonCrossParent->scale(buttonCrossScale, buttonCrossScale);
+#else
     mpButtonCrossParent->scale(g_drawHIO.mButtonCrossScale, g_drawHIO.mButtonCrossScale);
+#endif
     mpTextI->scale(g_drawHIO.mButtonCrossTextScale, g_drawHIO.mButtonCrossTextScale);
     mpTextM->scale(g_drawHIO.mButtonCrossTextScale, g_drawHIO.mButtonCrossTextScale);
 
+#if TARGET_PC
+    f32 buttonCrossPosX = i_posX;
+    f32 buttonCrossPosY = i_posY;
+    dAnchorHudScale(mpButtonCrossParent, HudCorner::TopLeft, &buttonCrossPosX, &buttonCrossPosY);
+    mpButtonCrossParent->paneTrans(buttonCrossPosX, buttonCrossPosY);
+#else
     mpButtonCrossParent->paneTrans(i_posX, i_posY);
+#endif
 }
 
 void dMeter2Draw_c::setAlphaButtonCrossAnimeMin() {
@@ -3505,9 +3659,16 @@ void dMeter2Draw_c::drawKanteraMeter(u8 i_button, f32 i_alphaRate) {
     Vec vtx0 = pane->getPanePtr()->getGlbVtx(0);
     Vec vtx3 = pane->getPanePtr()->getGlbVtx(3);
 
+#if TARGET_PC
+    const f32 oilUserScale = dGetUserHudScale();
+    mpKanteraMeter[i_button]->setPos(((vtx0.x + vtx3.x) * 0.5f) + 9.0f * oilUserScale + sp10[i_button],
+                                     vtx3.y + sp8[i_button]);
+    mpKanteraMeter[i_button]->setScale(0.6f * oilUserScale, 0.6f * oilUserScale);
+#else
     mpKanteraMeter[i_button]->setPos(((vtx0.x + vtx3.x) * 0.5f) + 9.0f + sp10[i_button],
                                      vtx3.y + sp8[i_button]);
     mpKanteraMeter[i_button]->setScale(0.6f, 0.6f);
+#endif
     mpKanteraMeter[i_button]->setNowGauge(dComIfGs_getMaxOil(), dComIfGs_getOil());
     mpKanteraMeter[i_button]->setAlphaRate(i_alphaRate);
 }
