@@ -57,6 +57,13 @@ enum class MenuScaling : u8 {
     Dusklight = 2,
 };
 
+enum class ZoraArmorMode : u8 {
+    Normal = 0,
+    Cosmetic = 1,
+    Mask = 2,
+    Cosmetic_Mask = 3,
+};
+
 enum class MagicArmorMode : u8 {
     NORMAL = 0,
     ON_DAMAGE = 1,
@@ -112,6 +119,12 @@ template <>
 struct ConfigEnumRange<MenuScaling> {
     static constexpr auto min = MenuScaling::GameCube;
     static constexpr auto max = MenuScaling::Dusklight;
+};
+
+template <>
+struct ConfigEnumRange<ZoraArmorMode> {
+    static constexpr auto min = ZoraArmorMode::Normal;
+    static constexpr auto max = ZoraArmorMode::Cosmetic_Mask;
 };
 
 template <>
@@ -248,6 +261,7 @@ struct UserSettings {
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastRoll;
         ConfigVar<bool> fastSpinner;
+        ConfigVar<ZoraArmorMode> zoraArmorMode;
         ConfigVar<MagicArmorMode> armorRupeeDrain;
         ConfigVar<bool> invincibleEnemies;
 

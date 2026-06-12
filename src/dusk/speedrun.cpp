@@ -33,6 +33,7 @@ void resetForSpeedrunMode() {
     getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
+    getSettings().game.zoraArmorMode.setSpeedrunValue(ZoraArmorMode::Normal);
     getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);

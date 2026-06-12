@@ -8,6 +8,12 @@
 #include "f_op/f_op_kankyo_mng.h"
 
 BOOL daAlink_c::checkZoraWearMaskDraw() {
+    #if TARGET_PC
+    if (dusk::getSettings().game.zoraArmorMode.getValue() == dusk::ZoraArmorMode::Mask ||
+        dusk::getSettings().game.zoraArmorMode.getValue() == dusk::ZoraArmorMode::Cosmetic_Mask) {
+            return checkZoraWearAbility();
+        }
+    #endif
     return checkZoraWearAbility() && !checkNoResetFlg0(FLG0_SWIM_UP);
 }
 
