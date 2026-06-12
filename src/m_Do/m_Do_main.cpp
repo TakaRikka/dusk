@@ -591,17 +591,16 @@ int game_main(int argc, char* argv[]) {
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
         config.windowPosX = -1;
         config.windowPosY = -1;
-        config.windowWidth = defaultWindowWidth * 2;
-        config.windowHeight = defaultWindowHeight * 2;
 
-        if (dusk::getSettings().video.memorizeWindowSize) {
-            int width = dusk::getSettings().video.lastWindowWidth.getValue();
-            int height = dusk::getSettings().video.lastWindowHeight.getValue();
+        const int lastWindowWidth = dusk::getSettings().video.lastWindowWidth.getValue();
+        const int lastWindowHeight = dusk::getSettings().video.lastWindowHeight.getValue();
 
-            if (width > 0 && height > 0) {
-                config.windowWidth = width;
-                config.windowHeight = height;
-            }
+        if (dusk::getSettings().video.memorizeWindowSize && lastWindowWidth > 0 && lastWindowHeight > 0) {
+            config.windowWidth = lastWindowWidth;
+            config.windowHeight = lastWindowHeight;
+        } else {
+            config.windowWidth = defaultWindowWidth * 2;
+            config.windowHeight = defaultWindowHeight * 2;
         }
 
         config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
