@@ -260,7 +260,7 @@ void main01(void) {
                 dusk::g_imguiConsole.HandleSDLEvent(event->sdl);
                 break;
             case AURORA_WINDOW_RESIZED:
-                if (dusk::getSettings().video.memorizeWindowSize && !dusk::getSettings().video.enableFullscreen) {
+                if (dusk::getSettings().video.rememberWindowSize && !dusk::getSettings().video.enableFullscreen) {
                     dusk::getSettings().video.lastWindowWidth.setValue(event->windowSize.width);
                     dusk::getSettings().video.lastWindowHeight.setValue(event->windowSize.height);
                     dusk::config::Save();
@@ -595,7 +595,7 @@ int game_main(int argc, char* argv[]) {
         const int lastWindowWidth = dusk::getSettings().video.lastWindowWidth.getValue();
         const int lastWindowHeight = dusk::getSettings().video.lastWindowHeight.getValue();
 
-        if (dusk::getSettings().video.memorizeWindowSize && lastWindowWidth > 0 && lastWindowHeight > 0) {
+        if (dusk::getSettings().video.rememberWindowSize && lastWindowWidth > 0 && lastWindowHeight > 0) {
             config.windowWidth = lastWindowWidth;
             config.windowHeight = lastWindowHeight;
         } else {

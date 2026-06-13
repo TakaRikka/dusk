@@ -802,10 +802,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml(
                     "<br/>Display the current framerate in a corner of the screen while playing.");
             });
-        config_bool_select(leftPane, rightPane, getSettings().video.memorizeWindowSize,
+        config_bool_select(leftPane, rightPane, getSettings().video.rememberWindowSize,
             {
-                .key = "Memorize Window Size",
-                .helpText = "Memorize the window's dimensions and restore them at the next startup. Fullscreen can still be toggled independently.",
+                .key = "Remember Window Size",
+                .helpText = "Save and restore the previous session's window size when opening Dusklight.",
                 .onChange =
                     [](bool value) {
                         if (value && !dusk::getSettings().video.enableFullscreen) {
