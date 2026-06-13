@@ -205,6 +205,37 @@ const std::vector<MenuContribution>& menu_contributions() noexcept {
     return mutable_menu_contributions();
 }
 
+static std::vector<WindowTabContribution>& mutable_window_tab_contributions() {
+    static std::vector<WindowTabContribution> contributions;
+    return contributions;
+}
+
+void register_window_tab(
+    WindowTabTarget target, std::string title, WindowTabBuilder builder) noexcept {
+    auto& contributions = mutable_window_tab_contributions();
+    for (auto& contribution : contributions) {
+        if (contribution.target == target && contribution.title == title) {
+            contribution.builder = std::move(builder);
+            return;
+        }
+    }
+    contributions.push_back({target, std::move(title), std::move(builder)});
+}
+
+void unregister_window_tab(WindowTabTarget target, const std::string& title) noexcept {
+    auto& contributions = mutable_window_tab_contributions();
+    for (auto it = contributions.begin(); it != contributions.end(); ++it) {
+        if (it->target == target && it->title == title) {
+            contributions.erase(it);
+            return;
+        }
+    }
+}
+
+const std::vector<WindowTabContribution>& window_tab_contributions() noexcept {
+    return mutable_window_tab_contributions();
+}
+
 Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) noexcept {
     Document& ret = *doc;
     if (passive) {

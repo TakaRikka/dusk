@@ -30,6 +30,14 @@ public:
     bool visible() const override;
     bool set_active_tab(int index);
 
+    template <typename T, typename... Args>
+    requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
+        auto child = std::make_unique<T>(std::forward<Args>(args)...);
+        T& ref = *child;
+        mContentComponents.emplace_back(std::move(child));
+        return ref;
+    }
+
 protected:
     void request_close();
     virtual bool consume_close_request();
@@ -40,14 +48,6 @@ protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
     bool handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept;
     bool mSuppressNavFallback = false;
-
-    template <typename T, typename... Args>
-    requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
-        auto child = std::make_unique<T>(std::forward<Args>(args)...);
-        T& ref = *child;
-        mContentComponents.emplace_back(std::move(child));
-        return ref;
-    }
 
     Rml::Element* mRoot;
     Rml::Element* mContentRoot;

@@ -1486,6 +1486,17 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Recording Mode",
             "Disables the game HUD and all background music.<br/><br/>Useful for recording footage.");
     });
+
+    for (const auto& tab : window_tab_contributions()) {
+        if (tab.target != WindowTabTarget::Settings) {
+            continue;
+        }
+        add_tab(tab.title, [this, b = tab.builder](Rml::Element* content) {
+            if (b) {
+                b(*this, content);
+            }
+        });
+    }
 }
 
 void SettingsWindow::update() {

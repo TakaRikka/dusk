@@ -144,6 +144,17 @@ ModsWindow::ModsWindow() {
             });
         }
     });
+
+    for (const auto& tab : window_tab_contributions()) {
+        if (tab.target != WindowTabTarget::Mods) {
+            continue;
+        }
+        add_tab(tab.title, [this, b = tab.builder](Rml::Element* content) {
+            if (b) {
+                b(*this, content);
+            }
+        });
+    }
 }
 
 void ModsWindow::update() {

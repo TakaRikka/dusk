@@ -83,6 +83,20 @@ void register_menu_contribution(
 void unregister_menu_contribution(const std::string& label) noexcept;
 const std::vector<MenuContribution>& menu_contributions() noexcept;
 
+class Window;
+
+enum class WindowTabTarget { Settings, Mods };
+using WindowTabBuilder = std::function<void(Window& window, Rml::Element* content)>;
+struct WindowTabContribution {
+    WindowTabTarget target;
+    std::string title;
+    WindowTabBuilder builder;
+};
+void register_window_tab(
+    WindowTabTarget target, std::string title, WindowTabBuilder builder) noexcept;
+void unregister_window_tab(WindowTabTarget target, const std::string& title) noexcept;
+const std::vector<WindowTabContribution>& window_tab_contributions() noexcept;
+
 Document& push_document(
     std::unique_ptr<Document> doc, bool show = true, bool passive = false) noexcept;
 void show_top_document() noexcept;
