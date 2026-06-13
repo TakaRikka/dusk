@@ -1,16 +1,6 @@
 name: Build
 
 on:
-  push:
-    paths-ignore:
-      - '*.md'
-      - '*LICENSE'
-      - 'docs/**'
-  pull_request:
-    paths-ignore:
-      - '*.md'
-      - '*LICENSE'
-      - 'docs/**'
   workflow_dispatch:
     inputs:
       tag_name:
@@ -234,13 +224,19 @@ jobs:
 
       - name: Build APK
         working-directory: platforms/android
+        env:
+          DUSK_ANDROID_KEYSTORE_BASE64: ${{ secrets.DUSK_ANDROID_KEYSTORE_BASE64 }}
+          DUSK_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.DUSK_ANDROID_KEYSTORE_PASSWORD }}
+          DUSK_ANDROID_KEY_ALIAS: ${{ secrets.DUSK_ANDROID_KEY_ALIAS }}
+          DUSK_ANDROID_KEY_PASSWORD: ${{ secrets.DUSK_ANDROID_KEY_PASSWORD }}
         run: ./gradlew :app:assembleRelease --rerun-tasks
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
           name: dusklight-${{env.DUSK_VERSION}}-android-${{matrix.artifact_arch}}
-          path: platforms/android/app/build/outputs/apk/release/app-${{matrix.abi}}-release-unsigned.apk
+          path: platforms/android/app/build/outputs/apk/release/app-${{matrix.abi}}-release.apk
+          compression-level: 0
 
   build-windows:
     name: Build Windows (${{matrix.name}})
@@ -338,6 +334,17 @@ jobs:
             artifact_name="$(basename "$artifact_dir")"
 
             if find "$artifact_dir" -mindepth 1 -type d -print -quit | grep -q .; then
+              if [[ "$artifact_name" == *-win32-* || "$artifact_name" == *-windows-* ]]; then
+                (cd "$artifact_dir" && zip -qr "$GITHUB_WORKSPACE/release-assets/${artifact_name}.zip" .)
+
+                portable_dir="$(mktemp -d)"
+                cp -a "$artifact_dir"/. "$portable_dir"/
+                : > "$portable_dir/portable.txt"
+                (cd "$portable_dir" && zip -qr "$GITHUB_WORKSPACE/release-assets/${artifact_name}-portable.zip" .)
+                rm -rf "$portable_dir"
+                continue
+              fi
+
               tar -C "$artifact_dir" -czf "release-assets/${artifact_name}.tar.gz" .
 
               if [[ "$artifact_name" != *-android-* && "$artifact_name" != *-ios-* && "$artifact_name" != *-tvos-* ]]; then

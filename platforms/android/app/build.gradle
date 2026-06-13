@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id 'com.android.application'
 }
@@ -7,6 +9,34 @@ def versionCodeInt = (System.getenv("DUSK_VERSION_CODE") ?: "100000").toInteger(
 
 def duskRepoDir = rootProject.projectDir.parentFile.parentFile
 def duskGeneratedAssetsDir = layout.buildDirectory.dir('generated/assets/dusklight').get().asFile
+def envOrProperty = { name ->
+    def value = project.findProperty(name)
+    if (value == null || value.toString().isBlank()) {
+        value = System.getenv(name)
+    }
+    return value == null || value.toString().isBlank() ? null : value.toString()
+}
+def androidKeystoreBase64 = envOrProperty('DUSK_ANDROID_KEYSTORE_BASE64')
+def androidKeystoreFile = envOrProperty('DUSK_ANDROID_KEYSTORE_FILE')
+def androidKeystorePassword = envOrProperty('DUSK_ANDROID_KEYSTORE_PASSWORD')
+def androidKeyAlias = envOrProperty('DUSK_ANDROID_KEY_ALIAS')
+def androidKeyPassword = envOrProperty('DUSK_ANDROID_KEY_PASSWORD') ?: androidKeystorePassword
+def androidSigningEnabled = androidKeystorePassword != null &&
+        androidKeyAlias != null &&
+        androidKeyPassword != null &&
+        (androidKeystoreBase64 != null || androidKeystoreFile != null)
+def androidSigningStoreFile = null
+
+if (androidSigningEnabled) {
+    if (androidKeystoreBase64 != null) {
+        androidSigningStoreFile = layout.buildDirectory.file('generated/signing/release.keystore').get().asFile
+        androidSigningStoreFile.parentFile.mkdirs()
+        androidSigningStoreFile.bytes = Base64.getDecoder().decode(androidKeystoreBase64.replaceAll('\\s', ''))
+    } else {
+        androidSigningStoreFile = file(androidKeystoreFile)
+    }
+}
+
 def syncDuskAssets = tasks.register('syncDuskAssets', Sync) {
     from(new File(duskRepoDir, 'res')) {
         into 'res'
@@ -27,11 +57,26 @@ android {
         versionName versionNameStr
     }
 
+    signingConfigs {
+        release {
+            if (androidSigningEnabled) {
+                storeFile androidSigningStoreFile
+                storePassword androidKeystorePassword
+                keyAlias androidKeyAlias
+                keyPassword androidKeyPassword
+                enableV1Signing true
+                enableV2Signing true
+                enableV3Signing true
+            }
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
         }
         release {
+            signingConfig androidSigningEnabled ? signingConfigs.release : signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

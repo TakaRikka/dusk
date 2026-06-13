@@ -4,14 +4,17 @@
 #include <fmt/format.h>
 
 #include <algorithm>
+#include <array>
 #include <charconv>
 #include <cctype>
 #include <filesystem>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <system_error>
 
 #include "aurora/lib/logging.hpp"
+#include "aurora/lib/rmlui/FileInterface_SDL.h"
 #include "dusk/io.hpp"
 #include "ui.hpp"
 
@@ -23,6 +26,17 @@ aurora::Module I18nLog{"dusk::ui::i18n"};
 absl::flat_hash_map<Rml::String, Rml::String> sDictionary;
 std::string sLanguage = "en";
 bool sInitialized = false;
+
+struct RmlFile {
+    aurora::rmlui::FileInterface_SDL& fileInterface;
+    Rml::FileHandle handle = {};
+
+    ~RmlFile() {
+        if (handle) {
+            fileInterface.Close(handle);
+        }
+    }
+};
 
 std::string to_lower_ascii(std::string_view value) {
     std::string lowered;
@@ -116,6 +130,41 @@ Rml::String decode_xml_entities(std::string_view value) {
     return decoded;
 }
 
+std::string read_resource_text(const std::filesystem::path& filePath) {
+    aurora::rmlui::FileInterface_SDL fileInterface;
+    const Rml::String fileName = io::fs_path_to_string(filePath);
+    RmlFile file{fileInterface, fileInterface.Open(fileName)};
+    if (!file.handle) {
+        throw std::runtime_error(fmt::format("Unable to open resource '{}'", fileName));
+    }
+
+    std::string text;
+    const std::size_t length = fileInterface.Length(file.handle);
+    if (length > 0) {
+        text.resize(length);
+        std::size_t total = 0;
+        while (total < text.size()) {
+            const std::size_t read = fileInterface.Read(text.data() + total, text.size() - total, file.handle);
+            if (read == 0) {
+                break;
+            }
+            total += read;
+        }
+        text.resize(total);
+        return text;
+    }
+
+    std::array<char, 4096> buffer{};
+    while (true) {
+        const std::size_t read = fileInterface.Read(buffer.data(), buffer.size(), file.handle);
+        if (read == 0) {
+            break;
+        }
+        text.append(buffer.data(), read);
+    }
+    return text;
+}
+
 bool parse_language_xml(std::string_view xml) {
     sDictionary.clear();
     std::size_t cursor = 0;
@@ -160,8 +209,7 @@ bool load_dictionary(std::string_view language) {
     const std::filesystem::path filePath = resource_path(
         std::filesystem::path("i18n") / fmt::format("{}.xml", language));
     try {
-        const auto bytes = io::FileStream::ReadAllBytes(filePath);
-        const std::string xml(bytes.begin(), bytes.end());
+        const std::string xml = read_resource_text(filePath);
         if (!parse_language_xml(xml)) {
             I18nLog.error("No valid i18n entries found in '{}'", io::fs_path_to_string(filePath));
             return false;
