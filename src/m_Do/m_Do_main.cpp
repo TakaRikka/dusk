@@ -684,6 +684,17 @@ int game_main(int argc, char* argv[]) {
         dusk::getSettings().backend.isoPath.getValue(),
         dusk::getSettings().backend.isoVerification.getValue());
 
+    if (parsed_arg_options.contains("mods") &&
+        !parsed_arg_options["mods"].as<std::string>().empty())
+    {
+        dusk::ModLoader::instance().setModsDir(parsed_arg_options["mods"].as<std::string>());
+    } else {
+        dusk::ModLoader::instance().setModsDir(dusk::ConfigPath / "mods");
+    }
+
+    DuskLog.info("Initializing mods...");
+    dusk::ModLoader::instance().init();
+
     if (!dvd_opened) {
         if (dusk::getSettings().backend.isoPath.getValue().empty()) {
             forcePreLaunchUI = true;
@@ -762,18 +773,6 @@ int game_main(int argc, char* argv[]) {
     // Development Mode
     // mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
     mDoDvdThd::SyncWidthSound = false;
-
-    // Setup mods
-    if (parsed_arg_options.contains("mods") &&
-        !parsed_arg_options["mods"].as<std::string>().empty())
-    {
-        dusk::ModLoader::instance().setModsDir(parsed_arg_options["mods"].as<std::string>());
-    } else {
-        dusk::ModLoader::instance().setModsDir(dusk::ConfigPath / "mods");
-    }
-
-    DuskLog.info("Initializing mods...");
-    dusk::ModLoader::instance().init();
 
     OSReport("Starting main01 (Game Loop)...\n");
     main01();
