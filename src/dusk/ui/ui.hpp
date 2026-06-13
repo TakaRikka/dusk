@@ -4,9 +4,11 @@
 #include <SDL3/SDL_events.h>
 
 #include <filesystem>
+#include <functional>
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "nav_types.hpp"
 
@@ -71,6 +73,15 @@ void shutdown() noexcept;
 
 void handle_event(const SDL_Event& event) noexcept;
 void update() noexcept;
+
+struct MenuContribution {
+    std::string label;
+    std::function<std::unique_ptr<Document>()> makeDocument;
+};
+void register_menu_contribution(
+    std::string label, std::function<std::unique_ptr<Document>()> makeDocument) noexcept;
+void unregister_menu_contribution(const std::string& label) noexcept;
+const std::vector<MenuContribution>& menu_contributions() noexcept;
 
 Document& push_document(
     std::unique_ptr<Document> doc, bool show = true, bool passive = false) noexcept;

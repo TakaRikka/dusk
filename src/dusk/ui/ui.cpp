@@ -174,6 +174,37 @@ void handle_event(const SDL_Event& event) noexcept {
     input::handle_event(event);
 }
 
+static std::vector<MenuContribution>& mutable_menu_contributions() {
+    static std::vector<MenuContribution> contributions;
+    return contributions;
+}
+
+void register_menu_contribution(
+    std::string label, std::function<std::unique_ptr<Document>()> makeDocument) noexcept {
+    auto& contributions = mutable_menu_contributions();
+    for (auto& contribution : contributions) {
+        if (contribution.label == label) {
+            contribution.makeDocument = std::move(makeDocument);
+            return;
+        }
+    }
+    contributions.push_back({std::move(label), std::move(makeDocument)});
+}
+
+void unregister_menu_contribution(const std::string& label) noexcept {
+    auto& contributions = mutable_menu_contributions();
+    for (auto it = contributions.begin(); it != contributions.end(); ++it) {
+        if (it->label == label) {
+            contributions.erase(it);
+            return;
+        }
+    }
+}
+
+const std::vector<MenuContribution>& menu_contributions() noexcept {
+    return mutable_menu_contributions();
+}
+
 Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) noexcept {
     Document& ret = *doc;
     if (passive) {

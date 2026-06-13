@@ -60,6 +60,15 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
 
     mTabBar->add_tab("Achievements", [this] { push(std::make_unique<AchievementsWindow>()); });
     mTabBar->add_tab("Mods", [this] { push(std::make_unique<ModsWindow>()); });
+    for (const auto& contribution : menu_contributions()) {
+        mTabBar->add_tab(contribution.label, [this, make = contribution.makeDocument] {
+            if (make) {
+                if (auto doc = make()) {
+                    push(std::move(doc));
+                }
+            }
+        });
+    }
     mTabBar->add_tab("Reset", [this] {
         mTabBar->set_active_tab(-1);
         const auto dismiss = [](Modal& modal) { modal.pop(); };

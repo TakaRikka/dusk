@@ -734,6 +734,19 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
 
+        for (const auto& contribution : menu_contributions()) {
+            mMenuButtons.push_back(std::make_unique<Button>(menuList, contribution.label));
+            mMenuButtons.back()->on_pressed([this, make = contribution.makeDocument] {
+                mRestartSuppressed = false;
+                if (make) {
+                    if (auto doc = make()) {
+                        push(std::move(doc));
+                    }
+                }
+            });
+            apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
+        }
+
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-4");
