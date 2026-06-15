@@ -289,6 +289,9 @@ struct UserSettings {
         std::array<ActionBindConfigVar, 4> callMidna;
         std::array<ActionBindConfigVar, 4> openDusklightMenu;
         std::array<ActionBindConfigVar, 4> turboSpeedButton;
+        std::array<ActionBindConfigVar, 4> quickTransform;
+        std::array<ActionBindConfigVar, 4> sunSong;
+        std::array<ActionBindConfigVar, 4> moonJump;
     } actionBindings;
 };
 

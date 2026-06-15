@@ -188,6 +188,24 @@ UserSettings g_userSettings = {
             ActionBindConfigVar{"actionBindings.turboButton_port2", PAD_NATIVE_BUTTON_INVALID},
             ActionBindConfigVar{"actionBindings.turboButton_port3", PAD_NATIVE_BUTTON_INVALID},
         },
+        .quickTransform {
+            ActionBindConfigVar{"actionBindings.quickTransform_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.quickTransform_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.quickTransform_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.quickTransform_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .sunSong {
+            ActionBindConfigVar{"actionBindings.sunSong_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.sunSong_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.sunSong_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.sunSong_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .moonJump {
+            ActionBindConfigVar{"actionBindings.moonJump_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.moonJump_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.moonJump_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.moonJump_port3", PAD_NATIVE_BUTTON_INVALID},
+        }
     }
 };
 
@@ -345,6 +363,18 @@ void registerSettings() {
     Register(g_userSettings.actionBindings.turboSpeedButton[1]);
     Register(g_userSettings.actionBindings.turboSpeedButton[2]);
     Register(g_userSettings.actionBindings.turboSpeedButton[3]);
+    Register(g_userSettings.actionBindings.quickTransform[0]);
+    Register(g_userSettings.actionBindings.quickTransform[1]);
+    Register(g_userSettings.actionBindings.quickTransform[2]);
+    Register(g_userSettings.actionBindings.quickTransform[3]);
+    Register(g_userSettings.actionBindings.sunSong[0]);
+    Register(g_userSettings.actionBindings.sunSong[1]);
+    Register(g_userSettings.actionBindings.sunSong[2]);
+    Register(g_userSettings.actionBindings.sunSong[3]);
+    Register(g_userSettings.actionBindings.moonJump[0]);
+    Register(g_userSettings.actionBindings.moonJump[1]);
+    Register(g_userSettings.actionBindings.moonJump[2]);
+    Register(g_userSettings.actionBindings.moonJump[3]);
 }
 
 // Transient settings
