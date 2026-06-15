@@ -157,6 +157,9 @@ public:
     int getDispType() const;
     void _move(f32, f32, int, f32);
     void _draw();
+#if TARGET_PC
+    bool refreshTextureSize();
+#endif
 
     virtual ~dMap_c() {
 #if DEBUG

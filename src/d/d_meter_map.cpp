@@ -539,6 +539,12 @@ void dMeterMap_c::_move(u32 param_0) {
     }
     #endif
 
+#if TARGET_PC
+    if (mMap->refreshTextureSize()) {
+        mMapJ2DPicture->changeTexture(mMap->getResTIMGPointer(), 0);
+    }
+#endif
+
     int stayNo = dComIfGp_roomControl_getStayNo();
 
     field_0x14 = param_0;

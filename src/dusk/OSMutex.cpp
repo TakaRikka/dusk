@@ -181,20 +181,22 @@ void OSWaitCond(OSCond* cond, OSMutex* mutex) {
     mutex->count = 0;
     mutex->thread = nullptr;
 
-    // Unlock the recursive mutex the same number of times it was locked
-    for (s32 i = 0; i < savedCount; i++) {
-        mutexData.nativeMutex.unlock();
-    }
-
-    // Wait on the condition variable
-    {
-        std::unique_lock<std::recursive_mutex> lock(mutexData.nativeMutex);
+    // Keep one recursion level held so cv.wait() is what releases the mutex;
+    // fully unlocking before the wait opens a window where a signal is lost.
+    if (savedCount >= 1) {
+        for (s32 i = 1; i < savedCount; i++) {
+            mutexData.nativeMutex.unlock();
+        }
+        std::unique_lock lock(mutexData.nativeMutex, std::adopt_lock);
         condData.cv.wait(lock);
-    }
-
-    // Re-lock the recursive mutex the same number of times
-    for (s32 i = 0; i < savedCount; i++) {
-        mutexData.nativeMutex.lock();
+        lock.release();
+        for (s32 i = 1; i < savedCount; i++) {
+            mutexData.nativeMutex.lock();
+        }
+    } else {
+        // Mutex wasn't held on entry (contract violation); wait anyway.
+        std::unique_lock lock(mutexData.nativeMutex);
+        condData.cv.wait(lock);
     }
 
     // Restore GC mutex state

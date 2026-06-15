@@ -13,6 +13,7 @@
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_timer.h>
 #include <algorithm>
+#include <aurora/gfx.h>
 #include <dolphin/pad.h>
 #include <m_Do/m_Do_main.h>
 
@@ -187,43 +188,6 @@ void remove_element(Rml::Element*& elem) noexcept {
 
 }  // namespace
 
-// https://vplesko.com/posts/how_to_implement_an_fps_counter.html
-void Overlay::advance_fps_counter(float& outFps, Uint64 perfFreq) {
-    if (perfFreq == 0) {
-        outFps = 0.f;
-        return;
-    }
-
-    const Uint64 curr = SDL_GetPerformanceCounter();
-    if (!mFpsHavePrevCounter) {
-        mFpsPrevCounter = curr;
-        mFpsHavePrevCounter = true;
-        outFps = 0.f;
-        return;
-    }
-
-    const Uint64 processingTicks = curr - mFpsPrevCounter;
-    mFpsPrevCounter = curr;
-
-    mFpsFrameEvents.push_back({curr, processingTicks});
-    mFpsSumTicks += processingTicks;
-
-    while (!mFpsFrameEvents.empty() && mFpsFrameEvents.front().endCounter + perfFreq < curr) {
-        mFpsSumTicks -= mFpsFrameEvents.front().processingTicks;
-        mFpsFrameEvents.pop_front();
-    }
-
-    const auto n = mFpsFrameEvents.size();
-    if (n == 0 || mFpsSumTicks == 0) {
-        outFps = 0.f;
-        return;
-    }
-
-    const double avgSeconds =
-        static_cast<double>(mFpsSumTicks) / static_cast<double>(n) / static_cast<double>(perfFreq);
-    outFps = static_cast<float>(1.0 / avgSeconds);
-}
-
 static std::string FormatTime(OSTime ticks) {
     OSCalendarTime t;
     OSTicksToCalendarTime(ticks, &t);
@@ -276,8 +240,7 @@ void Overlay::update() {
             mFpsCounter->SetAttribute("corner", kFpsCorners[idx]);
 
             const Uint64 perfFreq = SDL_GetPerformanceFrequency();
-            float fps = 0.f;
-            advance_fps_counter(fps, perfFreq);
+            float fps = aurora_get_fps();
 
             const Uint64 now = SDL_GetPerformanceCounter();
             // Limit updates to twice per second
@@ -290,9 +253,6 @@ void Overlay::update() {
             }
         } else {
             mFpsCounter->RemoveAttribute("open");
-            mFpsFrameEvents.clear();
-            mFpsSumTicks = 0;
-            mFpsHavePrevCounter = false;
             mFpsLastUpdate = 0;
         }
     }

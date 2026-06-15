@@ -512,11 +512,366 @@ dGrass_packet_c::dGrass_packet_c() {
     m_Mkusa_9q_cDL_size = 0xC0;
     field_0x1d714 = 0;
 
+#if TARGET_PC
+    dusk::batch::decode_leaf_template(mp_Mkusa_9q_DL, m_Mkusa_9q_DL_size, mTplKusa9q);
+    dusk::batch::decode_leaf_template(mp_Mkusa_9q_cDL, m_Mkusa_9q_cDL_size, mTplKusa9qCut);
+    dusk::batch::decode_leaf_template(l_M_TenGusaDL, 0xC0, mTplTengusa);
+#endif
+
     OS_REPORT("草群メモリ=%fＫ\n", 117.7734375f);
     
     m_deleteRoom = &dGrass_packet_c::deleteRoom;
 }
 
+#if TARGET_PC
+static MtxP get_model_mtx(Mtx modelMtx, Mtx storage) {
+    if (dusk::frame_interp::lookup_replacement(modelMtx, storage)) {
+        cMtx_concat(j3dSys.getViewMtx(), storage, storage);
+        return storage;
+    }
+    return modelMtx;
+}
+
+static void transform_positions(
+    const dusk::batch::LeafTemplate& tpl, const Vec* posArray, const Mtx mtx, Vec* xfPos) {
+    for (u32 i = 0; i < tpl.posRefCount; i++) {
+        const u8 idx = tpl.posRefs[i];
+        MTXMultVec(mtx, &posArray[idx], &xfPos[idx]);
+    }
+}
+
+static void split_batch(u32& emitted, u32 vtxCount) {
+    if (emitted + vtxCount > 0xFFFF) {
+        GXEnd();
+        GXBegin(GX_TRIANGLES, GX_VTXFMT1, GX_AUTO);
+        emitted = 0;
+    }
+    emitted += vtxCount;
+}
+
+static GXColor blade_amb_color(const dGrass_data_c* blade, const dKy_tevstr_c* tevstr) {
+    GXColor amb;
+    amb.a = 0;
+
+#if DEBUG
+    if (g_kankyoHIO.navy.grass_adjust_ON) {
+        amb.r = g_kankyoHIO.navy.grass_ambcol.r * 2;
+        amb.g = g_kankyoHIO.navy.grass_ambcol.g * 2;
+        amb.b = g_kankyoHIO.navy.grass_ambcol.b * 2;
+        return amb;
+    }
+#endif
+
+    amb.r = (blade->m_addCol & 0x1F) * 2;
+    amb.g = ((blade->m_addCol >> 5) & 0x1F) * 2;
+    amb.b = ((blade->m_addCol >> 0xA) & 0x1F) * 2;
+
+    if (daPy_py_c::checkNowWolfPowerUp()) {
+        f32 ambRate = g_env_light.bg_amb_col[0].r / 255.0f;
+        f32 col = (((blade->m_addCol & 0x1F) * 2 + 0x10));
+        amb.r = col * (ambRate * 4.0f);
+
+        ambRate = g_env_light.bg_amb_col[0].g / 255.0f;
+        f32 col2 = (((blade->m_addCol >> 5) & 0x1F) * 2 + 0x10);
+        amb.g = col2 * (4.0f * ambRate);
+
+        ambRate = g_env_light.bg_amb_col[0].b / 255.0f;
+        f32 col3 = (((blade->m_addCol >> 10) & 0x1F) * 2 + 0x10);
+        amb.b = col3 * (4.0f * ambRate);
+    }
+
+    f32 roomAmbScale = 1.0f - (static_cast<int>(blade->m_pos.x) & 0xFF) * 0.001953125f;
+    f32 colScale = 1.1f - (static_cast<u8>(static_cast<int>(blade->m_pos.x)) & 0xFF) / 2000.0f;
+    colScale -= (static_cast<int>(blade->m_pos.z) & 0xFF) / 2000.0f;
+
+    if (colScale > 1.0f) {
+        colScale = 1.0f;
+    }
+
+    if (amb.r == 0x3E) {
+        amb.r = tevstr->AmbCol.r * roomAmbScale;
+    } else {
+        amb.r = amb.r * colScale;
+    }
+
+    if (amb.g == 0x3E) {
+        amb.g = tevstr->AmbCol.g * roomAmbScale;
+    } else {
+        amb.g = amb.g * colScale;
+    }
+
+    if (amb.b == 0x3E) {
+        amb.b = tevstr->AmbCol.b * roomAmbScale;
+    } else {
+        amb.b = amb.b * colScale;
+    }
+
+    return amb;
+}
+
+static void blade_emit(const dusk::batch::LeafTemplate& tpl, const Vec* xformedPos,
+                             const GXColor* colors, GXColor amb) {
+    for (u32 i = 0; i < tpl.vtxCount; i++) {
+        const dusk::batch::LeafTemplate::Vtx& v = tpl.vtx[i];
+        const Vec& p = xformedPos[v.pos];
+        GXPosition3f32(p.x, p.y, p.z);
+        GXNormal1x8(v.nrm);
+        GXColor4u8(amb.r, amb.g, amb.b, colors[v.clr].a);
+        GXTexCoord1x8(v.tex);
+    }
+}
+
+void dGrass_packet_c::draw() {
+    ZoneScoped;
+    dScnKy_env_light_c* kankyo = dKy_getEnvlight();
+
+    j3dSys.reinitGX();
+    GXSetNumIndStages(0);
+    dKy_setLight_again();
+    GXClearVtxDesc();
+
+    static GXVtxDescList l_vtxDescList[] = {
+        {GX_VA_POS, GX_INDEX8},
+        {GX_VA_NRM, GX_INDEX8},
+        {GX_VA_CLR0, GX_INDEX8},
+        {GX_VA_TEX0, GX_INDEX8},
+        {GX_VA_NULL, GX_NONE},
+    };
+
+    static GXVtxDescList l_batchVtxDescList[] = {
+        {GX_VA_POS, GX_DIRECT},
+        {GX_VA_NRM, GX_INDEX8},
+        {GX_VA_CLR0, GX_DIRECT},
+        {GX_VA_TEX0, GX_INDEX8},
+        {GX_VA_NULL, GX_NONE},
+    };
+
+    GXSetVtxDescv(l_vtxDescList);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSETARRAY(GX_VA_POS, mp_pos, sizeof(l_pos), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_NRM, mp_normal, sizeof(l_normal), sizeof(Vec), true);
+    GXSETARRAY(GX_VA_CLR0, mp_colors, sizeof(l_color), sizeof(GXColor), true);
+    GXSETARRAY(GX_VA_TEX0, mp_texCoords, sizeof(l_texCoord), 8, true);
+
+    GXColorS10 reg1 = {0, 0, 0, 0};
+
+    // daytime "shine" alpha curve (TEVREG1 alpha)
+    f32 daytime = g_env_light.getDaytime();
+    f32 ratio;
+    f32 shine;
+    if (daytime >= 90.0f && daytime < 135.0f) {
+        ratio = 1.0f - (0.022222223f * (135.0f - daytime));
+        shine = 100.0f - (18.0f * ratio);
+    } else if (daytime >= 135.0f && daytime < 225.0f) {
+        ratio = 1.0f - (0.011111111f * (225.0f - daytime));
+        shine = 82.0f - (25.0f * ratio);
+    } else if (daytime >= 225.0f && daytime < 270.0f) {
+        ratio = 1.0f - (0.022222223f * (270.0f - daytime));
+        shine = 57.0f - (-25.0f * ratio);
+    } else if (daytime >= 270.0f && daytime < 315.0f) {
+        ratio = (1.0f - (0.022222223f * (315.0f - daytime)));
+        shine = 82.0f - (-18.0f * ratio);
+    } else {
+        shine = 100.0f;
+    }
+
+#if DEBUG
+    if (g_kankyoHIO.navy.grass_shine_value != 0.0f) {
+        shine = g_kankyoHIO.navy.grass_shine_value;
+    }
+#endif
+
+    static Vec xfPos[256];
+    Mtx identity;
+    PSMTXIdentity(identity);
+
+    for (int i = 0; i < 64; i++) {
+        dGrass_data_c* first = m_room[i].getData();
+        if (first == NULL || !dComIfGp_roomControl_checkStatusFlag(i, 0x10)) {
+            continue;
+        }
+
+        int lightCount = 6;
+        dKy_tevstr_c* tevstr = dComIfGp_roomControl_getTevStr(i);
+
+        f32 lightInf = g_env_light.grass_light_inf_rate * g_env_light.bg_light_influence;
+        lightInf += 0.5f * (1.0f - lightInf);
+
+        J3DLightInfo* lightInfo = tevstr->mLights[0].getLightInfo();
+        reg1.r = lightInfo->mColor.r * lightInf;
+        reg1.g = lightInfo->mColor.g * lightInf;
+        reg1.b = lightInfo->mColor.b * lightInf;
+        reg1.a = shine;
+        if (memcmp(dComIfGp_getStartStageName(), "D_MN01", 6) == 0) {
+            reg1.r = 0;
+            reg1.g = 0x1E;
+            reg1.b = 5;
+            reg1.a = 0x50;
+        }
+        GFSetTevColorS10(GX_TEVREG1, reg1);
+
+        if (dComIfGp_roomControl_getStatusRoomDt(i) != nullptr) {
+            lightCount = dComIfGp_roomControl_getStatusRoomDt(i)->getLightVecInfoNum();
+        }
+
+#if DEBUG
+        if (g_kankyoHIO.light.m_HOSTIO_setting != 0) {
+            lightCount = g_kankyoHIO.dungeonLight.usedLights;
+        }
+#endif
+
+        if (dKy_SunMoon_Light_Check() == TRUE && lightCount < 2) {
+            lightCount = 2;
+        }
+
+        for (int j = 0; j < 6; j++) {
+            if (kankyo->field_0x0c18[j].field_0x26 == 1) {
+                lightCount++;
+            }
+        }
+
+        // room-level setup
+        if (first->field_0x05 <= 3 || first->field_0x05 >= 10) {
+            GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0);
+            if (lightCount <= 3) {
+                GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
+            } else {
+                GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
+            }
+        } else {
+            GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0);
+            GXCallDisplayList(l_Tengusa_matDL, 0xA0);
+        }
+
+        GFSetTevColorS10(GX_TEVREG2, {0, 0, 0, 0});
+
+        dKy_Global_amb_set(tevstr);
+        dKy_GfFog_tevstr_set(tevstr);
+        dKy_setLight_nowroom_grass(tevstr->room_no, 0.0f);
+
+        GXSetVtxDescv(l_batchVtxDescList);
+        GXLoadPosMtxImm(identity, GX_PNMTX0);
+        GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
+
+        // buckets: (kusa05 vs tengusa) x (standing vs cut)
+        bool hasRegrowing = false;
+        for (int bucket = 0; bucket < 4; bucket++) {
+            const bool kusaTex = bucket < 2;
+            const bool cut = (bucket & 1) != 0;
+            const dusk::batch::LeafTemplate& tpl =
+                cut ? mTplKusa9qCut : (kusaTex ? mTplKusa9q : mTplTengusa);
+
+            bool open = false;
+            u32 emitted = 0;
+            for (dGrass_data_c* blade = first; blade != NULL; blade = blade->mp_next) {
+                if (cLib_checkBit<u8>(blade->field_0x01, 2)) {
+                    continue;  // clipped
+                }
+                if (blade->field_0x02 < -1) {
+                    hasRegrowing = true;
+                    continue;
+                }
+                const bool bladeKusaTex = blade->field_0x05 <= 3 || blade->field_0x05 >= 10;
+                if (bladeKusaTex != kusaTex || (blade->field_0x02 < 0) != cut) {
+                    continue;
+                }
+
+                if (!open) {
+                    if (kusaTex) {
+                        GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0);
+                        if (lightCount <= 2) {
+                            GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
+                        } else {
+                            GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
+                        }
+                    } else {
+                        GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0);
+                        GXCallDisplayList(l_Tengusa_matDL, 0xA0);
+                    }
+                    // change amb_src to GX_SRC_VTX
+                    const u32 lightMask =
+                        (kusaTex && lightCount <= 2)
+                            ? (GX_LIGHT1 | GX_LIGHT2 | GX_LIGHT3 | GX_LIGHT4)
+                            : (GX_LIGHT1 | GX_LIGHT2 | GX_LIGHT3 | GX_LIGHT4 | GX_LIGHT5 |
+                               GX_LIGHT6 | GX_LIGHT7);
+                    GXSetChanCtrl(GX_COLOR0, GX_TRUE, GX_SRC_VTX, GX_SRC_REG, lightMask,
+                                  GX_DF_CLAMP, GX_AF_SPOT);
+                    reg1.a = cut ? 0 : shine;
+                    GFSetTevColorS10(GX_TEVREG1, reg1);
+                    GXBegin(GX_TRIANGLES, GX_VTXFMT1, GX_AUTO);
+                    open = true;
+                }
+
+                split_batch(emitted, tpl.vtxCount);
+
+                Mtx interpMtx;
+                MtxP mtx = get_model_mtx(blade->m_modelMtx, interpMtx);
+                transform_positions(tpl, mp_pos, mtx, xfPos);
+                blade_emit(tpl, xfPos, mp_colors, blade_amb_color(blade, tevstr));
+            }
+            if (open) {
+                GXEnd();
+            }
+        }
+
+        // regrowing blades have per-blade TEVREG2 alpha
+        // draw them with the original immediate path
+        if (hasRegrowing) {
+            GXSetVtxDescv(l_vtxDescList);
+            for (dGrass_data_c* blade = first; blade != NULL; blade = blade->mp_next) {
+                if (blade->field_0x02 >= -1 || cLib_checkBit<u8>(blade->field_0x01, 2)) {
+                    continue;
+                }
+
+                const bool kusaTex = blade->field_0x05 <= 3 || blade->field_0x05 >= 10;
+                if (kusaTex) {
+                    GXLoadTexObj(&mTexObj_l_M_kusa05_RGBATEX, GX_TEXMAP0);
+                    if (lightCount <= 2) {
+                        GXCallDisplayList(mp_kusa9q_14_DL, m_kusa9q_DL_14_size);
+                    } else {
+                        GXCallDisplayList(mp_kusa9q_DL, m_kusa9q_DL_size);
+                    }
+                } else {
+                    GXLoadTexObj(&mTexObj_l_M_Hijiki00TEX, GX_TEXMAP0);
+                    GXCallDisplayList(l_Tengusa_matDL, 0xA0);
+                }
+
+                reg1.a = 0;
+                GFSetTevColorS10(GX_TEVREG1, reg1);
+                GXSetChanAmbColor(GX_COLOR0A0, blade_amb_color(blade, tevstr));
+
+                Mtx modelMtx;
+                GXLoadPosMtxImm(get_model_mtx(blade->m_modelMtx, modelMtx), GX_PNMTX0);
+                GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
+
+                GFSetTevColorS10(GX_TEVREG2,
+                    {0, 0, 0, static_cast<s16>(-0x100 - (blade->field_0x02 << 8) / 40)});
+
+                if (blade->field_0x02 != -2) {
+                    if (kusaTex) {
+                        GXCallDisplayList(mp_Mkusa_9q_DL, m_Mkusa_9q_DL_size);
+                    } else {
+                        GXCallDisplayList(l_M_TenGusaDL, 0xC0);
+                    }
+                } else {
+                    GXCallDisplayList(mp_Mkusa_9q_cDL, m_Mkusa_9q_cDL_size);
+                }
+
+                GFSetTevColorS10(GX_TEVREG2, {0, 0, 0, 0});
+            }
+        }
+    }
+
+    J3DShape::resetVcdVatCache();
+}
+#else
 void dGrass_packet_c::draw() {
     ZoneScoped;
     dScnKy_env_light_c* kankyo = dKy_getEnvlight();
@@ -811,6 +1166,7 @@ void dGrass_packet_c::draw() {
 
     J3DShape::resetVcdVatCache();
 }
+#endif
 
 void dGrass_packet_c::calc() {
     cXyz* temp_r29 = dKyw_get_wind_vec();

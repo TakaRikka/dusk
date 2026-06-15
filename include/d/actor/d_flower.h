@@ -4,6 +4,10 @@
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "SSystem/SComponent/c_xyz.h"
 
+#if TARGET_PC
+#include "dusk/batch.hpp"
+#endif
+
 class cCcD_Obj;
 class dCcMassS_HitInf;
 class fopAc_ac_c;
@@ -107,6 +111,12 @@ public:
 #if TARGET_PC
     TGXTexObj mTexObj_l_J_Ohana00_64TEX;
     TGXTexObj mTexObj_l_J_Ohana01_64128_0419TEX;
+
+    dusk::batch::LeafTemplate mTplHana00;       // l_J_hana00DL
+    dusk::batch::LeafTemplate mTplHana00Cut;    // l_J_hana00_cDL
+    dusk::batch::LeafTemplate mTplHana01;       // l_J_hana01DL
+    dusk::batch::LeafTemplate mTplHana01Cut00;  // l_J_hana01_c_00DL
+    dusk::batch::LeafTemplate mTplHana01Cut;    // l_J_hana01_c_01DL
 #endif
 };  // Size: 0x12A54
 
