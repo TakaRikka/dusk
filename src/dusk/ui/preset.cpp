@@ -37,6 +37,7 @@ void applyPresetDusk() {
     s.game.invertCameraXAxis.setValue(true);
     s.game.invertFirstPersonYAxis.setValue(true);
     s.game.no2ndFishForCat.setValue(true);
+    s.game.buttonFishing.setValue(true);
     s.game.enableAchievementToasts.setValue(true);
     s.game.enableControllerToasts.setValue(true);
     s.game.enableQuickTransform.setValue(true);

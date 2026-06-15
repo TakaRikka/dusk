@@ -46,6 +46,13 @@ struct J3DMaterialInitData {
     /* 0x14A */ BE(u16) mNBTScaleIdx;
 }; // size 0x14C
 
+
+#ifdef DUSK_TPHD
+struct J3DMaterialInitData_MAT4 : public J3DMaterialInitData {
+    /* 0x14C */ BE(u16) mPolygonOffsetIdx;
+}; // size 0x14E
+#endif
+
 /**
  * @ingroup jsystem-j3d
  * 
@@ -143,10 +150,29 @@ public:
     J3DNBTScale newNBTScale(int) const;
 
     u16 getMaterialID(int idx) const { return mpMaterialID[idx]; }
+#ifdef DUSK_TPHD
+    u8 getMaterialMode(int idx) const { return getMatInitData(idx)->mMaterialMode; }
+#else
     u8 getMaterialMode(int idx) const { return mpMaterialInitData[mpMaterialID[idx]].mMaterialMode; }
+#endif
     
+#if DUSK_TPHD
+    const PolygonOffset newPolygonOffset(int) const;
+
+    J3DMaterialInitData* getMatInitData(int idx) const {
+        static const u32 sInitDataSizes[] = {0, 0, 0x138, 0x14C, 0x14E};
+
+        return (J3DMaterialInitData*)((u8*)mpMaterialInitData + sInitDataSizes[mBlockType] * getMaterialID(idx));
+    }
+
+    u16 mBlockType;
+#endif
     /* 0x00 */ u16 mMaterialNum;
+#if DUSK_TPHD
+    /* 0x04 */ void* mpMaterialInitData;
+#else
     /* 0x04 */ J3DMaterialInitData* mpMaterialInitData;
+#endif
     /* 0x08 */ BE(u16)* mpMaterialID;
     /* 0x0C */ J3DIndInitData* mpIndInitData;
     /* 0x10 */ GXColor* mpMatColor;
@@ -175,6 +201,9 @@ public:
     /* 0x6C */ u8* mpZCompLoc;
     /* 0x70 */ u8* mpDither;
     /* 0x74 */ J3DNBTScaleInfo* mpNBTScaleInfo;
+#ifdef DUSK_TPHD
+    PolygonOffset* mpPolygonOffsets;
+#endif
     /* 0x78 */ J3DDisplayListInit* mpDisplayListInit;
     /* 0x7C */ J3DPatchingInfo* mpPatchingInfo;
     /* 0x80 */ J3DCurrentMtxInfo* mpCurrentMtxInfo;

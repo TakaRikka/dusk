@@ -169,6 +169,12 @@ struct J3DMaterialBlock_v21 : public J3DModelBlock {
     /* 0x74 */ OFFSET_PTR_V0 mpNBTScaleInfo;
 };
 
+#ifdef DUSK_TPHD
+struct J3DMaterialBlock_MAT4 : public J3DMaterialBlock {
+    /* 0x84 */ OFFSET_PTR_V0 mpPolygonOffsets;
+};
+#endif
+
 /**
  * @ingroup jsystem-j3d
  * 

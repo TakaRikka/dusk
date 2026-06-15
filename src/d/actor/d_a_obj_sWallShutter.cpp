@@ -9,9 +9,19 @@
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
 
-static DUSK_CONST char* l_resNameIdx[2] = {
+static DUSK_CONST char* l_resNameIdx[DUSK_IF_ELSE(10, 2)] = {
     "P_Rgate",
     "SDGate",
+#if TARGET_PC
+    "losGate1",
+    "SDGate",
+    "los_Maze",
+    "losGate5",
+    "losGate1",
+    "losGate2",
+    "losGate3",
+    "losGate4",
+#endif
 };
 
 daSwShutter_HIO_c::daSwShutter_HIO_c() {
@@ -36,7 +46,20 @@ void daSwShutter_c::setBaseMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-static const int l_bmdIdx[2] = {4, 4};
+static const int l_bmdIdx[DUSK_IF_ELSE(10, 2)] = {
+    4,
+    4,
+#if TARGET_PC
+    4,
+    4,
+    1,
+    4,
+    4,
+    4,
+    4,
+    4,
+#endif
+};
 
 int daSwShutter_c::CreateHeap() {
     J3DModelData* modelData =
@@ -50,7 +73,20 @@ int daSwShutter_c::CreateHeap() {
     return 1;
 }
 
-static const int l_dzbIdx[2] = {7, 7};
+static const int l_dzbIdx[DUSK_IF_ELSE(10, 2)] = {
+    7,
+    7,
+#if TARGET_PC
+    7,
+    7,
+    2,
+    7,
+    7,
+    7,
+    7,
+    7,
+#endif
+};
 
 int daSwShutter_c::create() {
     fopAcM_ct(this, daSwShutter_c);
@@ -74,9 +110,39 @@ int daSwShutter_c::create() {
         field_0x5b0 = 0.0f;
 
         if (fopAcM_isSwitch(this, getSwBit())) {
+            #if TARGET_PC
+            if (dusk::tphd_active()) {
+                switch (getModelType()) {
+                case 4:
+                    current.pos.y -= -370.0f;
+                    break;
+                case 5:
+                    current.pos.y -= -450.0f;
+                    break;
+                case 9:
+                    current.pos.y -= -740.0f;
+                    break;
+                default:
+                    current.pos.y += -450.0f;
+                    break;
+                }
+
+                init_modeMoveDownEnd();
+            } else {
+                current.pos.y += -450.0f;
+                init_modeMoveDownEnd();
+            }
+            #else
             current.pos.y += -450.0f;
             init_modeMoveDownEnd();
+            #endif
         } else {
+            #if TARGET_PC
+            if (dusk::tphd_active() && getModelType() == 2) {
+                current.pos.y += -450.0f;
+            }
+            #endif
+
             mShakeRot.x = 0;
             mShakeRot.y = 0;
             mShakeRot.z = 0;
@@ -142,10 +208,23 @@ void daSwShutter_c::init_modeMoveDownInit() {
     mMaxAtten = l_HIO.mMaxAtten;
     mMinAtten = l_HIO.mMinAtten;
 
+#if TARGET_PC
+    if (dusk::tphd_active()) {
+        // TPHD: opening a Cave-of-Shadows shutter gate reveals the floor below
+        dStage_showLOSNextFloor(fopAcM_GetRoomNo(this));
+    }
+#endif
+
     if (mModelType == TYPE_SUBDAN_e) {
         dComIfGp_particle_set(0x8C73, &current.pos, &shape_angle, NULL);
         dComIfGp_particle_set(0x8C74, &current.pos, &shape_angle, NULL);
-    } else {
+    }
+#if TARGET_PC
+    else if (dusk::tphd_active() && (mModelType == 0 || mModelType == 3 || mModelType == 4 || mModelType == 5 || mModelType == 9)) {
+        mShakeStrength = 0.0f;
+    }
+#endif
+    else {
         dComIfGp_particle_set(0x8709, &current.pos, &shape_angle, NULL);
         dComIfGp_particle_set(0x870A, &current.pos, &shape_angle, NULL);
     }
@@ -163,9 +242,16 @@ void daSwShutter_c::modeMoveDownInit() {
 }
 
 void daSwShutter_c::init_modeMoveDown() {
-    fopAcM_SetSpeedF(this, l_HIO.mInitSpeed);
+    #if TARGET_PC
+    if (dusk::tphd_active() && mModelType == 2) {
+        fopAcM_SetSpeedF(this, 13.6f);
+    } else
+    #endif
+    {
+        fopAcM_SetSpeedF(this, l_HIO.mInitSpeed);
+    }
 
-    if (mModelType == TYPE_SUBDAN_e) {
+    if (mModelType == TYPE_SUBDAN_e IF_DUSK(|| (dusk::tphd_active() && (mModelType != 4 && mModelType != 5 && mModelType != 9)))) {
         dComIfGp_particle_set(0x8C77, &current.pos, &shape_angle, NULL);
     } else {
         dComIfGp_particle_set(0x870D, &current.pos, &shape_angle, NULL);
@@ -175,11 +261,41 @@ void daSwShutter_c::init_modeMoveDown() {
 }
 
 void daSwShutter_c::modeMoveDown() {
-    cLib_chaseF(&speedF, l_HIO.mMaxSpeed, l_HIO.mAcceleration);
+#if TARGET_PC
+    if (dusk::tphd_active() && mModelType == 2) {
+        cLib_chaseF(&speedF, l_HIO.mInitSpeed, l_HIO.mAcceleration);
+    } else
+#endif
+    {
+        cLib_chaseF(&speedF, l_HIO.mMaxSpeed, l_HIO.mAcceleration);
+    }
+
+#if TARGET_PC
+    f32 target_dist;
+    if (dusk::tphd_active()) {
+        switch (getModelType()) {
+        case 4:
+            target_dist = cLib_addCalc(&current.pos.y, home.pos.y - -370.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f);
+            break;
+        case 5:
+            target_dist = cLib_addCalc(&current.pos.y, home.pos.y - -450.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f);
+            break;
+        case 9:
+            target_dist = cLib_addCalc(&current.pos.y, home.pos.y - -740.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f);
+            break;
+        default:
+            target_dist = cLib_addCalc(&current.pos.y, home.pos.y + -450.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f);
+            break;
+        }
+    } else {
+        target_dist = cLib_addCalc(&current.pos.y, home.pos.y + -450.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f);
+    }
+#else
     f32 target_dist =
         cLib_addCalc(&current.pos.y, home.pos.y + -450.0f, 1.0f, fopAcM_GetSpeedF(this), 1.0f);
+#endif
 
-    if (mModelType == TYPE_SUBDAN_e) {
+    if (mModelType == TYPE_SUBDAN_e IF_DUSK(|| (dusk::tphd_active() && (mModelType != 4 && mModelType != 5 && mModelType != 9)))) {
         mEmitterID0 = dComIfGp_particle_set(mEmitterID0, 0x8C75, &current.pos, &shape_angle, NULL);
         mEmitterID1 = dComIfGp_particle_set(mEmitterID1, 0x8C76, &current.pos, &shape_angle, NULL);
     } else {

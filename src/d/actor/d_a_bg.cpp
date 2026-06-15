@@ -13,6 +13,7 @@
 #include "d/d_bg_parts.h"
 #include "m_Do/m_Do_lib.h"
 #include "d/d_demo.h"
+#include "dusk/tphd/LosTable.hpp"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
@@ -297,6 +298,25 @@ int daBg_c::draw() {
     dComIfGd_setListBG();
     mDoLib_clipper::changeFar(1000000.0f);
 
+#if TARGET_PC
+    bool losClip = false;
+    Mtx losBgMtx;
+    if (dusk::tphd_active()) {
+        // TPHD Cave of Shadows rooms have a base matrix far from identity; it gets the room translation from 'los.bin'
+        // HD daBg::draw clips the shape bbox in world space, so recompute the room base matrix to transform it.
+        if (strcmp(dComIfGp_getStartStageName(), "D_SB11") == 0) {
+            f32 hx, hy, hz;
+            s16 ha;
+            if (dusk::tphd::los_get_room_trans(roomNo, &hx, &hy, &hz, &ha)) {
+                mDoMtx_stack_c::transS(hx, hy, hz);
+                mDoMtx_stack_c::YrotM(ha);
+                mDoMtx_copy(mDoMtx_stack_c::get(), losBgMtx);
+                losClip = true;
+            }
+        }
+    }
+#endif
+
     J3DModelData* modelData;
     for (int i = 0; i < 6; i++) {
         sp8 = 0;
@@ -325,8 +345,22 @@ int daBg_c::draw() {
             for (u16 j = 0; j < modelData->getShapeNum(); j++) {
                 J3DShape* shape = modelData->getShapeNodePointer(j);
 
-                if (mDoLib_clipper::clip(j3dSys.getViewMtx(), (Vec*)shape->getMin(),
-                                         (Vec*)shape->getMax())) {
+                Vec* clipMin = (Vec*)shape->getMin();
+                Vec* clipMax = (Vec*)shape->getMax();
+#if TARGET_PC
+                if (dusk::tphd_active()) {
+                    Vec losClipMin, losClipMax;
+                    if (losClip) {
+                        // HD transforms the bbox min/max by the room base matrix; clip rebuilds
+                        // the 8 corners (exact for the room angles, which are multiples of 90).
+                        mDoMtx_multVec(losBgMtx, clipMin, &losClipMin);
+                        mDoMtx_multVec(losBgMtx, clipMax, &losClipMax);
+                        clipMin = &losClipMin;
+                        clipMax = &losClipMax;
+                    }
+                }
+#endif
+                if (mDoLib_clipper::clip(j3dSys.getViewMtx(), clipMin, clipMax)) {
                     shape->hide();
                 } else {
                     shape->show();
@@ -565,17 +599,43 @@ int daBg_c::create() {
         }
 
         J3DModelData* modelData;
+#if TARGET_PC
+        f32 transX = 0.0f;
+        f32 transY = 0.0f;
+        f32 transVert = 0.0f;
+        s16 angle = 0;
+        bool foundMapTrans = false;
+
+        if (dusk::tphd_active()) {
+            // TPHD positions Cave of Shadows rooms via los.bin (per-room world X/Y/Z +
+            // Y-rotation, incl. the vertical Y that GC's MULT lacks). Retail gates
+            // this on g_dComIfG_gameInfo.field_0x1e448; los.bin only carries
+            // D_SB11's room data, so restrict it to that stage and fall back to MULT.
+            if (strcmp(dComIfGp_getStartStageName(), "D_SB11") == 0) {
+                foundMapTrans = dusk::tphd::los_get_room_trans(roomNo, &transX, &transVert, &transY, &angle);
+            }
+        }
+
+        if (!foundMapTrans)
+            foundMapTrans = dComIfGp_getMapTrans(roomNo, &transX, &transY, &angle);
+        if (foundMapTrans) {
+#else
         f32 transX;
         f32 transY;
         s16 angle;
         if (dComIfGp_getMapTrans(roomNo, &transX, &transY, &angle)) {
+#endif
             daBg_Part* bgPart = mBgParts;
             J3DModel* model;
             for (int i = 0; i < 6; i++) {
                 model = bgPart->model;
 
                 if (model != NULL) {
+                    #if TARGET_PC
+                    mDoMtx_stack_c::transS(transX, transVert, transY);
+                    #else
                     mDoMtx_stack_c::transS(transX, 0.0f, transY);
+                    #endif
                     mDoMtx_stack_c::YrotM(angle);
                     model->setBaseTRMtx(mDoMtx_stack_c::get());
 

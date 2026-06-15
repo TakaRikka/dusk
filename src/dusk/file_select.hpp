@@ -19,4 +19,7 @@ void ShowFolderSelect(
 
 std::string display_name_for_path(std::string_view path);
 
+void ShowFolderSelect(FileCallback callback, void* userdata, SDL_Window* window,
+                      const char* default_location);
+
 }  // namespace dusk

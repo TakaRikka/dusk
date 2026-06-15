@@ -1603,13 +1603,35 @@ void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
             bgm_wave1 = 0x45;
         }
         break;
+#if TARGET_PC
+    case Z2SCENE_CAVE_OF_SHADOWS:
+        if (room == 29) {
+            se_wave2 = 0x16;
+        } else if (room == 40) {
+            se_wave2 = 0x12;
+        } else {
+            se_wave2 = 0x36;
+        }
+
+        bgm_wave1 = 0x45;
+        se_wave1 = 0x51;
+        mDoAud_zelAudio_c::onBgmSet();
+        bgm_id = Z2BGM_SUB_DUNGEON;
+
+        if (BGM_ID == Z2BGM_SUB_DUNGEON) {
+            if (sceneNum == Z2SCENE_CAVE_OF_ORDEALS) {
+                BGM_ID = -1;
+            }
+        }
+        break;
+#endif
     }
 
         /*dSv_event_flag_c::M_071 - Cutscene - [cutscene: 20] Zant appears (during Midna's desperate hour) */
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[104])
             /* dSv_event_flag_c::F_0250 - Cutscene - [cutscene: 21] reunion with Zelda / Midna revived (Hyrule Castle barrier appears) */
         && !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[250])
-        && demo_wave == 0 && spotNo != Z2SCENE_ELDIN_BRIDGE_BATTLE)
+        && demo_wave == 0 && spotNo != Z2SCENE_ELDIN_BRIDGE_BATTLE IF_DUSK(&& spotNo != Z2SCENE_CAVE_OF_SHADOWS))
     {
         bgm_wave1 = 0x36;
         if (spotNo == Z2SCENE_CASTLE_TOWN_SHOPS && room == 5) {

@@ -132,7 +132,12 @@ J3DShapeDraw* J3DShapeFactory::newShapeDraw(int shapeNo, int mtxGroupNo) const {
     const J3DShapeInitData& shapeInitData = mShapeInitData[mIndexTable[shapeNo]];
     const J3DShapeDrawInitData& drawInitData =
         (&mDrawInitData[shapeInitData.mDrawInitDataIndex])[mtxGroupNo];
+#if TARGET_PC
+    shapeDraw = JKR_NEW J3DShapeDraw(&mDisplayListData[drawInitData.mDisplayListIndex], drawInitData.mDisplayListSize,
+                                     getVtxDescList(shapeNo));
+#else
     shapeDraw = JKR_NEW J3DShapeDraw(&mDisplayListData[drawInitData.mDisplayListIndex], drawInitData.mDisplayListSize);
+#endif
     J3D_ASSERT_ALLOCMEM(193, shapeDraw);
     return shapeDraw;
 }
@@ -154,7 +159,7 @@ s32 J3DShapeFactory::calcSize(int shapeNo, u32 flag) {
 
     for (u32 i = 0; i < mtxGroupNo; i++) {
         size += calcSizeShapeMtx(flag, shapeNo, i);
-        size += 0x0C;
+        size += sizeof(J3DShapeDraw);
     }
 
     return size;

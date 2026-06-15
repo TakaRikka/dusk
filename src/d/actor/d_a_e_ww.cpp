@@ -13,6 +13,9 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
+#include "dusk/tphd/LosTable.hpp"
+#include "dusk/tphd/TphdPack.hpp"
+
 enum E_ww_RES_File_ID {
     /* BCK */
     /* 0x04 */ BCK_WW_APPEAR = 0x4,
@@ -466,7 +469,7 @@ f32 daE_WW_c::checkCreateBg(cXyz i_vector) {
             return -G_CM3D_F_INF;
         }
 
-        if (dComIfG_Bgsp().GetSpecialCode(gnd_chk) == 5 || dComIfG_Bgsp().GetPolyAtt0(gnd_chk) == 0xD) {
+        if (dComIfG_Bgsp().GetSpecialCode(gnd_chk) == 5 || dComIfG_Bgsp().GetPolyAtt0(gnd_chk) == 0xD IF_DUSK(|| dusk::tphd::is_los_active())) {
             cXyz temp_r1 = daPy_getPlayerActorClass()->current.pos;
             temp_r1.y += 100.0f;
             sp14 = i_vector;
@@ -666,8 +669,14 @@ void daE_WW_c::executeMaster() {
                 sp30.set(0.0f, 0.0f, 3000.0f);
             }
 
+#if TARGET_PC
+            if (dusk::tphd::is_los_active()) {
+                sp30.z = 600.0f;
+            }
+#endif
+
             cLib_offsetPos(&sp3C, &sp48, fopCamM_GetAngleY(camera), &sp30);
-            if (current.pos.abs(sp3C) < field_0x6a8) {
+            if ((current.pos.abs(sp3C) < field_0x6a8) IF_DUSK(|| (dusk::tphd::is_los_active() && current.pos.y - sp48.y < field_0x6a8))) {
                 f32 temp_f31 = checkCreateBg(sp3C);
                 if (-G_CM3D_F_INF != temp_f31) {
                     sp3C.y = temp_f31;

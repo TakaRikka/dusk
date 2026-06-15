@@ -9,6 +9,24 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+#if DUSK_TPHD
+#include "dusk/tphd/HdAssetLayer.hpp"
+
+namespace {
+void register_copied_hd_resource(
+    JKRArchive* archive, JKRArchive::SDIFileEntry* fileEntry, void* buffer, u32 resourceSize) {
+    if (archive == NULL || fileEntry == NULL || buffer == NULL || resourceSize == 0 ||
+        archive->mStringTable == NULL)
+    {
+        return;
+    }
+
+    dusk::tphd::register_copied_hd_resource(archive->mEntryNum,
+        archive->mStringTable + fileEntry->getNameOffset(), buffer, resourceSize);
+}
+}  // namespace
+#endif
+
 JKRArchive* JKRArchive::check_mount_already(s32 entryNum, JKRHeap* heap) {
     if (heap == NULL) {
         heap = JKRGetCurrentHeap();
@@ -196,6 +214,9 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u32 type, const char*
     if (fileEntry) {
         u32 resourceSize;
         fetchResource(buffer, bufferSize, fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, buffer, resourceSize);
+#endif
         return resourceSize;
     }
 
@@ -214,6 +235,9 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, const char* path) {
     if (fileEntry) {
         u32 resourceSize;
         fetchResource(buffer, bufferSize, fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, buffer, resourceSize);
+#endif
         return resourceSize;
     }
 
@@ -226,6 +250,9 @@ u32 JKRArchive::readIdxResource(void* buffer, u32 bufferSize, u32 index) {
     if (fileEntry) {
         u32 resourceSize;
         fetchResource(buffer, bufferSize, fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, buffer, resourceSize);
+#endif
         return resourceSize;
     }
 
@@ -238,6 +265,9 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u16 id) {
     if (fileEntry) {
         u32 resourceSize;
         fetchResource(buffer, bufferSize, fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, buffer, resourceSize);
+#endif
         return resourceSize;
     }
 

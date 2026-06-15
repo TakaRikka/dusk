@@ -311,4 +311,5 @@ std::string display_name_for_path(std::string_view path) {
 #endif
     return fallback_display_name(path);
 }
+
 }  // namespace dusk

@@ -350,4 +350,11 @@ enum {
     /* 0xFF */ dItemNo_NONE_e,
 };
 
+#if TARGET_PC
+// HD item mappings
+enum {
+    dItemNo_WALLET_LV4_e = 0xDA,
+};
+#endif
+
 #endif /* D_D_ITEM_DATA_H */

@@ -5472,6 +5472,15 @@ int daB_ZANT_c::create() {
     fopAcM_ct(this, daB_ZANT_c);
     OS_REPORT("B_ZANT PARAM %x\n", fopAcM_GetParam(this));
 
+#if TARGET_PC
+        // Due to our loads being so much faster, Zant can initialize *before* the player
+        // This breaks respawning in the final phase of the fight when it tries
+        // to load the player's position
+        if (daPy_getPlayerActorClass() == NULL) {
+            return cPhs_INIT_e;
+        }
+#endif
+
     mSwbit = fopAcM_GetParam(this);
     if (mSwbit != 0xFF) {
         if (dComIfGs_isSwitch(mSwbit, fopAcM_GetRoomNo(this))) {

@@ -144,7 +144,11 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
             default:
                 // Invalid data block type
                 OS_REPORT_ERROR("データブロックタイプが不正です<%d>\n", block_type);
+#if DUSK_TPHD
+                return 0; // HD-port: skip actor instead of asserting.
+#else
                 JUT_ASSERT(527, FALSE);
+#endif
             }
 
             if (block_type == 0) {
@@ -185,7 +189,11 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
             default:
                 // Invalid data block type
                 OS_REPORT_ERROR("データブロックタイプが不正です<%d>\n", block_type);
+#if DUSK_TPHD
+                return 0;
+#else
                 JUT_ASSERT(570, FALSE);
+#endif
             }
 
             if (block_type == 0) {
@@ -226,8 +234,12 @@ bool daBgObj_c::spec_data_c::Set(void* i_ptr) {
             default:
                 // "Data Block type invalid<%d>\n"
                 OSReport_Error("データブロックタイプが不正です<%d>\n", block_type);
+#if DUSK_TPHD
+                return 0;
+#else
                 JUT_ASSERT(619, FALSE);
                 break;
+#endif
             }
 
             if (block_type == 0) {

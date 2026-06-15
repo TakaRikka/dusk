@@ -6,9 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_lv8Lift.h"
+#include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
-#include "d/d_bg_w.h"
+#include "dusk/tphd/LosTable.hpp"
 
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
@@ -44,14 +45,14 @@ f32 const daL8Lift_c::mSpeed[16] = {
 };
 
 int daL8Lift_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("L8Lift", 5);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd::is_los_active() ? "L8LiftSt" : "L8Lift", "L8Lift"), 5);
     JUT_ASSERT(190, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11000284);
     if (!mpModel) {
         return 0;
     }
 
-    int res = mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("L8Lift", 8),
+    int res = mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd::is_los_active() ? "L8LiftSt" : "L8Lift", "L8Lift"), 8),
         1, 0, 1.0f, 0, -1);
     JUT_ASSERT(207, res == 1);
 
@@ -63,9 +64,9 @@ static daL8Lift_HIO_c l_HIO;
 int daL8Lift_c::create() {
     fopAcM_ct(this, daL8Lift_c);
 
-    int phase_state = dComIfG_resLoad(&mPhase, "L8Lift");
+    int phase_state = dComIfG_resLoad(&mPhase, DUSK_IF_ELSE(dusk::tphd::is_los_active() ? "L8LiftSt" : "L8Lift", "L8Lift"));
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (MoveBGCreate("L8Lift", 11, dBgS_MoveBGProc_TypicalRotY, 0xd40, NULL) == cPhs_ERROR_e) {
+        if (MoveBGCreate(DUSK_IF_ELSE(dusk::tphd::is_los_active() ? "L8LiftSt" : "L8Lift", "L8Lift"), 11, dBgS_MoveBGProc_TypicalRotY, DUSK_IF_ELSE(dusk::tphd::is_los_active() ? 0x1D40 : 0xD40, 0xd40) , NULL) == cPhs_ERROR_e) {
             return cPhs_ERROR_e;
         }
 
@@ -92,8 +93,17 @@ int daL8Lift_c::create() {
         
         if (mSwbit == 0xff) {
             mBtk.setFrame(mBtk.getEndFrame() - 1.0f);
-            mLightSet = 1;
-            dKy_plight_set(&mLight);
+
+#if TARGET_PC
+            if (dusk::tphd::is_los_active()) {
+                mLightSet = 0;
+            } else
+#endif
+            {
+                mLightSet = 1;
+                dKy_plight_set(&mLight);
+            }
+
             init_modeWaitInit();
         } else {
             mNoRideOffSwTimer = 0;
@@ -290,8 +300,15 @@ void daL8Lift_c::init_modeOnAnm() {
 void daL8Lift_c::modeOnAnm() {
     if (mBtk.play() == 1) {
         field_0x808 = 1;
-        mLightSet = 1;
-        dKy_plight_set(&mLight);
+
+#if TARGET_PC
+      if (!dusk::tphd::is_los_active())
+#endif
+        {
+            mLightSet = 1;
+            dKy_plight_set(&mLight);
+        }
+
         init_modeMoveWait();
     }
 }
@@ -428,20 +445,28 @@ int daL8Lift_c::Draw() {
     J3DMaterial* mpMatNode = modelData->getMaterialNodePointer(0);
     dComIfGd_setListDarkBG();
 
-    if (mpMatNode->getTexGenBlock()->getTexMtx(1)) {
-        J3DTexMtxInfo* texMtxInfo = &mpMatNode->getTexGenBlock()->getTexMtx(1)->getTexMtxInfo();
-        if (texMtxInfo) {
-            Mtx mMtx58;
-            C_MTXLightOrtho(mMtx58, 100.0f, -100.0f, -100.0f, 100.0f, 1.0f, 1.0f, 0.0f, 0.0f);
-            mDoMtx_stack_c::XrotS(0x4000);
-            mDoMtx_stack_c::transM(-current.pos.x, -current.pos.y, -current.pos.z);
-            cMtx_concat(mMtx58, mDoMtx_stack_c::get(), texMtxInfo->mEffectMtx);
+#if TARGET_PC
+    if (dusk::tphd::is_los_active()) {
+        mDoExt_modelUpdateDL(mpModel);
+    } else
+#endif
+    {
+        if (mpMatNode->getTexGenBlock()->getTexMtx(1)) {
+            J3DTexMtxInfo* texMtxInfo = &mpMatNode->getTexGenBlock()->getTexMtx(1)->getTexMtxInfo();
+            if (texMtxInfo) {
+                Mtx mMtx58;
+                C_MTXLightOrtho(mMtx58, 100.0f, -100.0f, -100.0f, 100.0f, 1.0f, 1.0f, 0.0f, 0.0f);
+                mDoMtx_stack_c::XrotS(0x4000);
+                mDoMtx_stack_c::transM(-current.pos.x, -current.pos.y, -current.pos.z);
+                cMtx_concat(mMtx58, mDoMtx_stack_c::get(), texMtxInfo->mEffectMtx);
+            }
         }
+
+        mBtk.entry(modelData);
+        mDoExt_modelUpdateDL(mpModel);
+        mBtk.remove(modelData);
     }
 
-    mBtk.entry(modelData);
-    mDoExt_modelUpdateDL(mpModel);
-    mBtk.remove(modelData);
     dComIfGd_setList();
 
     J3DGXColor* mColor = mpMatNode->getTevKColor(1);
@@ -453,7 +478,7 @@ int daL8Lift_c::Draw() {
 }
 
 int daL8Lift_c::Delete() {
-    dComIfG_resDelete(&mPhase, "L8Lift");
+    dComIfG_resDelete(&mPhase, DUSK_IF_ELSE(dusk::tphd::is_los_active() ? "L8LiftSt" : "L8Lift", "L8Lift"));
     if (mLightSet) {
         dKy_plight_cut(&mLight);
     }

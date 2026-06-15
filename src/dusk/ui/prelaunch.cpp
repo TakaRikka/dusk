@@ -517,6 +517,20 @@ void file_dialog_callback(void*, const char* path, const char* error) {
     begin_disc_verification(path);
 }
 
+void folder_dialog_callback(void*, const char* path, const char* error) {
+    auto& state = prelaunch_state();
+    if (error != nullptr) {
+        return;
+    }
+    if (path == nullptr) {
+        return;
+    }
+
+    state.configuredHdContentPath = path;
+    getSettings().backend.hdContentPath.setValue(path);
+    config::Save();
+}
+
 PrelaunchState sPrelaunchState;
 
 }  // namespace
@@ -652,6 +666,8 @@ void ensure_initialized() noexcept {
     state.activeDiscPath = state.configuredDiscPath;
     state.configuredDiscValidation =
         verification_from_config(getSettings().backend.isoVerification.getValue());
+    state.configuredHdContentPath = getSettings().backend.hdContentPath;
+    state.activeHdContentPath = state.configuredHdContentPath;
     state.initialLanguage = getSettings().game.language;
     state.initialGraphicsBackend = getSettings().backend.graphicsBackend;
     state.initialCardFileType = getSettings().backend.cardFileType;
@@ -666,9 +682,17 @@ void open_iso_picker() noexcept {
         disc_file_filters(), sDiscFileFilters.size(), nullptr, false);
 }
 
+void open_folder_picker() noexcept {
+    ensure_initialized();
+    ShowFolderSelect(&folder_dialog_callback, nullptr, aurora::window::get_sdl_window(), nullptr);
+}
+
 bool is_restart_pending() noexcept {
     const auto& state = prelaunch_state();
     if (!state.activeDiscPath.empty() && state.configuredDiscPath != state.activeDiscPath) {
+        return true;
+    }
+    if (state.configuredHdContentPath != state.activeHdContentPath) {
         return true;
     }
     if (data::is_data_path_restart_pending()) {

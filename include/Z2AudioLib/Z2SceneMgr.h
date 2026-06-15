@@ -158,6 +158,10 @@ enum Z2Scene {
     /* 0x4E */ Z2SCENE_GROTTO_ROCK_2,
     /* 0x4F */ Z2SCENE_GROTTO_POND,
     /* 0x50 */ Z2SCENE_FARON_WOODS_CAVE,
+
+#if TARGET_PC
+    /* 0x51 */ Z2SCENE_CAVE_OF_SHADOWS,
+#endif
 };
 
 #endif /* Z2SCENEMGR_H */

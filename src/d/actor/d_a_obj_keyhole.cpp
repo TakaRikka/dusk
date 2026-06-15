@@ -10,6 +10,9 @@
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
 #include "Z2AudioLib/Z2Instances.h"
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
 
 daObj_Keyhole_HIO_c::daObj_Keyhole_HIO_c() {
     id = -1;
@@ -53,6 +56,21 @@ static int daObj_Keyhole_Draw(obj_keyhole_class* i_this) {
     for (int i = 0; i < 6; i++) {
         kh_chain_s* chain_s = &i_this->chain_s[i];
         for (int j = 0; j < i_this->chain_num; j++) {
+#if TARGET_PC
+            if (dusk::frame_interp::is_enabled() && i_this->mChainInterpPrevValid && i_this->mChainInterpCurrValid) {
+                const f32 alpha = dusk::frame_interp::get_interpolation_step();
+                Mtx mtx;
+                const f32* p0 = (const f32*)i_this->mChainInterpPrev[i][j];
+                const f32* p1 = (const f32*)i_this->mChainInterpCurr[i][j];
+                f32* dst = (f32*)mtx;
+                for (int k = 0; k < 12; k++) {
+                    dst[k] = p0[k] + (p1[k] - p0[k]) * alpha;
+                }
+                chain_s->model[j]->setBaseTRMtx(mtx);
+                g_env_light.setLightTevColorType_MAJI(chain_s->model[j], &actor->tevStr);
+                mDoExt_modelUpdateDL(chain_s->model[j]);
+            } else
+#endif
             dComIfGp_entrySimpleModel(chain_s->model[j], fopAcM_GetRoomNo(actor));
         }
     }
@@ -370,6 +388,21 @@ static void chain_move(obj_keyhole_class* i_this) {
             ANGLE_ADD(sp8, TREG_S(0) + 0x3D00);
         }
     }
+
+#if TARGET_PC
+    if (dusk::frame_interp::is_enabled()) {
+        if (i_this->mChainInterpCurrValid) {
+            memcpy(i_this->mChainInterpPrev, i_this->mChainInterpCurr, sizeof(i_this->mChainInterpCurr));
+            i_this->mChainInterpPrevValid = true;
+        }
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < i_this->chain_num; j++) {
+                MTXCopy(i_this->chain_s[i].model[j]->getBaseTRMtx(), i_this->mChainInterpCurr[i][j]);
+            }
+        }
+        i_this->mChainInterpCurrValid = true;
+    }
+#endif
 }
 
 static void open(obj_keyhole_class* i_this) {
@@ -749,6 +782,11 @@ static int daObj_Keyhole_Create(fopAc_ac_c* a_this) {
             OS_REPORT("//////////////OBJ_KEYHOLE SET NON !!\n");
             return cPhs_ERROR_e;
         }
+
+#if TARGET_PC
+        i_this->mChainInterpPrevValid = false;
+        i_this->mChainInterpCurrValid = false;
+#endif
 
         OS_REPORT("//////////////OBJ_KEYHOLE SET 2 !!\n");
 

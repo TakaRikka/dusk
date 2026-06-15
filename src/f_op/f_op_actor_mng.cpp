@@ -730,7 +730,10 @@ u8 var_r30 = fopAcM::HeapAdjustEntry;
 #endif
 
     u32 size = i_size & 0xFFFFFF;
-#if TARGET_PC
+#if DUSK_TPHD
+    // With TP-HD asset overlays, individual BMDs can be 5-10x their GC originals.
+    size *= 8;
+#elif TARGET_PC
     size *= 2;
 #endif
     bool result = fopAcM_entrySolidHeap_(i_actor, i_heapCallback, size);

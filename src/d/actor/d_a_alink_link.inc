@@ -425,4 +425,8 @@ daAlink_c::daAlink_c()
       mFaceBtkHeap(0x400),
       mFaceBckHeap(0xC00),
       mAnmHeap9(0x800)
-      {}
+{
+#if TARGET_PC
+    mLosStickValue = -1.0f;
+#endif
+}

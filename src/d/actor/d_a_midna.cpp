@@ -5,16 +5,17 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_midna.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
-#include "d/d_meter2_info.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_kago.h"
+#include "d/actor/d_a_midna.h"
+#include "d/d_debug_viewer.h"
 #include "d/d_demo.h"
+#include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_s_play.h"
-#include "d/d_debug_viewer.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/tphd/LosTable.hpp"
 
 static f32 dummy_lit_3777(int idx, u8 foo) {
     Vec dummy_vec = {0.0f, 0.0f, 0.0f};
@@ -3308,7 +3309,14 @@ int daMidna_c::execute() {
                     }
                 }
                 onStateFlg0(FLG0_UNK_8000);
-                mMsgFlow.init(this, 0xbb9, 0, NULL);
+#if TARGET_PC
+                if (dusk::tphd::is_los_active() && !dusk::getSettings().game.canTransformAnywhere) {
+                    mMsgFlow.init(this, 0x457, 0, NULL);
+                } else
+#endif
+                {
+                    mMsgFlow.init(this, 0xbb9, 0, NULL);
+                }
             } else if (mMsgFlow.doFlow(this, NULL, 0)) {
                 int item_id;
                 u16 event_id = mMsgFlow.getEventId(&item_id);

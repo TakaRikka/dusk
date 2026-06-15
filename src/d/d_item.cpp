@@ -229,7 +229,7 @@ static void (*item_func_ptr[256])() = {
     item_func_F_MAYFLY,
     item_func_noentry,
     item_func_noentry,
-    item_func_noentry,
+    DUSK_IF_ELSE(item_func_WALLET_LV4, item_func_noentry),
     item_func_noentry,
     item_func_noentry,
     item_func_noentry,
@@ -2186,5 +2186,12 @@ int addBombCount(u8 i_bombType, u8 i_addNum) {
 
     return i_addNum;
 }
+
+#if TARGET_PC
+// HD item functions
+void item_func_WALLET_LV4() {
+    dComIfGs_setWalletSize(3);
+}
+#endif
 
 u8* dEnemyItem_c::mData;

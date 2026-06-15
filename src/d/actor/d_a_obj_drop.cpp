@@ -26,6 +26,8 @@
 daObjDrop_HIO_c l_HIO;
 #endif
 
+#include <dusk/ui/settings.hpp>
+
 static void* searchParentSub(void* pproc, void* pdata) {
     daObjDrop_c* pdrop = (daObjDrop_c*)pdata;
     fopAc_ac_c* pym = (fopAc_ac_c*)pproc;
@@ -103,9 +105,17 @@ void daObjDrop_c::dropGet() {
         dComIfGs_setLightDropNum(dComIfGp_getStartStageDarkArea(), num + 1);
 
         if (dComIfGp_getStartStageDarkArea() == 2 &&
+            #if TARGET_PC
+            ((dusk::tphd_active() &&
+                 dComIfGs_getLightDropNum(dComIfGp_getStartStageDarkArea()) == 11) ||
+                !dusk::tphd_active() &&
+                    dComIfGs_getLightDropNum(dComIfGp_getStartStageDarkArea()) == 15
+            ))
+            #else
             dComIfGs_getLightDropNum(dComIfGp_getStartStageDarkArea()) == 15)
+            #endif
         {
-            /* dSv_event_flag_c::F_0005 - Misc. - Gathered 14 Tears of Light in area 4 */
+            /* dSv_event_flag_c::F_0005 - Misc. - Gathered 15 Tears of Light in area 4 */
             dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[9]);
         }
 

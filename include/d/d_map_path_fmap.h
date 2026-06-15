@@ -57,7 +57,7 @@ public:
         return &mpTypeGroupData[i_typeGroupNo];
     }
 
-    /* 0x0 */ fmpTresTypeGroupDataList_c mpTypeGroupData[17];
+    /* 0x0 */ fmpTresTypeGroupDataList_c mpTypeGroupData[DUSK_IF_ELSE(35, 17)];
 };
 
 class dMenu_Fmap_data_c {

@@ -25,8 +25,9 @@
 #include "dusk/logging.h"
 #include "dusk/string.hpp"
 #if TARGET_PC
-#include <format>
 #include <fmt/ranges.h>
+#include "dusk/tphd/LosTable.hpp"
+#include "os_report.h"
 #endif
 
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe,
@@ -312,7 +313,7 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms, bool param_2) {
             return 0;
         }
     }
-    
+
     BOOL r26 = TRUE;
     for (int roomNo = 0; roomNo < ARRAY_SIZE(mStatus); roomNo++) {
         if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
@@ -2094,6 +2095,85 @@ static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
     return 1;
 }
 
+#if TARGET_PC
+// Mirrors HD FUN_02ab7e94 (los override): the file RTBL is a linear placeholder chain
+// (r19 -> [19,18,20]); rewrite each room's m_rooms in place from los.bin floor links.
+// next gets NO 0x80 (floor not yet unlocked) so it is not bg-loaded at stage-create;
+// RoomCheck streams it in after the player exists. m_rooms arrays are 3 bytes each
+// (verified: contiguous, gap=3), so writing up to 3 bytes in place is safe.
+static void dStage_LOSRoomReadOverride(roomRead_class* p_node) {
+    OFFSET_PTR(roomRead_data_class)* rtbl = p_node->m_entries;
+
+    for (int roomNo = 0; roomNo < p_node->num; roomNo++) {
+        int nextFloorNo = dusk::tphd::los_next_floor(roomNo);
+        int prevFloorNo = dusk::tphd::los_prev_floor(roomNo);
+        u8* roomData = rtbl[roomNo]->m_rooms;
+        int n = 1;
+
+        roomData[0] = (u8)((roomNo & 0x3f) | (roomData[0] & 0xc0));
+        if (nextFloorNo > -1) {
+            // nextFloorNo is bg-loaded only once its floor-unlock switch (roomNo + 0x80) is set
+            u8 nextBg = dComIfGs_isSwitch(roomNo + 0x80, roomNo) ? 0x80 : 0;
+            roomData[1] = (u8)((nextFloorNo & 0x3f) | nextBg);
+            n = 2;
+        }
+
+        if (prevFloorNo > -1) {
+            roomData[n] = (u8)((prevFloorNo & 0x3f) | 0x80);
+            n++;
+        }
+
+        if (nextFloorNo < 0 && prevFloorNo > -1) {
+            int prevPrevFloorNo = dusk::tphd::los_prev_floor(prevFloorNo);
+            if (prevPrevFloorNo > -1) {
+                roomData[n] = (u8)((prevPrevFloorNo & 0x3f) | 0x80);
+                n++;
+            }
+        }
+
+        rtbl[roomNo]->num = (u8)n;
+        OSReport("[SB11] override r%-2d nextFloorNo=%d prevFloorNo=%d -> num=%d [%02x %02x %02x]\n",
+                  roomNo, nextFloorNo, prevFloorNo, n, roomData[0], n > 1 ? roomData[1] : 0, n > 2 ? roomData[2] : 0);
+    }
+}
+
+#endif
+
+#if TARGET_PC
+// Mirrors HD FUN_028290d0's reveal (called by the Cave-of-Shadows gate sWallShutter when it
+// opens): mark `fromRoom`'s los next-floor as bg (0x80) in fromRoom's m_rooms and clear that
+// floor's 0x08 status, so its daBg mesh gets created. Without 0x80 the floor streams in but the
+// mesh stays hidden (objectSetCheck skips fopAcM_create(BG) while status flag 0x08 is set).
+// No-op outside los stages. This replaces the earlier per-frame RoomCheck reveal (which churned
+// room loads). HD reveals the next floor at the moment you open the descent gate, not per-frame.
+void dStage_showLOSNextFloor(int fromRoom) {
+    if (!dusk::tphd::is_los_active()) {
+        return;
+    }
+
+    roomRead_class* room = dComIfGp_getStageRoom();
+    if (room == NULL || fromRoom < 0 || fromRoom >= room->num) {
+        return;
+    }
+
+    int nextFloorNo = dusk::tphd::los_next_floor(fromRoom);
+    if (nextFloorNo < 0) {
+        return;
+    }
+
+    roomRead_data_class* e = room->m_entries[fromRoom];
+    u8* roomData = e->m_rooms;
+    for (int j = 0; j < e->num; j++) {
+        if ((roomData[j] & 0x3f) == nextFloorNo) {
+            roomData[j] = (u8)(roomData[j] | 0x80);
+        }
+    }
+
+    dComIfGp_roomControl_offStatusFlag(nextFloorNo, 0x08);
+    OSReport("[SB11] gate reveal: from r%d -> next floor r%d\n", fromRoom, nextFloorNo);
+}
+#endif
+
 static int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int param_2, void* param_3) {
     UNUSED(param_2);
     roomRead_class* p_node = (roomRead_class*)((int*)i_data + 1);
@@ -2112,6 +2192,12 @@ static int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
         }
 #endif
     }
+
+#if TARGET_PC
+    if (dusk::tphd_active() && dusk::tphd::is_los_active()) {
+        dStage_LOSRoomReadOverride(p_node);
+    }
+#endif
 
     return 1;
 }
@@ -2301,6 +2387,13 @@ static int dStage_mecoInfoInit(dStage_dt_c* i_stage, void* i_data, int param_2, 
         dStage_MemoryConfig_data* entry_p = pd->field_0x4;
 
         for (int i = 0; i < pd->m_num; i++) {
+#if TARGET_PC
+            // los stages (D_SB11): the file MEC0 (roomNo%3) collides for los-adjacent floors;
+            // HD re-derives the block from the los floor index instead (FUN_02ab8910).
+            if (dusk::tphd_active() && dusk::tphd::is_los_active()) {
+                entry_p->m_blockID = (u8)(dusk::tphd::los_floor_index(entry_p->m_roomNo) % 3);
+            }
+#endif
             dStage_roomControl_c::setMemoryBlockID(entry_p->m_roomNo, entry_p->m_blockID);
             entry_p++;
         }

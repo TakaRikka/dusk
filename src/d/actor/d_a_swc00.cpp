@@ -126,6 +126,10 @@ int daSwc00_c::execute() {
     case 1:
     case 2:
     case 7:
+#if TARGET_PC
+    case 10:  // HD Cave of Shadows region switch
+    case 11:
+#endif
     case 15:
         if (sw2 != 0xff && !fopAcM_isSwitch(this, sw2)) {
             return 1;
@@ -179,7 +183,17 @@ int daSwc00_c::execute() {
             field_0x584 = 1;
         }
         break;
-    
+#if TARGET_PC
+    // HD Cave of Shadows region switch (CoS-controller bookkeeping omitted; not in this port)
+    case 10:
+    case 11:
+        if (hitCheck(this)) {
+            dComIfGs_onSwitch(sw1, fopAcM_GetRoomNo(this));
+            field_0x583 = 1;
+            field_0x584 = 1;
+        }
+        break;
+#endif
     case 7:
     case 8:
         if (hitCheck(this)) {

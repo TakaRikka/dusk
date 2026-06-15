@@ -79,7 +79,7 @@ SNOW_EFF::~SNOW_EFF() {}
 SNOW_EFF::SNOW_EFF() {}
 
 void dKankyo_snow_Packet::draw() {
-    dKyr_drawSnow(j3dSys.getViewMtx(), &mpTex);
+    GX_DEBUG_GROUP(dKyr_drawSnow, j3dSys.getViewMtx(), &mpTex);
 }
 
 STAR_EFF::~STAR_EFF() {}
@@ -103,7 +103,7 @@ HOUSI_EFF::~HOUSI_EFF() {}
 HOUSI_EFF::HOUSI_EFF() {}
 
 void dKankyo_housi_Packet::draw() {
-    dKyr_drawHousi(j3dSys.getViewMtx(), &mpResTex);
+    GX_DEBUG_GROUP(dKyr_drawHousi, j3dSys.getViewMtx(), &mpResTex);
 }
 
 VRKUMO_EFF::~VRKUMO_EFF() {}
@@ -119,7 +119,7 @@ EF_ODOUR_EFF::~EF_ODOUR_EFF() {}
 EF_ODOUR_EFF::EF_ODOUR_EFF() {}
 
 void dKankyo_odour_Packet::draw() {
-    dKyr_odour_draw(j3dSys.getViewMtx(), &mpResTex);
+    GX_DEBUG_GROUP(dKyr_odour_draw, j3dSys.getViewMtx(), &mpResTex);
 }
 
 EF_MUD_EFF::~EF_MUD_EFF() {}

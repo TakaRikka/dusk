@@ -2028,11 +2028,10 @@ void daAlink_blur_c::traceBlur(cXyz const* param_0, cXyz const* param_1, s16 par
 }
 
 void daAlink_blur_c::draw() {
+    ZoneScoped;
     j3dSys.reinitGX();
 
-#ifdef TARGET_PC
-    TGXTexObj texObj;
-#else
+#if !TARGET_PC
     static TGXTexObj texObj;
 #endif
     static GXColor nColor0 = {0xFF, 0xFF, 0xFF, 0x14};
@@ -2040,11 +2039,25 @@ void daAlink_blur_c::draw() {
     GXSetNumIndStages(0);
     nColor0.a = field_0x20;
 
+#if TARGET_PC
+    if (mpCachedBlurTex != m_blurTex) {
+        mBlurTexObj.reset();
+        GXInitTexObj(&mBlurTexObj,
+            reinterpret_cast<void*>(
+                reinterpret_cast<uintptr_t>(m_blurTex) + m_blurTex->imageOffset),
+            16, 4, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObjLOD(
+            &mBlurTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        mpCachedBlurTex = m_blurTex;
+    }
+    GXLoadTexObj(&mBlurTexObj, GX_TEXMAP0);
+#else
     GXInitTexObj(&texObj, (void*)((uintptr_t)m_blurTex + m_blurTex->imageOffset), 16, 4, GX_TF_I4,
                  GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE,
                     GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
+#endif
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
     GXClearVtxDesc();

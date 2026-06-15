@@ -217,7 +217,7 @@ void AchievementsWindow::updateTotal() {
         return;
     }
     const auto all = AchievementSystem::get().getAchievements();
-    int total = static_cast<int>(all.size());
+    const int total = std::count_if(all.begin(), all.end(), [](const Achievement& achievement){ return achievement.category != AchievementCategory::Glitched;});
     int unlocked = 0;
     for (const auto& a : all) {
         if (a.unlocked) {

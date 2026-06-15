@@ -10,8 +10,11 @@
 #include <cstring>
 
 
-static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[1] = {
+static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[DUSK_IF_ELSE(2, 1)] = {
     {"", 0},
+#if TARGET_PC
+    {"DEFAULT_GETITEM", 0},
+#endif
 };
 
 static DUSK_CONST char* l_resNameList[2] = {
@@ -145,7 +148,7 @@ int daNpc_FairySeirei_c::Draw() {
 
 int daNpc_FairySeirei_c::isDelete() {
     int ret = 0;
-    if (daNpcT_chkEvtBit(0x1F9) == false) {
+    if (IF_DUSK(mType != 4 &&) daNpcT_chkEvtBit(0x1F9) == false) {
         ret = 1;
     }
     return ret;
@@ -359,6 +362,15 @@ int daNpc_FairySeirei_c::talk(int param_0) {
                 }
                 if (fopAcM_IsExecuting(mItemPartnerId)) {
                     mTalking = TRUE;
+
+                    #if TARGET_PC
+                    if (dusk::tphd_active() && getType() == 4) {
+                        mEvtNo = 1;
+                        field_0xe33 = true;
+                        mSpeakEvent = true;
+                    }
+                    #endif
+
                     evtChange();
                 }
             } else {

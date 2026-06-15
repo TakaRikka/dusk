@@ -392,7 +392,10 @@ static const u8* l_sightDL_get() {
 #endif
 
 void daPy_sightPacket_c::draw() {
+    ZoneScoped;
+#if !TARGET_PC
     TGXTexObj texObj;
+#endif
 
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
@@ -407,10 +410,24 @@ void daPy_sightPacket_c::draw() {
 
     GXSetTevColor(GX_TEVREG0, reg0);
     GXSetTevColor(GX_TEVREG1, reg1);
+#if TARGET_PC
+    if (mpCachedImg != mpImg) {
+        mTexObj.reset();
+        GXInitTexObj(&mTexObj, mpData, mpImg->width, mpImg->height,
+            static_cast<GXTexFmt>(mpImg->format), static_cast<GXTexWrapMode>(mpImg->wrapS),
+            static_cast<GXTexWrapMode>(mpImg->wrapT),
+            mpImg->mipmapCount > 1 ? GX_ENABLE : GX_DISABLE);
+        GXInitTexObjLOD(
+            &mTexObj, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        mpCachedImg = mpImg;
+    }
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+#else
     GXInitTexObj(&texObj, mpData, mpImg->width, mpImg->height, (GXTexFmt)mpImg->format,
                  (GXTexWrapMode)mpImg->wrapS, (GXTexWrapMode)mpImg->wrapT, mpImg->mipmapCount > 1 ? GX_ENABLE : GX_DISABLE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
+#endif
     GXLoadPosMtxImm(mProjMtx, GX_PNMTX0);
     GXSetCurrentMtx(0);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);

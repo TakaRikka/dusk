@@ -118,7 +118,7 @@ u8 dSv_player_status_a_c::getMixItemIndex(int i_no) const {
 }
 
 u16 dSv_player_status_a_c::getRupeeMax() const {
-    if (mWalletSize < 3) {  // if you make this a default, it wont match. Compiler, pls.
+    if (mWalletSize < 3 IF_DUSK(|| (dusk::tphd_active() && mWalletSize < 4))) {  // if you make this a default, it wont match. Compiler, pls.
         switch (mWalletSize) {
         case WALLET:
             #if TARGET_PC
@@ -138,6 +138,10 @@ u16 dSv_player_status_a_c::getRupeeMax() const {
             #else
             return 1000;
             #endif
+        #if TARGET_PC
+        case 3:  // colossal wallet
+            return 9999;
+        #endif
         }
     }
 

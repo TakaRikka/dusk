@@ -25,8 +25,10 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstdio>
 #include <cstring>
+#include <dusk/ui/settings.hpp>
 
 #include "dusk/string.hpp"
+#include "dusk/tphd/LosTable.hpp"
 
 void dComIfG_play_c::ct() {
     mWindowNum = 0;
@@ -2573,7 +2575,14 @@ u8 dComIfG_getNowCalcRegion() {
 
 bool dComIfGp_isLightDropMapVisible() {
     for (int i = 0; i < 3; i++) {
+        #if TARGET_PC
+        if (dComIfGs_isLightDropGetFlag(i) != FALSE && 
+            ((dusk::tphd_active() && dComIfGs_getLightDropNum(i) < 12) ||
+            (!dusk::tphd_active() && dComIfGs_getLightDropNum(i) < 16)))
+        {
+        #else
         if (dComIfGs_isLightDropGetFlag(i) != FALSE && dComIfGs_getLightDropNum(i) < 16) {
+        #endif
             return true;
         }
     }
@@ -2854,6 +2863,12 @@ BOOL dComIfGs_Wolf_Change_Check() {
     } else if (dComIfGs_isTransformLV(3) && !dComIfGs_isDarkClearLV(3)) {
         is_wolf = true;
     }
+
+#if TARGET_PC
+    if (dusk::tphd::is_los_active()) {
+        is_wolf = true;
+    }
+#endif
 
     OS_REPORT("dComIfGs_isSaveSwitch 12[%x] 13[%x]\n", dComIfGs_isSaveSwitch(12), dComIfGs_isSaveSwitch(13));
 

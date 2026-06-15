@@ -1416,6 +1416,11 @@ dStage_KeepDoorInfo* dStage_GetKeepDoorInfo();
 dStage_KeepDoorInfo* dStage_GetRoomKeepDoorInfo();
 void dStage_dt_c_fieldMapLoader(void* i_data, dStage_dt_c* i_stage);
 
+#if TARGET_PC
+// TP HD Cave of Shadows (D_SB11): reveal the los next-floor when a descent gate opens.
+void dStage_showLOSNextFloor(int fromRoom);
+#endif
+
 #if DEBUG
 void dStage_DebugDisp();
 #endif

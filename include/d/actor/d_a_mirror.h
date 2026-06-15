@@ -18,16 +18,24 @@ public:
     TGXTexObj& getTexObj() { return mTexObj; }
     cXyz* getQuad() { return mQuad; }
 
+#if TARGET_PC
+    // TP HD reflects across N floor quads (F_SP117 room 2 uses 6); GC uses 1.
+    static const int MAX_QUADS = 6;
+#endif
+
     /* 0x010 */ TGXTexObj mTexObj;
     /* 0x030 */ u8 mModelCount;
     /* 0x034 */ J3DModel* mModels[0x40];
-    /* 0x134 */ cXyz mQuad[4];
+    /* 0x134 */ cXyz mQuad[DUSK_IF_ELSE(MAX_QUADS*4, 4)];
     /* 0x164 */ cXyz mMinVal;
     /* 0x170 */ cXyz mMaxVal;
     /* 0x17C */ cXyz mViewScale;
 #if TARGET_PC
     bool mbReset = false;
     bool mbHadEntry = false;
+    cXyz mQuadBoxMin[MAX_QUADS];  
+    cXyz mQuadBoxMax[MAX_QUADS];
+    int mQuadCount = 1;         
 #endif
 };
 

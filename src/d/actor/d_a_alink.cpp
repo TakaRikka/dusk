@@ -5,51 +5,53 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/actor/d_a_alink.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
-#include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/JHostIO/JORServer.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_math.h"
-#include "d/d_item.h"
-#include "d/d_meter2_draw.h"
-#include "d/d_pane_class.h"
-#include "d/d_demo.h"
+#include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_b_mgn.h"
+#include "d/actor/d_a_canoe.h"
+#include "d/actor/d_a_cow.h"
 #include "d/actor/d_a_crod.h"
+#include "d/actor/d_a_horse.h"
+#include "d/actor/d_a_kytag05.h"
 #include "d/actor/d_a_mg_rod.h"
 #include "d/actor/d_a_midna.h"
 #include "d/actor/d_a_mirror.h"
-#include "d/actor/d_a_spinner.h"
-#include "d/actor/d_a_tbox.h"
-#include "d/actor/d_a_tag_Lv6Gate.h"
-#include "d/actor/d_a_tag_kmsg.h"
-#include "d/actor/d_a_tag_magne.h"
-#include "d/actor/d_a_tag_wljump.h"
-#include "d/actor/d_a_npc_tk.h"
-#include "d/actor/d_a_cow.h"
-#include "d/actor/d_a_obj_crope.h"
-#include "d/actor/d_a_obj_wchain.h"
-#include "d/actor/d_a_tag_hstop.h"
-#include "d/actor/d_a_scene_exit.h"
-#include "d/actor/d_a_tag_mhint.h"
-#include "d/actor/d_a_tag_mmsg.h"
-#include "d/actor/d_a_tag_lantern.h"
-#include "d/actor/d_a_horse.h"
-#include "m_Do/m_Do_controller_pad.h"
-#include "d/d_bomb.h"
-#include "d/d_meter2_info.h"
-#include "d/actor/d_a_kytag05.h"
-#include "d/actor/d_a_b_mgn.h"
+#include "d/actor/d_a_ni.h"
 #include "d/actor/d_a_npc_bou.h"
 #include "d/actor/d_a_npc_kolin.h"
-#include "f_op/f_op_kankyo_mng.h"
+#include "d/actor/d_a_npc_tk.h"
+#include "d/actor/d_a_obj_crope.h"
+#include "d/actor/d_a_obj_wchain.h"
+#include "d/actor/d_a_scene_exit.h"
+#include "d/actor/d_a_spinner.h"
+#include "d/actor/d_a_tag_Lv6Gate.h"
+#include "d/actor/d_a_tag_hstop.h"
+#include "d/actor/d_a_tag_kmsg.h"
+#include "d/actor/d_a_tag_lantern.h"
+#include "d/actor/d_a_tag_magne.h"
+#include "d/actor/d_a_tag_mhint.h"
+#include "d/actor/d_a_tag_mmsg.h"
 #include "d/actor/d_a_tag_mstop.h"
 #include "d/actor/d_a_tag_mwait.h"
-#include "d/actor/d_a_canoe.h"
-#include "d/actor/d_a_ni.h"
+#include "d/actor/d_a_tag_wljump.h"
+#include "d/actor/d_a_tbox.h"
+#include "d/d_bomb.h"
+#include "d/d_demo.h"
+#include "d/d_item.h"
+#include "d/d_meter2_draw.h"
+#include "d/d_meter2_info.h"
+#include "d/d_pane_class.h"
 #include "d/d_s_play.h"
+#include "dusk/tphd/LosTable.hpp"
+#include "dusk/tphd/TphdPack.hpp"
+#include "f_op/f_op_kankyo_mng.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 #if TARGET_PC
 #include "dusk/action_bindings.h"
@@ -12734,7 +12736,19 @@ void daAlink_c::setMagicArmorBrk(int i_status) {
 
 BOOL daAlink_c::checkMagicArmorHeavy() const {
 #if TARGET_PC
-    return checkMagicArmorWearAbility() && (dComIfGs_getRupee() == 0 && !dusk::getSettings().game.freeMagicArmor);
+    if(!checkMagicArmorWearAbility()) {
+        return false;
+    }
+
+    switch(dusk::getSettings().game.armorRupeeDrain) {
+        case dusk::MagicArmorMode::NORMAL:
+            return dComIfGs_getRupee() == 0;
+        case dusk::MagicArmorMode::ON_DAMAGE:
+        case dusk::MagicArmorMode::DOUBLE_DEFENSE:
+        case dusk::MagicArmorMode::INVINCIBLE:
+        case dusk::MagicArmorMode::COSMETIC:
+            return false;
+    }
 #else
     return checkMagicArmorWearAbility() && dComIfGs_getRupee() == 0;
 #endif
@@ -14796,6 +14810,8 @@ void daAlink_c::deleteEquipItem(BOOL i_isPlaySound, BOOL i_isDeleteKantera) {
 #if TARGET_PC
     mIBChainInterpPrevValid = false;
     mIBChainInterpCurrValid = false;
+    mHsChainInterpPrevValid = false;
+    mHsChainInterpCurrValid = false;
 #endif
     field_0x0774 = NULL;
     field_0x0778 = NULL;
@@ -17438,7 +17454,7 @@ int daAlink_c::procCoMetamorphoseInit() {
             mProcVar2.field_0x300c = shape_angle.x;
 
             daMidna_c* midna = (daMidna_c*)getMidnaActor();
-            if (checkMidnaRide() && daMidna_c::checkMidnaRealBody() && midna->checkDemoTypeNone())
+            if (checkMidnaRide() && (daMidna_c::checkMidnaRealBody() IF_DUSK(|| dusk::tphd::is_los_active())) && midna->checkDemoTypeNone())
             {
                 midna->changeOriginalDemo();
                 midna->changeDemoMode(daPy_demo_c::DEMO_UNK_15_e);
@@ -18707,7 +18723,7 @@ int daAlink_c::execute() {
 #if TARGET_PC
             // This handles rupee drain and transitions between rupees/no rupees
             // We can skip all of that if the magic armor doesn't use rupees
-            if (!dusk::getSettings().game.freeMagicArmor && checkMagicArmorWearAbility() && mClothesChangeWaitTimer == 0) {
+            if (dusk::getSettings().game.armorRupeeDrain.getValue() == dusk::MagicArmorMode::NORMAL && checkMagicArmorWearAbility() && mClothesChangeWaitTimer == 0) {
 #else
             if (checkMagicArmorWearAbility() && mClothesChangeWaitTimer == 0) {
 #endif
@@ -19768,23 +19784,37 @@ int daAlink_c::draw() {
                 dComIfGd_getOpaListDark()->entryImm(mpHookChain, 0);
 
 #if TARGET_PC
-                if (dusk::frame_interp::is_enabled() &&
-                    mEquipItem == dItemNo_IRONBALL_e &&
-                    mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
-                {
-                    if (mIBChainInterpCurrValid) {
-                        memcpy(mIBChainInterpPrevPos, mIBChainInterpCurrPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
-                        memcpy(mIBChainInterpPrevAngle, mIBChainInterpCurrAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
-                        mIBChainInterpPrevHandRoot = mIBChainInterpCurrHandRoot;
-                        mIBChainInterpPrevValid = true;
+                if (dusk::frame_interp::is_enabled()) {
+                    if (mEquipItem == dItemNo_IRONBALL_e &&
+                        mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
+                    {
+                        if (mIBChainInterpCurrValid) {
+                            memcpy(mIBChainInterpPrevPos, mIBChainInterpCurrPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
+                            memcpy(mIBChainInterpPrevAngle, mIBChainInterpCurrAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
+                            mIBChainInterpPrevHandRoot = mIBChainInterpCurrHandRoot;
+                            mIBChainInterpPrevValid = true;
+                        }
+
+                        memcpy(mIBChainInterpCurrPos, mIronBallChainPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
+                        memcpy(mIBChainInterpCurrAngle, mIronBallChainAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
+                        mIBChainInterpCurrHandRoot = mHookshotTopPos;
+                        mIBChainInterpCurrValid = true;
+
+                        dusk::frame_interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
+                    } else {
+                        if (mHsChainInterpCurrValid) {
+                            mHsChainInterpPrevTop = mHsChainInterpCurrTop;
+                            mHsChainInterpPrevRoot = mHsChainInterpCurrRoot;
+                            mHsChainInterpPrevSubRoot = mHsChainInterpCurrSubRoot;
+                            mHsChainInterpPrevSubTop = mHsChainInterpCurrSubTop;
+                            mHsChainInterpPrevValid = true;
+                        }
+                        mHsChainInterpCurrTop = mHookshotTopPos;
+                        mHsChainInterpCurrRoot = mHeldItemRootPos;
+                        mHsChainInterpCurrSubRoot = field_0x3810;
+                        mHsChainInterpCurrSubTop = mIronBallBgChkPos;
+                        mHsChainInterpCurrValid = true;
                     }
-
-                    memcpy(mIBChainInterpCurrPos, mIronBallChainPos, IRON_BALL_CHAIN_COUNT * sizeof(cXyz));
-                    memcpy(mIBChainInterpCurrAngle, mIronBallChainAngle, IRON_BALL_CHAIN_COUNT * sizeof(csXyz));
-                    mIBChainInterpCurrHandRoot = mHookshotTopPos;
-                    mIBChainInterpCurrValid = true;
-
-                    dusk::frame_interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
                 }
 #endif
             }

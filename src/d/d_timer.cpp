@@ -617,6 +617,10 @@ void dDlst_TimerScrnDraw_c::setScreen(s32 param_0, JKRArchive* i_archive) {
 
     static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->setFont(mDoExt_getMesgFont());
     static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in')))->setFont(mDoExt_getMesgFont());
+#if TARGET_PC
+    static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in_s')))->setString(0x100, "");
+    static_cast<J2DTextBox*>(mpGetInScreen->search(MULTI_CHAR('get_in')))->setString(0x100, "");
+#endif
 
     for (int i = 0; i < 51; i++) {
         m_getin_info[i].bck_frame = 0.0f;

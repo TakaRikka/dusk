@@ -6,6 +6,10 @@
 #include "d/d_path.h"
 #include "SSystem/SComponent/c_math.h"
 
+#if TARGET_PC
+#include "dusk/logging.h"
+#endif
+
 static bool data_80450680 = true;
 
 dTres_c::typeGroupData_c* dTres_c::mTypeGroupData;
@@ -49,11 +53,25 @@ void dTres_c::addData(dTres_c::list_class* p_list, s8 roomNo) {
         data_s* listData = p_list->field_0x4->getDataPointer();
         typeGroupData_c* groupData = &mTypeGroupData[mNum];
         for (int i = 0; i < p_list->field_0x0; i++, listData++, groupData++) {
+#if TARGET_PC
+            if (mNum >= 0x40) {
+                DuskLog.warn("dTres_c::addData: treasure data overflow, skipping remaining entries");
+                break;
+            }
+#endif
             *(data_s*)groupData = *listData;
             groupData->mRoomNo = roomNo;
             groupData->mStatus = 0;
 
             u32 typeGroupNo = getTypeToTypeGroupNo(groupData->mType);
+#if TARGET_PC
+            // Skip TPHD entries for now
+            if (typeGroupNo >= TYPE_GROUP_ENUM_NUMBER) {
+                DuskLog.warn("dTres_c::addData: unknown treasure type 0x{:02x}, skipping", groupData->mType);
+                mNum++;
+                continue;
+            }
+#endif
             groupData->setNextDataPointer(NULL);
             groupData->setTypeGroupNo(typeGroupNo);
 

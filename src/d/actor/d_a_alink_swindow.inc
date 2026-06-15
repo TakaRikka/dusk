@@ -85,6 +85,17 @@ int daAlink_c::loadModelDVD() {
                 }
                 cPhs_Reset(&mPhaseReq);
                 mpArcHeap->freeAll();
+#if TARGET_PC
+                field_0x06d0 = NULL;
+                field_0x06d4 = NULL;
+                field_0x06d8 = NULL;
+                field_0x06dc = NULL;
+                field_0x06e0 = NULL;
+                field_0x06e4 = NULL;
+                field_0x06e8 = NULL;
+                field_0x06ec = NULL;
+                field_0x06f0 = NULL;
+#endif
 
                 if (mProcID == PROC_METAMORPHOSE || mProcID == PROC_METAMORPHOSE_ONLY) {
                     setArcName(!checkWolf());

@@ -23,6 +23,8 @@
 #include <string>
 #include <string_view>
 
+#include "dusk/tphd/LosTable.hpp"
+
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
 #endif
@@ -116,6 +118,10 @@ namespace dusk {
             ImGui::MenuItem("Bloom", nullptr, &m_showBloomWindow);
             ImGui::MenuItem("Stub Log", nullptr, &m_showStubLog);
             ImGui::MenuItem("Actor Spawner", nullptr, &m_showActorSpawner);
+
+            if (ImGui::MenuItem("Load Cave of Shadows")) {
+                dusk::tphd::set_los_next_stage();
+            }
 
             if (!dusk::IsGameLaunched) {
                 ImGui::EndDisabled();

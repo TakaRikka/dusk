@@ -23,6 +23,9 @@
 #ifndef __MWERKS__
 #include "dusk/extras.h"
 #include "dusk/logging.h"
+#if DUSK_TPHD
+#include "dusk/tphd/HdAssetLayer.hpp"
+#endif
 #endif
 
 dRes_info_c::dRes_info_c() {
@@ -643,7 +646,20 @@ int dRes_info_c::setRes() {
         }
 
 #if DEBUG
+#if DUSK_TPHD
+        // HD-redirected buffers live outside the JKR heap. Use the
+        // registered arc-range size; getSize() would return 0/undefined.
+        void* mArcHdr = ((JKRMemArchive*)mArchive)->mArcHeader;
+        size_t arcSize = 0;
+        if (auto hdRem = dusk::tphd::find_registered_hd_archive_remaining(mArcHdr)) {
+            arcSize = *hdRem;
+        } else {
+            arcSize = JKRGetRootHeap()->getSize(mArcHdr);
+        }
+        mSize = arcSize + JKRGetMemBlockSize(NULL, mDataHeap);
+#else
         mSize = JKRGetRootHeap()->getSize(((JKRMemArchive*)mArchive)->mArcHeader) + JKRGetMemBlockSize(NULL, mDataHeap);
+#endif
         if (data_8074C6C0_debug) {
             JKRExpHeap* zeldaHeap = mDoExt_getZeldaHeap();
             OSReport("\e[33mdRes_info_c::setRes <使用=%08x(work:%08x) 連続空き=%08x 残り空き=%08x (%3d) %s.arc\n\e[m", mSize, r28, zeldaHeap->getFreeSize(), zeldaHeap->getTotalFreeSize(), getResNum(), this);
@@ -1020,6 +1036,16 @@ int dRes_control_c::setObjectRes(char const* i_arcName, void* i_archiveRes, u32 
         return 0;
     }
 
+#if DUSK_TPHD
+    // HD hook for second JKRMemArchive constructor (see below)    
+    const std::string hdPath = fmt::format("/res/Object/{}.arc", i_arcName);
+    if (auto hd = dusk::tphd::try_load_hd_archive(hdPath)) {
+        DuskLog.info("[TPHD] setObjectRes redirect: {} -> HD ({} bytes)",
+                     i_arcName, (*hd)->size());
+        i_archiveRes = const_cast<u8*>((*hd)->data());
+        i_bufferSize = static_cast<u32>((*hd)->size());
+    }
+#endif
     JKRMemArchive* memArchive = JKR_NEW JKRMemArchive(i_archiveRes, i_bufferSize, JKRMEMBREAK_FLAG_UNKNOWN0);
     if (memArchive == NULL || !memArchive->isMounted()) {
         return 0;

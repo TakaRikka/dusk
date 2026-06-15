@@ -15,6 +15,9 @@ static const char* sSpotName[] = {
     "D_MN08A", "D_MN08D", "D_MN09",  "D_MN09A", "D_MN09B", "D_MN09C", "D_SB00",  "D_SB01",
     "D_SB02",  "D_SB03",  "D_SB04",  "D_SB05",  "D_SB06",  "D_SB07",  "D_SB08",  "D_SB09",
     "D_SB10",
+#if TARGET_PC
+    "D_SB11",
+#endif
 };
 
 #endif /* SPOTNAME_H */

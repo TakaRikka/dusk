@@ -103,6 +103,9 @@ J3DModelData* J3DModelLoader::load(void const* i_data, u32 i_flags) {
                 readJoint((J3DJointBlock*)block);
                 break;
             case 'MAT3':
+#if DUSK_TPHD
+            case 'MAT4':
+#endif
                 readMaterial((J3DMaterialBlock*)block, (s32)i_flags);
                 break;
             case 'MAT2':
@@ -147,6 +150,9 @@ J3DMaterialTable* J3DModelLoader::loadMaterialTable(void const* i_data) {
     for (u32 block_no = 0; block_no < data->mBlockNum; block_no++) {
         switch (block->mBlockType) {
             case 'MAT3':
+#if DUSK_TPHD
+            case 'MAT4':
+#endif
                 readMaterialTable((J3DMaterialBlock*)block, flags);
                 break;
             case 'MAT2':
@@ -212,6 +218,9 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(void const* i_data, u32 i_fl
                 modifyMaterial(i_flags);
                 break;
             case 'MAT3':
+#if DUSK_TPHD
+            case 'MAT4':
+#endif
                 flags = 0x50100000;
                 flags |= (i_flags & 0x3000000);
                 mpMaterialBlock = (J3DMaterialBlock*)block;
@@ -308,8 +317,22 @@ static GXVtxAttrFmtList getFmt(GXVtxAttrFmtList* i_fmtList, GXAttr i_attr) {
             return *i_fmtList;
         }
     }
-
+#if DUSK_TPHD
+    // HD BMDs occasionally have vertex arrays without a format entry. Mirror
+    // the GC runtime: fall back to J3DSys::initGX defaults.
+    GXVtxAttrFmtList def{};
+    def.attr = i_attr;
+    def.frac = 0;
+    if (i_attr == GX_VA_POS)               { def.cnt = GX_POS_XYZ; def.type = GX_F32; }
+    else if (i_attr == GX_VA_NRM)          { def.cnt = GX_NRM_XYZ; def.type = GX_F32; }
+    else if (i_attr == GX_VA_NBT)          { def.cnt = GX_NRM_NBT; def.type = GX_F32; }
+    else if (i_attr >= GX_VA_CLR0 &&
+             i_attr <= GX_VA_CLR1)         { def.cnt = GX_CLR_RGBA; def.type = GX_RGBA8; }
+    else                                   { def.cnt = GX_TEX_ST;  def.type = GX_F32; }
+    return def;
+#else
     OSPanic(__FILE__, __LINE__, "Unable to find vertex attribute format!");
+#endif
 }
 #endif
 

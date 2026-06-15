@@ -1,5 +1,8 @@
 #include "dusk/settings.h"
 #include "dusk/config.hpp"
+#include "dusk/main.h"
+
+#include <system_error>
 
 namespace dusk {
 
@@ -41,6 +44,7 @@ UserSettings g_userSettings = {
         .noMissClimbing {"game.noMissClimbing", false},
         .fastTears {"game.fastTears", false},
         .no2ndFishForCat {"game.no2ndFishForCat", false},
+        .buttonFishing {"game.buttonFishing", false},
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
@@ -50,6 +54,7 @@ UserSettings g_userSettings = {
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
         .minimalHUD {"game.minimalHUD", false},
+        .hudScale {"game.hudScale", 1.0f},
         .pauseOnFocusLost {"game.pauseOnFocusLost", false},
         .enableLinkDollRotation {"game.enableLinkDollRotation", false},
         .enableAchievementToasts {"game.enableAchievementToasts", true},
@@ -126,7 +131,7 @@ UserSettings g_userSettings = {
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastRoll {"game.fastRoll", false},
         .fastSpinner {"game.fastSpinner", false},
-        .freeMagicArmor {"game.freeMagicArmor", false},
+        .armorRupeeDrain {"game.armorRupeeDrain", MagicArmorMode::NORMAL},
         .invincibleEnemies {"game.invincibleEnemies", false},
 
         // Technical
@@ -150,6 +155,9 @@ UserSettings g_userSettings = {
         .isoPath {"backend.isoPath", ""},
         .isoVerification {"backend.isoVerification", DiscVerificationState::Unknown},
         .uiLanguage {"backend.uiLanguage", "en"},
+#if DUSK_TPHD
+        .hdContentPath {"backend.hdContentPath", ""},
+#endif
         .graphicsBackend {"backend.graphicsBackend", "auto"},
         .skipPreLaunchUI {"backend.skipPreLaunchUI", false},
         .showPipelineCompilation {"backend.showPipelineCompilation", false},
@@ -192,6 +200,28 @@ UserSettings& getSettings() {
     return g_userSettings;
 }
 
+std::filesystem::path tphd_content_path() {
+#if DUSK_TPHD
+    const std::string& hdPath = g_userSettings.backend.hdContentPath;
+    if (!hdPath.empty()) {
+        return hdPath;
+    }
+
+    if (!ConfigPath.empty()) {
+        std::error_code ec;
+        auto localPath = ConfigPath / "tphd" / "content";
+        if (std::filesystem::is_directory(localPath, ec)) {
+            return localPath;
+        }
+    }
+#endif
+    return {};
+}
+
+bool tphd_active() {
+    return !tphd_content_path().empty();
+}
+
 void registerSettings() {
     // Video
     Register(g_userSettings.video.enableFullscreen);
@@ -225,6 +255,7 @@ void registerSettings() {
     Register(g_userSettings.game.fastClimbing);
     Register(g_userSettings.game.fastTears);
     Register(g_userSettings.game.no2ndFishForCat);
+    Register(g_userSettings.game.buttonFishing);
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
@@ -240,6 +271,7 @@ void registerSettings() {
     Register(g_userSettings.game.freeCameraXSensitivity);
     Register(g_userSettings.game.freeCameraYSensitivity);
     Register(g_userSettings.game.minimalHUD);
+    Register(g_userSettings.game.hudScale);
     Register(g_userSettings.game.pauseOnFocusLost);
     Register(g_userSettings.game.enableDiscordPresence);
     Register(g_userSettings.game.bloomMode);
@@ -255,7 +287,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableFastIronBoots);
     Register(g_userSettings.game.canTransformAnywhere);
     Register(g_userSettings.game.fastRoll);
-    Register(g_userSettings.game.freeMagicArmor);
+    Register(g_userSettings.game.armorRupeeDrain);
     Register(g_userSettings.game.restoreWiiGlitches);
     Register(g_userSettings.game.enableLinkDollRotation);
     Register(g_userSettings.game.enableAchievementToasts);
@@ -315,6 +347,9 @@ void registerSettings() {
     Register(g_userSettings.backend.isoPath);
     Register(g_userSettings.backend.isoVerification);
     Register(g_userSettings.backend.uiLanguage);
+#if DUSK_TPHD
+    Register(g_userSettings.backend.hdContentPath);
+#endif
     Register(g_userSettings.backend.graphicsBackend);
     Register(g_userSettings.backend.skipPreLaunchUI);
     Register(g_userSettings.backend.showPipelineCompilation);

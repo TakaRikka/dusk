@@ -400,4 +400,8 @@ BOOL isBottleItem(u8 item_no);
 u8 check_itemno(int i_itemNo);
 BOOL isInsect(u8 i_itemNo);
 
+#if TARGET_PC
+void item_func_WALLET_LV4();
+#endif
+
 #endif /* D_D_ITEM_H */

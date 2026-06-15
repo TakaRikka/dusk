@@ -101,7 +101,7 @@ void daTit_HIO_c::genMessage(JORMContext* mctx) {
 #endif
 
 int daTitle_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 10);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName), 10);
     JUT_ASSERT(258, modelData);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000285);
 
@@ -109,16 +109,16 @@ int daTitle_c::CreateHeap() {
         return 0;
     }
 
-    int res = mBck.init((J3DAnmTransform*)dComIfG_getObjectRes(l_arcName, 7), 1, 0, 2.0f, 0, -1, false);
+    int res = mBck.init((J3DAnmTransform*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName), 7), 1, 0, 2.0f, 0, -1, false);
     JUT_ASSERT(276, res == 1);
 
-    res = mBpk.init(modelData, (J3DAnmColor*)dComIfG_getObjectRes(l_arcName, 13), 1, 0, 2.0f, 0, -1);
+    res = mBpk.init(modelData, (J3DAnmColor*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName), 13), 1, 0, 2.0f, 0, -1);
     JUT_ASSERT(283, res == 1);
 
-    res = mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcName, 16), 1, 0, 2.0f, 0, -1);
+    res = mBrk.init(modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName), 16), 1, 0, 2.0f, 0, -1);
     JUT_ASSERT(290, res == 1);
 
-    res = mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(l_arcName, 19), 1, 0, 2.0f, 0, -1);
+    res = mBtk.init(modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName), 19), 1, 0, 2.0f, 0, -1);
     JUT_ASSERT(297, res == 1);
 
     return 1;
@@ -132,7 +132,7 @@ static procFunc daTitleProc[6] = {
 int daTitle_c::create() {
     fopAcM_ct(this, daTitle_c);
 
-    int phase_state = dComIfG_resLoad(&mPhaseReq, l_arcName);
+    int phase_state = dComIfG_resLoad(&mPhaseReq, DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName));
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
@@ -408,7 +408,7 @@ int daTitle_c::Draw() {
 int daTitle_c::Delete() {
     mDoHIO_DELETE_CHILD(g_daTitHIO.id);
 
-    dComIfG_resDelete(&mPhaseReq, l_arcName);
+    dComIfG_resDelete(&mPhaseReq, DUSK_IF_ELSE(dusk::tphd_active() ? "Title" : l_arcName, l_arcName));
     JKR_DELETE(mTitle.Scr);
     JKR_DELETE(field_0x600);
 

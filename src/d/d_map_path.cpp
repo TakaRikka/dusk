@@ -19,11 +19,29 @@
 #include <numbers>
 #include <array>
 
-constexpr u16 kMapResolutionMultiplier = 4;
-constexpr u16 kMapImageSide = 16 * kMapResolutionMultiplier;
+constexpr u16 kPreferredMapResolutionMultiplier = 4;
+constexpr u32 kMaxMapRenderPixels = 4096 * 4096;
+constexpr u16 kMapImageSide = 16 * kPreferredMapResolutionMultiplier;
 constexpr u32 kMapImageTotalPixels = kMapImageSide * kMapImageSide;
 
 typedef std::function<u8(size_t, size_t)> PaintI8Fn;
+
+u16 map_resolution_multiplier(u16 width, u16 height) {
+    const u32 basePixels = static_cast<u32>(width) * height;
+    if (basePixels == 0) {
+        return 1;
+    }
+
+    u16 scale = kPreferredMapResolutionMultiplier;
+    while (scale > 1) {
+        const u32 scalePixels = static_cast<u32>(scale) * scale;
+        if (basePixels <= kMaxMapRenderPixels / scalePixels) {
+            break;
+        }
+        scale--;
+    }
+    return scale;
+}
 
 void paint_i8(std::span<u8> dst, size_t width, PaintI8Fn paint) {
     const auto blocksAcross = width >> 3;
@@ -478,9 +496,9 @@ void dRenderingMap_c::makeResTIMG(ResTIMG* p_image, u16 width, u16 height, u8* p
     p_image->format = GX_TF_C8;
     p_image->alphaEnabled = 2;
 #ifdef TARGET_PC
-    // Increase map render resolution
-    p_image->width = width * kMapResolutionMultiplier;
-    p_image->height = height * kMapResolutionMultiplier;
+    const u16 scale = map_resolution_multiplier(width, height);
+    p_image->width = width * scale;
+    p_image->height = height * scale;
 #else
     p_image->width = width;
     p_image->height = height;
@@ -563,9 +581,9 @@ void dRenderingFDAmap_c::drawBack() const {
 
 void dRenderingFDAmap_c::preRenderingMap() {
 #ifdef TARGET_PC
-    // Increase map render resolution
-    const u16 w = mTexWidth * kMapResolutionMultiplier;
-    const u16 h = mTexHeight * kMapResolutionMultiplier;
+    const u16 scale = map_resolution_multiplier(mTexWidth, mTexHeight);
+    const u16 w = mTexWidth * scale;
+    const u16 h = mTexHeight * scale;
     GXCreateFrameBuffer(w, h);
     // Set logical viewport dimensions
     GXSetViewport(0.0f, 0.0f, mTexWidth, mTexHeight, 0.0f, 1.0f);
@@ -610,9 +628,9 @@ void dRenderingFDAmap_c::preRenderingMap() {
 void dRenderingFDAmap_c::postRenderingMap() {
     GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
 #ifdef TARGET_PC
-    // Increase map render resolution
-    const u16 w = mTexWidth * kMapResolutionMultiplier;
-    const u16 h = mTexHeight * kMapResolutionMultiplier;
+    const u16 scale = map_resolution_multiplier(mTexWidth, mTexHeight);
+    const u16 w = mTexWidth * scale;
+    const u16 h = mTexHeight * scale;
     GXSetTexCopySrc(0, 0, w, h);
     GXSetTexCopyDst(w, h, GX_CTF_R8, GX_FALSE);
     GXCopyTex(field_0x4, GX_TRUE);

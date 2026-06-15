@@ -583,6 +583,12 @@ void Z2SeqMgr::bgmStreamPlay() {
         }
     }
 
+    #if TARGET_PC
+    if (dusk::tphd_active()) {
+        return;
+    }
+    #endif
+
     #if !PLATFORM_SHIELD
     else if (getStreamBgmID() == 0x2000000) {
         if (mStreamBgmHandle) {

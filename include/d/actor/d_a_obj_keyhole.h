@@ -66,9 +66,18 @@ public:
     /* 0x2CA7 */ s8 hide_lock;
     /* 0x2CA8 */ cXyz field_0x2ca8;
     /* 0x2CB4 */ u8 field_0x2cb4;
+
+#if TARGET_PC
+    Mtx mChainInterpPrev[6][16];
+    Mtx mChainInterpCurr[6][16];
+    bool mChainInterpPrevValid;
+    bool mChainInterpCurrValid;
+#endif
 };
 
+#if !TARGET_PC
 STATIC_ASSERT(sizeof(obj_keyhole_class) == 0x2CB8);
+#endif
 
 class daObj_Keyhole_HIO_c : public JORReflexible {
 public:

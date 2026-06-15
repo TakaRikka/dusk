@@ -737,6 +737,12 @@ void daAlink_c::setDemoData() {
                         } else {
                             mDemo.setStick(1.0f);
                         }
+
+#if TARGET_PC
+                        if (dusk::tphd::is_los_active() && mLosStickValue > 0.0f) {
+                            mDemo.setStick(mLosStickValue);
+                        }
+#endif
                     }
 
                     if ((demo_mode == daPy_demo_c::DEMO_UNK_2_e || demo_mode == daPy_demo_c::DEMO_UNK_3_e) && prm1_p != NULL && *prm1_p == 1) {

@@ -403,7 +403,10 @@ void e_ai_class::e_ai_damage() {
             if (m_timers[1] == 0) {
                 m_sound.startCreatureSound(Z2SE_EN_AI_FLASH, 0, -1);
                 mpEmitter = dComIfGp_particle_set(0x81ED, &current.pos, &tevStr, &shape_angle, NULL);
-                mpEmitter->becomeImmortalEmitter();
+                if (mpEmitter != NULL) {
+                    mpEmitter->becomeImmortalEmitter();
+                }
+
                 m_timers[1] = 1000;
                 m_timers[2] = 56;
             }

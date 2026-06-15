@@ -542,8 +542,11 @@ void J3DModel::viewCalc() {
     }
 
 #ifdef TARGET_PC
-    for (u16 i = 0; i < mModelData->getDrawMtxNum(); ++i) {
-        dusk::frame_interp::record_final_mtx(getDrawMtxPtr()[i]);
+    Mtx* drawMtx = getDrawMtxPtr();
+    if (drawMtx != J3DMtxBuffer::sNoUseDrawMtxPtr) {
+        for (u16 i = 0; i < mModelData->getDrawMtxNum(); ++i) {
+            dusk::frame_interp::record_final_mtx(drawMtx[i]);
+        }
     }
 #endif
 

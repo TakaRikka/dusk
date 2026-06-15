@@ -1532,6 +1532,16 @@ set(DUSK_FILES
         src/dusk/discord_presence.cpp
         src/dusk/version.cpp
         src/dusk/action_bindings.cpp
+        src/dusk/tphd/TphdPack.hpp
+        src/dusk/tphd/TphdPack.cpp
+        src/dusk/tphd/GtxParser.hpp
+        src/dusk/tphd/GtxParser.cpp
+        src/dusk/tphd/AddrLib.hpp
+        src/dusk/tphd/AddrLib.cpp
+        src/dusk/tphd/HdAssetLayer.hpp
+        src/dusk/tphd/HdAssetLayer.cpp
+        src/dusk/tphd/LosTable.hpp
+        src/dusk/tphd/LosTable.cpp
 )
 
 set(DUSK_HTTP_BACKEND_FILES

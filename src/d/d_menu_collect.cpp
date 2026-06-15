@@ -685,6 +685,8 @@ void dMenu_Collect2D_c::screenSet() {
         field_0x184[0][3] = 0x199;
     } else if (dComIfGs_getWalletSize() == BIG_WALLET) {
         field_0x184[0][3] = 0x19a;
+    } if (dusk::tphd_active() && dComIfGs_getWalletSize() == 3) {
+        field_0x184[0][3] = 0x19c;
     } else {
         field_0x184[0][3] = 0x19b;
     }

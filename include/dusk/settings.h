@@ -2,6 +2,7 @@
 #define DUSK_CONFIG_H
 
 #include <array>
+#include <filesystem>
 
 #include "dusk/config_var.hpp"
 
@@ -57,6 +58,14 @@ enum class MenuScaling : u8 {
     Dusklight = 2,
 };
 
+enum class MagicArmorMode : u8 {
+    NORMAL = 0,
+    ON_DAMAGE = 1,
+    DOUBLE_DEFENSE = 2,
+    INVINCIBLE = 3,
+    COSMETIC = 4,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -104,6 +113,12 @@ template <>
 struct ConfigEnumRange<MenuScaling> {
     static constexpr auto min = MenuScaling::GameCube;
     static constexpr auto max = MenuScaling::Dusklight;
+};
+
+template <>
+struct ConfigEnumRange<MagicArmorMode> {
+    static constexpr auto min = MagicArmorMode::NORMAL;
+    static constexpr auto max = MagicArmorMode::COSMETIC;
 };
 }  // namespace config
 
@@ -153,6 +168,7 @@ struct UserSettings {
         ConfigVar<bool> noMissClimbing;
         ConfigVar<bool> fastTears;
         ConfigVar<bool> no2ndFishForCat;
+        ConfigVar<bool> buttonFishing;
         ConfigVar<bool> instantSaves;
         ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
@@ -162,6 +178,7 @@ struct UserSettings {
         // Preferences
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> minimalHUD;
+        ConfigVar<float> hudScale;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementToasts;
@@ -233,7 +250,7 @@ struct UserSettings {
         ConfigVar<bool> canTransformAnywhere;
         ConfigVar<bool> fastRoll;
         ConfigVar<bool> fastSpinner;
-        ConfigVar<bool> freeMagicArmor;
+        ConfigVar<MagicArmorMode> armorRupeeDrain;
         ConfigVar<bool> invincibleEnemies;
 
         // Technical
@@ -257,6 +274,9 @@ struct UserSettings {
         ConfigVar<std::string> isoPath;
         ConfigVar<DiscVerificationState> isoVerification;
         ConfigVar<std::string> uiLanguage;
+#if DUSK_TPHD
+        ConfigVar<std::string> hdContentPath;
+#endif
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
         ConfigVar<bool> showPipelineCompilation;
@@ -276,6 +296,9 @@ struct UserSettings {
 };
 
 UserSettings& getSettings();
+
+std::filesystem::path tphd_content_path();
+bool tphd_active();
 
 void registerSettings();
 

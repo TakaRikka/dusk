@@ -180,6 +180,7 @@ cmake --build --preset macos-default-relwithdebinfo
 Alternate presets available:
 
 * `macos-default-debug`: Clang, Debug
+* `macos-default-debug-asan`: Clang, Debug, AddressSanitizer
 
 **ninja (Linux)**
 
@@ -191,8 +192,10 @@ cmake --build --preset linux-default-relwithdebinfo
 Alternate presets available:
 
 * `linux-default-debug`: GCC, Debug
+* `linux-default-debug-asan`: GCC, Debug, AddressSanitizer
 * `linux-clang-relwithdebinfo`: Clang, RelWithDebInfo
 * `linux-clang-debug`: Clang, Debug
+* `linux-clang-debug-asan`: Clang, Debug, AddressSanitizer
 
 **ninja (Windows)**
 
@@ -204,6 +207,7 @@ cmake --build --preset windows-msvc-relwithdebinfo
 Alternate presets available:
 
 * `windows-msvc-debug`: MSVC, Debug
+* `windows-msvc-debug-asan`: MSVC, Debug, AddressSanitizer
 * `windows-clang-relwithdebinfo`: Clang-cl, RelWithDebInfo
 * `windows-clang-debug`: Clang-cl, Debug
 

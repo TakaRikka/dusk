@@ -15,6 +15,8 @@
 #include "m_Do/m_Do_lib.h"
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
+#include <cstring>
 #endif
 
 #ifndef __MWERKS__
@@ -50,6 +52,32 @@ void dMirror_packet_c::calcMinMax() {
     mMinVal.set(FLT_MAX, FLT_MAX, FLT_MAX);
     mMaxVal.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
+#if TARGET_PC
+    // HD: per-quad cull box + global bbox over all mQuadCount quads.
+    for (int q = 0; q < mQuadCount; q++) {
+        cXyz& bmin = mQuadBoxMin[q];
+        cXyz& bmax = mQuadBoxMax[q];
+        bmin.set(FLT_MAX, FLT_MAX, FLT_MAX);
+        bmax.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+        cXyz* quad = &mQuad[q * 4];
+        for (int i = 0; i < 4; i++, quad++) {
+            if (quad->x < bmin.x) bmin.x = quad->x;
+            if (quad->x > bmax.x) bmax.x = quad->x;
+            if (quad->y < bmin.y) bmin.y = quad->y;
+            if (quad->y > bmax.y) bmax.y = quad->y;
+            if (quad->z < bmin.z) bmin.z = quad->z;
+            if (quad->z > bmax.z) bmax.z = quad->z;
+        }
+
+        if (bmin.x < mMinVal.x) mMinVal.x = bmin.x;
+        if (bmax.x > mMaxVal.x) mMaxVal.x = bmax.x;
+        if (bmin.y < mMinVal.y) mMinVal.y = bmin.y;
+        if (bmax.y > mMaxVal.y) mMaxVal.y = bmax.y;
+        if (bmin.z < mMinVal.z) mMinVal.z = bmin.z;
+        if (bmax.z > mMaxVal.z) mMaxVal.z = bmax.z;
+    }
+#else
     cXyz* quad = mQuad;
     for (int i = 0; i < 4; i++, quad++) {
         f32 val = quad->x;
@@ -82,6 +110,7 @@ void dMirror_packet_c::calcMinMax() {
             mMaxVal.z = val;
         }
     }
+#endif
 }
 
 int dMirror_packet_c::entryModel(J3DModel* i_model) {
@@ -103,8 +132,13 @@ int dMirror_packet_c::entryModel(J3DModel* i_model) {
     return 1;
 }
 
+#if TARGET_PC
+static f32 dMirror_quadDist(const cXyz& p, const cXyz& bmin, const cXyz& bmax);
+#endif
+
 void dMirror_packet_c::mirrorZdraw(f32* param_0, f32* param_1, f32 param_2, f32 param_3,
                                    f32 param_4, f32 param_5, f32 param_6, f32 param_7) {
+    ZoneScoped;
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(0);
@@ -130,11 +164,82 @@ void dMirror_packet_c::mirrorZdraw(f32* param_0, f32* param_1, f32 param_2, f32 
     GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
     GXSetCurrentMtx(0);
 
+#if TARGET_PC
+    // HD FUN_0247d9fc: with count>=2, tint only the same-height quad group nearest the camera
+    u32 groupMask = 1;
+    int groupCount = 1;
+    if (mQuadCount >= 2) {
+        const cXyz& eye = dComIfGd_getView()->lookat.eye;
+        int nearest = 0;
+        f32 best = FLT_MAX;
+        for (int q = 0; q < mQuadCount; q++) {
+            f32 dist = dMirror_quadDist(eye, mQuadBoxMin[q], mQuadBoxMax[q]);
+            if (dist < best) {
+                best = dist;
+                nearest = q;
+            }
+        }
+        groupMask = 0;
+        groupCount = 0;
+        for (int q = 0; q < mQuadCount; q++) {
+            if (fabsf(mQuadBoxMin[q].y - mQuadBoxMin[nearest].y) < 0.0001f) {
+                groupMask |= 1u << q;
+                groupCount++;
+            }
+        }
+    }
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, groupCount * 4);
+    for (int q = 0; q < mQuadCount; q++) {
+        if (groupMask & (1u << q)) {
+            for (int i = 0; i < 4; i++) {
+                GXPosition3f32(mQuad[q * 4 + i].x, mQuad[q * 4 + i].y, mQuad[q * 4 + i].z);
+            }
+        }
+    }
+    GXEnd();
+
+    if (mQuadCount >= 2 && GX2SupportsStencil()) {
+        GXSetColorUpdate(GX_DISABLE);
+        GXSetAlphaUpdate(GX_DISABLE);
+        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+        GX2SetStencilMask(0xff, 0xff, 0, 0xff, 0xff, 0);       
+        GX2SetDepthStencilControl(0, 0, 7, 1, 0, 7, 3, 3, 0, 0, 0, 0, 0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, groupCount * 4);
+        for (int q = 0; q < mQuadCount; q++) {
+            if (groupMask & (1u << q)) {
+                for (int i = 0; i < 4; i++) {
+                    GXPosition3f32(mQuad[q * 4 + i].x, mQuad[q * 4 + i].y, mQuad[q * 4 + i].z);
+                }
+            }
+        }
+        GXEnd();
+
+        GX2SetDepthStencilControl(1, 1, 7, 1, 0, 2, 1, 1, 1, 0, 0, 0, 0);
+        Mtx44 proj;
+        C_MTXOrtho(proj, param_1[1], param_1[1] + param_1[3], param_1[0],
+                   param_1[0] + param_1[2], 0, 100.0f);
+        GXSetProjection(proj, GX_ORTHOGRAPHIC);
+        GXLoadPosMtxImm(mDoMtx_getIdentity(), 0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(param_1[0], param_1[1], -100.0f);
+        GXPosition3f32(param_1[0] + param_1[2], param_1[1], -100.0f);
+        GXPosition3f32(param_1[0] + param_1[2], param_1[1] + param_1[3], -100.0f);
+        GXPosition3f32(param_1[0], param_1[1] + param_1[3], -100.0f);
+        GXEnd();
+        GXSetProjectionv(param_0);
+        GXSetColorUpdate(GX_ENABLE);
+        GXSetAlphaUpdate(GX_DISABLE); // no stencil-off: the next material's zmode write disables it
+        return;
+    }
+#else
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     for (int i = 0; i < 4; i++) {
         GXPosition3f32(mQuad[i].x, mQuad[i].y, mQuad[i].z);
     }
     GXEnd();
+#endif
 
     if (mViewScale.y > 0.0f) {
         GXSetZMode(GX_ENABLE, GX_ALWAYS, GX_ENABLE);
@@ -264,9 +369,223 @@ void dMirror_packet_c::modelDraw(J3DModel* i_model, Mtx param_1) {
     }
 }
 
+#if TARGET_PC
+// FUN_0247c89c: HD multi-quad floor reflection helpers (F_SP117 room 2):
+static f32 dMirror_quadDist(const cXyz& p, const cXyz& bmin, const cXyz& bmax) {
+    f32 ox = bmin.x - p.x;
+    if (ox < 0.0f) ox = 0.0f;
+    f32 oz = bmin.z - p.z;
+    if (oz < 0.0f) oz = 0.0f;
+    f32 px = p.x - bmax.x;
+    if (px < 0.0f) px = 0.0f;
+    f32 pz = p.z - bmax.z;
+    if (pz < 0.0f) pz = 0.0f;
+    return fabsf(p.y - bmin.y) + ox + oz + px + pz;
+}
+
+static void dMirror_accumQuadBBox(view_class* view, view_port_class* view_port, const u32 scissor[4],
+                                  cXyz* quad, f32& minX, f32& maxX, f32& minY, f32& maxY, f32& maxZ) {
+    cXyz sp19C[5];
+    int prjPosNum = 4;
+    f32 nearZ = -view->near_;
+
+    int behind = 0;
+    int lastFront = 0;
+    for (int i = 0; i < 4; i++) {
+        cMtx_multVec(view->viewMtx, &quad[i], &sp19C[i]);
+        if (sp19C[i].z >= nearZ) {
+            behind++;
+        } else {
+            lastFront = i;
+        }
+    }
+    if (behind >= 4) {
+        return;  
+    }
+
+    int var_r28 = lastFront;
+    if (behind != 0) {
+        int var_r27 = -1;
+        for (int i = 0; i < 4; i++) {
+            int temp_r5 = (var_r28 + 1) % 4;
+            if (var_r27 < 0) {
+                if (sp19C[temp_r5].z >= nearZ) {
+                    var_r27 = temp_r5;
+                }
+            } else if (sp19C[temp_r5].z < nearZ) {
+                int temp_r29 = (var_r27 + 3) % 4;
+                cXyz d0 = sp19C[var_r27] - sp19C[temp_r29];
+                d0 *= (nearZ - sp19C[temp_r29].z) / d0.z;
+                sp19C[4] = sp19C[temp_r29] + d0;
+                prjPosNum++;
+
+                cXyz d1 = sp19C[var_r28] - sp19C[temp_r5];
+                d1 *= (nearZ - sp19C[temp_r5].z) / d1.z;
+                sp19C[var_r28] = sp19C[temp_r5] + d1;
+
+                for (int j = var_r27; j != var_r28; j = (j + 1) % 4) {
+                    sp19C[j] = sp19C[var_r28];
+                }
+                break;
+            }
+            var_r28 = temp_r5;
+        }
+    }
+
+    f32 aspect = view->aspect;
+    f32 tanHalf = tanf(MTXDegToRad(view->fovy * 0.5f));
+    f32 vx, vy, vw, vh;
+    if (view_port->x_orig != 0.0f) {
+        vx = (((view_port->x_orig * 2.0f) + view_port->width) * 0.5f) - (FB_WIDTH / 2);
+        vw = FB_WIDTH;
+    } else {
+        vx = view_port->x_orig;
+        vw = view_port->width;
+    }
+    if (view_port->y_orig != 0.0f) {
+        vy = (((view_port->y_orig * 2.0f) + view_port->height) * 0.5f) - (FB_HEIGHT / 2);
+        vh = FB_HEIGHT;
+    } else {
+        vy = view_port->y_orig;
+        vh = view_port->height;
+    }
+
+    f32 sxMin = scissor[0];
+    f32 sxMax = sxMin + scissor[2];
+    f32 syMin = scissor[1];
+    f32 syMax = syMin + scissor[3];
+
+    Vec* p = sp19C;
+    for (int i = 0; i < prjPosNum; i++, p++) {
+        p->y = p->y / (p->z * tanHalf);
+        p->x = p->x / (aspect * (-p->z * tanHalf));
+        p->x = vx + ((1.0f + p->x) * (vw * 0.5f));
+        p->y = vy + ((1.0f + p->y) * (vh * 0.5f));
+        p->x = cLib_minMaxLimit<f32>(p->x, sxMin, sxMax);
+        p->y = cLib_minMaxLimit<f32>(p->y, syMin, syMax);
+        if (p->x < minX) minX = p->x;
+        if (p->x > maxX) maxX = p->x;
+        if (p->y < minY) minY = p->y;
+        if (p->y > maxY) maxY = p->y;
+        if (p->z > maxZ) maxZ = p->z;
+    }
+}
+#endif
+
 void dMirror_packet_c::mainDraw() {
+    ZoneScoped;
     j3dSys.reinitGX();
 
+#if TARGET_PC
+    f32 sp150[7];
+    GXGetProjectionv(sp150);
+
+    f32 sp138[6];
+    GXGetViewportv(sp138);
+
+    u32 scissor[4];
+    GXGetScissor(&scissor[0], &scissor[1], &scissor[2], &scissor[3]);
+
+    view_class* view = dComIfGd_getView();
+    view_port_class* view_port = dComIfGd_getViewport();
+
+    // HD mainDraw (FUN_0247e6e8):
+    f32 minX = FLT_MAX, minY = FLT_MAX;
+    f32 maxX = -FLT_MAX, maxY = -FLT_MAX, maxZ = -FLT_MAX;
+    for (int q = 0; q < mQuadCount; q++) {
+        dMirror_accumQuadBBox(view, view_port, scissor, &mQuad[q * 4], minX, maxX, minY, maxY, maxZ);
+    }
+
+    if (maxX <= minX || maxY <= minY) {
+        return;  
+    }
+    if (fabsf(maxX - minX) < 8.0f || fabsf(maxY - minY) < 8.0f) {
+        return;
+    }
+
+    GXSetScissor((u32)minX, (u32)minY, (u32)(maxX - minX), (u32)(maxY - minY));
+
+    Mtx reflMtx[MAX_QUADS];
+    for (int q = 0; q < mQuadCount; q++) {
+        cXyz* quad = &mQuad[q * 4];
+        cXyz e0 = quad[1] - quad[0];
+        cXyz e1 = quad[2] - quad[1];
+        cXyz n = e0.outprod(e1);
+        n.normalizeZP();
+
+        f32 planeD = (n.x * quad[0].x) + (n.y * quad[0].y) + (n.z * quad[0].z);
+        f32 dCenter = ((n.x * view->lookat.center.x) + (n.y * view->lookat.center.y) +
+                       (n.z * view->lookat.center.z)) -
+                      planeD;
+        cXyz reflEye =
+            view->lookat.eye -
+            (n * (2.0f * (((n.x * view->lookat.eye.x) + (n.y * view->lookat.eye.y) +
+                           (n.z * view->lookat.eye.z)) -
+                          planeD)));
+        cXyz reflCenter = view->lookat.center - (n * (2.0f * dCenter));
+
+        cXyz up(0.0f, 1.0f, 0.0f);
+        if (mViewScale.y > 0.0f) {
+            cXyz a = reflEye - view->lookat.eye;
+            cXyz b = a.outprod(view->lookat.up);
+            up = a.outprod(b);
+            up.normalizeZP();
+            up *= cXyz(-1.0f, -1.0f, -1.0f);
+        }
+
+        Mtx look;
+        mDoMtx_lookAt(look, &reflEye, &reflCenter, &up, view->bank);
+        mDoMtx_stack_c::scaleS(mViewScale);
+        mDoMtx_stack_c::concat(look);
+
+        f32 (*cur)[4] = mDoMtx_stack_c::get();
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 4; c++) {
+                reflMtx[q][r][c] = cur[r][c];
+            }
+        }
+    }
+    J3DShape::resetVcdVatCache();
+
+    bool wallQuad = !dusk::tphd_active() ||
+                    (mQuadCount <= 1 && mQuadBoxMax[0].y - mQuadBoxMin[0].y > 0.1f);
+    for (int i = 0; i < mModelCount; i++) {
+        Mtx& bm = mModels[i]->getBaseTRMtx();
+        cXyz pos(bm[0][3], bm[1][3], bm[2][3]);
+        int best = 0;
+        if (!wallQuad) {
+            const cXyz& eye = view->lookat.eye;
+            best = -1;
+            f32 bestDist = FLT_MAX;
+            for (int q = 0; q < mQuadCount; q++) {
+                if ((mQuadBoxMin[q].x <= pos.x || mQuadBoxMin[q].x <= eye.x) &&
+                    (mQuadBoxMin[q].z <= pos.z || mQuadBoxMin[q].z <= eye.z) &&
+                    (pos.x <= mQuadBoxMax[q].x || eye.x <= mQuadBoxMax[q].x) &&
+                    (pos.z <= mQuadBoxMax[q].z || eye.z <= mQuadBoxMax[q].z))
+                {
+                    f32 dist = dMirror_quadDist(pos, mQuadBoxMin[q], mQuadBoxMax[q]);
+                    if (dist < bestDist) {
+                        bestDist = dist;
+                        best = q;
+                    }
+                }
+            }
+            if (best < 0) {
+                continue;
+            }
+        }
+        modelDraw(mModels[i], reflMtx[best]);
+    }
+
+    j3dSys.reinitGX();
+    if (dusk::tphd_active()) {
+        mirrorZdraw(sp150, sp138, view->far_, minX, minY, maxX, maxY, maxZ);
+        GXSetScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
+    } else {
+        GXSetScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
+        mirrorZdraw(sp150, sp138, view->far_, minX, minY, maxX, maxY, maxZ);
+    }
+#else
     cXyz sp19C[5];
 
     Mtx sp16C;
@@ -454,6 +773,7 @@ void dMirror_packet_c::mainDraw() {
         GXSetScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
         mirrorZdraw(sp150, sp138, view->far_, var_f31, var_f30, var_f29, var_f28, var_f27);
     }
+#endif
 }
 
 void dMirror_packet_c::draw() {
@@ -534,6 +854,36 @@ int daMirror_c::create() {
         mPacket.getViewScale().set(-1.0f, 1.0f, 1.0f);
     } else {
         if (type == 1) {
+#if TARGET_PC
+            if (dusk::tphd_active() && strcmp(dComIfGp_getStartStageName(), "F_SP117") == 0 &&
+                dComIfGp_getStartStageRoomNo() == 2)
+            {
+                // HD const DAT_1002f070 (world-space floor rects) 
+                static const struct {
+                    f32 xMin, xMax, y, zMin, zMax;
+                } l_tot_quads[dMirror_packet_c::MAX_QUADS] = {
+                    {-1800.0f, 1800.0f, 999.0f, 747.0f, 5600.0f},
+                    {-670.0f, 670.0f, 999.0f, 5600.0f, 6400.0f},
+                    {-3530.0f, 3530.0f, 1526.0f, -8151.0f, -2014.0f},
+                    {-3530.0f, -1040.0f, 1526.0f, -2014.0f, -1089.0f},
+                    {1040.0f, 3530.0f, 1526.0f, -2014.0f, -1089.0f},
+                    {-700.0f, 700.0f, 2887.0f, -10700.0f, -8300.0f},
+                };
+                cXyz* q = mPacket.getQuad();
+                for (int i = 0; i < dMirror_packet_c::MAX_QUADS; i++) {
+                    q[i * 4 + 0].set(l_tot_quads[i].xMin, l_tot_quads[i].y, l_tot_quads[i].zMin);
+                    q[i * 4 + 1].set(l_tot_quads[i].xMax, l_tot_quads[i].y, l_tot_quads[i].zMin);
+                    q[i * 4 + 2].set(l_tot_quads[i].xMax, l_tot_quads[i].y, l_tot_quads[i].zMax);
+                    q[i * 4 + 3].set(l_tot_quads[i].xMin, l_tot_quads[i].y, l_tot_quads[i].zMax);
+                }
+                mPacket.mQuadCount = dMirror_packet_c::MAX_QUADS;
+                mPacket.getViewScale().set(1.0f, -1.0f, 1.0f);
+                m_myObj = this;
+                mPacket.calcMinMax();
+                eyePos.set(current.pos.x, current.pos.y, current.pos.z);
+                return cPhs_COMPLEATE_e;
+            }
+#endif
             scale *= 10.0f;
             mPacket.getViewScale().set(1.0, -1.0, 1.0);
         } else {

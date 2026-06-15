@@ -7,6 +7,9 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/JMath/JMath.h"
 #include "m_Do/m_Do_mtx.h"
+#if TARGET_PC
+#include "dusk/settings.h" 
+#endif
 
 void J3DMtxCalcJ3DSysInitBasic::init(Vec const& scale, Mtx const& mtx) {
     J3DSys::mCurrentS = scale;
@@ -178,7 +181,23 @@ void J3DJoint::entryIn() {
             matPacket->setMaterialAnmID(mesh->getMaterialAnm());
             matPacket->setShapePacket(shapePacket);
             bool isDrawModeOpaTexEdge = mesh->isDrawModeOpaTexEdge() == FALSE;
+#if TARGET_PC
+            // TP HD J3DJoint::entryIn (FUN_02b57690): 
+            J3DDrawBuffer* drawBuffer = j3dSys.getDrawBuffer(isDrawModeOpaTexEdge);
+            u8 r24;
+            if (dusk::tphd_active() && (mesh->mMaterialID & 0x80000000) != 0 &&
+                (mesh->getMaterialMode() & 0x20) != 0 &&
+                drawBuffer->getSortMode() == J3DDrawBufSortMode_Mat)
+            {
+                matPacket->drawClear();
+                shapePacket->drawClear();
+                r24 = drawBuffer->entryImm(matPacket, 1);
+            } else {
+                r24 = matPacket->entry(drawBuffer);
+            }
+#else
             u8 r24 = matPacket->entry(j3dSys.getDrawBuffer(isDrawModeOpaTexEdge));
+#endif
             if (r24) {
                 j3dSys.setMatPacket(matPacket);
                 J3DDrawBuffer::entryNum++;

@@ -1504,7 +1504,39 @@ void dScnLogo_c::dvdDataLoad() {
     mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
     #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
+    if (dusk::tphd_active) {
+        switch (getPalLanguage()) {
+        case 1:
+            mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
+            break;
+        case 2:
+            if (getGameVersion() == GameVersion::GcnPal) {
+                mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
+            } else {
+                mpBmgResCommand = onMemMount("/res/Msgusfr/bmgres.arc");
+            }
+            break;
+        case 3:
+            if (getGameVersion() == GameVersion::GcnPal) {
+                mpBmgResCommand = onMemMount("/res/Msgsp/bmgres.arc");
+            } else {
+                mpBmgResCommand = onMemMount("/res/Msgussp/bmgres.arc");
+            }
+            break;
+        case 4:
+            mpBmgResCommand = onMemMount("/res/Msgit/bmgres.arc");
+            break;
+        case 0:
+        default:
+            if (getGameVersion() == GameVersion::GcnPal) {
+                mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
+            }
+            else {
+                mpBmgResCommand = onMemMount("/res/Msgus/bmgres.arc");
+            }
+            break;
+        }
+    } else if (getGameVersion() == GameVersion::GcnPal) {
         switch (getPalLanguage()) {
         case 1:
             mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
@@ -1612,7 +1644,7 @@ void dScnLogo_c::dvdDataLoad() {
     mpRubyResCommand = onMemMount("/res/Fontus/rubyres.arc");
 #endif
 
-    mParticleCommand = mDoDvdThd_toMainRam_c::create(PARTICLE_COM_PATH, 0, dComIfGp_particle_getResHeap());
+    mParticleCommand = mDoDvdThd_toMainRam_c::create(DUSK_IF_ELSE(dusk::tphd_active() ? "/res/Particle/common-r.jpc" : PARTICLE_COM_PATH, PARTICLE_COM_PATH), 0, dComIfGp_particle_getResHeap());
 
     mItemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", 0, NULL);
     JUT_ASSERT(2620, mItemTableCommand != NULL);

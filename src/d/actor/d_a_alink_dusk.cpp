@@ -3,6 +3,7 @@
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
+#include "dusk/tphd/LosTable.hpp"
 
 void daAlink_c::handleWolfHowl() {
     if (checkWolf()) {
@@ -68,6 +69,11 @@ void daAlink_c::handleWolfHowl() {
 
 void daAlink_c::handleQuickTransform() {
     if (!dusk::getSettings().game.enableQuickTransform) {
+        return;
+    }
+
+    if (dusk::tphd::is_los_active() && !dusk::getSettings().game.canTransformAnywhere) {
+        Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         return;
     }
 

@@ -230,6 +230,13 @@ void J3DMatPacket::draw() {
 #endif
     packet->getShape()->loadPreDrawSetting();
 
+#if DUSK_TPHD
+    {
+        const auto* offs = mpMaterial->getPEBlock()->getPolygonOffset();
+        GX2SetPolygonOffset(offs->mFrontOffset, offs->mFrontScale, offs->mBackOffset, offs->mBackScale, offs->mClamp);
+    }
+#endif
+
     while (packet != NULL) {
         if (packet->getDisplayListObj() != NULL) {
             packet->getDisplayListObj()->callDL();

@@ -75,7 +75,6 @@
 #include <dolphin/dvd.h>
 
 #include "SDL3/SDL_init.h"
-#include "SDL3/SDL_filesystem.h"
 #include "SDL3/SDL_iostream.h"
 #include "SDL3/SDL_misc.h"
 #include "cxxopts.hpp"
@@ -89,6 +88,7 @@
 #include "dusk/io.hpp"
 #include "dusk/version.hpp"
 #include "dusk/discord_presence.hpp"
+#include "dusk/tphd/HdAssetLayer.hpp"
 #include "tracy/Tracy.hpp"
 #include "f_pc/f_pc_draw.h"
 #include "tracy/Tracy.hpp"
@@ -475,22 +475,14 @@ u8 OSGetLanguage() {
 }
 
 static void LanguageInit() {
-    // Keep language at 0 (English) if not on a PAL disc.
+    // Keep language at 0 (English) if not on a PAL disc and if TPHD is unloaded.
     // Doubt this matters, but avoid funky shit.
-    if (!dusk::version::isRegionPal()) {
+    if (!dusk::version::isRegionPal() && !dusk::tphd_active()) {
         return;
     }
 
     // Cache this to avoid funky shenanigans.
     selectedLanguage = static_cast<u8>(dusk::getSettings().game.language.getValue());
-}
-
-static std::string asset_path(const char* assetName) {
-    const char* basePath = SDL_GetBasePath();
-    if (basePath != nullptr && basePath[0] != '\0') {
-        return std::string(basePath) + "res/" + assetName;
-    }
-    return std::string("res/") + assetName;
 }
 
 static void log_build_info() {
@@ -563,10 +555,17 @@ int game_main(int argc, char* argv[]) {
     // PADSetDefaultMapping(&defaultPadMapping, PAD_TYPE_STANDARD);
 
     {
-        // Load mappings from https://github.com/mdqinc/SDL_GameControllerDB
-        const auto mappingsPath = asset_path("gamecontrollerdb.txt");
-        if (SDL_AddGamepadMappingsFromFile(mappingsPath.c_str()) < 0) {
-            DuskLog.warn("Failed to load gamecontrollerdb.txt: {}", SDL_GetError());
+        const auto mappingsPath = dusk::ConfigPath / "gamecontrollerdb.txt";
+        std::error_code ec;
+        if (std::filesystem::exists(mappingsPath, ec)) {
+            const auto mappingsPathString = dusk::io::fs_path_to_string(mappingsPath);
+            if (SDL_AddGamepadMappingsFromFile(mappingsPathString.c_str()) < 0) {
+                DuskLog.warn("Failed to load gamecontrollerdb.txt from '{}': {}",
+                    mappingsPathString, SDL_GetError());
+            }
+        } else if (ec) {
+            DuskLog.warn("Failed to inspect gamecontrollerdb.txt in data folder '{}': {}",
+                dusk::io::fs_path_to_string(mappingsPath), ec.message());
         }
     }
 
@@ -580,6 +579,9 @@ int game_main(int argc, char* argv[]) {
         config.appName = dusk::AppName;
         config.userPath = reinterpret_cast<const char*>(userPathString.c_str());
         config.cachePath = reinterpret_cast<const char*>(cachePathString.c_str());
+#ifdef DUSK_ASSET_DIR
+        config.resourcesPath = DUSK_ASSET_DIR;
+#endif
         config.vsync = dusk::getSettings().video.enableVsync;
         config.startFullscreen = dusk::getSettings().video.enableFullscreen;
         config.windowPosX = -1;
@@ -589,7 +591,11 @@ int game_main(int argc, char* argv[]) {
         config.desiredBackend = ResolveDesiredBackend(parsed_arg_options);
         config.logCallback = &aurora_log_callback;
         config.logLevel = startupLogLevel;
-        config.mem1Size = 256 * 1024 * 1024;
+        if (dusk::tphd_active()) {
+            config.mem1Size = 512 * 1024 * 1024;
+        } else {
+            config.mem1Size = 256 * 1024 * 1024;
+        }
         config.mem2Size = 24 * 1024 * 1024;
         config.allowJoystickBackgroundEvents = dusk::getSettings().game.allowBackgroundInput;
         config.pauseOnFocusLost = dusk::getSettings().game.pauseOnFocusLost;
@@ -740,6 +746,15 @@ int game_main(int argc, char* argv[]) {
 
         dusk::IsGameLaunched = true;
     }
+
+#if DUSK_TPHD
+    {
+        const auto hdPath = dusk::tphd_content_path();
+        if (!hdPath.empty()) {
+            dusk::tphd::set_hd_content_path(hdPath);
+        }
+    }
+#endif
 
 #if DUSK_ENABLE_SENTRY_NATIVE
     if (dusk::crash_reporting::get_consent() == dusk::crash_reporting::Consent::Unknown) {

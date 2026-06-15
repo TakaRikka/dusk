@@ -40,11 +40,11 @@ namespace dusk::ui {
 namespace {
 
 constexpr std::array kLanguageNames = {
-    "English",
-    "German",
-    "French",
-    "Spanish",
-    "Italian",
+    "[ENGLISH]",
+    "[GERMAN]",
+    "[FRENCH]",
+    "[SPANISH]",
+    "[ITALIAN]",
 };
 
 constexpr std::array<const char*, 4> kUiLanguageIds = {
@@ -79,6 +79,22 @@ int ui_language_index(std::string_view languageId) {
     return 0;
 }
 
+constexpr std::array kLanguageNamesUS = {
+    "[AMERICAN_ENGLISH]",
+    "[GERMAN]",
+    "[CANADIAN_FRENCH]",
+    "[LATIN_AMERICAN_SPANISH]",
+    "[ITALIAN]",
+};
+
+constexpr std::array kLanguageNamesEU = {
+    "[BRITISH_ENGLISH]",
+    "[GERMAN]",
+    "[EUROPEAN_FRENCH]",
+    "[EUROPEAN_SPANISH]",
+    "[ITALIAN]",
+};
+
 constexpr std::array kCardFileTypes = {
     "[CARD_IMAGE]",
     "[GCI_FOLDER]",
@@ -101,6 +117,14 @@ constexpr std::array kMenuScalingModeLabels = {
     "[GAMECUBE]",
     "[WII]",
     "[DUSKLIGHT]",
+};
+
+constexpr std::array kMagicArmorModes = {
+    "[MAGIC_ARMOR_NORMAL]",
+    "[MAGIC_ARMOR_ON_DAMAGE]",
+    "[MAGIC_ARMOR_DOUBLE_DEFENSE]",
+    "[MAGIC_ARMOR_INVINCIBLE]",
+    "[MAGIC_ARMOR_COSMETIC]",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
@@ -239,7 +263,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
-    getSettings().game.freeMagicArmor.setSpeedrunValue(false);
+    getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);
     getSettings().game.invincibleEnemies.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
@@ -576,6 +600,38 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 rightPane, [](Pane& pane) {
                     pane.add_rml("[SET_THE_DISC_IMAGE_THAT_DUSKLIGHT_USES_TO_LAUNCH_THE_GAME_CHANGES_REQUIR]");
                 });
+
+            leftPane.register_control(
+                leftPane
+                    .add_select_button({
+                        .key = "[TPHD_CONTENT_FOLDER]",
+                        .getValue =
+                            [] {
+                                const auto& path = prelaunch_state().configuredHdContentPath;
+                                std::string display;
+                                if (path.empty()) {
+                                    display = "(none)";
+                                } else {
+                                    display = std::filesystem::path(path).string();
+                                    if (display.empty()) {
+                                        display = path;
+                                    }
+                                }
+                                return display;
+                            },
+                        .isModified =
+                            [] {
+                                const auto& state = prelaunch_state();
+                                const auto& active = state.activeHdContentPath;
+                                return !active.empty() && state.configuredHdContentPath != active;
+                            },
+                    })
+                    .on_pressed([] { open_folder_picker(); }),
+                rightPane, [](Pane& pane) {
+                    pane.add_rml("[SET_THE_DIRECTORY_THAT_DUSK_LOADS_ELIGIBLE_TPHD_CONTENT_FROM]"
+                                  "<br/><br/>[CHANGES_REQUIRE_A_RESTART]");
+                });
+
 #if DUSK_CAN_CHANGE_DATA_FOLDER
             leftPane.register_control(
                 leftPane.add_select_button({
@@ -620,21 +676,31 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 #endif
             leftPane.register_control(
                 leftPane.add_select_button({
-                    .key = "[LANGUAGE]",
+                    .key = dusk::tphd_active() ? "[LANGUAGE_HD]" : "[LANGUAGE]",
                     .getValue =
                         [] {
                             const auto& state = prelaunch_state();
-                            if (!state.configuredDiscCanLaunch || !state.configuredDiscInfo.isPal) {
+                            if (!state.configuredDiscCanLaunch) {
                                 return kLanguageNames[0];
                             }
+
                             const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
+
+                            if (dusk::tphd_active()) {
+                                if (state.configuredDiscInfo.isPal) {
+                                    return kLanguageNamesEU[idx];
+                                } else {
+                                    return kLanguageNamesUS[idx];
+                                }
+                            }
+
                             return kLanguageNames[idx];
                         },
                     .isDisabled =
                         [] {
                             const auto& state = prelaunch_state();
                             return !state.configuredDiscCanLaunch ||
-                                   !state.configuredDiscInfo.isPal;
+                                   (!state.configuredDiscInfo.isPal && !dusk::tphd_active());
                         },
                     .isModified =
                         [] {
@@ -643,13 +709,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         },
                 }),
                 rightPane, [](Pane& pane) {
-                    for (int i = 0; i < kLanguageNames.size(); i++) {
+                    auto* languageNames = &kLanguageNames;
+                    auto& state = prelaunch_state();
+
+                    if (dusk::tphd_active()) {
+                        if (state.configuredDiscInfo.isPal) {
+                            languageNames = &kLanguageNamesEU;
+                        } else {
+                            languageNames = &kLanguageNamesUS;
+                        }
+                    }
+
+                    for (int i = 0; i < languageNames->size(); i++) {
                         pane.add_button({
-                                            .text = i == 0 ? "[ENGLISH]" :
-                                                            i == 1 ? "[GERMAN]" :
-                                                            i == 2 ? "[FRENCH]" :
-                                                            i == 3 ? "[SPANISH]" :
-                                                                     "[ITALIAN]",
+                                            .text = languageNames->data()[i],
                                             .isSelected =
                                                 [i] {
                                                     return getSettings().game.language.getValue() ==
@@ -1134,6 +1207,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[MIRRORS_THE_WORLD_HORIZONTALLY_MATCHING_THE_WII_VERSION_OF_THE_GAME]");
         addOption("[MINIMAL_HUD]", getSettings().game.minimalHUD,
             "[DISABLES_THE_ELEMENTS_OF_THE_MAIN_HUD_OF_THE_GAME_USEFUL_FOR_A_MORE_IMME]");
+        config_percent_select(leftPane, rightPane, getSettings().game.hudScale,
+            "[HUD_SCALE]",
+            "[SCALES_THE_SIZE_OF_THE_GAMEPLAY_HUD_HEARTS_BUTTONS_MINI_MAP_ETC_DOES_NO]",
+            50, 200, 5,
+            [] { return getSettings().game.minimalHUD.getValue(); });
         addOption("[RESTORE_WII_1_0_GLITCHES]", getSettings().game.restoreWiiGlitches,
             "[RESTORES_PATCHED_GLITCHES_FROM_WII_USA_1_0_THE_FIRST_RELEASED_VERSION]");
         addOption("[ENABLE_ROTATING_LINK_DOLL]", getSettings().game.enableLinkDollRotation,
@@ -1193,6 +1271,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "[LINK_WILL_NOT_RECOIL_WHEN_HIS_SWORD_HITS_WALLS]");
         addOption("[NO_2ND_FISH_FOR_CAT]", getSettings().game.no2ndFishForCat,
             "[SKIP_NEEDING_TO_CATCH_A_SECOND_FISH_FOR_SERA_S_CAT]");
+        addOption("[BUTTON_FISHING]", getSettings().game.buttonFishing,
+            "[ALLOW_FISHING_WITH_THE_FISHING_ROD_USING_THE_BUTTON_THE_ITEM_IS_ASSIGNED]");
         addOption("[SHOW_POE_COUNT_ON_MAP]", getSettings().game.enhancedMapMenus,
             "[DISPLAYS_COLLECTED_TOTAL_NUMBER_OF_POE_SOULS_FOR_A_REGION_ON_THE_MAP]");
         addSpeedrunDisabledOption("[SUN_S_SONG_R_X]", getSettings().game.sunsSong,
@@ -1285,8 +1365,38 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat("[CHEAT_FAST_ROLL]", getSettings().game.fastRoll, "[CHEAT_FAST_ROLL_HELP]");
         addCheat("[CHEAT_FAST_SPINNER]", getSettings().game.fastSpinner,
             "[CHEAT_FAST_SPINNER_HELP]");
-        addCheat("[CHEAT_FREE_MAGIC_ARMOR]", getSettings().game.freeMagicArmor,
-            "[CHEAT_FREE_MAGIC_ARMOR_HELP]");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "[MAGIC_ARMOR_BEHAVIOR]",
+                .getValue =
+                    [] {
+                        return kMagicArmorModes[static_cast<u8>(getSettings().game.armorRupeeDrain.getValue())];
+                    },
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .isModified =
+                    [] {
+                        return getSettings().game.armorRupeeDrain.getValue() !=
+                               getSettings().game.armorRupeeDrain.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kMagicArmorModes.size(); i++) {
+                    pane.add_button({
+                            .text = kMagicArmorModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.armorRupeeDrain.getValue() == static_cast<MagicArmorMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.armorRupeeDrain.setValue(static_cast<MagicArmorMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml(
+                    "[CONTROL_THE_BEHAVIOR_OF_THE_MAGIC_ARMOR]");
+            });
         addCheat("[CHEAT_INVINCIBLE_ENEMIES]", getSettings().game.invincibleEnemies,
             "[CHEAT_INVINCIBLE_ENEMIES_HELP]");
     });

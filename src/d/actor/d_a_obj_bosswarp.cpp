@@ -14,6 +14,9 @@
 #include "d/actor/d_a_obj_ystone.h"
 #include <cstring>
 
+#include "d/actor/d_a_alink.h"
+#include "dusk/tphd/LosTable.hpp"
+
 static DUSK_CONST char* l_arcName = "ef_Portal";
 
 static char const* l_clearEvName[9] = {
@@ -101,7 +104,7 @@ int daObjBossWarp_c::Create() {
     }
     mBossClearMapToolId = 0xff;
 
-    if (!isFirst() || level == 8) {
+    if ((!isFirst() || level == 8) IF_DUSK(&& !dusk::tphd::is_los_active())) {
         mBossWarpInEventId = dComIfGp_getEventManager().getEventIdx(this, "BOSS_WARPIN", 0xff);
         mBossWarpInMapToolId = 0xff;
         mAction = 3;
@@ -217,6 +220,31 @@ BOOL daObjBossWarp_c::checkDistance() {
 }
 
 int daObjBossWarp_c::execute() {
+#if TARGET_PC
+    if (dusk::tphd::is_los_active()) {
+        u8 sw = getSwNo();
+        if (sw == 0xff || fopAcM_isSwitch(this, sw)) {
+            if (mAction == ACT_WAIT) {
+                mAction = ACT_WAIT_WARP;
+            }
+
+            set_appear();
+
+            if (!dComIfGp_evmng_checkStartDemo()) {
+                field_0x595 = true;
+                field_0x620 = current.pos;
+            }
+
+            event_proc_call();
+
+            daMidna_c* midna = (daMidna_c*)daPy_py_c::getMidnaActor();
+            if (field_0x595 && midna != NULL) {
+                midna->onTagWaitPos(&field_0x620);
+            }
+        }
+    }
+#endif
+
     if (dStage_stagInfo_GetSTType(dComIfGp_getStage()->getStagInfo()) != 3) {
         u8 sw = getSwNo();
         if (sw == 0xff || fopAcM_isSwitch(this, sw)) {
@@ -476,6 +504,14 @@ int daObjBossWarp_c::demoProc() {
             disappear(0);
             break;
         case 3:  // SCENE_CHG
+            #if TARGET_PC
+            if (dusk::tphd::is_los_active()) {
+                // tphd sets some event flags here for bookkeeping, ignoring for now
+                daAlink_getAlinkActorClass()->mLosStickValue = -1.0f;
+                break;
+            }
+            #endif
+
             int scene;
             if (isFirst()) {
                 scene = getSceneListNo();
@@ -536,6 +572,11 @@ int daObjBossWarp_c::demoProc() {
             break;
         case 6:  // WALK_TARGET1
             dComIfGp_evmng_setGoal(&current.pos);
+#if TARGET_PC
+            if (dusk::tphd::is_los_active()) {
+                daAlink_getAlinkActorClass()->mLosStickValue = 1.0f;
+            }
+#endif
             break;
         case 7:  // APPEAR_END
             break;
@@ -573,6 +614,14 @@ int daObjBossWarp_c::demoProc() {
         dComIfGp_evmng_cutEnd(mStaffId);
         break;
     case 3:  // SCENE_CHG
+#if TARGET_PC
+        if (dusk::tphd::is_los_active()) {
+            if (mCounter++ == 0) {
+                fopAcM_offDraw(this);
+                dComIfGp_event_remove();
+            }
+        }
+#endif
         break;
     case 4:  // STONE_FALL
         if (ystone != NULL) {

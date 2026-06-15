@@ -1943,6 +1943,12 @@ void dMenu_Fmap2DBack_c::regionMapMove(STControl* i_stick) {
     calcAllMapPos2D(mArrowPos3DX + control_xpos - mStageTransX,
                     mArrowPos3DZ + control_ypos - mStageTransZ, &pos_x, &pos_y);
 
+#if TARGET_PC
+    if (dusk::getSettings().game.enableMirrorMode) {
+        pos_x = getMirrorPosX(pos_x, 0.0f);
+    }
+#endif
+
     mSelectRegion = 0xff;
     int region = mRegionCursor;
     if (region != 0xff && region != 7) {

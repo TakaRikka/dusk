@@ -64,6 +64,7 @@ static dPath* get_Extent_pos_end_get(kytag10_class* i_this, dPath* i_path, cXyz*
 }
 
 static void sparks_move(kytag10_class* i_this) {
+
     camera_process_class* camera_p = dComIfGp_getCamera(0);
 
     cXyz ratio_pos_1;
