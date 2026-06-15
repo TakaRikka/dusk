@@ -861,6 +861,20 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
         break;
     }
     case Page::Rumble: {
+        if (PADCanForceDeviceRumble(static_cast<u32>(port))) {
+            pane.add_child<BoolButton>(BoolButton::Props{
+                .key = "Use Device Haptics",
+                .getValue = [port] { return PADGetForceDeviceRumble(static_cast<u32>(port)); },
+                .setValue =
+                    [port](bool value) {
+                        PADSetForceDeviceRumble(static_cast<u32>(port), value ? TRUE : FALSE);
+                        PADSerializeMappings();
+                    },
+                .isDisabled = [this] { return mRumbleTestActive; },
+            });
+            pane.add_text("Use native device haptics instead of controller rumble. "
+                          "Useful for devices with built-in gamepads.");
+        }
         auto& rumbleTest = pane.add_select_button({
             .key = "Test Rumble",
             .getValue =

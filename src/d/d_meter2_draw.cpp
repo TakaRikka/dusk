@@ -25,6 +25,7 @@
 
 #if TARGET_PC
 #include "dusk/settings.h"
+#include "dusk/ui/icon_provider.hpp"
 #include <algorithm>
 
 namespace {
@@ -653,10 +654,22 @@ void dMeter2Draw_c::draw() {
     J2DGrafContext* graf_ctx = dComIfGp_getCurrentGrafPort();
     graf_ctx->setup2D();
 
+#if TARGET_PC
+    const bool touchControlsEnabled = dusk::getSettings().game.enableTouchControls;
+    if (touchControlsEnabled) {
+        mpButtonParent->hide();
+    } else {
+        mpButtonParent->show();
+    }
+#endif
+
     mpScreen->draw(0.0f, 0.0f, graf_ctx);
     drawKanteraScreen(1);
     drawKanteraScreen(2);
 
+#if TARGET_PC
+    if (!touchControlsEnabled) {
+#endif
     for (int i = 0; i < 2; i++) {
         if (mpItemXY[i] != NULL) {
             for (int j = 0; j < 3; j++) {
@@ -705,6 +718,9 @@ void dMeter2Draw_c::draw() {
             }
         }
     }
+#if TARGET_PC
+    }
+#endif
 
     if (mpLightDropParent->getAlphaRate() != 0.0f) {
         f32 var_f28 = g_drawHIO.mLightDrop.mPikariScaleNormal;
@@ -787,7 +803,11 @@ void dMeter2Draw_c::draw() {
         }
     }
 
+#if TARGET_PC
+    if (!touchControlsEnabled && field_0x738 > 0.0f) {
+#else
     if (field_0x738 > 0.0f) {
+#endif
         drawPikari(mpButtonMidona, &field_0x738, g_drawHIO.mMidnaIconPikariScale,
                    g_drawHIO.mMidnaIconPikariFrontOuter, g_drawHIO.mMidnaIconPikariFrontInner,
                    g_drawHIO.mMidnaIconPikariBackOuter, g_drawHIO.mMidnaIconPikariBackInner,
@@ -2452,6 +2472,11 @@ void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_pos
         SAFE_STRCPY(static_cast<J2DTextBox*>(mpBText[i]->getPanePtr())->getStringPtr(), mp_string);
     }
 
+#if TARGET_PC
+    if (dusk::getSettings().game.enableTouchControls) {
+        mpScreen->search(MULTI_CHAR('item_b_n'))->hide();
+    } else
+#endif
     if (i_action == 0x26 || i_action == 0x2E) {
         mpScreen->search(MULTI_CHAR('item_b_n'))->show();
         var_r31 = 1;
@@ -2729,6 +2754,12 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
             mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
         }
+
+#if TARGET_PC
+        if (dusk::getSettings().game.enableTouchControls) {
+            mpScreen->search(tag[i_no])->hide();
+        }
+#endif
     }
 }
 
@@ -3294,6 +3325,10 @@ void dMeter2Draw_c::setButtonIconMidonaAlpha(u32 param_0) {
     }
 
     mpButtonXY[2]->setAlpha(255.0f * field_0x724 * temp_f30_2);
+
+#if TARGET_PC
+    dusk::ui::update_midna_icon_texture(mpButtonMidona != NULL ? mpButtonMidona->getPanePtr() : NULL);
+#endif
 }
 
 void dMeter2Draw_c::setButtonIconAlpha(int i_no, u8 unused0, u32 unused1, bool unused2) {

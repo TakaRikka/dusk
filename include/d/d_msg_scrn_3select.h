@@ -49,6 +49,10 @@ public:
     void selectScale();
     void selectTrans();
     void selectAnimeTransform(int);
+#if TARGET_PC
+    bool pointerMove();
+    bool consumePointerClick();
+#endif
 
     void setOffsetX(f32 i_offsetX) { mOffsetX = i_offsetX; }
     bool isAnimeUpdate(int param_0) { return (field_0x114 & (u8)(1 << param_0)) ? TRUE : FALSE; }

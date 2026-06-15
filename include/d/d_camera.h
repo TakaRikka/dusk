@@ -1037,7 +1037,7 @@ public:
     bool test1Camera(s32);
     bool test2Camera(s32);
     #if TARGET_PC
-    static bool canUseFreeCam();
+    static bool isAimActive();
     bool freeCamera();
     bool executeDebugFlyCam();
     void deactivateDebugFlyCam();

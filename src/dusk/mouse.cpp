@@ -1,4 +1,5 @@
 #include "dusk/mouse.h"
+#include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
 #include "d/actor/d_a_alink.h"
@@ -26,16 +27,7 @@ void reset_deltas() {
 }
 
 bool queryMouseAimContext() {
-    if (!getSettings().game.enableMouseAim) {
-        return false;
-    }
-
-    daAlink_c* link = daAlink_getAlinkActorClass();
-    if (link == nullptr) {
-        return false;
-    }
-
-    return link->checkAimContext() && dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
+    return getSettings().game.enableMouseAim.getValue() && dCamera_c::isAimActive();
 }
 
 bool wantMouseCapture() {
@@ -50,7 +42,7 @@ bool isWindowFocused(SDL_Window* window) {
 }
 
 bool shouldCaptureMouse(SDL_Window* window) {
-    if (window == nullptr || ui::any_document_visible()) {
+    if (window == nullptr || ui::any_document_visible() || menu_pointer::active()) {
         return false;
     }
     return wantMouseCapture() && isWindowFocused(window);

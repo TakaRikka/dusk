@@ -31,7 +31,9 @@
 
 #if TARGET_PC
 #include "dusk/game_clock.h"
+#include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
+#include "dusk/ui/touch_controls.hpp"
 #endif
 
 typedef void (dMenu_Ring_c::*initFunc)();
@@ -614,6 +616,9 @@ void dMenu_Ring_c::_delete() {
  * initializes a new process if mStatus changes
 */
 void dMenu_Ring_c::_move() {
+#if TARGET_PC
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::ItemWheel);
+#endif
     mRingRadiusH = g_ringHIO.mRingRadiusH;
     mRingRadiusV = g_ringHIO.mRingRadiusV;
     mOldStatus = mStatus; // Save current status for check
@@ -1517,6 +1522,11 @@ void dMenu_Ring_c::stick_wait_proc() {
         setDoStatus(0);
         return;
     }
+#if TARGET_PC
+    if (pointerMove()) {
+        return;
+    }
+#endif
     if (dMw_A_TRIGGER() && !dMeter2Info_isTouchKeyCheck(0xe)) {
         Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
     }
@@ -1527,6 +1537,49 @@ void dMenu_Ring_c::stick_wait_proc() {
         field_0x6b2 = 0;
     }
 }
+
+#if TARGET_PC
+bool dMenu_Ring_c::pointerMove() {
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::ItemWheel);
+    const auto& pointer = dusk::menu_pointer::state();
+    if (!pointer.valid || mItemsTotal == 0) {
+        return false;
+    }
+
+    int hoveredSlot = -1;
+    f32 bestDistance = 42.0f;
+    for (u8 i = 0; i < mItemsTotal; ++i) {
+        const f32 x = mItemSlotPosX[i] + mCenterPosX;
+        const f32 y = mItemSlotPosY[i] + mCenterPosY;
+        const f32 distance = calcDistance(pointer.x, pointer.y, x, y);
+        if (distance < bestDistance) {
+            bestDistance = distance;
+            hoveredSlot = i;
+        }
+    }
+
+    if (hoveredSlot < 0) {
+        return false;
+    }
+
+    if (mCurrentSlot != hoveredSlot) {
+        mDirectSelectCursorPos.x = mItemSlotPosX[mCurrentSlot];
+        mDirectSelectCursorPos.z = mItemSlotPosY[mCurrentSlot];
+        mCurrentSlot = hoveredSlot;
+        mDirectSelectActive = true;
+        field_0x670 = field_0x63e[mCurrentSlot];
+        setStatus(STATUS_MOVE);
+        field_0x6b2 = 0;
+        return true;
+    }
+
+    if (dusk::menu_pointer::consume_click()) {
+        return true;
+    }
+
+    return false;
+}
+#endif
 
 void dMenu_Ring_c::stick_move_init() {
     if (mCursorSpeed == 0) {
@@ -1672,12 +1725,40 @@ void dMenu_Ring_c::drawSelectItem() {
 #else
             if (field_0x674[i] < 10) {
 #endif
+#if TARGET_PC
+                f32 initSizeX;
+                f32 initSizeY;
+                f32 initScaleX;
+                f32 initScaleY;
+                Vec pos;
+                dusk::ui::EquipTarget touchTarget;
+                if (dusk::ui::get_equip_target(i, touchTarget)) {
+                    initSizeX = touchTarget.width;
+                    initSizeY = touchTarget.height;
+                    initScaleX = 1.0f;
+                    initScaleY = 1.0f;
+                    pos.x = touchTarget.left;
+                    pos.y = touchTarget.top;
+                    pos.z = 0.0f;
+                } else {
+                    CPaneMgr* meterItemPane = dMeter2Info_getMeterItemPanePtr(i);
+                    if (meterItemPane == NULL) {
+                        continue;
+                    }
+                    initSizeX = meterItemPane->getInitSizeX() * 1.7f;
+                    initSizeY = meterItemPane->getInitSizeY() * 1.7f;
+                    initScaleX = meterItemPane->getInitScaleX();
+                    initScaleY = meterItemPane->getInitScaleY();
+                    pos = meterItemPane->getGlobalVtxCenter(meterItemPane->mPane, true, 0);
+                }
+#else
                 f32 initSizeX = dMeter2Info_getMeterItemPanePtr(i)->getInitSizeX() * 1.7f;
                 f32 initSizeY = dMeter2Info_getMeterItemPanePtr(i)->getInitSizeY() * 1.7f;
                 f32 initScaleX = dMeter2Info_getMeterItemPanePtr(i)->getInitScaleX();
                 f32 initScaleY = dMeter2Info_getMeterItemPanePtr(i)->getInitScaleY();
                 Vec pos = dMeter2Info_getMeterItemPanePtr(i)->getGlobalVtxCenter(
                     dMeter2Info_getMeterItemPanePtr(i)->mPane, true, 0);
+#endif
 
 #if TARGET_PC
                 f32 fVar14 = 0.1f + 0.8f * u;

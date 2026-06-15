@@ -12,6 +12,11 @@
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
 
+#if TARGET_PC
+#include "dusk/menu_pointer.h"
+#include "dusk/ui/touch_controls.hpp"
+#endif
+
 JUTGamePad* mDoCPd_c::m_gamePad[4];
 
 interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
@@ -58,6 +63,9 @@ void mDoCPd_c::create() {
 
 void mDoCPd_c::read() {
     ZoneScoped;
+#if TARGET_PC
+    dusk::ui::sync_virtual_input();
+#endif
     JUTGamePad::read();
 
     if (!mDoRst::isReset() && mDoRst::is3ButtonReset()) {
@@ -88,6 +96,12 @@ void mDoCPd_c::read() {
             cLib_memSet(interface, 0, sizeof(interface_of_controller_pad));
         } else {
             convert(interface, *pad);
+#if TARGET_PC
+            const u32 suppressedButtons = dusk::menu_pointer::suppressed_pad_buttons(i);
+            interface->mButtonFlags &= ~suppressedButtons;
+            interface->mPressedButtonFlags &= ~suppressedButtons;
+            dusk::menu_pointer::finish_pad_suppression_read(i);
+#endif
             LRlockCheck(interface);
         }
 #if DEBUG

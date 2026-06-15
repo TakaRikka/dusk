@@ -266,6 +266,8 @@ public:
 
     #if TARGET_PC
     void menuSaveWide();
+    bool pointerSaveSelect();
+    bool pointerYesNoSelect(bool errorSelect, u8 errParam = 0, u8 soundParam = 0);
     #endif
 
     void _draw2();

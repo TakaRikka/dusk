@@ -1213,6 +1213,10 @@ void dMap_c::changeTextureSize(int param_1, int param_2, int param_3) {
     JUT_ASSERT(2672, mImage_p != NULL);
     JUT_ASSERT(2673, mResTIMG != NULL);
 
+#if TARGET_PC
+    GXDestroyCopyTex(mImage_p);
+#endif
+
     mTexSizeX = param_1 >> param_3;
     mTexSizeY = param_2 >> param_3;
 
@@ -1223,6 +1227,24 @@ void dMap_c::changeTextureSize(int param_1, int param_2, int param_3) {
 
     init(mImage_p, mTexSizeX, mTexSizeY, param_1, param_2);
     makeResTIMG(mResTIMG, mTexSizeX, mTexSizeY, mImage_p, (u8*)m_res, 0x33);
+}
+#endif
+
+#if TARGET_PC
+bool dMap_c::refreshTextureSize() {
+    JUT_ASSERT(2688, mImage_p != NULL);
+    JUT_ASSERT(2689, mResTIMG != NULL);
+
+    const u16 oldWidth = mResTIMG->width;
+    const u16 oldHeight = mResTIMG->height;
+    makeResTIMG(mResTIMG, mTexSizeX, mTexSizeY, mImage_p, (u8*)m_res, 0x33);
+
+    if (mResTIMG->width == oldWidth && mResTIMG->height == oldHeight) {
+        return false;
+    }
+
+    GXDestroyCopyTex(mImage_p);
+    return true;
 }
 #endif
 

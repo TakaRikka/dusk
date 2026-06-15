@@ -36,6 +36,10 @@
 #include "d/d_menu_window.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
+#if TARGET_PC
+#include "dusk/menu_pointer.h"
+#endif
+
 typedef void (dMenu_Collect2D_c::*initFunc)();
 static DUSK_CONSTEXPR initFunc init[] = {
     &dMenu_Collect2D_c::wait_init,          &dMenu_Collect2D_c::save_open_init,
@@ -1786,6 +1790,12 @@ void dMenu_Collect2D_c::wait_init() {
 }
 
 void dMenu_Collect2D_c::wait_proc() {
+#if TARGET_PC
+    if (pointerWait()) {
+        return;
+    }
+#endif
+
     if (dMw_A_TRIGGER()) {
         if (mCursorX == 0 && mCursorY == 5) {
             if (mDoGph_gInf_c::getFader()->mStatus == 1) {
@@ -1886,6 +1896,87 @@ void dMenu_Collect2D_c::wait_proc() {
         setBButtonString(0x3F9);
     }
 }
+
+#if TARGET_PC
+void dMenu_Collect2D_c::pointerActivateCurrent() {
+    if (mCursorX == 0 && mCursorY == 5) {
+        if (mDoGph_gInf_c::getFader()->mStatus == 1) {
+            mSubWindowOpenCheck = 1;
+            Z2GetAudioMgr()->seStart(Z2SE_SY_MENU_CHANGE_WINDOW, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            dMeter2Info_set2DVibrationM();
+        }
+    } else if (mCursorX == 1 && mCursorY == 5) {
+        if (mDoGph_gInf_c::getFader()->mStatus == 1) {
+            mSubWindowOpenCheck = 2;
+            Z2GetAudioMgr()->seStart(Z2SE_SY_MENU_CHANGE_WINDOW, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            dMeter2Info_set2DVibrationM();
+        }
+    } else if (mCursorX == 3 && mCursorY == 4) {
+        if (field_0x22d[3][4] != 0 && mDoGph_gInf_c::getFader()->mStatus == 1) {
+            mSubWindowOpenCheck = 3;
+            dMeter2Info_set2DVibration();
+        }
+    } else if (mCursorX == 2 && mCursorY == 4) {
+        if (isFishIconVisible() && mDoGph_gInf_c::getFader()->mStatus == 1) {
+            mSubWindowOpenCheck = 4;
+            dMeter2Info_set2DVibration();
+        }
+    } else if (mCursorX == 3 && mCursorY == 3) {
+        if (isSkillIconVisible() && mDoGph_gInf_c::getFader()->mStatus == 1) {
+            mSubWindowOpenCheck = 5;
+            dMeter2Info_set2DVibration();
+        }
+    } else if (mCursorX == 2 && mCursorY == 3) {
+        if (isInsectIconVisible() && mDoGph_gInf_c::getFader()->mStatus == 1) {
+            mSubWindowOpenCheck = 6;
+            dMeter2Info_set2DVibration();
+        }
+    } else if (field_0x22d[mCursorX][mCursorY] != 0 && !mIsWolf) {
+        if ((mCursorX >= 3 && mCursorX <= 4) || (mCursorX == 5 && mCursorY == 2)) {
+            u8 cursorY = mCursorY;
+            if (cursorY == 0) {
+                if (daPy_getPlayerActorClass()->getSwordChangeWaitTimer() == 0) {
+                    changeSword();
+                }
+            } else if (cursorY == 1) {
+                if (daPy_getPlayerActorClass()->getShieldChangeWaitTimer() == 0) {
+                    changeShield();
+                }
+            } else if (cursorY == 2 &&
+                       daPy_getPlayerActorClass()->getClothesChangeWaitTimer() == 0)
+            {
+                changeClothe();
+            }
+        }
+    }
+}
+
+bool dMenu_Collect2D_c::pointerWait() {
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Collection);
+    for (u8 y = 0; y < 6; ++y) {
+        for (u8 x = 0; x < 7; ++x) {
+            if (getItemTag(x, y, true) == 0 || !dusk::menu_pointer::hit_pane(mpSelPm[x][y], 8.0f)) {
+                continue;
+            }
+            if (mCursorX != x || mCursorY != y) {
+                mDoAud_seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0);
+                mCursorX = x;
+                mCursorY = y;
+                cursorPosSet();
+                setItemNameString(mCursorX, mCursorY);
+            }
+            if (dusk::menu_pointer::consume_click()) {
+                pointerActivateCurrent();
+                return true;
+            }
+            return false;
+        }
+    }
+    return false;
+}
+#endif
 
 
 void dMenu_Collect2D_c::save_open_init() {

@@ -18,6 +18,10 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/menu_pointer.h"
+#endif
+
 typedef void (dMenu_Skill_c::*initFunc)();
 static initFunc map_init_process[] = {
     &dMenu_Skill_c::wait_init,
@@ -275,6 +279,12 @@ void dMenu_Skill_c::wait_init() {
 void dMenu_Skill_c::wait_move() {
     u8 oldIndex = mIndex;
     if (mDoGph_gInf_c::getFader()->getStatus() == 1) {
+#if TARGET_PC
+        if (pointerWait()) {
+            return;
+        }
+#endif
+
         if (mDoCPd_c::getTrigB(PAD_1) != 0) {
             mpDrawCursor->offPlayAnime(0);
             mStatus = 3;
@@ -298,6 +308,34 @@ void dMenu_Skill_c::wait_move() {
         }
     }
 }
+
+#if TARGET_PC
+bool dMenu_Skill_c::pointerWait() {
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Collection);
+    for (u8 i = 0; i < mSkillNum; ++i) {
+        if (!dusk::menu_pointer::hit_pane(mpLetterParent[i], 8.0f)) {
+            continue;
+        }
+
+        if (mIndex != i) {
+            mIndex = i;
+            changeActiveColor();
+            Z2GetAudioMgr()->seStart(Z2SE_SY_CURSOR_ITEM, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+        }
+        if (dusk::menu_pointer::consume_click()) {
+            mProcess = PROC_WAIT_MOVE;
+            Z2GetAudioMgr()->seStart(Z2SE_SY_EXP_WIN_OPEN, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            dMeter2Info_set2DVibration();
+            return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+#endif
 
 void dMenu_Skill_c::read_open_init() {
     static const u32 i_id[7] = {

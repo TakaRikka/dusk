@@ -136,8 +136,8 @@ void J3DLoadCPCmd(u8 addr, u32 val) {
 #if TARGET_PC
 static void J3DLoadArrayBasePtr(GXAttr attr, void* data, u32 size, bool le) {
     u32 idx = (attr == GX_VA_NBT) ? 1 : (attr - GX_VA_POS);
-    GXCmd1u8(GX_LOAD_AURORA);
-    GXCmd1u16(GX_LOAD_AURORA_ARRAYBASE | idx);
+    GXCmd1u8(GX_AURORA);
+    GXCmd1u16(GX_AURORA_LOAD_ARRAYBASE | idx);
     GXCmd1u64((u64)data);
     GXCmd1u32(size);
     GXCmd1u8(le ? 1 : 0);

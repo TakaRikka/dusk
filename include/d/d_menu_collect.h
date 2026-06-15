@@ -74,6 +74,8 @@ public:
 
     #if TARGET_PC
     void menuCollectWide();
+    bool pointerWait();
+    void pointerActivateCurrent();
     #endif
 
     void _create();

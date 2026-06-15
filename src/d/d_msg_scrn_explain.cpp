@@ -643,6 +643,10 @@ f32 dMsgScrnExplain_c::getAlphaRatio() {
 bool dMsgScrnExplain_c::checkTriggerA() {
     if (mDoCPd_c::getTrigA(PAD_1)) {
         return true;
+#if TARGET_PC
+    } else if (mpSelect_c != NULL && mpSelect_c->consumePointerClick()) {
+        return true;
+#endif
     } else {
         return false;
     }

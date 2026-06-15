@@ -212,6 +212,9 @@ public:
     void setCornerColor(JUtility::TColor c0) {
         setCornerColor(c0, c0, c0, c0);
     }
+#if TARGET_PC
+    JUtility::TColor corner(size_t index) const { return mCornerColor[index]; }
+#endif
 
 protected:
     /* 0x100 */ JUTTexture* mTexture[2];

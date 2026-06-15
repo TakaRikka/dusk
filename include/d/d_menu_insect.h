@@ -51,6 +51,10 @@ public:
     void setBButtonString(u16);
     void setHIO(bool);
 
+#if TARGET_PC
+    bool pointerWait();
+#endif
+
     virtual void draw() { _draw(); }
     virtual ~dMenu_Insect_c();
 
