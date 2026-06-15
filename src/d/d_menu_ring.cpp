@@ -32,6 +32,7 @@
 #if TARGET_PC
 #include "dusk/game_clock.h"
 #include "dusk/settings.h"
+#include "dusk/action_bindings.h"
 #endif
 
 typedef void (dMenu_Ring_c::*initFunc)();
@@ -1502,6 +1503,19 @@ void dMenu_Ring_c::stick_wait_init() {
 }
 
 void dMenu_Ring_c::stick_wait_proc() {
+    #if TARGET_PC
+    if (dusk::isActionBound(dusk::ActionBinds::SWAP_ITEMS, 0)) {
+        if (dusk::getActionBindTrig(dusk::ActionBinds::SWAP_ITEMS, 0)) {
+            u8 item_x = dComIfGs_getSelectItemIndex(0);
+            u8 item_y = dComIfGs_getSelectItemIndex(1);
+            dComIfGs_setSelectItemIndex(0, dComIfGs_getSelectItemIndex(2)); // GC X, Wii D-Left
+            dComIfGs_setSelectItemIndex(1, dComIfGs_getSelectItemIndex(3)); // GC Y, Wii D-right
+            dComIfGs_setSelectItemIndex(2, item_x); // Wii Dpad Down
+            dComIfGs_setSelectItemIndex(3, item_y); // Wii B
+            Z2GetAudioMgr()->seStart(Z2SE_SY_ITEM_SET_X, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+    }
+    #endif
     u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
 
     if (item != dItemNo_NONE_e) {
