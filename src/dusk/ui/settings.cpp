@@ -1,6 +1,7 @@
 #include "settings.hpp"
 
 #include "aurora/gfx.h"
+#include "autosplits.hpp"
 #include "bool_button.hpp"
 #include "controller_config.hpp"
 #include "dusk/app_info.hpp"
@@ -1254,6 +1255,29 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Show RTA",
                 .helpText = "Display the RTA timer. IGT is always visible.",
                 .isDisabled = [] { return !getSettings().game.speedrunMode; },
+            });
+        config_bool_select(leftPane, rightPane, getSettings().game.autosplitEnabled,
+            {
+                .key = "Autosplit",
+                .helpText = "Automatically send splits to LiveSplit when mapped events fire."
+                            " Use \"Configure Splits\" to import a .lss file and map each segment.",
+                .isDisabled = [] {
+                    return IsMobile || !getSettings().game.speedrunMode ||
+                           !getSettings().game.liveSplitEnabled;
+                },
+            });
+        leftPane.register_control(
+            leftPane.add_button({
+                .text = "Configure Splits",
+                .isDisabled = [] { return IsMobile; },
+            }).on_pressed([this] {
+                push(std::make_unique<AutosplitsWindow>());
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text(
+                    "Open the autosplit configuration window. Import a LiveSplit (.lss) "
+                    "file and assign a game event to each segment.");
             });
     });
 

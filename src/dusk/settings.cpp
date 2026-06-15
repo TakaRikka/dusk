@@ -143,6 +143,7 @@ UserSettings g_userSettings = {
         // Tools
         .speedrunMode {"game.speedrunMode", false},
         .liveSplitEnabled {"game.liveSplitEnabled", false},
+        .autosplitEnabled {"game.autosplitEnabled", false},
         .showSpeedrunRTATimer {"game.showSpeedrunRTATimer", true},
         .recordingMode {"game.recordingMode", false},
         .removeQuestMapMarkers {"game.removeQuestMapMarkers", false},
@@ -275,6 +276,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableResetKeybind);
     Register(g_userSettings.game.speedrunMode);
     Register(g_userSettings.game.liveSplitEnabled);
+    Register(g_userSettings.game.autosplitEnabled);
     Register(g_userSettings.game.showSpeedrunRTATimer);
     Register(g_userSettings.game.recordingMode);
     Register(g_userSettings.game.menuScalingMode);

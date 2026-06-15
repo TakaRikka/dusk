@@ -264,6 +264,7 @@ struct UserSettings {
         // Tools
         ConfigVar<bool> speedrunMode;
         ConfigVar<bool> liveSplitEnabled;
+        ConfigVar<bool> autosplitEnabled;
         ConfigVar<bool> showSpeedrunRTATimer;
         ConfigVar<bool> recordingMode;
         ConfigVar<bool> removeQuestMapMarkers;
