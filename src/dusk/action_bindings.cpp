@@ -1,6 +1,8 @@
 #include "dusk/action_bindings.h"
 
 #include "aurora/lib/input.hpp"
+#include "dusk/texture_replacements.hpp"
+#include "dusk/config.hpp"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
 
@@ -10,10 +12,11 @@ static std::array<std::array<ActionBindPressData, static_cast<int>(ActionBinds::
 
 ActionBindsMap& getActionBinds() {
     static ActionBindsMap actionBinds = {
-        {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera"}},
-        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna"}},
-        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
-        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
+        {ActionBinds::FIRST_PERSON_CAMERA, {&getSettings().actionBindings.firstPersonCamera, "First Person Camera", ActionBindType::GAMEPLAY}},
+        {ActionBinds::CALL_MIDNA,          {&getSettings().actionBindings.callMidna,         "Call Midna",          ActionBindType::GAMEPLAY}},
+        {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button",  ActionBindType::GAMEPLAY}},
+        {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu", ActionBindType::INTERFACE}},
+        {ActionBinds::TOGGLE_TEXTURE_PACK, {&getSettings().actionBindings.toggleTexturePack, "Toggle Texture Pack", ActionBindType::INTERFACE}},
     };
     return actionBinds;
 }
@@ -64,6 +67,15 @@ void updateActionBindings() {
                         actionPressData[port][static_cast<int>(action)].pressedCurFrame = true;
                     }
                 }
+            }
+
+            // Interface-specific triggers
+            if (getActionBindTrig(ActionBinds::TOGGLE_TEXTURE_PACK, port)) {
+                const bool enabled = !getSettings().game.enableTextureReplacements.getValue();
+                getSettings().game.enableTextureReplacements.setValue(enabled);
+                texture_replacements::set_enabled(enabled);
+                config::Save();
+                break;
             }
         }
     }

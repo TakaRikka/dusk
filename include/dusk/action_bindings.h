@@ -11,12 +11,19 @@ enum class ActionBinds {
     CALL_MIDNA,
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
+    TOGGLE_TEXTURE_PACK,
     COUNT,
+};
+
+enum class ActionBindType {
+    GAMEPLAY,
+    INTERFACE,
 };
 
 struct ActionBindData {
     std::array<config::ActionBindConfigVar, 4>* configVars{};
     std::string actionName{};
+    ActionBindType type{};
 };
 
 struct ActionBindPressData {
@@ -39,5 +46,7 @@ bool getActionBindHold(ActionBinds action, u32 port);
 bool getActionBindHoldAnyPort(ActionBinds action);
 
 int getActionBindButton(ActionBinds action, u32 port);
+
+ActionBindType getActionBindType(ActionBinds action);
 
 }
