@@ -105,6 +105,7 @@ int dMirror_packet_c::entryModel(J3DModel* i_model) {
 
 void dMirror_packet_c::mirrorZdraw(f32* param_0, f32* param_1, f32 param_2, f32 param_3,
                                    f32 param_4, f32 param_5, f32 param_6, f32 param_7) {
+    ZoneScoped;
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(0);
@@ -265,6 +266,7 @@ void dMirror_packet_c::modelDraw(J3DModel* i_model, Mtx param_1) {
 }
 
 void dMirror_packet_c::mainDraw() {
+    ZoneScoped;
     j3dSys.reinitGX();
 
     cXyz sp19C[5];

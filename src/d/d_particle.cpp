@@ -1359,6 +1359,7 @@ void dPa_control_c::calcMenu() {
 }
 
 void dPa_control_c::draw(JPADrawInfo* param_0, u8 param_1) {
+    ZoneScoped;
     if (mEmitterMng != NULL) {
         j3dSys.reinitGX();
         dKy_setLight_again();
@@ -1957,6 +1958,7 @@ void dPa_gen_d_light8PcallBack::execute(JPABaseEmitter* i_emitter, JPABasePartic
 }
 
 void dPa_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* param_2) {
+    ZoneScoped;
     Mtx local_60;
     Mtx auStack_90;
     Mtx auStack_c0;
@@ -2084,6 +2086,7 @@ void dPa_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* param_2
 }
 
 void dPa_gen_b_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* param_2) {
+    ZoneScoped;
     Mtx local_80;
     JGeometry::TVec3<f32> local_8c;
     JGeometry::TVec3<f32> aTStack_98;
@@ -2172,6 +2175,7 @@ void dPa_gen_b_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* p
 }
 
 void dPa_gen_d_light8PcallBack::draw(JPABaseEmitter* param_1, JPABaseParticle* param_2) {
+    ZoneScoped;
     Mtx local_60;
     Mtx auStack_90;
     Mtx auStack_c0;

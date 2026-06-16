@@ -1,12 +1,16 @@
 #include "dusk/logging.h"
+#include <algorithm>
 #include <array>
 #include <atomic>
 #include <chrono>
+#include <cctype>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include "dusk/io.hpp"
 #include "tracy/Tracy.hpp"
@@ -44,6 +48,9 @@ namespace {
 // We use this to check if the LogState is destroyed before attempting to acquire it.
 std::atomic g_logStateAlive(true);
 std::atomic<int> g_logFd(-1);
+constexpr size_t MaxRetainedLogCount = 10;
+constexpr size_t MaxRetainedOldLogCount = MaxRetainedLogCount - 1;
+constexpr uintmax_t MaxRetainedOldLogBytes = 100ull * 1024ull * 1024ull;
 
 struct LogState {
     std::mutex mutex;
@@ -89,6 +96,121 @@ const char* LogLevelString(AuroraLogLevel level) {
 
 FILE* LogStreamForLevel(AuroraLogLevel level) {
     return level >= LOG_ERROR ? stderr : stdout;
+}
+
+struct LogFileCandidate {
+    std::filesystem::path path;
+    std::string filename;
+    uintmax_t size;
+};
+
+void warn_log_cleanup_failure(
+    const char* action, const std::filesystem::path& path, const std::error_code& ec) {
+    std::fprintf(stderr, "[WARNING | dusk] Failed to %s '%s': %s\n", action,
+        dusk::io::fs_path_to_string(path).c_str(), ec.message().c_str());
+}
+
+bool is_digit_at(const std::string_view value, size_t index) {
+    return std::isdigit(static_cast<unsigned char>(value[index])) != 0;
+}
+
+bool is_generated_log_file_name(const std::filesystem::path& path) {
+    const std::string filename = path.filename().string();
+    constexpr std::string_view currentPrefix = "dusklight-"sv;
+    constexpr std::string_view legacyPrefix = "dusk-"sv;
+    constexpr std::string_view suffix = ".log"sv;
+    size_t timestampOffset = 0;
+
+    if (filename.starts_with(currentPrefix)) {
+        timestampOffset = currentPrefix.size();
+    } else if (filename.starts_with(legacyPrefix)) {
+        timestampOffset = legacyPrefix.size();
+    } else {
+        return false;
+    }
+
+    if (filename.size() != timestampOffset + 19 || !filename.ends_with(suffix) ||
+        filename[timestampOffset + 8] != '-') {
+        return false;
+    }
+
+    for (size_t i = timestampOffset; i < timestampOffset + 8; ++i) {
+        if (!is_digit_at(filename, i)) {
+            return false;
+        }
+    }
+    for (size_t i = timestampOffset + 9; i < timestampOffset + 15; ++i) {
+        if (!is_digit_at(filename, i)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void delete_log_file(const std::filesystem::path& path) {
+    std::error_code ec;
+    std::filesystem::remove(path, ec);
+    if (ec) {
+        warn_log_cleanup_failure("remove old log file", path, ec);
+    }
+}
+
+void prune_old_log_files(const std::filesystem::path& logsDir) {
+    std::error_code ec;
+    std::filesystem::directory_iterator entries{logsDir, ec};
+    if (ec) {
+        warn_log_cleanup_failure("inspect log directory", logsDir, ec);
+        return;
+    }
+
+    std::vector<LogFileCandidate> candidates;
+    for (const auto& entry : entries) {
+        const std::filesystem::path path = entry.path();
+        if (!is_generated_log_file_name(path)) {
+            continue;
+        }
+
+        ec.clear();
+        const auto status = entry.symlink_status(ec);
+        if (ec) {
+            warn_log_cleanup_failure("inspect log file", path, ec);
+            continue;
+        }
+        if (!std::filesystem::is_regular_file(status)) {
+            continue;
+        }
+
+        ec.clear();
+        const uintmax_t size = entry.file_size(ec);
+        if (ec) {
+            warn_log_cleanup_failure("inspect size of log file", path, ec);
+            continue;
+        }
+
+        candidates.push_back({path, path.filename().string(), size});
+    }
+
+    std::sort(candidates.begin(), candidates.end(),
+        [](const LogFileCandidate& a, const LogFileCandidate& b) {
+            return a.filename > b.filename;
+        });
+
+    const size_t retainedCount = std::min(candidates.size(), MaxRetainedOldLogCount);
+    uintmax_t retainedBytes = 0;
+    for (size_t i = 0; i < retainedCount; ++i) {
+        retainedBytes += candidates[i].size;
+    }
+
+    size_t retainedAfterSizeLimit = retainedCount;
+    while (retainedAfterSizeLimit > 0 && retainedBytes > MaxRetainedOldLogBytes) {
+        --retainedAfterSizeLimit;
+        retainedBytes -= candidates[retainedAfterSizeLimit].size;
+    }
+
+    for (size_t i = retainedAfterSizeLimit; i < candidates.size(); ++i) {
+        delete_log_file(candidates[i].path);
+    }
 }
 
 std::string MakeTimestampedLogName() {
@@ -230,6 +352,7 @@ void dusk::InitializeFileLogging(const std::filesystem::path& configDir, AuroraL
             io::fs_path_to_string(logsDir).c_str(), ec.message().c_str());
         return;
     }
+    prune_old_log_files(logsDir);
 
     const std::filesystem::path logPath = logsDir / MakeTimestampedLogName();
     g_logState.file = io::FileStream::Create(logPath).ToInner();

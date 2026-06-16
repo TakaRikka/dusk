@@ -604,6 +604,70 @@ int dMsgObject_c::_delete() {
     return 1;
 }
 
+#if TARGET_PC
+struct MirrorMsgOverride {
+    u32 gcMsgId;
+    u32 wiiMsgId;
+};
+
+static const MirrorMsgOverride mirrorMsgOverrides[] = {
+    {0x153a, 0x3c4a},
+    {0x1553, 0x3c63},
+    {0x1558, 0x3c68},
+    {0x155c, 0x3c6c},
+    {0x1569, 0x3c79},
+    {0x156f, 0x3c7f},
+    {0x1f81, 0x4691},
+    {0x232a, 0x4a3a},
+    {0x13f2, 0x3b02},
+    {0x1416, 0x3b26},
+    {0x1417, 0x3b27},
+    {0x1419, 0x3b29},
+    {0x1521, 0x3c31},
+    {0x1614, 0x3d24},
+    {0x1626, 0x3d36},
+    {0x1628, 0x3d38},
+    {0x16aa, 0x3dba},
+    {0x16b8, 0x3dc8},
+    {0x16b9, 0x3dc9},
+    {0x1904, 0x4014},
+    {0x1919, 0x4029},
+    {0x19cd, 0x40dd},
+    {0x19d3, 0x40e3},
+    {0x19d6, 0x40e6},
+    {0x19e6, 0x40f6},
+    {0x19eb, 0x40fb},
+    {0x14b6, 0x3bc6},
+    {0x151a, 0x3c2a},
+    {0x1530, 0x3c40},
+    {0x1532, 0x3c42},
+    {0x2726, 0x4e36},
+    {0x2736, 0x4e46},
+    {0x2739, 0x4e49},
+    {0x274c, 0x4e5c},
+    {0x24da, 0x4bea},
+    {0x24db, 0x4beb},
+    {0x13d8, 0x3ae8},
+    {0x13dc, 0x3aec},
+    {0x13eb, 0x3afb},
+    {0x17df, 0x3eef},
+    {0x17e2, 0x3ef2},
+    {0x1dae, 0x44be},
+    {0x14ca, 0x3bda},
+    {0x470, 0x493}, 
+    {0x473, 0x492},
+};
+
+static u32 getMirrorMsgOverride(u32 msgId) {
+    for (size_t i = 0; i < sizeof(mirrorMsgOverrides) / sizeof(mirrorMsgOverrides[0]); i++) {
+        if (mirrorMsgOverrides[i].gcMsgId == msgId) {
+            return mirrorMsgOverrides[i].wiiMsgId;
+        }
+    }
+    return msgId;
+}
+#endif
+
 void dMsgObject_c::setMessageIndex(u32 revoIndex, u32 param_2, bool param_3) {
     field_0x158 = revoIndex;
     revoIndex = getRevoMessageIndex(revoIndex);
@@ -692,9 +756,14 @@ u32 dMsgObject_c::getMessageIndex(u32 param_0) {
 }
 
 u32 dMsgObject_c::getRevoMessageIndex(u32 param_1) {
-    if (!g_MsgObject_HIO_c.mMessageDisplay) {
-        return param_1;
-    }
+#if TARGET_PC 
+    if (!dusk::getSettings().game.enableMirrorMode) { 
+        if (!g_MsgObject_HIO_c.mMessageDisplay) { return param_1; } } 
+    if (param_1 == getMirrorMsgOverride(param_1)) { return param_1; } 
+#else 
+    if (!g_MsgObject_HIO_c.mMessageDisplay) { return param_1; } 
+#endif
+
     u32 msgIndexCount;
     JMSMesgInfo_c* pMsg;
     int i = 0;

@@ -1419,6 +1419,8 @@ set(DUSK_FILES
         src/dusk/dvd_asset.cpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/asserts.cpp
+        src/dusk/batch.cpp
+        src/dusk/batch.hpp
         src/dusk/config.cpp
         src/dusk/crash_handler.cpp
         src/dusk/crash_reporting.cpp

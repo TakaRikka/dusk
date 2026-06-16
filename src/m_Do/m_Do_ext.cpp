@@ -2369,6 +2369,7 @@ static u8 l_matDL[132] ATTRIBUTE_ALIGN(32) = {
 };
 
 void mDoExt_3DlineMat0_c::setMaterial() {
+    ZoneScoped;
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
     dKy_setLight_again();
@@ -2384,6 +2385,7 @@ void mDoExt_3DlineMat0_c::setMaterial() {
 }
 
 void mDoExt_3DlineMat0_c::draw() {
+    ZoneScoped;
     GXSetTevColor(GX_TEVREG2, field_0x8);
 
     if (field_0xc != NULL) {
@@ -2692,6 +2694,7 @@ static u8 l_mat1DL[141] ATTRIBUTE_ALIGN(32) = {
 };
 
 void mDoExt_3DlineMat1_c::setMaterial() {
+    ZoneScoped;
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
     dKy_setLight_again();
@@ -2709,6 +2712,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
 }
 
 void mDoExt_3DlineMat1_c::draw() {
+    ZoneScoped;
     GXLoadTexObj(&mTextureObject, GX_TEXMAP0);
     GXSetTexCoordScaleManually(GX_TEXCOORD0, 1, GXGetTexObjWidth(&mTextureObject), GXGetTexObjHeight(&mTextureObject));
     GXSetTevColor(GX_TEVREG2, mColor);
@@ -2922,6 +2926,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16
 #endif
 
 void mDoExt_3DlineMat2_c::setMaterial() {
+    ZoneScoped;
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
     GXClearVtxDesc();
@@ -3119,6 +3124,7 @@ mDoExt_cube8pPacket::mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color)
 }
 
 void drawCube(MtxP mtx, cXyz* pos, const GXColor& color) {
+    ZoneScoped;
     GXSETARRAY(GX_VA_POS, pos, sizeof(cXyz) * 8, sizeof(cXyz), true);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
@@ -3198,6 +3204,7 @@ mDoExt_quadPacket::mDoExt_quadPacket(cXyz* i_points, const GXColor& i_color, u8 
 }
 
 void mDoExt_quadPacket::draw() {
+    ZoneScoped;
     GXSETARRAY(GX_VA_POS, mPoints, sizeof(mPoints), sizeof(cXyz), true);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
@@ -3248,6 +3255,7 @@ mDoExt_trianglePacket::mDoExt_trianglePacket(cXyz* i_points, const GXColor& i_co
 }
 
 void mDoExt_trianglePacket::draw() {
+    ZoneScoped;
     j3dSys.reinitGX();
 
     GXSETARRAY(GX_VA_POS, mPoints, sizeof(mPoints), sizeof(cXyz), true);
@@ -3301,6 +3309,7 @@ mDoExt_linePacket::mDoExt_linePacket(cXyz& i_start, cXyz& i_end, const GXColor& 
 }
 
 void mDoExt_linePacket::draw() {
+    ZoneScoped;
     j3dSys.reinitGX();
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
@@ -3418,6 +3427,7 @@ mDoExt_pointPacket::mDoExt_pointPacket(cXyz& i_position, const GXColor& i_color,
 }
 
 void mDoExt_pointPacket::draw() {
+    ZoneScoped;
     j3dSys.reinitGX();
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);

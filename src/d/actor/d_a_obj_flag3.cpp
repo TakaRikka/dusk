@@ -220,6 +220,7 @@ void FlagCloth2_c::initCcSphere(fopAc_ac_c*) {
 }
 
 inline void FlagCloth2_c::draw() {
+    ZoneScoped;
     j3dSys.reinitGX();
     GXSetNumIndStages(0);
     dKy_setLight_again();

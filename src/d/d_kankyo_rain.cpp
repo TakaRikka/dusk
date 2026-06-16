@@ -94,6 +94,39 @@ static void dKyr_set_btitex(TGXTexObj* i_obj, ResTIMG* i_img) {
     dKyr_set_btitex_common(i_obj, i_img, GX_TEXMAP0);
 }
 
+#if TARGET_PC
+template <int N>
+struct CachedTexObjs {
+    TGXTexObj texObj[N];
+    ResTIMG* timg[N] = {};
+};
+
+template <int N>
+static GXTexObj* load_cached_tex(CachedTexObjs<N>& cache, ResTIMG* img, GXTexMapID mapID) {
+    for (int i = 0; i < N; i++) {
+        if (img != nullptr && cache.timg[i] == img) {
+            GXLoadTexObj(&cache.texObj[i], mapID);
+            return &cache.texObj[i];
+        }
+    }
+
+    int slot = 0;
+    for (int i = 0; i < N; i++) {
+        if (cache.timg[i] == nullptr) {
+            slot = i;
+            break;
+        }
+    }
+
+    if (cache.timg[slot] != nullptr) {
+        cache.texObj[slot].reset();
+    }
+    cache.timg[slot] = img;
+    dKyr_set_btitex_common(&cache.texObj[slot], img, mapID);
+    return &cache.texObj[slot];
+}
+#endif
+
 void dKyr_lenzflare_move() {
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
@@ -2045,6 +2078,7 @@ static void dKr_cullVtx_Set(IF_DUSK(bool const vtxColor = false)) {
 }
 
 static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -2132,10 +2166,17 @@ static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
             return;
         }
 
+#if TARGET_PC
+        static CachedTexObjs<8> texobj;
+        load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+        load_cached_tex(texobj, (ResTIMG*)tex[1], GX_TEXMAP1);
+        load_cached_tex(texobj, (ResTIMG*)tex[texidx + 2], GX_TEXMAP2);
+#else
         TGXTexObj texobj;
         dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
         dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[1], GX_TEXMAP1);
         dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[texidx + 2], GX_TEXMAP2);
+#endif
 
         GXSetNumChans(0);
         GXSetTevColor(GX_TEVREG0, color_reg0);
@@ -2215,7 +2256,11 @@ static void dKyr_draw_rev_moon(Mtx drawMtx, u8** tex) {
 
         for (int i = 0; i < 2; i++) {
             if (i == 1) {
+#if TARGET_PC
+                load_cached_tex(texobj, (ResTIMG*)lenz_packet->mpResBall, GX_TEXMAP0);
+#else
                 dKyr_set_btitex(&texobj, (ResTIMG*)lenz_packet->mpResBall);
+#endif
                 GXClearVtxDesc();
                 GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
                 GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -2480,10 +2525,17 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
                 return;
             }
 
+#if TARGET_PC
+            static CachedTexObjs<8> texobj;
+            load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+            load_cached_tex(texobj, (ResTIMG*)tex[1], GX_TEXMAP1);
+            load_cached_tex(texobj, (ResTIMG*)tex[texidx + 2], GX_TEXMAP2);
+#else
             TGXTexObj texobj;
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[1], GX_TEXMAP1);
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[texidx + 2], GX_TEXMAP2);
+#endif
 
             GXSetNumChans(0);
             GXSetTevColor(GX_TEVREG0, color_reg0);
@@ -2577,7 +2629,11 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
 
                 for (int i = 0; i < 2; i++) {
                     if (i == 1) {
+#if TARGET_PC
+                        load_cached_tex(texobj, (ResTIMG*)lenz_packet->mpResBall, GX_TEXMAP0);
+#else
                         dKyr_set_btitex(&texobj, (ResTIMG*)lenz_packet->mpResBall);
+#endif
                         GXClearVtxDesc();
                         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
                         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -2690,6 +2746,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
 }
 
 void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
+    ZoneScoped;
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunLenzPacket;
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -2740,8 +2797,13 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
 
         j3dSys.reinitGX();
 
+#if TARGET_PC
+        static CachedTexObjs<3> texobj;
+        load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
         TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
         GXSetNumChans(0);
         GXSetTevColor(GX_TEVREG0, color_reg0);
         GXSetTevColor(GX_TEVREG1, color_reg1);
@@ -3046,11 +3108,23 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
                 }
 
                 if (i == 1) {
+#if TARGET_PC
+                    load_cached_tex(texobj, (ResTIMG*)tex[2], GX_TEXMAP0);
+#else
                     dKyr_set_btitex(&texobj, (ResTIMG*)tex[2]);
+#endif
                 } else if (i == 2) {
+#if TARGET_PC
+                    load_cached_tex(texobj, (ResTIMG*)tex[3], GX_TEXMAP0);
+#else
                     dKyr_set_btitex(&texobj, (ResTIMG*)tex[3]);
+#endif
                 } else {
+#if TARGET_PC
+                    load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
                     dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
                 }
 
                 spE4.x = -var_f31;
@@ -3141,8 +3215,13 @@ void dKyr_drawRain(Mtx drawMtx, u8** tex) {
                 return;
             }
 
+#if TARGET_PC
+            static CachedTexObjs<1> texobj;
+            load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
             TGXTexObj texobj;
             dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
             GXSetNumChans(0);
             GXSetTevColor(GX_TEVREG0, color_reg0);
             GXSetNumTexGens(1);
@@ -3306,8 +3385,13 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** tex) {
     color.b = 0xC8;
     color.a = rain_packet->mSibukiAlpha * alphaFade;
 
+#if TARGET_PC
+    static CachedTexObjs<1> texobj;
+    load_cached_tex(texobj, (ResTIMG*)tex[1], GX_TEXMAP0);
+#else
     TGXTexObj texobj;
     dKyr_set_btitex(&texobj, (ResTIMG*)tex[1]);
+#endif
     GXSetNumChans(0);
     GXSetTevColor(GX_TEVREG0, color);
     GXSetTevColor(GX_TEVREG1, color);
@@ -3388,13 +3472,18 @@ void dKyr_drawSibuki(Mtx drawMtx, u8** tex) {
 }
 
 void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dKankyo_housi_Packet* housi_packet = g_env_light.mpHousiPacket;
     static f32 rot = 0.0f;
 
     Mtx camMtx;
     Mtx rotMtx;
     cXyz pos[4];
+#if TARGET_PC
+    static CachedTexObjs<1> texobj;
+#else
     TGXTexObj spDC;
+#endif
     cXyz spD0;
     Vec spC4;
     Vec spB8;
@@ -3481,7 +3570,11 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
             f32 temp_f24 = 6.5f;
 
             for (int i = 0; i < 1; i++) {
-                dKyr_set_btitex(&spDC, (ResTIMG*)*tex);
+#if TARGET_PC
+                load_cached_tex(texobj, (ResTIMG*)*tex, GX_TEXMAP0);
+#else
+                dKyr_set_btitex(&texobj, (ResTIMG*)*tex);
+#endif
 #if TARGET_PC
                 GXSetNumChans(1);
                 GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
@@ -3579,7 +3672,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
 
                     block_14:
 #if !TARGET_PC // GXLoadTextObj does nothing, TEV colors replaced with vertex colors
-                        GXLoadTexObj(&spDC, GX_TEXMAP0);
+                        GXLoadTexObj(&texobj, GX_TEXMAP0);
                         GXSetTevColor(GX_TEVREG0, color_reg0);
 #endif
 
@@ -3775,6 +3868,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** tex) {
 }
 
 void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     dKankyo_snow_Packet* snow_packet = g_env_light.mpSnowPacket;
 
@@ -3838,8 +3932,13 @@ void dKyr_drawSnow(Mtx drawMtx, u8** tex) {
                 }
 
                 if (tex[0] != NULL) {
-                    TGXTexObj spA0;
-                    dKyr_set_btitex(&spA0, (ResTIMG*)tex[0]);
+#if TARGET_PC
+                    static CachedTexObjs<1> texobj;
+                    load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
+                    TGXTexObj texobj;
+                    dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
 #if TARGET_PC
                     // Dusklight optimization: enable draw call merging
                     // by using vertex color instead of GX_TEVREG0
@@ -4405,6 +4504,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
 }
 
 void drawCloudShadow(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_cloud_Packet* cloud_packet = g_env_light.mpCloudPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -4440,7 +4540,12 @@ void drawCloudShadow(Mtx drawMtx, u8** tex) {
 
         GXSetClipMode(GX_CLIP_DISABLE);
 
+#if TARGET_PC
+        static CachedTexObjs<1> texobj;
+        TGXTexObj fb_texobj;
+#else
         TGXTexObj texobj, fb_texobj;
+#endif
         if (g_env_light.mMoyaMode < 50) {
             dKy_ParticleColor_get_bg(&camera->view.lookat.eye, NULL, &sp48, &sp44, &sp40, &sp3C, 0.0f);
             f32 temp_f30 = 0.4f;
@@ -4453,7 +4558,11 @@ void drawCloudShadow(Mtx drawMtx, u8** tex) {
             color_reg1.g = (0.45f * sp38.g) + (0.55f * sp44.g);
             color_reg1.b = (0.45f * sp38.b) + (0.55f * sp44.b);
 
+#if TARGET_PC
+            load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
             dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
             GXSetNumChans(0);
             GXSetTevColor(GX_TEVREG0, color_reg0);
             GXSetTevColor(GX_TEVREG1, color_reg1);
@@ -4498,7 +4607,11 @@ void drawCloudShadow(Mtx drawMtx, u8** tex) {
             color_reg1.b = 0;
             color_reg1.a = 0xFF;
 
+#if TARGET_PC
+            load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP1);
+#else
             dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP1);
+#endif
 
             ResTIMG* fb_timg = mDoGph_gInf_c::getFrameBufferTimg();
             dDlst_window_c* window = dComIfGp_getWindow(0);
@@ -4645,7 +4758,11 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
     Mtx camMtx;
     Mtx rotMtx;
 
+#if TARGET_PC
+    static CachedTexObjs<3> texobj;
+#else
     TGXTexObj texobj;
+#endif
     cXyz proj;
 
     f32 rot;
@@ -4755,7 +4872,11 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
             color_reg1.r = 0;
             color_reg1.g = 0;
             color_reg1.b = 0;
+#if TARGET_PC
+            auto* loaded_texobj = load_cached_tex(texobj, (ResTIMG*)tex[j], GX_TEXMAP0);
+#else
             dKyr_set_btitex(&texobj, (ResTIMG*)tex[j]);
+#endif
 
             GXSetNumChans(0);
             GXSetTevColor(GX_TEVREG0, color);
@@ -4860,7 +4981,11 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
                     }
 
                     if (!(vrkumo_packet->mVrkumoEff[k].mAlpha <= 0.000001f)) {
+#if TARGET_PC
+                        GXLoadTexObj(loaded_texobj, GX_TEXMAP0);
+#else
                         GXLoadTexObj(&texobj, GX_TEXMAP0);
+#endif
                         GXSetTevColor(GX_TEVREG0, color);
 
                         sp60 = sp68 * (0.2f + (0.2f * (k / 100.0f)));
@@ -5393,6 +5518,7 @@ void dKyr_odour_move() {
 }
 
 void dKyr_odour_draw(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_odour_Packet* odour_packet = envlight->mOdourData.mpOdourPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -5481,8 +5607,14 @@ void dKyr_odour_draw(Mtx drawMtx, u8** tex) {
         break;
     }
 
+#if TARGET_PC
+    static CachedTexObjs<1> texobj;
+    TGXTexObj fb_texobj;
+    load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP1);
+#else
     TGXTexObj texobj, fb_texobj;
     dKyr_set_btitex_common(&texobj, (ResTIMG*)tex[0], GX_TEXMAP1);
+#endif
 
     ResTIMG* fb_timg = mDoGph_gInf_c::getFrameBufferTimg();
     dDlst_window_c* window = dComIfGp_getWindow(0);
@@ -5791,6 +5923,7 @@ void dKyr_mud_move() {
 }
 
 void dKyr_mud_draw(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dKankyo_mud_Packet* mud_packet = g_env_light.mpMudPacket;
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
 
@@ -5884,8 +6017,13 @@ void dKyr_mud_draw(Mtx drawMtx, u8** tex) {
     
         if (g_env_light.camera_water_in_status == 0) {
             for (int i = 0; i < 1; i++) {
+#if TARGET_PC
+                static CachedTexObjs<1> texobj_cache;
+                auto* texobj = load_cached_tex(texobj_cache, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
                 TGXTexObj texobj;
                 dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
 
                 GXSetNumChans(0);
                 GXSetTevColor(GX_TEVREG0, color_reg0);
@@ -5925,7 +6063,11 @@ void dKyr_mud_draw(Mtx drawMtx, u8** tex) {
 
                     color_reg0.a = mud_packet->mEffect[j].field_0x38 * var_f31;
 
+#if TARGET_PC
+                    GXLoadTexObj(texobj, GX_TEXMAP0);
+#else
                     GXLoadTexObj(&texobj, GX_TEXMAP0);
+#endif
                     GXSetTevColor(GX_TEVREG0, color_reg0);
 
                     f32 sp30 = 1.0f;
@@ -6010,6 +6152,7 @@ void dKyr_evil_move() {
 }
 
 static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_evil_Packet* evil_packet = envlight->mpEvilPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -6046,8 +6189,13 @@ static void dKyr_evil_draw2(Mtx drawMtx, u8** tex) {
         color_reg0.b = 0x87;
         color_reg0.a = 0xFF;
 
+#if TARGET_PC
+        static CachedTexObjs<1> texobj;
+        load_cached_tex(texobj, (ResTIMG*)tex[1], GX_TEXMAP0);
+#else
         TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[1]);
+#endif
 
 #if TARGET_PC
         if (dusk::frame_interp::get_ui_tick_pending())
@@ -6248,6 +6396,7 @@ static f32 dKyr_near_bosslight_check(cXyz pos) {
 }
 
 void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
+    ZoneScoped;
     dScnKy_env_light_c* envlight = dKy_getEnvlight();
     dKankyo_evil_Packet* evil_packet = envlight->mpEvilPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
@@ -6284,8 +6433,13 @@ void dKyr_evil_draw(Mtx drawMtx, u8** tex) {
         color_reg1.b = 10;
         color_reg1.a = 255;
 
+#if TARGET_PC
+        static CachedTexObjs<1> texobj;
+        load_cached_tex(texobj, (ResTIMG*)tex[0], GX_TEXMAP0);
+#else
         TGXTexObj texobj;
         dKyr_set_btitex(&texobj, (ResTIMG*)tex[0]);
+#endif
 
 #if TARGET_PC
         if (dusk::frame_interp::get_ui_tick_pending())

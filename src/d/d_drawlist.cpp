@@ -41,12 +41,12 @@ public:
     /* 0x14 */ GXColor field_0x14;
     /* 0x18 */ GXColor field_0x18;
     /* 0x1C */ TGXTexObj field_0x1c;
-    /* 0x3C */ GXTlutObj field_0x3c;
+    /* 0x3C */ TGXTlutObj field_0x3c;
     /* 0x48 */ s16 field_0x48;
     /* 0x4A */ s16 field_0x4a;
     /* 0x4C */ u8 field_0x4c;
     /* 0x50 */ TGXTexObj field_0x50;
-    /* 0x70 */ GXTlutObj field_0x70;
+    /* 0x70 */ TGXTlutObj field_0x70;
     /* 0x7C */ s16 field_0x7c;
     /* 0x7E */ s16 field_0x7e;
     /* 0x80 */ u8 field_0x80;
@@ -100,7 +100,7 @@ public:
     u8 check() { return field_0x0; }
     int getCI() { return mCI; }
     TGXTexObj* getTexObj() { return &mTexObj; }
-    GXTlutObj* getTlutObj() { return &mTlutObj; }
+    TGXTlutObj* getTlutObj() { return &mTlutObj; }
     GXColor* getColor() { return &mColor; }
     f32 getS() { return mS; }
     f32 getT() { return mT; }
@@ -110,7 +110,7 @@ public:
     /* 0x00 */ u8 field_0x0;
     /* 0x01 */ u8 mCI;
     /* 0x04 */ TGXTexObj mTexObj;
-    /* 0x24 */ GXTlutObj mTlutObj;
+    /* 0x24 */ TGXTlutObj mTlutObj;
     /* 0x30 */ GXColor mColor;
     /* 0x34 */ f32 mS;
     /* 0x38 */ f32 mT;
@@ -188,6 +188,7 @@ void dDlst_window_c::setScissor(f32 xOrig, f32 yOrig, f32 width, f32 height) {
 }
 
 void dDlst_2DTri_c::draw() {
+    ZoneScoped;
     f32 f4;
     f32 f5;
     f32 f2 = cM_scos(field_0xc);
@@ -224,6 +225,7 @@ void dDlst_2DTri_c::draw() {
 }
 
 void dDlst_2DQuad_c::draw() {
+    ZoneScoped;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
@@ -247,6 +249,7 @@ void dDlst_2DQuad_c::draw() {
 }
 
 void dDlst_2DPoint_c::draw() {
+    ZoneScoped;
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
@@ -268,6 +271,7 @@ void dDlst_2DPoint_c::draw() {
 }
 
 void dDlst_2DT_c::draw() {
+    ZoneScoped;
     static GXColor l_color = {0xFF, 0xFF, 0xFF, 0xE0};
     f32 var5 = field_0xe;
     f32 var6 = field_0x10;
@@ -326,6 +330,7 @@ void dDlst_2DT_c::draw() {
 }
 
 void dDlst_2DT2_c::draw() {
+    ZoneScoped;
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA6, 0);
     GXClearVtxDesc();
@@ -665,6 +670,7 @@ void dDlst_2DT2_c::init(ResTIMG* i_timg, f32 param_1, f32 param_2, f32 param_3, 
 }
 
 void dDlst_2DM_c::draw() {
+    ZoneScoped;
     s16 r31 = field_0x22;
     s16 r30 = field_0x24;
     int r29 = field_0x22 + 256.0f;
@@ -728,6 +734,7 @@ void dDlst_2DM_c::draw() {
 
 
 void dDlst_2Dm_c::draw() {
+    ZoneScoped;
     s16 r31 = field_0x48;
     s16 r30 = field_0x4a;
     int r29 = field_0x48 + 256.0f;
@@ -794,6 +801,7 @@ void dDlst_2Dm_c::draw() {
 
 
 void dDlst_2DMt_c::draw() {
+    ZoneScoped;
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -933,6 +941,7 @@ f32 cM_rnd_c::getValue(f32 param_0, f32 param_1) {
 }
 
 void dDlst_effectLine_c::draw() {
+    ZoneScoped;
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -1034,6 +1043,7 @@ void dDlst_shadowPoly_c::draw() {
         return;
 #endif
 
+    ZoneScoped;
     dDlst_shadowTri_c* tri = getTri();
 
     GXBegin(GX_TRIANGLES, GX_VTXFMT0, mCount * 3);
@@ -1610,6 +1620,7 @@ void dDlst_shadowControl_c::imageDraw(Mtx param_0) {
 }
 
 void dDlst_shadowControl_c::draw(Mtx param_0) {
+    ZoneScoped;
     static GXTevColorChan l_tevColorChan[4] = {
         GX_CH_RED,
         GX_CH_GREEN,
@@ -1985,7 +1996,7 @@ int dDlst_list_c::set(dDlst_base_c**& p_start, dDlst_base_c**& p_end, dDlst_base
     return 1;
 }
 
-#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+#if DUSK_GFX_DEBUG_GROUPS
 static absl::flat_hash_map<std::type_index, const char*> typeDrawNames;
 
 static const char* getTypeDrawName(dDlst_base_c* dlst) {
@@ -2008,7 +2019,7 @@ void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     for (; p_start < p_end; p_start++) {
         dDlst_base_c* dlst = *p_start;
 
-#if TARGET_PC && (TRACY_ENABLE || PARTIAL_DEBUG)
+#if DUSK_GFX_DEBUG_GROUPS
         const auto name = getTypeDrawName(dlst);
         GXScopedDebugGroup scope(name);
 #endif

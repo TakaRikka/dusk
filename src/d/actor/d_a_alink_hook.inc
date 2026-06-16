@@ -136,8 +136,26 @@ void daAlink_c::hsChainShape_c::draw() {
             }
         }
     } else {
+#if TARGET_PC
+        cXyz hsInterpTop, hsInterpRoot, hsInterpSubRoot, hsInterpSubTop;
+        if (dusk::frame_interp::is_enabled() && alink->mHsChainInterpPrevValid && alink->mHsChainInterpCurrValid) {
+            const f32 alpha = dusk::frame_interp::get_interpolation_step();
+            hsInterpTop    = alink->mHsChainInterpPrevTop    + (alink->mHsChainInterpCurrTop    - alink->mHsChainInterpPrevTop)    * alpha;
+            hsInterpRoot   = alink->mHsChainInterpPrevRoot   + (alink->mHsChainInterpCurrRoot   - alink->mHsChainInterpPrevRoot)   * alpha;
+            hsInterpSubRoot = alink->mHsChainInterpPrevSubRoot + (alink->mHsChainInterpCurrSubRoot - alink->mHsChainInterpPrevSubRoot) * alpha;
+            hsInterpSubTop  = alink->mHsChainInterpPrevSubTop  + (alink->mHsChainInterpCurrSubTop  - alink->mHsChainInterpPrevSubTop)  * alpha;
+        } else {
+            hsInterpTop    = alink->getHsChainTopPos();
+            hsInterpRoot   = alink->getHsChainRootPos();
+            hsInterpSubRoot = alink->getHsSubChainRootPos();
+            hsInterpSubTop  = alink->getHsSubChainTopPos();
+        }
+        const cXyz& chainRootPos = hsInterpRoot;
+        const cXyz& chainTopPos = hsInterpTop;
+#else
         const cXyz& chainRootPos = alink->getHsChainRootPos();
         const cXyz& chainTopPos = alink->getHsChainTopPos();
+#endif
         cXyz maxDistance = chainRootPos - chainTopPos;
 
         f32 maxDistanceF = maxDistance.abs();
@@ -200,8 +218,13 @@ void daAlink_c::hsChainShape_c::draw() {
             }
         }
 
+#if TARGET_PC
+        const cXyz& subChainRootPos = hsInterpSubRoot;
+        const cXyz& subChainTopPos = hsInterpSubTop;
+#else
         const cXyz& subChainRootPos = alink->getHsSubChainRootPos();
         const cXyz& subChainTopPos = alink->getHsSubChainTopPos();
+#endif
         maxDistance = subChainRootPos - subChainTopPos;
 
         maxDistanceF = maxDistance.abs();
