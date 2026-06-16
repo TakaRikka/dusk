@@ -955,4 +955,24 @@
   <entry key="SAVE_EDITOR_PIECES">碎片</entry>
   <entry key="SAVE_EDITOR_CM">厘米</entry>
   <entry key="SAVE_EDITOR_SLOT">存档栏位</entry>
+  <entry key="HUD_SCALE">HUD 缩放</entry>
+  <entry key="SCALES_THE_SIZE_OF_THE_GAMEPLAY_HUD_HEARTS_BUTTONS_MINI_MAP_ETC_DOES_NO">缩放游戏内 HUD 的大小，包括心、按键和小地图。不影响菜单。</entry>
+  <entry key="BUTTON_FISHING">按键钓鱼</entry>
+  <entry key="ALLOW_FISHING_WITH_THE_FISHING_ROD_USING_THE_BUTTON_THE_ITEM_IS_ASSIGNED">允许用钓竿所分配的按键钓鱼。</entry>
+  <entry key="MAGIC_ARMOR_BEHAVIOR">魔法铠甲行为</entry>
+  <entry key="MAGIC_ARMOR_NORMAL">正常</entry>
+  <entry key="MAGIC_ARMOR_ON_DAMAGE">受伤时消耗</entry>
+  <entry key="MAGIC_ARMOR_DOUBLE_DEFENSE">双倍防御</entry>
+  <entry key="MAGIC_ARMOR_INVINCIBLE">无敌</entry>
+  <entry key="MAGIC_ARMOR_COSMETIC">仅外观</entry>
+  <entry key="CONTROL_THE_BEHAVIOR_OF_THE_MAGIC_ARMOR">控制魔法铠甲的行为。</entry>
+  <entry key="BRITISH_ENGLISH">英式英语</entry>
+  <entry key="AMERICAN_ENGLISH">美式英语</entry>
+  <entry key="EUROPEAN_FRENCH">法语</entry>
+  <entry key="CANADIAN_FRENCH">加拿大法语</entry>
+  <entry key="EUROPEAN_SPANISH">西班牙语</entry>
+  <entry key="LATIN_AMERICAN_SPANISH">拉丁美洲西班牙语</entry>
+  <entry key="LANGUAGE_HD">语言HD</entry>
+  <entry key="TPHD_CONTENT_FOLDER">黄昏公主HDcontent文件夹</entry>
+  <entry key="SET_THE_DIRECTORY_THAT_DUSK_LOADS_ELIGIBLE_TPHD_CONTENT_FROM">设置黄昏公主HD加载内容的目录。</entry>
 </localization>

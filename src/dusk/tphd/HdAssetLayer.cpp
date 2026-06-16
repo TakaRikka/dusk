@@ -254,12 +254,36 @@ bool endsWithSuffixCI(std::string_view s, std::string_view suffix) {
 // Match an arc-relative path (e.g. "bmdr/model.bmd") against the Gfx2 entries
 // in the HD pack, which look like "tex/.../<arc-rel>.gtx".
 const TmpkEntry* findGtxBySuffix(const TphdPack& pack, std::string_view arcRelPath) {
+    auto findFirst = [&](std::string_view tail) -> const TmpkEntry* {
+        for (const auto& e : pack.entries()) {
+            if (e.data.size() < 4 || std::memcmp(e.data.data(), "Gfx2", 4) != 0) continue;
+            if (endsWithSuffixCI(e.name, tail)) return &e;
+        }
+        return nullptr;
+    };
+    auto findUnique = [&](std::string_view tail) -> const TmpkEntry* {
+        const TmpkEntry* found = nullptr;
+        for (const auto& e : pack.entries()) {
+            if (e.data.size() < 4 || std::memcmp(e.data.data(), "Gfx2", 4) != 0) continue;
+            if (!endsWithSuffixCI(e.name, tail)) continue;
+            if (found != nullptr) return nullptr;
+            found = &e;
+        }
+        return found;
+    };
+
     const std::string tail = "/" + std::string(arcRelPath) + ".gtx";
-    for (const auto& e : pack.entries()) {
-        if (e.data.size() < 4 || std::memcmp(e.data.data(), "Gfx2", 4) != 0) continue;
-        if (endsWithSuffixCI(e.name, tail)) return &e;
+    if (const TmpkEntry* gtx = findFirst(tail)) {
+        return gtx;
     }
-    return nullptr;
+
+    const auto slash = arcRelPath.find_last_of('/');
+    if (slash == std::string_view::npos) {
+        return nullptr;
+    }
+
+    const std::string basenameTail = "/" + std::string(arcRelPath.substr(slash + 1)) + ".gtx";
+    return findUnique(basenameTail);
 }
 
 // Post-deswizzle CPU expansions to RGBA8. Used for formats whose HD layout
@@ -687,6 +711,9 @@ void register_hd_textures_for_arc(std::span<u8> arcBytes, const std::vector<ArcF
 }
 
 // HD arcs whose Wii-U layouts don't match the GC UI pipeline.
+// Mounting the Wii-U RARC here would feed GX2/GTX-format region textures and
+// .dat blobs to the GC render path, producing a garbled world/dungeon map.
+// Keep the GC archive and let pack.gz replace textures via the vanilla path.
 constexpr std::string_view kHdSkipList[] = {
     "res/Object/fileSel.arc",
 };
@@ -694,6 +721,11 @@ constexpr std::string_view kHdSkipList[] = {
 bool is_layout_arc_path(std::string_view resPath) {
     return resPath.starts_with("res/Layout/") ||
            resPath.starts_with("res/LayoutRevo/");
+}
+
+bool is_field_map_arc_path(std::string_view resPath) {
+    return resPath.starts_with("res/FieldMap/") &&
+           endsWithSuffixCI(resPath, ".arc");
 }
 
 std::filesystem::path hd_pack_path_for_arc(std::string_view resPath) {
@@ -725,6 +757,9 @@ bool should_skip_hd_arc_mount(std::string_view resPath) {
     if (is_layout_arc_path(resPath)) {
         return true;
     }
+    if (is_field_map_arc_path(resPath)) {
+        return true;
+    }
     for (auto skip : kHdSkipList) {
         if (resPath == skip) return true;
     }
@@ -732,7 +767,13 @@ bool should_skip_hd_arc_mount(std::string_view resPath) {
 }
 
 bool should_register_hd_pack_for_vanilla_arc(std::string_view resPath) {
-    return resPath.starts_with("res/Layout/");
+    if (resPath.starts_with("res/Layout/")) {
+        return true;
+    }
+    // FieldMap arcs are mounted as the GC archive (see should_skip_hd_arc_mount),
+    // but their pack.gz map textures can still be swapped in against the GC
+    // archive's BTI pointers.
+    return is_field_map_arc_path(resPath);
 }
 
 void* overlay_open(void* userData) {

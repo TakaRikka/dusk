@@ -15,6 +15,7 @@
 #include <cstring>
 
 #include "dusk/string.hpp"
+#include "dusk/name_compat.hpp"
 #include "dusk/version.hpp"
 
 dFile_info_c::dFile_info_c(JKRArchive* i_archive, u8 param_1) {
@@ -102,7 +103,7 @@ int dFile_info_c::setSaveData(dSv_save_c* i_savedata, BOOL i_validChksum, u8 i_d
                 i_savedata->getPlayer().getPlayerStatusA().setLife(dComIfGs_getLife());
                 setHeartCnt(i_savedata);
                 i_savedata->getPlayer().getPlayerStatusA().setLife(12);
-                SAFE_STRCPY(mPlayerName, dComIfGs_getPlayerName());
+                dusk::name_compat::copyPlayerNameForDisplay(mPlayerName, dComIfGs_getPlayerName());
                 SAFE_STRCPY(mSaveDate, "");
                 SAFE_STRCPY(mPlayTime, "");
                 dMeter2Info_getString(0x4D, mSaveStatus, NULL);  // New Quest Log
@@ -113,7 +114,7 @@ int dFile_info_c::setSaveData(dSv_save_c* i_savedata, BOOL i_validChksum, u8 i_d
             }
         } else {
             setHeartCnt(i_savedata);
-            SAFE_STRCPY(mPlayerName, player_name);
+            dusk::name_compat::copyPlayerNameForDisplay(mPlayerName, player_name);
             setSaveDate(i_savedata);
             setPlayTime(i_savedata);
             result = 0;

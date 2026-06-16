@@ -1504,7 +1504,7 @@ void dScnLogo_c::dvdDataLoad() {
     mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
     #if TARGET_PC
-    if (dusk::tphd_active) {
+    if (dusk::tphd_active()) {
         switch (getPalLanguage()) {
         case 1:
             mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");

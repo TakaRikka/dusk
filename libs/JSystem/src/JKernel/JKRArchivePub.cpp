@@ -9,10 +9,73 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+#include <string>
+#include <vector>
+
 #if DUSK_TPHD
 #include "dusk/tphd/HdAssetLayer.hpp"
 
 namespace {
+bool append_resource_path(JKRArchive* archive, u32 nodeIndex,
+                          const JKRArchive::SDIFileEntry* target,
+                          std::vector<bool>& visited, std::string& path) {
+    if (archive == NULL || archive->mArcInfoBlock == NULL || archive->mNodes == NULL ||
+        archive->mFiles == NULL || archive->mStringTable == NULL ||
+        nodeIndex >= static_cast<u32>(archive->countDirectory()) ||
+        visited[nodeIndex])
+    {
+        return false;
+    }
+
+    visited[nodeIndex] = true;
+    JKRArchive::SDIDirEntry* node = archive->mNodes + nodeIndex;
+    JKRArchive::SDIFileEntry* fileEntry = archive->mFiles + node->first_file_index;
+
+    for (u32 i = 0; i < node->num_entries; ++i, ++fileEntry) {
+        const char* name = archive->mStringTable + fileEntry->getNameOffset();
+        if (fileEntry == target && !fileEntry->isDirectory()) {
+            if (!path.empty()) {
+                path += '/';
+            }
+            path += name;
+            return true;
+        }
+
+        if (!fileEntry->isDirectory() || strcmp(name, ".") == 0 || strcmp(name, "..") == 0) {
+            continue;
+        }
+
+        const size_t oldSize = path.size();
+        if (!path.empty()) {
+            path += '/';
+        }
+        path += name;
+
+        if (append_resource_path(archive, fileEntry->data_offset, target, visited, path)) {
+            return true;
+        }
+        path.resize(oldSize);
+    }
+
+    return false;
+}
+
+std::string resource_path_for_entry(JKRArchive* archive, JKRArchive::SDIFileEntry* fileEntry) {
+    const char* fallbackName = archive->mStringTable + fileEntry->getNameOffset();
+    if (archive->mArcInfoBlock == NULL || archive->mNodes == NULL ||
+        archive->mFiles == NULL || archive->countDirectory() <= 0)
+    {
+        return fallbackName;
+    }
+
+    std::string path;
+    std::vector<bool> visited(static_cast<size_t>(archive->countDirectory()), false);
+    if (append_resource_path(archive, 0, fileEntry, visited, path) && !path.empty()) {
+        return path;
+    }
+    return fallbackName;
+}
+
 void register_copied_hd_resource(
     JKRArchive* archive, JKRArchive::SDIFileEntry* fileEntry, void* buffer, u32 resourceSize) {
     if (archive == NULL || fileEntry == NULL || buffer == NULL || resourceSize == 0 ||
@@ -21,8 +84,9 @@ void register_copied_hd_resource(
         return;
     }
 
+    const std::string resourcePath = resource_path_for_entry(archive, fileEntry);
     dusk::tphd::register_copied_hd_resource(archive->mEntryNum,
-        archive->mStringTable + fileEntry->getNameOffset(), buffer, resourceSize);
+        resourcePath, buffer, resourceSize);
 }
 }  // namespace
 #endif
@@ -160,7 +224,12 @@ void* JKRArchive::getResource(const char* path) {
     }
 
     if (fileEntry) {
-        return fetchResource(fileEntry, NULL);
+        u32 resourceSize = 0;
+        void* resource = fetchResource(fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, resource, resourceSize);
+#endif
+        return resource;
     }
 
     return NULL;
@@ -176,7 +245,12 @@ void* JKRArchive::getResource(u32 type, const char* path) {
     }
 
     if (fileEntry) {
-        return fetchResource(fileEntry, NULL);
+        u32 resourceSize = 0;
+        void* resource = fetchResource(fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, resource, resourceSize);
+#endif
+        return resource;
     }
 
     return NULL;
@@ -186,7 +260,12 @@ void* JKRArchive::getIdxResource(u32 index) {
     JUT_ASSERT(384, isMounted());
     SDIFileEntry* fileEntry = findIdxResource(index);
     if (fileEntry) {
-        return fetchResource(fileEntry, NULL);
+        u32 resourceSize = 0;
+        void* resource = fetchResource(fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, resource, resourceSize);
+#endif
+        return resource;
     }
 
     return NULL;
@@ -196,7 +275,12 @@ void* JKRArchive::getResource(u16 id) {
     JUT_ASSERT(409, isMounted());
     SDIFileEntry* fileEntry = findIdResource(id);
     if (fileEntry) {
-        return fetchResource(fileEntry, NULL);
+        u32 resourceSize = 0;
+        void* resource = fetchResource(fileEntry, &resourceSize);
+#if DUSK_TPHD
+        register_copied_hd_resource(this, fileEntry, resource, resourceSize);
+#endif
+        return resource;
     }
 
     return NULL;

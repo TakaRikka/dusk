@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <cstring>
 
+#include "dusk/name_compat.hpp"
 #include "dusk/version.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
@@ -1886,6 +1887,7 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
 #endif
 
     dSv_save_c* savedata = dComIfGs_getSaveData();
+    dusk::name_compat::normalizeLoadedSaveNames();
     if (savedata->getPlayer().getPlayerStatusA().getLife() < 12) {
         savedata->getPlayer().getPlayerStatusA().setLife(12);
     }

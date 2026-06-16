@@ -955,4 +955,24 @@
   <entry key="SAVE_EDITOR_HEARTS">hearts</entry>
   <entry key="SAVE_EDITOR_PIECES">pieces</entry>
   <entry key="SAVE_EDITOR_CM">cm</entry>
+  <entry key="HUD_SCALE">HUD Scale</entry>
+  <entry key="SCALES_THE_SIZE_OF_THE_GAMEPLAY_HUD_HEARTS_BUTTONS_MINI_MAP_ETC_DOES_NO">Scales the size of the gameplay HUD, including hearts, buttons, and the mini-map. Does not affect menus.</entry>
+  <entry key="BUTTON_FISHING">Button Fishing</entry>
+  <entry key="ALLOW_FISHING_WITH_THE_FISHING_ROD_USING_THE_BUTTON_THE_ITEM_IS_ASSIGNED">Allow fishing with the fishing rod using the button the item is assigned to.</entry>
+  <entry key="MAGIC_ARMOR_BEHAVIOR">Magic Armor Behavior</entry>
+  <entry key="MAGIC_ARMOR_NORMAL">Normal</entry>
+  <entry key="MAGIC_ARMOR_ON_DAMAGE">On Damage</entry>
+  <entry key="MAGIC_ARMOR_DOUBLE_DEFENSE">Double Defense</entry>
+  <entry key="MAGIC_ARMOR_INVINCIBLE">Invincible</entry>
+  <entry key="MAGIC_ARMOR_COSMETIC">Cosmetic</entry>
+  <entry key="CONTROL_THE_BEHAVIOR_OF_THE_MAGIC_ARMOR">Control the behavior of the Magic Armor.</entry>
+  <entry key="BRITISH_ENGLISH">British English</entry>
+  <entry key="AMERICAN_ENGLISH">American English</entry>
+  <entry key="EUROPEAN_FRENCH">European French</entry>
+  <entry key="CANADIAN_FRENCH">Canadian French</entry>
+  <entry key="EUROPEAN_SPANISH">Spanish</entry>
+  <entry key="LATIN_AMERICAN_SPANISH">Latin American Spanish</entry>
+  <entry key="LANGUAGE_HD">Language HD</entry>
+  <entry key="TPHD_CONTENT_FOLDER">Dusklight HD Content Folder</entry>
+  <entry key="SET_THE_DIRECTORY_THAT_DUSK_LOADS_ELIGIBLE_TPHD_CONTENT_FROM">Set the directory that Dusk loads eligible TPHD content from.</entry>
 </localization>

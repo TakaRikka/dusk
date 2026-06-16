@@ -1439,6 +1439,8 @@ set(DUSK_FILES
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp
+        include/dusk/name_compat.hpp
+        src/dusk/name_compat.cpp
         src/dusk/settings.cpp
         src/dusk/speedrun.cpp
         src/dusk/string.cpp
