@@ -2721,6 +2721,12 @@ int dCamera_c::defaultTriming() {
         case 2:
         case 5:
         case 6:
+#if TARGET_PC
+            if (dusk::getSettings().game.disableTargetingLetterbox) {
+                SetTrimSize(0);
+                break;
+            }
+#endif
             SetTrimSize(1);
             break;
         case 4:
