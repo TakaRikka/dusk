@@ -1,8 +1,450 @@
+From beeb40d33aa4b7526530084ade0515cd08ed9f0d Mon Sep 17 00:00:00 2001
+From: Lurs <2795933+Lurs@users.noreply.github.com>
+Date: Fri, 12 Jun 2026 07:57:29 +0200
+Subject: [PATCH 1/2] add stencil support for aurora
+
+---
+ include/dolphin/gx/GXAurora.h | 48 +++++++++++++++++++++++++++++++++++
+ lib/dolphin/gx/GXAurora.cpp   | 36 ++++++++++++++++++++++++++
+ lib/gfx/common.cpp            | 15 ++++++-----
+ lib/gx/command_processor.cpp  | 22 ++++++++++++++++
+ lib/gx/gx.cpp                 | 32 +++++++++++++++++++++++
+ lib/gx/gx.hpp                 |  8 ++++++
+ lib/gx/pipeline.cpp           |  3 +++
+ lib/gx/pipeline.hpp           | 11 +++++++-
+ lib/webgpu/gpu.cpp            | 13 +++++++++-
+ lib/webgpu/gpu.hpp            |  2 ++
+ 10 files changed, 182 insertions(+), 8 deletions(-)
+
+diff --git a/include/dolphin/gx/GXAurora.h b/include/dolphin/gx/GXAurora.h
+index 72e584b..0b793ca 100644
+--- a/include/dolphin/gx/GXAurora.h
++++ b/include/dolphin/gx/GXAurora.h
+@@ -2,6 +2,7 @@
+ #define DOLPHIN_GXAURORA_H
+ 
+ #include <dolphin/types.h>
++#include <dolphin/gx/GXEnum.h>
+ 
+ #if __cplusplus
+ extern "C" {
+@@ -80,6 +81,22 @@ extern "C" {
+ 
+ #define GX2_SET_POLYGON_OFFSET 0x1000
+ 
++/**
++ * GX2SetStencilMask: compare masks, write masks and reference values for both faces.
++ * Must be followed by six u8 values: pre_mask_front, write_mask_front, ref_front,
++ * pre_mask_back, write_mask_back, ref_back. (Aurora uses the front-face values.)
++ */
++#define GX2_SET_STENCIL_MASK 0x1001
++
++/**
++ * GX2SetDepthStencilControl: depth test/write/func + stencil enable/funcs/ops, one register.
++ * Must be followed by thirteen u8 values: depth_test, depth_write, depth_func (GXCompare),
++ * stencil_test, back_stencil_enable, front_func (GXCompare), front_zpass, front_zfail, front_fail
++ * (GXStencilOp), back_func, back_zpass, back_zfail, back_fail. (Aurora uses the front face.)
++ * NOTE: like on GX2, any GXSetZMode (BP zmode) write also disables the stencil test.
++ */
++#define GX2_SET_DEPTH_STENCIL_CONTROL 0x1002
++
+ 
+ /*
+  * Debug marker stuff
+@@ -132,6 +149,37 @@ void GXSetScissorRender(u32 left, u32 top, u32 wd, u32 ht);
+ 
+ void GX2SetPolygonOffset(f32 mFrontOffset, f32 mFrontScale, f32 mBackOffset, f32 mBackScale, f32 mClamp);
+ 
++typedef enum GXStencilOp {
++  GX_ST_KEEP = 0,
++  GX_ST_ZERO = 1,
++  GX_ST_REPLACE = 2,
++  GX_ST_INCR = 3,
++  GX_ST_DECR = 4,
++  GX_ST_INVERT = 5,
++} GXStencilOp;
++
++/**
++ * GX2SetStencilMask analogue (compare/write masks + refs; front face used).
++ * u8 parameters so decompiled GX2 call sites transcribe verbatim.
++ */
++void GX2SetStencilMask(u8 pre_mask_front, u8 write_mask_front, u8 ref_front, u8 pre_mask_back,
++                       u8 write_mask_back, u8 ref_back);
++
++/**
++ * GX2SetDepthStencilControl analogue. depth_func/front_func take GXCompare values,
++ * the op parameters GXStencilOp values (both numerically identical to GX2 — decomp args are
++ * valid verbatim). A subsequent GXSetZMode write disables the stencil test, as on GX2.
++ */
++void GX2SetDepthStencilControl(u8 depth_test, u8 depth_write, u8 depth_func, u8 stencil_test,
++                               u8 back_stencil_enable, u8 front_func, u8 front_zpass,
++                               u8 front_zfail, u8 front_fail, u8 back_func, u8 back_zpass,
++                               u8 back_zfail, u8 back_fail);
++
++/**
++ * Returns whether the backend depth buffer carries a stencil aspect.
++ */
++GXBool GX2SupportsStencil(void);
++
+ /**
+  * Create an offscreen framebuffer and switch rendering to it.
+  * All subsequent GX rendering will target this framebuffer until GXRestoreFrameBuffer() is called.
+diff --git a/lib/dolphin/gx/GXAurora.cpp b/lib/dolphin/gx/GXAurora.cpp
+index 1485f0f..66056f1 100644
+--- a/lib/dolphin/gx/GXAurora.cpp
++++ b/lib/dolphin/gx/GXAurora.cpp
+@@ -8,6 +8,7 @@
+ 
+ #include "../../gfx/common.hpp"
+ #include "../../gx/fifo.hpp"
++#include "../../webgpu/gpu.hpp"
+ 
+ static void GXWriteString(const char* label) {
+   auto length = strlen(label);
+@@ -75,6 +76,41 @@ void GX2SetPolygonOffset(f32 mFrontOffset, f32 mFrontScale, f32 mBackOffset, f32
+   GX_WRITE_F32(mClamp);
+ }
+ 
++void GX2SetStencilMask(u8 pre_mask_front, u8 write_mask_front, u8 ref_front, u8 pre_mask_back,
++                       u8 write_mask_back, u8 ref_back) {
++  GX_WRITE_AURORA(GX2_SET_STENCIL_MASK);
++  GX_WRITE_U8(pre_mask_front);
++  GX_WRITE_U8(write_mask_front);
++  GX_WRITE_U8(ref_front);
++  GX_WRITE_U8(pre_mask_back);
++  GX_WRITE_U8(write_mask_back);
++  GX_WRITE_U8(ref_back);
++}
++
++void GX2SetDepthStencilControl(u8 depth_test, u8 depth_write, u8 depth_func, u8 stencil_test,
++                               u8 back_stencil_enable, u8 front_func, u8 front_zpass,
++                               u8 front_zfail, u8 front_fail, u8 back_func, u8 back_zpass,
++                               u8 back_zfail, u8 back_fail) {
++  GX_WRITE_AURORA(GX2_SET_DEPTH_STENCIL_CONTROL);
++  GX_WRITE_U8(depth_test);
++  GX_WRITE_U8(depth_write);
++  GX_WRITE_U8(depth_func);
++  GX_WRITE_U8(stencil_test);
++  GX_WRITE_U8(back_stencil_enable);
++  GX_WRITE_U8(front_func);
++  GX_WRITE_U8(front_zpass);
++  GX_WRITE_U8(front_zfail);
++  GX_WRITE_U8(front_fail);
++  GX_WRITE_U8(back_func);
++  GX_WRITE_U8(back_zpass);
++  GX_WRITE_U8(back_zfail);
++  GX_WRITE_U8(back_fail);
++}
++
++GXBool GX2SupportsStencil(void) {
++  return aurora::webgpu::g_graphicsConfig.depthStencilSupported ? GX_TRUE : GX_FALSE;
++}
++
+ void GXCreateFrameBuffer(u32 width, u32 height) {
+   aurora::gx::fifo::drain();
+   aurora::gfx::begin_offscreen(width, height);
+diff --git a/lib/gfx/common.cpp b/lib/gfx/common.cpp
+index 44ea987..5ae35fb 100644
+--- a/lib/gfx/common.cpp
++++ b/lib/gfx/common.cpp
+@@ -386,11 +386,11 @@ static void set_efb_targets(RenderPass& pass) {
+       webgpu::g_graphicsConfig.msaaSamples > 1 ? webgpu::g_frameBufferResolved.texture : webgpu::g_frameBuffer.texture;
+   pass.copySourceView =
+       webgpu::g_graphicsConfig.msaaSamples > 1 ? webgpu::g_frameBufferResolved.view : webgpu::g_frameBuffer.view;
+-  pass.copySourceDepthView = webgpu::g_depthBuffer.view;
++  pass.copySourceDepthView = webgpu::g_depthBuffer.sampleView;  
+   pass.targetSize = webgpu::g_frameBuffer.size;
+   pass.msaaSamples = webgpu::g_graphicsConfig.msaaSamples;
+   pass.hasDepth = true;
+-  pass.hasStencil = false;
++  pass.hasStencil = webgpu::g_graphicsConfig.depthStencilSupported;  
+ }
+ 
+ struct OffscreenCacheKey {
+@@ -1439,10 +1439,13 @@ static void render(wgpu::CommandEncoder& cmd, FramePacket& frame, RenderPass& pa
+                                                 : (passInfo.clearDepth ? wgpu::LoadOp::Clear : wgpu::LoadOp::Load))
+                                          : wgpu::LoadOp::Undefined,
+         .depthStoreOp = passInfo.hasDepth ? passInfo.depthStoreOp : wgpu::StoreOp::Undefined,
+-        .depthClearValue = passInfo.clearDepthValue,
+-        .stencilLoadOp = passInfo.hasStencil ? passInfo.stencilLoadOp : wgpu::LoadOp::Undefined,
+-        .stencilStoreOp = passInfo.hasStencil ? passInfo.stencilStoreOp : wgpu::StoreOp::Undefined,
+-        .stencilClearValue = passInfo.stencilClearValue,
++        .depthClearValue = passInfo.clearDepthValue,        
++        .stencilLoadOp = webgpu::g_graphicsConfig.depthStencilSupported
++                             ? (passInfo.clearDepth ? wgpu::LoadOp::Clear : wgpu::LoadOp::Load)
++                             : wgpu::LoadOp::Undefined,
++        .stencilStoreOp =
++            webgpu::g_graphicsConfig.depthStencilSupported ? wgpu::StoreOp::Store : wgpu::StoreOp::Undefined,
++        .stencilClearValue = 0,
+     };
+     depthStencilAttachmentPtr = &depthStencilAttachment;
+   }
+diff --git a/lib/gx/command_processor.cpp b/lib/gx/command_processor.cpp
+index 21e177d..6c8f13c 100644
+--- a/lib/gx/command_processor.cpp
++++ b/lib/gx/command_processor.cpp
+@@ -737,6 +737,8 @@ static void handle_bp(u32 value, bool bigEndian) {
+     g_gxState.depthCompare = bp_get(value, 1, 0) != 0;
+     g_gxState.depthFunc = static_cast<GXCompare>(bp_get(value, 3, 1));
+     g_gxState.depthUpdate = bp_get(value, 1, 4) != 0;
++    // GX2 stencil:
++    g_gxState.stencilEnable = false;
+     g_gxState.stateDirty = true;
+     break;
+   }
+@@ -1674,6 +1676,7 @@ static void push_gx_draw(GXPrimitive prim, GXVtxFmt fmt, u16 vtxCount, gfx::Rang
+       .instanceCount = instanceCount,
+       .bindGroups = bindGroups,
+       .dstAlpha = g_gxState.dstAlpha,
++      .stencilRef = g_gxState.stencilRef,
+   });
+ }
+ 
+@@ -1808,6 +1811,25 @@ void handle_aurora(const u8* data, u32& pos, u32 size, bool bigEndian) {
+     g_gxState.clamp = read_f32(data + pos, bigEndian);
+     pos += 4;
+     g_gxState.stateDirty = true;
++  } else if (subCmd == GX2_SET_STENCIL_MASK) {
++    CHECK(pos + 6 <= size, "GX2_SET_STENCIL_MASK read overrun");
++    g_gxState.stencilReadMask = data[pos];
++    g_gxState.stencilWriteMask = data[pos + 1];
++    g_gxState.stencilRef = data[pos + 2];
++    pos += 6;
++    g_gxState.stateDirty = true;
++  } else if (subCmd == GX2_SET_DEPTH_STENCIL_CONTROL) {
++    CHECK(pos + 13 <= size, "GX2_SET_DEPTH_STENCIL_CONTROL read overrun");
++    g_gxState.depthCompare = data[pos] != 0;
++    g_gxState.depthUpdate = data[pos + 1] != 0;
++    g_gxState.depthFunc = static_cast<GXCompare>(data[pos + 2]);
++    g_gxState.stencilEnable = data[pos + 3] != 0;
++    g_gxState.stencilFunc = static_cast<GXCompare>(data[pos + 5]);
++    g_gxState.stencilOpZPass = data[pos + 6];
++    g_gxState.stencilOpZFail = data[pos + 7];
++    g_gxState.stencilOpFail = data[pos + 8];
++    pos += 13;
++    g_gxState.stateDirty = true;
+   } else if (subCmd == GX_AURORA_DESTROY_TEXOBJ) {
+     CHECK(pos + 4 <= size, "GX_AURORA_DESTROY_TEXOBJ read overrun");
+     evict_texture_object(read_u32(data + pos, bigEndian));
+diff --git a/lib/gx/gx.cpp b/lib/gx/gx.cpp
+index 9fa5bcc..aef7d8e 100644
+--- a/lib/gx/gx.cpp
++++ b/lib/gx/gx.cpp
+@@ -630,15 +630,39 @@ static inline wgpu::PrimitiveState to_primitive_state(GXCullMode gx_cullMode) {
+   };
+ }
+ 
++static wgpu::StencilOperation to_stencil_op(uint8_t op) noexcept {
++  switch (op) {
++  case 1: return wgpu::StencilOperation::Zero;
++  case 2: return wgpu::StencilOperation::Replace;
++  case 3: return wgpu::StencilOperation::IncrementClamp;
++  case 4: return wgpu::StencilOperation::DecrementClamp;
++  case 5: return wgpu::StencilOperation::Invert;
++  default: return wgpu::StencilOperation::Keep;  
++  }
++}
++
+ wgpu::RenderPipeline build_pipeline(const PipelineConfig& config, ArrayRef<wgpu::VertexBufferLayout> vtxBuffers,
+                                     wgpu::ShaderModule shader, const char* label) noexcept {
+   ZoneScoped;
+   const float depthBias = (UseReversedZ ? -1.0f : 1.0f) * std::bit_cast<float>(config.polygonOffsetBits);
+   const float depthBiasSlopeScale = (UseReversedZ ? -1.0f : 1.0f) * std::bit_cast<float>(config.polygonOffsetScaleBits);
++  const bool stencilOn = g_graphicsConfig.depthStencilSupported && config.stencilEnable != 0;
++  const wgpu::StencilFaceState stencilFace =
++      stencilOn ? wgpu::StencilFaceState{
++                      .compare = to_compare_function(static_cast<GXCompare>(config.stencilFunc)),
++                      .failOp = to_stencil_op(config.stencilOpFail),
++                      .depthFailOp = to_stencil_op(config.stencilOpZFail),
++                      .passOp = to_stencil_op(config.stencilOpZPass),
++                  }
++                : wgpu::StencilFaceState{};
+   const wgpu::DepthStencilState depthStencil{
+       .format = g_graphicsConfig.depthFormat,
+       .depthWriteEnabled = config.depthCompare && config.depthUpdate,
+       .depthCompare = config.depthCompare ? to_compare_function(config.depthFunc) : wgpu::CompareFunction::Always,
++      .stencilFront = stencilFace,
++      .stencilBack = stencilFace,
++      .stencilReadMask = stencilOn ? static_cast<uint32_t>(config.stencilReadMask) : 0xFFFFFFFFu,
++      .stencilWriteMask = stencilOn ? static_cast<uint32_t>(config.stencilWriteMask) : 0xFFFFFFFFu,
+       .depthBias = round_away_from_zero<int32_t>(depthBias),
+       .depthBiasSlopeScale = depthBiasSlopeScale,
+       .depthBiasClamp = std::bit_cast<float>(config.polygonOffsetClampBits),
+@@ -778,6 +802,14 @@ void populate_pipeline_config(PipelineConfig& config, GXPrimitive primitive, GXV
+       .depthUpdate = g_gxState.depthUpdate,
+       .alphaUpdate = g_gxState.alphaUpdate,
+       .colorUpdate = g_gxState.colorUpdate,
++      .stencilEnable = static_cast<uint8_t>(g_gxState.stencilEnable ? 1 : 0),
++      .stencilFunc = static_cast<uint8_t>(g_gxState.stencilFunc),
++      .stencilReadMask = g_gxState.stencilReadMask,
++      .stencilWriteMask = g_gxState.stencilWriteMask,
++      .stencilOpFail = g_gxState.stencilOpFail,
++      .stencilOpZFail = g_gxState.stencilOpZFail,
++      .stencilOpZPass = g_gxState.stencilOpZPass,
++      .stencilPad = 0,
+   };
+ }
+ 
+diff --git a/lib/gx/gx.hpp b/lib/gx/gx.hpp
+index 287bbd7..d3b723b 100644
+--- a/lib/gx/gx.hpp
++++ b/lib/gx/gx.hpp
+@@ -368,6 +368,14 @@ struct GXState {
+   bool depthUpdate = true;
+   bool colorUpdate = true;
+   bool alphaUpdate = true;
++  bool stencilEnable = false;
++  GXCompare stencilFunc = GX_ALWAYS;
++  u8 stencilRef = 0;
++  u8 stencilReadMask = 0xff;
++  u8 stencilWriteMask = 0xff;
++  u8 stencilOpFail = 0;
++  u8 stencilOpZFail = 0;
++  u8 stencilOpZPass = 0;
+   u8 numChans = 0;
+   u8 numIndStages = 0;
+   u8 numTevStages = 0;
+diff --git a/lib/gx/pipeline.cpp b/lib/gx/pipeline.cpp
+index 74f3d8a..8d0b679 100644
+--- a/lib/gx/pipeline.cpp
++++ b/lib/gx/pipeline.cpp
+@@ -32,6 +32,9 @@ void render(const DrawData& data, const wgpu::RenderPassEncoder& pass) {
+     const wgpu::Color color{0.f, 0.f, 0.f, data.dstAlpha / 255.f};
+     pass.SetBlendConstant(&color);
+   }
++  if (data.stencilRef != 0) {
++    pass.SetStencilReference(data.stencilRef);
++  }
+   if (data.indexCount == 0) {
+     pass.Draw(data.vtxCount, data.instanceCount);
+   } else {
+diff --git a/lib/gx/pipeline.hpp b/lib/gx/pipeline.hpp
+index 474c85c..defa474 100644
+--- a/lib/gx/pipeline.hpp
++++ b/lib/gx/pipeline.hpp
+@@ -14,9 +14,10 @@ struct DrawData {
+   uint32_t instanceCount;
+   GXBindGroups bindGroups;
+   uint32_t dstAlpha;
++  uint8_t stencilRef = 0; 
+ };
+ 
+-constexpr uint32_t GXPipelineConfigVersion = 13;
++constexpr uint32_t GXPipelineConfigVersion = 14;
+ struct PipelineConfig {
+   uint32_t version = GXPipelineConfigVersion;
+   uint32_t msaaSamples = 1;
+@@ -31,6 +32,14 @@ struct PipelineConfig {
+   uint32_t polygonOffsetScaleBits;
+   uint32_t polygonOffsetClampBits;
+   bool depthCompare, depthUpdate, alphaUpdate, colorUpdate;
++  uint8_t stencilEnable;
++  uint8_t stencilFunc;     
++  uint8_t stencilReadMask;
++  uint8_t stencilWriteMask;
++  uint8_t stencilOpFail;     
++  uint8_t stencilOpZFail;
++  uint8_t stencilOpZPass;
++  uint8_t stencilPad;        
+ };
+ static_assert(std::has_unique_object_representations_v<PipelineConfig>);
+ 
+diff --git a/lib/webgpu/gpu.cpp b/lib/webgpu/gpu.cpp
+index 694343f..64bf823 100644
+--- a/lib/webgpu/gpu.cpp
++++ b/lib/webgpu/gpu.cpp
+@@ -63,6 +63,7 @@ bool g_bcTexturesSupported = false;
+ bool g_astcTexturesSupported = false;
+ bool g_textureComponentSwizzleSupported = false;
+ static std::atomic_bool g_shuttingDown = false;
++bool g_depthStencilSupported;
+ 
+ namespace {
+ 
+@@ -356,6 +357,13 @@ static TextureWithSampler create_depth_texture(uint32_t width, uint32_t height)
+   };
+   auto view = texture.CreateView(&viewDescriptor);
+ 
++  const wgpu::TextureViewDescriptor sampleViewDescriptor{
++      .label = "Depth sample view",
++      .dimension = wgpu::TextureViewDimension::e2D,
++      .aspect = wgpu::TextureAspect::DepthOnly,
++  };
++  auto sampleView = texture.CreateView(&sampleViewDescriptor);
++
+   const wgpu::SamplerDescriptor samplerDescriptor{
+       .label = "Depth sampler",
+       .addressModeU = wgpu::AddressMode::ClampToEdge,
+@@ -376,6 +384,7 @@ static TextureWithSampler create_depth_texture(uint32_t width, uint32_t height)
+       .size = size,
+       .format = format,
+       .sampler = std::move(sampler),
++      .sampleView = std::move(sampleView),
+   };
+ }
+ 
+@@ -849,6 +858,7 @@ bool initialize(AuroraBackend auroraBackend, bool allowCpu) {
+     g_bcTexturesSupported = false;
+     g_astcTexturesSupported = false;
+     g_textureComponentSwizzleSupported = false;
++    g_depthStencilSupported = true;
+     wgpu::SupportedFeatures supportedFeatures;
+     g_adapter.GetFeatures(&supportedFeatures);
+     for (size_t i = 0; i < supportedFeatures.featureCount; ++i) {
+@@ -995,9 +1005,10 @@ bool initialize(AuroraBackend auroraBackend, bool allowCpu) {
+               .height = size.native_fb_height,
+               .presentMode = presentMode,
+           },
+-      .depthFormat = wgpu::TextureFormat::Depth32Float,
++      .depthFormat = wgpu::TextureFormat::Depth24PlusStencil8,
+       .msaaSamples = g_config.msaa,
+       .textureAnisotropy = g_config.maxTextureAnisotropy,
++      .depthStencilSupported = g_depthStencilSupported,
+   };
+   create_copy_pipeline();
+   create_resample_pipeline();
+diff --git a/lib/webgpu/gpu.hpp b/lib/webgpu/gpu.hpp
+index 0753052..4b16e3a 100644
+--- a/lib/webgpu/gpu.hpp
++++ b/lib/webgpu/gpu.hpp
+@@ -16,6 +16,7 @@ struct GraphicsConfig {
+   wgpu::TextureFormat depthFormat;
+   uint32_t msaaSamples;
+   uint16_t textureAnisotropy;
++  bool depthStencilSupported = false;
+ };
+ struct TextureWithSampler {
+   wgpu::Texture texture;
+@@ -23,6 +24,7 @@ struct TextureWithSampler {
+   wgpu::Extent3D size;
+   wgpu::TextureFormat format;
+   wgpu::Sampler sampler;
++  wgpu::TextureView sampleView;
+ };
+ struct Viewport {
+   float left;
+-- 
+2.53.0.windows.1
+
+
+From ce42b0c81cad4eb20a02ae66ea9ae8e8d47c6eee Mon Sep 17 00:00:00 2001
+From: snnh <s2438137759@outlook.com>
+Date: Tue, 16 Jun 2026 11:04:14 +0800
+Subject: [PATCH 2/2] Add RmlUi translation callback
+
+---
+ extern/CMakeLists.txt                | 38 ++++++++++++++++++++++++----
+ include/aurora/rmlui.hpp             |  2 ++
+ lib/rmlui.cpp                        |  8 ++++++
+ lib/rmlui/SystemInterface_Aurora.cpp | 13 ++++++++++
+ lib/rmlui/SystemInterface_Aurora.h   |  3 +++
+ 5 files changed, 59 insertions(+), 5 deletions(-)
+
 diff --git a/extern/CMakeLists.txt b/extern/CMakeLists.txt
-index 9fdd928..cec1db2 100644
+index b93252b..8b18af3 100644
 --- a/extern/CMakeLists.txt
 +++ b/extern/CMakeLists.txt
-@@ -3,8 +3,8 @@ include(FetchContent)
+@@ -3,10 +3,10 @@ include(FetchContent)
  # Don't build tests for third party dependencies
  set(BUILD_TESTING OFF CACHE INTERNAL "Build tests")
  set(SKIP_INSTALL_ALL ON)
@@ -14,16 +456,55 @@ index 9fdd928..cec1db2 100644
 -  set(_USE_SHARED OFF)
 +  set(_USE_SHARED ON)
  endif ()
-@@ -123,6 +123,9 @@ if (AURORA_ENABLE_GX)
+ 
+ function(aurora_find_package_global)
+@@ -115,7 +115,7 @@ if (AURORA_ENABLE_GX)
+   endif ()
+   if (NOT TARGET ZLIB::ZLIB)
+     message(STATUS "aurora: Fetching zlib")
+-    set(ZLIB_BUILD_SHARED ${_USE_SHARED} CACHE BOOL "Enable building zlib shared library" FORCE)
++    set(ZLIB_BUILD_SHARED OFF CACHE BOOL "Enable building zlib shared library" FORCE)
+     set(ZLIB_BUILD_TESTING OFF CACHE BOOL "Enable Zlib Examples as tests" FORCE)
+     set(ZLIB_INSTALL OFF CACHE BOOL "Enable installation of zlib" FORCE)
+     set(ZLIB_COMPAT ON CACHE BOOL "Use the compat version of zlib instead of the newer zlib-ng" FORCE)
+@@ -126,8 +126,36 @@ if (AURORA_ENABLE_GX)
+       DOWNLOAD_EXTRACT_TIMESTAMP FALSE
        EXCLUDE_FROM_ALL
      )
++    set(_aurora_zlib_had_bsl_var OFF)
++    set(_aurora_zlib_had_bsl_cache OFF)
++    if (DEFINED BUILD_SHARED_LIBS)
++      set(_aurora_zlib_had_bsl_var ON)
++      set(_aurora_zlib_saved_bsl "${BUILD_SHARED_LIBS}")
++    endif ()
++    if (DEFINED CACHE{BUILD_SHARED_LIBS})
++      set(_aurora_zlib_had_bsl_cache ON)
++    endif ()
++    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
      FetchContent_MakeAvailable(ZLIB)
-+    if (NOT TARGET ZLIB::ZLIB AND TARGET zlibstatic)
+-    add_library(ZLIB::ZLIB ALIAS zlib-ng)
++    unset(BUILD_SHARED_LIBS CACHE)
++    if (_aurora_zlib_had_bsl_cache)
++      set(BUILD_SHARED_LIBS "${_aurora_zlib_saved_bsl}" CACHE BOOL "Build shared libraries" FORCE)
++    elseif (_aurora_zlib_had_bsl_var)
++      set(BUILD_SHARED_LIBS "${_aurora_zlib_saved_bsl}")
++    else ()
++      unset(BUILD_SHARED_LIBS)
++    endif ()
++    unset(_aurora_zlib_had_bsl_cache)
++    unset(_aurora_zlib_had_bsl_var)
++    unset(_aurora_zlib_saved_bsl)
++    if (NOT TARGET ZLIB::ZLIB AND TARGET zlib-ng)
++      add_library(ZLIB::ZLIB ALIAS zlib-ng)
++    elseif (NOT TARGET ZLIB::ZLIB AND TARGET zlibstatic)
 +      add_library(ZLIB::ZLIB ALIAS zlibstatic)
 +    endif ()
-     if (NOT TARGET ZLIB::ZLIB)
-       message(FATAL_ERROR "Failed to make zlib available")
-     endif ()
++    if (NOT TARGET ZLIB::ZLIB)
++      message(FATAL_ERROR "Failed to make zlib available")
++    endif ()
+     # libpng calls find_package(ZLIB) even when zlib was already provided by FetchContent.
+     file(WRITE "${CMAKE_FIND_PACKAGE_REDIRECTS_DIR}/ZLIBConfig.cmake"
+       "set(ZLIB_FOUND TRUE)\n"
 diff --git a/include/aurora/rmlui.hpp b/include/aurora/rmlui.hpp
 index 7d901b2..7c83792 100644
 --- a/include/aurora/rmlui.hpp
@@ -38,10 +519,10 @@ index 7d901b2..7c83792 100644
  struct RuntimeTexture {
    uint32_t width = 0;
 diff --git a/lib/rmlui.cpp b/lib/rmlui.cpp
-index 2183f1e..0d27c39 100644
+index 50dbb71..1c74e5e 100644
 --- a/lib/rmlui.cpp
 +++ b/lib/rmlui.cpp
-@@ -363,6 +363,14 @@ void set_input_type(InputType type) noexcept {
+@@ -389,6 +389,14 @@ void set_input_type(InputType type) noexcept {
    }
  }
  
@@ -102,3 +583,6 @@ index 9fc6703..be33f47 100644
  };
  
  } // namespace aurora::rmlui
+-- 
+2.53.0.windows.1
+
