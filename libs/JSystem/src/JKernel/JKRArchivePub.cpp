@@ -9,6 +9,7 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
+#include <cstring>
 #include <string>
 #include <vector>
 
