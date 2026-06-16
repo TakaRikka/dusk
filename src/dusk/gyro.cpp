@@ -70,16 +70,7 @@ bool rollgoal_gyro_enabled() {
 }
 
 bool queryGyroAimContext() {
-    if (!static_cast<bool>(getSettings().game.enableGyroAim)) {
-        return false;
-    }
-
-    daAlink_c* link = daAlink_getAlinkActorClass();
-    if (link == nullptr) {
-        return false;
-    }
-
-    return link->checkAimContext() && dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
+    return getSettings().game.enableGyroAim.getValue() && dCamera_c::isAimActive();
 }
 
 void read(float dt) {

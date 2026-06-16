@@ -296,6 +296,11 @@ public:
         MEMCARDCHECKPROC_ERR_YESNO_CURSOR_MOVE_ANM,
         MEMCARDCHECKPROC_SAVEDATA_CLEAR,
 
+#if TARGET_PC
+        MEMCARDCHECKPROC_AUTO_MAKE_GAMEFILE,
+        MEMCARDCHECKPROC_AUTO_MAKE_GAMEFILE_ERR_WAIT,
+#endif
+
         #if PLATFORM_WII || PLATFORM_SHIELD
         MEMCARDCHECKPROC_NAND_STAT_CHECK,
         MEMCARDCHECKPROC_GAMEFILE_INIT_SEL,
@@ -420,6 +425,10 @@ public:
     bool yesnoWakuAlpahAnm(u8);
     #if TARGET_PC
     void fileSelectWide();
+    bool pointerDataSelect();
+    bool pointerMenuSelect();
+    bool pointerCopyDataToSelect();
+    bool pointerYesNoSelect(bool errorSelect);
     #endif
     void _draw();
     void errorMoveAnmInitSet(int, int);
@@ -454,6 +463,10 @@ public:
     void MemCardMakeGameFile();
     void MemCardMakeGameFileWait();
     void MemCardMakeGameFileCheck();
+#if TARGET_PC
+    void MemCardAutoMakeGameFile();
+    void MemCardAutoMakeGameFileErrWait();
+#endif
     void MemCardMsgWindowInitOpen();
     void MemCardMsgWindowOpen();
     void MemCardMsgWindowClose();

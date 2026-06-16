@@ -19,8 +19,6 @@ public:
     void set_text(const Rml::String& text);
     Button& on_pressed(ButtonCallback callback);
 
-    const Rml::String& get_text() const { return mProps.text; }
-
 private:
     void update_props(Props props);
 

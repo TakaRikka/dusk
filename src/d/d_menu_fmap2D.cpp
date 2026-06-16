@@ -17,7 +17,10 @@
 #include "d/d_msg_scrn_explain.h"
 #include "m_Do/m_Do_graphic.h"
 #include "d/actor/d_a_midna.h"
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#include "dusk/ui/touch_controls.hpp"
+#endif
 #include <cstring>
 
 #if TARGET_PC
@@ -2509,6 +2512,10 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
 }
 
 dMenu_Fmap2DTop_c::~dMenu_Fmap2DTop_c() {
+#if TARGET_PC
+    dusk::ui::set_control_override(dusk::ui::Control::Z, dusk::ui::ControlOverride::Default);
+#endif
+
     deleteExplain();
     JKR_DELETE(mpTitleScreen);
     mpTitleScreen = NULL;
@@ -2781,6 +2788,12 @@ void dMenu_Fmap2DTop_c::setZButtonString(u32 param_0, u8 i_alpha) {
     if (param_0 == 0x529 && ((daMidna_c*)daPy_py_c::getMidnaActor())->checkPortalObjRide()) {
         param_0 = 0x533;
     }
+
+#if TARGET_PC
+    dusk::ui::set_control_override(dusk::ui::Control::Z,
+        param_0 != 0 && isWarpAccept() ? dusk::ui::ControlOverride::Action :
+                                         dusk::ui::ControlOverride::Default);
+#endif
 
 #if VERSION == VERSION_GCN_JPN
     static const u64 cont_zt[5] = {MULTI_CHAR('cont_zt'), MULTI_CHAR('cont_zt1'), MULTI_CHAR('cont_zt2'), MULTI_CHAR('cont_zt3'), MULTI_CHAR('cont_zt4')};

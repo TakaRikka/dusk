@@ -9,6 +9,8 @@ namespace dusk {
 enum class ActionBinds {
     FIRST_PERSON_CAMERA,
     CALL_MIDNA,
+    OPEN_MAP_SCREEN,
+    TOGGLE_MINIMAP,
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
     COUNT,
@@ -31,6 +33,12 @@ ActionBindsMap& getActionBinds();
 bool isActionBound(ActionBinds action, u32 port);
 
 void updateActionBindings();
+
+void setVirtualActionBind(ActionBinds action, u32 port, bool pressed, bool available = true);
+
+void clearVirtualActionBind(ActionBinds action, u32 port);
+
+void clearAllVirtualActionBinds();
 
 bool getActionBindTrig(ActionBinds action, u32 port);
 

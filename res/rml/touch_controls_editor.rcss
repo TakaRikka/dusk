@@ -1,0 +1,138 @@
+body.touch-editor {
+    background-color: rgba(4, 6, 8, 34%);
+    z-index: 8;
+}
+
+body.touch-editor .control,
+body.touch-editor action-bar {
+    opacity: 0.88;
+    cursor: move;
+    pointer-events: auto;
+}
+
+body.touch-editor .control:hover,
+body.touch-editor action-bar:hover,
+body.touch-editor .control.editor-selected,
+body.touch-editor action-bar.editor-selected {
+    border-color: rgba(255, 232, 128, 80%);
+    filter: brightness(1.15);
+}
+
+body.touch-editor action-bar button,
+body.touch-editor action-bar separator {
+    pointer-events: none;
+}
+
+selection-frame {
+    display: none;
+    position: absolute;
+    z-index: 20;
+    border: 2dp rgba(255, 232, 128, 88%);
+    background-color: rgba(255, 232, 128, 7%);
+    pointer-events: none;
+}
+
+selection-frame.visible {
+    display: block;
+}
+
+resize-handle {
+    display: block;
+    position: absolute;
+    width: 22dp;
+    height: 22dp;
+    border: 2dp rgba(255, 244, 190, 96%);
+    border-radius: 11dp;
+    background-color: rgba(34, 37, 42, 86%);
+    pointer-events: auto;
+}
+
+resize-handle.left {
+    left: -12dp;
+}
+
+resize-handle.right {
+    right: -12dp;
+}
+
+resize-handle.top {
+    top: -12dp;
+}
+
+resize-handle.bottom {
+    bottom: -12dp;
+}
+
+resize-handle.horizontal {
+    top: 50%;
+    margin-top: -11dp;
+}
+
+resize-handle.vertical {
+    left: 50%;
+    margin-left: -11dp;
+}
+
+resize-handle.corner.left {
+    left: -12dp;
+}
+
+resize-handle.corner.right {
+    right: -12dp;
+}
+
+resize-handle.corner.top {
+    top: -12dp;
+}
+
+resize-handle.corner.bottom {
+    bottom: -12dp;
+}
+
+editor-toolbar {
+    display: flex;
+    position: absolute;
+    left: 24dp;
+    right: 24dp;
+    top: 50%;
+    z-index: 30;
+    height: 48dp;
+    margin-top: -24dp;
+    gap: 8dp;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+editor-toolbar button.editor-command {
+    flex: 0 1 150dp;
+    min-width: 96dp;
+    height: 48dp;
+    padding: 0 14dp;
+    border-radius: 8dp;
+    border: 1dp rgba(255, 255, 255, 26%);
+    background-color: rgba(17, 19, 24, 88%);
+    color: rgba(255, 250, 232, 94%);
+    font-family: "Fira Sans";
+    font-size: 18dp;
+    line-height: 48dp;
+    opacity: 1;
+    cursor: pointer;
+}
+
+editor-toolbar button.editor-command span {
+    display: block;
+    width: 100%;
+    line-height: 48dp;
+    text-align: center;
+}
+
+editor-toolbar button.editor-command.primary {
+    border-color: rgba(255, 232, 128, 70%);
+    background-color: rgba(96, 82, 38, 90%);
+}
+
+editor-toolbar button.editor-command:hover,
+editor-toolbar button.editor-command:focus-visible {
+    border-color: rgba(255, 244, 190, 92%);
+    background-color: rgba(78, 85, 96, 92%);
+}

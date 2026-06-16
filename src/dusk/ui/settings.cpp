@@ -22,6 +22,7 @@
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "i18n.hpp"
+#include "touch_controls_editor.hpp"
 #include "ui.hpp"
 
 #include <aurora/lib/window.hpp>
@@ -35,6 +36,17 @@
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(TARGET_ANDROID) || defined(__ANDROID__) || \
+    (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
+#define TOUCH_CONTROLS_AVAILABLE true
+#else
+#define TOUCH_CONTROLS_AVAILABLE false
+#endif
 
 namespace dusk::ui {
 namespace {
@@ -892,6 +904,21 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml(
                     "[DISPLAY_THE_CURRENT_FRAMERATE_IN_A_CORNER_OF_THE_SCREEN_WHILE_PLAYING]");
             });
+        config_bool_select(leftPane, rightPane, getSettings().video.rememberWindowSize,
+            {
+                .key = "[REMEMBER_WINDOW_SIZE]",
+                .helpText = "[SAVE_AND_RESTORE_THE_PREVIOUS_SESSIONS_WINDOW_SIZE_WHEN_OPENING_DUSKLIGHT]",
+                .onChange =
+                    [](bool value) {
+                        if (value && !dusk::getSettings().video.enableFullscreen) {
+                            const auto windowSize = aurora::window::get_window_size();
+                            dusk::getSettings().video.lastWindowWidth.setValue(windowSize.width);
+                            dusk::getSettings().video.lastWindowHeight.setValue(windowSize.height);
+                            dusk::config::Save();
+                        }
+                    },
+                .isDisabled = [] { return IsMobile; },
+            });
         leftPane.add_section("[RESOLUTION]");
         graphics_tuner_control(*this, leftPane, rightPane,
             getSettings().game.internalResolutionScale,
@@ -1047,6 +1074,30 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .onChange = [](bool value) { aurora_set_background_input(value); },
             });
 
+#if TOUCH_CONTROLS_AVAILABLE
+        leftPane.add_section("[TOUCH]");
+        addOption("[TOUCH_CONTROLS]", getSettings().game.enableTouchControls,
+            "[ENABLES_CONTROLS_OVERLAY_FOR_TOUCH_SCREENS_PRESS_AND_DRAG_ON_THE_LEFT_SIDE]");
+        auto& customizeTouchLayout = leftPane.add_button(ControlledButton::Props{
+            .text = "[CUSTOMIZE_LAYOUT]",
+            .isDisabled = [] { return !getSettings().game.enableTouchControls; },
+        });
+        leftPane.register_control(customizeTouchLayout.on_pressed(
+                                      [this] { push(std::make_unique<TouchControlsEditor>()); }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("[OPEN_THE_TOUCH_CONTROLS_LAYOUT_EDITOR]");
+            });
+        config_percent_select(leftPane, rightPane, getSettings().game.touchCameraXSensitivity,
+            "[TOUCH_CAMERA_X_SENSITIVITY]",
+            "[ADJUSTS_TOUCH_CAMERA_HORIZONTAL_SENSITIVITY_APPLIES_TO_TOUCH_INPUT_ONLY]",
+            25, 400, 5, [] { return !getSettings().game.enableTouchControls; });
+        config_percent_select(leftPane, rightPane, getSettings().game.touchCameraYSensitivity,
+            "[TOUCH_CAMERA_Y_SENSITIVITY]",
+            "[ADJUSTS_TOUCH_CAMERA_VERTICAL_SENSITIVITY_APPLIES_TO_TOUCH_INPUT_ONLY]", 25,
+            400, 5, [] { return !getSettings().game.enableTouchControls; });
+#endif
+
         leftPane.add_section("[CAMERA]");
         addOption("[FREE_CAMERA]", getSettings().game.freeCamera,
             "[ENABLES_TWIN_STICK_CAMERA_CONTROL_LETTING_THE_C_STICK_MOVE_THE_CAMERA_VE]");
@@ -1108,6 +1159,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             [] { return !getSettings().game.enableMouseAim || !getSettings().game.enableMouseCamera; });
 
         leftPane.add_section("[GAMEPLAY]");
+        addOption("[MOUSE_TOUCH_IN_MENUS]", getSettings().game.enableMenuPointer,
+            "[ENABLES_MOUSE_AND_TOUCH_INPUT_FOR_SUPPORTED_IN_GAME_MENUS]");
         addOption("[INVERT_AIR_SWIM_X_AXIS]", getSettings().game.invertAirSwimX,
             "[INVERT_HORIZONTAL_MOVEMENT_WHILE_FLYING_OR_SWIMMING]");
         addOption("[INVERT_AIR_SWIM_Y_AXIS]", getSettings().game.invertAirSwimY,

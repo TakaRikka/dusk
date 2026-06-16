@@ -26,6 +26,11 @@
 
 #include "JSystem/JAudio2/JASDriverIF.h"
 
+#if TARGET_PC
+#include "dusk/menu_pointer.h"
+#include "dusk/ui/touch_controls.hpp"
+#endif
+
 typedef void (dMenu_Option_c::*initFunc)();
 static initFunc init[] = {
     &dMenu_Option_c::atten_init,
@@ -293,6 +298,10 @@ void dMenu_Option_c::_create() {
 }
 
 void dMenu_Option_c::_delete() {
+#if TARGET_PC
+    dusk::ui::set_control_override(dusk::ui::Control::Z, dusk::ui::ControlOverride::Default);
+#endif
+
     JKR_DELETE(mpString);
     mpString = NULL;
 
@@ -518,6 +527,15 @@ void dMenu_Option_c::_move() {
                 (this->*init[field_0x3ef])();
             }
         }
+
+#if TARGET_PC
+        if (field_0x3f4 == 5 && field_0x3ef != SelectType3 && field_0x3f3 == 5 &&
+            field_0x3ef != SelectType4 && field_0x3ef != SelectType5 && field_0x3ef != SelectType6 &&
+            field_0x3ef != SelectType7 && pointerConfirmSelect())
+        {
+            goto skip;
+        }
+#endif
     }
 skip:
     u8 oldValue = field_0x3ef;
@@ -1073,6 +1091,34 @@ void dMenu_Option_c::confirm_move_init() {
 void dMenu_Option_c::confirm_move_move() {
     bool leftTrigger = checkLeftTrigger();
     bool rightTrigger = checkRightTrigger();
+
+#if TARGET_PC
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
+    for (u8 i = 0; i < 2; ++i) {
+        if (!dusk::menu_pointer::hit_pane(mpYesNoSelBase_c[i], 8.0f)) {
+            continue;
+        }
+        if (field_0x3f9 != i) {
+            Z2GetAudioMgr()->seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            field_0x3fa = field_0x3f9;
+            field_0x3f9 = i;
+            yesnoSelectAnmSet();
+            field_0x3ef = SelectType6;
+            mpWarning->_move();
+            setAnimation();
+            return;
+        }
+        if (dusk::menu_pointer::consume_click()) {
+            yesNoSelectStart();
+            field_0x3ef = SelectType7;
+            dMeter2Info_set2DVibrationM();
+            mpWarning->_move();
+            setAnimation();
+            return;
+        }
+    }
+#endif
 
     if (mDoCPd_c::getTrigA(PAD_1) != 0) {
         yesNoSelectStart();
@@ -2063,6 +2109,11 @@ void dMenu_Option_c::cursorAnime(f32 i_cursorValue) {
 }
 
 void dMenu_Option_c::setZButtonString(u16 i_stringID) {
+#if TARGET_PC
+    dusk::ui::set_control_override(dusk::ui::Control::Z,
+        i_stringID != 0 ? dusk::ui::ControlOverride::Action : dusk::ui::ControlOverride::Default);
+#endif
+
     if (i_stringID == 0) {
         for (int i = 0; i < 3; i++) {
             if (mpZButtonText[i] != NULL) {
@@ -2142,7 +2193,88 @@ bool dMenu_Option_c::isRumbleSupported() {
     return JUTGamePad::sRumbleSupported >> 0x1f;
 }
 
+#if TARGET_PC
+bool dMenu_Option_c::pointerConfirmSelect() {
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
+    if (!dusk::menu_pointer::state().clicked) {
+        return false;
+    }
+
+    for (u8 i = 0; i < SelectType3; ++i) {
+        if (dusk::menu_pointer::hit_pane(mpMenuPane[i], 8.0f)) {
+            return false;
+        }
+    }
+
+    if (!dusk::menu_pointer::consume_click()) {
+        return false;
+    }
+
+    field_0x3f7 = 1;
+    field_0x3f5 = field_0x3ef;
+    field_0x3ef = SelectType4;
+    dMeter2Info_set2DVibration();
+    (this->*init[field_0x3ef])();
+    return true;
+}
+#endif
+
 bool dMenu_Option_c::dpdMenuMove() {
+#if TARGET_PC
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
+    for (u8 i = 0; i < SelectType3; ++i) {
+        if (!dusk::menu_pointer::hit_pane(mpMenuPane[i], 8.0f)) {
+            continue;
+        }
+        if (getSelectType() != i) {
+            field_0x3ef = i;
+            setCursorPos(i);
+            Z2GetAudioMgr()->seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+        }
+        if (!dusk::menu_pointer::consume_click()) {
+            return true;
+        }
+
+        switch (i) {
+        case SelectType0:
+            field_0x3e4 ^= 1;
+            field_0x3da = 5;
+            field_0x3ef = SelectType3;
+            field_0x3f5 = SelectType0;
+            Z2GetAudioMgr()->seStart(Z2SE_SY_OPTION_SWITCH, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            return true;
+        case SelectType1:
+            if (isRumbleSupported()) {
+                field_0x3ea ^= 1;
+                if (field_0x3ea != 0) {
+                    mDoCPd_c::startMotorWave(0, &field_0x3e0, JUTGamePad::CRumble::VAL_0, 0x3c);
+                }
+                field_0x3da = 5;
+                field_0x3ef = SelectType3;
+                field_0x3f5 = SelectType1;
+                Z2GetAudioMgr()->seStart(Z2SE_SY_OPTION_SWITCH, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                         -1.0f, 0);
+            }
+            return true;
+        case SelectType2:
+            if (field_0x3e9 == 0) {
+                field_0x3e9 = 2;
+            } else {
+                field_0x3e9--;
+            }
+            field_0x3da = 5;
+            mDoAud_setOutputMode(dMo_soundMode[field_0x3e9]);
+            setSoundMode(dMo_soundMode[field_0x3e9]);
+            field_0x3ef = SelectType3;
+            field_0x3f5 = SelectType2;
+            Z2GetAudioMgr()->seStart(Z2SE_SY_OPTION_SWITCH, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            return true;
+        }
+    }
+#endif
     return false;
 }
 

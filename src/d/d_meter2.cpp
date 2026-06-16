@@ -2966,7 +2966,15 @@ void dMeter2_c::alphaAnimeButtonCross() {
             field_0x190++;
         }
     } else {
+#if TARGET_PC
+        if (dusk::getSettings().game.enableTouchControls) {
+            mpMeterDraw->setAlphaButtonCrossAnimeMin();
+        } else {
+            mpMeterDraw->setAlphaButtonCrossAnimeMax();
+        }
+#else
         mpMeterDraw->setAlphaButtonCrossAnimeMax();
+#endif
 
         if (field_0x190 < 5) {
             field_0x190++;

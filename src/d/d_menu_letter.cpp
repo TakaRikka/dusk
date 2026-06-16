@@ -19,6 +19,15 @@
 
 #ifdef TARGET_PC
 #include "dusk/achievements.h"
+#include "dusk/menu_pointer.h"
+#include "dusk/ui/touch_controls.hpp"
+
+static void enable_turn_page_controls(bool enabled) {
+    const auto controlOverride =
+        enabled ? dusk::ui::ControlOverride::Action : dusk::ui::ControlOverride::Default;
+    dusk::ui::set_control_override(dusk::ui::Control::L, controlOverride);
+    dusk::ui::set_control_override(dusk::ui::Control::R, controlOverride);
+}
 #endif
 
 #if VERSION == VERSION_GCN_JPN
@@ -82,6 +91,10 @@ dMenu_Letter_c::dMenu_Letter_c(JKRExpHeap* i_heap, STControl* i_stick, CSTContro
 
 
 dMenu_Letter_c::~dMenu_Letter_c() {
+#if TARGET_PC
+    enable_turn_page_controls(false);
+#endif
+
     JKR_DELETE(mpDrawCursor);
     mpDrawCursor = NULL;
 
@@ -357,6 +370,10 @@ int dMenu_Letter_c::_open() {
 }
 
 int dMenu_Letter_c::_close() {
+#if TARGET_PC
+    enable_turn_page_controls(false);
+#endif
+
     s16 closeWindowFrame =
         g_drawHIO.mLetterSelectScreen.mCloseFrame[dMeter_drawLetterHIO_c::WINDOW_FRAME];
     field_0x368 = 0;
@@ -386,6 +403,10 @@ int dMenu_Letter_c::_close() {
 }
 
 void dMenu_Letter_c::wait_init() {
+#if TARGET_PC
+    enable_turn_page_controls(field_0x374 > 1);
+#endif
+
     setAButtonString(0x40c);
     setBButtonString(0x3f9);
 }
@@ -393,6 +414,12 @@ void dMenu_Letter_c::wait_init() {
 void dMenu_Letter_c::wait_move() {
     u8 oldIndex = mIndex;
     if (mDoGph_gInf_c::getFader()->getStatus() == 1) {
+#if TARGET_PC
+        if (pointerWait()) {
+            return;
+        }
+#endif
+
         if (mDoCPd_c::getTrigB(PAD_1) != 0) {
             mpDrawCursor->offPlayAnime(0);
             mStatus = 3;
@@ -448,8 +475,40 @@ void dMenu_Letter_c::wait_move() {
     }
 }
 
+#if TARGET_PC
+bool dMenu_Letter_c::pointerWait() {
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Collection);
+    for (u8 i = 0; i < field_0x373; ++i) {
+        if (!dusk::menu_pointer::hit_pane(mpLetterParent[i], 8.0f)) {
+            continue;
+        }
+
+        if (mIndex != i) {
+            mIndex = i;
+            changeActiveColor();
+            Z2GetAudioMgr()->seStart(Z2SE_SY_CURSOR_ITEM, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+        }
+        if (dusk::menu_pointer::consume_click()) {
+            mProcess = 3;
+            Z2GetAudioMgr()->seStart(Z2SE_SY_LETTER_OPEN, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+            dMeter2Info_set2DVibration();
+            return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+#endif
+
 
 void dMenu_Letter_c::slide_right_init() {
+#if TARGET_PC
+    enable_turn_page_controls(false);
+#endif
+
     field_0x358 = -field_0x1ec->getWidth() * mDoGph_gInf_c::getInvScale();
     field_0x35c = field_0x1ec->getWidth() IF_NOT_DUSK(* mDoGph_gInf_c::getInvScale());
     changePageLight();
@@ -467,6 +526,10 @@ void dMenu_Letter_c::slide_right_move() {
 }
 
 void dMenu_Letter_c::slide_left_init() {
+#if TARGET_PC
+    enable_turn_page_controls(false);
+#endif
+
     field_0x358 = field_0x1ec->getWidth() * mDoGph_gInf_c::getInvScale();
     field_0x35c = -field_0x1ec->getWidth() IF_NOT_DUSK(* mDoGph_gInf_c::getInvScale());
     changePageLight();
@@ -484,6 +547,10 @@ void dMenu_Letter_c::slide_left_move() {
 }
 
 void dMenu_Letter_c::read_open_init() {
+#if TARGET_PC
+    enable_turn_page_controls(false);
+#endif
+
     field_0x36a = 0;
     u8 idx = field_0x3ac[field_0x36f * 6 + mIndex] - 1;
     field_0x3e3 = 1;

@@ -138,7 +138,7 @@
             NOD_PREBUILT = nod;
             CXXOPTS = pkgs.cxxopts.src;
             JSON = pkgs.nlohmann_json.src;
-            XXHASH = pkgs.xxHash.src;
+            XXHASH = pkgs.xxhash.src;
             ZSTD = pkgs.zstd.src;
             FMT = pkgs.fetchzip {
               url = "https://github.com/fmtlib/fmt/archive/refs/tags/11.1.4.tar.gz";
@@ -194,7 +194,7 @@
                   pkgs.zstd
                   pkgs.cxxopts
                   pkgs.nlohmann_json
-                  pkgs.xxHash
+                  pkgs.xxhash
                   pkgs.abseil-cpp
                   pkgs.zlib
                   pkgs.libpng

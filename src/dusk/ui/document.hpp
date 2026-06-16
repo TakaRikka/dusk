@@ -7,7 +7,7 @@ namespace dusk::ui {
 
 class Document {
 public:
-    Document(const Rml::String& source);
+    explicit Document(const Rml::String& source, bool passive = false);
     virtual ~Document();
 
     Document(const Document&) = delete;
@@ -21,7 +21,13 @@ public:
 
     void listen(Rml::Element* element, Rml::EventId event, ScopedEventListener::Callback callback,
         bool capture = false);
+    void listen(Rml::Element* element, const Rml::String& event,
+        ScopedEventListener::Callback callback, bool capture = false);
     void listen(Rml::EventId event, ScopedEventListener::Callback callback, bool capture = false) {
+        listen(mDocument, event, std::move(callback), capture);
+    }
+    void listen(
+        const Rml::String& event, ScopedEventListener::Callback callback, bool capture = false) {
         listen(mDocument, event, std::move(callback), capture);
     }
     void toggle() {
@@ -43,6 +49,8 @@ public:
     bool pending_close() const { return mPendingClose; }
     bool closed() const { return mClosed; }
 
+    bool handle_nav_event(Rml::Event& event);
+
 protected:
     virtual bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 
@@ -50,6 +58,7 @@ protected:
     std::vector<std::unique_ptr<ScopedEventListener> > mListeners;
     bool mPendingClose = false;
     bool mClosed = false;
+    bool mPassive = false;
 };
 
 }  // namespace dusk::ui
