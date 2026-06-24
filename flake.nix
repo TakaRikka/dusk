@@ -269,6 +269,12 @@
                       runHook postInstall
                     '';
 
+                postFixup = lib.optionalString (!isDarwin) ''
+                  patchelf \
+                    --add-needed "${pkgs.vulkan-loader}/lib/libvulkan.so" \
+                    $out/bin/dusklight
+                '';
+
                 dontStrip = true;
 
                 meta = {
