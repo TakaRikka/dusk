@@ -28,7 +28,20 @@ You must dump your own copy of the game, please see [this article](https://wiki.
 
 Currently, only the GameCube USA and EUR releases are supported. Support for other versions of the game is planned in the future.
 
-### 2. Download [Dusklight](https://github.com/TwilitRealm/dusklight/releases)
+### 2. Download Dusklight
+
+**Windows / macOS / Linux**
+
+Download the latest [release](https://github.com/TwilitRealm/dusklight/releases) .zip file for your platform
+
+**macOS**
+
+- Requires MacOS version Big Sur (11.0) or later.
+- Dusklight can alternatively be installed via Homebrew with the following command
+
+    ```sh
+    brew install --cask dusklight
+    ```
 
 ### 3. Setup the game
 **Windows / macOS / Linux**
