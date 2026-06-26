@@ -35,7 +35,7 @@ static void CreateCallbackFat(s32 chan, s32 result) {
         card->fileInfo->offset = 0;
         card->fileInfo->iBlock = ent->startBlock;
         // Use system_clock to report time on saves in order to circumvent sleep mode desyncs.
-        ent->time = OSTicksToSeconds(chrono::system_clock::now());
+        ent->time = chrono::system_clock::now();
         result = __CARDUpdateDir(chan, callback);
         if (result < 0) {
             goto after;
