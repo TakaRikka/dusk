@@ -34,7 +34,8 @@ static void CreateCallbackFat(s32 chan, s32 result) {
         CARDSetIconSpeed(ent, 0, CARD_STAT_SPEED_FAST);
         card->fileInfo->offset = 0;
         card->fileInfo->iBlock = ent->startBlock;
-        ent->time = OSTicksToSeconds(OSGetTime());
+        // Use system_clock to report time on saves in order to circumvent sleep mode desyncs.
+        ent->time = OSTicksToSeconds(chrono::system_clock::now());
         result = __CARDUpdateDir(chan, callback);
         if (result < 0) {
             goto after;
