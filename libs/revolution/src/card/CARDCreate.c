@@ -1,5 +1,5 @@
 #include <revolution/card.h>
-
+#include <chrono>
 #include "__card.h"
 
 // prototypes
@@ -34,7 +34,7 @@ static void CreateCallbackFat(s32 chan, s32 result) {
         CARDSetIconSpeed(ent, 0, CARD_STAT_SPEED_FAST);
         card->fileInfo->offset = 0;
         card->fileInfo->iBlock = ent->startBlock;
-        ent->time = OSTicksToSeconds(OSGetTime());
+        ent->time = chrono::system_clock::now();
         result = __CARDUpdateDir(chan, callback);
         if (result < 0) {
             goto after;
