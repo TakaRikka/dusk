@@ -134,7 +134,7 @@ dOvlpFd3_c::dOvlpFd3_c() {
 
     mTimer = 2;
     field_0x11f = dComIfGp_getNextStageWipeSpeed();
-    DuskLog.debug("Wipe speed: {}\n", field_0x11f);
+    DuskLog.debug("Wipe speed: {}", field_0x11f);
     if (field_0x11f == 0) {
         field_0x11f = 1;
     }
