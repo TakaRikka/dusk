@@ -11,6 +11,7 @@
 #include "d/d_com_inf_game.h"
 
 #if TARGET_PC
+#include <aurora/texture.hpp>
 #include "dusk/dvd_asset.hpp"
 #include "dusk/frame_interpolation.h"
 
@@ -228,7 +229,7 @@ void daMant_packet_c::draw() {
         textureObjsInitialized = true;
     }
 
-    l_Egnd_mantTEX_hasReplacement = GXIsTexObjReplaced(&mainTexObj, &tlutObj) != GX_FALSE;
+    l_Egnd_mantTEX_hasReplacement = aurora::texture::has_replacement(&mainTexObj, &tlutObj);
 #else
     GXTlutObj GStack_80;
     GXInitTlutObj(&GStack_80, lut, GX_TL_RGB5A3, 0x100);
