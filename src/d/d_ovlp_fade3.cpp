@@ -140,7 +140,7 @@ dOvlpFd3_c::dOvlpFd3_c() {
     }
 
     dCam_getBody()->Stop();
-    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1));
+    mDoGph_gInf_c::startFadeOut((field_0x11f >> 1) + (dusk::getSettings().game.fasterSceneTransitions.getValue() ? 0 : 90));
 }
 
 void dOvlpFd3_c::execFirstSnap() {
@@ -169,8 +169,10 @@ void dOvlpFd3_c::execFadeOut() {
 
     if (mTimer < 0) {
         if (++mTimer == 0) {
-            // mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
-            // mTimer = XREG_S(2) + 90;
+            if (!dusk::getSettings().game.fasterSceneTransitions.getValue()) {
+                mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
+                mTimer = XREG_S(2) + 90;
+            }
             mDoAud_setFadeOutStart(0);
         }
     } else {
