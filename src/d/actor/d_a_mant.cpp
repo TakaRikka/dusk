@@ -226,10 +226,9 @@ void daMant_packet_c::draw() {
         GXInitTexObjCI(
             &undersideTexObj, l_Egnd_mantTEX_U, 0x80, 0x80, GX_TF_C8, GX_CLAMP, GX_CLAMP, 0, 0);
         GXInitTexObjLOD(&undersideTexObj, GX_LINEAR, GX_LINEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
+        l_Egnd_mantTEX_hasReplacement = aurora::texture::has_replacement(&mainTexObj, &tlutObj);
         textureObjsInitialized = true;
     }
-
-    l_Egnd_mantTEX_hasReplacement = aurora::texture::has_replacement(&mainTexObj, &tlutObj);
 #else
     GXTlutObj GStack_80;
     GXInitTlutObj(&GStack_80, lut, GX_TL_RGB5A3, 0x100);
