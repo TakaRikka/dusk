@@ -12,6 +12,8 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_graphic.h"
 
+#include "dusk/logging.h"
+
 void dDlst_snapShot_c::draw() {
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
 #if TARGET_PC
@@ -132,12 +134,13 @@ dOvlpFd3_c::dOvlpFd3_c() {
 
     mTimer = 2;
     field_0x11f = dComIfGp_getNextStageWipeSpeed();
+    DuskLog.debug("Wipe speed: {}\n", field_0x11f);
     if (field_0x11f == 0) {
         field_0x11f = 1;
     }
 
     dCam_getBody()->Stop();
-    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + 90);
+    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1));
 }
 
 void dOvlpFd3_c::execFirstSnap() {
@@ -166,8 +169,8 @@ void dOvlpFd3_c::execFadeOut() {
 
     if (mTimer < 0) {
         if (++mTimer == 0) {
-            mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
-            mTimer = XREG_S(2) + 90;
+            // mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
+            // mTimer = XREG_S(2) + 90;
             mDoAud_setFadeOutStart(0);
         }
     } else {
