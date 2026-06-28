@@ -1418,8 +1418,8 @@ static int phase_2(dScnPly_c* i_this) {
 
 static int phase_3(dScnPly_c* i_this) {
     DuskLog.debug("777777777777777777777777777777\n");
-    if ((i_this->sceneCommand != NULL && !i_this->sceneCommand->sync()))
-    // || mDoAud_check1stDynamicWave())  // <------ THIS FUNC IS THE ISSUE OR AT LEAST PART OF IT
+    if ((i_this->sceneCommand != NULL && !i_this->sceneCommand->sync()) ||
+        mDoAud_check1stDynamicWave())
     {
         DuskLog.debug("waiting1......\n");
         return cPhs_INIT_e;
