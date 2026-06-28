@@ -75,7 +75,15 @@ void Z2SceneMgr::setFadeOutStart(u8 fadeType) {
     Z2GetSeqMgr()->bgmAllMute(33,  3.0f / 10.0f);
     Z2GetSeMgr()->seMoveVolumeAll(0.0f, 33);
     Z2GetSeqMgr()->setBattleBgmOff(true);
-    load1stWait = dusk::getSettings().game.fasterSceneTransitions.getValue() ? 1 : 40;
+    #if TARGET_PC
+    if (dusk::getSettings().game.fasterSceneTransitions) {
+        load1stWait = 1;
+    } else {
+        load1stWait = 40;
+    }
+    #else
+    load1stWait = 40;
+    #endif
     timer = -1;
 }
 
@@ -1777,7 +1785,15 @@ void Z2SceneMgr::_load1stWaveInner_1() {
     if (field_0x1a && Z2GetSeqMgr()->checkBgmPlaying()) {
         OS_REPORT("[Z2SceneMgr::load1stDynamicWave]bgm StopCount = %d\n", 15);
         Z2GetSeqMgr()->bgmStop(15, 0);
-        load1stWait = dusk::getSettings().game.fasterSceneTransitions.getValue() ? -1 : -15;
+        #if TARGET_PC
+        if (dusk::getSettings().game.fasterSceneTransitions) {
+            load1stWait = -1;
+        } else {
+            load1stWait = -15;
+        }
+        #else
+        load1stWait = -15;
+        #endif
     } else {
         _load1stWaveInner_2();
     }

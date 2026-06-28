@@ -12,8 +12,6 @@
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_graphic.h"
 
-#include "dusk/logging.h"
-
 void dDlst_snapShot_c::draw() {
     GXSetTexCopySrc(0, 0, FB_WIDTH, FB_HEIGHT);
 #if TARGET_PC
@@ -134,13 +132,20 @@ dOvlpFd3_c::dOvlpFd3_c() {
 
     mTimer = 2;
     field_0x11f = dComIfGp_getNextStageWipeSpeed();
-    DuskLog.debug("Wipe speed: {}", field_0x11f);
     if (field_0x11f == 0) {
         field_0x11f = 1;
     }
 
     dCam_getBody()->Stop();
-    mDoGph_gInf_c::startFadeOut((field_0x11f >> 1) + (dusk::getSettings().game.fasterSceneTransitions.getValue() ? 0 : 90));
+    #if TARGET_PC
+    int time = 90;
+    if (dusk::getSettings().game.fasterSceneTransitions) {
+        time = 0;
+    }
+    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + time);
+    #else
+    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + 90);
+    #endif
 }
 
 void dOvlpFd3_c::execFirstSnap() {
@@ -169,10 +174,15 @@ void dOvlpFd3_c::execFadeOut() {
 
     if (mTimer < 0) {
         if (++mTimer == 0) {
-            if (!dusk::getSettings().game.fasterSceneTransitions.getValue()) {
+            #if TARGET_PC
+            if (!dusk::getSettings().game.fasterSceneTransitions) {
                 mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
                 mTimer = XREG_S(2) + 90;
             }
+            #else
+            mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
+            mTimer = XREG_S(2) + 90;
+            #endif  
             mDoAud_setFadeOutStart(0);
         }
     } else {
