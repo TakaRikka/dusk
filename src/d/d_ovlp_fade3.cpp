@@ -175,14 +175,12 @@ void dOvlpFd3_c::execFadeOut() {
     if (mTimer < 0) {
         if (++mTimer == 0) {
             #if TARGET_PC
-            if (!dusk::getSettings().game.fasterSceneTransitions) {
+            if (!dusk::getSettings().game.fastTransitions)
+            #endif
+            {
                 mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
                 mTimer = XREG_S(2) + 90;
             }
-            #else
-            mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
-            mTimer = XREG_S(2) + 90;
-            #endif  
             mDoAud_setFadeOutStart(0);
         }
     } else {
