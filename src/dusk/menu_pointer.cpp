@@ -314,7 +314,7 @@ void end_game_frame() noexcept {
 }
 
 void begin_context(Context context) noexcept {
-    if (context == Context::None) {
+    if (context == Context::None || !enabled()) {
         return;
     }
 
