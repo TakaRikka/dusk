@@ -427,13 +427,14 @@ void dMenu_Fmap2DBack_c::draw() {
 
         mpPointParent->setAlphaRate(mArrowAlpha * mSpotTextureFadeAlpha);
 
-        #ifdef TARGET_PC
+        f32 drawX = mArrowPos2DX + mTransX;
+#ifdef TARGET_PC
         if (dusk::getSettings().game.enableMirrorMode) {
-            mArrowPos2DX = getMirrorPosX(mArrowPos2DX,0.0f);
+            drawX = getMirrorPosX(drawX, 0.0f);
         }
-        #endif
+#endif
 
-        mpPointParent->translate(mArrowPos2DX + mTransX, mArrowPos2DY + mTransZ);
+        mpPointParent->translate(drawX, mArrowPos2DY + mTransZ);
         mpPointScreen->draw(0.0f, 0.0f, grafPort);
     }
 
@@ -751,7 +752,7 @@ void dMenu_Fmap2DBack_c::zoomMapCalc(f32 i_zoom) {
         f32 tmp = (mRegionMinMapY[mRegionCursor] + mRegionMapSizeY[mRegionCursor] * 0.5f) - dVar11;
 
         f32 tmp2 = (dVar12 + (i_zoom * (centerX - dVar12)));
-        f32 tmp2_ = (dVar11 + (i_zoom * (centerY - dVar11)));  
+        f32 tmp2_ = (dVar11 + (i_zoom * (centerY - dVar11)));
 
         field_0xf0c[mRegionCursor] =
             ((tmp2 + (tmp3 * mZoom)) - mRegionMapSizeX[mRegionCursor] * mZoom * 0.5f) -
