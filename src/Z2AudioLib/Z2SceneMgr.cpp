@@ -76,7 +76,7 @@ void Z2SceneMgr::setFadeOutStart(u8 fadeType) {
     Z2GetSeMgr()->seMoveVolumeAll(0.0f, 33);
     Z2GetSeqMgr()->setBattleBgmOff(true);
     #if TARGET_PC
-    if (dusk::getSettings().game.fasterSceneTransitions) {
+    if (dusk::getSettings().game.fastTransitions) {
         load1stWait = 1;
     } else {
         load1stWait = 40;
@@ -1786,7 +1786,7 @@ void Z2SceneMgr::_load1stWaveInner_1() {
         OS_REPORT("[Z2SceneMgr::load1stDynamicWave]bgm StopCount = %d\n", 15);
         Z2GetSeqMgr()->bgmStop(15, 0);
         #if TARGET_PC
-        if (dusk::getSettings().game.fasterSceneTransitions) {
+        if (dusk::getSettings().game.fastTransitions) {
             load1stWait = -1;
         } else {
             load1stWait = -15;

@@ -139,7 +139,7 @@ dOvlpFd3_c::dOvlpFd3_c() {
     dCam_getBody()->Stop();
     #if TARGET_PC
     int time = 90;
-    if (dusk::getSettings().game.fasterSceneTransitions) {
+    if (dusk::getSettings().game.fastTransitions) {
         time = 0;
     }
     mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + time);
