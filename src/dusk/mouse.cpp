@@ -1,14 +1,14 @@
 #include "dusk/mouse.h"
+#include "d/actor/d_a_alink.h"
+#include "d/d_com_inf_game.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
-#include "d/actor/d_a_alink.h"
-#include "d/d_com_inf_game.h"
 
-#include <aurora/lib/window.hpp>
-#include <imgui.h>
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_video.h>
+#include <aurora/lib/window.hpp>
+#include <imgui.h>
 
 #include <chrono>
 
@@ -19,9 +19,9 @@ using Clock = std::chrono::steady_clock;
 constexpr float kMousePixelToRad = 0.0025f;
 constexpr auto kCursorIdleDuration = std::chrono::seconds(1);
 
-float s_aim_yaw_rad      = 0.0f;
-float s_aim_pitch_rad    = 0.0f;
-float s_camera_yaw_rad   = 0.0f;
+float s_aim_yaw_rad = 0.0f;
+float s_aim_pitch_rad = 0.0f;
+float s_camera_yaw_rad = 0.0f;
 float s_camera_pitch_rad = 0.0f;
 Clock::time_point s_last_cursor_motion = Clock::now();
 
@@ -50,8 +50,14 @@ bool is_window_focused(SDL_Window* window) {
     return (SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0;
 }
 
+bool imgui_windows_visible() {
+    return ImGui::GetIO().MetricsRenderWindows > 0;
+}
+
 bool should_capture_mouse(SDL_Window* window) {
-    if (window == nullptr || ui::any_document_visible() || menu_pointer::active()) {
+    if (window == nullptr || ui::any_document_visible() || imgui_windows_visible() ||
+        menu_pointer::active())
+    {
         return false;
     }
     return want_mouse_capture() && is_window_focused(window);
@@ -132,6 +138,9 @@ bool should_show_cursor(bool captured) {
         return false;
     }
     if (ui::any_document_visible()) {
+        return true;
+    }
+    if (imgui_windows_visible()) {
         return true;
     }
     if (menu_pointer::enabled() && menu_pointer::active()) {
