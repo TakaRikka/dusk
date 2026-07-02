@@ -2727,6 +2727,10 @@ void daAlink_c::setHatAngle() {
         }
 
         *temp_r29 = cLib_minMaxLimit<s16>((*temp_r29 + *sp2C), -0x3800, 0x3800);
+        // Keep Kokiri hat tip clear of the body so it doesn't clip through the back shield
+        if (dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_KOKIRI_e) {
+            *temp_r29 = cLib_minMaxLimit<s16>(*temp_r29, -0x1800, 0x3800);
+        }
         sp10 = cLib_minMaxLimit<s16>(cM_atan2s(-((sp9C.x * var_f28) - (sp9C.z * var_f29)), JMAFastSqrt(SQUARE(temp_f27) + SQUARE(sp9C.y))), -0x2800, 0x2800);
 
         if (checkEndResetFlg0(ERFLG0_UNK_800000)) {
@@ -5945,7 +5949,9 @@ void daAlink_c::setItemMatrix(int param_0) {
             }
         } else {
             mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30b6));
-            mDoMtx_stack_c::transM(4.2f, -4.4f, -20.0f);
+            // Kokiri hat tip extends further back; shift shield lower to avoid clipping
+            float shieldBackY = dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_KOKIRI_e ? -8.5f : -4.4f;
+            mDoMtx_stack_c::transM(4.2f, shieldBackY, -20.0f);
             mDoMtx_stack_c::XYZrotM(cM_deg2s(91.0f), cM_deg2s(57.0f), cM_deg2s(180.0f));
             mShieldModel->setBaseTRMtx(mDoMtx_stack_c::get());
 

@@ -12,6 +12,7 @@ enum class ActionBinds {
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
     ROLL,
+    TRANSFORM,
     COUNT,
 };
 
