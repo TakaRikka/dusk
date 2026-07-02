@@ -249,12 +249,12 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_PAUSED:
                 dusk::audio::SetPaused(true);
-                dusk::mouse::onFocusLost();
+                dusk::mouse::on_focus_lost();
                 break;
             case AURORA_UNPAUSED:
                 dusk::audio::SetPaused(false);
                 dusk::game_clock::reset_frame_timer();
-                dusk::mouse::onFocusGained();
+                dusk::mouse::on_focus_gained();
                 break;
             case AURORA_SDL_EVENT:
                 dusk::mouse::handle_event(event->sdl);

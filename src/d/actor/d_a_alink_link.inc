@@ -156,7 +156,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
             f32 final_yaw = 0.f;
             f32 final_pitch = 0.f;
             if (dusk::getSettings().game.enableMouseAim) {
-                dusk::mouse::getAimDeltas(final_yaw, final_pitch);
+                dusk::mouse::get_aim_deltas(final_yaw, final_pitch);
             }
             if (dusk::getSettings().game.enableGyroAim) {
                 f32 gyro_yaw = 0.f;
