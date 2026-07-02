@@ -715,7 +715,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
             }
 
             IsGameLaunched = true;
-            hide(true);
+            pop(false);
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 

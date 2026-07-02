@@ -14,6 +14,7 @@
 #include "dusk/action_bindings.h"
 #include "dusk/gyro.h"
 #include "dusk/mouse.h"
+#include "dusk/touch_camera.h"
 #endif
 
 bool daAlink_c::checkNoSubjectModeCamera() {
@@ -121,18 +122,11 @@ BOOL daAlink_c::setBodyAngleToCamera() {
                 var_f31 /= dComIfGp_getCameraZoomScale(field_0x317c);
             }
 
-#if TARGET_PC
-            if (dusk::getSettings().game.enableMouseAim && checkAimContext()) {
-                sp8 = mBodyAngle.x;
-            } else
-#endif
-            {
-                shape_angle.y = shape_angle.y + (var_f31 * cM_ssin(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonXAxis ? -1.0f : 1.0f)));
-                sp8 = mBodyAngle.x + (var_f31 * cM_scos(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonYAxis ? -1.0f : 1.0f)));
+            shape_angle.y = shape_angle.y + (var_f31 * cM_ssin(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonXAxis ? -1.0f : 1.0f)));
+            sp8 = mBodyAngle.x + (var_f31 * cM_scos(mStickAngle) IF_DUSK(* (dusk::getSettings().game.invertFirstPersonYAxis ? -1.0f : 1.0f)));
 
-                if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
-                    sp8 = mBodyAngle.x;
-                }
+            if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
+                sp8 = mBodyAngle.x;
             }
         } else {
             sp8 = mBodyAngle.x;
@@ -141,7 +135,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
 #if TARGET_PC
         if ((dusk::getSettings().game.enableGyroAim ||
              dusk::getSettings().game.enableMouseAim) &&
-             checkAimContext())
+             checkAimInputContext())
         {
             f32 gyro_scale = 1.0f;
             if (checkWolfEyeUp()) {
@@ -155,7 +149,7 @@ BOOL daAlink_c::setBodyAngleToCamera() {
             f32 final_yaw = 0.f;
             f32 final_pitch = 0.f;
             if (dusk::getSettings().game.enableMouseAim) {
-                dusk::mouse::getAimDeltas(final_yaw, final_pitch);
+                dusk::mouse::get_aim_deltas(final_yaw, final_pitch);
             }
             if (dusk::getSettings().game.enableGyroAim) {
                 f32 gyro_yaw = 0.f;
@@ -170,6 +164,32 @@ BOOL daAlink_c::setBodyAngleToCamera() {
 
             if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
                 sp8 = mBodyAngle.x;
+            }
+        }
+
+        if (dusk::getSettings().game.enableTouchControls && checkAimInputContext()) {
+            f32 touchYawDp = 0.0f;
+            f32 touchPitchDp = 0.0f;
+            if (dusk::touch_camera::consume_delta(touchYawDp, touchPitchDp)) {
+                f32 scale = 1.0f;
+                if (checkWolfEyeUp()) {
+                    scale *= 0.6f;
+                }
+                if (dComIfGp_checkPlayerStatus0(0, 0x200000)) {
+                    scale /= dComIfGp_getCameraZoomScale(field_0x317c);
+                }
+
+                const f32 yawDeg = -touchYawDp * dusk::touch_camera::YAW_DEGREES_PER_DP * scale *
+                                   dusk::getSettings().game.touchCameraXSensitivity;
+                const f32 pitchDeg = touchPitchDp * dusk::touch_camera::PITCH_DEGREES_PER_DP *
+                                     scale * dusk::getSettings().game.touchCameraYSensitivity;
+
+                shape_angle.y = shape_angle.y + cM_deg2s(yawDeg);
+                sp8 = sp8 + cM_deg2s(pitchDeg);
+
+                if (checkNotItemSinkLimit() && sp8 > 0 && sp8 > mBodyAngle.x) {
+                    sp8 = mBodyAngle.x;
+                }
             }
         }
 #endif

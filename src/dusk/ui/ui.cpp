@@ -1,7 +1,11 @@
 #include "ui.hpp"
 
 #include <RmlUi/Core.h>
-#include <SDL3/SDL_filesystem.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_joystick.h>
+#include <SDL3/SDL_power.h>
+#include <SDL3/SDL_video.h>
 #include <absl/container/flat_hash_set.h>
 #include <aurora/rmlui.hpp>
 #include <fmt/format.h>
@@ -11,11 +15,12 @@
 #include <ranges>
 
 #include "aurora/lib/window.hpp"
+#include "dusk/config.hpp"
 #include "dusk/io.hpp"
 #include "input.hpp"
+#include "icon_provider.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
-#include "dusk/config.hpp"
 
 namespace dusk::ui {
 namespace {
@@ -56,11 +61,13 @@ bool initialize() noexcept {
     load_font("MaterialSymbolsRounded-Regular.ttf");
     load_font("NotoMono-Regular.ttf");
 
+    register_icon_texture_provider();
     sInitialized = true;
     return true;
 }
 
 void shutdown() noexcept {
+    unregister_icon_texture_provider();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();
@@ -188,9 +195,13 @@ Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) 
     return ret;
 }
 
-void show_top_document() noexcept {
+void focus_top_document(bool show) noexcept {
     if (auto* doc = top_document()) {
-        doc->show();
+        if (show) {
+            doc->show();
+        } else {
+            doc->focus();
+        }
     }
     input::sync_input_block();
 }
@@ -203,13 +214,13 @@ bool any_document_visible() noexcept {
 bool is_prelaunch_open() noexcept {
     return std::any_of(sDocumentStack.begin(), sDocumentStack.end(), [](const auto& doc) {
         const auto* prelaunch = dynamic_cast<const Prelaunch*>(doc.get());
-        return prelaunch != nullptr && !prelaunch->pending_close() && !prelaunch->closed();
+        return prelaunch != nullptr && prelaunch->active();
     });
 }
 
 Document* top_document() noexcept {
     for (auto& doc : std::views::reverse(sDocumentStack)) {
-        if (!doc->closed() && !doc->pending_close()) {
+        if (doc->active()) {
             return doc.get();
         }
     }
@@ -252,7 +263,7 @@ void update() noexcept {
                                   context->GetFocusElement() == context->GetRootElement()))
     {
         for (auto& doc : std::views::reverse(sDocumentStack)) {
-            if (!doc->closed() && !doc->pending_close() && doc->focus()) {
+            if (doc->active() && doc->focus()) {
                 break;
             }
         }

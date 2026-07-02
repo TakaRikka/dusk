@@ -80,6 +80,9 @@ public:
     void setBButtonString(u16);
     bool isRumbleSupported();
     bool dpdMenuMove();
+#if TARGET_PC
+    bool pointerConfirmSelect();
+#endif
     void paneResize(u64);
     void initialize();
     void yesnoMenuMoveAnmInitSet(int, int);

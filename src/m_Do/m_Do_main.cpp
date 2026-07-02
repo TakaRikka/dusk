@@ -47,6 +47,7 @@
 #include <system_error>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/android_frame_rate.hpp"
 #include "dusk/app_info.hpp"
 #include "dusk/crash_handler.h"
 #include "dusk/crash_reporting.h"
@@ -65,6 +66,7 @@
 #include "dusk/ui/overlay.hpp"
 #include "dusk/ui/prelaunch.hpp"
 #include "dusk/ui/preset.hpp"
+#include "dusk/ui/touch_controls.hpp"
 #include "dusk/ui/ui.hpp"
 #include "version.h"
 
@@ -247,12 +249,12 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_PAUSED:
                 dusk::audio::SetPaused(true);
-                dusk::mouse::onFocusLost();
+                dusk::mouse::on_focus_lost();
                 break;
             case AURORA_UNPAUSED:
                 dusk::audio::SetPaused(false);
                 dusk::game_clock::reset_frame_timer();
-                dusk::mouse::onFocusGained();
+                dusk::mouse::on_focus_gained();
                 break;
             case AURORA_SDL_EVENT:
                 dusk::mouse::handle_event(event->sdl);
@@ -332,11 +334,21 @@ void main01(void) {
             mDoAud_Execute();
         }
 
+        aurora_end_frame();
+
+        FrameMark;
+
+#ifdef DUSK_DISCORD
+        dusk::discord::run_callbacks();
+        dusk::discord::update_presence();
+#endif
+
         static Limiter main_loop_limiter;
         static double last_fps_setting = 0.0;
         static Limiter::duration_t target_ns = 0;
 
         if (dusk::getSettings().game.enableFrameInterpolation.getValue() == dusk::FrameInterpMode::Capped && !dusk::getTransientSettings().skipFrameRateLimit) {
+            ZoneScopedN("Frame limiter");
             double current_fps = dusk::getSettings().video.maxFrameRate.getValue();
             if (current_fps != last_fps_setting) {
                 last_fps_setting = current_fps;
@@ -348,16 +360,6 @@ void main01(void) {
         } else {
             main_loop_limiter.Reset();
         }
-
-        aurora_end_frame();
-
-
-        FrameMark;
-
-#ifdef DUSK_DISCORD
-        dusk::discord::run_callbacks();
-        dusk::discord::update_presence();
-#endif
     } while (dusk::IsRunning);
 
     exit:;
@@ -554,6 +556,7 @@ int game_main(int argc, char* argv[]) {
         dusk::resetForSpeedrunMode();
     }
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
+    dusk::android::update_surface_frame_rate();
     dusk::crash_reporting::initialize();
     dusk::crash_handler::install();
     // TODO: How to handle this?
@@ -663,6 +666,7 @@ int game_main(int argc, char* argv[]) {
     dusk::texture_replacements::reload();
     dusk::ui::initialize();
     dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
+    dusk::ui::push_document(std::make_unique<dusk::ui::TouchControls>(), false, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);
 
     // Invalidate a bad saved isoPath so that Dusklight can't get blocked from starting up.

@@ -1,0 +1,339 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    color: rgba(248, 244, 232, 90%);
+    z-index: 1;
+    filter: opacity(0);
+    transition: filter 0.2s linear-in-out;
+}
+
+body[open] {
+    filter: opacity(1);
+}
+
+body:not([open]) {
+    pointer-events: none;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    decorator: none;
+    padding: 0;
+    border: 1dp rgba(255, 255, 255, 22%);
+    background-color: rgba(22, 24, 28, 48%);
+    color: rgba(248, 244, 232, 90%);
+    text-align: center;
+    /* backdrop-filter: blur(7dp); */
+    /* box-shadow: 0 6dp 18dp rgba(0, 0, 0, 28%); */
+    transform-origin: center;
+    transition: background-color border-color filter transform 0.08s linear-in-out,
+                opacity 0.2s linear-in-out;
+}
+
+button.pressed,
+button.active {
+    background-color: rgba(63, 78, 90, 68%);
+    border-color: rgba(255, 255, 255, 48%);
+    filter: brightness(1.18);
+}
+
+button:hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+button span {
+    display: block;
+    line-height: 1;
+}
+
+button icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+button icon glyph {
+    display: block;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-size: 24dp;
+    line-height: 1;
+}
+
+.midna-icon,
+.item-icon,
+.item-count,
+.oil-meter {
+    display: none;
+}
+
+.midna-icon.visible,
+.item-icon.visible,
+.item-count.visible,
+.oil-meter.visible {
+    display: block;
+}
+
+.control {
+    position: absolute;
+}
+
+.trigger-l.active {
+    background-color: rgba(57, 116, 133, 74%);
+    border-color: rgba(128, 222, 234, 72%);
+}
+
+.trigger,
+.skip {
+    border-radius: 23dp;
+}
+
+.trigger {
+    font-size: 22dp;
+}
+
+.button-z {
+    background-color: rgba(118, 79, 158, 58%);
+    border-color: rgba(203, 170, 255, 36%);
+}
+
+.midna-icon {
+    position: absolute;
+    left: 9dp;
+    top: -1dp;
+    height: 48dp;
+}
+
+.button-z.has-icon span,
+.face.has-item span {
+    position: absolute;
+    font-size: 13dp;
+    line-height: 1;
+}
+
+.button-z.has-icon span {
+    right: 9dp;
+    bottom: 7dp;
+}
+
+.button-z.pressed {
+    background-color: rgba(139, 91, 187, 82%);
+    border-color: rgba(220, 194, 255, 70%);
+}
+
+action-bar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    border: 1dp rgba(255, 255, 255, 22%);
+    border-radius: 23dp;
+    background-color: rgba(22, 24, 28, 48%);
+    /* backdrop-filter: blur(7dp); */
+    /* box-shadow: 0 -6dp 18dp rgba(0, 0, 0, 28%); */
+    overflow: hidden;
+    opacity: 1;
+    transform-origin: center;
+    transition: opacity 0.2s linear-in-out;
+}
+
+action-bar:hidden,
+action-bar:hidden button,
+action-bar:hidden separator {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.utility {
+    position: relative;
+    flex: 1 1 auto;
+    width: 56dp;
+    height: 44dp;
+    margin: 0;
+    border-width: 0dp;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.utility,
+.skip {
+    opacity: 0.55;
+}
+
+.utility.pressed {
+    background-color: rgba(63, 78, 90, 68%);
+}
+
+.utility.pressed,
+.skip.pressed {
+    opacity: 1;
+}
+
+.skip {
+    z-index: 1;
+    border-color: rgba(255, 255, 255, 36%);
+}
+
+separator {
+    display: block;
+    flex: 0 0 1dp;
+    width: 1dp;
+    height: 24dp;
+    background-color: rgba(255, 255, 255, 18%);
+    opacity: 1;
+    transition: opacity 0.2s linear-in-out;
+}
+
+.face {
+    position: absolute;
+    border-radius: 29dp;
+    font-size: 24dp;
+    overflow: visible;
+}
+
+.item-icon {
+    width: auto;
+    height: auto;
+    max-width: 76%;
+    max-height: 76%;
+}
+
+.item-count {
+    position: absolute;
+    left: 6dp;
+    bottom: 5dp;
+    min-width: 17dp;
+    height: 15dp;
+    padding: 1dp 3dp;
+    border-radius: 7dp;
+    background-color: rgba(0, 0, 0, 52%);
+    color: rgba(255, 255, 255, 92%);
+    font-size: 12dp;
+    line-height: 13dp;
+    text-align: center;
+}
+
+.oil-meter {
+    position: absolute;
+    left: 12dp;
+    bottom: -5dp;
+    width: 34dp;
+    height: 8dp;
+    padding: 2dp;
+    border: 1dp rgba(42, 32, 18, 82%);
+    border-radius: 4dp;
+    background-color: rgba(18, 14, 10, 70%);
+    /* box-shadow: 0 2dp 6dp rgba(0, 0, 0, 35%); */
+}
+
+oil-fill {
+    display: block;
+    width: 0%;
+    height: 100%;
+    border-radius: 2dp;
+    background-color: rgb(255, 232, 74);
+}
+
+.face.has-item span {
+    right: 6dp;
+    bottom: 6dp;
+    color: rgba(255, 255, 255, 88%);
+}
+
+.face.a {
+    border-radius: 37dp;
+    font-size: 31dp;
+    background-color: rgba(34, 112, 123, 62%);
+}
+
+.face.b {
+    background-color: rgba(161, 61, 66, 58%);
+}
+
+.face.x {
+    background-color: rgba(83, 115, 151, 56%);
+}
+
+.face.y {
+    background-color: rgba(113, 91, 150, 54%);
+}
+
+button.control.docked-top,
+action-bar.docked-top {
+    border-top-width: 0dp;
+    border-top-left-radius: 0dp;
+    border-top-right-radius: 0dp;
+}
+
+button.control.docked-bottom,
+action-bar.docked-bottom {
+    border-bottom-width: 0dp;
+    border-bottom-left-radius: 0dp;
+    border-bottom-right-radius: 0dp;
+}
+
+button.control.docked-left,
+action-bar.docked-left {
+    border-left-width: 0dp;
+    border-top-left-radius: 0dp;
+    border-bottom-left-radius: 0dp;
+}
+
+button.control.docked-right,
+action-bar.docked-right {
+    border-right-width: 0dp;
+    border-top-right-radius: 0dp;
+    border-bottom-right-radius: 0dp;
+}
+
+touch-stick {
+    display: block;
+    position: absolute;
+    width: 124dp;
+    height: 124dp;
+    border-radius: 62dp;
+    background-color: rgba(18, 20, 24, 35%);
+    border: 1dp rgba(255, 255, 255, 20%);
+    /* backdrop-filter: blur(7dp); */
+    /* box-shadow: 0 8dp 24dp rgba(0, 0, 0, 24%); */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s linear-in-out;
+}
+
+touch-stick.active {
+    opacity: 1;
+}
+
+stick-ring {
+    position: absolute;
+    left: 18dp;
+    top: 18dp;
+    width: 88dp;
+    height: 88dp;
+    border-radius: 44dp;
+    border: 1dp rgba(255, 255, 255, 18%);
+}
+
+stick-knob {
+    position: absolute;
+    width: 48dp;
+    height: 48dp;
+    border-radius: 24dp;
+    background-color: rgba(238, 236, 226, 55%);
+    border: 1dp rgba(255, 255, 255, 45%);
+}

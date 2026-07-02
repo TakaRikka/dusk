@@ -3,7 +3,6 @@
 #include "aurora/rmlui.hpp"
 #include "ui.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
 namespace dusk::ui {
@@ -19,32 +18,39 @@ Rml::ElementDocument* load_document(const Rml::String& source) {
 
 }  // namespace
 
-Document::Document(const Rml::String& source) : mDocument(load_document(source)) {
+Document::Document(const Rml::String& source, bool passive)
+    : mDocument(load_document(source)), mPassive(passive) {
     // Block events while hidden (except for Menu command); play nav sounds when visible
     listen(
         Rml::EventId::Keydown,
         [this](Rml::Event& event) {
+            if (mPassive) {
+                return;
+            }
             const auto cmd = map_nav_event(event);
-            if (cmd != NavCommand::Menu && !visible()) {
+            if (cmd != NavCommand::Menu && (!visible() || !active())) {
                 event.StopImmediatePropagation();
             }
         },
         true);
-    const auto blockUnlessVisible = [this](Rml::Event& event) {
-        if (!visible()) {
+    const auto blockUnlessActive = [this](Rml::Event& event) {
+        if (!visible() || !active()) {
             event.StopImmediatePropagation();
         }
     };
-    listen(Rml::EventId::Mouseover, blockUnlessVisible, true);
-    listen(Rml::EventId::Click, blockUnlessVisible, true);
-    listen(Rml::EventId::Scroll, blockUnlessVisible, true);
+    listen(Rml::EventId::Mouseover, blockUnlessActive, true);
+    listen(Rml::EventId::Click, blockUnlessActive, true);
+    listen(Rml::EventId::Scroll, blockUnlessActive, true);
 
     listen(Rml::EventId::Keydown, [this](Rml::Event& event) {
-        const auto cmd = map_nav_event(event);
-        if (cmd == NavCommand::None) {
+        if (mPassive) {
+            auto* doc = top_document();
+            if (doc != nullptr && doc->handle_nav_event(event)) {
+                event.StopPropagation();
+            }
             return;
         }
-        if (handle_nav_command(event, cmd)) {
+        if (handle_nav_event(event)) {
             event.StopPropagation();
         }
     });
@@ -97,11 +103,38 @@ void Document::listen(Rml::Element* element, Rml::EventId event,
         std::make_unique<ScopedEventListener>(element, event, std::move(callback), capture));
 }
 
+void Document::listen(Rml::Element* element, const Rml::String& event,
+    ScopedEventListener::Callback callback, bool capture) {
+    if (element == nullptr) {
+        element = mDocument;
+    }
+    if (element == nullptr || event.empty() || !callback) {
+        return;
+    }
+    mListeners.emplace_back(
+        std::make_unique<ScopedEventListener>(element, event, std::move(callback), capture));
+}
+
 bool Document::visible() const {
     if (mDocument == nullptr) {
         return false;
     }
     return *mDocument->GetProperty(Rml::PropertyId::Visibility) == Rml::Style::Visibility::Visible;
+}
+
+bool Document::active() const {
+    return !mClosed && !mPendingClose;
+}
+
+bool Document::handle_nav_event(Rml::Event& event) {
+    if (!active()) {
+        return false;
+    }
+    const auto cmd = map_nav_event(event);
+    if (cmd == NavCommand::None || (cmd != NavCommand::Menu && !visible())) {
+        return false;
+    }
+    return handle_nav_command(event, cmd);
 }
 
 bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {

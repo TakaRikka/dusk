@@ -16,37 +16,37 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
 
-      dawnVersion = "v20260423.175430";
-      nodVersion = "v2.0.0-alpha.8";
+      dawnVersion = "v20260618.032059";
+      nodVersion = "v2.0.0-alpha.10";
       versionSuffix = "nix-" + (self.shortRev or self.dirtyShortRev or "dirty");
 
       dawnInfo = {
         "x86_64-linux" = {
           triple = "linux-x86_64";
-          hash = "sha256-HXfKTLHtMPwupnFnaflCARtXVPuS/0PoCePXidjE5xs=";
+          hash = "sha256-GFSd573b+VQx/VmFdNQgWDd0V9ayQlcw0Zuopke12ak=";
         };
         "aarch64-linux" = {
           triple = "linux-aarch64";
-          hash = "sha256-34yyFpfqBZUwoFXQ41F0AwAU78FaNihOSY0oriwn6B0=";
+          hash = "sha256-ZaoP7BAjBMnfAv2/AMRi3FNH2ZtyqASCSFyU/oB2Mzg=";
         };
         "aarch64-darwin" = {
           triple = "darwin-arm64";
-          hash = "sha256-eQnzrBp6gjiBek1VYQ9A5W13ClYWrDDKjIqv/7eNTR4=";
+          hash = "sha256-HT+qtlLaSHyoXPrUcXgcTGa877X5YfzbxRD4bJb7i1Y=";
         };
         "x86_64-darwin" = {
           triple = "darwin-x86_64";
-          hash = "sha256-QGWiGdxiI9kci3NPXH6QFFirxn16851zB/w3jqhIBJ4=";
+          hash = "sha256-cUNaCbA7rlKSukDVKGaVEVw0Zt1+mSbaHbmUCMvMVWc=";
         };
       };
 
       nodPrebuiltInfo = {
         "x86_64-linux" = {
           triple = "linux-x86_64";
-          hash = "sha256-mUqvLsbsqaZ+HAjMmHYPYO+MgtanGRTw7Gzn5uXR5rE=";
+          hash = "sha256-FVQWECVA2gWdc+n5OQ/Tvwn8z0qdgjSd1WlFt5HKOec=";
         };
         "aarch64-darwin" = {
           triple = "macos-arm64";
-          hash = "sha256-UPy1ywCcv0K6VJOU3uUelJuUdBh3UNaPRlyP5LOBeDw=";
+          hash = "sha256-8ZEejxksVgShNKUVRCBYaLOp9x/qOC9pAeVrElQUGUk=";
         };
       };
 
@@ -75,7 +75,7 @@
           '';
 
           dawn = pkgs.fetchzip {
-            url = "https://github.com/encounter/dawn-build/releases/download/${dawnVersion}/dawn-${dawnInfo.${system}.triple}.tar.gz";
+            url = "https://github.com/encounter/dawn/releases/download/${dawnVersion}/dawn-${dawnInfo.${system}.triple}.tar.gz";
             hash = dawnInfo.${system}.hash;
             stripRoot = false;
           };
@@ -94,7 +94,7 @@
               owner = "encounter";
               repo = "nod";
               rev = nodVersion;
-              hash = "sha256-+zrtVzjo0+X/6uMcNUn1+FaSR+jOhrcQSDNBFjw0NDs=";
+              hash = "sha256-r8qDlOVxv5iKiFjJQrcBuL9HVoOM3yEjRVnQIMqaICs=";
             };
             patches = [ ./fix-cmake-paths.patch ];
             cargoDeps = pkgs.rustPlatform.importCargoLock {
@@ -138,15 +138,15 @@
             NOD_PREBUILT = nod;
             CXXOPTS = pkgs.cxxopts.src;
             JSON = pkgs.nlohmann_json.src;
-            XXHASH = pkgs.xxHash.src;
+            XXHASH = pkgs.xxhash.src;
             ZSTD = pkgs.zstd.src;
             FMT = pkgs.fetchzip {
-              url = "https://github.com/fmtlib/fmt/archive/refs/tags/11.1.4.tar.gz";
-              hash = "sha256-sUbxlYi/Aupaox3JjWFqXIjcaQa0LFjclQAOleT+FRA=";
+              url = "https://github.com/fmtlib/fmt/archive/refs/tags/12.1.0.tar.gz";
+              hash = "sha256-ZmI1Dv0ZabPlxa02OpERI47jp7zFfjpeWCy1WyuPYZ0=";
             };
             TRACY = pkgs.fetchzip {
-              url = "https://github.com/wolfpld/tracy/archive/a64b9a20294d59421a2f57aeca3c6383d8c48169.tar.gz";
-              hash = "sha256-hbNGOsGeyGSvCJ2No8RkwOib1lX2on3vNZSzyVkZdXw=";
+              url = "https://github.com/wolfpld/tracy/archive/6789e7d6f9a65ec98926b602097a33a9676d2606.tar.gz";
+              hash = "sha256-Xxyd7G/mnXEPpN+ehmwl0AkAhS3CwObpJNDgcqbdUJg=";
             };
             IMGUI = pkgs.fetchFromGitHub {
               owner = "ocornut";
@@ -194,7 +194,7 @@
                   pkgs.zstd
                   pkgs.cxxopts
                   pkgs.nlohmann_json
-                  pkgs.xxHash
+                  pkgs.xxhash
                   pkgs.abseil-cpp
                   pkgs.zlib
                   pkgs.libpng
@@ -268,6 +268,12 @@
                       done
                       runHook postInstall
                     '';
+
+                postFixup = lib.optionalString (!isDarwin) ''
+                  patchelf \
+                    --add-needed "${pkgs.vulkan-loader}/lib/libvulkan.so" \
+                    $out/bin/dusklight
+                '';
 
                 dontStrip = true;
 

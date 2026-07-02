@@ -74,6 +74,9 @@ public:
     void clacEllipsePlotAverage(int, f32, f32);
     bool dpdMove();
     u8 openExplain(u8);
+#if TARGET_PC
+    bool pointerMove();
+#endif
 
     virtual void draw() { _draw(); }
     virtual ~dMenu_Ring_c();
@@ -215,6 +218,7 @@ private:
     bool mCursorInterpPrevAngular;
     bool mCursorInterpCurrAngular;
     bool mCursorInterpInit;
+    bool mPointerTouchPressHoveredCurrent;
 #endif
 };
 

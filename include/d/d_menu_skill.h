@@ -49,6 +49,10 @@ public:
     u8 getSkillNum();
     void setHIO(bool);
 
+#if TARGET_PC
+    bool pointerWait();
+#endif
+
     virtual void draw() { _draw(); }
     virtual ~dMenu_Skill_c();
 

@@ -16,11 +16,12 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     align-items: stretch;
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
 }
 
 fps,
+pipeline-progress,
 toast {
     position: absolute;
     border: 1dp #92875B;
@@ -98,7 +99,7 @@ toast message row.muted {
     opacity: 0.5;
 }
 
-toast progress {
+progress {
     height: 4dp;
     position: absolute;
     left: 0;
@@ -106,8 +107,48 @@ toast progress {
     width: 100%;
 }
 
-toast progress fill {
+progress fill {
     background-color: rgba(194, 164, 45, 80%);
+}
+
+pipeline-progress {
+    left: 12dp;
+    bottom: 12dp;
+    display: flex;
+    flex-flow: column;
+    z-index: 100;
+    min-width: 260dp;
+    max-width: 90%;
+    padding: 10dp 16dp 12dp;
+    border-radius: 7dp;
+    overflow: hidden;
+    filter: opacity(0);
+    transition: filter 0.2s linear-in-out;
+    pointer-events: none;
+}
+
+pipeline-progress[open] {
+    filter: opacity(1);
+}
+
+pipeline-status {
+    display: flex;
+    align-items: center;
+    gap: 8dp;
+    font-size: 18dp;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+icon.pipeline-spinner {
+    width: 1.2em;
+    height: 1.2em;
+    line-height: 1.2em;
+    font-size: 1.2em;
+    color: #C2A42D;
+    text-align: center;
+    transform-origin: center;
+    animation: 1s linear infinite pipeline-spinner-spin;
 }
 
 toast.achievement {
@@ -302,6 +343,15 @@ logo img.outer {
 }
 
 @keyframes logo-outer-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pipeline-spinner-spin {
     from {
         transform: rotate(0deg);
     }

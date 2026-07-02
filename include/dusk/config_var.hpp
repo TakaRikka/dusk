@@ -4,6 +4,7 @@
 #include "dolphin/types.h"
 #include <type_traits>
 #include <cstdlib>
+#include <limits>
 #include <string>
 
 /**
@@ -139,11 +140,16 @@ concept ConfigValueInteger =
     || std::is_same_v<T, s64>
     || std::is_same_v<T, u64>;
 
+template <typename T>
+struct ConfigValueTraits {
+    static constexpr bool enabled = false;
+};
+
 /**
  * \brief Concept that defines the legal set of types that can be used for CVar values.
  *
  * Valid types cannot be cv-qualified and must be basic primitive types (int, float, bool),
- * strings, or enums of the basic primitives.
+ * strings, enums of the basic primitives, or explicitly-enabled structured settings.
  */
 template <typename T>
 concept ConfigValue =
@@ -154,7 +160,8 @@ concept ConfigValue =
         || std::is_same_v<T, f32>
         || std::is_same_v<T, f64>
         || std::is_same_v<T, std::string>
-        || (std::is_enum_v<T> && ConfigValueInteger<std::underlying_type_t<T>>));
+        || (std::is_enum_v<T> && ConfigValueInteger<std::underlying_type_t<T>>)
+        || ConfigValueTraits<T>::enabled);
 
 template <ConfigValue T>
 const ConfigImplBase* GetConfigImpl();

@@ -4557,6 +4557,7 @@ public:
     void handleWolfHowl();
     void handleQuickTransform();
     bool checkAimContext();
+    bool checkAimInputContext();
 
     void onIronBallChainInterpCallback();
 

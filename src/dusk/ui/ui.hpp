@@ -74,7 +74,7 @@ void update() noexcept;
 
 Document& push_document(
     std::unique_ptr<Document> doc, bool show = true, bool passive = false) noexcept;
-void show_top_document() noexcept;
+void focus_top_document(bool show) noexcept;
 bool any_document_visible() noexcept;
 bool is_prelaunch_open() noexcept;
 Document* top_document() noexcept;
