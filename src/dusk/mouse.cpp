@@ -119,7 +119,7 @@ void update_cursor_visibility(SDL_Window* window, bool captured) {
         return;
     }
 
-    if (captured) {
+    if (captured || (!getSettings().game.enableMenuPointer.getValue() && !ui::any_document_visible())) {
         s_idle_frames = 0;
         set_cursor_visible(false);
         return;
