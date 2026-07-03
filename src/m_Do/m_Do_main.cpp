@@ -95,6 +95,7 @@
 #include "tracy/Tracy.hpp"
 #include <RmlUi/Core.h>
 #ifdef __APPLE__
+#include "dusk/macos_menu.hpp"
 #include <TargetConditionals.h>
 #endif
 
@@ -617,6 +618,11 @@ int game_main(int argc, char* argv[]) {
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);
     }
+
+#if defined(__APPLE__) && !TARGET_OS_IOS && !TARGET_OS_TV && !TARGET_OS_MACCATALYST
+    // macOS specific app menu actions
+    dusk::InstallMacOSAppMenuActions();
+#endif
 
 #ifdef DUSK_DISCORD
     if (dusk::getSettings().game.enableDiscordPresence) {
