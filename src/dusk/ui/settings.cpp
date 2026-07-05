@@ -479,8 +479,9 @@ SelectButton& config_percent_select(Pane& leftPane, Pane& rightPane, ConfigVar<f
         .key = std::move(key),
         .getValue = [&var] { return float_setting_percent(var); },
         .setValue =
-            [&var, min, max](int value) {
-                var.setValue(std::clamp(value, min, max) / 100.0f);
+            [&var, min, max, step](int value) {
+                int over = value - min;
+                var.setValue((min + std::clamp(step? (over - (over % step) + (((over % step) >= (step+1)>>1)? step : 0)) : over, 0, max - min)) / 100.0f);
                 config::Save();
             },
         .isDisabled = std::move(isDisabled),
@@ -1150,8 +1151,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
-            "Hold Tab to increase game speed by up to 4x.",
+            "Hold Tab to adjust game speed up to the selected factor.",
             [] { return getSettings().game.speedrunMode; });
+        config_percent_select(leftPane, rightPane, getSettings().game.turboSpeed,
+            "Turbo Speed", "Adjusts the target speed of the game.", 10, 2000, 5,
+            [] { return (!getSettings().game.enableTurboKeybind || getSettings().game.speedrunMode); });
         addOption("Reset Key (" + Rml::String{hotkeys::DO_RESET} + ")",
             getSettings().game.enableResetKeybind,
             "Press " + Rml::String{hotkeys::DO_RESET} + " to reset the game.");

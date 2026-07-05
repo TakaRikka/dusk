@@ -386,7 +386,7 @@ static void waitForTick(u32 p1, u16 p2) {
     }
 
     if (dusk::getTransientSettings().skipFrameRateLimit) {
-        p1 = OS_TIMER_CLOCK / 120;
+        p1 = (int)((OS_TIMER_CLOCK / 30) / dusk::getSettings().game.turboSpeed);
     }
     
     if (fopOvlpM_IsPeek() && dusk::getTransientSettings().stateShareLoadActive) {

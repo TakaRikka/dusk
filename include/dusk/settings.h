@@ -271,6 +271,7 @@ struct UserSettings {
 
         // Controls
         ConfigVar<bool> enableTurboKeybind;
+        ConfigVar<float> turboSpeed;
         ConfigVar<bool> enableResetKeybind;
 
         // Tools

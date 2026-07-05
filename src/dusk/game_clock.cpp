@@ -65,12 +65,8 @@ MainLoopPacer advance_main_loop() {
     }
 
     int sim_ticks_to_run = 0;
-    clock::time_point projected_snapshot_time = s_current_snapshot_time;
     const clock::time_point render_time = now - kSimPeriodDuration;
-    while (sim_ticks_to_run < kMaxSimTicksPerFrame && projected_snapshot_time < render_time) {
-        projected_snapshot_time += kSimPeriodDuration;
-        sim_ticks_to_run++;
-    }
+    sim_ticks_to_run = std::min(kMaxSimTicksPerFrame, (int)std::floor(std::chrono::duration<float>(render_time - s_current_snapshot_time)/kSimPeriodDuration));
     out.sim_ticks_to_run = sim_ticks_to_run;
     return out;
 }
