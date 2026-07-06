@@ -12,6 +12,8 @@ public:
 
 protected:
     bool mPrelaunch;
+    // set when the UI language changes
+    bool mPendingLanguageRefresh = false;
 };
 
 }  // namespace dusk::ui

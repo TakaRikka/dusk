@@ -9,6 +9,7 @@
 #include "aurora/rmlui.hpp"
 #include "dusk/speedrun.h"
 #include "dusk/livesplit.h"
+#include "dusk/i18n.h"
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "editor.hpp"
@@ -50,7 +51,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
                                                       },
                                                   .autoSelect = false,
                                               });
-    mTabBar->add_tab("Settings", [this] { push(std::make_unique<SettingsWindow>()); });
+    mTabBar->add_tab(tr("Settings"), [this] { push(std::make_unique<SettingsWindow>()); });
 
     if (getSettings().backend.enableAdvancedSettings) {
         mTabBar->add_tab("Warp", [this] { push(std::make_unique<WarpWindow>()); });
@@ -96,7 +97,7 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
             .icon = "question-mark",
         }));
     });
-    mTabBar->add_tab("Quit", [this] {
+    mTabBar->add_tab(tr("Quit"), [this] {
         mTabBar->set_active_tab(-1);
         const auto dismiss = [](Modal& modal) { modal.pop(); };
         push(std::make_unique<Modal>(Modal::Props{

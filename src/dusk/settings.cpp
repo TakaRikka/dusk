@@ -167,6 +167,10 @@ UserSettings g_userSettings = {
         .enableAdvancedSettings {"backend.enableAdvancedSettings", false},
     },
 
+    .ui = {
+        .language {"ui.language", UiLanguage::English},
+    },
+
     // Not sure if there's a better way to declare this
     .actionBindings = {
         .firstPersonCamera {
@@ -350,6 +354,8 @@ void registerSettings() {
     Register(g_userSettings.backend.checkForUpdates);
     Register(g_userSettings.backend.cardFileType);
     Register(g_userSettings.backend.enableAdvancedSettings);
+
+    Register(g_userSettings.ui.language);
 
     Register(g_userSettings.actionBindings.firstPersonCamera[0]);
     Register(g_userSettings.actionBindings.firstPersonCamera[1]);

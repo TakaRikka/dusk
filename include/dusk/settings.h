@@ -34,6 +34,11 @@ enum class GameLanguage : u8 {
     Italian = OS_LANGUAGE_ITALIAN,
 };
 
+enum class UiLanguage : u8 {
+    English = 0,
+    Italian = 1,
+};
+
 enum class DiscVerificationState : u8 {
     Unknown = 0,
     Success,
@@ -89,6 +94,12 @@ template <>
 struct ConfigEnumRange<GameLanguage> {
     static constexpr auto min = GameLanguage::English;
     static constexpr auto max = GameLanguage::Italian;
+};
+
+template <>
+struct ConfigEnumRange<UiLanguage> {
+    static constexpr auto min = UiLanguage::English;
+    static constexpr auto max = UiLanguage::Italian;
 };
 
 template <>
@@ -293,6 +304,11 @@ struct UserSettings {
         ConfigVar<int> cardFileType;
         ConfigVar<bool> enableAdvancedSettings;
     } backend;
+
+    // Interface (Dusklight UI) settings
+    struct {
+        ConfigVar<UiLanguage> language;
+    } ui;
 
     // Arrays of size 4 for 4 ports
     struct {

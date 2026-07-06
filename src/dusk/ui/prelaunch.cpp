@@ -3,6 +3,7 @@
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
 #include "dusk/file_select.hpp"
+#include "dusk/i18n.h"
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
@@ -692,7 +693,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         auto& state = prelaunch_state();
         const bool activeDiscLoaded = !state.activeDiscPath.empty();
         mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, activeDiscLoaded ? "Play" : "Select Disc Image"));
+            std::make_unique<Button>(menuList, tr(activeDiscLoaded ? "Play" : "Select Disc Image")));
         mMenuButtons.back()->on_pressed([this] {
             if (prelaunch_state().activeDiscPath.empty()) {
                 open_iso_picker();
@@ -719,14 +720,14 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, tr("Settings")));
         mMenuButtons.back()->on_pressed([this] {
             mRestartSuppressed = false;
             push(std::make_unique<SettingsWindow>(true));
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, tr("Quit")));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
     }
@@ -846,7 +847,7 @@ void Prelaunch::update() {
     }
 
     if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(activeDiscLoaded ? "Play" : "Select Disc Image");
+        mMenuButtons[0]->set_text(tr(activeDiscLoaded ? "Play" : "Select Disc Image"));
     }
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");

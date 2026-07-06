@@ -1442,6 +1442,7 @@ set(DUSK_FILES
 		src/dusk/gamepad_color.cpp
 		src/dusk/autosave.cpp
         src/dusk/http/http.hpp
+        src/dusk/i18n.cpp
         src/dusk/io.cpp
         src/dusk/layout.cpp
         src/dusk/logging.cpp

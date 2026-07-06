@@ -9,6 +9,7 @@
 #include "dusk/android_frame_rate.hpp"
 #include "dusk/config.hpp"
 #include "dusk/hotkeys.h"
+#include "dusk/i18n.h"
 #include "dusk/data.hpp"
 #include "dusk/file_select.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
@@ -57,6 +58,13 @@ constexpr std::array kLanguageNames = {
     "French",
     "Spanish",
     "Italian",
+};
+
+// Language names for the UI. Order must match the UiLanguage enum.
+// Names are shown in their own language.
+constexpr std::array kUiLanguageNames = {
+    "English",
+    "Italiano",
 };
 
 constexpr std::array kCardFileTypes = {
@@ -768,7 +776,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             rightPane, [](Pane& pane) { pane.clear(); });
         config_bool_select(leftPane, rightPane, getSettings().video.enableVsync,
             {
-                .key = "Enable VSync",
+                .key = tr("Enable VSync"),
                 .helpText = "Synchronizes the frame rate to your monitor's refresh rate.",
                 .onChange = [](bool value) { aurora_enable_vsync(value); },
             });
@@ -1442,6 +1450,41 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
 
         leftPane.add_section("Dusklight");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = tr("Interface Language"),
+                .getValue =
+                    [] {
+                        const auto idx = static_cast<u8>(getSettings().ui.language.getValue());
+                        return Rml::String{kUiLanguageNames[idx]};
+                    },
+                .isModified =
+                    [] {
+                        const auto& lang = getSettings().ui.language;
+                        return lang.getValue() != lang.getDefaultValue();
+                    },
+            }),
+            rightPane, [this](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kUiLanguageNames.size()); i++) {
+                    pane.add_button({
+                                        .text = kUiLanguageNames[i],
+                                        .isSelected =
+                                            [i] {
+                                                return getSettings().ui.language.getValue() ==
+                                                       static_cast<UiLanguage>(i);
+                                            },
+                                    })
+                        .on_pressed([this, i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().ui.language.setValue(static_cast<UiLanguage>(i));
+                            config::Save();
+                            mPendingLanguageRefresh = true;
+                        });
+                }
+                pane.add_rml(
+                    "<br/>Changes the language of the Dusklight interface. Reopen the menu to "
+                    "translate everything.");
+            });
 #if DUSK_CAN_OPEN_DATA_FOLDER
         leftPane.register_control(
             leftPane.add_button("Open Data Folder").on_pressed([] {
@@ -1645,6 +1688,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 void SettingsWindow::update() {
     if (mPrelaunch && top_document() == this) {
         try_push_verification_modal(*this);
+    }
+
+    if (mPendingLanguageRefresh) {
+        mPendingLanguageRefresh = false;
+        refresh_active_tab();
     }
 
     Window::update();
