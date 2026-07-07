@@ -840,7 +840,7 @@ int game_main(int argc, char* argv[]) {
 
     OSInit();
 
-    mDoMain::sPowerOnTime = OSGetTime();
+    mDoMain::sPowerOnTime = DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime());
 
     // Reset Data
     static mDoRstData sResetData = {0};
