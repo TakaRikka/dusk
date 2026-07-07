@@ -1534,6 +1534,7 @@ void dScnKy_env_light_c::setDaytime() {
     switch (g_kankyoHIO.time_change) {
     case 0:
     #endif
+      if (dusk::getSettings().game.systemTimeSync == false) {
         if (using_time_control_tag == 0) {
             if (!dKy_darkworld_check()) {
                 if (dComIfGp_event_runCheck() == FALSE) {
@@ -1625,6 +1626,7 @@ void dScnKy_env_light_c::setDaytime() {
                 daytime = 0.0f;
             }
         }
+     }
     #if DEBUG
         break;
     case 1:
