@@ -4163,7 +4163,7 @@ int daAlink_c::procWolfHowlDemo() {
                     } else {
                         #if TARGET_PC
                         if (daAlink_getAlinkActorClass()->getCorrectCurveID() == 9) {
-                            if (dComIfGp_roomControl_getTimePass()) {
+                            if (!dusk::getSettings().game.systemTimeSync && dComIfGp_roomControl_getTimePass()) {
                                 g_env_light.time_change_rate = 1.0f;
                                 dComIfGp_event_reset();
                                 dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
