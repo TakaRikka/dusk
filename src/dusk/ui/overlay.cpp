@@ -203,10 +203,19 @@ void remove_element(Rml::Element*& elem) noexcept {
 
 }  // namespace
 
-static std::string FormatTime(OSTime ticks) {
-    OSCalendarTime t;
-    OSTicksToCalendarTime(ticks, &t);
-    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", t.hour, t.min, t.sec, t.msec);
+static std::string FormatElapsedTime(OSTime ticksElapsed) {
+    using namespace std::chrono;
+
+    milliseconds ms{OSTicksToMilliseconds(ticksElapsed)};
+
+    const hours hr = duration_cast<hours>(ms);
+    ms -= hr;
+    const minutes min = duration_cast<minutes>(ms);
+    ms -= min;
+    const seconds sec = duration_cast<seconds>(ms);
+    ms -= sec;
+
+    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", hr.count(), min.count(), sec.count(), ms.count());
 }
 
 Overlay::Overlay() : Document(kDocumentSource, true, DocumentScope::Overlay) {
@@ -337,13 +346,13 @@ void Overlay::update() {
 
             if (getSettings().game.showSpeedrunRTATimer) {
                 mSpeedrunRta->SetAttribute("open", "");
-                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatTime(elapsedTime))));
+                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatElapsedTime(elapsedTime))));
             } else {
                 mSpeedrunRta->RemoveAttribute("open");
             }
 
             mSpeedrunIgt->SetInnerRML(
-                escape(fmt::format("IGT  {}", FormatTime(m_speedrunInfo.m_igtTimer))));
+                escape(fmt::format("IGT  {}", FormatElapsedTime(m_speedrunInfo.m_igtTimer))));
         } else {
             mSpeedrunTimer->RemoveAttribute("open");
         }
