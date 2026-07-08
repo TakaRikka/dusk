@@ -565,7 +565,7 @@ int game_main(int argc, char* argv[]) {
     }
 
     // Set SDL metadata for audio mixers and macOS "About" menu
-    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, "dev.twilitrealm.dusk");
+    SDL_SetAppMetadata("Dusklight", DUSK_VERSION_STRING, DUSK_APP_ID);
 
     {
         const auto userPathString = dusk::ConfigPath.u8string();

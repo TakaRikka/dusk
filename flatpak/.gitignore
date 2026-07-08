@@ -1,0 +1,5 @@
+# Flatpak-builder creates a bunch of directories that we don't want to commit. To make this easier to manage we ignore everything except what we explicitly want to track
+*
+
+!.gitignore
+!dev.twilitrealm.Dusklight.yml

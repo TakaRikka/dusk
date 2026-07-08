@@ -2,8 +2,8 @@
 Name=Dusklight
 GenericName=Dusklight
 Comment=PC port of a classic adventure game
-Exec=dusklight
-Icon=dev.twilitrealm.dusk
+Exec=@DUSK_APP_ID@
+Icon=@DUSK_APP_ID@
 Terminal=false
 Type=Application
 Categories=Game;
