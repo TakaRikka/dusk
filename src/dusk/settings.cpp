@@ -15,6 +15,9 @@ UserSettings g_userSettings = {
         .rememberWindowSize {"video.rememberWindowSize", false},
         .lastWindowWidth {"video.lastWindowWidth", 0},
         .lastWindowHeight {"video.lastWindowHeight", 0},
+        .fullscreenWidth {"video.fullscreenWidth", 0},
+        .fullscreenHeight {"video.fullscreenHeight", 0},
+        .fullscreenRefreshRate {"video.fullscreenRefreshRate", 0.0f},
     },
 
     .audio = {
@@ -224,6 +227,9 @@ void registerSettings() {
     Register(g_userSettings.video.rememberWindowSize);
     Register(g_userSettings.video.lastWindowWidth);
     Register(g_userSettings.video.lastWindowHeight);
+    Register(g_userSettings.video.fullscreenWidth);
+    Register(g_userSettings.video.fullscreenHeight);
+    Register(g_userSettings.video.fullscreenRefreshRate);
 
     // Audio
     Register(g_userSettings.audio.masterVolume);

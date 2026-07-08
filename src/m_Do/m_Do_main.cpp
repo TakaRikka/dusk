@@ -52,6 +52,7 @@
 #include "dusk/crash_handler.h"
 #include "dusk/crash_reporting.h"
 #include "dusk/data.hpp"
+#include "dusk/display.h"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/game_clock.h"
@@ -627,6 +628,7 @@ int game_main(int argc, char* argv[]) {
         AuroraSetViewportPolicy(AURORA_VIEWPORT_STRETCH);
     }
     VISetFrameBufferScale(dusk::getSettings().game.internalResolutionScale.getValue());
+    dusk::display::apply_fullscreen_mode();
     switch (dusk::getSettings().game.resampler.getValue()) {
     case dusk::Resampler::Area:
         aurora_set_resampler(SAMPLER_AREA);

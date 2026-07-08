@@ -1439,6 +1439,8 @@ set(DUSK_FILES
         include/dusk/menu_pointer.h
         src/dusk/menu_pointer.cpp
         src/dusk/mouse.cpp
+        include/dusk/display.h
+        src/dusk/display.cpp
 		src/dusk/gamepad_color.cpp
 		src/dusk/autosave.cpp
         src/dusk/http/http.hpp

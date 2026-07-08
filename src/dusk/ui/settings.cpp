@@ -10,6 +10,7 @@
 #include "dusk/config.hpp"
 #include "dusk/hotkeys.h"
 #include "dusk/data.hpp"
+#include "dusk/display.h"
 #include "dusk/file_select.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/io.hpp"
@@ -408,6 +409,15 @@ const Rml::String kUnlockFramerateHelpText =
     "visual artifacts or animation glitches.";
 const Rml::String kTextureReplacementHelpText =
     "Enable installed texture replacements.";
+const Rml::String kFullscreenResolutionHelpText =
+    "<br/>Override the monitor resolution used in fullscreen. \"Desktop\" keeps borderless fullscreen "
+    "at your current desktop resolution; choosing a specific resolution switches to exclusive "
+    "fullscreen and changes the monitor's output resolution.<br/><br/>Useful with NVIDIA DSR/DLDSR or "
+    "AMD VSR (Virtual Super Resolution) to run above native resolution without changing your Windows "
+    "display settings.";
+const Rml::String kRefreshRateHelpText =
+    "<br/>Select the refresh rate used when a fullscreen resolution is set. \"Auto\" uses the highest "
+    "refresh rate available for the chosen resolution.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -764,6 +774,138 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             VICenterWindow();
         }),
             rightPane, [](Pane& pane) { pane.clear(); });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Fullscreen Resolution",
+                .getValue =
+                    [] {
+                        const int w = getSettings().video.fullscreenWidth.getValue();
+                        const int h = getSettings().video.fullscreenHeight.getValue();
+                        if (w <= 0 || h <= 0) {
+                            return Rml::String{"Desktop"};
+                        }
+                        return Rml::String{fmt::format("{} × {}", w, h)};
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().video.fullscreenWidth.getValue() != 0 ||
+                               getSettings().video.fullscreenHeight.getValue() != 0;
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.add_button(
+                        {
+                            .text = "Desktop (Borderless)",
+                            .isSelected =
+                                [] {
+                                    return getSettings().video.fullscreenWidth.getValue() <= 0 ||
+                                           getSettings().video.fullscreenHeight.getValue() <= 0;
+                                },
+                        })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().video.fullscreenWidth.setValue(0);
+                        getSettings().video.fullscreenHeight.setValue(0);
+                        getSettings().video.fullscreenRefreshRate.setValue(0.0f);
+                        dusk::display::apply_fullscreen_mode();
+                        config::save();
+                    });
+                for (const auto res : dusk::display::enumerate_resolutions()) {
+                    pane.add_button(
+                            {
+                                .text =
+                                    Rml::String{fmt::format("{} × {}", res.width, res.height)},
+                                .isSelected =
+                                    [res] {
+                                        return getSettings().video.fullscreenWidth.getValue() ==
+                                                   res.width &&
+                                               getSettings().video.fullscreenHeight.getValue() ==
+                                                   res.height;
+                                    },
+                            })
+                        .on_pressed([res] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.fullscreenWidth.setValue(res.width);
+                            getSettings().video.fullscreenHeight.setValue(res.height);
+                            // If the current refresh rate isn't offered at the new resolution,
+                            // revert to Auto so we don't request an unavailable mode.
+                            const auto rates =
+                                dusk::display::enumerate_refresh_rates(res.width, res.height);
+                            const float current =
+                                getSettings().video.fullscreenRefreshRate.getValue();
+                            const bool available =
+                                std::any_of(rates.begin(), rates.end(), [current](float rate) {
+                                    return (current > rate ? current - rate : rate - current) <
+                                           0.5f;
+                                });
+                            if (!available) {
+                                getSettings().video.fullscreenRefreshRate.setValue(0.0f);
+                            }
+                            dusk::display::apply_fullscreen_mode();
+                            config::save();
+                        });
+                }
+                pane.add_rml(kFullscreenResolutionHelpText);
+            });
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Refresh Rate",
+                .getValue =
+                    [] {
+                        const float rate = getSettings().video.fullscreenRefreshRate.getValue();
+                        if (rate <= 0.0f) {
+                            return Rml::String{"Auto"};
+                        }
+                        return Rml::String{fmt::format("{} Hz", static_cast<int>(rate + 0.5f))};
+                    },
+                .isDisabled =
+                    [] {
+                        return getSettings().video.fullscreenWidth.getValue() <= 0 ||
+                               getSettings().video.fullscreenHeight.getValue() <= 0;
+                    },
+                .isModified =
+                    [] { return getSettings().video.fullscreenRefreshRate.getValue() != 0.0f; },
+            }),
+            rightPane, [](Pane& pane) {
+                pane.add_button(
+                        {
+                            .text = "Auto",
+                            .isSelected =
+                                [] {
+                                    return getSettings().video.fullscreenRefreshRate.getValue() <=
+                                           0.0f;
+                                },
+                        })
+                    .on_pressed([] {
+                        mDoAud_seStartMenu(kSoundItemChange);
+                        getSettings().video.fullscreenRefreshRate.setValue(0.0f);
+                        dusk::display::apply_fullscreen_mode();
+                        config::save();
+                    });
+                const int w = getSettings().video.fullscreenWidth.getValue();
+                const int h = getSettings().video.fullscreenHeight.getValue();
+                for (const float rate : dusk::display::enumerate_refresh_rates(w, h)) {
+                    pane.add_button(
+                            {
+                                .text = Rml::String{
+                                    fmt::format("{} Hz", static_cast<int>(rate + 0.5f))},
+                                .isSelected =
+                                    [rate] {
+                                        const float current =
+                                            getSettings().video.fullscreenRefreshRate.getValue();
+                                        return (current > rate ? current - rate : rate - current) <
+                                               0.5f;
+                                    },
+                            })
+                        .on_pressed([rate] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().video.fullscreenRefreshRate.setValue(rate);
+                            dusk::display::apply_fullscreen_mode();
+                            config::save();
+                        });
+                }
+                pane.add_rml(kRefreshRateHelpText);
+            });
         config_bool_select(leftPane, rightPane, getSettings().video.enableVsync,
             {
                 .key = "Enable VSync",
