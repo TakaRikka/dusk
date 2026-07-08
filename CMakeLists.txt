@@ -115,6 +115,22 @@ if(APPLE AND NOT CMAKE_OSX_SYSROOT)
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
+if (MSVC)
+    # Edit & Continue
+    if ("${CMAKE_MSVC_DEBUG_INFORMATION_FORMAT}" STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "EditAndContinue")
+    endif ()
+
+    if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "EditAndContinue")
+        add_link_options("/INCREMENTAL")
+    else ()
+        add_compile_options(/guard:cf)
+        add_link_options(/guard:cf)
+    endif ()
+
+    add_link_options(/CETCOMPAT)
+endif ()
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -179,16 +195,6 @@ option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structur
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
 set(DUSK_SENTRY_DSN "" CACHE STRING "Sentry DSN")
 set(DUSK_SENTRY_ENVIRONMENT "development" CACHE STRING "Sentry environment")
-
-# Edit & Continue
-if (MSVC)
-    if ("${CMAKE_MSVC_DEBUG_INFORMATION_FORMAT}" STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "EditAndContinue")
-    endif ()
-    if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "EditAndContinue")
-        add_link_options("/INCREMENTAL")
-    endif ()
-endif ()
 
 if (DUSK_MOVIE_SUPPORT)
     find_package(libjpeg-turbo 3.0 CONFIG QUIET)
