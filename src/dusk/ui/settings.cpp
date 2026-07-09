@@ -224,6 +224,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.enableTurboKeybind.setSpeedrunValue(false);
 
     getSettings().game.damageMultiplier.setSpeedrunValue(1);
+    getSettings().game.swordMultiplier.setSpeedrunValue(100);
     getSettings().game.instantDeath.setSpeedrunValue(false);
     getSettings().game.noHeartDrops.setSpeedrunValue(false);
     getSettings().game.autoSave.setSpeedrunValue(false);
@@ -1274,6 +1275,30 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             rightPane, [](Pane& pane) {
                 pane.clear();
                 pane.add_text("Multiplies incoming damage.");
+            });
+        leftPane.register_control(
+            leftPane.add_child<NumberButton>(NumberButton::Props{
+                .key = "Sword Damage Multiplier",
+                .getValue = [] { return getSettings().game.swordMultiplier.getValue(); },
+                .setValue =
+                    [](int value) {
+                        getSettings().game.swordMultiplier.setValue(value);
+                        config::Save();
+                    },
+                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .isModified =
+                    [] {
+                        return getSettings().game.swordMultiplier.getValue() !=
+                               getSettings().game.swordMultiplier.getDefaultValue();
+                    },
+                .min = 0,
+                .max = 1000,
+                .step = 10,
+                .suffix = "%",
+            }),
+            rightPane, [](Pane& pane) {
+                pane.clear();
+                pane.add_text("Multiplies the damage Link's sword will do to most enemies. Set to 0 to make most enemies invulnerable to the sword, except for Ending Blow.");
             });
         addSpeedrunDisabledOption(
             "Instant Death", getSettings().game.instantDeath, "Any hit will instantly kill you.");

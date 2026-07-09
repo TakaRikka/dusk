@@ -416,6 +416,11 @@ fopAc_ac_c* cc_at_check(fopAc_ac_c* i_enemy, dCcU_AtInfo* i_AtInfo) {
 
         if (i_AtInfo->mHitType == HIT_TYPE_LINK_NORMAL_ATTACK) {
             if (!daPy_py_c::checkNowWolf()) {
+#if TARGET_PC
+                if (dusk::getSettings().game.swordMultiplier != 100) {
+                    i_AtInfo->mAttackPower *= dusk::getSettings().game.swordMultiplier * 0.01;
+                }
+#endif
                 if (player_p->checkMasterSwordEquip()) {
                     i_AtInfo->mAttackPower *= 2;
                 }
