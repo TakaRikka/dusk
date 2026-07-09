@@ -10,6 +10,7 @@
 #include "cosmetics.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
+#include "dusk/mods/svc/ui.hpp"
 #include "dusk/settings.h"
 #include "dusk/speedrun.h"
 #include "editor.hpp"
@@ -45,7 +46,9 @@ const Rml::String kDocumentSource = R"RML(
 
 }
 
-MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById("popup")) {
+MenuBar::MenuBar()
+    : Document(kDocumentSource, false, DocumentScope::MenuBar),
+      mRoot(mDocument->GetElementById("popup")) {
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
                                                   .onClose =
                                                       [this] {
@@ -67,6 +70,9 @@ MenuBar::MenuBar() : Document(kDocumentSource), mRoot(mDocument->GetElementById(
 
     mTabBar->add_tab("Cosmetics", [this] {push(std::make_unique<CosmeticsWindow>());});
     mTabBar->add_tab("Mods", [this] { push(std::make_unique<ModsWindow>()); });
+    for (auto& tab : mods::svc::ui_mod_menu_tabs()) {
+        mTabBar->add_tab(tab.label, std::move(tab.onSelected));
+    }
 
     mTabBar->add_tab("Reset", [this] {
         mTabBar->set_active_tab(-1);
@@ -241,7 +247,10 @@ void MenuBar::rebuild() {
     for (auto& doc : get_document_stack()) {
         if (auto* menuBar = dynamic_cast<MenuBar*>(doc.get())) {
             const bool wasVisible = menuBar->visible();
-            doc = std::make_unique<MenuBar>();
+            auto next = std::make_unique<MenuBar>();
+            next->mFocusedTabIndex = menuBar->mFocusedTabIndex;
+            next->mWasVisible = menuBar->mWasVisible;
+            doc = std::move(next);
             if (wasVisible) {
                 doc->show();
             }

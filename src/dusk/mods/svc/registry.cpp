@@ -206,6 +206,7 @@ void ModLoader::init_services() {
             &svc::g_overlayModule,
             &svc::g_textureModule,
             &svc::g_configModule,
+            &svc::g_uiModule,
             &svc::g_gameModule,
         })
     {

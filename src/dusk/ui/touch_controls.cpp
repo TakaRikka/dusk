@@ -374,7 +374,7 @@ void sync_virtual_input() noexcept {
 }
 
 TouchControls::TouchControls()
-    : Document(touch_controls_document_source(), true),
+    : Document(touch_controls_document_source(), true, DocumentScope::TouchControls),
       mRoot(mDocument != nullptr ? mDocument->GetElementById("root") : nullptr),
       mControlStick(mDocument != nullptr ? mDocument->GetElementById("control-stick") : nullptr),
       mControlKnob(mDocument != nullptr ? mDocument->GetElementById("control-knob") : nullptr),

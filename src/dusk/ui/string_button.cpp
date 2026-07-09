@@ -148,6 +148,21 @@ void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
 
 StringButton::StringButton(Rml::Element* parent, Props props)
     : BaseStringButton(parent, {.key = std::move(props.key), .maxLength = props.maxLength}),
-      mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)) {}
+      mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)) {}
+
+bool StringButton::modified() const {
+    if (mIsModified) {
+        return mIsModified();
+    }
+    return BaseStringButton::modified();
+}
+
+bool StringButton::disabled() const {
+    if (mIsDisabled) {
+        return mIsDisabled();
+    }
+    return BaseStringButton::disabled();
+}
 
 }  // namespace dusk::ui

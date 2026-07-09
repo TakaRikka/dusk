@@ -1504,6 +1504,8 @@ set(DUSK_FILES
         src/dusk/ui/logs_window.hpp
         src/dusk/ui/mod_texture_provider.cpp
         src/dusk/ui/mod_texture_provider.hpp
+        src/dusk/ui/mod_window.cpp
+        src/dusk/ui/mod_window.hpp
         src/dusk/ui/modal.cpp
         src/dusk/ui/modal.hpp
         src/dusk/ui/nav_types.hpp
@@ -1577,6 +1579,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/overlay.cpp
         src/dusk/mods/svc/resource.cpp
         src/dusk/mods/svc/texture.cpp
+        src/dusk/mods/svc/ui.cpp
+        src/dusk/mods/svc/ui.hpp
         src/dusk/mods/svc/registry.cpp
         src/dusk/mods/svc/registry.hpp
         src/dusk/discord.cpp

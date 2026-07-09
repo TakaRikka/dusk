@@ -63,7 +63,7 @@ struct GraphicsTunerProps {
 
 class GraphicsTuner : public Document {
 public:
-    explicit GraphicsTuner(GraphicsTunerProps props, bool prelaunch);
+    explicit GraphicsTuner(GraphicsTunerProps props);
 
     void show() override;
     void hide(bool close) override;
@@ -92,7 +92,6 @@ private:
     std::vector<std::unique_ptr<Component> > mComponents;
     SteppedCarousel* mCarousel;
     Rml::Element* mRoot;
-    bool mPrelaunch;
 };
 
 }  // namespace dusk::ui

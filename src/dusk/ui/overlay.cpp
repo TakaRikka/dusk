@@ -206,7 +206,7 @@ static std::string FormatTime(OSTime ticks) {
     return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", t.hour, t.min, t.sec, t.msec);
 }
 
-Overlay::Overlay() : Document(kDocumentSource, true) {
+Overlay::Overlay() : Document(kDocumentSource, true, DocumentScope::Overlay) {
     mFpsCounter = mDocument->GetElementById("fps");
     mPipelineProgress = mDocument->GetElementById("pipeline-progress");
     mPipelineProgressLabel = mDocument->GetElementById("pipeline-progress-label");

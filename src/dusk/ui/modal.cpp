@@ -29,10 +29,41 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
     actions->SetClass("modal-actions", true);
 
     for (auto& action : mProps.actions) {
-        add_action(action);
+        add_action(std::move(action));
     }
 
     mDoAud_seStartMenu(kSoundWindowOpen);
+}
+
+void Modal::add_action(ModalAction action) {
+    auto* actions = mDialog->QuerySelector(".modal-actions");
+    auto btn = std::make_unique<Button>(actions, action.label);
+    btn->root()->SetClass("modal-btn", true);
+    btn->on_pressed([this, callback = std::move(action.onPressed)] {
+        if (callback) {
+            callback(*this);
+        }
+    });
+    mButtons.push_back(std::move(btn));
+}
+
+void Modal::set_body(const Rml::String& bodyRml) {
+    mDialog->QuerySelector(".modal-body")->SetInnerRML(bodyRml);
+}
+
+void Modal::set_icon(const Rml::String& icon) {
+    auto* iconElem = mDialog->QuerySelector("icon");
+    if (icon.empty()) {
+        if (iconElem != nullptr) {
+            iconElem->GetParentNode()->RemoveChild(iconElem);
+        }
+        return;
+    }
+    if (iconElem == nullptr) {
+        // The constructor only creates the icon element when Props.icon is set.
+        iconElem = append(mDialog->QuerySelector(".modal-header"), "icon");
+    }
+    iconElem->SetClassNames(icon);
 }
 
 bool Modal::focus() {

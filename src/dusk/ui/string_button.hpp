@@ -45,10 +45,14 @@ public:
         Rml::String key;
         std::function<Rml::String()> getValue;
         std::function<void(Rml::String)> setValue;
+        std::function<bool()> isDisabled;
+        std::function<bool()> isModified;
         int maxLength = -1;
     };
 
     StringButton(Rml::Element* parent, Props props);
+    bool modified() const override;
+    bool disabled() const override;
 
 protected:
     Rml::String format_value() override { return mGetValue(); }
@@ -61,6 +65,8 @@ protected:
 private:
     std::function<Rml::String()> mGetValue;
     std::function<void(Rml::String)> mSetValue;
+    std::function<bool()> mIsDisabled;
+    std::function<bool()> mIsModified;
 };
 
 }  // namespace dusk::ui

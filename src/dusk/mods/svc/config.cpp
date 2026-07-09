@@ -438,6 +438,11 @@ void config_mark_dirty() {
     s_dirty = true;
 }
 
+config::ConfigVarBase* config_find_var(
+    LoadedMod& mod, const ConfigVarHandle handle, const uint32_t expectedType) {
+    return find_var(mod, handle, expectedType);
+}
+
 constinit const ServiceModule g_configModule{
     .id = CONFIG_SERVICE_ID,
     .majorVersion = CONFIG_SERVICE_MAJOR,

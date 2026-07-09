@@ -99,7 +99,7 @@ float squared_distance(Rml::Vector2f a, Rml::Vector2f b) noexcept {
 }  // namespace
 
 TouchControlsEditor::TouchControlsEditor()
-    : Document(touch_controls_editor_document_source()),
+    : Document(touch_controls_editor_document_source(), false, DocumentScope::TouchControls),
       mRoot(mDocument != nullptr ? mDocument->GetElementById("root") : nullptr),
       mSelectionFrame(
           mDocument != nullptr ? mDocument->GetElementById("editor-selection-frame") : nullptr),
