@@ -316,6 +316,99 @@ Change callbacks fire on the game thread whenever the value changes at runtime (
 Writes that store the same value are silent. Values applied from `config.json` or `--cvar` at registration do
 **not** fire callbacks; read the value after `register_var` for the starting state.
 
+### UiService (`mods/svc/ui.h`)
+
+Integrate seamlessly with Dusklight's UI system: add controls and buttons to your mod's detail pane in the Mods window,
+create custom windows and modal dialogs, apply custom RCSS stylesheets (anywhere!), and add menu bar tabs.
+
+**Mod panel:** Registers or replaces the panel rendered in your mod's detail pane; `build` runs every time the detail
+content is rebuilt, and `update` runs every frame while that mod is selected. While your mod is selected, the detail
+pane carries your mod's id as a `mod-id` attribute (like custom window roots), so scoped RCSS can target it (e.g.
+`[mod-id="com.example.mod"]`).
+
+```cpp
+IMPORT_SERVICE(UiService, svc_ui);
+
+UiElementHandle statusText = 0;
+
+ModResult build(ModContext*, UiElementHandle panel, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, panel, "Status");
+    svc_ui->pane_add_text(mod_ctx, panel, "starting...", &statusText);
+    svc_ui->pane_add_progress(mod_ctx, panel, 0.5f, nullptr);
+    return MOD_OK;
+}
+
+ModResult update(ModContext*, void*, ModError*) {
+    svc_ui->elem_set_text(mod_ctx, statusText, "running");
+    return MOD_OK;
+}
+
+UiModsPanelDesc panel = UI_MODS_PANEL_DESC_INIT;
+panel.build = build;
+panel.update = update;
+svc_ui->register_mods_panel(mod_ctx, &panel);
+```
+
+Element setters must match the element kind: `elem_set_text`/`elem_set_rml` on text rows, and `elem_set_progress` on
+progress bars. `elem_set_class` sets or clears an RCSS class on any element handle, for styling via scoped or
+per-window RCSS. A non-`MOD_OK` result from `build`/`update` fails your mod, as do exceptions thrown from any UI
+callback.
+
+**Controls:** `pane_add_control` adds an input row described by a `UiControlDesc`: `UI_CONTROL_BUTTON`,
+`UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, or `UI_CONTROL_SELECT`. Values bind with callbacks or
+directly to a config var.
+
+```cpp
+UiControlDesc control = UI_CONTROL_DESC_INIT;
+control.kind = UI_CONTROL_TOGGLE;
+control.label = "Enable rainbows";
+control.help_rml = "Shown in the help pane while focused.";
+control.binding = UI_BINDING_CONFIG_VAR;
+control.config_var = myBoolVar;  // from svc_config->register_var
+svc_ui->pane_add_control(mod_ctx, leftPane, &control, nullptr);
+```
+
+`UI_BINDING_CONFIG_VAR` wires persistence, change notifications, and the modified indicator automatically. The var
+type must match the control: `TOGGLE` = bool, `NUMBER` and `SELECT` = int, `STRING` = string. Float vars are not
+bindable; use callbacks and convert. `help_rml` and `SELECT` option lists render in a help pane, so `SELECT` controls
+are only available inside window tabs.
+
+**Windows:** `window_push` pushes a tabbed two-pane window onto the document stack and shows it. Each tab's `build`
+receives the window handle plus fresh left and right pane handles on every activation. The optional per-tab `update`
+runs each frame while that tab is active. `on_closed` fires when the window is destroyed. `desc.rcss` optionally styles
+that window's document only; custom windows carry the owning mod's id as a `mod-id` attribute on the window root, so
+scoped RCSS can target your specific mod's windows (e.g. `window[mod-id="com.example.mod"]`).
+
+```cpp
+UiTabDesc tabs[1] = {UI_TAB_DESC_INIT};
+tabs[0].title = "Options";
+tabs[0].build = build_options_tab;
+
+UiWindowDesc desc = UI_WINDOW_DESC_INIT;
+desc.tabs = tabs;
+desc.tab_count = 1;
+desc.on_closed = options_window_closed;
+UiWindowHandle window = 0;
+svc_ui->window_push(mod_ctx, &desc, &window);
+```
+
+**Dialogs:** `dialog_push` shows a modal dialog. `variant` picks the style, `icon` optionally overrides the variant's
+default icon, and actions become buttons. After an action's `on_pressed` returns, the dialog closes unless the action
+sets `keep_open`. A `keep_open` action can close it later (or immediately) with `dialog_close`. Cancel fires
+`on_dismiss` if present and always closes. `dialog_set_body`, `dialog_set_icon`, and `dialog_add_action` mutate a live
+dialog.
+
+**Menu bar tabs:** `register_menu_tab` adds a tab to the in-game menu bar. `on_selected` fires when the user activates
+the tab: typically you'd push a window from it. The tab is removed by `unregister_menu_tab`, or automatically when the
+mod is disabled.
+
+**Custom styles:** `register_styles(scope, rcss, &handle)` applies an RCSS stylesheet to every document of a scope:
+existing documents restyle immediately, and future ones pick it up when created. `register_styles_file(scope, path,
+&handle)` reads the sheet from your bundle's `res/` directory. Scopes are `UI_SCOPE_PRELAUNCH`, `UI_SCOPE_WINDOW`,
+`UI_SCOPE_MENU_BAR`, `UI_SCOPE_OVERLAY`, `UI_SCOPE_TOUCH_CONTROLS`, and `UI_SCOPE_GRAPHICS_TUNER`. Sheets apply after
+host styles and may override them. Scope selectors tightly (use `[mod-id="..."]`!), especially for `UI_SCOPE_WINDOW`,
+unless changing host UI is intentional.
+
 ---
 
 ## Hooking Game Functions

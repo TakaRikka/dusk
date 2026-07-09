@@ -1,6 +1,7 @@
 #include "mods_window.hpp"
 
 #include "dusk/mod_loader.hpp"
+#include "dusk/mods/svc/ui.hpp"
 #include "fmt/format.h"
 #include "logs_window.hpp"
 #include "mod_texture_provider.hpp"
@@ -218,6 +219,7 @@ void ModsWindow::build_content(Rml::Element* content) {
 }
 
 void ModsWindow::build_detail(Pane& pane, mods::LoadedMod& mod) {
+    pane.root()->SetAttribute("mod-id", mod.metadata.id);
     pane.add_child<ModDetailHeader>(
         mod, [this, id = mod.metadata.id] { push(std::make_unique<LogsWindow>(id)); });
 
@@ -274,6 +276,10 @@ void ModsWindow::build_detail(Pane& pane, mods::LoadedMod& mod) {
         pane.add_text(mod.metadata.description)->SetClass("mod-description", true);
     }
 
+    if (mod.active) {
+        mods::svc::ui_build_mods_panels(mod, pane);
+    }
+
     pane.finalize();
 }
 
@@ -317,6 +323,10 @@ void ModsWindow::update() {
                 }
             }
         }
+    }
+
+    if (mSelectedMod != nullptr && mSelectedMod->active) {
+        mods::svc::ui_update_mods_panels(*mSelectedMod);
     }
 
     Window::update();

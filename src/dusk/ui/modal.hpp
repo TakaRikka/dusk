@@ -26,6 +26,10 @@ public:
 
     bool focus() override;
 
+    void add_action(ModalAction action);
+    void set_body(const Rml::String& bodyRml);
+    void set_icon(const Rml::String& icon);
+
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 

@@ -47,10 +47,10 @@ protected:
     void clear_content() noexcept;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
     bool handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept;
-    bool mSuppressNavFallback = false;
 
     template <typename T, typename... Args>
-    requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
+        requires std::is_base_of_v<Component, T>
+    T& add_child(Args&&... args) {
         auto child = std::make_unique<T>(std::forward<Args>(args)...);
         T& ref = *child;
         mContentComponents.emplace_back(std::move(child));
@@ -63,7 +63,7 @@ protected:
     // Only set for tab-bar-less windows.
     std::unique_ptr<Button> mCloseButton;
     TabBuilder mContentBuilder;
-    std::vector<std::unique_ptr<Component> > mContentComponents;
+    std::vector<std::unique_ptr<Component>> mContentComponents;
     Insets mBodyPadding;
     bool mInitialOpen = true;
 };

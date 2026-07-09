@@ -60,7 +60,7 @@ const Rml::String kDocumentSourceSmall = R"RML(
 }  // namespace
 
 Window::Window(Props props)
-    : Document(window_document_source(props.styleSheets)),
+    : Document(window_document_source(props.styleSheets), false, DocumentScope::Window),
       mRoot(mDocument->GetElementById("window")) {
     if (props.tabBar) {
         mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
@@ -262,13 +262,13 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (mTabBar && mTabBar->handle_nav_command(event, cmd)) {
         return true;
     }
-    return mSuppressNavFallback ? false : Document::handle_nav_command(event, cmd);
+    return Document::handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up) {
         if (!mTabBar) {
-            return true;
+            return false;
         }
         if (focus()) {
             mDoAud_seStartMenu(kSoundItemFocus);
@@ -331,8 +331,8 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
 }
 
 WindowSmall::WindowSmall(const Rml::String& windowClass, const Rml::String& dialogClass)
-    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")),
-      mDialog(mDocument->GetElementById("dialog")) {
+    : Document(kDocumentSourceSmall, false, DocumentScope::Window),
+      mRoot(mDocument->GetElementById("window")), mDialog(mDocument->GetElementById("dialog")) {
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
             Document::visible())
