@@ -303,7 +303,12 @@ int daAlink_c::commonKandelaarPour(int param_0) {
                 }
 
                 field_0x072c->setFrame(2.0f);
+                #if TARGET_PC
+                if (!dusk::getSettings().game.infiniteBottle)
+                    dComIfGs_setEquipBottleItemEmpty(mSelectItemId);
+                #else
                 dComIfGs_setEquipBottleItemEmpty(mSelectItemId);
+                #endif
             }
         }
     } else if (checkAnmEnd(frameCtrl_p)) {

@@ -213,7 +213,11 @@ int daAlink_c::commonBottleDrink(BOOL param_0) {
                 }
 
                 field_0x072c->setFrame(1.0f);
-                if (mDemo.getDemoType() == daPy_demo_c::DEMO_TYPE_SPECIAL_e) {
+                bool consumeContents = true;
+                #if TARGET_PC
+                consumeContents = !dusk::getSettings().game.infiniteBottle;
+                #endif
+                if (mDemo.getDemoType() == daPy_demo_c::DEMO_TYPE_SPECIAL_e && consumeContents) {
                     dComIfGs_setEquipBottleItemIn(mSelectItemId, dItemNo_HALF_MILK_BOTTLE_e);
                 }
             } else if (mProcVar2.field_0x300c == 0) {
@@ -267,7 +271,12 @@ int daAlink_c::commonBottleDrink(BOOL param_0) {
                 }
 
                 field_0x072c->setFrame(2.0f);
-                if (mDemo.getDemoType() == daPy_demo_c::DEMO_TYPE_SPECIAL_e) {
+
+                bool consumeContents = true;
+                #if TARGET_PC
+                consumeContents = !dusk::getSettings().game.infiniteBottle;
+                #endif
+                if (mDemo.getDemoType() == daPy_demo_c::DEMO_TYPE_SPECIAL_e && consumeContents) {
                     dComIfGs_setEquipBottleItemEmpty(mSelectItemId);
                 }
 
@@ -497,7 +506,13 @@ int daAlink_c::procBottleOpen() {
         } else if (frameCtrl_p->checkPass(11.0f)) {
             mHeldItemModel->getModelData()->entryTexMtxAnimator(field_0x0720);
             mProcVar2.field_0x300c = 2;
+
+            #if TARGET_PC
+            if (!dusk::getSettings().game.infiniteBottle)
+                dComIfGs_setEquipBottleItemEmpty(mSelectItemId);
+            #else
             dComIfGs_setEquipBottleItemEmpty(mSelectItemId);
+            #endif
 
             if (mEquipItem == dItemNo_WATER_BOTTLE_e && mProcVar3.field_0x300e != 0) {
                 seStartOnlyReverb(Z2SE_LK_SPRINKLE_WATER);

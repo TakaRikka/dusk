@@ -1663,7 +1663,12 @@ int daAlink_c::procFishingCast() {
         field_0x2fc8 = 0;
     }
 
-    if (checkEndResetFlg0(ERFLG0_FISHING_HIT) && mItemMode != 0xFF) {
+    bool consumesBait = true;
+    #if TARGET_PC
+    consumesBait = !dusk::getSettings().game.infiniteBait;
+    #endif
+
+    if (checkEndResetFlg0(ERFLG0_FISHING_HIT) && mItemMode != 0xFF && consumesBait) {
         mItemMode = 0xFF;
         dComIfGs_setBaitItem(0xFF);
 
@@ -1741,10 +1746,18 @@ int daAlink_c::procFishingFood() {
             mProcVar2.field_0x300c = 1;
 
             u16 item = dComIfGp_getSelectItem(mProcVar3.field_0x300e);
-            if (item == dItemNo_WORM_e || dComIfGp_getSelectItemNum(mProcVar3.field_0x300e) == 1) {
-                dComIfGs_setEquipBottleItemEmpty(mProcVar3.field_0x300e);
-            } else {
-                dComIfGp_addSelectItemNum(mProcVar3.field_0x300e, -1);
+
+            bool consumesContents = true;
+            #if TARGET_PC
+            if (dusk::getSettings().game.infiniteBottle)
+                consumesContents = false;          
+            #endif
+            if (consumesContents) {
+                if (item == dItemNo_WORM_e || dComIfGp_getSelectItemNum(mProcVar3.field_0x300e) == 1) { // If Worm or Bee Larva == 1
+                    dComIfGs_setEquipBottleItemEmpty(mProcVar3.field_0x300e); // Set bottle to empty
+                } else { // If there are more than 1 Bee Larva left in the bottle
+                    dComIfGp_addSelectItemNum(mProcVar3.field_0x300e, -1); // Substract 1 Bee Larva
+                }
             }
 
             if (mItemMode != dItemNo_NONE_e) {
