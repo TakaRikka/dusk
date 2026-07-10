@@ -629,6 +629,17 @@ static void bug_control(e_bug_class* a_this) {
 
             i_this->field_0x52++;
 
+#if TARGET_PC
+            if (dusk::getSettings().game.bugSpray) {
+                if (i_this->field_0x50 == 2) {
+                    // state: "gonna attach myself"
+                    // no, you're not
+                    i_this->field_0x50 = 4;
+                    // state: "nice try"
+                }
+            }
+#endif
+
             if (i_this->field_0x50 == -1) {
                 set_wait(a_this, i_this);
                 bug_mtxset(i_this);

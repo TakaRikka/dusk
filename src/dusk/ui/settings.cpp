@@ -246,6 +246,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);
     getSettings().game.invincibleEnemies.setSpeedrunValue(false);
+    getSettings().game.bugSpray.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
 
@@ -1423,6 +1424,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
+        addCheat("Bug Spray", getSettings().game.bugSpray,
+            "Poison Mites die instead of attaching themselves to and slowing down Link.");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
