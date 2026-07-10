@@ -24,6 +24,15 @@
 
 #if TARGET_PC
 #include "dusk/action_bindings.h"
+
+namespace {
+
+// Reads the user HUD scale setting, clamped to a safe range.
+f32 dGetUserHudScale() {
+    return std::clamp(dusk::getSettings().game.hudScale.getValue(), 0.5f, 2.0f);
+}
+
+}  // namespace
 #endif
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
@@ -326,7 +335,7 @@ f32 dMeterMap_c::getMapDispEdgeTop() {
               mMap->getTexelPerCm() * (mMap->getPackZ() + -mMap->getPackPlusZ()) -
               mMap->getTopEdgePlus();
     }
-    f32 rv = getMapDispEdgeBottomY_Layout() - tmp;
+    f32 rv = getMapDispEdgeBottomY_Layout() - tmp IF_DUSK(* dGetUserHudScale());
     return rv;
 }
 
@@ -637,8 +646,7 @@ void dMeterMap_c::draw() {
         #if TARGET_PC
         // Scale the minimap with the user HUD scale and shift down so its bottom-left
         // corner stays anchored to the same screen position as at scale 1.0.
-        const f32 userHudScale =
-            std::clamp(dusk::getSettings().game.hudScale.getValue(), 0.5f, 2.0f);
+        const f32 userHudScale = dGetUserHudScale();
         const f32 scaledSizeX = sizeX * userHudScale;
         const f32 scaledSizeY = sizeY * userHudScale;
         const f32 mapBottomShift = sizeY - scaledSizeY;

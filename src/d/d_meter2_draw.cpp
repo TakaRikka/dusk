@@ -2782,7 +2782,7 @@ void dMeter2Draw_c::drawButtonCross(f32 i_posX, f32 i_posY) {
 #if TARGET_PC
     f32 buttonCrossPosX = i_posX;
     f32 buttonCrossPosY = i_posY;
-    dAnchorHudScale(mpButtonCrossParent, HudCorner::TopLeft, &buttonCrossPosX, &buttonCrossPosY);
+    dAnchorHudScale(mpButtonCrossParent, HudCorner::BottomLeft, &buttonCrossPosX, &buttonCrossPosY);
     mpButtonCrossParent->paneTrans(buttonCrossPosX, buttonCrossPosY);
 #else
     mpButtonCrossParent->paneTrans(i_posX, i_posY);
