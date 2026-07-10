@@ -25,6 +25,7 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "dusk/action_bindings.h"
 #include "dusk/memory.h"
 #include "dusk/settings.h"
 #endif
@@ -2300,10 +2301,19 @@ void dMeter2_c::move2DContents() {
         }
 
         if (mpMeterDraw->isEmphasisA() && var_r30 != 0 && mpEmpButton->isSetButton(0)) {
-            mpEmpButton->setString(mpMeterDraw->getActionString(mDoStatus, 0, NULL), 0, 2 - var_r30,
-                                   0);
-            var_r19 = 1;
-            var_r30 -= 1;
+#if TARGET_PC
+            const bool suppressRollLabel =
+                mDoStatus == BUTTON_STATUS_UNK_121 &&
+                dusk::isActionBound(dusk::ActionBinds::ROLL, 0);
+#else
+            const bool suppressRollLabel = false;
+#endif
+            if (!suppressRollLabel) {
+                mpEmpButton->setString(mpMeterDraw->getActionString(mDoStatus, 0, NULL), 0,
+                                       2 - var_r30, 0);
+                var_r19 = 1;
+                var_r30 -= 1;
+            }
         }
 
         if (mpMeterDraw->isEmphasisZ() && var_r30 != 0 && mpEmpButton->isSetButton(3)) {

@@ -23,6 +23,8 @@ ActionBindsMap& getActionBinds() {
         {ActionBinds::TOGGLE_MINIMAP,      {&getSettings().actionBindings.toggleMinimap,     "Toggle Minimap"}},
         {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
         {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
+        {ActionBinds::ROLL,                {&getSettings().actionBindings.roll,              "Roll"}},
+        {ActionBinds::TRANSFORM,           {&getSettings().actionBindings.transform,         "Transform (Wolf/Human)"}},
     };
     return actionBinds;
 }

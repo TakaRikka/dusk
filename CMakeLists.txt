@@ -304,6 +304,7 @@ source_group("dusklight" FILES ${DUSK_FILES} ${DUSK_HTTP_BACKEND_FILES})
 include(cmake/GameABIConfig.cmake)
 
 find_package(Threads REQUIRED)
+find_package(zstd REQUIRED)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)

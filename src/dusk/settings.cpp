@@ -206,6 +206,18 @@ UserSettings g_userSettings = {
             ActionBindConfigVar{"actionBindings.turboButton_port2", PAD_NATIVE_BUTTON_INVALID},
             ActionBindConfigVar{"actionBindings.turboButton_port3", PAD_NATIVE_BUTTON_INVALID},
         },
+        .roll {
+            ActionBindConfigVar{"actionBindings.roll_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.roll_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.roll_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.roll_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
+        .transform {
+            ActionBindConfigVar{"actionBindings.transform_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.transform_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.transform_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.transform_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
     }
 };
 
@@ -377,6 +389,14 @@ void registerSettings() {
     Register(g_userSettings.actionBindings.turboSpeedButton[1]);
     Register(g_userSettings.actionBindings.turboSpeedButton[2]);
     Register(g_userSettings.actionBindings.turboSpeedButton[3]);
+    Register(g_userSettings.actionBindings.roll[0]);
+    Register(g_userSettings.actionBindings.roll[1]);
+    Register(g_userSettings.actionBindings.roll[2]);
+    Register(g_userSettings.actionBindings.roll[3]);
+    Register(g_userSettings.actionBindings.transform[0]);
+    Register(g_userSettings.actionBindings.transform[1]);
+    Register(g_userSettings.actionBindings.transform[2]);
+    Register(g_userSettings.actionBindings.transform[3]);
 }
 
 // Transient settings

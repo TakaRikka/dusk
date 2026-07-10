@@ -15,6 +15,7 @@
 #include "d/d_model.h"
 #include "d/d_tresure.h"
 #include "dusk/achievements.h"
+#include "dusk/action_bindings.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/livesplit.h"
 #include "dusk/logging.h"
@@ -765,9 +766,14 @@ static void duskExecute() {
         }
     }
 
-    if ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1)) {
-        if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
-            dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
+    {
+        const bool transformTrig = dusk::isActionBound(dusk::ActionBinds::TRANSFORM, 0)
+            ? dusk::getActionBindTrig(dusk::ActionBinds::TRANSFORM, 0)
+            : ((mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == PAD_TRIGGER_R && mDoCPd_c::getTrigY(PAD_1));
+        if (transformTrig) {
+            if (const auto link = g_dComIfG_gameInfo.play.getPlayer(0)) {
+                dynamic_cast<daAlink_c*>(link)->handleQuickTransform();
+            }
         }
     }
 

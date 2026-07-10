@@ -2727,6 +2727,10 @@ void daAlink_c::setHatAngle() {
         }
 
         *temp_r29 = cLib_minMaxLimit<s16>((*temp_r29 + *sp2C), -0x3800, 0x3800);
+        // Keep Kokiri hat tip clear of the body so it doesn't clip through the back shield
+        if (dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_KOKIRI_e) {
+            *temp_r29 = cLib_minMaxLimit<s16>(*temp_r29, -0x1800, 0x3800);
+        }
         sp10 = cLib_minMaxLimit<s16>(cM_atan2s(-((sp9C.x * var_f28) - (sp9C.z * var_f29)), JMAFastSqrt(SQUARE(temp_f27) + SQUARE(sp9C.y))), -0x2800, 0x2800);
 
         if (checkEndResetFlg0(ERFLG0_UNK_800000)) {
@@ -5945,7 +5949,9 @@ void daAlink_c::setItemMatrix(int param_0) {
             }
         } else {
             mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30b6));
-            mDoMtx_stack_c::transM(4.2f, -4.4f, -20.0f);
+            // Kokiri hat tip extends further back; shift shield lower to avoid clipping
+            float shieldBackY = dComIfGs_getSelectEquipClothes() == dItemNo_WEAR_KOKIRI_e ? -8.5f : -4.4f;
+            mDoMtx_stack_c::transM(4.2f, shieldBackY, -20.0f);
             mDoMtx_stack_c::XYZrotM(cM_deg2s(91.0f), cM_deg2s(57.0f), cM_deg2s(180.0f));
             mShieldModel->setBaseTRMtx(mDoMtx_stack_c::get());
 
@@ -11904,21 +11910,32 @@ BOOL daAlink_c::checkRAction() {
     return false;
 }
 
-BOOL daAlink_c::checkMoveDoAction() {
-    if (doTrigger()) {
-        if (dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
-            if (checkWolf()) {
-                return procWolfSideStepInit(0);
-            }
+BOOL daAlink_c::rollTrigger() const {
+#if TARGET_PC
+    if (dusk::isActionBound(dusk::ActionBinds::ROLL, 0)) {
+        return dusk::getActionBindTrig(dusk::ActionBinds::ROLL, 0);
+    }
+#endif
+    return doTrigger();
+}
 
+BOOL daAlink_c::checkMoveDoAction() {
+    if (dComIfGp_getDoStatus() == BUTTON_STATUS_JUMP) {
+        if (checkWolf() && rollTrigger()) {
+            return procWolfSideStepInit(0);
+        }
+
+        if (doTrigger() && !checkWolf()) {
             int direction = getDirectionFromShapeAngle();
-            if (field_0x2fb0 != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
+            if (mSideStepLandComboTimer != 0 && direction != DIR_BACKWARD && checkSideRollAction(direction)) {
                 return true;
             }
 
             return procSideStepInit(direction);
         }
+    }
 
+    if (rollTrigger()) {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_UNK_121) {
             if (!checkAttentionLock() && checkInputOnR()) {
                 shape_angle.y = mMoveAngle;
@@ -11930,6 +11947,10 @@ BOOL daAlink_c::checkMoveDoAction() {
         if (dComIfGp_getDoStatus() == BUTTON_STATUS_DASH) {
             return procWolfDashInit();
         }
+    }
+
+    if (doTrigger() && dComIfGp_getDoStatus() == BUTTON_STATUS_DASH) {
+        return procWolfDashInit();
     }
 
     return false;
@@ -15925,7 +15946,7 @@ int daAlink_c::procSideStepLandInit() {
         field_0x3478 = mpHIO->mSideStep.m.mBackLandAnm.mCancelFrame;
         field_0x2f98 = 2;
         mProcVar1.field_0x300a = 0;
-        field_0x2fb0 = 0;
+        mSideStepLandComboTimer = 0;
         field_0x2fcc = 10;
     } else {
         daAlink_ANM anm_id;
@@ -15941,7 +15962,7 @@ int daAlink_c::procSideStepLandInit() {
         setSingleAnimeParam(anm_id, &mpHIO->mSideStep.m.mSideLandAnm);
         field_0x3478 = mpHIO->mSideStep.m.mSideLandAnm.mCancelFrame;
         mProcVar1.field_0x300a = 1;
-        field_0x2fb0 = 8;
+        mSideStepLandComboTimer = 8;
         field_0x2fcc = 0;
 
         if (checkEnemyGroup(mTargetedActor) && mEquipItem == 0x103 && checkNoUpperAnime()) {
@@ -18537,8 +18558,8 @@ int daAlink_c::execute() {
             if (!checkWolf()) {
                 setHatAngle();
 
-                if (field_0x2fb0 != 0) {
-                    field_0x2fb0--;
+                if (mSideStepLandComboTimer != 0) {
+                    mSideStepLandComboTimer--;
                 }
 
                 footBgCheck();

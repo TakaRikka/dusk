@@ -21,6 +21,9 @@
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
 #include "dusk/frame_interpolation.h"
+#if TARGET_PC
+#include "dusk/action_bindings.h"
+#endif
 #include <cstring>
 
 #if TARGET_PC
@@ -2360,6 +2363,13 @@ void dMeter2Draw_c::setAlphaKeyAnimeMax() {
 void dMeter2Draw_c::drawButtonA(u8 i_action, f32 i_posX, f32 i_posY, f32 i_textPosX, f32 i_textPosY,
                                 f32 i_scale, bool param_6, bool param_7) {
     char* mp_string = getActionString(i_action, 1, &field_0x761);
+#if TARGET_PC
+    static char empty_string[1] = {0};
+    if (i_action == BUTTON_STATUS_UNK_121 &&
+        dusk::isActionBound(dusk::ActionBinds::ROLL, 0)) {
+        mp_string = empty_string;
+    }
+#endif
     f32 var_f31 = g_drawHIO.mButtonAScale;
     f32 var_f30 = g_drawHIO.mButtonATextScale;
 

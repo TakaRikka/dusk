@@ -13,6 +13,8 @@ enum class ActionBinds {
     TOGGLE_MINIMAP,
     OPEN_DUSKLIGHT_MENU,
     TURBO_SPEED_BUTTON,
+    ROLL,
+    TRANSFORM,
     COUNT,
 };
 
