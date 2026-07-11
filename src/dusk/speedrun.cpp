@@ -45,14 +45,14 @@ void resetForSpeedrunMode() {
     getSettings().game.debugFlyCam.setSpeedrunValue(false);
 }
 
-static void clear_speedrun_overrides() {
+static void clearSpeedrunOverrides() {
     config::EnumerateRegistered([](config::ConfigVarBase& cvar) {
         cvar.clearSpeedrunOverride();
     });
 }
 
 void restoreFromSpeedrunMode() {
-    clear_speedrun_overrides();
+    clearSpeedrunOverrides();
     aurora_set_pause_on_focus_lost(getSettings().game.pauseOnFocusLost.getValue());
 }
 
