@@ -21,6 +21,8 @@ public:
     bool focus() override;
     bool visible() const override;
 
+    static void rebuild();
+
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 

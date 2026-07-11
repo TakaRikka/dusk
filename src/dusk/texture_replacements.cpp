@@ -20,7 +20,8 @@ void reload() {
     }
 
     const auto root = ConfigPath / "texture_replacements";
-    s_directoryGroup = aurora::texture::load_replacement_directory(root);
+    s_directoryGroup = aurora::texture::load_replacement_directory(
+        root, {.priority = kUserTextureReplacementPriority});
     DuskLog.info("Texture replacement directory loaded: {} registration(s)",
                  s_directoryGroup.registrations.size());
 }

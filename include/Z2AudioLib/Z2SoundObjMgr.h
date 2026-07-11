@@ -100,13 +100,13 @@ public:
     bool isForceBattle() { return forceBattle_; }
     JSUList<Z2CreatureEnemy>* getEnemyList() { return &field_0x0; }
 
-    #if DEBUG
+    #if PARTIAL_DEBUG || DEBUG
     JSUList<Z2SoundObjBase>* getAllList() { return &allList_; }
     #endif
 
 private:
     /* 0x00 */ JSUList<Z2CreatureEnemy> field_0x0;
-    #if DEBUG
+    #if PARTIAL_DEBUG || DEBUG
     /* 0x0C */ JSUList<Z2SoundObjBase> allList_;
     #endif
     /* 0x0C */ Z2EnemyArea enemyArea_;

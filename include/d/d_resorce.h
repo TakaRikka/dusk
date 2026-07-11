@@ -59,7 +59,7 @@ private:
     /* 0x18 */ JKRHeap* heap;
     /* 0x1C */ JKRSolidHeap* mDataHeap;
     /* 0x20 */ void** mRes;
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x24 */ int mSize;
 #endif
 };  // Size: 0x24

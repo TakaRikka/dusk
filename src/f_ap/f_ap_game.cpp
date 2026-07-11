@@ -18,6 +18,7 @@
 #include "dusk/frame_interpolation.h"
 #include "dusk/livesplit.h"
 #include "dusk/logging.h"
+#include "dusk/mod_loader.hpp"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_tag.h"
 #include "f_op/f_op_overlap_mng.h"
@@ -815,6 +816,8 @@ static void duskExecute() {
     if (dusk::getSettings().game.infiniteOxygen) {
         dComIfGp_setOxygen(dComIfGp_getMaxOxygen());
     }
+
+    dusk::mods::ModLoader::instance().tick();
 }
 #endif
 

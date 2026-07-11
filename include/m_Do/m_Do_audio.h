@@ -11,13 +11,13 @@ class mDoAud_zelAudio_c : public Z2AudioMgr {
 public:
     void reset();
     mDoAud_zelAudio_c() {
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
         setMode(2);
 #endif
     }
     ~mDoAud_zelAudio_c() {}
 
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     u8 getMode() { return field_0x13bd; }
     void setMode(u8 mode) { field_0x13bd = mode; }
 

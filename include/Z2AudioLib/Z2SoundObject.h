@@ -7,7 +7,7 @@
 struct Z2SoundStarter;
 
 class Z2SoundObjBase : public Z2SoundHandles
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
 , public JSULink<Z2SoundObjBase>
 #endif
 {

@@ -521,13 +521,13 @@ private:
     /* 0x019 */ u8 field_0x19;
     /* 0x01A */ u8 field_0x1a;
     /* 0x01B */ u8 field_0x1b;
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x01C */ dPa_simpleEcallBack field_0x1c[48];
 #else
     /* 0x01C */ dPa_simpleEcallBack field_0x1c[25];
 #endif
     /* 0x210 */ level_c field_0x210;
-    #if DEBUG
+    #if PARTIAL_DEBUG || DEBUG
     u8 mSceneCount;
     #endif
 };

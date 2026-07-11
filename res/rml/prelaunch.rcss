@@ -362,6 +362,10 @@ body.animate-in .intro-item {
     transition: opacity transform 0.3s 0.6s cubic-in-out;
 }
 
+.delay-6 {
+    transition: opacity transform 0.3s 0.7s cubic-in-out;
+}
+
 /* Mobile layout */
 @media (max-height: 640dp) {
     .gradient {

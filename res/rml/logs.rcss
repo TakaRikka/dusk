@@ -1,0 +1,97 @@
+window.logs content {
+    flex-flow: column;
+}
+
+window.logs .log-toolbar {
+    display: flex;
+    flex-flow: row;
+    flex: 0 0 64dp;
+    height: 64dp;
+    align-items: center;
+    gap: 8dp;
+    padding-right: 72dp;
+    background-color: rgba(217, 217, 217, 10%);
+    border-bottom: 2dp #92875B;
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 18dp;
+}
+
+window.logs > close {
+    top: 8dp;
+    right: 8dp;
+}
+
+window.logs .log-title {
+    align-self: stretch;
+    flex: 0 0 auto;
+    padding: 0 24dp;
+    line-height: 64dp;
+    text-transform: uppercase;
+    border-bottom: 4dp #C2A42D;
+    font-effect: glow(0dp 4dp 0dp 4dp black);
+}
+
+window.logs .log-title-mod {
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: "Fira Sans";
+    font-weight: normal;
+    font-size: 15dp;
+    color: rgba(224, 219, 200, 55%);
+}
+
+.log-toolbar-spacer {
+    flex: 1 1 0;
+}
+
+.log-toolbar button {
+    flex: 0 0 auto;
+    font-family: "Fira Sans";
+    font-weight: normal;
+    font-size: 15dp;
+    padding: 5dp 12dp;
+}
+
+window.logs content pane.log-view {
+    flex: 1 1 0;
+    padding: 12dp 16dp;
+    padding-bottom: 0dp;
+    gap: 0dp;
+}
+
+.log-lines {
+    display: block;
+}
+
+.log-line {
+    display: block;
+    font-family: "Noto Mono";
+    font-size: 13dp;
+    line-height: 1.5;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.log-line .log-time {
+    color: rgba(224, 219, 200, 45%);
+}
+
+.log-line .log-mod {
+    color: rgba(194, 164, 45, 80%);
+}
+
+.log-line.lvl-trace,
+.log-line.lvl-debug {
+    opacity: 0.55;
+}
+
+.log-line.lvl-warn .log-msg {
+    color: #ffa826;
+}
+
+.log-line.lvl-error .log-msg {
+    color: #cc4444;
+}

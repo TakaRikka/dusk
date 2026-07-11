@@ -19,6 +19,7 @@ public:
     void update() override;
     bool focus() override;
     bool visible() const override;
+    bool obscures_game() const override { return true; }
 
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;

@@ -35,6 +35,11 @@ public:
     /* 0x4 */ s8 mNo;
     /* 0x5 */ u8 mCount;
 #else
+#if PARTIAL_DEBUG
+    // Initialized here since the DEBUG ctor doesn't run.
+    /* 0x4 */ s8 mNo = -1;
+    /* 0x5 */ u8 mCount = 0;
+#endif
     virtual ~mDoHIO_entry_c() {}
 #endif
 };

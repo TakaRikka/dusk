@@ -7,7 +7,8 @@
 
 namespace dusk {
 
-using namespace config;
+using config::ConfigVar;
+using config::ActionBindConfigVar;
 
 enum class BloomMode : int {
     Off = 0,

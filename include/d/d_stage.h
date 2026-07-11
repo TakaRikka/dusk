@@ -538,7 +538,7 @@ public:
     /* vt[86] */ virtual stage_tgsc_class* getDrTg(void) const = 0;
     /* vt[87] */ virtual void setDoor(stage_tgsc_class*) = 0;
     /* vt[88] */ virtual stage_tgsc_class* getDoor(void) const = 0;
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     virtual void setUnit(void*) = 0;
     virtual void* getUnit() = 0;
 #endif
@@ -796,7 +796,7 @@ public:
     virtual stage_tgsc_class* getDrTg(void) const { return mDrTg; }
     virtual void setDoor(stage_tgsc_class* i_Door) { mDoor = i_Door; }
     virtual stage_tgsc_class* getDoor(void) const { return mDoor; }
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     virtual void setUnit(void* i_Unit) { mUnit = i_Unit; }
     virtual void* getUnit() { return mUnit; }
 #endif
@@ -845,7 +845,7 @@ public:
     /* 0x54 */ stage_tgsc_class* mDrTg;
     /* 0x58 */ stage_tgsc_class* mDoor;
     /* 0x5C */ dStage_FloorInfo_c* mFloorInfo;
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x60 */ void* mUnit;
 #endif
     /* 0x60 */ u16 mPlayerNum;
@@ -990,7 +990,7 @@ public:
     /* vt[86] */ virtual stage_tgsc_class* getDrTg(void) const { return mDrTg; }
     /* vt[87] */ virtual void setDoor(stage_tgsc_class* i_Door) { mDoor = i_Door; }
     /* vt[88] */ virtual stage_tgsc_class* getDoor(void) const { return mDoor; }
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     virtual void setUnit(void* i_Unit) {
         UNUSED(i_Unit);
         OSReport("stage non unit list data !!\n");

@@ -159,6 +159,14 @@ toast.achievement heading {
     color: #C2A42D;
 }
 
+toast.warning {
+    border: 1dp #C2A42D;
+}
+
+toast.warning heading {
+    color: #C2A42D;
+}
+
 toast.controller-warning {
     top: auto;
     right: auto;

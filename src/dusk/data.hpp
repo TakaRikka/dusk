@@ -29,6 +29,7 @@ struct Paths {
 };
 
 Paths initialize_data();
+std::filesystem::path base_path_relative(const std::filesystem::path& path);
 std::filesystem::path configured_data_path();
 std::filesystem::path cache_path();
 bool open_data_path();

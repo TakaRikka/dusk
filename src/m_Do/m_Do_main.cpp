@@ -60,6 +60,7 @@
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/iso_validate.hpp"
+#include "dusk/mod_loader.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/ui/menu_bar.hpp"
@@ -265,7 +266,7 @@ void main01(void) {
                 if (dusk::getSettings().video.rememberWindowSize && !dusk::getSettings().video.enableFullscreen) {
                     dusk::getSettings().video.lastWindowWidth.setValue(event->windowSize.width);
                     dusk::getSettings().video.lastWindowHeight.setValue(event->windowSize.height);
-                    dusk::config::Save();
+                    dusk::config::save();
                 }
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
@@ -363,6 +364,7 @@ void main01(void) {
     } while (dusk::IsRunning);
 
     exit:;
+    dusk::mods::ModLoader::instance().shutdown();
     dusk::ui::shutdown();
 }
 
@@ -430,16 +432,7 @@ static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
         const auto name = std::string_view(cvarArg).substr(0, sep);
         const auto value = std::string_view(cvarArg).substr(sep + 1);
 
-        const auto cVar = dusk::config::GetConfigVar(name);
-        if (!cVar) {
-            DuskLog.fatal("Unknown --cvar name: '{}'", name);
-        }
-
-        try {
-            cVar->getImpl()->loadFromArg(*cVar, value);
-        } catch (const std::exception& e) {
-            DuskLog.fatal("Unable to parse: '{}': {}", value, e.what());
-        }
+        dusk::config::load_arg_override(name, value);
     }
 }
 
@@ -510,7 +503,6 @@ int game_main(int argc, char* argv[]) {
     mainCalled = true;
 
     dusk::registerSettings();
-    dusk::config::FinishRegistration();
 
     cxxopts::ParseResult parsed_arg_options;
 
@@ -522,6 +514,7 @@ int game_main(int argc, char* argv[]) {
             ("h,help", "Print usage")
             ("console", "Show the Windows console window for logs", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
+            ("mods", "Path to mods directory", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, d3d11, metal, vulkan, null)", cxxopts::value<std::string>())
             ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
 
@@ -551,10 +544,7 @@ int game_main(int argc, char* argv[]) {
 
     log_build_info();
 
-    dusk::config::LoadFromUserPreferences();
-    if (dusk::getSettings().game.speedrunMode) {
-        dusk::resetForSpeedrunMode();
-    }
+    dusk::config::load_from_user_preferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     dusk::android::update_surface_frame_rate();
     dusk::crash_reporting::initialize();
@@ -616,6 +606,12 @@ int game_main(int argc, char* argv[]) {
         config.imGuiInitCallback = &aurora_imgui_init_callback;
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);
+    }
+
+    // Apply after aurora_initialize: speedrun mode mutates cvars whose change callbacks push
+    // values into aurora.
+    if (dusk::getSettings().game.speedrunMode) {
+        dusk::resetForSpeedrunMode();
     }
 
 #ifdef DUSK_DISCORD
@@ -700,7 +696,7 @@ int game_main(int argc, char* argv[]) {
                 dusk::getSettings().backend.isoPath.setValue(dvd_path);
                 dusk::getSettings().backend.isoVerification.setValue(
                     dusk::DiscVerificationState::Unknown);
-                dusk::config::Save();
+                dusk::config::save();
                 dusk::IsGameLaunched = true;
             }
         } else {
@@ -723,7 +719,7 @@ int game_main(int argc, char* argv[]) {
             saveConfigBeforePrelaunch = true;
         }
         if (saveConfigBeforePrelaunch) {
-            dusk::config::Save();
+            dusk::config::save();
         }
 
         if (!dusk::getSettings().backend.skipPreLaunchUI) {
@@ -792,8 +788,61 @@ int game_main(int argc, char* argv[]) {
     // mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
     mDoDvdThd::SyncWidthSound = false;
 
-    OSReport("Starting main01 (Game Loop)...\n");
+    // Mod search directories, highest priority first: user dir (--mods replaces it), then
+    // mods/ next to the app, then install-bundled mods inside the app bundle.
+    {
+        std::vector<dusk::mods::ModSearchDir> modDirs;
+        if (parsed_arg_options.contains("mods") &&
+            !parsed_arg_options["mods"].as<std::string>().empty())
+        {
+            modDirs.push_back({.path = parsed_arg_options["mods"].as<std::string>()});
+        } else {
+            modDirs.push_back({.path = dusk::ConfigPath / "mods"});
+        }
+#if TARGET_ANDROID
+        // APK-bundled mods are extracted to internal storage
+        // by DuskActivity before SDL_main runs.
+        modDirs.push_back({
+            .path = dusk::CachePath / "bundled_mods",
+        });
+#elif defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV)
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("mods"),
+            .inPlaceNative = true,
+            .nativeLibDir = dusk::data::base_path_relative("Frameworks"),
+        });
+#else
+#if defined(__APPLE__)
+        // Base path is Contents/Resources; search up for dev mods
+        // TODO: scope to non-CI builds
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("../../../mods").lexically_normal(),
+            .inPlaceNative = true,
+        });
+        // Contents/Resources/mods
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("mods"),
+            .inPlaceNative = true,
+        });
+#else
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("mods"),
+            .inPlaceNative = true,
+        });
+#endif
+#endif
+        dusk::mods::ModLoader::instance().set_search_dirs(std::move(modDirs));
+    }
+#if TARGET_ANDROID
+    // A user-relocated data dir can live on external storage, which is mounted noexec.
+    // Native mod libraries must be extracted to internal storage.
+    dusk::mods::ModLoader::instance().set_cache_dir(dusk::CachePath / "mod_cache");
+#endif
 
+    DuskLog.info("Initializing mods...");
+    dusk::mods::ModLoader::instance().init();
+
+    OSReport("Starting main01 (Game Loop)...\n");
 
     main01();
 
@@ -814,6 +863,7 @@ int game_main(int argc, char* argv[]) {
 #endif
     dusk::ui::shutdown();
     dusk::texture_replacements::shutdown();
+    dusk::config::shutdown();
     aurora_shutdown();
 
     return 0;

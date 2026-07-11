@@ -9,7 +9,7 @@ namespace dusk::ui {
 
 class ControllerConfigWindow : public Window {
 public:
-    ControllerConfigWindow(bool prelaunch);
+    ControllerConfigWindow();
 
     void update() override;
     void hide(bool close) override;

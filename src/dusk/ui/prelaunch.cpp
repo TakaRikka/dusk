@@ -8,6 +8,7 @@
 #include "dusk/settings.h"
 #include "dusk/update_check.hpp"
 #include "modal.hpp"
+#include "mods_window.hpp"
 #include "preset.hpp"
 #include "settings.hpp"
 #include "version.h"
@@ -49,14 +50,14 @@ const Rml::String kDocumentSource = R"RML(
             </hero>
             <div id="menu-list" />
         </menu>
-        <disc-info class="intro-item delay-4">
+        <disc-info class="intro-item delay-5">
             <div id="disc-status">
                 <icon />
                 <span id="disc-status-label" />
             </div>
             <span id="disc-version" class="detail" />
         </disc-info>
-        <version-info class="intro-item delay-5">
+        <version-info class="intro-item delay-6">
             <div class="version">Version <span id="version-text"></span></div>
             <div id="update-status" class="update">
                 <span id="update-message"></span>
@@ -309,7 +310,7 @@ void persist_disc_choice(const std::string& path, iso::ValidationError validatio
 
     getSettings().backend.isoPath.setValue(path);
     getSettings().backend.isoVerification.setValue(verification);
-    config::Save();
+    config::save();
 
     if (previousPath != path || previousVerification != verification) {
         iso::log_verification_state(path, verification);
@@ -684,7 +685,9 @@ void try_apply_mirrored_layout(Rml::Element* body) {
     body->SetClass("mirrored", getSettings().game.enableMirrorMode.getValue());
 }
 
-Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementById("root")) {
+Prelaunch::Prelaunch()
+    : Document(kDocumentSource, false, DocumentScope::Prelaunch),
+      mRoot(mDocument->GetElementById("root")) {
     ensure_initialized();
     begin_update_check();
 
@@ -715,7 +718,7 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
             }
 
             IsGameLaunched = true;
-            pop(false);
+            pop();
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
 
@@ -726,9 +729,16 @@ Prelaunch::Prelaunch() : Document(kDocumentSource), mRoot(mDocument->GetElementB
         });
         apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
 
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Mods"));
+        mMenuButtons.back()->on_pressed([this] {
+            mRestartSuppressed = false;
+            push(std::make_unique<ModsWindow>());
+        });
+        apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
+
         mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
         mMenuButtons.back()->on_pressed([] { IsRunning = false; });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
+        apply_intro_animation(mMenuButtons.back()->root(), "delay-4");
     }
 
     mDiscStatus = mDocument->GetElementById("disc-status");

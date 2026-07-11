@@ -50,7 +50,8 @@ tab-bar[closable] tab-end-spacer {
     pointer-events: none;
 }
 
-tab-bar[closable] close {
+tab-bar[closable] close,
+window > close {
     display: block;
     position: fixed;
     top: 8dp;
@@ -70,12 +71,20 @@ tab-bar[closable] close {
 }
 
 tab-bar[closable] close:hover,
-tab-bar[closable] close:focus-visible {
+tab-bar[closable] close:focus-visible,
+window > close:hover,
+window > close:focus-visible {
     color: #fff;
     background-color: rgba(194, 164, 45, 24%);
 }
 
-tab-bar[closable] close:active {
+window > close {
+    top: 16dp;
+    right: 16dp;
+}
+
+tab-bar[closable] close:active,
+window > close:active {
     color: #fff;
     background-color: rgba(194, 164, 45, 40%);
 }

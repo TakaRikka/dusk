@@ -1,6 +1,6 @@
 ---
 Language: Cpp
-Standard: C++03
+Standard: c++20
 AccessModifierOffset: -4
 AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false

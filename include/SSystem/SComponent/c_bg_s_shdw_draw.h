@@ -20,7 +20,7 @@ public:
 
     /* 0x14 */ cM3dGAab mM3dGAab;
     /* 0x30 */ cBgS_ShdwDraw_Callback mCallbackFun;
-    #if DEBUG
+    #if PARTIAL_DEBUG || DEBUG
     /* 0x34 */ int field_0x34;
     #endif
 };

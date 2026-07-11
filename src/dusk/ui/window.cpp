@@ -2,6 +2,7 @@
 
 #include "aurora/lib/window.hpp"
 #include "aurora/rmlui.hpp"
+#include "fmt/format.h"
 #include "magic_enum.hpp"
 #include "pane.hpp"
 #include "ui.hpp"
@@ -24,17 +25,24 @@ float base_body_padding(Rml::Context* context) noexcept {
     return 64.0f * dpRatio;
 }
 
-const Rml::String kDocumentSource = R"RML(
+Rml::String window_document_source(const std::vector<Rml::String>& styleSheets) {
+    Rml::String links;
+    for (const auto& sheet : styleSheets) {
+        links += fmt::format("    <link type=\"text/rcss\" href=\"{}\" />\n", sheet);
+    }
+    return fmt::format(R"RML(
 <rml>
 <head>
     <link type="text/rcss" href="res/rml/tabbing.rcss" />
     <link type="text/rcss" href="res/rml/window.rcss" />
-</head>
+{}</head>
 <body>
     <window id="window"></window>
 </body>
 </rml>
-)RML";
+)RML",
+        links);
+}
 
 const Rml::String kDocumentSourceSmall = R"RML(
 <rml>
@@ -51,12 +59,25 @@ const Rml::String kDocumentSourceSmall = R"RML(
 
 }  // namespace
 
-Window::Window() : Document(kDocumentSource), mRoot(mDocument->GetElementById("window")) {
-    mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
-                                                  .onClose = [this] { request_close(); },
-                                                  .selectedTabIndex = 0,
-                                                  .autoSelect = true,
-                                              });
+Window::Window(Props props)
+    : Document(window_document_source(props.styleSheets), false, DocumentScope::Window),
+      mRoot(mDocument->GetElementById("window")) {
+    if (props.tabBar) {
+        mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
+                                                      .onClose = [this] { request_close(); },
+                                                      .selectedTabIndex = 0,
+                                                      .autoSelect = true,
+                                                  });
+    } else {
+        mCloseButton = std::make_unique<Button>(mRoot, Button::Props{}, "close");
+        mCloseButton->on_nav_command([this](Rml::Event&, NavCommand cmd) {
+            if (cmd == NavCommand::Confirm) {
+                request_close();
+                return true;
+            }
+            return false;
+        });
+    }
 
     auto elem = mDocument->CreateElement("content");
     elem->SetAttribute("id", "content");
@@ -152,7 +173,7 @@ void Window::update_safe_area() noexcept {
 }
 
 bool Window::set_active_tab(int index) {
-    return mTabBar->set_active_tab(index);
+    return mTabBar && mTabBar->set_active_tab(index);
 }
 
 void Window::request_close() {
@@ -167,16 +188,35 @@ bool Window::consume_close_request() {
 }
 
 void Window::refresh_active_tab() {
-    mTabBar->refresh_active_tab();
+    if (mTabBar) {
+        mTabBar->refresh_active_tab();
+    } else {
+        rebuild_content();
+    }
 }
 
 void Window::add_tab(const Rml::String& title, TabBuilder builder) {
+    if (!mTabBar) {
+        return;
+    }
     mTabBar->add_tab(title, [this, builder = std::move(builder)] {
         clear_content();
         if (builder) {
             builder(mContentRoot);
         }
     });
+}
+
+void Window::set_content(TabBuilder builder) {
+    mContentBuilder = std::move(builder);
+    rebuild_content();
+}
+
+void Window::rebuild_content() {
+    clear_content();
+    if (mContentBuilder) {
+        mContentBuilder(mContentRoot);
+    }
 }
 
 void Window::clear_content() noexcept {
@@ -187,7 +227,15 @@ void Window::clear_content() noexcept {
 }
 
 bool Window::focus() {
-    return mTabBar->focus();
+    if (mTabBar) {
+        return mTabBar->focus();
+    }
+    for (const auto& component : mContentComponents) {
+        if (component->focus()) {
+            return true;
+        }
+    }
+    return mCloseButton && mCloseButton->focus();
 }
 
 bool Window::visible() const {
@@ -211,14 +259,17 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         request_close();
         return true;
     }
-    if (mTabBar->handle_nav_command(event, cmd)) {
+    if (mTabBar && mTabBar->handle_nav_command(event, cmd)) {
         return true;
     }
-    return mSuppressNavFallback ? false : Document::handle_nav_command(event, cmd);
+    return Document::handle_nav_command(event, cmd);
 }
 
 bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
     if (cmd == NavCommand::Up) {
+        if (!mTabBar) {
+            return false;
+        }
         if (focus()) {
             mDoAud_seStartMenu(kSoundItemFocus);
             return true;
@@ -245,6 +296,9 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
                 }
                 return true;
             }
+        }
+        if (!mTabBar) {
+            return false;
         }
         return focus();
     } else if (cmd == NavCommand::Left || cmd == NavCommand::Right) {
@@ -277,8 +331,8 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
 }
 
 WindowSmall::WindowSmall(const Rml::String& windowClass, const Rml::String& dialogClass)
-    : Document(kDocumentSourceSmall), mRoot(mDocument->GetElementById("window")),
-      mDialog(mDocument->GetElementById("dialog")) {
+    : Document(kDocumentSourceSmall, false, DocumentScope::Window),
+      mRoot(mDocument->GetElementById("window")), mDialog(mDocument->GetElementById("dialog")) {
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
         if (event.GetTargetElement() == mRoot && !mRoot->HasAttribute("open") &&
             Document::visible())

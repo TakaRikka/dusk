@@ -1,0 +1,218 @@
+window.mods content pane.mod-list {
+    flex: 0 0 360dp;
+    padding: 16dp;
+    padding-bottom: 0dp;
+    gap: 4dp;
+}
+
+@media (max-height: 640dp) {
+    window.mods content pane.mod-list {
+        flex: 1 1 0;
+    }
+}
+
+window.mods content pane.mod-detail {
+    gap: 12dp;
+}
+
+.mod-info-row {
+    display: flex;
+    align-items: center;
+    gap: 12dp;
+    padding: 4dp 0;
+}
+
+.mod-info-label {
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    opacity: 0.55;
+    flex: 0 0 auto;
+}
+
+.mod-info-value {
+    flex: 1 1 0;
+}
+
+.mod-path {
+    font-size: 14dp;
+    word-break: break-all;
+    opacity: 0.7;
+}
+
+mod-entry {
+    display: flex;
+    flex-flow: row;
+    gap: 12dp;
+    padding: 10dp;
+    border-radius: 10dp;
+    decorator: vertical-gradient(#c2a42d00 #c2a42d00);
+    transition: decorator 0.1s linear-in-out;
+    cursor: pointer;
+    focus: auto;
+}
+
+mod-entry.current {
+    box-shadow: rgba(146, 135, 91, 40%) 0 0 0 1dp;
+}
+
+mod-entry:hover,
+mod-entry:focus-visible {
+    decorator: vertical-gradient(#c2a42d00 #c2a42d26);
+}
+
+mod-entry:selected {
+    decorator: vertical-gradient(#c2a42d10 #c2a42d40);
+}
+
+mod-entry .mod-icon {
+    flex: 0 0 auto;
+    width: 56dp;
+    height: 56dp;
+    border-radius: 8dp;
+}
+
+mod-entry icon.mod-icon {
+    font-size: 36dp;
+    background-color: rgba(17, 16, 10, 20%);
+    color: rgba(224, 219, 200, 45%);
+    decorator: text("&#xe87b;" center center);
+}
+
+mod-entry .mod-entry-info {
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 2dp;
+}
+
+mod-entry .mod-entry-name {
+    display: flex;
+    flex-flow: row;
+    align-items: baseline;
+    gap: 6dp;
+}
+
+mod-entry .mod-entry-name-text {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+mod-entry .mod-entry-version {
+    flex: 0 0 auto;
+    font-size: 13dp;
+    color: rgba(224, 219, 200, 50%);
+}
+
+mod-entry .mod-entry-status.active {
+    color: #44cc55;
+}
+
+mod-entry .mod-entry-status.failed {
+    color: #cc4444;
+}
+
+mod-entry .mod-entry-desc {
+    font-size: 14dp;
+    line-height: 1.3;
+    color: rgba(224, 219, 200, 65%);
+    max-height: 2.6em;
+    overflow: hidden;
+}
+
+mod-entry .mod-entry-sub {
+    font-size: 13dp;
+    color: rgba(224, 219, 200, 50%);
+}
+
+mod-entry.inactive .mod-icon {
+    filter: grayscale(1);
+}
+
+mod-entry.inactive .mod-entry-info {
+    opacity: 0.5;
+}
+
+mod-header {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+mod-header.has-banner {
+    height: 180dp;
+    margin: -24dp -24dp 0dp -24dp;
+}
+
+mod-header .mod-actions {
+    position: absolute;
+    top: 24dp;
+    left: 24dp;
+    display: flex;
+    flex-flow: row;
+    gap: 8dp;
+}
+
+mod-header .mod-actions button {
+    font-size: 16dp;
+    padding: 6dp 14dp;
+    background-color: rgba(21, 22, 16, 80%);
+    box-shadow: rgba(146, 135, 91, 60%) 0 0 0 1dp;
+}
+
+mod-header.no-banner {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+mod-header.no-banner .mod-actions {
+    position: static;
+}
+
+window.mods .mod-title {
+    display: block;
+    font-size: 28dp;
+    font-weight: bold;
+}
+
+window.mods .mod-title .mod-title-version {
+    font-weight: normal;
+    font-size: 16dp;
+    color: rgba(224, 219, 200, 55%);
+}
+
+window.mods .mod-author {
+    display: block;
+    font-size: 15dp;
+    color: rgba(224, 219, 200, 55%);
+}
+
+window.mods .mod-restart-note {
+    font-size: 15dp;
+    color: #ffa826;
+    opacity: 0.85;
+}
+
+window.mods .mod-description {
+    line-height: 1.5;
+}
+
+.status-badge {
+    font-size: 14dp;
+    opacity: 0.7;
+}
+
+.status-badge.active,
+.mod-info-label.active {
+    color: #44cc55;
+    opacity: 1;
+}
+
+.status-badge.failed,
+.mod-info-label.failed {
+    color: #cc4444;
+    opacity: 1;
+}

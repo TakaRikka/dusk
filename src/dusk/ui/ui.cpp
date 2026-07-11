@@ -17,8 +17,9 @@
 #include "aurora/lib/window.hpp"
 #include "dusk/config.hpp"
 #include "dusk/io.hpp"
-#include "input.hpp"
 #include "icon_provider.hpp"
+#include "input.hpp"
+#include "mod_texture_provider.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
 
@@ -33,6 +34,37 @@ bool sInitialized = false;
 std::vector<std::unique_ptr<Document> > sDocumentStack;
 // Documents that don't participate in the focus stack
 std::vector<std::unique_ptr<Document> > sPassiveDocuments;
+
+struct ScopedStyles {
+    DocumentScope scope;
+    std::string id;
+    Rml::SharedPtr<Rml::StyleSheetContainer> sheet;
+};
+std::vector<ScopedStyles> sScopedStyles;
+
+std::vector<const Rml::StyleSheetContainer*> scoped_sheets(DocumentScope scope) {
+    std::vector<const Rml::StyleSheetContainer*> sheets;
+    for (const auto& entry : sScopedStyles) {
+        if (entry.scope == scope) {
+            sheets.push_back(entry.sheet.get());
+        }
+    }
+    return sheets;
+}
+
+void restyle_scope(DocumentScope scope) {
+    const auto sheets = scoped_sheets(scope);
+    const auto restyle_documents = [&sheets, scope](auto& documents) {
+        for (auto& doc : documents) {
+            if (doc != nullptr && doc->scope() == scope && !doc->closed()) {
+                doc->restyle(sheets);
+            }
+        }
+    };
+    restyle_documents(sDocumentStack);
+    restyle_documents(sPassiveDocuments);
+}
+
 std::deque<Toast> sToasts;
 bool sMenuNotificationRequested = false;
 
@@ -62,11 +94,13 @@ bool initialize() noexcept {
     load_font("NotoMono-Regular.ttf");
 
     register_icon_texture_provider();
+    register_mod_texture_provider();
     sInitialized = true;
     return true;
 }
 
 void shutdown() noexcept {
+    unregister_mod_texture_provider();
     unregister_icon_texture_provider();
     sDocumentStack.clear();
     sPassiveDocuments.clear();
@@ -181,6 +215,34 @@ void handle_event(const SDL_Event& event) noexcept {
     input::handle_event(event);
 }
 
+bool register_scoped_styles(DocumentScope scope, std::string id, const std::string& rcss) noexcept {
+    auto sheet = Rml::Factory::InstanceStyleSheetString(rcss);
+    if (sheet == nullptr) {
+        return false;
+    }
+    const auto it = std::ranges::find_if(sScopedStyles,
+        [scope, &id](const ScopedStyles& entry) { return entry.scope == scope && entry.id == id; });
+    if (it != sScopedStyles.end()) {
+        it->sheet = std::move(sheet);
+    } else {
+        sScopedStyles.push_back({scope, std::move(id), std::move(sheet)});
+    }
+    restyle_scope(scope);
+    return true;
+}
+
+void unregister_scoped_styles(DocumentScope scope, std::string_view id) noexcept {
+    const auto erased = std::erase_if(sScopedStyles,
+        [scope, id](const ScopedStyles& entry) { return entry.scope == scope && entry.id == id; });
+    if (erased != 0) {
+        restyle_scope(scope);
+    }
+}
+
+void apply_scoped_styles(Document& doc) noexcept {
+    doc.restyle(scoped_sheets(doc.scope()));
+}
+
 Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) noexcept {
     Document& ret = *doc;
     if (passive) {
@@ -195,13 +257,9 @@ Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) 
     return ret;
 }
 
-void focus_top_document(bool show) noexcept {
+void uncover_top_document() noexcept {
     if (auto* doc = top_document()) {
-        if (show) {
-            doc->show();
-        } else {
-            doc->focus();
-        }
+        doc->uncover();
     }
     input::sync_input_block();
 }
@@ -216,6 +274,18 @@ bool is_prelaunch_open() noexcept {
         const auto* prelaunch = dynamic_cast<const Prelaunch*>(doc.get());
         return prelaunch != nullptr && prelaunch->active();
     });
+}
+
+bool game_obscured_below(const Document& doc) noexcept {
+    for (const auto& entry : sDocumentStack) {
+        if (entry.get() == &doc) {
+            break;
+        }
+        if (entry->active() && entry->obscures_game()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 Document* top_document() noexcept {
