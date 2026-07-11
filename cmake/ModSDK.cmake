@@ -54,79 +54,84 @@ function(add_mod target_name)
         message(FATAL_ERROR "add_mod: MOD_JSON does not exist: ${_mod_json}")
     endif ()
 
-    add_library(${target_name} SHARED ${ARG_SOURCES})
-    _mod_lib_name(_lib_name)
-    set_target_properties(${target_name} PROPERTIES
-            PREFIX ""
-            C_VISIBILITY_PRESET hidden
-            CXX_VISIBILITY_PRESET hidden
-            VISIBILITY_INLINES_HIDDEN ON
-            WINDOWS_EXPORT_ALL_SYMBOLS OFF)
-    target_compile_features(${target_name} PRIVATE cxx_std_20)
-    target_link_libraries(${target_name} PRIVATE dusklight_game_headers)
+    set(_has_lib FALSE)
+    set(_lib_name "")
+    if (ARG_SOURCES)
+        set(_has_lib TRUE)
+        add_library(${target_name} SHARED ${ARG_SOURCES})
+        _mod_lib_name(_lib_name)
+        set_target_properties(${target_name} PROPERTIES
+                PREFIX ""
+                C_VISIBILITY_PRESET hidden
+                CXX_VISIBILITY_PRESET hidden
+                VISIBILITY_INLINES_HIDDEN ON
+                WINDOWS_EXPORT_ALL_SYMBOLS OFF)
+        target_compile_features(${target_name} PRIVATE cxx_std_20)
+        target_link_libraries(${target_name} PRIVATE dusklight_game_headers)
 
-    if (NOT TARGET dusklight)
-        # Apply global compile options for out-of-tree mod builds
-        if (CMAKE_SYSTEM_NAME STREQUAL Linux)
-            target_compile_options(${target_name} PRIVATE
-                    -Wno-multichar -Wno-trigraphs -Wno-deprecated-declarations)
-        elseif (APPLE)
-            target_compile_options(${target_name} PRIVATE
-                    -Wno-declaration-after-statement -Wno-non-pod-varargs)
-        elseif (MSVC)
-            target_compile_options(${target_name} PRIVATE
-                    "$<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>"
-                    "$<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>")
-        endif ()
-        # Use signed char on ARM to match the original game (and x86)
-        string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" _mod_arch)
-        if (_mod_arch MATCHES "^(arm|aarch64)" AND CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
-            target_compile_options(${target_name} PRIVATE -fsigned-char)
-        endif ()
-    endif ()
-
-    if (APPLE)
-        # Game symbols resolve against the host executable at dlopen time.
-        target_link_options(${target_name} PRIVATE -undefined dynamic_lookup)
-    elseif (ANDROID)
-        if (TARGET dusklight)
-            target_link_libraries(${target_name} PRIVATE dusklight)
-        elseif (DUSK_GAME_SOLIB)
-            target_link_libraries(${target_name} PRIVATE "${DUSK_GAME_SOLIB}")
-        else ()
-            message(FATAL_ERROR "add_mod: DUSK_GAME_SOLIB is not set (libmain.so)")
-        endif ()
-    elseif (UNIX)
-        target_link_options(${target_name} PRIVATE -Wl,--allow-shlib-undefined)
-    elseif (WIN32)
-        # Link against the generated import library (game ABI surface). Function calls
-        # resolve through import thunks. Data is toolchain dependent:
-        # - clang-cl: lld's mingw mode auto-imports data references, fixed up at load by
-        #   the mod SDK's pseudo-relocation runtime (pseudo_reloc.cpp).
-        # - cl (MSVC): only DUSK_GAME_DATA-annotated data is reachable. Un-annotated
-        #   references fail to link.
-        if (NOT DUSK_GAME_IMPLIB)
-            message(FATAL_ERROR "add_mod: DUSK_GAME_IMPLIB is not set.")
-        endif ()
-        target_link_libraries(${target_name} PRIVATE "${DUSK_GAME_IMPLIB}")
-        set_target_properties(${target_name} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-        target_compile_definitions(${target_name} PRIVATE _ITERATOR_DEBUG_LEVEL=0)
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-            target_compile_options(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:C,CXX>:/clang:-mcmodel=large>")
-            target_sources(${target_name} PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../sdk/pseudo_reloc.cpp")
-            # lld mingw mode rewrites /DEFAULTLIB directives to -l style and skips %LIB%, so
-            # the CRT libraries and search paths are spelled out explicitly.
-            target_link_options(${target_name} PRIVATE -lldmingw /nodefaultlib /INCREMENTAL:NO)
-            target_link_libraries(${target_name} PRIVATE
-                    msvcrt.lib msvcprt.lib vcruntime.lib ucrt.lib
-                    oldnames.lib uuid.lib kernel32.lib user32.lib)
-            set(_lib_dirs "$ENV{LIB}")
-            if ("${_lib_dirs}" STREQUAL "")
-                message(FATAL_ERROR "add_mod: %LIB% is empty; configure from a VS dev shell")
+        if (NOT TARGET dusklight)
+            # Apply global compile options for out-of-tree mod builds
+            if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+                target_compile_options(${target_name} PRIVATE
+                        -Wno-multichar -Wno-trigraphs -Wno-deprecated-declarations)
+            elseif (APPLE)
+                target_compile_options(${target_name} PRIVATE
+                        -Wno-declaration-after-statement -Wno-non-pod-varargs)
+            elseif (MSVC)
+                target_compile_options(${target_name} PRIVATE
+                        "$<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>"
+                        "$<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>")
             endif ()
-            foreach (_libdir IN LISTS _lib_dirs)
-                target_link_options(${target_name} PRIVATE "/libpath:${_libdir}")
-            endforeach ()
+            # Use signed char on ARM to match the original game (and x86)
+            string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" _mod_arch)
+            if (_mod_arch MATCHES "^(arm|aarch64)" AND CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+                target_compile_options(${target_name} PRIVATE -fsigned-char)
+            endif ()
+        endif ()
+
+        if (APPLE)
+            # Game symbols resolve against the host executable at dlopen time.
+            target_link_options(${target_name} PRIVATE -undefined dynamic_lookup)
+        elseif (ANDROID)
+            if (TARGET dusklight)
+                target_link_libraries(${target_name} PRIVATE dusklight)
+            elseif (DUSK_GAME_SOLIB)
+                target_link_libraries(${target_name} PRIVATE "${DUSK_GAME_SOLIB}")
+            else ()
+                message(FATAL_ERROR "add_mod: DUSK_GAME_SOLIB is not set (libmain.so)")
+            endif ()
+        elseif (UNIX)
+            target_link_options(${target_name} PRIVATE -Wl,--allow-shlib-undefined)
+        elseif (WIN32)
+            # Link against the generated import library (game ABI surface). Function calls
+            # resolve through import thunks. Data is toolchain dependent:
+            # - clang-cl: lld's mingw mode auto-imports data references, fixed up at load by
+            #   the mod SDK's pseudo-relocation runtime (pseudo_reloc.cpp).
+            # - cl (MSVC): only DUSK_GAME_DATA-annotated data is reachable. Un-annotated
+            #   references fail to link.
+            if (NOT DUSK_GAME_IMPLIB)
+                message(FATAL_ERROR "add_mod: DUSK_GAME_IMPLIB is not set.")
+            endif ()
+            target_link_libraries(${target_name} PRIVATE "${DUSK_GAME_IMPLIB}")
+            set_target_properties(${target_name} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+            target_compile_definitions(${target_name} PRIVATE _ITERATOR_DEBUG_LEVEL=0)
+            if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+                target_compile_options(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:C,CXX>:/clang:-mcmodel=large>")
+                target_sources(${target_name} PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../sdk/pseudo_reloc.cpp")
+                # lld mingw mode rewrites /DEFAULTLIB directives to -l style and skips %LIB%, so
+                # the CRT libraries and search paths are spelled out explicitly.
+                target_link_options(${target_name} PRIVATE -lldmingw /nodefaultlib /INCREMENTAL:NO)
+                target_link_libraries(${target_name} PRIVATE
+                        msvcrt.lib msvcprt.lib vcruntime.lib ucrt.lib
+                        oldnames.lib uuid.lib kernel32.lib user32.lib)
+                set(_lib_dirs "$ENV{LIB}")
+                if ("${_lib_dirs}" STREQUAL "")
+                    message(FATAL_ERROR "add_mod: %LIB% is empty; configure from a VS dev shell")
+                endif ()
+                foreach (_libdir IN LISTS _lib_dirs)
+                    target_link_options(${target_name} PRIVATE "/libpath:${_libdir}")
+                endforeach ()
+            endif ()
         endif ()
     endif ()
 
@@ -141,6 +146,14 @@ function(add_mod target_name)
     set(_package_deps "${_mod_json}")
     set(_package_inputs "${_mod_json}")
     set(_extra_cmds "")
+    set(_lib_copy_cmd "")
+    set(_target_depend "")
+    if (_has_lib)
+        list(APPEND _zip_args "${_lib_name}")
+        set(_lib_copy_cmd COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "$<TARGET_FILE:${target_name}>" "${_stage}/${_lib_name}")
+        set(_target_depend ${target_name})
+    endif ()
     if (ARG_RES_DIR)
         _mod_resolve_source_path(_res_dir "${ARG_RES_DIR}")
         _mod_collect_assets(_res_deps "${_res_dir}")
@@ -194,12 +207,12 @@ function(add_mod target_name)
     add_custom_command(OUTPUT "${_out}"
             COMMAND ${CMAKE_COMMAND} -E rm -rf "${_stage}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${_stage}" "${_output_dir}"
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${target_name}>" "${_stage}/${_lib_name}"
+            ${_lib_copy_cmd}
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_mod_json}" "${_stage}/mod.json"
             ${_extra_cmds}
             COMMAND ${CMAKE_COMMAND} -E chdir "${_stage}" ${CMAKE_COMMAND} -E tar cvf "${_out}" --format=zip ${_zip_args}
             ${_bundle_cmds}
-            DEPENDS ${target_name} ${_package_deps} "${_package_inputs_file}"
+            DEPENDS ${_target_depend} ${_package_deps} "${_package_inputs_file}"
             COMMENT "Packaging ${target_name} -> ${_out}"
             COMMAND_EXPAND_LISTS
             VERBATIM
