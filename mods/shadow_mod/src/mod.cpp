@@ -57,6 +57,7 @@ ConfigVarHandle g_cvarStrength = 0;
 ConfigVarHandle g_cvarPcf = 0;
 ConfigVarHandle g_cvarBias = 0;
 ConfigVarHandle g_cvarBoxRadius = 0;
+ConfigVarHandle g_cvarEdgeFadeWidth = 0;
 ConfigVarHandle g_cvarContactShadows = 0;
 ConfigVarHandle g_cvarDebugView = 0;
 
@@ -107,6 +108,7 @@ struct ShadowUniforms {
     float bias;
     float size[2];
     float inv_size[2];
+    float edge_fade_width;
     float strength;
     float pcf_taps;
     float contact_enabled;
@@ -114,7 +116,6 @@ struct ShadowUniforms {
     float contact_length;
     uint32_t debug_mode;
     float _pad0;
-    float _pad1;
 };
 static_assert(sizeof(ShadowUniforms) % 16 == 0);
 
@@ -792,6 +793,8 @@ void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
     uniforms.size[1] = static_cast<float>(mapPass.mapSize);
     uniforms.inv_size[0] = 1.0f / uniforms.size[0];
     uniforms.inv_size[1] = 1.0f / uniforms.size[1];
+    uniforms.edge_fade_width =
+        static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarEdgeFadeWidth, 32), 0, 128));
     uniforms.strength =
         mapPass.fade *
         static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarStrength, 45), 0, 100)) /
@@ -867,6 +870,8 @@ ModResult build_controls_tab(
         "dynamic shadows. This can be expensive.");
     add_number(left, "Coverage", g_cvarBoxRadius, 1000, 20000, 500, nullptr,
         "Radius of the shadowed area around the camera, in world units. Smaller is sharper.");
+    add_number(left, "Fade Out", g_cvarEdgeFadeWidth, 0, 128, 32, " texels",
+        "Fade out shadows gradually near the edge of the coverage area.");
 
     svc_ui->pane_add_section(mod_ctx, left, "Appearance");
     add_number(left, "Strength", g_cvarStrength, 0, 100, 5, "%", "How dark shadowed areas become.");
@@ -992,6 +997,10 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     if (result != MOD_OK) {
         return result;
     }
+    result = register_int_option("edgeFadeWidth", 32, g_cvarEdgeFadeWidth, error);
+    if (result != MOD_OK) {
+        return result;
+    }
     result = register_bool_option("contactShadows", true, g_cvarContactShadows, error);
     if (result != MOD_OK) {
         return result;
@@ -1087,7 +1096,8 @@ MOD_EXPORT ModResult mod_shutdown(ModError*) {
     }
     g_cvarEnabled = g_cvarMapSize = g_cvarNoFrustumClipping = 0;
     g_cvarStrength = 0;
-    g_cvarPcf = g_cvarBias = g_cvarBoxRadius = g_cvarContactShadows = g_cvarDebugView = 0;
+    g_cvarPcf = g_cvarBias = g_cvarBoxRadius = g_cvarEdgeFadeWidth = g_cvarContactShadows =
+        g_cvarDebugView = 0;
     g_drawType = g_sceneBeginHook = g_sceneAfterTerrainHook = g_frameBeforeHudHook = 0;
     g_controlsWindow = 0;
     g_mapPass = {};
