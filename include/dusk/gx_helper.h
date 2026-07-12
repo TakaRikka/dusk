@@ -5,7 +5,8 @@
 
 #include <dolphin/gx/GXAurora.h>
 #include <dolphin/gx/GXExtra.h>
-#include "tracy/Tracy.hpp"
+
+#include "profiling.hpp"
 
 #if DUSK_GFX_DEBUG_GROUPS
 #define GX_DEBUG_GROUP(name, ...) \

@@ -198,6 +198,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     mCursorInterpPrevAngular = false;
     mCursorInterpCurrAngular = false;
     mCursorInterpInit = false;
+    mPointerTouchPressHoveredCurrent = false;
 #endif
     for (int i = 0; i < 4; i++) {
         field_0x674[i] = 0;
@@ -1561,6 +1562,10 @@ bool dMenu_Ring_c::pointerMove() {
     if (hoveredSlot < 0) {
         return false;
     }
+    if (pointer.pressed) {
+        mPointerTouchPressHoveredCurrent = pointer.touch && hoveredSlot == mCurrentSlot;
+    }
+    dusk::menu_pointer::set_hover_target(static_cast<dusk::menu_pointer::TargetId>(hoveredSlot));
 
     if (mCurrentSlot != hoveredSlot) {
         mDirectSelectCursorPos.x = mItemSlotPosX[mCurrentSlot];
@@ -1573,8 +1578,25 @@ bool dMenu_Ring_c::pointerMove() {
         return true;
     }
 
-    if (dusk::menu_pointer::consume_click()) {
+    const bool clickOpensExplain = !pointer.touch || mPointerTouchPressHoveredCurrent;
+    if (clickOpensExplain && dusk::menu_pointer::consume_click()) {
+        const u8 item = dComIfGs_getItem(mItemSlots[mCurrentSlot], false);
+        if (!dMeter2Info_isTouchKeyCheck(0xe) && openExplain(item)) {
+            dMeter2Info_setItemExplainWindowStatus(1);
+            field_0x6c4 = mCurrentSlot;
+            setStatus(STATUS_EXPLAIN);
+            dMeter2Info_set2DVibration();
+            setDoStatus(0);
+        } else {
+            Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
+                                     -1.0f, 0);
+        }
+        mPointerTouchPressHoveredCurrent = false;
         return true;
+    }
+
+    if (pointer.released) {
+        mPointerTouchPressHoveredCurrent = false;
     }
 
     return false;

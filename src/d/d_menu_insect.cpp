@@ -320,6 +320,7 @@ bool dMenu_Insect_c::pointerWait() {
             if (!isGetInsect(x, y) || !dusk::menu_pointer::hit_pane(mpINSParent[index], 8.0f)) {
                 continue;
             }
+            dusk::menu_pointer::set_hover_target(index);
 
             if (field_0xf4 != x || field_0xf5 != y) {
                 field_0xf4 = x;

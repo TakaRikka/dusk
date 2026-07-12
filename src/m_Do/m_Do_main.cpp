@@ -42,11 +42,13 @@
 #include "m_Do/m_Do_ext2.h"
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
+#include <sstream>
 
 #include <filesystem>
 #include <system_error>
 #include <thread>
 #include "SSystem/SComponent/c_API.h"
+#include "dusk/android_frame_rate.hpp"
 #include "dusk/app_info.hpp"
 #include "dusk/crash_handler.h"
 #include "dusk/crash_reporting.h"
@@ -59,6 +61,7 @@
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/iso_validate.hpp"
+#include "dusk/mod_loader.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/ui/menu_bar.hpp"
@@ -123,6 +126,8 @@ bool dusk::IsRunning = true;
 bool dusk::IsShuttingDown = false;
 bool dusk::IsGameLaunched = false;
 bool dusk::RestartRequested = false;
+uint8_t dusk::SaveRequested = 0;
+dusk::StageRequest dusk::StageRequested = {"",false};
 std::filesystem::path dusk::ConfigPath;
 std::filesystem::path dusk::CachePath;
 #endif
@@ -248,12 +253,12 @@ void main01(void) {
                 goto eventsDone;
             case AURORA_PAUSED:
                 dusk::audio::SetPaused(true);
-                dusk::mouse::onFocusLost();
+                dusk::mouse::on_focus_lost();
                 break;
             case AURORA_UNPAUSED:
                 dusk::audio::SetPaused(false);
                 dusk::game_clock::reset_frame_timer();
-                dusk::mouse::onFocusGained();
+                dusk::mouse::on_focus_gained();
                 break;
             case AURORA_SDL_EVENT:
                 dusk::mouse::handle_event(event->sdl);
@@ -264,7 +269,7 @@ void main01(void) {
                 if (dusk::getSettings().video.rememberWindowSize && !dusk::getSettings().video.enableFullscreen) {
                     dusk::getSettings().video.lastWindowWidth.setValue(event->windowSize.width);
                     dusk::getSettings().video.lastWindowHeight.setValue(event->windowSize.height);
-                    dusk::config::Save();
+                    dusk::config::save();
                 }
                 break;
             case AURORA_DISPLAY_SCALE_CHANGED:
@@ -333,11 +338,21 @@ void main01(void) {
             mDoAud_Execute();
         }
 
+        aurora_end_frame();
+
+        FrameMark;
+
+#ifdef DUSK_DISCORD
+        dusk::discord::run_callbacks();
+        dusk::discord::update_presence();
+#endif
+
         static Limiter main_loop_limiter;
         static double last_fps_setting = 0.0;
         static Limiter::duration_t target_ns = 0;
 
         if (dusk::getSettings().game.enableFrameInterpolation.getValue() == dusk::FrameInterpMode::Capped && !dusk::getTransientSettings().skipFrameRateLimit) {
+            ZoneScopedN("Frame limiter");
             double current_fps = dusk::getSettings().video.maxFrameRate.getValue();
             if (current_fps != last_fps_setting) {
                 last_fps_setting = current_fps;
@@ -349,19 +364,10 @@ void main01(void) {
         } else {
             main_loop_limiter.Reset();
         }
-
-        aurora_end_frame();
-
-
-        FrameMark;
-
-#ifdef DUSK_DISCORD
-        dusk::discord::run_callbacks();
-        dusk::discord::update_presence();
-#endif
     } while (dusk::IsRunning);
 
     exit:;
+    dusk::mods::ModLoader::instance().shutdown();
     dusk::ui::shutdown();
 }
 
@@ -429,16 +435,7 @@ static void ApplyCVarOverrides(const cxxopts::OptionValue& option) {
         const auto name = std::string_view(cvarArg).substr(0, sep);
         const auto value = std::string_view(cvarArg).substr(sep + 1);
 
-        const auto cVar = dusk::config::GetConfigVar(name);
-        if (!cVar) {
-            DuskLog.fatal("Unknown --cvar name: '{}'", name);
-        }
-
-        try {
-            cVar->getImpl()->loadFromArg(*cVar, value);
-        } catch (const std::exception& e) {
-            DuskLog.fatal("Unable to parse: '{}': {}", value, e.what());
-        }
+        dusk::config::load_arg_override(name, value);
     }
 }
 
@@ -508,9 +505,6 @@ int game_main(int argc, char* argv[]) {
     }
     mainCalled = true;
 
-    dusk::registerSettings();
-    dusk::config::FinishRegistration();
-
     cxxopts::ParseResult parsed_arg_options;
 
     try {
@@ -521,8 +515,12 @@ int game_main(int argc, char* argv[]) {
             ("h,help", "Print usage")
             ("console", "Show the Windows console window for logs", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
             ("dvd", "Path to DVD image file", cxxopts::value<std::string>())
+            ("mods", "Path to mods directory", cxxopts::value<std::string>())
             ("backend", "Graphics API backend to use (auto, d3d12, d3d11, metal, vulkan, null)", cxxopts::value<std::string>())
-            ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>());
+            ("cvar", "Override configuration variables without modifying config", cxxopts::value<std::vector<std::string>>())
+            ("develop", "Enable the game's developer mode and OSReport for debugging", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+            ("load-save", "Skip the opening and load a save from slot 1-3", cxxopts::value<uint8_t>()->default_value("0"))
+            ("stage", "Upon launching, load a stage, room, spawn point, and layer. When using --load-save, it uses the specified save on the loaded stage. Format (STAGE,ROOM,POINT,LAYER). Example: (STAGE) or (STAGE,0,0,-1)", cxxopts::value<std::string>());
 
         arg_options.parse_positional({"dvd"});
         arg_options.positional_help("<dvd-image>");
@@ -535,11 +533,52 @@ int game_main(int argc, char* argv[]) {
             printf("%s", (arg_options.help() + "\n").c_str());
             exit(0);
         }
+
+        if (parsed_arg_options.count("stage")) {
+            std::stringstream ss(parsed_arg_options["stage"].as<std::string>());
+            std::string token;
+
+            std::getline(ss,token,',');
+            std::string stageName = token;
+            s8 room = 0;
+            s16 point = 0;
+            s8 layer = -1;
+            if (std::getline(ss,token,',')) {
+                room = std::stoi(token);
+                if (std::getline(ss,token,',')) {
+                    point = std::stoi(token);
+                    if (std::getline(ss,token,',')) {
+                        layer = std::stoi(token);
+                    }
+                }
+            }
+
+            dusk::StageRequested = {stageName,true, room,point,layer};
+        }
     }
     catch (const cxxopts::exceptions::exception& e) {
         fprintf(stderr, "Argument Error: %s\n", e.what());
         exit(1);
     }
+    catch (const std::invalid_argument& e) {
+        // Handle parsing std::stoi when loading a stage
+        fprintf(stderr, "Fatal: Invalid Argument When Parsing Stage\n");
+        exit(1);
+    }
+    catch (const std::out_of_range& e) {
+        // Handle parsing std::stoi when loading a stage
+        fprintf(stderr, "Fatal: Argument Out of Range In Parsing Stage\n");
+        exit(1);
+    }
+
+    if (parsed_arg_options.contains("load-save")){
+        uint8_t slot = parsed_arg_options["load-save"].as<uint8_t>();
+        if (slot >= 1 && slot <= 3) {
+            dusk::SaveRequested = slot;
+        }
+    }
+
+    dusk::registerSettings();
 
     const auto startupLogLevel =
         static_cast<AuroraLogLevel>(parsed_arg_options["log-level"].as<uint8_t>());
@@ -548,13 +587,17 @@ int game_main(int argc, char* argv[]) {
     dusk::CachePath = dataPaths.cachePath;
     dusk::InitializeFileLogging(dusk::CachePath, startupLogLevel);
 
+    // Development Mode
+    if (parsed_arg_options.count("develop")) {
+        mDoMain::developmentMode = parsed_arg_options["develop"].as<bool>();  // Enable Dev Mode for Debugging
+        dusk::OSReportReallyForceEnable = parsed_arg_options["develop"].as<bool>();  // Print OSReport to console
+    }
+
     log_build_info();
 
-    dusk::config::LoadFromUserPreferences();
-    if (dusk::getSettings().game.speedrunMode) {
-        dusk::resetForSpeedrunMode();
-    }
+    dusk::config::load_from_user_preferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
+    dusk::android::update_surface_frame_rate();
     dusk::crash_reporting::initialize();
     dusk::crash_handler::install();
     // TODO: How to handle this?
@@ -614,6 +657,12 @@ int game_main(int argc, char* argv[]) {
         config.imGuiInitCallback = &aurora_imgui_init_callback;
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);
+    }
+
+    // Apply after aurora_initialize: speedrun mode mutates cvars whose change callbacks push
+    // values into aurora.
+    if (dusk::getSettings().game.speedrunMode) {
+        dusk::resetForSpeedrunMode();
     }
 
 #ifdef DUSK_DISCORD
@@ -684,7 +733,7 @@ int game_main(int argc, char* argv[]) {
         saveConfigBeforePrelaunch = true;
     }
 
-    std::string dvd_path;
+    std::string dvd_path = dusk::getSettings().backend.isoPath;
     bool dvd_opened = false;
     if (parsed_arg_options.count("dvd")) {
         dvd_path = parsed_arg_options["dvd"].as<std::string>();
@@ -698,13 +747,29 @@ int game_main(int argc, char* argv[]) {
                 dusk::getSettings().backend.isoPath.setValue(dvd_path);
                 dusk::getSettings().backend.isoVerification.setValue(
                     dusk::DiscVerificationState::Unknown);
-                dusk::config::Save();
+                dusk::config::save();
                 dusk::IsGameLaunched = true;
             }
         } else {
             DuskLog.warn("DVD image from command line failed validation: {}, opening prelaunch UI", dvd_path);
             forcePreLaunchUI = true;
         }
+    }
+
+    bool skipPreLaunchUI = dusk::getSettings().backend.skipPreLaunchUI.getValue();
+
+    // If we can't load right into the game, stop requesting to load a stage or save
+    if (forcePreLaunchUI || dvd_path.empty()) {
+        if (dusk::StageRequested.set) {
+            DuskLog.warn("Cannot load stage {} because no iso path is set, opening prelaunch UI",dusk::StageRequested.stage);
+            dusk::StageRequested = {};
+        }
+        if (dusk::SaveRequested) {
+            DuskLog.warn("Cannot load save {} because no iso path is set, opening prelaunch UI",dusk::SaveRequested);
+            dusk::SaveRequested = 0;
+        }
+    }else if (dusk::StageRequested.set || dusk::SaveRequested) {
+        skipPreLaunchUI = true;
     }
 
     dusk::iso::log_verification_state(
@@ -715,16 +780,16 @@ int game_main(int argc, char* argv[]) {
         if (dusk::getSettings().backend.isoPath.getValue().empty()) {
             forcePreLaunchUI = true;
         }
-        if (forcePreLaunchUI && dusk::getSettings().backend.skipPreLaunchUI.getValue()) {
+        if (forcePreLaunchUI && skipPreLaunchUI) {
             DuskLog.warn("Prelaunch UI was disabled with no usable DVD image, enabling prelaunch UI");
             dusk::getSettings().backend.skipPreLaunchUI.setValue(false);
             saveConfigBeforePrelaunch = true;
         }
         if (saveConfigBeforePrelaunch) {
-            dusk::config::Save();
+            dusk::config::save();
         }
 
-        if (!dusk::getSettings().backend.skipPreLaunchUI) {
+        if (!skipPreLaunchUI) {
             dusk::ui::push_document(std::make_unique<dusk::ui::Prelaunch>(), true);
 
             // pre game launch ui main loop
@@ -743,7 +808,6 @@ int game_main(int argc, char* argv[]) {
         }
 
         dvd_path = dusk::getSettings().backend.isoPath;
-
         if (dvd_path.empty()) {
             DuskLog.fatal("No DVD image specified, unable to boot!");
         }
@@ -786,12 +850,63 @@ int game_main(int argc, char* argv[]) {
     // Global Context Init
     dComIfG_ct();
 
-    // Development Mode
-    // mDoMain::developmentMode = 1;  // Force Dev Mode for Debugging
     mDoDvdThd::SyncWidthSound = false;
 
-    OSReport("Starting main01 (Game Loop)...\n");
+    // Mod search directories, highest priority first: user dir (--mods replaces it), then
+    // mods/ next to the app, then install-bundled mods inside the app bundle.
+    {
+        std::vector<dusk::mods::ModSearchDir> modDirs;
+        if (parsed_arg_options.contains("mods") &&
+            !parsed_arg_options["mods"].as<std::string>().empty())
+        {
+            modDirs.push_back({.path = parsed_arg_options["mods"].as<std::string>()});
+        } else {
+            modDirs.push_back({.path = dusk::ConfigPath / "mods"});
+        }
+#if TARGET_ANDROID
+        // APK-bundled mods are extracted to internal storage
+        // by DuskActivity before SDL_main runs.
+        modDirs.push_back({
+            .path = dusk::CachePath / "bundled_mods",
+        });
+#elif defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV)
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("mods"),
+            .inPlaceNative = true,
+            .nativeLibDir = dusk::data::base_path_relative("Frameworks"),
+        });
+#else
+#if defined(__APPLE__)
+        // Base path is Contents/Resources; search up for dev mods
+        // TODO: scope to non-CI builds
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("../../../mods").lexically_normal(),
+            .inPlaceNative = true,
+        });
+        // Contents/Resources/mods
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("mods"),
+            .inPlaceNative = true,
+        });
+#else
+        modDirs.push_back({
+            .path = dusk::data::base_path_relative("mods"),
+            .inPlaceNative = true,
+        });
+#endif
+#endif
+        dusk::mods::ModLoader::instance().set_search_dirs(std::move(modDirs));
+    }
+#if TARGET_ANDROID
+    // A user-relocated data dir can live on external storage, which is mounted noexec.
+    // Native mod libraries must be extracted to internal storage.
+    dusk::mods::ModLoader::instance().set_cache_dir(dusk::CachePath / "mod_cache");
+#endif
 
+    DuskLog.info("Initializing mods...");
+    dusk::mods::ModLoader::instance().init();
+
+    OSReport("Starting main01 (Game Loop)...\n");
 
     main01();
 
@@ -812,6 +927,7 @@ int game_main(int argc, char* argv[]) {
 #endif
     dusk::ui::shutdown();
     dusk::texture_replacements::shutdown();
+    dusk::config::shutdown();
     aurora_shutdown();
 
     return 0;

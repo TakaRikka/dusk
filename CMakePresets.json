@@ -72,7 +72,11 @@
           "type": "BOOL",
           "value": false
         },
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
+        "DUSK_ENABLE_CODE_MODS": {
+          "type": "BOOL",
+          "value": true
+        }
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -158,7 +162,15 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER": "cl",
         "CMAKE_CXX_COMPILER": "cl",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
+        "DUSK_ENABLE_CODE_MODS": {
+          "type": "BOOL",
+          "value": true
+        },
+        "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
+          "type": "BOOL",
+          "value": true
+        }
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -258,7 +270,11 @@
           "type": "BOOL",
           "value": false
         },
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
+        "DUSK_ENABLE_CODE_MODS": {
+          "type": "BOOL",
+          "value": true
+        }
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
@@ -389,6 +405,10 @@
         "BUILD_SHARED_LIBS": {
           "type": "BOOL",
           "value": false
+        },
+        "DUSK_ENABLE_CODE_MODS": {
+          "type": "BOOL",
+          "value": true
         },
         "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
           "type": "BOOL",

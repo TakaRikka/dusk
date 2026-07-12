@@ -7505,7 +7505,7 @@ static bool sTouchFreeCameraActive = false;
 
 bool dCamera_c::isAimActive() {
     auto* link = daAlink_getAlinkActorClass();
-    return link != nullptr && link->checkAimContext() &&
+    return link != nullptr && link->checkAimInputContext() &&
            dComIfGp_checkCameraAttentionStatus(link->field_0x317c, 0x10);
 }
 
@@ -7600,6 +7600,10 @@ bool dCamera_c::executeDebugFlyCam() {
             cStickY -= (io.MousePos.y - sFlyCamLastMousePos.y) * 2.0f;
         }
         sFlyCamLastMousePos = mouseValid ? io.MousePos : ImVec2{-1.0f, -1.0f};
+    }
+
+    if (dusk::getSettings().game.enableMirrorMode) {
+        stickX *= -1.0f;
     }
 
     f32 verticalDisp = 0.0f;
@@ -7712,7 +7716,7 @@ bool dCamera_c::freeCamera() {
 
     f32 yaw_rad = 0.0f;
     f32 pitch_rad = 0.0f;
-    dusk::mouse::getCameraDeltas(yaw_rad, pitch_rad);
+    dusk::mouse::get_camera_deltas(yaw_rad, pitch_rad);
     if (dusk::getSettings().game.enableMouseCamera && (yaw_rad != 0.0f || pitch_rad != 0.0f) &&
         !dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 0x8))
     {

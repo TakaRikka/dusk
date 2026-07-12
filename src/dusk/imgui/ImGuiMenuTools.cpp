@@ -73,7 +73,7 @@ namespace dusk {
                 bool disableWaterRefraction = getSettings().game.disableWaterRefraction;
                 if (ImGui::Checkbox("Disable Water Refraction", &disableWaterRefraction)) {
                     getSettings().game.disableWaterRefraction.setValue(disableWaterRefraction);
-                    config::Save();
+                    config::save();
                 }
                 ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
                 ImGui::EndMenu();

@@ -1,5 +1,6 @@
 #include "dusk/speedrun.h"
 #include "dusk/settings.h"
+#include "dusk/config.hpp"
 #include "m_Do/m_Do_main.h"
 #include <aurora/aurora.h>
 
@@ -35,13 +36,24 @@ void resetForSpeedrunMode() {
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.zoraArmorMode.setSpeedrunValue(ZoraArmorMode::Normal);
     getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);
+    getSettings().game.invincibleEnemies.setSpeedrunValue(false);
 
     getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
-    aurora_set_pause_on_focus_lost(false);
 
     getSettings().backend.enableAdvancedSettings.setSpeedrunValue(false);
     getSettings().game.recordingMode.setSpeedrunValue(false);
     getSettings().game.debugFlyCam.setSpeedrunValue(false);
+}
+
+static void clearSpeedrunOverrides() {
+    config::EnumerateRegistered([](config::ConfigVarBase& cvar) {
+        cvar.clearSpeedrunOverride();
+    });
+}
+
+void restoreFromSpeedrunMode() {
+    clearSpeedrunOverrides();
+    aurora_set_pause_on_focus_lost(getSettings().game.pauseOnFocusLost.getValue());
 }
 
 }  // namespace dusk

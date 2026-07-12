@@ -83,6 +83,12 @@ enum SelectType {
     SelectType8,
 };
 
+#if TARGET_PC
+static dusk::menu_pointer::TargetId option_yes_no_target(u8 index) noexcept {
+    return static_cast<dusk::menu_pointer::TargetId>(0x100 + index);
+}
+#endif
+
 dMenu_Option_c::dMenu_Option_c(JKRArchive* i_archive, STControl* i_stick) {
     mUseFlag = 0;
     mBarScale[0] = g_drawHIO.mOptionScreen.mBarScale[0];
@@ -1098,18 +1104,28 @@ void dMenu_Option_c::confirm_move_move() {
         if (!dusk::menu_pointer::hit_pane(mpYesNoSelBase_c[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(option_yes_no_target(i));
+        const bool clicked = dusk::menu_pointer::consume_click();
         if (field_0x3f9 != i) {
             Z2GetAudioMgr()->seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
                                      -1.0f, 0);
             field_0x3fa = field_0x3f9;
             field_0x3f9 = i;
+            if (clicked) {
+                yesNoSelectStart();
+                field_0x3ef = SelectType7;
+                dMeter2Info_set2DVibrationM();
+                mpWarning->_move();
+                setAnimation();
+                return;
+            }
             yesnoSelectAnmSet();
             field_0x3ef = SelectType6;
             mpWarning->_move();
             setAnimation();
             return;
         }
-        if (dusk::menu_pointer::consume_click()) {
+        if (clicked) {
             yesNoSelectStart();
             field_0x3ef = SelectType7;
             dMeter2Info_set2DVibrationM();
@@ -1156,11 +1172,36 @@ void dMenu_Option_c::confirm_select_init() {
 }
 
 void dMenu_Option_c::confirm_select_move() {
+#if TARGET_PC
+    dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
+    if (field_0x3f9 != 0xff &&
+        dusk::menu_pointer::hit_pane(mpYesNoSelBase_c[field_0x3f9], 8.0f))
+    {
+        const dusk::menu_pointer::TargetId target = option_yes_no_target(field_0x3f9);
+        dusk::menu_pointer::set_hover_target(target);
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(dusk::menu_pointer::Context::Options, target);
+        }
+    }
+#endif
     u8 selectMoveAnm = yesnoSelectMoveAnm();
     u8 wakuAlphaAnm = yesnoWakuAlpahAnm(field_0x3fa);
 
     if (selectMoveAnm == 1 && wakuAlphaAnm == 1) {
         yesnoCursorShow();
+#if TARGET_PC
+        if (field_0x3f9 != 0xff &&
+            dusk::menu_pointer::consume_deferred_activation(
+                dusk::menu_pointer::Context::Options, option_yes_no_target(field_0x3f9)))
+        {
+            yesNoSelectStart();
+            field_0x3ef = SelectType7;
+            dMeter2Info_set2DVibrationM();
+            mpWarning->_move();
+            setAnimation();
+            return;
+        }
+#endif
         field_0x3ef = SelectType5;
     }
     mpWarning->_move();
@@ -2196,16 +2237,14 @@ bool dMenu_Option_c::isRumbleSupported() {
 #if TARGET_PC
 bool dMenu_Option_c::pointerConfirmSelect() {
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
-    if (!dusk::menu_pointer::state().clicked) {
-        return false;
-    }
-
     for (u8 i = 0; i < SelectType3; ++i) {
         if (dusk::menu_pointer::hit_pane(mpMenuPane[i], 8.0f)) {
+            dusk::menu_pointer::set_hover_target(i);
             return false;
         }
     }
 
+    dusk::menu_pointer::set_hover_target(0x200);
     if (!dusk::menu_pointer::consume_click()) {
         return false;
     }
@@ -2226,6 +2265,7 @@ bool dMenu_Option_c::dpdMenuMove() {
         if (!dusk::menu_pointer::hit_pane(mpMenuPane[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(i);
         if (getSelectType() != i) {
             field_0x3ef = i;
             setCursorPos(i);

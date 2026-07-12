@@ -51,6 +51,8 @@ struct ControlProps {
     float h = 0.0f;
     float scale = 1.0f;
     ControlAnchor anchor = ControlAnchor::None;
+
+    bool operator==(const ControlProps&) const = default;
 };
 
 struct ControlRect {
@@ -76,6 +78,8 @@ struct ControlLayout {
 
     int version = Version;
     std::map<std::string, ControlProps, std::less<> > controls;
+
+    bool operator==(const ControlLayout&) const = default;
 };
 
 constexpr std::array<std::string_view, 9> kControlLayoutIds = {

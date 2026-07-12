@@ -88,9 +88,14 @@ public:
     /* 0x396A */ u8 field_0x396A[0x399E - 0x396A];
     /* 0x399E */ s16 field_0x399e;
     /* 0x39A0 */ u8 field_0x39A0[0x39A4 - 0x39A0];
-    
+#if TARGET_PC
+    /* 0x39A4 */ cM_rnd_c mMantRng;
+#endif
 };
-
+#if TARGET_PC
+STATIC_ASSERT(sizeof(mant_class) == 0x39ac);
+#else
 STATIC_ASSERT(sizeof(mant_class) == 0x39a4);
+#endif
 
 #endif /* D_A_MANT_H */

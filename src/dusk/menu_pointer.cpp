@@ -1,16 +1,34 @@
 #include "dusk/menu_pointer.h"
 
-#include "m_Do/m_Do_graphic.h"
 #include "d/d_pane_class.h"
 #include "dusk/settings.h"
+#include "m_Do/m_Do_graphic.h"
 
 #include <aurora/rmlui.hpp>
 #include <dolphin/pad.h>
 
 #include <algorithm>
+#include <chrono>
 
 namespace dusk::menu_pointer {
 namespace {
+using Clock = std::chrono::steady_clock;
+
+constexpr auto kTapMaxDuration = std::chrono::milliseconds(300);
+constexpr f32 kTapMoveThresholdDp = 12.0f;
+
+struct Gesture {
+    bool active = false;
+    bool movedTooFar = false;
+    bool crossedTarget = false;
+    bool pressTargetValid = false;
+    Context pressContext = Context::None;
+    TargetId pressTarget = InvalidTarget;
+    f32 startX = 0.0f;
+    f32 startY = 0.0f;
+    Clock::time_point startedAt{};
+};
+
 State s_state;
 bool s_clickConsumed = false;
 Context s_lastContext = Context::None;
@@ -27,7 +45,14 @@ s32 s_mouseButton = -1;
 u32 s_suppressedPadHoldMask = 0;
 u32 s_suppressedPadNextReadMask = 0;
 Context s_deferredActivationContext = Context::None;
-u8 s_deferredActivationTarget = 0xFF;
+TargetId s_deferredActivationTarget = InvalidTarget;
+Gesture s_gesture;
+bool s_hoverTargetValid = false;
+TargetId s_hoverTarget = InvalidTarget;
+bool s_clickPending = false;
+Context s_clickContext = Context::None;
+TargetId s_clickTarget = InvalidTarget;
+bool s_clickTargetValid = false;
 
 s32 scancode_from_rml_button(s32 button) noexcept {
     switch (button) {
@@ -104,6 +129,37 @@ void suppress_pad_for_mouse_button(s32 button, bool held) noexcept {
     }
 }
 
+f32 tap_move_threshold() noexcept {
+    auto* context = aurora::rmlui::get_context();
+    if (context == nullptr) {
+        return kTapMoveThresholdDp;
+    }
+
+    return kTapMoveThresholdDp * std::max(context->GetDensityIndependentPixelRatio(), 1.0f);
+}
+
+void update_gesture_movement(f32 x, f32 y) noexcept {
+    if (!s_gesture.active || s_gesture.movedTooFar) {
+        return;
+    }
+
+    const f32 dx = x - s_gesture.startX;
+    const f32 dy = y - s_gesture.startY;
+    const f32 threshold = tap_move_threshold();
+    if (dx * dx + dy * dy > threshold * threshold) {
+        s_gesture.movedTooFar = true;
+    }
+}
+
+void clear_click_state() noexcept {
+    s_clickConsumed = false;
+    s_clickPending = false;
+    s_clickContext = Context::None;
+    s_clickTarget = InvalidTarget;
+    s_clickTargetValid = false;
+    s_state.clicked = false;
+}
+
 void set_position_from_rml(f32 x, f32 y) noexcept {
     auto* context = aurora::rmlui::get_context();
     if (context == nullptr) {
@@ -121,7 +177,7 @@ void set_position_from_rml(f32 x, f32 y) noexcept {
 
 void clear_input_state() noexcept {
     s_state = {};
-    s_clickConsumed = false;
+    clear_click_state();
     s_lastDialogChoice = 0xFF;
     s_currentDialogChoice = 0xFF;
     s_lastDialogChoiceValid = false;
@@ -134,7 +190,10 @@ void clear_input_state() noexcept {
     s_suppressedPadHoldMask = 0;
     s_suppressedPadNextReadMask = 0;
     s_deferredActivationContext = Context::None;
-    s_deferredActivationTarget = 0xFF;
+    s_deferredActivationTarget = InvalidTarget;
+    s_gesture = {};
+    s_hoverTargetValid = false;
+    s_hoverTarget = InvalidTarget;
 }
 
 }  // namespace
@@ -143,8 +202,6 @@ bool handle_fallthrough_pointer(f32 x, f32 y, Phase phase, bool touch, s32 mouse
     if (!enabled()) {
         return false;
     }
-
-    s_clickConsumed = false;
 
     if (!touch) {
         if (phase == Phase::Press) {
@@ -174,21 +231,41 @@ bool handle_fallthrough_pointer(f32 x, f32 y, Phase phase, bool touch, s32 mouse
     }
 
     if (phase != Phase::Cancel) {
+        update_gesture_movement(x, y);
         set_position_from_rml(x, y);
     }
     s_state.touch = touch;
 
     switch (phase) {
     case Phase::Press:
+        clear_click_state();
+        s_gesture = {
+            .active = true,
+            .startX = x,
+            .startY = y,
+            .startedAt = Clock::now(),
+        };
         s_state.down = true;
         s_state.pressed = true;
         break;
-    case Phase::Release:
+    case Phase::Release: {
+        const bool shortEnough =
+            s_gesture.active && Clock::now() - s_gesture.startedAt <= kTapMaxDuration;
+        const bool stillEnough = s_gesture.active && !s_gesture.movedTooFar;
+        const bool targetClean = s_gesture.active && !s_gesture.crossedTarget;
+        s_clickContext = s_gesture.pressContext;
+        s_clickTarget = s_gesture.pressTarget;
+        s_clickTargetValid = s_gesture.pressTargetValid;
+        s_clickPending = shortEnough && stillEnough && targetClean;
         s_state.down = false;
         s_state.released = true;
-        s_state.clicked = true;
+        s_state.clicked = s_clickPending;
+        s_gesture = {};
         break;
+    }
     case Phase::Cancel:
+        clear_click_state();
+        s_gesture = {};
         s_state.down = false;
         break;
     case Phase::Move:
@@ -211,6 +288,12 @@ void begin_game_frame() noexcept {
 }
 
 void end_game_frame() noexcept {
+    if (s_gesture.active && s_gesture.pressTargetValid &&
+        s_currentContext == s_gesture.pressContext && !s_hoverTargetValid)
+    {
+        s_gesture.crossedTarget = true;
+    }
+
     s_lastContext = s_currentContext;
     s_lastDialogChoice = s_currentDialogChoice;
     s_lastDialogChoiceValid = s_currentDialogChoiceValid;
@@ -222,10 +305,16 @@ void end_game_frame() noexcept {
         s_state.valid = false;
     }
     s_clickConsumed = false;
+    s_clickPending = false;
+    s_clickContext = Context::None;
+    s_clickTarget = InvalidTarget;
+    s_clickTargetValid = false;
+    s_hoverTargetValid = false;
+    s_hoverTarget = InvalidTarget;
 }
 
 void begin_context(Context context) noexcept {
-    if (context == Context::None) {
+    if (context == Context::None || !enabled()) {
         return;
     }
 
@@ -237,7 +326,11 @@ void begin_context(Context context) noexcept {
         s_suppressedPadHoldMask = 0;
         s_suppressedPadNextReadMask = 0;
         s_deferredActivationContext = Context::None;
-        s_deferredActivationTarget = 0xFF;
+        s_deferredActivationTarget = InvalidTarget;
+        s_gesture = {};
+        s_hoverTargetValid = false;
+        s_hoverTarget = InvalidTarget;
+        clear_click_state();
     }
 
     s_currentContext = context;
@@ -259,13 +352,48 @@ const State& state() noexcept {
     return s_state;
 }
 
+void set_hover_target(TargetId target) noexcept {
+    s_hoverTargetValid = true;
+    s_hoverTarget = target;
+
+    if (s_gesture.active && !s_gesture.pressTargetValid && s_state.down) {
+        s_gesture.pressContext = s_currentContext;
+        s_gesture.pressTarget = target;
+        s_gesture.pressTargetValid = true;
+    }
+
+    if (s_gesture.active && s_gesture.pressTargetValid &&
+        (s_currentContext != s_gesture.pressContext || target != s_gesture.pressTarget))
+    {
+        s_gesture.crossedTarget = true;
+    }
+}
+
+bool click_matches_hover_target() noexcept {
+    if (!s_clickPending || !s_hoverTargetValid) {
+        return false;
+    }
+
+    if (!s_clickTargetValid) {
+        return true;
+    }
+
+    return s_currentContext == s_clickContext && s_hoverTarget == s_clickTarget;
+}
+
 bool consume_click() noexcept {
-    if (!s_state.clicked || s_clickConsumed) {
+    if (s_clickConsumed || !click_matches_hover_target()) {
         return false;
     }
 
     s_clickConsumed = true;
+    s_clickPending = false;
+    s_state.clicked = false;
     return true;
+}
+
+bool peek_click() noexcept {
+    return !s_clickConsumed && click_matches_hover_target();
 }
 
 void set_dialog_choice(u8 choice, bool clicked) noexcept {
@@ -300,18 +428,18 @@ bool consume_dialog_click(u8& choice) noexcept {
     return false;
 }
 
-void defer_activation(Context context, u8 target) noexcept {
+void defer_activation(Context context, TargetId target) noexcept {
     s_deferredActivationContext = context;
     s_deferredActivationTarget = target;
 }
 
-bool consume_deferred_activation(Context context, u8 target) noexcept {
+bool consume_deferred_activation(Context context, TargetId target) noexcept {
     if (s_deferredActivationContext != context || s_deferredActivationTarget != target) {
         return false;
     }
 
     s_deferredActivationContext = Context::None;
-    s_deferredActivationTarget = 0xFF;
+    s_deferredActivationTarget = InvalidTarget;
     return true;
 }
 
@@ -321,7 +449,7 @@ void clear_deferred_activation(Context context) noexcept {
     }
 
     s_deferredActivationContext = Context::None;
-    s_deferredActivationTarget = 0xFF;
+    s_deferredActivationTarget = InvalidTarget;
 }
 
 u32 suppressed_pad_buttons(u32 port) noexcept {

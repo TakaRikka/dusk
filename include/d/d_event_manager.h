@@ -41,7 +41,7 @@ public:
         BASE_ROOM5,
         BASE_DEMO,
 
-        #if DEBUG
+        #if PARTIAL_DEBUG || DEBUG
         BASE_DEBUG,
         #endif
 

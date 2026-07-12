@@ -394,21 +394,8 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                     icon_size_y *= _c7c;
                 }
 
-#if TARGET_PC
-                f32 rotation = mIconInfo[info_idx].rotation;
-                if (dusk::getSettings().game.enableMirrorMode &&
-                    (mIconInfo[info_idx].icon_no == ICON_LINK_e ||
-                     mIconInfo[info_idx].icon_no == ICON_LINK_ENTER_e))
-                {
-                    rotation = -rotation;
-                }
-
-                mPictures[mIconInfo[info_idx].icon_no]->rotate(icon_size_x / 2, icon_size_y / 2, ROTATE_Z,
-                                                               rotation);
-#else
                 mPictures[mIconInfo[info_idx].icon_no]->rotate(icon_size_x / 2, icon_size_y / 2, ROTATE_Z,
                                                         mIconInfo[info_idx].rotation);
-#endif
 
                 if (mIconInfo[info_idx].icon_no == ICON_LIGHT_DROP_e) {
                     mPictures[mIconInfo[info_idx].icon_no]->setAlpha((180.0f * _c80) / 255.0f);
@@ -423,9 +410,14 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                 }
 
                 f32 pos_x = i_posX + (icon_pos_x - (icon_size_x / 2));
+                bool r4 = false;
                 #if TARGET_PC
                 if (dusk::getSettings().game.enableMirrorMode) {
                     pos_x = getMirrorCenterPosX(i_posX + (icon_pos_x - (icon_size_x / 2)), icon_size_x / 2);
+                }
+
+                if(mIconInfo[info_idx].icon_no == ICON_GOLD_WOLF_e) {
+                    r4 = true;
                 }
                 #endif
 
@@ -435,7 +427,7 @@ void dMenuMapCommon_c::drawIcon(f32 i_posX, f32 i_posY, f32 param_3, f32 param_4
                 if (mIconInfo[info_idx].icon_no == ICON_LIGHT_DROP_e) {
                     mLightDropPic->draw((pos_x + (icon_size_x / 2)) - (var_f29 / 2),
                                         ((icon_size_y / 2) + (i_posY + (icon_pos_y - icon_size_y / 2))) - (var_f28 / 2),
-                                        var_f29, var_f28, false, false, false);
+                                        var_f29, var_f28, r4, false, false);
                 }
             }
         }

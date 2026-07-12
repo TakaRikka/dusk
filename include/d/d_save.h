@@ -1008,7 +1008,7 @@ public:
 
     static const int ZONE_MAX = 0x20;
 
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x000 */ u8 unk_0x0;
     /* 0x001 */ char unk_0x1;
     /* 0x000 */ u8 unk_0x2[0x48 - 0x2];
@@ -1029,6 +1029,9 @@ public:
     /* 0xF30 */ s64 mSaveTotalTime;
 #if DEBUG
     /* 0xF80 */ flagFile_c mFlagFile;
+#elif PARTIAL_DEBUG
+    // flagFile_c's ctor/virtuals are only defined under #if DEBUG (d_save.cpp)
+    alignas(flagFile_c) u8 mFlagFile[sizeof(flagFile_c)];
 #endif
 };  // Size: 0xF38
 

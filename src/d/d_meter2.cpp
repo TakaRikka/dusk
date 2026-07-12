@@ -27,6 +27,15 @@
 #if TARGET_PC
 #include "dusk/memory.h"
 #include "dusk/settings.h"
+
+namespace {
+
+// Reads the user HUD scale setting, clamped to a safe range.
+f32 dGetUserHudScale() {
+    return std::clamp(dusk::getSettings().game.hudScale.getValue(), 0.5f, 2.0f);
+}
+
+}  // namespace
 #endif
 
 int dMeter2_c::_create() {
@@ -437,7 +446,12 @@ void dMeter2_c::checkStatus() {
 
     field_0x128 = daPy_py_c::checkNowWolf();
 
+#if TARGET_PC
+    dMsgObject_c* msgObject = dMsgObject_getMsgObjectClass();
+    if (!dComIfGp_2dShowCheck() || (msgObject != NULL && msgObject->isPlaceMessage())) {
+#else
     if (!dComIfGp_2dShowCheck() || dMsgObject_getMsgObjectClass()->isPlaceMessage()) {
+#endif
         mStatus |= 0x4000;
     } else if (dComIfGp_checkPlayerStatus1(0, 1) && dComIfGp_getAStatus() == 0x12) {
         mStatus |= 0x200000;
@@ -663,8 +677,13 @@ void dMeter2_c::moveLife() {
         draw_life = true;
     }
 
-    if (mLifeGaugeScale != g_drawHIO.mLifeParentScale) {
-        mLifeGaugeScale = g_drawHIO.mLifeParentScale;
+#if TARGET_PC
+    const f32 lifeGaugeScale = g_drawHIO.mLifeParentScale * dGetUserHudScale();
+#else
+    const f32 lifeGaugeScale = g_drawHIO.mLifeParentScale;
+#endif
+    if (mLifeGaugeScale != lifeGaugeScale) {
+        mLifeGaugeScale = lifeGaugeScale;
         draw_life = true;
     }
 
@@ -1096,8 +1115,13 @@ void dMeter2_c::moveRupee() {
         }
     }
 
-    if (mRupeeKeyScale != g_drawHIO.mRupeeKeyScale) {
-        mRupeeKeyScale = g_drawHIO.mRupeeKeyScale;
+#if TARGET_PC
+    const f32 rupeeKeyScale = g_drawHIO.mRupeeKeyScale * dGetUserHudScale();
+#else
+    const f32 rupeeKeyScale = g_drawHIO.mRupeeKeyScale;
+#endif
+    if (mRupeeKeyScale != rupeeKeyScale) {
+        mRupeeKeyScale = rupeeKeyScale;
         draw_rupee = true;
     }
 
@@ -1195,8 +1219,13 @@ void dMeter2_c::moveKey() {
         }
     }
 
-    if (mKeyScale != g_drawHIO.mKeyScale) {
-        mKeyScale = g_drawHIO.mKeyScale;
+#if TARGET_PC
+    const f32 keyScale = g_drawHIO.mKeyScale * dGetUserHudScale();
+#else
+    const f32 keyScale = g_drawHIO.mKeyScale;
+#endif
+    if (mKeyScale != keyScale) {
+        mKeyScale = keyScale;
         draw_key = true;
     }
 
@@ -2127,8 +2156,13 @@ void dMeter2_c::moveButtonCross() {
         draw_cross = true;
     }
 
-    if (mButtonCrossScale != g_drawHIO.mButtonCrossScale) {
-        mButtonCrossScale = g_drawHIO.mButtonCrossScale;
+#if TARGET_PC
+    const f32 buttonCrossScale = g_drawHIO.mButtonCrossScale * dGetUserHudScale();
+#else
+    const f32 buttonCrossScale = g_drawHIO.mButtonCrossScale;
+#endif
+    if (mButtonCrossScale != buttonCrossScale) {
+        mButtonCrossScale = buttonCrossScale;
         draw_cross = true;
     }
 
@@ -2863,8 +2897,14 @@ void dMeter2_c::alphaAnimeButton() {
     u8 var_31;
     var_31 = 0;
 
+#if TARGET_PC
+    dMsgObject_c* msgObject = dMsgObject_getMsgObjectClass();
+    if ((mStatus & 0x4000) ||
+        ((mStatus & 0x100) && (msgObject != NULL && msgObject->isAutoMessageFlag())) ||
+#else
     if ((mStatus & 0x4000) ||
         ((mStatus & 0x100) && dMsgObject_getMsgObjectClass()->isAutoMessageFlag()) ||
+#endif
         ((mStatus & 0x40000000) && !(mStatus & 0x100)) || (mStatus & 0x80000000) || (mStatus & 8) ||
         (mStatus & 0x10) || (mStatus & 0x20) || (mStatus & 0x04000000) || (mStatus & 0x10000000))
     {

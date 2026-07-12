@@ -7,7 +7,8 @@
 
 namespace dusk {
 
-using namespace config;
+using config::ConfigVar;
+using config::ActionBindConfigVar;
 
 enum class BloomMode : int {
     Off = 0,
@@ -44,6 +45,12 @@ enum class FrameInterpMode : u8 {
     Off = 0,
     Capped = 1,
     Unlimited = 2,
+};
+
+enum class TouchTargeting : u8 {
+    Hybrid = 0,
+    Hold = 1,
+    Switch = 2,
 };
 
 enum class MenuScaling : u8 {
@@ -102,6 +109,12 @@ template <>
 struct ConfigEnumRange<FrameInterpMode> {
     static constexpr auto min = FrameInterpMode::Off;
     static constexpr auto max = FrameInterpMode::Unlimited;
+};
+
+template <>
+struct ConfigEnumRange<TouchTargeting> {
+    static constexpr auto min = TouchTargeting::Hybrid;
+    static constexpr auto max = TouchTargeting::Switch;
 };
 
 template <>
@@ -229,6 +242,7 @@ struct UserSettings {
         ConfigVar<bool> invertMouseY;
         ConfigVar<bool> freeCamera;
         ConfigVar<bool> enableTouchControls;
+        ConfigVar<TouchTargeting> touchTargeting;
         ConfigVar<bool> enableMenuPointer;
         ConfigVar<ui::ControlLayout> touchControlsLayout;
         ConfigVar<bool> invertCameraXAxis;
@@ -289,7 +303,6 @@ struct UserSettings {
         ConfigVar<DiscVerificationState> isoVerification;
         ConfigVar<std::string> graphicsBackend;
         ConfigVar<bool> skipPreLaunchUI;
-        ConfigVar<bool> showPipelineCompilation;
         ConfigVar<bool> wasPresetChosen;
         ConfigVar<bool> checkForUpdates;
         ConfigVar<int> cardFileType;

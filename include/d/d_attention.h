@@ -45,7 +45,7 @@ private:
 
 class dAttParam_c : public JORReflexible {
 public:
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x04 */ s8 mHIOChildNo;
 #endif
 
@@ -66,7 +66,7 @@ public:
     /* 0x35 */ u8 mAttnCursorDisappearFrames;
     /* 0x38 */ f32 field_0x38;
     /* 0x3C */ f32 field_0x3c;
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x44 */ s32 mDebugDispPosX;
     /* 0x48 */ s32 mDebugDispPosY;
 #endif

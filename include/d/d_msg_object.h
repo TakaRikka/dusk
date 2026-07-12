@@ -360,7 +360,12 @@ inline void dMsgObject_demoMessageGroup() {
 }
 
 inline bool dMsgObject_isTalkNowCheck() {
+#if TARGET_PC
+    dMsgObject_c* msgObject = dMsgObject_getMsgObjectClass();
+    return msgObject != NULL && msgObject->getStatus() != 1;
+#else
     return dMsgObject_getMsgObjectClass()->getStatus() == 1 ? false : true;
+#endif
 }
 
 inline bool dMsgObject_isKillMessageFlag() {
@@ -497,7 +502,12 @@ inline void dMsgObject_onMsgSend() {
 }
 
 inline bool dMsgObject_isFukidashiCheck() {
+#if TARGET_PC
+    dMsgObject_c* msgObject = dMsgObject_getMsgObjectClass();
+    return msgObject != NULL && msgObject->getScrnDrawPtr() != NULL;
+#else
     return dMsgObject_getMsgObjectClass()->getScrnDrawPtr() == NULL ? false : true;
+#endif
 }
 
 inline void* dMsgObject_getTalkHeap() {

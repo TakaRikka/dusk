@@ -156,6 +156,10 @@ bool player_attention_locked() noexcept {
     return player != nullptr && (player->checkAttentionLock() || player->checkEnemyAttentionLock());
 }
 
+bool hawkeye_active() noexcept {
+    return dCamera_c::isAimActive() && dComIfGp_checkPlayerStatus0(0, 0x200000);
+}
+
 bool item_wheel_active() noexcept {
     return dMeter2Info_getWindowStatus() == 2;
 }
@@ -174,7 +178,7 @@ enum class StickOutput {
 };
 
 StickOutput stick_output_mode() noexcept {
-    if (fishing_controls_active()) {
+    if (fishing_controls_active() || hawkeye_active()) {
         return StickOutput::CStick;
     }
     return StickOutput::MainStick;
@@ -370,7 +374,7 @@ void sync_virtual_input() noexcept {
 }
 
 TouchControls::TouchControls()
-    : Document(touch_controls_document_source(), true),
+    : Document(touch_controls_document_source(), true, DocumentScope::TouchControls),
       mRoot(mDocument != nullptr ? mDocument->GetElementById("root") : nullptr),
       mControlStick(mDocument != nullptr ? mDocument->GetElementById("control-stick") : nullptr),
       mControlKnob(mDocument != nullptr ? mDocument->GetElementById("control-knob") : nullptr),
@@ -481,43 +485,71 @@ void TouchControls::set_control_pressed(Control control, bool pressed) {
             mLastLTapTime = {};
             break;
         }
-        if (pressed && (mLLatched || mManualLLatched)) {
+        switch (getSettings().game.touchTargeting.getValue()) {
+        case TouchTargeting::Hold:
+            mLPressed = pressed;
             mLLatched = false;
             mManualLLatched = false;
-            mLPressed = false;
-            mLReleasePending = true;
+            mLReleasePending = false;
             mLPressStartTime = {};
             mLastLTapTime = {};
-            set_control_visual(control, false);
-        } else if (pressed) {
-            const auto now = clock::now();
-            if (!player_attention_locked() && mLastLTapTime != clock::time_point{} &&
-                now - mLastLTapTime <= kLDoubleTapWindow)
-            {
-                mManualLLatched = true;
+            break;
+        case TouchTargeting::Switch:
+            if (pressed) {
+                const bool wasLatched = mLPressed || mLLatched || mManualLLatched;
+                mLPressed = false;
+                mLLatched = false;
+                mManualLLatched = !wasLatched;
+                mLReleasePending = true;
+            } else {
+                mLPressed = false;
+                mLLatched = false;
+                mLReleasePending = false;
+            }
+            mLPressStartTime = {};
+            mLastLTapTime = {};
+            break;
+        case TouchTargeting::Hybrid:
+        default:
+            if (pressed && (mLLatched || mManualLLatched)) {
+                mLLatched = false;
+                mManualLLatched = false;
                 mLPressed = false;
                 mLReleasePending = true;
                 mLPressStartTime = {};
                 mLastLTapTime = {};
+                set_control_visual(control, false);
+            } else if (pressed) {
+                const auto now = clock::now();
+                if (!player_attention_locked() && mLastLTapTime != clock::time_point{} &&
+                    now - mLastLTapTime <= kLDoubleTapWindow)
+                {
+                    mManualLLatched = true;
+                    mLPressed = false;
+                    mLReleasePending = true;
+                    mLPressStartTime = {};
+                    mLastLTapTime = {};
+                } else if (!mLReleasePending) {
+                    mLPressed = true;
+                    mLPressStartTime = now;
+                }
             } else if (!mLReleasePending) {
-                mLPressed = true;
-                mLPressStartTime = now;
+                mLPressed = false;
             }
-        } else if (!mLReleasePending) {
-            mLPressed = false;
-        }
-        if (!pressed) {
-            const auto now = clock::now();
-            if (!mLReleasePending) {
-                const bool wasQuickTap = mLPressStartTime != clock::time_point{} &&
-                                         now - mLPressStartTime <= kLDoubleTapWindow;
-                mLastLTapTime = wasQuickTap ? now : clock::time_point{};
+            if (!pressed) {
+                const auto now = clock::now();
+                if (!mLReleasePending) {
+                    const bool wasQuickTap = mLPressStartTime != clock::time_point{} &&
+                                             now - mLPressStartTime <= kLDoubleTapWindow;
+                    mLastLTapTime = wasQuickTap ? now : clock::time_point{};
+                }
+                mLPressStartTime = {};
+                mLReleasePending = false;
             }
-            mLPressStartTime = {};
-            mLReleasePending = false;
-        }
-        if (!pressed && !player_attention_locked()) {
-            mLLatched = false;
+            if (!pressed && !player_attention_locked()) {
+                mLLatched = false;
+            }
+            break;
         }
         break;
     case Control::R:
@@ -631,6 +663,17 @@ void TouchControls::apply_control_transform(Control control) noexcept {
 }
 
 void TouchControls::sync_l_lock_state() noexcept {
+    const auto targeting = getSettings().game.touchTargeting.getValue();
+    if (targeting == TouchTargeting::Hold) {
+        mLLatched = false;
+        mManualLLatched = false;
+        return;
+    }
+    if (targeting == TouchTargeting::Switch) {
+        mLLatched = false;
+        return;
+    }
+
     if (player_attention_locked()) {
         if (mLPressed) {
             mLLatched = true;
@@ -693,7 +736,7 @@ void TouchControls::sync_touch_state() noexcept {
 
     sync_l_lock_state();
     const bool aimActive = dCamera_c::isAimActive();
-    if (aimActive && mMoveTouch.active) {
+    if (aimActive && !hawkeye_active() && mMoveTouch.active) {
         if (!mCameraTouch.active) {
             mCameraTouch = mMoveTouch;
             mCameraTouch.start = mMoveTouch.current;
@@ -1208,7 +1251,26 @@ void TouchControls::handle_touch_down(Rml::Event& event) noexcept {
     }
 
     const auto id = touch_event_id(event);
+    const auto dimensions = context->GetDimensions();
+    const float top = mSafeInsets.top + kAnalogZoneTopDp * touch_dp_scale();
+    const float bottom = static_cast<float>(dimensions.y) - mSafeInsets.bottom -
+                         kAnalogZoneBottomDp * touch_dp_scale();
+    const auto width = static_cast<float>(dimensions.x);
+    const bool inAnalogZone = position.y >= top && position.y <= bottom;
+    const bool inLeftZone = position.x < width * kLeftZoneWidth;
     if (dCamera_c::isAimActive()) {
+        if (hawkeye_active() && inAnalogZone && inLeftZone) {
+            if (!mMoveTouch.active) {
+                mMoveTouch = {
+                    .id = id,
+                    .start = position,
+                    .current = position,
+                    .active = true,
+                };
+            }
+            return;
+        }
+
         if (!mCameraTouch.active) {
             mCameraTouch = {
                 .id = id,
@@ -1220,16 +1282,11 @@ void TouchControls::handle_touch_down(Rml::Event& event) noexcept {
         return;
     }
 
-    const auto dimensions = context->GetDimensions();
-    const float top = mSafeInsets.top + kAnalogZoneTopDp * touch_dp_scale();
-    const float bottom = static_cast<float>(dimensions.y) - mSafeInsets.bottom -
-                         kAnalogZoneBottomDp * touch_dp_scale();
-    if (position.y < top || position.y > bottom) {
+    if (!inAnalogZone) {
         return;
     }
 
-    const auto width = static_cast<float>(dimensions.x);
-    if (!mMoveTouch.active && position.x < width * kLeftZoneWidth) {
+    if (!mMoveTouch.active && inLeftZone) {
         mMoveTouch = {
             .id = id,
             .start = position,

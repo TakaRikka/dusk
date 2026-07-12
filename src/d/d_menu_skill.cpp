@@ -316,6 +316,7 @@ bool dMenu_Skill_c::pointerWait() {
         if (!dusk::menu_pointer::hit_pane(mpLetterParent[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(i);
 
         if (mIndex != i) {
             mIndex = i;

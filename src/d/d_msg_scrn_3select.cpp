@@ -560,7 +560,8 @@ bool dMsgScrn3Select_c::pointerMove() {
 
         mDPDPoint = choice;
         field_0x110 = paneIndex;
-        dusk::menu_pointer::set_dialog_choice(choice, dusk::menu_pointer::state().clicked);
+        dusk::menu_pointer::set_hover_target(choice);
+        dusk::menu_pointer::set_dialog_choice(choice, dusk::menu_pointer::peek_click());
         return true;
     }
 

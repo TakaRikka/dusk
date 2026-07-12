@@ -426,7 +426,15 @@ void dMenu_Fmap2DBack_c::draw() {
         }
 
         mpPointParent->setAlphaRate(mArrowAlpha * mSpotTextureFadeAlpha);
-        mpPointParent->translate(mArrowPos2DX + mTransX, mArrowPos2DY + mTransZ);
+
+        f32 drawX = mArrowPos2DX + mTransX;
+#ifdef TARGET_PC
+        if (dusk::getSettings().game.enableMirrorMode) {
+            drawX = getMirrorPosX(drawX, 0.0f);
+        }
+#endif
+
+        mpPointParent->translate(drawX, mArrowPos2DY + mTransZ);
         mpPointScreen->draw(0.0f, 0.0f, grafPort);
     }
 
@@ -745,7 +753,7 @@ void dMenu_Fmap2DBack_c::zoomMapCalc(f32 i_zoom) {
 
         f32 tmp2 = (dVar12 + (i_zoom * (centerX - dVar12)));
         f32 tmp2_ = (dVar11 + (i_zoom * (centerY - dVar11)));
-        
+
         field_0xf0c[mRegionCursor] =
             ((tmp2 + (tmp3 * mZoom)) - mRegionMapSizeX[mRegionCursor] * mZoom * 0.5f) -
             mRegionMinMapX[mRegionCursor];
@@ -1018,6 +1026,11 @@ void dMenu_Fmap2DBack_c::allmap_move2(STControl* param_0) {
             f32 delta_y = speed * cM_ssin(angle);
             f32 delta_x = speed * cM_scos(angle);
 
+#ifdef TARGET_PC
+            if (dusk::getSettings().game.enableMirrorMode) {
+                delta_y = -delta_y;
+            }
+#endif
             control_xpos = control_xpos + delta_y;
             control_ypos = control_ypos + delta_x;
         }
@@ -1046,11 +1059,6 @@ void dMenu_Fmap2DBack_c::allmap_move2(STControl* param_0) {
     calcAllMapPos2D((mArrowPos3DX + control_xpos) - mStageTransX,
                     (mArrowPos3DZ + control_ypos) - mStageTransZ, &sp14, &sp10);
 
-#if TARGET_PC
-    if (dusk::getSettings().game.enableMirrorMode) {
-        sp14 = getMirrorPosX(sp14, 0.0f);
-    }
-#endif
 
     mSelectRegion = 0xff;
     for (int i = 7; i >= 0; i--) {
@@ -1465,6 +1473,12 @@ void dMenu_Fmap2DBack_c::worldGridDraw() {
     f32 dVar8 = -mStageTransZ;
     calcAllMapPos2D(dVar9, dVar8, &local_74, &local_78);
 
+    #if TARGET_PC
+    if(dusk::getSettings().game.enableMirrorMode) {
+        local_74 = getMirrorPosX(local_74, 0.0f);
+    }
+    #endif
+
     J2DDrawLine(local_74, mDoGph_gInf_c::getMinYF(), local_74,
                 mDoGph_gInf_c::getMinYF() + mDoGph_gInf_c::getHeightF(),
                 JUtility::TColor(255, 255, 255, 255), 6);
@@ -1473,6 +1487,11 @@ void dMenu_Fmap2DBack_c::worldGridDraw() {
     while (true) {
         calcAllMapPos2D(xPos, dVar8, &local_74, &local_78);
         if (local_74 >= getMapScissorAreaLX()) {
+            #if TARGET_PC
+            if(dusk::getSettings().game.enableMirrorMode) {
+                local_74 = getMirrorPosX(local_74, 0.0f);
+            }
+            #endif
             J2DDrawLine(local_74, mDoGph_gInf_c::getMinYF(), local_74,
                         mDoGph_gInf_c::getMinYF() + mDoGph_gInf_c::getHeightF(),
                         JUtility::TColor(255, 255, 255, 255), 6);
@@ -1534,6 +1553,12 @@ void dMenu_Fmap2DBack_c::regionGridDraw() {
     f32 dVar8 = mRegionOriginZ[mRegionCursor] - mStageTransZ;
     calcAllMapPos2D(dVar9, dVar8, &local_74, &local_78);
 
+    #if TARGET_PC
+    if(dusk::getSettings().game.enableMirrorMode) {
+        local_74 = getMirrorPosX(local_74, 0.0f);
+    }
+    #endif
+
     J2DDrawLine(local_74, mDoGph_gInf_c::getMinYF(), local_74,
                 mDoGph_gInf_c::getMinYF() + mDoGph_gInf_c::getHeightF(),
                 JUtility::TColor(180, 0, 0, 255), 6);
@@ -1542,6 +1567,12 @@ void dMenu_Fmap2DBack_c::regionGridDraw() {
     while (true) {
         calcAllMapPos2D(xPos, dVar8, &local_74, &local_78);
         if (local_74 >= getMapScissorAreaLX()) {
+            #if TARGET_PC
+            if(dusk::getSettings().game.enableMirrorMode) {
+                local_74 = getMirrorPosX(local_74, 0.0f);
+            }
+            #endif
+
             J2DDrawLine(local_74, mDoGph_gInf_c::getMinYF(), local_74,
                         mDoGph_gInf_c::getMinYF() + mDoGph_gInf_c::getHeightF(),
                         JUtility::TColor(180, 0, 0, 255), 6);
@@ -1604,6 +1635,12 @@ void dMenu_Fmap2DBack_c::worldOriginDraw() {
     f32 local_44, local_48;
     calcAllMapPos2D(-mStageTransX, -mStageTransZ, &local_44, &local_48);
 
+    #if TARGET_PC
+    if(dusk::getSettings().game.enableMirrorMode) {
+        local_44 = getMirrorPosX(local_44, 0.0f);
+    }
+    #endif
+
     J2DDrawLine(mDoGph_gInf_c::getMinXF(), local_48 - local_44 + mDoGph_gInf_c::getMinXF(),
                 mDoGph_gInf_c::getMinXF() + mDoGph_gInf_c::getWidthF(),
                 local_48 - local_44 + (mDoGph_gInf_c::getMinXF() + mDoGph_gInf_c::getWidthF()),
@@ -1638,6 +1675,13 @@ void dMenu_Fmap2DBack_c::scrollAreaDraw() {
         calcAllMapPos2D(x_min - mStageTransX, z_min - mStageTransZ, &local_4c, &local_50);
         calcAllMapPos2D(x_max - mStageTransX, z_max - mStageTransZ, &local_54, &local_58);
 
+        #if TARGET_PC
+        if(dusk::getSettings().game.enableMirrorMode) {
+            local_4c = getMirrorPosX(local_4c, 0.0f);
+            local_54 = getMirrorPosX(local_54, 0.0f);
+        }
+        #endif
+
         J2DDrawLine(local_4c, local_50, local_4c, local_58,
                     JUtility::TColor(255, 255, 255, 255), 6);
         J2DDrawLine(local_54, local_50, local_54, local_58,
@@ -1658,6 +1702,11 @@ void dMenu_Fmap2DBack_c::regionOriginDraw() {
         f32 center_x, center_y;
         calcAllMapPos2D(mRegionOriginX[i] - mStageTransX, mRegionOriginZ[i] - mStageTransZ,
                         &center_x, &center_y);
+        #if TARGET_PC
+        if(dusk::getSettings().game.enableMirrorMode) {
+            center_x = getMirrorPosX(center_x - 3.0f, 3.0f);
+        }
+        #endif
         J2DFillBox(center_x - 3.0f, center_y - 3.0f, 6.0f, 6.0f, JUtility::TColor(255, 0, 0, 255));
     }
 }
@@ -1675,6 +1724,11 @@ void dMenu_Fmap2DBack_c::stageOriginDraw() {
             f32 v1 = mRegionOriginX[mRegionCursor] + stage_data[i].mOffsetX - mStageTransX;
             f32 v2 = mRegionOriginZ[mRegionCursor] + stage_data[i].mOffsetZ - mStageTransZ;
             calcAllMapPos2D(v1, v2, &center_x, &center_y);
+            #if TARGET_PC
+            if(dusk::getSettings().game.enableMirrorMode) {
+                center_x = getMirrorPosX(center_x - 3.0f, 3.0f);
+            }
+            #endif
             J2DFillBox(center_x - 3.0f, center_y - 3.0f, 6.0f, 6.0f,
                        JUtility::TColor(0, 0, 255, 255));
         }
@@ -1921,7 +1975,7 @@ void dMenu_Fmap2DBack_c::regionMapMove(STControl* i_stick) {
             f32 speed = base_speed / 100.0f * local_78;
             f32 speed_y = speed * cM_ssin(angle);
             f32 speed_x = speed * cM_scos(angle);
-            control_xpos += speed_y;
+            control_xpos += IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -speed_y :) speed_y;
             control_ypos += speed_x;
         }
     }
@@ -1946,11 +2000,6 @@ void dMenu_Fmap2DBack_c::regionMapMove(STControl* i_stick) {
     calcAllMapPos2D(mArrowPos3DX + control_xpos - mStageTransX,
                     mArrowPos3DZ + control_ypos - mStageTransZ, &pos_x, &pos_y);
 
-#if TARGET_PC
-    if (dusk::getSettings().game.enableMirrorMode) {
-        pos_x = getMirrorPosX(pos_x, 0.0f);
-    }
-#endif
 
     mSelectRegion = 0xff;
     int region = mRegionCursor;
@@ -1982,11 +2031,6 @@ void dMenu_Fmap2DBack_c::stageMapMove(STControl* i_stick, u8 param_1, bool param
     if (stick_value >= slow_bound && param_2 && field_0x1238 != 2) {
         bVar6 = true;
         s16 angle = i_stick->getAngleStick();
-#if TARGET_PC
-        if (dusk::getSettings().game.enableMirrorMode) {
-            angle = -angle;
-        }
-#endif
         f32 local_68 = mTexMaxX - mTexMinX;
         f32 spot_zoom = getSpotMapZoomRate();
         f32 region_zoom = getRegionMapZoomRate(mRegionCursor);
@@ -2001,7 +2045,7 @@ void dMenu_Fmap2DBack_c::stageMapMove(STControl* i_stick, u8 param_1, bool param
         f32 speed = base_speed / 100.0f * local_78;
         f32 speed_x = speed * cM_ssin(angle);
         f32 speed_z = speed * cM_scos(angle);
-        mStageTransX += speed_x;
+        mStageTransX += IF_DUSK(dusk::getSettings().game.enableMirrorMode ? -speed_x :) speed_x;
         mStageTransZ += speed_z;
     } else if (!param_2) {
         return;
@@ -2095,6 +2139,11 @@ void dMenu_Fmap2DBack_c::drawDebugStageArea() {
                 if (stage_no >= 0) {
                     f32 v = i + mDoGph_gInf_c::getMinXF();
                     f32 v2 = j;
+                    #if TARGET_PC
+                    if(dusk::getSettings().game.enableMirrorMode) {
+                        v = getMirrorPosX(v - 3.0f, 3.0f);
+                    }
+                    #endif
                     J2DFillBox(v - 3.0f, v2 - 3.0f, 6.0f, 6.0f, colors[stage_no % 6]);
                 }
             }
@@ -2130,6 +2179,11 @@ void dMenu_Fmap2DBack_c::drawDebugRegionArea() {
                     mRegionMapSizeX[region] * mZoom, mRegionMapSizeY[region] * mZoom,
                     mpAreaTex[region]->getTexture(0)->getTexInfo());
                 if (u) {
+                    #if TARGET_PC
+                    if(dusk::getSettings().game.enableMirrorMode) {
+                        pos_x = getMirrorPosX(pos_x - 3.0f, 3.0f);
+                    }
+                    #endif
                     J2DFillBox(pos_x - 3.0f, pos_y - 3.0f, 6.0f, 6.0f, colors[region]);
                     break;
                 }

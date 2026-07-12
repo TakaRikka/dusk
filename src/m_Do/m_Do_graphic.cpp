@@ -53,6 +53,7 @@
 #include "dusk/dusk.h"
 #include "dusk/endian.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/gfx.hpp"
 #include "dusk/gx_helper.h"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/logging.h"
@@ -2356,6 +2357,10 @@ int mDoGph_Painter() {
 
             GXSetClipMode(GX_CLIP_ENABLE);
 
+#if TARGET_PC
+            dusk::mods::gfx_run_stage(GFX_STAGE_SCENE_BEGIN, &camera_p->view, view_port);
+#endif
+
             #if DEBUG
             // "drawing up to Background (Translucent) (Rendering)"
             fapGm_HIO_c::stopCpuTimer("背景（半透明）描画まで（レンダリング）");
@@ -2383,6 +2388,10 @@ int mDoGph_Painter() {
             #endif
 
             GX_DEBUG_GROUP(dComIfGd_drawShadow, camera_p->view.viewMtx);
+
+#if TARGET_PC
+            dusk::mods::gfx_run_stage(GFX_STAGE_SCENE_AFTER_TERRAIN, &camera_p->view, view_port);
+#endif
 
             #if DEBUG
             // "shadow drawing (Rendering)"
@@ -2412,6 +2421,10 @@ int mDoGph_Painter() {
 #endif
 
             GX_DEBUG_GROUP(dComIfGd_drawOpaListPacket);
+
+#if TARGET_PC
+            dusk::mods::gfx_run_stage(GFX_STAGE_SCENE_AFTER_OPAQUE, &camera_p->view, view_port);
+#endif
 
             #if DEBUG
             // "drawing up to special-use drawing (Opaque) except J3D (Rendering)"
@@ -2778,6 +2791,10 @@ int mDoGph_Painter() {
     captureScreenSetPort();
     #endif
 
+#if TARGET_PC
+    dusk::mods::gfx_run_stage(GFX_STAGE_FRAME_BEFORE_HUD);
+#endif
+
     if (fapGmHIO_get2Ddraw()) {
         Mtx m4;
         cMtx_copy(j3dSys.getViewMtx(), m4);
@@ -2834,6 +2851,10 @@ int mDoGph_Painter() {
         dComIfGd_draw2DOpaTop();
         dComIfGd_draw2DXlu();
     }
+
+#if TARGET_PC
+    dusk::mods::gfx_run_stage(GFX_STAGE_FRAME_AFTER_HUD);
+#endif
 
     #if DEBUG
     if (dJcame_c::get()) {

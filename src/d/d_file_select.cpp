@@ -777,6 +777,7 @@ bool dFile_select_c::pointerDataSelect() {
         if (!dusk::menu_pointer::hit_pane(mSelFilePanes[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerDataSelectTarget, i));
         const bool clicked = dusk::menu_pointer::consume_click();
         if (mSelectNum != i) {
             mDoAud_seStart(Z2SE_FILE_SELECT_CURSOR, NULL, 0, 0);
@@ -805,6 +806,7 @@ bool dFile_select_c::pointerMenuSelect() {
         if (!dusk::menu_pointer::hit_pane(m3mSelPane[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerMenuSelectTarget, i));
         const bool clicked = dusk::menu_pointer::consume_click();
         if (!mIsDataNew[mSelectNum] && mSelectMenuNum != i) {
             mDoAud_seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0);
@@ -833,6 +835,7 @@ bool dFile_select_c::pointerCopyDataToSelect() {
         if (!dusk::menu_pointer::hit_pane(mCpSelPane[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerCopySelectTarget, i));
         const bool clicked = dusk::menu_pointer::consume_click();
         if (field_0x026b != i) {
             mDoAud_seStart(Z2SE_FILE_SELECT_CURSOR, NULL, 0, 0);
@@ -861,6 +864,7 @@ bool dFile_select_c::pointerYesNoSelect(bool errorSelect) {
         if (!dusk::menu_pointer::hit_pane(mYnSelPane[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerYesNoSelectTarget, i));
         const bool clicked =
             (!errorSelect || field_0x0268 == i) && dusk::menu_pointer::consume_click();
         if (field_0x0268 != i) {
@@ -1103,12 +1107,13 @@ void dFile_select_c::dataSelectAnmSet() {
 void dFile_select_c::dataSelectMoveAnime() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::FileSelect);
-    if (mSelectNum != 0xFF && dusk::menu_pointer::hit_pane(mSelFilePanes[mSelectNum], 8.0f) &&
-        dusk::menu_pointer::consume_click())
-    {
-        dusk::menu_pointer::defer_activation(
-            dusk::menu_pointer::Context::FileSelect,
-            pointer_target(s_pointerDataSelectTarget, mSelectNum));
+    if (mSelectNum != 0xFF && dusk::menu_pointer::hit_pane(mSelFilePanes[mSelectNum], 8.0f)) {
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerDataSelectTarget, mSelectNum));
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(
+                dusk::menu_pointer::Context::FileSelect,
+                pointer_target(s_pointerDataSelectTarget, mSelectNum));
+        }
     }
 #endif
     bool iVar7 = true;
@@ -1494,12 +1499,14 @@ void dFile_select_c::menuSelectMoveAnm() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::FileSelect);
     if (mSelectMenuNum != 0xFF &&
-        dusk::menu_pointer::hit_pane(m3mSelPane[mSelectMenuNum], 8.0f) &&
-        dusk::menu_pointer::consume_click())
+        dusk::menu_pointer::hit_pane(m3mSelPane[mSelectMenuNum], 8.0f))
     {
-        dusk::menu_pointer::defer_activation(
-            dusk::menu_pointer::Context::FileSelect,
-            pointer_target(s_pointerMenuSelectTarget, mSelectMenuNum));
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerMenuSelectTarget, mSelectMenuNum));
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(
+                dusk::menu_pointer::Context::FileSelect,
+                pointer_target(s_pointerMenuSelectTarget, mSelectMenuNum));
+        }
     }
 #endif
     bool tmp1 = true;
@@ -1997,12 +2004,14 @@ void dFile_select_c::copyDataToSelectMoveAnm() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::FileSelect);
     if (field_0x026b != 0xFF &&
-        dusk::menu_pointer::hit_pane(mCpSelPane[field_0x026b], 8.0f) &&
-        dusk::menu_pointer::consume_click())
+        dusk::menu_pointer::hit_pane(mCpSelPane[field_0x026b], 8.0f))
     {
-        dusk::menu_pointer::defer_activation(
-            dusk::menu_pointer::Context::FileSelect,
-            pointer_target(s_pointerCopySelectTarget, field_0x026b));
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerCopySelectTarget, field_0x026b));
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(
+                dusk::menu_pointer::Context::FileSelect,
+                pointer_target(s_pointerCopySelectTarget, field_0x026b));
+        }
     }
 #endif
     bool iVar7 = true;
@@ -2522,12 +2531,14 @@ void dFile_select_c::yesNoCursorMoveAnm() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::FileSelect);
     if (field_0x0268 != 0xFF &&
-        dusk::menu_pointer::hit_pane(mYnSelPane[field_0x0268], 8.0f) &&
-        dusk::menu_pointer::consume_click())
+        dusk::menu_pointer::hit_pane(mYnSelPane[field_0x0268], 8.0f))
     {
-        dusk::menu_pointer::defer_activation(
-            dusk::menu_pointer::Context::FileSelect,
-            pointer_target(s_pointerYesNoSelectTarget, field_0x0268));
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerYesNoSelectTarget, field_0x0268));
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(
+                dusk::menu_pointer::Context::FileSelect,
+                pointer_target(s_pointerYesNoSelectTarget, field_0x0268));
+        }
     }
 #endif
     bool isYnSelMove = yesnoSelectMoveAnm();

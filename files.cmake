@@ -1418,6 +1418,8 @@ set(DUSK_FILES
         include/dusk/scope_guard.hpp
         src/dusk/dvd_asset.cpp
         src/d/actor/d_a_alink_dusk.cpp
+        src/dusk/android_frame_rate.hpp
+        src/dusk/android_frame_rate.cpp
         src/dusk/asserts.cpp
         src/dusk/batch.cpp
         src/dusk/batch.hpp
@@ -1494,6 +1496,12 @@ set(DUSK_FILES
         src/dusk/ui/input.hpp
         src/dusk/ui/icon_provider.cpp
         src/dusk/ui/icon_provider.hpp
+        src/dusk/ui/logs_window.cpp
+        src/dusk/ui/logs_window.hpp
+        src/dusk/ui/mod_texture_provider.cpp
+        src/dusk/ui/mod_texture_provider.hpp
+        src/dusk/ui/mod_window.cpp
+        src/dusk/ui/mod_window.hpp
         src/dusk/ui/modal.cpp
         src/dusk/ui/modal.hpp
         src/dusk/ui/nav_types.hpp
@@ -1505,6 +1513,8 @@ set(DUSK_FILES
         src/dusk/ui/pane.hpp
         src/dusk/ui/menu_bar.cpp
         src/dusk/ui/menu_bar.hpp
+        src/dusk/ui/mods_window.cpp
+        src/dusk/ui/mods_window.hpp
         src/dusk/ui/prelaunch.cpp
         src/dusk/ui/prelaunch.hpp
         src/dusk/ui/preset.cpp
@@ -1539,6 +1549,34 @@ set(DUSK_FILES
         src/dusk/OSReport.cpp
         src/dusk/OSThread.cpp
         src/dusk/OSMutex.cpp
+        src/dusk/mods/log_buffer.cpp
+        src/dusk/mods/log_buffer.hpp
+        src/dusk/mods/manifest.cpp
+        src/dusk/mods/manifest.hpp
+        src/dusk/mods/loader/bundle_disk.cpp
+        src/dusk/mods/loader/bundle_zip.cpp
+        src/dusk/mods/loader/context.cpp
+        src/dusk/mods/loader/depgraph.cpp
+        src/dusk/mods/loader/depgraph.hpp
+        src/dusk/mods/loader/loader.cpp
+        src/dusk/mods/loader/loader.hpp
+        src/dusk/mods/loader/native_module.cpp
+        src/dusk/mods/loader/native_module.hpp
+        src/dusk/mods/svc/camera.cpp
+        src/dusk/mods/svc/config.cpp
+        src/dusk/mods/svc/config.hpp
+        src/dusk/mods/svc/game.cpp
+        src/dusk/mods/svc/gfx.cpp
+        src/dusk/mods/svc/hook.cpp
+        src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/log.cpp
+        src/dusk/mods/svc/overlay.cpp
+        src/dusk/mods/svc/resource.cpp
+        src/dusk/mods/svc/texture.cpp
+        src/dusk/mods/svc/ui.cpp
+        src/dusk/mods/svc/ui.hpp
+        src/dusk/mods/svc/registry.cpp
+        src/dusk/mods/svc/registry.hpp
         src/dusk/discord.cpp
         src/dusk/discord.hpp
         src/dusk/discord_presence.cpp

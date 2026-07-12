@@ -1,54 +1,69 @@
 #include "dusk/mouse.h"
+#include "d/actor/d_a_alink.h"
+#include "d/d_com_inf_game.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
-#include "d/actor/d_a_alink.h"
-#include "d/d_com_inf_game.h"
 
-#include <aurora/lib/window.hpp>
-#include <imgui.h>
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_video.h>
+#include <aurora/lib/window.hpp>
+#include <imgui.h>
+
+#include <chrono>
 
 namespace dusk::mouse {
 namespace {
-constexpr float kMousePixelToRad = 0.0025f;
-constexpr int kIdleHideFrames = 99; // Approx. 3 seconds with 33ms ticks
+using Clock = std::chrono::steady_clock;
 
-float s_aim_yaw_rad      = 0.0f;
-float s_aim_pitch_rad    = 0.0f;
-float s_camera_yaw_rad   = 0.0f;
+constexpr float kMousePixelToRad = 0.0025f;
+constexpr auto kCursorIdleDuration = std::chrono::seconds(1);
+
+float s_aim_yaw_rad = 0.0f;
+float s_aim_pitch_rad = 0.0f;
+float s_camera_yaw_rad = 0.0f;
 float s_camera_pitch_rad = 0.0f;
-int s_idle_frames = 0;
+Clock::time_point s_last_cursor_motion = Clock::now();
 
 void reset_deltas() {
     s_aim_yaw_rad = s_aim_pitch_rad = 0.0f;
     s_camera_yaw_rad = s_camera_pitch_rad = 0.0f;
 }
 
-bool queryMouseAimContext() {
+bool query_mouse_aim_context() {
     return getSettings().game.enableMouseAim.getValue() && dCamera_c::isAimActive();
 }
 
-bool wantMouseCapture() {
-    return getSettings().game.enableMouseCamera.getValue() || queryMouseAimContext();
+bool want_mouse_capture() {
+    return getSettings().game.enableMouseCamera.getValue() || query_mouse_aim_context();
 }
 
-bool isWindowFocused(SDL_Window* window) {
+bool mouse_input_enabled() {
+    const auto& game = getSettings().game;
+    return game.enableMouseAim.getValue() || game.enableMouseCamera.getValue();
+}
+
+bool is_window_focused(SDL_Window* window) {
     if (window == nullptr) {
         return false;
     }
     return (SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0;
 }
 
-bool shouldCaptureMouse(SDL_Window* window) {
-    if (window == nullptr || ui::any_document_visible() || menu_pointer::active()) {
-        return false;
-    }
-    return wantMouseCapture() && isWindowFocused(window);
+bool imgui_windows_visible() {
+    return ImGui::GetIO().MetricsRenderWindows > 0;
 }
 
-bool syncCaptureState(SDL_Window* window, bool should_capture) {
+bool should_capture_mouse(SDL_Window* window) {
+    if (window == nullptr || ui::any_document_visible() || imgui_windows_visible() ||
+        menu_pointer::active())
+    {
+        return false;
+    }
+    return want_mouse_capture() && is_window_focused(window);
+}
+
+bool sync_capture_state(SDL_Window* window, bool should_capture) {
     if (window == nullptr) {
         reset_deltas();
         return false;
@@ -78,7 +93,7 @@ bool syncCaptureState(SDL_Window* window, bool should_capture) {
     return is_captured;
 }
 
-void accumulateDeltas(float mx_rel, float my_rel, bool camera_active, bool aim_active) {
+void accumulate_deltas(float mx_rel, float my_rel, bool camera_active, bool aim_active) {
     const auto& game = getSettings().game;
     const bool mirror_mode = game.enableMirrorMode.getValue();
     const bool invert_y = game.invertMouseY.getValue();
@@ -114,57 +129,62 @@ void set_cursor_visible(bool visible) {
     }
 }
 
-void update_cursor_visibility(SDL_Window* window, bool captured) {
-    if (window == nullptr || !isWindowFocused(window)) {
-        return;
-    }
+bool cursor_idle() {
+    return Clock::now() - s_last_cursor_motion >= kCursorIdleDuration;
+}
 
+bool should_show_cursor(bool captured) {
     if (captured) {
-        s_idle_frames = 0;
-        set_cursor_visible(false);
+        return false;
+    }
+    if (ui::any_document_visible()) {
+        return true;
+    }
+    if (imgui_windows_visible()) {
+        return true;
+    }
+    if (menu_pointer::enabled() && menu_pointer::active()) {
+        return true;
+    }
+    if (mouse_input_enabled()) {
+        return false;
+    }
+    return !cursor_idle();
+}
+
+void update_cursor_visibility(SDL_Window* window, bool captured) {
+    if (window == nullptr || !is_window_focused(window)) {
         return;
     }
 
-    const ImGuiIO& io = ImGui::GetIO();
-    if (io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f) {
-        s_idle_frames = 0;
-        set_cursor_visible(true);
-        return;
-    }
-
-    if (s_idle_frames < kIdleHideFrames) {
-        ++s_idle_frames;
-        set_cursor_visible(true);
-    } else {
-        set_cursor_visible(false);
-    }
+    set_cursor_visible(should_show_cursor(captured));
 }
 }  // namespace
 
 void read() {
     SDL_Window* window = aurora::window::get_sdl_window();
-    const bool capture_active = syncCaptureState(window, shouldCaptureMouse(window));
+    const bool capture_active = sync_capture_state(window, should_capture_mouse(window));
     update_cursor_visibility(window, capture_active);
 
     if (!capture_active) {
         return;
     }
 
-    const bool aim_active = capture_active && queryMouseAimContext();
+    const bool aim_active = capture_active && query_mouse_aim_context();
     const bool camera_active = capture_active && getSettings().game.enableMouseCamera;
 
     float mx_rel = 0.0f;
     float my_rel = 0.0f;
     SDL_GetRelativeMouseState(&mx_rel, &my_rel);
-    accumulateDeltas(mx_rel, my_rel, camera_active, aim_active);
+    accumulate_deltas(mx_rel, my_rel, camera_active, aim_active);
 }
 
-void getAimDeltas(float& out_yaw, float& out_pitch) {
+void get_aim_deltas(float& out_yaw, float& out_pitch) {
     out_yaw = s_aim_yaw_rad;
     out_pitch = s_aim_pitch_rad;
 }
 
-void getCameraDeltas(float& out_yaw, float& out_pitch) {
+void get_camera_deltas(float& out_yaw, float& out_pitch) {
     out_yaw = 0.0f;
     out_pitch = 0.0f;
 
@@ -178,26 +198,28 @@ void getCameraDeltas(float& out_yaw, float& out_pitch) {
 
 void handle_event(const SDL_Event& event) noexcept {
     switch (event.type) {
+    case SDL_EVENT_MOUSE_MOTION:
+        s_last_cursor_motion = Clock::now();
+        break;
     case SDL_EVENT_WINDOW_FOCUS_LOST:
-        onFocusLost();
+        on_focus_lost();
         break;
     case SDL_EVENT_WINDOW_FOCUS_GAINED:
-        onFocusGained();
+        on_focus_gained();
         break;
     }
 }
 
-void onFocusLost() {
+void on_focus_lost() {
     SDL_Window* window = aurora::window::get_sdl_window();
     if (window != nullptr) {
-        syncCaptureState(window, false);
+        sync_capture_state(window, false);
     }
-    s_idle_frames = 0;
     set_cursor_visible(true);
 }
 
-void onFocusGained() {
+void on_focus_gained() {
     SDL_Window* window = aurora::window::get_sdl_window();
-    syncCaptureState(window, shouldCaptureMouse(window));
+    sync_capture_state(window, should_capture_mouse(window));
 }
 }  // namespace dusk::mouse

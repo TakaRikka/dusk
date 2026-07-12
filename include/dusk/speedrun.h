@@ -37,5 +37,6 @@ struct SpeedrunInfo {
 extern SpeedrunInfo m_speedrunInfo;
 
 void resetForSpeedrunMode();
+void restoreFromSpeedrunMode();
 
 }  // namespace dusk

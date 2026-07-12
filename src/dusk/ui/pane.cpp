@@ -166,13 +166,13 @@ bool Pane::focus() {
 Rml::Element* Pane::add_section(const Rml::String& text) {
     auto* elem = append(mRoot, "div");
     elem->SetClass("section-heading", true);
-    elem->SetInnerRML(escape(text));
+    append_text(elem, text);
     return elem;
 }
 
 Rml::Element* Pane::add_text(const Rml::String& text) {
     auto* elem = append(mRoot, "div");
-    elem->SetInnerRML(escape(text));
+    append_text(elem, text);
     return elem;
 }
 

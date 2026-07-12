@@ -99,7 +99,7 @@ float squared_distance(Rml::Vector2f a, Rml::Vector2f b) noexcept {
 }  // namespace
 
 TouchControlsEditor::TouchControlsEditor()
-    : Document(touch_controls_editor_document_source()),
+    : Document(touch_controls_editor_document_source(), false, DocumentScope::TouchControls),
       mRoot(mDocument != nullptr ? mDocument->GetElementById("root") : nullptr),
       mSelectionFrame(
           mDocument != nullptr ? mDocument->GetElementById("editor-selection-frame") : nullptr),
@@ -585,7 +585,7 @@ bool TouchControlsEditor::handle_nav_command(Rml::Event& event, NavCommand cmd) 
 void TouchControlsEditor::save_layout() {
     mWorkingLayout.version = ControlLayout::Version;
     getSettings().game.touchControlsLayout.setValue(mWorkingLayout);
-    config::Save();
+    config::save();
     mDoAud_seStartMenu(kSoundItemChange);
     pop();
 }

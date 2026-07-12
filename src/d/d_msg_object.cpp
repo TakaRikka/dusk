@@ -428,17 +428,6 @@ static void dummyStrings() {
 dMsgObject_HIO_c g_MsgObject_HIO_c;
 
 int dMsgObject_c::_execute() {
-// TODO: enabling wii message overrides fixes direction text, but gives wrong item control text
-/*#if TARGET_PC
-    if (dusk::getSettings().game.enableMirrorMode) {
-        // enable wii message index override
-        g_MsgObject_HIO_c.mMessageDisplay = 1;
-    } else if (!dusk::getSettings().game.enableMirrorMode && g_MsgObject_HIO_c.mMessageDisplay == 1) {
-        g_MsgObject_HIO_c.mMessageDisplay = 0;
-    }
-#endif*/
-
-
     field_0x4c7 = 0;
     if (mpTalkHeap != NULL) {
         field_0x148 = mDoExt_setCurrentHeap(mpTalkHeap);
@@ -655,8 +644,21 @@ static const MirrorMsgOverride mirrorMsgOverrides[] = {
     {0x17e2, 0x3ef2},
     {0x1dae, 0x44be},
     {0x14ca, 0x3bda},
-    {0x470, 0x493}, 
+    {0x470, 0x493},
     {0x473, 0x492},
+    {0x1f41, 0x4651},
+    {0x1f42, 0x4652},
+    {0x0847, 0x0870},
+    {0x0d5c, 0x0d65},
+    {0x0a97, 0x0a98},
+    {0x0327, 0x12ba},
+    {0x0328, 0x12bb},
+    {0x1534, 0x3c44},
+    {0x1536, 0x3c46},
+    {0x1557, 0x3c67},
+    {0x1b88, 0x4298},
+    {0x14c8, 0x3bd8},
+    {0x151b, 0x3c2b},
 };
 
 static u32 getMirrorMsgOverride(u32 msgId) {

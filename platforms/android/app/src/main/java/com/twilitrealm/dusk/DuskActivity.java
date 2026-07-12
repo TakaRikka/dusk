@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,12 +15,16 @@ import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 
 import org.libsdl.app.SDLActivity;
+import org.libsdl.app.SDLSurface;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ import java.util.List;
 
 public class DuskActivity extends SDLActivity {
     private static final String TAG = "DuskActivity";
+    private static final float DEFAULT_SURFACE_FRAME_RATE = 60.0f;
     private static final int FOLDER_DIALOG_REQUEST_CODE = 0x4455;
     private static final int MANAGE_STORAGE_REQUEST_CODE = 0x4456;
     private static final String EXTERNAL_STORAGE_AUTHORITY =
@@ -89,6 +95,11 @@ public class DuskActivity extends SDLActivity {
     }
 
     @Override
+    protected SDLSurface createSDLSurface(Context context) {
+        return new DuskSurface(context);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         hideSystemBars();
@@ -137,6 +148,77 @@ public class DuskActivity extends SDLActivity {
         return new String[] {
             "main"
         };
+    }
+
+    public void setPreferredSurfaceFrameRate(float frameRate) {
+        runOnUiThread(() -> {
+            if (mSurface instanceof DuskSurface) {
+                ((DuskSurface)mSurface).setPreferredFrameRate(frameRate);
+            }
+        });
+    }
+
+    private static final class DuskSurface extends SDLSurface {
+        private float preferredFrameRate = DEFAULT_SURFACE_FRAME_RATE;
+
+        DuskSurface(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            super.surfaceChanged(holder, format, width, height);
+            setTargetFrameRate(holder);
+        }
+
+        void setPreferredFrameRate(float frameRate) {
+            preferredFrameRate = frameRate;
+            setTargetFrameRate(getHolder());
+        }
+
+        private void setTargetFrameRate(SurfaceHolder holder) {
+            if (!mIsSurfaceReady || Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                return;
+            }
+
+            Surface surface = holder != null ? holder.getSurface() : getHolder().getSurface();
+            if (surface == null || !surface.isValid()) {
+                return;
+            }
+
+            float targetFrameRate = getMaxSupportedFrameRate();
+            if (preferredFrameRate > 0.0f) {
+                targetFrameRate = preferredFrameRate;
+            }
+            if (targetFrameRate <= 0.0f) {
+                return;
+            }
+
+            try {
+                surface.setFrameRate(
+                    targetFrameRate, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT);
+                Log.v(TAG, "Requested surface frame rate " + targetFrameRate + " fps");
+            } catch (RuntimeException e) {
+                Log.w(TAG, "Failed to request surface frame rate", e);
+            }
+        }
+
+        private float getMaxSupportedFrameRate() {
+            if (mDisplay == null) {
+                return 0.0f;
+            }
+
+            float maxFrameRate = mDisplay.getRefreshRate();
+            Display.Mode[] modes = mDisplay.getSupportedModes();
+            if (modes == null) {
+                return maxFrameRate;
+            }
+
+            for (Display.Mode mode : modes) {
+                maxFrameRate = Math.max(maxFrameRate, mode.getRefreshRate());
+            }
+            return maxFrameRate;
+        }
     }
 
     @Override

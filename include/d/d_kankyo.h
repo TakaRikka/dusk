@@ -259,7 +259,7 @@ public:
     /* 0x09B8 */ DUNGEON_LIGHT dungeonlight[8];
     /* 0x0C18 */ BOSS_LIGHT field_0x0c18[8];
     /* 0x0D58 */ BOSS_LIGHT field_0x0d58[6];
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
     /* 0x0E48 */ NAVYCHAN navy;
     /* 0x0E58 */ u8 field_0xe58[0xE68 - 0xE58];  // part of NAVYCHAN?
 #endif
@@ -471,7 +471,7 @@ public:
     /* 0x130C */ u8 staffroll_next_timer;
 };  // Size: 0x1310
 
-extern dScnKy_env_light_c g_env_light;
+DUSK_GAME_EXTERN dScnKy_env_light_c g_env_light;
 
 STATIC_ASSERT(sizeof(dScnKy_env_light_c) == 4880);
 

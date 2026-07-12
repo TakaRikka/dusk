@@ -7,6 +7,9 @@ float s_pitch_dp = 0.0f;
 }  // namespace
 
 void add_delta(float yaw_dp, float pitch_dp) noexcept {
+    if (getSettings().game.enableMirrorMode) {
+        yaw_dp *= -1.0;
+    }
     s_yaw_dp += yaw_dp;
     s_pitch_dp += pitch_dp;
 }

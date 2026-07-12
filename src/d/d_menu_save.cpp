@@ -1820,6 +1820,7 @@ bool dMenu_save_c::pointerSaveSelect() {
         if (!dusk::menu_pointer::hit_pane(mpSelData[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerSaveSelectTarget, i));
         const bool clicked = dusk::menu_pointer::consume_click();
         if (mSelectedFile != i) {
             mDoAud_seStart(Z2SE_FILE_SELECT_CURSOR, NULL, 0, 0);
@@ -1848,6 +1849,7 @@ bool dMenu_save_c::pointerYesNoSelect(bool errorSelect, u8 errParam, u8 soundPar
         if (!dusk::menu_pointer::hit_pane(mpNoYes[i], 8.0f)) {
             continue;
         }
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerYesNoSelectTarget, i));
         const bool clicked =
             (!errorSelect || mYesNoCursor == i) && dusk::menu_pointer::consume_click();
         if (mYesNoCursor != i) {
@@ -1952,12 +1954,14 @@ void dMenu_save_c::saveSelectMoveAnime() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Save);
     if (mSelectedFile != 0xFF &&
-        dusk::menu_pointer::hit_pane(mpSelData[mSelectedFile], 8.0f) &&
-        dusk::menu_pointer::consume_click())
+        dusk::menu_pointer::hit_pane(mpSelData[mSelectedFile], 8.0f))
     {
-        dusk::menu_pointer::defer_activation(
-            dusk::menu_pointer::Context::Save,
-            pointer_target(s_pointerSaveSelectTarget, mSelectedFile));
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerSaveSelectTarget, mSelectedFile));
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(
+                dusk::menu_pointer::Context::Save,
+                pointer_target(s_pointerSaveSelectTarget, mSelectedFile));
+        }
     }
 #endif
     bool bookWakuAnmComplete = true;
@@ -2130,12 +2134,14 @@ void dMenu_save_c::yesNoCursorMoveAnm() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Save);
     if (mYesNoCursor != 0xFF &&
-        dusk::menu_pointer::hit_pane(mpNoYes[mYesNoCursor], 8.0f) &&
-        dusk::menu_pointer::consume_click())
+        dusk::menu_pointer::hit_pane(mpNoYes[mYesNoCursor], 8.0f))
     {
-        dusk::menu_pointer::defer_activation(
-            dusk::menu_pointer::Context::Save,
-            pointer_target(s_pointerYesNoSelectTarget, mYesNoCursor));
+        dusk::menu_pointer::set_hover_target(pointer_target(s_pointerYesNoSelectTarget, mYesNoCursor));
+        if (dusk::menu_pointer::consume_click()) {
+            dusk::menu_pointer::defer_activation(
+                dusk::menu_pointer::Context::Save,
+                pointer_target(s_pointerYesNoSelectTarget, mYesNoCursor));
+        }
     }
 #endif
     bool selAnmComplete = yesnoSelectMoveAnm(0);

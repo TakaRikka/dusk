@@ -139,7 +139,6 @@ action-bar {
     position: absolute;
     display: flex;
     align-items: center;
-    justify-content: stretch;
     border: 1dp rgba(255, 255, 255, 22%);
     border-radius: 23dp;
     background-color: rgba(22, 24, 28, 48%);

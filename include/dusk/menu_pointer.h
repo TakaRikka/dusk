@@ -6,6 +6,9 @@ class CPaneMgr;
 
 namespace dusk::menu_pointer {
 
+using TargetId = u16;
+constexpr TargetId InvalidTarget = 0xffff;
+
 enum class Context {
     None,
     FileSelect,
@@ -43,12 +46,14 @@ bool active() noexcept;
 bool enabled() noexcept;
 bool mouse_capture_active() noexcept;
 const State& state() noexcept;
+void set_hover_target(TargetId target) noexcept;
 bool consume_click() noexcept;
+bool peek_click() noexcept;
 void set_dialog_choice(u8 choice, bool clicked) noexcept;
 bool get_dialog_choice(u8& choice) noexcept;
 bool consume_dialog_click(u8& choice) noexcept;
-void defer_activation(Context context, u8 target) noexcept;
-bool consume_deferred_activation(Context context, u8 target) noexcept;
+void defer_activation(Context context, TargetId target) noexcept;
+bool consume_deferred_activation(Context context, TargetId target) noexcept;
 void clear_deferred_activation(Context context) noexcept;
 u32 suppressed_pad_buttons(u32 port) noexcept;
 void finish_pad_suppression_read(u32 port) noexcept;

@@ -314,7 +314,7 @@ public:
         >
     {
         TIterator_data_(const TFunctionValue_list_parameter& rParent, const f32* value) {
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
             pOwn_ = &rParent;
 #endif
             pf_ = value;
@@ -372,7 +372,7 @@ public:
             return (r1.pf_ - r2.pf_) / suData_size;
         }
 
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
         /* 0x00 */ const TFunctionValue_list_parameter* pOwn_;
 #endif
         /* 0x00 */ const f32* pf_;
@@ -425,7 +425,7 @@ public:
         >
     {
         TIterator_data_(const TFunctionValue_hermite& rParent, const f32* value) {
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
             pOwn_ = &rParent;
 #endif
             pf_ = value;
@@ -491,7 +491,7 @@ public:
             return (r1.pf_ - r2.pf_) / r1.uSize_;
         }
 
-#if DEBUG
+#if PARTIAL_DEBUG || DEBUG
         /* 0x00 */ const TFunctionValue_hermite* pOwn_;
         /* 0x04 */ const f32* pf_;
         /* 0x08 */ u32 uSize_;

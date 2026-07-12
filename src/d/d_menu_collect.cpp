@@ -1960,6 +1960,7 @@ bool dMenu_Collect2D_c::pointerWait() {
             if (getItemTag(x, y, true) == 0 || !dusk::menu_pointer::hit_pane(mpSelPm[x][y], 8.0f)) {
                 continue;
             }
+            dusk::menu_pointer::set_hover_target(static_cast<dusk::menu_pointer::TargetId>(x + y * 7));
             if (mCursorX != x || mCursorY != y) {
                 mDoAud_seStart(Z2SE_SY_MENU_CURSOR_COMMON, NULL, 0, 0);
                 mCursorX = x;

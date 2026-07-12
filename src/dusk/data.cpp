@@ -121,14 +121,6 @@ std::filesystem::path active_pref_path() {
     return get_pref_path();
 }
 
-std::filesystem::path base_path_relative(const std::filesystem::path& path) {
-    const auto* basePath = SDL_GetBasePath();
-    if (!basePath) {
-        return path;
-    }
-    return path_from_utf8(basePath) / path;
-}
-
 std::filesystem::path default_data_path(const std::filesystem::path& prefPath) {
 #ifdef __APPLE__
 #if TARGET_OS_IOS && !TARGET_OS_TV
@@ -887,6 +879,14 @@ void ensure_data_directory(const std::filesystem::path& dataPath) {
 }
 
 }  // namespace
+
+std::filesystem::path base_path_relative(const std::filesystem::path& path) {
+    const auto* basePath = SDL_GetBasePath();
+    if (!basePath) {
+        return path;
+    }
+    return path_from_utf8(basePath) / path;
+}
 
 bool open_data_path() {
 #if DUSK_CAN_OPEN_DATA_FOLDER
