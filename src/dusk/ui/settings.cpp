@@ -1257,6 +1257,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Skip needing to catch a second fish for Sera's cat.");
         addOption("Button Fishing", getSettings().game.buttonFishing,
             "Allow fishing with the Fishing Rod using the button the item is assigned to.");
+        addOption("Show Golden Bug Count on Map", getSettings().game.mapGoldBugCount,
+            "Displays collected/total number of Golden Bugs for a region on the map.");
         addOption("Show Poe Count on Map", getSettings().game.enhancedMapMenus,
             "Displays collected/total number of Poe Souls for a region on the map.");
         addSpeedrunDisabledOption("Sun's Song (R+X)", getSettings().game.sunsSong,

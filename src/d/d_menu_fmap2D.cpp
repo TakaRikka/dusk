@@ -2559,6 +2559,14 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
         mpPoeCountPane->setFont(mDoExt_getMesgFont());
     }
 
+    mpGoldBugCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("kabuto_osu_00.bti", dComIfGp_getItemIconArchive()));
+
+    mpGoldBugCountPane = JKR_NEW J2DTextBox();
+    if (mpGoldBugCountPane != nullptr) {
+        mpGoldBugCountPane->setFontSize(15.0f, 15.0f);
+        mpGoldBugCountPane->setFont(mDoExt_getMesgFont());
+    }
+
     mSelectRegionNo = 0xFF;
 #endif
 
@@ -2631,6 +2639,12 @@ dMenu_Fmap2DTop_c::~dMenu_Fmap2DTop_c() {
 
     JKR_DELETE(mpPoeCountPane);
     mpPoeCountPane = NULL;
+
+    JKR_DELETE(mpGoldBugCountIcon);
+    mpGoldBugCountIcon = NULL;
+
+    JKR_DELETE(mpGoldBugCountIcon);
+    mpGoldBugCountPane = NULL;
 #endif
 }
 
@@ -2730,6 +2744,34 @@ void dMenu_Fmap2DTop_c::draw() {
     mpTitleScreen->draw(mTransX, mTransY, ctx);
 
 #if TARGET_PC
+        if (dusk::getSettings().game.mapGoldBugCount) {
+        int nowGoldBugCount = 0;
+        int totalGoldBugCount = 0;
+        dMenuMapCommon_c::getFmapGoldBugCount(mSelectRegionNo, nowGoldBugCount, totalGoldBugCount);
+        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0) {
+            const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
+            const f32 y = (dusk::getSettings().game.enhancedMapMenus && dComIfGs_isEventBit(dSv_event_flag_c::F_0456))
+                ? 342.0f
+                : 380.0f;
+            constexpr f32 iconsize = 48.0f * 0.8f;
+
+            if (mpGoldBugCountIcon != nullptr)
+                mpGoldBugCountIcon->draw(x - 35.0f, y - 25.0f, iconsize, iconsize, false, false, false);
+
+            char counter_text[6];
+            snprintf(counter_text, sizeof(counter_text), "%d/%d", nowGoldBugCount, totalGoldBugCount);
+            mpGoldBugCountPane->setString(counter_text);
+
+            mpGoldBugCountPane->setCharColor(0x000000FF);
+            mpGoldBugCountPane->setGradColor(0x000000FF);
+            mpGoldBugCountPane->draw(x + 1, y + 1, FB_WIDTH, HBIND_LEFT);
+
+            mpGoldBugCountPane->setCharColor(0xC8C8C8FF);
+            mpGoldBugCountPane->setGradColor(0xC8C8C8FF);
+            mpGoldBugCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
+        }
+    }
+    
     if (dusk::getSettings().game.enhancedMapMenus) {
         int nowPoeCount = 0;
         int totalPoeCount = 0;

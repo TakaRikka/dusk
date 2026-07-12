@@ -755,6 +755,51 @@ void dMenuMapCommon_c::debugIcon() {
 
 #if TARGET_PC
 static constexpr struct {
+    int item_no;
+    s8 region_id;
+} l_goldBugInfo[] = {
+    {dItemNo_M_ANT_e, 2},
+    {dItemNo_F_ANT_e, 2},
+    {dItemNo_M_MAYFLY_e, 4},
+    {dItemNo_F_MAYFLY_e, 4},
+    {dItemNo_M_BEETLE_e, 1},
+    {dItemNo_F_BEETLE_e, 1},
+    {dItemNo_M_MANTIS_e, 3},
+    {dItemNo_F_MANTIS_e, 3},
+    {dItemNo_M_STAG_BEETLE_e, 3},
+    {dItemNo_F_STAG_BEETLE_e, 3},
+    {dItemNo_M_DANGOMUSHI_e, 2},
+    {dItemNo_F_DANGOMUSHI_e, 2},
+    {dItemNo_M_BUTTERFLY_e, 3},
+    {dItemNo_F_BUTTERFLY_e, 3},
+    {dItemNo_M_LADYBUG_e, 3},
+    {dItemNo_F_LADYBUG_e, 3},
+    {dItemNo_M_SNAIL_e, 1},
+    {dItemNo_F_SNAIL_e, 1},
+    {dItemNo_M_NANAFUSHI_e, 2},
+    {dItemNo_F_NANAFUSHI_e, 2},
+    {dItemNo_M_GRASSHOPPER_e, 2},
+    {dItemNo_F_GRASSHOPPER_e, 2},
+    {dItemNo_M_DRAGONFLY_e, 3},
+    {dItemNo_F_DRAGONFLY_e, 3},
+};
+
+void dMenuMapCommon_c::getFmapGoldBugCount(int regionNo, int& nowCount, int& totalCount) {
+    nowCount = 0;
+    totalCount = 0;
+
+    if (regionNo < 0)
+        return;
+
+    for (const auto& i : l_goldBugInfo) {
+        if (regionNo == i.region_id) {
+            nowCount += dComIfGs_isItemFirstBit(i.item_no);
+            totalCount++;
+        }
+    }
+}
+
+static constexpr struct {
     std::string_view stagename;
     u8 switch_no;
     s8 region_id;
