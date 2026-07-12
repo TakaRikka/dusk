@@ -92,6 +92,15 @@ fn sample_shadow_pcf(light_uv: vec2f, receiver: f32) -> f32 {
     return sum / count;
 }
 
+// Softly fades shadows out over a small band near the shadow-map edge so receivers do not
+// disappear abruptly when they leave the light's coverage area.
+fn shadow_edge_fade(light_uv: vec2f) -> f32 {
+    let edge_texels = 24.0;
+    let edge_uv = edge_texels * max(uniforms.inv_size.x, uniforms.inv_size.y);
+    let distance_to_edge = min(min(light_uv.x, 1.0 - light_uv.x), min(light_uv.y, 1.0 - light_uv.y));
+    return saturate(distance_to_edge / edge_uv);
+}
+
 fn scene_depth_at(uv: vec2f) -> f32 {
     let size = vec2<i32>(textureDimensions(scene_depth));
     let texel = clamp(vec2<i32>(uv * vec2f(size)), vec2<i32>(0i), size - 1i);
@@ -240,6 +249,7 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4f {
     var occlusion = 0.0;
     if in_shadow_bounds {
         occlusion = sample_shadow_pcf(light_uv, receiver);
+        occlusion *= shadow_edge_fade(light_uv);
     }
 
     if uniforms.debug_mode == 3u {
