@@ -1359,7 +1359,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     [] {
                         return kZoraArmorModes[static_cast<u8>(getSettings().game.zoraArmorMode.getValue())];
                     },
-                .isDisabled = [] { return getSettings().game.speedrunMode; },
+                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
                 .isModified =
                     [] {
                         return getSettings().game.zoraArmorMode.getValue() !=
@@ -1378,7 +1378,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
                             getSettings().game.zoraArmorMode.setValue(static_cast<ZoraArmorMode>(i));
-                            config::Save();
+                            config::save();
                         });
                 }
                 pane.add_rml(
