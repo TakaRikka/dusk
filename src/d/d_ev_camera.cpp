@@ -1436,7 +1436,7 @@ bool dCamera_c::watchActorEvCamera() {
         getEvFloatData(&actor->mZoomDist, "ZoomDist", 400.0f);
         getEvFloatData(&actor->mZoomVAngle, "ZoomVAngle", 0.0f);
         getEvFloatData(&actor->mFarDist, "FarDist", 1500.0f);
-        getEvFloatData(&actor->mFovy, "Fovy", 62.0f);
+        getEvFloatData(&actor->mFovy, "Fovy", static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()));
         getEvIntData(&actor->mNearTimer, "NearTimer", 20);
         getEvIntData(&actor->mFarTimer, "FarTimer", 30);
         getEvFloatData(&actor->mFrontAngle, "FrontAngle", 179.0f);
@@ -2178,7 +2178,7 @@ bool dCamera_c::gameOverEvCamera() {
             mViewCache.mCenter = sp224;
             mViewCache.mEye = sp230;
             gover_p->field_0x0++;
-            mViewCache.mFovy = 75.0f;
+            mViewCache.mFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.25f; // 75.0f
             bVar9 = true;
         }
         // fallthrough intentional.
@@ -3318,7 +3318,7 @@ bool dCamera_c::possessedEvCamera() {
             getEvFloatData(&fVar1, "Longitude", 0.0f);
             possessed->mLongitude.Val(fVar1);
 
-            getEvFloatData(&possessed->mFovy, "Fovy", 45.0f);
+            getEvFloatData(&possessed->mFovy, "Fovy", static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f);
             getEvIntData(&possessed->mBlure, "Blure", 0);
 
             if (possessed->mType == 0) {
@@ -3590,7 +3590,7 @@ bool dCamera_c::twoActor0EvCamera() {
         getEvFloatData(&twoact0_p->mLongitudeMax, "LongitudeMax", 160.0f);
 
         getEvIntData(&twoact0_p->mLongitudeType, "LongitudeType", -1);
-        getEvFloatData(&twoact0_p->mFovy, "Fovy", 60.0f);
+        getEvFloatData(&twoact0_p->mFovy, "Fovy", static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()));
         twoact0_p->field_0x4c = mViewCache.mDirection.R();
         twoact0_p->field_0x54 = cSAngle(mViewCache.mDirection.V().Degree());
         twoact0_p->field_0x56 = cSAngle(mViewCache.mDirection.U().Degree());
@@ -3781,7 +3781,7 @@ bool dCamera_c::digHoleEvCamera() {
                 f32 fVar3 = mViewCache.mDirection.V().Degree();
                 mViewCache.mDirection.R(fVar2 + (350.0f - fVar2) * digHole->field_0xc);
                 mViewCache.mDirection.V(fVar3 + (40.0f - fVar3) * digHole->field_0xc);
-                mViewCache.mFovy += (60.0f - mViewCache.mFovy) * digHole->field_0xc;
+                mViewCache.mFovy += (static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) - mViewCache.mFovy) * digHole->field_0xc;
                 mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
             } else if (!strcmp(dComIfGp_getStartStageName(), "R_SP01")) {
                 mBumpCheckFlags = 0;
@@ -3817,7 +3817,7 @@ bool dCamera_c::hintTalkEvCamera() {
     if (mCurCamStyleTimer == 0) {
         hintTalk->mTeacher = getEvActor("Teacher", "Midna");
         hintTalk->mStudent = getEvActor("Student", "@PLAYER");
-        getEvFloatData(&hintTalk->mFovy, "Fovy", 55.0f);
+        getEvFloatData(&hintTalk->mFovy, "Fovy", static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.92f);
         getEvFloatData(&hintTalk->mRadius, "Radius", 280.0f);
         getEvFloatData(&hintTalk->mCtrGapY, "CtrGapY", -25.0f);
         getEvIntData(&hintTalk->mTimer, "Timer", 20);

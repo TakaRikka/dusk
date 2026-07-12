@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_gb.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -544,9 +544,9 @@ static void kuki_control1(e_gb_class* i_this) {
     };
 
     static f32 wav_d[17] = {
-        0.0f, 0.2f, 0.4f, 
+        0.0f, 0.2f, 0.4f,
         0.5f, 0.6f, 0.8f, 1.0f,
-        1.0f, 1.0f, 1.0f, 
+        1.0f, 1.0f, 1.0f,
         1.0f, 1.0f, 0.8f, 0.6f,
         0.4f, 0.2f, 0.0f,
     };
@@ -606,7 +606,7 @@ static void kuki_control1(e_gb_class* i_this) {
             fVar7 = fVar6 * cM_scos(i_this->frameCounter * (1500 + TREG_S(2)) + i * (5000 + TREG_S(3)));
             fVar4 = fVar3 + (pcVar1->x - (pcVar1 - 1)->x);
             fVar8 = pcVar1->y - 5.0f;
-            
+
             if (fVar8 < (i_this->objAcch.GetGroundH() + 5.0f + YREG_F(18))) {
                 fVar8 = i_this->objAcch.GetGroundH() + 5.0f + YREG_F(18);
             }
@@ -643,7 +643,7 @@ static void kuki_control2(e_gb_class* i_this) {
     f32 diffx;
     f32 diffy;
     f32 diffz;
-    
+
     for (i = 16; i >= 0; i--, pcVar1--, pcVar2--) {
         diffx = pcVar1[0].x - pcVar1[1].x;
         diffy = pcVar1[0].y - pcVar1[1].y;
@@ -973,7 +973,7 @@ static void e_gf_eatbomb(e_gb_class* i_this) {
 
     if (i_this->bodyAnmNo == dRes_ID_E_GB_BCK_GF_BURST_e) {
         for (int i = 0; i < 5; i++) {
-            i_this->field_0xe7c[i] = dComIfGp_particle_set(i_this->field_0xe7c[i], eno[i], 
+            i_this->field_0xe7c[i] = dComIfGp_particle_set(i_this->field_0xe7c[i], eno[i],
                                                            &actor->home.pos, NULL, NULL);
             JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0xe7c[i]);
             if (emitter != NULL) {
@@ -1051,7 +1051,7 @@ static void damage_check2(e_gb_class* i_this) {
 
 static void action2(e_gb_class* i_this) {
     fopEn_enemy_c* actor = &i_this->actor;
-    
+
     damage_check2(i_this);
 
     s8 boss_room_wait_flag = 1;
@@ -1089,11 +1089,11 @@ static void action2(e_gb_class* i_this) {
 }
 
 static void cam_3d_morf(e_gb_class* i_this, f32 param_2) {
-    cLib_addCalc2(&i_this->demoCamCenter.x, i_this->demoCamCenterTarget.x, param_2, 
+    cLib_addCalc2(&i_this->demoCamCenter.x, i_this->demoCamCenterTarget.x, param_2,
                   i_this->demoCamCenterTargetDist.x * i_this->demoCamStepScale);
-    cLib_addCalc2(&i_this->demoCamCenter.y, i_this->demoCamCenterTarget.y, param_2, 
+    cLib_addCalc2(&i_this->demoCamCenter.y, i_this->demoCamCenterTarget.y, param_2,
                   i_this->demoCamCenterTargetDist.y * i_this->demoCamStepScale);
-    cLib_addCalc2(&i_this->demoCamCenter.z, i_this->demoCamCenterTarget.z, param_2, 
+    cLib_addCalc2(&i_this->demoCamCenter.z, i_this->demoCamCenterTarget.z, param_2,
                   i_this->demoCamCenterTargetDist.z * i_this->demoCamStepScale);
 
     cLib_addCalc2(&i_this->demoCamEye.x, i_this->demoCamEyeTarget.x, param_2,
@@ -1121,7 +1121,7 @@ static void demo_camera(e_gb_class* i_this) {
 
         camera->mCamera.Stop();
         i_this->demoMode = 2;
-        i_this->demoCamFovy = 55.0f;
+        i_this->demoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f;
         i_this->demoCounter = 0;
         camera->mCamera.SetTrimSize(3);
         daPy_getPlayerActorClass()->changeOriginalDemo();
@@ -1166,7 +1166,7 @@ static void demo_camera(e_gb_class* i_this) {
         i_this->demoCamCenterTargetDist.z = fabsf(i_this->demoCamCenterTarget.z - i_this->demoCamCenter.z);
         i_this->demoCamStepScale = 0.0f;
         i_this->demoMode = 3;
-        i_this->demoCamFovy = 55.0f;
+        i_this->demoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f;
         i_this->demoCounter = 0;
         // fallthrough
     case 3:
@@ -1383,7 +1383,7 @@ static int daE_GB_Execute(e_gb_class* i_this) {
                 baseEmitter->setGlobalSRTMatrix(model->getAnmMtx(GB_JNT_MOUTH_1_e));
             }
 
-            if (i_this->anmP->checkFrame(8.0f)) {                
+            if (i_this->anmP->checkFrame(8.0f)) {
                 i_this->sound.startCreatureVoice(Z2SE_EN_GB_V_NODAMAGE, -1);
             }
         }
@@ -1569,7 +1569,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     e_gb_class* i_this = (e_gb_class*)actor;
 
     i_this->anmP = JKR_NEW mDoExt_McaMorf(static_cast<J3DModelData*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BMD_GB_e)), NULL, NULL,
-                                              static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BCK_GB_WAIT_e)), 2, 1.0f, 
+                                              static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BCK_GB_WAIT_e)), 2, 1.0f,
                                               0, -1, 1, NULL, J3DMdlFlag_DifferedDLBuffer, 0x11000084);
     if (i_this->anmP == NULL || i_this->anmP->getModel() == NULL) {
         return 0;
@@ -1589,7 +1589,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     }
 
     if (i_this->brkAnmP->init(i_this->flowerAnmP->getModel()->getModelData(),
-                              static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BRK_GF_DIE_e)), 
+                              static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("E_gb", dRes_INDEX_E_GB_BRK_GF_DIE_e)),
                                1, 0, 1.0f, 0, -1) == 0) {
         return 0;
     }
@@ -1699,7 +1699,7 @@ static cPhs_Step daE_GB_Create(fopAc_ac_c* actor) {
 
         i_this->sound.init(&actor->current.pos, &actor->eyePos, 3, 1);
         i_this->sound.setEnemyName("E_gb");
-        
+
         i_this->frameCounter = cM_rndF(65535.0f);
 
         u32 sw_bit_2 = (fopAcM_GetParam(actor) & 0xFF00) >> 8;

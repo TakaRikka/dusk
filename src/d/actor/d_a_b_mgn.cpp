@@ -801,7 +801,7 @@ void daB_MGN_c::calcBloodMove() {
                 mBloodEffMode[i] = 4;
             }
             break;
-            
+
         case 4:
             mBloodEffSize[i].y *= 0.7f;
             mBloodEffSize[i].x *= 1.01f;
@@ -1091,37 +1091,37 @@ void daB_MGN_c::damage_check() {
             } else {
                 if (mAtInfo.mpCollider->GetAtAtp() >= 1) {
                     sp24 = getNearHitPos(&sp24);
-    
+
                     if (mAtInfo.mHitStatus == 0) {
                         dComIfGp_setHitMark(1, this, &sp24, NULL, NULL, 0);
                     } else {
                         dComIfGp_setHitMark(3, this, &sp24, NULL, NULL, 0);
                     }
-    
+
                     csXyz effrot(0, cLib_targetAngleY(&sp24, &player->current.pos), 0);
                     dComIfGp_particle_set(dPa_RM(ID_ZI_S_MGN_BODYCOREHIT_A), &sp24, &tevStr, &effrot, 0);
                 }
-    
+
                 if (field_0xb08 == 0) {
                     field_0xaa0 = 100;
                     field_0xb08 = 1;
                 }
-    
+
                 if (player->getCutCount() >= 3 && field_0xaa0 < 20) {
                     field_0xaa0 = 20;
                 }
-    
+
                 if (!dComIfGs_isOneZoneSwitch(6, fopAcM_GetRoomNo(this))) {
                     dComIfGs_onOneZoneSwitch(6, fopAcM_GetRoomNo(this));
                 }
-    
+
                 if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_WOLF_ATTACK) && player->getCutType() != daPy_py_c::CUT_TYPE_WOLF_B_LEFT &&
                     player->getCutType() != daPy_py_c::CUT_TYPE_WOLF_B_RIGHT && player->onWolfEnemyHangBite(this))
                 {
                     setActionMode(ACTION_DOWN_BITE_DAMAGE_e, 0);
                     return;
                 }
-    
+
                 u8 var_r29 = 0;
                 if (mAtInfo.mpCollider->ChkAtType(AT_TYPE_MASTER_SWORD)) {
                     if (mAtInfo.mpCollider->GetAtAtp() >= 4) {
@@ -1545,13 +1545,13 @@ void daB_MGN_c::executeDash() {
                             setActionMode(ACTION_CIRCLE_e, field_0xb03);
                             return;
                         }
-    
+
                         if ((s16)(mAcchCir.GetWallAngleY() - shape_angle.y) < 0) {
                             ANGLE_ADD(shape_angle.y, 0x100);
                         } else {
                             ANGLE_ADD(shape_angle.y, -0x100);
                         }
-    
+
                         current.angle.y = shape_angle.y;
                     }
                 }
@@ -2011,7 +2011,7 @@ void daB_MGN_c::executeDown() {
                     field_0xaff = 2;
                 }
                 break;
-                
+
             case 2:
             case 3:
                 if (health < 300) {
@@ -2581,7 +2581,7 @@ void daB_MGN_c::executeOpening() {
         mDemoCamCenter.set(-7.0f, 227.0f, -1312.0f - field_0xadc);
         mDemoCamEye.set(-114.0f, 150.0f, 2690.0f);
 
-        mDemoCamFovy = 40.0f;
+        static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.66f; // 40.0f;
         mDemoCamEyeStep = 170.0f;
 
         onBodyCo();
@@ -2976,7 +2976,7 @@ void daB_MGN_c::executeDeath() {
             field_0xa9c = 100;
         }
         break;
-        
+
     case 100:
         return;
     }
@@ -3076,7 +3076,7 @@ void daB_MGN_c::action() {
     case ACTION_CIRCLE_e:
         executeCircle();
         break;
-        
+
     case ACTION_DASH_e:
         executeDash();
         break;
@@ -3092,7 +3092,7 @@ void daB_MGN_c::action() {
     case ACTION_DOWN_DAMAGE_e:
         executeDownDamage();
         break;
-        
+
     case ACTION_DOWN_BITE_DAMAGE_e:
         executeDownBiteDamage();
         break;
@@ -3419,7 +3419,7 @@ int daB_MGN_c::CreateHeap() {
     if (mpMgnBtk == NULL) {
         return 0;
     }
-    
+
     if (!mpMgnBtk->init(mpMgnModelMorf->getModel()->getModelData(),
                            (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("B_mgn", BTK_MGN_EXIT),
                            1, J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1))

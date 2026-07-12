@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_hzelda.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -151,7 +151,7 @@ static int daE_HZELDA_Draw(e_hzelda_class* i_this) {
 
     if (i_this->mpSwordModel != NULL) {
         g_env_light.setLightTevColorType_MAJI(i_this->mpSwordModel, &a_this->tevStr);
-        
+
         J3DMaterial* materialp = i_this->mpSwordModel->getModelData()->getMaterialNodePointer(0);
         materialp->getTevColor(0)->r = i_this->mSwordColorIntensity * 255.0f;
         materialp->getTevColor(0)->g = i_this->mSwordColorIntensity * 150.0f;
@@ -455,10 +455,10 @@ static void e_hzelda_attack_c(e_hzelda_class* i_this) {
     cXyz sp60;
     cXyz sp54;
     int anm_frame = i_this->mpModelMorf->getFrame();
-    
+
     i_this->field_0x6b4 = 5;
     i_this->mSound.startCreatureSoundLevel(Z2SE_EN_HZE_MOVE, 0, -1);
-    
+
     sp60 = a_this->current.pos - i_this->mBallPos;
     sp60.y += 150.0f;
 
@@ -591,7 +591,7 @@ static void e_hzelda_attack_c(e_hzelda_class* i_this) {
                 i_this->mDemoMode = 1;
                 Z2GetAudioMgr()->bgmStop(0x1E, 0);
                 i_this->mMode = 10;
-                
+
                 i_this->mSound.startCreatureVoice(Z2SE_EN_HZE_V_DAMAGE_LAST, -1);
             } else {
                 i_this->mMode = 0;
@@ -843,7 +843,7 @@ static void demo_camera(e_hzelda_class* i_this) {
 
         camera->mCamera.Stop();
         i_this->mDemoMode = 2;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         i_this->mDemoTimer = 0;
         camera->mCamera.SetTrimSize(3);
         a_this->current.pos.set(0.0f, 500.0f, -2000.0f);
@@ -860,7 +860,7 @@ static void demo_camera(e_hzelda_class* i_this) {
             offset.z = 600.0f;
             MtxPosition(&offset, &target_eye);
             target_eye += a_this->current.pos;
-            
+
             i_this->mDemoCamEye = target_eye;
             i_this->mDemoCamCenter = target_center;
         } else if (i_this->mDemoTimer == 60) {
@@ -868,7 +868,7 @@ static void demo_camera(e_hzelda_class* i_this) {
             offset.y = -50.0f;
             offset.z = 300.0f;
             MtxPosition(&offset, &target_eye);
-            
+
             target_eye += a_this->current.pos;
             i_this->mDemoCamEye = target_eye;
         } else if (i_this->mDemoTimer == 160) {
@@ -962,7 +962,7 @@ static int daE_HZELDA_Execute(e_hzelda_class* i_this) {
     mDoMtx_stack_c::YrotM(a_this->shape_angle.y);
     mDoMtx_stack_c::XrotM(a_this->shape_angle.x);
     mDoMtx_stack_c::ZrotM(a_this->shape_angle.z);
-    
+
     f32 model_scale = l_HIO.mModelSize * a_this->scale.x;
     mDoMtx_stack_c::scaleM(model_scale, model_scale, model_scale);
 
@@ -1058,7 +1058,7 @@ static int daE_HZELDA_Execute(e_hzelda_class* i_this) {
 
     if (i_this->field_0x6e4 > 0) {
         i_this->mBallSound.startLevelSound(Z2SE_EN_HZE_ATK_C_BALL, 0, -1);
-    
+
         if (i_this->field_0x6e4 == 1) {
             MTXCopy(model->getAnmMtx(JNT_HAND_R), *calc_mtx);
             i_this->mpSwordModel->setBaseTRMtx(*calc_mtx);
@@ -1141,7 +1141,7 @@ static int daE_HZELDA_Execute(e_hzelda_class* i_this) {
                     sp114.z = i_this->mBallMoveStep;
                     MtxPosition(&sp114, &i_this->mBallMove);
                     i_this->field_0x6ba = 0;
-    
+
                     i_this->mSound.startCreatureSound(Z2SE_EN_HZE_ATK_C_BALL_RETURN, 0, -1);
                     dComIfGp_getVibration().StartShock(3, 0x1F, cXyz(0.0f, 1.0f, 0.0f));
                     ball_crash_eff_set(i_this, 0.4f);
@@ -1255,7 +1255,7 @@ static int daE_HZELDA_Execute(e_hzelda_class* i_this) {
         cLib_addCalc2(&i_this->mSwordColorIntensity, 1.0f, 1.0f, 0.025f);
         i_this->field_0x68c = 0;
         i_this->field_0x1418 = dComIfGp_particle_set(i_this->field_0x1418, 0x895F, &a_this->current.pos, NULL, NULL);
-        
+
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x1418);
         if (emitter != NULL) {
             emitter->setGlobalRTMatrix(i_this->mpSwordModel->getBaseTRMtx());
@@ -1271,7 +1271,7 @@ static int daE_HZELDA_Execute(e_hzelda_class* i_this) {
         for (int i = 0; i < 6; i++) {
             static u16 b_id[] = {0x891B, 0x891C, 0x891D, 0x891E, 0x891F, 0x8920};
             i_this->field_0x1428[i] = dComIfGp_particle_set(i_this->field_0x1428[i], b_id[i], &a_this->current.pos, NULL, NULL);
-        
+
             JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x1428[i]);
             if (emitter != NULL) {
                 if (i <= 2) {
@@ -1417,7 +1417,7 @@ static int daE_HZELDA_Create(fopAc_ac_c* i_this) {
                     {{0.0f, 0.0f, 0.0f}, 40.0f} // mSph
                 } // mSphAttr
             };
-    
+
             a_this->mSphCc[i].Set(cc_sph_src);
             a_this->mSphCc[i].SetStts(&a_this->field_0x958);
         }

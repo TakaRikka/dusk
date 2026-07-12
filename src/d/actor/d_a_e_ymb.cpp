@@ -2095,7 +2095,7 @@ void daE_YMB_c::executeDeath() {
             field_0x75c = 1800.0f;
             sp24.set(0.0f, 100.0f, field_0x75c);
             cLib_offsetPos(&mDemoCamEye, &current.pos, field_0x760, &sp24);
-            mDemoCamFovy = 60.0f;
+            mDemoCamFovy =static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
             camera->mCamera.Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
             field_0x6e6 = 0x6500;
             field_0x762 = 40;
@@ -2120,7 +2120,7 @@ void daE_YMB_c::executeDeath() {
             cLib_chaseF(&field_0x75c, 1300.0f, 5.0f);
             sp24.set(0.0f, 100.0f, field_0x75c);
             cLib_offsetPos(&mDemoCamEye, &current.pos, field_0x760, &sp24);
-            mDemoCamFovy = 60.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
 
             if (mMode == 2) {
                 if (mpModelMorf->checkFrame(263.0f)) {
@@ -2290,7 +2290,7 @@ void daE_YMB_c::executeLakeDemo() {
             camera->mCamera.Stop();
             camera->mCamera.SetTrimSize(3);
             mDemoCamCenter.set(-81000.0f, -17000.0f, 33000.0f);
-            mDemoCamFovy = 50.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
             field_0x760 = 0x7000;
             field_0x762 = -0x30;
             sp24.set(0.0f, 0.0f, 1000.0f);
@@ -2309,7 +2309,7 @@ void daE_YMB_c::executeLakeDemo() {
             mDemoCamCenter.set(-81000.0f, -17000.0f, 33000.0f);
             sp24.set(0.0f, 0.0f, 1000.0f);
             cLib_offsetPos(&mDemoCamEye, &mDemoCamCenter, field_0x760, &sp24);
-            mDemoCamFovy = 50.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
 
             if (field_0x760 < 0x6800) {
                 cLib_chaseF(&field_0x75c, 300.0f, 10.0f);
@@ -2330,7 +2330,7 @@ void daE_YMB_c::executeLakeDemo() {
             cLib_offsetPos(&mDemoCamEye, &mDemoCamCenter, field_0x760, &sp24);
             cLib_chasePos(&mDemoCamCenter, current.pos, 40.0f);
             cLib_chasePos(&mDemoCamEye, current.pos, 40.0f);
-            mDemoCamFovy = 50.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
 
             if (field_0x6fc == 0) {
                 field_0x6e4 = 0;
@@ -2338,7 +2338,7 @@ void daE_YMB_c::executeLakeDemo() {
                 mDemoCamCenter = current.pos;
                 sp24.set(0.0f, -700.0f, 3000.0f);
                 cLib_offsetPos(&mDemoCamEye, &field_0x69c, 0x6000, &sp24);
-                mDemoCamFovy = 50.0f;
+                mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
                 mMode = 5;
                 field_0x6fc = 70;
                 field_0x700 = 170;
@@ -2353,7 +2353,7 @@ void daE_YMB_c::executeLakeDemo() {
                 mDemoCamCenter = current.pos;
                 sp24.set(0.0f, -700.0f, 3500.0f);
                 cLib_offsetPos(&mDemoCamEye, &field_0x69c, 0x6000, &sp24);
-                mDemoCamFovy = 50.0f;
+                mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
                 field_0x740 = mDemoCamCenter - sp30;
             } else {
                 field_0x6f0 = 1;
@@ -2430,7 +2430,7 @@ void daE_YMB_c::executeStartDemo() {
             field_0x710 = 0;
             mDemoCamCenter.set(-88660.0f, -18918.0f, 38981.0f);
             mDemoCamEye.set(-89144.0f, -18551.0f, 39753.0f);
-            mDemoCamFovy = 50.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
             mMode = 2;
             field_0x6fc = 60;
             field_0x75c = mDemoCamEye.absXZ(current.pos);
@@ -2646,7 +2646,7 @@ void daE_YMB_c::executeBattleDemo() {
             sp28.set(0.0f, -200.0f, 500.0f);
             cLib_offsetPos(&sp34, &current.pos, shape_angle.y, &sp28);
             cLib_chasePos(&mDemoCamEye, sp34, 150.0f);
-            cLib_chaseF(&mDemoCamFovy, 50.0f, 2.0f);
+            cLib_chaseF(&mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.83f, 2.0f);
 
             if (mpModelMorf->isStop()) {
                 speed.y = 0.0f;

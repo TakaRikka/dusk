@@ -1,6 +1,6 @@
 /**
  * @file d_a_kago.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -1710,7 +1710,7 @@ void daKago_c::calcCircleCamera(int param_0) {
         cLib_addCalcPos(&mDemoCamEye, targetPos, 0.5f, mFlySpeed + 30.0f, 10.0f);
     }
 
-    mDemoCamFovy = 60.0f;
+    mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
     dCam_getBody()->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 }
 
@@ -1842,7 +1842,7 @@ void daKago_c::initPerchDemo() {
         mDoMtx_stack_c::transM(100.0f, 30.0f, 300.0f);
         mDoMtx_stack_c::multVecZero(&mDemoCamEye);
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         dCam_getBody()->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2057,7 +2057,7 @@ bool daKago_c::executePerchDemo() {
         mDoMtx_stack_c::multVecZero(&unkXyz1);
         cLib_addCalcPos(&mDemoCamEye, unkXyz1, 0.5f, 20.0f, 10.0f);
 
-        cLib_chaseF(&mDemoCamFovy, 70.0f, 1.0f);
+        cLib_chaseF(&mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f, 1.0f);
 
         dCam_getBody()->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2095,7 +2095,7 @@ bool daKago_c::executePerchDemo() {
         mDoMtx_stack_c::transM(0.0f, 50.0f, -800.0f);
         mDoMtx_stack_c::multVecZero(&unkXyz1);
         cLib_addCalcPos(&mDemoCamEye, unkXyz1, 0.5f, maxStep, minStep);
-        cLib_chaseF(&mDemoCamFovy, 70.0f, 1.0f);
+        cLib_chaseF(&mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f, 1.0f);
         dCam_getBody()->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
         break;
     }
@@ -2151,7 +2151,7 @@ bool daKago_c::PerchDemoAwayForward() {
         mDoMtx_stack_c::multVecZero(&unkXyz1);
         cLib_addCalcPos(&mDemoCamEye, unkXyz1, 0.5f, 10.0f, 5.0f);
 
-        cLib_chaseF(&mDemoCamFovy, 70.0f, 1.0f);
+        cLib_chaseF(&mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f, 1.0f);
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2232,7 +2232,7 @@ bool daKago_c::PerchDemoAwayForward() {
             cLib_addCalcPos(&mDemoCamEye, unkXyz1, 0.5f, 50.0f, 10.0f);
         }
 
-        cLib_chaseF(&mDemoCamFovy, 70.0f, 1.0f);
+        cLib_chaseF(&mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f, 1.0f);
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
         mGroundHeight = checkGroundHeight(current.pos, NULL);
@@ -2283,7 +2283,7 @@ bool daKago_c::PerchDemoAwayForward() {
         unkXyz1.set(playerPos.x, playerPos.y + 100.0f, playerPos.z);
         cLib_addCalcPos(&mDemoCamCenter, unkXyz1, 0.5f, 10.0f, 3.0f);
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2377,7 +2377,7 @@ void daKago_c::initFirstDemo() {
         field_0x6d0 = 400.0f;
         cStack_34.set(0.0f, field_0x6d0, field_0x6cc);
         cLib_offsetPos(&mDemoCamEye, &current.pos, shape_angle.y + field_0x6bc, &cStack_34);
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
         field_0x728 = 160;
@@ -2396,7 +2396,7 @@ void daKago_c::initFirstDemo() {
         field_0x6cc = 700.0f;
         cStack_34.set(0.0f, 0.0f, field_0x6cc);
         cLib_offsetPos(&mDemoCamEye, &current.pos, shape_angle.y + field_0x6bc, &cStack_34);
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
         field_0x728 = 80;
         break;
@@ -2414,7 +2414,7 @@ void daKago_c::initFirstDemo() {
         cLib_offsetPos(&mDemoCamEye, &midnaPos, shape_angle.y, &cStack_34);
         cStack_34.set(50.0f, 0.0f, 50.0f);
         cLib_offsetPos(&mDemoCamCenter, &midnaPos, shape_angle.y, &cStack_34);
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
         player->setPlayerPosAndAngle(&playerPos, cLib_targetAngleY(&playerPos, &current.pos), 0);
         break;
@@ -2461,7 +2461,7 @@ void daKago_c::initFirstDemo() {
             mFlySpeed = 50.0f;
             mDemoCamEye.set(-75232.0f, -14685.0f, 34417.0f);
             mDemoCamCenter.set(current.pos.x, current.pos.y + 100.0f, current.pos.z);
-            mDemoCamFovy = 70.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
             camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
             field_0x728 = 200;
         } else {
@@ -2473,7 +2473,7 @@ void daKago_c::initFirstDemo() {
             cStack_34.set(-500.0f, 1000.0f, 5000.0f);
             cLib_offsetPos(&mDemoCamEye, &current.pos, shape_angle.y, &cStack_34);
             mDemoCamCenter.set(current.pos.x, current.pos.y + 100.0f, current.pos.z);
-            mDemoCamFovy = 70.0f;
+            mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
             camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
             field_0x728 = 200;
         }
@@ -2518,7 +2518,7 @@ bool daKago_c::executeFirstDemo() {
         cLib_chasePos(&field_0x680, unkXyz1, 4.0f);
         cLib_offsetPos(&mDemoCamCenter, &current.pos, shape_angle.y, &field_0x680);
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2658,7 +2658,7 @@ bool daKago_c::executeFirstDemo() {
         cLib_offsetPos(&unkXyz1, &midnaPos, shape_angle.y, &offset);
         cLib_addCalcPos(&mDemoCamCenter, unkXyz1, 0.5f, 10.0f, 3.0f);
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2691,7 +2691,7 @@ bool daKago_c::executeFirstDemo() {
         cLib_offsetPos(&unkXyz1, &midnaPos, shape_angle.y, &offset);
         cLib_addCalcPos(&mDemoCamCenter, unkXyz1, 0.5f, 10.0f, 3.0f);
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
 
@@ -2732,7 +2732,7 @@ bool daKago_c::executeFirstDemo() {
             cLib_addCalcPos(&mDemoCamCenter, unkXyz1, 0.5f, 10.0f, 3.0f);
         }
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
         if (field_0x728 == 0) {
@@ -2779,7 +2779,7 @@ bool daKago_c::executeFirstDemo() {
         offset.set(0.0f, 100.0f, 0.0f);
         cLib_offsetPos(&mDemoCamCenter, &current.pos, shape_angle.y, &offset);
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         camera->Set(mDemoCamCenter, mDemoCamEye, mDemoCamFovy, 0);
         break;
@@ -2820,7 +2820,7 @@ void daKago_c::executeLandingLakeHairia() {
         mDemoCamEye.set(-79460.0f, -13000.0f, 34200.0f);
         mDemoCamCenter = current.pos;
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         shape_angle.x = current.angle.x = 0;
         shape_angle.y = current.angle.y = cLib_targetAngleY(&current.pos, &mDemoCamEye);
@@ -2879,7 +2879,7 @@ void daKago_c::executeLandingLakeHairia() {
 
         mDemoCamCenter = current.pos;
 
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
 
         shape_angle.x = current.angle.x = -cLib_targetAngleX(&current.pos, &field_0x6a4);
         shape_angle.y = current.angle.y = cLib_targetAngleY(&current.pos, &field_0x6a4);
@@ -3000,7 +3000,7 @@ void daKago_c::executeLandingBoartHouse() {
         setBck(dRes_ID_E_YC_BCK_YC_FLY_WL_e, 0x02, 10.0f, 1.0f);
         mDemoCamEye.set(2900.0f, 300.0f, 500.0f);
         mDemoCamCenter = current.pos;
-        mDemoCamFovy = 70.0f;
+        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f; // 70.0f;
         field_0x6a4.set(3630.0f, 300.0f, 600.0f);
 
         shape_angle.x = current.angle.x = -cLib_targetAngleX(&current.pos, &field_0x6a4);

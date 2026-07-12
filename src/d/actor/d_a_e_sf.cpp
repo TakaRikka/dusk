@@ -1383,7 +1383,7 @@ static void demo_camera(e_sf_class* i_this) {
             camera->mCamera.Stop();
             i_this->mDemoMode = 2;
             i_this->field_0xfda = 0;
-            i_this->mDemoCamFovy = 75.0f;
+            i_this->mDemoCamFovy =static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.25f; // 75.0f;
             camera->mCamera.SetTrimSize(3);
             dComIfGp_getEvent()->startCheckSkipEdge(a_this);
             daPy_getPlayerActorClass()->changeOriginalDemo();
@@ -1408,7 +1408,7 @@ static void demo_camera(e_sf_class* i_this) {
                 i_this->mDemoCamCenter = sp54;
             } else {
                 cLib_addCalc2(&i_this->mDemoCamCenter.y, sp54.y, 0.1f, 20.0f);
-                cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.05f, 0.25f);
+                cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f, 0.05f, 0.25f);
             }
             break;
 
@@ -1422,7 +1422,7 @@ static void demo_camera(e_sf_class* i_this) {
             camera->mCamera.Stop();
             i_this->mDemoMode = 11;
             i_this->field_0xfda = 0;
-            i_this->mDemoCamFovy = 75.0f;
+            i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.25f; // 75.0f;
             camera->mCamera.SetTrimSize(3);
             daPy_getPlayerActorClass()->changeOriginalDemo();
             daPy_getPlayerActorClass()->changeDemoMode(0x17, 1, 2, 0);
@@ -1457,7 +1457,7 @@ static void demo_camera(e_sf_class* i_this) {
                 daPy_getPlayerActorClass()->setPlayerPosAndAngle(&sp3c, a_this->shape_angle.y + 0x8000, 0);
             } else {
                 cLib_addCalc2(&i_this->mDemoCamCenter.y, sp54.y, 0.1f, 20.0f);
-                cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.05f, 0.2f);
+                cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f, 0.05f, 0.2f);
             }
 
             if (i_this->field_0xfda == 220) {

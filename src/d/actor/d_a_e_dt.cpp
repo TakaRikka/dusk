@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_dt.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -343,7 +343,7 @@ int daE_DT_c::draw() {
     mShadowKey = dComIfGd_setShadow(mShadowKey, 0, model, &pos, 4000.0f, 0.0f, current.pos.y,
                                     mAcch.GetGroundH(), mAcch.m_gnd, &tevStr, 0, 1.0f,
                                     dDlst_shadowControl_c::getSimpleTex());
-    
+
     cXyz unused = current.pos;
     unused.y += 100.0f;
 
@@ -1463,7 +1463,7 @@ void daE_DT_c::executeDeath() {
             player->changeDemoMode(4, 1, 0, 0);
             mCamEye.set(150.0f, 100.0f, 800.0f);
             mCamCenter = eyePos;
-            mCamFovy = 55.0f;
+            mCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
             camera->mCamera.SetTrimSize(3);
             attention_info.flags = 0;
             setBck(ANM_DEAD, J3DFrameCtrl::EMode_NONE, 3.0f, 1.0f);
@@ -1741,7 +1741,7 @@ void daE_DT_c::executeOpening() {
             mDoMtx_stack_c::YrotS(shape_angle.y + 0x7c00);
             mDoMtx_stack_c::transM(0.0f, 3000.0f, 1700.0f);
             mDoMtx_stack_c::multVecZero(&mCamEye);
-            mCamFovy = 55.0f;
+            mCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
             mCamBank = 0;
         }
         break;
@@ -1773,7 +1773,7 @@ void daE_DT_c::executeOpening() {
         mDoMtx_stack_c::multVecZero(&vec2);
         vec2.y += field_0x6e8;
         cLib_chasePos(&mCamCenter, vec2, 50.0f);
-        
+
         if (mpMorf->checkFrame(143.0f)) {
             mMode = 8;
             current.angle.y = shape_angle.y - 0x8000;
@@ -1815,7 +1815,7 @@ void daE_DT_c::executeOpening() {
             player->setPlayerPosAndAngle(&vec1, shape_angle.y + 0x8000, 0);
             mCamCenter.set(0.0f, 3112.0f, 243.0f);
             mCamEye.set(-150.0f, 150.0f, 1600.0f);
-            mCamFovy = 115.0f;
+            mCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.91f; // 115.0f;
             mDemoJump = true;
         }
         break;
@@ -1824,8 +1824,8 @@ void daE_DT_c::executeOpening() {
         mSound.startCreatureSoundLevel(Z2SE_EN_DT_FALLING, 0, -1);
         mDemoJump = false;
         mCamCenter = vec2;
-        cLib_chaseF(&mCamFovy, 70.0f, 1.0f);
-        
+        cLib_chaseF(&mCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.16f, 1.0f);
+
         if (mAcch.ChkGroundHit()) {
             setLargeWaterEffect();
             mMode = 11;
@@ -1843,7 +1843,7 @@ void daE_DT_c::executeOpening() {
         cLib_chasePos(&mCamCenter, vec2, 100.0f);
         vec1.set(-100.0f, 50.0f, 1550.0f);
         cLib_chasePos(&mCamEye, vec1, 100.0f);
-        cLib_chaseF(&mCamFovy, 70.0f, 1.5f);
+        cLib_chaseF(&mCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.16f, 1.5f);
         if (mTimer == 1) {
             player->changeDemoMode(23, 1, 0, 0);
         }
@@ -1862,7 +1862,7 @@ void daE_DT_c::executeOpening() {
             mMode = 20;
             mCamCenter.set(100.0f, 300.0f, 350.0f);
             mCamEye.set(800.0f, 800.0f, -500.0f);
-            mCamFovy = 70.0f;
+            mCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.16f; // 70.0f;
             field_0x704 = 0;
         }
         break;
@@ -1886,14 +1886,14 @@ void daE_DT_c::executeOpening() {
                     vec1.y += 100.0f;
                     mCamCenter = vec1;
                     mCamEye.set(1000.0f, 300.0f, 1700.0f);
-                    mCamFovy = 40.0f;
+                    mCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.66f; // 40.0f;
                 }
             }
         }
         break;
 
     case 30:
-        cLib_chaseF(&mCamFovy, 20.0f, 1.0f);
+        cLib_chaseF(&mCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.33f, 1.0f);
         if (mDemoID != -1) {
             fopAcM_SearchByID(mDemoID, &otama);
             if (otama != NULL) {
@@ -1913,7 +1913,7 @@ void daE_DT_c::executeOpening() {
         break;
 
     case 32:
-        cLib_chaseF(&mCamFovy, 20.0f, 1.0f);
+        cLib_chaseF(&mCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.33f, 1.0f);
         if (mDemoID != -1) {
             fopAcM_SearchByID(mDemoID, &otama);
             if (otama != NULL) {

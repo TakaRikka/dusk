@@ -240,15 +240,15 @@ static s8 tn_model_brk_idx2[16] = {
 
 static int tn_part_model_id[32] = {
     /* TN */
-    BMDR_TN_ARMOR_ARM_L, BMDR_TN_ARMOR_ARM_R, BMDR_TN_ARMOR_CHEST_B, BMDR_TN_ARMOR_CHEST_F, 
-    BMDR_TN_ARMOR_HEAD_B, BMDR_TN_ARMOR_HEAD_F,  BMDR_TN_ARMOR_SHOULDER_L, BMDR_TN_ARMOR_SHOULDER_R, 
-    BMDR_TN_ARMOR_WAIST_B, BMDR_TN_ARMOR_WAIST_F, BMDR_TN_ARMOR_WAIST_L, BMDR_TN_ARMOR_WAIST_R, 
+    BMDR_TN_ARMOR_ARM_L, BMDR_TN_ARMOR_ARM_R, BMDR_TN_ARMOR_CHEST_B, BMDR_TN_ARMOR_CHEST_F,
+    BMDR_TN_ARMOR_HEAD_B, BMDR_TN_ARMOR_HEAD_F,  BMDR_TN_ARMOR_SHOULDER_L, BMDR_TN_ARMOR_SHOULDER_R,
+    BMDR_TN_ARMOR_WAIST_B, BMDR_TN_ARMOR_WAIST_F, BMDR_TN_ARMOR_WAIST_L, BMDR_TN_ARMOR_WAIST_R,
     BMDR_TN_SHIELD, BMDR_TN_SWORD_A, BMDR_TN_SWORD_B_SAYA, BMDR_TN_SWORD_B,
 
     /* TN2 */
-    BMDR_TN2_ARMOR_ARM_L, BMDR_TN2_ARMOR_ARM_R, BMDR_TN2_ARMOR_CHEST_B, BMDR_TN2_ARMOR_CHEST_F, 
-    BMDR_TN2_ARMOR_HEAD_A, BMDR_TN2_ARMOR_HEAD_B, BMDR_TN2_ARMOR_SHOULDER_L, BMDR_TN2_ARMOR_SHOULDER_R, 
-    BMDR_TN2_ARMOR_WAIST_B, BMDR_TN2_ARMOR_WAIST_F, BMDR_TN2_ARMOR_WAIST_L, BMDR_TN2_ARMOR_WAIST_R, 
+    BMDR_TN2_ARMOR_ARM_L, BMDR_TN2_ARMOR_ARM_R, BMDR_TN2_ARMOR_CHEST_B, BMDR_TN2_ARMOR_CHEST_F,
+    BMDR_TN2_ARMOR_HEAD_A, BMDR_TN2_ARMOR_HEAD_B, BMDR_TN2_ARMOR_SHOULDER_L, BMDR_TN2_ARMOR_SHOULDER_R,
+    BMDR_TN2_ARMOR_WAIST_B, BMDR_TN2_ARMOR_WAIST_F, BMDR_TN2_ARMOR_WAIST_L, BMDR_TN2_ARMOR_WAIST_R,
     BMDR_TN2_SHIELD, BMDR_TN2_MACE, BMDR_TN2_SWORD_B_SAYA, BMDR_TN2_SWORD_B,
 };
 
@@ -1864,7 +1864,7 @@ void daB_TN_c::executeOpening() {
         Z2GetAudioMgr()->bgmStreamPlay();
 
         mActionMode2 = ACTION2_3_e;
-        mCamFovY = 60.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f
         field_0x724 = 380.0f;
         field_0x720 = 0x1000;
         mCamCenter.set(current.pos.x, current.pos.y + 220.0f, current.pos.z);
@@ -2694,7 +2694,7 @@ void daB_TN_c::executeChangeDemo() {
         camera->mCamera.SetTrimSize(3);
 
         mTimer1 = 30;
-        mCamFovY = 55.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.92f;  // 55.0f;
         field_0x724 = 380.0f;
         field_0x720 = 0x1000;
         mCamCenter.set(0.0f, -179.0f, -342.0f);
@@ -4210,7 +4210,7 @@ void daB_TN_c::executeEnding() {
             }
         }
 
-        mCamFovY = 55.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.92f;  // 55.0f;
         field_0x724 = 450.0f;
         field_0x720 = 0x1000;
         mCamCenter.set(-5.0f, -217.0f, -61.0f);

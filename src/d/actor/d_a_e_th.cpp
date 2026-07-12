@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_th.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -74,7 +74,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
         int jnt_no = i_joint->getJntNo();
         J3DModel* model_p = j3dSys.getModel();
         e_th_class* i_this = (e_th_class*)model_p->getUserArea();
-        
+
         if (i_this != NULL && (jnt_no == 3 || jnt_no == 4)) {
             MTXCopy(model_p->getAnmMtx(jnt_no), *calc_mtx);
             cMtx_YrotM(*calc_mtx, i_this->mHeadRotY);
@@ -132,7 +132,7 @@ static void ke_control(e_th_class* i_this, th_ke_s* i_ke_s, int i_no) {
         pos_p[0].x = pos_p[-1].x + sp40.x;
         pos_p[0].y = pos_p[-1].y + sp40.y;
         pos_p[0].z = pos_p[-1].z + sp40.z;
-        
+
         f32 temp_f29 = 0.75f + (0.001f * i_no);
         var_r29[0].x = temp_f29 * (pos_p[0].x - var_r29[0].x);
         var_r29[0].y = temp_f29 * (pos_p[0].y - var_r29[0].y);
@@ -668,7 +668,7 @@ static void action(e_th_class* i_this) {
             }
         }
         cLib_addCalcAngleS2(&i_this->mHeadRotY, var_r27 / 2, 4, 0x800);
-    
+
         if (var_r28 > (TREG_S(8) + 8000)) {
             var_r28 = TREG_S(8) + 8000;
         } else if (var_r28 < -(TREG_S(8) + 8000)) {
@@ -717,7 +717,7 @@ static void demo_camera(e_th_class* i_this) {
         camera->mCamera.Stop();
         i_this->mDemoCamMode = 2;
         i_this->mDemoCamTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         camera->mCamera.SetTrimSize(3);
 
         daPy_getPlayerActorClass()->changeOriginalDemo();
@@ -740,7 +740,7 @@ static void demo_camera(e_th_class* i_this) {
             if (i_this->mDemoCamTimer == 90) {
                 i_this->mDemoCamMode = 3;
                 i_this->mDemoCamTimer = 0;
-                i_this->mDemoCamFovy = 30.0f;
+                i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.5f;
                 i_this->mDemoCamCenter.set(0.0f, 180.0f, -1043.0f);
                 i_this->mDemoCamEye.set(0.0f, 84.0f, -1344.0f);
                 daPy_getPlayerActorClass()->changeDemoMode(0x48, 0, 0, 0);
@@ -749,7 +749,7 @@ static void demo_camera(e_th_class* i_this) {
         break;
     case 3:
         if (i_this->mDemoCamTimer > 20) {
-            cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.1f, 0.2f * i_this->field_0xd88);
+            cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f, 0.1f, 0.2f * i_this->field_0xd88);
             cLib_addCalc2(&i_this->field_0xd88, 1.0f, 1.0f, 0.05f);
 
             if (i_this->mDemoCamTimer == 145) {
@@ -773,7 +773,7 @@ static void demo_camera(e_th_class* i_this) {
             i_this->mTimers[1] = 10;
         }
 
-        cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.1f, 0.2f);
+        cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f, 0.1f, 0.2f);
 
         if (i_this->mDemoCamTimer >= 20 && i_this->mDemoCamTimer == 20) {
             daPy_getPlayerActorClass()->changeDemoMode(0x17, 1, 2, 0);
@@ -842,7 +842,7 @@ static void demo_camera(e_th_class* i_this) {
         camera->mCamera.Stop();
         i_this->mDemoCamMode = 11;
         i_this->mDemoCamTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         i_this->field_0xd78 = 0.0f;
         i_this->field_0xd88 = 0.0f;
         camera->mCamera.SetTrimSize(3);
@@ -978,14 +978,14 @@ static void demo_camera(e_th_class* i_this) {
         i_this->mDemoCamCenter += player->current.pos;
 
         if (i_this->mDemoCamTimer > 50) {
-            cLib_addCalc2(&i_this->mDemoCamFovy, 25.0f, 0.1f, i_this->field_0xd88);
+            cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.42f, 0.1f, i_this->field_0xd88);
             cLib_addCalc2(&i_this->field_0xd78, -55.0f, 0.1f, 1.9f * i_this->field_0xd88);
             cLib_addCalc2(&i_this->field_0xd88, 1.0f, 1.0f, 0.05f);
 
             if (i_this->mDemoCamTimer == 170) {
                 sp8 = 1;
                 i_this->mMode = 3;
-                
+
                 int bitSw = (fopAcM_GetParam(i_this) & 0xFF000000) >> 0x18;
                 dComIfGs_onSwitch(bitSw, fopAcM_GetRoomNo(i_this));
                 dComIfGs_offSwitch(106, fopAcM_GetRoomNo(i_this));
@@ -1018,7 +1018,7 @@ static void demo_camera(e_th_class* i_this) {
 static void anm_se_set(e_th_class* i_this) {
     u32 sound_id = 0;
     u32 voice_id = 0;
-    
+
     if (i_this->mAnm == 5 && i_this->mpModelMorf->checkFrame(13.0f)) {
         sound_id = Z2SE_EN_TH_BRANDISH_START;
     } else if ((i_this->mAnm == 7 || i_this->mAnm == 8) && i_this->mpModelMorf->checkFrame(1.0f)) {
@@ -1220,7 +1220,7 @@ static int daE_TH_Create(fopAc_ac_c* a_this) {
         if (i_this->field_0x5b6 == 2 && dComIfGs_isStageMiddleBoss() && checkItemGet(dItemNo_IRONBALL_e, TRUE)) {
             return cPhs_ERROR_e;
         }
-    
+
         i_this->field_0x5b7 = (fopAcM_GetParam(i_this) & 0xF00) >> 8;
         i_this->field_0x5b8 = (fopAcM_GetParam(i_this) & 0xF000) >> 12;
 

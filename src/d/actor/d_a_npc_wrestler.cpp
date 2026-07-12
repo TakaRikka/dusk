@@ -1,6 +1,6 @@
 /**
  * @file d_a_npc_wrestler.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -259,32 +259,32 @@ static DUSK_CONSTEXPR int l_bmdGetParamList[5] = {
 };
 
 static DUSK_CONSTEXPR daNpc_GetParam1 l_BouBckParamList[63] = {
-    {-1, 2}, {BCK_BOUS_F_DOWN, 2}, {BCK_BOUS_F_HEAD_UP, 0}, 
-    {BCK_BOUS_F_LOSE, 0}, {BCK_BOUS_F_LOSE2, 0}, {BCK_BOUS_F_PULLBACK, 0}, 
-    {BCK_BOUS_F_PUNCH, 0}, {BCK_BOUS_F_PUNCH_SHOCK, 0}, {BCK_BOUS_F_PUNCHMISS_TACKLESHOCK, 0}, 
+    {-1, 2}, {BCK_BOUS_F_DOWN, 2}, {BCK_BOUS_F_HEAD_UP, 0},
+    {BCK_BOUS_F_LOSE, 0}, {BCK_BOUS_F_LOSE2, 0}, {BCK_BOUS_F_PULLBACK, 0},
+    {BCK_BOUS_F_PUNCH, 0}, {BCK_BOUS_F_PUNCH_SHOCK, 0}, {BCK_BOUS_F_PUNCHMISS_TACKLESHOCK, 0},
     {BCK_BOUS_F_PUNCHSHOCK_RETURN, 0}, {BCK_BOUS_F_PUSHBACK, 0}, {BCK_BOUS_F_STAGGER, 2},
-    {BCK_BOUS_F_TACKLE, 0}, {BCK_BOUS_F_TACKLE_B, 0}, {BCK_BOUS_F_TACKLE_MISS, 0}, 
-    {BCK_BOUS_F_TACKLE_SHOCK, 0}, {BCK_BOUS_F_TACKLE_STAGGER, 2}, {BCK_BOUS_F_TACKLE_WAIT, 2}, 
-    {BCK_BOUS_F_TACKLESHOCK_RETURN, 0}, {BCK_BOUS_F_TALK_A, 2}, {BCK_BOUS_F_WAIT_B, 2}, 
+    {BCK_BOUS_F_TACKLE, 0}, {BCK_BOUS_F_TACKLE_B, 0}, {BCK_BOUS_F_TACKLE_MISS, 0},
+    {BCK_BOUS_F_TACKLE_SHOCK, 0}, {BCK_BOUS_F_TACKLE_STAGGER, 2}, {BCK_BOUS_F_TACKLE_WAIT, 2},
+    {BCK_BOUS_F_TACKLESHOCK_RETURN, 0}, {BCK_BOUS_F_TALK_A, 2}, {BCK_BOUS_F_WAIT_B, 2},
     {BCK_BOUS_F_WIN, 0}, {BCK_BOUS_F_WIN_POSE, 0}, {-1, 2},
-    {-1, 2}, {-1, 2}, {-1, 2}, 
-    {BCK_BOUS_WAIT_A, 2}, {-1, 2}, {BCK_BOUS_STEP, 0}, 
-    {BCK_BOUS_MIAU, 2}, {BCK_BOUS_HAKEYOI, 0}, {BCK_BOUS_SHIKO, 0}, 
+    {-1, 2}, {-1, 2}, {-1, 2},
+    {BCK_BOUS_WAIT_A, 2}, {-1, 2}, {BCK_BOUS_STEP, 0},
+    {BCK_BOUS_MIAU, 2}, {BCK_BOUS_HAKEYOI, 0}, {BCK_BOUS_SHIKO, 0},
     {BCK_BOUS_FIGHT_WAIT, 2}, {BCK_BOUS_FIGHT_STEP, 0}, {BCK_BOUS_FIGHT_STEPL, 2},
-    {BCK_BOUS_FIGHT_STEPR, 2}, {BCK_BOUS_PUNCH, 0}, {BCK_BOUS_PUNCH_SHOCK, 0}, 
-    {BCK_BOUS_PUNCHMISS_TACKLESHOCK, 0}, {BCK_BOUS_PUNCHSHOCK_RETURN, 0}, {BCK_BOUS_TACKLE, 0}, 
-    {BCK_BOUS_TACKLE_B, 0}, {BCK_BOUS_TACKLE_MISS, 0}, {BCK_BOUS_TACKLE_STAGGER, 2}, 
+    {BCK_BOUS_FIGHT_STEPR, 2}, {BCK_BOUS_PUNCH, 0}, {BCK_BOUS_PUNCH_SHOCK, 0},
+    {BCK_BOUS_PUNCHMISS_TACKLESHOCK, 0}, {BCK_BOUS_PUNCHSHOCK_RETURN, 0}, {BCK_BOUS_TACKLE, 0},
+    {BCK_BOUS_TACKLE_B, 0}, {BCK_BOUS_TACKLE_MISS, 0}, {BCK_BOUS_TACKLE_STAGGER, 2},
     {BCK_BOUS_TACKLE_WAIT, 2}, {BCK_BOUS_TACKLE_SHOCK, 0}, {BCK_BOUS_TACKLESHOCK_RETURN, 0},
-    {BCK_BOUS_STAGGER, 2}, {BCK_BOUS_PULLBACK, 0}, {BCK_BOUS_PUSHBACK, 0}, 
-    {BCK_BOUS_WIN, 0}, {BCK_BOUS_LOSE, 0}, {BCK_BOUS_LOSE2, 0}, 
-    {BCK_BOUS_DOWN, 2}, {BCK_BOUS_HEAD_UP, 0}, {BCK_BOUS_WIN_POSE, 0}, 
+    {BCK_BOUS_STAGGER, 2}, {BCK_BOUS_PULLBACK, 0}, {BCK_BOUS_PUSHBACK, 0},
+    {BCK_BOUS_WIN, 0}, {BCK_BOUS_LOSE, 0}, {BCK_BOUS_LOSE2, 0},
+    {BCK_BOUS_DOWN, 2}, {BCK_BOUS_HEAD_UP, 0}, {BCK_BOUS_WIN_POSE, 0},
     {BCK_BOUS_WAIT_B, 2}, {-1, 2}, {-1, 2},
     {-1, 2}, {-1, 2}, {-1, 2},
 };
 
 static DUSK_CONSTEXPR daNpc_GetParam2 l_BouFaceParamList[23] = {
     {-1, 0x44, 2}, {7, 0x45, 2}, {8, 0x46, 0},
-    {9, 0x47, 0}, {10, 0x48, 0}, {11, 0x49, 0}, 
+    {9, 0x47, 0}, {10, 0x48, 0}, {11, 0x49, 0},
     {12, 0x4A, 0}, {13, 0x4B, 0}, {14, 0x4C, 0},
     {15, 0x4D, 0}, {16, 0x4E, 0}, {17, 0x4F, 2},
     {18, 0x50, 0}, {19, 0x51, 0}, {20, 0x52, 0},
@@ -294,8 +294,8 @@ static DUSK_CONSTEXPR daNpc_GetParam2 l_BouFaceParamList[23] = {
 };
 
 static DUSK_CONSTEXPR daNpc_GetParam1 l_BouBtpParamList[23] = {
-    {BTP_BOUS, 2}, {BTP_BOUS_F_DOWN, 0}, 
-    {BTP_BOUS_F_HEAD_UP, 0}, {BTP_BOUS_F_LOSE, 0}, 
+    {BTP_BOUS, 2}, {BTP_BOUS_F_DOWN, 0},
+    {BTP_BOUS_F_HEAD_UP, 0}, {BTP_BOUS_F_LOSE, 0},
     {BTP_BOUS_F_LOSE2, 0}, {BTP_BOUS_F_PULLBACK, 0},
     {BTP_BOUS_F_PUNCH, 0}, {BTP_BOUS_F_PUNCH_SHOCK, 0},
     {BTP_BOUS_F_PUNCHMISS_TACKLESHOCK, 0}, {BTP_BOUS_F_PUNCHSHOCK_RETURN, 0},
@@ -340,12 +340,12 @@ static DUSK_CONSTEXPR daNpc_GetParam1 l_GrdBckParamList[63] = {
 
 static DUSK_CONSTEXPR daNpc_GetParam2 l_GrdFaceParamList[23] = {
     {-1, 0x4D, 2}, {8, 0x4E, 2}, {9, 0x4F, 0},
-    {0x0A, 0x50, 0}, {0x0B, 0x51, 0}, {0x0D, 0x52, 0}, 
-    {0x0E, -1, 0}, {0x0F, 0x53, 0}, {0x10, 0x54, 0}, 
+    {0x0A, 0x50, 0}, {0x0B, 0x51, 0}, {0x0D, 0x52, 0},
+    {0x0E, -1, 0}, {0x0F, 0x53, 0}, {0x10, 0x54, 0},
     {0x11, 0x55, 0}, {0x12, 0x56, 0}, {0x14, 0x57, 2},
     {0x15, 0x58, 0}, {0x16, 0x59, 0}, {0x17, 0x5A, 0},
-    {0x18, 0x5B, 0}, {0x19, 0x5C, 2}, {0x1A, -1, 2}, 
-    {0x1B, 0x5D, 0}, {0x1C, -1, 2}, {0x1D, 0x5E, 2}, 
+    {0x18, 0x5B, 0}, {0x19, 0x5C, 2}, {0x1A, -1, 2},
+    {0x1B, 0x5D, 0}, {0x1C, -1, 2}, {0x1D, 0x5E, 2},
     {0x1E, 0x5F, 0}, {0x1F, -1, 0},
 };
 
@@ -713,7 +713,7 @@ cPhs_Step daNpcWrestler_c::Create() {
         field_0xc90.SetTgSPrm(0);
         field_0xc90.SetH(field_0xbdc->field_0x0);
         field_0xc90.SetR(field_0xbdc->mWallR);
-        
+
         mAcch.CrrPos(dComIfG_Bgsp());
         mGndChk = mAcch.m_gnd;
         mGroundH = mAcch.GetGroundH();
@@ -2225,7 +2225,7 @@ bool daNpcWrestler_c::sumouReady(void* param_1) {
                         field_0xe84++;
                     }
 
-                    mDemoCamFovy = 45.0f;
+                    mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f; // 45.0f;
                     mDoMtx_stack_c::transS(mDemoCam.mDemoCamCenter);
                     mDoMtx_stack_c::YrotM(field_0xe5e);
                     mDemoCam.mDemoCamEye.set(0.0f, 50.0f, -field_0xbd8->field_0xb0);
@@ -2472,7 +2472,7 @@ bool daNpcWrestler_c::sumouPunchHit(void* param_1) {
             mAnm_p->modelCalc();
             mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(jointNo));
             mDoMtx_stack_c::multVecZero(&sp2c);
-            
+
             if (mAnm_p->getFrame() == 13.0f) {
                 if (mType == 1 && !player->checkEquipHeavyBoots()) {
                     setAction(&daNpcWrestler_c::demoSumouUnilateralWin);
@@ -2766,7 +2766,7 @@ bool daNpcWrestler_c::sumouPunchDraw(void* param_1) {
             mAnm_p->modelCalc();
             mDoMtx_stack_c::copy(mAnm_p->getModel()->getAnmMtx(jointNo));
             mDoMtx_stack_c::multVecZero(&sp2c);
-            
+
             if (mAnm_p->getFrame() > 18.0f && mAnm_p->getFrame() < 32.0f) {
                 dCam_getBody()->ModeFix(5);
             }
@@ -3463,7 +3463,7 @@ bool daNpcWrestler_c::sumouTackleStagger(void* param_1) {
         case 3:
             player->setSumouForceGraspCancel();
             break;
-            
+
         default:
             JUT_ASSERT(4311, FALSE);
             break;
@@ -4004,7 +4004,7 @@ bool daNpcWrestler_c::demoSumouWin(void* param_1) {
                         mDemoCam.mDemoCamCenter = current.pos;
                         mDemoCam.mDemoCamCenter.y += 50.0f;
                         mDemoCam.field_0x18.set(mDemoCam.mDemoCamCenter.x, mDemoCam.mDemoCamCenter.y + 100.0f, mDemoCam.mDemoCamCenter.z);
-                        mDemoCamFovy = 60.0f;
+                        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
 
                         player->setSumouLoseHeadUp();
                         field_0xe80 = 20;
@@ -4135,7 +4135,7 @@ bool daNpcWrestler_c::demoSumouLose(void* param_1) {
                     mDemoCam.mDemoCamCenter = *player->getViewerCurrentPosP();
                     mDemoCam.mDemoCamCenter.y += 30.0f;
                     mDemoCam.field_0x18.set(mDemoCam.mDemoCamCenter.x, mDemoCam.mDemoCamCenter.y + 100.0f, mDemoCam.mDemoCamCenter.z);
-                    mDemoCamFovy = 60.0f;
+                    mDemoCamFovy =static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
 
                     player->changeOriginalDemo();
                     player->changeDemoMode(0x31, 1, 0, 0);
@@ -4247,7 +4247,7 @@ bool daNpcWrestler_c::demoSumouWin2(void* param_1) {
                         mDemoCam.mDemoCamCenter = current.pos;
                         mDemoCam.mDemoCamCenter.y += 50.0f;
                         mDemoCam.field_0x18.set(mDemoCam.mDemoCamCenter.x, mDemoCam.mDemoCamCenter.y + 100.0f, mDemoCam.mDemoCamCenter.z);
-                        mDemoCamFovy = 60.0f;
+                        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
 
                         player->setSumouLoseHeadUp();
                         field_0xe80 = 20;
@@ -4363,7 +4363,7 @@ bool daNpcWrestler_c::demoSumouLose2(void* param_1) {
                     int joint_no = mType == 0 ? 2 : 2;
                     fVar1 = cLib_addCalcPos(&mDemoCam.mDemoCamCenter, getJointPos(joint_no), 0.1f, 50.0f, 1.0f);
                     fVar2 = cLib_addCalc(&mDemoCam.mDemoCamEye.y, mDemoCam.field_0x24.y, 0.05f, 50.0f, 1.0f);
-                    fVar3 = cLib_addCalc(&mDemoCamFovy, 30.0f, 0.08f, 10.0f, 0.3f);
+                    fVar3 = cLib_addCalc(&mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.5f, 0.08f, 10.0f, 0.3f);
 
                     if (fVar1 == 0.0f && fVar2 == 0.0f && fVar3 == 0.0f) {
                         field_0xe84++;
@@ -4380,7 +4380,7 @@ bool daNpcWrestler_c::demoSumouLose2(void* param_1) {
                     mDemoCam.mDemoCamCenter = *player->getViewerCurrentPosP();
                     mDemoCam.mDemoCamCenter.y += 30.0f;
                     mDemoCam.field_0x18.set(mDemoCam.mDemoCamCenter.x, mDemoCam.mDemoCamCenter.y + 100.0f, mDemoCam.mDemoCamCenter.z);
-                    mDemoCamFovy = 60.0f;
+                    mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
 
                     player->changeOriginalDemo();
                     player->changeDemoMode(0x31, 1, 0, 0);
@@ -4506,7 +4506,7 @@ bool daNpcWrestler_c::demoSumouUnilateralWin(void* param_1) {
                         mDemoCam.mDemoCamCenter = current.pos;
                         mDemoCam.mDemoCamCenter.y += 50.0f;
                         mDemoCam.field_0x18.set(mDemoCam.mDemoCamCenter.x, mDemoCam.mDemoCamCenter.y + 100.0f, mDemoCam.mDemoCamCenter.z);
-                        mDemoCamFovy = 60.0f;
+                        mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
 
                         player->setSumouLoseHeadUp();
                         field_0xe80 = 20;
@@ -4830,7 +4830,7 @@ BOOL daNpcWrestler_c::EvCut_grDSEntry3_4(int i_cutIndex) {
 #if DEBUG
                 char* choice;
                 if (choice_no == 0) {
-                    choice = "はい"; 
+                    choice = "はい";
                 } else {
                     choice = "いいえ";
                 }

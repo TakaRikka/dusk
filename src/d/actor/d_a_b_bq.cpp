@@ -1230,9 +1230,9 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 3;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f;  // 55.0f;
 
-        camera->mCamera.SetTrimSize(3);
+            camera->mCamera.SetTrimSize(3);
 
         daPy_getPlayerActorClass()->changeOriginalDemo();
         daPy_getPlayerActorClass()->changeDemoMode(12, 0, 0, 0);
@@ -1293,7 +1293,7 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 4;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 30.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.5f; //30.0f;
         i_this->field_0x129c = 0.0f;
 
         i_this->mMode++;
@@ -1387,7 +1387,7 @@ static void demo_camera(b_bq_class* i_this) {
                 dComIfGp_getVibration().StopQuake(31);
             }
 
-            cLib_addCalc2(&i_this->mDemoCamFovy, 55.0f, 0.05f, i_this->field_0x129c);
+            cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f, 0.05f, i_this->field_0x129c);
             cLib_addCalc2(&i_this->field_0x129c, 0.1f, 1.0f, 0.005f);
         } else {
             fpcM_Search(s_fw_sub0, i_this);
@@ -1414,7 +1414,7 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 11;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 50.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
 
         camera->mCamera.SetTrimSize(3);
 
@@ -1435,7 +1435,7 @@ static void demo_camera(b_bq_class* i_this) {
         }
 
         if (i_this->mDemoModeTimer == 50) {
-            i_this->mDemoCamFovy = 55.0f;
+            i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
 
             i_this->mDemoCamCenter.set(58.0f, 355.0f, 1800.0f);
             i_this->field_0x1264 = i_this->mDemoCamCenter;
@@ -1635,7 +1635,7 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 22;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
 
         camera->mCamera.SetTrimSize(3);
 
@@ -1695,7 +1695,7 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 31;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
 
         camera->mCamera.SetTrimSize(3);
 
@@ -1762,7 +1762,7 @@ static void demo_camera(b_bq_class* i_this) {
             cLib_addCalc2(&i_this->field_0x129c, 0.1f, 1.0f, 0.005f);
 
             if (i_this->mDemoModeTimer > (s16)(JREG_S(7) + 133)) {
-                cLib_addCalc2(&i_this->mDemoCamFovy, 30.0f, 0.5f, 4.0f);
+                cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.5f, 0.5f, 4.0f);
             }
         }
 
@@ -1776,7 +1776,8 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 35;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy =
+            static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f; // 55.0f
 
         monkeybomb->mMode++;
         // fallthrough
@@ -1804,7 +1805,7 @@ static void demo_camera(b_bq_class* i_this) {
 
         i_this->mDemoMode = 51;
         i_this->mDemoModeTimer = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f; // 55.0f
 
         camera->mCamera.SetTrimSize(3);
 
@@ -1936,7 +1937,7 @@ static void demo_camera(b_bq_class* i_this) {
                 i_this->mDemoMode = 52;
                 i_this->field_0x129c = 0.0f;
                 i_this->mDemoModeTimer = 0;
-                i_this->mDemoCamFovy = 55.0f;
+                i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
             }
 
             if (i_this->mDemoModeTimer >= 480) {
@@ -2028,13 +2029,13 @@ static void demo_camera(b_bq_class* i_this) {
             }
 
             if (i_this->mDemoModeTimer >= 415) {
-                cLib_addCalc2(&i_this->mDemoCamFovy, 70.0f, 0.05f, 0.1f);
+                cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 1.16f, 0.05f, 0.1f);
             }
 
             if (i_this->mDemoModeTimer == 532) {
                 i_this->mDemoMode = 53;
                 i_this->mDemoModeTimer = 0;
-                i_this->mDemoCamFovy = 55.0f;
+                i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f; // 55.0f
 
                 i_this->mDemoCamCenter.set(1072.0f, 1121.0f, -379.0f);
                 i_this->mDemoCamEye.set(1320.0f, 1293.0f, -701.0f);

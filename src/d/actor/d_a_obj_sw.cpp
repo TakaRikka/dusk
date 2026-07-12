@@ -326,7 +326,7 @@ static void demo_camera(obj_sw_class* i_this) {
         }
 
         player->setPlayerPosAndAngle(&i_this->field_0x598, a_this->current.angle.y + 0x8000, 0);
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         i_this->field_0x8e8.z = -800.0f;
         i_this->field_0x8e8.x = 300.0f;
         i_this->field_0x8e8.y = -200.0f;

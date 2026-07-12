@@ -1,7 +1,7 @@
 /**
  * @file d_a_b_yo.cpp
  * @brief Actor - Blizzeta (Boss)
- * 
+ *
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -319,7 +319,7 @@ int daB_YO_c::draw() {
     if (mIsInactive == 1) {
         return 1;
     }
-    
+
     if (field_0xfb5 == 2) {
         return 1;
     }
@@ -783,7 +783,7 @@ void daB_YO_c::executeOpening() {
         mCamCenter = current.pos;
         mCamCenter.y = 180.0f;
         mCamEye.set(0.0f, 250.0f, 1450.0f);
-        mCamFovY = 68.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.13f; // 68.0f;
         current.angle.y = -0x1000;
         shape_angle.y = -0x1000;
         setYoMessage(0x234E);
@@ -875,7 +875,7 @@ void daB_YO_c::executeOpening() {
 
     case 6:
         if (mActionTimer == 0) {
-            cLib_chaseF(&mCamFovY, 45.0f, 0.1f);
+            cLib_chaseF(&mCamFovY, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f, 0.1f);
         }
         cam_pos.set(120.0f, 120.0f, -2032.0f);
         cLib_chasePos(&mCamCenter, cam_pos, 4.0f);
@@ -893,7 +893,7 @@ void daB_YO_c::executeOpening() {
         break;
 
     case 7:
-        cLib_chaseF(&mCamFovY, 45.0f, 0.1f);
+        cLib_chaseF(&mCamFovY, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f, 0.1f);
         cam_pos.set(120.0f, 120.0f, -2032.0f);
         cLib_chasePos(&mCamCenter, cam_pos, 4.0f);
         if (mActionTimer2 == 0) {
@@ -910,11 +910,11 @@ void daB_YO_c::executeOpening() {
         break;
 
     case 8:
-        cLib_chaseF(&mCamFovY, 45.0f, 0.1f);
+        cLib_chaseF(&mCamFovY, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f, 0.1f);
         if (mActionTimer == 0) {
             player->changeDemoMode(60, 0, 0, 0);
         }
-        cLib_chaseF(&mCamFovY, 45.0f, 0.1f);
+        cLib_chaseF(&mCamFovY, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f, 0.1f);
         cam_pos.set(120.0f, 120.0f, -2032.0f);
         cLib_chasePos(&mCamCenter, cam_pos, 4.0f);
         if (doYoMessage() == 1) {
@@ -925,7 +925,7 @@ void daB_YO_c::executeOpening() {
         break;
 
     case 9:
-        cLib_chaseF(&mCamFovY, 45.0f, 0.1f);
+        cLib_chaseF(&mCamFovY, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.75f, 0.1f);
         cam_pos.set(120.0f, 120.0f, -2032.0f);
         cLib_chasePos(&mCamCenter, cam_pos, 4.0f);
         if (mActionTimer == 0) {
@@ -1017,7 +1017,7 @@ void daB_YO_c::executeOpening() {
             mMode = 20;
             mCamCenter.set(1339.0f, 2992.0f, 196.0f);
             mCamEye.set(1172.0f, 3086.0f, 582.0f);
-            mCamFovY = 68.0f;
+            mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.13f;  // 68.0f;
             mActionTimer = 60;
             mHensinScale = 1.0f;
             Z2GetAudioMgr()->seStart(Z2SE_EN_YO_DEMO_OP2, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
@@ -1534,7 +1534,7 @@ void daB_YO_c::executeSeriousDemo() {
         mMode = 100;
         mCamCenter.set(0.0f, 250.0f, 0.0f);
         mCamEye.set(0.0f, 150.0f, 500.0f);
-        mCamFovY = 68.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.13f;  // 68.0f;
         setBreakIceEffect();
         Z2GetAudioMgr()->seStart(Z2SE_EN_YO_DEMO_MID, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
         fpcM_Search(s_frizad_delete, this);
@@ -1615,7 +1615,7 @@ void daB_YO_c::executeSeriousDemo() {
             mCamCenter = current.pos;
             mCamCenter.y += 120.0f;
             mCamEye.set(0.0f, 450.0f, -730.0f);
-            mCamFovY = 44.0f;
+            mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.73f;  // 44.0f;
             mActionTimer = 120;
             mMode = 10;
             shape_angle.y = 0;
@@ -1680,7 +1680,7 @@ void daB_YO_c::executeSeriousDemo() {
         cLib_addCalcPos2(&mCamCenter, pos, 0.5f, 2.0f);
         pos.set(0.0f, 420.0f, -270.0f);
         cLib_addCalcPos2(&mCamEye, pos, 0.5f, 5.0f);
-        cLib_chaseF(&mCamFovY, 68.0f, 0.2f);
+        cLib_chaseF(&mCamFovY, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.13f, 0.2f);
         mIceCenterPos = current.pos;
         mIceCenterPos.y -= 100.0f;
         setApperEffect();
@@ -2132,7 +2132,7 @@ void daB_YO_c::executeDemoRevival() {
         mCamCenter = current.pos;
         mCamCenter.y = 1500.0f;
         mCamEye.set(0.0f, 1000.0f, 1200.0f);
-        mCamFovY = 60.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue());  // 60.0f;
         setIcicleOperate(8);
         // fallthrough
 
@@ -2308,7 +2308,7 @@ void daB_YO_c::executeDeath() {
         mCamCenter = current.pos;
         mCamCenter.y += 300.0f;
         mCamEye.set(-300.0f, 500.0f, -1000.0f);
-        mCamFovY = 68.0f;
+        mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.13f;  // 68.0f;
         mMode = 1;
         dComIfGs_onStageBossEnemy();
         dComIfGs_onSwitch(mSwNo2, fopAcM_GetRoomNo(this));
@@ -2544,7 +2544,7 @@ void daB_YO_c::executeDeath() {
             mCamEyeRange = 800.0f;
             mCamEye.set(mCamEyeRange * cM_ssin(mCamEyeAngle), 200.0f,
                         mCamEyeRange * cM_scos(mCamEyeAngle) - 300.0f);
-            mCamFovY = 60.0f;
+            mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue());  // 60.0f;
             mMode = 9;
             mActionTimer = 90;
             pos1.set(0.0f, 2.0f, 0.0f);
@@ -2611,7 +2611,7 @@ void daB_YO_c::executeDeath() {
             mCamEye.set(0.0f, 150.0f, 200.0f);
             mCamCenter.set(0.0f, 300.0f, -100.0f);
             mYstonePos.set(0.0f, 450.0f, -100.0f);
-            mCamFovY = 68.0f;
+            mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.13f;  // 68.0f;
             mMode = 13;
             mActionTimer = 120;
             if (ystone != NULL) {
@@ -3373,7 +3373,7 @@ cPhs_Step daB_YO_c::create() {
                 cXyz pos(0.0f, 0.0f, 3000.0f);
                 mYstoneID = fopAcM_create(fpcNm_OBJ_YSTONE_e, 5, &pos, fopAcM_GetRoomNo(this),
                                          NULL, NULL, 0xff);
-                
+
                 mRoomType = 1;
                 mRoomAlpha[0] = 0.0f;
                 mRoomAlpha[1] = 255.0f;
@@ -3389,7 +3389,7 @@ cPhs_Step daB_YO_c::create() {
                 g_env_light.wether_pat0 = 2;
                 g_env_light.wether_pat1 = 2;
                 fopAcM_OffStatus(this, fopAcStts_UNK_0x4000_e);
-            
+
             } else {
                 mRoomType = 0;
                 mRoomAlpha[0] = 255.0f;

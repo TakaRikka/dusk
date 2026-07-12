@@ -1103,7 +1103,7 @@ static void demo_camera(e_rdb_class* i_this) {
         camera->mCamera.Stop();
         i_this->mDemoMode = 2;
         i_this->field_0x10aa = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         camera->mCamera.SetTrimSize(3);
         player->changeOriginalDemo();
         dComIfGp_getEvent()->startCheckSkipEdge(i_this);
@@ -1182,7 +1182,7 @@ static void demo_camera(e_rdb_class* i_this) {
         camera->mCamera.Stop();
         i_this->mDemoMode = 11;
         i_this->field_0x10aa = 0;
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         camera->mCamera.SetTrimSize(3);
 
         player->changeOriginalDemo();
@@ -1267,7 +1267,7 @@ static void demo_camera(e_rdb_class* i_this) {
         cLib_addCalc2(&i_this->mDemoCamCenter.y, sp4c.y, 0.2f, 10.0f);
         cLib_addCalc2(&i_this->mDemoCamCenter.z, sp4c.z, 0.2f, 10.0f);
         cLib_addCalc2(&i_this->mDemoCamEye.y, 170.0f, 0.2f, 10.0f);
-        cLib_addCalc2(&i_this->mDemoCamFovy, 70.0f, 0.05f, 0.25f);
+        cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.16f, 0.05f, 0.25f);
         if (i_this->field_0x10aa >= 70 && !dMsgObject_isTalkNowCheck()) {
             i_this->mDemoMode = 13;
             i_this->field_0x10aa = 0;
@@ -1290,7 +1290,7 @@ static void demo_camera(e_rdb_class* i_this) {
             player->setPlayerPosAndAngle(&sp34, -0x5F3B, 0);
             i_this->mDemoCamCenter.set(-7661.0f, 323.0f, -5684.0f);
             i_this->mDemoCamEye.set(-7382.0f, 185.0f, -5360.0f);
-            i_this->mDemoCamFovy = 55.0f;
+            i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.91f; // 55.0f;
             daPy_getPlayerActorClass()->changeDemoMode(1, 1, 0, 0);
         }
 
@@ -1332,7 +1332,7 @@ static void demo_camera(e_rdb_class* i_this) {
         cam_3d_morf(i_this, 0.1f);
         cLib_addCalc2(&i_this->field_0x10f8, 0.05f, 1.0f, 0.005f);
         if (i_this->field_0x10aa >= 40) {
-            cLib_addCalc2(&i_this->mDemoCamFovy, 25.0f, 0.05f, 0.5f);
+            cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()) * 0.42f, 0.05f, 0.5f);
         }
 
         if (i_this->field_0x10aa == 179) {

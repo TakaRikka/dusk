@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_gob.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -701,11 +701,11 @@ static u8 ball(e_gob_class* i_this) {
             var_f29 = 800.0f;
             var_f28 = 100.0f;
         }
-    
+
         mDoMtx_stack_c::YrotS(-actor->shape_angle.y);
         mDoMtx_stack_c::transM(-actor->current.pos.x, -actor->current.pos.y, -actor->current.pos.z);
         mDoMtx_stack_c::multVec(&daPy_getPlayerActorClass()->current.pos, &sp2C);
-    
+
         if (fabsf(sp2C.x) < var_f28 && sp2C.z > temp_f27 && sp2C.z < var_f29) {
             actor->attention_info.flags |= fopAc_AttnFlag_CARRY_e;
         }
@@ -863,10 +863,10 @@ static u8 glab(e_gob_class* i_this) {
         if (i_this->field_0x6d8 >= 2) {
             dBgS_ObjGndChk_Spl sp124;
             sp124.SetPos(&actor->current.pos);
-            
+
             dBgS_ObjGndChk spD0;
             spD0.SetPos(&actor->current.pos);
-            
+
             f32 temp_f27 = dComIfG_Bgsp().GroundCross(&sp124);
             if (dComIfG_Bgsp().GroundCross(&spD0) < temp_f27 && i_this->mDemoCamMode == 0) {
                 i_this->mDemoCamMode = 10;
@@ -1553,12 +1553,12 @@ static void action(e_gob_class* i_this) {
         Vec sp58;
         cXyz sp4C;
         dBgS_GndChk sp7C;
-        
+
         f32 temp_f28 = 50.0f;
         sp4C = actor->current.pos;
         sp4C.y += 50.0f;
         sp7C.SetPos(&sp4C);
-        
+
         sp4C.y = dComIfG_Bgsp().GroundCross(&sp7C);
         if (-G_CM3D_F_INF != sp4C.y) {
             sp58.x = sp4C.x;
@@ -1617,7 +1617,7 @@ static void action(e_gob_class* i_this) {
         if (var_f29 > 0.2f + JREG_F(8)) {
             var_f29 = 0.2f + JREG_F(8);
         }
- 
+
         s16 sp12 = var_f29 * (4000.0f + JREG_F(9));
 
         for (int i = 0; i < 4; i++) {
@@ -1662,7 +1662,7 @@ static void demo_camera(e_gob_class* i_this) {
         i_this->mDemoCamMode = 2;
         i_this->mDemoCamTimer = 0;
 
-        i_this->mDemoCamFovy = 55.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f;
         camera->mCamera.SetTrimSize(3);
         i_this->mDemoCamCenter.set(-104.0f, 2205.0f, 1078.0f);
         i_this->mDemoCamEye.set(-175.0f, 2246.0f, 1418.0f);
@@ -1732,19 +1732,19 @@ static void demo_camera(e_gob_class* i_this) {
         if (i_this->mDemoCamTimer == 52) {
             player->changeDemoMode(0x22, 0, 0, 0);
         }
-    
+
         if (i_this->mDemoCamTimer < 30) {
             actor->current.pos.y = 3000.0f;
             actor->speed.y = 0.0f;
         }
-    
+
         if (i_this->mDemoCamTimer == 47) {
             ms->mAction = obj_msima_class::ACTION_DROP;
             ms->field_0x594 = ms->field_0x596 = 0;
             ms->field_0x59c = 700.0f;
             ms->field_0x586[0] = 40;
         }
-    
+
         if (i_this->mDemoCamTimer == 54) {
             spC = 2;
         } else if (i_this->mDemoCamTimer == 57) {
@@ -1754,14 +1754,14 @@ static void demo_camera(e_gob_class* i_this) {
         } else if (i_this->mDemoCamTimer == 62) {
             spC = 0;
         }
-    
+
         if (spC >= 0) {
             ms->mChains[spC].field_0x92 = 1;
             ms->mChains[spC].field_0x8c = 200.0f + TREG_F(12);
             dComIfGp_particle_set(0x8455, &ms->mChains[spC].mPos, NULL, NULL);
             mDoAud_seStart(Z2SE_OBJ_GOBFLOOR_CHAIN_BREAK, &ms->mChains[spC].mPos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
-    
+
         if (i_this->mDemoCamTimer == 82) {
             i_this->mDemoCamMode = 6;
             i_this->mDemoCamTimer = 0;
@@ -1821,7 +1821,7 @@ static void demo_camera(e_gob_class* i_this) {
         camera->mCamera.Stop();
         i_this->mDemoCamMode = 0xC;
         i_this->mDemoCamTimer = 0;
-        i_this->mDemoCamFovy = 60.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
         camera->mCamera.SetTrimSize(3);
         actor->speed.y = 0.0f;
         actor->current.pos.x = 0.0f;
@@ -1931,7 +1931,7 @@ static void demo_camera(e_gob_class* i_this) {
         // fallthrough
     case 15:
         if (i_this->mDemoCamTimer == 2) {
-            i_this->mDemoCamFovy = 60.0f;
+            i_this->mDemoCamFovy =static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue()); // 60.0f;
             i_this->mDemoCamCenter.set(-2218.0f, 3100.0f, 1256.0f);
             i_this->mDemoCamEye.set(-2486.0f, 3256.0f, 1418.0f);
             mDoGph_gInf_c::fadeIn(0.1f, g_blackColor);
@@ -2138,7 +2138,7 @@ static int daE_GOB_Execute(e_gob_class* i_this) {
             i_this->field_0x6f4.y -= 7000;
             i_this->field_0x6f4.x -= 2000;
         }
-    
+
         mDoMtx_stack_c::transS(i_this->field_0x6dc.x, i_this->field_0x6dc.y, i_this->field_0x6dc.z);
         mDoMtx_stack_c::YrotM(i_this->field_0x6f4.y);
         mDoMtx_stack_c::XrotM(i_this->field_0x6f4.x);
@@ -2295,7 +2295,7 @@ static int daE_GOB_Create(fopAc_ac_c* i_this) {
             hio_set = 1;
             l_HIO.id = mDoHIO_CREATE_CHILD("マグネゴロン", &l_HIO);
         }
-    
+
         i_this->attention_info.flags = fopAc_AttnFlag_BATTLE_e;
 
         fopAcM_SetMtx(i_this, a_this->mpModelMorf->getModel()->getBaseTRMtx());
@@ -2311,7 +2311,7 @@ static int daE_GOB_Create(fopAc_ac_c* i_this) {
 
         i_this->health = 1000;
         i_this->field_0x560 = 1000;
-    
+
         a_this->mAcch.Set(fopAcM_GetPosition_p(i_this), fopAcM_GetOldPosition_p(i_this), i_this, 1, &a_this->mAcchCir, fopAcM_GetSpeed_p(i_this), NULL, NULL);
         a_this->mAcchCir.SetWall(50.0f, 50.0f);
 
@@ -2352,7 +2352,7 @@ static int daE_GOB_Create(fopAc_ac_c* i_this) {
 
         a_this->mAtSph.Set(at_sph_src);
         a_this->mAtSph.SetStts(&a_this->mCcStts);
-    
+
         if (dComIfGs_isStageMiddleBoss()) {
             a_this->mAction = ACTION_MESSAGE;
             a_this->mMode = 0;

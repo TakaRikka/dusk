@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_so.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -41,7 +41,7 @@ static int daObj_So_Draw(obj_so_class* i_this) {
                 if (i < 10 && i_this->field_0x1a98[i - 2] != 0) {
                     g_env_light.setLightTevColorType_MAJI(i_this->field_0x1aa0[i - 2], &a_this->tevStr);
                     mDoExt_modelUpdateDL(i_this->field_0x1aa0[i - 2]);
-                }   
+                }
             }
         }
     }
@@ -120,7 +120,7 @@ static void part_set(obj_so_class* i_this, s8 param_2) {
 
     f32 scale = a_this->scale.x;
     mDoMtx_stack_c::scaleM(scale, scale, scale);
-    
+
     for (int i = 0; i < 26; i++) {
         mDoMtx_stack_c::push();
         if (i < 2) {
@@ -241,7 +241,7 @@ static void so_drop(obj_so_class* i_this) {
             if (i_this->field_0xdb2[0] != 0) {
                 sVar1 = 0;
             }
-            
+
             cLib_addCalcAngleS2(&a_this->shape_angle.x, -0x4000, 4, 0x300);
             if (sVar1 && i_this->mObjAcch.ChkGroundHit()) {
                 dComIfGs_onSwitch(fopAcM_GetParam(a_this) >> 16 & 0xFF, fopAcM_GetRoomNo(a_this));
@@ -709,7 +709,7 @@ static void part_move(obj_so_class* i_this) {
             }
 
             mDoMtx_stack_c::transS(i_this->field_0x1ac0[i].x, i_this->field_0x1ac0[i].y, i_this->field_0x1ac0[i].z);
-            
+
             if (i_this->field_0x1b50[i] != 0) {
                 i_this->field_0x1b50[i]--;
             }
@@ -827,7 +827,7 @@ static void demo_camera(obj_so_class* i_this) {
             MtxPosition(&sp30, &i_this->mDemoCamEye);
             i_this->mDemoCamEye.x += a_this->current.pos.x;
             i_this->mDemoCamEye.z += a_this->current.pos.z;
-            i_this->mDemoCamFovy = 40.0f;
+            i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.66f; // 40.0f;
             // fallthrough
         case 2:
             sp3c.set(12459.0f, 3152.0f, 4628.0f);
@@ -841,7 +841,7 @@ static void demo_camera(obj_so_class* i_this) {
                 i_this->mDemoCamCenter.y = sp3c.y;
             }
 
-            cLib_addCalc2(&i_this->mDemoCamFovy, 65.0f, 0.05f, 0.5f);
+            cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.08, 0.05f, 0.5f);
 
             if (i_this->field_0x1ba2 == 120) {
                 Z2GetAudioMgr()->setBattleBgmOff(false);

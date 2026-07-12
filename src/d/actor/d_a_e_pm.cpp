@@ -405,7 +405,7 @@ bool daE_PM_c::CameraSet() {
     }
 
     camera->mCamera.Stop();
-    mCamFovY = 65.0f;
+    mCamFovY = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.1f; // 65.0f;
     mCamCenter = camera_body->Center();
     mCamCenterTarget = mCamCenter;
     mCamCenterTarget2 = mCamCenter;

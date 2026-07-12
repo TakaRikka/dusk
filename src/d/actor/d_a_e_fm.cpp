@@ -1,6 +1,6 @@
 /**
  * @file d_a_e_fm.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -451,7 +451,7 @@ static int daE_FM_Draw(e_fm_class* i_this) {
 
     chain_material->getTevColor(0)->r = i_this->mChainColorR;
     chain_material = modelData->getMaterialNodePointer(0);
-    
+
     int color = 255.0f * i_this->field_0x778;
     chain_material->getTevColor(2)->r = color;
     chain_material->getTevColor(2)->g = color;
@@ -843,14 +843,14 @@ static void e_fm_f_fight(e_fm_class* i_this) {
         }
         break;
     case 1:
-        tame_eff_set(i_this);        
+        tame_eff_set(i_this);
 
         if (anm_frame == TREG_S(7) + 88) {
             i_this->field_0x790 = 1;
             dComIfGp_getVibration().StartQuake(VIBMODE_Q_POWER3, 1, cXyz(0.0f, 1.0f, 0.0f));
             i_this->mSound.startCreatureSound(Z2SE_EN_FM_BLAST, 0, -1);
             i_this->mSound.startCreatureVoice(Z2SE_EN_FM_V_BLAST_GAOO, -1);
-            
+
             if (dComIfGs_getArrowNum() <= 5 || dComIfGs_getLife() <= 4) {
                 i_this->mDoCreateBa = TRUE;
             }
@@ -881,7 +881,7 @@ static void animal_eff_set(e_fm_class* i_this, s16 param_1) {
         for (int i = 0; i < 4; i++) {
             static u16 fire_name[] = {0x8181, 0x8182, 0x8183, 0x8184};
             i_this->field_0x1888[i] = dComIfGp_particle_set(i_this->field_0x1888[i], fire_name[i], &i_this->current.pos, NULL, NULL);
-            
+
             JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x1888[i]);
             if (emitter != NULL) {
                 MTXCopy(model->getAnmMtx(3), *calc_mtx);
@@ -891,7 +891,7 @@ static void animal_eff_set(e_fm_class* i_this, s16 param_1) {
         }
     } else {
         i_this->field_0x1884 = dComIfGp_particle_set(i_this->field_0x1884, 0x814C, &i_this->current.pos, NULL, NULL);
-        
+
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x1884);
         if (emitter != NULL) {
             MTXCopy(model->getAnmMtx(3), *calc_mtx);
@@ -1181,7 +1181,7 @@ static void demo_camera(e_fm_class* i_this) {
             daPy_getPlayerActorClass()->changeDemoMode(1, 0, 0, 0);
         }
 
-        i_this->mDemoCamFovy = 55.0f + NREG_F(10);
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f + NREG_F(10);
         camera->mCamera.SetTrimSize(3);
     case 2:
         if (i_this->mDemoCamTimer == 10) {
@@ -1279,7 +1279,7 @@ static void demo_camera(e_fm_class* i_this) {
         i_this->mDemoCamTimer = 0;
         daPy_getPlayerActorClass()->changeOriginalDemo();
 
-        i_this->mDemoCamFovy = 50.0f;
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.83f; // 50.0f;
         i_this->mDemoCamEye = camera0->view.lookat.eye;
         i_this->mDemoCamCenter = camera0->view.lookat.center;
         i_this->field_0x778 = 0.0f;
@@ -1306,7 +1306,7 @@ static void demo_camera(e_fm_class* i_this) {
                 i_this->mDemoCamCenterSpd.z = fabsf(i_this->mDemoCamCenterTarget.z - i_this->mDemoCamCenter.z);
 
                 i_this->field_0x1b050 = 0.0f;
-                i_this->mDemoCamFovy = 55.0f + NREG_F(10);
+                i_this->mDemoCamFovy =static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f + NREG_F(10);
             }
 
             if (i_this->mDemoCamTimer == 120) {
@@ -1440,7 +1440,7 @@ static void demo_camera(e_fm_class* i_this) {
         i_this->mDemoCamTimer = 0;
         daPy_getPlayerActorClass()->changeOriginalDemo();
         daPy_getPlayerActorClass()->changeDemoMode(1, 0, 0, 0);
-        i_this->mDemoCamFovy = 55.0f + NREG_F(10);
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f + NREG_F(10);
         i_this->field_0x1b050 = 0.0f;
         camera->mCamera.SetTrimSize(3);
     case 21:
@@ -1455,7 +1455,7 @@ static void demo_camera(e_fm_class* i_this) {
             actor->current.pos.z = spE0.z;
             OS_REPORT(" FM DOWN POS REVISE \n");
         }
-        
+
         cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
         spEC.x = 100.0f + NREG_F(15);
         spEC.y = 50.0f + NREG_F(11);
@@ -1491,7 +1491,7 @@ static void demo_camera(e_fm_class* i_this) {
         i_this->mDemoCamMode = 51;
         i_this->mDemoCamTimer = 0;
         daPy_getPlayerActorClass()->changeOriginalDemo();
-        i_this->mDemoCamFovy = 55.0f + NREG_F(10);
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f + NREG_F(10);
         i_this->field_0x770 = 0;
         i_this->field_0x1aff6 = 0;
         i_this->field_0x1b050 = i_this->field_0x1b054 = i_this->field_0x1b068 = i_this->field_0x1b06c = i_this->field_0x1b074 = i_this->field_0x1b070 = 0.0f;
@@ -1650,7 +1650,7 @@ static void demo_camera(e_fm_class* i_this) {
         }
 
         if (i_this->mDemoCamTimer > XREG_S(8) + 14) {
-            cLib_addCalc2(&i_this->mDemoCamFovy, 85.0f, 0.05f, 0.05f + JREG_F(16));
+            cLib_addCalc2(&i_this->mDemoCamFovy, static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*1.41f, 0.05f, 0.05f + JREG_F(16));
         }
 
         if (i_this->mDemoCamTimer != XREG_S(7) + 206) {
@@ -1689,7 +1689,7 @@ static void demo_camera(e_fm_class* i_this) {
             }
         }
 
-        i_this->mDemoCamFovy = 55.0f + NREG_F(10);
+        i_this->mDemoCamFovy = static_cast<f32>(dusk::getSettings().game.cameraFieldOfView.getValue())*0.91f; // 55.0f + NREG_F(10);
         i_this->mSound.startCreatureSound(Z2SE_EN_BOSS_CONVERGE, 0, 0);
         daPy_getPlayerActorClass()->changeDemoMode(1, 0, 0, 0);
     }
@@ -1746,7 +1746,7 @@ static void demo_camera(e_fm_class* i_this) {
         if (ystone != NULL) {
             ystone->setCurrentPos(spE0);
         }
-    
+
         if (i_this->mDemoCamTimer == VREG_S(3) + 104) {
             cXyz warp_pos(-363.0f, 0.0f,291.0f);
             csXyz warp_rot(0, 0, 0);
@@ -2465,7 +2465,7 @@ static void chain_control3(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
 
     sp68 = i_chain_s->field_0x1ac[i_chain_s->field_0x6170] - i_chain_s->pos[i_chain_s->field_0x6170];
     i_chain_s->field_0x6174 = sp68.abs();
-    
+
     cXyz* ppos = &i_chain_s->pos[i_chain_s->field_0x6170];
     for (int i = i_chain_s->field_0x6170; i < i_chain_s->field_0x61d0; i++, ppos++) {
         *ppos += sp68 * ((f32)(i_chain_s->field_0x61d0 - (i - i_chain_s->field_0x6170)) / (f32)i_chain_s->field_0x61d0);
@@ -2488,7 +2488,7 @@ static void chain_control3(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
             daPy_py_c* spC = (daPy_py_c*)dComIfGp_getPlayer(0);
             f32 temp_f31 = (i_chain_s->field_0x6174 - 50.0f);
             temp_f31 *= 0.5f + TREG_F(12);
-            
+
             spC->setOutPower(temp_f31, cM_atan2s(sp68.x, sp68.z), 0);
         }
     } else if (i_chain_s->field_0x617e == 0) {
@@ -2550,7 +2550,7 @@ static void chain_control3(e_fm_class* i_this, chain_s* i_chain_s, int param_2) 
                     i_chain_s->field_0x617d = 1;
                 }
             }
-            
+
             if (i_chain_s->field_0x617d == 1) {
                 i_chain_s->field_0x617c = 0;
                 i_chain_s->field_0x6170 = 0;
@@ -2756,7 +2756,7 @@ static void action(e_fm_class* i_this) {
         i_this->mDoCreateBa = FALSE;
         ba_count = 0;
         fpcM_Search(s_ba_sub, i_this);
-        
+
         const int MAX_BA = 4;
         int create_num = MAX_BA - ba_count;
 
@@ -3388,7 +3388,7 @@ static int daE_FM_Execute(e_fm_class* i_this) {
         }
     } else if (i_this->mAnm == BCK_FM_OPDEMO) {
         i_this->field_0x2350 = dComIfGp_particle_set(i_this->field_0x2350, 0x872C, &actor->current.pos, NULL, NULL);
-        
+
         JPABaseEmitter* emitter = dComIfGp_particle_getEmitter(i_this->field_0x2350);
         if (emitter != NULL) {
             model = i_this->mpFmModelMorf->getModel();
@@ -3512,7 +3512,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
 
         static int brk[] = {
-            BRK_FM, BRK_FM_ATTACK, BRK_FM_PUTOUT, BRK_FM_PUTOUTWAIT, BRK_FM_ANIMAL02, 
+            BRK_FM, BRK_FM_ATTACK, BRK_FM_PUTOUT, BRK_FM_PUTOUTWAIT, BRK_FM_ANIMAL02,
             BRK_FM_OPDEMO, BRK_FM_HANGWAIT, BRK_FM_DEMOEND01, BRK_FM_DEMOEND02
         };
         if (a_this->mpFmBrk[i]->init(a_this->mpFmModelMorf->getModel()->getModelData(),
@@ -3527,7 +3527,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
         }
 
         static int btk[] = {
-            BTK_FM, BTK_FM_ATTACK, BTK_FM_PUTOUT, BTK_FM_PUTOUTWAIT, BTK_FM_ANIMAL02, 
+            BTK_FM, BTK_FM_ATTACK, BTK_FM_PUTOUT, BTK_FM_PUTOUTWAIT, BTK_FM_ANIMAL02,
             BTK_FM_OPDEMO, BTK_FM_HANGWAIT, BTK_FM_DEMOEND01, BTK_FM_DEMOEND02
         };
         if (a_this->mpFmBtk[i]->init(a_this->mpFmModelMorf->getModel()->getModelData(),
@@ -3620,7 +3620,7 @@ static int useHeapInit(fopAc_ac_c* i_this) {
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", BMDR_KUSARI));
     JUT_ASSERT(7404, modelData != NULL);
-    
+
     J3DModelData* modelData2 = static_cast<J3DModelData*>(dComIfG_getObjectRes("E_fm", BMDR_HANDLE));
     JUT_ASSERT(7408, modelData2 != NULL);
 
@@ -3837,7 +3837,7 @@ static int daE_FM_Create(fopAc_ac_c* i_this) {
 
         a_this->mCounter = cM_rndF(65535.0f);
         dKy_plight_set(&a_this->mPlight);
-    
+
         i_this->attention_info.distances[fopAc_attn_BATTLE_e] = 75;
 
         a_this->mSound.init(&i_this->current.pos, &i_this->eyePos, &a_this->mChain[0].sound_pos, &a_this->mChain[1].sound_pos, &a_this->mChain[2].sound_pos, &a_this->mChain[3].sound_pos, 6, 1, 1, 1, 1, 1);
