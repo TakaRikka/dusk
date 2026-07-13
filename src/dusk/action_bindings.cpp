@@ -23,6 +23,7 @@ ActionBindsMap& getActionBinds() {
         {ActionBinds::TOGGLE_MINIMAP,      {&getSettings().actionBindings.toggleMinimap,     "Toggle Minimap"}},
         {ActionBinds::OPEN_DUSKLIGHT_MENU, {&getSettings().actionBindings.openDusklightMenu, "Open Dusklight Menu"}},
         {ActionBinds::TURBO_SPEED_BUTTON,  {&getSettings().actionBindings.turboSpeedButton,  "Turbo Speed Button"}},
+        {ActionBinds::LOAD_LAST_STATE,  {&getSettings().actionBindings.loadLastState,  "Load Last State"}},
     };
     return actionBinds;
 }

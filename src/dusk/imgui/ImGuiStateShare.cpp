@@ -20,6 +20,8 @@
 #include <zstd.h>
 #include <dusk/autosave.h>
 
+#include "dusk/action_bindings.h"
+
 namespace dusk {
 
 using json = nlohmann::json;
@@ -418,7 +420,24 @@ void ImGuiStateShare::draw(bool& open) {
     ImGui::End();
 }
 
+void ImGuiStateShare::loadLastState() {
+    if (!m_loaded) {
+        loadStatesFile();
+    }
+    if (m_states.empty()) {
+        return;
+    }
+    const size_t lastIdx = m_states.size() - 1;
+    applyEncodedState(m_states[lastIdx].encoded, m_states[lastIdx].name);
+}
+
 void ImGuiMenuTools::ShowStateShare() {
+    if ((dusk::IsGameLaunched || !dusk::getTransientSettings().stateShareLoadActive) &&
+        !getSettings().game.speedrunMode
+        && dusk::isActionBound(dusk::ActionBinds::LOAD_LAST_STATE, 0) &&
+            dusk::getActionBindTrig(dusk::ActionBinds::LOAD_LAST_STATE, 0)) {
+        m_stateShare.loadLastState();
+    }
     if (!getSettings().backend.enableAdvancedSettings ||
         !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F8, m_showStateShare))
     {

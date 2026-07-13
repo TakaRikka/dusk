@@ -16,6 +16,7 @@ struct SavedStateEntry {
 class ImGuiStateShare {
 public:
     void draw(bool& open);
+    void loadLastState();
 
 private:
     std::string encodeCurrentState();
