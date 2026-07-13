@@ -101,6 +101,13 @@ constexpr std::array kMenuScalingModeLabels = {
     "Dusklight",
 };
 
+constexpr std::array kWalletSizes = {
+    "Default", 
+    "HD", 
+    "Large", 
+    "Uncapped"
+};
+
 constexpr std::array kMagicArmorModes = {
     "Normal",
     "On Damage",
@@ -1232,8 +1239,46 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Hearts will never drop from enemies, pots, and various other places.");
 
         leftPane.add_section("Quality of Life");
-        addOption("Bigger Wallets", getSettings().game.biggerWallets,
-            "Wallet sizes are like in the HD version. (500, 1000, 2000)");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Wallet Sizes",
+                .getValue =
+                    [] {
+                        const int idx = getSettings().game.walletSizes.getValue();
+                        return Rml::String{kWalletSizes[idx]};
+                    },
+                .isModified =
+                    [] {
+                        const auto& walletSizes = getSettings().game.walletSizes;
+                        return walletSizes.getValue() != walletSizes.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kWalletSizes.size()); ++i) {
+                    pane.add_button(
+                            {
+                                .text = kWalletSizes[i],
+                                .isSelected =
+                                    [i] { return getSettings().game.walletSizes.getValue() == i;
+                                    },
+                            })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.walletSizes.setValue(i);
+                            config::Save();
+                        });
+                }
+                pane.add_rml(R"(
+                    <br/>Modifies the maximum number of rupees the wallets can hold. 
+                    <ul style="display: block; margin-left: 20px;">
+                        <li style="display: block; margin-bottom: 4px;">• Default: 300, 600, 1 000</li>
+                        <li style="display: block; margin-bottom: 4px;">• HD: 500, 1 000, 2 000</li>
+                        <li style="display: block; margin-bottom: 4px;">• Large: 1 000, 5 000, 9 999</li>
+                        <li style="display: block; margin-bottom: 4px;">• Uncapped: 9 999</li>
+                    </ul>
+                )");
+            });
+
         addOption("Disable Rupee Cutscenes", getSettings().game.disableRupeeCutscenes,
             "Rupees will not play cutscenes after you have collected them the first time.");
         addOption("Faster Climbing", getSettings().game.fastClimbing,
