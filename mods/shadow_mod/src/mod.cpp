@@ -64,6 +64,7 @@ ConfigVarHandle g_cvarDebugView = 0;
 GfxDrawTypeHandle g_drawType = 0;
 GfxStageHookHandle g_sceneBeginHook = 0;
 GfxStageHookHandle g_sceneAfterTerrainHook = 0;
+GfxStageHookHandle g_sceneAfterOpaqueHook = 0;
 GfxStageHookHandle g_frameBeforeHudHook = 0;
 UiWindowHandle g_controlsWindow = 0;
 ResourceBuffer g_shaderSource = RESOURCE_BUFFER_INIT;
@@ -746,8 +747,8 @@ void render_shadow_map(
     g_mapPass.ready = true;
 }
 
-// Game thread, after the full 3D scene: deferred composite.
-void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
+// Game thread, after opaque scene draws and before translucent/fog overlays: deferred composite.
+void on_scene_after_opaque(ModContext*, const GfxStageContext*, void*) {
     const int64_t debugMode = get_debug_mode();
     restore_actual_light_debug();
 
@@ -812,6 +813,11 @@ void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
     const DrawPayload payload{resolved.depth, mapPass.shadowMap, mapPass.lightColor,
         uniformRange.offset, uniformRange.size, static_cast<uint32_t>(debugMode)};
     svc_gfx->push_draw(mod_ctx, g_drawType, &payload, sizeof(payload));
+}
+
+// Frame tail hook: only needed to restore light-view debug camera state before HUD.
+void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
+    restore_actual_light_debug();
 }
 
 void add_control(UiElementHandle pane, const UiControlDesc& desc) {
@@ -1038,6 +1044,12 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     {
         return dusk::mods::set_error(error, MOD_ERROR, "failed to register stage hook");
     }
+    stageDesc.callback = on_scene_after_opaque;
+    if (svc_gfx->register_stage_hook(
+            mod_ctx, GFX_STAGE_SCENE_AFTER_OPAQUE, &stageDesc, &g_sceneAfterOpaqueHook) != MOD_OK)
+    {
+        return dusk::mods::set_error(error, MOD_ERROR, "failed to register stage hook");
+    }
     stageDesc.callback = on_frame_before_hud;
     if (svc_gfx->register_stage_hook(
             mod_ctx, GFX_STAGE_FRAME_BEFORE_HUD, &stageDesc, &g_frameBeforeHudHook) != MOD_OK)
@@ -1098,7 +1110,8 @@ MOD_EXPORT ModResult mod_shutdown(ModError*) {
     g_cvarStrength = 0;
     g_cvarPcf = g_cvarBias = g_cvarBoxRadius = g_cvarEdgeFadeWidth = g_cvarContactShadows =
         g_cvarDebugView = 0;
-    g_drawType = g_sceneBeginHook = g_sceneAfterTerrainHook = g_frameBeforeHudHook = 0;
+    g_drawType = g_sceneBeginHook = g_sceneAfterTerrainHook = g_sceneAfterOpaqueHook =
+        g_frameBeforeHudHook = 0;
     g_controlsWindow = 0;
     g_mapPass = {};
     g_sceneCamera.valid = false;
