@@ -794,7 +794,7 @@ void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
     uniforms.inv_size[0] = 1.0f / uniforms.size[0];
     uniforms.inv_size[1] = 1.0f / uniforms.size[1];
     uniforms.edge_fade_width =
-        static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarEdgeFadeWidth, 32), 0, 128));
+        static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarEdgeFadeWidth, 32), 0, 256));
     uniforms.strength =
         mapPass.fade *
         static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarStrength, 45), 0, 100)) /
@@ -870,7 +870,7 @@ ModResult build_controls_tab(
         "dynamic shadows. This can be expensive.");
     add_number(left, "Coverage", g_cvarBoxRadius, 1000, 20000, 500, nullptr,
         "Radius of the shadowed area around the camera, in world units. Smaller is sharper.");
-    add_number(left, "Fade Out", g_cvarEdgeFadeWidth, 0, 128, 32, " texels",
+    add_number(left, "Fade Out", g_cvarEdgeFadeWidth, 0, 256, 32, " texels",
         "Fade out shadows gradually near the edge of the coverage area.");
 
     svc_ui->pane_add_section(mod_ctx, left, "Appearance");
@@ -997,7 +997,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     if (result != MOD_OK) {
         return result;
     }
-    result = register_int_option("edgeFadeWidth", 32, g_cvarEdgeFadeWidth, error);
+    result = register_int_option("edgeFadeWidth", 128, g_cvarEdgeFadeWidth, error);
     if (result != MOD_OK) {
         return result;
     }
