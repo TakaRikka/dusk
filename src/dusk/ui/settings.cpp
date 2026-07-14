@@ -219,6 +219,54 @@ AuroraBackend configured_backend() {
     return configuredBackend;
 }
 
+void reset_for_speedrun_mode() {
+    mDoMain::developmentMode = -1;
+
+    getSettings().game.enableTurboKeybind.setSpeedrunValue(false);
+
+    getSettings().game.damageMultiplier.setSpeedrunValue(1);
+    getSettings().game.instantDeath.setSpeedrunValue(false);
+    getSettings().game.noHeartDrops.setSpeedrunValue(false);
+    getSettings().game.autoSave.setSpeedrunValue(false);
+    getSettings().game.sunsSong.setSpeedrunValue(false);
+    getSettings().game.cameraFieldOfView.setSpeedrunValue(60);
+    getSettings().game.infiniteHearts.setSpeedrunValue(false);
+    getSettings().game.infiniteArrows.setSpeedrunValue(false);
+    getSettings().game.infiniteSeeds.setSpeedrunValue(false);
+    getSettings().game.infiniteBombs.setSpeedrunValue(false);
+    getSettings().game.infiniteOil.setSpeedrunValue(false);
+    getSettings().game.infiniteOxygen.setSpeedrunValue(false);
+    getSettings().game.infiniteRupees.setSpeedrunValue(false);
+    getSettings().game.enableIndefiniteItemDrops.setSpeedrunValue(false);
+    getSettings().game.moonJump.setSpeedrunValue(false);
+    getSettings().game.superClawshot.setSpeedrunValue(false);
+    getSettings().game.alwaysGreatspin.setSpeedrunValue(false);
+    getSettings().game.enableFastIronBoots.setSpeedrunValue(false);
+    getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
+    getSettings().game.fastRoll.setSpeedrunValue(false);
+    getSettings().game.fastSpinner.setSpeedrunValue(false);
+    getSettings().game.freeMagicArmor.setSpeedrunValue(false);
+    getSettings().game.invincibleEnemies.setSpeedrunValue(false);
+
+    getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
+    aurora_set_pause_on_focus_lost(false);
+
+    getSettings().backend.enableAdvancedSettings.setSpeedrunValue(false);
+    getSettings().game.recordingMode.setSpeedrunValue(false);
+    getSettings().game.debugFlyCam.setSpeedrunValue(false);
+}
+
+void clear_speedrun_overrides() {
+    config::EnumerateRegistered([](config::ConfigVarBase& cvar) {
+        cvar.clearSpeedrunOverride();
+    });
+}
+
+void restore_from_speedrun_mode() {
+    clear_speedrun_overrides();
+    aurora_set_pause_on_focus_lost(getSettings().game.pauseOnFocusLost.getValue());
+}
+
 std::filesystem::path normalized_display_path(const std::filesystem::path& path) {
     std::error_code ec;
     auto normalized = std::filesystem::weakly_canonical(path, ec);
@@ -363,6 +411,9 @@ const Rml::String kUnlockFramerateHelpText =
     "visual artifacts or animation glitches.";
 const Rml::String kTextureReplacementHelpText =
     "Enable installed texture replacements.";
+const Rml::String kCameraFOVHelpText =
+    "Configure the default field of view for the camera. Lower values zoom in, higher values zoom out. "
+    "This may be overridden during cutscenes or specific gameplay moments. May introduce visual glitches.";
 
 int float_setting_percent(ConfigVar<float>& var) {
     return static_cast<int>(var.getValue() * 100.0f + 0.5f);
@@ -835,6 +886,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = static_cast<int>(Resampler::Bilinear),
                 .valueMax = static_cast<int>(Resampler::Area),
                 .defaultValue = static_cast<int>(Resampler::Bilinear),
+            });
+
+        leftPane.add_section("Camera");
+        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.cameraFieldOfView,
+            GraphicsTunerProps{
+                .option = GraphicsOption::CameraFOV,
+                .title = "Field of View",
+                .helpText = kCameraFOVHelpText,
+                .valueMin = 45,
+                .valueMax = 90,
+                .defaultValue = 60,
+                .step = 1,
             });
 
         leftPane.add_section("Post-Processing");
