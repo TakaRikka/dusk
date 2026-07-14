@@ -255,14 +255,16 @@ void Overlay::update() {
             mFpsCounter->RemoveProperty(Rml::PropertyId::Bottom);
             mFpsCounter->SetAttribute("corner", kFpsCorners[idx]);
 
-            if(idx == 2) {
-                if(mPipelineProgress && mPipelineProgress->GetAttribute("open")) {
-                    // 12 (height of pipeline box off bottom) + height of pipeline box + 3 (padding space)
-                    mFpsCounter->SetProperty(Rml::PropertyId::Bottom, Rml::Property(15 + mPipelineProgress->GetOffsetHeight(), Rml::Unit::PX));
-                }
-                else {
+            if (idx == 2) {
+                if (mPipelineProgress && mPipelineProgress->GetAttribute("open")) {
+                    // 12 (height of pipeline box off bottom) + height of pipeline box + 3 (padding
+                    // space)
+                    mFpsCounter->SetProperty(Rml::PropertyId::Bottom,
+                        Rml::Property(15 + mPipelineProgress->GetOffsetHeight(), Rml::Unit::PX));
+                } else {
                     // Return fps counter to default height off the bottom
-                    mFpsCounter->SetProperty(Rml::PropertyId::Bottom, Rml::Property(12, Rml::Unit::PX));
+                    mFpsCounter->SetProperty(
+                        Rml::PropertyId::Bottom, Rml::Property(12, Rml::Unit::PX));
                 }
             }
 
