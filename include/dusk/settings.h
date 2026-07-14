@@ -207,6 +207,7 @@ struct UserSettings {
         ConfigVar<Resampler> resampler;
         ConfigVar<bool> enableMapBackground;
         ConfigVar<bool> disableCutscenePillarboxing;
+        ConfigVar<bool> disableTargetingLetterbox;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
