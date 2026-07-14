@@ -206,6 +206,12 @@ UserSettings g_userSettings = {
             ActionBindConfigVar{"actionBindings.turboButton_port2", PAD_NATIVE_BUTTON_INVALID},
             ActionBindConfigVar{"actionBindings.turboButton_port3", PAD_NATIVE_BUTTON_INVALID},
         },
+        .hudToggle {
+            ActionBindConfigVar{"actionBindings.hudToggle_port0", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.hudToggle_port1", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.hudToggle_port2", PAD_NATIVE_BUTTON_INVALID},
+            ActionBindConfigVar{"actionBindings.hudToggle_port3", PAD_NATIVE_BUTTON_INVALID},
+        },
     }
 };
 
@@ -377,6 +383,10 @@ void registerSettings() {
     Register(g_userSettings.actionBindings.turboSpeedButton[1]);
     Register(g_userSettings.actionBindings.turboSpeedButton[2]);
     Register(g_userSettings.actionBindings.turboSpeedButton[3]);
+    Register(g_userSettings.actionBindings.hudToggle[0]);
+    Register(g_userSettings.actionBindings.hudToggle[1]);
+    Register(g_userSettings.actionBindings.hudToggle[2]);
+    Register(g_userSettings.actionBindings.hudToggle[3]);
 }
 
 // Transient settings

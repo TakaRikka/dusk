@@ -25,6 +25,7 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "dusk/action_bindings.h"
 #include "dusk/memory.h"
 #include "dusk/settings.h"
 
@@ -327,6 +328,10 @@ int dMeter2_c::_execute() {
 
 int dMeter2_c::_draw() {
     #if TARGET_PC
+    if (dusk::isActionBound(dusk::ActionBinds::HUD_TOGGLE, 0) && dusk::getActionBindTrig(dusk::ActionBinds::HUD_TOGGLE, 0)) {
+        dusk::getSettings().game.minimalHUD.setValue(!dusk::getSettings().game.minimalHUD.getValue());
+    }
+
     if (dusk::getSettings().game.recordingMode || dusk::getSettings().game.minimalHUD ||
         dusk::getSettings().game.debugFlyCam)
     {
