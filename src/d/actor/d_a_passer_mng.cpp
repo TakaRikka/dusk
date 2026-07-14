@@ -67,7 +67,7 @@ static SizedGroup<7> const groupD = {
     {0x01000014, 0x21000015, 0x00000016, 0x1100000C, 0x5000000E, 0x4000000F, 0x0100000D},
 };
 
-const daPasserMng_c::Group* daPasserMng_c::mGroupTbl[4] = {
+DUSK_GAME_DATA const daPasserMng_c::Group* daPasserMng_c::mGroupTbl[4] = {
     (const Group*)&groupA,
     (const Group*)&groupB,
     (const Group*)&groupC,

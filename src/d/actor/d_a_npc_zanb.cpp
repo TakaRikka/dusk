@@ -73,9 +73,9 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_zanB_c::mCutNameList[1] = {""};
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_zanB_c::mCutNameList[1] = {""};
 
-daNpc_zanB_c::cutFunc DUSK_CONST daNpc_zanB_c::mCutList[1] = {NULL};
+DUSK_GAME_DATA daNpc_zanB_c::cutFunc DUSK_CONST daNpc_zanB_c::mCutList[1] = {NULL};
 
 daNpc_zanB_c::~daNpc_zanB_c() {
     OS_REPORT("|%06d:%x|daNpc_zanB_c -> デストラクト\n", g_Counter.mCounter0, this);
@@ -93,7 +93,7 @@ daNpc_zanB_c::~daNpc_zanB_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-daNpc_zanB_HIOParam const daNpc_zanB_Param_c::m = {
+DUSK_GAME_DATA daNpc_zanB_HIOParam const daNpc_zanB_Param_c::m = {
     270.0f,
     -3.0f,
     1.0f,

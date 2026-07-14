@@ -86,9 +86,9 @@ struct dItem_data {
 
     static u16 getFieldHeapSize(u8 index) { return field_item_res[index].mHeapSize; } 
 
-    static dItem_itemResource item_resource[255];
-    static dItem_fieldItemResource field_item_res[255];
-    static dItem_itemInfo item_info[255];
+    static DUSK_GAME_DATA dItem_itemResource item_resource[255];
+    static DUSK_GAME_DATA dItem_fieldItemResource field_item_res[255];
+    static DUSK_GAME_DATA dItem_itemInfo item_info[255];
 };
 
 enum {

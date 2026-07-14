@@ -196,15 +196,15 @@ namespace JASDsp {
     int setFXLine(u8, s16*, JASDsp::FxlineConfig_*);
     BOOL changeFXLineParam(u8, u8, uintptr_t);
 
-    extern u8 const DSPADPCM_FILTER[64];
-    extern u32 const DSPRES_FILTER[320];
-    extern u16 SEND_TABLE[];
-    extern TChannel* CH_BUF;
-    extern FxBuf* FX_BUF;
-    extern f32 sDSPVolume;
+    DUSK_GAME_EXTERN u8 const DSPADPCM_FILTER[64];
+    DUSK_GAME_EXTERN u32 const DSPRES_FILTER[320];
+    DUSK_GAME_EXTERN u16 SEND_TABLE[];
+    DUSK_GAME_EXTERN TChannel* CH_BUF;
+    DUSK_GAME_EXTERN FxBuf* FX_BUF;
+    DUSK_GAME_EXTERN f32 sDSPVolume;
 
     #if DEBUG
-    extern s32 dspMutex;
+    DUSK_GAME_EXTERN s32 dspMutex;
     #endif
 };
 

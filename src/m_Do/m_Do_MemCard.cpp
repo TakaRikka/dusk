@@ -881,7 +881,7 @@ s32 mDoMemCd_Ctrl_c::checkspaceNAND() {
 }
 #endif
 
-mDoMemCd_Ctrl_c g_mDoMemCd_control;
+DUSK_GAME_DATA mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
 static int mDoMemCd_main(void*) {
     JKRThread(OSGetCurrentThread(), 0);

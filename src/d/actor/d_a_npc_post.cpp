@@ -159,7 +159,7 @@ enum Type {
     /* 0x3 */ TYPE_DEFAULT,
 };
 
-daNpc_Post_HIOParam const daNpc_Post_Param_c::m = {
+DUSK_GAME_DATA daNpc_Post_HIOParam const daNpc_Post_Param_c::m = {
     190.0f,
     -3.0f,
     1.0f,
@@ -354,12 +354,12 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {2, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Post_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Post_c::mCutNameList[2] = {
     "",
     "DELIVER",
 };
 
-daNpc_Post_c::cutFunc DUSK_CONST daNpc_Post_c::mCutList[2] = {
+DUSK_GAME_DATA daNpc_Post_c::cutFunc DUSK_CONST daNpc_Post_c::mCutList[2] = {
     NULL,
     &daNpc_Post_c::cutDeliver,
 };

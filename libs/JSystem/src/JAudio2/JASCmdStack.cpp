@@ -8,9 +8,9 @@
 #include "JSystem/JAudio2/JASCriticalSection.h"
 #include <os.h>
 
-JASPortCmd::TPortHead JASPortCmd::sCommandListOnce;
+DUSK_GAME_DATA JASPortCmd::TPortHead JASPortCmd::sCommandListOnce;
 
-JASPortCmd::TPortHead JASPortCmd::sCommandListStay;
+DUSK_GAME_DATA JASPortCmd::TPortHead JASPortCmd::sCommandListStay;
 
 bool JASPortCmd::addPortCmdOnce() {
 	JASCriticalSection cs;

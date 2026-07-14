@@ -20,7 +20,7 @@ class daNpc_Pachi_Taro_Param_c {
 public:
     virtual ~daNpc_Pachi_Taro_Param_c() {}
 
-    static daNpc_Pachi_Taro_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Pachi_Taro_HIOParam const m;
 };
 
 #if DEBUG
@@ -196,8 +196,8 @@ public:
     void setTagPos(cXyz const& i_pos) { mTagPos = i_pos; }
     void setLookPos(cXyz const& i_pos) { mLookPos = i_pos; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[11];
-    static cutFunc DUSK_CONST mCutList[11];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[11];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[11];
 
 private:
     /* 0x0E40 */ NPC_PACHI_TARO_HIO_CLASS* mpHIO;

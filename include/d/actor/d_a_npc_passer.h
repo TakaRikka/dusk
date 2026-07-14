@@ -92,36 +92,36 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) >> 16) & 0xFF; }
     BOOL isStop() { return TRUE; }
 
-    static actionFunc ActionTable[5][2];
-    static seqFunc* m_funcTbl[28];
-    static seqFunc m_seq00_funcTbl[2];
-    static seqFunc m_seq01_funcTbl[2];
-    static seqFunc m_seq02_funcTbl[2];
-    static seqFunc m_seq03_funcTbl[2];
-    static seqFunc m_seq04_funcTbl[2];
-    static seqFunc m_seq05_funcTbl[4];
-    static seqFunc m_seq06_funcTbl[4];
-    static seqFunc m_seq07_funcTbl[2];
-    static seqFunc m_seq08_funcTbl[7];
-    static seqFunc m_seq09_funcTbl[2];
-    static seqFunc m_seq10_funcTbl[2];
-    static seqFunc m_seq11_funcTbl[6];
-    static seqFunc m_seq12_funcTbl[2];
-    static seqFunc m_seq13_funcTbl[6];
-    static seqFunc m_seq14_funcTbl[2];
-    static seqFunc m_seq15_funcTbl[2];
-    static seqFunc m_seq16_funcTbl[7];
-    static seqFunc m_seq17_funcTbl[2];
-    static seqFunc m_seq18_funcTbl[2];
-    static seqFunc m_seq19_funcTbl[7];
-    static seqFunc m_seq20_funcTbl[2];
-    static seqFunc m_seq21_funcTbl[2];
-    static seqFunc m_seq22_funcTbl[4];
-    static seqFunc m_seq23_funcTbl[7];
-    static seqFunc m_seq24_funcTbl[5];
-    static seqFunc m_seq25_funcTbl[7];
-    static seqFunc m_seq26_funcTbl[3];
-    static seqFunc m_seq27_funcTbl[1];
+    static DUSK_GAME_DATA actionFunc ActionTable[5][2];
+    static DUSK_GAME_DATA seqFunc* m_funcTbl[28];
+    static DUSK_GAME_DATA seqFunc m_seq00_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq01_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq02_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq03_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq04_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq05_funcTbl[4];
+    static DUSK_GAME_DATA seqFunc m_seq06_funcTbl[4];
+    static DUSK_GAME_DATA seqFunc m_seq07_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq08_funcTbl[7];
+    static DUSK_GAME_DATA seqFunc m_seq09_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq10_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq11_funcTbl[6];
+    static DUSK_GAME_DATA seqFunc m_seq12_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq13_funcTbl[6];
+    static DUSK_GAME_DATA seqFunc m_seq14_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq15_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq16_funcTbl[7];
+    static DUSK_GAME_DATA seqFunc m_seq17_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq18_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq19_funcTbl[7];
+    static DUSK_GAME_DATA seqFunc m_seq20_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq21_funcTbl[2];
+    static DUSK_GAME_DATA seqFunc m_seq22_funcTbl[4];
+    static DUSK_GAME_DATA seqFunc m_seq23_funcTbl[7];
+    static DUSK_GAME_DATA seqFunc m_seq24_funcTbl[5];
+    static DUSK_GAME_DATA seqFunc m_seq25_funcTbl[7];
+    static DUSK_GAME_DATA seqFunc m_seq26_funcTbl[3];
+    static DUSK_GAME_DATA seqFunc m_seq27_funcTbl[1];
 
 private:
     /* 0xAC8 */ J3DModel* mpModel;

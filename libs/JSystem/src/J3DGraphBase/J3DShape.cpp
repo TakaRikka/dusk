@@ -289,7 +289,7 @@ void J3DShape::makeVcdVatCmd() {
     OSRestoreInterrupts(sInterruptFlag);
 }
 
-void* J3DShape::sOldVcdVatCmd;
+DUSK_GAME_DATA void* J3DShape::sOldVcdVatCmd;
 
 void J3DShape::loadCurrentMtx() const {
     mCurrentMtx.load();
@@ -304,7 +304,7 @@ void J3DShape::loadPreDrawSetting() const {
     mCurrentMtx.load();
 }
 
-bool J3DShape::sEnvelopeFlag;
+DUSK_GAME_DATA bool J3DShape::sEnvelopeFlag;
 
 void J3DShape::setArrayAndBindPipeline() const {
     J3DShapeMtx::setCurrentPipeline((mFlags & 0x1C) >> 2);

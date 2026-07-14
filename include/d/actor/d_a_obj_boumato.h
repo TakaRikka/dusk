@@ -21,7 +21,7 @@ class daObj_BouMato_Param_c {
 public:
     virtual ~daObj_BouMato_Param_c() {}
 
-    static daObj_BouMato_HIOParam const m;
+    static DUSK_GAME_DATA daObj_BouMato_HIOParam const m;
 };
 
 #if DEBUG

@@ -11,7 +11,7 @@
 #include "dusk/string.hpp"
 #include "global.h"
 
-JUTConsoleManager* JUTConsoleManager::sManager;
+DUSK_GAME_DATA JUTConsoleManager* JUTConsoleManager::sManager;
 
 JUTConsole* JUTConsole::create(unsigned int param_0, unsigned int maxLines, JKRHeap* pHeap) {
     JUTConsoleManager* pManager = JUTConsoleManager::getManager();

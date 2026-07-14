@@ -185,8 +185,8 @@ public:
     void setMsg(u32 msg) { mMsg = msg; }
     bool checkEndFlow() { return (u32)field_0x26 == 1; }
 
-    static queryFunc mQueryList[53];
-    static eventFunc mEventList[43];
+    static DUSK_GAME_DATA queryFunc mQueryList[53];
+    static DUSK_GAME_DATA eventFunc mEventList[43];
 
 private:
     /* 0x04 */ u8* mFlow_p;

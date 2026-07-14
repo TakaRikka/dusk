@@ -106,14 +106,14 @@ int daTaFence_c::CreateHeap() {
     return 1;
 }
 
-const dCcD_SrcGObjInf daTaFence_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daTaFence_c::mCcDObjInfo = {
     {0, {{0x0, 0x0, 0x0}, {0x400032, 0x11}, {0x0}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
     {dCcD_SE_STONE, 0, 0, 0, 0},
     {0},
 };
 
-dCcD_SrcCyl daTaFence_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daTaFence_c::mCcDCyl = {
     daTaFence_c::mCcDObjInfo,
     {
         {

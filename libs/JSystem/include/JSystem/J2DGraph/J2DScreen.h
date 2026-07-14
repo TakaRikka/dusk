@@ -90,7 +90,7 @@ public:
 
     static J2DDataManage* getDataManage() { return mDataManage; }
 
-    static J2DDataManage* mDataManage;
+    static DUSK_GAME_DATA J2DDataManage* mDataManage;
 
     /* 0x100 */ bool mScissor;
     /* 0x102 */ u16 mMaterialNum;

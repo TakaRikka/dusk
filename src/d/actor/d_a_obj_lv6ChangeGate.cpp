@@ -28,14 +28,14 @@ daLv6ChangeGate_HIO_c::daLv6ChangeGate_HIO_c() {
 
 static daLv6ChangeGate_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daLv6ChangeGate_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daLv6ChangeGate_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x400, 0x11}, {0x79}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
     {dCcD_SE_STONE, 0, 0, 0, 0},
     {0},
 };
 
-dCcD_SrcCyl daLv6ChangeGate_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daLv6ChangeGate_c::mCcDCyl = {
     mCcDObjInfo,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}

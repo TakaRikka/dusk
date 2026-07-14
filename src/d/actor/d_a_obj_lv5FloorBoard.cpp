@@ -76,14 +76,14 @@ int daFlorBoad_c::Execute(Mtx** param_0) {
 
 static daFlorBoad_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daFlorBoad_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daFlorBoad_c::mCcDObjInfo = {
     {0, {{0, 1, 0}, {0x400020, 0x11}, {0}}},
     {dCcD_SE_SWORD, 0, 0, 2, 1},
     {dCcD_SE_STONE, 0, 0, 0, 6},
     {0},
 };
 
-dCcD_SrcCyl daFlorBoad_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daFlorBoad_c::mCcDCyl = {
     daFlorBoad_c::mCcDObjInfo,
     {
         {

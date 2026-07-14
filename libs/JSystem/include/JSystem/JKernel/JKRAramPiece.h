@@ -62,9 +62,9 @@ struct JKRAramCommand {
  */
 class JKRAramPiece {
 public:
-    static OSMutex mMutex;
+    static DUSK_GAME_DATA OSMutex mMutex;
     // TODO: fix type
-    static JSUList<JKRAMCommand> sAramPieceCommandList;
+    static DUSK_GAME_DATA JSUList<JKRAMCommand> sAramPieceCommandList;
 
 public:
     static JKRAMCommand* prepareCommand(int, uintptr_t, uintptr_t, u32, JKRAramBlock*,

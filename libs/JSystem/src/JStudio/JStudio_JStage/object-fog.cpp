@@ -13,7 +13,7 @@ JStudio_JStage::TAdaptor_fog::~TAdaptor_fog() {
     adaptor_do_end();
 }
 
-JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog> JStudio_JStage::TAdaptor_fog::saoVVOutput_[3] = {
+DUSK_GAME_DATA JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog> JStudio_JStage::TAdaptor_fog::saoVVOutput_[3] = {
     JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog>(JStudio_JStage::TAdaptor_fog::TEFOG_4, &JStage::TFog::JSGSetStartZ, &JStage::TFog::JSGGetStartZ),
     JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog>(JStudio_JStage::TAdaptor_fog::TEFOG_5, &JStage::TFog::JSGSetEndZ, &JStage::TFog::JSGGetEndZ),
     JStudio_JStage::TVariableValueOutput_object_<JStudio_JStage::TAdaptor_fog, JStage::TFog>(),

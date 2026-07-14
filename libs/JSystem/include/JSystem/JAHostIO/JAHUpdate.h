@@ -8,8 +8,8 @@
 
 namespace JAHUpdate {
 
-extern JAHioNode* spNode;
-extern JORMContext* spMc;
+DUSK_GAME_EXTERN JAHioNode* spNode;
+DUSK_GAME_EXTERN JORMContext* spMc;
 
 inline void startUpdateNode(JAHioNode* param_1) {
     spMc = attachJORMContext(8);

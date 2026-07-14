@@ -62,7 +62,7 @@ public:
     int getSw() { return fopAcM_GetParamBit(this, 0, 8); }
     int getArg1() { return fopAcM_GetParamBit(this, 0x14, 4); }
 
-    static f32 const mSpeed[];
+    static DUSK_GAME_DATA f32 const mSpeed[];
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;

@@ -50,7 +50,7 @@ void daTurara_c::setBaseMtx() {
 
 static daTurara_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daTurara_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daTurara_c::mCcDObjInfo = {
     {0, // mFlags
         {
             {0x20, 0x1, 0x1f},  // mObjAt
@@ -63,7 +63,7 @@ const dCcD_SrcGObjInf daTurara_c::mCcDObjInfo = {
     {0} // mGObjCo
 };
 
-dCcD_SrcCyl daTurara_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daTurara_c::mCcDCyl = {
     daTurara_c::mCcDObjInfo, // mObjInf
     {
         {

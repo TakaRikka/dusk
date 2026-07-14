@@ -33,7 +33,7 @@ struct JASWaveInfo {
     /* 0x1E */ s16 mpPenult;
     /* 0x20 */ const u32* field_0x20;
 
-    static u32 one;
+    static DUSK_GAME_DATA u32 one;
 };
 
 /**

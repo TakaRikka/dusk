@@ -57,15 +57,15 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0}, {-1, 0, 0}
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_ZelR_c::mCutNameList = "";
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_ZelR_c::mCutNameList = "";
 
-daNpc_ZelR_c::EventFn daNpc_ZelR_c::mCutList[1] = {
+DUSK_GAME_DATA daNpc_ZelR_c::EventFn daNpc_ZelR_c::mCutList[1] = {
     NULL
 };
 
 static NPC_ZELR_HIO_CLASS l_HIO;
 
-daNpc_ZelR_HIOParam const daNpc_ZelR_Param_c::m = {
+DUSK_GAME_DATA daNpc_ZelR_HIOParam const daNpc_ZelR_Param_c::m = {
     190.0f,
     -3.0f,
     1.0f,

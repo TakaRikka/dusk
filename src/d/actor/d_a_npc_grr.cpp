@@ -199,13 +199,13 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grR";
 
-char DUSK_CONST* DUSK_CONST daNpc_grR_c::mEvtCutNameList = "";
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_grR_c::mEvtCutNameList = "";
 
-daNpc_grR_c::cutFunc DUSK_CONST daNpc_grR_c::mEvtCutList[1] = {
+DUSK_GAME_DATA daNpc_grR_c::cutFunc DUSK_CONST daNpc_grR_c::mEvtCutList[1] = {
     NULL,
 };
 
-daNpc_grR_HIOParam const daNpc_grR_Param_c::m = {
+DUSK_GAME_DATA daNpc_grR_HIOParam const daNpc_grR_Param_c::m = {
     60.0f,
     -3.0f,
     1.0f,

@@ -23,7 +23,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "pouyaA",
 };
 
-daObj_Mie_HIOParam const daObj_Mie_Param_c::m = {
+DUSK_GAME_DATA daObj_Mie_HIOParam const daObj_Mie_Param_c::m = {
     0.0f, -4.0f, 1.0f, 100.0f, 255.0f, 20.0f, 10.0f, 14.0f, 37.0f, 50.0f, 18.0f,
 };
 

@@ -19,11 +19,11 @@
 #include <revolution/sc.h>
 #endif
 
-u8 mDoAud_zelAudio_c::mInitFlag;
+DUSK_GAME_DATA u8 mDoAud_zelAudio_c::mInitFlag;
 
-u8 mDoAud_zelAudio_c::mResetFlag;
+DUSK_GAME_DATA u8 mDoAud_zelAudio_c::mResetFlag;
 
-u8 mDoAud_zelAudio_c::mBgmSet;
+DUSK_GAME_DATA u8 mDoAud_zelAudio_c::mBgmSet;
 
 void mDoAud_zelAudio_c::reset() {
     mBgmSet = false;
@@ -31,7 +31,7 @@ void mDoAud_zelAudio_c::reset() {
 
 static mDoAud_zelAudio_c g_mDoAud_zelAudio;
 
-JKRSolidHeap* g_mDoAud_audioHeap;
+DUSK_GAME_DATA JKRSolidHeap* g_mDoAud_audioHeap;
 
 static mDoDvdThd_toMainRam_c* l_affCommand;
 

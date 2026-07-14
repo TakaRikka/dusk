@@ -284,7 +284,7 @@ int daAmiShutter_Create(fopAc_ac_c* i_this) {
     return static_cast<daAmiShutter_c*>(i_this)->create();
 }
 
-actor_method_class l_daAmiShutter_Method = {
+DUSK_GAME_DATA actor_method_class l_daAmiShutter_Method = {
     (process_method_func)daAmiShutter_Create,
     (process_method_func)daAmiShutter_Delete,
     (process_method_func)daAmiShutter_Execute,

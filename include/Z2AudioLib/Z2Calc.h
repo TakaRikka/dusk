@@ -42,8 +42,8 @@ f32 getParamByExp(f32 value, f32 inMin, f32 inMax, f32 exponent, f32 outMin, f32
 f32 getRandom(f32 magnitude, f32 exponent, f32 bias);
 f32 getRandom_0_1();
 
-extern const f32 cEqualCSlope;
-extern const f32 cEqualPSlope;
+DUSK_GAME_EXTERN const f32 cEqualCSlope;
+DUSK_GAME_EXTERN const f32 cEqualPSlope;
 }  // namespace Z2Calc
 
 #endif /* Z2CALC_H */

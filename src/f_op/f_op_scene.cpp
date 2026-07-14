@@ -62,7 +62,7 @@ static int fopScn_Create(void* i_this) {
     return ret;
 }
 
-leafdraw_method_class g_fopScn_Method = {
+DUSK_GAME_DATA leafdraw_method_class g_fopScn_Method = {
     (process_method_func)fopScn_Create,  
     (process_method_func)fopScn_Delete,
     (process_method_func)fopScn_Execute, 

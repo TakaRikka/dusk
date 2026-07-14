@@ -201,7 +201,7 @@ public:
 
     static s16 J2DCast_F32_to_S16(f32 value, u8 arg2);
 
-    static JGeometry::TBox2<f32> static_mBounds;
+    static DUSK_GAME_DATA JGeometry::TBox2<f32> static_mBounds;
 
 public:
     /* 0x04 */ u16 field_0x4;

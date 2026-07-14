@@ -170,7 +170,7 @@ public:
     static int daMP_c_Callback_Main(daMP_c*);
     static int daMP_c_Callback_Draw(daMP_c*);
 
-    static daMP_c* m_myObj;
+    static DUSK_GAME_DATA daMP_c* m_myObj;
 
 private:
     /* 0x568 */ u32 (*mpGetMovieRestFrame)(void);

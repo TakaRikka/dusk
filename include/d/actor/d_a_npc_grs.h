@@ -11,7 +11,7 @@ class daNpc_grS_Param_c {
 public:
     virtual ~daNpc_grS_Param_c() {}
 
-    static const daNpc_grS_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_grS_HIOParam m;
 };
 
 #if DEBUG
@@ -84,8 +84,8 @@ public:
     void setPrtcl();
     void adjustShapeAngle() {}
 
-    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[2];
-    static cutFunc DUSK_CONST mEvtCutList[2];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mEvtCutList[2];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

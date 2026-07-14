@@ -67,8 +67,8 @@ public:
     static void offEventKeepFlg() { m_eventKeepFlg = 0; }
     static void onEventKeepFlg() { m_eventKeepFlg = 1; }
 
-    static s16 m_dropAngleY;
-    static s16 m_eventKeepFlg;
+    static DUSK_GAME_DATA s16 m_dropAngleY;
+    static DUSK_GAME_DATA s16 m_eventKeepFlg;
 
 private:
     /* 0x0 */ u8 field_0x0;
@@ -1213,7 +1213,7 @@ public:
         onEndResetFlg0(ERFLG0_FISHING_RELEASE);
     }
 
-    static daMidna_c* m_midnaActor;
+    static DUSK_GAME_DATA daMidna_c* m_midnaActor;
 
     void setGiantPuzzle() { mMode = SMODE_WOLF_PUZZLE; }
     void setGiantPuzzleEnd() { mMode = 0; }

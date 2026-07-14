@@ -97,7 +97,7 @@ dMdl_c* dMdl_mng_c::entry(J3DModelData* i_modelData, u16 i_materialId, dKy_tevst
     return model;
 }
 
-dMdl_mng_c* dMdl_mng_c::m_myObj;
+DUSK_GAME_DATA dMdl_mng_c* dMdl_mng_c::m_myObj;
 
 void dMdl_mng_c::create() {
     m_myObj = JKR_NEW dMdl_mng_c();

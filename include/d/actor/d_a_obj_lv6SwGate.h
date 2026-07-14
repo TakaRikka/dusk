@@ -36,8 +36,8 @@ public:
     int getSwState() { return fopAcM_GetParamBit(this, 12, 4); }
     int getSw2() { return fopAcM_GetParamBit(this, 16, 8); }
 
-    static const dCcD_SrcGObjInf mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 private:
     /* 0x5A0  */ dCcD_Stts mCcStts;
     /* 0x5DC  */ dCcD_Cyl mCcDCyls[12];

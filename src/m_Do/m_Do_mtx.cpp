@@ -12,19 +12,19 @@
 #include "global.h"
 #include "os_report.h"
 
-Mtx mDoMtx_stack_c::now;
+DUSK_GAME_DATA Mtx mDoMtx_stack_c::now;
 
-Mtx mDoMtx_stack_c::buffer[16];
+DUSK_GAME_DATA Mtx mDoMtx_stack_c::buffer[16];
 
-Mtx* mDoMtx_stack_c::next = mDoMtx_stack_c::buffer;
+DUSK_GAME_DATA Mtx* mDoMtx_stack_c::next = mDoMtx_stack_c::buffer;
 
-Mtx* mDoMtx_stack_c::end = mDoMtx_stack_c::buffer + 16;
+DUSK_GAME_DATA Mtx* mDoMtx_stack_c::end = mDoMtx_stack_c::buffer + 16;
 
 static mDoMtx_stack_c mDoMtx_stack;
 
 static mDoMtx_quatStack_c mDoMtx_quatStack;
 
-Mtx g_mDoMtx_identity = {
+DUSK_GAME_DATA Mtx g_mDoMtx_identity = {
     {1.0f, 0.0f, 0.0f, 0.0f},
     {0.0f, 1.0f, 0.0f, 0.0f},
     {0.0f, 0.0f, 1.0f, 0.0f},

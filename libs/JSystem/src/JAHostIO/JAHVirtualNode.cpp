@@ -4,7 +4,7 @@
 
 #include "dusk/string.hpp"
 
-u32 JAHVirtualNode::smVirNodeNum;
+DUSK_GAME_DATA u32 JAHVirtualNode::smVirNodeNum;
 
 void JAHVirtualNode::virtualMessage(JAHControl& control) {
     message(control);

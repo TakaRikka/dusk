@@ -34,14 +34,14 @@ void daLv3Candle_HIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daLv3Candle_c::mCcDObjInfo = {
     {0, {{0x200, 0, 0x13}, {0xd8fbfdff, 0x1f}, {0x79}}},
     {1, 0, 0, 0, 0},
     {0xa, 0, 0, 0, 6},
     {0},
 };
 
-dCcD_SrcSph daLv3Candle_c::mCcDSph = {daLv3Candle_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 0.0f}}};
+DUSK_GAME_DATA dCcD_SrcSph daLv3Candle_c::mCcDSph = {daLv3Candle_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 0.0f}}};
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[] = {"L3candl", "L3candl2"};
 

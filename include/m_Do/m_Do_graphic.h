@@ -123,8 +123,8 @@ public:
     static void waitBlanking(int wait) { JFWDisplay::getManager()->waitBlanking(wait); }
 
 #if TARGET_PC
-    static f32 hudAspectScaleDown;
-    static f32 hudAspectScaleUp;
+    static DUSK_GAME_DATA f32 hudAspectScaleDown;
+    static DUSK_GAME_DATA f32 hudAspectScaleUp;
     static void updateSafeAreaBounds();
     static f32 getSafeMinXF() { return m_safeMinXF; }
     static f32 getSafeMinYF() { return m_safeMinYF; }
@@ -302,23 +302,23 @@ public:
     static void updateRenderSize();
     #endif
 
-    static TGXTexObj mFrameBufferTexObj;
-    static TGXTexObj mZbufferTexObj;
-    static bloom_c m_bloom;
-    static Mtx mBlureMtx;
-    static GXColor mBackColor;
-    static GXColor mFadeColor;
-    static JUTFader* mFader;
-    static ResTIMG* mFrameBufferTimg;
-    static void* mFrameBufferTex;
-    static ResTIMG* mZbufferTimg;
-    static void* mZbufferTex;
-    static f32 mFadeRate;
-    static f32 mFadeSpeed;
-    static u8 mBlureFlag;
-    static u8 mBlureRate;
-    static u8 mFade;
-    static bool mAutoForcus;
+    static DUSK_GAME_DATA TGXTexObj mFrameBufferTexObj;
+    static DUSK_GAME_DATA TGXTexObj mZbufferTexObj;
+    static DUSK_GAME_DATA bloom_c m_bloom;
+    static DUSK_GAME_DATA Mtx mBlureMtx;
+    static DUSK_GAME_DATA GXColor mBackColor;
+    static DUSK_GAME_DATA GXColor mFadeColor;
+    static DUSK_GAME_DATA JUTFader* mFader;
+    static DUSK_GAME_DATA ResTIMG* mFrameBufferTimg;
+    static DUSK_GAME_DATA void* mFrameBufferTex;
+    static DUSK_GAME_DATA ResTIMG* mZbufferTimg;
+    static DUSK_GAME_DATA void* mZbufferTex;
+    static DUSK_GAME_DATA f32 mFadeRate;
+    static DUSK_GAME_DATA f32 mFadeSpeed;
+    static DUSK_GAME_DATA u8 mBlureFlag;
+    static DUSK_GAME_DATA u8 mBlureRate;
+    static DUSK_GAME_DATA u8 mFade;
+    static DUSK_GAME_DATA bool mAutoForcus;
 
     #if PLATFORM_SHIELD
     static JKRHeap* getHeap() {
@@ -333,9 +333,9 @@ public:
     #endif
 
 #if PLATFORM_WII || PLATFORM_SHIELD || TARGET_PC
-    static ResTIMG* m_fullFrameBufferTimg;
-    static void* m_fullFrameBufferTex;
-    static TGXTexObj m_fullFrameBufferTexObj;
+    static DUSK_GAME_DATA ResTIMG* m_fullFrameBufferTimg;
+    static DUSK_GAME_DATA void* m_fullFrameBufferTex;
+    static DUSK_GAME_DATA TGXTexObj m_fullFrameBufferTexObj;
 #endif
 
     #if PLATFORM_WII || PLATFORM_SHIELD
@@ -350,35 +350,35 @@ public:
     #endif
 
     #if WIDESCREEN_SUPPORT
-    static u8 mWide;
-    static u8 mWideZoom;
+    static DUSK_GAME_DATA u8 mWide;
+    static DUSK_GAME_DATA u8 mWideZoom;
 
-    static f32 m_aspect;
-    static f32 m_scale;
-    static f32 m_invScale;
+    static DUSK_GAME_DATA f32 m_aspect;
+    static DUSK_GAME_DATA f32 m_scale;
+    static DUSK_GAME_DATA f32 m_invScale;
 
-    static f32 m_minXF;
-    static f32 m_minYF;
-    static int m_minX;
-    static int m_minY;
+    static DUSK_GAME_DATA f32 m_minXF;
+    static DUSK_GAME_DATA f32 m_minYF;
+    static DUSK_GAME_DATA int m_minX;
+    static DUSK_GAME_DATA int m_minY;
 
-    static f32 m_maxXF;
-    static f32 m_maxYF;
-    static int m_maxX;
-    static int m_maxY;
+    static DUSK_GAME_DATA f32 m_maxXF;
+    static DUSK_GAME_DATA f32 m_maxYF;
+    static DUSK_GAME_DATA int m_maxX;
+    static DUSK_GAME_DATA int m_maxY;
 
-    static int m_width;
-    static int m_height;
-    static f32 m_heightF;
-    static f32 m_widthF;
+    static DUSK_GAME_DATA int m_width;
+    static DUSK_GAME_DATA int m_height;
+    static DUSK_GAME_DATA f32 m_heightF;
+    static DUSK_GAME_DATA f32 m_widthF;
 
     #if TARGET_PC
-    static f32 m_safeMinXF;
-    static f32 m_safeMinYF;
-    static f32 m_safeMaxXF;
-    static f32 m_safeMaxYF;
-    static f32 m_safeWidthF;
-    static f32 m_safeHeightF;
+    static DUSK_GAME_DATA f32 m_safeMinXF;
+    static DUSK_GAME_DATA f32 m_safeMinYF;
+    static DUSK_GAME_DATA f32 m_safeMaxXF;
+    static DUSK_GAME_DATA f32 m_safeMaxYF;
+    static DUSK_GAME_DATA f32 m_safeWidthF;
+    static DUSK_GAME_DATA f32 m_safeHeightF;
     #endif
     #endif
 };

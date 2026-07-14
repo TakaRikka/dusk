@@ -34,7 +34,7 @@ public:
     bool isResetting() { return mResettingFlag; }
 
     static Z2AudioMgr* getInterface() { return mAudioMgrPtr; }
-    static Z2AudioMgr* mAudioMgrPtr;
+    static DUSK_GAME_DATA Z2AudioMgr* mAudioMgrPtr;
 
     /* 0x0514 */ virtual bool startSound(JAISoundID soundID, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
     /* 0x0518 */ bool mResettingFlag;

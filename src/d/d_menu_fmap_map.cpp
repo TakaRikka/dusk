@@ -505,7 +505,7 @@ void dMenu_FmapMap_c::_delete() {
     }
 }
 
-const dMfm_HIO_prm_res_src_s dMfm_HIO_prm_res_src_s::m_other = {30};
+DUSK_GAME_DATA const dMfm_HIO_prm_res_src_s dMfm_HIO_prm_res_src_s::m_other = {30};
 
 void dMenu_FmapMap_c::draw() {
     { int unused; }

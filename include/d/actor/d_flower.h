@@ -74,7 +74,7 @@ public:
         return m_deleteRoom;
     }
 
-    static deleteFunc m_deleteRoom;
+    static DUSK_GAME_DATA deleteFunc m_deleteRoom;
 
     dFlower_anm_c* getAnm(int i_idx) { return &m_anm[i_idx]; }
     dFlower_anm_c* getAnm() { return &m_anm[0]; }

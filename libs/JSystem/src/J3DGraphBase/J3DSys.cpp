@@ -8,15 +8,15 @@
 #include "global.h"
 #include "tracy/Tracy.hpp"
 
-J3DSys j3dSys;
+DUSK_GAME_DATA J3DSys j3dSys;
 
-Mtx J3DSys::mCurrentMtx;
+DUSK_GAME_DATA Mtx J3DSys::mCurrentMtx;
 
-Vec J3DSys::mCurrentS;
+DUSK_GAME_DATA Vec J3DSys::mCurrentS;
 
-Vec J3DSys::mParentS;
+DUSK_GAME_DATA Vec J3DSys::mParentS;
 
-J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
+DUSK_GAME_DATA J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
 
 #if TARGET_PC // Original game bug, array is too small.
 static u8 NullTexData[0x20] ATTRIBUTE_ALIGN(32) = {0};
@@ -35,7 +35,7 @@ static Mtx23 IndMtx = {
     0.0f, 0.5f, 0.0f,
 };
 
-u32 j3dDefaultViewNo;
+DUSK_GAME_DATA u32 j3dDefaultViewNo;
 
 static GXColor ColorBlack = {0x00, 0x00, 0x00, 0x00};
 

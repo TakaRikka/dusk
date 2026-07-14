@@ -89,10 +89,10 @@ public:
 
     void setAction(u8 i_action) { mAction = i_action; }
 
-    static createHeapFunc mCreateHeapFunc[];
-    static createInitFunc mCreateInitFunc[];
-    static executeFunc mExecuteFunc[];
-    static tgSetFunc mTgSetFunc[];
+    static DUSK_GAME_DATA createHeapFunc mCreateHeapFunc[];
+    static DUSK_GAME_DATA createInitFunc mCreateInitFunc[];
+    static DUSK_GAME_DATA executeFunc mExecuteFunc[];
+    static DUSK_GAME_DATA tgSetFunc mTgSetFunc[];
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* field_0x5a8[2][2];

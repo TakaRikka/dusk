@@ -15,9 +15,9 @@ JASTrack::JASTrack() : mDefaultChannelMgr(this), mChannelMgrCount(1), mStatus(0)
     init();
 }
 
-JASDefaultBankTable JASTrack::sDefaultBankTable;
+DUSK_GAME_DATA JASDefaultBankTable JASTrack::sDefaultBankTable;
 
-JASTrack::TList JASTrack::sTrackList;
+DUSK_GAME_DATA JASTrack::TList JASTrack::sTrackList;
 
 // NONMATCHING JASPoolAllocObject_MultiThreaded<_> locations
 JASTrack::~JASTrack() {
@@ -50,16 +50,16 @@ void JASTrack::setChannelMgrCount(u32 count) {
     }
 }
 
-JASOscillator::Point const JASTrack::sAdsTable[4] = {
+DUSK_GAME_DATA JASOscillator::Point const JASTrack::sAdsTable[4] = {
     {0, 0, 0x7fff},
     {0, 0, 0x7fff},
     {0, 0, 0},
     {0xe, 0, 0},
 };
 
-JASOscillator::Data const JASTrack::sEnvOsc = {0, 1.0f, NULL, NULL, 1.0f, 0.0f};
+DUSK_GAME_DATA JASOscillator::Data const JASTrack::sEnvOsc = {0, 1.0f, NULL, NULL, 1.0f, 0.0f};
 
-JASOscillator::Data const JASTrack::sPitchEnvOsc = {1, 1.0f, NULL, NULL, 1.0f, 0.0f};
+DUSK_GAME_DATA JASOscillator::Data const JASTrack::sPitchEnvOsc = {1, 1.0f, NULL, NULL, 1.0f, 0.0f};
 
 // NONMATCHING JASPoolAllocObject_MultiThreaded<_> locations
 void JASTrack::init() {
@@ -552,7 +552,7 @@ void JASTrack::setOscAdsr(s16 param_0, s16 param_1, s16 param_2, s16 param_3, u1
     mDirectRelease = i_directRelease;
 }
 
-const u32 JASDsp::FILTER_MODE_IIR = 0x00000020;
+DUSK_GAME_DATA const u32 JASDsp::FILTER_MODE_IIR = 0x00000020;
 
 void JASTrack::setFIR(s16 const* i_FIR) {
     for (int i = 0; i < 8; i++) {

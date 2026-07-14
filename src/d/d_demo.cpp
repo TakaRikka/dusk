@@ -67,7 +67,7 @@ static void unpause_streams(bool require_prelaunch_hidden) {
 }  // namespace
 #endif
 
-s16 dDemo_c::m_branchId = -1;
+DUSK_GAME_DATA s16 dDemo_c::m_branchId = -1;
 
 namespace {
 class jstudio_tAdaptor_message : public JStudio::TAdaptor_message {
@@ -232,41 +232,41 @@ f32 dDemo_actor_c::getPrm_Morf() {
     }
 }
 
-dDemo_system_c* dDemo_c::m_system;
+DUSK_GAME_DATA dDemo_system_c* dDemo_c::m_system;
 
-JStudio::TControl* dDemo_c::m_control;
+DUSK_GAME_DATA JStudio::TControl* dDemo_c::m_control;
 
-JStudio_JStage::TCreateObject* dDemo_c::m_stage;
+DUSK_GAME_DATA JStudio_JStage::TCreateObject* dDemo_c::m_stage;
 
-JStudio_JAudio2::TCreateObject* dDemo_c::m_audio;
+DUSK_GAME_DATA JStudio_JAudio2::TCreateObject* dDemo_c::m_audio;
 
-dDemo_particle_c* dDemo_c::m_particle;
+DUSK_GAME_DATA dDemo_particle_c* dDemo_c::m_particle;
 
-JStudio::TCreateObject* dDemo_c::m_message;
+DUSK_GAME_DATA JStudio::TCreateObject* dDemo_c::m_message;
 
-JStudio::TFactory* dDemo_c::m_factory;
+DUSK_GAME_DATA JStudio::TFactory* dDemo_c::m_factory;
 
-jmessage_tControl* dDemo_c::m_mesgControl;
+DUSK_GAME_DATA jmessage_tControl* dDemo_c::m_mesgControl;
 
-dDemo_object_c* dDemo_c::m_object;
+DUSK_GAME_DATA dDemo_object_c* dDemo_c::m_object;
 
-const u8* dDemo_c::m_data;
+DUSK_GAME_DATA const u8* dDemo_c::m_data;
 
-int dDemo_c::m_frame;
+DUSK_GAME_DATA int dDemo_c::m_frame;
 
-cXyz* dDemo_c::m_translation;
+DUSK_GAME_DATA cXyz* dDemo_c::m_translation;
 
-f32 dDemo_c::m_rotationY;
+DUSK_GAME_DATA f32 dDemo_c::m_rotationY;
 
-u32 dDemo_c::m_frameNoMsg;
+DUSK_GAME_DATA u32 dDemo_c::m_frameNoMsg;
 
-s32 dDemo_c::m_mode;
+DUSK_GAME_DATA s32 dDemo_c::m_mode;
 
-u32 dDemo_c::m_status;
+DUSK_GAME_DATA u32 dDemo_c::m_status;
 
-u16 dDemo_c::m_branchType;
+DUSK_GAME_DATA u16 dDemo_c::m_branchType;
 
-const u8* dDemo_c::m_branchData;
+DUSK_GAME_DATA const u8* dDemo_c::m_branchData;
 
 #if DEBUG
 u16 dDemo_c::m_branchNum = 0;

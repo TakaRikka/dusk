@@ -872,7 +872,7 @@ void dCcS::MassClear() {
 }
 
 // clang-format off
-bool dCcS::m_mtrl_hit_tbl[64] = {
+DUSK_GAME_DATA bool dCcS::m_mtrl_hit_tbl[64] = {
     true,  true,  true,  true,  true,  true,  true,  true, 
     false, true,  false, false, false, false, false, false,
     false, false, true,  false, false, false, false, false,

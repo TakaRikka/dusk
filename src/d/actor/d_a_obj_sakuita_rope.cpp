@@ -61,7 +61,7 @@ int Sakuita_c::setModelData(J3DModelData* i_modelData) {
     return 1;
 }
 
-daObjItaRope_Attr_c const daObjItaRope_c::M_attr = {
+DUSK_GAME_DATA daObjItaRope_Attr_c const daObjItaRope_c::M_attr = {
     -5.0f, 0.2f, 0.5f, 0.8f, 0,
 };
 

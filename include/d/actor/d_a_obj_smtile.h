@@ -12,7 +12,7 @@ class daObj_SMTile_Param_c {
 public:
     virtual ~daObj_SMTile_Param_c() {}
 
-    static daObj_SMTile_HIOParam const m;
+    static DUSK_GAME_DATA daObj_SMTile_HIOParam const m;
 };
 
 #if DEBUG

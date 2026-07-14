@@ -16,7 +16,7 @@
 #endif
 
 struct dMdm_HIO_prm_res_dst_s {
-    static void* m_res;
+    static DUSK_GAME_DATA void* m_res;
 };
 
 bool renderingDmap_c::hasMap() const {
@@ -288,7 +288,7 @@ void renderingDmap_c::afterDrawPath() {
     renderingPlusDoor_c::afterDrawPath();
 }
 
-void* dMdm_HIO_prm_res_dst_s::m_res;
+DUSK_GAME_DATA void* dMdm_HIO_prm_res_dst_s::m_res;
 
 void dMenu_DmapMap_c::_create(u16 param_0, u16 param_1, u16 param_2, u16 param_3,
                               void* res) {
@@ -939,13 +939,13 @@ void dMenu_StageMapCtrl_c::_create(u16 param_0, u16 param_1, u16 param_2, u16 pa
     _create(param_0, param_1, param_2, param_3, var_r31, param_4);
 }
 
-f32 dMenu_StageMapCtrl_c::m_zoomCenterMinX;
+DUSK_GAME_DATA f32 dMenu_StageMapCtrl_c::m_zoomCenterMinX;
 
-f32 dMenu_StageMapCtrl_c::m_zoomCenterMaxX;
+DUSK_GAME_DATA f32 dMenu_StageMapCtrl_c::m_zoomCenterMaxX;
 
-f32 dMenu_StageMapCtrl_c::m_zoomCenterMinZ;
+DUSK_GAME_DATA f32 dMenu_StageMapCtrl_c::m_zoomCenterMinZ;
 
-f32 dMenu_StageMapCtrl_c::m_zoomCenterMaxZ;
+DUSK_GAME_DATA f32 dMenu_StageMapCtrl_c::m_zoomCenterMaxZ;
 
 void dMenu_StageMapCtrl_c::_create(u16 width, u16 height, u16 param_2, u16 param_3,
                                    s8 param_4, void* param_5) {

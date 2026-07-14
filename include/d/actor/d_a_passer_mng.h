@@ -257,7 +257,7 @@ public:
         int field_0x04[0];
     };
 
-    static const Group* mGroupTbl[4];
+    static DUSK_GAME_DATA const Group* mGroupTbl[4];
 
 private:
     /* 0x568 */ fpc_ProcID* childProcIds;

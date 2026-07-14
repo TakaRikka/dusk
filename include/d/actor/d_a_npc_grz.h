@@ -28,7 +28,7 @@ class daNpc_Grz_Param_c {
 public:
     virtual ~daNpc_Grz_Param_c() {}
 
-    static daNpc_Grz_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Grz_HIOParam const m;
 };
 
 #if DEBUG
@@ -116,8 +116,8 @@ public:
 
     u8 getPathNoFromParam() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 
-    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[7];
-    static cutFunc DUSK_CONST mEvtCutList[7];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[7];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mEvtCutList[7];
 
 private:
     /* 0x0B48 */ Z2Creature mSound;

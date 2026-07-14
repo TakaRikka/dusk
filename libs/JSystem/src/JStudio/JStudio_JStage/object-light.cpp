@@ -12,7 +12,7 @@ JStudio_JStage::TAdaptor_light::~TAdaptor_light() {
     adaptor_do_end();
 }
 
-JStudio_JStage::TAdaptor_light::TVVOutput_direction_
+DUSK_GAME_DATA JStudio_JStage::TAdaptor_light::TVVOutput_direction_
     JStudio_JStage::TAdaptor_light::saoVVOutput_direction_[6] = {
         JStudio_JStage::TAdaptor_light::TVVOutput_direction_(
             JStudio_JStage::TAdaptor_light::TE_VALUE_10,

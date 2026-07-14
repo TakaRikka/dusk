@@ -51,15 +51,15 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0}, {-1, 0, 0}
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Zant_c::mCutNameList = "";
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Zant_c::mCutNameList = "";
 
-daNpc_Zant_c::cutFunc DUSK_CONST daNpc_Zant_c::mCutList[1] = {
+DUSK_GAME_DATA daNpc_Zant_c::cutFunc DUSK_CONST daNpc_Zant_c::mCutList[1] = {
     NULL
 };
 
 static NPC_ZANT_HIO_CLASS l_HIO;
 
-daNpc_Zant_HIOParam const daNpc_Zant_Param_c::m  = {
+DUSK_GAME_DATA daNpc_Zant_HIOParam const daNpc_Zant_Param_c::m  = {
     270.0f, -3.0f, 1.0f, 500.0f, 255.0f, 250.0f, 35.0f, 50.0f,
     0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,
     0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 0.0f, 0.0f, 0.0f, 60, 8,

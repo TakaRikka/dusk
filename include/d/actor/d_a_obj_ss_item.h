@@ -46,8 +46,8 @@ public:
     int buy(void* param_0);
     int cancel(void* param_0);
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl DUSK_CONST mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl DUSK_CONST mCcDCyl;
 
 private:
     /* 0x578 */ request_of_phase_process_class mPhase;

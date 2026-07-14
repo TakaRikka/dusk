@@ -122,19 +122,19 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_grM_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_grM_c::mCutNameList[2] = {
     "",
     "TALK_SPA",
 };
 
-daNpc_grM_c::cutFunc DUSK_CONST daNpc_grM_c::mCutList[2] = {
+DUSK_GAME_DATA daNpc_grM_c::cutFunc DUSK_CONST daNpc_grM_c::mCutList[2] = {
     NULL,
     &daNpc_grM_c::cutTalkSpa,
 };
 
 static NPC_GRM_HIO_CLASS l_HIO;
 
-daNpc_grM_HIOParam const daNpc_grM_Param_c::m = {
+DUSK_GAME_DATA daNpc_grM_HIOParam const daNpc_grM_Param_c::m = {
     300.0f, -3.0f,  1.0f,   600.0f, 255.0f, 260.0f, 35.0f, 70.0f, 0.0f, 0.0f,  30.0f,
     -30.0f, 30.0f,  -10.0f, 20.0f,  -20.0f, 0.6f,   12.0f, 8,     6,    8,     6,
     0.0f,   0.0f,   0.0f,   0.0f,   60,     8,      0,     0,     0,    false, false,

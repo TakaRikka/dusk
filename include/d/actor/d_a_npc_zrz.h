@@ -20,7 +20,7 @@ class daNpc_zrZ_Param_c {
 public:
     virtual ~daNpc_zrZ_Param_c() {}
 
-    static daNpc_zrZ_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_zrZ_HIOParam const m;
 };
 
 STATIC_ASSERT(sizeof(daNpc_zrZ_HIOParam) == 0x84);
@@ -160,8 +160,8 @@ private:
     /* 0x14C0 */ BOOL mMusicSet;
     /* 0x14C4 */ bool mSealReleased;
 
-    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[8];
-    static EventFn DUSK_CONST mEvtCutList[8];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[8];
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtCutList[8];
 
     enum Animation {
         /* 0x0 */ ANM_NONE,

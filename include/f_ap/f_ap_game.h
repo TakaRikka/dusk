@@ -75,7 +75,7 @@ public:
 
     static u8 mCaptureMagnification;
 
-    static u8 mCaptureScreenDivH;
+    static DUSK_GAME_DATA u8 mCaptureScreenDivH;
     static u8 mCaptureScreenDivV;
 
     static u8 mPackArchiveMode;
@@ -115,7 +115,7 @@ public:
     /* 0x3E */ u8 mBackgroundAlpha;
 };  // Size: 0x40
 
-extern fapGm_HIO_c g_HIO;
+DUSK_GAME_EXTERN fapGm_HIO_c g_HIO;
 
 inline void fapGmHIO_offMenu() {
     g_HIO.mDisplayPrint &= (u8)~2;

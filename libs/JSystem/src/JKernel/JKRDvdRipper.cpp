@@ -44,7 +44,7 @@ void* JKRDvdRipper::loadToMainRAM(s32 entryNumber, u8* dst, JKRExpandSwitch expa
                          pCompression, param_8);
 }
 
-bool JKRDvdRipper::errorRetry = true;
+DUSK_GAME_DATA bool JKRDvdRipper::errorRetry = true;
 
 void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch expandSwitch,
                                   u32 dstLength, JKRHeap* heap,
@@ -236,13 +236,13 @@ void* JKRDvdRipper::loadToMainRAM(JKRDvdFile* dvdFile, u8* dst, JKRExpandSwitch 
 
 static u8 lit_491[12];
 
-JSUList<JKRDMCommand> JKRDvdRipper::sDvdAsyncList;
+DUSK_GAME_DATA JSUList<JKRDMCommand> JKRDvdRipper::sDvdAsyncList;
 
 static OSMutex decompMutex;
 
-u32 JKRDvdRipper::sSZSBufferSize = 0x00000400;
+DUSK_GAME_DATA u32 JKRDvdRipper::sSZSBufferSize = 0x00000400;
 
-JKRHeap* JKRDvdRipper::sHeap = NULL;
+DUSK_GAME_DATA JKRHeap* JKRDvdRipper::sHeap = NULL;
 
 static u8* szpBuf;
 

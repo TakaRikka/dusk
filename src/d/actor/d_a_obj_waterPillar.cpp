@@ -130,13 +130,13 @@ int daWtPillar_c::createHeapCallBack(fopAc_ac_c* i_this) {
     return actor->CreateHeap();
 }
 
-const dCcD_SrcGObjInf daWtPillar_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daWtPillar_c::mCcDObjInfo = {
     {0x0, {{AT_TYPE_100, 0x0, 0x1D}, {AT_TYPE_0, 0x0}, 0x0}},    // mObj
     {dCcD_SE_SWORD, 0x0, 0x0, dCcD_MTRL_NONE, 0x0},      // mGObjAt
     {dCcD_SE_STONE, 0x0, 0x0, dCcD_MTRL_NONE, 0x0},      // mGObjTg
     {},  // mGObjCo
 };
-const dCcD_SrcGObjInf daWtPillar_c::mCcDObjCoInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daWtPillar_c::mCcDObjCoInfo = {
     {0x0, {{AT_TYPE_0, 0x0, 0x0}, {0x00, 0x0}, 0x79}},    // mObj
     {dCcD_SE_SWORD, 0x0, 0x0, dCcD_MTRL_NONE, 0x0},      // mGObjAt
     {dCcD_SE_STONE, 0x0, 0x0, dCcD_MTRL_NONE, 0x0},      // mGObjTg
@@ -145,17 +145,17 @@ const dCcD_SrcGObjInf daWtPillar_c::mCcDObjCoInfo = {
 
 static daWtPillar_HIO_c l_HIO;
 
-cull_box l_cull_box = {
+DUSK_GAME_DATA cull_box l_cull_box = {
     {-30.0f, -10.0f, -30.0f},
     {30.0f, 60.0f, 30.0f}
 };
 
-dCcD_SrcCps daWtPillar_c::mCcDCps = {
+DUSK_GAME_DATA dCcD_SrcCps daWtPillar_c::mCcDCps = {
     daWtPillar_c::mCcDObjInfo,
     { { {0.0f, 0.0f, 0.0f}, {0.0f,1100.0f, 0.0f}, 150.0f }}
 };
 
-dCcD_SrcCyl daWtPillar_c::mCcDCyl = {daWtPillar_c::mCcDObjCoInfo};
+DUSK_GAME_DATA dCcD_SrcCyl daWtPillar_c::mCcDCyl = {daWtPillar_c::mCcDObjCoInfo};
 
 int daWtPillar_c::CreateHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("efWater", 8));
@@ -694,7 +694,7 @@ int daWtPillar_Create(fopAc_ac_c* i_this) {
     return actor->create();
 }
 
-actor_method_class l_daWtPillar_Method = {
+DUSK_GAME_DATA actor_method_class l_daWtPillar_Method = {
     (process_method_func)daWtPillar_Create,
     (process_method_func)daWtPillar_Delete,
     (process_method_func)daWtPillar_Execute,

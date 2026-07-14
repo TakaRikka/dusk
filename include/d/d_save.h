@@ -1049,7 +1049,7 @@ public:
 #else
     u16
 #endif
-    static saveBitLabels[822];
+    static DUSK_GAME_DATA saveBitLabels[822];
 };
 
 class dSv_event_tmp_flag_c {
@@ -1058,7 +1058,7 @@ public:
         #include "d/d_save_temp_bit_labels.inc"
     };
 
-    static u16 const tempBitLabels[185];
+    static DUSK_GAME_DATA u16 const tempBitLabels[185];
 };
 
 #endif /* D_SAVE_D_SAVE_H */

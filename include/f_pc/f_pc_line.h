@@ -5,6 +5,6 @@
 
 void fpcLn_Create();
 
-extern node_lists_tree_class g_fpcLn_Queue;
+DUSK_GAME_EXTERN node_lists_tree_class g_fpcLn_Queue;
 
 #endif

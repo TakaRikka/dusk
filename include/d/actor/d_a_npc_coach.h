@@ -295,7 +295,7 @@ public:
 
     const daNpcCoach_Attr_c& attr() const { return M_attr; }
 
-    static daNpcCoach_Attr_c const M_attr;
+    static DUSK_GAME_DATA daNpcCoach_Attr_c const M_attr;
     static u16 const ParticleName[10];
 private:
     /* 0x0568 */ daNpcChHorse_c mChHorse;

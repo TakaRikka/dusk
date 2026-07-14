@@ -54,9 +54,9 @@ public:
     static mDoRstData* getResetData() { return mResetData; }
     static void setResetData(mDoRstData* rstData) { mResetData = rstData; }
 
-    static mDoRstData* mResetData;
+    static DUSK_GAME_DATA mDoRstData* mResetData;
 };
 
-extern bool mDoDvdErr_initialized;
+DUSK_GAME_EXTERN bool mDoDvdErr_initialized;
 
 #endif /* M_DO_M_DO_RESET_H */

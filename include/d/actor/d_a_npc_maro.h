@@ -14,7 +14,7 @@ class daNpc_Maro_Param_c {
 public:
     virtual ~daNpc_Maro_Param_c() {}
 
-    static const daNpc_Maro_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Maro_HIOParam m;
 };
 
 #if DEBUG
@@ -167,8 +167,8 @@ public:
     void startChoccai() { field_0x1134 = 1; }
     void endChoccai() { field_0x1134 = 0; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[17];
-    static cutFunc DUSK_CONST mCutList[17];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[17];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[17];
 
     u8 getGroupId() {
         return (fopAcM_GetParam(this) & 0xF0000000) >> 28;

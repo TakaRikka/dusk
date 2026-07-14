@@ -38,7 +38,7 @@ class daNpc_grMC_Param_c {
 public:
     virtual ~daNpc_grMC_Param_c() {}
 
-    static daNpc_grMC_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_grMC_HIOParam const m;
 };
 
 class daNpc_grMC_c : public dShopSystem_c {
@@ -124,8 +124,8 @@ public:
     BOOL checkRemoveJoint(int param_1) { return param_1 == JNT_MOUTH; }
     u16 getEyeballMaterialNo() { return 1; };
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList;
-    static cutFunc DUSK_CONST mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList;
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0x0F7C */ NPC_GRMC_HIO_CLASS* mpHIO;

@@ -202,13 +202,13 @@ struct J3DSys {
 
     J3DModel* getModel() { return mModel; }
 
-    static Mtx mCurrentMtx;
-    static Vec mCurrentS;
-    static Vec mParentS;
-    static J3DTexCoordScaleInfo sTexCoordScaleTable[8];
+    static DUSK_GAME_DATA Mtx mCurrentMtx;
+    static DUSK_GAME_DATA Vec mCurrentS;
+    static DUSK_GAME_DATA Vec mParentS;
+    static DUSK_GAME_DATA J3DTexCoordScaleInfo sTexCoordScaleTable[8];
 };
 
-extern u32 j3dDefaultViewNo;
+DUSK_GAME_EXTERN u32 j3dDefaultViewNo;
 DUSK_GAME_EXTERN J3DSys j3dSys;
 
 #endif /* J3DSYS_H */

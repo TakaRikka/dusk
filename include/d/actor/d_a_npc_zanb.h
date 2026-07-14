@@ -20,7 +20,7 @@ class daNpc_zanB_Param_c {
 public:
     virtual ~daNpc_zanB_Param_c() {}
 
-    static daNpc_zanB_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_zanB_HIOParam const m;
 };
 
 #if DEBUG
@@ -99,8 +99,8 @@ public:
         return nodeNo;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[1];
-    static cutFunc DUSK_CONST mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[1];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0xE40 */ NPC_ZANB_HIO_CLASS* mHIO;

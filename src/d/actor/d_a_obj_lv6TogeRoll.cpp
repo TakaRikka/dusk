@@ -10,14 +10,14 @@
 
 static daTogeRoll_HIO_c l_HIO;
 
-dCcD_SrcSph daTogeRoll_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daTogeRoll_c::mCcDSph = {
     daTogeRoll_c::mCcDObjInfo,  // mObjInf
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph
     }  // mSphAttr
 };
 
-dCcD_SrcCps daTogeRoll_c::mCcDCps = {
+DUSK_GAME_DATA dCcD_SrcCps daTogeRoll_c::mCcDCps = {
     daTogeRoll_c::mCcDObjInfo2,  // mObjInf
     {
         {{0.0f, 0.0f, 0.0f}, {0.0f, 1100.0f, 0.0f}, 150.0f},  // mCps
@@ -50,21 +50,21 @@ int daTogeRoll_c::CreateHeap() {
     return 1;
 }
 
-dCcD_SrcGObjInf const daTogeRoll_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daTogeRoll_c::mCcDObjInfo = {
     {0, {{0x800, 0x1, 0x1f}, {0xdafbfdff, 0x1f}, {0x79}}},
     {1, 0, 1, 0, 1},
     {0xa, 5, 0, 0, 0},
     {0},
 };
 
-dCcD_SrcGObjInf const daTogeRoll_c::mCcDObjInfo2 = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daTogeRoll_c::mCcDObjInfo2 = {
     {0, {{0, 0, 0}, {0xdafbfdff, 0x1f}, {0}}},
     {1, 0, 0, 0, 0},
     {0xa, 1, 0, 0, 2},
     {0},
 };
 
-f32 const daTogeRoll_c::mSpeed[] = {
+DUSK_GAME_DATA f32 const daTogeRoll_c::mSpeed[] = {
     10.0f, 16.6666666f, 23.3333333f, 25.0f,      26.6666666f, 28.3333333f,
     30.0f, 31.6666666f, 33.3333333f, 40.0f,      46.6666666f, 53.3333333f,
     60.0f, 66.6666666f, 83.3333333f, 3.3333333f,

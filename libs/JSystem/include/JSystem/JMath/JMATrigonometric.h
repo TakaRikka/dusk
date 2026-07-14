@@ -141,9 +141,9 @@ struct TAsinAcosTable {
     }
 };
 
-extern TSinCosTable<13, f32> sincosTable_;
-extern TAtanTable<1024, f32> atanTable_;
-extern TAsinAcosTable<1024, f32> asinAcosTable_;
+DUSK_GAME_EXTERN TSinCosTable<13, f32> sincosTable_;
+DUSK_GAME_EXTERN TAtanTable<1024, f32> atanTable_;
+DUSK_GAME_EXTERN TAsinAcosTable<1024, f32> asinAcosTable_;
 
 inline f32 acosDegree(f32 x) {
     return asinAcosTable_.acosDegree(x);

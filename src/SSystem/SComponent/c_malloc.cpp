@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
-JKRHeap* cMl::Heap;
+DUSK_GAME_DATA JKRHeap* cMl::Heap;
 
 void cMl::init(JKRHeap* heap) {
     Heap = heap;

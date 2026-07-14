@@ -4,7 +4,7 @@
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
-JASDSPChannel* JASDSPChannel::sDspChannels;
+DUSK_GAME_DATA JASDSPChannel* JASDSPChannel::sDspChannels;
 
 JASDSPChannel::JASDSPChannel() :
     mStatus(STATUS_INACTIVE),

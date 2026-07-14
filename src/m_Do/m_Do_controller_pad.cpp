@@ -17,10 +17,10 @@
 #include "dusk/ui/touch_controls.hpp"
 #endif
 
-JUTGamePad* mDoCPd_c::m_gamePad[4];
+DUSK_GAME_DATA JUTGamePad* mDoCPd_c::m_gamePad[4];
 
-interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
-interface_of_controller_pad mDoCPd_c::m_debugCpadInfo[4];
+DUSK_GAME_DATA interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
+DUSK_GAME_DATA interface_of_controller_pad mDoCPd_c::m_debugCpadInfo[4];
 
 void mDoCPd_c::create() {
     #if PLATFORM_GCN || PLATFORM_SHIELD

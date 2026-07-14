@@ -81,8 +81,8 @@ struct data {
     static unsigned int getTagCode(u32 tag) { return tag & 0xFFFF; }
     static u8 getTagGroup(u32 tag) { return tag >> 0x10; }
 
-    static const BE(u32) ga4cSignature;
-    static const BE(u32) ga4cSignature_color;
+    static DUSK_GAME_DATA const BE(u32) ga4cSignature;
+    static DUSK_GAME_DATA const BE(u32) ga4cSignature_color;
 
     static const int gcTagBegin = '\x1A';  // All text Control Tags will begin with this character
 

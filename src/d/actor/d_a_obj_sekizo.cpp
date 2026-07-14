@@ -23,7 +23,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {"", "Sekizo"};
 
 static u8 lit_3800[12];
 
-daObj_Sekizo_HIOParam const daObj_Sekizo_Param_c::m = {};
+DUSK_GAME_DATA daObj_Sekizo_HIOParam const daObj_Sekizo_Param_c::m = {};
 
 static OBJ_SEKIZO_HIO_CLASS l_HIO;
 

@@ -29,7 +29,7 @@ public:
     JSUTree<JAHVirtualNode>* getVirTree() { return &mTree; }
     static u32 getVirNodeNum() { return smVirNodeNum; }
 
-    static u32 smVirNodeNum;
+    static DUSK_GAME_DATA u32 smVirNodeNum;
 
     /* 0x04 */ JSUTree<JAHVirtualNode> mTree;
     /* 0x20 */ char mName[32];

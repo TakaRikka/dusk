@@ -58,8 +58,8 @@ public:
     static u32 getMirrorRoomPrm() { return 0xFF03; }
 
     typedef int (daMirror_c::*entryModelFunc)(J3DModel*);
-    static entryModelFunc m_entryModel;
-    static daMirror_c* m_myObj;
+    static DUSK_GAME_DATA entryModelFunc m_entryModel;
+    static DUSK_GAME_DATA daMirror_c* m_myObj;
 
     /* 0x570 */ dMirror_packet_c mPacket;
     /* 0x6f8 */ J3DModel* mpModel;

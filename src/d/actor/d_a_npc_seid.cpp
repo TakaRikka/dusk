@@ -49,13 +49,13 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_seiD_c::mCutNameList = "";
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_seiD_c::mCutNameList = "";
 
-daNpc_seiD_c::cutFunc DUSK_CONST daNpc_seiD_c::mCutList[1] = {
+DUSK_GAME_DATA daNpc_seiD_c::cutFunc DUSK_CONST daNpc_seiD_c::mCutList[1] = {
     0
 };
 
-daNpc_seiD_HIOParam const daNpc_seiD_Param_c::m = {
+DUSK_GAME_DATA daNpc_seiD_HIOParam const daNpc_seiD_Param_c::m = {
     0.0f,
     0.0f,
     1.0f,

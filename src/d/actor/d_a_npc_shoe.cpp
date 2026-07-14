@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_shoe.h"
 #include "d/actor/d_a_npc.h"
 
-const daNpcShoe_HIOParam daNpcShoe_Param_c::m = {
+DUSK_GAME_DATA const daNpcShoe_HIOParam daNpcShoe_Param_c::m = {
     55.0f,    // attention_offset
     -3.0f,    // gravity
     1.0f,     // scale
@@ -104,7 +104,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {NULL};
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Shoe";
 
-daNpcShoe_c::EventFn DUSK_CONST daNpcShoe_c::mEvtSeqList[1] = {NULL};
+DUSK_GAME_DATA daNpcShoe_c::EventFn DUSK_CONST daNpcShoe_c::mEvtSeqList[1] = {NULL};
 
 daNpcShoe_c::daNpcShoe_c() {}
 

@@ -74,8 +74,8 @@ namespace daObjLadder {
             return(Type_e)daObj::PrmAbstract(this,PRM_3, PRM_0);
         }
 
-        static char const M_arcname[5];
-        static Mtx M_tmp_mtx;
+        static DUSK_GAME_DATA char const M_arcname[5];
+        static DUSK_GAME_DATA Mtx M_tmp_mtx;
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mModel;

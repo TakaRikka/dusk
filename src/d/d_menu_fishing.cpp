@@ -20,12 +20,12 @@
 #include "dusk/version.hpp"
 
 typedef void (dMenu_Fishing_c::*initFunc)();
-initFunc map_init_process[] = {
+DUSK_GAME_DATA initFunc map_init_process[] = {
     &dMenu_Fishing_c::wait_init,
 };
 
 typedef void (dMenu_Fishing_c::*moveFunc)();
-moveFunc map_move_process[] = {
+DUSK_GAME_DATA moveFunc map_move_process[] = {
     &dMenu_Fishing_c::wait_move,
 };
 

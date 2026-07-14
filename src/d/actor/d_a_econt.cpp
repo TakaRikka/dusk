@@ -10,7 +10,7 @@
 #include "d/d_meter2_info.h"
 #include "f_pc/f_pc_executor.h"
 
-u8 data_805197E0[4];
+DUSK_GAME_DATA u8 data_805197E0[4];
 
 static int daEcont_Draw(econt_class* i_this) {
     return 1;

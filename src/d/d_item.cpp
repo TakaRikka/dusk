@@ -2187,4 +2187,4 @@ int addBombCount(u8 i_bombType, u8 i_addNum) {
     return i_addNum;
 }
 
-u8* dEnemyItem_c::mData;
+DUSK_GAME_DATA u8* dEnemyItem_c::mData;

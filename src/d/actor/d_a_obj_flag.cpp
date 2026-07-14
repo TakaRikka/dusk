@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_obj_flag.h"
 
-daObjFlag_c::M_attrs const daObjFlag_c::M_attr = {
+DUSK_GAME_DATA daObjFlag_c::M_attrs const daObjFlag_c::M_attr = {
     4000.0f, 1.0f, 0.3f, 
     15, 2000, 1500, 4000, 
     1800, 0, 0, 1000, 400, 

@@ -22,7 +22,7 @@ JStudio_JStage::TAdaptor_camera::~TAdaptor_camera() {
     adaptor_do_end();
 }
 
-JStudio_JStage::TAdaptor_camera::TVVOutput JStudio_JStage::TAdaptor_camera::saoVVOutput_[5] = {
+DUSK_GAME_DATA JStudio_JStage::TAdaptor_camera::TVVOutput JStudio_JStage::TAdaptor_camera::saoVVOutput_[5] = {
     TVVOutput(JStudio_JStage::TAdaptor_camera::TECAMERA_7, &JStage::TCamera::JSGSetViewRoll,
               &JStage::TCamera::JSGGetViewRoll),
     TVVOutput(JStudio_JStage::TAdaptor_camera::TECAMERA_6, &JStage::TCamera::JSGSetProjectionFovy,

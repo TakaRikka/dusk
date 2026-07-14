@@ -126,7 +126,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Tkc";
 
 static NPC_TKC_HIO_CLASS l_HIO;
 
-daNpcTkc_c::evtFunc daNpcTkc_c::mEvtSeqList[4] = {
+DUSK_GAME_DATA daNpcTkc_c::evtFunc daNpcTkc_c::mEvtSeqList[4] = {
     NULL,
     &daNpcTkc_c::EvCut_TksSecretChild,
     &daNpcTkc_c::EvCut_TksWarpExit,
@@ -149,7 +149,7 @@ daNpcTkc_c::~daNpcTkc_c() {
     #endif
 }
 
-daNpcTkc_HIOParam const daNpcTkc_Param_c::m = {
+DUSK_GAME_DATA daNpcTkc_HIOParam const daNpcTkc_Param_c::m = {
     10.0f,
     0.0f,
     1.0f,

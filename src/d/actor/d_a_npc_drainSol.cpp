@@ -23,7 +23,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_arcNames[2] = {
     "DrainSol2",
 };
 
-const daNpcDrSol_HIOParam daNpcDrSol_Param_c::m = {
+DUSK_GAME_DATA const daNpcDrSol_HIOParam daNpcDrSol_Param_c::m = {
     40.0f,
     0.0f,
     1.0f,

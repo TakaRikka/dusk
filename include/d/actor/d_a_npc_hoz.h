@@ -13,7 +13,7 @@ class daNpc_Hoz_Param_c {
 public:
     virtual ~daNpc_Hoz_Param_c() {}
 
-    static const daNpc_Hoz_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Hoz_HIOParam m;
 };
 
 #if DEBUG
@@ -125,8 +125,8 @@ public:
     bool getGameStartFlag() { return mGameStartFlag; }
     void setPotBreakFlag() { mPotBreakFlag = true; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[8];
-    static cutFunc DUSK_CONST mCutList[];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[8];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[];
 
 private:
     /* 0xE40 */ NPC_HOZ_HIO_CLASS* mpHIO;

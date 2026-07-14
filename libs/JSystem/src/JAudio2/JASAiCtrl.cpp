@@ -20,33 +20,33 @@
 
 #include "tracy/Tracy.hpp"
 
-s16* JASDriver::sDmaDacBuffer[3];
+DUSK_GAME_DATA s16* JASDriver::sDmaDacBuffer[3];
 
 static u8 data_804507A8 = 3;
 
-s16** JASDriver::sDspDacBuffer;
+DUSK_GAME_DATA s16** JASDriver::sDspDacBuffer;
 
-s32 JASDriver::sDspDacWriteBuffer;
+DUSK_GAME_DATA s32 JASDriver::sDspDacWriteBuffer;
 
-s32 JASDriver::sDspDacReadBuffer;
+DUSK_GAME_DATA s32 JASDriver::sDspDacReadBuffer;
 
-s32 JASDriver::sDspStatus;
+DUSK_GAME_DATA s32 JASDriver::sDspStatus;
 
-JASDriver::DSPBufCallback JASDriver::sDspDacCallback;
+DUSK_GAME_DATA JASDriver::DSPBufCallback JASDriver::sDspDacCallback;
 
-s16* JASDriver::lastRspMadep;
+DUSK_GAME_DATA s16* JASDriver::lastRspMadep;
 
-void (*JASDriver::dacCallbackFunc)(s16*, u32);
+DUSK_GAME_DATA void (*JASDriver::dacCallbackFunc)(s16*, u32);
 
-JASDriver::MixCallback JASDriver::extMixCallback;
+DUSK_GAME_DATA JASDriver::MixCallback JASDriver::extMixCallback;
 
-u32 JASDriver::sOutputRate;
+DUSK_GAME_DATA u32 JASDriver::sOutputRate;
 
-JASMixMode JASDriver::sMixMode = MIX_MODE_EXTRA;
+DUSK_GAME_DATA JASMixMode JASDriver::sMixMode = MIX_MODE_EXTRA;
 
-f32 JASDriver::sDacRate = 32028.5f;
+DUSK_GAME_DATA f32 JASDriver::sDacRate = 32028.5f;
 
-u32 JASDriver::sSubFrames = 0x00000007;
+DUSK_GAME_DATA u32 JASDriver::sSubFrames = 0x00000007;
 
 void JASDriver::initAI(void (*param_0)(void)) {
     setOutputRate(OUTPUT_RATE_0);
@@ -114,14 +114,14 @@ void JASDriver::setOutputRate(JASOutputRate param_0) {
 #endif
 }
 
-const JASDriver::MixFunc JASDriver::sMixFuncs[4] = {
+DUSK_GAME_DATA const JASDriver::MixFunc JASDriver::sMixFuncs[4] = {
     mixMonoTrack,
     mixMonoTrackWide,
     mixExtraTrack,
     mixInterleaveTrack,
 };
 
-u32 JASDriver::sSubFrameCounter;
+DUSK_GAME_DATA u32 JASDriver::sSubFrameCounter;
 
 void JASDriver::updateDac() {
     static u32 dacp = 0;
@@ -227,7 +227,7 @@ void JASDriver::readDspBuffer(s16* param_0, u32 param_1) {
     JASCalc::imixcopy(endDacBuffer, dacBuffer, param_0, param_1);
 }
 
-u32 sDspUpCount;
+DUSK_GAME_DATA u32 sDspUpCount;
 
 void JASDriver::finishDSPFrame() {
     static u32 waitcount;

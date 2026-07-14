@@ -191,7 +191,7 @@ static DUSK_CONSTEXPR s16 l_warpAppearFlag[7] = {
     0x01DD, // dSv_event_flag_c::F_0477 - Secret techniques - Distant howling complete (for secret technique 7)
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_GWolf_c::mEvtCutNameList[5] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_GWolf_c::mEvtCutNameList[5] = {
     "",
     "ATTACK_WARP",
     "ATTACK_WARP_HORSE",
@@ -199,7 +199,7 @@ char DUSK_CONST* DUSK_CONST daNpc_GWolf_c::mEvtCutNameList[5] = {
     "MEET_GWOLFA",
 };
 
-daNpc_GWolf_c::cutFunc DUSK_CONST daNpc_GWolf_c::mEvtCutList[5] = {
+DUSK_GAME_DATA daNpc_GWolf_c::cutFunc DUSK_CONST daNpc_GWolf_c::mEvtCutList[5] = {
     NULL,
     &daNpc_GWolf_c::ECut_attackWarp,
     &daNpc_GWolf_c::ECut_attackWarpHorse,
@@ -207,7 +207,7 @@ daNpc_GWolf_c::cutFunc DUSK_CONST daNpc_GWolf_c::mEvtCutList[5] = {
     &daNpc_GWolf_c::ECut_meetGWolf,
 };
 
-daNpc_GWolf_HIOParam const daNpc_GWolf_Param_c::m = {
+DUSK_GAME_DATA daNpc_GWolf_HIOParam const daNpc_GWolf_Param_c::m = {
     30.0f,
     -4.0f,
     1.0f,

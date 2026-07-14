@@ -14,7 +14,7 @@ struct JASSoundParams;
 namespace JASDsp {
     struct TChannel;
 
-    extern const u32 FILTER_MODE_IIR;
+    DUSK_GAME_EXTERN const u32 FILTER_MODE_IIR;
 };
 
 #if !BIT_64
@@ -136,12 +136,12 @@ struct JASTrack : public JASPoolAllocObject_MultiThreaded<JASTrack> {
 
     static void channelUpdateCallback(u32, JASChannel*, JASDsp::TChannel*, void*);
 
-    static JASOscillator::Point const sAdsTable[4];
-    static JASOscillator::Data const sEnvOsc;
-    static JASOscillator::Data const sPitchEnvOsc;
+    static DUSK_GAME_DATA JASOscillator::Point const sAdsTable[4];
+    static DUSK_GAME_DATA JASOscillator::Data const sEnvOsc;
+    static DUSK_GAME_DATA JASOscillator::Data const sPitchEnvOsc;
 
-    static JASDefaultBankTable sDefaultBankTable;
-    static TList sTrackList;
+    static DUSK_GAME_DATA JASDefaultBankTable sDefaultBankTable;
+    static DUSK_GAME_DATA TList sTrackList;
 
     static const int MAX_CHILDREN = 16;
 

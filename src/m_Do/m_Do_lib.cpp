@@ -38,11 +38,11 @@ u32 mDoLib_setResTimgObj(ResTIMG const* i_img, TGXTexObj* o_texObj, u32 tlut_nam
     return i_img->indexTexture;
 }
 
-J3DUClipper mDoLib_clipper::mClipper;
+DUSK_GAME_DATA J3DUClipper mDoLib_clipper::mClipper;
 
-f32 mDoLib_clipper::mSystemFar;
+DUSK_GAME_DATA f32 mDoLib_clipper::mSystemFar;
 
-f32 mDoLib_clipper::mFovyRate;
+DUSK_GAME_DATA f32 mDoLib_clipper::mFovyRate;
 
 void mDoLib_clipper::setup(f32 fovy, f32 aspect, f32 near_, f32 far_) {
     mClipper.setFovy(fovy);

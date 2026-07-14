@@ -242,7 +242,7 @@ public:
     static void setCurrentDirID(u32 dirID) { sCurrentDirID = dirID; }
 
 protected:
-    static u32 sCurrentDirID;
+    static DUSK_GAME_DATA u32 sCurrentDirID;
 };
 
 inline JKRCompression JKRConvertAttrToCompressionType(int attr) {

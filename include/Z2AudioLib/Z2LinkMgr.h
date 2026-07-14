@@ -57,7 +57,7 @@ public:
     void setUsingIronBall(bool isUsingIronBall) { mUsingIronBall = isUsingIronBall; }
     void setMarkState(u8 state) { mMarkState = state; }
 
-    static Z2CreatureLink* mLinkPtr;
+    static DUSK_GAME_DATA Z2CreatureLink* mLinkPtr;
     static Z2CreatureLink* getLink() { return mLinkPtr; }
 
     friend class Z2LinkSoundStarter;

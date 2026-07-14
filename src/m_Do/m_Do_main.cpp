@@ -105,11 +105,11 @@
 #endif
 
 // --- GLOBALS ---
-s8 mDoMain::developmentMode = -1;
-OSTime mDoMain::sPowerOnTime;
-OSTime mDoMain::sHungUpTime;
-u32 mDoMain::memMargin = 0xFFFFFFFF;
-char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+DUSK_GAME_DATA s8 mDoMain::developmentMode = -1;
+DUSK_GAME_DATA OSTime mDoMain::sPowerOnTime;
+DUSK_GAME_DATA OSTime mDoMain::sHungUpTime;
+DUSK_GAME_DATA u32 mDoMain::memMargin = 0xFFFFFFFF;
+DUSK_GAME_DATA char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
 #if TARGET_PC
 const int audioHeapSize = 0x14D800 * 2;
 #else
@@ -122,14 +122,14 @@ const int audioHeapSize = 0x14D800;
 #define COPYDATE_PATH "/str/Final/Release/COPYDATE"
 
 #if TARGET_PC
-bool dusk::IsRunning = true;
-bool dusk::IsShuttingDown = false;
-bool dusk::IsGameLaunched = false;
-bool dusk::RestartRequested = false;
-uint8_t dusk::SaveRequested = 0;
-dusk::StageRequest dusk::StageRequested = {"",false};
-std::filesystem::path dusk::ConfigPath;
-std::filesystem::path dusk::CachePath;
+DUSK_GAME_DATA bool dusk::IsRunning = true;
+DUSK_GAME_DATA bool dusk::IsShuttingDown = false;
+DUSK_GAME_DATA bool dusk::IsGameLaunched = false;
+DUSK_GAME_DATA bool dusk::RestartRequested = false;
+DUSK_GAME_DATA uint8_t dusk::SaveRequested = 0;
+DUSK_GAME_DATA dusk::StageRequest dusk::StageRequested = {"",false};
+DUSK_GAME_DATA std::filesystem::path dusk::ConfigPath;
+DUSK_GAME_DATA std::filesystem::path dusk::CachePath;
 #endif
 
 void dusk::RequestRestart() noexcept {
@@ -164,9 +164,9 @@ s32 LOAD_COPYDATE(void*) {
     return 1;
 }
 
-AuroraInfo auroraInfo;
-AuroraStats dusk::lastFrameAuroraStats;
-float dusk::frameUsagePct = 0.0f;
+DUSK_GAME_DATA AuroraInfo auroraInfo;
+DUSK_GAME_DATA AuroraStats dusk::lastFrameAuroraStats;
+DUSK_GAME_DATA float dusk::frameUsagePct = 0.0f;
 
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {

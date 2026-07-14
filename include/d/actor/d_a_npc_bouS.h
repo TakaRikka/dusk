@@ -29,7 +29,7 @@ class daNpcBouS_Param_c {
 public:
     virtual ~daNpcBouS_Param_c() {}
 
-    static daNpcBouS_HIOParam const m;
+    static DUSK_GAME_DATA daNpcBouS_HIOParam const m;
 };
 
 #if DEBUG
@@ -128,7 +128,7 @@ public:
         mForcibleTalk = 1;
     }
 
-    static eventFunc mEvtSeqList[4];
+    static DUSK_GAME_DATA eventFunc mEvtSeqList[4];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

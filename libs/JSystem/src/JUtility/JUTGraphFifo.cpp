@@ -6,7 +6,7 @@
 
 static bool data_804514B8;
 
-JUTGraphFifo* JUTGraphFifo::sCurrentFifo;
+DUSK_GAME_DATA JUTGraphFifo* JUTGraphFifo::sCurrentFifo;
 
 JUTGraphFifo::JUTGraphFifo(u32 size) {
     mSize = ROUND(size, 0x20);
@@ -26,7 +26,7 @@ JUTGraphFifo::JUTGraphFifo(u32 size) {
     }
 }
 
-bool JUTGraphFifo::mGpStatus[5];
+DUSK_GAME_DATA bool JUTGraphFifo::mGpStatus[5];
 
 JUTGraphFifo::~JUTGraphFifo() {
     sCurrentFifo->save();

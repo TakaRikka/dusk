@@ -12,7 +12,7 @@ extern int mDoGph_AfterOfDraw();
 extern int mDoGph_Painter();
 extern int mDoGph_Create();
 
-cAPI_Interface g_cAPI_Interface = {
+DUSK_GAME_DATA cAPI_Interface g_cAPI_Interface = {
     (cAPIGph_Mthd)mDoGph_Create,
     (cAPIGph_Mthd)mDoGph_BeforeOfDraw,
     (cAPIGph_Mthd)mDoGph_AfterOfDraw,

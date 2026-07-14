@@ -23,12 +23,12 @@ void JKRAramPiece::sendCommand(JKRAMCommand* command) {
     startDMA(command);
 }
 
-JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
+DUSK_GAME_DATA JSUList<JKRAMCommand> JKRAramPiece::sAramPieceCommandList;
 
-OSMutex JKRAramPiece::mMutex;
+DUSK_GAME_DATA OSMutex JKRAramPiece::mMutex;
 
 #if DEBUG && TARGET_PC
-volatile u8 forceRead;
+DUSK_GAME_DATA volatile u8 forceRead;
 #endif
 
 JKRAMCommand* JKRAramPiece::orderAsync(int direction, uintptr_t source, uintptr_t destination, u32 length,

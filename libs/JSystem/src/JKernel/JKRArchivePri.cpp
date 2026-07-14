@@ -9,7 +9,7 @@
 #include <cassert>
 #endif
 
-u32 JKRArchive::sCurrentDirID;
+DUSK_GAME_DATA u32 JKRArchive::sCurrentDirID;
 
 JKRArchive::JKRArchive() {
     mIsMounted = false;

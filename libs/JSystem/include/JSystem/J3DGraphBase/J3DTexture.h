@@ -85,7 +85,7 @@ public:
     }
 };
 
-extern J3DTexMtxInfo const j3dDefaultTexMtxInfo;
+DUSK_GAME_EXTERN J3DTexMtxInfo const j3dDefaultTexMtxInfo;
 
 /**
  * @ingroup jsystem-j3d
@@ -117,7 +117,7 @@ private:
     /* 0x64 */ Mtx mMtx;
 };  // Size: 0x94
 
-extern J3DTexCoordInfo const j3dDefaultTexCoordInfo[8];
+DUSK_GAME_EXTERN J3DTexCoordInfo const j3dDefaultTexCoordInfo[8];
 
 /**
  * @ingroup jsystem-j3d

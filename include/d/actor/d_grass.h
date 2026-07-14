@@ -84,7 +84,7 @@ public:
         return m_deleteRoom;
     }
 
-    static deleteFunc m_deleteRoom;
+    static DUSK_GAME_DATA deleteFunc m_deleteRoom;
 
     dGrass_anm_c* getAnm() { return m_anm; }
     dGrass_anm_c* getAnm(int i_no) { return &m_anm[i_no]; }

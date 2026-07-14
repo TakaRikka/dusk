@@ -58,17 +58,17 @@ public:
 #endif
 };
 
-f32 const E_OC_n::oc_attackb_trans[10] = {
+DUSK_GAME_DATA f32 const E_OC_n::oc_attackb_trans[10] = {
     0.0f, 0.0f, 0.0f, 0.0f, 15.3f, 
     38.4f, 63.3f, 86.2f, 103.3f, 112.0f
 };
 
-f32 const E_OC_n::oc_attackc_trans[10] = {
+DUSK_GAME_DATA f32 const E_OC_n::oc_attackc_trans[10] = {
     0.0f, 31.3f, 72.7f, 91.5f, 91.5f,
     91.5f, 91.5f, 91.5f, 91.5f, 91.5f
 };
 
-dCcD_SrcSph E_OC_n::cc_sph_src = {
+DUSK_GAME_DATA dCcD_SrcSph E_OC_n::cc_sph_src = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0xD8FBFDFF, 0x3}, 0x75}}, // mObj
         {0x9, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -80,7 +80,7 @@ dCcD_SrcSph E_OC_n::cc_sph_src = {
     } // mSphAttr
 };
 
-dCcD_SrcSph E_OC_n::at_sph_src = {
+DUSK_GAME_DATA dCcD_SrcSph E_OC_n::at_sph_src = {
     {
         {0x0, {{0x1000, 0x1, 0xD}, {0x0, 0x0}, 0x0}}, // mObj
         {0x9, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -193,13 +193,13 @@ static int daE_OC_Draw(daE_OC_c* i_this) {
     return i_this->draw();
 }
 
-daE_OC_c* E_OC_n::m_battle_oc;
+DUSK_GAME_DATA daE_OC_c* E_OC_n::m_battle_oc;
 
-daE_OC_c* E_OC_n::m_damage_oc;
+DUSK_GAME_DATA daE_OC_c* E_OC_n::m_damage_oc;
 
-daE_OC_c* E_OC_n::m_death_oc;
+DUSK_GAME_DATA daE_OC_c* E_OC_n::m_death_oc;
 
-daE_OC_c* E_OC_n::m_talk_oc;
+DUSK_GAME_DATA daE_OC_c* E_OC_n::m_talk_oc;
 
 static u8 lbl_216_bss_58;
 

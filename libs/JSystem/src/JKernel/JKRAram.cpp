@@ -27,7 +27,7 @@ static int JKRDecompressFromAramToMainRam(u32 src, void* dst, u32 srcLength, u32
                                           u32 offset, u32* resourceSize);
 int decompSZS_subroutine(u8* src, u8* dest);
 
-JKRAram* JKRAram::sAramObject;
+DUSK_GAME_DATA JKRAram* JKRAram::sAramObject;
 
 JKRAram* JKRAram::create(u32 aram_audio_buffer_size, u32 aram_audio_graph_size, s32 stream_priority,
                          s32 decomp_priority, s32 piece_priority) {
@@ -48,14 +48,14 @@ void JKRAram::destroy() {
 }
 #endif
 
-OSMessage JKRAram::sMessageBuffer[4] = {
+DUSK_GAME_DATA OSMessage JKRAram::sMessageBuffer[4] = {
     NULL,
     NULL,
     NULL,
     NULL,
 };
 
-OSMessageQueue JKRAram::sMessageQueue = {0};
+DUSK_GAME_DATA OSMessageQueue JKRAram::sMessageQueue = {0};
 
 JKRAram::JKRAram(u32 audio_buffer_size, u32 audio_graph_size, s32 priority)
     : JKRThread(stack_size, 0x10, priority) {
@@ -279,11 +279,11 @@ u8* JKRAram::aramToMainRam(u32 address, u8* buf, u32 p3, JKRExpandSwitch expandS
     }
 }
 
-JSUList<JKRAMCommand> JKRAram::sAramCommandList;
+DUSK_GAME_DATA JSUList<JKRAMCommand> JKRAram::sAramCommandList;
 
 static OSMutex decompMutex;
 
-u32 JKRAram::sSZSBufferSize = 0x00000400;
+DUSK_GAME_DATA u32 JKRAram::sSZSBufferSize = 0x00000400;
 
 static u8* szpBuf;
 

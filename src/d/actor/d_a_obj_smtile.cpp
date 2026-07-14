@@ -29,7 +29,7 @@ static s8 l_tileMoveData[21][4] = {
 
 static OBJ_SMTILE_HIO_CLASS l_HIO;
 
-daObj_SMTile_HIOParam const daObj_SMTile_Param_c::m = {600.0f, 20.0f};
+DUSK_GAME_DATA daObj_SMTile_HIOParam const daObj_SMTile_Param_c::m = {600.0f, 20.0f};
 
 #if DEBUG
 daObj_SMTile_HIO_c::daObj_SMTile_HIO_c() {

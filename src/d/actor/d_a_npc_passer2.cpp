@@ -31,7 +31,7 @@ static int createHeapCallBack(fopAc_ac_c* i_this) {
     return actor->createHeap();
 }
 
-daNpcPasser2_c::actionFunc daNpcPasser2_c::ActionTable[1][2] = {
+DUSK_GAME_DATA daNpcPasser2_c::actionFunc daNpcPasser2_c::ActionTable[1][2] = {
     {&daNpcPasser2_c::initPath, &daNpcPasser2_c::executePath},
 };
 

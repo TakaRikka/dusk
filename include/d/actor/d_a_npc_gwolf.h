@@ -19,7 +19,7 @@ class daNpc_GWolf_Param_c {
 public:
     virtual ~daNpc_GWolf_Param_c() {}
 
-    static daNpc_GWolf_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_GWolf_HIOParam const m;
 };
 
 #if DEBUG
@@ -104,8 +104,8 @@ public:
     void setHowlingEndFlag() { field_0xe1c = 2; }
     void setHowlingFlag() { field_0xe1c = 1; }
 
-    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[5];
-    static cutFunc DUSK_CONST mEvtCutList[5];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[5];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mEvtCutList[5];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

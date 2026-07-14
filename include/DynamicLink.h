@@ -88,9 +88,9 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     /* 0x24 */ s32 mSize;
     /* 0x28 */ mDoDvdThd_callback_c* mAsyncLoadCallback;
 
-    static u32 sAllocBytes;
-    static JKRArchive* sArchive;
-    static JKRFileCache* sFileCache;
+    static DUSK_GAME_DATA u32 sAllocBytes;
+    static DUSK_GAME_DATA JKRArchive* sArchive;
+    static DUSK_GAME_DATA JKRFileCache* sFileCache;
 };
 
 #endif /* DYNAMICLINK_H */

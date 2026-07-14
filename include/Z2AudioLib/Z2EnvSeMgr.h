@@ -175,7 +175,7 @@ struct Z2EnvSeMgr : public JASGlobalInstance<Z2EnvSeMgr> {
 
 STATIC_ASSERT(sizeof(Z2EnvSeMgr) == 0x30C);
 
-extern Z2EnvSeMgr g_mEnvSeMgr;
+DUSK_GAME_EXTERN Z2EnvSeMgr g_mEnvSeMgr;
 
 inline Z2EnvSeMgr* Z2GetEnvSeMgr() {
     return JASGlobalInstance<Z2EnvSeMgr>::getInstance();

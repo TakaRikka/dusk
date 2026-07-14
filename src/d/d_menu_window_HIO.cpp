@@ -1321,6 +1321,6 @@ void dMw_DHIO_c::bitCheck() {
 }
 #endif
 
-dMw_HIO_c g_mwHIO;
+DUSK_GAME_DATA dMw_HIO_c g_mwHIO;
 
-dMw_DHIO_c g_mwDHIO;
+DUSK_GAME_DATA dMw_DHIO_c g_mwDHIO;

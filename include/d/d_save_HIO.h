@@ -229,6 +229,6 @@ public:
 
 STATIC_ASSERT(sizeof(dSvBit_HIO_c) == 0x4A0);
 
-extern dSvBit_HIO_c g_save_bit_HIO;
+DUSK_GAME_EXTERN dSvBit_HIO_c g_save_bit_HIO;
 
 #endif /* D_SAVE_D_SAVE_HIO_H */

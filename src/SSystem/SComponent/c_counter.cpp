@@ -5,7 +5,7 @@
 
 #include "SSystem/SComponent/c_counter.h"
 
-counter_class g_Counter;
+DUSK_GAME_DATA counter_class g_Counter;
 
 void cCt_Counter(int resetCounter1) {
     if (resetCounter1 == 1) {

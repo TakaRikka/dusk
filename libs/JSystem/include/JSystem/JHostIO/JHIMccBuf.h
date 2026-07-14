@@ -27,8 +27,8 @@ public:
     virtual void disablePort() { mPortEnabled = false; }
     virtual bool isPort() { return mPortEnabled; }
 
-    static u8* mTempBuf;
-    static u16 mRefCount;
+    static DUSK_GAME_DATA u8* mTempBuf;
+    static DUSK_GAME_DATA u16 mRefCount;
 
     /* 0x04 */ u32 mTag;
     /* 0x08 */ u16 field_0x8;

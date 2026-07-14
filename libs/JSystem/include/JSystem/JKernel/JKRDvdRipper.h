@@ -33,11 +33,11 @@ class JKRDvdFile;
  */
 class JKRDvdRipper {
 public:
-    static JSUList<JKRDMCommand> sDvdAsyncList;
-    static u32 sSZSBufferSize;
-    static bool errorRetry;
+    static DUSK_GAME_DATA JSUList<JKRDMCommand> sDvdAsyncList;
+    static DUSK_GAME_DATA u32 sSZSBufferSize;
+    static DUSK_GAME_DATA bool errorRetry;
 #if TARGET_PC
-    static JKRHeap* sHeap;
+    static DUSK_GAME_DATA JKRHeap* sHeap;
 #endif
 
     enum EAllocDirection {

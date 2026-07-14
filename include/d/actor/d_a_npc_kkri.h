@@ -11,7 +11,7 @@ class daNpc_Kkri_Param_c {
 public:
     virtual ~daNpc_Kkri_Param_c() {}
 
-    static const daNpc_Kkri_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Kkri_HIOParam m;
 };
 
 #if DEBUG
@@ -118,8 +118,8 @@ public:
         return mpMorf[0]->getModel()->getAnmMtx(5);
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[3];
-    static int (daNpc_Kkri_c::* DUSK_CONST mCutList[])(int);
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[3];
+    static DUSK_GAME_DATA int (daNpc_Kkri_c::* DUSK_CONST mCutList[])(int);
 
 private:
     /* 0xE40 */ NPC_KKRI_HIO_CLASS* mpHIO;

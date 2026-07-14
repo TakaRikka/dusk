@@ -85,11 +85,11 @@ struct dLib_time_c {
     static void stopTime();
     static void startTime();
 
-    static OSTime m_diffTime;
-    static OSTime m_stopTime;
-    static bool m_timeStopped;
+    static DUSK_GAME_DATA OSTime m_diffTime;
+    static DUSK_GAME_DATA OSTime m_stopTime;
+    static DUSK_GAME_DATA bool m_timeStopped;
 };
 
-extern Quaternion ZeroQuat;
+DUSK_GAME_EXTERN Quaternion ZeroQuat;
 
 #endif /* D_D_LIB_H */

@@ -43,7 +43,7 @@ int fpcLf_IsDelete(leafdraw_class* i_leaf);
 int fpcLf_Delete(leafdraw_class* i_leaf);
 int fpcLf_Create(leafdraw_class* i_leaf);
 
-extern int g_fpcLf_type;
-extern leafdraw_method_class DUSK_CONST g_fpcLf_Method;
+DUSK_GAME_EXTERN int g_fpcLf_type;
+DUSK_GAME_EXTERN leafdraw_method_class DUSK_CONST g_fpcLf_Method;
 
 #endif

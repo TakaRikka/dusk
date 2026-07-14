@@ -15,6 +15,6 @@ static s32 fopCam_Draw(camera_class* i_this);
 static int fopCam_Execute(camera_class* i_this);
 int fopCam_IsDelete(camera_class* i_this);
 
-extern leafdraw_method_class g_fopCam_Method;
+DUSK_GAME_EXTERN leafdraw_method_class g_fopCam_Method;
 
 #endif

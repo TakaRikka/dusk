@@ -656,7 +656,7 @@ void dMenu_save_c::_delete() {
 }
 
 typedef void (dMenu_save_c::*menuProcFunc)();
-menuProcFunc MenuSaveProc[62] = {
+DUSK_GAME_DATA menuProcFunc MenuSaveProc[62] = {
     &dMenu_save_c::saveQuestion,
     &dMenu_save_c::saveQuestion2,
     &dMenu_save_c::saveQuestion21,

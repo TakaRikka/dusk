@@ -124,15 +124,15 @@ enum Joint {
     /* 0x2A */ JNT_TAIL_2,
 };
 
-f32 E_DT_n::eDt_ShakeFrame[10] = {
+DUSK_GAME_DATA f32 E_DT_n::eDt_ShakeFrame[10] = {
     20.0f, 22.0f, 24.0f, 26.0f, 28.0f, 30.0f, 32.0f, 34.0f, 36.0f, 38.0f,
 };
 
-f32 E_DT_n::eDt_ShakeFrameDemo[10] = {
+DUSK_GAME_DATA f32 E_DT_n::eDt_ShakeFrameDemo[10] = {
     310.0f, 312.0f, 314.0f, 316.0f, 318.0f, 320.0f, 322.0f, 324.0f, 326.0f, 328.0f,
 };
 
-dCcD_SrcSph E_DT_n::cc_dt_body_src = {
+DUSK_GAME_DATA dCcD_SrcSph E_DT_n::cc_dt_body_src = {
     {
         {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x0}, {0xd8fbfdff, 0x43}, 0x75}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -144,7 +144,7 @@ dCcD_SrcSph E_DT_n::cc_dt_body_src = {
     } // mSphAttr
 };
 
-dCcD_SrcSph E_DT_n::cc_dt_tongue_src = {
+DUSK_GAME_DATA dCcD_SrcSph E_DT_n::cc_dt_tongue_src = {
     {
         {0x0, {{AT_TYPE_CSTATUE_SWING, 0x1, 0x0}, {0xd8fbfdff, 0x43}, 0x75}}, // mObj
         {dCcD_SE_METAL, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -700,9 +700,9 @@ void daE_DT_c::setBoxTubaLandEffect() {
     }
 }
 
-int E_DT_n::mDt_OtamaNum;
+DUSK_GAME_DATA int E_DT_n::mDt_OtamaNum;
 
-int E_DT_n::mDt_OtamaNo[20];
+DUSK_GAME_DATA int E_DT_n::mDt_OtamaNo[20];
 
 static void* s_otama_todo(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) && !fpcM_IsCreating(fopAcM_GetID(i_proc))
@@ -726,7 +726,7 @@ int daE_DT_c::getNumberOfOtama() {
     return E_DT_n::mDt_OtamaNum;
 }
 
-int E_DT_n::m_fall_no;
+DUSK_GAME_DATA int E_DT_n::m_fall_no;
 
 static void* s_fall_otama(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) && !fpcM_IsCreating(fopAcM_GetID(i_proc))
@@ -772,7 +772,7 @@ static void* s_demo_otama(void* i_proc, void* i_this) {
     return NULL;
 }
 
-cXyz E_DT_n::m_tongue_pos;
+DUSK_GAME_DATA cXyz E_DT_n::m_tongue_pos;
 
 static void* s_bomb_search(void* i_proc, void* i_this) {
     if (fopAcM_IsActor(i_proc) && !fpcM_IsCreating(fopAcM_GetID(i_proc))) {

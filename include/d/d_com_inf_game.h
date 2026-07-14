@@ -1050,10 +1050,10 @@ public:
 STATIC_ASSERT(122384 == sizeof(dComIfG_inf_c));
 
 DUSK_GAME_EXTERN dComIfG_inf_c g_dComIfG_gameInfo;
-extern GXColor g_blackColor;
-extern GXColor g_clearColor;
-extern GXColor g_whiteColor;
-extern GXColor g_saftyWhiteColor;
+DUSK_GAME_EXTERN GXColor g_blackColor;
+DUSK_GAME_EXTERN GXColor g_clearColor;
+DUSK_GAME_EXTERN GXColor g_whiteColor;
+DUSK_GAME_EXTERN GXColor g_saftyWhiteColor;
 
 int dComLbG_PhaseHandler(request_of_phase_process_class*, request_of_phase_process_fn*,
                          void*);

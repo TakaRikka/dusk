@@ -6,10 +6,10 @@
 #include "JSystem/JAHostIO/JAHioUtil.h"
 #include "JSystem/JHostIO/JORFile.h"
 
-char JAHioUtil::mStringBuffer[256];
+DUSK_GAME_DATA char JAHioUtil::mStringBuffer[256];
 
-JAHioNode* JAHUpdate::spNode;
-JORMContext* JAHUpdate::spMc;
+DUSK_GAME_DATA JAHioNode* JAHUpdate::spNode;
+DUSK_GAME_DATA JORMContext* JAHUpdate::spMc;
 
 static char* dummy(JORDir* dir) {
     return std::strrchr(dir->getFilename(), '\n');

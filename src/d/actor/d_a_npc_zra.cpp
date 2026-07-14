@@ -22,7 +22,7 @@
 
 static NPC_ZRA_HIO_CLASS l_HIO;
 
-daNpc_zrA_HIOParam const daNpc_zrA_Param_c::m = {
+DUSK_GAME_DATA daNpc_zrA_HIOParam const daNpc_zrA_Param_c::m = {
     230.0f,   // mAttnOffsetY
     -3.0f,    // mGravity
     1.0f,     // mScale
@@ -410,7 +410,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName[4] = {
     "zrWF",
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_zrA_c::mEvtCutNameList[11] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_zrA_c::mEvtCutNameList[11] = {
     "",
     "TALK_SWIM",
     "BEFORE_BLAST_ZRR",
@@ -424,7 +424,7 @@ char DUSK_CONST* DUSK_CONST daNpc_zrA_c::mEvtCutNameList[11] = {
     "TALK_MULTI",
 };
 
-daNpc_zrA_c::EventFn DUSK_CONST daNpc_zrA_c::mEvtCutList[11] = {
+DUSK_GAME_DATA daNpc_zrA_c::EventFn DUSK_CONST daNpc_zrA_c::mEvtCutList[11] = {
     NULL,
     &daNpc_zrA_c::ECut_talkSwim,
     &daNpc_zrA_c::ECut_beforeBlastzrR,

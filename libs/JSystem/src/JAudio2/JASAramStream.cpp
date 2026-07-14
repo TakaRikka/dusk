@@ -12,16 +12,16 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JSupport/JSupport.h"
 
-JASTaskThread* JASAramStream::sLoadThread;
+DUSK_GAME_DATA JASTaskThread* JASAramStream::sLoadThread;
 
-u8* JASAramStream::sReadBuffer;
+DUSK_GAME_DATA u8* JASAramStream::sReadBuffer;
 
-u32 JASAramStream::sBlockSize;
+DUSK_GAME_DATA u32 JASAramStream::sBlockSize;
 
-u32 JASAramStream::sChannelMax;
+DUSK_GAME_DATA u32 JASAramStream::sChannelMax;
 
-bool dvdHasErrored;
-bool hasErrored;
+DUSK_GAME_DATA bool dvdHasErrored;
+DUSK_GAME_DATA bool hasErrored;
 
 #define PAUSE_REQUESTED   1
 #define PAUSE_DVD_ERROR   2

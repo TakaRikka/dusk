@@ -11,7 +11,7 @@ class daNpc_Pouya_Param_c {
 public:
     virtual ~daNpc_Pouya_Param_c() {}
 
-    static const daNpc_Pouya_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Pouya_HIOParam m;
 };
 
 #if DEBUG
@@ -146,8 +146,8 @@ public:
 
     MtxP getHeadMtx() { return mpMorf[0]->getModel()->getAnmMtx(4); }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[3];
-    static cutFunc DUSK_CONST mCutList[3];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[3];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[3];
 
 private:
     /* 0xE40 */ NPC_POUYA_HIO_CLASS* mpHIO;

@@ -93,7 +93,7 @@ public:
     inline int draw();
     inline void initBaseMtx();
 
-    static daObjFlag3_Attr_c const M_attr;
+    static DUSK_GAME_DATA daObjFlag3_Attr_c const M_attr;
     const daObjFlag3_Attr_c& attr() const { return M_attr; }
 
 private:

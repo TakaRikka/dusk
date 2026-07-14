@@ -10,7 +10,7 @@
 #include "d/d_k_wmark.h"
 #include "dusk/gx_helper.h"
 
-const EffParamProc daAlink_c::m_fEffParamProc[] = {
+DUSK_GAME_DATA const EffParamProc daAlink_c::m_fEffParamProc[] = {
     &daAlink_c::setEffectFrontRollParam,
     &daAlink_c::setEffectSlipParam,
     &daAlink_c::setEffectSmallLandParam,

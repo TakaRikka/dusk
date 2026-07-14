@@ -9,16 +9,16 @@
 #endif
 #include "global.h"
 
-u32 gsEnableHostio;
-u32 gsEnableInterface;
-u32 gsDataToRead;
+DUSK_GAME_DATA u32 gsEnableHostio;
+DUSK_GAME_DATA u32 gsEnableInterface;
+DUSK_GAME_DATA u32 gsDataToRead;
 
-u8* gsReadBuf;
-u8* gsWriteBuf;
-JHICommBufReader* gsJHIrecvBuf;
-JHICommBufWriter* gsJHIsendBuf;
+DUSK_GAME_DATA u8* gsReadBuf;
+DUSK_GAME_DATA u8* gsWriteBuf;
+DUSK_GAME_DATA JHICommBufReader* gsJHIrecvBuf;
+DUSK_GAME_DATA JHICommBufWriter* gsJHIsendBuf;
 
-JHIMccContext gMccContext;
+DUSK_GAME_DATA JHIMccContext gMccContext;
 
 BOOL JHIInit(u32 enabled) {
     gsEnableHostio = enabled;

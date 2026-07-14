@@ -86,7 +86,7 @@ public:
         /* 0x30 */ f32 field_0x30;
     };
 
-    static M_attrs const M_attr;
+    static DUSK_GAME_DATA M_attrs const M_attr;
     M_attrs const& attr() const { return M_attr; }
 };
 

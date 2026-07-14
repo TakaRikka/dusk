@@ -1086,7 +1086,7 @@ void daItem_c::set_bound_se() {
     }
 }
 
-s32 daItem_c::m_timer_max = 10000;
+DUSK_GAME_DATA s32 daItem_c::m_timer_max = 10000;
 
 int daItem_c::CountTimer() {
     m_timer++;
@@ -1198,7 +1198,7 @@ void daItem_c::initScale() {
     }
 }
 
-procFunc daItem_c::mFuncPtr[] = {
+DUSK_GAME_DATA procFunc daItem_c::mFuncPtr[] = {
     &daItem_c::procMainNormal,        &daItem_c::procMainEnemyCarry,
     &daItem_c::procMainSimpleGetDemo, &daItem_c::procWaitGetDemoEvent,
     &daItem_c::procMainGetDemoEvent,  &daItem_c::procMainBoomerangCarry,
@@ -1206,7 +1206,7 @@ procFunc daItem_c::mFuncPtr[] = {
     &daItem_c::procMainForceGet,      NULL,
 };
 
-const dCcD_SrcCyl daItem_c::m_cyl_src = {
+DUSK_GAME_DATA const dCcD_SrcCyl daItem_c::m_cyl_src = {
     {
         {0, {{0, 0, 0}, {0xFFFFFFFF, 17}, 0x59}},
         {dCcD_SE_NONE, 0, 0, 0, {0}},

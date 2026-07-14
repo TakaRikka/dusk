@@ -22,7 +22,7 @@
 #include <cstring>
 #endif
 
-const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Maro_HIOParam daNpc_Maro_Param_c::m = {
     100.0f,
     -3.0f,
     1.0f,
@@ -206,7 +206,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Maro_c::mCutNameList[17] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Maro_c::mCutNameList[17] = {
     "",
     "CONVERSATION_ABOUT_PACHINKO",
     "CONVERSATION_ABOUT_WOODSWD",
@@ -226,7 +226,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Maro_c::mCutNameList[17] = {
     "TALK_TO_KAKASHI",
 };
 
-daNpc_Maro_c::cutFunc DUSK_CONST daNpc_Maro_c::mCutList[17] = {
+DUSK_GAME_DATA daNpc_Maro_c::cutFunc DUSK_CONST daNpc_Maro_c::mCutList[17] = {
     NULL,
     &daNpc_Maro_c::cutConversationAboutPachinko,
     &daNpc_Maro_c::cutConversationAboutWoodSwd,

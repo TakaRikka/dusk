@@ -198,7 +198,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {40, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {40, -1, 1}, {41, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Taro_c::mCutNameList[17] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Taro_c::mCutNameList[17] = {
     "",
     "CONVERSATION_ABOUT_PACHINKO",
     "CONVERSATION_ABOUT_WOODSWD",
@@ -218,7 +218,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Taro_c::mCutNameList[17] = {
     "TAG_PUSH4",
 };
 
-daNpc_Taro_c::cutFunc DUSK_CONST daNpc_Taro_c::mCutList[17] = {
+DUSK_GAME_DATA daNpc_Taro_c::cutFunc DUSK_CONST daNpc_Taro_c::mCutList[17] = {
     NULL,
     &daNpc_Taro_c::cutConversationAboutPachinko,
     &daNpc_Taro_c::cutConversationAboutWoodSwd,
@@ -240,7 +240,7 @@ daNpc_Taro_c::cutFunc DUSK_CONST daNpc_Taro_c::mCutList[17] = {
 
 static NPC_TARO_HIO_CLASS l_HIO;
 
-daNpc_Taro_HIOParam const daNpc_Taro_Param_c::m = {
+DUSK_GAME_DATA daNpc_Taro_HIOParam const daNpc_Taro_Param_c::m = {
     140.0f, -3.0f,  1.0f,   400.0f, 255.0f, 120.0f, 35.0f, 30.0f, 0.0f, 0.0f, 10.0f,
     -10.0f, 30.0f,  -10.0f, 45.0f,  -45.0f, 0.6f,   12.0f, 3,     6,    5,    6,
     110.0f, 0.0f,   0.0f,   0.0f,   60,     8,      0,     0,     0,    0,    0,

@@ -174,7 +174,7 @@ void daNpcTheB_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-daNpcTheB_c::cutFunc daNpcTheB_c::mEvtSeqList[6] = {
+DUSK_GAME_DATA daNpcTheB_c::cutFunc daNpcTheB_c::mEvtSeqList[6] = {
     NULL,
     &daNpcTheB_c::EvCut_PersonalCombatIntro,
     &daNpcTheB_c::EvCut_PersonalCombatRevenge,
@@ -199,7 +199,7 @@ daNpcTheB_c::~daNpcTheB_c() {
     #endif
 }
 
-daNpcTheB_HIOParam const daNpcTheB_Param_c::m = {
+DUSK_GAME_DATA daNpcTheB_HIOParam const daNpcTheB_Param_c::m = {
     115.0f,
     -3.0f,
     1.0f,

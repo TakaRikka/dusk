@@ -74,8 +74,8 @@ public:
     s16 getAngleY() const { return mAngleY; }
     void setAngleY(s16 angle) { mAngleY = angle;}
 
-    static ResourceData const mData[23];
-    static f32 const m_cullfar_max;
+    static DUSK_GAME_DATA ResourceData const mData[23];
+    static DUSK_GAME_DATA f32 const m_cullfar_max;
 
     enum {
         SHOP_ITEMNO_SOLD,

@@ -14,7 +14,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_lib.h"
 
-int dkWmark_c::m_nowID;
+DUSK_GAME_DATA int dkWmark_c::m_nowID;
 
 int dkWmark_c::create() {
     static cXyz wolfFootScale(1.1f, 1.0f, 0.6f);

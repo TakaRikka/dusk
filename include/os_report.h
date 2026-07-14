@@ -25,7 +25,7 @@ DECL_WEAK void OSReportForceEnableOn(void);
 #define OS_PANIC(...)
 #endif
 
-extern u8 __OSReport_disable;
+DUSK_GAME_EXTERN u8 __OSReport_disable;
 extern u8 __OSReport_Error_disable;
 extern u8 __OSReport_Warning_disable;
 extern u8 __OSReport_System_disable;
@@ -33,7 +33,7 @@ extern u8 __OSReport_enable;
 
 #if TARGET_PC
 namespace dusk {
-    extern bool OSReportReallyForceEnable;
+    DUSK_GAME_EXTERN bool OSReportReallyForceEnable;
 }
 #endif
 

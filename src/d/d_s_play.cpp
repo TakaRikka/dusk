@@ -93,9 +93,9 @@ static OSTime resPreLoadTime1;
 
 static dScnPly_preLoad_HIO_c g_preLoadHIO;
 
-s8 dScnPly_c::pauseTimer;
+DUSK_GAME_DATA s8 dScnPly_c::pauseTimer;
 
-s8 dScnPly_c::nextPauseTimer;
+DUSK_GAME_DATA s8 dScnPly_c::nextPauseTimer;
 
 #if DEBUG
 u8 dScnPly_c::debugPause;
@@ -1393,9 +1393,9 @@ static int phase_3(dScnPly_c* i_this) {
     return cPhs_NEXT_e;
 }
 
-dScnPly_reg_HIO_c g_regHIO;
+DUSK_GAME_DATA dScnPly_reg_HIO_c g_regHIO;
 
-dScnPly_env_HIO_c g_envHIO;
+DUSK_GAME_DATA dScnPly_env_HIO_c g_envHIO;
 
 #if DEBUG
 dScnPly_preset_HIO_c g_presetHIO;

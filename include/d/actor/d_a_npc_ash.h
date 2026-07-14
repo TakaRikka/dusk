@@ -12,7 +12,7 @@ public:
     daNpcAsh_Param_c() {}
     virtual ~daNpcAsh_Param_c() {}
 
-    static const daNpcAsh_HIOParam m;
+    static DUSK_GAME_DATA const daNpcAsh_HIOParam m;
 };
 
 #if DEBUG
@@ -143,7 +143,7 @@ public:
     inline bool step(s16, bool);
     inline void playExpression();
 
-    static EventFn mEvtSeqList[6];
+    static DUSK_GAME_DATA EventFn mEvtSeqList[6];
 
 private:
     /* 0xB48 */ Z2Creature mCreatureSound;

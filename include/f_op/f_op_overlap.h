@@ -18,6 +18,6 @@ struct overlap_process_profile_definition {
 
 static s32 fopOvlp_Draw(void* param_1);
 
-extern leafdraw_method_class g_fopOvlp_Method;
+DUSK_GAME_EXTERN leafdraw_method_class g_fopOvlp_Method;
 
 #endif

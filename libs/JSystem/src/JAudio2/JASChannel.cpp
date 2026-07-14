@@ -12,13 +12,13 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JGeometry.h"
 
-OSMessageQueue JASChannel::sBankDisposeMsgQ;
+DUSK_GAME_DATA OSMessageQueue JASChannel::sBankDisposeMsgQ;
 
-OSMessage JASChannel::sBankDisposeMsg[16];
+DUSK_GAME_DATA OSMessage JASChannel::sBankDisposeMsg[16];
 
-OSMessage JASChannel::sBankDisposeList[16];
+DUSK_GAME_DATA OSMessage JASChannel::sBankDisposeList[16];
 
-int JASChannel::sBankDisposeListSize;
+DUSK_GAME_DATA int JASChannel::sBankDisposeListSize;
 
 JASChannel::JASChannel(Callback i_callback, void* i_callbackData) :
     mStatus(STATUS_STOP),

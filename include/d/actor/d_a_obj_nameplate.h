@@ -40,10 +40,10 @@ public:
         /* 0x1F */ u8 field_0x1F;
     };
 
-    static M_attrs const M_attr;
+    static DUSK_GAME_DATA M_attrs const M_attr;
     static M_attrs const& attr() { return M_attr; }
 
-    static char DUSK_CONST* DUSK_CONST l_arcName;
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST l_arcName;
 
     ~daObjNameplate_c() { dComIfG_resDelete(&this->mPhase, l_arcName); }
 

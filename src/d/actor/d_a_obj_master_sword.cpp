@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
 
-daObjMasterSword_Attr_c const daObjMasterSword_c::mAttr = {1.0f};
+DUSK_GAME_DATA daObjMasterSword_Attr_c const daObjMasterSword_c::mAttr = {1.0f};
 
 void daObjMasterSword_c::initBaseMtx() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -80,7 +80,7 @@ static int daObjMasterSword_Create(fopAc_ac_c* i_this) {
     return static_cast<daObjMasterSword_c*>(i_this)->create();
 }
 
-actionFunc daObjMasterSword_c::ActionTable[] = {
+DUSK_GAME_DATA actionFunc daObjMasterSword_c::ActionTable[] = {
     &daObjMasterSword_c::initWait, &daObjMasterSword_c::executeWait,
 };
 

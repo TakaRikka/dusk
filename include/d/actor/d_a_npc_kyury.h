@@ -11,7 +11,7 @@ class daNpc_Kyury_Param_c {
 public:
     virtual ~daNpc_Kyury_Param_c() {}
 
-    static const daNpc_Kyury_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Kyury_HIOParam m;
 };
 
 #if DEBUG
@@ -123,8 +123,8 @@ public:
         return nodeNo;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
-    static cutFunc DUSK_CONST mCutList[2];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
 
 private:
     /* 0xE40 */ NPC_KYURY_HIO_CLASS* mpHIO;

@@ -10,7 +10,7 @@
 #include "d/d_s_play.h"
 #include <cstring>
 
-const daNpcCdn3_c::ActionPair daNpcCdn3_c::ActionTable[8] = {
+DUSK_GAME_DATA const daNpcCdn3_c::ActionPair daNpcCdn3_c::ActionTable[8] = {
     {&daNpcCdn3_c::initWait, &daNpcCdn3_c::executeWait},
     {&daNpcCdn3_c::initPath, &daNpcCdn3_c::executePath},
     {&daNpcCdn3_c::initTalk, &daNpcCdn3_c::executeTalk},
@@ -1500,7 +1500,7 @@ inline int daNpcCdn3_c::draw() {
     return 1;
 }
 
-daNpcCdn3_c::seqFunc* daNpcCdn3_c::m_funcTbl[44] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc* daNpcCdn3_c::m_funcTbl[44] = {
     m_seq00_funcTbl, m_seq01_funcTbl,
     m_seq02_funcTbl, m_seq03_funcTbl,
     m_seq04_funcTbl, m_seq05_funcTbl,
@@ -1525,25 +1525,25 @@ daNpcCdn3_c::seqFunc* daNpcCdn3_c::m_funcTbl[44] = {
     m_seq42_funcTbl, m_seq43_funcTbl,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq00_funcTbl[2] = {&daNpcCdn3_c::walka, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq00_funcTbl[2] = {&daNpcCdn3_c::walka, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq01_funcTbl[2] = {&daNpcCdn3_c::runa, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq01_funcTbl[2] = {&daNpcCdn3_c::runa, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq02_funcTbl[2] = {&daNpcCdn3_c::waita, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq02_funcTbl[2] = {&daNpcCdn3_c::waita, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq03_funcTbl[2] = {&daNpcCdn3_c::talka, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq03_funcTbl[2] = {&daNpcCdn3_c::talka, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq04_funcTbl[2] = {&daNpcCdn3_c::runb, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq04_funcTbl[2] = {&daNpcCdn3_c::runb, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq05_funcTbl[4] = {&daNpcCdn3_c::turnr, &daNpcCdn3_c::waita,
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq05_funcTbl[4] = {&daNpcCdn3_c::turnr, &daNpcCdn3_c::waita,
                                                         &daNpcCdn3_c::talka, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq06_funcTbl[4] = {&daNpcCdn3_c::turnl, &daNpcCdn3_c::waita,
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq06_funcTbl[4] = {&daNpcCdn3_c::turnl, &daNpcCdn3_c::waita,
                                                         &daNpcCdn3_c::talka, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq07_funcTbl[2] = {&daNpcCdn3_c::waitwall, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq07_funcTbl[2] = {&daNpcCdn3_c::waitwall, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq08_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq08_funcTbl[7] = {
     &daNpcCdn3_c::talkwall,
     &daNpcCdn3_c::waitwall,
     &daNpcCdn3_c::talkbwall,
@@ -1553,25 +1553,25 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq08_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq09_funcTbl[2] = {&daNpcCdn3_c::talkb, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq09_funcTbl[2] = {&daNpcCdn3_c::talkb, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq10_funcTbl[2] = {&daNpcCdn3_c::talkc, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq10_funcTbl[2] = {&daNpcCdn3_c::talkc, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq11_funcTbl[6] = {&daNpcCdn3_c::talka, &daNpcCdn3_c::waita,
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq11_funcTbl[6] = {&daNpcCdn3_c::talka, &daNpcCdn3_c::waita,
                                                         &daNpcCdn3_c::talkb, &daNpcCdn3_c::waitb,
                                                         &daNpcCdn3_c::talkc, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq12_funcTbl[2] = {&daNpcCdn3_c::waitb, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq12_funcTbl[2] = {&daNpcCdn3_c::waitb, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq13_funcTbl[6] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq13_funcTbl[6] = {
     &daNpcCdn3_c::browsea, &daNpcCdn3_c::browseb, &daNpcCdn3_c::talka,
     &daNpcCdn3_c::talkb,   &daNpcCdn3_c::waita,   NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq14_funcTbl[2] = {&daNpcCdn3_c::walkb, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq14_funcTbl[2] = {&daNpcCdn3_c::walkb, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq15_funcTbl[2] = {&daNpcCdn3_c::sitwaita, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq15_funcTbl[2] = {&daNpcCdn3_c::sitwaita, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq16_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq16_funcTbl[7] = {
     &daNpcCdn3_c::sittalka,
     &daNpcCdn3_c::sitwaita,
     &daNpcCdn3_c::sittalkab,
@@ -1581,14 +1581,14 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq16_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq17_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq17_funcTbl[2] = {
     &daNpcCdn3_c::playm,
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq18_funcTbl[2] = {&daNpcCdn3_c::sitwaitb, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq18_funcTbl[2] = {&daNpcCdn3_c::sitwaitb, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq19_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq19_funcTbl[7] = {
     &daNpcCdn3_c::sittalkb,
     &daNpcCdn3_c::sitwaitb,
     &daNpcCdn3_c::sittalkbb,
@@ -1598,14 +1598,14 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq19_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq20_funcTbl[2] = {&daNpcCdn3_c::looka, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq20_funcTbl[2] = {&daNpcCdn3_c::looka, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq21_funcTbl[2] = {&daNpcCdn3_c::lookb, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq21_funcTbl[2] = {&daNpcCdn3_c::lookb, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq22_funcTbl[4] = {&daNpcCdn3_c::looka, &daNpcCdn3_c::lookb,
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq22_funcTbl[4] = {&daNpcCdn3_c::looka, &daNpcCdn3_c::lookb,
                                                         &daNpcCdn3_c::waita, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq23_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq23_funcTbl[7] = {
     &daNpcCdn3_c::talka,
     &daNpcCdn3_c::waita,
     &daNpcCdn3_c::talkb,
@@ -1615,11 +1615,11 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq23_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq24_funcTbl[5] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq24_funcTbl[5] = {
     &daNpcCdn3_c::talkb, &daNpcCdn3_c::talka, &daNpcCdn3_c::talkc, &daNpcCdn3_c::waita, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq25_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq25_funcTbl[7] = {
     &daNpcCdn3_c::browsea,
     &daNpcCdn3_c::browseb,
     &daNpcCdn3_c::talka,
@@ -1629,37 +1629,37 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq25_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq26_funcTbl[3] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq26_funcTbl[3] = {
     &daNpcCdn3_c::browsea,
     &daNpcCdn3_c::browseb,
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq27_funcTbl[2] = {&daNpcCdn3_c::dance, NULL};
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq27_funcTbl[2] = {&daNpcCdn3_c::dance, NULL};
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq28_funcTbl[3] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq28_funcTbl[3] = {
     &daNpcCdn3_c::ladytalka,
     &daNpcCdn3_c::normtalka,
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq29_funcTbl[3] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq29_funcTbl[3] = {
     &daNpcCdn3_c::ladytalkb,
     &daNpcCdn3_c::normtalkb,
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq30_funcTbl[6] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq30_funcTbl[6] = {
     &daNpcCdn3_c::talka, &daNpcCdn3_c::ladytalka, &daNpcCdn3_c::waita,
     &daNpcCdn3_c::talkb, &daNpcCdn3_c::waita,     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq31_funcTbl[6] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq31_funcTbl[6] = {
     &daNpcCdn3_c::waita, &daNpcCdn3_c::ladytalkb, &daNpcCdn3_c::talka,
     &daNpcCdn3_c::waita, &daNpcCdn3_c::talkb,     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq32_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq32_funcTbl[7] = {
     &daNpcCdn3_c::talka,
     &daNpcCdn3_c::ladytalka,
     &daNpcCdn3_c::waita,
@@ -1669,7 +1669,7 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq32_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq33_funcTbl[7] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq33_funcTbl[7] = {
     &daNpcCdn3_c::waita,
     &daNpcCdn3_c::ladytalkb,
     &daNpcCdn3_c::talka,
@@ -1679,50 +1679,50 @@ daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq33_funcTbl[7] = {
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq34_funcTbl[9] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq34_funcTbl[9] = {
     &daNpcCdn3_c::talka,     &daNpcCdn3_c::ladytalka, &daNpcCdn3_c::ladytalkb,
     &daNpcCdn3_c::waita,     &daNpcCdn3_c::talkb,     &daNpcCdn3_c::waita,
     &daNpcCdn3_c::normtalka, &daNpcCdn3_c::normtalkb, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq35_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq35_funcTbl[2] = {
     &daNpcCdn3_c::sellme,
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq36_funcTbl[4] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq36_funcTbl[4] = {
     &daNpcCdn3_c::ladytalkb,
     &daNpcCdn3_c::talka,
     &daNpcCdn3_c::waita,
     NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq37_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq37_funcTbl[2] = {
     &daNpcCdn3_c::sing, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq38_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq38_funcTbl[2] = {
     &daNpcCdn3_c::sittalka, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq39_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq39_funcTbl[2] = {
     &daNpcCdn3_c::sittalkab, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq40_funcTbl[3] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq40_funcTbl[3] = {
     &daNpcCdn3_c::sittalka, &daNpcCdn3_c::sittalkab, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq41_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq41_funcTbl[2] = {
     &daNpcCdn3_c::sittalkb, NULL,
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq42_funcTbl[2] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq42_funcTbl[2] = {
     &daNpcCdn3_c::sittalkbb, NULL,
 
 };
 
-daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq43_funcTbl[3] = {
+DUSK_GAME_DATA daNpcCdn3_c::seqFunc daNpcCdn3_c::m_seq43_funcTbl[3] = {
     &daNpcCdn3_c::sittalkb, &daNpcCdn3_c::sittalkbb, NULL,
 };
 

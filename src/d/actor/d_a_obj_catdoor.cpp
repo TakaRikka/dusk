@@ -10,7 +10,7 @@
 
 static const char* l_arcName = "CatDoor";
 
-const daObjCatDoor_Attr_c daObjCatDoor_c::M_attr = {
+DUSK_GAME_DATA const daObjCatDoor_Attr_c daObjCatDoor_c::M_attr = {
     30,
     1400,
 };

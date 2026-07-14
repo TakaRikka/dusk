@@ -3,11 +3,11 @@
 #include "JSystem/JAudio2/JASVoiceBank.h"
 #include "JSystem/JAudio2/JASBasicInst.h"
 
-const JASOscillator::Data JASVoiceBank::sOscData = {
+DUSK_GAME_DATA const JASOscillator::Data JASVoiceBank::sOscData = {
     0, 1.0f, NULL, NULL, 1.0f, 0.0f,
 };
 
-JASOscillator::Data* JASVoiceBank::sOscTable;
+DUSK_GAME_DATA JASOscillator::Data* JASVoiceBank::sOscTable;
 
 bool JASVoiceBank::getInstParam(int param_0, int param_1, int param_2,
                                     JASInstParam* param_3) const {

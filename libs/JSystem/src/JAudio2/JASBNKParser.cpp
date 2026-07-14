@@ -13,7 +13,7 @@ JASBank* JASBNKParser::createBank(void const* stream, JKRHeap* heap) {
     return createBasicBank(stream, heap);
 }
 
-u32 JASBNKParser::sUsedHeapSize;
+DUSK_GAME_DATA u32 JASBNKParser::sUsedHeapSize;
 
 JASBasicBank* JASBNKParser::createBasicBank(void const* stream, JKRHeap* heap) {
     if (heap == NULL) {

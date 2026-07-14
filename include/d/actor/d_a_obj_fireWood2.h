@@ -25,8 +25,8 @@ public:
     int Draw();
     int Delete();
 
-    static const dCcD_SrcGObjInf mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
 private:
     /* 0x568 */ u8 field_0x568[0x574 - 0x568];

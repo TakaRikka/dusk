@@ -28,8 +28,8 @@ struct JASWaveArcLoader {
     static void setCurrentDir(char const*);
     static char* getCurrentDir();
 
-    static char sCurrentDir[DIR_MAX];
-    static JASHeap* sAramHeap;
+    static DUSK_GAME_DATA char sCurrentDir[DIR_MAX];
+    static DUSK_GAME_DATA JASHeap* sAramHeap;
 };
 
 /**

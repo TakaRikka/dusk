@@ -82,7 +82,7 @@ void fpcLy_CreatedMesg(layer_class* i_layer) {
     }
 }
 
-layer_class l_fpcLy_Crear = {
+DUSK_GAME_DATA layer_class l_fpcLy_Crear = {
     NULL, NULL, 0, 0xFFFFFFFF, NULL, 0, NULL, NULL, NULL, 0, 0, 0,
 };
 
