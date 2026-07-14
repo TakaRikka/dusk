@@ -7,7 +7,7 @@
 #include "JSystem/JMath/JMath.h"
 #include "global.h"
 #include <mtx.h>
-#include "dusk/endian_gx.hpp"
+#include "helpers/endian_gx.hpp"
 
 class J3DShapeMtx;
 

@@ -50,6 +50,7 @@ set(DUSKLIGHT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dusklight" CACHE PATH "Path to du
 add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
 
 add_mod(my_mod
+        FEATURES game          # optional
         SOURCES src/mod.cpp
         MOD_JSON mod.json
         RES_DIR res            # optional
@@ -57,6 +58,12 @@ add_mod(my_mod
         TEXTURES_DIR textures  # optional
 )
 ```
+
+Available features:
+- `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
+  range of compatibility with Dusklight versions and a slightly faster build process.
+- `webgpu`: Allows importing the WebGPU API (`webgpu/webgpu.h`). Must be enabled when using
+  [GfxService](#gfxservice-modssvcgfxh).
 
 Building produces `my_mod.dusk` in `build/<preset>/mods/` (configurable via the `DUSK_MODS_OUTPUT_DIR` cache variable).
 Dusklight searches a `mods/` directory next to the app in addition to the user directory, so a dev build launched from
@@ -146,7 +153,7 @@ the service safe to call. A mod can use `IMPORT_SERVICE_VERSION` (or its optiona
 version to remain compatible with older Dusklight versions, then use `SERVICE_HAS` to check at runtime for fields added
 after that explicitly requested version.
 
-The contract (see `include/mods/api.h` for the full version):
+The contract (see `sdk/include/mods/api.h` for the full version):
 
 - **A required import is guaranteed valid.** If the service is missing or too old, the mod fails to load with a clear
   error. No need to null check at call sites.
@@ -415,6 +422,8 @@ unless changing host UI is intentional.
 
 ### GfxService (`mods/svc/gfx.h`)
 
+**Requires `add_mod(... FEATURES webgpu)`**
+
 Direct WebGPU access at various stages of the rendering pipeline. Mods use the `wgpu*` C API (via `webgpu/webgpu.h`) for
 custom draws and compute dispatches. Mods must manage their own WebGPU state, including pipelines and bind groups.
 
@@ -464,6 +473,8 @@ first in-game frame. Projection matrices match the renderer's WebGPU clip conven
 ---
 
 ## Hooking Game Functions
+
+**Requires `add_mod(... FEATURES game)`**
 
 Mods may hook the vast majority of game functions, including file-local static, private and virtual functions.
 `mods/hook.hpp` provides typed helpers over the hook service:
@@ -580,24 +591,6 @@ dusk::mods::hook_add_pre<CreateItem>(svc_hook, on_create_item_pre);
 ```
 
 For reference parameters (e.g. `const cXyz& pos`), `arg_ref<cXyz>` yields a direct reference.
-
-### Game code ABI contract
-
-A primary consideration when letting mods link against the game is maintaining ABI stability across Dusklight
-versions. If your mod calls or hooks game code directly (anything beyond the service APIs), import `GameService`
-(`mods/svc/game.h`):
-
-```cpp
-IMPORT_SERVICE(GameService, svc_game);
-```
-
-Its major version is the game code ABI epoch: it's bumped when game struct or vtable layouts change incompatibly, and
-the ordinary service version check then rejects your mod with a clear error instead of letting it corrupt memory in a
-version it wasn't built for. Service-only and asset-only mods should *not* import it and will continue to work across
-game ABI changes.
-
-The more you can do through services, the better: a mod that avoids touching game code directly sidesteps future ABI
-breaks entirely and plays nicer with other enabled mods.
 
 ---
 

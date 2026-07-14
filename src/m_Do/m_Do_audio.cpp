@@ -14,6 +14,10 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "tracy/Tracy.hpp"
 
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
+
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include "Z2AudioCS/Z2AudioCS.h"
 #include <revolution/sc.h>
@@ -24,6 +28,18 @@ DUSK_GAME_DATA u8 mDoAud_zelAudio_c::mInitFlag;
 DUSK_GAME_DATA u8 mDoAud_zelAudio_c::mResetFlag;
 
 DUSK_GAME_DATA u8 mDoAud_zelAudio_c::mBgmSet;
+
+#if TARGET_PC
+void mDoAud_seStartMenu(u32 i_sfxID) {
+    if (!mDoAud_zelAudio_c::isInitFlag()) {
+        return;
+    }
+    if (!dusk::getSettings().audio.menuSounds.getValue()) {
+        return;
+    }
+    mDoAud_seStart(i_sfxID, nullptr, 0, 0);
+}
+#endif
 
 void mDoAud_zelAudio_c::reset() {
     mBgmSet = false;

@@ -16,7 +16,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "dusk/version.hpp"
 
 typedef void (dMenu_Fishing_c::*initFunc)();

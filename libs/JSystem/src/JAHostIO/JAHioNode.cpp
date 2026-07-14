@@ -6,7 +6,7 @@
 #include "JSystem/JAHostIO/JAHioNode.h"
 
 #include "JSystem/JHostIO/JORServer.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 DUSK_GAME_DATA JAHioNode* JAHioNode::smCurrentNode;
 

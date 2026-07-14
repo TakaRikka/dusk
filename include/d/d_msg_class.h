@@ -4,8 +4,8 @@
 #include "JSystem/JMessage/control.h"
 #include "JSystem/JMessage/JMessage.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "dusk/endian.h"
-#include "dusk/string.hpp"
+#include "helpers/endian.h"
+#include "helpers/string.hpp"
 
 #if REGION_JPN
 #define D_MSG_CLASS_PAGE_CNT_MAX 30

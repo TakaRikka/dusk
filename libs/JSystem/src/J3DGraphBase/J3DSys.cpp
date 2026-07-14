@@ -4,9 +4,13 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 #include "global.h"
 #include "tracy/Tracy.hpp"
+
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
 
 DUSK_GAME_DATA J3DSys j3dSys;
 
@@ -370,3 +374,13 @@ void J3DSys::reinitPixelProc() {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetZCompLoc(GX_TRUE);
 }
+
+#if TARGET_PC
+void J3DSys::setViewMtx(const Mtx m) {
+    Mtx patched;
+    if (dusk::frame_interp::lookup_replacement(m, patched)) {
+        m = patched;
+    }
+    MTXCopy(m, mViewMtx);
+}
+#endif

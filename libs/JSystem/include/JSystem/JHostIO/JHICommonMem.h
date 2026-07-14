@@ -2,7 +2,7 @@
 #define JHICOMMONMEM_H
 
 #include <types.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 inline u32 JHIhtonl(u32 v) {
     return BSWAP32(v);

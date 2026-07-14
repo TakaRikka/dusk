@@ -64,6 +64,7 @@
 #include "dusk/mod_loader.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
+#include "dusk/os.h"
 #include "dusk/ui/menu_bar.hpp"
 #include "dusk/ui/overlay.hpp"
 #include "dusk/ui/prelaunch.hpp"
@@ -121,22 +122,6 @@ const int audioHeapSize = 0x14D800;
 // =========================================================================
 #define COPYDATE_PATH "/str/Final/Release/COPYDATE"
 
-#if TARGET_PC
-DUSK_GAME_DATA bool dusk::IsRunning = true;
-DUSK_GAME_DATA bool dusk::IsShuttingDown = false;
-DUSK_GAME_DATA bool dusk::IsGameLaunched = false;
-DUSK_GAME_DATA bool dusk::RestartRequested = false;
-DUSK_GAME_DATA uint8_t dusk::SaveRequested = 0;
-DUSK_GAME_DATA dusk::StageRequest dusk::StageRequested = {"",false};
-DUSK_GAME_DATA std::filesystem::path dusk::ConfigPath;
-DUSK_GAME_DATA std::filesystem::path dusk::CachePath;
-#endif
-
-void dusk::RequestRestart() noexcept {
-    RestartRequested = SupportsProcessRestart;
-    IsRunning = false;
-}
-
 s32 LOAD_COPYDATE(void*) {
     char buffer[32];
     memset(buffer, 0, sizeof(buffer));
@@ -164,9 +149,7 @@ s32 LOAD_COPYDATE(void*) {
     return 1;
 }
 
-DUSK_GAME_DATA AuroraInfo auroraInfo;
-DUSK_GAME_DATA AuroraStats dusk::lastFrameAuroraStats;
-DUSK_GAME_DATA float dusk::frameUsagePct = 0.0f;
+AuroraInfo auroraInfo;
 
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
@@ -910,7 +893,10 @@ int game_main(int argc, char* argv[]) {
 
     main01();
 
-    dusk::MoviePlayerShutdown();
+    // We need to cleanly shut down the threads to avoid crashes on shutdown.
+    if (daMP_c::m_myObj) {
+        daMP_c::m_myObj->daMP_c_Finish();
+    }
 
     dusk::crash_reporting::shutdown();
     dusk::ShutdownFileLogging();

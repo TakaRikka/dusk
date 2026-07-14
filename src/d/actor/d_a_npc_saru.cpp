@@ -11,7 +11,7 @@
 #include "d/actor/d_a_e_ym.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 enum saru_TW_RES_File_ID {
     /* BMDR */

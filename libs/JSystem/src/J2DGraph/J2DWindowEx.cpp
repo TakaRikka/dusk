@@ -3,7 +3,7 @@
 #include "JSystem/J2DGraph/J2DWindowEx.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 struct J2DWindowExDef {
     BE(u32) field_0x0[4];

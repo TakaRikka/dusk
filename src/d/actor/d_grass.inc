@@ -513,9 +513,9 @@ dGrass_packet_c::dGrass_packet_c() {
     field_0x1d714 = 0;
 
 #if TARGET_PC
-    dusk::batch::decode_leaf_template(mp_Mkusa_9q_DL, m_Mkusa_9q_DL_size, mTplKusa9q);
-    dusk::batch::decode_leaf_template(mp_Mkusa_9q_cDL, m_Mkusa_9q_cDL_size, mTplKusa9qCut);
-    dusk::batch::decode_leaf_template(l_M_TenGusaDL, 0xC0, mTplTengusa);
+    batch::decode_leaf_template(mp_Mkusa_9q_DL, m_Mkusa_9q_DL_size, mTplKusa9q);
+    batch::decode_leaf_template(mp_Mkusa_9q_cDL, m_Mkusa_9q_cDL_size, mTplKusa9qCut);
+    batch::decode_leaf_template(l_M_TenGusaDL, 0xC0, mTplTengusa);
 #endif
 
     OS_REPORT("草群メモリ=%fＫ\n", 117.7734375f);
@@ -533,7 +533,7 @@ static MtxP get_model_mtx(Mtx modelMtx, Mtx storage) {
 }
 
 static void transform_positions(
-    const dusk::batch::LeafTemplate& tpl, const Vec* posArray, const Mtx mtx, Vec* xfPos) {
+    const batch::LeafTemplate& tpl, const Vec* posArray, const Mtx mtx, Vec* xfPos) {
     for (u32 i = 0; i < tpl.posRefCount; i++) {
         const u8 idx = tpl.posRefs[i];
         MTXMultVec(mtx, &posArray[idx], &xfPos[idx]);
@@ -609,10 +609,10 @@ static GXColor blade_amb_color(const dGrass_data_c* blade, const dKy_tevstr_c* t
     return amb;
 }
 
-static void blade_emit(const dusk::batch::LeafTemplate& tpl, const Vec* xformedPos,
+static void blade_emit(const batch::LeafTemplate& tpl, const Vec* xformedPos,
                              const GXColor* colors, GXColor amb) {
     for (u32 i = 0; i < tpl.vtxCount; i++) {
-        const dusk::batch::LeafTemplate::Vtx& v = tpl.vtx[i];
+        const batch::LeafTemplate::Vtx& v = tpl.vtx[i];
         const Vec& p = xformedPos[v.pos];
         GXPosition3f32(p.x, p.y, p.z);
         GXNormal1x8(v.nrm);
@@ -765,7 +765,7 @@ void dGrass_packet_c::draw() {
         for (int bucket = 0; bucket < 4; bucket++) {
             const bool kusaTex = bucket < 2;
             const bool cut = (bucket & 1) != 0;
-            const dusk::batch::LeafTemplate& tpl =
+            const batch::LeafTemplate& tpl =
                 cut ? mTplKusa9qCut : (kusaTex ? mTplKusa9q : mTplTengusa);
 
             bool open = false;

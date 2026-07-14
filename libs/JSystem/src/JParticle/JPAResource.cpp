@@ -19,6 +19,8 @@
 #include "tracy/Tracy.hpp"
 
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
+
 #define JPA_DRAW_CTX_ARG , &ctx
 #else
 #define JPA_DRAW_CTX_ARG

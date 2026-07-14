@@ -5,6 +5,10 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/d_com_inf_game.h"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 void dMdl_c::draw() {
     j3dSys.setVtxPos(mpModelData->getVtxPosArray(), mpModelData->getVtxNum());
     j3dSys.setVtxNrm(mpModelData->getVtxNrmArray(), mpModelData->getNrmNum());

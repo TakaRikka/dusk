@@ -9,7 +9,7 @@
 #ifdef __MWERKS__
 #include <cmath>
 #else
-#include <dusk/math.h>
+#include <helpers/math.h>
 #endif
 #include <gx.h>
 

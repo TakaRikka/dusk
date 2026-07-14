@@ -10,11 +10,11 @@
 #include <span>
 
 #include "Adpcm.hpp"
-#include "freeverb/revmodel.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
-#include "dusk/endian.h"
 #include "dusk/logging.h"
+#include "freeverb/revmodel.hpp"
 #include "global.h"
+#include "helpers/endian.h"
 #include "tracy/Tracy.hpp"
 
 using namespace dusk::audio;

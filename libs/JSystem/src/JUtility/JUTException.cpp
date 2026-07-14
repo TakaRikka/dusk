@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #ifdef __REVOLUTION_SDK__
 #include <revolution.h>
 #else

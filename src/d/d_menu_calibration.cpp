@@ -14,7 +14,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 // Need 0xC bytes of padding with no symbol between dMenu_Calibration_c::__vtable and the end of
 // .data

@@ -9,7 +9,7 @@
 #include "d/actor/d_a_demo_item.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdData[3] = {
     {3, 1},

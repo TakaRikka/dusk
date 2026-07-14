@@ -2,7 +2,7 @@
 #define JUTRESFONT_H
 
 #include "JSystem/JUtility/JUTFont.h"
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 
 class JKRHeap;
 

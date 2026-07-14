@@ -4,7 +4,7 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_data.h"
-#include "dusk/offset_ptr.h"
+#include "helpers/offset_ptr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
 #include "os_report.h"

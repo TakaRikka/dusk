@@ -21,9 +21,13 @@
 #include "d/d_msg_object.h"
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_stage.h"
-#include "dusk/memory.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "f_op/f_op_msg_mng.h"
+
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#include "dusk/memory.h"
+#endif
 
 static dMf_HIO_c g_fmHIO;
 

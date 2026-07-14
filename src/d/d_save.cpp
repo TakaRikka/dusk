@@ -31,8 +31,8 @@
 #include "dusk/settings.h"
 #include <f_ap/f_ap_game.h>
 
-#include "dusk/string.hpp"
-#define strcpy dusk::SafeStringCopy
+#include "helpers/string.hpp"
+#define strcpy SafeStringCopy
 #endif
 
 static u8 dSv_item_rename(u8 i_itemNo) {

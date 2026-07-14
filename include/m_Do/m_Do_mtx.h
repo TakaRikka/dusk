@@ -6,7 +6,7 @@
 #include <mtx.h>
 
 #include "JSystem/JMath/JMath.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 extern u8 g_printCurrentHeapDebug;
 DUSK_GAME_EXTERN u8 g_printOtherHeapDebug;

@@ -8,7 +8,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 void dBgp_c::material_c::draw() {
     material_c* material = this;

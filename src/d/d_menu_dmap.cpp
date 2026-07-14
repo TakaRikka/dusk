@@ -26,7 +26,11 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
+
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
 #define POINTER_OPT dComIfGs_getOptPointer()

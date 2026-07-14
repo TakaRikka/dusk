@@ -1,6 +1,6 @@
 #include "dusk/dvd_asset.hpp"
 #include "dusk/logging.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 #include "dolphin/dvd.h"
 #include "DynamicLink.h"
 #include "JSystem/JKernel/JKRArchive.h"

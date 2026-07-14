@@ -7,7 +7,7 @@
 #include "global.h"
 #include <stdint.h>
 
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 
 /**
  * @ingroup jsystem-j3d

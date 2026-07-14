@@ -26,8 +26,12 @@
 #include "m_Do/m_Do_lib.h"
 #include "tracy/Tracy.hpp"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 #if DEBUG

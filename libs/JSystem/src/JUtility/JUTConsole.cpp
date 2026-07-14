@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "global.h"
 
 DUSK_GAME_DATA JUTConsoleManager* JUTConsoleManager::sManager;

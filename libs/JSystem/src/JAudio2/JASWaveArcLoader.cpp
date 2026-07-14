@@ -9,7 +9,7 @@
 #include <os.h>
 #include <stdint.h>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 DUSK_GAME_DATA JASHeap* JASWaveArcLoader::sAramHeap;
 

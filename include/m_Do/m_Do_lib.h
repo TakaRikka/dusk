@@ -8,7 +8,7 @@
 #include "JSystem/JGeometry.h"
 #endif
 
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 
 typedef struct Vec Vec;
 struct ResTIMG;

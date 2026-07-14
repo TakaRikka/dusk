@@ -13,7 +13,7 @@
 #include "d/actor/d_a_bg_obj.h"
 #include "d/actor/d_a_set_bgobj.h"
 #include "d/d_s_play.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static const char* getBmdName(int param_0, int param_1) {
     static char l_bmdName[16];

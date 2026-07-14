@@ -15,7 +15,7 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #ifdef __MWERKS__
 #include <stdint.h>
 #else
@@ -702,7 +702,7 @@ JKRHeap* JKRHeap::getCurrentHeap() {
 }
 
 void JKRHeap::setName(const char* name) {
-    dusk::SafeStringCopyTruncate(mName, name);
+    SafeStringCopyTruncate(mName, name);
 }
 
 void JKRHeap::setNamef(const char* fmt, ...) {

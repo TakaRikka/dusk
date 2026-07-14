@@ -8,7 +8,7 @@
 #include <cstring>
 #include <types.h>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 J2DMaterialFactory::J2DMaterialFactory(J2DMaterialBlock const& param_0) {
     mMaterialNum = param_0.field_0x8;

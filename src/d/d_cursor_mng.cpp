@@ -1,10 +1,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 
 #include "d/dolzel.h" // IWYU pragma: keep
-
 #include "d/d_cursor_mng.h"
-
-#include "../../libs/JSystem/include/JSystem/JKernel/JKRHeap.h"
 #include "d/d_com_inf_game.h"
 
 dCsr_mng_c* dCsr_mng_c::m_myObj;

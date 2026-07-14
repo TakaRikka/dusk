@@ -95,12 +95,6 @@ static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
 #define THP_TEXTURE_SET_COUNT  3
 #endif
 
-#if TARGET_PC
-namespace dusk {
-    void MoviePlayerShutdown();
-}
-#endif
-
 struct daMP_THPPlayer {
     /* 0x000 */ DVDFileInfo fileInfo;
 	/* 0x03C */ THPHeader header;

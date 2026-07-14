@@ -12,7 +12,7 @@
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "dusk/endian_ssystem.h"
+#include "helpers/endian_ssystem.h"
 
 #if !__MWERKS__
 // mwerks compiler makes value initialization act like default initialization so we need

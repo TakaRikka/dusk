@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_shop0.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Shop0_c*>(i_this)->createHeap();

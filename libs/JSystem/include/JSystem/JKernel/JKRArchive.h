@@ -4,7 +4,7 @@
 #include "JSystem/JKernel/JKRCompression.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "global.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class JKRHeap;
 

@@ -4,7 +4,7 @@
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/TColor.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J2DMaterial;
 class JUTPalette;

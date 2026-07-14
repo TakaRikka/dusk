@@ -9,7 +9,7 @@
 #include <types.h>
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg.h"
 

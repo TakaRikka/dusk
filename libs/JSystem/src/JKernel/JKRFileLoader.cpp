@@ -8,7 +8,7 @@
 #include <cstring>
 #include <string>
 #include "JSystem/JKernel/JKRHeap.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "global.h"
 
 DUSK_GAME_DATA JKRFileLoader* JKRFileLoader::sCurrentVolume;

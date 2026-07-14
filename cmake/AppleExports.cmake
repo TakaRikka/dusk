@@ -41,14 +41,13 @@ function(setup_apple_exports target)
 
     set(_exp "${CMAKE_BINARY_DIR}/${_config_subdir}dusklight_exports.exp")
     add_custom_command(TARGET ${target} PRE_LINK
-            # TODO: src/dusk/ is NOT excluded: inline code in game headers
-            # currently call into it (e.g. dusk::frame_interp::lookup_replacement).
             COMMAND "${_symgen}" exports
             "@${_rsp}"
             --out "${_exp}"
             --exclude cmake_pch
             --exclude miniz
             --exclude asan_options
+            --exclude src/dusk
             ${_sdk_args}
             COMMENT "Generating dusklight exports"
             VERBATIM)

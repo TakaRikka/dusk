@@ -7,7 +7,7 @@
 #include "global.h"
 #include <stdint.h>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 #if TARGET_PC
 #include "dusk/os.h"

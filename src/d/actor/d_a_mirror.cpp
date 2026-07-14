@@ -18,7 +18,7 @@
 #endif
 
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 static BOOL daMirror_c_createHeap(fopAc_ac_c* i_this) {

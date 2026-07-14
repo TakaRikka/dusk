@@ -2,7 +2,7 @@
 #define JUTNAMETAB_H
 
 #include <types.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 /**
 * @ingroup jsystem-jutility

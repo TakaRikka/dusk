@@ -4,7 +4,7 @@
 #include "JSystem/JAudio2/JASTaskThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include <dvd.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class JASChannel;
 

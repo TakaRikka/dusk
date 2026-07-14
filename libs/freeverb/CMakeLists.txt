@@ -7,3 +7,5 @@ add_library(freeverb
     allpass.cpp
     revmodel.cpp
 )
+target_include_directories(freeverb PRIVATE include/freeverb)
+target_include_directories(freeverb INTERFACE include)

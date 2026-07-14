@@ -2,7 +2,7 @@
 #define D_D_TRESURE_H
 
 #include <mtx.h>
-#include "dusk/offset_ptr.h"
+#include "helpers/offset_ptr.h"
 
 class dTres_c {
 public:

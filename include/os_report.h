@@ -31,10 +31,4 @@ extern u8 __OSReport_Warning_disable;
 extern u8 __OSReport_System_disable;
 extern u8 __OSReport_enable;
 
-#if TARGET_PC
-namespace dusk {
-    DUSK_GAME_EXTERN bool OSReportReallyForceEnable;
-}
-#endif
-
 #endif  // _OS_REPORT_H

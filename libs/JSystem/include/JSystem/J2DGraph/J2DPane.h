@@ -5,7 +5,7 @@
 #include "JSystem/JSupport/JSUList.h"
 #include <gx.h>
 #include <mtx.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J2DAnmBase;
 class J2DAnmColor;

@@ -57,7 +57,7 @@
 #include "dusk/settings.h"
 #include "res/Object/Alink.h"
 #include <cstring>
-#include <dusk/string.hpp>
+#include <helpers/string.hpp>
 #endif
 
 static int daAlink_Create(fopAc_ac_c* i_this);

@@ -33,8 +33,6 @@ function(setup_android_exports target)
 
     set(_vscript "${CMAKE_BINARY_DIR}/dusklight_exports.ver")
     add_custom_command(TARGET ${target} PRE_LINK
-            # TODO: src/dusk/ is NOT excluded: inline code in game headers
-            # currently call into it (e.g. dusk::frame_interp::lookup_replacement).
             COMMAND "${SYMGEN_EXE}" exports
             "@${_rsp}"
             --out "${_vscript}"
@@ -42,6 +40,7 @@ function(setup_android_exports target)
             --exclude cmake_pch
             --exclude miniz
             --exclude asan_options
+            --exclude src/dusk
             # Resolved from the Java side; the SDL ones live in the statically-linked
             # SDL archive, outside the provenance scan.
             --extra-sym JNI_OnLoad

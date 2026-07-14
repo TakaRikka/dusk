@@ -9,24 +9,47 @@ if (ANDROID)
     list(APPEND _game_compile_defs TARGET_ANDROID=1)
 endif ()
 
-set(_game_include_dirs
+# Public game headers
+set(_game_abi_include_dirs
         ${_game_root}/include
-        ${_game_root}/src
-        ${_game_root}/assets/GZ2E01 # TODO: make this dynamic if needed?
+        ${_game_root}/assets/GZ2E01
         ${_game_root}/libs/JSystem/include
-        ${_game_root}/libs
         ${_game_root}/extern/aurora/include/dolphin
         ${_game_root}/extern/aurora/include
+        ${_game_root}/sdk/include
+)
+
+# Internal game headers
+set(_game_include_dirs
+        ${_game_abi_include_dirs}
+        ${_game_root}/src
         ${_game_root}/extern
         ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# Interface target for mods and sub-projects to inherit game headers/defines.
+# Mod API, including services
+add_library(dusklight_mod_api INTERFACE)
+target_include_directories(dusklight_mod_api INTERFACE ${_game_root}/sdk/include)
+
+# Full internal headers used to build the game
 add_library(dusklight_game_headers INTERFACE)
 target_include_directories(dusklight_game_headers INTERFACE ${_game_include_dirs})
 target_compile_definitions(dusklight_game_headers INTERFACE ${_game_compile_defs})
-if (TARGET dawn::dawncpp_headers)
-    target_link_libraries(dusklight_game_headers INTERFACE dawn::dawncpp_headers)
-elseif (TARGET dawn::webgpu_dawn)
-    target_link_libraries(dusklight_game_headers INTERFACE dawn::webgpu_dawn)
-endif ()
+
+# Public game ABI for mods
+add_library(dusklight_game_abi_headers INTERFACE)
+target_include_directories(dusklight_game_abi_headers INTERFACE ${_game_abi_include_dirs})
+target_compile_definitions(dusklight_game_abi_headers INTERFACE ${_game_compile_defs})
+
+# Mod feature targets
+add_library(dusklight_mod_feature_game INTERFACE)
+target_link_libraries(dusklight_mod_feature_game INTERFACE
+        dusklight_mod_api
+        dusklight_game_abi_headers)
+target_compile_definitions(dusklight_mod_feature_game INTERFACE DUSK_MOD_FEATURE_GAME=1)
+target_sources(dusklight_mod_feature_game INTERFACE
+        ${_game_root}/sdk/src/game_feature.cpp)
+
+add_library(dusklight_mod_feature_webgpu INTERFACE)
+target_link_libraries(dusklight_mod_feature_webgpu INTERFACE dusklight_mod_api)
+target_compile_definitions(dusklight_mod_feature_webgpu INTERFACE DUSK_MOD_FEATURE_WEBGPU=1)

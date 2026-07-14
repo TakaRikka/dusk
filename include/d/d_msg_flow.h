@@ -2,7 +2,7 @@
 #define D_MSG_D_MSG_FLOW_H
 
 #include <types.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 enum {
     NODETYPE_MESSAGE_e = 1,

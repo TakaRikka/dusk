@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DShape.h"
 #include "JSystem/J3DAssert.h"
 #include <mtx.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J3DTexMtx;
 class J3DTexGenBlock;

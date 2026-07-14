@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include <mtx.h>
 
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J3DModelData;
 class J3DMaterialTable;

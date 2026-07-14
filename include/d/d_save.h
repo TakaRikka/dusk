@@ -8,7 +8,7 @@
 #include "d/d_item_data.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JHostIO/JORReflexible.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 static const int DEFAULT_SELECT_ITEM_INDEX = 0;
 static const int MAX_SELECT_ITEM = 4;
@@ -494,7 +494,7 @@ public:
 #endif
     void setPlayerName(const char* i_name) {
 #if AVOID_UB
-        dusk::SafeStringCopyTruncate(mPlayerName, i_name);
+        SafeStringCopyTruncate(mPlayerName, i_name);
 #else
         strcpy(mPlayerName, i_name);
 #endif
@@ -506,7 +506,7 @@ public:
 #endif
     void setHorseName(const char* i_name) {
 #if AVOID_UB
-        dusk::SafeStringCopyTruncate(mHorseName, i_name);
+        SafeStringCopyTruncate(mHorseName, i_name);
 #else
         strcpy(mHorseName, i_name);
 #endif

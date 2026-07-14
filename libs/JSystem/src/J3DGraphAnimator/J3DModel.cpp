@@ -8,7 +8,10 @@
 #include "JSystem/J3DGraphBase/J3DShapeMtx.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JKernel/JKRHeap.h"
+
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#endif
 
 #define J3D_ASSERTMSG(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
 #define J3D_WARN1(LINE, MSG, ARG1) JUT_WARN(LINE, MSG, ARG1)
@@ -104,6 +107,11 @@ void J3DModel::interp_callback(bool isSimFrame, void* pUserWork) {
         i_this->calcMaterial();
         i_this->diff();
     }
+}
+
+void J3DModel::setAnmMtx(int jointNo, Mtx m) {
+    mMtxBuffer->setAnmMtx(jointNo, m);
+    dusk::frame_interp::record_final_mtx(mMtxBuffer->getAnmMtx(jointNo));
 }
 #endif
 

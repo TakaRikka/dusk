@@ -2,7 +2,7 @@
 #include <JSystem/JUtility/JUTAssert.h>
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 DUSK_GAME_DATA u32 JAHVirtualNode::smVirNodeNum;
 

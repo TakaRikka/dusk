@@ -25,7 +25,7 @@
 
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 namespace {
 constexpr u8 pointer_target(u8 group, u8 index) noexcept {

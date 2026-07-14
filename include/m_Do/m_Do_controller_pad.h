@@ -3,7 +3,10 @@
 
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
+
+#if defined(DUSK_BUILDING_GAME)
 #include "dusk/settings.h"
+#endif
 
 // Controller Ports 1 - 4
 enum { PAD_1, PAD_2, PAD_3, PAD_4 };
@@ -54,29 +57,21 @@ public:
     static f32 getStickValue(u32 pad) { return getCpadInfo(pad).mMainStickValue; }
     static s16 getStickAngle(u32 pad) { return getCpadInfo(pad).mMainStickAngle; }
 
+#if TARGET_PC
+    static s16 getStickAngle3D(u32 pad);
+#else
     static s16 getStickAngle3D(u32 pad) {
-        #if TARGET_PC
-        if (dusk::getSettings().game.enableMirrorMode) {
-            return -getCpadInfo(pad).mMainStickAngle;
-        } else {
-            return getCpadInfo(pad).mMainStickAngle;
-        }
-        #else
         return getCpadInfo(pad).mMainStickAngle;
-        #endif
     }
+#endif
 
+#if TARGET_PC
+    static f32 getSubStickX3D(u32 pad);
+#else
     static f32 getSubStickX3D(u32 pad) {
-        #if TARGET_PC
-        if (dusk::getSettings().game.enableMirrorMode) {
-            return -getCpadInfo(pad).mCStickPosX;
-        } else {
-            return getCpadInfo(pad).mCStickPosX;
-        }
-        #else
         return getCpadInfo(pad).mCStickPosX;
-        #endif
     }
+#endif
 
     static f32 getSubStickX(u32 pad) { return getCpadInfo(pad).mCStickPosX; }
     static f32 getSubStickY(u32 pad) { return getCpadInfo(pad).mCStickPosY; }
