@@ -1793,6 +1793,19 @@ BOOL daMidna_c::setDemoAnm() {
 
 void daMidna_c::setFaceBtp(u16 i_index, BOOL i_isDemo) {
     J3DAnmTexPattern* btp;
+#if TARGET_PC
+    bool willLoad;
+    if (i_isDemo) {
+        willLoad = !(i_index == mBtpHeap.getIdx() && mBtpHeap.getArcNo() == 0);
+    } else {
+        willLoad = !(i_index == mBtpHeap.getIdx() && mBtpHeap.checkNoSetArcNo()) &&
+                   mBtpHeap.checkNoSetPriIdx();
+    }
+    if (willLoad && mpFaceBtp != NULL && mpModel != NULL) {
+        mpModel->getModelData()->removeTexNoAnimator(mpFaceBtp);
+        mpFaceBtp = NULL;
+    }
+#endif
     if (i_isDemo) {
         btp = static_cast<J3DAnmTexPattern*>(mBtpHeap.loadDataDemoRID(i_index, 0));
     } else {
@@ -1811,6 +1824,19 @@ void daMidna_c::setFaceBtp(u16 i_index, BOOL i_isDemo) {
 
 void daMidna_c::setFaceBtk(u16 i_index, BOOL i_isDemo) {
     J3DAnmTextureSRTKey* btk;
+#if TARGET_PC
+    bool willLoad;
+    if (i_isDemo) {
+        willLoad = !(i_index == mBtkHeap.getIdx() && mBtkHeap.getArcNo() == 0);
+    } else {
+        willLoad = !(i_index == mBtkHeap.getIdx() && mBtkHeap.checkNoSetArcNo()) &&
+                   mBtkHeap.checkNoSetPriIdx();
+    }
+    if (willLoad && mpFaceBtk != NULL && mpModel != NULL) {
+        mpModel->getModelData()->removeTexMtxAnimator(mpFaceBtk);
+        mpFaceBtk = NULL;
+    }
+#endif
     if (i_isDemo) {
         btk = static_cast<J3DAnmTextureSRTKey*>(mBtkHeap.loadDataDemoRID(i_index, 0));
     } else {
