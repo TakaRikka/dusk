@@ -17,7 +17,7 @@ public:
     static u8 getPlayerNo();
     static void setPlayerNo(u8 i_playerNo) { mPlayerNo = i_playerNo; }
 
-    static u8 mPlayerNo;
+    static DUSK_GAME_DATA u8 mPlayerNo;
 
     /* 0x568 */ u8 unused_0x568[0x570 - 0x568];
     /* 0x570 */ cXyz mVertices[4];

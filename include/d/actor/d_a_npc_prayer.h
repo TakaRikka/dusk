@@ -11,7 +11,7 @@ class daNpcPray_Param_c {
 public:
     virtual ~daNpcPray_Param_c() {}
 
-    static const daNpcPray_HIOParam m;
+    static DUSK_GAME_DATA const daNpcPray_HIOParam m;
 };
 
 #if DEBUG
@@ -77,7 +77,7 @@ public:
 
     s16 getMessageNo() { return (fopAcM_GetParam(this) >> 8) & 0xFFFF; } 
 
-    static EvtSeq DUSK_CONST mEvtSeqList[];
+    static DUSK_GAME_DATA EvtSeq DUSK_CONST mEvtSeqList[];
 
 private:
     /* 0xB48 */ Z2CreatureCitizen mSound;

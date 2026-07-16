@@ -259,7 +259,7 @@ u8 dCcD_GObjInf::GetTgHitObjSe() {
     }
 }
 
-Z2SoundID const dCcD_GObjInf::m_hitSeID[24] = {
+DUSK_GAME_DATA Z2SoundID const dCcD_GObjInf::m_hitSeID[24] = {
     Z2SE_HIT_DUMMY_CANCEL,    Z2SE_HIT_SWORD,          Z2SE_HIT_SHIELD_ATTACK,
     Z2SE_HIT_WOLFKICK,        Z2SE_HIT_WOLFBITE,       Z2SE_HIT_WOOD_WEAPON,
     Z2SE_HIT_HAMMER,          Z2SE_HIT_ARROW_STICK,    Z2SE_HIT_HOOKSHOT_STICK,

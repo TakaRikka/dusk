@@ -59,7 +59,7 @@ class daPeru_Param_c {
 public:
     virtual ~daPeru_Param_c() {}
 
-    static daPeru_HIOParam const m;
+    static DUSK_GAME_DATA daPeru_HIOParam const m;
 };
 
 #if DEBUG
@@ -186,8 +186,8 @@ public:
     void setCnt(int cnt) { field_0xe6a = cnt; }
     int getCnt() { return field_0xe6a; }
 
-    static const char* mCutNameList[3];
-    static cutAppearFunc mCutList[3];
+    static DUSK_GAME_DATA const char* mCutNameList[3];
+    static DUSK_GAME_DATA cutAppearFunc mCutList[3];
 
 private:
     /* 0x0E40 */ daNpcT_ActorMngr_c mActors[3];

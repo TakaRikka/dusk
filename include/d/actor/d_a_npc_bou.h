@@ -16,7 +16,7 @@ struct daNpc_Bou_HIOParam {
 public:
     virtual ~daNpc_Bou_Param_c() {}
 
-    static const daNpc_Bou_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Bou_HIOParam m;
  };
 
 #if DEBUG
@@ -114,8 +114,8 @@ public:
     virtual int drawDbgInfo();
     virtual void changeAnm(int*, int*);
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[9];
-    static cutFunc DUSK_CONST mCutList[9];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[9];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[9];
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

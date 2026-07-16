@@ -21,7 +21,7 @@ JASWaveBank* JASWSParser::createWaveBank(void const* stream, JKRHeap* heap) {
     }
 }
 
-u32 JASWSParser::sUsedHeapSize;
+DUSK_GAME_DATA u32 JASWSParser::sUsedHeapSize;
 
 JASBasicWaveBank* JASWSParser::createBasicWaveBank(void const* stream, JKRHeap* heap) {
     if (heap == NULL) {

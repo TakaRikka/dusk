@@ -7,7 +7,7 @@ static s32 daBaseNpc_chkPnt(cXyz param_0, dPnt* param_1, u16 param_2, u16 param_
 static u16 daBaseNpc_putNurbs(dPnt* i_CPnts, int i_CPntNum, int i_maxPntNum, dPnt* o_curve_p, BOOL i_isClosed);
 static s16 daBaseNpc_getGroundAngle(cBgS_PolyInfo* param_0, s16 param_1);
 
-dCcD_SrcCyl daBaseNpc_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daBaseNpc_c::mCcDCyl = {
     daBaseNpc_c::mCcDObj,
     {
         {
@@ -18,7 +18,7 @@ dCcD_SrcCyl daBaseNpc_c::mCcDCyl = {
     }
 };
 
-dCcD_SrcSph daBaseNpc_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daBaseNpc_c::mCcDSph = {
     daBaseNpc_c::mCcDObj,
     {
             {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph
@@ -701,11 +701,11 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
     return moveBgActor->MoveBGCreateHeap();
 }
 
-const char* daBaseNpc_moveBgActor_c::m_name;
+DUSK_GAME_DATA const char* daBaseNpc_moveBgActor_c::m_name;
 
-int daBaseNpc_moveBgActor_c::m_dzb_id;
+DUSK_GAME_DATA int daBaseNpc_moveBgActor_c::m_dzb_id;
 
-MoveBGActor_SetFunc daBaseNpc_moveBgActor_c::m_set_func;
+DUSK_GAME_DATA MoveBGActor_SetFunc daBaseNpc_moveBgActor_c::m_set_func;
 
 int daBaseNpc_moveBgActor_c::MoveBGCreateHeap() {
     if (!CreateHeap()) {

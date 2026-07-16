@@ -204,13 +204,13 @@ fopAc_ac_c::fopAc_ac_c() {}
 
 fopAc_ac_c::~fopAc_ac_c() {}
 
-int g_fopAc_type;
+DUSK_GAME_DATA int g_fopAc_type;
 
 BOOL fopAc_IsActor(void* i_actor) {
     return fpcM_IsJustType(g_fopAc_type, ((fopAc_ac_c*)i_actor)->actor_type);
 }
 
-u32 fopAc_ac_c::stopStatus;
+DUSK_GAME_DATA u32 fopAc_ac_c::stopStatus;
 
 static int fopAc_Draw(void* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)i_this;
@@ -635,7 +635,7 @@ u8 fopAcM::HeapAdjustEntry;
 u8 fopAcM::HeapAdjustUnk;
 #endif
 
-actor_method_class g_fopAc_Method = {
+DUSK_GAME_DATA actor_method_class g_fopAc_Method = {
     (process_method_func)fopAc_Create,  (process_method_func)fopAc_Delete,
     (process_method_func)fopAc_Execute, (process_method_func)fopAc_IsDelete,
     (process_method_func)fopAc_Draw,

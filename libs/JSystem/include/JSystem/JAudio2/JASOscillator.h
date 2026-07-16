@@ -2,7 +2,7 @@
 #define JASOSCILLATOR_H
 
 #include <types.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 /**
  * @ingroup jsystem-jaudio
@@ -92,10 +92,10 @@ struct JASOscillator {
 	/* 0x1A */ u16 _1A;
 	/* 0x1C */ int _1C;
 
-    static const f32 sCurveTableLinear[17];
-    static const f32 sCurveTableSampleCell[17];
-	static const f32 sCurveTableSqRoot[17];
-	static const f32 sCurveTableSquare[17];
+    static DUSK_GAME_DATA const f32 sCurveTableLinear[17];
+    static DUSK_GAME_DATA const f32 sCurveTableSampleCell[17];
+	static DUSK_GAME_DATA const f32 sCurveTableSqRoot[17];
+	static DUSK_GAME_DATA const f32 sCurveTableSquare[17];
 };
 
 #endif /* JASOSCILLATOR_H */

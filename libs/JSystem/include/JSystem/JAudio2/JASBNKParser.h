@@ -137,7 +137,7 @@ namespace JASBNKParser {
         return ptr[2];
     }
 
-    extern u32 sUsedHeapSize;
+    DUSK_GAME_EXTERN u32 sUsedHeapSize;
 };
 
 

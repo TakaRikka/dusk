@@ -35,7 +35,7 @@ int fpcNd_IsDelete(process_node_class* pProcNode);
 int fpcNd_Delete(process_node_class* pProcNode);
 int fpcNd_Create(process_node_class* pProcNode);
 
-extern int g_fpcNd_type;
-extern nodedraw_method_class g_fpcNd_Method;
+DUSK_GAME_EXTERN int g_fpcNd_type;
+DUSK_GAME_EXTERN nodedraw_method_class g_fpcNd_Method;
 
 #endif

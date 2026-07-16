@@ -6,7 +6,7 @@
 #else
 #include <dolphin.h>
 #endif
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 // Struct definitions might be wrong
 typedef struct bmg_header_t {

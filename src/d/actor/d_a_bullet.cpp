@@ -14,14 +14,14 @@ static DUSK_CONST char* l_bmdFileNameList[] = {"hanjo_stone.bmd"};
 
 static BULLET_HIO_CLASS l_HIO;
 
-const dCcD_SrcGObjInf daBullet_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daBullet_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x0, 0x0}, {0x79}}},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {0},
 };
 
-dCcD_SrcSph daBullet_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daBullet_c::mCcDSph = {
     daBullet_c::mCcDObjInfo,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph
@@ -81,7 +81,7 @@ int daBullet_c::Delete() {
     return 1;
 }
 
-daBullet_HIOParam const daBullet_Param_c::m = {
+DUSK_GAME_DATA daBullet_HIOParam const daBullet_Param_c::m = {
     -3.0f,
     255.0f,
     3.0f,

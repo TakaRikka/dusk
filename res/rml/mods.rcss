@@ -121,6 +121,7 @@ mod-entry .mod-entry-desc {
     color: rgba(224, 219, 200, 65%);
     max-height: 2.6em;
     overflow: hidden;
+    white-space: pre-wrap;
 }
 
 mod-entry .mod-entry-sub {

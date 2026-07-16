@@ -60,13 +60,13 @@ public:
     static void setTransBuffer(u8*, u32, JKRHeap*);
 
 private:
-    static JKRAramStream* sAramStreamObject;
-    static OSMessage sMessageBuffer[4];
-    static OSMessageQueue sMessageQueue;
+    static DUSK_GAME_DATA JKRAramStream* sAramStreamObject;
+    static DUSK_GAME_DATA OSMessage sMessageBuffer[4];
+    static DUSK_GAME_DATA OSMessageQueue sMessageQueue;
 
-    static u8* transBuffer;
-    static u32 transSize;
-    static JKRHeap* transHeap;
+    static DUSK_GAME_DATA u8* transBuffer;
+    static DUSK_GAME_DATA u32 transSize;
+    static DUSK_GAME_DATA JKRHeap* transHeap;
 };
 
 inline JKRAramStream* JKRCreateAramStreamManager(s32 priority) {

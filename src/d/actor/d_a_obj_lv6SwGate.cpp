@@ -31,11 +31,11 @@ void daLv6SwGate_HIO_c::genMessage(JORMContext* context)
 
 static daLv6SwGate_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daLv6SwGate_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daLv6SwGate_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x400, 0x11}, {0x79}}}, {1, 0, 0, 0, 0}, {0xA, 0, 0, 0, 0}, {0}
 };
 
-dCcD_SrcCyl daLv6SwGate_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daLv6SwGate_c::mCcDCyl = {
     mCcDObjInfo,
     {
         {

@@ -11,7 +11,7 @@ public:
     virtual ~dMsgUnit_c();
 };
 
-extern dMsgUnit_c g_msg_unit;
+DUSK_GAME_EXTERN dMsgUnit_c g_msg_unit;
 
 inline void dMsgUnit_setTag(int param_0, int param_1, TEXT_SPAN param_2) {
     g_msg_unit.setTag(param_0, param_1, param_2, true);

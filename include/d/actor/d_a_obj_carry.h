@@ -304,11 +304,11 @@ public:
         make_prm(o_params, o_paramsEx, 6, i_itemNo, i_itemBit, i_itemType, param_5);
     }
 
-    static const daObjCarry_dt_t mData[];
-    static cXyz mPos[5];
-    static u8 mSttsFlag[5];
-    static s8 mRoomNo[5];
-    static bool mSaveFlag;
+    static DUSK_GAME_DATA const daObjCarry_dt_t mData[];
+    static DUSK_GAME_DATA cXyz mPos[5];
+    static DUSK_GAME_DATA u8 mSttsFlag[5];
+    static DUSK_GAME_DATA s8 mRoomNo[5];
+    static DUSK_GAME_DATA bool mSaveFlag;
 
 public:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;

@@ -6,9 +6,9 @@
 #include "d/d_bg_w_base.h"
 #include <mtx.h>
 #include <types.h>
-#include "dusk/offset_ptr.h"
-#include "dusk/endian.h"
-#include "dusk/endian_ssystem.h"
+#include "helpers/offset_ptr.h"
+#include "helpers/endian.h"
+#include "helpers/endian_ssystem.h"
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;

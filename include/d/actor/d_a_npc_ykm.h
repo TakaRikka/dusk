@@ -38,7 +38,7 @@ class daNpc_ykM_Param_c {
 public:
     virtual ~daNpc_ykM_Param_c() {}
 
-    static daNpc_ykM_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_ykM_HIOParam const m;
 };
 
 #if DEBUG
@@ -285,8 +285,8 @@ public:
     int getBitTRB() { return (u8)((fopAcM_GetParam(this) & 0x3F0000) >> 16); }
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[10];
-    static cutFunc DUSK_CONST mCutList[10];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[10];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[10];
 private:
     /* 0x0E40 */ mDoExt_McaMorfSO* mFishModelMorf;
     /* 0x0E44 */ mDoExt_McaMorfSO* mLeafModelMorf;

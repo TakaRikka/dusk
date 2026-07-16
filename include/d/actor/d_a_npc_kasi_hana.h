@@ -25,7 +25,7 @@ class daNpcKasiHana_Param_c {
 public:
     virtual ~daNpcKasiHana_Param_c() {}
 
-    static daNpcKasiHana_HIOParam const m;
+    static DUSK_GAME_DATA daNpcKasiHana_HIOParam const m;
 };
 
 #if DEBUG
@@ -201,10 +201,10 @@ public:
     BOOL pl_front_check() { return actor_front_check(daPy_getPlayerActorClass()); }
     void setEscapePathDir() { if (pl_front_check()) mPath.reverse(); }
 
-    static EventFn mEvtSeqList[6];
-    static daTagEscape_c* mTargetTag;
-    static f32 mTargetTagDist;
-    static s16 mWolfAngle;
+    static DUSK_GAME_DATA EventFn mEvtSeqList[6];
+    static DUSK_GAME_DATA daTagEscape_c* mTargetTag;
+    static DUSK_GAME_DATA f32 mTargetTagDist;
+    static DUSK_GAME_DATA s16 mWolfAngle;
 
 private:
     /* 0x0B48 */ Z2CreatureCitizen mSound;

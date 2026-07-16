@@ -51,28 +51,28 @@ daLv6TogeTrap_HIO_c::daLv6TogeTrap_HIO_c() {
 
 static daLv6TogeTrap_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo = {
     {0, {{0x800, 0x1, 0x1F}, {0xD8FBFDFF, 0x11}, {0x79}}},
     {dCcD_SE_SWORD, 0, 1, 0, 1},
     {dCcD_SE_STONE, 5, 0, 0, 0},
     {0},
 };
 
-const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo2 = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daLv6TogeTrap_c::mCcDObjInfo2 = {
     {0, {{0x0, 0x0, 0}, {0xDAFBFDFF, 0x11}, {0x0}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
     {dCcD_SE_STONE, 1, 0, 0, 2},
     {0},
 };
 
-dCcD_SrcSph daLv6TogeTrap_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daLv6TogeTrap_c::mCcDSph = {
     daLv6TogeTrap_c::mCcDObjInfo,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph
     }  // mSphAttr
 };
 
-dCcD_SrcCyl daLv6TogeTrap_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daLv6TogeTrap_c::mCcDCyl = {
     daLv6TogeTrap_c::mCcDObjInfo2,
     {
         {
@@ -89,7 +89,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNameIdx[3] = {
     "L9Toge",
 };
 
-const f32 daLv6TogeTrap_c::mSpeed[16] = {
+DUSK_GAME_DATA const f32 daLv6TogeTrap_c::mSpeed[16] = {
     10.0f,
     16.666666f,
     23.333334f,

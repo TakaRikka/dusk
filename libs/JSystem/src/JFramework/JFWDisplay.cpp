@@ -14,11 +14,12 @@
 
 #ifdef TARGET_PC
 #include "dusk/dusk.h"
-#include "dusk/gx_helper.h"
+#include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
 #include "dusk/time.h"
 #include "f_op/f_op_overlap_mng.h"
+#include "helpers/gx_helper.h"
 
 #include "SDL3/SDL_timer.h"
 #include "tracy/Tracy.hpp"
@@ -65,7 +66,7 @@ JFWDisplay::~JFWDisplay() {
     mXfbManager = NULL;
 }
 
-JFWDisplay* JFWDisplay::sManager;
+DUSK_GAME_DATA JFWDisplay* JFWDisplay::sManager;
 
 JFWDisplay* JFWDisplay::createManager(GXRenderModeObj const* p_rObj, JKRHeap* p_heap,
                                       JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
@@ -428,7 +429,7 @@ static void waitForTick(u32 p1, u16 p2) {
     }
 }
 
-JSUList<JFWAlarm> JFWAlarm::sList(false);
+DUSK_GAME_DATA JSUList<JFWAlarm> JFWAlarm::sList(false);
 static void JFWThreadAlarmHandler(OSAlarm* p_alarm, OSContext* p_ctx) {
     JFWAlarm* alarm = static_cast<JFWAlarm*>(p_alarm);
     alarm->removeLink();

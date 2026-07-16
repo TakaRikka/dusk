@@ -7,11 +7,11 @@
 #include <cstdlib>
 #include <cstring>
 
-char* J2DPrint::mStrBuff;
+DUSK_GAME_DATA char* J2DPrint::mStrBuff;
 
 static bool sStrBufInitialized;
 
-size_t J2DPrint::mStrBuffSize;
+DUSK_GAME_DATA size_t J2DPrint::mStrBuffSize;
 
 static u8 data_8045158C[4];
 

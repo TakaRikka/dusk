@@ -69,9 +69,9 @@ public:
     u8 getSw() { return fopAcM_GetParam(this) & 0xFF; }
     u8 getRoom() { return fopAcM_GetParam(this) >> 10; }
 
-    static data_c mData[0x20];
-    static room_c mRoom[0x40];
-    static s16 mSetTop;
+    static DUSK_GAME_DATA data_c mData[0x20];
+    static DUSK_GAME_DATA room_c mRoom[0x40];
+    static DUSK_GAME_DATA s16 mSetTop;
 };
 
 #endif /* D_A_SUSPEND_H */

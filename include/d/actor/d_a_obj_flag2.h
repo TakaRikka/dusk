@@ -81,7 +81,7 @@ public:
 
     const daObjFlag2_Attr_c& attr() const { return M_attr; }
 
-    static daObjFlag2_Attr_c const M_attr;
+    static DUSK_GAME_DATA daObjFlag2_Attr_c const M_attr;
 
 private:
     /* 0x0568 */ J3DModel* mModel;

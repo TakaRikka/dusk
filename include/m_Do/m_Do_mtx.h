@@ -6,10 +6,10 @@
 #include <mtx.h>
 
 #include "JSystem/JMath/JMath.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 extern u8 g_printCurrentHeapDebug;
-extern u8 g_printOtherHeapDebug;
+DUSK_GAME_EXTERN u8 g_printOtherHeapDebug;
 
 void mDoMtx_XYZrotS(Mtx, s16, s16, s16);
 void mDoMtx_XYZrotM(Mtx, s16, s16, s16);
@@ -373,13 +373,13 @@ public:
         PSMTXIdentity(now);
     }
 
-    static Mtx now;
-    static Mtx buffer[16];
-    static Mtx* next;
-    static Mtx* end;
+    static DUSK_GAME_DATA Mtx now;
+    static DUSK_GAME_DATA Mtx buffer[16];
+    static DUSK_GAME_DATA Mtx* next;
+    static DUSK_GAME_DATA Mtx* end;
 };
 
-extern Mtx g_mDoMtx_identity;
+DUSK_GAME_EXTERN Mtx g_mDoMtx_identity;
 
 inline MtxP mDoMtx_getIdentity() {
     return g_mDoMtx_identity;

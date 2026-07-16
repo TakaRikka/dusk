@@ -128,8 +128,8 @@ namespace daObjSwpush2 {
         void off_switch() const { fopAcM_offSwitch(this, prm_get_swSave()); }
         void rev_switch() const { fopAcM_revSwitch(this, prm_get_swSave()); }
 
-        static const char M_arcname[];
-        static const Attr_c M_attr[4];
+        static DUSK_GAME_DATA const char M_arcname[];
+        static DUSK_GAME_DATA const Attr_c M_attr[4];
 
         #if DEBUG
         static Hio_c M_hio;

@@ -12,7 +12,7 @@ class daNpc_Doc_Param_c {
 public:
     virtual ~daNpc_Doc_Param_c() {}
 
-    static const daNpc_Doc_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Doc_HIOParam m;
 };
 
 #if DEBUG
@@ -133,8 +133,8 @@ public:
         return (fopAcM_GetParam(this) & 0xFF00) >> 8;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[1];
-    static cutFunc DUSK_CONST mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[1];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0xE40 */ NPC_DOC_HIO_CLASS* mpHIO;

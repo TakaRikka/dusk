@@ -63,7 +63,7 @@ struct JASDSPChannel {
     static u32 getNumFree();
     static u32 getNumBreak();
 
-    static JASDSPChannel* sDspChannels;
+    static DUSK_GAME_DATA JASDSPChannel* sDspChannels;
 
     /* 0x00 */ s32 mStatus;
 

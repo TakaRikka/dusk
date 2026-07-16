@@ -109,12 +109,12 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grD";
 
-char DUSK_CONST* DUSK_CONST daNpc_Grd_c::mEvtCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Grd_c::mEvtCutNameList[2] = {
     "",
     "NOD_TO_GRZ",
 };
 
-daNpc_Grd_c::cutFunc DUSK_CONST daNpc_Grd_c::mEvtCutList[2] = {
+DUSK_GAME_DATA daNpc_Grd_c::cutFunc DUSK_CONST daNpc_Grd_c::mEvtCutList[2] = {
     NULL,
     &daNpc_Grd_c::ECut_nodToGrz,
 };
@@ -131,7 +131,7 @@ daNpc_Grd_c::~daNpc_Grd_c() {
     }
 }
 
-const daNpc_Grd_HIOParam daNpc_Grd_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Grd_HIOParam daNpc_Grd_Param_c::m = {
     230.0f,   // attention_offset
     -3.0f,    // gravity
     1.0f,     // scale

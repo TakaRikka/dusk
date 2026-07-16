@@ -12,7 +12,7 @@ class daNpc_grM_Param_c {
 public:
     virtual ~daNpc_grM_Param_c() {}
 
-    static daNpc_grM_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_grM_HIOParam const m;
 };
 
 #if DEBUG
@@ -131,8 +131,8 @@ public:
     BOOL checkChangeJoint(int param_0) { return param_0 == JNT_HEAD; }
     BOOL checkRemoveJoint(int param_0) { return param_0 == JNT_MOUTH; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
-    static cutFunc DUSK_CONST mCutList[2];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
 
 private:
     /* 0x0F7C */ NPC_GRM_HIO_CLASS* mpHIO;

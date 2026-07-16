@@ -22,7 +22,7 @@ class daNpc_Bans_Param_c {
 public:
     virtual ~daNpc_Bans_Param_c() {}
 
-    static daNpc_Bans_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Bans_HIOParam const m;
 };
 
 #if DEBUG
@@ -117,8 +117,8 @@ public:
         return rv;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[4];
-    static cutFunc DUSK_CONST mCutList[4];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[4];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[4];
 
     /* 0x0F7C */ mDoExt_McaMorfSO* mpScoopMorf;
     /* 0x0F80 */ NPC_BANS_HIO_CLASS* mHIO;

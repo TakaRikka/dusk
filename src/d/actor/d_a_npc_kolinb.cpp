@@ -177,7 +177,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {8, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Kolinb_c::mCutNameList[7] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Kolinb_c::mCutNameList[7] = {
     "",
     "CONVERSATION_IN_HOTEL",
     "CONVERSATION_ABOUT_DEATHMT",
@@ -187,7 +187,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Kolinb_c::mCutNameList[7] = {
     "THANK_YOU",
 };
 
-daNpc_Kolinb_c::cutFunc DUSK_CONST daNpc_Kolinb_c::mCutList[7] = {
+DUSK_GAME_DATA daNpc_Kolinb_c::cutFunc DUSK_CONST daNpc_Kolinb_c::mCutList[7] = {
     NULL,
     &daNpc_Kolinb_c::cutConversationInHotel,
     &daNpc_Kolinb_c::cutConversationAboutDeathMt,
@@ -199,7 +199,7 @@ daNpc_Kolinb_c::cutFunc DUSK_CONST daNpc_Kolinb_c::mCutList[7] = {
 
 static NPC_KOLINB_HIO_CLASS l_HIO;
 
-daNpc_Kolinb_HIOParam const daNpc_Kolinb_Param_c::m = {
+DUSK_GAME_DATA daNpc_Kolinb_HIOParam const daNpc_Kolinb_Param_c::m = {
     100.0f,
     -3.0f,
     1.0f,

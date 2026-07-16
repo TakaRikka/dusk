@@ -5,6 +5,7 @@
 #endif
 
 #include <aurora/main.h>
+#include "d/actor/d_a_movie_player.h"
 #include "dusk/main.h"
 #include "dusk/io.hpp"
 

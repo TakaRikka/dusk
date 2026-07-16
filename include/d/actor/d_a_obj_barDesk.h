@@ -36,8 +36,8 @@ public:
     /* 0x5EC */ dCcD_Cyl mColCyl;
     /* 0x728 */ u8 field_0x728[8];
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 };
 
 STATIC_ASSERT(sizeof(daBarDesk_c) == 0x730);

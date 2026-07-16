@@ -88,7 +88,7 @@ private:
     /* 0x790 */ s16 mRotSpeed;
 
 public:
-    static const daObjCatDoor_Attr_c M_attr;
+    static DUSK_GAME_DATA const daObjCatDoor_Attr_c M_attr;
 };
 
 #endif /* D_A_OBJ_CATDOOR_H */

@@ -16,7 +16,7 @@ static void dummy() {
     cLib_calcTimer<s16>(0);
 }
 
-dCcD_SrcCyl const daObjGraRock_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl const daObjGraRock_c::mCcDCyl = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x2020, 0x11}, 0x0}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt

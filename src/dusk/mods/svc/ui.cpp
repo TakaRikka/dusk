@@ -2,6 +2,7 @@
 
 #include "config.hpp"
 #include "registry.hpp"
+#include "slot_map.hpp"
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/mod_loader.hpp"
@@ -33,7 +34,6 @@ namespace {
 aurora::Module Log("dusk::mods::ui");
 
 enum class UiSlotKind : u8 {
-    Free,
     Window,
     Dialog,
     Pane,
@@ -63,17 +63,14 @@ const char* slot_kind_name(UiSlotKind kind) {
     case UiSlotKind::MenuTab:
         return "menu tab";
     default:
-        return "free";
+        return "unknown";
     }
 }
 
-// Generation-checked handle slots. Game thread only: all mutations happen in service calls made
-// from mod code, in UI callbacks (ui::update), or in the loader's deactivate paths.
+// Game thread only: all mutations happen in service calls made from mod code, in UI callbacks
+// (ui::update), or in the loader's deactivate paths.
 struct UiSlot {
-    // Bumped on free, which invalidates every outstanding handle to this slot.
-    uint32_t generation = 1;
-    UiSlotKind kind = UiSlotKind::Free;
-    LoadedMod* owner = nullptr;
+    UiSlotKind kind = UiSlotKind::Window;
     // Pane/Text/Progress/Control: freed automatically when the element is destroyed
     Rml::Element* element = nullptr;
     // Pane payload
@@ -93,8 +90,7 @@ struct UiSlot {
     bool hasElementValue = false;
 };
 
-std::vector<UiSlot> s_slots;
-std::vector<uint32_t> s_freeSlots;
+SlotMap<UiSlot> s_slots;
 
 struct ModUiPanel {
     UiPanelBuildFn build = nullptr;
@@ -112,71 +108,26 @@ struct ModMenuTab {
 std::unordered_map<const LoadedMod*, std::vector<ModMenuTab>> s_modMenuTabs;
 bool s_menuTabsDirty = false;
 
-uint64_t handle_for(uint32_t index) {
-    return (uint64_t{s_slots[index].generation} << 32) | index;
-}
-
-uint32_t slot_index(const UiSlot& slot) {
-    return static_cast<uint32_t>(&slot - s_slots.data());
-}
-
 UiSlot* slot_from_handle(uint64_t handle) {
-    const auto index = static_cast<uint32_t>(handle & 0xFFFFFFFFu);
-    const auto generation = static_cast<uint32_t>(handle >> 32);
-    if (index >= s_slots.size()) {
-        return nullptr;
-    }
-    auto& slot = s_slots[index];
-    if (slot.kind == UiSlotKind::Free || slot.generation != generation) {
-        return nullptr;
-    }
-    return &slot;
+    auto* entry = s_slots.find(handle);
+    return entry != nullptr ? &entry->value : nullptr;
 }
 
 // Note: s_slots may reallocate on any later allocation, so callers must not hold the returned
 // slot reference across calls that can allocate (e.g. mod build callbacks); re-resolve instead.
 UiSlot& alloc_slot(LoadedMod& mod, UiSlotKind kind, uint64_t& outHandle) {
-    uint32_t index;
-    if (!s_freeSlots.empty()) {
-        index = s_freeSlots.back();
-        s_freeSlots.pop_back();
-    } else {
-        index = static_cast<uint32_t>(s_slots.size());
-        s_slots.emplace_back();
-    }
-    auto& slot = s_slots[index];
-    slot.kind = kind;
-    slot.owner = &mod;
-    outHandle = handle_for(index);
-    return slot;
-}
-
-void free_slot(UiSlot& slot) {
-    slot.generation++;
-    slot.kind = UiSlotKind::Free;
-    slot.owner = nullptr;
-    slot.element = nullptr;
-    slot.pane = nullptr;
-    slot.helpPane = nullptr;
-    slot.document = nullptr;
-    slot.onClosed = nullptr;
-    slot.onClosedUserData = nullptr;
-    slot.styleScope = ui::DocumentScope::None;
-    slot.styleId.clear();
-    slot.elementRml.clear();
-    slot.elementFloat = 0.0f;
-    slot.hasElementValue = false;
-    s_freeSlots.push_back(slot_index(slot));
+    outHandle = s_slots.emplace(mod, UiSlot{.kind = kind});
+    return s_slots.find(outHandle)->value;
 }
 
 UiSlot* resolve(LoadedMod& mod, uint64_t handle, UiSlotKind kind, const char* what) {
-    auto* slot = slot_from_handle(handle);
-    if (slot == nullptr || slot->owner != &mod || slot->kind != kind) {
+    auto* entry = s_slots.find_owned(handle, mod);
+    if (entry == nullptr || entry->value.kind != kind) {
         Log.error("[{}] {}: stale or invalid {} handle {:#x}", mod.metadata.id, what,
             slot_kind_name(kind), handle);
         return nullptr;
     }
-    return slot;
+    return &entry->value;
 }
 
 // Whether the registration a callback was created under is still live. Callbacks captured by
@@ -184,7 +135,7 @@ UiSlot* resolve(LoadedMod& mod, uint64_t handle, UiSlotKind kind, const char* wh
 // once a reload completes, but captured fn pointers still target the unloaded image. Teardown
 // frees the slots (ui_remove_mod), which invalidates every callback built under them.
 bool slot_live(uint64_t handle) {
-    return slot_from_handle(handle) != nullptr;
+    return s_slots.find(handle) != nullptr;
 }
 
 bool dialog_open(uint64_t handle) {
@@ -197,30 +148,22 @@ bool dialog_open(uint64_t handle) {
 // The generation check makes a late detach of an already-recycled slot a no-op.
 class SlotDetachListener final : public Rml::EventListener {
 public:
-    SlotDetachListener(uint32_t index, uint32_t generation)
-        : m_index{index}, m_generation{generation} {}
+    explicit SlotDetachListener(uint64_t handle) : m_handle{handle} {}
 
     void ProcessEvent(Rml::Event&) override {}
 
     void OnDetach(Rml::Element*) override {
-        if (m_index < s_slots.size()) {
-            auto& slot = s_slots[m_index];
-            if (slot.kind != UiSlotKind::Free && slot.generation == m_generation) {
-                free_slot(slot);
-            }
-        }
+        s_slots.erase(m_handle);
         delete this;
     }
 
 private:
-    uint32_t m_index;
-    uint32_t m_generation;
+    uint64_t m_handle;
 };
 
-void track_element(UiSlot& slot, Rml::Element& element) {
+void track_element(uint64_t handle, UiSlot& slot, Rml::Element& element) {
     slot.element = &element;
-    element.AddEventListener(
-        Rml::EventId::Click, new SlotDetachListener(slot_index(slot), slot.generation));
+    element.AddEventListener(Rml::EventId::Click, new SlotDetachListener{handle});
 }
 
 template <typename T, typename Fn>
@@ -269,7 +212,7 @@ uint64_t wrap_pane(LoadedMod& mod, ui::Pane& pane, ui::Pane* helpPane) {
     auto& slot = alloc_slot(mod, UiSlotKind::Pane, handle);
     slot.pane = &pane;
     slot.helpPane = helpPane;
-    track_element(slot, *pane.root());
+    track_element(handle, slot, *pane.root());
     return handle;
 }
 
@@ -446,14 +389,14 @@ bool wire_config_var_binding(LoadedMod& mod, const UiControlDesc& desc, ui::ModC
 }
 
 void on_mod_window_destroyed(uint64_t handle) {
-    auto* slot = slot_from_handle(handle);
-    if (slot == nullptr || slot->kind != UiSlotKind::Window) {
+    const auto* entry = s_slots.find(handle);
+    if (entry == nullptr || entry->value.kind != UiSlotKind::Window) {
         return;
     }
-    LoadedMod* mod = slot->owner;
-    const UiWindowClosedFn onClosed = slot->onClosed;
-    void* userData = slot->onClosedUserData;
-    free_slot(*slot);
+    auto released = s_slots.take(handle);
+    auto* mod = released->owner;
+    const UiWindowClosedFn onClosed = released->value.onClosed;
+    void* userData = released->value.onClosedUserData;
     if (mod != nullptr && onClosed != nullptr) {
         guarded_call(*mod, "window on_closed callback", [&] {
             onClosed(mod->context.get(), handle, userData);
@@ -464,7 +407,7 @@ void on_mod_window_destroyed(uint64_t handle) {
 void on_mod_dialog_destroyed(uint64_t handle) {
     auto* slot = slot_from_handle(handle);
     if (slot != nullptr && slot->kind == UiSlotKind::Dialog) {
-        free_slot(*slot);
+        s_slots.erase(handle);
     }
 }
 
@@ -573,7 +516,7 @@ ModResult ui_pane_add_text(LoadedMod& mod, uint64_t pane, const char* text, uint
         auto& elemSlot = alloc_slot(mod, UiSlotKind::Text, *outElem);
         elemSlot.elementRml = ui::escape(text);
         elemSlot.hasElementValue = true;
-        track_element(elemSlot, *elem);
+        track_element(*outElem, elemSlot, *elem);
     }
     return MOD_OK;
 }
@@ -588,7 +531,7 @@ ModResult ui_pane_add_rml(LoadedMod& mod, uint64_t pane, const char* rml, uint64
         auto& elemSlot = alloc_slot(mod, UiSlotKind::Text, *outElem);
         elemSlot.elementRml = rml;
         elemSlot.hasElementValue = true;
-        track_element(elemSlot, *elem);
+        track_element(*outElem, elemSlot, *elem);
     }
     return MOD_OK;
 }
@@ -604,7 +547,7 @@ ModResult ui_pane_add_progress(LoadedMod& mod, uint64_t pane, float value, uint6
         auto& elemSlot = alloc_slot(mod, UiSlotKind::Progress, *outElem);
         elemSlot.elementFloat = value;
         elemSlot.hasElementValue = true;
-        track_element(elemSlot, *elem);
+        track_element(*outElem, elemSlot, *elem);
     }
     return MOD_OK;
 }
@@ -691,7 +634,7 @@ ModResult ui_pane_add_control(
     }
     if (outElem != nullptr) {
         auto& elemSlot = alloc_slot(mod, UiSlotKind::Control, *outElem);
-        track_element(elemSlot, *control->root());
+        track_element(*outElem, elemSlot, *control->root());
     }
     return MOD_OK;
 }
@@ -740,13 +683,13 @@ ModResult ui_elem_set_progress(LoadedMod& mod, uint64_t elem, float value) {
 }
 
 ModResult ui_elem_set_class(LoadedMod& mod, uint64_t elem, const char* name, bool active) {
-    auto* slot = slot_from_handle(elem);
-    if (slot == nullptr || slot->owner != &mod || slot->element == nullptr) {
+    auto* entry = s_slots.find_owned(elem, mod);
+    if (entry == nullptr || entry->value.element == nullptr) {
         Log.error(
             "[{}] elem_set_class: stale or invalid element handle {:#x}", mod.metadata.id, elem);
         return MOD_INVALID_ARGUMENT;
     }
-    slot->element->SetClass(name, active);
+    entry->value.element->SetClass(name, active);
     return MOD_OK;
 }
 
@@ -945,7 +888,7 @@ ModResult ui_unregister_menu_tab(LoadedMod& mod, uint64_t handle) {
             s_modMenuTabs.erase(it);
         }
     }
-    free_slot(*slot);
+    s_slots.erase_owned(handle, mod);
     s_menuTabsDirty = true;
     return MOD_OK;
 }
@@ -1026,7 +969,7 @@ ModResult ui_register_styles(
     slot.styleId = fmt::format("{}:{:x}", mod.metadata.id, handle);
     if (!ui::register_scoped_styles(docScope, slot.styleId, rcss)) {
         Log.error("[{}] register_styles: failed to parse RCSS", mod.metadata.id);
-        free_slot(slot);
+        s_slots.erase(handle);
         return MOD_INVALID_ARGUMENT;
     }
     outHandle = handle;
@@ -1056,8 +999,8 @@ ModResult ui_unregister_styles(LoadedMod& mod, uint64_t handle) {
     if (slot == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    ui::unregister_scoped_styles(slot->styleScope, slot->styleId);
-    free_slot(*slot);
+    auto released = s_slots.take_owned(handle, mod);
+    ui::unregister_scoped_styles(released->value.styleScope, released->value.styleId);
     return MOD_OK;
 }
 
@@ -1066,14 +1009,12 @@ void ui_remove_mod(LoadedMod& mod) {
     if (s_modMenuTabs.erase(&mod) != 0) {
         s_menuTabsDirty = true;
     }
-    for (auto& slot : s_slots) {
-        if (slot.kind == UiSlotKind::Free || slot.owner != &mod) {
-            continue;
-        }
+    auto entries = s_slots.take_all(mod);
+    for (auto& entry : entries) {
+        auto& slot = entry.value;
         switch (slot.kind) {
         case UiSlotKind::Window: {
             auto* window = static_cast<ui::ModWindow*>(slot.document);
-            free_slot(slot);
             if (window != nullptr) {
                 window->force_close();
             }
@@ -1081,7 +1022,6 @@ void ui_remove_mod(LoadedMod& mod) {
         }
         case UiSlotKind::Dialog: {
             auto* dialog = static_cast<ModDialog*>(slot.document);
-            free_slot(slot);
             if (dialog != nullptr) {
                 dialog->force_close();
             }
@@ -1089,10 +1029,8 @@ void ui_remove_mod(LoadedMod& mod) {
         }
         case UiSlotKind::Style:
             ui::unregister_scoped_styles(slot.styleScope, slot.styleId);
-            free_slot(slot);
             break;
         default:
-            free_slot(slot);
             break;
         }
     }

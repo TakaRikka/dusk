@@ -5,7 +5,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 #include "f_op/f_op_view.h"
 #include "global.h"
 #include "m_Do/m_Do_ext.h"
@@ -301,7 +301,7 @@ public:
 
     static TGXTexObj* getSimpleTex() { return &mSimpleTexObj; }
 
-    static TGXTexObj mSimpleTexObj;
+    static DUSK_GAME_DATA TGXTexObj mSimpleTexObj;
 
 private:
     /* 0x00000 */ u8 field_0x0;
@@ -512,11 +512,11 @@ public:
     static void offWipe() { mWipe = 0; }
     static f32 getWipeRate() { return mWipeRate; }
 
-    static dDlst_2DT2_c mWipeDlst;
-    static GXColor mWipeColor;
-    static f32 mWipeRate;
-    static f32 mWipeSpeed;
-    static u8 mWipe;
+    static DUSK_GAME_DATA dDlst_2DT2_c mWipeDlst;
+    static DUSK_GAME_DATA GXColor mWipeColor;
+    static DUSK_GAME_DATA f32 mWipeRate;
+    static DUSK_GAME_DATA f32 mWipeSpeed;
+    static DUSK_GAME_DATA u8 mWipe;
 
 private:
     /* 0x00000 */ J3DDrawBuffer* mDrawBuffers[DB_LIST_MAX];

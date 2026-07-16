@@ -9,7 +9,7 @@
 #include "d/actor/d_a_npc_lud.h"
 #include <cstring>
 
-const daNpc_Lud_HIOParam daNpc_Lud_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Lud_HIOParam daNpc_Lud_Param_c::m = {
     160.0f,  // attention_offset
     -3.0f,   // gravity
     1.0f,    // scale
@@ -212,7 +212,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Lud_c::mCutNameList[8] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Lud_c::mCutNameList[8] = {
     "",
     "HURRY",
     "CONVERSATION_IN_HOTEL",
@@ -223,7 +223,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Lud_c::mCutNameList[8] = {
     "THANK_YOU",
 };
 
-daNpc_Lud_c::cutFunc DUSK_CONST daNpc_Lud_c::mCutList[8] = {
+DUSK_GAME_DATA daNpc_Lud_c::cutFunc DUSK_CONST daNpc_Lud_c::mCutList[8] = {
     NULL,
     &daNpc_Lud_c::cutHurry,
     &daNpc_Lud_c::cutConversationInHotel,

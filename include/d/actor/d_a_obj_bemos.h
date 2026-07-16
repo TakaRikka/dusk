@@ -50,12 +50,12 @@ public:
         void wall_pos(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16, f32);
         bool chk_wall_pre(fopAc_ac_c const*, daObjBm_c::BgcSrc_c const*, int, s16);
 
-        static const daObjBm_c::BgcSrc_c M_lin5[];
-        static const daObjBm_c::BgcSrc_c M_lin20[];
+        static DUSK_GAME_DATA const daObjBm_c::BgcSrc_c M_lin5[];
+        static DUSK_GAME_DATA const daObjBm_c::BgcSrc_c M_lin20[];
 
-        static dBgS_ObjGndChk M_gnd_work[23];
-        static dBgS_WtrChk M_wrt_work;
-        static dBgS_ObjLinChk M_wall_work[23];
+        static DUSK_GAME_DATA dBgS_ObjGndChk M_gnd_work[23];
+        static DUSK_GAME_DATA dBgS_WtrChk M_wrt_work;
+        static DUSK_GAME_DATA dBgS_ObjLinChk M_wall_work[23];
 
         /* 0x000 */ f32 field_0x0[23];
         /* 0x05C */ int field_0x5c;
@@ -130,7 +130,7 @@ public:
 #endif
     int Delete();
 
-    static s16 const M_dir_base[4];
+    static DUSK_GAME_DATA s16 const M_dir_base[4];
     // private:
     /* 0x05A0 */ request_of_phase_process_class mPhase;
     /* 0x05A8 */ J3DModel* mpModel;

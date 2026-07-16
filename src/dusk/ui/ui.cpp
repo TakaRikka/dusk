@@ -31,9 +31,9 @@ void load_font(const char* filename, bool fallback = false) {
 }
 
 bool sInitialized = false;
-std::vector<std::unique_ptr<Document> > sDocumentStack;
+std::vector<std::unique_ptr<Document>> sDocumentStack;
 // Documents that don't participate in the focus stack
-std::vector<std::unique_ptr<Document> > sPassiveDocuments;
+std::vector<std::unique_ptr<Document>> sPassiveDocuments;
 
 struct ScopedStyles {
     DocumentScope scope;
@@ -173,10 +173,12 @@ void handle_event(const SDL_Event& event) noexcept {
                 const char* name = SDL_GetGamepadName(gamepad);
                 Rml::String content = fmt::format("<span>{}</span>", name ? name : "[Unknown]");
                 Rml::String title = "Device Connected";
-                if (const char* icon = connection_state_icon(SDL_GetGamepadConnectionState(gamepad))) {
+                if (const char* icon =
+                        connection_state_icon(SDL_GetGamepadConnectionState(gamepad)))
+                {
                     title = fmt::format(
-                        "<row><span>{}</span> <icon class=\"connection\">&#x{};</icon></row>", title,
-                        icon);
+                        "<row><span>{}</span> <icon class=\"connection\">&#x{};</icon></row>",
+                        title, icon);
                 }
                 int batteryLevel = -1;
                 const auto powerState = SDL_GetGamepadPowerInfo(gamepad, &batteryLevel);
@@ -382,6 +384,17 @@ Rml::Element* append(Rml::Element* parent, const Rml::String& tag) noexcept {
     return parent->AppendChild(doc->CreateElement(tag));
 }
 
+Rml::Element* append_text(Rml::Element* parent, const Rml::String& text) noexcept {
+    if (parent == nullptr) {
+        return nullptr;
+    }
+    auto* doc = parent->GetOwnerDocument();
+    if (doc == nullptr) {
+        return nullptr;
+    }
+    return parent->AppendChild(doc->CreateTextNode(text));
+}
+
 NavCommand map_nav_event(const Rml::Event& event) noexcept {
     const auto key = static_cast<Rml::Input::KeyIdentifier>(
         event.GetParameter<int>("key_identifier", Rml::Input::KI_UNKNOWN));
@@ -448,7 +461,7 @@ void push_toast(Toast toast) noexcept {
     sToasts.push_back(std::move(toast));
 }
 
-std::vector<std::unique_ptr<Document> >& get_document_stack() noexcept {
+std::vector<std::unique_ptr<Document>>& get_document_stack() noexcept {
     return sDocumentStack;
 }
 

@@ -131,8 +131,8 @@ public:
         return (fopAcM_GetParam(this) & 0xf0) >> 4;
     }
 
-    static const char* mCutNameList[8];
-    static cutFunc DUSK_CONST mCutList[8];
+    static DUSK_GAME_DATA const char* mCutNameList[8];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[8];
 
     void setDialogueTmr1(int param_1) {
         field_0x1024 = param_1;
@@ -216,7 +216,7 @@ class daNpc_ykW_Param_c {
 public:
     virtual ~daNpc_ykW_Param_c() {}
 
-    static const daNpc_ykW_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_ykW_HIOParam m;
 };
 
 #endif /* D_A_NPC_YKW_H */

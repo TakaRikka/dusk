@@ -4,7 +4,7 @@
 
 namespace JStudio {
 namespace data {
-    extern const char ga8cSignature[8];
+    DUSK_GAME_EXTERN const char ga8cSignature[8];
 }  // namespace data
 }  // namespace JStudio
 

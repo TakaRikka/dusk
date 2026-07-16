@@ -31,7 +31,7 @@ public:
     /* 0x1E5 */ u8 mMidBossClearCopy[32];
 };
 
-extern dMw_DHIO_c g_mwDHIO;
+DUSK_GAME_EXTERN dMw_DHIO_c g_mwDHIO;
 
 class dMw_HIO_c : public JORReflexible {
 public:
@@ -131,6 +131,6 @@ public:
     /* 0x12A */ u8 mMirrorShardCopy[4];
 };  // Size: 0x130
 
-extern dMw_HIO_c g_mwHIO;
+DUSK_GAME_EXTERN dMw_HIO_c g_mwHIO;
 
 #endif /* D_MENU_D_MENU_WINDOW_HIO_H */

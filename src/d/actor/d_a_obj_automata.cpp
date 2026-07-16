@@ -19,7 +19,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {
     "AutoMata",
 };
 
-daObj_AutoMata_HIOParam const daObj_AutoMata_Param_c::m = {
+DUSK_GAME_DATA daObj_AutoMata_HIOParam const daObj_AutoMata_Param_c::m = {
     220.0f, 80.0f, 40.0f,
 };
 

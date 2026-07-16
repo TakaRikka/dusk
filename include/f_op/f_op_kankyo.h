@@ -21,6 +21,6 @@ struct kankyo_process_profile_definition {
 
 BOOL fopKy_IsKankyo(void* i_this);
 
-extern leafdraw_method_class g_fopKy_Method;
+DUSK_GAME_EXTERN leafdraw_method_class g_fopKy_Method;
 
 #endif /* F_OP_F_OP_KANKYO_H */

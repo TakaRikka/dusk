@@ -28,7 +28,7 @@ struct dMfm_prm_res_s {
 struct dMfm_HIO_prm_res_src_s {
     /* 0x0 */ u8 mFlashDuration;
 
-    static const dMfm_HIO_prm_res_src_s m_other;
+    static DUSK_GAME_DATA const dMfm_HIO_prm_res_src_s m_other;
 };
 
 struct dMfm_HIO_prm_res_dst_s {

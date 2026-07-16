@@ -776,12 +776,12 @@ public:
         return chkFindActor(daPy_getPlayerActorClass(), param_0, param_1);
     }
 
-    static dCcD_SrcGObjInf const mCcDObjData;
-    static dCcD_SrcCyl mCcDCyl;
-    static dCcD_SrcSph mCcDSph;
-    static fopAc_ac_c* mFindActorPtrs[50];
-    static s16 mSrchName;
-    static int mFindCount;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjData;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA fopAc_ac_c* mFindActorPtrs[50];
+    static DUSK_GAME_DATA s16 mSrchName;
+    static DUSK_GAME_DATA int mFindCount;
 
     enum Mode {
         /*  0 */ MODE_ENTER,

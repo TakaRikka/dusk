@@ -13,7 +13,7 @@
 #include "d/actor/d_a_npc_uri.h"
 #include <cstring>
 
-const daNpc_Moi_HIOParam daNpc_Moi_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Moi_HIOParam daNpc_Moi_Param_c::m = {
     200.0f,   // attention_offset
     -3.0f,    // gravity
     1.0f,     // scale
@@ -207,11 +207,11 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {18, 4, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Moi_c::mCutNameList[5] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Moi_c::mCutNameList[5] = {
     "", "DELIVERED_SW", "APPEARANCE_MOI", "CONVERSATION_WITH_URI", "FIND_WOLF",
 };
 
-daNpc_Moi_c::cutFunc DUSK_CONST daNpc_Moi_c::mCutList[5] = {
+DUSK_GAME_DATA daNpc_Moi_c::cutFunc DUSK_CONST daNpc_Moi_c::mCutList[5] = {
     NULL,
     &daNpc_Moi_c::cutDeliveredSw,
     &daNpc_Moi_c::cutAppearanceMoi,

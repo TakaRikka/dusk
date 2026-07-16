@@ -15,7 +15,7 @@ class daObj_AutoMata_Param_c {
 public:
     virtual ~daObj_AutoMata_Param_c() {}
 
-    static daObj_AutoMata_HIOParam const m;
+    static DUSK_GAME_DATA daObj_AutoMata_HIOParam const m;
 };
 
 #if DEBUG

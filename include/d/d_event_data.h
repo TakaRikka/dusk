@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "f_pc/f_pc_base.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 struct msg_class;
 

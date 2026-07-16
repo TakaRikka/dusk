@@ -113,9 +113,9 @@ public:
     virtual void drawOtherMdls();
     virtual bool dbgDraw();
 
-    static dCcD_SrcGObjInf const mCcDObj;
-    static dCcD_SrcCyl mCcDCyl;
-    static dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObj;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
 
 public:
     /* 0x56C */ dBgS_ObjAcch mAcch;
@@ -173,9 +173,9 @@ public:
     virtual int ToFore() { return 1; }
     virtual int ToBack() { return 1; }
 
-    static const char* m_name;
-    static int m_dzb_id;
-    static MoveBGActor_SetFunc m_set_func;
+    static DUSK_GAME_DATA const char* m_name;
+    static DUSK_GAME_DATA int m_dzb_id;
+    static DUSK_GAME_DATA MoveBGActor_SetFunc m_set_func;
 
 public:
     /* 0xA14 */ dBgW* mpBgw;

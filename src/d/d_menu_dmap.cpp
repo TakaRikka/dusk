@@ -26,7 +26,11 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
+
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)
 #define POINTER_OPT dComIfGs_getOptPointer()
@@ -422,7 +426,7 @@ static f32 player_px;
 
 static f32 player_py;
 
-dMenu_Dmap_c* dMenu_Dmap_c::myclass;
+DUSK_GAME_DATA dMenu_Dmap_c* dMenu_Dmap_c::myclass;
 
 void dMenu_DmapBg_c::setCButtonString(u32 i_msgNo) {
     static u64 const c_tag[2] = {

@@ -46,8 +46,8 @@ private:
     /* 0x730 */ u8 mTgHit;
     /* 0x734 */ Z2SoundObjSimple mSound;
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 };
 
 STATIC_ASSERT(sizeof(daLv1Cdl00_c) == 0x754);

@@ -288,7 +288,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "ins";
 
-daNpcIns_c::eventFunc daNpcIns_c::mEvtSeqList[1] = {
+DUSK_GAME_DATA daNpcIns_c::eventFunc daNpcIns_c::mEvtSeqList[1] = {
     NULL,
 };
 
@@ -319,7 +319,7 @@ static insect_param_data const l_insectParams[24] = {
     {0x01A8, 0x714, 0, 0},
 };
 
-daNpcIns_HIOParam const daNpcIns_Param_c::m = {
+DUSK_GAME_DATA daNpcIns_HIOParam const daNpcIns_Param_c::m = {
     35.0f,
     -3.0f,
     1.0f,

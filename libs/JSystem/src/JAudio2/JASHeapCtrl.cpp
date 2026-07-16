@@ -247,7 +247,7 @@ JASGenericMemPool::~JASGenericMemPool() {
     }
 }
 
-JKRSolidHeap* JASDram;
+DUSK_GAME_DATA JKRSolidHeap* JASDram;
 
 // TODO: What is this and Where does it go?
 struct TNextOnFreeList {
@@ -290,11 +290,11 @@ void JASGenericMemPool::free(void* ptr, u32 param_1) {
     freeMemCount++;
 }
 
-uintptr_t JASKernel::sAramBase;
+DUSK_GAME_DATA uintptr_t JASKernel::sAramBase;
 
-JKRHeap* JASKernel::sSystemHeap;
+DUSK_GAME_DATA JKRHeap* JASKernel::sSystemHeap;
 
-JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* JASKernel::sCommandHeap;
+DUSK_GAME_DATA JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* JASKernel::sCommandHeap;
 
 void JASKernel::setupRootHeap(JKRSolidHeap* heap, u32 size) {
     JUT_ASSERT(784, heap);
@@ -314,7 +314,7 @@ JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* JASKernel::getCom
     return JASKernel::sCommandHeap;
 }
 
-JASHeap JASKernel::audioAramHeap;
+DUSK_GAME_DATA JASHeap JASKernel::audioAramHeap;
 
 void JASKernel::setupAramHeap(uintptr_t param_0, u32 param_1) {
 #if !PLATFORM_GCN

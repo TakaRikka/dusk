@@ -26,8 +26,8 @@ public:
     int Draw();
     int Delete();
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
     u8 getLightType() { return fopAcM_GetParamBit(this,8,8); }
     u8 getOnSw() { return fopAcM_GetParamBit(this,0,8); }

@@ -11,7 +11,7 @@ class daNpcDrSol_Param_c {
 public:
     virtual ~daNpcDrSol_Param_c() {}
 
-    static const daNpcDrSol_HIOParam m;
+    static DUSK_GAME_DATA const daNpcDrSol_HIOParam m;
 };
 
 #if DEBUG

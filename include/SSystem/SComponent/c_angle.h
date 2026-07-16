@@ -24,11 +24,11 @@ private:
     s16 mAngle;
 
 public:
-    const static cSAngle _0;
-    const static cSAngle _1;
-    const static cSAngle _90;
-    const static cSAngle _180;
-    const static cSAngle _270;
+    const static DUSK_GAME_DATA cSAngle _0;
+    const static DUSK_GAME_DATA cSAngle _1;
+    const static DUSK_GAME_DATA cSAngle _90;
+    const static DUSK_GAME_DATA cSAngle _180;
+    const static DUSK_GAME_DATA cSAngle _270;
 #ifdef __MWERKS__
     cSAngle() {}
     ~cSAngle() {}

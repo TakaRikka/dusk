@@ -22,9 +22,9 @@ void J3DMtxCalcJ3DSysInitMaya::init(Vec const& scale, Mtx const& mtx) {
     JMAMTXApplyScale(mtx, J3DSys::mCurrentMtx, scale.x, scale.y, scale.z);
 }
 
-J3DMtxBuffer* J3DMtxCalc::mMtxBuffer;
+DUSK_GAME_DATA J3DMtxBuffer* J3DMtxCalc::mMtxBuffer;
 
-J3DJoint* J3DMtxCalc::mJoint;
+DUSK_GAME_DATA J3DJoint* J3DMtxCalc::mJoint;
 
 void J3DMtxCalcCalcTransformBasic::calcTransform(J3DTransformInfo const& transInfo) {
     J3DJoint* joint = J3DMtxCalc::getJoint();
@@ -189,7 +189,7 @@ void J3DJoint::entryIn() {
     }
 }
 
-J3DMtxCalc* J3DJoint::mCurrentMtxCalc;
+DUSK_GAME_DATA J3DMtxCalc* J3DJoint::mCurrentMtxCalc;
 
 void J3DJoint::recursiveCalc() {
     J3DMtxCalc* prevMtxCalc = NULL;

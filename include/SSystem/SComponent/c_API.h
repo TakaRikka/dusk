@@ -12,6 +12,6 @@ struct cAPI_Interface {
     /* 0x14 */ cAPIGph_Mthd blankingOffMtd;
 };
 
-extern cAPI_Interface g_cAPI_Interface;
+DUSK_GAME_EXTERN cAPI_Interface g_cAPI_Interface;
 
 #endif /* C_API_H */

@@ -3,7 +3,7 @@
 
 #include "JSystem/JAudio2/JAISound.h"
 #include "JSystem/JAudio2/JASGadget.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 /**
  * @ingroup jsystem-jaudio

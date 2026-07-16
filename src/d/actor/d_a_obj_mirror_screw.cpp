@@ -11,7 +11,7 @@
 
 static char const* l_arcName = "MR-Screw";
 
-daObjMirrorScrew_c::attr const daObjMirrorScrew_c::M_attr = {
+DUSK_GAME_DATA daObjMirrorScrew_c::attr const daObjMirrorScrew_c::M_attr = {
     -2710.0f,  // mDownDist
     0.6f,      // mRotSpeedThreshold
     45,        // mSpinCount
@@ -20,7 +20,7 @@ daObjMirrorScrew_c::attr const daObjMirrorScrew_c::M_attr = {
     -3.375f,   // mDownSpeed
 };
 
-daObjMirrorScrew_actionFunc daObjMirrorScrew_c::ActionTable[2][2] = {
+DUSK_GAME_DATA daObjMirrorScrew_actionFunc daObjMirrorScrew_c::ActionTable[2][2] = {
     {
         &daObjMirrorScrew_c::initWait,
         &daObjMirrorScrew_c::executeWait,

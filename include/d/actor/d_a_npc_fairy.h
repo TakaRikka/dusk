@@ -94,7 +94,7 @@ class daNpc_Fairy_Param_c {
 public:
     virtual ~daNpc_Fairy_Param_c() {}
 
-    static daNpc_Fairy_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Fairy_HIOParam const m;
 };
 
 #if DEBUG
@@ -294,8 +294,8 @@ public:
     u8 getSceneNo1() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
     u8 getSceneNo2() { return (fopAcM_GetParam(this) >> 16) & 0xFF; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[18];
-    static cutFunc DUSK_CONST mCutList[18];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[18];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[18];
 private:
     /* 0x0E40 */ NPC_FAIRY_HIO_CLASS* mHIO;
     /* 0x0E44 */ dCcD_Cyl mCyl;

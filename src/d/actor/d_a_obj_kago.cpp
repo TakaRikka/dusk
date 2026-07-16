@@ -15,7 +15,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
-daObj_Kago_HIOParam const daObj_Kago_Param_c::m = {
+DUSK_GAME_DATA daObj_Kago_HIOParam const daObj_Kago_Param_c::m = {
     0.0f,
     -5.0f,
     1.0f,

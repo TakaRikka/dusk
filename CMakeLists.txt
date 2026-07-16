@@ -326,6 +326,7 @@ source_group("dusklight" FILES ${DUSK_FILES} ${DUSK_HTTP_BACKEND_FILES})
 include(cmake/GameABIConfig.cmake)
 
 find_package(Threads REQUIRED)
+set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)
@@ -512,9 +513,12 @@ if (WIN32)
     target_link_libraries(dusklight PRIVATE Psapi)
 endif ()
 if (APPLE)
-    # Mods resolve game symbols from the executable at dlopen time.
-    target_link_options(dusklight PRIVATE -Wl,-export_dynamic)
-elseif (UNIX AND NOT ANDROID)
+    include(cmake/AppleExports.cmake)
+    setup_apple_exports(dusklight)
+elseif (ANDROID)
+    include(cmake/AndroidExports.cmake)
+    setup_android_exports(dusklight)
+elseif (UNIX)
     target_link_options(dusklight PRIVATE -rdynamic)
 endif ()
 
@@ -537,6 +541,8 @@ endif ()
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     target_link_options(dusklight PRIVATE "-Wl,--build-id=sha1")
     target_link_libraries(dusklight PRIVATE dl)
+elseif (ANDROID)
+    target_link_options(dusklight PRIVATE "-Wl,--build-id=sha1")
 endif ()
 
 if (NOT APPLE)
@@ -581,7 +587,9 @@ include(cmake/ModSDK.cmake)
 
 if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     add_custom_target(dusklight_mods) # Aggregate target for all in-tree mods
-    add_subdirectory(tools/mod_template)
+    add_subdirectory(mods/template_mod)
+    add_subdirectory(mods/ao_mod)
+    add_subdirectory(mods/shadow_mod)
 endif ()
 
 if (APPLE)

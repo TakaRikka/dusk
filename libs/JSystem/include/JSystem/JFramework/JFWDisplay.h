@@ -27,7 +27,7 @@ public:
     OSThread* getThread() const { return mThread; }
     void setThread(OSThread* thread) { mThread = thread; }
 
-    static JSUList<JFWAlarm> sList;
+    static DUSK_GAME_DATA JSUList<JFWAlarm> sList;
 
 public:
     /* 0x28 */ OSThread* mThread;
@@ -108,7 +108,7 @@ public:
     int getEfbHeight() const { return JUTVideo::getManager()->getEfbHeight(); }
     JUTXfb* getXfbManager() const { return mXfbManager; }
 
-    static JFWDisplay* sManager;
+    static DUSK_GAME_DATA JFWDisplay* sManager;
 
 private:
     /* 0x04 */ JUTFader* mFader;

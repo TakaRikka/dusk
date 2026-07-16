@@ -64,11 +64,11 @@ void daPy_boomerangMove_c::initOffset(const cXyz* i_pos) {
     field_0x0 = 0;
 }
 
-daMidna_c* daPy_py_c::m_midnaActor;
+DUSK_GAME_DATA daMidna_c* daPy_py_c::m_midnaActor;
 
-s16 daPy_boomerangMove_c::m_dropAngleY;
+DUSK_GAME_DATA s16 daPy_boomerangMove_c::m_dropAngleY;
 
-s16 daPy_boomerangMove_c::m_eventKeepFlg;
+DUSK_GAME_DATA s16 daPy_boomerangMove_c::m_eventKeepFlg;
 
 int daPy_boomerangMove_c::posMove(cXyz* o_pos, s16* o_rotY, fopAc_ac_c* i_objActor, s16 i_rotStep) {
     daBoomerang_c* boomerang_p = daPy_py_c::getThrowBoomerangActor();

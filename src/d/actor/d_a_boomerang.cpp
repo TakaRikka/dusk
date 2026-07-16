@@ -137,17 +137,17 @@ static const u8 lbl_46_rodata_24[6] = {
     0x1E,
 };
 
-const u16 daBoomerang_HIO_c0::m_lockWaitTime = 10;
+DUSK_GAME_DATA const u16 daBoomerang_HIO_c0::m_lockWaitTime = 10;
 
-const f32 daBoomerang_HIO_c0::m_minCircleR = 28.0f;
+DUSK_GAME_DATA const f32 daBoomerang_HIO_c0::m_minCircleR = 28.0f;
 
-const f32 daBoomerang_HIO_c0::m_middleCircleR = 35.0f;
+DUSK_GAME_DATA const f32 daBoomerang_HIO_c0::m_middleCircleR = 35.0f;
 
-const f32 daBoomerang_HIO_c0::m_maxCircleR = 80.0f;
+DUSK_GAME_DATA const f32 daBoomerang_HIO_c0::m_maxCircleR = 80.0f;
 
-const f32 daBoomerang_HIO_c0::m_scale = 3.0f / 5.0f;
+DUSK_GAME_DATA const f32 daBoomerang_HIO_c0::m_scale = 3.0f / 5.0f;
 
-const f32 daBoomerang_HIO_c0::m_lockWindScale = 2.0f;
+DUSK_GAME_DATA const f32 daBoomerang_HIO_c0::m_lockWindScale = 2.0f;
 
 static const u32 l_lockSeFlg[BOOMERANG_LOCK_MAX] = {
     Z2SE_SY_BOOM_LOCK_ON_1,

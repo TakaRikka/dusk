@@ -57,6 +57,6 @@ int fpcBs_Delete(base_process_class* i_proc);
 base_process_class* fpcBs_Create(s16 i_profname, fpc_ProcID i_procID, void* i_append);
 int fpcBs_SubCreate(base_process_class* i_proc);
 
-extern int g_fpcBs_type;
+DUSK_GAME_EXTERN int g_fpcBs_type;
 
 #endif

@@ -151,21 +151,21 @@ public:
     struct C3ButtonReset {
         C3ButtonReset() { mReset = false; }
 
-        static u32 sResetPattern;
-        static u32 sResetMaskPattern;
-        static callbackFn sCallback;
-        static void* sCallbackArg;
-        static OSTime sThreshold;
-        static s32 sResetOccurredPort;
-        static bool sResetOccurred;
-        static bool sResetSwitchPushing;
+        static DUSK_GAME_DATA u32 sResetPattern;
+        static DUSK_GAME_DATA u32 sResetMaskPattern;
+        static DUSK_GAME_DATA callbackFn sCallback;
+        static DUSK_GAME_DATA void* sCallbackArg;
+        static DUSK_GAME_DATA OSTime sThreshold;
+        static DUSK_GAME_DATA s32 sResetOccurredPort;
+        static DUSK_GAME_DATA bool sResetOccurred;
+        static DUSK_GAME_DATA bool sResetSwitchPushing;
 
         /* 0x0 */ bool mReset;
     };  // Size: 0x4
 
     struct CStick {
-        static f32 sPressPoint;
-        static f32 sReleasePoint;
+        static DUSK_GAME_DATA f32 sPressPoint;
+        static DUSK_GAME_DATA f32 sReleasePoint;
 
         CStick() { clear(); }
         void clear();
@@ -187,9 +187,9 @@ public:
     struct CRumble {
         CRumble(JUTGamePad* pad) { clear(pad); }
 
-        static u32 sChannelMask[4];
-        static u8 mStatus[4];
-        static u32 mEnabled;
+        static DUSK_GAME_DATA u32 sChannelMask[4];
+        static DUSK_GAME_DATA u8 mStatus[4];
+        static DUSK_GAME_DATA u32 mEnabled;
 
         enum ERumble {
             VAL_0 = 0,
@@ -237,18 +237,18 @@ public:
         mRumble.startPatternedRumble(data, rumble, length);
     }
 
-    static JSUList<JUTGamePad> mPadList;
-    static bool mListInitialized;
-    static PADStatus mPadStatus[4];
-    static CButton mPadButton[4];
-    static CStick mPadMStick[4];
-    static CStick mPadSStick[4];
-    static EStickMode sStickMode;
-    static int sClampMode;
-    static u8 mPadAssign[4];
-    static u32 sSuppressPadReset;
-    static s32 sAnalogMode;
-    static u32 sRumbleSupported;
+    static DUSK_GAME_DATA JSUList<JUTGamePad> mPadList;
+    static DUSK_GAME_DATA bool mListInitialized;
+    static DUSK_GAME_DATA PADStatus mPadStatus[4];
+    static DUSK_GAME_DATA CButton mPadButton[4];
+    static DUSK_GAME_DATA CStick mPadMStick[4];
+    static DUSK_GAME_DATA CStick mPadSStick[4];
+    static DUSK_GAME_DATA EStickMode sStickMode;
+    static DUSK_GAME_DATA int sClampMode;
+    static DUSK_GAME_DATA u8 mPadAssign[4];
+    static DUSK_GAME_DATA u32 sSuppressPadReset;
+    static DUSK_GAME_DATA s32 sAnalogMode;
+    static DUSK_GAME_DATA u32 sRumbleSupported;
 
     /* 0x18 */ CButton mButton;
     /* 0x48 */ CStick mMainStick;
@@ -273,7 +273,7 @@ public:
 * 
 */
 struct JUTGamePadLongPress {
-    static JSUList<JUTGamePadLongPress> sPatternList;
+    static DUSK_GAME_DATA JSUList<JUTGamePadLongPress> sPatternList;
     void checkCallback(int port, u32 hold_time);
 
     u32 getMaskPattern() const { return mMaskPattern; }

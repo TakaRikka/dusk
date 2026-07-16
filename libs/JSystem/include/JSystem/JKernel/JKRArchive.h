@@ -4,7 +4,7 @@
 #include "JSystem/JKernel/JKRCompression.h"
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "global.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class JKRHeap;
 
@@ -242,7 +242,7 @@ public:
     static void setCurrentDirID(u32 dirID) { sCurrentDirID = dirID; }
 
 protected:
-    static u32 sCurrentDirID;
+    static DUSK_GAME_DATA u32 sCurrentDirID;
 };
 
 inline JKRCompression JKRConvertAttrToCompressionType(int attr) {

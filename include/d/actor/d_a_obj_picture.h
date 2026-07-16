@@ -39,11 +39,11 @@ public:
 #if DEBUG
     const
 #endif
-    static dCcD_SrcCps s_CcDCps;
+    static DUSK_GAME_DATA dCcD_SrcCps s_CcDCps;
 #if DEBUG
     const
 #endif
-    static dCcD_SrcCyl s_CcDCyl_pic_at;
+    static DUSK_GAME_DATA dCcD_SrcCyl s_CcDCyl_pic_at;
 
 private:
     /* 0x574 */ dCcD_Stts field_0x574;

@@ -252,7 +252,21 @@ void Overlay::update() {
         if (getSettings().video.enableFpsOverlay.getValue()) {
             const int idx = getSettings().video.fpsOverlayCorner.getValue();
             mFpsCounter->SetAttribute("open", "");
+            mFpsCounter->RemoveProperty(Rml::PropertyId::Bottom);
             mFpsCounter->SetAttribute("corner", kFpsCorners[idx]);
+
+            if (idx == 2) {
+                if (mPipelineProgress && mPipelineProgress->GetAttribute("open")) {
+                    // 12 (height of pipeline box off bottom) + height of pipeline box + 3 (padding
+                    // space)
+                    mFpsCounter->SetProperty(Rml::PropertyId::Bottom,
+                        Rml::Property(15 + mPipelineProgress->GetOffsetHeight(), Rml::Unit::PX));
+                } else {
+                    // Return fps counter to default height off the bottom
+                    mFpsCounter->SetProperty(
+                        Rml::PropertyId::Bottom, Rml::Property(12, Rml::Unit::PX));
+                }
+            }
 
             const Uint64 perfFreq = SDL_GetPerformanceFrequency();
             float fps = aurora_get_fps();

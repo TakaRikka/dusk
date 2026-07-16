@@ -10,7 +10,7 @@ struct daObj_Sekizo_HIOParam {
 class daObj_Sekizo_Param_c {
 public:
     virtual ~daObj_Sekizo_Param_c() {}
-    static daObj_Sekizo_HIOParam const m;
+    static DUSK_GAME_DATA daObj_Sekizo_HIOParam const m;
 };
 
 #if DEBUG

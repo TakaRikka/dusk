@@ -53,7 +53,7 @@ public:
     static void remove();
     static void reset();
 
-    static dMdl_mng_c* m_myObj;
+    static DUSK_GAME_DATA dMdl_mng_c* m_myObj;
 
 private:
     /* 0x00 */ dMdl_c field_0x0[4];

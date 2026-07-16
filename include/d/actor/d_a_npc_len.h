@@ -14,7 +14,7 @@ class daNpc_Len_Param_c {
 public:
     virtual ~daNpc_Len_Param_c() {}
 
-    static const daNpc_Len_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Len_HIOParam m;
 };
 
 #if DEBUG
@@ -100,8 +100,8 @@ public:
     s32 getFootRJointNo() { return 32; }
     BOOL chkXYItems() { return TRUE; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[4];
-    static cutFunc DUSK_CONST mCutList[4];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[4];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[4];
 
     int getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

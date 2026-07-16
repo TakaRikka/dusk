@@ -17,7 +17,7 @@ class daObjTks_Param_c {
 public:
     virtual ~daObjTks_Param_c() {}
 
-    static const daObjTks_HIOParam m;
+    static DUSK_GAME_DATA const daObjTks_HIOParam m;
 };
 
 #if DEBUG

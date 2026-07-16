@@ -21,8 +21,8 @@ const int BLOCK_NONE = -1;
 
 // Used to expand a signed 24 int to a signed 32 int
 const u32 gu32Mask_TSequence_value_signExpansion = 0xFF000000;
-extern const BE(u32) ga4cSignature;  // 'STB/0'
-extern const s32 gauDataSize_TEParagraph_data[8];
+DUSK_GAME_EXTERN const BE(u32) ga4cSignature;  // 'STB/0'
+DUSK_GAME_EXTERN const s32 gauDataSize_TEParagraph_data[8];
 
 inline void toString_block(char* a5c, u32 arg1) {
     // from debug, todo

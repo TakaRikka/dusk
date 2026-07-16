@@ -152,7 +152,7 @@ public:
 
     static JUTConsoleManager* const getManager() { return sManager; }
 
-    static JUTConsoleManager* sManager;
+    static DUSK_GAME_DATA JUTConsoleManager* sManager;
 
 #ifdef __MWERKS__
     typedef JGadget::TLinkList<JUTConsole, -offsetof(JUTConsole, mListNode)> ConsoleList;

@@ -50,8 +50,8 @@ public:
     int getSwBit2() { return fopAcM_GetParamBit(this, 8, 8); }
     int getScale() { return fopAcM_GetParamBit(this, 0x10, 8); }
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 };
 
 STATIC_ASSERT(sizeof(daZrTurara_c) == 0x76C);

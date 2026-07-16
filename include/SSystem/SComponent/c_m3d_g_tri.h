@@ -2,7 +2,7 @@
 #define C_M3D_G_TRI_H_
 
 #include "SSystem/SComponent/c_m3d_g_pla.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class cM3dGCyl;
 

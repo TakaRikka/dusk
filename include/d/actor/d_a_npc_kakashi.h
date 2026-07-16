@@ -14,7 +14,7 @@ class daNpc_Kakashi_Param_c {
 public:
     virtual ~daNpc_Kakashi_Param_c() {}
 
-    static const daNpc_Kakashi_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Kakashi_HIOParam m;
 };
 
 #if DEBUG
@@ -113,8 +113,8 @@ public:
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
     u8 getBitSW2() { return (fopAcM_GetParam(this) & 0xFF0000) >> 16; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[4];
-    static int (daNpc_Kakashi_c::* DUSK_CONST mCutList[])(int);
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[4];
+    static DUSK_GAME_DATA int (daNpc_Kakashi_c::* DUSK_CONST mCutList[])(int);
 
 private:
     /* 0x0E40 */ NPC_KAKASHI_HIO_CLASS* mpHIO;

@@ -9,7 +9,7 @@
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "J_Hatake";
 
-daObj_Pleaf_HIOParam const daObj_Pleaf_Param_c::m = {0, -3.0f, 1.0f, 900.0f};
+DUSK_GAME_DATA daObj_Pleaf_HIOParam const daObj_Pleaf_Param_c::m = {0, -3.0f, 1.0f, 900.0f};
 
 static OBJ_PLEAF_HIO_CLASS l_HIO;
 

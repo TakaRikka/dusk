@@ -17,7 +17,7 @@ public:
         JUT_ASSERT(51, m_obj == NULL);
     }
 
-    static dEyeHL_c* m_obj;
+    static DUSK_GAME_DATA dEyeHL_c* m_obj;
 };
 
 class dEyeHL_c {

@@ -190,12 +190,12 @@ STATIC_ASSERT(sizeof(daBoomerang_c) == 0xDE4);
 
 class daBoomerang_HIO_c0 {
 public:
-    static u16 const m_lockWaitTime;
-    static f32 const m_minCircleR;
-    static f32 const m_middleCircleR;
-    static f32 const m_maxCircleR;
-    static f32 const m_scale;
-    static f32 const m_lockWindScale;
+    static DUSK_GAME_DATA u16 const m_lockWaitTime;
+    static DUSK_GAME_DATA f32 const m_minCircleR;
+    static DUSK_GAME_DATA f32 const m_middleCircleR;
+    static DUSK_GAME_DATA f32 const m_maxCircleR;
+    static DUSK_GAME_DATA f32 const m_scale;
+    static DUSK_GAME_DATA f32 const m_lockWindScale;
 };
 
 #endif /* D_A_BOOMERANG_H */

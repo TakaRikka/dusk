@@ -7,7 +7,7 @@
 
 #include "d/actor/d_a_coach_fire.h"
 
-CoachFireAttr const daCoachFire_c::M_attr = {
+DUSK_GAME_DATA CoachFireAttr const daCoachFire_c::M_attr = {
     50.0f,  // radius
     4.0f,   // field_0x04
     36,     // field_0x08

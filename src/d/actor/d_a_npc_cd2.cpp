@@ -179,7 +179,7 @@ static anmTblPrm const l_bckTbl_W[54] = {
     {"Wgeneral", 5},  {"Wgeneral", 6},  {"Wgeneral", 9},  {"Wgeneral", 15},
 };
 
-dCcD_SrcCyl const daNpcCd2_c::m_cylDat = {
+DUSK_GAME_DATA dCcD_SrcCyl const daNpcCd2_c::m_cylDat = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0, 0}, 0x79}}, // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -240,7 +240,7 @@ static anmTblPrm const l_btpTWTbl[30] = {
 
 #include "d/actor/d_a_npc_cd2_HIO.inc"
 
-daNpcCd2_HIO_c l_Cd2_HIO;
+DUSK_GAME_DATA daNpcCd2_HIO_c l_Cd2_HIO;
 
 int daNpcCd2_c::NpcCreate(int param_1) {
     J3DModelData* a_mdlData_p = getNpcMdlDataP(param_1);

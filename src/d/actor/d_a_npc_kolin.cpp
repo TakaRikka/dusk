@@ -308,7 +308,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {20, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Kolin_c::mCutNameList[11] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Kolin_c::mCutNameList[11] = {
     "",
     "NO_RIDE",
     "HAIL",
@@ -322,7 +322,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Kolin_c::mCutNameList[11] = {
     "THANK_YOU",
 };
 
-daNpc_Kolin_c::cutFunc DUSK_CONST daNpc_Kolin_c::mCutList[11] = {
+DUSK_GAME_DATA daNpc_Kolin_c::cutFunc DUSK_CONST daNpc_Kolin_c::mCutList[11] = {
     NULL,
     &daNpc_Kolin_c::cutNoRide,
     &daNpc_Kolin_c::cutHail,
@@ -336,7 +336,7 @@ daNpc_Kolin_c::cutFunc DUSK_CONST daNpc_Kolin_c::mCutList[11] = {
     &daNpc_Kolin_c::cutThankYou
 };
 
-daNpc_Kolin_HIOParam const daNpc_Kolin_Param_c::m = {
+DUSK_GAME_DATA daNpc_Kolin_HIOParam const daNpc_Kolin_Param_c::m = {
     140.0f,
     -3.0f,
     1.0f,

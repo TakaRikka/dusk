@@ -10,7 +10,7 @@
 
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 
-cXyz cCcD_ShapeAttr::m_virtual_center = cXyz::Zero;
+DUSK_GAME_DATA cXyz cCcD_ShapeAttr::m_virtual_center = cXyz::Zero;
 
 void cCcD_DivideInfo::Set(u32 xDivInfo, u32 yDivInfo, u32 zDivInfo) {
     mXDivInfo = xDivInfo;

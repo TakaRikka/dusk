@@ -138,7 +138,7 @@ enum Event {
     /* 0x8 */ EVENT_FIND_WOLF_VER2,
 };
 
-daNpc_Jagar_HIOParam const daNpc_Jagar_Param_c::m = {
+DUSK_GAME_DATA daNpc_Jagar_HIOParam const daNpc_Jagar_Param_c::m = {
     170.0f, -3.0f, 1.0f, 400.0f, 255.0f, 160.0f,
     35.0f, 30.0f, 0.0f, 0.0f, 10.0f, -10.0f,
     30.0f, -10.0f, 45.0f, -45.0f, 0.6f, 12.0f,
@@ -315,7 +315,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {13, -1, 1}, {12, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Jagar_c::mCutNameList[7] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Jagar_c::mCutNameList[7] = {
     "",
     "CLIMBUP",
     "NEED_YOUR_HELP",
@@ -325,7 +325,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Jagar_c::mCutNameList[7] = {
     "FIND_WOLF",
 };
 
-daNpc_Jagar_c::cutFunc DUSK_CONST daNpc_Jagar_c::mCutList[7] = {
+DUSK_GAME_DATA daNpc_Jagar_c::cutFunc DUSK_CONST daNpc_Jagar_c::mCutList[7] = {
     NULL,
     &daNpc_Jagar_c::cutClimbUp,
     &daNpc_Jagar_c::cutNeedYourHelp,

@@ -54,11 +54,11 @@ BOOL daObjSwpush::Act_c::solidHeapCB(fopAc_ac_c* a_this) {
     return static_cast<daObjSwpush::Act_c*>(a_this)->create_heap();
 }
 
-s16 const daObjSwpush::Act_c::M_bmd[3] = {BMDR_KBOTA_00, BMDR_S_LV3BOTA, BMDR_S_LV6BOTA};
+DUSK_GAME_DATA s16 const daObjSwpush::Act_c::M_bmd[3] = {BMDR_KBOTA_00, BMDR_S_LV3BOTA, BMDR_S_LV6BOTA};
 
-s16 const daObjSwpush::Act_c::M_dzb[3] = {DZB_KBOTA_00, DZB_KBOTA2_00, DZB_KBOTA3_00};
+DUSK_GAME_DATA s16 const daObjSwpush::Act_c::M_dzb[3] = {DZB_KBOTA_00, DZB_KBOTA2_00, DZB_KBOTA3_00};
 
-DUSK_CONST char* daObjSwpush::Act_c::M_arcname[3] = {
+DUSK_GAME_DATA DUSK_CONST char* daObjSwpush::Act_c::M_arcname[3] = {
     "Kbota_00",
     "S_lv3bota",
     "S_lv6bota",
@@ -117,9 +117,9 @@ cPhs_Step daObjSwpush::Act_c::create_res_load() {
     return cPhs_COMPLEATE_e;
 }
 
-u32 const daObjSwpush::Act_c::M_heap_size[3] = {0x1000, 0x1000, 0x1000};
+DUSK_GAME_DATA u32 const daObjSwpush::Act_c::M_heap_size[3] = {0x1000, 0x1000, 0x1000};
 
-daObjSwpush::Hio_c::Attr_c const daObjSwpush::Act_c::M_attr[5] = {
+DUSK_GAME_DATA daObjSwpush::Hio_c::Attr_c const daObjSwpush::Act_c::M_attr[5] = {
     {
         (AttrFlag_e)(FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),
         1.0f,
@@ -198,7 +198,7 @@ daObjSwpush::Hio_c::Attr_c const daObjSwpush::Act_c::M_attr[5] = {
 
 };
 
-u8 const daObjSwpush::Act_c::M_op_vtx[4] = {0x0D, 0x0B, 0x0A, 0x0C};
+DUSK_GAME_DATA u8 const daObjSwpush::Act_c::M_op_vtx[4] = {0x0D, 0x0B, 0x0A, 0x0C};
 
 cPhs_Step daObjSwpush::Act_c::Mthd_Create() {
     fopAcM_ct(this, daObjSwpush::Act_c);

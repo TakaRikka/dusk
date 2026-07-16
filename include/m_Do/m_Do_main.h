@@ -6,12 +6,12 @@
 
 class JKRExpHeap;
 
-extern OSThread mainThread;
+DUSK_GAME_EXTERN OSThread mainThread;
 
 void version_check();
 s32 LOAD_COPYDATE(void*);
 
-extern OSThread mainThread;
+DUSK_GAME_EXTERN OSThread mainThread;
 const int HeapCheckTableNum = 8;
 
 class HeapCheck {
@@ -70,11 +70,11 @@ struct mDoMain {
     static u32 archiveHeapSize;
     static u32 gameHeapSize;
 
-    static char COPYDATE_STRING[18];
-    static u32 memMargin;
-    static OSTime sPowerOnTime;
-    static OSTime sHungUpTime;
-    static s8 developmentMode;
+    static DUSK_GAME_DATA char COPYDATE_STRING[18];
+    static DUSK_GAME_DATA u32 memMargin;
+    static DUSK_GAME_DATA OSTime sPowerOnTime;
+    static DUSK_GAME_DATA OSTime sHungUpTime;
+    static DUSK_GAME_DATA s8 developmentMode;
 };
 
 #endif /* M_DO_M_DO_MAIN_H */

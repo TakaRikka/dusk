@@ -36,7 +36,7 @@ public:
 
 static daSyRock_HIO_c l_HIO;
 
-dCcD_SrcCyl daSyRock_c::mCcDCyl = {mCcDObjInfo};
+DUSK_GAME_DATA dCcD_SrcCyl daSyRock_c::mCcDCyl = {mCcDObjInfo};
 
 daSyRock_HIO_c::daSyRock_HIO_c() {
     mShakeAmplitude = 450.0f;
@@ -151,7 +151,7 @@ int daSyRock_c::CreateHeap() {
     return 1;
 }
 
-dCcD_SrcGObjInf const daSyRock_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daSyRock_c::mCcDObjInfo = {
     {0x0, {{AT_TYPE_BOMB, 0x1, 0x1F}, {AT_TYPE_IRON_BALL | AT_TYPE_BOMB, 0x11}, 0x79}},    // mObj
     {dCcD_SE_SWORD, 0x0, 0x1, dCcD_MTRL_NONE, 0x0},      // mGObjAt
     {dCcD_SE_STONE, 0x0, 0x0, dCcD_MTRL_NONE, 0x2},      // mGObjTg

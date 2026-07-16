@@ -6,13 +6,13 @@
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
-Mtx J3DMtxBuffer::sNoUseDrawMtx;
+DUSK_GAME_DATA Mtx J3DMtxBuffer::sNoUseDrawMtx;
 
-Mtx33 J3DMtxBuffer::sNoUseNrmMtx;
+DUSK_GAME_DATA Mtx33 J3DMtxBuffer::sNoUseNrmMtx;
 
-Mtx* J3DMtxBuffer::sNoUseDrawMtxPtr = &J3DMtxBuffer::sNoUseDrawMtx;
+DUSK_GAME_DATA Mtx* J3DMtxBuffer::sNoUseDrawMtxPtr = &J3DMtxBuffer::sNoUseDrawMtx;
 
-Mtx33* J3DMtxBuffer::sNoUseNrmMtxPtr = &J3DMtxBuffer::sNoUseNrmMtx;
+DUSK_GAME_DATA Mtx33* J3DMtxBuffer::sNoUseNrmMtxPtr = &J3DMtxBuffer::sNoUseNrmMtx;
 
 // force .sdata2 order
 static f32 dummy1() {

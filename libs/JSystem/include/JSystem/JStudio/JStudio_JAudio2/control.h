@@ -94,7 +94,7 @@ struct TAdaptor_sound : public JStudio::TAdaptor_sound {
 
     void set_bPermit_onExit_notEnd_(bool param_1) { field_0x11c = param_1; }
 
-    static TVVOSetValue_ saoVVOSetValue_[6];
+    static DUSK_GAME_DATA TVVOSetValue_ saoVVOSetValue_[6];
 
     /* 0x114 */ TCreateObject* pCreateObject_;
     /* 0x118 */ JAISoundHandle opJAISoundHandle_;

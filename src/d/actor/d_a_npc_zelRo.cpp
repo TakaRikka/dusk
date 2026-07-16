@@ -83,13 +83,13 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_ZelRo_c::mCutNameList = "";
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_ZelRo_c::mCutNameList = "";
 
-daNpc_ZelRo_c::cutFunc DUSK_CONST daNpc_ZelRo_c::mCutList[1] = {
+DUSK_GAME_DATA daNpc_ZelRo_c::cutFunc DUSK_CONST daNpc_ZelRo_c::mCutList[1] = {
     NULL
 };
 
-const daNpc_ZelRo_HIOParam daNpc_ZelRo_Param_c::m = {
+DUSK_GAME_DATA const daNpc_ZelRo_HIOParam daNpc_ZelRo_Param_c::m = {
     190.0f,
     -3.0f,
     1.0f,

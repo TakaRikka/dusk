@@ -171,7 +171,7 @@ Hio_c L_hio;
 
 }
 
-char const Act_c::M_arcname[5] = "Mhsg";
+DUSK_GAME_DATA char const Act_c::M_arcname[5] = "Mhsg";
 
 int Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, attr_type(mType).field_0x0);
@@ -344,7 +344,7 @@ void Act_c::mode_fell_init() {
 void Act_c::mode_fell() {
 }
 
-Mtx Act_c::M_tmp_mtx;
+DUSK_GAME_DATA Mtx Act_c::M_tmp_mtx;
 
 void Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);

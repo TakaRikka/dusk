@@ -53,7 +53,7 @@ enum CStatueAnimIndex {
     CStatueAnimIndex_N,
 };
 
-u16 const daCstatue_c::m_bckIdxTable[daCstatueType_N][CStatueAnimIndex_N] = {
+DUSK_GAME_DATA u16 const daCstatue_c::m_bckIdxTable[daCstatueType_N][CStatueAnimIndex_N] = {
     // daCstatueType_NORMAL
     {CStatueAnimSwing, CStatueAnimWalk, CStatueAnimSwing, CStatueAnimFall, CStatueAnimStop,
      CStatueAnimStart, CStatueAnimSwingre},

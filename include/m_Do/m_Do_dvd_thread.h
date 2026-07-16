@@ -138,13 +138,13 @@ struct mDoDvdThd {
     static void create(s32);
     static void suspend();
 
-    static OSThread l_thread;
-    static mDoDvdThdStack l_threadStack;
-    static mDoDvdThd_param_c l_param;
+    static DUSK_GAME_DATA OSThread l_thread;
+    static DUSK_GAME_DATA mDoDvdThdStack l_threadStack;
+    static DUSK_GAME_DATA mDoDvdThd_param_c l_param;
 
     static u8 verbose;
-    static u8 DVDLogoMode;
-    static bool SyncWidthSound;
+    static DUSK_GAME_DATA u8 DVDLogoMode;
+    static DUSK_GAME_DATA bool SyncWidthSound;
     static u8 Report_DVDRead;
 };
 

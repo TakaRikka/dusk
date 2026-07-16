@@ -202,7 +202,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "TKS";
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Tks";
 
-daNpcTks_HIOParam const daNpcTks_Param_c::m = {
+DUSK_GAME_DATA daNpcTks_HIOParam const daNpcTks_Param_c::m = {
     90.0f,
     -3.0f,
     1.0f,

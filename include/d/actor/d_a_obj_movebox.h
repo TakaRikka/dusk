@@ -122,12 +122,12 @@ struct Bgc_c {
     bool chk_wall_touch(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*, s16);
     bool chk_wall_touch2(daObjMovebox::Act_c const*, daObjMovebox::BgcSrc_c const*, int, s16);
 
-    static const daObjMovebox::BgcSrc_c M_lin5[];
-    static const daObjMovebox::BgcSrc_c M_lin20[];
+    static DUSK_GAME_DATA const daObjMovebox::BgcSrc_c M_lin5[];
+    static DUSK_GAME_DATA const daObjMovebox::BgcSrc_c M_lin20[];
 
-    static dBgS_ObjGndChk M_gnd_work[23];
-    static dBgS_WtrChk M_wrt_work;
-    static dBgS_ObjLinChk M_wall_work[23];
+    static DUSK_GAME_DATA dBgS_ObjGndChk M_gnd_work[23];
+    static DUSK_GAME_DATA dBgS_WtrChk M_wrt_work;
+    static DUSK_GAME_DATA dBgS_ObjLinChk M_wall_work[23];
 
     /* 0x000 */ f32 field_0x0[23];
     /* 0x05C */ int field_0x5c;
@@ -213,11 +213,11 @@ struct Act_c : public dBgS_MoveBgActor {
 
     int getType() { return prm_get_type(); }
 
-    static const s16 M_dir_base[4];
-    static const char* const M_arcname[8];
-    static const dCcD_SrcCyl M_cyl_src;
+    static DUSK_GAME_DATA const s16 M_dir_base[4];
+    static DUSK_GAME_DATA const char* const M_arcname[8];
+    static DUSK_GAME_DATA const dCcD_SrcCyl M_cyl_src;
 
-    static const daObjMovebox::Attr_c M_attr[8];
+    static DUSK_GAME_DATA const daObjMovebox::Attr_c M_attr[8];
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;

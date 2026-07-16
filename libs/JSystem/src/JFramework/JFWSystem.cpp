@@ -13,32 +13,32 @@
 #include "JSystem/JUtility/JUTResFont.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 
-s32 JFWSystem::CSetUpParam::maxStdHeaps = 2;
+DUSK_GAME_DATA s32 JFWSystem::CSetUpParam::maxStdHeaps = 2;
 
-u32 JFWSystem::CSetUpParam::sysHeapSize = 0x400000;
+DUSK_GAME_DATA u32 JFWSystem::CSetUpParam::sysHeapSize = 0x400000;
 
-JKRExpHeap* JFWSystem::rootHeap;
+DUSK_GAME_DATA JKRExpHeap* JFWSystem::rootHeap;
 
-JKRExpHeap* JFWSystem::systemHeap;
+DUSK_GAME_DATA JKRExpHeap* JFWSystem::systemHeap;
 
 
-u32 JFWSystem::CSetUpParam::fifoBufSize = 0x40000;
+DUSK_GAME_DATA u32 JFWSystem::CSetUpParam::fifoBufSize = 0x40000;
 
-u32 JFWSystem::CSetUpParam::aramAudioBufSize = 0x800000;
+DUSK_GAME_DATA u32 JFWSystem::CSetUpParam::aramAudioBufSize = 0x800000;
 
-u32 JFWSystem::CSetUpParam::aramGraphBufSize = 0x600000;
+DUSK_GAME_DATA u32 JFWSystem::CSetUpParam::aramGraphBufSize = 0x600000;
 
-s32 JFWSystem::CSetUpParam::streamPriority = 8;
+DUSK_GAME_DATA s32 JFWSystem::CSetUpParam::streamPriority = 8;
 
-s32 JFWSystem::CSetUpParam::decompPriority = 7;
+DUSK_GAME_DATA s32 JFWSystem::CSetUpParam::decompPriority = 7;
 
-s32 JFWSystem::CSetUpParam::aPiecePriority = 6;
+DUSK_GAME_DATA s32 JFWSystem::CSetUpParam::aPiecePriority = 6;
 
-ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)&JUTResFONT_Ascfont_fix12;
+DUSK_GAME_DATA ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)&JUTResFONT_Ascfont_fix12;
 
-const GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
+DUSK_GAME_DATA const GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
 
-u32 JFWSystem::CSetUpParam::exConsoleBufferSize = 0x24FC;
+DUSK_GAME_DATA u32 JFWSystem::CSetUpParam::exConsoleBufferSize = 0x24FC;
 
 void JFWSystem::firstInit() {
     JUT_ASSERT(80, rootHeap == NULL);
@@ -49,17 +49,17 @@ void JFWSystem::firstInit() {
     JKRHEAP_NAME(systemHeap, "System");
 }
 
-JKRThread* JFWSystem::mainThread;
+DUSK_GAME_DATA JKRThread* JFWSystem::mainThread;
 
-JUTDbPrint* JFWSystem::debugPrint;
+DUSK_GAME_DATA JUTDbPrint* JFWSystem::debugPrint;
 
-JUTResFont* JFWSystem::systemFont;
+DUSK_GAME_DATA JUTResFont* JFWSystem::systemFont;
 
-JUTConsoleManager* JFWSystem::systemConsoleManager;
+DUSK_GAME_DATA JUTConsoleManager* JFWSystem::systemConsoleManager;
 
-JUTConsole* JFWSystem::systemConsole;
+DUSK_GAME_DATA JUTConsole* JFWSystem::systemConsole;
 
-bool JFWSystem::sInitCalled = false;
+DUSK_GAME_DATA bool JFWSystem::sInitCalled = false;
 
 void JFWSystem::init() {
     JUT_ASSERT(101, sInitCalled == false);

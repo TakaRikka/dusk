@@ -26,7 +26,7 @@ void JASProbe::stop() {
 	_1A8++;
 }
 
-JASProbe* JASProbe::sProbeTable[16];
+DUSK_GAME_DATA JASProbe* JASProbe::sProbeTable[16];
 
 void JASProbe::start(s32 index, char const* name) {
 	JASProbe* probe;

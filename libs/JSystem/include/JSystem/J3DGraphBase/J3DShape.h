@@ -4,8 +4,10 @@
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DFifo.h"
+#include "JSystem/JMath/JMath.h"
+#include "global.h"
 #include <mtx.h>
-#include "dusk/endian_gx.hpp"
+#include "helpers/endian_gx.hpp"
 
 class J3DShapeMtx;
 
@@ -78,13 +80,13 @@ public:
     virtual void load() const;
     virtual void calcNBTScale(Vec const&, f32 (*)[3][3], f32 (*)[3][3]);
 
-    static J3DShapeMtx_LoadFunc sMtxLoadPipeline[4];
-    static u16 sMtxLoadCache[10];
-    static u32 sCurrentPipeline;
-    static u8* sCurrentScaleFlag;
-    static bool sNBTFlag;
-    static bool sLODFlag;
-    static u32 sTexMtxLoadType;
+    static DUSK_GAME_DATA J3DShapeMtx_LoadFunc sMtxLoadPipeline[4];
+    static DUSK_GAME_DATA u16 sMtxLoadCache[10];
+    static DUSK_GAME_DATA u32 sCurrentPipeline;
+    static DUSK_GAME_DATA u8* sCurrentScaleFlag;
+    static DUSK_GAME_DATA bool sNBTFlag;
+    static DUSK_GAME_DATA bool sLODFlag;
+    static DUSK_GAME_DATA u32 sTexMtxLoadType;
 
     static void setCurrentPipeline(u32 pipeline) {
         J3D_ASSERT_RANGE(91, pipeline < 4);
@@ -202,8 +204,8 @@ public:
 
     static void resetVcdVatCache() { sOldVcdVatCmd = NULL; }
 
-    static void* sOldVcdVatCmd;
-    static bool sEnvelopeFlag;
+    static DUSK_GAME_DATA void* sOldVcdVatCmd;
+    static DUSK_GAME_DATA bool sEnvelopeFlag;
 
 private:
     friend struct J3DShapeFactory;

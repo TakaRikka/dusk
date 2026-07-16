@@ -22,7 +22,7 @@ class daNpc_Uri_Param_c {
 public:
     virtual ~daNpc_Uri_Param_c() {}
 
-    static const daNpc_Uri_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Uri_HIOParam m;
 };
 
 #if DEBUG
@@ -136,8 +136,8 @@ public:
 
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
 
-    static const char* mCutNameList[7];
-    static cutFunc DUSK_CONST mCutList[7];
+    static DUSK_GAME_DATA const char* mCutNameList[7];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[7];
 
 private:
     /* 0x0E40 */ NPC_URI_HIO_CLASS* mpHIO;

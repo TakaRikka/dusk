@@ -215,7 +215,7 @@ private:
 STATIC_ASSERT(sizeof(daE_YM_c) == 0xAF8);
 
 struct E_YM_n {
-    static dCcD_SrcSph cc_sph_src;
+    static DUSK_GAME_DATA dCcD_SrcSph cc_sph_src;
 };
 
 

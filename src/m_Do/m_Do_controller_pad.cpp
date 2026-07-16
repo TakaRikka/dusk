@@ -14,13 +14,30 @@
 
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
+#include "dusk/settings.h"
 #include "dusk/ui/touch_controls.hpp"
 #endif
 
-JUTGamePad* mDoCPd_c::m_gamePad[4];
+DUSK_GAME_DATA JUTGamePad* mDoCPd_c::m_gamePad[4];
 
-interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
-interface_of_controller_pad mDoCPd_c::m_debugCpadInfo[4];
+DUSK_GAME_DATA interface_of_controller_pad mDoCPd_c::m_cpadInfo[4];
+DUSK_GAME_DATA interface_of_controller_pad mDoCPd_c::m_debugCpadInfo[4];
+
+#if TARGET_PC
+s16 mDoCPd_c::getStickAngle3D(u32 pad) {
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return -getCpadInfo(pad).mMainStickAngle;
+    }
+    return getCpadInfo(pad).mMainStickAngle;
+}
+
+f32 mDoCPd_c::getSubStickX3D(u32 pad) {
+    if (dusk::getSettings().game.enableMirrorMode) {
+        return -getCpadInfo(pad).mCStickPosX;
+    }
+    return getCpadInfo(pad).mCStickPosX;
+}
+#endif
 
 void mDoCPd_c::create() {
     #if PLATFORM_GCN || PLATFORM_SHIELD

@@ -99,7 +99,7 @@ int daObjHFtr_c::draw() {
     return 1;
 }
 
-dCcD_SrcCyl const daObjHFtr_c::s_CcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl const daObjHFtr_c::s_CcDCyl = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x400020, 0x11}, 0x0}},  // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},               // mGObjAt

@@ -35,7 +35,7 @@ daLv2Candle_HIO_c::daLv2Candle_HIO_c() {
     mColor2B = 0x42;
 }
 
-dCcD_SrcGObjInf const daLv2Candle_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daLv2Candle_c::mCcDObjInfo = {
     {
         0, {
             {0x200, 0, 0x13},
@@ -48,7 +48,7 @@ dCcD_SrcGObjInf const daLv2Candle_c::mCcDObjInfo = {
     {0},
 };
 
-dCcD_SrcCyl daLv2Candle_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daLv2Candle_c::mCcDCyl = {
     daLv2Candle_c::mCcDObjInfo,
     {
         { {0.0f, 0.0f, 0.0f}, 0, 0}

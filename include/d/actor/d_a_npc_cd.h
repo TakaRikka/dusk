@@ -25,7 +25,7 @@ public:
     J3DModelData* getObjMdlDataP(int);
     virtual ~daNpcCd_c() {}
 
-    static dCcD_SrcCyl const m_cylDat;
+    static DUSK_GAME_DATA dCcD_SrcCyl const m_cylDat;
 
     /* 0x56C */ request_of_phase_process_class mPhase1;
     /* 0x574 */ request_of_phase_process_class mPhase2;
@@ -101,7 +101,7 @@ public:
 
 STATIC_ASSERT(sizeof(daNpcCd_HIO_c) == 0x29BC);
 
-extern daNpcCd_HIO_c l_Cd_HIO;
+DUSK_GAME_EXTERN daNpcCd_HIO_c l_Cd_HIO;
 inline f32 HIO_atnOfs(int param_1) {
     s16 rv;
     if (param_1 < 16) {

@@ -19,7 +19,7 @@ int mDoMch_Create();
 void mDoMch_Destroy();
 #endif
 
-extern GXRenderModeObj g_ntscZeldaProg;
+DUSK_GAME_EXTERN GXRenderModeObj g_ntscZeldaProg;
 
 class mDoMch_render_c {
 public:
@@ -30,11 +30,11 @@ public:
 
     static GXRenderModeObj* getRenderModeObj() { return mRenderModeObj; }
 
-    static GXRenderModeObj* mRenderModeObj;
+    static DUSK_GAME_DATA GXRenderModeObj* mRenderModeObj;
 };
 
 namespace mDoMch {
-    extern u8 mDebugFill;
+    DUSK_GAME_EXTERN u8 mDebugFill;
     extern u8 mDebugFillNotUse;
     extern u8 mDebugFillNew;
     extern u8 mDebugFillDelete;

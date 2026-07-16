@@ -14,7 +14,7 @@ class daNpcBlueNS_Param_c {
 public:
     virtual ~daNpcBlueNS_Param_c() {}
 
-    static const daNpcBlueNS_HIOParam m;
+    static DUSK_GAME_DATA const daNpcBlueNS_HIOParam m;
 };
 
 #if DEBUG
@@ -124,7 +124,7 @@ public:
         return var_r30;
     }
 
-    static EventFn DUSK_CONST mEvtSeqList[];
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtSeqList[];
 
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ u8 field_0xBD8[0xBDC - 0xBD8];

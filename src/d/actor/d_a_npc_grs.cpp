@@ -93,12 +93,12 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grS";
 
 static NPC_GRS_HIO_CLASS l_HIO;
 
-char DUSK_CONST* DUSK_CONST daNpc_grS_c::mEvtCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_grS_c::mEvtCutNameList[2] = {
     "",
     "PUSHOUT",
 };
 
-daNpc_grS_c::cutFunc DUSK_CONST daNpc_grS_c::mEvtCutList[2] = {
+DUSK_GAME_DATA daNpc_grS_c::cutFunc DUSK_CONST daNpc_grS_c::mEvtCutList[2] = {
     NULL,
     &daNpc_grS_c::cutPushOut,
 };
@@ -122,7 +122,7 @@ daNpc_grS_c::~daNpc_grS_c() {
 #endif
 }
 
-const daNpc_grS_HIOParam daNpc_grS_Param_c::m = {
+DUSK_GAME_DATA const daNpc_grS_HIOParam daNpc_grS_Param_c::m = {
     120.0f, -3.0f, 1.0f, 600.0f, 255.0f, 120.0f, 35.0f, 60.0f,
     0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -30.0f, 45.0f, -45.0f,
     0.6f, 12.0f,

@@ -51,7 +51,7 @@ public:
 daObjFlag2_Hio_c M_hio;
 #endif
 
-daObjFlag2_Attr_c const daObjFlag2_c::M_attr = {
+DUSK_GAME_DATA daObjFlag2_Attr_c const daObjFlag2_c::M_attr = {
     -2.0f, 0.74f, 0.68f, 40.0f, 100.0f,
 };
 

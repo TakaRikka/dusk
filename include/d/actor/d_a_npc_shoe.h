@@ -11,7 +11,7 @@ class daNpcShoe_Param_c {
 public:
     virtual ~daNpcShoe_Param_c() {}
 
-    static const daNpcShoe_HIOParam m;
+    static DUSK_GAME_DATA const daNpcShoe_HIOParam m;
 };
 
 STATIC_ASSERT(sizeof(daNpcShoe_Param_c::m) == 0x6C);
@@ -110,7 +110,7 @@ public:
     inline bool chkFindPlayer();
     inline void playMotion();
 
-    static EventFn DUSK_CONST mEvtSeqList[1];
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtSeqList[1];
 
 private:
     /* 0xB48 */ J3DModel* mpModel1;

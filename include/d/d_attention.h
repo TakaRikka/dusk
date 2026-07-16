@@ -286,13 +286,13 @@ public:
     void keepLock(int timer) { mAttnBlockTimer = timer; }
     bool Lockon() { return LockonTruth() || chkFlag(0x20000000); }  // only matches with -O2?
 
-    static type_tbl_entry loc_type_tbl[3];
-    static type_tbl_entry act_type_tbl[5];
-    static dist_entry dist_table[234];
-    static int loc_type_num;
-    static int act_type_num;
-    static type_tbl_entry chk_type_tbl[1];
-    static int chk_type_num;
+    static DUSK_GAME_DATA type_tbl_entry loc_type_tbl[3];
+    static DUSK_GAME_DATA type_tbl_entry act_type_tbl[5];
+    static DUSK_GAME_DATA dist_entry dist_table[234];
+    static DUSK_GAME_DATA int loc_type_num;
+    static DUSK_GAME_DATA int act_type_num;
+    static DUSK_GAME_DATA type_tbl_entry chk_type_tbl[1];
+    static DUSK_GAME_DATA int chk_type_num;
 
 public:
     /* 0x000 */ fopAc_ac_c* mpPlayer;

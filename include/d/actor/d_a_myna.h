@@ -131,8 +131,8 @@ public:
     typedef void (daMyna_c::*ProcFunc)();
     typedef int (daMyna_c::*BaseMotionFunc)(int);
 
-    static dCcD_SrcSph const mCcDSph;
-    static daMyna_c::BaseMotionFunc mBaseMotionTBL[7];
+    static DUSK_GAME_DATA dCcD_SrcSph const mCcDSph;
+    static DUSK_GAME_DATA daMyna_c::BaseMotionFunc mBaseMotionTBL[7];
 
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ mDoExt_McaMorfSO* mpMorf;

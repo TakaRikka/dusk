@@ -101,7 +101,7 @@ static int fopCam_Create(void* i_this) {
     return ret;
 }
 
-leafdraw_method_class g_fopCam_Method = {
+DUSK_GAME_DATA leafdraw_method_class g_fopCam_Method = {
     (process_method_func)fopCam_Create,  (process_method_func)fopCam_Delete,
     (process_method_func)fopCam_Execute, (process_method_func)fopCam_IsDelete,
     (process_method_func)fopCam_Draw,

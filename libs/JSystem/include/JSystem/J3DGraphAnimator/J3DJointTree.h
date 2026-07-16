@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J3DJoint;
 class J3DMtxBuffer;

@@ -41,7 +41,7 @@ void JASAudioThread::stop() {
     jamMessageBlock((void*)2);
 }
 
-volatile int JASAudioThread::snIntCount;
+DUSK_GAME_DATA volatile int JASAudioThread::snIntCount;
 
 class Lock {
 public:

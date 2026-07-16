@@ -6,7 +6,7 @@
 #include <climits>
 #include "os_report.h"
 
-JSUList<JKRAramBlock> JKRAramHeap::sAramList;
+DUSK_GAME_DATA JSUList<JKRAramBlock> JKRAramHeap::sAramList;
 
 JKRAramHeap::JKRAramHeap(u32 startAddress, u32 size) {
     OSInitMutex(&mMutex);

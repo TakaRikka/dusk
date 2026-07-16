@@ -13,7 +13,7 @@ public:
     inline int execute();
     inline int draw();
 
-    static int m_nowID;
+    static DUSK_GAME_DATA int m_nowID;
 
     static void setFootMark(cXyz* i_pos, s16 param_1, int param_2) {
         fopKyM_create(fpcNm_WMARK_e, param_2 | (param_1 << 0x10), i_pos, NULL, NULL);

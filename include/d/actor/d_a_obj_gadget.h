@@ -117,7 +117,7 @@ class daObj_Gadget_Param_c {
 public:
     virtual ~daObj_Gadget_Param_c() {}
 
-    static daObj_Gadget_HIOParam const m;
+    static DUSK_GAME_DATA daObj_Gadget_HIOParam const m;
 };
 
 

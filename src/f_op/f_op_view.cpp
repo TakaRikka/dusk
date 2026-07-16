@@ -38,7 +38,7 @@ s32 fopVw_Create(void* i_this) {
     return ret;
 }
 
-leafdraw_method_class g_fopVw_Method = {
+DUSK_GAME_DATA leafdraw_method_class g_fopVw_Method = {
     (process_method_func)fopVw_Create,  (process_method_func)fopVw_Delete,
     (process_method_func)fopVw_Execute, (process_method_func)fopVw_IsDelete,
     (process_method_func)fopVw_Draw,

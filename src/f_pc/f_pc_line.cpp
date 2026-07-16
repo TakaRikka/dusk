@@ -16,7 +16,7 @@ void fpcLn_Create() {
         cLs_Create(line_node++);
 }
 
-node_lists_tree_class g_fpcLn_Queue = {
+DUSK_GAME_DATA node_lists_tree_class g_fpcLn_Queue = {
     l_fpcLn_Line,
     ARRAY_SIZEU(l_fpcLn_Line),
 };

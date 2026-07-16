@@ -12,7 +12,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_actor.h"
 #include "d/d_com_inf_game.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #if DEBUG
 #include "d/d_debug_viewer.h"
 #endif
@@ -25,7 +25,7 @@ class daObj_GrA_Param_c {
 public:
     virtual ~daObj_GrA_Param_c() {}
 
-    static const daObj_GrA_HIO_Param_c m;
+    static DUSK_GAME_DATA const daObj_GrA_HIO_Param_c m;
 };
 
 #if DEBUG
@@ -308,7 +308,7 @@ cPhs_Step daObj_GrA_c::create() {
     return phase;
 }
 
-daObj_GrA_HIO_Param_c const daObj_GrA_Param_c::m = {
+DUSK_GAME_DATA daObj_GrA_HIO_Param_c const daObj_GrA_Param_c::m = {
     85.0f,
     -4.0f,
     1.0f,
@@ -2083,7 +2083,7 @@ static int daObj_GrA_IsDelete(void* i_this) {
 
 AUDIO_INSTANCES;
 
-daObj_GrA_c::MotionFunc daObj_GrA_c::mBaseMotionList[22] = {
+DUSK_GAME_DATA daObj_GrA_c::MotionFunc daObj_GrA_c::mBaseMotionList[22] = {
     &daObj_GrA_c::base000,
     &daObj_GrA_c::base001,
     &daObj_GrA_c::base003,
@@ -2108,7 +2108,7 @@ daObj_GrA_c::MotionFunc daObj_GrA_c::mBaseMotionList[22] = {
     &daObj_GrA_c::base026,
 };
 
-daObj_GrA_c::MotionFunc daObj_GrA_c::mFaceMotionList[14] = {
+DUSK_GAME_DATA daObj_GrA_c::MotionFunc daObj_GrA_c::mFaceMotionList[14] = {
     &daObj_GrA_c::face000,
     &daObj_GrA_c::face003,
     &daObj_GrA_c::face004,

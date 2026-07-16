@@ -1,4 +1,5 @@
 #include "registry.hpp"
+#include "slot_map.hpp"
 
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/manifest.hpp"
@@ -59,18 +60,22 @@ const char* host_mod_version(ModContext* context) {
 
 const char* host_mod_dir(ModContext* context) {
     const auto* mod = mod_from_context(context);
-    return mod != nullptr ? mod->dir.c_str() : "";
+    return mod != nullptr ? mod->dirUtf8.c_str() : "";
+}
+
+const char* host_native_dir(ModContext* context) {
+    const auto* mod = mod_from_context(context);
+    return mod != nullptr ? mod->nativeDirUtf8.c_str() : "";
 }
 
 struct LifecycleWatcher {
-    uint64_t handle = 0;
-    LoadedMod* owner = nullptr;
     ModLifecycleFn fn = nullptr;
     void* userData = nullptr;
+    uint64_t order = 0;
 };
 
-std::vector<LifecycleWatcher> s_watchers;
-uint64_t s_nextWatchHandle = 1;
+SlotMap<LifecycleWatcher> s_watchers;
+uint64_t s_nextWatchOrder = 0;
 
 ModResult host_watch_mod_lifecycle(
     ModContext* context, ModLifecycleFn fn, void* userData, uint64_t* outHandle) {
@@ -78,8 +83,8 @@ ModResult host_watch_mod_lifecycle(
     if (mod == nullptr || fn == nullptr || outHandle == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    const auto handle = s_nextWatchHandle++;
-    s_watchers.push_back({handle, mod, fn, userData});
+    const auto handle = s_watchers.emplace(
+        *mod, LifecycleWatcher{.fn = fn, .userData = userData, .order = s_nextWatchOrder++});
     *outHandle = handle;
     return MOD_OK;
 }
@@ -89,32 +94,41 @@ ModResult host_unwatch_mod_lifecycle(ModContext* context, const uint64_t handle)
     if (mod == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    const auto erased = std::erase_if(s_watchers,
-        [&](const LifecycleWatcher& w) { return w.handle == handle && w.owner == mod; });
-    return erased != 0 ? MOD_OK : MOD_INVALID_ARGUMENT;
+    return s_watchers.erase_owned(handle, *mod) ? MOD_OK : MOD_INVALID_ARGUMENT;
 }
 
 void host_mod_detached(LoadedMod& mod) {
     // The subject's own watches go first: a mod is never notified about its own teardown.
-    std::erase_if(s_watchers, [&](const LifecycleWatcher& w) { return w.owner == &mod; });
+    s_watchers.erase_all(mod);
 
-    // Iterate a snapshot: callbacks may watch/unwatch, and a failing callback erases the
-    // failing mod's services.
-    const auto snapshot = s_watchers;
-    for (const auto& watcher : snapshot) {
-        const bool alive = std::ranges::any_of(
-            s_watchers, [&](const LifecycleWatcher& w) { return w.handle == watcher.handle; });
-        if (!alive) {
+    // Iterate a snapshot in registration order: callbacks may watch/unwatch, and a failing
+    // callback erases the failing mod's services.
+    struct PendingNotify {
+        uint64_t order;
+        uint64_t handle;
+    };
+    std::vector<PendingNotify> snapshot;
+    s_watchers.for_each([&](const uint64_t handle, const auto& entry) {
+        snapshot.push_back({.order = entry.value.order, .handle = handle});
+    });
+    std::ranges::sort(snapshot, {}, &PendingNotify::order);
+
+    for (const auto& pending : snapshot) {
+        const auto* entry = s_watchers.find(pending.handle);
+        if (entry == nullptr) {
             continue;
         }
+        // Do not retain pointers into SlotMap across a callback that may mutate it.
+        auto* owner = entry->owner;
+        const auto watcher = entry->value;
         try {
-            watcher.fn(watcher.owner->context.get(), mod.context.get(), mod.metadata.id.c_str(),
+            watcher.fn(owner->context.get(), mod.context.get(), mod.metadata.id.c_str(),
                 MOD_LIFECYCLE_DETACHED, watcher.userData);
         } catch (const std::exception& e) {
-            fail_mod(*watcher.owner, MOD_ERROR,
+            fail_mod(*owner, MOD_ERROR,
                 fmt::format("Exception in mod lifecycle callback: {}", e.what()));
         } catch (...) {
-            fail_mod(*watcher.owner, MOD_ERROR, "Unknown exception in mod lifecycle callback");
+            fail_mod(*owner, MOD_ERROR, "Unknown exception in mod lifecycle callback");
         }
     }
 }
@@ -133,6 +147,7 @@ constinit HostService s_hostService{
     .mod_dir = host_mod_dir,
     .watch_mod_lifecycle = host_watch_mod_lifecycle,
     .unwatch_mod_lifecycle = host_unwatch_mod_lifecycle,
+    .native_dir = host_native_dir,
 };
 
 }  // namespace

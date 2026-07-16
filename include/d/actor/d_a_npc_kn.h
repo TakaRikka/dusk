@@ -25,7 +25,7 @@ class daNpc_Kn_Param_c {
 public:
     virtual ~daNpc_Kn_Param_c() {}
 
-    static const daNpc_Kn_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Kn_HIOParam m;
 };
 
 #if DEBUG
@@ -412,14 +412,14 @@ public:
     virtual ~daNpc_Kn_c();
     virtual bool afterSetMotionAnm(int, int, f32, int);
     
-    static const dCcD_SrcGObjInf mCcDObjData;
-    static char DUSK_CONST* DUSK_CONST mCutNameList[21];
-    static cutFunc DUSK_CONST mCutList[21];
-    static dCcD_SrcCyl mCcDCyl;
-    static dCcD_SrcSph mCcDSph;
-    static s16 mSrchName;
-    static fopAc_ac_c* mFindActorPtrs[50];
-    static int mFindCount;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjData;
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[21];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[21];
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA s16 mSrchName;
+    static DUSK_GAME_DATA fopAc_ac_c* mFindActorPtrs[50];
+    static DUSK_GAME_DATA int mFindCount;
 
 private:
     /* 0x0E44 */ J3DModel* mpPodModel;

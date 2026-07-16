@@ -20,7 +20,7 @@ class daNpc_midP_Param_c {
 public:
     virtual ~daNpc_midP_Param_c() {}
 
-    static const daNpc_midP_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_midP_HIOParam m;
 };
 
 #if DEBUG
@@ -148,8 +148,8 @@ public:
         return nodeNo;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList;
-    static cutFunc DUSK_CONST mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList;
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0xE40 */ NPC_MIDP_HIO_CLASS* mpHIO;

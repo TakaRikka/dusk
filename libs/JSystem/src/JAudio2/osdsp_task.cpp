@@ -5,8 +5,8 @@
 #include <dsp.h>
 #include <os.h>
 
-extern DSPTaskInfo* __DSP_first_task;
-extern DSPTaskInfo* __DSP_curr_task;
+DUSK_GAME_EXTERN DSPTaskInfo* __DSP_first_task;
+DUSK_GAME_EXTERN DSPTaskInfo* __DSP_curr_task;
 extern "C" void __DSP_exec_task(DSPTaskInfo*, DSPTaskInfo*);
 extern "C" void __DSP_remove_task(DSPTaskInfo* task);
 

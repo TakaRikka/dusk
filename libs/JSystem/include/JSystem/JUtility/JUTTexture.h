@@ -3,8 +3,8 @@
 
 #include <gx.h>
 #include <stdint.h>
-#include "dusk/endian.h"
-#include "dusk/gx_helper.h"
+#include "helpers/endian.h"
+#include "helpers/gx_helper.h"
 
 class JUTPalette;
 

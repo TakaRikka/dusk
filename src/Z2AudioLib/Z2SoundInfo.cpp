@@ -8,7 +8,7 @@
 #include "Z2AudioLib/Z2Calc.h"
 
 struct JAUStdSoundTableType {
-    static const u32 STRM_CH_SHIFT;
+    static DUSK_GAME_DATA const u32 STRM_CH_SHIFT;
     struct StringOffset {
         static inline const char* getString(const void* addr, u32 offset) {
             return (const char*)addr + offset;
@@ -230,7 +230,7 @@ void Z2SoundInfo::getSeqInfo(JAISoundID soundID, JAISeq* seqPtr) const {
     getSoundInfo_(soundID, seqPtr);
 }
 
-const u32 JAUStdSoundTableType::STRM_CH_SHIFT = 2;
+DUSK_GAME_DATA const u32 JAUStdSoundTableType::STRM_CH_SHIFT = 2;
 
 void Z2SoundInfo::getStreamInfo(JAISoundID soundID, JAIStream* streamPtr) const {
     int numChild;

@@ -27,7 +27,7 @@ static DUSK_CONSTEXPR int DUSK_CONST* l_loadRes_list[2] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[] = {"yel_bag"};
 
-dCcD_SrcCyl daObj_YBag_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daObj_YBag_c::mCcDCyl = {
     daNpcT_c::mCcDObjData,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}
@@ -69,14 +69,14 @@ daObj_YBag_c::~daObj_YBag_c() {
 #endif
 }
 
-const dCcD_SrcGObjInf daObj_YBag_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daObj_YBag_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0x00}, {0x79}}},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {0},
 };
 
-daObj_YBag_HIOParam const daObj_YBag_Param_c::m = {
+DUSK_GAME_DATA daObj_YBag_HIOParam const daObj_YBag_Param_c::m = {
     0.0f, -4.0f, 1.0f, 400.0f, 255.0f, 10.0f, 4.0f, 10.0f, 
     41.0f, 32.0f, 3.0f,
 };

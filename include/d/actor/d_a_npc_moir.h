@@ -23,7 +23,7 @@ class daNpcMoiR_Param_c {
 public:
     virtual ~daNpcMoiR_Param_c() {}
 
-    static daNpcMoiR_HIOParam const m;
+    static DUSK_GAME_DATA daNpcMoiR_HIOParam const m;
 };
 
 #if DEBUG
@@ -212,7 +212,7 @@ public:
     inline void setLookMode(int i_lookMode);
     inline void searchActors();
 
-    static EventFn mEvtSeqList[4];
+    static DUSK_GAME_DATA EventFn mEvtSeqList[4];
 
 private:
     /* 0xB48 */ Z2Creature mSound;

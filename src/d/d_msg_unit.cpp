@@ -379,4 +379,4 @@ void dMsgUnit_c::setTag(int i_type, int i_value, TEXT_SPAN o_buffer, bool param_
 }
 #endif
 
-dMsgUnit_c g_msg_unit;
+DUSK_GAME_DATA dMsgUnit_c g_msg_unit;

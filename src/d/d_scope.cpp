@@ -10,14 +10,14 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 
 typedef void (dScope_c::*initFunc)();
-initFunc init_process[] = {
+DUSK_GAME_DATA initFunc init_process[] = {
     &dScope_c::open_init,
     &dScope_c::move_init,
     &dScope_c::close_init,
 };
 
 typedef void (dScope_c::*moveFunc)();
-moveFunc move_process[] = {
+DUSK_GAME_DATA moveFunc move_process[] = {
     &dScope_c::open_proc,
     &dScope_c::move_proc,
     &dScope_c::close_proc,

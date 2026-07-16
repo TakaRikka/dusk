@@ -52,7 +52,7 @@ static Vec const l_craw_offset[4] = {
     {0.0f, 0.0f, 95.0f},
 };
 
-s16 const daObjBm_c::M_dir_base[4] = {
+DUSK_GAME_DATA s16 const daObjBm_c::M_dir_base[4] = {
     0x0000,
     0x4000,
     -0x8000,
@@ -1037,12 +1037,12 @@ void daObjBm_c::mode_wait() {
     }
 }
 
-const daObjBm_c::BgcSrc_c daObjBm_c::Bgc_c::M_lin5[] = {
+DUSK_GAME_DATA const daObjBm_c::BgcSrc_c daObjBm_c::Bgc_c::M_lin5[] = {
     {0.0f, 0.0f, 0.0f, 0.0f}, {-0.5f, -0.5f, -1.0f, -1.0f}, {0.5f, -0.5f, 1.0f, -1.0f},
     {0.5f, 0.5f, 1.0f, 1.0f}, {-0.5f, 0.5f, -1.0f, 1.0f},
 };
 
-const daObjBm_c::BgcSrc_c daObjBm_c::Bgc_c::M_lin20[] = {
+DUSK_GAME_DATA const daObjBm_c::BgcSrc_c daObjBm_c::Bgc_c::M_lin20[] = {
     {0.0f, 0.0f, 0.0f, 0.0f},    {-0.25f, -0.25f, 0.0f, 0.0f}, {-0.5f, -0.5f, -1.0f, -1.0f},
     {0.0f, -0.5f, 1.0f, -1.0f},  {0.0f, 0.0f, 1.0f, 1.0f},     {-0.5f, 0.0f, -1.0f, 1.0f},
     {0.25f, -0.25f, 0.0f, 0.0f}, {0.0f, -0.5f, -1.0f, -1.0f},  {0.5f, -0.5f, 1.0f, -1.0f},
@@ -1148,11 +1148,11 @@ static f32 dummy_rodata_5157() {
     return -G_CM3D_F_INF;
 }
 
-dBgS_ObjGndChk daObjBm_c::Bgc_c::M_gnd_work[23];
+DUSK_GAME_DATA dBgS_ObjGndChk daObjBm_c::Bgc_c::M_gnd_work[23];
 
-dBgS_WtrChk daObjBm_c::Bgc_c::M_wrt_work;
+DUSK_GAME_DATA dBgS_WtrChk daObjBm_c::Bgc_c::M_wrt_work;
 
-dBgS_ObjLinChk daObjBm_c::Bgc_c::M_wall_work[23];
+DUSK_GAME_DATA dBgS_ObjLinChk daObjBm_c::Bgc_c::M_wall_work[23];
 
 void daObjBm_c::Bgc_c::chk_wall_touch(const fopAc_ac_c*, const daObjBm_c::BgcSrc_c*, short) {
     static dBgS_ObjLinChk touch_work;

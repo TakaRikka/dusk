@@ -47,7 +47,7 @@ public:
 
     int getMoveSpeed() { return fopAcM_GetParamBit(this, 0x8, 4); }
 
-    static f32 const mSpeed[16];
+    static DUSK_GAME_DATA f32 const mSpeed[16];
 
 private:
     /* 0x5a0 */ request_of_phase_process_class mPhaseReq;

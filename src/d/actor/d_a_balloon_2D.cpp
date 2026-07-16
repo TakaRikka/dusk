@@ -229,9 +229,9 @@ int daBalloon2D_c::createHeap() {
     return 1;
 }
 
-daBalloon2D_HIO_c l_HOSTIO;
+DUSK_GAME_DATA daBalloon2D_HIO_c l_HOSTIO;
 
-daBalloon2D_c* daBalloon2D_c::myclass;
+DUSK_GAME_DATA daBalloon2D_c* daBalloon2D_c::myclass;
 
 int daBalloon2D_c::create() {
     int rv = dComIfG_resLoad(this, l_arcName);

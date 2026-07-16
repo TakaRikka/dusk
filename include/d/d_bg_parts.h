@@ -237,8 +237,8 @@ public:
     static void drawShare();
     static void entryShare(packet_c*);
 
-    static JKRSolidHeap* mShareHeap;
-    static share_c* mShare;
+    static DUSK_GAME_DATA JKRSolidHeap* mShareHeap;
+    static DUSK_GAME_DATA share_c* mShare;
 
     /* 0x000 */ void* mPointer;
     /* 0x004 */ char mArcName[8];

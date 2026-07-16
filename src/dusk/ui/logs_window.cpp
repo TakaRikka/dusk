@@ -72,16 +72,11 @@ std::string format_time(int64_t timeMs) {
     return fmt::format("{}.{:03}", buffer.data(), timeMs % 1000);
 }
 
-void append_text(Rml::ElementDocument* doc, Rml::Element* parent, const Rml::String& text) {
-    parent->AppendChild(doc->CreateTextNode(text));
-}
-
-Rml::Element* append_span(Rml::ElementDocument* doc, Rml::Element* parent, const char* className,
-    const Rml::String& text) {
-    auto span = doc->CreateElement("span");
+Rml::Element* append_span(Rml::Element* parent, const char* className, const Rml::String& text) {
+    auto* span = append(parent, "span");
     span->SetClass(className, true);
-    append_text(doc, span.get(), text);
-    return parent->AppendChild(std::move(span));
+    append_text(span, text);
+    return span;
 }
 
 }  // namespace
@@ -265,18 +260,18 @@ Rml::Element* LogsWindow::append_log_line(const mods::log::Line& line) {
         modId = "?";
     }
 
-    auto elem = mDocument->CreateElement("div");
+    auto* elem = append(mLinesElem, "div");
     elem->SetClass("log-line", true);
     elem->SetClass(level_class(line.level), true);
 
     constexpr const char* kNbsp = "\xc2\xa0";
-    append_span(mDocument, elem.get(), "log-time", format_time(line.timeMs));
-    append_text(mDocument, elem.get(), kNbsp);
-    append_span(mDocument, elem.get(), "log-mod", fmt::format("[{}]", modId));
-    append_text(mDocument, elem.get(), kNbsp);
-    append_span(mDocument, elem.get(), "log-msg", line.message);
+    append_span(elem, "log-time", format_time(line.timeMs));
+    append_text(elem, kNbsp);
+    append_span(elem, "log-mod", fmt::format("[{}]", modId));
+    append_text(elem, kNbsp);
+    append_span(elem, "log-msg", line.message);
 
-    return mLinesElem->AppendChild(std::move(elem));
+    return elem;
 }
 
 void LogsWindow::copy_to_clipboard() {

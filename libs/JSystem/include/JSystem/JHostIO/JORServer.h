@@ -120,7 +120,7 @@ public:
     CallbackLinkList* referEventCallbackList() { return &m_eventCallbackList; }
 
     static JORServer* getInstance() { return instance; }
-    static JORServer* instance;
+    static DUSK_GAME_DATA JORServer* instance;
 
     /* 0x0000C */ JORMContext m_context;
     /* 0x10020 */ JORReflexible* mp_rootObj;

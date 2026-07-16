@@ -4,7 +4,7 @@
 #include <mtx.h>
 #include <cmath>
 
-#include "dusk/math.h"
+#include "helpers/math.h"
 
 typedef f32 Mtx33[3][3];
 typedef f32 Mtx23[2][3];

@@ -11,7 +11,7 @@
 #include "d/d_debug_viewer.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     daTag_Msg_c* msg = (daTag_Msg_c*)i_this;
@@ -79,7 +79,7 @@ int daTag_Msg_c::destroy() {
     return 1;
 }
 
-const daTag_Msg_HIO_Param_c daTag_Msg_Param_c::m = {0};
+DUSK_GAME_DATA const daTag_Msg_HIO_Param_c daTag_Msg_Param_c::m = {0};
 
 int daTag_Msg_c::execute() {
     bool set_event = true;
@@ -224,7 +224,7 @@ void daTag_Msg_c::getParam() {
     SAFE_STRCPY(mStaffName, "Tag_ms");
 }
 
-DUSK_CONST char* daTag_Msg_c::mEvtCutTBL[2] = {
+DUSK_GAME_DATA DUSK_CONST char* daTag_Msg_c::mEvtCutTBL[2] = {
     "SPEAK",
     "PAUSE",
 };

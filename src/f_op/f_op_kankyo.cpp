@@ -107,7 +107,7 @@ static int fopKy_Create(void* i_this) {
     return ret;
 }
 
-leafdraw_method_class g_fopKy_Method = {
+DUSK_GAME_DATA leafdraw_method_class g_fopKy_Method = {
     (process_method_func)fopKy_Create,  (process_method_func)fopKy_Delete,
     (process_method_func)fopKy_Execute, (process_method_func)fopKy_IsDelete,
     (process_method_func)fopKy_Draw,

@@ -9,7 +9,7 @@
 #include <types.h>
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg.h"
 
@@ -98,11 +98,11 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {21, -1, 1}, {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {22, 4, 1},  {-1, 0, 0},  {-1, 0, 0},
     {-1, 0, 0},  {23, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}};
 
-char DUSK_CONST* DUSK_CONST daObj_Sekizoa_c::mCutNameList[9] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daObj_Sekizoa_c::mCutNameList[9] = {
     "", "START", "START", "TURN", "JUMP", "GOAL", "EXIT", "FREE", "EXTINCTION",
 };
 
-daObj_Sekizoa_c::cutFunc DUSK_CONST daObj_Sekizoa_c::mCutList[9] = {
+DUSK_GAME_DATA daObj_Sekizoa_c::cutFunc DUSK_CONST daObj_Sekizoa_c::mCutList[9] = {
     NULL,
     &daObj_Sekizoa_c::cutStart,
     &daObj_Sekizoa_c::cutStart,
@@ -118,7 +118,7 @@ static DUSK_CONSTEXPR cXyz l_srcPosR(-600.0f, 1000.0f, 1800.0f);
 
 static DUSK_CONSTEXPR cXyz l_srcPosL(600.0f, 1000.0f, 1800.0f);
 
-daObj_Sekizoa_HIOParam const daObj_Sekizoa_Param_c::m = {
+DUSK_GAME_DATA daObj_Sekizoa_HIOParam const daObj_Sekizoa_Param_c::m = {
     600.0f, -10.0f, 1.0f,   1100.0f, 255.0f,   550.0f, 100.0f, 70.0f, 0.0f, 0.0f, 30.0f,
     0.0f,   30.0f,  -30.0f, 45.0f,   -45.0f,   0.6f,   8.0f,   0x3,   0x6,  0x5,  0x6,
     0.0f,   0.0f,   0.0f,   0.0f,    0x3C0008, 0.0f,   0.0f,   4.0f,  0.0f, 0.0f, 0.0f,

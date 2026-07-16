@@ -50,14 +50,14 @@ int daIceWall_c::CreateHeap() {
 
 static daIceWall_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daIceWall_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daIceWall_c::mCcDObjInfo = {
     {0, {{0x100, 1, 0}, {0x400000, 0x11}, {0}}},
     {dCcD_SE_SWORD, 0, 0, 2, 1},
     {dCcD_SE_STONE, 0, 0, 0, 0x2006},
     {0},
 };
 
-dCcD_SrcCyl daIceWall_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daIceWall_c::mCcDCyl = {
     daIceWall_c::mCcDObjInfo,
     {
         {

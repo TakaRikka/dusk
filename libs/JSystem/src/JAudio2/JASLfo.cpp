@@ -40,7 +40,7 @@ void JASLfo::incCounter(f32 param_0) {
     }
 }
 
-JASLfo JASLfo::sFreeRunLfo;
+DUSK_GAME_DATA JASLfo JASLfo::sFreeRunLfo;
 
 void JASLfo::resetCounter() {
     field_0x16 = mDelay;

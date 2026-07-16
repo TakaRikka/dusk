@@ -32,7 +32,7 @@ public:
     }
     void callEmt();
 
-    static dCcD_SrcCyl const s_CcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcCyl const s_CcDCyl;
 
 private:
     /* 0x574 */ J3DModel* mpModel;

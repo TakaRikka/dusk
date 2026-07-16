@@ -1437,7 +1437,7 @@ inline u16 calcZModeID(u8 param_0, u8 param_1, u8 param_2) {
     return param_1 * 2 + param_0 * 0x10 + param_2;
 }
 
-extern u8 j3dZModeTable[96];
+DUSK_GAME_EXTERN u8 j3dZModeTable[96];
 
 /**
  * @ingroup jsystem-j3d

@@ -1,10 +1,12 @@
 #include "registry.hpp"
+#include "slot_map.hpp"
 
 #include "aurora/dvd.h"
 #include "aurora/lib/logging.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/overlay.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <cstring>
 #include <mutex>
@@ -33,15 +35,15 @@ std::unordered_map<uintptr_t, OverlayFileData> s_overlayFiles;
 uintptr_t s_nextOverlayId = 1;
 std::mutex s_overlayMutex;
 
-struct RuntimeOverlayEntry {
-    uint64_t handle = 0;
+struct RuntimeOverlaySlot {
     std::string discPath;
     std::string bundlePath;                         // bundle-backed if non-empty
     std::shared_ptr<const std::vector<u8>> buffer;  // buffer-backed otherwise
     size_t size = 0;
+    uint64_t order = 0;
 };
-std::unordered_map<const LoadedMod*, std::vector<RuntimeOverlayEntry>> s_runtimeOverlays;
-uint64_t s_nextRuntimeHandle = 1;
+SlotMap<RuntimeOverlaySlot> s_runtimeOverlays;
+uint64_t s_nextRuntimeOrder = 0;
 bool s_overlaysDirty = false;
 
 // Aurora matches overlay paths against the disc case-insensitively and later entries win, so
@@ -84,20 +86,25 @@ void find_overlay_files(std::vector<AuroraOverlayFile>& files, LoadedMod& mod,
 
 void append_runtime_overlays(std::vector<AuroraOverlayFile>& files, LoadedMod& mod,
     std::unordered_map<std::string, const LoadedMod*>& claims) {
-    const auto it = s_runtimeOverlays.find(&mod);
-    if (it == s_runtimeOverlays.end()) {
-        return;
-    }
-
-    for (const auto& entry : it->second) {
-        const auto id = s_nextOverlayId++;
-        if (entry.buffer != nullptr) {
-            s_overlayFiles.emplace(id, OverlayFileData{{}, nullptr, entry.buffer});
-        } else {
-            s_overlayFiles.emplace(id, OverlayFileData{entry.bundlePath, mod.bundle, nullptr});
+    // Aurora resolves duplicate paths later-entry-wins, so emit in registration order (SlotMap
+    // iteration is index order, and freed indices are reused).
+    std::vector<const RuntimeOverlaySlot*> slots;
+    s_runtimeOverlays.for_each([&](uint64_t, const auto& entry) {
+        if (entry.owner == &mod) {
+            slots.push_back(&entry.value);
         }
-        claim_overlay_path(claims, entry.discPath, mod);
-        files.emplace_back(strdup(entry.discPath.c_str()), reinterpret_cast<void*>(id), entry.size);
+    });
+    std::ranges::sort(slots, {}, &RuntimeOverlaySlot::order);
+
+    for (const auto* slot : slots) {
+        const auto id = s_nextOverlayId++;
+        if (slot->buffer != nullptr) {
+            s_overlayFiles.emplace(id, OverlayFileData{{}, nullptr, slot->buffer});
+        } else {
+            s_overlayFiles.emplace(id, OverlayFileData{slot->bundlePath, mod.bundle, nullptr});
+        }
+        claim_overlay_path(claims, slot->discPath, mod);
+        files.emplace_back(strdup(slot->discPath.c_str()), reinterpret_cast<void*>(id), slot->size);
     }
 }
 
@@ -201,47 +208,39 @@ void overlay_sync_files() {
 
 uint64_t overlay_add_file(
     LoadedMod& mod, std::string discPath, std::string bundlePath, size_t size) {
-    const auto handle = s_nextRuntimeHandle++;
-    s_runtimeOverlays[&mod].push_back({
-        .handle = handle,
-        .discPath = std::move(discPath),
-        .bundlePath = std::move(bundlePath),
-        .size = size,
-    });
+    const auto handle = s_runtimeOverlays.emplace(mod, RuntimeOverlaySlot{
+                                                           .discPath = std::move(discPath),
+                                                           .bundlePath = std::move(bundlePath),
+                                                           .size = size,
+                                                           .order = s_nextRuntimeOrder++,
+                                                       });
     s_overlaysDirty = true;
     return handle;
 }
 
 uint64_t overlay_add_buffer(LoadedMod& mod, std::string discPath, std::vector<u8> data) {
-    const auto handle = s_nextRuntimeHandle++;
     const auto size = data.size();
-    s_runtimeOverlays[&mod].push_back({
-        .handle = handle,
-        .discPath = std::move(discPath),
-        .buffer = std::make_shared<const std::vector<u8>>(std::move(data)),
-        .size = size,
-    });
+    const auto handle = s_runtimeOverlays.emplace(mod,
+        RuntimeOverlaySlot{
+            .discPath = std::move(discPath),
+            .buffer = std::make_shared<const std::vector<u8>>(std::move(data)),
+            .size = size,
+            .order = s_nextRuntimeOrder++,
+        });
     s_overlaysDirty = true;
     return handle;
 }
 
 bool overlay_remove(LoadedMod& mod, uint64_t handle) {
-    const auto it = s_runtimeOverlays.find(&mod);
-    if (it == s_runtimeOverlays.end()) {
+    if (!s_runtimeOverlays.erase_owned(handle, mod)) {
         return false;
-    }
-    if (std::erase_if(it->second, [&](const auto& entry) { return entry.handle == handle; }) == 0) {
-        return false;
-    }
-    if (it->second.empty()) {
-        s_runtimeOverlays.erase(it);
     }
     s_overlaysDirty = true;
     return true;
 }
 
 void overlay_remove_mod(LoadedMod& mod) {
-    if (s_runtimeOverlays.erase(&mod) != 0) {
+    if (s_runtimeOverlays.erase_all(mod) != 0) {
         s_overlaysDirty = true;
     }
 }

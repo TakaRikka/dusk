@@ -127,7 +127,7 @@ static dCcD_SrcSph l_sphSrc = {
     } // mSphAttr
 };
 
-u16 l_se_angle[4] = {0, 0x3FFF, 0x7FFF, 0xBFFF}; // {0°, 90°, 180°, 270°}
+DUSK_GAME_DATA u16 l_se_angle[4] = {0, 0x3FFF, 0x7FFF, 0xBFFF}; // {0°, 90°, 180°, 270°}
 
 int daObjKWheel00_c::Create() {
     mpModel->setBaseTRMtx(mTransformMtx);

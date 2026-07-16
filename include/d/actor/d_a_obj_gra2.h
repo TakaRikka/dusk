@@ -234,8 +234,8 @@ public:
     void setCrazyThrowLeft() { field_0xa48 |= (u16)8; }
     void setCrazyThrowRight() { field_0xa48 |= (u16)0x10; }
 
-    static MotionFunc mBaseMotionList[22];
-    static MotionFunc mFaceMotionList[14];
+    static DUSK_GAME_DATA MotionFunc mBaseMotionList[22];
+    static DUSK_GAME_DATA MotionFunc mFaceMotionList[14];
 
     bool isFirstGra() { return isFisrtGra(); }
     bool isFisrtGra() { return field_0x1fe8 == 0; }

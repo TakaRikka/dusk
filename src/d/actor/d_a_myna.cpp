@@ -254,7 +254,7 @@ static void* daMyna_searchEvtTag(void* i_evtTagActor, void* param_1) {
     return 0;
 }
 
-dCcD_SrcSph const daMyna_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph const daMyna_c::mCcDSph = {
     0, 0x400, 1, 0x1F, 0, 0, 0x79, 0xA, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0.0f, 0.0f, 0.0f, 15.0f,
 };
 
@@ -326,7 +326,7 @@ int daMyna_c::baseMotion06(int param_0) {
     return 1;
 }
 
-daMyna_c::BaseMotionFunc daMyna_c::mBaseMotionTBL[] = {
+DUSK_GAME_DATA daMyna_c::BaseMotionFunc daMyna_c::mBaseMotionTBL[] = {
     &daMyna_c::baseMotion00, &daMyna_c::baseMotion01, &daMyna_c::baseMotion02,
     &daMyna_c::baseMotion03, &daMyna_c::baseMotion04, &daMyna_c::baseMotion05,
     &daMyna_c::baseMotion06,

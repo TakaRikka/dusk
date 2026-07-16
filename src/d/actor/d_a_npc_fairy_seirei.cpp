@@ -53,16 +53,16 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-DUSK_CONST char* daNpc_FairySeirei_c::mCutNameList[1] = {
+DUSK_GAME_DATA DUSK_CONST char* daNpc_FairySeirei_c::mCutNameList[1] = {
     "",
 };
 
-DUSK_CONST daNpc_FairySeirei_c::cutFunc daNpc_FairySeirei_c::mCutList[1] = {
+DUSK_GAME_DATA DUSK_CONST daNpc_FairySeirei_c::cutFunc daNpc_FairySeirei_c::mCutList[1] = {
     NULL,
 };
 
 
-const daNpc_FairySeirei_HIOParam daNpc_FairySeirei_Param_c::m = {
+DUSK_GAME_DATA const daNpc_FairySeirei_HIOParam daNpc_FairySeirei_Param_c::m = {
     600.0f, 0.0f, 1.0f, 4000.0f, 255.0f, 200.0f, 0.0f, 60.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
     0.0f,   0.0f, 0.0f, 0.0f,    0,      0,      0,    0,     0.0f, 0.0f, 0.0f, 0.0f, 0,    0,
     0,      0,    0,    0,       0,      0.0f,   0.0f, 0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,

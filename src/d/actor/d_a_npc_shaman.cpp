@@ -165,12 +165,12 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {7, 0, 1}, {0, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Sha_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Sha_c::mCutNameList[2] = {
     "",
     "PERFORM_AUGURY",
 };
 
-daNpc_Sha_c::cutFunc DUSK_CONST daNpc_Sha_c::mCutList[2] = {
+DUSK_GAME_DATA daNpc_Sha_c::cutFunc DUSK_CONST daNpc_Sha_c::mCutList[2] = {
     NULL,
     &daNpc_Sha_c::cutPerformAugury,
 };
@@ -193,7 +193,7 @@ daNpc_Sha_c::~daNpc_Sha_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-daNpc_Sha_HIOParam const daNpc_Sha_Param_c::m = {
+DUSK_GAME_DATA daNpc_Sha_HIOParam const daNpc_Sha_Param_c::m = {
     210.0f,
     -3.0f,
     1.0f,
@@ -1131,15 +1131,15 @@ int daNpc_Sha_c::test(void* param_1) {
     return 1;
 }
 
-const u16 daNpc_Sha_c::mEvtBitLabels[6] = {
+DUSK_GAME_DATA const u16 daNpc_Sha_c::mEvtBitLabels[6] = {
     0xF0FF, 0xEFFF, 0xEEFF, 0xEDFF, 0xECFF, 0xEBFF,
 };
 
-const u16 daNpc_Sha_c::mTmpBitLabels[6] = {
+DUSK_GAME_DATA const u16 daNpc_Sha_c::mTmpBitLabels[6] = {
     0xFAFF, 0xF9FF, 0xF8FF, 0xF7FF, 0xF6FF, 0xF5FF,
 };
 
-const int daNpc_Sha_c::mSceneChangeNoTable[48] = {
+DUSK_GAME_DATA const int daNpc_Sha_c::mSceneChangeNoTable[48] = {
     1, 2, 3, 4,
     5, 6, 7, 8,
     9, 0xA, 0xB, 0xC,
@@ -1154,7 +1154,7 @@ const int daNpc_Sha_c::mSceneChangeNoTable[48] = {
     0x2D, -1, -1, -1,
 };
 
-daNpc_Sha_c::queryFunc daNpc_Sha_c::mQueries[48] = {
+DUSK_GAME_DATA daNpc_Sha_c::queryFunc daNpc_Sha_c::mQueries[48] = {
     &daNpc_Sha_c::query000, &daNpc_Sha_c::query265, &daNpc_Sha_c::query000, &daNpc_Sha_c::query267,
     &daNpc_Sha_c::query000, &daNpc_Sha_c::query000, &daNpc_Sha_c::query078, &daNpc_Sha_c::query268,
     &daNpc_Sha_c::query265, &daNpc_Sha_c::query265, &daNpc_Sha_c::query078, &daNpc_Sha_c::query000,

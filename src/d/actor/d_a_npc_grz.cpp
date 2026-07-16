@@ -354,7 +354,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[6] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "grZ";
 
-char DUSK_CONST* DUSK_CONST daNpc_Grz_c::mEvtCutNameList[7] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Grz_c::mEvtCutNameList[7] = {
     "",
     "WAIT",
     "REBIRTH",
@@ -364,7 +364,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Grz_c::mEvtCutNameList[7] = {
     "STONE_SMASH_SKIP",
 };
 
-daNpc_Grz_c::cutFunc DUSK_CONST daNpc_Grz_c::mEvtCutList[7] = {
+DUSK_GAME_DATA daNpc_Grz_c::cutFunc DUSK_CONST daNpc_Grz_c::mEvtCutList[7] = {
     NULL,
     &daNpc_Grz_c::doWaitCut,
     &daNpc_Grz_c::doRebirthCut,
@@ -406,7 +406,7 @@ daNpc_Grz_c::~daNpc_Grz_c() {
 #endif
 }
 
-daNpc_Grz_HIOParam const daNpc_Grz_Param_c::m = {
+DUSK_GAME_DATA daNpc_Grz_HIOParam const daNpc_Grz_Param_c::m = {
     130.0f,
     -3.0f,
     1.0f,

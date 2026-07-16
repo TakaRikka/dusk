@@ -348,12 +348,12 @@ JStudio_JStage::TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::~TVVOutput_ANIMATION
 
 namespace JStudio_JStage {
     
-const TAdaptor_actor::TVVOutputObject TAdaptor_actor::saoVVOutput_[] = {
+DUSK_GAME_DATA const TAdaptor_actor::TVVOutputObject TAdaptor_actor::saoVVOutput_[] = {
     TVVOutputObject(TAdaptor_actor::TEACTOR_1, &JStage::TActor::JSGSetAnimationTransition, &JStage::TActor::JSGGetAnimationTransition),
     TVVOutputObject()
 };
 
-const TAdaptor_actor::TVVOutput_ANIMATION_FRAME_ TAdaptor_actor::saoVVOutput_ANIMATION_FRAME_[] = {
+DUSK_GAME_DATA const TAdaptor_actor::TVVOutput_ANIMATION_FRAME_ TAdaptor_actor::saoVVOutput_ANIMATION_FRAME_[] = {
     TVVOutput_ANIMATION_FRAME_(0, 305, &JStage::TActor::JSGSetAnimationFrame, &JStage::TActor::JSGGetAnimationFrame, &JStage::TActor::JSGGetAnimationFrameMax),
     TVVOutput_ANIMATION_FRAME_(2, 309, &JStage::TActor::JSGSetTextureAnimationFrame, &JStage::TActor::JSGGetTextureAnimationFrame, &JStage::TActor::JSGGetTextureAnimationFrameMax),
     TVVOutput_ANIMATION_FRAME_()

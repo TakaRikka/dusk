@@ -326,19 +326,19 @@ JStudio::TObject_actor::TObject_actor(JStudio::stb::data::TParse_TBlock_object c
 
 }
 
-u32 const JStudio::TAdaptor_actor::sauVariableValue_3_TRANSLATION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_actor::sauVariableValue_3_TRANSLATION_XYZ[3] = {
     3, 4, 5,
 };
 
- u32 const JStudio::TAdaptor_actor::sauVariableValue_3_ROTATION_XYZ[3] = {
+ DUSK_GAME_DATA u32 const JStudio::TAdaptor_actor::sauVariableValue_3_ROTATION_XYZ[3] = {
     6, 7, 8,
 };
 
-u32 const JStudio::TAdaptor_actor::sauVariableValue_3_SCALING_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_actor::sauVariableValue_3_SCALING_XYZ[3] = {
     9, 10, 11,
 };
 
- JStudio::TVariableValue::TOutput_none_ JStudio::TVariableValue::soOutput_none_;
+ DUSK_GAME_DATA JStudio::TVariableValue::TOutput_none_ JStudio::TVariableValue::soOutput_none_;
 
 void JStudio::TObject_actor::do_paragraph(u32 param_1, void const* param_2, u32 param_3) {
     TAdaptor* adaptor = getAdaptor();
@@ -479,11 +479,11 @@ JStudio::TObject_ambientLight::TObject_ambientLight(
     JStudio::TAdaptor_ambientLight* param_1) : TObject(param_0, param_1) {
 }
 
-u32 const JStudio::TAdaptor_ambientLight::sauVariableValue_3_COLOR_RGB[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_ambientLight::sauVariableValue_3_COLOR_RGB[3] = {
     0, 1, 2,
 };
 
-u32 const JStudio::TAdaptor_ambientLight::sauVariableValue_4_COLOR_RGBA[4] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_ambientLight::sauVariableValue_4_COLOR_RGBA[4] = {
     0, 1, 2, 3,
 };
 
@@ -540,15 +540,15 @@ JStudio::TObject_camera::TObject_camera(JStudio::stb::data::TParse_TBlock_object
                                         JStudio::TAdaptor_camera* param_1)
     : TObject(param_0, param_1) {}
 
-u32 const JStudio::TAdaptor_camera::sauVariableValue_3_POSITION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_camera::sauVariableValue_3_POSITION_XYZ[3] = {
     0, 1, 2,
 };
 
-u32 const JStudio::TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ[3] = {
     3, 4, 5,
 };
 
-u32 const JStudio::TAdaptor_camera::sauVariableValue_2_DISTANCE_NEAR_FAR[2] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_camera::sauVariableValue_2_DISTANCE_NEAR_FAR[2] = {
     8, 9,
 };
 
@@ -686,15 +686,15 @@ JStudio::TAdaptor_fog::~TAdaptor_fog() {}
 JStudio::TObject_fog::TObject_fog(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                       JStudio::TAdaptor_fog* param_1) : TObject(param_0, param_1) {}
 
-u32 const JStudio::TAdaptor_fog::sauVariableValue_3_COLOR_RGB[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_fog::sauVariableValue_3_COLOR_RGB[3] = {
     0, 1, 2,
 };
 
-u32 const JStudio::TAdaptor_fog::sauVariableValue_4_COLOR_RGBA[4] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_fog::sauVariableValue_4_COLOR_RGBA[4] = {
     0, 1, 2, 3,
 };
 
-u32 const JStudio::TAdaptor_fog::sauVariableValue_2_RANGE_BEGIN_END[2] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_fog::sauVariableValue_2_RANGE_BEGIN_END[2] = {
     4, 5,
 };
 
@@ -759,23 +759,23 @@ JStudio::TAdaptor_light::~TAdaptor_light() {}
 JStudio::TObject_light::TObject_light(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                           JStudio::TAdaptor_light* param_1) : TObject(param_0, param_1) {}
 
-u32 const JStudio::TAdaptor_light::sauVariableValue_2_DIRECTION_THETA_PHI[2] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_light::sauVariableValue_2_DIRECTION_THETA_PHI[2] = {
     10, 11,
 };
 
- u32 const JStudio::TAdaptor_light::sauVariableValue_3_COLOR_RGB[3] = {
+ DUSK_GAME_DATA u32 const JStudio::TAdaptor_light::sauVariableValue_3_COLOR_RGB[3] = {
     0, 1, 2,
 };
 
-u32 const JStudio::TAdaptor_light::sauVariableValue_4_COLOR_RGBA[4] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_light::sauVariableValue_4_COLOR_RGBA[4] = {
     0, 1, 2, 3,
 };
 
-u32 const JStudio::TAdaptor_light::sauVariableValue_3_POSITION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_light::sauVariableValue_3_POSITION_XYZ[3] = {
     4, 5, 6,
 };
 
-u32 const JStudio::TAdaptor_light::sauVariableValue_3_TARGET_POSITION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_light::sauVariableValue_3_TARGET_POSITION_XYZ[3] = {
     7, 8, 9,
 };
 
@@ -921,31 +921,31 @@ JStudio::TAdaptor_particle::~TAdaptor_particle() {}
 JStudio::TObject_particle::TObject_particle(
     JStudio::stb::data::TParse_TBlock_object const& param_0, JStudio::TAdaptor_particle* param_1) : TObject(param_0, param_1) {}
 
- u32 const JStudio::TAdaptor_particle::sauVariableValue_3_TRANSLATION_XYZ[3] = {
+ DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_3_TRANSLATION_XYZ[3] = {
     0, 1, 2,
 };
 
-u32 const JStudio::TAdaptor_particle::sauVariableValue_3_ROTATION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_3_ROTATION_XYZ[3] = {
     3, 4, 5,
 };
 
-u32 const JStudio::TAdaptor_particle::sauVariableValue_3_SCALING_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_3_SCALING_XYZ[3] = {
     6, 7, 8,
 };
 
-u32 const JStudio::TAdaptor_particle::sauVariableValue_3_COLOR_RGB[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_3_COLOR_RGB[3] = {
     9, 10, 11,
 };
 
-u32 const JStudio::TAdaptor_particle::sauVariableValue_4_COLOR_RGBA[4] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_4_COLOR_RGBA[4] = {
     9, 10, 11, 12,
 };
 
-u32 const JStudio::TAdaptor_particle::sauVariableValue_3_COLOR1_RGB[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_3_COLOR1_RGB[3] = {
     9, 10, 11,
 };
 
-u32 const JStudio::TAdaptor_particle::sauVariableValue_4_COLOR1_RGBA[4] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_particle::sauVariableValue_4_COLOR1_RGBA[4] = {
     9, 10, 11, 12,
 };
 
@@ -1119,7 +1119,7 @@ JStudio::TAdaptor_sound::~TAdaptor_sound() {}
 JStudio::TObject_sound::TObject_sound(JStudio::stb::data::TParse_TBlock_object const& param_0,
                                           JStudio::TAdaptor_sound* param_1) : TObject(param_0, param_1) {}
 
-u32 const JStudio::TAdaptor_sound::sauVariableValue_3_POSITION_XYZ[3] = {
+DUSK_GAME_DATA u32 const JStudio::TAdaptor_sound::sauVariableValue_3_POSITION_XYZ[3] = {
     0, 1, 2,
 };
 

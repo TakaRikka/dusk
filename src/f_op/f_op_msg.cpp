@@ -101,7 +101,7 @@ int fopMsg_Create(void* i_this) {
     return ret;
 }
 
-leafdraw_method_class g_fopMsg_Method = {
+DUSK_GAME_DATA leafdraw_method_class g_fopMsg_Method = {
     (process_method_func)fopMsg_Create,  (process_method_func)fopMsg_Delete,
     (process_method_func)fopMsg_Execute, (process_method_func)fopMsg_IsDelete,
     (process_method_func)fopMsg_Draw,

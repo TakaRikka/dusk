@@ -30,7 +30,7 @@ struct JASAudioThread : public JKRThread, public JASGlobalInstance<JASAudioThrea
 	/* 0x7c */ OSThreadQueue sThreadQueue;
 	/* 0x84 */ bool sbPauseFlag;        // type unsure
 	
-    static volatile int snIntCount; // type unsure
+    static DUSK_GAME_DATA volatile int snIntCount; // type unsure
 
 };
 

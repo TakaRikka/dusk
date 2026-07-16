@@ -138,7 +138,7 @@ enum Type {
     /* 0x5 */ TYPE_DEFAULT,
 };
 
-daNpc_Bans_HIOParam const daNpc_Bans_Param_c::m = {
+DUSK_GAME_DATA daNpc_Bans_HIOParam const daNpc_Bans_Param_c::m = {
     200.0f,
     -3.0f,
     1.0f,
@@ -335,14 +335,14 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {9, 0, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Bans_c::mCutNameList[4] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Bans_c::mCutNameList[4] = {
     "",
     "ANGER",
     "PURCHASE",
     "GO_BACK",
 };
 
-daNpc_Bans_c::cutFunc DUSK_CONST daNpc_Bans_c::mCutList[4] = {
+DUSK_GAME_DATA daNpc_Bans_c::cutFunc DUSK_CONST daNpc_Bans_c::mCutList[4] = {
     NULL,
     &daNpc_Bans_c::cutAnger,
     &daNpc_Bans_c::cutPurchase,

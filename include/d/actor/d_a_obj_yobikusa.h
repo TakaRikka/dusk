@@ -76,8 +76,8 @@ public:
     inline cPhs_Step create();
     inline ~daObjYobikusa_c();
 
-    static attributes const M_attr;
-    static actionFuncEntry ActionTable[3];
+    static DUSK_GAME_DATA attributes const M_attr;
+    static DUSK_GAME_DATA actionFuncEntry ActionTable[3];
 
     const attributes* attr() const { return &M_attr; }
     int getType() { return argument & 0x7F; }

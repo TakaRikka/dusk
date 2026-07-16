@@ -15,6 +15,7 @@
 #include "dusk/io.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/discord_presence.hpp"
+#include "dusk/speedrun.h"
 #include "graphics_tuner.hpp"
 #include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
@@ -218,101 +219,8 @@ AuroraBackend configured_backend() {
     return configuredBackend;
 }
 
-void reset_for_speedrun_mode() {
-    mDoMain::developmentMode = -1;
-
-    getSettings().game.enableTurboKeybind.setSpeedrunValue(false);
-
-    getSettings().game.damageMultiplier.setSpeedrunValue(1);
-    getSettings().game.instantDeath.setSpeedrunValue(false);
-    getSettings().game.noHeartDrops.setSpeedrunValue(false);
-    getSettings().game.autoSave.setSpeedrunValue(false);
-    getSettings().game.sunsSong.setSpeedrunValue(false);
-
-    getSettings().game.infiniteHearts.setSpeedrunValue(false);
-    getSettings().game.infiniteArrows.setSpeedrunValue(false);
-    getSettings().game.infiniteSeeds.setSpeedrunValue(false);
-    getSettings().game.infiniteBombs.setSpeedrunValue(false);
-    getSettings().game.infiniteOil.setSpeedrunValue(false);
-    getSettings().game.infiniteOxygen.setSpeedrunValue(false);
-    getSettings().game.infiniteRupees.setSpeedrunValue(false);
-    getSettings().game.enableIndefiniteItemDrops.setSpeedrunValue(false);
-    getSettings().game.moonJump.setSpeedrunValue(false);
-    getSettings().game.superClawshot.setSpeedrunValue(false);
-    getSettings().game.alwaysGreatspin.setSpeedrunValue(false);
-    getSettings().game.enableFastIronBoots.setSpeedrunValue(false);
-    getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
-    getSettings().game.fastRoll.setSpeedrunValue(false);
-    getSettings().game.fastSpinner.setSpeedrunValue(false);
-    getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);
-    getSettings().game.invincibleEnemies.setSpeedrunValue(false);
-
-    getSettings().game.pauseOnFocusLost.setSpeedrunValue(false);
-
-    getSettings().backend.enableAdvancedSettings.setSpeedrunValue(false);
-    getSettings().game.recordingMode.setSpeedrunValue(false);
-    getSettings().game.debugFlyCam.setSpeedrunValue(false);
-}
-
-void clear_speedrun_overrides() {
-    config::EnumerateRegistered([](config::ConfigVarBase& cvar) {
-        cvar.clearSpeedrunOverride();
-    });
-}
-
-void restore_from_speedrun_mode() {
-    clear_speedrun_overrides();
-}
-
-std::filesystem::path normalized_display_path(const std::filesystem::path& path) {
-    std::error_code ec;
-    auto normalized = std::filesystem::weakly_canonical(path, ec);
-    if (!ec) {
-        return normalized;
-    }
-
-    normalized = std::filesystem::absolute(path, ec);
-    if (!ec) {
-        return normalized.lexically_normal();
-    }
-
-    return path.lexically_normal();
-}
-
-std::filesystem::path user_home_path() {
-    const char* homePath = SDL_GetUserFolder(SDL_FOLDER_HOME);
-    if (homePath == nullptr || homePath[0] == '\0') {
-        return {};
-    }
-    return std::filesystem::path{reinterpret_cast<const char8_t*>(homePath)};
-}
-
-Rml::String abbreviated_data_path_string() {
-    const auto path = data::configured_data_path();
-    const auto homePath = user_home_path();
-    if (path.empty() || homePath.empty()) {
-        return io::fs_path_to_string(path);
-    }
-
-    const auto normalizedPath = normalized_display_path(path);
-    const auto normalizedHome = normalized_display_path(homePath);
-    if (normalizedPath == normalizedHome) {
-        return "~";
-    }
-
-    const auto relativePath = normalizedPath.lexically_relative(normalizedHome);
-    if (!relativePath.empty() && !relativePath.is_absolute()) {
-        const auto it = relativePath.begin();
-        if (it == relativePath.end() || *it != "..") {
-            return io::fs_path_to_string(std::filesystem::path{"~"} / relativePath);
-        }
-    }
-
-    return io::fs_path_to_string(path);
-}
-
 Rml::String configured_data_path_display_name() {
-    const auto path = abbreviated_data_path_string();
+    const auto path = data::abbreviated_path_string(data::configured_data_path());
     if (path.empty()) {
         return "(none)";
     }
@@ -329,8 +237,9 @@ public:
     explicit DataFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
 
     void update() override {
-        const Rml::String rml = "<span class=\"data-folder-current\">Current data folder:<br/>" +
-                                escape(abbreviated_data_path_string()) + "</span>";
+        const Rml::String rml =
+            "<span class=\"data-folder-current\">Current data folder:<br/>" +
+            escape(data::abbreviated_path_string(data::configured_data_path())) + "</span>";
         if (rml != mCurrentRml) {
             mRoot->SetInnerRML(rml);
             mCurrentRml = rml;
@@ -1318,9 +1227,9 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .onChange =
                     [](bool enabled) {
                         if (enabled) {
-                            reset_for_speedrun_mode();
+                            resetForSpeedrunMode();
                         } else {
-                            restore_from_speedrun_mode();
+                            restoreFromSpeedrunMode();
                             if (getSettings().game.liveSplitEnabled) {
                                 speedrun::disconnectLiveSplit();
                             }

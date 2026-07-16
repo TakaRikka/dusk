@@ -3,7 +3,7 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JGadget/search.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 namespace JGadget {
 namespace binary {

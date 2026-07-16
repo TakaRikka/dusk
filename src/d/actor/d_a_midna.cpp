@@ -109,7 +109,7 @@ void daMidna_hio_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-daMidna_hio_c1 const daMidna_hio_c0::m = {
+DUSK_GAME_DATA daMidna_hio_c1 const daMidna_hio_c0::m = {
     0,
     0,
     0,
@@ -126,8 +126,8 @@ daMidna_hio_c1 const daMidna_hio_c0::m = {
     25.0f,
 };
 
-bool daMidna_matAnm_c::sEyeMoveFlg;
-u8 daMidna_matAnm_c::sMorfFrame;
+DUSK_GAME_DATA bool daMidna_matAnm_c::sEyeMoveFlg;
+DUSK_GAME_DATA u8 daMidna_matAnm_c::sMorfFrame;
 
 void daMidna_matAnm_c::init() {
     mOldTransX = 0.0f;
@@ -173,7 +173,7 @@ int daMidna_McaMorfCB1_c::execute(u16 i_jointNo, J3DTransformInfo* transform) {
     return 1;
 }
 
-daMidna_texData_s const daMidna_c::m_texDataTable[21] = {
+DUSK_GAME_DATA daMidna_texData_s const daMidna_c::m_texDataTable[21] = {
     0x0405, 0x03A4,
     0x03F5, 0x0399,
     0x03F6, 0x0399,
@@ -197,7 +197,7 @@ daMidna_texData_s const daMidna_c::m_texDataTable[21] = {
     0x03FD, 0x0399,
 };
 
-daMidna_anmData_s const daMidna_c::m_anmDataTable[53] = {
+DUSK_GAME_DATA daMidna_anmData_s const daMidna_c::m_anmDataTable[53] = {
     0x01DC, 0x00, -1.0f, 0,
     0x01B7, 0x01, -1.0f, 0,
     0x01B8, 0x02, -1.0f, 0,

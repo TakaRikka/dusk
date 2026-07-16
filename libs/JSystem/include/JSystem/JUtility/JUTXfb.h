@@ -71,7 +71,7 @@ public:
     static JUTXfb* getManager() { return sManager; }
 
 private:
-    static JUTXfb* sManager;
+    static DUSK_GAME_DATA JUTXfb* sManager;
 
 private:
     /* 0x00 */ u8* mBuffer[3];

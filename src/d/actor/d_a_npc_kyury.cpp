@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_kyury.h"
 #include <cstring>
 
-const daNpc_Kyury_HIOParam daNpc_Kyury_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Kyury_HIOParam daNpc_Kyury_Param_c::m = {
     200.0f,  // attention_offset
     -3.0f,   // gravity
     1.0f,    // scale
@@ -127,12 +127,12 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Kyury_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Kyury_c::mCutNameList[2] = {
     "",
     "CONVERSATION",
 };
 
-daNpc_Kyury_c::cutFunc DUSK_CONST daNpc_Kyury_c::mCutList[2] = {
+DUSK_GAME_DATA daNpc_Kyury_c::cutFunc DUSK_CONST daNpc_Kyury_c::mCutList[2] = {
     NULL,
     &daNpc_Kyury_c::cutConversation,
 };

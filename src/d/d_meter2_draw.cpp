@@ -57,6 +57,7 @@ void dAnchorHudScale(CPaneMgr* i_pane, HudCorner i_corner, f32* io_x, f32* io_y,
 
 }  // namespace
 #endif
+
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");
 
@@ -2781,7 +2782,7 @@ void dMeter2Draw_c::drawButtonCross(f32 i_posX, f32 i_posY) {
 #if TARGET_PC
     f32 buttonCrossPosX = i_posX;
     f32 buttonCrossPosY = i_posY;
-    dAnchorHudScale(mpButtonCrossParent, HudCorner::TopLeft, &buttonCrossPosX, &buttonCrossPosY);
+    dAnchorHudScale(mpButtonCrossParent, HudCorner::BottomLeft, &buttonCrossPosX, &buttonCrossPosY);
     mpButtonCrossParent->paneTrans(buttonCrossPosX, buttonCrossPosY);
 #else
     mpButtonCrossParent->paneTrans(i_posX, i_posY);

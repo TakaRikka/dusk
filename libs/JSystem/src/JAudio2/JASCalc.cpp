@@ -141,7 +141,7 @@ void JASCalc::bzero(void* dest, u32 size) {
 }
 
 #if AVOID_UB
-s16 const JASCalc::CUTOFF_TO_IIR_TABLE[129][4] = {
+DUSK_GAME_DATA s16 const JASCalc::CUTOFF_TO_IIR_TABLE[129][4] = {
 #else
 s16 const JASCalc::CUTOFF_TO_IIR_TABLE[128][4] = {
 #endif

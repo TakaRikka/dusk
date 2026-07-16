@@ -14,7 +14,7 @@ class daNpc_Taro_Param_c {
 public:
     virtual ~daNpc_Taro_Param_c() {}
 
-    static daNpc_Taro_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Taro_HIOParam const m;
 };
 
 #if DEBUG
@@ -156,8 +156,8 @@ public:
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xff0000) >> 16; }
     u8 getBitSW2() { return (fopAcM_GetParam(this) & 0xff000000) >> 24; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[17];
-    static cutFunc DUSK_CONST mCutList[17];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[17];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[17];
 
 private:
     /* 0x0E40 */ NPC_TARO_HIO_CLASS* mpHIO;

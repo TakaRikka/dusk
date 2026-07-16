@@ -6,9 +6,9 @@
 #include "JSystem/JAHostIO/JAHioNode.h"
 
 #include "JSystem/JHostIO/JORServer.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
-JAHioNode* JAHioNode::smCurrentNode;
+DUSK_GAME_DATA JAHioNode* JAHioNode::smCurrentNode;
 
 JAHioNode::JAHioNode(const char* name) : mTree(this) {
     mLastChild = NULL;

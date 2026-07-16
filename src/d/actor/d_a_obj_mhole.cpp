@@ -25,7 +25,7 @@ static f32 const l_size[2] = {150.0f, 370.0f};
 
 static char const* l_arcName[2] = {"ef_MgnF_L", "ef_MgnF_S"};
 
-dCcD_SrcCps l_cps_src = {
+DUSK_GAME_DATA dCcD_SrcCps l_cps_src = {
     {
         {0x0, {{AT_TYPE_40000, 0x0, 0x1d}, {0x0, 0x0}, 0x0}},  // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x6},                    // mGObjAt

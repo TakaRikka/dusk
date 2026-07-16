@@ -1,6 +1,7 @@
 #include "config.hpp"
 
 #include "registry.hpp"
+#include "slot_map.hpp"
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/config.hpp"
@@ -15,7 +16,6 @@
 #include <memory>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 #include <vector>
 
 namespace dusk::mods::svc {
@@ -23,25 +23,22 @@ namespace {
 
 aurora::Module Log("dusk::mods::config");
 
-struct ModConfigVarEntry {
-    uint64_t handle = 0;
-    ConfigVarType type = CONFIG_VAR_BOOL;
-    std::unique_ptr<config::ConfigVarBase> var;
+enum class ConfigSlotKind : uint8_t {
+    Var,
+    Subscription,
 };
 
-struct ModConfigSubscription {
-    uint64_t handle = 0;
+struct ConfigSlot {
+    ConfigSlotKind kind = ConfigSlotKind::Var;
+    // Var payload
+    ConfigVarType type = CONFIG_VAR_BOOL;
+    std::unique_ptr<config::ConfigVarBase> var;
+    // Subscription payload
     uint64_t varHandle = 0;
     config::Subscription coreSubscription = 0;
 };
 
-struct ModConfigRecord {
-    std::vector<ModConfigVarEntry> vars;
-    std::vector<ModConfigSubscription> subscriptions;
-};
-
-std::unordered_map<const LoadedMod*, ModConfigRecord> s_modConfig;
-uint64_t s_nextHandle = 1;
+SlotMap<ConfigSlot> s_slots;
 bool s_dirty = false;
 std::chrono::steady_clock::time_point s_lastSave{};
 constexpr std::chrono::seconds kSaveDebounce{2};
@@ -130,17 +127,13 @@ bool valid_var_fragment(const char* name) {
 }
 
 config::ConfigVarBase* find_var(LoadedMod& mod, const uint64_t handle, uint32_t expectedType) {
-    const auto recordIt = s_modConfig.find(&mod);
-    if (recordIt == s_modConfig.end()) {
+    const auto* entry = s_slots.find_owned(handle, mod);
+    if (entry == nullptr || entry->value.kind != ConfigSlotKind::Var ||
+        entry->value.type != expectedType)
+    {
         return nullptr;
     }
-    const auto& vars = recordIt->second.vars;
-    const auto entry =
-        std::ranges::find_if(vars, [&](const auto& e) { return e.handle == handle; });
-    if (entry == vars.end() || entry->type != expectedType) {
-        return nullptr;
-    }
-    return entry->var.get();
+    return entry->value.var.get();
 }
 
 template <typename T>
@@ -154,17 +147,17 @@ ConfigVar<T>* find_typed_var(ModContext* context, ConfigVarHandle handle, uint32
 }
 
 void config_remove_mod(LoadedMod& mod) {
-    const auto it = s_modConfig.find(&mod);
-    if (it == s_modConfig.end()) {
-        return;
+    const auto entries = s_slots.take_all(mod);
+    for (const auto& entry : entries) {
+        if (entry.value.kind == ConfigSlotKind::Subscription) {
+            config::unsubscribe(entry.value.coreSubscription);
+        }
     }
-    for (const auto& sub : it->second.subscriptions) {
-        config::unsubscribe(sub.coreSubscription);
+    for (const auto& entry : entries) {
+        if (entry.value.kind == ConfigSlotKind::Var) {
+            config::unregister(*entry.value.var);
+        }
     }
-    for (const auto& entry : it->second.vars) {
-        config::unregister(*entry.var);
-    }
-    s_modConfig.erase(it);
 }
 
 ModResult config_register_var(
@@ -190,16 +183,16 @@ ModResult config_register_var(
     std::unique_ptr<config::ConfigVarBase> var;
     switch (desc->type) {
     case CONFIG_VAR_BOOL:
-        var = std::make_unique<ConfigVar<bool> >(fullName, desc->default_bool);
+        var = std::make_unique<ConfigVar<bool>>(fullName, desc->default_bool);
         break;
     case CONFIG_VAR_INT:
-        var = std::make_unique<ConfigVar<s64> >(fullName, desc->default_int);
+        var = std::make_unique<ConfigVar<s64>>(fullName, desc->default_int);
         break;
     case CONFIG_VAR_FLOAT:
-        var = std::make_unique<ConfigVar<f64> >(fullName, desc->default_float);
+        var = std::make_unique<ConfigVar<f64>>(fullName, desc->default_float);
         break;
     case CONFIG_VAR_STRING:
-        var = std::make_unique<ConfigVar<std::string> >(
+        var = std::make_unique<ConfigVar<std::string>>(
             fullName, desc->default_string != nullptr ? desc->default_string : "");
         break;
     default:
@@ -211,13 +204,10 @@ ModResult config_register_var(
     // reads the value right after registration anyway.
     config::Register(*var);
 
-    auto& record = s_modConfig[mod];
-    auto& entry = record.vars.emplace_back();
-    entry.handle = s_nextHandle++;
-    entry.type = desc->type;
-    entry.var = std::move(var);
+    const auto handle = s_slots.emplace(
+        *mod, ConfigSlot{.kind = ConfigSlotKind::Var, .type = desc->type, .var = std::move(var)});
     if (outHandle != nullptr) {
-        *outHandle = entry.handle;
+        *outHandle = handle;
     }
     return MOD_OK;
 }
@@ -227,29 +217,26 @@ ModResult config_unregister_var(ModContext* context, ConfigVarHandle var) {
     if (mod == nullptr || var == 0) {
         return MOD_INVALID_ARGUMENT;
     }
-    const auto recordIt = s_modConfig.find(mod);
-    if (recordIt != s_modConfig.end()) {
-        auto& record = recordIt->second;
-        const auto entry =
-            std::ranges::find_if(record.vars, [&](const auto& e) { return e.handle == var; });
-        if (entry != record.vars.end()) {
-            std::erase_if(record.subscriptions, [&](const ModConfigSubscription& sub) {
-                if (sub.varHandle != var) {
-                    return false;
-                }
-                config::unsubscribe(sub.coreSubscription);
-                return true;
-            });
-
-            // The persisted value is stashed and restored by a future registration of the
-            // same name.
-            config::unregister(*entry->var);
-            record.vars.erase(entry);
-            return MOD_OK;
-        }
+    const auto* entry = s_slots.find_owned(var, *mod);
+    if (entry == nullptr || entry->value.kind != ConfigSlotKind::Var) {
+        Log.error("[{}] config unregister failed: unknown handle {}", mod->metadata.id, var);
+        return MOD_INVALID_ARGUMENT;
     }
-    Log.error("[{}] config unregister failed: unknown handle {}", mod->metadata.id, var);
-    return MOD_INVALID_ARGUMENT;
+
+    // Only the owning mod can (currently) subscribe to a var
+    std::vector<uint64_t> bound;
+    s_slots.for_each([&](const uint64_t handle, const auto& e) {
+        if (e.value.kind == ConfigSlotKind::Subscription && e.value.varHandle == var) {
+            bound.push_back(handle);
+        }
+    });
+    for (const auto handle : bound) {
+        config::unsubscribe(s_slots.take(handle)->value.coreSubscription);
+    }
+
+    // The persisted value is stashed and restored by a future registration of the same name.
+    config::unregister(*s_slots.take(var)->value.var);
+    return MOD_OK;
 }
 
 ModResult config_get_bool(ModContext* context, ConfigVarHandle var, bool* outValue) {
@@ -361,22 +348,13 @@ ModResult config_subscribe(ModContext* context, ConfigVarHandle var, ConfigChang
     if (mod == nullptr || var == 0 || callback == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    const auto recordIt = s_modConfig.find(mod);
-    if (recordIt == s_modConfig.end()) {
-        return MOD_INVALID_ARGUMENT;
-    }
-    auto& record = recordIt->second;
-    const auto entry =
-        std::ranges::find_if(record.vars, [&](const auto& e) { return e.handle == var; });
-    if (entry == record.vars.end()) {
+    const auto* entry = s_slots.find_owned(var, *mod);
+    if (entry == nullptr || entry->value.kind != ConfigSlotKind::Var) {
         return MOD_INVALID_ARGUMENT;
     }
 
-    auto& sub = record.subscriptions.emplace_back();
-    sub.handle = s_nextHandle++;
-    sub.varHandle = var;
-    sub.coreSubscription = config::subscribe(entry->var->getName(),
-        [modPtr = mod, callback, userData, varHandle = var, type = entry->type](
+    const auto coreSubscription = config::subscribe(entry->value.var->getName(),
+        [modPtr = mod, callback, userData, varHandle = var, type = entry->value.type](
             config::ConfigVarBase& varBase, const void* previous) {
             const ConfigVarValue previousValue = translate_previous(type, previous);
             std::string stringStorage;
@@ -390,8 +368,13 @@ ModResult config_subscribe(ModContext* context, ConfigVarHandle var, ConfigChang
                 fail_mod(*modPtr, MOD_ERROR, "Unknown exception in config change callback");
             }
         });
+    const auto handle = s_slots.emplace(*mod, ConfigSlot{
+                                                  .kind = ConfigSlotKind::Subscription,
+                                                  .varHandle = var,
+                                                  .coreSubscription = coreSubscription,
+                                              });
     if (outHandle != nullptr) {
-        *outHandle = sub.handle;
+        *outHandle = handle;
     }
     return MOD_OK;
 }
@@ -401,19 +384,14 @@ ModResult config_unsubscribe(ModContext* context, ConfigSubscriptionHandle handl
     if (mod == nullptr || handle == 0) {
         return MOD_INVALID_ARGUMENT;
     }
-    const auto recordIt = s_modConfig.find(mod);
-    if (recordIt != s_modConfig.end()) {
-        auto& subscriptions = recordIt->second.subscriptions;
-        const auto sub =
-            std::ranges::find_if(subscriptions, [&](const auto& s) { return s.handle == handle; });
-        if (sub != subscriptions.end()) {
-            config::unsubscribe(sub->coreSubscription);
-            subscriptions.erase(sub);
-            return MOD_OK;
-        }
+    const auto* entry = s_slots.find_owned(handle, *mod);
+    if (entry == nullptr || entry->value.kind != ConfigSlotKind::Subscription) {
+        Log.error("[{}] config unsubscribe failed: unknown handle {}", mod->metadata.id, handle);
+        return MOD_INVALID_ARGUMENT;
     }
-    Log.error("[{}] config unsubscribe failed: unknown handle {}", mod->metadata.id, handle);
-    return MOD_INVALID_ARGUMENT;
+    config::unsubscribe(entry->value.coreSubscription);
+    s_slots.erase(handle);
+    return MOD_OK;
 }
 
 constexpr ConfigService s_configService{

@@ -3,7 +3,7 @@
 #include "d/d_vibration.h"
 
 // Motor Shock patterns
-const vib_pattern dVibration_c::MS_patt[VIBMODE_S_MAX] = {
+DUSK_GAME_DATA const vib_pattern dVibration_c::MS_patt[VIBMODE_S_MAX] = {
     /* VIBMODE_S_CUSTOM */ {0, 0, 0x00000000},
     /* VIBMODE_S_POWER1 */ {0, 3, 0xC0000000},
     /* VIBMODE_S_POWER2 */ {0, 4, 0xE0000000},
@@ -18,7 +18,7 @@ const vib_pattern dVibration_c::MS_patt[VIBMODE_S_MAX] = {
 };
 
 // Camera Shock patterns
-const vib_pattern dVibration_c::CS_patt[VIBMODE_S_MAX] = {
+DUSK_GAME_DATA const vib_pattern dVibration_c::CS_patt[VIBMODE_S_MAX] = {
     /* VIBMODE_S_CUSTOM */ {0, 0, 0x00000000},
     /* VIBMODE_S_POWER1 */ {0, 3, 0xC0000000},
     /* VIBMODE_S_POWER2 */ {0, 4, 0xE0000000},
@@ -33,7 +33,7 @@ const vib_pattern dVibration_c::CS_patt[VIBMODE_S_MAX] = {
 };
 
 // Motor Quake patterns
-const vib_pattern dVibration_c::MQ_patt[VIBMODE_Q_MAX] = {
+DUSK_GAME_DATA const vib_pattern dVibration_c::MQ_patt[VIBMODE_Q_MAX] = {
     /* VIBMODE_Q_CUSTOM */ {0, 0, 0x00000000},
     /* VIBMODE_Q_POWER1 */ {1, 32, 0x10202020},
     /* VIBMODE_Q_POWER2 */ {1, 32, 0x42104208},
@@ -47,7 +47,7 @@ const vib_pattern dVibration_c::MQ_patt[VIBMODE_Q_MAX] = {
 };
 
 // Camera Quake patterns
-const vib_pattern dVibration_c::CQ_patt[VIBMODE_Q_MAX] = {
+DUSK_GAME_DATA const vib_pattern dVibration_c::CQ_patt[VIBMODE_Q_MAX] = {
     /* VIBMODE_Q_CUSTOM */ {0, 0, 0x00000000},
     /* VIBMODE_Q_POWER1 */ {1, 32, 0x10202020},
     /* VIBMODE_Q_POWER2 */ {1, 32, 0x42104208},
@@ -60,7 +60,7 @@ const vib_pattern dVibration_c::CQ_patt[VIBMODE_Q_MAX] = {
     /* VIBMODE_Q_HORSE  */ {0, 27, 0x20201000},
 };
 
-const char* shock_names[VIBMODE_S_MAX] = {
+DUSK_GAME_DATA const char* shock_names[VIBMODE_S_MAX] = {
     "VIBMODE_S_CUSTOM",
     "VIBMODE_S_POWER1",
     "VIBMODE_S_POWER2",
@@ -74,7 +74,7 @@ const char* shock_names[VIBMODE_S_MAX] = {
     "VIBMODE_S_FOR2D",
 };
 
-const char* quake_names[VIBMODE_Q_MAX] = {
+DUSK_GAME_DATA const char* quake_names[VIBMODE_Q_MAX] = {
     "VIBMODE_Q_CUSTOM",
     "VIBMODE_Q_POWER1",
     "VIBMODE_Q_POWER2",

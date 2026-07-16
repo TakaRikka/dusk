@@ -9,7 +9,7 @@
 #ifdef __MWERKS__
 #include <cmath>
 #else
-#include <dusk/math.h>
+#include <helpers/math.h>
 #endif
 #include <gx.h>
 
@@ -117,60 +117,60 @@ static void dummyVirtual(J2DMaterial* material) {
     block->getTevSwapModeTable(0);
 }
 
-J2DTexCoordInfo const j2dDefaultTexCoordInfo[8] = {
+DUSK_GAME_DATA J2DTexCoordInfo const j2dDefaultTexCoordInfo[8] = {
     {GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, 0}, {GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY, 0},
     {GX_TG_MTX2x4, GX_TG_TEX2, GX_IDENTITY, 0}, {GX_TG_MTX2x4, GX_TG_TEX3, GX_IDENTITY, 0},
     {GX_TG_MTX2x4, GX_TG_TEX4, GX_IDENTITY, 0}, {GX_TG_MTX2x4, GX_TG_TEX5, GX_IDENTITY, 0},
     {GX_TG_MTX2x4, GX_TG_TEX6, GX_IDENTITY, 0}, {GX_TG_MTX2x4, GX_TG_TEX7, GX_IDENTITY, 0},
 };
 
-J2DTexMtxInfo const j2dDefaultTexMtxInfo = {1,    1,    255,  255,  {0.5f, 0.5f,
+DUSK_GAME_DATA J2DTexMtxInfo const j2dDefaultTexMtxInfo = {1,    1,    255,  255,  {0.5f, 0.5f,
                                             0.0f}, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f};
 
-J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo = {{0.5f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f}, 1};
+DUSK_GAME_DATA J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo = {{0.5f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f}, 1};
 
-J2DTevStageInfo const j2dDefaultTevStageInfo = {
+DUSK_GAME_DATA J2DTevStageInfo const j2dDefaultTevStageInfo = {
     4,          GX_CC_RASC,    GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV,   GX_TEV_ADD,
     GX_TB_ZERO, GX_CS_SCALE_1, 1,          GX_TEVPREV, GX_CA_RASA,    GX_CA_ZERO,
     GX_CA_ZERO, GX_CA_APREV,   GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1,
     GX_TEVPREV};
 
-const J2DIndTevStageInfo j2dDefaultIndTevStageInfo = {
+DUSK_GAME_DATA const J2DIndTevStageInfo j2dDefaultIndTevStageInfo = {
     GX_INDTEXSTAGE0, GX_ITB_NONE, GX_ITB_NONE, GX_ITM_OFF,  GX_ITW_OFF,
     GX_ITW_OFF,      0,           0,           GX_ITBA_OFF,
 };
 
-const GXColor j2dDefaultColInfo = {255, 255, 255, 255};
+DUSK_GAME_DATA const GXColor j2dDefaultColInfo = {255, 255, 255, 255};
 
-const J2DTevOrderInfo j2dDefaultTevOrderInfoNull = {
+DUSK_GAME_DATA const J2DTevOrderInfo j2dDefaultTevOrderInfoNull = {
     GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL, 0};
 
-const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull = {
+DUSK_GAME_DATA const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull = {
     GX_TEXCOORD_NULL,
     GX_TEXMAP_NULL,
 };
 
-const GXColorS10 j2dDefaultTevColor = {255, 255, 255, 255};
+DUSK_GAME_DATA const GXColorS10 j2dDefaultTevColor = {255, 255, 255, 255};
 
-const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo = {
+DUSK_GAME_DATA const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo = {
     GX_ITS_1,
     GX_ITS_1,
 };
 
-const GXColor j2dDefaultTevKColor = {255, 255, 255, 255};
+DUSK_GAME_DATA const GXColor j2dDefaultTevKColor = {255, 255, 255, 255};
 
-const J2DTevSwapModeInfo j2dDefaultTevSwapMode = {GX_TEV_SWAP0, GX_TEV_SWAP0, 0, 0};
+DUSK_GAME_DATA const J2DTevSwapModeInfo j2dDefaultTevSwapMode = {GX_TEV_SWAP0, GX_TEV_SWAP0, 0, 0};
 
-const J2DTevSwapModeTableInfo j2dDefaultTevSwapModeTable = {
+DUSK_GAME_DATA const J2DTevSwapModeTableInfo j2dDefaultTevSwapModeTable = {
     GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA};
 
-const J2DBlendInfo j2dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA,
+DUSK_GAME_DATA const J2DBlendInfo j2dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA,
                                                  GX_LO_NOOP};
 
-const u8 j2dDefaultPEBlockDither = 0;
+DUSK_GAME_DATA const u8 j2dDefaultPEBlockDither = 0;
 
-const J2DColorChanInfo j2dDefaultColorChanInfo = {0, 3, 0, 0};
+DUSK_GAME_DATA const J2DColorChanInfo j2dDefaultColorChanInfo = {0, 3, 0, 0};
 
-const u8 j2dDefaultTevSwapTableID = 0x1B;
+DUSK_GAME_DATA const u8 j2dDefaultTevSwapTableID = 0x1B;
 
-const u16 j2dDefaultAlphaCmp = 0x00E7;
+DUSK_GAME_DATA const u16 j2dDefaultAlphaCmp = 0x00E7;

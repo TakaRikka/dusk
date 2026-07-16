@@ -45,8 +45,8 @@ private:
 public:
     u8 getScale() { return fopAcM_GetParamBit(this, 0, 8); }
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
 };
 
 STATIC_ASSERT(sizeof(daZrTuraRc_c) == 0x938);

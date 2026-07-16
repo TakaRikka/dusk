@@ -1,0 +1,7 @@
+{
+  "id": "dev.twilitrealm.shadow_mod",
+  "name": "[Demo] Dynamic Shadows",
+  "version": "1.0.0",
+  "author": "encounter",
+  "description": "Demo showcasing dynamic shadow maps: re-renders geometry from the sun (or moon) point of view and composites real-time shadows over the world, with screen-space contact shadows for fine detail."
+}

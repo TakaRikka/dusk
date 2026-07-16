@@ -6,7 +6,7 @@
 #include "d/d_bg_plc.h"
 #include "d/d_bg_s_sph_chk.h"
 #include "d/d_bg_w_base.h"
-#include "dusk/offset_ptr.h"
+#include "helpers/offset_ptr.h"
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;

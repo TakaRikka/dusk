@@ -337,7 +337,7 @@ f32 renderingAmap_c::getIconSize(u8 i_typeGroup) const {
     return iconSize;
 }
 
-dMap_prm_res_s* dMap_HIO_prm_res_dst_s::m_res;
+DUSK_GAME_DATA dMap_prm_res_s* dMap_HIO_prm_res_dst_s::m_res;
 
 inline u8 twoValueLineInterpolation(u8 param_0, u8 param_1, f32 param_2) {
     return ((f32)param_0 + (param_2 * ((f32)param_1 - (f32)param_0)));

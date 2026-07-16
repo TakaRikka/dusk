@@ -26,7 +26,7 @@ class daNpc_Moi_Param_c {
 public:
     virtual ~daNpc_Moi_Param_c() {}
 
-    static const daNpc_Moi_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Moi_HIOParam m;
 };
 
 #if DEBUG
@@ -158,8 +158,8 @@ public:
     bool chkSFight() { return field_0x166b == 1; }
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[5];
-    static cutFunc DUSK_CONST mCutList[5];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[5];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[5];
 
 private:
     /* 0x0E40 */ NPC_MOI_HIO_CLASS* mpHIO;

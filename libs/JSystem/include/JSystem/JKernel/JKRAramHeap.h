@@ -19,7 +19,7 @@ public:
     };
 
 public:
-    static JSUList<JKRAramBlock> sAramList;
+    static DUSK_GAME_DATA JSUList<JKRAramBlock> sAramList;
 
     JKRAramHeap(u32, u32);
     virtual ~JKRAramHeap();

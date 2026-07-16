@@ -8,7 +8,7 @@
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "dusk/frame_interpolation.h"
 
-u16 J3DShapeMtx::sMtxLoadCache[10];
+DUSK_GAME_DATA u16 J3DShapeMtx::sMtxLoadCache[10];
 
 #ifdef TARGET_PC
 static void J3DFrameInterpConcat(MtxP lhs, MtxP rhs, Mtx out) {
@@ -54,42 +54,42 @@ void J3DShapeMtx::loadMtxIndx_PNCPU(int slot, u16 indx) const {
     J3DFifoLoadNrmMtxImm(*j3dSys.getShapePacket()->getBaseMtxPtr(), slot * 3);
 }
 
-J3DShapeMtx_LoadFunc J3DShapeMtx::sMtxLoadPipeline[4] = {
+DUSK_GAME_DATA J3DShapeMtx_LoadFunc J3DShapeMtx::sMtxLoadPipeline[4] = {
     &J3DShapeMtx::loadMtxIndx_PNGP,
     &J3DShapeMtx::loadMtxIndx_PCPU,
     &J3DShapeMtx::loadMtxIndx_NCPU,
     &J3DShapeMtx::loadMtxIndx_PNCPU,
 };
 
-J3DShapeMtxConcatView_LoadFunc J3DShapeMtxConcatView::sMtxLoadPipeline[4] = {
+DUSK_GAME_DATA J3DShapeMtxConcatView_LoadFunc J3DShapeMtxConcatView::sMtxLoadPipeline[4] = {
     &J3DShapeMtxConcatView::loadMtxConcatView_PNGP,
     &J3DShapeMtxConcatView::loadMtxConcatView_PCPU,
     &J3DShapeMtxConcatView::loadMtxConcatView_NCPU,
     &J3DShapeMtxConcatView::loadMtxConcatView_PNCPU,
 };
 
-J3DShapeMtxConcatView_LoadFunc J3DShapeMtxConcatView::sMtxLoadLODPipeline[4] = {
+DUSK_GAME_DATA J3DShapeMtxConcatView_LoadFunc J3DShapeMtxConcatView::sMtxLoadLODPipeline[4] = {
     &J3DShapeMtxConcatView::loadMtxConcatView_PNGP_LOD,
     &J3DShapeMtxConcatView::loadMtxConcatView_PCPU,
     &J3DShapeMtxConcatView::loadMtxConcatView_NCPU,
     &J3DShapeMtxConcatView::loadMtxConcatView_PNCPU,
 };
 
-u32 J3DShapeMtx::sCurrentPipeline;
+DUSK_GAME_DATA u32 J3DShapeMtx::sCurrentPipeline;
 
-u8* J3DShapeMtx::sCurrentScaleFlag;
+DUSK_GAME_DATA u8* J3DShapeMtx::sCurrentScaleFlag;
 
-bool J3DShapeMtx::sNBTFlag;
+DUSK_GAME_DATA bool J3DShapeMtx::sNBTFlag;
 
-bool J3DShapeMtx::sLODFlag;
+DUSK_GAME_DATA bool J3DShapeMtx::sLODFlag;
 
-u32 J3DShapeMtx::sTexMtxLoadType;
+DUSK_GAME_DATA u32 J3DShapeMtx::sTexMtxLoadType;
 
-MtxP J3DShapeMtxConcatView::sMtxPtrTbl[2];
+DUSK_GAME_DATA MtxP J3DShapeMtxConcatView::sMtxPtrTbl[2];
 
-J3DTexGenBlock* J3DDifferedTexMtx::sTexGenBlock;
+DUSK_GAME_DATA J3DTexGenBlock* J3DDifferedTexMtx::sTexGenBlock;
 
-J3DTexMtxObj* J3DDifferedTexMtx::sTexMtxObj;
+DUSK_GAME_DATA J3DTexMtxObj* J3DDifferedTexMtx::sTexMtxObj;
 
 void J3DDifferedTexMtx::loadExecute(f32 const (*param_0)[4]) {
     static Mtx qMtx = {

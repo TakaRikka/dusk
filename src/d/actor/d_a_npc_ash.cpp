@@ -12,7 +12,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include <cstring>
 
-const daNpcAsh_HIOParam daNpcAsh_Param_c::m = {
+DUSK_GAME_DATA const daNpcAsh_HIOParam daNpcAsh_Param_c::m = {
     35.0f,    // attention_offset
     -3.0f,    // gravity
     1.0f,     // scale
@@ -198,7 +198,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[6] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Ash";
 
-daNpcAsh_c::EventFn daNpcAsh_c::mEvtSeqList[6] = {
+DUSK_GAME_DATA daNpcAsh_c::EventFn daNpcAsh_c::mEvtSeqList[6] = {
     NULL,
     &daNpcAsh_c::EvCut_Introduction,
     &daNpcAsh_c::EvCut_Meeting,

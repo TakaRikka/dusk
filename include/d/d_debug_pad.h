@@ -29,6 +29,6 @@ public:
     /* 0x4 */ s32 mMode;
 };
 
-extern dDebugPad_c dDebugPad;
+DUSK_GAME_EXTERN dDebugPad_c dDebugPad;
 
 #endif

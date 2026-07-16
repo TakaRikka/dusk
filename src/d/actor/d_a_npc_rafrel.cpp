@@ -97,7 +97,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[7] = {
     "RESIST_WIRETAP_RAFREL",
 };
 
-const daNpcRafrel_HIOParam daNpcRafrel_Param_c::m = {
+DUSK_GAME_DATA const daNpcRafrel_HIOParam daNpcRafrel_Param_c::m = {
     35.0f,
     -3.0f,
     1.0f,
@@ -152,7 +152,7 @@ void daNpcRafrel_HIO_c::genMessage(JORMContext* ctx) {
 static NPC_RAFREL_HIO_CLASS l_HIO;
 
 typedef BOOL (daNpcRafrel_c::*EventFn)(int);
-EventFn daNpcRafrel_c::mEvtSeqList[] = {
+DUSK_GAME_DATA EventFn daNpcRafrel_c::mEvtSeqList[] = {
     NULL,
     &daNpcRafrel_c::EvCut_Introduction,
     &daNpcRafrel_c::EvCut_Meeting,

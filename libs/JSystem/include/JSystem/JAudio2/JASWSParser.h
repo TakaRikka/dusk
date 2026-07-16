@@ -89,7 +89,7 @@ public:
     static JASBasicWaveBank* createBasicWaveBank(void const*, JKRHeap*);
     static JASSimpleWaveBank* createSimpleWaveBank(void const*, JKRHeap*);
 
-    static u32 sUsedHeapSize;
+    static DUSK_GAME_DATA u32 sUsedHeapSize;
 };
 
 #endif /* JASWSPARSER_H */

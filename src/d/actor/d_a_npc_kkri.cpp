@@ -222,13 +222,13 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Kkri_c::mCutNameList[3] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Kkri_c::mCutNameList[3] = {
     "",
     "CONVERSATION_ABOUT_SOUP",
     "YM_LOOK",
 };
 
-int (daNpc_Kkri_c::* DUSK_CONST daNpc_Kkri_c::mCutList[])(int) = {
+DUSK_GAME_DATA int (daNpc_Kkri_c::* DUSK_CONST daNpc_Kkri_c::mCutList[])(int) = {
     NULL,
     &daNpc_Kkri_c::cutConversationAboutSoup,
     &daNpc_Kkri_c::cutYmLook,
@@ -236,7 +236,7 @@ int (daNpc_Kkri_c::* DUSK_CONST daNpc_Kkri_c::mCutList[])(int) = {
 
 static NPC_KKRI_HIO_CLASS l_HIO;
 
-const daNpc_Kkri_HIOParam daNpc_Kkri_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Kkri_HIOParam daNpc_Kkri_Param_c::m = {
     180.0f,
     -3.0f,
     1.0f,

@@ -22,7 +22,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNameList[2] = {"", "SekiDoor"};
 
 static OBJ_SEKIDOOR_HIO_CLASS l_HIO;
 
-const daObj_SekiDoor_HIOParam daObj_SekiDoor_Param_c::m = {0};
+DUSK_GAME_DATA const daObj_SekiDoor_HIOParam daObj_SekiDoor_Param_c::m = {0};
 
 static const f32 reference_posy = 460.0f;
 

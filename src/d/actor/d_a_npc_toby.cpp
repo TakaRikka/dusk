@@ -17,7 +17,7 @@
 #include "dusk/frame_interpolation.h"
 #include <cstring>
 
-const daNpc_Toby_HIOParam daNpc_Toby_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Toby_HIOParam daNpc_Toby_Param_c::m = {
     160.0f,
     -3.0f,
     1.0f,
@@ -247,7 +247,7 @@ enum NPC_TOBY_CUTS {
     CUT_CONVERSATION_ABOUT_ZRA = 6,
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Toby_c::mCutNameList[7] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Toby_c::mCutNameList[7] = {
     "",
     "TOBY_HOUSE_FIRE",
     "TALKTO_ONESELF",
@@ -257,7 +257,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Toby_c::mCutNameList[7] = {
     "CONVERSATION_ABOUT_ZRA",
 };
 
-daNpc_Toby_c::cutFunc DUSK_CONST daNpc_Toby_c::mCutList[7] = {
+DUSK_GAME_DATA daNpc_Toby_c::cutFunc DUSK_CONST daNpc_Toby_c::mCutList[7] = {
     NULL,
     &daNpc_Toby_c::cutTobyHouseFire,
     &daNpc_Toby_c::cutTalkToOneself,

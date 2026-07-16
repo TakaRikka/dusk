@@ -13,7 +13,7 @@ class daNpc_Seirei_Param_c {
 public:
     virtual ~daNpc_Seirei_Param_c() {}
 
-    static daNpc_Seirei_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Seirei_HIOParam const m;
 };
 
 #if DEBUG
@@ -99,8 +99,8 @@ public:
     u32 getBitSW() { return (fopAcM_GetParam(this) & 0xFF000) >> 12; }
     bool getDoBtnChkFlag() { return (fopAcM_GetParam(this) & 0x100) == 0; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
-    static cutFunc DUSK_CONST mCutList[2];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
 
 private:
     /* 0xE40 */ NPC_SEIREI_HIO_CLASS* mpHIO;

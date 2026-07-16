@@ -176,7 +176,7 @@ static int daObjMHasu_MoveBGDraw(nObjMHasu::daObjMHasu_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-actor_method_class daObjMHasu_METHODS = {
+DUSK_GAME_DATA actor_method_class daObjMHasu_METHODS = {
     (process_method_func)&daObjMHasu_create1st,
     (process_method_func)&daObjMHasu_MoveBGDelete,
     (process_method_func)&daObjMHasu_MoveBGExecute,

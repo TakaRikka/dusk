@@ -62,7 +62,7 @@ struct JASBasicWaveBank : public JASWaveBank {
     /* 0x24 */ u16 mHandleCount;
     /* 0x26 */ u16 mGroupCount;
 
-    static u32 mNoLoad;
+    static DUSK_GAME_DATA u32 mNoLoad;
 };
 
 #endif /* JASBASICWAVEBANK_H */
