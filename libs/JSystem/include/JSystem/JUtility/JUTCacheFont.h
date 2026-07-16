@@ -55,7 +55,11 @@ public:
     void prepend(JUTCacheFont::TGlyphCacheInfo*);
 
     virtual ~JUTCacheFont();
+#if TARGET_PC
+    virtual void loadImage(int, GXTexMapID FONT_DRAW_CTX);
+#else
     virtual void loadImage(int, GXTexMapID);
+#endif
     virtual void setBlock();
 
     void setPagingType(EPagingType type) { mPagingType = type; }
