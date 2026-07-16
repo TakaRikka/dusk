@@ -27,6 +27,11 @@ if(APPLE AND NOT CMAKE_OSX_SYSROOT)
             OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
+if (APPLE)
+    # Prefer standard system paths over third-party Frameworks (like Mono.framework)
+    set(CMAKE_FIND_FRAMEWORK LAST)
+endif ()
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -71,6 +76,23 @@ endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
 set(AURORA_ENABLE_RMLUI ON CACHE BOOL "Enable RmlUi UI support" FORCE)
+if (APPLE)
+    find_program(BREW_EXECUTABLE brew)
+    if (BREW_EXECUTABLE)
+        execute_process(
+            COMMAND ${BREW_EXECUTABLE} --prefix
+            OUTPUT_VARIABLE BREW_PREFIX
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        if (EXISTS "${BREW_PREFIX}/include")
+            add_compile_options("-I${BREW_PREFIX}/include")
+        endif ()
+        if (EXISTS "${BREW_PREFIX}/lib")
+            add_link_options("-L${BREW_PREFIX}/lib")
+        endif ()
+    endif ()
+endif ()
+
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 target_compile_definitions(aurora_mtx PRIVATE MTX_USE_PS=1)
 

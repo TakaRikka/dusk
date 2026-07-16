@@ -18,9 +18,9 @@
 using GameVersion = dusk::version::GameVersion;
 
 // keep the original version of the cape texture const so we don't need to reload the file
-static u8 const * l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}, {GameVersion::GcnPal, 0x1C00}}, 0x4000), true); return buf; }
-static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x5C00}, {GameVersion::GcnPal, 0x5C00}}, 0x4000), true); return buf; }
-static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C00}, {GameVersion::GcnPal, 0x9C00}}, 0x60),   true); return buf; }
+static u8 const * l_Egnd_mantTEX_get()   { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x1C00}, {GameVersion::GcnPal, 0x1C00}, {GameVersion::GcnJpn, 0x1C00}}, 0x4000), true); return buf; }
+static u8* l_Egnd_mantTEX_U_get() { alignas(32) static u8 buf[0x4000]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x5C00}, {GameVersion::GcnPal, 0x5C00}, {GameVersion::GcnJpn, 0x5C00}}, 0x4000), true); return buf; }
+static u8* l_Egnd_mantPAL_get()   { alignas(32) static u8 buf[0x60];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C00}, {GameVersion::GcnPal, 0x9C00}, {GameVersion::GcnJpn, 0x9C00}}, 0x60),   true); return buf; }
 #define l_Egnd_mantTEX   (l_Egnd_mantTEX_get())
 #define l_Egnd_mantTEX_U (l_Egnd_mantTEX_U_get())
 #define l_Egnd_mantPAL   (l_Egnd_mantPAL_get())
@@ -35,9 +35,9 @@ static TGXTexObj mainTexObj;
 static TGXTexObj undersideTexObj;
 
 // l_pos is unused
-//static f32* l_pos_get()      { alignas(32) static f32 buf[507];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA44C}, {GameVersion::GcnPal, 0xA44C}}, sizeof(buf)),   true); return buf; }
-static f32* l_normal_get()   { alignas(32) static f32 buf[3];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C60}, {GameVersion::GcnPal, 0x9C60}}, sizeof(buf)),   true); return buf; }
-static f32* l_texCoord_get() { alignas(32) static f32 buf[338];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA458}, {GameVersion::GcnPal, 0xA458}}, sizeof(buf)),   true); return buf; }
+//static f32* l_pos_get()      { alignas(32) static f32 buf[507];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA44C}, {GameVersion::GcnPal, 0xA44C}, {GameVersion::GcnJpn, 0xA44C}}, sizeof(buf)),   true); return buf; }
+static f32* l_normal_get()   { alignas(32) static f32 buf[3];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0x9C60}, {GameVersion::GcnPal, 0x9C60}, {GameVersion::GcnJpn, 0x9C60}}, sizeof(buf)),   true); return buf; }
+static f32* l_texCoord_get() { alignas(32) static f32 buf[338];   static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA458}, {GameVersion::GcnPal, 0xA458}, {GameVersion::GcnJpn, 0xA458}}, sizeof(buf)),   true); return buf; }
 //#define l_pos      (l_pos_get())
 #define l_normal   (l_normal_get())
 #define l_texCoord (l_texCoord_get())
@@ -55,7 +55,7 @@ static bool l_Egnd_mantTEX_hasReplacement = false;
 #if TARGET_PC
 using GameVersion = dusk::version::GameVersion;
 
-static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA9A0}, {GameVersion::GcnPal, 0xA9A0}}, 0x3EC), true); return buf; }
+static u8* l_Egnd_mantDL_get() { alignas(32) static u8 buf[0x3EC]; static bool _ = (dusk::LoadRelAsset(buf, "/rel/Final/Release/d_a_mant.rel", {{GameVersion::GcnUsa, 0xA9A0}, {GameVersion::GcnPal, 0xA9A0}, {GameVersion::GcnJpn, 0xA9A0}}, 0x3EC), true); return buf; }
 #define l_Egnd_mantDL (l_Egnd_mantDL_get())
 #else
 #include "assets/l_Egnd_mantDL.h"

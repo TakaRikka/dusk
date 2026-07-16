@@ -26,6 +26,7 @@ struct VerificationStatus {
 
 struct DiscInfo {
     bool isPal = false;
+    bool isJpn = false;
 };
 
 ValidationError inspect(const char* path, DiscInfo& info);

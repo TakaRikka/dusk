@@ -26,8 +26,10 @@ void init() {
 
     if (game == "GZ2E"sv) {
         gameVersion = GameVersion::GcnUsa;
-    } else if (game == "GZ2P") {
+    } else if (game == "GZ2P"sv || game == "GZ2P") {
         gameVersion = GameVersion::GcnPal;
+    } else if (game == "GZ2J"sv) {
+        gameVersion = GameVersion::GcnJpn;
     } else {
         // TODO: Handle remaining valid versions.
         DuskLog.fatal("Unknown/unsupported game version in disc: {}", game);

@@ -886,7 +886,11 @@ void Prelaunch::update() {
         if (activeDiscLoaded) {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::Block);
             Rml::String innerRML = "GameCube • ";
-            innerRML += state.activeDiscInfo.isPal ? "EUR" : "USA";
+            if (state.activeDiscInfo.isJpn) {
+                innerRML += "JPN";
+            } else {
+                innerRML += state.activeDiscInfo.isPal ? "EUR" : "USA";
+            }
             mDiscDetail->SetInnerRML(innerRML);
         } else {
             mDiscDetail->SetProperty(Rml::PropertyId::Display, Rml::Style::Display::None);
