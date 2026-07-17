@@ -26,6 +26,9 @@
 #include "miniz.h"
 #include "native_module.hpp"
 #include "nlohmann/json.hpp"
+#if DUSK_HAS_PREPATCH
+#include "prepatch.hpp"
+#endif
 
 using namespace std::string_literals;
 using namespace std::string_view_literals;
@@ -409,6 +412,28 @@ static bool parse_meta(NativeMod& native, LoadedMod& mod) {
                 return invalid("unterminated hook display name");
             }
             parsed.hookMems.push_back(record);
+            break;
+        }
+        case MOD_META_HOOK_MEM_EXT: {
+            if (size <= sizeof(ModMetaHookMemExt)) {
+                return invalid("truncated extended hook record");
+            }
+            auto* record = reinterpret_cast<ModMetaHookMemExt*>(const_cast<uint8_t*>(cursor));
+            if (record->pmf_size <= MOD_META_HOOK_MEM_CAPACITY ||
+                record->pmf_size > MOD_META_HOOK_MEM_EXT_CAPACITY || record->materialize == nullptr)
+            {
+                return invalid("bad extended hook member-pointer size");
+            }
+            const char* strings = reinterpret_cast<const char*>(cursor) + sizeof(ModMetaHookMemExt);
+            const size_t capacity = size - sizeof(ModMetaHookMemExt);
+            if (!terminated_within(strings, capacity)) {
+                return invalid("unterminated extended hook vtable symbol");
+            }
+            const size_t vtableLen = std::char_traits<char>::length(strings);
+            if (!terminated_within(strings + vtableLen + 1, capacity - vtableLen - 1)) {
+                return invalid("unterminated extended hook display name");
+            }
+            parsed.hookMemExts.push_back(record);
             break;
         }
         case MOD_META_HOOK_NAME: {
@@ -906,6 +931,9 @@ void ModLoader::init() {
     m_initialized = true;
 
     manifest::initialize();
+#if DUSK_HAS_PREPATCH
+    prepatch::initialize();
+#endif
 
     if (m_searchDirs.empty()) {
         Log.warn("no mod search directories configured; mod loading skipped");

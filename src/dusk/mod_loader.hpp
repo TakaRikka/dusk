@@ -73,6 +73,7 @@ struct ModMetaParsed {
     std::vector<ModMetaExport*> exports;
     std::vector<ModMetaHookFn*> hookFns;
     std::vector<ModMetaHookMem*> hookMems;
+    std::vector<ModMetaHookMemExt*> hookMemExts;
     std::vector<ModMetaHookName*> hookNames;
 };
 
@@ -81,6 +82,15 @@ inline const char* hook_mem_vtable_symbol(const ModMetaHookMem& rec) {
 }
 
 inline const char* hook_mem_display_name(const ModMetaHookMem& rec) {
+    const char* vtable = hook_mem_vtable_symbol(rec);
+    return vtable + std::char_traits<char>::length(vtable) + 1;
+}
+
+inline const char* hook_mem_vtable_symbol(const ModMetaHookMemExt& rec) {
+    return reinterpret_cast<const char*>(&rec) + sizeof(ModMetaHookMemExt);
+}
+
+inline const char* hook_mem_display_name(const ModMetaHookMemExt& rec) {
     const char* vtable = hook_mem_vtable_symbol(rec);
     return vtable + std::char_traits<char>::length(vtable) + 1;
 }

@@ -2,7 +2,7 @@ include_guard(GLOBAL)
 
 get_filename_component(_SYMBOL_MANIFEST_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
 
-set(_SYMGEN_VERSION "1.2.3")
+set(_SYMGEN_VERSION "1.3.1")
 set(_SYMGEN_RELEASE_BASE_URL "https://github.com/encounter/symgen/releases/download/v${_SYMGEN_VERSION}")
 set(SYMGEN_PATH "" CACHE FILEPATH "Path to a symgen executable; empty downloads the pinned release")
 mark_as_advanced(SYMGEN_PATH)
@@ -113,14 +113,18 @@ function(setup_symbol_manifest target)
     endif ()
 
     if (APPLE)
-        # Room for the load command `symgen manifest --embed` inserts post-link.
-        target_link_options(${target} PRIVATE "LINKER:-headerpad,0x200")
+        # Room for the symbol manifest and several prepatch arenas.
+        target_link_options(${target} PRIVATE "LINKER:-headerpad,0x1000")
+        # ld64 may update an existing output, which breaks our symdb insertion. Remove it first.
+        add_custom_command(TARGET ${target} PRE_LINK
+                COMMAND "${CMAKE_COMMAND}" -E rm -f "$<TARGET_FILE:${target}>"
+                VERBATIM)
     endif ()
 
     # The manifest is embedded into the image as a new section, located at runtime through
     # the descriptor manifest.cpp reserves. On Apple platforms this command must stay
-    # attached before the ad-hoc codesign POST_BUILD command: the patch invalidates any
-    # existing signature.
+    # attached before the ad-hoc codesign POST_BUILD command: the patch removes any existing
+    # signature.
     add_custom_command(TARGET ${target} POST_BUILD
             COMMAND "${SYMGEN_EXE}" manifest ${_input} --embed "$<TARGET_FILE:${target}>"
             COMMENT "Embedding symbol manifest"

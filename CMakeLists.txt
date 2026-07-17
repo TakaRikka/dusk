@@ -91,6 +91,35 @@ option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structur
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
 option(DUSK_ENABLE_CODE_MODS "Enable code mods" OFF)
 
+set(DUSK_HAS_FUNCHOOK OFF)
+if (DUSK_ENABLE_CODE_MODS AND (NOT APPLE OR CMAKE_SYSTEM_NAME STREQUAL "Darwin"))
+    set(DUSK_HAS_FUNCHOOK ON)
+endif ()
+set(DUSK_HAS_FUNCHOOK ${DUSK_HAS_FUNCHOOK} CACHE INTERNAL "Enable funchook" FORCE)
+
+set(_target_architectures ${CMAKE_OSX_ARCHITECTURES})
+if (NOT _target_architectures)
+    set(_target_architectures ${CMAKE_SYSTEM_PROCESSOR})
+endif ()
+list(LENGTH _target_architectures _target_arch_count)
+set(DUSK_HAS_PREPATCH OFF)
+if (DUSK_ENABLE_CODE_MODS AND APPLE AND _target_arch_count EQUAL 1)
+    list(GET _target_architectures 0 _target_arch)
+    if (_target_arch STREQUAL "arm64")
+        set(DUSK_HAS_PREPATCH ON)
+    endif ()
+endif ()
+set(DUSK_HAS_PREPATCH ${DUSK_HAS_PREPATCH} CACHE INTERNAL "Enable symgen prepatch support" FORCE)
+
+if (DUSK_ENABLE_CODE_MODS AND CMAKE_SYSTEM_NAME MATCHES "^(iOS|tvOS)$")
+    list(LENGTH CMAKE_OSX_ARCHITECTURES _mobile_arch_count)
+    if (NOT _mobile_arch_count EQUAL 1 OR NOT CMAKE_OSX_ARCHITECTURES STREQUAL "arm64")
+        message(FATAL_ERROR
+                "iOS/tvOS code mods require a single arm64 architecture; got "
+                "CMAKE_OSX_ARCHITECTURES='${CMAKE_OSX_ARCHITECTURES}'")
+    endif ()
+endif ()
+
 # Edit & Continue
 if (MSVC)
     if ("${CMAKE_MSVC_DEBUG_INFORMATION_FORMAT}" STREQUAL "" AND CMAKE_BUILD_TYPE STREQUAL "Debug"
@@ -175,8 +204,8 @@ if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     set(CMAKE_BUILD_RPATH "$ORIGIN")
 elseif (APPLE)
     add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN")
-    set(CMAKE_BUILD_RPATH "$ORIGIN")
+    set(CMAKE_INSTALL_RPATH "@loader_path")
+    set(CMAKE_BUILD_RPATH "@loader_path")
 elseif (MSVC)
     add_compile_options(
         $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
@@ -219,7 +248,7 @@ FetchContent_Declare(miniz
 )
 
 set(_fetch_content_deps cxxopts json miniz)
-if (DUSK_ENABLE_CODE_MODS)
+if (DUSK_HAS_FUNCHOOK)
     message(STATUS "dusklight: Fetching funchook")
     # cmake/PatchFunchook.cmake patches funchook's cmake/capstone.cmake.in to inject a
     # PATCH_COMMAND into capstone's inner ExternalProject. That PATCH_COMMAND runs
@@ -272,10 +301,10 @@ if (DUSK_ENABLE_SENTRY_NATIVE)
     )
     if (NOT sentry_native_POPULATED)
         FetchContent_Populate(sentry_native)
-        set(_dusk_skip_install_rules ${CMAKE_SKIP_INSTALL_RULES})
+        set(_skip_install_rules ${CMAKE_SKIP_INSTALL_RULES})
         set(CMAKE_SKIP_INSTALL_RULES ON)
         add_subdirectory(${sentry_native_SOURCE_DIR} ${sentry_native_BINARY_DIR} EXCLUDE_FROM_ALL)
-        set(CMAKE_SKIP_INSTALL_RULES ${_dusk_skip_install_rules})
+        set(CMAKE_SKIP_INSTALL_RULES ${_skip_install_rules})
     endif ()
 endif ()
 
@@ -308,7 +337,7 @@ set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)
-if (DUSK_ENABLE_CODE_MODS)
+if (DUSK_HAS_FUNCHOOK)
     list(APPEND GAME_LIBS funchook-static)
 endif ()
 
@@ -381,6 +410,9 @@ endif ()
 if (DUSK_ENABLE_CODE_MODS)
     list(APPEND GAME_COMPILE_DEFS DUSK_CODE_MODS=1)
 endif ()
+list(APPEND GAME_COMPILE_DEFS
+        DUSK_HAS_FUNCHOOK=$<BOOL:${DUSK_HAS_FUNCHOOK}>
+        DUSK_HAS_PREPATCH=$<BOOL:${DUSK_HAS_PREPATCH}>)
 
 if (DUSK_PACKAGE_INSTALL)
     include(GNUInstallDirs)
@@ -473,18 +505,28 @@ if (MSVC)
     else ()
         target_link_options(dusklight PRIVATE /FUNCTIONPADMIN /OPT:NOICF)
     endif ()
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang)$")
     if (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
         set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
     else ()
         set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,5>)
     endif ()
 endif ()
+
 if (DEFINED DUSK_PATCHABLE_ENTRY_FLAG)
     target_compile_options(dusklight PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
     foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
         target_compile_options(${jsystem_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
     endforeach()
+    foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
+            aurora_os aurora_pad aurora_si aurora_vi)
+        if (TARGET ${_sdk_lib})
+            get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
+            if (NOT _sdk_lib_imported)
+                target_compile_options(${_sdk_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+            endif ()
+        endif ()
+    endforeach ()
 endif ()
 
 if (WIN32)
@@ -612,13 +654,13 @@ if (APPLE)
         list(APPEND _apple_bundle_properties
             XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS ${DUSK_ENTITLEMENTS})
     endif ()
-    if (NOT IOS AND NOT TVOS)
+    if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         list(APPEND _apple_bundle_properties
             XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME "YES")
     endif ()
     set_target_properties(dusklight PROPERTIES ${_apple_bundle_properties})
 
-    if (NOT IOS AND NOT TVOS AND NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
+    if (CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
         set(_sign_nested_commands)
         if (TARGET crashpad_handler)
             list(APPEND _sign_nested_commands
@@ -635,7 +677,7 @@ if (APPLE)
     endif ()
 endif ()
 
-if (APPLE AND NOT IOS AND NOT TVOS)
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     find_library(APPKIT_FRAMEWORK AppKit REQUIRED)
     target_sources(dusklight PRIVATE src/dusk/file_select_macos.mm)
     set_source_files_properties(src/dusk/file_select_macos.mm PROPERTIES COMPILE_FLAGS -fobjc-arc)

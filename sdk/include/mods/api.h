@@ -148,6 +148,7 @@ typedef enum ModMetaKind {
     MOD_META_HOOK_FN = 4,
     MOD_META_HOOK_MEM = 5,
     MOD_META_HOOK_NAME = 6,
+    MOD_META_HOOK_MEM_EXT = 7,
 } ModMetaKind;
 
 typedef struct ModMetaRecord {
@@ -203,14 +204,36 @@ static_assert(sizeof(ModMetaHookFn) == 24);
  * NUL-terminated strings follow `resolved`: the class vtable symbol (empty if the class name is not
  * representable), then the stringified target for tooling display.
  */
+#define MOD_META_HOOK_MEM_CAPACITY 16u
 typedef struct MOD_META_ALIGN ModMetaHookMem {
     ModMetaRecord rec;
     uint32_t reserved;
-    unsigned char pmf[16];
+    unsigned char pmf[MOD_META_HOOK_MEM_CAPACITY];
     void* resolved; /* runtime only */
 } ModMetaHookMem;
 
 static_assert(sizeof(ModMetaHookMem) == 32);
+
+/*
+ * Extended member-function hook record. The Microsoft x64 ABI uses a 24-byte member pointer for
+ * classes whose inheritance model was fixed while the class was incomplete. Keep this a distinct
+ * record kind so loaders can continue to consume MOD_META_HOOK_MEM's original 16-byte layout.
+ *
+ * MSVC cannot constant-initialize that member pointer, so materialize points to a compiler-
+ * generated helper that writes its native representation to a caller-provided buffer. The record
+ * itself, including its trailing names and the helper relocation, remains constant-initialized and
+ * available to static tooling. pmf_size is the number of bytes the helper writes.
+ */
+#define MOD_META_HOOK_MEM_EXT_CAPACITY 24u
+typedef void (*ModMetaHookMemMaterializeFn)(unsigned char* out_pmf);
+typedef struct MOD_META_ALIGN ModMetaHookMemExt {
+    ModMetaRecord rec;
+    uint32_t pmf_size;
+    ModMetaHookMemMaterializeFn materialize;
+    void* resolved; /* runtime only */
+} ModMetaHookMemExt;
+
+static_assert(sizeof(ModMetaHookMemExt) == 24);
 
 /*
  * Hook on a function by symbol name, for targets that cannot be named in C++ (file-local statics,

@@ -417,6 +417,21 @@ function(install_bundled_mods)
                         DESTINATION "${_bundle_dir}/Frameworks"
                         PATTERN "${_lib_name}" EXCLUDE)
             endforeach ()
+            if (DUSK_HAS_PREPATCH)
+                set(_prepatch_executable "${_bundle_dir}/Dusklight")
+                set(_prepatch_mod_args "")
+                foreach (_id IN LISTS _ids)
+                    string(APPEND _prepatch_mod_args
+                            " \"${_bundle_dir}/Frameworks/${_id}.so\"")
+                endforeach ()
+                install(CODE "
+                    execute_process(
+                        COMMAND \"${SYMGEN_EXE}\" prepatch
+                            --binary \"${_prepatch_executable}\"
+                            --report \"${CMAKE_BINARY_DIR}/prepatch-report-$<CONFIG>.json\"
+                            ${_prepatch_mod_args}
+                        COMMAND_ERROR_IS_FATAL ANY)")
+            endif ()
         else ()
             foreach (_i RANGE ${_last})
                 list(GET _ids ${_i} _id)
@@ -432,6 +447,24 @@ function(install_bundled_mods)
                         endif ()
                     endforeach ()")
             endforeach ()
+            if (DUSK_HAS_PREPATCH)
+                set(_prepatch_executable "${_bundle_dir}/Contents/MacOS/Dusklight")
+                set(_prepatch_mod_args "")
+                foreach (_i RANGE ${_last})
+                    list(GET _ids ${_i} _id)
+                    list(GET _lib_platforms ${_i} _lib_platform)
+                    list(GET _lib_names ${_i} _lib_name)
+                    string(APPEND _prepatch_mod_args
+                            " \"${_bundle_dir}/Contents/Resources/mods/${_id}/lib/${_lib_platform}/${_lib_name}\"")
+                endforeach ()
+                install(CODE "
+                    execute_process(
+                        COMMAND \"${SYMGEN_EXE}\" prepatch
+                            --binary \"${_prepatch_executable}\"
+                            --report \"${CMAKE_BINARY_DIR}/prepatch-report-$<CONFIG>.json\"
+                            ${_prepatch_mod_args}
+                        COMMAND_ERROR_IS_FATAL ANY)")
+            endif ()
             if (TARGET crashpad_handler)
                 install(CODE "execute_process(COMMAND /usr/bin/codesign --force --sign - \"${_bundle_dir}/Contents/MacOS/$<TARGET_FILE_NAME:crashpad_handler>\" COMMAND_ERROR_IS_FATAL ANY)")
             endif ()

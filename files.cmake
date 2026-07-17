@@ -1479,6 +1479,8 @@ set(DUSK_FILES
         src/dusk/mods/loader/loader.hpp
         src/dusk/mods/loader/native_module.cpp
         src/dusk/mods/loader/native_module.hpp
+        src/dusk/mods/loader/prepatch.cpp
+        src/dusk/mods/loader/prepatch.hpp
         src/dusk/mods/log_buffer.cpp
         src/dusk/mods/log_buffer.hpp
         src/dusk/mods/manifest.cpp

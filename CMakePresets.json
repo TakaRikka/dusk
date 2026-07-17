@@ -314,10 +314,18 @@
           "type": "BOOL",
           "value": false
         },
+        "ENABLE_VISIBILITY": {
+          "type": "BOOL",
+          "value": true
+        },
         "Rust_CARGO_TARGET": "aarch64-apple-ios",
         "BUILD_SHARED_LIBS": {
           "type": "BOOL",
           "value": false
+        },
+        "DUSK_ENABLE_CODE_MODS": {
+          "type": "BOOL",
+          "value": true
         },
         "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
           "type": "BOOL",
@@ -354,11 +362,19 @@
           "type": "BOOL",
           "value": false
         },
+        "ENABLE_VISIBILITY": {
+          "type": "BOOL",
+          "value": true
+        },
         "Rust_CARGO_TARGET": "aarch64-apple-tvos",
         "Rust_TOOLCHAIN": "nightly",
         "BUILD_SHARED_LIBS": {
           "type": "BOOL",
           "value": false
+        },
+        "DUSK_ENABLE_CODE_MODS": {
+          "type": "BOOL",
+          "value": true
         },
         "CMAKE_DISABLE_FIND_PACKAGE_PkgConfig": {
           "type": "BOOL",
