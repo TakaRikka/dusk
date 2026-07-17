@@ -1,0 +1,3 @@
+# Actions core owned by the host; ActionService is the mod facade
+
+ActionService currently owns registration, Bindings, evaluation, capture, host builtins, and labels under `mods/svc`, so host UI must import that directory — unlike Config and peers, where Dusklight uses a first-class host TU and the Service only exposes it to mods. We extract Actions into `dusk::actions` with a native C++ host API (including host builtins, Binding labels, and rebind sessions); ActionService stays a thin 1.0 ABI over that core, with session lifecycle entry points for mods and a thin SDK helper that only calls them. Capture APIs remain beside sessions; presentation-epoch ownership is unchanged; scope is Actions only.

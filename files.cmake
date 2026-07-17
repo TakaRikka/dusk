@@ -1421,6 +1421,10 @@ set(DUSK_FILES
         src/dusk/achievements.cpp
         src/dusk/action_bindings.cpp
         src/dusk/action_bindings.h
+        src/dusk/actions.hpp
+        src/dusk/actions.cpp
+        src/dusk/binding_label.cpp
+        src/dusk/binding_label.hpp
         src/dusk/android_frame_rate.cpp
         src/dusk/android_frame_rate.hpp
         src/dusk/asserts.cpp
@@ -1483,6 +1487,7 @@ set(DUSK_FILES
         src/dusk/mods/log_buffer.hpp
         src/dusk/mods/manifest.cpp
         src/dusk/mods/manifest.hpp
+        src/dusk/mods/svc/actions.cpp
         src/dusk/mods/svc/camera.cpp
         src/dusk/mods/svc/config.cpp
         src/dusk/mods/svc/config.hpp
@@ -1492,6 +1497,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/host.cpp
         src/dusk/mods/svc/log.cpp
         src/dusk/mods/svc/overlay.cpp
+        src/dusk/mods/svc/player_controller.hpp
         src/dusk/mods/svc/registry.cpp
         src/dusk/mods/svc/registry.hpp
         src/dusk/mods/svc/resource.cpp

@@ -42,6 +42,10 @@ target_include_directories(dusklight_game_abi_headers INTERFACE ${_game_abi_incl
 target_compile_definitions(dusklight_game_abi_headers INTERFACE ${_game_compile_defs})
 
 # Mod feature targets
+add_library(dusklight_mod_feature_actions INTERFACE)
+target_link_libraries(dusklight_mod_feature_actions INTERFACE dusklight_mod_api)
+target_compile_definitions(dusklight_mod_feature_actions INTERFACE DUSK_MOD_FEATURE_ACTIONS=1)
+
 add_library(dusklight_mod_feature_game INTERFACE)
 target_link_libraries(dusklight_mod_feature_game INTERFACE
         dusklight_mod_api

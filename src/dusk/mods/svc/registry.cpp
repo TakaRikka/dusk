@@ -210,6 +210,7 @@ void ModLoader::init_services() {
             &svc::g_gameModule,
             &svc::g_cameraModule,
             &svc::g_gfxModule,
+            &svc::g_actionsModule,
         })
     {
         svc::register_module(*module);

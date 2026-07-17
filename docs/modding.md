@@ -54,7 +54,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/FetchDusklight.cmake")
 add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
 
 add_mod(my_mod
-        FEATURES game          # remove for service/asset-only mods; add webgpu for GfxService
+        FEATURES game          # remove for service/asset-only mods; add actions / webgpu as needed
         SOURCES src/mod.cpp
         MOD_JSON mod.json
         RES_DIR res            # mod resources, including icon.png and banner.png
@@ -64,6 +64,7 @@ add_mod(my_mod
 ```
 
 Available features:
+- `actions`: Provides the SDL3 types used by Binding values and is required to include [ActionService](#actionservice-modssvcactionsh).
 - `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
   range of compatibility with Dusklight versions and a slightly faster build process.
 - `webgpu`: Allows importing the WebGPU API (`webgpu/webgpu.h`). Must be enabled when using
@@ -469,6 +470,71 @@ if (svc_camera->get_camera(mod_ctx, game_view, &camera) == MOD_OK) {
 `get_camera` returns `MOD_UNAVAILABLE` while the view is not a valid perspective camera, such as before the
 first in-game frame. Projection matrices match the renderer's WebGPU clip convention and renderer depth convention
 (reversed-Z by default).
+
+### ActionService (`mods/svc/actions.h`)
+
+**Requires `add_mod(... FEATURES actions)`**
+
+Register rebindable Actions, manage tagged Bindings, observe them via poll and/or callback, run rebind capture, and
+drive host-owned rebind sessions. Observation only — the service never performs game or mod side effects on your
+behalf. Game thread only. The host owns the Actions core (`dusk::actions`); ActionService is the thin mod facade over
+it. Gameplay intents formerly on host `ActionBinds` live in the first-party `dev.twilitrealm.actions_mod` mod, which
+hooks game functions with replace-when-bound semantics (see ADR 0005). Open Dusklight Menu and Turbo Speed are
+host-registered Actions (see below).
+
+```cpp
+#include "mods/svc/actions.h"
+
+IMPORT_SERVICE(ActionService, svc_actions);
+
+void on_action(ModContext* ctx, ActionHandle action, ActionEvent event, void*) {
+    if (event == ACTION_EVENT_PRESSED) {
+        /* do the thing */
+    }
+}
+
+ActionDesc desc = ACTION_DESC_INIT;
+desc.name = "call_midna";
+desc.display_name = "Call Midna";
+desc.delivery = ACTION_DELIVERY_GAMEPLAY;
+desc.default_binding.kind = ACTION_BINDING_KEYBOARD;
+desc.default_binding.scancode = SDL_SCANCODE_Z;
+desc.callback = on_action;
+
+ActionHandle action = 0;
+svc_actions->register_action(mod_ctx, &desc, &action);
+
+bool pressed = false;
+svc_actions->was_pressed(mod_ctx, action, &pressed);
+```
+
+Identity is `(owning mod id, local name)`; a duplicate live name returns `MOD_CONFLICT`. Bindings are tagged
+(`keyboard` / `gamepad_button` / `unbound`), one per Action, persisted under `actions.<escaped mod id>.<name>` in
+`config.json`. Persisted Bindings survive mod unload; live registrations clear on disable/reload/fail. Multiple Actions
+may share a Binding (fan-out). Gamepad buttons and LT/RT trigger pulls are evaluated on the primary player
+(`PAD_1`); keyboard is global. Trigger Bindings use that controller's Controller Config activation zones.
+`ACTION_DELIVERY_GAMEPLAY` suppresses delivery while host UI documents are visible; `ACTION_DELIVERY_ALWAYS` does not.
+Rebind capture (`begin_capture`) accepts a filter: keyboard-only, gamepad-only, or either (default); the callback
+receives the Binding and does not auto-apply it. Escape during capture cancels (same as `cancel_capture`: no
+callback, no Binding change) for every filter and is not assignable via capture; unbound is assigned only via
+`set_binding` (Clear). `get_default_binding` reads the registration default — use it to pair Rebind with Clear
+(default unbound) or Reset (concrete default), never both, and to disable Reset when already at default.
+`format_binding_label` writes a Settings-quality UTF-8 display label for a Binding (scancode name /
+readable gamepad button or trigger name) using the primary player's gamepad when available. Unbound →
+`"Not Bound"`.
+
+Rebind sessions (`create_rebind_session` / `begin_rebind_session` / `cancel_rebind_session` /
+`query_rebind_session` / `destroy_rebind_session`) are the preferred path for rebind UIs: begin listens for
+input, applies the Binding on complete, and cancel / Escape leave the Binding unchanged. Sessions are owned by
+the calling mod. The SDK helper `mods/action_rebind_session.hpp` is a thin RAII wrapper over these entry
+points. Lower-level capture APIs remain available beside sessions.
+
+Actions registered by the **host process** (not a `.dusk` mod) use the config namespace `actions.host.<name>` and
+are the only Actions listed under Settings → Input for rebinding. Host examples: Open Dusklight Menu
+(`open_dusklight_menu`, `ACTION_DELIVERY_ALWAYS`, default Binding F1) and Turbo Speed (`turbo_speed_button`,
+`ACTION_DELIVERY_GAMEPLAY`, host-applied, default Binding Tab). Host Actions always use concrete defaults; a
+persisted unbound Binding is coerced to the default at register. Mod-owned Actions are rebound through each
+owning mod’s UI.
 
 ---
 

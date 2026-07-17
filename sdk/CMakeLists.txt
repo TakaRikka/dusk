@@ -1,11 +1,11 @@
 # Dusklight Mod SDK entry point
 #
-# Provides selectable mod service, game ABI, and WebGPU header surfaces without configuring the
-# full game tree.
+# Provides selectable mod service, game ABI, SDL3 actions, and WebGPU header surfaces without
+# configuring the full game tree.
 #
 # Usage (from a mod project):
 #   add_subdirectory(<dusk>/sdk dusk-sdk EXCLUDE_FROM_ALL)
-#   add_mod(my_mod FEATURES game webgpu SOURCES ... MOD_JSON mod.json)
+#   add_mod(my_mod FEATURES actions game webgpu SOURCES ... MOD_JSON mod.json)
 #
 # On platforms where mods link against the game binary (Windows/Apple/Android), a
 # version-independent link stub is downloaded automatically unless DUSK_GAME_EXE is set.

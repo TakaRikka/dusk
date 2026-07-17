@@ -36,6 +36,7 @@ struct ServiceModule {
     // reload requests. The set of active mods is stable when this runs.
     void (*lifecycleApplied)() = nullptr;
     // Top of ModLoader::tick, before pending lifecycle requests apply.
+    // ActionService may no-op here when UI already evaluated the presentation epoch.
     void (*frameBegin)() = nullptr;
     // End of ModLoader::tick, after every mod_update.
     void (*frameEnd)() = nullptr;
@@ -72,5 +73,6 @@ extern const ServiceModule g_uiModule;
 extern const ServiceModule g_gameModule;
 extern const ServiceModule g_cameraModule;
 extern const ServiceModule g_gfxModule;
+extern const ServiceModule g_actionsModule;
 
 }  // namespace dusk::mods::svc

@@ -37,6 +37,16 @@ public:
         return make_handle(index, slot.generation);
     }
 
+    // Host-process ownership: Entry::owner == nullptr.
+    template <typename... Args>
+    Handle emplace_host(Args&&... args) {
+        T value{std::forward<Args>(args)...};
+        const auto index = allocate_index();
+        auto& slot = m_slots[index];
+        slot.entry.emplace(Entry{.owner = nullptr, .value = std::move(value)});
+        return make_handle(index, slot.generation);
+    }
+
     // Returned pointers remain valid only until the next mutating operation.
     Entry* find(Handle handle) {
         auto* slot = find_slot(handle);
@@ -58,6 +68,16 @@ public:
         return entry != nullptr && entry->owner == &owner ? entry : nullptr;
     }
 
+    Entry* find_host(Handle handle) {
+        auto* entry = find(handle);
+        return entry != nullptr && entry->owner == nullptr ? entry : nullptr;
+    }
+
+    const Entry* find_host(Handle handle) const {
+        const auto* entry = find(handle);
+        return entry != nullptr && entry->owner == nullptr ? entry : nullptr;
+    }
+
     std::optional<Entry> take(Handle handle) {
         const auto index = handle_index(handle);
         auto* slot = find_slot(handle);
@@ -76,12 +96,33 @@ public:
         return take(handle);
     }
 
+    std::optional<Entry> take_host(Handle handle) {
+        if (find_host(handle) == nullptr) {
+            return std::nullopt;
+        }
+        return take(handle);
+    }
+
     std::vector<Entry> take_all(const LoadedMod& owner) {
         std::vector<Entry> entries;
         for (size_t slotIndex = 0; slotIndex < m_slots.size(); ++slotIndex) {
             const auto index = static_cast<uint32_t>(slotIndex);
             auto& slot = m_slots[index];
             if (!slot.entry.has_value() || slot.entry->owner != &owner) {
+                continue;
+            }
+            entries.push_back(std::move(*slot.entry));
+            release_slot(index);
+        }
+        return entries;
+    }
+
+    std::vector<Entry> take_all_host() {
+        std::vector<Entry> entries;
+        for (size_t slotIndex = 0; slotIndex < m_slots.size(); ++slotIndex) {
+            const auto index = static_cast<uint32_t>(slotIndex);
+            auto& slot = m_slots[index];
+            if (!slot.entry.has_value() || slot.entry->owner != nullptr) {
                 continue;
             }
             entries.push_back(std::move(*slot.entry));
@@ -106,8 +147,19 @@ public:
         return erase(handle);
     }
 
+    bool erase_host(Handle handle) {
+        if (find_host(handle) == nullptr) {
+            return false;
+        }
+        return erase(handle);
+    }
+
     size_t erase_all(const LoadedMod& owner) {
         return take_all(owner).size();
+    }
+
+    size_t erase_all_host() {
+        return take_all_host().size();
     }
 
     template <typename Fn>
