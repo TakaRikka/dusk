@@ -170,6 +170,7 @@
               throw needSubmodules
             else
               pkgs.stdenv.mkDerivation {
+                enableParallelBuilding = true;
                 pname = "dusklight";
                 version = versionSuffix;
                 src = ./.;
