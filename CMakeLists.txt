@@ -307,7 +307,7 @@ find_package(Threads REQUIRED)
 set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
     aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
-    Threads::Threads zstd::libzstd dusklight_game_headers)
+    Threads::Threads zstd::libzstd dusklight_game_headers miniz)
 if (DUSK_ENABLE_CODE_MODS)
     list(APPEND GAME_LIBS funchook-static)
 endif ()

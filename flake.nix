@@ -134,6 +134,7 @@
               nodFromSource;
 
           fetchContentDirs = {
+            MINIZ = pkgs.miniz.src;
             DAWN_PREBUILT = dawn;
             NOD_PREBUILT = nod;
             CXXOPTS = pkgs.cxxopts.src;
@@ -195,6 +196,7 @@
                   pkgs.cxxopts
                   pkgs.nlohmann_json
                   pkgs.xxhash
+                  pkgs.miniz
                   pkgs.abseil-cpp
                   pkgs.zlib
                   pkgs.libpng
