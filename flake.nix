@@ -2,6 +2,7 @@
   description = "Dusklight — native PC port of the Twilight Princess decompilation";
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+  inputs.self.submodules = true;
 
   outputs =
     { self, nixpkgs }:
@@ -134,13 +135,20 @@
               nodFromSource;
 
           fetchContentDirs = {
-            MINIZ = pkgs.miniz.src;
             DAWN_PREBUILT = dawn;
             NOD_PREBUILT = nod;
             CXXOPTS = pkgs.cxxopts.src;
             JSON = pkgs.nlohmann_json.src;
             XXHASH = pkgs.xxhash.src;
             ZSTD = pkgs.zstd.src;
+
+
+            MINIZ = pkgs.fetchzip {
+              url = "https://github.com/richgel999/miniz/releases/download/3.0.2/miniz-3.0.2.zip";
+              hash = "sha256-DXysXkQEmoDAMMg1F8KexkwpXNyiHNzLJqXR9SMEkxk=";
+              stripRoot = false;
+            };
+
             FMT = pkgs.fetchzip {
               url = "https://github.com/fmtlib/fmt/archive/refs/tags/12.1.0.tar.gz";
               hash = "sha256-ZmI1Dv0ZabPlxa02OpERI47jp7zFfjpeWCy1WyuPYZ0=";
@@ -197,7 +205,6 @@
                   pkgs.cxxopts
                   pkgs.nlohmann_json
                   pkgs.xxhash
-                  pkgs.miniz
                   pkgs.abseil-cpp
                   pkgs.zlib
                   pkgs.libpng
