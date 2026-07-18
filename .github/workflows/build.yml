@@ -208,9 +208,6 @@ jobs:
       - name: Build bundled mods
         run: cmake --build --preset ${{matrix.preset}} --target dusklight_mods
 
-      - name: Stage stripped JNI library
-        run: ANDROID_STAGE_ABIS="${{matrix.abi}}" platforms/android/scripts/stage-jni-libs.sh
-
       - name: Build APK
         working-directory: platforms/android
         run: ./gradlew :app:assembleRelease --rerun-tasks
