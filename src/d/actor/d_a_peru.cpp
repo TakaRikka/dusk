@@ -70,19 +70,19 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {4, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-const char* daPeru_c::mCutNameList[3] = {
+DUSK_GAME_DATA const char* daPeru_c::mCutNameList[3] = {
     "",
     "PERU_APPEAR",
     "PERU_APPEAR_SKIP",
 };
 
-daPeru_c::cutAppearFunc daPeru_c::mCutList[3] = {
+DUSK_GAME_DATA daPeru_c::cutAppearFunc daPeru_c::mCutList[3] = {
     NULL,
     &daPeru_c::cutAppear,
     &daPeru_c::cutAppear_skip,
 };
 
-daPeru_HIOParam const daPeru_Param_c::m = {
+DUSK_GAME_DATA daPeru_HIOParam const daPeru_Param_c::m = {
     60.0f,
     -3.0f,
     1.0f,

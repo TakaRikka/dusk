@@ -73,7 +73,7 @@ u8 mDoMch::FpscrEnableBits;
 u8 mDoMch::GXWarningLevel;
 u8 mDoMch::GXWarningExecuteFrame;
 #else
-u8 mDoMch::mDebugFill;
+DUSK_GAME_DATA u8 mDoMch::mDebugFill;
 #endif
 
 static int solidHeapErrors;
@@ -91,7 +91,7 @@ static int unknownHeapErrors;
 static u32 heapErrors;
 
 #if VERSION == VERSION_GCN_USA || VERSION == VERSION_GCN_JPN
-GXRenderModeObj g_ntscZeldaIntDf = {
+DUSK_GAME_DATA GXRenderModeObj g_ntscZeldaIntDf = {
     VI_TVMODE_NTSC_INT,
     608,
     448,
@@ -118,7 +118,7 @@ GXRenderModeObj g_ntscZeldaIntDf = {
     {8, 8, 10, 12, 10, 8, 8},
 };
 
-GXRenderModeObj g_ntscZeldaProg = {
+DUSK_GAME_DATA GXRenderModeObj g_ntscZeldaProg = {
     VI_TVMODE_NTSC_PROG,
     608,
     448,
@@ -277,7 +277,7 @@ GXRenderModeObj g_palZeldaProg60 = {
 };
 #endif
 
-GXRenderModeObj* mDoMch_render_c::mRenderModeObj = &g_ntscZeldaIntDf;
+DUSK_GAME_DATA GXRenderModeObj* mDoMch_render_c::mRenderModeObj = &g_ntscZeldaIntDf;
 
 static const char* myGetHeapTypeByString(JKRHeap* p_heap) {
     static char tmpString[5];

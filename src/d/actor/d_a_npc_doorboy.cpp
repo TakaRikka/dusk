@@ -117,11 +117,11 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "DoorBoy";
 
 static NPC_DOORBOY_HIO_CLASS l_HIO;
 
-daNpcDoorBoy_c::EventFn DUSK_CONST daNpcDoorBoy_c::mEvtSeqList[1] = {
+DUSK_GAME_DATA daNpcDoorBoy_c::EventFn DUSK_CONST daNpcDoorBoy_c::mEvtSeqList[1] = {
     NULL
 };
 
-daNpcDoorBoy_HIOParam const daNpcDoorBoy_Param_c::m = {
+DUSK_GAME_DATA daNpcDoorBoy_HIOParam const daNpcDoorBoy_Param_c::m = {
     55.0f,
     0.0f,
     1.0f,

@@ -41,21 +41,21 @@ namespace JASDriver {
     void subframeCallback();
     void DSPSyncCallback();
 
-    extern const MixFunc sMixFuncs[4];
-    extern s16* sDmaDacBuffer[3];
-    extern JASMixMode sMixMode;
-    extern f32 sDacRate;
-    extern u32 sSubFrames;
-    extern s16** sDspDacBuffer;
-    extern s32 sDspDacWriteBuffer;
-    extern s32 sDspDacReadBuffer;
-    extern s32 sDspStatus;
-    extern DSPBufCallback sDspDacCallback;
-    extern s16* lastRspMadep;
-    extern void (*dacCallbackFunc)(s16*, u32);
-    extern MixCallback extMixCallback;
-    extern u32 sOutputRate;
-    extern u32 sSubFrameCounter;
+    DUSK_GAME_EXTERN const MixFunc sMixFuncs[4];
+    DUSK_GAME_EXTERN s16* sDmaDacBuffer[3];
+    DUSK_GAME_EXTERN JASMixMode sMixMode;
+    DUSK_GAME_EXTERN f32 sDacRate;
+    DUSK_GAME_EXTERN u32 sSubFrames;
+    DUSK_GAME_EXTERN s16** sDspDacBuffer;
+    DUSK_GAME_EXTERN s32 sDspDacWriteBuffer;
+    DUSK_GAME_EXTERN s32 sDspDacReadBuffer;
+    DUSK_GAME_EXTERN s32 sDspStatus;
+    DUSK_GAME_EXTERN DSPBufCallback sDspDacCallback;
+    DUSK_GAME_EXTERN s16* lastRspMadep;
+    DUSK_GAME_EXTERN void (*dacCallbackFunc)(s16*, u32);
+    DUSK_GAME_EXTERN MixCallback extMixCallback;
+    DUSK_GAME_EXTERN u32 sOutputRate;
+    DUSK_GAME_EXTERN u32 sSubFrameCounter;
 };
 
 #endif /* JASAICTRL_H */

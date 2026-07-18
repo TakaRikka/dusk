@@ -67,8 +67,8 @@ public:
         mFontSizeY = y;
     }
 
-    static char* mStrBuff;
-    static size_t mStrBuffSize;
+    static DUSK_GAME_DATA char* mStrBuff;
+    static DUSK_GAME_DATA size_t mStrBuffSize;
 
 private:
     void private_initiate(JUTFont*, f32, f32, JUtility::TColor, JUtility::TColor,

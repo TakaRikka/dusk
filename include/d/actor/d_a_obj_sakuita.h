@@ -43,7 +43,7 @@ public:
 
     const daObjSakuita_Attr_c& attr() const { return M_attr; }
 
-    static daObjSakuita_Attr_c const M_attr;
+    static DUSK_GAME_DATA daObjSakuita_Attr_c const M_attr;
 
 private:
     /* 0x568 */ J3DModel* mModel;

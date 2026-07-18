@@ -10,7 +10,7 @@ const u32 stack_size = 0x800;
 const u32 stack_size = 0x4000;
 #endif
 
-JKRDecomp* JKRDecomp::sDecompObject;
+DUSK_GAME_DATA JKRDecomp* JKRDecomp::sDecompObject;
 
 JKRDecomp* JKRDecomp::create(s32 priority) {
     if (!sDecompObject) {
@@ -29,9 +29,9 @@ void JKRDecomp::destroy() {
 }
 #endif
 
-OSMessage JKRDecomp::sMessageBuffer[8] = {0};
+DUSK_GAME_DATA OSMessage JKRDecomp::sMessageBuffer[8] = {0};
 
-OSMessageQueue JKRDecomp::sMessageQueue = {0};
+DUSK_GAME_DATA OSMessageQueue JKRDecomp::sMessageQueue = {0};
 
 JKRDecomp::JKRDecomp(s32 priority) : JKRThread(stack_size, 0x10, priority) {
     resume();

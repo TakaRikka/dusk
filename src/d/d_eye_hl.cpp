@@ -35,7 +35,7 @@ void dEyeHL_c::remove() {
     dEyeHL_mng_c::remove(this);
 }
 
-dEyeHL_c* dEyeHL_mng_c::m_obj;
+DUSK_GAME_DATA dEyeHL_c* dEyeHL_mng_c::m_obj;
 
 void dEyeHL_mng_c::update() {
     dEyeHL_c* obj = m_obj;

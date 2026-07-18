@@ -151,10 +151,10 @@ public:
 
     ResTIMG* getResTIMGPointer(int i_no) const { return dMenu_DmapMap_c::getResTIMGPointer(i_no); }
 
-    static f32 m_zoomCenterMinX;
-    static f32 m_zoomCenterMaxX;
-    static f32 m_zoomCenterMinZ;
-    static f32 m_zoomCenterMaxZ;
+    static DUSK_GAME_DATA f32 m_zoomCenterMinX;
+    static DUSK_GAME_DATA f32 m_zoomCenterMaxX;
+    static DUSK_GAME_DATA f32 m_zoomCenterMinZ;
+    static DUSK_GAME_DATA f32 m_zoomCenterMaxZ;
 
     /* 0x88 */ u8 field_0x88[0x8C - 0x88];
     /* 0x8C */ dTres_c::typeGroupData_c* field_0x8c;

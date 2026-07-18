@@ -113,7 +113,7 @@ void JORReflexible::listenPropertyEvent(const JORPropertyEvent* pEvent) {
 }
 #endif
 
-JORServer* JORServer::instance;
+DUSK_GAME_DATA JORServer* JORServer::instance;
 
 JORServer* JORServer::create() {
     if (instance == NULL) {

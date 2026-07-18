@@ -8,11 +8,11 @@
 #include "d/d_com_inf_actor.h"
 #include <types.h>
 
-dComIfAc_info_c g_dComIfAc_gameInfo = {
+DUSK_GAME_DATA dComIfAc_info_c g_dComIfAc_gameInfo = {
     0,      // field_0x0
     false,  // mPause
 };
 
-dComIfGoat_info_c g_dComIfGoat_gameInfo = {
+DUSK_GAME_DATA dComIfGoat_info_c g_dComIfGoat_gameInfo = {
     NULL, // field_0x0
 };

@@ -13,7 +13,7 @@
 #include "d/d_cc_uty.h"
 
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 #if DEBUG

@@ -47,8 +47,8 @@ public:
     virtual ~daObj_SSDrink_c();
     virtual void setSoldOut();
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl DUSK_CONST mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl DUSK_CONST mCcDCyl;
 
 private:
     /* 0x578 */ mDoExt_btpAnm* mpBtpAnm;

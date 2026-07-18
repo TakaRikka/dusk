@@ -35,7 +35,7 @@ static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpcGuard_c*>(i_this)->createHeap();
 }
 
-daNpcGuard_c::actionFunc daNpcGuard_c::ActionTable[7][2] = {
+DUSK_GAME_DATA daNpcGuard_c::actionFunc daNpcGuard_c::ActionTable[7][2] = {
     {&daNpcGuard_c::initPath, &daNpcGuard_c::executePath},
     {&daNpcGuard_c::initRun, &daNpcGuard_c::executeRun},
     {&daNpcGuard_c::initFightWait, &daNpcGuard_c::executeFightWait},

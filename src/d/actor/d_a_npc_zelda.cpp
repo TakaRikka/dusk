@@ -53,8 +53,8 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {1, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-const char* daNpc_Zelda_c::mCutNameList = "";
-daNpc_Zelda_c::cutFunc DUSK_CONST daNpc_Zelda_c::mCutList[1] = { 0 };
+DUSK_GAME_DATA const char* daNpc_Zelda_c::mCutNameList = "";
+DUSK_GAME_DATA daNpc_Zelda_c::cutFunc DUSK_CONST daNpc_Zelda_c::mCutList[1] = { 0 };
 
 static NPC_ZELDA_HIO_CLASS l_HIO;
 
@@ -108,7 +108,7 @@ daNpc_Zelda_c::~daNpc_Zelda_c() {
     deleteRes(l_loadResPtrnList[field_0xf80], (const char**)l_resNameList);
 }
 
-const daNpc_Zelda_HIOParam daNpc_Zelda_Param_c::m = {{
+DUSK_GAME_DATA const daNpc_Zelda_HIOParam daNpc_Zelda_Param_c::m = {{
     190.0f, // attention_offset
     -3.0f, // gravity
     1.0f, // scale

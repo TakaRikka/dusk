@@ -22,7 +22,7 @@ public:
         /* 0x8 */ u32 mParam3;
     };
 
-    static param const mParam;
+    static DUSK_GAME_DATA param const mParam;
 };
 
 
@@ -52,7 +52,7 @@ public:
     int wait(void*);
     int talk(void*);
 
-    static dCcD_SrcCyl const mCylDat;
+    static DUSK_GAME_DATA dCcD_SrcCyl const mCylDat;
 
     /* 0x56c */ u8 mParam;
     /* 0x570 */ mDoExt_bckAnm mBckAnm;

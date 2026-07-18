@@ -1081,7 +1081,7 @@ void daE_GE_c::executeShield() {
     }
 }
 
-daE_GE_c::actionFunc daE_GE_c::l_actionmenu[9] = {
+DUSK_GAME_DATA daE_GE_c::actionFunc daE_GE_c::l_actionmenu[9] = {
     (&daE_GE_c::executeWait), (&daE_GE_c::executeFly),  (&daE_GE_c::executeAttack),
     (&daE_GE_c::executeBack), (&daE_GE_c::executeDown), (&daE_GE_c::executeSurprise),
     (&daE_GE_c::executeCaw),  (&daE_GE_c::executeWind), (&daE_GE_c::executeShield),

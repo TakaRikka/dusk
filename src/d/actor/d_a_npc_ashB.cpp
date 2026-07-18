@@ -10,7 +10,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include <cstring>
 
-const daNpcAshB_HIOParam daNpcAshB_Param_c::m = {
+DUSK_GAME_DATA const daNpcAshB_HIOParam daNpcAshB_Param_c::m = {
     205.0f,   // attention_offset
     -3.0f,    // gravity
     1.0f,     // scale
@@ -93,7 +93,7 @@ void daNpcAshB_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-daNpcAshB_c::EventFn DUSK_CONST daNpcAshB_c::mEvtSeqList[2] = {
+DUSK_GAME_DATA daNpcAshB_c::EventFn DUSK_CONST daNpcAshB_c::mEvtSeqList[2] = {
     NULL,
     &daNpcAshB_c::EvCut_Appear,
 };

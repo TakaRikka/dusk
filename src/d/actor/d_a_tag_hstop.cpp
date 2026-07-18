@@ -102,7 +102,7 @@ void daTagHstop_c::setActive() {
     }
 }
 
-dMsgFlow_c daTagHstop_c::m_msgFlow;
+DUSK_GAME_DATA dMsgFlow_c daTagHstop_c::m_msgFlow;
 
 int daTagHstop_c::execute() {
     if (eventInfo.checkCommandTalk()) {

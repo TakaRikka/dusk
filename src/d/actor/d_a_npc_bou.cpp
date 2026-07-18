@@ -119,7 +119,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {2, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {6, -1, 1}, {5, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Bou_c::mCutNameList[9] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Bou_c::mCutNameList[9] = {
     "",
     "WILDGOAT",
     "WILDGOAT_SUCCESS",
@@ -131,7 +131,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Bou_c::mCutNameList[9] = {
     "MEETING_AGAIN"
 };
 
-daNpc_Bou_c::cutFunc DUSK_CONST daNpc_Bou_c::mCutList[9] = {
+DUSK_GAME_DATA daNpc_Bou_c::cutFunc DUSK_CONST daNpc_Bou_c::mCutList[9] = {
     NULL,
     &daNpc_Bou_c::cutWildGoat,
     &daNpc_Bou_c::cutWildGoatSuccess,
@@ -157,7 +157,7 @@ daNpc_Bou_c::~daNpc_Bou_c() {
     deleteRes(l_loadResPtrnList[mType], (char const**)l_resNameList);
 }
 
-daNpc_Bou_HIOParam const daNpc_Bou_Param_c::m = {
+DUSK_GAME_DATA daNpc_Bou_HIOParam const daNpc_Bou_Param_c::m = {
     {
         210.0f, -3.0f, 1.0f, 600.0f, 255.0f, 200.0f, 35.0f, 40.0f,
        0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f, -45.0f,

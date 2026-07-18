@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_passer.h"
 #include "d/d_s_play.h"
 
-daNpcPasser_c::actionFunc daNpcPasser_c::ActionTable[5][2] = {
+DUSK_GAME_DATA daNpcPasser_c::actionFunc daNpcPasser_c::ActionTable[5][2] = {
     {&daNpcPasser_c::initPath, &daNpcPasser_c::executePath},
     {&daNpcPasser_c::initEscape, &daNpcPasser_c::executeEscape},
     {&daNpcPasser_c::initFear, &daNpcPasser_c::executeFear},
@@ -481,7 +481,7 @@ void daNpcPasser_c::create_init() {
     setBaseMtx();
 }
 
-daNpcPasser_c::seqFunc* daNpcPasser_c::m_funcTbl[28] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc* daNpcPasser_c::m_funcTbl[28] = {
     daNpcPasser_c::m_seq00_funcTbl, daNpcPasser_c::m_seq01_funcTbl,
     daNpcPasser_c::m_seq02_funcTbl, daNpcPasser_c::m_seq03_funcTbl,
     daNpcPasser_c::m_seq04_funcTbl, daNpcPasser_c::m_seq05_funcTbl,
@@ -498,51 +498,51 @@ daNpcPasser_c::seqFunc* daNpcPasser_c::m_funcTbl[28] = {
     daNpcPasser_c::m_seq26_funcTbl, daNpcPasser_c::m_seq27_funcTbl,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq00_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq00_funcTbl[2] = {
     &daNpcPasser_c::walka,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq01_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq01_funcTbl[2] = {
     &daNpcPasser_c::runa,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq02_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq02_funcTbl[2] = {
     &daNpcPasser_c::waita,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq03_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq03_funcTbl[2] = {
     &daNpcPasser_c::talka,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq04_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq04_funcTbl[2] = {
     &daNpcPasser_c::runb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq05_funcTbl[4] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq05_funcTbl[4] = {
     &daNpcPasser_c::turnr,
     &daNpcPasser_c::waita,
     &daNpcPasser_c::talka,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq06_funcTbl[4] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq06_funcTbl[4] = {
     &daNpcPasser_c::turnl,
     &daNpcPasser_c::waita,
     &daNpcPasser_c::talka,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq07_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq07_funcTbl[2] = {
     &daNpcPasser_c::waitwall,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq08_funcTbl[7] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq08_funcTbl[7] = {
     &daNpcPasser_c::talkwall,
     &daNpcPasser_c::waitwall,
     &daNpcPasser_c::talkbwall,
@@ -552,17 +552,17 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq08_funcTbl[7] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq09_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq09_funcTbl[2] = {
     &daNpcPasser_c::talkb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq10_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq10_funcTbl[2] = {
     &daNpcPasser_c::talkc,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq11_funcTbl[6] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq11_funcTbl[6] = {
     &daNpcPasser_c::talka,
     &daNpcPasser_c::waita,
     &daNpcPasser_c::talkb,
@@ -571,12 +571,12 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq11_funcTbl[6] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq12_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq12_funcTbl[2] = {
     &daNpcPasser_c::waitb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq13_funcTbl[6] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq13_funcTbl[6] = {
     &daNpcPasser_c::browsea,
     &daNpcPasser_c::browseb,
     &daNpcPasser_c::talka,
@@ -585,17 +585,17 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq13_funcTbl[6] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq14_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq14_funcTbl[2] = {
     &daNpcPasser_c::walkb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq15_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq15_funcTbl[2] = {
     &daNpcPasser_c::sitwaita,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq16_funcTbl[7] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq16_funcTbl[7] = {
     &daNpcPasser_c::sittalka,
     &daNpcPasser_c::sitwaita,
     &daNpcPasser_c::sittalkab,
@@ -605,17 +605,17 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq16_funcTbl[7] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq17_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq17_funcTbl[2] = {
     &daNpcPasser_c::playm,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq18_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq18_funcTbl[2] = {
     &daNpcPasser_c::sitwaitb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq19_funcTbl[7] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq19_funcTbl[7] = {
     &daNpcPasser_c::sittalkb,
     &daNpcPasser_c::sitwaitb,
     &daNpcPasser_c::sittalkbb,
@@ -625,24 +625,24 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq19_funcTbl[7] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq20_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq20_funcTbl[2] = {
     &daNpcPasser_c::looka,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq21_funcTbl[2] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq21_funcTbl[2] = {
     &daNpcPasser_c::lookb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq22_funcTbl[4] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq22_funcTbl[4] = {
     &daNpcPasser_c::looka,
     &daNpcPasser_c::lookb,
     &daNpcPasser_c::waita,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq23_funcTbl[7] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq23_funcTbl[7] = {
     &daNpcPasser_c::talka,
     &daNpcPasser_c::waita,
     &daNpcPasser_c::talkb,
@@ -652,7 +652,7 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq23_funcTbl[7] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq24_funcTbl[5] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq24_funcTbl[5] = {
     &daNpcPasser_c::talkb,
     &daNpcPasser_c::talka,
     &daNpcPasser_c::talkc,
@@ -660,7 +660,7 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq24_funcTbl[5] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq25_funcTbl[7] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq25_funcTbl[7] = {
     &daNpcPasser_c::browsea,
     &daNpcPasser_c::browseb,
     &daNpcPasser_c::talka,
@@ -670,13 +670,13 @@ daNpcPasser_c::seqFunc daNpcPasser_c::m_seq25_funcTbl[7] = {
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq26_funcTbl[3] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq26_funcTbl[3] = {
     &daNpcPasser_c::browsea,
     &daNpcPasser_c::browseb,
     NULL,
 };
 
-daNpcPasser_c::seqFunc daNpcPasser_c::m_seq27_funcTbl[1] = {
+DUSK_GAME_DATA daNpcPasser_c::seqFunc daNpcPasser_c::m_seq27_funcTbl[1] = {
     &daNpcPasser_c::waitTime,
 };
 

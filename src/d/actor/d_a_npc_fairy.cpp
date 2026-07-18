@@ -145,7 +145,7 @@ enum Type {
     /* 0x4 */ TYPE_50F,
 };
 
-const daNpc_Fairy_HIOParam daNpc_Fairy_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Fairy_HIOParam daNpc_Fairy_Param_c::m = {
     190.0f,
     -3.0f,
     1.0f,
@@ -459,7 +459,7 @@ static DUSK_CONSTEXPR daNpcT_evtData_c l_evtList[18] = {
     {"RETURN_CANCEL", 1},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Fairy_c::mCutNameList[18] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Fairy_c::mCutNameList[18] = {
     "",
     "APPEAR_10F_01",
     "APPEAR_10F_02",
@@ -480,7 +480,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Fairy_c::mCutNameList[18] = {
     "RETURN_CANCEL",
 };
 
-daNpc_Fairy_c::cutFunc DUSK_CONST daNpc_Fairy_c::mCutList[18] = {
+DUSK_GAME_DATA daNpc_Fairy_c::cutFunc DUSK_CONST daNpc_Fairy_c::mCutList[18] = {
     NULL,
     &daNpc_Fairy_c::cutAppear_10F_01,
     &daNpc_Fairy_c::cutAppear_10F_02,

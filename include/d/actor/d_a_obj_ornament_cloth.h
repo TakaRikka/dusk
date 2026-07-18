@@ -61,7 +61,7 @@ public:
 
     const daObjOnCloth_Attr_c& attr() const { return M_attr; }
 
-    static daObjOnCloth_Attr_c const M_attr;
+    static DUSK_GAME_DATA daObjOnCloth_Attr_c const M_attr;
 
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ mDoExt_btkAnm* mBtkAnm;

@@ -22,14 +22,14 @@ daTogeTrap_HIO_c::daTogeTrap_HIO_c() {
 
 static daTogeTrap_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daTogeTrap_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daTogeTrap_c::mCcDObjInfo = {
     {0, {{2, 1, 0x1D}, {0x480028, 0x11}, {0}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0},
     {dCcD_SE_STONE, 0, 0, 0, 0},
     {0},
 };
 
-dCcD_SrcCyl daTogeTrap_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daTogeTrap_c::mCcDCyl = {
     daTogeTrap_c::mCcDObjInfo,
     {
         {

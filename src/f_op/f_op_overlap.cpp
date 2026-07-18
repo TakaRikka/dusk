@@ -59,7 +59,7 @@ static s32 fopOvlp_Create(void* i_this) {
     return ret;
 }
 
-leafdraw_method_class g_fopOvlp_Method = {
+DUSK_GAME_DATA leafdraw_method_class g_fopOvlp_Method = {
     (process_method_func)fopOvlp_Create,  (process_method_func)fopOvlp_Delete,
     (process_method_func)fopOvlp_Execute, (process_method_func)fopOvlp_IsDelete,
     (process_method_func)fopOvlp_Draw,

@@ -226,11 +226,11 @@ void dMapInfo_n::getFloorParameter(f32 param_0, s8* i_floorNo, f32* param_2, f32
     }
 }
 
-s8 dMapInfo_c::mNowStayFloorNo;
+DUSK_GAME_DATA s8 dMapInfo_c::mNowStayFloorNo;
 
-int dMapInfo_c::mNowStayRoomNo;
+DUSK_GAME_DATA int dMapInfo_c::mNowStayRoomNo;
 
-u8 dMapInfo_c::mNowStayFloorNoDecisionFlg;
+DUSK_GAME_DATA u8 dMapInfo_c::mNowStayFloorNoDecisionFlg;
 
 s8 dMapInfo_c::calcFloorNo(f32 param_0, bool i_chkMinMax, int i_roomNo) {
     f32 sp10;
@@ -330,24 +330,24 @@ void dMapInfo_c::create() {
 
 void dMapInfo_c::remove() {}
 
-dDrawPath_c::layer_data* dMpath_c::mLayerList;
+DUSK_GAME_DATA dDrawPath_c::layer_data* dMpath_c::mLayerList;
 
 // these are needed for sinit, but its got reversed reg alloc?
-f32 dMpath_c::mMinX = FLT_MAX;
+DUSK_GAME_DATA f32 dMpath_c::mMinX = FLT_MAX;
 
-f32 dMpath_c::mMaxX = -FLT_MAX;
+DUSK_GAME_DATA f32 dMpath_c::mMaxX = -FLT_MAX;
 
-f32 dMpath_c::mMinZ = FLT_MAX;
+DUSK_GAME_DATA f32 dMpath_c::mMinZ = FLT_MAX;
 
-f32 dMpath_c::mMaxZ = -FLT_MAX;
+DUSK_GAME_DATA f32 dMpath_c::mMaxZ = -FLT_MAX;
 
-f32 dMpath_c::mAllCenterX;
+DUSK_GAME_DATA f32 dMpath_c::mAllCenterX;
 
-f32 dMpath_c::mAllCenterZ;
+DUSK_GAME_DATA f32 dMpath_c::mAllCenterZ;
 
-f32 dMpath_c::mAllSizeX;
+DUSK_GAME_DATA f32 dMpath_c::mAllSizeX;
 
-f32 dMpath_c::mAllSizeZ;
+DUSK_GAME_DATA f32 dMpath_c::mAllSizeZ;
 
 static bool data_80450E88;
 
@@ -355,11 +355,11 @@ bool dMpath_c::isExistMapPathData() {
     return data_80450E88;
 }
 
-int dMapInfo_c::mNextRoomNo = -1;
+DUSK_GAME_DATA int dMapInfo_c::mNextRoomNo = -1;
 
-s8 dMpath_c::mBottomFloorNo = 127;
+DUSK_GAME_DATA s8 dMpath_c::mBottomFloorNo = 127;
 
-s8 dMpath_c::mTopFloorNo = -128;
+DUSK_GAME_DATA s8 dMpath_c::mTopFloorNo = -128;
 
 int dMpath_c::getTopBottomFloorNo(s8* i_topFloorNo, s8* i_bottomFloorNo) {
     if (isExistMapPathData()) {

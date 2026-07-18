@@ -10,7 +10,7 @@ namespace JStudio {
 namespace fvb {
 namespace data {
 
-extern const char ga4cSignature[4];
+DUSK_GAME_EXTERN const char ga4cSignature[4];
 
 const int PARAGRAPH_DATA = 1;
 

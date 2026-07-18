@@ -745,7 +745,7 @@ int dMsgFlow_c::getParam(u8* params) {
     return *(BE(int)*)params;
 }
 
-queryFunc dMsgFlow_c::mQueryList[53] = {
+DUSK_GAME_DATA queryFunc dMsgFlow_c::mQueryList[53] = {
     &dMsgFlow_c::query005, &dMsgFlow_c::query001, &dMsgFlow_c::query002, &dMsgFlow_c::query003,
     &dMsgFlow_c::query006, &dMsgFlow_c::query007, &dMsgFlow_c::query004, &dMsgFlow_c::query008,
     &dMsgFlow_c::query009, &dMsgFlow_c::query010, &dMsgFlow_c::query011, &dMsgFlow_c::query012,
@@ -1730,7 +1730,7 @@ u16 dMsgFlow_c::query053(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
     return ret;
 }
 
-eventFunc dMsgFlow_c::mEventList[43] = {
+DUSK_GAME_DATA eventFunc dMsgFlow_c::mEventList[43] = {
     &dMsgFlow_c::event000, &dMsgFlow_c::event001, &dMsgFlow_c::event002, &dMsgFlow_c::event003,
     &dMsgFlow_c::event004, &dMsgFlow_c::event005, &dMsgFlow_c::event006, &dMsgFlow_c::event007,
     &dMsgFlow_c::event008, &dMsgFlow_c::event009, &dMsgFlow_c::event010, &dMsgFlow_c::event011,

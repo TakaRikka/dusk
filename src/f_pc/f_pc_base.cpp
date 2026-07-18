@@ -41,7 +41,7 @@ BOOL fpcBs_Is_JustOfType(int i_typeA, int i_typeB) {
     }
 }
 
-int g_fpcBs_type;
+DUSK_GAME_DATA int g_fpcBs_type;
 
 int fpcBs_MakeOfType(int* i_type) {
     static int t_type = 0x9130000;

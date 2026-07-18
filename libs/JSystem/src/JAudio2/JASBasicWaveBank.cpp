@@ -55,7 +55,7 @@ void JASBasicWaveBank::incWaveTable(JASBasicWaveBank::TWaveGroup const* param_0)
     }
 }
 
-u32 JASBasicWaveBank::mNoLoad;
+DUSK_GAME_DATA u32 JASBasicWaveBank::mNoLoad;
 
 void JASBasicWaveBank::decWaveTable(JASBasicWaveBank::TWaveGroup const* param_0) {
     JASMutexLock lock(&field_0x4);

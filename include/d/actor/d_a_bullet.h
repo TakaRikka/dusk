@@ -18,7 +18,7 @@ class daBullet_Param_c {
 public:
     virtual ~daBullet_Param_c() {}
 
-    static daBullet_HIOParam const m;
+    static DUSK_GAME_DATA daBullet_HIOParam const m;
 };
 
 #if DEBUG
@@ -80,8 +80,8 @@ public:
     int wait(void*);
     int move(void*);
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
 };
 
 STATIC_ASSERT(sizeof(daBullet_c) == 0x95c);

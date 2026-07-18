@@ -24,7 +24,7 @@ struct daTagTWGate_zevParam {
     /* 0x1B */ s8 mLayer;
 };
 
-daTagTWGate_Attr_c const daTagTWGate_c::mAttr = {};
+DUSK_GAME_DATA daTagTWGate_Attr_c const daTagTWGate_c::mAttr = {};
 
 #if DEBUG
 daTagTWGate_Hio_c daTagTWGate_c::mHio;
@@ -79,7 +79,7 @@ static daTagTWGate_zevParam const l_zevParamTbl[4] = {
 
 static DUSK_CONSTEXPR const char* l_myName = "Gate";
 
-const actionFunc daTagTWGate_c::ActionTable[][2] = {
+DUSK_GAME_DATA const actionFunc daTagTWGate_c::ActionTable[][2] = {
     {&daTagTWGate_c::initWait, &daTagTWGate_c::executeWait},
     {&daTagTWGate_c::initDemoFilone1, &daTagTWGate_c::executeDemoFilone1},
     {&daTagTWGate_c::initDemoFilone2, &daTagTWGate_c::executeDemoFilone2},

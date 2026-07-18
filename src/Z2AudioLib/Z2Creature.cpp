@@ -10,8 +10,8 @@ static void Z2_E_ms_modVol(Z2SoundHandlePool*, u32);
 static void Z2_E_mm_modPitch(Z2SoundHandlePool*, u32);
 static void Z2_B_zan_modPitch(Z2SoundHandlePool*, u32);
 
-s8 data_80451358;
-s8 data_80451359;
+DUSK_GAME_DATA s8 data_80451358;
+DUSK_GAME_DATA s8 data_80451359;
 
 static Z2EnemyArea const sAreaDefault = {true, 700, 1100, 1500};
 

@@ -39,7 +39,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Blue_NS";
 
 static NPC_BLUE_NS_HIO_CLASS l_HIO;
 
-daNpcBlueNS_c::EventFn DUSK_CONST daNpcBlueNS_c::mEvtSeqList[] = {
+DUSK_GAME_DATA daNpcBlueNS_c::EventFn DUSK_CONST daNpcBlueNS_c::mEvtSeqList[] = {
     NULL,
     &daNpcBlueNS_c::_Evt_ChgYami_Chibi,
     &daNpcBlueNS_c::_Evt_ChgYami_Debu,
@@ -93,7 +93,7 @@ const static dCcD_SrcCyl l_cyl_src = {
     }
 };
 
-const daNpcBlueNS_HIOParam daNpcBlueNS_Param_c::m = {
+DUSK_GAME_DATA const daNpcBlueNS_HIOParam daNpcBlueNS_Param_c::m = {
     55.0f,
     -3.0f,
     1.0f,

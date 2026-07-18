@@ -1,6 +1,7 @@
 #include <memory>
 
 #include "aurora/lib/logging.hpp"
+#include "dusk/os.h"
 #include "os_report.h"
 
 aurora::Module Log("dusk::osReport");

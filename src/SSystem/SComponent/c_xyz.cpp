@@ -137,11 +137,11 @@ s16 cXyz::atan2sY_XZ() const {
     return cM_atan2s(-this->y, absXZ());
 }
 
-const cXyz cXyz::Zero(0, 0, 0);
-const cXyz cXyz::BaseX(1, 0, 0);
-const cXyz cXyz::BaseY(0, 1, 0);
-const cXyz cXyz::BaseZ(0, 0, 1);
-const cXyz cXyz::BaseXY(1, 1, 0);
-const cXyz cXyz::BaseXZ(1, 0, 1);
-const cXyz cXyz::BaseYZ(0, 1, 1);
-const cXyz cXyz::BaseXYZ(1, 1, 1);
+DUSK_GAME_DATA const cXyz cXyz::Zero(0, 0, 0);
+DUSK_GAME_DATA const cXyz cXyz::BaseX(1, 0, 0);
+DUSK_GAME_DATA const cXyz cXyz::BaseY(0, 1, 0);
+DUSK_GAME_DATA const cXyz cXyz::BaseZ(0, 0, 1);
+DUSK_GAME_DATA const cXyz cXyz::BaseXY(1, 1, 0);
+DUSK_GAME_DATA const cXyz cXyz::BaseXZ(1, 0, 1);
+DUSK_GAME_DATA const cXyz cXyz::BaseYZ(0, 1, 1);
+DUSK_GAME_DATA const cXyz cXyz::BaseXYZ(1, 1, 1);

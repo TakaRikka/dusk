@@ -408,7 +408,7 @@ bool J2DScreen::isUsed(ResFONT const* p_font) {
     return J2DPane::isUsed(p_font);
 }
 
-J2DDataManage* J2DScreen::mDataManage;
+DUSK_GAME_DATA J2DDataManage* J2DScreen::mDataManage;
 
 void* J2DScreen::getNameResource(char const* resName) {
     void* res = JKRGetNameResource(resName, NULL);

@@ -12,7 +12,7 @@
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "L9Chand";
 
-daObjChandelier_proc daObjChandelier_c::s_exeProc[5] = {
+DUSK_GAME_DATA daObjChandelier_proc daObjChandelier_c::s_exeProc[5] = {
     &daObjChandelier_c::exeModeWait,
     &daObjChandelier_c::exeModeStartSwg,
     &daObjChandelier_c::exeModeDown,

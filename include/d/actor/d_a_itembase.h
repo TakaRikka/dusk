@@ -60,7 +60,7 @@ public:
     virtual u8 getCollisionH();
     virtual u8 getCollisionR();
 
-    static daItemBase_data const m_data;
+    static DUSK_GAME_DATA daItemBase_data const m_data;
 
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;

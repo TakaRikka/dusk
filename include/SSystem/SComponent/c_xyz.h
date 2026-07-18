@@ -14,14 +14,14 @@ struct cXy {
 };
 
 struct cXyz : Vec {
-    static const cXyz Zero;
-    static const cXyz BaseX;
-    static const cXyz BaseY;
-    static const cXyz BaseZ;
-    static const cXyz BaseXY;
-    static const cXyz BaseXZ;
-    static const cXyz BaseYZ;
-    static const cXyz BaseXYZ;
+    static DUSK_GAME_DATA const cXyz Zero;
+    static DUSK_GAME_DATA const cXyz BaseX;
+    static DUSK_GAME_DATA const cXyz BaseY;
+    static DUSK_GAME_DATA const cXyz BaseZ;
+    static DUSK_GAME_DATA const cXyz BaseXY;
+    static DUSK_GAME_DATA const cXyz BaseXZ;
+    static DUSK_GAME_DATA const cXyz BaseYZ;
+    static DUSK_GAME_DATA const cXyz BaseXYZ;
 #ifdef __MWERKS__
     cXyz() {}
     ~cXyz() {}

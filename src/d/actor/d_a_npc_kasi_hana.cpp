@@ -557,7 +557,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[6] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "kasi_hana";
 
-daNpcKasiHana_HIOParam const daNpcKasiHana_Param_c::m = {
+DUSK_GAME_DATA daNpcKasiHana_HIOParam const daNpcKasiHana_Param_c::m = {
     55.0f,
     -3.0f,
     1.0f,
@@ -611,7 +611,7 @@ void daNpcKasiHana_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-daNpcKasiHana_c::EventFn daNpcKasiHana_c::mEvtSeqList[6] = {
+DUSK_GAME_DATA daNpcKasiHana_c::EventFn daNpcKasiHana_c::mEvtSeqList[6] = {
     NULL,
     &daNpcKasiHana_c::_Evt_Kasi_Appear,
     &daNpcKasiHana_c::_Evt_Kasi_Talk,
@@ -1469,11 +1469,11 @@ int daNpcKasiHana_c::fear(int param_1) {
     return 1;
 }
 
-daTagEscape_c* daNpcKasiHana_c::mTargetTag;
+DUSK_GAME_DATA daTagEscape_c* daNpcKasiHana_c::mTargetTag;
 
-f32 daNpcKasiHana_c::mTargetTagDist;
+DUSK_GAME_DATA f32 daNpcKasiHana_c::mTargetTagDist;
 
-s16 daNpcKasiHana_c::mWolfAngle;
+DUSK_GAME_DATA s16 daNpcKasiHana_c::mWolfAngle;
 
 daTagEscape_c* daNpcKasiHana_c::srchWolfTag() {
     mTargetTag = NULL;

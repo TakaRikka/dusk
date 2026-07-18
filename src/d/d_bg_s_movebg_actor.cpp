@@ -51,11 +51,11 @@ int dBgS_MoveBgActor::ToBack() {
     return 1;
 }
 
-const char* dBgS_MoveBgActor::m_name;
+DUSK_GAME_DATA const char* dBgS_MoveBgActor::m_name;
 
-int dBgS_MoveBgActor::m_dzb_id;
+DUSK_GAME_DATA int dBgS_MoveBgActor::m_dzb_id;
 
-MoveBGActor_SetFunc dBgS_MoveBgActor::m_set_func;
+DUSK_GAME_DATA MoveBGActor_SetFunc dBgS_MoveBgActor::m_set_func;
 
 int dBgS_MoveBgActor::MoveBGCreateHeap() {
     if (!CreateHeap()) {

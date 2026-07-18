@@ -28,7 +28,7 @@ int daObj_Brakeeff_Draw(obj_brakeeff_class* i_this) {
 }
 
 // Particle IDS
-u16 e_name[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
+DUSK_GAME_DATA u16 e_name[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
 void obj_brakeeff_1(obj_brakeeff_class* i_this) {
     fopAc_ac_c* a_this = static_cast<fopAc_ac_c*>(i_this);
@@ -130,13 +130,13 @@ int daObj_Brakeeff_Delete(obj_brakeeff_class* i_this) {
 }
 
 // model data per effect type
-u32 bef_bmd[2] = {
+DUSK_GAME_DATA u32 bef_bmd[2] = {
     5,
     6,
 };
 
 // J3DAnmTevRegKey per effect type
-u32 bef_brk[2] = {
+DUSK_GAME_DATA u32 bef_brk[2] = {
     9,
     10,
 };
@@ -229,7 +229,7 @@ int daObj_Brakeeff_Create(fopAc_ac_c* a_this) {
     return res_load_result;
 }
 
-actor_method_class l_daObj_Brakeeff_Method = {
+DUSK_GAME_DATA actor_method_class l_daObj_Brakeeff_Method = {
     (process_method_func)daObj_Brakeeff_Create,  (process_method_func)daObj_Brakeeff_Delete,
     (process_method_func)daObj_Brakeeff_Execute, (process_method_func)daObj_Brakeeff_IsDelete,
     (process_method_func)daObj_Brakeeff_Draw,

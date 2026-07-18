@@ -39,7 +39,7 @@ static const cM3dGCylS l_cyl_info[] = {
     { 0.0f, 0.0f, 0.0f, 50.0f, 100.0f },
 };
 
-const daObjCarry_dt_t daObjCarry_c::mData[] = {
+DUSK_GAME_DATA const daObjCarry_dt_t daObjCarry_c::mData[] = {
     // TYPE_TSUBO
     {
         27.0f,

@@ -66,7 +66,7 @@ public:
     u8 getMoveSpeed() { return fopAcM_GetParamBit(this, 8, 4); }
     int getSw() { return fopAcM_GetParamBit(this, 12, 8); }
 
-    static f32 const mSpeed[16];
+    static DUSK_GAME_DATA f32 const mSpeed[16];
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;

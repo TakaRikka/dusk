@@ -117,18 +117,18 @@ public:
     }
 
 private:
-    static OSMessageQueue sMessageQueue;
-    static const char* sCpuExpName[17];
-    static JSUList<JUTException::JUTExMapFile> sMapFileList;
-    static OSMessage sMessageBuffer[1];
-    static JUTException* sErrorManager;
-    static JUTExceptionUserCallback sPreUserCallback;
-    static JUTExceptionUserCallback sPostUserCallback;
-    static void* sConsoleBuffer;
-    static u32 sConsoleBufferSize;
-    static JUTConsole* sConsole;
-    static u32 msr;
-    static u32 fpscr;
+    static DUSK_GAME_DATA OSMessageQueue sMessageQueue;
+    static DUSK_GAME_DATA const char* sCpuExpName[17];
+    static DUSK_GAME_DATA JSUList<JUTException::JUTExMapFile> sMapFileList;
+    static DUSK_GAME_DATA OSMessage sMessageBuffer[1];
+    static DUSK_GAME_DATA JUTException* sErrorManager;
+    static DUSK_GAME_DATA JUTExceptionUserCallback sPreUserCallback;
+    static DUSK_GAME_DATA JUTExceptionUserCallback sPostUserCallback;
+    static DUSK_GAME_DATA void* sConsoleBuffer;
+    static DUSK_GAME_DATA u32 sConsoleBufferSize;
+    static DUSK_GAME_DATA JUTConsole* sConsole;
+    static DUSK_GAME_DATA u32 msr;
+    static DUSK_GAME_DATA u32 fpscr;
 
 private:
     /* 0x7C */ JUTExternalFB* mFrameMemory;

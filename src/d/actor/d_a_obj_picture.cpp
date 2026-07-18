@@ -517,7 +517,7 @@ static int daObjPicture_draw(daObjPicture_c* i_this) {
 #if DEBUG
 const
 #endif
-dCcD_SrcCps daObjPicture_c::s_CcDCps = {
+DUSK_GAME_DATA dCcD_SrcCps daObjPicture_c::s_CcDCps = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0x20A0, 0x11}, 0x0}}, // mObj
         {dCcD_SE_SWORD, 0x0, 0x0, 0x0, 0x0}, // mGObjAt
@@ -532,7 +532,7 @@ dCcD_SrcCps daObjPicture_c::s_CcDCps = {
 #if DEBUG
 const
 #endif
-dCcD_SrcCyl daObjPicture_c::s_CcDCyl_pic_at = {
+DUSK_GAME_DATA dCcD_SrcCyl daObjPicture_c::s_CcDCyl_pic_at = {
     {
         {0x0, {{0x400, 0x1, 0x11}, {0x0, 0x11}, 0x79}},  // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},              // mGObjAt

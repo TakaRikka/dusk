@@ -12,14 +12,14 @@
 
 static char const* l_arcName = "H_Haka";
 
-dCcD_SrcGObjInf const daGraveStone_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daGraveStone_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0},
     {0},
 };
 
-dCcD_SrcCyl const daGraveStone_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl const daGraveStone_c::mCcDCyl = {
     {
         {0, {{0, 0, 0}, {0, 0}, {0x79}}},
         {0, 0, 0, 0, 0},

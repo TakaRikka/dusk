@@ -40,7 +40,7 @@ public:
 
     void setCharColor(JUtility::TColor color) { mColor = color; };
 
-    static JUTDbPrint* sDebugPrint;
+    static DUSK_GAME_DATA JUTDbPrint* sDebugPrint;
 
 private:
     /* 0x00 */ unk_print* mFirst;

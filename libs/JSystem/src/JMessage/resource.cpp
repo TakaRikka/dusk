@@ -89,7 +89,7 @@ u16 JMessage::TResource::toMessageIndex_messageID(u32 uMsgID, u32 upperHalf, boo
     return nIndex;
 }
 
-JMessage::locale::parseCharacter_function JMessage::TResourceContainer::sapfnParseCharacter_[5] = {
+DUSK_GAME_DATA JMessage::locale::parseCharacter_function JMessage::TResourceContainer::sapfnParseCharacter_[5] = {
     NULL,
     JMessage::locale::parseCharacter_1Byte,
     JMessage::locale::parseCharacter_2Byte,

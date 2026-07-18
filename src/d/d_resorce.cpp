@@ -581,7 +581,7 @@ int dRes_info_c::setRes(JKRArchive* i_archive, JKRHeap* i_heap) {
     return rt >> 0x1F;
 }
 
-bool data_8074C6C0_debug;
+DUSK_GAME_DATA bool data_8074C6C0_debug;
 
 int dRes_info_c::setRes() {
     if (mArchive == NULL) {

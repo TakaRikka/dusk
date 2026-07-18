@@ -26,8 +26,12 @@
 #include "m_Do/m_Do_lib.h"
 #include "tracy/Tracy.hpp"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 #if DEBUG
@@ -35,7 +39,7 @@
 #endif
 
 extern "C" {
-    extern dPa_particleTracePcallBack_c JPTracePCB4;
+    DUSK_GAME_EXTERN dPa_particleTracePcallBack_c JPTracePCB4;
 }
 
 void dPa_cleanupGX() {
@@ -125,11 +129,11 @@ u32 dummy(JPABaseEmitter* i_emitter) {
     return i_emitter->getAge();
 }
 
-dPa_modelEcallBack dPa_modelEcallBack::mEcallback;
+DUSK_GAME_DATA dPa_modelEcallBack dPa_modelEcallBack::mEcallback;
 
-dPa_modelPcallBack dPa_modelEcallBack::mPcallback;
+DUSK_GAME_DATA dPa_modelPcallBack dPa_modelEcallBack::mPcallback;
 
-dPa_modelEcallBack::model_c* dPa_modelEcallBack::mModel;
+DUSK_GAME_DATA dPa_modelEcallBack::model_c* dPa_modelEcallBack::mModel;
 
 #if DEBUG
 u8 dPa_modelEcallBack::mNum;
@@ -1120,7 +1124,7 @@ void dPa_control_c::level_c::cutTable(dPa_control_c::level_c::emitter_c* i_emitt
     i_emitter->cleanup();
 }
 
-dPa_selectTexEcallBack dPa_control_c::mTsubo[] = {
+DUSK_GAME_DATA dPa_selectTexEcallBack dPa_control_c::mTsubo[] = {
     dPa_selectTexEcallBack(0),
     dPa_selectTexEcallBack(1),
     dPa_selectTexEcallBack(2),
@@ -1137,35 +1141,35 @@ static GXColor l_lifeBallColor[3] = {
     {0xEB, 0xD7, 0x2F, 0xFF},
 };
 
-dPa_setColorEcallBack dPa_control_c::mLifeBall[3] = {
+DUSK_GAME_DATA dPa_setColorEcallBack dPa_control_c::mLifeBall[3] = {
     dPa_setColorEcallBack(l_lifeBallColor[0]),
     dPa_setColorEcallBack(l_lifeBallColor[1]),
     dPa_setColorEcallBack(l_lifeBallColor[2]),
 };
 
-JPAEmitterManager* dPa_control_c::mEmitterMng;
+DUSK_GAME_DATA JPAEmitterManager* dPa_control_c::mEmitterMng;
 
-dPa_wbPcallBack_c dPa_control_c::mWaterBubblePcallBack;
+DUSK_GAME_DATA dPa_wbPcallBack_c dPa_control_c::mWaterBubblePcallBack;
 
-dPa_fsenthPcallBack dPa_control_c::mFsenthPcallBack;
+DUSK_GAME_DATA dPa_fsenthPcallBack dPa_control_c::mFsenthPcallBack;
 
-dPa_light8EcallBack dPa_control_c::mLight8EcallBack;
+DUSK_GAME_DATA dPa_light8EcallBack dPa_control_c::mLight8EcallBack;
 
-dPa_light8PcallBack dPa_control_c::mLight8PcallBack;
+DUSK_GAME_DATA dPa_light8PcallBack dPa_control_c::mLight8PcallBack;
 
-dPa_gen_b_light8EcallBack dPa_control_c::m_b_Light8EcallBack;
+DUSK_GAME_DATA dPa_gen_b_light8EcallBack dPa_control_c::m_b_Light8EcallBack;
 
-dPa_gen_b_light8PcallBack dPa_control_c::m_b_Light8PcallBack;
+DUSK_GAME_DATA dPa_gen_b_light8PcallBack dPa_control_c::m_b_Light8PcallBack;
 
-dPa_gen_d_light8EcallBack dPa_control_c::m_d_Light8EcallBack;
+DUSK_GAME_DATA dPa_gen_d_light8EcallBack dPa_control_c::m_d_Light8EcallBack;
 
-dPa_gen_d_light8PcallBack dPa_control_c::m_d_Light8PcallBack;
+DUSK_GAME_DATA dPa_gen_d_light8PcallBack dPa_control_c::m_d_Light8PcallBack;
 
-u8 dPa_control_c::mStatus;
+DUSK_GAME_DATA u8 dPa_control_c::mStatus;
 
-Mtx dPa_control_c::mWindViewMatrix;
+DUSK_GAME_DATA Mtx dPa_control_c::mWindViewMatrix;
 
-dPa_particleTracePcallBack_c dPa_control_c::mParticleTracePCB;
+DUSK_GAME_DATA dPa_particleTracePcallBack_c dPa_control_c::mParticleTracePCB;
 
 dPa_control_c::dPa_control_c() {
 #if DEBUG

@@ -6,7 +6,7 @@
 class JKRHeap;
 
 struct cMl {
-    static JKRHeap* Heap;
+    static DUSK_GAME_DATA JKRHeap* Heap;
     static void init(JKRHeap*);
     static void* memalignB(int, u32);
     static void free(void*);

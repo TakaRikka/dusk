@@ -83,8 +83,8 @@ public:
     #endif
     static void setPauseTimer(s8 time) { nextPauseTimer = time; }
 
-    static s8 pauseTimer;
-    static s8 nextPauseTimer;
+    static DUSK_GAME_DATA s8 pauseTimer;
+    static DUSK_GAME_DATA s8 nextPauseTimer;
 
     #if DEBUG
     void onDebugPause() {
@@ -104,8 +104,8 @@ public:
     /* 0x1D4 */ u8 field_0x1d4;
 };
 
-extern dScnPly_env_HIO_c g_envHIO;
-extern dScnPly_reg_HIO_c g_regHIO;
+DUSK_GAME_EXTERN dScnPly_env_HIO_c g_envHIO;
+DUSK_GAME_EXTERN dScnPly_reg_HIO_c g_regHIO;
 
 #if DEBUG
 extern dScnPly_preset_HIO_c g_presetHIO;

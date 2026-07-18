@@ -74,12 +74,12 @@ void J3DCalcBBoardMtx(__REGISTER Mtx mtx) {
 	mtx[2][2] = z;
 }
 
-J3DTransformInfo const j3dDefaultTransformInfo = {
+DUSK_GAME_DATA J3DTransformInfo const j3dDefaultTransformInfo = {
     {1.0f, 1.0f, 1.0f}, {0, 0, 0}, {0.0f, 0.0f, 0.0f}};
 
-Vec const j3dDefaultScale = {1.0f, 1.0f, 1.0f};
+DUSK_GAME_DATA Vec const j3dDefaultScale = {1.0f, 1.0f, 1.0f};
 
-Mtx const j3dDefaultMtx = {
+DUSK_GAME_DATA Mtx const j3dDefaultMtx = {
     {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 0.0f}};
 
 void J3DCalcYBBoardMtx(Mtx mtx) {
@@ -610,7 +610,7 @@ void J3DPSMtxArrayConcat(Mtx mA, Mtx mB, Mtx mAB, u32 count) {
 }
 #endif // clang-format on
 
-f32 const PSMulUnit01[] = {
+DUSK_GAME_DATA f32 const PSMulUnit01[] = {
     0.0f,
     -1.0f,
 };

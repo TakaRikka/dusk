@@ -8,9 +8,9 @@
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_k_wmark.h"
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 
-const EffParamProc daAlink_c::m_fEffParamProc[] = {
+DUSK_GAME_DATA const EffParamProc daAlink_c::m_fEffParamProc[] = {
     &daAlink_c::setEffectFrontRollParam,
     &daAlink_c::setEffectSlipParam,
     &daAlink_c::setEffectSmallLandParam,

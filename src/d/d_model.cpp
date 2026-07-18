@@ -5,6 +5,10 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "d/d_com_inf_game.h"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 void dMdl_c::draw() {
     j3dSys.setVtxPos(mpModelData->getVtxPosArray(), mpModelData->getVtxNum());
     j3dSys.setVtxNrm(mpModelData->getVtxNrmArray(), mpModelData->getNrmNum());
@@ -97,7 +101,7 @@ dMdl_c* dMdl_mng_c::entry(J3DModelData* i_modelData, u16 i_materialId, dKy_tevst
     return model;
 }
 
-dMdl_mng_c* dMdl_mng_c::m_myObj;
+DUSK_GAME_DATA dMdl_mng_c* dMdl_mng_c::m_myObj;
 
 void dMdl_mng_c::create() {
     m_myObj = JKR_NEW dMdl_mng_c();

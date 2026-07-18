@@ -142,11 +142,11 @@ DynamicModuleControl::DynamicModuleControl(char const* name) {
 }
 #endif
 
-u32 DynamicModuleControl::sAllocBytes;
+DUSK_GAME_DATA u32 DynamicModuleControl::sAllocBytes;
 
-JKRArchive* DynamicModuleControl::sArchive;
+DUSK_GAME_DATA JKRArchive* DynamicModuleControl::sArchive;
 
-JKRFileCache* DynamicModuleControl::sFileCache;
+DUSK_GAME_DATA JKRFileCache* DynamicModuleControl::sFileCache;
 
 static const char* baseString = "Base";
 

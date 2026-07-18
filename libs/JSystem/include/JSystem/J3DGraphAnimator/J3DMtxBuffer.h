@@ -62,10 +62,10 @@ public:
         mpNrmMtxArr[1][mCurrentViewNo] = tmp;
     }
 
-    static Mtx sNoUseDrawMtx;
-    static Mtx33 sNoUseNrmMtx;
-    static Mtx* sNoUseDrawMtxPtr;
-    static Mtx33* sNoUseNrmMtxPtr;
+    static DUSK_GAME_DATA Mtx sNoUseDrawMtx;
+    static DUSK_GAME_DATA Mtx33 sNoUseNrmMtx;
+    static DUSK_GAME_DATA Mtx* sNoUseDrawMtxPtr;
+    static DUSK_GAME_DATA Mtx33* sNoUseNrmMtxPtr;
 
     /* 0x00 */ J3DJointTree* mJointTree;
     /* 0x04 */ u8* mpScaleFlagArr;

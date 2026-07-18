@@ -3,3 +3,4 @@ build/
 app/build/
 local.properties
 app/src/main/jniLibs/*/*.so
+app/src/main/bundled_mods/

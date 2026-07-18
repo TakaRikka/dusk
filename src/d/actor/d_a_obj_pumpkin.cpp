@@ -17,7 +17,7 @@
 #include <cstring>
 #endif
 
-const daObj_Pumpkin_HIOParam daObj_Pumpkin_Param_c::m = {
+DUSK_GAME_DATA const daObj_Pumpkin_HIOParam daObj_Pumpkin_Param_c::m = {
     0.0f,
     -5.0f,
     1.4f,

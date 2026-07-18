@@ -892,7 +892,7 @@ struct J2DBlendInfo {
     /* 0x3 */ u8 mOp;
 };
 
-extern const J2DBlendInfo j2dDefaultBlendInfo;
+DUSK_GAME_EXTERN const J2DBlendInfo j2dDefaultBlendInfo;
 
 /**
  * @ingroup jsystem-j2d

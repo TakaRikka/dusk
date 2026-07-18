@@ -3,7 +3,7 @@
 
 #include <gx.h>
 
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 enum JUTTransparency { UNK0, UNK1 };
 

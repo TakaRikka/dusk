@@ -14,7 +14,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "dusk/version.hpp"
 
 dFile_info_c::dFile_info_c(JKRArchive* i_archive, u8 param_1) {

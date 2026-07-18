@@ -5,7 +5,7 @@
 #include "JSystem/JAudio2/JAIAudible.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 #include <cstdint>
 
 class JAISound;

@@ -19,7 +19,7 @@ public:
     u8 getSwNo2() { return fopAcM_GetParamBit(this, 8, 8); }
     u8 getSwNo3() { return fopAcM_GetParamBit(this, 16, 8); }
 
-    static daTagMagne_c* mTagMagne;
+    static DUSK_GAME_DATA daTagMagne_c* mTagMagne;
 
     /* 0x568 */ u8 mSwNo1;
     /* 0x569 */ u8 mSwNo2;

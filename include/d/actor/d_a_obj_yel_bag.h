@@ -24,7 +24,7 @@ class daObj_YBag_Param_c {
 public:
     virtual ~daObj_YBag_Param_c() {}
 
-    static daObj_YBag_HIOParam const m;
+    static DUSK_GAME_DATA daObj_YBag_HIOParam const m;
 };
 
 #if DEBUG
@@ -109,8 +109,8 @@ public:
     void setWaterPrtcl();
     void setHamonPrtcl();
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 };
 
 STATIC_ASSERT(sizeof(daObj_YBag_c) == 0xa3c);

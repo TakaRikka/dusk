@@ -15,7 +15,7 @@
 #include "d/d_bg_s_capt_poly.h"
 
 #if TARGET_PC
-#include "dusk/offset_ptr.h"
+#include "helpers/offset_ptr.h"
 #include "dusk/settings.h"
 #endif
 

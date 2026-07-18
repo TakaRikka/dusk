@@ -10,7 +10,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-const daNpc_Uri_HIOParam daNpc_Uri_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Uri_HIOParam daNpc_Uri_Param_c::m = {
     200.0f,   // attention_offset
     -3.0f,    // gravity
     1.0f,     // scale
@@ -190,7 +190,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-const char* daNpc_Uri_c::mCutNameList[7] = {
+DUSK_GAME_DATA const char* daNpc_Uri_c::mCutNameList[7] = {
     "",
     "CONVERSATION",
     "START_CARRY_TUTORIAL",
@@ -200,7 +200,7 @@ const char* daNpc_Uri_c::mCutNameList[7] = {
     "MEETING_AGAIN",
 };
 
-daNpc_Uri_c::cutFunc DUSK_CONST daNpc_Uri_c::mCutList[7] = {
+DUSK_GAME_DATA daNpc_Uri_c::cutFunc DUSK_CONST daNpc_Uri_c::mCutList[7] = {
     NULL,
     &daNpc_Uri_c::cutConversation,
     &daNpc_Uri_c::cutStartCarryTutorial,

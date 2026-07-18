@@ -15,7 +15,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_bbmdFileName = "x_oiltubo_00b.bmd";
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_bbtkFileName = "x_oiltubo_00b.btk";
 
-dCcD_SrcCyl DUSK_CONST daObj_Oiltubo_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl DUSK_CONST daObj_Oiltubo_c::mCcDCyl = {
     daObj_Oiltubo_c::mCcDObjInfo,
     {
         {
@@ -41,7 +41,7 @@ int daObj_Oiltubo_c::create() {
     return phase_state;
 }
 
-const dCcD_SrcGObjInf daObj_Oiltubo_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daObj_Oiltubo_c::mCcDObjInfo = {
     {0x0, {{0x0, 0x0, 0x0}, {0xd8fbfdff, 0x1F}, 0x79}},  // mObj
     {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt
     {dCcD_SE_NONE, 0x2, 0x0, 0x0, 0x1},                  // mGObjTg

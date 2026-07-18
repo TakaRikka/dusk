@@ -45,7 +45,7 @@ int daBmWindow_c::CreateHeap() {
     return mModel != NULL ? 1 : 0;
 }
 
-dCcD_SrcGObjInf const daBmWindow_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daBmWindow_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0xd8fafdbf, 0x11}, {0}}},
     {1, 0, 0, 0, 0},
     {0xa, 0, 0, 0, 0xa6},
@@ -122,7 +122,7 @@ int daBmWindow_c::Execute(Mtx** param_1) {
 
 static daBmWindow_HIO_c l_HIO;
 
-dCcD_SrcCyl daBmWindow_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daBmWindow_c::mCcDCyl = {
     daBmWindow_c::mCcDObjInfo,
     {
         {

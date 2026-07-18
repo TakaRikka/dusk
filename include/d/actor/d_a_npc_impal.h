@@ -12,7 +12,7 @@ class daNpcImpal_Param_c {
 public:
     virtual ~daNpcImpal_Param_c() {}
 
-    static const daNpcImpal_HIOParam m;
+    static DUSK_GAME_DATA const daNpcImpal_HIOParam m;
 };
 
 #if DEBUG
@@ -121,7 +121,7 @@ public:
     inline void setLookMode(int i_lookMode);
     inline void deleteObstacle();
 
-    static EventFn mEvtSeqList[4];
+    static DUSK_GAME_DATA EventFn mEvtSeqList[4];
 
 private:
     /* 0xB48 */ Z2Creature mCreatureSound;

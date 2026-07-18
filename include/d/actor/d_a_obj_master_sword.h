@@ -48,8 +48,8 @@ public:
     u8 getEventID() { return (fopAcM_GetParam(this) >> 0x10) & 0xFF; }
     u16 getFlagNo() { return fopAcM_GetParam(this) & 0xFFFF; }
 
-    static daObjMasterSword_Attr_c const mAttr;
-    static actionFunc ActionTable[];
+    static DUSK_GAME_DATA daObjMasterSword_Attr_c const mAttr;
+    static DUSK_GAME_DATA actionFunc ActionTable[];
 
 private:
     /* 0x568 */ J3DModel* mpModel;

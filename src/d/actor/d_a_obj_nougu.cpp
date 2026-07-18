@@ -9,7 +9,7 @@
 #include "d/actor/d_a_npc.h"
 #include "SSystem/SComponent/c_counter.h"
 
-dCcD_SrcSph daObj_Nougu_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daObj_Nougu_c::mCcDSph = {
     daNpcT_c::mCcDObjData,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}
@@ -18,7 +18,7 @@ dCcD_SrcSph daObj_Nougu_c::mCcDSph = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_resName = "Jagar4";
 
-const daObj_Nougu_HIOParam daObj_Nougu_Param_c::m = {
+DUSK_GAME_DATA const daObj_Nougu_HIOParam daObj_Nougu_Param_c::m = {
     0.0f,
     -3.0f,
     1.0f,

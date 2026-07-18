@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #ifdef __REVOLUTION_SDK__
 #include <revolution.h>
 #else
@@ -27,16 +27,16 @@ struct CallbackObject {
     /* 0x10 */ int param_4;
 };
 
-OSMessageQueue JUTException::sMessageQueue = {0};
+DUSK_GAME_DATA OSMessageQueue JUTException::sMessageQueue = {0};
 
 STATIC_ASSERT(sizeof(CallbackObject) == 0x14);
 static CallbackObject exCallbackObject;
 
-JSUList<JUTException::JUTExMapFile> JUTException::sMapFileList(false);
+DUSK_GAME_DATA JSUList<JUTException::JUTExMapFile> JUTException::sMapFileList(false);
 
 static OSTime c3bcnt[4] = {0, 0, 0, 0};
 
-const char* JUTException::sCpuExpName[17] = {
+DUSK_GAME_DATA const char* JUTException::sCpuExpName[17] = {
     "SYSTEM RESET",
     "MACHINE CHECK",
     "DSI",
@@ -56,11 +56,11 @@ const char* JUTException::sCpuExpName[17] = {
     "FLOATING POINT",
 };
 
-JUTException* JUTException::sErrorManager;
+DUSK_GAME_DATA JUTException* JUTException::sErrorManager;
 
-JUTExceptionUserCallback JUTException::sPreUserCallback;
+DUSK_GAME_DATA JUTExceptionUserCallback JUTException::sPreUserCallback;
 
-JUTExceptionUserCallback JUTException::sPostUserCallback;
+DUSK_GAME_DATA JUTExceptionUserCallback JUTException::sPostUserCallback;
 
 #if PLATFORM_GCN
 const int stack_size = 0x1C00;
@@ -100,7 +100,7 @@ JUTException* JUTException::create(JUTDirectPrint* directPrint) {
     return sErrorManager;
 }
 
-OSMessage JUTException::sMessageBuffer[1] = {0};
+DUSK_GAME_DATA OSMessage JUTException::sMessageBuffer[1] = {0};
 
 void* JUTException::run() {
 #ifdef TARGET_PC
@@ -140,15 +140,15 @@ void* JUTException::run() {
 #endif
 }
 
-void* JUTException::sConsoleBuffer;
+DUSK_GAME_DATA void* JUTException::sConsoleBuffer;
 
-u32 JUTException::sConsoleBufferSize;
+DUSK_GAME_DATA u32 JUTException::sConsoleBufferSize;
 
-JUTConsole* JUTException::sConsole;
+DUSK_GAME_DATA JUTConsole* JUTException::sConsole;
 
-u32 JUTException::msr;
+DUSK_GAME_DATA u32 JUTException::msr;
 
-u32 JUTException::fpscr;
+DUSK_GAME_DATA u32 JUTException::fpscr;
 
 void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, u32 param_4) {
 #ifndef TARGET_PC

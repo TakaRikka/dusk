@@ -68,9 +68,9 @@ void J3DDisplayListObj::callDL() const {
     GXCallDisplayList(mpDisplayList[0], mSize);
 }
 
-GDLObj J3DDisplayListObj::sGDLObj;
+DUSK_GAME_DATA GDLObj J3DDisplayListObj::sGDLObj;
 
-s32 J3DDisplayListObj::sInterruptFlag;
+DUSK_GAME_DATA s32 J3DDisplayListObj::sInterruptFlag;
 
 void J3DDisplayListObj::beginDL() {
     swapBuffer();

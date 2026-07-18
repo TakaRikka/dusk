@@ -102,7 +102,7 @@ public:
 
     static JUTProcBar* getManager() { return sManager; }
 
-    static JUTProcBar* sManager;
+    static DUSK_GAME_DATA JUTProcBar* sManager;
 
 private:
     /* 0x000 */ CTime mIdle;

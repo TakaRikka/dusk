@@ -148,14 +148,14 @@ int daObjSCannonTen_c::execute() {
     return 1;
 }
 
-const daObjSCannonTen_c::ExeProc daObjSCannonTen_c::s_exeProc[] = {
+DUSK_GAME_DATA const daObjSCannonTen_c::ExeProc daObjSCannonTen_c::s_exeProc[] = {
     &daObjSCannonTen_c::exeModeWait,
     &daObjSCannonTen_c::exeModeOrderEvt,
     &daObjSCannonTen_c::exeModeActionEvt,
     &daObjSCannonTen_c::exeModeEnd,
 };
 
-const daObjSCannonTen_c::ExeProc daObjSCannonTen_c::s_demoExeProc[][2] = {
+DUSK_GAME_DATA const daObjSCannonTen_c::ExeProc daObjSCannonTen_c::s_demoExeProc[][2] = {
     {&daObjSCannonTen_c::demoInitLinkIn, &daObjSCannonTen_c::demoExeLinkIn},
     {&daObjSCannonTen_c::demoInitSet, &daObjSCannonTen_c::demoExeSet},
     {&daObjSCannonTen_c::demoInitMove, &daObjSCannonTen_c::demoExeMove},

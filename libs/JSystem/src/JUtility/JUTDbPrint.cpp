@@ -16,7 +16,7 @@ JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {
     mVisible = true;
 }
 
-JUTDbPrint* JUTDbPrint::sDebugPrint;
+DUSK_GAME_DATA JUTDbPrint* JUTDbPrint::sDebugPrint;
 
 JUTDbPrint* JUTDbPrint::start(JUTFont* pFont, JKRHeap* pHeap) {
     if (sDebugPrint == NULL) {

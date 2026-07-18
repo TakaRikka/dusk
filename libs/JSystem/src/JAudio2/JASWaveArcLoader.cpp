@@ -9,9 +9,9 @@
 #include <os.h>
 #include <stdint.h>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
-JASHeap* JASWaveArcLoader::sAramHeap;
+DUSK_GAME_DATA JASHeap* JASWaveArcLoader::sAramHeap;
 
 JASHeap* JASWaveArcLoader::getRootHeap() {
     if (JASWaveArcLoader::sAramHeap) {
@@ -20,7 +20,7 @@ JASHeap* JASWaveArcLoader::getRootHeap() {
     return JASKernel::getAramHeap();
 }
 
-char JASWaveArcLoader::sCurrentDir[DIR_MAX] = "/AudioRes/Waves/";
+DUSK_GAME_DATA char JASWaveArcLoader::sCurrentDir[DIR_MAX] = "/AudioRes/Waves/";
 
 void JASWaveArcLoader::setCurrentDir(char const* dir) {
     JUT_ASSERT(40, std::strlen(dir) < DIR_MAX - 1);

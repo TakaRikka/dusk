@@ -13,7 +13,7 @@
 #include "d/actor/d_a_bg_obj.h"
 #include "d/actor/d_a_set_bgobj.h"
 #include "d/d_s_play.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static const char* getBmdName(int param_0, int param_1) {
     static char l_bmdName[16];
@@ -501,14 +501,14 @@ static dCcD_SrcTri l_tri_src = {
 
 static DUSK_CONST char* l_specName = "spec.dat";
 
-createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
+DUSK_GAME_DATA createHeapFunc daBgObj_c::mCreateHeapFunc[] = {
     &daBgObj_c::CreateHeapType0,
     &daBgObj_c::CreateHeapType1,
     &daBgObj_c::CreateHeapType1,
     &daBgObj_c::CreateHeapType1,
 };
 
-createInitFunc daBgObj_c::mCreateInitFunc[] = {
+DUSK_GAME_DATA createInitFunc daBgObj_c::mCreateInitFunc[] = {
     &daBgObj_c::CreateInitType0,
     &daBgObj_c::CreateInitType1,
     &daBgObj_c::CreateInitType1,
@@ -519,14 +519,14 @@ int daBgObj_c::Create() {
     return (this->*mCreateInitFunc[mSpecData.mSpecType])();
 }
 
-executeFunc daBgObj_c::mExecuteFunc[] = {
+DUSK_GAME_DATA executeFunc daBgObj_c::mExecuteFunc[] = {
     &daBgObj_c::ExecuteType0,
     &daBgObj_c::ExecuteType1,
     &daBgObj_c::ExecuteType1,
     &daBgObj_c::ExecuteType1,
 };
 
-tgSetFunc daBgObj_c::mTgSetFunc[] = {
+DUSK_GAME_DATA tgSetFunc daBgObj_c::mTgSetFunc[] = {
     &daBgObj_c::set_tri_0, &daBgObj_c::set_tri_1, &daBgObj_c::set_cyl_0,
     &daBgObj_c::set_tri_2, &daBgObj_c::set_tri_3,
 };

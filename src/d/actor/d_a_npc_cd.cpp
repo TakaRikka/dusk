@@ -160,7 +160,7 @@ static anmTblPrm const l_bckTbl_W[10] = {
     {"Wspcial_l", 7}, {"Wspcial_l", 8}, {"Wspcial_l", 3}, {"Wspcial_l", 4}, {"Wspcial_l", 5},
 };
 
-dCcD_SrcCyl const daNpcCd_c::m_cylDat = {
+DUSK_GAME_DATA dCcD_SrcCyl const daNpcCd_c::m_cylDat = {
     {
         {0x0, {{0x0, 0x0, 0x0}, {0, 0}, 0x79}},  // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},      // mGObjAt
@@ -346,7 +346,7 @@ static anmTblPrm const l_bmdTWTbl[30] = {
     {l_resWGNa2[1], 3}, {l_resWANb2[1], 3},
 };
 
-daNpcCd_HIO_c l_Cd_HIO;
+DUSK_GAME_DATA daNpcCd_HIO_c l_Cd_HIO;
 
 int daNpcCd_c::setAttention(int i_idx) {
     static cXyz const a_eyeOfsTbl[30] = {

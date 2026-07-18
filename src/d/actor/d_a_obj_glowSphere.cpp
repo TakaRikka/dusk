@@ -22,14 +22,14 @@ static DUSK_CONSTEXPR cull_box l_cull_box = {
     {30.0f, 60.0f, 30.0f}
 };
 
-const dCcD_SrcGObjInf daGlwSph_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daGlwSph_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x10000, 0x11}, {0x19}}},
     {dCcD_SE_SWORD, 0, 0, 0, 0x0},
     {dCcD_SE_STONE, 0, 0, 0, 0x2},
     {0},
 };
 
-dCcD_SrcSph daGlwSph_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daGlwSph_c::mCcDSph = {
     daGlwSph_c::mCcDObjInfo,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph
@@ -45,7 +45,7 @@ static GXColor l_envColor[] = {
     /* Blue   */ {0x00, 0x32, 0xFF, 0xFF},
 };
 
-_GlSph_Mng_c daGlwSph_c::mSphMng;
+DUSK_GAME_DATA _GlSph_Mng_c daGlwSph_c::mSphMng;
 
 _GlSph_Mng_c& daGlwSph_c::getSphMng() {
     return mSphMng;
@@ -415,9 +415,9 @@ BOOL _GlSph_Mng_c::_chkAllGet_main() {
     return TRUE;
 }
 
-u16 _GlSph_Mng_c::mSphSe;
+DUSK_GAME_DATA u16 _GlSph_Mng_c::mSphSe;
 
-s16 _GlSph_Mng_c::mSeClrTmr;
+DUSK_GAME_DATA s16 _GlSph_Mng_c::mSeClrTmr;
 
 void _GlSph_Mng_c::SphSeProc() {
     if (mSeClrTmr > 0) {

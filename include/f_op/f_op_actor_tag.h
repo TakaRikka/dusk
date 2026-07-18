@@ -7,6 +7,6 @@ void fopAcTg_ActorQTo(create_tag_class* i_createTag);
 int fopAcTg_Init(create_tag_class* i_createTag, void* i_data);
 int fopAcTg_ToActorQ(create_tag_class* i_createTag);
 
-extern node_list_class g_fopAcTg_Queue;
+DUSK_GAME_EXTERN node_list_class g_fopAcTg_Queue;
 
 #endif

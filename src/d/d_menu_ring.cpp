@@ -30,6 +30,7 @@
 #include <cstdio>
 
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
 #include "dusk/game_clock.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/settings.h"

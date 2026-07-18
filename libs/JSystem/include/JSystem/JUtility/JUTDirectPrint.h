@@ -33,10 +33,10 @@ public:
     static JUTDirectPrint* getManager() { return sDirectPrint; }
 
 private:
-    static u8 sAsciiTable[128];
-    static u32 sFontData[64];
-    static u32 sFontData2[77];
-    static JUTDirectPrint* sDirectPrint;
+    static DUSK_GAME_DATA u8 sAsciiTable[128];
+    static DUSK_GAME_DATA u32 sFontData[64];
+    static DUSK_GAME_DATA u32 sFontData2[77];
+    static DUSK_GAME_DATA JUTDirectPrint* sDirectPrint;
     static u8 sDirectPrint_padding[4 /* padding */];
 
 private:

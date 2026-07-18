@@ -75,9 +75,9 @@ JKRADCommand* JKRDvdAramRipper::loadToAram_Async(JKRDvdFile* dvdFile, u32 addres
     return command;
 }
 
-JSUList<JKRADCommand> JKRDvdAramRipper::sDvdAramAsyncList;
+DUSK_GAME_DATA JSUList<JKRADCommand> JKRDvdAramRipper::sDvdAramAsyncList;
 
-bool JKRDvdAramRipper::errorRetry = true;
+DUSK_GAME_DATA bool JKRDvdAramRipper::errorRetry = true;
 
 JKRADCommand* JKRDvdAramRipper::callCommand_Async(JKRADCommand* command) {
     s32 compression;
@@ -228,7 +228,7 @@ JKRADCommand::~JKRADCommand() {
 
 static OSMutex decompMutex;
 
-u32 JKRDvdAramRipper::sSZSBufferSize = 0x00000400;
+DUSK_GAME_DATA u32 JKRDvdAramRipper::sSZSBufferSize = 0x00000400;
 
 static u8* szpBuf;
 

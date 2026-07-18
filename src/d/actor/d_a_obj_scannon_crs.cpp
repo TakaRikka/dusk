@@ -267,7 +267,7 @@ void daSCannonCrs_c::exeModeWarpEvt(daMidna_c* i_midna_p) {
 
 void daSCannonCrs_c::exeModeEnd(daMidna_c* i_midna_p) {}
 
-void (daSCannonCrs_c::*daSCannonCrs_c::s_exeProc[])(daMidna_c*) = {
+DUSK_GAME_DATA void (daSCannonCrs_c::*daSCannonCrs_c::s_exeProc[])(daMidna_c*) = {
     &daSCannonCrs_c::exeModeWait,
     &daSCannonCrs_c::exeModePreWait,
     &daSCannonCrs_c::exeModeOrderEvt,

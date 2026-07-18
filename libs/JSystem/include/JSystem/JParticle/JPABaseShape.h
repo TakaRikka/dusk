@@ -63,13 +63,13 @@ public:
     JPABaseShape(u8 const*, JKRHeap*);
     void setGX(JPAEmitterWorkData*) const;
 
-    static GXBlendMode st_bm[3];
-    static GXBlendFactor st_bf[10];
-    static GXLogicOp st_lo[16];
-    static GXCompare st_c[8];
-    static GXAlphaOp st_ao[4];
-    static GXTevColorArg st_ca[6][4];
-    static GXTevAlphaArg st_aa[2][4];
+    static DUSK_GAME_DATA GXBlendMode st_bm[3];
+    static DUSK_GAME_DATA GXBlendFactor st_bf[10];
+    static DUSK_GAME_DATA GXLogicOp st_lo[16];
+    static DUSK_GAME_DATA GXCompare st_c[8];
+    static DUSK_GAME_DATA GXAlphaOp st_ao[4];
+    static DUSK_GAME_DATA GXTevColorArg st_ca[6][4];
+    static DUSK_GAME_DATA GXTevAlphaArg st_aa[2][4];
 
     GXBlendMode getBlendMode() const { return st_bm[pBsd->mBlendModeCfg & 0x03]; }
     GXBlendFactor getBlendSrc() const { return st_bf[(pBsd->mBlendModeCfg >> 2) & 0x0F]; }

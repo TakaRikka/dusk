@@ -1031,7 +1031,7 @@ static int way_check(e_dn_class* i_this) {
     return 2;
 }
 
-int learn_check;
+DUSK_GAME_DATA int learn_check;
 
 static void* shot_s_sub(void* i_actor, void* i_data) {
     UNUSED(i_data);

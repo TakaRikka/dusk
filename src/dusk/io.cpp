@@ -5,8 +5,6 @@
 
 #include "dusk/io.hpp"
 
-using namespace dusk::io;
-
 #if _WIN32
 #define MODE_TYPE wchar_t
 #define MODE(val) L##val
@@ -23,7 +21,10 @@ using namespace dusk::io;
 #define _SH_DENYWR 0
 #endif
 
-static FILE* ThrowIfNotOpen(const FileStream& file) {
+namespace dusk::io {
+namespace {
+
+FILE* ThrowIfNotOpen(const FileStream& file) {
     if (!file.GetFileHandle()) {
         throw std::runtime_error("Invalid file handle!");
     }
@@ -31,14 +32,14 @@ static FILE* ThrowIfNotOpen(const FileStream& file) {
     return static_cast<FILE*>(file.GetFileHandle());
 }
 
-[[noreturn]] static void ThrowForError(int code) {
+[[noreturn]] void ThrowForError(int code) {
     if (code == 0) {
         throw std::system_error(std::make_error_code(std::errc::io_error));
     }
     throw std::system_error(std::make_error_code(static_cast<std::errc>(code)));
 }
 
-static FILE* OpenCore(const std::filesystem::path& path, const MODE_TYPE* mode, int shareFlag) {
+FILE* OpenCore(const std::filesystem::path& path, const MODE_TYPE* mode, int shareFlag) {
     FILE* file;
 
     int err;
@@ -59,12 +60,13 @@ static FILE* OpenCore(const std::filesystem::path& path, const MODE_TYPE* mode, 
     return file;
 }
 
-static FILE* OpenCore(const char* path, const MODE_TYPE* mode, int shareFlag) {
+FILE* OpenCore(const char* path, const MODE_TYPE* mode, int shareFlag) {
     return OpenCore(reinterpret_cast<const char8_t*>(path), mode, shareFlag);
 }
 
-FileStream::FileStream() noexcept : file(nullptr) {
-}
+}  // namespace
+
+FileStream::FileStream() noexcept : file(nullptr) {}
 
 FileStream::FileStream(FILE* file) : file(file) {
     if (!file) {
@@ -184,3 +186,5 @@ FILE* FileStream::ToInner() {
     file = nullptr;
     return handle;
 }
+
+}  // namespace dusk::io

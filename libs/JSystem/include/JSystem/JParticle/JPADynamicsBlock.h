@@ -4,7 +4,7 @@
 #include "JSystem/JGeometry.h"
 
 #include <types.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 struct JPAEmitterWorkData;
 

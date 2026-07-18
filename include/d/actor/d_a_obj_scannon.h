@@ -76,12 +76,12 @@ public:
     int getSw1() { return fopAcM_GetParamBit(this, 0, 8); }
     int getSw2() { return fopAcM_GetParamBit(this, 8, 8); }
 
-    static const demoTable_s s_demoTable[];
-    static void (daSCannon_c::*DUSK_CONST s_exeProc[])();
-    static void (daSCannon_c::*DUSK_CONST s_demoExeProc_WarpEnd[][2])();
-    static void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireTks[][2])();
-    static void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireFirst[][2])();
-    static void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireSecond[][2])();
+    static DUSK_GAME_DATA const demoTable_s s_demoTable[];
+    static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_exeProc[])();
+    static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_demoExeProc_WarpEnd[][2])();
+    static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireTks[][2])();
+    static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireFirst[][2])();
+    static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireSecond[][2])();
 
 private:
     /* 0x574 */ request_of_phase_process_class mZevPhase;

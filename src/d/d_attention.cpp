@@ -41,13 +41,13 @@ static bool padLockButton(s32 i_padNo) {
 }
 }  // namespace
 
-type_tbl_entry dAttention_c::loc_type_tbl[3] = {
+DUSK_GAME_DATA type_tbl_entry dAttention_c::loc_type_tbl[3] = {
     {fopAc_attn_LOCK_e, fopAc_AttnFlag_LOCK_e},
     {fopAc_attn_TALK_e, fopAc_AttnFlag_TALK_e},
     {fopAc_attn_BATTLE_e, fopAc_AttnFlag_BATTLE_e},
 };
 
-type_tbl_entry dAttention_c::act_type_tbl[5] = {
+DUSK_GAME_DATA type_tbl_entry dAttention_c::act_type_tbl[5] = {
     {fopAc_attn_SPEAK_e, fopAc_AttnFlag_SPEAK_e},
     {fopAc_attn_CARRY_e, fopAc_AttnFlag_CARRY_e},
     {fopAc_attn_DOOR_e, fopAc_AttnFlag_DOOR_e},
@@ -157,7 +157,7 @@ int dAttDraw_CallBack_c::execute(u16 param_0, J3DTransformInfo* transform) {
     return 1;
 }
 
-dAttDrawParam_c g_AttDwHIO;
+DUSK_GAME_DATA dAttDrawParam_c g_AttDwHIO;
 
 dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
     mpPlayer = i_player;
@@ -339,7 +339,7 @@ dAttList_c* dAttention_c::getActionBtnXY() {
     return NULL;
 }
 
-int dAttention_c::loc_type_num = 3;
+DUSK_GAME_DATA int dAttention_c::loc_type_num = 3;
 
 int dAttention_c::chkAttMask(u32 i_type, u32 i_mask) {
     int i;
@@ -375,13 +375,13 @@ static int check_event_condition(u32 i_attnType, u16 i_condition) {
     return false;
 }
 
-int dAttention_c::act_type_num = 5;
+DUSK_GAME_DATA int dAttention_c::act_type_num = 5;
 
-type_tbl_entry dAttention_c::chk_type_tbl[1] = {
+DUSK_GAME_DATA type_tbl_entry dAttention_c::chk_type_tbl[1] = {
     {fopAc_attn_CHECK_e, fopAc_AttnFlag_CHECK_e},
 };
 
-int dAttention_c::chk_type_num = 1;
+DUSK_GAME_DATA int dAttention_c::chk_type_num = 1;
 
 static bool attn_opt_hold = true;
 

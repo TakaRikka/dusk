@@ -19,7 +19,7 @@ class daObj_Bed_Param_c {
 public:
     virtual ~daObj_Bed_Param_c() {}
 
-    static daObj_Bed_HIOParam const m;
+    static DUSK_GAME_DATA daObj_Bed_HIOParam const m;
 };
 
 #if DEBUG

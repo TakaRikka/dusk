@@ -15,6 +15,7 @@
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
 #include "dusk/main.h"
+#include "dusk/os.h"
 #include "m_Do/m_Do_main.h"
 
 #include <aurora/lib/internal.hpp>

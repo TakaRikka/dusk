@@ -22,7 +22,7 @@ class daNpc_Post_Param_c {
 public:
     virtual ~daNpc_Post_Param_c() {}
 
-    static daNpc_Post_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Post_HIOParam const m;
 };
 
 #if DEBUG
@@ -153,8 +153,8 @@ public:
 
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
-    static cutFunc DUSK_CONST mCutList[2];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
 
 private:
     /* 0x0E40 */ mDoExt_McaMorfSO* mpFlagModelMorf;

@@ -60,11 +60,11 @@ public:
     u32 getPathID() { return fopAcM_GetParamBit(this, 0, 8); }
     u32 getSpeed() { return fopAcM_GetParamBit(this, 8, 4); }
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcGObjInf const mCcDObjInfo2;
-    static f32 const mSpeed[];
-    static dCcD_SrcSph mCcDSph;
-    static dCcD_SrcCps mCcDCps;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo2;
+    static DUSK_GAME_DATA f32 const mSpeed[];
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcCps mCcDCps;
 
 private:
     /* 0x05A0 */ request_of_phase_process_class mPhase;

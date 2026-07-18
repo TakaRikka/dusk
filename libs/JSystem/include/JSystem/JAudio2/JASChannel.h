@@ -166,10 +166,10 @@ public:
         u32 field_0x104;
     };
 
-    static OSMessageQueue sBankDisposeMsgQ;
-    static OSMessage sBankDisposeMsg[16];
-    static OSMessage sBankDisposeList[16];
-    static int sBankDisposeListSize;
+    static DUSK_GAME_DATA OSMessageQueue sBankDisposeMsgQ;
+    static DUSK_GAME_DATA OSMessage sBankDisposeMsg[16];
+    static DUSK_GAME_DATA OSMessage sBankDisposeList[16];
+    static DUSK_GAME_DATA int sBankDisposeListSize;
 };
 
 #endif /* JASCHANNEL_H */

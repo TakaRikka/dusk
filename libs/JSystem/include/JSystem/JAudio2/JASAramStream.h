@@ -4,7 +4,7 @@
 #include "JSystem/JAudio2/JASTaskThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include <dvd.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class JASChannel;
 
@@ -256,24 +256,24 @@ public:
      * Thread that will be sent DVD load commands.
      * This is the JASDvd thread in practice.
      */
-    static JASTaskThread* sLoadThread;
+    static DUSK_GAME_DATA JASTaskThread* sLoadThread;
 
     /**
      * Buffer used to read DVD data. Can store the size of an entire streamed audio block.
      */
-    static u8* sReadBuffer;
+    static DUSK_GAME_DATA u8* sReadBuffer;
 
     /**
      * Block size used by all streamed music in the game.
      * This is 0x2760 for TP.
      */
-    static u32 sBlockSize;
+    static DUSK_GAME_DATA u32 sBlockSize;
 
     /**
      * Maximum amount of output channels for all streamed music in the game.
      * This is 2 for TP (stereo).
      */
-    static u32 sChannelMax;
+    static DUSK_GAME_DATA u32 sChannelMax;
 };
 
 #endif /* JASARAMSTREAM_H */

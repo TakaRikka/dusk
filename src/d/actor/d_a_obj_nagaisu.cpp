@@ -40,7 +40,7 @@ int daObjNagaisu_c::createHeap() {
     return 1;
 }
 
-const int daObjNagaisu_c::REMOVE_ISU_IDX[] = {
+DUSK_GAME_DATA const int daObjNagaisu_c::REMOVE_ISU_IDX[] = {
     6,
     7,
     11,
@@ -50,7 +50,7 @@ const int daObjNagaisu_c::REMOVE_ISU_IDX[] = {
     29,
 };
 
-const dCcD_SrcCyl daObjIsuChild_c::s_CcDCyl = {
+DUSK_GAME_DATA const dCcD_SrcCyl daObjIsuChild_c::s_CcDCyl = {
     {
         {0, {{0, 0, 0}, {0x400020, 0x11}, 0}},
         {dCcD_SE_NONE, 0, 0, 0, 0},

@@ -32,8 +32,8 @@ public:
 #endif
     }
 
-    static JUTGraphFifo* sCurrentFifo;
-    static bool mGpStatus[5];
+    static DUSK_GAME_DATA JUTGraphFifo* sCurrentFifo;
+    static DUSK_GAME_DATA bool mGpStatus[5];
 
 private:
     /* 0x04 */ GXFifoObj* mFifo;

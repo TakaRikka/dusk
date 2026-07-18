@@ -14,8 +14,8 @@ public:
     /* 0x4 */ bool mPause;
 };
 
-extern dComIfGoat_info_c g_dComIfGoat_gameInfo;
-extern dComIfAc_info_c g_dComIfAc_gameInfo;
+DUSK_GAME_EXTERN dComIfGoat_info_c g_dComIfGoat_gameInfo;
+DUSK_GAME_EXTERN dComIfAc_info_c g_dComIfAc_gameInfo;
 
 inline bool dComIfA_PauseCheck() {
     return g_dComIfAc_gameInfo.mPause;

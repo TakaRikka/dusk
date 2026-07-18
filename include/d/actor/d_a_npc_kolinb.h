@@ -12,7 +12,7 @@ class daNpc_Kolinb_Param_c {
 public:
     virtual ~daNpc_Kolinb_Param_c() {}
 
-    static daNpc_Kolinb_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Kolinb_HIOParam const m;
 };
 
 #if DEBUG
@@ -150,8 +150,8 @@ public:
     s32 getBackboneJointNo() { return mType == 2 ? ZRCB_JNT_BACKBONE1 : KOLINB_JNT_BACKBONE1; }
     s32 getNeckJointNo() { return mType == 2 ? ZRCB_JNT_NECK : KOLINB_JNT_NECK; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[7];
-    static cutFunc DUSK_CONST mCutList[7];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[7];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[7];
 
     u32 getFlowNodeNo() {
         u16 nodeNo = home.angle.x;

@@ -55,7 +55,7 @@ public:
     };
     #endif
 
-    static const daObjLndRope_Attr_c mAttr;
+    static DUSK_GAME_DATA const daObjLndRope_Attr_c mAttr;
     static const daObjLndRope_Hio_c M_Hio;
 
 private:

@@ -141,7 +141,7 @@ enum Type {
     /* 0x4 */ TYPE_4,
 };
 
-const daNpc_Aru_HIOParam daNpc_Aru_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Aru_HIOParam daNpc_Aru_Param_c::m = {
     220.0f,
     -3.0f,
     1.0f,
@@ -345,7 +345,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {11, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Aru_c::mCutNameList[7] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Aru_c::mCutNameList[7] = {
     "",
     "RIDEON_HORSE",
     "GOTO_BULLRUNNING_STAGE",
@@ -355,7 +355,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Aru_c::mCutNameList[7] = {
     "NO_ENTRANCE",
 };
 
-daNpc_Aru_c::cutFunc DUSK_CONST daNpc_Aru_c::mCutList[7] = {
+DUSK_GAME_DATA daNpc_Aru_c::cutFunc DUSK_CONST daNpc_Aru_c::mCutList[7] = {
     NULL,
     &daNpc_Aru_c::cutRideOnHorse,
     &daNpc_Aru_c::cutGotoBullRunningStage,

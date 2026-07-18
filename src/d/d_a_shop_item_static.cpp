@@ -15,7 +15,7 @@ cXyz* daShopItem_c::getPosP() {
     return &current.pos;
 }
 
-ResourceData const daShopItem_c::mData[23] = {
+DUSK_GAME_DATA ResourceData const daShopItem_c::mData[23] = {
     {"B_mD_sold", 3, -1, -1, -1, -1, -1, -1, 0.0f, 1.0f, 0, {0, -0x8000, 0}, 0, 0, 0, 0, -1, -1},
     {"B_mD_oil", 3, -1, -1, -1, -1, -1, -1, 0.0f, 1.0f, 0, {0, 0, 0}, 0, 0, 0, 0, -1, -1},
     {"O_mD_red", 3, -1, -1, -1, -1, -1, -11, 0.0f, 1.0f, 0, {0, 0, 0}, 0, 0, 0, 0, -1, -1},

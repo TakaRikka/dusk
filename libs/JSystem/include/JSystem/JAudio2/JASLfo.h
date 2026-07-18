@@ -19,7 +19,7 @@ struct JASLfo {
 
     static void updateFreeRun(f32 param_0) { sFreeRunLfo.incCounter(param_0); }
 
-    static JASLfo sFreeRunLfo;
+    static DUSK_GAME_DATA JASLfo sFreeRunLfo;
 
     /* 0x00 */ u32 field_0x0;
     /* 0x04 */ u32 field_0x4;

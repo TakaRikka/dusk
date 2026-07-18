@@ -23,7 +23,7 @@ class daNpc_Hanjo_Param_c {
 public:
     virtual ~daNpc_Hanjo_Param_c() {}
 
-    static const daNpc_Hanjo_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Hanjo_HIOParam m;
 };
 
 #if DEBUG
@@ -217,10 +217,10 @@ public:
 
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
 
-    static dCcD_SrcGObjInf const mStoneCcDObjInfo;
-    static char DUSK_CONST* DUSK_CONST mCutNameList[6];
-    static cutFunc DUSK_CONST mCutList[6];
-    static dCcD_SrcSph DUSK_CONST mStoneCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mStoneCcDObjInfo;
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[6];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[6];
+    static DUSK_GAME_DATA dCcD_SrcSph DUSK_CONST mStoneCcDSph;
 private:
     /* 0x0E40 */ NPC_HANJO_HIO_CLASS* mpHIO;
     /* 0x0E44 */ J3DModel* mModel1;

@@ -21,6 +21,7 @@ struct Uniforms {
     bias: f32,                // shadow-map depth bias (reversed-depth units)
     size: vec2f,              // shadow map size in texels
     inv_size: vec2f,
+    edge_fade_width: f32,
     strength: f32,            // final darkening amount, horizon fade baked in
     pcf_taps: f32,            // 0 = single tap, 1 = 3x3, 2 = 5x5
     contact_enabled: f32,
@@ -28,7 +29,6 @@ struct Uniforms {
     contact_length: f32,      // view-space march distance
     debug_mode: u32,          // 0 = composite; nonzero modes are diagnostic views
     _pad0: f32,
-    _pad1: f32,
 }
 
 @group(0) @binding(0) var scene_depth: texture_2d<f32>;
@@ -90,6 +90,16 @@ fn sample_shadow_pcf(light_uv: vec2f, receiver: f32) -> f32 {
         }
     }
     return sum / count;
+}
+
+// Softly fades shadows out over a small band near the shadow-map edge so receivers do not
+// disappear abruptly when they leave the light's coverage area.
+fn shadow_edge_fade(light_uv: vec2f) -> f32 {
+    let edge_texels = uniforms.edge_fade_width;
+    let edge_uv = edge_texels * max(uniforms.inv_size.x, uniforms.inv_size.y);
+    let distance_to_edge = min(min(light_uv.x, 1.0 - light_uv.x), min(light_uv.y, 1.0 - light_uv.y));
+    // Avoid division by zero when the fade width is zero (no fade).
+    return select(1.0, saturate(distance_to_edge / edge_uv), edge_uv > 0.0);
 }
 
 fn scene_depth_at(uv: vec2f) -> f32 {
@@ -240,6 +250,7 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4f {
     var occlusion = 0.0;
     if in_shadow_bounds {
         occlusion = sample_shadow_pcf(light_uv, receiver);
+        occlusion *= shadow_edge_fade(light_uv);
     }
 
     if uniforms.debug_mode == 3u {

@@ -388,7 +388,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Wrestler";
 
 static NPC_WRESTLER_HIO_CLASS l_HIO;
 
-const daNpcWrestler_HIOParam daNpcWrestler_Param_c::m = {
+DUSK_GAME_DATA const daNpcWrestler_HIOParam daNpcWrestler_Param_c::m = {
     220.0f,
     -3.0f,
     1.0f,
@@ -646,7 +646,7 @@ void daNpcWrestler_HIO_c::genMessage(JORMContext* ctext) {
 }
 #endif
 
-daNpcWrestler_c::EventFn DUSK_CONST daNpcWrestler_c::mEvtSeqList[7] = {
+DUSK_GAME_DATA daNpcWrestler_c::EventFn DUSK_CONST daNpcWrestler_c::mEvtSeqList[7] = {
     NULL,
     &daNpcWrestler_c::EvCut_grDSEntry,
     &daNpcWrestler_c::EvCut_grDSEntry2,

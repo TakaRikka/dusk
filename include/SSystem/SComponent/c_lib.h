@@ -102,6 +102,6 @@ void MtxPosition(cXyz DUSK_CONST*, cXyz*);
 void MtxPush(void);
 void MtxPull(void);
 
-extern Mtx* calc_mtx;
+DUSK_GAME_EXTERN Mtx* calc_mtx;
 
 #endif

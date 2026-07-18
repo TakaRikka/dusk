@@ -24,6 +24,6 @@ public:
     /* 0x1B0 */ scene_tag_class scene_tag;
 };
 
-extern leafdraw_method_class g_fopScn_Method;
+DUSK_GAME_EXTERN leafdraw_method_class g_fopScn_Method;
 
 #endif

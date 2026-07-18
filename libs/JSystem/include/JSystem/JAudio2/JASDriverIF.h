@@ -24,11 +24,11 @@ namespace JASDriver {
     void DSPSyncCallback();
     void updateDacCallback();
 
-    extern JASCallbackMgr sDspSyncCallback;
-    extern JASCallbackMgr sSubFrameCallback;
-    extern JASCallbackMgr sUpdateDacCallback;
-    extern u16 MAX_MIXERLEVEL;
-    extern u32 JAS_SYSTEM_OUTPUT_MODE;
+    DUSK_GAME_EXTERN JASCallbackMgr sDspSyncCallback;
+    DUSK_GAME_EXTERN JASCallbackMgr sSubFrameCallback;
+    DUSK_GAME_EXTERN JASCallbackMgr sUpdateDacCallback;
+    DUSK_GAME_EXTERN u16 MAX_MIXERLEVEL;
+    DUSK_GAME_EXTERN u32 JAS_SYSTEM_OUTPUT_MODE;
 };
 
 inline void JAISetOutputMode(u32 mode) {

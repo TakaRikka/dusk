@@ -2,7 +2,7 @@ include_guard(GLOBAL)
 
 get_filename_component(_SYMBOL_MANIFEST_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
 
-set(_SYMGEN_VERSION "1.1.1")
+set(_SYMGEN_VERSION "1.2.3")
 set(_SYMGEN_RELEASE_BASE_URL "https://github.com/encounter/symgen/releases/download/v${_SYMGEN_VERSION}")
 set(SYMGEN_PATH "" CACHE FILEPATH "Path to a symgen executable; empty downloads the pinned release")
 mark_as_advanced(SYMGEN_PATH)
@@ -108,18 +108,21 @@ function(setup_symbol_manifest target)
 
     if (WIN32)
         set(_input --pdb "$<TARGET_PDB_FILE:${target}>")
-        set(_out "$<TARGET_FILE_DIR:${target}>/dusklight.symdb")
     else ()
         set(_input --binary "$<TARGET_FILE:${target}>")
-        if (APPLE)
-            set(_out "$<TARGET_BUNDLE_CONTENT_DIR:${target}>/Resources/dusklight.symdb")
-        else ()
-            set(_out "$<TARGET_FILE_DIR:${target}>/dusklight.symdb")
-        endif ()
     endif ()
 
+    if (APPLE)
+        # Room for the load command `symgen manifest --embed` inserts post-link.
+        target_link_options(${target} PRIVATE "LINKER:-headerpad,0x200")
+    endif ()
+
+    # The manifest is embedded into the image as a new section, located at runtime through
+    # the descriptor manifest.cpp reserves. On Apple platforms this command must stay
+    # attached before the ad-hoc codesign POST_BUILD command: the patch invalidates any
+    # existing signature.
     add_custom_command(TARGET ${target} POST_BUILD
-            COMMAND "${SYMGEN_EXE}" manifest ${_input} --out "${_out}"
-            COMMENT "Generating symbol manifest"
+            COMMAND "${SYMGEN_EXE}" manifest ${_input} --embed "$<TARGET_FILE:${target}>"
+            COMMENT "Embedding symbol manifest"
             VERBATIM)
 endfunction()

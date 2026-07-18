@@ -62,11 +62,11 @@ public:
     int getModelType() { return fopAcM_GetParamBit(this, 20, 4); }
     int getHankei2() { return fopAcM_GetParamBit(this, 24, 8); }
 
-    static const dCcD_SrcGObjInf mCcDObjInfo;
-    static const dCcD_SrcGObjInf mCcDObjInfo2;
-    static const f32 mSpeed[16];
-    static dCcD_SrcSph mCcDSph;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo2;
+    static DUSK_GAME_DATA const f32 mSpeed[16];
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;

@@ -8,8 +8,8 @@
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTReport.h"
 
-J3DPacket* l_drawPacketList[1000];
-int l_drawPacketListNum;
+DUSK_GAME_DATA J3DPacket* l_drawPacketList[1000];
+DUSK_GAME_DATA int l_drawPacketListNum;
 
 J3DPacket* dDbVw_setDrawPacketList(J3DPacket* i_packet, int i_bufferType) {
     if (i_packet == NULL) {

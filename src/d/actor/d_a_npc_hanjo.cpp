@@ -15,7 +15,7 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static DUSK_CONSTEXPR int l_bmdData[4][2] = {
     {14, 1}, {26, 2},
@@ -121,7 +121,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},  {-1, 0, 0},  {8, -1, 0},  {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0},  {9, -1, 0},
     {-1, 0, 0},  {-1, 0, 0},  {-1, 0, 0}};
 
-char DUSK_CONST* DUSK_CONST daNpc_Hanjo_c::mCutNameList[6] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Hanjo_c::mCutNameList[6] = {
     "",
     "CONVERSATION_ABOUT_SARU",
     "CONVERSATION",
@@ -130,7 +130,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Hanjo_c::mCutNameList[6] = {
     "DIVE",
 };
 
-daNpc_Hanjo_c::cutFunc DUSK_CONST daNpc_Hanjo_c::mCutList[6] = {
+DUSK_GAME_DATA daNpc_Hanjo_c::cutFunc DUSK_CONST daNpc_Hanjo_c::mCutList[6] = {
     NULL,
     &daNpc_Hanjo_c::cutConversationAboutSaru,
     &daNpc_Hanjo_c::cutConversation,
@@ -139,11 +139,11 @@ daNpc_Hanjo_c::cutFunc DUSK_CONST daNpc_Hanjo_c::mCutList[6] = {
     &daNpc_Hanjo_c::cutDive,
 };
 
-dCcD_SrcSph DUSK_CONST daNpc_Hanjo_c::mStoneCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph DUSK_CONST daNpc_Hanjo_c::mStoneCcDSph = {
     daNpc_Hanjo_c::mStoneCcDObjInfo, {}
 };
 
-daNpc_Hanjo_HIOParam const daNpc_Hanjo_Param_c::m = {
+DUSK_GAME_DATA daNpc_Hanjo_HIOParam const daNpc_Hanjo_Param_c::m = {
     160.0f, -3.0f, 1.0f, 400.0f, 
     255.0f, 160.0f, 35.0f, 30.0f, 0.0f, 0.0f, 10.0f, -10.0f, 30.0f, -10.0f, 45.0f,
     -45.0f, 0.6f, 12.0f, 3, 6, 5, 6, 110.0f, 500.0f, 300.0f, -300.0f, 60, 8, 0, 0, 0, 0, 0,
@@ -152,7 +152,7 @@ daNpc_Hanjo_HIOParam const daNpc_Hanjo_Param_c::m = {
      80.0f, 65.0f, 4.0f, 600.0f, 136.0f, 0x500, 90, 90, 2,
 };
 
-dCcD_SrcGObjInf const daNpc_Hanjo_c::mStoneCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daNpc_Hanjo_c::mStoneCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, {0}},
     {0, 0, 0, 0, {0}},

@@ -87,7 +87,7 @@ struct dMap_HIO_prm_res_src_s {
 };
 
 struct dMap_HIO_prm_res_dst_s {
-    static dMap_prm_res_s* m_res;
+    static DUSK_GAME_DATA dMap_prm_res_s* m_res;
     static dMap_HIO_prm_other_s m_other;
 };
 

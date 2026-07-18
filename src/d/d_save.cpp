@@ -31,8 +31,8 @@
 #include "dusk/settings.h"
 #include <f_ap/f_ap_game.h>
 
-#include "dusk/string.hpp"
-#define strcpy dusk::SafeStringCopy
+#include "helpers/string.hpp"
+#define strcpy SafeStringCopy
 #endif
 
 static u8 dSv_item_rename(u8 i_itemNo) {
@@ -2089,7 +2089,7 @@ const
 #if PLATFORM_SHIELD
 s16
 #else
-u16
+DUSK_GAME_DATA u16
 #endif
 dSv_event_flag_c::saveBitLabels[822] = {
     UNUSED, TEST_001, TEST_002, TEST_003, TEST_004, F_0001, F_0002, F_0003, F_0004, F_0005, F_0006, 
@@ -2166,7 +2166,7 @@ dSv_event_flag_c::saveBitLabels[822] = {
     F_0816, F_0817, F_0818, F_0819, F_0820, KORO2_ALLCLEAR,
 };
 
-u16 const dSv_event_tmp_flag_c::tempBitLabels[185] = {
+DUSK_GAME_DATA u16 const dSv_event_tmp_flag_c::tempBitLabels[185] = {
     UNUSED, UNUSED, T_0002, T_0003, T_0004, T_0005, T_0006, T_0007, T_0001, T_0008, T_0009, T_0010,
     T_0011, T_0012, T_0013, T_0014, T_0015, T_0016, T_0017, T_0018, T_0019, T_0020, T_0021, T_0022,
     T_0023, T_0024, T_0025, T_0026, T_0027, T_0028, T_0029, T_0030, T_0031, T_0032, TREG_000, 

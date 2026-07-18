@@ -4,7 +4,7 @@
 #include "JSystem/J2DGraph/J2DManage.h"
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JUtility/TColor.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J2DMaterial;
 class JUTNameTab;
@@ -90,7 +90,7 @@ public:
 
     static J2DDataManage* getDataManage() { return mDataManage; }
 
-    static J2DDataManage* mDataManage;
+    static DUSK_GAME_DATA J2DDataManage* mDataManage;
 
     /* 0x100 */ bool mScissor;
     /* 0x102 */ u16 mMaterialNum;

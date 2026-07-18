@@ -15,14 +15,14 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resFileName = "Obj_btl";
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_bmdName = "al_bottle.bmd";
 
-dCcD_SrcGObjInf const daObj_SSDrink_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daObj_SSDrink_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, {0}},
     {0, 0, 0, 0, {0}},
     {{0}},
 };
 
-dCcD_SrcCyl DUSK_CONST daObj_SSDrink_c::mCcDCyl = {mCcDObjInfo, {}};
+DUSK_GAME_DATA dCcD_SrcCyl DUSK_CONST daObj_SSDrink_c::mCcDCyl = {mCcDObjInfo, {}};
 
 daObj_SSDrink_c::~daObj_SSDrink_c() {
     dComIfG_resDelete(&mPhase, getResName());

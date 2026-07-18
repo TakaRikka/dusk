@@ -12,7 +12,7 @@ const u32 stack_size = 0xc00;
 const u32 stack_size = 0x4000;
 #endif
 
-JKRAramStream* JKRAramStream::sAramStreamObject;
+DUSK_GAME_DATA JKRAramStream* JKRAramStream::sAramStreamObject;
 
 JKRAramStream* JKRAramStream::create(s32 priority) {
     if (!sAramStreamObject) {
@@ -23,14 +23,14 @@ JKRAramStream* JKRAramStream::create(s32 priority) {
     return sAramStreamObject;
 }
 
-void* JKRAramStream::sMessageBuffer[4] = {
+DUSK_GAME_DATA void* JKRAramStream::sMessageBuffer[4] = {
     NULL,
     NULL,
     NULL,
     NULL,
 };
 
-OSMessageQueue JKRAramStream::sMessageQueue = {0};
+DUSK_GAME_DATA OSMessageQueue JKRAramStream::sMessageQueue = {0};
 
 JKRAramStream::JKRAramStream(s32 priority) : JKRThread(stack_size, 0x10, priority) {
     resume();
@@ -141,11 +141,11 @@ s32 JKRAramStream::writeToAram(JKRAramStreamCommand* command) {
     return writtenLength;
 }
 
-u8* JKRAramStream::transBuffer;
+DUSK_GAME_DATA u8* JKRAramStream::transBuffer;
 
-u32 JKRAramStream::transSize;
+DUSK_GAME_DATA u32 JKRAramStream::transSize;
 
-JKRHeap* JKRAramStream::transHeap;
+DUSK_GAME_DATA JKRHeap* JKRAramStream::transHeap;
 
 JKRAramStreamCommand* JKRAramStream::write_StreamToAram_Async(JSUFileInputStream* stream, u32 addr,
                                                               u32 size, u32 offset,

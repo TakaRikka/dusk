@@ -38,17 +38,17 @@ public:
     static u32 getIntervalX() { return smIntX; }
     static u32 getNameWidth() { return smNameWidth; }
 
-    static u16 smButtonWidth[];
-    static u16 smCommentWidth[];
-    static u16 smComboWidth[];
-    static u16 smYTop;
-    static u16 smXLeft;
-    static u16 smIndentSize;
-    static u16 smLineHeight;
-    static u16 smContWidth;
-    static u16 smIntX;
-    static u16 smIntY;
-    static u16 smNameWidth;
+    static DUSK_GAME_DATA u16 smButtonWidth[];
+    static DUSK_GAME_DATA u16 smCommentWidth[];
+    static DUSK_GAME_DATA u16 smComboWidth[];
+    static DUSK_GAME_DATA u16 smYTop;
+    static DUSK_GAME_DATA u16 smXLeft;
+    static DUSK_GAME_DATA u16 smIndentSize;
+    static DUSK_GAME_DATA u16 smLineHeight;
+    static DUSK_GAME_DATA u16 smContWidth;
+    static DUSK_GAME_DATA u16 smIntX;
+    static DUSK_GAME_DATA u16 smIntY;
+    static DUSK_GAME_DATA u16 smNameWidth;
 
     u16 getX() { return mX; }
     u16 getY() { return mY; }

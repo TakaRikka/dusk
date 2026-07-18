@@ -20,7 +20,7 @@ struct cM3d_Range {
 };
 
 #define G_CM3D_F_INF (1000000000.0f)
-extern const f32 G_CM3D_F_ABS_MIN;
+DUSK_GAME_EXTERN const f32 G_CM3D_F_ABS_MIN;
 
 static void cM3d_InDivPos1(const Vec*, const Vec*, f32, Vec*);
 void cM3d_InDivPos2(const Vec*, const Vec*, f32, Vec*);

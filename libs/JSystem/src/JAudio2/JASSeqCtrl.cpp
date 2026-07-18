@@ -4,7 +4,7 @@
 #include "JSystem/JAudio2/JASSeqParser.h"
 #include "JSystem/JAudio2/JASTrack.h"
 
-JASSeqParser JASSeqCtrl::sDefaultParser;
+DUSK_GAME_DATA JASSeqParser JASSeqCtrl::sDefaultParser;
 
 JASSeqCtrl::JASSeqCtrl() {
     field_0x3c = &sDefaultParser;

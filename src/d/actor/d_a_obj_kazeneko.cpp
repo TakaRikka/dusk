@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-KazoNekoAttr const daObjKazeNeko_c::M_attr = {
+DUSK_GAME_DATA KazoNekoAttr const daObjKazeNeko_c::M_attr = {
     30.0f, 120.0f, 3000.0f, 7000.0f, 90.0f, 
     1800.0f, 180.0f, 27.0f, 15.0f,
     1, 0x70, 0x6400, 0x190000,

@@ -9,7 +9,7 @@
 #include "d/d_save.h"
 #include "f_op/f_op_actor_mng.h"
 
-FmtMngAttributes const daFmtMng_c::M_attr = {
+DUSK_GAME_DATA FmtMngAttributes const daFmtMng_c::M_attr = {
     0x14, 6.0f, 0.5f,
     120.0f, 150.0f, 10, 0x4000,
 };
@@ -62,7 +62,7 @@ void daFmtMng_c::initMemberPos() {
     }
 }
 
-daFmtMng_c::ActionFunc daFmtMng_c::ActionTable[10] = {
+DUSK_GAME_DATA daFmtMng_c::ActionFunc daFmtMng_c::ActionTable[10] = {
     &daFmtMng_c::initWait, &daFmtMng_c::executeWait,
     &daFmtMng_c::initWalk, &daFmtMng_c::executeWalk,
     &daFmtMng_c::initReverse, &daFmtMng_c::executeReverse,

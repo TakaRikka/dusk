@@ -9,7 +9,7 @@ struct counter_class {
     u32 mTimer;
 };
 
-extern counter_class g_Counter;
+DUSK_GAME_EXTERN counter_class g_Counter;
 
 void cCt_Counter(int resetCounter1);
 

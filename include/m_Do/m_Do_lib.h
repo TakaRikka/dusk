@@ -8,7 +8,7 @@
 #include "JSystem/JGeometry.h"
 #endif
 
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 
 typedef struct Vec Vec;
 struct ResTIMG;
@@ -37,9 +37,9 @@ struct mDoLib_clipper {
         mClipper.calcViewFrustum();
     }
 
-    static J3DUClipper mClipper;
-    static f32 mSystemFar;
-    static f32 mFovyRate;
+    static DUSK_GAME_DATA J3DUClipper mClipper;
+    static DUSK_GAME_DATA f32 mSystemFar;
+    static DUSK_GAME_DATA f32 mFovyRate;
 };
 
 void mDoLib_project(Vec* src, Vec* dst);

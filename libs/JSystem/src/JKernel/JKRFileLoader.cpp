@@ -8,11 +8,11 @@
 #include <cstring>
 #include <string>
 #include "JSystem/JKernel/JKRHeap.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "global.h"
 
-JKRFileLoader* JKRFileLoader::sCurrentVolume;
-JSUList<JKRFileLoader> JKRFileLoader::sVolumeList;
+DUSK_GAME_DATA JKRFileLoader* JKRFileLoader::sCurrentVolume;
+DUSK_GAME_DATA JSUList<JKRFileLoader> JKRFileLoader::sVolumeList;
 
 JKRFileLoader::JKRFileLoader(void)
     : mFileLoaderLink(this), mVolumeName(NULL), mVolumeType(0), mMountCount(0) {}

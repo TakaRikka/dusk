@@ -16,7 +16,7 @@ static const char* l_arcName1 = "J_Tobi";
 
 static const char* l_arcName2 = "J_Umak";
 
-daObjYobikusa_c::actionFuncEntry daObjYobikusa_c::ActionTable[] = {
+DUSK_GAME_DATA daObjYobikusa_c::actionFuncEntry daObjYobikusa_c::ActionTable[] = {
     {&daObjYobikusa_c::initSwingWind, &daObjYobikusa_c::executeSwingWind},
     {&daObjYobikusa_c::initPushDown, &daObjYobikusa_c::executePushDown},
     {&daObjYobikusa_c::initPickLeaf, &daObjYobikusa_c::executePickLeaf},
@@ -39,7 +39,7 @@ void daObjYobikusa_c::initSwingWind() {
     mMode = MODE_SWING_WIND;
 }
 
-daObjYobikusa_c::attributes const daObjYobikusa_c::M_attr = {
+DUSK_GAME_DATA daObjYobikusa_c::attributes const daObjYobikusa_c::M_attr = {
     1000.0f, 4000.0f, 0.0f, 1500.0f, 500.0f, 1152.0f, 512.0f, 200.0f, 400.0f,
     0.02f,   0.0f,    0.0f, 5000.0f, 150.0f, 1024,    64,     10000,  6582};
 

@@ -87,7 +87,7 @@ struct daNpcCd2_HIO_c : public fOpAcm_HIO_entry_c {
     /* 0x20C4 */ daNpcCd2_HIO_WChild_c field_0x20c4[14];
 };
 
-extern daNpcCd2_HIO_c l_Cd2_HIO;
+DUSK_GAME_EXTERN daNpcCd2_HIO_c l_Cd2_HIO;
 
 inline s16 Cd2_HIO_atnOfs(int param_1) {
     s16 rv;
@@ -269,7 +269,7 @@ public:
     J3DAnmTexPattern* getTexAnmP(int);
     virtual ~daNpcCd2_c() {}
 
-    static dCcD_SrcCyl const m_cylDat;
+    static DUSK_GAME_DATA dCcD_SrcCyl const m_cylDat;
 
     /* 0x56C */ request_of_phase_process_class mPhase1;
     /* 0x574 */ request_of_phase_process_class mPhase2;

@@ -140,11 +140,11 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[1] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "kasi_kyu";
 
-daNpcKasiKyu_c::EventFn DUSK_CONST daNpcKasiKyu_c::mEvtSeqList[1] = {
+DUSK_GAME_DATA daNpcKasiKyu_c::EventFn DUSK_CONST daNpcKasiKyu_c::mEvtSeqList[1] = {
     NULL
 };
 
-daNpcKasiKyu_HIOParam const daNpcKasiKyu_Param_c::m = {
+DUSK_GAME_DATA daNpcKasiKyu_HIOParam const daNpcKasiKyu_Param_c::m = {
     55.0f,
     -3.0f,
     1.0f,
@@ -366,11 +366,11 @@ void daNpcKasiKyu_c::setParam() {
     attention_info.flags = fopAc_AttnFlag_SPEAK_e | fopAc_AttnFlag_TALK_e;
 }
 
-daTagEscape_c* daNpcKasiKyu_c::mTargetTag;
+DUSK_GAME_DATA daTagEscape_c* daNpcKasiKyu_c::mTargetTag;
 
-f32 daNpcKasiKyu_c::mTargetTagDist;
+DUSK_GAME_DATA f32 daNpcKasiKyu_c::mTargetTagDist;
 
-s16 daNpcKasiKyu_c::mWolfAngle;
+DUSK_GAME_DATA s16 daNpcKasiKyu_c::mWolfAngle;
 
 BOOL daNpcKasiKyu_c::main() {
     if (mSygnal >= 0) {

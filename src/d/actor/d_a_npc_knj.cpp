@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_knj.h"
 #include <cstring>
 
-const daNpc_Knj_HIOParam daNpc_Knj_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Knj_HIOParam daNpc_Knj_Param_c::m = {
     0.0f,     // attention_offset
     0.0f,     // gravity
     1.0f,     // scale
@@ -125,9 +125,9 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Knj_c::mCutNameList[1] = {""};
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Knj_c::mCutNameList[1] = {""};
 
-daNpc_Knj_c::cutFunc DUSK_CONST daNpc_Knj_c::mCutList[1] = {
+DUSK_GAME_DATA daNpc_Knj_c::cutFunc DUSK_CONST daNpc_Knj_c::mCutList[1] = {
     NULL,
 };
 

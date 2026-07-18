@@ -51,7 +51,7 @@ void daObjSakuita_Hio_c::dt() {
 static daObjSakuita_Hio_c M_hio;
 #endif
 
-daObjSakuita_Attr_c const daObjSakuita_c::M_attr = {
+DUSK_GAME_DATA daObjSakuita_Attr_c const daObjSakuita_c::M_attr = {
     20.0f, 12.0f, 70.0f, -50.0f, 0.8f, 0.5f, -6.0f, 900.0f, 20000.0f, 100.0f, 0x1400, 0x14,
 };
 

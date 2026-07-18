@@ -20,14 +20,14 @@ daOnsTaru_HIO_c::daOnsTaru_HIO_c() {
 
 static daOnsTaru_HIO_c l_HIO;
 
-const dCcD_SrcGObjInf daOnsTaru_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daOnsTaru_c::mCcDObjInfo = {
     {0, {{8, 0, 0x1F}, {0xD8FADDAF, 0x1F}, {0x79}}},
     {dCcD_SE_NONE, 0, 1, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 2},
     {0},
 };
 
-dCcD_SrcCyl daOnsTaru_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daOnsTaru_c::mCcDCyl = {
     daOnsTaru_c::mCcDObjInfo,
     {
         {

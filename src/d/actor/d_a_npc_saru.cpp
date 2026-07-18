@@ -11,7 +11,7 @@
 #include "d/actor/d_a_e_ym.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 enum saru_TW_RES_File_ID {
     /* BMDR */
@@ -216,21 +216,21 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {3, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Saru_c::mCutNameList[4] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Saru_c::mCutNameList[4] = {
     "",
     "FIND_MONKEY",
     "HELP_ME",
     "YM_LOOK",
 };
 
-daNpc_Saru_c::cutFunc DUSK_CONST daNpc_Saru_c::mCutList[4] = {
+DUSK_GAME_DATA daNpc_Saru_c::cutFunc DUSK_CONST daNpc_Saru_c::mCutList[4] = {
     NULL,
     &daNpc_Saru_c::cutFindMonkey,
     &daNpc_Saru_c::cutHelpMe,
     &daNpc_Saru_c::cutYmLook,
 };
 
-daNpc_Saru_HIOParam const daNpc_Saru_Param_c::m = {
+DUSK_GAME_DATA daNpc_Saru_HIOParam const daNpc_Saru_Param_c::m = {
     140.0f,
     -3.0f,
     1.0f,

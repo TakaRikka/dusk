@@ -14,8 +14,8 @@ public:
     virtual ~JASVoiceBank();
     virtual u32 getType() const;
 
-    static const JASOscillator::Data sOscData;
-    static JASOscillator::Data* sOscTable;
+    static DUSK_GAME_DATA const JASOscillator::Data sOscData;
+    static DUSK_GAME_DATA JASOscillator::Data* sOscTable;
 };
 
 #endif /* JASVOICEBANK_H */

@@ -47,7 +47,7 @@ void Z2CreatureLink::setLinkBootsType(s32 bootsType) {
     }
 }
 
-Z2CreatureLink* Z2CreatureLink::mLinkPtr;
+DUSK_GAME_DATA Z2CreatureLink* Z2CreatureLink::mLinkPtr;
 
 Z2CreatureLink::Z2CreatureLink() {
     mLinkState = 0;

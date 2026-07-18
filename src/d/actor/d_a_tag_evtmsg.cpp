@@ -17,9 +17,9 @@ enum evt_cut_e {
     NUM_EVT_CUTS_e,
 };
 
-DUSK_CONST char* daTag_EvtMsg_c::mEvtCutNameList[] = {"", "TALK", "WAIT"};
+DUSK_GAME_DATA DUSK_CONST char* daTag_EvtMsg_c::mEvtCutNameList[] = {"", "TALK", "WAIT"};
 
-EvtCutFunc daTag_EvtMsg_c::mEvtCutList[] = {
+DUSK_GAME_DATA EvtCutFunc daTag_EvtMsg_c::mEvtCutList[] = {
     NULL,
     &daTag_EvtMsg_c::ECut_talk,
     &daTag_EvtMsg_c::ECut_wait,

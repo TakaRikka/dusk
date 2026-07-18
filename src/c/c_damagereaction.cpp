@@ -4,15 +4,15 @@
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_s_play.h"
 
-u8 cDmr_SkipInfo;
-u8 data_80450C99;
-u8 data_80450C9A;
-u8 data_80450C9B;
+DUSK_GAME_DATA u8 cDmr_SkipInfo;
+DUSK_GAME_DATA u8 data_80450C99;
+DUSK_GAME_DATA u8 data_80450C9A;
+DUSK_GAME_DATA u8 data_80450C9B;
 
-u8 data_80450C9C;
-u8 data_80450C9D;
-u8 data_80450C9E;
-u8 cDmr_FishingWether;
+DUSK_GAME_DATA u8 data_80450C9C;
+DUSK_GAME_DATA u8 data_80450C9D;
+DUSK_GAME_DATA u8 data_80450C9E;
+DUSK_GAME_DATA u8 cDmr_FishingWether;
 
 #if DEBUG
 void debug_actor_create() {
@@ -60,8 +60,8 @@ BOOL cDmrNowMidnaTalk() {
     return 0;
 }
 
-u8 data_80450CA0;
+DUSK_GAME_DATA u8 data_80450CA0;
 
 extern "C" {
-    JPTraceParticleCallBack4 JPTracePCB4;
+    DUSK_GAME_DATA JPTraceParticleCallBack4 JPTracePCB4;
 }

@@ -68,7 +68,7 @@ int CheckFieldItemCreateHeap(fopAc_ac_c* i_this) {
         dItem_data::getItemBrkName(item_no), dItem_data::getItemBtpName(item_no));
 }
 
-const daItemBase_data daItemBase_c::m_data = {
+DUSK_GAME_DATA const daItemBase_data daItemBase_c::m_data = {
     -4.5f,  // mGravity
     0.62f,  // mGroundReflect
     45.0f,  // mLaunchSpeed

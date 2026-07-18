@@ -73,19 +73,19 @@ int daAlink_c::getReinRideDirection() {
     return DIR_RIGHT;
 }
 
-Vec const daAlink_c::m_handLeftOutSidePos = {
+DUSK_GAME_DATA Vec const daAlink_c::m_handLeftOutSidePos = {
     9.0f, -5.0f, 3.0f
 };
 
-Vec const daAlink_c::m_handRightOutSidePos = {
+DUSK_GAME_DATA Vec const daAlink_c::m_handRightOutSidePos = {
     9.0f, -5.0f, -3.0f
 };
 
-Vec const daAlink_c::m_handLeftInSidePos = {
+DUSK_GAME_DATA Vec const daAlink_c::m_handLeftInSidePos = {
     9.0f, 5.0f, 3.0f
 };
 
-Vec const daAlink_c::m_handRightInSidePos = {
+DUSK_GAME_DATA Vec const daAlink_c::m_handRightInSidePos = {
     9.0f, 5.0f, -3.0f
 };
 

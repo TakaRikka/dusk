@@ -11,7 +11,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 
-daObjLdy_Attr_c const daObjLdy_c::mAttr = {5.0f, 30.0f, 130.0f, -50.0f, 0.15f, 0.45f, 0.3f, 1000.0f,
+DUSK_GAME_DATA daObjLdy_Attr_c const daObjLdy_c::mAttr = {5.0f, 30.0f, 130.0f, -50.0f, 0.15f, 0.45f, 0.3f, 1000.0f,
                                            0.0f, 0.0f,  0.0f,   0.0f,   0,     10,    0};
 
 void daObjLdy_c::create_init() {

@@ -9,7 +9,7 @@
 #include "d/d_msg_object.h"
 #include <cstring>
 
-const daNpc_clerkB_HIOParam daNpc_clerkB_Param_c::m = {
+DUSK_GAME_DATA const daNpc_clerkB_HIOParam daNpc_clerkB_Param_c::m = {
     220.0f,  // attention_offset
     -3.0f,   // gravity
     1.0f,    // scale
@@ -120,9 +120,9 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {8, -1, 1}, {2, 0, 0},  {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_clerkB_c::mCutNameList[1] = {""};
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_clerkB_c::mCutNameList[1] = {""};
 
-daNpc_clerkB_c::cutFunc DUSK_CONST daNpc_clerkB_c::mCutList[1] = {NULL};
+DUSK_GAME_DATA daNpc_clerkB_c::cutFunc DUSK_CONST daNpc_clerkB_c::mCutList[1] = {NULL};
 
 daNpc_clerkB_c::~daNpc_clerkB_c() {
     deleteObject();

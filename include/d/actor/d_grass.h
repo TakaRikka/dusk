@@ -5,7 +5,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 
 #if TARGET_PC
-#include "../../../src/dusk/batch.hpp"
+#include <helpers/batch.hpp>
 #endif
 
 class cCcD_Obj;
@@ -84,7 +84,7 @@ public:
         return m_deleteRoom;
     }
 
-    static deleteFunc m_deleteRoom;
+    static DUSK_GAME_DATA deleteFunc m_deleteRoom;
 
     dGrass_anm_c* getAnm() { return m_anm; }
     dGrass_anm_c* getAnm(int i_no) { return &m_anm[i_no]; }
@@ -115,9 +115,9 @@ public:
     TGXTexObj mTexObj_l_M_Hijiki00TEX;
     TGXTexObj mTexObj_l_M_kusa05_RGBATEX;
 
-    dusk::batch::LeafTemplate mTplKusa9q;     // l_M_Kusa_9qDL
-    dusk::batch::LeafTemplate mTplKusa9qCut;  // l_M_Kusa_9q_cDL
-    dusk::batch::LeafTemplate mTplTengusa;    // l_M_TenGusaDL
+    batch::LeafTemplate mTplKusa9q;     // l_M_Kusa_9qDL
+    batch::LeafTemplate mTplKusa9qCut;  // l_M_Kusa_9q_cDL
+    batch::LeafTemplate mTplTengusa;    // l_M_TenGusaDL
 #endif
 };  // Size: 0x1D718
 

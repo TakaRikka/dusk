@@ -32,8 +32,8 @@ public:
 
     virtual ~daTag_EvtMsg_c();
 
-    static DUSK_CONST char* mEvtCutNameList[];
-    static EvtCutFunc mEvtCutList[];
+    static DUSK_GAME_DATA DUSK_CONST char* mEvtCutNameList[];
+    static DUSK_GAME_DATA EvtCutFunc mEvtCutList[];
 };
 
 #endif /* D_A_TAG_EVTMSG_H */

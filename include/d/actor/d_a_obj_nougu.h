@@ -16,7 +16,7 @@ class daObj_Nougu_Param_c {
 public:
     virtual ~daObj_Nougu_Param_c() {}
 
-    static const daObj_Nougu_HIOParam m;
+    static DUSK_GAME_DATA const daObj_Nougu_HIOParam m;
 };
 
 #if DEBUG
@@ -73,7 +73,7 @@ public:
 
     int getType() { return 0; }
 
-    static dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
 };
 
 STATIC_ASSERT(sizeof(daObj_Nougu_c) == 0xe30);

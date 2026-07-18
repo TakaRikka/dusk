@@ -2,7 +2,7 @@
 #define JUTRESFONT_H
 
 #include "JSystem/JUtility/JUTFont.h"
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 
 class JKRHeap;
 
@@ -64,7 +64,7 @@ public:
     }
 
     static const int suAboutEncoding_ = 3;
-    static IsLeadByte_func const saoAboutEncoding_[suAboutEncoding_];
+    static DUSK_GAME_DATA IsLeadByte_func const saoAboutEncoding_[suAboutEncoding_];
 
     // some types uncertain, may need to be fixed
     /* 0x1C */ int mWidth;
@@ -95,7 +95,7 @@ public:
 #endif
 };
 
-extern u8 const JUTResFONT_Ascfont_fix12[];
+DUSK_GAME_EXTERN u8 const JUTResFONT_Ascfont_fix12[];
 extern u8 const JUTResFONT_Ascfont_fix16[];
 
 #endif /* JUTRESFONT_H */

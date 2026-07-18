@@ -141,7 +141,7 @@ public:
     static JKRThread* searchThread(OSThread* thread);
     static JSUList<JKRThread>& getList() { return (JSUList<JKRThread>&)sThreadList; }
 
-    static JSUList<JKRThread> sThreadList;
+    static DUSK_GAME_DATA JSUList<JKRThread> sThreadList;
     // static u8 sThreadList[12];
 
 #if TARGET_PC
@@ -155,7 +155,7 @@ public:
     virtual ~JKRIdleThread() { sThread = NULL; }
     virtual void* run() { while (true); }
 
-    static void* sThread;
+    static DUSK_GAME_DATA void* sThread;
 };
 
 typedef void (*JKRThreadSwitch_PreCallback)(OSThread* current, OSThread* next);
@@ -181,11 +181,11 @@ public:
     static u32 getTotalCount() { return sTotalCount; }
 
 private:
-    static JKRThreadSwitch* sManager;
-    static u32 sTotalCount;
-    static u64 sTotalStart;
-    static JKRThreadSwitch_PreCallback mUserPreCallback;
-    static JKRThreadSwitch_PostCallback mUserPostCallback;
+    static DUSK_GAME_DATA JKRThreadSwitch* sManager;
+    static DUSK_GAME_DATA u32 sTotalCount;
+    static DUSK_GAME_DATA u64 sTotalStart;
+    static DUSK_GAME_DATA JKRThreadSwitch_PreCallback mUserPreCallback;
+    static DUSK_GAME_DATA JKRThreadSwitch_PostCallback mUserPostCallback;
 
 private:
     /* 0x00 */  // vtable
@@ -207,8 +207,8 @@ public:
 
     int check();
 
-    static JSUList<JKRTask> sTaskList;
-    static u8 sEndMesgQueue[32];
+    static DUSK_GAME_DATA JSUList<JKRTask> sTaskList;
+    static DUSK_GAME_DATA u8 sEndMesgQueue[32];
 
     /* 0x7C */ JSULink<JKRTask> mTaskLink;
     /* 0x8C */ u8 field_0x8c[0x94 - 0x8C];

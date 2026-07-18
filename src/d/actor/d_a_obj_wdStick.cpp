@@ -14,7 +14,7 @@
 
 static daWdStick_HIO_c l_HIO;
 
-dCcD_SrcSph daWdStick_c::mCcDSph = {daWdStick_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 4.0f}}};
+DUSK_GAME_DATA dCcD_SrcSph daWdStick_c::mCcDSph = {daWdStick_c::mCcDObjInfo, {{{0.0f, 0.0f, 0.0f}, 4.0f}}};
 
 daWdStick_HIO_c::daWdStick_HIO_c() {
     field_0x04 = 60;
@@ -37,7 +37,7 @@ int daWdStick_c::CreateHeap() {
     return mModel != 0 ? 1 : 0;
 }
 
-dCcD_SrcGObjInf const daWdStick_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daWdStick_c::mCcDObjInfo = {
     {0, {{0x200, 0, 0x1f}, {0xd8fbffff, 0x1f}, {0x0}}},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 4},

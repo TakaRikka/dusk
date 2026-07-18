@@ -10,9 +10,9 @@
 struct dPa_name {
     static DUSK_CONST char* getName(u32 i_id);
 
-    static u16 j_o_id[5];
-    static u16 s_o_id[14];
-    static DUSK_CONST char* jpaName[];
+    static DUSK_GAME_DATA u16 j_o_id[5];
+    static DUSK_GAME_DATA u16 s_o_id[14];
+    static DUSK_GAME_DATA DUSK_CONST char* jpaName[];
 };
 
 // enum names made up based on debug strings

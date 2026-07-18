@@ -82,7 +82,7 @@ int daObjHBarrel_c::execute() {
     return 1;
 }
 
-dCcD_SrcCyl const daObjHBarrel_c::s_CcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl const daObjHBarrel_c::s_CcDCyl = {
     {
         {0x0, {{0x0, 0x0, 0xd}, {0xd8fafdff, 0x11}, 0x79}},  // mObj
         {dCcD_SE_NONE, 0x0, 0x0, 0x0, 0x0},                  // mGObjAt

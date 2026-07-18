@@ -811,7 +811,7 @@ extern "C" void ModuleEpilog() {
 }
 
 #else
-process_profile_definition DUSK_CONST* DUSK_CONST g_fpcPfLst_ProfileList[] = {
+DUSK_GAME_DATA process_profile_definition DUSK_CONST* DUSK_CONST g_fpcPfLst_ProfileList[] = {
     &g_profile_OVERLAP0.base.base,
     &g_profile_OVERLAP1.base.base,
     &g_profile_OVERLAP3.base.base,

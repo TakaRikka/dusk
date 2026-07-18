@@ -18,17 +18,17 @@ struct ResFONT;
  */
 struct JFWSystem {
     struct CSetUpParam {
-        static s32 maxStdHeaps;
-        static u32 sysHeapSize;
-        static u32 fifoBufSize;
-        static u32 aramAudioBufSize;
-        static u32 aramGraphBufSize;
-        static s32 streamPriority;
-        static s32 decompPriority;
-        static s32 aPiecePriority;
-        static ResFONT* systemFontRes;
-        static const GXRenderModeObj* renderMode;
-        static u32 exConsoleBufferSize;
+        static DUSK_GAME_DATA s32 maxStdHeaps;
+        static DUSK_GAME_DATA u32 sysHeapSize;
+        static DUSK_GAME_DATA u32 fifoBufSize;
+        static DUSK_GAME_DATA u32 aramAudioBufSize;
+        static DUSK_GAME_DATA u32 aramGraphBufSize;
+        static DUSK_GAME_DATA s32 streamPriority;
+        static DUSK_GAME_DATA s32 decompPriority;
+        static DUSK_GAME_DATA s32 aPiecePriority;
+        static DUSK_GAME_DATA ResFONT* systemFontRes;
+        static DUSK_GAME_DATA const GXRenderModeObj* renderMode;
+        static DUSK_GAME_DATA u32 exConsoleBufferSize;
     };
 
     static void firstInit();
@@ -67,14 +67,14 @@ struct JFWSystem {
         CSetUpParam::renderMode = p_modeObj;
     }
 
-    static JKRExpHeap* rootHeap;
-    static JKRExpHeap* systemHeap;
-    static JKRThread* mainThread;
-    static JUTDbPrint* debugPrint;
-    static JUTResFont* systemFont;
-    static JUTConsoleManager* systemConsoleManager;
-    static JUTConsole* systemConsole;
-    static bool sInitCalled;
+    static DUSK_GAME_DATA JKRExpHeap* rootHeap;
+    static DUSK_GAME_DATA JKRExpHeap* systemHeap;
+    static DUSK_GAME_DATA JKRThread* mainThread;
+    static DUSK_GAME_DATA JUTDbPrint* debugPrint;
+    static DUSK_GAME_DATA JUTResFont* systemFont;
+    static DUSK_GAME_DATA JUTConsoleManager* systemConsoleManager;
+    static DUSK_GAME_DATA JUTConsole* systemConsole;
+    static DUSK_GAME_DATA bool sInitCalled;
 };
 
 #endif /* JFWSYSTEM_H */

@@ -14,7 +14,7 @@
 
 static const char* dummyString() { return ""; }
 
-daObj_BouMato_HIOParam const daObj_BouMato_Param_c::m = {
+DUSK_GAME_DATA daObj_BouMato_HIOParam const daObj_BouMato_Param_c::m = {
     0.0f, -3.0f, 1.0f, 400.0f, 300.0f, 4.0f, 20.0f,
 };
 

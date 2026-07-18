@@ -8,7 +8,7 @@
 
 static bool data_80450680 = true;
 
-dTres_c::typeGroupData_c* dTres_c::mTypeGroupData;
+DUSK_GAME_DATA dTres_c::typeGroupData_c* dTres_c::mTypeGroupData;
 
 int dTres_c::createWork() {
     mTypeGroupData = JKR_NEW_ARRAY(dTres_c::typeGroupData_c, 0x40);
@@ -25,9 +25,9 @@ void dTres_c::remove() {
     data_80450680 = true;
 }
 
-dTres_c::type_group_list dTres_c::mTypeGroupListAll[17];
+DUSK_GAME_DATA dTres_c::type_group_list dTres_c::mTypeGroupListAll[17];
 
-u16 dTres_c::mNum;
+DUSK_GAME_DATA u16 dTres_c::mNum;
 
 void dTres_c::reset() {
     if (data_80450680) {
@@ -229,7 +229,7 @@ void dTres_c::setPosition(int dataNo, u8 listIdx, Vec const* i_pos, int i_roomNo
     }
 }
 
-u8 const dTres_c::typeToTypeGroup[17][2] = {
+DUSK_GAME_DATA u8 const dTres_c::typeToTypeGroup[17][2] = {
     {0xFF, 0x00}, {0x00, 0x01}, {0x01, 0x02}, {0x02, 0x03}, {0x03, 0x04}, {0x04, 0x05},
     {0x05, 0x06}, {0x06, 0x07}, {0x07, 0x08}, {0x80, 0x09}, {0x81, 0x0A}, {0x82, 0x0B},
     {0x83, 0x0C}, {0x84, 0x0D}, {0x85, 0x0E}, {0x87, 0x0F}, {0x88, 0x10},

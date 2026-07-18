@@ -17,7 +17,7 @@ static s32 l_bmdData[4] = { 8, 0, 9, 0 };
 
 static DUSK_CONST char* l_resNameList[1] = {"Kakashi"};
 
-const daObj_KBacket_HIOParam daObj_KBacket_Param_c::m = {
+DUSK_GAME_DATA const daObj_KBacket_HIOParam daObj_KBacket_Param_c::m = {
     0.0f, -5.0f, 1.0f, 400.0f, 73.0f, 30.0f, 30.0f, 30.0f, 37.0f, 45.0f, 0.0f
 };
 

@@ -11,11 +11,11 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/actor/d_a_npc.h"
 
-const daObj_Stick_HIOParam daObj_Stick_Param_c::m = {
+DUSK_GAME_DATA const daObj_Stick_HIOParam daObj_Stick_Param_c::m = {
     0.0f, -3.0f, 1.0f, 100.0f
 };
 
-dCcD_SrcSph daObj_Stick_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daObj_Stick_c::mCcDSph = {
     daNpcT_c::mCcDObjData,                                               // mObjInf
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph

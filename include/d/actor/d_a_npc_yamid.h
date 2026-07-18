@@ -20,7 +20,7 @@ class daNpc_yamiD_Param_c {
 public:
     virtual ~daNpc_yamiD_Param_c() {}
 
-    static daNpc_yamiD_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_yamiD_HIOParam const m;
 };
 
 #if DEBUG
@@ -129,8 +129,8 @@ public:
         field_0xe44.OffTgSetBit();
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
-    static cutFunc DUSK_CONST mCutList[2];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
 
 private:
     /* 0xE40 */ NPC_YAMID_HIO_CLASS* mpHIO;

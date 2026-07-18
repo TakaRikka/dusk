@@ -20,7 +20,7 @@
 #include "absl/container/flat_hash_map.h"
 #include "client/TracyScoped.hpp"
 #include "dusk/frame_interpolation.h"
-#include "dusk/gx_helper.h"
+#include "helpers/gx_helper.h"
 #include "dusk/logging.h"
 
 static const void* getInterpKey(const void* base, int idx) {
@@ -1811,7 +1811,7 @@ int dDlst_shadowControl_c::setSimple(cXyz* param_0, f32 param_1, f32 param_2, cX
     return 1;
 }
 
-TGXTexObj dDlst_shadowControl_c::mSimpleTexObj;
+DUSK_GAME_DATA TGXTexObj dDlst_shadowControl_c::mSimpleTexObj;
 
 void dDlst_shadowControl_c::setSimpleTex(ResTIMG const* i_timg) {
     mDoLib_setResTimgObj(i_timg, &mSimpleTexObj, 0, NULL);
@@ -2027,15 +2027,15 @@ void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
     }
 }
 
-dDlst_2DT2_c dDlst_list_c::mWipeDlst;
+DUSK_GAME_DATA dDlst_2DT2_c dDlst_list_c::mWipeDlst;
 
-GXColor dDlst_list_c::mWipeColor = {0, 0, 0, 0};
+DUSK_GAME_DATA GXColor dDlst_list_c::mWipeColor = {0, 0, 0, 0};
 
-u8 dDlst_list_c::mWipe;
+DUSK_GAME_DATA u8 dDlst_list_c::mWipe;
 
-f32 dDlst_list_c::mWipeRate;
+DUSK_GAME_DATA f32 dDlst_list_c::mWipeRate;
 
-f32 dDlst_list_c::mWipeSpeed;
+DUSK_GAME_DATA f32 dDlst_list_c::mWipeSpeed;
 
 void dDlst_list_c::wipeIn(f32 i_wipeSpeed, GXColor& i_wipeColor) {
     mWipe = true;

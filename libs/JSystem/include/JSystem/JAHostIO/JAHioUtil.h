@@ -4,7 +4,7 @@
 namespace JAHioUtil {
     char* getString(const char* msg, ...);
 
-    extern char mStringBuffer[];
+    DUSK_GAME_EXTERN char mStringBuffer[];
 }
 
 #endif /* JAHIOUTIL_H */

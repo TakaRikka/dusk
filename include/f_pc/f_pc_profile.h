@@ -6,7 +6,7 @@
 #include "global.h"
 
 // Putting const on these profiles make them have internal linkage. Make sure they're extern!
-#define DUSK_PROFILE IF_DUSK(extern)
+#define DUSK_PROFILE IF_DUSK(extern) DUSK_GAME_DATA
 
 typedef struct nodedraw_method_class nodedraw_method_class;
 typedef struct leafdraw_method_class leafdraw_method_class;
@@ -27,6 +27,6 @@ typedef struct process_profile_definition {
 
 struct leaf_process_profile_definition;
 process_profile_definition DUSK_CONST* fpcPf_Get(s16 i_profname);
-extern process_profile_definition DUSK_CONST* DUSK_CONST* DUSK_CONST g_fpcPf_ProfileList_p;
+DUSK_GAME_EXTERN process_profile_definition DUSK_CONST* DUSK_CONST* DUSK_CONST g_fpcPf_ProfileList_p;
 
 #endif

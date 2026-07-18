@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <cstring>
 
-s16 const daObjMovebox::Act_c::M_dir_base[4] = {
+DUSK_GAME_DATA s16 const daObjMovebox::Act_c::M_dir_base[4] = {
     0x0000,
     0x4000,
     -0x8000,
@@ -132,17 +132,17 @@ void daSus_c::room_c::reset() {
     }
 }
 
-daSus_c::data_c daSus_c::mData[0x20];
+DUSK_GAME_DATA daSus_c::data_c daSus_c::mData[0x20];
 
-daSus_c::room_c daSus_c::mRoom[0x40];
+DUSK_GAME_DATA daSus_c::room_c daSus_c::mRoom[0x40];
 
 #if DEBUG
 daCanBall_c::Hio_c daCanBall_c::mHIO;
 #endif
 
-s16 daArrow_c::m_count;
+DUSK_GAME_DATA s16 daArrow_c::m_count;
 
-s16 daSus_c::mSetTop;
+DUSK_GAME_DATA s16 daSus_c::mSetTop;
 
 int daSus_c::newData(s8 i_roomNo, cXyz const& param_1, cXyz const& param_2, u8 param_3, u8 param_4,
                      u8 i_type) {
@@ -334,17 +334,17 @@ void daNpcKakashi_clrSuccessCount() {
     dComIfGs_setTmpReg(0xFEFF, 0);
 }
 
-bool daYkgr_c::m_flag;
+DUSK_GAME_DATA bool daYkgr_c::m_flag;
 
-bool daYkgr_c::m_alpha_flag;
+DUSK_GAME_DATA bool daYkgr_c::m_alpha_flag;
 
-u8 daYkgr_c::m_alpha;
+DUSK_GAME_DATA u8 daYkgr_c::m_alpha;
 
-f32 daYkgr_c::m_aim_rate;
+DUSK_GAME_DATA f32 daYkgr_c::m_aim_rate;
 
-dPath* daYkgr_c::m_path;
+DUSK_GAME_DATA dPath* daYkgr_c::m_path;
 
-JPABaseEmitter* daYkgr_c::m_emitter;
+DUSK_GAME_DATA JPABaseEmitter* daYkgr_c::m_emitter;
 
 const char* daSetBgObj_c::getArcName(fopAc_ac_c* i_this) {
     static char arcName[8];
@@ -362,23 +362,23 @@ const char* daSetBgObj_c::getArcName(fopAc_ac_c* i_this) {
     return arcName;
 }
 
-f32 const daDsh_c::OPEN_SIZE = 270.1f;
+DUSK_GAME_DATA f32 const daDsh_c::OPEN_SIZE = 270.1f;
 
-f32 const daDsh_c::OPEN_ACCEL = 10.0f;
+DUSK_GAME_DATA f32 const daDsh_c::OPEN_ACCEL = 10.0f;
 
-f32 const daDsh_c::OPEN_SPEED = -40.0f;
+DUSK_GAME_DATA f32 const daDsh_c::OPEN_SPEED = -40.0f;
 
-f32 const daDsh_c::OPEN_BOUND_SPEED = -30.0f;
+DUSK_GAME_DATA f32 const daDsh_c::OPEN_BOUND_SPEED = -30.0f;
 
-f32 const daDsh_c::OPEN_BOUND_RATIO = -0.4f;
+DUSK_GAME_DATA f32 const daDsh_c::OPEN_BOUND_RATIO = -0.4f;
 
-f32 const daDsh_c::CLOSE_ACCEL = 10.0f;
+DUSK_GAME_DATA f32 const daDsh_c::CLOSE_ACCEL = 10.0f;
 
-f32 const daDsh_c::CLOSE_SPEED = 40.0f;
+DUSK_GAME_DATA f32 const daDsh_c::CLOSE_SPEED = 40.0f;
 
-f32 const daDsh_c::CLOSE_BOUND_SPEED = 30.0f;
+DUSK_GAME_DATA f32 const daDsh_c::CLOSE_BOUND_SPEED = 30.0f;
 
-f32 const daDsh_c::CLOSE_BOUND_RATIO = -0.4f;
+DUSK_GAME_DATA f32 const daDsh_c::CLOSE_BOUND_RATIO = -0.4f;
 
 int daTagStream_c::checkArea(cXyz const* param_0) {
     cXyz relativePos;
@@ -391,11 +391,11 @@ int daTagStream_c::checkArea(cXyz const* param_0) {
     return 0;
 }
 
-daMirror_c::entryModelFunc daMirror_c::m_entryModel = NULL;
+DUSK_GAME_DATA daMirror_c::entryModelFunc daMirror_c::m_entryModel = NULL;
 
-daTagStream_c* daTagStream_c::m_top;
+DUSK_GAME_DATA daTagStream_c* daTagStream_c::m_top;
 
-daMirror_c* daMirror_c::m_myObj;
+DUSK_GAME_DATA daMirror_c* daMirror_c::m_myObj;
 
 int daMirror_c::entry(J3DModel* param_0) {
     if (m_myObj == NULL) {
@@ -413,11 +413,11 @@ bool daMirror_c::remove() {
     return true;
 }
 
-dGrass_packet_c::deleteFunc dGrass_packet_c::m_deleteRoom = NULL;
+DUSK_GAME_DATA dGrass_packet_c::deleteFunc dGrass_packet_c::m_deleteRoom = NULL;
 
-daGrass_c* daGrass_c::m_myObj;
+DUSK_GAME_DATA daGrass_c* daGrass_c::m_myObj;
 
-dGrass_packet_c* daGrass_c::m_grass;
+DUSK_GAME_DATA dGrass_packet_c* daGrass_c::m_grass;
 
 void daGrass_c::deleteRoomGrass(int param_0) {
     if (m_grass) {
@@ -425,9 +425,9 @@ void daGrass_c::deleteRoomGrass(int param_0) {
     }
 }
 
-dFlower_packet_c::deleteFunc dFlower_packet_c::m_deleteRoom = NULL;
+DUSK_GAME_DATA dFlower_packet_c::deleteFunc dFlower_packet_c::m_deleteRoom = NULL;
 
-dFlower_packet_c* daGrass_c::m_flower;
+DUSK_GAME_DATA dFlower_packet_c* daGrass_c::m_flower;
 
 void daGrass_c::deleteRoomFlower(int param_0) {
     if (m_flower != NULL) {
@@ -435,7 +435,7 @@ void daGrass_c::deleteRoomFlower(int param_0) {
     }
 }
 
-daMP_c* daMP_c::m_myObj;
+DUSK_GAME_DATA daMP_c* daMP_c::m_myObj;
 
 u32 daMP_c::daMP_c_Get_MovieRestFrame() {
     JUT_ASSERT(668, m_myObj != NULL);
@@ -462,7 +462,7 @@ void daMP_c::daMP_c_THPPlayerPause() {
     m_myObj->mpTHPPause();
 }
 
-daTagMagne_c* daTagMagne_c::mTagMagne;
+DUSK_GAME_DATA daTagMagne_c* daTagMagne_c::mTagMagne;
 
 int daTagMagne_c::checkMagnetCode(cBgS_PolyInfo& poly) {
 #if DEBUG
@@ -508,9 +508,9 @@ int daTagMagne_c::checkMagneC() {
     return 0;
 }
 
-u8 daTagMist_c::mPlayerNo;
+DUSK_GAME_DATA u8 daTagMist_c::mPlayerNo;
 
-bool daObjCarry_c::mSaveFlag;
+DUSK_GAME_DATA bool daObjCarry_c::mSaveFlag;
 
 u8 daTagMist_c::getPlayerNo() {
     return mPlayerNo;
@@ -528,7 +528,7 @@ bool daObjCarry_c::chkSaveFlag() {
     return mSaveFlag == true;
 }
 
-cXyz daObjCarry_c::mPos[5];
+DUSK_GAME_DATA cXyz daObjCarry_c::mPos[5];
 
 const cXyz& daObjCarry_c::getPos(int param_0) {
 #if DEBUG
@@ -548,7 +548,7 @@ void daObjCarry_c::savePos(int param_0, cXyz param_1) {
     mPos[param_0] = param_1;
 }
 
-u8 daObjCarry_c::mSttsFlag[5];
+DUSK_GAME_DATA u8 daObjCarry_c::mSttsFlag[5];
 
 void daObjCarry_c::onSttsFlag(int idx, u8 flag) {
 #if DEBUG
@@ -577,7 +577,7 @@ u8 daObjCarry_c::chkSttsFlag(int idx, u8 flag) {
     return cLib_checkBit(mSttsFlag[idx], flag) > 0;
 }
 
-s8 daObjCarry_c::mRoomNo[5];
+DUSK_GAME_DATA s8 daObjCarry_c::mRoomNo[5];
 
 void daObjCarry_c::setRoomNo(int idx, s8 roomNo) {
 #if DEBUG

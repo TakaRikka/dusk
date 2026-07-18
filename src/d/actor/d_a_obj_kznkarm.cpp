@@ -73,7 +73,7 @@ void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
 
 #endif
 
- daObjKznkarm_Attr_c const daObjKznkarm_c::M_attr = {
+ DUSK_GAME_DATA daObjKznkarm_Attr_c const daObjKznkarm_c::M_attr = {
     -5.0f, -30.0f, 0.6f, 0.94f,
      40.0f, 40.0f, -60.0f,
     -6.0f, -6.0f, -60.0f, 0.0f,
@@ -82,7 +82,7 @@ void daObjKznkarm_Hio_c::genMessage(JORMContext* ctx) {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_arcName = "J_Kazami";
 
-daObjKznkarm_c::actionFunc daObjKznkarm_c::ActionTable[4][2] = {
+DUSK_GAME_DATA daObjKznkarm_c::actionFunc daObjKznkarm_c::ActionTable[4][2] = {
     &daObjKznkarm_c::initBroken,
     &daObjKznkarm_c::executeBroken,
     &daObjKznkarm_c::initCarry,

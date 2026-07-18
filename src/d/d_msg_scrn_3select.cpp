@@ -28,7 +28,7 @@ bool hit_choice_pane(CPaneMgr* pane, f32 padding) {
 #endif
 
 typedef void (dMsgScrn3Select_c::*processFn)();
-processFn process[] = {
+DUSK_GAME_DATA processFn process[] = {
     &dMsgScrn3Select_c::open1Proc,  &dMsgScrn3Select_c::open2Proc,  &dMsgScrn3Select_c::waitProc,
     &dMsgScrn3Select_c::selectProc, &dMsgScrn3Select_c::changeProc, &dMsgScrn3Select_c::closeProc,
 };

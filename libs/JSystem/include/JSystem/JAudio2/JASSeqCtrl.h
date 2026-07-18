@@ -73,7 +73,7 @@ public:
     /* 0x52 */ u16 field_0x52;
     /* 0x54 */ u32 field_0x54;
     /* 0x58 */ u32 field_0x58;
-    static JASSeqParser sDefaultParser;
+    static DUSK_GAME_DATA JASSeqParser sDefaultParser;
 };
 
 #endif /* JASSEQCTRL_H */

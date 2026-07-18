@@ -91,7 +91,7 @@ struct TVariableValue {
         pOutput_ = (param_1 != NULL) ? param_1 : &soOutput_none_;
     }
 
-    static TOutput_none_ soOutput_none_;
+    static DUSK_GAME_DATA TOutput_none_ soOutput_none_;
 
     /* 0x00 */ f32 mValue;
     /* 0x04 */ u32 field_0x4;
@@ -249,9 +249,9 @@ struct TAdaptor_actor : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[14];
 
-    static u32 const sauVariableValue_3_TRANSLATION_XYZ[3];
-    static u32 const sauVariableValue_3_ROTATION_XYZ[3];
-    static u32 const sauVariableValue_3_SCALING_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_TRANSLATION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_ROTATION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_SCALING_XYZ[3];
 };  // Size: 0x128
 
 struct TObject_actor : public TObject {
@@ -267,8 +267,8 @@ struct TAdaptor_ambientLight : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[4];
 
-    static u32 const sauVariableValue_3_COLOR_RGB[3];
-    static u32 const sauVariableValue_4_COLOR_RGBA[4];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_COLOR_RGB[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_4_COLOR_RGBA[4];
 };
 
 struct TObject_ambientLight : public TObject {
@@ -299,9 +299,9 @@ struct TAdaptor_camera : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[12];
 
-    static u32 const sauVariableValue_3_POSITION_XYZ[3];
-    static u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
-    static u32 const sauVariableValue_2_DISTANCE_NEAR_FAR[2];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_POSITION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_2_DISTANCE_NEAR_FAR[2];
 };
 
 struct TObject_camera : public TObject {
@@ -322,9 +322,9 @@ struct TAdaptor_fog : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[6];
 
-    static u32 const sauVariableValue_3_COLOR_RGB[3];
-    static u32 const sauVariableValue_4_COLOR_RGBA[4];
-    static u32 const sauVariableValue_2_RANGE_BEGIN_END[2];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_COLOR_RGB[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_4_COLOR_RGBA[4];
+    static DUSK_GAME_DATA u32 const sauVariableValue_2_RANGE_BEGIN_END[2];
 };
 
 struct TObject_fog : public TObject {
@@ -351,11 +351,11 @@ struct TAdaptor_light : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[13];
 
-    static u32 const sauVariableValue_3_COLOR_RGB[3];
-    static u32 const sauVariableValue_4_COLOR_RGBA[4];
-    static u32 const sauVariableValue_3_POSITION_XYZ[3];
-    static u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
-    static u32 const sauVariableValue_2_DIRECTION_THETA_PHI[2];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_COLOR_RGB[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_4_COLOR_RGBA[4];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_POSITION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_TARGET_POSITION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_2_DIRECTION_THETA_PHI[2];
 };
 
 struct TObject_light : public TObject {
@@ -396,13 +396,13 @@ struct TAdaptor_particle : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[20];
 
-    static u32 const sauVariableValue_3_TRANSLATION_XYZ[3];
-    static u32 const sauVariableValue_3_ROTATION_XYZ[3];
-    static u32 const sauVariableValue_3_SCALING_XYZ[3];
-    static u32 const sauVariableValue_3_COLOR_RGB[3];
-    static u32 const sauVariableValue_4_COLOR_RGBA[4];
-    static u32 const sauVariableValue_3_COLOR1_RGB[3];
-    static u32 const sauVariableValue_4_COLOR1_RGBA[4];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_TRANSLATION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_ROTATION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_SCALING_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_COLOR_RGB[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_4_COLOR_RGBA[4];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_COLOR1_RGB[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_4_COLOR1_RGBA[4];
 };
 
 struct TObject_particle : public TObject {
@@ -440,7 +440,7 @@ struct TAdaptor_sound : public TAdaptor {
 
     /* 0x10 */ TVariableValue mValue[13];
 
-    static u32 const sauVariableValue_3_POSITION_XYZ[3];
+    static DUSK_GAME_DATA u32 const sauVariableValue_3_POSITION_XYZ[3];
 };  // Size: 0x114
 
 struct TObject_sound : public TObject {

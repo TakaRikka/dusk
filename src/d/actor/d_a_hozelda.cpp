@@ -31,7 +31,7 @@ static void* daHoZelda_searchGanon(fopAc_ac_c* i_actor, void* i_data) {
     return NULL;
 }
 
-const daHoZelda_hio_c1 daHoZelda_hio_c0::m = {
+DUSK_GAME_DATA const daHoZelda_hio_c1 daHoZelda_hio_c0::m = {
     0x38E,
     0x2AAA,
     0x4000,
@@ -40,8 +40,8 @@ const daHoZelda_hio_c1 daHoZelda_hio_c0::m = {
     4000.0f,
 };
 
-u8 daHoZelda_matAnm_c::mEyeMoveFlg;
-u8 daHoZelda_matAnm_c::mMorfFrame;
+DUSK_GAME_DATA u8 daHoZelda_matAnm_c::mEyeMoveFlg;
+DUSK_GAME_DATA u8 daHoZelda_matAnm_c::mMorfFrame;
 
 void daHoZelda_matAnm_c::init() {
     field_0xf4 = 0.0f;

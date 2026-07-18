@@ -4,7 +4,7 @@
 #include "JSystem/J3DGraphBase/J3DShape.h"
 #include "JSystem/J3DAssert.h"
 #include <mtx.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J3DTexMtx;
 class J3DTexGenBlock;
@@ -22,8 +22,8 @@ public:
             loadExecute(m);
     }
 
-    static J3DTexGenBlock* sTexGenBlock;
-    static J3DTexMtxObj* sTexMtxObj;
+    static DUSK_GAME_DATA J3DTexGenBlock* sTexGenBlock;
+    static DUSK_GAME_DATA J3DTexMtxObj* sTexMtxObj;
 };
 
 class J3DShapeMtxConcatView;
@@ -75,9 +75,9 @@ public:
     void loadMtxConcatView_PNCPU(int, u16) const;
     void loadMtxConcatView_PNGP_LOD(int, u16) const;
 
-    static J3DShapeMtxConcatView_LoadFunc sMtxLoadPipeline[4];
-    static J3DShapeMtxConcatView_LoadFunc sMtxLoadLODPipeline[4];
-    static MtxP sMtxPtrTbl[2];
+    static DUSK_GAME_DATA J3DShapeMtxConcatView_LoadFunc sMtxLoadPipeline[4];
+    static DUSK_GAME_DATA J3DShapeMtxConcatView_LoadFunc sMtxLoadLODPipeline[4];
+    static DUSK_GAME_DATA MtxP sMtxPtrTbl[2];
 };
 
 /**

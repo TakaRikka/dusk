@@ -5,17 +5,17 @@
 #include "JSystem/JAHostIO/JAHioUtil.h"
 #include "JSystem/JHostIO/JORMContext.h"
 
-u16 JAHControl::smButtonWidth[] = {20, 50, 100, 150, 300, 600};
-u16 JAHControl::smCommentWidth[] = {20, 50, 100, 200, 400, 800};
-u16 JAHControl::smComboWidth[] = {50, 100, 150, 200, 300, 600};
-u16 JAHControl::smYTop = 5;
-u16 JAHControl::smXLeft = 5;
-u16 JAHControl::smIndentSize = 30;
-u16 JAHControl::smLineHeight = 23;
-u16 JAHControl::smContWidth = 450;
-u16 JAHControl::smIntX = 2;
-u16 JAHControl::smIntY = 5;
-u16 JAHControl::smNameWidth = 150;
+DUSK_GAME_DATA u16 JAHControl::smButtonWidth[] = {20, 50, 100, 150, 300, 600};
+DUSK_GAME_DATA u16 JAHControl::smCommentWidth[] = {20, 50, 100, 200, 400, 800};
+DUSK_GAME_DATA u16 JAHControl::smComboWidth[] = {50, 100, 150, 200, 300, 600};
+DUSK_GAME_DATA u16 JAHControl::smYTop = 5;
+DUSK_GAME_DATA u16 JAHControl::smXLeft = 5;
+DUSK_GAME_DATA u16 JAHControl::smIndentSize = 30;
+DUSK_GAME_DATA u16 JAHControl::smLineHeight = 23;
+DUSK_GAME_DATA u16 JAHControl::smContWidth = 450;
+DUSK_GAME_DATA u16 JAHControl::smIntX = 2;
+DUSK_GAME_DATA u16 JAHControl::smIntY = 5;
+DUSK_GAME_DATA u16 JAHControl::smNameWidth = 150;
 
 void JAHControl::returnY(u16 param_1) {
     mY += u16(smIntY + smLineHeight * param_1);

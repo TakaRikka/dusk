@@ -9,7 +9,7 @@
 #include "d/actor/d_a_demo_item.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdData[3] = {
     {3, 1},
@@ -192,7 +192,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {32, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Yelia_c::mCutNameList[6] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Yelia_c::mCutNameList[6] = {
     "",
     "CONVERSATION_ABOUT_LOOPHOLE",
     "TW_RESISTANCE",
@@ -201,7 +201,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Yelia_c::mCutNameList[6] = {
     "THANK_YOU",
 };
 
-BOOL (daNpc_Yelia_c::*daNpc_Yelia_c::mCutList[6])(int) = {
+DUSK_GAME_DATA BOOL (daNpc_Yelia_c::*daNpc_Yelia_c::mCutList[6])(int) = {
     NULL,
     &daNpc_Yelia_c::cutConversationAboutLoopHole,
     &daNpc_Yelia_c::cutTWResistance,
@@ -298,7 +298,7 @@ enum Motion {
     /* 0x21 */ MOTION_KIZUKU_WAIT,
 };
 
-daNpc_Yelia_HIOParam const daNpc_Yelia_Param_c::m = {
+DUSK_GAME_DATA daNpc_Yelia_HIOParam const daNpc_Yelia_Param_c::m = {
     170.0f,   // mAttnOffsetY
     -3.0f,    // mGravity
     1.0f,     // mScale

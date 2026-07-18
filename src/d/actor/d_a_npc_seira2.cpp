@@ -103,13 +103,13 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {24, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Seira2_c::mCutNameList[1] = {""};
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Seira2_c::mCutNameList[1] = {""};
 
-daNpc_Seira2_c::cutFunc DUSK_CONST daNpc_Seira2_c::mCutList[1] = { NULL };
+DUSK_GAME_DATA daNpc_Seira2_c::cutFunc DUSK_CONST daNpc_Seira2_c::mCutList[1] = { NULL };
 
 static NPC_SEIRA2_HIO_CLASS l_HIO;
 
-const daNpc_Seira2_HIOParam daNpc_Seira2_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Seira2_HIOParam daNpc_Seira2_Param_c::m = {
     210.0f,
     -3.0f,
     1.0f,

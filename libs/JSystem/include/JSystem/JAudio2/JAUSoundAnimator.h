@@ -2,7 +2,7 @@
 #define JAUSOUNDANIMATOR_H
 
 #include "JSystem/JAudio2/JAISound.h"
-#include "dusk/offset_ptr.h"
+#include "helpers/offset_ptr.h"
 
 class JAUSoundAnimation;
 

@@ -89,10 +89,10 @@ public:
     int testShake();
     #endif
 
-    static const vib_pattern MS_patt[VIBMODE_S_MAX];
-    static const vib_pattern CS_patt[VIBMODE_S_MAX];
-    static const vib_pattern MQ_patt[VIBMODE_Q_MAX];
-    static const vib_pattern CQ_patt[VIBMODE_Q_MAX];
+    static DUSK_GAME_DATA const vib_pattern MS_patt[VIBMODE_S_MAX];
+    static DUSK_GAME_DATA const vib_pattern CS_patt[VIBMODE_S_MAX];
+    static DUSK_GAME_DATA const vib_pattern MQ_patt[VIBMODE_Q_MAX];
+    static DUSK_GAME_DATA const vib_pattern CQ_patt[VIBMODE_Q_MAX];
 
 private:
 #if DEBUG
@@ -133,7 +133,7 @@ private:
     /* 0x8C */ s32 mMode;
 };  // Size: 0x90
 
-extern const char* shock_names[VIBMODE_S_MAX];
-extern const char* quake_names[VIBMODE_Q_MAX];
+DUSK_GAME_EXTERN const char* shock_names[VIBMODE_S_MAX];
+DUSK_GAME_EXTERN const char* quake_names[VIBMODE_Q_MAX];
 
 #endif /* D_D_VIBRATION_H */

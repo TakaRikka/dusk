@@ -22,8 +22,8 @@ public:
         }
     }
 
-    static daTagHstop_c* m_top;
-    static dMsgFlow_c m_msgFlow;
+    static DUSK_GAME_DATA daTagHstop_c* m_top;
+    static DUSK_GAME_DATA dMsgFlow_c m_msgFlow;
 
     /* 0x568 */ daTagHstop_c* mNext;
     /* 0x568 */ daTagHstop_c* mPrev;

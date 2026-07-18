@@ -5,7 +5,7 @@
 #include "f_pc/f_pc_base.h"
 #include "SSystem/SComponent/c_bg_s_grp_pass_chk.h"
 #include "SSystem/SComponent/c_bg_s_poly_pass_chk.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 struct cBgD_Vtx_t : public Vec {};
 

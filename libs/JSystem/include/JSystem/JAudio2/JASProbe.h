@@ -13,7 +13,7 @@ struct JASProbe {
     void stop();
     static void stop(s32);
 
-    static JASProbe* sProbeTable[16];
+    static DUSK_GAME_DATA JASProbe* sProbeTable[16];
 
     /* 0x000 */ char const* mName;
 	/* 0x004 */ s32 mStartTime;

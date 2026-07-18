@@ -2,7 +2,7 @@
 #define JSUINPUTSTREAM_H
 
 #include "JSystem/JSupport/JSUIosBase.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 /**
  * @ingroup jsystem-jsupport

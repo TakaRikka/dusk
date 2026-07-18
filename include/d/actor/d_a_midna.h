@@ -32,7 +32,7 @@ public:
 
 class daMidna_hio_c0 {
 public:
-    static daMidna_hio_c1 const m;
+    static DUSK_GAME_DATA daMidna_hio_c1 const m;
 };
 
 STATIC_ASSERT(sizeof(daMidna_hio_c0::m) == 0x20);
@@ -87,8 +87,8 @@ public:
     /* 0x0FC */ f32 mNowOffsetX;
     /* 0x100 */ f32 mNowOffsetY;
 
-    static bool sEyeMoveFlg;
-    static u8 sMorfFrame;
+    static DUSK_GAME_DATA bool sEyeMoveFlg;
+    static DUSK_GAME_DATA u8 sMorfFrame;
 };
 
 STATIC_ASSERT(sizeof(daMidna_matAnm_c) == 0x104);
@@ -420,8 +420,8 @@ public:
 
     static u32 getOtherHeapSize() { return 0x1D0; }
 
-    static daMidna_texData_s const m_texDataTable[21];
-    static daMidna_anmData_s const m_anmDataTable[53];
+    static DUSK_GAME_DATA daMidna_texData_s const m_texDataTable[21];
+    static DUSK_GAME_DATA daMidna_anmData_s const m_anmDataTable[53];
 
 private:
     /* 0x568 */ request_of_phase_process_class mPhase;

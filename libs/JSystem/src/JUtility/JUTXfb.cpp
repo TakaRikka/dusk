@@ -33,7 +33,7 @@ JUTXfb::JUTXfb(GXRenderModeObj const* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber x
     }
 }
 
-JUTXfb* JUTXfb::sManager;
+DUSK_GAME_DATA JUTXfb* JUTXfb::sManager;
 
 JUTXfb::~JUTXfb() {
     for (int i = 0; i < 3; i++) {

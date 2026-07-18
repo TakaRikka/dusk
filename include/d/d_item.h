@@ -8,7 +8,7 @@ public:
     static void setItemData(u8* data) { mData = data; }
     static u8* getItemData() { return mData; }
 
-    static u8* mData;
+    static DUSK_GAME_DATA u8* mData;
 };
 
 void execItemGet(u8 item_id);

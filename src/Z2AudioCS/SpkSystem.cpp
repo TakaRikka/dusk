@@ -1,6 +1,5 @@
 #include "Z2AudioCS/SpkSystem.h"
 
-#include "../../libs/JSystem/include/JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JAudio2/JASGadget.h"
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 #include "JSystem/JKernel/JKRHeap.h"

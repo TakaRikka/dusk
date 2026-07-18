@@ -52,8 +52,8 @@ struct JASPortCmd : JSULink<JASPortCmd> {
     Command mFunc;
 	JASPortArgs* mArgs;
 
-    static TPortHead sCommandListOnce;
-    static TPortHead sCommandListStay;
+    static DUSK_GAME_DATA TPortHead sCommandListOnce;
+    static DUSK_GAME_DATA TPortHead sCommandListStay;
 };
 
 #endif /* JASCMDSTACK_H */

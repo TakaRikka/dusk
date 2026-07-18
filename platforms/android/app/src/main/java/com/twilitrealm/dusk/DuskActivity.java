@@ -27,6 +27,10 @@ import org.libsdl.app.SDLActivity;
 import org.libsdl.app.SDLSurface;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,8 +94,53 @@ public class DuskActivity extends SDLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        extractBundledMods();
         super.onCreate(savedInstanceState);
         hideSystemBars();
+    }
+
+    // Bundled mod packages ship as APK assets, which the native loader cannot read directly;
+    // mirror them into internal storage (the loader's CachePath/bundled_mods search dir)
+    // before SDL_main starts.
+    private void extractBundledMods() {
+        File outDir = new File(getFilesDir(), "bundled_mods");
+        try {
+            deleteRecursively(outDir); // drop packages removed by an app update
+            String[] names = getAssets().list("mods");
+            if (names == null || names.length == 0) {
+                return;
+            }
+            if (!outDir.mkdirs()) {
+                Log.w(TAG, "Unable to create " + outDir);
+                return;
+            }
+            byte[] buffer = new byte[65536];
+            for (String name : names) {
+                if (!name.endsWith(".dusk")) {
+                    continue;
+                }
+                try (InputStream in = getAssets().open("mods/" + name);
+                     OutputStream out = new FileOutputStream(new File(outDir, name)))
+                {
+                    int count;
+                    while ((count = in.read(buffer)) > 0) {
+                        out.write(buffer, 0, count);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to extract bundled mods", e);
+        }
+    }
+
+    private static void deleteRecursively(File file) {
+        File[] children = file.listFiles();
+        if (children != null) {
+            for (File child : children) {
+                deleteRecursively(child);
+            }
+        }
+        file.delete();
     }
 
     @Override

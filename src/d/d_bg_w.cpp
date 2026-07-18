@@ -2485,5 +2485,5 @@ dBgW* dBgW_NewSet(cBgD_t* pbgd, u32 flags, Mtx* pbase_mtx) {
     return nw;
 }
 
-extern u8 struct_80450F88[8];
-u8 struct_80450F88[8];
+DUSK_GAME_EXTERN u8 struct_80450F88[8];
+DUSK_GAME_DATA u8 struct_80450F88[8];

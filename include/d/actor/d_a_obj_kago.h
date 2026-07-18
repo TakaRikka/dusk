@@ -24,7 +24,7 @@ class daObj_Kago_Param_c {
 public:
     virtual ~daObj_Kago_Param_c() {}
 
-    static const daObj_Kago_HIOParam m;
+    static DUSK_GAME_DATA const daObj_Kago_HIOParam m;
 };
 
 #if DEBUG

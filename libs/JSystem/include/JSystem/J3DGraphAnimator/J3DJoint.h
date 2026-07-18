@@ -53,8 +53,8 @@ public:
     }
     static void setJoint(J3DJoint* joint) { mJoint = joint; }
 
-    static J3DMtxBuffer* mMtxBuffer;
-    static J3DJoint* mJoint;
+    static DUSK_GAME_DATA J3DMtxBuffer* mMtxBuffer;
+    static DUSK_GAME_DATA J3DJoint* mJoint;
 };  // Size: 0x4
 
 typedef int (*J3DJointCallBack)(J3DJoint*, int);
@@ -100,7 +100,7 @@ public:
     void setMtxType(u8 type) { mKind = (mKind & ~0xf0) | (type << 4); }
     f32 getRadius() const { return mBoundingSphereRadius; }
 
-    static J3DMtxCalc* mCurrentMtxCalc;
+    static DUSK_GAME_DATA J3DMtxCalc* mCurrentMtxCalc;
 
     u8 getKind() const { return mKind & 15; }
 

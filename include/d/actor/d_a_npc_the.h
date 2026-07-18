@@ -12,7 +12,7 @@ class daNpcThe_Param_c {
 public:
     virtual ~daNpcThe_Param_c() {}
 
-    static const daNpcThe_HIOParam m;
+    static DUSK_GAME_DATA const daNpcThe_HIOParam m;
 };
 
 STATIC_ASSERT(sizeof(daNpcThe_Param_c::m) == 0x6C);
@@ -231,8 +231,8 @@ private:
     /* 0xE1D */ bool field_0xe1d;
     /* 0xE1E */ u8 mType;
 
-    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[4];
-    static EventFn DUSK_CONST mEvtCutList[4];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[4];
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtCutList[4];
 };
 
 STATIC_ASSERT(sizeof(daNpcThe_c) == 0xE20);

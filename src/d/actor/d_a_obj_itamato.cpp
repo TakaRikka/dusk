@@ -11,7 +11,7 @@
 #include "JSystem/JHostIO/JORFile.h"
 #include <cstring>
 
-daObj_ItaMato_HIOParam const daObj_ItaMato_Param_c::m = {
+DUSK_GAME_DATA daObj_ItaMato_HIOParam const daObj_ItaMato_Param_c::m = {
     110.0f,
     -3.0f,
     1.0f,

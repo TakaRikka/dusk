@@ -15,7 +15,7 @@
 
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 enum ITEMICON_RES_FILE_ID {
     ITEMICON_BTI_ARI_MESU_00=0x3,
@@ -594,7 +594,7 @@ BOOL dMeter2Info_c::isDirectUseItem(int param_0) {
     return (mDirectUseItem & (u8)(1 << param_0)) ? TRUE : FALSE;
 }
 
-dMeter2Info_c g_meter2_info;
+DUSK_GAME_DATA dMeter2Info_c g_meter2_info;
 
 int dMeter2Info_c::setMeterString(s32 i_string) {
     if (mMeterString != 0) {
@@ -1742,7 +1742,7 @@ bool dMeter2Info_isItemOpenCheck() {
     return true;
 }
 
-dMenu_LetterData dMenu_Letter::letter_data[64] = {
+DUSK_GAME_DATA dMenu_LetterData dMenu_Letter::letter_data[64] = {
     {0x09C5, 0x0A29, 0x0A8D, 0x010B}, {0x09C6, 0x0A2A, 0x0A8E, 0x0237},
     {0x09C7, 0x0A2B, 0x0A8F, 0x0236}, {0x09C8, 0x0A2C, 0x0A90, 0x0037},
     {0x09C9, 0x0A2D, 0x0A91, 0x0039}, {0x09CA, 0x0A2E, 0x0A92, 0x0067},

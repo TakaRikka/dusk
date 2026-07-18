@@ -91,7 +91,7 @@ public:
 
     s16 getExTime() { return mExTime; }
 
-    static const char* m_arcNameList[6];
+    static DUSK_GAME_DATA const char* m_arcNameList[6];
 
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;

@@ -4,7 +4,7 @@
 #include "JSystem/JAudio2/JASTaskThread.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 
-JASTaskThread* JASDvd::sThread;
+DUSK_GAME_DATA JASTaskThread* JASDvd::sThread;
 
 JASTaskThread* JASDvd::getThreadPointer() {
     return JASDvd::sThread;

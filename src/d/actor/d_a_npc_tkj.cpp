@@ -64,17 +64,17 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpcTkj_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpcTkj_c::mCutNameList[2] = {
     "",
     "LV7_FIRST_START",
 };
 
-int (daNpcTkj_c::* DUSK_CONST daNpcTkj_c::mCutList[])(int) = {
+DUSK_GAME_DATA int (daNpcTkj_c::* DUSK_CONST daNpcTkj_c::mCutList[])(int) = {
     NULL,
     &daNpcTkj_c::cutLv7Start,
 };
 
-const daNpc_Tkj_HIOParam daNpc_Tkj_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Tkj_HIOParam daNpc_Tkj_Param_c::m = {
     120.0f,
     -3.0f,
     1.0f,

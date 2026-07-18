@@ -80,7 +80,7 @@ void JStudio_JAudio2::TAdaptor_sound::adaptor_do_prepare() {
     }
 }
 
-JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_ JStudio_JAudio2::TAdaptor_sound::saoVVOSetValue_[6] = {
+DUSK_GAME_DATA JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_ JStudio_JAudio2::TAdaptor_sound::saoVVOSetValue_[6] = {
     JStudio_JAudio2::TAdaptor_sound::TVVOSetValue_(
         JStudio_JAudio2::TAdaptor_sound::UNK_7, setValue_VOLUME_ 
     ),

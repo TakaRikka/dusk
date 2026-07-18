@@ -2,7 +2,7 @@
 
 #include "d/d_item_data.h"
 
-dItem_itemResource dItem_data::item_resource[] = {
+DUSK_GAME_DATA dItem_itemResource dItem_data::item_resource[] = {
     {"F_gD_rupy", 0x0004,-0x0001,-0x0001, 0x0007,-0x0001, 0x0, -0x1, 0x002D, 0x64, 0x0000},
     {"F_gD_rupy", 0x0004,-0x0001,-0x0001, 0x0007,-0x0001, 0x0, -0x1, 0x002D, 0x3C, 0x0000},
     {"F_gD_rupy", 0x0004,-0x0001,-0x0001, 0x0007,-0x0001, 0x1, -0x1, 0x002D, 0x3C, 0x0000},
@@ -260,7 +260,7 @@ dItem_itemResource dItem_data::item_resource[] = {
     {"T_gD_key", 0x0003,-0x0001,-0x0001,-0x0001,-0x0001, -0x1, -0x1, 0x006E, 0x64, 0x0000},
 };
 
-dItem_fieldItemResource dItem_data::field_item_res[] = {
+DUSK_GAME_DATA dItem_fieldItemResource dItem_data::field_item_res[] = {
     {"Always", 0x0014,-0x0001, 0x0030, 0xFF, 0x1000},
     {"Always", 0x0017,-0x0001, 0x0031, 0x0, 0x1000},
     {"Always", 0x0017,-0x0001, 0x0031, 0x1, 0x1000},
@@ -518,7 +518,7 @@ dItem_fieldItemResource dItem_data::field_item_res[] = {
     {"T_g_key", 0x0003,-0x0001,-0x0001, 0xFF, 0x1000},
 };
 
-dItem_itemInfo dItem_data::item_info[] = {
+DUSK_GAME_DATA dItem_itemInfo dItem_data::item_info[] = {
     {15, 40, 30, 4}, {20, 70, 30, 4}, {20, 70, 30, 4},   {20, 70, 30, 4},    {20, 70, 30, 4},
     {20, 70, 30, 4}, {20, 70, 30, 4}, {20, 70, 30, 4},   {20, 40, 30, 4},    {20, 40, 30, 4},
     {40, 60, 30, 0}, {40, 60, 30, 0}, {40, 60, 30, 0},   {40, 60, 30, 0},    {20, 80, 50, 0},

@@ -311,10 +311,10 @@ struct daFmtMng_c : public fopAc_ac_c {
     }
 
     static FmtMngAttributes const& attr() { return M_attr; }
-    static FmtMngAttributes const M_attr;
+    static DUSK_GAME_DATA FmtMngAttributes const M_attr;
 
     typedef void (daFmtMng_c::*ActionFunc)();
-    static daFmtMng_c::ActionFunc ActionTable[10];
+    static DUSK_GAME_DATA daFmtMng_c::ActionFunc ActionTable[10];
 
     /* 0x568 */ FmtPos_c* mPos;
     /* 0x56C */ FmtMember_c* mMember;

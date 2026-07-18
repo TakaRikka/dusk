@@ -394,13 +394,13 @@ public:
     void onHide() { mHide = true; }
     void offHide() { mHide = false; }
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
-    static dCcD_SrcSph mCcDSph;
-    static fopAc_ac_c* mFindActorPList[100];
-    static s32 mFindCount;
-    static s16 mSrchActorName;
-    static char mFileNameBuf[0x15];
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA fopAc_ac_c* mFindActorPList[100];
+    static DUSK_GAME_DATA s32 mFindCount;
+    static DUSK_GAME_DATA s16 mSrchActorName;
+    static DUSK_GAME_DATA char mFileNameBuf[0x15];
 };
 
 STATIC_ASSERT(sizeof(daNpcF_c) == 0xB48);

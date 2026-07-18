@@ -131,8 +131,8 @@ struct TAdaptor_actor : public JStudio::TAdaptor_actor, public JStudio_JStage::T
 
     JStage::TActor* get_pJSG_() { return (JStage::TActor*) pJSGObject_; }
 
-    static const TVVOutputObject saoVVOutput_[];
-    static const TVVOutput_ANIMATION_FRAME_  saoVVOutput_ANIMATION_FRAME_[];
+    static DUSK_GAME_DATA const TVVOutputObject saoVVOutput_[];
+    static DUSK_GAME_DATA const TVVOutput_ANIMATION_FRAME_  saoVVOutput_ANIMATION_FRAME_[];
 
     /* 0x130 */ u32 field_0x130;
     /* 0x134 */ u32 field_0x134;
@@ -187,7 +187,7 @@ struct TAdaptor_camera : public JStudio::TAdaptor_camera, public TAdaptor_object
 
     JStage::TCamera* get_pJSG_() { return (JStage::TCamera*)pJSGObject_; }
 
-    static TVVOutput saoVVOutput_[];
+    static DUSK_GAME_DATA TVVOutput saoVVOutput_[];
 
     /* 0x108 */ int field_0x108;
     /* 0x10C */ JStage::TObject* field_0x10c;
@@ -211,7 +211,7 @@ struct TAdaptor_fog : public JStudio::TAdaptor_fog, public TAdaptor_object_ {
 
     JStage::TFog* get_pJSG_() { return (JStage::TFog*)pJSGObject_; }
 
-    static TVariableValueOutput_object_<TAdaptor_fog, JStage::TFog> saoVVOutput_[];
+    static DUSK_GAME_DATA TVariableValueOutput_object_<TAdaptor_fog, JStage::TFog> saoVVOutput_[];
 };
 
 template<class TAdaptor, class TStageObject>
@@ -285,7 +285,7 @@ struct TAdaptor_light : public JStudio::TAdaptor_light, public TAdaptor_object_ 
 
     int field_0x11c;
 
-    static TVVOutput_direction_ saoVVOutput_direction_[6];
+    static DUSK_GAME_DATA TVVOutput_direction_ saoVVOutput_direction_[6];
 };
 
 bool

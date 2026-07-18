@@ -7,11 +7,11 @@
 
 extern f32 cM_atan2f(f32, f32);
 
-const cSAngle cSAngle::_0(static_cast<s16>(0));
-const cSAngle cSAngle::_1(static_cast<s16>(0xb6));
-const cSAngle cSAngle::_90(static_cast<s16>(0x4000));
-const cSAngle cSAngle::_180(static_cast<s16>(-0x8000));
-const cSAngle cSAngle::_270(static_cast<s16>(-0x4000));
+DUSK_GAME_DATA const cSAngle cSAngle::_0(static_cast<s16>(0));
+DUSK_GAME_DATA const cSAngle cSAngle::_1(static_cast<s16>(0xb6));
+DUSK_GAME_DATA const cSAngle cSAngle::_90(static_cast<s16>(0x4000));
+DUSK_GAME_DATA const cSAngle cSAngle::_180(static_cast<s16>(-0x8000));
+DUSK_GAME_DATA const cSAngle cSAngle::_270(static_cast<s16>(-0x4000));
 
 #ifdef __MWERKS__
 cSAngle::cSAngle(const cSAngle& angle) {

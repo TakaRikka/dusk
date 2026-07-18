@@ -22,8 +22,6 @@ public:
 
 #if defined(_WIN32)
     static constexpr auto LibraryExtension = ".dll";
-#elif defined(__APPLE__)
-    static constexpr auto LibraryExtension = ".dylib";
 #else
     static constexpr auto LibraryExtension = ".so";
 #endif

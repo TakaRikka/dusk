@@ -26,7 +26,11 @@
 #include <cstdio>
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
+
+#if TARGET_PC
+#include "dusk/settings.h"
+#endif
 
 void dComIfG_play_c::ct() {
     mWindowNum = 0;
@@ -1207,9 +1211,9 @@ void dComIfG_inf_c::createBaseCsr() {
 }
 #endif
 
-GXColor g_clearColor = {0, 0, 0, 0};
+DUSK_GAME_DATA GXColor g_clearColor = {0, 0, 0, 0};
 
-GXColor g_blackColor = {0, 0, 0, 255};
+DUSK_GAME_DATA GXColor g_blackColor = {0, 0, 0, 255};
 
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
     dComIfGp_offEnableNextStage();
@@ -1228,7 +1232,7 @@ int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
     return 1;
 }
 
-dComIfG_inf_c g_dComIfG_gameInfo;
+DUSK_GAME_DATA dComIfG_inf_c g_dComIfG_gameInfo;
 
 BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     #if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
@@ -2987,6 +2991,22 @@ u8 dComIfGs_staffroll_next_go_check() {
     return envLight->staffroll_next_timer;
 }
 
-GXColor g_whiteColor = {255, 255, 255, 255};
+DUSK_GAME_DATA GXColor g_whiteColor = {255, 255, 255, 255};
 
-GXColor g_saftyWhiteColor = {160, 160, 160, 255};
+DUSK_GAME_DATA GXColor g_saftyWhiteColor = {160, 160, 160, 255};
+
+#if TARGET_PC
+void dComIfGd_drawXluListInvisible() {
+    ZoneScoped;
+    if (!dusk::getSettings().game.disableWaterRefraction) {
+        g_dComIfG_gameInfo.drawlist.drawXluListInvisible();
+    }
+}
+
+void dComIfGd_drawOpaListInvisible() {
+    ZoneScoped;
+    if (!dusk::getSettings().game.disableWaterRefraction) {
+        g_dComIfG_gameInfo.drawlist.drawOpaListInvisible();
+    }
+}
+#endif

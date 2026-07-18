@@ -33,17 +33,17 @@ public:
     static f32 getCenterX() { return mAllCenterX; }
     static f32 getCenterZ() { return mAllCenterZ; }
 
-    static dDrawPath_c::layer_data* mLayerList;  // this doesn't seem right, but can't figure it out atm
-    static f32 mMinX;
-    static f32 mMaxX;
-    static f32 mMinZ;
-    static f32 mMaxZ;
-    static f32 mAllCenterX;
-    static f32 mAllCenterZ;
-    static f32 mAllSizeX;
-    static f32 mAllSizeZ;
-    static s8 mBottomFloorNo;
-    static s8 mTopFloorNo;
+    static DUSK_GAME_DATA dDrawPath_c::layer_data* mLayerList;  // this doesn't seem right, but can't figure it out atm
+    static DUSK_GAME_DATA f32 mMinX;
+    static DUSK_GAME_DATA f32 mMaxX;
+    static DUSK_GAME_DATA f32 mMinZ;
+    static DUSK_GAME_DATA f32 mMaxZ;
+    static DUSK_GAME_DATA f32 mAllCenterX;
+    static DUSK_GAME_DATA f32 mAllCenterZ;
+    static DUSK_GAME_DATA f32 mAllSizeX;
+    static DUSK_GAME_DATA f32 mAllSizeZ;
+    static DUSK_GAME_DATA s8 mBottomFloorNo;
+    static DUSK_GAME_DATA s8 mTopFloorNo;
 };
 
 struct dMapInfo_n {
@@ -90,10 +90,10 @@ public:
     static void setNextRoomNoForMapPat0(int i_roomNo) { mNextRoomNo = i_roomNo; }
     static int getNextRoomNoForMapPat0() { return mNextRoomNo; }
 
-    static int mNextRoomNo;
-    static int mNowStayRoomNo;
-    static s8 mNowStayFloorNo;
-    static u8 mNowStayFloorNoDecisionFlg;
+    static DUSK_GAME_DATA int mNextRoomNo;
+    static DUSK_GAME_DATA int mNowStayRoomNo;
+    static DUSK_GAME_DATA s8 mNowStayFloorNo;
+    static DUSK_GAME_DATA u8 mNowStayFloorNoDecisionFlg;
 };
 
 class renderingDAmap_c : public dRenderingFDAmap_c {

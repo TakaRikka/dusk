@@ -1775,7 +1775,7 @@ static cPhs_Step daE_DD_Create(fopAc_ac_c* a_this) {
     return phase;
 }
 
-actor_method_class l_daE_DD_Method = {
+DUSK_GAME_DATA actor_method_class l_daE_DD_Method = {
     (process_method_func)daE_DD_Create,
     (process_method_func)daE_DD_Delete,
     (process_method_func)daE_DD_Execute,

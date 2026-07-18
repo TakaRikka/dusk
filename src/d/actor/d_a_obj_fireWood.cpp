@@ -21,7 +21,7 @@ void daFireWood_c::setBaseMtx() {
 
 static daFireWood_HIO_c l_HIO;
 
-dCcD_SrcCyl daFireWood_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daFireWood_c::mCcDCyl = {
     daFireWood_c::mCcDObjInfo,
     {
         {
@@ -32,7 +32,7 @@ dCcD_SrcCyl daFireWood_c::mCcDCyl = {
     }
 };
 
-const dCcD_SrcGObjInf daFireWood_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daFireWood_c::mCcDObjInfo = {
     {0, {{AT_TYPE_LANTERN_SWING, 0, 0x13}, {0xD8FBFFFF, 0x1F}, {0x0}}},
     {dCcD_SE_SWORD, 0, 0, dCcD_MTRL_NONE, 0},
     {dCcD_SE_STONE, 0, 0, dCcD_MTRL_NONE, 0},
