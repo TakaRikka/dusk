@@ -25,14 +25,14 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_bmdFileName[] = {
     "pumpkin.bmd",
 };
 
-dCcD_SrcGObjInf const daObj_SSItem_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daObj_SSItem_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {0, 0, 0, 0, {0}},
     {0, 0, 0, 0, {0}},
     {{0}},
 };
 
-dCcD_SrcCyl DUSK_CONST daObj_SSItem_c::mCcDCyl = {mCcDObjInfo, {}};
+DUSK_GAME_DATA dCcD_SrcCyl DUSK_CONST daObj_SSItem_c::mCcDCyl = {mCcDObjInfo, {}};
 
 daObj_SSItem_c::~daObj_SSItem_c() {
     dComIfG_resDelete(&mPhase, getResName());

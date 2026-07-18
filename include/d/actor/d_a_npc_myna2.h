@@ -13,7 +13,7 @@ class daNpc_myna2_Param_c {
 public:
     virtual ~daNpc_myna2_Param_c() {}
 
-    static const daNpc_myna2_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_myna2_HIOParam m;
 };
 
 #if DEBUG
@@ -87,8 +87,8 @@ public:
 
     int getType() { return mType; }
 
-    static char DUSK_CONST* DUSK_CONST mEvtCutNameList[5];
-    static EventFn DUSK_CONST mEvtCutList[];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[5];
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtCutList[];
 
     /* 0xB48 */ u8 field_0xB48[0xB4C - 0xB48];
     /* 0xB4C */ daNpcF_Lookat_c mLookat;

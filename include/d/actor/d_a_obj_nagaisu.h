@@ -29,7 +29,7 @@ public:
         mPos.z = i_pos.z;
     }
 
-    static const dCcD_SrcCyl s_CcDCyl;
+    static DUSK_GAME_DATA const dCcD_SrcCyl s_CcDCyl;
 
     /* 0x004 */ dMdl_obj_c mMdlObj;
     /* 0x038 */ Vec mPos;
@@ -59,7 +59,7 @@ public:
     void init();
     void setIsu();
 
-    static const int REMOVE_ISU_IDX[];
+    static DUSK_GAME_DATA const int REMOVE_ISU_IDX[];
 
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dCcD_Stts mCcStts;

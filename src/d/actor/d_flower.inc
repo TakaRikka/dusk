@@ -19,7 +19,7 @@ static u8* l_J_Ohana00_64TEX_get() { static u8 buf[0x800]; static bool _ = (dusk
 // from d_grass.inc
 static MtxP get_model_mtx(Mtx modelMtx, Mtx storage);
 static void transform_positions(
-    const dusk::batch::LeafTemplate& tpl, const Vec* posArray, const Mtx mtx, Vec* xfPos);
+    const batch::LeafTemplate& tpl, const Vec* posArray, const Mtx mtx, Vec* xfPos);
 static void split_batch(u32& emitted, u32 vtxCount);
 #else
 #include "assets/l_J_Ohana00_64TEX.h"
@@ -595,11 +595,11 @@ dFlower_packet_c::dFlower_packet_c() {
         l_J_Ohana01_64128_0419TEX__width + 1, l_J_Ohana01_64128_0419TEX__height + 1, GX_TF_CMPR, GX_MIRROR, GX_MIRROR, GX_FALSE
     );
 
-    dusk::batch::decode_leaf_template(l_J_hana00DL, 0x140, mTplHana00);
-    dusk::batch::decode_leaf_template(l_J_hana00_cDL, 0xC0, mTplHana00Cut);
-    dusk::batch::decode_leaf_template(l_J_hana01DL, 0x120, mTplHana01);
-    dusk::batch::decode_leaf_template(l_J_hana01_c_00DL, 0xC0, mTplHana01Cut00);
-    dusk::batch::decode_leaf_template(l_J_hana01_c_01DL, 0x120, mTplHana01Cut);
+    batch::decode_leaf_template(l_J_hana00DL, 0x140, mTplHana00);
+    batch::decode_leaf_template(l_J_hana00_cDL, 0xC0, mTplHana00Cut);
+    batch::decode_leaf_template(l_J_hana01DL, 0x120, mTplHana01);
+    batch::decode_leaf_template(l_J_hana01_c_00DL, 0xC0, mTplHana01Cut00);
+    batch::decode_leaf_template(l_J_hana01_c_01DL, 0x120, mTplHana01Cut);
 #endif
 
     m_deleteRoom = &dFlower_packet_c::deleteRoom;
@@ -757,9 +757,9 @@ static GXColor hana01_amb_color(int idx, const dKy_tevstr_c* tevstr) {
     return amb;
 }
 
-static void flower_emit(const dusk::batch::LeafTemplate& tpl, const Vec* xformedPos, GXColor amb) {
+static void flower_emit(const batch::LeafTemplate& tpl, const Vec* xformedPos, GXColor amb) {
     for (u32 i = 0; i < tpl.vtxCount; i++) {
-        const dusk::batch::LeafTemplate::Vtx& v = tpl.vtx[i];
+        const batch::LeafTemplate::Vtx& v = tpl.vtx[i];
         const Vec& p = xformedPos[v.pos];
         GXPosition3f32(p.x, p.y, p.z);
         GXNormal1x8(v.nrm);
@@ -852,7 +852,7 @@ void dFlower_packet_c::draw() {
 
         for (int bucket = 0; bucket < 2; bucket++) {
             const bool cut = bucket != 0;
-            const dusk::batch::LeafTemplate& tpl = cut ? mTplHana00Cut : mTplHana00;
+            const batch::LeafTemplate& tpl = cut ? mTplHana00Cut : mTplHana00;
 
             bool open = false;
             u32 emitted = 0;
@@ -931,10 +931,10 @@ void dFlower_packet_c::draw() {
         GXLoadPosMtxImm(identity, GX_PNMTX0);
         GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
 
-        const dusk::batch::LeafTemplate* const buckets[3] = {
+        const batch::LeafTemplate* const buckets[3] = {
             &mTplHana01, &mTplHana01Cut00, &mTplHana01Cut};
         for (int bucket = 0; bucket < 3; bucket++) {
-            const dusk::batch::LeafTemplate& tpl = *buckets[bucket];
+            const batch::LeafTemplate& tpl = *buckets[bucket];
 
             bool open = false;
             u32 emitted = 0;

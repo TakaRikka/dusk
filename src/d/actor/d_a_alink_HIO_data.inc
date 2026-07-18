@@ -1,7 +1,7 @@
 #include "d/actor/d_a_alink.h"
 
 // clang-format off
-const daAlinkHIO_basic_c1 daAlinkHIO_basic_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_basic_c1 daAlinkHIO_basic_c0::m = {
     false,
 	20000,
 	-10000,
@@ -30,7 +30,7 @@ const daAlinkHIO_basic_c1 daAlinkHIO_basic_c0::m = {
 	5000.0f,
 };
 
-const daAlinkHIO_move_c1 daAlinkHIO_move_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_move_c1 daAlinkHIO_move_c0::m = {
 	{
         11,
 	    0.7f,
@@ -58,7 +58,7 @@ const daAlinkHIO_move_c1 daAlinkHIO_move_c0::m = {
     0.4f,
 };
 
-const daAlinkHIO_atnMove_c1 daAlinkHIO_atnMove_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_atnMove_c1 daAlinkHIO_atnMove_c0::m = {
     3000,
 	2000,
 	6,
@@ -83,7 +83,7 @@ const daAlinkHIO_atnMove_c1 daAlinkHIO_atnMove_c0::m = {
 	1.3f,
 };
 
-const daAlinkHIO_noActAtnMove_c1 daAlinkHIO_noActAtnMove_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_noActAtnMove_c1 daAlinkHIO_noActAtnMove_c0::m = {
     3000,
 	2000,
 	6,
@@ -108,7 +108,7 @@ const daAlinkHIO_noActAtnMove_c1 daAlinkHIO_noActAtnMove_c0::m = {
 	2.3f,
 };
 
-const daAlinkHIO_frontRoll_c1 daAlinkHIO_frontRoll_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_frontRoll_c1 daAlinkHIO_frontRoll_c0::m = {
 	{
         29,
 	    1.1f,
@@ -147,7 +147,7 @@ const daAlinkHIO_frontRoll_c1 daAlinkHIO_frontRoll_c0::m = {
     60.0f,
 };
 
-const daAlinkHIO_backJump_c1 daAlinkHIO_backJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_backJump_c1 daAlinkHIO_backJump_c0::m = {
 	{
 		9,
 	    0.7f,
@@ -168,7 +168,7 @@ const daAlinkHIO_backJump_c1 daAlinkHIO_backJump_c0::m = {
 	10.0f,
 };
 
-const daAlinkHIO_sideStep_c1 daAlinkHIO_sideStep_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_sideStep_c1 daAlinkHIO_sideStep_c0::m = {
 	{
 		5,
         1.1f,
@@ -205,7 +205,7 @@ const daAlinkHIO_sideStep_c1 daAlinkHIO_sideStep_c0::m = {
     10.0f,
 };
 
-const daAlinkHIO_slide_c1 daAlinkHIO_slide_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_slide_c1 daAlinkHIO_slide_c0::m = {
 	{
 		14,
         0.75f,
@@ -248,7 +248,7 @@ const daAlinkHIO_slide_c1 daAlinkHIO_slide_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmV_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmV_c0::m = {
 	{
 		27,
         1.2f,
@@ -264,7 +264,7 @@ const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmV_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmL_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmL_c0::m = {
 	{
 		27,
         1.2f,
@@ -280,7 +280,7 @@ const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmL_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmR_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmR_c0::m = {
 	{
 		27,
         1.2f,
@@ -296,7 +296,7 @@ const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmR_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSL_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSL_c0::m = {
 	{
 		31,
         1.1f,
@@ -312,7 +312,7 @@ const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSL_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSR_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSR_c0::m = {
 	{
 		27,
         1.1f,
@@ -328,7 +328,7 @@ const daAlinkHIO_cutNormal_c1 daAlinkHIO_cutNmSR_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnL_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnL_c0::m = {
 	{
 		29,
         1.0f,
@@ -348,7 +348,7 @@ const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnL_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnV_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnV_c0::m = {
 	{
 		33,
         1.0f,
@@ -368,7 +368,7 @@ const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnV_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnS_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnS_c0::m = {
 	{
 		31,
         1.1f,
@@ -388,7 +388,7 @@ const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnS_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSl_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSl_c0::m = {
 	{
 		33,
         0.9f,
@@ -408,7 +408,7 @@ const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSl_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSm_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSm_c0::m = {
 	{
 		31,
         0.9f,
@@ -427,7 +427,7 @@ const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnSm_c0::m = {
 #pragma pop
 
 #pragma push
-const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnR_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnR_c0::m = {
 	{
 		34,
         1.1f,
@@ -445,7 +445,7 @@ const daAlinkHIO_cutFinish_c1 daAlinkHIO_cutFnR_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_cutFnJU_c1 daAlinkHIO_cutFnJU_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutFnJU_c1 daAlinkHIO_cutFnJU_c0::m = {
 	{
 		19,
         1.0f,
@@ -474,7 +474,7 @@ const daAlinkHIO_cutFnJU_c1 daAlinkHIO_cutFnJU_c0::m = {
     80.0f,
 };
 
-const daAlinkHIO_cutJump_c1 daAlinkHIO_cutJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutJump_c1 daAlinkHIO_cutJump_c0::m = {
 	{
 		17,
         1.1f,
@@ -498,7 +498,7 @@ const daAlinkHIO_cutJump_c1 daAlinkHIO_cutJump_c0::m = {
     3.0f,
 };
 
-const daAlinkHIO_cutTurn_c1 daAlinkHIO_cutTurn_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutTurn_c1 daAlinkHIO_cutTurn_c0::m = {
 	{
 		47,
         1.0f,
@@ -548,7 +548,7 @@ const daAlinkHIO_cutTurn_c1 daAlinkHIO_cutTurn_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLA_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLA_c0::m = {
 	{
 		21,
         0.9f,
@@ -564,7 +564,7 @@ const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLA_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLB_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLB_c0::m = {
 	{
 		24,
         0.9f,
@@ -580,7 +580,7 @@ const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutLB_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRA_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRA_c0::m = {
 	{
 		24,
         0.95f,
@@ -596,7 +596,7 @@ const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRA_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRB_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRB_c0::m = {
 	{
 		11,
         0.9f,
@@ -610,7 +610,7 @@ const daAlinkHIO_hoCut_c1 daAlinkHIO_hoCutRB_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_hoCutCharge_c1 daAlinkHIO_hoCutCharge_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_hoCutCharge_c1 daAlinkHIO_hoCutCharge_c0::m = {
 	{
 		6,
         0.45f,
@@ -643,7 +643,7 @@ const daAlinkHIO_hoCutCharge_c1 daAlinkHIO_hoCutCharge_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaL_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaL_c0::m = {
 	{
 		12,
         0.8f,
@@ -658,7 +658,7 @@ const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaL_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaR_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaR_c0::m = {
 	{
 		14,
         1.0f,
@@ -673,7 +673,7 @@ const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaR_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaCharge_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaCharge_c0::m = {
 	{
 		14,
         1.0f,
@@ -686,7 +686,7 @@ const daAlinkHIO_cutDash_c1 daAlinkHIO_cutDaCharge_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_cutDown_c1 daAlinkHIO_cutDown_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutDown_c1 daAlinkHIO_cutDown_c0::m = {
 	{
 		8,
         1.0f,
@@ -729,7 +729,7 @@ const daAlinkHIO_cutDown_c1 daAlinkHIO_cutDown_c0::m = {
     10.0f,
 };
 
-const daAlinkHIO_cutHead_c1 daAlinkHIO_cutHead_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutHead_c1 daAlinkHIO_cutHead_c0::m = {
 	{
 		8,
         0.9f,
@@ -762,7 +762,7 @@ const daAlinkHIO_cutHead_c1 daAlinkHIO_cutHead_c0::m = {
     1.6f,
 };
 
-const daAlinkHIO_cutLargeJump_c1 daAlinkHIO_cutLargeJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cutLargeJump_c1 daAlinkHIO_cutLargeJump_c0::m = {
 	{
 		29,
         1.3f,
@@ -802,7 +802,7 @@ const daAlinkHIO_cutLargeJump_c1 daAlinkHIO_cutLargeJump_c0::m = {
     5.0f,
 };
 
-const daAlinkHIO_cut_c1 daAlinkHIO_cut_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_cut_c1 daAlinkHIO_cut_c0::m = {
 	{
 		18,
         -1.100f,
@@ -857,7 +857,7 @@ const daAlinkHIO_cut_c1 daAlinkHIO_cut_c0::m = {
     0.0f,
 };
 
-const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtPush_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtPush_c0::m = {
 	{
 		14,
         1.0f,
@@ -873,7 +873,7 @@ const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtPush_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtKick_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtKick_c0::m = {
 	{
 		21,
         1.2f,
@@ -888,7 +888,7 @@ const daAlinkHIO_guardAttack_c1 daAlinkHIO_gAtKick_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_turnMove_c1 daAlinkHIO_turnMove_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_turnMove_c1 daAlinkHIO_turnMove_c0::m = {
 	{
 		27,
         1.0f,
@@ -906,7 +906,7 @@ const daAlinkHIO_turnMove_c1 daAlinkHIO_turnMove_c0::m = {
 	25.0f,
 };
 
-const daAlinkHIO_guard_c1 daAlinkHIO_guard_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_guard_c1 daAlinkHIO_guard_c0::m = {
 	{
 		11,
         1.0f,
@@ -951,7 +951,7 @@ const daAlinkHIO_guard_c1 daAlinkHIO_guard_c0::m = {
     18.0f,
 };
 
-const daAlinkHIO_crouch_c1 daAlinkHIO_crouch_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_crouch_c1 daAlinkHIO_crouch_c0::m = {
 	{
 		9,
         1.0f,
@@ -978,7 +978,7 @@ const daAlinkHIO_crouch_c1 daAlinkHIO_crouch_c0::m = {
     5.0f,
 };
 
-const daAlinkHIO_autoJump_c1 daAlinkHIO_autoJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_autoJump_c1 daAlinkHIO_autoJump_c0::m = {
 	{
 		6,
         1.2f,
@@ -1036,7 +1036,7 @@ const daAlinkHIO_autoJump_c1 daAlinkHIO_autoJump_c0::m = {
     23.0f,
 };
 
-const daAlinkHIO_smallJump_c1 daAlinkHIO_smallJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_smallJump_c1 daAlinkHIO_smallJump_c0::m = {
 	{
 		8,
         0.6f,
@@ -1063,7 +1063,7 @@ const daAlinkHIO_smallJump_c1 daAlinkHIO_smallJump_c0::m = {
     7.0f,
 };
 
-const daAlinkHIO_wallCatch_c1 daAlinkHIO_wallCatch_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wallCatch_c1 daAlinkHIO_wallCatch_c0::m = {
 	{
 		19,
         1.0f,
@@ -1095,7 +1095,7 @@ const daAlinkHIO_wallCatch_c1 daAlinkHIO_wallCatch_c0::m = {
     4.0f,
 };
 
-const daAlinkHIO_wallFall_c1 daAlinkHIO_wallFall_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wallFall_c1 daAlinkHIO_wallFall_c0::m = {
 	{
 		22,
         0.8f,
@@ -1112,7 +1112,7 @@ const daAlinkHIO_wallFall_c1 daAlinkHIO_wallFall_c0::m = {
 	},
 };
 
-const daAlinkHIO_wallMove_c1 daAlinkHIO_wallMove_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wallMove_c1 daAlinkHIO_wallMove_c0::m = {
     0.8f,
 	1.1f,
 	3.0f,
@@ -1120,7 +1120,7 @@ const daAlinkHIO_wallMove_c1 daAlinkHIO_wallMove_c0::m = {
 	3.0f,
 };
 
-const daAlinkHIO_wallHang_c1 daAlinkHIO_wallHang_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wallHang_c1 daAlinkHIO_wallHang_c0::m = {
     2,
 	3,
 	50.0f,
@@ -1131,7 +1131,7 @@ const daAlinkHIO_wallHang_c1 daAlinkHIO_wallHang_c0::m = {
 	200.0f,
 };
 
-const daAlinkHIO_pushpull_c1 daAlinkHIO_pushpull_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_pushpull_c1 daAlinkHIO_pushpull_c0::m = {
     0,
 	120,
 	7,
@@ -1153,7 +1153,7 @@ const daAlinkHIO_pushpull_c1 daAlinkHIO_pushpull_c0::m = {
 	0.75f,
 };
 
-const daAlinkHIO_damNormal_c1 daAlinkHIO_damNormal_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damNormal_c1 daAlinkHIO_damNormal_c0::m = {
 	{
 		22,
         2.3f,
@@ -1190,7 +1190,7 @@ const daAlinkHIO_damNormal_c1 daAlinkHIO_damNormal_c0::m = {
     0.5f,
 };
 
-const daAlinkHIO_damLaHu_c1 daAlinkHIO_damLarge_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damLaHu_c1 daAlinkHIO_damLarge_c0::m = {
 	{
 		49,
         0.8f,
@@ -1256,7 +1256,7 @@ const daAlinkHIO_damLaHu_c1 daAlinkHIO_damLarge_c0::m = {
     0.5f,
 };
 
-const daAlinkHIO_damLaHu_c1 daAlinkHIO_damHuge_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damLaHu_c1 daAlinkHIO_damHuge_c0::m = {
 	{
 		49,
         0.8f,
@@ -1322,7 +1322,7 @@ const daAlinkHIO_damLaHu_c1 daAlinkHIO_damHuge_c0::m = {
     0.5f,
 };
 
-const daAlinkHIO_damHorse_c1 daAlinkHIO_damHorse_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damHorse_c1 daAlinkHIO_damHorse_c0::m = {
 	{
 		9,
         2.0f,
@@ -1341,7 +1341,7 @@ const daAlinkHIO_damHorse_c1 daAlinkHIO_damHorse_c0::m = {
     5000,
 };
 
-const daAlinkHIO_damFall_c1 daAlinkHIO_damFall_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damFall_c1 daAlinkHIO_damFall_c0::m = {
 	{
 		11,
         1.2f,
@@ -1367,7 +1367,7 @@ const daAlinkHIO_damFall_c1 daAlinkHIO_damFall_c0::m = {
     15.0f,
 };
 
-const daAlinkHIO_damCaught_c1 daAlinkHIO_damCaught_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damCaught_c1 daAlinkHIO_damCaught_c0::m = {
 	{
 		59,
         1.5f,
@@ -1382,7 +1382,7 @@ const daAlinkHIO_damCaught_c1 daAlinkHIO_damCaught_c0::m = {
 	1.3f,
 };
 
-const daAlinkHIO_damSwim_c1 daAlinkHIO_damSwim_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damSwim_c1 daAlinkHIO_damSwim_c0::m = {
 	{
 		22,
         1.2f,
@@ -1433,7 +1433,7 @@ const daAlinkHIO_damSwim_c1 daAlinkHIO_damSwim_c0::m = {
     15.0f,
 };
 
-const daAlinkHIO_damage_c1 daAlinkHIO_damage_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_damage_c1 daAlinkHIO_damage_c0::m = {
 	{
 		14,
         1.0f,
@@ -1471,7 +1471,7 @@ const daAlinkHIO_damage_c1 daAlinkHIO_damage_c0::m = {
     35.0f,
 };
 
-const daAlinkHIO_horse_c1 daAlinkHIO_horse_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_horse_c1 daAlinkHIO_horse_c0::m = {
 	{
 		18,
         1.2f,
@@ -1512,7 +1512,7 @@ const daAlinkHIO_horse_c1 daAlinkHIO_horse_c0::m = {
     5.0f,
 };
 
-const daAlinkHIO_canoe_c1 daAlinkHIO_canoe_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_canoe_c1 daAlinkHIO_canoe_c0::m = {
 	{
 		23,
         1.3f,
@@ -1536,7 +1536,7 @@ const daAlinkHIO_canoe_c1 daAlinkHIO_canoe_c0::m = {
     0.2f,
 };
 
-const daAlinkHIO_bow_c1 daAlinkHIO_bow_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_bow_c1 daAlinkHIO_bow_c0::m = {
 	{
 		9,
         1.0f,
@@ -1572,7 +1572,7 @@ const daAlinkHIO_bow_c1 daAlinkHIO_bow_c0::m = {
     800.0f,
 };
 
-const daAlinkHIO_boom_c1 daAlinkHIO_boom_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_boom_c1 daAlinkHIO_boom_c0::m = {
 	{
 		21,
         0.9f,
@@ -1599,7 +1599,7 @@ const daAlinkHIO_boom_c1 daAlinkHIO_boom_c0::m = {
     40.0f,
 };
 
-const daAlinkHIO_bomb_c1 daAlinkHIO_bomb_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_bomb_c1 daAlinkHIO_bomb_c0::m = {
     160,
 	50,
 	50,
@@ -1624,7 +1624,7 @@ const daAlinkHIO_bomb_c1 daAlinkHIO_bomb_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_huLight_c1 daAlinkHIO_huLight_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_huLight_c1 daAlinkHIO_huLight_c0::m = {
     0,
     3,
 	0,
@@ -1639,7 +1639,7 @@ const daAlinkHIO_huLight_c1 daAlinkHIO_huLight_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_kandelaar_c1 daAlinkHIO_kandelaar_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_kandelaar_c1 daAlinkHIO_kandelaar_c0::m = {
 	{
 		30,
         1.1f,
@@ -1672,7 +1672,7 @@ const daAlinkHIO_kandelaar_c1 daAlinkHIO_kandelaar_c0::m = {
     0.5f,
 };
 
-const daAlinkHIO_fmChain_c1 daAlinkHIO_fmChain_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_fmChain_c1 daAlinkHIO_fmChain_c0::m = {
 	{
 		20,
         1.2f,
@@ -1689,7 +1689,7 @@ const daAlinkHIO_fmChain_c1 daAlinkHIO_fmChain_c0::m = {
 	},
 };
 
-const daAlinkHIO_magneBoots_c1 daAlinkHIO_magneBoots_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_magneBoots_c1 daAlinkHIO_magneBoots_c0::m = {
 	{
 		29,
         1.1f,
@@ -1713,7 +1713,7 @@ const daAlinkHIO_magneBoots_c1 daAlinkHIO_magneBoots_c0::m = {
     0.7f,
 };
 
-const daAlinkHIO_pickUp_c1 daAlinkHIO_pickUp_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_pickUp_c1 daAlinkHIO_pickUp_c0::m = {
 	{
 		18,
         0.9f,
@@ -1732,7 +1732,7 @@ const daAlinkHIO_pickUp_c1 daAlinkHIO_pickUp_c0::m = {
     30.0f,
 };
 
-const daAlinkHIO_board_c1 daAlinkHIO_board_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_board_c1 daAlinkHIO_board_c0::m = {
 	{
 		9,
         2.5f,
@@ -1782,7 +1782,7 @@ const daAlinkHIO_board_c1 daAlinkHIO_board_c0::m = {
     50.0f,
 };
 
-const daAlinkHIO_bottle_c1 daAlinkHIO_bottle_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_bottle_c1 daAlinkHIO_bottle_c0::m = {
 	{
 		56,
         1.15f,
@@ -1848,7 +1848,7 @@ const daAlinkHIO_bottle_c1 daAlinkHIO_bottle_c0::m = {
 	},
 };
 
-const daAlinkHIO_hookshot_c1 daAlinkHIO_hookshot_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_hookshot_c1 daAlinkHIO_hookshot_c0::m = {
 	{
 		12,
         1.0f,
@@ -1885,7 +1885,7 @@ const daAlinkHIO_hookshot_c1 daAlinkHIO_hookshot_c0::m = {
     90.0f,
 };
 
-const daAlinkHIO_spinner_c1 daAlinkHIO_spinner_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_spinner_c1 daAlinkHIO_spinner_c0::m = {
 	{
 		21,
         0.8f,
@@ -1908,7 +1908,7 @@ const daAlinkHIO_spinner_c1 daAlinkHIO_spinner_c0::m = {
     60.0f,
 };
 
-const daAlinkHIO_ironBall_c1 daAlinkHIO_ironBall_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_ironBall_c1 daAlinkHIO_ironBall_c0::m = {
 	{
 		19,
         1.1f,
@@ -1949,7 +1949,7 @@ const daAlinkHIO_ironBall_c1 daAlinkHIO_ironBall_c0::m = {
     0.5f,
 };
 
-const daAlinkHIO_copyRod_c1 daAlinkHIO_copyRod_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_copyRod_c1 daAlinkHIO_copyRod_c0::m = {
     19,
 	1.0f,
 	0.0f,
@@ -1966,7 +1966,7 @@ const daAlinkHIO_copyRod_c1 daAlinkHIO_copyRod_c0::m = {
 	2000.0f,
 };
 
-const daAlinkHIO_zwLight_c1 daAlinkHIO_zwLight_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_zwLight_c1 daAlinkHIO_zwLight_c0::m = {
     771,
 	0,
 	182,
@@ -1979,7 +1979,7 @@ const daAlinkHIO_zwLight_c1 daAlinkHIO_zwLight_c0::m = {
 	0.0f,
 };
 
-const daAlinkHIO_item_c1 daAlinkHIO_item_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_item_c1 daAlinkHIO_item_c0::m = {
 	{
 		12,
         1.0f,
@@ -2003,7 +2003,7 @@ const daAlinkHIO_item_c1 daAlinkHIO_item_c0::m = {
     1.3f,
 };
 
-const daAlinkHIO_ladder_c1 daAlinkHIO_ladder_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_ladder_c1 daAlinkHIO_ladder_c0::m = {
 	{
 		13,
         0.8f,
@@ -2038,7 +2038,7 @@ const daAlinkHIO_ladder_c1 daAlinkHIO_ladder_c0::m = {
     80.0f,
 };
 
-const daAlinkHIO_roofHang_c1 daAlinkHIO_roofHang_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_roofHang_c1 daAlinkHIO_roofHang_c0::m = {
 	{
 		34,
         1.0f,
@@ -2063,7 +2063,7 @@ const daAlinkHIO_roofHang_c1 daAlinkHIO_roofHang_c0::m = {
     3.0f,
 };
 
-const daAlinkHIO_grab_c1 daAlinkHIO_grab_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_grab_c1 daAlinkHIO_grab_c0::m = {
 	{
 		4,
         0.9f,
@@ -2146,7 +2146,7 @@ const daAlinkHIO_grab_c1 daAlinkHIO_grab_c0::m = {
     0.55f,
 };
 
-const daAlinkHIO_swim_c1 daAlinkHIO_swim_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_swim_c1 daAlinkHIO_swim_c0::m = {
 	{
 		25,
         1.0f,
@@ -2224,7 +2224,7 @@ const daAlinkHIO_swim_c1 daAlinkHIO_swim_c0::m = {
     1.3f,
 };
 
-const daAlinkHIO_wlMove_c1 daAlinkHIO_wlMove_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlMove_c1 daAlinkHIO_wlMove_c0::m = {
 	{
 		14,
         1.0f,
@@ -2303,7 +2303,7 @@ const daAlinkHIO_wlMove_c1 daAlinkHIO_wlMove_c0::m = {
     0.5f,
 };
 
-const daAlinkHIO_wlMoveNoP_c1 daAlinkHIO_wlMoveNoP_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlMoveNoP_c1 daAlinkHIO_wlMoveNoP_c0::m = {
     9000,
 	100,
 	5,
@@ -2325,7 +2325,7 @@ const daAlinkHIO_wlMoveNoP_c1 daAlinkHIO_wlMoveNoP_c0::m = {
 	30.0f,
 };
 
-const daAlinkHIO_wlAtnMove_c1 daAlinkHIO_wlAtnMove_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtnMove_c1 daAlinkHIO_wlAtnMove_c0::m = {
     9000,
 	100,
 	3,
@@ -2343,7 +2343,7 @@ const daAlinkHIO_wlAtnMove_c1 daAlinkHIO_wlAtnMove_c0::m = {
 	2.0f,
 };
 
-const daAlinkHIO_wlSideStep_c1 daAlinkHIO_wlSideStep_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlSideStep_c1 daAlinkHIO_wlSideStep_c0::m = {
 	{
 		5,
         1.0f,
@@ -2380,7 +2380,7 @@ const daAlinkHIO_wlSideStep_c1 daAlinkHIO_wlSideStep_c0::m = {
     10.0f,
 };
 
-const daAlinkHIO_wlBackJump_c1 daAlinkHIO_wlBackJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlBackJump_c1 daAlinkHIO_wlBackJump_c0::m = {
 	{
 		11,
         0.8f,
@@ -2401,7 +2401,7 @@ const daAlinkHIO_wlBackJump_c1 daAlinkHIO_wlBackJump_c0::m = {
 	10.0f,
 };
 
-const daAlinkHIO_wlHowl_c1 daAlinkHIO_wlHowl_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlHowl_c1 daAlinkHIO_wlHowl_c0::m = {
 	{
 		49,
         1.0f,
@@ -2436,7 +2436,7 @@ const daAlinkHIO_wlHowl_c1 daAlinkHIO_wlHowl_c0::m = {
     0.7f,
 };
 
-const daAlinkHIO_wlAutoJump_c1 daAlinkHIO_wlAutoJump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAutoJump_c1 daAlinkHIO_wlAutoJump_c0::m = {
 	{
 		3,
         1.2f,
@@ -2478,7 +2478,7 @@ const daAlinkHIO_wlAutoJump_c1 daAlinkHIO_wlAutoJump_c0::m = {
     100.0f,
 };
 
-const daAlinkHIO_wlPush_c1 daAlinkHIO_wlPush_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlPush_c1 daAlinkHIO_wlPush_c0::m = {
     1.0f,
 	3.0f,
 	1.0f,
@@ -2486,7 +2486,7 @@ const daAlinkHIO_wlPush_c1 daAlinkHIO_wlPush_c0::m = {
 	0.75f,
 };
 
-const daAlinkHIO_wlLie_c1 daAlinkHIO_wlLie_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlLie_c1 daAlinkHIO_wlLie_c0::m = {
 	{
 		14,
         1.5f,
@@ -2515,7 +2515,7 @@ const daAlinkHIO_wlLie_c1 daAlinkHIO_wlLie_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_wlLight_c1 daAlinkHIO_wlLight_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlLight_c1 daAlinkHIO_wlLight_c0::m = {
     515,
 	0,
 	120,
@@ -2529,7 +2529,7 @@ const daAlinkHIO_wlLight_c1 daAlinkHIO_wlLight_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_wlWallHang_c1 daAlinkHIO_wlWallHang_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlWallHang_c1 daAlinkHIO_wlWallHang_c0::m = {
 	{
 		13,
         1.2f,
@@ -2583,7 +2583,7 @@ const daAlinkHIO_wlWallHang_c1 daAlinkHIO_wlWallHang_c0::m = {
     10.0f,
 };
 
-const daAlinkHIO_wlDamNormal_c1 daAlinkHIO_wlDamNormal_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlDamNormal_c1 daAlinkHIO_wlDamNormal_c0::m = {
 	{
 		9,
         1.0f,
@@ -2618,7 +2618,7 @@ const daAlinkHIO_wlDamNormal_c1 daAlinkHIO_wlDamNormal_c0::m = {
     0.25f,
 };
 
-const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamLarge_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamLarge_c0::m = {
 	{
 		49,
         1.0f,
@@ -2658,7 +2658,7 @@ const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamLarge_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamHuge_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamHuge_c0::m = {
 	{
 		49,
         1.1f,
@@ -2697,7 +2697,7 @@ const daAlinkHIO_wlDamLaHu_c1 daAlinkHIO_wlDamHuge_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_wlDamFall_c1 daAlinkHIO_wlDamFall_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlDamFall_c1 daAlinkHIO_wlDamFall_c0::m = {
 	{
 		11,
         1.0f,
@@ -2721,7 +2721,7 @@ const daAlinkHIO_wlDamFall_c1 daAlinkHIO_wlDamFall_c0::m = {
     15.0f,
 };
 
-const daAlinkHIO_wlDamCaught_c1 daAlinkHIO_wlDamCaught_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlDamCaught_c1 daAlinkHIO_wlDamCaught_c0::m = {
     300,
 	5,
 	1.2f,
@@ -2729,7 +2729,7 @@ const daAlinkHIO_wlDamCaught_c1 daAlinkHIO_wlDamCaught_c0::m = {
 	1.5f,
 };
 
-const daAlinkHIO_wlDamage_c1 daAlinkHIO_wlDamage_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlDamage_c1 daAlinkHIO_wlDamage_c0::m = {
 	{
 		9,
         1.1f,
@@ -2747,7 +2747,7 @@ const daAlinkHIO_wlDamage_c1 daAlinkHIO_wlDamage_c0::m = {
     0.7f,
 };
 
-const daAlinkHIO_wlSlide_c1 daAlinkHIO_wlSlide_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlSlide_c1 daAlinkHIO_wlSlide_c0::m = {
 	{
 		20,
         1.25f,
@@ -2790,7 +2790,7 @@ const daAlinkHIO_wlSlide_c1 daAlinkHIO_wlSlide_c0::m = {
     30.0f,
 };
 
-const daAlinkHIO_wlRope_c1 daAlinkHIO_wlRope_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlRope_c1 daAlinkHIO_wlRope_c0::m = {
 	{
 		16,
         1.0f,
@@ -2812,7 +2812,7 @@ const daAlinkHIO_wlRope_c1 daAlinkHIO_wlRope_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaLr_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaLr_c0::m = {
 	{
 		41,
         0.9f,
@@ -2836,7 +2836,7 @@ const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaLr_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaSc_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaSc_c0::m = {
 	{
 		15,
         0.9f,
@@ -2860,7 +2860,7 @@ const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaSc_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaTl_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaTl_c0::m = {
 	{
 		42,
         1.05f,
@@ -2882,7 +2882,7 @@ const daAlinkHIO_wlAtWait_c1 daAlinkHIO_wlAtWaTl_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_wlAtRoll_c1 daAlinkHIO_wlAtRoll_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtRoll_c1 daAlinkHIO_wlAtRoll_c0::m = {
 	{
 		40,
         1.0f,
@@ -2895,7 +2895,7 @@ const daAlinkHIO_wlAtRoll_c1 daAlinkHIO_wlAtRoll_c0::m = {
     0.0f,
 };
 
-const daAlinkHIO_wlAtNjump_c1 daAlinkHIO_wlAtNjump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtNjump_c1 daAlinkHIO_wlAtNjump_c0::m = {
 	{
 		6,
         1.0f,
@@ -2915,7 +2915,7 @@ const daAlinkHIO_wlAtNjump_c1 daAlinkHIO_wlAtNjump_c0::m = {
     10.0f,
 };
 
-const daAlinkHIO_wlAtCjump_c1 daAlinkHIO_wlAtCjump_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtCjump_c1 daAlinkHIO_wlAtCjump_c0::m = {
 	{
 		3,
         2.0f,
@@ -2947,7 +2947,7 @@ const daAlinkHIO_wlAtCjump_c1 daAlinkHIO_wlAtCjump_c0::m = {
     0.1f,
 };
 
-const daAlinkHIO_wlAtLand_c1 daAlinkHIO_wlAtLand_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtLand_c1 daAlinkHIO_wlAtLand_c0::m = {
 	{
 		19,
         0.9f,
@@ -2972,7 +2972,7 @@ const daAlinkHIO_wlAtLand_c1 daAlinkHIO_wlAtLand_c0::m = {
     2.0f,
 };
 
-const daAlinkHIO_wlAtDown_c1 daAlinkHIO_wlAtDown_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtDown_c1 daAlinkHIO_wlAtDown_c0::m = {
 	{
 		3,
         1.0f,
@@ -3029,7 +3029,7 @@ const daAlinkHIO_wlAtDown_c1 daAlinkHIO_wlAtDown_c0::m = {
     13.0f,
 };
 
-const daAlinkHIO_wlAtLock_c1 daAlinkHIO_wlAtLock_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtLock_c1 daAlinkHIO_wlAtLock_c0::m = {
 	{
 		6,
         3.0f,
@@ -3057,7 +3057,7 @@ const daAlinkHIO_wlAtLock_c1 daAlinkHIO_wlAtLock_c0::m = {
     1000.0f,
 };
 
-const daAlinkHIO_wlAtBite_c1 daAlinkHIO_wlAtBite_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAtBite_c1 daAlinkHIO_wlAtBite_c0::m = {
 	{
 		5,
         1.0f,
@@ -3088,7 +3088,7 @@ const daAlinkHIO_wlAtBite_c1 daAlinkHIO_wlAtBite_c0::m = {
     0.02f,
 };
 
-const daAlinkHIO_wlAttack_c1 daAlinkHIO_wlAttack_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlAttack_c1 daAlinkHIO_wlAttack_c0::m = {
 	{
 		59,
         1.2f,
@@ -3108,7 +3108,7 @@ const daAlinkHIO_wlAttack_c1 daAlinkHIO_wlAttack_c0::m = {
 	30.0f,
 };
 
-const daAlinkHIO_wlPoint_c1 daAlinkHIO_wlPoint_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlPoint_c1 daAlinkHIO_wlPoint_c0::m = {
 	{
 		6,
         0.9f,
@@ -3150,7 +3150,7 @@ const daAlinkHIO_wlPoint_c1 daAlinkHIO_wlPoint_c0::m = {
     0.2f,
 };
 
-const daAlinkHIO_wlChain_c1 daAlinkHIO_wlChain_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlChain_c1 daAlinkHIO_wlChain_c0::m = {
 	{
 		39,
         1.0f,
@@ -3183,7 +3183,7 @@ const daAlinkHIO_wlChain_c1 daAlinkHIO_wlChain_c0::m = {
     5.0f,
 };
 
-const daAlinkHIO_wlSwim_c1 daAlinkHIO_wlSwim_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlSwim_c1 daAlinkHIO_wlSwim_c0::m = {
 	{
 		25,
         0.9f,
@@ -3237,7 +3237,7 @@ const daAlinkHIO_wlSwim_c1 daAlinkHIO_wlSwim_c0::m = {
     7.0f,
 };
 
-const daAlinkHIO_wlGrab_c1 daAlinkHIO_wlGrab_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlGrab_c1 daAlinkHIO_wlGrab_c0::m = {
 	{
 		20,
         1.5f,
@@ -3277,7 +3277,7 @@ const daAlinkHIO_wlGrab_c1 daAlinkHIO_wlGrab_c0::m = {
 
 #pragma push
 #pragma force_active on
-const daAlinkHIO_wlBall_c1 daAlinkHIO_wlBall_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wlBall_c1 daAlinkHIO_wlBall_c0::m = {
 	{
 		64,
         1.0f,
@@ -3299,7 +3299,7 @@ const daAlinkHIO_wlBall_c1 daAlinkHIO_wlBall_c0::m = {
 };
 #pragma pop
 
-const daAlinkHIO_wolf_c1 daAlinkHIO_wolf_c0::m = {
+DUSK_GAME_DATA const daAlinkHIO_wolf_c1 daAlinkHIO_wolf_c0::m = {
     13000,
 	-10000,
 	8000,

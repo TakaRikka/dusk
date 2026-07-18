@@ -12,7 +12,7 @@ class daNpcShad_Param_c : public JORReflexible {
 public:
     virtual ~daNpcShad_Param_c() {}
 
-    static const daNpcShad_HIOParam m;
+    static DUSK_GAME_DATA const daNpcShad_HIOParam m;
 };
 
 #if DEBUG
@@ -184,7 +184,7 @@ public:
     void lookat();
     BOOL drawDbgInfo();
 
-    static EventFn DUSK_CONST mEvtSeqList[14];
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtSeqList[14];
 
     u8 getPathID() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
     s16 getMessageNo() { return shape_angle.x; }

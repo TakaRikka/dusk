@@ -130,7 +130,7 @@ STATIC_ASSERT(sizeof(mDoMemCd_Ctrl_c) == 8192);
 
 static int mDoMemCd_main(void*);
 
-extern mDoMemCd_Ctrl_c g_mDoMemCd_control;
+DUSK_GAME_EXTERN mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
 inline bool mDoMemCd_isCardCommNone() {
     return g_mDoMemCd_control.isCardCommNone();

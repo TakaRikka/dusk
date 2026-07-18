@@ -41,9 +41,9 @@ public:
     static void deleteRoomGrass(int);
     static void deleteRoomFlower(int);
 
-    static daGrass_c* m_myObj;
-    static dGrass_packet_c* m_grass;
-    static dFlower_packet_c* m_flower;
+    static DUSK_GAME_DATA daGrass_c* m_myObj;
+    static DUSK_GAME_DATA dGrass_packet_c* m_grass;
+    static DUSK_GAME_DATA dFlower_packet_c* m_flower;
 
     /* 0x568 */ u8 unk_0x568[0x570 - 0x568];
 };

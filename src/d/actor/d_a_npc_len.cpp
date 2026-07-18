@@ -44,7 +44,7 @@ enum Motion {
     /* 0x11 */ MOT_UNK_17 = 17,
 };
 
-const daNpc_Len_HIOParam daNpc_Len_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Len_HIOParam daNpc_Len_Param_c::m = {
     230.0f, -3.0f,  1.0f,   450.0f, 255.0f, 210.0f, 35.0f, 40.0f,  0.0f,  0.0f, 15.0f,
     -15.0f, 30.0f,  -10.0f, 30.0f,  -30.0f, 0.6f,   12.0f, 3,      6,     5,    6,
     110.0f, 0.0f,   0.0f,   0.0f,   60,     8,      0,     0,      0,     0,    0,
@@ -144,14 +144,14 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},  {-1, 0, 0}, {-1, 0, 0},  {17, 4, 1},  {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Len_c::mCutNameList[4] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Len_c::mCutNameList[4] = {
     "",
     "HURRY",
     "CONVERSATION_IN_HOTEL",
     "TAKE_WOODSTATUE",
 };
 
-daNpc_Len_c::cutFunc DUSK_CONST daNpc_Len_c::mCutList[4] = {
+DUSK_GAME_DATA daNpc_Len_c::cutFunc DUSK_CONST daNpc_Len_c::mCutList[4] = {
     NULL,
     &daNpc_Len_c::cutHurry,
     &daNpc_Len_c::cutConversationInHotel,

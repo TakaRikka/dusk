@@ -325,13 +325,13 @@ void daNpc_grO_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-char DUSK_CONST* DUSK_CONST daNpc_grO_c::mEvtCutNameList[3] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_grO_c::mEvtCutNameList[3] = {
     "",
     "BOKIN_FINISH",
     "PUSHOUT",
 };
 
-daNpc_grO_c::cutFunc DUSK_CONST daNpc_grO_c::mEvtCutList[3] = {
+DUSK_GAME_DATA daNpc_grO_c::cutFunc DUSK_CONST daNpc_grO_c::mEvtCutList[3] = {
     NULL,
     &daNpc_grO_c::ECut_bokinFinish,
     &daNpc_grO_c::cutPushOut,
@@ -355,7 +355,7 @@ daNpc_grO_c::~daNpc_grO_c() {
     #endif
 }
 
-daNpc_grO_HIOParam const daNpc_grO_Param_c::m = {
+DUSK_GAME_DATA daNpc_grO_HIOParam const daNpc_grO_Param_c::m = {
     160.0f,
     -3.0f,
     1.0f,

@@ -66,8 +66,8 @@ private:
     /* 0xEDE */ u8 field_0xede;
 
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 };
 
 STATIC_ASSERT(sizeof(daBmWindow_c) == 0xEE0);

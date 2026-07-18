@@ -56,6 +56,6 @@ struct view_class {
     /* 0x1E0 */ Mtx viewMtxNoTrans;
 };
 
-extern leafdraw_method_class g_fopVw_Method;
+DUSK_GAME_EXTERN leafdraw_method_class g_fopVw_Method;
 
 #endif

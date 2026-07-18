@@ -42,7 +42,7 @@ struct JASCalc {
     f32 fake3();
 
 #if AVOID_UB
-    static const s16 CUTOFF_TO_IIR_TABLE[129][4];
+    static DUSK_GAME_DATA const s16 CUTOFF_TO_IIR_TABLE[129][4];
 #else
     static const s16 CUTOFF_TO_IIR_TABLE[128][4];
 #endif

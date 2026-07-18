@@ -16,7 +16,7 @@ const int stack_size = 3072;
 const int stack_size = 8192;
 #endif
 
-bool mDoDvdErr_initialized;
+DUSK_GAME_DATA bool mDoDvdErr_initialized;
 
 static OSThread DvdErr_thread;
 

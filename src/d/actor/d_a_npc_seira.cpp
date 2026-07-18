@@ -111,19 +111,19 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {25, 4, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Seira_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Seira_c::mCutNameList[2] = {
     "",
     "CONVERSATION_ABOUT_SARU",
 };
 
-daNpc_Seira_c::cutFunc DUSK_CONST daNpc_Seira_c::mCutList[2] = {
+DUSK_GAME_DATA daNpc_Seira_c::cutFunc DUSK_CONST daNpc_Seira_c::mCutList[2] = {
     NULL,
     &daNpc_Seira_c::cutConversationAboutSaru,
 };
 
 static NPC_SEIRA_HIO_CLASS l_HIO;
 
-const daNpc_Seira_HIOParam daNpc_Seira_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Seira_HIOParam daNpc_Seira_Param_c::m = {
     210.0f,
     -3.0f,
     1.0f,

@@ -3,7 +3,7 @@
 #include "d/d_att_dist.h"
 #include "d/d_attention.h"
 
-dist_entry dAttention_c::dist_table[234] = {
+DUSK_GAME_DATA dist_entry dAttention_c::dist_table[234] = {
     {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.01f, 0},
     {250.0f, 375.0f, 500.0f, 400.0f, -400.0f, 0.5f, 0},
     {187.5f, 250.0f, 312.5f, 300.0f, -300.0f, 1.0f, 0},

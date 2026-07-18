@@ -8,11 +8,11 @@
 
 #include "JSystem/JKernel/JKRHeap.h"
 
-JUTVideo* JUTVideo::sManager;
+DUSK_GAME_DATA JUTVideo* JUTVideo::sManager;
 
-OSTick JUTVideo::sVideoLastTick;
+DUSK_GAME_DATA OSTick JUTVideo::sVideoLastTick;
 
-OSTick JUTVideo::sVideoInterval;
+DUSK_GAME_DATA OSTick JUTVideo::sVideoInterval;
 
 static bool data_80451544;
 

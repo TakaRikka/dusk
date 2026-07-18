@@ -68,8 +68,8 @@ public:
         _clrLstBuf();
     }
 
-    static u16 mSphSe;
-    static s16 mSeClrTmr;
+    static DUSK_GAME_DATA u16 mSphSe;
+    static DUSK_GAME_DATA s16 mSeClrTmr;
 
     /* 0x0 */ int field_0x0;
     /* 0x4 */ _GlSph_LstInfo_c mListBuf[120];
@@ -135,9 +135,9 @@ public:
         saveGetFlag();
     }
 
-    static const dCcD_SrcGObjInf mCcDObjInfo;
-    static dCcD_SrcSph mCcDSph;
-    static _GlSph_Mng_c mSphMng;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA _GlSph_Mng_c mSphMng;
 
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mpModel;

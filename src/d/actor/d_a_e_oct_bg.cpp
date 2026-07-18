@@ -173,10 +173,10 @@ static int daE_OctBg_Delete(daE_OctBg_c* i_this) {
 
 static daE_OctBg_HIO_c l_HIO;
 
-u8 unk_bss_78;
-u8 unk_bss_79;
-u8 unk_bss_7A;
-u8 unk_bss_7B;
+DUSK_GAME_DATA u8 unk_bss_78;
+DUSK_GAME_DATA u8 unk_bss_79;
+DUSK_GAME_DATA u8 unk_bss_7A;
+DUSK_GAME_DATA u8 unk_bss_7B;
 
 void daE_OctBg_c::cc_set() {
     cXyz cStack_1c;

@@ -4,7 +4,7 @@
 #include <gx.h>
 #include <mtx.h>
 #include "global.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 /**
  * @ingroup jsystem-j2d
@@ -46,7 +46,7 @@ struct J2DTexMtxInfo {
 
 };  // Size: 0x24
 
-extern J2DTexMtxInfo const j2dDefaultTexMtxInfo;
+DUSK_GAME_EXTERN J2DTexMtxInfo const j2dDefaultTexMtxInfo;
 
 /**
  * @ingroup jsystem-j2d
@@ -86,7 +86,7 @@ struct J2DIndTexOrderInfo {
     GXTexMapID getTexMapID() const { return (GXTexMapID)mTexMapID; }
 };
 
-extern const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull;
+DUSK_GAME_EXTERN const J2DIndTexOrderInfo j2dDefaultIndTexOrderNull;
 
 /**
  * @ingroup jsystem-j2d
@@ -130,7 +130,7 @@ struct J2DIndTexMtxInfo {
     }
 };
 
-extern J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo;
+DUSK_GAME_EXTERN J2DIndTexMtxInfo const j2dDefaultIndTexMtxInfo;
 
 /**
  * @ingroup jsystem-j2d
@@ -175,7 +175,7 @@ struct J2DIndTexCoordScaleInfo {
     GXIndTexScale getScaleT() const { return (GXIndTexScale)mScaleT; }
 };
 
-extern const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo;
+DUSK_GAME_EXTERN const J2DIndTexCoordScaleInfo j2dDefaultIndTexCoordScaleInfo;
 
 /**
  * @ingroup jsystem-j2d
@@ -239,7 +239,7 @@ inline u32 J2DCalcIndTevStage(J2DIndTevStageInfo info) {
            (info.mBiasSel << 4)  | (info.mIndFormat << 2)  | (info.mIndStage);
 }
 
-extern const J2DIndTevStageInfo j2dDefaultIndTevStageInfo;
+DUSK_GAME_EXTERN const J2DIndTevStageInfo j2dDefaultIndTevStageInfo;
 
 /**
  * @ingroup jsystem-j2d
@@ -289,7 +289,7 @@ struct J2DTexCoordInfo {
     }
 };
 
-extern J2DTexCoordInfo const j2dDefaultTexCoordInfo[8];
+DUSK_GAME_EXTERN J2DTexCoordInfo const j2dDefaultTexCoordInfo[8];
 
 /**
  * @ingroup jsystem-j2d
@@ -332,7 +332,7 @@ struct J2DTevOrderInfo {
     }
 };
 
-extern const J2DTevOrderInfo j2dDefaultTevOrderInfoNull;
+DUSK_GAME_EXTERN const J2DTevOrderInfo j2dDefaultTevOrderInfoNull;
 
 /**
  * @ingroup jsystem-j2d
@@ -383,7 +383,7 @@ struct J2DTevStageInfo {
     /* 0x13 */ u8 field_0x13;
 };
 
-extern J2DTevStageInfo const j2dDefaultTevStageInfo;
+DUSK_GAME_EXTERN J2DTevStageInfo const j2dDefaultTevStageInfo;
 
 /**
  * @ingroup jsystem-j2d
@@ -396,7 +396,7 @@ struct J2DTevSwapModeInfo {
     /* 0x3 */ u8 field_0x3;
 };
 
-extern const J2DTevSwapModeInfo j2dDefaultTevSwapMode;
+DUSK_GAME_EXTERN const J2DTevSwapModeInfo j2dDefaultTevSwapMode;
 
 /**
  * @ingroup jsystem-j2d
@@ -565,8 +565,8 @@ inline u8 J2DCalcTevSwapTable(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
     return (param_0 << 6) + (param_1 << 4) + (param_2 << 2) + param_3;
 }
 
-extern const J2DTevSwapModeTableInfo j2dDefaultTevSwapModeTable;
-extern const u8 j2dDefaultTevSwapTableID;
+DUSK_GAME_EXTERN const J2DTevSwapModeTableInfo j2dDefaultTevSwapModeTable;
+DUSK_GAME_EXTERN const u8 j2dDefaultTevSwapTableID;
 
 /**
  * @ingroup jsystem-j2d
@@ -615,7 +615,7 @@ struct J2DColorChanInfo {
 };
 
 inline u16 J2DCalcColorChanID(u8 param_0) { return param_0; }
-extern const J2DColorChanInfo j2dDefaultColorChanInfo;
+DUSK_GAME_EXTERN const J2DColorChanInfo j2dDefaultColorChanInfo;
 
 /**
  * @ingroup jsystem-j2d
@@ -644,12 +644,12 @@ private:
     /* 0x0 */ u16 mColorChan;
 };
 
-extern const GXColor j2dDefaultColInfo;
-extern const GXColorS10 j2dDefaultTevColor;
-extern const GXColor j2dDefaultTevKColor;
-extern const J2DTevOrderInfo j2dDefaultTevOrderInfoNull;
-extern const u8 j2dDefaultPEBlockDither;
-extern const u8 j2dDefaultTevSwapTableID;
-extern const u16 j2dDefaultAlphaCmp;
+DUSK_GAME_EXTERN const GXColor j2dDefaultColInfo;
+DUSK_GAME_EXTERN const GXColorS10 j2dDefaultTevColor;
+DUSK_GAME_EXTERN const GXColor j2dDefaultTevKColor;
+DUSK_GAME_EXTERN const J2DTevOrderInfo j2dDefaultTevOrderInfoNull;
+DUSK_GAME_EXTERN const u8 j2dDefaultPEBlockDither;
+DUSK_GAME_EXTERN const u8 j2dDefaultTevSwapTableID;
+DUSK_GAME_EXTERN const u16 j2dDefaultAlphaCmp;
 
 #endif /* J2DTEVS_H */

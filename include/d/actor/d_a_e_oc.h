@@ -159,14 +159,14 @@ private:
 STATIC_ASSERT(sizeof(daE_OC_c) == 0xe88);
 
 struct E_OC_n {
-    static f32 const oc_attackb_trans[10];
-    static f32 const oc_attackc_trans[10];
-    static dCcD_SrcSph cc_sph_src;
-    static dCcD_SrcSph at_sph_src;
-    static daE_OC_c* m_battle_oc;
-    static daE_OC_c* m_damage_oc;
-    static daE_OC_c* m_death_oc;
-    static daE_OC_c* m_talk_oc;
+    static DUSK_GAME_DATA f32 const oc_attackb_trans[10];
+    static DUSK_GAME_DATA f32 const oc_attackc_trans[10];
+    static DUSK_GAME_DATA dCcD_SrcSph cc_sph_src;
+    static DUSK_GAME_DATA dCcD_SrcSph at_sph_src;
+    static DUSK_GAME_DATA daE_OC_c* m_battle_oc;
+    static DUSK_GAME_DATA daE_OC_c* m_damage_oc;
+    static DUSK_GAME_DATA daE_OC_c* m_death_oc;
+    static DUSK_GAME_DATA daE_OC_c* m_talk_oc;
 };
 
 #endif /* D_A_E_OC_H */

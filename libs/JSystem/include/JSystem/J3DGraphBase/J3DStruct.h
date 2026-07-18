@@ -7,7 +7,7 @@
 #include "global.h"
 #include "JSystem/JMath/JMath.h"
 
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 /**
  * @ingroup jsystem-j3d

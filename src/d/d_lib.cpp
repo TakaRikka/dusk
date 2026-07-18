@@ -32,7 +32,7 @@ static void dummy1(mDoExt_btkAnm* btk, cXyz& pos) {
     dDbVw_drawLineOpa(pos, pos, color, 0, 0);
 }
 
-Quaternion ZeroQuat = {
+DUSK_GAME_DATA Quaternion ZeroQuat = {
     0.0f,
     0.0f,
     0.0f,
@@ -316,11 +316,11 @@ u32 dLib_getExpandSizeFromAramArchive(JKRAramArchive* i_aramArchive, char const*
     return uVar1 > uVar5 ? uVar1 : uVar5;
 }
 
-OSTime dLib_time_c::m_diffTime;
+DUSK_GAME_DATA OSTime dLib_time_c::m_diffTime;
 
-OSTime dLib_time_c::m_stopTime;
+DUSK_GAME_DATA OSTime dLib_time_c::m_stopTime;
 
-bool dLib_time_c::m_timeStopped;
+DUSK_GAME_DATA bool dLib_time_c::m_timeStopped;
 
 OSTime dLib_time_c::getTime() {
     if (!m_timeStopped) {

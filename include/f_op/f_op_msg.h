@@ -36,7 +36,7 @@ struct msg_class {
     /* 0xFA */ u8 select_idx;
 };  // Size: 0xFC
 
-extern leafdraw_method_class g_fopMsg_Method;
+DUSK_GAME_EXTERN leafdraw_method_class g_fopMsg_Method;
 
 namespace fopMsg {
     extern u8 MemCheck;

@@ -33,7 +33,7 @@ public:
 
     const CoachFireAttr& attr() { return M_attr; }
 
-    static CoachFireAttr const M_attr;
+    static DUSK_GAME_DATA CoachFireAttr const M_attr;
 
     inline ~daCoachFire_c();
 

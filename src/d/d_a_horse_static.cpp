@@ -50,4 +50,4 @@ void e_wb_class::setRunRideMode() {
     }
 }
 
-daTagHstop_c* daTagHstop_c::m_top;
+DUSK_GAME_DATA daTagHstop_c* daTagHstop_c::m_top;

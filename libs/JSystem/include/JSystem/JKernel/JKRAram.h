@@ -65,13 +65,13 @@ public:
     static u32 getSZSBufferSize() { return sSZSBufferSize; }
     static void setSZSBufferSize(u32 size) { sSZSBufferSize = size; }
 
-    static OSMessageQueue sMessageQueue;
+    static DUSK_GAME_DATA OSMessageQueue sMessageQueue;
 
 private:
-    static JKRAram* sAramObject;
-    static u32 sSZSBufferSize;
-    static OSMessage sMessageBuffer[4];
-    static JSUList<JKRAMCommand> sAramCommandList;
+    static DUSK_GAME_DATA JKRAram* sAramObject;
+    static DUSK_GAME_DATA u32 sSZSBufferSize;
+    static DUSK_GAME_DATA OSMessage sMessageBuffer[4];
+    static DUSK_GAME_DATA JSUList<JKRAMCommand> sAramCommandList;
 };
 
 inline JKRAramBlock* JKRAllocFromAram(u32 size, JKRAramHeap::EAllocMode allocMode) {

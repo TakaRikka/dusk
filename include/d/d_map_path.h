@@ -260,7 +260,7 @@ struct dMpath_n {
         /* 0x0 */ TGXTexObj* mp_texObj[TEX_OBJ_NUMBER];
     };
 
-    static dTexObjAggregate_c m_texObjAgg;
+    static DUSK_GAME_DATA dTexObjAggregate_c m_texObjAgg;
 };
 
 STATIC_ASSERT(sizeof(dMpath_n::dTexObjAggregate_c) == 28);

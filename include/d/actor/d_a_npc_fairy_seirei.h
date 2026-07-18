@@ -13,7 +13,7 @@ class daNpc_FairySeirei_Param_c {
 public:
     virtual ~daNpc_FairySeirei_Param_c() {}
 
-    static daNpc_FairySeirei_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_FairySeirei_HIOParam const m;
 };
 
 #if DEBUG
@@ -90,8 +90,8 @@ public:
 
     int getSeneNo() { return (fopAcM_GetParam(this) >> 8) & 0xFF; }
 
-    static DUSK_CONST char* mCutNameList[1];
-    static DUSK_CONST cutFunc mCutList[1];
+    static DUSK_GAME_DATA DUSK_CONST char* mCutNameList[1];
+    static DUSK_GAME_DATA DUSK_CONST cutFunc mCutList[1];
 
 private:
     /* 0xE40 */ NPC_FAIRY_SEIREI_HIO_CLASS* mpHIO;

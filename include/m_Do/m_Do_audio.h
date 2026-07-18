@@ -4,8 +4,12 @@
 #include "Z2AudioLib/Z2AudioMgr.h"
 #include "Z2AudioLib/Z2EnvSeMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
+#if defined(DUSK_BUILDING_GAME)
 #include "dusk/audio.h"
 #include "dusk/settings.h"
+#else
+#define DUSK_AUDIO_SKIP(...)
+#endif
 
 class mDoAud_zelAudio_c : public Z2AudioMgr {
 public:
@@ -33,12 +37,12 @@ public:
     static void onBgmSet() { mBgmSet = true; }
     static void offBgmSet() { mBgmSet = false; }
 
-    static u8 mInitFlag;
-    static u8 mResetFlag;
-    static u8 mBgmSet;
+    static DUSK_GAME_DATA u8 mInitFlag;
+    static DUSK_GAME_DATA u8 mResetFlag;
+    static DUSK_GAME_DATA u8 mBgmSet;
 };
 
-extern JKRSolidHeap* g_mDoAud_audioHeap;
+DUSK_GAME_EXTERN JKRSolidHeap* g_mDoAud_audioHeap;
 
 void mDoAud_Execute();
 void mDoAud_resetProcess();
@@ -134,15 +138,7 @@ inline void mDoAud_seStart(u32 i_sfxID, const Vec* i_sePos, u32 param_2, s8 i_re
 }
 
 #if TARGET_PC
-inline void mDoAud_seStartMenu(u32 i_sfxID) {
-    if (!mDoAud_zelAudio_c::isInitFlag()) {
-        return;
-    }
-    if (!dusk::getSettings().audio.menuSounds.getValue()) {
-        return;
-    }
-    mDoAud_seStart(i_sfxID, nullptr, 0, 0);
-}
+void mDoAud_seStartMenu(u32 i_sfxID);
 #endif
 
 inline void mDoAud_seStartLevel(u32 i_sfxID, const Vec* i_sePos, u32 param_2, s8 i_reverb) {

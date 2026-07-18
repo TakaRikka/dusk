@@ -186,4 +186,4 @@ void dSvBit_HIO_c::init() {
     mTransformFlag = field_0x49d = dComIfGs_isEventBit(dSv_event_flag_c::M_077);
 }
 
-dSvBit_HIO_c g_save_bit_HIO;
+DUSK_GAME_DATA dSvBit_HIO_c g_save_bit_HIO;

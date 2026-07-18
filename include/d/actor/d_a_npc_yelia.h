@@ -11,7 +11,7 @@ class daNpc_Yelia_Param_c {
 public:
     virtual ~daNpc_Yelia_Param_c() {}
 
-    static daNpc_Yelia_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Yelia_HIOParam const m;
 };
 
 #if DEBUG
@@ -102,8 +102,8 @@ public:
         return no;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[6];
-    static int (daNpc_Yelia_c::*mCutList[6])(int);
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[6];
+    static DUSK_GAME_DATA int (daNpc_Yelia_c::*mCutList[6])(int);
 private:
     /* 0xE40 */ NPC_YELIA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCcCyl;

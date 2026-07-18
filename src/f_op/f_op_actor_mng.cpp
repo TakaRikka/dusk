@@ -379,14 +379,14 @@ s32 fopAcM_callCallback(fopAc_ac_c* i_actor, heapCallbackFunc i_callback, JKRHea
     return ret;
 }
 
-u8 fopAcM::HeapAdjustEntry;
-u8 fopAcM::HeapAdjustUnk;
-u8 fopAcM::HeapAdjustVerbose;
-u8 fopAcM::HeapAdjustQuiet;
-u8 fopAcM::HeapDummyCreate;
-u8 fopAcM::HeapSkipMargin;
-u8 fopAcM::HeapDummyCheck;
-int fopAcM::HeapAdjustMargin =
+DUSK_GAME_DATA u8 fopAcM::HeapAdjustEntry;
+DUSK_GAME_DATA u8 fopAcM::HeapAdjustUnk;
+DUSK_GAME_DATA u8 fopAcM::HeapAdjustVerbose;
+DUSK_GAME_DATA u8 fopAcM::HeapAdjustQuiet;
+DUSK_GAME_DATA u8 fopAcM::HeapDummyCreate;
+DUSK_GAME_DATA u8 fopAcM::HeapSkipMargin;
+DUSK_GAME_DATA u8 fopAcM::HeapDummyCheck;
+DUSK_GAME_DATA int fopAcM::HeapAdjustMargin =
 #if VERSION == VERSION_SHIELD_DEBUG
     0x1000;
 #else
@@ -914,7 +914,7 @@ bool fopAcM_checkCullingBox(Mtx m, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z
         return false;
 }
 
-cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e] = {
+DUSK_GAME_DATA cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e] = {
     {
         {-40.0f, 0.0f, -40.0f},
         {40.0f, 125.0f, 40.0f},
@@ -979,7 +979,7 @@ cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e] = {
 #endif
 };
 
-cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e] = {
+DUSK_GAME_DATA cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e] = {
     {
         {0.0f, 0.0f, 0.0f},
         80.0f,
@@ -2097,11 +2097,11 @@ void fopAcM_GetRealMax(const fopAc_ac_c*) {
     static cXyz max;
 }
 
-dBgS_ObjLinChk fopAcM_lc_c::mLineCheck;
+DUSK_GAME_DATA dBgS_ObjLinChk fopAcM_lc_c::mLineCheck;
 
-dBgS_ObjGndChk fopAcM_gc_c::mGndCheck;
+DUSK_GAME_DATA dBgS_ObjGndChk fopAcM_gc_c::mGndCheck;
 
-f32 fopAcM_gc_c::mGroundY;
+DUSK_GAME_DATA f32 fopAcM_gc_c::mGroundY;
 
 void fopAcM_effSmokeSet1(u32* param_0, u32* param_1, cXyz const* param_2, csXyz const* param_3,
                          f32 param_4, dKy_tevstr_c const* param_5, int param_6) {
@@ -2316,13 +2316,13 @@ fopAc_ac_c* fopAcM_searchFromName4Event(char const* i_name, s16 i_eventID) {
     return fopAcM_Search((fopAcIt_JudgeFunc)fopAcM_findObject4EventCB, &prm);
 }
 
-dBgS_ObjRoofChk fopAcM_rc_c::mRoofCheck;
+DUSK_GAME_DATA dBgS_ObjRoofChk fopAcM_rc_c::mRoofCheck;
 
-dBgS_WtrChk fopAcM_wt_c::mWaterCheck;
+DUSK_GAME_DATA dBgS_WtrChk fopAcM_wt_c::mWaterCheck;
 
-f32 fopAcM_rc_c::mRoofY;
+DUSK_GAME_DATA f32 fopAcM_rc_c::mRoofY;
 
-f32 fopAcM_wt_c::mWaterY;
+DUSK_GAME_DATA f32 fopAcM_wt_c::mWaterY;
 
 s32 fopAcM_getWaterY(cXyz const* param_0, f32* o_waterY) {
     if (fopAcM_wt_c::waterCheck(param_0) && fopAcM_wt_c::getPolyAtt0() != 6) {

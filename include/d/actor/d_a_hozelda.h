@@ -29,8 +29,8 @@ public:
     static void setMorfFrame(u8 i_frame) { mMorfFrame = i_frame; }
     static void decMorfFrame() { cLib_calcTimer<u8>(&mMorfFrame); }
 
-    static u8 mEyeMoveFlg;
-    static u8 mMorfFrame;
+    static DUSK_GAME_DATA u8 mEyeMoveFlg;
+    static DUSK_GAME_DATA u8 mMorfFrame;
 
     /* 0x0F4 */ f32 field_0xf4;
     /* 0x0F8 */ f32 field_0xf8;
@@ -50,7 +50,7 @@ struct daHoZelda_hio_c1 {
 struct daHoZelda_hio_c0 {
     daHoZelda_hio_c0() {}
 
-    static daHoZelda_hio_c1 const m;
+    static DUSK_GAME_DATA daHoZelda_hio_c1 const m;
 };
 
 class daHoZelda_hio_c : public JORReflexible {

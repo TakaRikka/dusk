@@ -55,10 +55,10 @@ public:
     int draw();
     int _delete();
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcGObjInf const mCcDObjCoInfo;
-    static dCcD_SrcCps mCcDCps;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjCoInfo;
+    static DUSK_GAME_DATA dCcD_SrcCps mCcDCps;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
     void onRockFlag() {
         mCarryingStalactite = true;

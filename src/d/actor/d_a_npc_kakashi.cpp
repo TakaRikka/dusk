@@ -75,21 +75,21 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Kakashi_c::mCutNameList[4] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Kakashi_c::mCutNameList[4] = {
     "",
     "SWDTUTORIAL",
     "GET_WOODSWD",
     "MAROS_WHISPER",
 };
 
-int (daNpc_Kakashi_c::* DUSK_CONST daNpc_Kakashi_c::mCutList[])(int) = {
+DUSK_GAME_DATA int (daNpc_Kakashi_c::* DUSK_CONST daNpc_Kakashi_c::mCutList[])(int) = {
     NULL,
     &daNpc_Kakashi_c::cutSwdTutorial,
     &daNpc_Kakashi_c::cutGetWoodSwd,
     &daNpc_Kakashi_c::cutMarosWhisper,
 };
 
-const daNpc_Kakashi_HIOParam daNpc_Kakashi_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Kakashi_HIOParam daNpc_Kakashi_Param_c::m = {
     190.0f,
     -6.0f,
     1.0f,

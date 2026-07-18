@@ -659,7 +659,7 @@ void dRenderingFDAmap_c::postRenderingMap() {
     dComIfGp_getCurrentGrafPort()->setup2D();
 }
 
-dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
+DUSK_GAME_DATA dMpath_n::dTexObjAggregate_c dMpath_n::m_texObjAgg;
 
 void dRenderingFDAmap_c::renderingDecoration(dDrawPath_c::line_class const* p_line) {
     s32 width = getDecorationLineWidth(p_line->field_0x1);

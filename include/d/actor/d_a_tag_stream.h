@@ -42,7 +42,7 @@ public:
     /* 0x570 */ daTagStream_c* field_0x570;
     /* 0x574 */ daTagStream_c* mNext;
 
-    static daTagStream_c* m_top;
+    static DUSK_GAME_DATA daTagStream_c* m_top;
 };
 
 #endif /* D_A_TAG_STREAM_H */

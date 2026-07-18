@@ -2,7 +2,7 @@
 #define D_D_TRESURE_H
 
 #include <mtx.h>
-#include "dusk/offset_ptr.h"
+#include "helpers/offset_ptr.h"
 
 class dTres_c {
 public:
@@ -113,10 +113,10 @@ public:
         return mTypeGroupData;
     }
 
-    static u8 const typeToTypeGroup[17][2];
-    static type_group_list mTypeGroupListAll[17];
-    static typeGroupData_c* mTypeGroupData;
-    static u16 mNum;
+    static DUSK_GAME_DATA u8 const typeToTypeGroup[17][2];
+    static DUSK_GAME_DATA type_group_list mTypeGroupListAll[17];
+    static DUSK_GAME_DATA typeGroupData_c* mTypeGroupData;
+    static DUSK_GAME_DATA u16 mNum;
 
     static void setNpcYkmPosition(int param_1, Vec* param_2) {
         setPosition(param_1, 13, param_2, -1);

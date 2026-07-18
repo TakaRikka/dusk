@@ -44,8 +44,8 @@ private:
     /* 0x730 */ u8 mTgHit;
     /* 0x734 */ Z2SoundObjSimple mSound;
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
 
 };  // Size: 0x754
 

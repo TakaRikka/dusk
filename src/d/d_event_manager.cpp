@@ -15,7 +15,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 #if DEBUG
 static dEvM_HIO_c l_HIO;

@@ -35,9 +35,9 @@ public:
     virtual int ToFore();
     virtual int ToBack();
 
-    static const char* m_name;
-    static int m_dzb_id;
-    static MoveBGActor_SetFunc m_set_func;
+    static DUSK_GAME_DATA const char* m_name;
+    static DUSK_GAME_DATA int m_dzb_id;
+    static DUSK_GAME_DATA MoveBGActor_SetFunc m_set_func;
 };
 
 STATIC_ASSERT(sizeof(dBgS_MoveBgActor) == 0x5a0);

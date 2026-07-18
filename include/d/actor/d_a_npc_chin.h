@@ -12,7 +12,7 @@ class daNpcChin_Param_c {
 public:
     virtual ~daNpcChin_Param_c() {}
 
-    static daNpcChin_HIOParam const m;
+    static DUSK_GAME_DATA daNpcChin_HIOParam const m;
 };
 
 #if DEBUG
@@ -183,7 +183,7 @@ public:
     inline void ForcibleTalk_Off() { field_0xe06 = 0; }
     inline u8 getForcibleTalk2() { return field_0xe06; }
 
-    static eventFunc mEvtSeqList[8];
+    static DUSK_GAME_DATA eventFunc mEvtSeqList[8];
 
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ daNpcF_MatAnm_c* mpMatAnm;

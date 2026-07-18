@@ -43,8 +43,8 @@ public:
     virtual int Draw();
     virtual int Delete();
 
-    static const dCcD_SrcGObjInf mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
 private:
     /* 0x56C */ request_of_phase_process_class mPhase;

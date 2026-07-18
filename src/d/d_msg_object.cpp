@@ -425,7 +425,7 @@ static void dummyStrings() {
     DEAD_STRING("");
 }
 
-dMsgObject_HIO_c g_MsgObject_HIO_c;
+DUSK_GAME_DATA dMsgObject_HIO_c g_MsgObject_HIO_c;
 
 int dMsgObject_c::_execute() {
     field_0x4c7 = 0;

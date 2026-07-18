@@ -25,8 +25,8 @@ public:
     int Draw();
     int Delete();
 
-    static const dCcD_SrcGObjInf mCcDObjInfo;
-    static dCcD_SrcSph mCcDSph;
+    static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
 
 private:
     /* 0x5A0  */ request_of_phase_process_class mPhase;

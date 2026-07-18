@@ -9,7 +9,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 
 
-JASSeqParser::CmdInfo JASSeqParser::sCmdInfo[96] = {
+DUSK_GAME_DATA JASSeqParser::CmdInfo JASSeqParser::sCmdInfo[96] = {
     NULL, 0x0000, 0x0000,
     NULL, 0x0000, 0x0000,
     NULL, 0x0000, 0x0000,
@@ -108,7 +108,7 @@ JASSeqParser::CmdInfo JASSeqParser::sCmdInfo[96] = {
     &JASSeqParser::cmdFinish, 0x0000, 0x0000,
 };
 
-JASSeqParser::CmdInfo JASSeqParser::sExtCmdInfo[255] = {
+DUSK_GAME_DATA JASSeqParser::CmdInfo JASSeqParser::sExtCmdInfo[255] = {
     NULL, 0x0000, 0x0000,
     &JASSeqParser::cmdDump, 0x0000, 0x0000,
     NULL, 0x0000, 0x0000,
@@ -589,7 +589,7 @@ s32 JASSeqParser::cmdIntTimer(JASTrack* param_0, u32* param_1) {
     return 0;
 }
 
-u16 (*JASSeqParser::sCallBackFunc)(JASTrack*, u16);
+DUSK_GAME_DATA u16 (*JASSeqParser::sCallBackFunc)(JASTrack*, u16);
 
 s32 JASSeqParser::cmdSyncCPU(JASTrack* param_0, u32* param_1) {
     u16 r31 = 0xffff;

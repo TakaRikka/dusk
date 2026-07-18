@@ -8,7 +8,7 @@
 #include "d/actor/d_a_npc_shop0.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static int createHeapCallBack(fopAc_ac_c* i_this) {
     return static_cast<daNpc_Shop0_c*>(i_this)->createHeap();
@@ -39,7 +39,7 @@ int daNpc_Shop0_c::create() {
     return phase_step;
 }
 
-dCcD_SrcCyl const daNpc_Shop0_c::mCylDat = {
+DUSK_GAME_DATA dCcD_SrcCyl const daNpc_Shop0_c::mCylDat = {
     {
         {
             0x0, // mFlags
@@ -62,7 +62,7 @@ dCcD_SrcCyl const daNpc_Shop0_c::mCylDat = {
     }
 };
 
-daNpc_Shop0_Param_c::param const daNpc_Shop0_Param_c::mParam = {
+DUSK_GAME_DATA daNpc_Shop0_Param_c::param const daNpc_Shop0_Param_c::mParam = {
     0x44480000, 
     0x44480000,
     0x41F00000,

@@ -12,7 +12,7 @@
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "SSystem/SComponent/c_phase.h"
-#include "dusk/endian_ssystem.h"
+#include "helpers/endian_ssystem.h"
 
 #if !__MWERKS__
 // mwerks compiler makes value initialization act like default initialization so we need
@@ -50,14 +50,14 @@ class cM3dGPla;
 s8 dComIfGp_getReverb(int roomNo);
 
 namespace fopAcM {
-extern u8 HeapAdjustEntry;
-extern u8 HeapAdjustUnk;
-extern u8 HeapAdjustVerbose;
-extern u8 HeapAdjustQuiet;
-extern u8 HeapDummyCreate;
-extern u8 HeapDummyCheck;
-extern u8 HeapSkipMargin;
-extern int HeapAdjustMargin;
+DUSK_GAME_EXTERN u8 HeapAdjustEntry;
+DUSK_GAME_EXTERN u8 HeapAdjustUnk;
+DUSK_GAME_EXTERN u8 HeapAdjustVerbose;
+DUSK_GAME_EXTERN u8 HeapAdjustQuiet;
+DUSK_GAME_EXTERN u8 HeapDummyCreate;
+DUSK_GAME_EXTERN u8 HeapDummyCheck;
+DUSK_GAME_EXTERN u8 HeapSkipMargin;
+DUSK_GAME_EXTERN int HeapAdjustMargin;
 }  // namespace fopAcM
 
 struct fopAcM_prmBase_class {
@@ -826,8 +826,8 @@ BOOL fopAcM_getNameString(const fopAc_ac_c*, char*);
 
 inline void fopAcM_SetStatusMap(fopAc_ac_c*, u32) {}
 
-extern cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e];
-extern cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e];
+DUSK_GAME_EXTERN cull_box l_cullSizeBox[fopAc_CULLBOX_MAX_e];
+DUSK_GAME_EXTERN cull_sphere l_cullSizeSphere[fopAc_CULLSPHERE_MAX_e];
 
 class fopAcM_lc_c {
 public:
@@ -854,7 +854,7 @@ public:
         return cBgW_CheckBGround(poly.mNormal.y);
     }
 
-    static dBgS_ObjLinChk mLineCheck;
+    static DUSK_GAME_DATA dBgS_ObjLinChk mLineCheck;
 };
 
 class dBgS_RoofChk;
@@ -864,16 +864,16 @@ public:
     static f32 getRoofY() { return mRoofY; }
     static bool roofCheck(const cXyz*);
 
-    static dBgS_ObjRoofChk mRoofCheck;
-    static f32 mRoofY;
+    static DUSK_GAME_DATA dBgS_ObjRoofChk mRoofCheck;
+    static DUSK_GAME_DATA f32 mRoofY;
 };
 
 class dBgS_GndChk;
 class fopAcM_gc_c {
 public:
     static bool gndCheck(const cXyz*);
-    static dBgS_ObjGndChk mGndCheck;
-    static f32 mGroundY;
+    static DUSK_GAME_DATA dBgS_ObjGndChk mGndCheck;
+    static DUSK_GAME_DATA f32 mGroundY;
 
     static bool getTriPla(cM3dGPla* i_plane) {
         return dComIfG_Bgsp().GetTriPla(mGndCheck, i_plane);
@@ -900,8 +900,8 @@ public:
     static int getPolyAtt0() { return dComIfG_Bgsp().GetPolyAtt0(mWaterCheck); }
 
     static bool waterCheck(const cXyz*);
-    static dBgS_WtrChk mWaterCheck;
-    static f32 mWaterY;
+    static DUSK_GAME_DATA dBgS_WtrChk mWaterCheck;
+    static DUSK_GAME_DATA f32 mWaterY;
 };
 
 #endif

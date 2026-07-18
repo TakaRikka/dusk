@@ -8,7 +8,7 @@
 #include "SSystem/SComponent/c_tag.h"
 #include "global.h"
 
-node_lists_tree_class g_fopDwTg_Queue = {NULL, 0};
+DUSK_GAME_DATA node_lists_tree_class g_fopDwTg_Queue = {NULL, 0};
 
 void fopDwTg_ToDrawQ(create_tag_class* i_createTag, int i_priority) {
     cTg_AdditionToTree(&g_fopDwTg_Queue, i_priority, i_createTag);

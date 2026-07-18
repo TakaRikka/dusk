@@ -9,6 +9,7 @@
 #include "m_Do/m_Do_ext.h"
 #if TARGET_PC
 #include <cstdarg>
+#include "dusk/os.h"
 #endif
 
 u8 __OSReport_disable;

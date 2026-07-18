@@ -59,9 +59,9 @@ public:
 #endif
 
 private:
-    static JUTVideo* sManager;
-    static OSTick sVideoLastTick;
-    static OSTick sVideoInterval;
+    static DUSK_GAME_DATA JUTVideo* sManager;
+    static DUSK_GAME_DATA OSTick sVideoLastTick;
+    static DUSK_GAME_DATA OSTick sVideoInterval;
 
 private:
     /* 0x04 */ GXRenderModeObj* mRenderObj;

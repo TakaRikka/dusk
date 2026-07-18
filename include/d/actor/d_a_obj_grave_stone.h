@@ -49,8 +49,8 @@ private:
     /* 0x978 */ daObj_GrvStn_prtclMngr_c mPrtclMngr[4];
     /* 0xAE8 */ s16 mTimer;
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl const mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl const mCcDCyl;
 };
 
 STATIC_ASSERT(sizeof(daGraveStone_c) == 0xAEC);

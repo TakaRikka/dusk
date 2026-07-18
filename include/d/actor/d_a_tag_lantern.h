@@ -12,7 +12,7 @@ class daTag_Lantern_Param_c {
 public:
     inline virtual ~daTag_Lantern_Param_c() {}
 
-    static daTag_Lantern_HIOParam const m;
+    static DUSK_GAME_DATA daTag_Lantern_HIOParam const m;
 };
 
 #if DEBUG

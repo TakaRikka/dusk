@@ -30,7 +30,7 @@ static void destroyVideo() {
     return;
 }
 
-mDoRstData* mDoRst::mResetData;
+DUSK_GAME_DATA mDoRstData* mDoRst::mResetData;
 
 void mDoRst_reset(int reset, u32 resetCode, int forceMenu) {
     JUT_ASSERT(83, mDoExt_GetCurrentRunningThread() != 0);

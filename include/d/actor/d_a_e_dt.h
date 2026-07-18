@@ -175,14 +175,14 @@ private:
 STATIC_ASSERT(sizeof(daE_DT_c) == 0x1174);
 
 struct E_DT_n {
-    static f32 eDt_ShakeFrame[10];
-    static f32 eDt_ShakeFrameDemo[10];
-    static dCcD_SrcSph cc_dt_body_src;
-    static dCcD_SrcSph cc_dt_tongue_src;
-    static int mDt_OtamaNum;
-    static int mDt_OtamaNo[20];
-    static int m_fall_no;
-    static cXyz m_tongue_pos;
+    static DUSK_GAME_DATA f32 eDt_ShakeFrame[10];
+    static DUSK_GAME_DATA f32 eDt_ShakeFrameDemo[10];
+    static DUSK_GAME_DATA dCcD_SrcSph cc_dt_body_src;
+    static DUSK_GAME_DATA dCcD_SrcSph cc_dt_tongue_src;
+    static DUSK_GAME_DATA int mDt_OtamaNum;
+    static DUSK_GAME_DATA int mDt_OtamaNo[20];
+    static DUSK_GAME_DATA int m_fall_no;
+    static DUSK_GAME_DATA cXyz m_tongue_pos;
 };
 
 

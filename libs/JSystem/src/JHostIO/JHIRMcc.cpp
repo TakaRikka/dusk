@@ -7,14 +7,14 @@
 #include <revolution/hio2.h>
 #endif
 
-HIO2DeviceType gExiDevice = HIO2_DEVICE_INVALID;
-u8 data_8074bd04 = 1;
+DUSK_GAME_DATA HIO2DeviceType gExiDevice = HIO2_DEVICE_INVALID;
+DUSK_GAME_DATA u8 data_8074bd04 = 1;
 
-s32 ghHIO2;
-JHIMccContext tContext_old;
-JHIMccContext tContext_new;
-bool data_8074d138;
-u8 data_8074d139;
+DUSK_GAME_DATA s32 ghHIO2;
+DUSK_GAME_DATA JHIMccContext tContext_old;
+DUSK_GAME_DATA JHIMccContext tContext_new;
+DUSK_GAME_DATA bool data_8074d138;
+DUSK_GAME_DATA u8 data_8074d139;
 
 BOOL JHIhio2CallbackEnum(HIO2DeviceType type) {
     gExiDevice = type;

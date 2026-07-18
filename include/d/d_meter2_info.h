@@ -21,7 +21,7 @@ struct dMenu_Letter {
     static u16 getLetterText(int idx) { return letter_data[idx].mText; }
     static u16 getLetterEventFlag(int idx) { return letter_data[idx].mEventFlag; }
 
-    static dMenu_LetterData letter_data[64];
+    static DUSK_GAME_DATA dMenu_LetterData letter_data[64];
 };
 
 class dMw_c;
@@ -301,7 +301,7 @@ public:
     /* 0xF3 */ u8 unk_0xf3[5];
 };
 
-extern dMeter2Info_c g_meter2_info;
+DUSK_GAME_EXTERN dMeter2Info_c g_meter2_info;
 
 void dMeter2Info_setSword(u8 i_itemId, bool i_offItemBit);
 void dMeter2Info_setCloth(u8 i_clothId, bool i_offItemBit);

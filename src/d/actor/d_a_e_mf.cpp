@@ -3264,7 +3264,7 @@ e_mf_class::e_mf_class() {}
 
 AUDIO_INSTANCES;
 
-actor_method_class l_daE_MF_Method = {
+DUSK_GAME_DATA actor_method_class l_daE_MF_Method = {
     (process_method_func)daE_MF_Create,
     (process_method_func)daE_MF_Delete,
     (process_method_func)daE_MF_Execute,

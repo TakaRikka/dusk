@@ -20,7 +20,7 @@ class daNpc_ZelR_Param_c {
 public:
     virtual ~daNpc_ZelR_Param_c() {};
 
-    static const daNpc_ZelR_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_ZelR_HIOParam m;
 };
 
 #if DEBUG
@@ -93,8 +93,8 @@ public:
     BOOL checkChangeJoint(int param_1) { return param_1 == 3; };
     BOOL checkRemoveJoint(int param_1) { return param_1 == 13; };
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList;
-    static EventFn mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList;
+    static DUSK_GAME_DATA EventFn mCutList[1];
 
 private:
     /* 0xE40 */ NPC_ZELR_HIO_CLASS* mpHIO;

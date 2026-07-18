@@ -6,6 +6,7 @@
 
 #if DUSK_CODE_MODS
 #include "dusk/logging.h"
+#include "dusk/mods/log_buffer.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -13,6 +14,7 @@
 #include <exception>
 #include <fmt/format.h>
 #include <funchook.h>
+#include <string>
 #include <unordered_map>
 #include <vector>
 #endif
@@ -64,7 +66,28 @@ struct InstalledHook {
 
 std::unordered_map<uintptr_t, HookSlot> s_registry;
 std::unordered_map<uintptr_t, InstalledHook> s_installed;
+std::unordered_map<const ModContext*, std::vector<uintptr_t>> s_declaredTargets;
 uint64_t s_nextOrder = 0;
+
+bool declared_target(const ModContext* context, void* fnAddr) {
+    if (context == nullptr) {
+        return false;
+    }
+    const auto it = s_declaredTargets.find(context);
+    if (it == s_declaredTargets.end()) {
+        return false;
+    }
+    const auto addr = reinterpret_cast<uintptr_t>(fnAddr);
+    return std::ranges::find(it->second, addr) != it->second.end();
+}
+
+ModResult reject_undeclared(ModContext* context, void* fnAddr) {
+    log::write(mod_id_from_context(context), LOG_LEVEL_ERROR,
+        "tried to hook undeclared target {:p}; hook targets must be declared with "
+        "DEFINE_HOOK/DEFINE_HOOK_SYMBOL",
+        fnAddr);
+    return MOD_INVALID_ARGUMENT;
+}
 
 HookOptions normalize_options(const HookOptions* options) {
     if (options == nullptr || options->struct_size < sizeof(HookOptions)) {
@@ -95,10 +118,19 @@ void sort_hooks(std::vector<T>& hooks) {
     });
 }
 
+// Once a hook is installed, funchook has patched the target's entry: its bytes lead to the
+// detour, not the function, so canonicalization must stop there.
+[[maybe_unused]] bool installed_target(void* addr) {
+    return s_installed.contains(reinterpret_cast<uintptr_t>(addr));
+}
+
 // Follow E9/FF25 chains to skip MSVC incremental-link and import stubs.
 void* resolve_import_thunk(void* addr) {
 #if defined(_WIN32) && (defined(_M_X64) || defined(__x86_64__))
     for (int i = 0; i < 8; ++i) {
+        if (installed_target(addr)) {
+            break;
+        }
         const auto* p = static_cast<const uint8_t*>(addr);
         if (p[0] == 0x48 && p[1] == 0xFF && p[2] == 0x25) {  // lld emits a REX.W prefix
             ++p;
@@ -122,6 +154,9 @@ void* resolve_import_thunk(void* addr) {
     // incremental-link stubs are a plain `b`, or `adrp x16; add x16, x16, #off; br x16`
     // range-extension thunks when the target is out of B range.
     for (int i = 0; i < 8; ++i) {
+        if (installed_target(addr)) {
+            break;
+        }
         const auto* p = static_cast<const uint8_t*>(addr);
         uint32_t insn0, insn1, insn2;
         std::memcpy(&insn0, p, 4);
@@ -155,6 +190,18 @@ void* resolve_import_thunk(void* addr) {
         break;
     }
 #endif
+    return addr;
+}
+
+// Resolve thunks recursively (max of 8 steps) until we find our target.
+void* resolve_target(void* addr) {
+    for (int i = 0; i < 8; ++i) {
+        void* next = resolve_import_thunk(addr);
+        if (next == addr) {
+            break;
+        }
+        addr = next;
+    }
     return addr;
 }
 
@@ -199,7 +246,10 @@ ModResult hook_install(ModContext* context, void* fnAddr, void* trampolineFn, vo
         return MOD_INVALID_ARGUMENT;
     }
 
-    fnAddr = resolve_import_thunk(fnAddr);
+    fnAddr = resolve_target(fnAddr);
+    if (!declared_target(context, fnAddr)) {
+        return reject_undeclared(context, fnAddr);
+    }
     const auto key = reinterpret_cast<uintptr_t>(fnAddr);
     if (const auto it = s_installed.find(key); it != s_installed.end()) {
         auto& entry = it->second;
@@ -242,7 +292,10 @@ ModResult hook_add_pre(
     if (fnAddr == nullptr || context == nullptr || callback == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    fnAddr = resolve_import_thunk(fnAddr);
+    fnAddr = resolve_target(fnAddr);
+    if (!declared_target(context, fnAddr)) {
+        return reject_undeclared(context, fnAddr);
+    }
     auto& hooks = s_registry[reinterpret_cast<uintptr_t>(fnAddr)].pre;
     hooks.push_back({context, callback, normalize_options(options), s_nextOrder++});
     sort_hooks(hooks);
@@ -254,7 +307,10 @@ ModResult hook_add_post(
     if (fnAddr == nullptr || context == nullptr || callback == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    fnAddr = resolve_import_thunk(fnAddr);
+    fnAddr = resolve_target(fnAddr);
+    if (!declared_target(context, fnAddr)) {
+        return reject_undeclared(context, fnAddr);
+    }
     auto& hooks = s_registry[reinterpret_cast<uintptr_t>(fnAddr)].post;
     hooks.push_back({context, nullptr, callback, normalize_options(options), s_nextOrder++});
     sort_hooks(hooks);
@@ -268,7 +324,10 @@ ModResult hook_replace(
     }
 
     const HookOptions normalized = normalize_options(options);
-    fnAddr = resolve_import_thunk(fnAddr);
+    fnAddr = resolve_target(fnAddr);
+    if (!declared_target(context, fnAddr)) {
+        return reject_undeclared(context, fnAddr);
+    }
     auto& slot = s_registry[reinterpret_cast<uintptr_t>(fnAddr)];
     if (slot.replace.replaceCallback == nullptr) {
         slot.replace = {context, callback, nullptr, normalized, s_nextOrder++};
@@ -302,7 +361,7 @@ ModResult hook_dispatch_pre(
         return MOD_INVALID_ARGUMENT;
     }
 
-    fnAddr = resolve_import_thunk(fnAddr);
+    fnAddr = resolve_target(fnAddr);
     const auto it = s_registry.find(reinterpret_cast<uintptr_t>(fnAddr));
     if (it == s_registry.end()) {
         return MOD_OK;
@@ -352,7 +411,7 @@ ModResult hook_dispatch_post(ModContext*, void* fnAddr, void* args, void* retval
         return MOD_INVALID_ARGUMENT;
     }
 
-    fnAddr = resolve_import_thunk(fnAddr);
+    fnAddr = resolve_target(fnAddr);
     const auto it = s_registry.find(reinterpret_cast<uintptr_t>(fnAddr));
     if (it == s_registry.end()) {
         return MOD_OK;
@@ -371,8 +430,187 @@ ModResult hook_dispatch_post(ModContext*, void* fnAddr, void* args, void* retval
     return MOD_OK;
 }
 
+#if defined(_WIN32)
+/* Follow jump stubs, then match the MSVC vcall thunk a virtual mfp points at.
+ * Returns the vtable slot's byte offset, or npos when fn is not a vcall thunk. */
+size_t vcall_slot_offset(const void*& fn) noexcept {
+    constexpr size_t npos = static_cast<size_t>(-1);
+#if defined(_M_X64) || defined(__x86_64__)
+    const auto* p = static_cast<const uint8_t*>(fn);
+    for (int i = 0; i < 8 && p[0] == 0xE9; ++i) {  // incremental-link stubs
+        int32_t rel;
+        std::memcpy(&rel, p + 1, 4);
+        p += 5 + rel;
+    }
+    fn = p;
+    // The vptr load. Unoptimized clang-cl thunks spill/reload rcx first
+    // (push rax; mov [rsp], rcx; mov rcx, [rsp]), so scan a short window.
+    const uint8_t* q = nullptr;
+    for (int i = 0; i <= 12; ++i) {
+        if (p[i] == 0x48 && p[i + 1] == 0x8B && p[i + 2] == 0x01) {  // mov rax, [rcx]
+            q = p + i + 3;
+            break;
+        }
+    }
+    if (q == nullptr) {
+        return npos;
+    }
+    if (q[0] == 0xFF && q[1] == 0x20) {  // jmp [rax]  (MSVC)
+        return 0;
+    }
+    if (q[0] == 0xFF && q[1] == 0x60) {  // jmp [rax + imm8]
+        return static_cast<int8_t>(q[2]);
+    }
+    if (q[0] == 0xFF && q[1] == 0xA0) {  // jmp [rax + imm32]
+        int32_t off;
+        std::memcpy(&off, q + 2, 4);
+        return off;
+    }
+    // clang-cl: mov rax, [rax + off]; (pop r10;) jmp rax. Requiring the jmp rax
+    // distinguishes the thunk from an ordinary getter that begins the same way.
+    if (q[0] == 0x48 && q[1] == 0x8B && (q[2] == 0x00 || q[2] == 0x40 || q[2] == 0x80)) {
+        size_t off = 0;
+        const uint8_t* r = q + 3;
+        if (q[2] == 0x40) {
+            off = static_cast<int8_t>(q[3]);
+            r = q + 4;
+        } else if (q[2] == 0x80) {
+            int32_t off32;
+            std::memcpy(&off32, q + 3, 4);
+            off = off32;
+            r = q + 7;
+        }
+        for (int i = 0; i <= 8; ++i) {
+            if (r[i] == 0xFF && r[i + 1] == 0xE0) {  // jmp rax (48 REX optional)
+                return off;
+            }
+        }
+    }
+    return npos;
+#elif defined(_M_ARM64) || defined(__aarch64__)
+    const auto* p = static_cast<const uint8_t*>(fn);
+    uint32_t insn[3];
+    for (int i = 0; i < 8; ++i) {  // incremental-link `b` stubs
+        std::memcpy(insn, p, 4);
+        if ((insn[0] & 0xFC000000u) != 0x14000000u) {
+            break;
+        }
+        const auto imm26 = static_cast<int32_t>(insn[0] << 6) >> 6;
+        p += static_cast<intptr_t>(imm26) * 4;
+    }
+    fn = p;
+    std::memcpy(insn, p, 12);
+    // ldr Xt, [x0]; ldr Xs, [Xt, #imm12*8]; br Xs
+    if ((insn[0] & 0xFFFFFFE0u) != 0xF9400000u) {
+        return npos;
+    }
+    const uint32_t t = insn[0] & 0x1Fu;
+    if ((insn[1] & 0xFFC003E0u) != (0xF9400000u | (t << 5))) {
+        return npos;
+    }
+    const uint32_t s = insn[1] & 0x1Fu;
+    if (insn[2] != (0xD61F0000u | (s << 5))) {
+        return npos;
+    }
+    return ((insn[1] >> 10) & 0xFFFu) * 8;
+#else
+    (void)fn;
+    return npos;
+#endif
+}
+#endif  // _WIN32
+
+bool resolve_symbol_checked(const char* symbol, bool requireCode, void** out, std::string& why) {
+    HookSymbolFlags flags{};
+    switch (manifest::resolve(symbol, out, &flags)) {
+    case manifest::ResolveStatus::Ok:
+        if (requireCode && (flags & HOOK_SYMBOL_CODE) == 0) {
+            why = fmt::format("'{}' is not a code symbol", symbol);
+            return false;
+        }
+        return true;
+    case manifest::ResolveStatus::Unavailable:
+        why = "no symbol manifest for this build";
+        return false;
+    case manifest::ResolveStatus::NotFound:
+        why = fmt::format("symbol '{}' not found", symbol);
+        return false;
+    case manifest::ResolveStatus::Ambiguous:
+        why = fmt::format("'{}' maps to more than one address; use the mangled name", symbol);
+        return false;
+    }
+    why = "unexpected resolve failure";
+    return false;
+}
+
+/* Decode a HOOK_MEM record's pointer-to-member representation into the target code address,
+ * mirroring what calling through the mfp would invoke. Virtual members hook the class's own
+ * overrider, read from its vtable (resolved from the symbol manifest). */
+void* resolve_member_record(
+    const ModMetaHookMem& record, const char* vtableSymbol, std::string& why) {
+    uintptr_t words[2];
+    std::memcpy(words, record.pmf, sizeof(words));
+
+#if defined(_WIN32)
+    const void* fn = reinterpret_cast<const void*>(words[0]);
+    const size_t slot = vcall_slot_offset(fn);
+    if (slot == static_cast<size_t>(-1)) {  // not a vcall thunk: direct address
+        return const_cast<void*>(fn);
+    }
+    if (vtableSymbol[0] == '\0') {
+        why = "class name is not representable as a vtable symbol";
+        return nullptr;
+    }
+    void* vtable = nullptr;
+    if (!resolve_symbol_checked(vtableSymbol, false, &vtable, why)) {
+        return nullptr;
+    }
+    // ??_7 points at the first slot.
+    return *reinterpret_cast<void**>(static_cast<char*>(vtable) + slot);
+#else
+#if defined(__aarch64__) || defined(__arm__)
+    // AAPCS C++ ABI: the virtual flag is bit 0 of the adjustment word (function
+    // addresses can't spare their low bit), and ptr holds the slot offset directly.
+    const bool isVirtual = (words[1] & 1) != 0;
+    const uintptr_t thisAdjust = words[1] >> 1;
+    const uintptr_t slotOffset = words[0];
+#else
+    // Itanium C++ ABI: virtual mfps set bit 0 of ptr; the slot offset is ptr - 1.
+    const bool isVirtual = (words[0] & 1) != 0;
+    const uintptr_t thisAdjust = words[1];
+    const uintptr_t slotOffset = words[0] - 1;
+#endif
+    if (!isVirtual) {  // non-virtual: the address itself
+        return reinterpret_cast<void*>(words[0]);
+    }
+    if (thisAdjust != 0) {
+        // this-adjusting mfp (member of a secondary base): the slot offset is relative to a
+        // vtable we can't locate. Hook the overrider by name instead.
+        why = "virtual member of a secondary base; hook the overrider by name";
+        return nullptr;
+    }
+    if (vtableSymbol[0] == '\0') {
+        why = "class name is not representable as a vtable symbol";
+        return nullptr;
+    }
+    void* vtable = nullptr;
+    if (!resolve_symbol_checked(vtableSymbol, false, &vtable, why)) {
+        return nullptr;
+    }
+    // _ZTV points at the offset-to-top slot; the address point mfps index from is
+    // two pointers in (past offset-to-top and the typeinfo pointer).
+    void* target =
+        *reinterpret_cast<void**>(static_cast<char*>(vtable) + 2 * sizeof(void*) + slotOffset);
+    if (target == nullptr) {
+        why = "vtable slot is empty";
+    }
+    return target;
+#endif
+}
+
 void hook_remove_mod(LoadedMod& mod) {
     ModContext* context = mod.context.get();
+    s_declaredTargets.erase(context);
 
     for (auto it = s_registry.begin(); it != s_registry.end();) {
         auto& slot = it->second;
@@ -507,6 +745,56 @@ constexpr HookService s_hookService{
 };
 
 }  // namespace
+
+#if DUSK_CODE_MODS
+void hook_resolve_mod_records(LoadedMod& mod) {
+    auto& declared = s_declaredTargets[mod.context.get()];
+    declared.clear();
+    if (!mod.native) {
+        return;
+    }
+
+    const auto resolved = [&](void* target, void** slot) {
+        target = resolve_target(target);
+        *slot = target;
+        declared.push_back(reinterpret_cast<uintptr_t>(target));
+    };
+    const auto unresolved = [&](const char* what, std::string_view why, void** slot) {
+        *slot = nullptr;
+        log::write(mod.metadata.id, LOG_LEVEL_WARN,
+            "hook target '{}' did not resolve ({}); installing this hook will fail", what, why);
+    };
+
+    for (auto* record : mod.native->parsed.hookFns) {
+        if (record->target != nullptr) {
+            resolved(record->target, &record->resolved);
+        } else {
+            unresolved("<fn>", "null link-time target", &record->resolved);
+        }
+    }
+    for (auto* record : mod.native->parsed.hookMems) {
+        std::string why;
+        void* target = resolve_member_record(*record, hook_mem_vtable_symbol(*record), why);
+        if (target != nullptr) {
+            resolved(target, &record->resolved);
+        } else {
+            unresolved(hook_mem_display_name(*record), why, &record->resolved);
+        }
+    }
+    for (auto* record : mod.native->parsed.hookNames) {
+        const char* name = hook_name_symbol(*record);
+        std::string why;
+        void* target = nullptr;
+        if (resolve_symbol_checked(name, true, &target, why)) {
+            resolved(target, &record->resolved);
+        } else {
+            unresolved(name, why, &record->resolved);
+        }
+    }
+}
+#else
+void hook_resolve_mod_records(LoadedMod&) {}
+#endif  // DUSK_CODE_MODS
 
 constinit const ServiceModule g_hookModule{
     .id = HOOK_SERVICE_ID,

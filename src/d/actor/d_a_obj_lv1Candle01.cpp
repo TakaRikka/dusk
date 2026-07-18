@@ -10,7 +10,7 @@
 
 static daLv1Cdl01_HIO_c l_HIO;
 
-dCcD_SrcGObjInf const daLv1Cdl01_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daLv1Cdl01_c::mCcDObjInfo = {
     {
         0, {
             {0, 0, 0},
@@ -23,7 +23,7 @@ dCcD_SrcGObjInf const daLv1Cdl01_c::mCcDObjInfo = {
     {0},
 };
 
-dCcD_SrcCyl daLv1Cdl01_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daLv1Cdl01_c::mCcDCyl = {
     daLv1Cdl01_c::mCcDObjInfo,
     {
         { {0.0f, 0.0f, 0.0f}, 0, 0}

@@ -967,7 +967,7 @@ public:
     /* 0x7A0 */ dKankyo_ParticlelightHIO_c particleLight;
 };
 
-extern dKankyo_HIO_c g_kankyoHIO;
+DUSK_GAME_EXTERN dKankyo_HIO_c g_kankyoHIO;
 
 enum dKy_dice_wether_mode {
     DICE_MODE_SUNNY_e,

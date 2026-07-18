@@ -6,32 +6,32 @@
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 
-extern u8 j3dTevSwapTableTable[1024];
+DUSK_GAME_EXTERN u8 j3dTevSwapTableTable[1024];
 
-extern const J3DLightInfo j3dDefaultLightInfo;
-extern const J3DTexCoordInfo j3dDefaultTexCoordInfo[8];
-extern const J3DTexMtxInfo j3dDefaultTexMtxInfo;
-extern const J3DIndTexMtxInfo j3dDefaultIndTexMtxInfo;
-extern const J3DTevStageInfo j3dDefaultTevStageInfo;
-extern const J3DIndTevStageInfo j3dDefaultIndTevStageInfo;
-extern const J3DFogInfo j3dDefaultFogInfo;
-extern const J3DNBTScaleInfo j3dDefaultNBTScaleInfo;
+DUSK_GAME_EXTERN const J3DLightInfo j3dDefaultLightInfo;
+DUSK_GAME_EXTERN const J3DTexCoordInfo j3dDefaultTexCoordInfo[8];
+DUSK_GAME_EXTERN const J3DTexMtxInfo j3dDefaultTexMtxInfo;
+DUSK_GAME_EXTERN const J3DIndTexMtxInfo j3dDefaultIndTexMtxInfo;
+DUSK_GAME_EXTERN const J3DTevStageInfo j3dDefaultTevStageInfo;
+DUSK_GAME_EXTERN const J3DIndTevStageInfo j3dDefaultIndTevStageInfo;
+DUSK_GAME_EXTERN const J3DFogInfo j3dDefaultFogInfo;
+DUSK_GAME_EXTERN const J3DNBTScaleInfo j3dDefaultNBTScaleInfo;
 
-extern const GXColor j3dDefaultColInfo;
-extern const GXColor j3dDefaultAmbInfo;
+DUSK_GAME_EXTERN const GXColor j3dDefaultColInfo;
+DUSK_GAME_EXTERN const GXColor j3dDefaultAmbInfo;
 extern const u8 j3dDefaultColorChanNum;
-extern const J3DTevOrderInfo j3dDefaultTevOrderInfoNull;
-extern const J3DIndTexOrderInfo j3dDefaultIndTexOrderNull;
-extern const GXColorS10 j3dDefaultTevColor;
-extern const J3DIndTexCoordScaleInfo j3dDefaultIndTexCoordScaleInfo;
-extern const GXColor j3dDefaultTevKColor;
-extern const J3DTevSwapModeInfo j3dDefaultTevSwapMode;
-extern const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable;
-extern const J3DBlendInfo j3dDefaultBlendInfo;
-extern const J3DColorChanInfo j3dDefaultColorChanInfo;
-extern const u8 j3dDefaultTevSwapTableID;
-extern const u16 j3dDefaultAlphaCmpID;
-extern const u16 j3dDefaultZModeID;
+DUSK_GAME_EXTERN const J3DTevOrderInfo j3dDefaultTevOrderInfoNull;
+DUSK_GAME_EXTERN const J3DIndTexOrderInfo j3dDefaultIndTexOrderNull;
+DUSK_GAME_EXTERN const GXColorS10 j3dDefaultTevColor;
+DUSK_GAME_EXTERN const J3DIndTexCoordScaleInfo j3dDefaultIndTexCoordScaleInfo;
+DUSK_GAME_EXTERN const GXColor j3dDefaultTevKColor;
+DUSK_GAME_EXTERN const J3DTevSwapModeInfo j3dDefaultTevSwapMode;
+DUSK_GAME_EXTERN const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable;
+DUSK_GAME_EXTERN const J3DBlendInfo j3dDefaultBlendInfo;
+DUSK_GAME_EXTERN const J3DColorChanInfo j3dDefaultColorChanInfo;
+DUSK_GAME_EXTERN const u8 j3dDefaultTevSwapTableID;
+DUSK_GAME_EXTERN const u16 j3dDefaultAlphaCmpID;
+DUSK_GAME_EXTERN const u16 j3dDefaultZModeID;
 
 /**
  * @ingroup jsystem-j3d
@@ -191,7 +191,7 @@ struct J3DIndTevStage {
     /* 0x0 */ u32 mInfo;
 };
 
-extern const J3DTevOrderInfo j3dDefaultTevOrderInfoNull;
+DUSK_GAME_EXTERN const J3DTevOrderInfo j3dDefaultTevOrderInfoNull;
 
 /**
  * @ingroup jsystem-j3d
@@ -209,8 +209,8 @@ struct J3DTevOrder : public J3DTevOrderInfo {
     u8 getTexMap() const { return mTexMap; }
 };
 
-extern u8 j3dTevSwapTableTable[1024];
-extern u8 const j3dDefaultTevSwapTableID;
+DUSK_GAME_EXTERN u8 j3dTevSwapTableTable[1024];
+DUSK_GAME_EXTERN u8 const j3dDefaultTevSwapTableID;
 
 inline u8 calcTevSwapTableID(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
     return 0x40 * (u8)param_0 + 0x10 * (u8)param_1 + 4 * (u8)param_2 + param_3;
@@ -263,7 +263,7 @@ public:
     /* 0x34 */ GXLightObj mLightObj;
 };  // Size = 0x74
 
-extern const J3DNBTScaleInfo j3dDefaultNBTScaleInfo;
+DUSK_GAME_EXTERN const J3DNBTScaleInfo j3dDefaultNBTScaleInfo;
 
 /**
  * @ingroup jsystem-j3d
@@ -287,12 +287,12 @@ struct J3DNBTScale : public J3DNBTScaleInfo {
     BE(Vec)* getScale() { return &mScale; }
 };
 
-extern const GXColor j3dDefaultColInfo;
-extern const GXColor j3dDefaultAmbInfo;
-extern const GXColorS10 j3dDefaultTevColor;
-extern const GXColor j3dDefaultTevKColor;
-extern u8 j3dAlphaCmpTable[768];
-extern const u8 j3dDefaultNumChans;
+DUSK_GAME_EXTERN const GXColor j3dDefaultColInfo;
+DUSK_GAME_EXTERN const GXColor j3dDefaultAmbInfo;
+DUSK_GAME_EXTERN const GXColorS10 j3dDefaultTevColor;
+DUSK_GAME_EXTERN const GXColor j3dDefaultTevKColor;
+DUSK_GAME_EXTERN u8 j3dAlphaCmpTable[768];
+DUSK_GAME_EXTERN const u8 j3dDefaultNumChans;
 
 struct J3DNBTScale;
 struct J3DTexCoord;

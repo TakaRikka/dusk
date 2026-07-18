@@ -436,7 +436,7 @@ void daSCannon_c::exeModeOrderEvt() {
     eventInfo.onCondition(dEvtCnd_CANDEMO_e);
 }
 
-void (daSCannon_c::*DUSK_CONST daSCannon_c::s_exeProc[])() = {
+DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST daSCannon_c::s_exeProc[])() = {
     &daSCannon_c::exeModeWait,
     &daSCannon_c::exeModeOrderEvt,
     &daSCannon_c::exeModeActionEvt,
@@ -465,22 +465,22 @@ DUSK_CONSTEXPR char DUSK_CONST* CUT_TYPE_TABLE_FIRE_SECOND[4] = {
     "FINISH",
 };
 
-void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_WarpEnd[][2])() = {
+DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_WarpEnd[][2])() = {
     {&daSCannon_c::demoInitWarpEndWait, &daSCannon_c::demoExeWarpEndWait},
     {&daSCannon_c::demoInitWarpEndMove, &daSCannon_c::demoExeWarpEndMove},
 };
 
-void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireTks[][2])() = {
+DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireTks[][2])() = {
     {NULL, NULL},
     {NULL, NULL},
     {NULL, NULL},
 };
 
-void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireFirst[][2])() = {
+DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireFirst[][2])() = {
     {&daSCannon_c::demoInitLinkIn, &daSCannon_c::demoExeLinkIn},
 };
 
-void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireSecond[][2])() = {
+DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST daSCannon_c::s_demoExeProc_FireSecond[][2])() = {
     {&daSCannon_c::demoInitSet, &daSCannon_c::demoExeSet},
     {&daSCannon_c::demoInitMove, &daSCannon_c::demoExeMove},
     {&daSCannon_c::demoInitFire, &daSCannon_c::demoExeFire},
@@ -525,7 +525,7 @@ void daSCannon_c::exeModeActionEvt() {
 
 void daSCannon_c::exeModeEnd() {}
 
-const daSCannon_c::demoTable_s daSCannon_c::s_demoTable[] = {
+DUSK_GAME_DATA const daSCannon_c::demoTable_s daSCannon_c::s_demoTable[] = {
     {s_demoExeProc_WarpEnd, CUT_TYPE_TABLE_WARP_END, 2},
     {s_demoExeProc_FireFirst, CUT_TYPE_TABLE_FIRE_FIRST, 1},
     {s_demoExeProc_FireTks, CUT_TYPE_TABLE_FIRE_TKS, 3},

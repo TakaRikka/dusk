@@ -435,7 +435,7 @@ public:
 
     cM3dGAab& GetWorkAab() { return mAab; }
 
-    static cXyz m_virtual_center;
+    static DUSK_GAME_DATA cXyz m_virtual_center;
 };
 
 STATIC_ASSERT(0x20 == sizeof(cCcD_ShapeAttr));

@@ -20,7 +20,7 @@ class daNpc_Raca_Param_c {
 public:
     virtual ~daNpc_Raca_Param_c() {}
 
-    static daNpc_Raca_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Raca_HIOParam const m;
 };
 
 #if DEBUG
@@ -145,8 +145,8 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xFF0000) >> 16; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList;
-    static cutFunc DUSK_CONST mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList;
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0xE40 */ NPC_RACA_HIO_CLASS* mpHIO;

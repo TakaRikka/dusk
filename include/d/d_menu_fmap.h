@@ -268,7 +268,7 @@ public:
         /* 0x1D */ PROC_HOWL_DEMO3,
      };
 
-    static dMenu_Fmap_c* MyClass;
+    static DUSK_GAME_DATA dMenu_Fmap_c* MyClass;
 
 private:
     /* 0x004 */ JKRExpHeap* mpHeap;
@@ -356,7 +356,7 @@ public:
     /* 0x10 */ u8 mBaseBackAlpha;
     /* 0x11 */ u8 mMoyaAlpha;
 
-    static dMf_HIO_c* mMySelfPointer;
+    static DUSK_GAME_DATA dMf_HIO_c* mMySelfPointer;
 };
 
 const char* dMenuFmap_getStartStageName(void* param_0);

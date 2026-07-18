@@ -219,55 +219,8 @@ AuroraBackend configured_backend() {
     return configuredBackend;
 }
 
-std::filesystem::path normalized_display_path(const std::filesystem::path& path) {
-    std::error_code ec;
-    auto normalized = std::filesystem::weakly_canonical(path, ec);
-    if (!ec) {
-        return normalized;
-    }
-
-    normalized = std::filesystem::absolute(path, ec);
-    if (!ec) {
-        return normalized.lexically_normal();
-    }
-
-    return path.lexically_normal();
-}
-
-std::filesystem::path user_home_path() {
-    const char* homePath = SDL_GetUserFolder(SDL_FOLDER_HOME);
-    if (homePath == nullptr || homePath[0] == '\0') {
-        return {};
-    }
-    return std::filesystem::path{reinterpret_cast<const char8_t*>(homePath)};
-}
-
-Rml::String abbreviated_data_path_string() {
-    const auto path = data::configured_data_path();
-    const auto homePath = user_home_path();
-    if (path.empty() || homePath.empty()) {
-        return io::fs_path_to_string(path);
-    }
-
-    const auto normalizedPath = normalized_display_path(path);
-    const auto normalizedHome = normalized_display_path(homePath);
-    if (normalizedPath == normalizedHome) {
-        return "~";
-    }
-
-    const auto relativePath = normalizedPath.lexically_relative(normalizedHome);
-    if (!relativePath.empty() && !relativePath.is_absolute()) {
-        const auto it = relativePath.begin();
-        if (it == relativePath.end() || *it != "..") {
-            return io::fs_path_to_string(std::filesystem::path{"~"} / relativePath);
-        }
-    }
-
-    return io::fs_path_to_string(path);
-}
-
 Rml::String configured_data_path_display_name() {
-    const auto path = abbreviated_data_path_string();
+    const auto path = data::abbreviated_path_string(data::configured_data_path());
     if (path.empty()) {
         return "(none)";
     }
@@ -284,8 +237,9 @@ public:
     explicit DataFolderPathText(Rml::Element* parent) : Component(append(parent, "div")) {}
 
     void update() override {
-        const Rml::String rml = "<span class=\"data-folder-current\">Current data folder:<br/>" +
-                                escape(abbreviated_data_path_string()) + "</span>";
+        const Rml::String rml =
+            "<span class=\"data-folder-current\">Current data folder:<br/>" +
+            escape(data::abbreviated_path_string(data::configured_data_path())) + "</span>";
         if (rml != mCurrentRml) {
             mRoot->SetInnerRML(rml);
             mCurrentRml = rml;

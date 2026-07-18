@@ -99,9 +99,9 @@ public:
     /* 0x1C */ MtxP mpZMtx;
     /* 0x20 */ J3DPacket* mpCallBackPacket;
 
-    static sortFunc sortFuncTable[6];
-    static drawFunc drawFuncTable[2];
-    static int entryNum;
+    static DUSK_GAME_DATA sortFunc sortFuncTable[6];
+    static DUSK_GAME_DATA drawFunc drawFuncTable[2];
+    static DUSK_GAME_DATA int entryNum;
 };
 
 #endif /* J3DDRAWBUFFER_H */

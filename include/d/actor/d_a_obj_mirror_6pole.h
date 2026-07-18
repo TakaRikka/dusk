@@ -54,7 +54,7 @@ public:
     inline void callInit();
     inline void callExecute();
 
-    static const actionFunc ActionTable[][2];
+    static DUSK_GAME_DATA const actionFunc ActionTable[][2];
 
 private:
     /* 0x568 */ J3DModel* mpModel;

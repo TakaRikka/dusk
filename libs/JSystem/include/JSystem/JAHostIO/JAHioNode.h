@@ -41,7 +41,7 @@ public:
 
     static JAHioNode* getCurrentNode() { return smCurrentNode; }
 
-    static JAHioNode* smCurrentNode;
+    static DUSK_GAME_DATA JAHioNode* smCurrentNode;
 
     JSUTree<JAHioNode>* getTree() { return &mTree; }
     char* getNodeName() { return mName; }

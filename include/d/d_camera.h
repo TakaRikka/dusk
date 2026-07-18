@@ -1169,7 +1169,7 @@ public:
         return mCamSetup.Far();
     }
 
-    static engine_fn engine_tbl[];
+    static DUSK_GAME_DATA engine_fn engine_tbl[];
 
     /* 0x000 */ camera_class* field_0x0;
 #if PARTIAL_DEBUG || DEBUG // Ensure struct layout consistent in all TUs.

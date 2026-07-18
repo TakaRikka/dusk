@@ -107,9 +107,9 @@ static u16 lightMaskData[8] = {
     GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7,
 };
 
-dScnKy_env_light_c g_env_light;
+DUSK_GAME_DATA dScnKy_env_light_c g_env_light;
 
-Z2EnvSeMgr g_mEnvSeMgr;
+DUSK_GAME_DATA Z2EnvSeMgr g_mEnvSeMgr;
 
 #if DEBUG
 dKankyo_HIO_c g_kankyoHIO;

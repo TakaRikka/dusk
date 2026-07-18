@@ -99,7 +99,7 @@ public:
         mWarpMode = daCstatueWarpMode_Active;
     }
 
-    static u16 const m_bckIdxTable[daCstatueType_N][7];
+    static DUSK_GAME_DATA u16 const m_bckIdxTable[daCstatueType_N][7];
 
 private:
     /* 0x568 */ const char* mResName;

@@ -13,7 +13,7 @@ class daTag_Msg_Param_c {
 public:
     virtual ~daTag_Msg_Param_c() {}
 
-    static const daTag_Msg_HIO_Param_c m;
+    static DUSK_GAME_DATA const daTag_Msg_HIO_Param_c m;
 };
 
 #if DEBUG
@@ -47,7 +47,7 @@ public:
     void getParam();
     BOOL cut_speak(int, BOOL);
 
-    static DUSK_CONST char* mEvtCutTBL[2];
+    static DUSK_GAME_DATA DUSK_CONST char* mEvtCutTBL[2];
 
     /* 0x56C */ char mStaffName[8];
     /* 0x574 */ request_of_phase_process_class mPhase;

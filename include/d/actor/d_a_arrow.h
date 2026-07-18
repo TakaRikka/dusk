@@ -161,7 +161,7 @@ private:
     /* 0xA10 */ dPa_hermiteEcallBack_c field_0xa10;
     /* 0xA28 */ int (daArrow_c::*mProcFunc)();
 
-    static s16 m_count;
+    static DUSK_GAME_DATA s16 m_count;
 };
 
 STATIC_ASSERT(sizeof(daArrow_c) == 0xA34);

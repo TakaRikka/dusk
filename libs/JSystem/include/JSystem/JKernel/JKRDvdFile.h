@@ -62,7 +62,7 @@ public:
     static JSUList<JKRDvdFile>& getDvdList() { return sDvdList; }
 
 private:
-    static JSUList<JKRDvdFile> sDvdList;
+    static DUSK_GAME_DATA JSUList<JKRDvdFile> sDvdList;
 };
 
 #endif /* JKRDVDFILE_H */

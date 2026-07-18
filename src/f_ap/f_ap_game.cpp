@@ -742,7 +742,7 @@ static void fapGm_AfterRecord() {
     fapGm_After();
 }
 
-BOOL isRecording = false;
+DUSK_GAME_DATA BOOL isRecording = false;
 
 static void duskExecute() {
     dusk::menu_pointer::begin_game_frame();
@@ -851,7 +851,7 @@ void fapGm_Execute() {
 #endif
 }
 
-fapGm_HIO_c g_HIO;
+DUSK_GAME_DATA fapGm_HIO_c g_HIO;
 
 void fapGm_Create() {
     // unused, unknown purpose

@@ -14,8 +14,8 @@ void JHIReport(const char* fmt, ...) {}
 
 void JHIHalt(const char* fmt, ...) {}
 
-u8* JHIMccBuf::mTempBuf;
-u16 JHIMccBuf::mRefCount;
+DUSK_GAME_DATA u8* JHIMccBuf::mTempBuf;
+DUSK_GAME_DATA u16 JHIMccBuf::mRefCount;
 
 JHIMccBuf::JHIMccBuf(u16 channel, u16 param_1, u32 param_2) {
     initInstance(channel, param_1, param_2);

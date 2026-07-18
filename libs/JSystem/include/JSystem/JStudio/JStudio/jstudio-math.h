@@ -6,7 +6,7 @@
 
 #define m_PI_D 3.141592653589793
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 namespace JStudio {

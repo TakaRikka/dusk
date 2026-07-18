@@ -116,10 +116,10 @@ public:
     }
 
     static dPa_modelEcallBack& getEcallback() { return mEcallback; }
-    static dPa_modelEcallBack mEcallback;
+    static DUSK_GAME_DATA dPa_modelEcallBack mEcallback;
 
-    static dPa_modelPcallBack mPcallback;
-    static model_c* mModel;
+    static DUSK_GAME_DATA dPa_modelPcallBack mPcallback;
+    static DUSK_GAME_DATA model_c* mModel;
     #if DEBUG
     static u8 mNum;
     #endif
@@ -495,20 +495,20 @@ public:
         return &mWaterBubblePcallBack; 
     }
 
-    static dPa_selectTexEcallBack mTsubo[8];
-    static dPa_setColorEcallBack mLifeBall[3];
-    static Mtx mWindViewMatrix;
-    static JPAEmitterManager* mEmitterMng;
-    static dPa_wbPcallBack_c mWaterBubblePcallBack;
-    static dPa_fsenthPcallBack mFsenthPcallBack;
-    static dPa_light8EcallBack mLight8EcallBack;
-    static dPa_light8PcallBack mLight8PcallBack;
-    static dPa_gen_b_light8EcallBack m_b_Light8EcallBack;
-    static dPa_gen_b_light8PcallBack m_b_Light8PcallBack;
-    static dPa_gen_d_light8EcallBack m_d_Light8EcallBack;
-    static dPa_gen_d_light8PcallBack m_d_Light8PcallBack;
-    static dPa_particleTracePcallBack_c mParticleTracePCB;
-    static u8 mStatus;
+    static DUSK_GAME_DATA dPa_selectTexEcallBack mTsubo[8];
+    static DUSK_GAME_DATA dPa_setColorEcallBack mLifeBall[3];
+    static DUSK_GAME_DATA Mtx mWindViewMatrix;
+    static DUSK_GAME_DATA JPAEmitterManager* mEmitterMng;
+    static DUSK_GAME_DATA dPa_wbPcallBack_c mWaterBubblePcallBack;
+    static DUSK_GAME_DATA dPa_fsenthPcallBack mFsenthPcallBack;
+    static DUSK_GAME_DATA dPa_light8EcallBack mLight8EcallBack;
+    static DUSK_GAME_DATA dPa_light8PcallBack mLight8PcallBack;
+    static DUSK_GAME_DATA dPa_gen_b_light8EcallBack m_b_Light8EcallBack;
+    static DUSK_GAME_DATA dPa_gen_b_light8PcallBack m_b_Light8PcallBack;
+    static DUSK_GAME_DATA dPa_gen_d_light8EcallBack m_d_Light8EcallBack;
+    static DUSK_GAME_DATA dPa_gen_d_light8PcallBack m_d_Light8PcallBack;
+    static DUSK_GAME_DATA dPa_particleTracePcallBack_c mParticleTracePCB;
+    static DUSK_GAME_DATA u8 mStatus;
 
 private:
     /* 0x000 */ JKRSolidHeap* mHeap;

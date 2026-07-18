@@ -15,7 +15,7 @@ class daObj_Pleaf_Param_c {
 public:
     virtual ~daObj_Pleaf_Param_c() {}
 
-    static daObj_Pleaf_HIOParam const m;
+    static DUSK_GAME_DATA daObj_Pleaf_HIOParam const m;
 };
 
 #if DEBUG

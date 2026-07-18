@@ -10,6 +10,7 @@
 
 #ifdef TARGET_PC
 #include <algorithm>
+#include "dusk/frame_interpolation.h"
 #endif
 
 JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor)

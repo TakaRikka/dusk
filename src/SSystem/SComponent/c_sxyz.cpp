@@ -5,7 +5,7 @@
 
 #include "SSystem/SComponent/c_sxyz.h"
 
-const csXyz csXyz::Zero = csXyz(0, 0, 0);
+DUSK_GAME_DATA const csXyz csXyz::Zero = csXyz(0, 0, 0);
 
 csXyz::csXyz(s16 x, s16 y, s16 z) {
     this->x = x;

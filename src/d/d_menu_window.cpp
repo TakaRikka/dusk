@@ -219,7 +219,7 @@ static BOOL dMw_isMenuRing() {
 }
 
 typedef void (dMw_c::*initFunc)(u8);
-initFunc init_proc[] = {
+DUSK_GAME_DATA initFunc init_proc[] = {
     &dMw_c::key_wait_init,
     &dMw_c::ring_open_init,
     &dMw_c::ring_move_init,
@@ -258,7 +258,7 @@ initFunc init_proc[] = {
 };
 
 typedef void (dMw_c::*procFunc)();
-procFunc move_proc[] = {
+DUSK_GAME_DATA procFunc move_proc[] = {
     &dMw_c::key_wait_proc,
     &dMw_c::ring_open_proc,
     &dMw_c::ring_move_proc,

@@ -8,7 +8,7 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 static DUSK_CONST char* l_evtNameList[] = {
     NULL,
@@ -17,7 +17,7 @@ static DUSK_CONST char* l_evtNameList[] = {
 
 static DUSK_CONST char* l_resFileName = "TAGEVT";
 
-DUSK_CONST char* daTag_Evt_c::mEvtCutList[] = {
+DUSK_GAME_DATA DUSK_CONST char* daTag_Evt_c::mEvtCutList[] = {
     "WAIT",
     "TALK",
     "NEXT",

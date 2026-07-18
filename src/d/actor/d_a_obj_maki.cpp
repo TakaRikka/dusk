@@ -132,7 +132,7 @@ int daObj_Maki_IsDelete(obj_maki_class* i_this) {
     return true;
 }
 
-u8 lbl_567_bss_8;
+DUSK_GAME_DATA u8 lbl_567_bss_8;
 
 int daObj_Maki_Delete(obj_maki_class* i_this) {
     dComIfG_resDelete(&i_this->mPhase, "Obj_maki");
@@ -237,7 +237,7 @@ cPhs_Step daObj_Maki_Create(fopAc_ac_c* i_this) {
     return phase;
 }
 
-actor_method_class l_daObj_Maki_Method = {
+DUSK_GAME_DATA actor_method_class l_daObj_Maki_Method = {
     (process_method_func)daObj_Maki_Create,  (process_method_func)daObj_Maki_Delete,
     (process_method_func)daObj_Maki_Execute, (process_method_func)daObj_Maki_IsDelete,
     (process_method_func)daObj_Maki_Draw,

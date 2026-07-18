@@ -19,8 +19,8 @@
 #include "Z2AudioCS/Z2AudioCS.h"
 #endif
 
-Z2AudioMgr* Z2AudioMgr::mAudioMgrPtr;
-u8 gMuffleOutOfRangeMic = false;
+DUSK_GAME_DATA Z2AudioMgr* Z2AudioMgr::mAudioMgrPtr;
+DUSK_GAME_DATA u8 gMuffleOutOfRangeMic = false;
 
 Z2AudioMgr::Z2AudioMgr() : mSoundStarter(true) {
     mAudioMgrPtr = this;

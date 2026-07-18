@@ -55,9 +55,9 @@ public:
     static bool isErrorRetry() { return errorRetry; }
 
     // TODO: fix type
-    static JSUList<JKRADCommand> sDvdAramAsyncList;
-    static u32 sSZSBufferSize;
-    static bool errorRetry;
+    static DUSK_GAME_DATA JSUList<JKRADCommand> sDvdAramAsyncList;
+    static DUSK_GAME_DATA u32 sSZSBufferSize;
+    static DUSK_GAME_DATA bool errorRetry;
 };
 
 inline JKRAramBlock *JKRDvdToAram(s32 entrynum, u32 p2, JKRExpandSwitch expSwitch, u32 p4, u32 p5, u32 *p6) {

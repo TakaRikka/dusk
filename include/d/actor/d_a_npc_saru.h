@@ -21,7 +21,7 @@ class daNpc_Saru_Param_c {
 public:
     virtual ~daNpc_Saru_Param_c() {}
 
-    static const daNpc_Saru_HIOParam m;
+    static DUSK_GAME_DATA const daNpc_Saru_HIOParam m;
 };
 
 #if DEBUG
@@ -133,8 +133,8 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xff0000) >> 16; }
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xff00) >> 8; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[4];
-    static cutFunc DUSK_CONST mCutList[4];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[4];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[4];
 private:
     /* 0xE40 */ NPC_SARU_HIO_CLASS* mpHIO;
     /* 0xE44 */ J3DModel* mpRoseModels[2];

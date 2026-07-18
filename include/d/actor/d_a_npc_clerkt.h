@@ -12,7 +12,7 @@ class daNpcClerkt_Param_c {
 public:
     virtual ~daNpcClerkt_Param_c() {}
 
-    static const daNpcClerkt_HIOParam m;
+    static DUSK_GAME_DATA const daNpcClerkt_HIOParam m;
 };
 
 #if DEBUG
@@ -125,8 +125,8 @@ public:
         }
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[1];
-    static cutFunc DUSK_CONST mCutList[1];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[1];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
 private:
     /* 0x0F7C */ NPC_CLERKT_HIO_CLASS* mpHIO;

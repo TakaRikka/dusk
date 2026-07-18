@@ -53,8 +53,8 @@ public:
     static void setCurrentVolume(JKRFileLoader* fileLoader) { sCurrentVolume = fileLoader; }
     static JSUList<JKRFileLoader>& getVolumeList() { return sVolumeList; }
 
-    static JKRFileLoader* sCurrentVolume;
-    static JSUList<JKRFileLoader> sVolumeList;
+    static DUSK_GAME_DATA JKRFileLoader* sCurrentVolume;
+    static DUSK_GAME_DATA JSUList<JKRFileLoader> sVolumeList;
 };
 
 inline bool JKRDetachResource(void* resource, JKRFileLoader* fileLoader) {

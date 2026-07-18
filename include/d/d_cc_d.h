@@ -424,7 +424,7 @@ public:
     bool ChkTgShieldHit() { return mGObjTg.ChkRPrm(2); }
     bool ChkTgSpinnerReflect() { return mGObjTg.ChkSPrm(0x200); }
     
-    static const Z2SoundID m_hitSeID[24];
+    static DUSK_GAME_DATA const Z2SoundID m_hitSeID[24];
 
 protected:
     /* 0x058 */ dCcD_GObjAt mGObjAt;

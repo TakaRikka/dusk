@@ -59,7 +59,7 @@ int daGpTaru_c::CreateHeap() {
     return 1;
 }
 
-dCcD_SrcCyl daGpTaru_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daGpTaru_c::mCcDCyl = {
     daGpTaru_c::mCcDObjInfo,
     {
         {
@@ -70,7 +70,7 @@ dCcD_SrcCyl daGpTaru_c::mCcDCyl = {
     }  // mCylAttr
 };
 
-const dCcD_SrcGObjInf daGpTaru_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daGpTaru_c::mCcDObjInfo = {
     {0, {{0, 0, 0x1F}, {0xD8FAFDBF, 0x11}, {0x79}}},
     {dCcD_SE_NONE, 0, 1, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 2},

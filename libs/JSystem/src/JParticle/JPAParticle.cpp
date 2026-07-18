@@ -7,6 +7,10 @@
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAExtraShape.h"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 JPAParticleCallBack::~JPAParticleCallBack() {
     /* empty function */
 }

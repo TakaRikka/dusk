@@ -65,15 +65,15 @@ public:
     f32 getCloseBoundSpeed() { return CLOSE_BOUND_SPEED; }
     f32 getCloseBoundRatio() { return CLOSE_BOUND_RATIO; }
 
-    static f32 const OPEN_SIZE;
-    static f32 const OPEN_ACCEL;
-    static f32 const OPEN_SPEED;
-    static f32 const OPEN_BOUND_SPEED;
-    static f32 const OPEN_BOUND_RATIO;
-    static f32 const CLOSE_ACCEL;
-    static f32 const CLOSE_SPEED;
-    static f32 const CLOSE_BOUND_SPEED;
-    static f32 const CLOSE_BOUND_RATIO;
+    static DUSK_GAME_DATA f32 const OPEN_SIZE;
+    static DUSK_GAME_DATA f32 const OPEN_ACCEL;
+    static DUSK_GAME_DATA f32 const OPEN_SPEED;
+    static DUSK_GAME_DATA f32 const OPEN_BOUND_SPEED;
+    static DUSK_GAME_DATA f32 const OPEN_BOUND_RATIO;
+    static DUSK_GAME_DATA f32 const CLOSE_ACCEL;
+    static DUSK_GAME_DATA f32 const CLOSE_SPEED;
+    static DUSK_GAME_DATA f32 const CLOSE_BOUND_SPEED;
+    static DUSK_GAME_DATA f32 const CLOSE_BOUND_RATIO;
 
     /* 0x5A0 */ dComIfG_resLoader_c mResLoader;
     /* 0x5B0 */ J3DModel* mpModel;

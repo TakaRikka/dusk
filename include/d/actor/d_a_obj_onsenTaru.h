@@ -52,8 +52,8 @@ public:
     bool getTempStat() { return mTempStat; }
     void startTimer() { mStartTimer = true; }
     
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;

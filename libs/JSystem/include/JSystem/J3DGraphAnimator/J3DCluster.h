@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphLoader/J3DClusterLoader.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class J3DDeformer;
 class J3DClusterKey;

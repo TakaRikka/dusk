@@ -460,7 +460,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {MOT_ANM_RUN, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Pachi_Maro_c::mCutNameList[11] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Pachi_Maro_c::mCutNameList[11] = {
     "",
     "TUTRIAL_BEGIN",
     "TUTRIAL_BEGIN_SKIP",
@@ -474,7 +474,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Pachi_Maro_c::mCutNameList[11] = {
     "TUTRIAL_CAUTION",
 };
 
-daNpc_Pachi_Maro_c::cutFunc DUSK_CONST daNpc_Pachi_Maro_c::mCutList[11] = {
+DUSK_GAME_DATA daNpc_Pachi_Maro_c::cutFunc DUSK_CONST daNpc_Pachi_Maro_c::mCutList[11] = {
     NULL,
     &daNpc_Pachi_Maro_c::cutTutrialBegin,
     &daNpc_Pachi_Maro_c::cutTutrialBegin_Skip,
@@ -506,7 +506,7 @@ daNpc_Pachi_Maro_c::~daNpc_Pachi_Maro_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-daNpc_Pachi_Maro_HIOParam const daNpc_Pachi_Maro_Param_c::m = {
+DUSK_GAME_DATA daNpc_Pachi_Maro_HIOParam const daNpc_Pachi_Maro_Param_c::m = {
     100.0f,
     -3.0f,
     1.0f,

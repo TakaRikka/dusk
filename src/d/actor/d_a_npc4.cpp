@@ -707,7 +707,7 @@ void daNpcF_c::tgHitCallBack(fopAc_ac_c* i_this, dCcD_GObjInf* param_1, fopAc_ac
     }
 }
 
-dCcD_SrcCyl daNpcF_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daNpcF_c::mCcDCyl = {
     daNpcF_c::mCcDObjInfo,
     {
         {
@@ -718,18 +718,18 @@ dCcD_SrcCyl daNpcF_c::mCcDCyl = {
     }
 };
 
-dCcD_SrcSph daNpcF_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daNpcF_c::mCcDSph = {
     daNpcF_c::mCcDObjInfo,
     {
                 {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSph
     }  // mSphAttr
 };
 
-char daNpcF_c::mFileNameBuf[0x15];
+DUSK_GAME_DATA char daNpcF_c::mFileNameBuf[0x15];
 
-fopAc_ac_c* daNpcF_c::mFindActorPList[100];
+DUSK_GAME_DATA fopAc_ac_c* daNpcF_c::mFindActorPList[100];
 
-s32 daNpcF_c::mFindCount;
+DUSK_GAME_DATA s32 daNpcF_c::mFindCount;
 
 void* daNpcF_c::srchAttnActor1(void* i_proc, void* param_1) {
     void* param_1_copy = param_1;
@@ -746,7 +746,7 @@ void* daNpcF_c::srchAttnActor1(void* i_proc, void* param_1) {
     return NULL;
 }
 
-s16 daNpcF_c::mSrchActorName;
+DUSK_GAME_DATA s16 daNpcF_c::mSrchActorName;
 
 void* daNpcF_c::srchActor(void* i_proc, void* i_this) {
     void* i_this_copy = i_this;
@@ -2159,14 +2159,14 @@ int daNpcF_MoveBgActor_c::MoveBGDraw() {
     return Draw();
 }
 
-dCcD_SrcGObjInf const daBaseNpc_c::mCcDObj = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daBaseNpc_c::mCcDObj = {
     {0, {{0, 0, 0}, {0x0, 0x0}, {0x79}}},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {0}
 };
 
-dCcD_SrcGObjInf const daNpcF_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daNpcF_c::mCcDObjInfo = {
     {0, {{0, 0, 0}, {0x0, 0x0}, {0x79}}},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 0},

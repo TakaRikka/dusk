@@ -315,7 +315,7 @@ void loadNBTScale(J3DNBTScale& NBTScale) {
     }
 }
 
-const J3DLightInfo j3dDefaultLightInfo = {
+DUSK_GAME_DATA const J3DLightInfo j3dDefaultLightInfo = {
     0.0f, 0.0f, 0.0f,
     0.0f, -1.0f, 0.0f,
     0xff, 0xff, 0xff, 0xff,
@@ -323,14 +323,14 @@ const J3DLightInfo j3dDefaultLightInfo = {
     1.0f, 0.0f, 0.0f,
 };
 
-J3DTexCoordInfo const j3dDefaultTexCoordInfo[8] = {
+DUSK_GAME_DATA J3DTexCoordInfo const j3dDefaultTexCoordInfo[8] = {
     {GX_MTX2x4, GX_TG_TEX0, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX1, GX_IDENTITY, 0},
     {GX_MTX2x4, GX_TG_TEX2, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX3, GX_IDENTITY, 0},
     {GX_MTX2x4, GX_TG_TEX4, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX5, GX_IDENTITY, 0},
     {GX_MTX2x4, GX_TG_TEX6, GX_IDENTITY, 0}, {GX_MTX2x4, GX_TG_TEX7, GX_IDENTITY, 0},
 };
 
-J3DTexMtxInfo const j3dDefaultTexMtxInfo = {
+DUSK_GAME_DATA J3DTexMtxInfo const j3dDefaultTexMtxInfo = {
     0x01,
     0x00,
     0xFF,
@@ -341,27 +341,27 @@ J3DTexMtxInfo const j3dDefaultTexMtxInfo = {
      1.0f},
 };
 
-J3DIndTexMtxInfo const j3dDefaultIndTexMtxInfo = {
+DUSK_GAME_DATA J3DIndTexMtxInfo const j3dDefaultIndTexMtxInfo = {
     0.5f, 0.0f, 0.0f,
     0.0f, 0.5f, 0.0f,
     1
 };
 
-J3DTevStageInfo const j3dDefaultTevStageInfo = {
+DUSK_GAME_DATA J3DTevStageInfo const j3dDefaultTevStageInfo = {
     0x04, 0x0A, 0x0F, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
     0x05, 0x07, 0x07, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
 };
 
-J3DIndTevStageInfo const j3dDefaultIndTevStageInfo = {
+DUSK_GAME_DATA J3DIndTevStageInfo const j3dDefaultIndTevStageInfo = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-J3DFogInfo const j3dDefaultFogInfo = {
+DUSK_GAME_DATA J3DFogInfo const j3dDefaultFogInfo = {
     0x00, 0x00, 0x0140, 0.0f, 0.0f, 0.1f, 10000.0f, 0xFF, 0xFF, 0xFF, 0x00,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
 };
 
-J3DNBTScaleInfo const j3dDefaultNBTScaleInfo = {
+DUSK_GAME_DATA J3DNBTScaleInfo const j3dDefaultNBTScaleInfo = {
 #if TARGET_PC
     0x00, {1.0f, 1.0f, 1.0f},
 #else
@@ -399,9 +399,9 @@ void makeTexCoordTable() {
     }
 }
 
-u8 j3dTevSwapTableTable[1024];
+DUSK_GAME_DATA u8 j3dTevSwapTableTable[1024];
 
-u8 j3dAlphaCmpTable[768];
+DUSK_GAME_DATA u8 j3dAlphaCmpTable[768];
 
 void makeAlphaCmpTable() {
     u8* table = j3dAlphaCmpTable;
@@ -417,7 +417,7 @@ void makeAlphaCmpTable() {
     }
 }
 
-u8 j3dZModeTable[96];
+DUSK_GAME_DATA u8 j3dZModeTable[96];
 
 void makeZModeTable() {
     u8* table = j3dZModeTable;
@@ -495,44 +495,44 @@ static void J3DGDLoadPostTexMtxImm(f32 (*param_1)[4], u32 param_2) {
     J3DGDWrite_f32(param_1[2][3]);
 }
 
-const GXColor j3dDefaultColInfo = {0xFF, 0xFF, 0xFF, 0xFF};
+DUSK_GAME_DATA const GXColor j3dDefaultColInfo = {0xFF, 0xFF, 0xFF, 0xFF};
 
-const GXColor j3dDefaultAmbInfo = {0x32, 0x32, 0x32, 0x32};
+DUSK_GAME_DATA const GXColor j3dDefaultAmbInfo = {0x32, 0x32, 0x32, 0x32};
 
-const u8 j3dDefaultNumChans = 1;
+DUSK_GAME_DATA const u8 j3dDefaultNumChans = 1;
 
-const J3DTevOrderInfo j3dDefaultTevOrderInfoNull = {0xFF, 0xFF, 0xFF, 0x00};
+DUSK_GAME_DATA const J3DTevOrderInfo j3dDefaultTevOrderInfoNull = {0xFF, 0xFF, 0xFF, 0x00};
 
-const J3DIndTexOrderInfo j3dDefaultIndTexOrderNull = {0xFF, 0xFF, 0x00, 0x00};
+DUSK_GAME_DATA const J3DIndTexOrderInfo j3dDefaultIndTexOrderNull = {0xFF, 0xFF, 0x00, 0x00};
 
-const GXColorS10 j3dDefaultTevColor = {0xFF, 0xFF, 0xFF, 0xFF};
+DUSK_GAME_DATA const GXColorS10 j3dDefaultTevColor = {0xFF, 0xFF, 0xFF, 0xFF};
 
-const J3DIndTexCoordScaleInfo j3dDefaultIndTexCoordScaleInfo = {
+DUSK_GAME_DATA const J3DIndTexCoordScaleInfo j3dDefaultIndTexCoordScaleInfo = {
     0x00,
     0x00,
     0x00,
     0x00,
 };
 
-const GXColor j3dDefaultTevKColor = {0xFF, 0xFF, 0xFF, 0xFF};
+DUSK_GAME_DATA const GXColor j3dDefaultTevKColor = {0xFF, 0xFF, 0xFF, 0xFF};
 
-J3DTevSwapModeInfo const j3dDefaultTevSwapMode = {
+DUSK_GAME_DATA J3DTevSwapModeInfo const j3dDefaultTevSwapMode = {
     0x00,
     0x00,
     0x00,
     0x00,
 };
 
-const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable = {0x00, 0x01, 0x02, 0x03};
+DUSK_GAME_DATA const J3DTevSwapModeTableInfo j3dDefaultTevSwapModeTable = {0x00, 0x01, 0x02, 0x03};
 
-const J3DBlendInfo j3dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP};
+DUSK_GAME_DATA const J3DBlendInfo j3dDefaultBlendInfo = {GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP};
 
-const J3DColorChanInfo j3dDefaultColorChanInfo = {
+DUSK_GAME_DATA const J3DColorChanInfo j3dDefaultColorChanInfo = {
     0x00, 0x00, 0x00, 0x02, 0x02, 0x00, 0xFF, 0xFF,
 };
 
-const u8 j3dDefaultTevSwapTableID = 0x1B;
+DUSK_GAME_DATA const u8 j3dDefaultTevSwapTableID = 0x1B;
 
-const u16 j3dDefaultAlphaCmpID = 0x00E7;
+DUSK_GAME_DATA const u16 j3dDefaultAlphaCmpID = 0x00E7;
 
-const u16 j3dDefaultZModeID = 0x0017;
+DUSK_GAME_DATA const u16 j3dDefaultZModeID = 0x0017;

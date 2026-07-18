@@ -27,11 +27,11 @@ s32 mDoDvdThd::main(void* param_0) {
     return 0;
 }
 
-OSThread mDoDvdThd::l_thread;
+DUSK_GAME_DATA OSThread mDoDvdThd::l_thread;
 
-mDoDvdThdStack mDoDvdThd::l_threadStack;
+DUSK_GAME_DATA mDoDvdThdStack mDoDvdThd::l_threadStack;
 
-mDoDvdThd_param_c mDoDvdThd::l_param;
+DUSK_GAME_DATA mDoDvdThd_param_c mDoDvdThd::l_param;
 
 #if DEBUG
 u8 mDoDvdThd::verbose;
@@ -44,10 +44,10 @@ const char* mDoDvdHack::FstStringStart;
 u32 mDoDvdHack::MaxEntryNum;
 mDoDvdHack::Manager mDoDvdHack::Manager::sManager;
 #else
-bool mDoDvdThd::SyncWidthSound;
+DUSK_GAME_DATA bool mDoDvdThd::SyncWidthSound;
 #endif
 
-u8 sDefaultDirection;
+DUSK_GAME_DATA u8 sDefaultDirection;
 
 #pragma push
 #pragma force_active on

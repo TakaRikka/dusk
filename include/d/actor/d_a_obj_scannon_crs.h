@@ -49,7 +49,7 @@ public:
     int getWarpId() { return fopAcM_GetParamBit(this, 8, 8); }
     u16 getMsgId() { return home.angle.x; }
 
-    static void (daSCannonCrs_c::*s_exeProc[])(daMidna_c*);
+    static DUSK_GAME_DATA void (daSCannonCrs_c::*s_exeProc[])(daMidna_c*);
 
 private:
     /* 0x574 */ cXyz mPortalWaitPos;

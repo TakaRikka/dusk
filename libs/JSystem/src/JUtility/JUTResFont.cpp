@@ -143,7 +143,7 @@ void JUTResFont::countBlock() {
     }
 }
 
-IsLeadByte_func const JUTResFont::saoAboutEncoding_[3] = {
+DUSK_GAME_DATA IsLeadByte_func const JUTResFont::saoAboutEncoding_[3] = {
     JUTFont::isLeadByte_1Byte,
     JUTFont::isLeadByte_2Byte,
     JUTFont::isLeadByte_ShiftJIS,

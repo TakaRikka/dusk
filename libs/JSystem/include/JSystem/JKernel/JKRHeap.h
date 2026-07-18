@@ -11,12 +11,12 @@
 class JKRHeap;
 typedef void (*JKRErrorHandler)(void*, u32, int);
 
-extern u8 JKRValue_DEBUGFILL_NOTUSE;
-extern u8 JKRValue_DEBUGFILL_NEW;
-extern u8 JKRValue_DEBUGFILL_DELETE;
+DUSK_GAME_EXTERN u8 JKRValue_DEBUGFILL_NOTUSE;
+DUSK_GAME_EXTERN u8 JKRValue_DEBUGFILL_NEW;
+DUSK_GAME_EXTERN u8 JKRValue_DEBUGFILL_DELETE;
 
-extern s32 fillcheck_dispcount;
-extern bool data_8074A8D0_debug;
+DUSK_GAME_EXTERN s32 fillcheck_dispcount;
+DUSK_GAME_EXTERN bool data_8074A8D0_debug;
 
 #if BIT_64
 #define MEM_BLOCK_SIZE 0x20
@@ -194,26 +194,26 @@ public:
     }
     static void* getState_buf_(TState* state) { return &state->mBuf; }
 
-    static void* mCodeStart;
-    static void* mCodeEnd;
-    static void* mUserRamStart;
-    static void* mUserRamEnd;
-    static u32 mMemorySize;
-    static JKRAllocCallback sAllocCallback;
-    static JKRFreeCallback sFreeCallback;
+    static DUSK_GAME_DATA void* mCodeStart;
+    static DUSK_GAME_DATA void* mCodeEnd;
+    static DUSK_GAME_DATA void* mUserRamStart;
+    static DUSK_GAME_DATA void* mUserRamEnd;
+    static DUSK_GAME_DATA u32 mMemorySize;
+    static DUSK_GAME_DATA JKRAllocCallback sAllocCallback;
+    static DUSK_GAME_DATA JKRFreeCallback sFreeCallback;
 
-    static bool sDefaultFillFlag;
+    static DUSK_GAME_DATA bool sDefaultFillFlag;
 
-    static JKRHeap* sRootHeap;
+    static DUSK_GAME_DATA JKRHeap* sRootHeap;
 
-    static JKRHeap* sRootHeap2;
+    static DUSK_GAME_DATA JKRHeap* sRootHeap2;
 
-    static JKRHeap* sSystemHeap;
+    static DUSK_GAME_DATA JKRHeap* sSystemHeap;
 #if !TARGET_PC // Hide sCurrentHeap, we need to make it thread local.
     static JKRHeap* sCurrentHeap;
 #endif
 
-    static JKRErrorHandler mErrorHandler;
+    static DUSK_GAME_DATA JKRErrorHandler mErrorHandler;
 
 #if TARGET_PC
     void setName(const char* name);

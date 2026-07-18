@@ -5,7 +5,7 @@
 #include "JSystem/JHostIO/JORServer.h"
 
 template <>
-JAHioMgr* JAHSingletonBase<JAHioMgr>::sInstance = NULL;
+DUSK_GAME_DATA JAHioMgr* JAHSingletonBase<JAHioMgr>::sInstance = NULL;
 
 JAHioMgr::JAHioMgr() : field_0x4(0), field_0x8(0) {}
 

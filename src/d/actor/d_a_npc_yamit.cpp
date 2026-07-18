@@ -80,12 +80,12 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0}, {-1, 0, 0}, {2, -1, 1}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_yamiT_c::mCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_yamiT_c::mCutNameList[2] = {
     "",
     "STOPPER",
 };
 
-daNpc_yamiT_c::cutFunc DUSK_CONST daNpc_yamiT_c::mCutList[2] = {
+DUSK_GAME_DATA daNpc_yamiT_c::cutFunc DUSK_CONST daNpc_yamiT_c::mCutList[2] = {
     NULL,
     &daNpc_yamiT_c::cutStopper,
 };
@@ -97,7 +97,7 @@ daNpc_yamiT_c::~daNpc_yamiT_c() {
     deleteRes(l_loadResPtrnList[mType], (const char**)l_resNameList);
 }
 
-const daNpc_yamiT_HIOParam daNpc_yamiT_Param_c::m = {
+DUSK_GAME_DATA const daNpc_yamiT_HIOParam daNpc_yamiT_Param_c::m = {
     230.0f,  // attention_offset
     -3.0f,   // gravity
     1.0f,    // scale

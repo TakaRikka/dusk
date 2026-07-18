@@ -8,7 +8,7 @@
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "JSystem/JUtility/JUTResource.h"
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 J2DPane::J2DPane() : mBounds(), mGlobalBounds(), mClipRect(), mPaneTree(this) {
@@ -424,7 +424,7 @@ void J2DPane::resize(f32 x, f32 y) {
     place(box);
 }
 
-JGeometry::TBox2<f32> J2DPane::static_mBounds(0, 0, 0, 0);
+DUSK_GAME_DATA JGeometry::TBox2<f32> J2DPane::static_mBounds(0, 0, 0, 0);
 
 JGeometry::TBox2<f32>& J2DPane::getBounds() {
     static_mBounds = mBounds;

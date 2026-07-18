@@ -35,7 +35,7 @@ public:
     /* 0x20 */ f32 mMoveRange;
 };
 
-dCcD_SrcSph E_YM_n::cc_sph_src = {
+DUSK_GAME_DATA dCcD_SrcSph E_YM_n::cc_sph_src = {
     {
         {0, {{0x400, 1, 13}, {0xD8FBFDFF, 3}, 0x75}},
         {dCcD_SE_METAL, 0, 0, 0, {0}},

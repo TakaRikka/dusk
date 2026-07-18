@@ -144,7 +144,7 @@ struct TResourceContainer {
         destroyResource_color();
     }
 
-    static JMessage::locale::parseCharacter_function sapfnParseCharacter_[5];
+    static DUSK_GAME_DATA JMessage::locale::parseCharacter_function sapfnParseCharacter_[5];
 
     /* 0x00 */ u8 encodingType_;
     /* 0x04 */ JMessage::locale::parseCharacter_function pfnParseCharacter_;

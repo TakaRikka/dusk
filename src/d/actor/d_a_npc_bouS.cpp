@@ -261,7 +261,7 @@ void daNpcBouS_HIO_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-daNpcBouS_c::eventFunc daNpcBouS_c::mEvtSeqList[4] = {
+DUSK_GAME_DATA daNpcBouS_c::eventFunc daNpcBouS_c::mEvtSeqList[4] = {
     NULL,
     &daNpcBouS_c::EvCut_BousIntroSumo1,
     &daNpcBouS_c::EvCut_BousIntroSumo2,
@@ -286,7 +286,7 @@ daNpcBouS_c::~daNpcBouS_c() {
     #endif
 }
 
-daNpcBouS_HIOParam const daNpcBouS_Param_c::m = {
+DUSK_GAME_DATA daNpcBouS_HIOParam const daNpcBouS_Param_c::m = {
     220.0f,
     -3.0f,
     1.0f,

@@ -186,7 +186,7 @@ int daObjBurnBox_MoveBGDraw(daObjBurnBox_c* i_this) {
     return i_this->MoveBGDraw();
 }
 
-actor_method_class daObjBurnBox_METHODS = {
+DUSK_GAME_DATA actor_method_class daObjBurnBox_METHODS = {
     (process_method_func) daObjBurnBox_create1st,     (process_method_func)daObjBurnBox_MoveBGDelete,
     (process_method_func) daObjBurnBox_MoveBGExecute, NULL,
     (process_method_func) daObjBurnBox_MoveBGDraw,

@@ -38,7 +38,7 @@ public:
     struct BckTbl {
         u16 idx[4];
     };
-    static const BckTbl m_bckIdxTable[];
+    static DUSK_GAME_DATA const BckTbl m_bckIdxTable[];
 
 private:
     /* 0x5A0 */ const char* m_arcName;

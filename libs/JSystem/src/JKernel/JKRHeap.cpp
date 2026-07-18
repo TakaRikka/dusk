@@ -15,7 +15,7 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTException.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #ifdef __MWERKS__
 #include <stdint.h>
 #else
@@ -28,14 +28,14 @@
 #include "os_report.h"
 
 #if DEBUG
-u8 JKRValue_DEBUGFILL_NOTUSE = 0xFD;
-u8 JKRValue_DEBUGFILL_NEW = 0xCD;
-u8 JKRValue_DEBUGFILL_DELETE = 0xDD;
+DUSK_GAME_DATA u8 JKRValue_DEBUGFILL_NOTUSE = 0xFD;
+DUSK_GAME_DATA u8 JKRValue_DEBUGFILL_NEW = 0xCD;
+DUSK_GAME_DATA u8 JKRValue_DEBUGFILL_DELETE = 0xDD;
 #endif
 
-bool JKRHeap::sDefaultFillFlag = true;
+DUSK_GAME_DATA bool JKRHeap::sDefaultFillFlag = true;
 
-JKRHeap* JKRHeap::sSystemHeap;
+DUSK_GAME_DATA JKRHeap* JKRHeap::sSystemHeap;
 
 #if TARGET_PC
 // JSystem normally has a thread switch callback to track the correct heap.
@@ -52,13 +52,13 @@ static thread_local TLS_GLOBAL_DYNAMIC JKRHeap* sCurrentHeap;
 JKRHeap* JKRHeap::sCurrentHeap;
 #endif
 
-JKRHeap* JKRHeap::sRootHeap;
+DUSK_GAME_DATA JKRHeap* JKRHeap::sRootHeap;
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 JKRHeap* JKRHeap::sRootHeap2;
 #endif
 
-JKRErrorHandler JKRHeap::mErrorHandler;
+DUSK_GAME_DATA JKRErrorHandler JKRHeap::mErrorHandler;
 
 static bool data_80451380;
 
@@ -111,19 +111,19 @@ JKRHeap::~JKRHeap() {
     }
 }
 
-void* JKRHeap::mCodeStart;
+DUSK_GAME_DATA void* JKRHeap::mCodeStart;
 
-void* JKRHeap::mCodeEnd;
+DUSK_GAME_DATA void* JKRHeap::mCodeEnd;
 
-void* JKRHeap::mUserRamStart;
+DUSK_GAME_DATA void* JKRHeap::mUserRamStart;
 
-void* JKRHeap::mUserRamEnd;
+DUSK_GAME_DATA void* JKRHeap::mUserRamEnd;
 
-u32 JKRHeap::mMemorySize;
+DUSK_GAME_DATA u32 JKRHeap::mMemorySize;
 
-JKRHeap::JKRAllocCallback JKRHeap::sAllocCallback;
+DUSK_GAME_DATA JKRHeap::JKRAllocCallback JKRHeap::sAllocCallback;
 
-JKRHeap::JKRFreeCallback JKRHeap::sFreeCallback;
+DUSK_GAME_DATA JKRHeap::JKRFreeCallback JKRHeap::sFreeCallback;
 
 bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
     void* arenaLo = OSGetArenaLo();
@@ -661,8 +661,8 @@ void operator delete[](void* ptr JKR_HEAP_TOKEN_PARAM) IF_DUSK(noexcept) {
 }
 #endif
 
-s32 fillcheck_dispcount = 100;
-bool data_8074A8D0_debug = true;
+DUSK_GAME_DATA s32 fillcheck_dispcount = 100;
+DUSK_GAME_DATA bool data_8074A8D0_debug = true;
 
 void JKRHeap::state_register(JKRHeap::TState* p, u32 id) const {
     JUT_ASSERT(1213, p != NULL);
@@ -680,7 +680,7 @@ void JKRHeap::state_dump(const JKRHeap::TState& p) const {
     JUT_LOG(1248, "used size  : %u", p.getUsedSize());
 }
 
-void* ARALT_AramStartAdr = (void*)0x90000000;
+DUSK_GAME_DATA void* ARALT_AramStartAdr = (void*)0x90000000;
 
 void* JKRHeap::getAltAramStartAdr() { return ARALT_AramStartAdr; }
 
@@ -702,7 +702,7 @@ JKRHeap* JKRHeap::getCurrentHeap() {
 }
 
 void JKRHeap::setName(const char* name) {
-    dusk::SafeStringCopyTruncate(mName, name);
+    SafeStringCopyTruncate(mName, name);
 }
 
 void JKRHeap::setNamef(const char* fmt, ...) {

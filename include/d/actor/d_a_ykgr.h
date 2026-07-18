@@ -57,12 +57,12 @@ public:
     int _execute();
     bool _draw();
 
-    static JPABaseEmitter* m_emitter;
-    static bool m_flag;
-    static bool m_alpha_flag;
-    static u8 m_alpha;
-    static f32 m_aim_rate;
-    static dPath* m_path;
+    static DUSK_GAME_DATA JPABaseEmitter* m_emitter;
+    static DUSK_GAME_DATA bool m_flag;
+    static DUSK_GAME_DATA bool m_alpha_flag;
+    static DUSK_GAME_DATA u8 m_alpha;
+    static DUSK_GAME_DATA f32 m_aim_rate;
+    static DUSK_GAME_DATA dPath* m_path;
 
     /* 0x568 */ u8 field_0x568[0x570 - 0x568];
     /* 0x570 */ Mtx field_0x570;

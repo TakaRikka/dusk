@@ -17,25 +17,25 @@
 #include <cstring>
 #endif
 
-dCcD_SrcCyl daNpc_Kn_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daNpc_Kn_c::mCcDCyl = {
     mCcDObjData,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f},
     }
 };
 
-dCcD_SrcSph daNpc_Kn_c::mCcDSph = {
+DUSK_GAME_DATA dCcD_SrcSph daNpc_Kn_c::mCcDSph = {
     mCcDObjData,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f}  // mSphCc
     },
 };
 
-s16 daNpc_Kn_c::mSrchName;
+DUSK_GAME_DATA s16 daNpc_Kn_c::mSrchName;
 
-fopAc_ac_c* daNpc_Kn_c::mFindActorPtrs[50];
+DUSK_GAME_DATA fopAc_ac_c* daNpc_Kn_c::mFindActorPtrs[50];
 
-int daNpc_Kn_c::mFindCount;
+DUSK_GAME_DATA int daNpc_Kn_c::mFindCount;
 
 void* dummy_srchActor(void* i_actor1, void* i_actor2) {
     // Fake function (though a similar one likely existed and got stripped out).
@@ -59,7 +59,7 @@ void* dummy_srchActor(void* i_actor1, void* i_actor2) {
     return NULL;
 }
 
-const dCcD_SrcGObjInf daNpc_Kn_c::mCcDObjData = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daNpc_Kn_c::mCcDObjData = {
     {0, {{0, 0, 0}, {0, 0}, {0x79}}},
     {dCcD_SE_NONE, 0, 0, 0, 0},
     {dCcD_SE_NONE, 0, 0, 0, 0},
@@ -68,7 +68,7 @@ const dCcD_SrcGObjInf daNpc_Kn_c::mCcDObjData = {
 
 #include "d/actor/d_a_npc_kn_base.inc"
 
-const daNpc_Kn_HIOParam daNpc_Kn_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Kn_HIOParam daNpc_Kn_Param_c::m = {
     50.0f,
     -5.0f,
     1.0f,
@@ -468,7 +468,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Kn_c::mCutNameList[21] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Kn_c::mCutNameList[21] = {
     "",
     "NONE_EQUIP_CHANGE_TALK",
     "NO_EQ_CHNGE_TLK_STD",
@@ -492,7 +492,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Kn_c::mCutNameList[21] = {
     "SEVENTH_SKILL_GET",
 };
 
-daNpc_Kn_c::cutFunc DUSK_CONST daNpc_Kn_c::mCutList[21] = {
+DUSK_GAME_DATA daNpc_Kn_c::cutFunc DUSK_CONST daNpc_Kn_c::mCutList[21] = {
     NULL,
     &daNpc_Kn_c::ECut_noneEquipChangeTalk,
     &daNpc_Kn_c::ECut_noneEquipChangeTalkStand,

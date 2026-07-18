@@ -51,7 +51,7 @@ public:
     u8 getRunMotionType() { return fopAcM_GetParam(this) >> 30; }
     u8 getPathID() { return (fopAcM_GetParam(this) >> 16) & 0xFF; }
 
-    static actionFunc ActionTable[1][2];
+    static DUSK_GAME_DATA actionFunc ActionTable[1][2];
 
 private:
     /* 0x9EC */ J3DModel* mpModel;

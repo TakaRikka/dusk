@@ -7,25 +7,25 @@
 #include "global.h"
 #include <stdint.h>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 #if TARGET_PC
 #include "dusk/os.h"
 #endif
 
-JSUList<JKRThread> JKRThread::sThreadList(0);
+DUSK_GAME_DATA JSUList<JKRThread> JKRThread::sThreadList(0);
 
-void* JKRIdleThread::sThread;
+DUSK_GAME_DATA void* JKRIdleThread::sThread;
 
-JKRThreadSwitch* JKRThreadSwitch::sManager;
+DUSK_GAME_DATA JKRThreadSwitch* JKRThreadSwitch::sManager;
 
-u32 JKRThreadSwitch::sTotalCount;
+DUSK_GAME_DATA u32 JKRThreadSwitch::sTotalCount;
 
-u64 JKRThreadSwitch::sTotalStart;
+DUSK_GAME_DATA u64 JKRThreadSwitch::sTotalStart;
 
-JKRThreadSwitch_PreCallback JKRThreadSwitch::mUserPreCallback;
+DUSK_GAME_DATA JKRThreadSwitch_PreCallback JKRThreadSwitch::mUserPreCallback;
 
-JKRThreadSwitch_PostCallback JKRThreadSwitch::mUserPostCallback;
+DUSK_GAME_DATA JKRThreadSwitch_PostCallback JKRThreadSwitch::mUserPostCallback;
 
 JKRThread::JKRThread(u32 stack_size, int message_count, int param_3) : mThreadListLink(this) {
     JKRHeap* heap = JKRHeap::findFromRoot(this);
@@ -358,10 +358,10 @@ static void dummy(JKRIdleThread* thread) {
 
 #pragma push
 #pragma force_active on
-JSUList<JKRTask> JKRTask::sTaskList;
+DUSK_GAME_DATA JSUList<JKRTask> JKRTask::sTaskList;
 #pragma pop
 
 #pragma push
 #pragma force_active on
-u8 JKRTask::sEndMesgQueue[32];
+DUSK_GAME_DATA u8 JKRTask::sEndMesgQueue[32];
 #pragma pop

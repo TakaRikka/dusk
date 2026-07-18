@@ -273,10 +273,10 @@ namespace JASKernel {
     u32 getAramFreeSize();
     u32 getAramSize();
 
-    extern JASHeap audioAramHeap;
-    extern uintptr_t sAramBase;
-    extern JKRHeap* sSystemHeap;
-    extern JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* sCommandHeap;
+    DUSK_GAME_EXTERN JASHeap audioAramHeap;
+    DUSK_GAME_EXTERN uintptr_t sAramBase;
+    DUSK_GAME_EXTERN JKRHeap* sSystemHeap;
+    DUSK_GAME_EXTERN JASMemChunkPool<1024, JASThreadingModel::ObjectLevelLockable>* sCommandHeap;
 };
 
 /**
@@ -452,6 +452,6 @@ private:
 template <typename T> JASMemPool_MultiThreaded<T> JASPoolAllocObject_MultiThreaded<T>::memPool_;
 #endif
 
-extern JKRSolidHeap* JASDram;
+DUSK_GAME_EXTERN JKRSolidHeap* JASDram;
 
 #endif /* JASHEAPCTRL_H */

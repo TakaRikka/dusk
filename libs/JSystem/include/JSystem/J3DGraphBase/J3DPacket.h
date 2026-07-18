@@ -125,8 +125,8 @@ public:
     u8* getDisplayList(int idx) { return (u8*)mpDisplayList[idx]; }
     u32 getDisplayListSize() { return mSize; }
 
-    static GDLObj sGDLObj;
-    static s32 sInterruptFlag;
+    static DUSK_GAME_DATA GDLObj sGDLObj;
+    static DUSK_GAME_DATA s32 sInterruptFlag;
 
     /* 0x0 */ void* mpDisplayList[2];
     /* 0x8 */ u32 mSize;

@@ -45,10 +45,10 @@ struct J3DTransformInfo {
 #endif
 };  // Size: 0x20
 
-extern J3DTransformInfo const j3dDefaultTransformInfo;
-extern Vec const j3dDefaultScale;
-extern Mtx const j3dDefaultMtx;
-extern f32 const PSMulUnit01[];
+DUSK_GAME_EXTERN J3DTransformInfo const j3dDefaultTransformInfo;
+DUSK_GAME_EXTERN Vec const j3dDefaultScale;
+DUSK_GAME_EXTERN Mtx const j3dDefaultMtx;
+DUSK_GAME_EXTERN f32 const PSMulUnit01[];
 
 void J3DGQRSetup7(u32 param_0, u32 param_1, u32 param_2, u32 param_3);
 void J3DCalcBBoardMtx(f32 (*)[4]);

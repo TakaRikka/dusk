@@ -3,7 +3,7 @@
 
 #include "JSystem/JUtility/TColor.h"
 #include <cstring>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 #if TARGET_PC
 struct FontDrawContext {

@@ -8,7 +8,7 @@
 #endif
 
 #ifndef __MWERKS__
-#include "dusk/math.h"
+#include "helpers/math.h"
 #endif
 
 #endif // dolzel.h

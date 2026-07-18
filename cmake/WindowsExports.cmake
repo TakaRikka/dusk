@@ -6,9 +6,16 @@ get_filename_component(_DUSK_WINDOWS_EXPORTS_CMAKE_DIR "${CMAKE_CURRENT_LIST_FIL
 # import library mods link against. symgen scans the built objects, filters by source, and
 # writes a .def used by the main link and import library generation.
 function(setup_windows_exports target)
-    if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
-        message(WARNING "dusklight: Windows code-mod exports are x64-only for now; skipping")
-        return()
+    string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" _implib_arch)
+    if (_implib_arch STREQUAL "arm64")
+        set(_dlltool_machine "arm64")
+        set(_lib_machine "arm64")
+    elseif (_implib_arch MATCHES "^(amd64|x86_64)$")
+        set(_dlltool_machine "i386:x86-64")
+        set(_lib_machine "x64")
+    else ()
+        message(FATAL_ERROR
+                "dusklight: no Windows mod linking support for ${CMAKE_SYSTEM_PROCESSOR}")
     endif ()
 
     include("${_DUSK_WINDOWS_EXPORTS_CMAKE_DIR}/SymbolManifest.cmake")
@@ -50,14 +57,13 @@ function(setup_windows_exports target)
     # Generate curated exports list from the main binary
     set(_def "${CMAKE_BINARY_DIR}/${_config_subdir}dusklight_exports.def")
     add_custom_command(TARGET ${target} PRE_LINK
-            # TODO: src/dusk/ is NOT excluded: inline code in game headers
-            # currently call into it (e.g. dusk::frame_interp::lookup_replacement).
             COMMAND "${_symgen}" def
-            --rsp "${_rsp}"
+            "@${_rsp}"
             --out "${_def}"
             --exclude cmake_pch
             --exclude miniz
             --exclude asan_options
+            --exclude src/dusk
             --max-exports 58000
             ${_sdk_args}
             ${_forward_args}
@@ -70,11 +76,11 @@ function(setup_windows_exports target)
     get_filename_component(_compiler_dir "${CMAKE_CXX_COMPILER}" DIRECTORY)
     find_program(DUSK_LLVM_DLLTOOL llvm-dlltool HINTS "${_compiler_dir}")
     if (DUSK_LLVM_DLLTOOL)
-        set(_implib_cmd "${DUSK_LLVM_DLLTOOL}" -d "${_def}" -D dusklight.exe -m i386:x86-64
-                -l "${_implib}")
+        set(_implib_cmd "${DUSK_LLVM_DLLTOOL}" -d "${_def}" -D dusklight.exe
+                -m "${_dlltool_machine}" -l "${_implib}")
     else ()
-        set(_implib_cmd "${CMAKE_AR}" /nologo "/def:${_def}" /machine:x64 /name:dusklight.exe
-                "/out:${_implib}")
+        set(_implib_cmd "${CMAKE_AR}" /nologo "/def:${_def}" "/machine:${_lib_machine}"
+                /name:dusklight.exe "/out:${_implib}")
     endif ()
     add_custom_command(TARGET ${target} POST_BUILD
             COMMAND ${_implib_cmd}
@@ -82,9 +88,6 @@ function(setup_windows_exports target)
             COMMENT "Generating dusklight import library"
             VERBATIM)
     set(DUSK_GAME_IMPLIB "${_implib}" CACHE INTERNAL "Import library for Windows mod linking")
-    set(DUSK_GAME_DEF "${_def}" CACHE INTERNAL "Curated export .def for the game executable")
 
-    # Ship the import library as sdk/dusklight.lib in the install tree: mods may use it to
-    # compile against Dusklight without having to build the whole game. (See DUSK_GAME_IMPLIB)
-    install(FILES "${_implib}" DESTINATION sdk RENAME dusklight.lib)
+    install(FILES "${_implib}" DESTINATION sdk RENAME "windows-${_implib_arch}.lib")
 endfunction()

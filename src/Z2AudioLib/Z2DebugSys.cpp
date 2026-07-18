@@ -121,7 +121,7 @@ JAISeqDataMgr* Z2DebugSys::initSeSeqDataMgr(const void* param_1) {
 
 u8 gMicOn = true;
 u8 gMicOffWhenOutOfSight = true;
-extern u8 gMuffleOutOfRangeMic;
+DUSK_GAME_EXTERN u8 gMuffleOutOfRangeMic;
 
 void Z2ParamNode::message(JAHControl& ctrl) {
     ctrl.makeComment("**** 各種パラメータ編集用ノード ****", 0, 5, 0);

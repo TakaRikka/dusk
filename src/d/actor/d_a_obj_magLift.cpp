@@ -37,7 +37,7 @@ int daMagLift_c::CreateHeap() {
     return 1;
 }
 
-const f32 daMagLift_c::mSpeed[16] = {
+DUSK_GAME_DATA const f32 daMagLift_c::mSpeed[16] = {
     5.0f,       6.6666665f, 8.333333f,  10.0f,      11.666667f, 13.333333f, 15.0f,      16.666666f,
     18.333334f, 20.0f,      21.666666f, 23.333334f, 25.0f,      26.666666f, 28.333334f, 3.3333333f,
 };

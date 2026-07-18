@@ -67,7 +67,7 @@ public:
     void hide() { mIsVisible = 0; }
     u8 isVisible() { return mIsVisible; }
 
-    static daBalloon2D_c* myclass;
+    static DUSK_GAME_DATA daBalloon2D_c* myclass;
 
     struct ScoreCount {
         cXyz field_0x0;

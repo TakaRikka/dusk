@@ -99,12 +99,12 @@ void daObjMovebox::Hio_c::genMessage(JORMContext* context) {
 
 #endif
 
-const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin5[] = {
+DUSK_GAME_DATA const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin5[] = {
     {0.0f, 0.0f, 0.0f, 0.0f},   {-0.5f, -0.5f, 1.0f, 1.0f}, {0.5f, -0.5f, -1.0f, 1.0f},
     {0.5f, 0.5f, -1.0f, -1.0f}, {-0.5f, 0.5f, 1.0f, -1.0f},
 };
 
-const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin20[] = {
+DUSK_GAME_DATA const daObjMovebox::BgcSrc_c daObjMovebox::Bgc_c::M_lin20[] = {
     {0.0f, 0.0f, 0.0f, 0.0f},    {-0.25f, -0.25f, 0.0f, 0.0f}, {-0.5f, -0.5f, 1.0f, 1.0f},
     {0.0f, -0.5f, -1.0f, 1.0f},  {0.0f, 0.0f, -1.0f, -1.0f},   {-0.5f, 0.0f, 1.0f, -1.0f},
     {0.25f, -0.25f, 0.0f, 0.0f}, {0.0f, -0.5f, 1.0f, 1.0f},    {0.5f, -0.5f, -1.0f, 1.0f},
@@ -128,7 +128,7 @@ daObjMovebox::Bgc_c::Bgc_c() {
     mState = STATE_0_e;
 }
 
-dBgS_ObjGndChk daObjMovebox::Bgc_c::M_gnd_work[23];
+DUSK_GAME_DATA dBgS_ObjGndChk daObjMovebox::Bgc_c::M_gnd_work[23];
 
 void daObjMovebox::Bgc_c::gnd_pos(const daObjMovebox::Act_c* i_actor,
                                   const daObjMovebox::BgcSrc_c* i_bgcSrc, int i_checkNum,
@@ -165,7 +165,7 @@ void daObjMovebox::Bgc_c::gnd_pos(const daObjMovebox::Act_c* i_actor,
     }
 }
 
-dBgS_WtrChk daObjMovebox::Bgc_c::M_wrt_work;
+DUSK_GAME_DATA dBgS_WtrChk daObjMovebox::Bgc_c::M_wrt_work;
 
 
 void daObjMovebox::Bgc_c::wrt_pos(cXyz const& param_0) {
@@ -186,7 +186,7 @@ void daObjMovebox::Bgc_c::wrt_pos(cXyz const& param_0) {
     }
 }
 
-dBgS_ObjLinChk daObjMovebox::Bgc_c::M_wall_work[23];
+DUSK_GAME_DATA dBgS_ObjLinChk daObjMovebox::Bgc_c::M_wall_work[23];
 
 
 void daObjMovebox::Bgc_c::wall_pos(daObjMovebox::Act_c const* i_actor,
@@ -409,11 +409,11 @@ void daObjMovebox::Act_c::prmX_init() {
     shape_angle.x = 0;
 }
 
-const char* const daObjMovebox::Act_c::M_arcname[8] = {
+DUSK_GAME_DATA const char* const daObjMovebox::Act_c::M_arcname[8] = {
     "Kkiba_00", "Osiblk", "H_Box20", "A_SMBlock", "P_Lv4blk", "P_Lv4blk2", "H_OsiHaka", "dummy4",
 };
 
-const dCcD_SrcCyl daObjMovebox::Act_c::M_cyl_src = {
+DUSK_GAME_DATA const dCcD_SrcCyl daObjMovebox::Act_c::M_cyl_src = {
     {
         0,
         {{0, 0, 0}, {0xD8FAFDBF, 0x11}, {0x78}},  // mObj
@@ -430,7 +430,7 @@ const dCcD_SrcCyl daObjMovebox::Act_c::M_cyl_src = {
     }
 };
 
-const daObjMovebox::Attr_c daObjMovebox::Act_c::M_attr[8] = {
+DUSK_GAME_DATA const daObjMovebox::Attr_c daObjMovebox::Act_c::M_attr[8] = {
     {
         // Timing
         6,      14,     10,     6,      14,     10,

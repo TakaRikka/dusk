@@ -9,7 +9,7 @@ struct SVec {
 
 class csXyz : public SVec {
 public:
-    static const csXyz Zero;
+    static DUSK_GAME_DATA const csXyz Zero;
     ~csXyz() {}
     csXyz() {}
     csXyz(s16, s16, s16);

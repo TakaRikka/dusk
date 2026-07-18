@@ -19,9 +19,9 @@ f32 Z2Calc::linearTransform(f32 inValue, f32 inMin, f32 inMax, f32 outMin, f32 o
     }
 }
 
-const f32 Z2Calc::cEqualCSlope = 1.0f;
+DUSK_GAME_DATA const f32 Z2Calc::cEqualCSlope = 1.0f;
 
-const f32 Z2Calc::cEqualPSlope = 0.5f;
+DUSK_GAME_DATA const f32 Z2Calc::cEqualPSlope = 0.5f;
 
 f32 Z2Calc::getParamByExp(f32 value, f32 inMin, f32 inMax, f32 exponent, f32 outMin, f32 outMax, Z2Calc::CurveSign curveSign) {
     if (curveSign == Z2Calc::CURVE_POSITIVE) {

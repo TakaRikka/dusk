@@ -214,24 +214,24 @@ void dPaPoF_c::clearFourAllID() {
     clearTwoAllID();
 }
 
-const dPaPoT_c::effTypeFunc dPaPoT_c::m_typeTwoData[] = {
+DUSK_GAME_DATA const dPaPoT_c::effTypeFunc dPaPoT_c::m_typeTwoData[] = {
     &dPaPoT_c::getCenterEffType,
     &dPaPoT_c::getLeftEffType,
     &dPaPoT_c::getRightEffType,
 };
 
-const dPaPoT_c::emitterFunc dPaPoT_c::m_emitterTwoData[] = {
+DUSK_GAME_DATA const dPaPoT_c::emitterFunc dPaPoT_c::m_emitterTwoData[] = {
     &dPaPoT_c::getCenterEmitter,
     &dPaPoT_c::getLeftEmitter,
     &dPaPoT_c::getRightEmitter,
 };
 
-const dPaPoF_c::effTypeFunc dPaPoF_c::m_typeFourData[] = {
+DUSK_GAME_DATA const dPaPoF_c::effTypeFunc dPaPoF_c::m_typeFourData[] = {
     &dPaPoF_c::getCenterEffType,   &dPaPoF_c::getLeftEffType,      &dPaPoF_c::getRightEffType,
     &dPaPoF_c::getBackLeftEffType, &dPaPoF_c::getBackRightEffType,
 };
 
-const  dPaPoF_c::emitterFunc dPaPoF_c::m_emitterFourData[] = {
+DUSK_GAME_DATA const  dPaPoF_c::emitterFunc dPaPoF_c::m_emitterFourData[] = {
     &dPaPoF_c::getCenterEmitter,   &dPaPoF_c::getLeftEmitter,      &dPaPoF_c::getRightEmitter,
     &dPaPoF_c::getBackLeftEmitter, &dPaPoF_c::getBackRightEmitter,
 };

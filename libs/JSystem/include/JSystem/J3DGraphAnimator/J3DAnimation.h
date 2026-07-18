@@ -6,7 +6,7 @@
 #include <mtx.h>
 #include "global.h"
 
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 #if TARGET_PC
 #define OFFSET_PTR_V0 BE(u32)

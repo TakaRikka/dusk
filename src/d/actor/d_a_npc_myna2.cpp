@@ -91,7 +91,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[3] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "myna2";
 
-char DUSK_CONST* DUSK_CONST daNpc_myna2_c::mEvtCutNameList[5] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_myna2_c::mEvtCutNameList[5] = {
     "",
     "FIRST_TALK",
     "GAME_FAILURE",
@@ -99,7 +99,7 @@ char DUSK_CONST* DUSK_CONST daNpc_myna2_c::mEvtCutNameList[5] = {
     "GAME_GOAL_SUCCESS",
 };
 
-daNpc_myna2_c::EventFn DUSK_CONST daNpc_myna2_c::mEvtCutList[] = {
+DUSK_GAME_DATA daNpc_myna2_c::EventFn DUSK_CONST daNpc_myna2_c::mEvtCutList[] = {
     NULL,
     &daNpc_myna2_c::ECut_firstTalk,
     &daNpc_myna2_c::ECut_gameFailure,
@@ -107,7 +107,7 @@ daNpc_myna2_c::EventFn DUSK_CONST daNpc_myna2_c::mEvtCutList[] = {
     &daNpc_myna2_c::ECut_gameGoalSuccess,
 };
 
-const daNpc_myna2_HIOParam daNpc_myna2_Param_c::m = {
+DUSK_GAME_DATA const daNpc_myna2_HIOParam daNpc_myna2_Param_c::m = {
     60.0f,
     0.0f,
     1.0f,

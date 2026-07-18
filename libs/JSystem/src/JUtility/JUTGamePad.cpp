@@ -8,7 +8,7 @@
 #include "dusk/action_bindings.h"
 #endif
 
-u32 JUTGamePad::CRumble::sChannelMask[4] = {
+DUSK_GAME_DATA u32 JUTGamePad::CRumble::sChannelMask[4] = {
     PAD_CHAN0_BIT,
     PAD_CHAN1_BIT,
     PAD_CHAN2_BIT,
@@ -17,11 +17,11 @@ u32 JUTGamePad::CRumble::sChannelMask[4] = {
 
 static u32 channel_mask[4] = {PAD_CHAN0_BIT, PAD_CHAN1_BIT, PAD_CHAN2_BIT, PAD_CHAN3_BIT};
 
-JSUList<JUTGamePad> JUTGamePad::mPadList(false);
+DUSK_GAME_DATA JSUList<JUTGamePad> JUTGamePad::mPadList(false);
 
-bool JUTGamePad::mListInitialized;
+DUSK_GAME_DATA bool JUTGamePad::mListInitialized;
 
-u8 JUTGamePad::mPadAssign[4];
+DUSK_GAME_DATA u8 JUTGamePad::mPadAssign[4];
 
 JUTGamePad::JUTGamePad(EPadPort port) : mRumble(this), mLink(this) {
     mPortNum = port;
@@ -53,11 +53,11 @@ void JUTGamePad::initList() {
     }
 }
 
-u32 JUTGamePad::sSuppressPadReset;
+DUSK_GAME_DATA u32 JUTGamePad::sSuppressPadReset;
 
-u8 data_8074CFA4_debug;
+DUSK_GAME_DATA u8 data_8074CFA4_debug;
 
-s32 JUTGamePad::sAnalogMode;
+DUSK_GAME_DATA s32 JUTGamePad::sAnalogMode;
 
 BOOL JUTGamePad::init() {
     PADSetSpec(PAD_SPEC_5);
@@ -73,19 +73,19 @@ void JUTGamePad::clear() {
 #endif
 }
 
-PADStatus JUTGamePad::mPadStatus[4];
+DUSK_GAME_DATA PADStatus JUTGamePad::mPadStatus[4];
 
-JUTGamePad::CButton JUTGamePad::mPadButton[4];
+DUSK_GAME_DATA JUTGamePad::CButton JUTGamePad::mPadButton[4];
 
-JUTGamePad::CStick JUTGamePad::mPadMStick[4];
+DUSK_GAME_DATA JUTGamePad::CStick JUTGamePad::mPadMStick[4];
 
-JUTGamePad::CStick JUTGamePad::mPadSStick[4];
+DUSK_GAME_DATA JUTGamePad::CStick JUTGamePad::mPadSStick[4];
 
-JUTGamePad::EStickMode JUTGamePad::sStickMode = EStickMode1;
+DUSK_GAME_DATA JUTGamePad::EStickMode JUTGamePad::sStickMode = EStickMode1;
 
-int JUTGamePad::sClampMode = EClampStick;
+DUSK_GAME_DATA int JUTGamePad::sClampMode = EClampStick;
 
-u32 JUTGamePad::sRumbleSupported;
+DUSK_GAME_DATA u32 JUTGamePad::sRumbleSupported;
 
 u32 JUTGamePad::read() {
     sRumbleSupported = PADRead(mPadStatus);
@@ -181,21 +181,21 @@ void JUTGamePad::assign() {
     }
 }
 
-u8 JUTGamePad::CRumble::mStatus[4];
+DUSK_GAME_DATA u8 JUTGamePad::CRumble::mStatus[4];
 
-u32 JUTGamePad::CRumble::mEnabled;
+DUSK_GAME_DATA u32 JUTGamePad::CRumble::mEnabled;
 
-callbackFn JUTGamePad::C3ButtonReset::sCallback;
+DUSK_GAME_DATA callbackFn JUTGamePad::C3ButtonReset::sCallback;
 
-void* JUTGamePad::C3ButtonReset::sCallbackArg;
+DUSK_GAME_DATA void* JUTGamePad::C3ButtonReset::sCallbackArg;
 
-OSTime JUTGamePad::C3ButtonReset::sThreshold = (OSTime)(OS_TIMER_CLOCK / 60) * 30;
+DUSK_GAME_DATA OSTime JUTGamePad::C3ButtonReset::sThreshold = (OSTime)(OS_TIMER_CLOCK / 60) * 30;
 
-bool JUTGamePad::C3ButtonReset::sResetSwitchPushing;
+DUSK_GAME_DATA bool JUTGamePad::C3ButtonReset::sResetSwitchPushing;
 
-bool JUTGamePad::C3ButtonReset::sResetOccurred;
+DUSK_GAME_DATA bool JUTGamePad::C3ButtonReset::sResetOccurred;
 
-s32 JUTGamePad::C3ButtonReset::sResetOccurredPort;
+DUSK_GAME_DATA s32 JUTGamePad::C3ButtonReset::sResetOccurredPort;
 
 void JUTGamePad::checkResetCallback(OSTime holdTime) {
     if (holdTime >= JUTGamePad::C3ButtonReset::sThreshold) {
@@ -208,13 +208,13 @@ void JUTGamePad::checkResetCallback(OSTime holdTime) {
     }
 }
 
-f32 JUTGamePad::CStick::sPressPoint = 0.5f;
+DUSK_GAME_DATA f32 JUTGamePad::CStick::sPressPoint = 0.5f;
 
-f32 JUTGamePad::CStick::sReleasePoint = 0.25f;
+DUSK_GAME_DATA f32 JUTGamePad::CStick::sReleasePoint = 0.25f;
 
-u32 JUTGamePad::C3ButtonReset::sResetPattern = PAD_BUTTON_START | PAD_BUTTON_X | PAD_BUTTON_B;
+DUSK_GAME_DATA u32 JUTGamePad::C3ButtonReset::sResetPattern = PAD_BUTTON_START | PAD_BUTTON_X | PAD_BUTTON_B;
 
-u32 JUTGamePad::C3ButtonReset::sResetMaskPattern = 0x0000FFFF;
+DUSK_GAME_DATA u32 JUTGamePad::C3ButtonReset::sResetMaskPattern = 0x0000FFFF;
 
 void JUTGamePad::update() {
     if (mPortNum != EPortInvalid) {
@@ -269,7 +269,7 @@ void JUTGamePad::update() {
     }
 }
 
-JSUList<JUTGamePadLongPress> JUTGamePadLongPress::sPatternList(false);
+DUSK_GAME_DATA JSUList<JUTGamePadLongPress> JUTGamePadLongPress::sPatternList(false);
 
 void JUTGamePad::checkResetSwitch() {
     if (!JUTGamePad::C3ButtonReset::sResetOccurred) {

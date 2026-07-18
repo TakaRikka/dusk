@@ -64,6 +64,7 @@
 #include "dusk/mod_loader.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
+#include "dusk/os.h"
 #include "dusk/ui/menu_bar.hpp"
 #include "dusk/ui/overlay.hpp"
 #include "dusk/ui/prelaunch.hpp"
@@ -105,11 +106,11 @@
 #endif
 
 // --- GLOBALS ---
-s8 mDoMain::developmentMode = -1;
-OSTime mDoMain::sPowerOnTime;
-OSTime mDoMain::sHungUpTime;
-u32 mDoMain::memMargin = 0xFFFFFFFF;
-char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
+DUSK_GAME_DATA s8 mDoMain::developmentMode = -1;
+DUSK_GAME_DATA OSTime mDoMain::sPowerOnTime;
+DUSK_GAME_DATA OSTime mDoMain::sHungUpTime;
+DUSK_GAME_DATA u32 mDoMain::memMargin = 0xFFFFFFFF;
+DUSK_GAME_DATA char mDoMain::COPYDATE_STRING[18] = "??/??/?? ??:??:??";
 #if TARGET_PC
 const int audioHeapSize = 0x14D800 * 2;
 #else
@@ -120,22 +121,6 @@ const int audioHeapSize = 0x14D800;
 // LOAD_COPYDATE - PC Version
 // =========================================================================
 #define COPYDATE_PATH "/str/Final/Release/COPYDATE"
-
-#if TARGET_PC
-bool dusk::IsRunning = true;
-bool dusk::IsShuttingDown = false;
-bool dusk::IsGameLaunched = false;
-bool dusk::RestartRequested = false;
-uint8_t dusk::SaveRequested = 0;
-dusk::StageRequest dusk::StageRequested = {"",false};
-std::filesystem::path dusk::ConfigPath;
-std::filesystem::path dusk::CachePath;
-#endif
-
-void dusk::RequestRestart() noexcept {
-    RestartRequested = SupportsProcessRestart;
-    IsRunning = false;
-}
 
 s32 LOAD_COPYDATE(void*) {
     char buffer[32];
@@ -165,8 +150,6 @@ s32 LOAD_COPYDATE(void*) {
 }
 
 AuroraInfo auroraInfo;
-AuroraStats dusk::lastFrameAuroraStats;
-float dusk::frameUsagePct = 0.0f;
 
 bool launchUILoop() {
     while (dusk::IsRunning && !dusk::IsGameLaunched) {
@@ -910,7 +893,10 @@ int game_main(int argc, char* argv[]) {
 
     main01();
 
-    dusk::MoviePlayerShutdown();
+    // We need to cleanly shut down the threads to avoid crashes on shutdown.
+    if (daMP_c::m_myObj) {
+        daMP_c::m_myObj->daMP_c_Finish();
+    }
 
     dusk::crash_reporting::shutdown();
     dusk::ShutdownFileLogging();

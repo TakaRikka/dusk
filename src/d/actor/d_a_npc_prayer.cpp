@@ -42,12 +42,12 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[2] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Prayer";
 
-daNpcPray_c::EvtSeq DUSK_CONST daNpcPray_c::mEvtSeqList[] = {
+DUSK_GAME_DATA daNpcPray_c::EvtSeq DUSK_CONST daNpcPray_c::mEvtSeqList[] = {
     NULL,
     &daNpcPray_c::_Evt_GetHeart,
 };
 
-const daNpcPray_HIOParam daNpcPray_Param_c::m = {
+DUSK_GAME_DATA const daNpcPray_HIOParam daNpcPray_Param_c::m = {
     55.0f,
     -3.0f,
     1.0f,

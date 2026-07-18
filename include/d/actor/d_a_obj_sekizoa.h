@@ -57,7 +57,7 @@ class daObj_Sekizoa_Param_c {
 public:
     virtual ~daObj_Sekizoa_Param_c() {}
 
-    static daObj_Sekizoa_HIOParam const m;
+    static DUSK_GAME_DATA daObj_Sekizoa_HIOParam const m;
 };
 
 #if DEBUG
@@ -268,8 +268,8 @@ public:
                               -300.0f, 0);
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[9];
-    static cutFunc DUSK_CONST mCutList[9];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[9];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[9];
 
     /* 0x0E40 */ mDoExt_McaMorfSO* mpMcaMorf;
     /* 0x0E44 */ mDoExt_invisibleModel mInvModel;

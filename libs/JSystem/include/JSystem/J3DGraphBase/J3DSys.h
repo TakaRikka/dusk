@@ -6,8 +6,7 @@
 
 #include "JSystem/J3DAssert.h"
 #include "JSystem/JMath/JMath.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 #include "global.h"
 
 enum J3DSysDrawBuf {
@@ -190,25 +189,23 @@ struct J3DSys {
     Mtx& getModelDrawMtx(u16 no) { return mModelDrawMtx[no]; }
     J3DShapePacket* getShapePacket() { return mShapePacket; }
 
+#if TARGET_PC
+    void setViewMtx(const Mtx m);
+#else
     void setViewMtx(const Mtx m) {
-#ifdef TARGET_PC
-        Mtx patched;
-        if (dusk::frame_interp::lookup_replacement(m, patched)) {
-            m = patched;
-        }
-#endif
         MTXCopy(m, mViewMtx);
     }
+#endif
 
     J3DModel* getModel() { return mModel; }
 
-    static Mtx mCurrentMtx;
-    static Vec mCurrentS;
-    static Vec mParentS;
-    static J3DTexCoordScaleInfo sTexCoordScaleTable[8];
+    static DUSK_GAME_DATA Mtx mCurrentMtx;
+    static DUSK_GAME_DATA Vec mCurrentS;
+    static DUSK_GAME_DATA Vec mParentS;
+    static DUSK_GAME_DATA J3DTexCoordScaleInfo sTexCoordScaleTable[8];
 };
 
-extern u32 j3dDefaultViewNo;
+DUSK_GAME_EXTERN u32 j3dDefaultViewNo;
 DUSK_GAME_EXTERN J3DSys j3dSys;
 
 #endif /* J3DSYS_H */

@@ -496,7 +496,7 @@ s32 cLib_distanceAngleS(s16 x, s16 y) {
 
 static Mtx mtx[10];
 
-Mtx* calc_mtx = mtx;
+DUSK_GAME_DATA Mtx* calc_mtx = mtx;
 
 /**
  * Initializes calc_mtx to mtx stack

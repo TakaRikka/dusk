@@ -217,29 +217,25 @@ void ModLoader::init_services() {
 }
 
 bool ModLoader::register_static_service_exports(LoadedMod& mod) {
-    if (!mod.native || mod.native->manifest == nullptr) {
+    if (!mod.native) {
         return true;
     }
 
-    const auto& manifest = *mod.native->manifest;
-    for (size_t i = 0; i < manifest.export_count; ++i) {
-        const auto& serviceExport = manifest.exports[i];
-        if (serviceExport.struct_size != sizeof(ServiceExport) ||
-            !svc::valid_service_id(serviceExport.service_id))
-        {
+    for (const auto* serviceExport : mod.native->parsed.exports) {
+        if (!svc::valid_service_id(serviceExport->service_id.chars)) {
             fail_mod(mod, MOD_INVALID_ARGUMENT, "Invalid service export descriptor");
             return false;
         }
 
-        const bool deferred = (serviceExport.flags & SERVICE_EXPORT_DEFERRED) != 0;
-        if (!deferred && serviceExport.service == nullptr) {
+        const bool deferred = (serviceExport->rec.flags & SERVICE_EXPORT_DEFERRED) != 0;
+        if (!deferred && serviceExport->service == nullptr) {
             fail_mod(mod, MOD_INVALID_ARGUMENT, "Static service export has null service pointer");
             return false;
         }
 
         const auto result =
-            svc::register_service(serviceExport.service_id, serviceExport.major_version,
-                serviceExport.minor_version, serviceExport.service, &mod, deferred);
+            svc::register_service(serviceExport->service_id.chars, serviceExport->major_version,
+                serviceExport->minor_version, serviceExport->service, &mod, deferred);
         if (result != MOD_OK) {
             fail_mod(mod, result, "Service export registration failed");
             return false;
@@ -262,18 +258,13 @@ std::string ModLoader::describe_missing_import(
 
     // No record can also mean the provider failed or is disabled and its services were removed.
     for (const auto& other : mods()) {
-        if ((other.active && !other.loadFailed) || !other.native ||
-            other.native->manifest == nullptr)
-        {
+        if ((other.active && !other.loadFailed) || !other.native) {
             continue;
         }
-        const auto& manifest = *other.native->manifest;
-        for (size_t i = 0; i < manifest.export_count; ++i) {
-            const auto& serviceExport = manifest.exports[i];
-            if (serviceExport.struct_size == sizeof(ServiceExport) &&
-                svc::valid_service_id(serviceExport.service_id) &&
-                std::string_view{serviceExport.service_id} == serviceId &&
-                serviceExport.major_version == majorVersion)
+        for (const auto* serviceExport : other.native->parsed.exports) {
+            if (svc::valid_service_id(serviceExport->service_id.chars) &&
+                std::string_view{serviceExport->service_id.chars} == serviceId &&
+                serviceExport->major_version == majorVersion)
             {
                 return fmt::format("Required service {}@{} unavailable: provider '{}' {}",
                     serviceId, majorVersion, other.metadata.id,
@@ -286,35 +277,33 @@ std::string ModLoader::describe_missing_import(
 }
 
 bool ModLoader::resolve_service_imports(LoadedMod& mod) {
-    if (!mod.native || mod.native->manifest == nullptr) {
+    if (!mod.native) {
         return true;
     }
 
-    const auto& manifest = *mod.native->manifest;
-    for (size_t i = 0; i < manifest.import_count; ++i) {
-        const auto& serviceImport = manifest.imports[i];
-        if (serviceImport.struct_size != sizeof(ServiceImport) ||
-            !svc::valid_service_id(serviceImport.service_id) || serviceImport.slot == nullptr)
+    for (const auto* serviceImport : mod.native->parsed.imports) {
+        if (!svc::valid_service_id(serviceImport->service_id.chars) ||
+            serviceImport->slot == nullptr)
         {
             fail_mod(mod, MOD_INVALID_ARGUMENT, "Invalid service import descriptor");
             return false;
         }
 
-        const auto* service = svc::find_service(
-            serviceImport.service_id, serviceImport.major_version, serviceImport.min_minor_version);
+        const auto* service = svc::find_service(serviceImport->service_id.chars,
+            serviceImport->major_version, serviceImport->min_minor_version);
         if (service == nullptr) {
-            *static_cast<const void**>(serviceImport.slot) = nullptr;
-            if ((serviceImport.flags & SERVICE_IMPORT_OPTIONAL) != 0) {
+            *static_cast<const void**>(serviceImport->slot) = nullptr;
+            if ((serviceImport->rec.flags & SERVICE_IMPORT_OPTIONAL) != 0) {
                 continue;
             }
 
             fail_mod(mod, MOD_UNAVAILABLE,
-                describe_missing_import(serviceImport.service_id, serviceImport.major_version,
-                    serviceImport.min_minor_version));
+                describe_missing_import(serviceImport->service_id.chars,
+                    serviceImport->major_version, serviceImport->min_minor_version));
             return false;
         }
 
-        *static_cast<const void**>(serviceImport.slot) = service->service;
+        *static_cast<const void**>(serviceImport->slot) = service->service;
     }
 
     return true;

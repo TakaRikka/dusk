@@ -14,7 +14,7 @@ class daObj_SekiDoor_Param_c {
 public:
     virtual ~daObj_SekiDoor_Param_c() {};
 
-    static daObj_SekiDoor_HIOParam const m;
+    static DUSK_GAME_DATA daObj_SekiDoor_HIOParam const m;
 };
 
 #if DEBUG

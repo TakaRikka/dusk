@@ -92,9 +92,9 @@ public:
 
     static void registerSeqCallback(u16 (*param_0)(JASTrack*, u16)) { sCallBackFunc = param_0; }
 
-    static CmdInfo sCmdInfo[96];
-    static CmdInfo sExtCmdInfo[255];
-    static u16 (*sCallBackFunc)(JASTrack*, u16);
+    static DUSK_GAME_DATA CmdInfo sCmdInfo[96];
+    static DUSK_GAME_DATA CmdInfo sExtCmdInfo[255];
+    static DUSK_GAME_DATA u16 (*sCallBackFunc)(JASTrack*, u16);
 };
 
 #endif /* JASSEQPARSER_H */

@@ -2,7 +2,7 @@
 
 #include "d/d_particle_name.h"
 
-u16 dPa_name::j_o_id[5] = {
+DUSK_GAME_DATA u16 dPa_name::j_o_id[5] = {
     ID_ZI_J_O_DIGTGA_A,
     ID_ZI_J_O_DIGTGA_B,
     ID_ZI_J_O_FIRE_A,
@@ -10,7 +10,7 @@ u16 dPa_name::j_o_id[5] = {
     ID_ZI_J_O_KAGEROU,
 };
 
-u16 dPa_name::s_o_id[14] = {
+DUSK_GAME_DATA u16 dPa_name::s_o_id[14] = {
     dPa_RM(ID_ZI_S_O_FIRE2_A),
     dPa_RM(ID_ZI_S_O_FIRE2_B),
     dPa_RM(ID_ZI_S_O_KAGEROU2),
@@ -35,7 +35,7 @@ DUSK_CONST char* dPa_name::getName(u32 i_id) {
     return jpaName[i_id];
 }
 
-DUSK_CONST char* dPa_name::jpaName[] = {
+DUSK_GAME_DATA DUSK_CONST char* dPa_name::jpaName[] = {
     "AK_JN_M_breakFaceRock00.jpa",
     "AK_JN_M_breakGreatRock00.jpa",
     "AK_JN_M_breakLittleRock00.jpa",

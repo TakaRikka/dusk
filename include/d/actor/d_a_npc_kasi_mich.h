@@ -23,7 +23,7 @@ class daNpcKasiMich_Param_c {
 public:
     virtual ~daNpcKasiMich_Param_c() {}
 
-    static daNpcKasiMich_HIOParam const m;
+    static DUSK_GAME_DATA daNpcKasiMich_HIOParam const m;
 };
 
 #if DEBUG
@@ -121,10 +121,10 @@ public:
     void chgWeightLight() { mCcStts.SetWeight(0xD8); }
     BOOL pl_front_check() { return actor_front_check(daPy_getPlayerActorClass()); }
 
-    static EventFn DUSK_CONST mEvtSeqList[1];
-    static daTagEscape_c* mTargetTag;
-    static f32 mTargetTagDist;
-    static s16 mWolfAngle;
+    static DUSK_GAME_DATA EventFn DUSK_CONST mEvtSeqList[1];
+    static DUSK_GAME_DATA daTagEscape_c* mTargetTag;
+    static DUSK_GAME_DATA f32 mTargetTagDist;
+    static DUSK_GAME_DATA s16 mWolfAngle;
 
 private:
     /* 0x0B48 */ Z2CreatureCitizen mSound;

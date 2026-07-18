@@ -21,9 +21,13 @@
 #include "d/d_msg_object.h"
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_stage.h"
-#include "dusk/memory.h"
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 #include "f_op/f_op_msg_mng.h"
+
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#include "dusk/memory.h"
+#endif
 
 static dMf_HIO_c g_fmHIO;
 
@@ -93,7 +97,7 @@ static dMenu_Fmap_c::process move_process[30] = {
     &dMenu_Fmap_c::howl_demo3_move,
 };
 
-dMf_HIO_c* dMf_HIO_c::mMySelfPointer;
+DUSK_GAME_DATA dMf_HIO_c* dMf_HIO_c::mMySelfPointer;
 
 dMf_HIO_c::dMf_HIO_c() {
     mMySelfPointer = this;
@@ -136,7 +140,7 @@ const char* dMenuFmap_getStartStageName(void* i_fieldData) {
     return dComIfGp_getStartStageName();
 }
 
-dMenu_Fmap_c* dMenu_Fmap_c::MyClass;
+DUSK_GAME_DATA dMenu_Fmap_c* dMenu_Fmap_c::MyClass;
 
 dMenu_Fmap_c::dMenu_Fmap_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i_cstick,
                            u8 i_process, u8 i_regionCursor, u8 i_stageCursor, f32 i_stageTransX,

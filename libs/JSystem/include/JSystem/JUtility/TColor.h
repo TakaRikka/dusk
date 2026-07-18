@@ -2,7 +2,7 @@
 #define TCOLOR_H
 
 #include <gx.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 namespace JUtility {
     

@@ -21,6 +21,10 @@
 #include "f_pc/f_pc_priority.h"
 #include "m_Do/m_Do_controller_pad.h"
 
+#if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#endif
+
 #include "tracy/Tracy.hpp"
 
 void fpcM_Draw(void* i_proc) {

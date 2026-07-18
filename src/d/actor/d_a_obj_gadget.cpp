@@ -35,7 +35,7 @@ public:
 #endif
 
 
-daObj_Gadget_HIOParam const daObj_Gadget_Param_c::m = {
+DUSK_GAME_DATA daObj_Gadget_HIOParam const daObj_Gadget_Param_c::m = {
     0.0f, -4.0f, 1.0f, 100.0f, 37.0f, 26.0f, 13.0f, 14.0f,
      37.0f, 50.0f, 18.0f,
 };

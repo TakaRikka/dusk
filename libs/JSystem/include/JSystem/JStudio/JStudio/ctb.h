@@ -109,7 +109,7 @@ struct data {
         }
     };
 
-    static const u32 ga4cSignature;
+    static DUSK_GAME_DATA const u32 ga4cSignature;
 };
 
 struct TObject_TxyzRy : public TObject {

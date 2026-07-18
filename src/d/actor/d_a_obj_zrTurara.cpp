@@ -19,7 +19,7 @@ daZrTurara_HIO_c::daZrTurara_HIO_c() {
 
 static daZrTurara_HIO_c l_HIO;
 
-dCcD_SrcGObjInf const daZrTurara_c::mCcDObjInfo = {
+DUSK_GAME_DATA dCcD_SrcGObjInf const daZrTurara_c::mCcDObjInfo = {
     {0, {
         {0, 0, 0},
         {0x20, 0x11},
@@ -30,7 +30,7 @@ dCcD_SrcGObjInf const daZrTurara_c::mCcDObjInfo = {
     {0}
 };
 
-dCcD_SrcCyl daZrTurara_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daZrTurara_c::mCcDCyl = {
     mCcDObjInfo,
     {
         {{0.0f, 0.0f, 0.0f}, 0.0f, 0.0f}

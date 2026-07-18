@@ -106,12 +106,12 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_resNames[1] = {"chtSolB"};
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "chtSolB";
 
-char DUSK_CONST* DUSK_CONST daNpc_SoldierB_c::mEvtCutNameList[2] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_SoldierB_c::mEvtCutNameList[2] = {
     "",
     "LISTEN_LAKE",
 };
 
-daNpc_SoldierB_c::cutFunc DUSK_CONST daNpc_SoldierB_c::mEvtCutList[2] = {
+DUSK_GAME_DATA daNpc_SoldierB_c::cutFunc DUSK_CONST daNpc_SoldierB_c::mEvtCutList[2] = {
     NULL,
     &daNpc_SoldierB_c::ECut_listenLake,
 };
@@ -128,7 +128,7 @@ daNpc_SoldierB_c::~daNpc_SoldierB_c() {
     }
 }
 
-daNpc_SoldierB_HIOParam const daNpc_SoldierB_Param_c::m = {
+DUSK_GAME_DATA daNpc_SoldierB_HIOParam const daNpc_SoldierB_Param_c::m = {
     30.0f,    // attention_offset
     -4.0f,    // gravity
     1.0f,     // scale

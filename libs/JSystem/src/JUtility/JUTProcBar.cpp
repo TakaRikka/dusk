@@ -27,7 +27,7 @@ JUTProcBar::JUTProcBar() {
     mWatchHeap = NULL;
 }
 
-JUTProcBar* JUTProcBar::sManager;
+DUSK_GAME_DATA JUTProcBar* JUTProcBar::sManager;
 
 JUTProcBar::~JUTProcBar() {
     sManager = NULL;

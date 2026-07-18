@@ -79,9 +79,9 @@ J3DSkinDeform::J3DSkinDeform() {
     mSkinNList = NULL;
 }
 
-BE(u16)* J3DSkinDeform::sWorkArea_WEvlpMixMtx[1024];
+DUSK_GAME_DATA BE(u16)* J3DSkinDeform::sWorkArea_WEvlpMixMtx[1024];
 
-BE(f32)* J3DSkinDeform::sWorkArea_WEvlpMixWeight[1024];
+DUSK_GAME_DATA BE(f32)* J3DSkinDeform::sWorkArea_WEvlpMixWeight[1024];
 
 void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
     J3D_ASSERT_NULLPTR(322, pModelData != NULL);
@@ -194,7 +194,7 @@ void J3DSkinDeform::initSkinInfo(J3DModelData* pModelData) {
     }
 }
 
-u16 J3DSkinDeform::sWorkArea_MtxReg[1024];
+DUSK_GAME_DATA u16 J3DSkinDeform::sWorkArea_MtxReg[1024];
 
 int J3DSkinDeform::initMtxIndexArray(J3DModelData* pModelData) {
     J3D_ASSERT_NULLPTR(507, pModelData != NULL);

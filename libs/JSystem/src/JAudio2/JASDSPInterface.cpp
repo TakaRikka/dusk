@@ -11,13 +11,13 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include <os.h>
 
-JASDsp::TChannel* JASDsp::CH_BUF;
+DUSK_GAME_DATA JASDsp::TChannel* JASDsp::CH_BUF;
 
-JASDsp::FxBuf* JASDsp::FX_BUF;
+DUSK_GAME_DATA JASDsp::FxBuf* JASDsp::FX_BUF;
 
-f32 JASDsp::sDSPVolume;
+DUSK_GAME_DATA f32 JASDsp::sDSPVolume;
 
-u16 JASDsp::SEND_TABLE[] = {
+DUSK_GAME_DATA u16 JASDsp::SEND_TABLE[] = {
     0x0D00,
     0x0D60,
     0x0DC8,
@@ -32,10 +32,10 @@ u16 JASDsp::SEND_TABLE[] = {
     0x0000,
 };
 
-u32 JASWaveInfo::one = 1;
+DUSK_GAME_DATA u32 JASWaveInfo::one = 1;
 
 #if DEBUG
-s32 JASDsp::dspMutex = 1;
+DUSK_GAME_DATA s32 JASDsp::dspMutex = 1;
 #endif
 
 void JASDsp::boot(void (*param_0)(void*)) {
@@ -99,14 +99,14 @@ void JASDsp::invalChannelAll() {
     DCInvalidateRange(CH_BUF, sizeof(TChannel) * DSP_CHANNELS);
 }
 
-u8 const ATTRIBUTE_ALIGN(32) JASDsp::DSPADPCM_FILTER[64] = {
+DUSK_GAME_DATA u8 const ATTRIBUTE_ALIGN(32) JASDsp::DSPADPCM_FILTER[64] = {
     0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x04, 0x00,
     0x10, 0x00, 0xF8, 0x00, 0x0E, 0x00, 0xFA, 0x00, 0x0C, 0x00, 0xFC, 0x00, 0x12, 0x00, 0xF6, 0x00,
     0x10, 0x68, 0xF7, 0x38, 0x12, 0xC0, 0xF7, 0x04, 0x14, 0x00, 0xF4, 0x00, 0x08, 0x00, 0xF8, 0x00,
     0x04, 0x00, 0xFC, 0x00, 0xFC, 0x00, 0x04, 0x00, 0xFC, 0x00, 0x00, 0x00, 0xF8, 0x00, 0x00, 0x00,
 };
 
-u32 const ATTRIBUTE_ALIGN(32) JASDsp::DSPRES_FILTER[320] = {
+DUSK_GAME_DATA u32 const ATTRIBUTE_ALIGN(32) JASDsp::DSPRES_FILTER[320] = {
     0x0C3966AD,
     0x0D46FFDF,
     0x0B396696,

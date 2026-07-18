@@ -17,7 +17,7 @@ class daNpc_Aru_Param_c {
 public:
     virtual ~daNpc_Aru_Param_c() {}
 
-    static daNpc_Aru_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Aru_HIOParam const m;
 };
 
 #if DEBUG
@@ -171,8 +171,8 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
     void setLastIn() { mLastGoatIn = true; }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[7];
-    static cutFunc DUSK_CONST mCutList[7];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[7];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[7];
 
 private:
     /* 0xE40 */ NPC_ARU_HIO_CLASS* mpHIO;

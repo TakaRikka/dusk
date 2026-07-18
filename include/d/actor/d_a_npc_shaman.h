@@ -20,7 +20,7 @@ class daNpc_Sha_Param_c {
 public:
     virtual ~daNpc_Sha_Param_c() {}
 
-    static daNpc_Sha_HIOParam const m;
+    static DUSK_GAME_DATA daNpc_Sha_HIOParam const m;
 };
 
 #if DEBUG
@@ -110,12 +110,12 @@ public:
         return nodeNo == 0xFFFF ? -1 : nodeNo;
     }
 
-    static char DUSK_CONST* DUSK_CONST mCutNameList[2];
-    static cutFunc DUSK_CONST mCutList[2];
-    static const u16 mEvtBitLabels[6];
-    static const u16 mTmpBitLabels[6];
-    static const int mSceneChangeNoTable[48];
-    static queryFunc mQueries[48];
+    static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
+    static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
+    static DUSK_GAME_DATA const u16 mEvtBitLabels[6];
+    static DUSK_GAME_DATA const u16 mTmpBitLabels[6];
+    static DUSK_GAME_DATA const int mSceneChangeNoTable[48];
+    static DUSK_GAME_DATA queryFunc mQueries[48];
 
 private:
     /* 0xE40 */ NPC_SHA_HIO_CLASS* mpHIO;

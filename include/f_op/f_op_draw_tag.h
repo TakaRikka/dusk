@@ -5,7 +5,7 @@
 
 typedef struct create_tag_class create_tag_class;
 
-extern node_lists_tree_class g_fopDwTg_Queue;
+DUSK_GAME_EXTERN node_lists_tree_class g_fopDwTg_Queue;
 
 void fopDwTg_DrawQTo(create_tag_class* i_createTag);
 void fopDwTg_CreateQueue();

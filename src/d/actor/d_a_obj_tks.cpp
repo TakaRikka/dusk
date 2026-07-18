@@ -59,7 +59,7 @@ daObjTks_c::~daObjTks_c() {
 #endif
 }
 
-const daObjTks_HIOParam daObjTks_Param_c::m = {
+DUSK_GAME_DATA const daObjTks_HIOParam daObjTks_Param_c::m = {
     90.0f,
     -3.0f,
     1.0f,

@@ -4310,12 +4310,12 @@ void dMeter_cursorHIO_c::genMessage(JORMContext* mctx) {
 }
 #endif
 
-dMeter_menuHIO_c g_menuHIO;
+DUSK_GAME_DATA dMeter_menuHIO_c g_menuHIO;
 
-dMeter_drawHIO_c g_drawHIO;
+DUSK_GAME_DATA dMeter_drawHIO_c g_drawHIO;
 
-dMeter_ringHIO_c g_ringHIO;
+DUSK_GAME_DATA dMeter_ringHIO_c g_ringHIO;
 
-dMeter_fmapHIO_c g_fmapHIO;
+DUSK_GAME_DATA dMeter_fmapHIO_c g_fmapHIO;
 
-dMeter_cursorHIO_c g_cursorHIO;
+DUSK_GAME_DATA dMeter_cursorHIO_c g_cursorHIO;

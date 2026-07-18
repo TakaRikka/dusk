@@ -2182,7 +2182,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "Chat";
 
 static NPC_CHAT_HIO_CLASS l_HIO;
 
-daNpcChat_c::eventFunc DUSK_CONST daNpcChat_c::mEvtSeqList[1] = {
+DUSK_GAME_DATA daNpcChat_c::eventFunc DUSK_CONST daNpcChat_c::mEvtSeqList[1] = {
     NULL,
 };
 
@@ -2218,7 +2218,7 @@ static DUSK_CONSTEXPR anmTblPrm const l_objTWTbl[13] = {
     {"objectTW", -1},
 };
 
-daNpcChat_HIOParam const daNpcChat_Param_c::m = {
+DUSK_GAME_DATA daNpcChat_HIOParam const daNpcChat_Param_c::m = {
     55.0f,
     -3.0f,
     1.0f,

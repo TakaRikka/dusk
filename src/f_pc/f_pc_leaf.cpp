@@ -56,7 +56,7 @@ int fpcLf_Delete(leafdraw_class* i_leaf) {
     return ret;
 }
 
-int g_fpcLf_type;
+DUSK_GAME_DATA int g_fpcLf_type;
 
 int fpcLf_Create(leafdraw_class* i_leaf) {
     if (LEAFDRAW_BASE(i_leaf).state.init_state == 0) {
@@ -74,7 +74,7 @@ int fpcLf_Create(leafdraw_class* i_leaf) {
     return ret;
 }
 
-leafdraw_method_class DUSK_CONST g_fpcLf_Method = {
+DUSK_GAME_DATA leafdraw_method_class DUSK_CONST g_fpcLf_Method = {
     (process_method_func)fpcLf_Create,  (process_method_func)fpcLf_Delete,
     (process_method_func)fpcLf_Execute, (process_method_func)fpcLf_IsDelete,
     (process_method_func)fpcLf_Draw,

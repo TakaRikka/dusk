@@ -13,7 +13,7 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
-#include "dusk/string.hpp"
+#include "helpers/string.hpp"
 
 namespace {
 static u8 event_debug_evnt() {

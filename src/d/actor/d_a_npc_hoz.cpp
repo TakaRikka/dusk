@@ -188,7 +188,7 @@ static DUSK_CONSTEXPR daNpcT_MotionSeqMngr_c::sequenceStepData_c l_motionSequenc
     {29, -1, 1}, {0, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {9, -1, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0},
 };
 
-char DUSK_CONST* DUSK_CONST daNpc_Hoz_c::mCutNameList[8] = {
+DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST daNpc_Hoz_c::mCutNameList[8] = {
     "",
     "BOAT_RACE",
     "BEFORE_BATTLE",
@@ -199,7 +199,7 @@ char DUSK_CONST* DUSK_CONST daNpc_Hoz_c::mCutNameList[8] = {
     "TALK_BREAK",
 };
 
-daNpc_Hoz_c::cutFunc DUSK_CONST daNpc_Hoz_c::mCutList[] = {
+DUSK_GAME_DATA daNpc_Hoz_c::cutFunc DUSK_CONST daNpc_Hoz_c::mCutList[] = {
     NULL,
     &daNpc_Hoz_c::ECut_boatRace,
     &daNpc_Hoz_c::ECut_beforeBattle,
@@ -210,7 +210,7 @@ daNpc_Hoz_c::cutFunc DUSK_CONST daNpc_Hoz_c::mCutList[] = {
     &daNpc_Hoz_c::ECut_talkBreak,
 };
 
-const daNpc_Hoz_HIOParam daNpc_Hoz_Param_c::m = {
+DUSK_GAME_DATA const daNpc_Hoz_HIOParam daNpc_Hoz_Param_c::m = {
     60.0f,
     -3.0f,
     1.0f,

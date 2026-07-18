@@ -10,7 +10,7 @@
 
 static daTvCdlst_HIO_c l_HIO;
 
-dCcD_SrcCyl daTvCdlst_c::mCcDCyl = {
+DUSK_GAME_DATA dCcD_SrcCyl daTvCdlst_c::mCcDCyl = {
     daTvCdlst_c::mCcDObjInfo, // mObjInf
     {
         {
@@ -42,7 +42,7 @@ int daTvCdlst_c::CreateHeap() {
     return 1;
 }
 
-const dCcD_SrcGObjInf daTvCdlst_c::mCcDObjInfo = {
+DUSK_GAME_DATA const dCcD_SrcGObjInf daTvCdlst_c::mCcDObjInfo = {
     {0, // mFlags
         {
             {0x0, 0x0, 0x0},  // mObjAt

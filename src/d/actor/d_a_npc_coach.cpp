@@ -200,7 +200,7 @@ static int jointRearWheelCallBack(J3DJoint* i_joint, int param_2) {
     return 1;
 }
 
-daNpcCoach_Attr_c const daNpcCoach_c::M_attr = {
+DUSK_GAME_DATA daNpcCoach_Attr_c const daNpcCoach_c::M_attr = {
     -3.0f,
     -200.0f,
     -0.25f,

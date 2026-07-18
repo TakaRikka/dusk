@@ -14,7 +14,7 @@
 
 static TAG_LANTERN_HIO_CLASS l_HIO;
 
-daTag_Lantern_HIOParam const daTag_Lantern_Param_c::m = {0};
+DUSK_GAME_DATA daTag_Lantern_HIOParam const daTag_Lantern_Param_c::m = {0};
 
 #if DEBUG
 daTag_Lantern_HIO_c::daTag_Lantern_HIO_c() {

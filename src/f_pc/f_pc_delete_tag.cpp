@@ -7,7 +7,7 @@
 #include "f_pc/f_pc_delete_tag.h"
 #include "f_pc/f_pc_debug_sv.h"
 
-node_list_class g_fpcDtTg_Queue = {NULL, NULL, 0};
+DUSK_GAME_DATA node_list_class g_fpcDtTg_Queue = {NULL, NULL, 0};
 
 BOOL fpcDtTg_IsEmpty() {
     if (g_fpcDtTg_Queue.mSize == 0) {

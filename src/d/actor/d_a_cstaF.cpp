@@ -34,7 +34,7 @@ static const char l_arcNameFB[] = "CstaFB";
 
 static const char l_spStageName[8] = "R_SP209";
 
-const daCstaF_c::BckTbl daCstaF_c::m_bckIdxTable[] = {
+DUSK_GAME_DATA const daCstaF_c::BckTbl daCstaF_c::m_bckIdxTable[] = {
     {9, 9, 8, 7},
     {9, 9, 8, 7}
 };

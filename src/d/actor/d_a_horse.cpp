@@ -76,11 +76,11 @@ static void strippedFunc() {
 
 static char const l_arcName[] = "Horse";
 
-const u16 daHorse_c::m_footJointTable[] = {
+DUSK_GAME_DATA const u16 daHorse_c::m_footJointTable[] = {
     3, 7, 27, 31,
 };
 
-const f32 daHorse_c::m_callLimitDistance2 = 640000.0f;
+DUSK_GAME_DATA const f32 daHorse_c::m_callLimitDistance2 = 640000.0f;
 
 static f32 l_autoUpHeight = 50.0f;
 
@@ -170,7 +170,7 @@ void daHorse_hio_c::genMessage(JORMContext* ctx) {
 }
 #endif
 
-const daHorse_hio_c1 daHorse_hio_c0::m = {
+DUSK_GAME_DATA const daHorse_hio_c1 daHorse_hio_c0::m = {
     600,
     50,
     45,

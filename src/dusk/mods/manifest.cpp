@@ -6,17 +6,13 @@
 
 #include <algorithm>
 #include <cstring>
-#include <filesystem>
 #include <limits>
 #include <utility>
 #include <vector>
 
-#include <SDL3/SDL_filesystem.h>
 #include <zstd.h>
 
 #include "aurora/lib/logging.hpp"
-
-#include "dusk/io.hpp"
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
@@ -62,6 +58,31 @@ struct Entry {
     HookSymbolFlags flags;
 };
 static_assert(sizeof(Entry) == 24);
+
+/*
+ * `symgen manifest --embed` appends the symbol manifest to the linked executable as an added
+ * section and patches this descriptor with its location.
+ */
+struct SymdbDescriptor {
+    volatile uint64_t magic;
+    volatile uint64_t rva;
+    volatile uint64_t size;
+};
+constexpr uint64_t kDescriptorMagic = 0x52444842444d5953ull;  // "SYMDBHDR"
+#if defined(_WIN32)
+#pragma section(".symdbh", read)
+__declspec(allocate(".symdbh"))
+#if defined(__clang__)
+__attribute__((used))
+#endif
+constinit const SymdbDescriptor s_symdbDescriptor{kDescriptorMagic, 0, 0};
+#elif defined(__APPLE__)
+__attribute__((section("__DATA,__symdbh"), used)) constinit const SymdbDescriptor
+    s_symdbDescriptor{kDescriptorMagic, 0, 0};
+#else
+__attribute__((section("symdbh"), used)) constinit const SymdbDescriptor s_symdbDescriptor{
+    kDescriptorMagic, 0, 0};
+#endif
 
 struct State {
     std::vector<uint8_t> data;
@@ -149,13 +170,28 @@ bool running_image_identity(std::vector<uint8_t>& outId, uintptr_t& outBase) {
 #elif defined(__linux__)
     struct Ctx {
         std::vector<uint8_t>* id;
+        uintptr_t probe;
         uintptr_t base = 0;
         bool found = false;
-    } ctx{&outId};
+    } ctx{&outId, reinterpret_cast<uintptr_t>(&s_symdbDescriptor)};
     dl_iterate_phdr(
         [](dl_phdr_info* info, size_t, void* data) -> int {
             auto* ctx = static_cast<Ctx*>(data);
-            // The first callback is the main executable.
+            // Select the image containing our descriptor: the game is not always the
+            // first entry (on Android it is libmain.so, behind the app process).
+            bool contains = false;
+            for (int i = 0; i < info->dlpi_phnum; ++i) {
+                const auto& phdr = info->dlpi_phdr[i];
+                if (phdr.p_type == PT_LOAD && ctx->probe >= info->dlpi_addr + phdr.p_vaddr &&
+                    ctx->probe - (info->dlpi_addr + phdr.p_vaddr) < phdr.p_memsz)
+                {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+                return 0;
+            }
             ctx->base = info->dlpi_addr;
             for (int i = 0; i < info->dlpi_phnum; ++i) {
                 const auto& phdr = info->dlpi_phdr[i];
@@ -178,7 +214,7 @@ bool running_image_identity(std::vector<uint8_t>& outId, uintptr_t& outBase) {
                     p = desc + ((note->n_descsz + 3) & ~3u);
                 }
             }
-            return 1;  // only inspect the main executable
+            return 1;  // matched our image; stop either way
         },
         &ctx);
     outBase = ctx.base;
@@ -188,13 +224,6 @@ bool running_image_identity(std::vector<uint8_t>& outId, uintptr_t& outBase) {
     (void)outBase;
     return false;
 #endif
-}
-
-std::filesystem::path manifest_path() {
-    const char* basePath = SDL_GetBasePath();
-    std::filesystem::path dir =
-        basePath != nullptr ? std::filesystem::path{basePath} : std::filesystem::current_path();
-    return dir / "dusklight.symdb";
 }
 
 std::string hex_string(const uint8_t* data, size_t len) {
@@ -216,40 +245,12 @@ void initialize() {
     }
     s_state.initialized = true;
 
-    const auto path = manifest_path();
-    std::error_code ec;
-    if (!std::filesystem::exists(path, ec)) {
-        Log.info("no symbol manifest at {}; by-name resolution unavailable",
-            io::fs_path_to_string(path));
+    if (s_symdbDescriptor.magic != kDescriptorMagic) {
+        Log.error("symbol manifest descriptor is corrupt");
         return;
     }
-    std::vector<uint8_t> data;
-    try {
-        data = io::FileStream::ReadAllBytes(path);
-    } catch (const std::exception& e) {
-        Log.error("failed to read symbol manifest {}: {}", io::fs_path_to_string(path), e.what());
-        return;
-    }
-    if (data.size() < sizeof(Header)) {
-        Log.error(
-            "symbol manifest {} is truncated ({} bytes)", io::fs_path_to_string(path), data.size());
-        return;
-    }
-
-    Header header{};
-    std::memcpy(&header, data.data(), sizeof(header));
-    if (std::memcmp(header.magic, kMagic, sizeof(kMagic)) != 0 || header.version != kVersion) {
-        Log.error("symbol manifest {} has wrong magic/version", io::fs_path_to_string(path));
-        return;
-    }
-    const auto compression = static_cast<Compression>(header.compression);
-    if ((compression != Compression::None && compression != Compression::Zstd) ||
-        header.buildIdLen > sizeof(header.buildId) ||
-        header.compressedLen > data.size() - sizeof(Header) ||
-        header.uncompressedLen > std::numeric_limits<size_t>::max() ||
-        (compression == Compression::None && header.compressedLen != header.uncompressedLen))
-    {
-        Log.error("symbol manifest {} is malformed", io::fs_path_to_string(path));
+    if (s_symdbDescriptor.rva == 0) {
+        Log.info("no symbol manifest embedded; by-name resolution unavailable");
         return;
     }
 
@@ -259,41 +260,67 @@ void initialize() {
         Log.error("cannot determine the running image's build id; ignoring symbol manifest");
         return;
     }
+
+    const auto* blob = reinterpret_cast<const uint8_t*>(imageBase + s_symdbDescriptor.rva);
+    const auto blobLen = static_cast<size_t>(s_symdbDescriptor.size);
+    if (blobLen < sizeof(Header)) {
+        Log.error("embedded symbol manifest is truncated ({} bytes)", blobLen);
+        return;
+    }
+
+    Header header{};
+    std::memcpy(&header, blob, sizeof(header));
+    if (std::memcmp(header.magic, kMagic, sizeof(kMagic)) != 0 || header.version != kVersion) {
+        Log.error("embedded symbol manifest has wrong magic/version");
+        return;
+    }
+    const auto compression = static_cast<Compression>(header.compression);
+    if ((compression != Compression::None && compression != Compression::Zstd) ||
+        header.buildIdLen > sizeof(header.buildId) ||
+        header.compressedLen > blobLen - sizeof(Header) ||
+        header.uncompressedLen > std::numeric_limits<size_t>::max() ||
+        (compression == Compression::None && header.compressedLen != header.uncompressedLen))
+    {
+        Log.error("embedded symbol manifest is malformed");
+        return;
+    }
+
+    // The manifest travels inside the image it describes, so a mismatch here means broken
+    // build tooling rather than a stale file — but it still guards resolved addresses.
     if (imageId.size() != header.buildIdLen ||
         std::memcmp(imageId.data(), header.buildId, imageId.size()) != 0)
     {
-        Log.error("symbol manifest {} is stale: built for {}, running image is {}",
-            io::fs_path_to_string(path), hex_string(header.buildId, header.buildIdLen),
+        Log.error("embedded symbol manifest is stale: built for {}, running image is {}",
+            hex_string(header.buildId, header.buildIdLen),
             hex_string(imageId.data(), imageId.size()));
         return;
     }
 
     const auto compressedLen = static_cast<size_t>(header.compressedLen);
     const auto uncompressedLen = static_cast<size_t>(header.uncompressedLen);
-    std::vector<uint8_t> payload;
-    const auto* storedPayload = data.data() + sizeof(Header);
+    std::vector<uint8_t> data;
+    const auto* storedPayload = blob + sizeof(Header);
     if (compression == Compression::None) {
-        payload.assign(storedPayload, storedPayload + compressedLen);
+        data.assign(storedPayload, storedPayload + compressedLen);
     } else {
-        payload.resize(uncompressedLen);
+        data.resize(uncompressedLen);
         const size_t decompressedLen =
-            ZSTD_decompress(payload.data(), payload.size(), storedPayload, compressedLen);
+            ZSTD_decompress(data.data(), data.size(), storedPayload, compressedLen);
         if (ZSTD_isError(decompressedLen)) {
-            Log.error("failed to decompress symbol manifest {}: {}", io::fs_path_to_string(path),
+            Log.error("failed to decompress embedded symbol manifest: {}",
                 ZSTD_getErrorName(decompressedLen));
             return;
         }
-        if (decompressedLen != payload.size()) {
-            Log.error("symbol manifest {} decompressed to {} bytes, expected {}",
-                io::fs_path_to_string(path), decompressedLen, payload.size());
+        if (decompressedLen != data.size()) {
+            Log.error("embedded symbol manifest decompressed to {} bytes, expected {}",
+                decompressedLen, data.size());
             return;
         }
     }
-    data = std::move(payload);
 
     const uint64_t entriesEnd = uint64_t{header.entryCount} * sizeof(Entry);
     if (entriesEnd > data.size()) {
-        Log.error("decompressed symbol manifest {} is malformed", io::fs_path_to_string(path));
+        Log.error("decompressed embedded symbol manifest is malformed");
         return;
     }
 

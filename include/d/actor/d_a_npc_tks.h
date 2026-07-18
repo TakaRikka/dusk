@@ -31,7 +31,7 @@ class daNpcTks_Param_c {
 public:
     virtual ~daNpcTks_Param_c() {}
 
-    static daNpcTks_HIOParam const m;
+    static DUSK_GAME_DATA daNpcTks_HIOParam const m;
 };
 
 #if DEBUG

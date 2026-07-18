@@ -28,7 +28,7 @@ class daObj_Pumpkin_Param_c {
 public:
     virtual ~daObj_Pumpkin_Param_c() {}
 
-    static const daObj_Pumpkin_HIOParam m;
+    static DUSK_GAME_DATA const daObj_Pumpkin_HIOParam m;
 };
 
 #if DEBUG

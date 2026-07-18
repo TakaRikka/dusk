@@ -207,7 +207,7 @@ static DUSK_CONSTEXPR char DUSK_CONST* l_evtNames[4] = {
 
 static DUSK_CONSTEXPR char DUSK_CONST* l_myName = "MoiR";
 
-daNpcMoiR_HIOParam const daNpcMoiR_Param_c::m = {
+DUSK_GAME_DATA daNpcMoiR_HIOParam const daNpcMoiR_Param_c::m = {
     35.0f,
     -3.0f,
     1.0f,
@@ -261,7 +261,7 @@ void daNpcMoiR_HIO_c::genMessage(JORMContext* ctext) {
 
 static NPC_MOIR_HIO_CLASS l_HIO;
 
-daNpcMoiR_c::EventFn daNpcMoiR_c::mEvtSeqList[4] = {
+DUSK_GAME_DATA daNpcMoiR_c::EventFn daNpcMoiR_c::mEvtSeqList[4] = {
     NULL,
     &daNpcMoiR_c::EvCut_Introduction,
     &daNpcMoiR_c::EvCut_Appear,

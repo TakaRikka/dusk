@@ -36,8 +36,8 @@ public:
     u8 getArg0() { return fopAcM_GetParamBit(this, 8, 4); }
     u8 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
-    static dCcD_SrcGObjInf const mCcDObjInfo;
-    static dCcD_SrcCyl mCcDCyl;
+    static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
+    static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
 private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;

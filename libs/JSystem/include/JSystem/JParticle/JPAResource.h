@@ -2,7 +2,7 @@
 #define JPARESOURCE_H
 
 #include <types.h>
-#include "dusk/endian.h"
+#include "helpers/endian.h"
 
 class JKRHeap;
 struct JPAEmitterWorkData;

@@ -24,7 +24,7 @@ class daObj_Mie_Param_c {
 public:
     virtual ~daObj_Mie_Param_c() {}
 
-    static const daObj_Mie_HIOParam m;
+    static DUSK_GAME_DATA const daObj_Mie_HIOParam m;
 };
 
 #if DEBUG

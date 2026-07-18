@@ -58,7 +58,7 @@ public:
 };
 #endif
 
-daObjOnCloth_Attr_c const daObjOnCloth_c::M_attr = {
+DUSK_GAME_DATA daObjOnCloth_Attr_c const daObjOnCloth_c::M_attr = {
     8.0f,
     -40.0f,
     0.3f,

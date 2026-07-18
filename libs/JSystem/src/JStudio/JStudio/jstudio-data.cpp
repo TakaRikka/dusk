@@ -2,4 +2,4 @@
 
 #include "JSystem/JStudio/JStudio/jstudio-data.h"
 
-const char JStudio::data::ga8cSignature[8] = "jstudio";
+DUSK_GAME_DATA const char JStudio::data::ga8cSignature[8] = "jstudio";

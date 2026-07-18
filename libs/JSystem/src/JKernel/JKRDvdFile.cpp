@@ -5,7 +5,7 @@
 #include "JSystem/JUtility/JUTException.h"
 #include <stdint.h>
 
-JSUList<JKRDvdFile> JKRDvdFile::sDvdList;
+DUSK_GAME_DATA JSUList<JKRDvdFile> JKRDvdFile::sDvdList;
 
 JKRDvdFile::JKRDvdFile() : mDvdLink(this) {
     initiate();
