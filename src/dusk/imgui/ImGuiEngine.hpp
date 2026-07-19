@@ -13,6 +13,11 @@ public:
     static ImFont* fontMono;
     static ImTextureID orgIcon;
     static ImTextureID duskLogo;
+    // DPI-derived font scale baked at init time by ImGuiEngine_Initialize(), before the user's
+    // Debug UI Scale preference is applied. Multiply this by that preference every frame to get
+    // io.FontGlobalScale, rather than overwriting FontGlobalScale directly (which would require a
+    // full re-init/font atlas rebake any time the preference changes).
+    static float baseFontScale;
 };
 
 void ImGuiEngine_Initialize(float scale);

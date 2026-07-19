@@ -11,6 +11,8 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "d/d_com_inf_game.h"
+#include "dusk/randomizer/game/flags.h"
 #include "dusk/randomizer/game/verify_item_functions.h"
 #endif
 
@@ -1346,6 +1348,12 @@ int daNpc_grR_c::talk(void* param_1) {
                         if (randomizer_IsActive()) {
                             i_itemNo = verifyProgressiveItem(randomizer_getItemAtLocation("Goron Mines Gor Liggs Key Shard"));
                             randomizer_setTempFlagForLocation("Goron Mines Gor Liggs Key Shard");
+                            // Vanilla sets this later in Gor Liggs's full dialogue tree (see the "late"
+                            // note on this location in locations.yaml), which is also what normally
+                            // lets the player past him. The randomizer shortcuts straight to spawning
+                            // the substituted item and skips the rest of that dialogue, so without
+                            // this the flag - and passage past him - never actually unlocks.
+                            dComIfGs_onEventBit(TALKED_TO_GOR_LIGGS_IN_GORON_MINES);
                         }
 #endif
                         mItemID = fopAcM_createItemForPresentDemo(&current.pos, i_itemNo, 0, -1, -1, NULL, NULL);

@@ -187,6 +187,7 @@ struct UserSettings {
         ConfigVar<bool> enableMirrorMode;
         ConfigVar<bool> minimalHUD;
         ConfigVar<float> hudScale;
+        ConfigVar<float> debugUIScale;
         ConfigVar<bool> pauseOnFocusLost;
         ConfigVar<bool> enableLinkDollRotation;
         ConfigVar<bool> enableAchievementToasts;

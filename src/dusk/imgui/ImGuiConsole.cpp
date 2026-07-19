@@ -53,7 +53,7 @@ ImGuiWindow* FindDragScrollWindow(ImGuiWindow* window) {
 }  // namespace
 
 namespace dusk {
-    float ImGuiScale() { return 1.0f; }
+    float ImGuiScale() { return getSettings().game.debugUIScale.getValue(); }
 
     void ImGuiStringViewText(std::string_view text) {
         // begin()/end() do not work on MSVC
@@ -250,6 +250,8 @@ namespace dusk {
         ZoneScoped;
 
         UpdateSettings();
+
+        ImGui::GetIO().FontGlobalScale = ImGuiEngine::baseFontScale * ImGuiScale();
 
         if (ImGui::IsKeyPressed(ImGuiKey_F11)) {
             getSettings().video.enableFullscreen.setValue(!getSettings().video.enableFullscreen);

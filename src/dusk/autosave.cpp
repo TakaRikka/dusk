@@ -53,10 +53,15 @@ bool writeAutoSave() {
     dComIfGs_setMemoryToCard(mSaveBuffer, dComIfGs_getDataNum());
     mDoMemCdRWm_SetCheckSumGameData(mSaveBuffer, dComIfGs_getDataNum());
 
-    // Save randomizer hash
-    dusk::getSettings().randomizer.seedHashes[dComIfGs_getDataNum()].setValue(randomizer_GetContext().mHash);
-    dusk::config::Save();
+    // Save randomizer hash. Only do this while the randomizer is actually active (which already
+    // requires a non-empty hash) - this used to run unconditionally, so if randomizer_GetContext()
+    // ever got reset to a blank context for any reason (e.g. a failed/interrupted Archipelago
+    // reconnect) while a file kept autosaving, the next autosave would silently overwrite that
+    // file's stored seed hash with an empty string, permanently unlinking it from its Archipelago
+    // session with no way to recover other than reconnecting fresh and losing the association.
     if (randomizer_IsActive()) {
+        dusk::getSettings().randomizer.seedHashes[dComIfGs_getDataNum()].setValue(randomizer_GetContext().mHash);
+        dusk::config::Save();
         g_randomizerState.mFileNum = dComIfGs_getDataNum();
     }
 

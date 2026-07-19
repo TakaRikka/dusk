@@ -4,6 +4,7 @@
 #include <dolphin/types.h>
 
 #include <array>
+#include <deque>
 #include <list>
 #include <iomanip>
 #include <optional>
@@ -25,6 +26,22 @@ public:
     static constexpr size_t OBJ_DELETE_SIZE = 1;
     static constexpr u8 ROOM_STAGE = 0xFF;
 
+    // Location categories whose randomized item gets embedded directly into a local object/NPC/
+    // dialogue lookup (mTreasureChestOverrides, mPoeOverrides, mFreestandingItemOverrides,
+    // mBugRewardOverrides, mSkyCharacterOverrides, mGoldenWolfOverrides, mTwilitInsectOverrides,
+    // mItemLocations, mFlowItemMessageOverrides, mShopOverrides) and granted the instant the player
+    // physically interacts with it, atomically with the location's checked-state - see each
+    // `location->HasCategories(...)` block in randomizer_context.cpp's world-gen loop (~line 1076
+    // onward) for the per-category override-table population, and
+    // ArchipelagoContext::hasAtomicLocalGrant() (archipelago_context.cpp) for the dedup logic that
+    // depends on this same category set. Both sides must reference this single list - a category
+    // added to one without the other already caused one real bug (Iza's Helping Hand double-granting
+    // a Poe Soul when "Name Lookup" was initially missing from the dedup side).
+    static constexpr std::array kAtomicallyGrantedLocationCategories = {
+        "Chest", "Poe", "Freestanding Item", "Bug Reward", "Sky Character", "Golden Wolf",
+        "Twilit Insect", "Name Lookup", "FLW Message", "Shop"
+    };
+
     RandomizerContext() = default;
 
     bool mCreatingSave{false};
@@ -37,6 +54,14 @@ public:
     std::list<u16> mStartEventFlags{};
     std::unordered_map<u8, std::list<u8>> mStartRegionFlags{};
     std::list<u8> mStartingInventory{};
+
+    // Tracks (player, location) pairs for items already received from OTHER players, so a resync
+    // on reconnect doesn't re-grant them. AP location IDs are shared globally across all players of
+    // the same game (not per-player), so a plain location-id check can't distinguish "my location"
+    // from "the same-numbered location in someone else's world" - this explicit record is necessary
+    // because IsLocationChecked() only reflects this player's own location-collected state, which is
+    // meaningless for items found by someone else. Encoded as (player << 48) | (location & 0xFFFFFFFFFFFF).
+    std::unordered_set<u64> mProcessedNetworkItems{};
 
     struct itemLocationData{
         int itemId{0xFF};
@@ -85,6 +110,11 @@ public:
     std::optional<std::string> LoadFromHash(const std::string& hash);
     std::optional<std::string> LoadFromPath(const fspath& path);
     std::filesystem::path GetSeedDataPath() const;
+
+    static u64 EncodeNetworkItemKey(int player, int64_t location) {
+        return (static_cast<u64>(static_cast<u32>(player)) << 48) |
+               (static_cast<u64>(location) & 0xFFFFFFFFFFFFULL);
+    }
 
     enum Settings {
         HYRULE_BARRIER_REQUIREMENTS,
@@ -149,8 +179,6 @@ public:
         CLEAR_QUEUE,
     };
 
-    static constexpr u8 EVENT_ITEM_QUEUE_SIZE = 10;
-
     RandomizerState() {mInitialized = false;}
 
     int _create();
@@ -181,7 +209,9 @@ public:
     u8 mEventItemStatus{};
     bool mHasPendingToDChange{false};
     u8 mTimeChange{};
-    u8 mEventItemQueue[EVENT_ITEM_QUEUE_SIZE];
+    // Unbounded FIFO of items waiting for the get-item cutscene. Was previously a fixed-size array
+    // that silently dropped items once full during a large multiworld sync burst.
+    std::deque<u8> mEventItemQueue;
     bool mRoomReloadingState{false};
 
     // Used to store an item id for a flow message override so that we can give the item

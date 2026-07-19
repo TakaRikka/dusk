@@ -2817,18 +2817,18 @@ JKRExpHeap* dComIfGp_getSubHeap2D(int flag) {
     return NULL;
 }
 
+static u8 l_insect_itemno[24] = {
+    dItemNo_M_BEETLE_e,      dItemNo_F_BEETLE_e,      dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e, dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
+    dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e, dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e, dItemNo_M_DANGOMUSHI_e,  dItemNo_F_DANGOMUSHI_e,
+    dItemNo_M_MANTIS_e,      dItemNo_F_MANTIS_e,      dItemNo_M_LADYBUG_e,   dItemNo_F_LADYBUG_e,   dItemNo_M_SNAIL_e,       dItemNo_F_SNAIL_e,
+    dItemNo_M_DRAGONFLY_e,   dItemNo_F_DRAGONFLY_e,   dItemNo_M_ANT_e,       dItemNo_F_ANT_e,       dItemNo_M_MAYFLY_e,      dItemNo_F_MAYFLY_e,
+};
+
 u8 dComIfGs_checkGetInsectNum() {
-    static u8 l_itemno[24] = {
-        dItemNo_M_BEETLE_e,      dItemNo_F_BEETLE_e,      dItemNo_M_BUTTERFLY_e, dItemNo_F_BUTTERFLY_e, dItemNo_M_STAG_BEETLE_e, dItemNo_F_STAG_BEETLE_e,
-        dItemNo_M_GRASSHOPPER_e, dItemNo_F_GRASSHOPPER_e, dItemNo_M_NANAFUSHI_e, dItemNo_F_NANAFUSHI_e, dItemNo_M_DANGOMUSHI_e,  dItemNo_F_DANGOMUSHI_e,
-        dItemNo_M_MANTIS_e,      dItemNo_F_MANTIS_e,      dItemNo_M_LADYBUG_e,   dItemNo_F_LADYBUG_e,   dItemNo_M_SNAIL_e,       dItemNo_F_SNAIL_e,
-        dItemNo_M_DRAGONFLY_e,   dItemNo_F_DRAGONFLY_e,   dItemNo_M_ANT_e,       dItemNo_F_ANT_e,       dItemNo_M_MAYFLY_e,      dItemNo_F_MAYFLY_e,
-    };
-
     u8 insectCount = 0;
-    u8* insectList = l_itemno;
+    u8* insectList = l_insect_itemno;
 
-    for (int i = 0; i < ARRAY_SIZEU(l_itemno); i++) {
+    for (int i = 0; i < ARRAY_SIZEU(l_insect_itemno); i++) {
         if (dComIfGs_isItemFirstBit(*insectList++) &&
             dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x191 + i]))
         {
@@ -2836,6 +2836,22 @@ u8 dComIfGs_checkGetInsectNum() {
         }
     }
     return insectCount;
+}
+
+// Golden bugs granted outside of their overworld pickup actor (i.e. from the randomizer/Archipelago
+// item-get path) only ever set the item's "first obtained" bit - item_func_M_BEETLE and friends are
+// empty, since normally the overworld actor itself sets its species' saveBitLabels[0x191 + i] "Misc."
+// flag via setSaveBitNo(). Without that second flag, dComIfGs_checkGetInsectNum() undercounts, so
+// Agitha (and the bug menu) treat shuffled bugs as never collected. Call this after any item get to
+// backfill the missing flag for every species already marked as obtained.
+void dComIfGs_syncInsectMiscFlags() {
+    for (int i = 0; i < ARRAY_SIZEU(l_insect_itemno); i++) {
+        if (dComIfGs_isItemFirstBit(l_insect_itemno[i]) &&
+            !dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x191 + i]))
+        {
+            dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[0x191 + i]);
+        }
+    }
 }
 
 u8 dComIfGs_checkGetItem(u8 i_itemNo) {

@@ -8,6 +8,7 @@
 #include "d/d_item.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2_info.h"
+#include "dusk/logging.h"
 #if TARGET_PC
 #include "dusk/randomizer/game/flags.h"
 #include "dusk/randomizer/game/tools.h"
@@ -541,6 +542,7 @@ static void (*item_func_ptr_randomizer[256])() = {
 
 inline void getItemFunc(u8 i_itemNo) {
     dComIfGs_onItemFirstBit(i_itemNo);
+    dComIfGs_syncInsectMiscFlags();
 #if TARGET_PC
     (randomizer_IsActive() ? item_func_ptr_randomizer : item_func_ptr)[i_itemNo]();
 #else
@@ -1814,54 +1816,53 @@ void item_func_HORSE_FLUTE() {
 }
 
 #if TARGET_PC
+// Logged so a double-increment (two calls for what should be one server-sent key) is directly
+// visible in the log, rather than only showing up as an unexplained gap between the server's
+// authoritative send count and the in-game held count.
+static void logged_incrementKeyNum(const char* dungeonName, u8 keyType) {
+    u8 currentKeys = dComIfGs_getKeyNum(keyType);
+    DuskLog.info("item_func: incrementing {} small key count {} -> {}", dungeonName, currentKeys, currentKeys + 1);
+    dComIfGs_setKeyNum(keyType, currentKeys + 1);
+}
+
 void item_func_FOREST_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x10);
-    dComIfGs_setKeyNum(0x10, currentKeys + 1);
+    logged_incrementKeyNum("Forest Temple", 0x10);
 }
 
 void item_func_MINES_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x11);
-    dComIfGs_setKeyNum(0x11, currentKeys + 1);
+    logged_incrementKeyNum("Goron Mines", 0x11);
 }
 
 void item_func_LAKEBED_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x12);
-    dComIfGs_setKeyNum(0x12, currentKeys + 1);
+    logged_incrementKeyNum("Lakebed Temple", 0x12);
 }
 
 void item_func_ARBITERS_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x13);
-    dComIfGs_setKeyNum(0x13, currentKeys + 1);
+    logged_incrementKeyNum("Arbiters Grounds", 0x13);
 }
 
 void item_func_SNOWPEAK_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x14);
-    dComIfGs_setKeyNum(0x14, currentKeys + 1);
+    logged_incrementKeyNum("Snowpeak Ruins", 0x14);
 }
 
 void item_func_TEMPLE_OF_TIME_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x15);
-    dComIfGs_setKeyNum(0x15, currentKeys + 1);
+    logged_incrementKeyNum("Temple of Time", 0x15);
 }
 
 void item_func_CITY_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x16);
-    dComIfGs_setKeyNum(0x16, currentKeys + 1);
+    logged_incrementKeyNum("City in the Sky", 0x16);
 }
 
 void item_func_PALACE_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x17);
-    dComIfGs_setKeyNum(0x17, currentKeys + 1);
+    logged_incrementKeyNum("Palace of Twilight", 0x17);
 }
 
 void item_func_HYRULE_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0x18);
-    dComIfGs_setKeyNum(0x18, currentKeys + 1);
+    logged_incrementKeyNum("Hyrule Castle", 0x18);
 }
 
 void item_func_CAMP_SMALL_KEY() {
-    u8 currentKeys = dComIfGs_getKeyNum(0xA);
-    dComIfGs_setKeyNum(0xA, currentKeys + 1);
+    logged_incrementKeyNum("Bulblin Camp", 0xA);
 }
 
 void item_func_LAKE_HYLIA_PORTAL() {

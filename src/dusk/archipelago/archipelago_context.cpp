@@ -1,8 +1,10 @@
 #include <dusk/archipelago/archipelago_context.hpp>
 
+#include <array>
 #include <thread>
 
 #include "Archipelago.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/actor/d_a_alink.h"
 #include "dusk/config.hpp"
@@ -28,9 +30,9 @@ struct SettingsNameConvert {
 
     const std::string& tryGetOptionConvert(const std::string& option) const {
         if (optionsConvert.empty()) {
-            if (option == "Yes")
+            if (option == "Yes" || option == "True" || option == "true")
                 return kDefaultYes;
-            if (option == "No")
+            if (option == "No" || option == "False" || option == "false")
                 return kDefaultNo;
             return option;
         }
@@ -99,7 +101,9 @@ static auto sArchiSettingToDusklight = std::to_array<SettingsNameConvert>({
     }},
     {"Poes Shuffled", "Poe Souls", {
         {"Yes", "All"},
-        {"No", "Vanilla"}
+        {"No", "Vanilla"},
+        {"True", "All"},
+        {"False", "Vanilla"}
     }}
 });
 
@@ -249,9 +253,14 @@ void ArchipelagoContext::itemRecvImpl(int id, bool notify) {
 
     if (notify && item.importance == randomizer::logic::item::Importance::MAJOR) {
         DuskLog.info("[AP] Adding Item: {}", item.itemName);
-        g_randomizerState.addItemToEventQueue(verifyProgressiveItem(item.itemId));
+        auto verifiedId = verifyProgressiveItem(item.itemId);
+        ApItemLog.info("recv: '{}' (apId {} -> gameItemId {} -> verified {}), routing to event queue",
+            item.itemName, id, item.itemId, verifiedId);
+        g_randomizerState.addItemToEventQueue(verifiedId);
     }else {
         DuskLog.info("[AP] Silently Adding Item: {}", item.itemName);
+        ApItemLog.info("recv: '{}' (apId {} -> gameItemId {}), granting directly via execItemGet",
+            item.itemName, id, item.itemId);
         execItemGet(item.itemId);
     }
 
@@ -372,6 +381,24 @@ bool ArchipelagoContext::IsCurrentSeedHash(const std::string& seedStr) {
 bool ArchipelagoContext::ConnectToServer(int file, bool isBlocking) {
     config::Save();
 
+    // m_locationItemInfo (and the collect-state snapshot it seeds from) is never otherwise cleared,
+    // so a reconnect within the same process run would see the prior session's stale location data.
+    // IsReceivedLocationScouts() (`!m_locationItemInfo.empty()`) would then report true immediately,
+    // skipping the wait for the new session's real scout response and letting GenerateLocalWorldData()
+    // proceed against last session's location/item info. m_receivedItemsQueue has the same problem -
+    // items queued via HandleItemReceived() before a disconnect (e.g. the scout-retry loop's
+    // Disconnect/reconnect cycle) would otherwise survive into the new session and get drained
+    // against data from a different connection attempt.
+    {
+        std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
+        instance().m_locationItemInfo.clear();
+        instance().m_initLocationCollectState.clear();
+    }
+    {
+        std::lock_guard<std::mutex> lock(instance().m_queueMutex);
+        instance().m_receivedItemsQueue.clear();
+    }
+
     instance().LoadTempItemInfo();
 
     instance().LoadTempLocationInfo();
@@ -475,6 +502,11 @@ void ArchipelagoContext::Execute() {
     if (!IsConnected())
         return;
 
+    // backfill the per-species "Misc." flag for any golden bugs already obtained before this fix
+    // existed, so previously-received bugs are picked up by Agitha/the bug menu without needing to
+    // receive a new item first
+    dComIfGs_syncInsectMiscFlags();
+
     // reset player inventory if server requested it
     if (instance().m_isNeedResetInv) {
         HandleResetInventory();
@@ -488,16 +520,41 @@ void ArchipelagoContext::Execute() {
         return;
     }
 
-    // drain pending item queue here
-    instance().m_queueMutex.lock();
-    if (!instance().m_receivedItemsQueue.empty()) {
-        for (auto item : instance().m_receivedItemsQueue) {
-            instance().itemRecvImpl(item.first, item.second);
+    // Drain pending item queue here. HandleItemReceived() on the AP network thread needs
+    // m_queueMutex just to enqueue, so the lock is only held long enough to swap the queue out into
+    // a local vector, and all the actual (possibly slow) processing happens after unlocking, so a
+    // burst of items doesn't block the network thread's ability to enqueue more.
+    //
+    // Hold the whole queue until location scouts are back - shouldSkipDuplicateItem() needs
+    // m_locationItemInfo fully populated to correctly dedup (self or foreign) items tied to a
+    // location, and this runs every frame, so this is a short deferral on first connect, not a
+    // hang. Processing the batch in order (rather than skipping just the unready entries) keeps
+    // items applied in the order they were received.
+    std::vector<ReceivedItemEntry> itemsToProcess;
+    {
+        std::lock_guard<std::mutex> lock(instance().m_queueMutex);
+        if (!instance().m_receivedItemsQueue.empty() && IsReceivedLocationScouts()) {
+            // std::vector move-assignment already leaves the source empty - no need to also clear() it.
+            itemsToProcess = std::move(instance().m_receivedItemsQueue);
         }
-
-        instance().m_receivedItemsQueue.clear();
     }
-    instance().m_queueMutex.unlock();
+
+    // shouldSkipDuplicateItem() only records new dedup entries in-memory (mProcessedNetworkItems);
+    // persist once here, after the whole batch, instead of once per newly-processed item - a
+    // multi-item resync burst would otherwise do N synchronous full-context seed.dat writes on the
+    // main thread in a single frame.
+    size_t processedCountBefore = randomizer_GetContext().mProcessedNetworkItems.size();
+
+    for (auto& item : itemsToProcess) {
+        if (instance().shouldSkipDuplicateItem(item))
+            continue;
+
+        instance().itemRecvImpl(item.relativeId, item.notify);
+    }
+
+    if (randomizer_GetContext().mProcessedNetworkItems.size() != processedCountBefore) {
+        instance().persistProcessedItems();
+    }
 
     // update location checks here if we need to
     if (instance().m_isUpdateLocations) {
@@ -509,20 +566,165 @@ void ArchipelagoContext::Execute() {
 void ArchipelagoContext::HandleItemReceived(AP_NetworkItem& netItem, bool notify) {
     int relativeId = netItem.item - ARCHI_ITEM_OFFSET;
 
+    ApItemLog.info("HandleItemReceived: raw item={} location={} player={} notify={} relativeId={}",
+        netItem.item, netItem.location, netItem.player, notify, relativeId);
+
     // TODO: modify this to also include junk items like ammo
     if (!notify && ((relativeId >= 0 && relativeId <= 6) || relativeId == 7)) {
         // skip rupee refills so players cant abuse disconnect/reconnect
+        ApItemLog.info("HandleItemReceived: skipped (rupee refill dedup)");
         return;
     }
 
-    if (!instance().m_isNeedResetInv && netItem.location != -1 && IsLocationChecked(netItem.location)) {
-        // no need to handle item if its location has already been checked
-        return;
-    }
+    // The location-based dedup check (see shouldSkipDuplicateItem()) depends on m_locationItemInfo,
+    // which is populated asynchronously by location scouts (AP_SetLocationInfoCallback), and on
+    // GetSeedDirectoryPath(), which depends on IsConnected(). Neither is guaranteed ready yet when
+    // this callback fires - it runs on the AP network thread as soon as a message arrives, which can
+    // be before scouts return or before the client-side connection state has settled, especially
+    // during the very first resync burst right after a reconnect. Running the dedup check here would
+    // race against that state and silently under-dedup. So we capture everything the dedup check
+    // will need and defer the actual check to the main thread's queue drain in Execute(), which only
+    // runs once IsConnected() is true and (per the drain loop) only processes the queue once location
+    // scouts have actually come back.
+    ApItemLog.info("HandleItemReceived: pushed to receive queue (relativeId={}, notify={})", relativeId, notify);
 
     instance().m_queueMutex.lock();
-    instance().m_receivedItemsQueue.push_back({relativeId, notify});
+    instance().m_receivedItemsQueue.push_back({relativeId, notify, netItem.player, netItem.location, instance().m_isNeedResetInv});
     instance().m_queueMutex.unlock();
+}
+
+void ArchipelagoContext::persistProcessedItems() {
+    std::filesystem::path workingDir;
+    GetSeedDirectoryPath(workingDir);
+    // GetSeedDirectoryPath() silently leaves workingDir untouched (empty) if IsConnected() is
+    // false at the exact moment this runs - which would make the write below silently target
+    // a bogus relative "seed.dat" instead of the real seed folder, never actually persisting
+    // this dedup entry. This is now called from Execute(), which only runs while IsConnected()
+    // is true, so this should be rare in practice, but IsConnected() isn't re-checked between
+    // Execute()'s top-of-function guard and this call, so a disconnect racing in between is a
+    // real (if narrow) window - log loudly instead of failing silently.
+    if (workingDir.empty()) {
+        ApItemLog.error("persistProcessedItems: GetSeedDirectoryPath() returned empty - "
+            "IsConnected()={}, cannot persist new dedup entries!", IsConnected());
+        return;
+    }
+    auto writeResult = randomizer_GetContext().WriteToFile(workingDir / "seed.dat");
+    if (writeResult.has_value()) {
+        ApItemLog.error("persistProcessedItems: failed to persist dedup entries to {}: {}",
+            (workingDir / "seed.dat").string(), writeResult.value());
+    } else {
+        ApItemLog.info("persistProcessedItems: persisted dedup entries to {}", (workingDir / "seed.dat").string());
+    }
+}
+
+bool ArchipelagoContext::shouldSkipDuplicateItem(const ReceivedItemEntry& entry) {
+    // Small Key items (AP ids 54-62 for the 9 dungeons, 66 for the Bulblin Camp key) are pure
+    // interchangeable counters with no "already have this one" gating in their item_func - unlike
+    // most items, re-processing an already-received key is NOT idempotent, it just adds another.
+    // The reset-inventory wipe never touches key counts at all (they live in separate per-stage save
+    // data, not the general inventory getItem() wipes), so on every single reconnect (which triggers
+    // this reset unconditionally, per AP protocol) skipping the dedup below would let the entire
+    // key-receive history replay and re-increment on top of whatever was already there - including
+    // keys already spent opening doors, since consumption isn't tracked here at all. So keys must
+    // always be deduped, reset or not; everything else keeps the original reset-bypass behavior,
+    // since re-granting equipment/one-off items after the wipe is harmless.
+    //
+    // Progressive Sky Book (AP id 123) has the exact same problem despite looking flag-gated at the
+    // top level: getProgressiveSkybook() resolves every receive after the first two into "Air Letter",
+    // which does the same unconditional dComIfGs_setAncientDocumentNum(letterCount + 1) with no
+    // "already counted" check - so it's just as vulnerable to replay-induced over-counting as keys.
+    //
+    // Piece of Heart / Heart Container (AP ids 23/24) are the same shape of bug: item_func_KAKERA_HEART/
+    // UTUWA_HEART call dComIfGp_setItemMaxLifeCount(), which does an unconditional mItemMaxLifeCount +=
+    // max - re-processing one of these on replay permanently inflates max health.
+    const bool isSmallKeyItem = (entry.relativeId >= 54 && entry.relativeId <= 62) || entry.relativeId == 66;
+    const bool isSkyBookItem = entry.relativeId == 123;
+    const bool isHeartItem = entry.relativeId == 23 || entry.relativeId == 24;
+    const bool isNonIdempotentCounter = isSmallKeyItem || isSkyBookItem || isHeartItem;
+
+    // Items delivered with no location (AP's "precollected"/start-inventory items, which the
+    // pre-existing `netItem.location != -1` check this replaced already anticipated as a real,
+    // expected value) can't use any location-based dedup at all. For ordinary items that's fine -
+    // re-granting an idempotent item is harmless - but the non-idempotent counters above still need
+    // *some* persistent dedup, or a location-less key/skybook/heart delivery would replay and
+    // over-count on every single reconnect with zero protection. Dedup those via (player,
+    // relativeId) instead, in a key range (bit 47 set) that can never collide with a real
+    // apLocationId, which this codebase's location ids never approach.
+    if (entry.location == -1) {
+        if (!isNonIdempotentCounter)
+            return false;
+
+        auto& processedItems = randomizer_GetContext().mProcessedNetworkItems;
+        constexpr int64_t kLocationlessDedupBase = 0x800000000000LL;
+        u64 key = RandomizerContext::EncodeNetworkItemKey(entry.player, kLocationlessDedupBase | entry.relativeId);
+        if (processedItems.contains(key)) {
+            ApItemLog.info("shouldSkipDuplicateItem: skipped, already processed location-less item relativeId={} for player {}",
+                entry.relativeId, entry.player);
+            return true;
+        }
+        // Persistence is batched by the caller (Execute()) after the whole drain loop, not per-item.
+        processedItems.insert(key);
+        return false;
+    }
+
+    // entry.wasResetPending captures m_isNeedResetInv as it was at the moment the item was actually
+    // received (in HandleItemReceived, on the network thread) - by the time this runs, on a later
+    // Execute() call, m_isNeedResetInv has always already been cleared, so re-reading it live here
+    // would make this condition always true and change behavior for non-counter items.
+    const bool shouldDedup = isNonIdempotentCounter || !entry.wasResetPending;
+
+    // Chests and the other locally-embedded location types (see hasAtomicLocalGrant()) grant +
+    // animate their item the instant the player physically interacts with them - completely
+    // independent of the AP network round-trip for that same location, and atomically with the
+    // location's checked-state being updated (both happen in the same native code path, no async
+    // gap, and unaffected by the general-inventory reset wipe since that state lives in separate
+    // per-region save data). That atomicity holds regardless of wasResetPending, so this check runs
+    // unconditionally rather than being gated behind shouldDedup - gating it left chest-type items
+    // with zero dedup protection specifically during the reset-pending resync window, which is the
+    // single most likely time for a duplicate delivery to actually happen.
+    if (entry.player == AP_GetPlayerID() && hasAtomicLocalGrant(entry.location)) {
+        if (IsLocationChecked(entry.location)) {
+            ApItemLog.info("shouldSkipDuplicateItem: skipped, location {} already granted locally", entry.location);
+            return true;
+        }
+        return false;
+    }
+
+    if (!shouldDedup)
+        return false;
+
+    // Track (player, location) pairs we've actually processed, persisted so it survives
+    // reconnects, for everything else (self non-chest locations + foreign locations).
+    //
+    // Self-locations used to be deduped via IsLocationChecked() unconditionally instead, on the
+    // theory that our own save-file state is authoritative and safe to trust. That's only true for
+    // locations with a local, atomic grant like chests (handled above) - for everything else,
+    // IsLocationChecked() reflects whether the location's "checked" flag has been set (either from
+    // the AP_SetLocationCheckedCallback's SetLocationChecked() confirmation, or a live
+    // isLocationObtained() read of the location's own completion condition), not whether we've
+    // actually been granted the ITEM that location contains. For those, the server can send the
+    // LocationChecked confirmation for a location in the same instant it sends the item itself -
+    // so on the item's very first, legitimate delivery, IsLocationChecked() could already read
+    // true and this would wrongly skip granting the item, permanently losing it. That's exactly
+    // what happened to a Progressive Dominion Rod during a big multi-item burst: HandleItemReceived
+    // queued it, then the LocationChecked callback fired for the same location before Execute()
+    // drained the queue, and the old logic saw IsLocationChecked() == true and silently dropped it.
+    //
+    // AP location IDs are shared globally across every player of the same game (confirmed via
+    // the apworld's get_apid(), which is a flat base_id + code with no per-player component), so a
+    // same-numbered location can exist in both our world and another player's world - but that's
+    // fine here since the (player, location) pair disambiguates them.
+    auto& processedItems = randomizer_GetContext().mProcessedNetworkItems;
+    u64 key = RandomizerContext::EncodeNetworkItemKey(entry.player, entry.location);
+    if (processedItems.contains(key)) {
+        ApItemLog.info("shouldSkipDuplicateItem: skipped, already processed gift from player {} at location {}",
+            entry.player, entry.location);
+        return true;
+    }
+    // Persistence is batched by the caller (Execute()) after the whole drain loop, not per-item.
+    processedItems.insert(key);
+
+    return false;
 }
 
 void ArchipelagoContext::HandleResetInventory() {
@@ -569,6 +771,10 @@ void ArchipelagoContext::HandleResetInventory() {
 }
 
 void ArchipelagoContext::HandleReceiveLocationScout(const std::vector<AP_NetworkItem>& items) {
+    // Runs on the AP network thread (AP_SetLocationInfoCallback) - m_locationItemInfo is also read
+    // from the main thread every frame (Execute() and everything it calls), so this whole loop must
+    // hold m_locationInfoMutex to avoid a concurrent-mutation-during-iteration race.
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
     for (const auto& item : items) {
         int parsedItemId;
         std::string parsedItemName;
@@ -596,8 +802,18 @@ void ArchipelagoContext::HandleReceiveLocationScout(const std::vector<AP_Network
             continue;
         }
 
-        bool collected = false;
-        if (instance().m_initLocationCollectState.contains(item.location))
+        // HandleReceiveLocationScout() isn't guaranteed to run exactly once - the connect modal's
+        // scout-wait loop can re-request scouts after a timeout, and if the original (merely slow,
+        // not actually lost) response then arrives late, its response arrives even later still,
+        // potentially well after gameplay has already started and this location has been checked.
+        // Blindly overwriting the map entry here would reset collected back to the stale snapshot
+        // taken at connect time, making UpdateCheckedLocations() think the location needs sending
+        // again - which is exactly what caused a Forest Temple Diababa Heart Container check to be
+        // sent to the server twice. So: only seed collected from the initial snapshot the first
+        // time we see this location; if we've already recorded progress on it, keep that.
+        auto existingIt = instance().m_locationItemInfo.find(locName);
+        bool collected = existingIt != instance().m_locationItemInfo.end() ? existingIt->second.collected : false;
+        if (existingIt == instance().m_locationItemInfo.end() && instance().m_initLocationCollectState.contains(item.location))
             collected = instance().m_initLocationCollectState[item.location];
 
         instance().m_locationItemInfo[locName] = {
@@ -613,6 +829,7 @@ void ArchipelagoContext::HandleReceiveLocationScout(const std::vector<AP_Network
 // so eventually finding a way to properly associate locations with their respective item get funcs would benefit this system
 void ArchipelagoContext::UpdateCheckedLocations() {
     auto& world = instance().m_archiWorld;
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     bool changed = false;
 
@@ -652,6 +869,7 @@ void ArchipelagoContext::SetNeedUpdateLocations(bool update) {
 
 bool ArchipelagoContext::IsLocationChecked(int locId) {
     auto& world = instance().m_archiWorld;
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     for (const auto& [locName, locInfo] : instance().m_locationItemInfo) {
         if (locInfo.apLocationId == locId) {
@@ -669,6 +887,38 @@ bool ArchipelagoContext::IsLocationChecked(int locId) {
     return false;
 }
 
+bool ArchipelagoContext::hasAtomicLocalGrant(int64_t apLocationId) {
+    // The category list this checks against (RandomizerContext::kAtomicallyGrantedLocationCategories)
+    // is shared with randomizer_context.cpp's world-gen override-table population, so the two sides
+    // can't drift independently - see that constant's declaration for the full reasoning.
+    std::lock_guard<std::mutex> lock(m_locationInfoMutex);
+    for (const auto& [locName, locInfo] : m_locationItemInfo) {
+        if (locInfo.apLocationId == apLocationId) {
+            if (auto* location = m_archiWorld->GetLocation(locInfo.locationName, true)) {
+                for (const auto* category : RandomizerContext::kAtomicallyGrantedLocationCategories) {
+                    if (!location->HasCategories(category))
+                        continue;
+
+                    // World-gen only populates mShopOverrides for "Shop" locations when the
+                    // "Shop Items" setting is On (randomizer_context.cpp's world-gen loop) - if a
+                    // Shop location is tagged with the category but that setting is off, no local
+                    // override was ever embedded, so treating it as atomically-locally-granted here
+                    // would wrongly dedup via IsLocationChecked() an item that only the network
+                    // delivery actually grants, risking losing it on first delivery (the same class
+                    // of bug already hit for the Progressive Dominion Rod).
+                    if (std::string_view(category) == "Shop" && m_archiWorld->Setting("Shop Items") != "On")
+                        continue;
+
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+    }
+    return false;
+}
+
 void ArchipelagoContext::SetLocationChecked(int locId, bool collected) {
     // func was ran before location scouts could be sent out, cache result until scouts return.
     if (!IsReceivedLocationScouts()) {
@@ -677,6 +927,7 @@ void ArchipelagoContext::SetLocationChecked(int locId, bool collected) {
     }
 
     auto& world = instance().m_archiWorld;
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     for (auto& [locName, locInfo] : instance().m_locationItemInfo) {
         if (locInfo.apLocationId == locId) {
@@ -697,6 +948,7 @@ void ArchipelagoContext::SetLocationChecked(int locId, bool collected) {
 
 void ArchipelagoContext::UpdateLocationState(int locId, bool collected) {
     auto& world = instance().m_archiWorld;
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     for (const auto& [locName, locInfo] : instance().m_locationItemInfo) {
         if (locInfo.apLocationId == locId) {
@@ -714,6 +966,7 @@ void ArchipelagoContext::UpdateLocationState(int locId, bool collected) {
 
 void ArchipelagoContext::UpdateAllLocationState() {
     auto& world = instance().m_archiWorld;
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
     // TODO: find out why some locations seem to keep their collection state upon reset (bugs)
 
     for (const auto& [locName, locInfo] : instance().m_locationItemInfo) {
@@ -726,6 +979,7 @@ void ArchipelagoContext::UpdateAllLocationState() {
 }
 
 bool ArchipelagoContext::IsReceivedLocationScouts() {
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
     return !instance().m_locationItemInfo.empty();
 }
 
@@ -750,6 +1004,7 @@ void ArchipelagoContext::RequestAllLocationScout(bool isHint) {
         locations.insert(ARCHI_ITEM_OFFSET + i);
     }
 
+    DuskLog.info("Requesting location scouts for {} locations.", locations.size());
     AP_SendLocationScouts(locations, isHint);
 }
 
@@ -762,8 +1017,8 @@ bool ArchipelagoContext::GenerateConfigFromAP(randomizer::seedgen::config::Confi
     YAML::Node apConfigYaml;
     try {
         apConfigYaml = YAML::Load(settingsStr);
-    }catch (YAML::BadFile& e) {
-        DuskLog.warn("Failed to load AP Config YAML file!");
+    }catch (const YAML::Exception& e) {
+        DuskLog.warn("Failed to load AP Config YAML file! Reason: {}", e.what());
         return false;
     }
 
@@ -777,44 +1032,50 @@ bool ArchipelagoContext::GenerateConfigFromAP(randomizer::seedgen::config::Confi
 
         const auto& settingConvert = GetAPSettingNameConvert(apSettingName);
 
-        if (!settingConvert.apName.empty()) {
-            auto& setting = settings.GetMap().at(settingConvert.dusklightName);
-            setting.SetCurrentOption(settingConvert.tryGetOptionConvert(apSettingValue));
-        } else if (apSettingName == "Castle Requirements") {
-            auto& setting = settings.GetMap().at("Hyrule Barrier Requirements");
+        //try catch is neccesary here. If it fails on converting the setting, it will crash and not continue reading the settings.
+        //this results in it using a default settiings file instead of the settings for the player
+        try {
+            if (!settingConvert.apName.empty()) {
+                auto& setting = settings.GetMap().at(settingConvert.dusklightName);
+                setting.SetCurrentOption(settingConvert.tryGetOptionConvert(apSettingValue));
+            } else if (apSettingName == "Castle Requirements") {
+                auto& setting = settings.GetMap().at("Hyrule Barrier Requirements");
 
-            // ap assumes max mirror shards/fused shadows/dungeons, so update those settings as well
+                // ap assumes max mirror shards/fused shadows/dungeons, so update those settings as well
 
-            if(apSettingValue == "Open")
-                setting.SetCurrentOption("Open");
-            else if(apSettingValue == "Vanilla")
-                setting.SetCurrentOption("Vanilla");
-            else if(apSettingValue == "Fused Shadows") {
-                setting.SetCurrentOption("Fused Shadows");
-                settings.GetMap().at("Hyrule Barrier Fused Shadows").SetCurrentOption("3");
-            }else if(apSettingValue == "Mirror Shards") {
-                setting.SetCurrentOption("Mirror Shards");
-                settings.GetMap().at("Hyrule Barrier Mirror Shards").SetCurrentOption("4");
-            }else if(apSettingValue == "All Dungeons") {
-                setting.SetCurrentOption("Dungeons");
-                settings.GetMap().at("Hyrule Barrier Dungeons").SetCurrentOption("8");
+                if(apSettingValue == "Open")
+                    setting.SetCurrentOption("Open");
+                else if(apSettingValue == "Vanilla")
+                    setting.SetCurrentOption("Vanilla");
+                else if(apSettingValue == "Fused Shadows") {
+                    setting.SetCurrentOption("Fused Shadows");
+                    settings.GetMap().at("Hyrule Barrier Fused Shadows").SetCurrentOption("3");
+                }else if(apSettingValue == "Mirror Shards") {
+                    setting.SetCurrentOption("Mirror Shards");
+                    settings.GetMap().at("Hyrule Barrier Mirror Shards").SetCurrentOption("4");
+                }else if(apSettingValue == "All Dungeons") {
+                    setting.SetCurrentOption("Dungeons");
+                    settings.GetMap().at("Hyrule Barrier Dungeons").SetCurrentOption("8");
+                }
+            }else if (apSettingName == "Temple of Time Entrance Requirements") {
+                auto& setting = settings.GetMap().at("Sacred Grove Does Not Require Skull Kid");
+                auto& setting2 = settings.GetMap().at("Temple of Time Sword Requirement");
+
+                if(apSettingValue == "Closed") {
+                    setting.SetCurrentOption("Off");
+                    setting2.SetCurrentOption("Master Sword");
+                }else if (apSettingValue == "Open Grove") {
+                    setting.SetCurrentOption("On");
+                    setting2.SetCurrentOption("Master Sword");
+                }else if (apSettingValue == "Open") {
+                    setting.SetCurrentOption("On");
+                    setting2.SetCurrentOption("None");
+                }
+            }else {
+                DuskLog.debug("Missing Setting: {} Value: {}", apSettingName, apSettingValue);
             }
-        }else if (apSettingName == "Temple of Time Entrance Requirements") {
-            auto& setting = settings.GetMap().at("Sacred Grove Does Not Require Skull Kid");
-            auto& setting2 = settings.GetMap().at("Temple of Time Sword Requirement");
-
-            if(apSettingValue == "Closed") {
-                setting.SetCurrentOption("Off");
-                setting2.SetCurrentOption("Master Sword");
-            }else if (apSettingValue == "Open Grove") {
-                setting.SetCurrentOption("On");
-                setting2.SetCurrentOption("Master Sword");
-            }else if (apSettingValue == "Open") {
-                setting.SetCurrentOption("On");
-                setting2.SetCurrentOption("None");
-            }
-        }else {
-            DuskLog.debug("Missing Setting: {} Value: {}", apSettingName, apSettingValue);
+        }catch (const std::exception& e) {
+            DuskLog.warn("Failed to apply AP setting \"{}\" (value \"{}\"): {}", apSettingName, apSettingValue, e.what());
         }
     }
 
@@ -822,6 +1083,7 @@ bool ArchipelagoContext::GenerateConfigFromAP(randomizer::seedgen::config::Confi
 }
 
 int ArchipelagoContext::GetItemAtLocation(const std::string& locName) {
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
     if (!instance().m_locationItemInfo.contains(locName)) {
         DuskLog.warn("No item found for ({}).", locName);
         return 0;
@@ -830,6 +1092,7 @@ int ArchipelagoContext::GetItemAtLocation(const std::string& locName) {
 }
 
 int ArchipelagoContext::GetItemAtLocation(int locId) {
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
     for (const auto& [locName, locInfo] : instance().m_locationItemInfo) {
         if (locInfo.apLocationId == locId) {
             return locInfo.itemId;
@@ -857,6 +1120,7 @@ void ArchipelagoContext::FillArchipelagoWorld() {
     }
 
     auto& locationInfo = instance().m_locationItemInfo;
+    std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     // fill all locations with data pulled from archi session
     for (auto location : world->GetAllLocations()) {

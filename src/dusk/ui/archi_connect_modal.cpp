@@ -1,8 +1,10 @@
 #include <dusk/ui/archi_connect_modal.hpp>
 #include <dusk/ui/string_button.hpp>
 
+#include <chrono>
 #include <thread>
 #include "dusk/archipelago/archipelago_context.hpp"
+#include "dusk/logging.h"
 #include "m_Do/m_Do_audio.h"
 
 namespace dusk::ui {
@@ -87,8 +89,43 @@ void HandleArchipelagoConnect() {
 
     connectStatus.store(ArchiConnectModal::ConnectionStatus::Generating);
 
-    while (!archi::ArchipelagoContext::IsReceivedLocationScouts()) {
-        std::this_thread::yield();
+    // Location scouts are requested once by the AP message thread right after connecting. That
+    // request/response can occasionally get delayed or lost (e.g. while the connection is also
+    // being flooded with a large backlog of item messages on reconnect), and there was previously
+    // no timeout here at all - a lost response meant this spun forever, burning a CPU core and
+    // leaving the player stuck on "Loading seed data into game..." with no way out but a force-close.
+    constexpr auto kScoutTimeout = std::chrono::seconds(15);
+    constexpr int kMaxScoutAttempts = 3;
+    bool receivedScouts = false;
+
+    for (int attempt = 1; attempt <= kMaxScoutAttempts && !receivedScouts; attempt++) {
+        if (attempt > 1) {
+            DuskLog.warn("Location scouts not received after {}s, retrying (attempt {}/{})",
+                kScoutTimeout.count(), attempt, kMaxScoutAttempts);
+            archi::ArchipelagoContext::RequestAllLocationScout();
+        }
+
+        const auto waitStart = std::chrono::steady_clock::now();
+        while (!archi::ArchipelagoContext::IsReceivedLocationScouts()) {
+            if (!archi::ArchipelagoContext::IsConnected()) {
+                DuskLog.error("Lost connection while waiting for location scouts.");
+                connectStatus.store(ArchiConnectModal::ConnectionStatus::Error);
+                return;
+            }
+            if (std::chrono::steady_clock::now() - waitStart > kScoutTimeout) {
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
+
+        receivedScouts = archi::ArchipelagoContext::IsReceivedLocationScouts();
+    }
+
+    if (!receivedScouts) {
+        DuskLog.error("Failed to receive location scouts after {} attempts, giving up.", kMaxScoutAttempts);
+        archi::ArchipelagoContext::DisconnectFromServer();
+        connectStatus.store(ArchiConnectModal::ConnectionStatus::Error);
+        return;
     }
 
     archi::ArchipelagoContext::GenerateLocalWorldData();

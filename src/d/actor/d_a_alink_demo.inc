@@ -2590,6 +2590,7 @@ int daAlink_c::procCoGetItemInit() {
         }
 #if TARGET_PC
         if (randomizer_IsActive() && g_randomizerState.getGiveItemToPlayerStatus() == RandomizerState::ITEM_IN_QUEUE) {
+            ApItemLog.info("drain: get-item cutscene reached, marking queue slot for clear (item_no={})", item_no);
             g_randomizerState.setGiveItemToPlayerStatus(RandomizerState::CLEAR_QUEUE);
         }
 #endif

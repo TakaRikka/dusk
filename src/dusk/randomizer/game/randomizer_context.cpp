@@ -44,6 +44,10 @@ std::optional<std::string> RandomizerContext::WriteToFile(const fspath& path) {
     // as single characters and not numbers
 
     out["mStartEventFlags"] = this->mStartEventFlags;
+
+    const std::list<u64> processedNetworkItems(this->mProcessedNetworkItems.begin(), this->mProcessedNetworkItems.end());
+    out["mProcessedNetworkItems"] = processedNetworkItems;
+
     for (const auto& [region, flags] : this->mStartRegionFlags) {
         const std::list<u16> u16Flags(flags.begin(), flags.end());
         out["mStartRegionFlags"][static_cast<u16>(region)] = u16Flags;
@@ -161,6 +165,11 @@ std::optional<std::string> RandomizerContext::LoadFromPath(const fspath& path) {
     // Event flags
     for (const auto& flag : in["mStartEventFlags"]) {
         this->mStartEventFlags.push_back(flag.as<u16>());
+    }
+
+    // Already-processed items received from other players (see field comment in the header)
+    for (const auto& keyNode : in["mProcessedNetworkItems"]) {
+        this->mProcessedNetworkItems.insert(keyNode.as<u64>());
     }
     // Region Flags
     for (const auto& regionNode : in["mStartRegionFlags"]) {
@@ -372,9 +381,7 @@ int RandomizerState::_create() {
     mEventItemStatus = QUEUE_EMPTY;
     mHasPendingToDChange = false;
     // g_customMenuRing._initialize();
-    for (int i = 0; i < EVENT_ITEM_QUEUE_SIZE; i++) {
-        mEventItemQueue[i] = 0;
-    }
+    mEventItemQueue.clear();
     return 1;
 }
 
@@ -628,18 +635,35 @@ void RandomizerState::handlePoeItem(u8 bitSw)
 
 void RandomizerState::addItemToEventQueue(u8 item)
 {
-    for (int i = 0; i < EVENT_ITEM_QUEUE_SIZE; i++)
-    {
-        if (mEventItemQueue[i] == 0)
-        {
-            mEventItemQueue[i] = item;
-            break;
-        }
-    }
+    mEventItemQueue.push_back(item);
+    ApItemLog.info("queue: stored item {} (queue size now {})", item, mEventItemQueue.size());
 }
 
 void RandomizerState::initGiveItemToPlayer()
 {
+    // Pop a completed item off the queue unconditionally, before the mProcID switch below. The
+    // get-item cutscene itself puts Link into PROC_GET_ITEM, which is deliberately NOT one of the
+    // "safe" states that switch matches (so a new item can't be triggered mid-cutscene). But the
+    // pop-the-finished-item step was previously nested inside that same switch, so once a cutscene
+    // set CLEAR_QUEUE, there was no way to ever act on it: Link is sitting in exactly the one state
+    // the switch excludes. That permanently deadlocked the queue - the first item played its
+    // cutscene fine, and every item after it (this session and all future ones) was stuck forever.
+    if (getGiveItemToPlayerStatus() == CLEAR_QUEUE) {
+        if (!mEventItemQueue.empty()) {
+            ApItemLog.info("drain: clearing completed queue item {} (queue size now {})",
+                mEventItemQueue.front(), mEventItemQueue.size() - 1);
+            mEventItemQueue.pop_front();
+        }
+        setGiveItemToPlayerStatus(QUEUE_EMPTY);
+    }
+
+    const bool hasPendingItem = !mEventItemQueue.empty();
+    if (hasPendingItem || getGiveItemToPlayerStatus() != QUEUE_EMPTY) {
+        // Only fires while something is actually pending, so this can't flood the log on its own.
+        ApItemLog.info("drain: status={} link mProcID={}",
+            getGiveItemToPlayerStatus(), daAlink_getAlinkActorClass()->mProcID);
+    }
+
     switch (daAlink_getAlinkActorClass()->mProcID)
     {
         case daAlink_c::PROC_WAIT:
@@ -654,42 +678,34 @@ void RandomizerState::initGiveItemToPlayer()
             // Check if link is currently in a cutscene
             if (daAlink_getAlinkActorClass()->checkEventRun())
             {
+                if (hasPendingItem) {
+                    ApItemLog.info("drain: blocked, checkEventRun() is true");
+                }
                 break;
             }
 
             // Ensure that link is not currently in a message-based event.
             if (daAlink_getAlinkActorClass()->getEventId() != 0)
             {
+                if (hasPendingItem) {
+                    ApItemLog.info("drain: blocked, getEventId()={} (nonzero)",
+                        daAlink_getAlinkActorClass()->getEventId());
+                }
                 break;
             }
 
+            // Note: giveItemToPlayerStatus can't be CLEAR_QUEUE here - that's already handled
+            // unconditionally above, before this switch, and reset to QUEUE_EMPTY.
             u8 itemToGive = 0xFF;
 
-            for (int i = 0; i < EVENT_ITEM_QUEUE_SIZE; i++)
+            if (!mEventItemQueue.empty())
             {
-                const u8 storedItem = mEventItemQueue[i];
-
-                if (storedItem)
+                if (getGiveItemToPlayerStatus() == QUEUE_EMPTY)
                 {
-                    const u8 giveItemToPlayerStatus = getGiveItemToPlayerStatus();
-
-                    // If we have the call to clear the queue, then we want to clear the item and break out.
-                    if (giveItemToPlayerStatus == CLEAR_QUEUE)
-                    {
-                        mEventItemQueue[i] = 0;
-                        setGiveItemToPlayerStatus(QUEUE_EMPTY);
-                        break;
-                    }
-
-                    // If the queue is empty and we have an item to give, update the queue state.
-                    else if (giveItemToPlayerStatus == QUEUE_EMPTY)
-                    {
-                        setGiveItemToPlayerStatus(ITEM_IN_QUEUE);
-                    }
-
-                    itemToGive = verifyProgressiveItem(storedItem);
-                    break;
+                    setGiveItemToPlayerStatus(ITEM_IN_QUEUE);
                 }
+
+                itemToGive = verifyProgressiveItem(mEventItemQueue.front());
             }
 
             // if there is no item to give, break out of the case.
@@ -697,6 +713,8 @@ void RandomizerState::initGiveItemToPlayer()
             {
                 break;
             }
+
+            ApItemLog.info("drain: triggering get-item cutscene for verified item {}", itemToGive);
 
             g_dComIfG_gameInfo.play.getEvent()->setGtItm(itemToGive);
 
@@ -1052,6 +1070,13 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         }
 
         const auto& metaData = location->GetMetadata();
+
+        // The 10 categories checked in this block (Chest, Poe, Freestanding Item, Bug Reward,
+        // Sky Character, Golden Wolf, Twilit Insect, Name Lookup, FLW Message, Shop) are exactly
+        // RandomizerContext::kAtomicallyGrantedLocationCategories - ArchipelagoContext::
+        // hasAtomicLocalGrant() depends on that same list to decide which locations grant their
+        // item atomically/locally. Adding a category here without adding it to that shared list
+        // (or vice versa) will silently misclassify the new category's dedup behavior.
 
         // Chest Overrides
         // Keyed by u16 of 0xFF00 (stage index) and 0x00FF (tbox id)

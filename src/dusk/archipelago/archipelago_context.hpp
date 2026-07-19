@@ -28,8 +28,29 @@ namespace dusk::archi
             bool collected = false;
         };
 
-        std::vector<std::pair<int, bool>> m_receivedItemsQueue;
+        struct ReceivedItemEntry {
+            int relativeId;
+            bool notify;
+            int player;
+            int64_t location;
+            bool wasResetPending;
+        };
+
+        // Lock ordering: if a caller needs both, always acquire m_queueMutex before
+        // m_locationInfoMutex (Execute()'s drain does this via IsReceivedLocationScouts()). No path
+        // currently acquires them in the reverse order - keep it that way, or this becomes a
+        // lock-order-inversion deadlock risk.
+        std::vector<ReceivedItemEntry> m_receivedItemsQueue;
         std::mutex m_queueMutex;
+
+        // Guards m_locationItemInfo: HandleReceiveLocationScout() mutates it from the AP network
+        // thread (via AP_SetLocationInfoCallback), while Execute() and everything it calls
+        // (hasAtomicLocalGrant, IsLocationChecked, UpdateCheckedLocations, etc.) reads/mutates it
+        // from the main thread every frame. Plain mutex is sufficient - traced every locking
+        // function below and none call another while already holding this lock, and AP_SendItem()
+        // (called from UpdateCheckedLocations while holding it) only queues a websocket send with
+        // no synchronous callback re-entry into this code.
+        std::mutex m_locationInfoMutex;
 
         // Rando Data
         randomizer::seedgen::config::Config m_config;
@@ -56,6 +77,12 @@ namespace dusk::archi
         void LoadTempLocationInfo();
 
         void itemRecvImpl(int id, bool notify);
+
+        bool shouldSkipDuplicateItem(const ReceivedItemEntry& entry);
+
+        void persistProcessedItems();
+
+        bool hasAtomicLocalGrant(int64_t apLocationId);
 
         int getItemIdFromApId(int apId);
 

@@ -1582,6 +1582,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     },
                 .isDisabled = [] { return getSettings().game.speedrunMode; },
             });
+        config_percent_select(leftPane, rightPane, getSettings().game.debugUIScale,
+            "Debug UI Scale",
+            "Scales the size of the Shift+F1 debug console, including the Rando Tracker window.",
+            50, 200, 5,
+            [] { return !getSettings().backend.enableAdvancedSettings.getValue(); });
         config_bool_select(leftPane, rightPane, getSettings().game.showInputViewer,
             {
                 .key = "Show Input Viewer",

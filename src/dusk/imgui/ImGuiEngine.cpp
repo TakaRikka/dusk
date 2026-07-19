@@ -65,6 +65,7 @@ ImFont* ImGuiEngine::fontExtraLarge;
 ImFont* ImGuiEngine::fontMono;
 ImTextureID ImGuiEngine::orgIcon = 0;
 ImTextureID ImGuiEngine::duskLogo = 0;
+float ImGuiEngine::baseFontScale = 1.0f;
 
 inline ImFont* CreateFont(float size, const std::string& fontPath, std::string_view fontName) {
     bool fontFileExists = !fontPath.empty() && AssetExists(fontPath);
@@ -94,7 +95,8 @@ void ImGuiEngine_Initialize(float scale) {
     ImGui::GetCurrentContext();
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear();
-    io.FontGlobalScale = scale > 0.0f ? 1.0f / scale : 1.0f;
+    ImGuiEngine::baseFontScale = scale > 0.0f ? 1.0f / scale : 1.0f;
+    io.FontGlobalScale = ImGuiEngine::baseFontScale;
     io.ConfigWindowsMoveFromTitleBarOnly = IsMobile;
 
     ImGuiEngine::fontNormal =
