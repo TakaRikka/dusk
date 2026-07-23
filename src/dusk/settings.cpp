@@ -50,6 +50,7 @@ UserSettings g_userSettings = {
         .instantText {"game.instantText", false},
         .sunsSong {"game.sunsSong", false},
         .autoSave {"game.autoSave", false},
+        .mapHeartPieceCount{"game.mapHeartPieceCount", false},
         .mapGoldBugCount{"game.mapGoldBugCount", false},
         .enhancedMapMenus {"game.enhancedMapMenus", false},
 
@@ -255,6 +256,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.autoSave);
+    Register(g_userSettings.game.mapHeartPieceCount);
     Register(g_userSettings.game.mapGoldBugCount);
     Register(g_userSettings.game.enhancedMapMenus);
     Register(g_userSettings.game.enableMirrorMode);

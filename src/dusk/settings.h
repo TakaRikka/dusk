@@ -182,6 +182,7 @@ struct UserSettings {
         ConfigVar<bool> instantText;
         ConfigVar<bool> sunsSong;
         ConfigVar<bool> autoSave;
+        ConfigVar<bool> mapHeartPieceCount;
         ConfigVar<bool> mapGoldBugCount;
         ConfigVar<bool> enhancedMapMenus;
 

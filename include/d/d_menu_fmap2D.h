@@ -423,10 +423,12 @@ public:
     /* 0xC4 */ u8 mAlphaDpad;
 
 #if TARGET_PC
-    J2DTextBox* mpGoldBugCountPane;
+    J2DPicture* mpHeartPieceCountIcon;
+    J2DTextBox* mpHeartPieceCountPane;
     J2DPicture* mpGoldBugCountIcon;
-    J2DTextBox* mpPoeCountPane;
+    J2DTextBox* mpGoldBugCountPane;
     J2DPicture* mpPoeCountIcon;
+    J2DTextBox* mpPoeCountPane;
     u8 mSelectRegionNo;
 #endif
  };
