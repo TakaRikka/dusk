@@ -52,7 +52,7 @@ public:
 public:
     JKRHeap(u32 size, JKRHeap* parent, bool errorFlag);
     JKRHeap(void* data, u32 size, JKRHeap* parent, bool errorFlag);
-    virtual ~JKRHeap();
+    virtual ~JKRHeap() DUSK_OVERRIDE;
 
     JKRHeap* becomeSystemHeap();
     JKRHeap* becomeCurrentHeap();

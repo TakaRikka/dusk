@@ -31,11 +31,11 @@ public:
     int getStatus() const { return DVDGetCommandBlockStatus(&mFileInfo.cb); }
 
 public:
-    /* vt[03] */ virtual bool open(const char*);               /* override */
-    /* vt[04] */ virtual void close(void);                     /* override */
-    /* vt[05] */ virtual s32 readData(void*, s32, s32);        /* override */
-    /* vt[06] */ virtual s32 writeData(const void*, s32, s32); /* override */
-    /* vt[07] */ virtual s32 getFileSize(void) const;          /* override */
+    /* vt[03] */ virtual bool open(const char*) DUSK_OVERRIDE;
+    /* vt[04] */ virtual void close(void) DUSK_OVERRIDE;
+    /* vt[05] */ virtual s32 readData(void*, s32, s32) DUSK_OVERRIDE;
+    /* vt[06] */ virtual s32 writeData(const void*, s32, s32) DUSK_OVERRIDE;
+    /* vt[07] */ virtual s32 getFileSize(void) const DUSK_OVERRIDE;
     /* vt[08] */ virtual bool open(s32);
 
 // private:

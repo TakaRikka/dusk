@@ -81,26 +81,26 @@ public:
     }
 
 public:
-    /* vt[04] */ virtual u32 getHeapType();                                     /* override */
-    /* vt[05] */ virtual bool check();                                          /* override */
-    /* vt[06] */ virtual bool dump_sort();                                      /* override */
-    /* vt[07] */ virtual bool dump();                                           /* override */
-    /* vt[08] */ virtual void do_destroy();                                     /* override */
-    /* vt[09] */ virtual void* do_alloc(u32 size, int alignment);               /* override */
-    /* vt[10] */ virtual void do_free(void* ptr);                               /* override */
-    /* vt[11] */ virtual void do_freeAll();                                     /* override */
-    /* vt[12] */ virtual void do_freeTail();                                    /* override */
-    /* vt[13] */ virtual void do_fillFreeArea();                                /* override */
-    /* vt[14] */ virtual s32 do_resize(void* ptr, u32 size);                    /* override */
-    /* vt[15] */ virtual s32 do_getSize(void* ptr);                             /* override */
-    /* vt[16] */ virtual s32 do_getFreeSize();                                  /* override */
-    /* vt[17] */ virtual void* do_getMaxFreeBlock();                            /* override */
-    /* vt[18] */ virtual s32 do_getTotalFreeSize();                             /* override */
-    /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID);                   /* override */
-    /* vt[20] */ virtual u8 do_getCurrentGroupId();                             /* override */
-    /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const; /* override */
+    /* vt[04] */ virtual u32 getHeapType() DUSK_OVERRIDE;
+    /* vt[05] */ virtual bool check() DUSK_OVERRIDE;
+    /* vt[06] */ virtual bool dump_sort() DUSK_OVERRIDE;
+    /* vt[07] */ virtual bool dump() DUSK_OVERRIDE;
+    /* vt[08] */ virtual void do_destroy() DUSK_OVERRIDE;
+    /* vt[09] */ virtual void* do_alloc(u32 size, int alignment) DUSK_OVERRIDE;
+    /* vt[10] */ virtual void do_free(void* ptr) DUSK_OVERRIDE;
+    /* vt[11] */ virtual void do_freeAll() DUSK_OVERRIDE;
+    /* vt[12] */ virtual void do_freeTail() DUSK_OVERRIDE;
+    /* vt[13] */ virtual void do_fillFreeArea() DUSK_OVERRIDE;
+    /* vt[14] */ virtual s32 do_resize(void* ptr, u32 size) DUSK_OVERRIDE;
+    /* vt[15] */ virtual s32 do_getSize(void* ptr) DUSK_OVERRIDE;
+    /* vt[16] */ virtual s32 do_getFreeSize() DUSK_OVERRIDE;
+    /* vt[17] */ virtual void* do_getMaxFreeBlock() DUSK_OVERRIDE;
+    /* vt[18] */ virtual s32 do_getTotalFreeSize() DUSK_OVERRIDE;
+    /* vt[19] */ virtual s32 do_changeGroupID(u8 newGroupID) DUSK_OVERRIDE;
+    /* vt[20] */ virtual u8 do_getCurrentGroupId() DUSK_OVERRIDE;
+    /* vt[21] */ virtual void state_register(JKRHeap::TState* p, u32 id) const DUSK_OVERRIDE;
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const& r1,
-                                            JKRHeap::TState const& r2) const; /* override */
+                                            JKRHeap::TState const& r2) const DUSK_OVERRIDE;
 
     /* 0x6C */ u8 mAllocMode;
     /* 0x6D */ u8 mCurrentGroupId;

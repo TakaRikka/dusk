@@ -19,7 +19,7 @@ public:
 
 protected:
     JKRSolidHeap(void*, u32, JKRHeap*, bool);
-    virtual ~JKRSolidHeap();
+    virtual ~JKRSolidHeap() DUSK_OVERRIDE;
 
     void* allocFromHead(u32, int);
     void* allocFromTail(u32, int);
@@ -27,25 +27,25 @@ protected:
     static s32 getUsedSize(JKRSolidHeap* heap) { return heap->mSize - heap->getTotalFreeSize(); }
 
 public:
-    /* vt[04] */ virtual u32 getHeapType(void); /* override */
-    /* vt[05] */ virtual bool check(void);      /* override */
+    /* vt[04] */ virtual u32 getHeapType(void) DUSK_OVERRIDE;
+    /* vt[05] */ virtual bool check(void) DUSK_OVERRIDE;
 
-    /* vt[07] */ virtual bool dump(void);                /* override */
-    /* vt[08] */ virtual void do_destroy(void);          /* override */
-    /* vt[09] */ virtual void* do_alloc(u32, int);       /* override */
-    /* vt[10] */ virtual void do_free(void*);            /* override */
-    /* vt[11] */ virtual void do_freeAll(void);          /* override */
-    /* vt[12] */ virtual void do_freeTail(void);         /* override */
-    /* vt[13] */ virtual void do_fillFreeArea(void);     /* override */
-    /* vt[14] */ virtual s32 do_resize(void*, u32);      /* override */
-    /* vt[15] */ virtual s32 do_getSize(void*);          /* override */
-    /* vt[16] */ virtual s32 do_getFreeSize(void);       /* override */
-    /* vt[17] */ virtual void* do_getMaxFreeBlock(void); /* override */
-    /* vt[18] */ virtual s32 do_getTotalFreeSize(void);  /* override */
+    /* vt[07] */ virtual bool dump(void) DUSK_OVERRIDE;
+    /* vt[08] */ virtual void do_destroy(void) DUSK_OVERRIDE;
+    /* vt[09] */ virtual void* do_alloc(u32, int) DUSK_OVERRIDE;
+    /* vt[10] */ virtual void do_free(void*) DUSK_OVERRIDE;
+    /* vt[11] */ virtual void do_freeAll(void) DUSK_OVERRIDE;
+    /* vt[12] */ virtual void do_freeTail(void) DUSK_OVERRIDE;
+    /* vt[13] */ virtual void do_fillFreeArea(void) DUSK_OVERRIDE;
+    /* vt[14] */ virtual s32 do_resize(void*, u32) DUSK_OVERRIDE;
+    /* vt[15] */ virtual s32 do_getSize(void*) DUSK_OVERRIDE;
+    /* vt[16] */ virtual s32 do_getFreeSize(void) DUSK_OVERRIDE;
+    /* vt[17] */ virtual void* do_getMaxFreeBlock(void) DUSK_OVERRIDE;
+    /* vt[18] */ virtual s32 do_getTotalFreeSize(void) DUSK_OVERRIDE;
 
-    /* vt[21] */ virtual void state_register(JKRHeap::TState*, u32) const; /* override */
+    /* vt[21] */ virtual void state_register(JKRHeap::TState*, u32) const DUSK_OVERRIDE;
     /* vt[22] */ virtual bool state_compare(JKRHeap::TState const&,
-                                            JKRHeap::TState const&) const; /* override */
+                                            JKRHeap::TState const&) const DUSK_OVERRIDE;
 
 private:
     /* 0x00 */  // vtable

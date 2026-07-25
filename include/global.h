@@ -255,5 +255,6 @@ using std::isnan;
 
 #define DUSK_CONST IF_DUSK(const)
 #define DUSK_CONSTEXPR IF_DUSK(constexpr)
+#define DUSK_OVERRIDE IF_DUSK(override)
 
 #endif

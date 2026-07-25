@@ -22,9 +22,9 @@ public:
     u32 getAramAddress_Entry(SDIFileEntry*);
     u32 getAramAddress(char const*);
 
-    /* vt[15] */ u32 getExpandedResSize(const void*) const;            /* override */
-    /* vt[16] */ void* fetchResource(SDIFileEntry*, u32*);             /* override */
-    /* vt[17] */ void* fetchResource(void*, u32, SDIFileEntry*, u32*); /* override */
+    /* vt[15] */ u32 getExpandedResSize(const void*) const DUSK_OVERRIDE;
+    /* vt[16] */ void* fetchResource(SDIFileEntry*, u32*) DUSK_OVERRIDE;
+    /* vt[17] */ void* fetchResource(void*, u32, SDIFileEntry*, u32*) DUSK_OVERRIDE;
 
 public:
     static u32 fetchResource_subroutine(u32, u32, u8*, u32, int);

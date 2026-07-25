@@ -45,7 +45,7 @@ public:
     inline virtual ~JKRArcFinder() {}
 
 public:
-    /* vt[3] */ virtual bool findNextFile(void); /* override */
+    /* vt[3] */ virtual bool findNextFile(void) DUSK_OVERRIDE;
 
 private:
     /* 0x00 */  // JKRFileFinder_UnknownBase
@@ -63,7 +63,7 @@ public:
     virtual ~JKRDvdFinder();
 
 public:
-    /* vt[3] */ virtual bool findNextFile(void); /* override */
+    /* vt[3] */ virtual bool findNextFile(void) DUSK_OVERRIDE;
 
 private:
     /* 0x00 */  // JKRFileFinder_UnknownBase
