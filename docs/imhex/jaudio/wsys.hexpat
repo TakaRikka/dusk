@@ -207,7 +207,7 @@ struct THeader {
     /**
      * ID of wave bank.
      * This matches the value passed to the BAA load command.
-     * The game does not use this value itself.
+     * The game originally does not use this value itself, but Dusklight does rely on it.
      */
     u32 mId;
     
