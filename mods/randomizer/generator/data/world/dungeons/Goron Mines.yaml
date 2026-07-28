@@ -1,0 +1,336 @@
+
+# GORON MINES ENTRANCE ROOM
+
+- Name: Goron Mines Entrance
+  Region: Goron Mines
+  Dungeon Start Area: True
+  Exits:
+    Goron Mines Entrance Room Upper Platforms: Can_Break_Wooden_Barrier and Iron_Boots
+    Death Mountain Sumo Hall Goron Mines Tunnel: Nothing
+
+- Name: Goron Mines Entrance Room Upper Platforms
+  Region: Goron Mines
+  Events:
+    Can Open Goron Mines Entrance Room Iron Gate: Iron_Boots
+  Locations:
+    Goron Mines Entrance Chest: Nothing
+  Exits:
+    Goron Mines Entrance Room Near Central Magnet Room: "'Can_Open_Goron_Mines_Entrance_Room_Iron_Gate'"
+    Goron Mines Entrance: Nothing
+
+- Name: Goron Mines Entrance Room Near Central Magnet Room # Behind the gate that opens
+  Region: Goron Mines
+  Exits:
+    Goron Mines Central Magnet Room Near Entrance: Nothing
+    Goron Mines Entrance Room Upper Platforms: "'Can_Open_Goron_Mines_Entrance_Room_Iron_Gate'"
+
+# GORON MINES CENTRAL MAGNET ROOM
+
+- Name: Goron Mines Central Magnet Room Near Entrance
+  Region: Goron Mines
+  Locations:
+    Goron Mines Main Magnet Room Bottom Chest: Nothing
+  Exits:
+    Goron Mines Magnet Ceiling Room Lower: Goron_Mines_Small_Key or Small_Keys == Keysy
+    Goron Mines Central Magnet Room Center Tower: (Active_Goron_Mines_Magnets == On and Iron_Boots) or 'Can_Activate_Central_Tower_Magnet'
+    Goron Mines Entrance Room Near Central Magnet Room: Nothing
+
+- Name: Goron Mines Central Magnet Room Center Tower
+  Region: Goron Mines
+  Events:
+    Can Activate Central Tower Magnet: Iron_Boots
+  Exits:
+    Goron Mines Central Magnet Room Near Crystal Switch Room: "'Can_Activate_Central_Tower_Magnet'"
+    Goron Mines Central Magnet Room Near Entrance: "'Can_Activate_Central_Tower_Magnet'"
+    Goron Mines Magnet Ceiling Room Near Central Magnet Room: Nothing
+
+- Name: Goron Mines Central Magnet Room Near Crystal Switch Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Crystal Switch Room Water Side: Nothing
+    Goron Mines Central Magnet Room Center Tower: "'Can_Activate_Central_Tower_Magnet'"
+    Goron Mines Central Magnet Room Near Ceiling Dodongo Room: "'Can_Activate_Highest_Central_Magnet'"
+
+- Name: Goron Mines Central Magnet Room Near Ceiling Dodongo Room
+  Region: Goron Mines
+  Events:
+    Can Activate Highest Central Magnet: Bow and Iron_Boots
+  Locations:
+    Goron Mines Main Magnet Room Top Chest: Nothing
+  Exits:
+    Goron Mines Central Magnet Room Near Crystal Switch Room: "'Can_Activate_Highest_Central_Magnet'"
+    Goron Mines Ceiling Dodongo Room Near Central Magnet Room: Nothing
+
+# GORON MINES MAGNET CEILING ROOM
+
+- Name: Goron Mines Magnet Ceiling Room Lower
+  Region: Goron Mines
+  Exits:
+    Goron Mines Magnet Ceiling Room Lower Past Stone Wall: Nothing
+    Goron Mines Central Magnet Room Near Entrance: Nothing
+
+- Name: Goron Mines Magnet Ceiling Room Lower Past Stone Wall
+  Region: Goron Mines
+  Exits:
+    Goron Mines First Magnet Floor Room Lower: Nothing
+
+- Name: Goron Mines Magnet Ceiling Room Upper Near First Magnet Floor Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Magnet Ceiling Room Ceiling: Iron_Boots
+    Goron Mines Magnet Ceiling Room Lower: Nothing
+
+- Name: Goron Mines Magnet Ceiling Room Ceiling
+  Region: Goron Mines
+  Locations:
+    Goron Mines Magnet Maze Chest: Nothing
+  Exits:
+    Goron Mines Magnet Ceiling Room Near Central Magnet Room: Nothing
+    Goron Mines Magnet Ceiling Room Upper Near First Magnet Floor Room: Nothing
+    Goron Mines Magnet Ceiling Room Lower: Nothing
+
+- Name: Goron Mines Magnet Ceiling Room Near Central Magnet Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Central Magnet Room Center Tower: Nothing
+    Goron Mines Magnet Ceiling Room Lower: Nothing
+
+# GORON MINES FIRST MAGNET FLOOR ROOM
+
+- Name: Goron Mines First Magnet Floor Room Lower
+  Region: Goron Mines
+  Exits:
+    Goron Mines First Magnet Floor Room Lower Near Gor Amatos Room: Iron_Boots
+
+- Name: Goron Mines First Magnet Floor Room Lower Near Gor Amatos Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Gor Amato Room Lower: Nothing
+    Goron Mines First Magnet Floor Room Lower: Nothing
+
+- Name: Goron Mines First Magnet Floor Room Upper Near Gor Amatos Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines First Magnet Floor Room Upper Near Magnet Ceiling Room: Iron_Boots
+    Goron Mines First Magnet Floor Room Lower Near Gor Amatos Room: Nothing
+    Goron Mines Gor Amato Room Upper: Nothing
+
+- Name: Goron Mines First Magnet Floor Room Upper Near Magnet Ceiling Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Magnet Ceiling Room Upper Near First Magnet Floor Room: Nothing
+    Goron Mines First Magnet Floor Room Upper Near Gor Amatos Room: Iron_Boots
+    Goron Mines First Magnet Floor Room Lower: Nothing
+
+# GORON MINES GOR AMATO ROOM
+
+- Name: Goron Mines Gor Amato Room Lower
+  Region: Goron Mines
+  Locations:
+    Goron Mines Gor Amato Chest: Nothing
+    Goron Mines Gor Amato Small Chest: Nothing
+    Goron Mines Gor Amato Key Shard: Can_Talk_to_Humans
+  Exits:
+    Goron Mines Gor Amato Room Upper: Can_Climb_Ladders
+    Goron Mines First Magnet Floor Room Lower Near Gor Amatos Room: Nothing
+
+- Name: Goron Mines Gor Amato Room Upper
+  Region: Goron Mines
+  Exits:
+    Goron Mines First Magnet Floor Room Upper Near Gor Amatos Room: Nothing
+    Goron Mines Gor Amato Room Lower: Nothing
+
+# GORON MINES CRYSTAL SWITCH ROOM
+
+- Name: Goron Mines Crystal Switch Room Water Side
+  Region: Goron Mines
+  Locations:
+    Goron Mines Crystal Switch Room Underwater Chest: Iron_Boots
+    Goron Mines Crystal Switch Room Small Chest: Iron_Boots
+  Exits:
+    Goron Mines Crystal Switch Room Beamos Side: Can_Hit_Crystal_Switch_at_Range or (Can_Hit_Crystal_Switch and Iron_Boots)
+    Goron Mines Central Magnet Room Near Crystal Switch Room: Nothing
+
+- Name: Goron Mines Crystal Switch Room Beamos Side
+  Region: Goron Mines
+  Locations:
+    Goron Mines After Crystal Switch Room Magnet Wall Chest: Iron_Boots
+  Exits:
+    Goron Mines Crystal Switch Room Near Outside Room: Bow or (Sword and Iron_Boots)
+    Goron Mines Crystal Switch Room Water Side: Can_Hit_Crystal_Switch
+
+- Name: Goron Mines Crystal Switch Room Near Outside Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Outside Room: count(Goron_Mines_Small_Key, 2) or Small_Keys == Keysy
+    Goron Mines Crystal Switch Room Beamos Side: Nothing
+
+# GORON MINES OUTSIDE ROOM
+
+- Name: Goron Mines Outside Room
+  Region: Goron Mines
+  Locations:
+    Goron Mines Outside Beamos Chest: Nothing
+    Goron Mines Outside Underwater Chest: Iron_Boots and (Sword or Water_Bombs) # Can also just swim over the barrier
+    Goron Mines Outside Clawshot Chest: Clawshot and (Bow or Slingshot)
+  Exits:
+    Goron Mines Floor Turning Room Near Outside Room: count(Goron_Mines_Small_Key, 3) or Small_Keys == Keysy
+    Goron Mines Outside Room Near Boss Door Room: Clawshot or (Can_Defeat_Beamos and Iron_Boots and Bow)
+
+- Name: Goron Mines Outside Room Near Boss Door Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Boss Door Room Near Outside Room: Nothing
+    Goron Mines Outside Room: Nothing
+
+# GORON MINES FLOOR TURNING ROOM
+
+- Name: Goron Mines Floor Turning Room Near Outside Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Floor Turning Room Near Gor Ebizo Room Lower: Iron_Boots
+    Goron Mines Outside Room: Nothing
+
+- Name: Goron Mines Floor Turning Room Near Gor Ebizo Room Lower
+  Region: Goron Mines
+  Exits:
+    Goron Mines Gor Ebizo Room Lower: Nothing
+    Goron Mines Floor Turning Room Near Outside Room: Nothing
+
+- Name: Goron Mines Floor Turning Room Near Gor Ebizo Room Upper
+  Region: Goron Mines
+  Exits:
+    Goron Mines Floor Turning Room Near Miniboss Room: Iron_Boots
+    Goron Mines Floor Turning Room Near Gor Ebizo Room Lower: Nothing
+    Goron Mines Floor Turning Room Near Outside Room: Nothing
+    Goron Mines Gor Ebizo Room Upper: Nothing
+
+- Name: Goron Mines Floor Turning Room Near Miniboss Room
+  Region: Goron Mines
+  Locations:
+    Goron Mines Chest Before Dangoro: Nothing
+  Exits:
+    Dangoro Miniboss Room North Side: Nothing
+    Goron Mines Floor Turning Room Near Outside Room: Nothing
+
+# GORON MINES GOR EBIZO ROOM
+
+- Name: Goron Mines Gor Ebizo Room Lower
+  Region: Goron Mines
+  Locations:
+    Goron Mines Gor Ebizo Chest: Nothing
+    Goron Mines Gor Ebizo Key Shard: Can_Talk_to_Humans
+    Goron Mines Hint Sign: Nothing
+  Exits:
+    Goron Mines Gor Ebizo Room Upper: Can_Climb_Ladders
+    Goron Mines Floor Turning Room Near Gor Ebizo Room Lower: Nothing
+
+- Name: Goron Mines Gor Ebizo Room Upper
+  Region: Goron Mines
+  Exits:
+    Goron Mines Floor Turning Room Near Gor Ebizo Room Upper: Nothing
+    Goron Mines Gor Ebizo Room Lower: Nothing
+
+# DANGORO MINIBOSS ROOM
+
+- Name: Dangoro Miniboss Room North Side
+  Exits:
+    Dangoro Miniboss Room South Side: Can_Defeat_Dangoro
+    Goron Mines Floor Turning Room Near Miniboss Room: Nothing
+
+- Name: Dangoro Miniboss Room South Side
+  Exits:
+    Goron Mines Beamos Circle Room Near Miniboss Room: Nothing
+    Dangoro Miniboss Room North Side: Can_Defeat_Dangoro
+
+# GORON MINES BEAMOS CIRCLE ROOM
+
+- Name: Goron Mines Beamos Circle Room Near Miniboss Room
+  Region: Goron Mines
+  Events:
+    Can Cut Down Iron Platform in Beamos Circle Room: Bow
+  Locations:
+    Goron Mines Dangoro Chest: Nothing
+  Exits:
+    Goron Mines Beamos Circle Room Center: "'Can_Cut_Down_Iron_Platform_in_Beamos_Circle_Room'"
+    Dangoro Miniboss Room South Side: Nothing
+
+- Name: Goron Mines Beamos Circle Room Center
+  Region: Goron Mines
+  Events:
+    Can Kill Beamos in Beamos Circle Room: Can_Defeat_Beamos
+  Locations:
+    Goron Mines Beamos Room Chest: "'Can_Kill_Beamos_in_Beamos_Circle_Room'"
+  Exits:
+    Goron Mines Beamos Circle Room Near Gor Liggs Room: "'Can_Kill_Beamos_in_Beamos_Circle_Room'"
+    Goron Mines Beamos Circle Room Near Ceiling Dodongo Room: "'Can_Kill_Beamos_in_Beamos_Circle_Room'"
+    Goron Mines Beamos Circle Room Near Miniboss Room: "'Can_Cut_Down_Iron_Platform_in_Beamos_Circle_Room'"
+
+- Name: Goron Mines Beamos Circle Room Near Gor Liggs Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Gor Liggs Room: Nothing
+    Goron Mines Beamos Circle Room Center: "'Can_Kill_Beamos_in_Beamos_Circle_Room'"
+
+- Name: Goron Mines Beamos Circle Room Near Ceiling Dodongo Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Ceiling Dodongo Room Near Beamos Circle Room: Nothing
+    Goron Mines Beamos Circle Room Center: "'Can_Kill_Beamos_in_Beamos_Circle_Room'"
+
+# GORON MINES GOR LIGGS ROOM
+
+- Name: Goron Mines Gor Liggs Room
+  Region: Goron Mines
+  Locations:
+    Goron Mines Gor Liggs Chest: Nothing
+    Goron Mines Gor Liggs Key Shard: Can_Talk_to_Humans
+  Exits:
+    Goron Mines Beamos Circle Room Near Gor Liggs Room: Nothing
+
+# GORON MINES CEILING DODONGO ROOM
+
+- Name: Goron Mines Ceiling Dodongo Room Near Beamos Circle Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Ceiling Dodongo Room Near Central Magnet Room: Gale_Boomerang or Clawshot or Bow # to get rid of ceiling torch slugs
+    Goron Mines Beamos Circle Room Near Ceiling Dodongo Room: Nothing
+
+- Name: Goron Mines Ceiling Dodongo Room Near Ceiling Dodongo
+  Region: Goron Mines
+  Events:
+    Can Hit Ceiling Dodongo Switch: Iron_Boots and Bow
+  Exits:
+    Goron Mines Ceiling Dodongo Room Near Central Magnet Room: "'Can_Hit_Ceiling_Dodongo_Switch'"
+    Goron Mines Ceiling Dodongo Room Near Beamos Circle Room: Gale_Boomerang or Clawshot or Bow # to get rid of ceiling torch slugs
+    
+- Name: Goron Mines Ceiling Dodongo Room Near Central Magnet Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Central Magnet Room Near Ceiling Dodongo Room: Nothing
+    Goron Mines Ceiling Dodongo Room Near Ceiling Dodongo: "'Can_Hit_Ceiling_Dodongo_Switch'"
+
+# GORON MINES BOSS DOOR ROOM
+
+- Name: Goron Mines Boss Door Room Near Outside Room
+  Region: Goron Mines
+  Exits:
+    Goron Mines Boss Door Room Near Boss Door: Bow
+    Goron Mines Outside Room Near Boss Door Room: Nothing
+
+- Name: Goron Mines Boss Door Room Near Boss Door
+  Region: Goron Mines
+  Exits:
+    Goron Mines Boss Room: count(Goron_Mines_Key_Shard, 3) or Big_Keys == Keysy
+    Goron Mines Boss Door Room Near Outside Room: Bow
+
+# GORON MINES BOSS ROOM
+
+- Name: Goron Mines Boss Room
+  Events:
+    Can Complete Goron Mines: Can_Defeat_Fyrus
+  Locations:
+    Goron Mines Fyrus Heart Container: Can_Defeat_Fyrus
+    Goron Mines Dungeon Reward: Can_Defeat_Fyrus
+  Exits:
+    Lower Kakariko Village: Can_Defeat_Fyrus

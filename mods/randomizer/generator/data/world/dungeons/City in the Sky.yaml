@@ -1,0 +1,406 @@
+# CITY IN THE SKY ENTRANCE
+
+- Name: City in the Sky Entrance
+  Region: City in the Sky
+  Dungeon Start Area: True
+  Locations:
+    City in the Sky Underwater West Chest: Iron_Boots
+    City in the Sky Underwater East Chest: Iron_Boots
+  Exits:
+    Lake Hylia: Clawshot # Or Nothing after fall entrance is set
+    City in the Sky Oocca Hallway Near Entrance: Can_Hit_Crystal_Switch_at_Range
+    City in the Sky Shop: Nothing
+
+# CITY IN THE SKY SHOP
+
+- Name: City in the Sky Shop
+  Region: City in the Sky
+  Events:
+    Can Refill Regular Bombs: "'Can_Farm_Rupees'"
+    Can Refill Arrows: "'Can_Farm_Rupees'"
+    Can Refill Lantern Oil: "'Can_Farm_Rupees'"
+  Exits:
+    City in the Sky Entrance: Nothing
+
+# CITY IN THE SKY OOCCA HALLWAY
+
+- Name: City in the Sky Oocca Hallway Near Entrance
+  Region: City in the Sky
+  Exits:
+    City in the Sky Oocca Hallway Near Lobby: Clawshot
+    City in the Sky Entrance: Clawshot
+
+- Name: City in the Sky Oocca Hallway Near Lobby
+  Region: City in the Sky
+  Exits:
+    City in the Sky Lobby Floor: Nothing
+    City in the Sky Oocca Hallway Near Entrance: Clawshot
+
+# CITY IN THE SKY LOBBY
+
+- Name: City in the Sky Lobby Floor
+  Region: City in the Sky
+  Locations:
+    City in the Sky Hint Sign: Nothing
+  Exits:
+    City in the Sky Lobby Floor Near West Bridge: Double_Clawshots
+    City in the Sky East Bridge Near Lobby: Nothing
+    City in the Sky North Fan Passageway Near Lobby: Nothing
+    City in the Sky Lobby Floor Upper West Ledge: Clawshot
+    City in the Sky Lobby Above Ceiling Fan: Double_Clawshots and 'Can_Disable_City_in_the_Sky_Lobby_Ceiling_Fan'
+
+- Name: City in the Sky Lobby Floor Near West Bridge
+  Region: City in the Sky
+  Exits:
+    City in the Sky West Bridge Near Lobby: Nothing
+    City in the Sky Lobby Floor: Clawshot
+
+- Name: City in the Sky Lobby Floor Upper West Ledge
+  Region: City in the Sky
+  Exits:
+    City in the Sky West Bridge Upper Ledge: Nothing
+    City in the Sky Lobby Floor: Nothing
+
+- Name: City in the Sky Lobby Above Ceiling Fan
+  Region: City in the Sky
+  Events:
+    Can Turn on City in the Sky North Fan: Double_Clawshots and 'Can_Disable_City_in_the_Sky_Lobby_Ceiling_Fan'
+  Locations:
+    City in the Sky Chest Below Big Key Chest: Nothing
+  Exits:
+    City in the Sky Outside Central Tower Ground: Nothing
+    City in the Sky Lobby Floor: Can_Survive_Damage and 'Can_Disable_City_in_the_Sky_Lobby_Ceiling_Fan'
+
+- Name: City in the Sky Lobby Above Highest Grating
+  Region: City in the Sky
+  Events:
+    Can Disable City in the Sky Lobby Ceiling Fan: Iron_Boots and Clawshot
+  Locations:
+    City in the Sky Big Key Chest: Iron_Boots
+  Exits:
+    City in the Sky Lobby Above Ceiling Fan: Nothing
+    City in the Sky Outside Central Tower Ropes: Nothing
+
+# CITY IN THE SKY WEST BRIDGE
+
+- Name: City in the Sky West Bridge Upper Ledge
+  Region: City in the Sky
+  Events:
+    Can Extend City in the Sky West Bridge: Spinner
+  Exits:
+    City in the Sky West Bridge Near Lobby: Clawshot
+    City in the Sky Lobby Floor Upper West Ledge: Nothing
+
+- Name: City in the Sky West Bridge Near Lobby
+  Region: City in the Sky
+  Exits:
+    City in the Sky West Bridge Near Double Clawshot Maze Room: Double_Clawshots or 'Can_Extend_City_in_the_Sky_West_Bridge'
+    City in the Sky West Bridge Upper Ledge: Clawshot
+    City in the Sky Lobby Floor Near West Bridge: Nothing
+
+- Name: City in the Sky West Bridge Near Double Clawshot Maze Room
+  Region: City in the Sky
+  Exits:
+    City in the Sky Double Clawshot Maze Room Near West Bridge: Nothing
+    City in the Sky West Bridge Near Lobby: Double_Clawshots or 'Can_Extend_City_in_the_Sky_West_Bridge'
+
+# CITY IN THE SKY DOUBLE CLAWSHOT MAZE ROOM
+
+- Name: City in the Sky Double Clawshot Maze Room Near West Bridge
+  Region: City in the Sky
+  Locations:
+    City in the Sky West Wing First Chest: Clawshot
+  Exits:
+    City in the Sky Double Clawshot Maze Room Near Baba Tower: Double_Clawshots
+    City in the Sky West Bridge Near Double Clawshot Maze Room: Nothing
+
+- Name: City in the Sky Double Clawshot Maze Room Near Baba Tower
+  Region: City in the Sky
+  Locations:
+    City in the Sky West Wing Baba Balcony Chest: Nothing
+    City in the Sky West Wing Narrow Ledge Chest: Nothing
+    City in the Sky West Wing Tile Worm Chest: Nothing
+  Exits:
+    City in the Sky Baba Tower Bottom: Nothing
+
+# CITY IN THE SKY BABA TOWER
+
+- Name: City in the Sky Baba Tower Bottom
+  Region: City in the Sky
+  Locations:
+    City in the Sky Baba Tower Top Small Chest: Can_Defeat_Baba_Serpent and Can_Defeat_Big_Baba and Double_Clawshots
+    City in the Sky Baba Tower Narrow Ledge Chest: Can_Defeat_Baba_Serpent and Can_Defeat_Big_Baba and Double_Clawshots
+    City in the Sky Baba Tower Alcove Chest: Can_Defeat_Baba_Serpent and Can_Defeat_Big_Baba and Double_Clawshots
+  Exits:
+    City in the Sky Baba Tower Top: Can_Defeat_Baba_Serpent and Can_Defeat_Big_Baba and Double_Clawshots
+    City in the Sky Double Clawshot Maze Room Near Baba Tower: Nothing
+
+- Name: City in the Sky Baba Tower Top
+  Region: City in the Sky
+  Exits:
+    City in the Sky West Garden Near Baba Tower: Nothing
+    City in the Sky Baba Tower Bottom: Double_Clawshots
+
+# CITY IN THE SKY WEST GARDEN
+
+- Name: City in the Sky West Garden Near Baba Tower
+  Region: City in the Sky
+  Exits:
+    City in the Sky West Garden Middle: Clawshot
+    City in the Sky Baba Tower Top: Nothing
+
+- Name: City in the Sky West Garden Middle
+  Region: City in the Sky
+  Locations:
+    City in the Sky West Garden Corner Chest: Nothing
+    City in the Sky West Garden Lone Island Chest: Double_Clawshots
+    City in the Sky Garden Island Poe: Double_Clawshots and Can_Defeat_Poe
+  Exits:
+    City in the Sky West Garden Near Peahat Train North: Double_Clawshots
+
+- Name: City in the Sky West Garden Near Peahat Train North
+  Region: City in the Sky
+  Locations:
+    City in the Sky West Garden Lower Chest: Nothing
+  Exits:
+    City in the Sky Peahat Train Room North Near West Garden: Nothing
+    City in the Sky West Garden Near Baba Tower: Clawshot
+
+- Name: City in the Sky West Garden Near Peahat Train South
+  Region: City in the Sky
+  Locations:
+    City in the Sky West Garden Ledge Chest: Nothing
+  Exits:
+    City in the Sky West Garden Middle: Nothing
+    City in the Sky Peahat Train Room South Near West Garden: Nothing
+
+# CITY IN THE SKY PEAHAT TRAIN ROOM
+
+- Name: City in the Sky Peahat Train Room North Near West Garden
+  Region: City in the Sky
+  Exits:
+    City in the Sky Peahat Train Room South Near West Garden: Double_Clawshots
+    City in the Sky Peahat Train Room Near Outside Central Tower: Double_Clawshots
+    City in the Sky West Garden Near Peahat Train North: Nothing
+
+- Name: City in the Sky Peahat Train Room South Near West Garden
+  Region: City in the Sky
+  Exits:
+    City in the Sky Peahat Train Room North Near West Garden: Double_Clawshots
+    City in the Sky Peahat Train Room Near Outside Central Tower: Double_Clawshots
+    City in the Sky West Garden Near Peahat Train South: Nothing
+
+- Name: City in the Sky Peahat Train Room Near Outside Central Tower
+  Region: City in the Sky
+  Exits:
+    City in the Sky Peahat Train Room North Near West Garden: Double_Clawshots
+    City in the Sky Peahat Train Room South Near West Garden: Double_Clawshots
+    City in the Sky Outside Central Tower Ground: Nothing
+
+# CITY IN THE SKY OUTSIDE CENTRAL TOWER
+
+- Name: City in the Sky Outside Central Tower Ground
+  Region: City in the Sky
+  Exits:
+    City in the Sky Outside Central Tower Ledge: Clawshot
+    City in the Sky Lobby Above Ceiling Fan: Nothing
+    City in the Sky Peahat Train Room Near Outside Central Tower: Nothing
+
+- Name: City in the Sky Outside Central Tower Ledge
+  Region: City in the Sky
+  Exits:
+    City in the Sky Outside Central Tower Ropes: Can_Use_Tightrope
+
+- Name: City in the Sky Outside Central Tower Ropes
+  Region: City in the Sky
+  Locations:
+    City in the Sky Central Outside Ledge Chest: Can_Use_Tightrope and Can_Climb_Vines
+    City in the Sky Central Outside Poe Island Chest: Can_Use_Tightrope and Can_Climb_Vines
+    City in the Sky Poe Above Central Fan: Can_Use_Tightrope and Can_Defeat_Poe
+  Exits:
+    City in the Sky Lobby Above Highest Grating: Nothing
+    City in the Sky Outside Central Tower Ground: Nothing
+
+# CITY IN THE SKY EAST BRIDGE
+
+- Name: City in the Sky East Bridge Near Lobby
+  Region: City in the Sky
+  Events:
+    Can Spin City in the Sky East Bridge: Spinner
+  Exits:
+    City in the Sky Lobby Floor: Nothing
+    City in the Sky East Bridge Near East Helmasaur Room: "'Can_Spin_City_in_the_Sky_East_Bridge'"
+
+- Name: City in the Sky East Bridge Near East Helmasaur Room
+  Region: City in the Sky
+  Exits:
+    City in the Sky East Helmasaur Room Top Near East Bridge: City_in_the_Sky_Small_Key or Small_Keys == Keysy
+    City in the Sky East Bridge Near Lobby: "'Can_Spin_City_in_the_Sky_East_Bridge'"
+
+- Name: City in the Sky Under East Bridge
+  Region: City in the Sky
+  Exits:
+    City in the Sky East Helmasaur Room Bottom Near East Bridge: Nothing
+    City in the Sky East Bridge Near Lobby: Double_Clawshots and 'Can_Spin_City_in_the_Sky_East_Bridge'
+
+# CITY IN THE SKY EAST HELMASAUR ROOM
+
+- Name: City in the Sky East Helmasaur Room Top Near East Bridge
+  Region: City in the Sky
+  Events:
+    Can Hit City in the Sky East Helmasaur Room Crystal Switch: Can_Hit_Crystal_Switch_at_Range
+  Exits:
+    City in the Sky East Helmasaur Room Top Near Tower Before Miniboss: "'Can_Hit_City_in_the_Sky_East_Helmasaur_Room_Crystal_Switch'"
+    City in the Sky East Bridge Near East Helmasaur Room: Nothing
+
+- Name: City in the Sky East Helmasaur Room Top Near Tower Before Miniboss
+  Region: City in the Sky
+  Exits:
+    City in the Sky Tower Before Miniboss Higher Caged Area: Nothing
+    City in the Sky East Helmasaur Room Top Near East Tileworm Room: "'Can_Hit_City_in_the_Sky_East_Helmasaur_Room_Crystal_Switch'"
+    City in the Sky East Helmasaur Room Top Near East Bridge: "'Can_Hit_City_in_the_Sky_East_Helmasaur_Room_Crystal_Switch'"
+
+- Name: City in the Sky East Helmasaur Room Top Near East Tileworm Room
+  Region: City in the Sky
+  Events:
+    Can Hit City in the Sky East Helmasaur Room Crystal Switch: Can_Hit_Crystal_Switch_at_Range
+  Exits:
+    City in the Sky East Tileworm Room Near East Helmasaur Room: Nothing
+    City in the Sky East Helmasaur Room Top Near Tower Before Miniboss: Nothing
+
+- Name: City in the Sky East Helmasaur Room Bottom Near Tower Before Miniboss
+  Region: City in the Sky
+  Exits:
+    City in the Sky East Helmasaur Room Bottom Near East Bridge: Double_Clawshots
+    City in the Sky Tower Before Miniboss Lower Caged Area: Nothing
+
+- Name: City in the Sky East Helmasaur Room Bottom Near East Bridge
+  Region: City in the Sky
+  Locations:
+    City in the Sky East Wing Lower Level Chest: Nothing
+  Exits:
+    City in the Sky Under East Bridge: Nothing
+    City in the Sky East Helmasaur Room Bottom Near Tower Before Miniboss: Double_Clawshots
+
+# CITY IN THE SKY EAST TILEWORM ROOM
+
+- Name: City in the Sky East Tileworm Room Near East Helmasaur Room
+  Region: City in the Sky
+  Locations:
+    City in the Sky East Tile Worm Small Chest: Nothing
+  Exits:
+    City in the Sky East Tileworm Room Near Double Dinalfos Room: Can_Launch_Tileworm
+    City in the Sky East Helmasaur Room Top Near East Tileworm Room: Nothing
+
+- Name: City in the Sky East Tileworm Room Near Double Dinalfos Room
+  Region: City in the Sky
+  Exits:
+    City in the Sky Double Dinalfos Room Bottom: Nothing
+    City in the Sky East Tileworm Room Near East Helmasaur Room: Clawshot or Can_Launch_Tileworm
+
+# CITY IN THE SKY DOUBLE DINALFOS ROOM
+
+- Name: City in the Sky Double Dinalfos Room Bottom
+  Region: City in the Sky
+  Exits:
+    City in the Sky Double Dinalfos Room Top: Can_Defeat_Dinalfos and Clawshot
+    City in the Sky East Tileworm Room Near Double Dinalfos Room: Can_Defeat_Dinalfos # Room locks when you go in
+
+- Name: City in the Sky Double Dinalfos Room Top
+  Region: City in the Sky
+  Exits:
+    City in the Sky Oocca Flight Room Near Double Dinalfos Room: Nothing
+    City in the Sky Double Dinalfos Room Bottom: Nothing
+
+# CITY IN THE SKY OOCCA FLIGHT ROOM
+
+- Name: City in the Sky Oocca Flight Room Near Double Dinalfos Room
+  Region: City in the Sky
+  Locations:
+    City in the Sky East Wing After Dinalfos Alcove Chest: Clawshot
+    City in the Sky East Wing After Dinalfos Ledge Chest: Nothing
+  Exits:
+    City in the Sky Oocca Flight Room Near Tower Before Miniboss: Clawshot
+    City in the Sky Double Dinalfos Room Top: Nothing
+
+- Name: City in the Sky Oocca Flight Room Near Tower Before Miniboss
+  Region: City in the Sky
+  Exits:
+    City in the Sky Tower Before Miniboss Top: Nothing
+
+# CITY IN THE SKY TOWER BEFORE MINIBOSS
+
+- Name: City in the Sky Tower Before Miniboss Top
+  Region: City in the Sky
+  Events:
+    Can Open City in the Sky Tower Before Miniboss Upper Gate: Clawshot
+  Exits:
+    City in the Sky Tower Before Miniboss Higher Caged Area: "'Can_Open_City_in_the_Sky_Tower_Before_Miniboss_Upper_Gate'"
+    City in the Sky Tower Before Miniboss Bottom: Nothing
+
+- Name: City in the Sky Tower Before Miniboss Bottom
+  Region: City in the Sky
+  Exits:
+    Aerolfos Miniboss Room: Nothing
+    City in the Sky Tower Before Miniboss Lower Caged Area: Double_Clawshots
+
+- Name: City in the Sky Tower Before Miniboss Higher Caged Area
+  Region: City in the Sky
+  Locations:
+    City in the Sky East First Wing Chest After Fans: Nothing
+  Exits:
+    City in the Sky East Helmasaur Room Top Near Tower Before Miniboss: Nothing
+    City in the Sky Tower Before Miniboss Bottom: "'Can_Open_City_in_the_Sky_Tower_Before_Miniboss_Upper_Gate'"
+
+- Name: City in the Sky Tower Before Miniboss Lower Caged Area
+  Region: City in the Sky
+  Exits:
+    City in the Sky East Helmasaur Room Bottom Near Tower Before Miniboss: Nothing
+
+# AEROLFOS MINIBOSS ROOM
+
+- Name: Aerolfos Miniboss Room
+  Locations:
+    City in the Sky Aeralfos Chest: Can_Defeat_Aerolfos
+  Exits:
+    City in the Sky Tower Before Miniboss Bottom: Can_Defeat_Aerolfos
+
+# CITY IN THE SKY NORTH FAN PASSAGEWAY
+
+- Name: City in the Sky North Fan Passageway Near Lobby
+  Region: City in the Sky
+  Exits:                                                                         
+    City in the Sky North Fan Passageway Near North Tower: Double_Clawshots and 'Can_Turn_on_City_in_the_Sky_North_Fan'
+    City in the Sky Lobby Floor: Nothing
+
+- Name: City in the Sky North Fan Passageway Near North Tower
+  Region: City in the Sky
+  Locations:
+    City in the Sky Chest Behind North Fan: Clawshot
+  Exits:
+    City in the Sky North Tower Bottom: Nothing
+    City in the Sky North Fan Passageway Near Lobby: Double_Clawshots and 'Can_Turn_on_City_in_the_Sky_North_Fan'
+
+# CITY IN THE SKY NORTH TOWER
+
+- Name: City in the Sky North Tower Bottom
+  Region: City in the Sky
+  Exits:
+    City in the Sky North Tower Top: Can_Defeat_Aerolfos and Double_Clawshots
+    City in the Sky North Fan Passageway Near North Tower: Nothing
+
+- Name: City in the Sky North Tower Top
+  Exits:
+    City in the Sky Boss Room: City_in_the_Sky_Big_Key or Big_Keys == Keysy
+    City in the Sky North Tower Bottom: Nothing
+
+# CITY IN THE SKY BOSS ROOM
+
+- Name: City in the Sky Boss Room
+  Events:
+    Can Complete City in the Sky: Can_Defeat_Argorok
+  Locations:
+    City in the Sky Argorok Heart Container: Can_Defeat_Argorok
+    City in the Sky Dungeon Reward: Can_Defeat_Argorok
+  Exits:
+    City in the Sky Entrance: Can_Defeat_Argorok

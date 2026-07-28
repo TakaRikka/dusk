@@ -1,0 +1,192 @@
+
+# GERUDO DESERT
+
+- Name: Gerudo Desert
+  Map Sector: Desert Province
+  Region: South Gerudo Desert
+  Can Warp: True
+  Locations:
+    Gerudo Desert Peahat Ledge Chest: Clawshot
+    Gerudo Desert East Canyon Chest: Nothing
+    Gerudo Desert Lone Small Chest: Nothing
+    Gerudo Desert West Canyon Chest: Clawshot
+    Gerudo Desert South Chest Behind Wooden Gates: Can_Defeat_Bulblin
+    Gerudo Desert Owl Statue Chest: Restored_Dominion_Rod
+    Gerudo Desert Owl Statue Sky Character: Restored_Dominion_Rod
+    Gerudo Desert Male Dayfly: Nothing
+    Gerudo Desert Female Dayfly: Nothing
+    Gerudo Desert East Poe: Can_Use_Senses and Night
+    Gerudo Desert Hint Sign: Nothing
+  Exits:
+    Gerudo Desert Skulltula Grotto: Can_Dig
+    Gerudo Desert Cave of Ordeals Plateau: Clawshot and Can_Defeat_Shadow_Beast
+    Gerudo Desert Basin: Nothing
+    Lake Hylia: Nothing # Modified rando savewarp
+
+- Name: Gerudo Desert Skulltula Grotto
+  Locations:
+    Gerudo Desert Skulltula Grotto Chest: Can_Defeat_Skulltula
+  Exits:
+    Gerudo Desert: Nothing
+
+- Name: Gerudo Desert Cave of Ordeals Plateau
+  Map Sector: Desert Province
+  Region: South Gerudo Desert
+  Can Warp: True
+  Locations:
+    Gerudo Desert Warp Portal: Can_Defeat_Shadow_Beast
+    Gerudo Desert Poe Above Cave of Ordeals: Can_Use_Senses and Night
+  Exits:
+    Cave of Ordeals: Nothing
+    Gerudo Desert: Nothing
+
+- Name: Gerudo Desert Basin
+  Map Sector: Desert Province
+  Region: North Gerudo Desert
+  Can Warp: True
+  Locations:
+    Gerudo Desert Northeast Chest Behind Gates: Can_Defeat_Bulblin and Can_Ride_Boars
+    Gerudo Desert Campfire North Chest: Nothing
+    Gerudo Desert Campfire East Chest: Can_Defeat_Bulblin and Can_Ride_Boars
+    Gerudo Desert Campfire West Chest: Can_Defeat_Bulblin and Can_Ride_Boars
+    Gerudo Desert Northwest Chest Behind Gates: Can_Defeat_Bulblin and Can_Ride_Boars
+  Exits:
+    Gerudo Desert North East Ledge: Clawshot
+    Gerudo Desert Chu Grotto: Can_Dig
+    Gerudo Desert Outside Bulblin Camp: Can_Defeat_Bulblin and Can_Ride_Boars
+    Gerudo Desert: Can_Defeat_Bulblin and Can_Ride_Boars
+
+- Name: Gerudo Desert North East Ledge
+  Map Sector: Desert Province
+  Region: North Gerudo Desert
+  Can Warp: True
+  Locations:
+    Gerudo Desert North Peahat Poe: Night and Can_Defeat_Poe
+  Exits:
+    Gerudo Desert Rock Grotto: Can_Dig
+    Gerudo Desert Basin: Nothing
+
+- Name: Gerudo Desert Rock Grotto
+  Locations:
+    Gerudo Desert Rock Grotto Lantern Chest: Can_Light_Torches
+    Gerudo Desert Rock Grotto First Poe: Can_Defeat_Poe
+    Gerudo Desert Rock Grotto Second Poe: Can_Defeat_Poe
+  Exits:
+    Gerudo Desert North East Ledge: Nothing
+
+- Name: Gerudo Desert Chu Grotto
+  Exits:
+    Gerudo Desert Basin: Nothing
+
+- Name: Gerudo Desert Outside Bulblin Camp
+  Map Sector: Desert Province
+  Region: North Gerudo Desert
+  Can Warp: True
+  Locations:
+    Gerudo Desert North Small Chest Before Bulblin Camp: Nothing
+    Outside Bulblin Camp Poe: Night and Can_Defeat_Poe
+    Gerudo Desert Golden Wolf: "'Howl_at_Lake_Hylia_Howling_Stone'"
+  Exits:
+    Bulblin Camp: Nothing
+    Gerudo Desert Basin: Can_Defeat_Bulblin and 'Can_Access_Gerudo_Desert_Basin'
+
+# BULBLIN CAMP
+
+- Name: Bulblin Camp
+  Map Sector: Desert Province
+  Region: Bulblin Camp
+  Can Warp: True
+  Locations:
+    Bulblin Camp First Chest Under Tower At Entrance: Nothing
+    Bulblin Camp Small Chest in Back of Camp: Nothing
+    Bulblin Camp Roasted Boar: Has_Damaging_Item
+    Bulblin Camp Poe: Night and Can_Defeat_Poe and (Gerudo_Desert_Bulblin_Camp_Key or Small_Keys == Keysy or Arbiters_Does_Not_Require_Bulblin_Camp == On)
+    Bulblin Guard Key: Can_Defeat_Bulblin
+    Bulblin Camp Hint Sign: Nothing
+  Exits:
+    Outside Arbiters Grounds: Arbiters_Does_Not_Require_Bulblin_Camp == On or (Can_Defeat_King_Bulblin_Desert and (Gerudo_Desert_Bulblin_Camp_Key or Small_Keys == Keysy))
+    Gerudo Desert Outside Bulblin Camp: Nothing
+
+- Name: Outside Arbiters Grounds
+  Map Sector: Desert Province
+  Region: Bulblin Camp
+  Can Warp: True
+  Locations:
+    Outside Arbiters Grounds Lantern Chest: Can_Light_Torches
+    Outside Arbiters Grounds Poe: Night and Can_Defeat_Poe
+  Exits:
+    Arbiters Grounds Entrance: Nothing
+    Bulblin Camp: Nothing
+
+# MIRROR CHAMBER
+
+- Name: Mirror Chamber Lower
+  Map Sector: Desert Province
+  Region: None
+  Can Warp: True
+  Exits:
+    Mirror Chamber Upper: Nothing
+    Arbiters Grounds Boss Room: Mirror_Chamber_Access == Open or (Mirror_Chamber_Access == Barrier and 'Can_Complete_Arbiters_Grounds')
+
+- Name: Mirror Chamber Upper
+  Map Sector: Desert Province
+  Region: Mirror Chamber
+  Can Warp: True
+  Locations:
+    Mirror Chamber Warp Portal: Can_Defeat_Shadow_Beast
+  Exits:
+    Twilight Realm Portal:  Mirror_Chamber_Portal and
+                            (Palace_of_Twilight_Requirements == Open or
+                            (Palace_of_Twilight_Requirements == Fused_Shadows and count(Progressive_Fused_Shadow, 3)) or
+                            (Palace_of_Twilight_Requirements == Mirror_Shards and count(Progressive_Mirror_Shard, 4)) or
+                            (Palace_of_Twilight_Requirements == Vanilla and 'Can_Complete_City_in_the_Sky'))
+    Mirror Chamber Lower: Can_Defeat_Shadow_Beast
+
+- Name: Twilight Realm Portal
+  Exits:
+    Palace of Twilight Entrance: Nothing
+    Mirror Chamber Upper: Can_Defeat_Shadow_Beast 
+
+# CAVE OF ORDEALS
+
+- Name: Cave of Ordeals
+  Events:
+    Can Beat 10 CoO Floors: Can_Defeat_Bokoblin and Can_Defeat_Keese and Can_Defeat_Rat and Can_Defeat_Baba_Serpent and 
+                            Can_Defeat_Skulltula and Can_Defeat_Bulblin and Can_Defeat_Torch_Slug and Can_Defeat_Fire_Keese and 
+                            Can_Defeat_Dodongo and Can_Defeat_Tektite and Can_Defeat_Lizalfos
+    Can Beat 20 CoO Floors: Spinner and 'Can_Beat_10_CoO_Floors' and Can_Defeat_Helmasaur and Can_Defeat_Rat and 
+                            Can_Defeat_Chu and Can_Defeat_Chu_Worm and Can_Defeat_Bubble and Can_Defeat_Bulblin and
+                            Can_Defeat_Keese and Can_Defeat_Rat and Can_Defeat_Stalhound and Can_Defeat_Poe and Can_Defeat_Leever
+    Can Beat 30 CoO Floors: Ball_and_Chain and 'Can_Beat_20_CoO_Floors' and Can_Defeat_Bokoblin and Can_Defeat_Ice_Keese and
+                            Can_Defeat_Keese and Can_Defeat_Rat and Can_Defeat_Ghoul_Rat and Can_Defeat_Stalchild and
+                            Can_Defeat_Redead_Knight and Can_Defeat_Bulblin and Can_Defeat_Stalfos and Can_Defeat_Skulltula and
+                            Can_Defeat_Bubble and Can_Defeat_Lizalfos and Can_Defeat_Fire_Bubble
+    Can Beat 40 CoO Floors: Restored_Dominion_Rod and 'Can_Beat_30_CoO_Floors' and Can_Defeat_Beamos and Can_Defeat_Keese and
+                            Can_Defeat_Torch_Slug and Can_Defeat_Fire_Keese and Can_Defeat_Dodongo and Can_Defeat_Fire_Bubble and
+                            Can_Defeat_Redead_Knight and Can_Defeat_Poe and Can_Defeat_Ghoul_Rat and Can_Defeat_Chu and
+                            Can_Defeat_Ice_Keese and Can_Defeat_Freezard and Can_Defeat_Chilfos and Can_Defeat_Ice_Bubble and
+                            Can_Defeat_Leever and Can_Defeat_Darknut
+    Can Beat 50 CoO Floors: Double_Clawshots and 'Can_Beat_40_CoO_Floors' and Can_Defeat_Armos and Can_Defeat_Bokoblin and
+                            Can_Defeat_Baba_Serpent and Can_Defeat_Lizalfos and Can_Defeat_Bulblin and Can_Defeat_Dinalfos and
+                            Can_Defeat_Poe and Can_Defeat_Redead_Knight and Can_Defeat_Chu and Can_Defeat_Freezard and
+                            Can_Defeat_Chilfos and Can_Defeat_Ghoul_Rat and Can_Defeat_Rat and Can_Defeat_Stalchild and
+                            Can_Defeat_Aerolfos and Can_Defeat_Darknut
+  Locations:
+    # Chest are HD Only
+    # Cave of Ordeals Floor 10 Chest: "'Can_Beat_10_CoO_Floors'"
+    # Cave of Ordeals Floor 20 Chest: "'Can_Beat_20_CoO_Floors'"
+    # Cave of Ordeals Floor 30 Chest: "'Can_Beat_30_CoO_Floors'"
+    # Cave of Ordeals Floor 40 Chest: "'Can_Beat_40_CoO_Floors'"
+    # Cave of Ordeals Floor 50 Chest: "'Can_Beat_50_CoO_Floors'"
+    Cave of Ordeals Hint Sign: Nothing
+    Cave of Ordeals Great Fairy Reward: "'Can_Beat_50_CoO_Floors'"
+    Cave of Ordeals Floor 17 Poe: Spinner and 'Can_Beat_10_CoO_Floors' and Can_Defeat_Helmasaur and Can_Defeat_Rat and Can_Defeat_Chu and
+                                  Can_Defeat_Chu_Worm and Can_Defeat_Bubble and Can_Defeat_Bulblin and Can_Defeat_Keese and Can_Defeat_Poe
+    Cave of Ordeals Floor 33 Poe: Restored_Dominion_Rod and 'Can_Beat_30_CoO_Floors' and Can_Defeat_Beamos and Can_Defeat_Keese and
+                                  Can_Defeat_Torch_Slug and Can_Defeat_Fire_Keese and Can_Defeat_Dodongo and Can_Defeat_Fire_Bubble and
+                                  Can_Defeat_Redead_Knight and Can_Defeat_Poe
+    Cave of Ordeals Floor 44 Poe: Double_Clawshots and 'Can_Beat_40_CoO_Floors' and Can_Defeat_Armos and Can_Defeat_Bokoblin and
+                                  Can_Defeat_Baba_Serpent and Can_Defeat_Lizalfos and Can_Defeat_Bulblin and Can_Defeat_Dinalfos and
+                                  Can_Defeat_Poe
+  Exits:
+    Gerudo Desert Cave of Ordeals Plateau: Clawshot

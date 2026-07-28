@@ -1,0 +1,256 @@
+# Macros are a way to shorten or make more explicit the logical requirements
+# for certain things. Macros can be used on logic statements like any item and do
+# not need any code modifications to run. Simply add them here and they can be used
+# in the world graph files.
+
+Can Open Doors: Human_Link
+Can Climb Ladders: Human_Link
+Can Climb Vines: Human_Link
+Can Talk to Humans: Human_Link
+Can Swing on Monkeys: Human_Link
+Can Pickup Bomblings: Human_Link
+Can Pull Lakebed Levers: Human_Link
+Can Pull Blocks: Human_Link
+Can Ride Boars: Human_Link
+Can Summon Hawk: Human_Link
+Can Talk to Animals: Wolf_Link
+Can Use Senses: Wolf_Link
+Can Dig: Wolf_Link
+Can Howl: Wolf_Link
+Can Sniff: Wolf_Link
+Can Midna Jump: Wolf_Link
+Can Use Tightrope: Wolf_Link
+Not Twilight: Human_Link or Wolf_Link
+
+Slingshot: Slingshot and 'Can_Refill_Slingshot_Seeds' and Human_Link
+Lantern: Lantern and 'Can_Refill_Lantern_Oil' and Human_Link
+Gale Boomerang: Gale_Boomerang and Human_Link
+Iron Boots: Iron_Boots and Human_Link
+Bow: Progressive_Bow and 'Can_Refill_Arrows' and Human_Link
+Regular Bombs: Bomb_Bag and 'Can_Refill_Regular_Bombs' and Human_Link
+Water Bombs: Bomb_Bag and 'Can_Refill_Water_Bombs' and Human_Link
+Bombs: Regular_Bombs or Water_Bombs
+Bomb Arrows: Bow and Bombs
+Spinner: Spinner and Human_Link
+Ball and Chain: Ball_and_Chain and Human_Link
+Zora Armor: Zora_Armor and Human_Link
+Magic Armor: Magic_Armor and Human_Link
+Shield: Hylian_Shield or 'Can_Buy_Wooden_Shield'
+Bottle: Empty_Bottle and Lantern # Can't empty lantern oil from a bottle until you have the lantern
+Asheis Sketch: Asheis_Sketch and Human_Link
+Aurus Memo: Aurus_Memo and Human_Link
+Renados Letter: Renados_Letter and Human_Link
+Invoice: Invoice and Human_Link
+Wooden Statue: Wooden_Statue and Human_Link
+Ilias Charm: Ilias_Charm and Human_Link
+
+Fishing Rod: Progressive_Fishing_Rod and Human_Link
+Coral Earring: count(Progressive_Fishing_Rod, 2) and Human_Link
+Sword: Progressive_Sword and Human_Link
+Ordon Sword: count(Progressive_Sword, 2) and Human_Link
+Master Sword: count(Progressive_Sword, 3) and Human_Link
+Light Sword: count(Progressive_Sword, 4) and Human_Link
+Big Quiver: count(Progressive_Bow, 2) and 'Can_Refill_Arrows' and Human_Link
+Giant Quiver: count(Progressive_Bow, 3) and 'Can_Refill_Arrows' and Human_Link
+Clawshot: Progressive_Clawshot and Human_Link
+Double Clawshots: count(Progressive_Clawshot, 2) and Human_Link
+Dominion Rod: Progressive_Dominion_Rod and Human_Link
+Restored Dominion Rod: count(Progressive_Dominion_Rod, 2) and Human_Link
+Big Wallet: Progressive_Wallet
+Giant Wallet: count(Progressive_Wallet, 2)
+Collosal Wallet: count(Progressive_Wallet, 3)
+
+Ending Blow: Sword and Progressive_Hidden_Skill
+Shield Attack: Shield and count(Progressive_Hidden_Skill, 2)
+Back Slice: Sword and count(Progressive_Hidden_Skill, 3)
+Helm Splitter: Sword and Shield_Attack and count(Progressive_Hidden_Skill, 4)
+Mortal Draw: Sword and count(Progressive_Hidden_Skill, 5)
+Jump Strike: Sword and count(Progressive_Hidden_Skill, 6)
+Great Spin: Sword and count(Progressive_Hidden_Skill, 7)
+
+Can Use Back Slice as Sword: Back_Slice_as_Sword == On and count(Progressive_Hidden_Skill, 3)
+
+Can Do Niche Stuff: Impossible # TODO: Make settings for all of these
+Can Do Difficult Combat: Impossible # TODO: Make settings for all of these
+
+Can Use Hot Spring Water: Bottle and 'Can_Buy_Hot_Spring_Water'
+Can Use Bottled Fairy: Bottle and 'Fairy_Access'
+# This will have to change if we allow players to start with less than 3 hearts
+Can Survive Damage: Logic_Damage_Multiplier != OHKO or Can_Use_Bottled_Fairy
+Can Survive One Bonk: Bonks_Do_Damage == Off or Can_Survive_Damage
+Can Survive Two Bonks: Bonks_Do_Damage == Off or Logic_Damage_Multiplier != OHKO or 
+                       (Can_Use_Bottled_Fairy and count(Empty_Bottle, 2))
+Can Survive Three Bonks: Bonks_Do_Damage == Off or Logic_Damage_Multiplier != OHKO or 
+                         (Can_Use_Bottled_Fairy and count(Empty_Bottle, 3))
+Can Smash: Bombs or Ball_and_Chain
+Can Break Webs: Lantern or Bombs or (Ball_and_Chain and Ball_and_Chain_Webs == On)
+Can Light Torches: Lantern
+Can Extinguish Torches: Gale_Boomerang
+Can Launch Bombs: Bombs and (Gale_Boomerang or Bow)
+Can Break Monkey Cage: Sword or Iron_Boots or Spinner or Ball_and_Chain or Wolf_Link or Bombs or
+                       Bow or Clawshot or (Can_Do_Niche_Stuff and Shield_Attack)
+Can Cut Hanging Web: Clawshot or Bow or Gale_Boomerang or Ball_and_Chain
+Can Break Wooden Barrier: Sword or Can_Smash or Wolf_Link or Can_Use_Back_Slice_as_Sword
+Can Refill Air: Zora_Armor # or glitched logic water bombs
+Can Cross Quicksand: Wolf_Link or Spinner
+Can Break Armor: Ball_and_Chain
+Can Break Ice: Ball_and_Chain
+Can Launch Canonball: Bombs
+Can Knock Down Hyrule Castle Painting: Bow or (Can_Do_Niche_Stuff and (Bombs or Jump_Strike))
+Can Knock Down Hanging Baba: Bow or Clawshot or Gale_Boomerang or Slingshot 
+
+Has Damaging Item: Sword or Ball_and_Chain or Bow or Bombs or Iron_Boots or Wolf_Link or Spinner
+Can Hit Crystal Switch: Clawshot or Has_Damaging_Item
+Can Hit Crystal Switch at Range: Clawshot or Bow
+
+Can Complete MDH: Skip_Midna's_Desparate_Hour == On or ('Can_Access_Castle_Town_South' and 'Can_Complete_Lakebed_Temple')
+
+
+
+# REGULAR ENEMIES
+
+# A lot of enemies use this identical logical requirement
+Can Defeat Generic Enemy: Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link or Bombs or 
+                          Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+
+Can Defeat Shadow Beast: Sword or (Wolf_Link and Can_Complete_MDH)
+Can Defeat Keese: Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link or Slingshot or 
+                  Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Fire Keese: Can_Defeat_Keese
+Can Defeat Ice Keese: Can_Defeat_Keese
+Can Defeat Shadow Keese: Can_Defeat_Keese
+Can Defeat Rat: Slingshot or Can_Defeat_Generic_Enemy
+Can Defeat Ghoul Rat: Can_Use_Senses
+Can Defeat Bokoblin: Can_Defeat_Generic_Enemy or Slingshot
+Can Defeat Red Bokoblin: Sword or Ball_and_Chain or Giant_Quiver or Wolf_Link or Bombs or
+                         Can_Use_Back_Slice_as_Sword or (Can_Do_Difficult_Combat and (Iron_Boots or Spinner))
+Can Defeat Bulblin: Can_Defeat_Generic_Enemy
+Can Defeat Deku Baba: Sword or Ball_and_Chain or Bow or Spinner or Shield_Attack or Slingshot or Clawshot or Bombs or
+                      Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Big Baba: Can_Defeat_Generic_Enemy
+Can Defeat Baba Serpent: Can_Defeat_Generic_Enemy
+Can Defeat Walltula: Ball_and_Chain or Slingshot or Bow or Gale_Boomerang or Clawshot
+Can Defeat Skulltula: Can_Defeat_Generic_Enemy
+Can Defeat Deku Like: Bombs
+Can Launch Tileworm: Gale_Boomerang
+Can Defeat Tileworm: Gale_Boomerang and Can_Defeat_Generic_Enemy
+Can Defeat Stalhound: Can_Defeat_Generic_Enemy
+Can Defeat Kargarok: Can_Defeat_Generic_Enemy
+Can Defeat Goron: Sword or Ball_and_Chain or Bow or Spinner or Shield_Attack or Slingshot or Clawshot or Bombs or
+                  (Can_Do_Niche_Stuff and Iron_Boots) or (Can_Do_Difficult_Combat and Lantern) or Can_Use_Back_Slice_as_Sword
+Can Defeat Torch Slug: Sword or Ball_and_Chain or Bow or Wolf_Link or Bombs 
+Can Defeat Dodongo: Can_Defeat_Generic_Enemy
+Can Defeat Beamos: Ball_and_Chain or Bow or Bombs
+Can Defeat Leever: Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link or Bombs or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Helmasaur: Can_Defeat_Generic_Enemy
+Can Defeat Tektite: Can_Defeat_Generic_Enemy
+Can Defeat Toado: Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link
+Can Defeat Water Toadpoli: Sword or Ball_and_Chain or Bow or Shield_Attack or (Can_Do_Difficult_Combat and Wolf_Link)
+Can Defeat Shell Blade: Water_Bombs or (Sword and (Iron_Boots or (Can_Do_Niche_Stuff and Magic_Armor)))
+Can Defeat Lizalfos: Sword or Ball_and_Chain or Bow or Wolf_Link or Bombs or
+                     Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Dinalfos: Sword or Ball_and_Chain or Wolf_Link
+Can Defeat Chu: Can_Defeat_Generic_Enemy or Clawshot
+Can Defeat Chu Worm: (Bombs or Clawshot) and (Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link or Can_Use_Back_Slice_as_Sword)
+Can Defeat Bubble: Can_Defeat_Generic_Enemy
+Can Defeat Fire Bubble: Can_Defeat_Bubble
+Can Defeat Ice Bubble: Can_Defeat_Bubble
+Can Defeat Skull Kid: Bow
+Can Defeat Poe: Can_Use_Senses
+Can Defeat Stalchild: Can_Defeat_Generic_Enemy
+Can Defeat Stalfos: Can_Smash
+Can Defeat Redead Knight: Sword or Ball_and_Chain or Bow or Wolf_Link or Bombs or
+                          Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat White Wolfos: Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link or Bombs or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Chilfos: Can_Defeat_Generic_Enemy
+Can Defeat Mini Freezard: Can_Defeat_Generic_Enemy
+Can Defeat Freezard: Ball_and_Chain
+Can Defeat Young Gohma: Sword or Ball_and_Chain or Bow or Spinner or Wolf_Link or Bombs or 
+                        (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Baby Gohma: Can_Defeat_Generic_Enemy or Slingshot or Clawshot
+Can Defeat Armos: Can_Defeat_Generic_Enemy or Clawshot
+Can Defeat Zant Head: Sword or Wolf_Link or Can_Use_Back_Slice_as_Sword
+
+# MINIBOSSES
+
+Can Defeat Ook: Sword or Ball_and_Chain or Bow or Wolf_Link or Bombs or 
+                Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Dangoro: Iron_Boots and (Sword or Wolf_Link or Bomb_Arrows or (Can_Do_Niche_Stuff and Ball_and_Chain))
+Can Defeat Deku Toad: Sword or Ball_and_Chain or Bow or Wolf_Link or Bombs or 
+                      Can_Use_Back_Slice_as_Sword or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat King Bulblin Desert: Sword or Ball_and_Chain or Wolf_Link or Giant_Quiver or Can_Use_Back_Slice_as_Sword or
+                                (Can_Do_Difficult_Combat and (Spinner or Iron_Boots or Bombs or Big_Quiver))
+Can Defeat Deathsword: Can_Use_Senses and Sword and (Clawshot or Bow or Gale_Boomerang)
+Can Defeat Darkhammer: Sword or Ball_and_Chain or Bow or Wolf_Link or Bombs or 
+                       (Can_Use_Back_Slice_as_Sword and Can_Do_Difficult_Combat) or (Can_Do_Niche_Stuff and Iron_Boots)
+Can Defeat Darknut: Sword or (Can_Do_Difficult_Combat and (Bombs or Ball_and_Chain))
+Can Defeat Aerolfos: Clawshot and (Sword or Ball_and_Chain or Wolf_Link or (Can_Do_Niche_Stuff and Iron_Boots))
+Can Defeat Phantom Zant: Sword or Wolf_Link
+Can Defeat King Bulblin Castle: Sword or Ball_and_Chain or Wolf_Link or Big_Quiver or (Can_Do_Difficult_Combat and 
+                                (Spinner or Iron_Boots or Bombs or Can_Use_Back_Slice_as_Sword))
+
+# BOSSES
+
+Can Defeat Diababa: Can_Launch_Bombs or (Gale_Boomerang and 
+                      (Sword or Ball_and_Chain or Wolf_Link or Bombs or 
+                        (Can_Do_Difficult_Combat and Can_Use_Back_Slice_as_Sword) or (Can_Do_Niche_Stuff and Iron_Boots)))
+Can Defeat Fyrus: Bow and Iron_Boots and (Sword or (Can_Do_Difficult_Combat and Can_Use_Back_Slice_as_Sword))
+Can Defeat Morpheel: Iron_Boots and Clawshot and Sword and Can_Refill_Air
+Can Defeat Stallord: Spinner and (Sword or Can_Do_Difficult_Combat)
+Can Defeat Blizzeta: Ball_and_Chain
+Can Defeat Armogohma: Bow and Dominion_Rod
+Can Defeat Argorok: Double_Clawshots and Ordon_Sword and (Iron_Boots or (Can_Do_Niche_Stuff and Magic_Armor))
+Can Defeat Zant: Master_Sword and Gale_Boomerang and (Iron_Boots or (Can_Do_Niche_Stuff and Magic_Armor)) and 
+                 Can_Refill_Air and Clawshot and Ball_and_Chain 
+
+Can Open North Faron Woods Gate: North_Faron_Woods_Gate_Key or Small_Keys == Keysy
+Can Complete Prologue: Skip_Prologue == On or (Sword and Slingshot and Can_Open_North_Faron_Woods_Gate)
+
+# You can only use warp portals from certain stages.
+# 'Can_Warp' is an event added to any logical area
+# which is part of a stage that players can warp from.
+Can Use Warp Portals: Wolf_Link and 'Can_Warp' and Can_Complete_Prologue
+
+Can Free All Monkeys in Forest Temple: "'Can_Free_Monkey_in_Entrance_Room' and 'Can_Free_Monkey_on_Totem' and 
+                                        'Can_Free_Monkey_in_Big_Baba_Room' and 'Can_Free_Monkey_in_West_Tileworm_Room' and
+                                        'Can_Free_Monkey_in_East_Tileworm_Room' and 'Can_Free_Monkey_in_Dark_Spider_Room' and
+                                        'Can_Free_Monkey_in_North_Deku_Like_Room'"
+
+Has Sword For Temple of Time: Temple_of_Time_Sword_Requirement == None or 
+                              (Temple_of_Time_Sword_Requirement == Wooden_Sword and Sword) or
+                              (Temple_of_Time_Sword_Requirement == Ordon_Sword and Ordon_Sword) or
+                              (Temple_of_Time_Sword_Requirement == Master_Sword and Master_Sword) or
+                              (Temple_of_Time_Sword_Requirement == Light_Sword and Light_Sword)
+
+Can Complete Faron Twilight: Faron_Twilight_Cleared == On or count(Faron_Twilight_Tear, 16)
+Can Complete Eldin Twilight: Eldin_Twilight_Cleared == On or count(Eldin_Twilight_Tear, 16)
+Can Complete Lanayru Twilight: Lanayru_Twilight_Cleared == On or count(Lanayru_Twilight_Tear, 16)
+Can Complete All Twilight: Can_Complete_Faron_Twilight and Can_Complete_Eldin_Twilight and Can_Complete_Lanayru_Twilight
+
+Can Defeat Faron Twilit Insect: Twilight
+Can Defeat Eldin Twilit Insect: Twilight
+Can Defeat Lanayru Twilit Insect: Twilight and Can_Complete_Eldin_Twilight
+
+Can Clear Forest: Can_Complete_Faron_Twilight and ('Can_Complete_Forest_Temple' or Faron_Woods_Logic == Open)
+
+Can Complete All Dungeons: "'Can_Complete_Forest_Temple' and 'Can_Complete_Goron_Mines' and 'Can_Complete_Lakebed_Temple' and 
+                            'Can_Complete_Arbiters_Grounds' and 'Can_Complete_Snowpeak_Ruins' and 'Can_Complete_Temple_of_Time' and
+                            'Can_Complete_City_in_the_Sky' and 'Can_Complete_Palace_of_Twilight'"
+
+Can Break Hyrule Castle Barrier: Hyrule_Barrier_Requirements == Open or 
+                                (Hyrule_Barrier_Requirements == Vanilla and 'Can_Complete_Palace_of_Twilight') or
+                                (Hyrule_Barrier_Requirements == Fused_Shadows and count(Progressive_Fused_Shadow, Hyrule_Barrier_Fused_Shadows)) or
+                                (Hyrule_Barrier_Requirements == Mirror_Shards and count(Progressive_Mirror_Shard, Hyrule_Barrier_Mirror_Shards)) or
+                                (Hyrule_Barrier_Requirements == Dungeons and dungeons_completed(Hyrule_Barrier_Dungeons)) or
+                                (Hyrule_Barrier_Requirements == Poe_Souls and count(Poe_Soul, Hyrule_Barrier_Poe_Souls)) or
+                                (Hyrule_Barrier_Requirements == Hearts and hearts(Hyrule_Barrier_Hearts))
+
+Can Open Hyrule Castle Big Key Gate: Hyrule_Castle_Big_Key_Requirements == None or
+                                     (Hyrule_Castle_Big_Key_Requirements == Fused_Shadows and count(Progressive_Fused_Shadow, Hyrule_Castle_Big_Key_Fused_Shadows)) or
+                                     (Hyrule_Castle_Big_Key_Requirements == Mirror_Shards and count(Progressive_Mirror_Shard, Hyrule_Castle_Big_Key_Mirror_Shards)) or
+                                     (Hyrule_Castle_Big_Key_Requirements == Dungeons and dungeons_completed(Hyrule_Castle_Big_Key_Dungeons)) or
+                                     (Hyrule_Castle_Big_Key_Requirements == Poe_Souls and count(Poe_Soul, Hyrule_Castle_Big_Key_Poe_Souls)) or
+                                     (Hyrule_Castle_Big_Key_Requirements == Hearts and hearts(Hyrule_Castle_Big_Key_Hearts))
+
+
+Can Talk to Springwater Goron: Nothing # TODO

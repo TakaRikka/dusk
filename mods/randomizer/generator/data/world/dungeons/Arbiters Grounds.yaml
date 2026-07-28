@@ -1,0 +1,347 @@
+
+# ARBITERS GROUNDS ENTRANCE ROOM
+
+- Name: Arbiters Grounds Entrance
+  Region: Arbiters Grounds
+  Dungeon Start Area: True
+  Events:
+    Can Pull Arbiters Entrance Chain: Clawshot or Can_Cross_Quicksand
+  Exits:
+    Arbiters Grounds Entrance Past Gate: "'Can_Pull_Arbiters_Entrance_Chain'"
+    Outside Arbiters Grounds: Nothing
+
+- Name: Arbiters Grounds Entrance Past Gate
+  Region: Arbiters Grounds
+  Events:
+    Can Refill Lantern Oil: Nothing
+  Locations:
+    Arbiters Grounds Entrance Chest: Can_Break_Wooden_Barrier
+  Exits:
+    Arbiters Grounds Dark Lantern Room: Arbiters_Grounds_Small_Key or Small_Keys == Keysy
+    Arbiters Grounds Entrance: "'Can_Pull_Arbiters_Entrance_Chain'"
+
+# ARBITERS GROUNDS DARK LANTERN ROOM
+
+- Name: Arbiters Grounds Dark Lantern Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Torch Room: Lantern
+    Arbiters Grounds Entrance Past Gate: Nothing
+
+# ARBITERS GROUNDS TORCH ROOM
+
+- Name: Arbiters Grounds Torch Room
+  Region: Arbiters Grounds
+  Events:
+    Poe Scent: Can_Use_Senses and Can_Sniff
+    Can Pull Torch Room Chain: "'Poe_Scent'"
+    Arbiters Grounds Poe 1: Can_Use_Senses
+  Locations:
+    Arbiters Grounds Torch Room East Chest: Nothing
+    Arbiters Grounds Torch Room West Chest: Nothing
+    Arbiters Grounds Torch Room Poe: Can_Use_Senses
+    Arbiters Grounds Hint Sign: Nothing
+  Exits:
+    Arbiters Grounds East Turnable Room Middle: Nothing
+    Arbiters Grounds Torch Room Near East Turnable Room Lower: "'Can_Pull_Torch_Room_Chain'"
+    Arbiters Grounds West Chandelier Room Near Lower Torch Room: Nothing
+    Arbiters Grounds Socket Room Near Torch Room: "'Arbiters_Grounds_Poe_1' and 'Arbiters_Grounds_Poe_2' and 'Arbiters_Grounds_Poe_3' and 'Arbiters_Grounds_Poe_4'"
+
+- Name: Arbiters Grounds Torch Room Near East Turnable Room Lower
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds East Turnable Room Lower: Nothing
+    Arbiters Grounds Torch Room: "'Can_Pull_Torch_Room_Chain'"
+
+- Name: Arbiters Grounds Torch Room Chandelier
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Torch Room: Nothing
+    Arbiters Grounds Ghoul Rat Room: Nothing
+    Arbiters Grounds West Chandelier Room: Nothing
+
+# ARBITERS GROUNDS EAST TURNABLE ROOM
+
+- Name: Arbiters Grounds East Turnable Room Middle
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds East Chandelier Room Near Turnable Room: count(Arbiters_Grounds_Small_Key, 2) or Small_Keys == Keysy
+    Arbiters Grounds Torch Room: Nothing
+
+- Name: Arbiters Grounds East Turnable Room Lower
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds East Lower Turnable Redead Chest: Nothing
+  Exits:
+    Arbiters Grounds Poe 2 Room: Can_Defeat_Redead_Knight and Clawshot
+    Arbiters Grounds Torch Room Near East Turnable Room Lower: Nothing
+
+# ARBITERS GROUNDS POE 2 ROOM
+
+- Name: Arbiters Grounds Poe 2 Room
+  Region: Arbiters Grounds
+  Events:
+    Arbiters Grounds Poe 2: Can_Use_Senses
+  Locations:
+    Arbiters Grounds East Turning Room Poe: Can_Use_Senses
+
+# ARBITERS GROUNDS EAST CHANDELIER ROOM
+
+- Name: Arbiters Grounds East Chandelier Room Near Turnable Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds East Chandelier Room Past Chandelier: Can_Pull_Blocks
+    Arbiters Grounds East Turnable Room Middle: Nothing
+
+- Name: Arbiters Grounds East Chandelier Room Past Chandelier
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds East Upper Turnable Chest: Nothing
+    Arbiters Grounds East Upper Turnable Redead Chest: Can_Break_Wooden_Barrier
+  Exits:
+    Arbiters Grounds Poe 3 Room Near East Chandelier Room: count(Arbiters_Grounds_Small_Key, 3) or Small_Keys == Keysy
+    Arbiters Grounds East Chandelier Room Near Turnable Room: Nothing
+
+# ARBITERS GROUNDS POE 3 ROOM
+
+- Name: Arbiters Grounds Poe 3 Room Near East Chandelier Room
+  Region: Arbiters Grounds
+  Events:
+    Arbiters Grounds Poe 3: Can_Use_Senses and Can_Defeat_Stalchild and Can_Defeat_Redead_Knight and 'Poe_Scent'
+  Locations:
+    Arbiters Grounds Hidden Wall Poe: Can_Use_Senses and Can_Defeat_Stalchild and Can_Defeat_Redead_Knight and 'Poe_Scent'
+  Exits:
+    Arbiters Grounds Poe 3 Room Near Ghoul Rat Room: Can_Defeat_Stalchild and Can_Defeat_Redead_Knight
+    Arbiters Grounds East Chandelier Room Past Chandelier: Impossible # Wall
+
+- Name: Arbiters Grounds Poe 3 Room Near Ghoul Rat Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Ghoul Rat Room: Nothing
+    Arbiters Grounds Poe 3 Room Near East Chandelier Room: Can_Defeat_Stalchild and Can_Defeat_Redead_Knight
+
+# ARBITERS GROUNDS GOUL RAT ROOM
+
+- Name: Arbiters Grounds Ghoul Rat Room
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds Ghoul Rat Room Chest: Nothing
+  Exits:
+    Arbiters Grounds Torch Room Chandelier: count(Arbiters_Grounds_Small_Key, 4) or Small_Keys == Keysy
+    Arbiters Grounds Poe 3 Room Near Ghoul Rat Room: Nothing
+
+# ARBITERS GROUNDS WEST CHANDELIER ROOM
+
+- Name: Arbiters Grounds West Chandelier Room Near Lower Torch Room
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds West Small Chest Behind Block: Nothing
+  Exits:
+    Arbiters Grounds West Chandelier Room: "'Can_Push_West_Chandelier_Room_Block'"
+
+- Name: Arbiters Grounds West Chandelier Room
+  Region: Arbiters Grounds
+  Events:
+    Can Push West Chandelier Room Block: Nothing
+  Locations:
+    Arbiters Grounds West Chandelier Chest: Nothing
+  Exits:
+    Arbiters Grounds West Chandelier Room Near Lower Torch Room: Nothing
+    Arbiters Grounds Single Stalfos Room Near West Chandelier Room: Nothing
+
+- Name: Arbiters Grounds West Chandelier Room High Platform
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Poe 4 Room: Nothing
+    Arbiters Grounds West Chandelier Room: Nothing
+
+# ARBITERS GROUNDS SINGLE STALFOS ROOM
+
+- Name: Arbiters Grounds Single Stalfos Room Near West Chandelier Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Single Stalfos Room Near Lantern Puzzle Room: Can_Break_Wooden_Barrier
+    Arbiters Grounds West Chandelier Room: Nothing
+
+- Name: Arbiters Grounds Single Stalfos Room Near Lantern Puzzle Room
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds West Stalfos West Chest: Nothing
+    Arbiters Grounds West Stalfos Northeast Chest: Can_Break_Wooden_Barrier
+  Exits:
+    Arbiters Grounds Lantern Puzzle Room Near Single Stalfos Room: Can_Defeat_Stalfos
+    Arbiters Grounds Single Stalfos Room Near West Chandelier Room: Can_Break_Wooden_Barrier
+
+# ARBITERS GROUNDS LANTERN PUZZLE ROOM
+
+- Name: Arbiters Grounds Lantern Puzzle Room Near Single Stalfos Room
+  Region: Arbiters Grounds
+  Events:
+    Can Light Arbiters Grounds Lantern Puzzle: Lantern
+  Exits:
+    Arbiters Grounds Lantern Puzzle Room Near Poe 4 Room: "'Can_Light_Arbiters_Grounds_Lantern_Puzzle'"
+    Arbiters Grounds Single Stalfos Room Near Lantern Puzzle Room: Nothing
+
+- Name: Arbiters Grounds Lantern Puzzle Room Near Poe 4 Room
+  Exits:
+    Arbiters Grounds Poe 4 Room: Nothing
+    Arbiters Grounds Lantern Puzzle Room Near Single Stalfos Room: "'Can_Light_Arbiters_Grounds_Lantern_Puzzle'"
+
+# Arbiters GROUNDS POE 4 ROOM
+
+- Name: Arbiters Grounds Poe 4 Room
+  Region: Arbiters Grounds
+  Events:
+    Arbiters Grounds Poe 4: Can_Use_Senses
+  Locations:
+    Arbiters Grounds West Poe: Can_Use_Senses
+  Exits:
+    Arbiters Grounds West Chandelier Room High Platform: Nothing
+    Arbiters Grounds Lantern Puzzle Room Near Poe 4 Room: Nothing
+
+# ARBITERS GROUNDS SOCKET ROOM
+
+- Name: Arbiters Grounds Socket Room Near Torch Room
+  Region: Arbiters Grounds
+  Events:
+    Can Spin Turning Wall Socket: Spinner
+  Exits:
+    Arbiters Grounds Socket Room Near North Turning Room: Clawshot # If the wall is already turned
+    Arbiters Grounds Socket Room Bottom Tower: "'Can_Spin_Turning_Wall_Socket'"
+    Arbiters Grounds Socket Room Near Torch Room: Nothing
+
+- Name: Arbiters Grounds Socket Room Near North Turning Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds North Turning Room Near Socket Room: Nothing
+    # Can't assume access the other way because of the potential wall
+
+- Name: Arbiters Grounds Socket Room Near Spinner Room
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds Big Key Chest: Nothing
+  Exits:
+    Arbiters Grounds Socket Room Near Torch Room: Spinner
+    Arbiters Grounds Spinner Room Near Socket Room: Nothing
+
+- Name: Arbiters Grounds Socket Room Bottom Tower
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Socket Room Near Boss Door: Spinner
+    Arbiters Grounds Socket Room Near Torch Room: "'Can_Spin_Turning_Wall_Socket'"
+
+- Name: Arbiters Grounds Socket Room Near Boss Door
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Boss Room: Arbiters_Grounds_Big_Key or Big_Keys == Keysy
+    Arbiters Grounds Socket Room Bottom Tower: Nothing
+
+# ARBITERS GROUNDS NORTH TURNING ROOM
+
+- Name: Arbiters Grounds North Turning Room Near Socket Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds North Turning Room Central Column: Nothing
+    Arbiters Grounds Socket Room Near North Turning Room: Nothing
+
+- Name: Arbiters Grounds North Turning Room Central Column
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds North Turning Room Chest: Nothing
+  Exits:
+    Arbiters Grounds North Turning Room Near Basement Spike Room: Nothing
+    Arbiters Grounds North Turning Room Near Socket Room: Clawshot
+
+- Name: Arbiters Grounds North Turning Room Near Basement Spike Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Basement Spike Room Near North Turning Room: count(Arbiters_Grounds_Small_Key, 5) or Small_Keys == Keysy
+
+# ARBITERS GROUNDS BASEMENT SPIKE ROOM
+
+- Name: Arbiters Grounds Basement Spike Room Near North Turning Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Basement Spike Room Near Spinner Traps: Can_Defeat_Ghoul_Rat
+    Arbiters Grounds North Turning Room Near Basement Spike Room: count(Arbiters_Grounds_Small_Key, 5) or Small_Keys == Keysy
+
+- Name: Arbiters Grounds Basement Spike Room Near Spinner Traps
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Triple Stalfos Room Center: Nothing
+
+# ARBITERS GROUNDS TRIPLE STALFOS ROOM
+
+- Name: Arbiters Grounds Triple Stalfos Room Center
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Triple Stalfos Room Near Miniboss Room: Can_Defeat_Stalfos
+    Arbiters Grounds Triple Stalfos Room Near Spinner Room: Spinner
+
+- Name: Arbiters Grounds Triple Stalfos Room Near Miniboss Room
+  Region: Arbiters Grounds
+  Exits:
+    Deathsword Miniboss Room: Nothing
+    Arbiters Grounds Triple Stalfos Room Near Spinner Room: Spinner
+    Arbiters Grounds Triple Stalfos Room Center: Nothing
+
+- Name: Arbiters Grounds Triple Stalfos Room Near Spinner Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Spinner Room Bottom: Nothing
+    Arbiters Grounds Triple Stalfos Room Center: Spinner
+    Arbiters Grounds Triple Stalfos Room Near Miniboss Room: Spinner
+
+# DEATHSWORD MINIBOSS ROOM
+
+- Name: Deathsword Miniboss Room
+  Locations:
+    Arbiters Grounds Death Sword Chest: Can_Defeat_Deathsword
+  Exits:
+    Arbiters Grounds Triple Stalfos Room Near Miniboss Room: Can_Defeat_Deathsword
+
+# ARBITERS GROUNDS SPINNER ROOM
+
+- Name: Arbiters Grounds Spinner Room Bottom
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds Spinner Room First Small Chest: Can_Cross_Quicksand
+    Arbiters Grounds Spinner Room Second Small Chest: Can_Cross_Quicksand
+    Arbiters Grounds Spinner Room Lower Central Small Chest: Can_Cross_Quicksand
+  Exits:
+    Arbiters Grounds Spinner Room Near Single Stalfos: Spinner
+    Arbiters Grounds Spinner Room Near Double Stalfos: Spinner
+    Arbiters Grounds Triple Stalfos Room Near Spinner Room: Can_Cross_Quicksand
+
+- Name: Arbiters Grounds Spinner Room Near Single Stalfos
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds Spinner Room Stalfos Alcove Chest: Nothing
+  Exits:
+    Arbiters Grounds Spinner Room Bottom: Nothing
+
+- Name: Arbiters Grounds Spinner Room Near Double Stalfos
+  Region: Arbiters Grounds
+  Locations:
+    Arbiters Grounds Spinner Room Lower North Chest: Nothing
+  Exits:
+    Arbiters Grounds Spinner Room Near Socket Room: Spinner
+    Arbiters Grounds Spinner Room Near Single Stalfos: Nothing
+    Arbiters Grounds Spinner Room Bottom: Nothing
+
+- Name: Arbiters Grounds Spinner Room Near Socket Room
+  Region: Arbiters Grounds
+  Exits:
+    Arbiters Grounds Socket Room Near Spinner Room: Nothing
+    Arbiters Grounds Spinner Room Near Double Stalfos: Nothing
+
+# ARBITERS GROUNDS BOSS ROOM
+
+- Name: Arbiters Grounds Boss Room
+  Events:
+    Can Complete Arbiters Grounds: Can_Defeat_Stallord
+  Locations:
+    Arbiters Grounds Stallord Heart Container: Can_Defeat_Stallord
+    Arbiters Grounds Dungeon Reward: Can_Defeat_Stallord
+  Exits:
+    Mirror Chamber Lower: Can_Defeat_Stallord

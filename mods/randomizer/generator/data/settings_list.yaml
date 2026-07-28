@@ -1,0 +1,561 @@
+######################
+##  Logic Settings  ##
+######################
+
+- Name: Logic Rules
+  Default Option: All Locations Reachable
+  Options:
+    - All Locations Reachable: "Logic is considered when placing items. Tricks and Glitches can be enabled for consideration below."
+    - Beatable Only: "Logic is considered when placing items only until the world is beatable. Remaining items are placed without logic consideration. Tricks and Glitches can be enabled for consideration below."
+    - No Logic: "Maximize randomization, logic is not considered when placing items. MAY BE IMPOSSIBLE TO BEAT."
+    # - Vanilla:                         "Items are placed in their vanilla locations."
+
+######################
+##  Access Options  ##
+######################
+
+- Name: Hyrule Barrier Requirements
+  Need In Game: True
+  Tracker Important: True
+  Default Option: Vanilla
+  Options:
+    - Open: "The barrier around Hyrule Castle is dispelled from the beginning."
+    - Vanilla: "The barrier will be dispelled once Palace of Twilight is cleared."
+    - Fused Shadows: "The barrier will be dispelled once the required number of Fused Shadows have been collected."
+    - Mirror Shards: "The barrier will be dispelled once the required number of Mirror Shards have been collected."
+    - Dungeons: "The barrier will be dispelled once the required number of Dungeons have been cleared."
+    - Poe Souls: "The barrier will be dispelled once the required number of Poe Souls have been collected."
+    - Hearts: "The barrier will be dispelled once the required number of Hearts have been reached."
+
+- Name: Hyrule Barrier Fused Shadows
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-3: No description available.
+
+- Name: Hyrule Barrier Mirror Shards
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-4: No description available.
+
+- Name: Hyrule Barrier Dungeons
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-8: No description available.
+
+- Name: Hyrule Barrier Poe Souls
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-60: No description available.
+
+- Name: Hyrule Barrier Hearts
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 4
+  Options:
+    - 4-20: No description available. # Hehe 420
+
+- Name: Palace of Twilight Requirements
+  Need In Game: True
+  Tracker Important: True
+  Default Option: Vanilla
+  Options:
+    - Open: "The Mirror of Twilight is open at the start of the game."
+    - Fused Shadows: "The player must collect all 3 Fused Shadows."
+    - Mirror Shards: "The player must collect all 4 Mirror Shards."
+    - Vanilla: "The player must complete City in the Sky."
+
+- Name: Faron Woods Logic
+  Tracker Important: True
+  Default Option: Closed
+  Options:
+    - Closed: "Midna will block the player from leaving Faron Woods until Forest Temple is completed."
+    - Open: "Midna will not prevent the player from leaving Faron Woods."
+
+- Name: Mirror Chamber Access
+  Need In Game: True
+  Tracker Important: True
+  Default Option: Open
+  Options:
+    - Open: "The entrance is open and operates like normal. If you start with the Mirror Chamber Portal, you can access the Stallord boss fight without going through Arbiter's Grounds."
+    - Barrier: "A barrier is placed in front of the Mirror Chamber entrance and goes away once Stallord is defeated."
+    - Closed: "The Mirror Chamber is isolated from the world and cannot be reached from the Stallord boss room. To access it, players will either need the portal or access from Palace of Twilight."
+
+######################
+##    Item Pool     ##
+######################
+
+- Name: Golden Bugs
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The Golden Bug locations across Hyrule will give the golden bug at that location in the base game."
+    - "On": "The Golden Bug locations across Hyrule will be randomized."
+
+- Name: Sky Characters
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The Sky Character locations across Hyrule will give Sky Characters."
+    - "On": "The Sky Character locations across Hyrule will be randomized."
+
+- Name: Gifts From NPCs
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Locations which involve an NPC giving you a gift will give the item expected from the base game."
+    - "On": "Locations which involve an NPC giving you a gift will be randomized."
+
+- Name: Shop Items
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Shop item locations will contain the item they have in the base game."
+    - "On": "Shop items will be randomized."
+
+- Name: Hidden Skills
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The golden wolf locations across Hyrule will give you Hidden Skills. You will be required to get at least one of them to obtain the Ending Blow."
+    - "On": "The golden wolf locations across Hyrule will be randomized."
+
+- Name: Hidden Rupees
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Rupees hidden in tricky locations will not be randomized."
+    - "On": "Rupees hidden in tricky locations will be randomized."
+
+- Name: Freestanding Rupees
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Rupees out in the open will not be randomized."
+    - "On": "Rupees out in the open will be randomized."
+
+- Name: Poe Souls
+  Tracker Important: True
+  Default Option: Vanilla
+  Options:
+    - Vanilla: "All poes will give poe souls as the item for beating them."
+    - Overworld: "Overworld poes will give randomized items. Poes in dungeons will still give poe souls."
+    - Dungeon: "Poes in dungeons will give randomized items. Overworld poes will will give poe souls."
+    - All: "All poes will be randomized."
+
+- Name: Ilia Memory Quest
+  Tracker Important: True
+  Default Option: Vanilla
+  Options:
+    - Vanilla: "The Ilia Memory Quest will work the same way as the base game. You'll start it by beating Temple of Time and then talking to Renado in Kakariko Village."
+    - Letter: "Renado's Letter will be shuffled into the world somewhere. You'll start the quest by finding Renado's Letter and then showing it to Telma in her bar."
+    - Invoice: "The Invoice will be shuffled into the world somewhere. You'll start the quest by finding the Invoice and showing it to the Doctor in Castle Town."
+    - Statue: "The Wooden Statue will be shuffled into the world somewhere. You'll start the quest by finding the Wooden Statue and then showing it to Ilia in Kakariko Village."
+    - Charm: "Ilia's Charm will be shuffled into the world somewhere. You'll start the quest by finding Ilia's Charm and then showing it to Ilia in Kakariko Village to complete the quest."
+
+- Name: Item Scarcity
+  Default Option: Vanilla
+  Options:
+    - Vanilla: "No changes to the item pool."
+    - Minimal: "Removes unrequired items such as Heart Containers and Pieces, Hawkeye, etc. Has as few items as possible for Bomb Bags, Bows, Hidden Skills, and Wallets. No Magic Armor and 1 Hidden Skill if Glitchless logic."
+    - Plentiful: "One extra copy of major items. There are 17 Heart Containers but no Pieces of Heart. Extra keys if `Keysanity` or `Any Dungeon`."
+
+- Name: Trap Item Frequency
+  Default Option: None
+  Options:
+    - None: "All items in the game will be genuine."
+    - Few: "Approximately 12.5% of non-major items will be replaced with 'traps' that don't give the item they appear to be."
+    - Many: "Approximately 39.1% of non-major items will be replaced with 'traps' that don't give the item they appear to be."
+    - Mayhem: "Approximately 62.7% of non-major items will be replaced with 'traps' that don't give the item they appear to be."
+    - Nightmare: "All of the non-major items will be replaced with 'traps' that don't give the item they appear to be."
+
+######################
+##   Dungeon Items  ##
+######################
+
+- Name: Small Keys
+  Tracker Important: True
+  Default Option: Vanilla
+  Random Low: Own Dungeon
+  Random High: Anywhere
+  Options:
+    - Vanilla: "Small Keys will appear in their vanilla locations."
+    - Own Dungeon: "Small Keys will appear inside their respective dungeon."
+    - Any Dungeon: "Small Keys can appear inside any dungeon."
+    # - Own Region: "Small Keys will appear in their dungeon's region."
+    - Overworld: "Small Keys will only appear in the overworld."
+    - Anywhere: "Small Keys can appear anywhere."
+    - Keysy: "Small Keys will not appear anywhere in the world and their locks will start opened."
+
+- Name: Big Keys
+  Tracker Important: True
+  Default Option: Vanilla
+  Options:
+    - Vanilla: "Big Keys will appear in their vanilla locations."
+    - Own Dungeon: "Big Keys will appear inside their respective dungeon."
+    - Any Dungeon: "Big Keys can appear inside any dungeon."
+    # - Own Region: "Big Keys appear in their dungeon's region."
+    - Overworld: "Big Keys will only appear in the overworld."
+    - Anywhere: "Big Keys can appear anywhere."
+    - Keysy: "Big Keys will not appear anywhere in the world and boss doors will start opened."
+
+- Name: Maps and Compasses
+  Default Option: Vanilla
+  Options:
+    - Vanilla: "Maps and Compasses will appear in their vanilla locations."
+    - Own Dungeon: "Maps and Compasses can appear anywhere inside their respective dungeon."
+    - Any Dungeon: "Maps and Compasses can appear inside any dungeon."
+    # - Own Region: "Maps and Compasses will appear in their dungeon's region."
+    - Overworld: "Maps and Compasses will only appear in the overworld."
+    - Anywhere: "Maps and Compasses can appear anywhere."
+    - Start With: "The player starts with all Maps and Compasses."
+
+- Name: Hyrule Castle Big Key Requirements
+  Need In Game: True
+  Tracker Important: True
+  Default Option: None
+  Options:
+    - None: "The gate is opened and the key is randomized according to the respective Big Key settings."
+    - Fused Shadows: "The gate will open once the required number of Fused Shadows have been collected."
+    - Mirror Shards: "The gate will open once the required number of Mirror Shards have been collected."
+    - Dungeons: "The gate will open once the required number of Dungeons have been cleared."
+    - Poe Souls: "The gate will open once the required number of Poe Souls have been collected."
+    - Hearts: "The gate will open once the required number of Hearts have been reached."
+
+- Name: Hyrule Castle Big Key Fused Shadows
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-3: No description available.
+
+- Name: Hyrule Castle Big Key Mirror Shards
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-4: No description available.
+
+- Name: Hyrule Castle Big Key Dungeons
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-8: No description available.
+
+- Name: Hyrule Castle Big Key Poe Souls
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 1
+  Options:
+    - 1-60: No description available.
+
+- Name: Hyrule Castle Big Key Hearts
+  Need In Game: True
+  Tracker Important: True
+  Default Option: 4
+  Options:
+    - 4-20: No description available. # Hehe 420
+
+- Name: Dungeon Rewards Can Be Anywhere
+  Default Option: "Off"
+  Options:
+    - "Off": "Dungeon reward items (Fused Shadows and Mirror Shards) will only appear at the end of dungeons."
+    - "On": "Dungeon reward items (Fused Shadows and Mirror Shards) can appear anywhere."
+
+- Name: No Small Keys on Bosses
+  Default Option: "Off"
+  Options:
+    - "Off": "Small keys will not be placed on boss heart container or dungeon reward checks."
+    - "On": "Small keys can potentially be placed on boss heart container or dungeon reward checks. You may be expected to defeat a dungeon's boss before progressing further into the dungeon."
+
+- Name: Unrequired Dungeons Are Barren
+  Tracker Important: True
+  Default Option: "On"
+  Options:
+    - "Off": "Unrequired dungeons may contain items needed to beat the game."
+    - "On": "Unrequired dungeons will not contain any items necessary to beat the game."
+
+######################
+##    Timesavers    ##
+######################
+
+- Name: Skip Prologue
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "You will be required to play through the prologue section of the game to begin the randomizer. This includes everything up to the second goat herding sequence."
+    - "On": "The prologue section of the game will be completed from the start."
+
+- Name: Faron Twilight Cleared
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "You will be required to complete the Castle Sewers and Faron Twilight section of the game."
+    - "On": "The Castle Sewers and Faron Twilight section of the game will be completed from the start."
+
+- Name: Eldin Twilight Cleared
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "You will be required to complete the Eldin Twilight section of the game."
+    - "On": "The Eldin Twilight section of the game will be completed from the start."
+
+- Name: Lanayru Twilight Cleared
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "You will be required to complete the Lanayru Twilight section of the game."
+    - "On": "The Lanayru Twilight section of the game will be completed from the start."
+
+- Name: Skip Midna's Desparate Hour
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "After completing Lakebed Temple, you will be required to complete the Midna's Desperate Hour section of the game. Note that some overworld poes require Midna's Desperate Hour to be completed before they spawn in."
+    - "On": "The Midna's Desperate Hour section of the game will be completed from the start."
+
+- Name: Skip Minor Cutscenes
+  Need In Game: True
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Minor cutscenes such as area introduction cutscenes and Midna text explanations will not be skipped."
+    - "On": "Minor cutscenes such as area introduction cutscenes and Midna text explanations will not play."
+
+- Name: Skip Major Cutscenes
+  Need In Game: True
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "If you want to skip a skippable cutscene, you must press the start button twice while the cutscene is playing."
+    - "On": "The randomizer will automatically skip any skippable cutscene as fast as possible."
+
+- Name: Unlock Map Regions
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The map will not start filled in at the beginning of the randomizer. You will have to travel to the different sections of the world to get them on the map."
+    - "On": "The map will start as filled in as possible. Certain sections such as Eldin and Lanayru will only be filled in if their Twilight section is cleared from the start."
+
+- Name: Open Door of Time
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "You will be required to lead the big statue down the Temple of Time to open the big door at the bottom."
+    - "On": "The big statue will already be set in place at the bottom of the Temple of Time and the door will be opened from the start."
+
+- Name: Active Goron Mines Magnets
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The switches to activate magnets in Goron Mines will need to be activated manually."
+    - "On": "The switches to activate magnets in Goron Mines will be activated from the start except for the highest one in the main room."
+
+- Name: Lower Hyrule Castle Chandelier
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The chandeliers in Hyrule Castle will all need to be lowered manually."
+    - "On": "One of the chandeliers in the Hyrule Castle main hall will be lowered from the start. This skips requiring Gale Boomerang and either Lantern or Bow to complete Hyrule Castle."
+
+- Name: Skip Bridge Donation
+  Need In Game: True
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "You will need to donate money at Kakariko Malo Mart to build the bridge between Eldin Field and Castle Town."
+    - "On": "The bridge between Eldin Field and Castle Town will be automatically built after Eldin and Lanayru Twilight are both completed."
+
+######################
+# Additional Settings#
+######################
+
+- Name: Starting Form
+  Tracker Important: True
+  Default Option: Human
+  Options:
+    - Human: Start as Human Link
+    - Wolf: Start as Wolf Link
+
+- Name: Bonks Do Damage
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": No description available.
+    - "On": No description available.
+
+- Name: Starting Time of Day
+  Default Option: Noon
+  Options:
+    - Morning: "Time of day will start at 9am."
+    - Noon: "Time of day will start at noon."
+    - Evening: "Time of day will start at 6pm."
+    - Night: "Time of day will start at midnight."
+
+- Name: Logic Transform Anywhere
+  Default Option: "On"
+  Options:
+    - "Off": "You will not be expected to transform in places that you normally can't."
+    - "On": "You may be expected to transform in places that require turning on the Dusklight Transform Anywhere setting."
+
+- Name: Logic Increase Wallet Capacity
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Logic will assume you have the same wallet capacities as the base game."
+    - "On": "Logic will assume that you have the Bigger Wallets Dusklight setting turned on."
+
+- Name: Logic Damage Multiplier
+  Default Option: Vanilla
+  Options:
+    - Vanilla: "Logic will assume your Dusklight Damage Multiplier is x1."
+    - Double: "Logic will assume your Dusklight Damage Multiplier is x2."
+    - Triple: "Logic will assume your Dusklight Damage Multiplier is x3."
+    - Quadruple: "Logic will assume your Dusklight Damage Multiplier is x4."
+    - OHKO: "Logic will assume your Dusklight Instant Death setting is turned on."
+
+#############################
+# Dungeon Entrance Settings #
+#############################
+
+- Name: Lakebed Does Not Require Water Bombs
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The entrance to Lakebed Temple will be blocked by a boulder and require using Water Bombs to blow up."
+    - "On": "The rock blocking access to the entrance of Lakebed Temple will be gone, meaning you can get in without Water Bombs."
+
+- Name: Arbiters Does Not Require Bulblin Camp
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Bulblin Camp will have to be completed to access the entrance to Arbiter's Grounds. This will require finding the Gerudo Desert Bulblin Camp Key."
+    - "On": "Bulblin Camp will be cleared at the start of the randomizer."
+
+- Name: Snowpeak Does Not Require Reekfish Scent
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Getting the reekfish scent will be required for running through the blizzard on Snowpeak Mountain. Getting the reekfish scent requires the Coral Earring."
+    - "On": "The randomizer will start you with the reekfish scent, meaning you can go through the Snowpeak Mountain blizzard without needing the Coral Earring."
+
+- Name: Sacred Grove Does Not Require Skull Kid
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Getting through the Lost Woods will require completing the Skull Kid chase sequence."
+    - "On": "The Skull Kid chase sequence in the Lost Woods will start already completed."
+
+- Name: City Does Not Require Filled Skybook
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "The canon to City in the Sky will spawn in Lake Hylia when the Sky Book has been completed."
+    - "On": "The canon to City in the Sky will be in Lake Hylia from the start."
+
+- Name: Goron Mines Entrance
+  Tracker Important: True
+  Default Option: Closed
+  Options:
+    - Closed: "Accessing Goron Mines will require climbing up to the Death Mountain Sumo Hall and wrestling with the Goron Elder."
+    - No Wrestling: "Accessing Goron Mines will require climbing up to the Death Mountain Sumo Hall, but wrestling the Goron Elder will not be necessary."
+    - Open: "The elevator shortcut to the Death Mountain Sumo Hall will be open, and can be used to access Goron Mines."
+
+- Name: Temple of Time Sword Requirement
+  Need In Game: True
+  Tracker Important: True
+  Default Option: None
+  Options:
+    - None: "The door to the past will be open from the start."
+    - Wooden Sword: "The door to the past will require striking at least the Wooden Sword into the Master Sword pedestal."
+    - Ordon Sword: "The door to the past will require striking at least the Ordon Sword into the Master Sword pedestal."
+    - Master Sword: "The door to the past will require striking at least the Master Sword into the Master Sword pedestal."
+    - Light Sword: "The door to the past will require striking the Light Sword into the Master Sword pedestal."
+
+- Name: Randomize Starting Spawn
+  Default Option: "Off"
+  Options:
+    - "Off": "Link will start outside his house."
+    - "On": "Link will start in a random area."
+
+- Name: Randomize Dungeon Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a dungeon will lead to the vanilla dungeon."
+    - "On": "Entering a dungeon will lead to a random dungeon."
+    - "On + Hyrule Castle": "Entering a dungeon will lead to a random dungeon. Hyrule Castle's entrance will be shuffled as well."
+
+- Name: Randomize Boss Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a boss door will lead to the intended boss."
+    - "On": "Entering a boss door will lead to a random boss."
+
+- Name: Randomize Grotto Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a grotto will lead to the intended grotto."
+    - "On": "Entering a grotto will lead to a random grotto."
+
+- Name: Randomize Cave Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a door or loadzone that leads to a cave area will lead to the intended cave."
+    - "On": "Entering a door or loadzone that leads to a cave area will lead to a random cave."
+
+- Name: Randomize Interior Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a door or loadzone that leads to an interior area will lead to the intended area."
+    - "On": "Entering a door or loadzone that leads to an interior area will lead to a random intended area."
+
+- Name: Randomize Overworld Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a loadzone that leads to an overworld area will lead to the intended area."
+    - "On": "Entering a loadzone that leads to an overworld area will lead to a random area."
+
+- Name: Decouple Double Door Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a left door will lead to the same location as the corresponding right door."
+    - "On": "Entering a left door may lead somewhere different than the corresponding right door (only if the door's type is randomized)."
+
+- Name: Decouple Entrances
+  Tracker Important: True
+  Default Option: "Off"
+  Options:
+    - "Off": "Entering a location and taking the entrance behind you will take you back to where you came from."
+    - "On": "Entering a location and taking the entrance behind you will take you to a random location."
+
+
+#############################
+##       Logic Tricks      ##
+#############################
+
+- Name: Back Slice as Sword
+  Default Option: "Off"
+  Options:
+    - "Off": "Back Slicing without a sword can be logically required to do damage."
+    - "On": "Back Slicing without a sword can be logically required to do damage."
+    
+- Name: Ball and Chain Webs
+  Default Option: "Off"
+  Options:
+    - "Off": "Ball and Chain will not be required to break webs."
+    - "On": "Ball and Chain may be required to break webs."

@@ -1,0 +1,194 @@
+# PALACE OF TWILIGHT ENTRANCE
+
+- Name: Palace of Twilight Entrance
+  Region: Palace of Twilight
+  Dungeon Start Area: True
+  Events:
+    Can Place East Sol at Palace of Twilight Entrance: "'Can_Bring_East_Sol_to_Palace_of_Twilight_Entrance'"
+    Can Place West Sol at Palace of Twilight Entrance: "'Can_Bring_West_Sol_to_Palace_of_Twilight_Entrance'"
+  Locations:
+    Palace of Twilight Collect Both Sols: "'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance' and 'Can_Place_West_Sol_at_Palace_of_Twilight_Entrance'"
+    Palace of Twilight Hint Sign: Nothing
+  Exits:
+    Palace of Twilight West Wing First Room Near Entrance: Nothing
+    Palace of Twilight Entrance Near East Wing First Room: Nothing
+    Palace of Twilight Entrance Near North Wing: Light_Sword
+    Twilight Realm Portal: Nothing
+
+- Name: Palace of Twilight Entrance Near East Wing First Room
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight East Wing First Room Near Entrance: Nothing
+    Palace of Twilight Entrance: "'Can_Place_West_Sol_at_Palace_of_Twilight_Entrance'"
+
+- Name: Palace of Twilight Entrance Near North Wing
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight North Wing First Room Bottom: Nothing
+    Palace of Twilight Entrance: Light_Sword
+
+# PALACE OF TWILIGHT WEST WING FIRST ROOM
+
+- Name: Palace of Twilight West Wing First Room Near Entrance
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight West Wing First Room Central Chest: Can_Defeat_Zant_Head
+    Palace of Twilight West Wing Chest Behind Wall of Darkness: Light_Sword and Clawshot
+  Exits:
+    Palace of Twilight West Wing First Room Near Second Room: Clawshot
+    Palace of Twilight Entrance: Nothing
+
+- Name: Palace of Twilight West Wing First Room Near Second Room
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight West Wing Second Room Near First Room: count(Palace_of_Twilight_Small_Key, 6) or (Small_Keys == Vanilla and count(Palace_of_Twilight_Small_Key, 3)) or Small_Keys == Keysy
+    Palace of Twilight West Wing First Room Near Entrance: Nothing
+
+# PALACE OF TWILIGHT WEST WING SECOND ROOM
+
+- Name: Palace of Twilight West Wing Second Room Near First Room
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight West Wing Second Room Middle: Nothing
+    Palace of Twilight West Wing First Room Near Second Room: Nothing
+
+- Name: Palace of Twilight West Wing Second Room Middle
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight West Wing Second Room Central Chest: Can_Defeat_Zant_Head
+    Palace of Twilight West Wing Second Room Lower South Chest: Can_Defeat_Zant_Head
+    Palace of Twilight West Wing Second Room Southeast Chest: Double_Clawshots
+  Exits:
+    Palace of Twilight West Wing Second Room Near Phantom Zant Room: Clawshot
+    Palace of Twilight West Wing Second Room Near First Room: "'Can_Bring_West_Sol_to_Palace_of_Twilight_Entrance'"
+
+- Name: Palace of Twilight West Wing Second Room Near Phantom Zant Room
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight West Wing Phantom Zant Room: count(Palace_of_Twilight_Small_Key, 7) or Small_Keys == Keysy
+    Palace of Twilight West Wing Second Room Middle: Nothing
+
+# PALACE OF TWILIGHT WEST WING PHANTOM ZANT ROOM
+
+- Name: Palace of Twilight West Wing Phantom Zant Room
+  Region: Palace of Twilight
+  Events:
+    Can Bring West Sol to Palace of Twilight Entrance: Can_Defeat_Phantom_Zant and Human_Link # Only human can carry the sol
+  Exits:
+    Palace of Twilight West Wing Second Room Near Phantom Zant Room: "'Can_Bring_West_Sol_to_Palace_of_Twilight_Entrance'"
+
+# PALACE OF TWILIGHT EAST WING FIRST ROOM
+
+- Name: Palace of Twilight East Wing First Room Near Entrance
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight East Wing First Room Bottom: Nothing
+    Palace of Twilight East Wing First Room Near Second Room: Clawshot
+
+- Name: Palace of Twilight East Wing First Room Bottom
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight East Wing First Room East Alcove Chest: Light_Sword or 'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance'
+    Palace of Twilight East Wing First Room West Alcove Chest: Light_Sword or 'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance'
+  Exits:
+    Palace of Twilight East Wing First Room Near Second Room: Double_Clawshots or Light_Sword or 'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance'
+
+- Name: Palace of Twilight East Wing First Room Near Second Room
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight East Wing First Room North Small Chest: Nothing
+    Palace of Twilight East Wing First Room Zant Head Chest: Can_Defeat_Zant_Head
+  Exits:
+    Palace of Twilight East Wing Second Room Near First Room: count(Palace_of_Twilight_Small_Key, 6) or (Small_Keys == Vanilla and count(Palace_of_Twilight_Small_Key, 3)) or Small_Keys == Keysy
+    Palace of Twilight East Wing First Room Bottom: Nothing
+    Palace of Twilight East Wing First Room Near Entrance: Light_Sword or 'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance'
+
+# PALACE OF TWILIGHT EAST WING SECOND ROOM
+
+- Name: Palace of Twilight East Wing Second Room Near First Room
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight East Wing Second Room Near Phantom Zant Room: Clawshot and Can_Defeat_Zant_Head and Can_Defeat_Shadow_Beast
+    Palace of Twilight East Wing First Room Near Second Room: Nothing
+
+- Name: Palace of Twilight East Wing Second Room Near Phantom Zant Room
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight East Wing Second Room Northeast Chest: Double_Clawshots
+    Palace of Twilight East Wing Second Room Northwest Chest: Clawshot
+    Palace of Twilight East Wing Second Room Southwest Chest: Double_Clawshots
+    Palace of Twilight East Wing Second Room Southeast Chest: Double_Clawshots and Can_Defeat_Zant_Head and Can_Defeat_Shadow_Beast
+  Exits:
+    Palace of Twilight East Wing Phantom Zant Room: count(Palace_of_Twilight_Small_Key, 7) or Small_Keys == Keysy
+    Palace of Twilight East Wing Second Room Near First Room: Double_Clawshots and 'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance'
+
+# PALACE OF TWILIGHT EAST PHANTOM ZANT ROOM
+
+- Name: Palace of Twilight East Wing Phantom Zant Room
+  Region: Palace of Twilight
+  Events:
+    Can Bring East Sol to Palace of Twilight Entrance: Can_Defeat_Phantom_Zant and Human_Link
+  Exits:
+    Palace of Twilight East Wing Second Room Near Phantom Zant Room: "'Can_Place_East_Sol_at_Palace_of_Twilight_Entrance'"
+
+# PALACE OF TWILIGHT NORTH WING FIRST ROOM
+
+- Name: Palace of Twilight North Wing First Room Bottom
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight Central First Room Chest: Light_Sword and Can_Defeat_Zant_Head
+  Exits:
+    Palace of Twilight Entrance Near North Wing: Nothing
+    Palace of Twilight North Wing First Room Top: Light_Sword
+
+- Name: Palace of Twilight North Wing First Room Top
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight North Wing Outside Room: count(Palace_of_Twilight_Small_Key, 5) or Small_Keys == Keysy
+    Palace of Twilight North Wing First Room Bottom: Nothing
+
+# PALACE OF TWILIGHT NORTH WING OUTSIDE ROOM
+
+- Name: Palace of Twilight North Wing Outside Room
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight Big Key Chest: Light_Sword and Double_Clawshots
+    Palace of Twilight Central Outdoor Chest: Light_Sword and Can_Defeat_Zant_Head
+  Exits:
+    Palace of Twilight North Wing Tower Bottom: count(Palace_of_Twilight_Small_Key, 6) or Small_Keys == Keysy
+    Palace of Twilight North Wing First Room Top: Nothing
+
+# PALACE OF TWILIGHT NORTH WING TOWER
+
+- Name: Palace of Twilight North Wing Tower Bottom
+  Region: Palace of Twilight
+  Locations:
+    Palace of Twilight Central Tower Chest: Clawshot and Light_Sword and Can_Defeat_Zant_Head
+  Exits:
+    Palace of Twilight North Wing Tower Top: Clawshot and Light_Sword
+    Palace of Twilight North Wing Outside Room: Nothing
+
+- Name: Palace of Twilight North Wing Tower Top
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight Boss Door Room: count(Palace_of_Twilight_Small_Key, 7) or Small_Keys == Keysy
+    Palace of Twilight North Wing Tower Bottom: Nothing
+
+# PALACE OF TWILIGHT BOSS DOOR ROOM
+
+- Name: Palace of Twilight Boss Door Room
+  Region: Palace of Twilight
+  Exits:
+    Palace of Twilight Boss Room: Can_Defeat_Shadow_Beast and (Palace_of_Twilight_Big_Key or Big_Keys == Keysy)
+    Palace of Twilight North Wing Tower Top: Nothing
+
+# PALACE OF TWILIGHT BOSS ROOM
+
+- Name: Palace of Twilight Boss Room
+  Events:
+    Can Complete Palace of Twilight: Can_Defeat_Zant
+  Locations:
+    Palace of Twilight Zant Heart Container: Can_Defeat_Zant
+  Exits:
+    Palace of Twilight Entrance: Can_Defeat_Zant
+  

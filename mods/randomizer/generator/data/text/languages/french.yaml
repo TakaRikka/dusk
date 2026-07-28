@@ -1,0 +1,2417 @@
+# This file contains all custom French text for the dusklight randomizer
+
+# NOTES FOR TRANSLATORS:
+# - You should only be translating the "Text" fields for each element in this file. Do not translate the
+# - Text being surrounded by braces '{}' means that the text will be colored. If a text field begins with a brace,
+#   the entire field must be surrounded with quotation marks.
+# - Below each text element, you can specify a given text's gender and/or plurality. If you need additional
+#   specifiers for pieces of text, let us know. If no gender is provided, the assumption is no gender. If no
+#   plurality is provided, the assumed plurality is singular.
+
+# ITEM NAMES
+Green Rupee:
+  Standard:
+    Text: Green Rupee
+  Pretty:
+    Text: a {Green Rupee}
+  Cryptic:
+    Text: a {penny}
+
+Blue Rupee:
+  Standard:
+    Text: Blue Rupee
+  Pretty:
+    Text: a {Blue Rupee}
+  Cryptic:
+    Text: a {fiver}
+
+Yellow Rupee:
+  Standard:
+    Text: Yellow Rupee
+  Pretty:
+    Text: a {Yellow Rupee}
+  Cryptic:
+    Text: some {change}
+
+Red Rupee:
+  Standard:
+    Text: Red Rupee
+  Pretty:
+    Text: a {Red Rupee}
+  Cryptic:
+    Text: "{couch cash}"
+
+Purple Rupee:
+  Standard:
+    Text: Purple Rupee
+  Pretty:
+    Text: a {Purple Rupee}
+  Cryptic:
+    Text: a {good sum}
+
+Orange Rupee:
+  Standard:
+    Text: Orange Rupee
+  Pretty:
+    Text: an {Orange Rupee}
+  Cryptic:
+    Text: a {payday}
+
+Silver Rupee:
+  Standard:
+    Text: Silver Rupee
+  Pretty:
+    Text: a {Silver Rupee}
+  Cryptic:
+    Text: "{many riches}"
+
+Bombs 5:
+  Standard:
+    Text: Bombs 5
+  Pretty:
+    Text: "{Bombs (5)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {regular explosives}
+    Plurality: Plural
+
+Bombs 10:
+  Standard:
+    Text: Bombs 10
+  Pretty:
+    Text: "{Bombs (10)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {regular explosives}
+    Plurality: Plural
+
+Bombs 20:
+  Standard:
+    Text: Bombs 20
+  Pretty:
+    Text: "{Bombs (20)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {regular explosives}
+    Plurality: Plural
+
+Bombs 30:
+  Standard:
+    Text: Bombs 30
+  Pretty:
+    Text: "{Bombs (30)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {regular explosives}
+    Plurality: Plural
+
+Arrows 10:
+  Standard:
+    Text: Arrows 10
+  Pretty:
+    Text: "{Arrows (10)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {thin ammo}
+
+Arrows 20:
+  Standard:
+    Text: Arrows 20
+  Pretty:
+    Text: "{Arrows (20)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {thin ammo}
+
+Arrows 30:
+  Standard:
+    Text: Arrows 30
+  Pretty:
+    Text: "{Arrows (30)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {thin ammo}
+
+Seeds 50:
+  Standard:
+    Text: Seeds 50
+  Pretty:
+    Text: "{Seeds (50)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {pellets}
+    Plurality: Plural
+
+Foolish Item:
+  Standard:
+    Text: Foolish Item
+  Pretty:
+    Text: a {Foolish Item}
+  Cryptic:
+    Text: a {chilly surprise}
+
+Ordon Spring Portal:
+  Standard:
+    Text: Ordon Spring Portal
+  Pretty:
+    Text: the {Ordon Spring Portal}
+  Cryptic:
+    Text: a {portal to home}
+
+South Faron Portal:
+  Standard:
+    Text: South Faron Portal
+  Pretty:
+    Text: the {South Faron Portal}
+  Cryptic:
+    Text: a {portal to a forest clearing}
+
+Water Bombs 5:
+  Standard:
+    Text: Water Bombs 5
+  Pretty:
+    Text: "{Water Bombs (5)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {water explosives}
+    Plurality: Plural
+
+Water Bombs 10:
+  Standard:
+    Text: Water Bombs 10
+  Pretty:
+    Text: "{Water Bombs (10)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {water explosives}
+    Plurality: Plural
+
+Water Bombs 15:
+  Standard:
+    Text: Water Bombs 15
+  Pretty:
+    Text: "{Water Bombs (15)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {water explosives}
+    Plurality: Plural
+
+Bomblings 5:
+  Standard:
+    Text: Bomblings 5
+  Pretty:
+    Text: "{Bomblings (5)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {crawling explosives}
+    Plurality: Plural
+
+Bomblings 10:
+  Standard:
+    Text: Bomblings 10
+  Pretty:
+    Text: "{Bomblings (10)}"
+    Plurality: Plural
+  Cryptic:
+    Text: some {crawling explosives}
+    Plurality: Plural
+
+Piece of Heart:
+  Standard:
+    Text: Piece of Heart
+  Pretty:
+    Text: a {Piece of Heart}
+  Cryptic:
+    Text: some {love}
+
+Heart Container:
+  Standard:
+    Text: Heart Container
+  Pretty:
+    Text: a {Heart Container}
+  Cryptic:
+    Text: a {lot of love}
+
+Ordon Shield:
+  Standard:
+    Text: Ordon Shield
+  Pretty:
+    Text: the {Ordon Shield}
+  Cryptic:
+    Text: a {sturdy reminder of home}
+
+Wooden Shield:
+  Standard:
+    Text: Wooden Shield
+  Pretty:
+    Text: a {Wooden Shield}
+  Cryptic:
+    Text: a {wood protector}
+
+Hylian Shield:
+  Standard:
+    Text: Hylian Shield
+  Pretty:
+    Text: the {Hylian Shield}
+  Cryptic:
+    Text: an {unbreakable shield}
+
+Magic Armor:
+  Standard:
+    Text: Magic Armor
+  Pretty:
+    Text: the {Magic Armor}
+  Cryptic:
+    Text: "{magical clothing}"
+
+Zora Armor:
+  Standard:
+    Text: Zora Armor
+  Pretty:
+    Text: the {Zora Armor}
+  Cryptic:
+    Text: the {fish suit}
+
+Shadow Crystal:
+  Standard:
+    Text: Shadow Crystal
+  Pretty:
+    Text: the {Shadow Crystal}
+  Cryptic:
+    Text: a {crystal of dark power}
+
+Progressive Wallet:
+  Standard:
+    Text: Progressive Wallet
+  Pretty:
+    Text: a {Wallet}
+  Cryptic:
+    Text: a {money bag}
+
+Upper Zoras River Portal:
+  Standard:
+    Text: Upper Zoras River Portal
+  Pretty:
+    Text: the {Upper Zoras River Portal}
+  Cryptic:
+    Text: a {portal to some raging rapids}
+
+Castle Town Portal:
+  Standard:
+    Text: Castle Town Portal
+  Pretty:
+    Text: the {Castle Town Portal}
+  Cryptic:
+    Text: a {portal to the city}
+
+Gerudo Desert Portal:
+  Standard:
+    Text: Gerudo Desert Portal
+  Pretty:
+    Text: the {Gerudo Desert Portal}
+  Cryptic:
+    Text: a {portal to a challenging cave}
+
+North Faron Portal:
+  Standard:
+    Text: North Faron Portal
+  Pretty:
+    Text: the {North Faron Portal}
+  Cryptic:
+    Text: a {portal to a forest clearing}
+
+Hawkeye:
+  Standard:
+    Text: Hawkeye
+  Pretty:
+    Text: the {Hawkeye}
+  Cryptic:
+    Text: the {zoom-and-enhance}
+
+Progressive Sword:
+  Standard:
+    Text: Progressive Sword
+  Pretty:
+    Text: a {Sword}
+  Cryptic:
+    Text: a {sharp weapon}
+
+Gale Boomerang:
+  Standard:
+    Text: Gale Boomerang
+  Pretty:
+    Text: the {Gale Boomerang}
+  Cryptic:
+    Text: the {fairy of winds}
+
+Spinner:
+  Standard:
+    Text: Spinner
+  Pretty:
+    Text: the {Spinner}
+  Cryptic:
+    Text: the {gear rotator}
+
+Ball and Chain:
+  Standard:
+    Text: Ball and Chain
+  Pretty:
+    Text: the {Ball and Chain}
+  Cryptic:
+    Text: the {iron weight}
+
+Progressive Bow:
+  Standard:
+    Text: Progressive Bow
+  Pretty:
+    Text: a {Bow}
+  Cryptic:
+    Text: an {arrow launcher}
+
+Progressive Clawshot:
+  Standard:
+    Text: Progressive Clawshot
+  Pretty:
+    Text: a {Clawshot}
+  Cryptic:
+    Text: a {chain launcher}
+
+Iron Boots:
+  Standard:
+    Text: Iron Boots
+  Pretty:
+    Text: the {Iron Boots}
+    Plurality: Plural
+  Cryptic:
+    Text: the {heavy shoes}
+    Plurality: Plural
+
+Progressive Dominion Rod:
+  Standard:
+    Text: Dominion Rod
+  Pretty:
+    Text: a {Dominion Rod}
+  Cryptic:
+    Text: a {rod of control}
+
+Lantern:
+  Standard:
+    Text: Lantern
+  Pretty:
+    Text: the {Lantern}
+  Cryptic:
+    Text: the {small light}
+
+Progressive Fishing Rod:
+  Standard:
+    Text: Progressive Fishing Rod
+  Pretty:
+    Text: a {Fishing Rod}
+  Cryptic:
+    Text: a {rod of patience}
+
+Slingshot:
+  Standard:
+    Text: Slingshot
+  Pretty:
+    Text: the {Slingshot}
+  Cryptic:
+    Text: the {child's toy}
+
+Kakariko Gorge Portal:
+  Standard:
+    Text: Kakariko Gorge Portal
+  Pretty:
+    Text: the {Kakariko Gorge Portal}
+  Cryptic:
+    Text: a {portal to a big gap}
+
+Kakariko Village Portal:
+  Standard:
+    Text: Kakariko Village Portal
+  Pretty:
+    Text: the {Kakariko Village Portal}
+  Cryptic:
+    Text: a {portal to a village}
+
+Giant Bomb Bag:
+  Standard:
+    Text: Giant Bomb Bag
+  Pretty:
+    Text: a {Giant Bomb Bag}
+  Cryptic:
+    Text: an {explosive capacity upgrade}
+
+Bomb Bag:
+  Standard:
+    Text: Bomb Bag
+  Pretty:
+    Text: a {Bomb Bag}
+  Cryptic:
+    Text: a {bag for explosions}
+
+Death Mountain Portal:
+  Standard:
+    Text: Death Mountain Portal
+  Pretty:
+    Text: the {Death Mountain Portal}
+  Cryptic:
+    Text: a {portal to a volcano}
+
+Zoras Domain Portal:
+  Standard:
+    Text: Zoras Domain Portal
+  Pretty:
+    Text: the {Zora's Domain Portal}
+  Cryptic:
+    Text: a {portal to water}
+
+Empty Bottle:
+  Standard:
+    Text: Empty Bottle
+  Pretty:
+    Text: an {Empty Bottle}
+  Cryptic:
+    Text:
+
+Red Potion Shop:
+  Standard:
+    Text: Red Potion Shop
+  Pretty:
+    Text: a {Red Potion}
+  Cryptic:
+    Text: a {health refill}
+
+Blue Potion Shop:
+  Standard:
+    Text: Blue Potion Shop
+  Pretty:
+    Text: a {Blue Potion}
+  Cryptic:
+    Text: a {blue health refill}
+
+Bottle with Half Milk:
+  Standard:
+    Text: Bottle with Half Milk
+  Pretty:
+    Text: a {Bottle with Half Milk}
+  Cryptic:
+    Text: a {baby bottle}
+
+Fairy Tears:
+  Standard:
+    Text: Fairy Tears
+  Pretty:
+    Text: some {Fairy Tears}
+    Plurality: Plural
+  Cryptic:
+    Text: a {refill of great power}
+
+Bottle with Great Fairies Tears:
+  Standard:
+    Text: Bottle with Great Fairies Tears
+  Pretty:
+    Text: a {Bottle with Great Fairies Tears}
+  Cryptic:
+    Text: a {bottle of great power}
+
+Renados Letter:
+  Standard:
+    Text: Renados Letter
+  Pretty:
+    Text: "{Renado's Letter}"
+  Cryptic:
+    Text: a {letter from a concerned shaman}
+
+Invoice:
+  Standard:
+    Text: Invoice
+  Pretty:
+    Text: the {Invoice}
+  Cryptic:
+    Text: the {bill for the doctor}
+
+Wooden Statue:
+  Standard:
+    Text: Wooden Statue
+  Pretty:
+    Text: the {Wooden Statue}
+  Cryptic:
+    Text: "{memories of home}"
+    Plurality: Plural
+
+Ilias Charm:
+  Standard:
+    Text: Ilias Charm
+  Pretty:
+    Text: "{Ilias Charm}"
+  Cryptic:
+    Text: a {friend's item}
+
+Horse Call:
+  Standard:
+    Text: Horse Call
+  Pretty:
+    Text: the {Horse Call}
+  Cryptic:
+    Text: the {horse beckoner}
+
+Forest Temple Small Key:
+  Standard:
+    Text: Forest Temple Small Key
+  Pretty:
+    Text: a {Forest Temple Small Key}
+  Cryptic:
+    Text: a {key for a deep forest}
+
+Goron Mines Small Key:
+  Standard:
+    Text: Goron Mines Small Key
+  Pretty:
+    Text: a {Goron Mines Small Key}
+  Cryptic:
+    Text: a {key for a volcanic mine}
+
+Lakebed Temple Small Key:
+  Standard:
+    Text: Lakebed Temple Small Key
+  Pretty:
+    Text: a {Lakebed Temple Small Key}
+  Cryptic:
+    Text: a {key for an underground lake}
+
+Arbiters Grounds Small Key:
+  Standard:
+    Text: Arbiters Grounds Small Key
+  Pretty:
+    Text: an {Arbiters Grounds Small Key}
+  Cryptic:
+    Text: a {key for an ancient prison}
+
+Snowpeak Ruins Small Key:
+  Standard:
+    Text: Snowpeak Ruins Small Key
+  Pretty:
+    Text: a {Snowpeak Ruins Small Key}
+  Cryptic:
+    Text: a {key for a snowy mansion}
+
+Temple of Time Small Key:
+  Standard:
+    Text: Temple of Time Small Key
+  Pretty:
+    Text: a {Temple of Time Small Key}
+  Cryptic:
+    Text: a {key for the past}
+
+City in the Sky Small Key:
+  Standard:
+    Text: City in the Sky Small Key
+  Pretty:
+    Text: the {City in the Sky Small Key}
+  Cryptic:
+    Text: a {key for the skies above}
+
+Palace of Twilight Small Key:
+  Standard:
+    Text: Palace of Twilight Small Key
+  Pretty:
+    Text: a {Palace of Twilight Small Key}
+  Cryptic:
+    Text: a {key for a another realm}
+
+Hyrule Castle Small Key:
+  Standard:
+    Text: Hyrule Castle Small Key
+  Pretty:
+    Text: a {Hyrule Castle Small Key}
+  Cryptic:
+    Text: a {key for a kingdom's castle}
+
+Gerudo Desert Bulblin Camp Key:
+  Standard:
+    Text: Gerudo Bulblin Camp Small Key
+  Pretty:
+    Text: the {Gerudo Desert Bulblin Camp Key}
+  Cryptic:
+    Text: the {key for a desert tent}
+
+Lake Hylia Portal:
+  Standard:
+    Text: Lake Hylia Portal
+  Pretty:
+    Text: the {Lake Hylia Portal}
+  Cryptic:
+    Text: a {portal to a vast lake}
+
+Aurus Memo:
+  Standard:
+    Text: Aurus Memo
+  Pretty:
+    Text: "{Auru's Memo}"
+  Cryptic:
+    Text: a {friend's favor}
+
+Asheis Sketch:
+  Standard:
+    Text: Asheis Sketch
+  Pretty:
+    Text: "{Ashei's Sketch}"
+  Cryptic:
+    Text: a {sketch of a horrific beast}
+
+Forest Temple Big Key:
+  Standard:
+    Text: Forest Temple Big Key
+  Pretty:
+    Text: the {Forest Temple Big Key}
+  Cryptic:
+    Text: the {key to the twilit parasite}
+
+Lakebed Temple Big Key:
+  Standard:
+    Text: Lakebed Temple Big Key
+  Pretty:
+    Text: the {Lakebed Temple Big Key}
+  Cryptic:
+    Text: the {key to the twilit aquatic}
+
+Arbiters Grounds Big Key:
+  Standard:
+    Text: Arbiters Grounds Big Key
+  Pretty:
+    Text: the {Arbiters Grounds Big Key}
+  Cryptic:
+    Text: the {key to the twilit fossil}
+
+Temple of Time Big Key:
+  Standard:
+    Text: Temple of Time Big Key
+  Pretty:
+    Text: the {Temple of Time Big Key}
+  Cryptic:
+    Text: the {key to the twilit arachnid}
+
+City in the Sky Big Key:
+  Standard:
+    Text: City in the Sky Big Key
+  Pretty:
+    Text: the {City in the Sky Big Key}
+  Cryptic:
+    Text: the {key to the twilit dragon}
+
+Palace of Twilight Big Key:
+  Standard:
+    Text: Palace of Twilight Big Key
+  Pretty:
+    Text: the {Palace of Twilight Big Key}
+  Cryptic:
+    Text: the {key to the usurper king}
+
+Hyrule Castle Big Key:
+  Standard:
+    Text: Hyrule Castle Big Key
+  Pretty:
+    Text: a {Hyrule Castle Big Key}
+  Cryptic:
+    Text: the {key to the castle throne room}
+
+Forest Temple Compass:
+  Standard:
+    Text: Forest Temple Compass
+  Pretty:
+    Text: the {Forest Temple Compass}
+  Cryptic:
+    Text: the {pointer for a deep forest}
+
+Goron Mines Compass:
+  Standard:
+    Text: Goron Mines Compass
+  Pretty:
+    Text: the {Goron Mines Compass}
+  Cryptic:
+    Text: the {pointer for a volcano}
+
+Lakebed Temple Compass:
+  Standard:
+    Text: Lakebed Temple Compass
+  Pretty:
+    Text: the {Lakebed Temple Compass}
+  Cryptic:
+    Text: the {pointer for an underground lake}
+
+Bottle with Lantern Oil:
+  Standard:
+    Text: Bottle with Lantern Oil
+  Pretty:
+    Text: a {Bottle with Lantern Oil}
+  Cryptic:
+    Text: a {bottle with lighter fluid}
+
+Progressive Mirror Shard:
+  Standard:
+    Text: Progressive Mirror Shard
+  Pretty:
+    Text: a {Mirror Shard}
+  Cryptic:
+    Text: a {reflective shard of power}
+
+Arbiters Grounds Compass:
+  Standard:
+    Text: Arbiters Grounds Compass
+  Pretty:
+    Text: the {Arbiters Grounds Compass}
+  Cryptic:
+    Text: the {pointer for an ancient prison}
+
+Snowpeak Ruins Compass:
+  Standard:
+    Text: Snowpeak Ruins Compass
+  Pretty:
+    Text: the {Snowpeak Ruins Compass}
+  Cryptic:
+    Text: the {pointer for a snowy mansion}
+
+Temple of Time Compass:
+  Standard:
+    Text: Temple of Time Compass
+  Pretty:
+    Text: the {Temple of Time Compass}
+  Cryptic:
+    Text: the {pointer for the past}
+
+City in the Sky Compass:
+  Standard:
+    Text: City in the Sky Compass
+  Pretty:
+    Text: the {City in the Sky Compass}
+  Cryptic:
+    Text: the {pointer for the skies above}
+
+Palace of Twilight Compass:
+  Standard:
+    Text: Palace of Twilight Compass
+  Pretty:
+    Text: the {Palace of Twilight Compass}
+  Cryptic:
+    Text: the {pointer for another realm}
+
+Hyrule Castle Compass:
+  Standard:
+    Text: Hyrule Castle Compass
+  Pretty:
+    Text: a {Hyrule Castle Compass}
+  Cryptic:
+    Text: the {pointer for the kingdom's castle}
+
+Mirror Chamber Portal:
+  Standard:
+    Text: Mirror Chamber Portal
+  Pretty:
+    Text: the {Mirror Chamber Portal}
+  Cryptic:
+    Text: a {portal to a coliseum}
+
+Snowpeak Portal:
+  Standard:
+    Text: Snowpeak Portal
+  Pretty:
+    Text: the {Snowpeak Portal}
+  Cryptic:
+    Text: a {portal to a snowy mountain}
+
+Forest Temple Dungeon Map:
+  Standard:
+    Text: Forest Temple Dungeon Map
+  Pretty:
+    Text: the {Forest Temple Dungeon Map}
+  Cryptic:
+    Text: the {map for a deep forest}
+
+Goron Mines Dungeon Map:
+  Standard:
+    Text: Goron Mines Dungeon Map
+  Pretty:
+    Text: the {Goron Mines Dungeon Map}
+  Cryptic:
+    Text: the {map for a volcano}
+
+Lakebed Temple Dungeon Map:
+  Standard:
+    Text: Lakebed Temple Dungeon Map
+  Pretty:
+    Text: the {Lakebed Temple Dungeon Map}
+  Cryptic:
+    Text: the {map for an underground lake}
+
+Arbiters Grounds Dungeon Map:
+  Standard:
+    Text: Arbiters Grounds Dungeon Map
+  Pretty:
+    Text: the {Arbiters Grounds Dungeon Map}
+  Cryptic:
+    Text: the {map for an ancient prison}
+
+Snowpeak Ruins Dungeon Map:
+  Standard:
+    Text: Snowpeak Ruins Dungeon Map
+  Pretty:
+    Text: the {Snowpeak Ruins Dungeon Map}
+  Cryptic:
+    Text: the {map for a snowy mansion}
+
+Temple of Time Dungeon Map:
+  Standard:
+    Text: Temple of Time Dungeon Map
+  Pretty:
+    Text: the {Temple of Time Dungeon Map}
+  Cryptic:
+    Text: the {map for the past}
+
+City in the Sky Dungeon Map:
+  Standard:
+    Text: City in the Sky Dungeon Map
+  Pretty:
+    Text: the {City in the Sky Dungeon Map}
+  Cryptic:
+    Text: the {map for the skies above}
+
+Palace of Twilight Dungeon Map:
+  Standard:
+    Text: Palace of Twilight Dungeon Map
+  Pretty:
+    Text: the {Palace of Twilight Dungeon Map}
+  Cryptic:
+    Text: the {map for another realm}
+
+Hyrule Castle Dungeon Map:
+  Standard:
+    Text: Hyrule Castle Dungeon Map
+  Pretty:
+    Text: a {Hyrule Castle Dungeon Map}
+  Cryptic:
+    Text: the {map for the kingdom's castle}
+
+Sacred Grove Portal:
+  Standard:
+    Text: Sacred Grove Portal
+  Pretty:
+    Text: the {Sacred Grove Portal}
+  Cryptic:
+    Text: a {portal to an ancient forest}
+
+Male Beetle:
+  Standard:
+    Text: Male Beetle
+  Pretty:
+    Text: the {<male>Beetle}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Beetle:
+  Standard:
+    Text: Female Beetle
+  Pretty:
+    Text: the {<female>Beetle}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Butterfly:
+  Standard:
+    Text: Male Butterfly
+  Pretty:
+    Text: the {<male>Butterfly}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Butterfly:
+  Standard:
+    Text: Female Butterfly
+  Pretty:
+    Text: the {<female>Butterfly}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Stag Beetle:
+  Standard:
+    Text: Male Stag Beetle
+  Pretty:
+    Text: the {<male>Stag Beetle}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Stag Beetle:
+  Standard:
+    Text: Female Stag Beetle
+  Pretty:
+    Text: the {<female>Stag Beetle}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Grasshopper:
+  Standard:
+    Text: Male Grasshopper
+  Pretty:
+    Text: the {<male>Grasshopper}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Grasshopper:
+  Standard:
+    Text: Female Grasshopper
+  Pretty:
+    Text: the {<female>Grasshopper}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Phasmid:
+  Standard:
+    Text: Male Phasmid
+  Pretty:
+    Text: the {<male>Phasmid}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Phasmid:
+  Standard:
+    Text: Female Phasmid
+  Pretty:
+    Text: the {<female>Phasmid}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Pill Bug:
+  Standard:
+    Text: Male Pill Bug
+  Pretty:
+    Text: the {<male>Pill Bug}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Pill Bug:
+  Standard:
+    Text: Female Pill Bug
+  Pretty:
+    Text: the {<female>Pill Bug}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Mantis:
+  Standard:
+    Text: Male Mantis
+  Pretty:
+    Text: the {<male>Mantis}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Mantis:
+  Standard:
+    Text: Female Mantis
+  Pretty:
+    Text: the {<female>Mantis}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Ladybug:
+  Standard:
+    Text: Male Ladybug
+  Pretty:
+    Text: the {<male>Ladybug}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Ladybug:
+  Standard:
+    Text: Female Ladybug
+  Pretty:
+    Text: the {<female>Ladybug}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Snail:
+  Standard:
+    Text: Male Snail
+  Pretty:
+    Text: the {<male>Snail}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Snail:
+  Standard:
+    Text: Female Snail
+  Pretty:
+    Text: the {<female>Snail}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Dragonfly:
+  Standard:
+    Text: Male Dragonfly
+  Pretty:
+    Text: the {<male>Dragonfly}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Dragonfly:
+  Standard:
+    Text: Female Dragonfly
+  Pretty:
+    Text: the {<female>Dragonfly}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Ant:
+  Standard:
+    Text: Male Ant
+  Pretty:
+    Text: the {<male>Ant}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Ant:
+  Standard:
+    Text: Female Ant
+  Pretty:
+    Text: the {<female>Ant}
+  Cryptic:
+    Text: a {shiny insect}
+
+Male Dayfly:
+  Standard:
+    Text: Male Dayfly
+  Pretty:
+    Text: the {<male>Dayfly}
+  Cryptic:
+    Text: a {shiny insect}
+
+Female Dayfly:
+  Standard:
+    Text: Female Dayfly
+  Pretty:
+    Text: the {<female>Dayfly}
+  Cryptic:
+    Text: a {shiny insect}
+
+Progressive Fused Shadow:
+  Standard:
+    Text: Progressive Fused Shadow
+  Pretty:
+    Text: a {Fused Shadow}
+  Cryptic:
+    Text: a {shadow of ultimate power}
+
+Poe Soul:
+  Standard:
+    Text: Poe Soul
+  Pretty:
+    Text: a {Poe Soul}
+  Cryptic:
+    Text: a {soul of the dead}
+
+Progressive Hidden Skill:
+  Standard:
+    Text: Progressive Hidden Skill
+  Pretty:
+    Text: a {Hidden Skill}
+  Cryptic:
+    Text: a {forgotten technique}
+
+
+Bridge of Eldin Portal:
+  Standard:
+    Text: Bridge of Eldin Portal
+  Pretty:
+    Text: the {Bridge of Eldin Portal}
+  Cryptic:
+    Text: a {portal to a long bridge}
+
+Progressive Sky Book:
+  Standard:
+    Text: Progressive Sky Book
+  Pretty:
+    Text: a {Sky Character}
+  Cryptic:
+    Text: a {glyph of the heavens}
+
+Purple Rupee Links House:
+  Standard:
+    Text: Purple Rupee Links House
+  Pretty:
+    Text: the {Purple Rupee from your basement}
+  Cryptic:
+    Text: "{your savings}"
+    Plurality: Plural
+
+North Faron Woods Gate Key:
+  Standard:
+    Text: North Faron Woods Gate Key
+  Pretty:
+    Text: the {North Faron Woods Gate Key}
+  Cryptic:
+    Text: a {key to a northern forest}
+
+Gate Keys:
+  Standard:
+    Text: Gate Keys
+  Pretty:
+    Text: the {Gate Keys}
+    Plurality: Plural
+  Cryptic:
+    Text: "{King Bulblin's keys}"
+    Plurality: Plural
+
+Ordon Pumpkin:
+  Standard:
+    Text: Ordon Pumpkin
+  Pretty:
+    Text: the {Ordon Pumpkin}
+  Cryptic:
+    Text: a {soup ingredient}
+
+Ordon Cheese:
+  Standard:
+    Text: Ordon Cheese
+  Pretty:
+    Text: some {Ordon Cheese}
+  Cryptic:
+    Text: a {soup ingredient}
+
+Snowpeak Ruins Bedroom Key:
+  Standard:
+    Text: Snowpeak Ruins Bedroom Key
+  Pretty:
+    Text: the {Snowpeak Ruins Bedroom Key}
+  Cryptic:
+    Text: the {key to a snowy bedroom}
+
+Goron Mines Key Shard:
+  Standard:
+    Text: Goron Mines Key Shard
+  Pretty:
+    Text: a {Goron Mines Key Shard}
+  Cryptic:
+    Text: "{one third of a key}"
+
+Coro Key:
+  Standard:
+    Text: Coro Key
+  Pretty:
+    Text: "{Coro's Key}"
+  Cryptic:
+    Text: a {key to a forest cave}
+
+Game Beatable:
+  Standard:
+    Text: Game Beatable
+  Pretty:
+    Text: "{Game Beatable}"
+  Cryptic:
+    Text: the {game-winning item}
+
+Hint:
+  Standard:
+    Text: Hint
+  Pretty:
+    Text: a {Hint}
+  Cryptic:
+    Text: a {piece of knowledge}
+
+Faron Twilight Tear:
+  Standard:
+    Text: Faron Twilight Tear
+  Pretty:
+    Text: a {Faron Twilight Tear}
+  Cryptic:
+    Text: a {tear of a forest spirit}
+
+Eldin Twilight Tear:
+  Standard:
+    Text: Eldin Twilight Tear
+  Pretty:
+    Text: an {Eldin Twilight Tear}
+  Cryptic:
+    Text: a {tear of a volcano spirit}
+
+Lanayru Twilight Tear:
+  Standard:
+    Text: Lanayru Twilight Tear
+  Pretty:
+    Text: a {Lanayru Twilight Tear}
+  Cryptic:
+    Text: a {tear of a lake spirit}
+
+# ITEM NAMES FOR PROGRESSIVE ITEMS
+Progressive Wallet x0:
+  Standard:
+    Text: Small Wallet
+
+Progressive Wallet x1:
+  Standard:
+    Text: Large Wallet
+
+Progressive Wallet x2:
+  Standard:
+    Text: Giant's Wallet
+
+Progressive Sword x1:
+  Standard:
+    Text: Wooden Sword
+
+Progressive Sword x2:
+  Standard:
+    Text: Ordon Sword
+
+Progressive Sword x3:
+  Standard:
+    Text: Master Sword
+
+Progressive Sword x4:
+  Standard:
+    Text: Light Sword
+
+Progressive Bow x1:
+  Standard:
+    Text: Bow (30 Arrows)
+
+Progressive Bow x2:
+  Standard:
+    Text: Bow (60 Arrows)
+
+Progressive Bow x3:
+  Standard:
+    Text: Bow (100 Arrows)
+
+Progressive Clawshot x1:
+  Standard:
+    Text: Clawshot
+
+Progressive Clawshot x2:
+  Standard:
+    Text: Double Clawshots
+
+Progressive Dominion Rod x1:
+  Standard:
+    Text: Dominion Rod
+
+Progressive Dominion Rod x2:
+  Standard:
+    Text: Restored Dominion Rod
+
+Progressive Fishing Rod x1:
+  Standard:
+    Text: Fishing Rod
+
+Progressive Fishing Rod x2:
+  Standard:
+    Text: Corral Earring
+
+Progressive Sky Book x1:
+  Standard:
+    Text: Sky Book (0/6 Characters)
+
+Progressive Sky Book x2:
+  Standard:
+    Text: Sky Book (1/6 Characters)
+
+Progressive Sky Book x3:
+  Standard:
+    Text: Sky Book (2/6 Characters)
+
+Progressive Sky Book x4:
+  Standard:
+    Text: Sky Book (3/6 Characters)
+
+Progressive Sky Book x5:
+  Standard:
+    Text: Sky Book (4/6 Characters)
+
+Progressive Sky Book x6:
+  Standard:
+    Text: Sky Book (5/6 Characters)
+
+Progressive Sky Book x7:
+  Standard:
+    Text: Sky Book (6/6 Characters)
+
+# HINT REGION NAMES
+Ordon:
+  Standard:
+    Text: Ordon
+  Pretty:
+    Text: "{Ordon}"
+  Cryptic:
+    Text: a {quaint village}
+
+Faron Woods:
+  Standard:
+    Text: Faron Woods
+  Pretty:
+    Text: "{Faron Woods}"
+  Cryptic:
+    Text: a {forest}
+
+Sacred Grove:
+  Standard:
+    Text: Sacred Grove
+  Pretty:
+    Text: the {Sacred Grove}
+  Cryptic:
+    Text: a {hidden grove}
+
+Faron Field:
+  Standard:
+    Text: Faron Field
+  Pretty:
+    Text: "{Faron Field}"
+  Cryptic:
+    Text: a {field near the forest}
+
+Kakariko Gorge:
+  Standard:
+    Text: Kakariko Gorge
+  Pretty:
+    Text: "{Kakariko Gorge}"
+  Cryptic:
+    Text: a {field with a large chasm}
+
+Kakariko Village:
+  Standard:
+    Text: Kakariko Village
+  Pretty:
+    Text: "{Kakariko Village}"
+  Cryptic:
+    Text: a {charming village}
+
+Kakariko Graveyard:
+  Standard:
+    Text: Kakariko Graveyard
+  Pretty:
+    Text: the {Kakariko Graveyard}
+  Cryptic:
+    Text: a {yard for the dead}
+
+Death Mountain:
+  Standard:
+    Text: Death Mountain
+  Pretty:
+    Text: "{Death Mountain}"
+  Cryptic:
+    Text: a {volcano path}
+
+Eldin Field:
+  Standard:
+    Text: Eldin Field
+  Pretty:
+    Text: "{Eldin Field}"
+  Cryptic:
+    Text: a {field near a volcano}
+
+North Eldin:
+  Standard:
+    Text: North Eldin
+  Pretty:
+    Text: "{North Eldin}"
+  Cryptic:
+    Text: a {narrow gray field}
+
+Hidden Village:
+  Standard:
+    Text: Hidden Village
+  Pretty:
+    Text: the {Hidden Village}
+  Cryptic:
+    Text: a {secluded settlement}
+
+Lanayru Field:
+  Standard:
+    Text: Lanayru Field
+  Pretty:
+    Text: "{Lanayru Field}"
+  Cryptic:
+    Text: a {field with a river}
+
+Beside Castle Town:
+  Standard:
+    Text: Beside Castle Town
+  Pretty:
+    Text: "{Beside Castle Town}"
+  Cryptic:
+    Text: a {field beside a city}
+
+Castle Town:
+  Standard:
+    Text: Castle Town
+  Pretty:
+    Text: "{Castle Town}"
+  Cryptic:
+    Text: a {city}
+
+South of Castle Town:
+  Standard:
+    Text: South of Castle Town
+  Pretty:
+    Text: "{South of Castle Town}"
+  Cryptic:
+    Text: a {field south of a city}
+
+Great Bridge of Hylia:
+  Standard:
+    Text: Great Bridge of Hylia
+  Pretty:
+    Text: the {Great Bridge of Hylia}
+  Cryptic:
+    Text: a {path along a great bridge}
+
+Lake Hylia:
+  Standard:
+    Text: Lake Hylia
+  Pretty:
+    Text: "{Lake Hylia}"
+  Cryptic:
+    Text: a {vast lake}
+
+Lanayru Spring:
+  Standard:
+    Text: Lanayru Spring
+  Pretty:
+    Text: the {Lanayru Spring}
+  Cryptic:
+    Text: a {cavernous spring}
+
+Upper Zoras River:
+  Standard:
+    Text: Upper Zoras River
+  Pretty:
+    Text: "{Upper Zoras River}"
+  Cryptic:
+    Text: a {fork in the river}
+
+Zoras Domain:
+  Standard:
+    Text: Zoras Domain
+  Pretty:
+    Text: "{Zoras Domain}"
+  Cryptic:
+    Text: the {home of a grand waterfall}
+
+South Gerudo Desert:
+  Standard:
+    Text: South Gerudo Desert
+  Pretty:
+    Text: "{South Gerudo Desert}"
+  Cryptic:
+    Text: the {southern desert}
+
+North Gerudo Desert:
+  Standard:
+    Text: North Gerudo Desert
+  Pretty:
+    Text: "{North Gerudo Desert}"
+  Cryptic:
+    Text: the {northern desert}
+
+Bublin Camp:
+  Standard:
+    Text: Bublin Camp
+  Pretty:
+    Text: "{Bublin Camp}"
+  Cryptic:
+    Text: a {camp of enemies}
+
+Mirror Chamber:
+  Standard:
+    Text: Mirror Chamber
+  Pretty:
+    Text: the {Mirror Chamber}
+  Cryptic:
+    Text: a {chamber of chains}
+
+Forest Temple:
+  Standard:
+    Text: Forest Temple
+  Pretty:
+    Text: the {Forest Temple}
+  Cryptic:
+    Text: a {deep forest}
+
+Goron Mines:
+  Standard:
+    Text: Goron Mines
+  Pretty:
+    Text: the {Goron Mines}
+  Cryptic:
+    Text: a {volcanic mine}
+
+Lakebed Temple:
+  Standard:
+    Text: Lakebed Temple
+  Pretty:
+    Text: the {Lakebed Temple}
+  Cryptic:
+    Text: an {underground lake}
+
+Arbiters Grounds:
+  Standard:
+    Text: Arbiters Grounds
+  Pretty:
+    Text: the {Arbiters Grounds}
+  Cryptic:
+    Text: an {ancient prison}
+
+Snowpeak Ruins:
+  Standard:
+    Text: Snowpeak Ruins
+  Pretty:
+    Text: the {Snowpeak Ruins}
+  Cryptic:
+    Text: a {snowy mansion}
+
+Temple of Time:
+  Standard:
+    Text: Temple of Time
+  Pretty:
+    Text: the {Temple of Time}
+  Cryptic:
+    Text: the {past}
+
+City in the Sky:
+  Standard:
+    Text: City in the Sky
+  Pretty:
+    Text: the {City in the Sky}
+  Cryptic:
+    Text: the {skies above}
+
+Palace of Twilight:
+  Standard:
+    Text: Palace of Twilight
+  Pretty:
+    Text: the {Palace of Twilight}
+  Cryptic:
+    Text: "{another realm}"
+
+Hyrule Castle:
+  Standard:
+    Text: Hyrule Castle
+  Pretty:
+    Text: the {Hyrule Castle}
+  Cryptic:
+    Text: the {kingdom's castle}
+
+# NO REQUIRED DUNGEON TEXT
+No Required Dungeons Text:
+  Standard:
+    Text: No Required Dungeons
+
+# ITEM GET TEXT
+Foolish Get Item Text:
+  Standard:
+    Text: |-
+      <fast>a <light blue>cold<white> wind blows...
+
+Shadow Crystal Get Item Text:
+  Standard:
+    Text: |-
+      <slow>Vous obtenez le <red>Cristal Maudit<white>!
+      !La sombre manifestation des
+      pouvoirs de <red>Xanto<white> qui permet
+      de se transformer à volonté!
+
+Restored Dominion Rod Text:
+  Standard:
+    Text: |-
+      <fast>Power has been restored to
+      the <red>Dominion Rod<white>! Now it can
+      be used to imbue statues
+      with life in the present!
+
+Forest Temple Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for the
+      <green>Forest Temple<white>!
+
+Goron Mines Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for
+      <red>Goron Mines<white>!
+
+Lakebed Temple Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for the
+      <blue>Lakebed Temple<white>!
+
+Arbiters Grounds Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for
+      <orange>Arbiter's Grounds<white>!
+
+Snowpeak Ruins Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for
+      <light blue>Snowpeak Ruins<white>!
+
+Temple of Time Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for the
+      <dark green>Temple of Time<white>!
+
+City in the Sky Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for the
+      <yellow>City in the Sky<white>!
+
+Palace of Twilight Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for the
+      <purple>Palace of Twilight<white>!
+
+Hyrule Castle Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for
+      <silver>Hyrule Castle<white>!
+
+Bulblin Camp Small Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Small Key<white> for the
+      <orange>Bulblin Camp<white>!
+
+Forest Temple Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for the
+      <green>Forest Temple<white>!
+
+Lakebed Temple Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for the
+      <blue>Lakebed Temple<white>!
+
+Arbiters Grounds Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for
+      <orange>Arbiter's Grounds<white>!
+
+Temple of Time Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for the
+      <dark green>Temple of Time<white>!
+
+City in the Sky Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for the
+      <yellow>City in the Sky<white>!
+
+Palace of Twilight Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for the
+      <purple>Palace of Twilight<white>!
+
+Hyrule Castle Big Key Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Big Key<white> for
+      <silver>Hyrule Castle<white>!
+
+Forest Temple Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for the
+      <green>Forest Temple<white>!
+
+Goron Mines Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for
+      <red>Goron Mines<white>!
+
+Lakebed Temple Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for the
+      <blue>Lakebed Temple<white>!
+
+Mirror Shard 2 Get item Text:
+  Standard:
+    Text: |-
+      <fast>You got the second shard of
+      the <red>Mirror of Twilight<white>! It
+      has a beautiful shine to it
+      and feels slightly <light blue>cold<white>...
+
+Mirror Shard 3 Get item Text:
+  Standard:
+    Text: |-
+      <fast>You got the third shard of
+      the <red>Mirror of Twilight<white>! It
+      is covered in dirt and
+      <dark green>webs<white>...
+
+Mirror Shard 4 Get item Text:
+  Standard:
+    Text: |-
+      <fast>You got the final shard of
+      the <red>Mirror of Twilight<white>! It
+      feels lighter than <yellow>air<white>...
+
+Arbiters Grounds Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for
+      <orange>Arbiter's Grounds<white>!
+
+Snowpeak Ruins Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for
+      <light blue>Snowpeak Ruins<white>!
+
+Temple of Time Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for the
+      <dark green>Temple of Time<white>!
+
+City in the Sky Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for the
+      <yellow>City in the Sky<white>!
+
+Palace of Twilight Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for the
+      <purple>Palace of Twilight<white>!
+
+Hyrule Castle Compass Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Compass<white> for
+      <silver>Hyrule Castle<white>!
+      <fast>
+#
+Forest Temple Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for the
+      <green>Forest Temple<white>!
+
+Goron Mines Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for
+      <red>Goron Mines<white>!
+
+Lakebed Temple Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for the
+      <blue>Lakebed Temple<white>!
+
+Snowpeak Ruins Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for
+      <light blue>Snowpeak Ruins<white>!
+
+Arbiters Grounds Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for
+      <orange>Arbiter's Grounds<white>!
+
+Temple of Time Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for the
+      <dark green>Temple of Time<white>!
+
+City in the Sky Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for the
+      <yellow>City in the Sky<white>!
+
+Palace of Twilight Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for the
+      <purple>Palace of Twilight<white>!
+
+Hyrule Castle Dungeon Map Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the <red>Dungeon Map<white> for
+      <silver>Hyrule Castle<white>!
+      <fast>
+
+Fused Shadow 1 Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Fused Shadow<white>!
+      It seems to have some <green>moss<white>
+      growing on it...
+
+Fused Shadow 2 Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the second <red>Fused
+      Shadow<white>! It feels <red>warm<white> to
+      the touch...
+
+Fused Shadow 3 Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the final <red>Fused
+      Shadow<white>! It feels <blue>wet<white> and
+      smells like fish...
+
+Mirror Shard 1 Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got the first shard of
+      the <red>Mirror of Twilight<white>! It
+      is covered in <orange>sand<white>...
+
+Poe Soul Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Poe's Soul<white>!
+      You've collected <red>{}<white> so far.
+
+Ending Blow Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Ending Blow<white>!
+
+Shield Attack Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Shield Attack<white>!
+
+Back Slice Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Back Slice<white>!
+
+Helm Splitter Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Helm Splitter<white>!
+
+Mortal Draw Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Mortal Draw<white>!
+
+Jump Strike Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Jump Strike<white>!
+
+Great Spin Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You learned the <red>Great Spin<white>!
+
+Partially Filled Sky Book Get Item Text:
+  Standard:
+    Text: |-
+      <fast>You got a <red>Sky Character<white>!
+      You've collected <red>{}<white> so far.
+
+Midna Call As Human Two Choice:
+  Standard:
+    Text: |-
+      <2 way choice 1>Transform into wolf
+      <2 way choice 2>Something else
+
+Midna Call As Wolf Two Choice:
+  Standard:
+    Text: |-
+      <2 way choice 1>Transform into human
+      <2 way choice 2>Something else
+
+Midna Call As Wolf No Shadow Crystal Two Choice:
+  Standard:
+    Text: |-
+      <2 way choice 1>Warp
+      <2 way choice 2>Something else
+
+Midna Call As Human Three Choice:
+  Standard:
+    Text: |-
+      <3 way choice 1>Transform into wolf
+      <3 way choice 2>Warp
+      <3 way choice 3>Something else
+
+Midna Call As Wolf Three Choice:
+  Standard:
+    Text: |-
+      <3 way choice 1>Transform into human
+      <3 way choice 2>Warp
+      <3 way choice 3>Something else
+
+Slingshot Shop Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>: <purple>30 Rupees<white>
+#      I got this in for the kids. It's just a
+#      toy, but it stings something AWFUL
+#      when you get hit by it!
+
+Slingshot Shop Too Expensive Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> is <purple>30 Rupees<white>. If you want it, bring some money with you, all right, m'dear?
+
+Slingshot Shop Purchase Confirmation Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> is <purple>30 Rupees<white>. Do you want to buy it, m'dear?<begin choice>
+
+Slingshot Shop After Purchase Text Template:
+  Standard:
+    Text: |-
+      What are you doing buying <Item Pretty Name>, you naughty thing? You're too old for toys! Will you at least let the kids play with it?
+
+Barnes Special Offer Text Template:
+  Standard:
+    Text: |-
+      I've got a special offer goin' right now: <Item Pretty Name>, just <purple>120 Rupees<white>! How 'bout that?<begin choice>
+
+Kakariko Malo Mart Wooden Shield Purchase Confirmation Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> will cost you <purple>50 Rupees<white>. Want one or not?<begin choice>
+
+Kakariko Malo Mart Wooden Shield Too Expensive Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> will cost you <purple>50 Rupees<white>, but you can't afford it. Don't expect a discount just because we're from the same town.
+
+Kakariko Malo Mart Hylian Shield Purchase Confirmation Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> will cost you <purple>200 Rupees<white>. Want one or not?<begin choice>
+
+Kakariko Malo Mart Hylian Shield Too Expensive Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> will run you <purple>200 Rupees<white>...but if you have that much, I'll eat my hat. And I don't even HAVE a hat.
+
+Kakariko Malo Mart Hylian Shield After Purchase Text Template:
+  Standard:
+    Text: |-
+      Well, you bought my last <Item Standard Name>... so you'd better take good care of it.
+
+Kakariko Malo Mart Hawkeye Purchase Confirmation Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> is <purple>100 Rupees<white>. You want it or not?<begin choice>
+
+Kakariko Malo Mart Hawkeye Too Expensive Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> costs <purple>100 Rupees<white>... but there are people with enough Rupees, and then there's you. The guy with not enough.
+
+Kakariko Malo Mart Hawkeye After Purchase Text Template:
+  Standard:
+    Text: |-
+      You bought my last <Item Standard Name>...
+
+Kakariko Malo Mart Red Potion Too Expensive Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> will cost you <purple>30 Rupees<white>, but I won't be donating it to the poor, sorry.
+
+Kakariko Malo Mart Red Potion Purchase Confirmation Text Template:
+  Standard:
+    Text: |-
+      <Item Pretty Name> will cost you <purple>30 Rupees<white>. Want some or not?<begin choice>
+
+Kakariko Malo Mart Red Potion Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>: <purple>30 Rupees<white>
+#      This potion replenishes your
+#      life energy. Keep it in an <red>empty
+#      bottle<white>.
+
+Kakariko Malo Mart Hawkeye Coming Soon Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>: <orange>COMING SOON
+
+Kakariko Malo Mart Hawkeye Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>: <purple>100 Rupees<white>
+#      This eyewear allows you to see
+#      distant objects as if with the eyes
+#      of a hawk.
+
+Kakariko Malo Mart Sold Out Text:
+  Standard:
+    Text: <orange>SOLD OUT
+
+Kakariko Malo Mart Wooden Shield Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>: <purple>50 Rupees<white>
+#      This is a simple shield. It's made of
+#      wood, so it will burn away if
+#      touched by fire.
+
+Kakariko Malo Mart Hylian Shield Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>: <purple>200 Rupees<white>
+#              LIMITED SUPPLY!
+#      Don't let them sell out before you
+#      buy one!
+
+Chudleys Shop Magic Armor Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>
+      Only for the richest and most
+      precious customers who value their
+      lives over their Rupees.
+
+Castle Town Malo Mart Magic Armor After Purchase Text Template:
+  Standard:
+    Text: |-
+      We have sold out of <Item Pretty Name>!
+
+Castle Town Malo Mart Magic Armor Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name> <red>!Special! <purple>598 Rupees<white>
+#      This is quite a bargain when you
+#      think of how valuable your life is.
+#      What's a few Rupees to stay alive?
+
+Castle Town Malo Mart Magic Armor Sold Out Text Template:
+  Standard:
+    Text: |-
+      <Item Standard Name>
+      -SOLD OUT-
+      *This item has been discontinued.
+
+Charlo Donation Choice Text:
+  Standard:
+    Text: |-
+      <3 way choice 1>100 Rupees
+      <3 way choice 2>50 Rupees
+      <3 way choice 3>Sorry...
+
+Charlo Donation Ask Text Template:
+  Standard:
+    Text: |-
+      For <Item Pretty Name>...
+      Would you please make a donation?<begin choice>
+
+Coro Bottle Offer 1 Text Template:
+  Standard:
+    Text: |-
+      And check this out! I have a special,
+      one-time offer of <Item Pretty Name> for only <purple>100 Rupees<white>! How 'bout it, guy? What a bargain!<begin choice>
+
+Coro Bottle Offer 2 Text Template:
+  Standard:
+    Text: |-
+      I have a special, one-time offer of
+      <Item Pretty Name> for only <purple>100 Rupees<white>. How 'bout it, guy?<begin choice>
+
+Coro Bottle Offer 3 Text Template:
+  Standard:
+    Text: |-
+      Right now we have a <purple>100-Rupee<white>
+      <Item Standard Name> and <purple>20-Rupee<white> <red>refills<white> to choose from!<begin choice>
+
+Coro Bottle Offer 4 Text Template:
+  Standard:
+    Text: |-
+      And check this out! I have a special,
+      one-time offer of <Item Pretty Name> for only <purple>100 Rupees<white>! How 'bout it, guy? What a bargain!<begin choice>
+
+Fishing Hole Sign Text Template:
+  Standard:
+    Text: |-
+      <red>           DON'T LITTER!
+      <white>Do NOT toss empty bottles or
+      <Item Pretty Name> here! The fish are CRYING!
+
+      Keep the fishing hole clean!
+
+Custom Midna Call Need Something Text:
+  Standard:
+    Text: |-
+      Need Something?<begin choice>
+
+Custom Midna Call 3 Choice Text:
+  Standard:
+    Text: |-
+      <3 way choice 1>Hints
+      <3 way choice 2>Change time of day
+      <3 way choice 3>Return to spawn
+
+Custom Midna Call 2 Choice Text:
+  Standard:
+    Text: |-
+      <2 way choice 1>Hints
+      <2 way choice 2>Return to spawn
+
+Custom Midna Call Hints Text:
+  Standard:
+    Text: |-
+      I have no hints to give.
+
+Return to Spawn Dungeon Intro Text:
+  Standard:
+    Text: |-
+      I'll get you out of here. 
+      Where do you want to go?<begin choice>
+
+Return to Spawn Dungeon Choice Text:
+  Standard:
+    Text: |-
+      <3 way choice 1>Dungeon entrance
+      <3 way choice 2>Nevermind
+      <3 way choice 3>Spawn
+
+Return to Spawn Dungeon No Choice Text:
+  Standard:
+    Text: |-
+      <2 way choice 1>Nevermind
+      <2 way choice 2>Spawn
+
+Midna Hints Required Dungeons Intro Zero Dungeons:
+  Standard:
+    Text: |-
+      There are <red>0<white> required dungeons.
+
+Midna Hints Required Dungeons Intro At Least One Dungeon:
+  Standard:
+    Text: |-
+      There are <red><required dungeon count><white> required dungeons:
+
+Ordon Hint Sign Text:
+  Standard:
+    Text: |-
+      Ordon Hint Sign.
+      There are no hints placed here.
+
+South Faron Woods Hint Sign Text:
+  Standard:
+    Text: |-
+      South Faron Woods Hint Sign.
+      There are no hints placed here.
+
+Sacred Grove Hint Sign Text:
+  Standard:
+    Text: |-
+      Sacred Grove Hint Sign.
+      There are no hints placed here.
+
+Faron Field Hint Sign Text:
+  Standard:
+    Text: |-
+      Faron Field Hint Sign.
+      There are no hints placed here.
+
+Kakariko Gorge Hint Sign Text:
+  Standard:
+    Text: |-
+      Kakariko Gorge Hint Sign.
+      There are no hints placed here.
+
+Kakariko Village Hint Sign Text:
+  Standard:
+    Text: |-
+      Kakariko Village Hint Sign.
+      There are no hints placed here.
+
+Kakariko Graveyard Hint Sign Text:
+  Standard:
+    Text: |-
+      Kakariko Graveyard Hint Sign.
+      There are no hints placed here.
+
+Eldin Field Hint Sign Text:
+  Standard:
+    Text: |-
+      Eldin Field Hint Sign.
+      There are no hints placed here.
+
+North Eldin Field Hint Sign Text:
+  Standard:
+    Text: |-
+      North Eldin Field Hint Sign.
+      There are no hints placed here.
+
+Hidden Village Hint Sign Text:
+  Standard:
+    Text: |-
+      Hidden Village Hint Sign.
+      There are no hints placed here.
+
+Lanayru Field Hint Sign Text:
+  Standard:
+    Text: |-
+      Lanayru Field Hint Sign.
+      There are no hints placed here.
+
+Beside Castle Town Hint Sign Text:
+  Standard:
+    Text: |-
+      Beside Castle Town Hint Sign.
+      There are no hints placed here.
+
+Castle Town Center Hint Sign Text:
+  Standard:
+    Text: |-
+      Castle Town Center Hint Sign.
+      There are no hints placed here.
+
+Outside South Castle Town Hint Sign Text:
+  Standard:
+    Text: |-
+      Outside South Castle Town Hint Sign.
+      There are no hints placed here.
+
+Lake Hylia Bridge Hint Sign Text:
+  Standard:
+    Text: |-
+      Lake Hylia Bridge Hint Sign.
+      There are no hints placed here.
+
+Lake Hylia Hint Sign Text:
+  Standard:
+    Text: |-
+      Lake Hylia Hint Sign.
+      There are no hints placed here.
+
+Lanayru Spring Hint Sign Text:
+  Standard:
+    Text: |-
+      Lanayru Spring Hint Sign.
+      There are no hints placed here.
+
+Lake Lantern Cave Hint Sign Text:
+  Standard:
+    Text: |-
+      Lake Lantern Cave Hint Sign.
+      There are no hints placed here.
+
+Fishing Hole Hint Sign Text:
+  Standard:
+    Text: |-
+      Fishing Hole Hint Sign.
+      There are no hints placed here.
+
+Zoras Domain Hint Sign Text:
+  Standard:
+    Text: |-
+      Zoras Domain Hint Sign.
+      There are no hints placed here.
+
+Snowpeak Hint Sign Text:
+  Standard:
+    Text: |-
+      Snowpeak Hint Sign.
+      There are no hints placed here.
+
+Gerudo Desert Hint Sign Text:
+  Standard:
+    Text: |-
+      Gerudo Desert Hint Sign.
+      There are no hints placed here.
+
+Bulblin Camp Hint Sign Text:
+  Standard:
+    Text: |-
+      Bulblin Camp Hint Sign.
+      There are no hints placed here.
+
+Forest Temple Hint Sign Text:
+  Standard:
+    Text: |-
+      Forest Temple Hint Sign.
+      There are no hints placed here.
+
+Goron Mines Hint Sign Text:
+  Standard:
+    Text: |-
+      Goron Mines Hint Sign.
+      There are no hints placed here.
+
+Lakebed Temple Hint Sign Text:
+  Standard:
+    Text: |-
+      Lakebed Temple Hint Sign.
+      There are no hints placed here.
+
+Arbiters Grounds Hint Sign Text:
+  Standard:
+    Text: |-
+      Arbiters Grounds Hint Sign.
+      There are no hints placed here.
+
+Snowpeak Ruins Hint Sign Text:
+  Standard:
+    Text: |-
+      Snowpeak Ruins Hint Sign.
+      There are no hints placed here.
+
+Temple of Time First Hint Sign Text:
+  Standard:
+    Text: |-
+      Temple of Time First Hint Sign.
+      There are no hints placed here.
+
+Temple of Time Second Hint Sign Text:
+  Standard:
+    Text: |-
+      Temple of Time Second Hint Sign.
+      There are no hints placed here.
+
+City in the Sky Hint Sign Text:
+  Standard:
+    Text: |-
+      City in the Sky Hint Sign.
+      There are no hints placed here.
+
+Palace of Twilight Hint Sign Text:
+  Standard:
+    Text: |-
+      Palace of Twilight Hint Sign.
+      There are no hints placed here.
+
+Hyrule Castle Hint Sign Text:
+  Standard:
+    Text: |-
+      Hyrule Castle Hint Sign.
+      There are no hints placed here.
+
+Cave of Ordeals Hint Sign Text:
+  Standard:
+    Text: |-
+      Cave of Ordeals Hint Sign.
+      There are no hints placed here.

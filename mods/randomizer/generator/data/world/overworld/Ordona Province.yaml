@@ -1,0 +1,173 @@
+
+# OUTSIDE LINK'S HOUSE
+
+- Name: Outside Links House
+  Map Sector: Ordona Province
+  Region: Ordon
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Ordon Hint Sign: Nothing
+  Exits:
+    Ordon Village: Nothing
+    Ordon Spring: Nothing
+    Ordon Links House: Can_Climb_Ladders and Can_Open_Doors
+
+- Name: Ordon Links House
+  Exits:
+    Outside Links House: Can_Open_Doors
+  Locations:
+    Wooden Sword Chest: Nothing
+    Links Basement Chest: Lantern
+
+# ORDON SPRING
+
+- Name: Ordon Spring
+  Map Sector: Ordona Province
+  Region: Ordon
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Ordon Spring Warp Portal: Nothing
+    Ordon Spring Golden Wolf: "'Howl_at_Death_Mountain_Howling_Stone'"
+  Exits:
+    Outside Links House: Nothing
+    Ordon Bridge: Skip_Prologue == On or ('Can_Access_Outside_Links_House' and Sword and Slingshot)
+
+- Name: Ordon Bridge
+  Map Sector: Ordona Province
+  Region: Ordon
+  Can Warp: True
+  Exits:
+    South Faron Woods: Can_Complete_Prologue
+    Ordon Spring: Skip_Prologue == On or ('Can_Access_Outside_Links_House' and Sword and Slingshot)
+
+# ORDON VILLAGE
+
+- Name: Ordon Village
+  Map Selector: Ordona Province
+  Region: Ordon
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Can Farm Rupees: Nothing # Can break pumpkins
+    Can Refill Slingshot Seeds: Nothing # Can break pumpkins
+    Fish for Ordon Cat: Day and Fishing_Rod
+  Locations:
+    Ordon Rupee Under Tall Tree 1: Nothing
+    Ordon Rupee Under Tall Tree 2: Nothing
+    Ordon Tree Long Branch Rupee: Can_Climb_Vines
+    Ordon Tree Short Branch Rupee: Can_Climb_Vines
+    Ordon Bo Cliff Rupee: Can_Climb_Ladders and Can_Summon_Hawk
+    Ordon Bo Roof Rupee: Can_Climb_Ladders
+    Ordon Bo Window Rupee 1: Can_Climb_Ladders
+    Ordon Bo Window Rupee 2: Can_Climb_Ladders
+    Ordon Rupee In Grass By Bo: Nothing
+    Ordon Rusl House Roof Rupee 1: Human_Link
+    Ordon Rusl House Roof Rupee 2: Human_Link
+    Ordon Hidden Rusl House Rupee: Gale_Boomerang or Clawshot
+    Ordon Rupee In River 1: Nothing
+    Ordon Rupee In River 2: Nothing
+    Ordon Rupee Under Bridge: Nothing
+    Ordon Shield House Ledge Grass Rupee: Night and (Gale_Boomerang or Clawshot)
+    Uli Cradle Delivery: Day and Human_Link
+  Exits:
+    Ordon Seras Shop: Day and Can_Open_Doors
+    Ordon Sword House: Day and Can_Open_Doors
+    Ordon Shield House: Day and Can_Open_Doors
+    Ordon Shield House Upper Ledge: Impossible # To satisfy Entrance Rando
+    Ordon Fados House: Day and Can_Open_Doors
+    Ordon Bos House Left Door Exterior: Nothing
+    Ordon Bos House Right Door Exterior: Nothing
+    Ordon Ranch Village Pathway: Nothing
+    Outside Links House: Nothing
+
+- Name: Ordon Seras Shop
+  Can Transform: If Transform Anywhere
+  Events:
+    Can Refill Lantern Oil: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+  Locations:
+    Ordon Cat Rescue: "'Fish_for_Ordon_Cat'"
+    Sera Shop Slingshot: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+  Exits:
+    Ordon Village: Nothing
+
+- Name: Ordon Sword House
+  Locations:
+    Ordon Sword: Can_Complete_Prologue or Faron_Twilight_Cleared == On
+  Exits:
+    Ordon Village: Can_Open_Doors
+
+- Name: Ordon Shield House
+  Exits:
+    Ordon Shield House Upper Ledge: Wolf_Link
+    Ordon Village: Can_Open_Doors
+
+- Name: Ordon Shield House Upper Ledge
+  Locations:
+    Ordon Shield: (Can_Complete_Prologue or Faron_Twilight_Cleared == On) and Can_Survive_Two_Bonks
+  Exits:
+    Ordon Village: Wolf_Link
+
+- Name: Ordon Fados House
+  Exits:
+    Ordon Village: Can_Open_Doors
+
+- Name: Ordon Bos House Left Door Exterior
+  Can Transform: Never
+  Exits:
+    Ordon Bos House Left Door Interior: Can_Open_Doors
+    Ordon Village: Nothing
+
+- Name: Ordon Bos House Right Door Exterior
+  Can Transform: Never
+  Exits:
+    Ordon Bos House Right Door Interior: Can_Open_Doors
+    Ordon Village: Nothing
+
+- Name: Ordon Bos House Left Door Interior
+  Can Transform: Never
+  Exits:
+    Ordon Bos House Left Door Exterior: Can_Open_Doors
+    Ordon Bos House: Nothing
+
+- Name: Ordon Bos House Right Door Interior
+  Can Transform: Never
+  Exits:
+    Ordon Bos House Right Door Exterior: Can_Open_Doors
+    Ordon Bos House: Nothing
+
+- Name: Ordon Bos House
+  Can Transform: Never
+  Locations:
+    Wrestling With Bo: Human_Link
+  Exits:
+    Ordon Bos House Right Door Interior: Nothing
+    Ordon Bos House Right Door Interior: Nothing
+
+# ORDON RANCH
+
+- Name: Ordon Ranch Village Pathway
+  Map Sector: Ordona Province
+  Region: Ordon
+  Can Warp: True
+  Can Change Time: True
+  Exits:
+    Ordon Village: Nothing
+    Ordon Ranch: Day
+
+- Name: Ordon Ranch
+  Map Sector: Ordona Province
+  Region: Ordon
+  Can Warp: True
+  Locations:
+    Herding Goats Reward: Can_Complete_Prologue and Day
+  Exits:
+    Ordon Ranch Grotto: Wolf_Link
+    Ordon Ranch Village Pathway: Day
+
+- Name: Ordon Ranch Grotto
+  Locations:
+    Ordon Ranch Grotto Lantern Chest: Can_Light_Torches
+  Exits:
+    Ordon Ranch: Nothing

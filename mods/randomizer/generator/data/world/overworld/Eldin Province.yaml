@@ -1,0 +1,632 @@
+
+# KAKARIKO GORGE
+
+- Name: Kakariko Gorge
+  Map Sector: Eldin Province
+  Region: Kakariko Gorge
+  Twilight: Eldin
+  Can Warp: True
+  Locations:
+    Kakariko Gorge Warp Portal: Nothing
+    Kakariko Gorge Owl Statue Chest: Restored_Dominion_Rod
+    Kakariko Gorge Double Clawshot Chest: Double_Clawshots
+    Kakariko Gorge Spire Heart Piece: Clawshot or Gale_Boomerang
+    Kakariko Gorge Owl Statue Boulder Rupee: Can_Smash
+    Kakariko Gorge Spire Boulder Rupee: Can_Smash
+    Kakariko Gorge Owl Statue Sky Character: Restored_Dominion_Rod
+    Kakariko Gorge Male Pill Bug: Nothing
+    Kakariko Gorge Female Pill Bug: Nothing
+    Kakariko Gorge Poe: Can_Use_Senses and Can_Complete_MDH and Can_Complete_All_Twilight and Night
+    Kakariko Gorge Hint Sign: Nothing
+  Exits:
+    Kakariko Gorge Cave Entrance: Can_Smash
+    Kakariko Gorge Keese Grotto: Can_Dig
+    Kakariko Gorge Behind Gate: Nothing
+    Eldin Field: Can_Smash
+    Faron Field: Nothing
+
+- Name: Kakariko Gorge Cave Entrance
+  Map Sector: Eldin Province
+  Region: Kakariko Gorge
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Kakariko Gorge: Can_Smash
+    Eldin Lantern Cave: Nothing
+
+- Name: Eldin Lantern Cave
+  Locations:
+    Eldin Lantern Cave First Chest: Can_Break_Webs
+    Eldin Lantern Cave Lantern Chest: Lantern
+    Eldin Lantern Cave Second Chest: Can_Break_Webs
+    Eldin Lantern Cave Poe: Can_Break_Webs and Can_Use_Senses
+  Exits:
+    Kakariko Gorge Cave Entrance: Nothing
+
+- Name: Kakariko Gorge Keese Grotto
+  Exits:
+    Kakariko Gorge: Nothing
+
+- Name: Kakariko Gorge Behind Gate
+  Region: Kakariko Gorge
+  Twilight: Eldin
+  Exits:
+    Lower Kakariko Village: Nothing
+    Kakariko Gorge: Wolf_Link or Gate_Keys or Small_Keys == Keysy or Twilight
+
+# KAKARIKO VILLAGE & GRAVEYARD
+
+- Name: Lower Kakariko Village
+  Map Sector: Eldin Province
+  Region: Kakariko Village
+  Twilight: Eldin
+  Can Warp: True
+  Events:
+    Can Start Springwater Rush: Can_Talk_to_Springwater_Goron
+  Locations:
+    Kakariko Village Warp Portal: Nothing
+    Eldin Spring Underwater Chest: Can_Smash and Iron_Boots
+    Eldin Spring Underwater Boulder Rupee: Water_Bombs and (Iron_Boots or Zora_Armor) and Can_Complete_Eldin_Twilight
+    Kakariko Village Bomb Rock Spire Heart Piece: Bombs and Gale_Boomerang
+    Kakariko Village Bell Rupee: Shadow_Crystal and Can_Launch_Bombs and Can_Complete_Eldin_Twilight
+    Kakariko Village Hot Spring Ledge Box Rupee: (Shadow_Crystal or Gale_Boomerang) and Can_Complete_Eldin_Twilight
+    Kakariko Village Spring Shortcut Box Rupee 1: Can_Smash and Can_Complete_Eldin_Twilight
+    Kakariko Village Spring Shortcut Box Rupee 2: Can_Smash and Can_Complete_Eldin_Twilight
+    Kakariko Village Ant House Ledge Box Rupee: Gale_Boomerang and Can_Complete_Eldin_Twilight
+    Kakariko Village Hint Sign: Nothing
+  Exits:
+    Renados Sanctuary Front West Door Exterior: Nothing
+    Renados Sanctuary Front East Door Exterior: Nothing
+    Renados Sanctuary Back West Door Exterior: Nothing
+    Renados Sanctuary Back East Door Exterior: Nothing
+    Kakariko Renados Sanctuary: Twilight
+    Kakariko Graveyard: Nothing
+    Kakariko Malo Mart: Twilight or (Can_Open_Doors and Day)
+    Elde Inn North Door Exterior: Nothing
+    Elde Inn South Door Exterior: Nothing
+    Kakariko Elde Inn: Twilight
+    Kakariko Bug House Door: Nothing
+    Kakariko Bug House Ceiling Hole: Nothing
+    Kakariko Barnes Bomb Shop Lower: Twilight or (Can_Open_Doors and Day)
+    Upper Kakariko Village: Can_Smash or ('Can_Complete_Goron_Mines' and Day)
+    Death Mountain Near Kakariko: Nothing
+    Kakariko Village Behind Gate: Not_Twilight
+    Kakariko Gorge Behind Gate: Nothing
+
+- Name: Renados Sanctuary Front East Door Exterior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Front East Door Interior: Can_Open_Doors
+    Lower Kakariko Village: Nothing
+
+- Name: Renados Sanctuary Front West Door Exterior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Front West Door Interior: Can_Open_Doors
+    Lower Kakariko Village: Nothing
+
+- Name: Renados Sanctuary Back East Door Exterior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Back East Door Interior: Can_Open_Doors
+    Lower Kakariko Village: Nothing
+
+- Name: Renados Sanctuary Back West Door Exterior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Back West Door Interior: Can_Open_Doors
+    Lower Kakariko Village: Nothing
+
+- Name: Renados Sanctuary Front East Door Interior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Front East Door Exterior: Can_Open_Doors
+    Kakariko Renados Sanctuary: Nothing
+
+- Name: Renados Sanctuary Front West Door Interior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Front West Door Exterior: Can_Open_Doors
+    Kakariko Renados Sanctuary: Nothing
+
+- Name: Renados Sanctuary Back East Door Interior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Back East Door Exterior: Can_Open_Doors
+    Kakariko Renados Sanctuary: Nothing
+
+- Name: Renados Sanctuary Back West Door Interior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Renados Sanctuary Back West Door Exterior: Can_Open_Doors
+    Kakariko Renados Sanctuary: Nothing
+
+- Name: Kakariko Renados Sanctuary
+  Twilight: Eldin
+  Can Transform: If Transform Anywhere
+  Events:
+    Can Show Ilia Wooden Statue: Wooden_Statue
+    Can Show Ilia Ilias Charm: Ilias_Charm
+  Locations:
+    Renados Letter: "'Can_Complete_Temple_of_Time'"
+    Ilia Memory Reward: "'Can_Show_Ilia_Ilias_Charm'"
+  Exits:
+    Kakariko Renados Sanctuary Basement: Nothing
+    Renados Sanctuary Front East Door Interior: Nothing
+    Renados Sanctuary Front West Door Interior: Nothing
+    Renados Sanctuary Back East Door Interior: Nothing
+    Renados Sanctuary Back West Door Interior: Nothing
+
+- Name: Kakariko Renados Sanctuary Basement
+  Twilight: Eldin
+  Locations:
+    Sanctuary Basement Twilit Insect 1: Can_Defeat_Eldin_Twilit_Insect
+    Sanctuary Basement Twilit Insect 2: Can_Defeat_Eldin_Twilit_Insect
+    Sanctuary Basement Twilit Insect 3: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Kakariko Renados Sanctuary: Human_Link
+
+- Name: Kakariko Graveyard
+  Map Sector: Eldin Province
+  Region: Kakariko Graveyard
+  Twilight: Eldin
+  Can Warp: True
+  Events:
+    Can Follow Rutella: Gate_Keys or Small_Keys == Keysy
+  Locations:
+    Kakariko Graveyard Lantern Chest: Lantern
+    Kakariko Graveyard Male Ant: Nothing
+    Kakariko Graveyard Grave Poe: Can_Use_Senses and Night
+    Kakariko Graveyard Open Poe: Can_Use_Senses and Night
+    Kakariko Graveyard Golden Wolf: Can_Complete_Eldin_Twilight and 'Howl_at_Snowpeak_Mountain_Howling_Stone'
+    Kakariko Graveyard Twilit Insect: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Kakariko Graveyard Pond: "'Can_Follow_Rutella'"
+    Lower Kakariko Village: Nothing
+
+- Name: Kakariko Graveyard Pond
+  Map Sector: Eldin Province
+  Region: Kakariko Graveyard
+  Twilight: Eldin
+  Can Warp: True
+  Locations: 
+    Kakariko Graveyard Underwater Boulder Rupee: (Iron_Boots or Zora_Armor) and Water_Bombs
+    Rutelas Blessing: "'Can_Follow_Rutella'"
+    Gift From Ralis: Asheis_Sketch and 'Can_Follow_Rutella'
+    Kakariko Graveyard Hint Sign: Nothing
+  Exits:
+    Lake Hylia: Water_Bombs and (Iron_Boots or Zora_Armor)
+    Kakariko Graveyard: "'Can_Follow_Rutella'"
+
+- Name: Kakariko Malo Mart
+  Twilight: Eldin
+  Can Transform: If Transform Anywhere
+  Events:
+    Can Fund Malo Mart: Can_Talk_to_Humans and Not_Twilight and Can_Complete_Lanayru_Twilight and 'Can_Farm_Lots_of_Rupees'
+  Locations:
+    Kakariko Village Malo Mart Hylian Shield: Can_Talk_to_Humans and Not_Twilight and 'Can_Farm_Lots_of_Rupees'
+    Kakariko Village Malo Mart Hawkeye: "'Can_Start_Talo_Sharpshooting' and 'Can_Farm_Lots_of_Rupees'"
+    Kakariko Village Malo Mart Red Potion: Can_Talk_to_Humans and Not_Twilight and 'Can_Farm_Lots_of_Rupees'
+    Kakariko Village Malo Mart Wooden Shield: Can_Talk_to_Humans and Not_Twilight and 'Can_Farm_Lots_of_Rupees'
+    Kakariko Malo Mart Twilit Insect: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Lower Kakariko Village: Nothing
+
+- Name: Elde Inn North Door Exterior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Elde Inn North Door Interior: Can_Open_Doors and Day
+    Lower Kakariko Village: Nothing
+
+- Name: Elde Inn South Door Exterior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Elde Inn South Door Interior: Can_Open_Doors and Day
+    Lower Kakariko Village: Nothing
+
+- Name: Elde Inn North Door Interior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Elde Inn North Door Exterior: Can_Open_Doors and Day
+    Kakariko Elde Inn: Nothing
+
+- Name: Elde Inn South Door Interior
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Elde Inn South Door Exterior: Can_Open_Doors and Day
+    Kakariko Elde Inn: Nothing
+
+- Name: Kakariko Elde Inn
+  Twilight: Eldin
+  Locations:
+    Kakariko Inn Chest: Nothing
+    Kakariko Inn Pipe Twilit Insect: Can_Defeat_Eldin_Twilit_Insect
+    Kakariko Inn Bedroom Twilit Insect: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Elde Inn North Door Interior: Nothing
+    Elde Inn South Door Interior: Nothing
+
+- Name: Kakariko Bug House Door
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Kakariko Bug House: Can_Open_Doors
+    Lower Kakariko Village: Nothing
+
+- Name: Kakariko Bug House Ceiling Hole
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Kakariko Bug House: Nothing
+    Lower Kakariko Village: Nothing
+
+- Name: Kakariko Bug House
+  Twilight: Eldin
+  Locations:
+    Kakariko Village Female Ant: Nothing
+    Kakariko Bug House Twilit Insect: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Kakariko Bug House Door: Can_Open_Doors
+    Kakariko Bug House Ceiling Hole: Can_Midna_Jump or Twilight
+
+- Name: Kakariko Barnes Bomb Shop Lower
+  Twilight: Eldin
+  Events:
+    Can Refill Regular Bombs: "'Can_Farm_Lots_of_Rupees'"
+    Can Refill Water Bombs: "'Can_Farm_Lots_of_Rupees'"
+  Locations:
+    Barnes Bomb Bag: "'Can_Farm_Lots_of_Rupees'"
+  Exits:
+    Kakariko Barnes Bomb Shop Upper: Nothing
+    Lower Kakariko Village: Can_Open_Doors
+
+- Name: Kakariko Barnes Bomb Shop Upper
+  Twilight: Eldin
+  Locations:
+    Barnes Bomb Shop Twilit Insect: Can_Defeat_Eldin_Twilit_Insect and Can_Survive_One_Bonk
+  Exits:
+    Kakariko Barnes Bomb Shop Lower: Nothing
+    Upper Kakariko Village: Nothing
+
+- Name: Upper Kakariko Village
+  Map Sector: Eldin Province
+  Region: Kakariko Village
+  Twilight: Eldin
+  Can Warp: True
+  Locations:
+    Kakariko Village Bomb Shop Poe: Can_Use_Senses and Night
+    Kakariko Village Watchtower Poe: Can_Use_Senses and Night
+    Kakariko Watchtower Alcove Chest: Can_Smash
+    Kakariko Destroyed Building Twilit Insect 1: Can_Defeat_Eldin_Twilit_Insect
+    Kakariko Destroyed Building Twilit Insect 2: Can_Defeat_Eldin_Twilit_Insect
+    Kakariko Destroyed Building Twilit Insect 3: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Kakariko Watchtower Lower Door: Nothing
+    Kakariko Watchtower Dig Spot: Nothing
+    Kakariko Top of Watchtower: Day and 'Can_Complete_Goron_Mines'
+    Kakariko Barnes Bomb Shop Upper: Nothing
+    Lower Kakariko Village: Nothing
+
+- Name: Kakariko Watchtower Lower Door
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Kakariko Watchtower Lower Interior: Can_Open_Doors
+    Upper Kakariko Village: Nothing
+
+- Name: Kakariko Watchtower Dig Spot
+  Twilight: Eldin
+  Can Transform: Never
+  Exits:
+    Kakariko Watchtower Lower Interior: Can_Dig or Twilight
+    Upper Kakariko Village: Nothing
+
+- Name: Kakariko Watchtower Lower Interior
+  Twilight: Eldin
+  Locations:
+    Kakariko Watchtower Twilit Insect: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Kakariko Watchtower Upper Interior: Can_Climb_Ladders
+    Kakariko Watchtower Lower Door: Can_Open_Doors
+    Kakariko Watchtower Dig Spot: Can_Dig or Twilight
+
+- Name: Kakariko Watchtower Upper Interior
+  Twilight: Eldin
+  Locations:
+    Kakariko Watchtower Chest: Nothing
+  Exits:
+    Kakariko Watchtower Lower Interior: Nothing
+    Kakariko Top of Watchtower: Can_Open_Doors
+
+- Name: Kakariko Top of Watchtower
+  Map Sector: Eldin Province
+  Region: Kakariko Village
+  Twilight: Eldin
+  Can Warp: True
+  Events:
+    Can Start Talo Sharpshooting: Day and Can_Climb_Ladders and Bow and 'Can_Complete_Goron_Mines'
+  Locations:
+    Talo Sharpshooting: "'Can_Start_Talo_Sharpshooting'"
+  Exits:
+    Kakariko Watchtower Upper Interior: Can_Open_Doors
+
+- Name: Kakariko Village Behind Gate
+  Map Sector: Eldin Province
+  Region: Kakariko Village
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Eldin Field: Nothing
+    Lower Kakariko Village: Gate_Keys or Small_Keys == Keysy
+
+# DEATH MOUNTAIN
+
+- Name: Death Mountain Near Kakariko
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Death Mountain Trail: Iron_Boots or 'Can_Complete_Goron_Mines' or Twilight
+    Lower Kakariko Village: Nothing
+
+- Name: Death Mountain Trail
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Events:
+    Howl at Death Mountain Howling Stone: Can_Howl
+  Locations:
+    Death Mountain Trail Twilit Insect Near Howling Stone: Can_Defeat_Eldin_Twilit_Insect
+    Death Mountain Alcove Chest: Clawshot or 'Can_Complete_Goron_Mines'
+    Death Mountain Trail Poe: Can_Use_Senses and 'Can_Complete_Goron_Mines'
+  Exits:
+    Death Mountain Volcano: Nothing
+    Death Mountain Near Kakariko: Nothing
+
+- Name: Death Mountain Volcano
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Locations:
+    Death Mountain Warp Portal: Nothing
+    Death Mountain Volcano Pipe Ledge Rock Rupee: Can_Complete_Eldin_Twilight and (Can_Defeat_Goron or 'Can_Complete_Goron_Mines')
+    Death Mountain Trail Twilit Insect on Wall: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Death Mountain Hot Spring: Twilight or (Can_Defeat_Goron or 'Can_Complete_Goron_Mines')
+    Death Mountain Lower Elevator: Goron_Mines_Entrance == Open or 'Can_Access_Death_Mountain_Lower_Elevator'
+    Death Mountain Outside Sumo Hall: Iron_Boots and (Can_Defeat_Goron or 'Can_Complete_Goron_Mines') and Can_Complete_Eldin_Twilight
+    Death Mountain Trail: Nothing
+
+- Name: Death Mountain Hot Spring
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Events:
+    Can Buy Wooden Shield: Can_Talk_to_Humans and 'Can_Farm_Rupees' and (Can_Defeat_Goron or 'Can_Complete_Goron_Mines')
+  Locations:
+    Death Mountain Trail Twilit Insect in Hot Spring: Can_Defeat_Eldin_Twilit_Insect
+  Exits:
+    Death Mountain Volcano: Nothing
+
+- Name: Death Mountain Lower Elevator
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Death Mountain Sumo Hall Elevator: Iron_Boots
+    Death Mountain Volcano: Nothing
+
+- Name: Death Mountain Outside Sumo Hall
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Locations:
+    Death Mountain Volcano Ledge Rupee 1: Can_Complete_Eldin_Twilight and (Can_Defeat_Goron or 'Can_Complete_Goron_Mines')
+    Death Mountain Volcano Ledge Rupee 2: Can_Complete_Eldin_Twilight and (Can_Defeat_Goron or 'Can_Complete_Goron_Mines')
+    Death Mountain Volcano Ledge Rupee 3: Can_Complete_Eldin_Twilight and (Can_Defeat_Goron or 'Can_Complete_Goron_Mines')
+  Exits:
+    Death Mountain Sumo Hall: Nothing
+    Death Mountain Hot Spring: Nothing
+    Death Mountain Volcano: Nothing
+
+- Name: Death Mountain Sumo Hall Elevator
+  Map Sector: Eldin Province
+  Region: Death Mountain
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Death Mountain Sumo Hall: Goron_Mines_Entrance != Closed or 'Can_Wrestle_Goron_Elder'
+    Death Mountain Lower Elevator: Iron_Boots
+
+- Name: Death Mountain Sumo Hall
+  Can Transform: If Transform Anywhere
+  Events:
+    Can Wrestle Goron Elder: Iron_Boots
+  Exits:
+    Death Mountain Sumo Hall Goron Mines Tunnel: Goron_Mines_Entrance != Closed or 'Can_Wrestle_Goron_Elder'
+    Death Mountain Sumo Hall Elevator: Goron_Mines_Entrance != Closed or 'Can_Wrestle_Goron_Elder'
+    Death Mountain Outside Sumo Hall: Nothing
+
+- Name: Death Mountain Sumo Hall Goron Mines Tunnel
+  Exits:
+    Goron Mines Entrance: Nothing
+    Death Mountain Sumo Hall: Goron_Mines_Entrance != Closed or 'Can_Wrestle_Goron_Elder'
+
+# ELDIN FIELD
+
+- Name: Eldin Field
+  Map Sector: Eldin Province
+  Region: Eldin Field
+  Twilight: Eldin
+  Can Warp: True
+  Events:
+    Can Finish Goron Springwater Rush: "'Can_Start_Springwater_Rush' and (Skip_Bridge_Donation == On or 'Can_Fund_Malo_Mart')"
+  Locations:
+    Bridge of Eldin Warp Portal: Can_Defeat_Shadow_Beast
+    Eldin Field Bomb Rock Chest: Can_Smash
+    Bridge of Eldin Owl Statue Chest: Restored_Dominion_Rod
+    Goron Springwater Rush: "'Can_Finish_Goron_Springwater_Rush'"
+    Eldin Field Male Grasshopper: Nothing
+    Eldin Field Female Grasshopper: Nothing
+    Bridge of Eldin Male Phasmid: Clawshot or Gale_Boomerang
+    Eldin Field Hint Sign: Nothing
+  Exits:
+    # Only allow logical access to the other side if we've already been there or the bridge donation is skipped
+    Eldin Field Near Castle Town: (Skip_Bridge_Donation == On and Can_Complete_Eldin_Twilight and Can_Complete_Lanayru_Twilight) or 'Can_Access_Eldin_Field_Near_Castle_Town'
+    Eldin Field Bomskit Grotto: Can_Dig
+    Eldin Field Water Bomb Fish Grotto: Can_Dig
+    Eldin Field North of Bridge: Nothing
+    Kakariko Gorge: Can_Smash
+    Kakariko Village Behind Gate: Nothing
+
+- Name: Eldin Field Near Castle Town
+  Map Sector: Eldin Province
+  Region: Eldin Field
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Outside Castle Town East: Nothing
+    Eldin Field: Skip_Bridge_Donation == On or 'Can_Fund_Malo_Mart'
+
+- Name: Eldin Field Bomskit Grotto
+  Locations:
+    Eldin Field Bomskit Grotto Left Chest: Nothing
+    Eldin Field Bomskit Grotto Lantern Chest: Lantern
+  Exits:
+    Eldin Field: Nothing
+
+- Name: Eldin Field Water Bomb Fish Grotto
+  Events:
+    Can Refill Water Bombs: Fishing_Rod
+  Locations:
+    Eldin Field Water Bomb Fish Grotto Chest: Nothing
+  Exits:
+    Eldin Field: Nothing
+
+- Name: Eldin Field North of Bridge
+  Map Sector: Eldin Province
+  Region: North Eldin
+  Twilight: Eldin
+  Can Warp: True
+  Locations:
+    Bridge of Eldin Boulder Rupee: Can_Smash
+    Bridge of Eldin Owl Statue Sky Character: Restored_Dominion_Rod
+    Bridge of Eldin Female Phasmid: Clawshot or Gale_Boomerang
+  Exits:
+    Eldin Field Lava Cave Upper Ledge: Clawshot
+    North Eldin Field: Can_Smash
+    Eldin Field: Nothing
+
+- Name: Eldin Field Lava Cave Upper Ledge
+  Map Sector: Eldin Province
+  Region: North Eldin
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Eldin Field Lava Cave Upper: Nothing
+    Eldin Field North of Bridge: Nothing
+
+- Name: Eldin Field Lava Cave Upper
+  Locations:
+    Eldin Stockcave Upper Chest: Iron_Boots
+  Exits:
+    Eldin Field Lava Cave Lower: Iron_Boots
+    Eldin Field Lava Cave Upper Ledge: Nothing
+
+- Name: Eldin Field Lava Cave Lower
+  Locations:
+    Eldin Stockcave Lantern Chest: Lantern
+    Eldin Stockcave Lowest Chest: Nothing
+  Exits:
+    Eldin Field Lava Cave Lower Ledge: Nothing
+
+- Name: Eldin Field Lava Cave Lower Ledge
+  Map Sector: Eldin Province
+  Region: North Eldin
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Eldin Field North of Bridge: Clawshot
+    Eldin Field Lava Cave Lower: Nothing
+
+- Name: North Eldin Field
+  Map Sector: Eldin Province
+  Region: North Eldin
+  Twilight: Eldin
+  Can Warp: True
+  Locations:
+    North Eldin Field Hint Sign: Nothing
+  Exits:
+    Eldin Field Grotto Platform: Spinner
+    Eldin Field Outside Hidden Village: Ilia_Memory_Quest >= Charm or 'Can_Show_Ilia_Wooden_Statue'
+    Lanayru Field: Nothing
+    Eldin Field North of Bridge: Nothing
+
+- Name: Eldin Field Grotto Platform
+  Map Sector: Eldin Province
+  Region: North Eldin
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Eldin Field Stalfos Grotto: Can_Dig
+    North Eldin Field: Spinner # TODO: Check Savewarp
+
+- Name: Eldin Field Stalfos Grotto
+  Locations:
+    Eldin Field Stalfos Grotto Right Small Chest: Nothing
+    Eldin Field Stalfos Grotto Left Small Chest: Nothing
+    Eldin Field Stalfos Grotto Stalfos Chest: Can_Defeat_Stalfos
+  Exits:
+    Eldin Field Grotto Platform: Nothing
+
+- Name: Eldin Field Outside Hidden Village
+  Map Sector: Eldin Province
+  Region: North Eldin
+  Twilight: Eldin
+  Can Warp: True
+  Exits:
+    Hidden Village: Nothing
+    North Eldin Field: "'Can_Show_Ilia_Wooden_Statue'"
+
+# HIDDEN VILLAGE
+
+- Name: Hidden Village
+  Map Sector: Eldin Province
+  Region: Hidden Village
+  Can Warp: True
+  Can Transform: If Transform Anywhere
+  Events:
+    Howl at Hidden Village Howling Stone: Can_Howl
+  Locations:
+    Cats Hide and Seek Minigame: Can_Talk_to_Animals and Bow and Clawshot and 'Can_Show_Ilia_Ilias_Charm'
+    Ilia Charm: Bow
+    Hidden Village Poe: Night and Can_Talk_to_Animals and Bow and Clawshot and 'Can_Show_Ilia_Ilias_Charm'
+    Hidden Village Hint Sign: Nothing
+  Exits:
+    Hidden Village Impaz House: Bow and Dominion_Rod and Can_Open_Doors
+    Eldin Field Outside Hidden Village: Nothing
+
+- Name: Hidden Village Impaz House
+  Can Transform: If Transform Anywhere
+  Locations:
+    Skybook From Impaz: Bow and Dominion_Rod and 'Can_Access_Hidden_Village'
+  Exits:
+    Hidden Village: Nothing

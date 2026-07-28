@@ -1,0 +1,2750 @@
+###############################
+#           SPAWN             #
+###############################
+
+- Type: Spawn
+  Forward:
+    Connection: Links Spawn -> Outside Links House
+    Stage: 43
+    Room: 1
+    Spawn: "01"
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+###############################
+#        WARP PORTALS         #
+###############################
+
+- Type: Warp Portal
+  Forward:
+    Connection: Ordon Spring Warp Portal -> Ordon Spring
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: South Faron Woods Warp Portal -> South Faron Woods
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: North Faron Woods Warp Portal -> North Faron Woods
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Sacred Grove Warp Portal -> Sacred Grove Lower
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Kakariko Gorge Warp Portal -> Kakariko Gorge
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Kakariko Village Warp Portal -> Lower Kakariko Village
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Death Mountain Warp Portal -> Death Mountain Volcano
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Bridge of Eldin Warp Portal -> Eldin Field North of Bridge
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Castle Town Warp Portal -> Outside Castle Town West
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Lake Hylia Warp Portal -> Lake Hylia
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Upper Zoras River Warp Portal -> Upper Zoras River
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Zoras Domain Warp Portal -> Zoras Throne Room
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Snowpeak Warp Portal -> Snowpeak Summit Upper
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Gerudo Desert Warp Portal -> Gerudo Desert Cave of Ordeals Plateau
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Warp Portal
+  Forward:
+    Connection: Mirror Chamber Warp Portal -> Mirror Chamber Upper
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+###############################
+#          DUNGEONS           #
+###############################
+
+- Type: Dungeon
+  Forward:
+    Connection: North Faron Woods -> Forest Temple Entrance
+    Alias: Faron Woods -> Forest Temple
+    Stage: 6
+    Room: 22
+    Spawn: "00"
+    Spawn Type: "00" 
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Forest Temple Entrance -> North Faron Woods
+    Alias: Forest Temple -> Faron Woods
+    Stage: 45
+    Room: 6
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Death Mountain Sumo Hall Goron Mines Tunnel -> Goron Mines Entrance
+    Alias: Death Mountain Sumo Hall -> Goron Mines
+    Stage: 3
+    Room: 1
+    Spawn: "01"
+    Spawn Type: "00" 
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Goron Mines Entrance -> Death Mountain Sumo Hall Goron Mines Tunnel
+    Alias: Goron Mines -> Death Mountain Sumo Hall
+    Stage: 69
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Lake Hylia Lakebed Temple Entrance -> Lakebed Temple Entrance
+    Alias: Lake Hylia -> Lakebed Temple
+    Stage: 0
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Lakebed Temple Entrance -> Lake Hylia Lakebed Temple Entrance
+    Alias: Lakebed Temple -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "0B"
+    Spawn Type: "D0"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Outside Arbiters Grounds -> Arbiters Grounds Entrance
+    Alias: Outside Arbiters Grounds -> Arbiters Grounds
+    Stage: 24
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Arbiters Grounds Entrance -> Outside Arbiters Grounds
+    Alias: Arbiters Grounds -> Outside Arbiters Grounds
+    Stage: 55
+    Room: 3
+    Spawn: "03"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Door Couple Tag: Snowpeak Ruins Entrance
+  Forward:
+    Connection: Snowpeak Ruins East Door Exterior -> Snowpeak Ruins East Door Interior
+    Alias: Outside Snowpeak Ruins -> Snowpeak Ruins East Door
+    Stage: 27
+    Room: 0
+    Spawn: "02"
+    Spawn Type: "A0"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Snowpeak Ruins East Door Interior -> Snowpeak Ruins East Door Exterior
+    Alias: Snowpeak Ruins East Door -> Outside Snowpeak Ruins
+    Stage: 51
+    Room: 1
+    Spawn: "0A"
+    Spawn Type: "0B"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Door Couple Tag: Snowpeak Ruins Entrance
+  Forward:
+    Connection: Snowpeak Ruins West Door Exterior -> Snowpeak Ruins West Door Interior
+    Alias: Outside Snowpeak Ruins -> Snowpeak Ruins West Door
+    Stage: 27
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "A0"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Snowpeak Ruins West Door Interior -> Snowpeak Ruins West Door Exterior
+    Alias: Snowpeak Ruins West Door -> Outside Snowpeak Ruins
+    Stage: 51
+    Room: 1
+    Spawn: "09"
+    Spawn Type: "0B"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Sacred Grove Past Behind Window -> Temple of Time Entrance
+    Alias: Sacred Grove Past -> Temple of Time
+    Stage: 9
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Temple of Time Entrance -> Sacred Grove Past Behind Window
+    Alias: Temple of Time -> Sacred Grove Past
+    Stage: 54
+    Room: 2
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Lake Hylia -> City in the Sky Entrance
+    Alias: Lake Hylia -> City in the Sky
+    Stage: 12
+    Room: 0
+    Spawn: "02"
+    Spawn Type: "00"
+    Parameters: "C00F"
+    State: "FF"
+  Return:
+    Connection: City in the Sky Entrance -> Lake Hylia
+    Alias: City in the Sky -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "4D"
+    Spawn Type: "40"
+    Parameters: "C00F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Twilight Realm Portal -> Palace of Twilight Entrance
+    Alias: Mirror Chamber -> Palace of Twilight
+    Stage: 15
+    Room: 0
+    Spawn: "0A"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "E"
+  Return:
+    Connection: Palace of Twilight Entrance -> Twilight Realm Portal
+    Alias: Palace of Twilight -> Mirror Chamber
+    Stage: 60
+    Room: 4
+    Spawn: "04"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Dungeon
+  Forward:
+    Connection: Castle Town North Inside Barrier -> Hyrule Castle Entrance
+    Alias: Castle Town -> Hyrule Castle
+    Stage: 20
+    Room: 11
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Hyrule Castle Entrance -> Castle Town North Inside Barrier
+    Alias: Hyrule Castle -> Castle Town
+    Stage: 53
+    Room: 1
+    Spawn: "32"
+    Spawn Type: "10"
+    Parameters: "F01F"
+    State: "FF"
+
+###############################
+#           BOSSES            #
+###############################
+
+- Type: Boss
+  Forward:
+    Connection: Forest Temple Boss Door Room North Side -> Forest Temple Boss Room
+    Alias: Forest Temple -> Forest Temple Boss Room
+    Stage: 7
+    Room: 50
+    Spawn: "01"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Forest Temple Boss Room -> South Faron Woods
+    Alias: Forest Temple Boss Room -> Faron Woods
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: Goron Mines Boss Door Room Near Boss Door -> Goron Mines Boss Room
+    Alias: Goron Mines -> Goron Mines Boss Room
+    Stage: 4
+    Room: 50
+    Spawn: "01"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Goron Mines Boss Room -> Lower Kakariko Village
+    Alias: Goron Mines Boss Room -> Kakariko Village
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: Lakebed Temple Central Room Past Boss Door -> Lakebed Temple Boss Room
+    Alias: Lakebed Temple -> Lakebed Temple Boss Room
+    Stage: 1
+    Room: 50
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Lakebed Temple Boss Room -> Lake Hylia Lanayru Spring
+    Alias: Lakebed Temple Boss Room -> Lanayru Spring
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: Arbiters Grounds Socket Room Near Boss Door -> Arbiters Grounds Boss Room
+    Alias: Arbiters Grounds -> Arbiters Grounds Boss Room
+    Stage: 25
+    Room: 50
+    Spawn: "00"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Arbiters Grounds Boss Room -> Mirror Chamber Lower
+    Alias: Arbiters Grounds Boss Room -> Mirror Chamber
+    Stage: 60
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "501F"
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: Snowpeak Ruins West Courtyard North Balcony -> Snowpeak Ruins Boss Room
+    Alias: Snowpeak Ruins -> Snowpeak Ruins Boss Room
+    Stage: 28
+    Room: 50
+    Spawn: "01"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Snowpeak Ruins Boss Room -> Snowpeak Summit Lower
+    Alias: Snowpeak Ruins Boss Room -> Outside Snowpeak Ruins
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: Temple of Time Crumbling Corridor Near Boss Door -> Temple of Time Boss Room
+    Alias: Temple of Time -> Temple of Time Boss Room
+    Stage: 10
+    Room: 50
+    Spawn: "00"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Temple of Time Boss Room -> Sacred Grove Past Behind Window
+    Alias: Temple of Time Boss Room -> Sacred Grove Past
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: City in the Sky North Tower Top -> City in the Sky Boss Room
+    Alias: City in the Sky -> City in the Sky Boss Room
+    Stage: 13
+    Room: 50
+    Spawn: "01"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: City in the Sky Boss Room -> City in the Sky Entrance
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Boss
+  Forward:
+    Connection: Palace of Twilight Boss Door Room -> Palace of Twilight Boss Room
+    Alias: Palace of Twilight -> Palace of Twilight Boss Room
+    Stage: 16
+    Room: 10
+    Spawn: "00"
+    Spawn Type: "60"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Palace of Twilight Boss Room -> Palace of Twilight Entrance
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+###############################
+#          GROTTOS            #
+###############################
+
+- Type: Grotto
+  Forward:
+    Connection: Ordon Ranch -> Ordon Ranch Grotto
+    Stage: 35
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "2"
+  Return:
+    Connection: Ordon Ranch Grotto -> Ordon Ranch
+    Stage: 41
+    Room: 0
+    Spawn: "05"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lost Woods Lower Battle Arena -> Lost Woods Baba Serpent Grotto
+    Alias: Lost Woods -> Lost Woods Baba Serpent Grotto
+    Stage: 36
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F01F"
+    State: "2"
+  Return:
+    Connection: Lost Woods Baba Serpent Grotto -> Lost Woods Lower Battle Arena
+    Alias: Lost Woods Baba Serpent Grotto -> Lost Woods
+    Stage: 54
+    Room: 3
+    Spawn: "05"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Faron Field -> Faron Field Corner Grotto
+    Stage: 36
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F01F"
+    State: "1"
+  Return:
+    Connection: Faron Field Corner Grotto -> Faron Field
+    Stage: 56
+    Room: 6
+    Spawn: "02"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Faron Field -> Faron Field Fishing Grotto
+    Stage: 39
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F010"
+    State: "1"
+  Return:
+    Connection: Faron Field Fishing Grotto -> Faron Field
+    Stage: 56
+    Room: 6
+    Spawn: "03"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Kakariko Gorge -> Kakariko Gorge Keese Grotto
+    Stage: 36
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F01F"
+    State: "3"
+  Return:
+    Connection: Kakariko Gorge Keese Grotto -> Kakariko Gorge
+    Stage: 56
+    Room: 3
+    Spawn: "04"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Eldin Field -> Eldin Field Bomskit Grotto
+    Stage: 35
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "1"
+  Return:
+    Connection: Eldin Field Bomskit Grotto -> Eldin Field
+    Stage: 56
+    Room: 0
+    Spawn: "0C"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Eldin Field -> Eldin Field Water Bomb Fish Grotto
+    Stage: 39
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F010"
+    State: "3"
+  Return:
+    Connection: Eldin Field Water Bomb Fish Grotto -> Eldin Field
+    Stage: 56
+    Room: 0
+    Spawn: "0D"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Eldin Field Grotto Platform -> Eldin Field Stalfos Grotto
+    Alias: Eldin Field -> Eldin Field Stalfos Grotto
+    Stage: 36
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F01F"
+    State: "0"
+  Return:
+    Connection: Eldin Field Stalfos Grotto -> Eldin Field Grotto Platform
+    Alias: Eldin Field Stalfos Grotto -> Eldin Field
+    Stage: 56
+    Room: 7
+    Spawn: "02"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lanayru Field -> Lanayru Field Chu Grotto
+    Stage: 37
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "3"
+  Return:
+    Connection: Lanayru Field Chu Grotto -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: "08"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lanayru Field -> Lanayru Field Skulltula Grotto
+    Stage: 38
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "3"
+  Return:
+    Connection: Lanayru Field Skulltula Grotto -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: "06"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lanayru Field -> Lanayru Field Poe Grotto
+    Stage: 35
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "3"
+  Return:
+    Connection: Lanayru Field Poe Grotto -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: 07""
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Outside Castle Town West Grotto Ledge -> Outside Castle Town West Helmasaur Grotto
+    Alias: Outside Castle Town West -> Outside Castle Town West Helmasaur Grotto
+    Stage: 35
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "0"
+  Return:
+    Connection: Outside Castle Town West Helmasaur Grotto -> Outside Castle Town West Grotto Exit
+    Alias: Outside Castle Town West Helmasaur Grotto -> Outside Castle Town West
+    Stage: 57
+    Room: 8
+    Spawn: "05"
+    Spawn Type: "90"
+    Parameters: F01F""
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Outside Castle Town South Tektite Grotto Platform -> Outside Castle Town South Tektite Grotto
+    Alias: Outside Castle Town South -> Outside Castle Town South Tektite Grotto
+    Stage: 39
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F010"
+    State: "0"
+  Return:
+    Connection: Outside Castle Town South Tektite Grotto -> Outside Castle Town South Tektite Grotto Platform
+    Alias: Outside Castle Town South Tektite Grotto -> Outside Castle Town South
+    Stage: 57
+    Room: 16
+    Spawn: "03"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lake Hylia Bridge Grotto Ledge -> Lake Hylia Bridge Bubble Grotto
+    Alias: Lake Hylia Bridge -> Lake Hylia Bridge Bubble Grotto
+    Stage: 38
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "0"
+  Return:
+    Connection: Lake Hylia Bridge Bubble Grotto -> Lake Hylia Bridge Grotto Ledge
+    Alias: Lake Hylia Bridge Bubble Grotto -> Lake Hylia Bridge
+    Stage: 56
+    Room: 13
+    Spawn: "03"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lake Hylia Upper Area -> Lake Hylia Water Toadpoli Grotto
+    Alias: Lake Hylia -> Lake Hylia Water Toadpoli Grotto
+    Stage: 39
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F010"
+    State: "2"
+  Return:
+    Connection: Lake Hylia Water Toadpoli Grotto -> Lake Hylia Upper Area
+    Alias: Lake Hylia Water Toadpoli Grotto -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "04"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Lake Hylia Shell Blade Grotto Ledge -> Lake Hylia Shell Blade Grotto
+    Alias: Lake Hylia -> Lake Hylia Shell Blade Grotto
+    Stage: 39
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F010"
+    State: "4"
+  Return:
+    Connection: Lake Hylia Shell Blade Grotto -> Lake Hylia Shell Blade Grotto Ledge
+    Alias: Lake Hylia Shell Blade Grotto -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "63"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Gerudo Desert -> Gerudo Desert Skulltula Grotto
+    Stage: 38
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "1"
+  Return:
+    Connection: Gerudo Desert Skulltula Grotto -> Gerudo Desert
+    Stage: 59
+    Room: 0
+    Spawn: "08"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "0"
+
+- Type: Grotto
+  Forward:
+    Connection: Gerudo Desert Basin -> Gerudo Desert Chu Grotto
+    Alias: Gerudo Desert -> Gerudo Desert Chu Grotto
+    Stage: 37
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "1"
+  Return:
+    Connection: Gerudo Desert Chu Grotto -> Gerudo Desert Basin
+    Alias: Gerudo Desert Chu Grotto -> Gerudo Desert
+    Stage: 59
+    Room: 0
+    Spawn: "0A"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "0"
+
+- Type: Grotto
+  Forward:
+    Connection: Gerudo Desert North East Ledge -> Gerudo Desert Rock Grotto
+    Alias: Gerudo Desert -> Gerudo Desert Rock Grotto
+    Stage: 37
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "0"
+  Return:
+    Connection: Gerudo Desert Rock Grotto -> Gerudo Desert North East Ledge
+    Alias: Gerudo Desert Rock Grotto -> Gerudo Desert
+    Stage: 59
+    Room: 0
+    Spawn: "09"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "0"
+
+- Type: Grotto
+  Forward:
+    Connection: Snowpeak Climb Upper -> Snowpeak Ice Keese Grotto
+    Alias: Snowpeak Climb -> Snowpeak Ice Keese Grotto
+    Stage: 37
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "2"
+  Return:
+    Connection: Snowpeak Ice Keese Grotto -> Snowpeak Climb Upper
+    Alias: Snowpeak Ice Keese Grotto -> Snowpeak Climb
+    Stage: 51
+    Room: 0
+    Spawn: "02"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Grotto
+  Forward:
+    Connection: Snowpeak Climb Upper -> Snowpeak Freezard Grotto
+    Alias: Snowpeak Climb -> Snowpeak Freezard Grotto
+    Stage: 38
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "C0"
+    Parameters: "F013"
+    State: "2"
+  Return:
+    Connection: Snowpeak Freezard Grotto -> Snowpeak Climb Upper
+    Alias: Snowpeak Freezard Grotto -> Snowpeak Climb
+    Stage: 51
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "90"
+    Parameters: "F01F"
+    State: "FF"
+
+###############################
+#          INTERIORS          #
+###############################
+
+- Type: Interior
+  Forward:
+    Connection: Outside Links House -> Ordon Links House
+    Alias: Outside Links House -> Links House
+    Stage: 65
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Links House -> Outside Links House
+    Alias: Links House -> Outside Links House 
+    Stage: 43
+    Room: 1
+    Spawn: "03"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Ordon Village -> Ordon Seras Shop
+    Stage: 65
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Seras Shop -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "05"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Ordon Village -> Ordon Sword House
+    Stage: 65
+    Room: 5
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Sword House -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "09"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Ordon Village -> Ordon Shield House
+    Stage: 65
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Shield House -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "06"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Ordon Village -> Ordon Shield House Upper Ledge
+    Stage: 
+    Room: 
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+  Return:
+    Connection: Ordon Shield House Upper Ledge -> Ordon Village
+    Stage: 
+    Room: 
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Ordon Village -> Ordon Fados House
+    Stage: 
+    Room: 
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+  Return:
+    Connection: Ordon Fados House -> Ordon Village
+    Stage: 
+    Room: 
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Ordon Bos House
+  Forward:
+    Connection: Ordon Bos House Left Door Exterior -> Ordon Bos House Left Door Interior
+    Alias: Ordon Village -> Ordon Bos House Left Door
+    Stage: 65
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Bos House Left Door Interior -> Ordon Bos House Left Door Exterior
+    Alias: Ordon Bos House Left Door -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "0B"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Ordon Bos House
+  Forward:
+    Connection: Ordon Bos House Right Door Exterior -> Ordon Bos House Right Door Interior
+    Alias: Ordon Village -> Ordon Bos House Right Door
+    Stage: 65
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Bos House Right Door Interior -> Ordon Bos House Right Door Exterior
+    Alias: Ordon Bos House Right Door -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "04"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: South Faron Woods -> Faron Woods Coros House Lower
+    Alias: Faron Woods -> Coros House Door
+    Stage: 67
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Faron Woods Coros House Lower -> South Faron Woods
+    Alias: Coros House Door -> Faron Woods
+    Stage: 45
+    Room: 4
+    Spawn: "01"
+    Spawn Type: "A0"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: South Faron Woods Coros Ledge -> Faron Woods Coros House Upper
+    Alias: Faron Woods -> Coros House Window
+    Stage: 67
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F05F"
+    State: "FF"
+  Return:
+    Connection: Faron Woods Coros House Upper -> South Faron Woods Coros Ledge
+    Alias: Coros House Window -> Faron Woods
+    Stage: 45
+    Room: 4
+    Spawn: "09"
+    Spawn Type: "00"
+    Parameters: "F05F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Renados Sanctuary Front Door
+  Forward:
+    Connection: Renados Sanctuary Front East Door Exterior -> Renados Sanctuary Front East Door Interior
+    Alias: Kakriko Village -> Renados Sanctuary Front East Door
+    Stage: 68
+    Room: 0
+    Spawn: "06"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Renados Sanctuary Front East Door Interior -> Renados Sanctuary Front East Door Exterior
+    Alias: Renados Sanctuary Front East Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "30"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Renados Sanctuary Front Door
+  Forward:
+    Connection: Renados Sanctuary Front West Door Exterior -> Renados Sanctuary Front West Door Interior
+    Alias: Kakriko Village -> Renados Sanctuary Front West Door
+    Stage: 68
+    Room: 0
+    Spawn: "05"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Renados Sanctuary Front West Door Interior -> Renados Sanctuary Front West Door Exterior
+    Alias: Renados Sanctuary Front West Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "2E"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Renados Sanctuary Back Door
+  Forward:
+    Connection: Renados Sanctuary Back East Door Exterior -> Renados Sanctuary Back East Door Interior
+    Alias: Kakriko Village -> Renados Sanctuary Back East Door
+    Stage: 68
+    Room: 0
+    Spawn: "08"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Renados Sanctuary Back East Door Interior -> Renados Sanctuary Back East Door Exterior
+    Alias: Renados Sanctuary Back East Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "33"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Renados Sanctuary Back Door
+  Forward:
+    Connection: Renados Sanctuary Back West Door Exterior -> Renados Sanctuary Back West Door Interior
+    Alias: Kakriko Village -> Renados Sanctuary Back West Door
+    Stage: 68
+    Room: 0
+    Spawn: "07"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Renados Sanctuary Back West Door Interior -> Renados Sanctuary Back West Door Exterior
+    Alias: Renados Sanctuary Back West Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "32"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Kakariko Renados Sanctuary -> Kakariko Renados Sanctuary Basement
+    Stage: 75
+    Room: 5
+    Spawn: "00"
+    Spawn Type: "FF"
+    Parameters: "FFFF"
+    State: "FF"
+  Return:
+    Connection: Kakariko Renados Sanctuary Basement -> Kakariko Renados Sanctuary
+    Stage: 68
+    Room: 0
+    Spawn: "02"
+    Spawn Type: "FF"
+    Parameters: "FFFF"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Lower Kakariko Village -> Kakariko Malo Mart
+    Alias: Kakariko Village -> Kakariko Malo Mart
+    Stage: 68
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "f09f"
+    State: "FF"
+  Return:
+    Connection: Kakariko Malo Mart -> Lower Kakariko Village
+    Alias: Kakariko Malo Mart -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "28"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Elde Inn
+  Forward:
+    Connection: Elde Inn North Door Exterior -> Elde Inn North Door Interior
+    Alias: Kakariko Village -> Edle Inn North Door
+    Stage: 68
+    Room: 2
+    Spawn: "02"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Elde Inn North Door Interior -> Elde Inn North Door Exterior
+    Alias: Elde Inn North Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "31"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Elde Inn
+  Forward:
+    Connection: Elde Inn South Door Exterior -> Elde Inn South Door Interior
+    Alias: Kakariko Village -> Elde Inn South Door
+    Stage: 68
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Elde Inn South Door Interior -> Elde Inn South Door Exterior
+    Alias: Elde Inn South Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "2A"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Kakariko Bug House Door -> Kakariko Bug House
+    Alias: Kakariko Village -> Kakariko Bug House Door
+    Stage: 68
+    Room: 6
+    Spawn: "05"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Bug House -> Kakariko Bug House Door
+    Alias: Kakariko Bug House Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "29"
+    Spawn Type: "90"
+    Parameters: "F03F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Kakariko Bug House Ceiling Hole -> Kakariko Bug House
+    Alias: Kakariko Village -> Kakariko Bug House Ceiling Hole
+    Stage: 68
+    Room: 6
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F03F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Bug House -> Kakariko Bug House Ceiling Hole
+    Alias: Kakariko Bug House Ceiling Hole -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "04"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Lower Kakariko Village -> Kakariko Barnes Bomb Shop Lower
+    Alias: Kakariko Village -> Kakariko Barnes Bomb Shop Door
+    Stage: 68
+    Room: 1
+    Spawn: "02"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Barnes Bomb Shop Lower -> Lower Kakariko Village
+    Alias: Kakariko Barnes Bomb Shop Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "2C"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Upper Kakariko Village -> Kakariko Barnes Bomb Shop Upper
+    Alias: Kakariko Village -> Kakariko Barnes Bomb Shop Window
+    Stage: 68
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Barnes Bomb Shop Upper -> Upper Kakariko Village
+    Alias: Kakariko Barnes Bomb Shop Window -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "0A"
+    Spawn Type: "10"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Kakariko Watchtower Lower Door -> Kakariko Watchtower Lower Interior
+    Alias: Kakariko Village -> Kakariko Watchtower Lower Door
+    Stage: 68
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Watchtower Lower Interior -> Kakariko Watchtower Lower Door
+    Alias: Kakariko Watchtower Lower Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "2D"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Kakariko Watchtower Dig Spot -> Kakariko Watchtower Lower Interior
+    Alias: Kakariko Village -> Kakariko Watchtower Dig Spot
+    Stage: 68
+    Room: 4
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Watchtower Lower Interior -> Kakariko Watchtower Dig Spot
+    Alias: Kakariko Watchtower Dig Spot -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "03"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Kakariko Top of Watchtower -> Kakariko Watchtower Upper Interior
+    Alias: Kakariko Village -> Kakariko Watchtower Upper Door
+    Stage: 68
+    Room: 4
+    Spawn: "02"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Watchtower Upper Interior -> Kakariko Top of Watchtower
+    Alias: Kakariko Watchtower Upper Door -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "2F"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Death Mountain Outside Sumo Hall -> Death Mountain Sumo Hall
+    Alias: Death Mountain -> Death Mountain Sumo Hall
+    Stage: 69
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Death Mountain Sumo Hall -> Death Mountain Outside Sumo Hall
+    Alias: Death Mountain Sumo Hall -> Death Mountain
+    Stage: 47
+    Room: 3
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Death Mountain Lower Elevator -> Death Mountain Sumo Hall Elevator
+    Alias: Death Mountain Elevator -> Death Mountain Sumo Hall
+    Stage: 69
+    Room: 0
+    Spawn: "03"
+    Spawn Type: "E0"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Death Mountain Sumo Hall Elevator -> Death Mountain Lower Elevator
+    Alias: Death Mountain Sumo Hall -> Death Mountain Elevator
+    Stage: 47
+    Room: 3
+    Spawn: "03"
+    Spawn Type: "E0"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Hidden Village -> Hidden Village Impaz House
+    Stage: 72
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Hidden Village Impaz House -> Hidden Village
+    Stage: 63
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Upper Zoras River -> Upper Zoras River Izas House
+    Stage: 49
+    Room: 1
+    Spawn: "01"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Upper Zoras River Izas House -> Upper Zoras River
+    Stage: 61
+    Room: 0
+    Spawn: "04"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Fishing Hole -> Fishing Hole House
+    Stage: 71
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "A0"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Fishing Hole House -> Fishing Hole
+    Stage: 62
+    Room: 0
+    Spawn: "03"
+    Spawn Type: "B0"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town West -> Castle Town STAR Game
+    Stage: 74
+    Room: 7
+    Spawn: "03"
+    Spawn Type: "10"
+    Parameters: "F090"
+    State: "FF"
+  Return:
+    Connection: Castle Town STAR Game -> Castle Town West
+    Stage: 53
+    Room: 2
+    Spawn: "01"
+    Spawn Type: "10"
+    Parameters: "F01F"
+    State: "FF"
+
+
+- Type: Interior
+  Door Couple Tag: Castle Town Goron House
+  Forward:
+    Connection: Castle Town Goron House West Door Exterior -> Castle Town Goron House West Door Interior
+    Alias: Castle Town Center -> Castle Town Goron House West Door
+    Stage: 73
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Goron House West Door Interior -> Castle Town Goron House West Door Exterior
+    Alias: Castle Town Goron House West Door -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "0E"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Castle Town Goron House
+  Forward:
+    Connection: Castle Town Goron House East Door Exterior -> Castle Town Goron House East Door Interior
+    Alias: Castle Town Center -> Castle Town Goron House East Door
+    Stage: 73
+    Room: 4
+    Spawn: "02"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Goron House East Door Interior -> Castle Town Goron House East Door Exterior
+    Alias: Castle Town Goron House East Door -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "10"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town Center -> Castle Town Malo Mart
+    Stage: 73
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Malo Mart -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "0C"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Castle Town Doctors Office
+  Forward:
+    Connection: Castle Town Doctors Office West Door Exterior -> Castle Town Doctors Office West Door Interior
+    Alias: Castle Town East -> Castle Town Doctors Office West Door
+    Stage: 73
+    Room: 2
+    Spawn: "01"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Doctors Office West Door Interior -> Castle Town Doctors Office West Door Exterior
+    Alias: Castle Town Doctors Office West Door -> Castle Town East
+    Stage: 53
+    Room: 4
+    Spawn: "04"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Door Couple Tag: Castle Town Doctors Office
+  Forward:
+    Connection: Castle Town Doctors Office East Door Exterior -> Castle Town Doctors Office East Door Interior
+    Alias: Castle Town East -> Castle Town Doctors Office East Door
+    Stage: 73
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Doctors Office East Door Interior -> Castle Town Doctors Office East Door Exterior
+    Alias: Castle Town Doctors Office East Door -> Castle Town East
+    Stage: 53
+    Room: 4
+    Spawn: "03"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town Doctors Office Balcony -> Castle Town Doctors Office Upper
+    Alias: Castle Town Doctors Office Balcony -> Castle Town Doctors Office
+    Stage: 73
+    Room: 2
+    Spawn: "02"
+    Spawn Type: "10"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Doctors Office Upper -> Castle Town Doctors Office Balcony
+    Alias: Castle Town Doctors Office -> Castle Town Doctors Office Balcony
+    Stage: 53
+    Room: 4
+    Spawn: "05"
+    Spawn Type: "00"
+    Parameters: "F05F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town South -> Castle Town Agithas House
+    Stage: 73
+    Room: 3
+    Spawn: "01"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Agithas House -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "05"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town South -> Castle Town Seer House
+    Stage: 73
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Seer House -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "04"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town South -> Castle Town Jovanis House
+    Stage: 73
+    Room: 5
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Jovanis House -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "0A"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Interior
+  Forward:
+    Connection: Castle Town South -> Castle Town Telmas Bar
+    Stage: 70
+    Room: 5
+    Spawn: "00"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Telmas Bar -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+###############################
+#            CAVES            #
+###############################
+
+- Type: Cave
+  Forward:
+    Connection: South Faron Woods Behind Gate -> Faron Woods Cave South
+    Alias: South Faron Woods -> Faron Woods Cave
+    Stage: 40
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Faron Woods Cave South -> South Faron Woods Behind Gate
+    Alias: Faron Woods Cave -> South Faron Woods
+    Stage: 45
+    Room: 3
+    Spawn: "63"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Mist Area Near Faron Woods Cave -> Faron Woods Cave North
+    Alias: Faron Woods Mist Area -> Faron Woods Cave
+    Stage: 40
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Faron Woods Cave North -> Mist Area Near Faron Woods Cave
+    Alias: Faron Woods Cave -> Faron Woods Mist Area
+    Stage: 45
+    Room: 5
+    Spawn: "04"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Mist Area Outside Faron Mist Cave -> Mist Area Faron Mist Cave
+    Alias: Faron Woods Mist Area -> Faron Woods Mist Cave
+    Stage: 45
+    Room: 14
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Mist Area Faron Mist Cave -> Mist Area Outside Faron Mist Cave
+    Alias: Faron Woods Mist Cave -> Faron Woods Mist Area
+    Stage: 45
+    Room: 5
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Kakariko Gorge Cave Entrance -> Eldin Lantern Cave
+    Alias: Kakariko Gorge -> Eldin Lantern Cave
+    Stage: 32
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Eldin Lantern Cave -> Kakariko Gorge Cave Entrance
+    Alias: Eldin Lantern Cave -> Kakariko Gorge
+    Stage: 56
+    Room: 3
+    Spawn: "0F"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Eldin Field Lava Cave Upper Ledge -> Eldin Field Lava Cave Upper
+    Alias: Eldin Field -> Eldin Field Lava Cave Upper
+    Stage: 34
+    Room: 10
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Eldin Field Lava Cave Upper -> Eldin Field Lava Cave Upper Ledge
+    Alias: Eldin Field Lava Cave Upper -> Eldin Field
+    Stage: 56
+    Room: 0
+    Spawn: "14"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Eldin Field Lava Cave Lower -> Eldin Field Lava Cave Lower Ledge
+    Alias: Eldin Field Lava Cave Lower -> Eldin Field
+    Stage: 56
+    Room: 0
+    Spawn: "15"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Eldin Field Lava Cave Lower Ledge -> Eldin Field Lava Cave Lower
+    Alias: Eldin Field -> Eldin Field Lava Cave Lower
+    Stage: 34
+    Room: 10
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Lanayru Field Cave Entrance -> Lanayru Ice Puzzle Cave
+    Alias: Lanayru Field -> Lanayru Ice Puzzle Cave
+    Stage: 30
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Lanayru Ice Puzzle Cave -> Lanayru Field Cave Entrance
+    Alias: Lanayru Ice Puzzle Cave -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: "0F"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Lake Hylia -> Lake Hylia Lanayru Spring
+    Alias: Lake Hylia -> Lanayru Spring
+    Stage: 52
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "C000"
+    State: "FF"
+  Return:
+    Connection: Lake Hylia Lanayru Spring -> Lake Hylia
+    Alias: Lanayru Spring -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "07"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Lake Hylia Cave Entrance -> Lake Hylia Long Cave
+    Alias: Lake Hylia -> Lake Hylia Long Cave
+    Stage: 33
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Lake Hylia Long Cave -> Lake Hylia Cave Entrance
+    Alias: Lake Hylia Long Cave -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "1D"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Cave
+  Forward:
+    Connection: Gerudo Desert Cave of Ordeals Plateau -> Cave of Ordeals
+    Alias: Gerudo Desert -> Cave of Ordeals
+    Stage: 31
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Cave of Ordeals -> Gerudo Desert Cave of Ordeals Plateau
+    Alias: Cave of Ordeals -> Gerudo Desert
+    Stage: 59
+    Room: 0
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+###############################
+#         OVERWORLD           #
+###############################
+
+- Type: Overworld
+  Forward:
+    Connection: Outside Links House -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Ordon Village -> Outside Links House
+    Stage: 43
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Outside Links House -> Ordon Spring
+    Stage: 44
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Ordon Spring -> Outside Links House
+    Stage: 43
+    Room: 1
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "3091"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Ordon Village -> Ordon Ranch Village Pathway
+    Alias: Ordon Village -> Ordon Ranch
+    Stage: 41
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Ordon Ranch Village Pathway -> Ordon Village
+    Alias: Ordon Ranch -> Ordon Village
+    Stage: 43
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Ordon Bridge -> South Faron Woods
+    Stage: 45
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: South Faron Woods -> Ordon Bridge
+    Stage: 44
+    Room: 1
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: South Faron Woods Above Owl Statue -> Mist Area Near Owl Statue Chest
+    Alias: South Faron Woods -> Faron Woods Mist Area
+    Stage: 45
+    Room: 5
+    Spawn: "62"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Mist Area Near Owl Statue Chest -> South Faron Woods Above Owl Statue
+    Alias: Faron Woods Mist Area -> South Faron Woods
+    Stage: 45
+    Room: 8
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Mist Area Near North Faron Woods -> North Faron Woods
+    Alias: Faron Woods Mist Area -> North Faron Woods
+    Stage: 45
+    Room: 6
+    Spawn: "02"
+    Spawn Type: "00"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: North Faron Woods -> Mist Area Near North Faron Woods
+    Alias: North Faron Woods -> Faron Woods Mist Area
+    Stage: 45
+    Room: 11
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: North Faron Lost Woods Ledge -> Lost Woods
+    Alias: North Faron Woods -> Lost Woods
+    Stage: 54
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Lost Woods -> North Faron Lost Woods Ledge
+    Alias: Lost Woods -> North Faron Woods
+    Stage: 45
+    Room: 6
+    Spawn: "03"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lost Woods Lower Battle Arena -> Sacred Grove Lower
+    Alias: Lost Woods Lower Battle Arena -> Sacred Grove
+    Stage: 54
+    Room: 1
+    Spawn: "03"
+    Spawn Type: "50"
+    Parameters: ""
+    State: "FF"
+  Return:
+    Connection: Sacred Grove Lower -> Lost Woods Lower Battle Arena
+    Alias: Sacred Grove -> Lost Woods Lower Battle Arena
+    Stage: 54
+    Room: 1
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lost Woods Upper Battle Arena -> Sacred Grove Before Block
+    Alias: Lost Woods Upper Battle Arena -> Sacred Grove
+    Stage: 54
+    Room: 1
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Sacred Grove Before Block -> Lost Woods Upper Battle Arena
+    Alias: Sacred Grove -> Lost Woods Upper Battle Arena
+    Stage: 54
+    Room: 3
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Sacred Grove Upper -> Sacred Grove Past
+    Alias: Sacred Grove -> Sacred Grove Past
+    Stage: 54
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F012"
+    State: "FF"
+  Return:
+    Connection: Sacred Grove Past -> Sacred Grove Upper
+    Alias: Sacred Grove Past -> Sacred Grove
+    Stage: 54
+    Room: 1
+    Spawn: "05"
+    Spawn Type: "10"
+    Parameters: "F032"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: South Faron Woods -> Faron Field
+    Stage: 56
+    Room: 6
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Faron Field -> South Faron Woods
+    Stage: 45
+    Room: 4
+    Spawn: "08"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Faron Field Behind Boulder -> Outside Castle Town South Inside Boulder
+    Alias: Faron Field -> Outside Castle Town South
+    Stage: 57
+    Room: 16
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Outside Castle Town South -> Faron Field Behind Boulder
+    Alias: Outside Castle Town South -> Faron Field
+    Stage: 56
+    Room: 6
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Kakariko Gorge Behind Gate -> Lower Kakariko Village
+    Alias: Kakariko Gorge -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "3C"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Lower Kakariko Village -> Kakariko Gorge Behind Gate
+    Alias: Kakariko Village -> Kakariko Gorge
+    Stage: 56
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lower Kakariko Village -> Kakariko Graveyard
+    Alias: Kakariko Village -> Kakariko Graveyard
+    Stage: 48
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Kakariko Graveyard -> Lower Kakariko Village
+    Alias: Kakariko Graveyard -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lower Kakariko Village -> Death Mountain Near Kakariko
+    Alias: Kakariko Village -> Death Mountain
+    Stage: 47
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Death Mountain Near Kakariko -> Lower Kakariko Village
+    Alias: Death Mountain -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Kakariko Graveyard Pond -> Lake Hylia
+    Alias: Kakariko Graveyard -> Lake Hylia
+    Stage: 52
+    Room: 0
+    Spawn: "19"
+    Spawn Type: "D0"
+    Parameters: "00FF"
+    State: "FF"
+  Return:
+    Connection: Lake Hylia -> Kakariko Graveyard Pond
+    Alias: Lake Hylia -> Kakariko Graveyard
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Kakariko Village Behind Gate -> Eldin Field
+    Alias: Kakariko Village -> Eldin Field
+    Stage: 56
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Eldin Field -> Kakariko Village Behind Gate
+    Alias: Eldin Field -> Kakariko Village
+    Stage: 46
+    Room: 0
+    Spawn: "08"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Eldin Field Near Castle Town -> Outside Castle Town East
+    Alias: Eldin Field -> Outside Castle Town East
+    Stage: 57
+    Room: 17
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Outside Castle Town East -> Eldin Field Near Castle Town
+    Alias: Outside Castle Town East -> Eldin Field
+    Stage: 56
+    Room: 0
+    Spawn: "07"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Eldin Field Outside Hidden Village -> Hidden Village
+    Alias: Eldin Field -> Hidden Village
+    Stage: 63
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Hidden Village -> Eldin Field Outside Hidden Village
+    Alias: Hidden Village -> Eldin Field
+    Stage: 56
+    Room: 7
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lanayru Field Near Zoras Domain -> Zoras Domain West Ledge
+    Alias: Lanayru Field -> Zoras Domain
+    Stage: 50
+    Room: 1
+    Spawn: "0F"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Zoras Domain West Ledge -> Lanayru Field Near Zoras Domain
+    Alias: Zoras Domain -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: "03"
+    Spawn Type: "00"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Upper Zoras River -> Fishing Hole
+    Stage: 62
+    Room: 0
+    Spawn: "02"
+    Spawn Type: "B0"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Fishing Hole -> Upper Zoras River
+    Stage: 61
+    Room: 0
+    Spawn: "0A"
+    Spawn Type: "A0"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Upper Zoras River -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: "02"
+    Spawn Type: D0""
+    Parameters: "00FF"
+    State: "FF"
+  Return:
+    Connection: Lanayru Field -> Upper Zoras River 
+    Stage: 
+    Room: 
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Upper Zoras River -> Zoras Domain
+    Stage: 50
+    Room: 1
+    Spawn: "0A"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Zoras Domain -> Upper Zoras River
+    Stage: 61
+    Room: 0
+    Spawn: "07"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Zoras Domain Top of Waterfall -> Zoras Throne Room
+    Alias: Zoras Domain -> Zoras Throne Room
+    Stage: 50
+    Room: 0
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Zoras Throne Room -> Zoras Domain Top of Waterfall
+    Alias: Zoras Throne Room -> Zoras Domain
+    Stage: 50
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Zoras Domain -> Snowpeak Climb Lower
+    Alias: Zoras Domain -> Snowpeak Province
+    Stage: 51
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Snowpeak Climb Lower -> Zoras Domain
+    Alias: Snowpeak Province -> Zoras Domain
+    Stage: 50
+    Room: 1
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Snowpeak Climb Upper -> Snowpeak Summit Cave
+    Alias: Snowpeak Climb -> Snowpeak Summit Cave
+    Stage: 51
+    Room: 2
+    Spawn: "08"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Snowpeak Summit Cave -> Snowpeak Climb Upper
+    Alias: Snowpeak Summit Cave -> Snowpeak Climb
+    Stage: 51
+    Room: 0
+    Spawn: "0F"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lanayru Field -> Outside Castle Town West
+    Stage: 57
+    Room: 8
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Outside Castle Town West -> Lanayru Field
+    Stage: 56
+    Room: 10
+    Spawn: "04"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Outside Castle Town West -> Lake Hylia Bridge
+    Stage: 56
+    Room: 12
+    Spawn: "01"
+    Spawn Type: "00"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Lake Hylia Bridge -> Outside Castle Town West
+    Stage: 57
+    Room: 8
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Outside Castle Town West -> Castle Town West
+    Stage: 53
+    Room: 2
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town West -> Outside Castle Town West
+    Stage: 57
+    Room: 8
+    Spawn: "01"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town West -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "04"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town Center -> Castle Town West
+    Stage: 53
+    Room: 2
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town West -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "08"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town South -> Castle Town West
+    Stage: 53
+    Room: 2
+    Spawn: "03"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town Center -> Castle Town North
+    Stage: 53
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Castle Town North -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "03"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town Center -> Castle Town East
+    Stage: 53
+    Room: 4
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Castle Town East -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town Center -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Castle Town South -> Castle Town Center
+    Stage: 53
+    Room: 0
+    Spawn: "05"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town East -> Outside Castle Town East
+    Stage: 57
+    Room: 17
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Outside Castle Town East -> Castle Town East
+    Stage: 53
+    Room: 4
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town East -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "09"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Castle Town South -> Castle Town East
+    Stage: 53
+    Room: 4
+    Spawn: "06"
+    Spawn Type: "50"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Castle Town South -> Outside Castle Town South
+    Stage: 57
+    Room: 16
+    Spawn: "01"
+    Spawn Type: "05"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Outside Castle Town South -> Castle Town South
+    Stage: 53
+    Room: 3
+    Spawn: "00"
+    Spawn Type: "10"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Outside Castle Town South -> Lake Hylia
+    Stage: 57
+    Room: 16
+    Spawn: "01"
+    Spawn Type: "05"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Lake Hylia -> Outside Castle Town South
+    Stage: -1
+    Room: -1
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lake Hylia Bridge -> Flight by Fowl
+    Stage: 52
+    Room: 0
+    Spawn: "08"
+    Spawn Type: "B0"
+    Parameters: "F09F"
+    State: "FF"
+  Return:
+    Connection: Flight by Fowl -> Lake Hylia Bridge
+    Stage: 56
+    Room: 13
+    Spawn: "01"
+    Spawn Type: "A0"
+    Parameters: "F09F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Lake Hylia -> Gerudo Desert
+    Stage: 59
+    Room: 0
+    Spawn: "00"
+    Spawn Type: "00"
+    Parameters: "F018"
+    State: "FF"
+  Return:
+    Connection: Gerudo Desert -> Lake Hylia
+    Stage: 
+    Room: 
+    Spawn: ""
+    Spawn Type: ""
+    Parameters: ""
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Gerudo Desert Outside Bulblin Camp -> Bulblin Camp
+    Alias: Gerudo Desert -> Bulblin Camp
+    Stage: 55
+    Room: 1
+    Spawn: "00"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Bulblin Camp -> Gerudo Desert Outside Bulblin Camp
+    Alias: Bulblin Camp -> Gerudo Desert
+    Stage: 59
+    Room: 0
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+
+- Type: Overworld
+  Forward:
+    Connection: Bulblin Camp -> Outside Arbiters Grounds
+    Stage: 55
+    Room: 3
+    Spawn: "07"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"
+  Return:
+    Connection: Outside Arbiters Grounds -> Bulblin Camp
+    Stage: 55
+    Room: 1
+    Spawn: "02"
+    Spawn Type: "50"
+    Parameters: "F01F"
+    State: "FF"

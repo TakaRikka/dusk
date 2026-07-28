@@ -1,0 +1,396 @@
+
+# SOUTH FARON WOODS
+
+- Name: South Faron Woods
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Can Refill Lantern Oil: "'Can_Farm_Rupees'"
+  Locations:
+    South Faron Warp Portal: Can_Complete_Prologue
+    Faron Woods Coro Boulder Rupee 1: Can_Smash
+    Faron Woods Coro Boulder Rupee 2: Can_Smash
+    Faron Woods Coro Boulder Rupee 3: Can_Smash
+    Faron Woods Coro Boulder Rupee 4: Can_Smash
+    Coro Bottle: Can_Complete_Prologue
+    South Faron Woods Twilit Insect in Tunnel 1: Can_Defeat_Faron_Twilit_Insect
+    South Faron Woods Twilit Insect in Tunnel 2: Can_Defeat_Faron_Twilit_Insect
+    South Faron Woods Coros House Exterior Twilit Insect: Can_Defeat_Faron_Twilit_Insect
+    South Faron Woods Hint Sign: Nothing
+  Exits:
+    South Faron Woods Coros Ledge: Can_Midna_Jump or Twilight
+    Faron Woods Coros House Lower: Can_Open_Doors
+    South Faron Woods Behind Gate: Nothing # Coro Key is Vanilla if forest is closed
+    South Faron Woods Owl Statue Area: Can_Smash
+    Faron Field: Can_Clear_Forest
+    Ordon Bridge: Nothing
+
+- Name: South Faron Woods Coros Ledge
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Exits:
+    South Faron Woods: Nothing
+    Faron Woods Coros House Upper: Nothing
+
+- Name: Faron Woods Coros House Upper
+  Twilight: Faron
+  Exits: 
+    Faron Woods Coros House Lower: Nothing
+    South Faron Woods Coros Ledge: Nothing
+
+- Name: Faron Woods Coros House Lower
+  Twilight: Faron
+  Locations:
+    Faron Woods Coros House Interior Twilit Insect 1: Can_Defeat_Faron_Twilit_Insect
+    Faron Woods Coros House Interior Twilit Insect 2: Can_Defeat_Faron_Twilit_Insect
+  Exits:
+    Faron Woods Coros House Upper: Wolf_Link # Only wolf link can climb the ledge
+    South Faron Woods: Can_Open_Doors
+
+- Name: South Faron Woods Owl Statue Area
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Can Move Faron Woods Owl Statue: Can_Clear_Forest and Restored_Dominion_Rod
+  Locations:
+    Faron Woods Owl Statue Sky Character: Can_Clear_Forest and Restored_Dominion_Rod
+  Exits:
+    South Faron Woods Above Owl Statue: Can_Midna_Jump and 'Can_Move_Faron_Woods_Owl_Statue'
+    South Faron Woods: Can_Smash
+    
+- Name: South Faron Woods Above Owl Statue
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Exits:
+    Mist Area Near Owl Statue Chest: Nothing
+    South Faron Woods Owl Statue Area: Nothing
+
+- Name: South Faron Woods Behind Gate
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    South Faron Woods Twilit Insect Behind Gate 1: Can_Defeat_Faron_Twilit_Insect
+    South Faron Woods Twilit Insect Behind Gate 2: Can_Defeat_Faron_Twilit_Insect
+  Exits:
+    Faron Woods Cave South: Nothing
+    South Faron Woods: Can_Dig or Can_Clear_Forest or 'Can_Access_South_Faron_Woods'
+
+# FARON WOODS CAVE
+
+- Name: Faron Woods Cave South
+  Twilight: Faron
+  Exits:
+    Faron Woods Cave: Nothing
+    South Faron Woods Behind Gate: Nothing
+
+- Name: Faron Woods Cave
+  Twilight: Faron
+  Locations:
+    South Faron Cave Chest: Nothing
+  Exits:
+    Faron Woods Cave North: Nothing
+    Faron Woods Cave South: Nothing
+
+- Name: Faron Woods Cave North
+  Twilight: Faron
+  Exits:
+    Mist Area Near Faron Woods Cave: Nothing
+    Faron Woods Cave: Nothing
+
+# MIST AREA
+
+- Name: Mist Area Near Faron Woods Cave
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Faron Mist Twilit Insect on Wall 1: Can_Defeat_Faron_Twilit_Insect
+    Faron Mist Twilit Insect on Wall 2: Can_Defeat_Faron_Twilit_Insect
+  Exits:
+    Mist Area Inside Mist: Lantern
+    Mist Area Under Owl Statue Chest: Can_Midna_Jump or Twilight
+    Faron Woods Cave North: Nothing
+
+- Name: Mist Area Inside Mist
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Faron Mist Stump Chest: Lantern and Can_Complete_Prologue
+    Faron Mist North Chest: Lantern and Can_Complete_Prologue
+    Faron Mist South Chest: Lantern and Can_Complete_Prologue
+  Exits:
+    Mist Area Near Faron Woods Cave: Lantern
+    Mist Area Under Owl Statue Chest: Lantern
+    Mist Area Outside Faron Mist Cave: Lantern
+    Mist Area Near North Faron Woods: Lantern
+
+- Name: Mist Area Under Owl Statue Chest
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Exits:
+    Mist Area Inside Mist: Lantern
+    Mist Area Center Stump: Can_Midna_Jump or Twilight
+
+- Name: Mist Area Near Owl Statue Chest
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Faron Woods Owl Statue Chest: Nothing
+  Exits:
+    Mist Area Under Owl Statue Chest: Nothing
+    South Faron Woods Above Owl Statue: Nothing
+
+- Name: Mist Area Center Stump
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Faron Mist Poe: Can_Use_Senses and Can_Complete_Prologue
+    Faron Mist Twilit Insect on Center Stump 1: Can_Defeat_Faron_Twilit_Insect
+    Faron Mist Twilit Insect on Center Stump 2: Can_Defeat_Faron_Twilit_Insect
+    Faron Mist Twilit Insect on Center Stump 3: Can_Defeat_Faron_Twilit_Insect
+  Exits:
+    Mist Area Inside Mist: Lantern
+    Mist Area Near North Faron Woods: Can_Midna_Jump or Twilight
+  
+- Name: Mist Area Outside Faron Mist Cave
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Exits:
+    Mist Area Faron Mist Cave: Nothing
+    Mist Area Inside Mist: Lantern
+
+- Name: Mist Area Near North Faron Woods
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Faron Mist Burrowing Twilit Insect 1: Can_Defeat_Faron_Twilit_Insect
+    Faron Mist Burrowing Twilit Insect 2: Can_Defeat_Faron_Twilit_Insect
+  Exits:
+    North Faron Woods: North_Faron_Woods_Gate_Key or Skip_Prologue == On
+    Mist Area Near Faron Woods Cave: Can_Midna_Jump or Twilight
+    Mist Area Inside Mist: Lantern
+
+- Name: Mist Area Faron Mist Cave
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Locations:
+    Faron Mist Cave Open Chest: Nothing
+    Faron Mist Cave Lantern Chest: Lantern
+  Exits:
+    Mist Area Outside Faron Mist Cave: Nothing
+
+# NORTH FARON WOODS
+
+- Name: North Faron Woods
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can_Warp: True
+  Can Change Time: True
+  Events:
+    Can Refill Lantern Oil: "'Can_Farm_Rupees'"
+    Can Refill Slingshot Seeds: Can_Defeat_Deku_Baba
+  Locations:
+    North Faron Warp Portal: Can_Complete_Prologue
+    North Faron Woods Deku Baba Chest: Nothing
+    Faron Woods Golden Wolf: Can_Complete_Faron_Twilight
+    North Faron Woods Twilit Insect 1: Can_Defeat_Faron_Twilit_Insect
+    North Faron Woods Twilit Insect 2: Can_Defeat_Faron_Twilit_Insect
+  Exits:
+    North Faron Lost Woods Ledge: Can_Midna_Jump
+    Forest Temple Entrance: Nothing
+    Mist Area Near North Faron Woods: Nothing
+
+- Name: North Faron Lost Woods Ledge
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Twilight: Faron
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Howl at North Faron Woods Howling Stone: Can_Howl
+  Exits:
+    Lost Woods: Nothing
+    # In North Faron Woods, when you are near the Lost Woods entrance,
+    # you can save-warp to the main part of North Faron Woods.
+    North Faron Woods: Nothing
+
+
+# SACRED GROVE
+
+- Name: Lost Woods
+  Map Sector: Faron Province
+  Region: Sacred Grove
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Can Refill Arrows: Nothing
+    Lost Woods Skull Kid: Can_Defeat_Skull_Kid
+  Locations:
+    Lost Woods Lantern Chest: Lantern
+    Lost Woods Waterfall Poe: Can_Use_Senses and Night
+  Exits:
+    Lost Woods Lower Battle Arena: Sacred_Grove_Does_Not_Require_Skull_Kid == On or ('Lost_Woods_Skull_Kid' and Wolf_Link)
+    Lost Woods Upper Battle Arena: Sacred_Grove_Does_Not_Require_Skull_Kid == On or ('Lost_Woods_Skull_Kid' and Wolf_Link)
+    North Faron Lost Woods Ledge: Nothing
+
+- Name: Lost Woods Lower Battle Arena
+  Map Sector: Faron Province
+  Region: Sacred Grove
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Can Smash Lost Woods Rock: Can_Smash
+  Locations:
+    Sacred Grove Spinner Chest: Spinner
+    Lost Woods Boulder Poe: Can_Use_Senses and 'Can_Smash_Lost_Woods_Rock' and (Can_Defeat_Skull_Kid or Sacred_Grove_Does_Not_Require_Skull_Kid == On)
+  Exits:
+    # Human Link can't dig into the grotto, so we need to hide away blowing up the rock behind an event.
+    # By requiring only wolf in the direct logic statement, this tells the search algorithm that only wolf is
+    # allowed to go through this exit.
+    Lost Woods Baba Serpent Grotto: Can_Dig and 'Can_Smash_Lost_Woods_Rock'
+    Sacred Grove Lower: Can_Defeat_Skull_Kid or Sacred_Grove_Does_Not_Require_Skull_Kid == On
+
+- Name: Lost Woods Upper Battle Arena
+  Map Sector: Faron Province
+  Region: Sacred Grove
+  Can Warp: True
+  Can Change Time: True
+  Exits:
+    Sacred Grove Before Block: Can_Defeat_Skull_Kid or Sacred_Grove_Does_Not_Require_Skull_Kid == On
+
+- Name: Lost Woods Baba Serpent Grotto
+  Locations:
+    Sacred Grove Baba Serpent Grotto Chest: Can_Defeat_Baba_Serpent and Can_Knock_Down_Hanging_Baba
+  Exits:
+    Lost Woods Lower Battle Arena: Nothing
+
+- Name: Sacred Grove Before Block
+  Map Sector: Faron Province
+  Region: Sacred Grove
+  Can Warp: True
+  Exits:
+    Sacred Grove Upper: Nothing
+    Lost Woods Upper Battle Arena: Nothing
+    
+- Name: Sacred Grove Upper
+  Map Sector: Faron Province
+  Region: Sacred Grove
+  Can Warp: True
+  Locations:
+    Sacred Grove Hint Sign: Nothing
+  Exits:
+    Sacred Grove Lower: Nothing
+    Sacred Grove Past: Has_Sword_For_Temple_of_Time and 'Can_Access_Sacred_Grove_Lower' and Can_Defeat_Shadow_Beast
+
+- Name: Sacred Grove Lower
+  Map Sector: Faron Province
+  Region: Sacred Grove
+  Can Warp: True
+  Locations:
+    Sacred Grove Warp Portal: Can_Defeat_Shadow_Beast
+    Sacred Grove Male Snail: Clawshot or Gale_Boomerang
+    Sacred Grove Master Sword Poe: Can_Use_Senses and Night
+    Sacred Grove Pedestal Master Sword: Nothing
+    Sacred Grove Pedestal Shadow Crystal: Nothing
+  Exits:
+    Lost Woods Lower Battle Arena: Nothing
+    Sacred Grove Upper: "'Can_Access_Sacred_Grove_Before_Block'"
+
+- Name: Sacred Grove Past
+  Locations: 
+    Sacred Grove Past Owl Statue Chest: Dominion_Rod
+    Sacred Grove Female Snail: Clawshot or Gale_Boomerang
+    Sacred Grove Temple of Time Owl Statue Poe: Dominion_Rod and Can_Use_Senses
+  Exits:
+    Sacred Grove Past Behind Window: Has_Sword_For_Temple_of_Time
+    Sacred Grove Upper: Nothing
+
+- Name: Sacred Grove Past Behind Window
+  Exits:
+    Sacred Grove Past: Nothing
+    Temple of Time Entrance: Nothing
+
+# FARON FIELD
+
+- Name: Faron Field
+  Map Sector: Faron Province
+  Region: Faron Field
+  Can_Warp: True
+  Events:
+    Can Refill Arrows: Nothing
+  Locations:
+    Faron Field Bridge Chest: Clawshot
+    Faron Field Tree Heart Piece: Clawshot or Gale_Boomerang # or Ball and Chain if trick
+    Faron Field Male Beetle: Nothing
+    Faron Field Female Beetle: Clawshot or Gale_Boomerang # or Ball and Chain if trick
+    Faron Field Poe: Can_Use_Senses and Night
+    Faron Field Hint Sign: Nothing
+  Exits:
+    Faron Field Behind Boulder: Can_Use_Hot_Spring_Water and 'Can_Access_Outside_Castle_Town_South'
+    Kakariko Gorge: Nothing
+    Lake Hylia Bridge: Gate_Keys or Small_Keys == Keysy
+    Faron Field Corner Grotto: Can_Dig
+    Faron Field Fishing Grotto: Can_Dig
+    South Faron Woods: Nothing
+
+- Name: Faron Field Behind Boulder
+  Map Sector: Faron Province
+  Region: Faron Field
+  Can_Warp: True
+  Exits:
+    # If you enter Outside Castle Town from here while the boulder is still there, 
+    # you get stuck and are forced to save-warp or portal-warp.
+    Outside Castle Town South Inside Boulder: Nothing
+    Faron Field: Can_Use_Hot_Spring_Water and 'Can_Access_Outside_Castle_Town_South'
+
+- Name: Faron Field Corner Grotto
+  Locations:
+    Faron Field Corner Grotto Right Chest: Nothing
+    Faron Field Corner Grotto Left Chest: Nothing
+    Faron Field Corner Grotto Rear Chest: Nothing
+    # Faron Field Corner Grotto Main Chest: Nothing # HD Only
+  Exits:
+    Faron Field: Nothing
+
+- Name: Faron Field Fishing Grotto
+  Exits:
+    Faron Field: Nothing

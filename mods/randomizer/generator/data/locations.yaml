@@ -1,0 +1,7478 @@
+# Note: Metadata fields also get added to a location's categories.
+# So, for example, the Wooden Sword Chest location has the categories
+# listed under the Categories field as well as the category "Chest"
+
+# ORDONA PROVINCE
+
+- Name: Wooden Sword Chest
+  Original Item: Progressive Sword
+  Categories:
+    - Overworld
+    - Ordona Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 65
+        Tbox Id: 4
+
+- Name: Links Basement Chest
+  Original Item: Purple Rupee Links House
+  Categories:
+    - Overworld
+    - Ordona Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 65
+        Tbox Id: 1
+
+- Name: Uli Cradle Delivery
+  Original Item: Progressive Fishing Rod
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Npc
+  Metadata:
+    Name Lookup:
+      - Uli Cradle Delivery
+    Event Flag: 0x0301
+
+- Name: Ordon Cat Rescue
+  Original Item: Bottle with Half Milk
+  Categories:
+    - Overworld
+    - Npc
+    - Ordona Province
+  Metadata:
+    Name Lookup:
+      - Ordon Cat Rescue
+    Event Flag: 0x1408
+
+- Name: Sera Shop Slingshot
+  Original Item: Slingshot
+  Categories:
+    - Overworld
+    - Ordona Province
+  Metadata:
+    Shop:
+      - Stage: 65
+        Item: 0x4B
+    Event Flag: 0x4902
+
+- Name: Ordon Shield
+  Original Item: Ordon Shield
+  Categories:
+    - Overworld
+    - Ordona Province
+  Metadata:
+    Name Lookup:
+      - Ordon Shield
+    Switch Flag:
+      Stage: 65
+      Flag: 0x1A
+
+- Name: Ordon Sword
+  Original Item: Progressive Sword
+  Categories:
+    - Overworld
+    - Ordona Province
+  Metadata:
+    Name Lookup:
+      - Ordon Sword
+    Switch Flag:
+      Stage: 65
+      Flag: 0x18
+
+- Name: Wrestling With Bo
+  Original Item: Iron Boots
+  Categories:
+    - Overworld
+    - Ordona Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 65
+        Tbox Id: 2
+
+- Name: Ordon Bo Cliff Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x80
+
+- Name: Ordon Bo Roof Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x8B
+
+- Name: Ordon Bo Window Rupee 1
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x8A
+
+- Name: Ordon Bo Window Rupee 2
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x86
+
+- Name: Ordon Hidden Rusl House Rupee
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x88
+
+- Name: Ordon Rupee In Grass By Bo
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x96
+
+- Name: Ordon Rupee In River 1
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x95
+
+- Name: Ordon Rupee In River 2
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x91
+
+- Name: Ordon Rupee Under Bridge
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x82
+
+- Name: Ordon Rupee Under Tall Tree 1
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x87
+
+- Name: Ordon Rupee Under Tall Tree 2
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x85
+
+- Name: Ordon Rusl House Roof Rupee 1
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x84
+
+- Name: Ordon Rusl House Roof Rupee 2
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x81
+
+- Name: Ordon Shield House Ledge Grass Rupee
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x94
+
+- Name: Ordon Tree Long Branch Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x97
+
+- Name: Ordon Tree Short Branch Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Ordona Province
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 43
+        Flag: 0x89
+
+- Name: Herding Goats Reward
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Ordona Province
+  Metadata:
+    Name Lookup:
+      - Herding Goats Reward
+    Event Flag: 0x4240
+
+- Name: Ordon Ranch Grotto Lantern Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (Happy Link)
+  Categories:
+    - Overworld
+    - Ordona Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 35
+        Tbox Id: 7
+
+- Name: Ordon Spring Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - 
+    - Ordona Province
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3C08
+
+- Name: Ordon Spring Warp Portal
+  Original Item: Ordon Spring Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Ordona Province
+  Metadata:
+    - None
+
+# FARON PROVINCE
+
+- Name: South Faron Woods Twilit Insect in Tunnel 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x1
+
+- Name: South Faron Woods Twilit Insect in Tunnel 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x6
+
+- Name: Faron Woods Coros House Interior Twilit Insect 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 67
+        Flag: 0x9
+
+- Name: Faron Woods Coros House Interior Twilit Insect 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 67
+        Flag: 0x4
+
+- Name: South Faron Woods Coros House Exterior Twilit Insect
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x0
+
+- Name: South Faron Woods Twilit Insect Behind Gate 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0xB
+
+- Name: South Faron Woods Twilit Insect Behind Gate 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x5
+
+- Name: Faron Mist Twilit Insect on Wall 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x12
+
+- Name: Faron Mist Twilit Insect on Wall 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x11
+
+- Name: Faron Mist Twilit Insect on Center Stump 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0xE
+
+- Name: Faron Mist Twilit Insect on Center Stump 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0xD
+
+- Name: Faron Mist Twilit Insect on Center Stump 3
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0xC
+
+- Name: Faron Mist Burrowing Twilit Insect 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x17
+
+- Name: Faron Mist Burrowing Twilit Insect 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x8
+
+- Name: North Faron Woods Twilit Insect 1
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Twilit Insect
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x15
+
+- Name: North Faron Woods Twilit Insect 2
+  Original Item: Faron Twilight Tear
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Twilit Insect
+  Metadata:
+    Twilit Insect:
+      - Stage: 45
+        Flag: 0x14
+
+- Name: South Faron Warp Portal
+  Original Item: South Faron Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Faron Woods
+  Metadata:
+    - None
+
+- Name: Coro Bottle
+  Original Item: Bottle with Lantern Oil
+  Categories:
+    - Overworld
+    - Npc
+    - Faron Woods
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Coro Bottle
+    Event Flag: 0x1A08
+
+- Name: Faron Woods Coro Boulder Rupee 1
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 45
+        Flag: 0x80
+
+- Name: Faron Woods Coro Boulder Rupee 2
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 45
+        Flag: 0x81
+
+- Name: Faron Woods Coro Boulder Rupee 3
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 45
+        Flag: 0x82
+
+- Name: Faron Woods Coro Boulder Rupee 4
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 45
+        Flag: 0x83
+
+- Name: South Faron Cave Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 40
+        Tbox Id: 31
+
+- Name: Faron Mist South Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 29
+
+- Name: Faron Mist Stump Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 28
+
+- Name: Faron Mist North Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 27
+
+- Name: Faron Mist Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Faron Woods
+  Metadata:
+    Poe:
+      - Stage: 45
+        Flag: 0x5D
+
+- Name: Faron Mist Cave Open Chest
+  Original Item: North Faron Woods Gate Key
+  Categories:
+    - Overworld
+    - Faron Woods
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 24
+
+- Name: Faron Mist Cave Lantern Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Faron Woods
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 26
+
+- Name: North Faron Warp Portal
+  Original Item: North Faron Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Faron Woods
+  Metadata:
+    - None
+
+- Name: Faron Woods Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3C10
+
+- Name: North Faron Woods Deku Baba Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Faron Woods
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 63
+
+- Name: Faron Woods Owl Statue Sky Character
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Faron Woods
+  Metadata:
+    Sky Character:
+      - Stage: 45
+        Room: 8
+    Event Flag: 0x6080
+
+- Name: Faron Woods Owl Statue Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Faron Woods
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 45
+        Tbox Id: 30
+
+- Name: Faron Field Bridge Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Faron Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 6
+
+# HD Only
+# - Name: Faron Field Corner Grotto Main Chest
+#   Original Item: Stamp (Wolf Link)
+#   Categories:
+#     - Overworld
+# #     - Hyrule Field - Faron Province
+
+- Name: Faron Field Corner Grotto Left Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Faron Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 11
+
+- Name: Faron Field Corner Grotto Rear Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Faron Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 13
+
+- Name: Faron Field Corner Grotto Right Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Faron Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 12
+
+- Name: Faron Field Female Beetle
+  Original Item: Female Beetle
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Faron Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x9E
+
+- Name: Faron Field Male Beetle
+  Original Item: Male Beetle
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Faron Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x9F
+
+- Name: Faron Field Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Faron Province
+  Metadata:
+    Poe:
+      - Stage: 56
+        Flag: 0x39
+
+- Name: Faron Field Tree Heart Piece
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Faron Province
+    - ARC
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x81
+
+- Name: Lost Woods Boulder Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Sacred Grove
+  Metadata:
+    Poe:
+      - Stage: 54
+        Flag: 0x10
+
+- Name: Lost Woods Lantern Chest
+  Original Item: Bombs 30
+  Categories:
+    - Overworld
+    - Sacred Grove
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 54
+        Tbox Id: 3
+
+- Name: Lost Woods Waterfall Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Sacred Grove
+  Metadata:
+    Poe:
+      - Stage: 54
+        Flag: 0x11
+
+- Name: Sacred Grove Baba Serpent Grotto Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Sacred Grove
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 3
+
+- Name: Sacred Grove Spinner Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (X)
+  Categories:
+    - Overworld
+    - Sacred Grove
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 54
+        Tbox Id: 2
+
+- Name: Sacred Grove Warp Portal
+  Original Item: Sacred Grove Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Sacred Grove
+  Metadata:
+    - None
+
+- Name: Sacred Grove Pedestal Master Sword
+  Original Item: Progressive Sword
+  Categories:
+    - Overworld
+    - Sacred Grove
+    - Event
+  Metadata:
+    Name Lookup:
+      - Sacred Grove Pedestal Master Sword
+    Event Flag: 0x2120
+
+- Name: Sacred Grove Pedestal Shadow Crystal
+  Original Item: Shadow Crystal
+  Categories:
+    - Overworld
+    - Sacred Grove
+    - Event
+  Metadata:
+    Name Lookup:
+      - Sacred Grove Pedestal Shadow Crystal
+    Event Flag: 0x2120
+
+- Name: Sacred Grove Master Sword Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Sacred Grove
+  Metadata:
+    Poe:
+      - Stage: 54
+        Flag: 0x0F
+
+- Name: Sacred Grove Female Snail
+  Original Item: Female Snail
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Sacred Grove
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 54
+        Flag: 0x98
+
+- Name: Sacred Grove Male Snail
+  Original Item: Male Snail
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Sacred Grove
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 54
+        Flag: 0x99
+
+- Name: Sacred Grove Past Owl Statue Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Sacred Grove
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 54
+        Tbox Id: 1
+
+- Name: Sacred Grove Temple of Time Owl Statue Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Sacred Grove
+  Metadata:
+    Poe:
+      - Stage: 54
+        Flag: 0x1E
+
+# ELDIN PROVINCE
+
+- Name: Sanctuary Basement Twilit Insect 1
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 75
+        Flag: 0x2
+
+- Name: Sanctuary Basement Twilit Insect 2
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 75
+        Flag: 0x3
+
+- Name: Sanctuary Basement Twilit Insect 3
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 75
+        Flag: 0xC
+
+- Name: Kakariko Graveyard Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 48
+        Flag: 0x6
+
+- Name: Kakariko Malo Mart Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 68
+        Flag: 0x9
+
+- Name: Kakariko Inn Pipe Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 68
+        Flag: 0x8
+
+- Name: Kakariko Inn Bedroom Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 68
+        Flag: 0x0
+
+- Name: Kakariko Bug House Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 68
+        Flag: 0x1
+
+- Name: Barnes Bomb Shop Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 68
+        Flag: 0x7
+
+- Name: Kakariko Destroyed Building Twilit Insect 1
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 46
+        Flag: 0x4
+
+- Name: Kakariko Destroyed Building Twilit Insect 2
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 46
+        Flag: 0x5
+
+- Name: Kakariko Destroyed Building Twilit Insect 3
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 46
+        Flag: 0xB
+
+- Name: Kakariko Watchtower Twilit Insect
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 68
+        Flag: 0xA
+
+- Name: Death Mountain Trail Twilit Insect Near Howling Stone
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 47
+        Flag: 0xF
+
+- Name: Death Mountain Trail Twilit Insect on Wall
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 47
+        Flag: 0xE
+
+- Name: Death Mountain Trail Twilit Insect in Hot Spring
+  Original Item: Eldin Twilight Tear
+  Categories:
+    - Overworld
+    - Eldin Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 47
+        Flag: 0x10
+
+- Name: Kakariko Gorge Warp Portal
+  Original Item: Kakariko Gorge Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Hyrule Field - Eldin Province
+  Metadata:
+    - None
+
+- Name: Kakariko Gorge Female Pill Bug
+  Original Item: Female Pill Bug
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x94
+
+- Name: Kakariko Gorge Male Pill Bug
+  Original Item: Male Pill Bug
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x95
+
+- Name: Kakariko Gorge Owl Statue Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (E)
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 4
+
+- Name: Kakariko Gorge Owl Statue Sky Character
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+  Metadata:
+    Sky Character:
+      - Stage: 56
+        Room: 3
+    Event Flag: 0x6020
+
+- Name: Kakariko Gorge Owl Statue Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x8D
+
+- Name: Kakariko Gorge Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Eldin Province
+  Metadata:
+    Poe:
+      - Stage: 56
+        Flag: 0x3A
+
+- Name: Kakariko Gorge Spire Heart Piece
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - ARC
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x82
+
+- Name: Kakariko Gorge Double Clawshot Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 5
+
+- Name: Kakariko Gorge Spire Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x8E
+
+- Name: Eldin Lantern Cave First Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (O)
+  Categories:
+    - Overworld
+    - Eldin Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 32
+        Tbox Id: 61
+
+- Name: Eldin Lantern Cave Second Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Eldin Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 32
+        Tbox Id: 63
+
+- Name: Eldin Lantern Cave Lantern Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Eldin Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 32
+        Tbox Id: 62
+
+- Name: Eldin Lantern Cave Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Eldin Lantern Cave
+  Metadata:
+    Poe:
+      - Stage: 32
+        Flag: 0x60
+
+- Name: Kakariko Village Warp Portal
+  Original Item: Kakariko Village Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Kakariko Village
+  Metadata:
+    - None
+
+- Name: Eldin Spring Underwater Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 46
+        Tbox Id: 21
+
+- Name: Eldin Spring Underwater Boulder Rupee
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x8D
+
+- Name: Kakariko Village Bomb Rock Spire Heart Piece
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x8C
+
+- Name: Kakariko Village Bell Rupee
+  Original Item: Silver Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x8A
+
+- Name: Kakariko Village Hot Spring Ledge Box Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x87
+
+- Name: Kakariko Village Spring Shortcut Box Rupee 1
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x88
+
+- Name: Kakariko Village Spring Shortcut Box Rupee 2
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x89
+
+- Name: Kakariko Village Malo Mart Hawkeye
+  Original Item: Hawkeye
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 68
+        Item: 0x3E
+    Switch Flag:
+        Stage: 68
+        Flag: 0x33
+
+- Name: Kakariko Village Malo Mart Hylian Shield
+  Original Item: Hylian Shield
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 68
+        Item: 0x2C
+    Switch Flag:
+        Stage: 68
+        Flag: 0x39
+
+- Name: Kakariko Village Malo Mart Red Potion
+  Original Item: Red Potion Shop
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 68
+        Item: 0x61
+    Switch Flag:
+        Stage: 68
+        Flag: 0x4
+
+- Name: Kakariko Village Malo Mart Wooden Shield
+  Original Item: Wooden Shield
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 68
+        Item: 0x2B
+    Switch Flag:
+        Stage: 68
+        Flag: 0x5
+
+- Name: Kakariko Inn Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 68
+        Tbox Id: 23
+
+- Name: Kakariko Village Female Ant
+  Original Item: Female Ant
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Kakariko Village
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 68
+        Flag: 0x90
+
+- Name: Kakariko Village Ant House Ledge Box Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 46
+        Flag: 0x85
+
+- Name: Barnes Bomb Bag
+  Original Item: Bomb Bag
+  Categories:
+    - Overworld
+    - Npc 
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 68
+        Item: 0x50
+    Event Flag: 0x0908
+
+- Name: Kakariko Village Bomb Shop Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Kakariko Village
+  Metadata:
+    Poe:
+      - Stage: 46
+        Flag: 0x5E
+
+- Name: Kakariko Village Watchtower Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Kakariko Village
+  Metadata:
+    Poe:
+      - Stage: 46
+        Flag: 0x5F
+
+- Name: Kakariko Watchtower Alcove Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 46
+        Tbox Id: 20
+
+- Name: Kakariko Watchtower Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 68
+        Tbox Id: 17
+
+- Name: Talo Sharpshooting
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Talo Sharpshooting
+    Event Flag: 0x0920
+
+- Name: Renados Letter
+  Original Item: Renados Letter
+  Categories:
+    - Overworld
+    - Npc
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Renados Letter
+    Event Flag: 0x0F80
+
+- Name: Ilia Memory Reward
+  Original Item: Horse Call
+  Categories:
+    - Overworld
+    - Npc
+    - Kakariko Village
+  Metadata:
+    Name Lookup:
+      - Ilia Memory Reward
+    Event Flag: 0x5E04
+
+- Name: Rutelas Blessing
+  Original Item: Zora Armor
+  Categories:
+    - Overworld
+    - Npc
+    - Kakariko Graveyard
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Rutelas Blessing
+    Event Flag: 0x0804
+
+- Name: Gift From Ralis
+  Original Item: Progressive Fishing Rod
+  Categories:
+    - Overworld
+    - Npc
+    - Kakariko Graveyard
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Gift From Ralis
+    Event Flag: 0x3B80
+
+- Name: Kakariko Graveyard Lantern Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Kakariko Graveyard
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 48
+        Tbox Id: 24
+
+- Name: Kakariko Graveyard Male Ant
+  Original Item: Male Ant
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Kakariko Graveyard
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 48
+        Flag: 0x91
+
+- Name: Kakariko Graveyard Underwater Boulder Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Kakariko Graveyard
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 48
+        Flag: 0x8E
+
+- Name: Kakariko Graveyard Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - Kakariko Graveyard
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3D80
+
+- Name: Kakariko Graveyard Open Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Kakariko Graveyard
+  Metadata:
+    Poe:
+      - Stage: 48
+        Flag: 0x58
+
+- Name: Kakariko Graveyard Grave Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Kakariko Graveyard
+  Metadata:
+    Poe:
+      - Stage: 48
+        Flag: 0x57
+
+- Name: Death Mountain Warp Portal
+  Original Item: Death Mountain Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Death Mountain
+  Metadata:
+    - None
+
+- Name: Death Mountain Alcove Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Death Mountain
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 47
+        Tbox Id: 22
+
+- Name: Death Mountain Volcano Ledge Rupee 1
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Death Mountain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 47
+        Flag: 0x81
+
+- Name: Death Mountain Volcano Ledge Rupee 2
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Death Mountain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 47
+        Flag: 0x82
+
+- Name: Death Mountain Volcano Ledge Rupee 3
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Death Mountain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 47
+        Flag: 0x83
+
+- Name: Death Mountain Volcano Pipe Ledge Rock Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Death Mountain
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 47
+        Flag: 0x80
+
+- Name: Death Mountain Trail Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Death Mountain
+  Metadata:
+    Poe:
+      - Stage: 47
+        Flag: 0x59
+
+- Name: Eldin Field Bomb Rock Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 2
+
+- Name: Eldin Field Bomskit Grotto Lantern Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (C)
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 35
+        Tbox Id: 6
+
+- Name: Eldin Field Bomskit Grotto Left Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 35
+        Tbox Id: 10
+
+- Name: Eldin Field Female Grasshopper
+  Original Item: Female Grasshopper
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x98
+
+- Name: Eldin Field Male Grasshopper
+  Original Item: Male Grasshopper
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x99
+
+- Name: Goron Springwater Rush
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Hyrule Field - Eldin Province
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x80
+
+- Name: Eldin Field Water Bomb Fish Grotto Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (Sad Link)
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 39
+        Tbox Id: 16
+
+- Name: Bridge of Eldin Warp Portal
+  Original Item: Bridge of Eldin Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Hyrule Field - Eldin Province
+  Metadata:
+    - None
+
+- Name: Bridge of Eldin Female Phasmid
+  Original Item: Female Phasmid
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x96
+
+- Name: Bridge of Eldin Male Phasmid
+  Original Item: Male Phasmid
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Eldin Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x97
+
+- Name: Bridge of Eldin Owl Statue Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 3
+
+- Name: Bridge of Eldin Owl Statue Sky Character
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin Province
+  Metadata:
+    Sky Character:
+      - Stage: 56
+        Room: 0
+    Event Flag: 0x6010
+
+- Name: Bridge of Eldin Boulder Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Eldin
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x8F
+
+- Name: Eldin Stockcave Upper Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Eldin Stockcave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 34
+        Tbox Id: 63
+
+- Name: Eldin Stockcave Lantern Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (Piece of Heart)
+  Categories:
+    - Overworld
+    - Eldin Stockcave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 34
+        Tbox Id: 61
+
+- Name: Eldin Stockcave Lowest Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Eldin Stockcave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 34
+        Tbox Id: 62
+
+- Name: Eldin Field Stalfos Grotto Left Small Chest
+  Original Item: Bombs 5
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 18
+
+- Name: Eldin Field Stalfos Grotto Right Small Chest
+  Original Item: Bombs 5
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 17
+
+- Name: Eldin Field Stalfos Grotto Stalfos Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 36
+        Tbox Id: 2
+
+- Name: Skybook From Impaz
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Npc
+    - Hidden Village
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Skybook From Impaz
+    Event Flag: 0x5F80
+
+- Name: Cats Hide and Seek Minigame
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Hidden Village
+  Metadata:
+    Freestanding Item:
+      - Stage: 63
+        Flag: 0x8B
+
+- Name: Hidden Village Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hidden Village
+  Metadata:
+    Poe:
+      - Stage: 63
+        Flag: 0x40
+
+- Name: Ilia Charm
+  Original Item: Ilias Charm
+  Categories:
+    - Overworld
+    - Npc
+    - Hidden Village
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Ilia Charm
+    Event Flag: 0x2280
+
+# LANAYRU PROVINCE
+
+- Name: Castle Town Twilit Insect
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 53
+        Flag: 0x2C
+
+- Name: Lake Hylia Twilit Insect Between Bridges
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 52
+        Flag: 0x2F
+
+- Name: Lake Hylia Burrowing Twilit Insect
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 52
+        Flag: 0x30
+
+- Name: Lake Hylia Twilit Insect Behind Canon
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 52
+        Flag: 0x32
+
+- Name: Lake Hylia Twilit Insect on Docks
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 52
+        Flag: 0x31
+
+- Name: Lake Hylia Twilit Bloat
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 52
+        Flag: 0x35
+
+- Name: Zoras River Twilit Insect 1
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 49
+        Flag: 0x3D
+
+- Name: Zoras River Twilit Insect 2
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 49
+        Flag: 0x36
+
+- Name: Zoras River Twilit Insect 3
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 49
+        Flag: 0x3A
+
+- Name: Zoras River Twilit Insect 4
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 49
+        Flag: 0x39
+
+- Name: Upper Zoras River Twilit Insect
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 61
+        Flag: 0x37
+
+- Name: Zoras Domain Twilit Insect near Lilypads 1
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 50
+        Flag: 0x3B
+
+- Name: Zoras Domain Twilit Insect near Lilypads 2
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 50
+        Flag: 0x2E
+
+- Name: Zoras Domain Burrowing Twilit Insect
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 50
+        Flag: 0x2D
+
+- Name: Zoras Domain Twilit Insect on West Ledge
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+  Metadata:
+    Twilit Insect:
+      - Stage: 50
+        Flag: 0x3C
+
+- Name: Zoras Domain Throne Room Twilit Insect
+  Original Item: Lanayru Twilight Tear
+  Categories:
+    - Overworld
+    - Lanayru Province
+    - Twilit Insect
+  Metadata:
+    Twilit Insect:
+      - Stage: 50
+        Flag: 0x3E
+
+- Name: Lanayru Field Behind Gate Underwater Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (F)
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 7
+
+- Name: Lanayru Field North Underwater Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x87
+
+- Name: Lanayru Field South Underwater Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x86
+
+- Name: Lanayru Field Tree Boulder Rupee
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x88
+
+- Name: Lanayru Field Bridge Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 56
+        Flag: 0x33
+
+- Name: Lanayru Field Female Stag Beetle
+  Original Item: Female Stag Beetle
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x9A
+
+- Name: Lanayru Field Male Stag Beetle
+  Original Item: Male Stag Beetle
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x9B
+
+# HD Only location
+# - Name: Lanayru Field Chu Grotto Chest
+#   Original Item: Stamp (I)
+#   Categories:
+#     - Overworld
+# #     - Hyrule Field - Lanayru Province
+#     - DZX
+#   Metadata:
+#     - None
+
+- Name: Lanayru Field Poe Grotto Left Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 35
+        Flag: 0x0B
+
+- Name: Lanayru Field Poe Grotto Right Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 35
+        Flag: 0x0A
+
+- Name: Lanayru Field Skulltula Grotto Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (P)
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 38
+        Tbox Id: 19
+
+- Name: Lanayru Ice Block Puzzle Cave Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 30
+        Tbox Id: 0
+
+- Name: Lanayru Field Spinner Track Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 8
+
+- Name: Lanayru Field North Spinner Track Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x89
+
+- Name: Lanayru Field South Spinner Track Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x8A
+
+- Name: Castle Town Warp Portal
+  Original Item: Castle Town Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    - None
+
+- Name: West Hyrule Field Female Butterfly
+  Original Item: Female Butterfly
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x9C
+
+- Name: West Hyrule Field Male Butterfly
+  Original Item: Male Butterfly
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x9D
+
+- Name: West Hyrule Field Northern Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x84
+
+- Name: West Hyrule Field Southern Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x85
+
+- Name: West Hyrule Field Helmasaur Grotto Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (Angry Link)
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 35
+        Tbox Id: 0
+
+- Name: West Hyrule Field Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3C04
+
+- Name: Hyrule Field Amphitheater Owl Statue Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 57
+        Tbox Id: 11
+
+- Name: Hyrule Field Amphitheater Owl Statue Sky Character
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Sky Character:
+      - Stage: 57
+        Room: 8
+    Switch Flag:
+        Stage: 57
+        Flag: 0x57
+
+- Name: Hyrule Field Amphitheater Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 57
+        Flag: 0x49
+
+- Name: Charlo Donation Blessing
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+    - ObjectARC
+    - Boss
+  Metadata:
+    Name Lookup:
+      - Charlo Donation Blessing
+    Event Flag: 0x2480
+
+- Name: STAR Prize 1
+  Original Item: Progressive Bow
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+    - ARC
+  Metadata:
+    Name Lookup:
+      - STAR Prize 1
+    Event Flag: 0x2308
+
+- Name: STAR Prize 2
+  Original Item: Progressive Bow
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+    - ARC
+  Metadata:
+    Name Lookup:
+      - STAR Prize 2
+    Event Flag: 0x2301
+
+- Name: Castle Town Malo Mart Magic Armor
+  Original Item: Magic Armor
+  Categories:
+    - Overworld
+    - Castle Town
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 73
+        Item: 0x30
+    Switch Flag:
+        Stage: 73
+        Flag: 0x2B
+
+# HD Only location
+# - Name: Castle Town Malo Mart Stamp
+#   Original Item: Stamp (Malo Mart)
+#   Categories:
+#     - Overworld
+#     - Castle Town
+#     - ARC
+#     - Shop
+#   Metadata:
+#     - None
+
+- Name: North Castle Town Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - Castle Town
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3D40
+
+- Name: Doctors Office Balcony Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Castle Town
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 53
+        Tbox Id: 1
+
+- Name: East Castle Town Bridge Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 57
+        Flag: 0x47
+
+- Name: Jovani 20 Poe Soul Reward
+  Original Item: Bottle with Great Fairies Tears
+  # HD Original Item: Ghost Lantern
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Jovani 20 Poe Soul Reward
+    Event Flag: 0x5510
+
+- Name: Jovani 60 Poe Soul Reward
+  Original Item: Silver Rupee
+  #HD Original Item: Bottle with Great Fairies Tears
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Jovani 60 Poe Soul Reward
+    Event Flag: 0x3820
+
+# HD Only Location
+# - Name: Gengle 60 Poe Soul Reward
+#   Original Item: Stamp (Rupee)
+#   Categories:
+#     - Overworld
+#     - Npc
+#     - Castle Town
+#   Metadata:
+#     - None
+
+- Name: Jovani House Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Castle Town
+    - Poe
+  Metadata:
+    Poe:
+      - Stage: 73
+        Flag: 0x1E
+
+- Name: Telma Invoice
+  Original Item: Invoice
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Telma Invoice
+    Event Flag: 0x2180
+
+- Name: Agitha Male Beetle Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC0
+    Event Flag: 0x3110
+
+- Name: Agitha Female Beetle Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC1
+    Event Flag: 0x3108
+
+- Name: Agitha Male Butterfly Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC2
+    Event Flag: 0x3104
+
+- Name: Agitha Female Butterfly Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC3
+    Event Flag: 0x3102
+
+- Name: Agitha Male Stag Beetle Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC4
+    Event Flag: 0x3101
+
+- Name: Agitha Female Stag Beetle Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC5
+    Event Flag: 0x3280
+
+- Name: Agitha Male Grasshopper Reward
+  Original Item: Progressive Wallet
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC6
+    Event Flag: 0x3240
+
+- Name: Agitha Female Grasshopper Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC7
+    Event Flag: 0x3220
+
+- Name: Agitha Male Phasmid Reward
+  Original Item: Progressive Wallet
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC8
+    Event Flag: 0x3210
+
+- Name: Agitha Female Phasmid Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xC9
+    Event Flag: 0x3208
+
+- Name: Agitha Male Pill Bug Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xCA
+    Event Flag: 0x3204
+
+- Name: Agitha Female Pill Bug Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xCB
+    Event Flag: 0x3202
+
+- Name: Agitha Male Mantis Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xCC
+    Event Flag: 0x3201
+
+- Name: Agitha Female Mantis Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xCD
+    Event Flag: 0x3380
+
+- Name: Agitha Male Ladybug Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xCE
+    Event Flag: 0x3340
+
+- Name: Agitha Female Ladybug Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xCF
+    Event Flag: 0x3320
+
+- Name: Agitha Male Snail Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD0
+    Event Flag: 0x3310
+
+- Name: Agitha Female Snail Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD1
+    Event Flag: 0x3308
+
+- Name: Agitha Male Dragonfly Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD2
+    Event Flag: 0x3304
+
+- Name: Agitha Female Dragonfly Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD3
+    Event Flag: 0x3302
+
+- Name: Agitha Male Ant Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD4
+    Event Flag: 0x3301
+
+- Name: Agitha Female Ant Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD5
+    Event Flag: 0x3480
+
+- Name: Agitha Male Dayfly Reward
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD6
+    Event Flag: 0x3440
+
+- Name: Agitha Female Dayfly Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Npc
+    - Castle Town
+  Metadata:
+    Bug Reward:
+      - Item Id: 0xD7
+    Event Flag: 0x3420
+
+# HD Only Location
+# - Name: Agitha 12 Golden Bugs Reward
+#   Original Item: Stamp (Agitha)
+#   Categories:
+#     - Overworld
+#     - Npc
+#     - Castle Town
+#     - Bug Reward
+#   Metadata:
+#     - None
+
+- Name: Outside South Castle Town Tightrope Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 57
+        Tbox Id: 12
+
+- Name: Outside South Castle Town Fountain Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (Surprised Zelda)
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 57
+        Tbox Id: 14
+
+- Name: Outside South Castle Town Male Ladybug
+  Original Item: Male Ladybug
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x91
+
+- Name: Outside South Castle Town Female Ladybug
+  Original Item: Female Ladybug
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x90
+
+- Name: Outside South Castle Town Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 57
+        Flag: 0x30
+
+- Name: Outside South Castle Town Tektite Grotto Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 39
+        Tbox Id: 1
+
+- Name: Outside South Castle Town Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3C02
+
+- Name: Outside South Castle Town Double Clawshot Chasm Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (V)
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 57
+        Tbox Id: 13
+
+- Name: Outside South Castle Town Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 57
+        Flag: 0x83
+
+- Name: Wooden Statue
+  Original Item: Wooden Statue
+  Categories:
+    - Overworld
+    - Npc
+    - Hyrule Field - Lanayru Province
+    - REL
+  Metadata:
+    Name Lookup:
+      - Wooden Statue
+    Event Flag: 0x2204
+
+- Name: Lake Hylia Bridge Owl Statue Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 15
+
+- Name: Lake Hylia Bridge Owl Statue Sky Character
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Sky Character:
+      - Stage: 56
+        Room: 13
+    Event Flag: 0x6008
+
+- Name: Lake Hylia Bridge Owl Statue Boulder Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x8B
+
+- Name: Lake Hylia Bridge Vines Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 10
+
+- Name: Lake Hylia Bridge Female Mantis
+  Original Item: Female Mantis
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x92
+
+- Name: Lake Hylia Bridge Male Mantis
+  Original Item: Male Mantis
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x93
+
+- Name: Lake Hylia Bridge Cliff Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 56
+        Tbox Id: 9
+
+- Name: Lake Hylia Bridge Cliff Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Hyrule Field - Lanayru Province
+  Metadata:
+    Poe:
+      - Stage: 56
+        Flag: 0x3B
+
+- Name: Lake Hylia Bridge Bubble Grotto Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (M)
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 38
+        Tbox Id: 4
+
+- Name: Lake Hylia Bridge Faron Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Hyrule Field - Lanayru
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 56
+        Flag: 0x8C
+
+- Name: Lake Hylia Warp Portal
+  Original Item: Lake Hylia Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Ordona Province
+  Metadata:
+    - None
+
+- Name: Auru Gift To Fyer
+  Original Item: Aurus Memo
+  Categories:
+    - Overworld
+    - Npc
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Auru Gift To Fyer
+    Event Flag: 0x2520
+
+- Name: Lake Hylia Tower Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Hylia
+  Metadata:
+    Poe:
+      - Stage: 52
+        Flag: 0x4C
+
+- Name: Lake Hylia Water Toadpoli Grotto Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (S)
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 39
+        Tbox Id: 5
+
+- Name: Lake Lantern Cave First Chest
+  Original Item: Bomblings 5
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 1
+
+- Name: Lake Lantern Cave Second Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 2
+
+- Name: Lake Lantern Cave Third Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 6
+
+- Name: Lake Lantern Cave Fourth Chest
+  Original Item: Arrows 10
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 0
+
+- Name: Lake Lantern Cave Fifth Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (J)
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 7
+
+- Name: Lake Lantern Cave Sixth Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 8
+
+- Name: Lake Lantern Cave Seventh Chest
+  Original Item: Bomblings 5
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 14
+
+- Name: Lake Lantern Cave Eighth Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 10
+
+- Name: Lake Lantern Cave Ninth Chest
+  Original Item: Arrows 10
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 9
+
+- Name: Lake Lantern Cave Tenth Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 5
+
+- Name: Lake Lantern Cave Eleventh Chest
+  Original Item: Bomblings 10
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 4
+
+- Name: Lake Lantern Cave Twelfth Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 11
+
+- Name: Lake Lantern Cave Thirteenth Chest
+  Original Item: Seeds 50
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 12
+
+- Name: Lake Lantern Cave Fourteenth Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (Treasure Chest)
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 13
+
+- Name: Lake Lantern Cave End Lantern Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Lake Lantern Cave
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 33
+        Tbox Id: 3
+
+- Name: Lake Lantern Cave First Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Lantern Cave
+  Metadata:
+    Poe:
+      - Stage: 33
+        Flag: 0x5E
+
+- Name: Lake Lantern Cave Second Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Lantern Cave
+  Metadata:
+    Poe:
+      - Stage: 33
+        Flag: 0x5D
+
+- Name: Lake Lantern Cave Final Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Lantern Cave
+  Metadata:
+    Poe:
+      - Stage: 33
+        Flag: 0x5F
+
+- Name: Lake Hylia Underwater Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (W)
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 5
+
+- Name: Lake Hylia Left Underwater Boulder Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 52
+        Flag: 0x9A
+
+- Name: Lake Hylia Left Underwater Pillar Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 52
+        Flag: 0x81
+
+- Name: Lake Hylia Right Underwater Boulder Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 52
+        Flag: 0x9B
+
+- Name: Lake Hylia Right Underwater Pillar Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 52
+        Flag: 0x80
+
+- Name: Lake Hylia Alcove Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Hylia
+  Metadata:
+    Poe:
+      - Stage: 52
+        Flag: 0x46
+
+- Name: Flight By Fowl Top Platform Reward
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 25
+
+- Name: Flight By Fowl Second Platform Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 0
+
+- Name: Flight By Fowl Third Platform Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (Cucco)
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 2
+
+- Name: Flight By Fowl Fourth Platform Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 8
+
+- Name: Flight By Fowl Fifth Platform Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 7
+
+- Name: Isle of Riches Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Hylia
+  Metadata:
+    Poe:
+      - Stage: 52
+        Flag: 0x47
+
+- Name: Flight By Fowl Ledge Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Hylia
+  Metadata:
+    Poe:
+      - Stage: 52
+        Flag: 0x4D
+
+- Name: Lake Hylia Shell Blade Grotto Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 39
+        Tbox Id: 21
+
+- Name: Lake Hylia Dock Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Lake Hylia
+  Metadata:
+    Poe:
+      - Stage: 52
+        Flag: 0x4B
+
+- Name: Outside Lanayru Spring Left Statue Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 1
+
+- Name: Outside Lanayru Spring Right Statue Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 6
+
+- Name: Lanayru Spring Back Room Lantern Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 29
+
+- Name: Lanayru Spring Back Room Left Chest
+  Original Item: Bombs 5
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 28
+
+- Name: Lanayru Spring Back Room Right Chest
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 27
+
+- Name: Lanayru Spring East Double Clawshot Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 4
+
+- Name: Lanayru Spring West Double Clawshot Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 3
+
+- Name: Lanayru Spring Underwater Left Chest
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Tbox Id: 12
+        Stage: 52
+
+- Name: Lanayru Spring Underwater Right Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 52
+        Tbox Id: 10
+
+- Name: Lanayru Spring Lower Underwater Boulder Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 52
+        Flag: 0x8F
+
+- Name: Lanayru Spring Upper Underwater Boulder Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Lake Hylia
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 52
+        Flag: 0x90
+
+- Name: Plumm Fruit Balloon Minigame
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Lake Hylia
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Plumm Fruit Balloon Minigame
+    Event Flag: 0x2380
+
+- Name: Upper Zoras River Warp Portal
+  Original Item: Upper Zoras River Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Upper Zoras River
+  Metadata:
+    - None
+
+- Name: Upper Zoras River Female Dragonfly
+  Original Item: Female Dragonfly
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Upper Zoras River
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 61
+        Flag: 0x9E
+
+- Name: Upper Zoras River Central Underwater Boulder Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Upper Zoras River
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 61
+        Flag: 0x91
+
+- Name: Upper Zoras River East Underwater Boulder Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Upper Zoras River
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 61
+        Flag: 0x93
+
+- Name: Upper Zoras River Ledge Boulder Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Upper Zoras River
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 61
+        Flag: 0x94
+
+- Name: Upper Zoras River West Underwater Boulder Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Upper Zoras River
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 61
+        Flag: 0x92
+
+- Name: Upper Zoras River Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Upper Zoras River
+  Metadata:
+    Poe:
+      - Stage: 61
+        Flag: 0x48
+
+- Name: Iza Helping Hand
+  Original Item: Bomb Bag
+  Categories:
+    - Overworld
+    - Npc
+    - Upper Zoras River
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Iza Helping Hand
+    Event Flag: 0x0B01
+
+- Name: Iza Raging Rapids Minigame
+  Original Item: Giant Bomb Bag
+  Categories:
+    - Overworld
+    - Npc
+    - Upper Zoras River
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Iza Raging Rapids Minigame
+    Event Flag: 0x5908
+
+- Name: Fishing Hole Bottle
+  Original Item: Empty Bottle
+  Categories:
+    - Overworld
+    - Fishing Hole
+    - ARC
+    - REL
+  Metadata:
+    FLW Message:
+      - Group: 0
+        Message Id: 1822
+    Event Flag: 0x3908
+
+- Name: Fishing Hole Heart Piece
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Fishing Hole
+    - ARC
+    - REL
+  Metadata:
+    # Can be picked up as a freestanding item with clawshot
+    Freestanding Item:
+      - Stage: 62
+        Flag: 0x80
+    # Or picked up with the fishing rod during fishing
+    FLW Message:
+      - Group: 7
+        Message Id: 7564
+      - Group: 7
+        Message Id: 7578
+
+
+- Name: Zoras Domain Warp Portal
+  Original Item: Zoras Domain Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Zoras Domain
+  Metadata:
+    - None
+
+- Name: Zoras Domain Male Dragonfly
+  Original Item: Male Dragonfly
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Zoras Domain
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x9F
+
+- Name: Zoras Domain Mother and Child Isle Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Zoras Domain
+  Metadata:
+    Poe:
+      - Stage: 50
+        Flag: 0x4A
+
+- Name: Zoras Domain Chest Behind Waterfall
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 50
+        Tbox Id: 26
+
+- Name: Zoras Domain Chest By Mother and Child Isles
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 50
+        Tbox Id: 30
+
+- Name: Zoras Domain Waterfall Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Zoras Domain
+  Metadata:
+    Poe:
+      - Stage: 50
+        Flag: 0x49
+
+- Name: Zoras Domain Behind Waterfall Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x96
+
+- Name: Zoras Domain Central Underwater Boulder Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x8E
+
+- Name: Zoras Domain North Underwater Boulder Rupee
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x8D
+
+- Name: Zoras Domain Shortcut Ledge Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x84
+
+- Name: Zoras Domain Shortcut Lower Boulder Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x8C
+
+- Name: Zoras Domain Shortcut Upper Boulder Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Hidden
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x8B
+
+
+- Name: Zoras Domain Top Ledge Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x83
+
+- Name: Zoras Domain Vine Ledge Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x97
+
+- Name: Zoras Domain Waterfall Ledge Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x95
+
+- Name: Zoras Domain Extinguish All Torches Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 50
+        Tbox Id: 20
+
+- Name: Zoras Domain Light All Torches Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 50
+        Tbox Id: 19
+
+- Name: Zoras Domain Underwater Goron
+  Original Item: Bomb Bag
+  Categories:
+    - Overworld
+    - Npc
+    - Zoras Domain
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Zoras Domain Underwater Goron
+    Event Flag: 0x3D10
+
+- Name: Zoras Domain Throne East Gate Underwater Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x8A
+
+- Name: Zoras Domain Throne East Underwater Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x86
+
+- Name: Zoras Domain Throne Northwest Underwater Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x87
+
+- Name: Zoras Domain Throne South Underwater Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x88
+
+- Name: Zoras Domain Throne West Gate Underwater Rupee
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x89
+
+- Name: Zoras Domain Throne West Underwater Rupee
+  Original Item: Yellow Rupee
+  Categories:
+    - Overworld
+    - Zoras Domain
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 50
+        Flag: 0x85
+
+# SNOWPEAK PROVINCE
+
+- Name: Snowpeak Warp Portal
+  Original Item: Snowpeak Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Snowpeak Province
+  Metadata:
+    - None
+
+- Name: Ashei Sketch
+  Original Item: Asheis Sketch
+  Categories:
+    - Overworld
+    - Npc
+    - Snowpeak Province
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Ashei Sketch
+    Event Flag: 0x2940
+
+- Name: Snowpeak Blizzard Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Snowpeak Province
+  Metadata:
+    Poe:
+      - Stage: 51
+        Flag: 0x7D
+
+- Name: Snowpeak Above Freezard Grotto Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Snowpeak Province
+  Metadata:
+    Poe:
+      - Stage: 51
+        Flag: 0x7C
+
+- Name: Snowpeak Poe Among Trees
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Snowpeak Province
+  Metadata:
+    Poe:
+      - Stage: 51
+        Flag: 0x7B
+
+- Name: Snowpeak Freezard Grotto Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Snowpeak Province
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 38
+        Tbox Id: 15
+
+- Name: Snowpeak Cave Ice Lantern Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Snowpeak Province
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 51
+        Tbox Id: 0
+
+- Name: Snowpeak Cave Ice Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Snowpeak Province
+  Metadata:
+    Poe:
+      - Stage: 51
+        Flag: 0x7F
+
+- Name: Snowpeak Icy Summit Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Snowpeak Province
+  Metadata:
+    Poe:
+      - Stage: 51
+        Flag: 0x7E
+
+- Name: Snowboard Racing Prize
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Npc
+    - Snowpeak Province
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Snowboard Racing Prize
+    Event Flag: 0x3B10
+
+- Name: Snowboarding Bridge Ledge Bottom Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x84
+
+- Name: Snowboarding Bridge Ledge Middle Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x83
+
+- Name: Snowboarding Bridge Ledge Upper Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x82
+
+- Name: Snowboarding Shortcut Rupee 1
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x88
+
+- Name: Snowboarding Shortcut Rupee 2
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x89
+
+- Name: Snowboarding Shortcut Rupee 3
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x8A
+
+- Name: Snowboarding Shortcut Rupee 4
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x8B
+
+- Name: Snowboarding Shortcut Rupee 5
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x8C
+
+- Name: Snowboarding Shortcut Rupee 6
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x8D
+
+- Name: Snowboarding Shortcut Rupee 7
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x8E
+
+- Name: Snowboarding Shortcut Rupee 8
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x8F
+
+- Name: Snowboarding Shortcut Rupee 9
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x90
+
+- Name: Snowboarding Shortcut Rupee 10
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x91
+
+- Name: Snowboarding Shortcut Rupee 11
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x92
+
+- Name: Snowboarding Snowy Tree Top Rupee 1
+  Original Item: Blue Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x85
+
+- Name: Snowboarding Snowy Tree Top Rupee 2
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x86
+
+- Name: Snowboarding Snowy Tree Top Rupee 3
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x87
+
+- Name: Snowboarding Top Left Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x80
+
+- Name: Snowboarding Top Right Rupee
+  Original Item: Green Rupee
+  Categories:
+    - Overworld
+    - Snowpeak
+    - Rupee - Freestanding
+  Metadata:
+    Freestanding Item:
+      - Stage: 51
+        Flag: 0x81
+
+# DESERT PROVINCE
+
+- Name: Gerudo Desert Warp Portal
+  Original Item: Gerudo Desert Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Gerudo Desert
+  Metadata:
+    - None
+
+- Name: Gerudo Desert East Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Gerudo Desert
+  Metadata:
+    Poe:
+      - Stage: 59
+        Flag: 0x5C
+
+- Name: Gerudo Desert Skulltula Grotto Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 38
+        Tbox Id: 8
+
+- Name: Gerudo Desert Peahat Ledge Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 11
+
+- Name: Gerudo Desert East Canyon Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 6
+
+- Name: Gerudo Desert South Chest Behind Wooden Gates
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 0
+
+- Name: Gerudo Desert Lone Small Chest
+  Original Item: Arrows 10
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 5
+
+- Name: Gerudo Desert Male Dayfly
+  Original Item: Male Dayfly
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Gerudo Desert
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 59
+        Flag: 0x99
+
+- Name: Gerudo Desert Female Dayfly
+  Original Item: Female Dayfly
+  Categories:
+    - Overworld
+    - Golden Bug
+    - Gerudo Desert
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 59
+        Flag: 0x98
+
+- Name: Gerudo Desert Owl Statue Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 1
+
+- Name: Gerudo Desert Owl Statue Sky Character
+  Original Item: Progressive Sky Book
+  Categories:
+    - Overworld
+    - Gerudo Desert
+  Metadata:
+    Sky Character:
+      - Stage: 59
+        Room: 0
+    Event Flag: 0x6040
+
+- Name: Gerudo Desert Poe Above Cave of Ordeals
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Gerudo Desert
+  Metadata:
+    Poe:
+      - Stage: 59
+        Flag: 0x5D
+
+- Name: Gerudo Desert West Canyon Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (R)
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 7
+
+- Name: Gerudo Desert North Peahat Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Gerudo Desert
+  Metadata:
+    Poe:
+      - Stage: 59
+        Flag: 0x5B
+
+- Name: Gerudo Desert Rock Grotto First Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Gerudo Desert
+  Metadata:
+    Poe:
+      - Stage: 37
+        Flag: 0x0F
+
+- Name: Gerudo Desert Rock Grotto Second Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Gerudo Desert
+  Metadata:
+    Poe:
+      - Stage: 37
+        Flag: 0x10
+
+- Name: Gerudo Desert Rock Grotto Lantern Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (Sad Midna)
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 37
+        Tbox Id: 14
+
+- Name: Gerudo Desert Campfire East Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 9
+
+- Name: Gerudo Desert Campfire North Chest
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 8
+
+- Name: Gerudo Desert Campfire West Chest
+  Original Item: Arrows 10
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 10
+
+- Name: Gerudo Desert Northeast Chest Behind Gates
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 2
+
+- Name: Gerudo Desert Northwest Chest Behind Gates
+  Original Item: Red Rupee
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 3
+
+- Name: Gerudo Desert North Small Chest Before Bulblin Camp
+  Original Item: Arrows 10
+  Categories:
+    - Overworld
+    - Gerudo Desert
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 59
+        Tbox Id: 13
+
+- Name: Gerudo Desert Golden Wolf
+  Original Item: Progressive Hidden Skill
+  Categories:
+    - Overworld
+    - Gerudo Desert
+  Metadata:
+    Golden Wolf:
+      - Flag: 0x3C01
+
+- Name: Outside Bulblin Camp Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Gerudo Desert
+  Metadata:
+    Poe:
+      - Stage: 59
+        Flag: 0x33
+
+- Name: Bulblin Camp First Chest Under Tower At Entrance
+  Original Item: Arrows 20
+  Categories:
+    - Overworld
+    - Bulblin Camp
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 55
+        Tbox Id: 31
+
+# In vanilla this chest shares a flag with the other small chest
+# in the area. So we change this one to use a different flag
+- Name: Bulblin Camp Small Chest in Back of Camp
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Bulblin Camp
+    - DZX
+  Metadata:
+    Chest:
+      - Stage: 55
+        Tbox Id: 30
+
+- Name: Bulblin Camp Roasted Boar
+  Original Item: Piece of Heart
+  Categories:
+    - Overworld
+    - Bulblin Camp
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 55
+        Flag: 0x9F
+
+- Name: Bulblin Guard Key
+  Original Item: Gerudo Desert Bulblin Camp Key
+  Categories:
+    - Overworld
+    - Bulblin Camp
+    - Small Key
+    - DZX
+  Metadata:
+    Freestanding Item:
+      - Stage: 55
+        Flag: 0x9A
+
+- Name: Bulblin Camp Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Bulblin Camp
+  Metadata:
+    Poe:
+      - Stage: 55
+        Flag: 0x78
+
+- Name: Outside Arbiters Grounds Lantern Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Overworld
+    - Bulblin Camp
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 55
+        Tbox Id: 15
+
+- Name: Outside Arbiters Grounds Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Bulblin Camp
+  Metadata:
+    Poe:
+      - Stage: 55
+        Flag: 0x5A
+
+# HD Only Location
+# - Name: Cave of Ordeals Floor 10 Chest
+#   Original Item: Stamp (Surprised Link)
+#   Categories:
+#     - Overworld
+# #     - Cave of Ordeals
+
+# HD Only Location
+# - Name: Cave of Ordeals Floor 20 Chest
+#   Original Item: Stamp (Angry Zelda)
+#   Categories:
+#     - Overworld
+# #     - Cave of Ordeals
+
+# HD Only Location
+# - Name: Cave of Ordeals Floor 30 Chest
+#   Original Item: Stamp (Happy Midna)
+#   Categories:
+#     - Overworld
+# #     - Cave of Ordeals
+
+# HD Only Location
+# - Name: Cave of Ordeals Floor 40 Chest
+#   Original Item: Stamp (Heart Container)
+#   Categories:
+#     - Overworld
+# #     - Cave of Ordeals
+
+# HD Only Location
+# - Name: Cave of Ordeals Floor 50 Chest
+#   Original Item: Stamp (Fairy)
+#   Categories:
+#     - Overworld
+# #     - Cave of Ordeals
+
+- Name: Cave of Ordeals Floor 17 Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Cave of Ordeals
+  Metadata:
+    Poe:
+      - Stage: 31
+        Flag: 0x45
+
+- Name: Cave of Ordeals Floor 33 Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Cave of Ordeals
+  Metadata:
+    Poe:
+      - Stage: 31
+        Flag: 0x46
+
+- Name: Cave of Ordeals Floor 44 Poe
+  Original Item: Poe Soul
+  Categories:
+    - Overworld
+    - Poe
+    - Cave of Ordeals
+  Metadata:
+    Poe:
+      - Stage: 31
+        Flag: 0x47
+
+- Name: Cave of Ordeals Great Fairy Reward
+  Original Item: Fairy Tears
+  Categories:
+    - Overworld
+    - Npc
+    - Cave of Ordeals
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Cave of Ordeals Great Fairy Reward
+    Event Flag: 0x3E40      
+
+- Name: Mirror Chamber Warp Portal
+  Original Item: Mirror Chamber Portal
+  Categories:
+    - Overworld
+    - Warp Portal
+    - Mirror Chamber
+  Metadata:
+    - None
+
+# FOREST TEMPLE
+
+- Name: Forest Temple Entrance Vines Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 7
+
+- Name: Forest Temple Central Chest Hanging From Web
+  Original Item: Forest Temple Compass
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 20
+
+- Name: Forest Temple Central Chest Behind Stairs
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 37
+
+- Name: Forest Temple Central North Chest
+  Original Item: Forest Temple Dungeon Map
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 39
+
+- Name: Forest Temple West Deku Like Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 31
+
+- Name: Forest Temple Big Baba Key
+  Original Item: Forest Temple Small Key
+  Categories:
+    - Small Key
+    - Dungeon
+    - Forest Temple
+    - REL
+  Metadata:
+    Freestanding Item:
+      - Stage: 6
+        Flag: 0x6 # Technically a tbox id
+
+- Name: Forest Temple Totem Pole Chest
+  Original Item: Forest Temple Small Key
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 25
+
+- Name: Forest Temple West Tile Worm Chest Behind Stairs
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 19
+
+- Name: Forest Temple West Tile Worm Room Vines Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 24
+
+- Name: Forest Temple Gale Boomerang
+  Original Item: Gale Boomerang
+  Categories:
+    - Forest Temple
+    - Dungeon
+    - Boss
+  Metadata:
+    Name Lookup:
+      - Forest Temple Gale Boomerang
+    Item Flag:
+      Stage: 8
+      Flag: 0x9D
+
+- Name: Forest Temple Big Key Chest
+  Original Item: Forest Temple Big Key
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Big Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 38
+
+- Name: Forest Temple East Water Cave Chest
+  Original Item: Yellow Rupee
+  # HD Original Item: Stamp (A)
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 26
+
+- Name: Forest Temple Second Monkey Under Bridge Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 9
+
+- Name: Forest Temple Windless Bridge Chest
+  Original Item: Forest Temple Small Key
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 4
+
+- Name: Forest Temple East Tile Worm Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (N)
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 1
+
+- Name: Forest Temple North Deku Like Chest
+  Original Item: Forest Temple Small Key
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 6
+        Tbox Id: 2
+
+- Name: Forest Temple Diababa Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Dungeon
+    - Forest Temple
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 7
+        Flag: 0x9F
+
+- Name: Forest Temple Dungeon Reward
+  Original Item: Progressive Fused Shadow
+  Categories:
+    - Dungeon
+    - Forest Temple
+    - Dungeon Reward
+    - REL
+    - ARC
+  Goal Location: True
+  Metadata:
+    FLW Message:
+      - Group: 5
+        Message Id: 5001
+    Item Flag:
+      Stage: 7
+      Flag: 0x9E
+
+# GORON MINES
+
+- Name: Goron Mines Entrance Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 27
+
+- Name: Goron Mines Main Magnet Room Bottom Chest
+  Original Item: Goron Mines Small Key
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 11
+
+- Name: Goron Mines Gor Amato Key Shard
+  Original Item: Goron Mines Key Shard
+  Categories:
+    - Npc
+    - Dungeon
+    - Goron Mines
+    - Dungeon Items
+    - Big Key
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Goron Mines Gor Amato Key Shard
+    Event Flag: 0x3008 # late
+
+- Name: Goron Mines Gor Amato Chest
+  Original Item: Goron Mines Dungeon Map
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 17
+
+- Name: Goron Mines Gor Amato Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 24
+
+- Name: Goron Mines Magnet Maze Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 20
+
+- Name: Goron Mines Crystal Switch Room Underwater Chest
+  Original Item: Goron Mines Small Key
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 16
+
+- Name: Goron Mines Crystal Switch Room Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 28
+
+- Name: Goron Mines After Crystal Switch Room Magnet Wall Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 9
+
+- Name: Goron Mines Outside Beamos Chest
+  Original Item: Goron Mines Small Key
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 15
+
+- Name: Goron Mines Outside Underwater Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (H)
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 21
+
+- Name: Goron Mines Outside Clawshot Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (U)
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 14
+
+- Name: Goron Mines Gor Ebizo Key Shard
+  Original Item: Goron Mines Key Shard
+  Categories:
+    - Npc
+    - Dungeon
+    - Goron Mines
+    - Dungeon Items
+    - Big Key
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Goron Mines Gor Ebizo Key Shard
+    Event Flag: 0x3702 # late
+
+- Name: Goron Mines Gor Ebizo Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 25
+
+- Name: Goron Mines Chest Before Dangoro
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 13
+
+- Name: Goron Mines Dangoro Chest
+  Original Item: Progressive Bow
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 6
+
+- Name: Goron Mines Beamos Room Chest
+  Original Item: Goron Mines Compass
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 12
+
+- Name: Goron Mines Gor Liggs Key Shard
+  Original Item: Goron Mines Key Shard
+  Categories:
+    - Npc
+    - Dungeon
+    - Goron Mines
+    - Dungeon Items
+    - Big Key
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Goron Mines Gor Liggs Key Shard
+    Event Flag: 0x3701 # late
+
+- Name: Goron Mines Gor Liggs Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 26
+
+- Name: Goron Mines Main Magnet Room Top Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 3
+        Tbox Id: 30
+
+- Name: Goron Mines Fyrus Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Dungeon
+    - Goron Mines
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 4
+        Flag: 0x9F
+
+- Name: Goron Mines Dungeon Reward
+  Original Item: Progressive Fused Shadow
+  Categories:
+    - Dungeon
+    - Goron Mines
+    - Dungeon Reward
+    - REL
+    - ARC
+  Goal Location: True
+  Metadata:
+    FLW Message:
+      - Group: 5
+        Message Id: 6011
+    Event Flag: 0x0701
+
+# LAKEBED TEMPLE
+
+- Name: Lakebed Temple Lobby Left Chest
+  Original Item: Arrows 20
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 28
+
+- Name: Lakebed Temple Lobby Rear Chest
+  Original Item: Water Bombs 10
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 29
+
+- Name: Lakebed Temple Stalactite Room Chest
+  Original Item: Water Bombs 10
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 3
+
+- Name: Lakebed Temple Chandelier Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 5
+
+- Name: Lakebed Temple Central Room Spire Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (K)
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 16
+
+- Name: Lakebed Temple Central Room Chest
+  Original Item: Lakebed Temple Dungeon Map
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 17
+
+- Name: Lakebed Temple Central Room Small Chest
+  Original Item: Arrows 20
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 1
+
+- Name: Lakebed Temple East Lower Waterwheel Stalactite Chest
+  Original Item: Lakebed Temple Small Key
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 6
+
+- Name: Lakebed Temple East Lower Waterwheel Bridge Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 8
+
+- Name: Lakebed Temple East Second Floor Southeast Chest
+  Original Item: Lakebed Temple Small Key
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 10
+
+- Name: Lakebed Temple East Second Floor Southwest Chest
+  Original Item: Water Bombs 5
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 24
+
+- Name: Lakebed Temple East Water Supply Small Chest
+  Original Item: Water Bombs 10
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 27
+
+- Name: Lakebed Temple East Water Supply Clawshot Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (Y)
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 11
+
+- Name: Lakebed Temple Before Deku Toad Alcove Chest
+  Original Item: Lakebed Temple Small Key
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 2
+
+- Name: Lakebed Temple Before Deku Toad Underwater Left Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 15
+
+- Name: Lakebed Temple Before Deku Toad Underwater Right Chest
+  Original Item: Water Bombs 5
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 14
+
+- Name: Lakebed Temple Deku Toad Chest
+  Original Item: Progressive Clawshot
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 2
+        Tbox Id: 0
+
+- Name: Lakebed Temple West Lower Small Chest
+  Original Item: Water Bombs 10
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 30
+
+- Name: Lakebed Temple West Second Floor Central Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 19
+
+- Name: Lakebed Temple West Second Floor Northeast Chest
+  Original Item: Water Bombs 15
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 13
+
+- Name: Lakebed Temple West Second Floor Southeast Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 7
+
+- Name: Lakebed Temple West Second Floor Southwest Underwater Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 25
+
+- Name: Lakebed Temple West Water Supply Small Chest
+  Original Item: Water Bombs 10
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 21
+
+- Name: Lakebed Temple West Water Supply Chest
+  Original Item: Lakebed Temple Compass
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 20
+
+- Name: Lakebed Temple Underwater Maze Small Chest
+  Original Item: Water Bombs 5
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 18
+
+- Name: Lakebed Temple Big Key Chest
+  Original Item: Lakebed Temple Big Key
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Big Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 0
+        Tbox Id: 12
+
+- Name: Lakebed Temple Morpheel Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Dungeon
+    - Lakebed Temple
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 1
+        Flag: 0x9F
+
+- Name: Lakebed Temple Dungeon Reward
+  Original Item: Progressive Fused Shadow
+  Categories:
+    - Dungeon
+    - Lakebed Temple
+    - Dungeon Reward
+    - REL
+    - ARC
+  Goal Location: True
+  Metadata:
+    FLW Message:
+      - Group: 5
+        Message Id: 7001
+    Event Flag: 0x0904 # late
+
+# ARBITERS GROUNDS
+
+- Name: Arbiters Grounds Entrance Chest
+  Original Item: Arbiters Grounds Small Key
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 23
+
+- Name: Arbiters Grounds Torch Room Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Arbiters Grounds
+  Metadata:
+    Poe:
+      - Stage: 24
+        Flag: 0x1E
+
+- Name: Arbiters Grounds Torch Room East Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 19
+
+- Name: Arbiters Grounds Torch Room West Chest
+  Original Item: Arbiters Grounds Dungeon Map
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Dungeon Items
+    - Dungeon Map
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 18
+
+- Name: Arbiters Grounds West Small Chest Behind Block
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 25
+
+- Name: Arbiters Grounds East Lower Turnable Redead Chest
+  Original Item: Arbiters Grounds Small Key
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 6
+
+- Name: Arbiters Grounds East Turning Room Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Arbiters Grounds
+  Metadata:
+    Poe:
+      - Stage: 24
+        Flag: 0x1F
+
+- Name: Arbiters Grounds East Upper Turnable Chest
+  Original Item: Arbiters Grounds Compass
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Dungeon Items
+    - Compass
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 4
+
+- Name: Arbiters Grounds East Upper Turnable Redead Chest
+  Original Item: Arbiters Grounds Small Key
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 5
+
+- Name: Arbiters Grounds Hidden Wall Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Arbiters Grounds
+  Metadata:
+    Poe:
+      - Stage: 24
+        Flag: 0x20
+
+- Name: Arbiters Grounds Ghoul Rat Room Chest
+  Original Item: Arbiters Grounds Small Key
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 21
+
+- Name: Arbiters Grounds West Chandelier Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (Surprised Midna)
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 3
+
+- Name: Arbiters Grounds West Stalfos Northeast Chest
+  Original Item: Bombs 5
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 16
+
+- Name: Arbiters Grounds West Stalfos West Chest
+  Original Item: Bombs 5
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 17
+
+- Name: Arbiters Grounds West Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Arbiters Grounds
+  Metadata:
+    Poe:
+      - Stage: 24
+        Flag: 0x21
+
+- Name: Arbiters Grounds North Turning Room Chest
+  Original Item: Arbiters Grounds Small Key
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 24
+
+- Name: Arbiters Grounds Death Sword Chest
+  Original Item: Spinner
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 26
+        Tbox Id: 11
+
+- Name: Arbiters Grounds Spinner Room First Small Chest
+  Original Item: Bombs 10
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 28
+
+- Name: Arbiters Grounds Spinner Room Second Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 27
+
+- Name: Arbiters Grounds Spinner Room Lower Central Small Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 29
+
+- Name: Arbiters Grounds Spinner Room Stalfos Alcove Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 26
+
+- Name: Arbiters Grounds Spinner Room Lower North Chest
+  Original Item: Yellow Rupee
+  # HD Original Item: Stamp (D)
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 30
+
+- Name: Arbiters Grounds Big Key Chest
+  Original Item: Arbiters Grounds Big Key
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Big Key
+  Metadata:
+    Chest:
+      - Stage: 24
+        Tbox Id: 20
+
+- Name: Arbiters Grounds Stallord Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Arbiters Grounds
+    - Dungeon
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 25
+        Flag: 0x9F
+
+- Name: Arbiters Grounds Dungeon Reward
+  Original Item: Progressive Mirror Shard
+  Categories:
+    - Dungeon
+    - Arbiters Grounds
+    - Dungeon Reward
+  Goal Location: True
+  Metadata:
+    Name Lookup:
+      - Arbiters Grounds Dungeon Reward
+    Item Flag:
+      Stage: 25
+      Flag: 0x9E
+
+# SNOWPEAK RUINS
+
+- Name: Snowpeak Ruins Lobby West Armor Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (Q)
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 23
+
+- Name: Snowpeak Ruins Lobby East Armor Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 22
+
+- Name: Snowpeak Ruins Lobby Armor Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Snowpeak Ruins
+  Metadata:
+    Poe:
+      - Stage: 27
+        Flag: 0x15
+
+- Name: Snowpeak Ruins Lobby Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Snowpeak Ruins
+  Metadata:
+    Poe:
+      - Stage: 27
+        Flag: 0x72
+
+- Name: Snowpeak Ruins Lobby Chandelier Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 21
+
+- Name: Snowpeak Ruins Mansion Map
+  Original Item: Snowpeak Ruins Dungeon Map
+  Categories:
+    - Npc
+    - Dungeon
+    - Snowpeak Ruins
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Snowpeak Ruins Mansion Map
+    Event Flag: 0x0B10 # late
+
+- Name: Snowpeak Ruins East Courtyard Chest
+  Original Item: Snowpeak Ruins Small Key
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 15
+
+- Name: Snowpeak Ruins East Courtyard Buried Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 14
+
+- Name: Snowpeak Ruins Ordon Pumpkin Chest
+  Original Item: Ordon Pumpkin
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Dungeon Items
+    - Ordon Pumpkin
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 10
+
+- Name: Snowpeak Ruins Courtyard Central Chest
+  Original Item: Bombs 5
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 3
+
+- Name: Snowpeak Ruins West Courtyard Buried Chest
+  Original Item: Snowpeak Ruins Small Key
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 13
+
+- Name: Snowpeak Ruins West Cannon Room Central Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 20
+
+- Name: Snowpeak Ruins West Cannon Room Corner Chest
+  Original Item: Bombs 5
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 19
+
+- Name: Snowpeak Ruins Wooden Beam Central Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (B)
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 1
+
+- Name: Snowpeak Ruins Wooden Beam Chandelier Chest
+  Original Item: Snowpeak Ruins Small Key
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 7
+
+- Name: Snowpeak Ruins Wooden Beam Northwest Chest
+  Original Item: Snowpeak Ruins Compass
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 2
+
+- Name: Snowpeak Ruins Ball and Chain
+  Original Item: Ball and Chain
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - REL
+  Metadata:
+    Name Lookup:
+      - Snowpeak Ruins Ball and Chain
+    Switch Flag:
+      Stage: 29
+      Flag: 0x5F
+
+- Name: Snowpeak Ruins Chest After Darkhammer
+  Original Item: Ordon Cheese
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 29
+        Tbox Id: 6
+
+- Name: Snowpeak Ruins Broken Floor Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 25
+
+- Name: Snowpeak Ruins Ice Room Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Snowpeak Ruins
+  Metadata:
+    Poe:
+      - Stage: 27
+        Flag: 0x7F
+
+- Name: Snowpeak Ruins Northeast Chandelier Chest
+  Original Item: Snowpeak Ruins Small Key
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 18
+
+- Name: Snowpeak Ruins Chapel Chest
+  Original Item: Snowpeak Ruins Bedroom Key
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Big Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 27
+        Tbox Id: 11
+
+- Name: Snowpeak Ruins Blizzeta Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Dungeon
+    - Snowpeak Ruins
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 28
+        Flag: 0x9F
+
+- Name: Snowpeak Ruins Dungeon Reward
+  Original Item: Progressive Mirror Shard
+  Categories:
+    - Dungeon
+    - Snowpeak Ruins
+    - Dungeon Reward
+    - REL
+    - ARC
+  Goal Location: True
+  Metadata:
+    FLW Message:
+      - Group: 5
+        Message Id: 9301
+    Event Flag: 0x2008
+
+- Name: Temple of Time Lobby Lantern Chest
+  Original Item: Temple of Time Small Key
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 41
+
+- Name: Temple of Time First Staircase Gohma Gate Chest
+  Original Item: Arrows 30
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 2
+
+- Name: Temple of Time First Staircase Window Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 45
+
+- Name: Temple of Time First Staircase Armos Chest
+  Original Item: Temple of Time Dungeon Map
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 1
+
+- Name: Temple of Time Poe Behind Gate
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Temple of Time
+  Metadata:
+    Poe:
+      - Stage: 9
+        Flag: 0x19
+
+- Name: Temple of Time Armos Antechamber East Chest
+  Original Item: Temple of Time Small Key
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 4
+
+- Name: Temple of Time Armos Antechamber North Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (L)
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 46
+
+- Name: Temple of Time Armos Antechamber Statue Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 5
+
+- Name: Temple of Time Moving Wall Beamos Room Chest
+  Original Item: Temple of Time Compass
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 6
+
+- Name: Temple of Time Moving Wall Dinalfos Room Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 12
+
+- Name: Temple of Time Scales Gohma Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 44
+
+- Name: Temple of Time Scales Upper Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (T)
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 47
+
+- Name: Temple of Time Poe Above Scales
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - Temple of Time
+  Metadata:
+    Poe:
+      - Stage: 9
+        Flag: 0x18
+
+- Name: Temple of Time Floor Switch Puzzle Room Upper Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 48
+
+- Name: Temple of Time Big Key Chest
+  Original Item: Temple of Time Big Key
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Big Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 8
+
+- Name: Temple of Time Gilloutine Chest
+  Original Item: Temple of Time Small Key
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 9
+
+- Name: Temple of Time Chest Before Darknut
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 9
+        Tbox Id: 43
+
+- Name: Temple of Time Darknut Chest
+  Original Item: Progressive Dominion Rod
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 11
+        Tbox Id: 0
+
+- Name: Temple of Time Armogohma Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Dungeon
+    - Temple of Time
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 10
+        Flag: 0x9F
+
+- Name: Temple of Time Dungeon Reward
+  Original Item: Progressive Mirror Shard
+  Categories:
+    - Dungeon
+    - Temple of Time
+    - Dungeon Reward
+    - REL
+    - ARC
+  Goal Location: True
+  Metadata:
+    FLW Message:
+      - Group: 5
+        Message Id: 9401
+    Item Flag:
+      Stage: 10
+      Flag: 0x9E
+
+# CITY IN THE SKY
+
+- Name: City in the Sky Underwater East Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 27
+
+- Name: City in the Sky Underwater West Chest
+  Original Item: Water Bombs 15
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 3
+
+- Name: City in the Sky West Wing First Chest
+  Original Item: City in the Sky Small Key
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 5
+
+- Name: City in the Sky West Wing Baba Balcony Chest
+  Original Item: Arrows 20
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 21
+
+- Name: City in the Sky West Wing Narrow Ledge Chest
+  Original Item: Red Rupee
+  # HD Original Item: Stamp (Ooccoo)
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 22
+
+- Name: City in the Sky West Wing Tile Worm Chest
+  Original Item: Bombs 10
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 20
+
+- Name: City in the Sky Baba Tower Top Small Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 7
+
+- Name: City in the Sky Baba Tower Narrow Ledge Chest
+  Original Item: Arrows 20
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 23
+
+- Name: City in the Sky Baba Tower Alcove Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 6
+
+- Name: City in the Sky West Garden Corner Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 15
+
+- Name: City in the Sky West Garden Lone Island Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (G)
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 25
+
+- Name: City in the Sky Garden Island Poe
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - City in the Sky
+  Metadata:
+    Poe:
+      - Stage: 12
+        Flag: 0x54
+
+- Name: City in the Sky West Garden Lower Chest
+  Original Item: Bombs 5
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 11
+
+- Name: City in the Sky West Garden Ledge Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 9
+
+- Name: City in the Sky Central Outside Ledge Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 24
+
+- Name: City in the Sky Central Outside Poe Island Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (Z)
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 12
+
+- Name: City in the Sky Poe Above Central Fan
+  Original Item: Poe Soul
+  Categories:
+    - Dungeon
+    - Poe
+    - City in the Sky
+  Metadata:
+    Poe:
+      - Stage: 12
+        Flag: 0x55
+
+- Name: City in the Sky Big Key Chest
+  Original Item: City in the Sky Big Key
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - Big Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 13
+
+- Name: City in the Sky Chest Below Big Key Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 14
+
+- Name: City in the Sky East First Wing Chest After Fans
+  Original Item: City in the Sky Dungeon Map
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 2
+
+- Name: City in the Sky East Tile Worm Small Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 19
+
+- Name: City in the Sky East Wing After Dinalfos Alcove Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 18
+
+- Name: City in the Sky East Wing After Dinalfos Ledge Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 26
+
+- Name: City in the Sky East Wing Lower Level Chest
+  Original Item: City in the Sky Compass
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 4
+
+- Name: City in the Sky Aeralfos Chest
+  Original Item: Progressive Clawshot
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 14
+        Tbox Id: 0
+
+- Name: City in the Sky Chest Behind North Fan
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 12
+        Tbox Id: 17
+
+- Name: City in the Sky Argorok Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Heart Container
+    - Dungeon
+    - City in the Sky
+    - Boss
+  Metadata:
+    Freestanding Item:
+      - Stage: 13
+        Flag: 0x9F
+
+- Name: City in the Sky Dungeon Reward
+  Original Item: Progressive Mirror Shard
+  Categories:
+    - Dungeon
+    - City in the Sky
+    - Dungeon Reward
+    - REL
+    - ARC
+  Goal Location: True
+  Metadata:
+    FLW Message:
+      - Group: 5
+        Message Id: 11001
+    Event Flag: 0x2002
+
+# PALACE OF TWILIGHT
+
+- Name: Palace of Twilight West Wing First Room Central Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 4
+
+- Name: Palace of Twilight West Wing Chest Behind Wall of Darkness
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 30
+
+- Name: Palace of Twilight West Wing Second Room Central Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 5
+
+- Name: Palace of Twilight West Wing Second Room Lower South Chest
+  Original Item: Palace of Twilight Compass
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Dungeon Items
+    - Compass
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 3
+
+- Name: Palace of Twilight West Wing Second Room Southeast Chest
+  Original Item: Orange Rupee
+  # HD Original Item: Stamp (Angry Midna)
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 25
+
+- Name: Palace of Twilight East Wing First Room Zant Head Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 6
+
+- Name: Palace of Twilight East Wing First Room East Alcove Chest
+  Original Item: Piece of Heart
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 0
+
+- Name: Palace of Twilight East Wing First Room North Small Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 36
+
+- Name: Palace of Twilight East Wing First Room West Alcove Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 27
+
+- Name: Palace of Twilight East Wing Second Room Northeast Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 28
+
+- Name: Palace of Twilight East Wing Second Room Northwest Chest
+  Original Item: Purple Rupee
+  # HD Original Item: Stamp (Zant)
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 29
+
+- Name: Palace of Twilight East Wing Second Room Southeast Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 7
+
+- Name: Palace of Twilight East Wing Second Room Southwest Chest
+  Original Item: Palace of Twilight Dungeon Map
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Dungeon Items
+    - Dungeon Map
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 33
+
+- Name: Palace of Twilight Collect Both Sols
+  Original Item: Progressive Sword
+  Categories:
+    - Cutscene
+    - Dungeon
+    - Palace of Twilight
+  Metadata:
+    Freestanding Item:
+      - Stage: 15
+        Flag: 0x81
+
+- Name: Palace of Twilight Central First Room Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 22
+
+- Name: Palace of Twilight Central Outdoor Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 24
+
+- Name: Palace of Twilight Big Key Chest
+  Original Item: Palace of Twilight Big Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Big Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 23
+
+- Name: Palace of Twilight Central Tower Chest
+  Original Item: Palace of Twilight Small Key
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Small Key
+  Metadata:
+    Chest:
+      - Stage: 15
+        Tbox Id: 26
+
+- Name: Palace of Twilight Zant Heart Container
+  Original Item: Heart Container
+  Categories:
+    - Dungeon
+    - Palace of Twilight
+    - Heart Container
+    - Dungeon Reward
+  Goal Location: True
+  Metadata:
+    Freestanding Item:
+      - Stage: 16
+        Flag: 0x80
+
+# HYRULE CASTLE
+
+- Name: Hyrule Castle West Courtyard Central Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 5
+
+- Name: Hyrule Castle West Courtyard North Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 9
+
+- Name: Hyrule Castle King Bulblin Key
+  Original Item: Hyrule Castle Small Key
+  Categories:
+    - Npc
+    - Small Key
+    - Dungeon
+    - Hyrule Castle
+    - REL
+  Metadata:
+    Name Lookup:
+      - Hyrule Castle King Bulblin Key
+    # Not actually a chest, but uses a chest collection flag
+    Chest: 
+      - Stage: 20
+        Tbox Id: 0x3
+
+- Name: Hyrule Castle East Wing Boomerang Puzzle Chest
+  Original Item: Hyrule Castle Dungeon Map
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - Dungeon Items
+    - Dungeon Map
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 4
+
+- Name: Hyrule Castle East Wing Balcony Chest
+  Original Item: Yellow Rupee
+  # HD Original Item: Stamp (Sad Zelda)
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 11
+
+- Name: Hyrule Castle Graveyard Grave Switch Room Back Left Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 34
+
+- Name: Hyrule Castle Graveyard Grave Switch Room Front Left Chest
+  Original Item: Green Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 33
+
+- Name: Hyrule Castle Graveyard Grave Switch Room Right Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 30
+
+- Name: Hyrule Castle Graveyard Owl Statue Chest
+  Original Item: Hyrule Castle Small Key
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 7
+
+- Name: Hyrule Castle Main Hall Northeast Chest
+  Original Item: Hyrule Castle Compass
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - Dungeon Items
+    - Compass
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 8
+
+- Name: Hyrule Castle Main Hall Northwest Chest
+  Original Item: Silver Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 13
+
+- Name: Hyrule Castle Main Hall Southwest Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 2
+
+- Name: Hyrule Castle Lantern Staircase Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 25
+
+- Name: Hyrule Castle Southeast Balcony Tower Chest
+  Original Item: Hyrule Castle Small Key
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - Small Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 1
+
+- Name: Hyrule Castle Big Key Chest
+  Original Item: Hyrule Castle Big Key
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - Big Key
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 0
+
+- Name: Hyrule Castle Treasure Room First Chest
+  Original Item: Orange Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 15
+
+- Name: Hyrule Castle Treasure Room Second Chest
+  Original Item: Seeds 50
+  # HD Original Item: Stamp (Happy Zelda)
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 16
+
+- Name: Hyrule Castle Treasure Room Third Chest
+  Original Item: Silver Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 17
+
+- Name: Hyrule Castle Treasure Room Fourth Chest
+  Original Item: Bomblings 10
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 18
+
+- Name: Hyrule Castle Treasure Room Fifth Chest
+  Original Item: Purple Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 19
+
+- Name: Hyrule Castle Treasure Room First Small Chest
+  Original Item: Arrows 30
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 35
+
+- Name: Hyrule Castle Treasure Room Second Small Chest
+  Original Item: Green Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 29
+
+- Name: Hyrule Castle Treasure Room Third Small Chest
+  Original Item: Bombs 20
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 21
+
+- Name: Hyrule Castle Treasure Room Fourth Small Chest
+  Original Item: Arrows 20
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 23
+
+- Name: Hyrule Castle Treasure Room Fifth Small Chest
+  Original Item: Water Bombs 15
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 22
+
+- Name: Hyrule Castle Treasure Room Sixth Small Chest
+  Original Item: Red Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 26
+
+- Name: Hyrule Castle Treasure Room Seventh Small Chest
+  Original Item: Yellow Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 27
+
+- Name: Hyrule Castle Treasure Room Eighth Small Chest
+  Original Item: Blue Rupee
+  Categories:
+    - Dungeon
+    - Hyrule Castle
+    - ARC
+  Metadata:
+    Chest:
+      - Stage: 20
+        Tbox Id: 28
+
+- Name: Defeat Ganondorf
+  Original Item: Game Beatable
+  Categories:
+    - Placeholder
+  Metadata:
+    - None
+
+# HINT SIGNS
+
+- Name: Ordon Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: South Faron Woods Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Sacred Grove Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Faron Field Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Kakariko Gorge Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Kakariko Village Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Kakariko Graveyard Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Eldin Field Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: North Eldin Field Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Hidden Village Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Lanayru Field Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Beside Castle Town Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Castle Town Center Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Outside South Castle Town Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Lake Hylia Bridge Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Lake Hylia Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Lanayru Spring Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Lake Lantern Cave Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Fishing Hole Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Zoras Domain Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Snowpeak Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Gerudo Desert Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Bulblin Camp Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Forest Temple Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Goron Mines Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Lakebed Temple Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Arbiters Grounds Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Snowpeak Ruins Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Temple of Time First Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Temple of Time Second Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: City in the Sky Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Palace of Twilight Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Hyrule Castle Hint Sign
+  Categories:
+    - Hint Sign
+    - Dungeon
+    - Non-Item Location
+  Metadata:
+    - None
+
+- Name: Cave of Ordeals Hint Sign
+  Categories:
+    - Hint Sign
+    - Overworld
+    - Non-Item Location
+  Metadata:
+    - None

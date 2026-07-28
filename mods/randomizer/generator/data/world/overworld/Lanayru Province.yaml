@@ -1,0 +1,772 @@
+
+# LANAYRU FIELD
+
+- Name: Lanayru Field
+  Map Sector: Lanayru Province
+  Region: Lanayru Field
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Lanayru Field Behind Gate Underwater Chest: Iron_Boots
+    Lanayru Field Tree Boulder Rupee: Can_Smash
+    Lanayru Field North Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Lanayru Field South Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Lanayru Field Male Stag Beetle: Clawshot or Gale_Boomerang
+    Lanayru Field Female Stag Beetle: Clawshot or Gale_Boomerang
+    Lanayru Field Bridge Poe: Night and Can_Use_Senses and Can_Complete_MDH and Can_Complete_All_Twilight
+    Lanayru Field Hint Sign: Nothing
+  Exits:
+    Lanayru Field Near Zoras Domain: Can_Smash
+    Lanayru Field Cave Entrance: Can_Smash
+    Lanayru Field Chu Grotto: Can_Dig
+    Lanayru Field Skulltula Grotto: Can_Dig
+    Lanayru Field Poe Grotto: Can_Dig
+    Hyrule Field Near Spinner Rails: Can_Smash
+    Outside Castle Town West: Nothing
+    North Eldin Field: Nothing
+    Upper Zoras River: Impossible # To satisfy entrance rando
+
+- Name: Lanayru Field Near Zoras Domain
+  Map Sector: Lanayru Province
+  Region: Lanayru Field
+  Twilight: Lanayru
+  Can Warp: True
+  Exits:
+    Zoras Domain West Ledge: Nothing
+    Lanayru Field: Can_Smash
+
+- Name: Lanayru Field Cave Entrance
+  Map Sector: Lanayru Province
+  Region: Lanayru Field
+  Twilight: Lanayru
+  Can Warp: True
+  Exits:
+    Lanayru Ice Puzzle Cave: Nothing
+    Lanayru Field: Can_Smash
+
+- Name: Lanayru Ice Puzzle Cave
+  Locations:
+    Lanayru Ice Block Puzzle Cave Chest: Ball_and_Chain
+  Exits:
+    Lanayru Field Cave Entrance: Nothing
+
+- Name: Lanayru Field Chu Grotto
+  # Locations:
+  #   Lanayru Field Chu Grotto Chest: Nothing # HD Only
+  Exits:
+    Lanayru Field: Nothing
+
+- Name: Lanayru Field Skulltula Grotto
+  Locations:
+    Lanayru Field Skulltula Grotto Chest: Lantern
+  Exits:
+    Lanayru Field: Nothing
+
+- Name: Lanayru Field Poe Grotto
+  Locations:
+    Lanayru Field Poe Grotto Left Poe: Can_Use_Senses
+    Lanayru Field Poe Grotto Right Poe: Can_Use_Senses
+  Exits:
+    Lanayru Field: Nothing
+
+- Name: Hyrule Field Near Spinner Rails
+  Map Sector: Lanayru Province
+  Region: Lanayru Field
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Lanayru Field Spinner Track Chest: Spinner
+    Lanayru Field North Spinner Track Boulder Rupee: Can_Smash
+    Lanayru Field South Spinner Track Boulder Rupee: Can_Smash
+  Exits:
+    Lake Hylia Bridge: Can_Smash
+    Lanayru Field: Can_Smash
+
+# OUTSIDE CASTLE TOWN WEST
+
+- Name: Outside Castle Town West
+  Map Sector: Lanayru Province
+  Region: Beside Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Castle Town Warp Portal: Nothing
+    Hyrule Field Amphitheater Owl Statue Chest: Restored_Dominion_Rod
+    Hyrule Field Amphitheater Owl Statue Sky Character: Restored_Dominion_Rod
+    West Hyrule Field Northern Boulder Rupee: Can_Smash
+    West Hyrule Field Southern Boulder Rupee: Can_Smash
+    West Hyrule Field Male Butterfly: Nothing
+    West Hyrule Field Female Butterfly: Gale_Boomerang
+    Hyrule Field Amphitheater Poe: Can_Use_Senses and Night
+    West Hyrule Field Golden Wolf: Can_Climb_Vines and 'Howl_at_Upper_Zoras_River_Howling_Stone'
+    Beside Castle Town Hint Sign: Can_Climb_Vines
+  Exits:
+    Outside Castle Town West Grotto Ledge: Clawshot
+    Castle Town West: Nothing
+    Lake Hylia Bridge: Nothing
+    Lanayru Field: Nothing
+
+- Name: Outside Castle Town West Grotto Ledge
+  Map Sector: Lanayru Province
+  Region: Beside Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    West Hyrule Field Female Butterfly: Nothing
+  Exits:
+    Outside Castle Town West Helmasaur Grotto: Can_Dig
+    Outside Castle Town West: Nothing
+
+- Name: Outside Castle Town West Helmasaur Grotto
+  Locations:
+    West Hyrule Field Helmasaur Grotto Chest: Can_Defeat_Helmasaur
+  Exits:
+    Outside Castle Town West Grotto Exit: Nothing
+
+# If you exit the grotto as wolf, you jump over the ledge and fall
+# down to Outside Castle Town West
+- Name: Outside Castle Town West Grotto Exit
+  Can Transform: Never
+  Exits:
+    Outside Castle Town West Grotto Ledge: Human_Link
+    Outside Castle Town West: Wolf_Link
+
+# CASTLE TOWN
+
+- Name: Castle Town West
+  Map Sector: Lanayru Province
+  Region: Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Can Transform: If Transform Anywhere
+  Locations:
+    Charlo Donation Blessing: "'Can_Farm_Lots_of_Rupees'"
+  Exits:
+    Castle Town STAR Game: Nothing
+    Castle Town Center: Nothing
+    Castle Town South: Nothing
+    Outside Castle Town West: Nothing
+
+- Name: Castle Town STAR Game
+  Twilight: Lanayru
+  Can Transform: If Transform Anywhere
+  Locations:
+    STAR Prize 1: Clawshot
+    STAR Prize 2: Double_Clawshots
+  Exits:
+    Castle Town West: Nothing
+
+- Name: Castle Town Center
+  Map Sector: Lanayru Province
+  Region: Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Can Transform: If Transform Anywhere
+  Locations:
+    Castle Town Center Hint Sign: Nothing
+  Exits:
+    Castle Town Goron House West Door Exterior: Nothing
+    Castle Town Goron House East Door Exterior: Nothing
+    Castle Town Malo Mart: Can_Open_Doors and 'Can_Farm_Rupees'
+    Castle Town North: Nothing
+    Castle Town East: Nothing
+    Castle Town South: Nothing
+    Castle Town West: Nothing
+
+- Name: Castle Town Goron House West Door Exterior
+  Can Transform: Never
+  Exits:
+    Castle Town Goron House West Door Interior: Can_Open_Doors
+    Castle Town Center: Nothing
+
+- Name: Castle Town Goron House East Door Exterior
+  Can Transform: Never
+  Exits:
+    Castle Town Goron House East Door Interior: Can_Open_Doors
+    Castle Town Center: Nothing
+
+- Name: Castle Town Goron House West Door Interior
+  Can Transform: Never
+  Exits:
+    Castle Town Goron House West Door Exterior: Can_Open_Doors
+    Castle Town Goron House: Nothing
+
+- Name: Castle Town Goron House East Door Interior
+  Can Transform: Never
+  Exits:
+    Castle Town Goron House East Door Exterior: Can_Open_Doors
+    Castle Town Goron House: Nothing
+
+- Name: Castle Town Goron House
+  Can Transform: If Transform Anywhere
+  Exits:
+    Castle Town Goron House West Door Interior: Nothing
+    Castle Town Goron House East Door Interior: Nothing
+    Castle Town Goron House Ledge: Nothing
+
+- Name: Castle Town Goron House Ledge
+  Twilight: Lanayru
+  Can Transform: If Transform Anywhere
+  Exits:
+    Castle Town Goron House: Nothing
+
+- Name: Castle Town Malo Mart
+  Can Transform: If Transform Anywhere
+  Locations:
+    # Castle Town Malo Mart Stamp: Can_Talk_to_Humans and 'Can_Farm_Lots_of_Rupees' and 'Can_Fund_Malo_Mart' # HD only
+    Castle Town Malo Mart Magic Armor: Can_Talk_to_Humans and 'Can_Farm_Lots_of_Rupees' and 'Can_Fund_Malo_Mart' and Big_Wallet
+  Exits:
+    Castle Town Center: Can_Open_Doors
+
+- Name: Castle Town North
+  Map Sector: Lanayru Province
+  Region: Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Exits:
+    Castle Town North Behind First Door: Can_Complete_MDH
+    Castle Town Center: Nothing
+
+- Name: Castle Town North Behind First Door
+  Twilight: Lanayru
+  Locations:
+    North Castle Town Golden Wolf: "'Howl_at_Hidden_Village_Howling_Stone'"
+  Exits:
+    Castle Town North Inside Barrier: Can_Break_Hyrule_Castle_Barrier
+    Castle Town North: Can_Complete_MDH
+
+- Name: Castle Town North Inside Barrier
+  Twilight: Lanayru
+  Exits:
+    Hyrule Castle Entrance: Nothing
+    Castle Town North Behind First Door: Can_Complete_MDH
+
+- Name: Castle Town East
+  Map Sector: Lanayru Province
+  Region: Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Exits:
+    Castle Town Doctors Office West Door Exterior: Nothing
+    Castle Town Doctors Office East Door Exterior: Nothing
+    Outside Castle Town East: Nothing
+    Castle Town South: Nothing
+    Castle Town Center: Nothing
+
+- Name: Castle Town Doctors Office West Door Exterior
+  Can Transform: Never
+  Exits:
+    Castle Town Doctors Office West Door Interior: Can_Open_Doors
+    Castle Town East: Nothing
+
+- Name: Castle Town Doctors Office East Door Exterior
+  Can Transform: Never
+  Exits:
+    Castle Town Doctors Office East Door Interior: Can_Open_Doors
+    Castle Town East: Nothing
+
+- Name: Castle Town Doctors Office West Door Interior
+  Can Transform: Never
+  Exits:
+    Castle Town Doctors Office West Door Exterior: Can_Open_Doors
+    Castle Town Doctors Office Entrance: Nothing
+
+- Name: Castle Town Doctors Office East Door Interior
+  Can Transform: Never
+  Exits:
+    Castle Town Doctors Office East Door Exterior: Can_Open_Doors
+    Castle Town Doctors Office Entrance: Nothing
+
+- Name: Castle Town Doctors Office Entrance
+  Can Transform: If Transform Anywhere
+  Exits:
+    Castle Town Doctors Office Lower: Ilia_Memory_Quest >= Statue or (Invoice and Can_Talk_to_Humans)
+    Castle Town Doctors Office West Door Interior: Nothing
+    Castle Town Doctors Office East Door Interior: Nothing
+
+- Name: Castle Town Doctors Office Lower
+  Events:
+    Medicine Scent: Can_Sniff
+  Exits:
+    Castle Town Doctors Office Upper: Wolf_Link
+    Castle Town Doctors Office Entrance: Invoice and Can_Talk_to_Humans
+
+- Name: Castle Town Doctors Office Upper
+  Exits:
+    Castle Town Doctors Office Lower: Nothing
+    Castle Town Doctors Office Balcony: Nothing
+
+- Name: Castle Town Doctors Office Balcony
+  Twilight: Lanayru
+  Can Transform: If Transform Anywhere
+  Locations:
+    Doctors Office Balcony Chest: Nothing
+  Exits:
+    Castle Town East: Nothing
+    Castle Town Doctors Office Upper: Nothing
+    
+- Name: Outside Castle Town East
+  Can Transform: If Transform Anywhere
+  Map Sector: Lanayru Province
+  Region: Castle Town
+  Can Warp: True
+  Locations:
+    East Castle Town Bridge Poe: Night and Can_Use_Senses
+  Exits:
+    Eldin Field Near Castle Town: Nothing
+    Castle Town East: Nothing
+
+- Name: Castle Town South
+  Map Sector: Lanayru Province
+  Region: Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Events:
+    Can Buy Hot Spring Water: "'Can_Finish_Goron_Springwater_Rush'"
+    Can Learn About Wooden Statue: "'Medicine_Scent'"
+  Locations:
+    Castle Town Twilit Insect: Can_Defeat_Lanayru_Twilit_Insect
+  Exits:
+    Castle Town Agithas House: Can_Open_Doors
+    Castle Town Seer House: Can_Open_Doors
+    Castle Town Jovanis House: Can_Dig
+    Castle Town Telmas Bar: Can_Open_Doors
+    Outside Castle Town South: Nothing
+    Castle Town West: Nothing
+    Castle Town East: Nothing
+    Castle Town Center: Nothing
+
+- Name: Castle Town Agithas House
+  Can Transform: If Transform Anywhere
+  Locations:
+    Agitha Female Ant Reward: Female_Ant and Can_Talk_to_Humans
+    Agitha Female Beetle Reward: Female_Beetle and Can_Talk_to_Humans
+    Agitha Female Butterfly Reward: Female_Butterfly and Can_Talk_to_Humans
+    Agitha Female Dayfly Reward: Female_Dayfly and Can_Talk_to_Humans
+    Agitha Female Dragonfly Reward: Female_Dragonfly and Can_Talk_to_Humans
+    Agitha Female Grasshopper Reward: Female_Grasshopper and Can_Talk_to_Humans
+    Agitha Female Ladybug Reward: Female_Ladybug and Can_Talk_to_Humans
+    Agitha Female Mantis Reward: Female_Mantis and Can_Talk_to_Humans
+    Agitha Female Phasmid Reward: Female_Phasmid and Can_Talk_to_Humans
+    Agitha Female Pill Bug Reward: Female_Pill_Bug and Can_Talk_to_Humans
+    Agitha Female Snail Reward: Female_Snail and Can_Talk_to_Humans
+    Agitha Female Stag Beetle Reward: Female_Stag_Beetle and Can_Talk_to_Humans
+    Agitha Male Ant Reward: Male_Ant and Can_Talk_to_Humans
+    Agitha Male Beetle Reward: Male_Beetle and Can_Talk_to_Humans
+    Agitha Male Butterfly Reward: Male_Butterfly and Can_Talk_to_Humans
+    Agitha Male Dayfly Reward: Male_Dayfly and Can_Talk_to_Humans
+    Agitha Male Dragonfly Reward: Male_Dragonfly and Can_Talk_to_Humans
+    Agitha Male Grasshopper Reward: Male_Grasshopper and Can_Talk_to_Humans
+    Agitha Male Ladybug Reward: Male_Ladybug and Can_Talk_to_Humans
+    Agitha Male Mantis Reward: Male_Mantis and Can_Talk_to_Humans
+    Agitha Male Phasmid Reward: Male_Phasmid and Can_Talk_to_Humans
+    Agitha Male Pill Bug Reward: Male_Pill_Bug and Can_Talk_to_Humans
+    Agitha Male Snail Reward: Male_Snail and Can_Talk_to_Humans
+    Agitha Male Stag Beetle Reward: Male_Stag_Beetle and Can_Talk_to_Humans
+    # Agitha 12 Golden Bugs Reward: golden_bugs(12) and Can_Talk_to_Humans # HD Only
+  Exits:
+    Castle Town South: Can_Open_Doors
+
+- Name: Castle Town Seer House
+  Can Transform: If Transform Anywhere
+  Exits:
+    Castle Town South: Can_Open_Doors
+
+- Name: Castle Town Jovanis House
+  Twilight: Lanayru
+  Can Transform: If Transform Anywhere
+  Events:
+    Can Farm Lots of Rupees: Can_Talk_to_Animals and 'Can_Talk_to_Jovani_in_Telmas_Bar'
+    Freed Jovani: count(Poe_Soul, 60)
+  Locations:
+    Jovani House Poe: Can_Use_Senses
+    Jovani 20 Poe Soul Reward: count(Poe_Soul, 20)
+    Jovani 60 Poe Soul Reward: "'Freed_Jovani'"
+    # Gengle 60 Poe Soul Reward: Can_Talk_to_Animals and 'Can_Talk_to_Jovani_in_Telmas_Bar' # HD Only
+  Exits:
+    Castle Town South: Nothing
+
+- Name: Castle Town Telmas Bar
+  Can Transform: If Transform Anywhere
+  Events:
+    Can Talk to Jovani in Telmas Bar: Can_Talk_to_Humans and 'Freed_Jovani'
+  Locations:
+    Telma Invoice: Renados_Letter
+  Exits:
+    Castle Town South: Can_Open_Doors
+
+# OUTSIDE CASTLE TOWN SOUTH
+
+- Name: Outside Castle Town South
+  Map Sector: Lanayru Province
+  Region: South of Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Outside South Castle Town Tightrope Chest: Clawshot and Can_Use_Tightrope
+    Outside South Castle Town Fountain Chest: Spinner and Clawshot
+    Outside South Castle Town Double Clawshot Chasm Chest: Double_Clawshots
+    Outside South Castle Town Boulder Rupee: Can_Smash
+    Outside South Castle Town Male Ladybug: Nothing
+    Outside South Castle Town Female Ladybug: Nothing
+    Outside South Castle Town Poe: Night and Can_Use_Senses
+    Outside South Castle Town Golden Wolf: "'Howl_at_North_Faron_Woods_Howling_Stone'"
+    Wooden Statue: "'Can_Learn_About_Wooden_Statue'"
+    Outside South Castle Town Hint Sign: Nothing
+  Exits:
+    Outside Castle Town South Tektite Grotto Platform: Can_Climb_Vines
+    Faron Field Behind Boulder: Can_Use_Hot_Spring_Water
+    Lake Hylia: Nothing
+    Castle Town South: Nothing
+
+- Name: Outside Castle Town South Tektite Grotto Platform
+  Map Sector: Lanayru Province
+  Region: South of Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Exits:
+    Outside Castle Town South Tektite Grotto: Can_Dig
+    Outside Castle Town South: Nothing
+
+- Name: Outside Castle Town South Tektite Grotto
+  Locations:
+    Outside South Castle Town Tektite Grotto Chest: Can_Defeat_Tektite
+  Exits:
+    Outside Castle Town South Tektite Grotto Platform: Nothing
+
+# If you enter Outside Castle Town South from there while the boulder is still there,
+# you get stuck and are forced to save-warp or portal-warp
+- Name: Outside Castle Town South Inside Boulder
+  Map Sector: Lanayru Province
+  Region: South of Castle Town
+  Twilight: Lanayru
+  Can Warp: True
+  Exits:
+    Outside Castle Town South: Can_Use_Hot_Spring_Water and 'Can_Access_Outside_Castle_Town_South'
+
+# LAKE HYLIA BRIDGE
+
+- Name: Lake Hylia Bridge
+  Map Sector: Lanayru Province
+  Region: Great Bridge of Hylia
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Lake Hylia Bridge Vines Chest: Clawshot
+    Lake Hylia Bridge Owl Statue Chest: Clawshot and Restored_Dominion_Rod
+    Lake Hylia Bridge Faron Boulder Rupee: Can_Smash
+    Lake Hylia Bridge Owl Statue Boulder Rupee: Can_Smash
+    Lake Hylia Bridge Owl Statue Sky Character: Clawshot and Restored_Dominion_Rod
+    Lake Hylia Bridge Male Mantis: Clawshot or Gale_Boomerang
+    Lake Hylia Bridge Female Mantis: Clawshot or Gale_Boomerang
+    Lake Hylia Bridge Hint Sign: Clawshot
+  Exits:
+    Lake Hylia Bridge Grotto Ledge: Can_Launch_Bombs and Clawshot
+    Hyrule Field Near Spinner Rails: Can_Smash
+    Flight by Fowl: Can_Open_Doors
+    Faron Field: Gate_Keys or Small_Keys == Keysy
+    Outside Castle Town West: Nothing
+    Lake Hylia: Twilight
+
+- Name: Lake Hylia Bridge Grotto Ledge
+  Map Sector: Lanayru Province
+  Region: Great Bridge of Hylia
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Lake Hylia Bridge Cliff Chest: Nothing
+    Lake Hylia Bridge Cliff Poe: Can_Use_Senses and Can_Complete_MDH and Can_Complete_All_Twilight
+  Exits:
+    Lake Hylia Bridge Bubble Grotto: Can_Dig
+    Lake Hylia Bridge: Nothing
+
+- Name: Lake Hylia Bridge Bubble Grotto
+  Locations:
+    Lake Hylia Bridge Bubble Grotto Chest: Can_Defeat_Bubble and Can_Defeat_Fire_Bubble and Can_Defeat_Ice_Bubble
+  Exits:
+    Lake Hylia Bridge Grotto Ledge: Nothing
+
+# LAKE HYLIA
+
+- Name: Lake Hylia
+  Map Sector: Lanayru Province
+  Region: Lake Hylia
+  Twilight: Lanayru
+  Can Warp: True
+  Events:
+    Can Farm Lots of Rupees: Nothing
+  Locations:
+    Lake Hylia Warp Portal: Nothing
+    Lake Hylia Underwater Chest: Iron_Boots
+    Lake Hylia Left Underwater Boulder Rupee: Zora_Armor and Iron_Boots and Water_Bombs and Can_Complete_Lanayru_Twilight
+    Lake Hylia Left Underwater Pillar Rupee: Zora_Armor and Can_Complete_Lanayru_Twilight
+    Lake Hylia Right Underwater Boulder Rupee: Zora_Armor and Iron_Boots and Water_Bombs and Can_Complete_Lanayru_Twilight
+    Lake Hylia Right Underwater Pillar Rupee: Zora_Armor and Can_Complete_Lanayru_Twilight
+    Lake Hylia Alcove Poe: Night and Can_Use_Senses
+    Lake Hylia Dock Poe: Night and Can_Use_Senses
+    Plumm Fruit Balloon Minigame: Can_Howl
+    Lake Hylia Twilit Insect Between Bridges: Can_Defeat_Lanayru_Twilit_Insect
+    Lake Hylia Burrowing Twilit Insect: Can_Defeat_Lanayru_Twilit_Insect
+    Lake Hylia Twilit Insect Behind Canon: Can_Defeat_Lanayru_Twilit_Insect
+    Lake Hylia Twilit Insect on Docks: Can_Defeat_Lanayru_Twilit_Insect
+    Lake Hylia Twilit Bloat: count(Lanayru_Twilight_Tear, 15) and Can_Defeat_Lanayru_Twilit_Insect
+    Zoras River Twilit Insect 1: Can_Defeat_Lanayru_Twilit_Insect
+    Zoras River Twilit Insect 2: Can_Defeat_Lanayru_Twilit_Insect
+    Zoras River Twilit Insect 3: Can_Defeat_Lanayru_Twilit_Insect
+    Zoras River Twilit Insect 4: Can_Defeat_Lanayru_Twilit_Insect
+  Exits:
+    Lake Hylia Upper Area: Can_Climb_Ladders
+    Flight by Fowl: Can_Talk_to_Humans
+    Lake Hylia Lakebed Temple Entrance: Zora_Armor and (Lakebed_Does_Not_Require_Water_Bombs == On or (Iron_Boots and Water_Bombs))
+    Lake Hylia Lanayru Spring: Nothing
+    City in the Sky Entrance: Clawshot and (City_Does_Not_Require_Filled_Skybook == On or count(Progressive_Sky_Book, 7))
+    Gerudo Desert: Aurus_Memo
+    Upper Zoras River: Can_Howl or Twilight
+    Kakariko Graveyard Pond: Impossible # To satisfy entrance rando
+    Outside Castle Town South: Impossible # To saitisfy entrance rando
+
+# Area after the ladder
+- Name: Lake Hylia Upper Area
+  Map Sector: Lanayru Province
+  Region: Lake Hylia
+  Twilight: Lanayru
+  Can Warp: True
+  Events:
+    Howl at Lake Hylia Howling Stone: Can_Howl
+  Locations:
+    Auru Gift To Fyer: Can_Climb_Ladders
+    Lake Hylia Tower Poe: Night and Can_Use_Senses
+  Exits:
+    Lake Hylia Cave Entrance: Can_Smash
+    Lake Hylia Water Toadpoli Grotto: Can_Dig
+    Lake Hylia: Nothing
+
+- Name: Lake Hylia Cave Entrance
+  Map Sector: Lanayru Province
+  Region: Lake Hylia
+  Can Warp: True
+  Exits:
+    Lake Hylia Long Cave: Nothing
+    Lake Hylia: Can_Smash
+
+- Name: Lake Hylia Long Cave
+  Locations:
+    Lake Lantern Cave First Chest: Can_Smash and Lantern
+    Lake Lantern Cave Second Chest: Can_Smash and Lantern
+    Lake Lantern Cave Third Chest: Can_Smash and Lantern
+    Lake Lantern Cave Fourth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Fifth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Sixth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Seventh Chest: Can_Smash and Lantern
+    Lake Lantern Cave Eighth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Ninth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Tenth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Eleventh Chest: Can_Smash and Lantern
+    Lake Lantern Cave Twelfth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Thirteenth Chest: Can_Smash and Lantern
+    Lake Lantern Cave Fourteenth Chest: Can_Smash and Lantern
+    Lake Lantern Cave End Lantern Chest: Can_Smash and Lantern
+    Lake Lantern Cave First Poe: Can_Smash and Lantern and Can_Use_Senses
+    Lake Lantern Cave Second Poe: Can_Smash and Lantern and Can_Use_Senses
+    Lake Lantern Cave Final Poe: Can_Smash and Lantern and Can_Use_Senses
+    Lake Lantern Cave Hint Sign: Can_Smash and Lantern
+  Exits:
+    Lake Hylia Cave Entrance: Nothing
+
+- Name: Lake Hylia Water Toadpoli Grotto
+  Locations:
+    Lake Hylia Water Toadpoli Grotto Chest: Can_Defeat_Water_Toadpoli
+  Exits:
+    Lake Hylia Upper Area: Nothing
+
+- Name: Flight by Fowl
+  Map Sector: Lanayru Province
+  Region: Lake Hylia
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Outside Lanayru Spring Left Statue Chest: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Outside Lanayru Spring Right Statue Chest: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Flight By Fowl Top Platform Reward: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Flight By Fowl Second Platform Chest: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Flight By Fowl Third Platform Chest: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Flight By Fowl Fourth Platform Chest: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Flight By Fowl Fifth Platform Chest: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Isle of Riches Poe: Night and Can_Use_Senses and Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Lake Hylia Hint Sign: Nothing
+  Exits:
+    Lake Hylia Shell Blade Grotto Ledge: Can_Talk_to_Humans and 'Can_Farm_Rupees'
+    Lake Hylia Bridge: Can_Open_Doors
+    Lake Hylia: Can_Talk_to_Humans
+
+- Name: Lake Hylia Shell Blade Grotto Ledge
+  Map Sector: Lanayru Province
+  Region: Lake Hylia
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Flight By Fowl Ledge Poe: Night and Can_Use_Senses
+  Exits:
+    Lake Hylia Shell Blade Grotto: Can_Dig
+    Lake Hylia: Nothing
+
+- Name: Lake Hylia Shell Blade Grotto
+  Locations:
+    Lake Hylia Shell Blade Grotto Chest: Can_Defeat_Shell_Blade
+  Exits:
+    Lake Hylia Shell Blade Grotto Ledge: Nothing
+
+- Name: Lake Hylia Lanayru Spring
+  Map Sector: Lanayru Province
+  Region: Lanayru Spring
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Lanayru Spring Underwater Left Chest: Iron_Boots or (Can_Do_Niche_Stuff and Magic_Armor)
+    Lanayru Spring Underwater Right Chest: Iron_Boots or (Can_Do_Niche_Stuff and Magic_Armor)
+    Lanayru Spring Back Room Left Chest: Clawshot
+    Lanayru Spring Back Room Right Chest: Clawshot
+    Lanayru Spring Back Room Lantern Chest: Clawshot and Lantern
+    Lanayru Spring East Double Clawshot Chest: Double_Clawshots
+    Lanayru Spring West Double Clawshot Chest: Double_Clawshots
+    Lanayru Spring Lower Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Lanayru Spring Upper Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Lanayru Spring Hint Sign: Iron_Boots or (Can_Do_Niche_Stuff and Magic_Armor)
+  Exits:
+    Lake Hylia: Nothing
+
+- Name: Lake Hylia Lakebed Temple Entrance
+  Map Sector: Lanayru Province
+  Region: Lake Hylia
+  Twilight: Lanayru
+  Exits:
+    Lakebed Temple Entrance: Nothing
+    Lake Hylia: Zora_Armor and ((Lakebed_Does_Not_Require_Water_Bombs == On) or (Iron_Boots and Water_Bombs))
+    
+
+# UPPER ZORAS RIVER
+
+- Name: Upper Zoras River
+  Map Sector: Lanayru Province
+  Region: Upper Zoras River
+  Twilight: Lanayru
+  Can Warp: True
+  Events:
+    Howl at Upper Zoras River Howling Stone: Can_Howl
+  Locations:
+    Upper Zoras River Warp Portal: Sword or (Can_Defeat_Shadow_Beast and Logic_Transform_Anywhere == On)
+    Upper Zoras River Ledge Boulder Rupee: Can_Smash
+    Upper Zoras River East Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Upper Zoras River West Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Upper Zoras River Central Underwater Boulder Rupee: Iron_Boots and Water_Bombs
+    Upper Zoras River Female Dragonfly: Nothing
+    Upper Zoras River Poe: Can_Use_Senses
+    Upper Zoras River Twilit Insect: Can_Defeat_Lanayru_Twilit_Insect
+  Exits:
+    Upper Zoras River Izas House: Can_Open_Doors and Upper_Zoras_River_Portal
+    Fishing Hole: Can_Open_Doors
+    Zoras Domain: Nothing
+    Lanayru Field: Nothing
+
+- Name: Upper Zoras River Izas House
+  Can Warp: True
+  Locations:
+    Iza Helping Hand: Bow and Upper_Zoras_River_Portal
+    Iza Raging Rapids Minigame: Bow and Upper_Zoras_River_Portal
+  Exits:
+    Upper Zoras River: Can_Open_Doors
+
+- Name: Fishing Hole
+  Map Sector: Lanayru Province
+  Region: Upper Zoras River
+  Can Warp: True
+  Locations:
+    Fishing Hole Heart Piece: Clawshot
+    Fishing Hole Bottle: Fishing_Rod
+    Fishing Hole Hint Sign: Nothing
+  Exits:
+    Fishing Hole House: Can_Open_Doors
+    Upper Zoras River: Can_Open_Doors
+
+- Name: Fishing Hole House
+  Locations:
+    Fishing Hole Heart Piece: "'Can_Farm_Rupees'"
+  Exits:
+    Fishing Hole: Can_Open_Doors
+
+# ZORAS DOMAIN
+
+- Name: Zoras Domain
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Can Warp: True
+  Events:
+    Reekfish Scent: Coral_Earring
+  Locations:
+    Zoras Domain Chest By Mother and Child Isles: Nothing
+    Zoras Domain Chest Behind Waterfall: Can_Midna_Jump
+    Zoras Domain Central Underwater Boulder Rupee: Can_Complete_Lanayru_Twilight and Iron_Boots and Water_Bombs
+    Zoras Domain North Underwater Boulder Rupee: Can_Complete_Lanayru_Twilight and Iron_Boots and Water_Bombs
+    Zoras Domain Male Dragonfly: Nothing
+    Zoras Domain Mother and Child Isle Poe: Can_Use_Senses
+    Zoras Domain Waterfall Poe: Can_Midna_Jump and Can_Use_Senses
+    Zoras Domain Twilit Insect near Lilypads 1: Can_Defeat_Lanayru_Twilit_Insect
+    Zoras Domain Twilit Insect near Lilypads 2: Can_Defeat_Lanayru_Twilit_Insect
+    Zoras Domain Burrowing Twilit Insect: Can_Defeat_Lanayru_Twilit_Insect  
+  Exits:
+    Zoras Domain West Ledge: Clawshot or Can_Midna_Jump or Twilight
+    Zoras Domain Top of Waterfall: Clawshot or Can_Midna_Jump or Twilight
+    Snowpeak Climb Lower: Not_Twilight
+    Upper Zoras River: Nothing
+
+- Name: Zoras Domain West Ledge
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Zoras Domain Twilit Insect on West Ledge: Can_Defeat_Lanayru_Twilit_Insect
+    Zoras Domain Hint Sign: Nothing
+  Exits:
+    Zoras Domain Top of Waterfall: Can_Smash
+    Zoras Domain: Nothing
+    Lanayru Field Near Zoras Domain: Nothing
+
+- Name: Zoras Domain Top of Waterfall
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Zoras Domain Behind Waterfall Rupee: Can_Complete_Lanayru_Twilight
+    Zoras Domain Top Ledge Rupee: Can_Complete_Lanayru_Twilight
+    Zoras Domain Vine Ledge Rupee: Can_Complete_Lanayru_Twilight
+    Zoras Domain Waterfall Ledge Rupee: Can_Complete_Lanayru_Twilight
+    Zoras Domain Shortcut Ledge Rupee: Can_Complete_Lanayru_Twilight
+    Zoras Domain Shortcut Lower Boulder Rupee: Can_Smash
+    Zoras Domain Shortcut Upper Boulder Rupee: Can_Smash
+  Exits:
+    Zoras Throne Room: Nothing
+    Zoras Domain West Ledge: Can_Smash
+    Zoras Domain: Nothing
+
+- Name: Zoras Throne Room
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Can Warp: True
+  Locations:
+    Zoras Domain Warp Portal: Nothing
+    Zoras Domain Light All Torches Chest: Can_Light_Torches and Iron_Boots
+    Zoras Domain Extinguish All Torches Chest: Can_Extinguish_Torches and Iron_Boots
+    Zoras Domain Throne East Gate Underwater Rupee: Can_Complete_Lanayru_Twilight and Iron_Boots
+    Zoras Domain Throne East Underwater Rupee: Can_Complete_Lanayru_Twilight and (Iron_Boots or Zora_Armor)
+    Zoras Domain Throne Northwest Underwater Rupee: Can_Complete_Lanayru_Twilight and (Iron_Boots or Zora_Armor)
+    Zoras Domain Throne South Underwater Rupee: Can_Complete_Lanayru_Twilight and (Iron_Boots or Zora_Armor)
+    Zoras Domain Throne West Gate Underwater Rupee: Can_Complete_Lanayru_Twilight and Iron_Boots
+    Zoras Domain Throne West Underwater Rupee: Can_Complete_Lanayru_Twilight and (Iron_Boots or Zora_Armor)
+    Zoras Domain Underwater Goron: Water_Bombs and Iron_Boots and Zora_Armor
+    Zoras Domain Throne Room Twilit Insect: Can_Defeat_Lanayru_Twilit_Insect
+  Exits:
+    Zoras Domain Top of Waterfall: Nothing

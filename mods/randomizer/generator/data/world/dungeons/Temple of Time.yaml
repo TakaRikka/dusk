@@ -1,0 +1,205 @@
+# Bringing down the giant statue is handled via a chain of events for each
+# individual traversal between teleporters.
+
+# TEMPLE OF TIME ENTRANCE
+
+- Name: Temple of Time Entrance
+  Region: Temple of Time
+  Dungeon Start Area: True
+  Events:
+    Can Refill Lantern Oil: Nothing
+    Can Open Door of Time: Dominion_Rod and 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Entrance'
+  Locations:
+    Temple of Time Lobby Lantern Chest: Lantern
+    Temple of Time First Hint Sign: Nothing
+  Exits:
+    Temple of Time Yellow Gates Corridor Near Entrance: Temple_of_Time_Small_Key or Small_Keys == Keysy
+    Temple of Time Entrance Near Crumbling Corridor: Open_Door_of_Time == On or 'Can_Open_Door_of_Time'
+    Sacred Grove Past Behind Window: Nothing
+
+- Name: Temple of Time Entrance Near Crumbling Corridor
+  Region: Temple of Time
+  Exits:
+    Temple of Time Crumbling Corridor Near Entrance: Nothing
+    Temple of Time Entrance: "'Can_Open_Door_of_Time'"
+  
+# TEMPLE OF TIME YELLOW GATES CORRIDOR
+
+- Name: Temple of Time Yellow Gates Corridor Near Entrance
+  Region: Temple of Time
+  Locations:
+    Temple of Time First Staircase Gohma Gate Chest: Nothing
+  Exits:
+    Temple of Time Yellow Gates Corridor Near Central Mechnical Platform Room: Clawshot or Gale_Boomerang or Bow or Ball_and_Chain
+    Temple of Time Entrance: Nothing
+
+- Name: Temple of Time Yellow Gates Corridor Near Central Mechnical Platform Room
+  Region: Temple of Time
+  Events:
+    Can Teleport Giant Statue to Temple of Time Entrance: Dominion_Rod and 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Yellow_Gates_Corridor'
+  Locations:
+    Temple of Time First Staircase Window Chest: Nothing
+    Temple of Time First Staircase Armos Chest: Can_Defeat_Armos
+  Exits:
+    Temple of Time Central Mechanical Platform Room Bottom: Human_Link # To pick up statues
+    Temple of Time Yellow Gates Corridor Near Entrance: Clawshot or 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Entrance'
+
+# TEMPLE OF TIME CENTRAL MECHANICAL PLATFORM ROOM
+
+- Name: Temple of Time Central Mechanical Platform Room Bottom
+  Region: Temple of Time
+  Locations:
+    Temple of Time Poe Behind Gate: Dominion_Rod and Can_Use_Senses
+  Exits:
+    Temple of Time Central Mechanical Platform Room Top: Spinner
+    Temple of Time Yellow Gates Corridor Near Central Mechnical Platform Room: Nothing
+
+- Name: Temple of Time Central Mechanical Platform Room Top
+  Region: Temple of Time
+  Events:
+    Can Teleport Giant Statue to Temple of Time Yellow Gates Corridor: Dominion_Rod and 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Central_Mechanical_Platform'
+  Exits:
+    Temple of Time Central Mechanical Platform Room Near Armos Antechamber: Human_Link # To pick up statues
+    Temple of Time Moving Walls Corridor Near Central Platform Room: count(Temple_of_Time_Small_Key, 2) or Small_Keys == Keysy
+    Temple of Time Central Mechanical Platform Room Bottom: Nothing
+
+- Name: Temple of Time Central Mechanical Platform Room Near Armos Antechamber
+  Region: Temple of Time
+  Exits:
+    Temple of Time Armos Antechamber: Nothing
+    Temple of Time Central Mechanical Platform Room Top: Nothing
+
+# TEMPLE OF TIME ARMOS ANTECHAMBER
+
+- Name: Temple of Time Armos Antechamber
+  Region: Temple of Time
+  Locations:
+    Temple of Time Armos Antechamber East Chest: Can_Defeat_Armos
+    Temple of Time Armos Antechamber North Chest: Nothing
+    Temple of Time Armos Antechamber Statue Chest: Dominion_Rod
+  Exits:
+    Temple of Time Central Mechanical Platform Room Near Armos Antechamber: Nothing
+
+# TEMPLE OF TIME MOVING WALLS CORRIDOR
+
+- Name: Temple of Time Moving Walls Corridor Near Central Platform Room
+  Region: Temple of Time
+  Exits:
+    Temple of Time Moving Walls Corridor Middle: Bow or Clawshot
+    Temple of Time Central Mechanical Platform Room Top: Nothing
+
+- Name: Temple of Time Moving Walls Corridor Middle # This area's logic assumes you already have Bow or Clawshot to get here
+  Region: Temple of Time
+  Events:
+    Can Teleport Giant Statue to Temple of Time Central Mechanical Platform: Dominion_Rod and 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Moving_Walls_Corridor' 
+  Locations:
+    Temple of Time Moving Wall Beamos Room Chest: Nothing
+    Temple of Time Moving Wall Dinalfos Room Chest: Dominion_Rod
+    Temple of Time Second Hint Sign: Nothing
+  Exits:
+    Temple of Time Moving Walls Corridor Near Scales Room: Bow or Clawshot
+    Temple of Time Moving Walls Corridor Near Central Platform Room: Bow or Clawshot
+
+- Name: Temple of Time Moving Walls Corridor Near Scales Room
+  Region: Temple of Time
+  Exits:
+    Temple of Time Scale Room Bottom: Nothing
+    Temple of Time Moving Walls Corridor Middle: Bow or Clawshot
+
+# TEMPLE OF TIME SCALES ROOM
+
+- Name: Temple of Time Scale Room Bottom
+  Region: Temple of Time
+  Locations:
+    Temple of Time Scales Gohma Chest: Can_Defeat_Young_Gohma and Can_Defeat_Baby_Gohma
+  Exits:
+    Temple of Time Scales Room Top: Clawshot and Spinner
+    Temple of Time Scales Room Near Spike Trap Corridor: Human_Link # Need to throw a statue
+
+- Name: Temple of Time Scales Room Top
+  Region: Temple of Time
+  Locations:
+    Temple of Time Scales Upper Chest: Nothing
+    Temple of Time Poe Above Scales: Can_Use_Senses
+  Exits:
+    Temple of Time Floor Switch Puzzle Room: Nothing
+    Temple of Time Scales Room Near Spike Trap Corridor: Nothing
+    Temple of Time Scale Room Bottom: Nothing
+
+- Name: Temple of Time Scales Room Near Spike Trap Corridor
+  Region: Temple of Time
+  Events:
+    Can Teleport Giant Statue to Temple of Time Moving Walls Corridor: Dominion_Rod and 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Scales_Room'
+  Exits:
+    Temple of Time Spike Trap Corridor Near Scales Room: Nothing
+    Temple of Time Scale Room Bottom: Nothing
+
+# TEMPLE OF TIME FLOOR SWITCH PUZZLE ROOM
+
+- Name: Temple of Time Floor Switch Puzzle Room
+  Region: Temple of Time
+  Locations:
+    Temple of Time Big Key Chest: Can_Defeat_Helmasaur and Clawshot
+    Temple of Time Floor Switch Puzzle Room Upper Chest: Clawshot
+  Exits:
+    Temple of Time Scales Room Top: Nothing
+
+# TEMPLE OF TIME SPIKE TRAP CORRIDOR
+
+- Name: Temple of Time Spike Trap Corridor Near Scales Room
+  Region: Temple of Time
+  Locations:
+    Temple of Time Gilloutine Chest: Nothing
+  Exits:
+    Temple of Time Spike Trap Corridor Baby Gohma Area: Human_Link # to pickup pot/statue
+    Temple of Time Scales Room Near Spike Trap Corridor: Nothing
+
+- Name: Temple of Time Spike Trap Corridor Baby Gohma Area
+  Region: Temple of Time
+  Locations:
+    Temple of Time Chest Before Darknut: Can_Defeat_Armos and Can_Defeat_Baby_Gohma and Can_Defeat_Young_Gohma
+  Exits:
+    Temple of Time Spike Trap Corridor Near Miniboss Room: Can_Defeat_Armos
+    Temple of Time Spike Trap Corridor Near Scales Room: "'Can_Teleport_Giant_Statue_to_Temple_of_Time_Scales_Room'"
+
+- Name: Temple of Time Spike Trap Corridor Near Miniboss Room
+  Region: Temple of Time
+  Events:
+    Can Teleport Giant Statue to Temple of Time Scales Room: Dominion_Rod and 'Can_Teleport_Giant_Statue_to_Temple_of_Time_Spike_Trap_Corridor'
+  Exits:
+    Darknut Miniboss Room: count(Temple_of_Time_Small_Key, 3) or Small_Keys == Keysy
+    Temple of Time Spike Trap Corridor Baby Gohma Area: "'Can_Teleport_Giant_Statue_to_Temple_of_Time_Scales_Room'"
+
+# DARKNUT MINIBOSS ROOM
+
+- Name: Darknut Miniboss Room
+  Events:
+    Can Teleport Giant Statue to Temple of Time Spike Trap Corridor: Dominion_Rod and Open_Door_of_Time == Off
+  Locations:
+    Temple of Time Darknut Chest: Can_Defeat_Darknut
+  Exits:
+    Temple of Time Spike Trap Corridor Near Miniboss Room: "'Can_Teleport_Giant_Statue_to_Temple_of_Time_Spike_Trap_Corridor'"
+  
+# TEMPLE OF TIME CRUMBLING CORRIDOR
+
+- Name: Temple of Time Crumbling Corridor Near Entrance
+  Region: Temple of Time
+  Exits:
+    Temple of Time Crumbling Corridor Near Boss Door: Dominion_Rod
+    Temple of Time Entrance Near Crumbling Corridor: Nothing
+
+- Name: Temple of Time Crumbling Corridor Near Boss Door
+  Region: Temple of Time
+  Exits:
+    Temple of Time Boss Room: Temple_of_Time_Big_Key or Big_Keys == Keysy
+
+# TEMPLE OF TIME BOSS ROOM
+
+- Name: Temple of Time Boss Room
+  Events:
+    Can Complete Temple of Time: Can_Defeat_Armogohma
+  Locations:
+    Temple of Time Armogohma Heart Container: Can_Defeat_Armogohma
+    Temple of Time Dungeon Reward: Can_Defeat_Armogohma
+  Exits:
+    Sacred Grove Past Behind Window: Can_Defeat_Armogohma

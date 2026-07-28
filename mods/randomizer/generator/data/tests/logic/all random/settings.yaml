@@ -1,0 +1,66 @@
+Seed: TESTTESTTEST
+Plandomizer: false
+Generate Spoiler Log: true
+Arbiters Does Not Require Bulblin Camp: Random
+Back Slice as Sword: Random
+Ball and Chain Webs: Random
+Big Keys: Random
+Bonks Do Damage: Random
+City Does Not Require Filled Skybook: Random
+Damage Multiplier: Random
+Dungeon Rewards Can Be Anywhere: Random
+Eldin Twilight Cleared: Random
+Faron Twilight Cleared: Random
+Faron Woods Logic: Random
+Fast Iron Boots: Random
+Gifts From NPCs: Random
+Golden Bugs: Random
+Goron Mines Entrance: Random
+Hidden Skills: Random
+Hyrule Barrier Requirements: Random
+Increase Spinner Speed: Random
+Increase Wallet Capacity: Random
+Instant Message Text: Random
+Item Scarcity: Random
+Lakebed Does Not Require Water Bombs: Random
+Lanayru Twilight Cleared: Random
+Logic Rules: Random
+Maps and Compasses: Random
+No Small Keys on Bosses: Random
+Open Door of Time: Random
+Palace of Twilight Requirements: Random
+Poe Souls: Random
+Quick Transform: Random
+Random Starting Item Count: 0
+Randomize Starting Spawn: Random
+Randomize Dungeon Entrances: Random
+Randomize Boss Entrances: Random
+Randomize Grotto Entrances: Random
+Randomize Cave Entrances: Random
+Randomize Interior Entrances: Random
+Randomize Overworld Entrances: Random
+Decouple Double Door Entrances: Random
+Decouple Entrances: Random
+Sacred Grove Does Not Require Skull Kid: Random
+Shop Items: Random
+Shops Display The Replaced Item: Random
+Skip Major Cutscenes: Random
+Skip Midna's Desparate Hour: Random
+Skip Minor Cutscenes: Random
+Skip Prologue: Random
+Sky Characters: Random
+Small Keys: Random
+Snowpeak Does Not Require Reekfish Scent: Random
+Starting Form: Random
+Starting Hearts: 3
+Starting Time of Day: Random
+Temple of Time Sword Requirement: Random
+Logic Transform Anywhere: Random
+Trap Item Frequency: Random
+Unlock Map Regions: Random
+Unrequired Dungeons Are Barren: Random
+trappable_items: major_items
+Starting Inventory:
+  {}
+Excluded Locations:
+  []

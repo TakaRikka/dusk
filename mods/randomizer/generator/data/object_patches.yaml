@@ -1,0 +1,4961 @@
+# Patches for game objects that get spawned in
+
+# Lakebed Temple
+D_MN01:
+  # Room 2 - Outer Bridges Rooms
+  2:
+    # Add hint sign near lower west water wheel
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -4765.38037
+        y: -1.21
+        z: 272.192261
+      angle:
+        x: 21125 # Flow node id
+        y: 0x46B9
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Goron Mines
+D_MN04:
+  # Room 17 - Gor Ebizo's Room
+  17:
+    # Add hint sign near Gor Ebizo
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 11394.1855
+        y: 2878.65
+        z: -17913.05
+      angle:
+        x: 21124 # Flow node id
+        y: 0xD556
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Forest Temple
+D_MN05:
+  # Room 0 - Main Center Room
+  0:
+    # Add hint sign near west door
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -1972.11682
+        y: 3150
+        z: 7610.9751
+      angle:
+        x: 21123 # Flow node id
+        y: 0x6000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Temple of Time
+D_MN06:
+  # Room 0 - Entrance Room
+  0:
+    # Add hint sign near Ooccoo
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -618.9335
+        y: 725.0
+        z: 3112.2
+      angle:
+        x: 21128 # Flow node id
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+  # Room 4 - Moving Walls Room
+  4:
+    # Add hint sign after first switch area
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -3885.2157
+        y: 4450.0
+        z: -6353.38135
+      angle:
+        x: 21129 # Flow node id
+        y: 0x2000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+
+# City in the Sky
+D_MN07:
+  # Stage file objects
+  Stage:
+    # change the Savemem actor that changes Link's spawn position
+    - action: patch
+      name: Savmem
+      parameters: 0x00000A03
+      position:
+        x: -15044.2919921875
+        y: 0.0
+        z: -11283.109375
+      angle:
+        x: 0xFFFF
+        y: 0xFFFF
+        z: 0x184D
+      set id: 0xFFFF
+      patch:
+        parameters: 0x00000003
+      layers:
+        - 0
+
+  # Room 0 - Entrance
+  0:
+    # Add an extra loading zone so players can go down to Lake Hylia
+    # without needing the clawshot. This loading zone is placed to the
+    # west of the pond at the entrance and can be jumped into off the broken bridge
+    - action: add
+      name: scnChg
+      parameters: 0xFFFF0001
+      position:
+        x: -3176.0
+        y: -600.0
+        z: 5480.0
+      angle:
+        x: 0x0FFF
+        y: 0
+        z: 0x0FFF
+      set id: 0xFFFF
+      scale:
+        x: 20
+        y: 67
+        z: 54
+      layers:
+        - 0
+
+  # Room 2 - Central Room
+  2:
+    # Add hint sign after first switch area
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 3376.54
+        y: 0.0
+        z: -12709.0352
+      angle:
+        x: 21130 # Flow node id
+        y: 0xC846
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+  # Room 6 - West Bridge
+  6:
+    # Delete argorok actor that normally breaks the bridge
+    - action: delete
+      name: dr
+      parameters: 0x00000018
+      position:
+        x: -7075
+        y: -200
+        z: -11809.4033203125
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Palace of Twilight
+D_MN08:
+  # Room 0 - Main Entrance
+  0:
+    # Delete the invisible wall that blocks north access
+    # This wall normally disappears when both sols are
+    # placed, but we want players to be able to access
+    # the north wing if they have Light Sword
+    - action: delete
+      name: ClearB
+      parameters: 0x00003F81
+      position:
+        x: 255.0
+        y: 1600.0
+        z: 2560.0
+      angle:
+        x: 0x4000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      scale:
+        x: 20
+        y: 10
+        z: 20
+      layers:
+        - 14
+
+    # Delete the TagYami as well so midna doesn't prevent
+    # the player from going north either
+    - action: delete
+      name: TagYami
+      parameters: 0x00E6E502
+      position:
+        x: 250
+        y: 800
+        z: 5800
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      scale:
+        x: 100
+        y: 50
+        z: 100
+      layers:
+        - 14
+
+    # Add hint sign to starting area
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 679.0
+        y: -200.0
+        z: 9311.0
+      angle:
+        x: 21131 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14
+
+# Hyrule Castle
+D_MN09:
+  # Room 11 - Entrance Courtyard Area
+  11:
+    # Add hint sign near central statue
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 0.0
+        y: 25.0
+        z: 11625.0
+      angle:
+        x: 21132 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Arbiter's Grounds
+D_MN10:
+  # Room 2 - Poe Gate Room
+  2:
+    # Add hint sign near Poe Gate
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -349.4044
+        y: 450.0
+        z: -2876.90771
+      angle:
+        x: 21126 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Snowpeak Ruins
+D_MN11:
+  # Room 1 - Yeta's Room
+  1:
+    # Add hint sign near Poe Gate
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -530.0
+        y: 0.0
+        z: -669.69
+      angle:
+        x: 21127 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Cave of Ordeals
+D_SB01:
+  # Room 0 - Main Cave
+  0:
+    # Add hint sign at the start
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -1191.42
+        y: 1100.0
+        z: -260.65
+      angle:
+        x: 21133 # Flow node id
+        y: 0xE483
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Lake Hylia Lantern Cave
+D_SB03:
+  # Room 0 - Main Cave
+  0:
+    # Add hint sign about halfway through the cave
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -2897.38672
+        y: -1636.68994
+        z: -17674.8691
+      angle:
+        x: 21117 # Flow node id
+        y: 0x3E21
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Ordon Village
+F_SP103:
+  # Room 0 - Main Village
+  0:
+    # Bo's House left Door
+    - action: patch
+      name: kdoor
+      parameters: 0x88000627
+      position:
+        x: 470.482940673828
+        y: 500.190002441406
+        z: 5323.12890625
+      angle:
+        x: 0x0191
+        y: 0x3777
+        z: 0xFFFF
+      set id: 0x00FF
+      scale:
+        x: 10
+        y: 10
+        z: 10
+      patch:
+        # Set angle.x to -1 so the door isn't locked
+        angle:
+          x: 0xFFFF
+      layers:
+        - 0
+
+    # Bo's House right door
+    - action: patch
+      name: kdoor
+      parameters: 0x94000627
+      position:
+        x: 500.711181640625
+        y: 500.190002441406
+        z: 5172.26708984375
+      angle:
+        x: 0x0191
+        y: 0xB778
+        z: 0xFFFF
+      set id: 0x00FF
+      scale:
+        x: 10
+        y: 10
+        z: 10
+      patch:
+        # Set angle.x to -1 so the door isn't locked
+        angle:
+          x: 0xFFFF
+      layers:
+        - 0
+
+    # Rupee on Rusl's House (they both share the same flag, this gives one a different flag)
+    - action: patch
+      name: item
+      parameters: 0xF3FF8103
+      position:
+        x: -4739.0400390625
+        y: 1155.98303222656
+        z: 2239.53588867187
+      angle:
+        x: 0x0000
+        y: 0x3333
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0xF3FF8403
+      layers:
+        - 0
+        - 5
+
+    # Rupee above Haunch's House (also flag sharing situation)
+    - action: patch
+      name: item
+      parameters: 0xF3FF8701
+      position:
+        x: -1819.2646484375
+        y: 984.098937988281
+        z: 1665.06237792969
+      angle:
+        x: 0x0000
+        y: 0x3333
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0xF3FF8501
+      layers:
+        - 0
+
+    # Rupee by Bo's Window (also flag sharing situation)
+    - action: patch
+      name: item
+      parameters: 0xF3FF8601
+      position:
+        x: 590.097839355469
+        y: 1158.02856445312
+        z: 5215.7802734375
+      angle:
+        x: 0x0000
+        y: 0x3333
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0xF3FF8A01
+      layers:
+        - 0
+
+    # Rupee in Ordon River (also flag sharing situation)
+    - action: patch
+      name: item
+      parameters: 0x13FF9501
+      position:
+        x: -4326.0654296875
+        y: 28.7633323669434
+        z: 4208.9892578125
+      angle:
+        x: 0x0000
+        y: 0x999A
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0x13FF9101
+      layers:
+        - 0
+
+    # Add Epona actor to Ordon Village so we don't crash
+    # when entering on layer 0
+    - action: add
+      name: Horse
+      parameters: 0x00000148
+      position:
+        x: -1200
+        y: 367.4823
+        z: 6100
+      angle:
+        x: 0x0000
+        y: 0x71C7
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+  # Room 1 - Outside Link's House
+  1:
+    # Delete 2nd Beth actor
+    - action: delete
+      name: Besu
+      parameters: 0x00FFFF10
+      position:
+        x: 907.519104003906
+        y: 800
+        z: -1572.38488769531
+      angle:
+        x: 0x0032
+        y: 0xA2D9
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 4
+
+    # Delete 2nd Malo actor
+    - action: delete
+      name: Maro
+      parameters: 0xFFFFFF0F
+      position:
+        x: 847.672119140625
+        y: 800
+        z: -1500.17639160156
+      angle:
+        x: 0x003D
+        y: 0xA2D9
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 4
+
+    # Add hint sign near loading zone to Ordon Village
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 687.89
+        y: 800.0
+        z: -1424.16
+      angle:
+        x: 21100 # Flow node id
+        y: 0xA019
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 8
+        - 9
+        - 12
+
+# Ordon Spring
+F_SP104:
+  # Room 1 - Main Spring
+  1:
+    # Golden Wolf in Ordon Spring
+    - action: patch
+      name: GWolf
+      parameters: 0x0E4102FF
+      position:
+        x: -1855.69543457031
+        y: 311.160461425781
+        z: -8084.61572265625
+      angle:
+        x: 0x0BD1
+        y: 0x8000
+        z: 0x00FF
+      set id: 0xFFFF
+      patch:
+        # Turn the golden wolf into a htPiece actor with the hidden skill item
+        name: htPiece
+        parameters: 0xFFFFFFE1
+      layers:
+        - 2
+
+# Faron Woods
+F_SP108:
+  # Room 4 - Coro's Clearing
+  4:
+    # Add hint sign near on platform south of Coro's hut
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -12423.8467
+        y: 273.277985
+        z: -11518.958
+      angle:
+        x: 21101 # Flow node id
+        y: 0x9228
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 5
+        - 9
+        - 14
+
+    # Rupee under boulder near coro (green)
+    - action: patch
+      name: item
+      parameters: 0xF3048001
+      position:
+        x: -14823.521484375
+        y: -207.559860229492
+        z: -17239.197265625
+      angle:
+        x: 0x0000
+        y: 0x2B60
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0xF3048101
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 5
+        - 9
+        - 14
+
+    # Rupee under boulder near coro (blue)
+    - action: patch
+      name: item
+      parameters: 0xF3048002
+      position:
+        x: -14708.259765625
+        y: 65.5312805175781
+        z: -17336.09375
+      angle:
+        x: 0x0000
+        y: 0x2B60
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0xF3048201
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 5
+        - 9
+        - 14
+
+    # Rupee under boulder near coro (yellow)
+    - action: patch
+      name: item
+      parameters: 0xF3048003
+      position:
+        x: -14725.6796875
+        y: -29.1403198242188
+        z: -17190.748046875
+      angle:
+        x: 0x0000
+        y: 0x2B60
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag
+        parameters: 0xF3048301
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 5
+        - 9
+        - 14
+
+  # Room 6 - North Faron Woods
+  6:
+    # Spawn Item for Golden Wolf in North Faron Woods layer 3
+    - action: add
+      name: htPiece
+      parameters: 0xFFFFFFE1
+      position:
+        x: -36699.4375
+        y: 428.600311279297
+        z: -23663.64453125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x00FF
+      set id: 0xFFFF
+      layers:
+        - 3
+
+# Kakariko Village
+F_SP109:
+  # Room 0 - Main Village
+  0:
+    # Add bomb rock heart piece to twilight layer
+    - action: add
+      name: htPiece
+      parameters: 0x00FF8C21
+      position:
+        x: -2360.0
+        y: 1586.455
+        z: 9050
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14
+
+    # Add hint sign near hot spring
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -3347.52734
+        y: 2999.16138
+        z: -2865.99341
+      angle:
+        x: 21105 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 2
+        - 12
+        - 14
+
+# Kakariko Graveyard
+F_SP111:
+  # Room 0 - Main graveyard
+  0:
+    # Male Ant
+    - action: patch
+      name: I_Ari
+      parameters: 0x00000F00
+      position:
+        x: 16933.3046875
+        y: 500
+        z: -769.167724609375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x91
+        name: htPiece
+        parameters: 0x00FF91D4
+      layers:
+        - 0
+        - 2
+        - 3
+
+    # Golden Wolf in Kakariko Graveyard
+    - action: patch
+      name: GWolf
+      parameters: 0x037906FF
+      position:
+        x: 17575.34375
+        y: 500.0
+        z: -51.3761901855469
+      angle:
+        x: 0x0BD1
+        y: 0xC000
+        z: 0x00FF
+      set id: 0xFFFF
+      patch:
+        # Turn the golden wolf into a htPiece actor with the hidden skill item
+        name: htPiece
+        parameters: 0xFFFFFFE1
+      layers:
+        - 2
+        - 3
+
+    # Add hint sign behind zora grave
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 21765.9863
+        y: 500.0
+        z: -62.247
+      angle:
+        x: 21106 # Flow node id
+        y: 0xC000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 2
+        - 3
+        - 14
+
+# Zora's Domain
+F_SP113:
+  # Room 0 - Throne Room
+  0:
+    # East Gate Underwater Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13FF8A02
+      position:
+        x: 513.140747070313
+        y: -1098.53369140625
+        z: -163.655395507813
+      angle:
+        x: 0x0000
+        y: 0x3333
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x13FFFF02
+      layers:
+        - 0
+        - 2
+
+    # East Gate Underwater Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x13FF8A02
+      position:
+        x: 591.445739746094
+        y: -1124.66955566406
+        z: -107.20272064209
+      angle:
+        x: 0x0000
+        y: 0x999A
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x13FFFF02
+      layers:
+        - 0
+        - 2
+
+    # West Gate Underwater Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13FF8902
+      position:
+        x: -414.366485595703
+        y: -1080.33239746094
+        z: -203.718460083008
+      angle:
+        x: 0x0000
+        y: 0xCCCD
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x13FFFF02
+      layers:
+        - 0
+        - 2
+
+    # West Gate Underwater Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13FF8902
+      position:
+        x: -463.534942626953
+        y: -1115.705078125
+        z: -125.413246154785
+      angle:
+        x: 0x0000
+        y: 0x3333
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x13FFFF02
+      layers:
+        - 0
+        - 2
+
+  # Room 1 - Main Zora's Domain Area
+  1:
+    # Male Dragonfly
+    - action: patch
+      name: I_Tom
+      parameters: 0x00000F00
+      position:
+        x: 3653.44995117188
+        y: -5167.66455078125
+        z: 15500.0009765625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9F
+        name: htPiece
+        parameters: 0x00FF9FD2
+        position:
+          y: -5300
+      layers:
+        - 0
+        - 2
+
+    # Central Underwater Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x133B8E03
+      position:
+        x: 244.258148193359
+        y: -8445.4345703125
+        z: 12791.822265625
+      angle:
+        x: 0x0000
+        y: 0xDF4A
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133BFF03
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Blue)
+    - action: patch
+      name: item
+      parameters: 0x133B8E02
+      position:
+        x: 167.000732421875
+        y: -8493.4326171875
+        z: 12821.283203125
+      angle:
+        x: 0x0000
+        y: 0xDF4A
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133BFF02
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0x133B8E01
+      position:
+        x: 191.989395141602
+        y: -8528.955078125
+        z: 12747.720703125
+      angle:
+        x: 0x0000
+        y: 0xDF4A
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133BFF01
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Green 2)
+    - action: patch
+      name: item
+      parameters: 0x133B8E01
+      position:
+        x: 192.409286499023
+        y: -8430.283203125
+        z: 12866.822265625
+      angle:
+        x: 0x0000
+        y: 0xDF4A
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133BFF01
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # North Underwater Boulder Rupee (Red)
+    - action: patch
+      name: item
+      parameters: 0x133A8D04
+      position:
+        x: 7.37179803848267
+        y: -8762.6083984375
+        z: 8355.388671875
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133AFF04
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # North Underwater Boulder Rupee (Yellow 1)
+    - action: patch
+      name: item
+      parameters: 0x133A8D03
+      position:
+        x: 141.887588500977
+        y: -8844.4091796875
+        z: 8355.388671875
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133AFF03
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # North Underwater Boulder Rupee (Yellow 2)
+    - action: patch
+      name: item
+      parameters: 0x133A8D03
+      position:
+        x: 15.3052892684937
+        y: -8880.763671875
+        z: 8404.501953125
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x133AFF03
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Shortcut Lower Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0xF3248C03
+      position:
+        x: -4717.2822265625
+        y: -1214.41479492188
+        z: 6721.99853515625
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF324FF03
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Shortcut Lower Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0xF3248C01
+      position:
+        x: -4708.02392578125
+        y: -1097.32348632812
+        z: 6647.25830078125
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF324FF01
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Shortcut Lower Boulder Rupee (Green 2)
+    - action: patch
+      name: item
+      parameters: 0xF3248C01
+      position:
+        x: -4733.75
+        y: -1215.96069335938
+        z: 6784.78125
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF324FF01
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Shortcut Upper Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0xF3658B03
+      position:
+        x: -3786.8876953125
+        y: -693.817016601562
+        z: 6765.89501953125
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF365FF03
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Shortcut Upper Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0xF3658B02
+      position:
+        x: -3756.13256835937
+        y: -551.098693847656
+        z: 6694.25341796875
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF365FF02
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Shortcut Upper Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0xF3658B02
+      position:
+        x: -3769.923828125
+        y: -614.487182617187
+        z: 6888.47021484375
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF365FF02
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+    # Add hint sign on west ledge
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -2964.84839
+        y: -2500.0
+        z: 17146.2676
+      angle:
+        x: 21119 # Flow node id
+        y: 0xAF09
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 2
+        - 13
+        - 14
+
+# Snowpeak Province
+F_SP114:
+  # Room 0 - Blizzard Area
+  0:
+    # Add hint sign in front of blizzard area
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 15931.9238
+        y: -14389.4912
+        z: -17388.1992
+      angle:
+        x: 21120 # Flow node id
+        y: 0x2C5A
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 4
+
+  # Room 1 - Snowboard Area
+  1:
+    # Snowboarding Bridge Ledge Bottom Rupee
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -48119.171875
+        y: 0
+        z: -2599.25610351562
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x84)
+        parameters: 0xF3FF8401
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Bridge Ledge Middle Rupee
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -46534.28125
+        y: 11544.2265625
+        z: -8413.3955078125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x83)
+        parameters: 0xF3FF8301
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Bridge Ledge Upper Rupee
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -43177.66796875
+        y: 15660.8828125
+        z: -9569.9169921875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x82)
+        parameters: 0xF3FF8201
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 1
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -47645.078125
+        y: 0
+        z: 39380.15234375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x88)
+        parameters: 0xF3FF8801
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 2
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -46933.09375
+        y: 0
+        z: 40671.33984375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x89)
+        parameters: 0xF3FF8901
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 3
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -44577.45703125
+        y: 0
+        z: 47715.25390625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x8A)
+        parameters: 0xF3FF8A01
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 4
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF04
+      position:
+        x: -44606.390625
+        y: 0
+        z: 48379.03125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x8B)
+        parameters: 0xF3FF8B04
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 5
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -44649.34765625
+        y: 0
+        z: 48967.97265625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x8C)
+        parameters: 0xF3FF8C01
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 6
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -44645.703125
+        y: 0
+        z: 50150.0078125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x8D)
+        parameters: 0xF3FF8D01
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 7
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -44480.6953125
+        y: 0
+        z: 51324.0078125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x8E)
+        parameters: 0xF3FF8E01
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 8
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -43814.9921875
+        y: 0
+        z: 55098.53125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x8F)
+        parameters: 0xF3FF8F01
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 9
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -43624.30078125
+        y: 0
+        z: 57275.41796875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x90)
+        parameters: 0xF3FF9001
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 10
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -43662.1171875
+        y: 0
+        z: 59659.77734375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x91)
+        parameters: 0xF3FF9101
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Shortcut Rupee 11
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -44644.55859375
+        y: 0
+        z: 62885.18359375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x92)
+        parameters: 0xF3FF9201
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Snowy Tree Top Rupee 1 (Blue)
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF02
+      position:
+        x: -48988.61328125
+        y: -27072.4296875
+        z: 22625.138671875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x85)
+        parameters: 0xF3FF8502
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Snowy Tree Top Rupee 2 (Red)
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF04
+      position:
+        x: -49091.05859375
+        y: 0
+        z: 25205.296875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x86)
+        parameters: 0xF3FF8604
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Snowy Tree Top Rupee 3 (Purple)
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF05
+      position:
+        x: -49256
+        y: 0
+        z: 27146.310546875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x87)
+        parameters: 0xF3FF8705
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Top Left Rupee
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -33332.109375
+        y: 15760.8828125
+        z: -5062.1845703125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x80)
+        parameters: 0xF3FF8001
+      layers:
+        - 0
+        - 3
+
+    # Snowboarding Top Right Rupee
+    - action: patch
+      name: item
+      parameters: 0xF3FFFF01
+      position:
+        x: -36254.51953125
+        y: 15760.8828125
+        z: -13958.623046875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Give this rupee a unique flag (0x81)
+        parameters: 0xF3FF8101
+      layers:
+        - 0
+        - 3
+
+# Lake Hylia
+F_SP115:
+  # Room 0 - Main Lake
+  0:
+    # Chest at the top of isle of riches
+    - action: patch
+      name: tboxEL1
+      parameters: 0x00000106
+      position:
+        x: -102523.015625
+        y: -16646.677734375
+        z: 43291.4296875
+      angle:
+        x: 0x0000
+        y: 0xA16D
+        z: 0x0000
+      set id: 0xFFFF
+      patch: # Give it a unique tbox id
+        parameters: 0x00190106
+      layers:
+        - 1
+        - 2
+        - 3
+        - 4
+
+    # Left Underwater Boulder Rupee (Yellow 1)
+    - action: patch
+      name: item
+      parameters: 0x13599A03
+      position:
+        x: -94876.2734375
+        y: -32004.568359375
+        z: 40183.83203125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1359FF03
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Left Underwater Boulder Rupee (Yellow 2)
+    - action: patch
+      name: item
+      parameters: 0x13599A03
+      position:
+        x: -94707.8203125
+        y: -32004.568359375
+        z: 40305.67578125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1359FF03
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Left Underwater Boulder Rupee (Yellow 3)
+    - action: patch
+      name: item
+      parameters: 0x13599A03
+      position:
+        x: -94790.046875
+        y: -32004.568359375
+        z: 40022.875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1359FF03
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Left Underwater Boulder Rupee (Blue)
+    - action: patch
+      name: item
+      parameters: 0x13599A02
+      position:
+        x: -94650.5
+        y: -31915.41015625
+        z: 40132.12109375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1359FF02
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Right Underwater Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x13589B03
+      position:
+        x: -92246.28125
+        y: -31720.103515625
+        z: 41678.73828125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1358FF03
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Right Underwater Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13589B02
+      position:
+        x: -92077.8359375
+        y: -31720.103515625
+        z: 41800.58203125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1358FF02
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Right Underwater Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x13589B02
+      position:
+        x: -92156.6796875
+        y: -31720.103515625
+        z: 41553.30078125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1358FF02
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Spawn Auru on layers 1 & 3
+    - action: add
+      name: Rafrel
+      parameters: 0x00001D01
+      position:
+        x: -116486.945
+        y: -13860.0
+        z: 58533.0078
+      angle:
+        x: 0x0000
+        y: 0xCCCD
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 1
+        - 3
+
+    # Spawn a red rupee behind the canon so players always have
+    # enough money for it
+    - action: add
+      name: item
+      parameters: 0xF3FFFF04
+      position:
+        x: -108290.086
+        y: -18654.748
+        z: 45935.2969
+      angle:
+        x: 0x0000
+        y: 0x0001
+        z: 0x003F
+      set id: 0xFFFF
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Add hint sign in cucco shack
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -109203.461
+        y: -7220.0
+        z: 33083.7344
+      angle:
+        x: 21115 # Flow node id
+        y: 0x64B5
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 1
+        - 2
+        - 3
+        - 13
+        - 14
+
+  # Room 1 - Lanayru Spring
+  1:
+    # Lower Underwater Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x131D8F03
+      position:
+        x: -770.449157714844
+        y: -1573.41650390625
+        z: -357.485656738281
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x131DFF03
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Lower Underwater Boulder Rupee (Blue)
+    - action: patch
+      name: item
+      parameters: 0x131D8F02
+      position:
+        x: -740.873229980469
+        y: -1604.72351074219
+        z: -263.534973144531
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x131DFF02
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Lower Underwater Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0x131D8F01
+      position:
+        x: -657.096984863281
+        y: -1594.28796386719
+        z: -292.812927246094
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x131DFF01
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Lower Underwater Boulder Rupee (Green 2)
+    - action: patch
+      name: item
+      parameters: 0x131D8F01
+      position:
+        x: -787.852966308594
+        y: -1514.28125
+        z: -297.316223144531
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x131DFF01
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Upper Underwater Boulder Rupee (Yellow 1)
+    - action: patch
+      name: item
+      parameters: 0x13399003
+      position:
+        x: -1201.95251464844
+        y: -1100.27172851562
+        z: 1692.37805175781
+      angle:
+        x: 0x0000
+        y: 0x56C1
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1339FF03
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Upper Underwater Boulder Rupee (Yellow 2)
+    - action: patch
+      name: item
+      parameters: 0x13399003
+      position:
+        x: -1157.26696777344
+        y: -1148.73376464844
+        z: 1796.97399902344
+      angle:
+        x: 0x0000
+        y: 0x56C1
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1339FF03
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Upper Underwater Boulder Rupee (Green)
+    - action: patch
+      name: item
+      parameters: 0x13399001
+      position:
+        x: -1095.27661132812
+        y: -1106.08728027344
+        z: 1748.41162109375
+      angle:
+        x: 0x0000
+        y: 0x56C1
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1339FF01
+      layers:
+        - 0
+        - 2
+        - 14
+
+    # Add hint sign underwater
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -309.997833
+        y: -1614.82178
+        z: 157.970795
+      angle:
+        x: 21116 # Flow node id
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 2
+        - 14
+
+# Castle Town
+F_SP116:
+  # Room 0 - Central castle Town
+  0:
+    # Shoe shiner in front of Malo Mart
+    - action: patch
+      name: shoe
+      parameters: 0x0434C864
+      position:
+        x: 1031.68518066406
+        y: -181.089660644531
+        z: 2604.8818359375
+      angle:
+        x: 0x0000
+        y: 0x905C
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Make the shoe shiner always appear
+        parameters: 0x0434F000
+      layers:
+        - 0
+
+    # Add hint sign south of the central fountain
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 0.0
+        y: -200.0
+        z: 835.0
+      angle:
+        x: 21112 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+  # Room 1 - North Castle Town
+  1:
+    # Golden Wolf in North Castle Town
+    - action: patch
+      name: GWolf
+      parameters: 0x013207FF
+      position:
+        x: 0.0
+        y: 800.0
+        z: -9500.0
+      angle:
+        x: 0x0BD1
+        y: 0x0000
+        z: 0x00FF
+      set id: 0xFFFF
+      patch:
+        # Turn the golden wolf into a htPiece actor with the hidden skill item
+        name: htPiece
+        parameters: 0xFFFFFFE1
+      layers:
+        - 1
+
+# Sacred Grove
+F_SP117:
+  # Room 1 - Pedestal of Time
+  1:
+    # Male Snail
+    - action: patch
+      name: I_Kat
+      parameters: 0x00000F00
+      position:
+        x: 1447.40808105469
+        y: 1533.73156738281
+        z: 7053.470703125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x99
+        name: htPiece
+        parameters: 0x00FF99D0
+        position:
+          y: 1383
+      layers:
+        - 2
+
+    # Door to the past
+    - action: patch
+      name: smgdoor
+      parameters: 0x064010FF
+      position:
+        x: 0.0
+        y: 1725.0
+        z: 6900.0
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Give the door a custom flag not tied to the portal
+        parameters: 0x063010FF
+      layers:
+        - 2
+
+    # Statue guarding door to the past
+    - action: patch
+      name: Sekizoa
+      parameters: 0x3000EE64
+      position:
+        x: 0.0
+        y: 1725.0
+        z: 7020.0
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Give the statue a custom flag not tied to the portal
+        parameters: 0x3000EE63
+      layers:
+        - 2
+
+    # Msg Tag for striking pedestal
+    - action: patch
+      name: KMsg
+      parameters: 0x03AA96C7
+      position:
+        x: 0.0
+        y: 1700.0
+        z: -5435.0
+      angle:
+        x: 0x8064
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      scale:
+        x: 0x23
+        y: 0x23
+        z: 0x23
+      patch:
+        # Give the tag a custom flag not tied to the portal
+        angle:
+          x: 0x80FF
+      layers:
+        - 2
+
+    # Spawn in the Master Sword actor
+    - action: add
+      name: mstrsrd
+      parameters: 0x00020110
+      position:
+        x: 0.0
+        y: 1700.0
+        z: -5435.0
+      angle:
+        x: 0x0147
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 2
+
+    # Delete shadow beast fight walls
+    - action: delete
+      name: Obj_tp
+      parameters: 0xEF00FF01
+      position:
+        x: 1445.53735351562
+        y: 3895.68212890625
+        z: -3593.36694335937
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0xFF64
+      set id: 0xFFFF
+      layers:
+        - 2
+
+    # Add hint sign near Door to the Past
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -1543.0
+        y: 1725.0
+        z: 7964.85498
+      angle:
+        x: 21102 # Flow node id
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 2
+
+  # Room 2 - Temple of Time
+  2:
+    # Female Snail
+    - action: patch
+      name: I_Kat
+      parameters: 0x00000F10
+      position:
+        x: 405.664825439453
+        y: 1382.14660644531
+        z: 6069.1953125
+      angle:
+        x: 0x0000
+        y: 0x5D27
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x98
+        name: htPiece
+        parameters: 0x00FF98D1
+      layers:
+        - 2
+
+# Outside Arbiters Grounds
+F_SP118:
+  # Room 1 - Bulblin Camp
+  1:
+    # Small Key Actor
+    - action: patch
+      name: Obj_key
+      parameters: 0xFFFFFFFF
+      position:
+        x: 4470
+        y: 300
+        z: -2950
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this small key into the rando check
+        name: htPiece
+        parameters: 0x00FF9AD7
+        position:
+          x: 4000
+          z: -3500
+      layers:
+        - 0
+
+    # Spawn in the item for the Bulblin Guard Key on
+    # the layer where the camp is already beaten
+    - action: add
+      name: htPiece
+      parameters: 0x00FF9AD7
+      position:
+        x: 4000
+        y: 300
+        z: -3500
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 1
+        - 2
+        - 3
+
+    # Chest in front of bulblin camp
+    - action: patch
+      name: tboxA0
+      parameters: 0xFF0FFFC0
+      position:
+        x: 4761.640625
+        y: 0
+        z: 1580.57019042969
+      angle:
+        x: 0x0000
+        y: 0xE000
+        z: 0x0FFF
+      set id: 0xFFFF
+      patch:
+        # Give this chest a unique tboxid
+        parameters: 0xFF0FF7C0
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+
+    # Chest in back of bulblin camp
+    - action: patch
+      name: tboxA0
+      parameters: 0xFF0FFFC0
+      position:
+        x: 2389.04541015625
+        y: 260
+        z: -1473.38720703125
+      angle:
+        x: 0x0000
+        y: 0x6000
+        z: 0x05FF
+      set id: 0xFFFF
+      patch:
+        # Give this chest a unique tboxid
+        parameters: 0xFF0FF780
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+
+    # Gate to King Bublin 2 Fight
+    - action: patch
+      name: CrvGate
+      parameters: 0xFFFFFFFF
+      position:
+        x: 2150.0
+        y: 0.0
+        z: -450.0
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Give the gate a unique flag (0x00) so
+        # it stays permanently open once it's been unlocked
+        parameters: 0xFFFF00FF
+      layers:
+        - 0
+
+    # Add hint sign before jump down to lower desert
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -568.556152
+        y: 260.0
+        z: -3969.31
+      angle:
+        x: 21122 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Hyrule Field
+F_SP121:
+  # Room 0 - Eldin Field / Bridge of Eldin
+  0:
+    # Male Grasshopper
+    - action: patch
+      name: I_Bat
+      parameters: 0x00000F00
+      position:
+        x: 19600
+        y: 648.359558105469
+        z: 13400
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x99
+        name: htPiece
+        parameters: 0x00FF99C2
+      layers:
+        - 0
+        - 6
+        - 8
+
+    # Female Grasshopper
+    - action: patch
+      name: I_Bat
+      parameters: 0x00000F10
+      position:
+        x: -9950
+        y: 35.1765174865723
+        z: -8950
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x98
+        name: htPiece
+        parameters: 0x00FF98C3
+      layers:
+        - 0
+        - 6
+        - 8
+
+    # Male Phasmid
+    - action: patch
+      name: I_Nan
+      parameters: 0x00001F00
+      position:
+        x: 35135
+        y: 254.385009765625
+        z: -15115.2587890625
+      angle:
+        x: 0xC000
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x97
+        name: htPiece
+        parameters: 0x00FF97C8
+      layers:
+        - 0
+        - 6
+        - 8
+
+    # Female Phasmid
+    - action: patch
+      name: I_Nan
+      parameters: 0x00001F10
+      position:
+        x: 39919.859375
+        y: 1415.41796875
+        z: -40367.38671875
+      angle:
+        x: 0xC000
+        y: 0x58E3
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x96
+        name: htPiece
+        parameters: 0x00FF96C9
+      layers:
+        - 0
+        - 6
+        - 8
+
+    # Yellow Rupee under BoE Boulder 1
+    - action: patch
+      name: item
+      parameters: 0xF3778F03
+      position:
+        x: 37400
+        y: -39.2301330566406
+        z: -40200
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF377FF03
+      layers:
+        - 0
+        - 6
+        - 8
+        - 14
+
+    # Yellow Rupee under BoE Boulder 2
+    - action: patch
+      name: item
+      parameters: 0xF3778F03
+      position:
+        x: 37500
+        y: -91.5920944213867
+        z: -39900
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF377FF03
+      layers:
+        - 0
+        - 6
+        - 8
+        - 14
+
+    # Add hint sign next to Eldin field south small bridge
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -12433.2744
+        y: -1075.2218
+        z: 20885.7129
+      angle:
+        x: 21107 # Flow node id
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 8
+        - 14
+
+  # Room 3 - Kakariko Gorge
+  3:
+    # Male Pill Bug
+    - action: patch
+      name: I_Dan
+      parameters: 0x00000F00
+      position:
+        x: -10000
+        y: -7200
+        z: 57450
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x95
+        name: htPiece
+        parameters: 0x00FF95CA
+      layers:
+        - 0
+        - 6
+
+    # Female Pill Bug
+    - action: patch
+      name: I_Dan
+      parameters: 0x00000F10
+      position:
+        x: 500
+        y: -6117.943359375
+        z: 61700
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x94
+        name: htPiece
+        parameters: 0x00FF94CB
+      layers:
+        - 0
+        - 6
+
+    # Blue Rupee under Gorge Spire Boulder 1
+    - action: patch
+      name: item
+      parameters: 0xF37A8E02
+      position:
+        x: -25742.5
+        y: -5147.73876953125
+        z: 55865.015625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF37AFF02
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Blue Rupee under Gorge Spire Boulder 2
+    - action: patch
+      name: item
+      parameters: 0xF37A8E02
+      position:
+        x: -25811.0703125
+        y: -5130.3076171875
+        z: 56205.63671875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF37AFF02
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Green Rupee under Gorge Spire Boulder
+    - action: patch
+      name: item
+      parameters: 0xF37A8E01
+      position:
+        x: -25676.435546875
+        y: -5174.85400390625
+        z: 56052.64453125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF37AFF01
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Blue Rupee under Gorge Statue Boulder 1
+    - action: patch
+      name: item
+      parameters: 0xF3788D02
+      position:
+        x: -14013.876953125
+        y: -4640.60107421875
+        z: 45103.53515625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF378FF02
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Blue Rupee under Gorge Statue Boulder 2
+    - action: patch
+      name: item
+      parameters: 0xF3788D02
+      position:
+        x: -13793.6083984375
+        y: -4736.62060546875
+        z: 45056.8984375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF378FF02
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Blue Rupee under Gorge Statue Boulder 3
+    - action: patch
+      name: item
+      parameters: 0xF3788D02
+      position:
+        x: -13833.4169921875
+        y: -4700.61328125
+        z: 45221.265625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF378FF02
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Blue Rupee under Gorge Statue Boulder 4
+    - action: patch
+      name: item
+      parameters: 0xF3788D02
+      position:
+        x: -13939.875
+        y: -4664.60595703125
+        z: 45198.17578125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0xF378FF02
+      layers:
+        - 0
+        - 6
+        - 14
+
+    # Add Epona Jump to post MDH layers
+    - action: add
+      name: Hjump
+      parameters: 0x044FFF02
+      position:
+        x: 5600
+        y: -5680
+        z: 52055
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      scale:
+        x: 32
+        y: 45
+        z: 45
+      layers:
+        - 2
+        - 6
+
+    # Add hint sign near owl statue
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -10116.0215
+        y: -4923.46191
+        z: 43064.4375
+      angle:
+        x: 21104 # Flow node id
+        y: 0x0789
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 14
+
+  # Room 6 - Faron Field
+  6:
+    # Male Beetle
+    - action: patch
+      name: kab_o
+      parameters: 0x00000F00
+      position:
+        x: -50200
+        y: -8810
+        z: 86400
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9F
+        name: htPiece
+        parameters: 0x00FF9FC0
+        position:
+          y: -8910 # Lower by 100 so Link can reach it
+      layers:
+        - 0
+        - 6
+        - 9
+        - 10
+
+    # Female Beetle
+    - action: patch
+      name: kab_o
+      parameters: 0x00000F10
+      position:
+        x: -36490
+        y: -8100
+        z: 74330
+      angle:
+        x: 0x0000
+        y: 0x2000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9E
+        name: htPiece
+        parameters: 0x00FF9EC1
+      layers:
+        - 0
+        - 6
+        - 9
+        - 10
+
+    # Spawn coming from Outside South Castle Town
+    - action: patch
+      name: Link
+      parameters: 0xFF00503F
+      position:
+        x: -47839.47265625
+        y: -9337.5810546875
+        z: 52352.32421875
+      angle:
+        x: 0x0000
+        y: 0xF334
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Change spawn to not be inside rocks if the rocks aren't broken
+        position:
+          x: -48296.46875
+          y: -9428.5810546875
+          z: 53030.3203125
+      layers:
+        - 0
+        - 6
+        - 9
+        - 10
+
+    # Add hint sign under bridge
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -46039.4922
+        y: -9250.0
+        z: 81859.2891
+      angle:
+        x: 21103 # Flow node id
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 9
+        - 10
+
+  # Room 7 - North Eldin
+  7:
+    # Add Ganon Barriers to block Lanayru Twilight access
+    # during Eldin Twilight
+    - action: add
+      name: Obj_gb
+      parameters: 0x800F0601
+      position:
+        x: 10778.207
+        y: 3096.82666
+        z: -62651.0078
+      angle:
+        x: 0xFF5C
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14 # Twilight layer
+
+    - action: add
+      name: Obj_gb
+      parameters: 0x800F0601
+      position:
+        x: 10778.207
+        y: 3096.82666
+        z: -62921.0078
+      angle:
+        x: 0xFF5C
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14 # Twilight layer
+
+    - action: add
+      name: Obj_gb
+      parameters: 0x800F0601
+      position:
+        x: 10778.207
+        y: 3096.82666
+        z: -63191.0078
+      angle:
+        x: 0xFF5C
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14 # Twilight layer
+
+    # Add hint sign next to North Eldin Field spinner track
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 18468.8418
+        y: 1580.0
+        z: -63560.9531
+      angle:
+        x: 21108 # Flow node id
+        y: 0xCDC6
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 8
+        - 14
+
+  # Room 10 - Lanayru Field
+  10:
+    # Male Stag Beetle
+    - action: patch
+      name: I_Kuw
+      parameters: 0x00000F00
+      position:
+        x: -62724.33203125
+        y: -882.901000976563
+        z: -33130.4140625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9B
+        name: htPiece
+        parameters: 0x00FF9BC4
+      layers:
+        - 0
+        - 6
+
+    # Female Stag Beetle
+    - action: patch
+      name: I_Kuw
+      parameters: 0x00000F10
+      position:
+        x: -48850
+        y: 59.1445922851562
+        z: -51350
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9A
+        name: htPiece
+        parameters: 0x00FF9AC5
+      layers:
+        - 0
+        - 6
+
+    # South Underwater Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x137F8603
+      position:
+        x: -44868.2109375
+        y: -4623.99853515625
+        z: -29872.623046875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0x137FFF03
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # South Underwater Boulder Rupee (Green)
+    - action: patch
+      name: item
+      parameters: 0x137F8601
+      position:
+        x: -44725.27734375
+        y: -4658.63720703125
+        z: -29682.888671875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0x137FFF01
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # South Underwater Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x137F8602
+      position:
+        x: -44813.50390625
+        y: -4589.35986328125
+        z: -29537.416015625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0x137FFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # South Underwater Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x137F8602
+      position:
+        x: -44999.03125
+        y: -4675.9560546875
+        z: -29785.939453125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0x137FFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # North Underwater Boulder Rupee (Red 1)
+    - action: patch
+      name: item
+      parameters: 0x137E8704
+      position:
+        x: -45730.50390625
+        y: -3624.84008789063
+        z: -40552.89453125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0x137EFF04
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # North Underwater Boulder Rupee (Red 1)
+    - action: patch
+      name: item
+      parameters: 0x137E8704
+      position:
+        x: -45478.16015625
+        y: -3763.39453125
+        z: -40783.9609375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0001
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0x137EFF04
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # North Spinner Track Boulder Rupee (Yellow 1)
+    - action: patch
+      name: item
+      parameters: 0xF30F8903
+      position:
+        x: -76250
+        y: 750
+        z: -32100
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF30FFF03
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # North Spinner Track Boulder Rupee (Yellow 2)
+    - action: patch
+      name: item
+      parameters: 0xF30F8903
+      position:
+        x: -75500
+        y: 700
+        z: -31700
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF30FFF03
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # Add hint sign at path fork in west Lanayru Field
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -64943.7422
+        y: -1359.66711
+        z: -31897.8828
+      angle:
+        x: 21110 # Flow node id
+        y: 0xE223
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+  # Room 12 - Hylia Bridge-Lanayru Field Transition
+  12:
+    # South Spinner Track Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0xF30E8A02
+      position:
+        x: -93650
+        y: -2800
+        z: 5000
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF30EFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # South Spinner Track Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0xF30E8A02
+      position:
+        x: -93400
+        y: -2850
+        z: 4850
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF30EFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # South Spinner Track Boulder Rupee (Blue 3)
+    - action: patch
+      name: item
+      parameters: 0xF30E8A02
+      position:
+        x: -93900
+        y: -2800
+        z: 4750
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF30EFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+  # Room 13 - Great Bridge of Hylia
+  13:
+    # Male Mantis
+    - action: patch
+      name: I_Kam
+      parameters: 0x00000F00
+      position:
+        x: -92900
+        y: -5441.38720703125
+        z: 30350
+      angle:
+        x: 0x0000
+        y: 0x4000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x93
+        name: htPiece
+        parameters: 0x00FF93CC
+      layers:
+        - 0
+        - 6
+
+    # Female Mantis
+    - action: patch
+      name: I_Kam
+      parameters: 0x00000F10
+      position:
+        x: -88800
+        y: -6091.95068359375
+        z: 59050
+      angle:
+        x: 0x0000
+        y: 0xC000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x92
+        name: htPiece
+        parameters: 0x00FF92CD
+      layers:
+        - 0
+        - 6
+
+    # Boulder Near Owl Statue Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0xF37C8B02
+      position:
+        x: -89951.5546875
+        y: -5034.109375
+        z: 22045.078125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF37CFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # Boulder Near Owl Statue Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0xF37C8B02
+      position:
+        x: -89746.765625
+        y: -4973.77587890625
+        z: 21901.685546875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF37CFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # Boulder Near Owl Statue Rupee (Blue 3)
+    - action: patch
+      name: item
+      parameters: 0xF37C8B02
+      position:
+        x: -89632.046875
+        y: -5076.08056640625
+        z: 22065.515625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF37CFF02
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # Boulder Near Faron Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0xF37B8C03
+      position:
+        x: -78349.703125
+        y: -7331.6181640625
+        z: 58471.4375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0005
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF37BFF03
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+    # Add hint sign on platform above owl statue
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -94678.8672
+        y: -3900.0
+        z: 18410.543
+      angle:
+        x: 21114 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+# Outside Castle Town Maps
+F_SP122:
+  # Room 8 - Outside West Castle Town
+  8:
+    # Male Butterfly
+    - action: patch
+      name: I_Cho
+      parameters: 0x00000F00
+      position:
+        x: -75063.46875
+        y: -421.140930175781
+        z: 16017.3466796875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9D
+        name: htPiece
+        parameters: 0x00FF9DC2
+      layers:
+        - 0
+
+    # Male Butterfly again (for some reason the one on layer 6 has a different x position)
+    - action: patch
+      name: I_Cho
+      parameters: 0x00000F00
+      position:
+        x: -75063.0546875
+        y: -421.140930175781
+        z: 16017.3466796875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9D
+        name: htPiece
+        parameters: 0x00FF9DC2
+      layers:
+        - 6
+
+    # Female Butterfly
+    - action: patch
+      name: I_Cho
+      parameters: 0x00000F10
+      position:
+        x: -79687.9609375
+        y: -656.609985351562
+        z: 1544.75891113281
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9C
+        name: htPiece
+        parameters: 0x00FF9CCD
+      layers:
+        - 0
+        - 6
+
+    # Golden Wolf Outside Castle Town West
+    - action: patch
+      name: GWolf
+      parameters: 0x042903FF
+      position:
+        x: -68310.15625
+        y: -1050.0
+        z: 5925.4560546875
+      angle:
+        x: 0x0BD1
+        y: 0xC16D
+        z: 0x00FF
+      set id: 0xFFFF
+      patch:
+        # Turn the golden wolf into a htPiece actor with the hidden skill item
+        name: htPiece
+        parameters: 0xFFFFFFE1
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Northern Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0xF34B8403
+      position:
+        x: -71091.9375
+        y: -1082.32336425781
+        z: -7070.81005859375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF03
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Northern Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0xF34B8401
+      position:
+        x: -71149.3515625
+        y: -1131.98156738281
+        z: -6873.412109375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF01
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Northern Boulder Rupee (Green 2)
+    - action: patch
+      name: item
+      parameters: 0xF34B8401
+      position:
+        x: -71028.1640625
+        y: -1086.46154785156
+        z: -6809.62451171875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF01
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Northern Boulder Rupee (Green 3)
+    - action: patch
+      name: item
+      parameters: 0xF34B8401
+      position:
+        x: -70900.6015625
+        y: -1007.83605957031
+        z: -6860.65478515625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF01
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Northern Boulder Rupee (Blue)
+    - action: patch
+      name: item
+      parameters: 0xF34B8402
+      position:
+        x: -70951.6328125
+        y: -1090.59973144531
+        z: -7000.9873046875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF02
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Southern Boulder Rupee (Yellow 1)
+    - action: patch
+      name: item
+      parameters: 0xF34C8503
+      position:
+        x: -71926.4140625
+        y: -1947.20300292969
+        z: -542.079528808594
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF03
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Southern Boulder Rupee (Yellow 2)
+    - action: patch
+      name: item
+      parameters: 0xF34C8503
+      position:
+        x: -71668.03125
+        y: -1902.7158203125
+        z: -393.373565673828
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF03
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Southern Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0xF34C8502
+      position:
+        x: -71791.0859375
+        y: -1996.86120605469
+        z: -319.543182373047
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF02
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Southern Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0xF34C8502
+      position:
+        x: -71758.1796875
+        y: -1955.47937011719
+        z: -564.430725097656
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34BFF02
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Add hint sign on platform with helmasaur grotto
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -80699.5
+        y: -765.58374
+        z: 1903.61462
+      angle:
+        x: 21111 # Flow node id
+        y: 0x25B7
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 6
+        - 13
+        - 14
+
+  # Room 16 - Outside South Castle Town
+  16:
+    # Male Ladybug
+    - action: patch
+      name: I_Ten
+      parameters: 0x00000F00
+      position:
+        x: -45085.2734375
+        y: -5971.20849609375
+        z: 29910.453125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x91
+        name: htPiece
+        parameters: 0x00FF91CE
+        position:
+          y: -6081 # Lower the item so it isn't awkwardly floating
+      layers:
+        - 0
+        - 1
+        - 6
+
+    # Female Ladybug
+    - action: patch
+      name: I_Ten
+      parameters: 0x00000F10
+      position:
+        x: -54382.18359375
+        y: -5481.6298828125
+        z: 27425.111328125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x90
+        name: htPiece
+        parameters: 0x00FF90CF
+      layers:
+        - 0
+        - 1
+        - 6
+
+    # Golden Wolf Outside Castle Town South
+    - action: patch
+      name: GWolf
+      parameters: 0x022A04FF
+      position:
+        x: -55927.09375
+        y: -6100.0
+        z: 25315.892578125
+      angle:
+        x: 0x0BD1
+        y: 0xE9F5
+        z: 0x00FF
+      set id: 0xFFFF
+      patch:
+        # Turn the golden wolf into a htPiece actor with the hidden skill item
+        name: htPiece
+        parameters: 0xFFFFFFE1
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0xF34A8301
+      position:
+        x: -46447.33984375
+        y: -5826.849609375
+        z: 26237.958984375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF01
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Green 2)
+    - action: patch
+      name: item
+      parameters: 0xF34A8301
+      position:
+        x: -46278.0234375
+        y: -5826.849609375
+        z: 26476.99609375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF01
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Green 3)
+    - action: patch
+      name: item
+      parameters: 0xF34A8301
+      position:
+        x: -46596.7421875
+        y: -5826.849609375
+        z: 26277.798828125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF01
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0xF34A8302
+      position:
+        x: -46317.86328125
+        y: -5826.849609375
+        z: 26138.361328125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF02
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0xF34A8302
+      position:
+        x: -46576.8203125
+        y: -5826.849609375
+        z: 26486.955078125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF02
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Blue 3)
+    - action: patch
+      name: item
+      parameters: 0xF34A8302
+      position:
+        x: -46377.62890625
+        y: -5826.849609375
+        z: 26357.4765625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF02
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0xF34A8303
+      position:
+        x: -46359.03515625
+        y: -5826.849609375
+        z: 26254.951171875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x003F
+      set id: 0xFFFF
+      patch:
+        # Take away the flag from this item so it doesn't conflict
+        # with the nearby randomized item
+        parameters: 0xF34AFF03
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Spawn coming from Faron Field
+    - action: patch
+      name: Link
+      parameters: 0xFF00503F
+      position:
+        x: -50958.37109375
+        y: -7010.82958984375
+        z: 38985.1875
+      angle:
+        x: 0x0000
+        y: 0x8AAB
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Change spawn to not be inside rocks if the rocks aren't broken
+        position:
+          x: -51369.37109375
+          y: -6698.830078125
+          z: 37038.19140625
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+    # Add hint sign south of the fountain
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -51500.0
+        y: -5500.0
+        z: 27368.3086
+      angle:
+        x: 21113 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 4
+        - 6
+        - 13
+        - 14
+
+# Gerudo Desert
+F_SP124:
+  # Room 0 - Main Desert
+  0:
+    # Male Dayfly
+    - action: patch
+      name: I_Kag
+      parameters: 0x00000F0F
+      position:
+        x: 29089.78125
+        y: 412.155059814453
+        z: 58985.57421875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x99
+        name: htPiece
+        parameters: 0x00FF99D6
+      layers:
+        - 0
+
+    # Female Dayfly
+    - action: patch
+      name: I_Kag
+      parameters: 0x00000F1F
+      position:
+        x: 11656.46484375
+        y: 141.179977416992
+        z: 55374.140625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x98
+        name: htPiece
+        parameters: 0x00FF98D7
+      layers:
+        - 0
+
+    # Golden Wolf in Desert
+    - action: patch
+      name: GWolf
+      parameters: 0x0B3205FF
+      position:
+        x: 1112.08215332031
+        y: -162.940002441406
+        z: 12659.6689453125
+      angle:
+        x: 0x0BD1
+        y: 0x0000
+        z: 0x00FF
+      set id: 0xFFFF
+      patch:
+        # Turn the golden wolf into a htPiece actor with the hidden skill item
+        name: htPiece
+        parameters: 0xFFFFFFE1
+      layers:
+        - 0
+
+    # Add hint sign before jump down to lower desert
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 20356.23
+        y: 556.7
+        z: 38694.8047
+      angle:
+        x: 21121 # Flow node id
+        y: 0x0099
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+
+# Mirror Chamber
+F_SP125:
+  # Room 4 - Main Chamber
+  4:
+    # Add barrier to prevent players from going back to the Arbiters Boss Room
+    # depending on settings
+    - action: add
+      name: Obj_gb
+      parameters: 0x800F0601
+      position:
+        x: 1794.0
+        y: 2523.0
+        z: -17400.0
+      angle:
+        x: 0xFF7F
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+
+# Upper Zora's River
+F_SP126:
+  # Room 0 - Main area
+  0:
+    # Female Dragonfly
+    - action: patch
+      name: I_Tom
+      parameters: 0x00000F10
+      position:
+        x: 5849.5498046875
+        y: 80.7757110595703
+        z: -1121.2275390625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x9E
+        name: htPiece
+        parameters: 0x00FF9ED3
+      layers:
+        - 0
+        - 1
+
+    # Central Underwater Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13609102
+      position:
+        x: 1391.9443359375
+        y: -1868.77282714844
+        z: -1002.97778320312
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1360FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x13609102
+      position:
+        x: 1491.43737792969
+        y: -1934.05505371094
+        z: -802.984436035156
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1360FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Blue 3)
+    - action: patch
+      name: item
+      parameters: 0x13609102
+      position:
+        x: 1346.45397949219
+        y: -1874.81726074219
+        z: -796.263793945313
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1360FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Green)
+    - action: patch
+      name: item
+      parameters: 0x13609101
+      position:
+        x: 1533.86730957031
+        y: -1853.056640625
+        z: -1013.22180175781
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1360FF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Central Underwater Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x13609103
+      position:
+        x: 1465.11157226562
+        y: -1776.89404296875
+        z: -915.513854980469
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1360FF03
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Yellow 1)
+    - action: patch
+      name: item
+      parameters: 0x135F9203
+      position:
+        x: -909.917846679688
+        y: -1426.30310058594
+        z: 1181.94140625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF03
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Yellow 2)
+    - action: patch
+      name: item
+      parameters: 0x135F9203
+      position:
+        x: -836.750610351562
+        y: -1334.42431640625
+        z: 1269.40539550781
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF03
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x135F9202
+      position:
+        x: -810.4248046875
+        y: -1491.58532714844
+        z: 1381.93481445312
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x135F9202
+      position:
+        x: -853.017944335938
+        y: -1491.58532714844
+        z: 1502.61547851562
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Blue 3)
+    - action: patch
+      name: item
+      parameters: 0x135F9202
+      position:
+        x: -648.732666015625
+        y: -1410.5869140625
+        z: 1270.46142578125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0x135F9201
+      position:
+        x: -767.994873046875
+        y: -1410.5869140625
+        z: 1171.69738769531
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Green 2)
+    - action: patch
+      name: item
+      parameters: 0x135F9201
+      position:
+        x: -955.408203125
+        y: -1432.34753417969
+        z: 1388.65539550781
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # West Underwater Boulder Rupee (Green 3)
+    - action: patch
+      name: item
+      parameters: 0x135F9201
+      position:
+        x: -605.872863769531
+        y: -1410.5869140625
+        z: 1397.17749023438
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x135FFF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # East Underwater Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x13549303
+      position:
+        x: 3569.236328125
+        y: -924.596496582031
+        z: 4092.87475585937
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1354FF03
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # East Underwater Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13549302
+      position:
+        x: 3496.06909179687
+        y: -1016.47528076172
+        z: 4005.4111328125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1354FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # East Underwater Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x13549302
+      position:
+        x: 3595.56201171875
+        y: -1081.75744628906
+        z: 4205.40283203125
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1354FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # East Underwater Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0x13549301
+      position:
+        x: 3637.99194335937
+        y: -1000.75909423828
+        z: 3995.16748046875
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1354FF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # East Underwater Boulder Rupee (Green 1)
+    - action: patch
+      name: item
+      parameters: 0x13549301
+      position:
+        x: 3450.57861328125
+        y: -1022.51971435547
+        z: 4212.12353515625
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1354FF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Ledge Boulder Rupee (Yellow)
+    - action: patch
+      name: item
+      parameters: 0x13679403
+      position:
+        x: -11.2600412368774
+        y: 587.779846191406
+        z: -3185.00219726562
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1367FF03
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Ledge Boulder Rupee (Blue 1)
+    - action: patch
+      name: item
+      parameters: 0x13679402
+      position:
+        x: -84.4272842407227
+        y: 495.90087890625
+        z: -3272.46630859375
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1367FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Ledge Boulder Rupee (Blue 2)
+    - action: patch
+      name: item
+      parameters: 0x13679402
+      position:
+        x: 15.0657520294189
+        y: 430.618682861328
+        z: -3072.47290039063
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1367FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Ledge Boulder Rupee (Blue 3)
+    - action: patch
+      name: item
+      parameters: 0x13679402
+      position:
+        x: -129.917633056641
+        y: 489.8564453125
+        z: -3065.75219726562
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1367FF02
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+    # Ledge Boulder Rupee (Green)
+    - action: patch
+      name: item
+      parameters: 0x13679401
+      position:
+        x: 57.4956970214844
+        y: 511.617279052734
+        z: -3282.71020507812
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x000A
+      set id: 0xFFFF
+      patch:
+        # Take away the unique flag from this rupee so it doesn't conflict
+        # with the one randomizer rupee nearby
+        parameters: 0x1367FF01
+      layers:
+        - 0
+        - 1
+        - 13
+        - 14
+
+# Fishing Pond
+F_SP127:
+  # Room 0 - Main Pond
+  0:
+    # Add hint sign behind hut
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: -2924.74585
+        y: 35.0
+        z: 8386.28906
+      angle:
+        x: 21118 # Flow node id
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 14
+
+# Hidden Village
+F_SP128:
+  # Room 0 - Main Village
+  0:
+    # Add hint sign
+    - action: add
+      name: Obj_kn2
+      parameters: 0xFFFFFFFF
+      position:
+        x: 5161.03
+        y: 0.0
+        z: -5264.33
+      angle:
+        x: 21109 # Flow node id
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+        - 2
+
+# Kakariko Village Interiors
+R_SP109:
+  # Room 2 - Elde Inn
+  2:
+    # Delete 2nd Luda actor
+    - action: delete
+      name: Lud
+      parameters: 0x00FFFF07
+      position:
+        x: -1350
+        y: 0
+        z: -900
+      angle:
+        x: 0x0037
+        y: 0x18E3
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 2
+        - 3
+
+    # Delete 2nd Colin actor
+    - action: delete
+      name: Kolin
+      parameters: 0x00FFFF07
+      position:
+        x: -1150
+        y: 0
+        z: -800
+      angle:
+        x: 0x0004
+        y: 0xC38F
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 2
+        - 3
+
+  # Room 3 - Kak Malo Mart
+  3:
+    # Red Potion Shop item (left side)
+    - action: patch
+      name: TGSPITM
+      parameters: 0x01001E61
+      position:
+        x: -550
+        y: 450
+        z: -500
+      angle:
+        x: 0x014D
+        y: 0x0000
+        z: 0x74FF
+      set id: 0xFFFF
+      patch:
+        # Change this into a sold out sign until the hawkeye is available
+        parameters: 0x01FFFFFF
+        angle:
+          x: 0x014B
+          y: 0x8000
+          z: 0x0BFF
+      layers:
+        - 2
+        - 3
+
+    # Hawkeye Shop Item (left side)
+    - action: patch
+      name: TGSPITM
+      parameters: 0x0100643E
+      position:
+        x: -550
+        y: 450
+        z: -500
+      angle:
+        x: 0x0149
+        y: 0x0000
+        z: 0x3E33
+      set id: 0xFFFF
+      patch:
+        # Give the hawkeye shop item a different bought flag
+        angle:
+          z: 0x3E3D 
+      layers:
+        - 2
+        - 3
+
+    # Wooden Shield Shop Item (middle)
+    - action: patch
+      name: TGSPITM
+      parameters: 0x0200322B
+      position:
+        x: -650
+        y: 450
+        z: -500
+      angle:
+        x: 0x0143
+        y: 0x0000
+        z: 0xFFFF
+      set id: 0xFFFF
+      patch:
+        # Give the wooden shield item a different bought flag
+        angle:
+          z: 0xFF05 
+      layers:
+        - 2
+        - 3
+
+    # Red Potion Shop item (Right Side)
+    - action: patch
+      name: TGSPITM
+      parameters: 0x03001E61
+      position:
+        x: -750
+        y: 450
+        z: -500
+      angle:
+        x: 0x014D
+        y: 0x8000
+        z: 0x76FF
+      set id: 0xFFFF
+      patch:
+        # Give this item a unique flag, and make it set the
+        # flag for the right side sold out sign
+        angle:
+          z: 0x3904
+      layers:
+        - 2
+        - 3
+
+    # Right side Sold Out shop item
+    - action: patch
+      name: TGSPITM
+      parameters: 0x03FFFFFF
+      position:
+        x: -750
+        y: 450
+        z: -500
+      angle:
+        x: 0x0147
+        y: 0x8000
+        z: 0x3976
+      set id: 0xFFFF
+      patch:
+        # Give the sign a different set of flags
+        angle:
+          z: 0x04FF
+      layers:
+        - 2
+        - 3
+
+    # Left side Sold Out Sign
+    - action: patch
+      name: TGSPITM
+      parameters: 0x01FFFFFF
+      position:
+        x: -550
+        y: 450
+        z: -500
+      angle:
+        x: 0x014B
+        y: 0x8000
+        z: 0x333D
+      set id: 0xFFFF
+      patch:
+        # Change the sign to the Hylian Shield sold out sign
+        angle:
+          x: 0x0147
+          z: 0x33FF
+      layers:
+        - 2
+        - 3
+
+    # Spawn in a middle item Sold Out Sign
+    - action: add
+      name: TGSPITM
+      parameters: 0x02FFFFFF
+      position:
+        x: -650.0
+        y: 450.0
+        z: -500.0
+      angle:
+        x: 0x0147
+        y: 0x8000
+        z: 0x05FF
+      set id: 0xFFFF
+      layers:
+        - 2
+        - 3
+
+  # Room 6 - Abandoned House
+  6:
+    # Female Ant
+    - action: patch
+      name: I_Ari
+      parameters: 0x00000F10
+      position:
+        x: 225.092803955078
+        y: 16.1963920593262
+        z: -17.4444351196289
+      angle:
+        x: 0x0000
+        y: 0x8000
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Turn this bug into a htPiece actor with collectible flag 0x90
+        name: htPiece
+        parameters: 0x00FF90D5
+      layers:
+        - 0
+        - 1
+        - 2
+        - 3
+
+# Castle Town Shops
+R_SP160:
+  # Jovani's House
+  5:
+    # Spawn the poe in Jovani's House
+    - action: add
+      name: E_hp
+      parameters: 0xFF031E00
+      position:
+        x: 4531.19
+        y: -30.0
+        z: 2631.961
+      angle:
+        x: 0x0000
+        y: 0x0000
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1

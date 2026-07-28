@@ -1,0 +1,609 @@
+# Flag values taken from: https://github.com/lunarsoap5/Randomizer-Web-Generator-1/blob/development/Generator/Assets/Flags.cs
+
+EventFlags:
+  - 0x0382 # Gave wooden sword to Talo. Talked to squirrel outside link's house
+  - 0x0629 # Tame Epona, KB1 trigger activated, Warped Kakariko Bridge Back.
+  - 0x0F40 # Talked to Doctor for the first time.
+  - 0x1208 # Can use Sera's Shop.
+  - 0x1410 # Put Bo outside, ready to wrestle
+  - 0x0F01 # Got Lantern from Coro (Remove when adding Coro checks)
+  - 0x0A2F # Bridge of Eldin Stolen, KB1 defeated, KB1 started
+  - 0x0F68 # Bridge of Eldin Warped Back, forced text when entering dr. clinic, talked to dr before giving invoice
+  - 0x4088 # Saved monkey from puppets, Visited Gerudo Desert for the first time.
+  - 0x4118 # Talked to Fado after Faron and Eldin Twilight
+  - 0x07A0 # Watched Colin CS after KB1, talked to Bo before sumo
+  - 0x2020 # Master Sword Story Progression
+  - 0x2010 # Arbiters Grounds Story Progression
+  - 0x2C10 # Raised the mirror in the Mirror Chamber
+  - 0x1B38 # Skip Monkey Escort
+  - 0x1C20 # Talked to Bo after opening boots chest.
+  - 0x5F20 # Shad leaves sanctuary.
+  - 0xF701 # Add 256 Rupees to Charlo.
+  - 0xF8F4 # Add 244 Rupees to Charlo.
+  - 0x6001 # Talked to Fyer after Lanayru Twilight
+  - 0x3880 # Talked to Jovani after defeating Poe.
+  - 0x2208 # Talked to Yeto on top of the mountain after clearing SPR
+  - 0x3B40 # Won Snowboard race against Yeto.
+  - 0x2F80 # Talked to Goron outside East Castle Town
+  - 0x1C10 # Win Sumo round 1 against Bo
+  - 0x3902 # Released first caught fish in Ordon Day 2
+  - 0x1002 # Talked to Jaggle after climbing vines.
+  - 0x0B20 # Talked to Yeta in Snowpeak for the first time
+  - 0x4308 # Senses unlocked
+  - 0x4610 # Rode Epona back to Link's House
+  - 0x0C10 # Midna accompanies Wolf
+  - Skip_Prologue == On:
+    - 0x0404 # Talked to Uli Day 1.
+    - 0x4510 # Saved Talo
+    - 0x4A60 # Completed Ordon Day 1 and Finished Sword Training.
+    - 0x1601 # Completed Ordon Day 2.
+    - 0x1580 # Watched CS for Goats 2 Done.
+  - Faron_Twilight_Cleared == On:
+    - 0x057F # Midna Charge Unlocked, Finished Sewers, Met Zelda in swers, Midna cut prison chain, watched sewers intro CS, Escaped Cell in Sewers.
+    - 0x0610 # Cleared Faron Twilight
+    - 0x0C08 # Sword and shield removed from wolf's back.
+  - Eldin_Twilight_Cleared == On:
+    - 0x0708 # Cleared Eldin Twilight
+    - 0x0604 # Map Warping unlocked.
+  - Lanayru_Twilight_Cleared == On:
+    - 0x0880 # Zora's Domain Thawed.
+    - 0x0C02 # Lanayru Twilight Story Flag.
+    - 0x0A10 # Defeated Kargarok Rider at Lake (allows player to howl for Kargorok.);
+  - Skip_Minor_Cutscenes == On:
+    - 0x0140 # Talked to Yeto First Time.
+    - 0x0390 # Jaggle Calls out to Link, talked to Squirrel as Wolf in Ordon.
+    - 0x06C0 # CS After beating Ordon Shadow, CS after entering Faron Twilight.
+    - 0x0702 # First Time Talking to Gor Coron in Sumo Hall
+    - 0x1501 # Talked to Agitha for the first time.
+    - 0x2001 # Talked to Telma for the first time.
+    - 0x5E10 # Midna text after beating Forest Temple.
+    - 0x1D40 # Listened to Fyer at drained lake.
+    - 0x2201 # Plumm initial CS watched.
+    - 0x2310 # STAR initial CS watched.
+    - 0x2602 # Talked to Yeto on Snowpeak.
+    - 0x2840 # Used Ooccoo for the first time.
+    - 0x3704 # Postman twilight text.
+    - 0x3806 # Hena cabin first time CS, talked to Hena first time.
+    - 0x3A01 # Talked to Ralis in Graveyard for the first time.
+    - 0x4002 # Agreed to help Rusl after Snowpeak Ruins.
+    - 0x4205 # Watched post-ToT Ooccoo CS. Watched Cutscene with Rusl in North Faron Woods.
+    - 0x4508 # Allows postman letters to show up in inventory.
+    - 0x4A10 # Saw Talo in cage CS.
+    - 0x3E02 # City Ooccoo CS watched.
+    - 0x5940 # Met Postman for the first time.
+    - 0x5D40 # Midna text after Kargarok flight.
+    - 0x2502 # Watched cutscene with Yeto on top of mountain
+  - Faron_Woods_Logic == Open:
+    - 0x0602 # Forest Temple Story Flag
+    - 0x0C40 # Talked to Farone after clearing Forest Temple
+    - 0x5E10 # Midna text after Forest Temple completed
+  - Skip_Midna's_Desparate_Hour == On:
+    - 0x0C01 # Midna's Desperate Hour started.
+    - 0x1E08 # Midna's Deseperate Hour Completed.
+  - Small_Keys == Keysy:
+    - 0x0850 # Zora Escort started and completed.
+    - 0x0480 # Told Yeta about pumpkin.
+    - 0x0003 # Yeto put pumpkin and cheese in soup.
+    - 0x1460 # Snowpeak Ruins North and West doors unlocked.
+    - 0x0120 # Told Yeta about cheese
+  - Hyrule_Barrier_Requirements == Open:
+    - 0x4208 # Remove Castle Barrier
+  - Palace_of_Twilight_Requirements == Open:
+    - 0x2B08 # Mirror of Twilight Repaired.
+  - Goron_Mines_Entrance != Closed:
+    - 0x0706 # Talked to Gor Coron, Won Sumo against Gor Coron.
+  - Arbiters_Does_Not_Require_Bulblin_Camp == On:
+    - 0x0B40 # Escaped Burning Tent in Bulblin Camp.
+  - Snowpeak_Does_Not_Require_Reekfish_Scent == On:
+    - 0x6120 # Got the reekfish and smelled it (removes void in Snowpeak).
+  - City_Does_Not_Require_Filled_Skybook == On:
+    - 0x3B08 # Sky Cannon Repaired.
+  - Randomize_Starting_Spawn == On:
+    - 0x057A # Finished Sewers, Midna text after entering Faron Twilight, Met Zelda in sewers, Midna cut prison chain, Watched Sewers intro CS, Escaped cell in sewers.
+  - Ilia_Memory_Quest >= Letter:
+    - 0x2004 # ToT Story Progression Flag
+    - 0x0F80 # Renados Letter Check
+  - Ilia_Memory_Quest >= Statue:
+    - 0x2710 # Showed Invoice to Doctor
+    - 0x2F04 # Got Medicine Scent
+    - 0x2102 # Talked to Louise after Medicine Scent
+    - 0x2204 # Got Wooden Statue
+  - Ilia_Memory_Quest >= Charm:
+    - 0x2340 # Gave statue to Ilia
+    - 0x2E08 # HV barrier removed
+    - 0x2280 # Got Ilia's Charm
+  - Skip_Bridge_Donation == Off:
+    - 0xF901 # Add 256 Rupees to Malo Mart.
+    - 0xFAF4 # Add 244 Rupees to Malo Mart.
+
+RegionFlags:
+  Ordona Province:
+    Index: 0x00
+    Flags:
+      - 0x57 # Spider on Link's Ladder killed.
+      - 0x63 # Spawn the Chest in Link's House
+      - 0x7E # Midna jumps to Shop unlocked
+      - 0x6B # Ordon Spring Portal.
+      - 0x44 # Midna Text after Ordon Shield (Spawns sword)
+      - 0x46 # Midna Text after Ordon Sword
+      - 0x68 # Approach faron wall with Midna
+      - 0xA0 # Midna allows player to approach Faron Twilight Wall
+      - 0xBA # Explored area outside Link's house as wolf
+      - 0x61 # Defeated first bulblin outside link's house
+      - 0x62 # Defeated second bulblin outside link's house
+      - 0x60 # Defeated Hugo
+      - Skip_Minor_Cutscenes == On:
+        - 0x4A # Ordon Day 3 Intro CS.
+        - 0x4C # Knocked down Ordon bee nest CS.
+        - 0x4E # Ordon Ranch first time CS.
+        - 0x53 # Ilia spring CS watched.
+        - 0x54 # Ilia spring CS started.
+        - 0x55 # Ordon Village first time CS.
+        - 0x56 # Ilia spring CS trigger.
+        - 0x68 # Approach Faron Twilgiht with Midna CS.
+        - 0x6E # Enter shield house as wolf CS.
+        - 0x75 # Midna text after hearing Bo and Jaggle talk about the shield.
+        - 0x7C # Midna text before jumping to Ordon Shop roof.
+        - 0x7D # Rusl talking to Uli during wolf night CS.
+        - 0xB8 # Enter Ordon Village as wolf CS.
+
+  Hyrule Castle Sewers and Rooftops:
+    Index: 0x01
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x42 # Midna text after first gate in sewers.
+        - 0x43 # Midna text after exiting to rooftops.
+        - 0x51 # Zelda tower intro CS.
+        - 0x57 # Outside top door intro CS.
+        - 0x5A # Went to the otherside of the fence in sewers CS.
+        - 0x5B # Top of stairway intro CS.
+        - 0x5C # Stairway intro CS.
+        - 0x7B # Midna text when approaching the rooftop guard.
+
+  Faron Woods:
+    Index: 0x02
+    Flags:
+      - 0x63 # Trill lets you shop at his store.
+      - 0x48 # Talked to Coro after bugs
+      - 0x60 # Got Lantern Back from Monkey
+      - 0x61 # Saw bugs move in Coro's house
+      - 0x7D # Talked to Midna about Coro spirit
+      - 0x4E # Saved Monkey from Puppets.
+      - 0x62 # Midna text before jumping to lost woods
+      - 0x95 # Midna text after warping to North Faron for bridge.
+      - 0xBF # Burned First cobweb in faron cave
+      - 0xBE # Burned second cobweb in faron cave
+      - Skip_Prologue == On:
+        - 0x4B # North Faron Gate Unlocked
+      - Skip_Minor_Cutscenes == On:
+        - 0x74 # Faron intro CS.
+        - 0x77 # See Faron Light Spirit from afar CS.
+        - 0x7C # Entered mist area as human.
+      - Faron_Twilight_Cleared == On:
+        - 0x46 # Midna jump 1 mist area.
+        - 0x47 # Midna jump 1 mist area.
+        - 0x98 # South Faron Portal.
+      # Re-enable once key situation is sorted out
+      # - Small_Keys == Keysy:
+        # - 0x53 # Coro gate unlocked.
+        # - 0x4B # North Faron Gate Unlocked.
+
+  Kakariko and Death Mountain:
+    Index: 0x03
+    Flags:
+      - 0xB9 # Barnes sells water bombs.
+      - 0xB3 # Colin Rescued CS (Malo Mart is Open).
+      - 0xA4 # Barnes Sells Bombs.
+      - 0x42 # Big Rock fell at DMT
+      - 0xA7 # Unlock Jumps to top of Sanctuary
+      - 0x9A # Kakariko Village intro CS.
+      - 0x54 # Custom flag. Sets the sign in Kak Malo mart slot 1 to appear.
+      - 0x99 # Remove wooden shield from Kak Malo Mart counter.
+      - Skip_Minor_Cutscenes == On:
+        - 0x49 # Death mountain intro CS.
+        - 0x83 # Kakariko Graveyard intro CS.
+        - 0x8C # Midna text after Meteor fell.
+      - Eldin_Twilight_Cleared == On:
+        - 0x14 # Collected Tear From Bomb Storage
+        - 0x1A # Collected Tear From Bomb Storage
+        - 0x1B # Collected Tear From Bomb Storage
+        - 0x67 # Ant house entered from top
+        - 0x64 # Ant house box pushed
+        - 0x5E # Defeated Ant house Tears of Light bug
+        - 0x1E # Collected Tear from Ant house
+        - 0xBD # Done Midna jumps in ant house.
+      - Small_Keys == Keysy:
+        - 0xBA # Followed Rutella to graveyard.
+        - 0xB6 # Started Rutella escort.
+      - Goron_Mines_Entrance == Open:
+        - 0x79 # moved death mountain rock to exit
+        - 0x8F # moved death mountain rock to hot spring water
+        - 0xB0 # Goron lets you enter elevator in sumo hall
+      - Ilia_Memory_Quest >= Charm:
+        - 0x70 # Darbus destroyed HV rocks
+
+  Lake Hylia and Zoras Domain:
+    Index: 0x04
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x58 # Talked to Rutella in Lanayru Twilight.
+        - 0x5F # Zora's domain intro CS twilight.
+        - 0x67 # Midna text after jumping to Lake from burning bridge.
+        - 0x6B # Zora's Domain exit flood water cutscene.
+        - 0x72 # Midna text after arriving at frozen Upper Zora River.
+        - 0x91 # Midna text after frozen Zora Domain intro CS.
+        - 0xB0 # Watched CS of Ooccoo running to Sky Cannon.
+      - Lanayru_Twilight_Cleared == On:
+        - 0x7F # Lake Hylia has water on Lake Hylia Map.
+      - Skip_Midna's_Desparate_Hour == On:
+        - 0x51 # Set flag for MDH Cutscene in Lake Hylia
+      - Lakebed_Does_Not_Require_Water_Bombs == On:
+        - 0x70 # Blew up rock in front of lakebed CS.
+        - 0x78 # Blew up rock in front of lakebed.
+  
+  # Not sure what Index 5 is
+
+  Hyrule Field:
+    Index: 0x06
+    Flags:
+      - 0x4C # Bridge of Eldin Warped back CS.
+      - 0x7E # Kakariko Gorge placed CS
+      - 0x83 # Set the flag for the Ganon Barriers in Hyrule Field during Eldin Twilight.
+      - Skip_Minor_Cutscenes == On:
+        - 0x68 # Midna text after warping Gorge bridge.
+        - 0x7C # Midna text after Lanayru Field twilight CS.
+        - 0x72 # Faron Field intro CS.
+        - 0x40 # Twilight Lanayru Field intro CS.
+        - 0x4F # Cutscene of gate outside Kakariko Village.
+        - 0xB3 # Midna text after entering Lanayru Twilight.
+        - 0xB4 # Midna text when seeing Lanayru Twilight from far away.
+        - 0xB6 # Midna text after entering Eldin Twilight.
+        - 0xB7 # Midna text when seeing Eldin Twilight from far away.
+      - Lanayru_Twilight_Cleared == On:
+        - 0x58 # Lake Hylia has water on Hyrule Field Map
+      - Ilia_Memory_Quest >= Charm:
+        - 0x43 # Remove HV rocks from Hyrule field
+
+  Lost Woods and Sacred Grove:
+    Index: 0x07
+    Flags:
+      - 0x58 # Sacred Grove MS Pedestal Map
+      - Skip_Minor_Cutscenes == On:
+        - 0x42 # Midna text after pushing block shortcut as human after Grove 2.
+        - 0x43 # cs after pushing block human
+        - 0x44 # Lost Woods intro CS.
+      - Temple_of_Time_Sword_Requirement == None:
+        - 0x49 # Stairs to Temple of time created.
+        - 0x4A # Struck master sword pedestal with sword.
+        - 0x4B # Stairs and window appear and work properly (Past).
+        - 0xBC # Statue in present is gone. (custom flag)
+      - Sacred_Grove_Does_Not_Require_Skull_Kid == On:
+        - 0xB6 # Skull Kid - Human defeated.
+        - 0xB7 # Lost Woods Turns to day after defeating Skull Kid - Human
+        - 0x5B # Block pushed down
+        - 0x42 # Midna text after block pushed down
+        - 0x43 # cs after pushing block human
+
+
+  Snowpeak Province:
+    Index: 0x08
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x45 # Snowpeak Summit intro CS.
+        - 0x5E # Midna text outside SPR.
+        - 0x5F # Snowpeak intro CS.
+      - Snowpeak_Does_Not_Require_Reekfish_Scent == On:
+        - 0x49 # Snowpeak summit cs.
+        - 0x45 # Snowpeak Summit intro CS.
+
+  Castle Town:
+    Index: 0x09
+    Flags:
+      - 0x40 # Original Jovani Poe killed. It is replaced with a custom actor.
+      - 0x76 # Jovani Chest CS 2
+      - 0x7F # Open Chest to Jovani
+      - 0x7E # Jovani Chest CS
+      - 0x50 # Set flag for Midna breaking Barrier CS.
+      - 0xBC # Spawn Gengle by default as his actor interferes with the poe soul
+      - Skip_Minor_Cutscenes == On:
+        - 0x55 # STAR Tent intro CS.
+        - 0x7D # Jovani House intro CS.
+      - Ilia_Memory_Quest >= Statue:
+        - 0x56 # Remove invisible wall from Doctor
+
+  Gerudo Desert:
+    Index: 0x0A
+    Flags:
+      - 0x99 # Desert Entrance CS.
+      - 0x20 # Set Freestanding key flag.
+      - 0x7F # Mirror Raised Cutscene Flag (Places Boar at desert entrance)
+      - Skip_Minor_Cutscenes == On:
+        - 0x53 # Mirror Chamber Intro CS.
+      - Arbiters_Does_Not_Require_Bulblin_Camp == On:
+        - 0x43 # Explored part 9 of the Bulblin camp area
+        - 0x44 # Explored part 8 of the Bulblin camp area
+        - 0x45 # Explored part 7 of the Bulblin camp area
+        - 0x46 # Explored part 6 of the Bulblin camp area
+        - 0x47 # Explored part 5 of the Bulblin camp area
+        - 0x4C # Explored part 2 of the Bulblin camp area
+        - 0x4D # Explored part 4 of the Bulblin camp area
+        - 0x4E # Explored part 3 of the Bulblin camp area
+
+  Forest Temple:
+    Index: 0x10
+    Flags:
+      - 0x49 # FT Ook Bridge Destroyed
+      - Skip_Minor_Cutscenes == On:
+        - 0x41 # Midna text after getting Boomerang.
+        - 0x42 # Midna text after Ook breaks the bridge.
+        - 0x47 # Midna text after freeing first monkey.
+        - 0x49 # Bridge before Ook broken.
+        - 0x56 # Bokoblins spot Link in windless bridge room.
+        - 0x57 # Turned bridge in windless bridge room.
+        - 0x72 # West Tile Worm room intro CS.
+        - 0x76 # Second monkey room intro CS.
+        - 0x7C # Big Baba room intro CS.
+        - 0x7D # Midna text in room before boss room.
+        - 0x7E # Midna text after saving monkey after defeating Ook.
+        - 0x85 # Midna text after opening hanging chest.
+        - 0x83 # East outside room intro CS.
+        - 0xB6 # Forest Temple intro CS.
+      - Small_Keys == Keysy:
+        - 0x54 # Unlocked door to Second Monkey.
+        - 0x58 # Unlock windless bridge east door.
+        - 0x61 # Opened big baba monkey cage.
+        - 0x74 # Opened tile worm monkey cage.
+      - Big_Keys == Keysy:
+        - 0x48 # Unlocked Forest Temple Boss Door.
+        - 0xED # Got Forest Temple Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Forest Temple Compass.
+        - 0xEF # Got Forest Temple Dungeon Map.
+
+  Goron Mines:
+    Index: 0x11
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x43 # Cut rope of door in outside room CS.
+        - 0x44 # Pressed second button of the main magnet room of the second floor CS trigger.
+        - 0x45 # Pressed third button in entrance room CS.
+        - 0x46 # Pressed second button in entrance room CS.
+        - 0x47 # Cut rope of door in Toadpoli room CS.
+        - 0x4A # Pressed first button of the main magnet room on the second floor CS.
+        - 0x68 # Pressed outside magnet switch for first time CS.
+        - 0x72 # Main magnet room intro CS.
+        - 0x73 # Main magnet room intro CS trigger.
+        - 0x7A # Outside room intro CS.
+        - 0x80 # Room after Bow chest intro CS.
+        - 0x81 # Pulled Beamos in outside room CS.
+        - 0x84 # Open gate in Toadpoli room CS.
+        - 0x85 # Pressed second button in Toadpoli room CS.
+        - 0x88 # Magnet maze room intro CS.
+        - 0x8A # Goron Mines intro CS.
+        - 0x8B # Pressed first button in entrance room CS.
+        - 0x8C # Open gate in entrance room CS.
+        - 0xBC # Main magnet room second floor intro CS.
+        - 0xBD # Main magnet room second floor intro CS trigger.
+        - 0xBE # Hit crystal switch in room after bow chest CS.
+        - 0xBF # Room after Bow chest intro CS trigger.
+      - Small_Keys == Keysy:
+        - 0x60 # Unlock north door in toadpoli room.
+        - 0x62 # Unlock west locked door in main magnet room.
+        - 0x6C # Unlock east outside door.
+      - Big_Keys == Keysy:
+        - 0x48 # Unlocked Goron Mines Boss Door.
+        - 0xED # Got Goron Mines Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Goron Mines Compass.
+        - 0xEF # Got Goron Mines Dungeon Map.
+      - Active_Goron_Mines_Magnets == On:
+        - 0xBB # activated magnet from water before first elder
+        - 0x8F # activated ceiling maze magnet after first elder
+        - 0x5B # activated main magnet room 1st magnet
+        - 0x4A # watched main magnet room 1st magnet cs
+        - 0x61 # activated main magnet room 2nd magnet
+        - 0x44 # watched main magnet room 2nd magnet cs
+        - 0x9E # crystal switch room 1st Iron Boots switch pressed
+        - 0x83 # crystal switch room 1st Iron Boots switch cs shown
+        - 0x82 # crystal switch room 1st magnet active
+        - 0x9F # crystal switch room 2nd Iron Boots switch pressed
+        - 0x85 # crystal switch room 2nd Iron Boots switch cs shown
+        - 0x86 # crystal switch room 2nd magnet active
+        - 0x54 # activated outside room magnet
+        - 0x68 # watched outside room magnet cs
+        - 0x8d # activated east wing dodongo room magnet
+        # Note: the final magnet is not activated because there is a
+        # softlock when you exit the main magnet room through the top door
+        # as wolf while the gate beyond the door in the Dodongo room is not
+        # open. Alternatively if we do open this gate, it leads to much
+        # more complicated logic and some jank where you can walk through
+        # Dangoro while he sits there (and the gate covering the door
+        # animation is also a bit jank). Also you can die during the
+        # Dangoro fight to appear on the north side of his arena. There are
+        # too many nuances for it to be reasonable for glitchless logic,
+        # and also every small key door would require 3 keys.
+
+  Lakebed Temple:
+    Index: 0x12
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x46 # Midna Stalactite text in second room.
+        - 0x7E # Horizontal wheel is turning in east room CS.
+        - 0x7F # Horizontal wheel is turning in east room CS trigger.
+        - 0xA5 # Central room intro CS.
+        - 0xA6 # South bridge to main room intro CS.
+        - 0xA7 # Lakebed Temple intro CS.
+        - 0xAA # Rotate staircase main room CS.
+        - 0xB4 # East water supply Chu Worm CS.
+      - Small_Keys == Keysy:
+        - 0x6B # Unlock east door main room 2F.
+        - 0x7B # Unlocked door in second east room 2F.
+        - 0x7C # Unlocked door before Deku Toad.
+      - Big_Keys == Keysy:
+        - 0x8A # Unlocked Lakebed Temple Boss Door.
+        - 0xED # Got Lakebed Temple Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Lakebed Temple Compass.
+        - 0xEF # Got Lakebed Temple Dungeon Map.
+
+  Arbiters Grounds:
+    Index: 0x13
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x5A # Turn walls in third room Basement second floor CS.
+        - 0x73 # Arbiters Grounds intro CS.
+        - 0x94 # Risen tracks on pilar before boss CS.
+      - Small_Keys == Keysy:
+        - 0x78 # Unlocked door in second east room 2F.
+        - 0x84 # Unlocked door in elevator room 2B.
+        - 0x85 # Unlocked door in first room.
+        - 0x92 # Unlocked door in first east room 1F.
+        - 0x99 # Unlocked door in fourth east room.
+      - Big_Keys == Keysy:
+        - 0x47 # Unlocked Arbiter's Grounds Boss Door.
+        - 0xED # Got Arbiter's Grounds Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Arbiter's Grounds Compass.
+        - 0xEF # Got Arbiter's Grounds Dungeon Map.
+
+  Snowpeak Ruins:
+    Index: 0x14
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x83 # First Floor Northwest room intro CS.
+        - 0xA1 # Midna text after finding Bedroom Key.
+        - 0xA7 # Snowpeak Ruins intro CS.
+        - 0xAA # Freezard in cage CS.
+        - 0xAC # Courtyard intro CS.
+        - 0xAE # Pumpkin room intro CS.
+        - 0xB2 # Midna text after getting Cheese.
+        - 0xB4 # Midna text after getting Pumpkin.
+      - Small_Keys == Keysy:
+        - 0x4D # Unlock North lobby door.
+        - 0x4C # Unlock West lobby door.
+        - 0x6F # Unlock door in southeast room 2F.
+        - 0x73 # Unlock door in east outside hallway.
+        - 0x74 # Unlock west door in courtyard.
+        - 0x70 # Unlock door to lobby from Freezard room.
+      - Big_Keys == Keysy:
+        - 0x57 # Unlocked Snowpeak Ruins Boss Door.
+        - 0xED # Got Snowpeak Ruins Big Key.
+        - 0x56 # Watched CS of Yeta entering boss room.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Snowpeak Ruins Compass.
+        - 0xEF # Got Snowpeak Ruins Dungeon Map.
+
+  Temple of Time:
+    Index: 0x15
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x40 # Midna text telling you to use your senses on the missing statue.
+        - 0x41 # Midna text after using senses on missing statue.
+        - 0x4A # Temple of Time intro CS.
+        - 0x4B # Scales of Time room intro CS.
+        - 0x4C # CS after changing the balance on the scales for the first time.
+        - 0x4D # CS trigger after changing the balance on the scales for the first time.
+        - 0x90 # Pressed button in room 1 for the first time CS.
+        - 0x91 # Pressed the button on the seventh floor for the first time CS.
+        - 0x94 # Pressed the button on the fifth floor for the first time CS.
+        - 0x95 # Pressed buttons on third floor for the first time CS.
+        - 0x96 # Pressed the button on the second floor for the first time CS.
+        - 0x54 # statue getting possessed for the first time cs
+      - Small_Keys == Keysy:
+        - 0x44 # Unlock door in room 1.
+        - 0x42 # Unlock door in room 6 on 8F.
+        - 0x43 # Unlock door in 5F.
+      - Big_Keys == Keysy:
+        - 0x7F # Unlocked Temple of Time Boss Door.
+        - 0xED # Got Temple of Time Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Temple of Time Compass.
+        - 0xEF # Got Temple of Time Dungeon Map.
+      - Open_Door_of_Time == On:
+        - 0x59 # deactivate statue slot in room 1 (opens door and deactivates statue)
+        - 0x80 # open big door in room 1 cs part 2
+        - 0x81 # open big door in room 1 cs part 1
+        - 0xBC # big door in room 1 opens
+        - 0xBE # open big door in room 1 cs part 1 trigger
+        - 0xBD # open big door in room 1 cs part 2 trigger
+        - 0xBF # statue placed in slot in room 1
+
+  City in the Sky:
+    Index: 0x16
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x64 # North wing main room intro CS.
+        - 0x65 # East wing fan room second floor intro CS.
+        - 0x66 # Went beyond first gate outside shop intro CS.
+        - 0x67 # City in The Sky intro CS.
+        - 0x6E # East bridge extended CS.
+      - Small_Keys == Keysy:
+        - 0x59 # Unlock east bridge door.
+      - Big_Keys == Keysy:
+        - 0x58 # Unlocked City in The Sky Boss Door.
+        - 0xED # Got City in The Sky Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got City in The Sky Compass.
+        - 0xEF # Got City in The Sky Dungeon Map.
+
+  Palace of Twilight:
+    Index: 0x17
+    Flags:
+      - Skip_Minor_Cutscenes == On:
+        - 0x4D # Phantom Zant 1 CS.
+        - 0x66 # Midna text when west hand steals sol.
+        - 0x6F # Midna text about black fog in west room.
+        - 0x70 # Midna text after finding west sol.
+        - 0x72 # Midna text trigger when seeing a Twili for the first time.
+        - 0x78 # Midna text when seeing a Twili for the first time.
+        - 0x79 # Midna text after Light Sword cutscene.
+        - 0x95 # Midna text after re-entering west wing after sol was stolen.
+        - 0x9E # Midna text at dungeon entrance.
+        - 0xB3 # Watched east wing second room stairs CS.
+      - Small_Keys == Keysy:
+        - 0x57 # Unlock door in north room 3.
+        - 0x58 # Unlock door in east room 2.
+        - 0x59 # Unlock door in west room 2.
+        - 0x6C # Unlock door in north room 2.
+        - 0x7A # Unlock door in norht room 1.
+        - 0x7B # Unlock door in east room 1.
+        - 0x7C # Unlock door in west room 1.
+      - Big_Keys == Keysy:
+        - 0x56 # Unlocked Palace of Twilight Boss Door.
+        - 0xED # Got Palace of Twilight Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Palace of Twilight Compass.
+        - 0xEF # Got Palace of Twilight Dungeon Map.
+
+  Hyrule Castle:
+    Index: 0x18
+    Flags:
+      - 0x4B # Watched CS with Allies in HC.
+      - Skip_Minor_Cutscenes == On:
+        - 0x4F # Hyrule Castle Graveyard intro CS.
+        - 0x8C # East garden intro CS.
+        - 0x8D # East garden intro CS trigger.
+        - 0x77 # Midna text at the east end of the east garden.
+        - 0x82 # South garden intro CS.
+        - 0x99 # Double Darknut room intro CS
+        - 0xA4 # Midna text after Owl Statue chest in graveyard.
+        - 0xB7 # Lit southeast torch in second floor north room for the first time CS.
+        - 0xB8 # Lit northeast torch in second floor north room for the first time CS.
+      - Small_Keys == Keysy:
+        - 0x93 # Unlock door outside 3F.
+        - 0xB0 # Unlock treasure room door.
+        - 0xA3 # Unlock door in south garden.
+      - Big_Keys == Keysy and Hyrule_Castle_Big_Key_Requirements == None:
+        - 0xA1 # Unlocked Hyrule Castle Boss Door.
+        - 0xED # Got Hyrule Castle Big Key.
+      - Maps_and_Compasses == Start_With:
+        - 0xEE # Got Hyrule Castle Compass.
+        - 0xEF # Got Hyrule Castle Dungeon Map.
+      - Lower_Hyrule_Castle_Chandelier == On:
+        - 0x6F # watched double Dinalfos cs 1
+        - 0x70 # watched double Dinalfos cs 2
+        - 0x85 # watched focus on lowered chandelier cs
+        - 0x9D # lower the main hall chandelier
+        - 0xAF # defeated double Dinalfos (opens gates both sides)
+      - Hyrule_Castle_Big_Key_Requirements == None:
+        - 0x94 # Open HC BK gate

@@ -1,0 +1,277 @@
+
+# FOREST TEMPLE ENTRANCE ROOM
+
+- Name: Forest Temple Entrance
+  Region: Forest Temple
+  Dungeon Start Area: True
+  Events: 
+    Can Free Monkey in Entrance Room: Can_Break_Monkey_Cage
+  Locations:
+    Forest Temple Entrance Vines Chest: Can_Defeat_Walltula or Clawshot
+  Exits:
+    Forest Temple Entrance Ledge Above Monkey Cage: Can_Defeat_Walltula and Can_Defeat_Bokoblin and Can_Break_Monkey_Cage and Can_Climb_Vines
+    North Faron Woods: Nothing
+
+- Name: Forest Temple Entrance Ledge Above Monkey Cage
+  Region: Forest Temple
+  Exits:
+    Forest Temple Lobby: Nothing
+    Forest Temple Entrance: Nothing
+
+# FOREST TEMPLE LOBBY
+
+- Name: Forest Temple Lobby
+  Region: Forest Temple
+  Locations:
+    Forest Temple Central Chest Behind Stairs: Gale_Boomerang # Incase the player blocks it by lighting the torches
+    Forest Temple Central Chest Hanging From Web: Can_Cut_Hanging_Web
+  Exits:
+    Forest Temple Lobby North Ledge: Can_Light_Torches
+    Forest Temple Lobby West Ledge: Clawshot or (Can_Swing_on_Monkeys and 'Can_Free_Monkey_on_Totem')
+    Forest Temple East Water Room Near Lobby: Can_Swing_on_Monkeys and 'Can_Free_Monkey_in_Entrance_Room'
+    Forest Temple Entrance Ledge Above Monkey Cage: Nothing
+
+- Name: Forest Temple Lobby North Ledge
+  Region: Forest Temple
+  Locations:
+    Forest Temple Central North Chest: Nothing
+  Exits:
+    Forest Temple Outside Center South Ledge: Nothing
+    Forest Temple Lobby: Nothing
+
+- Name: Forest Temple Lobby West Ledge
+  Region: Forest Temple
+  Locations:
+    Forest Temple Hint Sign: Nothing
+  Exits:
+    Forest Temple Lobby West Ledge Behind Web: Can_Break_Webs
+    Forest Temple Lobby: Nothing
+
+- Name: Forest Temple Lobby West Ledge Behind Web
+  Region: Forest Temple
+  Exits:
+    Forest Temple West Main Room: Nothing
+    Forest Temple Lobby West Ledge: Can_Break_Webs
+
+# FOREST TEMPLE WEST MAIN ROOM
+
+- Name: Forest Temple West Main Room
+  Region: Forest Temple
+  Locations:
+    Forest Temple West Deku Like Chest: Can_Defeat_Walltula
+  Exits:
+    Forest Temple West Main Room Ledge near Big Baba Room: Can_Defeat_Walltula
+    Forest Temple West Main Room Behind Boulder: Can_Pickup_Bomblings
+    Forest Temple West Main Room Ledge near Outside: Can_Climb_Vines
+    
+- Name: Forest Temple West Main Room Ledge near Big Baba Room
+  Region: Forest Temple
+  Exits:
+    Forest Temple Big Baba Room: Nothing
+    Forest Temple West Main Room: Nothing
+
+- Name: Forest Temple West Main Room Behind Boulder
+  Region: Forest Temple
+  Exits:
+    Forest Temple West Tileworm Room: Nothing
+    Forest Temple West Main Room: Can_Smash
+
+- Name: Forest Temple West Main Room Ledge near Outside
+  Region: Forest Temple
+  Exits:
+    Forest Temple Outside West Ledge: Nothing
+    Forest Temple West Main Room: Nothing
+
+# FOREST TEMPLE BIG BABA ROOM
+
+- Name: Forest Temple Big Baba Room
+  Region: Forest Temple
+  Events:
+    Can Free Monkey in Big Baba Room: count(Forest_Temple_Small_Key, 4) or Small_Keys == Keysy
+  Locations:
+    Forest Temple Big Baba Key: Can_Defeat_Big_Baba
+  Exits:
+    Forest Temple West Main Room Ledge near Big Baba Room: Nothing
+
+# FOREST TEMPLE WEST TILEWORM ROOM
+- Name: Forest Temple West Tileworm Room
+  Region: Forest Temple
+  Events:
+    Can Free Monkey in West Tileworm Room: Can_Light_Torches and (count(Forest_Temple_Small_Key, 4) or Small_Keys == Keysy)
+  Locations:
+    Forest Temple Totem Pole Chest: Can_Survive_One_Bonk
+    Forest Temple West Tile Worm Room Vines Chest: Nothing
+    Forest Temple West Tile Worm Chest Behind Stairs: Gale_Boomerang
+  Exits:
+    Forest Temple West Main Room Behind Boulder: Nothing
+
+# FOREST TEMPLE OUTSIDE WEST AND CENTER AREA
+
+- Name: Forest Temple Outside Center South Ledge
+  Region: Forest Temple
+  Exits:
+    Forest Temple Outside Center North Ledge: Can_Swing_on_Monkeys and 'Can_Free_Monkey_on_Totem' and 
+                                              'Can_Free_Monkey_in_Big_Baba_Room' and 'Can_Free_Monkey_in_West_Tileworm_Room'
+    Forest Temple Lobby North Ledge: Nothing
+
+- Name: Forest Temple Outside West Ledge
+  Region: Forest Temple
+  Exits:
+    Forest Temple Outside Center North Ledge: Gale_Boomerang
+    Forest Temple West Main Room Ledge near Outside: Nothing
+
+- Name: Forest Temple Outside Center North Ledge
+  Region: Forest Temple
+  Events:
+    Can Free Outside Monkey: Gale_Boomerang
+  Exits:
+    Ook Miniboss Room: Nothing
+    Forest Temple Outside West Ledge: Gale_Boomerang
+
+# OOK MINIBOSS ROOM
+
+- Name: Ook Miniboss Room
+  Locations:
+    Forest Temple Gale Boomerang: Can_Defeat_Ook
+  Exits:
+    Forest Temple Outside Center North Ledge: Gale_Boomerang
+
+# FOREST TEMPLE EAST WATER ROOM
+
+- Name: Forest Temple East Water Room Near Lobby
+  Region: Forest Temple
+  Exits:
+    Forest Temple East Water Room: Can_Pickup_Bomblings # Can burn the web with the bombling
+    Forest Temple Lobby: Nothing
+
+- Name: Forest Temple East Water Room
+  Region: Forest Temple
+  Locations:
+    Forest Temple Big Key Chest: Gale_Boomerang
+    Forest Temple East Water Cave Chest: Nothing
+  Exits:
+    Forest Temple Second Monkey Outside Room: count(Forest_Temple_Small_Key, 4) or Small_Keys == Keysy
+    Forest Temple Outside East: Nothing
+    Forest Temple East Water Room Near Lobby: Can_Break_Webs
+
+# FOREST TEMPLE SECOND MONKEY OUTSIDE ROOM
+
+- Name: Forest Temple Second Monkey Outside Room
+  Region: Forest Temple
+  Events:
+    Can Free Monkey on Totem: Can_Survive_Three_Bonks and Can_Defeat_Bokoblin
+  Locations:
+    Forest Temple Second Monkey Under Bridge Chest: Nothing
+  Exits:
+    Forest Temple East Water Room: count(Forest_Temple_Small_Key, 4) or Small_Keys == Keysy
+
+# FOREST TEMPLE OUTSIDE EAST
+
+- Name: Forest Temple Outside East
+  Region: Forest Temple
+  Exits:
+    Forest Temple North Cross Room South Side: Nothing
+    Forest Temple East Water Room: Nothing
+
+# FOREST TEMPLE NORTH CROSS ROOM
+
+- Name: Forest Temple North Cross Room South Side
+  Region: Forest Temple
+  Locations:
+    Forest Temple Windless Bridge Chest: Nothing
+  Exits:
+    Forest Temple North Cross Room East Side: Gale_Boomerang
+    Forest Temple North Cross Room West Side: Gale_Boomerang
+    Forest Temple North Cross Room North Side: Gale_Boomerang
+    Forest Temple Outside East: Nothing
+
+- Name: Forest Temple North Cross Room East Side
+  Region: Forest Temple
+  Exits:
+    Forest Temple East Tileworm Room: count(Forest_Temple_Small_Key, 4) or Small_Keys == Keysy
+    Forest Temple North Cross Room South Side: Gale_Boomerang
+    Forest Temple North Cross Room West Side: Nothing
+    Forest Temple North Cross Room North Side: Gale_Boomerang
+
+- Name: Forest Temple North Cross Room West Side
+  Region: Forest Temple
+  Exits:
+    Forest Temple Dark Spider Room: Nothing
+    Forest Temple North Cross Room South Side: Gale_Boomerang
+    Forest Temple North Cross Room East Side: Nothing
+    Forest Temple North Cross Room North Side: Gale_Boomerang
+
+- Name: Forest Temple North Cross Room North Side
+  Region: Forest Temple
+  Exits:
+    Forest Temple Boss Door Room South Side: Nothing
+    Forest Temple North Cross Room South Side: Gale_Boomerang
+    Forest Temple North Cross Room East Side: Gale_Boomerang
+    Forest Temple North Cross Room West Side: Gale_Boomerang
+
+# FOREST TEMPLE EAST TILEWORM ROOM
+
+- Name: Forest Temple East Tileworm Room
+  Region: Forest Temple
+  Events:
+    Can Free Monkey in East Tileworm Room: Can_Defeat_Tileworm and Can_Defeat_Skulltula and Can_Defeat_Walltula and Gale_Boomerang # or Tileworm Boost
+  Locations:
+    Forest Temple East Tile Worm Chest: Can_Defeat_Tileworm and Can_Defeat_Skulltula and Can_Defeat_Walltula and Gale_Boomerang # or Tileworm Boost
+  Exits:
+    Forest Temple North Cross Room East Side: count(Forest_Temple_Small_Key, 4) or Small_Keys == Keysy
+
+# FOREST TEMPLE DARK SPIDER ROOM
+
+- Name: Forest Temple Dark Spider Room
+  Region: Forest Temple
+  Events:
+    Can Free Monkey in Dark Spider Room: Can_Break_Webs and Can_Break_Monkey_Cage
+  Exits:
+    Forest Temple North Cross Room West Side: Nothing
+
+# FOREST TEMPLE BOSS DOOR ROOM
+
+- Name: Forest Temple Boss Door Room South Side
+  Region: Forest Temple
+  Exits:
+    Forest Temple Boss Door Room West Side: Gale_Boomerang or Clawshot
+    Forest Temple Boss Door Room North Side: Can_Swing_on_Monkeys and Can_Free_All_Monkeys_in_Forest_Temple
+
+- Name: Forest Temple Boss Door Room West Side
+  Region: Forest Temple
+  Exits:
+    Forest Temple Boss Door Room North Side: Clawshot
+    Forest Temple North Deku Like Room: Nothing
+    Forest Temple Boss Door Room South Side: Gale_Boomerang # Can do a jumpslash, but it's a bit precise
+
+- Name: Forest Temple Boss Door Room North Side
+  Region: Forest Temple
+  Events:
+    Fairy Access: Nothing
+  Exits: 
+    Forest Temple Boss Room: Forest_Temple_Big_Key or Big_Keys == Keysy
+    Forest Temple Boss Door Room South Side: Can_Swing_on_Monkeys and Can_Free_All_Monkeys_in_Forest_Temple
+    Forest Temple Boss Door Room West Side: Clawshot
+
+# FOREST TEMPLE NORTH DEKU LIKE ROOM
+
+- Name: Forest Temple North Deku Like Room
+  Region: Forest Temple
+  Events:
+    Can Free Monkey in North Deku Like Room: Gale_Boomerang
+  Locations:
+    Forest Temple North Deku Like Chest: Can_Defeat_Deku_Like or Gale_Boomerang
+  Exits:
+    Forest Temple Boss Door Room West Side: Nothing
+
+# FOREST TEMPLE BOSS ROOM
+
+- Name: Forest Temple Boss Room
+  Events:
+    Can Complete Forest Temple: Can_Defeat_Diababa
+  Locations:
+    Forest Temple Diababa Heart Container: Can_Defeat_Diababa
+    Forest Temple Dungeon Reward: Can_Defeat_Diababa
+  Exits:
+    South Faron Woods: Can_Defeat_Diababa
+    

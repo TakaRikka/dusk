@@ -1,0 +1,466 @@
+- Name: Foolish Get Item Text
+  Group: 0
+  Message Id: 120
+
+#
+#- Name: Ordon Spring Portal Get Item Text
+#  Group: 0
+#  Message Id: 121
+#
+#- Name: South Faron Portal Get Item Text
+#  Group: 0
+#  Message Id: 122
+
+- Name: Shadow Crystal Get Item Text
+  Group: 0
+  Message Id: 151
+
+- Name: Restored Dominion Rod Text
+  Group: 0
+  Message Id: 177
+
+- Name: Forest Temple Small Key Get Item Text
+  Group: 0
+  Message Id: 234
+
+- Name: Goron Mines Small Key Get Item Text
+  Group: 0
+  Message Id: 235
+
+- Name: Lakebed Temple Small Key Get Item Text
+  Group: 0
+  Message Id: 236
+
+- Name: Arbiters Grounds Small Key Get Item Text
+  Group: 0
+  Message Id: 237
+
+- Name: Snowpeak Ruins Small Key Get Item Text
+  Group: 0
+  Message Id: 238
+
+- Name: Temple of Time Small Key Get Item Text
+  Group: 0
+  Message Id: 239
+
+- Name: City in the Sky Small Key Get Item Text
+  Group: 0
+  Message Id: 240
+
+- Name: Palace of Twilight Small Key Get Item Text
+  Group: 0
+  Message Id: 241
+
+- Name: Hyrule Castle Small Key Get Item Text
+  Group: 0
+  Message Id: 242
+
+- Name: Bulblin Camp Small Key Get Item Text
+  Group: 0
+  Message Id: 243
+
+- Name: Forest Temple Big Key Get Item Text
+  Group: 0
+  Message Id: 247
+
+- Name: Lakebed Temple Big Key Get Item Text
+  Group: 0
+  Message Id: 248
+
+- Name: Arbiters Grounds Big Key Get Item Text
+  Group: 0
+  Message Id: 249
+
+- Name: Temple of Time Big Key Get Item Text
+  Group: 0
+  Message Id: 250
+
+- Name: City in the Sky Big Key Get Item Text
+  Group: 0
+  Message Id: 251
+
+- Name: Palace of Twilight Big Key Get Item Text
+  Group: 0
+  Message Id: 252
+
+- Name: Hyrule Castle Big Key Get Item Text
+  Group: 0
+  Message Id: 253
+
+- Name: Forest Temple Compass Get Item Text
+  Group: 0
+  Message Id: 254
+
+- Name: Goron Mines Compass Get Item Text
+  Group: 0
+  Message Id: 255
+
+- Name: Lakebed Temple Compass Get Item Text
+  Group: 0
+  Message Id: 256
+
+- Name: Mirror Shard 2 Get item Text
+  Group: 0
+  Message Id: 266
+
+- Name: Mirror Shard 3 Get item Text
+  Group: 0
+  Message Id: 267
+
+- Name: Mirror Shard 4 Get item Text
+  Group: 0
+  Message Id: 268
+
+- Name: Arbiters Grounds Compass Get Item Text
+  Group: 0
+  Message Id: 269
+
+- Name: Snowpeak Ruins Compass Get Item Text
+  Group: 0
+  Message Id: 270
+
+- Name: Temple of Time Compass Get Item Text
+  Group: 0
+  Message Id: 271
+
+- Name: City in the Sky Compass Get Item Text
+  Group: 0
+  Message Id: 272
+
+- Name: Palace of Twilight Compass Get Item Text
+  Group: 0
+  Message Id: 273
+
+- Name: Hyrule Castle Compass Get Item Text
+  Group: 0
+  Message Id: 274
+
+- Name: Forest Temple Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 283
+
+- Name: Goron Mines Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 284
+
+- Name: Lakebed Temple Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 285
+
+- Name: Arbiters Grounds Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 286
+
+- Name: Snowpeak Ruins Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 287
+
+- Name: Temple of Time Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 288
+
+- Name: City in the Sky Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 289
+
+- Name: Palace of Twilight Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 290
+
+- Name: Hyrule Castle Dungeon Map Get Item Text
+  Group: 0
+  Message Id: 291
+
+- Name: Fused Shadow 1 Get Item Text
+  Group: 0
+  Message Id: 317
+
+- Name: Fused Shadow 2 Get Item Text
+  Group: 0
+  Message Id: 318
+
+- Name: Fused Shadow 3 Get Item Text
+  Group: 0
+  Message Id: 319
+
+- Name: Mirror Shard 1 Get Item Text
+  Group: 0
+  Message Id: 320
+
+- Name: Poe Soul Get Item Text
+  Group: 0
+  Message Id: 325
+
+- Name: Ending Blow Get Item Text
+  Group: 0
+  Message Id: 326
+
+- Name: Shield Attack Get Item Text
+  Group: 0
+  Message Id: 327
+
+- Name: Back Slice Get Item Text
+  Group: 0
+  Message Id: 328
+
+- Name: Helm Splitter Get Item Text
+  Group: 0
+  Message Id: 329
+
+- Name: Mortal Draw Get Item Text
+  Group: 0
+  Message Id: 330
+
+- Name: Jump Strike Get Item Text
+  Group: 0
+  Message Id: 331
+
+- Name: Great Spin Get Item Text
+  Group: 0
+  Message Id: 332
+
+- Name: Partially Filled Sky Book Get Item Text
+  Group: 0
+  Message Id: 335
+
+- Name: Midna Call As Human Two Choice
+  Group: 0
+  Message Id: 2004
+
+- Name: Midna Call As Wolf Two Choice
+  Group: 0
+  Message Id: 2005
+
+- Name: Midna Call As Wolf No Shadow Crystal Two Choice
+  Group: 0
+  Message Id: 2039
+
+- Name: Midna Call As Human Three Choice
+  Group: 0
+  Message Id: 2040
+
+- Name: Midna Call As Wolf Three Choice
+  Group: 0
+  Message Id: 2041
+
+- Name: Slingshot Shop Text
+  Group: 1
+  Message Id: 7009
+
+- Name: Slingshot Shop Too Expensive Text
+  Group: 1
+  Message Id: 7014
+
+- Name: Slingshot Shop Purchase Confirmation Text
+  Group: 1
+  Message Id: 7015
+
+- Name: Slingshot Shop After Purchase Text
+  Group: 1
+  Message Id: 7016
+
+- Name: Links House Sign
+  Group: 1
+  Message Id: 9005
+
+- Name: Barnes Special Offer Text
+  Group: 2
+  Message Id: 5155
+
+- Name: Kakariko Malo Mart Wooden Shield Purchase Confirmation Text
+  Group: 2
+  Message Id: 5809
+
+- Name: Kakariko Malo Mart Wooden Shield Too Expensive Text
+  Group: 2
+  Message Id: 5810
+
+- Name: Kakariko Malo Mart Hylian Shield Purchase Confirmation Text
+  Group: 2
+  Message Id: 5813
+
+- Name: Kakariko Malo Mart Hylian Shield Too Expensive Text
+  Group: 2
+  Message Id: 5814
+
+- Name: Kakariko Malo Mart Hylian Shield After Purchase Text
+  Group: 2
+  Message Id: 5818
+
+- Name: Kakariko Malo Mart Hawkeye Purchase Confirmation Text
+  Group: 2
+  Message Id: 5820
+
+- Name: Kakariko Malo Mart Hawkeye Too Expensive Text
+  Group: 2
+  Message Id: 5821
+
+- Name: Kakariko Malo Mart Hawkeye After Purchase Text
+  Group: 2
+  Message Id: 5822
+
+- Name: Kakariko Malo Mart Red Potion Too Expensive Text
+  Group: 2
+  Message Id: 5824
+
+- Name: Kakariko Malo Mart Red Potion Purchase Confirmation Text
+  Group: 2
+  Message Id: 5825
+
+- Name: Kakariko Malo Mart Red Potion Text
+  Group: 2
+  Message Id: 5990
+
+- Name: Kakariko Malo Mart Hawkeye Coming Soon Text
+  Group: 2
+  Message Id: 5991
+
+- Name: Kakariko Malo Mart Hawkeye Text
+  Group: 2
+  Message Id: 5992
+
+- Name: Kakariko Malo Mart Sold Out Text
+  Group: 2
+  Message Id: 5996
+
+- Name: Kakariko Malo Mart Wooden Shield Text
+  Group: 2
+  Message Id: 5998
+
+- Name: Kakariko Malo Mart Hylian Shield Text
+  Group: 2
+  Message Id: 5999
+
+- Name: Chudleys Shop Magic Armor Text
+  Group: 4
+  Message Id: 5413
+
+- Name: Castle Town Malo Mart Magic Armor After Purchase Text
+  Group: 4
+  Message Id: 5433
+
+- Name: Castle Town Malo Mart Magic Armor Text
+  Group: 4
+  Message Id: 5440
+
+- Name: Castle Town Malo Mart Magic Armor Sold Out Text
+  Group: 4
+  Message Id: 5451
+
+- Name: Charlo Donation Ask Text
+  Group: 4
+  Message Id: 6402
+
+- Name: Charlo Donation Choice Text
+  Group: 4
+  Message Id: 6403
+
+- Name: Coro Bottle Offer 1 Text
+  Group: 6
+  Message Id: 5216
+
+- Name: Coro Bottle Offer 2 Text
+  Group: 6
+  Message Id: 5223
+
+- Name: Coro Bottle Offer 3 Text
+  Group: 6
+  Message Id: 5237
+
+- Name: Coro Bottle Offer 4 Text
+  Group: 6
+  Message Id: 5253
+
+- Name: Fishing Hole Sign Text
+  Group: 7
+  Message Id: 9502
+
+# Completely Custom Text IDs
+- Name: Custom Midna Call Need Something Text
+  Attributes: 0x07F60000150D0000FF00000000000400
+
+- Name: Custom Midna Call 3 Choice Text
+  Attributes: 0x07F8000015000000FF00000000000400
+
+- Name: Custom Midna Call 2 Choice Text
+  Attributes: 0x07F8000015000000FF00000000000400
+
+- Name: Custom Midna Call Hints Text
+  Attributes: 0x07F60000150D0000FF00000000000400
+
+- Name: Return to Spawn Dungeon Intro Text
+  Attributes: 0x07F60000150D0000FF00000000000400
+
+- Name: Return to Spawn Dungeon Choice Text
+  Attributes: 0x07F60000150D0000FF00000000000400
+
+- Name: Return to Spawn Dungeon No Choice Text
+  Attributes: 0x07F60000150D0000FF00000000000400
+
+- Name: Ordon Hint Sign Text
+
+- Name: South Faron Woods Hint Sign Text
+
+- Name: Sacred Grove Hint Sign Text
+
+- Name: Faron Field Hint Sign Text
+
+- Name: Kakariko Gorge Hint Sign Text
+
+- Name: Kakariko Village Hint Sign Text
+
+- Name: Kakariko Graveyard Hint Sign Text
+
+- Name: Eldin Field Hint Sign Text
+
+- Name: North Eldin Field Hint Sign Text
+
+- Name: Hidden Village Hint Sign Text
+
+- Name: Lanayru Field Hint Sign Text
+
+- Name: Beside Castle Town Hint Sign Text
+
+- Name: Castle Town Center Hint Sign Text
+
+- Name: Outside South Castle Town Hint Sign Text
+
+- Name: Lake Hylia Bridge Hint Sign Text
+
+- Name: Lake Hylia Hint Sign Text
+
+- Name: Lanayru Spring Hint Sign Text
+
+- Name: Lake Lantern Cave Hint Sign Text
+
+- Name: Fishing Hole Hint Sign Text
+
+- Name: Zoras Domain Hint Sign Text
+
+- Name: Snowpeak Hint Sign Text
+
+- Name: Gerudo Desert Hint Sign Text
+
+- Name: Bulblin Camp Hint Sign Text
+
+- Name: Forest Temple Hint Sign Text
+
+- Name: Goron Mines Hint Sign Text
+
+- Name: Lakebed Temple Hint Sign Text
+
+- Name: Arbiters Grounds Hint Sign Text
+
+- Name: Snowpeak Ruins Hint Sign Text
+
+- Name: Temple of Time First Hint Sign Text
+
+- Name: Temple of Time Second Hint Sign Text
+
+- Name: City in the Sky Hint Sign Text
+
+- Name: Palace of Twilight Hint Sign Text
+
+- Name: Hyrule Castle Hint Sign Text
+
+- Name: Cave of Ordeals Hint Sign Text

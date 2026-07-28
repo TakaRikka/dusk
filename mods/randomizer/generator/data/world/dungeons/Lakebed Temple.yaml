@@ -1,0 +1,438 @@
+
+# LAKEBED TEMPLE LOBBY
+
+- Name: Lakebed Temple Entrance
+  Region: Lakebed Temple
+  Dungeon Start Area: True
+  Exits:
+    Lakebed Temple Lobby: Zora_Armor
+    Lake Hylia Lakebed Temple Entrance: Nothing
+
+- Name: Lakebed Temple Lobby
+  Region: Lakebed Temple
+  Events:
+    Can Pull Lakebed Lobby Lever: Can_Pull_Lakebed_Levers
+  Locations:
+    Lakebed Temple Lobby Left Chest: Nothing
+    Lakebed Temple Lobby Rear Chest: Nothing
+  Exits:
+    Lakebed Temple Lobby Near Stalactite Room: "'Can_Pull_Lakebed_Lobby_Lever'"
+    Lakebed Temple Entrance: Zora_Armor
+
+- Name: Lakebed Temple Lobby Near Stalactite Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Stalactite Room Near Lobby: Nothing
+    Lakebed Temple Lobby: "'Can_Pull_Lakebed_Lobby_Lever'"
+
+# LAKEBED TEMPLE STALACTITE ROOM
+
+- Name: Lakebed Temple Stalactite Room Near Lobby
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Lobby Near Stalactite Room: Nothing
+    Lakebed Temple Stalactite Room Near Circling Current Room: Can_Launch_Bombs
+
+- Name: Lakebed Temple Stalactite Room Near Circling Current Room
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple Stalactite Room Chest: Can_Launch_Bombs
+  Exits:
+    Lakebed Temple Circling Current Room South: Nothing
+    Lakebed Temple Stalactite Room Near Lobby: Nothing
+
+# LAKEBED TEMPLE CIRCLING CURRENT ROOM
+
+- Name: Lakebed Temple Circling Current Room South
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Central Room: Can_Open_Doors
+    Lakebed Temple Stalactite Room Near Circling Current Room: Nothing
+
+- Name: Lakebed Temple Circling Current Room East Lower
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple East Waterwheel Room First Floor Near Circling Current Room: Nothing
+    Lakebed Temple Central Room: Nothing
+    
+- Name: Lakebed Temple Circling Current Room East Upper
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside East Waterwheel Room Second Floor Near Circling Current Room: Nothing
+    Lakebed Temple Central Room: Nothing
+
+- Name: Lakebed Temple Circling Current Room West Lower Near Central Room
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple Hint Sign: Nothing
+  Exits:
+    Lakebed Temple Circling Current Room West Lower Near West Waterwheel Room Lower: "'Can_Pull_East_Water_Supply_Lever' and 'Can_Turn_Lakebed_Staircase_with_Clawshot'"
+    Lakebed Temple Central Room: Nothing
+
+- Name: Lakebed Temple Circling Current Room West Lower Near West Waterwheel Room Lower
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Circling Current Room West Lower Near Central Room: "'Can_Pull_East_Water_Supply_Lever' and 'Can_Turn_Lakebed_Staircase_with_Clawshot'"
+    Lakebed Temple West Waterwheel Room Lower: Nothing
+
+- Name: Lakebed Temple Circling Current Room West Upper Near Central Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Circling Current Room West Upper Near West Waterwheel Room Upper: "'Can_Pull_West_Water_Supply_Lever'"
+    Lakebed Temple Central Room: Nothing
+
+- Name: Lakebed Temple Circling Current Room West Upper Near West Waterwheel Room Upper
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Circling Current Room West Upper Near Central Room: "'Can_Pull_West_Water_Supply_Lever'"
+    Lakebed Temple Outside West Waterwheel Room Upper Near Circling Current Room: Nothing
+
+# LAKEBED TEMPLE CENTRAL ROOM
+
+# We're just going to assume that you need to be human for everything in this room
+# because I don't feel like splitting this room up into 5 different sections to account
+# for two edge cases as wolf link that aren't going to be relevant any time soon
+- Name: Lakebed Temple Central Room
+  Region: Lakebed Temple
+  Events:
+    Can Turn Lakebed Staircase: Human_Link
+    Can Turn Lakebed Staircase with Clawshot: Clawshot
+    Can Open Lakebed Temple Boss Door: (Lakebed_Temple_Big_Key or Big_Keys == Keysy) and 'Can_Pull_West_Water_Supply_Lever' and 'Can_Pull_East_Water_Supply_Lever'
+  Locations:
+    Lakebed Temple Central Room Small Chest: Human_Link
+    Lakebed Temple Central Room Chest: Human_Link
+    Lakebed Temple Chandelier Chest: Clawshot
+    Lakebed Temple Central Room Spire Chest: Iron_Boots and ('Can_Pull_West_Water_Supply_Lever' or 'Can_Pull_East_Water_Supply_Lever')
+  Exits:
+    Lakebed Temple Circling Current Room East Lower: "'Can_Turn_Lakebed_Staircase'"
+    Lakebed Temple Circling Current Room East Upper: "'Can_Turn_Lakebed_Staircase' and (Lakebed_Temple_Small_Key or Small_Keys == Keysy)"
+    Lakebed Temple Circling Current Room West Lower Near Central Room: "'Can_Turn_Lakebed_Staircase'"
+    Lakebed Temple Circling Current Room West Upper Near Central Room: "'Can_Turn_Lakebed_Staircase'"
+    Lakebed Temple Circling Current Room South: Can_Open_Doors and 'Can_Turn_Lakebed_Staircase'
+    Lakebed Temple Central Room Past Boss Door: "'Can_Open_Lakebed_Temple_Boss_Door'"
+
+- Name: Lakebed Temple Central Room Past Boss Door
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Boss Room: Nothing
+    Lakebed Temple Central Room: "'Can_Open_Lakebed_Temple_Boss_Door'"
+
+# LAKEBED TEMPLE EAST WATERWHEEL ROOM FIRST FLOOR
+
+- Name: Lakebed Temple East Waterwheel Room First Floor Near Circling Current Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple East Waterwheel Room Waterwheel: "'Can_Pull_East_Water_Supply_Lever'"
+    Lakebed Temple East Waterwheel Room First Floor Lowest: Nothing
+    Lakebed Temple Circling Current Room East Lower: Nothing
+
+- Name: Lakebed Temple East Waterwheel Room Waterwheel # Being on the turning waterwheel
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple East Waterwheel Room First Floor Near Circling Current Room: Nothing
+    Lakebed Temple East Waterwheel Room First Floor Near Water Jet Room Land Side: Nothing
+    Lakebed Temple East Waterwheel Room First Floor Near Water Jet Room Water Side: Nothing
+
+- Name: Lakebed Temple East Waterwheel Room First Floor Near Water Jet Room Land Side
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Water Jet Room Land Side: Nothing
+    Lakebed Temple East Waterwheel Room Waterwheel: "'Can_Pull_East_Water_Supply_Lever'"
+    Lakebed Temple East Waterwheel Room First Floor Lowest: Nothing
+    Lakebed Temple East Waterwheel Room First Floor Near Circling Current Room: Nothing # Can jump down to the right
+
+- Name: Lakebed Temple East Waterwheel Room First Floor Near Water Jet Room Water Side
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Water Jet Room Water Side Near East Waterwheel Room: Nothing
+    Lakebed Temple East Waterwheel Room Waterwheel: "'Can_Pull_East_Water_Supply_Lever'"
+    Lakebed Temple East Waterwheel Room First Floor Lowest: Nothing
+
+- Name: Lakebed Temple East Waterwheel Room First Floor Lowest
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple East Lower Waterwheel Stalactite Chest: Can_Launch_Bombs and Can_Climb_Vines
+    Lakebed Temple East Lower Waterwheel Bridge Chest: Clawshot and 'Can_Pull_West_Water_Supply_Lever' and 'Can_Turn_Lakebed_Staircase'
+  Exits:
+    Lakebed Temple East Waterwheel Room First Floor Near Circling Current Room: Can_Climb_Vines or ('Can_Pull_West_Water_Supply_Lever' and 'Can_Turn_Lakebed_Staircase')
+
+# LAKEBED TEMPLE OUTSIDE EAST WATERWHEEL ROOM SECOND FLOOR
+
+- Name: Lakebed Temple Outside East Waterwheel Room Second Floor Near Circling Current Room
+  Region: Lakebed Temple
+  Events:
+    Can Pull Outside East Waterwheel Room Second Floor Lever: Clawshot or (Can_Launch_Bombs and Can_Climb_Vines)
+  Locations:
+    Lakebed Temple East Second Floor Southwest Chest: Nothing
+  Exits:
+    Lakebed Temple Outside East Waterwheel Room Second Floor North: Clawshot or (Can_Launch_Bombs and Can_Climb_Vines)
+    Lakebed Temple Circling Current Room East Upper: Nothing
+
+- Name: Lakebed Temple Outside East Waterwheel Room Second Floor North
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside East Waterwheel Room Second Floor North Near East Water Supply Room: Can_Smash
+    Lakebed Temple East Waterwheel Room Second Floor: Nothing
+
+- Name: Lakebed Temple Outside East Waterwheel Room Second Floor North Near East Water Supply Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple East Water Supply Room: Nothing
+    Lakebed Temple Outside East Waterwheel Room Second Floor North: Can_Smash
+
+- Name: Lakebed Temple Outside East Waterwheel Room Second Floor South Near East Water Supply Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside East Waterwheel Room Second Floor South: Nothing
+    Lakebed Temple East Water Supply Room: Nothing
+
+- Name: Lakebed Temple Outside East Waterwheel Room Second Floor South
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple East Second Floor Southeast Chest: Nothing
+  Exits:
+    Lakebed Temple East Waterwheel Room Second Floor: Nothing
+
+# LAKEBED TEMPLE EAST WATERWHEEL ROOM SECOND FLOOR
+
+- Name: Lakebed Temple East Waterwheel Room Second Floor
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside East Waterwheel Room Second Floor North: Nothing
+    Lakebed Temple Outside East Waterwheel Room Second Floor South: Nothing
+    Lakebed Temple East Waterwheel Room First Floor Lowest: Nothing
+
+# LAKEBED TEMPLE EAST WATER SUPPLY ROOM
+
+- Name: Lakebed Temple East Water Supply Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple East Water Supply Room Past Locked Door: count(Lakebed_Temple_Small_Key, 3) or Small_Keys == Keysy or (Small_Keys == Vanilla and count(Lakebed_Temple_Small_Key, 2))
+    Lakebed Temple Outside East Waterwheel Room Second Floor North Near East Water Supply Room: Nothing
+    Lakebed Temple Outside East Waterwheel Room Second Floor South Near East Water Supply Room: Nothing
+
+- Name: Lakebed Temple East Water Supply Room Past Locked Door
+  Region: Lakebed Temple
+  Events:
+    Can Pull East Water Supply Lever: Can_Climb_Vines and Can_Climb_Ladders and Can_Pull_Lakebed_Levers
+  Locations:
+    Lakebed Temple East Water Supply Small Chest: Can_Climb_Vines and Iron_Boots # Boots required incase someone activates the lever and falls down
+    Lakebed Temple East Water Supply Clawshot Chest: Can_Climb_Vines and Clawshot and Iron_Boots
+
+# LAKEBED TEMPLE WATER JET ROOM (the room before the miniboss)
+
+- Name: Lakebed Temple Water Jet Room Water Side Near East Waterwheel Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Water Jet Room Water Side Underwater: count(Lakebed_Temple_Small_Key, 3) or Small_Keys == Keysy
+    Lakebed Temple East Waterwheel Room First Floor Near Water Jet Room Water Side: Nothing
+
+- Name: Lakebed Temple Water Jet Room Water Side Underwater
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple Before Deku Toad Underwater Left Chest: Iron_Boots
+    Lakebed Temple Before Deku Toad Underwater Right Chest: Iron_Boots
+  Exits:
+    Lakebed Temple Water Jet Room Water Side Near East Waterwheel Room: count(Lakebed_Temple_Small_Key, 3) or Small_Keys == Keysy
+    Lakebed Temple Water Jet Room Water Side Near MiniBoss Room: Iron_Boots and Water_Bombs
+
+- Name: Lakebed Temple Water Jet Room Water Side Near MiniBoss Room
+  Region: Lakebed Temple
+  Exits:
+    Deku Toad Miniboss Room Water Tunnel: Zora_Armor
+    Lakebed Temple Water Jet Room Water Side Underwater: Zora_Armor and Iron_Boots and Water_Bombs
+
+- Name: Lakebed Temple Water Jet Room Land Side
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple Before Deku Toad Alcove Chest: Nothing
+  Exits:
+    Deku Toad Miniboss Room Near Water Jet Room Land Side: Nothing
+    Lakebed Temple East Waterwheel Room First Floor Near Water Jet Room Land Side: Nothing
+
+# DEKU TOAD MINIBOSS ROOM
+
+- Name: Deku Toad Miniboss Room Water Tunnel
+  Exits:
+    Deku Toad Miniboss Room Battle Arena: Zora_Armor
+    Lakebed Temple Water Jet Room Water Side Near MiniBoss Room: Zora_Armor
+
+- Name: Deku Toad Miniboss Room Battle Arena
+  Events:
+    Can Pull Deku Toad Miniboss Room Lever: Clawshot
+  Locations:
+    Lakebed Temple Deku Toad Chest: Can_Defeat_Deku_Toad
+  Exits:
+    Deku Toad Miniboss Room Near Water Jet Room Land Side: Clawshot
+
+- Name: Deku Toad Miniboss Room Near Water Jet Room Land Side
+  Exits:
+    Deku Toad Miniboss Room Battle Arena: "'Can_Pull_Deku_Toad_Miniboss_Room_Lever'"
+    Lakebed Temple Water Jet Room Land Side: Nothing
+
+# LAKEBED TEMPLE WEST WATERWHEEL ROOM
+
+- Name: Lakebed Temple West Waterwheel Room Lower
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple West Lower Small Chest: Clawshot
+  Exits:
+    Lakebed Temple West Waterwheel Room Upper North: Clawshot
+    Lakebed Temple Circling Current Room West Lower Near West Waterwheel Room Lower: Nothing
+    Lakebed Temple West Waterwheel Room Lower Near Underwater Maze Room: Clawshot and 'Can_Pull_West_Water_Supply_Lever'
+
+- Name: Lakebed Temple West Waterwheel Room Upper North
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple West Second Floor Central Small Chest: Clawshot
+  Exits:
+    Lakebed Temple West Waterwheel Room Upper Near North Door: Clawshot
+    Lakebed Temple West Waterwheel Room Lower: Clawshot
+
+- Name: Lakebed Temple West Waterwheel Room Upper Near North Door
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room North: Nothing
+    Lakebed Temple West Waterwheel Room Upper North: Clawshot
+
+- Name: Lakebed Temple West Waterwheel Room On Waterwheels
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room Southeast: Nothing
+    Lakebed Temple Outside West Waterwheel Room Southwest: Nothing
+    Lakebed Temple West Waterwheel Room Upper Near North Door: Clawshot
+    Lakebed Temple West Waterwheel Room Upper North: Clawshot
+    Lakebed Temple West Waterwheel Room Lower: Nothing
+
+- Name: Lakebed Temple West Waterwheel Room Lower Near Underwater Maze Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Underwater Maze Room Near Waterwheel Room: Nothing
+    Lakebed Temple West Waterwheel Room Lower: Clawshot and 'Can_Pull_West_Water_Supply_Lever'
+
+# LAKEBED TEMPLE OUTSIDE WEST WATERWHEEL ROOM
+
+- Name: Lakebed Temple Outside West Waterwheel Room Upper Near Circling Current Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room Southeast: "'Can_Pull_Outside_West_Waterwheel_Room_Southeast_Lever'"
+    Lakebed Temple Circling Current Room West Upper Near West Waterwheel Room Upper: Nothing
+
+- Name: Lakebed Temple Outside West Waterwheel Room Southeast
+  Region: Lakebed Temple
+  Events:
+    Can Pull Outside West Waterwheel Room Southeast Lever: Clawshot
+  Locations:
+    Lakebed Temple West Second Floor Southeast Chest: Nothing
+  Exits:
+    Lakebed Temple West Waterwheel Room On Waterwheels: Nothing
+    Lakebed Temple Outside West Waterwheel Room Upper Near Circling Current Room: "'Can_Pull_Outside_West_Waterwheel_Room_Southeast_Lever'"
+
+- Name: Lakebed Temple Outside West Waterwheel Room Southwest
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple West Waterwheel Room On Waterwheels: Nothing
+    Lakebed Temple Outside West Waterwheel Room Southwest Pond: "'Can_Pull_West_Water_Supply_Lever'"
+
+- Name: Lakebed Temple Outside West Waterwheel Room Southwest Pond
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple West Second Floor Southwest Underwater Chest: Iron_Boots
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room Southwest Near West Water Supply Room: Clawshot or 'Can_Pull_West_Water_Supply_Lever'
+    Lakebed Temple Outside West Waterwheel Room Southwest: "'Can_Pull_West_Water_Supply_Lever'"
+
+- Name: Lakebed Temple Outside West Waterwheel Room Southwest Near West Water Supply Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple West Water Supply Room: Nothing
+    Lakebed Temple Outside West Waterwheel Room Southwest Pond: Nothing
+
+- Name: Lakebed Temple Outside West Waterwheel Room Northwest Near West Water Supply Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room Tektite Area: Nothing
+    Lakebed Temple West Water Supply Room: Nothing
+
+- Name: Lakebed Temple Outside West Waterwheel Room Tektite Area
+  Region: Lakebed Temple
+  Events:
+    Can Pull Outside West Waterwheel Room Northeast Lever: Clawshot
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room North: "'Can_Pull_Outside_West_Waterwheel_Room_Northeast_Lever'"
+    Lakebed Temple Outside West Waterwheel Room Northwest Near West Water Supply Room: Clawshot
+
+- Name: Lakebed Temple Outside West Waterwheel Room North
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple West Second Floor Northeast Chest: "'Can_Pull_West_Water_Supply_Lever'"
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room Tektite Area: Can_Launch_Bombs
+    Lakebed Temple West Waterwheel Room Upper Near North Door: Nothing
+
+# LAKEBED TEMPLE WEST WATER SUPPLY ROOM
+
+- Name: Lakebed Temple West Water Supply Room
+  Region: Lakebed Temple
+  Events:
+    Can Pull West Water Supply Lever: Clawshot and Can_Climb_Ladders and Iron_Boots
+  Locations:
+    Lakebed Temple West Water Supply Small Chest: Clawshot and Iron_Boots
+    Lakebed Temple West Water Supply Chest: Clawshot and Iron_Boots
+  Exits:
+    Lakebed Temple Outside West Waterwheel Room Southwest Near West Water Supply Room: Nothing
+    Lakebed Temple Outside West Waterwheel Room Northwest Near West Water Supply Room: Nothing
+
+# LAKEBED TEMPLE UNDERWATER MAZE ROOM
+
+- Name: Lakebed Temple Underwater Maze Room Near Waterwheel Room
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Underwater Maze Room Near Big Key Room Lower: Zora_Armor and Iron_Boots and Water_Bombs
+    Lakebed Temple West Waterwheel Room Lower Near Underwater Maze Room: Nothing
+
+- Name: Lakebed Temple Underwater Maze Room Near Big Key Room Lower
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple Underwater Maze Small Chest: Zora_Armor
+  Exits:
+    Lakebed Temple Underwater Maze Room Near Waterwheel Room: Zora_Armor and Iron_Boots and Water_Bombs
+    Lakebed Temple Underwater Maze Room Near Big Key Room Upper: Zora_Armor and Iron_Boots and Water_Bombs
+    Lakebed Temple Big Key Room Lower: Zora_Armor and Iron_Boots
+
+- Name: Lakebed Temple Underwater Maze Room Near Big Key Room Upper
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Big Key Room Upper: Nothing
+    Lakebed Temple Underwater Maze Room Near Big Key Room Lower: Zora_Armor and Iron_Boots and Water_Bombs
+
+# LAKEBED TEMPLE BIG KEY ROOM
+
+- Name: Lakebed Temple Big Key Room Upper
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Big Key Room Middle: Clawshot
+    Lakebed Temple Underwater Maze Room Near Big Key Room Upper: Nothing
+
+- Name: Lakebed Temple Big Key Room Middle
+  Region: Lakebed Temple
+  Locations:
+    Lakebed Temple Big Key Chest: Nothing
+  Exits:
+    Lakebed Temple Big Key Room Lower: Nothing
+
+- Name: Lakebed Temple Big Key Room Lower
+  Region: Lakebed Temple
+  Exits:
+    Lakebed Temple Underwater Maze Room Near Big Key Room Lower: Zora_Armor and Iron_Boots
+
+# LAKEBED TEMPLE BOSS ROOM
+
+- Name: Lakebed Temple Boss Room
+  Events:
+    Can Complete Lakebed Temple: Can_Defeat_Morpheel
+  Locations:
+    Lakebed Temple Morpheel Heart Container: Can_Defeat_Morpheel
+    Lakebed Temple Dungeon Reward: Can_Defeat_Morpheel
+  Exits:
+    Lake Hylia Lanayru Spring: Can_Defeat_Morpheel

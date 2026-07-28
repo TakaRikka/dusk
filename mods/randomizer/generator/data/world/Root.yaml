@@ -1,0 +1,163 @@
+# These logic files contain the listings for each predefined logical area. Areas can contain
+# events, locations, and exits.
+#
+# EVENTS are logic variables which become true when their requirement evaluates
+# to true and are surrounded with single quotes when used in other logic statements
+# (unlike macros which are defined in macros.yaml). It's possible to add new events
+# to the logic simply by defining them in an area and then using them in whichever
+# logic statements you wish. No modifications to the code are necessary. Every logical
+# area that gets defined will also come with an automatically generated 'Can_Access_<Area_Name>'
+# event. This event is added to the area and has no requirements. If you start a logic statement
+# with an event, then the entire statement must be surrounded in double quotes due to how yaml
+# is parsed.
+#
+# LOCATIONS are places which can contain randomized items. Adding new locations
+# here will require adding them in locations.yaml as well.
+#
+# EXITS define how the areas of the world graph connect to each other. Each exit
+# is a one way connection, so when making new areas remember to define the exit
+# connections both ways if applicable. No modifications to the code are necessary
+# for adding new exits.
+#
+# Each dungeon in the world graph is at least defined on a room by room basis
+# (although in many cases rooms are split up into multiple parts). This is to
+# help simplify glitched logic (eventually).
+#
+# NOTE: When writing direct logic requirements for exits, do not write a logic
+# statement that requires both human link *and* wolf link to evaluate to true.
+# The search and flatten algorithms need to keep track of human-wolf/day-night
+# combinations separately and test them one at a time to know which forms
+# are allowed through any single exit. This doesn't work if both forms are
+# directly required. If you need to write a logic statement for an exit that
+# absolutely requires both human and wolf link, then hide away one (or both)
+# of the forms behind an event in the area.
+#
+# See the "Lost Woods Lower Battle Arena -> Lost Woods Baba Serpent Grotto" exit
+# for an example of the above.
+
+# The following logical operators/functions are available for logic statements:
+# - and
+# - or
+# - <item>
+# - Human_Link
+# - Wolf_Link
+# - Day
+# - Night
+# - count(<item>, <number>)
+# - setting_name [<=, ==, >=, !=] option
+# - golden_bugs(count)
+
+- Name: Root
+  Exits:
+    Root Human Day: (Human_Link and (Starting_Form == Human or Shadow_Crystal)) and (Starting_Time_of_Day == Morning or Starting_Time_of_Day == Noon)
+    Root Human Night: (Human_Link and (Starting_Form == Human or Shadow_Crystal)) and (Starting_Time_of_Day == Evening or Starting_Time_of_Day == Night)
+    Root Wolf Day: (Wolf_Link and (Starting_Form == Wolf or Shadow_Crystal)) and (Starting_Time_of_Day == Morning or Starting_Time_of_Day == Noon)
+    Root Wolf Night: (Wolf_Link and (Starting_Form == Wolf or Shadow_Crystal)) and (Starting_Time_of_Day == Evening or Starting_Time_of_Day == Night)
+
+- Name: Root Human Day
+  Can Transform: Never
+  Exits:
+    Root Exits: Nothing
+
+- Name: Root Human Night
+  Can Transform: Never
+  Exits:
+    Root Exits: Nothing
+
+- Name: Root Wolf Day
+  Can Transform: Never
+  Exits:
+    Root Exits: Nothing
+
+- Name: Root Wolf Night
+  Can Transform: Never
+  Exits:
+    Root Exits: Nothing
+
+- Name: Root Exits
+  Can Transform: Never
+  Exits:
+    Links Spawn: Nothing
+    Warp Portals: Can_Use_Warp_Portals
+
+- Name: Links Spawn
+  Exits:
+    Outside Links House: Nothing
+
+- Name: Warp Portals
+  Exits:
+    Ordon Spring Warp Portal: Ordon_Spring_Portal and (Unlock_Map_Regions == On or 'Ordona_Province_Map_Sector')
+    South Faron Woods Warp Portal: South_Faron_Portal and (Unlock_Map_Regions == On or 'Faron_Province_Map_Sector')
+    North Faron Woods Warp Portal: North_Faron_Portal and (Unlock_Map_Regions == On or 'Faron_Province_Map_Sector')
+    Sacred Grove Warp Portal: Sacred_Grove_Portal and (Unlock_Map_Regions == On or 'Faron_Province_Map_Sector')
+    Kakariko Gorge Warp Portal: Kakariko_Gorge_Portal and (Unlock_Map_Regions == On or 'Eldin_Province_Map_Sector')
+    Kakariko Village Warp Portal: Kakariko_Village_Portal and (Unlock_Map_Regions == On or 'Eldin_Province_Map_Sector')
+    Death Mountain Warp Portal: Death_Mountain_Portal and (Unlock_Map_Regions == On or 'Eldin_Province_Map_Sector')
+    Bridge of Eldin Warp Portal: Bridge_of_Eldin_Portal and (Unlock_Map_Regions == On or 'Eldin_Province_Map_Sector')
+    Castle Town Warp Portal: Castle_Town_Portal and (Unlock_Map_Regions == On or 'Lanayru_Province_Map_Sector')
+    Lake Hylia Warp Portal: Lake_Hylia_Portal and (Unlock_Map_Regions == On or 'Lanayru_Province_Map_Sector')
+    Upper Zoras River Warp Portal: Upper_Zoras_River_Portal and (Unlock_Map_Regions == On or 'Lanayru_Province_Map_Sector')
+    Zoras Domain Warp Portal: Zoras_Domain_Portal and (Unlock_Map_Regions == On or 'Lanayru_Province_Map_Sector')
+    Snowpeak Warp Portal: Snowpeak_Portal and (Unlock_Map_Regions == On or 'Snowpeak_Province_Map_Sector')
+    Gerudo Desert Warp Portal: Gerudo_Desert_Portal and 'Desert_Province_Map_Sector'
+    Mirror Chamber Warp Portal: Mirror_Chamber_Portal and 'Desert_Province_Map_Sector'
+
+- Name: Ordon Spring Warp Portal
+  Exits:
+    Ordon Spring: Nothing
+
+- Name: South Faron Woods Warp Portal
+  Exits:
+    South Faron Woods: Nothing
+
+- Name: North Faron Woods Warp Portal
+  Exits:
+    North Faron Woods: Nothing
+
+- Name: Sacred Grove Warp Portal
+  Exits:
+    Sacred Grove Lower: Nothing
+
+- Name: Kakariko Gorge Warp Portal
+  Exits:
+    Kakariko Gorge: Nothing
+
+- Name: Kakariko Village Warp Portal
+  Exits:
+    Lower Kakariko Village: Nothing
+
+- Name: Death Mountain Warp Portal
+  Exits:
+    Death Mountain Volcano: Nothing
+
+- Name: Bridge of Eldin Warp Portal
+  Exits:
+    Eldin Field North of Bridge: Nothing
+
+- Name: Castle Town Warp Portal
+  Exits:
+    Outside Castle Town West: Nothing
+
+- Name: Lake Hylia Warp Portal
+  Exits:
+    Lake Hylia: Nothing
+
+- Name: Upper Zoras River Warp Portal
+  Exits:
+    Upper Zoras River: Nothing
+
+- Name: Zoras Domain Warp Portal
+  Exits:
+    Zoras Throne Room: Nothing
+
+- Name: Snowpeak Warp Portal
+  Exits:
+    Snowpeak Summit Upper: Nothing
+
+- Name: Gerudo Desert Warp Portal
+  Exits:
+    Gerudo Desert Cave of Ordeals Plateau: Nothing
+
+- Name: Mirror Chamber Warp Portal
+  Exits:
+    Mirror Chamber Upper: Nothing

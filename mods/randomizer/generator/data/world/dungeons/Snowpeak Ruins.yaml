@@ -1,0 +1,346 @@
+# SNOWPEAK RUINS ENTRANCE
+
+- Name: Snowpeak Ruins Entrance
+  Region: Snowpeak Ruins
+  Dungeon Start Area: True
+  Locations:
+    Snowpeak Ruins Lobby West Armor Chest: Can_Break_Armor
+    Snowpeak Ruins Lobby East Armor Chest: Can_Break_Armor
+    Snowpeak Ruins Lobby Armor Poe: Can_Break_Armor and Can_Use_Senses
+    Snowpeak Ruins Lobby Poe: Can_Use_Senses
+  Exits:
+    Snowpeak Ruins Entrance Near Caged Freezard Room: Clawshot and 'Can_Break_Snowpeak_Entrance_Ice_Wall_Shortcut'
+    Snowpeak Ruins Yetas Room: Can_Open_Doors
+    Snowpeak Ruins Room Below Broken Floor Near Entrance: Can_Open_Doors
+    Snowpeak Ruins East Door Interior: Can_Open_Doors
+    Snowpeak Ruins West Door Interior: Can_Open_Doors
+
+- Name: Snowpeak Ruins Entrance Near Caged Freezard Room
+  Region: Snowpeak Ruins
+  Events:
+    Can Break Snowpeak Entrance Ice Wall Shortcut: Can_Break_Ice
+  Locations:
+    Snowpeak Ruins Lobby Chandelier Chest: Ball_and_Chain
+  Exits:
+    Snowpeak Ruins Entrance Near Second Floor Mini Freezard Room: Ball_and_Chain
+    Snowpeak Ruins Caged Freezard Room Second Floor: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 3) or Small_Keys == Keysy)
+    Snowpeak Ruins Entrance: Nothing
+
+- Name: Snowpeak Ruins Entrance Near Second Floor Mini Freezard Room
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Second Floor Mini Freezard Room: Nothing
+    Snowpeak Ruins Entrance Near Caged Freezard Room: Ball_and_Chain
+
+# SNOWPEAK RUINS YETAS ROOM
+
+- Name: Snowpeak Ruins Yetas Room
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Mansion Map: Can_Talk_to_Humans
+    Snowpeak Ruins Hint Sign: Nothing
+  Exits:
+    Snowpeak Ruins Kitchen: Can_Open_Doors
+    Snowpeak Ruins West Courtyard: Ordon_Pumpkin or Small_Keys == Keysy
+    Snowpeak Ruins Caged Freezard Room First Floor: Ordon_Cheese or Small_Keys == Keysy
+    Snowpeak Ruins Entrance: Can_Open_Doors
+
+# SNOWPEAK RUINS KITCHEN
+
+- Name: Snowpeak Ruins Kitchen
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Block Puzzle Room Near Kitchen: Can_Open_Doors
+    Snowpeak Ruins Yetas Room: Can_Open_Doors
+
+# SNOWPEAK RUINS BLOCK PUZZLE ROOM
+
+- Name: Snowpeak Ruins Block Puzzle Room Near Kitchen
+  Region: Snowpeak Ruins
+  Events:
+    Can Press Snowpeak Block Puzzle Ice Switch: Can_Break_Ice
+  Exits:
+    Snowpeak Ruins East Courtyard Near Block Puzzle Room First Floor: Can_Open_Doors
+    Snowpeak Ruins Block Puzzle Room Near Northeast Chilfos Room First Floor: "'Can_Push_Snowpeak_Block_Puzzle_Highest_Block'"
+    Snowpeak Ruins Kitchen: Can_Open_Doors
+
+- Name: Snowpeak Ruins Block Puzzle Room Near Northeast Chilfos Room First Floor
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Northeast Chilfos Room Near Block Puzzle Room First Floor: Can_Open_Doors
+    Snowpeak Ruins Block Puzzle Room Near Kitchen: Nothing
+    Snowpeak Ruins Block Puzzle Room Second Floor: "'Can_Push_Snowpeak_Block_Puzzle_Highest_Block'"
+
+- Name: Snowpeak Ruins Block Puzzle Room Second Floor
+  Region: Snowpeak Ruins
+  Events:
+    Can Push Snowpeak Block Puzzle Highest Block: Nothing
+  Exits:
+    Snowpeak Ruins Second Floor Mini Freezard Room: Can_Open_Doors
+    Snowpeak Ruins East Courtyard Balcony Near Block Puzzle Room: Can_Open_Doors and 'Can_Press_Snowpeak_Block_Puzzle_Ice_Switch'
+    Snowpeak Ruins Block Puzzle Room Near Kitchen: "'Can_Push_Snowpeak_Block_Puzzle_Highest_Block'"
+
+- Name: Snowpeak Ruins Block Puzzle Room Near Northeast Chilfos Room Second Floor
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Northeast Chilfos Room Near Block Puzzle Room Second Floor: Nothing
+    Snowpeak Ruins Block Puzzle Room Near Northeast Chilfos Room First Floor: Nothing
+
+# SNOWPEAK RUINS EAST COURTYARD
+
+- Name: Snowpeak Ruins East Courtyard Near Block Puzzle Room First Floor
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins East Courtyard: Can_Dig
+    Snowpeak Ruins East Courtyard Hallway: Can_Break_Ice
+    Snowpeak Ruins Block Puzzle Room Near Kitchen: Can_Open_Doors
+
+- Name: Snowpeak Ruins East Courtyard
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins East Courtyard Buried Chest: Can_Dig
+    Snowpeak Ruins East Courtyard Chest: Nothing
+  Exits:
+    Snowpeak Ruins East Courtyard Hallway: Can_Open_Doors
+    Snowpeak Ruins West Courtyard: Can_Break_Ice
+
+- Name: Snowpeak Ruins East Courtyard Hallway
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Triple Mini Freezard Room: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 4) or Small_Keys == Keysy)
+    Snowpeak Ruins East Courtyard: Can_Open_Doors
+    Snowpeak Ruins East Courtyard Near Block Puzzle Room First Floor: Can_Break_Ice
+
+- Name: Snowpeak Ruins East Courtyard Balcony Near Block Puzzle Room
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins East Courtyard Balcony Near Northeast Chilfos Room: Can_Defeat_Chilfos and Clawshot
+    Snowpeak Ruins East Courtyard Near Block Puzzle Room First Floor: Nothing
+    Snowpeak Ruins East Courtyard: Nothing
+    Snowpeak Ruins East Courtyard Hallway: Nothing
+    Snowpeak Ruins Block Puzzle Room Second Floor: Can_Open_Doors
+
+- Name: Snowpeak Ruins East Courtyard Balcony Near Northeast Chilfos Room
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Northeast Chilfos Room Near East Courtyard Balcony: Can_Open_Doors
+
+# SNOWPEAK RUINS TRIPLE MINI FREEZARD ROOM
+
+- Name: Snowpeak Ruins Triple Mini Freezard Room
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Northeast Chilfos Room First Floor: Can_Defeat_Mini_Freezard
+    Snowpeak Ruins East Courtyard Hallway: Can_Defeat_Mini_Freezard and (count(Snowpeak_Ruins_Small_Key, 4) or Small_Keys == Keysy)
+
+# SNOWPEAK RUINS NORTHEAST CHILLFOS ROOM
+
+- Name: Snowpeak Ruins Northeast Chilfos Room First Floor
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Northeast Chilfos Room Near Block Puzzle Room First Floor: Can_Defeat_Chilfos and Can_Open_Doors
+    Snowpeak Ruins Northeast Chilfos Room Near East Courtyard Balcony: Clawshot and 'Can_Break_Snowpeak_Northeast_Chilfos_Room_Ice_Wall_Shortcut'
+    Snowpeak Ruins Triple Mini Freezard Room: Can_Defeat_Chilfos and Can_Open_Doors
+
+- Name: Snowpeak Ruins Northeast Chilfos Room Near Block Puzzle Room First Floor
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Ordon Pumpkin Chest: Nothing
+  Exits:
+    Snowpeak Ruins Block Puzzle Room Near Northeast Chilfos Room First Floor: Can_Open_Doors
+    Snowpeak Ruins Northeast Chilfos Room First Floor: Can_Open_Doors
+
+- Name: Snowpeak Ruins Northeast Chilfos Room Near East Courtyard Balcony
+  Region: Snowpeak Ruins
+  Events:
+    Can Break Snowpeak Northeast Chilfos Room Ice Wall Shortcut: Can_Break_Ice
+  Exits:
+    Snowpeak Ruins Northeast Chilfos Room Near Block Puzzle Room Second Floor: Ball_and_Chain
+    Snowpeak Ruins Northeast Chilfos Room First Floor: Nothing
+
+- Name: Snowpeak Ruins Northeast Chilfos Room Near Block Puzzle Room Second Floor
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Northeast Chandelier Chest: Nothing
+  Exits:
+    Snowpeak Ruins Block Puzzle Room Near Northeast Chilfos Room Second Floor: Can_Open_Doors
+    Snowpeak Ruins Northeast Chilfos Room Near East Courtyard Balcony: Ball_and_Chain
+    Snowpeak Ruins Northeast Chilfos Room First Floor: Nothing
+
+# SNOWPEAK RUINS WEST COURTYARD
+
+- Name: Snowpeak Ruins West Courtyard
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins West Courtyard Buried Chest: Can_Dig
+    Snowpeak Ruins Courtyard Central Chest: Can_Break_Ice
+  Exits:
+    Snowpeak Ruins West Canon Room Near Courtyard: Can_Open_Doors
+    Snowpeak Ruins East Courtyard: Can_Break_Ice
+    Snowpeak Ruins West Courtyard Hallway Near Ladder: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 4) or Small_Keys == Keysy)
+    Darkhammer Miniboss Room: Can_Open_Doors and (Ball_and_Chain or (Can_Launch_Canonball and 'Can_Load_Snowpeak_West_Courtyard_Hallway_Canonball_Holder'))
+
+- Name: Snowpeak Ruins West Courtyard Hallway Near Ladder
+  Region: Snowpeak Ruins
+  Events:
+    Can Load Snowpeak West Courtyard Hallway Canonball Holder: Human_Link
+  Exits:
+    Snowpeak Ruins West Courtyard North Balcony: Can_Climb_Ladders and 'Can_Kill_Snowpeak_Courtyard_Balcony_Freezard'
+    Snowpeak Ruins West Hallway Near Caged Freezard Room: "'Can_Push_Snowpeak_West_Courtyard_Hallway_Block'"
+    Snowpeak Ruins West Courtyard: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 4) or Small_Keys == Keysy)
+
+- Name: Snowpeak Ruins West Hallway Near Caged Freezard Room
+  Region: Snowpeak Ruins
+  Events:
+    Can Load Snowpeak Hallway to Caged Freezard Canonball Holder: Human_Link
+    Can Push Snowpeak West Courtyard Hallway Block: Nothing
+  Exits:
+    Snowpeak Ruins Caged Freezard Room First Floor: Can_Open_Doors
+    Snowpeak Ruins West Courtyard Hallway Near Ladder: "'Can_Push_Snowpeak_West_Courtyard_Hallway_Block'"
+
+- Name: Snowpeak Ruins West Courtyard South Balcony
+  Region: Snowpeak Ruins
+  Events:
+    Can Break Snowpeak Balcony Ice Wall Shortcut: Can_Break_Ice
+    Can Kill Snowpeak Courtyard Balcony Freezard: Can_Launch_Canonball and 'Can_Load_Snowpeak_Double_Freezard_Room_Canonball_Holder'
+  Exits:
+    Snowpeak Ruins Double Freezard Room Behind Freezard: Can_Open_Doors
+    Snowpeak Ruins West Courtyard: Nothing
+    Snowpeak Ruins West Courtyard Hallway Near Ladder: Nothing
+    Snowpeak Ruins East Courtyard: Nothing
+
+- Name: Snowpeak Ruins West Courtyard North Balcony
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Chapel: Can_Open_Doors
+    Snowpeak Ruins Boss Room: Snowpeak_Ruins_Bedroom_Key or Big_Keys == Keysy
+
+# SNOWPEAK RUINS WEST CANON ROOM
+
+- Name: Snowpeak Ruins West Canon Room Near Courtyard
+  Region: Snowpeak Ruins
+  Events:
+    Can Launch West Canon Room Canonballs: Can_Launch_Canonball
+  Locations:
+    Snowpeak Ruins West Cannon Room Central Chest: Can_Break_Ice
+    Snowpeak Ruins West Cannon Room Corner Chest: Can_Break_Ice or 'Can_Launch_West_Canon_Room_Canonballs'
+  Exits:
+    Snowpeak Ruins West Canon Room Near Wooden Beam Room: Can_Break_Ice or 'Can_Launch_West_Canon_Room_Canonballs'
+    Snowpeak Ruins West Courtyard: Can_Open_Doors
+
+- Name: Snowpeak Ruins West Canon Room Near Wooden Beam Room
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Wooden Beam Room First Floor: Can_Open_Doors
+    Snowpeak Ruins West Canon Room Near Courtyard: Can_Break_Ice or 'Can_Launch_West_Canon_Room_Canonballs'
+
+# SNOWPEAK RUINS WOODEN BEAM ROOM
+
+- Name: Snowpeak Ruins Wooden Beam Room First Floor
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Wooden Beam Central Chest: Can_Defeat_Ice_Keese
+    Snowpeak Ruins Wooden Beam Northwest Chest: Can_Defeat_Ice_Keese
+  Exits:
+    Snowpeak Ruins West Canon Room Near Wooden Beam Room: Can_Open_Doors
+
+- Name: Snowpeak Ruins Wooden Beam Room Second Floor
+  Region: Snowpeak Ruins
+  Events:
+    Can Break Snowpeak Wooden Beam Room Ice Shortcut: Can_Break_Ice
+  Locations:
+    Snowpeak Ruins Wooden Beam Chandelier Chest: Ball_and_Chain
+  Exits:
+    Snowpeak Ruins Wooden Beam Room First Floor: Nothing
+    Snowpeak Ruins Caged Freezard Room Second Floor: Can_Open_Doors
+
+# DARKHAMMER MINIBOSS ROOM
+
+- Name: Darkhammer Miniboss Room
+  Locations:
+    Snowpeak Ruins Ball and Chain: Can_Defeat_Darkhammer
+    Snowpeak Ruins Chest After Darkhammer: Can_Break_Ice and Can_Defeat_Darkhammer
+  Exits:
+    Snowpeak Ruins West Courtyard: Can_Open_Doors
+
+# SNOWPEAK RUINS CAGED FREEZARD ROOM
+
+- Name: Snowpeak Ruins Caged Freezard Room First Floor
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Caged Freezard Room Second Floor: Can_Break_Ice
+    Snowpeak Ruins West Hallway Near Caged Freezard Room: Can_Open_Doors
+    Snowpeak Ruins Yetas Room: Can_Open_Doors
+
+- Name: Snowpeak Ruins Caged Freezard Room Second Floor
+  Region: Snowpeak Ruins
+  Events:
+    Can Launch Snowpeak Caged Freezard Room Canonballs: Can_Launch_Canonball and Ball_and_Chain and 'Can_Load_Snowpeak_Hallway_to_Caged_Freezard_Canonball_Holder'
+  Exits:
+    Snowpeak Ruins Wooden Beam Room Second Floor: Can_Open_Doors
+    Snowpeak Ruins Room Below Broken Floor: Can_Smash
+    Snowpeak Ruins Entrance Near Caged Freezard Room: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 3) or Small_Keys == Keysy)
+    Snowpeak Ruins Double Freezard Room: "'Can_Push_Snowpeak_Double_Freezard_Room_Block'"
+
+# SNOWPEAK RUINS ROOM BELOW BROKEN FLOOR
+
+- Name: Snowpeak Ruins Room Below Broken Floor Near Entrance
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins Entrance: Can_Open_Doors
+
+- Name: Snowpeak Ruins Room Below Broken Floor
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Broken Floor Chest: Nothing
+  Exits:
+    Snowpeak Ruins Caged Freezard Room Second Floor: Clawshot # There's no collision from the bottom
+
+# SNOWPEAK RUINS SECOND FLOOR MINI FREEZARD ROOM
+
+- Name: Snowpeak Ruins Second Floor Mini Freezard Room
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Ice Room Poe: Can_Break_Ice and Can_Use_Senses
+  Exits:
+    Snowpeak Ruins Block Puzzle Room Second Floor: Can_Open_Doors
+    Snowpeak Ruins Double Freezard Room: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 4) or Small_Keys == Keysy)
+    Snowpeak Ruins Entrance Near Second Floor Mini Freezard Room: Can_Open_Doors
+
+# SNOWPEAK RUINS DOUBLE FREEZARD ROOM
+
+- Name: Snowpeak Ruins Double Freezard Room
+  Region: Snowpeak Ruins
+  Events:
+    Can Push Snowpeak Double Freezard Room Block: Can_Defeat_Freezard
+    Can Load Snowpeak Double Freezard Room Canonball Holder: Can_Defeat_Freezard and 'Can_Launch_Snowpeak_Caged_Freezard_Room_Canonballs' and 'Can_Push_Snowpeak_Double_Freezard_Room_Block'
+  Exits:
+    Snowpeak Ruins Double Freezard Room Behind Freezard: Can_Defeat_Freezard
+    Snowpeak Ruins Caged Freezard Room Second Floor: "'Can_Push_Snowpeak_Double_Freezard_Room_Block'"
+    Snowpeak Ruins Second Floor Mini Freezard Room: Can_Open_Doors and (count(Snowpeak_Ruins_Small_Key, 4) or Small_Keys == Keysy)
+
+- Name: Snowpeak Ruins Double Freezard Room Behind Freezard
+  Region: Snowpeak Ruins
+  Exits:
+    Snowpeak Ruins West Courtyard North Balcony: Can_Open_Doors
+    Snowpeak Ruins Double Freezard Room: Can_Defeat_Freezard
+
+# SNOWPEAK RUINS CHAPEL
+
+- Name: Snowpeak Ruins Chapel
+  Region: Snowpeak Ruins
+  Locations:
+    Snowpeak Ruins Chapel Chest: Can_Defeat_Chilfos and Can_Open_Doors
+  Exits:
+    Snowpeak Ruins West Courtyard North Balcony: Can_Open_Doors
+
+# SNOWPEAK RUINS BOSS ROOM
+
+- Name: Snowpeak Ruins Boss Room
+  Events:
+    Can Complete Snowpeak Ruins: Can_Defeat_Blizzeta
+  Locations:
+    Snowpeak Ruins Blizzeta Heart Container: Can_Defeat_Blizzeta
+    Snowpeak Ruins Dungeon Reward: Can_Defeat_Blizzeta
+  Exits:
+    Snowpeak Summit Lower: Can_Defeat_Blizzeta

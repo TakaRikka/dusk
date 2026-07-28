@@ -1,0 +1,116 @@
+- Name: Snowpeak Climb Lower
+  Map Sector: Snowpeak Province
+  Region: Snowpeak Mountain
+  Can Warp: True
+  Locations:
+    Ashei Sketch: Can_Talk_to_Humans
+    Snowpeak Hint Sign: Nothing
+  Exits:
+    Snowpeak Climb Upper: Snowpeak_Does_Not_Require_Reekfish_Scent == On or 'Reekfish_Scent'
+    Zoras Domain: Nothing
+
+- Name: Snowpeak Climb Upper
+  Map Sector: Snowpeak Province
+  Region: Snowpeak Mountain
+  Can Warp: True
+  Events:
+    Howl at Snowpeak Mountain Howling Stone: Can_Howl
+  Locations:
+    Snowpeak Above Freezard Grotto Poe: Can_Use_Senses
+    Snowpeak Blizzard Poe: Can_Use_Senses
+    Snowpeak Poe Among Trees: Can_Use_Senses and Night
+  Exits:
+    Snowpeak Ice Keese Grotto: Can_Dig
+    Snowpeak Freezard Grotto: Can_Dig
+    Snowpeak Summit Cave: Can_Dig
+    Snowpeak Climb Lower: Nothing
+
+- Name: Snowpeak Ice Keese Grotto
+  Exits:
+    Snowpeak Climb Upper: Nothing
+
+- Name: Snowpeak Freezard Grotto
+  Locations:
+    Snowpeak Freezard Grotto Chest: Can_Defeat_Freezard
+  Exits:
+    Snowpeak Climb Upper: Nothing
+
+- Name: Snowpeak Summit Cave
+  Map Sector: Snowpeak Province
+  Region: Snowpeak Mountain
+  Can Warp: True
+  Locations:
+    Snowpeak Cave Ice Lantern Chest: Can_Light_Torches and Ball_and_Chain
+    Snowpeak Cave Ice Poe: Ball_and_Chain and Can_Use_Senses
+  Exits:
+    Snowpeak Summit Upper: Can_Climb_Vines
+    Snowpeak Climb Upper: Can_Dig
+
+- Name: Snowpeak Summit Upper
+  Map Sector: Snowpeak Province
+  Region: Snowpeak Mountain
+  Can Warp: True
+  Events:
+    Snowboarding Rupees: "(Snowpeak_Portal or Can_Defeat_Shadow_Beast)
+                           and ((Bonks_Do_Damage == Off or (Bonks_Do_Damage == On
+                            and (Logic_Damage_Multiplier != OHKO or Can_Use_Bottled_Fairy))) or 'Can_Complete_Snowpeak_Ruins')"
+  Locations:
+    Snowpeak Warp Portal: Can_Defeat_Shadow_Beast
+    Snowboarding Bridge Ledge Bottom Rupee: "'Snowboarding_Rupees'"
+    Snowboarding Bridge Ledge Middle Rupee: "'Snowboarding_Rupees'"
+    Snowboarding Bridge Ledge Upper Rupee: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 1: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 2: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 3: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 4: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 5: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 6: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 7: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 8: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 9: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 10: "'Snowboarding_Rupees'"
+    Snowboarding Shortcut Rupee 11: "'Snowboarding_Rupees'"
+    Snowboarding Snowy Tree Top Rupee 1: "'Snowboarding_Rupees'"
+    Snowboarding Snowy Tree Top Rupee 2: "'Snowboarding_Rupees'"
+    Snowboarding Snowy Tree Top Rupee 3: "'Snowboarding_Rupees'"
+    Snowboarding Top Left Rupee: "'Snowboarding_Rupees'"
+    Snowboarding Top Right Rupee: "'Snowboarding_Rupees'"
+    Snowboard Racing Prize: Can_Defeat_Shadow_Beast and 'Can_Complete_Snowpeak_Ruins'
+  Exits:
+    Snowpeak Summit Lower: Can_Defeat_Shadow_Beast and Can_Survive_One_Bonk
+
+- Name: Snowpeak Summit Lower
+  Map Sector: Snowpeak Province
+  Region: Snowpeak Mountain
+  Can Warp: True
+  Locations:
+    Snowpeak Icy Summit Poe: Can_Use_Senses
+  Exits:
+    Snowpeak Ruins East Door Exterior: Nothing
+    Snowpeak Ruins West Door Exterior: Nothing
+
+- Name: Snowpeak Ruins East Door Exterior
+  Can Transform: Never
+  Exits:
+    Snowpeak Ruins East Door Interior: Can_Open_Doors
+    Snowpeak Summit Lower: Nothing
+
+- Name: Snowpeak Ruins West Door Exterior
+  Can Transform: Never
+  Exits:
+    Snowpeak Ruins West Door Interior: Can_Open_Doors
+    Snowpeak Summit Lower: Nothing
+
+- Name: Snowpeak Ruins East Door Interior
+  Region: Snowpeak Ruins
+  Can Transform: Never
+  Exits:
+    Snowpeak Ruins East Door Exterior: Can_Open_Doors
+    Snowpeak Ruins Entrance: Nothing
+
+- Name: Snowpeak Ruins West Door Interior
+  Region: Snowpeak Ruins
+  Can Transform: Never
+  Exits:
+    Snowpeak Ruins West Door Exterior: Can_Open_Doors
+    Snowpeak Ruins Entrance: Nothing

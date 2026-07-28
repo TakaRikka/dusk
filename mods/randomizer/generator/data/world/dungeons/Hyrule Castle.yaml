@@ -1,0 +1,215 @@
+# HYRULE CASTLE ENTRANCE
+
+- Name: Hyrule Castle Entrance
+  Region: Hyrule Castle
+  Dungeon Start Area: True
+  Locations:
+    Hyrule Castle Hint Sign: Nothing
+  Exits:
+    Hyrule Castle Entrance Near West Courtyard: Can_Defeat_Red_Bokoblin
+    Hyrule Castle Entrance Near East Courtyard: Can_Defeat_Red_Bokoblin
+    Hyrule Castle Main Hall Near Entrance: Can_Open_Doors and (Hyrule_Castle_Small_Key or Small_Keys == Keysy)
+    Castle Town North Inside Barrier: Nothing
+    
+- Name: Hyrule Castle Entrance Near West Courtyard
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle West Courtyard: Nothing
+    Hyrule Castle Entrance: Can_Defeat_Red_Bokoblin
+
+- Name: Hyrule Castle Entrance Near East Courtyard
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle East Courtyard Near Entrance: Nothing
+    Hyrule Castle Entrance: Can_Defeat_Red_Bokoblin
+
+# HYRULE CASTLE WEST COURTYARD
+
+- Name: Hyrule Castle West Courtyard
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle West Courtyard North Small Chest: Can_Defeat_Bokoblin
+    Hyrule Castle West Courtyard Central Small Chest: Can_Defeat_Bokoblin
+    Hyrule Castle King Bulblin Key: Can_Defeat_Bokoblin and Can_Defeat_King_Bulblin_Castle
+
+# HYRULE CASTLE EAST COURTYARD
+
+- Name: Hyrule Castle East Courtyard Near Entrance
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle East Courtyard Near Graveyard: Human_Link # For riding the boar
+    Hyrule Castle Entrance Near East Courtyard: Nothing
+
+- Name: Hyrule Castle East Courtyard Near Graveyard
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle East Wing Boomerang Puzzle Chest: Gale_Boomerang
+    Hyrule Castle East Wing Balcony Chest: Gale_Boomerang and Can_Climb_Ladders
+  Exits:
+    Hyrule Castle Graveyard: Can_Dig
+    Hyrule Castle East Courtyard Near Entrance: Gale_Boomerang and Can_Climb_Ladders
+  
+# HYRULE CASTLE GRAVEYARD
+
+- Name: Hyrule Castle Graveyard
+  Region: Hyrule Castle
+  Events:
+    Can Refill Lantern Oil: Can_Smash
+  Locations:
+    Hyrule Castle Graveyard Grave Switch Room Right Chest: Can_Smash
+    Hyrule Castle Graveyard Grave Switch Room Front Left Chest: Can_Smash
+    Hyrule Castle Graveyard Grave Switch Room Back Left Chest: Can_Smash
+    Hyrule Castle Graveyard Owl Statue Chest: Can_Smash and Lantern and Restored_Dominion_Rod
+
+# HYRULE CASTLE MAIN HALL
+
+- Name: Hyrule Castle Main Hall Near Entrance
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle Main Hall Bottom: Can_Defeat_Bokoblin and Can_Defeat_Lizalfos
+    Hyrule Castle Entrance: Nothing
+
+- Name: Hyrule Castle Main Hall Bottom
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle Main Hall Northeast Chest: Clawshot and (Lantern or (Can_Defeat_Bokoblin and Can_Defeat_Lizalfos))
+  Exits:
+    Hyrule Castle Main Hall Near Entrance: Can_Defeat_Bokoblin and Can_Defeat_Lizalfos
+    Hyrule Castle Main Hall Near First Darknut Room: Double_Clawshots
+    Hyrule Castle Main Hall Near Double Dinalfos Room: Double_Clawshots and Lower_Hyrule_Castle_Chandelier == On
+
+- Name: Hyrule Castle Main Hall Near First Darknut Room
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle First Darknut Room Near Main Hall: Can_Open_Doors
+    Hyrule Castle Main Hall Bottom: Nothing
+
+- Name: Hyrule Castle Main Hall Near Double Darknut Room
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle Main Hall Southwest Chest: Nothing
+    Hyrule Castle Main Hall Northwest Chest: Double_Clawshots
+  Exits:
+    Hyrule Castle Main Hall Bottom: Nothing
+    Hyrule Castle Double Darknut Room: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Darknuts'
+
+- Name: Hyrule Castle Main Hall Near Double Dinalfos Room
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle Double Dinalfos Room: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Dinalfos'
+    Hyrule Castle Main Hall Bottom: Nothing
+
+
+# HYRULE CASTLE FIRST DARKNUT ROOM
+
+- Name: Hyrule Castle First Darknut Room Near Main Hall
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle Lantern Staircase Chest: Can_Defeat_Darknut and Lantern and Gale_Boomerang
+  Exits:
+    Hyrule Castle First Darknut Room Past Lantern Staircase: Can_Defeat_Darknut and Lantern and Gale_Boomerang
+    Hyrule Castle Main Hall Near First Darknut Room: Can_Open_Doors
+
+- Name: Hyrule Castle First Darknut Room Past Lantern Staircase
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle Torch Puzzle Room: Can_Open_Doors
+    Hyrule Castle Hanging Painting Room: Can_Open_Doors
+    Hyrule Castle First Darknut Room Near Main Hall: Can_Defeat_Darknut
+
+# HYRULE CASTLE HANGING PAINTING ROOM
+
+- Name: Hyrule Castle Hanging Painting Room
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle Double Darknut Room: Can_Open_Doors and Can_Knock_Down_Hyrule_Castle_Painting
+    Hyrule Castle First Darknut Room Past Lantern Staircase: Can_Open_Doors
+
+# HYRULE CASTLE DOUBLE DARKNUT ROOM
+
+- Name: Hyrule Castle Double Darknut Room
+  Region: Hyrule Castle
+  Events:
+    Can Defeat Hyrule Castle Double Darknuts: Can_Defeat_Darknut
+  Exits:
+    Hyrule Castle Main Hall Near Double Darknut Room: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Darknuts'
+    Hyrule Castle Outside Balcony: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Darknuts'
+    Hyrule Castle Hanging Painting Room: Can_Open_Doors
+
+# HYRULE CASTLE TORCH PUZZLE ROOM
+
+- Name: Hyrule Castle Torch Puzzle Room
+  Region: Hyrule Castle
+  Exits:
+    Hyrule Castle Double Dinalfos Room: Can_Open_Doors and Lantern
+    Hyrule Castle First Darknut Room Past Lantern Staircase: Can_Open_Doors
+
+# HYRULE CASTLE DOUBLE DINALFOS ROOM
+
+- Name: Hyrule Castle Double Dinalfos Room
+  Region: Hyrule Castle
+  Events:
+    Can Defeat Hyrule Castle Double Dinalfos: Can_Defeat_Dinalfos
+  Exits:
+    Hyrule Castle Outside Balcony: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Dinalfos'
+    Hyrule Castle Main Hall Near Double Dinalfos Room: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Dinalfos'
+    Hyrule Castle Torch Puzzle Room: Can_Open_Doors
+
+# HYRULE CASTLE OUTSIDE BALCONY
+
+- Name: Hyrule Castle Outside Balcony
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle Southeast Balcony Tower Chest: Can_Defeat_Aerolfos
+    Hyrule Castle Big Key Chest: Can_Open_Hyrule_Castle_Big_Key_Gate
+  Exits:
+    Hyrule Castle Final Climb Near Outside Balcony: Can_Open_Doors and (count(Hyrule_Castle_Small_Key, 2) or Small_Keys == Keysy)
+    Hyrule Castle Double Darknut Room: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Darknuts'
+    Hyrule Castle Double Dinalfos Room: Can_Open_Doors and 'Can_Defeat_Hyrule_Castle_Double_Dinalfos'
+
+# HYRULE CASTLE FINAL CLIMB
+
+- Name: Hyrule Castle Final Climb Near Outside Balcony
+  Region: Hyrule Castle
+  Events:
+    Follow Ghost Soldiers: Can_Use_Senses
+  Exits:
+    Hyrule Castle Final Climb Top: "'Follow_Ghost_Soldiers' and Can_Defeat_Dinalfos and Can_Defeat_Darknut and Double_Clawshots and Spinner"
+    Hyrule Castle Outside Balcony: Can_Open_Doors
+
+- Name: Hyrule Castle Final Climb Top
+  Region: Hyrule Castle
+  Events:
+    Follow Ghost Soldiers: Can_Use_Senses
+  Exits:
+    Hyrule Castle Treasure Room: Can_Open_Doors and (count(Hyrule_Castle_Small_Key, 3) or Small_Keys == Keysy)
+    Hyrule Castle Throne Room: Hyrule_Castle_Big_Key or Big_Keys == Keysy
+    Hyrule Castle Final Climb Near Outside Balcony: "'Follow_Ghost_Soldiers' and Can_Defeat_Dinalfos and Can_Defeat_Darknut and Double_Clawshots and Spinner"
+
+# HYRULE CASTLE TREASURE ROOM
+
+- Name: Hyrule Castle Treasure Room
+  Region: Hyrule Castle
+  Locations:
+    Hyrule Castle Treasure Room First Small Chest: Nothing
+    Hyrule Castle Treasure Room Second Small Chest: Nothing
+    Hyrule Castle Treasure Room Third Small Chest: Nothing
+    Hyrule Castle Treasure Room Fourth Small Chest: Nothing
+    Hyrule Castle Treasure Room Fifth Small Chest: Nothing
+    Hyrule Castle Treasure Room Sixth Small Chest: Nothing
+    Hyrule Castle Treasure Room Seventh Small Chest: Nothing
+    Hyrule Castle Treasure Room Eighth Small Chest: Nothing
+    Hyrule Castle Treasure Room First Chest: Nothing
+    Hyrule Castle Treasure Room Second Chest: Nothing
+    Hyrule Castle Treasure Room Third Chest: Nothing
+    Hyrule Castle Treasure Room Fourth Chest: Nothing
+    Hyrule Castle Treasure Room Fifth Chest: Nothing
+  Exits:
+    Hyrule Castle Final Climb Top: Can_Open_Doors
+
+# HYRULE CASTLE THRONE ROOM
+
+- Name: Hyrule Castle Throne Room
+  Region: Hyrule Castle
+  Locations:
+    Defeat Ganondorf: Master_Sword and Wolf_Link and Ending_Blow
