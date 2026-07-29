@@ -18,6 +18,7 @@
 #include <fmt/format.h>
 
 #include <algorithm>
+#include <chrono>
 #include <climits>
 #include <cstdint>
 #include <functional>
@@ -1321,6 +1322,27 @@ ModResult ui_unregister_menu_tab(ModContext* context, UiMenuTabHandle tab) {
     return ui_impl::ui_unregister_menu_tab(*mod, tab);
 }
 
+ModResult ui_push_toast(ModContext* context, const UiToastDesc* desc) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || desc == nullptr || desc->struct_size < sizeof(UiToastDesc) ||
+        ((desc->title_rml == nullptr || desc->title_rml[0] == '\0') &&
+            (desc->body_rml == nullptr || desc->body_rml[0] == '\0')))
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    constexpr uint32_t kDefaultDurationMs = 5000;
+    const uint32_t durationMs = desc->duration_ms == 0 ? kDefaultDurationMs : desc->duration_ms;
+    ui::push_toast({
+        .type = desc->type != nullptr ? desc->type : "",
+        .title = desc->title_rml != nullptr ? desc->title_rml : "",
+        .content = desc->body_rml != nullptr ? desc->body_rml : "",
+        .duration = std::chrono::milliseconds{durationMs},
+        .modId = mod->metadata.id,
+    });
+    return MOD_OK;
+}
+
 ModResult ui_dialog_set_body(ModContext* context, UiDialogHandle dialog, const char* bodyRml) {
     auto* mod = mod_from_context(context);
     if (mod == nullptr || dialog == 0 || bodyRml == nullptr) {
@@ -1371,6 +1393,7 @@ constexpr UiService s_uiService{
     .unregister_styles = ui_unregister_styles,
     .register_menu_tab = ui_register_menu_tab,
     .unregister_menu_tab = ui_unregister_menu_tab,
+    .push_toast = ui_push_toast,
 };
 
 }  // namespace

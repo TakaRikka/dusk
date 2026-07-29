@@ -409,6 +409,22 @@ sets `keep_open`. A `keep_open` action can close it later (or immediately) with 
 `on_dismiss` if present and always closes. `dialog_set_body`, `dialog_set_icon`, and `dialog_add_action` mutate a live
 dialog.
 
+**Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
+RCSS class; `warning` uses the built-in warning appearance, and mods can define their own types. A duration of 0 uses
+the default of 5 seconds.
+
+Toasts have a `mod-id` attribute, so `UI_SCOPE_OVERLAY` styles can use selectors such as
+`toast[mod-id="com.example.randomizer"].success`.
+
+```cpp
+UiToastDesc toast = UI_TOAST_DESC_INIT;
+toast.type = "success";
+toast.title_rml = "Randomizer";
+toast.body_rml = "<span>Seed loaded successfully.</span>";
+toast.duration_ms = 3000;
+svc_ui->push_toast(mod_ctx, &toast);
+```
+
 **Menu bar tabs:** `register_menu_tab` adds a tab to the in-game menu bar. `on_selected` fires when the user activates
 the tab: typically you'd push a window from it. The tab is removed by `unregister_menu_tab`, or automatically when the
 mod is disabled.

@@ -5,11 +5,11 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 0u
+#define UI_SERVICE_MINOR 1u
 
 /*
- * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, scoped
- * RCSS stylesheets and menu bar tabs.
+ * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
+ * scoped RCSS stylesheets and menu bar tabs.
  *
  * All calls must be made on the game thread from mod callbacks (initialize, update, hooks, or UI
  * callbacks). Handles are opaque, generation-checked ids; a stale or unknown handle fails with
@@ -208,6 +208,19 @@ typedef struct UiMenuTabDesc {
 
 #define UI_MENU_TAB_DESC_INIT {sizeof(UiMenuTabDesc), NULL, NULL, NULL}
 
+typedef struct UiToastDesc {
+    uint32_t struct_size;
+    /* Optional RCSS class, such as "warning" or a custom mod-defined type. */
+    const char* type;
+    /* Optional RML. At least one of title_rml or body_rml must be non-empty. */
+    const char* title_rml;
+    const char* body_rml;
+    /* How long the toast remains open; 0 uses the default of 5000 ms. */
+    uint32_t duration_ms;
+} UiToastDesc;
+
+#define UI_TOAST_DESC_INIT {sizeof(UiToastDesc), NULL, NULL, NULL, 0u}
+
 typedef struct UiService {
     ServiceHeader header;
 
@@ -271,6 +284,9 @@ typedef struct UiService {
     ModResult (*register_menu_tab)(
         ModContext* ctx, const UiMenuTabDesc* desc, UiMenuTabHandle* out_tab);
     ModResult (*unregister_menu_tab)(ModContext* ctx, UiMenuTabHandle tab);
+
+    /* Enqueue a toast notification. */
+    ModResult (*push_toast)(ModContext* ctx, const UiToastDesc* desc);
 } UiService;
 
 #ifdef __cplusplus
