@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 /*
  * Read-only access to the res/ tree of the calling mod's own bundle. Reload serves the new
  * bundle's contents. For writable storage, use HostService::mod_dir.
@@ -41,13 +45,5 @@ typedef struct ResourceService {
     void (*free)(ModContext* ctx, ResourceBuffer* buffer);
 } ResourceService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<ResourceService> {
-    static constexpr const char* id = RESOURCE_SERVICE_ID;
-    static constexpr uint16_t major_version = RESOURCE_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = RESOURCE_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(ResourceService, svc_resource, RESOURCE_SERVICE_ID, RESOURCE_SERVICE_MAJOR,
+    RESOURCE_SERVICE_MINOR);

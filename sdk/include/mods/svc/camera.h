@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 #define CAMERA_SERVICE_ID "dev.twilitrealm.dusklight.camera"
 #define CAMERA_SERVICE_MAJOR 1u
 #define CAMERA_SERVICE_MINOR 0u
@@ -53,13 +57,5 @@ typedef struct CameraService {
     ModResult (*get_camera)(ModContext* ctx, const void* game_view, CameraInfo* out_info);
 } CameraService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<CameraService> {
-    static constexpr const char* id = CAMERA_SERVICE_ID;
-    static constexpr uint16_t major_version = CAMERA_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = CAMERA_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(
+    CameraService, svc_camera, CAMERA_SERVICE_ID, CAMERA_SERVICE_MAJOR, CAMERA_SERVICE_MINOR);

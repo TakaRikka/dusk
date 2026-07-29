@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 /*
  * The mod SDK imports this service automatically for mods built with FEATURES game; service-only
  * and asset-only mods do not require it.
@@ -19,13 +23,4 @@ typedef struct GameService {
     ServiceHeader header;
 } GameService;
 
-#ifdef __cplusplus
-#include <mods/service.hpp>
-
-template <>
-struct mods::ServiceTraits<GameService> {
-    static constexpr const char* id = GAME_SERVICE_ID;
-    static constexpr uint16_t major_version = GAME_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = GAME_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(GameService, svc_game, GAME_SERVICE_ID, GAME_SERVICE_MAJOR, GAME_SERVICE_MINOR);

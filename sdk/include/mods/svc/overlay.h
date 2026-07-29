@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 #define OVERLAY_SERVICE_ID "dev.twilitrealm.dusklight.overlay"
 #define OVERLAY_SERVICE_MAJOR 1u
 #define OVERLAY_SERVICE_MINOR 0u
@@ -46,13 +50,5 @@ typedef struct OverlayService {
     ModResult (*remove)(ModContext* ctx, OverlayHandle handle);
 } OverlayService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<OverlayService> {
-    static constexpr const char* id = OVERLAY_SERVICE_ID;
-    static constexpr uint16_t major_version = OVERLAY_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = OVERLAY_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(
+    OverlayService, svc_overlay, OVERLAY_SERVICE_ID, OVERLAY_SERVICE_MAJOR, OVERLAY_SERVICE_MINOR);

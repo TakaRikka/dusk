@@ -209,6 +209,7 @@ void ModLoader::init_services() {
             &svc::g_uiModule,
             &svc::g_gameModule,
             &svc::g_cameraModule,
+            &svc::g_windowModule,
             &svc::g_gfxModule,
         })
     {

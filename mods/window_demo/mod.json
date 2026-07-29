@@ -1,0 +1,7 @@
+{
+  "id": "dev.twilitrealm.window_demo",
+  "name": "[Demo] Extra Window",
+  "version": "1.0.0",
+  "author": "Twilit Realm",
+  "description": "Demonstrates creating an extra window through WindowService and rendering to it with GfxService."
+}

@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 /*
  * Logging into the game's console and log files. Messages are attributed to the calling mod
  * (prefixed with its ID).
@@ -36,13 +40,4 @@ typedef struct LogService {
     void (*error)(ModContext* ctx, const char* message);
 } LogService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<LogService> {
-    static constexpr const char* id = LOG_SERVICE_ID;
-    static constexpr uint16_t major_version = LOG_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = LOG_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(LogService, svc_log, LOG_SERVICE_ID, LOG_SERVICE_MAJOR, LOG_SERVICE_MINOR);

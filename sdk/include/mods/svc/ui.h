@@ -3,6 +3,10 @@
 #include <mods/api.h>
 #include <mods/svc/config.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
 #define UI_SERVICE_MINOR 0u
@@ -273,13 +277,4 @@ typedef struct UiService {
     ModResult (*unregister_menu_tab)(ModContext* ctx, UiMenuTabHandle tab);
 } UiService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<UiService> {
-    static constexpr const char* id = UI_SERVICE_ID;
-    static constexpr uint16_t major_version = UI_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = UI_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(UiService, svc_ui, UI_SERVICE_ID, UI_SERVICE_MAJOR, UI_SERVICE_MINOR);
