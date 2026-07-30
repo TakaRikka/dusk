@@ -71,6 +71,9 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
     }
 
     auto* elem = append(parent, "toast");
+    if (!toast.modId.empty()) {
+        elem->SetAttribute("mod-id", toast.modId);
+    }
     if (!toast.type.empty()) {
         elem->SetClass(toast.type, true);
     }

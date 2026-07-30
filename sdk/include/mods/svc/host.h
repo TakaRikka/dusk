@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 /*
  * The host service: the calling mod's identity and its runtime interface to the loader.
  * Always available; every other service can be reached from it.
@@ -103,13 +107,4 @@ typedef struct HostService {
     const char* (*native_dir)(ModContext* ctx);
 } HostService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<HostService> {
-    static constexpr const char* id = HOST_SERVICE_ID;
-    static constexpr uint16_t major_version = HOST_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = HOST_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(HostService, svc_host, HOST_SERVICE_ID, HOST_SERVICE_MAJOR, HOST_SERVICE_MINOR);

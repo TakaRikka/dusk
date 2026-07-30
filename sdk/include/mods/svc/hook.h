@@ -2,9 +2,13 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 /*
- * Intercept game functions by address. Prefer the typed helpers in mods/hook.hpp
- * (hook_add_pre/hook_add_post/hook_replace over a &Class::method): they generate the
+ * Intercept game functions by address. Prefer the typed helpers in mods/svc/hook.hpp
+ * (mods::hook::add_pre/add_post/replace over a &Class::method): they generate the
  * trampoline and hide install/dispatch, which are the low-level primitives those helpers
  * build. resolve() maps a symbol name to an address for targets you can't name at compile time
  * (file-local statics included).
@@ -46,7 +50,7 @@ typedef enum HookReplacePolicy {
 /*
  * Hook callbacks. `args` is an array of pointers to the call's arguments (index 0 is `this`
  * for member functions); `retval` points at the return slot (NULL for void). Read and write
- * them through mods::arg<T> / arg_ref<T> from mods/hook.hpp. `userdata` is the pointer
+ * them through mods::arg<T> / arg_ref<T> from mods/svc/hook.hpp. `userdata` is the pointer
  * from HookOptions. All run on the game thread, in the hooked call's own stack frame.
  */
 typedef HookAction (*HookPreFn)(ModContext* ctx, void* args, void* retval, void* userdata);
@@ -114,13 +118,4 @@ typedef struct HookService {
         ModContext* ctx, const char* symbol, void** out_addr, HookSymbolFlags* out_flags);
 } HookService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<HookService> {
-    static constexpr const char* id = HOOK_SERVICE_ID;
-    static constexpr uint16_t major_version = HOOK_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = HOOK_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(HookService, svc_hook, HOOK_SERVICE_ID, HOOK_SERVICE_MAJOR, HOOK_SERVICE_MINOR);

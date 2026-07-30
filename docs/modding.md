@@ -54,7 +54,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/FetchDusklight.cmake")
 add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
 
 add_mod(my_mod
-        FEATURES game          # remove for service/asset-only mods; add webgpu for GfxService
+        FEATURES game fmt      # remove game for service-only mods; add webgpu for GfxService
         SOURCES src/mod.cpp
         MOD_JSON mod.json
         RES_DIR res            # mod resources, including icon.png and banner.png
@@ -64,6 +64,8 @@ add_mod(my_mod
 ```
 
 Available features:
+
+- `fmt`: Provides the header-only `{fmt}` library and the formatted logging helpers in `mods/svc/log.hpp`.
 - `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
   range of compatibility with Dusklight versions and a slightly faster build process.
 - `webgpu`: Allows importing the WebGPU API (`webgpu/webgpu.h`). Must be enabled when using
@@ -143,6 +145,9 @@ IMPORT_SERVICE_VERSION(LogService, svc_log, 0);   // required, minimum minor ver
 IMPORT_OPTIONAL_SERVICE(SomeService, svc_maybe);  // may be null
 ```
 
+A service must be imported in only **one** file (usually your `mod.cpp`). Other files may simply use `svc_log` or
+`mods::log::` after including the appropriate header.
+
 Each service is individually versioned, and there may be multiple major versions of a service provided at once,
 allowing backwards compatibility with older mods while still changing services fundamentally if necessary. A **major**
 bump is a breaking change, treated as a different service entirely. For **additive** changes, a service appends new
@@ -179,7 +184,15 @@ svc_log->write(mod_ctx, LOG_LEVEL_DEBUG, "verbose details");
 ```
 
 Messages appear in the console prefixed with your mod ID. Messages are plain UTF-8 strings and are copied before the
-call returns; use `snprintf` or `fmt::format` for formatting.
+call returns. C++ mods can enable `add_mod(... FEATURES fmt)` and use the formatted logging helpers in
+`mods/svc/log.hpp`:
+
+```cpp
+#include <mods/svc/log.hpp>
+
+mods::log::info("spawned actor {} at ({}, {})", actorName, x, y);
+mods::log::warn("health is down to {:.1f}%", healthPercent);
+```
 
 ### ResourceService (`mods/svc/resource.h`)
 
@@ -236,7 +249,7 @@ every service dropped its state. For your own mod's teardown, use `mod_shutdown`
 ### HookService (`mods/svc/hook.h`)
 
 Installs hooks on game functions and resolves symbols by name. You'll rarely call it directly; use the typed helpers in
-`mods/hook.hpp` described in [Hooking Game Functions](#hooking-game-functions).
+`mods/svc/hook.hpp` described in [Hooking Game Functions](#hooking-game-functions).
 
 ### OverlayService (`mods/svc/overlay.h`)
 
@@ -409,6 +422,22 @@ sets `keep_open`. A `keep_open` action can close it later (or immediately) with 
 `on_dismiss` if present and always closes. `dialog_set_body`, `dialog_set_icon`, and `dialog_add_action` mutate a live
 dialog.
 
+**Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
+RCSS class; `warning` uses the built-in warning appearance, and mods can define their own types. A duration of 0 uses
+the default of 5 seconds.
+
+Toasts have a `mod-id` attribute, so `UI_SCOPE_OVERLAY` styles can use selectors such as
+`toast[mod-id="com.example.randomizer"].success`.
+
+```cpp
+UiToastDesc toast = UI_TOAST_DESC_INIT;
+toast.type = "success";
+toast.title_rml = "Randomizer";
+toast.body_rml = "<span>Seed loaded successfully.</span>";
+toast.duration_ms = 3000;
+svc_ui->push_toast(mod_ctx, &toast);
+```
+
 **Menu bar tabs:** `register_menu_tab` adds a tab to the in-game menu bar. `on_selected` fires when the user activates
 the tab: typically you'd push a window from it. The tab is removed by `unregister_menu_tab`, or automatically when the
 mod is disabled.
@@ -419,6 +448,26 @@ existing documents restyle immediately, and future ones pick it up when created.
 `UI_SCOPE_MENU_BAR`, `UI_SCOPE_OVERLAY`, `UI_SCOPE_TOUCH_CONTROLS`, and `UI_SCOPE_GRAPHICS_TUNER`. Sheets apply after
 host styles and may override them. Scope selectors tightly (use `[mod-id="..."]`!), especially for `UI_SCOPE_WINDOW`,
 unless changing host UI is intentional.
+
+### WindowService (`mods/svc/window.h`)
+
+Allows creating new windows that can be rendered to via `GfxService`.
+
+```cpp
+IMPORT_SERVICE(WindowService, svc_window);
+
+WindowDesc desc = WINDOW_DESC_INIT;
+desc.title = "My auxiliary view";
+desc.on_event = on_window_event;
+WindowHandle window = 0;
+svc_window->create_window(mod_ctx, &desc, &window);
+```
+
+Window callbacks run on the game thread. A close event is only a request; call `destroy_window` when the mod is ready to
+close it. A window attached to a GfxService present target cannot be destroyed until that target is unregistered. Only
+one present target may be attached to a WindowService window at a time.
+
+New windows are hidden by default so a mod can finish attaching graphics before calling `show_window`.
 
 ### GfxService (`mods/svc/gfx.h`)
 
@@ -451,6 +500,30 @@ registered with `register_compute_type` follow the same worker-thread rule and r
 All WGPU handles from the service are borrowed. Resolved target views are valid for the current frame only. GPU objects
 created by a mod are owned by that mod and should be released in `mod_shutdown`.
 
+#### External presentation
+
+GfxService supports external presentation ("present targets") backed by either a WindowService window (via
+`register_window_present_target`) or a plain `WGPUSurface` (via `register_present_target`).
+
+```cpp
+GfxPresentTargetDesc target_desc = GFX_PRESENT_TARGET_DESC_INIT;
+target_desc.render = render_auxiliary_view;
+GfxPresentTargetHandle target = 0;
+svc_gfx->register_window_present_target(mod_ctx, window, &target_desc, &target);
+
+// From a stage callback:
+svc_gfx->push_present(mod_ctx, target, &payload, sizeof(payload));
+```
+
+For WindowService windows, the surface is automatically reconfigured on window size changes.
+For plain `WBPUSurface`s, `resize_present_target` must be used to resize.
+
+To create a `WGPUSurface` manually, `GfxDeviceInfo` holds the `WGPUInstance` and `WGPUAdapter` which can be used with
+`wgpuInstanceCreateSurface` and a chained `WGPUSurfaceSource*` struct.
+
+`push_present` must be called every frame from a GfxService stage callback. If surface was lost, `push_present` returns
+`MOD_ERROR`. Unregister and re-register the target before trying again.
+
 ### CameraService (`mods/svc/camera.h`)
 
 Converts a game view provided by a render callback into WebGPU-convention camera data. Matrix fields are column-major
@@ -477,11 +550,10 @@ first in-game frame. Projection matrices match the renderer's WebGPU clip conven
 **Requires `add_mod(... FEATURES game)`**
 
 Mods may hook the vast majority of game functions, including file-local static, private and virtual functions.
-`mods/hook.hpp` provides typed helpers over the hook service:
+`mods/svc/hook.hpp` provides typed helpers over the hook service:
 
 ```cpp
-#include "mods/hook.hpp"
-#include "mods/svc/hook.h"
+#include "mods/svc/hook.hpp"
 
 IMPORT_SERVICE(HookService, svc_hook);
 
@@ -505,7 +577,7 @@ HookAction on_pos_move_pre(ModContext*, void* args, void* retval, void* userdata
     return HOOK_CONTINUE;
 }
 
-mods::hook_add_pre<LinkPosMove>(svc_hook, on_pos_move_pre);
+mods::hook::add_pre<LinkPosMove>(on_pos_move_pre);
 ```
 
 ### Post-hooks
@@ -516,7 +588,7 @@ if any.
 ```cpp
 void on_pos_move_post(ModContext*, void* args, void* retval, void* userdata) { ... }
 
-mods::hook_add_post<LinkPosMove>(svc_hook, on_pos_move_post);
+mods::hook::add_post<LinkPosMove>(on_pos_move_post);
 ```
 
 ### Replace-hooks
@@ -531,7 +603,7 @@ void on_execute_replace(ModContext*, void* args, void* retval, void*) {
     }
 }
 
-mods::hook_replace<LinkExecute>(svc_hook, on_execute_replace);
+mods::hook::replace<LinkExecute>(on_execute_replace);
 ```
 
 By default a second replace-hook on the same function is a conflict; `HookOptions` (`replace_policy`, `priority`,
@@ -547,7 +619,7 @@ symbol name instead. You must supply the signature along with the name.
 DEFINE_HOOK_SYMBOL("daAlink_hookshotAtHitCallBack",
     void(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*), HookshotHit);
 
-mods::hook_add_pre<HookshotHit>(svc_hook, on_hookshot_hit_pre);
+mods::hook::add_pre<HookshotHit>(on_hookshot_hit_pre);
 ...
 HookshotHit::g_orig(link, atObjInf, target, tgObjInf);  // call through to the original
 ```
@@ -587,7 +659,7 @@ HookAction on_create_item_pre(ModContext*, void* args, void*, void*) {
     return HOOK_CONTINUE;
 }
 
-mods::hook_add_pre<CreateItem>(svc_hook, on_create_item_pre);
+mods::hook::add_pre<CreateItem>(on_create_item_pre);
 ```
 
 For reference parameters (e.g. `const cXyz& pos`), `arg_ref<cXyz>` yields a direct reference.

@@ -21,26 +21,9 @@ export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 ```bash
 cmake --preset android-arm64
 cmake --build --preset android-arm64
-
-cmake --preset android-x86_64
-cmake --build --preset android-x86_64
 ```
 
-These builds produce:
-
-- `build/android-arm64/Binaries/libmain.so`
-- `build/android-x86_64/Binaries/libmain.so`
-
-## Stage Libraries Into APK Project
-
-```bash
-./android/scripts/stage-jni-libs.sh
-```
-
-This copies:
-
-- `libmain.so` -> `android/app/src/main/jniLibs/arm64-v8a/`
-- `libmain.so` -> `android/app/src/main/jniLibs/x86_64/`
+This build produces `build/android-arm64/libmain.so`
 
 ## Refresh SDL Java Shim (Optional)
 

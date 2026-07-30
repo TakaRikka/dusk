@@ -1,5 +1,6 @@
 #include "registry.hpp"
 #include "slot_map.hpp"
+#include "window.hpp"
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/gfx.hpp"
@@ -7,11 +8,16 @@
 #include "mods/svc/gfx.h"
 
 #include <aurora/gfx.hpp>
+#include <aurora/webgpu.hpp>
 #include <fmt/format.h>
 
+#include <atomic>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
+#include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -25,6 +31,7 @@ enum class GfxSlotKind : uint8_t {
     DrawType,
     StageHook,
     ComputeType,
+    PresentTarget,
 };
 
 enum class GfxStreamBuffer : uint8_t {
@@ -33,6 +40,33 @@ enum class GfxStreamBuffer : uint8_t {
     Uniform,
     Storage,
 };
+
+enum class PresentTargetStatus : uint8_t {
+    Pending,
+    Ready,
+    TransientUnavailable,
+    Lost,
+    Error,
+};
+
+struct PresentTargetState {
+    wgpu::Surface surface;
+    wgpu::SurfaceConfiguration configuration;
+    wgpu::Texture currentTexture;
+    wgpu::TextureView currentView;
+    std::atomic<PresentTargetStatus> status = PresentTargetStatus::Pending;
+    bool configured = false;
+    bool presentPending = false;
+    bool vsync = true;
+};
+
+bool present_target_failed(const std::shared_ptr<PresentTargetState>& state) {
+    if (state == nullptr) {
+        return true;
+    }
+    const auto status = state->status.load(std::memory_order_acquire);
+    return status == PresentTargetStatus::Lost || status == PresentTargetStatus::Error;
+}
 
 struct GfxSlot {
     GfxSlotKind kind = GfxSlotKind::DrawType;
@@ -48,13 +82,21 @@ struct GfxSlot {
 
     GfxComputeFn computeFn = nullptr;
     aurora::gfx::EncoderTaskId auroraTaskId = aurora::gfx::InvalidEncoderTask;
+
+    GfxPresentFn presentFn = nullptr;
+    std::shared_ptr<PresentTargetState> presentState;
+    WindowHandle window = 0;
+    uint32_t targetWidth = 0;
+    uint32_t targetHeight = 0;
+    WGPUTextureUsage targetUsage = WGPUTextureUsage_RenderAttachment;
+    WGPUTextureFormat preferredFormat = WGPUTextureFormat_Undefined;
+    WGPUCompositeAlphaMode preferredAlphaMode = WGPUCompositeAlphaMode_Auto;
+    uint32_t lastPresentFrame = UINT32_MAX;
 };
 
 struct WorkerFailure {
     std::string modId;
     std::string message;
-    std::vector<aurora::gfx::DrawTypeId> drawIds;
-    std::vector<aurora::gfx::EncoderTaskId> taskIds;
 };
 
 std::mutex s_mutex;
@@ -84,20 +126,23 @@ GfxSlot* resolve_owned_slot_locked(LoadedMod& mod, uint64_t handle, GfxSlotKind 
     return &entry->value;
 }
 
-void collect_mod_slots_locked(LoadedMod& owner, std::vector<aurora::gfx::DrawTypeId>& drawIds,
+void collect_mod_types_locked(LoadedMod& owner, std::vector<aurora::gfx::DrawTypeId>& drawIds,
     std::vector<aurora::gfx::EncoderTaskId>& taskIds) {
-    auto entries = s_slots.take_all(owner);
-    for (auto& entry : entries) {
+    s_slots.for_each([&](uint64_t, const auto& entry) {
+        if (entry.owner != &owner) {
+            return;
+        }
         const auto& slot = entry.value;
         if (slot.kind == GfxSlotKind::DrawType && slot.auroraDrawId != aurora::gfx::InvalidDrawType)
         {
             drawIds.push_back(slot.auroraDrawId);
-        } else if (slot.kind == GfxSlotKind::ComputeType &&
+        } else if ((slot.kind == GfxSlotKind::ComputeType ||
+                       slot.kind == GfxSlotKind::PresentTarget) &&
                    slot.auroraTaskId != aurora::gfx::InvalidEncoderTask)
         {
             taskIds.push_back(slot.auroraTaskId);
         }
-    }
+    });
 }
 
 void unregister_aurora_types(const std::vector<aurora::gfx::DrawTypeId>& drawIds,
@@ -116,7 +161,6 @@ void draw_trampoline(const aurora::gfx::DrawContext& ctx, const wgpu::RenderPass
     GfxDrawFn fn = nullptr;
     void* userData = nullptr;
     ModContext* modContext = nullptr;
-    LoadedMod* owner = nullptr;
     std::string ownerId;
     {
         std::lock_guard lock{s_mutex};
@@ -128,7 +172,6 @@ void draw_trampoline(const aurora::gfx::DrawContext& ctx, const wgpu::RenderPass
         fn = slot.drawFn;
         userData = slot.userData;
         modContext = slot.ownerContext;
-        owner = entry->owner;
         ownerId = slot.ownerId;
     }
 
@@ -164,7 +207,6 @@ void draw_trampoline(const aurora::gfx::DrawContext& ctx, const wgpu::RenderPass
         .modId = std::move(ownerId),
         .message = std::move(failure),
     };
-    collect_mod_slots_locked(*owner, record.drawIds, record.taskIds);
     s_workerFailures.push_back(std::move(record));
 }
 
@@ -174,7 +216,6 @@ void compute_trampoline(const aurora::gfx::EncoderTaskContext& ctx, const wgpu::
     GfxComputeFn fn = nullptr;
     void* userData = nullptr;
     ModContext* modContext = nullptr;
-    LoadedMod* owner = nullptr;
     std::string ownerId;
     {
         std::lock_guard lock{s_mutex};
@@ -186,7 +227,6 @@ void compute_trampoline(const aurora::gfx::EncoderTaskContext& ctx, const wgpu::
         fn = slot.computeFn;
         userData = slot.userData;
         modContext = slot.ownerContext;
-        owner = entry->owner;
         ownerId = slot.ownerId;
     }
 
@@ -216,8 +256,233 @@ void compute_trampoline(const aurora::gfx::EncoderTaskContext& ctx, const wgpu::
         .modId = std::move(ownerId),
         .message = std::move(failure),
     };
-    collect_mod_slots_locked(*owner, record.drawIds, record.taskIds);
     s_workerFailures.push_back(std::move(record));
+}
+
+template <typename T>
+bool contains(const T* values, size_t count, T value) {
+    for (size_t i = 0; i < count; ++i) {
+        if (values[i] == value) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool configure_present_target(const std::shared_ptr<PresentTargetState>& state,
+    const aurora::gfx::EncoderTaskContext& ctx, uint32_t width, uint32_t height,
+    WGPUTextureUsage requestedUsage, WGPUTextureFormat preferredFormat,
+    WGPUCompositeAlphaMode preferredAlphaMode, bool vsync) {
+    if (width == 0 || height == 0) {
+        state->status.store(PresentTargetStatus::TransientUnavailable, std::memory_order_release);
+        return false;
+    }
+    if (!state->surface) {
+        state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+        return false;
+    }
+
+    const auto adapter = ctx.device.GetAdapter();
+    wgpu::SurfaceCapabilities capabilities;
+    if (!adapter ||
+        state->surface.GetCapabilities(adapter, &capabilities) != wgpu::Status::Success ||
+        capabilities.formatCount == 0 || capabilities.presentModeCount == 0 ||
+        capabilities.alphaModeCount == 0)
+    {
+        state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+        return false;
+    }
+
+    auto format = static_cast<wgpu::TextureFormat>(preferredFormat);
+    if (format == wgpu::TextureFormat::Undefined ||
+        !contains(capabilities.formats, capabilities.formatCount, format))
+    {
+        format = aurora::gfx::color_format();
+    }
+    if (format == wgpu::TextureFormat::Undefined ||
+        !contains(capabilities.formats, capabilities.formatCount, format))
+    {
+        format = capabilities.formats[0];
+    }
+
+    const auto presentMode = aurora::webgpu::select_present_mode(capabilities);
+
+    auto alphaMode = static_cast<wgpu::CompositeAlphaMode>(preferredAlphaMode);
+    if (alphaMode != wgpu::CompositeAlphaMode::Auto &&
+        !contains(capabilities.alphaModes, capabilities.alphaModeCount, alphaMode))
+    {
+        alphaMode = capabilities.alphaModes[0];
+    }
+
+    auto usage = static_cast<wgpu::TextureUsage>(requestedUsage);
+    if (usage == wgpu::TextureUsage::None) {
+        usage = wgpu::TextureUsage::RenderAttachment;
+    }
+    if ((usage & wgpu::TextureUsage::RenderAttachment) == wgpu::TextureUsage::None ||
+        (usage & ~capabilities.usages) != wgpu::TextureUsage::None)
+    {
+        state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+        return false;
+    }
+
+    state->configuration = wgpu::SurfaceConfiguration{
+        .device = ctx.device,
+        .format = format,
+        .usage = usage,
+        .width = width,
+        .height = height,
+        .alphaMode = alphaMode,
+        .presentMode = presentMode,
+    };
+    state->surface.Configure(&state->configuration);
+    state->configured = true;
+    state->vsync = vsync;
+    state->status.store(PresentTargetStatus::Pending, std::memory_order_release);
+    return true;
+}
+
+void present_trampoline(const aurora::gfx::EncoderTaskContext& ctx, const wgpu::CommandEncoder& cmd,
+    const void* payload, size_t payloadSize, void* userdata) {
+    const auto handle = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(userdata));
+    GfxPresentFn fn = nullptr;
+    void* userData = nullptr;
+    ModContext* modContext = nullptr;
+    std::string ownerId;
+    std::shared_ptr<PresentTargetState> state;
+    uint32_t width = 0;
+    uint32_t height = 0;
+    WGPUTextureUsage usage = WGPUTextureUsage_RenderAttachment;
+    WGPUTextureFormat preferredFormat = WGPUTextureFormat_Undefined;
+    WGPUCompositeAlphaMode preferredAlphaMode = WGPUCompositeAlphaMode_Auto;
+    {
+        std::lock_guard lock{s_mutex};
+        auto* entry = resolve_entry_locked(handle, GfxSlotKind::PresentTarget);
+        if (entry == nullptr) {
+            return;
+        }
+        const auto& slot = entry->value;
+        fn = slot.presentFn;
+        userData = slot.userData;
+        modContext = slot.ownerContext;
+        ownerId = slot.ownerId;
+        state = slot.presentState;
+        width = slot.targetWidth;
+        height = slot.targetHeight;
+        usage = slot.targetUsage;
+        preferredFormat = slot.preferredFormat;
+        preferredAlphaMode = slot.preferredAlphaMode;
+    }
+    if (fn == nullptr || state == nullptr || present_target_failed(state)) {
+        return;
+    }
+
+    state->presentPending = false;
+    state->currentView = {};
+    state->currentTexture = {};
+    const bool vsync = aurora::webgpu::vsync_enabled();
+    if (!state->configured || state->configuration.width != width ||
+        state->configuration.height != height || state->vsync != vsync)
+    {
+        if (!configure_present_target(
+                state, ctx, width, height, usage, preferredFormat, preferredAlphaMode, vsync))
+        {
+            return;
+        }
+    }
+
+    wgpu::SurfaceTexture surfaceTexture;
+    state->surface.GetCurrentTexture(&surfaceTexture);
+    if (surfaceTexture.status != wgpu::SurfaceGetCurrentTextureStatus::SuccessOptimal &&
+        surfaceTexture.status != wgpu::SurfaceGetCurrentTextureStatus::SuccessSuboptimal)
+    {
+        if (surfaceTexture.status == wgpu::SurfaceGetCurrentTextureStatus::Lost) {
+            state->status.store(PresentTargetStatus::Lost, std::memory_order_release);
+            state->configured = false;
+        } else if (surfaceTexture.status == wgpu::SurfaceGetCurrentTextureStatus::Outdated) {
+            state->status.store(
+                PresentTargetStatus::TransientUnavailable, std::memory_order_release);
+            state->configured = false;
+        } else if (surfaceTexture.status == wgpu::SurfaceGetCurrentTextureStatus::Error) {
+            state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+            state->configured = false;
+        } else {
+            state->status.store(
+                PresentTargetStatus::TransientUnavailable, std::memory_order_release);
+        }
+        return;
+    }
+
+    state->currentTexture = std::move(surfaceTexture.texture);
+    state->currentView = state->currentTexture.CreateView();
+    if (!state->currentTexture || !state->currentView) {
+        state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+        return;
+    }
+
+    const GfxPresentContext presentContext{
+        .struct_size = sizeof(GfxPresentContext),
+        .device = ctx.device.Get(),
+        .queue = ctx.queue.Get(),
+        .encoder = cmd.Get(),
+        .target_texture = state->currentTexture.Get(),
+        .target_view = state->currentView.Get(),
+        .target_format = static_cast<WGPUTextureFormat>(state->configuration.format),
+        .target_width = width,
+        .target_height = height,
+        .vertex_buffer = ctx.vertexBuffer.Get(),
+        .index_buffer = ctx.indexBuffer.Get(),
+        .uniform_buffer = ctx.uniformBuffer.Get(),
+        .storage_buffer = ctx.storageBuffer.Get(),
+    };
+
+    std::string failure;
+    try {
+        fn(modContext, &presentContext, payload, payloadSize, userData);
+        state->presentPending = true;
+        state->status.store(PresentTargetStatus::Ready, std::memory_order_release);
+        if (surfaceTexture.status == wgpu::SurfaceGetCurrentTextureStatus::SuccessSuboptimal) {
+            state->configured = false;
+        }
+        return;
+    } catch (const std::exception& e) {
+        failure = fmt::format("exception in gfx present callback: {}", e.what());
+    } catch (...) {
+        failure = "unknown exception in gfx present callback";
+    }
+
+    state->presentPending = false;
+    state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+    std::lock_guard lock{s_mutex};
+    s_workerFailures.push_back(WorkerFailure{
+        .modId = std::move(ownerId),
+        .message = std::move(failure),
+    });
+}
+
+void present_after_submit_trampoline(
+    const aurora::gfx::EncoderTaskCompletionContext&, const void*, size_t, void* userdata) {
+    const auto handle = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(userdata));
+    std::shared_ptr<PresentTargetState> state;
+    {
+        std::lock_guard lock{s_mutex};
+        const auto* entry = resolve_entry_locked(handle, GfxSlotKind::PresentTarget);
+        if (entry == nullptr) {
+            return;
+        }
+        state = entry->value.presentState;
+    }
+    if (state == nullptr || !state->presentPending) {
+        return;
+    }
+
+    const bool presented = state->surface.Present();
+    state->presentPending = false;
+    state->currentView = {};
+    state->currentTexture = {};
+    if (!presented) {
+        state->configured = false;
+        state->status.store(PresentTargetStatus::Error, std::memory_order_release);
+    }
 }
 
 }  // namespace
@@ -449,6 +714,158 @@ ModResult gfx_push_compute(
     return MOD_OK;
 }
 
+ModResult gfx_register_present_target(LoadedMod& mod, wgpu::Surface surface, WindowHandle window,
+    const GfxPresentTargetDesc& desc, uint64_t& outHandle) {
+    outHandle = 0;
+    auto state = std::make_shared<PresentTargetState>();
+    state->surface = std::move(surface);
+
+    uint64_t handle = 0;
+    {
+        std::lock_guard lock{s_mutex};
+        handle = s_slots.emplace(mod, GfxSlot{
+                                          .kind = GfxSlotKind::PresentTarget,
+                                          .ownerContext = mod.context.get(),
+                                          .ownerId = mod.metadata.id,
+                                          .userData = desc.user_data,
+                                          .presentFn = desc.render,
+                                          .presentState = state,
+                                          .window = window,
+                                          .targetWidth = desc.width,
+                                          .targetHeight = desc.height,
+                                          .targetUsage = desc.usage == WGPUTextureUsage_None ?
+                                                             WGPUTextureUsage_RenderAttachment :
+                                                             desc.usage,
+                                          .preferredFormat = desc.preferred_format,
+                                          .preferredAlphaMode = desc.preferred_alpha_mode,
+                                      });
+    }
+
+    const auto auroraId =
+        aurora::gfx::register_encoder_task_type(aurora::gfx::EncoderTaskDescriptor{
+            .label = desc.label,
+            .callback = present_trampoline,
+            .userdata = reinterpret_cast<void*>(static_cast<uintptr_t>(handle)),
+            .afterSubmit = present_after_submit_trampoline,
+        });
+    if (auroraId == aurora::gfx::InvalidEncoderTask) {
+        std::lock_guard lock{s_mutex};
+        s_slots.erase_owned(handle, mod);
+        return MOD_ERROR;
+    }
+
+    {
+        std::lock_guard lock{s_mutex};
+        auto* slot = resolve_owned_slot_locked(mod, handle, GfxSlotKind::PresentTarget);
+        if (slot == nullptr) {
+            aurora::gfx::unregister_encoder_task_type(auroraId);
+            return MOD_ERROR;
+        }
+        slot->auroraTaskId = auroraId;
+    }
+    outHandle = handle;
+    return MOD_OK;
+}
+
+ModResult gfx_unregister_present_target(LoadedMod& mod, uint64_t handle) {
+    aurora::gfx::EncoderTaskId auroraId = aurora::gfx::InvalidEncoderTask;
+    {
+        std::lock_guard lock{s_mutex};
+        auto* slot = resolve_owned_slot_locked(mod, handle, GfxSlotKind::PresentTarget);
+        if (slot == nullptr) {
+            return MOD_INVALID_ARGUMENT;
+        }
+        auroraId = slot->auroraTaskId;
+    }
+
+    aurora::gfx::unregister_encoder_task_type(auroraId);
+    aurora::gfx::synchronize();
+
+    std::optional<GfxSlotMap::Entry> removed;
+    {
+        std::lock_guard lock{s_mutex};
+        removed = s_slots.take_owned(handle, mod);
+    }
+    if (!removed.has_value()) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    if (removed->value.presentState != nullptr && removed->value.presentState->configured) {
+        removed->value.presentState->surface.Unconfigure();
+    }
+    if (removed->value.window != 0) {
+        svc::window_release_for_graphics(mod, removed->value.window);
+    }
+    return MOD_OK;
+}
+
+ModResult gfx_resize_present_target(
+    LoadedMod& mod, uint64_t handle, uint32_t width, uint32_t height) {
+    std::lock_guard lock{s_mutex};
+    auto* slot = resolve_owned_slot_locked(mod, handle, GfxSlotKind::PresentTarget);
+    if (slot == nullptr || width == 0 || height == 0) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    if (slot->window != 0) {
+        return MOD_UNSUPPORTED;
+    }
+    slot->targetWidth = width;
+    slot->targetHeight = height;
+    return MOD_OK;
+}
+
+ModResult gfx_push_present(
+    LoadedMod& mod, uint64_t handle, const void* payload, size_t payloadSize) {
+    WindowHandle window = 0;
+    {
+        std::lock_guard lock{s_mutex};
+        auto* slot = resolve_owned_slot_locked(mod, handle, GfxSlotKind::PresentTarget);
+        if (slot == nullptr) {
+            return MOD_INVALID_ARGUMENT;
+        }
+        if (present_target_failed(slot->presentState)) {
+            return MOD_ERROR;
+        }
+        window = slot->window;
+    }
+
+    uint32_t width = 0;
+    uint32_t height = 0;
+    if (window != 0 && !svc::window_get_pixel_size(mod, window, width, height)) {
+        return MOD_UNAVAILABLE;
+    }
+
+    aurora::gfx::EncoderTaskId auroraId = aurora::gfx::InvalidEncoderTask;
+    const uint32_t frame = aurora::gfx::current_frame();
+    {
+        std::lock_guard lock{s_mutex};
+        auto* slot = resolve_owned_slot_locked(mod, handle, GfxSlotKind::PresentTarget);
+        if (slot == nullptr) {
+            return MOD_INVALID_ARGUMENT;
+        }
+        if (present_target_failed(slot->presentState)) {
+            return MOD_ERROR;
+        }
+        if (slot->lastPresentFrame == frame) {
+            return MOD_CONFLICT;
+        }
+        if (window != 0) {
+            slot->targetWidth = width;
+            slot->targetHeight = height;
+        }
+        auroraId = slot->auroraTaskId;
+    }
+    if (!aurora::gfx::push_encoder_task(auroraId, payload, payloadSize)) {
+        return MOD_UNAVAILABLE;
+    }
+    {
+        std::lock_guard lock{s_mutex};
+        if (auto* slot = resolve_owned_slot_locked(mod, handle, GfxSlotKind::PresentTarget)) {
+            slot->lastPresentFrame = frame;
+        }
+    }
+    return MOD_OK;
+}
+
 void gfx_run_stage(
     GfxStage stage, const view_class* gameView, const view_port_class* gameViewport) {
     struct StageEntry {
@@ -518,6 +935,37 @@ void gfx_run_stage(
     }
 }
 
+void gfx_remove_mod(LoadedMod& mod) {
+    std::vector<aurora::gfx::DrawTypeId> drawIds;
+    std::vector<aurora::gfx::EncoderTaskId> taskIds;
+    {
+        std::lock_guard lock{s_mutex};
+        collect_mod_types_locked(mod, drawIds, taskIds);
+    }
+    unregister_aurora_types(drawIds, taskIds);
+    if (!drawIds.empty() || !taskIds.empty()) {
+        aurora::gfx::synchronize();
+    }
+
+    std::vector<GfxSlotMap::Entry> entries;
+    {
+        std::lock_guard lock{s_mutex};
+        entries = s_slots.take_all(mod);
+    }
+    for (auto& entry : entries) {
+        auto& slot = entry.value;
+        if (slot.kind != GfxSlotKind::PresentTarget) {
+            continue;
+        }
+        if (slot.presentState != nullptr && slot.presentState->configured) {
+            slot.presentState->surface.Unconfigure();
+        }
+        if (slot.window != 0) {
+            svc::window_release_for_graphics(mod, slot.window);
+        }
+    }
+}
+
 void gfx_drain_worker_failures() {
     std::vector<WorkerFailure> failures;
     {
@@ -528,37 +976,15 @@ void gfx_drain_worker_failures() {
         return;
     }
 
-    bool needsSynchronize = false;
-    for (const auto& failure : failures) {
-        unregister_aurora_types(failure.drawIds, failure.taskIds);
-        needsSynchronize = needsSynchronize || !failure.drawIds.empty() || !failure.taskIds.empty();
-    }
-    if (needsSynchronize) {
-        aurora::gfx::synchronize();
-    }
-
     for (const auto& failure : failures) {
         for (auto& mod : ModLoader::instance().mods()) {
             if (mod.metadata.id == failure.modId && mod.active) {
+                gfx_remove_mod(mod);
                 fail_mod(mod, MOD_ERROR, failure.message);
                 break;
             }
         }
     }
-}
-
-void gfx_remove_mod(LoadedMod& mod) {
-    std::vector<aurora::gfx::DrawTypeId> drawIds;
-    std::vector<aurora::gfx::EncoderTaskId> taskIds;
-    {
-        std::lock_guard lock{s_mutex};
-        collect_mod_slots_locked(mod, drawIds, taskIds);
-    }
-    if (drawIds.empty() && taskIds.empty()) {
-        return;
-    }
-    unregister_aurora_types(drawIds, taskIds);
-    aurora::gfx::synchronize();
 }
 
 }  // namespace dusk::mods
@@ -567,23 +993,40 @@ namespace dusk::mods::svc {
 namespace {
 
 ModResult gfx_get_device_info(ModContext* context, GfxDeviceInfo* outInfo) {
-    if (outInfo == nullptr || outInfo->struct_size < sizeof(GfxDeviceInfo)) {
+    constexpr uint32_t v0Size = offsetof(GfxDeviceInfo, instance);
+    if (outInfo == nullptr || outInfo->struct_size < v0Size) {
         return MOD_INVALID_ARGUMENT;
     }
     const uint32_t structSize = outInfo->struct_size;
-    *outInfo = GfxDeviceInfo{.struct_size = structSize};
+    outInfo->device = nullptr;
+    outInfo->queue = nullptr;
+    outInfo->color_format = WGPUTextureFormat_Undefined;
+    outInfo->depth_format = WGPUTextureFormat_Undefined;
+    outInfo->sample_count = 1;
+    outInfo->uses_reversed_z = false;
+    if (structSize >= sizeof(GfxDeviceInfo)) {
+        outInfo->instance = nullptr;
+        outInfo->adapter = nullptr;
+    }
 
     auto* mod = mod_from_context(context);
     if (mod == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
 
-    outInfo->device = aurora::gfx::device().Get();
+    const auto device = aurora::gfx::device();
+    outInfo->device = device.Get();
     outInfo->queue = aurora::gfx::queue().Get();
     outInfo->color_format = static_cast<WGPUTextureFormat>(aurora::gfx::color_format());
     outInfo->depth_format = static_cast<WGPUTextureFormat>(aurora::gfx::depth_format());
     outInfo->sample_count = aurora::gfx::sample_count();
     outInfo->uses_reversed_z = aurora::gfx::uses_reversed_z();
+    if (structSize >= sizeof(GfxDeviceInfo)) {
+        const auto adapter = device.GetAdapter();
+        const auto instance = adapter ? adapter.GetInstance() : wgpu::Instance{};
+        outInfo->instance = instance.Get();
+        outInfo->adapter = adapter.Get();
+    }
     return MOD_OK;
 }
 
@@ -592,6 +1035,103 @@ void* gfx_get_proc_address(ModContext* context, const char* name) {
         return nullptr;
     }
     return reinterpret_cast<void*>(wgpuGetProcAddress(WGPUStringView{name, WGPU_STRLEN}));
+}
+
+bool valid_present_desc(const GfxPresentTargetDesc* desc) {
+    return desc != nullptr && desc->struct_size >= sizeof(GfxPresentTargetDesc) &&
+           desc->render != nullptr;
+}
+
+ModResult gfx_register_present_target_impl(ModContext* context, WGPUSurface surface,
+    const GfxPresentTargetDesc* desc, GfxPresentTargetHandle* outHandle) {
+    if (outHandle != nullptr) {
+        *outHandle = 0;
+    }
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || surface == nullptr || !valid_present_desc(desc) || outHandle == nullptr ||
+        desc->width == 0 || desc->height == 0)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+    uint64_t handle = 0;
+    const auto result = gfx_register_present_target(*mod, wgpu::Surface{surface}, 0, *desc, handle);
+    if (result == MOD_OK) {
+        *outHandle = handle;
+    }
+    return result;
+}
+
+ModResult gfx_register_window_present_target_impl(ModContext* context, WindowHandle window,
+    const GfxPresentTargetDesc* desc, GfxPresentTargetHandle* outHandle) {
+    if (outHandle != nullptr) {
+        *outHandle = 0;
+    }
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || window == 0 || !valid_present_desc(desc) || outHandle == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    SDL_Window* sdlWindow = nullptr;
+    const auto acquireResult = window_acquire_for_graphics(*mod, window, sdlWindow);
+    if (acquireResult != MOD_OK) {
+        return acquireResult;
+    }
+    uint32_t width = 0;
+    uint32_t height = 0;
+    if (!window_get_pixel_size(*mod, window, width, height)) {
+        window_release_for_graphics(*mod, window);
+        return MOD_UNAVAILABLE;
+    }
+
+    const auto device = aurora::gfx::device();
+    const auto adapter = device.GetAdapter();
+    const auto instance = adapter ? adapter.GetInstance() : wgpu::Instance{};
+    auto surface = aurora::webgpu::create_window_surface(instance, sdlWindow, desc->label);
+    if (!surface) {
+        window_release_for_graphics(*mod, window);
+        return MOD_UNAVAILABLE;
+    }
+
+    auto windowDesc = *desc;
+    windowDesc.width = width;
+    windowDesc.height = height;
+    uint64_t handle = 0;
+    const auto result =
+        gfx_register_present_target(*mod, std::move(surface), window, windowDesc, handle);
+    if (result != MOD_OK) {
+        window_release_for_graphics(*mod, window);
+        return result;
+    }
+    *outHandle = handle;
+    return MOD_OK;
+}
+
+ModResult gfx_resize_present_target_impl(
+    ModContext* context, GfxPresentTargetHandle handle, uint32_t width, uint32_t height) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || handle == 0 || width == 0 || height == 0) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return gfx_resize_present_target(*mod, handle, width, height);
+}
+
+ModResult gfx_unregister_present_target_impl(ModContext* context, GfxPresentTargetHandle handle) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || handle == 0) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return gfx_unregister_present_target(*mod, handle);
+}
+
+ModResult gfx_push_present_impl(
+    ModContext* context, GfxPresentTargetHandle handle, const void* payload, size_t payloadSize) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || handle == 0 || payloadSize > GFX_INLINE_DRAW_PAYLOAD_SIZE ||
+        (payloadSize > 0 && payload == nullptr))
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return gfx_push_present(*mod, handle, payload, payloadSize);
 }
 
 ModResult gfx_register_draw_type_impl(
@@ -782,6 +1322,11 @@ constexpr GfxService s_gfxService{
     .unregister_stage_hook = gfx_unregister_stage_hook_impl,
     .resolve_pass = gfx_resolve_pass_impl,
     .create_pass = gfx_create_pass_impl,
+    .register_present_target = gfx_register_present_target_impl,
+    .register_window_present_target = gfx_register_window_present_target_impl,
+    .resize_present_target = gfx_resize_present_target_impl,
+    .unregister_present_target = gfx_unregister_present_target_impl,
+    .push_present = gfx_push_present_impl,
 };
 
 }  // namespace
