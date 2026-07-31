@@ -9,14 +9,14 @@
  */
 struct JAISoundParamsProperty {
     void init() {
-        field_0x0 = 1.0f;
-        field_0x4 = 0.0f;
-        field_0x8 = 1.0f;
+        mVolume = 1.0f;
+        mFxMix = 0.0f;
+        mPitch = 1.0f;
     }
 
-    /* 0x00 */ f32 field_0x0;
-    /* 0x04 */ f32 field_0x4;
-    /* 0x08 */ f32 field_0x8;
+    /* 0x00 */ f32 mVolume;
+    /* 0x04 */ f32 mFxMix;
+    /* 0x08 */ f32 mPitch;
 };  // Size: 0xC
 
 /**

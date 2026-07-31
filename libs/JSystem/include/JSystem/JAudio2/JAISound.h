@@ -101,7 +101,7 @@ struct JAISoundStatus_ {
     bool isMute() const { return field_0x0.flags.mute; }
     bool isPaused() const { return field_0x0.flags.paused; }
     void pauseWhenOut() {
-        field_0x1.flags.flag3 = 1;
+        field_0x1.flags.mPauseWhenOut = 1;
     }
 
     /* 0x0 */ union {
@@ -120,9 +120,9 @@ struct JAISoundStatus_ {
     /* 0x1 */ union {
         u8 value;
         struct {
-            u8 flag1 : 1;
+            u8 mComesBack : 1;
             u8 flag2 : 1;
-            u8 flag3 : 1;
+            u8 mPauseWhenOut : 1;
             u8 flag4 : 1;
             u8 flag5 : 1;
             u8 flag6 : 1;
@@ -309,7 +309,7 @@ public:
     bool hasLifeTime() const { return status_.field_0x1.flags.flag2; }
 
     void removeLifeTime_() {
-        status_.field_0x1.flags.flag1 = false;
+        status_.field_0x1.flags.mComesBack = false;
         status_.field_0x1.flags.flag2 = 0;
     }
 
@@ -346,7 +346,7 @@ public:
 
     void setComesBack(bool param_0) {
         JUT_ASSERT(354, status_.state.flags.calcedOnce == 0);
-        status_.field_0x1.flags.flag1 = 1;
+        status_.field_0x1.flags.mComesBack = 1;
         if (param_0) {
             status_.pauseWhenOut();
         }

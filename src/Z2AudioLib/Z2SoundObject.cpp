@@ -222,7 +222,7 @@ Z2SoundHandlePool* Z2SoundObjBase::startCollisionSE(u32 hitID, u32 mapinfo, Z2So
         if (30 <= mapinfo && mapinfo <= 52) {
             Z2Audible* audible = (Z2Audible*)(*handle)->getAudible();
             if (audible != NULL) {
-                audible->getAudibleParam()->field_0x0.bytes.b1_2_7 = 8;
+                audible->getAudibleParam()->field_0x0.bytes.mClampMinVolume = 8;
             }
         }
     }

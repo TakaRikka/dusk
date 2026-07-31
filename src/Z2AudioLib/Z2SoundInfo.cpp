@@ -23,7 +23,7 @@ u16 Z2SoundInfo::getBgmSeqResourceID(JAISoundID soundID) const {
 
     if (data != NULL) {
         switch ((typeID & 0xf0)) {
-        case 0x60:
+        case SOUND_TYPEID_SEQUENCE:
             return (u16)data->mResourceId;
         }
     }
@@ -53,7 +53,7 @@ u32 Z2SoundInfo::getPriority(JAISoundID soundID) const {
     JAUSoundTableItem* data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
     u8 typeID = JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID);
 
-    if (data != NULL && (typeID & 0x40) != 0) {
+    if (data != NULL && (typeID & SOUND_TYPEID_VALID) != 0) {
         return data->mPriority;
     }
 
@@ -67,64 +67,64 @@ JAUAudibleParam Z2SoundInfo::getAudibleSwFull(JAISoundID soundID) {
 
     u8 typeID = JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID);
     switch (typeID) {
-    case 81:
-        audibleParam.field_0x0.bytes.b0_0 = (u32)getSwBit(soundID) >> 8;
-        if ((getSwBit(soundID) & 1) != 0) {
-            audibleParam.field_0x0.bytes.b0_4 = 0;
+    case SOUND_TYPEID_SOUND_EFFECT:
+        audibleParam.field_0x0.bytes.mDopplerPower = (u32)getSwBit(soundID) >> SOUND_SW_DOPPLER_POWER_OFFSET;
+        if ((getSwBit(soundID) & SOUND_SW_ALWAYS_MAX_PRIORITY) != 0) {
+            audibleParam.field_0x0.bytes.mCalculatePriority = 0;
         } else {
-            audibleParam.field_0x0.bytes.b0_4 = 1;
+            audibleParam.field_0x0.bytes.mCalculatePriority = 1;
         }
 
-        if ((getSwBit(soundID) & 2) != 0) {
-            audibleParam.field_0x0.bytes.b0_5 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_DISTANCE_VOL) != 0) {
+            audibleParam.field_0x0.bytes.mCalcDistanceVolume = 0;
         } else {
-            audibleParam.field_0x0.bytes.b0_5 = 1;
+            audibleParam.field_0x0.bytes.mCalcDistanceVolume = 1;
         }
 
-        if ((getSwBit(soundID) & 4) != 0) {
-            audibleParam.field_0x0.bytes.b0_6 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_FX_MIX) != 0) {
+            audibleParam.field_0x0.bytes.mCalcFxMix = 0;
         } else {
-            audibleParam.field_0x0.bytes.b0_6 = 1;
+            audibleParam.field_0x0.bytes.mCalcFxMix = 1;
         }
 
-        if ((getSwBit(soundID) & 0x800000) != 0) {
-            audibleParam.field_0x0.bytes.b0_7 = 1;
+        if ((getSwBit(soundID) & SOUND_SW_CULL_AT_MAX_DISTANCE) != 0) {
+            audibleParam.field_0x0.bytes.mCullAtMaxDistance = 1;
         } else {
-            audibleParam.field_0x0.bytes.b0_7 = 0;
+            audibleParam.field_0x0.bytes.mCullAtMaxDistance = 0;
         }
 
-        if ((getSwBit(soundID) & 0x1000) != 0) {
-            audibleParam.field_0x0.bytes.b1_0 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_PAN) != 0) {
+            audibleParam.field_0x0.bytes.mCalcPan = 0;
         } else {
-            audibleParam.field_0x0.bytes.b1_0 = 1;
+            audibleParam.field_0x0.bytes.mCalcPan = 1;
         }
 
-        if ((getSwBit(soundID) & 0x2000) != 0) {
-            audibleParam.field_0x0.bytes.b1_1 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_DOLBY) != 0) {
+            audibleParam.field_0x0.bytes.mCalcDolby = 0;
         } else {
-            audibleParam.field_0x0.bytes.b1_1 = 1;
+            audibleParam.field_0x0.bytes.mCalcDolby = 1;
         }
 
         uVar7 = 0;
-        if ((getSwBit(soundID) & 0x80000) != 0) {
+        if ((getSwBit(soundID) & SOUND_SW_CLAMP_MIN_VOLUME) != 0) {
             uVar7 = 8;
         }
 
-        iVar1 = (getSwBit(soundID) >> 16) & 0x7;
-        iVar1 += (getSwBit(soundID) >> 16) & 0x70;
-        iVar1 += (getSwBit(soundID) >> 16) & 0xf00;
-        audibleParam.field_0x0.bytes.b1_2_7 = uVar7;
+        iVar1 = (getSwBit(soundID) >> 16) & SOUND_VOL_DIST_BIT_MASK_SHIFTED;
+        iVar1 += (getSwBit(soundID) >> 16) & SOUND_VOL_DIST_BIT_2_MASK_SHIFTED;
+        iVar1 += (getSwBit(soundID) >> 16) & SOUND_VOL_SOMETHING_MASK_SHIFTED;
+        audibleParam.field_0x0.bytes.mClampMinVolume = uVar7;
         audibleParam.field_0x0.half.f1 = iVar1;
         break;
     default:
-        audibleParam.field_0x0.bytes.b0_0 = 0;
-        audibleParam.field_0x0.bytes.b0_4 = 1;
-        audibleParam.field_0x0.bytes.b0_5 = 1;
-        audibleParam.field_0x0.bytes.b0_6 = 1;
-        audibleParam.field_0x0.bytes.b0_7 = 0;
-        audibleParam.field_0x0.bytes.b1_0 = 1;
-        audibleParam.field_0x0.bytes.b1_1 = 1;
-        audibleParam.field_0x0.bytes.b1_2_7 = 0;
+        audibleParam.field_0x0.bytes.mDopplerPower = 0;
+        audibleParam.field_0x0.bytes.mCalculatePriority = 1;
+        audibleParam.field_0x0.bytes.mCalcDistanceVolume = 1;
+        audibleParam.field_0x0.bytes.mCalcFxMix = 1;
+        audibleParam.field_0x0.bytes.mCullAtMaxDistance = 0;
+        audibleParam.field_0x0.bytes.mCalcPan = 1;
+        audibleParam.field_0x0.bytes.mCalcDolby = 1;
+        audibleParam.field_0x0.bytes.mClampMinVolume = 0;
         audibleParam.field_0x0.half.f1 = 0;
         break;
     }
@@ -139,53 +139,53 @@ u16 Z2SoundInfo::getAudibleSw(JAISoundID soundID) const {
 
     u8 typeID = JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID);
     switch (typeID) {
-    case 81:
-        audibleParam.field_0x0.bytes.b0_0 = (u32)getSwBit(soundID) >> 8;
-        if ((getSwBit(soundID) & 1) != 0) {
-            audibleParam.field_0x0.bytes.b0_4 = 0;
+    case SOUND_TYPEID_SOUND_EFFECT:
+        audibleParam.field_0x0.bytes.mDopplerPower = (u32)getSwBit(soundID) >> SOUND_SW_DOPPLER_POWER_OFFSET;
+        if ((getSwBit(soundID) & SOUND_SW_ALWAYS_MAX_PRIORITY) != 0) {
+            audibleParam.field_0x0.bytes.mCalculatePriority = 0;
         } else {
-            audibleParam.field_0x0.bytes.b0_4 = 1;
+            audibleParam.field_0x0.bytes.mCalculatePriority = 1;
         }
 
-        if ((getSwBit(soundID) & 2) != 0) {
-            audibleParam.field_0x0.bytes.b0_5 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_DISTANCE_VOL) != 0) {
+            audibleParam.field_0x0.bytes.mCalcDistanceVolume = 0;
         } else {
-            audibleParam.field_0x0.bytes.b0_5 = 1;
+            audibleParam.field_0x0.bytes.mCalcDistanceVolume = 1;
         }
 
         if ((getSwBit(soundID) & 4) != 0) {
-            audibleParam.field_0x0.bytes.b0_6 = 0;
+            audibleParam.field_0x0.bytes.mCalcFxMix = 0;
         } else {
-            audibleParam.field_0x0.bytes.b0_6 = 1;
+            audibleParam.field_0x0.bytes.mCalcFxMix = 1;
         }
 
-        if ((getSwBit(soundID) & 0x800000) != 0) {
-            audibleParam.field_0x0.bytes.b0_7 = 1;
+        if ((getSwBit(soundID) & SOUND_SW_CULL_AT_MAX_DISTANCE) != 0) {
+            audibleParam.field_0x0.bytes.mCullAtMaxDistance = 1;
         } else {
-            audibleParam.field_0x0.bytes.b0_7 = 0;
+            audibleParam.field_0x0.bytes.mCullAtMaxDistance = 0;
         }
 
-        if ((getSwBit(soundID) & 0x1000) != 0) {
-            audibleParam.field_0x0.bytes.b1_0 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_PAN) != 0) {
+            audibleParam.field_0x0.bytes.mCalcPan = 0;
         } else {
-            audibleParam.field_0x0.bytes.b1_0 = 1;
+            audibleParam.field_0x0.bytes.mCalcPan = 1;
         }
 
-        if ((getSwBit(soundID) & 0x2000) != 0) {
-            audibleParam.field_0x0.bytes.b1_1 = 0;
+        if ((getSwBit(soundID) & SOUND_SW_IGNORE_DOLBY) != 0) {
+            audibleParam.field_0x0.bytes.mCalcDolby = 0;
         } else {
-            audibleParam.field_0x0.bytes.b1_1 = 1;
+            audibleParam.field_0x0.bytes.mCalcDolby = 1;
         }
 
         uVar7 = 0;
-        if ((getSwBit(soundID) & 0x80000) != 0) {
+        if ((getSwBit(soundID) & SOUND_SW_CLAMP_MIN_VOLUME) != 0) {
             uVar7 = 8;
         }
 
-        iVar1 = (getSwBit(soundID) >> 16) & 0x7;
-        iVar1 += (getSwBit(soundID) >> 16) & 0x70;
-        iVar1 += (getSwBit(soundID) >> 16) & 0xf00;
-        audibleParam.field_0x0.bytes.b1_2_7 = uVar7;
+        iVar1 = (getSwBit(soundID) >> 16) & SOUND_VOL_DIST_BIT_MASK_SHIFTED;
+        iVar1 += (getSwBit(soundID) >> 16) & SOUND_VOL_DIST_BIT_2_MASK_SHIFTED;
+        iVar1 += (getSwBit(soundID) >> 16) & SOUND_VOL_SOMETHING_MASK_SHIFTED;
+        audibleParam.field_0x0.bytes.mClampMinVolume = uVar7;
         audibleParam.field_0x0.half.f1 = iVar1;
         break;
     default:
@@ -208,19 +208,19 @@ void Z2SoundInfo::getSeInfo(JAISoundID soundID, JAISe* sePtr) const {
     }
 
     switch(typeID) {
-    case 81:
-        sePtr->getProperty().field_0x8 *= data->field_0x8;
-        u32 uStack_6c = (getSwBit(soundID) & 0xf0) >> 4;
-        if (uStack_6c > 8) {
-            sePtr->getProperty().field_0x8 += Z2Calc::linearTransform(uStack_6c, 8.0f, 15.0f, 16.0f, 24.0f, true) / 48.0f * Z2Calc::getRandom_0_1();
+    case SOUND_TYPEID_SOUND_EFFECT:
+        sePtr->getProperty().mPitch *= data->mPitch;
+        u32 pitchParam = (getSwBit(soundID) & SOUND_SW_RANDOM_PITCH_MASK) >> SOUND_SW_RANDOM_PITCH_OFFSET;
+        if (pitchParam > 8) {
+            sePtr->getProperty().mPitch += Z2Calc::linearTransform(pitchParam, 8.0f, 15.0f, 16.0f, 24.0f, true) / 48.0f * Z2Calc::getRandom_0_1();
         } else {
-            sePtr->getProperty().field_0x8 += (uStack_6c / 48.0f) * Z2Calc::getRandom_0_1();
+            sePtr->getProperty().mPitch += (pitchParam / 48.0f) * Z2Calc::getRandom_0_1();
         }
 
-        u32 uVar1 = (u32)getSwBit(soundID) >> 0x1c;
+        u32 uVar1 = (u32)getSwBit(soundID) >> SOUND_SW_RANDOM_VOLUME_OFFSET;
         if (uVar1 != 0) {
             f32 dVar18 = (uVar1 / 15.0f) * Z2Calc::getRandom_0_1();
-            sePtr->getProperty().field_0x0 -= dVar18 < 0.0f ? 0.0f : (dVar18 > 1.0f ? 1.0f : dVar18);
+            sePtr->getProperty().mVolume -= dVar18 < 0.0f ? 0.0f : (dVar18 > 1.0f ? 1.0f : dVar18);
         }
         break;
     }
@@ -240,13 +240,13 @@ void Z2SoundInfo::getStreamInfo(JAISoundID soundID, JAIStream* streamPtr) const 
 
     u8 typeID = JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID);
     switch (typeID & 0xf0) {
-    case 0x70:
+    case SOUND_TYPEID_STREAM:
         u16 uVar1;
         s32 iVar4;
         data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
         JUT_ASSERT(356, data);
 
-        uVar1 = data->mResourceId;
+        uVar1 = data->mStreamPanParameters;
         numChild = streamPtr->getNumChild();
         iVar4 = 0;
         for (; iVar4 < numChild && uVar1 != 0; uVar1 >>= JAUStdSoundTableType::STRM_CH_SHIFT, iVar4++) {
@@ -277,12 +277,12 @@ const char* Z2SoundInfo::getStreamFilePath(JAISoundID soundID) {
     const void* resource;
 
     switch (JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID) & 0xf0) {
-    case 0x70:
+    case SOUND_TYPEID_STREAM:
         data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
         JUT_ASSERT(394, data);
         resource = JASGlobalInstance<JAUSoundTable>::getInstance()->getResource();
         JUT_ASSERT(398, resource);
-        return JAUStdSoundTableType::StringOffset::getString(resource, data->field_0x4);
+        return JAUStdSoundTableType::StringOffset::getString(resource, data->mStreamFilePath);
     default:
         return NULL;
     }
@@ -300,8 +300,8 @@ int Z2SoundInfo::getSwBit(JAISoundID soundID) const {
     u8 typeID = JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID);
     if (data != NULL) {
         switch(typeID) {
-        case 81:
-            return data->field_0x4;
+        case SOUND_TYPEID_SOUND_EFFECT:
+            return data->mSwBit;
         }
     }
 
@@ -313,7 +313,7 @@ void Z2SoundInfo::getSoundInfo_(JAISoundID soundID, JAISound* soundPtr) const {
     JAUSoundTableItem* data = JASGlobalInstance<JAUSoundTable>::getInstance()->getData(soundID);
 
     u8 typeID = JASGlobalInstance<JAUSoundTable>::getInstance()->getTypeID(soundID);
-    if (data != NULL && (typeID & 0x40) != 0) {
-        soundPtr->getProperty().field_0x0 = (1.0f / 127.0f) * data->field_0x1;
+    if (data != NULL && (typeID & SOUND_TYPEID_VALID) != 0) {
+        soundPtr->getProperty().mVolume = (1.0f / 127.0f) * data->mVolume;
     }
 }

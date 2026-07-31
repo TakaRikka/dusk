@@ -70,7 +70,7 @@ void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params,
             if (inner_.field_0x26c) {
                 switch (inner_.track.getStatus()) {
                 case JASTrack::STATUS_STOPPED:
-                    if (status_.field_0x1.flags.flag1) {
+                    if (status_.field_0x1.flags.mComesBack) {
                         startTrack_(params);
                     } else {
                         stop_JAISound_();
@@ -84,8 +84,8 @@ void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params,
                 startTrack_(params);
             }
         }
-    } else if (status_.field_0x1.flags.flag1) {
-        if (status_.field_0x1.flags.flag3) {
+    } else if (status_.field_0x1.flags.mComesBack) {
+        if (status_.field_0x1.flags.mPauseWhenOut) {
             inner_.track.pause(true);
         } else {
             stopTrack_();

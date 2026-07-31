@@ -54,9 +54,9 @@ s32 JAISoundStatus_::unlockIfLocked() {
 }
 
 void JAISoundParams::mixOutAll(const JASSoundParams& inParams, JASSoundParams* outParams, f32 param_2) {
-    outParams->mVolume = move_.params_.mVolume * (inParams.mVolume * property_.field_0x0) * param_2;
-    outParams->mFxMix = move_.params_.mFxMix + (inParams.mFxMix + property_.field_0x4);
-    outParams->mPitch = move_.params_.mPitch * (inParams.mPitch * property_.field_0x8);
+    outParams->mVolume = move_.params_.mVolume * (inParams.mVolume * property_.mVolume) * param_2;
+    outParams->mFxMix = move_.params_.mFxMix + (inParams.mFxMix + property_.mFxMix);
+    outParams->mPitch = move_.params_.mPitch * (inParams.mPitch * property_.mPitch);
     outParams->mPan = (inParams.mPan + move_.params_.mPan) - 0.5f;
     outParams->mDolby = inParams.mDolby + move_.params_.mDolby;
 }
@@ -181,7 +181,7 @@ bool JAISound::calc_JAISound_() {
     }
 
     if (audience_ != NULL && audible_ != NULL) {
-        if ((priority_ = audience_->calcPriority(audible_)) == 0xFFFFFFFF && status_.field_0x1.flags.flag1 == 0) {
+        if ((priority_ = audience_->calcPriority(audible_)) == 0xFFFFFFFF && status_.field_0x1.flags.mComesBack == 0) {
             stop_JAISound_();
         }
     } else {

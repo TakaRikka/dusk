@@ -167,7 +167,7 @@ JAISeMgr::JAISeMgr(bool setInstance) : JASGlobalInstance<JAISeMgr>(setInstance) 
 }
 
 bool JAISeMgr::isUsingSeqData(const JAISeqDataRegion& seqDataRegion) {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         if (mCategoryMgrs[i].JAISeCategoryMgr::isUsingSeqData(seqDataRegion)) {
             return true;
         }
@@ -177,7 +177,7 @@ bool JAISeMgr::isUsingSeqData(const JAISeqDataRegion& seqDataRegion) {
 
 int JAISeMgr::releaseSeqData(const JAISeqDataRegion& seqDataRegion) {
     bool r30 = 0;
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         switch (mCategoryMgrs[i].JAISeCategoryMgr::releaseSeqData(seqDataRegion)) {
         case 0:
             return 0;
@@ -191,14 +191,14 @@ int JAISeMgr::releaseSeqData(const JAISeqDataRegion& seqDataRegion) {
 }
 
 void JAISeMgr::setCategoryArrangement(const JAISeCategoryArrangement& arrangement) {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].setMaxActiveSe(arrangement.mItems[i].mMaxActiveSe);
         mCategoryMgrs[i].setMaxInactiveSe(arrangement.mItems[i].mMaxInactiveSe);
     }
 }
 
 void JAISeMgr::getCategoryArrangement(JAISeCategoryArrangement* arrangement) {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         int active = mCategoryMgrs[i].getMaxActiveSe();
         JUT_ASSERT(299, active <= 255);
         arrangement->mItems[i].mMaxActiveSe = active;
@@ -209,19 +209,19 @@ void JAISeMgr::getCategoryArrangement(JAISeCategoryArrangement* arrangement) {
 }
 
 void JAISeMgr::stop() {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].stop();
     }
 }
 
 void JAISeMgr::stopSoundID(JAISoundID id) {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].stopSoundID(id);
     }
 }
 
 void JAISeMgr::initParams() {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].getParams()->init();
     }
 }
@@ -270,16 +270,16 @@ JAISe* JAISeMgr::newSe_(int category, u32 priority) {
 
 void JAISeMgr::calc() {
     mParams.calc();
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].JAISeMgr_calc_();
     }
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].JAISeMgr_freeDeadSe_();
     }
 }
 
 void JAISeMgr::mixOut() {
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         mCategoryMgrs[i].JAISeMgr_mixOut_(mParams, mSoundActivity);
     }
 }
@@ -324,7 +324,7 @@ bool JAISeMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry
 
 int JAISeMgr::getNumActiveSe() const {
     int num = 0;
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < NUM_CATEGORIES; i++) {
         num += mCategoryMgrs[i].getNumSe();
     }
     return num;
