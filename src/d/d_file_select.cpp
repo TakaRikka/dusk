@@ -28,6 +28,7 @@
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
 #include "helpers/string.hpp"
+#include "dusk/mods/svc/save.hpp"
 
 namespace {
 constexpr u8 pointer_target(u8 group, u8 index) noexcept {
@@ -254,6 +255,10 @@ dFile_select_c::~dFile_select_c() {
 
 void dFile_select_c::_create() {
     int i;
+
+#if TARGET_PC
+    dusk::mods::svc::save_no_slot();
+#endif
 
     mDoGph_gInf_c::setFadeColor(static_cast<JUtility::TColor&>(g_blackColor));
     
@@ -1390,6 +1395,9 @@ void dFile_select_c::menuSelectStart() {
         mIsSelectEnd = true;
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
         dComIfGs_setDataNum(mSelectNum);
+#if TARGET_PC
+        dusk::mods::svc::save_slot_loaded(mSelectNum, &mSaveData[mSelectNum]);
+#endif
     } else if (mSelectMenuNum == 0) {
         mSelIcon->setAlphaRate(0.0f);
         yesnoMenuMoveAnmInitSet(0x473, 0x47d);
@@ -1740,6 +1748,9 @@ void dFile_select_c::nameInput2() {
     case 2:
         dComIfGs_setHorseName(mpName->getInputStrPtr());
         mIsSelectEnd = true;
+#if TARGET_PC
+        dusk::mods::svc::save_slot_new(mSelectNum);
+#endif
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
     }
 }
@@ -2666,6 +2677,9 @@ void dFile_select_c::DataEraseWait2() {
         mDataSelProc = DATASELPROC_ERROR_MSG_PANE_MOVE;
     } else if (field_0x03b4 == 1) {
         mDoAud_seStart(Z2SE_SY_FILE_DELETE_OK, NULL, 0, 0);
+#if TARGET_PC
+        dusk::mods::svc::save_slot_erased(mSelectNum);
+#endif
         field_0x03b1 = 0;
         mDeleteEfPane[mSelectNum]->alphaAnimeStart(0);
         mFileInfoNoDatBasePane[mSelectNum]->alphaAnimeStart(0);
@@ -2769,6 +2783,9 @@ void dFile_select_c::DataCopyWait2() {
             mDataSelProc = DATASELPROC_ERROR_MSG_PANE_MOVE;
         } else if (field_0x03b4 == 1) {
             mDoAud_seStart(Z2SE_SY_FILE_COPY_OK, NULL, 0, 0);
+#if TARGET_PC
+            dusk::mods::svc::save_slot_copied(mCpDataNum, mCpDataToNum);
+#endif
             field_0x03b1 = 0;
             mCopyEfPane[mSelectNum]->alphaAnimeStart(0);
             mCopyEfPane[mCpDataToNum]->alphaAnimeStart(0);
