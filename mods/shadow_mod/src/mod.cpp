@@ -20,7 +20,7 @@
 #include "dolphin/gx/GXPixel.h"
 #include "dolphin/gx/GXTransform.h"
 #include "m_Do/m_Do_mtx.h"
-#include "mods/hook.hpp"
+#include "mods/svc/hook.hpp"
 #include "mods/service.hpp"
 #include "mods/svc/camera.h"
 #include "mods/svc/config.h"
@@ -29,6 +29,7 @@
 #include "mods/svc/log.h"
 #include "mods/svc/resource.h"
 #include "mods/svc/ui.h"
+#include "mods/svc/window.h"
 
 #include <algorithm>
 #include <cmath>
@@ -45,6 +46,7 @@ IMPORT_SERVICE(GfxService, svc_gfx);
 IMPORT_SERVICE(CameraService, svc_camera);
 IMPORT_SERVICE(HookService, svc_hook);
 IMPORT_SERVICE(LogService, svc_log);
+IMPORT_SERVICE(WindowService, svc_window);
 
 namespace {
 
@@ -62,6 +64,7 @@ ConfigVarHandle g_cvarDebugView = 0;
 GfxDrawTypeHandle g_drawType = 0;
 GfxStageHookHandle g_sceneBeginHook = 0;
 GfxStageHookHandle g_sceneAfterTerrainHook = 0;
+GfxStageHookHandle g_sceneAfterOpaqueHook = 0;
 GfxStageHookHandle g_frameBeforeHudHook = 0;
 UiWindowHandle g_controlsWindow = 0;
 ResourceBuffer g_shaderSource = RESOURCE_BUFFER_INIT;
@@ -70,6 +73,11 @@ WGPURenderPipeline g_compositePipeline = nullptr;       // multiply blend
 WGPURenderPipeline g_compositeDebugPipeline = nullptr;  // no blend (debug views)
 WGPUBindGroupLayout g_compositeLayout = nullptr;
 WGPUBindGroupLayout g_compositeDebugLayout = nullptr;
+WGPURenderPipeline g_debugPresentPipeline = nullptr;
+WGPUBindGroupLayout g_debugPresentLayout = nullptr;
+WGPUTextureFormat g_debugPresentFormat = WGPUTextureFormat_Undefined;
+WindowHandle g_debugWindow = 0;
+GfxPresentTargetHandle g_debugPresentTarget = 0;
 
 struct MapPassOutput {
     bool ready = false;
@@ -185,6 +193,34 @@ bool get_bool_option(ConfigVarHandle handle, bool fallback) {
 
 int64_t get_debug_mode() {
     return std::clamp<int64_t>(get_int_option(g_cvarDebugView, 0), 0, 10);
+}
+
+bool debug_window_open() {
+    return g_debugWindow != 0 && g_debugPresentTarget != 0;
+}
+
+ModResult close_debug_window() {
+    if (g_debugPresentTarget != 0) {
+        const auto result = svc_gfx->unregister_present_target(mod_ctx, g_debugPresentTarget);
+        if (result != MOD_OK) {
+            return result;
+        }
+        g_debugPresentTarget = 0;
+    }
+    if (g_debugWindow != 0) {
+        const auto result = svc_window->destroy_window(mod_ctx, g_debugWindow);
+        if (result != MOD_OK) {
+            return result;
+        }
+        g_debugWindow = 0;
+    }
+    return MOD_OK;
+}
+
+void on_debug_window_event(ModContext*, WindowHandle, const WindowEvent* event, void*) {
+    if (event->type == WINDOW_EVENT_CLOSE_REQUESTED && close_debug_window() != MOD_OK) {
+        svc_log->error(mod_ctx, "failed to close shadow debug window");
+    }
 }
 
 bool matrix_ready(const Mtx m) {
@@ -395,6 +431,90 @@ bool build_composite_pipeline(
     return outLayout != nullptr;
 }
 
+void release_debug_present_pipeline() {
+    if (g_debugPresentPipeline != nullptr) {
+        wgpuRenderPipelineRelease(g_debugPresentPipeline);
+        g_debugPresentPipeline = nullptr;
+    }
+    if (g_debugPresentLayout != nullptr) {
+        wgpuBindGroupLayoutRelease(g_debugPresentLayout);
+        g_debugPresentLayout = nullptr;
+    }
+    g_debugPresentFormat = WGPUTextureFormat_Undefined;
+}
+
+bool ensure_debug_present_pipeline(const GfxPresentContext& ctx) {
+    if (g_debugPresentPipeline != nullptr && g_debugPresentFormat == ctx.target_format) {
+        return true;
+    }
+    release_debug_present_pipeline();
+
+    WGPUShaderSourceWGSL wgsl = WGPU_SHADER_SOURCE_WGSL_INIT;
+    wgsl.code = {static_cast<const char*>(g_shaderSource.data), g_shaderSource.size};
+    WGPUShaderModuleDescriptor moduleDesc = WGPU_SHADER_MODULE_DESCRIPTOR_INIT;
+    moduleDesc.nextInChain = &wgsl.chain;
+    moduleDesc.label = {"shadow debug present", WGPU_STRLEN};
+    WGPUShaderModule module = wgpuDeviceCreateShaderModule(ctx.device, &moduleDesc);
+    if (module == nullptr) {
+        return false;
+    }
+
+    WGPUColorTargetState colorTarget = WGPU_COLOR_TARGET_STATE_INIT;
+    colorTarget.format = ctx.target_format;
+    WGPUFragmentState fragment = WGPU_FRAGMENT_STATE_INIT;
+    fragment.module = module;
+    fragment.entryPoint = {"fs_main", WGPU_STRLEN};
+    fragment.targetCount = 1;
+    fragment.targets = &colorTarget;
+
+    WGPURenderPipelineDescriptor pipelineDesc = WGPU_RENDER_PIPELINE_DESCRIPTOR_INIT;
+    pipelineDesc.label = {"shadow debug present", WGPU_STRLEN};
+    pipelineDesc.vertex.module = module;
+    pipelineDesc.vertex.entryPoint = {"vs_main", WGPU_STRLEN};
+    pipelineDesc.primitive.topology = WGPUPrimitiveTopology_TriangleList;
+    pipelineDesc.multisample.count = 1;
+    pipelineDesc.fragment = &fragment;
+    g_debugPresentPipeline = wgpuDeviceCreateRenderPipeline(ctx.device, &pipelineDesc);
+    wgpuShaderModuleRelease(module);
+    if (g_debugPresentPipeline == nullptr) {
+        return false;
+    }
+    g_debugPresentLayout = wgpuRenderPipelineGetBindGroupLayout(g_debugPresentPipeline, 0);
+    if (g_debugPresentLayout == nullptr) {
+        release_debug_present_pipeline();
+        return false;
+    }
+    g_debugPresentFormat = ctx.target_format;
+    return true;
+}
+
+WGPUBindGroup create_composite_bind_group(WGPUDevice device, WGPUBindGroupLayout layout,
+    WGPUBuffer uniformBuffer, const DrawPayload& data) {
+    if (data.sceneDepth == nullptr || data.shadowMap == nullptr || data.lightColor == nullptr ||
+        layout == nullptr || uniformBuffer == nullptr)
+    {
+        return nullptr;
+    }
+
+    WGPUBindGroupEntry entries[4] = {WGPU_BIND_GROUP_ENTRY_INIT, WGPU_BIND_GROUP_ENTRY_INIT,
+        WGPU_BIND_GROUP_ENTRY_INIT, WGPU_BIND_GROUP_ENTRY_INIT};
+    entries[0].binding = 0;
+    entries[0].textureView = data.sceneDepth;
+    entries[1].binding = 1;
+    entries[1].textureView = data.shadowMap;
+    entries[2].binding = 2;
+    entries[2].buffer = uniformBuffer;
+    entries[2].offset = data.uniform_offset;
+    entries[2].size = data.uniform_size;
+    entries[3].binding = 3;
+    entries[3].textureView = data.lightColor;
+    WGPUBindGroupDescriptor bindGroupDesc = WGPU_BIND_GROUP_DESCRIPTOR_INIT;
+    bindGroupDesc.layout = layout;
+    bindGroupDesc.entryCount = 4;
+    bindGroupDesc.entries = entries;
+    return wgpuDeviceCreateBindGroup(device, &bindGroupDesc);
+}
+
 // Render worker thread: fullscreen deferred-shadow composite.
 void on_draw(
     ModContext*, const GfxDrawContext* ctx, const void* payload, size_t payloadSize, void*) {
@@ -407,29 +527,12 @@ void on_draw(
     WGPURenderPipeline pipeline =
         data.debug_mode != 0 ? g_compositeDebugPipeline : g_compositePipeline;
     WGPUBindGroupLayout layout = data.debug_mode != 0 ? g_compositeDebugLayout : g_compositeLayout;
-    if (data.sceneDepth == nullptr || data.shadowMap == nullptr || data.lightColor == nullptr ||
-        pipeline == nullptr)
-    {
+    if (pipeline == nullptr) {
         return;
     }
 
-    WGPUBindGroupEntry entries[4] = {WGPU_BIND_GROUP_ENTRY_INIT, WGPU_BIND_GROUP_ENTRY_INIT,
-        WGPU_BIND_GROUP_ENTRY_INIT, WGPU_BIND_GROUP_ENTRY_INIT};
-    entries[0].binding = 0;
-    entries[0].textureView = data.sceneDepth;
-    entries[1].binding = 1;
-    entries[1].textureView = data.shadowMap;
-    entries[2].binding = 2;
-    entries[2].buffer = ctx->uniform_buffer;
-    entries[2].offset = data.uniform_offset;
-    entries[2].size = data.uniform_size;
-    entries[3].binding = 3;
-    entries[3].textureView = data.lightColor;
-    WGPUBindGroupDescriptor bindGroupDesc = WGPU_BIND_GROUP_DESCRIPTOR_INIT;
-    bindGroupDesc.layout = layout;
-    bindGroupDesc.entryCount = 4;
-    bindGroupDesc.entries = entries;
-    WGPUBindGroup bindGroup = wgpuDeviceCreateBindGroup(ctx->device, &bindGroupDesc);
+    WGPUBindGroup bindGroup =
+        create_composite_bind_group(ctx->device, layout, ctx->uniform_buffer, data);
     if (bindGroup == nullptr) {
         return;
     }
@@ -438,6 +541,81 @@ void on_draw(
     wgpuRenderPassEncoderSetBindGroup(ctx->pass, 0, bindGroup, 0, nullptr);
     wgpuRenderPassEncoderDraw(ctx->pass, 3, 1, 0, 0);
     wgpuBindGroupRelease(bindGroup);
+}
+
+// Render worker thread: draw the selected diagnostic into the auxiliary surface.
+void on_debug_present(
+    ModContext*, const GfxPresentContext* ctx, const void* payload, size_t payloadSize, void*) {
+    WGPUBindGroup bindGroup = nullptr;
+    if (payloadSize == sizeof(DrawPayload)) {
+        DrawPayload data;
+        std::memcpy(&data, payload, sizeof(data));
+        if (ensure_debug_present_pipeline(*ctx)) {
+            bindGroup = create_composite_bind_group(
+                ctx->device, g_debugPresentLayout, ctx->uniform_buffer, data);
+        }
+    }
+
+    WGPURenderPassColorAttachment colorAttachment = WGPU_RENDER_PASS_COLOR_ATTACHMENT_INIT;
+    colorAttachment.view = ctx->target_view;
+    colorAttachment.loadOp = WGPULoadOp_Clear;
+    colorAttachment.storeOp = WGPUStoreOp_Store;
+    colorAttachment.clearValue = WGPUColor{0.0, 0.0, 0.0, 1.0};
+    WGPURenderPassDescriptor passDesc = WGPU_RENDER_PASS_DESCRIPTOR_INIT;
+    passDesc.label = {"shadow debug present", WGPU_STRLEN};
+    passDesc.colorAttachmentCount = 1;
+    passDesc.colorAttachments = &colorAttachment;
+    WGPURenderPassEncoder pass = wgpuCommandEncoderBeginRenderPass(ctx->encoder, &passDesc);
+
+    if (bindGroup != nullptr) {
+        wgpuRenderPassEncoderSetPipeline(pass, g_debugPresentPipeline);
+        wgpuRenderPassEncoderSetBindGroup(pass, 0, bindGroup, 0, nullptr);
+        wgpuRenderPassEncoderDraw(pass, 3, 1, 0, 0);
+        wgpuBindGroupRelease(bindGroup);
+    }
+
+    wgpuRenderPassEncoderEnd(pass);
+    wgpuRenderPassEncoderRelease(pass);
+}
+
+ModResult open_debug_window() {
+    if (g_debugWindow != 0) {
+        return MOD_CONFLICT;
+    }
+
+    WindowDesc windowDesc = WINDOW_DESC_INIT;
+    windowDesc.title = "Shadow Debug View";
+    windowDesc.width = 720;
+    windowDesc.height = 480;
+    windowDesc.on_event = on_debug_window_event;
+    auto result = svc_window->create_window(mod_ctx, &windowDesc, &g_debugWindow);
+    if (result != MOD_OK) {
+        return result;
+    }
+
+    GfxPresentTargetDesc presentDesc = GFX_PRESENT_TARGET_DESC_INIT;
+    presentDesc.label = "Shadow debug surface";
+    presentDesc.render = on_debug_present;
+    result = svc_gfx->register_window_present_target(
+        mod_ctx, g_debugWindow, &presentDesc, &g_debugPresentTarget);
+    if (result != MOD_OK) {
+        close_debug_window();
+        return result;
+    }
+
+    result = svc_window->show_window(mod_ctx, g_debugWindow);
+    if (result != MOD_OK) {
+        close_debug_window();
+    }
+    return result;
+}
+
+void on_toggle_debug_window(ModContext*, void*) {
+    const auto result = debug_window_open() ? close_debug_window() : open_debug_window();
+    if (result != MOD_OK) {
+        svc_log->error(mod_ctx, debug_window_open() ? "failed to close shadow debug window" :
+                                                      "failed to open shadow debug window");
+    }
 }
 
 // Picks the sun or moon (whichever is above the horizon) and returns the normalized
@@ -595,7 +773,7 @@ void restore_actual_light_debug() {
 void on_scene_begin(ModContext*, const GfxStageContext* stageCtx, void*) {
     restore_actual_light_debug();
     capture_scene_camera(stageCtx);
-    if (!get_bool_option(g_cvarEnabled, true) || get_debug_mode() != 9) {
+    if (!get_bool_option(g_cvarEnabled, true) || get_debug_mode() != 9 || debug_window_open()) {
         return;
     }
 
@@ -653,7 +831,7 @@ void render_shadow_map(
         return;
     }
     const int64_t debugMode = get_debug_mode();
-    if (debugMode == 9) {
+    if (debugMode == 9 && !debug_window_open()) {
         return;
     }
     if (!matrix_ready(replayView)) {
@@ -749,19 +927,30 @@ void render_shadow_map(
     g_mapPass.ready = true;
 }
 
-// Game thread, after the full 3D scene: deferred composite.
-void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
+// Game thread, after opaque scene draws and before translucent/fog overlays: deferred composite.
+void on_scene_after_opaque(ModContext*, const GfxStageContext*, void*) {
     const int64_t debugMode = get_debug_mode();
+    const bool presentDebug = debug_window_open();
     restore_actual_light_debug();
 
+    if (presentDebug && debugMode == 0) {
+        svc_gfx->push_present(mod_ctx, g_debugPresentTarget, nullptr, 0);
+    }
+
     const MapPassOutput mapPass = std::exchange(g_mapPass, {});
-    if (debugMode == 9) {
+    if (debugMode == 9 && !debug_window_open()) {
         return;
     }
     if (!mapPass.ready || mapPass.shadowMap == nullptr || mapPass.lightColor == nullptr) {
+        if (presentDebug && debugMode != 0) {
+            svc_gfx->push_present(mod_ctx, g_debugPresentTarget, nullptr, 0);
+        }
         return;
     }
     if (!g_sceneCamera.valid) {
+        if (presentDebug && debugMode != 0) {
+            svc_gfx->push_present(mod_ctx, g_debugPresentTarget, nullptr, 0);
+        }
         return;
     }
     const CameraInfo& camera = g_sceneCamera.info;
@@ -773,6 +962,9 @@ void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
     if (svc_gfx->resolve_pass(mod_ctx, &resolveDesc, &resolved) != MOD_OK ||
         resolved.depth == nullptr)
     {
+        if (presentDebug && debugMode != 0) {
+            svc_gfx->push_present(mod_ctx, g_debugPresentTarget, nullptr, 0);
+        }
         return;
     }
 
@@ -797,7 +989,7 @@ void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
     uniforms.inv_size[0] = 1.0f / uniforms.size[0];
     uniforms.inv_size[1] = 1.0f / uniforms.size[1];
     uniforms.edge_fade_width =
-        static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarEdgeFadeWidth, 32), 0, 128));
+        static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarEdgeFadeWidth, 32), 0, 256));
     uniforms.strength =
         mapPass.fade *
         static_cast<float>(std::clamp<int64_t>(get_int_option(g_cvarStrength, 45), 0, 100)) /
@@ -806,15 +998,36 @@ void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
     uniforms.contact_enabled = get_bool_option(g_cvarContactShadows, false) ? 1.0f : 0.0f;
     uniforms.contact_thickness = 25.0f;
     uniforms.contact_length = 60.0f;
-    uniforms.debug_mode = static_cast<uint32_t>(debugMode);
+    // Camera Replay intentionally uses the gameplay-camera offscreen pass instead of the light
+    // shadow map, so it remains diagnostic on both windows. Other external diagnostics leave the
+    // main window on the normal shadow composite.
+    uniforms.debug_mode = presentDebug && debugMode != 10 ? 0u : static_cast<uint32_t>(debugMode);
 
     GfxRange uniformRange{0, 0};
     if (svc_gfx->push_uniform(mod_ctx, &uniforms, sizeof(uniforms), &uniformRange) != MOD_OK) {
         return;
     }
     const DrawPayload payload{resolved.depth, mapPass.shadowMap, mapPass.lightColor,
-        uniformRange.offset, uniformRange.size, static_cast<uint32_t>(debugMode)};
+        uniformRange.offset, uniformRange.size, uniforms.debug_mode};
     svc_gfx->push_draw(mod_ctx, g_drawType, &payload, sizeof(payload));
+
+    if (presentDebug && debugMode != 0) {
+        uniforms.debug_mode = static_cast<uint32_t>(debugMode);
+        GfxRange debugUniformRange{0, 0};
+        if (svc_gfx->push_uniform(mod_ctx, &uniforms, sizeof(uniforms), &debugUniformRange) !=
+            MOD_OK)
+        {
+            return;
+        }
+        const DrawPayload debugPayload{resolved.depth, mapPass.shadowMap, mapPass.lightColor,
+            debugUniformRange.offset, debugUniformRange.size, uniforms.debug_mode};
+        svc_gfx->push_present(mod_ctx, g_debugPresentTarget, &debugPayload, sizeof(debugPayload));
+    }
+}
+
+// Frame tail hook: only needed to restore light-view debug camera state before HUD.
+void on_frame_before_hud(ModContext*, const GfxStageContext*, void*) {
+    restore_actual_light_debug();
 }
 
 void add_control(UiElementHandle pane, const UiControlDesc& desc) {
@@ -873,7 +1086,7 @@ ModResult build_controls_tab(
         "dynamic shadows. This can be expensive.");
     add_number(left, "Coverage", g_cvarBoxRadius, 1000, 20000, 500, nullptr,
         "Radius of the shadowed area around the camera, in world units. Smaller is sharper.");
-    add_number(left, "Fade Out", g_cvarEdgeFadeWidth, 0, 128, 32, " texels",
+    add_number(left, "Fade Out", g_cvarEdgeFadeWidth, 0, 256, 32, " texels",
         "Fade out shadows gradually near the edge of the coverage area.");
 
     svc_ui->pane_add_section(mod_ctx, left, "Appearance");
@@ -899,6 +1112,14 @@ ModResult build_controls_tab(
         "Bounds: valid X in red, valid Y in green, and valid depth in blue<br/>Light View: "
         "renders the game world directly from the light camera<br/>Camera Replay: "
         "captures the same draw-list replay from the gameplay camera");
+    UiControlDesc debugWindowControl = UI_CONTROL_DESC_INIT;
+    debugWindowControl.kind = UI_CONTROL_BUTTON;
+    debugWindowControl.label = "Open / Close Debug Window";
+    debugWindowControl.help_rml =
+        "Shows the selected debug view in an auxiliary WebGPU window. Standard diagnostics leave "
+        "the main view on the normal shadow composite.";
+    debugWindowControl.on_pressed = on_toggle_debug_window;
+    add_control(left, debugWindowControl);
     return MOD_OK;
 }
 
@@ -934,6 +1155,12 @@ ModResult build_panel(ModContext*, UiElementHandle panel, void*, ModError*) {
     control.kind = UI_CONTROL_BUTTON;
     control.label = "Open Controls";
     control.on_pressed = on_open_controls;
+    add_control(panel, control);
+
+    control = UI_CONTROL_DESC_INIT;
+    control.kind = UI_CONTROL_BUTTON;
+    control.label = "Open / Close Debug Window";
+    control.on_pressed = on_toggle_debug_window;
     add_control(panel, control);
     return MOD_OK;
 }
@@ -1000,7 +1227,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     if (result != MOD_OK) {
         return result;
     }
-    result = register_int_option("edgeFadeWidth", 32, g_cvarEdgeFadeWidth, error);
+    result = register_int_option("edgeFadeWidth", 128, g_cvarEdgeFadeWidth, error);
     if (result != MOD_OK) {
         return result;
     }
@@ -1041,6 +1268,12 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     {
         return mods::set_error(error, MOD_ERROR, "failed to register stage hook");
     }
+    stageDesc.callback = on_scene_after_opaque;
+    if (svc_gfx->register_stage_hook(
+            mod_ctx, GFX_STAGE_SCENE_AFTER_OPAQUE, &stageDesc, &g_sceneAfterOpaqueHook) != MOD_OK)
+    {
+        return mods::set_error(error, MOD_ERROR, "failed to register stage hook");
+    }
     stageDesc.callback = on_frame_before_hud;
     if (svc_gfx->register_stage_hook(
             mod_ctx, GFX_STAGE_FRAME_BEFORE_HUD, &stageDesc, &g_frameBeforeHudHook) != MOD_OK)
@@ -1051,18 +1284,18 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     // Skip the game's own shadow rendering while the dynamic pass is active: the
     // shadowControl pair covers the actor real/blob shadows, drawCloudShadow the weather
     // cloud shadows.
-    if (mods::hook_add_pre<GameShadowImageDraw>(svc_hook, on_game_shadow_pre) != MOD_OK ||
-        mods::hook_add_pre<GameShadowDraw>(svc_hook, on_game_shadow_pre) != MOD_OK ||
-        mods::hook_add_pre<CloudShadowDraw>(svc_hook, on_game_shadow_pre) != MOD_OK)
+    if (mods::hook::add_pre<GameShadowImageDraw>(on_game_shadow_pre) != MOD_OK ||
+        mods::hook::add_pre<GameShadowDraw>(on_game_shadow_pre) != MOD_OK ||
+        mods::hook::add_pre<CloudShadowDraw>(on_game_shadow_pre) != MOD_OK)
     {
         return mods::set_error(error, MOD_ERROR, "failed to hook game shadow rendering");
     }
-    if (mods::hook_add_pre<ClipperSphereClip>(svc_hook, on_frustum_clip_pre) != MOD_OK ||
-        mods::hook_add_pre<ClipperBoxClip>(svc_hook, on_frustum_clip_pre) != MOD_OK)
+    if (mods::hook::add_pre<ClipperSphereClip>(on_frustum_clip_pre) != MOD_OK ||
+        mods::hook::add_pre<ClipperBoxClip>(on_frustum_clip_pre) != MOD_OK)
     {
         return mods::set_error(error, MOD_ERROR, "failed to hook frustum clipping");
     }
-    if (mods::hook_add_pre<CopyTex>(svc_hook, on_copy_tex_pre) != MOD_OK) {
+    if (mods::hook::add_pre<CopyTex>(on_copy_tex_pre) != MOD_OK) {
         return mods::set_error(error, MOD_ERROR, "failed to hook GXCopyTex");
     }
     UiModsPanelDesc panelDesc = UI_MODS_PANEL_DESC_INIT;
@@ -1078,6 +1311,8 @@ MOD_EXPORT ModResult mod_update(ModError*) {
 
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
     restore_actual_light_debug();
+    close_debug_window();
+    release_debug_present_pipeline();
     svc_resource->free(mod_ctx, &g_shaderSource);
     if (g_compositePipeline != nullptr) {
         wgpuRenderPipelineRelease(g_compositePipeline);
@@ -1099,8 +1334,11 @@ MOD_EXPORT ModResult mod_shutdown(ModError*) {
     g_cvarStrength = 0;
     g_cvarPcf = g_cvarBias = g_cvarBoxRadius = g_cvarEdgeFadeWidth = g_cvarContactShadows =
         g_cvarDebugView = 0;
-    g_drawType = g_sceneBeginHook = g_sceneAfterTerrainHook = g_frameBeforeHudHook = 0;
+    g_drawType = g_sceneBeginHook = g_sceneAfterTerrainHook = g_sceneAfterOpaqueHook =
+        g_frameBeforeHudHook = 0;
     g_controlsWindow = 0;
+    g_debugWindow = 0;
+    g_debugPresentTarget = 0;
     g_mapPass = {};
     g_sceneCamera.valid = false;
     g_sceneCamera.raw_valid = false;

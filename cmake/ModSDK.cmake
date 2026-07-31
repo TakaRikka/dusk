@@ -113,6 +113,29 @@ function(_mod_add_webgpu_headers target_name)
     endif ()
 endfunction()
 
+function(_mod_add_fmt target_name)
+    if (NOT TARGET fmt::fmt-header-only)
+        find_package(fmt 11 CONFIG QUIET GLOBAL)
+    endif ()
+
+    if (NOT TARGET fmt::fmt-header-only)
+        include(FetchContent)
+        message(STATUS "Mod SDK: fetching fmt")
+        # Keep the fallback version in sync with extern/aurora/extern/CMakeLists.txt.
+        FetchContent_Declare(fmt
+                URL https://github.com/fmtlib/fmt/archive/refs/tags/12.1.0.tar.gz
+                URL_HASH SHA256=ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
+                DOWNLOAD_EXTRACT_TIMESTAMP FALSE
+                EXCLUDE_FROM_ALL)
+        FetchContent_MakeAvailable(fmt)
+    endif ()
+
+    if (NOT TARGET fmt::fmt-header-only)
+        message(FATAL_ERROR "add_mod: FEATURES fmt could not provide fmt::fmt-header-only")
+    endif ()
+    target_link_libraries(${target_name} PRIVATE fmt::fmt-header-only)
+endfunction()
+
 function(add_mod target_name)
     cmake_parse_arguments(ARG "BUNDLE" "MOD_JSON;RES_DIR;OVERLAY_DIR;TEXTURES_DIR;OUTPUT_DIR"
             "SOURCES;RUNTIME_LIBRARIES;FEATURES" ${ARGN})
@@ -127,7 +150,7 @@ function(add_mod target_name)
         message(FATAL_ERROR "add_mod: MOD_JSON does not exist: ${_mod_json}")
     endif ()
 
-    set(_supported_features game webgpu)
+    set(_supported_features fmt game webgpu)
     set(_features "")
     foreach (_feature IN LISTS ARG_FEATURES)
         list(FIND _supported_features "${_feature}" _feature_index)
@@ -166,6 +189,9 @@ function(add_mod target_name)
             target_link_libraries(${target_name} PRIVATE dusklight_mod_feature_${_feature})
             if (_feature STREQUAL "webgpu")
                 _mod_add_webgpu_headers(${target_name})
+            endif ()
+            if (_feature STREQUAL "fmt")
+                _mod_add_fmt(${target_name})
             endif ()
             if (_feature STREQUAL "game" OR _feature STREQUAL "webgpu")
                 set(_needs_host_link TRUE)

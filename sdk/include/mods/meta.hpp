@@ -241,6 +241,48 @@ consteval auto make_hook_mem_names() {
     return r;
 }
 
+#if defined(__GNUC__) && !defined(__clang__) && defined(__ELF__)
+/* https://gcc.gnu.org/bugzilla/show_bug.cgi?id=41091 prevents inline static template members from
+ * sharing an explicit ELF section with ordinary variables. GCC can instead constant-evaluate a
+ * file-local record at each DEFINE_HOOK. */
+template <auto Target>
+void materialize_hook_mem(unsigned char* outPmf) {
+    const auto target = Target;
+    std::memcpy(outPmf, &target, sizeof(target));
+}
+
+template <auto Target, FixedString Disp>
+consteval auto make_local_hook_record() {
+    using F = decltype(Target);
+    if constexpr (std::is_member_function_pointer_v<F>) {
+        constexpr auto names = make_hook_mem_names<Target, Disp>();
+        static_assert(sizeof(F) <= MOD_META_HOOK_MEM_EXT_CAPACITY,
+            "unsupported pointer-to-member representation");
+        if constexpr (sizeof(F) > MOD_META_HOOK_MEM_CAPACITY) {
+            HookMemExtRecord<names.len> record = {
+                {sizeof(HookMemExtRecord<names.len>), MOD_META_HOOK_MEM_EXT, 0}, sizeof(F),
+                materialize_hook_mem<Target>, nullptr, {}};
+            for (size_t i = 0; i < names.len; ++i) {
+                record.names[i] = names.chars[i];
+            }
+            return record;
+        } else {
+            HookMemRecord<F, names.len> record = {
+                {sizeof(HookMemRecord<F, names.len>), MOD_META_HOOK_MEM, 0}, 0, {Target}, nullptr,
+                {}};
+            for (size_t i = 0; i < names.len; ++i) {
+                record.names[i] = names.chars[i];
+            }
+            return record;
+        }
+    } else {
+        static_assert(std::is_pointer_v<F> && std::is_function_v<std::remove_pointer_t<F>>,
+            "hook target must be a function or member function");
+        return HookFnRecord<F>{{sizeof(HookFnRecord<F>), MOD_META_HOOK_FN, 0}, 0, Target, nullptr};
+    }
+}
+#endif
+
 /*
  * MSVC constant-evaluates a compact pointer-to-member only when every other operand in the
  * initializer is a literal: no consteval calls, constexpr-object copies, or default member

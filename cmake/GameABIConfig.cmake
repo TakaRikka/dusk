@@ -62,3 +62,7 @@ target_sources(dusklight_mod_feature_game INTERFACE
 add_library(dusklight_mod_feature_webgpu INTERFACE)
 target_link_libraries(dusklight_mod_feature_webgpu INTERFACE dusklight_mod_api)
 target_compile_definitions(dusklight_mod_feature_webgpu INTERFACE DUSK_MOD_FEATURE_WEBGPU=1)
+
+add_library(dusklight_mod_feature_fmt INTERFACE)
+target_link_libraries(dusklight_mod_feature_fmt INTERFACE dusklight_mod_api)
+target_compile_definitions(dusklight_mod_feature_fmt INTERFACE DUSK_MOD_FEATURE_FMT=1)

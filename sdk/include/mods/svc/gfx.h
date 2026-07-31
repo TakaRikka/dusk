@@ -1,6 +1,11 @@
 #pragma once
 
 #include <mods/api.h>
+#include <mods/svc/window.h>
+
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
 
 #if !defined(DUSK_BUILDING_GAME) && !defined(DUSK_MOD_FEATURE_WEBGPU)
 #error "mods/svc/gfx.h requires add_mod(... FEATURES webgpu)"
@@ -28,7 +33,7 @@
 
 #define GFX_SERVICE_ID "dev.twilitrealm.dusklight.gfx"
 #define GFX_SERVICE_MAJOR 1u
-#define GFX_SERVICE_MINOR 0u
+#define GFX_SERVICE_MINOR 1u
 
 /* Maximum size for push_draw payload */
 #define GFX_INLINE_DRAW_PAYLOAD_SIZE 128u
@@ -37,6 +42,7 @@
 typedef uint64_t GfxDrawTypeHandle;
 typedef uint64_t GfxStageHookHandle;
 typedef uint64_t GfxComputeTypeHandle;
+typedef uint64_t GfxPresentTargetHandle;
 
 /* A suballocation in one of the shared per-frame streaming buffers. */
 typedef struct GfxRange {
@@ -56,11 +62,13 @@ typedef struct GfxDeviceInfo {
     WGPUTextureFormat depth_format; /* scene depth target format */
     uint32_t sample_count;          /* scene pass MSAA sample count */
     bool uses_reversed_z;           /* true means depth 1.0 is near */
+    WGPUInstance instance;          /* borrowed; added in GfxService 1.1 */
+    WGPUAdapter adapter;            /* borrowed; added in GfxService 1.1 */
 } GfxDeviceInfo;
 
 #define GFX_DEVICE_INFO_INIT                                                                       \
     {sizeof(GfxDeviceInfo), NULL, NULL, WGPUTextureFormat_Undefined, WGPUTextureFormat_Undefined,  \
-        1u, false}
+        1u, false, NULL, NULL}
 
 /*
  * Passed to GfxDrawFn on the render worker thread; valid only during the call. The pass pipeline,
@@ -168,6 +176,48 @@ typedef struct GfxComputeTypeDesc {
 
 #define GFX_COMPUTE_TYPE_DESC_INIT {sizeof(GfxComputeTypeDesc), NULL, NULL, NULL}
 
+/*
+ * Invoked on the render worker while the frame encoder is open. The target texture and view have
+ * been acquired by the host and are borrowed for the callback. Record all target work on encoder,
+ * leave no pass open, and do not finish, submit, or present it. The host submits the shared command
+ * buffer and presents the target after submission. The streaming buffers contain data appended on
+ * the game thread before push_present.
+ */
+typedef struct GfxPresentContext {
+    uint32_t struct_size;
+    WGPUDevice device;
+    WGPUQueue queue;
+    WGPUCommandEncoder encoder;
+    WGPUTexture target_texture;
+    WGPUTextureView target_view;
+    WGPUTextureFormat target_format;
+    uint32_t target_width;
+    uint32_t target_height;
+    WGPUBuffer vertex_buffer;
+    WGPUBuffer index_buffer;
+    WGPUBuffer uniform_buffer;
+    WGPUBuffer storage_buffer;
+} GfxPresentContext;
+
+typedef void (*GfxPresentFn)(ModContext* ctx, const GfxPresentContext* present_ctx,
+    const void* payload, size_t payload_size, void* user_data);
+
+typedef struct GfxPresentTargetDesc {
+    uint32_t struct_size;
+    const char* label; /* optional debug label */
+    uint32_t width;    /* required for raw surfaces; ignored for WindowService windows */
+    uint32_t height;
+    WGPUTextureUsage usage; /* 0 defaults to RenderAttachment */
+    WGPUTextureFormat preferred_format;
+    WGPUCompositeAlphaMode preferred_alpha_mode;
+    GfxPresentFn render;
+    void* user_data;
+} GfxPresentTargetDesc;
+
+#define GFX_PRESENT_TARGET_DESC_INIT                                                               \
+    {sizeof(GfxPresentTargetDesc), NULL, 0u, 0u, WGPUTextureUsage_None,                            \
+        WGPUTextureFormat_Undefined, WGPUCompositeAlphaMode_Auto, NULL, NULL}
+
 typedef struct GfxService {
     ServiceHeader header;
 
@@ -200,15 +250,25 @@ typedef struct GfxService {
     ModResult (*resolve_pass)(
         ModContext* ctx, const GfxResolveDesc* desc, GfxResolvedTargets* out_targets);
     ModResult (*create_pass)(ModContext* ctx, uint32_t width, uint32_t height);
+
+    /* Minor version 1 */
+
+    ModResult (*register_present_target)(ModContext* ctx, WGPUSurface surface,
+        const GfxPresentTargetDesc* desc, GfxPresentTargetHandle* out_handle);
+    ModResult (*register_window_present_target)(ModContext* ctx, WindowHandle window,
+        const GfxPresentTargetDesc* desc, GfxPresentTargetHandle* out_handle);
+    /* Raw-surface targets only; WindowService target resizes are managed automatically. */
+    ModResult (*resize_present_target)(
+        ModContext* ctx, GfxPresentTargetHandle handle, uint32_t width, uint32_t height);
+    ModResult (*unregister_present_target)(ModContext* ctx, GfxPresentTargetHandle handle);
+    /*
+     * MOD_OK means the task was queued.
+     * MOD_UNAVAILABLE means no task could be queued now (for example, a window has no pixel size).
+     * MOD_ERROR means an earlier task found the surface lost or deterministically invalid;
+     * unregister and recreate the target before pushing again.
+     */
+    ModResult (*push_present)(
+        ModContext* ctx, GfxPresentTargetHandle handle, const void* payload, size_t payload_size);
 } GfxService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<GfxService> {
-    static constexpr const char* id = GFX_SERVICE_ID;
-    static constexpr uint16_t major_version = GFX_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = GFX_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(GfxService, svc_gfx, GFX_SERVICE_ID, GFX_SERVICE_MAJOR, GFX_SERVICE_MINOR);
