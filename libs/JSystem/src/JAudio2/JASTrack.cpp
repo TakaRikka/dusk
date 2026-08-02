@@ -288,13 +288,13 @@ void JASTrack::setLatestKey(u8 param_0) {
     field_0x22b += getTransposeTotal();
 }
 
-JASChannel* JASTrack::channelStart(JASTrack::TChannelMgr* i_channelMgr, u32 param_1, u32 param_2,
+JASChannel* JASTrack::channelStart(JASTrack::TChannelMgr* i_channelMgr, u32 key, u32 velocity,
                                    u32 i_updateTimer) {
     JASBank* bank = NULL;
     if (mBankTable != NULL) {
         bank = mBankTable->getBank(mBankNumber);
     }
-    JASChannel* channel = JASBank::noteOn(bank, mProgNumber, param_1, param_2,
+    JASChannel* channel = JASBank::noteOn(bank, mProgNumber, key, velocity,
                                           mNoteOnPrio | mReleasePrio << 8,
                                           channelUpdateCallback, i_channelMgr);
     if (channel == NULL) {
@@ -315,17 +315,17 @@ JASChannel* JASTrack::channelStart(JASTrack::TChannelMgr* i_channelMgr, u32 para
     return channel;
 }
 
-int JASTrack::noteOn(u32 noteid, u32 param_1, u32 param_2) {
+int JASTrack::noteOn(u32 noteid, u32 key, u32 velocity) {
     JUT_ASSERT(486, noteid != 0 && noteid < TChannelMgr::CHANNEL_MAX);
     if (isMute()) {
         return 0;
     }
     int ret = 1;
-    param_1 += getTransposeTotal();
+    key += getTransposeTotal();
     for (u32 i = 0; i < mChannelMgrCount; i++) {
         if (mChannelMgrs[i] != NULL) {
             mChannelMgrs[i]->noteOff(noteid, 0);
-            JASChannel* channel = channelStart(mChannelMgrs[i], param_1, param_2, 0);
+            JASChannel* channel = channelStart(mChannelMgrs[i], key, velocity, 0);
             if (channel == NULL) {
                 ret = 0;
             }
@@ -356,7 +356,7 @@ int JASTrack::gateOn(u32 param_0, u32 i_velocity, f32 i_time, u32 i_flags) {
             } else {
                 JASChannel* channel = channel_mgr->mChannels[0];
                 if (channel != NULL) {
-                    channel->setKey(uvar7 - channel->field_0xdc.mWaveInfo.mBaseKey);
+                    channel->setKey(uvar7 - channel->mAnon.mWaveInfo.mBaseKey);
                     channel->setVelocity(i_velocity);
                     channel->setUpdateTimer(update_timer);
                 }

@@ -11,31 +11,31 @@
 using namespace dusk::mods::svc::audio_res;
 
 // NONMATCHING JASPoolAllocObject_MultiThreaded<_> locations
-JASChannel* JASBank::noteOn(JASBank const* param_0, int param_1, u8 param_2, u8 param_3, u16 param_4,
-                         void (*param_5)(u32, JASChannel*, JASDsp::TChannel*, void*),
-                         void* param_6) {
-    if (param_1 >= 0xf0) {
-        return noteOnOsc(param_1 - 0xf0, param_2, param_3, param_4, param_5, param_6);
+JASChannel* JASBank::noteOn(JASBank const* bank, int program, u8 key, u8 velocity, u16 priority,
+                         void (*callback)(u32, JASChannel*, JASDsp::TChannel*, void*),
+                         void* callback_data) {
+    if (program >= 0xf0) {
+        return noteOnOsc(program - 0xf0, key, velocity, priority, callback, callback_data);
     }
-    if (!param_0) {
+    if (!bank) {
         return NULL;
     }
-    JASInstParam stack_60;
-    if (!param_0->getInstParam(param_1, param_2, param_3, &stack_60)) {
+    JASInstParam instParam;
+    if (!bank->getInstParam(program, key, velocity, &instParam)) {
         return NULL;
     }
-    JASWaveBank* waveBank = param_0->getWaveBank();
+    JASWaveBank* waveBank = bank->getWaveBank();
     if (!waveBank) {
         return NULL;
     }
-    JASWaveHandle* waveHandle = waveBank->getWaveHandle(stack_60.field_0x1a);
+    JASWaveHandle* waveHandle = waveBank->getWaveHandle(instParam.mWaveId);
     if (!waveHandle) {
         return NULL;
     }
 #if TARGET_PC
-    auto const key = AudioWaveKey(static_cast<AudioWaveBank>(waveBank->bankId), stack_60.field_0x1a);
+    auto const wave_key = AudioWaveKey(static_cast<AudioWaveBank>(waveBank->bankId), instParam.mWaveId);
     std::lock_guard lock(s_replacements_mutex);
-    auto const found_replacement = s_replacements.find(key);
+    auto const found_replacement = s_replacements.find(wave_key);
     if (found_replacement != s_replacements.end()) {
         waveHandle = &found_replacement->second;
     }
@@ -52,32 +52,32 @@ JASChannel* JASBank::noteOn(JASBank const* param_0, int param_1, u8 param_2, u8 
         return NULL;
     }
 
-    JASChannel* channel = JKR_NEW JASChannel(param_5, param_6);
+    JASChannel* channel = JKR_NEW JASChannel(callback, callback_data);
     if (!channel) {
         return NULL;
     }
-    channel->setPriority(param_4);
-    channel->field_0xdc.mWaveInfo = *waveInfo;
+    channel->setPriority(priority);
+    channel->mAnon.mWaveInfo = *waveInfo;
     channel->mWaveAramAddress = wavePtr;
 #if TARGET_PC
     channel->mAramBaseAddress = aramBase;
     channel->mSampleReference = waveHandle->getSampleReference();
 #endif
-    channel->field_0xdc.mChannelType = stack_60.field_0x1c;
-    channel->setBankDisposeID(param_0);
-    channel->setInitPitch(stack_60.mPitch * (waveInfo->mSampleRate / JASDriver::getDacRate()));
-    if (stack_60.field_0x1e == 0) {
-        channel->setKey(param_2 - waveInfo->mBaseKey);
+    channel->mAnon.mChannelType = instParam.mChannelType;
+    channel->setBankDisposeID(bank);
+    channel->setInitPitch(instParam.mPitch * (waveInfo->mSampleRate / JASDriver::getDacRate()));
+    if (instParam.mDontSetKey == 0) {
+        channel->setKey(key - waveInfo->mBaseKey);
     }
-    channel->setInitVolume(stack_60.mVolume);
-    channel->setVelocity(param_3);
-    channel->setInitPan(stack_60.mPan);
-    channel->setInitFxmix(stack_60.mFxMix);
-    channel->setInitDolby(stack_60.mDolby);
-    for (u32 i = 0; i < stack_60.field_0x1d; i++) {
-        channel->setOscInit(i, stack_60.field_0x14[i]);
+    channel->setInitVolume(instParam.mVolume);
+    channel->setVelocity(velocity);
+    channel->setInitPan(instParam.mPan);
+    channel->setInitFxmix(instParam.mFxMix);
+    channel->setInitDolby(instParam.mDolby);
+    for (u32 i = 0; i < instParam.mOscillatorCount; i++) {
+        channel->setOscInit(i, instParam.mOscillators[i]);
     }
-    channel->setDirectRelease(stack_60.field_0x18);
+    channel->setDirectRelease(instParam.mDirectRelease);
     if (!channel->play()) {
         return NULL;
     }
@@ -85,24 +85,24 @@ JASChannel* JASBank::noteOn(JASBank const* param_0, int param_1, u8 param_2, u8 
 }
 
 // NONMATCHING JASPoolAllocObject_MultiThreaded<_> locations
-JASChannel* JASBank::noteOnOsc(int param_0, u8 param_1, u8 param_2, u16 param_3,
-                            void (*param_4)(u32, JASChannel*, JASDsp::TChannel*, void*),
-                            void* param_5) {
+JASChannel* JASBank::noteOnOsc(int param_0, u8 key, u8 velocity, u16 priority,
+                            void (*callback)(u32, JASChannel*, JASDsp::TChannel*, void*),
+                            void* callback_data) {
     static JASOscillator::Point const OSC_RELEASE_TABLE[2] = {
         {0x0001, 0x000A, 0x0000},
         {0x000F, 0x0000, 0x0000},
     };
     static const JASOscillator::Data OSC_ENV = {0, 1.0f, NULL, OSC_RELEASE_TABLE, 1.0f, 0.0f};
-    JASChannel* channel = JKR_NEW JASChannel(param_4, param_5);
+    JASChannel* channel = JKR_NEW JASChannel(callback, callback_data);
     if (!channel) {
         return NULL;
     }
-    channel->setPriority(param_3);
+    channel->setPriority(priority);
     channel->mOscillatorSomething = param_0;
-    channel->field_0xdc.mChannelType = 2;
+    channel->mAnon.mChannelType = CHANNEL_OSCILLATOR;
     channel->setInitPitch(16736.016f / JASDriver::getDacRate());
-    channel->setKey(param_1 - channel->field_0xdc.mWaveInfo.mBaseKey);
-    channel->setVelocity(param_2);
+    channel->setKey(key - channel->mAnon.mWaveInfo.mBaseKey);
+    channel->setVelocity(velocity);
     channel->setOscInit(0, &OSC_ENV);
     if (!channel->play()) {
         return NULL;

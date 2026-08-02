@@ -21,13 +21,13 @@ void JASBasicBank::newInstTable(u8 num, JKRHeap* heap) {
     }
 }
 
-bool JASBasicBank::getInstParam(int prg_no, int param_1, int param_2,
+bool JASBasicBank::getInstParam(int prg_no, int key, int velocity,
                                 JASInstParam* o_param) const {
     JASInst* inst = getInst(prg_no);
     if (inst == NULL) {
         return false;
     }
-    return inst->getParam(param_1, param_2, o_param);
+    return inst->getParam(key, velocity, o_param);
 }
 
 void JASBasicBank::setInst(int prg_no, JASInst* inst) {

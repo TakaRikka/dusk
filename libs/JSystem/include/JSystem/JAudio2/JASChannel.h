@@ -174,7 +174,7 @@ public:
     struct {
         u32 mChannelType; // CHANNEL_WAVE or CHANNEL_OSCILLATOR
         JASWaveInfo mWaveInfo;
-    } field_0xdc;
+    } mAnon;
     union {
         u32 mWaveAramAddress;
         u32 mOscillatorSomething;

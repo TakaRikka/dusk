@@ -37,7 +37,7 @@ JASChannel::JASChannel(Callback i_callback, void* i_callbackData) :
     mKeySweepCount(0),
     mSkipSamples(0)
 {
-    field_0xdc.mChannelType = 0;
+    mAnon.mChannelType = 0;
     field_0x104 = 0;
     mMixConfig[0].whole = 0x150;
     mMixConfig[1].whole = 0x210;
@@ -240,7 +240,7 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
         mCallback(CB_START, this, i_channel, mCallbackData);
     }
 
-    if (field_0xdc.mWaveInfo.mpLoaded[0] == 0) {
+    if (mAnon.mWaveInfo.mpLoaded[0] == 0) {
         JUT_WARN_DEVICE(346, 2, "%s", "Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;
@@ -256,9 +256,9 @@ s32 JASChannel::initialUpdateDSPChannel(JASDsp::TChannel* i_channel) {
         return -1;
     }
 
-    switch (field_0xdc.mChannelType) {
+    switch (mAnon.mChannelType) {
     case 0:
-        i_channel->setWaveInfo(field_0xdc.mWaveInfo, mWaveAramAddress, mSkipSamples);
+        i_channel->setWaveInfo(mAnon.mWaveInfo, mWaveAramAddress, mSkipSamples);
 #if TARGET_PC
         i_channel->mAramBaseAddress = mAramBaseAddress;
 #endif
@@ -321,7 +321,7 @@ s32 JASChannel::updateDSPChannel(JASDsp::TChannel* i_channel) {
         mCallback(CB_PLAY, this, i_channel, mCallbackData);
     }
 
-    if (field_0xdc.mWaveInfo.mpLoaded[0] == 0) {
+    if (mAnon.mWaveInfo.mpLoaded[0] == 0) {
         JUT_WARN_DEVICE(456, 2, "%s","Lost wave data while playing");
         mDspCh->free();
         mDspCh = NULL;

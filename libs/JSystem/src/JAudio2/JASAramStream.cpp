@@ -722,9 +722,9 @@ void JASAramStream::channelStart() {
         }
         jc->setInitPitch(mSampleRate / JASDriver::getDacRate());
         jc->setOscInit(0, &OSC_ENV);
-        jc->field_0xdc.mWaveInfo = wave_info;
+        jc->mAnon.mWaveInfo = wave_info;
         jc->mWaveAramAddress = mAramAddress + sBlockSize * mAramBlocksPerChannel * i;
-        jc->field_0xdc.mChannelType = 0;
+        jc->mAnon.mChannelType = 0;
         int ret = jc->playForce();
         JUT_ASSERT(977, ret);
         JUT_ASSERT_MSG(979, mChannels[i] == NULL, "channelStart for already playing channel");

@@ -26,8 +26,8 @@ void JASDrumSet::newPercArray(u8 num, JKRHeap* heap) {
     }
 }
 
-bool JASDrumSet::getParam(int key, int param_1, JASInstParam* param_2) const {
-    UNUSED(param_1);
+bool JASDrumSet::getParam(int key, int velocity, JASInstParam* o_param) const {
+    UNUSED(velocity);
     JUT_ASSERT(48, key >= 0);
     if (mPercArray == NULL) {
         return false;
@@ -43,12 +43,12 @@ bool JASDrumSet::getParam(int key, int param_1, JASInstParam* param_2) const {
         return false;
     }
 
-    param_2->field_0x1c = 0;
-    param_2->field_0x1e = 1;
-    param_2->mVolume = perc->mVolume;
-    param_2->mPitch = perc->mPitch;
-    param_2->mPan = perc->mPan;
-    param_2->field_0x18 = u16(perc->field_0xc);
+    o_param->mChannelType = 0;
+    o_param->mDontSetKey = 1;
+    o_param->mVolume = perc->mVolume;
+    o_param->mPitch = perc->mPitch;
+    o_param->mPan = perc->mPan;
+    o_param->mDirectRelease = u16(perc->mDirectRelease);
 
     static JASOscillator::Data osc;
 
@@ -61,11 +61,11 @@ bool JASDrumSet::getParam(int key, int param_1, JASInstParam* param_2) const {
 
     static JASOscillator::Data* oscp = &osc;
 
-    param_2->field_0x14 = &oscp;
-    param_2->field_0x1d = 1;
-    param_2->mVolume *= perc->field_0x10;
-    param_2->mPitch *= perc->field_0x14;
-    param_2->field_0x1a = u16(perc->field_0xe);
+    o_param->mOscillators = &oscp;
+    o_param->mOscillatorCount = 1;
+    o_param->mVolume *= perc->mVolumeMult;
+    o_param->mPitch *= perc->mPitchMult;
+    o_param->mWaveId = u16(perc->mWaveId);
     return true;
 }
 
@@ -107,12 +107,12 @@ JASDrumSet::TPerc::TPerc() {
     mVolume = 1.0f;
     mPitch = 1.0f;
     mPan = 0.5f;
-    field_0xc = 1000;
+    mDirectRelease = 1000;
 }
 
 void JASDrumSet::TPerc::setRelease(u32 release) {
     JUT_ASSERT(224, release < 0x10000);
-    field_0xc = release;
+    mDirectRelease = release;
 }
 
 u32 JASDrumSet::getType() const { return 'PERC'; }
