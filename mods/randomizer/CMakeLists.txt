@@ -127,3 +127,15 @@ target_compile_definitions(randomizer_generator PRIVATE
         SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
         RANDO_SAVE_PATH="${CMAKE_BINARY_DIR}/randomizer/"
         RANDOMIZER_ONLY)
+
+# standalone tests
+add_executable(randomizer_generator_tests ${CMAKE_CURRENT_SOURCE_DIR}/generator/test/test.cpp ${RANDOMIZER_GENERATOR_SOURCES})
+target_link_libraries(randomizer_generator_tests PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
+target_compile_definitions(randomizer_generator_tests PRIVATE
+        RANDO_DATA_PATH="generator/data/"
+        SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
+        RANDO_SAVE_PATH="${CMAKE_BINARY_DIR}/randomizer/"
+        RANDO_LOGIC_TESTS_PATH="${CMAKE_SOURCE_DIR}/mods/randomizer/generator/data/tests/logic"
+        SETTINGS_PATH="${RANDO_SAVE_PATH}/randomizer_settings.yaml.test"
+        PREFERENCES_PATH="${RANDO_SAVE_PATH}/randomizer_preferences.yaml.test"
+        RANDOMIZER_ONLY)
