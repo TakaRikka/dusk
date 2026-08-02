@@ -8,7 +8,9 @@ namespace randomizer::logic::world
 {
     class World;
 };
-class Location;
+namespace randomizer::logic::location {
+    class Location;
+}
 namespace randomizer::logic::item
 {
     enum Importance
@@ -43,7 +45,8 @@ namespace randomizer::logic::item
         bool IsMinor() const;
         bool isJunk() const;
         bool IsGameWinningItem() const;
-        std::list<Location*> GetChainLocations() const;
+        void AddChainLocation(location::Location* location);
+        std::list<location::Location*> GetChainLocations() const;
         bool IsDungeonSmallKey() const;
         bool IsBigKey() const;
         bool IsDungeonMap() const;
@@ -52,6 +55,8 @@ namespace randomizer::logic::item
         bool IsShadowCrystal() const;
         bool IsBottle() const;
         bool IsStamp() const;
+        bool CanBeInBarrenRegion() const;
+        bool IsSameOrSimilarItem(Item* otherItem) const;
 
         bool operator==(const Item& rhs) const;
         bool operator<(const Item& rhs) const;
@@ -62,7 +67,7 @@ namespace randomizer::logic::item
         world::World* _world = nullptr;
         Importance _importance = INVALID;
         bool _gameWinningItem = false;
-        std::list<Location*> _chainLocations;
+        std::list<location::Location*> _chainLocations;
 
         bool _dungeonSmallKey = false;
         bool _bigKey = false;

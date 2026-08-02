@@ -5,8 +5,9 @@
 #include "../utility/random.hpp"
 #include "../utility/string.hpp"
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <ranges>
 
 namespace randomizer::logic::fill
 {
@@ -64,16 +65,18 @@ namespace randomizer::logic::fill
         }
     }
 
-    void AssumedFill(world::WorldPool& worlds,
-                     item_pool::ItemPool& itemsToPlacePool,
-                     const item_pool::ItemPool& itemsNotYetPlaced,
-                     location::LocationPool allowedLocations,
-                     const int& worldToFill /* = -1 */)
+    location::LocationPool AssumedFill(
+        world::WorldPool& worlds,
+        item_pool::ItemPool& itemsToPlacePool,
+        const item_pool::ItemPool& itemsNotYetPlaced,
+        location::LocationPool allowedLocations,
+        const int& worldToFill /* = -1 */)
     {
         // Assumed Fill may sometimes place items in such a way that accidentally locks out being able to place specific items
         // later on. Allow the algorithm to retry a reasonable amount of times before returning an error.
         int retries = 10;
         bool unsuccessfulPlacement = true;
+        location::LocationPool rollbacks = {};
         while (unsuccessfulPlacement)
         {
             if (retries <= 0)
@@ -100,7 +103,7 @@ namespace randomizer::logic::fill
 
             utility::random::ShufflePool(itemsToPlacePool);
             auto itemsToPlace = itemsToPlacePool;
-            location::LocationPool rollbacks = {};
+            rollbacks.clear();
 
             while (!itemsToPlace.empty())
             {
@@ -182,6 +185,8 @@ namespace randomizer::logic::fill
                 rollbacks.push_back(spotToFill);
             }
         }
+
+        return rollbacks;
     }
 
     void FastFill(item_pool::ItemPool& itemsToPlace, location::LocationPool allowedLocations)
@@ -228,7 +233,7 @@ namespace randomizer::logic::fill
         utility::container::FilterAndEraseFromVector(locations, [](const auto& location) {
             return !location->IsProgression();
         });
-        
+
         // Filter out the slingshot and progressive swords to place first. The slingshot and first sword have a very limited
         // pool of locations and have to be found in the intro. We also include the lantern, shadow crystal, and progressive
         // fishing rod because those items can lock prologue locations also.
@@ -277,7 +282,12 @@ namespace randomizer::logic::fill
 
         // Place goal items at goal locations
         auto completeItemPool = item_pool::GetCompleteItemPool(worlds);
-        AssumedFill(worlds, goalItems, completeItemPool, goalLocations);
+        auto filledLocations = AssumedFill(worlds, goalItems, completeItemPool, goalLocations);
+
+        // Goal items placed at goal locations are expected items
+        for (auto location: filledLocations) {
+            location->SetExpectedItem(true);
+        }
 
         // Determine required dungeons now that we placed goal location items
         world->DetermineRequiredDungeons();
@@ -317,7 +327,11 @@ namespace randomizer::logic::fill
                                 (item->GetName() == "Ordon Pumpkin" || item->GetName() == "Ordon Cheese"));
                     });
                 auto completeItemPool = item_pool::GetCompleteItemPool(worlds);
-                AssumedFill(worlds, smallKeys, completeItemPool, dungeonLocations);
+                auto filledLocations = AssumedFill(worlds, smallKeys, completeItemPool, dungeonLocations);
+                // Own Dungeon small keys are expected items
+                for (auto location: filledLocations) {
+                    location->SetExpectedItem(true);
+                }
             }
 
             // Big Keys
@@ -327,7 +341,11 @@ namespace randomizer::logic::fill
                                                                                    [&](const auto& item)
                                                                                    { return item == dungeon_->GetBigKey(); });
                 auto completeItemPool = item_pool::GetCompleteItemPool(worlds);
-                AssumedFill(worlds, bigKeys, completeItemPool, dungeonLocations);
+                auto filledLocations = AssumedFill(worlds, bigKeys, completeItemPool, dungeonLocations);
+                // Own Dungeon big keys are expected items
+                for (auto location: filledLocations) {
+                    location->SetExpectedItem(true);
+                }
             }
 
             // Place maps and compasses last with fast fill since they're junk items
@@ -525,7 +543,7 @@ namespace randomizer::logic::fill
             LOG_TO_DEBUG("Caching timeforms for world " + std::to_string(world->GetID()));
             auto& exitTimeFormCache = world->GetExitTimeFormCache();
             exitTimeFormCache.clear();
-            for (const auto& [areaName, area] : world->GetAreaTable())
+            for (const auto& area : world->GetAreaTable() | std::views::values)
             {
                 const auto& areaFormTimes = searchWithItems._areaFormTime[area.get()];
                 for (const auto& exit : area->GetExits())
@@ -535,10 +553,12 @@ namespace randomizer::logic::fill
                     for (const auto& formTime : requirement::FormTime::ALL_FORM_TIMES)
                     {
                         if (formTime & areaFormTimes &&
-                            requirement::EvaluateRequirementAtFormTime(req,
-                                                                                     &searchWithItems,
-                                                                                     formTime,
-                                                                                     world.get()))
+                            requirement::EvaluateRequirementAtFormTime(
+                                req,
+                                &searchWithItems,
+                                formTime,
+                                world.get()
+                            ))
                         {
                             exitTimeFormCache[exit] |= formTime;
                         }

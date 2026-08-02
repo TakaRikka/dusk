@@ -10,7 +10,8 @@ namespace randomizer::logic::location
                        const std::unordered_set<std::string>& categories,
                        world::World* world,
                        item::Item* originalItem,
-                       const bool& goalLocation,
+                       bool goalLocation,
+                       const std::string& goalName,
                        const std::string& hintPriority,
                        const YAML::Node& metadata):
         _id(id),
@@ -19,6 +20,7 @@ namespace randomizer::logic::location
         _world(world),
         _originalItem(originalItem),
         _goalLocation(goalLocation),
+        _goalName(goalName),
         _hintPriority(hintPriority),
         _metadata(metadata)
     {
@@ -43,6 +45,10 @@ namespace randomizer::logic::location
     bool Location::IsGoalLocation() const
     {
         return this->_goalLocation;
+    }
+
+    const std::string& Location::GetGoalName() const {
+        return this->_goalName;
     }
 
     void Location::SetCurrentItem(item::Item* item)
@@ -77,7 +83,7 @@ namespace randomizer::logic::location
         return this->_trackedItem;
     }
 
-    void Location::SetKnownVanillaItem(const bool& hasKnownVanillaItem)
+    void Location::SetKnownVanillaItem(bool hasKnownVanillaItem)
     {
         this->_hasKnownVanillaItem = hasKnownVanillaItem;
     }
@@ -86,6 +92,15 @@ namespace randomizer::logic::location
     {
         return this->_hasKnownVanillaItem;
     }
+
+    void Location::SetExpectedItem(bool hasExpectedItem) {
+        this->_hasExpectedItem = hasExpectedItem;
+    }
+
+    bool Location::HasExpectedItem() const {
+        return this->_hasExpectedItem || this->_hasKnownVanillaItem;
+    }
+
 
     void Location::SetProgression(const bool& progression)
     {
@@ -147,6 +162,22 @@ namespace randomizer::logic::location
     void Location::SetRegisteredLocationCategories(std::unordered_set<std::string>* registeredLocationCategories)
     {
         this->_registeredLocationCategories = registeredLocationCategories;
+    }
+
+    void Location::AddPathLocation(Location* location) {
+        this->_pathLocations.push_back(location);
+    }
+
+    std::vector<Location*>& Location::GetPathLocations() {
+        return this->_pathLocations;
+    }
+
+    void Location::SetImportance(Importance importance) {
+        this->_importance = importance;
+    }
+
+    Importance Location::GetImportance() const {
+        return this->_importance;
     }
 
     const std::set<std::string>& GetAllRandomizerLocationNames() {

@@ -18,8 +18,10 @@ namespace randomizer::logic::search
                    world::WorldPool* worlds,
                    const item_pool::ItemPool& items /* = {} */,
                    const int& worldToSearch /* = -1 */,
-                   bool startingInventory /*= true */):
-        _searchMode(searchMode), _worlds(worlds), _startingInventory(startingInventory)
+                   bool startingInventory /*= true */,
+                   location::Location* importanceLocation /*= nullptr*/):
+        _searchMode(searchMode), _worlds(worlds), _startingInventory(startingInventory),
+        _importanceLocation(importanceLocation)
     {
         // Set the items we should already own
         this->_ownedItems.insert(items.begin(), items.end());
@@ -34,6 +36,7 @@ namespace randomizer::logic::search
                     this->_ownedItems.insert(startingInventory.begin(), startingInventory.end());
                 }
             }
+            this->_itemsAtStart = _ownedItems;
         }
 
         // Set search starting properties and add each world's root exits to _exitsToTry
@@ -50,6 +53,33 @@ namespace randomizer::logic::search
                     {
                         this->_exitsToTry.emplace_back(exit);
                     }
+                }
+            }
+        }
+
+        // If we're doing an importance search, then we have to set up a few extra things
+        if (this->_searchMode == SearchMode::LOCATION_IMPORTANCE && importanceLocation != nullptr) {
+            auto importanceItem = importanceLocation->GetCurrentItem();
+
+            // Generate the logic requirement for what it would "mean" to obtain the item at this importance location.
+            // We're going to assume that this logic requirement is always false when searching.
+            // This ensures that we only evaluate to true the chain locations that this item absolutely does not help unlock
+            auto count = this->_ownedItems.count(importanceItem) + 1;
+            if (count == 1) {
+                this->_assumedFalseReq = requirement::Requirement{requirement::Type::ITEM, {importanceItem}};
+            } else {
+                this->_assumedFalseReq = requirement::Requirement{requirement::Type::COUNT, {count, importanceItem}};
+            }
+
+            // If this location is either a heart container or piece of heart, we'll pass along any assumed heart
+            // count from this location or any of its path locations. This will properly take into account any
+            // heart requirements that were necessary to get here and adjust hint importance accordingly.
+            // (I.e. If Accessing Hyrule Castle requires 10 hearts, and this location has a heart piece, but its
+            // locked by something in Hyrule Castle, then it'll always be not required.)
+            if (importanceItem->IsSameOrSimilarItem(importanceItem->GetWorld()->GetItem("Heart Container"))) {
+                this->_assumedHeartCount = this->_importanceLocation->GetComputedRequirement().getHeartCount();
+                for (auto location : this->_importanceLocation->GetPathLocations()) {
+                    this->_assumedHeartCount = std::max(this->_assumedHeartCount, location->GetComputedRequirement().getHeartCount());
                 }
             }
         }
@@ -224,8 +254,11 @@ namespace randomizer::logic::search
 
     void Search::ProcessLocation(location::Location* location)
     {
-        // Don't return if we aren't collecting items
-        if (!this->_collectItems)
+        // Don't return if we aren't collecting items, or if we're doing an importance search
+        // and the item at this location is a similar item to our importance location
+        if (!this->_collectItems ||
+              (this->_searchMode == SearchMode::LOCATION_IMPORTANCE &&
+              this->_importanceLocation->GetCurrentItem()->IsSameOrSimilarItem(location->GetCurrentItem())))
         {
             return;
         }
@@ -383,7 +416,7 @@ namespace randomizer::logic::search
     {
         for (const auto& exit : this->_exitsToTry)
         {
-            if (exit->GetConnectedArea() == nullptr && 
+            if (exit->GetConnectedArea() == nullptr &&
                 requirement::EvaluateDisconnectedExitRequiremrnt(this, exit) != requirement::EvalSuccess::NONE)
             {
                 return true;
@@ -659,6 +692,28 @@ namespace randomizer::logic::search
         auto search = Search::Beatable(worlds, items);
         search.SearchWorlds();
         return search._isBeatable;
+    }
+
+    location::LocationPool GetPossibleHintSigns(location::Location* location) {
+        // Remove the item at the location
+        const auto itemAtLocation = location->GetCurrentItem();
+        location->RemoveCurrentItem();
+
+        // Run an accessible search
+        auto search = Search::Accessible(&location->GetWorld()->GetRandomizer()->GetWorlds());
+        search.SearchWorlds();
+
+        // Give the item back
+        location->SetCurrentItem(itemAtLocation);
+
+        // Return all the hint signs that the search found
+        location::LocationPool hintSigns{};
+        for (auto loc : search._visitedLocations) {
+            if (loc->HasCategories("Hint Sign")) {
+                hintSigns.push_back(loc);
+            }
+        }
+        return hintSigns;
     }
 
 } // namespace randomizer::logic::search

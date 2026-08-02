@@ -6,6 +6,7 @@
 #include "item_pool.hpp"
 #include "location.hpp"
 #include "requirement.hpp"
+#include "hint_types.hpp"
 
 #include "../seedgen/settings.hpp"
 #include "../utility/log.hpp"
@@ -47,7 +48,7 @@ namespace randomizer::logic::world
          * @brief Resolves all remaining random settings within a specific world
          */
         void ResolveRandomSettings();
-        
+
         /**
          * @brief Resolves settings that conflict with each other. Ideally will only resolve settings that conflict due to
          * having their current option randomly chosen.
@@ -133,6 +134,7 @@ namespace randomizer::logic::world
         item_pool::ItemPool& GetStartingItemPool();
         location::Location* GetLocation(const std::string& name);
         location::LocationPool GetAllLocations(const bool& includeNonItemLocations = false);
+        location::LocationPool GetHintSignLocations();
         area::Area* GetArea(const std::string& name, const bool& createIfNotFound = false);
         area::Area* GetRootArea() const;
         const std::map<std::string, std::unique_ptr<area::Area>>& GetAreaTable() const;
@@ -161,10 +163,27 @@ namespace randomizer::logic::world
 
             return this->_textDatabase.at(name).at(type).mText.at(Text::ENGLISH);
         }
+
+        Text& GetTextObject(const std::string& name, Text::Type type = Text::STANDARD) {
+            if (!this->_textDatabase.contains(name)) {
+                throw std::runtime_error(name + " is not a text object in world " + std::to_string(this->_id));
+            }
+            return this->_textDatabase[name][type];
+        }
+
         // Make a new custom text entry for this world specifically and return a reference to it
         Text& AddNewText(const std::string& name, Text::Type type = Text::STANDARD) {
             return this->_textDatabase[name][type];
         }
+
+        void AddGoalLocation(location::Location* location) {
+            this->_goalLocations.push_back(location);
+        }
+
+        const auto& GetGoalLocations() {return this->_goalLocations;}
+        auto& GetBarrenRegions() { return this->_barrenRegions;}
+        auto& GetMidnaHints() { return this->_midnaHints;}
+        auto& GetHintSignHints() { return this->_hintSignHints;}
 
        private:
         int _id = -1;
@@ -191,6 +210,12 @@ namespace randomizer::logic::world
         // Plandomizer Data
         std::unordered_map<location::Location*, item::Item*> _plandomizerLocations = {};
         std::unordered_map<entrance::Entrance*, entrance::Entrance*> _plandomizerEntrances = {};
+
+        // Hint stuff
+        std::list<location::Location*> _goalLocations = {};
+        std::map<std::string, std::list<location::Location*>> _barrenRegions = {};
+        std::vector<hints::Hint> _midnaHints{};
+        std::unordered_map<location::Location*, std::vector<hints::Hint>> _hintSignHints = {};
 
         Randomizer* _randomizer = nullptr;
     };

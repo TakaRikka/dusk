@@ -480,6 +480,97 @@
     - Master Sword: "The door to the past will require striking at least the Master Sword into the Master Sword pedestal."
     - Light Sword: "The door to the past will require striking the Light Sword into the Master Sword pedestal."
 
+#############################
+##          Hints          ##
+#############################
+
+- Name: Number of Path Hints
+  Default Option: 3
+  Options:
+    - 0-7: "Select the number of path hints you would like to generate."
+
+- Name: Path Hints on Midna
+  Default Option: "Off"
+  Options:
+    - "Off": "Path Hints will not be part of Midna's hint text."
+    - "On": "Path hints will be part of Midna's hint text. If path hints are also placed on hint signs, then the hints will be split evenly between the two options."
+
+- Name: Path Hints on Hint Signs
+  Default Option: "Off"
+  Options:
+    - "Off": "Path Hints will not be placed on hint signs."
+    - "Overworld": "Path hints will be placed only on overworld hint signs. If path hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Dungeon": "Path hints will be placed only on dungeon hint signs. If path hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Any": "Path hints can be placed at any hint sign. If path hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+
+- Name: Number of Barren Hints
+  Default Option: 3
+  Options:
+    - 0-7: "Select the number of barren hints you would like to generate."
+
+- Name: Barren Hints on Midna
+  Default Option: "On"
+  Options:
+    - "Off": "Barren Hints will not be part of Midna's hint text."
+    - "On": "Barren hints will be part of Midna's hint text. If barren hints are also placed on hint signs, then the hints will be split evenly between the two options."
+    #- "On + Region Hint Signs": "Barren hints will be part of Midna's hint text. The hint signs within Midna's hinted barren regions will also declare the region as barren. If barren hints are also placed on hint signs, then the hints will be split evenly between the two options."
+
+- Name: Barren Hints on Hint Signs
+  Default Option: "Off"
+  Options:
+    - "Off": "Barren Hints will not be placed on hint signs."
+    - "Overworld": "Barren hints will be placed only on overworld hint signs. If barren hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Dungeon": "Barren hints will be placed only on dungeon hint signs. If barren hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Any": "Barren hints can be placed at any hint sign. If barren hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+
+- Name: Number of Item Hints
+  Default Option: 1
+  Options:
+    - 0-7: "Select the number of item hints you would like to generate."
+
+- Name: Item Hints on Midna
+  Default Option: "Off"
+  Options:
+    - "Off": "Item Hints will not be part of Midna's hint text."
+    - "On": "Item hints will be part of Midna's hint text. If item hints are also placed on hint signs, then the hints will be split evenly between the two options."
+
+- Name: Item Hints on Hint Signs
+  Default Option: "Overworld"
+  Options:
+    - "Off": "Item Hints will not be placed on hint signs."
+    - "Overworld": "Item hints will be placed only on overworld hint signs. If item hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Dungeon": "Item hints will be placed only on dungeon hint signs. If item hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Any": "Item hints can be placed at any hint sign. If item hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+
+- Name: Number of Location Hints
+  Default Option: 5
+  Options:
+    - 0-7: "Select the number of location hints you would like to generate."
+
+- Name: Location Hints on Midna
+  Default Option: "Off"
+  Options:
+    - "Off": "Location Hints will not be part of Midna's hint text."
+    - "On": "Location hints will be part of Midna's hint text. If location hints are also placed on hint signs, then the hints will be split evenly between the two options."
+
+- Name: Location Hints on Hint Signs
+  Default Option: "Overworld"
+  Options:
+    - "Off": "Location Hints will not be placed on hint signs."
+    - "Overworld": "Location hints will be placed only on overworld hint signs. If location hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Dungeon": "Location hints will be placed only on dungeon hint signs. If location hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+    - "Any": "Location hints can be placed at any hint sign. If location hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
+
+- Name: Prioritize Remote Location Hints
+  Default Option: "On"
+  Options:
+    - "Off": "All locations will be treated equally for location hints."
+    - "On": "Certain locations which are time-consuming to check will be given priority for location hints."
+
+#############################
+##   Entrance Randomizer   ##
+#############################
+
 - Name: Randomize Starting Spawn
   Default Option: "Off"
   Options:

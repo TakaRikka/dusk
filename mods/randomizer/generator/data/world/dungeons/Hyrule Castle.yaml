@@ -183,7 +183,7 @@
     Follow Ghost Soldiers: Can_Use_Senses
   Exits:
     Hyrule Castle Treasure Room: Can_Open_Doors and (count(Hyrule_Castle_Small_Key, 3) or Small_Keys == Keysy)
-    Hyrule Castle Throne Room: Hyrule_Castle_Big_Key or Big_Keys == Keysy
+    Hyrule Castle Throne Room: Hyrule_Castle_Big_Key or (Big_Keys == Keysy and Hyrule_Castle_Big_Key_Requirements == None)
     Hyrule Castle Final Climb Near Outside Balcony: "'Follow_Ghost_Soldiers' and Can_Defeat_Dinalfos and Can_Defeat_Darknut and Double_Clawshots and Spinner"
 
 # HYRULE CASTLE TREASURE ROOM

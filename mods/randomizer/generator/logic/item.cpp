@@ -105,7 +105,11 @@ namespace randomizer::logic::item
         return this->_gameWinningItem;
     }
 
-    std::list<Location*> Item::GetChainLocations() const
+    void Item::AddChainLocation(location::Location* location) {
+        this->_chainLocations.push_back(location);
+    }
+
+    std::list<location::Location*> Item::GetChainLocations() const
     {
         return this->_chainLocations;
     }
@@ -144,10 +148,33 @@ namespace randomizer::logic::item
     {
         return this->_bottle;
     }
-    
+
     bool Item::IsStamp() const
     {
         return this->_stamp;
+    }
+
+    bool Item::CanBeInBarrenRegion() const {
+        return !this->IsMajor() ||
+            (this->IsDungeonSmallKey() && this->_world->Setting("Small Keys").IsAnyOf("Vanilla", "Own Dungeon")) ||
+            (this->IsBigKey() && this->_world->Setting("Big Keys").IsAnyOf("Vanilla", "Own Dungeon"));
+    }
+
+    bool Item::IsSameOrSimilarItem(Item* otherItem) const {
+        if (this == otherItem) {
+            return true;
+        }
+
+        // Heart Piece Items
+        std::set<const Item*> heartPieceItems = {
+            this->_world->GetItem("Heart Container"),
+            this->_world->GetItem("Piece of Heart"),
+        };
+        if (heartPieceItems.contains(this) && heartPieceItems.contains(otherItem)) {
+            return true;
+        }
+
+        return false;
     }
 
     bool Item::operator==(const Item& rhs) const

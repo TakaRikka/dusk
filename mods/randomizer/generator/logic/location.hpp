@@ -20,6 +20,13 @@ namespace randomizer::logic::area
 
 namespace randomizer::logic::location
 {
+    enum class Importance {
+        UNKNOWN,
+        NOT_REQUIRED,
+        POSSIBLY_REQUIRED,
+        REQUIRED,
+    };
+
     class Location
     {
        public:
@@ -28,7 +35,8 @@ namespace randomizer::logic::location
                  const std::unordered_set<std::string>& categories,
                  world::World* world,
                  item::Item* originalItem,
-                 const bool& goalLocation,
+                 bool goalLocation,
+                 const std::string& goalName,
                  const std::string& hintPriority,
                  const YAML::Node& metadata);
 
@@ -36,14 +44,17 @@ namespace randomizer::logic::location
         std::string GetName() const;
         world::World* GetWorld() const;
         bool IsGoalLocation() const;
+        const std::string& GetGoalName() const;
         void SetCurrentItem(item::Item* currentItem);
         item::Item* GetCurrentItem() const;
         void RemoveCurrentItem();
         bool IsEmpty() const;
         item::Item* GetOriginalItem() const;
         item::Item* GetTrackedItem() const;
-        void SetKnownVanillaItem(const bool& hasKnownVanillaItem);
+        void SetKnownVanillaItem(bool hasKnownVanillaItem);
         bool HasKnownVanillaItem() const;
+        void SetExpectedItem(bool hasExpectedItem);
+        bool HasExpectedItem() const;
         void SetProgression(const bool& progression);
         bool IsProgression() const;
         void SetHinted(const bool& hinted);
@@ -56,6 +67,10 @@ namespace randomizer::logic::location
         void SetComputedRequirement(const requirement::Requirement& computedRequirement);
         requirement::Requirement GetComputedRequirement();
         void SetRegisteredLocationCategories(std::unordered_set<std::string>* registeredLocationCategories);
+        void AddPathLocation(Location* location);
+        std::vector<Location*>& GetPathLocations();
+        void SetImportance(Importance importance);
+        Importance GetImportance() const;
 
         /**
          *  @brief Checks to see if the location has all the passed in categories. If a passed in category was never registered,
@@ -84,13 +99,15 @@ namespace randomizer::logic::location
 
        private:
         int _id = -1;
-        std::string _name = "";
+        std::string _name{};
         std::unordered_set<std::string> _categories = {};
         world::World* _world;
         item::Item* _originalItem = item::Nothing.get();
         bool _goalLocation = false;
+        std::string _goalName{};
         item::Item* _currentItem = item::Nothing.get();
         bool _hasKnownVanillaItem = false;
+        bool _hasExpectedItem = false;
         std::list<area::LocationAccess*> _locationAccessList = {};
         bool _progression = true; // Set as false later if applicable
         bool _hinted = false;
@@ -104,6 +121,10 @@ namespace randomizer::logic::location
          * We can't call it from the world directly since the function we want to use it in is templated in this class.
          */
         std::unordered_set<std::string>* _registeredLocationCategories = nullptr;
+
+        // Hint related things
+        std::vector<Location*> _pathLocations{};
+        Importance _importance = Importance::UNKNOWN;
 
         // Potential tracker stuff
         item::Item* _trackedItem = item::Nothing.get();

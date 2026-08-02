@@ -22,12 +22,16 @@ namespace randomizer::logic::fill
      *  This is important for the assumed fill algorithm since we need to assume we have these items.
      *  @param allowedLocations Locations where items in itemsToPlacePool are allowed to be filled.
      *  @param worldToFill A specific world to fill. If -1 (default), then all worlds are considered
+     *
+     *  @return The locations which had items placed at them during this fill call
      */
-    void AssumedFill(world::WorldPool& worlds,
-                     item_pool::ItemPool& itemsToPlacePool,
-                     const item_pool::ItemPool& itemsNotYetPlaced,
-                     location::LocationPool allowedLocations,
-                     const int& worldToFill = -1);
+    location::LocationPool AssumedFill(
+        world::WorldPool& worlds,
+        item_pool::ItemPool& itemsToPlacePool,
+        const item_pool::ItemPool& itemsNotYetPlaced,
+        location::LocationPool allowedLocations,
+        const int& worldToFill = -1
+    );
 
     /**
      *  @brief Places items in locations completely randomly without any logic checks.

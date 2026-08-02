@@ -181,7 +181,12 @@ namespace randomizer::logic::world
             }
 
             auto originalItem = this->GetItem(originalItemName);
-            auto goalLocation = locationNode["Goal Location"].as<bool>(false);
+            bool goalLocation = false;
+            std::string goalName = name;
+            if (locationNode["Goal Name"]) {
+                goalLocation = true;
+                goalName = locationNode["Goal Name"].as<std::string>();
+            }
             auto hintPriority = locationNode["Hint Priority"].as<std::string>("Never");
             auto metadata = locationNode["Metadata"];
 
@@ -200,6 +205,7 @@ namespace randomizer::logic::world
                                                                  this,
                                                                  originalItem,
                                                                  goalLocation,
+                                                                 goalName,
                                                                  hintPriority,
                                                                  metadata);
 
@@ -559,7 +565,7 @@ namespace randomizer::logic::world
                  (originalItem->IsDungeonSmallKey() ||
                   utility::str::Contains(originalItemName, "Ordon Pumpkin", "Ordon Cheese"))) ||
                 // Vanilla Big Keys (only include Hyrule Castle Big Key if it has no requirements)
-                (this->Setting("Big Keys") == "Vanilla" && originalItem->IsBigKey() && 
+                (this->Setting("Big Keys") == "Vanilla" && originalItem->IsBigKey() &&
                  (originalItemName != "Hyrule Castle Big Key" || this->Setting("Hyrule Castle Big Key Requirements") == "None")) ||
                 // Vanilla Maps and Compasses
                 (this->Setting("Maps and Compasses") == "Vanilla" &&
@@ -662,7 +668,7 @@ namespace randomizer::logic::world
         // Some locations not being randomized can conflict with other settings. When
         // the appropriate location and setting conflict, these locations should have their item
         // removed and be set to nonprogress.
-        for (auto& [locationName, location] : this->_locationTable)
+        for (auto& location : this->_locationTable | std::views::values)
         {
             auto originalItem = location->GetOriginalItem();
             auto originalItemName = originalItem->GetName();
@@ -753,12 +759,12 @@ namespace randomizer::logic::world
     void World::AssignGoalLocations()
     {
         std::unordered_map<std::string, location::LocationPool> dungeonGoalLocations = {};
-        for (const auto& [dungeonName, dungeon] : this->_dungeons)
+        for (const auto& dungeonName : this->_dungeons | std::views::keys)
         {
             dungeonGoalLocations[dungeonName] = {};
         }
         // Collect all the possible goal locations for each dungeon
-        for (auto& [areaName, area] : this->_areaTable)
+        for (auto& area : this->_areaTable | std::views::values)
         {
             for (const auto& locAcc : area->GetLocations())
             {
@@ -1190,9 +1196,22 @@ namespace randomizer::logic::world
     location::LocationPool World::GetAllLocations(const bool& includeNonItemLocations /* = false */)
     {
         location::LocationPool locationPool = {};
-        for (const auto& [locationName, location] : this->_locationTable)
+        for (const auto& location : this->_locationTable | std::views::values)
         {
             if (includeNonItemLocations || !location->HasCategories("Non-Item Location"))
+            {
+                locationPool.emplace_back(location.get());
+            }
+        }
+        return locationPool;
+    }
+
+    location::LocationPool World::GetHintSignLocations()
+    {
+        location::LocationPool locationPool = {};
+        for (const auto& location : this->_locationTable | std::views::values)
+        {
+            if (location->HasCategories("Hint Sign"))
             {
                 locationPool.emplace_back(location.get());
             }

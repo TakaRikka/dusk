@@ -1,9 +1,11 @@
 #include "text.hpp"
 
+#include "string.hpp"
 #include "yaml.hpp"
 
 #include <fmt/format.h>
 
+#include <ranges>
 #include <unordered_map>
 
 #ifndef RANDOMIZER_ONLY
@@ -19,25 +21,16 @@ namespace randomizer {
         }
     }
 
-    void Text::Replace(const std::string& oldStr, const Text& replacementText, int count/* = 1*/) {
+    void Text::Replace(const std::string& oldText, const Text& replacementText, uint32_t count/* = max*/) {
         for (size_t i = 0; i < mText.size(); ++i) {
             auto& curString = mText[i];
-            for (int i = 0; i < count; ++i) {
-                if (auto startPos = curString.find(oldStr); startPos != std::string::npos) {
-                    curString.replace(startPos, oldStr.length(), replacementText.mText[i]);
-                }
-            }
+            curString = utility::str::Replace(curString, oldText, replacementText.mText[i], count);
         }
     }
 
-    void Text::Replace(const std::string& oldStr, const std::string& replacementText, int count/* = 1*/) {
-        for (size_t i = 0; i < mText.size(); ++i) {
-            auto& curString = mText[i];
-            for (int i = 0; i < count; ++i) {
-                if (auto startPos = curString.find(oldStr); startPos != std::string::npos) {
-                    curString.replace(startPos, oldStr.length(), replacementText);
-                }
-            }
+    void Text::Replace(const std::string& oldText, const std::string& replacementText, uint32_t count/* = max*/) {
+        for (auto& text : mText) {
+            text = utility::str::Replace(text, oldText, replacementText, count);
         }
     }
 
@@ -73,6 +66,17 @@ namespace randomizer {
         }
     }
 
+    void Text::PadToNextBox() {
+        BreakLines();
+        for (auto& text : mText) {
+            size_t numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
+            while (numNewLines == 0 || text.back() != '\n' || numNewLines % LINES_PER_BOX != 0) {
+                text += '\n';
+                ++numNewLines;
+            }
+        }
+    }
+
     bool Text::Empty() const {
         for (auto& text : mText) {
             if (!text.empty()) {
@@ -80,6 +84,80 @@ namespace randomizer {
             }
         }
         return true;
+    }
+
+    bool Text::IsTooLong() const {
+        for (auto& text : mText) {
+            auto numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
+            if (numNewLines > MAX_NEWLINES_PER_MESSAGE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Will split this text object into multiple objects short enough to fit into individual
+    // text ids
+    std::vector<Text> Text::SplitToFitTextLimits() {
+        if (this->IsTooLong()) {
+            // Figure out how many new text objects we need to fit all the text
+            size_t numTextObjects{1};
+            for (auto& text : mText) {
+                double numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
+                auto curTextSplitAmount = static_cast<size_t>(std::ceil(numNewLines / MAX_NEWLINES_PER_MESSAGE));
+                numTextObjects = std::max(curTextSplitAmount, numTextObjects);
+            }
+
+            std::vector<Text> splitText{numTextObjects};
+            // Split each string into the appropriate number of objects
+            for (size_t textIdx = 0; textIdx < mText.size(); ++textIdx) {
+                auto& textStr = mText[textIdx];
+                // Calculate how many newlines we're allowing in this string per message
+                // Different languages may have different amounts of newlines
+                double numNewLines = std::ranges::count_if(textStr, [](char c){return c == '\n';});
+                auto newLinesPerMessage  = static_cast<size_t>(std::ceil(numNewLines / numTextObjects));
+                // Keep the number of lines as a multiple of how many lines are in a box so we don't split in the middle of a textbox
+                while (newLinesPerMessage % LINES_PER_BOX != 0) {
+                    ++newLinesPerMessage;
+                }
+
+                size_t splitIdx = 0;
+                do {
+                    size_t pos = 0;
+                    for (int i = 0; i < newLinesPerMessage; ++i) {
+                        pos = textStr.find('\n', pos);
+                        if (pos == std::string::npos) {
+                            break;
+                        }
+                        ++pos;
+                    }
+
+                    // Get the current split of the string
+                    auto curSplit = textStr.substr(0, pos);
+                    // Pop off the last newline since it's unnecessary
+                    if (curSplit.back() == '\n') {
+                        curSplit.pop_back();
+                    }
+                    splitText.at(splitIdx).mText[textIdx] = curSplit;
+                    ++splitIdx;
+                    if (pos == std::string::npos) {
+                        textStr.clear();
+                    } else {
+                        textStr = textStr.substr(pos);
+                    }
+                } while (!textStr.empty());
+            }
+
+            // Recopy the front element to this object
+            *this = splitText[0];
+
+            // Reassign the vector everything except the first element
+            splitText.assign(splitText.begin() + 1, splitText.end());
+            return splitText;
+        }
+
+        return {};
     }
 
     Text& Text::operator+=(const Text& rhs) {
@@ -301,7 +379,7 @@ namespace randomizer {
         return tb.at(name).at(type).mText.at(language);
     }
 
-    Text addColor(const Text& t, Text::Color color, int count /* = 1*/, bool forceAround /* = false*/) {
+    Text addColor(const Text& t, Text::Color color, int count /* = 1*/) {
         const static std::unordered_map<Text::Color, std::string> colorStrings = {
             {Text::WHITE, "<white>"},
             {Text::RED, "<red>"},
@@ -324,11 +402,16 @@ namespace randomizer {
         }
 
         Text text = t;
-        if (forceAround) {
-            text = colorStrings.at(color) + text + colorStrings.at(Text::WHITE);
+        for (auto& langText : text.mText) {
+            // If we don't have brackets indicating color, then surround the entire text
+            if (langText.find('{') == std::string::npos && langText.find('}') == std::string::npos) {
+                langText = colorStrings.at(color) + langText + colorStrings.at(Text::WHITE);
+            } else {
+                langText = utility::str::Replace(langText, "{", colorStrings.at(color), count);
+                langText = utility::str::Replace(langText, "}", colorStrings.at(Text::WHITE), count);
+            }
         }
-        text.Replace("{", colorStrings.at(color), count);
-        text.Replace("}", colorStrings.at(Text::WHITE), count);
+
         return text;
     }
 
@@ -436,5 +519,59 @@ namespace randomizer {
                 pos += replacement.length();
             }
         }
+    }
+
+    Text makeTextListing(std::vector<Text> texts) {
+        if (texts.empty()) {
+            return Text{};
+        }
+        if (texts.size() == 1) {
+            return texts.front();
+        }
+
+        // TODO: Other language listing rules
+        std::string english{};
+        std::string french{};
+        std::string german{};
+        std::string italian{};
+        std::string spanish{};
+        for (int i = 0; i < texts.size(); ++i) {
+            auto& text = texts[i];
+
+            // English rules. Move other languages out of english when we have their rules
+            if (i == 0) {
+                english += text.mText[Text::ENGLISH];
+                french += text.mText[Text::FRENCH];
+                german += text.mText[Text::GERMAN];
+                italian += text.mText[Text::ITALIAN];
+                spanish += text.mText[Text::SPANISH];
+            } else if (i == texts.size() - 1 && texts.size() == 2) {
+                english += " and " + text.mText[Text::ENGLISH];
+                french += " and " + text.mText[Text::FRENCH];
+                german += " and " + text.mText[Text::GERMAN];
+                italian += " and " + text.mText[Text::ITALIAN];
+                spanish += " and " + text.mText[Text::SPANISH];
+            } else if (i == texts.size() - 1) {
+                english += ", and " + text.mText[Text::ENGLISH];
+                french += ", and " + text.mText[Text::FRENCH];
+                german += ", and " + text.mText[Text::GERMAN];
+                italian += ", and " + text.mText[Text::ITALIAN];
+                spanish += ", and " + text.mText[Text::SPANISH];
+            } else {
+                english += ", " + text.mText[Text::ENGLISH];
+                french += ", " + text.mText[Text::FRENCH];
+                german += ", " + text.mText[Text::GERMAN];
+                italian += ", " + text.mText[Text::ITALIAN];
+                spanish += ", " + text.mText[Text::SPANISH];
+            }
+        }
+
+        Text listingText{};
+        listingText.mText[Text::ENGLISH] = english;
+        listingText.mText[Text::FRENCH] = french;
+        listingText.mText[Text::GERMAN] = german;
+        listingText.mText[Text::ITALIAN] = italian;
+        listingText.mText[Text::SPANISH] = spanish;
+        return listingText;
     }
 }; // namespace Text

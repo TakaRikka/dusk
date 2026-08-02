@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cstring>
+#include <limits>
 #include <optional>
 
 namespace randomizer::utility::str {
@@ -16,7 +17,7 @@ namespace randomizer::utility::str {
 
     std::u16string toUTF16(const std::string& str);
 
-    template<typename T> 
+    template<typename T>
     concept StringType = std::derived_from<T, std::basic_string<typename T::value_type>>;
 
     template<typename T> requires StringType<T>
@@ -70,10 +71,10 @@ namespace randomizer::utility::str {
 
     /**
      * @brief Checks to see if any of the passed in substrings are within a string
-     * 
+     *
      * @param str The string to check for substrings
      * @param substrs Paramater Pack of strings to test against the first argument
-     * 
+     *
      * @return true if any of the passed in substrings are found within the string, false otherwise
      */
     template<class... Types>
@@ -116,4 +117,8 @@ namespace randomizer::utility::str {
     }
 
     std::optional<int> toInt(std::string_view str);
+    std::string Replace(const std::string& originalStr,
+                        const std::string& oldStr,
+                        const std::string& replacementStr,
+                        uint32_t count = std::numeric_limits<uint32_t>::max());
 }

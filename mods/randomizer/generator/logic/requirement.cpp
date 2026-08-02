@@ -149,6 +149,82 @@ namespace randomizer::logic::requirement
         return reqStr;
     }
 
+    // Return a set of all items mentioned in this requirement
+    std::unordered_set<item::Item*> Requirement::getItems(world::World* world) const {
+        std::unordered_set<item::Item*> items = {};
+        switch (this->_type) {
+            case Type::AND:
+            case Type::OR:
+                for (const auto& arg : this->_args) {
+                    items.merge(std::get<Requirement>(arg).getItems(world));
+                }
+                break;
+            case Type::ITEM:
+                items.insert(std::get<item::Item*>(this->_args[0]));
+                break;
+            case Type::COUNT:
+                items.insert(std::get<item::Item*>(this->_args[1]));
+                break;
+            case Type::HEARTS:
+                items.insert(world->GetItem("Piece of Heart"));
+                items.insert(world->GetItem("Heart Container"));
+                break;
+            default:
+                break;
+        }
+
+        return items;
+    }
+
+    // Return the heart count necessary for this requirement
+    int Requirement::getHeartCount(int curCount /*= 0*/) const {
+        switch (this->_type) {
+        case Type::AND:
+        case Type::OR:
+            for (const auto& arg : this->_args) {
+                curCount = std::get<Requirement>(arg).getHeartCount(curCount);
+            }
+            break;
+        case Type::HEARTS:
+            if (std::get<int>(this->_args[0]) > curCount) {
+                curCount = std::get<int>(this->_args[0]);
+            }
+            break;
+        default:
+            break;
+        }
+        return curCount;
+    }
+
+    bool Requirement::operator==(const Requirement& other) const {
+        // Types and argument counts must match
+        if (_type != other._type || _args.size() != other._args.size()) {
+            return false;
+        }
+
+        // Check matches to account for different ordering
+        std::vector<bool> matched(other._args.size(), false);
+
+        for (const auto& arg : _args) {
+            bool foundMatch = false;
+            for (size_t i = 0; i < other._args.size(); ++i) {
+                if (!matched[i] && arg == other._args[i]) {
+                    matched[i] = true;
+                    foundMatch = true;
+                    break;
+                }
+            }
+
+            // If an argument in _args has no unassigned match in other._args, they are not equal
+            if (!foundMatch) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     Requirement ParseRequirementString(const std::string& reqStr,
                                        world::World* world,
                                        const bool& forceLogic /* = false */)
@@ -304,7 +380,7 @@ namespace randomizer::logic::requirement
                 else if (notEqualComparison)
                 {
                     result = world->Setting(settingName) != optionName.c_str();
-                } 
+                }
                 else if (gteComparison)
                 {
                     result = world->Setting(settingName) >= optionName.c_str();
@@ -381,7 +457,7 @@ namespace randomizer::logic::requirement
             {
                 req._type = Type::HEARTS;
                 std::string numHeartsStr(argStr.begin() + argStr.find('(') + 1, argStr.end() - 1);
-                
+
                 // If the string for the count is a setting, use the settings current option instead
                 if (seedgen::settings::GetAllSettingsInfo()->contains(numHeartsStr))
                 {
@@ -537,7 +613,7 @@ namespace randomizer::logic::requirement
                 count = std::get<int>(req._args[0]);
                 heartPiece = world->GetItem("Piece of Heart");
                 heartContainer = world->GetItem("Heart Container");
-                return std::ranges::count(world->GetStartingItemPool(), heartPiece) + 
+                return std::ranges::count(world->GetStartingItemPool(), heartPiece) +
                        std::ranges::count(world->GetStartingItemPool(), heartContainer) * 5 >= count * 5;
             default:
                 return false;
@@ -555,6 +631,8 @@ namespace randomizer::logic::requirement
         int count;
         int eventIndex;
         int macroIndex;
+        bool changedToOnlyItemsAtStart = false;
+        bool evaluation = false;
         switch (req._type)
         {
             case Type::NOTHING:
@@ -564,10 +642,26 @@ namespace randomizer::logic::requirement
                 return false;
 
             case Type::OR:
-                return std::ranges::any_of(
+                if (search->_searchMode == search::SearchMode::LOCATION_IMPORTANCE &&
+                    std::ranges::any_of(req._args, [&](const auto& arg) {
+                        return std::get<Requirement>(arg) == search->_assumedFalseReq;
+                    }) &&
+                    !search->_onlySearchWithItemsAtStart)
+                {
+                    changedToOnlyItemsAtStart = true;
+                    search->_onlySearchWithItemsAtStart = true;
+                }
+
+                evaluation = std::ranges::any_of(
                     req._args,
                     [&](const auto& arg)
                     { return EvaluateRequirementAtFormTime(std::get<Requirement>(arg), search, formTime, world); });
+
+                if (changedToOnlyItemsAtStart) {
+                    search->_onlySearchWithItemsAtStart = false;
+                }
+
+                return evaluation;
 
             case Type::AND:
                 return std::ranges::all_of(
@@ -577,11 +671,17 @@ namespace randomizer::logic::requirement
 
             case Type::ITEM:
                 item = std::get<item::Item*>(req._args[0]);
+                if (search->_onlySearchWithItemsAtStart) {
+                    return search->_itemsAtStart.contains(item);
+                }
                 return search->_ownedItems.contains(item);
 
             case Type::COUNT:
                 count = std::get<int>(req._args[0]);
                 item = std::get<item::Item*>(req._args[1]);
+                if (search->_onlySearchWithItemsAtStart) {
+                    return search->_itemsAtStart.count(item) >= count;
+                }
                 return search->_ownedItems.count(item) >= count;
 
             case Type::EVENT:
@@ -611,12 +711,16 @@ namespace randomizer::logic::requirement
                 count = std::get<int>(req._args[0]);
                 return std::ranges::count_if(search->_ownedItems,
                                      [](const auto& ownedItem) { return ownedItem->IsGoldenBug(); }) >= count;
-            
+
             case Type::HEARTS:
                 count = std::get<int>(req._args[0]);
+                if (search->_searchMode == search::SearchMode::LOCATION_IMPORTANCE &&
+                    search->_assumedHeartCount >= count) {
+                    return true;
+                }
                 heartPiece = world->GetItem("Piece of Heart");
                 heartContainer = world->GetItem("Heart Container");
-                return search->_ownedItems.count(heartPiece) + 
+                return search->_ownedItems.count(heartPiece) +
                        (search->_ownedItems.count(heartContainer) + 3) * 5 >= count * 5;
 
             case Type::DUNGEONS_COMPLETED:
@@ -630,7 +734,7 @@ namespace randomizer::logic::requirement
                         "Can Complete Snowpeak Ruins",
                         "Can Complete Temple of Time",
                         "Can Complete City in the Sky",
-                        "Can Complete Palace of Twilight"  
+                        "Can Complete Palace of Twilight"
                     };
                     for (const auto& eventName : dungeonCompletionEvents)
                     {

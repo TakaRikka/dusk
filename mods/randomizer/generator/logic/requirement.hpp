@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 #include <variant>
 #include <vector>
 
@@ -96,6 +97,10 @@ namespace randomizer::logic::requirement
         std::vector<Argument> _args;
 
         std::string to_string() const;
+        std::unordered_set<item::Item*> getItems(world::World* world) const;
+        int getHeartCount(int curCount = 0) const;
+
+        bool operator==(const Requirement& other) const;
     };
 
     Requirement ParseRequirementString(const std::string& reqStr,

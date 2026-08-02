@@ -1,6 +1,8 @@
 #pragma once
 
 #include "item_pool.hpp"
+#include "requirement.hpp"
+#include "location.hpp"
 #include "../utility/log.hpp"
 
 #include <unordered_set>
@@ -27,11 +29,6 @@ namespace randomizer::logic::item
     class Item;
 }
 
-namespace randomizer::logic::location
-{
-    class Location;
-}
-
 namespace randomizer::logic::area
 {
     class EventAccess;
@@ -54,7 +51,8 @@ namespace randomizer::logic::search
         ALL_LOCATIONS_REACHABLE,
         GENERATE_PLAYTHROUGH,
         SPHERE_ZERO,
-        TRACKER_SPHERES
+        TRACKER_SPHERES,
+        LOCATION_IMPORTANCE,
     };
 
     class Search
@@ -65,7 +63,8 @@ namespace randomizer::logic::search
                world::WorldPool* worlds,
                const item_pool::ItemPool& items = {},
                const int& worldToSearch = -1,
-               bool startingInventory = true);
+               bool startingInventory = true,
+               location::Location* importanceLocation = nullptr);
 
         static auto Accessible(world::WorldPool* worlds,
                                const item_pool::ItemPool& items = {},
@@ -107,6 +106,14 @@ namespace randomizer::logic::search
                              const int& worldToSearch = -1)
         {
             return Search(SearchMode::SPHERE_ZERO, worlds, items, worldToSearch);
+        }
+
+        static auto LocationImportance(world::WorldPool* worlds,
+            location::Location* importanceLocation,
+            const item_pool::ItemPool& items = {},
+            const int& worldToSearch = -1)
+        {
+            return Search(SearchMode::LOCATION_IMPORTANCE, worlds, items, worldToSearch, false, importanceLocation);
         }
 
         void SearchWorlds();
@@ -159,18 +166,32 @@ namespace randomizer::logic::search
         std::list<std::list<entrance::Entrance*>> _entranceSpheres;
 
         std::unordered_map<area::Area*, int> _areaFormTime;
+
+        // Variables used for Location Importance searches
+        std::unordered_multiset<item::Item*> _itemsAtStart{};
+        bool _onlySearchWithItemsAtStart = false;
+        int _assumedHeartCount = 0;
+        requirement::Requirement _assumedFalseReq = requirement::IMPOSSIBLE_REQUIREMENT;
+        location::Location* _importanceLocation = nullptr;
     };
 
     /**
      * @brief Verifies that necessary logic for all worlds is satisfied.
-     * 
+     *
      * @param worlds The worlds to verify logic for
      * @param items The pool of items that haven't been placed yet
-     * 
+     *
      * @return An optional value that holds a string explaining why the logic was not satisfied if validation failed
      */
     std::optional<std::string> VerifyLogic(world::WorldPool* worlds,
                                            const item_pool::ItemPool& items = {});
     void GeneratePlaythrough(randomizer::Randomizer* randomizer);
     bool GameBeatable(world::WorldPool* worlds, const item_pool::ItemPool& items = {});
+
+    /**
+     * @brief Returns the pool of hint signs that the passed in location can be hinted at.
+     * We don't want a hint sign to hint a location which is logically required to access
+     * itself, as that is logically useless information.
+     */
+    location::LocationPool GetPossibleHintSigns(location::Location* location);
 } // namespace randomizer::logic::search

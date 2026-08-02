@@ -1,9 +1,11 @@
 #pragma once
 
-#include <string>
-
 #include "settings.hpp"
 #include "../utility/path.hpp"
+
+#include <optional>
+#include <string>
+
 
 // forward declaration
 namespace YAML

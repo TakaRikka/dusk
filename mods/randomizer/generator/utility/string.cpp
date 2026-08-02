@@ -89,4 +89,20 @@ namespace randomizer::utility::str {
 
         return std::nullopt;
     }
+
+    std::string Replace(const std::string& originalStr,
+                    const std::string& oldStr,
+                    const std::string& replacementStr,
+                    uint32_t count) {
+        std::string retStr = originalStr;
+        auto startPos = retStr.find(oldStr);
+        for (int i = 0; i < count; ++i) {
+            if (startPos == std::string::npos) {
+                return retStr;
+            }
+            retStr.replace(startPos, oldStr.length(), replacementStr);
+            startPos = retStr.find(oldStr, startPos + replacementStr.length());
+        }
+        return retStr;
+    }
 }

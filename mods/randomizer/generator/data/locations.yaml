@@ -297,7 +297,7 @@
   Original Item: Progressive Hidden Skill
   Categories:
     - Overworld
-    - 
+    -
     - Ordona Province
   Metadata:
     Golden Wolf:
@@ -1326,8 +1326,8 @@
       - Stage: 68
         Item: 0x3E
     Switch Flag:
-        Stage: 68
-        Flag: 0x33
+      Stage: 68
+      Flag: 0x33
 
 - Name: Kakariko Village Malo Mart Hylian Shield
   Original Item: Hylian Shield
@@ -1340,8 +1340,8 @@
       - Stage: 68
         Item: 0x2C
     Switch Flag:
-        Stage: 68
-        Flag: 0x39
+      Stage: 68
+      Flag: 0x39
 
 - Name: Kakariko Village Malo Mart Red Potion
   Original Item: Red Potion Shop
@@ -1354,8 +1354,8 @@
       - Stage: 68
         Item: 0x61
     Switch Flag:
-        Stage: 68
-        Flag: 0x4
+      Stage: 68
+      Flag: 0x4
 
 - Name: Kakariko Village Malo Mart Wooden Shield
   Original Item: Wooden Shield
@@ -1368,8 +1368,8 @@
       - Stage: 68
         Item: 0x2B
     Switch Flag:
-        Stage: 68
-        Flag: 0x5
+      Stage: 68
+      Flag: 0x5
 
 - Name: Kakariko Inn Chest
   Original Item: Red Rupee
@@ -1409,7 +1409,7 @@
   Original Item: Bomb Bag
   Categories:
     - Overworld
-    - Npc 
+    - Npc
     - Kakariko Village
     - ARC
   Metadata:
@@ -1469,6 +1469,7 @@
     - Npc
     - Kakariko Village
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Talo Sharpshooting
@@ -1492,6 +1493,7 @@
     - Overworld
     - Npc
     - Kakariko Village
+    - Remote Location
   Metadata:
     Name Lookup:
       - Ilia Memory Reward
@@ -1883,6 +1885,7 @@
     - Npc
     - Hidden Village
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Skybook From Impaz
@@ -1894,6 +1897,7 @@
     - Overworld
     - Npc
     - Hidden Village
+    - Remote Location
   Metadata:
     Freestanding Item:
       - Stage: 63
@@ -2215,6 +2219,7 @@
     - Overworld
     - Hyrule Field - Lanayru Province
     - ARC
+    - Remote Location
   Metadata:
     Chest:
       - Stage: 30
@@ -2350,8 +2355,8 @@
       - Stage: 57
         Room: 8
     Switch Flag:
-        Stage: 57
-        Flag: 0x57
+      Stage: 57
+      Flag: 0x57
 
 - Name: Hyrule Field Amphitheater Poe
   Original Item: Poe Soul
@@ -2412,8 +2417,8 @@
       - Stage: 73
         Item: 0x30
     Switch Flag:
-        Stage: 73
-        Flag: 0x2B
+      Stage: 73
+      Flag: 0x2B
 
 # HD Only location
 # - Name: Castle Town Malo Mart Stamp
@@ -2478,6 +2483,7 @@
     - Npc
     - Castle Town
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Jovani 60 Poe Soul Reward
@@ -3556,6 +3562,7 @@
     - Npc
     - Lake Hylia
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Plumm Fruit Balloon Minigame
@@ -3644,6 +3651,7 @@
     - Npc
     - Upper Zoras River
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Iza Helping Hand
@@ -3656,6 +3664,7 @@
     - Npc
     - Upper Zoras River
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Iza Raging Rapids Minigame
@@ -4066,6 +4075,7 @@
     - Npc
     - Snowpeak Province
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Snowboard Racing Prize
@@ -4712,10 +4722,11 @@
     - Npc
     - Cave of Ordeals
     - ARC
+    - Remote Location
   Metadata:
     Name Lookup:
       - Cave of Ordeals Great Fairy Reward
-    Event Flag: 0x3E40      
+    Event Flag: 0x3E40
 
 - Name: Mirror Chamber Warp Portal
   Original Item: Mirror Chamber Portal
@@ -4937,7 +4948,7 @@
     - Dungeon Reward
     - REL
     - ARC
-  Goal Location: True
+  Goal Name: Diababa
   Metadata:
     FLW Message:
       - Group: 5
@@ -5206,7 +5217,7 @@
     - Dungeon Reward
     - REL
     - ARC
-  Goal Location: True
+  Goal Name: Fyrus
   Metadata:
     FLW Message:
       - Group: 5
@@ -5531,7 +5542,7 @@
     - Dungeon Reward
     - REL
     - ARC
-  Goal Location: True
+  Goal Name: Morpheel
   Metadata:
     FLW Message:
       - Group: 5
@@ -5719,6 +5730,7 @@
   Categories:
     - Dungeon
     - Arbiters Grounds
+    - Remote Location
   Metadata:
     Chest:
       - Stage: 26
@@ -5804,7 +5816,7 @@
     - Dungeon
     - Arbiters Grounds
     - Dungeon Reward
-  Goal Location: True
+  Goal Name: Stallord
   Metadata:
     Name Lookup:
       - Arbiters Grounds Dungeon Reward
@@ -6094,7 +6106,7 @@
     - Dungeon Reward
     - REL
     - ARC
-  Goal Location: True
+  Goal Name: Blizzeta
   Metadata:
     FLW Message:
       - Group: 5
@@ -6329,7 +6341,7 @@
     - Dungeon Reward
     - REL
     - ARC
-  Goal Location: True
+  Goal Name: Armogohma
   Metadata:
     FLW Message:
       - Group: 5
@@ -6619,6 +6631,7 @@
     - Dungeon
     - City in the Sky
     - ARC
+    - Remote Location
   Metadata:
     Chest:
       - Stage: 14
@@ -6655,7 +6668,7 @@
     - Dungeon Reward
     - REL
     - ARC
-  Goal Location: True
+  Goal Name: Argorok
   Metadata:
     FLW Message:
       - Group: 5
@@ -6810,6 +6823,7 @@
     - Cutscene
     - Dungeon
     - Palace of Twilight
+    - Remote Location
   Metadata:
     Freestanding Item:
       - Stage: 15
@@ -6866,7 +6880,7 @@
     - Palace of Twilight
     - Heart Container
     - Dungeon Reward
-  Goal Location: True
+  Goal Name: Zant
   Metadata:
     Freestanding Item:
       - Stage: 16
@@ -6908,7 +6922,7 @@
     Name Lookup:
       - Hyrule Castle King Bulblin Key
     # Not actually a chest, but uses a chest collection flag
-    Chest: 
+    Chest:
       - Stage: 20
         Tbox Id: 0x3
 
@@ -7200,6 +7214,7 @@
   Original Item: Game Beatable
   Categories:
     - Placeholder
+  Goal Name: Ganondorf
   Metadata:
     - None
 

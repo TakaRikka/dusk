@@ -138,13 +138,20 @@ namespace randomizer
         }
         logic::fill::CacheExitTimeForms(this->_worlds);
 
-        // Flattening isn't used for anything yet, but flattens down the requirements for
-        // each location and entrance into a single statement. This will be useful for hints and could potentially
-        // be used to speed up the fill algorithm (but the fill algorithm is already pretty fast, so we'd only gain maybe like
-        // 0.2 seconds back or something)
+        // Flattens down the requirements for each location and entrance into a single statement.
+        // This is used for calculating hint importance.
         utility::platform::Log("Flattening...");
         FlattenSearch search = FlattenSearch(this->_worlds.at(0).get());
         search.doSearch();
+
+        // Set chain locations once the flatten search is done
+        for (auto& world : this->_worlds) {
+            for (auto& location : world->GetAllLocations()) {
+                for (auto& item : location->GetComputedRequirement().getItems(world.get())) {
+                    item->AddChainLocation(location);
+                }
+            }
+        }
 
         utility::platform::Log("Filling Worlds...");
         logic::fill::FillWorlds(this->_worlds);

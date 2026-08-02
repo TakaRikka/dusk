@@ -1510,11 +1510,11 @@ North Gerudo Desert:
   Cryptic:
     Text: the {northern desert}
 
-Bublin Camp:
+Bulblin Camp:
   Standard:
-    Text: Bublin Camp
+    Text: Bulblin Camp
   Pretty:
-    Text: "{Bublin Camp}"
+    Text: "{Bulblin Camp}"
   Cryptic:
     Text: a {camp of enemies}
 
@@ -1538,7 +1538,7 @@ Goron Mines:
   Standard:
     Text: Goron Mines
   Pretty:
-    Text: the {Goron Mines}
+    Text: "{Goron Mines}"
   Cryptic:
     Text: a {volcanic mine}
 
@@ -1546,7 +1546,7 @@ Lakebed Temple:
   Standard:
     Text: Lakebed Temple
   Pretty:
-    Text: the {Lakebed Temple}
+    Text: "{Lakebed Temple}"
   Cryptic:
     Text: an {underground lake}
 
@@ -1562,7 +1562,7 @@ Snowpeak Ruins:
   Standard:
     Text: Snowpeak Ruins
   Pretty:
-    Text: the {Snowpeak Ruins}
+    Text: "{Snowpeak Ruins}"
   Cryptic:
     Text: a {snowy mansion}
 
@@ -1578,7 +1578,7 @@ City in the Sky:
   Standard:
     Text: City in the Sky
   Pretty:
-    Text: the {City in the Sky}
+    Text: "{City in the Sky}"
   Cryptic:
     Text: the {skies above}
 
@@ -1594,9 +1594,63 @@ Hyrule Castle:
   Standard:
     Text: Hyrule Castle
   Pretty:
-    Text: the {Hyrule Castle}
+    Text: "{Hyrule Castle}"
   Cryptic:
     Text: the {kingdom's castle}
+
+# BOSS/GOAL NAMES
+Diababa:
+  Standard:
+    Text: Diababa
+
+Fyrus:
+  Standard:
+    Text: Fyrus
+
+Morpheel:
+  Standard:
+    Text: Morpheel
+
+Stallord:
+  Standard:
+    Text: Stallord
+
+Blizzeta:
+  Standard:
+    Text: Blizzeta
+
+Armogohma:
+  Standard:
+    Text: Armogohma
+
+Argorok:
+  Standard:
+    Text: Argorok
+
+Zant:
+  Standard:
+    Text: Zant
+
+Ganondorf:
+  Standard:
+    Text: Ganondorf
+
+# HINT TEMPLATES
+Path Hint:
+  Standard:
+    Text: <fast>They say that <regions> |is/are| on the path to <goal name>.
+
+Barren Hint:
+  Standard:
+    Text: <fast>They say that visiting <region> is a foolish choice.
+
+Item Hint:
+  Standard:
+    Text: <fast>They say that <Item Pretty or Cryptic Name> can be found at <regions>.
+
+Location Hint:
+  Standard:
+    Text: <fast>They say that the reward for <Location Name> is <Item Pretty or Cryptic Name>.
 
 # NO REQUIRED DUNGEON TEXT
 No Required Dungeons Text:
@@ -2211,6 +2265,26 @@ Midna Hints Required Dungeons Intro At Least One Dungeon:
   Standard:
     Text: |-
       There are <red><required dungeon count><white> required dungeons:
+
+Midna Hints Path Hints Intro:
+  Standard:
+    Text: |-
+      The following <red>paths<white> lie before you:
+
+Midna Hints Barren Hints Intro:
+  Standard:
+    Text: |-
+      There is <purple>nothing<white> to be found in these regions:
+
+Midna Hints Item Hints Intro:
+  Standard:
+    Text: |-
+      These <green>items<white> may be of use to you:
+
+Midna Hints Location Hints Intro:
+  Standard:
+    Text: |-
+      These <red>locations<white> are known to me:
 
 Ordon Hint Sign Text:
   Standard:

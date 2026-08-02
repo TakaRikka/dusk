@@ -4,6 +4,7 @@
 #include "../randomizer.hpp"
 #include "../utility/file.hpp"
 #include "../utility/platform.hpp"
+#include "../utility/string.hpp"
 #include "../utility/yaml.hpp"
 
 #include <algorithm>
@@ -244,7 +245,45 @@ namespace randomizer::logic::spoiler_log
             }
         }
 
-        // TODO: Hints
+                // Print Hints
+        spoilerLog << std::endl << "Hints:" << std::endl;
+        for (const auto& world : worlds) {
+            // Midna hints first
+            spoilerLog << "    World " << world->GetID() << ":" << std::endl;
+            spoilerLog << "        Midna:" << std::endl;
+            auto midnaText = world->GetText("Custom Midna Call Hints Text");
+            midnaText = utility::str::Replace(midnaText, "\n", "\n            ");
+            spoilerLog << "            " << midnaText << std::endl;
+
+            spoilerLog << std::endl;
+            // Put sign hints into a structure that will automatically sort them
+            const auto& hintSignHints = world->GetHintSignHints();
+            std::map<std::string, std::list<std::string>> hints{};
+            for (const auto& [hintSign, hintsOnSign] : hintSignHints) {
+                for (const auto& hint : hintsOnSign) {
+                    // Format the hints so they appear nice in the spoiler log
+                    auto hintText = hint.text.mText[Text::ENGLISH];
+                    hintText = utility::str::Replace(hintText, "\n", "\n                ");
+                    // If this is a path hint, also include the location and item it's referring to
+                    if (auto pathHint = std::get_if<hints::PathHint>(&hint.data)) {
+                        hintText += " (" + pathHint->hintedLocation->GetName() + ": " + pathHint->hintedLocation->GetCurrentItem()->GetName() + ")";
+                    }
+                    hints[hintSign->GetName()].push_back(hintText);
+                }
+            }
+
+            // Then print them
+            if (!hints.empty()) {
+                spoilerLog << "        Hint Signs:" << std::endl;
+                for (const auto& [signName, hintsOnSign] : hints) {
+                    spoilerLog << "           " << signName << ":" << std::endl;
+                    for (const auto& hint : hintsOnSign) {
+                        spoilerLog << "               " << hint << std::endl;
+                    }
+                }
+                spoilerLog << std::endl;
+            }
+        }
 
         // Log Settings
         LogSettings(spoilerLog, randomizer);

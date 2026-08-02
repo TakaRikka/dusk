@@ -3,6 +3,7 @@
 #include <string>
 #include <array>
 #include <unordered_map>
+#include <limits>
 
 namespace randomizer {
     class Text {
@@ -59,6 +60,8 @@ namespace randomizer {
 
         static constexpr size_t MAX_LINE_WIDTH_ITEM_TEXTBOX = 441;
         static constexpr size_t MAX_LINE_WIDTH_NORMAL_TEXTBOX = 750;
+        static constexpr size_t MAX_NEWLINES_PER_MESSAGE = 40;
+        static constexpr size_t LINES_PER_BOX = 4;
 
         Text() = default;
         explicit Text(const std::string& str);
@@ -69,15 +72,21 @@ namespace randomizer {
 
         /**
          *
-         * @param oldStr the string to replace
+         * @param oldText the string to replace
          * @param replacementText the Text object to replace the old string
          * @param count the number of occurrences to replace
          */
-        void Replace(const std::string& oldStr, const Text& replacementText, int count = 1);
-        void Replace(const std::string& oldStr, const std::string& replacementText, int count = 1);
+        void Replace(const std::string& oldText, const Text& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
+        void Replace(const std::string& oldText, const std::string& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
         void BreakLines(int maxLineWidth = MAX_LINE_WIDTH_NORMAL_TEXTBOX);
+
+        // Inserts newlines to pad the text to the next box
+        void PadToNextBox();
         void Capitalize();
         bool Empty() const;
+        bool IsTooLong() const;
+        std::vector<Text> SplitToFitTextLimits();
+        bool operator==(const Text& t) const = default;
         Text& operator+=(const Text& rhs);
         Text& operator+=(const std::string& rhs);
         friend Text operator+(Text lhs, Text& rhs);
@@ -112,12 +121,13 @@ namespace randomizer {
     const Text& getTextObject(const std::string& name, Text::Type type = Text::STANDARD);
     const std::string& getTextStr(const std::string& name, Text::Type type = Text::STANDARD, Text::Language language = Text::ENGLISH);
 
-
-    Text addColor(const Text& text, Text::Color color, int count = 1, bool forceAround = false);
+    Text addColor(const Text& t, Text::Color color, int count = 1);
 
     // Adds newlines in appropriate places to properly break the text string for textboxes
     void breakLines(std::string& str, int maxLineWidth);
 
     // Replaces the message codes in the string with the ingame hex equivalents
     void applyMessageCodes(std::string&);
+
+    Text makeTextListing(std::vector<Text> texts);
 }; // namespace Text
