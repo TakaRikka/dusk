@@ -14,8 +14,10 @@
 
 #include <iostream>
 
+#ifndef RANDOMIZER_ONLY
 #include "../src/paths.hpp"
 #include "../src/randomizer_context.hpp"
+#endif
 
 namespace randomizer
 {
@@ -37,13 +39,14 @@ namespace randomizer
         catch(const std::exception& e)
         {
             std::cout << "============================================================" << std::endl;
-            std::cout << "The following exception occured: " << e.what() << std::endl;
+            std::cout << "The following exception occurred: " << e.what() << std::endl;
             return e.what();
         }
 
         return std::nullopt;
     }
 
+#ifndef RANDOMIZER_ONLY
     void Randomizer::GenerateTrackerWorld() {
         auto contextHash = randomizer_GetContext().mHash;
 
@@ -78,7 +81,7 @@ namespace randomizer
         FlattenSearch search = FlattenSearch(trackerWorld);
         search.doSearch();
     }
-
+#endif
     void Randomizer::GenerateWorlds()
     {
         utility::time::ScopedTimer<"Seed generation took ", std::chrono::milliseconds> timer;

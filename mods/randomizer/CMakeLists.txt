@@ -87,6 +87,23 @@ set(RANDOMIZER_SOURCES
         src/session.cpp
 )
 
+# Embed the generator's YAML data into the mod library. Paths are relative to this
+# directory and must match the RANDO_DATA_PATH-based b::embed<> identifiers in code.
+file(GLOB_RECURSE RANDOMIZER_DATA RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/generator/data/*")
+
+# Create an OBJECT library to hold all battery-embed generated files so we can add it
+# to both the mod and the standalone generator
+add_library(randomizer_embeds OBJECT)
+
+b_embed(randomizer_embeds "res/shadow_crystal.bti")
+foreach (RANDOMIZER_FILE IN LISTS RANDOMIZER_DATA)
+    if (RANDOMIZER_FILE MATCHES "^generator/data/tests")
+        continue()
+    endif ()
+    b_embed(randomizer_embeds "${RANDOMIZER_FILE}")
+endforeach ()
+
 add_mod(randomizer
     FEATURES game
     SOURCES  src/mod.cpp ${RANDOMIZER_GENERATOR_SOURCES} ${RANDOMIZER_SOURCES}
@@ -94,7 +111,7 @@ add_mod(randomizer
     RES_DIR  res
 )
 
-target_link_libraries(randomizer PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt)
+target_link_libraries(randomizer PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
 
 string(LENGTH "${CMAKE_CURRENT_SOURCE_DIR}/" RANDOMIZER_SOURCE_PATH_SIZE)
 target_compile_definitions(randomizer PRIVATE
@@ -102,14 +119,11 @@ target_compile_definitions(randomizer PRIVATE
         SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
 )
 
-# Embed the generator's YAML data into the mod library. Paths are relative to this
-# directory and must match the RANDO_DATA_PATH-based b::embed<> identifiers in code.
-file(GLOB_RECURSE RANDOMIZER_DATA RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/generator/data/*")
-b_embed(randomizer "res/shadow_crystal.bti")
-foreach (RANDOMIZER_FILE IN LISTS RANDOMIZER_DATA)
-    if (RANDOMIZER_FILE MATCHES "^generator/data/tests")
-        continue()
-    endif ()
-    b_embed(randomizer "${RANDOMIZER_FILE}")
-endforeach ()
+# standalone randomizer generator for testing
+add_executable(randomizer_generator ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator_only.cpp ${RANDOMIZER_GENERATOR_SOURCES})
+target_link_libraries(randomizer_generator PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
+target_compile_definitions(randomizer_generator PRIVATE
+        RANDO_DATA_PATH="generator/data/"
+        SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
+        RANDO_SAVE_PATH="${CMAKE_BINARY_DIR}/randomizer/"
+        RANDOMIZER_ONLY)

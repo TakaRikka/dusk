@@ -6,8 +6,10 @@
 
 #include <unordered_map>
 
+#ifndef RANDOMIZER_ONLY
 #include "JSystem/JUtility/JUTFont.h"
 #include "m_Do/m_Do_ext.h"
+#endif
 
 namespace randomizer {
 
@@ -399,14 +401,15 @@ namespace randomizer {
                 continue;
             }
 
-            JUTFont::TWidth width{};
+
 #ifndef RANDOMIZER_ONLY
+            JUTFont::TWidth width{};
             gameFont->getWidthEntry(str[i], &width);
+            curLineWidth += /*width.field_0x0 + */width.field_0x1;
 #else
             // Assume worst case with no iso access
-            width.field_0x1 = 21;
+            curLineWidth += 21;
 #endif
-            curLineWidth += /*width.field_0x0 + */width.field_0x1;
             // If we exceed the maximum line width, replace the
             // previous space with a newline and start counting
             // from the newline again
