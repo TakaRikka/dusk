@@ -4,15 +4,13 @@
 #include <dolphin/types.h>
 
 #include <array>
-#include <list>
+#include <filesystem>
 #include <iomanip>
+#include <list>
 #include <optional>
-#include <string>
 #include <sstream>
+#include <string>
 #include <unordered_map>
-#include <unordered_set>
-
-#include "../generator/randomizer.hpp"
 
 /*
  * Class holding all the information necessary for playing

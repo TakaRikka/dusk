@@ -2,6 +2,7 @@
 
 #include "JSystem/JMessage/control.h"
 #include "d/d_msg_class.h"
+#include "d/d_save.h"
 #include "d/d_com_inf_game.h"
 #include "randomizer_context.hpp"
 #include "custom_flow_ids.hpp"
@@ -61,7 +62,7 @@ char* GetFormatedTextOverride(u32 key, std::string& text) {
 }
 
 u8 getLanguageForOverride() {
-    u8 language = randomizer::Text::ENGLISH;
+    u8 language = dSv_player_config_c::LANGUAGE_ENGLISH;
 
     // TODO: add service or something to check game language
     /*if (dusk::version::isRegionPal()) {

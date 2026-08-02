@@ -1095,6 +1095,21 @@ void parseObjPatchData(stage_tgsc_data_class& object, const YAML::Node& patchNod
     }
 }
 
+static std::array<u8, 20> CreateAttributeData(const YAML::Node& node, const std::string& name) {
+    auto attributesStr = node.as<std::string>();
+    auto attributesVec = HexToBytes(attributesStr);
+    if (attributesVec.size() != 16) {
+        throw std::runtime_error(fmt::format("Attributes for Text Override {} "
+                                             "are the wrong length. (Expected: 16, Actual: {}", name, attributesVec.size()));
+    }
+
+    std::array<u8, 20> attributes{};
+    for (size_t i = 0; i < attributesVec.size(); ++i) {
+        attributes[i + 4] = attributesVec[i];
+    }
+    return attributes;
+}
+
 RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
     RandomizerContext randoData{};
 
@@ -1504,6 +1519,92 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
                 message->type = 1;
                 message->msg_index = handleCustomMessageID(flowNode["inf index"]);
                 message->next_node_idx = handleCustomFlowID(flowNode["next flow index"]);
+
+                // If a custom message is too long, split it up among additional flow/message nodes
+                if (message->msg_index >= BASE_CUSTOM_MSG_AND_FLOW_ID) {
+                    auto textName = flowNode["inf index"].as<std::string>();
+                    if (world->GetTextDatabase().contains(textName)) {
+                        auto& text = world->GetTextObject(textName);
+                        if (text.IsTooLong()) {
+                            // Get the attributes for the text at this ID. Pretty inefficient since we
+                            // have to loop through every element unfortunately
+                            std::optional<std::array<u8, 20>> customAttributes{};
+                            auto textOverrides = LOAD_EMBED_YAML(RANDO_DATA_PATH "text/text_overrides.yaml");
+                            for (const auto& overrideNode : textOverrides) {
+                                const auto& overrideName = overrideNode["Name"].as<std::string>();
+                                if (overrideName == textName && overrideNode["Attributes"]) {
+                                    customAttributes = CreateAttributeData(overrideNode["Attributes"], textName);
+                                    break;
+                                }
+                            }
+
+
+                            // Add each split text as a new custom message entry. The original entry
+                            // still exists but has been sliced down to fit properly.
+                            auto extraText = text.SplitToFitTextLimits();
+                            std::vector<mesg_flow_node> newMsgFlows{};
+                            for (size_t i = 0; i < extraText.size(); i++) {
+                                // Add this custom text to the world
+                                auto extraTextName = textName + std::to_string(i + 1);
+                                world->AddNewText(extraTextName) = extraText[i];
+
+                                // Kinda silly, but means we don't need to create another function
+                                // to handle direct string names.
+                                YAML::Node node{};
+                                node["name"] = extraTextName;
+                                // Create new Flow and Message Ids for the split text object
+                                auto newCustomFlowIndex = handleCustomFlowID(node["name"]);
+                                auto newCustomMessageIndex = handleCustomMessageID(node["name"]);
+
+                                // Create the new flow node. We're storing its own flow index with
+                                // itself for now, but we'll shift it back to the previous node later
+                                mesg_flow_node newMsgFlow{};
+                                newMsgFlow.type = 1;
+                                newMsgFlow.msg_index = newCustomMessageIndex;
+                                newMsgFlow.next_node_idx = newCustomFlowIndex;
+
+                                newMsgFlows.push_back(newMsgFlow);
+
+                                //Add the custom text to the rando data
+                                u32 key = (CUSTOM_BMG_GROUP << 16) | newCustomMessageIndex;
+                                for (auto language : randomizer::supportedLanguages) {
+                                    std::string newText = extraText[i].mText[language];
+                                    randomizer::applyMessageCodes(newText);
+                                    randoData.mTextOverrides[language][key] = newText;
+                                }
+
+                                // Add custom attribute data as well if it exists
+                                if (customAttributes.has_value()) {
+                                    auto attributes = customAttributes.value();
+
+                                    // Set the message id in the attribute data
+                                    attributes[4] = newCustomMessageIndex >> 8;
+                                    attributes[5] = newCustomMessageIndex & 0xFF;
+
+                                    randoData.mAttributeOverrides[key] = attributes;
+                                }
+                            }
+
+                            // Shift all the next_node_idx fields back a node and set the original
+                            // next node idx as the next node idx for the final of the new flows
+                            auto finalNodeIdx = message->next_node_idx;
+                            message->next_node_idx = newMsgFlows[0].next_node_idx;
+                            for (size_t i = 0; i < newMsgFlows.size(); i++) {
+                                auto& curFlow = newMsgFlows[i];
+                                auto curFlowIdx = curFlow.next_node_idx;
+                                if (i == newMsgFlows.size() - 1) {
+                                    curFlow.next_node_idx = finalNodeIdx;
+                                } else {
+                                    curFlow.next_node_idx = newMsgFlows[i + 1].next_node_idx;
+                                }
+
+                                // Also Add the new custom flows to our rando data
+                                u32 key = (CUSTOM_BMG_GROUP << 16) | curFlowIdx;
+                                randoData.mFlowPatches[key] = std::bit_cast<u64>(curFlow);
+                            }
+                        }
+                    }
+                }
             }
             for (auto index : indices) {
                 u32 key = (groupNo << 16) | index;
@@ -1545,17 +1646,7 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
 
         // If we have custom attributes
         if (overrideNode["Attributes"]) {
-            auto attributesStr = overrideNode["Attributes"].as<std::string>();
-            auto attributesVec = HexToBytes(attributesStr);
-            if (attributesVec.size() != 16) {
-                throw std::runtime_error(fmt::format("Attributes for Text Override {} "
-                                                     "are the wrong length. (Expected: 16, Actual: {}", name, attributesVec.size()));
-            }
-
-            std::array<u8, 20> attributes{};
-            for (size_t i = 0; i < attributesVec.size(); ++i) {
-                attributes[i + 4] = attributesVec[i];
-            }
+            auto attributes = CreateAttributeData(overrideNode["Attributes"], name);
 
             // Set the message id in the attribute data
             attributes[4] = messageId >> 8;
