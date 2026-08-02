@@ -14,9 +14,9 @@ void JASBasicBank::newInstTable(u8 num, JKRHeap* heap) {
         mInstNumMax = num;
         mInstTable = JKR_NEW_ARRAY_ARGS(JASInst*, mInstNumMax, heap, 0);
 #if TARGET_ANDROID
-        JASCalc::_bzero(mInstTable, mInstNumMax * 4);
+        JASCalc::_bzero(mInstTable, mInstNumMax * sizeof(mInstTable[0]));
 #else
-        JASCalc::bzero(mInstTable, mInstNumMax * 4);
+        JASCalc::bzero(mInstTable, mInstNumMax * sizeof(mInstTable[0]));
 #endif
     }
 }
