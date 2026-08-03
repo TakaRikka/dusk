@@ -148,16 +148,18 @@ void handleGamepadColor() {
                 PADSetColor(port, 0, 0, 0);
             }
             continue;
-        case LedStatusMode::PLAYER_HP:
+        case LedStatusMode::PLAYER_HP: {
             auto [color, speed] = getColorSettingFromHP();
             finalColor = color;
             lerpSpeed = speed * speedFactor;
             break;
-        case LedStatusMode::GAME_STATE:
+        }
+        case LedStatusMode::GAME_STATE: {
             auto [color, speed] = getColorSetting();
             finalColor = color + additionalColor;
             lerpSpeed = speed * speedFactor;
             break;
+        }
         default:
             continue;
         }
