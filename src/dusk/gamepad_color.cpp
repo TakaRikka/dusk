@@ -5,8 +5,6 @@
 #include <d/actor/d_a_alink.h>
 #include <dusk/gamepad_color.h>
 
-#include "aurora/lib/logging.hpp"
-
 #include "ui/controller_config.hpp"
 
 #include <pad.h>
@@ -15,10 +13,7 @@ namespace dusk::input {
 
 namespace {
 
-    aurora::Module Log("dusk::input::gamepad_color");
-
     cXyz currentColor = {0, 0, 0};
-    float lerpSpeed = 0.0f;
 
     enum ColorVariations : u8 {
         NO_COLOR = 0,
@@ -30,6 +25,8 @@ namespace {
         LINK_ZORA = 6,
         LINK_MAGIC = 7,
         LINK_MAGIC_HEAVY = 8,
+        RED = 9,
+        GREEN = 10,
     };
 
     struct ColorSetting {
@@ -47,6 +44,8 @@ namespace {
         /* 6: LINK_ZORA        */ { {0, 0, 100},     5.0f },
         /* 7: LINK_MAGIC       */ { {100, 0, 5},     5.0f },
         /* 8: LINK_MAGIC_HEAVY */ { {5, 100, 100},   5.0f },
+        /* 9: RED              */ { {255, 0, 0},     2.0f },
+        /* 10: GREEN           */ { {0, 255, 0},     2.0f },
     };
 
     cXyz LerpColor(const cXyz a, const cXyz b, const float t) {
@@ -100,10 +99,10 @@ namespace {
         return kColorTable[NO_COLOR].color;
     }
 
-    ColorSetting getColorSettingFromHP() {
+    cXyz getColorSettingFromHP() {
         Z2CreatureLink* link = Z2GetLink();
         if (link == nullptr)
-            return kColorTable[NO_COLOR];
+            return kColorTable[DUSK_COLOR].color;
 
         // Current HP in quarter-heart units (pieces)
         const int currentHp = link->getLinkHp();
@@ -115,38 +114,59 @@ namespace {
         float t = static_cast<float>(currentHp) / static_cast<float>(maxHp);
         t = std::clamp(t, 0.0f, 1.0f);
 
-        Log.info("Current HP: {}, Max HP: {}, Normalized: {}", currentHp, maxHp, t);
+        const cXyz kRed = kColorTable[RED].color;  // 0% HP
+        const cXyz  kGreen = kColorTable[GREEN].color; // 100% HP
 
-        constexpr cXyz kRed = {255.0f, 0.0f, 0.0f};    // 0% HP
-        constexpr cXyz kGreen = {0.0f, 255.0f, 0.0f};  // 100% HP
-
+        // Interpolate between red and green based on HP percentage
         const cXyz hpColor = LerpColor(kRed, kGreen, t);
-        const float speed = 2.0f; // Speed of color transition
 
-        return {hpColor, speed};
+        return hpColor;
     }
 }  // namespace
 
 bool pad_has_led(const int port) noexcept {
-    if (port > PAD_MAX_CONTROLLERS || port < 0)
+    if (port >= PAD_MAX_CONTROLLERS || port < 0)
         return false;
 
     return PADHasLED(port);
 }
 
 void handleGamepadColor() {
-    auto [color, speed] = getColorSettingFromHP();
-    const cXyz additionalColor = getAdditionalColor();
-    cXyz finalColor = color; // + additionalColor;
-    lerpSpeed = speed / 30.0f;
+    cXyz finalColor = {0, 0, 0};
+    float lerpSpeed = 0.0f;
 
-    clamp(finalColor);
-    currentColor = LerpColor(currentColor, finalColor, lerpSpeed);
+    for (int port = 0; port < PAD_MAX_CONTROLLERS; ++port) {
+        const auto LedMode = getSettings().game.LedStatusMode[port].getValue();
 
-    for (int i = 0; i < 4; i++) {
-        if (pad_has_led(i) && getSettings().game.enableLED[i]) {
+        switch (LedMode) {
+        case LedStatusMode::OFF:
+            if (pad_has_led(port)) {
+                PADSetColor(port, 0, 0, 0);
+            }
+            continue;
+        case LedStatusMode::PLAYER_HP: {
+            auto color = getColorSettingFromHP();
+            finalColor = color;
+            lerpSpeed = 1.0f;
+            break;
+        }
+        case LedStatusMode::GAME_STATE: {
+            auto [color, speed] = getColorSetting();
+            const cXyz additionalColor = getAdditionalColor();
+            finalColor = color + additionalColor;
+            lerpSpeed = speed / 30.0f;
+            break;
+        }
+        default:
+            continue;
+        }
+
+        clamp(finalColor);
+        currentColor = LerpColor(currentColor, finalColor, lerpSpeed);
+
+        if (pad_has_led(port)) {
             PADSetColor(
-                i,
+                port,
                 static_cast<u8>(currentColor.x),
                 static_cast<u8>(currentColor.y),
                 static_cast<u8>(currentColor.z)
