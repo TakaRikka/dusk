@@ -67,6 +67,12 @@ enum class MagicArmorMode : u8 {
     COSMETIC = 4,
 };
 
+enum class LedStatusMode : u8 {
+    OFF = 0,
+    GAME_STATE = 1,
+    PLAYER_HP = 2,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -120,6 +126,12 @@ template <>
 struct ConfigEnumRange<MagicArmorMode> {
     static constexpr auto min = MagicArmorMode::NORMAL;
     static constexpr auto max = MagicArmorMode::COSMETIC;
+};
+
+template <>
+struct ConfigEnumRange<LedStatusMode> {
+    static constexpr auto min = LedStatusMode::OFF;
+    static constexpr auto max = LedStatusMode::PLAYER_HP;
 };
 
 template <>
@@ -246,6 +258,7 @@ struct UserSettings {
         ConfigVar<bool> debugFlyCamLockEvents;
         ConfigVar<bool> allowBackgroundInput;
         std::array<ConfigVar<bool>, 4> enableLED;
+        std::array<ConfigVar<LedStatusMode>, 4> LedStatusMode;
         ConfigVar<bool> swapDirectSelect;
 
         // Cheats
