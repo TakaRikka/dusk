@@ -114,8 +114,8 @@ namespace {
         float t = static_cast<float>(currentHp) / static_cast<float>(maxHp);
         t = std::clamp(t, 0.0f, 1.0f);
 
-        const cXyz kRed = kColorTable[RED].color;  // 0% HP
-        const cXyz  kGreen = kColorTable[GREEN].color; // 100% HP
+        const cXyz kRed = kColorTable[RED].color;     // 0% HP
+        const cXyz kGreen = kColorTable[GREEN].color; // 100% HP
 
         // Interpolate between red and green based on HP percentage
         const cXyz hpColor = LerpColor(kRed, kGreen, t);
@@ -145,8 +145,7 @@ void handleGamepadColor() {
             }
             continue;
         case LedStatusMode::PLAYER_HP: {
-            auto color = getColorSettingFromHP();
-            finalColor = color;
+            finalColor = getColorSettingFromHP();
             lerpSpeed = 1.0f;
             break;
         }

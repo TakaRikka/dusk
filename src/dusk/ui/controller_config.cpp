@@ -344,8 +344,7 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             pane.add_button({
                 .text = "Game's state",
                 .isSelected = [port] {
-                    return getSettings().game.ledStatusMode[port].getValue() ==
-                           LedStatusMode::GAME_STATE;
+                    return getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::GAME_STATE;
                 },
             })
             .on_pressed([this, port] {
@@ -356,15 +355,14 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             pane.add_button({
                 .text = "Player's HP",
                 .isSelected = [port] {
-                    return getSettings().game.ledStatusMode[port].getValue() ==
-                           LedStatusMode::PLAYER_HP;
+                    return getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::PLAYER_HP;
                 },
             })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundClick);
                 getSettings().game.ledStatusMode[port].setValue(LedStatusMode::PLAYER_HP);
             });
-            pane.add_text("Sets the controller's lighting color based on the game's state (such as the current outfit) or the player's HP.");
+            pane.add_text("Sets the controller's lighting color based on the game's state (such as the current outfit) or the current player's HP.");
         });
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
                                   .key = "Enable Dead Zones",
