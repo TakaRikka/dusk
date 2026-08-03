@@ -136,9 +136,9 @@ void handleGamepadColor() {
     float lerpSpeed = 0.0f;
 
     for (int port = 0; port < PAD_MAX_CONTROLLERS; ++port) {
-        const auto LedMode = getSettings().game.LedStatusMode[port].getValue();
+        const auto ledMode = getSettings().game.ledStatusMode[port].getValue();
 
-        switch (LedMode) {
+        switch (ledMode) {
         case LedStatusMode::OFF:
             if (pad_has_led(port)) {
                 PADSetColor(port, 0, 0, 0);

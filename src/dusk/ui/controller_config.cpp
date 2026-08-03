@@ -316,10 +316,10 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             .key = "LED Status Mode",
             .getValue =
                 [port] {
-                    if (getSettings().game.LedStatusMode[port].getValue() == LedStatusMode::GAME_STATE) {
+                    if (getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::GAME_STATE) {
                         return "Game's state";
                     }
-                    else if (getSettings().game.LedStatusMode[port].getValue() == LedStatusMode::PLAYER_HP) {
+                    else if (getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::PLAYER_HP) {
                         return "Player's HP";
                     } else {
                         return "Off";
@@ -333,36 +333,36 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             pane.add_button({
                 .text = "Off",
                 .isSelected = [port] {
-                    return getSettings().game.LedStatusMode[port].getValue() == LedStatusMode::OFF;
+                    return getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::OFF;
                 },
             })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundClick);
-                getSettings().game.LedStatusMode[port].setValue(LedStatusMode::OFF);
+                getSettings().game.ledStatusMode[port].setValue(LedStatusMode::OFF);
             });
 
             pane.add_button({
                 .text = "Game's state",
                 .isSelected = [port] {
-                    return getSettings().game.LedStatusMode[port].getValue() ==
+                    return getSettings().game.ledStatusMode[port].getValue() ==
                            LedStatusMode::GAME_STATE;
                 },
             })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundClick);
-                getSettings().game.LedStatusMode[port].setValue(LedStatusMode::GAME_STATE);
+                getSettings().game.ledStatusMode[port].setValue(LedStatusMode::GAME_STATE);
             });
 
             pane.add_button({
                 .text = "Player's HP",
                 .isSelected = [port] {
-                    return getSettings().game.LedStatusMode[port].getValue() ==
+                    return getSettings().game.ledStatusMode[port].getValue() ==
                            LedStatusMode::PLAYER_HP;
                 },
             })
             .on_pressed([this, port] {
                 mDoAud_seStartMenu(kSoundClick);
-                getSettings().game.LedStatusMode[port].setValue(LedStatusMode::PLAYER_HP);
+                getSettings().game.ledStatusMode[port].setValue(LedStatusMode::PLAYER_HP);
             });
             pane.add_text("Sets the controller's lighting color based on the game's state (such as the current outfit) or the player's HP.");
         });
