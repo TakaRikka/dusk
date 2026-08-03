@@ -222,6 +222,8 @@ void randomizer_checkAndOverrideEntranceData(const char*& i_Name, s8& i_RoomNo, 
  * variable. This allows the tracker/Archipelago to know a location has been checked
  * when the item is received instead of some indeterminate amount of time afterward.
  */
+void randomizer_setTempFlag(RandomizerContext::itemLocationData);
+
 void randomizer_setTempFlagForLocation(const std::string& locationName);
 
 void randomizer_setTempFlagForFLWOverride(u32 key);

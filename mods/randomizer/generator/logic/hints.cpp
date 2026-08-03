@@ -635,6 +635,10 @@ namespace randomizer::logic::hints {
 
     static void AssignHintSignHints(const location::LocationPool& hintSigns, std::vector<Hint> hints, world::World* world) {
         size_t hintsPerSign = std::ceil(static_cast<double>(hints.size()) / static_cast<double>(hintSigns.size()));
+        // Don't bother placing hints if there are none
+        if (hintsPerSign == 0) {
+            return;
+        }
         auto& worlds = world->GetRandomizer()->GetWorlds();
         auto& hintSignHints = world->GetHintSignHints();
         auto hintSignHintsOriginal = hintSignHints;

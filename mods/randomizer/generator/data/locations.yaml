@@ -33,6 +33,11 @@
     - Ordona Province
     - Npc
   Metadata:
+    FLW Event:
+      - Group: 1
+        Index: 0x18F
+        Next Node Index: 0x116
+        Parameters: 0x0001004A
     Name Lookup:
       - Uli Cradle Delivery
     Event Flag: 0x0301
@@ -44,6 +49,11 @@
     - Npc
     - Ordona Province
   Metadata:
+    FLW Event:
+      - Group: 1
+        Index: 0x6DF
+        Next Node Index: 0x44A
+        Parameters: 0x00010065
     Name Lookup:
       - Ordon Cat Rescue
     Event Flag: 0x1408
@@ -277,6 +287,11 @@
     - Npc
     - Ordona Province
   Metadata:
+    FLW Event:
+      - Group: 1
+        Index: 0x345
+        Next Node Index: 0x216
+        Parameters: 0x00010021
     Name Lookup:
       - Herding Goats Reward
     Event Flag: 0x4240
@@ -493,6 +508,11 @@
     - Faron Woods
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 6
+        Index: 0x72
+        Next Node Index: 0x54
+        Parameters: 0x0001009D
     Name Lookup:
       - Coro Bottle
     Event Flag: 0x1A08
@@ -1471,6 +1491,17 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      # Win the game without ever using the hawkeye
+      - Group: 2
+        Index: 0x124
+        Next Node Index: 0xA6
+        Parameters: 0x00010021
+      # Win the game, but have used hawkeye before
+      - Group: 2
+        Index: 0xE0
+        Next Node Index: 0x71
+        Parameters: 0x00010021
     Name Lookup:
       - Talo Sharpshooting
     Event Flag: 0x0920
@@ -1483,6 +1514,11 @@
     - Kakariko Village
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x19A
+        Next Node Index: 0xF5
+        Parameters: 0x00010080
     Name Lookup:
       - Renados Letter
     Event Flag: 0x0F80
@@ -1507,6 +1543,11 @@
     - Kakariko Graveyard
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x55
+        Next Node Index: 0x25
+        Parameters: 0x00010031
     Name Lookup:
       - Rutelas Blessing
     Event Flag: 0x0804
@@ -1519,6 +1560,11 @@
     - Kakariko Graveyard
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x339
+        Next Node Index: 0x1ED
+        Parameters: 0x0001003D
     Name Lookup:
       - Gift From Ralis
     Event Flag: 0x3B80
@@ -1887,6 +1933,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 6
+        Index: 0x610
+        Next Node Index: 0x439
+        Parameters: 0x000100E9
     Name Lookup:
       - Skybook From Impaz
     Event Flag: 0x5F80
@@ -1922,6 +1973,11 @@
     - Hidden Village
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 6
+        Index: 0x32
+        Next Node Index: 0x2A
+        Parameters: 0x00010083
     Name Lookup:
       - Ilia Charm
     Event Flag: 0x2280
@@ -2390,6 +2446,11 @@
     - Castle Town
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 4
+        Index: 0x276
+        Next Node Index: 0x1A5
+        Parameters: 0x00010055
     Name Lookup:
       - STAR Prize 1
     Event Flag: 0x2308
@@ -2402,6 +2463,11 @@
     - Castle Town
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 4
+        Index: 0x269
+        Next Node Index: 0x1A1
+        Parameters: 0x00010056
     Name Lookup:
       - STAR Prize 2
     Event Flag: 0x2301
@@ -2471,6 +2537,17 @@
     - Castle Town
     - ARC
   Metadata:
+    FLW Event:
+      # Flow if less than 60 souls
+      - Group: 4
+        Index: 0x841
+        Next Node Index: 0x773
+        Parameters: 0x00010075
+      # Custom flow if 60 souls
+      - Group: 9
+        Index: Jovani Give 20 Reward
+        Next Node Index: 0x77E
+        Parameters: 0x00010075
     Name Lookup:
       - Jovani 20 Poe Soul Reward
     Event Flag: 0x5510
@@ -2485,6 +2562,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 4
+        Index: 0x852
+        Next Node Index: 0x781
+        Parameters: 0x00010007
     Name Lookup:
       - Jovani 60 Poe Soul Reward
     Event Flag: 0x3820
@@ -2518,6 +2600,11 @@
     - Castle Town
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 4
+        Index: 0x14D
+        Next Node Index: 0xC6
+        Parameters: 0x00010081
     Name Lookup:
       - Telma Invoice
     Event Flag: 0x2180
@@ -3040,6 +3127,11 @@
     - Lake Hylia
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 8
+        Index: 0x180
+        Next Node Index: 0xF7
+        Parameters: 0x00010090
     Name Lookup:
       - Auru Gift To Fyer
     Event Flag: 0x2520
@@ -3564,6 +3656,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 8
+        Index: 0x1FC
+        Next Node Index: 0x152
+        Parameters: 0x00010021
     Name Lookup:
       - Plumm Fruit Balloon Minigame
     Event Flag: 0x2380
@@ -3653,6 +3750,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 8
+        Index: 0x2E4
+        Next Node Index: 0x208
+        Parameters: 0x00010051
     Name Lookup:
       - Iza Helping Hand
     Event Flag: 0x0B01
@@ -3666,6 +3768,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 8
+        Index: 0x2EE
+        Next Node Index: 0x20F
+        Parameters: 0x0001004F
     Name Lookup:
       - Iza Raging Rapids Minigame
     Event Flag: 0x5908
@@ -3898,6 +4005,11 @@
     - Zoras Domain
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 7
+        Index: 0x8
+        Next Node Index: 0x1
+        Parameters: 0x00010051
     Name Lookup:
       - Zoras Domain Underwater Goron
     Event Flag: 0x3D10
@@ -3987,6 +4099,11 @@
     - Snowpeak Province
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 6
+        Index: 0x282
+        Next Node Index: 0x1C6
+        Parameters: 0x00010091
     Name Lookup:
       - Ashei Sketch
     Event Flag: 0x2940
@@ -4077,6 +4194,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 6
+        Index: 0x2F8
+        Next Node Index: 0x237
+        Parameters: 0x00010021
     Name Lookup:
       - Snowboard Racing Prize
     Event Flag: 0x3B10
@@ -4724,6 +4846,11 @@
     - ARC
     - Remote Location
   Metadata:
+    FLW Event:
+      - Group: 5
+        Index: 0x20A
+        Next Node Index: 0x18F
+        Parameters: 0x00010073
     Name Lookup:
       - Cave of Ordeals Great Fairy Reward
     Event Flag: 0x3E40
@@ -4992,6 +5119,11 @@
     - Big Key
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 5
+        Index: 0x237
+        Next Node Index: 0x19B
+        Parameters: 0x000100F9
     Name Lookup:
       - Goron Mines Gor Amato Key Shard
     Event Flag: 0x3008 # late
@@ -5111,6 +5243,11 @@
     - Big Key
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 5
+        Index: 0x259
+        Next Node Index: 0x1AD
+        Parameters: 0x000100FA
     Name Lookup:
       - Goron Mines Gor Ebizo Key Shard
     Event Flag: 0x3702 # late
@@ -5171,6 +5308,11 @@
     - Big Key
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 5
+        Index: 0x248
+        Next Node Index: 0x1A4
+        Parameters: 0x000100FD
     Name Lookup:
       - Goron Mines Gor Liggs Key Shard
     Event Flag: 0x3701 # late
@@ -5892,6 +6034,11 @@
     - Dungeon Map
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 5
+        Index: 0x3C8
+        Next Node Index: 0x265
+        Parameters: 0x00010023
     Name Lookup:
       - Snowpeak Ruins Mansion Map
     Event Flag: 0x0B10 # late

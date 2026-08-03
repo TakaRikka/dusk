@@ -42,18 +42,21 @@
     query: 6
     parameters: 0x0064
     next node index: 0x222
+
   # Patch Charlo to take 100 rupees from Link instead of 30
   - index: 0x34E
     type: event
     event: 41
     parameters: 0x00000064
     next node index: 0x226
+
   # Patch Charlo to add 100 rupees to his counter instead of 30
   - index: 0x357
     type: event
     event: 3
     parameters: 0x00000064
     next node index: 0x22B
+
   # Patch Malo Mart door person to not check for time of day.
   # Change from branch node that checks time of day to event node
   # that does nothing.
@@ -62,6 +65,22 @@
     event: 42
     parameters: 0x00000000
     next node index: 0x10C
+
+  # Patch Jovani to skip checking whether we've received the first
+  # or second reward and skip straight to the second reward if we're
+  # talking to him for the first time with 60 souls
+  - index: 0x844
+    type: message
+    inf index: 0x322
+    next flow index: 0x851
+
+  # Patch Jovani to check if we've received the 20 reward yet at
+  # the end of the 60 reward sequence.
+  - index: 0x81F
+    type: event
+    event: 14
+    parameters: 0x00000063
+    next node index: Jovani Check 20 Reward Obtained
 
 5: # zel_05.bmg
   # Patch Yeta flow to always give the map check even if the player has obtained the Ordon Cheese
@@ -85,6 +104,13 @@
     event: 42
     parameters: 0x00000000
     next node index: 0x1AC
+
+  # Patch Cave of Ordeals Great Fairy to skip over the check
+  # for an empty bottle the first time
+  - index: 0x850
+    type: message
+    inf index: 0x25B
+    next flow index: 0x202
 
 #6: # zel_06.bmg
 #7: # zel_07.bmg
@@ -276,6 +302,18 @@
     event: 45
     parameters: 0x00000000
     next node index: 0x116
+
+  # Check to see if we've obtained the 20 Poe Soul Reward.
+  # If we haven't then branch to giving the reward
+  - name: Jovani Check 20 Reward Obtained
+    type: branch
+    num results: 2
+    query: 1
+    parameters: 0x0272
+    next node index: 0xFFFF
+    results:
+      - 0xFFFF # Yes, we've obtained the reward, do nothing
+      - Jovani Give 20 Reward
 
   #################################################
   #                  HINT SIGNS                   #
