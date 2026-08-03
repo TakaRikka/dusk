@@ -99,10 +99,10 @@ namespace {
         return kColorTable[NO_COLOR].color;
     }
 
-    cXyz getColorSettingFromHP() {
+    ColorSetting getColorSettingFromHP() {
         Z2CreatureLink* link = Z2GetLink();
         if (link == nullptr)
-            return kColorTable[DUSK_COLOR].color;
+            return kColorTable[DUSK_COLOR];
 
         // Current HP in quarter-heart units (pieces)
         const int currentHp = link->getLinkHp();
@@ -120,7 +120,7 @@ namespace {
         // Interpolate between red and green based on HP percentage
         const cXyz hpColor = LerpColor(kRed, kGreen, t);
 
-        return hpColor;
+        return {hpColor, 30.0f};
     }
 }  // namespace
 
@@ -134,28 +134,30 @@ bool pad_has_led(const int port) noexcept {
 void handleGamepadColor() {
     cXyz finalColor = {0, 0, 0};
     float lerpSpeed = 0.0f;
+    const cXyz additionalColor = getAdditionalColor();
+    const auto& settings = getSettings();
+    constexpr float speedFactor = 1.0f / 30.0f;
 
     for (int port = 0; port < PAD_MAX_CONTROLLERS; ++port) {
-        const auto ledMode = getSettings().game.ledStatusMode[port].getValue();
+        const bool hasLed = pad_has_led(port);
+        const auto ledMode = settings.game.ledStatusMode[port].getValue();
 
         switch (ledMode) {
         case LedStatusMode::OFF:
-            if (pad_has_led(port)) {
+            if (hasLed) {
                 PADSetColor(port, 0, 0, 0);
             }
             continue;
-        case LedStatusMode::PLAYER_HP: {
-            finalColor = getColorSettingFromHP();
-            lerpSpeed = 1.0f;
+        case LedStatusMode::PLAYER_HP:
+            auto [color, speed] = getColorSettingFromHP();
+            finalColor = color;
+            lerpSpeed = speed * speedFactor;
             break;
-        }
-        case LedStatusMode::GAME_STATE: {
+        case LedStatusMode::GAME_STATE:
             auto [color, speed] = getColorSetting();
-            const cXyz additionalColor = getAdditionalColor();
             finalColor = color + additionalColor;
-            lerpSpeed = speed / 30.0f;
+            lerpSpeed = speed * speedFactor;
             break;
-        }
         default:
             continue;
         }
@@ -163,7 +165,7 @@ void handleGamepadColor() {
         clamp(finalColor);
         currentColor = LerpColor(currentColor, finalColor, lerpSpeed);
 
-        if (pad_has_led(port)) {
+        if (hasLed) {
             PADSetColor(
                 port,
                 static_cast<u8>(currentColor.x),
