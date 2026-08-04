@@ -3,6 +3,7 @@
 #include "hint_types.hpp"
 
 #include <memory>
+#include <vector>
 
 namespace randomizer::logic::world {
 class World;

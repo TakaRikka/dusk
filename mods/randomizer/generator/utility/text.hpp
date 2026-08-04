@@ -4,6 +4,8 @@
 #include <array>
 #include <unordered_map>
 #include <limits>
+#include <vector>
+#include <cstdint>
 
 namespace randomizer {
     class Text {
