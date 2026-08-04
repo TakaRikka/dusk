@@ -11,6 +11,7 @@
 #include <cstring>
 #include <limits>
 #include <optional>
+#include <cstdint>
 
 namespace randomizer::utility::str {
     std::string toUTF8(const std::u16string& str);
