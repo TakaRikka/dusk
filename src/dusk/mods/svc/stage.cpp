@@ -10,18 +10,18 @@
 #include "dusk/utilities.hpp"
 
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <string_view>
 
 namespace dusk::mods::svc {
 namespace {
 
-aurora::Module Log("dusk::mods::stage");
+aurora::Module Log{"dusk::mods::stage"};
 
-constexpr size_t kACTREntrySize = 0x20;
-constexpr size_t kTGSCEntrySize = 0x23;
+constexpr size_t kActrEntrySize = 0x20;
+constexpr size_t kTgscEntrySize = 0x23;
 constexpr uint8_t kRoomDefault = 0xFF;
 constexpr int8_t kLayerDefault = -1;
 
@@ -34,16 +34,15 @@ struct ActorEditRecord {
     uint8_t room = 0;
     int8_t layer = kLayerDefault;
     EditKind kind = EditKind::Patch;
-    uint32_t crc = 0;                 // Patch/Delete
-    std::vector<uint8_t> record;      // Patch/Add
+    uint32_t crc = 0;
+    std::vector<uint8_t> record;
 };
 
 std::unordered_map<std::string, std::vector<ActorEditRecord>> s_edits;
 uint64_t s_nextHandle = 1;
 uint64_t s_nextSeq = 1;
-std::unordered_set<uint64_t> s_warnedRecords;  // (crc | seq-of-stage-hash) collision warnings
+std::unordered_set<uint32_t> s_warnedRecords;
 
-// Position in m_mods (dependency-sorted load order) + 1; later-loaded mods win.
 int32_t compute_mod_priority(const LoadedMod& mod) {
     int32_t index = 0;
     for (const auto& other : ModLoader::instance().mods()) {
@@ -77,21 +76,19 @@ bool layer_matches(const ActorEditRecord& record, int8_t layer) {
 
 }  // namespace
 
-bool stage_apply_actor_edits(void* actorData, void* actorPrm, int8_t roomNo) {
+bool stage_apply_actor_edits(void* actorData, void* actorPrm, size_t recordSize, int8_t roomNo) {
     const auto* edits = current_stage_edits();
     if (edits == nullptr) {
         return true;
     }
 
-    // PLYR spawns use room -1 to signify using the start room ID
     uint8_t room = static_cast<uint8_t>(roomNo);
     if (roomNo == -1) {
         room = static_cast<uint8_t>(dComIfGp_getStartStageRoomNo());
     }
 
     const auto layer = static_cast<int8_t>(dComIfG_play_c::getLayerNo(0));
-    const auto crcActr = utils::crc32(actorData, kACTREntrySize);
-    const auto crcTgsc = utils::crc32(actorData, kTGSCEntrySize);
+    const auto crc = utils::crc32(actorData, recordSize);
 
     const ActorEditRecord* winner = nullptr;
     int32_t winnerPriority = 0;
@@ -103,10 +100,8 @@ bool stage_apply_actor_edits(void* actorData, void* actorPrm, int8_t roomNo) {
             continue;
         }
 
-        // check record type based on size
-        const bool matches = record.kind == EditKind::Delete
-            ? record.crc == crcActr || record.crc == crcTgsc
-            : record.crc == (record.record.size() == kTGSCEntrySize ? crcTgsc : crcActr);
+        const bool matches = record.crc == crc && (record.kind == EditKind::Delete ||
+                                                      record.record.size() == recordSize);
         if (!matches) {
             continue;
         }
@@ -158,8 +153,8 @@ void stage_create_new_actors(
 
 namespace {
 
-ModResult register_edit(LoadedMod& mod, const char* stage, ActorEditRecord&& record,
-    uint64_t& outHandle) {
+ModResult register_edit(
+    LoadedMod& mod, const char* stage, ActorEditRecord&& record, uint64_t& outHandle) {
     record.handle = s_nextHandle++;
     record.mod = &mod;
     record.seq = s_nextSeq++;
@@ -202,9 +197,8 @@ ModResult stage_add_actor(LoadedMod& mod, const char* stage, uint8_t room, int8_
 
 ModResult stage_remove_actor_edit(LoadedMod& mod, uint64_t handle) {
     for (auto it = s_edits.begin(); it != s_edits.end(); ++it) {
-        const auto removed = std::erase_if(it->second, [&](const auto& record) {
-            return record.handle == handle && record.mod == &mod;
-        });
+        const auto removed = std::erase_if(it->second,
+            [&](const auto& record) { return record.handle == handle && record.mod == &mod; });
         if (removed != 0) {
             if (it->second.empty()) {
                 s_edits.erase(it);
@@ -234,7 +228,7 @@ bool is_valid_stage_name(const char* stage) {
 }
 
 bool is_valid_record_size(size_t size) {
-    return size == kACTREntrySize || size == kTGSCEntrySize;
+    return size == kActrEntrySize || size == kTgscEntrySize;
 }
 
 ModResult stage_patch_actor_(ModContext* context, const char* stage, uint8_t room, int8_t layer,

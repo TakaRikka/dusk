@@ -1593,13 +1593,17 @@ DUSK_GAME_DATA dStage_roomControl_c::roomDzs_c dStage_roomControl_c::m_roomDzs;
 u8 dStage_roomControl_c::mNoArcBank;
 #endif
 
-static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
 #if TARGET_PC
-    if (!dusk::mods::svc::stage_apply_actor_edits(i_actorData, i_actorPrm, i_actorPrm->room_no)) {
-        DuskLog.error("Failed to apply stage actor edits!");
+static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm,
+                               size_t recordSize = sizeof(stage_actor_data_class)) {
+    if (!dusk::mods::svc::stage_apply_actor_edits(i_actorData, i_actorPrm, recordSize,
+            i_actorPrm->room_no))
+    {
         JKRFree(i_actorPrm);
         return;
     }
+#else
+static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
 #endif
     dStage_objectNameInf* actorInf = dStage_searchName(i_actorData->name);
 
@@ -2000,7 +2004,12 @@ static int dStage_tgscCommonLayerInit(dStage_dt_c* i_stage, void* i_data, int en
                 appen->base = tgsc_data->base;
                 appen->room_no = (int)i_stage->getRoomNo();
                 appen->scale = tgsc_data->scale;
+#if TARGET_PC
+                dStage_actorCreate(actor_data, appen,
+                    sizeof(stage_actor_data_class) + sizeof(fopAcM_prmScale_class));
+#else
                 dStage_actorCreate(actor_data, appen);
+#endif
             }
         }
         tgsc_data++;
@@ -2071,7 +2080,12 @@ static int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
                 appen->base = actor_data->base;
                 appen->room_no = (int)i_stage->getRoomNo();
                 appen->scale = tgsc_data->scale;
+#if TARGET_PC
+                dStage_actorCreate(actor_data, appen,
+                    sizeof(stage_actor_data_class) + sizeof(fopAcM_prmScale_class));
+#else
                 dStage_actorCreate(actor_data, appen);
+#endif
             }
         }
         tgsc_data++;
@@ -2094,7 +2108,12 @@ static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
             appen->base = actor_data->base;
             appen->room_no = (int)i_stage->getRoomNo();
             appen->scale = tgsc_data->scale;
+#if TARGET_PC
+            dStage_actorCreate(actor_data, appen,
+                sizeof(stage_actor_data_class) + sizeof(fopAcM_prmScale_class));
+#else
             dStage_actorCreate(actor_data, appen);
+#endif
         }
         tgsc_data++;
     }
@@ -2520,7 +2539,7 @@ static void dKankyo_create() {
 }
 
 #if TARGET_PC
-static void duskStageSvc_newActorCreate(dStage_dt_c* i_stage) {
+static void dusk_stage_svc_new_actor_create(dStage_dt_c* i_stage) {
     dusk::mods::svc::stage_create_new_actors(i_stage->getRoomNo(),
         [](void* user, const void* record, size_t size) {
             auto* stage = static_cast<dStage_dt_c*>(user);
@@ -2531,11 +2550,11 @@ static void duskStageSvc_newActorCreate(dStage_dt_c* i_stage) {
             if (appen != nullptr) {
                 appen->base = object.base;
                 appen->room_no = static_cast<int>(stage->getRoomNo());
-                // if size is greater than 0x20, must be a TGSC actor
-                if (size > 0x20) {
+                if (size > sizeof(stage_actor_data_class)) {
                     appen->scale = object.scale;
                 }
-                dStage_actorCreate(reinterpret_cast<stage_actor_data_class*>(&object), appen);
+                dStage_actorCreate(
+                    reinterpret_cast<stage_actor_data_class*>(&object), appen, size);
             }
         },
         i_stage);
@@ -2739,7 +2758,7 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
 
     dStage_dt_c_decode(i_data, i_stage, l_funcTable, ARRAY_SIZEU(l_funcTable));
 #if TARGET_PC
-    duskStageSvc_newActorCreate(i_stage);
+    dusk_stage_svc_new_actor_create(i_stage);
 #endif
     layerActorLoader(i_data, i_stage, param_2);
 }

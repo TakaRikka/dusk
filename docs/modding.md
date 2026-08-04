@@ -373,6 +373,15 @@ buffer contract as `get_blob`. Pass a `NULL` buffer to either read function to q
 are cleared. Observers are removed automatically when the mod is detached, so the output handle is only needed for
 manual unregistration. Save callbacks run on the game thread.
 
+### StageService (`mods/svc/stage.h`)
+
+Patches, removes, or adds serialized stage actor records as rooms load. ACTR records are 0x20 bytes and TGSC records
+are 0x23 bytes. `record_crc` is the CRC-32 of the unmodified record.
+
+Stage names may contain up to 8 characters. For patches and deletions, room `0xff` and layer `-1` match any room or
+layer; additions require a specific room. Edits are removed when the mod is detached. If multiple mods edit the same
+record, the later-loaded mod wins.
+
 ### UiService (`mods/svc/ui.h`)
 
 Integrate seamlessly with Dusklight's UI system: add controls and buttons to your mod's detail pane in the Mods window,
