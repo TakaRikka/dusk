@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 /*
  * Class holding all the information necessary for playing
