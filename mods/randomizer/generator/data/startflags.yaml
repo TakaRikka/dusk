@@ -317,6 +317,8 @@ RegionFlags:
       - 0x99 # Desert Entrance CS.
       - 0x20 # Set Freestanding key flag.
       - 0x7F # Mirror Raised Cutscene Flag (Places Boar at desert entrance)
+      - Small_Keys == Keysy:
+        - 0x5F # Gate to King Bulblin Tent unlocked
       - Skip_Minor_Cutscenes == On:
         - 0x53 # Mirror Chamber Intro CS.
       - Arbiters_Does_Not_Require_Bulblin_Camp == On:

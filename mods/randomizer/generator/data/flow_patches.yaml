@@ -7,22 +7,35 @@
   # instead. These are all the flow jumps that normally determine which "Talk to Midna"
   # text is displayed.
   - index:
-     - 0x1
-     - 0x9
-     - 0xC
-     - 0x8F
-     - 0x192
-     - 0x1A4
-     - 0x18F
-     - 0x197
-     - 0x1BC
-     - 0x1C9
+      - 0x1
+      - 0x9
+      - 0xC
+      - 0x8F
+      - 0x192
+      - 0x1A4
+      - 0x18F
+      - 0x197
+      - 0x1BC
+      - 0x1C9
     type: event
     event: 42
     parameters: 0x00000000
     next node index: Custom Midna Call Begin
 
-#1: # zel_01.bmg
+1: # zel_01.bmg - Ordon Village
+  # Patch the flow in Bo's house that normally prevents us from leaving without
+  # Having the iron boots. Patch it so we take the flow which allows us to leave
+  # no matter what
+  - index: 0x8F
+    type: branch
+    num results: 2
+    query: 21
+    parameters: 0x0045
+    next node index: 0x4B
+    results:
+      - 0x90
+      - 0x90
+
 2: # zel_02.bmg
   # Patch Barnes branch to see if you can buy the bomb bag to use
   # query 54 (custom event check) instead of query 22 (how many bomb bags the player has)
@@ -32,6 +45,37 @@
     query: 53
     parameters: 0x004D
     next node index: 0x340
+
+  # Change the flow of buying the red potion item in Kak Malo Mart to not check for an empty bottle first
+  # if the item is randomized. Change both branch paths to lead to the same next node
+  - only if: Shop_Items == On
+    index: 0x43F
+    type: branch
+    num results: 2
+    query: 24
+    parameters: 0x00000001
+    next node index: 0x2EA
+    results:
+      - 0x440
+      - 0x440
+
+  # Change the flow of buying the red potion item in Kak Malo Mart to set the sold out flag if shop
+  # items are randomized
+  - only if: Shop_Items == On
+    index: 0x445
+    type: event
+    event: 3
+    parameters: 0x0000001E
+    next node index: Kakariko Malo Mart Red Potion Sold Out
+
+  # Change the flow of buying the wooden shield in Kak Malo Mart to set the sold out flag if shop
+  # items are randomized
+  - only if: Shop_Items == On
+    index: 0x417
+    type: event
+    event: 3
+    parameters: 0x00000032
+    next node index: Kakariko Malo Mart Wooden Shield Sold Out
 
 #3: # zel_03.bmg
 4: # zel_04.bmg - Castle Town
@@ -66,6 +110,17 @@
     parameters: 0x00000000
     next node index: 0x10C
 
+  # Patch Jovani flow so that we can turn in poe souls before completing MDH
+  - index: 0x832
+    type: branch
+    num results: 2
+    query: 1
+    parameters: 0x01C8
+    next node index: 0x763
+    results:
+      - 0x834 # Skip over 0x833 and go directly to 0x834
+      - 0x84E
+
   # Patch Jovani to skip checking whether we've received the first
   # or second reward and skip straight to the second reward if we're
   # talking to him for the first time with 60 souls
@@ -81,6 +136,14 @@
     event: 14
     parameters: 0x00000063
     next node index: Jovani Check 20 Reward Obtained
+
+  # Patch the flow of showing the Doctor the Invoice to call our custom
+  # event which calls offWarashibeItem instead of setWarashibeItem
+  - index: 0x2D7
+    type: event
+    event: 47
+    parameters: 0x00000081
+    next node index: 0x1D3
 
 5: # zel_05.bmg
   # Patch Yeta flow to always give the map check even if the player has obtained the Ordon Cheese
@@ -114,7 +177,12 @@
 
 #6: # zel_06.bmg
 #7: # zel_07.bmg
-#8: # zel_08.bmg
+8: # zel_08.bmg - HF, Outside CT, LH, UZR, Zora's River, KB2, Title Screen
+  # Skip over the node which deletes auru's memo from the inventory after showing it to Fyer
+  - index: 0x53
+    type: message
+    inf index: 0xA7
+    next flow index: 0x54 # Go directly to 0x54 instead of 0x5D
 
 # Custom Flow Nodes
 9:
@@ -302,6 +370,28 @@
     event: 45
     parameters: 0x00000000
     next node index: 0x116
+
+  #################################################
+  #              KAKARIKO MALO MART               #
+  #################################################
+
+  # Run event 24 which sets the shop sold out flag
+  - name: Kakariko Malo Mart Red Potion Sold Out
+    type: event
+    event: 24
+    parameters: 0x00000000
+    next node index: 0x2F2
+
+  # Run event 24 which sets the shop sold out flag
+  - name: Kakariko Malo Mart Wooden Shield Sold Out
+    type: event
+    event: 24
+    parameters: 0x00000000
+    next node index: 0x2D0
+
+  #################################################
+  #                    JOVANI                     #
+  #################################################
 
   # Check to see if we've obtained the 20 Poe Soul Reward.
   # If we haven't then branch to giving the reward

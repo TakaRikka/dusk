@@ -310,6 +310,7 @@ namespace randomizer::logic::item_pool
         {
             std::list<std::string> smallKeys = {
                 {"Gate Keys"},
+                {"Gerudo Desert Bulblin Camp Key"},
                 {"Forest Temple Small Key"},
                 {"Goron Mines Small Key"},
                 {"Lakebed Temple Small Key"},

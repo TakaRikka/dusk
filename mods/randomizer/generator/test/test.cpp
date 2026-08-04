@@ -6,6 +6,7 @@
 
 int main()
 {
+    std::filesystem::create_directories(RANDO_SAVE_PATH);
     for (const auto& entry : std::filesystem::recursive_directory_iterator(RANDO_LOGIC_TESTS_PATH))
     {
         if (entry.path().generic_string().ends_with("settings.yaml"))

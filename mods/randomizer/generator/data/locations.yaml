@@ -64,6 +64,11 @@
     - Overworld
     - Ordona Province
   Metadata:
+    FLW Event:
+      - Group: 1
+        Index: 0x4D2
+        Next Node Index: 0x2FA
+        Parameters: 0x0001004B
     Shop:
       - Stage: 65
         Item: 0x4B
@@ -1342,6 +1347,11 @@
     - Kakariko Village
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x439
+        Next Node Index: 0x2E8
+        Parameters: 0x0001003E
     Shop:
       - Stage: 68
         Item: 0x3E
@@ -1356,6 +1366,11 @@
     - Kakariko Village
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x427
+        Next Node Index: 0x2DB
+        Parameters: 0x0001002C
     Shop:
       - Stage: 68
         Item: 0x2C
@@ -1370,6 +1385,11 @@
     - Kakariko Village
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x449
+        Next Node Index: 0x2F3
+        Parameters: 0x00010061
     Shop:
       - Stage: 68
         Item: 0x61
@@ -1384,6 +1404,11 @@
     - Kakariko Village
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 2
+        Index: 0x41C
+        Next Node Index: 0x2D3
+        Parameters: 0x0001002B
     Shop:
       - Stage: 68
         Item: 0x2B
@@ -2479,6 +2504,11 @@
     - Castle Town
     - ARC
   Metadata:
+    FLW Event:
+      - Group: 4
+        Index: 0x610
+        Next Node Index: 0x5AE
+        Parameters: 0x00010030
     Shop:
       - Stage: 73
         Item: 0x30

@@ -243,19 +243,23 @@
   Group: 0
   Message Id: 2041
 
-- Name: Slingshot Shop Text
+- Only If: Shop_Items == On
+  Name: Slingshot Shop Text
   Group: 1
   Message Id: 7009
 
-- Name: Slingshot Shop Too Expensive Text
+- Only If: Shop_Items == On
+  Name: Slingshot Shop Too Expensive Text
   Group: 1
   Message Id: 7014
 
-- Name: Slingshot Shop Purchase Confirmation Text
+- Only If: Shop_Items == On
+  Name: Slingshot Shop Purchase Confirmation Text
   Group: 1
   Message Id: 7015
 
-- Name: Slingshot Shop After Purchase Text
+- Only If: Shop_Items == On
+  Name: Slingshot Shop After Purchase Text
   Group: 1
   Message Id: 7016
 
@@ -267,83 +271,103 @@
   Group: 2
   Message Id: 5155
 
-- Name: Kakariko Malo Mart Wooden Shield Purchase Confirmation Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Wooden Shield Purchase Confirmation Text
   Group: 2
   Message Id: 5809
 
-- Name: Kakariko Malo Mart Wooden Shield Too Expensive Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Wooden Shield Too Expensive Text
   Group: 2
   Message Id: 5810
 
-- Name: Kakariko Malo Mart Hylian Shield Purchase Confirmation Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hylian Shield Purchase Confirmation Text
   Group: 2
   Message Id: 5813
 
-- Name: Kakariko Malo Mart Hylian Shield Too Expensive Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hylian Shield Too Expensive Text
   Group: 2
   Message Id: 5814
 
-- Name: Kakariko Malo Mart Hylian Shield After Purchase Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hylian Shield After Purchase Text
   Group: 2
   Message Id: 5818
 
-- Name: Kakariko Malo Mart Hawkeye Purchase Confirmation Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hawkeye Purchase Confirmation Text
   Group: 2
   Message Id: 5820
 
-- Name: Kakariko Malo Mart Hawkeye Too Expensive Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hawkeye Too Expensive Text
   Group: 2
   Message Id: 5821
 
-- Name: Kakariko Malo Mart Hawkeye After Purchase Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hawkeye After Purchase Text
   Group: 2
   Message Id: 5822
 
-- Name: Kakariko Malo Mart Red Potion Too Expensive Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Red Potion Too Expensive Text
   Group: 2
   Message Id: 5824
 
-- Name: Kakariko Malo Mart Red Potion Purchase Confirmation Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Red Potion Purchase Confirmation Text
   Group: 2
   Message Id: 5825
 
-- Name: Kakariko Malo Mart Red Potion Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Red Potion Text
   Group: 2
   Message Id: 5990
 
-- Name: Kakariko Malo Mart Hawkeye Coming Soon Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hawkeye Coming Soon Text
   Group: 2
   Message Id: 5991
 
-- Name: Kakariko Malo Mart Hawkeye Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hawkeye Text
   Group: 2
   Message Id: 5992
 
-- Name: Kakariko Malo Mart Sold Out Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Sold Out Text
   Group: 2
   Message Id: 5996
 
-- Name: Kakariko Malo Mart Wooden Shield Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Wooden Shield Text
   Group: 2
   Message Id: 5998
 
-- Name: Kakariko Malo Mart Hylian Shield Text
+- Only If: Shop_Items == On
+  Name: Kakariko Malo Mart Hylian Shield Text
   Group: 2
   Message Id: 5999
 
-- Name: Chudleys Shop Magic Armor Text
+- Only If: Shop_Items == On
+  Name: Chudleys Shop Magic Armor Text
   Group: 4
   Message Id: 5413
 
-- Name: Castle Town Malo Mart Magic Armor After Purchase Text
+- Only If: Shop_Items == On
+  Name: Castle Town Malo Mart Magic Armor After Purchase Text
   Group: 4
   Message Id: 5433
 
-- Name: Castle Town Malo Mart Magic Armor Text
+- Only If: Shop_Items == On
+  Name: Castle Town Malo Mart Magic Armor Text
   Group: 4
   Message Id: 5440
 
-- Name: Castle Town Malo Mart Magic Armor Sold Out Text
+- Only If: Shop_Items == On
+  Name: Castle Town Malo Mart Magic Armor Sold Out Text
   Group: 4
   Message Id: 5451
 

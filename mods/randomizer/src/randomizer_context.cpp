@@ -1501,6 +1501,14 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
     for (const auto& groupNode : flowPatches) {
         u8 groupNo = groupNode.first.as<u8>();
         for (const auto& flowNode : groupNode.second) {
+            // Check to see if this patch is contingent on a specific setting
+            if (flowNode["only if"]) {
+                const auto& condition = flowNode["only if"].as<std::string>();
+                // If the required condition isn't set, then skip this one
+                if (!world->EvaluateSettingCondition(condition)) {
+                    continue;
+                }
+            }
             std::string name{};
             std::list<u16> indices{};
             if (flowNode["index"]) {
@@ -1665,6 +1673,14 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
     // Text Overrides
     auto textOverrides = LOAD_EMBED_YAML(RANDO_DATA_PATH "text/text_overrides.yaml");
     for (const auto& overrideNode : textOverrides) {
+        // Check to see if this override is contingent on a specific setting
+        if (overrideNode["Only If"]) {
+            const auto& condition = overrideNode["Only If"].as<std::string>();
+            // If the required condition isn't set, then skip this one
+            if (!world->EvaluateSettingCondition(condition)) {
+                continue;
+            }
+        }
         const auto& name = overrideNode["Name"].as<std::string>();
         u8 group;
         u16 messageId;
