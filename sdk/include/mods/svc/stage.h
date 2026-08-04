@@ -14,17 +14,19 @@
 typedef uint64_t StageActorHandle;
 
 /*
- * Runtime edits to ACTR (0x20-byte) and TGSC (0x23-byte) stage records.
- *
- * stage must be a non-empty name of at most 8 characters. room 0xff and layer -1 match any room
- * or layer for patch and delete operations; add_actor requires a specific room. Later-loaded mods
- * win conflicts. record_crc is the CRC-32 of the unmodified record. Registrations are removed when
- * the calling mod is detached. out_handle may be NULL.
+ * Runtime edits to Stage Info (.dzs/.dzr) data.
  */
 
 typedef struct StageService {
     ServiceHeader header;
 
+    /*
+     * Actor Node (ACTR/TGSC/SCOB/Door) Editing:
+     * stage must be a non-empty name of at most 8 characters. room 0xff and layer -1 match any room
+     * or layer for patch and delete operations; add_actor requires a specific room. Later-loaded mods
+     * win conflicts. record_crc is the CRC-32 of the unmodified record. Registrations are removed when
+     * the calling mod is detached. out_handle may be NULL.
+     */
     ModResult (*patch_actor)(ModContext* ctx, const char* stage, uint8_t room, int8_t layer,
         uint32_t record_crc, const void* record, size_t record_size, StageActorHandle* out_handle);
 
