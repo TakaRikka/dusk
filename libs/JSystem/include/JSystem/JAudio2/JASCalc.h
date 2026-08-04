@@ -2,6 +2,7 @@
 #define JASCALC_H
 
 #include <types.h>
+#include <cstring>
 #include <limits>
 
 /**
@@ -10,16 +11,31 @@
  */
 struct JASCalc {
     static void imixcopy(const s16*, const s16*, s16*, u32);
-    static void bcopyfast(const void* src, void* dest, u32 size);
+#if TARGET_PC
+    static void bcopyfast(const void* src, void* dest, u32 size) {
+        std::memcpy(dest, src, size);
+    }
 #if TARGET_ANDROID
-    static void _bcopy(const void* src, void* dest, u32 size);
+    static void _bcopy(const void* src, void* dest, u32 size) {
 #else
-    static void bcopy(const void* src, void* dest, u32 size);
+    static void bcopy(const void* src, void* dest, u32 size) {
 #endif
-    static void bzerofast(void* dest, u32 size);
+        std::memcpy(dest, src, size);
+    }
+    static void bzerofast(void* dest, u32 size) {
+        std::memset(dest, 0, size);
+    }
 #if TARGET_ANDROID
-    static void _bzero(void* dest, u32 size);
+    static void _bzero(void* dest, u32 size) {
 #else
+    static void bzero(void* dest, u32 size) {
+#endif
+        std::memset(dest, 0, size);
+    }
+#else
+    static void bcopyfast(const void* src, void* dest, u32 size);
+    static void bcopy(const void* src, void* dest, u32 size);
+    static void bzerofast(void* dest, u32 size);
     static void bzero(void* dest, u32 size);
 #endif
     static f32 pow2(f32);

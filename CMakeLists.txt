@@ -193,24 +193,21 @@ if (DUSK_MOVIE_SUPPORT)
     endif ()
 endif ()
 
-if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
     # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
     #   (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
     #   For >4-char literals (which GCC/Clang truncate to int), use the MULTI_CHAR() macro.
     # -Wdeprecated-declarations: JSystem uses std::iterator, deprecated in C++17
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar -Wno-trigraphs -Wno-deprecated-declarations")
-    set(CMAKE_INSTALL_RPATH "$ORIGIN")
-    set(CMAKE_BUILD_RPATH "$ORIGIN")
-elseif (APPLE)
-    add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
-    set(CMAKE_INSTALL_RPATH "@loader_path")
-    set(CMAKE_BUILD_RPATH "@loader_path")
-elseif (MSVC)
     add_compile_options(
-        $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
-        $<$<COMPILE_LANGUAGE:C,CXX>:/MP>
-        $<$<COMPILE_LANGUAGE:C,CXX>:/FS>
+        $<$<COMPILE_LANGUAGE:C,CXX>:-Wno-multichar>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-trigraphs>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-declarations>
+    )
+elseif (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    add_compile_options(
+            $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
+            $<$<COMPILE_LANGUAGE:C,CXX>:/MP>
+            $<$<COMPILE_LANGUAGE:C,CXX>:/FS>
     )
 
     if (NOT DUSK_BUILD_WARNINGS)
@@ -223,6 +220,15 @@ elseif (MSVC)
         add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/wo4244>) # narrowing conversion, possible data loss
     endif ()
     add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
+endif ()
+
+if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN")
+    set(CMAKE_BUILD_RPATH "$ORIGIN")
+elseif (APPLE)
+    add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
+    set(CMAKE_INSTALL_RPATH "@loader_path")
+    set(CMAKE_BUILD_RPATH "@loader_path")
 endif ()
 
 include(FetchContent)

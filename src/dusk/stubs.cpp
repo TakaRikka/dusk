@@ -908,7 +908,7 @@ void AIInit(u8* stack) {
     // In a real scenario, it would set up the audio interface and prepare it for use.
 }
 
-void AIInitDMA(u32 start_addr, u32 length) {
+void AIInitDMA(uintptr_t start_addr, u32 length) {
     STUB_LOG();
 }
 

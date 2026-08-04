@@ -26,6 +26,7 @@
 #include "dusk/frame_interpolation.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
+#include "dusk/mods/svc/save.hpp"
 #endif
 
 static int SelStartFrameTbl[3] = {
@@ -1467,6 +1468,10 @@ void dMenu_save_c::memCardDataSaveWait2() {
         mDoAud_seStart(Z2SE_SY_FILE_SAVE_OK, NULL, 0, 0);
         dComIfGs_setDataNum(mSelectedFile);
         dComIfGs_setNoFile(0);
+
+#if TARGET_PC
+        dusk::mods::svc::save_slot_written(mSelectedFile, mSaveBuffer + mSelectedFile * QUEST_LOG_SIZE);
+#endif
 
         if (mUseType == TYPE_WHITE_EVENT || mUseType == TYPE_BLACK_EVENT) {
             headerTxtSet(0x530);  // Saved.

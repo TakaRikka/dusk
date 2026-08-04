@@ -25,8 +25,9 @@
 
 #ifdef TARGET_PC
 #include "dusk/logging.h"
-#include "dusk/version.hpp"
 #include "dusk/main.h"
+#include "dusk/mods/svc/save.hpp"
+#include "dusk/version.hpp"
 #include "m_Do/m_Do_MemCard.h"
 #endif
 
@@ -771,15 +772,20 @@ void dScnLogo_c::nextSceneChange() {
                     status = mDoMemCd_LoadSync(buf, sizeof(buf), 0);
                     // Wait until the card is loaded
                 } while (status == 0);
-            
+
+                const uint32_t saveSlot = dusk::SaveRequested - 1;
                 if (status == 1) {
-                    dComIfGs_setCardToMemory(buf, dusk::SaveRequested - 1);
+                    dComIfGs_setCardToMemory(buf, saveSlot);
                 } else {
                     dComIfGs_init();
                 }
-            
+
                 dComIfGs_setNoFile(dusk::SaveRequested);
-                dComIfGs_setDataNum(dusk::SaveRequested-1);
+                dComIfGs_setDataNum(saveSlot);
+                if (status == 1) {
+                    dusk::mods::svc::save_slot_loaded(
+                        saveSlot, buf + saveSlot * SAVEDATA_SIZE);
+                }
 
                 dComIfGs_gameStart();
             
