@@ -25,6 +25,7 @@
 #include "dusk/logging.h"
 #include "helpers/string.hpp"
 #if TARGET_PC
+#include "dusk/mods/svc/stage.hpp"
 #include <format>
 #include <fmt/ranges.h>
 #endif
@@ -1593,6 +1594,13 @@ u8 dStage_roomControl_c::mNoArcBank;
 #endif
 
 static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
+#if TARGET_PC
+    if (!dusk::mods::svc::stage_apply_actor_edits(i_actorData, i_actorPrm, i_actorPrm->room_no)) {
+        DuskLog.error("Failed to apply stage actor edits!");
+        JKRFree(i_actorPrm);
+        return;
+    }
+#endif
     dStage_objectNameInf* actorInf = dStage_searchName(i_actorData->name);
 
     if (actorInf == NULL) {
@@ -2511,6 +2519,29 @@ static void dKankyo_create() {
     fopKyM_fastCreate(fpcNm_ENVSE_e, 0, NULL, NULL, NULL);
 }
 
+#if TARGET_PC
+static void duskStageSvc_newActorCreate(dStage_dt_c* i_stage) {
+    dusk::mods::svc::stage_create_new_actors(i_stage->getRoomNo(),
+        [](void* user, const void* record, size_t size) {
+            auto* stage = static_cast<dStage_dt_c*>(user);
+            stage_tgsc_data_class object{};
+            std::memcpy(&object, record, size);
+
+            fopAcM_prm_class* appen = fopAcM_CreateAppend();
+            if (appen != nullptr) {
+                appen->base = object.base;
+                appen->room_no = static_cast<int>(stage->getRoomNo());
+                // if size is greater than 0x20, must be a TGSC actor
+                if (size > 0x20) {
+                    appen->scale = object.scale;
+                }
+                dStage_actorCreate(reinterpret_cast<stage_actor_data_class*>(&object), appen);
+            }
+        },
+        i_stage);
+}
+#endif
+
 static void layerMemoryInfoLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
     UNUSED(param_2);
     static FuncTable l_layerFuncTable[] = {
@@ -2707,6 +2738,9 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
     };
 
     dStage_dt_c_decode(i_data, i_stage, l_funcTable, ARRAY_SIZEU(l_funcTable));
+#if TARGET_PC
+    duskStageSvc_newActorCreate(i_stage);
+#endif
     layerActorLoader(i_data, i_stage, param_2);
 }
 
