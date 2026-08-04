@@ -1,16 +1,16 @@
 #include "save.hpp"
-#include "ui.hpp"
 
 #include "registry.hpp"
 
 #include "aurora/lib/logging.hpp"
-#include "dusk/mods/loader/loader.hpp"
+#include "d/d_save.h"
 #include "dusk/main.h"
+#include "dusk/mods/loader/loader.hpp"
 #include "dusk/utilities.hpp"
 #include "mods/svc/save.h"
 
-#include <string_view>
 #include <fstream>
+#include <string_view>
 
 namespace dusk::mods::svc {
 namespace {
@@ -18,18 +18,18 @@ namespace {
 aurora::Module Log("dusk::mods::save");
 
 constexpr uint32_t kSlotCount = 3;
-constexpr size_t kQuestLogSize = 0xA94;  // static_asserted against QUEST_LOG_SIZE
+constexpr size_t kQuestLogSize = 0xA94;
+static_assert(kQuestLogSize == QUEST_LOG_SIZE);
 constexpr int kSidecarVersion = 1;
 constexpr const char* kSidecarName = "mod_saves.json";
 constexpr size_t kMaxBlobNameLength = 256;
 
-// Blob names sort deterministically in the sidecar; mod ids likewise.
 using BlobMap = std::map<std::string, std::vector<uint8_t>>;
 
 struct SlotStore {
     bool snapshotValid = false;
     uint32_t snapshotCrc = 0;
-    std::map<std::string, BlobMap> mods;  // mod id -> blobs
+    std::map<std::string, BlobMap> mods;
 };
 
 struct SaveObserverRecord {
@@ -41,96 +41,15 @@ struct SaveObserverRecord {
     void* userData = nullptr;
 };
 
-// Game thread only (same rule as the other loader registries).
 std::array<SlotStore, kSlotCount> s_slots;
 int32_t s_currentSlot = -1;
 bool s_sidecarLoaded = false;
 std::vector<SaveObserverRecord> s_observers;
 uint64_t s_nextHandle = 1;
-int32_t s_nextSeq = 1;
-
-// Position in m_mods (dependency-sorted load order) + 1; later-loaded mods win.
-int32_t compute_mod_priority(const LoadedMod& mod) {
-    int32_t index = 0;
-    for (const auto& other : ModLoader::instance().mods()) {
-        ++index;
-        if (&other == &mod) {
-            return index;
-        }
-    }
-    return index + 1;
-}
 
 std::filesystem::path sidecar_path() {
     return dusk::ConfigPath / kSidecarName;
 }
-
-// --- base64 (RFC 4648, no wrapping) ---
-
-constexpr char kB64Chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-std::string base64_encode(const std::vector<uint8_t>& data) {
-    std::string out;
-    out.reserve((data.size() + 2) / 3 * 4);
-    for (size_t i = 0; i < data.size(); i += 3) {
-        const uint32_t rest = data.size() - i;
-        uint32_t chunk = data[i] << 16;
-        if (rest > 1) {
-            chunk |= data[i + 1] << 8;
-        }
-        if (rest > 2) {
-            chunk |= data[i + 2];
-        }
-        out.push_back(kB64Chars[chunk >> 18 & 0x3F]);
-        out.push_back(kB64Chars[chunk >> 12 & 0x3F]);
-        out.push_back(rest > 1 ? kB64Chars[chunk >> 6 & 0x3F] : '=');
-        out.push_back(rest > 2 ? kB64Chars[chunk & 0x3F] : '=');
-    }
-    return out;
-}
-
-bool base64_decode(const std::string& text, std::vector<uint8_t>& out) {
-    if (text.size() % 4 != 0) {
-        return false;
-    }
-    static const auto lookup = [] {
-        std::array<int8_t, 256> table;
-        table.fill(-1);
-        for (int i = 0; i < 64; ++i) {
-            table[static_cast<uint8_t>(kB64Chars[i])] = static_cast<int8_t>(i);
-        }
-        return table;
-    }();
-    out.clear();
-    out.reserve(text.size() / 4 * 3);
-    for (size_t i = 0; i < text.size(); i += 4) {
-        uint32_t chunk = 0;
-        int pads = 0;
-        for (size_t j = 0; j < 4; ++j) {
-            const char c = text[i + j];
-            if (c == '=' && i + 4 == text.size() && j >= 2) {
-                ++pads;
-                chunk <<= 6;
-                continue;
-            }
-            const int8_t value = lookup[static_cast<uint8_t>(c)];
-            if (value < 0 || pads != 0) {
-                return false;
-            }
-            chunk = chunk << 6 | static_cast<uint32_t>(value);
-        }
-        out.push_back(chunk >> 16 & 0xFF);
-        if (pads < 2) {
-            out.push_back(chunk >> 8 & 0xFF);
-        }
-        if (pads < 1) {
-            out.push_back(chunk & 0xFF);
-        }
-    }
-    return true;
-}
-
-// --- sidecar I/O ---
 
 void load_sidecar() {
     if (s_sidecarLoaded) {
@@ -144,8 +63,8 @@ void load_sidecar() {
     try {
         const auto json = nlohmann::json::parse(in);
         if (json.value("version", 0) != kSidecarVersion) {
-            Log.warn("mod save sidecar has unknown version {}; ignoring it",
-                json.value("version", 0));
+            Log.warn(
+                "mod save sidecar has unknown version {}; ignoring it", json.value("version", 0));
             return;
         }
         const auto& slots = json.at("slots");
@@ -160,9 +79,9 @@ void load_sidecar() {
             for (const auto& [modId, blobs] : modsJson.items()) {
                 for (const auto& [name, encoded] : blobs.items()) {
                     std::vector<uint8_t> bytes;
-                    if (!base64_decode(encoded.get<std::string>(), bytes)) {
-                        Log.warn("mod save sidecar: bad blob '{}/{}' in slot {}; dropped",
-                            modId, name, slot);
+                    if (!utils::base64_decode(encoded.get<std::string>(), bytes)) {
+                        Log.warn("mod save sidecar: bad blob '{}/{}' in slot {}; dropped", modId,
+                            name, slot);
                         continue;
                     }
                     s_slots[slot].mods[modId][name] = std::move(bytes);
@@ -188,7 +107,7 @@ void flush_sidecar() {
             }
             nlohmann::json blobsJson = nlohmann::json::object();
             for (const auto& [name, bytes] : blobs) {
-                blobsJson[name] = base64_encode(bytes);
+                blobsJson[name] = utils::base64_encode(bytes);
             }
             mods[modId] = std::move(blobsJson);
         }
@@ -215,10 +134,8 @@ void flush_sidecar() {
     }
 }
 
-// --- observer notification ---
-
 void notify(uint32_t slot, SaveEventFn SaveObserverRecord::* which, const char* what) {
-    // Copy before invoking: callbacks may (un)register observers.
+    // Callbacks may unregister observers.
     const auto observers = s_observers;
     for (const auto& observer : observers) {
         if (!observer.mod->active || observer.*which == nullptr) {
@@ -237,8 +154,6 @@ void notify(uint32_t slot, SaveEventFn SaveObserverRecord::* which, const char* 
 }
 
 }  // namespace
-
-// --- seam entry points ---
 
 void save_slot_new(uint32_t slot) {
     if (slot >= kSlotCount) {
@@ -260,7 +175,7 @@ void save_slot_loaded(uint32_t slot, const void* slotData) {
     load_sidecar();
     auto& store = s_slots[slot];
     if (store.snapshotValid && slotData != nullptr) {
-        const auto crc = utils::CRC32(slotData, kQuestLogSize);
+        const auto crc = utils::crc32(slotData, kQuestLogSize);
         if (crc != store.snapshotCrc) {
             Log.warn("slot {} save data does not match the mod sidecar snapshot; mod save "
                      "data may be stale (card file changed externally?)",
@@ -279,7 +194,7 @@ void save_slot_written(uint32_t slot, const void* slotData) {
     auto& store = s_slots[slot];
     if (slotData != nullptr) {
         store.snapshotValid = true;
-        store.snapshotCrc = utils::CRC32(slotData, kQuestLogSize);
+        store.snapshotCrc = utils::crc32(slotData, kQuestLogSize);
     }
     flush_sidecar();
     notify(slot, &SaveObserverRecord::onWritten, "save-written");
@@ -308,8 +223,6 @@ void save_slot_erased(uint32_t slot) {
 void save_no_slot() {
     s_currentSlot = -1;
 }
-
-// --- loader plumbing (service surface) ---
 
 namespace {
 
@@ -392,9 +305,8 @@ ModResult save_observe(LoadedMod& mod, SaveEventFn onNewSave, SaveEventFn onLoad
 }
 
 ModResult save_unobserve(LoadedMod& mod, uint64_t handle) {
-    const auto removed = std::erase_if(s_observers, [&](const auto& observer) {
-        return observer.handle == handle && observer.mod == &mod;
-    });
+    const auto removed = std::erase_if(s_observers,
+        [&](const auto& observer) { return observer.handle == handle && observer.mod == &mod; });
     return removed != 0 ? MOD_OK : MOD_INVALID_ARGUMENT;
 }
 
@@ -427,7 +339,7 @@ ModResult save_peek_blob(
 
 void save_remove_mod(LoadedMod& mod) {
     std::erase_if(s_observers, [&](const auto& observer) { return observer.mod == &mod; });
-    // Slot blob data is deliberately kept: it belongs to the save, not the mod session.
+    // Blob data persists across mod reloads.
 }
 
 namespace {
@@ -509,7 +421,7 @@ constexpr SaveService s_saveService{
     .peek_blob = save_peek_blob_,
 };
 
-}
+}  // namespace
 
 constinit const ServiceModule g_saveModule{
     .id = SAVE_SERVICE_ID,

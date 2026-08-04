@@ -1,7 +1,6 @@
 #include "dusk/autosave.h"
 #include "dusk/ui/ui.hpp"
 #include "imgui/ImGuiConsole.hpp"
-#include "mods/svc/config.hpp"
 #include "mods/svc/save.hpp"
 
 bool shouldAutoSave = false;

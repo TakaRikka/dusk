@@ -22,8 +22,4 @@ struct ModMenuTabEntry {
 
 std::vector<ModMenuTabEntry> ui_mod_menu_tabs();
 
-namespace ui_impl {
-bool ui_any_document_visible();
-}
-
 }  // namespace dusk::mods::svc
