@@ -1,11 +1,11 @@
-#include "audio_res.hpp"
+#include "wsys.hpp"
 #include "aurora/lib/logging.hpp"
 #include "dusk/mod_loader.hpp"
 #include "helpers/alignment.hpp"
 
 namespace {
 
-aurora::Module Log("dusk::mods::svc::audio_res::wav");
+aurora::Module Log("dusk::mods::svc::audio_res::wsys::wav");
 
 struct ChunkHeader {
     char magic[4];
@@ -37,7 +37,7 @@ bool check_four_cc(char const (&field)[4], char const (&expected)[5]) {
 
 }
 
-namespace dusk::mods::svc::audio_res {
+namespace dusk::mods::svc::audio_res::wsys {
 
 ModResult load_wav(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::span<u8 const> fileData) {
     using namespace helpers::alignment;

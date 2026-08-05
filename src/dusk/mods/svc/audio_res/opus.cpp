@@ -1,6 +1,6 @@
 #if DUSK_OPUS
 
-#include "audio_res.hpp"
+#include "wsys.hpp"
 #include "aurora/lib/logging.hpp"
 #include "dusk/mod_loader.hpp"
 #include "helpers/cast.hpp"
@@ -8,7 +8,7 @@
 
 namespace {
 
-aurora::Module Log("dusk::mods::svc::audio_res::opus");
+aurora::Module Log("dusk::mods::svc::audio_res::wsys::opus");
 
 struct OpusHandle {
     OggOpusFile* file;
@@ -24,7 +24,7 @@ struct OpusHandle {
 
 }
 
-namespace dusk::mods::svc::audio_res {
+namespace dusk::mods::svc::audio_res::wsys {
 ModResult load_opus(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::span<u8 const> fileData) {
     OpusHead head;
     const int result = op_test(&head, fileData.data(), fileData.size());

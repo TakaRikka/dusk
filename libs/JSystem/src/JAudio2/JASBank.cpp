@@ -2,13 +2,13 @@
 
 #include "JSystem/JAudio2/JASBank.h"
 
-#include "dusk/mods/svc/audio_res/audio_res.hpp"
+#include "dusk/mods/svc/audio_res/wsys.hpp"
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASBasicInst.h"
 #include "JSystem/JAudio2/JASBasicWaveBank.h"
 #include "JSystem/JAudio2/JASChannel.h"
 
-using namespace dusk::mods::svc::audio_res;
+using namespace dusk::mods::svc::audio_res::wsys;
 
 // NONMATCHING JASPoolAllocObject_MultiThreaded<_> locations
 JASChannel* JASBank::noteOn(JASBank const* bank, int program, u8 key, u8 velocity, u16 priority,

@@ -1487,6 +1487,8 @@ set(DUSK_FILES
         src/dusk/mods/manifest.hpp
         src/dusk/mods/svc/audio_res/audio_res.hpp
         src/dusk/mods/svc/audio_res/audio_res.cpp
+        src/dusk/mods/svc/audio_res/wsys.cpp
+        src/dusk/mods/svc/audio_res/wsys.hpp
         src/dusk/mods/svc/audio_res/wave.cpp
         src/dusk/mods/svc/audio_res/opus.cpp
         src/dusk/mods/svc/camera.cpp
