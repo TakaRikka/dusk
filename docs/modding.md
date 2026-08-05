@@ -543,6 +543,84 @@ if (svc_camera->get_camera(mod_ctx, game_view, &camera) == MOD_OK) {
 first in-game frame. Projection matrices match the renderer's WebGPU clip convention and renderer depth convention
 (reversed-Z by default).
 
+### ActorService (`mods/svc/actor.h`)
+
+A service that manages registering and creating custom actors. These actors will be run by the game as if they are part of the engine. These actors can be created by the game either by its 16-bit actor name, or a 7-character long name that can
+be loaded by a stage.
+
+```cpp
+#include "mods/svc/actor.h"
+IMPORT_SERVICE(ActorService, svc_actor);
+
+class myActor_c : public fopAc_ac_c {}
+
+int myActor_Create(void* i_this) {
+    // Ran several times, until it returns cPhs_COMPLEATE_e to allow for async loading
+    return cPhs_COMPLEATE_e;
+}
+
+int myActor_Delete(void* i_this) {
+    // Free resources here
+    return 1;
+}
+
+int myActor_Execute(void* i_this) {
+    // Ran once per game tick
+    return 1;
+}
+
+int myActor_IsDelete(void* i_this) {
+    // Returns 1 when the actor can be deleted
+    return 1;
+}
+
+int myActor_Draw(void* i_this) {
+    // Code to draw the actor
+    return 1;
+}
+
+s16 actor_name; // The process name that can be used by the game to load the actor
+ActorHandle actor_handle;
+ProfileDesc profDesc = {
+    .name = "AUnique", // The name used by the stage loader to load the actor with.
+                       // It has a character limit of 7. This should be universally
+                       // unique both between the game and other mods.
+    .priorityGroup = 7, // When, relative to other actors _Execute should run
+                        // See: mods/svc/actor.h
+    .process_size = sizeof(myActor_c),
+    .drawPriority = fpcDwPi_OBJ_LBOX_e, // Defines when the actor should be drawn relative
+                                        // to other actors (see f_pc_draw_priority.h)
+    .createFunction = myActor_Create,
+    .deleteFunction = myActor_Delete,
+    .executeFunction = myActor_Execute,
+    .isDeleteFunction = myActor_IsDelete,
+    .drawFunction = myActor_Draw,
+    .status = fopAcStts_CULL_e  | fopAcStts_UNK_0x4000_e | fopAcStts_UNK_0x40000_e,
+    .group = fopAc_ACTOR_e,
+    .cullType = fopAc_CULLBOX_CUSTOM_e
+};
+svc_actor->register_actor(mod_ctx, &profDesc, &actor_name, &actor_handle);
+
+// Spawn the actor at the player's position
+fopAc_ac_c* plr = dComIfGp_getPlayer(0);
+if (plr) {
+    ActorSpawnParams spawnParams = {
+        .parameters = 0,
+        .argument = 0,
+        .roomNum = fopAcM_GetRoomNo(plr),
+        .position = {plr->current.pos.x,plr->current.pos.y,plr->current.pos.z},
+        .angle = {plr->current.angle.x,plr->current.angle.y,plr->current.angle.z},
+        .scale = {1.0f,1.0f,1.0f}
+    };
+    ActorId created_actor_id;
+    svc_actor->create_actor(mod_ctx, actor_name, &spawnParams, &created_actor_id);
+}
+```
+
+`get_camera` returns `MOD_UNAVAILABLE` while the view is not a valid perspective camera, such as before the
+first in-game frame. Projection matrices match the renderer's WebGPU clip convention and renderer depth convention
+(reversed-Z by default).
+
 ---
 
 ## Hooking Game Functions

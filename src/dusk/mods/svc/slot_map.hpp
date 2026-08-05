@@ -122,6 +122,11 @@ public:
         }
     }
 
+    // Returns the index of the handle within the slot map.
+    static constexpr uint32_t index_of(Handle handle) {
+        return handle_index(handle);
+    }
+
 private:
     struct Slot {
         uint32_t generation = 1;
