@@ -15,6 +15,7 @@
 #include "../generator/utility/string.hpp"
 
 #include <fstream>
+#include <mods/svc/log.hpp>
 
 #include "custom_flow_ids.hpp"
 #include "d/actor/d_a_alink.h"
@@ -24,7 +25,6 @@
 #include "d/d_meter2_info.h"
 #include "d/d_msg_class.h"
 #include "d/d_msg_flow.h"
-#include "fmt/format.h"
 #include "m_Do/m_Do_audio.h"
 
 std::optional<std::string> RandomizerContext::WriteToFile() {
@@ -154,7 +154,7 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
     this->mHash = hash;
 
     if (!std::filesystem::exists(this->GetSeedDataPath())) {
-        randomizer::session::LogError(fmt::format("Failed to load Hash: {}", hash).c_str());
+        mods::log::error("Failed to load Hash: {}", hash);
         mHash.clear();
         return std::nullopt;
     }

@@ -105,13 +105,13 @@ foreach (RANDOMIZER_FILE IN LISTS RANDOMIZER_DATA)
 endforeach ()
 
 add_mod(randomizer
-    FEATURES game
+    FEATURES game fmt
     SOURCES  src/mod.cpp ${RANDOMIZER_GENERATOR_SOURCES} ${RANDOMIZER_SOURCES}
     MOD_JSON mod.json
     RES_DIR  res
 )
 
-target_link_libraries(randomizer PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
+target_link_libraries(randomizer PRIVATE yaml-cpp::yaml-cpp base64pp randomizer_embeds)
 
 string(LENGTH "${CMAKE_CURRENT_SOURCE_DIR}/" RANDOMIZER_SOURCE_PATH_SIZE)
 target_compile_definitions(randomizer PRIVATE

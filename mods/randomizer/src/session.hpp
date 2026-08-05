@@ -25,16 +25,4 @@ struct ServiceManager {
 extern ServiceManager svc_mng;
 
 ModResult initialize(const ServiceManager& services);
-
-inline void LogError(const char* msg) {
-    svc_mng.log->error(svc_mng.mod_ctx, msg);
-}
-
-inline void LogDebug(const char* msg) {
-    svc_mng.log->debug(svc_mng.mod_ctx, msg);
-}
-
-inline void LogWarn(const char* msg) {
-    svc_mng.log->warn(svc_mng.mod_ctx, msg);
-}
 }

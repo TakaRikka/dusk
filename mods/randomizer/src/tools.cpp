@@ -6,13 +6,14 @@
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "f_op/f_op_actor_mng.h"
-#include "fmt/format.h"
 #include "item_ids.h"
 #include "randomizer_context.hpp"
 #include "session.hpp"
 #include "stages.h"
 #include "utilities.h"
 #include "verify_item_functions.h"
+
+#include <mods/svc/log.hpp>
 
 bool playerIsInRoomStage(s32 room, const char* stage)
 {
@@ -713,7 +714,7 @@ int getStageSaveId(int id) {
         case 42: // F_SP102 (Title Screen / King Bulblin 1)
             return 0xFF;
     default:
-            randomizer::session::LogWarn(fmt::format("Failed to find Save Id for ID: {}" , id).c_str());
+            mods::log::warn("Failed to find Save Id for ID: {}" , id);
             return -1;
     }
 }
