@@ -1,6 +1,6 @@
 # Android Shell
 
-This directory contains a minimal SDLActivity-based Android app wrapper for Dusklight.
+This directory contains Dusklight's Android shell built on top of Borealis.
 
 ## Prerequisites
 
@@ -25,24 +25,19 @@ cmake --build --preset android-arm64
 
 This build produces `build/android-arm64/libmain.so`
 
-## Refresh SDL Java Shim (Optional)
-
-If you update SDL and want to refresh the embedded Java shim files:
-
-```bash
-./android/scripts/sync-sdl-java.sh
-```
-
 ## Build APK
 
 ```bash
-cd android
+cd platforms/android
 ./gradlew :app:assembleDebug
 ```
 
 Output APK:
 
-- `android/app/build/outputs/apk/debug/app-debug.apk`
+- `app/build/outputs/apk/debug/app-arm64-v8a-debug.apk`
+
+Aurora needs a hardware-backed graphics adapter. If an AVD has GPU
+acceleration disabled, launch it with `-gpu host`.
 
 ## Launch With Runtime Args (adb)
 
@@ -50,10 +45,13 @@ You can pass command-line args through the activity intent:
 
 ```bash
 adb shell am start -n dev.twilitrealm.dusk/.DuskActivity \
-  --es dusk_args "--backend vulkan"
+  --es borealis_args "--backend vulkan"
 ```
 
 Supported extras:
 
-- `dusk_args`: single shell-like argument string
-- `dusk_argv`: string-array argv
+- `borealis_args`: single shell-like argument string
+- `borealis_argv`: string-array argv
+
+The legacy `dusk_args` and `dusk_argv` names remain accepted during the shell
+transition.

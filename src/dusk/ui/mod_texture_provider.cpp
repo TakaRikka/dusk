@@ -16,7 +16,7 @@ std::string mod_image_source(const mods::LoadedMod& mod, std::string_view bundle
 
 #include <SDL3/SDL_iostream.h>
 #include <SDL3/SDL_surface.h>
-#include <aurora/lib/logging.hpp>
+#include <borealis/log.hpp>
 #include <aurora/rmlui.hpp>
 
 #include <cstddef>
@@ -34,7 +34,7 @@ std::string mod_image_source(const mods::LoadedMod& mod, std::string_view bundle
 namespace dusk::ui {
 namespace {
 
-aurora::Module Log{"dusk::ui::modTexture"};
+constexpr borealis::Log Log{"dusk::ui::modTexture"};
 
 constexpr std::string_view kScheme = "mod";
 constexpr std::string_view kSourcePrefix = "mod://";

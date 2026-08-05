@@ -1,6 +1,6 @@
 #include "overlay.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "controller_config.hpp"
 #include "dusk/achievements.h"
 #include "dusk/action_bindings.h"
@@ -24,7 +24,7 @@
 
 namespace dusk::ui {
 namespace {
-aurora::Module Log{"dusk::ui::overlay"};
+constexpr borealis::Log Log{"dusk::ui::overlay"};
 
 const Rml::String kDocumentSource = R"RML(
 <rml>

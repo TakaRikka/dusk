@@ -55,26 +55,26 @@ void emit(Source source, const std::string& modId, LogLevel level, const std::st
         slot.message.assign(message);
     }
 
-    AuroraLogLevel auroraLevel = LOG_INFO;
+    auto logLevel = borealis::LogLevel::Info;
     switch (level) {
     case LOG_LEVEL_TRACE:
+        logLevel = borealis::LogLevel::Trace;
+        break;
     case LOG_LEVEL_DEBUG:
-        auroraLevel = LOG_DEBUG;
+        logLevel = borealis::LogLevel::Debug;
         break;
     case LOG_LEVEL_INFO:
-        auroraLevel = LOG_INFO;
+        logLevel = borealis::LogLevel::Info;
         break;
     case LOG_LEVEL_WARN:
-        auroraLevel = LOG_WARNING;
+        logLevel = borealis::LogLevel::Warning;
         break;
     case LOG_LEVEL_ERROR:
-        auroraLevel = LOG_ERROR;
+        logLevel = borealis::LogLevel::Error;
         break;
     }
-    if (aurora::g_config.logLevel <= auroraLevel) {
-        aurora::log_internal(auroraLevel, modId.c_str(), message.c_str(),
-            static_cast<unsigned int>(message.length()));
-    }
+    const borealis::Log modLog{modId.c_str()};
+    modLog.report(logLevel, "{}", message);
 }
 
 Range copy_since(uint64_t sinceSeq, std::vector<Line>& out) {

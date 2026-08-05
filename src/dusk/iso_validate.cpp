@@ -1,48 +1,14 @@
 #include "iso_validate.hpp"
 
-#include <SDL3/SDL_iostream.h>
-#include <nod.h>
-#include <xxhash.h>
+#include <borealis/disc.hpp>
 
 #include <array>
-#include <memory>
-#include <stdexcept>
 #include <string_view>
 
 #include "dusk/logging.h"
+#include "dusk/settings.h"
 
 namespace {
-
-constexpr uint8_t hex_nibble_to_u8(char c) {
-    if (c >= '0' && c <= '9')
-        return c - '0';
-    if (c >= 'a' && c <= 'f')
-        return c - 'a' + 10;
-    if (c >= 'A' && c <= 'F')
-        return c - 'A' + 10;
-    throw std::invalid_argument("invalid hex character");
-}
-
-constexpr uint64_t parse_u64_hex(std::string_view s) {
-    if (s.size() != 16)
-        throw std::invalid_argument("expected 16 hex chars for uint64");
-
-    uint64_t value = 0;
-    for (char c : s) {
-        value = (value << 4) | hex_nibble_to_u8(c);
-    }
-    return value;
-}
-
-constexpr XXH128_hash_t parse_xxh128(std::string_view hex) {
-    if (hex.size() != 32)
-        throw std::invalid_argument("expected 32 hex chars for XXH128");
-
-    return XXH128_hash_t{
-        .low64 = parse_u64_hex(hex.substr(16, 16)),
-        .high64 = parse_u64_hex(hex.substr(0, 16)),
-    };
-}
 
 const char* verification_state_name(dusk::DiscVerificationState state) noexcept {
     switch (state) {
@@ -59,195 +25,90 @@ const char* verification_state_name(dusk::DiscVerificationState state) noexcept 
 }  // namespace
 
 namespace dusk::iso {
+namespace {
 
-struct KnownDisc {
-    std::string_view id;
-    Platform platform;
-    Region region;
-    bool supported = false;
-    XXH128_hash_t hash{};
-
-    constexpr KnownDisc(std::string_view id, Platform platform, Region region)
-        : id(id), platform(platform), region(region) {}
-    constexpr KnownDisc(
-        std::string_view id, Platform platform, Region region, const std::string_view hash)
-        : id(id), platform(platform), region(region), supported(true), hash(parse_xxh128(hash)) {}
-};
-
-constexpr auto KNOWN_DISCS = std::to_array<KnownDisc>({
-    {"GZ2E01", Platform::GameCube, Region::NorthAmerica, "14e886f08e548a000afde98a3195e788"},
-    {"GZ2J01", Platform::GameCube, Region::Japan, "5967dc7a6a553652f4d2050aeef6f368"},
-    {"GZ2P01", Platform::GameCube, Region::Europe, "9ef597588b0035ca9e91b333fa9a8a7e"},
-    {"RZDE01", Platform::Wii, Region::NorthAmerica},
-    {"RZDJ01", Platform::Wii, Region::Japan},
-    {"RZDK01", Platform::Wii, Region::Korea},
-    {"RZDP01", Platform::Wii, Region::Europe},
+constexpr auto AcceptedDiscs = std::to_array<borealis::disc::AcceptedDisc>({
+    {
+        .gameId = "GZ2E01",
+        .expectedHash = borealis::disc::parse_xxh3_128("14e886f08e548a000afde98a3195e788"),
+    },
+    {
+        .gameId = "GZ2J01",
+        .expectedHash = borealis::disc::parse_xxh3_128("5967dc7a6a553652f4d2050aeef6f368"),
+    },
+    {
+        .gameId = "GZ2P01",
+        .expectedHash = borealis::disc::parse_xxh3_128("9ef597588b0035ca9e91b333fa9a8a7e"),
+    },
 });
 
-constexpr const KnownDisc* find_disc(std::string_view id) {
-    for (const auto& disc : KNOWN_DISCS) {
-        if (disc.id == id)
-            return &disc;
-    }
-    return nullptr;
-}
+constexpr auto RecognizedGameIds =
+    std::to_array<std::string_view>({"RZDE01", "RZDJ01", "RZDK01", "RZDP01"});
 
-struct NodHandleWrapper {
-    NodHandle* handle;
-
-    NodHandleWrapper() : handle(nullptr) {}
-    ~NodHandleWrapper() {
-        if (handle != nullptr) {
-            nod_free(handle);
-            handle = nullptr;
-        }
-    }
+constexpr borealis::disc::Catalog DiscCatalog{
+    .acceptedDiscs = AcceptedDiscs,
+    .recognizedGameIds = RecognizedGameIds,
 };
 
-static ValidationError convert_nod_error(NodResult result) {
-    switch (result) {
-    case NOD_RESULT_ERR_IO:
+ValidationError validation_error(borealis::disc::Status status) noexcept {
+    switch (status) {
+    case borealis::disc::Status::Success:
+        return ValidationError::Success;
+    case borealis::disc::Status::IOError:
         return ValidationError::IOError;
-    case NOD_RESULT_ERR_FORMAT:
+    case borealis::disc::Status::InvalidImage:
         return ValidationError::InvalidImage;
+    case borealis::disc::Status::UnknownGame:
+        return ValidationError::WrongGame;
+    case borealis::disc::Status::UnsupportedVersion:
+        return ValidationError::WrongVersion;
+    case borealis::disc::Status::Canceled:
+        return ValidationError::Canceled;
+    case borealis::disc::Status::HashMismatch:
+        return ValidationError::HashMismatch;
+    case borealis::disc::Status::Failed:
     default:
         return ValidationError::Unknown;
     }
 }
 
-s64 StreamReadAt(void* user_data, u64 offset, void* out, size_t len) {
-    if (len == 0) {
-        return 0;
-    }
-    auto* io = static_cast<SDL_IOStream*>(user_data);
-    const auto ret = SDL_SeekIO(io, static_cast<s64>(offset), SDL_IO_SEEK_SET);
-    if (ret < 0) {
-        return -1;
-    }
-    const auto read = SDL_ReadIO(io, out, len);
-    if (read == 0) {
-        if (SDL_GetIOStatus(io) == SDL_IO_STATUS_EOF) {
-            return 0;
-        }
-        return -1;
-    }
-    return static_cast<s64>(read);
-}
-
-s64 StreamLength(void* user_data) {
-    return SDL_GetIOSize(static_cast<SDL_IOStream*>(user_data));
-}
-
-void StreamClose(void* user_data) {
-    SDL_CloseIO(static_cast<SDL_IOStream*>(user_data));
-}
-
-ValidationError verify_disc(NodHandle* disc, VerificationStatus& status) {
-    std::unique_ptr<XXH3_state_t, decltype(&XXH3_freeState)> hashState(
-        XXH3_createState(), XXH3_freeState);
-    if (!hashState) {
-        return ValidationError::Unknown;
-    }
-    XXH3_128bits_reset(hashState.get());
-
-    while (true) {
-        if (status.shouldCancel.load(std::memory_order_relaxed)) {
-            return ValidationError::Canceled;
-        }
-
-        size_t bytesAvail;
-        const auto buf = nod_buf_read(disc, &bytesAvail);
-        if (!bytesAvail)
+Region region_from_game_id(std::string_view gameId) noexcept {
+    if (gameId.size() >= 4) {
+        switch (gameId[3]) {
+        case 'P':
+            return Region::Europe;
+        case 'J':
+            return Region::Japan;
+        case 'K':
+            return Region::Korea;
+        default:
             break;
-
-        XXH3_128bits_update(hashState.get(), buf, bytesAvail);
-
-        status.bytesRead.fetch_add(bytesAvail, std::memory_order_relaxed);
-        nod_buf_consume(disc, bytesAvail);
+        }
     }
-
-    const auto hash = XXH3_128bits_digest(hashState.get());
-    if (!XXH128_isEqual(hash, status.knownDisc->hash)) {
-        return ValidationError::HashMismatch;
-    }
-    return ValidationError::Success;
+    return Region::NorthAmerica;
 }
+
+void update_info(const borealis::disc::Result& result, DiscInfo& info) noexcept {
+    if (!result.metadata.gameId.empty()) {
+        info.platform = result.metadata.platform;
+        info.region = region_from_game_id(result.metadata.gameId);
+    }
+}
+
+}  // namespace
 
 ValidationError validate(const char* path, VerificationStatus& status, DiscInfo& info) {
-    const auto sdlStream = SDL_IOFromFile(path, "rb");
-    if (sdlStream == nullptr) {
-        return ValidationError::IOError;
-    }
-
-    NodHandleWrapper disc;
-    const NodDiscStream nod_stream{
-        .user_data = sdlStream,
-        .read_at = StreamReadAt,
-        .stream_len = StreamLength,
-        .close = StreamClose,
-    };
-    auto result = nod_disc_open_stream(&nod_stream, nullptr, &disc.handle);
-    if (disc.handle == nullptr || result != NOD_RESULT_OK) {
-        return convert_nod_error(result);
-    }
-
-    status.bytesTotal.store(nod_disc_size(disc.handle), std::memory_order_relaxed);
-
-    NodDiscHeader header{};
-    result = nod_disc_header(disc.handle, &header);
-    if (result != NOD_RESULT_OK) {
-        return convert_nod_error(result);
-    }
-
-    const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
-    if (!knownDisc) {
-        return ValidationError::WrongGame;
-    }
-    status.knownDisc = knownDisc;
-
-    info.platform = knownDisc->platform;
-    info.region = knownDisc->region;
-    if (!knownDisc->supported) {
-        return ValidationError::WrongVersion;
-    }
-    return verify_disc(disc.handle, status);
+    const auto result = borealis::disc::verify(
+        path == nullptr ? std::string_view{} : std::string_view{path}, DiscCatalog, &status);
+    update_info(result, info);
+    return validation_error(result.status);
 }
 
 ValidationError inspect(const char* path, DiscInfo& info) {
-    const auto sdlStream = SDL_IOFromFile(path, "rb");
-    if (sdlStream == nullptr) {
-        return ValidationError::IOError;
-    }
-
-    NodHandleWrapper disc;
-    const NodDiscStream nod_stream{
-        .user_data = sdlStream,
-        .read_at = StreamReadAt,
-        .stream_len = StreamLength,
-        .close = StreamClose,
-    };
-    auto result = nod_disc_open_stream(&nod_stream, nullptr, &disc.handle);
-    if (disc.handle == nullptr || result != NOD_RESULT_OK) {
-        return convert_nod_error(result);
-    }
-
-    NodDiscHeader header{};
-    result = nod_disc_header(disc.handle, &header);
-    if (result != NOD_RESULT_OK) {
-        return convert_nod_error(result);
-    }
-
-    const auto knownDisc = find_disc(std::string_view(header.game_id, 6));
-    if (!knownDisc) {
-        return ValidationError::WrongGame;
-    }
-
-    info.platform = knownDisc->platform;
-    info.region = knownDisc->region;
-    if (!knownDisc->supported) {
-        return ValidationError::WrongVersion;
-    }
-    return ValidationError::Success;
+    const auto result = borealis::disc::inspect(
+        path == nullptr ? std::string_view{} : std::string_view{path}, DiscCatalog);
+    update_info(result, info);
+    return validation_error(result.status);
 }
 
 bool isPal(const char* path) {

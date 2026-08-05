@@ -3,8 +3,8 @@
 #include "fmt/format.h"
 #include "nlohmann/json.hpp"
 
-#include "aurora/lib/logging.hpp"
 #include "dusk/io.hpp"
+#include <borealis/io.hpp>
 #include "dusk/settings.h"
 
 #include <algorithm>
@@ -28,7 +28,7 @@ constexpr auto ConfigFileName = "config.json";
 
 using json = nlohmann::json;
 
-aurora::Module DuskConfigLog("dusk::config");
+constexpr borealis::Log DuskConfigLog{"dusk::config"};
 
 absl::flat_hash_map<std::string, ConfigVarBase*> RegisteredConfigVars;
 absl::flat_hash_map<std::string, nlohmann::json> UnregisteredConfigVars;
@@ -464,7 +464,7 @@ void load_from_user_preferences() {
     if (configJsonPath.empty()) {
         return;
     }
-    const auto configPathString = io::fs_path_to_string(configJsonPath);
+    const auto configPathString = borealis::io::fs_path_to_string(configJsonPath);
     load_from_file_name(configPathString.c_str());
 }
 
@@ -532,7 +532,7 @@ void save() {
     if (configJsonPath.empty()) {
         return;
     }
-    const auto configPathString = io::fs_path_to_string(configJsonPath);
+    const auto configPathString = borealis::io::fs_path_to_string(configJsonPath);
 
     DuskConfigLog.info("Saving config to '{}'", configPathString);
 

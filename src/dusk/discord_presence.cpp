@@ -1,12 +1,14 @@
-#ifdef DUSK_DISCORD
+#if BOREALIS_HAS_DISCORD
 
 #include "dusk/discord_presence.hpp"
 #include "d/d_com_inf_game.h"
-#include "discord.hpp"
+#include "dusk/app_info.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/map_loader_definitions.h"
 #include "fmt/format.h"
+
+#include <borealis/discord.hpp>
 
 #include <chrono>
 #include <string>
@@ -14,21 +16,22 @@
 #include <utility>
 
 namespace dusk::discord {
+namespace {
+constexpr borealis::Log Log{"dusk::discord"};
+int64_t g_startTime = 0;
+bool g_initialized = false;
+}  // namespace
 
-static int64_t g_startTime = 0;
-static bool g_initialized = false;
-static constexpr const char* kApplicationId = "1495632471994405035";
-
-static void on_ready(const rpc::User& user) {
-    DuskLog.info("Discord: Connected as {}", user.username);
+static void on_ready(const borealis::discord::User& user) {
+    Log.info("Connected as {}", user.username);
 }
 
 static void on_disconnected(int errorCode, std::string_view message) {
-    DuskLog.warn("Discord: Disconnected ({}: {})", errorCode, message);
+    Log.warn("Disconnected ({}: {})", errorCode, message);
 }
 
 static void on_error(int errorCode, std::string_view message) {
-    DuskLog.warn("Discord: Error ({}: {})", errorCode, message);
+    Log.warn("Error ({}: {})", errorCode, message);
 }
 
 static const char* lookup_map_name(const char* mapFile) {
@@ -49,20 +52,22 @@ void initialize() {
         std::chrono::system_clock::now().time_since_epoch())
                       .count();
 
-    rpc::EventHandlers handlers{};
+    borealis::discord::EventHandlers handlers{};
     handlers.ready = on_ready;
     handlers.disconnected = on_disconnected;
     handlers.error = on_error;
-    rpc::initialize(kApplicationId, std::move(handlers));
-    g_initialized = true;
+    g_initialized = borealis::discord::initialize(AppInfo, std::move(handlers));
+    if (!g_initialized) {
+        return;
+    }
 
-    DuskLog.info("Discord Rich Presence initialized");
+    Log.info("Discord Rich Presence initialized");
 }
 
 void run_callbacks() {
     if (!g_initialized)
         return;
-    rpc::run_callbacks();
+    borealis::discord::run_callbacks();
 }
 
 void update_presence() {
@@ -78,7 +83,7 @@ void update_presence() {
     static std::string sDetailsBuf;
     static std::string sStateBuf;
 
-    rpc::Presence presence{};
+    borealis::discord::Presence presence{};
     presence.startTimestamp = g_startTime;
     presence.largeImageKey = "icon";
     presence.largeImageText = "Dusklight";
@@ -105,19 +110,20 @@ void update_presence() {
         }
     }
 
-    rpc::update_presence(std::move(presence));
-    DuskLog.debug("Discord Rich Presence sent");
+    if (borealis::discord::update_presence(std::move(presence))) {
+        Log.debug("Discord Rich Presence changed");
+    }
 }
 
 void shutdown() {
     if (!g_initialized)
         return;
-    rpc::clear_presence();
-    rpc::shutdown();
+    borealis::discord::clear_presence();
+    borealis::discord::shutdown();
     g_initialized = false;
-    DuskLog.info("Discord Rich Presence shut down");
+    Log.info("Discord Rich Presence shut down");
 }
 
 }  // namespace dusk::discord
 
-#endif  // DUSK_DISCORD
+#endif  // BOREALIS_HAS_DISCORD

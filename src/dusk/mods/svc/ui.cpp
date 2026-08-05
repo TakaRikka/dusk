@@ -4,7 +4,7 @@
 #include "registry.hpp"
 #include "slot_map.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/ui/menu_bar.hpp"
@@ -32,7 +32,7 @@
 namespace dusk::mods::svc::ui_impl {
 namespace {
 
-aurora::Module Log("dusk::mods::ui");
+constexpr borealis::Log Log{"dusk::mods::ui"};
 
 enum class UiSlotKind : u8 {
     Window,
