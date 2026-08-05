@@ -17,6 +17,8 @@ void ApplyExistingRandomizerPreset(const std::filesystem::path& presetFilePath);
 void CopyPermalinkToClipboard();
 void PastePermalinkFromClipboard();
 
+ModResult buildMenuTab();
+
 std::filesystem::path GetRandomizerPath();
 std::filesystem::path GetRandomizerSettingsPath();
 std::filesystem::path GetRandomizerPreferencesPath();

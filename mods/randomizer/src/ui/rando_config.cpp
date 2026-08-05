@@ -95,6 +95,210 @@ const std::vector<std::pair<std::string, std::string>>& GetStartingInventoryLayo
     return layoutOrder;
 }
 
+namespace {
+// Control Helpers
+void add_button(UiElementHandle pane, const char* label, const char* help_rml,
+    UiPressedFn on_pressed, UiElementHandle* out_handle = nullptr)
+{
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_BUTTON;
+    desc.label = label;
+    desc.help_rml = help_rml;
+    desc.on_pressed = on_pressed;
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
+void add_section(UiElementHandle pane, const char* label) {
+    session::svc_mng.ui->pane_add_section(session::svc_mng.mod_ctx, pane, label);
+}
+
+void add_string_input(UiElementHandle pane, const char* label, const char* help_rml,
+    int32_t max_length, UiControlGetFn getFn, UiControlSetFn setFn, UiElementHandle* out_handle = nullptr)
+{
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_STRING;
+    desc.label = label;
+    desc.help_rml = help_rml;
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.get = getFn;
+    desc.set = setFn;
+    desc.max_length = max_length;
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
+void add_select_setting(UiElementHandle pane, const char* key, const char* help_rml,
+    UiControlGetFn getFn, UiControlSetFn setFn, UiElementHandle* out_handle = nullptr)
+{
+    auto setting = FindSetting(key);
+    auto info = setting->GetInfo();
+
+    std::vector<const char*> optionsList;
+    for (size_t i = 0; i < info->GetOptions().size(); ++i) {
+        optionsList.push_back(info->GetOptions()[i].c_str());
+    }
+
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_SELECT;
+    desc.label = key;
+    desc.help_rml = help_rml;
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.get = getFn;
+    desc.set = setFn;
+    desc.options = optionsList.data();
+    desc.option_count = optionsList.size();
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
+// Seed Management Tab
+ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
+    UiElementHandle rightPane, void*, ModError*)
+{
+    add_button(leftPane,
+        "Generate Seed",
+        "Generate a Randomizer seed using the current configuration options, and the supplied seed string.",
+        [](ModContext*, void*) {});
+
+    add_string_input(leftPane,
+        "Seed String",
+        "Current value of the seed used by the randomizer for generation. Leave blank for a random value.",
+        32,
+        [](ModContext*, void*, UiControlValue*) {},
+        [](ModContext*, void*, const UiControlValue*) {});
+
+    add_button(leftPane,
+        "Delete Seeds",
+        " ",
+        [](ModContext*, void*) {});
+
+    add_section(leftPane, "Permalink");
+
+    add_button(leftPane,
+        "Copy Permalink",
+        "Copy your current settings permalink to share with others.",
+        [](ModContext*, void*) {});
+
+    add_button(leftPane,
+        "Paste Permalink",
+        "Paste in a permalink from your clipboard. This will overwrite your current settings.",
+        [](ModContext*, void*) {});
+
+    add_section(leftPane, "Presets");
+
+    add_button(leftPane,
+        "Save Current Settings as Preset",
+        "Save the current settings to your list of presets.",
+        [](ModContext*, void*) {});
+
+    add_button(leftPane,
+        "Load Preset",
+        "Choose an existing preset to load from.",
+        [](ModContext*, void*) {});
+
+    return MOD_OK;
+}
+
+ModResult updateSeedManagementTab(ModContext* ctx, void*, ModError*) {
+    return MOD_OK;
+}
+
+// Seed Options Tab
+ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
+    UiElementHandle rightPane, void*, ModError*)
+{
+    add_button(leftPane,
+        "Reset Settings to Default",
+        "Reset all settings to their default values. This will also clear starting items and excluded locations.",
+        [](ModContext*, void*) {});
+
+    add_section(leftPane, "Logic Settings");
+
+    add_select_setting(leftPane,
+        "Logic Rules",
+        " ",
+        [](ModContext*, void*, UiControlValue*) {},
+        [](ModContext*, void*, const UiControlValue*) {});
+
+    add_section(leftPane, "Access Options");
+
+    add_section(leftPane, "Shuffles");
+
+    add_section(leftPane, "Dungeon Items");
+
+    add_section(leftPane, "Timesavers");
+
+    add_section(leftPane, "Additional Settings");
+
+    add_section(leftPane, "Dungeon Entrance Settings");
+
+    add_section(leftPane, "Tricks");
+
+    return MOD_OK;
+}
+
+// Hints Tab
+ModResult buildHintsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
+    UiElementHandle rightPane, void*, ModError*)
+{
+    return MOD_OK;
+}
+
+// Starting Inventory Tab
+ModResult buildStartingInventoryTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
+    UiElementHandle rightPane, void*, ModError*)
+{
+    return MOD_OK;
+}
+
+// Excluded Locations Tab
+ModResult buildExcludedLocationsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
+    UiElementHandle rightPane, void*, ModError*)
+{
+    return MOD_OK;
+}
+
+// Menu Tab
+void OnMenuTabSelected(ModContext* ctx, void*) {
+    UiTabDesc tabs[5]{};
+
+    tabs[0].struct_size = sizeof(UiTabDesc);
+    tabs[0].title = "Seed Management";
+    tabs[0].build = buildSeedManagementTab;
+    tabs[0].update = updateSeedManagementTab;
+
+    tabs[1].struct_size = sizeof(UiTabDesc);
+    tabs[1].title = "Seed Options";
+    tabs[1].build = buildSeedOptionsTab;
+
+    tabs[2].struct_size = sizeof(UiTabDesc);
+    tabs[2].title = "Hints";
+    tabs[2].build = buildHintsTab;
+
+    tabs[3].struct_size = sizeof(UiTabDesc);
+    tabs[3].title = "Starting Inventory";
+    tabs[3].build = buildStartingInventoryTab;
+
+    tabs[4].struct_size = sizeof(UiTabDesc);
+    tabs[4].title = "Excluded Locations";
+    tabs[4].build = buildExcludedLocationsTab;
+
+    UiWindowDesc desc = UI_WINDOW_DESC_INIT;
+    desc.tabs = tabs;
+    desc.tab_count = 5;
+    UiWindowHandle window{};
+    session::svc_mng.ui->window_push(ctx, &desc, &window);
+}
+}
+
+UiMenuTabHandle g_menu_tab{};
+
+ModResult buildMenuTab() {
+    UiMenuTabDesc desc = UI_MENU_TAB_DESC_INIT;
+    desc.label = "Randomizer";
+    desc.on_selected = OnMenuTabSelected;
+
+    return session::svc_mng.ui->register_menu_tab(session::svc_mng.mod_ctx, &desc, &g_menu_tab);
+}
+
 std::filesystem::path GetRandomizerPath() {
     return paths::GetRandomizerPath() / "randomizer";
 }
