@@ -126,8 +126,35 @@ void add_string_input(UiElementHandle pane, const char* label, const char* help_
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
-void add_select_setting(UiElementHandle pane, const char* key, const char* help_rml,
-    UiControlGetFn getFn, UiControlSetFn setFn, UiElementHandle* out_handle = nullptr)
+void add_select_setting(UiElementHandle pane, const char* key, UiElementHandle* out_handle = nullptr)
+{
+    auto setting = FindSetting(key);
+    auto info = setting->GetInfo();
+
+    std::vector<const char*> optionsList;
+    std::string help_rml = "";
+    for (size_t i = 0; i < info->GetOptions().size(); ++i) {
+        optionsList.push_back(info->GetOptions()[i].c_str());
+        help_rml += fmt::format("<br/><span style=\"color: #C2A42D;\">{}</span>: {}", info->GetOptions()[i], info->GetDescriptions()[i]);
+    }
+
+    // temp dummies
+    auto getFn = [](ModContext*, void*, UiControlValue*) {};
+    auto setFn = [](ModContext*, void*, const UiControlValue*) {};
+
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_SELECT;
+    desc.label = key;
+    desc.help_rml = help_rml.c_str();
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.get = getFn;
+    desc.set = setFn;
+    desc.options = optionsList.data();
+    desc.option_count = optionsList.size();
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
+void add_select_number_setting(UiElementHandle pane, const char* key, UiElementHandle* out_handle = nullptr)
 {
     auto setting = FindSetting(key);
     auto info = setting->GetInfo();
@@ -137,10 +164,14 @@ void add_select_setting(UiElementHandle pane, const char* key, const char* help_
         optionsList.push_back(info->GetOptions()[i].c_str());
     }
 
+    // temp dummies
+    auto getFn = [](ModContext*, void*, UiControlValue*) {};
+    auto setFn = [](ModContext*, void*, const UiControlValue*) {};
+
     UiControlDesc desc = UI_CONTROL_DESC_INIT;
     desc.kind = UI_CONTROL_SELECT;
     desc.label = key;
-    desc.help_rml = help_rml;
+    desc.help_rml = "";
     desc.binding = UI_BINDING_CALLBACKS;
     desc.get = getFn;
     desc.set = setFn;
@@ -211,26 +242,68 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
         [](ModContext*, void*) {});
 
     add_section(leftPane, "Logic Settings");
-
-    add_select_setting(leftPane,
-        "Logic Rules",
-        " ",
-        [](ModContext*, void*, UiControlValue*) {},
-        [](ModContext*, void*, const UiControlValue*) {});
+    add_select_setting(leftPane, "Logic Rules");
 
     add_section(leftPane, "Access Options");
+    add_select_setting(leftPane, "Hyrule Barrier Requirements");
+    add_select_setting(leftPane, "Palace of Twilight Requirements");
+    add_select_setting(leftPane, "Faron Woods Logic");
+    add_select_setting(leftPane, "Mirror Chamber Access");
 
     add_section(leftPane, "Shuffles");
+    add_select_setting(leftPane, "Golden Bugs");
+    add_select_setting(leftPane, "Sky Characters");
+    add_select_setting(leftPane, "Gifts From NPCs");
+    add_select_setting(leftPane, "Shop Items");
+    add_select_setting(leftPane, "Hidden Skills");
+    add_select_setting(leftPane, "Hidden Rupees");
+    add_select_setting(leftPane, "Freestanding Rupees");
+    add_select_setting(leftPane, "Poe Souls");
+    add_select_setting(leftPane, "Ilia Memory Quest");
+    add_select_setting(leftPane, "Item Scarcity");
+    add_select_setting(leftPane, "Trap Item Frequency");
 
     add_section(leftPane, "Dungeon Items");
+    add_select_setting(leftPane, "Small Keys");
+    add_select_setting(leftPane, "Big Keys");
+    add_select_setting(leftPane, "Maps and Compasses");
+    add_select_setting(leftPane, "Hyrule Castle Big Key Requirements");
+    add_select_setting(leftPane, "Dungeon Rewards Can Be Anywhere");
+    add_select_setting(leftPane, "No Small Keys on Bosses");
+    add_select_setting(leftPane, "Unrequired Dungeons Are Barren");
 
     add_section(leftPane, "Timesavers");
+    add_select_setting(leftPane, "Skip Prologue");
+    add_select_setting(leftPane, "Faron Twilight Cleared");
+    add_select_setting(leftPane, "Eldin Twilight Cleared");
+    add_select_setting(leftPane, "Lanayru Twilight Cleared");
+    add_select_setting(leftPane, "Skip Midna's Desparate Hour");
+    add_select_setting(leftPane, "Skip Minor Cutscenes");
+    add_select_setting(leftPane, "Skip Major Cutscenes");
+    add_select_setting(leftPane, "Unlock Map Regions");
+    add_select_setting(leftPane, "Open Door of Time");
+    add_select_setting(leftPane, "Active Goron Mines Magnets");
+    add_select_setting(leftPane, "Lower Hyrule Castle Chandelier");
+    add_select_setting(leftPane, "Skip Bridge Donation");
 
     add_section(leftPane, "Additional Settings");
+    add_select_setting(leftPane, "Starting Time of Day");
+    add_select_setting(leftPane, "Logic Transform Anywhere");
+    add_select_setting(leftPane, "Logic Increase Wallet Capacity");
+    add_select_setting(leftPane, "Logic Damage Multiplier");
 
     add_section(leftPane, "Dungeon Entrance Settings");
+    add_select_setting(leftPane, "Lakebed Does Not Require Water Bombs");
+    add_select_setting(leftPane, "Arbiters Does Not Require Bulblin Camp");
+    add_select_setting(leftPane, "Snowpeak Does Not Require Reekfish Scent");
+    add_select_setting(leftPane, "Sacred Grove Does Not Require Skull Kid");
+    add_select_setting(leftPane, "City Does Not Require Filled Skybook");
+    add_select_setting(leftPane, "Goron Mines Entrance");
+    add_select_setting(leftPane, "Temple of Time Sword Requirement");
 
     add_section(leftPane, "Tricks");
+    add_select_setting(leftPane, "Back Slice as Sword");
+    add_select_setting(leftPane, "Ball and Chain Webs");
 
     return MOD_OK;
 }
@@ -239,6 +312,27 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
 ModResult buildHintsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
+    add_section(leftPane, "Path Hints");
+    add_select_number_setting(leftPane, "Number of Path Hints");
+    add_select_setting(leftPane, "Path Hints on Midna");
+    add_select_setting(leftPane, "Path Hints on Hint Signs");
+
+    add_section(leftPane, "Barren Hints");
+    add_select_number_setting(leftPane, "Number of Barren Hints");
+    add_select_setting(leftPane, "Barren Hints on Midna");
+    add_select_setting(leftPane, "Barren Hints on Hint Signs");
+
+    add_section(leftPane, "Item Hints");
+    add_select_number_setting(leftPane, "Number of Item Hints");
+    add_select_setting(leftPane, "Item Hints on Midna");
+    add_select_setting(leftPane, "Item Hints on Hint Signs");
+
+    add_section(leftPane, "Location Hints");
+    add_select_number_setting(leftPane, "Number of Location Hints");
+    add_select_setting(leftPane, "Location Hints on Midna");
+    add_select_setting(leftPane, "Location Hints on Hint Signs");
+    add_select_setting(leftPane, "Prioritize Remote Location Hints");
+
     return MOD_OK;
 }
 
