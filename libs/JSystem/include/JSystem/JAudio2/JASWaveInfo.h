@@ -5,7 +5,7 @@
 #include <memory>
 
 #if TARGET_PC
-struct JASSampleDataReference;
+#include "JSystem/JAudio2/JASSampleDataReference.h"
 #endif
 
 struct JASWaveArc;

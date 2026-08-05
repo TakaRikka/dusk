@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
 #include "JSystem/JAudio2/JASChannel.h"
 #include "JSystem/JAudio2/JASWaveInfo.h"
 #include "absl/container/flat_hash_map.h"
