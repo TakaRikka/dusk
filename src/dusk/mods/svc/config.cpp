@@ -3,7 +3,7 @@
 #include "registry.hpp"
 #include "slot_map.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/config.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/config.h"
@@ -21,7 +21,7 @@
 namespace dusk::mods::svc {
 namespace {
 
-aurora::Module Log("dusk::mods::config");
+constexpr borealis::Log Log{"dusk::mods::config"};
 
 enum class ConfigSlotKind : uint8_t {
     Var,

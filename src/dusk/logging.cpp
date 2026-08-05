@@ -1,35 +1,15 @@
 #include "dusk/logging.h"
-#include <algorithm>
-#include <array>
-#include <atomic>
-#include <chrono>
-#include <cctype>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <filesystem>
-#include <mutex>
-#include <string>
-#include <vector>
 
-#include "dusk/io.hpp"
+#include <string_view>
+
 #include "tracy/Tracy.hpp"
-
-#if TARGET_ANDROID
-#include "android/log.h"
-#include <vector>
-#include <sstream>
-#endif
 
 bool StubLogEnabled = true;
 
 using namespace std::literals::string_view_literals;
 
-// MSVC is broken and seemingly miscompiles std::string_view::npos without this.
-// I wish I was joking.
-constexpr size_t npos = std::string_view::npos;
-
-static constexpr std::string_view StubFragments[] = {
+namespace {
+constexpr std::string_view kStubFragments[] = {
     "is a stub"sv,
     "Unimplemented: BP register"sv,
     "Unhandled BP register"sv,
@@ -37,354 +17,33 @@ static constexpr std::string_view StubFragments[] = {
     "but selective updates are not implemented"sv,
 };
 
-#if _WIN32
-#define DUSK_FILENO _fileno
-#else
-#define DUSK_FILENO fileno
-#endif
-
-namespace {
-// On macOS, std::mutex becomes poisoned when its dtor is run.
-// We use this to check if the LogState is destroyed before attempting to acquire it.
-std::atomic g_logStateAlive(true);
-std::atomic<int> g_logFd(-1);
-constexpr size_t MaxRetainedLogCount = 10;
-constexpr size_t MaxRetainedOldLogCount = MaxRetainedLogCount - 1;
-constexpr uintmax_t MaxRetainedOldLogBytes = 100ull * 1024ull * 1024ull;
-
-struct LogState {
-    std::mutex mutex;
-    FILE* file = nullptr;
-    std::u8string filePath;
-
-    ~LogState() {
-        CloseFile();
-        g_logStateAlive.store(false, std::memory_order_release);
-    }
-
-    void CloseFile() {
-        if (!g_logStateAlive.load(std::memory_order_acquire)) {
-            return;
-        }
-        std::lock_guard lock(mutex);
-        if (file != nullptr) {
-            g_logFd.store(-1, std::memory_order_release);
-            std::fflush(file);
-            std::fclose(file);
-            file = nullptr;
-        }
-    }
-};
-LogState g_logState;
-
-const char* LogLevelString(AuroraLogLevel level) {
-    switch (level) {
-    case LOG_DEBUG:
-        return "DEBUG";
-    case LOG_INFO:
-        return "INFO";
-    case LOG_WARNING:
-        return "WARNING";
-    case LOG_ERROR:
-        return "ERROR";
-    case LOG_FATAL:
-        return "FATAL";
-    }
-
-    return "??";
-}
-
-FILE* LogStreamForLevel(AuroraLogLevel level) {
-    return level >= LOG_ERROR ? stderr : stdout;
-}
-
-struct LogFileCandidate {
-    std::filesystem::path path;
-    std::string filename;
-    uintmax_t size;
-};
-
-void warn_log_cleanup_failure(
-    const char* action, const std::filesystem::path& path, const std::error_code& ec) {
-    std::fprintf(stderr, "[WARNING | dusk] Failed to %s '%s': %s\n", action,
-        dusk::io::fs_path_to_string(path).c_str(), ec.message().c_str());
-}
-
-bool is_digit_at(const std::string_view value, size_t index) {
-    return std::isdigit(static_cast<unsigned char>(value[index])) != 0;
-}
-
-bool is_generated_log_file_name(const std::filesystem::path& path) {
-    const std::string filename = path.filename().string();
-    constexpr std::string_view currentPrefix = "dusklight-"sv;
-    constexpr std::string_view legacyPrefix = "dusk-"sv;
-    constexpr std::string_view suffix = ".log"sv;
-    size_t timestampOffset = 0;
-
-    if (filename.starts_with(currentPrefix)) {
-        timestampOffset = currentPrefix.size();
-    } else if (filename.starts_with(legacyPrefix)) {
-        timestampOffset = legacyPrefix.size();
-    } else {
-        return false;
-    }
-
-    if (filename.size() != timestampOffset + 19 || !filename.ends_with(suffix) ||
-        filename[timestampOffset + 8] != '-') {
-        return false;
-    }
-
-    for (size_t i = timestampOffset; i < timestampOffset + 8; ++i) {
-        if (!is_digit_at(filename, i)) {
-            return false;
-        }
-    }
-    for (size_t i = timestampOffset + 9; i < timestampOffset + 15; ++i) {
-        if (!is_digit_at(filename, i)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void delete_log_file(const std::filesystem::path& path) {
-    std::error_code ec;
-    std::filesystem::remove(path, ec);
-    if (ec) {
-        warn_log_cleanup_failure("remove old log file", path, ec);
-    }
-}
-
-void prune_old_log_files(const std::filesystem::path& logsDir) {
-    std::error_code ec;
-    std::filesystem::directory_iterator entries{logsDir, ec};
-    if (ec) {
-        warn_log_cleanup_failure("inspect log directory", logsDir, ec);
-        return;
-    }
-
-    std::vector<LogFileCandidate> candidates;
-    for (const auto& entry : entries) {
-        const std::filesystem::path path = entry.path();
-        if (!is_generated_log_file_name(path)) {
-            continue;
-        }
-
-        ec.clear();
-        const auto status = entry.symlink_status(ec);
-        if (ec) {
-            warn_log_cleanup_failure("inspect log file", path, ec);
-            continue;
-        }
-        if (!std::filesystem::is_regular_file(status)) {
-            continue;
-        }
-
-        ec.clear();
-        const uintmax_t size = entry.file_size(ec);
-        if (ec) {
-            warn_log_cleanup_failure("inspect size of log file", path, ec);
-            continue;
-        }
-
-        candidates.push_back({path, path.filename().string(), size});
-    }
-
-    std::sort(candidates.begin(), candidates.end(),
-        [](const LogFileCandidate& a, const LogFileCandidate& b) {
-            return a.filename > b.filename;
-        });
-
-    const size_t retainedCount = std::min(candidates.size(), MaxRetainedOldLogCount);
-    uintmax_t retainedBytes = 0;
-    for (size_t i = 0; i < retainedCount; ++i) {
-        retainedBytes += candidates[i].size;
-    }
-
-    size_t retainedAfterSizeLimit = retainedCount;
-    while (retainedAfterSizeLimit > 0 && retainedBytes > MaxRetainedOldLogBytes) {
-        --retainedAfterSizeLimit;
-        retainedBytes -= candidates[retainedAfterSizeLimit].size;
-    }
-
-    for (size_t i = retainedAfterSizeLimit; i < candidates.size(); ++i) {
-        delete_log_file(candidates[i].path);
-    }
-}
-
-std::string MakeTimestampedLogName() {
-    const auto now = std::chrono::system_clock::now();
-    const std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
-
-    std::tm localTime{};
-#if _WIN32
-    localtime_s(&localTime, &nowTime);
-#else
-    localtime_r(&nowTime, &localTime);
-#endif
-
-    std::array<char, 32> buffer{};
-    std::strftime(buffer.data(), buffer.size(), "dusklight-%Y%m%d-%H%M%S.log", &localTime);
-    return buffer.data();
-}
-
-void WriteLogLine(FILE* out, const char* levelStr, const char* module, const char* message, unsigned int len) {
-    if (out == nullptr) {
-        return;
-    }
-
-    std::fprintf(out, "[%s | %s] ", levelStr, module);
-    std::fwrite(message, 1, len, out);
-    std::fputc('\n', out);
-    std::fflush(out);
-}
-
-void WriteLogLineToFile(
-    const char* levelStr, const char* module, const char* message, unsigned int len) {
-    if (g_logStateAlive.load(std::memory_order_acquire)) {
-        std::lock_guard lock(g_logState.mutex);
-        if (g_logState.file != nullptr) {
-            WriteLogLine(g_logState.file, levelStr, module, message, len);
-        }
-    }
-}
-}  // namespace
-
-static bool IsForStubLog(const char* message) {
-    std::string_view msg_view(message);
-
-    for (auto& fragment : StubFragments) {
-        if (msg_view.find(fragment) != ""sv.npos) {
+bool is_for_stub_log(const std::string_view message) {
+    for (const auto& fragment : kStubFragments) {
+        if (message.find(fragment) != std::string_view::npos) {
             return true;
         }
     }
-
     return false;
 }
 
-#if TARGET_ANDROID
-void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
-                         unsigned int len) {
+bool divert_stub_messages(const borealis::log::Message& message) {
     ZoneScoped;
-    if (StubLogEnabled && level != LOG_FATAL && IsForStubLog(message)) {
-        dusk::SendToStubLog(level, module, message);
-        return;
+    if (!StubLogEnabled || !is_for_stub_log(message.text)) {
+        return false;
     }
-
-    if (module == nullptr) {
-        module = "";
-    }
-
-    const char* levelStr = LogLevelString(level);
-    int android_log_level = 0;
-    switch (level) {
-    case LOG_DEBUG:
-        android_log_level = ANDROID_LOG_DEBUG;
-        break;
-    case LOG_INFO:
-        android_log_level = ANDROID_LOG_INFO;
-        break;
-    case LOG_WARNING:
-        android_log_level = ANDROID_LOG_WARN;
-        break;
-    case LOG_ERROR:
-        android_log_level = ANDROID_LOG_ERROR;
-        break;
-    case LOG_FATAL:
-        android_log_level = ANDROID_LOG_FATAL;
-        break;
-    }
-
-    std::stringstream msgStream(std::string(message, len));
-    std::string segment;
-    while(std::getline(msgStream, segment)) {
-        __android_log_print(android_log_level, module, "%s\n", segment.c_str());
-    }
-
-    WriteLogLineToFile(levelStr, module, message, len);
-
-    if (level == LOG_FATAL) {
-        abort();
-    }
+    dusk::SendToStubLog(message.level, message.module, message.text);
+    return true;
 }
-#else
-void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message,
-                         unsigned int len) {
-    ZoneScoped;
-    if (StubLogEnabled && level != LOG_FATAL && IsForStubLog(message)) {
-        dusk::SendToStubLog(level, module, message);
-        return;
-    }
+}  // namespace
 
-    if (module == nullptr) {
-        module = "";
-    }
-
-    const char* levelStr = LogLevelString(level);
-    FILE* out = LogStreamForLevel(level);
-    WriteLogLine(out, levelStr, module, message, len);
-    WriteLogLineToFile(levelStr, module, message, len);
-
-    if (level == LOG_FATAL) {
-        abort();
-    }
-}
-#endif
-
-
-aurora::Module DuskLog("dusk");
-
-void dusk::InitializeFileLogging(const std::filesystem::path& configDir, AuroraLogLevel logLevel) {
-    if (!g_logStateAlive.load(std::memory_order_acquire)) {
-        return;
-    }
-    std::lock_guard lock(g_logState.mutex);
-    if (g_logState.file != nullptr || configDir.empty()) {
-        return;
-    }
-
-    std::error_code ec;
-    const std::filesystem::path logsDir = configDir / "logs";
-    std::filesystem::create_directories(logsDir, ec);
-    if (ec) {
-        std::fprintf(stderr, "[WARNING | dusk] Failed to create log directory '%s': %s\n",
-            io::fs_path_to_string(logsDir).c_str(), ec.message().c_str());
-        return;
-    }
-    prune_old_log_files(logsDir);
-
-    const std::filesystem::path logPath = logsDir / MakeTimestampedLogName();
-    g_logState.file = io::FileStream::Create(logPath).ToInner();
-    if (g_logState.file == nullptr) {
-        std::fprintf(stderr, "[WARNING | dusk] Failed to open log file '%s'\n",
-            io::fs_path_to_string(logPath).c_str());
-        return;
-    }
-
-    g_logState.filePath = logPath.u8string();
-    g_logFd.store(DUSK_FILENO(g_logState.file), std::memory_order_release);
-    aurora::g_config.logCallback = &aurora_log_callback;
-    aurora::g_config.logLevel = logLevel;
-    WriteLogLine(g_logState.file, "INFO", "dusk", "File logging initialized", 24);
-}
-
-void dusk::ShutdownFileLogging() {
-    if (!g_logStateAlive.load(std::memory_order_acquire)) {
-        return;
-    }
-    g_logState.CloseFile();
-}
-
-const char* dusk::GetLogFilePath() {
-    if (!g_logStateAlive.load(std::memory_order_acquire)) {
-        return nullptr;
-    }
-    std::lock_guard lock(g_logState.mutex);
-    return reinterpret_cast<const char*>(
-        g_logState.filePath.empty() ? nullptr : g_logState.filePath.c_str());
-}
-
-int dusk::GetLogFileDescriptor() {
-    return g_logFd.load(std::memory_order_acquire);
+void dusk::InitializeLogging(
+    const std::filesystem::path& cacheDir, const borealis::cli::StandardOptions& standard) {
+    borealis::log::Options options{};
+    options.level = borealis::LogLevel::Debug;
+    options.fileDirectory = cacheDir.empty() ? std::filesystem::path{} : cacheDir / "logs";
+    options.filePrefix = "dusklight";
+    options.legacyFilePrefixes = {"dusk"};
+    options.divert = &divert_stub_messages;
+    standard.apply_to(options);
+    borealis::log::init(options);
 }

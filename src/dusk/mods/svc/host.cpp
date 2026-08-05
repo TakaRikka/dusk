@@ -7,7 +7,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <version.h>
+#include <borealis/version.h>
 
 namespace dusk::mods::svc {
 namespace {
@@ -135,7 +135,7 @@ void host_mod_detached(LoadedMod& mod) {
 
 constinit HostService s_hostService{
     .header = SERVICE_HEADER(HostService, HOST_SERVICE_MAJOR, HOST_SERVICE_MINOR),
-    .version = DUSK_VERSION_STRING,
+    .version = BOREALIS_APP_VERSION,
     .build_id = nullptr,
     .build_id_len = 0,
     .get_service = host_get_service,

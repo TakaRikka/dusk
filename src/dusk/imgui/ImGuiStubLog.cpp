@@ -11,24 +11,8 @@ namespace dusk {
     static bool StubLogPaused;
     static std::mutex StubLogMutex;
 
-    const char* LogLevelName(const AuroraLogLevel level) {
-        switch (level) {
-        case LOG_DEBUG:
-            return "DEBUG";
-        case LOG_INFO:
-            return "INFO";
-        case LOG_WARNING:
-            return "WARNING";
-        case LOG_ERROR:
-            return "ERROR";
-        case LOG_FATAL:
-            return "FATAL";
-        default:
-            return "UNKNOWN";
-        }
-    }
-
-    void SendToStubLog(AuroraLogLevel level, const char* module, const char* message) {
+    void SendToStubLog(
+        borealis::LogLevel level, std::string_view module, std::string_view message) {
         if (StubLogPaused) {
             return;
         }
@@ -41,8 +25,10 @@ namespace dusk {
         }
 
         LineOffsets.push_back(StubLogBuffer.size());
-        const auto levelName = LogLevelName(level);
-        StubLogBuffer.appendf("[%s | %s] %s\n", levelName, module, message);
+        const auto levelName = borealis::to_string(level);
+        StubLogBuffer.appendf("[%.*s | %.*s] %.*s\n", static_cast<int>(levelName.size()),
+            levelName.data(), static_cast<int>(module.size()), module.data(),
+            static_cast<int>(message.size()), message.data());
     }
 
     void ImGuiMenuTools::ShowStubLog() {

@@ -2,7 +2,7 @@
 #include "slot_map.hpp"
 #include "window.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/gfx.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/gfx.h"
@@ -25,7 +25,7 @@
 namespace dusk::mods {
 namespace {
 
-aurora::Module Log("dusk::mods::gfx");
+constexpr borealis::Log Log{"dusk::mods::gfx"};
 
 enum class GfxSlotKind : uint8_t {
     DrawType,

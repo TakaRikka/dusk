@@ -23,5 +23,5 @@ cp -r platforms/freedesktop/{16x16,32x32,48x48,64x64,128x128,256x256,512x512,102
 cp platforms/freedesktop/dev.twilitrealm.dusk.desktop build/appdir/usr/share/applications
 
 cd build/install
-VERSION="$DUSK_VERSION" NO_STRIP=1 "$linuxdeploy" \
+VERSION="$APP_VERSION" NO_STRIP=1 "$linuxdeploy" \
   -l "$lib_dir/libusb-1.0.so" --appdir "$build_dir/appdir" --output appimage
