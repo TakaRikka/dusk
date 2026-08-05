@@ -699,10 +699,6 @@ if (plr) {
 }
 ```
 
-`get_camera` returns `MOD_UNAVAILABLE` while the view is not a valid perspective camera, such as before the
-first in-game frame. Projection matrices match the renderer's WebGPU clip convention and renderer depth convention
-(reversed-Z by default).
-
 ---
 
 ## Hooking Game Functions
