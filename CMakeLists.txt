@@ -33,6 +33,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 # Folder-based instead of target-based organization
 # in Visual Studio and Xcode generators
