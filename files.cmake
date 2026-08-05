@@ -1498,6 +1498,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/gfx.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/id_allocator.cpp
+        src/dusk/mods/svc/id_allocator.hpp
         src/dusk/mods/svc/log.cpp
         src/dusk/mods/svc/overlay.cpp
         src/dusk/mods/svc/registry.cpp

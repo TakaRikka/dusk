@@ -52,6 +52,14 @@ typedef struct AudioResService {
         AudioWaveInfo const* wave_info,
         AudioWaveHandle* out_handle);
 
+    ModResult (*add_wave)(
+        ModContext* ctx,
+        AudioWaveBank bank,
+        char const* file_name,
+        AudioWaveInfo const* wave_info,
+        AudioWaveHandle* out_handle,
+        uint16_t* out_wave_id);
+
     ModResult (*remove_wave)(ModContext* ctx, AudioWaveHandle handle);
 } AudioResService;
 

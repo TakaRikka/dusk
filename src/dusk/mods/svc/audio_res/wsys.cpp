@@ -1,10 +1,9 @@
 #include "wsys.hpp"
-#include "../registry.hpp"
 #include "../slot_map.hpp"
+#include "../id_allocator.hpp"
 #include "aurora/lib/logging.hpp"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/mods/loader/loader.hpp"
-#include "helpers/alignment.hpp"
 #include "helpers/cast.hpp"
 
 namespace dusk::mods::svc::audio_res::wsys {
@@ -26,6 +25,12 @@ constexpr ContainerLoadFunction s_containerLoadFunctions[] = {
 #endif
 };
 
+PlainIdAllocator<u16> sound_effect_id_allocator(5'000);
+PlainIdAllocator<u16> music_sample_id_allocator(1'000);
+
+PlainIdAllocator<u16>& id_allocator_for_bank(AudioWaveBank const bank) {
+    return bank == SoundEffects ? sound_effect_id_allocator : music_sample_id_allocator;
+}
 
 bool validate_raw_size(LoadedMod const& mod, std::string const& path, uintptr_t actual_size, AudioRawWave const& raw, u32& sample_count) {
     u32 samples_per_block;
@@ -122,32 +127,25 @@ JASWaveInfo wave_info_from_slot(RuntimeWaveReplacementSlot const& slot) {
 }
 
 bool wave_remove(LoadedMod const& mod, AudioWaveHandle const handle) {
-    auto const result = s_waveReplacements.erase_owned(handle, mod);
-    wave_replacements_dirty |= result;
-    return result;
-}
-
-}
-
-absl::flat_hash_map<AudioWaveKey, AudioWaveReplacementValue> s_replacements;
-std::mutex s_replacements_mutex;
-
-ModResult remove_wave(ModContext* ctx, AudioWaveHandle handle) {
-    auto* mod = mod_from_context(ctx);
-    if (mod == nullptr || handle == 0) {
-        return MOD_INVALID_ARGUMENT;
+    auto const found = s_waveReplacements.find_owned(handle, mod);
+    if (found == nullptr) {
+        return false;
     }
-    if (!wave_remove(*mod, handle)) {
-        Log.error("[{}] remove wave failed: unknown handle {}", mod->metadata.id, handle);
-        return MOD_INVALID_ARGUMENT;
+
+    if (found->value.mod_defined) {
+        auto& allocator = id_allocator_for_bank(found->value.bank);
+        allocator.free(found->value.wave_id);
     }
-    return MOD_OK;
+
+    s_waveReplacements.erase_owned(handle, mod);
+    return true;
 }
 
-ModResult insert_replace_wave(
+ModResult insert_replace_wave_core(
     ModContext* ctx,
     AudioWaveBank bank,
     u16 wave_id,
+    bool mod_defined,
     char const* file_name,
     AudioWaveInfo const* wave_info,
     AudioWaveHandle* out_handle) {
@@ -164,6 +162,7 @@ ModResult insert_replace_wave(
     slot.bundle_path = file_name;
     slot.bank = bank;
     slot.wave_id = wave_id;
+    slot.mod_defined = mod_defined;
 
     ModResult result;
     if (wave_info && wave_info->raw_wave) {
@@ -195,6 +194,65 @@ ModResult insert_replace_wave(
     }
 
     return MOD_OK;
+}
+
+
+}
+
+absl::flat_hash_map<AudioWaveKey, AudioWaveReplacementValue> s_replacements;
+std::mutex s_replacements_mutex;
+
+ModResult remove_wave(ModContext* ctx, AudioWaveHandle handle) {
+    auto* mod = mod_from_context(ctx);
+    if (mod == nullptr || handle == 0) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    if (!wave_remove(*mod, handle)) {
+        Log.error("[{}] remove wave failed: unknown handle {}", mod->metadata.id, handle);
+        return MOD_INVALID_ARGUMENT;
+    }
+    return MOD_OK;
+}
+
+ModResult insert_replace_wave(
+    ModContext* ctx,
+    AudioWaveBank bank,
+    u16 wave_id,
+    char const* file_name,
+    AudioWaveInfo const* wave_info,
+    AudioWaveHandle* out_handle) {
+
+    return insert_replace_wave_core(ctx, bank, wave_id, false, file_name, wave_info, out_handle);
+}
+
+ModResult insert_add_wave(
+    ModContext* ctx,
+    AudioWaveBank bank,
+    char const* file_name,
+    AudioWaveInfo const* wave_info,
+    AudioWaveHandle* out_handle,
+    u16* out_wave_id) {
+
+    if (out_wave_id == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    *out_wave_id = 0;
+
+    if (bank != SoundEffects && bank != MusicSamples) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    auto& allocator = id_allocator_for_bank(bank);
+    auto const new_wave_id = allocator.alloc();
+
+    auto const result = insert_replace_wave_core(ctx, bank, new_wave_id, true, file_name, wave_info, out_handle);
+    if (result != MOD_OK) {
+        allocator.free(new_wave_id);
+    }
+
+    *out_wave_id = new_wave_id;
+    return result;
 }
 
 void remove_mod(LoadedMod& mod) {

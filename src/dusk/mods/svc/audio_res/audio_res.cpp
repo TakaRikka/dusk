@@ -16,6 +16,7 @@ using namespace dusk::helpers::cast;
 constexpr AudioResService s_audioResService{
     .header = SERVICE_HEADER(AudioResService, AUDIO_RES_SERVICE_MAJOR, AUDIO_RES_SERVICE_MINOR),
     .replace_wave = &wsys::insert_replace_wave,
+    .add_wave = &wsys::insert_add_wave,
     .remove_wave = &wsys::remove_wave,
 };
 

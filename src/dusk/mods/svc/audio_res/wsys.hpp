@@ -82,6 +82,7 @@ extern std::mutex s_replacements_mutex;
 struct RuntimeWaveReplacementSlot {
     std::string bundle_path;
     AudioWaveBank bank;
+    bool mod_defined;
     u16 wave_id;
 
     u8 base_key;
@@ -114,6 +115,14 @@ ModResult insert_replace_wave(
     char const* file_name,
     AudioWaveInfo const* wave_info,
     AudioWaveHandle* out_handle);
+
+ModResult insert_add_wave(
+    ModContext* ctx,
+    AudioWaveBank bank,
+    char const* file_name,
+    AudioWaveInfo const* wave_info,
+    AudioWaveHandle* out_handle,
+    u16* out_wave_id);
 
 ModResult remove_wave(ModContext* ctx, AudioWaveHandle handle);
 
