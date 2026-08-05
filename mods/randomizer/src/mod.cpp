@@ -2,6 +2,7 @@
 #include "mods/svc/log.h"
 
 #include "session.hpp"
+#include "ui/ui.hpp"
 
 DEFINE_MOD();
 IMPORT_SERVICE(HostService, svc_host);
@@ -31,11 +32,17 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         return mods::set_error(error, result, "failed to initialize session");
     }
 
+    result = randomizer::ui::initialize();
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize ui");
+    }
+
     svc_log->info(mod_ctx, "randomizer initialized");
     return MOD_OK;
 }
 
 MOD_EXPORT ModResult mod_update(ModError*) {
+    randomizer::ui::update();
     return MOD_OK;
 }
 

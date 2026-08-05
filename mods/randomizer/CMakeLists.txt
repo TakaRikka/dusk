@@ -87,6 +87,8 @@ set(RANDOMIZER_SOURCES
         src/session.cpp
         src/ui/config_store.cpp
         src/ui/rando_seed_generation.cpp
+        src/ui/rando_config.cpp
+        src/ui/ui.cpp
 )
 
 # Embed the generator's YAML data into the mod library. Paths are relative to this
