@@ -1503,6 +1503,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/ui.hpp
         src/dusk/mods/svc/window.cpp
         src/dusk/mods/svc/window.hpp
+        src/dusk/mods/svc/save.cpp
+        src/dusk/mods/svc/save.hpp
         src/dusk/mouse.cpp
         src/dusk/scope_guard.hpp
         src/dusk/settings.cpp
@@ -1582,6 +1584,7 @@ set(DUSK_FILES
         src/dusk/update_check.cpp
         src/dusk/update_check.hpp
         src/dusk/version.cpp
+        src/dusk/utilities.cpp
         src/helpers/batch.cpp
         src/helpers/endian.cpp
         src/helpers/offset_ptr.cpp

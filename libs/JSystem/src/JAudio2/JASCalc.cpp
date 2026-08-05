@@ -11,6 +11,7 @@ void JASCalc::imixcopy(const s16* s1, const s16* s2, s16* dst, u32 n) {
     }
 }
 
+#if !TARGET_PC
 void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     JUT_ASSERT(226, (reinterpret_cast<uintptr_t>(src) & 0x03) == 0);
     JUT_ASSERT(227, (reinterpret_cast<uintptr_t>(dest) & 0x03) == 0);
@@ -33,11 +34,7 @@ void JASCalc::bcopyfast(const void* src, void* dest, u32 size) {
     }
 }
 
-#if TARGET_ANDROID
-void JASCalc::_bcopy(const void* src, void* dest, u32 size) {
-#else
 void JASCalc::bcopy(const void* src, void* dest, u32 size) {
-#endif
     u32* usrc;
     u32* udest;
 
@@ -94,11 +91,7 @@ void JASCalc::bzerofast(void* dest, u32 size) {
     }
 }
 
-#if TARGET_ANDROID
-void JASCalc::_bzero(void* dest, u32 size) {
-#else
 void JASCalc::bzero(void* dest, u32 size) {
-#endif
     u32* udest;
     u8* bdest = (u8*)dest;
     if ((size & 0x1f) == 0 && (reinterpret_cast<uintptr_t>(dest) & 0x1f) == 0) {
@@ -139,6 +132,7 @@ void JASCalc::bzero(void* dest, u32 size) {
         }
     }
 }
+#endif
 
 #if AVOID_UB
 DUSK_GAME_DATA s16 const JASCalc::CUTOFF_TO_IIR_TABLE[129][4] = {

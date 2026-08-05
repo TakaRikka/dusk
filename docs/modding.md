@@ -340,6 +340,39 @@ Change callbacks fire on the game thread whenever the value changes at runtime (
 Writes that store the same value are silent. Values applied from `config.json` or `--cvar` at registration do
 **not** fire callbacks; read the value after `register_var` for the starting state.
 
+### SaveService (`mods/svc/save.h`)
+
+Stores named binary blobs for each save slot. Blob names are scoped to the calling mod, and each mod may store up to
+`SAVE_BLOB_BUDGET_BYTES` per slot. The service copies data passed to `set_blob`.
+
+```cpp
+IMPORT_SERVICE(SaveService, svc_save);
+
+struct MySaveData {
+    uint32_t version;
+    uint32_t counter;
+};
+
+MySaveData state{1, 42};
+svc_save->set_blob(mod_ctx, "state", &state, sizeof(state));
+
+MySaveData loaded{};
+size_t loadedSize = sizeof(loaded);
+if (svc_save->get_blob(mod_ctx, "state", &loaded, &loadedSize) == MOD_OK &&
+    loadedSize == sizeof(loaded)) {
+    apply_state(loaded);
+}
+```
+
+`set_blob`, `get_blob`, and `delete_blob` operate on the current slot, which is available after creating or loading a
+save and unavailable at file select. Blob changes are written with the next game save. File-select copy and erase
+operations update the blob data as well. Use `peek_blob` to read the calling mod's data from any slot; it uses the same
+buffer contract as `get_blob`. Pass a `NULL` buffer to either read function to query the blob size.
+
+`observe_saves` registers callbacks for new, loaded, and written saves. New-save callbacks run after the slot's blobs
+are cleared. Observers are removed automatically when the mod is detached, so the output handle is only needed for
+manual unregistration. Save callbacks run on the game thread.
+
 ### UiService (`mods/svc/ui.h`)
 
 Integrate seamlessly with Dusklight's UI system: add controls and buttons to your mod's detail pane in the Mods window,
