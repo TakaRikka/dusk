@@ -6,6 +6,8 @@
 #include "mods/svc/hook.h"
 #include "mods/svc/ui.h"
 #include "mods/svc/resource.h"
+#include "mods/svc/save.h"
+#include "mods/svc/stage.h"
 
 namespace randomizer::session {
 struct ServiceManager {
@@ -16,6 +18,8 @@ struct ServiceManager {
     const UiService* ui;
     const ResourceService* resource;
     const ConfigService* config;
+    const SaveService* save;
+    const StageService* stage;
 };
 
 extern ServiceManager svc_mng;

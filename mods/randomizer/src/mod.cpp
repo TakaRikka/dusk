@@ -10,6 +10,8 @@ IMPORT_SERVICE(HookService, svc_hook);
 IMPORT_SERVICE(UiService, svc_ui);
 IMPORT_SERVICE(ResourceService, svc_res);
 IMPORT_SERVICE(ConfigService, svc_config);
+IMPORT_SERVICE(SaveService, svc_save);
+IMPORT_SERVICE(StageService, svc_stage);
 
 extern "C" {
 
@@ -21,7 +23,9 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         svc_hook,
         svc_ui,
         svc_res,
-        svc_config
+        svc_config,
+        svc_save,
+        svc_stage,
     });
     if (result != MOD_OK) {
         return mods::set_error(error, result, "failed to initialize session");
