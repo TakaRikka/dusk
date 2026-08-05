@@ -373,6 +373,55 @@ buffer contract as `get_blob`. Pass a `NULL` buffer to either read function to q
 are cleared. Observers are removed automatically when the mod is detached, so the output handle is only needed for
 manual unregistration. Save callbacks run on the game thread.
 
+### StageService (`mods/svc/stage.h`)
+
+Allows making changes to a stage's "stage info" (contents of .dzs/.dzr files).
+(Currently only supports editing actor nodes.)
+
+```cpp
+IMPORT_SERVICE(StageService, svc_stage);
+
+stage_actor_data_class record = {
+    "carry00",
+    0xFF000000,
+    cXyz(0.0f, 0.0f, 0.0f),
+    csXyz(0, 0, 0),
+    0,
+};
+
+StageActorHandle handle{};
+svc_stage->patch_actor(mod_ctx, "F_SP102", 0, -1, record_crc, &record, sizeof(record), &handle);
+```
+
+```
+StageActorHandle handle{};
+svc_stage->delete_actor(mod_ctx, "F_SP102", 0, -1, record_crc, &handle);
+```
+
+Patch or remove actors from the original actor list as the room loads.
+Given records must be of either `stage_actor_data_class` or `stage_tgsc_data_class` types.
+`record_crc` is the CRC-32 of the unmodified original record used to identify the record to replace or remove.
+
+```
+stage_actor_data_class record = {
+    "carry00",
+    0xFF000000,
+    cXyz(0.0f, 0.0f, 0.0f),
+    csXyz(0, 0, 0),
+    0,
+};
+
+StageActorHandle handle{};
+svc_stage->add_actor(mod_ctx, "F_SP102", 0, -1, &record, sizeof(record), &handle);
+```
+
+Add a new actor to the actor list as the room loads.
+Given records must be of either `stage_actor_data_class` or `stage_tgsc_data_class` types.
+
+Stage names may contain up to 8 characters. For patches and deletions, room `0xff` and layer `-1` match any room or
+layer; additions require a specific room. Edits are removed when the mod is detached. If multiple mods edit the same
+record, the later-loaded mod wins.
+
 ### UiService (`mods/svc/ui.h`)
 
 Integrate seamlessly with Dusklight's UI system: add controls and buttons to your mod's detail pane in the Mods window,

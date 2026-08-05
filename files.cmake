@@ -1505,6 +1505,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/window.hpp
         src/dusk/mods/svc/save.cpp
         src/dusk/mods/svc/save.hpp
+        src/dusk/mods/svc/stage.cpp
+        src/dusk/mods/svc/stage.hpp
         src/dusk/mouse.cpp
         src/dusk/scope_guard.hpp
         src/dusk/settings.cpp
