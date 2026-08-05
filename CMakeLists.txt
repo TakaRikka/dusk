@@ -150,6 +150,7 @@ if (DUSK_MOVIE_SUPPORT)
             -DENABLE_SHARED=OFF
             -DWITH_TURBOJPEG=ON
             -DWITH_JAVA=OFF
+            -DCMAKE_INSTALL_LIBDIR=lib
         )
         if (CMAKE_TOOLCHAIN_FILE)
             get_filename_component(_jpeg_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
