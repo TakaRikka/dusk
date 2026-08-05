@@ -12,8 +12,11 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     endif ()
 endif ()
 
+set(COSMETIC_SOURCES src/color_utils.cpp src/midna_hair_color.cpp src/texture_utils.cpp src/hooks.cpp)
+
 add_mod(basic_cosmetics_mod
-    SOURCES  src/mod.cpp
+    FEATURES game fmt
+    SOURCES  src/mod.cpp ${COSMETIC_SOURCES}
     MOD_JSON mod.json
     RES_DIR  res
 )
