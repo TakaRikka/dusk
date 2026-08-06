@@ -5,7 +5,7 @@
 #include "__os.h"
 #include "__dvd.h"
 
-static u8 CheckBuffer[32] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u8 CheckBuffer[32];
 
 static volatile BOOL lowDone = TRUE;
 static volatile u32 lowIntType = 0;

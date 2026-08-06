@@ -23,9 +23,9 @@ DUSK_GAME_DATA Vec J3DSys::mParentS;
 DUSK_GAME_DATA J3DTexCoordScaleInfo J3DSys::sTexCoordScaleTable[8];
 
 #if TARGET_PC // Original game bug, array is too small.
-static u8 NullTexData[0x20] ATTRIBUTE_ALIGN(32) = {0};
+ATTRIBUTE_ALIGN(32) static u8 NullTexData[0x20] = {0};
 #else
-static u8 NullTexData[0x10] ATTRIBUTE_ALIGN(32) = {0};
+ATTRIBUTE_ALIGN(32) static u8 NullTexData[0x10] = {0};
 #endif
 
 static Mtx j3dIdentityMtx = {

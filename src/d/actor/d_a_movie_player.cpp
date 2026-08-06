@@ -218,21 +218,21 @@ static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr) {
 }
 
 #if !TARGET_PC
-static u8 THPStatistics[1120] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u8 THPStatistics[1120];
 
-static THPHuffmanTab* Ydchuff ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPHuffmanTab* Ydchuff;
 
-static THPHuffmanTab* Udchuff ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPHuffmanTab* Udchuff;
 
-static THPHuffmanTab* Vdchuff ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPHuffmanTab* Vdchuff;
 
-static THPHuffmanTab* Yachuff ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPHuffmanTab* Yachuff;
 
-static THPHuffmanTab* Uachuff ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPHuffmanTab* Uachuff;
 
-static THPHuffmanTab* Vachuff ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPHuffmanTab* Vachuff;
 
-static f32 __THPIDCTWorkspace[64] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static f32 __THPIDCTWorkspace[64];
 
 static u8* __THPHuffmanBits;
 
@@ -240,11 +240,11 @@ static u8* __THPHuffmanSizeTab;
 
 static u16* __THPHuffmanCodeTab;
 
-static THPSample* Gbase ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static THPSample* Gbase;
 
-static u32 Gwid ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 Gwid;
 
-static f32* Gq ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static f32* Gq;
 
 static u8* __THPLCWork512[3];
 
@@ -3582,7 +3582,7 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
 
 static BOOL daMP_Initialized;
 
-static u32 daMP_WorkBuffer[16] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 daMP_WorkBuffer[16];
 
 static OSMessageQueue daMP_PrepareReadyQueue;
 
@@ -3604,7 +3604,7 @@ static void* daMP_CurAudioBuffer;
 
 static s32 daMP_AudioSystem;
 
-static u8 daMP_SoundBuffer[2][0x8C0] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u8 daMP_SoundBuffer[2][0x8C0];
 
 static s16* daMP_audioCallbackWithMSound(s32 sample) {
     if (daMP_ActivePlayer.open == 0 || daMP_ActivePlayer.internalState != 2 || daMP_ActivePlayer.audioExist == 0) {

@@ -58,7 +58,7 @@ namespace nw4hbm {
                 public:
                     /* 0x14 */ ut::LinkListNode mLinkNode;
 
-                    static u8 mMramBuf[LOAD_BUFFER_SIZE] ATTRIBUTE_ALIGN(32);
+                    ATTRIBUTE_ALIGN(32) static u8 mMramBuf[LOAD_BUFFER_SIZE];
                 };
                 typedef ut::LinkList<LoadCommand, offsetof(LoadCommand, mLinkNode)> LoadCommandList;
 

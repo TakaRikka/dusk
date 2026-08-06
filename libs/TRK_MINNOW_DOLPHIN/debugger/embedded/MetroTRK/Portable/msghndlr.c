@@ -85,7 +85,7 @@ DSError TRKDoSupportMask(TRKBuffer*) {
 }
 
 DSError TRKDoReadMemory(TRKBuffer* buffer) {
-    u8 buf[0x820] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 buf[0x820];
     size_t tempLength;
     int result;
     int replyErr;
@@ -158,7 +158,7 @@ DSError TRKDoReadMemory(TRKBuffer* buffer) {
 }
 
 DSError TRKDoWriteMemory(TRKBuffer* b) {
-    u8 buf[0x820] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 buf[0x820];
     size_t tempLength;
     int options;
     int result;
