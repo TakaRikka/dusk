@@ -254,14 +254,16 @@ Installs hooks on game functions and resolves symbols by name. You'll rarely cal
 ### OverlayService (`mods/svc/overlay.h`)
 
 Registers DVD file overlays at runtime: the dynamic counterpart to the static `overlay/` directory (see
-[Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, or with a caller-owned buffer
+[Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, a file within an archive,
+or with a caller-owned buffer
 (copied on registration):
 
 ```cpp
 IMPORT_SERVICE(OverlayService, svc_overlay);
 
 OverlayHandle handle = 0;
-svc_overlay->add_file(mod_ctx, "/res/Msgus.arc", "res/replacement.arc", &handle);
+svc_overlay->add_file(mod_ctx, "/Movie/demo_movie98_00.thp", "res/replacement.thp", &handle); // Replaces the demo movie
+svc_overlay->add_file(mod_ctx, "/res/Object/Kmdl.arc/archive/bmwr/al.bmd", "res/link_model.bmd", &handle); // Replaces link's model
 svc_overlay->add_buffer(mod_ctx, "/generated.txt", data, size, nullptr);
 svc_overlay->remove(mod_ctx, handle);
 ```
@@ -752,6 +754,12 @@ For reference parameters (e.g. `const cXyz& pos`), `arg_ref<cXyz>` yields a dire
 
 Files placed under `overlay/` in the `.dusk` archive override game files at the corresponding path, equivalent to
 replacing files in the .iso. This requires no code: an archive with just `mod.json` and `overlay/` is a complete mod.
+Additionally, replacing a `.arc` Archive file with a directory of the same name allows a user to overlay a specific
+file within an archive.
+
+- Example: A file in `overlay/Audiores/Stream/menu_select.ast` will overlay the audio stream for the main title.
+- Example: A file in `overlay/res/Layout/main2D.arc/main2d/timg/midona64.bti` will overlay the icon for midna in the
+game's ui
 
 Files placed under `textures/` register as texture replacements, and act just like the user's general
 `texture_replacements/` directory: Dolphin-style naming, matched by texture hash

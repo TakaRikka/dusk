@@ -147,6 +147,14 @@ cleanup:
 
 void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
     JUT_ASSERT(428, isMounted());
+    
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(fileEntry, returnSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+    
     u32 tempReturnSize;
     if (returnSize == NULL) {
         returnSize = &tempReturnSize;
@@ -181,6 +189,14 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
 void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry,
                                    u32* returnSize) {
     JUT_ASSERT(504, isMounted());
+
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(fileEntry, returnSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+
     u32 size = fileEntry->data_size;
     JKRCompression fileCompression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 24));
 

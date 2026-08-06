@@ -135,6 +135,14 @@ bool JKRMemArchive::open(void* buffer, u32 bufferSize, JKRMemBreakFlag flag) {
 
 void* JKRMemArchive::fetchResource(SDIFileEntry* fileEntry, u32* resourceSize) {
     JUT_ASSERT(555, isMounted());
+
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(fileEntry, resourceSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+
     if (!JKAR_DATA(fileEntry)) {
         JKAR_DATA(fileEntry) = mArchiveData + fileEntry->data_offset;
     }
@@ -149,6 +157,14 @@ void* JKRMemArchive::fetchResource(SDIFileEntry* fileEntry, u32* resourceSize) {
 void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry,
                                    u32* resourceSize) {
     JUT_ASSERT(595, isMounted());
+
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(fileEntry, resourceSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+
     u32 srcLength = fileEntry->data_size;
     if (srcLength > bufferSize) {
         srcLength = bufferSize;

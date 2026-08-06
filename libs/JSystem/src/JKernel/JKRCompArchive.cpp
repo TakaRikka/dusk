@@ -226,6 +226,14 @@ bool JKRCompArchive::open(s32 entryNum) {
 
 void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
     JUT_ASSERT(597, isMounted());
+    
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(fileEntry, pSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+
     u32 ptrSize;
     u32 size = fileEntry->data_size;
     int compression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 0x18));
@@ -274,6 +282,14 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
 {
     u32 size = 0;
     JUT_ASSERT(708, isMounted());
+
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(fileEntry, pSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+
     u32 fileSize = fileEntry->data_size;
     u32 alignedSize = ALIGN_NEXT(fileSize, 32);
     u32 fileFlag = fileEntry->type_flags_and_name_offset >> 0x18;

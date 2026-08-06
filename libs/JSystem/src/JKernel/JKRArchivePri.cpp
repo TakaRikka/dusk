@@ -270,4 +270,63 @@ void JKRArchive::initFileDataPointers() {
         mFiles[i].index = i;
     }
 }
+
+void JKRArchive::buildIdToPathMap(u32 dirIndex, const std::string& currentPath) {
+    const SDIDirEntry& dir = mNodes[dirIndex];
+    for (int i = 0; i < dir.num_entries; i++) {
+        const SDIFileEntry& entry = mFiles[dir.first_file_index + i];
+        std::string entryName = std::string(&mStringTable[entry.getNameOffset()]);
+        if (entryName == "." || entryName == "..") {
+            continue;
+        }
+        if (entry.isDirectory()) {
+            buildIdToPathMap(entry.data_offset, currentPath + entryName + "/");
+        }else {
+            mIdToPathMap[entry.file_id] = currentPath + entryName;
+        }
+    }
+}
+
+void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_size) {
+    if (!isOverlayed() || sGetArcOverlayBufferFn == nullptr) {
+        return nullptr;
+    }
+
+    if (mIdToPathMap.empty()) {
+        buildIdToPathMap(0, std::string(&mStringTable[mNodes[0].name_offset])+"/");
+    }
+    
+    // If this arc has already loaded this overlayed file, return the pointer to it here.
+    const auto& it = mFileIdToArcOverlayData.find(fileEntry->index);
+    if (it != mFileIdToArcOverlayData.end()) {
+        if (out_size) {
+            *out_size = it->second->size();
+        }
+        return (void*)it->second->data();
+    }
+
+    const auto& it2 = mIdToPathMap.find(fileEntry->file_id);
+    if (it2 == mIdToPathMap.end()) {
+        return nullptr;
+    }
+
+    std::shared_ptr<const std::vector<u8>> buffer_ptr = sGetArcOverlayBufferFn(mEntryNum, it2->second);
+    if (buffer_ptr == nullptr) {
+        return nullptr;
+    }
+
+    void* out_data = (void*)buffer_ptr->data();
+
+    if (out_size) {
+        *out_size = buffer_ptr->size();
+    }
+
+    mFileIdToArcOverlayData[fileEntry->file_id] = std::move(buffer_ptr);
+
+    return out_data;
+}
+
+bool(*JKRArchive::sArcHasOverlayFn)(s32 dvdEntryNum) = nullptr;
+std::shared_ptr<const std::vector<u8>>(*JKRArchive::sGetArcOverlayBufferFn)(s32, const std::string&) = nullptr;
+
 #endif

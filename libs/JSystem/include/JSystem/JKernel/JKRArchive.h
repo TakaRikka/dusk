@@ -6,11 +6,17 @@
 #include "global.h"
 #include "helpers/endian.h"
 
+#ifdef TARGET_PC
+#include <memory>
+#include <unordered_map>
+#include <vector>
+#endif
+
 class JKRHeap;
 
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 struct SArcHeader {
     /* 0x00 */ BE(u32) signature;
@@ -25,7 +31,7 @@ struct SArcHeader {
 
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 struct SArcDataInfo {
     /* 0x00 */ BE(u32) num_nodes;
@@ -59,7 +65,7 @@ extern u32 sCurrentDirID__10JKRArchive;  // JKRArchive::sCurrentDirID
 
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 class JKRArchive : public JKRFileLoader {
 public:
@@ -192,9 +198,7 @@ public:
     u32 countFile() const { return mArcInfoBlock->num_file_entries; }
     s32 countDirectory() const { return mArcInfoBlock->num_nodes; }
     u8 getMountMode() const { return mMountMode; }
-    bool isFileEntry(u32 param_0) const {
-        return getFileAttribute(param_0) & 1;
-    }
+    bool isFileEntry(u32 param_0) const { return getFileAttribute(param_0) & 1; }
 
 public:
     /* 0x00 */  // vtable
@@ -211,6 +215,48 @@ public:
 
 #if TARGET_PC
     void** mFileData;
+
+    // Returns true if the given dvdEntryNum has an archive overlay assigned to it
+    static bool (*sArcHasOverlayFn)(s32 dvdEntryNum);
+
+    // Given a DVD Entry and a path inside of the archive, return a shared pointer to the overlayed
+    // file data, if availible. Otherwise, return nullptr
+    static std::shared_ptr<const std::vector<u8>> (*sGetArcOverlayBufferFn)(
+        s32 dvdEntryNum, const std::string& pathInArc);
+
+    std::unordered_map<s32, std::shared_ptr<const std::vector<u8>>>
+        mFileIdToArcOverlayData;  // Owns the pointers for all overlayed data
+
+    // bool mIsOverlayed = false;
+    // bool mIsOverlayedSet = false; Checks if the DVD Entry Number
+    // assigned to the current archive has an overlay assigned
+    bool isOverlayed() {
+        // We have the option to cache the return value here, but won't
+        // get runtime changes for arhives that change if they are overlayed or not, so the value
+        // currently isn't cached here
+        // if (!mIsOverlayedSet) {
+        //     if (!sArcHasOverlayFn) {
+        //         return false;
+        //     }
+        //     mIsOverlayed = sArcHasOverlayFn(mEntryNum);
+        //     mIsOverlayedSet = true;
+        // }
+        // return mIsOverlayed;
+        if (!sArcHasOverlayFn) {
+            return false;
+        }
+        return sArcHasOverlayFn(mEntryNum);
+    }
+
+    std::unordered_map<s32, std::string> mIdToPathMap;
+    // Fill mIdToPathMap which maps every File ID in the arhive to a string that gives the full path
+    // inside of the archive
+    void buildIdToPathMap(u32 dirIndex, const std::string& currentPath);
+
+    // Given a pointer to a file entry, loads and returns a pointer to overlayed data, if it exists.
+    // Otherwise, returns NULL. The loaded archive data is stored as a shared_ptr within
+    // mFileIdToArcOverlayData.
+    void* getOverlayData(SDIFileEntry* entry, u32* out_size);
 #endif
 
 protected:
@@ -234,7 +280,7 @@ public:
         } else if (attr & JKRARCHIVE_ATTR_YAZ0) {
             return COMPRESSION_YAZ0;
         } else {
-           return COMPRESSION_YAY0;
+            return COMPRESSION_YAY0;
         }
     }
 
@@ -261,8 +307,8 @@ inline bool JKRRemoveResource(void* resource, JKRFileLoader* fileLoader) {
     return JKRFileLoader::removeResource(resource, fileLoader);
 }
 
-inline JKRArchive* JKRMountArchive(void* ptr, JKRHeap* heap,
-                                   JKRArchive::EMountDirection mountDirection) {
+inline JKRArchive* JKRMountArchive(
+    void* ptr, JKRHeap* heap, JKRArchive::EMountDirection mountDirection) {
     return JKRArchive::mount(ptr, heap, mountDirection);
 }
 

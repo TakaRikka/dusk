@@ -196,6 +196,14 @@ cleanup:
 
 void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
     JUT_ASSERT(442, isMounted());
+    
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(pEntry, pOutSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+    
     u32 outSize;
     u8* outBuf;
     if (pOutSize == NULL) {
@@ -231,6 +239,14 @@ void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
 void* JKRAramArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* pEntry,
                                     u32* resourceSize) {
     JUT_ASSERT(515, isMounted());
+
+#ifdef TARGET_PC
+    void* overlay_data = getOverlayData(pEntry, resourceSize);
+    if (overlay_data) {
+        return overlay_data;
+    }
+#endif
+
     u32 size = pEntry->data_size;
     if (size > bufferSize) {
         size = bufferSize;

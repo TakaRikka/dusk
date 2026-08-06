@@ -1,8 +1,8 @@
 #include "registry.hpp"
 #include "slot_map.hpp"
 
-#include "aurora/dvd.h"
 #include <borealis/log.hpp>
+#include "aurora/dvd.h"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/overlay.h"
 
@@ -24,7 +24,7 @@ constexpr borealis::Log Log{"dusk::mods::overlay"};
 struct OverlayFileData {
     std::string bundlePath;
     std::shared_ptr<ModBundle> bundle;
-    std::shared_ptr<const std::vector<u8> > buffer;
+    std::shared_ptr<const std::vector<u8>> buffer;
 };
 
 // Keyed by the id passed to Aurora as per-file userdata. Guarded by s_overlayMutex: Aurora may
@@ -34,6 +34,16 @@ struct OverlayFileData {
 std::unordered_map<uintptr_t, OverlayFileData> s_overlayFiles;
 uintptr_t s_nextOverlayId = 1;
 std::mutex s_overlayMutex;
+
+struct OverlayArcData {
+    std::string fullFilePath;
+    std::shared_ptr<ModBundle> bundle;  
+    std::shared_ptr<const std::vector<u8>> buffer; // Only used by runtime buffer overlays
+};
+struct OverlayedArc {
+    std::unordered_map<std::string, OverlayArcData> pathInArcToData;
+};
+std::unordered_map<s32, OverlayedArc> s_arcOverlays;
 
 struct RuntimeOverlaySlot {
     std::string discPath;
@@ -64,6 +74,30 @@ void claim_overlay_path(std::unordered_map<std::string, const LoadedMod*>& claim
     }
 }
 
+void claim_arc_overlay_path(LoadedMod& mod, const std::string& filePath, const std::string& dvdPath,
+    const std::string& pathInArc, std::shared_ptr<const std::vector<u8>> buffer = nullptr) {
+
+    s32 entryNum = DVDConvertPathToEntrynum(dvdPath.c_str());
+    if (entryNum == -1) {
+        // The arc we're attempting to overlay doesn't exist on the DVD, ignore the file instead.
+        return;
+    }
+    // Log.info("{}", entryNum);
+    auto it = s_arcOverlays.find(entryNum);
+    if (it == s_arcOverlays.end()) {
+        s_arcOverlays[entryNum] = {};
+        it = s_arcOverlays.find(entryNum);
+    }
+
+    OverlayedArc& arc = it->second;
+
+    arc.pathInArcToData[pathInArc] = OverlayArcData{
+        .fullFilePath = filePath,
+        .bundle = mod.bundle,
+        .buffer = buffer
+    };
+}
+
 void find_overlay_files(std::vector<AuroraOverlayFile>& files, LoadedMod& mod,
     std::unordered_map<std::string, const LoadedMod*>& claims) {
     for (const auto& file : mod.bundle->getFileNames()) {
@@ -75,6 +109,15 @@ void find_overlay_files(std::vector<AuroraOverlayFile>& files, LoadedMod& mod,
         assert(!overlayPath.starts_with('/'));
         overlayPath.insert(0, "/");
 
+        size_t pos = overlayPath.find(".arc/");
+        if (pos != std::string::npos) {
+            // All arc overlays that are directories
+            claim_arc_overlay_path(
+                mod, file, overlayPath.substr(0, pos + 4), overlayPath.substr(pos + 5));
+            continue;
+        }
+
+        // Register the overlay as a file
         const auto size = mod.bundle->getFileSize(file);
 
         const auto id = s_nextOverlayId++;
@@ -98,6 +141,14 @@ void append_runtime_overlays(std::vector<AuroraOverlayFile>& files, LoadedMod& m
 
     for (const auto* slot : slots) {
         const auto id = s_nextOverlayId++;
+
+        // Claim this as an arc overlay if it is one.
+        size_t arcDirPos = std::string(slot->discPath).find(".arc/");
+        if (arcDirPos != std::string::npos) {
+            claim_arc_overlay_path(mod, slot->bundlePath, slot->discPath.substr(0, arcDirPos + 4), slot->discPath.substr(arcDirPos + 5), slot->buffer);
+            continue;
+        }
+
         if (slot->buffer != nullptr) {
             s_overlayFiles.emplace(id, OverlayFileData{{}, nullptr, slot->buffer});
         } else {
@@ -110,7 +161,7 @@ void append_runtime_overlays(std::vector<AuroraOverlayFile>& files, LoadedMod& m
 
 struct OpenOverlayFile {
     std::vector<u8> ownedData;
-    std::shared_ptr<const std::vector<u8> > shared;
+    std::shared_ptr<const std::vector<u8>> shared;
     size_t pos = 0;
 
     [[nodiscard]] const std::vector<u8>& data() const {
@@ -192,6 +243,7 @@ void overlay_sync_files() {
     {
         std::lock_guard lock{s_overlayMutex};
         s_overlayFiles.clear();
+        s_arcOverlays.clear();
         for (auto& mod : ModLoader::instance().active_mods()) {
             find_overlay_files(files, mod, claims);
             append_runtime_overlays(files, mod, claims);
@@ -220,13 +272,13 @@ uint64_t overlay_add_file(
 
 uint64_t overlay_add_buffer(LoadedMod& mod, std::string discPath, std::vector<u8> data) {
     const auto size = data.size();
-    const auto handle = s_runtimeOverlays.emplace(mod,
-        RuntimeOverlaySlot{
-            .discPath = std::move(discPath),
-            .buffer = std::make_shared<const std::vector<u8>>(std::move(data)),
-            .size = size,
-            .order = s_nextRuntimeOrder++,
-        });
+    const auto handle = s_runtimeOverlays.emplace(
+        mod, RuntimeOverlaySlot{
+                 .discPath = std::move(discPath),
+                 .buffer = std::make_shared<const std::vector<u8>>(std::move(data)),
+                 .size = size,
+                 .order = s_nextRuntimeOrder++,
+             });
     s_overlaysDirty = true;
     return handle;
 }
@@ -275,13 +327,12 @@ ModResult overlay_add_file(
     try {
         size = mod->bundle->getFileSize(bundlePath);
     } catch (const std::exception& e) {
-        Log.error(
-            "[{}] overlay add_file '{}' failed: {}", mod->metadata.id, bundlePath, e.what());
+        Log.error("[{}] overlay add_file '{}' failed: {}", mod->metadata.id, bundlePath, e.what());
         return MOD_UNAVAILABLE;
     }
     if (size > kMaxOverlayFileSize) {
-        Log.error("[{}] overlay add_file '{}' failed: file too large ({} bytes)",
-            mod->metadata.id, bundlePath, size);
+        Log.error("[{}] overlay add_file '{}' failed: file too large ({} bytes)", mod->metadata.id,
+            bundlePath, size);
         return MOD_INVALID_ARGUMENT;
     }
 
@@ -324,6 +375,39 @@ ModResult overlay_remove(ModContext* context, OverlayHandle handle) {
     return MOD_OK;
 }
 
+bool arc_has_overlay(s32 dvdEntryNum) {
+    if (s_arcOverlays.find(dvdEntryNum) != s_arcOverlays.end()) {
+        return true;
+    }
+    return false;
+}
+
+std::shared_ptr<const std::vector<u8>> get_arc_overlay_buffer(
+    s32 dvdEntryNum, const std::string& pathInArc) {
+    const auto& arcIt = s_arcOverlays.find(dvdEntryNum);
+    if (arcIt == s_arcOverlays.end()) {
+        return nullptr;
+    }
+
+    const auto& arcFileIt = arcIt->second.pathInArcToData.find(pathInArc);
+    if (arcFileIt == arcIt->second.pathInArcToData.end()) {
+        return nullptr;
+    }
+
+    if (arcFileIt->second.buffer != nullptr) {
+        // If we are using a buffer overlay, return the shared buffer ptr
+        return arcFileIt->second.buffer;
+    }
+
+    // Load the file as a unique pointer, which will be owned as the arc
+    return std::move(std::make_shared<const std::vector<u8>>(arcFileIt->second.bundle->readFile(arcFileIt->second.fullFilePath)));
+}
+
+void overlay_init() {
+    JKRArchive::sArcHasOverlayFn = arc_has_overlay;
+    JKRArchive::sGetArcOverlayBufferFn = get_arc_overlay_buffer;
+}
+
 constexpr OverlayService s_overlayService{
     .header = SERVICE_HEADER(OverlayService, OVERLAY_SERVICE_MAJOR, OVERLAY_SERVICE_MINOR),
     .add_file = overlay_add_file,
@@ -338,6 +422,7 @@ constinit const ServiceModule g_overlayModule{
     .majorVersion = OVERLAY_SERVICE_MAJOR,
     .minorVersion = OVERLAY_SERVICE_MINOR,
     .service = &s_overlayService,
+    .initialize = &overlay_init,
     .modDetached = overlay_remove_mod,
     .lifecycleApplied = overlay_sync_files,
     .frameEnd =
