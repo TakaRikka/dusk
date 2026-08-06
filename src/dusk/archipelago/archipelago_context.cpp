@@ -673,17 +673,19 @@ bool ArchipelagoContext::shouldSkipDuplicateItem(const ReceivedItemEntry& entry)
     // would make this condition always true and change behavior for non-counter items.
     const bool shouldDedup = isNonIdempotentCounter || !entry.wasResetPending;
 
-    // Chests and the other locally-embedded location types (see hasAtomicLocalGrant()) grant +
-    // animate their item the instant the player physically interacts with them - completely
-    // independent of the AP network round-trip for that same location, and atomically with the
-    // location's checked-state being updated (both happen in the same native code path, no async
-    // gap, and unaffected by the general-inventory reset wipe since that state lives in separate
-    // per-region save data). That atomicity holds regardless of wasResetPending, so this check runs
-    // unconditionally rather than being gated behind shouldDedup - gating it left chest-type items
-    // with zero dedup protection specifically during the reset-pending resync window, which is the
-    // single most likely time for a duplicate delivery to actually happen.
-    if (entry.player == AP_GetPlayerID() && hasAtomicLocalGrant(entry.location)) {
+    // Chests etc. grant their item locally the instant the player interacts with them, so the
+    // network copy is normally redundant and safe to skip once IsLocationChecked() is true. But
+    // that "checked" flag survives HandleResetInventory()'s wipe while the actual item (inventory
+    // slot, collect flag, ...) doesn't - so during a reset resync, trusting it here means the item
+    // never comes back. Only skip outside of a reset; during one, fall through to the general dedup
+    // below so the item gets re-granted like everything else.
+    if (entry.player == AP_GetPlayerID() && hasAtomicLocalGrant(entry.location) && !entry.wasResetPending) {
         if (IsLocationChecked(entry.location)) {
+            // Also seed the persisted dedup table, so a later reset resync (which can't use
+            // IsLocationChecked() - see above) still knows this was handled, and doesn't
+            // double-grant a non-idempotent counter (e.g. a small key found in a chest).
+            randomizer_GetContext().mProcessedNetworkItems.insert(
+                RandomizerContext::EncodeNetworkItemKey(entry.player, entry.location));
             ApItemLog.info("shouldSkipDuplicateItem: skipped, location {} already granted locally", entry.location);
             return true;
         }
