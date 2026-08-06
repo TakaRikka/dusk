@@ -138,9 +138,30 @@ void add_select_setting(UiElementHandle pane, const char* key, UiElementHandle* 
         help_rml += fmt::format("<br/><span style=\"color: #C2A42D;\">{}</span>: {}", info->GetOptions()[i], info->GetDescriptions()[i]);
     }
 
-    // temp dummies
-    auto getFn = [](ModContext*, void*, UiControlValue*) {};
-    auto setFn = [](ModContext*, void*, const UiControlValue*) {};
+    auto getFn = [](ModContext*, void* user_data, UiControlValue* out_value) {
+        auto setting = FindSetting(static_cast<const char*>(user_data));
+        const auto& options = setting->GetInfo()->GetOptions();
+
+        for (size_t i = 0; i < options.size(); ++i) {
+            if (options[i] == setting->GetCurrentOption()) {
+                out_value->int_value = i;
+                return;
+            }
+        }
+
+        // default
+        out_value->int_value = 0;
+    };
+
+    auto setFn = [](ModContext*, void* user_data, const UiControlValue* value) {
+        auto setting = FindSetting(static_cast<const char*>(user_data));
+        const auto& options = setting->GetInfo()->GetOptions();
+
+        if (value->int_value >= 0 && value->int_value < options.size()) {
+            setting->SetCurrentOption(options[value->int_value]);
+            SaveRandomizerConfig();
+        }
+    };
 
     UiControlDesc desc = UI_CONTROL_DESC_INIT;
     desc.kind = UI_CONTROL_SELECT;
@@ -149,6 +170,7 @@ void add_select_setting(UiElementHandle pane, const char* key, UiElementHandle* 
     desc.binding = UI_BINDING_CALLBACKS;
     desc.get = getFn;
     desc.set = setFn;
+    desc.user_data = (void*)key;
     desc.options = optionsList.data();
     desc.option_count = optionsList.size();
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
@@ -164,9 +186,30 @@ void add_select_number_setting(UiElementHandle pane, const char* key, UiElementH
         optionsList.push_back(info->GetOptions()[i].c_str());
     }
 
-    // temp dummies
-    auto getFn = [](ModContext*, void*, UiControlValue*) {};
-    auto setFn = [](ModContext*, void*, const UiControlValue*) {};
+    auto getFn = [](ModContext*, void* user_data, UiControlValue* out_value) {
+        auto setting = FindSetting(static_cast<const char*>(user_data));
+        const auto& options = setting->GetInfo()->GetOptions();
+
+        for (size_t i = 0; i < options.size(); ++i) {
+            if (options[i] == setting->GetCurrentOption()) {
+                out_value->int_value = i;
+                return;
+            }
+        }
+
+        // default
+        out_value->int_value = 0;
+    };
+
+    auto setFn = [](ModContext*, void* user_data, const UiControlValue* value) {
+        auto setting = FindSetting(static_cast<const char*>(user_data));
+        const auto& options = setting->GetInfo()->GetOptions();
+
+        if (value->int_value >= 0 && value->int_value < options.size()) {
+            setting->SetCurrentOption(options[value->int_value]);
+            SaveRandomizerConfig();
+        }
+    };
 
     UiControlDesc desc = UI_CONTROL_DESC_INIT;
     desc.kind = UI_CONTROL_SELECT;
@@ -175,6 +218,7 @@ void add_select_number_setting(UiElementHandle pane, const char* key, UiElementH
     desc.binding = UI_BINDING_CALLBACKS;
     desc.get = getFn;
     desc.set = setFn;
+    desc.user_data = (void*)key;
     desc.options = optionsList.data();
     desc.option_count = optionsList.size();
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
@@ -187,43 +231,67 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
     add_button(leftPane,
         "Generate Seed",
         "Generate a Randomizer seed using the current configuration options, and the supplied seed string.",
-        [](ModContext*, void*) {});
+        [](ModContext*, void*) {
+            if (TryCreateRandomSeed()) {
+                mods::log::info("Created new Seed for generator.");
+            }
+            GenerateRandomizerSeed();
+        });
 
     add_string_input(leftPane,
         "Seed String",
         "Current value of the seed used by the randomizer for generation. Leave blank for a random value.",
         32,
-        [](ModContext*, void*, UiControlValue*) {},
-        [](ModContext*, void*, const UiControlValue*) {});
+        [](ModContext*, void*, UiControlValue* out_value) {
+            out_value->string_value = GetRandomizerConfig().GetSeed().c_str();
+        },
+        [](ModContext*, void*, const UiControlValue* value) {
+            GetRandomizerConfig().SetSeed(value->string_value);
+            SaveRandomizerConfig();
+        });
 
     add_button(leftPane,
         "Delete Seeds",
-        " ",
-        [](ModContext*, void*) {});
+        "Delete any seed not currently being used.",
+        [](ModContext*, void*) {
+            // TODO
+        });
 
     add_section(leftPane, "Permalink");
 
-    add_button(leftPane,
-        "Copy Permalink",
-        "Copy your current settings permalink to share with others.",
-        [](ModContext*, void*) {});
+    {
+        std::string help_rml = "Copy your current settings permalink to share with others.";
+        help_rml += fmt::format("<br/>Current Permalink: {}", GetRandomizerConfig().GetPermalink());
+        add_button(leftPane,
+            "Copy Permalink",
+            help_rml.c_str(),
+            [](ModContext*, void*) {
+                // TODO: need SDL clipboard access
+            });
+    }
 
     add_button(leftPane,
         "Paste Permalink",
         "Paste in a permalink from your clipboard. This will overwrite your current settings.",
-        [](ModContext*, void*) {});
+        [](ModContext*, void*) {
+            // TODO: need SDL clipboard access
+        });
 
     add_section(leftPane, "Presets");
 
     add_button(leftPane,
         "Save Current Settings as Preset",
         "Save the current settings to your list of presets.",
-        [](ModContext*, void*) {});
+        [](ModContext*, void*) {
+            // TODO
+        });
 
     add_button(leftPane,
         "Load Preset",
         "Choose an existing preset to load from.",
-        [](ModContext*, void*) {});
+        [](ModContext*, void*) {
+            // TODO
+        });
 
     return MOD_OK;
 }
@@ -239,7 +307,10 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
     add_button(leftPane,
         "Reset Settings to Default",
         "Reset all settings to their default values. This will also clear starting items and excluded locations.",
-        [](ModContext*, void*) {});
+        [](ModContext*, void*) {
+            GetRandomizerConfig().ResetSettingsToDefault();
+            SaveRandomizerConfig();
+        });
 
     add_section(leftPane, "Logic Settings");
     add_select_setting(leftPane, "Logic Rules");
