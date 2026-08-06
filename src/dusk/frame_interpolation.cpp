@@ -6,10 +6,30 @@
 
 #include <absl/container/flat_hash_map.h>
 
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <utility>
+#include <vector>
+
 namespace {
 
+struct DecomposedMtx {
+    Quaternion rot{0.0f, 0.0f, 0.0f, 1.0f};
+    Vec scale{1.0f, 1.0f, 1.0f};
+    Vec skew{};
+    Vec translation{};
+    bool coordinateFlip = false;
+    bool valid = false;
+};
+
+struct RecordedMtx {
+    Mtx value{};
+    DecomposedMtx decomposed;
+};
+
 struct Recording {
-    absl::flat_hash_map<uintptr_t, Mtx> matrix_values;
+    absl::flat_hash_map<uintptr_t, RecordedMtx> matrixValues;
 };
 
 bool s_initialized = false;
@@ -67,7 +87,7 @@ void copy_view_to_snap(CameraSnapshot* dst, const view_class& v) {
     dst->valid = true;
 }
 
-inline void lerp_matrix(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
+void lerp_matrix_elements(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
     for (size_t row = 0; row < 3; ++row) {
         for (size_t col = 0; col < 4; ++col) {
             const float l = lhs[row][col];
@@ -76,27 +96,236 @@ inline void lerp_matrix(Mtx out, const Mtx lhs, const Mtx rhs, float step) {
     }
 }
 
-inline void lerp_xyz(cXyz* out, const cXyz& lhs, const cXyz& rhs, float step) {
+Vec combine_vec(const Vec& lhs, const Vec& rhs, float rhsScale) {
+    Vec scaledRhs;
+    VECScale(&rhs, &scaledRhs, rhsScale);
+
+    Vec result;
+    VECAdd(&lhs, &scaledRhs, &result);
+    return result;
+}
+
+bool normalize_vec(Vec* value, float* magnitude) {
+    constexpr float kMinimumMagnitudeSquared = 1.0e-12f;
+    const float magnitudeSquared = VECSquareMag(value);
+    if (!std::isfinite(magnitudeSquared) || magnitudeSquared <= kMinimumMagnitudeSquared) {
+        return false;
+    }
+
+    *magnitude = VECMag(value);
+    VECNormalize(value, value);
+    return true;
+}
+
+bool matrix_is_finite(const Mtx matrix) {
+    for (size_t row = 0; row < 3; ++row) {
+        for (size_t col = 0; col < 4; ++col) {
+            if (!std::isfinite(matrix[row][col])) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Adapted from
+// https://github.com/rt64/rt64/blob/5473732a822a4423b5696e7cb18fecc425a59875/src/common/rt64_math.cpp#L245
+// License: MIT
+bool decompose_matrix(const Mtx matrix, DecomposedMtx* out) {
+    if (!matrix_is_finite(matrix)) {
+        return false;
+    }
+
+    DecomposedMtx result{};
+
+    // Extract translation
+    result.translation = {matrix[0][3], matrix[1][3], matrix[2][3]};
+
+    // Extract scale and shear from the three basis columns
+    Vec axes[3] = {
+        {matrix[0][0], matrix[1][0], matrix[2][0]},
+        {matrix[0][1], matrix[1][1], matrix[2][1]},
+        {matrix[0][2], matrix[1][2], matrix[2][2]},
+    };
+
+    // Compute X scale and normalize the first column
+    if (!normalize_vec(&axes[0], &result.scale.x)) {
+        return false;
+    }
+
+    // Compute XY shear and make the second column orthogonal to the first
+    result.skew.z = VECDotProduct(&axes[0], &axes[1]);
+    axes[1] = combine_vec(axes[1], axes[0], -result.skew.z);
+
+    // Compute Y scale and normalize the second column
+    if (!normalize_vec(&axes[1], &result.scale.y)) {
+        return false;
+    }
+    result.skew.z /= result.scale.y;
+
+    // Compute XZ and YZ shear, then orthogonalize the third column
+    result.skew.y = VECDotProduct(&axes[0], &axes[2]);
+    axes[2] = combine_vec(axes[2], axes[0], -result.skew.y);
+    result.skew.x = VECDotProduct(&axes[1], &axes[2]);
+    axes[2] = combine_vec(axes[2], axes[1], -result.skew.x);
+
+    // Compute Z scale and normalize the third column
+    if (!normalize_vec(&axes[2], &result.scale.z)) {
+        return false;
+    }
+    result.skew.y /= result.scale.z;
+    result.skew.x /= result.scale.z;
+
+    // The basis is now orthonormal. A negative determinant indicates a coordinate-system flip.
+    Vec cross;
+    VECCrossProduct(&axes[1], &axes[2], &cross);
+    const float orientation = VECDotProduct(&axes[0], &cross);
+    if (!std::isfinite(orientation)) {
+        return false;
+    }
+    result.coordinateFlip = orientation < 0.0f;
+    if (result.coordinateFlip) {
+        VECScale(&result.scale, &result.scale, -1.0f);
+        for (Vec& axis : axes) {
+            VECScale(&axis, &axis, -1.0f);
+        }
+    }
+
+    // Convert the basis to a quaternion
+    Mtx rotationMatrix = {
+        {axes[0].x, axes[1].x, axes[2].x, 0.0f},
+        {axes[0].y, axes[1].y, axes[2].y, 0.0f},
+        {axes[0].z, axes[1].z, axes[2].z, 0.0f},
+    };
+    QUATMtx(&result.rot, rotationMatrix);
+    QUATNormalize(&result.rot, &result.rot);
+    const float rotationMagnitudeSquared = QUATDotProduct(&result.rot, &result.rot);
+    if (!std::isfinite(rotationMagnitudeSquared) || rotationMagnitudeSquared < 0.5f) {
+        return false;
+    }
+
+    result.valid = true;
+    *out = result;
+    return true;
+}
+
+void recompose_matrix(Mtx out, const DecomposedMtx& matrix) {
+    Mtx rotationMatrix;
+    MTXQuat(rotationMatrix, &matrix.rot);
+
+    for (size_t row = 0; row < 3; ++row) {
+        out[row][0] = rotationMatrix[row][0] * matrix.scale.x;
+        out[row][1] =
+            (rotationMatrix[row][0] * matrix.skew.z + rotationMatrix[row][1]) * matrix.scale.y;
+        out[row][2] = (rotationMatrix[row][0] * matrix.skew.y +
+                          rotationMatrix[row][1] * matrix.skew.x + rotationMatrix[row][2]) *
+                      matrix.scale.z;
+    }
+    out[0][3] = matrix.translation.x;
+    out[1][3] = matrix.translation.y;
+    out[2][3] = matrix.translation.z;
+}
+
+DecomposedMtx equivalent_decomposition(const DecomposedMtx& source, size_t axis) {
+    DecomposedMtx result = source;
+    Quaternion halfTurn{};
+    if (axis == 0) {
+        halfTurn.x = 1.0f;
+        result.scale.y = -result.scale.y;
+        result.scale.z = -result.scale.z;
+        result.skew.y = -result.skew.y;
+        result.skew.z = -result.skew.z;
+    } else if (axis == 1) {
+        halfTurn.y = 1.0f;
+        result.scale.x = -result.scale.x;
+        result.scale.z = -result.scale.z;
+        result.skew.x = -result.skew.x;
+        result.skew.z = -result.skew.z;
+    } else {
+        halfTurn.z = 1.0f;
+        result.scale.x = -result.scale.x;
+        result.scale.y = -result.scale.y;
+        result.skew.x = -result.skew.x;
+        result.skew.y = -result.skew.y;
+    }
+    QUATMultiply(&source.rot, &halfTurn, &result.rot);
+    return result;
+}
+
+// Adapted from
+// https://github.com/rt64/rt64/blob/6dc3d4d9d4b310843e803e979a6bbedffe2cdbe9/src/hle/rt64_rigid_body.cpp#L101-L129
+// License: MIT
+DecomposedMtx choose_previous_decomposition(
+    const DecomposedMtx& previous, const DecomposedMtx& current) {
+    DecomposedMtx best = previous;
+    if (previous.coordinateFlip == current.coordinateFlip) {
+        return best;
+    }
+
+    // A mirrored transform has three equivalent half-turn/negative-scale decompositions. Choose
+    // the one whose rotation is closest to the current transform to avoid an unintended spin.
+    float bestSimilarity = std::abs(QUATDotProduct(&best.rot, &current.rot));
+    for (size_t axis = 0; axis < 3; ++axis) {
+        DecomposedMtx candidate = equivalent_decomposition(previous, axis);
+        const float similarity = std::abs(QUATDotProduct(&candidate.rot, &current.rot));
+        if (similarity > bestSimilarity) {
+            best = candidate;
+            bestSimilarity = similarity;
+        }
+    }
+    return best;
+}
+
+Vec lerp_vec(const Vec& lhs, const Vec& rhs, float step) {
+    return {
+        lhs.x + (rhs.x - lhs.x) * step,
+        lhs.y + (rhs.y - lhs.y) * step,
+        lhs.z + (rhs.z - lhs.z) * step,
+    };
+}
+
+void interpolate_matrix(Mtx out, const RecordedMtx& lhs, const RecordedMtx& rhs, float step) {
+    if (step <= 0.0f) {
+        MTXCopy(lhs.value, out);
+        return;
+    }
+    if (step >= 1.0f) {
+        MTXCopy(rhs.value, out);
+        return;
+    }
+    if (std::memcmp(lhs.value, rhs.value, sizeof(Mtx)) == 0) {
+        MTXCopy(rhs.value, out);
+        return;
+    }
+
+    if (lhs.decomposed.valid && rhs.decomposed.valid) {
+        const DecomposedMtx previous =
+            choose_previous_decomposition(lhs.decomposed, rhs.decomposed);
+        DecomposedMtx result{};
+        QUATSlerp(&previous.rot, &rhs.decomposed.rot, &result.rot, step);
+        QUATNormalize(&result.rot, &result.rot);
+        result.scale = lerp_vec(previous.scale, rhs.decomposed.scale, step);
+        result.skew = lerp_vec(previous.skew, rhs.decomposed.skew, step);
+        result.translation = lerp_vec(previous.translation, rhs.decomposed.translation, step);
+        recompose_matrix(out, result);
+        if (matrix_is_finite(out)) {
+            return;
+        }
+    }
+
+    lerp_matrix_elements(out, lhs.value, rhs.value, step);
+}
+
+void lerp_xyz(cXyz* out, const cXyz& lhs, const cXyz& rhs, float step) {
     out->x = lhs.x + (rhs.x - lhs.x) * step;
     out->y = lhs.y + (rhs.y - lhs.y) * step;
     out->z = lhs.z + (rhs.z - lhs.z) * step;
 }
 
-static s16 lerp_bank(s16 a, s16 b, f32 t) {
+s16 lerp_bank(s16 a, s16 b, f32 t) {
     const f32 ra = S2RAD(a);
     const f32 d = remainderf(S2RAD(b) - ra, 2.0f * static_cast<f32>(M_PI));
     return cAngle::Radian_to_SAngle(ra + d * t);
-}
-
-inline bool matrix_differs(const Mtx lhs, const Mtx rhs, float epsilon = 0.0001f) {
-    for (size_t row = 0; row < 3; ++row) {
-        for (size_t col = 0; col < 4; ++col) {
-            if (std::abs(lhs[row][col] - rhs[row][col]) > epsilon) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 const Mtx* resolve_replacement(const Mtx* source, Mtx* scratch) {
@@ -114,7 +343,7 @@ const Mtx* resolve_replacement(const Mtx* source, Mtx* scratch) {
 }
 
 bool has_recording_data(const Recording& recording) {
-    return !recording.matrix_values.empty();
+    return !recording.matrixValues.empty();
 }
 
 void clear_replacements() {
@@ -188,20 +417,25 @@ void begin_record() {
 
 void end_record() {
     g_recording = false;
+    for (auto& entry : g_current_recording.matrixValues) {
+        RecordedMtx& matrix = entry.second;
+        matrix.decomposed.valid = decompose_matrix(matrix.value, &matrix.decomposed);
+    }
 }
 
 void interpolate() {
     ensure_initialized();
     clear_replacements();
-    g_interpolating = g_enabled && !g_recording && !g_sync_presentation && has_recording_data(g_current_recording);
+    g_interpolating = g_enabled && !g_recording && !g_sync_presentation &&
+                      has_recording_data(g_current_recording);
     if (!g_interpolating) {
         return;
     }
-    for (auto const& old : g_previous_recording.matrix_values) {
-        if (auto it = g_current_recording.matrix_values.find(old.first);
-            it != g_current_recording.matrix_values.end())
+    for (auto const& old : g_previous_recording.matrixValues) {
+        if (auto it = g_current_recording.matrixValues.find(old.first);
+            it != g_current_recording.matrixValues.end())
         {
-            lerp_matrix(g_replacements[old.first], old.second, it->second, g_step);
+            interpolate_matrix(g_replacements[old.first], old.second, it->second, g_step);
         }
     }
 }
@@ -227,7 +461,9 @@ float get_interpolation_step() {
 }
 
 void set_ui_tick_pending(bool value) {
-    if (g_ui_tick_pending == value) { return; }
+    if (g_ui_tick_pending == value) {
+        return;
+    }
     g_ui_tick_pending = value;
 }
 
@@ -241,8 +477,9 @@ void record_final_mtx(Mtx m, const void* key) {
         return;
     }
 
-    auto& it = g_current_recording.matrix_values[reinterpret_cast<uintptr_t>(key)];
-    MTXCopy(m, it);
+    auto& value = g_current_recording.matrixValues[reinterpret_cast<uintptr_t>(key)];
+    MTXCopy(m, value.value);
+    value.decomposed.valid = false;
 }
 
 void record_final_mtx(Mtx m) {
@@ -272,7 +509,9 @@ bool lookup_concat_replacement(const void* lhs, const void* rhs, Mtx out) {
     Mtx rhs_scratch;
     const Mtx* resolved_lhs = resolve_replacement(reinterpret_cast<const Mtx*>(lhs), &lhs_scratch);
     const Mtx* resolved_rhs = resolve_replacement(reinterpret_cast<const Mtx*>(rhs), &rhs_scratch);
-    if (resolved_lhs == reinterpret_cast<const Mtx*>(lhs) && resolved_rhs == reinterpret_cast<const Mtx*>(rhs)) {
+    if (resolved_lhs == static_cast<const Mtx*>(lhs) &&
+        resolved_rhs == static_cast<const Mtx*>(rhs))
+    {
         return false;
     }
 
