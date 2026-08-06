@@ -13,7 +13,6 @@ class J3DVertexData;
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "d/actor/d_a_alink.h"
-#include "d/actor/d_a_player.h"
 #include "global.h"
 #include "gx/GXEnum.h"
 #include "m_Do/m_Do_dvd_thread.h"

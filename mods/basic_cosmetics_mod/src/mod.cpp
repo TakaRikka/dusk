@@ -1,5 +1,7 @@
 #include "mod.hpp"
 #include "hooks.hpp"
+#include "color_utils.hpp"
+#include "midna_hair_color.hpp"
 
 #include "mods/service.hpp"
 #include "mods/svc/config.h"
@@ -7,8 +9,6 @@
 #include "mods/svc/log.h"
 #include "mods/svc/log.hpp"
 #include "mods/svc/ui.h"
-
-#include "m_Do/m_Do_dvd_thread.h"
 
 #include <string>
 
@@ -35,6 +35,14 @@ std::string get_str_option(ConfigVarHandle handle, const std::string& fallback) 
     return value;
 }
 
+int64_t get_int_option(ConfigVarHandle handle, int64_t fallback) {
+    int64_t value = fallback;
+    if (handle == 0 || svc_config->get_int(mod_ctx, handle, &value) != MOD_OK) {
+        return fallback;
+    }
+    return value;
+}
+
 namespace {
 UiWindowHandle g_cosmeticsWindow = 0;
 
@@ -50,6 +58,18 @@ ModResult register_str_option(
     return MOD_OK;
 }
 
+ModResult register_int_option(
+    const char* name, int64_t defaultValue, ConfigVarHandle& outHandle, ModError* error) {
+    ConfigVarDesc cvarDesc = CONFIG_VAR_DESC_INIT;
+    cvarDesc.name = name;
+    cvarDesc.type = CONFIG_VAR_INT;
+    cvarDesc.default_int = defaultValue;
+    if (svc_config->register_var(mod_ctx, &cvarDesc, &outHandle) != MOD_OK) {
+        return mods::set_error(error, MOD_ERROR, "failed to register cosmetics option");
+    }
+    return MOD_OK;
+}
+
 void add_control(UiElementHandle pane, const UiControlDesc& desc) {
     auto result = svc_ui->pane_add_control(mod_ctx, pane, &desc, nullptr);
     if (result != MOD_OK) {
@@ -57,14 +77,89 @@ void add_control(UiElementHandle pane, const UiControlDesc& desc) {
     }
 }
 
-void add_cosmetic_option(UiElementHandle left, ConfigVarHandle cvar, const std::string& name) {
+const char* kDefaultHexColorsExplanation =
+    "Set the color with any 6 digit hex code. A reload will be required to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Red: ab706e<br/>"
+    "- Blue: 6382a0<br/>"
+    "- Purple: 94749a<br/>"
+    "- Orange: ec8644<br/>"
+    "- Yellow: b9ab00<br/>"
+    "- Pink: ec9fc8<br/>"
+    "- Black: 505154<br/>"
+    "- White: f8f7f4<br/>"
+    "- Brown: 91723e<br/>";
+
+const char* kGlowColorsExplanation =
+    "Set the color with any 6 digit hex code, or with \"rainbow\" for a rainbow effect.<br/>"
+    "Common colors:<br/>"
+    "- Red: ff0000<br/>"
+    "- Orange: f68821<br/>"
+    "- Yellow: f6f321<br/>"
+    "- Green: 00ff00<br/>"
+    "- Blue: 0000ff<br/>"
+    "- Purple: 8000ff<br/>"
+    "- White: a0a0a0<br/>";
+
+const char* kMasterSwordColorsExplanation =
+    "Set the color with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Red: ff0000<br/>"
+    "- Orange: f68821<br/>"
+    "- Yellow: f6f321<br/>"
+    "- Green: 00ff00<br/>"
+    "- Blue: 0000ff<br/>"
+    "- Purple: 8000ff<br/>"
+    "- White: a0a0a0<br/>"
+    "- Cyan: 30d0d0<br/>";
+
+const char* kChargeRingColorsExplanation =
+    "Set the color with any 6 digit hex code.<br/>"
+    "Common colors:<br/>"
+    "- Pink: ff9f9f<br/>"
+    "- Red: ff0000<br/>"
+    "- Yellow: ffff00<br/>"
+    "- Green: 00ff00<br/>"
+    "- Blue: 0000ff<br/>"
+    "- Purple: ff00ff<br/>"
+    "- Brown: 331900<br/>"
+    "- White: feffff<br/>"
+    "- Black: 000000<br/>";
+
+void add_cosmetic_option(UiElementHandle left, ConfigVarHandle cvar, const char* name, const char* helpRml) {
     UiControlDesc control = UI_CONTROL_DESC_INIT;
     control.kind = UI_CONTROL_STRING;
-    control.label = name.c_str();
-    control.help_rml = "Set the color with a 6 digit hex code. A reload may be required to see changes.";
+    control.label = name;
+    control.help_rml = helpRml;
     control.binding = UI_BINDING_CONFIG_VAR;
     control.config_var = cvar;
     control.max_length = 6;
+    add_control(left, control);
+}
+
+void add_cosmetic_option_with_rainbow(UiElementHandle left, ConfigVarHandle cvar, const char* name, const char* helpRml) {
+    UiControlDesc control = UI_CONTROL_DESC_INIT;
+    control.kind = UI_CONTROL_STRING;
+    control.label = name;
+    control.help_rml = helpRml;
+    control.binding = UI_BINDING_CONFIG_VAR;
+    control.config_var = cvar;
+    control.max_length = 7;
+    add_control(left, control);
+}
+
+void add_midna_hair_option(UiElementHandle left, ConfigVarHandle cvar, const std::string& name) {
+    static const char* kMidnaHairOptions[] = {
+        "Default", "Pink", "Red", "Yellow", "Green", "Blue", "Purple", "Brown", "White", "Black"
+    };
+    UiControlDesc control = UI_CONTROL_DESC_INIT;
+    control.kind = UI_CONTROL_SELECT;
+    control.label = name.c_str();
+    control.help_rml = "Choose Midna's hair color.";
+    control.binding = UI_BINDING_CONFIG_VAR;
+    control.config_var = cvar;
+    control.options = kMidnaHairOptions;
+    control.option_count = 10;
     add_control(left, control);
 }
 
@@ -72,22 +167,31 @@ ModResult build_equipment_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
     (void)right;
 
-    add_cosmetic_option(left, g_cvars.herosTunicCapColor, "Hero's Tunic Cap Color");
-    add_cosmetic_option(left, g_cvars.herosTunicTorsoColor, "Hero's Tunic Body Color");
-    add_cosmetic_option(left, g_cvars.herosTunicSkirtColor, "Hero's Tunic Skirt Color");
-    add_cosmetic_option(left, g_cvars.zoraArmorCapColor, "Zora Armor Cap Color");
-    add_cosmetic_option(left, g_cvars.zoraArmorHelmetColor, "Zora Armor Helmet Color");
-    add_cosmetic_option(left, g_cvars.zoraArmorTorsoColor, "Zora Armor Torso Color");
-    add_cosmetic_option(left, g_cvars.zoraArmorScalesColor, "Zora Armor Scales Color");
-    add_cosmetic_option(left, g_cvars.zoraArmorFlippersColor, "Zora Armor Flippers Color");
-    add_cosmetic_option(left, g_cvars.lanternGlowColor, "Lantern Glow Color");
-    add_cosmetic_option(left, g_cvars.woodenSwordColor, "Wooden Sword Color");
-    add_cosmetic_option(left, g_cvars.msBladeColor, "Master Sword Blade Color");
-    add_cosmetic_option(left, g_cvars.msHandleColor, "Master Sword Handle Color");
-    add_cosmetic_option(left, g_cvars.lightSwordGlowColor, "Light Sword Glow Color");
-    add_cosmetic_option(left, g_cvars.boomerangColor, "Boomerang Color");
-    add_cosmetic_option(left, g_cvars.ironBootsColor, "Iron Boots Color");
-    add_cosmetic_option(left, g_cvars.spinnerColor, "Spinner Color");
+    add_cosmetic_option(left, g_cvars.herosTunicCapColor, "Hero's Tunic Cap Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.herosTunicTorsoColor, "Hero's Tunic Body Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.herosTunicSkirtColor, "Hero's Tunic Skirt Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorCapColor, "Zora Armor Cap Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorHelmetColor, "Zora Armor Helmet Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorTorsoColor, "Zora Armor Torso Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorScalesColor, "Zora Armor Scales Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorFlippersColor, "Zora Armor Flippers Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option_with_rainbow(left, g_cvars.lanternGlowColor, "Lantern Glow Color", kGlowColorsExplanation);
+    add_cosmetic_option(left, g_cvars.woodenSwordColor, "Wooden Sword Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.msBladeColor, "Master Sword Blade Color", kMasterSwordColorsExplanation);
+    add_cosmetic_option(left, g_cvars.msHandleColor, "Master Sword Handle Color", kMasterSwordColorsExplanation);
+    add_cosmetic_option_with_rainbow(left, g_cvars.lightSwordGlowColor, "Light Sword Glow Color", kGlowColorsExplanation);
+    add_cosmetic_option(left, g_cvars.boomerangColor, "Boomerang Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.ironBootsColor, "Iron Boots Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.spinnerColor, "Spinner Color", kDefaultHexColorsExplanation);
+
+    return MOD_OK;
+}
+
+ModResult build_ui_colors_tab(
+    ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
+    (void)right;
+
+    add_cosmetic_option(left, g_cvars.heartColor, "Heart Color", kDefaultHexColorsExplanation);
 
     return MOD_OK;
 }
@@ -96,12 +200,12 @@ ModResult build_misc_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
     (void)right;
 
-    add_cosmetic_option(left, g_cvars.midnaHairBaseColor, "Midna's Hair Base Color");
-    add_cosmetic_option(left, g_cvars.midnaHairTipsColor, "Midna's Hair Tips Color");
-    add_cosmetic_option(left, g_cvars.midnaChargeRingColor, "Midna Charge Ring Color");
-    add_cosmetic_option(left, g_cvars.linkHairColor, "Link's Hair Color");
-    add_cosmetic_option(left, g_cvars.wolfLinkColor, "Wolf Link Color");
-    add_cosmetic_option(left, g_cvars.eponaColor, "Epona Color");
+    add_midna_hair_option(left, g_cvars.midnaHairBaseColor, "Midna's Hair Base Color");
+    add_midna_hair_option(left, g_cvars.midnaHairTipsColor, "Midna's Hair Tips Color");
+    add_cosmetic_option(left, g_cvars.midnaChargeRingColor, "Midna Charge Ring Color", kChargeRingColorsExplanation);
+    add_cosmetic_option(left, g_cvars.linkHairColor, "Link's Hair Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.wolfLinkColor, "Wolf Link Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.eponaColor, "Epona Color", kDefaultHexColorsExplanation);
 
     return MOD_OK;
 }
@@ -114,11 +218,13 @@ void on_open_cosmetics_menu(ModContext*, void*) {
     if (g_cosmeticsWindow != 0) {
         return;
     }
-    UiTabDesc tabs[] = {UI_TAB_DESC_INIT, UI_TAB_DESC_INIT};
+    UiTabDesc tabs[] = {UI_TAB_DESC_INIT, UI_TAB_DESC_INIT, UI_TAB_DESC_INIT};
     tabs[0].title = "Equipment Colors";
     tabs[0].build = build_equipment_colors_tab;
-    tabs[1].title = "Misc Colors";
-    tabs[1].build = build_misc_colors_tab;
+    tabs[1].title = "UI Colors";
+    tabs[1].build = build_ui_colors_tab;
+    tabs[2].title = "Misc Colors";
+    tabs[2].build = build_misc_colors_tab;
     UiWindowDesc desc = UI_WINDOW_DESC_INIT;
     desc.tabs = tabs;
     desc.tab_count = ARRAY_SIZE(tabs);
@@ -139,14 +245,16 @@ ModResult build_panel(ModContext*, UiElementHandle panel, void*, ModError*) {
 }
 
 #define REGISTER_COSMETIC_OPTION(option) \
-    auto option##Result = register_str_option(#option, NULL, g_cvars.option, error); \
-    if (option##Result != MOD_OK) { \
-        return option##Result; \
+    result = register_str_option(#option, NULL, g_cvars.option, error); \
+    if (result != MOD_OK) { \
+        return result; \
     } \
 
 extern "C" {
 MOD_EXPORT ModResult mod_initialize(ModError* error) {
     svc_log->info(mod_ctx, "basic_cosmetics_mod initialized");
+
+    ModResult result{};
 
     REGISTER_COSMETIC_OPTION(herosTunicCapColor)
     REGISTER_COSMETIC_OPTION(herosTunicTorsoColor)
@@ -164,8 +272,18 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     REGISTER_COSMETIC_OPTION(boomerangColor)
     REGISTER_COSMETIC_OPTION(ironBootsColor)
     REGISTER_COSMETIC_OPTION(spinnerColor)
-    REGISTER_COSMETIC_OPTION(midnaHairBaseColor)
-    REGISTER_COSMETIC_OPTION(midnaHairTipsColor)
+    REGISTER_COSMETIC_OPTION(heartColor)
+
+    result = register_int_option("midnaHairBaseColor", 0, g_cvars.midnaHairBaseColor, error);
+    if (result != MOD_OK) {
+        return result;
+    }
+
+    result = register_int_option("midnaHairTipsColor", 0, g_cvars.midnaHairTipsColor, error);
+    if (result != MOD_OK) {
+        return result;
+    }
+
     REGISTER_COSMETIC_OPTION(midnaChargeRingColor)
     REGISTER_COSMETIC_OPTION(linkHairColor)
     REGISTER_COSMETIC_OPTION(wolfLinkColor)
@@ -176,7 +294,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     svc_ui->register_mods_panel(mod_ctx, &panelDesc);
 
     // Add all our hooks
-    auto result = add_all_hooks();
+    result = add_all_hooks();
     if (result != MOD_OK) {
         return result;
     }
@@ -185,6 +303,8 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
 }
 
 MOD_EXPORT ModResult mod_update(ModError*) {
+    update_rainbow_rgb(1.0f);
+    set_all_midna_hair_colors();
     return MOD_OK;
 }
 

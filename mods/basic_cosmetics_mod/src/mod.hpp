@@ -21,6 +21,7 @@ struct cvars {
     ConfigVarHandle boomerangColor = 0;
     ConfigVarHandle ironBootsColor = 0;
     ConfigVarHandle spinnerColor = 0;
+    ConfigVarHandle heartColor = 0;
     ConfigVarHandle midnaHairBaseColor = 0;
     ConfigVarHandle midnaHairTipsColor = 0;
     ConfigVarHandle midnaChargeRingColor = 0;
@@ -32,3 +33,5 @@ struct cvars {
 cvars& get_cvars();
 
 std::string get_str_option(ConfigVarHandle handle, const std::string& fallback);
+
+int64_t get_int_option(ConfigVarHandle handle, int64_t fallback);

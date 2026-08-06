@@ -60,13 +60,9 @@ GXColor hex_color_str_to_gx_color(const std::string& hexColorStr) {
     return GXColor{r, g, b};
 }
 
+static f32 rainbowPhaseAngle = 0.f;
+
 GXColor get_rainbow_rgb(f32 amplitude) {
-    static f32 rainbowPhaseAngle = 0.f;
-    f32 angleIncrement = 1.0f; // Degrees per frame (Adjust for speed)
-    rainbowPhaseAngle += angleIncrement;
-    if (rainbowPhaseAngle >= 360.0f) {
-        rainbowPhaseAngle -= 360.0f;
-    }
     f32 phase_rad = rainbowPhaseAngle * M_PI / 180.0f;
 
     u8 r_val = (u8)(amplitude * (sinf(phase_rad) + 1.0f) + 0.5f);
@@ -78,4 +74,11 @@ GXColor get_rainbow_rgb(f32 amplitude) {
     rgbColor.b = b_val;
     rgbColor.a = 0xff;
     return rgbColor;
+}
+
+void update_rainbow_rgb(f32 increment) {
+    rainbowPhaseAngle += increment;
+    if (rainbowPhaseAngle >= 360.0f) {
+        rainbowPhaseAngle -= 360.0f;
+    }
 }

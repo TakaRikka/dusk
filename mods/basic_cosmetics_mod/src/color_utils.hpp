@@ -23,3 +23,5 @@ bool is_valid_hex_color_str(std::string_view hexStr);
 GXColor hex_color_str_to_gx_color(const std::string& hexColorStr);
 
 GXColor get_rainbow_rgb(f32 amplitude);
+
+void update_rainbow_rgb(f32 increment);
