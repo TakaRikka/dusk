@@ -884,7 +884,7 @@ dScnLogo_c::~dScnLogo_c() {
     JKR_DELETE(mProgressiveSel);
 
     #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
+    if (isRegionPal()) {
         mpPalLogoResCommand->getArchive()->removeResourceAll();
         mpPalLogoResCommand->getArchive()->unmount();
         mpPalLogoResCommand->destroy();
@@ -1059,7 +1059,7 @@ static int phase_0(dScnLogo_c* i_this) {
     JKRHEAP_NAME(i_this->mLogo01Heap, "Logo01");
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
-    IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)
+    IF_DUSK_BLOCK(isRegionPal())
     switch (i_this->getPalLanguage()) {
     case 1:
         i_this->mpPalLogoResCommand = mDoDvdThd_mountArchive_c::create("/res/Layout/LogoPalGm.arc", 0, NULL);
@@ -1100,7 +1100,7 @@ static int phase_1(dScnLogo_c* i_this) {
     #endif
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
-    IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)
+    IF_DUSK_BLOCK(isRegionPal())
     if (!mDoDvdThd::SyncWidthSound) {
         return cPhs_INIT_e;
     }
@@ -1335,7 +1335,7 @@ void dScnLogo_c::logoInitGC() {
     mDolbyLogo = JKR_NEW dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
 
 #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
+    if (isRegionPal()) {
         u8 language = getPalLanguage();
         if (language >= 5) {
             language = 0;
@@ -1599,7 +1599,7 @@ void dScnLogo_c::dvdDataLoad() {
     mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
     #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
+    if (isRegionPal()) {
         switch (getPalLanguage()) {
         case 1:
             mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
