@@ -996,7 +996,7 @@ dScnLogo_c::~dScnLogo_c() {
     mDoExt_setAraCacheSize(free_size - aram_heap->getTotalFreeSize());
 
 #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnJpn) {
+    if (isRegionJpn()) {
         if (dComIfGp_getFontArchive() != NULL) {
             dComIfGp_getFontArchive()->unmount();
             dComIfGp_setFontArchive(NULL);
