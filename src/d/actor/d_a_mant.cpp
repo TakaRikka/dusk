@@ -15,76 +15,49 @@
 #include "dusk/dvd_asset.hpp"
 #include "dusk/frame_interpolation.h"
 
+#include <type_traits>
+
 using namespace dusk::version;
 
 #define MANT_REL_PATH platformSelect<const char*>("/rel/Final/Release/d_a_mant.rel", "/rel/Rfinal/Release/d_a_mant.rel")
 
+#define DEFINE_MANT_ASSET(name, type, count, ...)                                                  \
+    static type* name##_get() {                                                                    \
+        alignas(32) static std::remove_cv_t<type> buf[count];                                      \
+        static bool _ = (dusk::LoadRelAsset(buf, MANT_REL_PATH, __VA_ARGS__), true);               \
+        return buf;                                                                                \
+    }
+
 // keep the original version of the cape texture const so we don't need to reload the file
-static u8 const* l_Egnd_mantTEX_get() {
-    alignas(32) static u8 buf[0x4000];
-    static bool _ = (
-        dusk::LoadRelAsset(
-            buf,
-            MANT_REL_PATH,
-            {
-            {GameVersion::GcnUsa,     0x1C00},
-            {GameVersion::GcnPal,     0x1C00},
-            {GameVersion::GcnJpn,     0x1C00},
-            {GameVersion::WiiUsaRev0, 0x1B00},
-            {GameVersion::WiiUsa,     0x1900},
-            {GameVersion::WiiPal,     0x1900},
-            {GameVersion::WiiJpn,     0x1900}
-            },
-            0x4000
-        ),
-        true
-    );
-    return buf;
-}
+DEFINE_MANT_ASSET(l_Egnd_mantTEX, u8 const, 0x4000, {
+    {GameVersion::GcnUsa,     0x1C00},
+    {GameVersion::GcnPal,     0x1C00},
+    {GameVersion::GcnJpn,     0x1C00},
+    {GameVersion::WiiUsaRev0, 0x1B00},
+    {GameVersion::WiiUsa,     0x1900},
+    {GameVersion::WiiPal,     0x1900},
+    {GameVersion::WiiJpn,     0x1900},
+});
 
-static u8* l_Egnd_mantTEX_U_get() {
-    alignas(32) static u8 buf[0x4000];
-    static bool _ = (
-        dusk::LoadRelAsset(
-            buf,
-            MANT_REL_PATH,
-            {
-            {GameVersion::GcnUsa,     0x5C00},
-            {GameVersion::GcnPal,     0x5C00},
-            {GameVersion::GcnJpn,     0x5C00},
-            {GameVersion::WiiUsaRev0, 0x5B00},
-            {GameVersion::WiiUsa,     0x5900},
-            {GameVersion::WiiPal,     0x5900},
-            {GameVersion::WiiJpn,     0x5900}
-            },
-            0x4000
-        ),
-        true
-    );
-    return buf;
-}
+DEFINE_MANT_ASSET(l_Egnd_mantTEX_U, u8, 0x4000, {
+    {GameVersion::GcnUsa,     0x5C00},
+    {GameVersion::GcnPal,     0x5C00},
+    {GameVersion::GcnJpn,     0x5C00},
+    {GameVersion::WiiUsaRev0, 0x5B00},
+    {GameVersion::WiiUsa,     0x5900},
+    {GameVersion::WiiPal,     0x5900},
+    {GameVersion::WiiJpn,     0x5900},
+});
 
-static u8* l_Egnd_mantPAL_get() {
-    alignas(32) static u8 buf[0x60];
-    static bool _ = (
-        dusk::LoadRelAsset(
-            buf,
-            MANT_REL_PATH,
-            {
-            {GameVersion::GcnUsa,     0x9C00},
-            {GameVersion::GcnPal,     0x9C00},
-            {GameVersion::GcnJpn,     0x9C00},
-            {GameVersion::WiiUsaRev0, 0x9B00},
-            {GameVersion::WiiUsa,     0x9900},
-            {GameVersion::WiiPal,     0x9900},
-            {GameVersion::WiiJpn,     0x9900}
-            },
-            0x60
-        ),
-        true
-    );
-    return buf;
-}
+DEFINE_MANT_ASSET(l_Egnd_mantPAL, u8, 0x60, {
+    {GameVersion::GcnUsa,     0x9C00},
+    {GameVersion::GcnPal,     0x9C00},
+    {GameVersion::GcnJpn,     0x9C00},
+    {GameVersion::WiiUsaRev0, 0x9B00},
+    {GameVersion::WiiUsa,     0x9900},
+    {GameVersion::WiiPal,     0x9900},
+    {GameVersion::WiiJpn,     0x9900},
+});
 
 #define l_Egnd_mantTEX   (l_Egnd_mantTEX_get())
 #define l_Egnd_mantTEX_U (l_Egnd_mantTEX_U_get())
@@ -100,69 +73,45 @@ static TGXTexObj mainTexObj;
 static TGXTexObj undersideTexObj;
 
 // l_pos is unused
-// static f32* l_pos_get() {
-//     alignas(32) static f32 buf[507];
-//     static bool _ = (
-//         dusk::LoadRelAsset(
-//             buf,
-//             MANT_REL_PATH,
-//             {
-//             {GameVersion::GcnUsa, 0x9C60},
-//             {GameVersion::GcnPal, 0x9C60}
-//             },
-//             sizeof(buf)
-//         ),
-//         true
-//     );
-//     return buf;
-// }
+// DEFINE_MANT_ASSET(l_pos, f32, 507, {
+//     {GameVersion::GcnUsa, 0x9C60},
+//     {GameVersion::GcnPal, 0x9C60},
+// });
 
 // I think l_normal doesn't exist on Wii
-static f32* l_normal_get() {
-    alignas(32) static f32 buf[3];
-    static bool _ = (
-        dusk::LoadRelAsset(
-            buf,
-            MANT_REL_PATH,
-            {
-            {GameVersion::GcnUsa, 0xA44C},
-            {GameVersion::GcnPal, 0xA44C},
-            {GameVersion::GcnJpn, 0xA44C}
-            },
-            sizeof(buf)
-        ),
-        true
-    );
-    return buf;
-}
+DEFINE_MANT_ASSET(l_normal, f32, 3, {
+    {GameVersion::GcnUsa, 0xA44C},
+    {GameVersion::GcnPal, 0xA44C},
+    {GameVersion::GcnJpn, 0xA44C},
+});
 
-static f32* l_texCoord_get() {
-    alignas(32) static f32 buf[338];
-    static bool _ = (
-        dusk::LoadRelAsset(
-            buf,
-            MANT_REL_PATH,
-            {
-            {GameVersion::GcnUsa,     0xA458},
-            {GameVersion::GcnPal,     0xA458},
-            {GameVersion::GcnJpn,     0xA458},
-            {GameVersion::WiiUsaRev0, 0x9B60},
-            {GameVersion::WiiUsa,     0x9960},
-            {GameVersion::WiiPal,     0x9960},
-            {GameVersion::WiiJpn,     0x9960}
-            },
-            sizeof(buf)
-        ),
-        true
-    );
-    return buf;
-}
+DEFINE_MANT_ASSET(l_texCoord, f32, 338, {
+    {GameVersion::GcnUsa,     0xA458},
+    {GameVersion::GcnPal,     0xA458},
+    {GameVersion::GcnJpn,     0xA458},
+    {GameVersion::WiiUsaRev0, 0x9B60},
+    {GameVersion::WiiUsa,     0x9960},
+    {GameVersion::WiiPal,     0x9960},
+    {GameVersion::WiiJpn,     0x9960},
+});
 
 //#define l_pos      (l_pos_get())
 #define l_normal   (l_normal_get())
 #define l_texCoord (l_texCoord_get())
 
 static bool l_Egnd_mantTEX_hasReplacement = false;
+
+DEFINE_MANT_ASSET(l_Egnd_mantDL, u8, 0x3EC, {
+    {GameVersion::GcnUsa,     0xA9A0},
+    {GameVersion::GcnPal,     0xA9A0},
+    {GameVersion::GcnJpn,     0xA9A0},
+    {GameVersion::WiiUsaRev0, 0xA0C0},
+    {GameVersion::WiiUsa,     0x9EC0},
+    {GameVersion::WiiPal,     0x9EC0},
+    {GameVersion::WiiJpn,     0x9EC0},
+});
+
+#define l_Egnd_mantDL (l_Egnd_mantDL_get())
 #else
 #include "assets/l_Egnd_mantTEX.h"
 
@@ -172,37 +121,9 @@ static bool l_Egnd_mantTEX_hasReplacement = false;
 #endif
 #include "d/d_s_play.h"
 
-#if TARGET_PC
-using GameVersion = dusk::version::GameVersion;
-
-static u8* l_Egnd_mantDL_get() {
-    alignas(32) static u8 buf[0x3EC];
-    static bool _ = (
-        dusk::LoadRelAsset(
-            buf,
-            MANT_REL_PATH,
-            {
-            {GameVersion::GcnUsa,     0xA9A0},
-            {GameVersion::GcnPal,     0xA9A0},
-            {GameVersion::GcnJpn,     0xA9A0},
-            {GameVersion::WiiUsaRev0, 0xA0C0},
-            {GameVersion::WiiUsa,     0x9EC0},
-            {GameVersion::WiiPal,     0x9EC0},
-            {GameVersion::WiiJpn,     0x9EC0}
-            },
-            0x3EC
-        ),
-        true
-    );
-    return buf;
-}
-
-#define l_Egnd_mantDL (l_Egnd_mantDL_get())
-#else
-#include "assets/l_Egnd_mantDL.h"
-#endif
-
 #if !TARGET_PC
+#include "assets/l_Egnd_mantDL.h"
+
 static void* pal_d = (void*)&l_Egnd_mantPAL;
 
 static void* tex_d[2] = {
