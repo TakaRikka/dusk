@@ -242,8 +242,14 @@ FetchContent_Declare(miniz
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     EXCLUDE_FROM_ALL
 )
+message(STATUS "dusklight: Fetching nlohmann/json")
+FetchContent_Declare(json
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+    URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
+    DOWNLOAD_EXTRACT_TIMESTAMP FALSE
+)
 
-set(_fetch_content_deps miniz)
+set(_fetch_content_deps miniz json)
 if (DUSK_HAS_FUNCHOOK)
     message(STATUS "dusklight: Fetching funchook")
     # cmake/PatchFunchook.cmake patches funchook's cmake/capstone.cmake.in to inject a
@@ -303,7 +309,7 @@ include(cmake/GameABIConfig.cmake)
 find_package(Threads REQUIRED)
 set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::log borealis::presentation borealis::sentry borealis::update freeverb cxxopts::cxxopts absl::flat_hash_map TracyClient fmt::fmt
+    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::log borealis::presentation borealis::sentry borealis::update freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)
 if (DUSK_HAS_FUNCHOOK)
     list(APPEND GAME_LIBS funchook-static)
