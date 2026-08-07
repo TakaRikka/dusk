@@ -917,6 +917,9 @@ void Prelaunch::update() {
                 break;
             case iso::Region::NorthAmerica:
                 innerRML += "USA";
+                if (state.activeDiscInfo.platform == iso::Platform::Wii) {
+                    innerRML += fmt::format(" Rev. {}", state.activeDiscInfo.revision);
+                }
                 break;
             case iso::Region::Korea:
                 innerRML += "KOR";

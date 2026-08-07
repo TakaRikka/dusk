@@ -107,6 +107,7 @@ void update_info(const borealis::disc::Result& result, DiscInfo& info) noexcept 
     if (!result.metadata.gameId.empty()) {
         info.platform = result.metadata.platform;
         info.region = region_from_game_id(result.metadata.gameId);
+        info.revision = result.metadata.revision;
     }
 }
 
