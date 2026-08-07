@@ -35,12 +35,6 @@ DEFINE_HOOK(&dSv_player_item_c::setLineUpItem, dSv_player_item_c__setLineUpItem)
 
 DEFINE_HOOK(&dSv_info_c::onSwitch, dSv_info_c__onSwitch);
 
-DEFINE_HOOK(&dMsgFlow_c::query001, dMsgFlow_c__query001);
-DEFINE_HOOK(&dMsgFlow_c::query022, dMsgFlow_c__query022);
-DEFINE_HOOK(&dMsgFlow_c::query025, dMsgFlow_c__query025);
-DEFINE_HOOK(&dMsgFlow_c::query049, dMsgFlow_c__query049);
-DEFINE_HOOK(&dMsgFlow_c::event035, dMsgFlow_c__event035);
-
 /*DEFINE_HOOK_SYMBOL("__Z21dComIfGp_setNextStagePKcsaafjiasii",
     void(char const*, s16, s8, s8, f32, u32, int, s8, s16, int, int), setNextStage);*/
 
@@ -475,66 +469,6 @@ HookAction hookPreSaveInfoOnSwitch(ModContext*, void* args, void*, void*) {
     return HOOK_CONTINUE;
 }
 
-HookAction hookPreQuery001(ModContext*, void* args, void* retval, void*) {
-    auto* node = mods::arg<mesg_flow_node_branch*>(args, 1);
-    if (node->param == 0xFA) { // MDH Completed
-        // Return 0 to be able to turn souls into Jovani pre MDH
-        if (playerIsInRoomStage(5, allStages[Castle_Town_Shops])) {
-            *static_cast<u16*>(retval) = 0;
-            return HOOK_SKIP_ORIGINAL;
-        }
-    }
-    return HOOK_CONTINUE;
-}
-
-HookAction hookPreQuery022(ModContext*, void* args, void* retval, void*) {
-    if (daAlink_c::checkStageName(allStages[Ordon_Village_Interiors])) {
-        auto* node = mods::arg<mesg_flow_node_branch*>(args, 1);
-        if ((node->param & 0xFF) == dItemNo_Randomizer_HVY_BOOTS_e) {
-            // Return false so that the door in Bo's house can be opened without the Iron Boots
-            *static_cast<u16*>(retval) = 0;
-            return HOOK_SKIP_ORIGINAL;
-        }
-    }
-    return HOOK_CONTINUE;
-}
-
-HookAction hookPreQuery025(ModContext*, void* args, void* retval, void*) {
-    // 0x4461 is the key for the red potion shop item
-    if (playerIsInRoomStage(3, allStages[Kakariko_Village_Interiors]) &&
-        randomizer_GetContext().mShopOverrides.contains(0x4461)) {
-        // Return 0 so the player can buy the red potion item from the shop.
-        *static_cast<u16*>(retval) = 0;
-        return HOOK_SKIP_ORIGINAL;
-    }
-    return HOOK_CONTINUE;
-}
-
-void hookPostQuery049(ModContext*, void*, void* retval, void*) {
-    // Split up getting both rewards from Jovani in randomizer
-    auto& out = *static_cast<u16*>(retval);
-    if (out == 4 && !dComIfGs_isEventBit(GOT_BOTTLE_FROM_JOVANI)) {
-        out = 3;
-    }
-}
-
-HookAction hookPreEvent035(ModContext*, void* args, void* retval, void*) {
-    auto* node = mods::arg<mesg_flow_node_event*>(args, 1);
-    const u8* p = node->params;
-    const int prm0 = (p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
-
-    if (prm0 == dItemNo_TOMATO_PUREE_e || prm0 == dItemNo_TASTE_e) {
-        dComIfGs_offItemFirstBit(prm0);
-    } else if (prm0 == dItemNo_RAFRELS_MEMO_e || prm0 == dItemNo_ASHS_SCRIBBLING_e) {
-        // rando: keep SLOT_19 (the items are randomized)
-    } else if (prm0 == dItemNo_LETTER_e || prm0 == dItemNo_BILL_e ||
-               prm0 == dItemNo_WOOD_STATUE_e || prm0 == dItemNo_IRIAS_PENDANT_e) {
-        offWarashibeItem(prm0);
-    }
-    *static_cast<int*>(retval) = 1;
-    return HOOK_SKIP_ORIGINAL;
-}
-
 // TODO: item service
 /* HookAction hookPreExecItemGet(ModContext*, void* args, void*, void*) {
     if (randomizer_IsActive()) {
@@ -656,12 +590,6 @@ ModResult initialize() {
     ADD_HOOK_POST(dSv_player_item_c__setLineUpItem, hookPostSetLineUpItem);
 
     ADD_HOOK_PRE(dSv_info_c__onSwitch, hookPreSaveInfoOnSwitch);
-
-    ADD_HOOK_PRE(dMsgFlow_c__query001, hookPreQuery001);
-    ADD_HOOK_PRE(dMsgFlow_c__query022, hookPreQuery022);
-    ADD_HOOK_PRE(dMsgFlow_c__query025, hookPreQuery025);
-    ADD_HOOK_POST(dMsgFlow_c__query049, hookPostQuery049);
-    ADD_HOOK_PRE(dMsgFlow_c__event035, hookPreEvent035);
 
     //ADD_HOOK_PRE(setNextStage, hookPreSetNextStage);
 
