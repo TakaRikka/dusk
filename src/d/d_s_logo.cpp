@@ -53,8 +53,8 @@ struct homeBtnData {
 #if TARGET_PC
 using namespace dusk::version;
 
-#define LOGO_ARC versionSelect<const char*>({{GameVersion::GcnJpn, "Logo"}, {GameVersion::GcnPal, "LogoPal"}}, "LogoUs")
-#define MSG_PATH versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Msgjp/bmgres.arc"}}, "/res/Msgus/bmgres.arc")
+#define LOGO_ARC versionSelect<const char*>({{GameVersion::GcnJpn, "Logo"}, {GameVersion::GcnPal, "LogoPal"}, {GameVersion::WiiJpn, "Logo"}, {GameVersion::WiiPal, "LogoPal"}}, "LogoUs")
+#define MSG_PATH versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Msgjp/bmgres.arc"}, {GameVersion::WiiJpn, "/res/Msgjp/bmgres.arc"}}, "/res/Msgus/bmgres.arc")
 #elif VERSION == VERSION_SHIELD
 #define LOGO_ARC "LogoUs"
 #define MSG_PATH  "/res/Msgcn/bmgres.arc"
@@ -77,7 +77,20 @@ using namespace dusk::version;
 #define PROGRESSIVE_MODE_ON  OS_PROGRESSIVE_MODE_ON
 #endif
 
-#if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+// TODO: Probably shouldn't actually load LayoutRevo, so I disabled it for now
+#if TARGET_PC && 0
+using namespace dusk::version;
+
+#define FMAP_RES_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/fmapres.arc"}, {GameVersion::GcnPal, "/res/Layout/fmapres.arc"}, {GameVersion::GcnJpn, "/res/Layout/fmapres.arc"}}, "/res/LayoutRevo/fmapresR.arc")
+#define DMAP_RES_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/dmapres.arc"}, {GameVersion::GcnPal, "/res/Layout/dmapres.arc"}, {GameVersion::GcnJpn, "/res/Layout/dmapres.arc"}}, "/res/LayoutRevo/dmapresR.arc")
+#define COLLECT_RES_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/clctres.arc"}, {GameVersion::GcnPal, "/res/Layout/clctres.arc"}, {GameVersion::GcnJpn, "/res/Layout/clctres.arc"}}, "/res/LayoutRevo/clctresR.arc")
+
+#define MSG_COM_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/msgcom.arc"}, {GameVersion::GcnPal, "/res/Layout/msgcom.arc"}, {GameVersion::GcnJpn, "/res/Layout/msgcom.arc"}}, "/res/LayoutRevo/msgcomR.arc")
+#define MSG_RES0_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/msgres00.arc"}, {GameVersion::GcnPal, "/res/Layout/msgres00.arc"}, {GameVersion::GcnJpn, "/res/Layout/msgres00.arc"}}, "/res/LayoutRevo/msgres00R.arc")
+#define MSG_RES1_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/msgres01.arc"}, {GameVersion::GcnPal, "/res/Layout/msgres01.arc"}, {GameVersion::GcnJpn, "/res/Layout/msgres01.arc"}}, "/res/LayoutRevo/msgres01R.arc")
+#define MSG_RES2_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/msgres02.arc"}, {GameVersion::GcnPal, "/res/Layout/msgres02.arc"}, {GameVersion::GcnJpn, "/res/Layout/msgres02.arc"}}, "/res/LayoutRevo/msgres02R.arc")
+#define MSG_RES3_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/msgres03.arc"}, {GameVersion::GcnPal, "/res/Layout/msgres03.arc"}, {GameVersion::GcnJpn, "/res/Layout/msgres03.arc"}}, "/res/LayoutRevo/msgres03R.arc")
+#elif PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
 #define FMAP_RES_PATH "/res/LayoutRevo/fmapresR.arc"
 #define DMAP_RES_PATH "/res/LayoutRevo/dmapresR.arc"
 #define COLLECT_RES_PATH "/res/LayoutRevo/clctresR.arc"
@@ -99,7 +112,10 @@ using namespace dusk::version;
 #define MSG_RES3_PATH "/res/Layout/msgres03.arc"
 #endif
 
-#if PLATFORM_WII || PLATFORM_SHIELD
+#if TARGET_PC
+#define ICON_RES_PATH "/res/CardIcon/cardicon.arc"
+#define PARTICLE_COM_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Particle/common.jpc"}, {GameVersion::GcnPal, "/res/Particle/common.jpc"}, {GameVersion::GcnJpn, "/res/Particle/common.jpc"}}, "/res/Particle/common-r.jpc")
+#elif PLATFORM_WII || PLATFORM_SHIELD
 #define ICON_RES_PATH "/res/WiiBannerIcon/bannerIcon.arc"
 #define PARTICLE_COM_PATH "/res/Particle/common-r.jpc"
 #else
@@ -107,7 +123,13 @@ using namespace dusk::version;
 #define PARTICLE_COM_PATH "/res/Particle/common.jpc"
 #endif
 
-#if PLATFORM_WII
+// TODO: Probably shouldn't actually load LayoutRevo, so I disabled it for now
+#if TARGET_PC && 0
+#define RING_RES_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/ringres.arc"}, {GameVersion::GcnPal, "/res/Layout/ringres.arc"}, {GameVersion::GcnJpn, "/res/Layout/ringres.arc"}}, "/res/LayoutRevo/ringresR.arc")
+#define ITEM_INF_RES_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/itmInfRes.arc"}, {GameVersion::GcnPal, "/res/Layout/itmInfRes.arc"}, {GameVersion::GcnJpn, "/res/Layout/itmInfRes.arc"}}, "/res/LayoutRevo/itmInfResR.arc")
+#define BUTTON_RES_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/button.arc"}, {GameVersion::GcnPal, "/res/Layout/button.arc"}, {GameVersion::GcnJpn, "/res/Layout/button.arc"}}, "/res/LayoutRevo/buttonR.arc")
+#define MAIN2D_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/res/Layout/main2D.arc"}, {GameVersion::GcnPal, "/res/Layout/main2D.arc"}, {GameVersion::GcnJpn, "/res/Layout/main2D.arc"}}, "/res/LayoutRevo/main2DR.arc")
+#elif PLATFORM_WII
 #define RING_RES_PATH "/res/LayoutRevo/ringresR.arc"
 #define ITEM_INF_RES_PATH "/res/LayoutRevo/itmInfResR.arc"
 #define BUTTON_RES_PATH "/res/LayoutRevo/buttonR.arc"
@@ -1640,8 +1662,8 @@ void dScnLogo_c::dvdDataLoad() {
     mpMsgResCommand[2] = aramMount(MSG_RES2_PATH, mDoExt_getJ2dHeap());
     mpMsgResCommand[3] = aramMount(MSG_RES3_PATH, mDoExt_getJ2dHeap());
 #if TARGET_PC
-    const auto res4Path = versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Layout/msgres04.arc"}}, "/res/Layout/msgres04F.arc");
-    mpMsgResCommand[4] = aramMount( res4Path, mDoExt_getJ2dHeap());
+    const auto res4Path = versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Layout/msgres04.arc"}, {GameVersion::WiiJpn, "/res/Layout/msgres04.arc"}}, "/res/Layout/msgres04F.arc");
+    mpMsgResCommand[4] = aramMount(res4Path, mDoExt_getJ2dHeap());
 #elif VERSION == VERSION_GCN_JPN
     mpMsgResCommand[4] = aramMount("/res/Layout/msgres04.arc", mDoExt_getJ2dHeap());
 #else
@@ -1657,11 +1679,15 @@ void dScnLogo_c::dvdDataLoad() {
         {
             {GameVersion::GcnJpn, "/res/Fontjp/fontres.arc"},
             {GameVersion::GcnPal, "/res/Fonteu/fontres.arc"},
+            {GameVersion::WiiJpn, "/res/Fontjp/fontres.arc"},
+            {GameVersion::WiiPal, "/res/Fonteu/fontres.arc"},
         }, "/res/Fontus/fontres.arc");
     const auto fontRubyPath = versionSelect<const char*>(
         {
             {GameVersion::GcnJpn, "/res/Fontjp/rubyres.arc"},
             {GameVersion::GcnPal, "/res/Fonteu/rubyres.arc"},
+            {GameVersion::WiiJpn, "/res/Fontjp/rubyres.arc"},
+            {GameVersion::WiiPal, "/res/Fonteu/rubyres.arc"},
         }, "/res/Fontus/rubyres.arc");
 
     // Note: GCN_JPN mounts this archive as tail instead of head.

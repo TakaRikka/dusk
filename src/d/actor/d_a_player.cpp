@@ -375,10 +375,14 @@ static const u8* l_sightDL_get() {
     static bool _ = (
         dusk::LoadDolAsset(
             buf,
-{
-            {GameVersion::GcnUsa, 0x803BA0C0},
-            {GameVersion::GcnPal, 0x803BBDA0},
-            {GameVersion::GcnJpn, 0x803B4220}
+            {
+            {GameVersion::GcnUsa,     0x803BA0C0},
+            {GameVersion::GcnPal,     0x803BBDA0},
+            {GameVersion::GcnJpn,     0x803B4220},
+            {GameVersion::WiiUsaRev0, 0x803F63C0},
+            {GameVersion::WiiUsa,     0x803E1640},
+            {GameVersion::WiiPal,     0x803E23A0},
+            {GameVersion::WiiJpn,     0x803DF600}
             },
             0x89
         ),
