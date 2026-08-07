@@ -41,9 +41,12 @@ constexpr auto AcceptedDiscs = std::to_array<borealis::disc::AcceptedDisc>({
         .expectedHash = borealis::disc::parse_xxh3_128("9ef597588b0035ca9e91b333fa9a8a7e"),
     },
     {
-        // TODO: How to support revisions?
-        .gameId = "RZDE01",
-        .expectedHash = borealis::disc::parse_xxh3_128("b3d91fbea59e5c66934d04c01566728e"),  // Rev. 2: c3ec420921a1b36d6ae43f576491d25c
+        .gameId = "RZDE01", .revision = 0,
+        .expectedHash = borealis::disc::parse_xxh3_128("b3d91fbea59e5c66934d04c01566728e"),
+    },
+    {
+        .gameId = "RZDE01", .revision = 2,
+        .expectedHash = borealis::disc::parse_xxh3_128("c3ec420921a1b36d6ae43f576491d25c"),
     },
     {
         .gameId = "RZDJ01",

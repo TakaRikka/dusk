@@ -30,9 +30,10 @@ void init() {
         gameVersion = GameVersion::GcnPal;
     } else if (game == "GZ2J"sv) {
         gameVersion = GameVersion::GcnJpn;
-    } else if (game == "RZDE"sv) {
-        // TODO: How to support revisions?
+    } else if (game == "RZDE"sv && diskId.gameVersion == 0) {
         gameVersion = GameVersion::WiiUsaRev0;
+    } else if (game == "RZDE"sv && diskId.gameVersion == 2) {
+        gameVersion = GameVersion::WiiUsa;
     } else if (game == "RZDP"sv) {
         gameVersion = GameVersion::WiiPal;
     } else if (game == "RZDJ"sv) {
