@@ -26,10 +26,17 @@ void init() {
 
     if (game == "GZ2E"sv) {
         gameVersion = GameVersion::GcnUsa;
-    } else if (game == "GZ2P") {
+    } else if (game == "GZ2P"sv) {
         gameVersion = GameVersion::GcnPal;
-    } else if (game == "GZ2J") {
+    } else if (game == "GZ2J"sv) {
         gameVersion = GameVersion::GcnJpn;
+    } else if (game == "RZDE"sv) {
+        // TODO: How to support revisions?
+        gameVersion = GameVersion::WiiUsaRev0;
+    } else if (game == "RZDP"sv) {
+        gameVersion = GameVersion::WiiPal;
+    } else if (game == "RZDJ"sv) {
+        gameVersion = GameVersion::WiiJpn;
     } else {
         // TODO: Handle remaining valid versions.
         DuskLog.fatal("Unknown/unsupported game version in disc: {}", game);
