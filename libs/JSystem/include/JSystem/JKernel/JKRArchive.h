@@ -216,37 +216,12 @@ public:
 #if TARGET_PC
     void** mFileData;
 
-    // Returns true if the given dvdEntryNum has an archive overlay assigned to it
-    static bool (*sArcHasOverlayFn)(s32 dvdEntryNum);
+    std::unordered_map<s32, std::vector<u8>> mFileIdToArcOverlayData;  // Owns all overlayed data
+    std::string mArcOverlaysPath;  // Used to check if overlays are currently registered to a path
 
-    // Given a DVD Entry and a path inside of the archive, return a shared pointer to the overlayed
-    // file data, if availible. Otherwise, return nullptr
-    static std::shared_ptr<const std::vector<u8>> (*sGetArcOverlayBufferFn)(
-        s32 dvdEntryNum, const std::string& pathInArc);
-
-    std::unordered_map<s32, std::shared_ptr<const std::vector<u8>>>
-        mFileIdToArcOverlayData;  // Owns the pointers for all overlayed data
-
-    // bool mIsOverlayed = false;
-    // bool mIsOverlayedSet = false; Checks if the DVD Entry Number
-    // assigned to the current archive has an overlay assigned
-    bool isOverlayed() {
-        // We have the option to cache the return value here, but won't
-        // get runtime changes for arhives that change if they are overlayed or not, so the value
-        // currently isn't cached here
-        // if (!mIsOverlayedSet) {
-        //     if (!sArcHasOverlayFn) {
-        //         return false;
-        //     }
-        //     mIsOverlayed = sArcHasOverlayFn(mEntryNum);
-        //     mIsOverlayedSet = true;
-        // }
-        // return mIsOverlayed;
-        if (!sArcHasOverlayFn) {
-            return false;
-        }
-        return sArcHasOverlayFn(mEntryNum);
-    }
+    // Get the path of the current archive on the dvd file system, and change the ending from .arc
+    // to _arc/
+    void buildArcOverlaysPath();
 
     std::unordered_map<s32, std::string> mIdToPathMap;
     // Fill mIdToPathMap which maps every File ID in the arhive to a string that gives the full path

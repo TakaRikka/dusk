@@ -7,6 +7,7 @@
 
 #if TARGET_PC
 #include <cassert>
+#include "JSystem/JKernel/JKRDvdRipper.h"
 #endif
 
 DUSK_GAME_DATA u32 JKRArchive::sCurrentDirID;
@@ -271,6 +272,28 @@ void JKRArchive::initFileDataPointers() {
     }
 }
 
+void JKRArchive::buildArcOverlaysPath() {
+    if (!mArcOverlaysPath.empty() || mEntryNum < 0) {
+        return;
+    }
+
+    char buf[100];
+    if (!DVDConvertEntrynumToPath(mEntryNum, buf, 100)) {
+        return;
+    }
+
+    std::string path = std::string(buf);
+    size_t pos = path.rfind(".arc");
+
+    if (pos == std::string::npos) {
+        return;
+    }
+    path[pos] = '_'; // Replace the .arc with _arc
+    path.push_back('/');
+
+    mArcOverlaysPath = std::move(path);
+}
+
 void JKRArchive::buildIdToPathMap(u32 dirIndex, const std::string& currentPath) {
     const SDIDirEntry& dir = mNodes[dirIndex];
     for (int i = 0; i < dir.num_entries; i++) {
@@ -288,45 +311,53 @@ void JKRArchive::buildIdToPathMap(u32 dirIndex, const std::string& currentPath) 
 }
 
 void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_size) {
-    if (!isOverlayed() || sGetArcOverlayBufferFn == nullptr) {
+    if (mArcOverlaysPath.empty()) {
+        buildArcOverlaysPath();
+    }
+
+    // First, check if any overlays are applied on this directory
+    if (DVDConvertPathToEntrynum(mArcOverlaysPath.c_str()) < 0) {
         return nullptr;
     }
 
+    // Build a map of file Ids -> Local path names
     if (mIdToPathMap.empty()) {
         buildIdToPathMap(0, std::string(&mStringTable[mNodes[0].name_offset])+"/");
     }
-    
-    // If this arc has already loaded this overlayed file, return the pointer to it here.
+
     const auto& it = mFileIdToArcOverlayData.find(fileEntry->index);
     if (it != mFileIdToArcOverlayData.end()) {
         if (out_size) {
-            *out_size = it->second->size();
+            *out_size = it->second.size();
         }
-        return (void*)it->second->data();
+        return (void*)it->second.data();
     }
 
     const auto& it2 = mIdToPathMap.find(fileEntry->file_id);
     if (it2 == mIdToPathMap.end()) {
         return nullptr;
     }
-
-    std::shared_ptr<const std::vector<u8>> buffer_ptr = sGetArcOverlayBufferFn(mEntryNum, it2->second);
-    if (buffer_ptr == nullptr) {
+    
+    DVDFileInfo fileInfo;
+    if (!DVDOpen(std::string(mArcOverlaysPath+it2->second).c_str(),&fileInfo)) {
         return nullptr;
     }
 
-    void* out_data = (void*)buffer_ptr->data();
-
     if (out_size) {
-        *out_size = buffer_ptr->size();
+        *out_size = fileInfo.length;
     }
 
-    mFileIdToArcOverlayData[fileEntry->file_id] = std::move(buffer_ptr);
+    std::vector<u8> buffer(fileInfo.length);
+    s32 status = DVDReadPrio(&fileInfo, buffer.data(), ALIGN_NEXT(fileInfo.length,0x20), 0, 2);
+    DVDClose(&fileInfo);
 
+    if (status < DVD_RESULT_GOOD) {
+        return nullptr;
+    }    
+
+    void* out_data = buffer.data();
+    mFileIdToArcOverlayData[fileEntry->file_id] = std::move(buffer);
     return out_data;
 }
-
-bool(*JKRArchive::sArcHasOverlayFn)(s32 dvdEntryNum) = nullptr;
-std::shared_ptr<const std::vector<u8>>(*JKRArchive::sGetArcOverlayBufferFn)(s32, const std::string&) = nullptr;
 
 #endif
