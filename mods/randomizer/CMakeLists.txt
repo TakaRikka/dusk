@@ -101,7 +101,6 @@ file(GLOB_RECURSE RANDOMIZER_DATA RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
 # to both the mod and the standalone generator
 add_library(randomizer_embeds OBJECT)
 
-b_embed(randomizer_embeds "res/shadow_crystal.bti")
 foreach (RANDOMIZER_FILE IN LISTS RANDOMIZER_DATA)
     if (RANDOMIZER_FILE MATCHES "^generator/data/tests")
         continue()
