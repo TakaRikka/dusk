@@ -33,7 +33,7 @@ s32 ESP_CloseLib(void) {
 
 s32 ESP_LaunchTitle(u64 titleID, ESTicketView* pTicketView) {
     s32 ret = 0;
-    u8 buf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 buf[256];
     IOSIoVector* vec = (IOSIoVector*)(buf + 208);
     u64* id = (u64*)buf;
 
@@ -63,7 +63,7 @@ out:
 
 s32 ESP_GetTicketViews(ESTitleId titleId, ESTicketView* ticketViewList, u32* ticketViewCnt) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
     ESTitleId* p1 = (ESTitleId*)__esBuf;
     u32* p2 = (u32*)(__esBuf + 32);
@@ -111,7 +111,7 @@ out:
 
 s32 ESP_DiGetTicketView(const void* ticket, ESTicketView* ticketView) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
 
     if (__esFd < 0 || ticketView == NULL) {
@@ -142,7 +142,7 @@ out:
 
 s32 ESP_DiGetTmd(ESTitleMeta* tmd, u32* tmdSize) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
     u32* p1 = (u32*)__esBuf;
 
@@ -184,7 +184,7 @@ out:
 
 s32 ESP_GetTmdView(ESTitleId titleId, ESTmdView* tmdView, u32* size) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
     ESTitleId* p1 = (ESTitleId*)__esBuf;
     u32* p2 = (u32*)(__esBuf + 32);
@@ -233,7 +233,7 @@ out:
 
 s32 ESP_GetDataDir(ESTitleId titleId, char* dataDir) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
     ESTitleId* p1 = (ESTitleId*)__esBuf;
 
@@ -260,7 +260,7 @@ out:
 
 s32 ESP_GetTitleId(ESTitleId* titleId) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
 
     if (__esFd < 0 || titleId == NULL) {
@@ -283,7 +283,7 @@ out:
 
 s32 ESP_GetConsumption(ESTicketId ticketId, ESLpEntry* entries, u32* nEntries) {
     s32 rv = 0;
-    u8 __esBuf[256] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 __esBuf[256];
     IOSIoVector* v = (IOSIoVector*)(__esBuf + 256 - 6 * sizeof(IOSIoVector));
     ESTicketId* p1 = (ESTicketId*)__esBuf;
     u32* p2 = (u32*)(__esBuf + 32);

@@ -24,7 +24,7 @@ static u32 __relnchFl = 0;
 
 typedef struct IOSRpcRequest {
     IOSResourceRequest request;
-    IOSIpcCb cb ATTRIBUTE_ALIGN(32); // I am assuming this is aligned due to where cbArg is stored, and I see nothing between cb and callback_arg?
+    ATTRIBUTE_ALIGN(32) IOSIpcCb cb; // I am assuming this is aligned due to where cbArg is stored, and I see nothing between cb and callback_arg?
     void* callback_arg;
     u32 relaunch_flag;
     OSThreadQueue thread_queue;
@@ -37,7 +37,7 @@ static IOSRpcRequest* __relnchRpcSave = 0;
 
 #define ROUNDUP(sz)     (((u32)(sz) + (IPC_BUF_CNT / 2 - 1)) & ~(u32)(IPC_BUF_CNT / 2 - 1))
 
-static u8 __rpcBuf[ROUNDUP(sizeof(IOSRpcRequest))] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u8 __rpcBuf[ROUNDUP(sizeof(IOSRpcRequest))];
 
 static struct {
     u32 rcount;

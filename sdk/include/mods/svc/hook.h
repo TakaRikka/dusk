@@ -7,20 +7,22 @@
 #endif
 
 /*
- * Intercept game functions by address. Prefer the typed helpers in mods/svc/hook.hpp
- * (mods::hook::add_pre/add_post/replace over a &Class::method): they generate the
- * trampoline and hide install/dispatch, which are the low-level primitives those helpers
- * build. resolve() maps a symbol name to an address for targets you can't name at compile time
- * (file-local statics included).
+ * Hooks allow intercepting calls to game functions, allowing you to:
+ * - Modify arguments
+ * - Perform your own work before (pre), after (post) or instead of (replace) the original call
+ * - From a pre hook, conditionally skip the original call and return your own value
  *
- * Every call is game-thread-only. Install and removal must run with no hooked function on the
- * stack; the loader guarantees this by applying mod lifecycle changes between frames, which is
- * why hooking a function that never returns (the outermost loop) makes a mod un-unloadable.
+ * In most cases, you'll want to instead use the C++ helpers in mods/svc/hook.hpp
+ * (mods::hook::add_pre/add_post/replace). They generate the trampoline passed to
+ * install and provide compile-time type checking.
+ *
+ * resolve() resolves an address by symbol name for targets you can't name at compile time
+ * (file-local statics included).
  */
 
 #define HOOK_SERVICE_ID "dev.twilitrealm.dusklight.hook"
 #define HOOK_SERVICE_MAJOR 1u
-#define HOOK_SERVICE_MINOR 0u
+#define HOOK_SERVICE_MINOR 1u
 
 /* Symbol flags reported by resolve() */
 typedef enum HookSymbolFlags {
@@ -72,11 +74,18 @@ typedef struct HookService {
     ServiceHeader header;
 
     /*
-     * Install a trampoline detour on fn_addr and return the address to call the original through in
-     * *out_original_fn. The typed helpers generate the trampoline and call this; mods normally
-     * don't. The first mod to install a given target owns the live detour; later mods register as
-     * candidates so a hook survives the owner unloading (the detour is handed off and every
-     * original pointer is rewritten). Idempotent per (mod, out slot).
+     * Install a hook on fn_addr.
+     *
+     * trampoline_fn must point to a function that matches the original function's signature and
+     * dispatches pre- and post- hooks. This dispatch trampoline is normally generated at compile
+     * time using C++ template instantiation (see mods/svc/hook.hpp).
+     *
+     * The first hook install on a target will implicitly install a detour (patched instructions
+     * on the target that jump to the dispatch trampoline). When all hooks are uninstalled from a
+     * target, the detour is completely uninstalled.
+     *
+     * The address that the dispatch trampoline should call the original function through is written
+     * to out_original_fn.
      */
     ModResult (*install)(
         ModContext* ctx, void* fn_addr, void* trampoline_fn, void** out_original_fn);
@@ -116,6 +125,16 @@ typedef struct HookService {
      */
     ModResult (*resolve)(
         ModContext* ctx, const char* symbol, void** out_addr, HookSymbolFlags* out_flags);
+
+    /* Minor version 1 */
+
+    /*
+     * Uninstall the current mod's hook on fn_addr and unregister all callbacks.
+     * If no other mods have a hook installed on the target, the detour is uninstalled entirely.
+     *
+     * original_fn_slot must match the out_original_fn passed to install.
+     */
+    ModResult (*uninstall)(ModContext* ctx, void* fn_addr, void** original_fn_slot);
 } HookService;
 
 MOD_DECLARE_SERVICE(HookService, svc_hook, HOOK_SERVICE_ID, HOOK_SERVICE_MAJOR, HOOK_SERVICE_MINOR);
