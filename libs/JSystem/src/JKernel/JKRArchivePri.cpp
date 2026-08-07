@@ -347,7 +347,7 @@ void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_s
         *out_size = fileInfo.length;
     }
 
-    std::vector<u8> buffer(fileInfo.length);
+    std::vector<u8> buffer(ALIGN_NEXT(fileInfo.length,0x20));
     s32 status = DVDReadPrio(&fileInfo, buffer.data(), ALIGN_NEXT(fileInfo.length,0x20), 0, 2);
     DVDClose(&fileInfo);
 
