@@ -61,4 +61,14 @@ namespace dusk::version {
 
         return defaultValue;
     }
+
+    template<typename T>
+    T platformSelect(const T& gcn, const T& wii) {
+        return isGcn() ? gcn : wii;
+    }
+
+    template<typename T>
+    T regionSelect(const T& usa, const T& pal, const T& jpn) {
+        return isRegionUsa() ? usa : isRegionPal() ? pal : jpn;
+    }
 }  // namespace dusk::version

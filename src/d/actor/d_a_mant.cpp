@@ -17,7 +17,7 @@
 
 using namespace dusk::version;
 
-#define MANT_REL_PATH versionSelect<const char*>({{GameVersion::GcnUsa, "/rel/Final/Release/d_a_mant.rel"}, {GameVersion::GcnPal, "/rel/Final/Release/d_a_mant.rel"}, {GameVersion::GcnJpn, "/rel/Final/Release/d_a_mant.rel"}}, "/rel/Rfinal/Release/d_a_mant.rel")
+#define MANT_REL_PATH platformSelect<const char*>("/rel/Final/Release/d_a_mant.rel", "/rel/Rfinal/Release/d_a_mant.rel")
 
 // keep the original version of the cape texture const so we don't need to reload the file
 static u8 const* l_Egnd_mantTEX_get() {
