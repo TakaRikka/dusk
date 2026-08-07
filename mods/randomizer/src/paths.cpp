@@ -5,8 +5,12 @@
 namespace randomizer::paths {
 
 std::filesystem::path GetRandomizerPath() {
-    // TODO: need a more permanent directory than this
-    return session::svc_mng.host->mod_dir(session::svc_mng.mod_ctx);
+    const char* dataDir = nullptr;
+    if (session::svc_mng.host->data_dir(session::svc_mng.mod_ctx, &dataDir) != MOD_OK) {
+        session::svc_mng.host->fail(session::svc_mng.mod_ctx, MOD_ERROR, "Failed to get data directory");
+    }
+
+    return dataDir;
 }
 
 std::filesystem::path GetRandomizerSettingsPath() {
