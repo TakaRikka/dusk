@@ -7,7 +7,7 @@
 #include "helpers/endian.h"
 
 #ifdef TARGET_PC
-#include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 #endif
