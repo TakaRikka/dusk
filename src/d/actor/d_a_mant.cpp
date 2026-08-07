@@ -78,12 +78,7 @@ static TGXTexObj undersideTexObj;
 //     {GameVersion::GcnPal, 0x9C60},
 // });
 
-// I think l_normal doesn't exist on Wii
-DEFINE_MANT_ASSET(l_normal, f32, 3, {
-    {GameVersion::GcnUsa, 0xA44C},
-    {GameVersion::GcnPal, 0xA44C},
-    {GameVersion::GcnJpn, 0xA44C},
-});
+alignas(32) static f32 const l_normal[3] = {0.0f, 1.0f, 0.0f};
 
 DEFINE_MANT_ASSET(l_texCoord, f32, 338, {
     {GameVersion::GcnUsa,     0xA458},
@@ -95,8 +90,7 @@ DEFINE_MANT_ASSET(l_texCoord, f32, 338, {
     {GameVersion::WiiJpn,     0x9960},
 });
 
-//#define l_pos      (l_pos_get())
-#define l_normal   (l_normal_get())
+// #define l_pos      (l_pos_get())
 #define l_texCoord (l_texCoord_get())
 
 static bool l_Egnd_mantTEX_hasReplacement = false;
