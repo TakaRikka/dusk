@@ -15,6 +15,8 @@
 #include <thread>
 #include <map>
 
+#include "d/d_file_select.h"
+
 namespace randomizer::ui {
 
 seedgen::settings::Setting* FindSetting(const std::string& key) {
@@ -95,16 +97,21 @@ const std::vector<std::pair<std::string, std::string>>& GetStartingInventoryLayo
     return layoutOrder;
 }
 
+UiMenuTabHandle g_menu_tab{};
+
+FileSelectGateWindowCtx g_file_select_window_ctx{};
+
 namespace {
 // Control Helpers
 void add_button(UiElementHandle pane, const char* label, const char* help_rml,
-    UiPressedFn on_pressed, UiElementHandle* out_handle = nullptr)
+    UiPressedFn on_pressed, void* userdata = nullptr, UiElementHandle* out_handle = nullptr)
 {
     UiControlDesc desc = UI_CONTROL_DESC_INIT;
     desc.kind = UI_CONTROL_BUTTON;
     desc.label = label;
     desc.help_rml = help_rml;
     desc.on_pressed = on_pressed;
+    desc.user_data = userdata;
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
@@ -452,9 +459,31 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
     UiWindowHandle window{};
     session::svc_mng.ui->window_push(ctx, &desc, &window);
 }
-}
 
-UiMenuTabHandle g_menu_tab{};
+// Play Tab
+ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
+    UiElementHandle rightPane, void*, ModError*)
+{
+    add_button(leftPane,
+        "Selected Seed",
+        "",
+        [](ModContext*, void*) {
+            // TODO
+        });
+
+    add_button(leftPane,
+        "Start Randomizer",
+        "",
+        [](ModContext*, void* userdata) {
+            // set flag to move to name screen after window close
+            g_file_select_window_ctx.is_proceed = true;
+            session::svc_mng.ui->window_close(session::svc_mng.mod_ctx, *static_cast<UiWindowHandle*>(userdata));
+        },
+        &g_file_select_window_ctx.window_handle);
+
+    return MOD_OK;
+}
+}
 
 ModResult buildMenuTab() {
     UiMenuTabDesc desc = UI_MENU_TAB_DESC_INIT;
@@ -462,6 +491,56 @@ ModResult buildMenuTab() {
     desc.on_selected = OnMenuTabSelected;
 
     return session::svc_mng.ui->register_menu_tab(session::svc_mng.mod_ctx, &desc, &g_menu_tab);
+}
+
+ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {
+    UiTabDesc tabs[6]{};
+
+    tabs[0].struct_size = sizeof(UiTabDesc);
+    tabs[0].title = "Play";
+    tabs[0].build = buildPlayTab;
+
+    tabs[1].struct_size = sizeof(UiTabDesc);
+    tabs[1].title = "Seed Management";
+    tabs[1].build = buildSeedManagementTab;
+    tabs[1].update = updateSeedManagementTab;
+
+    tabs[2].struct_size = sizeof(UiTabDesc);
+    tabs[2].title = "Seed Options";
+    tabs[2].build = buildSeedOptionsTab;
+
+    tabs[3].struct_size = sizeof(UiTabDesc);
+    tabs[3].title = "Hints";
+    tabs[3].build = buildHintsTab;
+
+    tabs[4].struct_size = sizeof(UiTabDesc);
+    tabs[4].title = "Starting Inventory";
+    tabs[4].build = buildStartingInventoryTab;
+
+    tabs[5].struct_size = sizeof(UiTabDesc);
+    tabs[5].title = "Excluded Locations";
+    tabs[5].build = buildExcludedLocationsTab;
+
+    UiWindowDesc desc = UI_WINDOW_DESC_INIT;
+    desc.tabs = tabs;
+    desc.tab_count = 6;
+    desc.user_data = fileSelect;
+    desc.on_closed = [](ModContext*, UiWindowHandle, void* userdata) {
+        dFile_select_c* i_this = static_cast<dFile_select_c*>(userdata);
+
+        // if closing the window through backing out, return to file select
+        if (!g_file_select_window_ctx.is_proceed)  {
+            i_this->headerTxtSet(0x43, 1, 0);
+            i_this->fileRecScaleAnmInitSet2(0.0f, 1.0f);
+            i_this->nameMoveAnmInitSet(0xd29, 0xd1f);
+            i_this->modoruTxtDispAnmInit(0);
+            i_this->mDataSelProc = dFile_select_c::DATASELPROC_NAME_TO_DATA_SELECT_MOVE;
+        }
+
+        g_dialogSelectModeState = SelectReady;
+    };
+
+    session::svc_mng.ui->window_push(session::svc_mng.mod_ctx, &desc, &g_file_select_window_ctx.window_handle);
 }
 
 std::filesystem::path GetRandomizerPath() {

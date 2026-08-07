@@ -3,6 +3,7 @@
 
 #include "session.hpp"
 #include "ui/ui.hpp"
+#include "hooks.hpp"
 
 DEFINE_MOD();
 IMPORT_SERVICE(HostService, svc_host);
@@ -30,6 +31,11 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     });
     if (result != MOD_OK) {
         return mods::set_error(error, result, "failed to initialize session");
+    }
+
+    result = randomizer::hooks::initialize();
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize hooks");
     }
 
     result = randomizer::ui::initialize();
