@@ -551,7 +551,7 @@ void daAlink_c::setBowSight() {
         getArrowFlyData(&dist, &speed, TRUE);
         checkSightLine(dist, &sight_pos);
         mSight.setPos(&sight_pos);
-        mSight.offDrawFlg();
+        mSight.onDrawFlg();
     } else {
         mSight.offDrawFlg();
     }
