@@ -51,6 +51,7 @@ UserSettings g_userSettings = {
         .sunsSong {"game.sunsSong", false},
         .autoSave {"game.autoSave", false},
         .enhancedMapMenus {"game.enhancedMapMenus", false},
+        .aimingReticle {"game.aimingReticle", false},
 
         // Preferences
         .enableMirrorMode {"game.enableMirrorMode", false},
