@@ -1,1 +1,3 @@
 -keep class dev.twilitrealm.dusk.DuskActivity { *; }
+-keep class dev.twilitrealm.dusk.DuskSecretStore { *; }
+-keep class dev.twilitrealm.dusk.DuskSecretStore$Result { *; }

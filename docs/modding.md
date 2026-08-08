@@ -212,6 +212,46 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
 Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
 `HostService::data_dir` for persistent storage.
 
+### SecretStorageService (`mods/svc/secret_storage.h`)
+
+Small secret values bound to the caller's exact portable mod ID and a caller-chosen key, without exposing paths,
+aliases, enumeration, existence checks, or asynchronous work. The v1 table order is exactly `get`, owner-aware
+`free`, `put`, `remove`.
+
+```cpp
+IMPORT_SERVICE(SecretStorageService, svc_secret);
+
+const char token[] = "example";
+SecretStorageResult stored = svc_secret->put(mod_ctx, "token", token, sizeof(token) - 1);
+
+ResourceBuffer value = RESOURCE_BUFFER_INIT;
+if (svc_secret->get(mod_ctx, "token", &value) == SECRET_STORAGE_OK) {
+    // value.data is NULL and value.size is zero for a stored empty value.
+    svc_secret->free(mod_ctx, &value);
+}
+```
+
+Keys are 1 through 128 bytes of lowercase ASCII `[a-z0-9_.-]` and cannot start with a dot. Mod IDs must be portable
+lowercase dot-separated labels of `[a-z0-9_]`, at most 240 bytes total and 64 bytes per label; legacy uppercase IDs
+are rejected rather than normalized. Values are bounded to 65536 bytes. `put` deep-copies input before returning and
+the host wipes its temporary copies best effort.
+`get` always empties `out_buffer` on entry or failure but never frees a prior buffer, so callers must free it before
+reusing the struct. Returned buffers are owner-bound, wiped before release, and reclaimed/wiped on mod detach.
+
+Android derives a SHA-256 identity from the exact runtime application ID, mod ID and key using the fixed v1 domain and
+little-endian length prefixes. The digest drives a per-identity nonexportable AndroidKeyStore AES-256-GCM key and
+private no-backup metadata. The encrypted envelope authenticates its complete fixed header as AAD. Corrupt envelopes,
+identity mismatch, malformed lengths, trailing bytes and invalid tags return `SECRET_STORAGE_CORRUPT`; a committed
+record whose key was removed or permanently invalidated returns `SECRET_STORAGE_KEY_INVALIDATED`. A corrupt or
+key-invalidated committed record blocks `put` until an explicit `remove`.
+
+The record group is the base metadata file with `.new` and legacy `.bak` artifacts. Android's `AtomicFile.openRead`
+restores a legacy backup before the bounded read; base wins over stale `.new`, and `.new` alone is cleaned as
+uncommitted. Non-regular artifacts are rejected. `remove` deletes and verifies all metadata artifacts before deleting
+the Keystore alias; a failed metadata delete preserves the alias, while a failed alias delete leaves a harmless orphan
+for a later retry. On non-Android platforms every operation returns
+`SECRET_STORAGE_UNAVAILABLE`: there is deliberately no desktop secret-file fallback.
+
 ### HostService (`mods/svc/host.h`)
 
 Mod metadata and runtime interaction with the loader:

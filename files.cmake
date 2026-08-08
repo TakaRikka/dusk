@@ -1497,6 +1497,9 @@ set(DUSK_FILES
         src/dusk/mods/svc/save.hpp
         src/dusk/mods/svc/stage.cpp
         src/dusk/mods/svc/stage.hpp
+        src/dusk/mods/svc/secret_storage.cpp
+        src/dusk/mods/svc/secret_storage_core.cpp
+        src/dusk/mods/svc/secret_storage_core.hpp
         src/dusk/mouse.cpp
         src/dusk/presentation.cpp
         src/dusk/presentation.hpp
@@ -1581,4 +1584,9 @@ set(DUSK_FILES
         src/helpers/endian.cpp
         src/helpers/offset_ptr.cpp
         src/helpers/string.cpp
+)
+
+set(DUSK_SECRET_STORAGE_BACKEND_FILES
+        src/dusk/mods/svc/secret_storage_android.cpp
+        src/dusk/mods/svc/secret_storage_android.hpp
 )

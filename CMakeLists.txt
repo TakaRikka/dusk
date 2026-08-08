@@ -297,6 +297,9 @@ set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES})
 source_group("dusklight" FILES ${DUSK_FILES})
+if (ANDROID)
+    list(APPEND DUSK_FILES ${DUSK_SECRET_STORAGE_BACKEND_FILES})
+endif ()
 
 include(cmake/GameABIConfig.cmake)
 
