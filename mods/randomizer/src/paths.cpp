@@ -21,6 +21,10 @@ std::filesystem::path GetRandomizerPreferencesPath() {
     return GetRandomizerPath() / "preferences.yaml";
 }
 
+std::filesystem::path GetRandomizerPresetsPath() {
+    return GetRandomizerPath() / "presets";
+}
+
 std::filesystem::path GetRandomizerSeedsPath() {
     return GetRandomizerPath() / "seeds";
 }

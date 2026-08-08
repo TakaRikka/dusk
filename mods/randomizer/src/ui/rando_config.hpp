@@ -34,11 +34,4 @@ void PastePermalinkFromClipboard();
 
 ModResult buildMenuTab();
 ModResult buildFileSelectGateMenu(dFile_select_c*);
-
-std::filesystem::path GetRandomizerPath();
-std::filesystem::path GetRandomizerSettingsPath();
-std::filesystem::path GetRandomizerPreferencesPath();
-std::filesystem::path GetRandomizerSeedsPath();
-std::filesystem::path GetRandomizerPresetsPath();
-
 }

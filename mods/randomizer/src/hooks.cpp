@@ -18,6 +18,7 @@
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
+DEFINE_HOOK(&dFile_select_c::nameInput2, dFile_select_c__nameInput2);
 
 DEFINE_HOOK(&dSv_event_c::isEventBit, dSv_event_c__isEventBit);
 DEFINE_HOOK(&dSv_event_c::onEventBit, dSv_event_c__onEventBit);
@@ -131,6 +132,15 @@ HookAction hookPreSelectDataNameMove(ModContext*, void* args, void* retval, void
     return HOOK_SKIP_ORIGINAL;
 }
 
+void hookPostNameInput2(ModContext*, void* args, void* retval, void* userdata) {
+    dFile_select_c* i_this = mods::arg<dFile_select_c*>(args, 0);
+
+    if (i_this->mIsSelectEnd) {
+        if (!randomizer_GetContext().mHash.empty()) {
+            session::setupRandomizerFile();
+        }
+    }
+}
 
 HookAction hookPreIsEventBit(ModContext*, void* args, void* retval, void*) {
     const u16 i_no = mods::arg<u16>(args, 1);
@@ -602,6 +612,8 @@ ModResult initialize() {
     ADD_HOOK_PRE(dItemData_CheckFieldItemCreateHeap, hookPreCheckFieldItemCreateHeap);
 
     ADD_HOOK_POST(dEvt_control_c__talkEnd, hookPostTalkEnd);
+
+    ADD_HOOK_POST(dFile_select_c__nameInput2, hookPostNameInput2);
 
     return MOD_OK;
 }

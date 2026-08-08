@@ -10,7 +10,6 @@
 #include "randomizer_context.hpp"
 #include "session.hpp"
 #include "stages.h"
-#include "utilities.h"
 #include "verify_item_functions.h"
 
 #include <mods/svc/log.hpp>
@@ -746,4 +745,34 @@ bool tracker_isStageItem(int stage, int flag) {
         // Need to subtract 0x80 (MEMORY_ITEM constant in d_save.cpp) because the above function does it
         return g_dComIfG_gameInfo.info.getSavedata().getSave(stage).getBit().isItem(flag - 0x80);
     }
+}
+
+// Kinda hacky, but will do for now
+void onRegionFlag(int i_stageNo, int i_no) {
+    auto regionFlags = reinterpret_cast<u8*>(&dComIfGs_getSaveData()->getSave(i_stageNo).getBit());
+    const int offset = i_no / 8;
+    const int shift = i_no % 8;
+    regionFlags[offset] |= (0x80 >> shift);
+}
+
+void setRegionBit(u8 i_region) {
+    dComIfGs_getSaveData()->getPlayer().getPlayerFieldLastStayInfo().mRegion |= i_region;
+}
+
+void setAllLetterGet() {
+    dComIfGs_getSaveData()->getPlayer().getLetterInfo().mLetterGetFlags[0] |= 0xFFFF;
+}
+
+void setAllLetterRead() {
+    dComIfGs_getSaveData()->getPlayer().getLetterInfo().mLetterReadFlags[0] |= 0xFFFF;
+}
+
+u8 getAncientDocumentNum() {
+    // TODO
+    return 0;
+}
+
+u8 getAreaKeyNum(int) {
+    // TODO
+    return 0;
 }

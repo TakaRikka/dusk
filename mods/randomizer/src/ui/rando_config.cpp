@@ -15,6 +15,7 @@
 #include <thread>
 #include <map>
 
+#include "../randomizer_context.hpp"
 #include "d/d_file_select.h"
 
 namespace randomizer::ui {
@@ -130,6 +131,21 @@ void add_string_input(UiElementHandle pane, const char* label, const char* help_
     desc.get = getFn;
     desc.set = setFn;
     desc.max_length = max_length;
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
+void add_select(UiElementHandle pane, const char* label, const char* help_rml, const char** options,
+    size_t option_count, UiControlGetFn getFn, UiControlSetFn setFn, UiElementHandle* out_handle = nullptr)
+{
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_SELECT;
+    desc.label = label;
+    desc.help_rml = help_rml;
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.get = getFn;
+    desc.set = setFn;
+    desc.options = options;
+    desc.option_count = option_count;
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
@@ -464,11 +480,59 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
 ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
-    add_button(leftPane,
+    std::filesystem::path seed_dir = paths::GetRandomizerSeedsPath();
+
+    std::string help_rml = "";
+    if (std::filesystem::is_empty(seed_dir)) {
+        help_rml = "No seeds generated! You can generate a seed from the Seed Management Tab.";
+    } else {
+        help_rml = "Choose which seed you want to play.";
+    }
+
+    std::vector<std::string> seedHashes;
+    for (const auto& entry : std::filesystem::directory_iterator(seed_dir)) {
+        if (entry.is_directory()) {
+            seedHashes.push_back(entry.path().filename().string());
+        }
+    }
+    
+    std::vector<const char*> availableSeeds;
+    for (const auto& hash : seedHashes) {
+        availableSeeds.push_back(hash.c_str());
+    }
+
+    add_select(leftPane,
         "Selected Seed",
-        "",
-        [](ModContext*, void*) {
-            // TODO
+        help_rml.c_str(),
+        availableSeeds.data(),
+        availableSeeds.size(),
+        [](ModContext*, void*, UiControlValue* out_value) {
+            int idx = 0;
+            for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
+                if (entry.is_directory()) {
+                    std::string hash = entry.path().filename().string();
+                    if (randomizer_GetContext().mHash == hash) {
+                        break;
+                    }
+                    idx++;
+                }
+            }
+
+            out_value->int_value = idx;
+        },
+        [](ModContext*, void*, const UiControlValue* value) {
+            int idx = 0;
+            for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
+                if (entry.is_directory()) {
+                    if (idx == value->int_value) {
+                        std::string hash = entry.path().filename().string();
+                        randomizer_GetContext() = RandomizerContext();
+                        randomizer_GetContext().LoadFromHash(hash);
+                        break;
+                    }
+                    idx++;
+                }
+            }
         });
 
     add_button(leftPane,
@@ -541,26 +605,6 @@ ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {
     };
 
     session::svc_mng.ui->window_push(session::svc_mng.mod_ctx, &desc, &g_file_select_window_ctx.window_handle);
-}
-
-std::filesystem::path GetRandomizerPath() {
-    return paths::GetRandomizerPath() / "randomizer";
-}
-
-std::filesystem::path GetRandomizerSettingsPath() {
-    return GetRandomizerPath() / "settings.yaml";
-}
-
-std::filesystem::path GetRandomizerPreferencesPath() {
-    return GetRandomizerPath() / "preferences.yaml";
-}
-
-std::filesystem::path GetRandomizerPresetsPath() {
-    return GetRandomizerPath() / "presets";
-}
-
-std::filesystem::path GetRandomizerSeedsPath() {
-    return GetRandomizerPath() / "seeds";
 }
 
 } // namespace dusk::ui

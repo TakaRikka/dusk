@@ -332,12 +332,14 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
         this->mReturnToPlaceOverrides[key] = override;
     }
 
-    // TODO: setup ui service to allow pushing toasts
-    /*dusk::ui::push_toast(dusk::ui::Toast{
-        .title = "Randomizer",
-        .content =  fmt::format("Loaded Randomizer Seed {}", this->mHash),
-        .duration = std::chrono::seconds(3),
-    });*/
+    UiToastDesc desc = UI_TOAST_DESC_INIT;
+    desc.type = "success";
+    desc.title_rml = "Randomizer";
+    std::string body_text = fmt::format("Loaded Randomizer Seed {}", this->mHash);
+    desc.body_rml = body_text.c_str();
+    desc.duration_ms = 3000;
+    randomizer::session::svc_mng.ui->push_toast(randomizer::session::svc_mng.mod_ctx, &desc);
+
     return std::nullopt;
 }
 
