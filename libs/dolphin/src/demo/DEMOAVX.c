@@ -3,7 +3,7 @@
 #include <dolphin/demo.h>
 #include "sdk_math.h"
 
-static s16 __AVX_internal_buffer[3200] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static s16 __AVX_internal_buffer[3200];
 
 static void (*__AVX_save_isr)(void);
 

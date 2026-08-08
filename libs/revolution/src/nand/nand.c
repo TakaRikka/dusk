@@ -293,7 +293,7 @@ s32 NANDMove(const char* path, const char* destDir) {
 }
 
 static ISFSError nandGetFileStatus(IOSFd fd, u32* length, u32* pos) {
-    ISFSFileStats fstat ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) ISFSFileStats fstat;
     ISFSError result = ISFS_GetFileStats(fd, &fstat);
     if (result == ISFS_ERROR_OK) {
         if (length) {

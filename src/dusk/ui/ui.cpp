@@ -17,6 +17,7 @@
 #include "aurora/lib/window.hpp"
 #include "dusk/config.hpp"
 #include "dusk/io.hpp"
+#include <borealis/io.hpp>
 #include "icon_provider.hpp"
 #include "input.hpp"
 #include "mod_texture_provider.hpp"
@@ -27,7 +28,7 @@ namespace dusk::ui {
 namespace {
 
 void load_font(const char* filename, bool fallback = false) {
-    Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback);
+    Rml::LoadFontFace(borealis::io::fs_path_to_string(resource_path(filename)), fallback);
 }
 
 bool sInitialized = false;

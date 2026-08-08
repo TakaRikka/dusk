@@ -8,7 +8,7 @@
 
 #define CAMERA_SERVICE_ID "dev.twilitrealm.dusklight.camera"
 #define CAMERA_SERVICE_MAJOR 1u
-#define CAMERA_SERVICE_MINOR 0u
+#define CAMERA_SERVICE_MINOR 1u
 
 /*
  * Snapshot of a game camera for the frame currently being recorded.
@@ -46,6 +46,37 @@ typedef struct CameraInfo {
 
 #define CAMERA_INFO_INIT {sizeof(CameraInfo)}
 
+/* 0 is never a valid handle. */
+typedef uint64_t CameraOperatorHandle;
+
+typedef struct CameraOperatorState {
+    uint32_t struct_size;
+
+    /* Host inputs. */
+    uint64_t frame_counter;
+    uint64_t ticks;
+    float aspect;
+
+    /* Initial camera state and callback output. */
+    float eye[3];
+    float center[3];
+    float fovy;
+    float bank_degrees;
+} CameraOperatorState;
+
+/* Return true to use state for the current frame. Game thread only. */
+typedef bool (*CameraOperateFn)(ModContext* ctx, CameraOperatorState* state, void* user_data);
+
+typedef struct CameraOperatorDesc {
+    uint32_t struct_size;
+    const char* debug_name;
+    int32_t priority;
+    CameraOperateFn operate;
+    void* user_data;
+} CameraOperatorDesc;
+
+#define CAMERA_OPERATOR_DESC_INIT {sizeof(CameraOperatorDesc), NULL, 0, NULL, NULL}
+
 typedef struct CameraService {
     ServiceHeader header;
 
@@ -55,6 +86,17 @@ typedef struct CameraService {
      * perspective camera.
      */
     ModResult (*get_camera)(ModContext* ctx, const void* game_view, CameraInfo* out_info);
+
+    /* Minor version 1 */
+
+    /*
+     * Register an operator for the main camera. Operators run by descending priority, then
+     * registration order, until one returns true. debug_name and operate must be set; debug_name
+     * is copied. out_handle must not be NULL.
+     */
+    ModResult (*register_camera_operator)(
+        ModContext* ctx, const CameraOperatorDesc* desc, CameraOperatorHandle* out_handle);
+    ModResult (*unregister_camera_operator)(ModContext* ctx, CameraOperatorHandle handle);
 } CameraService;
 
 MOD_DECLARE_SERVICE(

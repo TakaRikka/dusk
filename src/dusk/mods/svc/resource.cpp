@@ -1,6 +1,6 @@
 #include "registry.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/resource.h"
 
@@ -14,7 +14,7 @@
 namespace dusk::mods::svc {
 namespace {
 
-aurora::Module Log("dusk::mods::resource");
+constexpr borealis::Log Log{"dusk::mods::resource"};
 
 // Allocations by owning mod, so buffers still live when a mod detaches can be freed.
 std::unordered_map<void*, const LoadedMod*> s_buffers;

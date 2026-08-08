@@ -209,8 +209,8 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
 }
 ```
 
-Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. Note that the bundle is read-only; for writable
-storage, use the directory from `svc_host->mod_dir(mod_ctx)`.
+Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
+`HostService::data_dir` for persistent storage.
 
 ### HostService (`mods/svc/host.h`)
 
@@ -219,9 +219,17 @@ Mod metadata and runtime interaction with the loader:
 ```cpp
 IMPORT_SERVICE(HostService, svc_host);
 
-const char* id  = svc_host->mod_id(mod_ctx);
-const char* dir = svc_host->mod_dir(mod_ctx);  // writable per-mod directory
-svc_host->fail(mod_ctx, MOD_ERROR, "something unrecoverable happened");  // disables the mod
+// Temporary mod data directory, wiped on startup
+const char* cacheDir = svc_host->mod_dir(mod_ctx);
+
+// Persistent mod data directory
+const char* dataDir = nullptr;
+if (svc_host->data_dir(mod_ctx, &dataDir) == MOD_OK) {
+    // ...
+}
+
+// Report an error and disable the mod
+svc_host->fail(mod_ctx, MOD_ERROR, "something unrecoverable happened");
 ```
 
 `get_service`/`publish_service` provide dynamic service lookup; see [Exporting Services](#exporting-services).
@@ -372,6 +380,55 @@ buffer contract as `get_blob`. Pass a `NULL` buffer to either read function to q
 `observe_saves` registers callbacks for new, loaded, and written saves. New-save callbacks run after the slot's blobs
 are cleared. Observers are removed automatically when the mod is detached, so the output handle is only needed for
 manual unregistration. Save callbacks run on the game thread.
+
+### StageService (`mods/svc/stage.h`)
+
+Allows making changes to a stage's "stage info" (contents of .dzs/.dzr files).
+(Currently only supports editing actor nodes.)
+
+```cpp
+IMPORT_SERVICE(StageService, svc_stage);
+
+stage_actor_data_class record = {
+    "carry00",
+    0xFF000000,
+    cXyz(0.0f, 0.0f, 0.0f),
+    csXyz(0, 0, 0),
+    0,
+};
+
+StageActorHandle handle{};
+svc_stage->patch_actor(mod_ctx, "F_SP102", 0, -1, record_crc, &record, sizeof(record), &handle);
+```
+
+```
+StageActorHandle handle{};
+svc_stage->delete_actor(mod_ctx, "F_SP102", 0, -1, record_crc, &handle);
+```
+
+Patch or remove actors from the original actor list as the room loads.
+Given records must be of either `stage_actor_data_class` or `stage_tgsc_data_class` types.
+`record_crc` is the CRC-32 of the unmodified original record used to identify the record to replace or remove.
+
+```
+stage_actor_data_class record = {
+    "carry00",
+    0xFF000000,
+    cXyz(0.0f, 0.0f, 0.0f),
+    csXyz(0, 0, 0),
+    0,
+};
+
+StageActorHandle handle{};
+svc_stage->add_actor(mod_ctx, "F_SP102", 0, -1, &record, sizeof(record), &handle);
+```
+
+Add a new actor to the actor list as the room loads.
+Given records must be of either `stage_actor_data_class` or `stage_tgsc_data_class` types.
+
+Stage names may contain up to 8 characters. For patches and deletions, room `0xff` and layer `-1` match any room or
+layer; additions require a specific room. Edits are removed when the mod is detached. If multiple mods edit the same
+record, the later-loaded mod wins.
 
 ### UiService (`mods/svc/ui.h`)
 
@@ -575,6 +632,9 @@ if (svc_camera->get_camera(mod_ctx, game_view, &camera) == MOD_OK) {
 `get_camera` returns `MOD_UNAVAILABLE` while the view is not a valid perspective camera, such as before the
 first in-game frame. Projection matrices match the renderer's WebGPU clip convention and renderer depth convention
 (reversed-Z by default).
+
+Camera operators allow overriding the main camera. When an operator callback returns true, its values replace the camera
+state for the current frame. Register and unregister using `register_camera_operator` / `unregister_camera_operator`.
 
 ---
 
@@ -878,6 +938,6 @@ const char* nativeDir = svc_host->native_dir(mod_ctx);  // read-only
 ```
 
 Libraries loaded explicitly by the mod remain its responsibility: stop their threads and unload them during
-`mod_shutdown`. Do not write into `native_dir`; use `mod_dir` for writable state. Native library namespaces are
-process-wide on some platforms, so two mods cannot safely assume that incompatible libraries with the same filename
-will remain isolated.
+`mod_shutdown`. Do not write into `native_dir`; use `data_dir` for persistent storage or `mod_dir` for temporary
+(session) storage. Native library namespaces are process-wide on some platforms, so two mods cannot safely assume that
+incompatible libraries with the same filename will remain isolated.

@@ -1,23 +1,23 @@
 #include "prelaunch.hpp"
 
+#include "dusk/app_info.hpp"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
-#include "dusk/file_select.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
-#include "dusk/update_check.hpp"
 #include "modal.hpp"
 #include "mods_window.hpp"
 #include "preset.hpp"
 #include "settings.hpp"
-#include "version.h"
 
-#include <SDL3/SDL_dialog.h>
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_misc.h>
-#include <aurora/lib/logging.hpp>
 #include <aurora/lib/window.hpp>
+#include <borealis/file_select.hpp>
+#include <borealis/log.hpp>
+#include <borealis/update.hpp>
+#include <borealis/version.h>
 #include <fmt/format.h>
 
 #include <algorithm>
@@ -32,7 +32,7 @@
 
 namespace dusk::ui {
 namespace {
-aurora::Module PrelaunchLog{"dusk::ui::prelaunch"};
+constexpr borealis::Log PrelaunchLog{"dusk::ui::prelaunch"};
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -72,10 +72,10 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
-constexpr std::array<SDL_DialogFileFilter, 2> kDiscFileFilters{{
+const std::vector<borealis::file_select::Filter> kDiscFileFilters{
     {"Game Disc Images", "iso;gcm;ciso;gcz;nfs;rvz;wbfs;wia;tgc"},
     {"All Files", "*"},
-}};
+};
 
 struct DiscVerificationResult {
     std::string path;
@@ -102,7 +102,7 @@ struct DiscVerificationTask {
     }
 
     ~DiscVerificationTask() {
-        status.shouldCancel.store(true, std::memory_order_relaxed);
+        status.cancelRequested.store(true, std::memory_order_relaxed);
         join();
     }
 
@@ -129,15 +129,15 @@ struct UpdateCheckTask {
     UpdateCheckTask() {
         worker = std::thread([this] {
             try {
-                result = update_check::check_latest_github_release("TwilitRealm", "dusklight");
+                result = borealis::update::check_latest_github_release(AppInfo);
             } catch (const std::exception& e) {
                 result = {
-                    .status = update_check::Status::Failed,
+                    .status = borealis::update::Status::Failed,
                     .message = fmt::format("Update check failed with exception: {}", e.what()),
                 };
             } catch (...) {
                 result = {
-                    .status = update_check::Status::Failed,
+                    .status = borealis::update::Status::Failed,
                     .message = "Update check failed with an unknown exception",
                 };
             }
@@ -155,13 +155,13 @@ struct UpdateCheckTask {
 
     [[nodiscard]] bool finished() const { return done.load(std::memory_order_acquire); }
 
-    update_check::Result result;
+    borealis::update::Result result;
     std::atomic_bool done = false;
     std::thread worker;
 };
 
 std::unique_ptr<UpdateCheckTask> sUpdateCheckTask;
-std::optional<update_check::Result> sUpdateCheckResult;
+std::optional<borealis::update::Result> sUpdateCheckResult;
 
 bool verification_state_allows_launch(iso::ValidationError validation) noexcept {
     return validation == iso::ValidationError::Unknown ||
@@ -212,7 +212,7 @@ void begin_disc_verification(std::string path) noexcept {
         return;
     }
     if (sDiscVerificationTask != nullptr) {
-        sDiscVerificationTask->status.shouldCancel.store(true, std::memory_order_relaxed);
+        sDiscVerificationTask->status.cancelRequested.store(true, std::memory_order_relaxed);
         sDiscVerificationTask.reset();
     }
     sDiscVerificationTask = std::make_unique<DiscVerificationTask>(std::move(path));
@@ -244,7 +244,7 @@ void begin_update_check() {
     sUpdateCheckTask = std::make_unique<UpdateCheckTask>();
 }
 
-std::optional<update_check::Result> take_finished_update_check() {
+std::optional<borealis::update::Result> take_finished_update_check() {
     if (sUpdateCheckTask == nullptr || !sUpdateCheckTask->finished()) {
         return std::nullopt;
     }
@@ -255,7 +255,7 @@ std::optional<update_check::Result> take_finished_update_check() {
     return result;
 }
 
-std::string update_release_label(const update_check::Release& release) {
+std::string update_release_label(const borealis::update::Release& release) {
     std::string_view tagName = release.tagName;
     if (!tagName.empty() && tagName.front() == 'v') {
         tagName.remove_prefix(1);
@@ -265,7 +265,7 @@ std::string update_release_label(const update_check::Release& release) {
 
 void open_update_release() {
     if (!sUpdateCheckResult.has_value() ||
-        sUpdateCheckResult->status != update_check::Status::UpdateAvailable)
+        sUpdateCheckResult->status != borealis::update::Status::UpdateAvailable)
     {
         return;
     }
@@ -438,7 +438,7 @@ private:
         }
 
         mCancelRequested = true;
-        sDiscVerificationTask->status.shouldCancel.store(true, std::memory_order_relaxed);
+        sDiscVerificationTask->status.cancelRequested.store(true, std::memory_order_relaxed);
         if (mCancelButton != nullptr) {
             mCancelButton->set_text("Cancelling...");
             mCancelButton->set_disabled(true);
@@ -455,7 +455,7 @@ private:
         }
 
         if (mFileName != nullptr) {
-            std::string fileName = display_name_for_path(sDiscVerificationTask->path);
+            std::string fileName = borealis::file_select::display_name(sDiscVerificationTask->path);
             if (fileName.empty()) {
                 fileName = sDiscVerificationTask->path;
             }
@@ -496,12 +496,15 @@ private:
     bool mFinished = false;
 };
 
-void file_dialog_callback(void*, const char* path, const char* error) {
-    if (path == nullptr || error != nullptr) {
+void file_dialog_callback(borealis::file_select::Result result) {
+    if (result.status != borealis::file_select::Status::Selected || result.locations.empty()) {
+        if (result.status == borealis::file_select::Status::Failed) {
+            PrelaunchLog.warn("File selection failed: {}", result.message);
+        }
         return;
     }
 
-    begin_disc_verification(path);
+    begin_disc_verification(result.locations.front());
 }
 
 PrelaunchState sPrelaunchState;
@@ -649,8 +652,12 @@ void ensure_initialized() noexcept {
 
 void open_iso_picker() noexcept {
     ensure_initialized();
-    ShowFileSelect(&file_dialog_callback, nullptr, aurora::window::get_sdl_window(),
-        kDiscFileFilters.data(), kDiscFileFilters.size(), nullptr, false);
+    borealis::file_select::open_file(
+        {
+            .parentWindow = aurora::window::get_sdl_window(),
+            .filters = kDiscFileFilters,
+        },
+        &file_dialog_callback);
 }
 
 bool is_restart_pending() noexcept {
@@ -888,32 +895,35 @@ void Prelaunch::update() {
             Rml::String innerRML = "";
 
             switch (state.activeDiscInfo.platform) {
-                case iso::Platform::GameCube:
-                    innerRML += "GameCube";
-                    break;
-                case iso::Platform::Wii:
-                    innerRML += "Wii";
-                    break;
+            case iso::Platform::Unknown:
+                innerRML += "Unknown";
+                break;
+            case iso::Platform::GameCube:
+                innerRML += "GameCube";
+                break;
+            case iso::Platform::Wii:
+                innerRML += "Wii";
+                break;
             }
 
             innerRML += " • ";
 
             switch (state.activeDiscInfo.region) {
-                case iso::Region::Japan:
-                    innerRML += "JPN";
-                    break;
-                case iso::Region::Europe:
-                    innerRML += "EUR";
-                    break;
-                case iso::Region::NorthAmerica:
-                    innerRML += "USA";
-                    break;
-                case iso::Region::Korea:
-                    innerRML += "KOR";
-                    break;
-                default:
-                    innerRML += "Unknown";
-                    break;
+            case iso::Region::Japan:
+                innerRML += "JPN";
+                break;
+            case iso::Region::Europe:
+                innerRML += "EUR";
+                break;
+            case iso::Region::NorthAmerica:
+                innerRML += "USA";
+                break;
+            case iso::Region::Korea:
+                innerRML += "KOR";
+                break;
+            default:
+                innerRML += "Unknown";
+                break;
             }
             mDiscDetail->SetInnerRML(innerRML);
         } else {
@@ -921,7 +931,7 @@ void Prelaunch::update() {
         }
     }
     if (mVersion != nullptr) {
-        std::string_view versionStr(DUSK_WC_DESCRIBE);
+        std::string_view versionStr(BOREALIS_APP_DESCRIBE);
         if (versionStr[0] == 'v') {
             versionStr = versionStr.substr(1);
         }
@@ -929,7 +939,7 @@ void Prelaunch::update() {
     }
     if (mUpdateStatus != nullptr && mUpdateMessage != nullptr) {
         if (auto result = take_finished_update_check()) {
-            if (result->status == update_check::Status::Failed) {
+            if (result->status == borealis::update::Status::Failed) {
                 PrelaunchLog.error("Failed to check for updates: {}", result->message);
             }
             sUpdateCheckResult = std::move(*result);
@@ -939,11 +949,11 @@ void Prelaunch::update() {
             mUpdateStatus->SetAttribute("state", "checking");
             mUpdateMessage->SetInnerRML("Checking for updates...");
         } else if (!sUpdateCheckResult.has_value() ||
-                   sUpdateCheckResult->status == update_check::Status::UpToDate)
+                   sUpdateCheckResult->status == borealis::update::Status::UpToDate)
         {
             mUpdateStatus->RemoveAttribute("state");
             mUpdateMessage->SetInnerRML("");
-        } else if (sUpdateCheckResult->status == update_check::Status::UpdateAvailable) {
+        } else if (sUpdateCheckResult->status == borealis::update::Status::UpdateAvailable) {
             mUpdateStatus->SetAttribute("state", "available");
             mUpdateMessage->SetInnerRML("Update available!");
             if (mUpdateDownloadLabel != nullptr) {

@@ -1,23 +1,20 @@
 #pragma once
 
-#include <aurora/aurora.h>
-#include <aurora/lib/logging.hpp>
+#include <borealis/cli.hpp>
+#include <borealis/log.hpp>
 
 #include <filesystem>
-
-void aurora_log_callback(AuroraLogLevel level, const char* module, const char* message, unsigned int len);
+#include <string_view>
 
 namespace dusk {
-    void InitializeFileLogging(const std::filesystem::path& configDir, AuroraLogLevel logLevel);
-    void ShutdownFileLogging();
-    const char* GetLogFilePath();
-    int GetLogFileDescriptor();
-    void SendToStubLog(AuroraLogLevel level, const char* module, const char* message);
-}
+void InitializeLogging(
+    const std::filesystem::path& cacheDir, const borealis::cli::StandardOptions& standard);
+void SendToStubLog(borealis::LogLevel level, std::string_view module, std::string_view message);
+}  // namespace dusk
 
 extern bool StubLogEnabled;
 
-extern aurora::Module DuskLog;
+inline constexpr borealis::Log DuskLog{"dusk"};
 
 #ifndef NDEBUG
 #define STUB_LOG() DuskLog.debug("{} is a stub", __FUNCTION__)
@@ -26,8 +23,8 @@ extern aurora::Module DuskLog;
 #endif
 
 #if TARGET_PC
-#define STUB_RET(...) \
-    STUB_LOG(); \
+#define STUB_RET(...)                                                                              \
+    STUB_LOG();                                                                                    \
     return __VA_ARGS__;
 
 #else

@@ -25,11 +25,6 @@ endif ()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Version detection & version.h
-include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/DetectVersion.cmake")
-detect_version()
-configure_version_header()
-
 # Mod API and optional feature header surfaces
 include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/GameABIConfig.cmake")
 

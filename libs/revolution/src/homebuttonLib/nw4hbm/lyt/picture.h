@@ -34,7 +34,7 @@ namespace nw4hbm {
 
         private:
             /* 0x00 (base) */
-            /* 0xD4 */ ut::Color mVtxColors[VERTEXCOLOR_MAX] ATTRIBUTE_ALIGN(4);
+            /* 0xD4 */ ATTRIBUTE_ALIGN(4) ut::Color mVtxColors[VERTEXCOLOR_MAX];
             /* 0xE4 */ detail::TexCoordAry mTexCoordAry;
         };
 

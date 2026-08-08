@@ -484,7 +484,7 @@ void mDoMemCd_Ctrl_c::detach() {
     mCardState = CARD_STATE_NO_CARD_e;
 }
 
-static u8 MemCardWorkArea0[CARD_WORKAREA_SIZE] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u8 MemCardWorkArea0[CARD_WORKAREA_SIZE];
 
 s32 mDoMemCd_Ctrl_c::mount() {
     s32 result = CARDMount(mChannel, MemCardWorkArea0, NULL);

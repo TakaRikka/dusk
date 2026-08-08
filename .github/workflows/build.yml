@@ -76,7 +76,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusklight-${{env.DUSK_VERSION}}-linux-${{matrix.preset}}-${{matrix.artifact_arch}}
+          name: dusklight-${{env.APP_VERSION}}-linux-${{matrix.preset}}-${{matrix.artifact_arch}}
           path: |
             build/install/Dusklight-*.AppImage
             build/install/debug.tar.*
@@ -145,7 +145,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusklight-${{env.DUSK_VERSION}}-${{matrix.artifact_name}}
+          name: dusklight-${{env.APP_VERSION}}-${{matrix.artifact_name}}
           path: |
             build/install/Dusklight.app
             build/install/debug.tar.*
@@ -221,7 +221,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusklight-${{env.DUSK_VERSION}}-android-${{matrix.artifact_arch}}
+          name: dusklight-${{env.APP_VERSION}}-android-${{matrix.artifact_arch}}
           path: upload/
 
   build-windows:
@@ -283,7 +283,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: dusklight-${{env.DUSK_VERSION}}-win32-msvc-${{matrix.artifact_arch}}
+          name: dusklight-${{env.APP_VERSION}}-win32-msvc-${{matrix.artifact_arch}}
           path: |
             build/install/*.exe
             build/install/*.dll
