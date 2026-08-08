@@ -27,4 +27,5 @@ extern ServiceManager svc_mng;
 ModResult initialize(const ServiceManager& services);
 
 void setupRandomizerFile();
+void registerStageEdits();
 }

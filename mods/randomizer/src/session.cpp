@@ -6,6 +6,7 @@
 #include "flags.h"
 #include "item_ids.h"
 #include "tools.h"
+#include "stages.h"
 
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
@@ -95,6 +96,52 @@ void setupRandomizerFile() {
     g_randomizerState = RandomizerState();
     mods::log::debug("Created Rando Save");
     randoData.mCreatingSave = false;
+}
+
+void registerStageEdits() {
+    auto& ctx = randomizer_GetContext();
+    auto stage_of = [](u32 key) -> const char* {
+        const u32 stage_id = key >> 16;
+        if (stage_id >= sizeof(allStages) / sizeof(allStages[0])) {
+            return nullptr;
+        }
+        return allStages[stage_id];
+    };
+
+    for (const auto& [key, patches] : ctx.mObjectPatches) {
+        const char* stage = stage_of(key);
+        if (stage == nullptr) {
+            continue;
+        }
+
+        const u8 room = (key >> 8) & 0xFF;
+        const s8 layer = static_cast<s8>(key & 0xFF);
+        for (const auto& [crc, bytes] : patches) {
+            StageActorHandle handle{};
+
+            ModResult res;
+            if (bytes.size() == RandomizerContext::OBJ_DELETE_SIZE) {
+                res = svc_mng.stage->delete_actor(mod_ctx, stage, room, layer, crc, &handle);
+            } else {
+                res = svc_mng.stage->patch_actor(
+                    mod_ctx, stage, room, layer, crc, bytes.data(), bytes.size(), &handle);
+            }
+        }
+    }
+
+    for (const auto& [key, additions] : ctx.mObjectAdditions) {
+        const char* stage = stage_of(key);
+        if (stage == nullptr) {
+            continue;
+        }
+
+        const u8 room = (key >> 8) & 0xFF;
+        const s8 layer = static_cast<s8>(key & 0xFF);
+        for (const auto& bytes : additions) {
+            StageActorHandle handle{};
+            svc_mng.stage->add_actor(mod_ctx, stage, room, layer, bytes.data(), bytes.size(), &handle);
+        }
+    }
 }
 
 }

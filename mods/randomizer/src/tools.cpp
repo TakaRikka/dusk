@@ -767,12 +767,37 @@ void setAllLetterRead() {
     dComIfGs_getSaveData()->getPlayer().getLetterInfo().mLetterReadFlags[0] |= 0xFFFF;
 }
 
-u8 getAncientDocumentNum() {
-    // TODO
-    return 0;
+constexpr const char* skyCharacterBlobName = "sky_characters";
+u8 g_skyCharacters = 0;
+
+void saveAncientDocumentNum() {
+    auto* ctx = randomizer::session::svc_mng.mod_ctx;
+    randomizer::session::svc_mng.save->set_blob(ctx, skyCharacterBlobName, &g_skyCharacters, sizeof(g_skyCharacters));
 }
 
-u8 getAreaKeyNum(int) {
-    // TODO
-    return 0;
+void loadAncientDocumentNum() {
+    g_skyCharacters = 0;
+    size_t size = sizeof(g_skyCharacters);
+    auto* ctx = randomizer::session::svc_mng.mod_ctx;
+    randomizer::session::svc_mng.save->get_blob(ctx, skyCharacterBlobName, &g_skyCharacters, &size);
+}
+
+u8 getAncientDocumentNum() {
+    return g_skyCharacters;
+}
+
+void setAncientDocumentNum(u8 num) {
+    g_skyCharacters = num;
+    saveAncientDocumentNum();
+}
+
+u8 getAreaKeyNum(int i_stageNo) {
+    stage_stag_info_class* stagInfo = dComIfGp_getStageStagInfo();
+    if (stagInfo != nullptr) {
+        if (i_stageNo == dStage_stagInfo_GetSaveTbl(stagInfo)) {
+            return dComIfGs_getKeyNum();
+        }
+    }
+
+    return dComIfGs_getSaveData()->getSave(i_stageNo).getBit().getKeyNum();
 }

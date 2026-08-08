@@ -528,6 +528,7 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
                         std::string hash = entry.path().filename().string();
                         randomizer_GetContext() = RandomizerContext();
                         randomizer_GetContext().LoadFromHash(hash);
+                        session::registerStageEdits();
                         break;
                     }
                     idx++;
