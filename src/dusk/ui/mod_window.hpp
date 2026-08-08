@@ -14,6 +14,7 @@ struct ModControlSpec {
         Number,
         String,
         Select,
+        Secret,
     };
 
     Kind kind = Kind::Button;

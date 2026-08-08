@@ -126,6 +126,9 @@ void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
     if (commit) {
         set_value(mInputElem->GetValue());
     }
+    if (mType == "password") {
+        mInputElem->SetValue("");
+    }
     mInputListeners.clear();
     mRoot->RemoveChild(mInputElem);
     mInputElem = nullptr;
@@ -140,9 +143,12 @@ void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
 }
 
 StringButton::StringButton(Rml::Element* parent, Props props)
-    : BaseStringButton(parent, {.key = std::move(props.key), .maxLength = props.maxLength}),
+    : BaseStringButton(parent,
+          {.key = std::move(props.key), .type = props.secret ? "password" : "text",
+              .maxLength = props.maxLength}),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
-      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)) {}
+      mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)),
+      mSecret(props.secret) {}
 
 bool StringButton::modified() const {
     if (mIsModified) {

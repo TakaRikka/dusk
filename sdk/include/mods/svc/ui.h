@@ -9,7 +9,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 1u
+#define UI_SERVICE_MINOR 2u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -51,11 +51,12 @@ typedef enum UiControlKind {
     UI_CONTROL_NUMBER = 2, /* integer stepper with min/max/step */
     UI_CONTROL_STRING = 3, /* text input */
     UI_CONTROL_SELECT = 4, /* one of `options`; the value is the option index */
+    UI_CONTROL_SECRET = 5, /* write-only password input; callback binding only */
 } UiControlKind;
 
 typedef enum UiControlBinding {
     /* Values flow through the `get`/`set` callbacks. Getters are polled every frame while the
-       control is visible and must be cheap. */
+       control is visible and must be cheap. SECRET is write-only and uses only `set`. */
     UI_BINDING_CALLBACKS = 0,
     /* The control reads and writes `config_var` (a ConfigService handle owned by the calling mod)
      * directly: persistence, change notifications and the modified indicator (value != default) are
@@ -64,10 +65,11 @@ typedef enum UiControlBinding {
     UI_BINDING_CONFIG_VAR = 1,
 } UiControlBinding;
 
-/* Tagged by the control's kind: TOGGLE reads bool_value, NUMBER and SELECT read int_value, STRING
- * reads string_value. string_value passed to a setter is only valid during the call; a getter
- * should point it at storage owned by the mod (e.g. a static buffer) that stays valid until the
- * next call into the mod — the host copies it right after the getter returns. */
+/* Tagged by the control's kind: TOGGLE reads bool_value, NUMBER and SELECT read int_value, and
+ * STRING/SECRET read string_value. string_value passed to a setter is only valid during the call;
+ * a STRING getter should point it at storage owned by the mod (e.g. a static buffer) that stays
+ * valid until the next call into the mod — the host copies it right after the getter returns.
+ * SECRET ignores `get` and never prefills or displays a value. */
 typedef struct UiControlValue {
     uint32_t struct_size;
     bool bool_value;
@@ -93,7 +95,7 @@ typedef struct UiControlDesc {
     const char* help_rml;
     UiControlBinding binding;   /* ignored for BUTTON */
     ConfigVarHandle config_var; /* UI_BINDING_CONFIG_VAR */
-    UiControlGetFn get;         /* UI_BINDING_CALLBACKS (all kinds but BUTTON) */
+    UiControlGetFn get;         /* UI_BINDING_CALLBACKS (ignored for BUTTON/SECRET) */
     UiControlSetFn set;         /* UI_BINDING_CALLBACKS (all kinds but BUTTON) */
     UiPressedFn on_pressed;     /* BUTTON only. Required for BUTTON. */
     UiPredicateFn is_disabled;  /* optional */
@@ -114,7 +116,7 @@ typedef struct UiControlDesc {
      * one exists (mod window tabs); MOD_UNSUPPORTED elsewhere. */
     const char* const* options;
     size_t option_count;
-    int32_t max_length; /* STRING: maximum input length; < 1 means unlimited */
+    int32_t max_length; /* STRING/SECRET: maximum input length; < 1 means unlimited */
 } UiControlDesc;
 
 #define UI_CONTROL_DESC_INIT                                                                       \

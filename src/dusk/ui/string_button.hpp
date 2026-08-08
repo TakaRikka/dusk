@@ -48,6 +48,7 @@ public:
         std::function<bool()> isDisabled;
         std::function<bool()> isModified;
         int maxLength = -1;
+        bool secret = false;
     };
 
     StringButton(Rml::Element* parent, Props props);
@@ -55,7 +56,7 @@ public:
     bool disabled() const override;
 
 protected:
-    Rml::String format_value() override { return mGetValue(); }
+    Rml::String format_value() override { return mSecret ? "" : mGetValue(); }
     void set_value(Rml::String value) override {
         if (mSetValue) {
             mSetValue(std::move(value));
@@ -67,6 +68,7 @@ private:
     std::function<void(Rml::String)> mSetValue;
     std::function<bool()> mIsDisabled;
     std::function<bool()> mIsModified;
+    bool mSecret = false;
 };
 
 }  // namespace dusk::ui

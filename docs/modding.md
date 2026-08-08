@@ -469,8 +469,8 @@ per-window RCSS. A non-`MOD_OK` result from `build`/`update` fails your mod, as 
 callback.
 
 **Controls:** `pane_add_control` adds an input row described by a `UiControlDesc`: `UI_CONTROL_BUTTON`,
-`UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, or `UI_CONTROL_SELECT`. Values bind with callbacks or
-directly to a config var.
+`UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, `UI_CONTROL_SECRET`, or
+`UI_CONTROL_SELECT`. Values bind with callbacks or directly to a config var.
 
 ```cpp
 UiControlDesc control = UI_CONTROL_DESC_INIT;
@@ -485,7 +485,8 @@ svc_ui->pane_add_control(mod_ctx, leftPane, &control, nullptr);
 `UI_BINDING_CONFIG_VAR` wires persistence, change notifications, and the modified indicator automatically. The var
 type must match the control: `TOGGLE` = bool, `NUMBER` and `SELECT` = int, `STRING` = string. Float vars are not
 bindable; use callbacks and convert. `help_rml` and `SELECT` option lists render in a help pane, so `SELECT` controls
-are only available inside window tabs.
+are only available inside window tabs. `SECRET` requires callback binding, never invokes a getter, masks input, and
+clears the host's temporary input after invoking the setter.
 
 **Windows:** `window_push` pushes a tabbed two-pane window onto the document stack and shows it. Each tab's `build`
 receives the window handle plus fresh left and right pane handles on every activation. The optional per-tab `update`

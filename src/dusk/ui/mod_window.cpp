@@ -48,6 +48,7 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
         });
         break;
     case ModControlSpec::Kind::String:
+    case ModControlSpec::Kind::Secret:
         control = &pane.add_child<StringButton>(StringButton::Props{
             .key = s.label,
             .getValue = s.getString,
@@ -55,6 +56,7 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
             .isDisabled = s.isDisabled,
             .isModified = s.isModified,
             .maxLength = s.maxLength,
+            .secret = s.kind == ModControlSpec::Kind::Secret,
         });
         break;
     case ModControlSpec::Kind::Select:

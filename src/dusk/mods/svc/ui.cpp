@@ -288,6 +288,20 @@ void wire_callback_binding(
             setValue(raw);
         };
         break;
+    case UI_CONTROL_SECRET:
+        spec.setString = [modPtr, set, userData, guardHandle](Rml::String value) {
+            if (!slot_live(guardHandle)) {
+                std::fill(value.begin(), value.end(), '\0');
+                return;
+            }
+            UiControlValue raw = UI_CONTROL_VALUE_INIT;
+            raw.string_value = value.c_str();
+            guarded_call(*modPtr, "secret control setter", [&] {
+                set(modPtr->context.get(), userData, &raw);
+            });
+            std::fill(value.begin(), value.end(), '\0');
+        };
+        break;
     default:
         break;
     }
@@ -384,6 +398,8 @@ bool wire_config_var_binding(LoadedMod& mod, const UiControlDesc& desc, ui::ModC
         }
         return true;
     }
+    case UI_CONTROL_SECRET:
+        return false;
     default:
         return false;
     }
@@ -596,6 +612,13 @@ ModResult ui_pane_add_control(
         break;
     case UI_CONTROL_STRING:
         spec.kind = ui::ModControlSpec::Kind::String;
+        spec.maxLength = desc.max_length < 1 ? -1 : desc.max_length;
+        break;
+    case UI_CONTROL_SECRET:
+        if (desc.binding != UI_BINDING_CALLBACKS) {
+            return MOD_INVALID_ARGUMENT;
+        }
+        spec.kind = ui::ModControlSpec::Kind::Secret;
         spec.maxLength = desc.max_length < 1 ? -1 : desc.max_length;
         break;
     case UI_CONTROL_SELECT:
@@ -1055,6 +1078,7 @@ bool valid_control_desc(const UiControlDesc& desc) {
     case UI_CONTROL_NUMBER:
     case UI_CONTROL_STRING:
     case UI_CONTROL_SELECT:
+    case UI_CONTROL_SECRET:
         break;
     default:
         return false;
@@ -1071,9 +1095,9 @@ bool valid_control_desc(const UiControlDesc& desc) {
     }
     switch (desc.binding) {
     case UI_BINDING_CALLBACKS:
-        return desc.get != nullptr && desc.set != nullptr;
+        return desc.set != nullptr && (desc.kind == UI_CONTROL_SECRET || desc.get != nullptr);
     case UI_BINDING_CONFIG_VAR:
-        return desc.config_var != 0;
+        return desc.kind != UI_CONTROL_SECRET && desc.config_var != 0;
     default:
         return false;
     }
