@@ -361,6 +361,9 @@ HttpCore::Response HttpCore::defaultExecutor(const Request& request,
     if (transport.error == dusk::http::Error::NoBackend) {
         return Response{.result = HTTP_RESULT_UNAVAILABLE};
     }
+    if (transport.error == dusk::http::Error::Timeout) {
+        return Response{.result = HTTP_RESULT_TIMEOUT};
+    }
     if (transport.error == dusk::http::Error::TooLarge) {
         return Response{.result = HTTP_RESULT_RESPONSE_TOO_LARGE};
     }

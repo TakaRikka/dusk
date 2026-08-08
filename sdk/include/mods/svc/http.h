@@ -8,7 +8,7 @@
 
 #define HTTP_SERVICE_ID "dev.twilitrealm.dusklight.http"
 #define HTTP_SERVICE_MAJOR 1u
-#define HTTP_SERVICE_MINOR 0u
+#define HTTP_SERVICE_MINOR 1u
 
 #define HTTP_URL_MAX_SIZE 4096u
 #define HTTP_HEADER_MAX_COUNT 32u
@@ -29,6 +29,7 @@ typedef enum HttpResult {
     HTTP_RESULT_CANCELED = 2,
     HTTP_RESULT_RESPONSE_TOO_LARGE = 3,
     HTTP_RESULT_FAILED = 4,
+    HTTP_RESULT_TIMEOUT = 5,
 } HttpResult;
 
 typedef struct HttpHeader {

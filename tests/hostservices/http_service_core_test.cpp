@@ -434,6 +434,16 @@ void test_default_transport_mapping() {
         assert(result.headerValues[0].empty() && result.bodies[0].empty());
         checked.shutdown();
     }
+
+    dusk::http::test::reset({.error = dusk::http::Error::Timeout});
+    HttpCore timed;
+    CallbackState timeout_result;
+    assert(timed.begin(context, &desc, record_callback, &timeout_result, &handle) == MOD_OK);
+    pump_until(timed, [&] { return timeout_result.calls == 1; });
+    assert(timeout_result.results[0] == HTTP_RESULT_TIMEOUT);
+    assert(timeout_result.statusCodes[0] == 0);
+    assert(timeout_result.headerValues[0].empty() && timeout_result.bodies[0].empty());
+    timed.shutdown();
 }
 
 void test_shutdown_joins_active_executor_without_delivery() {
