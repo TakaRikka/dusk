@@ -9,7 +9,7 @@ ext.borealisAndroid = [
     borealisDir: borealisDir,
     propertiesFile: new File(duskRepoDir, 'build/android-arm64/borealis-android.properties'),
     namespace: 'dev.twilitrealm.dusk',
-    applicationId: 'dev.twilitrealm.dusk',
+    applicationId: System.getenv('DUSK_APPLICATION_ID') ?: 'dev.twilitrealm.dusk',
     abis: ['arm64-v8a'],
     assets: [
         [
