@@ -49,6 +49,9 @@ DEFINE_HOOK(&CheckFieldItemCreateHeap, dItemData_CheckFieldItemCreateHeap);
 
 DEFINE_HOOK(&dEvt_control_c::talkEnd, dEvt_control_c__talkEnd);
 
+DEFINE_HOOK(&dComIfG_play_c::getLayerNo_common_common, dComIfG_play_c__getLayerNo_common_common);
+
+
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
 }
@@ -567,6 +570,597 @@ void hookPostTalkEnd(ModContext*, void*, void*, void*) {
     }
 }
 
+HookAction hookPreGetLayerNo(ModContext*, void* args, void* retval, void*) {
+    auto i_stageName = mods::arg<const char*>(args, 0);
+    auto i_roomNo = mods::arg<int>(args, 1);
+    auto& layer = mods::arg_ref<int>(args, 2);
+
+    if (strcmp(dComIfGp_getStartStageName(), "S_MV000") == 0 ||
+          (strcmp(dComIfGp_getStartStageName(), "F_SP102") == 0 && layer == 10)) {
+        return HOOK_CONTINUE;
+    }
+
+    int stageID = getStageID(i_stageName);
+    bool condition = false;
+    bool darkIsClear = false;
+
+    if (layer < 0) {
+        layer = -1;
+
+        // Stage is in a Twilight state
+        if (dKy_darkworld_stage_check(i_stageName, i_roomNo) == TRUE) {
+            layer = 14;
+        }
+
+        if (layer < 13) {
+            switch(stageID) {
+            case Snowpeak_Ruins: {
+                if (dComIfGs_isEventBit(SNOWPEAK_RUINS_CLEARED)) {
+                    layer = 3;
+                }
+                break;
+            }
+            case Snowpeak: {
+                if (dComIfGs_isEventBit(SNOWPEAK_RUINS_CLEARED) && (i_roomNo != 0)) {
+                    layer = 3;
+                }
+                break;
+            }
+            case Faron_Woods:
+            case Faron_Woods_Interiors: {
+                if ((i_roomNo == 5) || (i_roomNo == 6)) { // North Faron or Mist Area
+                    condition = dComIfGs_isEventBit(ORDON_DAY_2_OVER); // Talo Saved
+                    if (condition) {
+                        layer = 3;
+                    } else {
+                        layer = 1;
+                    }
+                }
+                else {
+                    condition = dComIfGs_isEventBit(ORDON_DAY_2_OVER); // Talo Saved
+                    if (condition) {
+                        condition = dComIfGs_isEventBit(FOREST_TEMPLE_CLEARED); // Forest Temple Completed
+
+                        if (condition) {
+                            layer = 5;
+                        }
+                    } else {
+                        layer = 1;
+                    }
+                }
+                break;
+            }
+
+            case Kakariko_Village:
+            {
+                condition = dComIfGs_isEventBit(WATCHED_CUTSCENE_AFTER_GORON_MINES); // Cutscene after GM Watched
+                if (condition == false) {
+                    condition = dComIfGs_isEventBit(GORON_MINES_CLEARED); // Goron Mines Completed
+                    if (condition == false) {
+                        layer = 2;
+
+                        // If it is night, the layer is different.
+                        dComIfG_get_timelayer(&layer);
+                    }
+                    else {
+                        layer = 12;
+                    }
+                }
+                else {
+                    layer = 2;
+                    dComIfG_get_timelayer(&layer);
+                }
+
+                break;
+            }
+            case Kakariko_Graveyard:
+            {
+                condition = dComIfGs_isEventBit(GOT_ZORA_ARMOR_FROM_RUTELA); // Got Zora Armor from Rutela
+                if (condition == false) {
+                    condition = dComIfGs_isEventBit(ZORA_ESCORT_CLEARED); // Zora Escort Cleared
+
+                    if (condition == false) {
+                        layer = 2;
+
+                        // If it is night, the layer is different.
+                        dComIfG_get_timelayer(&layer);
+                    }
+                    else {
+                        layer = 4;
+                    }
+                }
+                else {
+                    layer = 2;
+                    dComIfG_get_timelayer(&layer);
+                }
+                break;
+            }
+
+            case Kakariko_Graveyard_Interiors: {
+                if (((i_roomNo == 1 &&
+                        (condition = dComIfGs_isEventBit(LAKEBED_TEMPLE_CLEARED),
+                        condition != false)))) // Lakebed Completed
+                {
+                    layer = 4;
+                    dComIfG_get_timelayer(&layer);
+                }
+                else {
+                    layer = 2;
+                    dComIfG_get_timelayer(&layer);
+                }
+                break;
+            }
+
+            case Kakariko_Village_Interiors: {
+                if (i_roomNo == 1) { // Lakebed Completed
+                    layer = 4;
+                    dComIfG_get_timelayer(&layer);
+                }
+                else if (i_roomNo == 3) {
+                    layer = 2;
+                }
+                else {
+                    layer = 2;
+                    dComIfG_get_timelayer(&layer);
+                }
+                break;
+            }
+
+            case Death_Mountain: {
+                condition =
+                    dComIfGs_isEventBit(GORON_MINES_CLEARED); // Goron Mines Completed
+
+                if (condition) {
+                    layer = 2;
+                }
+                break;
+            }
+
+            case Death_Mountain_Interiors: {
+                layer = 0;
+                break;
+            }
+
+            case Lake_Hylia: {
+                if (i_roomNo == 1) { // Lanayru Spring
+
+                    condition = dComIfGs_isEventBit(LAKEBED_TEMPLE_CLEARED); // Lakebed Temple has been completed
+                    if (condition) {
+                        condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_STARTED); // MDH has been started
+                        if (condition == false) {
+                            layer = 9;
+                        }
+                        else {
+                            layer = 2;
+                        }
+                    }
+                }
+                else {
+                    condition = dComIfGs_isEventBit(SKY_CANNON_REPAIRED); // Sky Cannon Repaired
+                    if (condition == false) {
+                        condition = dComIfGs_isEventBit(WARPED_SKY_CANNON_TO_LAKE_HYLIA); // Sky Cannon Warped to Lake Hylia
+
+                        if (condition == false) {
+                            layer = 2;
+                        }
+                        else {
+                            layer = 1;
+                        }
+                    }
+                    else {
+                        layer = 3;
+                    }
+                }
+                break;
+            }
+
+            case Castle_Town_Interiors:
+            {
+                if (condition = dComIfGs_isEventBit(LAKEBED_TEMPLE_CLEARED),condition) { // Lakebed Temple Completed
+                    layer = 2;
+                    if (condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED),condition) { // MDH Completed
+                        layer = 0;
+                    }
+                }
+                if (i_roomNo == 5) { // Telma's Bar
+                    layer = 4;
+                }
+                break;
+            }
+
+            case Castle_Town:  {
+                condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED); // MDH Completed
+                if (condition == false) {
+                    condition = dComIfGs_isEventBit(LAKEBED_TEMPLE_CLEARED); // Lakebed Temple Completed
+                    if (condition == false) {
+                        if ((i_roomNo == 3) &&
+                            (condition = dComIfGs_isEventBit(ZORA_ESCORT_CLEARED),condition != false)) { // Zora Escort Cleared
+                            layer = 1;
+                            }
+                        else if (i_roomNo == 4) {
+                            layer = 1;
+                        }
+                    }
+                    else {
+                        layer = 2;
+                    }
+                }
+                else {
+                    if (((i_roomNo == 4) || (i_roomNo == 3)) || (i_roomNo == 1)) {
+                        layer = 1;
+                    }
+                    else {
+                        layer = 0;
+                    }
+                }
+
+                if (i_roomNo == 0) {
+                    if (dComIfGs_getStartPoint() == 0xF) {
+                        layer = 5;
+                    }
+                }
+                break;
+            }
+
+            case Zoras_Domain: {
+                layer = 0;
+                break;
+            }
+
+            case Upper_Zoras_River: {
+                condition = dComIfGs_isEventBit(IZA_1_MINIGAME_UNLOCKED); // Iza 1 Unlocked
+                if (condition != false)
+                {
+                    layer = 1;
+                }
+                break;
+            }
+
+            case Gerudo_Desert: {
+                layer = 8;
+
+                condition = dComIfGs_isEventBit(VISITED_DESERT_FOR_THE_FIRST_TIME); // Have been to desert
+                if (condition != false) {
+                    layer = 0;
+                }
+                break;
+            }
+
+            case Zoras_River: {
+                condition = dComIfGs_isEventBit(IZA_1_MINIGAME_DONE); // Iza 1 Minigame Completed
+
+                if (condition == false) {
+                    condition = dComIfGs_isEventBit(STARTED_IZA_1_MINIGAME); // Iza 1 Minigame Started
+                    if (condition != false) {
+                        layer = 2;
+                    }
+                }
+                else {
+                    layer = 1;
+                }
+                break;
+            }
+
+            case Ordon_Village: {
+                if (i_roomNo == 0) {
+                    if (!dKy_daynight_check()) {
+                        layer = 0;
+                    }
+                    else {
+                        layer = 5;
+                    }
+                }
+
+                else {
+                    if (i_roomNo == 1) {
+                        condition =
+                            dComIfGs_isEventBit(ORDON_DAY_1_FINISHED); // Ordon Day 1 done
+
+                        if (condition) {
+                            condition = dComIfGs_isEventBit(ORDON_DAY_2_OVER); // Talo Saved
+                            if (condition) {
+                                layer = 2;
+                            }
+                            else {
+                                layer = 4;
+                            }
+                        }
+                        else {
+                            layer = 3;
+                        }
+                    }
+                }
+                break;
+            }
+
+            case Ordon_Village_Interiors:
+            {
+                /* not used in randomizer anymore. keeping for documentation sake
+                if ( i_roomNo == 1 )     // Sera's Shop
+                {
+                    condition = dComIfGs_isEventBit(
+                        BOUGHT_SLINGSHOT_FROM_SERA );     // Bought slinghot from Sera
+
+                    if ( condition )
+                    {
+                        layer = 2;
+                    }
+                }*/
+                if (i_roomNo == 2) { // Jaggle's House
+
+                    darkIsClear = dComIfGs_isDarkClearLV(0);
+                    if (darkIsClear == false) {
+                        condition = dComIfGs_isEventBit(FINISHED_SEWERS); // First Trip to Sewers done
+                        if (condition != false) {
+                            layer = 1;
+                        }
+                    }
+                    else {
+                        layer = 1;
+                    }
+                }
+                /* not used in randomizer anymore. keeping for documentation sake
+                else
+                {
+                    if ( i_roomNo == 5 )     // Rusl's House
+                    {
+                        darkIsClear = libtp::tp::d_save::isDarkClearLV( playerStatusBPtr, 0 );
+                        if ( darkIsClear != false )
+                        {
+                            layer = 2;
+                        }
+                    }
+                }*/
+
+                break;
+            }
+
+            case Ordon_Spring: {
+                condition = dComIfGs_isEventBit(ORDON_DAY_2_OVER); // Talo saved
+                if (condition) {
+                    condition =
+                        dComIfGs_isEventBit(FINISHED_SEWERS); // First trip to Sewers done
+
+                    if (condition) {
+                        darkIsClear = dComIfGs_isDarkClearLV(0);
+                        if (darkIsClear != false) {
+                            layer = 2;
+                        }
+                        else {
+                            layer = 4;
+                        }
+                    }
+                    else {
+                        layer = 0;
+                    }
+                }
+                else {
+                    condition = dComIfGs_isEventBit(TALO_CHASES_MONKEY); // Sword training done on Ordon Day 2
+                    if (condition) {
+                        layer = 3;
+                    }
+                    else {
+                        layer = 1;
+                    }
+                }
+
+                break;
+            }
+
+            case Ordon_Ranch: {
+                condition = dComIfGs_isEventBit(ORDON_DAY_1_FINISHED); // Day 1 done
+                if (condition) {
+                    condition = dComIfGs_isEventBit(ORDON_DAY_2_OVER); // Talo Saved
+                    if (condition) {
+                        condition = dComIfGs_isEventBit(WATCHED_CUTSCENE_AFTER_GOATS_2); // Saw CS after Goats 2 done
+
+                        if (condition) {
+                            layer = 2;
+                            dComIfG_get_timelayer(&layer);
+                        }
+                        else {
+                            layer = 9;
+                        }
+                    }
+                    else {
+                        layer = 2;
+                    }
+                }
+                else {
+                    layer = 12;
+                }
+                break;
+            }
+
+            case Hyrule_Field: {
+                // First 3 twilights are cleared
+                if ((dComIfGs_getSaveData()->getPlayer().getPlayerStatusB().mDarkClearLevelFlag & 0x7) == 0x7) {
+                    if (dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED)) {
+                        layer = 6;
+                    }
+                    else if (dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_STARTED)) {
+                        layer = 4;
+                    }
+                    else {
+                        layer = 0;
+                    }
+                }
+                else {
+                    layer = 0;
+                }
+                break;
+            }
+
+            case Outside_Castle_Town: {
+                if (i_roomNo == 8) {
+                    condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED); // MDH Completed
+                    if (condition == false) {
+                        condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_STARTED); // MDH State Activated
+                        if (condition != false) {
+                            layer = 4;
+                        }
+                    }
+                    else {
+                        layer = 6;
+                    }
+                }
+                else {
+                    if (i_roomNo == 0x10) {
+                        condition = dComIfGs_isEventBit(GOT_WOOD_STATUE); // Wooden Statue Gotten
+                        if (condition == false) {
+                            condition = dComIfGs_isEventBit(TALKED_TO_LOUISE_ABOUT_THE_STOLEN_STATUE); // Talked to Louise after Medicine Scent
+                            if (condition == false) {
+                                condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED); // MDH Completed
+                                if (condition == false) {
+                                    condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_STARTED); // MDH State Activated
+                                    if (condition != false) {
+                                        layer = 4;
+                                    }
+                                    else {
+                                        layer = 6;
+                                    }
+                                }
+                                else {
+                                    layer = 6;
+                                }
+                            }
+                            else {
+                                layer = 1;
+                            }
+                        }
+                        else {
+                            layer = 6;
+                        }
+                    }
+                    else {
+                        if (i_roomNo == 0x11) {
+                            condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED); // MDH Completed
+                            if (condition == false) {
+                                condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_STARTED); // MDH State Activated
+                                if (condition != false) {
+                                    layer = 4;
+                                }
+                            }
+                            else {
+                                layer = 0;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+
+            case Hidden_Village: {
+                condition = dComIfGs_isEventBit(GAVE_ILIA_THE_WOOD_STATUE); // Ilia shown the wooden statue
+                if (condition != false) {
+                    condition = dComIfGs_isEventBit(GOT_ILIAS_CHARM); // Ilia shown Ilia's Charm
+                    if (condition != false) {
+                        layer = 1;
+                    }
+                }
+                else {
+                    layer = 1;
+                }
+
+                break;
+            }
+
+            case Castle_Town_Shops: {
+                if (i_roomNo == 5) {
+                    layer = 0;
+                    condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_STARTED);
+                    if (condition) {
+                        layer = 1;
+                        condition = dComIfGs_isEventBit(MIDNAS_DESPERATE_HOUR_COMPLETED);
+                        if (condition) {
+                            layer = 0;
+                        }
+                    }
+                }
+                else {
+                    condition = dComIfGs_isEventBit(MALO_MART_CASTLE_TOWN_BRANCH_IS_OPEN); // CT Shop is Malo Mart
+
+                    if (condition != false) {
+                        layer = 1;
+                    }
+                }
+                break;
+            }
+
+            case Sacred_Grove: {
+                layer = 2;
+                break;
+            }
+
+            case Bulblin_Camp: {
+                condition = dComIfGs_isEventBit(ESCAPED_BURNING_TENT_IN_BULBLIN_CAMP); // Escaped Burning Tent in Bulblin Camp
+                if (condition) {
+                    if (i_roomNo == 3) // Other states for this room are very similar, but do not have the boar
+                        // in the dzx.
+                    { // Setting state 1 solves for any potential softlocks regarding the boar in that area.
+                        layer = 1;
+                    }
+                    else {
+                        layer = 3;
+                    }
+                }
+                break;
+            }
+
+            case Faron_Woods_Cave: {
+                condition = dComIfGs_isEventBit(ORDON_DAY_2_OVER); // Talo saved
+                if (condition != false) {
+                    layer = 1;
+                }
+                break;
+            }
+
+            case Hyrule_Castle_Sewers: {
+                condition = dComIfGs_isEventBit(FINISHED_SEWERS); // Sewers Finished
+                if (condition) {
+                    layer = 13;
+                }
+                else {
+                    layer = 14;
+                }
+                break;
+            }
+
+            case Hyrule_Castle: {
+                if (((i_roomNo != 0xb) && (i_roomNo != 0xd)) && (i_roomNo != 0xe)) {
+                    layer = 1;
+                }
+                break;
+            }
+
+            case Fishing_Pond:
+            case Fishing_Pond_Interiors: {
+                switch (g_env_light.fishing_hole_season) {
+                case 1:
+                    layer = 0;
+                    break;
+                case 2:
+                    layer = 1;
+                    break;
+                case 3:
+                    layer = 2;
+                    break;
+                case 4:
+                    layer = 3;
+                    break;
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+        }
+    }
+
+    return HOOK_CONTINUE;
+}
+
 }
 
 ModResult initialize() {
@@ -614,6 +1208,8 @@ ModResult initialize() {
     ADD_HOOK_POST(dEvt_control_c__talkEnd, hookPostTalkEnd);
 
     ADD_HOOK_POST(dFile_select_c__nameInput2, hookPostNameInput2);
+
+    ADD_HOOK_PRE(dComIfG_play_c__getLayerNo_common_common, hookPreGetLayerNo);
 
     return MOD_OK;
 }
