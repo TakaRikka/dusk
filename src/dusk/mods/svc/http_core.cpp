@@ -1,6 +1,6 @@
 #include "http_core.hpp"
 
-#include "dusk/http/http.hpp"
+#include <borealis/http.hpp>
 
 #include <algorithm>
 #include <cstring>
@@ -95,7 +95,7 @@ bool is_https_url(const std::string_view url) {
         url.find('#') == std::string_view::npos;
 }
 
-bool valid_response_headers(const std::vector<dusk::http::Header>& headers) {
+bool valid_response_headers(const std::vector<borealis::http::Header>& headers) {
     if (headers.size() > HTTP_HEADER_MAX_COUNT) {
         return false;
     }
@@ -345,11 +345,12 @@ HttpCore::Response HttpCore::defaultExecutor(const Request& request,
         return Response{.result = HTTP_RESULT_CANCELED};
     }
 
-    dusk::http::Request transportRequest{
-        .method = request.method == HTTP_METHOD_POST ? dusk::http::Method::Post : dusk::http::Method::Get,
+    borealis::http::Request transportRequest{
         .url = request.url,
         .timeout = std::chrono::milliseconds(request.timeoutMs),
         .maxBodyBytes = request.maxResponseSize,
+        .method = request.method == HTTP_METHOD_POST ? borealis::http::Method::Post :
+                                                      borealis::http::Method::Get,
     };
     transportRequest.headers.reserve(request.headers.size());
     for (const auto& header : request.headers) {
@@ -360,20 +361,20 @@ HttpCore::Response HttpCore::defaultExecutor(const Request& request,
             reinterpret_cast<const char*>(request.body.data()), request.body.size());
     }
 
-    const dusk::http::Result transport = dusk::http::request(transportRequest);
+    const borealis::http::Result transport = borealis::http::request(transportRequest);
     if (canceled.load(std::memory_order_acquire)) {
         return Response{.result = HTTP_RESULT_CANCELED};
     }
-    if (transport.error == dusk::http::Error::NoBackend) {
+    if (transport.error == borealis::http::Error::NoBackend) {
         return Response{.result = HTTP_RESULT_UNAVAILABLE};
     }
-    if (transport.error == dusk::http::Error::Timeout) {
+    if (transport.error == borealis::http::Error::Timeout) {
         return Response{.result = HTTP_RESULT_TIMEOUT};
     }
-    if (transport.error == dusk::http::Error::TooLarge) {
+    if (transport.error == borealis::http::Error::TooLarge) {
         return Response{.result = HTTP_RESULT_RESPONSE_TOO_LARGE};
     }
-    if (transport.error != dusk::http::Error::None || transport.response.statusCode < 100 ||
+    if (transport.error != borealis::http::Error::None || transport.response.statusCode < 100 ||
         transport.response.statusCode > 599 ||
         transport.response.body.size() > request.maxResponseSize ||
         !valid_response_headers(transport.response.headers))

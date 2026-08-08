@@ -1,8 +1,8 @@
-#include "dusk/http/http.hpp"
+#include <borealis/http.hpp>
 
 #include <mutex>
 
-namespace dusk::http::test {
+namespace borealis::http::test {
 std::mutex mutex;
 Request lastRequest;
 Result nextResult{.error = Error::NoBackend};
@@ -24,13 +24,13 @@ int call_count() {
     std::lock_guard lock(mutex);
     return calls;
 }
-}  // namespace dusk::http::test
+}  // namespace borealis::http::test
 
-namespace dusk::http {
+namespace borealis::http {
 Result request(const Request& request) {
     std::lock_guard lock(test::mutex);
     test::lastRequest = request;
     ++test::calls;
     return test::nextResult;
 }
-}  // namespace dusk::http
+}  // namespace borealis::http
