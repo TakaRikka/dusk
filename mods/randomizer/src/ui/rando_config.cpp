@@ -481,6 +481,8 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
     UiElementHandle rightPane, void*, ModError*)
 {
     std::filesystem::path seed_dir = paths::GetRandomizerSeedsPath();
+    if (!std::filesystem::exists(seed_dir))
+        std::filesystem::create_directory(seed_dir);
 
     std::string help_rml = "";
     if (std::filesystem::is_empty(seed_dir)) {
@@ -605,7 +607,7 @@ ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {
         g_dialogSelectModeState = SelectReady;
     };
 
-    session::svc_mng.ui->window_push(session::svc_mng.mod_ctx, &desc, &g_file_select_window_ctx.window_handle);
+    return session::svc_mng.ui->window_push(session::svc_mng.mod_ctx, &desc, &g_file_select_window_ctx.window_handle);
 }
 
 } // namespace dusk::ui

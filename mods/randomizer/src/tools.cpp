@@ -788,7 +788,6 @@ u8 getAncientDocumentNum() {
 
 void setAncientDocumentNum(u8 num) {
     g_skyCharacters = num;
-    saveAncientDocumentNum();
 }
 
 u8 getAreaKeyNum(int i_stageNo) {
