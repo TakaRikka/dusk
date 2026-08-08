@@ -75,7 +75,7 @@ private:
     };
 
     static bool validateRequest(const HttpRequestDesc* desc, Request& request);
-    static Response unavailable(const Request&, const std::atomic_bool&);
+    static Response defaultExecutor(const Request&, const std::atomic_bool&);
     void workerMain();
     void queueCompletionLocked(const std::shared_ptr<Entry>& entry, Response response);
 

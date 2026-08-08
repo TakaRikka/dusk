@@ -1,4 +1,5 @@
 #include "dusk/mods/svc/http_core.hpp"
+#include "dusk/http/http.hpp"
 
 #include <atomic>
 #ifdef NDEBUG
@@ -15,6 +16,12 @@
 #include <vector>
 
 using dusk::mods::svc::HttpCore;
+
+namespace dusk::http::test {
+void reset(Result result);
+Request captured();
+int call_count();
+}  // namespace dusk::http::test
 
 namespace {
 
@@ -97,6 +104,16 @@ void test_validation_boundaries() {
     invalid = "https://synthetic.invalid/#fragment";
     desc = request_desc(invalid);
     assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
+    const std::string invalidUrls[] = {
+        "https://synthetic.invalid/control\t",
+        "https://synthetic.invalid/space here",
+        std::string("https://synthetic.invalid/obs") + static_cast<char>(0x80),
+        std::string("https://synthetic.invalid/malformed") + static_cast<char>(0xc3) + '(',
+    };
+    for (auto invalidUrl : invalidUrls) {
+        desc = request_desc(invalidUrl);
+        assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
+    }
 
     uint8_t body[] = {'x'};
     desc = request_desc(url, HTTP_METHOD_GET, body, sizeof(body));
@@ -112,6 +129,33 @@ void test_validation_boundaries() {
         .struct_size = sizeof(HttpHeader), .name = "X-Test", .name_size = 6, .value = "a\r\nb", .value_size = 4};
     desc = request_desc(url, HTTP_METHOD_GET, nullptr, 0, &badValue, 1);
     assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
+    const char nulValue[] = {'a', '\0', 'b'};
+    const HttpHeader nulValueHeader{
+        .struct_size = sizeof(HttpHeader),
+        .name = "X-Test",
+        .name_size = 6,
+        .value = nulValue,
+        .value_size = sizeof(nulValue),
+    };
+    desc = request_desc(url, HTTP_METHOD_GET, nullptr, 0, &nulValueHeader, 1);
+    assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
+    const HttpHeader allowedValues[] = {
+        {sizeof(HttpHeader), "X-Test", 6, "\tprintable ASCII !~", 19},
+        {sizeof(HttpHeader), "X-Empty", 7, "", 0},
+    };
+    desc = request_desc(url, HTTP_METHOD_GET, nullptr, 0, allowedValues, 2);
+    assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_OK);
+    const std::string invalidValues[] = {
+        std::string("control") + static_cast<char>(0x1f),
+        std::string("obs") + static_cast<char>(0x80),
+        std::string("malformed") + static_cast<char>(0xc3) + '(',
+    };
+    for (const auto& invalidValue : invalidValues) {
+        const HttpHeader header{
+            sizeof(HttpHeader), "X-Test", 6, invalidValue.data(), invalidValue.size()};
+        desc = request_desc(url, HTTP_METHOD_GET, nullptr, 0, &header, 1);
+        assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
+    }
     const HttpHeader hopByHop{
         .struct_size = sizeof(HttpHeader), .name = "Content-Length", .name_size = 14, .value = "1", .value_size = 1};
     desc = request_desc(url, HTTP_METHOD_GET, nullptr, 0, &hopByHop, 1);
@@ -320,6 +364,7 @@ void test_detach_and_response_limits() {
 }
 
 void test_unavailable_and_clean_shutdown() {
+    dusk::http::test::reset({.error = dusk::http::Error::NoBackend});
     HttpCore core;
     CallbackState callbacks;
     ModContext* context = reinterpret_cast<ModContext*>(9);
@@ -333,6 +378,62 @@ void test_unavailable_and_clean_shutdown() {
     core.shutdown();
     assert(std::chrono::steady_clock::now() - started < 1s);
     core.shutdown();
+}
+
+void test_default_transport_mapping() {
+    ModContext* context = reinterpret_cast<ModContext*>(12);
+    std::string url = "https://synthetic.invalid/mapped";
+    std::string authorization = "Bearer distinctive-secret";
+    const HttpHeader headers[] = {
+        {sizeof(HttpHeader), "Authorization", 13, authorization.data(), authorization.size()},
+        {sizeof(HttpHeader), "X-Test", 6, "mapped", 6},
+    };
+    const uint8_t body[] = {0, 1, 2, 3};
+    auto desc = request_desc(url, HTTP_METHOD_POST, body, sizeof(body), headers, 2, 32);
+    CallbackState callbacks;
+    dusk::http::test::reset({
+        .response = {
+            .statusCode = 418,
+            .headers = {{"X-Answer", "yes"}},
+            .body = std::string("a\0b", 3),
+        },
+    });
+    HttpCore core;
+    HttpRequestHandle handle{};
+    assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_OK);
+    pump_until(core, [&] { return callbacks.calls == 1; });
+    const dusk::http::Request captured = dusk::http::test::captured();
+    assert(dusk::http::test::call_count() == 1);
+    assert(captured.method == dusk::http::Method::Post && captured.url == url);
+    assert(captured.timeout == 1ms && captured.maxBodyBytes == 32);
+    assert(captured.body == std::string("\0\1\2\3", 4));
+    assert(captured.headers.size() == 2 && captured.headers[0].value == authorization);
+    assert(callbacks.results[0] == HTTP_RESULT_OK && callbacks.statusCodes[0] == 418);
+    assert(callbacks.bodies[0] == std::string("a\0b", 3));
+    core.shutdown();
+
+    const dusk::http::Result malformed[] = {
+        {.response = {.statusCode = 99}},
+        {.response = {.statusCode = 600}},
+        {.response = {.statusCode = 200, .headers = {{"bad name", "value"}}}},
+        {.response = {.statusCode = 200, .headers = std::vector<dusk::http::Header>(33)}},
+        {.response = {.statusCode = 200, .headers = {{"X-Test", std::string(4097, 'x')}}}},
+        {.error = dusk::http::Error::Network, .response = {.statusCode = 200, .body = "leak"}},
+        {.error = dusk::http::Error::TooLarge, .response = {.statusCode = 200, .body = "leak"}},
+    };
+    for (const auto& transport : malformed) {
+        dusk::http::test::reset(transport);
+        HttpCore checked;
+        CallbackState result;
+        assert(checked.begin(context, &desc, record_callback, &result, &handle) == MOD_OK);
+        pump_until(checked, [&] { return result.calls == 1; });
+        const HttpResult expected = transport.error == dusk::http::Error::TooLarge
+            ? HTTP_RESULT_RESPONSE_TOO_LARGE
+            : HTTP_RESULT_FAILED;
+        assert(result.results[0] == expected && result.statusCodes[0] == 0);
+        assert(result.headerValues[0].empty() && result.bodies[0].empty());
+        checked.shutdown();
+    }
 }
 
 void test_shutdown_joins_active_executor_without_delivery() {
@@ -409,5 +510,6 @@ int main() {
     test_cancel_and_owner();
     test_detach_and_response_limits();
     test_unavailable_and_clean_shutdown();
+    test_default_transport_mapping();
     test_shutdown_joins_active_executor_without_delivery();
 }

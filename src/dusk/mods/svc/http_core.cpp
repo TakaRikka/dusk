@@ -1,5 +1,7 @@
 #include "http_core.hpp"
 
+#include "dusk/http/http.hpp"
+
 #include <algorithm>
 #include <string_view>
 
@@ -78,7 +80,9 @@ bool is_forbidden_header(const std::string_view name) {
 
 bool is_https_url(const std::string_view url) {
     if (!url.starts_with("https://") || url.size() <= std::string_view("https://").size() ||
-        url.find('\0') != std::string_view::npos || contains_cr_or_lf(url))
+        !std::ranges::all_of(url, [](const unsigned char value) {
+            return value >= 0x21 && value <= 0x7e;
+        }))
     {
         return false;
     }
@@ -90,10 +94,31 @@ bool is_https_url(const std::string_view url) {
         url.find('#') == std::string_view::npos;
 }
 
+bool valid_response_headers(const std::vector<dusk::http::Header>& headers) {
+    if (headers.size() > HTTP_HEADER_MAX_COUNT) {
+        return false;
+    }
+    size_t aggregateSize = 0;
+    for (const auto& header : headers) {
+        if (header.name.size() > HTTP_HEADER_NAME_MAX_SIZE ||
+            header.value.size() > HTTP_HEADER_VALUE_MAX_SIZE ||
+            !is_token(header.name) || contains_cr_or_lf(header.value) ||
+            header.value.find('\0') != std::string::npos ||
+            aggregateSize > HTTP_HEADER_AGGREGATE_MAX_SIZE - header.name.size() ||
+            aggregateSize + header.name.size() >
+                HTTP_HEADER_AGGREGATE_MAX_SIZE - header.value.size())
+        {
+            return false;
+        }
+        aggregateSize += header.name.size() + header.value.size();
+    }
+    return true;
+}
+
 }  // namespace
 
 HttpCore::HttpCore(Executor executor)
-    : m_executor(executor ? std::move(executor) : unavailable), m_worker(&HttpCore::workerMain, this) {}
+    : m_executor(executor ? std::move(executor) : defaultExecutor), m_worker(&HttpCore::workerMain, this) {}
 
 HttpCore::~HttpCore() {
     shutdown();
@@ -286,7 +311,11 @@ bool HttpCore::validateRequest(const HttpRequestDesc* desc, Request& request) {
         }
         const std::string_view name{source.name, source.name_size};
         const std::string_view value{source.value, source.value_size};
-        if (!is_token(name) || contains_cr_or_lf(value) || is_forbidden_header(name)) {
+        if (!is_token(name) ||
+            !std::ranges::all_of(value, [](const unsigned char byte) {
+                return byte == '\t' || (byte >= 0x20 && byte <= 0x7e);
+            }) ||
+            is_forbidden_header(name)) {
             return false;
         }
         aggregateSize += source.name_size + source.value_size;
@@ -304,8 +333,55 @@ bool HttpCore::validateRequest(const HttpRequestDesc* desc, Request& request) {
     return true;
 }
 
-HttpCore::Response HttpCore::unavailable(const Request&, const std::atomic_bool&) {
-    return Response{.result = HTTP_RESULT_UNAVAILABLE};
+HttpCore::Response HttpCore::defaultExecutor(const Request& request,
+    const std::atomic_bool& canceled) {
+    if (canceled.load(std::memory_order_acquire)) {
+        return Response{.result = HTTP_RESULT_CANCELED};
+    }
+
+    dusk::http::Request transportRequest{
+        .method = request.method == HTTP_METHOD_POST ? dusk::http::Method::Post : dusk::http::Method::Get,
+        .url = request.url,
+        .timeout = std::chrono::milliseconds(request.timeoutMs),
+        .maxBodyBytes = request.maxResponseSize,
+    };
+    transportRequest.headers.reserve(request.headers.size());
+    for (const auto& header : request.headers) {
+        transportRequest.headers.push_back({.name = header.name, .value = header.value});
+    }
+    if (!request.body.empty()) {
+        transportRequest.body.assign(
+            reinterpret_cast<const char*>(request.body.data()), request.body.size());
+    }
+
+    const dusk::http::Result transport = dusk::http::request(transportRequest);
+    if (canceled.load(std::memory_order_acquire)) {
+        return Response{.result = HTTP_RESULT_CANCELED};
+    }
+    if (transport.error == dusk::http::Error::NoBackend) {
+        return Response{.result = HTTP_RESULT_UNAVAILABLE};
+    }
+    if (transport.error == dusk::http::Error::TooLarge) {
+        return Response{.result = HTTP_RESULT_RESPONSE_TOO_LARGE};
+    }
+    if (transport.error != dusk::http::Error::None || transport.response.statusCode < 100 ||
+        transport.response.statusCode > 599 ||
+        transport.response.body.size() > request.maxResponseSize ||
+        !valid_response_headers(transport.response.headers))
+    {
+        return Response{.result = HTTP_RESULT_FAILED};
+    }
+
+    Response response{
+        .result = HTTP_RESULT_OK,
+        .statusCode = static_cast<uint32_t>(transport.response.statusCode),
+        .body = std::vector<uint8_t>(transport.response.body.begin(), transport.response.body.end()),
+    };
+    response.headers.reserve(transport.response.headers.size());
+    for (const auto& header : transport.response.headers) {
+        response.headers.push_back({.name = header.name, .value = header.value});
+    }
+    return response;
 }
 
 void HttpCore::workerMain() {
@@ -326,13 +402,17 @@ void HttpCore::workerMain() {
         }
 
         Response response;
-        try {
-            response = m_executor(entry->request, entry->canceled);
-        } catch (...) {
-            response.result = HTTP_RESULT_FAILED;
-            response.statusCode = 0;
-            response.headers.clear();
-            response.body.clear();
+        if (entry->canceled.load(std::memory_order_acquire)) {
+            response.result = HTTP_RESULT_CANCELED;
+        } else {
+            try {
+                response = m_executor(entry->request, entry->canceled);
+            } catch (...) {
+                response.result = HTTP_RESULT_FAILED;
+                response.statusCode = 0;
+                response.headers.clear();
+                response.body.clear();
+            }
         }
 
         std::lock_guard lock(m_mutex);
@@ -342,6 +422,10 @@ void HttpCore::workerMain() {
         }
         if (entry->canceled.load(std::memory_order_acquire)) {
             response = Response{.result = HTTP_RESULT_CANCELED};
+        } else if (response.result != HTTP_RESULT_OK) {
+            response.statusCode = 0;
+            response.headers.clear();
+            response.body.clear();
         } else if (response.body.size() > entry->request.maxResponseSize) {
             response = Response{.result = HTTP_RESULT_RESPONSE_TOO_LARGE};
         }

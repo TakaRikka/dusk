@@ -256,9 +256,8 @@ every service dropped its state. For your own mod's teardown, use `mod_shutdown`
 
 ### HttpService (`mods/svc/http.h`)
 
-Asynchronous HTTPS GET/POST requests with bounded copied inputs. M3A exposes an offline contract only: the built-in
-executor reports `HTTP_RESULT_UNAVAILABLE` without DNS or network activity, while retaining the final lifecycle and
-callback rules for later transport work.
+Asynchronous HTTPS GET/POST requests with bounded copied inputs. The host executes accepted requests on one worker and
+delivers completions only from the game-thread frame boundary.
 
 ```cpp
 IMPORT_SERVICE(HttpService, svc_http);
@@ -280,10 +279,15 @@ HttpRequestHandle handle{};
 svc_http->begin(mod_ctx, &request, completed, nullptr, &handle);
 ```
 
-`begin` deep-copies the URL, headers and body before it returns. URLs must use exact lowercase `https://`; userinfo,
-fragments, CR/LF header values, hop-by-hop headers and `Content-Length` are rejected. URLs are at most 4096 bytes,
+`begin` deep-copies the URL, headers and body before it returns. URLs must use exact lowercase `https://`; every URL
+byte must be visible ASCII (`0x21`-`0x7e`). Header names are HTTP tokens and header values may contain only HTAB
+(`0x09`) or printable ASCII (`0x20`-`0x7e`); this portable byte contract rejects spaces in URLs, controls, obs-text and
+UTF-8 bytes. Userinfo, fragments, hop-by-hop headers and `Content-Length` are rejected. URLs are at most 4096 bytes,
 requests carry at most 32 headers/16 KiB aggregate and a 64 KiB body, timeouts are 1-60000 ms, and requested response
-limits are 1 byte through 2 MiB. GET has no body.
+limits are 1 byte through 2 MiB. GET has no body. Responses in the valid HTTP status range, including non-2xx responses,
+complete with `HTTP_RESULT_OK`; a mod chooses its own HTTP-status policy. Redirects are bounded to five HTTPS targets
+under the original timeout budget. Cross-origin redirects remove `Authorization` and `Cookie`; only POST on 301/302/303
+turns into GET and removes content headers, while 307/308 preserve the request method and body.
 
 The one worker queues completions, but callbacks run only from the game-thread frame boundary, outside service locks.
 Response headers/body are borrowed for the callback duration only. Cancel is owner-bound and gives an accepted queued or

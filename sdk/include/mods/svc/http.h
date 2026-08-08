@@ -3,8 +3,7 @@
 #include "mods/api.h"
 
 /*
- * Offline-safe asynchronous HTTPS request service. M3A defines only the contract and lifecycle;
- * the built-in executor always reports unavailable and performs no network activity.
+ * Asynchronous HTTPS request service with bounded copied inputs and a single host worker.
  */
 
 #define HTTP_SERVICE_ID "dev.twilitrealm.dusklight.http"
@@ -83,16 +82,19 @@ typedef struct HttpService {
     ServiceHeader header;
 
     /*
-     * Copies every input byte before returning. Only exact lowercase "https://" URLs are accepted.
-     * GET and POST are the only methods. On success out_handle receives a nonzero caller-owned
-     * handle; its completion is delivered once unless the caller's mod detaches first.
+     * Copies every input byte before returning. Only exact lowercase "https://" URLs are accepted:
+     * every URL byte must be visible ASCII (0x21-0x7e). Header names are HTTP tokens; header-value
+     * bytes must be HTAB (0x09) or printable ASCII (0x20-0x7e). GET and POST are the only methods.
+     * On success out_handle receives a nonzero caller-owned handle; its completion is delivered once
+     * unless the caller's mod detaches first.
      */
     ModResult (*begin)(ModContext* ctx, const HttpRequestDesc* desc, HttpCompletionFn callback,
         void* user_data, HttpRequestHandle* out_handle);
 
     /*
      * Cancels an accepted queued or running request owned by ctx. A canceled request receives one
-     * HTTP_RESULT_CANCELED completion on a later frame pump. Other handles are rejected.
+     * HTTP_RESULT_CANCELED completion on a later frame pump. Native transports may need to wait for
+     * their bounded in-flight call to return before that completion is queued. Other handles are rejected.
      */
     ModResult (*cancel)(ModContext* ctx, HttpRequestHandle handle);
 } HttpService;
