@@ -254,6 +254,42 @@ svc_host->watch_mod_lifecycle(mod_ctx, on_mod_lifecycle, nullptr, &watch);
 `MOD_LIFECYCLE_DETACHED` fires on the game thread at a lifecycle safe point, after the subject's `mod_shutdown` ran and
 every service dropped its state. For your own mod's teardown, use `mod_shutdown` instead.
 
+### HttpService (`mods/svc/http.h`)
+
+Asynchronous HTTPS GET/POST requests with bounded copied inputs. M3A exposes an offline contract only: the built-in
+executor reports `HTTP_RESULT_UNAVAILABLE` without DNS or network activity, while retaining the final lifecycle and
+callback rules for later transport work.
+
+```cpp
+IMPORT_SERVICE(HttpService, svc_http);
+
+void completed(ModContext*, HttpRequestHandle, const HttpResponseView* response, void*) {
+    if (response->result == HTTP_RESULT_UNAVAILABLE) {
+        // Retry policy belongs to the mod.
+    }
+}
+
+const char url[] = "https://synthetic.invalid/status";
+HttpRequestDesc request = HTTP_REQUEST_DESC_INIT;
+request.method = HTTP_METHOD_GET;
+request.url = url;
+request.url_size = sizeof(url) - 1;
+request.timeout_ms = 1000;
+request.max_response_size = 4096;
+HttpRequestHandle handle{};
+svc_http->begin(mod_ctx, &request, completed, nullptr, &handle);
+```
+
+`begin` deep-copies the URL, headers and body before it returns. URLs must use exact lowercase `https://`; userinfo,
+fragments, CR/LF header values, hop-by-hop headers and `Content-Length` are rejected. URLs are at most 4096 bytes,
+requests carry at most 32 headers/16 KiB aggregate and a 64 KiB body, timeouts are 1-60000 ms, and requested response
+limits are 1 byte through 2 MiB. GET has no body.
+
+The one worker queues completions, but callbacks run only from the game-thread frame boundary, outside service locks.
+Response headers/body are borrowed for the callback duration only. Cancel is owner-bound and gives an accepted queued or
+running request exactly one later `HTTP_RESULT_CANCELED` completion. On mod detach, all caller work and callbacks are
+suppressed before its image unloads.
+
 ### HookService (`mods/svc/hook.h`)
 
 Installs hooks on game functions and resolves symbols by name. You'll rarely call it directly; use the typed helpers in

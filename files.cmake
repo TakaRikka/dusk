@@ -1483,6 +1483,9 @@ set(DUSK_FILES
         src/dusk/mods/svc/gfx.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/http.cpp
+        src/dusk/mods/svc/http_core.cpp
+        src/dusk/mods/svc/http_core.hpp
         src/dusk/mods/svc/log.cpp
         src/dusk/mods/svc/overlay.cpp
         src/dusk/mods/svc/registry.cpp
