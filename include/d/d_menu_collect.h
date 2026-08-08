@@ -17,14 +17,9 @@ class dMenu_Insect_c;
 class dSelect_cursor_c;
 
 #if TARGET_PC
-struct PaneCache {
-    u64 tag;
-    f32 origTransX;
-    f32 origTransY;
-    bool cached;
-};
+#include "dusk/utilities.hpp"
 
-static PaneCache mpScreenPanes[] = {
+static dusk::utils::PaneCache mpScreenPanes[] = {
     {MULTI_CHAR('sa_tex_n'), 0.0f, 0.0f, false},
     {MULTI_CHAR('op_tex_n'), 0.0f, 0.0f, false},
     {MULTI_CHAR('heart_n'), 0.0f, 0.0f, false},
@@ -172,7 +167,7 @@ public:
     J2DPicture* getBlackTex() { return mpBlackTex; }
     u8 getSubWindowOpenCheck() { return mSubWindowOpenCheck; }
 
-private:
+// private:
     /* 0x004 */ JKRExpHeap* mpHeap;
     /* 0x008 */ JKRExpHeap* mpSubHeap;
     /* 0x00C */ void* field_0xc;

@@ -11,16 +11,33 @@
 
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_midna.h"
+#include "d/d_bright_check.h"
+#include "d/d_file_sel_info.h"
+#include "d/d_file_select.h"
 #include "d/d_kankyo.h"
 #include "d/d_kantera_icon_meter.h"
+#include "d/d_menu_collect.h"
+#include "d/d_menu_fishing.h"
+#include "d/d_menu_insect.h"
+#include "d/d_menu_letter.h"
+#include "d/d_menu_option.h"
+#include "d/d_menu_ring.h"
+#include "d/d_menu_save.h"
+#include "d/d_menu_skill.h"
+#include "d/d_meter_button.h"
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
+#include "d/d_msg_out_font.h"
 #include "d/d_pane_class.h"
 #include "m_Do/m_Do_dvd_thread.h"
+#include "SSystem/SComponent/c_phase.h"
 
 #include <optional>
 
+#include "d/d_menu_fmap2D.h"
+
+// Main hook for recoloring textures on load
 DEFINE_HOOK_SYMBOL(
     "mDoDvdThd_mountArchive_c::execute", s32(mDoDvdThd_mountArchive_c*), MountArchiveExecute);
 void mount_archive_execute_post(ModContext*, void* args, void* retval, void* userdata) {
@@ -28,29 +45,31 @@ void mount_archive_execute_post(ModContext*, void* args, void* retval, void* use
     handle_texture_overrides_on_load(archive);
 }
 
-// Helper for getting lantern color
-std::optional<GXColor> get_lantern_color() {
-    auto lanternColorStr = get_str_option(get_cvars().lanternGlowColor, "");
-    if (is_valid_hex_color_str(lanternColorStr) || lanternColorStr == "rainbow") {
-        if (is_valid_hex_color_str(lanternColorStr)) {
-            return hex_color_str_to_gx_color(lanternColorStr);
+// Helper for getting configVar color
+static std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow = false) {
+    auto colorStr = get_str_option(handle, "");
+    if (is_valid_hex_color_str(colorStr) || (colorStr == "rainbow" && allowRainbow)) {
+        if (is_valid_hex_color_str(colorStr)) {
+            return hex_color_str_to_gx_color(colorStr);
         }
-
-        // Assume rainbow if not a valid hex str
-        auto lanternColor = get_rainbow_rgb(127.5f);
-        lanternColor.r /= 2;
-        lanternColor.g /= 2;
-        lanternColor.b /= 2;
-        return lanternColor;
+        
+        if (allowRainbow) {
+            // Assume rainbow if not a valid hex str
+            auto color = get_rainbow_rgb(127.5f);
+            color.r /= 2;
+            color.g /= 2;
+            color.b /= 2;
+            return color;
+        }
     }
 
     return std::nullopt;
 }
 
-// Override Lantern ambience color
+// Lantern ambience color
 DEFINE_HOOK(&dKy_WolfEyeLight_set, WolfEyeLightSet);
 void wolf_eye_light_set_post(ModContext*, void* args, void* retval, void* userdata) {
-    auto maybeLanternColor = get_lantern_color();
+    auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
 
@@ -61,10 +80,10 @@ void wolf_eye_light_set_post(ModContext*, void* args, void* retval, void* userda
     }
 }
 
-// Override Lantern Sphere color
+// Lantern Sphere color
 DEFINE_HOOK(&daAlink_c::preKandelaarDraw, PreKandelaarDraw);
 void pre_kandelaar_draw_post(ModContext*, void* args, void* retval, void* userdata) {
-    auto maybeLanternColor = get_lantern_color();
+    auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
 
@@ -84,7 +103,7 @@ void pre_kandelaar_draw_post(ModContext*, void* args, void* retval, void* userda
     }
 }
 
-// Override Main Lantern Meter Color
+// Main Lantern Meter Color
 DEFINE_HOOK(&CPaneMgr::setBlackWhite, CPaneMgrSetBlackWhite);
 HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void* retval, void* userdata) {
     // Check for magic meter
@@ -101,7 +120,7 @@ HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void* retval, 
         return HOOK_CONTINUE;
     }
 
-    auto maybeLanternColor = get_lantern_color();
+    auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
         black = JUtility::TColor(lanternColor.r, lanternColor.g, lanternColor.b, 255);
@@ -111,10 +130,10 @@ HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void* retval, 
     return HOOK_CONTINUE;
 }
 
-// Override Lantern Icon Meter Color
+// Lantern Icon Meter Color
 DEFINE_HOOK(&dKantera_icon_c::setNowGauge, KanteraIconSetNowGauge);
 void kantera_icon_set_now_gauge_post(ModContext*, void* args, void* retval, void* userdata) {
-    auto maybeLanternColor = get_lantern_color();
+    auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
 
@@ -125,19 +144,15 @@ void kantera_icon_set_now_gauge_post(ModContext*, void* args, void* retval, void
     }
 }
 
-// Override Light Sword Effect Color
+// Light Sword Effect Color
 DEFINE_HOOK(&daAlink_c::setLightningSwordEffect, SetLightningSwordEffect);
 void set_lightning_sword_effect_post(ModContext*, void* args, void* retval, void* userdata) {
-    auto glowColorStr = get_str_option(get_cvars().lightSwordGlowColor, "");
-    if (is_valid_hex_color_str(glowColorStr) || glowColorStr == "rainbow") {
-        GXColor glowColor{};
-        if (glowColorStr == "rainbow") {
-            glowColor = get_rainbow_rgb(127.5f);
-        } else {
-            glowColor = hex_color_str_to_gx_color(glowColorStr);
-        }
+    auto maybeGlowColor = get_config_var_color(get_cvars().lightSwordGlowColor, true);
+    if (maybeGlowColor.has_value()) {
+        auto glowColor = maybeGlowColor.value();
 
         auto link = mods::arg<daAlink_c*>(args, 0);
+        // Check copied from inside the hooked function
         if (link->mEquipItem == 0x103 && link->checkNoResetFlg3(daPy_py_c::FLG3_UNK_100000)) {
             for (size_t i = 0; i < 3; i++) {
                 auto emitter = dComIfGp_particle_getEmitter(link->field_0x327c[i]);
@@ -150,23 +165,67 @@ void set_lightning_sword_effect_post(ModContext*, void* args, void* retval, void
     }
 }
 
-// Heart Icon tags
-static constexpr std::array heart_tags = {
-    MULTI_CHAR('hear_00'), MULTI_CHAR('hear_01'), MULTI_CHAR('hear_02'), MULTI_CHAR('hear_03'), MULTI_CHAR('hear_04'), MULTI_CHAR('hear_05'), MULTI_CHAR('hear_06'),
-    MULTI_CHAR('hear_07'), MULTI_CHAR('hear_08'), MULTI_CHAR('hear_09'), MULTI_CHAR('hear_10'), MULTI_CHAR('hear_11'), MULTI_CHAR('hear_12'), MULTI_CHAR('hear_13'),
-    MULTI_CHAR('hear_14'), MULTI_CHAR('hear_15'), MULTI_CHAR('hear_16'), MULTI_CHAR('hear_17'), MULTI_CHAR('hear_18'), MULTI_CHAR('hear_19'), MULTI_CHAR('bigh_00'),
-    MULTI_CHAR('bigh_01'), MULTI_CHAR('bigh_02'), MULTI_CHAR('bigh_03'), /*MULTI_CHAR('bigh_n')*/
-};
+void recolor_ui_button(ConfigVarHandle option, u64 tag, J2DScreen* screen) {
+    auto buttonColorStr = get_str_option(option, "");
+    if (is_valid_hex_color_str(buttonColorStr)) {
+        auto color = hex_color_str_to_gx_color(buttonColorStr);
+        auto element = static_cast<J2DPicture*>(screen->search(tag));
+        if (element != nullptr) {
+            element->setBlackWhite(JUtility::TColor(0, 0, 0, 0),
+                JUtility::TColor(color.r, color.g, color.b, 0xFF));
+        }
+    }
+}
 
+// Main gameplay UI. Top left hearts and top right buttons
 DEFINE_HOOK(&dMeter2Draw_c::init, dMeter2Init);
-void d_meter_2_init_post(ModContext*, void* args, void* retval, void* userdata) {
+void d_meter_2_init_post(ModContext*, void* args, void*, void*) {
     auto dMeter2Draw = mods::arg<dMeter2Draw_c*>(args, 0);
+    auto screen = dMeter2Draw->getMainScreenPtr();
+
+    // Heart tags on main UI
+    static constexpr std::array kHeartTags = {
+        MULTI_CHAR('hear_00'), MULTI_CHAR('hear_01'), MULTI_CHAR('hear_02'), MULTI_CHAR('hear_03'), MULTI_CHAR('hear_04'), MULTI_CHAR('hear_05'), MULTI_CHAR('hear_06'),
+        MULTI_CHAR('hear_07'), MULTI_CHAR('hear_08'), MULTI_CHAR('hear_09'), MULTI_CHAR('hear_10'), MULTI_CHAR('hear_11'), MULTI_CHAR('hear_12'), MULTI_CHAR('hear_13'),
+        MULTI_CHAR('hear_14'), MULTI_CHAR('hear_15'), MULTI_CHAR('hear_16'), MULTI_CHAR('hear_17'), MULTI_CHAR('hear_18'), MULTI_CHAR('hear_19'), MULTI_CHAR('bigh_00'),
+        MULTI_CHAR('bigh_01'), MULTI_CHAR('bigh_02'), MULTI_CHAR('bigh_03')
+    };
+
     auto heartColorStr = get_str_option(get_cvars().heartColor, "");
     if (is_valid_hex_color_str(heartColorStr)) {
         auto heartColor = hex_color_str_to_gx_color(heartColorStr);
-        auto screen = dMeter2Draw->getMainScreenPtr();
-        for (auto tag : heart_tags) {
+        for (auto tag : kHeartTags) {
             auto element = static_cast<J2DPicture*>(screen->search(tag));
+            if (element != nullptr) {
+                element->setBlackWhite(heartColor, JUtility::TColor(200, 200, 200, 255));
+            }
+        }
+    }
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+    recolor_ui_button(get_cvars().xButtonColor, MULTI_CHAR('x_btn'), screen);
+    recolor_ui_button(get_cvars().yButtonColor, MULTI_CHAR('y_btn'), screen);
+    recolor_ui_button(get_cvars().zButtonColor, MULTI_CHAR('zbtn'), screen);
+}
+
+// Hearts on the file select screen
+DEFINE_HOOK(&dFile_info_c::setHeartCnt, FileInfoSetHeartCount);
+void file_info_set_heart_count_post(ModContext*, void* args, void*, void*) {
+    auto fileInfo = mods::arg<dFile_info_c*>(args, 0);
+
+    // Heart tags on file select
+    static constexpr std::array kFileSelectHeartTags {
+        MULTI_CHAR('hear_20'), MULTI_CHAR('hear_21'), MULTI_CHAR('hear_22'), MULTI_CHAR('hear_23'), MULTI_CHAR('hear_24'), MULTI_CHAR('hear_25'), MULTI_CHAR('hear_26'),
+        MULTI_CHAR('hear_27'), MULTI_CHAR('hear_28'), MULTI_CHAR('hear_29'), MULTI_CHAR('hear_30'), MULTI_CHAR('hear_31'), MULTI_CHAR('hear_32'), MULTI_CHAR('hear_33'),
+        MULTI_CHAR('hear_34'), MULTI_CHAR('hear_35'), MULTI_CHAR('hear_36'), MULTI_CHAR('hear_37'), MULTI_CHAR('hear_38'), MULTI_CHAR('hear_39'),
+    };
+
+    auto heartColorStr = get_str_option(get_cvars().heartColor, "");
+    if (is_valid_hex_color_str(heartColorStr)) {
+        auto heartColor = hex_color_str_to_gx_color(heartColorStr);
+        for (auto tag : kFileSelectHeartTags) {
+            auto element = static_cast<J2DPicture*>(fileInfo->mFileInfo.Scr->search(tag));
             if (element != nullptr) {
                 element->setBlackWhite(heartColor, JUtility::TColor(200, 200, 200, 255));
             }
@@ -174,12 +233,198 @@ void d_meter_2_init_post(ModContext*, void* args, void* retval, void* userdata) 
     }
 }
 
-// Override Midna Hair Color
+// Buttons that appear contextually at the bottom of the screen during gameplay
+// (Are X, Y ever used there?)
+DEFINE_HOOK(&dMeterButton_c::screenInitButton, ScreenInitButton);
+void screen_init_button_post(ModContext*, void* args, void*, void*) {
+    auto meterButton = mods::arg<dMeterButton_c*>(args, 0);
+    auto screen = meterButton->mpButtonScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn1'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+    recolor_ui_button(get_cvars().xButtonColor, MULTI_CHAR('x_btn'), screen);
+    recolor_ui_button(get_cvars().yButtonColor, MULTI_CHAR('y_btn'), screen);
+    recolor_ui_button(get_cvars().zButtonColor, MULTI_CHAR('zbtn'), screen);
+}
+
+// A and B buttons when saving a file
+DEFINE_HOOK(&dMenu_save_c::screenSet, MenuSaveScreenSet);
+void menu_save_screen_set_post(ModContext*, void* args, void*, void*) {
+    auto menuSave = mods::arg<dMenu_save_c*>(args, 0);
+    auto screen = menuSave->mSaveSel.Scr;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('wabtn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('wbbtn'), screen);
+}
+
+// A and B buttons when selecting a file
+DEFINE_HOOK(&dFile_select_c::screenSet, FileSelectScreenSet);
+void file_select_screen_set_post(ModContext*, void* args, void*, void*) {
+    auto fileSelect = mods::arg<dFile_select_c*>(args, 0);
+    auto screen = fileSelect->fileSel.Scr;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('wabtn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('wbbtn'), screen);
+}
+
+// A button on brightness check screen
+DEFINE_HOOK(&dBrightCheck_c::screenSet, BrightCheckScreenSet);
+void bright_check_screen_set_post(ModContext*, void* args, void*, void*) {
+    auto brightCheck = mods::arg<dBrightCheck_c*>(args, 0);
+    auto screen = brightCheck->mBrightCheck.Scr;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn1'), screen);
+}
+
+// X and Y buttons on the item wheel screen
+DEFINE_HOOK(&dMenu_Ring_c::_create, MenuRingCreate);
+void menu_ring_create_post(ModContext*, void* args, void*, void*) {
+    auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
+    auto screen = menuRing->mpScreen;
+
+    recolor_ui_button(get_cvars().xButtonColor, MULTI_CHAR('xbtn'), screen);
+    recolor_ui_button(get_cvars().yButtonColor, MULTI_CHAR('ybtn'), screen);
+}
+
+// A and B buttons on the main pause screen
+DEFINE_HOOK(&dMenu_Collect2D_c::_create, MenuCollect2DCreate);
+void menu_collect_2D_create_post(ModContext*, void* args, void*, void*) {
+    auto menuCollect2D = mods::arg<dMenu_Collect2D_c*>(args, 0);
+    auto screen = menuCollect2D->mpScreenIcon;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+}
+
+// A and B buttons on the fishing journal screen
+DEFINE_HOOK(&dMenu_Fishing_c::screenSetDoIcon, MenuFishingScreenSetDoIcon);
+void menu_fishing_screen_set_do_icon_post(ModContext*, void* args, void*, void*) {
+    auto menuFishing = mods::arg<dMenu_Fishing_c*>(args, 0);
+    auto screen = menuFishing->mpIconScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+}
+
+// A and B buttons on the insect collection screen
+DEFINE_HOOK(&dMenu_Insect_c::screenSetDoIcon, MenuInsectScreenSetDoIcon);
+void menu_insect_screen_set_do_icon_post(ModContext*, void* args, void*, void*) {
+    auto menuInsect = mods::arg<dMenu_Insect_c*>(args, 0);
+    auto screen = menuInsect->mpIconScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+}
+
+// A and B buttons on the letters screen
+DEFINE_HOOK(&dMenu_Letter_c::screenSetDoIcon, MenuLetterScreenSetDoIcon);
+void menu_letter_screen_set_do_icon_post(ModContext*, void* args, void*, void*) {
+    auto menuLetter = mods::arg<dMenu_Letter_c*>(args, 0);
+    auto screen = menuLetter->mpIconScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+}
+
+// A, B, and Z buttons on option screen
+DEFINE_HOOK(&dMenu_Option_c::_create, MenuOptionCreate);
+void menu_option_create_post(ModContext*, void* args, void*, void*) {
+    auto menuOption = mods::arg<dMenu_Option_c*>(args, 0);
+    auto screen = menuOption->mpScreenIcon;
+    auto backScreen = menuOption->mpBackScreen;
+    auto tvScreen = menuOption->mpTVScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+    recolor_ui_button(get_cvars().zButtonColor, MULTI_CHAR('g_zbtn'), backScreen);
+
+    // A Button on option's brightness check screen
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn1'), tvScreen);
+}
+
+// A and B buttons on the hidden skills screen
+DEFINE_HOOK(&dMenu_Skill_c::screenSetDoIcon, MenuSkillScreenSetDoIcon);
+void menu_skill_screen_set_do_icon_post(ModContext*, void* args, void*, void*) {
+    auto menuSkill = mods::arg<dMenu_Skill_c*>(args, 0);
+    auto screen = menuSkill->mpIconScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
+}
+
+// A, B, and Z buttons on the map screen
+DEFINE_HOOK(&dMenu_Fmap_c::_create, MenuFMapCreate);
+void menu_fmap_create_post(ModContext*, void* args, void*, void*) {
+    auto menuFMap = mods::arg<dMenu_Fmap_c*>(args, 0);
+    auto screen = menuFMap->mpDraw2DTop->mpTitleScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn1'), screen);
+    recolor_ui_button(get_cvars().zButtonColor, MULTI_CHAR('zbtn'), screen);
+}
+
+// A, B, X, and Y button icons in text
+DEFINE_HOOK(&COutFont_c::createPane, OutFontCreatePane);
+void out_font_create_pane_post(ModContext*, void* args, void*, void*) {
+    auto outFont = mods::arg<COutFont_c*>(args, 0);
+    auto paneArr = outFont->mpPane;
+    
+    auto maybeAButtonColor = get_config_var_color(get_cvars().aButtonColor);
+    if (maybeAButtonColor.has_value()) {
+        auto aButtonColor = maybeAButtonColor.value();
+        paneArr[0]->setBlackWhite(
+            JUtility::TColor(255, 255, 255, 0),
+            JUtility::TColor(aButtonColor.r,aButtonColor.g,aButtonColor.b, 255));
+    }
+
+    auto maybeBButtonColor = get_config_var_color(get_cvars().bButtonColor);
+    if (maybeBButtonColor.has_value()) {
+        auto bButtonColor = maybeBButtonColor.value();
+        paneArr[1]->setBlackWhite(
+            JUtility::TColor(255, 255, 255, 0),
+            JUtility::TColor(bButtonColor.r,bButtonColor.g,bButtonColor.b, 255));
+    }
+
+    // Condition copied from hooked function
+    auto xyBlack = JUtility::TColor(255, 255, 255, 0);
+    if (outFont->field_0x242 == 1) {
+        xyBlack = JUtility::TColor(0, 0, 0, 0);
+    }
+
+    auto maybeXButtonColor = get_config_var_color(get_cvars().xButtonColor);
+    if (maybeXButtonColor.has_value()) {
+        auto xButtonColor = maybeXButtonColor.value();
+        paneArr[5]->setBlackWhite(xyBlack, JUtility::TColor(xButtonColor.r,xButtonColor.g,xButtonColor.b, 255));
+    }
+
+    auto maybeYButtonColor = get_config_var_color(get_cvars().yButtonColor);
+    if (maybeYButtonColor.has_value()) {
+        auto yButtonColor = maybeYButtonColor.value();
+        paneArr[6]->setBlackWhite(xyBlack, JUtility::TColor(yButtonColor.r,yButtonColor.g,yButtonColor.b, 255));
+    }
+}
+
+// Heart icon in text
+DEFINE_HOOK(&COutFontSet_c::drawFont, OutFontSetDrawFont);
+void out_font_set_draw_font_post(ModContext*, void* args, void*, void*) {
+    auto outFontSet = mods::arg<COutFontSet_c*>(args, 0);
+
+    auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
+    if (maybeHeartColor.has_value()) {
+        auto heartColor = maybeHeartColor.value();
+        u32 heartColor_u32 = heartColor.r << 24 | heartColor.g << 16 | heartColor.b << 8 | 0xFF;
+        if (outFontSet->getType() == 0x1B) { // Heart icon type
+            outFontSet->mColor = heartColor_u32;
+        }
+    }
+}
+
+// Midna Hair Color
 DEFINE_HOOK(&daMidna_c::create, MidnaCreate);
-void midna_create_post(ModContext*, void* args, void* retval, void* userdata) {
+void midna_create_post(ModContext*, void* args, void* retval, void*) {
     auto step = reinterpret_cast<int*>(retval);
-    // check for cPhs_Compleate
-    if (*step != 4) {
+    // Don't set colors if midna isn't done loading
+    if (*step != cPhs_COMPLEATE_e) {
         return;
     }
 
@@ -268,7 +513,7 @@ void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void
     }
 }
 
-// Override Midna Charge Ring Color
+// Midna Charge Ring Color
 DEFINE_HOOK(&daAlink_c::setWolfLockDomeModel, SetWolfLockDomeModel);
 void wolf_lock_dome_model_post(ModContext*, void* args, void* retval, void* userdata) {
     auto domeRingColorStr = get_str_option(get_cvars().midnaChargeRingColor, "");
@@ -295,72 +540,62 @@ void wolf_lock_dome_model_post(ModContext*, void* args, void* retval, void* user
     }
 }
 
+#define ADD_POST_HOOK(defined_hook, function, original) \
+    result = mods::hook::add_post<defined_hook>(function); \
+    if (result != MOD_OK) { \
+        mods::log::debug("failed to add post hook to" #original ", Result {}", static_cast<int>(result)); \
+        return result; \
+    }
+
+#define ADD_PRE_HOOK(defined_hook, function, original) \
+    result = mods::hook::add_pre<defined_hook>(function); \
+    if (result != MOD_OK) { \
+        mods::log::debug("failed to add pre hook to" #original ", Result {}", static_cast<int>(result)); \
+        return result; \
+    }
+
 ModResult add_all_hooks() {
-    auto result = mods::hook::add_post<MountArchiveExecute>(mount_archive_execute_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to mountArchive_execute, Result {}", static_cast<int>(result));
-        return result;
-    }
+    ModResult result{};
 
-    result = mods::hook::add_post<WolfEyeLightSet>(wolf_eye_light_set_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to dKy_WolfEyeLight_set, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Main hook for texture recoloring
+    ADD_POST_HOOK(MountArchiveExecute, mount_archive_execute_post, mountArchive_execute)
 
-    result = mods::hook::add_post<PreKandelaarDraw>(pre_kandelaar_draw_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to daAlink_c::preKandelaarDraw, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Hooks for lantern glow
+    ADD_POST_HOOK(WolfEyeLightSet, wolf_eye_light_set_post, dKy_WolfEyeLight_set)
+    ADD_POST_HOOK(PreKandelaarDraw, pre_kandelaar_draw_post, daAlink_c::preKandelaarDraw)
 
-    result = mods::hook::add_post<SetWolfLockDomeModel>(wolf_lock_dome_model_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to daAlink_c::setWolfLockDomeModel, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Hooks for lantern meter color
+    ADD_PRE_HOOK(CPaneMgrSetBlackWhite, cpane_mgr_set_black_white_pre, CPaneMgr::setBlackWhite)
+    ADD_POST_HOOK(KanteraIconSetNowGauge, kantera_icon_set_now_gauge_post, dKantera_icon_c::setNowGauge)
 
-    result = mods::hook::add_pre<CPaneMgrSetBlackWhite>(cpane_mgr_set_black_white_pre);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add pre hook to CPaneMgr::setBlackWhite, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Hook for midna charge ring
+    ADD_POST_HOOK(SetWolfLockDomeModel, wolf_lock_dome_model_post, daAlink_c::setWolfLockDomeModel)
 
-    result = mods::hook::add_post<KanteraIconSetNowGauge>(kantera_icon_set_now_gauge_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to dKantera_icon_c::setNowGauge, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Hook for light sword glow
+    ADD_POST_HOOK(SetLightningSwordEffect, set_lightning_sword_effect_post, daAlink_c::setLightningSwordEffect)
 
-    result = mods::hook::add_post<SetLightningSwordEffect>(set_lightning_sword_effect_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to daAlink_c::setLightningSwordEffect, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Hooks for Midna Hair Color
+    ADD_POST_HOOK(MidnaCreate, midna_create_post, daMidna_c::create)
+    ADD_PRE_HOOK(MidnaSetBodyPartMatrix, midna_set_body_part_matrix_pre, daMidna_c::setBodyPartMatrix)
+    ADD_POST_HOOK(MidnaSetBodyPartMatrix, midna_set_body_part_matrix_post, daMidna_c::setBodyPartMatrix)
 
-    result = mods::hook::add_post<MidnaCreate>(midna_create_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to daMidna_c::create, Result {}", static_cast<int>(result));
-        return result;
-    }
-
-    result = mods::hook::add_pre<MidnaSetBodyPartMatrix>(midna_set_body_part_matrix_pre);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add pre hook to daMidna_c::setBodyPartMatrix, Result {}", static_cast<int>(result));
-        return result;
-    }
-
-    result = mods::hook::add_post<MidnaSetBodyPartMatrix>(midna_set_body_part_matrix_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to daMidna_c::setBodyPartMatrix, Result {}", static_cast<int>(result));
-        return result;
-    }
-
-    result = mods::hook::add_post<dMeter2Init>(d_meter_2_init_post);
-    if (result != MOD_OK) {
-        mods::log::debug("failed to add post hook to dMeter2Draw_c::init, Result {}", static_cast<int>(result));
-        return result;
-    }
+    // Hooks for UI colors
+    ADD_POST_HOOK(dMeter2Init, d_meter_2_init_post, dMeter2Draw_c::init)
+    ADD_POST_HOOK(FileInfoSetHeartCount, file_info_set_heart_count_post, dFile_info_c::setHeartCnt)
+    ADD_POST_HOOK(ScreenInitButton, screen_init_button_post, dMeterButton_c::screenInitButton)
+    ADD_POST_HOOK(MenuSaveScreenSet, menu_save_screen_set_post, dMenu_save_c::screenSet)
+    ADD_POST_HOOK(FileSelectScreenSet, file_select_screen_set_post, dFile_select_c::screenSet)
+    ADD_POST_HOOK(BrightCheckScreenSet, bright_check_screen_set_post, dBrightCheck_c::screenSet)
+    ADD_POST_HOOK(MenuRingCreate, menu_ring_create_post, dMenu_Ring_c::_create)
+    ADD_POST_HOOK(MenuCollect2DCreate, menu_collect_2D_create_post, dMenu_Collect2D_c::_create)
+    ADD_POST_HOOK(MenuFishingScreenSetDoIcon, menu_fishing_screen_set_do_icon_post, dMenu_Fishing_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuInsectScreenSetDoIcon, menu_insect_screen_set_do_icon_post, dMenu_Insect_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuLetterScreenSetDoIcon, menu_letter_screen_set_do_icon_post, dMenu_Letter_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuOptionCreate, menu_option_create_post, dMenu_Option_c::_create)
+    ADD_POST_HOOK(MenuSkillScreenSetDoIcon, menu_skill_screen_set_do_icon_post, dMenu_Skill_c::screenSetDoIcon)
+    ADD_POST_HOOK(OutFontCreatePane, out_font_create_pane_post, COutFont_c::createPane)
+    ADD_POST_HOOK(OutFontSetDrawFont, out_font_set_draw_font_post, COutFontSet_c::drawFont)
+    ADD_POST_HOOK(MenuFMapCreate, menu_fmap_create_post, dMenu_Fmap_c::_create)
 
     return MOD_OK;
 }

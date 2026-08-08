@@ -22,6 +22,11 @@ struct cvars {
     ConfigVarHandle ironBootsColor = 0;
     ConfigVarHandle spinnerColor = 0;
     ConfigVarHandle heartColor = 0;
+    ConfigVarHandle aButtonColor = 0;
+    ConfigVarHandle bButtonColor = 0;
+    ConfigVarHandle xButtonColor = 0;
+    ConfigVarHandle yButtonColor = 0;
+    ConfigVarHandle zButtonColor = 0;
     ConfigVarHandle midnaHairBaseColor = 0;
     ConfigVarHandle midnaHairTipsColor = 0;
     ConfigVarHandle midnaChargeRingColor = 0;

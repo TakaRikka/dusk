@@ -70,13 +70,6 @@ ModResult register_int_option(
     return MOD_OK;
 }
 
-void add_control(UiElementHandle pane, const UiControlDesc& desc) {
-    auto result = svc_ui->pane_add_control(mod_ctx, pane, &desc, nullptr);
-    if (result != MOD_OK) {
-        mods::log::debug("pane_add_control failed {}", static_cast<int>(result));
-    }
-}
-
 const char* kDefaultHexColorsExplanation =
     "Set the color with any 6 digit hex code. A reload will be required to see changes.<br/>"
     "Common colors:<br/>"
@@ -91,7 +84,7 @@ const char* kDefaultHexColorsExplanation =
     "- Brown: 91723e<br/>";
 
 const char* kGlowColorsExplanation =
-    "Set the color with any 6 digit hex code, or with \"rainbow\" for a rainbow effect.<br/>"
+    "Set the color of the lantern light with any 6 digit hex code, or with \"rainbow\" for a rainbow effect.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
     "- Orange: f68821<br/>"
@@ -113,8 +106,82 @@ const char* kMasterSwordColorsExplanation =
     "- White: a0a0a0<br/>"
     "- Cyan: 30d0d0<br/>";
 
+const char* kAButtonColorsExplanation =
+    "Set the color of the A button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Red: ff0000<br/>"
+    "- Orange: ff5000<br/>"
+    "- Yellow: ffaf00<br/>"
+    "- Dark Green: 0080ff<br/>"
+    "- Blue: 0000ff<br/>"
+    "- Purple: 8000ff<br/>"
+    "- Grey: 5555ff<br/>"
+    "- Pink: ff20ff<br/>";
+
+const char* kBButtonColorsExplanation =
+    "Set the color of the B button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Orange: ffff40<br/>"
+    "- Pink: ffa0ff<br/>"
+    "- Green: 00e87b<br/>"
+    "- Blue: 00aaff<br/>"
+    "- Purple: 6078ff<br/>"
+    "- Black: 000000<br/>"
+    "- Teal: 00f3ff<br/>";
+
+const char* kXButtonColorsExplanation =
+    "Set the color of the X button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Red: ff0000<br/>"
+    "- Orange: ff8200<br/>"
+    "- Yellow: f7df00<br/>"
+    "- Lime Green: 70ff00<br/>"
+    "- Dark Green: 00bd11<br/>"
+    "- Blue: 0000ff<br/>"
+    "- Purple: 800088<br/>"
+    "- Black: 000000<br/>"
+    "- Pink: ff00aa<br/>"
+    "- Cyan: 00ffff<br/>";
+
+const char* kYButtonColorsExplanation =
+    "Set the color of the Y button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Red: ff0000<br/>"
+    "- Orange: ff8200<br/>"
+    "- Yellow: f7df00<br/>"
+    "- Lime Green: 70ff00<br/>"
+    "- Dark Green: 00bd11<br/>"
+    "- Blue: 0000ff<br/>"
+    "- Purple: 800088<br/>"
+    "- Black: 000000<br/>"
+    "- Pink: ff00aa<br/>"
+    "- Cyan: 00ffff<br/>";
+
+const char* kZButtonColorsExplanation =
+    "Set the Z button color with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Red: ff0000<br/>"
+    "- Orange: ff8200<br/>"
+    "- Yellow: f7df00<br/>"
+    "- Lime Green: 70ff00<br/>"
+    "- Dark Green: 00bd11<br/>"
+    "- Purple: 800088<br/>"
+    "- Black: 000000<br/>"
+    "- Light Blue: 00ffff<br/>";
+
+const char* kHeartColorsExplanation =
+    "Set the heart color with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Common colors:<br/>"
+    "- Orange: ffff40<br/>"
+    "- Pink: ffa0ff<br/>"
+    "- Green: 00e87b<br/>"
+    "- Blue: 00aaff<br/>"
+    "- Purple: 6078ff<br/>"
+    "- Black: 000000<br/>"
+    "- Teal: 00f3ff<br/>";
+
 const char* kChargeRingColorsExplanation =
-    "Set the color with any 6 digit hex code.<br/>"
+    "Set the color of Midna's charge ring with any 6 digit hex code.<br/>"
     "Common colors:<br/>"
     "- Pink: ff9f9f<br/>"
     "- Red: ff0000<br/>"
@@ -125,6 +192,13 @@ const char* kChargeRingColorsExplanation =
     "- Brown: 331900<br/>"
     "- White: feffff<br/>"
     "- Black: 000000<br/>";
+
+void add_control(UiElementHandle pane, const UiControlDesc& desc) {
+    auto result = svc_ui->pane_add_control(mod_ctx, pane, &desc, nullptr);
+    if (result != MOD_OK) {
+        mods::log::debug("pane_add_control failed {}", static_cast<int>(result));
+    }
+}
 
 void add_cosmetic_option(UiElementHandle left, ConfigVarHandle cvar, const char* name, const char* helpRml) {
     UiControlDesc control = UI_CONTROL_DESC_INIT;
@@ -191,7 +265,12 @@ ModResult build_ui_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
     (void)right;
 
-    add_cosmetic_option(left, g_cvars.heartColor, "Heart Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.aButtonColor, "A Button Color", kAButtonColorsExplanation);
+    add_cosmetic_option(left, g_cvars.bButtonColor, "B Button Color", kBButtonColorsExplanation);
+    add_cosmetic_option(left, g_cvars.xButtonColor, "X Button Color", kXButtonColorsExplanation);
+    add_cosmetic_option(left, g_cvars.yButtonColor, "Y Button Color", kYButtonColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zButtonColor, "Z Button Color", kZButtonColorsExplanation);
+    add_cosmetic_option(left, g_cvars.heartColor, "Heart Color", kHeartColorsExplanation);
 
     return MOD_OK;
 }
@@ -272,6 +351,11 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     REGISTER_COSMETIC_OPTION(boomerangColor)
     REGISTER_COSMETIC_OPTION(ironBootsColor)
     REGISTER_COSMETIC_OPTION(spinnerColor)
+    REGISTER_COSMETIC_OPTION(aButtonColor)
+    REGISTER_COSMETIC_OPTION(bButtonColor)
+    REGISTER_COSMETIC_OPTION(xButtonColor)
+    REGISTER_COSMETIC_OPTION(yButtonColor)
+    REGISTER_COSMETIC_OPTION(zButtonColor)
     REGISTER_COSMETIC_OPTION(heartColor)
 
     result = register_int_option("midnaHairBaseColor", 0, g_cvars.midnaHairBaseColor, error);
