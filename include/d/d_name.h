@@ -13,14 +13,9 @@ class JUTFont;
 class STControl;
 
 #if TARGET_PC
-struct PaneCache {
-    u64 tag;
-    f32 origTransX;
-    f32 origTransY;
-    bool cached;
-};
+#include "dusk/utilities.hpp"
 
-static PaneCache l_tagName[] = {
+static dusk::utils::PaneCache l_tagName[] = {
     {MULTI_CHAR('m_00_0'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_00_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_00_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_00_3'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_00_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_01_0'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_01_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_01_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_01_3'), 0.0f, 0.0f, false},
     {MULTI_CHAR('m_01_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_02_0'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_02_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_02_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_02_3'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_02_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('m03_0'), 0.0f, 0.0f, false},  {MULTI_CHAR('m03_1'), 0.0f, 0.0f, false},  {MULTI_CHAR('m03_2'), 0.0f, 0.0f, false},
     {MULTI_CHAR('m03_3'), 0.0f, 0.0f, false},  {MULTI_CHAR('m03_4'), 0.0f, 0.0f, false},  {MULTI_CHAR('m_04_0'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_04_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_04_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_04_3'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_04_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_05_0'), 0.0f, 0.0f, false}, {MULTI_CHAR('m_05_1'), 0.0f, 0.0f, false},
@@ -31,11 +26,11 @@ static PaneCache l_tagName[] = {
     {MULTI_CHAR('m12_3'), 0.0f, 0.0f, false},  {MULTI_CHAR('m12_4'), 0.0f, 0.0f, false}, {MULTI_CHAR('p_end_2'), 0.0f, 0.0f, false}, {MULTI_CHAR('p_end_1'), 0.0f, 0.0f, false}, {MULTI_CHAR('p_end_0'), 0.0f, 0.0f, false},
 };                                             
 
-static PaneCache l_nameTagName[] = {
+static dusk::utils::PaneCache l_nameTagName[] = {
     {MULTI_CHAR('name_00'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_01'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_02'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_03'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_04'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_05'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_06'), 0.0f, 0.0f, false}, {MULTI_CHAR('name_07'), 0.0f, 0.0f, false},
 };
 
-static PaneCache l_nameCurTagName[] = {
+static dusk::utils::PaneCache l_nameCurTagName[] = {
     {MULTI_CHAR('s__n_00'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_01'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_02'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_03'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_04'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_05'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_06'), 0.0f, 0.0f, false}, {MULTI_CHAR('s__n_07'), 0.0f, 0.0f, false},
 };
 #endif

@@ -13,7 +13,9 @@ class dFile_info_c;
 class J2DPicture;
 
 #if TARGET_PC
-static PaneCache mSelDtPanes[] = {
+#include "dusk/utilities.hpp"
+
+static dusk::utils::PaneCache mSelDtPanes[] = {
     {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
     {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},
     {MULTI_CHAR('ken_n0'), 0.0f, 0.0f, false},
@@ -26,7 +28,7 @@ static PaneCache mSelDtPanes[] = {
     {MULTI_CHAR('b_base1'), 0.0f, 0.0f, false},
 };
 
-static PaneCache fileSelPanes[] = {
+static dusk::utils::PaneCache fileSelPanes[] = {
     {MULTI_CHAR('w_uzu00'), 0.0f, 0.0f, false},
     {MULTI_CHAR('w_uzu01'), 0.0f, 0.0f, false},
     {MULTI_CHAR('w_uzu02'), 0.0f, 0.0f, false},

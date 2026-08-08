@@ -105,7 +105,7 @@ void dMenu_Collect2D_c::menuCollectWide() {
     static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
-        for (PaneCache& entry : mpScreenPanes) {
+        for (dusk::utils::PaneCache& entry : mpScreenPanes) {
             J2DPane* pane = mpScreen->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -119,7 +119,7 @@ void dMenu_Collect2D_c::menuCollectWide() {
     // Reset all panes
     mpScreen->scale(1.0f, 1.0f);
     mpScreen->translate(0.0f, 0.0f);
-    for (PaneCache& entry : mpScreenPanes) {
+    for (dusk::utils::PaneCache& entry : mpScreenPanes) {
         J2DPane* pane = mpScreen->search(entry.tag);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);

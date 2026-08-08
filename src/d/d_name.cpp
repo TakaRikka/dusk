@@ -1516,7 +1516,7 @@ void dName_c::nameWide() {
     static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
-        for (PaneCache& entry : l_tagName) {
+        for (dusk::utils::PaneCache& entry : l_tagName) {
             J2DPane* pane = nameIn.NameInScr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -1524,7 +1524,7 @@ void dName_c::nameWide() {
                 entry.cached = true;
             }
         }
-        for (PaneCache& entry : l_nameTagName) {
+        for (dusk::utils::PaneCache& entry : l_nameTagName) {
             J2DPane* pane = nameIn.NameInScr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -1532,7 +1532,7 @@ void dName_c::nameWide() {
                 entry.cached = true;
             }
         }
-        for (PaneCache& entry : l_nameCurTagName) {
+        for (dusk::utils::PaneCache& entry : l_nameCurTagName) {
             J2DPane* pane = nameIn.NameInScr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -1546,19 +1546,19 @@ void dName_c::nameWide() {
     // Reset all panes
     nameIn.NameInScr->scale(1.0f, 1.0f);
     nameIn.NameInScr->translate(0.0f, 0.0f);
-    for (PaneCache& entry : l_tagName) {
+    for (dusk::utils::PaneCache& entry : l_tagName) {
         J2DPane* pane = nameIn.NameInScr->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);
     }
-    for (PaneCache& entry : l_nameTagName) {
+    for (dusk::utils::PaneCache& entry : l_nameTagName) {
         J2DPane* pane = nameIn.NameInScr->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);
     }
-    for (PaneCache& entry : l_nameCurTagName) {
+    for (dusk::utils::PaneCache& entry : l_nameCurTagName) {
         J2DPane* pane = nameIn.NameInScr->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
@@ -1574,17 +1574,17 @@ void dName_c::nameWide() {
             break;
         default: // Wii and Dusklight
             // List of Characters Box
-            for (PaneCache& entry : l_tagName) {
+            for (dusk::utils::PaneCache& entry : l_tagName) {
                 J2DPane* pane = nameIn.NameInScr->search(entry.tag);
                 pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
             }
             // Letters being typed
-            for (PaneCache& entry : l_nameTagName) {
+            for (dusk::utils::PaneCache& entry : l_nameTagName) {
                 J2DPane* pane = nameIn.NameInScr->search(entry.tag);
                 pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
             }
             // Underscores when typing below letters
-            for (PaneCache& entry : l_nameCurTagName) {
+            for (dusk::utils::PaneCache& entry : l_nameCurTagName) {
                 J2DPane* pane = nameIn.NameInScr->search(entry.tag);
                 pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
             }
