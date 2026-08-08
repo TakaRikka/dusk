@@ -85,9 +85,9 @@ private:
     std::deque<std::shared_ptr<Entry>> m_work;
     std::deque<std::shared_ptr<Entry>> m_completions;
     std::unordered_map<uint64_t, std::shared_ptr<Entry>> m_entries;
-    std::thread m_worker;
     uint64_t m_nextHandle = 1;
     bool m_stopping = false;
+    std::thread m_worker;
 };
 
 }  // namespace dusk::mods::svc

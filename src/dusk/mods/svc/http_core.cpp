@@ -3,6 +3,7 @@
 #include "dusk/http/http.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <string_view>
 
 namespace dusk::mods::svc {
@@ -275,6 +276,11 @@ void HttpCore::shutdown() {
 }
 
 bool HttpCore::validateRequest(const HttpRequestDesc* desc, Request& request) {
+    static_assert(sizeof(HttpMethod) == sizeof(uint32_t));
+    uint32_t method = 0;
+    if (desc != nullptr) {
+        std::memcpy(&method, &desc->method, sizeof(method));
+    }
     if (desc == nullptr || desc->struct_size != sizeof(HttpRequestDesc) ||
         !pointer_length_pair_valid(desc->url, desc->url_size) ||
         !pointer_length_pair_valid(desc->headers, desc->header_count) ||
@@ -283,8 +289,8 @@ bool HttpCore::validateRequest(const HttpRequestDesc* desc, Request& request) {
         desc->body_size > HTTP_REQUEST_BODY_MAX_SIZE || desc->timeout_ms < kTimeoutMinMs ||
         desc->timeout_ms > kTimeoutMaxMs || desc->max_response_size == 0 ||
         desc->max_response_size > HTTP_RESPONSE_MAX_SIZE ||
-        (desc->method != HTTP_METHOD_GET && desc->method != HTTP_METHOD_POST) ||
-        (desc->method == HTTP_METHOD_GET && desc->body_size != 0))
+        (method != HTTP_METHOD_GET && method != HTTP_METHOD_POST) ||
+        (method == HTTP_METHOD_GET && desc->body_size != 0))
     {
         return false;
     }
@@ -322,7 +328,7 @@ bool HttpCore::validateRequest(const HttpRequestDesc* desc, Request& request) {
         headers.push_back(Header{.name = std::string(name), .value = std::string(value)});
     }
 
-    request.method = desc->method;
+    request.method = static_cast<HttpMethod>(method);
     request.url = std::string(url);
     request.headers = std::move(headers);
     if (desc->body_size != 0) {

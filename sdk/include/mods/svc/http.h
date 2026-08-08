@@ -1,6 +1,10 @@
 #pragma once
 
-#include "mods/api.h"
+#include <mods/api.h>
+
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
 
 /*
  * Asynchronous HTTPS request service with bounded copied inputs and a single host worker.
@@ -100,12 +104,4 @@ typedef struct HttpService {
     ModResult (*cancel)(ModContext* ctx, HttpRequestHandle handle);
 } HttpService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct dusk::mods::ServiceTraits<HttpService> {
-    static constexpr const char* id = HTTP_SERVICE_ID;
-    static constexpr uint16_t major_version = HTTP_SERVICE_MAJOR;
-};
-#endif
+MOD_DECLARE_SERVICE(HttpService, svc_http, HTTP_SERVICE_ID, HTTP_SERVICE_MAJOR, HTTP_SERVICE_MINOR);

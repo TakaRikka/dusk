@@ -9,6 +9,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
+#include <cstring>
 #include <functional>
 #include <mutex>
 #include <string>
@@ -118,7 +119,10 @@ void test_validation_boundaries() {
     uint8_t body[] = {'x'};
     desc = request_desc(url, HTTP_METHOD_GET, body, sizeof(body));
     assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
-    desc = request_desc(url, static_cast<HttpMethod>(99));
+    desc = request_desc(url);
+    const uint32_t invalidMethod = 99;
+    static_assert(sizeof(desc.method) == sizeof(invalidMethod));
+    std::memcpy(&desc.method, &invalidMethod, sizeof(invalidMethod));
     assert(core.begin(context, &desc, record_callback, &callbacks, &handle) == MOD_INVALID_ARGUMENT);
 
     const HttpHeader badName{
