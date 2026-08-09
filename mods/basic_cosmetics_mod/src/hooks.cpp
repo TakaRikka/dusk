@@ -27,18 +27,18 @@
 #include "d/d_menu_save.h"
 #include "d/d_menu_skill.h"
 #include "d/d_meter_button.h"
+#include "d/d_meter_hakusha.h"
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_out_font.h"
+#include "d/d_msg_scrn_base.h"
 #include "d/d_pane_class.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "SSystem/SComponent/c_phase.h"
 
 #include <optional>
-
-#include "d/d_msg_scrn_base.h"
 
 // Main hook for recoloring textures on load
 DEFINE_HOOK_SYMBOL(
@@ -200,9 +200,9 @@ void d_meter_2_init_post(ModContext*, void* args, void*, void*) {
         MULTI_CHAR('bigh_01'), MULTI_CHAR('bigh_02'), MULTI_CHAR('bigh_03')
     };
 
-    auto heartColorStr = get_str_option(get_cvars().heartColor, "");
-    if (is_valid_hex_color_str(heartColorStr)) {
-        auto heartColor = hex_color_str_to_gx_color(heartColorStr);
+    auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
+    if (maybeHeartColor.has_value()) {
+        auto heartColor = maybeHeartColor.value();
         for (auto tag : kHeartTags) {
             auto element = static_cast<J2DPicture*>(screen->search(tag));
             if (element != nullptr) {
@@ -230,9 +230,9 @@ void file_info_set_heart_count_post(ModContext*, void* args, void*, void*) {
         MULTI_CHAR('hear_34'), MULTI_CHAR('hear_35'), MULTI_CHAR('hear_36'), MULTI_CHAR('hear_37'), MULTI_CHAR('hear_38'), MULTI_CHAR('hear_39'),
     };
 
-    auto heartColorStr = get_str_option(get_cvars().heartColor, "");
-    if (is_valid_hex_color_str(heartColorStr)) {
-        auto heartColor = hex_color_str_to_gx_color(heartColorStr);
+    auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
+    if (maybeHeartColor.has_value()) {
+        auto heartColor = maybeHeartColor.value();
         for (auto tag : kFileSelectHeartTags) {
             auto element = static_cast<J2DPicture*>(fileInfo->mFileInfo.Scr->search(tag));
             if (element != nullptr) {
@@ -385,6 +385,15 @@ void msg_object_talk_start_init_post(ModContext*, void* args, void*, void*) {
     }
 }
 
+// A button when on Epona
+DEFINE_HOOK(&dMeterHakusha_c::_create, MeterHakushaCreate);
+void meter_hakusha_create_post(ModContext*, void* args, void*, void*) {
+    auto meterHakusha = mods::arg<dMeterHakusha_c*>(args, 0);
+    auto screen = meterHakusha->mpButtonScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn1'), screen);
+}
+
 // A, B, X, and Y button icons in text
 DEFINE_HOOK(&COutFont_c::createPane, OutFontCreatePane);
 void out_font_create_pane_post(ModContext*, void* args, void*, void*) {
@@ -525,7 +534,7 @@ static GXColorS10 midnaField0x6e0{};
 static GXColor midnaField0x6e8{};
 static GXColor midnaField0x6ec{};
 
-// Copy the original values from before the function
+// Copy the original values before setBodyPartMatrix runs
 HookAction midna_set_body_part_matrix_pre(ModContext*, void* args, void* retval, void* userdata) {
     auto midna = mods::arg<daMidna_c*>(args, 0);
 
@@ -539,12 +548,12 @@ HookAction midna_set_body_part_matrix_pre(ModContext*, void* args, void* retval,
 void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void* userdata) {
     auto midna = mods::arg<daMidna_c*>(args, 0);
     if (midna->mpHairhandBmd != NULL) {
-        // Restore the original values from before the function ran (this undoes the chase)
+        // Restore the original values from before setBodyPartMatrix ran (this undoes the chase)
         midna->field_0x6e0 = midnaField0x6e0;
         midna->field_0x6e8 = midnaField0x6e8;
         midna->field_0x6ec = midnaField0x6ec;
 
-        // statement copied from inside function to determine colors
+        // Statement copied from inside function to determine colors
         bool bigColors = midna->checkStateFlg0(daMidna_c::FLG0_UNK_10000000) ||
             midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_HAIR].mResID ||
             midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_S_TAKES].mResID ||
@@ -558,7 +567,7 @@ void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void
         GXColor kcolor1{};
         GXColor kcolor2{};
 
-        // Then set our own colors
+        // Set our own colors
         if (bigColors) {
             kcolor1 = *get_midna_hair_bigKColor();
             if (dKy_darkworld_check()) {
@@ -579,7 +588,7 @@ void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void
             }
         }
 
-        // And reapply the chase
+        // Reapply the chase that happens in the function
         cLib_chaseS(&midna->field_0x6e0.r, color.r, 10);
         cLib_chaseS(&midna->field_0x6e0.g, color.g, 10);
         cLib_chaseS(&midna->field_0x6e0.b, color.b, 10);
@@ -676,6 +685,7 @@ ModResult add_all_hooks() {
     ADD_POST_HOOK(OutFontSetDrawFont, out_font_set_draw_font_post, COutFontSet_c::drawFont)
     ADD_POST_HOOK(MenuFMapCreate, menu_fmap_create_post, dMenu_Fmap_c::_create)
     ADD_POST_HOOK(MsgObjectTalkStartInit, msg_object_talk_start_init_post, dMsgObject_c::talkStartInit)
+    ADD_POST_HOOK(MeterHakushaCreate, meter_hakusha_create_post, dMeterHakusha_c::_create)
 
     // Heart Model Color
     ADD_POST_HOOK(ItemBaseCreateItemHeap, item_base_create_item_heap_post, daItemBase_c::CreateItemHeap)
