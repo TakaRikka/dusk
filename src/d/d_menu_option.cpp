@@ -1710,9 +1710,11 @@ void dMenu_Option_c::screenSet() {
     mpString->getString(0x55C, field_0x270[2], NULL, NULL, NULL, 0);
     for (int i = 0; i < 5; i++) {
 #if TARGET_PC
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             field_0x25c[i] = (J2DTextBox*)mpTVScreen->search(tv_btnA[i]);
-            mpTVScreen->search(ftv_btnA[i])->hide();
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mpTVScreen->search(ftv_btnA[i])->hide();
+            }
         } else {
             field_0x25c[i] = (J2DTextBox*)mpTVScreen->search(ftv_btnA[i]);
             mpTVScreen->search(tv_btnA[i])->hide();
