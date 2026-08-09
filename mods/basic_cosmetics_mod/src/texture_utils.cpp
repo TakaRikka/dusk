@@ -197,6 +197,10 @@ auto& get_cosmetic_overrides() {
     static std::unordered_map<s32, std::unordered_map<std::string_view, std::list<CosmeticOverride>>> cosmeticOverrides{};
     if (cosmeticOverrides.empty()) {
         auto& g_cvars = get_cvars();
+        // Ordon Clothes Link Model
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Bmdl.arc")]["bmwr/al_swb.bmd"] = {
+            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
+        };
         // Main Link Model
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Kmdl.arc")]["bmwr/al_head.bmd"] = {
             {.textures = {"al_cap"},  .hexColor = g_cvars.herosTunicCapColor},
@@ -262,6 +266,26 @@ auto& get_cosmetic_overrides() {
         // Wolf Link Color
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Wmdl.arc")]["bmwr/wl.bmd"] = {
             {.textures = {"wl_body"}, .hexColor = g_cvars.wolfLinkColor},
+        };
+        // Wooden Sword Item Model
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_SWB.arc")]["bmdr/o_gd_al_swb.bmd"] = {
+            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
+        };
+        // Boomerang Item Model
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_boom.arc")]["bmdr/o_gd_boom.bmd"] = {
+            {.textures = {"L_al_boom00"}, .hexColor = g_cvars.boomerangColor},
+        };
+        // Iron Boots Item Model
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_boot.arc")]["bmwr/o_gd_al_bootsh.bmd"] = {
+            {.textures = {"al_bootsH"},  .hexColor = g_cvars.ironBootsColor},
+        };
+        // Spinner Item Model
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_SP.arc")]["bmdr/o_gd_al_sp.bmd"] = {
+            {.textures = {"al_SP"}, .hexColor = g_cvars.spinnerColor},
+        };
+        // Gale Boomerang for Ook
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/E_mk.arc")]["bmdr/bm.bmd"] = {
+            {.textures = {"L_al_boom00", "bm_boom"}, .hexColor = g_cvars.boomerangColor},
         };
     }
     return cosmeticOverrides;
