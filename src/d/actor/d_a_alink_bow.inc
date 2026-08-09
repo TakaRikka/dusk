@@ -543,7 +543,8 @@ void daAlink_c::setBowNormalAnime() {
 }
 
 void daAlink_c::setBowSight() {
-    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000)) {
+#if TARGET_PC
+    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000) && dusk::getSettings().game.aimingReticle) {
         cXyz sight_pos;
         f32 dist;
         f32 speed;
@@ -552,6 +553,17 @@ void daAlink_c::setBowSight() {
         checkSightLine(dist, &sight_pos);
         mSight.setPos(&sight_pos);
         mSight.onDrawFlg();
+#else
+    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000)) {
+        cXyz sight_pos;
+        f32 dist;
+        f32 speed;
+
+        getArrowFlyData(&dist, &speed, TRUE);
+        checkSightLine(dist, &sight_pos);
+        mSight.setPos(&sight_pos);
+        mSight.offDrawFlg();
+#endif
     } else {
         mSight.offDrawFlg();
     }
