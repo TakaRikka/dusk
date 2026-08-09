@@ -49,6 +49,16 @@ uint16_t blend_overlay_rgb_565(uint8_t grayVal, GXColor color)
     return ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3);
 }
 
+// Helper function to perform overlay blending on a single 8-bit color channel
+uint8_t blend_overlay_channel(uint8_t base, uint8_t blend)
+{
+    if (base < 128) {
+        return static_cast<uint8_t>((2 * base * blend) / 255);
+    }
+
+    return static_cast<uint8_t>(255 - (2 * (255 - base) * (255 - blend)) / 255);
+}
+
 bool is_valid_hex_color_str(std::string_view hexStr) {
     return hexStr.find_first_not_of("0123456789ABCDEFabcdef") == std::string_view::npos && hexStr.length() == 6;
 }

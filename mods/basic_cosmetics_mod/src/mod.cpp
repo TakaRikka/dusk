@@ -251,6 +251,8 @@ ModResult build_equipment_colors_tab(
     add_cosmetic_option(left, g_cvars.zoraArmorFlippersColor, "Zora Armor Flippers Color", kDefaultHexColorsExplanation);
     add_cosmetic_option_with_rainbow(left, g_cvars.lanternGlowColor, "Lantern Glow Color", kGlowColorsExplanation);
     add_cosmetic_option(left, g_cvars.woodenSwordColor, "Wooden Sword Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.ordonSwordBladeColor, "Ordon Sword Blade Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.ordonSwordHandleColor, "Ordon Sword Handle Color", kDefaultHexColorsExplanation);
     add_cosmetic_option(left, g_cvars.msBladeColor, "Master Sword Blade Color", kMasterSwordColorsExplanation);
     add_cosmetic_option(left, g_cvars.msHandleColor, "Master Sword Handle Color", kMasterSwordColorsExplanation);
     add_cosmetic_option_with_rainbow(left, g_cvars.lightSwordGlowColor, "Light Sword Glow Color", kGlowColorsExplanation);
@@ -345,6 +347,8 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     REGISTER_COSMETIC_OPTION(zoraArmorFlippersColor)
     REGISTER_COSMETIC_OPTION(lanternGlowColor)
     REGISTER_COSMETIC_OPTION(woodenSwordColor)
+    REGISTER_COSMETIC_OPTION(ordonSwordBladeColor)
+    REGISTER_COSMETIC_OPTION(ordonSwordHandleColor)
     REGISTER_COSMETIC_OPTION(msBladeColor)
     REGISTER_COSMETIC_OPTION(msHandleColor)
     REGISTER_COSMETIC_OPTION(lightSwordGlowColor)

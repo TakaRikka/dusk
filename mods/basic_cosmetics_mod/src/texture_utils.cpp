@@ -36,6 +36,73 @@ ResTIMG* find_tex_header_in_tex_1_section(J3DTextureBlock* tex1Ptr, const char* 
     return nullptr;
 }
 
+void recolor_rgb5a3_texture(ResTIMG* texHeaderPtr, GXColor color)
+{
+    // Precompute lookup tables for both RGB555 (opaque) and RGB444 (translucent) modes
+    uint16_t recolors_rgb555[0x100];
+    uint16_t recolors_rgb444[0x100];
+
+    for (int32_t i = 0; i < 0x100; i++) {
+        const uint8_t r = blend_overlay_channel(i, color.r);
+        const uint8_t g = blend_overlay_channel(i, color.g);
+        const uint8_t b = blend_overlay_channel(i, color.b);
+
+        // Pack as RGB555: Bit 15 set to 1 + 5 bits R, G, B
+        recolors_rgb555[i] = 0x8000 | ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+
+        // Pack as RGB444: 4 bits R, G, B (Bit 15 remains 0)
+        recolors_rgb444[i] = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+    }
+
+    constexpr int32_t blockWidth = 4;
+    constexpr int32_t blockHeight = 4;
+
+    const int32_t roundedWidth = texHeaderPtr->width + ((blockWidth - (texHeaderPtr->width % blockWidth)) % blockWidth);
+    const int32_t roundedHeight = texHeaderPtr->height + ((blockHeight - (texHeaderPtr->height % blockHeight)) % blockHeight);
+
+    const int32_t totalPixels = roundedWidth * roundedHeight;
+
+    auto* pixelPtr = reinterpret_cast<BE<uint16_t>*>(JSUConvertOffsetToPtr<u8>(texHeaderPtr, texHeaderPtr->imageOffset));
+
+    for (int32_t i = 0; i < totalPixels; i++) {
+        const uint16_t rawPixel = pixelPtr[i];
+
+        // MSB determines if pixel is opaque or translucent
+        if (rawPixel & 0x8000) {
+            // Pixel is opaque
+            const uint8_t r5 = (rawPixel >> 10) & 0x1F;
+            const uint8_t g5 = (rawPixel >> 5) & 0x1F;
+            const uint8_t b5 = rawPixel & 0x1F;
+
+            // Expand 5-bit to 8-bit
+            const uint8_t r8 = (r5 << 3) | (r5 >> 2);
+            const uint8_t g8 = (g5 << 3) | (g5 >> 2);
+            const uint8_t b8 = (b5 << 3) | (b5 >> 2);
+
+            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
+
+            pixelPtr[i] = recolors_rgb555[grayVal];
+        } else {
+            // Pixel is translucent
+            const uint16_t alpha3 = rawPixel & 0x7000;
+
+            const uint8_t r4 = (rawPixel >> 8) & 0x0F;
+            const uint8_t g4 = (rawPixel >> 4) & 0x0F;
+            const uint8_t b4 = rawPixel & 0x0F;
+
+            // Expand 4-bit to 8-bit
+            const uint8_t r8 = (r4 << 4) | r4;
+            const uint8_t g8 = (g4 << 4) | g4;
+            const uint8_t b8 = (b4 << 4) | b4;
+
+            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
+
+            // Combine original alpha with recolored RGB444
+            pixelPtr[i] = alpha3 | recolors_rgb444[grayVal];
+        }
+    }
+}
+
 // When left is greater than right
 // 0b00 points to the left color
 // 0b01 points to the right color
@@ -73,18 +140,8 @@ uint32_t swap_index_bits(bool leftIsGreater, uint32_t bits) {
     return bits ^ mask;
 }
 
-void recolor_cmpr_texture(J3DTextureBlock* tex1Ptr, const char* textureName, GXColor color)
+void recolor_cmpr_texture(ResTIMG* texHeaderPtr, GXColor color)
 {
-    ResTIMG* texHeaderPtr = find_tex_header_in_tex_1_section(tex1Ptr, textureName);
-    if (texHeaderPtr == nullptr) {
-        return;
-    }
-
-    if (texHeaderPtr->format != GX_VA_TEX1) {
-        // Texture is not CMPR
-        return;
-    }
-
     uint16_t recolors[0x100];
     for (int32_t i = 0; i < 0x100; i++) {
         recolors[i] = blend_overlay_rgb_565(i, color);
@@ -156,6 +213,158 @@ void recolor_cmpr_texture(J3DTextureBlock* tex1Ptr, const char* textureName, GXC
         rgb565Ptr[1] = rightNewRgb565;
 
         currentAddr += 8;
+    }
+}
+
+// Function to encode a single 4x4 sub-block (16 pixels) into an 8-byte CMPR block
+static void encode_cmpr_sub_block(uint8_t* dst, const uint8_t pixels[16]) {
+    uint8_t min_val = 255;
+    uint8_t max_val = 0;
+
+    for (int i = 0; i < 16; ++i) {
+        if (pixels[i] < min_val) min_val = pixels[i];
+        if (pixels[i] > max_val) max_val = pixels[i];
+    }
+
+    auto intensity_to_rgb565 = [](uint8_t val) -> uint16_t {
+        uint16_t r5 = val >> 3;
+        uint16_t g6 = val >> 2;
+        uint16_t b5 = val >> 3;
+        return static_cast<uint16_t>((r5 << 11) | (g6 << 5) | b5);
+    };
+
+    uint16_t c0_565 = intensity_to_rgb565(max_val);
+    uint16_t c1_565 = intensity_to_rgb565(min_val);
+    uint32_t indices = 0;
+
+    if (max_val > min_val) {
+        // Enforce c0_565 > c1_565 in unsigned 16-bit representation to use 4-color mode
+        if (c0_565 == c1_565) {
+            if ((c0_565 & 0x001F) < 0x001F) {
+                c0_565 += 1;
+            } else {
+                c1_565 -= 1;
+            }
+        }
+
+        // Interpolated 8-bit intensity values for quantization
+        const int c0 = max_val;
+        const int c1 = min_val;
+        const int c2 = (2 * max_val + min_val) / 3;
+        const int c3 = (max_val + 2 * min_val) / 3;
+
+        // Map each pixel to the nearest palette entry
+        for (int i = 0; i < 16; ++i) {
+            const int p = pixels[i];
+            const int d0 = std::abs(p - c0);
+            const int d1 = std::abs(p - c1);
+            const int d2 = std::abs(p - c2);
+            const int d3 = std::abs(p - c3);
+
+            uint32_t best_idx = 0;
+            int min_d = d0;
+
+            if (d1 < min_d) { min_d = d1; best_idx = 1; }
+            if (d2 < min_d) { min_d = d2; best_idx = 2; }
+            if (d3 < min_d) { min_d = d3; best_idx = 3; }
+
+            indices |= (best_idx << (30 - (2 * i)));
+        }
+    }
+
+    // Account for big endian data expectation
+    dst[0] = static_cast<uint8_t>(c0_565 >> 8);
+    dst[1] = static_cast<uint8_t>(c0_565 & 0xFF);
+    dst[2] = static_cast<uint8_t>(c1_565 >> 8);
+    dst[3] = static_cast<uint8_t>(c1_565 & 0xFF);
+    dst[4] = static_cast<uint8_t>(indices >> 24);
+    dst[5] = static_cast<uint8_t>((indices >> 16) & 0xFF);
+    dst[6] = static_cast<uint8_t>((indices >> 8) & 0xFF);
+    dst[7] = static_cast<uint8_t>(indices & 0xFF);
+}
+
+bool convert_i8_to_cmpr(ResTIMG* texHeaderPtr) {
+
+    const uint16_t width = texHeaderPtr->width;
+    const uint16_t height = texHeaderPtr->height;
+
+    if (width % 8 != 0 || height % 8 != 0) {
+        return false;
+    }
+
+    const uint32_t tilesX = width / 8;
+    const uint32_t blocksY_CMPR = height / 8;
+
+    auto* imageData = JSUConvertOffsetToPtr<uint8_t>(texHeaderPtr, texHeaderPtr->imageOffset);
+    uint8_t* writePtr = imageData;
+
+    // Process image in 8x8 blocks
+    for (uint32_t by = 0; by < blocksY_CMPR; ++by) {
+        for (uint32_t bx = 0; bx < tilesX; ++bx) {
+            // Locate the two stacked 8x4 I8 tiles (32 bytes each) making up the 8x8 block
+            const uint32_t topTileIdx = (2 * by) * tilesX + bx;
+            const uint32_t bottomTileIdx = (2 * by + 1) * tilesX + bx;
+
+            const uint8_t* topTileData = imageData + (topTileIdx * 32);
+            const uint8_t* bottomTileData = imageData + (bottomTileIdx * 32);
+
+            uint8_t subBlockPixels[4][16];
+
+            // Extract Sub-block 0 (Top-Left) and Sub-block 1 (Top-Right)
+            for (int row = 0; row < 4; ++row) {
+                for (int col = 0; col < 4; ++col) {
+                    subBlockPixels[0][row * 4 + col] = topTileData[row * 8 + col];
+                    subBlockPixels[1][row * 4 + col] = topTileData[row * 8 + col + 4];
+                }
+            }
+
+            // Extract Sub-block 2 (Bottom-Left) and Sub-block 3 (Bottom-Right)
+            for (int row = 0; row < 4; ++row) {
+                for (int col = 0; col < 4; ++col) {
+                    subBlockPixels[2][row * 4 + col] = bottomTileData[row * 8 + col];
+                    subBlockPixels[3][row * 4 + col] = bottomTileData[row * 8 + col + 4];
+                }
+            }
+
+            // Encode the 4 sub-blocks in CMPR order (32 bytes per 8x8 block)
+            for (const auto& subBlockPixel : subBlockPixels) {
+                encode_cmpr_sub_block(writePtr, subBlockPixel);
+                writePtr += 8;
+            }
+        }
+    }
+
+    // Update ResTIMG header metadata
+    texHeaderPtr->format = GX_TF_CMPR; // 0x0E
+    texHeaderPtr->colorFormat = 0;
+    texHeaderPtr->numColors = 0;
+    texHeaderPtr->paletteOffset = 0;
+
+    return true;
+}
+
+void recolor_texture(J3DTextureBlock* tex1Ptr, const char* textureName, GXColor color) {
+    ResTIMG* texHeaderPtr = find_tex_header_in_tex_1_section(tex1Ptr, textureName);
+    if (texHeaderPtr == nullptr) {
+        return;
+    }
+
+    switch (texHeaderPtr->format) {
+    case GX_TF_CMPR:
+        recolor_cmpr_texture(texHeaderPtr, color);
+        break;
+    case GX_TF_RGB5A3:
+        recolor_rgb5a3_texture(texHeaderPtr, color);
+        break;
+    case GX_TF_I8:
+        if (convert_i8_to_cmpr(texHeaderPtr)) {
+            recolor_cmpr_texture(texHeaderPtr, color);
+        } else {
+            mods::log::debug("Could not convert {} from i8 to cmpr", textureName);
+        }
+        break;
+    default:
+        break;
     }
 }
 
@@ -246,6 +455,11 @@ auto& get_cosmetic_overrides() {
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Mmdl.arc")]["bmwr/al_swb.bmd"] = {
             {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
         };
+        // Ordon Sword Colors
+        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Alink.arc")]["bmwr/al_swa.bmd"] = {
+            {.textures = {"al_SWA", "hilight01"}, .hexColor = g_cvars.ordonSwordBladeColor},
+            {.textures = {"al_SWgripA"}, .hexColor = g_cvars.ordonSwordHandleColor},
+        };
         // Master Sword Colors
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Alink.arc")]["bmwe/al_swm.bmd"] = {
             {.textures = {"al_SWM"}, .hexColor = g_cvars.msBladeColor},
@@ -265,7 +479,7 @@ auto& get_cosmetic_overrides() {
         };
         // Wolf Link Color
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Wmdl.arc")]["bmwr/wl.bmd"] = {
-            {.textures = {"wl_body"}, .hexColor = g_cvars.wolfLinkColor},
+            {.textures = {"wl_body", "wl_eye.1", "wl_eye.2", "wl_eye.3", "wl_eye.4", "wl_eye.5"}, .hexColor = g_cvars.wolfLinkColor},
         };
         // Wooden Sword Item Model
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_SWB.arc")]["bmdr/o_gd_al_swb.bmd"] = {
@@ -327,7 +541,7 @@ void handle_texture_overrides_on_load(mDoDvdThd_mountArchive_c* mountArchive) {
             auto color = hex_color_str_to_gx_color(hexColorStr);
             if (tex1Addr) {
                 for (const auto& textureName : textures) {
-                    recolor_cmpr_texture(tex1Addr, textureName.data(), color);
+                    recolor_texture(tex1Addr, textureName.data(), color);
                 }
             }
         }
