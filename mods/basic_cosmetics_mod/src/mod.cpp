@@ -2,6 +2,7 @@
 #include "hooks.hpp"
 #include "color_utils.hpp"
 #include "midna_hair_color.hpp"
+#include "option_descriptions.hpp"
 
 #include "mods/service.hpp"
 #include "mods/svc/config.h"
@@ -70,129 +71,6 @@ ModResult register_int_option(
     return MOD_OK;
 }
 
-const char* kDefaultHexColorsExplanation =
-    "Set the color with any 6 digit hex code. A reload will be required to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Red: ab706e<br/>"
-    "- Blue: 6382a0<br/>"
-    "- Purple: 94749a<br/>"
-    "- Orange: ec8644<br/>"
-    "- Yellow: b9ab00<br/>"
-    "- Pink: ec9fc8<br/>"
-    "- Black: 505154<br/>"
-    "- White: f8f7f4<br/>"
-    "- Brown: 91723e<br/>";
-
-const char* kGlowColorsExplanation =
-    "Set the color of the lantern light with any 6 digit hex code, or with \"rainbow\" for a rainbow effect.<br/>"
-    "Common colors:<br/>"
-    "- Red: ff0000<br/>"
-    "- Orange: f68821<br/>"
-    "- Yellow: f6f321<br/>"
-    "- Green: 00ff00<br/>"
-    "- Blue: 0000ff<br/>"
-    "- Purple: 8000ff<br/>"
-    "- White: a0a0a0<br/>";
-
-const char* kMasterSwordColorsExplanation =
-    "Set the color with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Red: ff0000<br/>"
-    "- Orange: f68821<br/>"
-    "- Yellow: f6f321<br/>"
-    "- Green: 00ff00<br/>"
-    "- Blue: 0000ff<br/>"
-    "- Purple: 8000ff<br/>"
-    "- White: a0a0a0<br/>"
-    "- Cyan: 30d0d0<br/>";
-
-const char* kAButtonColorsExplanation =
-    "Set the color of the A button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Red: ff0000<br/>"
-    "- Orange: ff5000<br/>"
-    "- Yellow: ffaf00<br/>"
-    "- Dark Green: 0080ff<br/>"
-    "- Blue: 0000ff<br/>"
-    "- Purple: 8000ff<br/>"
-    "- Grey: 5555ff<br/>"
-    "- Pink: ff20ff<br/>";
-
-const char* kBButtonColorsExplanation =
-    "Set the color of the B button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Orange: ffff40<br/>"
-    "- Pink: ffa0ff<br/>"
-    "- Green: 00e87b<br/>"
-    "- Blue: 00aaff<br/>"
-    "- Purple: 6078ff<br/>"
-    "- Black: 000000<br/>"
-    "- Teal: 00f3ff<br/>";
-
-const char* kXButtonColorsExplanation =
-    "Set the color of the X button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Red: ff0000<br/>"
-    "- Orange: ff8200<br/>"
-    "- Yellow: f7df00<br/>"
-    "- Lime Green: 70ff00<br/>"
-    "- Dark Green: 00bd11<br/>"
-    "- Blue: 0000ff<br/>"
-    "- Purple: 800088<br/>"
-    "- Black: 000000<br/>"
-    "- Pink: ff00aa<br/>"
-    "- Cyan: 00ffff<br/>";
-
-const char* kYButtonColorsExplanation =
-    "Set the color of the Y button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Red: ff0000<br/>"
-    "- Orange: ff8200<br/>"
-    "- Yellow: f7df00<br/>"
-    "- Lime Green: 70ff00<br/>"
-    "- Dark Green: 00bd11<br/>"
-    "- Blue: 0000ff<br/>"
-    "- Purple: 800088<br/>"
-    "- Black: 000000<br/>"
-    "- Pink: ff00aa<br/>"
-    "- Cyan: 00ffff<br/>";
-
-const char* kZButtonColorsExplanation =
-    "Set the Z button color with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Red: ff0000<br/>"
-    "- Orange: ff8200<br/>"
-    "- Yellow: f7df00<br/>"
-    "- Lime Green: 70ff00<br/>"
-    "- Dark Green: 00bd11<br/>"
-    "- Purple: 800088<br/>"
-    "- Black: 000000<br/>"
-    "- Light Blue: 00ffff<br/>";
-
-const char* kHeartColorsExplanation =
-    "Set the heart color with any 6 digit hex code. This will also change the color of heart drops. A reload may be necessary to see changes.<br/>"
-    "Common colors:<br/>"
-    "- Orange: ffff40<br/>"
-    "- Pink: ffa0ff<br/>"
-    "- Green: 00e87b<br/>"
-    "- Blue: 00aaff<br/>"
-    "- Purple: 6078ff<br/>"
-    "- Black: 000000<br/>"
-    "- Teal: 00f3ff<br/>";
-
-const char* kChargeRingColorsExplanation =
-    "Set the color of Midna's charge ring with any 6 digit hex code.<br/>"
-    "Common colors:<br/>"
-    "- Pink: ff9f9f<br/>"
-    "- Red: ff0000<br/>"
-    "- Yellow: ffff00<br/>"
-    "- Green: 00ff00<br/>"
-    "- Blue: 0000ff<br/>"
-    "- Purple: ff00ff<br/>"
-    "- Brown: 331900<br/>"
-    "- White: feffff<br/>"
-    "- Black: 000000<br/>";
-
 void add_control(UiElementHandle pane, const UiControlDesc& desc) {
     auto result = svc_ui->pane_add_control(mod_ctx, pane, &desc, nullptr);
     if (result != MOD_OK) {
@@ -241,24 +119,24 @@ ModResult build_equipment_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
     (void)right;
 
-    add_cosmetic_option(left, g_cvars.herosTunicCapColor, "Hero's Tunic Cap Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.herosTunicTorsoColor, "Hero's Tunic Body Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.herosTunicSkirtColor, "Hero's Tunic Skirt Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorCapColor, "Zora Armor Cap Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorHelmetColor, "Zora Armor Helmet Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorTorsoColor, "Zora Armor Torso Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorScalesColor, "Zora Armor Scales Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorFlippersColor, "Zora Armor Flippers Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option_with_rainbow(left, g_cvars.lanternGlowColor, "Lantern Glow Color", kGlowColorsExplanation);
-    add_cosmetic_option(left, g_cvars.woodenSwordColor, "Wooden Sword Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.ordonSwordBladeColor, "Ordon Sword Blade Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.ordonSwordHandleColor, "Ordon Sword Handle Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.msBladeColor, "Master Sword Blade Color", kMasterSwordColorsExplanation);
-    add_cosmetic_option(left, g_cvars.msHandleColor, "Master Sword Handle Color", kMasterSwordColorsExplanation);
-    add_cosmetic_option_with_rainbow(left, g_cvars.lightSwordGlowColor, "Light Sword Glow Color", kGlowColorsExplanation);
-    add_cosmetic_option(left, g_cvars.boomerangColor, "Boomerang Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.ironBootsColor, "Iron Boots Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.spinnerColor, "Spinner Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.herosTunicCapColor, "Hero's Tunic Cap Color", kLinksCapColorsExplanation);
+    add_cosmetic_option(left, g_cvars.herosTunicTorsoColor, "Hero's Tunic Body Color", kLinksShirtColorsExplanation);
+    add_cosmetic_option(left, g_cvars.herosTunicSkirtColor, "Hero's Tunic Skirt Color", kLinksSkirtColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorCapColor, "Zora Armor Cap Color", kZoraCapColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorHelmetColor, "Zora Armor Helmet Color", kZoraHelmetColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorTorsoColor, "Zora Armor Torso Color", kZoraTorsoColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorScalesColor, "Zora Armor Scales Color", kZoraScalesColorsExplanation);
+    add_cosmetic_option(left, g_cvars.zoraArmorFlippersColor, "Zora Armor Flippers Color", kZoraFlippersColorsExplanation);
+    add_cosmetic_option_with_rainbow(left, g_cvars.lanternGlowColor, "Lantern Glow Color", kLanternGlowColorsExplanation);
+    add_cosmetic_option(left, g_cvars.woodenSwordColor, "Wooden Sword Color", kWoodenSwordColorsExplanation);
+    add_cosmetic_option(left, g_cvars.ordonSwordBladeColor, "Ordon Sword Blade Color", kOrdonBladeColorsExplanation);
+    add_cosmetic_option(left, g_cvars.ordonSwordHandleColor, "Ordon Sword Handle Color", kOrdonHandleColorsExplanation);
+    add_cosmetic_option(left, g_cvars.msBladeColor, "Master Sword Blade Color", kMSBladeColorsExplanation);
+    add_cosmetic_option(left, g_cvars.msHandleColor, "Master Sword Handle Color", kMSHandleColorsExplanation);
+    add_cosmetic_option_with_rainbow(left, g_cvars.lightSwordGlowColor, "Light Sword Glow Color", kSwordGlowColorsExplanation);
+    add_cosmetic_option(left, g_cvars.boomerangColor, "Boomerang Color", kBoomerangColorsExplanation);
+    add_cosmetic_option(left, g_cvars.ironBootsColor, "Iron Boots Color", kIronBootsColorsExplanation);
+    add_cosmetic_option(left, g_cvars.spinnerColor, "Spinner Color", kSpinnerColorsExplanation);
 
     return MOD_OK;
 }
@@ -284,9 +162,9 @@ ModResult build_misc_colors_tab(
     add_midna_hair_option(left, g_cvars.midnaHairBaseColor, "Midna's Hair Base Color");
     add_midna_hair_option(left, g_cvars.midnaHairTipsColor, "Midna's Hair Tips Color");
     add_cosmetic_option(left, g_cvars.midnaChargeRingColor, "Midna Charge Ring Color", kChargeRingColorsExplanation);
-    add_cosmetic_option(left, g_cvars.linkHairColor, "Link's Hair Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.wolfLinkColor, "Wolf Link Color", kDefaultHexColorsExplanation);
-    add_cosmetic_option(left, g_cvars.eponaColor, "Epona Color", kDefaultHexColorsExplanation);
+    add_cosmetic_option(left, g_cvars.linkHairColor, "Link's Hair Color", kLinksHairColorsExplanation);
+    add_cosmetic_option(left, g_cvars.wolfLinkColor, "Wolf Link Color", kWolfLinkColorsExplanation);
+    add_cosmetic_option(left, g_cvars.eponaColor, "Epona Color", kEponaColorsExplanation);
 
     return MOD_OK;
 }
