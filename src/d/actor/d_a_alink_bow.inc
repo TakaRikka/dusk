@@ -553,8 +553,8 @@ void daAlink_c::setBowSight() {
         checkSightLine(dist, &sight_pos);
         mSight.setPos(&sight_pos);
         mSight.onDrawFlg();
-    } 
-    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000)) {
+    }
+    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000) && !dusk::getSettings().game.aimingReticle) {
         cXyz sight_pos;
         f32 dist;
         f32 speed;
