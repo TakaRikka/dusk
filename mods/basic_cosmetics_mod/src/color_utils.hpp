@@ -5,7 +5,7 @@
  * https://github.com/zsrtp/libtp_rel/blob/master/include/util/color_utils.h
  */
 
-#include "dolphin/gx/GXStruct.h"
+#include <gx.h>
 
 #include <cstdint>
 #include <string>

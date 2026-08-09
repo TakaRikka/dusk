@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dolphin/gx/GXStruct.h"
+#include <gx.h>
 
 void set_all_midna_hair_colors();
 
