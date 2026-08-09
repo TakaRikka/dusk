@@ -170,7 +170,7 @@ const char* kZButtonColorsExplanation =
     "- Light Blue: 00ffff<br/>";
 
 const char* kHeartColorsExplanation =
-    "Set the heart color with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
+    "Set the heart color with any 6 digit hex code. This will also change the color of heart drops. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Orange: ffff40<br/>"
     "- Pink: ffa0ff<br/>"

@@ -11,6 +11,7 @@
 
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_midna.h"
+#include "d/d_a_item_static.h"
 #include "d/d_bright_check.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
@@ -18,6 +19,7 @@
 #include "d/d_kantera_icon_meter.h"
 #include "d/d_menu_collect.h"
 #include "d/d_menu_fishing.h"
+#include "d/d_menu_fmap2D.h"
 #include "d/d_menu_insect.h"
 #include "d/d_menu_letter.h"
 #include "d/d_menu_option.h"
@@ -28,6 +30,7 @@
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
+#include "d/d_msg_object.h"
 #include "d/d_msg_out_font.h"
 #include "d/d_pane_class.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -35,7 +38,7 @@
 
 #include <optional>
 
-#include "d/d_menu_fmap2D.h"
+#include "d/d_msg_scrn_base.h"
 
 // Main hook for recoloring textures on load
 DEFINE_HOOK_SYMBOL(
@@ -48,6 +51,12 @@ void mount_archive_execute_post(ModContext*, void* args, void* retval, void* use
 // Helper for getting configVar color
 static std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow = false) {
     auto colorStr = get_str_option(handle, "");
+
+    // Convert to lowercase
+    for (auto& c : colorStr) {
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    }
+
     if (is_valid_hex_color_str(colorStr) || (colorStr == "rainbow" && allowRainbow)) {
         if (is_valid_hex_color_str(colorStr)) {
             return hex_color_str_to_gx_color(colorStr);
@@ -363,6 +372,19 @@ void menu_fmap_create_post(ModContext*, void* args, void*, void*) {
     recolor_ui_button(get_cvars().zButtonColor, MULTI_CHAR('zbtn'), screen);
 }
 
+// A button on the howling screen
+DEFINE_HOOK(&dMsgObject_c::talkStartInit, MsgObjectTalkStartInit);
+void msg_object_talk_start_init_post(ModContext*, void* args, void*, void*) {
+    auto msgObject = mods::arg<dMsgObject_c*>(args, 0);
+
+    // If textbox kind is howling
+    if (msgObject->mFukiKind == 17) {
+        auto screen = msgObject->mpScrnDraw->mpScreen;
+
+        recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('abtn'), screen);
+    }
+}
+
 // A, B, X, and Y button icons in text
 DEFINE_HOOK(&COutFont_c::createPane, OutFontCreatePane);
 void out_font_create_pane_post(ModContext*, void* args, void*, void*) {
@@ -415,6 +437,63 @@ void out_font_set_draw_font_post(ModContext*, void* args, void*, void*) {
         u32 heartColor_u32 = heartColor.r << 24 | heartColor.g << 16 | heartColor.b << 8 | 0xFF;
         if (outFontSet->getType() == 0x1B) { // Heart icon type
             outFontSet->mColor = heartColor_u32;
+        }
+    }
+}
+
+// Heart Drop/Piece of Heart/Heart Container model color
+DEFINE_HOOK(&daItemBase_c::CreateItemHeap, ItemBaseCreateItemHeap);
+void item_base_create_item_heap_post(ModContext*, void* args, void*, void*) {
+    auto itemBase = mods::arg<daItemBase_c*>(args, 0);
+    if (itemBase == NULL) {
+        return;
+    }
+    auto itemNo = itemBase->m_itemNo;
+    if (itemNo == dItemNo_HEART_e || itemNo == dItemNo_UTAWA_HEART_e || itemNo == dItemNo_KAKERA_HEART_e) {
+        auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
+        if (maybeHeartColor.has_value()) {
+            auto heartColor = maybeHeartColor.value();
+            auto heartColorS10 = GXColorS10(heartColor.r, heartColor.g, heartColor.b, heartColor.a);
+
+            // Edit inner heart material color for Piece of Heart / Heart Container
+            if (itemNo == dItemNo_UTAWA_HEART_e || itemNo == dItemNo_KAKERA_HEART_e) {
+                *itemBase->mpModel->getModelData()->getMaterialNodePointer(3)->getTevKColor(1) = heartColor;
+                *itemBase->mpModel->getModelData()->getMaterialNodePointer(3)->getTevColor(1) = heartColorS10;
+            }
+
+            const u8 heartColorRGB[3] = {heartColor.r,heartColor.g,heartColor.b};
+            u8** cRegTable = reinterpret_cast<u8**>(&itemBase->mpBrkAnm->getBrkAnm()->mAnmCRegDataR);
+            u8** kRegTable = reinterpret_cast<u8**>(&itemBase->mpBrkAnm->getBrkAnm()->mAnmKRegDataR);
+
+            for (int i = 0; i < 3; i++) {
+                u8* cReg = cRegTable[i];
+                u8* kReg = kRegTable[i];
+
+                auto curColor = heartColorRGB[i];
+
+                // Set heart drop inner heart color
+                cReg[0x3] = curColor;
+                cReg[0xB] = curColor;
+
+                // Set heart drop outer heart color
+                kReg[0x3] = curColor;
+                kReg[0xB] = curColor;
+
+                if (itemNo == dItemNo_KAKERA_HEART_e) {
+                    cReg[0x13] = curColor;
+                    cReg[0x1B] = curColor;
+                    kReg[0x13] = curColor;
+                    kReg[0x1B] = curColor;
+
+                }
+                if (itemNo == dItemNo_UTAWA_HEART_e) {
+                    cReg[0x13] = curColor;
+                    kReg[0x13] = curColor;
+                    kReg[0x1B] = curColor;
+                    kReg[0x23] = curColor;
+                    kReg[0x2B] = curColor;
+                }
+            }
         }
     }
 }
@@ -596,6 +675,10 @@ ModResult add_all_hooks() {
     ADD_POST_HOOK(OutFontCreatePane, out_font_create_pane_post, COutFont_c::createPane)
     ADD_POST_HOOK(OutFontSetDrawFont, out_font_set_draw_font_post, COutFontSet_c::drawFont)
     ADD_POST_HOOK(MenuFMapCreate, menu_fmap_create_post, dMenu_Fmap_c::_create)
+    ADD_POST_HOOK(MsgObjectTalkStartInit, msg_object_talk_start_init_post, dMsgObject_c::talkStartInit)
+
+    // Heart Model Color
+    ADD_POST_HOOK(ItemBaseCreateItemHeap, item_base_create_item_heap_post, daItemBase_c::CreateItemHeap)
 
     return MOD_OK;
 }
