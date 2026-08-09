@@ -475,7 +475,7 @@ auto& get_cosmetic_overrides() {
         };
         // Epona Color
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Horse.arc")]["bmdr/hs.bmd"] = {
-            {.textures = {"hs_body"}, .hexColor = g_cvars.eponaColor},
+            {.textures = {"hs_body", "hs_eye.1", "hs_eye.2", "hs_eye.3"}, .hexColor = g_cvars.eponaColor},
         };
         // Wolf Link Color
         cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Wmdl.arc")]["bmwr/wl.bmd"] = {
