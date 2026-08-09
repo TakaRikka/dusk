@@ -11,6 +11,7 @@
 #include "dusk/data.hpp"
 #include "dusk/imgui/ImGuiEngine.hpp"
 #include "dusk/io.hpp"
+#include "dusk/language.hpp"
 #include "dusk/presentation.hpp"
 #include <borealis/io.hpp>
 #include <borealis/file_select.hpp>
@@ -52,14 +53,6 @@
 
 namespace dusk::ui {
 namespace {
-
-constexpr std::array kLanguageNames = {
-    "English",
-    "German",
-    "French",
-    "Spanish",
-    "Italian",
-};
 
 constexpr std::array kCardFileTypes = {
     "Card Image",
@@ -562,18 +555,15 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .key = "Language",
                     .getValue =
                         [] {
-                            const auto& state = prelaunch_state();
-                            if (!state.configuredDiscCanLaunch || state.configuredDiscInfo.region != iso::Region::Europe) {
-                                return kLanguageNames[0];
-                            }
-                            const u8 idx = static_cast<u8>(getSettings().game.language.getValue());
-                            return kLanguageNames[idx];
+                            return language::language_name(getSettings().game.language.getValue());
                         },
                     .isDisabled =
                         [] {
                             const auto& state = prelaunch_state();
-                            return !state.configuredDiscCanLaunch ||
-                                   state.configuredDiscInfo.region != iso::Region::Europe;
+                            if (!state.configuredDiscCanLaunch) {
+                                return true;
+                            }
+                            return language::available_languages(state.configuredDiscInfo).size() <= 1;
                         },
                     .isModified =
                         [] {
@@ -582,18 +572,22 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         },
                 }),
                 rightPane, [](Pane& pane) {
-                    for (int i = 0; i < kLanguageNames.size(); i++) {
+                    const auto& state = prelaunch_state();
+                    const auto languages = state.configuredDiscCanLaunch
+                                               ? language::available_languages(state.configuredDiscInfo)
+                                               : language::available_languages({});
+                    for (const GameLanguage language : languages) {
                         pane.add_button({
-                                            .text = kLanguageNames[i],
+                                            .text = language::language_name(language),
                                             .isSelected =
-                                                [i] {
+                                                [language] {
                                                     return getSettings().game.language.getValue() ==
-                                                           static_cast<GameLanguage>(i);
+                                                           language;
                                                 },
                                         })
-                            .on_pressed([i] {
+                            .on_pressed([language] {
                                 mDoAud_seStartMenu(kSoundItemChange);
-                                getSettings().game.language.setValue(static_cast<GameLanguage>(i));
+                                getSettings().game.language.setValue(language);
                                 config::save();
                             });
                     }
@@ -1543,6 +1537,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 void SettingsWindow::update() {
     if (mPrelaunch && top_document() == this) {
         try_push_verification_modal(*this);
+        try_push_language_unavailable_modal(*this);
     }
 
     Window::update();

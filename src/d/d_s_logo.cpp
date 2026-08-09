@@ -24,6 +24,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 
 #ifdef TARGET_PC
+#include "dusk/language.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/mods/svc/save.hpp"
@@ -1598,30 +1599,15 @@ void dScnLogo_c::dvdDataLoad() {
     mpButtonCommand = aramMount(BUTTON_RES_PATH, mDoExt_getJ2dHeap());
     mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
-    #if TARGET_PC
-    if (isRegionPal()) {
-        switch (getPalLanguage()) {
-        case 1:
-            mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
-            break;
-        case 2:
-            mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
-            break;
-        case 3:
-            mpBmgResCommand = onMemMount("/res/Msgsp/bmgres.arc");
-            break;
-        case 4:
-            mpBmgResCommand = onMemMount("/res/Msgit/bmgres.arc");
-            break;
-        case 0:
-        default:
-            mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
-            break;
-        }
-    } else {
-        mpBmgResCommand = onMemMount(MSG_PATH);
-    }
-    #elif VERSION == VERSION_GCN_PAL
+#if TARGET_PC
+#if AVOID_UB
+    static char bmgPath[32];
+#else
+    static char bmgPath[22];
+#endif
+    snprintf(bmgPath, sizeof(bmgPath), "/res/%s/bmgres.arc", dusk::language::msg_folder());
+    mpBmgResCommand = onMemMount(bmgPath);
+#elif VERSION == VERSION_GCN_PAL
     switch (getPalLanguage()) {
     case 1:
         mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
@@ -1640,7 +1626,7 @@ void dScnLogo_c::dvdDataLoad() {
         mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
         break;
     }
-    #elif VERSION == VERSION_SHIELD_DEBUG
+#elif VERSION == VERSION_SHIELD_DEBUG
     switch (getPalLanguage()) {
     case 2:
         mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
@@ -1652,9 +1638,9 @@ void dScnLogo_c::dvdDataLoad() {
         mpBmgResCommand = onMemMount("/res/Msgus/bmgres.arc");
         break;
     }
-    #else
+#else
     mpBmgResCommand = onMemMount(MSG_PATH);
-    #endif
+#endif
 
     mpMsgComCommand = aramMount(MSG_COM_PATH, mDoExt_getJ2dHeap());
     mpMsgResCommand[0] = aramMount(MSG_RES0_PATH, mDoExt_getJ2dHeap());
