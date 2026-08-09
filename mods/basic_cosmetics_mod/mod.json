@@ -1,7 +1,7 @@
 {
-  "id": "com.basic_cosmetics.mod",
-  "name": "Basic Cosmetics Mod",
+  "id": "dev.twilitrealm.basic_cosmetics",
+  "name": "Basic Cosmetics",
   "version": "1.0.0",
-  "author": "TwilitRealm",
+  "author": "Twilit Realm",
   "description": "Change Basic Cosmetic Colors"
 }
