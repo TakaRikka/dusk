@@ -1,6 +1,6 @@
 #pragma once
 
-inline const char* kLinksCapColorsExplanation =
+constexpr const char* kLinksCapColorsExplanation =
     "Set the color of the Hero's Tunic cap with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -13,7 +13,7 @@ inline const char* kLinksCapColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kLinksShirtColorsExplanation =
+constexpr const char* kLinksShirtColorsExplanation =
     "Set the color of the Hero's Tunic shirt with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -26,7 +26,7 @@ inline const char* kLinksShirtColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kLinksSkirtColorsExplanation =
+constexpr const char* kLinksSkirtColorsExplanation =
     "Set the color of the Hero's Tunic skirt with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -39,7 +39,7 @@ inline const char* kLinksSkirtColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kZoraCapColorsExplanation =
+constexpr const char* kZoraCapColorsExplanation =
     "Set the color of the Zora Armor cap with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -52,7 +52,7 @@ inline const char* kZoraCapColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kZoraHelmetColorsExplanation =
+constexpr const char* kZoraHelmetColorsExplanation =
     "Set the color of the Zora Armor helmet with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -65,7 +65,7 @@ inline const char* kZoraHelmetColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kZoraTorsoColorsExplanation =
+constexpr const char* kZoraTorsoColorsExplanation =
     "Set the color of the Zora Armor torso with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -78,7 +78,7 @@ inline const char* kZoraTorsoColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kZoraScalesColorsExplanation =
+constexpr const char* kZoraScalesColorsExplanation =
     "Set the color of the Zora Armor scales with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -91,7 +91,7 @@ inline const char* kZoraScalesColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kZoraFlippersColorsExplanation =
+constexpr const char* kZoraFlippersColorsExplanation =
     "Set the color of the Zora Armor flippers with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -104,7 +104,7 @@ inline const char* kZoraFlippersColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kWoodenSwordColorsExplanation =
+constexpr const char* kWoodenSwordColorsExplanation =
     "Set the color with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -117,7 +117,7 @@ inline const char* kWoodenSwordColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kLanternGlowColorsExplanation =
+constexpr const char* kLanternGlowColorsExplanation =
     "Set the color of the lantern light with any 6 digit hex code, or with \"rainbow\" for a rainbow effect.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -128,7 +128,7 @@ inline const char* kLanternGlowColorsExplanation =
     "- Purple: 8000ff<br/>"
     "- White: a0a0a0<br/>";
 
-inline const char* kOrdonBladeColorsExplanation =
+constexpr const char* kOrdonBladeColorsExplanation =
     "Set the color of the Ordon Sword's blade with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -140,7 +140,7 @@ inline const char* kOrdonBladeColorsExplanation =
     "- White: a0a0a0<br/>"
     "- Cyan: 30d0d0<br/>";
 
-inline const char* kOrdonHandleColorsExplanation =
+constexpr const char* kOrdonHandleColorsExplanation =
     "Set the color of the Ordon Sword's handle with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -152,7 +152,7 @@ inline const char* kOrdonHandleColorsExplanation =
     "- White: a0a0a0<br/>"
     "- Cyan: 30d0d0<br/>";
 
-inline const char* kMSBladeColorsExplanation =
+constexpr const char* kMSBladeColorsExplanation =
     "Set the color of the Master Sword's blade with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -164,7 +164,7 @@ inline const char* kMSBladeColorsExplanation =
     "- White: a0a0a0<br/>"
     "- Cyan: 30d0d0<br/>";
 
-inline const char* kMSHandleColorsExplanation =
+constexpr const char* kMSHandleColorsExplanation =
     "Set the color of the Master Sword's handle with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -176,7 +176,7 @@ inline const char* kMSHandleColorsExplanation =
     "- White: a0a0a0<br/>"
     "- Cyan: 30d0d0<br/>";
 
-inline const char* kSwordGlowColorsExplanation =
+constexpr const char* kSwordGlowColorsExplanation =
     "Set the color of the light sword glow with any 6 digit hex code, or with \"rainbow\" for a rainbow effect.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -187,7 +187,7 @@ inline const char* kSwordGlowColorsExplanation =
     "- Purple: 8000ff<br/>"
     "- White: a0a0a0<br/>";
 
-inline const char* kBoomerangColorsExplanation =
+constexpr const char* kBoomerangColorsExplanation =
     "Set the color of the Gale Boomerang with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -200,7 +200,7 @@ inline const char* kBoomerangColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kIronBootsColorsExplanation =
+constexpr const char* kIronBootsColorsExplanation =
     "Set the color of the Iron Boots with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -213,7 +213,7 @@ inline const char* kIronBootsColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kSpinnerColorsExplanation =
+constexpr const char* kSpinnerColorsExplanation =
     "Set the color of the Spinner with any 6 digit hex code. Closing and re-opening Dusklight will be required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -227,7 +227,7 @@ inline const char* kSpinnerColorsExplanation =
     "- Brown: 91723e<br/>";
 
 
-inline const char* kAButtonColorsExplanation =
+constexpr const char* kAButtonColorsExplanation =
     "Set the color of the A button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -239,7 +239,7 @@ inline const char* kAButtonColorsExplanation =
     "- Grey: 5555ff<br/>"
     "- Pink: ff20ff<br/>";
 
-inline const char* kBButtonColorsExplanation =
+constexpr const char* kBButtonColorsExplanation =
     "Set the color of the B button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Orange: ffff40<br/>"
@@ -250,7 +250,7 @@ inline const char* kBButtonColorsExplanation =
     "- Black: 000000<br/>"
     "- Teal: 00f3ff<br/>";
 
-inline const char* kXButtonColorsExplanation =
+constexpr const char* kXButtonColorsExplanation =
     "Set the color of the X button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -264,7 +264,7 @@ inline const char* kXButtonColorsExplanation =
     "- Pink: ff00aa<br/>"
     "- Cyan: 00ffff<br/>";
 
-inline const char* kYButtonColorsExplanation =
+constexpr const char* kYButtonColorsExplanation =
     "Set the color of the Y button with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -278,7 +278,7 @@ inline const char* kYButtonColorsExplanation =
     "- Pink: ff00aa<br/>"
     "- Cyan: 00ffff<br/>";
 
-inline const char* kZButtonColorsExplanation =
+constexpr const char* kZButtonColorsExplanation =
     "Set the Z button color with any 6 digit hex code. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ff0000<br/>"
@@ -290,7 +290,7 @@ inline const char* kZButtonColorsExplanation =
     "- Black: 000000<br/>"
     "- Light Blue: 00ffff<br/>";
 
-inline const char* kHeartColorsExplanation =
+constexpr const char* kHeartColorsExplanation =
     "Set the heart color with any 6 digit hex code. This will also change the color of heart drops. A reload may be necessary to see changes.<br/>"
     "Common colors:<br/>"
     "- Orange: ffff40<br/>"
@@ -301,7 +301,7 @@ inline const char* kHeartColorsExplanation =
     "- Black: 000000<br/>"
     "- Teal: 00f3ff<br/>";
 
-inline const char* kChargeRingColorsExplanation =
+constexpr const char* kChargeRingColorsExplanation =
     "Set the color of Midna's charge ring with any 6 digit hex code.<br/>"
     "Common colors:<br/>"
     "- Pink: ff9f9f<br/>"
@@ -314,7 +314,7 @@ inline const char* kChargeRingColorsExplanation =
     "- White: feffff<br/>"
     "- Black: 000000<br/>";
 
-inline const char* kLinksHairColorsExplanation =
+constexpr const char* kLinksHairColorsExplanation =
     "Set the color of Link's hair with any 6 digit hex code. Loading a new area, changing forms, or changing tunics is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -327,7 +327,7 @@ inline const char* kLinksHairColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kWolfLinkColorsExplanation =
+constexpr const char* kWolfLinkColorsExplanation =
     "Set the color of Wolf Link with any 6 digit hex code. Loading a new area or changing forms is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
@@ -340,7 +340,7 @@ inline const char* kWolfLinkColorsExplanation =
     "- White: f8f7f4<br/>"
     "- Brown: 91723e<br/>";
 
-inline const char* kEponaColorsExplanation =
+constexpr const char* kEponaColorsExplanation =
     "Set the color of Wolf Link with any 6 digit hex code. Loading a new area while *not* riding Epona is required to see changes.<br/>"
     "Common colors:<br/>"
     "- Red: ab706e<br/>"
