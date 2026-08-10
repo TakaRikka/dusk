@@ -543,7 +543,7 @@ void daAlink_c::setBowNormalAnime() {
 }
 
 void daAlink_c::setBowSight() {
-    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000) IF_DUSK(&& dusk::getSettings().game.aimingReticle)) {
+    if (checkBowChargeWaitAnime() && !dComIfGp_checkPlayerStatus0(0, 0x200000)) {
         cXyz sight_pos;
         f32 dist;
         f32 speed;
@@ -552,7 +552,7 @@ void daAlink_c::setBowSight() {
         checkSightLine(dist, &sight_pos);
         mSight.setPos(&sight_pos);
         mSight.offDrawFlg();
-        IF_DUSK(mSight.onDrawFlg());
+        DUSK_IF_ELSE(dusk::getSettings().game.aimingReticle ? mSight.onDrawFlg() : mSight.offDrawFlg(), mSight.offDrawFlg());
     } else {
         mSight.offDrawFlg();
     }
