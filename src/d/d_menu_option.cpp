@@ -159,7 +159,9 @@ void dMenu_Option_c::_create() {
     
     mpTVButtonText = JKR_NEW CPaneMgr(mpTVScreen, MULTI_CHAR('a_text_n'), 0, NULL);
     JUT_ASSERT(298, mpTVButtonText != NULL);
+    IF_DUSK_BLOCK(dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
     mpTVScreen->search(MULTI_CHAR('g_abtn_n'))->hide();
+    IF_DUSK_BLOCK_END
 
     mpScreenIcon = JKR_NEW J2DScreen();
     JUT_ASSERT(325, mpScreenIcon != NULL);

@@ -333,16 +333,13 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         mpScreen->search(MULTI_CHAR('yx_te_s3'))->hide();
         mpScreen->search(MULTI_CHAR('yx_te_s4'))->hide();
         mpScreen->search(MULTI_CHAR('yx_text'))->hide();
-#if TARGET_PC
-        if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
-#endif
-        {
-            mpScreen->search(MULTI_CHAR('fyx_te_1'))->hide();
-            mpScreen->search(MULTI_CHAR('fyx_te_2'))->hide();
-            mpScreen->search(MULTI_CHAR('fyx_te_3'))->hide();
-            mpScreen->search(MULTI_CHAR('fyx_te_4'))->hide();
-            mpScreen->search(MULTI_CHAR('fyx_tex'))->hide();
-        }
+        IF_DUSK_BLOCK(dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
+        mpScreen->search(MULTI_CHAR('fyx_te_1'))->hide();
+        mpScreen->search(MULTI_CHAR('fyx_te_2'))->hide();
+        mpScreen->search(MULTI_CHAR('fyx_te_3'))->hide();
+        mpScreen->search(MULTI_CHAR('fyx_te_4'))->hide();
+        mpScreen->search(MULTI_CHAR('fyx_tex'))->hide();
+        IF_DUSK_BLOCK_END
         mpScreen->search(MULTI_CHAR('x_btn_n'))->hide();
         mpScreen->search(MULTI_CHAR('y_btn_n'))->hide();
     }

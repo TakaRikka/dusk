@@ -343,12 +343,9 @@ void dMenu_Fishing_c::screenSetBase() {
         field_0x19c[1][i]->setString(0x20, "");
 
         mpFishNameString[i] = (J2DTextBox*)mpScreen->search(name_0[i]);
-#if TARGET_PC
-        if (dusk::version::isGcn())
-#endif
-        {
-            mpScreen->search(fname_0[i])->hide();
-        }
+        IF_DUSK_BLOCK(dusk::version::isGcn())
+        mpScreen->search(fname_0[i])->hide();
+        IF_DUSK_BLOCK_END
         mpFishNameString[i]->setFont(mDoExt_getSubFont());
         mpFishNameString[i]->setString(0x20, "");
         dMeter2Info_getStringKanji(name_id[i], mpFishNameString[i]->getStringPtr(), NULL);

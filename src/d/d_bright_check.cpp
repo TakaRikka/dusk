@@ -83,12 +83,9 @@ void dBrightCheck_c::screenSet() {
     JUT_ASSERT(0, mBrightCheck.Scr != NULL);
     mBrightCheck.Scr->setPriority("zelda_option_check.blo", 0x1100000, mArchive);
 
-#if TARGET_PC
-    if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
-#endif
-    {
-        mBrightCheck.Scr->search(MULTI_CHAR('g_abtn_n'))->hide();
-    }
+    IF_DUSK_BLOCK(dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
+    mBrightCheck.Scr->search(MULTI_CHAR('g_abtn_n'))->hide();
+    IF_DUSK_BLOCK_END
 
     #if TARGET_PC
     J2DTextBox* settings_text;
