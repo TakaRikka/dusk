@@ -6,7 +6,7 @@
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "item_ids.h"
-#include "utilities.h"
+#include "tools.h"
 
 bool haveItem(u32 item) {
     return checkItemGet((u8)item, 1);

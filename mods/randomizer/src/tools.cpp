@@ -6,13 +6,13 @@
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "f_op/f_op_actor_mng.h"
-#include "fmt/format.h"
 #include "item_ids.h"
 #include "randomizer_context.hpp"
 #include "session.hpp"
 #include "stages.h"
-#include "utilities.h"
 #include "verify_item_functions.h"
+
+#include <mods/svc/log.hpp>
 
 bool playerIsInRoomStage(s32 room, const char* stage)
 {
@@ -713,7 +713,7 @@ int getStageSaveId(int id) {
         case 42: // F_SP102 (Title Screen / King Bulblin 1)
             return 0xFF;
     default:
-            randomizer::session::LogWarn(fmt::format("Failed to find Save Id for ID: {}" , id).c_str());
+            mods::log::warn("Failed to find Save Id for ID: {}" , id);
             return -1;
     }
 }
@@ -745,4 +745,58 @@ bool tracker_isStageItem(int stage, int flag) {
         // Need to subtract 0x80 (MEMORY_ITEM constant in d_save.cpp) because the above function does it
         return g_dComIfG_gameInfo.info.getSavedata().getSave(stage).getBit().isItem(flag - 0x80);
     }
+}
+
+// Kinda hacky, but will do for now
+void onRegionFlag(int i_stageNo, int i_no) {
+    auto regionFlags = reinterpret_cast<u8*>(&dComIfGs_getSaveData()->getSave(i_stageNo).getBit());
+    const int offset = i_no / 8;
+    const int shift = i_no % 8;
+    regionFlags[offset] |= (0x80 >> shift);
+}
+
+void setRegionBit(u8 i_region) {
+    dComIfGs_getSaveData()->getPlayer().getPlayerFieldLastStayInfo().mRegion |= i_region;
+}
+
+void setAllLetterGet() {
+    dComIfGs_getSaveData()->getPlayer().getLetterInfo().mLetterGetFlags[0] |= 0xFFFF;
+}
+
+void setAllLetterRead() {
+    dComIfGs_getSaveData()->getPlayer().getLetterInfo().mLetterReadFlags[0] |= 0xFFFF;
+}
+
+constexpr const char* skyCharacterBlobName = "sky_characters";
+u8 g_skyCharacters = 0;
+
+void saveAncientDocumentNum() {
+    auto* ctx = randomizer::session::svc_mng.mod_ctx;
+    randomizer::session::svc_mng.save->set_blob(ctx, skyCharacterBlobName, &g_skyCharacters, sizeof(g_skyCharacters));
+}
+
+void loadAncientDocumentNum() {
+    g_skyCharacters = 0;
+    size_t size = sizeof(g_skyCharacters);
+    auto* ctx = randomizer::session::svc_mng.mod_ctx;
+    randomizer::session::svc_mng.save->get_blob(ctx, skyCharacterBlobName, &g_skyCharacters, &size);
+}
+
+u8 getAncientDocumentNum() {
+    return g_skyCharacters;
+}
+
+void setAncientDocumentNum(u8 num) {
+    g_skyCharacters = num;
+}
+
+u8 getAreaKeyNum(int i_stageNo) {
+    stage_stag_info_class* stagInfo = dComIfGp_getStageStagInfo();
+    if (stagInfo != nullptr) {
+        if (i_stageNo == dStage_stagInfo_GetSaveTbl(stagInfo)) {
+            return dComIfGs_getKeyNum();
+        }
+    }
+
+    return dComIfGs_getSaveData()->getSave(i_stageNo).getBit().getKeyNum();
 }

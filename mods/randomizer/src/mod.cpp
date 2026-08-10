@@ -2,6 +2,8 @@
 #include "mods/svc/log.h"
 
 #include "session.hpp"
+#include "ui/ui.hpp"
+#include "hooks.hpp"
 
 DEFINE_MOD();
 IMPORT_SERVICE(HostService, svc_host);
@@ -10,6 +12,8 @@ IMPORT_SERVICE(HookService, svc_hook);
 IMPORT_SERVICE(UiService, svc_ui);
 IMPORT_SERVICE(ResourceService, svc_res);
 IMPORT_SERVICE(ConfigService, svc_config);
+IMPORT_SERVICE(SaveService, svc_save);
+IMPORT_SERVICE(StageService, svc_stage);
 
 extern "C" {
 
@@ -21,10 +25,22 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         svc_hook,
         svc_ui,
         svc_res,
-        svc_config
+        svc_config,
+        svc_save,
+        svc_stage,
     });
     if (result != MOD_OK) {
         return mods::set_error(error, result, "failed to initialize session");
+    }
+
+    result = randomizer::hooks::initialize();
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize hooks");
+    }
+
+    result = randomizer::ui::initialize();
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize ui");
     }
 
     svc_log->info(mod_ctx, "randomizer initialized");
@@ -32,6 +48,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
 }
 
 MOD_EXPORT ModResult mod_update(ModError*) {
+    randomizer::ui::update();
     return MOD_OK;
 }
 

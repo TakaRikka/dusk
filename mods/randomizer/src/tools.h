@@ -49,6 +49,17 @@ int getLocationItem(randomizer::logic::location::Location* location);
 int getStageSaveId(int id);
 int getStageSaveId(const char* stage);
 
+void onRegionFlag(int i_stageNo, int i_no);
+void setRegionBit(u8 i_region);
+void setAllLetterGet();
+void setAllLetterRead();
+void setAncientDocumentNum(u8 num);
+u8 getAncientDocumentNum();
+u8 getAreaKeyNum(int);
+
+void saveAncientDocumentNum();
+void loadAncientDocumentNum();
+
 bool tracker_isEventBit(u16 flag);
 bool tracker_isStageSwitch(int stage, int flag);
 bool tracker_isStageItem(int stage, int flag);

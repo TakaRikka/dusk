@@ -15,6 +15,7 @@
 #include "../generator/utility/string.hpp"
 
 #include <fstream>
+#include <mods/svc/log.hpp>
 
 #include "custom_flow_ids.hpp"
 #include "d/actor/d_a_alink.h"
@@ -24,7 +25,6 @@
 #include "d/d_meter2_info.h"
 #include "d/d_msg_class.h"
 #include "d/d_msg_flow.h"
-#include "fmt/format.h"
 #include "m_Do/m_Do_audio.h"
 
 std::optional<std::string> RandomizerContext::WriteToFile() {
@@ -154,7 +154,7 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
     this->mHash = hash;
 
     if (!std::filesystem::exists(this->GetSeedDataPath())) {
-        randomizer::session::LogError(fmt::format("Failed to load Hash: {}", hash).c_str());
+        mods::log::error("Failed to load Hash: {}", hash);
         mHash.clear();
         return std::nullopt;
     }
@@ -332,12 +332,14 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
         this->mReturnToPlaceOverrides[key] = override;
     }
 
-    // TODO: setup ui service to allow pushing toasts
-    /*dusk::ui::push_toast(dusk::ui::Toast{
-        .title = "Randomizer",
-        .content =  fmt::format("Loaded Randomizer Seed {}", this->mHash),
-        .duration = std::chrono::seconds(3),
-    });*/
+    UiToastDesc desc = UI_TOAST_DESC_INIT;
+    desc.type = "success";
+    desc.title_rml = "Randomizer";
+    std::string body_text = fmt::format("Loaded Randomizer Seed {}", this->mHash);
+    desc.body_rml = body_text.c_str();
+    desc.duration_ms = 3000;
+    randomizer::session::svc_mng.ui->push_toast(randomizer::session::svc_mng.mod_ctx, &desc);
+
     return std::nullopt;
 }
 
