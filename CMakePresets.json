@@ -28,12 +28,12 @@
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "sccache",
         "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
-        "DUSK_ENABLE_SENTRY_NATIVE": {
+        "BOREALIS_ENABLE_SENTRY": {
           "type": "BOOL",
           "value": true
         },
-        "DUSK_SENTRY_DSN": "$env{SENTRY_DSN}",
-        "DUSK_SENTRY_ENVIRONMENT": "production",
+        "BOREALIS_SENTRY_DSN": "$env{SENTRY_DSN}",
+        "BOREALIS_SENTRY_ENVIRONMENT": "production",
         "Rust_RUSTUP_INSTALL_MISSING_TARGET": {
           "type": "BOOL",
           "value": true
@@ -448,7 +448,7 @@
         "ci"
       ],
       "cacheVariables": {
-        "DUSK_ENABLE_SENTRY_NATIVE": {
+        "BOREALIS_ENABLE_SENTRY": {
           "type": "BOOL",
           "value": false
         }

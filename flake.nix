@@ -228,7 +228,7 @@
                 ninjaFlags = [ "dusklight" ];
 
                 cmakeFlags = [
-                  "-DDUSK_VERSION_OVERRIDE=${versionSuffix}"
+                  "-DBOREALIS_APP_VERSION_OVERRIDE=${versionSuffix}"
                   "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
                   "-DAURORA_DAWN_PROVIDER=package"
                   "-DAURORA_DAWN_LINKAGE=static"

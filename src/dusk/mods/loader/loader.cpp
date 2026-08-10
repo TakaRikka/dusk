@@ -2,6 +2,8 @@
 #include "dusk/logging.h"
 #include "dusk/mod_loader.hpp"
 
+#include <borealis/io.hpp>
+
 #include <algorithm>
 #include <chrono>
 #include <cstring>
@@ -85,7 +87,7 @@ static constexpr std::string_view k_nativeLibName = ""sv;
 
 namespace dusk::mods {
 namespace {
-aurora::Module Log{"dusk::mods::loader"};
+constexpr borealis::Log Log{"dusk::mods::loader"};
 ModLoader g_modLoader;
 constexpr std::string_view k_nativeLibDir = "lib/"sv;
 
@@ -282,7 +284,7 @@ static ModMetadata load_metadata(const std::filesystem::path& modPath, ModBundle
     validate_mod_id(metaId);
 
     if (metaName.empty()) {
-        metaName = io::fs_path_to_string(modPath.stem());
+        metaName = borealis::io::fs_path_to_string(modPath.stem());
     }
     if (metaVersion.empty()) {
         metaVersion = "?"s;
@@ -516,7 +518,7 @@ std::filesystem::path ModLoader::external_native_lib_path(const LoadedMod& mod) 
         return {};
     }
     fs::path path = libDir / fs::path(mod.metadata.id +
-                                      io::fs_path_to_string(fs::path(k_nativeLibName).extension()));
+                                      borealis::io::fs_path_to_string(fs::path(k_nativeLibName).extension()));
     std::error_code ec;
     if (!fs::is_regular_file(path, ec)) {
         return {};
@@ -544,7 +546,7 @@ void ModLoader::load_native(
         return;
     }
     mod.dir = fs::absolute(scratchDir);
-    mod.dirUtf8 = io::fs_path_to_string(mod.dir);
+    mod.dirUtf8 = borealis::io::fs_path_to_string(mod.dir);
 
     fs::path libPath;
     fs::path runtimeDir;
@@ -666,7 +668,7 @@ void ModLoader::load_native(
 
     mod.nativePath = fs::absolute(libPath);
     mod.nativeDir = fs::absolute(runtimeDir);
-    mod.nativeDirUtf8 = io::fs_path_to_string(mod.nativeDir);
+    mod.nativeDirUtf8 = borealis::io::fs_path_to_string(mod.nativeDir);
     mod.native = std::move(nativeMod);
     mod.nativeStatus = NativeModStatus::Loaded;
     runtimeDirRollback.release();

@@ -29,6 +29,7 @@
 #endif
 
 #if TARGET_PC
+#include "dusk/camera_operators.hpp"
 #include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
 #include "dusk/action_bindings.h"
@@ -1053,7 +1054,7 @@ void dCamera_c::debugDrawInit() {
 bool dCamera_c::Run() {
 #if TARGET_PC
     ResetView();
-    if (executeDebugFlyCam()) {
+    if (executeDebugFlyCam() || dusk::mods::camera_run_operators(this)) {
         mFrameCounter++;
         mTicks++;
         return true;

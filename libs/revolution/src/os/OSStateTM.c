@@ -5,14 +5,14 @@
 
 #include <revolution/private/iosrestypes.h>
 
-static u32 StmImInBuf[8] ATTRIBUTE_ALIGN(32);
-static u32 StmImOutBuf[8] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 StmImInBuf[8];
+ATTRIBUTE_ALIGN(32) static u32 StmImOutBuf[8];
 
-static u32 StmVdInBuf[8] ATTRIBUTE_ALIGN(32);
-static u32 StmVdOutBuf[8] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 StmVdInBuf[8];
+ATTRIBUTE_ALIGN(32) static u32 StmVdOutBuf[8];
 
-static u32 StmEhInBuf[8] ATTRIBUTE_ALIGN(32);
-static u32 StmEhOutBuf[8] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 StmEhInBuf[8];
+ATTRIBUTE_ALIGN(32) static u32 StmEhOutBuf[8];
 
 static OSResetCallback ResetCallback;
 static OSPowerCallback PowerCallback;
