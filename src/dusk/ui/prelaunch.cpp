@@ -292,7 +292,7 @@ std::string get_error_msg(iso::ValidationError error) {
     case iso::ValidationError::WrongGame:
         return "The selected game is not supported by Dusklight.";
     case iso::ValidationError::WrongVersion:
-        return "Dusklight currently supports GameCube USA and PAL disc images only.";
+        return "Dusklight does not currently support the Wii's Korean version.";
     case iso::ValidationError::Canceled:
         return "Disc verification was canceled. Dusklight cannot guarantee the selected disc "
                "image is compatible.";
