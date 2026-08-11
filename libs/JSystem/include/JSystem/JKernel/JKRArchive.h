@@ -284,25 +284,9 @@ public:
         mFileIdxToArcOverlayData.erase(it);
     }
 
+    // Frees all currently loaded overlay data
     void removeOverlayResourceAll() { mFileIdxToArcOverlayData = {}; }
 
-    // Clears all loaded archive data and replaces them with new archive data
-    void syncOverlayResourceAll() {
-        if (mFileIdxToArcOverlayData.empty()) {
-            return;
-        }
-        {
-            std::vector<u32> fileIndexes;
-            fileIndexes.reserve(mFileIdxToArcOverlayData.size());
-            for (const auto& [key, vec] : mFileIdxToArcOverlayData) {
-                fileIndexes.push_back(key);
-            }
-            mFileIdxToArcOverlayData = {};
-            for (const auto& idx : fileIndexes) {
-                getOverlayData(findIdxResource(idx),nullptr);
-            }
-        }
-    }
 #endif
 
 protected:

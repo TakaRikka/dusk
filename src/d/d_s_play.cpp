@@ -1156,42 +1156,42 @@ static int phase_1(dScnPly_c* i_this) {
 
 #ifdef TARGET_PC
     // Free any overlay resources that are loaded by always-loaded archives
-#define SYNC_OVERLAY(x) {                 \
+#define FREE_OVERLAY(x) {                 \
     JKRArchive* arc = x;                  \
     if (arc) {                            \
-        arc->syncOverlayResourceAll();  \
+        arc->removeOverlayResourceAll();  \
     }}
 
-    SYNC_OVERLAY(dComIfGp_getFieldMapArchive2())
-    SYNC_OVERLAY(dComIfGp_getAnmArchive())
-    SYNC_OVERLAY(dComIfGp_getFmapResArchive())
-    SYNC_OVERLAY(dComIfGp_getDmapResArchive())
-    SYNC_OVERLAY(dComIfGp_getCollectResArchive())
-    SYNC_OVERLAY(dComIfGp_getItemIconArchive())
-    SYNC_OVERLAY(dComIfGp_getAllMapArchive())
-    SYNC_OVERLAY(dComIfGp_getRingResArchive())
-    SYNC_OVERLAY(dComIfGp_getNameResArchive())
-    SYNC_OVERLAY(dComIfGp_getDemoMsgArchive())
-    SYNC_OVERLAY(dComIfGp_getMeterButtonArchive())
-    SYNC_OVERLAY(dComIfGp_getCardIconResArchive())
-    SYNC_OVERLAY(dComIfGp_getMsgDtArchive())
-    SYNC_OVERLAY(dComIfGp_getMsgCommonArchive())
+    FREE_OVERLAY(dComIfGp_getFieldMapArchive2())
+    FREE_OVERLAY(dComIfGp_getAnmArchive())
+    FREE_OVERLAY(dComIfGp_getFmapResArchive())
+    FREE_OVERLAY(dComIfGp_getDmapResArchive())
+    FREE_OVERLAY(dComIfGp_getCollectResArchive())
+    FREE_OVERLAY(dComIfGp_getItemIconArchive())
+    FREE_OVERLAY(dComIfGp_getAllMapArchive())
+    FREE_OVERLAY(dComIfGp_getRingResArchive())
+    FREE_OVERLAY(dComIfGp_getNameResArchive())
+    FREE_OVERLAY(dComIfGp_getDemoMsgArchive())
+    FREE_OVERLAY(dComIfGp_getMeterButtonArchive())
+    FREE_OVERLAY(dComIfGp_getCardIconResArchive())
+    FREE_OVERLAY(dComIfGp_getMsgDtArchive())
+    FREE_OVERLAY(dComIfGp_getMsgCommonArchive())
     for (int i = 0; i < 7; i++) {
         JKRArchive* arc = dComIfGp_getMsgArchive(i);
         if (arc) {
-            arc->syncOverlayResourceAll();
+            arc->removeOverlayResourceAll();
         }
     }
     // SYNC_OVERLAY(dComIfGp_getFontArchive()) // Pointers to font data seem to be static
     // SYNC_OVERLAY(dComIfGp_getRubyArchive()) // Same with here
-    SYNC_OVERLAY(dComIfGp_getMain2DArchive())
+    FREE_OVERLAY(dComIfGp_getMain2DArchive())
     dRes_info_c* res = dComIfG_getObjectResInfo("Always");
     if (res && res->getArchive()) {
-        res->getArchive()->syncOverlayResourceAll();
+        res->getArchive()->removeOverlayResourceAll();
     }
     res = dComIfG_getObjectResInfo("Alink");
     if (res && res->getArchive()) {
-        res->getArchive()->syncOverlayResourceAll();
+        res->getArchive()->removeOverlayResourceAll();
     }
 
 #undef SYNC_OVERLAY
