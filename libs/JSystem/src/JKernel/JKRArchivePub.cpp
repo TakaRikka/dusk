@@ -246,6 +246,7 @@ u32 JKRArchive::readResource(void* buffer, u32 bufferSize, u16 id) {
 
 void JKRArchive::removeResourceAll() {
     if (mArcInfoBlock && mMountMode != MOUNT_MEM) {
+        IF_DUSK(removeOverlayResourceAll();)
         SDIFileEntry* fileEntry = mFiles;
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
             if (JKAR_DATA(fileEntry)) {
@@ -259,6 +260,7 @@ void JKRArchive::removeResourceAll() {
 
 bool JKRArchive::removeResource(void* resource) {
     JUT_ASSERT(678, resource != NULL);
+    IF_DUSK(removeOverlayResource(resource);)
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
         return false;
@@ -270,6 +272,9 @@ bool JKRArchive::removeResource(void* resource) {
 
 bool JKRArchive::detachResource(void* resource) {
     JUT_ASSERT(707, resource != NULL);
+
+    IF_DUSK(removeOverlayResource(resource);)
+
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
         return false;
@@ -280,6 +285,14 @@ bool JKRArchive::detachResource(void* resource) {
 
 u32 JKRArchive::getResSize(const void* resource) const {
     JUT_ASSERT(732, resource != NULL);
+
+#ifdef TARGET_PC
+    u32 overlayedSize;
+    if (getOverlayFileSize(resource, &overlayedSize)) {
+        return overlayedSize;
+    }
+#endif
+    
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
         return -1;

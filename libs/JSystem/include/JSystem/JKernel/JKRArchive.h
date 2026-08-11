@@ -232,6 +232,50 @@ public:
     // Otherwise, returns NULL. The loaded archive data is stored as a shared_ptr within
     // mFileIdToArcOverlayData.
     void* getOverlayData(SDIFileEntry* entry, u32* out_size);
+
+    void* getOverlayCopyData(void* buffer, u32 bufferSize, SDIFileEntry* entry, u32* out_size);
+
+    // Returns false when the entry isn't overlayed
+    bool getOverlayFileSize(SDIFileEntry* entry, u32* out_size) const {
+        const auto& it = mFileIdToArcOverlayData.find(entry->file_id);
+        if (it != mFileIdToArcOverlayData.end()) {
+            *out_size = it->second.size();
+            return true;
+        }
+
+        *out_size = entry->getSize();
+        return false;
+    }
+
+    // Returns false when the entry isn't overlayed
+    bool getOverlayFileSize(const void* data, u32* out_size) const {
+        for (auto it = mFileIdToArcOverlayData.begin(); it != mFileIdToArcOverlayData.end(); ++it) {
+            if (it->second.data() == data) {
+                *out_size = it->second.size();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    u32 getFileSize(SDIFileEntry* entry) const {
+        u32 size;
+        getOverlayFileSize(entry, &size);
+        return size;
+    }
+
+    void removeOverlayResource(void* resource) {
+        for (auto it = mFileIdToArcOverlayData.begin(); it != mFileIdToArcOverlayData.end(); ++it) {
+            if (it->second.data() == resource) {
+                mFileIdToArcOverlayData.erase(it);
+                break;
+            }
+        }
+    }
+
+    void removeOverlayResourceAll() {
+        mFileIdToArcOverlayData = {};
+    }
 #endif
 
 protected:

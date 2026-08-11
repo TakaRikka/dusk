@@ -159,9 +159,9 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
     JUT_ASSERT(595, isMounted());
 
 #ifdef TARGET_PC
-    void* overlay_data = getOverlayData(fileEntry, resourceSize);
+    void* overlay_data = getOverlayCopyData(buffer, bufferSize, fileEntry, resourceSize);
     if (overlay_data) {
-        return overlay_data;
+        return buffer;
     }
 #endif
 
@@ -188,6 +188,7 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
 
 void JKRMemArchive::removeResourceAll(void) {
     JUT_ASSERT(642, isMounted());
+    IF_DUSK(removeOverlayResourceAll();)
 
     if (mArcInfoBlock == NULL)
         return;
@@ -207,6 +208,7 @@ void JKRMemArchive::removeResourceAll(void) {
 
 bool JKRMemArchive::removeResource(void* resource) {
     JUT_ASSERT(673, isMounted());
+    IF_DUSK(removeOverlayResource(resource);)
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry)
@@ -247,6 +249,13 @@ u32 JKRMemArchive::fetchResource_subroutine(u8* src, u32 srcLength, u8* dst, u32
 }
 
 u32 JKRMemArchive::getExpandedResSize(const void* resource) const {
+#ifdef TARGET_PC
+    u32 overlaySize;
+    if (getOverlayFileSize(resource, &overlaySize)) {
+        return overlaySize;
+    }
+#endif
+
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
         return -1;

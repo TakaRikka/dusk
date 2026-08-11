@@ -8,6 +8,7 @@
 #if TARGET_PC
 #include <cassert>
 #include "JSystem/JKernel/JKRDvdRipper.h"
+#include "dusk/logging.h"
 #endif
 
 DUSK_GAME_DATA u32 JKRArchive::sCurrentDirID;
@@ -277,8 +278,9 @@ void JKRArchive::buildArcOverlaysPath() {
         return;
     }
 
-    char buf[100];
+    char buf[128];
     if (!DVDConvertEntrynumToPath(mEntryNum, buf, 100)) {
+        DuskLog.warn("Attempted to convert DVD entry number {} to path failed! Is it too long?", mEntryNum);
         return;
     }
 
@@ -288,7 +290,7 @@ void JKRArchive::buildArcOverlaysPath() {
     if (pos == std::string::npos) {
         return;
     }
-    path[pos] = '_'; // Replace the .arc with _arc
+    path.erase(pos); // Remove .arc from the end of the path
     path.push_back('/');
 
     mArcOverlaysPath = std::move(path);
@@ -325,7 +327,7 @@ void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_s
         buildIdToPathMap(0, std::string(&mStringTable[mNodes[0].name_offset])+"/");
     }
 
-    const auto& it = mFileIdToArcOverlayData.find(fileEntry->index);
+    const auto& it = mFileIdToArcOverlayData.find(fileEntry->file_id);
     if (it != mFileIdToArcOverlayData.end()) {
         if (out_size) {
             *out_size = it->second.size();
@@ -358,6 +360,23 @@ void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_s
     void* out_data = buffer.data();
     mFileIdToArcOverlayData[fileEntry->file_id] = std::move(buffer);
     return out_data;
+}
+
+void* JKRArchive::getOverlayCopyData(void* buffer, u32 bufferSize, SDIFileEntry* entry, u32* out_size) {
+    u32 overlaySize;
+    void* overlay_data = getOverlayData(entry, &overlaySize);
+    if (overlay_data) {
+        if (overlaySize <= bufferSize) {
+            if (out_size) {
+            *out_size = overlaySize;
+            }
+            memcpy(buffer, overlay_data, overlaySize);
+            return buffer;
+        }else{
+            DuskLog.error("Attempted to load overlay for {}{}, but its size of {} was greater than the allocated buffer's size of {}",mArcOverlaysPath,mIdToPathMap[entry->file_id],overlaySize,bufferSize);
+        }
+    }
+    return nullptr;
 }
 
 #endif
