@@ -1159,7 +1159,7 @@ static int phase_1(dScnPly_c* i_this) {
 #define SYNC_OVERLAY(x) {                 \
     JKRArchive* arc = x;                  \
     if (arc) {                            \
-        arc->removeOverlayResourceAll();  \
+        arc->syncOverlayResourceAll();  \
     }}
 
     SYNC_OVERLAY(dComIfGp_getFieldMapArchive2())
