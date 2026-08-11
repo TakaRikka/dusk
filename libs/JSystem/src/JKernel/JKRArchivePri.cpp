@@ -307,7 +307,7 @@ void JKRArchive::buildIdToPathMap(u32 dirIndex, const std::string& currentPath) 
         if (entry.isDirectory()) {
             buildIdToPathMap(entry.data_offset, currentPath + entryName + "/");
         }else {
-            mIdToPathMap[entry.file_id] = currentPath + entryName;
+            mIdxToPathMap[entry.index] = currentPath + entryName;
         }
     }
 }
@@ -323,20 +323,20 @@ void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_s
     }
 
     // Build a map of file Ids -> Local path names
-    if (mIdToPathMap.empty()) {
+    if (mIdxToPathMap.empty()) {
         buildIdToPathMap(0, std::string(&mStringTable[mNodes[0].name_offset])+"/");
     }
 
-    const auto& it = mFileIdToArcOverlayData.find(fileEntry->file_id);
-    if (it != mFileIdToArcOverlayData.end()) {
+    const auto& it = mFileIdxToArcOverlayData.find(fileEntry->index);
+    if (it != mFileIdxToArcOverlayData.end()) {
         if (out_size) {
             *out_size = it->second.size();
         }
         return (void*)it->second.data();
     }
 
-    const auto& it2 = mIdToPathMap.find(fileEntry->file_id);
-    if (it2 == mIdToPathMap.end()) {
+    const auto& it2 = mIdxToPathMap.find(fileEntry->index);
+    if (it2 == mIdxToPathMap.end()) {
         return nullptr;
     }
     
@@ -358,7 +358,7 @@ void* JKRArchive::getOverlayData(JKRArchive::SDIFileEntry* fileEntry, u32* out_s
     }    
 
     void* out_data = buffer.data();
-    mFileIdToArcOverlayData[fileEntry->file_id] = std::move(buffer);
+    mFileIdxToArcOverlayData[fileEntry->index] = std::move(buffer);
     return out_data;
 }
 
@@ -373,7 +373,7 @@ void* JKRArchive::getOverlayCopyData(void* buffer, u32 bufferSize, SDIFileEntry*
             memcpy(buffer, overlay_data, overlaySize);
             return buffer;
         }else{
-            DuskLog.error("Attempted to load overlay for {}{}, but its size of {} was greater than the allocated buffer's size of {}",mArcOverlaysPath,mIdToPathMap[entry->file_id],overlaySize,bufferSize);
+            DuskLog.error("Attempted to load overlay for {}{}, but its size of {} was greater than the allocated buffer's size of {}",mArcOverlaysPath,mIdxToPathMap[entry->index],overlaySize,bufferSize);
         }
     }
     return nullptr;

@@ -216,29 +216,29 @@ public:
 #if TARGET_PC
     void** mFileData;
 
-    std::unordered_map<s32, std::vector<u8>> mFileIdToArcOverlayData;  // Owns all overlayed data
+    std::unordered_map<s32, std::vector<u8>> mFileIdxToArcOverlayData;  // Owns all overlayed data
     std::string mArcOverlaysPath;  // Used to check if overlays are currently registered to a path
 
     // Get the path of the current archive on the dvd file system, and change the ending from .arc
     // to _arc/
     void buildArcOverlaysPath();
 
-    std::unordered_map<s32, std::string> mIdToPathMap;
-    // Fill mIdToPathMap which maps every File ID in the arhive to a string that gives the full path
+    std::unordered_map<s32, std::string> mIdxToPathMap;
+    // Fill mIdxToPathMap which maps every File ID in the arhive to a string that gives the full path
     // inside of the archive
     void buildIdToPathMap(u32 dirIndex, const std::string& currentPath);
 
     // Given a pointer to a file entry, loads and returns a pointer to overlayed data, if it exists.
     // Otherwise, returns NULL. The loaded archive data is stored as a shared_ptr within
-    // mFileIdToArcOverlayData.
+    // mFileIdxToArcOverlayData.
     void* getOverlayData(SDIFileEntry* entry, u32* out_size);
 
     void* getOverlayCopyData(void* buffer, u32 bufferSize, SDIFileEntry* entry, u32* out_size);
 
     // Returns false when the entry isn't overlayed
     bool getOverlayFileSize(SDIFileEntry* entry, u32* out_size) const {
-        const auto& it = mFileIdToArcOverlayData.find(entry->file_id);
-        if (it != mFileIdToArcOverlayData.end()) {
+        const auto& it = mFileIdxToArcOverlayData.find(entry->index);
+        if (it != mFileIdxToArcOverlayData.end()) {
             *out_size = it->second.size();
             return true;
         }
@@ -249,7 +249,7 @@ public:
 
     // Returns false when the entry isn't overlayed
     bool getOverlayFileSize(const void* data, u32* out_size) const {
-        for (auto it = mFileIdToArcOverlayData.begin(); it != mFileIdToArcOverlayData.end(); ++it) {
+        for (auto it = mFileIdxToArcOverlayData.begin(); it != mFileIdxToArcOverlayData.end(); ++it) {
             if (it->second.data() == data) {
                 *out_size = it->second.size();
                 return true;
@@ -265,16 +265,43 @@ public:
     }
 
     void removeOverlayResource(void* resource) {
-        for (auto it = mFileIdToArcOverlayData.begin(); it != mFileIdToArcOverlayData.end(); ++it) {
+        for (auto it = mFileIdxToArcOverlayData.begin(); it != mFileIdxToArcOverlayData.end(); ++it) {
             if (it->second.data() == resource) {
-                mFileIdToArcOverlayData.erase(it);
+                mFileIdxToArcOverlayData.erase(it);
                 break;
             }
         }
     }
 
-    void removeOverlayResourceAll() {
-        mFileIdToArcOverlayData = {};
+    // Given a path into an archive, free a resource. Make sure when calling this that there are no
+    // pointers to the underlying resource stored anywhere or else it will crash!
+    void removeOverlayResource(const char* path) {
+        SDIFileEntry* entry = findFsResource(path, 0);
+        if (entry == nullptr) {
+            return;
+        }
+        const auto& it = mFileIdxToArcOverlayData.find(entry->index);
+        mFileIdxToArcOverlayData.erase(it);
+    }
+
+    void removeOverlayResourceAll() { mFileIdxToArcOverlayData = {}; }
+
+    // Clears all loaded archive data and replaces them with new archive data
+    void syncOverlayResourceAll() {
+        if (mFileIdxToArcOverlayData.empty()) {
+            return;
+        }
+        {
+            std::vector<u32> fileIndexes;
+            fileIndexes.reserve(mFileIdxToArcOverlayData.size());
+            for (const auto& [key, vec] : mFileIdxToArcOverlayData) {
+                fileIndexes.push_back(key);
+            }
+            mFileIdxToArcOverlayData = {};
+            for (const auto& idx : fileIndexes) {
+                getOverlayData(findIdxResource(idx),nullptr);
+            }
+        }
     }
 #endif
 

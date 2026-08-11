@@ -272,6 +272,10 @@ svc_overlay->remove(mod_ctx, handle);
 on the disc are added as new files. Changes are applied at the next frame boundary, and data the game already read
 stays in memory until the file is re-read: sometimes a scene reload, and in the worst case, a full restart.
 
+*Note: Keep in mind that the game keeps some archive files always loaded at runtime. To allow for
+hot-swapping, there is code to re-load any overlayed data during a loadingscreen within the
+`static int phase_1(dScnPly_c* i_this)` function in `d_s_play.cpp`*
+
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
 ### TextureService (`mods/svc/texture.h`)
