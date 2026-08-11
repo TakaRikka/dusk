@@ -602,7 +602,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             leftPane.register_control(
                 leftPane.add_select_button({
                     .key = "Graphics Backend",
-                    .getValue = [] { return Rml::String{backend_name(aurora_get_backend())}; },
+                    .getValue = [] { return Rml::String{backend_name(configured_backend())}; },
                     .isModified =
                         [] {
                             return getSettings().backend.graphicsBackend.getValue() !=
