@@ -273,18 +273,58 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
             SaveRandomizerConfig();
         });
 
-    add_button(leftPane,
-        "Delete Seeds",
-        "Delete any seed not currently being used.",
-        [](ModContext*, void*) {
-            // TODO
-        });
+    {
+        std::filesystem::path seed_dir = paths::GetRandomizerSeedsPath();
+        if (!std::filesystem::exists(seed_dir))
+            std::filesystem::create_directory(seed_dir);
+
+        std::string help_rml = "Delete any seed not currently being used.";
+
+        std::vector<std::string> seedHashes;
+        for (const auto& entry : std::filesystem::directory_iterator(seed_dir)) {
+            if (entry.is_directory()) {
+                seedHashes.push_back(entry.path().filename().string());
+            }
+        }
+
+        std::vector<const char*> availableSeeds;
+        for (const auto& hash : seedHashes) {
+            availableSeeds.push_back(hash.c_str());
+        }
+
+        add_select(leftPane,
+            "Delete Seeds",
+            help_rml.c_str(),
+            availableSeeds.data(),
+            availableSeeds.size(),
+            [](ModContext*, void*, UiControlValue* out_value) {
+                out_value->int_value = 0;
+            },
+            [](ModContext*, void*, const UiControlValue* value) {
+                int idx = 0;
+                for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
+                    if (entry.is_directory()) {
+                        if (idx == value->int_value) {
+                            std::string hash = entry.path().filename().string();
+                            if (randomizer_GetContext().mHash == hash) {
+                                randomizer_GetContext() = RandomizerContext{};
+                            }
+                            std::filesystem::remove_all(entry);
+                            break;
+                        }
+                        idx++;
+                    }
+                }
+            });
+    }
 
     add_section(leftPane, "Permalink");
 
     {
-        std::string help_rml = "Copy your current settings permalink to share with others.";
-        help_rml += fmt::format("<br/>Current Permalink: {}", GetRandomizerConfig().GetPermalink());
+        std::string help_rml = "Copy your current settings permalink to share with others.<br/>";
+        help_rml += fmt::format(
+            "<br/>Current Permalink:<br/><span style=\"word-break: break-all;\">{}</span>",
+            GetRandomizerConfig().GetPermalink());
         add_button(leftPane,
             "Copy Permalink",
             help_rml.c_str(),
@@ -538,15 +578,22 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
             }
         });
 
-    add_button(leftPane,
-        "Start Randomizer",
-        "",
-        [](ModContext*, void* userdata) {
+    {
+        UiControlDesc desc = UI_CONTROL_DESC_INIT;
+        desc.kind = UI_CONTROL_BUTTON;
+        desc.label = "Start Randomizer";
+        desc.help_rml = "";
+        desc.on_pressed = [](ModContext*, void* userdata) {
             // set flag to move to name screen after window close
             g_file_select_window_ctx.is_proceed = true;
             session::svc_mng.ui->window_close(session::svc_mng.mod_ctx, *static_cast<UiWindowHandle*>(userdata));
-        },
-        &g_file_select_window_ctx.window_handle);
+        };
+        desc.user_data = &g_file_select_window_ctx.window_handle;
+        desc.is_disabled = [](ModContext*, void*) {
+            return randomizer_GetContext().mHash.empty();
+        };
+        session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, leftPane, &desc, nullptr);
+    }
 
     return MOD_OK;
 }
