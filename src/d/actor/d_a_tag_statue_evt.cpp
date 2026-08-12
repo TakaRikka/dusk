@@ -362,9 +362,11 @@ int daTagStatue_c::demoProc() {
                     item = dItemNo_AIR_LETTER_e;
                 }
 
-                mItemId =
-                    fopAcM_createItemForTrBoxDemo(&current.pos, item, -1,
-                                                  fopAcM_GetRoomNo(this), 0, 0);
+#if TARGET_PC
+                item = dusk::mods::item_check_sky_character(item & 0xFF, this);
+#endif
+                mItemId = fopAcM_createItemForTrBoxDemo(&current.pos, item, -1,
+                    fopAcM_GetRoomNo(this), 0, 0 IF_DUSK_ARG(dusk::mods::item_give_tag_sky_character()));
 
                 JUT_ASSERT(580, mItemId != fpcM_ERROR_PROCESS_ID_e);
 

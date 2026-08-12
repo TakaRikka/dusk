@@ -1472,6 +1472,9 @@ set(DUSK_FILES
         src/dusk/mods/loader/native_module.hpp
         src/dusk/mods/loader/prepatch.cpp
         src/dusk/mods/loader/prepatch.hpp
+        src/dusk/mods/item.hpp
+        src/dusk/mods/item_checks.cpp
+        src/dusk/mods/item_gives.cpp
         src/dusk/mods/log_buffer.cpp
         src/dusk/mods/log_buffer.hpp
         src/dusk/mods/manifest.cpp
@@ -1483,6 +1486,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/gfx.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/item.cpp
+        src/dusk/mods/svc/item.hpp
         src/dusk/mods/svc/log.cpp
         src/dusk/mods/svc/overlay.cpp
         src/dusk/mods/svc/registry.cpp

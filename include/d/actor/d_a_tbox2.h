@@ -83,6 +83,10 @@ private:
     /* 0xAC0 */ u8 field_0xAC0[0xAC4 - 0xAC0];
     /* 0xAC4 */ int mStaffIdx;
     /* 0xAC8 */ dBgW* mBoxBgW;
+#if TARGET_PC
+    bool mParamsInit;
+    u8 mOriginalItemNo;
+#endif
 };
 
 STATIC_ASSERT(sizeof(daTbox2_c) == 0xACC);

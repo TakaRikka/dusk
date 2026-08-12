@@ -1165,8 +1165,9 @@ int daNpc_Uri_c::cutEndCarryTutorial(int param_1) {
             (s32)mFlow.getEventId(&local_48) == 1)
         {
             if (mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
-                mItemPartnerId =
-                    fopAcM_createItemForPresentDemo(&current.pos, local_48, 0, -1, -1, NULL, NULL);
+                DUSK_ITEM_CHECK("uli_cradle_reward", local_48, this);
+                mItemPartnerId = fopAcM_createItemForPresentDemo(&current.pos, local_48, 0, -1, -1,
+                    NULL, NULL DUSK_GIVE_TAG("uli_cradle_reward"));
             }
             if (fopAcM_IsExecuting(mItemPartnerId)) {
                 /* T_0007 - Ordon Village - During Uli's pick-up tutorial */

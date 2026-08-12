@@ -96,6 +96,9 @@ public:
     /* 0xDE0 */ cXyz field_0xde0;
     /* 0xDEC */ u8 field_0xdec[0xdf9 - 0xdec];
     /* 0xDF9 */ u8 field_0xdf9;
+#if TARGET_PC
+    bool mItemCheckOverridden;
+#endif
 };
 
 STATIC_ASSERT(sizeof(daE_HP_c) == 0xdfc);
