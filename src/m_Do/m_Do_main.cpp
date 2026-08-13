@@ -65,6 +65,7 @@
 #include "dusk/iso_validate.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
+#include "dusk/hq_minimap.hpp"
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/svc/window.hpp"
 #include "dusk/mouse.h"
@@ -709,6 +710,10 @@ int game_main(int argc, char* argv[]) {
         dusk::ui::shutdown();
         aurora_shutdown();
         return 0;
+    }
+
+    if (dusk::getSettings().game.enableHighQualityMinimapTextures.getValue()) {
+        dusk::hq_minimap::set_active(true);
     }
 
     dusk::texture_replacements::reload();
