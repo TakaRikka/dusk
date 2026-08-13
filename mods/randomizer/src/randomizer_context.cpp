@@ -255,7 +255,7 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
 
     // Items we call by location name
     for (const auto& locationNode : in["mItemLocations"]) {
-        const auto& locationName = locationNode.first.as<std::string>();
+        const auto& locationName = nameLookupOverride(locationNode.first.as<std::string>());
         retrieveItemData(this->mItemLocations[locationName], locationNode.second);
     }
 
@@ -857,7 +857,7 @@ std::vector<u8> HexToBytes(std::string hex) {
 }
 
 int randomizer_getItemAtLocation(const std::string& locationName) {
-    return randomizer_GetContext().mItemLocations[locationName].itemId;
+    return randomizer_GetContext().mItemLocations[nameLookupOverride(locationName)].itemId;
 }
 
 void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo, s16& pointNo, s8& mapLayer) {
@@ -893,7 +893,7 @@ void randomizer_setTempFlag(RandomizerContext::itemLocationData data) {
 }
 
 void randomizer_setTempFlagForLocation(const std::string& locationName) {
-    randomizer_setTempFlag(randomizer_GetContext().mItemLocations[locationName]);
+    randomizer_setTempFlag(randomizer_GetContext().mItemLocations[nameLookupOverride(locationName)]);
 }
 
 void randomizer_setTempFlagForFLWOverride(u32 key) {
@@ -1357,7 +1357,7 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         // Items that we lookup just by calling their location name
         if (location->HasCategories("Name Lookup")) {
             for (const auto& locationNameNode : metaData["Name Lookup"]) {
-                const auto& locationName = locationNameNode.as<std::string>();
+                const auto& locationName = nameLookupOverride(locationNameNode.as<std::string>());
                 const int itemId = location->GetCurrentItem()->GetID();
                 randoData.mItemLocations[locationName].itemId = itemId;
                 getNodeFlags(randoData.mItemLocations[locationName], metaData);

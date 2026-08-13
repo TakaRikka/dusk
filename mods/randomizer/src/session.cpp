@@ -112,7 +112,7 @@ void observe_give(ModContext*, const ItemGiveInfo* info, void*) {
         randomizer_setTempFlagForLocation(info->check_name);
     }
 
-    if (std::strcmp(info->check_name, "Arbiters Grounds Dungeon Reward") == 0) {
+    if (std::strcmp(info->check_name, "dungeon_reward:D_MN10") == 0) {
         dComIfGs_onItem(0x9E, -1);
     } else if (auto key = parse_derived(info->check_name, "freestanding:");
                key && key->stage_id == Ook)

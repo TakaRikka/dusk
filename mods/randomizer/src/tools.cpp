@@ -501,6 +501,55 @@ randomizer::logic::item_pool::ItemPool getSaveItemPool(randomizer::logic::world:
     return pool;
 }
 
+// overriding location names from generator to match item service api format
+std::string nameLookupOverride(const std::string& locationName) {
+    // [generator name], [service name]
+    static std::unordered_map<std::string, std::string> nameLookup = {
+        {"Arbiters Grounds Dungeon Reward", "dungeon_reward:D_MN10"},
+        {"Ashei Sketch", "ashei_sketch"},
+        {"Auru Gift To Fyer", "auru_memo"},
+        {"Cave of Ordeals Great Fairy Reward", "fairy_reward:D_SB01"},
+        {"Charlo Donation Blessing", "prayer_reward"},
+        {"Coro Bottle", "coro_bottle"},
+        {"Gift From Ralis", "coral_earring"},
+        {"Goron Mines Gor Amato Key Shard", "key_shard_1:D_MN04"},
+        {"Goron Mines Gor Ebizo Key Shard", "key_shard_2:D_MN04"},
+        {"Goron Mines Gor Liggs Key Shard", "key_shard_3:D_MN04"},
+        {"Herding Goats Reward", "goats_reward"},
+        {"Hyrule Castle King Bulblin Key", "bulblin_key:D_MN09"},
+        {"Ilia Charm", "ilia_charm"},
+        {"Iza Helping Hand", "iza_reward_1"},
+        {"Iza Raging Rapids Minigame", "iza_reward_2"},
+        {"Jovani 20 Poe Soul Reward", "jovani_reward_1"},
+        {"Jovani 60 Poe Soul Reward", "jovani_reward_2"},
+        {"Ordon Cat Rescue", "sera_reward"},
+        {"Ordon Shield", "ordon_shield"},
+        {"Ordon Sword", "ordon_sword"},
+        {"Plumm Fruit Balloon Minigame", "plumm_minigame_reward"},
+        {"Renados Letter", "renado_letter"},
+        {"Rutelas Blessing", "zora_armor"},
+        {"Skybook From Impaz", "skybook"},
+        {"Snowboard Racing Prize", "snowboard_race_reward"},
+        {"Snowpeak Ruins Ball and Chain", "ball_and_chain:D_MN11"},
+        {"Snowpeak Ruins Mansion Map", "dungeon_map:D_MN11"},
+        {"STAR Prize 1", "star_reward_1"},
+        {"STAR Prize 2", "star_reward_2"},
+        {"Talo Sharpshooting", "archery_reward:F_SP109"},
+        {"Telma Invoice", "telma_invoice"},
+        {"Uli Cradle Delivery", "uli_cradle_reward"},
+        {"Wooden Statue", "wood_statue"},
+        {"Zoras Domain Underwater Goron", "goron_reward:F_SP113"},
+    };
+
+    for (auto& [oldName, newName] : nameLookup) {
+        if (locationName == oldName) {
+            return newName;
+        }
+    }
+
+    return locationName;
+}
+
 bool isLocationObtained(randomizer::logic::location::Location* location) {
     auto& locationMeta = location->GetMetadata();
     if (auto& chestNode = locationMeta["Chest"]) {
@@ -604,7 +653,7 @@ int getLocationItem(randomizer::logic::location::Location* location) {
         return context.mFlowItemMessageOverrides[key].itemId;
     }
     if (auto& nameNode = locationMeta["Name Lookup"]) {
-        auto name = nameNode[0].as<std::string>();
+        auto name = nameLookupOverride(nameNode[0].as<std::string>());
         return context.mItemLocations[name].itemId;
     }
     return -1;

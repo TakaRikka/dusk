@@ -29,6 +29,8 @@ int numFusedShadows();
 int numMirrorShards();
 int getTempleKeysFound(int saveId);
 
+std::string nameLookupOverride(const std::string& locationName);
+
 /*
  * Reads the current player inventory and returns an ItemPool that can be used for logic searches
  *
