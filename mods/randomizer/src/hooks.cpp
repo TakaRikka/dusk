@@ -77,6 +77,9 @@ DEFINE_HOOK(&daDoor20_c::checkOpenMsgDoor, daDoor20_c__checkOpenMsgDoor);
 
 DEFINE_HOOK_SYMBOL("demo_camera_end", void(e_mk_class*), e_mk_demo_camera_end);
 
+DEFINE_HOOK(&dStage_changeScene4Event, changeScene4Event);
+DEFINE_HOOK_SYMBOL("dStage_playerInit", int(dStage_dt_c*, void*, int, void*), stage_playerInit);
+
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
 }
@@ -1324,6 +1327,76 @@ void hookPostEmkDemoCameraEnd(ModContext*, void* args, void* retval, void*) {
     }
 }
 
+void hookPostChangeScene4Event(ModContext*, void* args, void* retval, void*) {
+    int i_exitId = mods::arg<int>(args, 0);
+    s8 room_no = mods::arg<s8>(args, 1);
+
+    stage_scls_info_dummy_class* scls;
+    if (room_no == -1) {
+        scls = dComIfGp_getStageSclsInfo();
+    } else {
+        dStage_roomDt_c* room = dComIfGp_roomControl_getStatusRoomDt(room_no);
+        scls = room->getSclsInfo();
+    }
+
+    if (scls == NULL) {
+        return;
+    }
+
+    stage_scls_info_class* scls_info = &scls->m_entries[i_exitId];
+
+    // If randomizer is active and we're loading the first spawn, set our starting time of day
+    if (std::strcmp(scls_info->mStage, "F_SP103")
+        && scls_info->mRoom == 1
+        && scls_info->mStart == 1)
+    {
+        dKy_set_nexttime(15.0f * randomizer_GetContext().mStartHour);
+        g_randomizerState.mUpdateTracker = true;
+    }
+}
+
+HookAction hookPreStagePlayerInit(ModContext*, void* args, void* retval, void*) {
+    void* i_data = mods::arg<void*>(args, 1);
+    int num = mods::arg<int>(args, 2);
+
+    stage_actor_class* player = (stage_actor_class*)((int*)i_data + 1);
+    stage_actor_data_class* player_data = player->m_entries;
+
+    // Modify entrance types in certain situations to avoid crashes
+    for (size_t i = 0; i < num; ++i) {
+        u8& entranceType = reinterpret_cast<u8*>(&player_data[i].base.parameters)[2];
+        switch (entranceType) {
+        // Only replace the entrance type if it is a door.
+        case 0x80:
+        case 0xA0:
+        case 0xB0:
+        {
+            if (dComIfGs_getTransformStatus() == TF_STATUS_WOLF) {
+                // Change the entrance type to play the animation of walking out of the
+                // loading zone instead of entering through the door.
+                entranceType = 0x50;
+            }
+            break;
+        }
+
+        // Water swimming entrance.
+        // If we have this, but there isn't any water to spawn in, the game hangs
+        case 0xD0:
+        {
+            // If there's no water, change to non-swimming entrance
+            if (getStageID() == Lake_Hylia && !dComIfGs_isEventBit(WARPED_METEOR_TO_ZORAS_DOMAIN)) {
+                entranceType = 0x50;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    return HOOK_CONTINUE;
+}
+
 }
 
 ModResult initialize() {
@@ -1389,6 +1462,9 @@ ModResult initialize() {
 
     ADD_HOOK_POST(e_mk_demo_camera_end, hookPostEmkDemoCameraEnd);
 
+    ADD_HOOK_POST(changeScene4Event, hookPostChangeScene4Event);
+    ADD_HOOK_PRE(stage_playerInit, hookPreStagePlayerInit);
+
     return MOD_OK;
 }
 
@@ -1442,6 +1518,9 @@ ModResult uninstall() {
     mods::hook::uninstall<daDoor20_c__checkOpenMsgDoor>(svc_hook);
 
     mods::hook::uninstall<e_mk_demo_camera_end>(svc_hook);
+
+    mods::hook::uninstall<changeScene4Event>(svc_hook);
+    mods::hook::uninstall<stage_playerInit>(svc_hook);
 
     return MOD_OK;
 }

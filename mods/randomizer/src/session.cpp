@@ -344,4 +344,11 @@ ModResult initialize(const ServiceManager& services) {
     return MOD_OK;
 }
 
+void update() {
+    if (!g_randomizerState.mInitialized) {
+        g_randomizerState._create();
+    }
+    g_randomizerState.execute();
+}
+
 }

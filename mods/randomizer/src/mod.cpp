@@ -52,6 +52,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
 
 MOD_EXPORT ModResult mod_update(ModError*) {
     randomizer::ui::update();
+    randomizer::session::update();
     return MOD_OK;
 }
 

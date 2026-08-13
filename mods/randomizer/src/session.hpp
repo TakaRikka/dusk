@@ -30,6 +30,7 @@ extern ServiceManager svc_mng;
 extern std::string g_pending_seed_hash;
 
 ModResult initialize(const ServiceManager& services);
+void update();
 
 void deactivateSeed();
 void setupRandomizerFile();
