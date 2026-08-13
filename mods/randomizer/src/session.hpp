@@ -8,6 +8,7 @@
 #include "mods/svc/resource.h"
 #include "mods/svc/save.h"
 #include "mods/svc/stage.h"
+#include "mods/svc/item.h"
 
 namespace randomizer::session {
 struct ServiceManager {
@@ -20,6 +21,7 @@ struct ServiceManager {
     const ConfigService* config;
     const SaveService* save;
     const StageService* stage;
+    const ItemService* item;
 };
 
 extern ServiceManager svc_mng;

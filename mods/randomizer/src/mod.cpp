@@ -1,9 +1,10 @@
 #include "mods/service.hpp"
 #include "mods/svc/log.h"
 
+#include "hooks.hpp"
+#include "item.hpp"
 #include "session.hpp"
 #include "ui/ui.hpp"
-#include "hooks.hpp"
 
 DEFINE_MOD();
 IMPORT_SERVICE(HostService, svc_host);
@@ -14,6 +15,7 @@ IMPORT_SERVICE(ResourceService, svc_res);
 IMPORT_SERVICE(ConfigService, svc_config);
 IMPORT_SERVICE(SaveService, svc_save);
 IMPORT_SERVICE(StageService, svc_stage);
+IMPORT_SERVICE(ItemService, svc_item);
 
 extern "C" {
 
@@ -28,6 +30,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         svc_config,
         svc_save,
         svc_stage,
+        svc_item,
     });
     if (result != MOD_OK) {
         return mods::set_error(error, result, "failed to initialize session");
@@ -54,6 +57,7 @@ MOD_EXPORT ModResult mod_update(ModError*) {
 
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
     svc_log->info(mod_ctx, "randomizer unloaded");
+    randomizer::item::restore_item_data_tables();
     return MOD_OK;
 }
 }

@@ -5,6 +5,7 @@
 #include "flags.h"
 #include "stages.h"
 #include "tools.h"
+#include "item.hpp"
 #include "item_ids.h"
 
 #include <mods/svc/hook.hpp>
@@ -50,7 +51,13 @@ DEFINE_HOOK(&CheckFieldItemCreateHeap, dItemData_CheckFieldItemCreateHeap);
 DEFINE_HOOK(&dEvt_control_c::talkEnd, dEvt_control_c__talkEnd);
 
 DEFINE_HOOK(&dComIfG_play_c::getLayerNo_common_common, dComIfG_play_c__getLayerNo_common_common);
+DEFINE_HOOK(&dComIfGs_onStageSwitch, onStageSwitch);
 
+extern void getItemFunc(u8);
+DEFINE_HOOK(&getItemFunc, dItem_getItemFunc);
+
+extern int checkItemGet(u8 i_itemNo, int i_default);
+DEFINE_HOOK(&checkItemGet, dItem_checkItemGet);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -482,24 +489,16 @@ HookAction hookPreSaveInfoOnSwitch(ModContext*, void* args, void*, void*) {
     return HOOK_CONTINUE;
 }
 
-// TODO: item service
-/* HookAction hookPreExecItemGet(ModContext*, void* args, void*, void*) {
-    if (randomizer_IsActive()) {
-        const u8 item = mods::arg<u8>(args, 0);
-        item_funcs::exec_item_get(item);
-        dusk::mods::item_granted(item, mods::arg<u32>(args, 1), mods::arg<fopAc_ac_c*>(args, 2));
-        return HOOK_SKIP_ORIGINAL;
-    }
-    return HOOK_CONTINUE;
-} */
+HookAction hookPreGetItemFunc(ModContext*, void* args, void*, void*) {
+    const u8 item = mods::arg<u8>(args, 0);
+    item::exec_item_get(item);
+    return HOOK_SKIP_ORIGINAL;
+}
 
-/* HookAction hookPreCheckItemGet(ModContext*, void* args, void* retval, void*) {
-    if (randomizer_IsActive()) {
-        *static_cast<int*>(retval) = item_funcs::check_item_get(mods::arg<u8>(args, 0), mods::arg<int>(args, 1));
-        return HOOK_SKIP_ORIGINAL;
-    }
-    return HOOK_CONTINUE;
-} */
+ HookAction hookPreCheckItemGet(ModContext*, void* args, void* retval, void*) {
+    *static_cast<int*>(retval) = item::check_item_get(mods::arg<u8>(args, 0), mods::arg<int>(args, 1));
+    return HOOK_SKIP_ORIGINAL;
+}
 
 HookAction hookPreSetNextStage(ModContext*, void* args, void*, void*) {
     randomizer_checkAndOverrideEntranceData(
@@ -1161,6 +1160,19 @@ HookAction hookPreGetLayerNo(ModContext*, void* args, void* retval, void*) {
     return HOOK_CONTINUE;
 }
 
+HookAction hookPreOnStageSwitch(ModContext*, void* args, void* retval, void*) {
+    const int i_stageNo = mods::arg<int>(args, 0);
+    const int i_no = mods::arg<int>(args, 1);
+
+    // Avoid trying to get the save table if stag info is NULL
+    if (dComIfGp_getStageStagInfo() == NULL) {
+        dComIfGs_onSaveSwitch(i_stageNo, i_no);
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
 }
 
 ModResult initialize() {
@@ -1210,6 +1222,11 @@ ModResult initialize() {
     ADD_HOOK_POST(dFile_select_c__nameInput2, hookPostNameInput2);
 
     ADD_HOOK_PRE(dComIfG_play_c__getLayerNo_common_common, hookPreGetLayerNo);
+
+    ADD_HOOK_PRE(dItem_getItemFunc, hookPreGetItemFunc);
+    ADD_HOOK_PRE(dItem_checkItemGet, hookPreCheckItemGet);
+
+    ADD_HOOK_PRE(onStageSwitch, hookPreOnStageSwitch);
 
     return MOD_OK;
 }

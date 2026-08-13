@@ -86,6 +86,7 @@ set(RANDOMIZER_SOURCES
         src/paths.cpp
         src/session.cpp
         src/hooks.cpp
+        src/item.cpp
         src/ui/config_store.cpp
         src/ui/rando_seed_generation.cpp
         src/ui/rando_config.cpp
