@@ -553,7 +553,7 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
             for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
                 if (entry.is_directory()) {
                     std::string hash = entry.path().filename().string();
-                    if (randomizer_GetContext().mHash == hash) {
+                    if (session::g_pending_seed_hash == hash) {
                         break;
                     }
                     idx++;
@@ -567,10 +567,7 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
             for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
                 if (entry.is_directory()) {
                     if (idx == value->int_value) {
-                        std::string hash = entry.path().filename().string();
-                        randomizer_GetContext() = RandomizerContext();
-                        randomizer_GetContext().LoadFromHash(hash);
-                        session::registerStageEdits();
+                        session::g_pending_seed_hash = entry.path().filename().string();
                         break;
                     }
                     idx++;
@@ -590,7 +587,7 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
         };
         desc.user_data = &g_file_select_window_ctx.window_handle;
         desc.is_disabled = [](ModContext*, void*) {
-            return randomizer_GetContext().mHash.empty();
+            return session::g_pending_seed_hash.empty();
         };
         session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, leftPane, &desc, nullptr);
     }

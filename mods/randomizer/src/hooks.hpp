@@ -4,4 +4,5 @@
 
 namespace randomizer::hooks {
 ModResult initialize();
+ModResult uninstall();
 }

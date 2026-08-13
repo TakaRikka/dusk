@@ -16,15 +16,14 @@
 
 namespace randomizer::session {
 ServiceManager svc_mng;
+std::string g_pending_seed_hash{};
 
-ModResult initialize(const ServiceManager& services) {
-    svc_mng = services;
-
-    return MOD_OK;
-}
-
+SaveObserverHandle s_save_observer{};
 ItemCheckHandle s_check_resolver{};
 ItemGiveHandle s_check_observer{};
+std::vector<StageActorHandle> s_stage_edits{};
+
+constexpr const char* kSeedHashBlobName = "seed_hash";
 
 struct DerivedKey {
     int stage_id;
@@ -123,18 +122,46 @@ void observe_give(ModContext*, const ItemGiveInfo* info, void*) {
     }
 }
 
-void activateSeed() {
+bool activateSeed(const char* hash) {
     auto& ctx = randomizer_GetContext();
+    ctx = RandomizerContext();
+    if (auto err = ctx.LoadFromHash(hash); err.has_value() || ctx.mHash.empty()) {
+        mods::log::error("failed to load seed {}", hash);
+        return false;
+    }
 
     item::apply_item_data_tables();
 
     svc_mng.item->set_check_resolver(mod_ctx, nullptr, resolve_check, nullptr, &s_check_resolver);
     svc_mng.item->observe_gives(mod_ctx, observe_give, nullptr, &s_check_observer);
+
+    registerStageEdits();
+    mods::log::info("activated seed {}", ctx.mHash);
+    return true;
+}
+
+void deactivateSeed() {
+    if (s_check_resolver != 0) {
+        svc_mng.item->clear_check_resolver(mod_ctx, s_check_resolver);
+        s_check_resolver = 0;
+    }
+
+    if (s_check_observer != 0) {
+        svc_mng.item->unobserve_gives(mod_ctx, s_check_observer);
+        s_check_observer = 0;
+    }
+
+    for (auto handle : s_stage_edits) {
+        svc_mng.stage->remove_actor_edit(mod_ctx, handle);
+    }
+    s_stage_edits.clear();
+
+    item::restore_item_data_tables();
+    randomizer_GetContext() = RandomizerContext{};
+    g_randomizerState = RandomizerState{};
 }
 
 void setupRandomizerFile() {
-    activateSeed();
-
     // Setup file based on randomizer data
     auto& randoData = randomizer_GetContext();
     randoData.mCreatingSave = true;
@@ -239,6 +266,10 @@ void registerStageEdits() {
                 res = svc_mng.stage->patch_actor(
                     mod_ctx, stage, room, layer, crc, bytes.data(), bytes.size(), &handle);
             }
+
+            if (res == MOD_OK) {
+                s_stage_edits.push_back(handle);
+            }
         }
     }
 
@@ -252,9 +283,65 @@ void registerStageEdits() {
         const s8 layer = static_cast<s8>(key & 0xFF);
         for (const auto& bytes : additions) {
             StageActorHandle handle{};
-            svc_mng.stage->add_actor(mod_ctx, stage, room, layer, bytes.data(), bytes.size(), &handle);
+            ModResult rt;
+            rt = svc_mng.stage->add_actor(mod_ctx, stage, room, layer, bytes.data(), bytes.size(), &handle);
+            if (rt == MOD_OK) {
+                s_stage_edits.push_back(handle);
+            }
         }
     }
+}
+
+void onNewSave(ModContext*, uint32_t, void*) {
+    const std::string hash = g_pending_seed_hash;
+    if (hash.empty())
+        return;
+
+    if (!activateSeed(hash.c_str()))
+        return;
+
+    svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
+    setupRandomizerFile();
+}
+
+void onSaveLoaded(ModContext*, uint32_t, void*) {
+    size_t size = 0;
+    if (svc_mng.save->get_blob(mod_ctx, kSeedHashBlobName, nullptr, &size) != MOD_OK || size == 0) {
+        mods::log::error("seed_hash not found!");
+        deactivateSeed();
+        return;
+    }
+
+    std::string hash(size, '\0');
+    if (svc_mng.save->get_blob(mod_ctx, kSeedHashBlobName, hash.data(), &size) != MOD_OK) {
+        mods::log::error("failed to get seed_hash!");
+        deactivateSeed();
+        return;
+    }
+
+    if (randomizer_GetContext().mHash != hash) {
+        deactivateSeed();
+        activateSeed(hash.c_str());
+    }
+
+    loadAncientDocumentNum();
+}
+
+ModResult initialize(const ServiceManager& services) {
+    svc_mng = services;
+
+    ModResult rt = svc_mng.save->observe_saves(
+        svc_mng.mod_ctx,
+        onNewSave,
+        onSaveLoaded,
+        nullptr,
+        nullptr,
+        &s_save_observer);
+    if (rt != MOD_OK) {
+        return rt;
+    }
+
+    return MOD_OK;
 }
 
 }

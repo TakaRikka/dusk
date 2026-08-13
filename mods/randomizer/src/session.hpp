@@ -10,6 +10,8 @@
 #include "mods/svc/stage.h"
 #include "mods/svc/item.h"
 
+#include <string>
+
 namespace randomizer::session {
 struct ServiceManager {
     ModContext* mod_ctx;
@@ -25,9 +27,11 @@ struct ServiceManager {
 };
 
 extern ServiceManager svc_mng;
+extern std::string g_pending_seed_hash;
 
 ModResult initialize(const ServiceManager& services);
 
+void deactivateSeed();
 void setupRandomizerFile();
 void registerStageEdits();
 }

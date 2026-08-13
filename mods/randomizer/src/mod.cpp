@@ -56,8 +56,9 @@ MOD_EXPORT ModResult mod_update(ModError*) {
 }
 
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
+    randomizer::session::deactivateSeed();
+    randomizer::hooks::uninstall();
     svc_log->info(mod_ctx, "randomizer unloaded");
-    randomizer::item::restore_item_data_tables();
     return MOD_OK;
 }
 }

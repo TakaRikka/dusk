@@ -13,13 +13,15 @@
 
 #include "d/actor/d_a_alink.h"
 #include "d/d_file_select.h"
+#include "d/d_file_sel_info.h"
 #include "d/d_meter2_info.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
-DEFINE_HOOK(&dFile_select_c::nameInput2, dFile_select_c__nameInput2);
+
+DEFINE_HOOK(&dFile_info_c::setSaveData, dFile_info_c__setSaveData);
 
 DEFINE_HOOK(&dSv_event_c::isEventBit, dSv_event_c__isEventBit);
 DEFINE_HOOK(&dSv_event_c::onEventBit, dSv_event_c__onEventBit);
@@ -142,12 +144,41 @@ HookAction hookPreSelectDataNameMove(ModContext*, void* args, void* retval, void
     return HOOK_SKIP_ORIGINAL;
 }
 
-void hookPostNameInput2(ModContext*, void* args, void* retval, void* userdata) {
-    dFile_select_c* i_this = mods::arg<dFile_select_c*>(args, 0);
+void hookPostSetSaveData(ModContext* ctx, void* args, void* retval, void* userdata) {
+    dFile_info_c* i_this = mods::arg<dFile_info_c*>(args, 0);
+    u8 i_dataNo = mods::arg<u8>(args, 3);
 
-    if (i_this->mIsSelectEnd) {
-        if (!randomizer_GetContext().mHash.empty()) {
-            session::setupRandomizerFile();
+    if (*static_cast<int*>(retval) == 0) {
+        char hash[64];
+        size_t size = sizeof(hash) - 1;
+
+        ModResult rt = session::svc_mng.save->peek_blob(ctx, i_dataNo, "seed_hash", hash, &size);
+        if (rt != MOD_OK || size == 0) {
+            // leave file text vanilla if seed hash isn't found
+            mods::log::debug("no seed_hash found for file {}", i_dataNo);
+            return;
+        }
+
+        hash[size] = 0;
+        const std::string curFileSeedHash = hash;
+        if (!curFileSeedHash.empty()) {
+            const auto setHBinding = [](J2DTextBox* tbox, J2DTextBoxHBinding bind) {
+                tbox->mFlags &= 0b0011;
+                tbox->mFlags |= ((bind & 3) << 2);
+            };
+
+            // Overwrite "Save time" text with "Randomizer"
+            auto saveTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'));
+            SafeStringCopy(saveTimeText->getStringPtr(), "Randomizer");
+            setHBinding(saveTimeText, J2DTextBoxHBinding::HBIND_LEFT);
+
+            // Overwrite the "Total play time" text with the seed hash
+            auto playTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'));
+            SafeStringCopy(playTimeText->getStringPtr(), curFileSeedHash.c_str());
+
+            // Give the text double the space on the menu incase the seed hash is long
+            setHBinding(playTimeText, J2DTextBoxHBinding::HBIND_LEFT);
+            playTimeText->resize(playTimeText->getWidth() * 2, playTimeText->getHeight());
         }
     }
 }
@@ -1191,6 +1222,8 @@ ModResult initialize() {
     ADD_HOOK_PRE(dFile_select_c__selectDataNameMove, hookPreSelectDataNameMove);
     ADD_HOOK_PRE(dFile_select_c__dataSelect, hookPreDataSelect);
 
+    ADD_HOOK_POST(dFile_info_c__setSaveData, hookPostSetSaveData);
+
     ADD_HOOK_PRE(dSv_event_c__isEventBit, hookPreIsEventBit);
     ADD_HOOK_PRE(dSv_event_c__onEventBit, hookPreOnEventBit);
 
@@ -1219,14 +1252,56 @@ ModResult initialize() {
 
     ADD_HOOK_POST(dEvt_control_c__talkEnd, hookPostTalkEnd);
 
-    ADD_HOOK_POST(dFile_select_c__nameInput2, hookPostNameInput2);
-
     ADD_HOOK_PRE(dComIfG_play_c__getLayerNo_common_common, hookPreGetLayerNo);
 
     ADD_HOOK_PRE(dItem_getItemFunc, hookPreGetItemFunc);
     ADD_HOOK_PRE(dItem_checkItemGet, hookPreCheckItemGet);
 
     ADD_HOOK_PRE(onStageSwitch, hookPreOnStageSwitch);
+
+    return MOD_OK;
+}
+
+ModResult uninstall() {
+    auto svc_hook = session::svc_mng.hook;
+
+    mods::hook::uninstall<dFile_select_c__selectDataNameMove>(svc_hook);
+    mods::hook::uninstall<dFile_select_c__dataSelect>(svc_hook);
+
+    mods::hook::uninstall<dFile_info_c__setSaveData>(svc_hook);
+
+    mods::hook::uninstall<dSv_event_c__isEventBit>(svc_hook);
+    mods::hook::uninstall<dSv_event_c__onEventBit>(svc_hook);
+
+    mods::hook::uninstall<dSv_memBit_c__isSwitch>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__onSwitch>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__onDungeonItem>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__offDungeonItem>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__isDungeonItem>(svc_hook);
+
+    mods::hook::uninstall<dSv_player_status_b_c__isDarkClearLV>(svc_hook);
+
+    mods::hook::uninstall<dSv_player_item_c__checkEmptyBottle>(svc_hook);
+    mods::hook::uninstall<dSv_player_item_c__setLineUpItem>(svc_hook);
+
+    mods::hook::uninstall<dSv_info_c__onSwitch>(svc_hook);
+
+    mods::hook::uninstall<ObjGb_Create>(svc_hook);
+
+    mods::hook::uninstall<readItemTexture>(svc_hook);
+
+    mods::hook::uninstall<dShopSystem_c__seq_decide_yes>(svc_hook);
+
+    mods::hook::uninstall<dItemData_CheckFieldItemCreateHeap>(svc_hook);
+
+    mods::hook::uninstall<dEvt_control_c__talkEnd>(svc_hook);
+
+    mods::hook::uninstall<dComIfG_play_c__getLayerNo_common_common>(svc_hook);
+
+    mods::hook::uninstall<dItem_getItemFunc>(svc_hook);
+    mods::hook::uninstall<dItem_checkItemGet>(svc_hook);
+
+    mods::hook::uninstall<onStageSwitch>(svc_hook);
 
     return MOD_OK;
 }
