@@ -12,11 +12,17 @@
 #include <mods/svc/log.hpp>
 
 #include "d/actor/d_a_alink.h"
-#include "d/d_file_select.h"
+#include "d/actor/d_a_b_bq.h"
+#include "d/actor/d_a_door_shutter.h"
+#include "d/actor/d_a_tag_kmsg.h"
+#include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
+#include "d/d_file_select.h"
 #include "d/d_meter2_info.h"
+#include "d/d_msg_object.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
+#include "d/actor/d_a_e_mk.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
@@ -60,6 +66,16 @@ DEFINE_HOOK(&getItemFunc, dItem_getItemFunc);
 
 extern int checkItemGet(u8 i_itemNo, int i_default);
 DEFINE_HOOK(&checkItemGet, dItem_checkItemGet);
+
+DEFINE_HOOK(&daAlink_c::decideDoStatus, daAlink_c__decideDoStatus);
+DEFINE_HOOK_SYMBOL("daAlink_searchBouDoor", void*(fopAc_ac_c*, void*), searchBouDoor);
+DEFINE_HOOK(&daAlink_c::checkGroundSpecialMode, daAlink_c__checkGroundSpecialMode);
+
+DEFINE_HOOK_SYMBOL("b_bq_end", void(b_bq_class*), bq_end);
+
+DEFINE_HOOK(&daDoor20_c::checkOpenMsgDoor, daDoor20_c__checkOpenMsgDoor);
+
+DEFINE_HOOK_SYMBOL("demo_camera_end", void(e_mk_class*), e_mk_demo_camera_end);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -1204,6 +1220,110 @@ HookAction hookPreOnStageSwitch(ModContext*, void* args, void* retval, void*) {
     return HOOK_CONTINUE;
 }
 
+HookAction hookPreDecideDoStatus(ModContext*, void* args, void* retval, void*) {
+    daAlink_c* i_this = mods::arg<daAlink_c*>(args, 0);
+    bool set_status = false;
+
+    if (i_this->mAttList != NULL) {
+        s16 actor_name = fopAcM_GetName(i_this->field_0x27f4);
+        if (actor_name == fpcNm_Tag_Lv6Gate_e ||
+            (actor_name == fpcNm_TAG_KMSG_e && static_cast<daTag_KMsg_c*>(i_this->field_0x27f4)->getType() == 3))
+        {
+            // Separate check for striking sword into the pedestal for randomizer
+            if (!i_this->checkEquipAnime() && randomizer_checkTempleOfTimeRequirement()) {
+                i_this->setDoStatus(BUTTON_STATUS_STRIKE);
+                set_status = true;
+            }
+        }
+    }
+
+    if (set_status) {
+        i_this->decideCommonDoStatus();
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreSearchBouDoor(ModContext*, void* args, void* retval, void*) {
+    // In randomizer, we don't want Bo preventing us from entering his house on Day 2
+    if (daAlink_c::checkStageName("F_SP103"))
+    {
+        *static_cast<void**>(retval) = nullptr;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreCheckGroundSpecialMode(ModContext*, void* args, void* retval, void*) {
+    daAlink_c* i_this = mods::arg<daAlink_c*>(args, 0);
+
+    if (i_this->mLinkAcch.ChkGroundHit()
+        && !i_this->checkModeFlg(daAlink_c::MODE_PLAYER_FLY)
+        && !i_this->checkMagneBootsOn()
+        && i_this->checkEndResetFlg0(daAlink_c::ERFLG0_FORCE_WOLF_CHANGE))
+    {
+        u8 stage = getStageID();
+        // In rando, don't transform in twilight fog unless we have shadow crystal
+        if (!dComIfGs_isEventBit(TRANSFORMING_UNLOCKED) &&
+            (stage == Palace_of_Twilight || stage == Phantom_Zant_1 || stage == Phantom_Zant_2))
+        {
+            *static_cast<BOOL*>(retval) = FALSE;
+            return HOOK_SKIP_ORIGINAL;
+        }
+        *static_cast<BOOL*>(retval) = i_this->procCoMetamorphoseInit();
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostBqEnd(ModContext*, void* args, void* retval, void*) {
+    // If the player is wolf, they will softlock after the defeat cutscene is completed.
+    checkTransformFromWolf();
+}
+
+HookAction hookPreCheckOpenMsgDoor(ModContext*, void* args, void* retval, void*) {
+    daDoor20_c* i_this = mods::arg<daDoor20_c*>(args, 0);
+    int* param_1 = mods::arg<int*>(args, 1);
+
+    if (!door_param2_c::isMsgDoor(i_this)) {
+        *static_cast<int*>(retval) = 1;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    int msgNo = door_param2_c::getMsgNo(i_this);
+    if (msgNo == 0xffff) {
+        *param_1 = 0;
+        *static_cast<int*>(retval) = 1;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    i_this->field_0x624.init(NULL, msgNo, 0, NULL);
+    int rv = 1;
+    // If we are in SPR, we don't want Yeta's msg flow to prevent us from opening the door if we haven't talked to her.
+    if (!daAlink_c::checkStageName("D_MN11")) {
+        rv = i_this->field_0x624.checkOpenDoor(i_this, param_1);
+    }
+    dMsgObject_endFlowGroup();
+    *static_cast<int*>(retval) = rv;
+    return HOOK_SKIP_ORIGINAL;
+}
+
+void hookPostEmkDemoCameraEnd(ModContext*, void* args, void* retval, void*) {
+    e_mk_class* i_this = mods::arg<e_mk_class*>(args, 0);
+
+    switch (i_this->demoSubMode) {
+    case 6:
+        if (i_this->demoCamCounter == 180) {
+            // If the player is wolf, they will void and lose the boomerang check.
+            checkTransformFromWolf();
+        }
+        break;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -1259,6 +1379,16 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(onStageSwitch, hookPreOnStageSwitch);
 
+    ADD_HOOK_PRE(daAlink_c__decideDoStatus, hookPreDecideDoStatus);
+    ADD_HOOK_PRE(searchBouDoor, hookPreSearchBouDoor);
+    ADD_HOOK_PRE(daAlink_c__checkGroundSpecialMode, hookPreCheckGroundSpecialMode);
+
+    ADD_HOOK_POST(bq_end, hookPostBqEnd);
+
+    ADD_HOOK_PRE(daDoor20_c__checkOpenMsgDoor, hookPreCheckOpenMsgDoor);
+
+    ADD_HOOK_POST(e_mk_demo_camera_end, hookPostEmkDemoCameraEnd);
+
     return MOD_OK;
 }
 
@@ -1302,6 +1432,16 @@ ModResult uninstall() {
     mods::hook::uninstall<dItem_checkItemGet>(svc_hook);
 
     mods::hook::uninstall<onStageSwitch>(svc_hook);
+
+    mods::hook::uninstall<daAlink_c__decideDoStatus>(svc_hook);
+    mods::hook::uninstall<searchBouDoor>(svc_hook);
+    mods::hook::uninstall<daAlink_c__checkGroundSpecialMode>(svc_hook);
+
+    mods::hook::uninstall<bq_end>(svc_hook);
+
+    mods::hook::uninstall<daDoor20_c__checkOpenMsgDoor>(svc_hook);
+
+    mods::hook::uninstall<e_mk_demo_camera_end>(svc_hook);
 
     return MOD_OK;
 }
