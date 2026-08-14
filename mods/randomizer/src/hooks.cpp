@@ -45,8 +45,12 @@ DEFINE_HOOK(&dSv_player_item_c::setLineUpItem, dSv_player_item_c__setLineUpItem)
 
 DEFINE_HOOK(&dSv_info_c::onSwitch, dSv_info_c__onSwitch);
 
-/*DEFINE_HOOK_SYMBOL("__Z21dComIfGp_setNextStagePKcsaafjiasii",
-    void(char const*, s16, s8, s8, f32, u32, int, s8, s16, int, int), setNextStage);*/
+#ifdef _MSVC_LANG
+#define setNextStage_sig "?dComIfGp_setNextStage@@YAXPEBDFCCMIHCFHH@Z"
+#else
+#define setNextStage_sig "_Z21dComIfGp_setNextStagePKcsaafjiasii"
+#endif
+DEFINE_HOOK_SYMBOL(setNextStage_sig, void(char const *, s16, s8, s8, f32, u32, int, s8, s16, int, int), setNextStage);
 
 DEFINE_HOOK_SYMBOL("daObj_Gb_Create", int(fopAc_ac_c*), ObjGb_Create);
 
@@ -1433,7 +1437,7 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(dSv_info_c__onSwitch, hookPreSaveInfoOnSwitch);
 
-    //ADD_HOOK_PRE(setNextStage, hookPreSetNextStage);
+    ADD_HOOK_PRE(setNextStage, hookPreSetNextStage);
 
     ADD_HOOK_PRE(ObjGb_Create, hookPreObjGbCreate);
 
@@ -1491,6 +1495,7 @@ ModResult uninstall() {
     mods::hook::uninstall<dSv_player_item_c__setLineUpItem>(svc_hook);
 
     mods::hook::uninstall<dSv_info_c__onSwitch>(svc_hook);
+    mods::hook::uninstall<setNextStage>();
 
     mods::hook::uninstall<ObjGb_Create>(svc_hook);
 

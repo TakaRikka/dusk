@@ -4,6 +4,7 @@
 #include "../item.hpp"
 
 #include <iterator>
+#include <cstdint>
 
 BitVector::BitVector(const std::list<int>& bits)
 {

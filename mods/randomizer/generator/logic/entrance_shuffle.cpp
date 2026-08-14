@@ -65,7 +65,7 @@ namespace randomizer::logic::entrance_shuffle
 
             auto forwardEntrance = world->GetEntrance(forwardEntry["Connection"].as<std::string>());
             forwardEntrance->SetType(type);
-            // TODO: Set actual entrance data
+            forwardEntrance->SetGameInfo(forwardEntry);
             forwardEntrance->SetID(world->GetNewEntranceID());
             forwardEntrance->SetPrimary(true);
             forwardEntrance->SetAlias(
@@ -78,7 +78,7 @@ namespace randomizer::logic::entrance_shuffle
 
                 auto returnEntrance = world->GetEntrance(returnEntry["Connection"].as<std::string>());
                 returnEntrance->SetType(type);
-                // TODO: Set actual entrance data
+                returnEntrance->SetGameInfo(returnEntry);
                 returnEntrance->SetID(world->GetNewEntranceID());
                 returnEntrance->SetAlias(
                     returnEntry["Alias"] ? returnEntry["Alias"].as<std::string>() : "");
@@ -471,7 +471,7 @@ namespace randomizer::logic::entrance_shuffle
         // plandomizer stuff going on. Currently, the only non-assumed entrance we're shuffling
         // is the randomized spawn, but if we ever shuffle warp portals, they'll go here too.
 
-        int retries = 20;
+        int retries = 10000;
         while (retries > 0)
         {
             std::unordered_map<Entrance*, Entrance*> rollbacks = {};

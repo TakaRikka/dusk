@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 project(randomizer CXX)
+set(CMAKE_CXX_STANDARD 23)
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(DUSK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../.." CACHE PATH "Path to dusk source root")

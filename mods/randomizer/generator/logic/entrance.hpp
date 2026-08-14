@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <map>
 #include <string>
+#include <cstdint>
+#include "../utility/yaml.hpp"
 
 // Forward Declarations
 namespace randomizer::logic::area
@@ -148,6 +150,16 @@ namespace randomizer::logic::entrance
          */
         Entrance* AssumeReachable();
 
+        void SetStageId(uint8_t stageId) { _stageId = stageId; }
+        void SetRoomNo(int8_t roomNo) { _roomNo = roomNo; }
+        void SetLayerNo(int8_t layerNo) { _layerNo = layerNo; }
+        void SetPointNo(int16_t pointNo) { _pointNo = pointNo; }
+        uint8_t GetStageId() const { return _stageId; }
+        int8_t GetRoomNo() const { return _roomNo; }
+        int8_t GetLayerNo() const { return _layerNo; }
+        int16_t GetPointNo() const { return _pointNo; }
+        bool SetGameInfo(const YAML::Node& node);
+
        private:
         int _id = -1;
         area::Area* _parentArea = nullptr;
@@ -158,6 +170,11 @@ namespace randomizer::logic::entrance
         std::string _originalName = "";
         std::string _alias = "";
         world::World* _world = nullptr;
+
+        uint8_t _stageId = 0xFF;
+        int8_t _roomNo = -1;
+        int8_t _layerNo = -1;
+        int16_t _pointNo = -1;
 
         /**
          * @brief The local requirement for this entrance assuming we have access to its parent area.

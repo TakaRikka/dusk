@@ -356,4 +356,31 @@ namespace randomizer::logic::entrance
 
         return {parentAreaName, connectedAreaName};
     }
+
+    bool Entrance::SetGameInfo(const YAML::Node& node) {
+        bool ret = true;
+        std::string stageIdString = node["Stage"].as<std::string>();
+        if (stageIdString == "null") {
+            stageIdString = "-1";
+            ret = false;
+        }
+        int stageId = std::stoi(stageIdString);
+        if (stageId == -1) {
+            stageId = 0xFF;
+        }
+        SetStageId(static_cast<uint8_t>(stageId));
+        std::string roomNoString = node["Room"].as<std::string>();
+        if (roomNoString == "null") {
+            roomNoString = "-1";
+            ret = false;
+        }
+        SetRoomNo(static_cast<int8_t>(std::stoi(roomNoString)));
+        SetPointNo(static_cast<int16_t>(std::stoi("0x0"+node["Spawn"].as<std::string>(),nullptr,16)));
+        int layer = std::stoi("0x0"+node["State"].as<std::string>(),nullptr,16);
+        if (layer == 0xFF) {
+            layer = -1;
+        }
+        SetLayerNo(static_cast<int8_t>(layer));
+        return ret;
+    }
 } // namespace randomizer::logic::entrance
