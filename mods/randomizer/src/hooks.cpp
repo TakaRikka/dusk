@@ -14,6 +14,10 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_b_bq.h"
 #include "d/actor/d_a_door_shutter.h"
+#include "d/actor/d_a_e_mk.h"
+#include "d/actor/d_a_kytag08.h"
+#include "d/actor/d_a_npc4.h"
+#include "d/actor/d_a_npc_bans.h"
 #include "d/actor/d_a_tag_kmsg.h"
 #include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
@@ -22,7 +26,6 @@
 #include "d/d_msg_object.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
-#include "d/actor/d_a_e_mk.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
@@ -79,6 +82,14 @@ DEFINE_HOOK_SYMBOL("demo_camera_end", void(e_mk_class*), e_mk_demo_camera_end);
 
 DEFINE_HOOK(&dStage_changeScene4Event, changeScene4Event);
 DEFINE_HOOK_SYMBOL("dStage_playerInit", int(dStage_dt_c*, void*, int, void*), stage_playerInit);
+
+DEFINE_HOOK_SYMBOL("daKytag08_Execute", int(kytag08_class*), Kytag08_Execute);
+
+DEFINE_HOOK(&daNpcT_chkEvtBit, NpcT_chkEvtBit);
+DEFINE_HOOK(&daNpcF_chkEvtBit, NpcF_chkEvtBit);
+DEFINE_HOOK(&daNpcF_c::orderEvent, daNpcF_c__orderEvent);
+
+DEFINE_HOOK(&daNpc_Bans_c::isDelete, daNpc_Bans_c__isDelete);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -1397,6 +1408,84 @@ HookAction hookPreStagePlayerInit(ModContext*, void* args, void* retval, void*) 
     return HOOK_CONTINUE;
 }
 
+void hookPostKytag08Execute(ModContext*, void* args, void* retval, void*) {
+    kytag08_class* i_this = mods::arg<kytag08_class*>(args, 0);
+
+    if (i_this->mSizeTimer < 100 || dComIfGs_BossLife_public_Get() == 1) {
+        dComIfGs_BossLife_public_Set(0);
+        i_this->mTargetAvoidPos = i_this->current.pos;
+        i_this->mSizeTimer = 180;
+        mDoAud_startFogWipeTrigger(&i_this->current.pos);
+    }
+}
+
+HookAction hookPreNpcTChkEvtBit(ModContext*, void* args, void* retval, void*) {
+    u32 i_no = mods::arg<u32>(args, 0);
+
+    switch (i_no) {
+    case 0x153: // Checking if the player has Ending Blow
+        if (getStageID() == Hidden_Skill) {
+            *static_cast<BOOL*>(retval) = TRUE;
+            return HOOK_SKIP_ORIGINAL;
+        }
+        break;
+    case 0x40: // Checking if the player has completed Goron Mines
+        if (getStageID() == Kakariko_Village_Interiors) {
+            // Return true so Barnes will sell bombs no matter what
+            *static_cast<BOOL*>(retval) = TRUE;
+            return HOOK_SKIP_ORIGINAL;
+        }
+        break;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcFChkEvtBit(ModContext*, void* args, void* retval, void*) {
+    u32 i_no = mods::arg<u32>(args, 0);
+
+    switch (i_no) {
+    case 0x169: // Checking if Raised Mirror in Mirror Chamber
+        // Only let Auru despawn in randomizer if we already collected his item
+        if (getStageID() == Lake_Hylia) {
+            *static_cast<BOOL*>(retval) = dComIfGs_isEventBit(GOT_AURUS_MEMO);
+            return HOOK_SKIP_ORIGINAL;
+        }
+        break;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcBansIsDelete(ModContext*, void* args, void* retval, void*) {
+    daNpc_Bans_c* i_this = mods::arg<daNpc_Bans_c*>(args, 0);
+
+    switch (i_this->mType) {
+    case 3: // MAKING_BOMBS
+        *static_cast<BOOL*>(retval) = TRUE;
+        return HOOK_SKIP_ORIGINAL;
+    case 4: // SHOP
+        *static_cast<BOOL*>(retval) = FALSE;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcFOrderEvent(ModContext*, void* args, void* retval, void*) {
+    daNpcF_c* i_this = mods::arg<daNpcF_c*>(args, 0);
+    int& i_forceSpeak = mods::arg_ref<int>(args, 1);
+    u16 i_priority = mods::arg<u16>(args, 4);
+
+    // kinda hacky way to check for the state where Bo is trying to talk after getting Iron Boots
+    const std::string arcName = i_this->eventInfo.getArchiveName();
+    if (arcName == "Bou4" && i_priority == 40) {
+        i_forceSpeak = FALSE;
+    }
+
+    return HOOK_CONTINUE;
+}
+
 }
 
 ModResult initialize() {
@@ -1465,6 +1554,14 @@ ModResult initialize() {
     ADD_HOOK_POST(changeScene4Event, hookPostChangeScene4Event);
     ADD_HOOK_PRE(stage_playerInit, hookPreStagePlayerInit);
 
+    ADD_HOOK_POST(Kytag08_Execute, hookPostKytag08Execute);
+
+    ADD_HOOK_PRE(NpcT_chkEvtBit, hookPreNpcTChkEvtBit);
+    ADD_HOOK_PRE(NpcF_chkEvtBit, hookPreNpcFChkEvtBit);
+    ADD_HOOK_PRE(daNpcF_c__orderEvent, hookPreNpcFOrderEvent);
+
+    ADD_HOOK_PRE(daNpc_Bans_c__isDelete, hookPreNpcBansIsDelete);
+
     return MOD_OK;
 }
 
@@ -1521,6 +1618,14 @@ ModResult uninstall() {
 
     mods::hook::uninstall<changeScene4Event>(svc_hook);
     mods::hook::uninstall<stage_playerInit>(svc_hook);
+
+    mods::hook::uninstall<Kytag08_Execute>(svc_hook);
+
+    mods::hook::uninstall<NpcT_chkEvtBit>(svc_hook);
+    mods::hook::uninstall<NpcF_chkEvtBit>(svc_hook);
+    mods::hook::uninstall<daNpcF_c__orderEvent>(svc_hook);
+
+    mods::hook::uninstall<daNpc_Bans_c__isDelete>(svc_hook);
 
     return MOD_OK;
 }
