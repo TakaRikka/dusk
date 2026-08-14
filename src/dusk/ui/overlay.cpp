@@ -326,27 +326,27 @@ void Overlay::update() {
                 mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigY(PAD_1))
             {
                 if (m_speedrunInfo.m_isRunStarted) {
-                    m_speedrunInfo.m_endTimestamp = OSGetNativeTime() - m_speedrunInfo.m_startTimestamp;
-                    m_speedrunInfo.m_isRunStarted = false;
+                    m_speedrunInfo.stopRun();
                 }
             }
 
-            OSTime elapsedTime = 0;
+            OSTime rtaElapsedTime = 0;
             if (m_speedrunInfo.m_isRunStarted) {
-                elapsedTime = OSGetNativeTime() - m_speedrunInfo.m_startTimestamp;
-            } else if (m_speedrunInfo.m_endTimestamp != 0) {
-                elapsedTime = m_speedrunInfo.m_endTimestamp;
+                rtaElapsedTime = OSGetNativeTime() - m_speedrunInfo.m_rtaStartTimestamp;
+            } else if (m_speedrunInfo.m_rtaTimer != 0) {
+                rtaElapsedTime = m_speedrunInfo.m_rtaTimer;
             }
 
-            if (!m_speedrunInfo.m_isPauseIGT) {
-                m_speedrunInfo.m_igtTimer = elapsedTime - m_speedrunInfo.m_totalLoadTime;
+            if (m_speedrunInfo.m_isRunStarted && !m_speedrunInfo.m_isPauseIGT) {
+                m_speedrunInfo.m_igtTimer = OSGetTime() - m_speedrunInfo.m_igtStartTimestamp -
+                                            m_speedrunInfo.m_totalLoadTime;
             }
 
             mSpeedrunTimer->SetAttribute("open", "");
 
             if (getSettings().game.showSpeedrunRTATimer) {
                 mSpeedrunRta->SetAttribute("open", "");
-                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatElapsedTime(elapsedTime))));
+                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatElapsedTime(rtaElapsedTime))));
             } else {
                 mSpeedrunRta->RemoveAttribute("open");
             }
