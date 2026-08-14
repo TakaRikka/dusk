@@ -326,14 +326,14 @@ void Overlay::update() {
                 mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigY(PAD_1))
             {
                 if (m_speedrunInfo.m_isRunStarted) {
-                    m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+                    m_speedrunInfo.m_endTimestamp = OSGetNativeTime() - m_speedrunInfo.m_startTimestamp;
                     m_speedrunInfo.m_isRunStarted = false;
                 }
             }
 
             OSTime elapsedTime = 0;
             if (m_speedrunInfo.m_isRunStarted) {
-                elapsedTime = OSGetTime() - m_speedrunInfo.m_startTimestamp;
+                elapsedTime = OSGetNativeTime() - m_speedrunInfo.m_startTimestamp;
             } else if (m_speedrunInfo.m_endTimestamp != 0) {
                 elapsedTime = m_speedrunInfo.m_endTimestamp;
             }

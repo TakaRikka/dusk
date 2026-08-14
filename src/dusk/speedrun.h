@@ -6,12 +6,12 @@ namespace dusk {
 struct SpeedrunInfo {
     void startRun() {
         m_isRunStarted = true;
-        m_startTimestamp = OSGetTime();
+        m_startTimestamp = OSGetNativeTime();
     }
 
     void stopRun() {
         m_isRunStarted = false;
-        m_endTimestamp = OSGetTime() - m_startTimestamp;
+        m_endTimestamp = OSGetNativeTime() - m_startTimestamp;
     }
 
     void reset() {

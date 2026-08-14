@@ -394,7 +394,7 @@ static TransientSettings g_transientSettings = {
         .colliderViewOpacity = 50.0f,
         .drawRange = 100.0f,
     },
-    .skipFrameRateLimit = false,
+    .turboMode = false,
 };
 
 TransientSettings& getTransientSettings() {

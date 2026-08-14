@@ -2035,7 +2035,7 @@ void flagFile_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
     }
     case 102: {
         OSCalendarTime time;
-        OSTicksToCalendarTime(OSGetTime(), &time);
+        OSTicksToCalendarTime(DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime()), &time);
 
         const char* start_stage_name = dComIfGp_getStartStageName();
         char filename[64];
