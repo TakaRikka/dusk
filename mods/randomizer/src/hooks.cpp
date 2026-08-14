@@ -14,12 +14,16 @@
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_b_bq.h"
 #include "d/actor/d_a_door_shutter.h"
+#include "d/actor/d_a_e_md.h"
 #include "d/actor/d_a_e_mk.h"
 #include "d/actor/d_a_kytag08.h"
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_npc_bans.h"
 #include "d/actor/d_a_tag_kmsg.h"
 #include "d/actor/d_a_npc_fairy.h"
+#include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_npc_shad.h"
+#include "d/actor/d_a_npc_yelia.h"
 #include "d/actor/d_a_npc_ykm.h"
 #include "d/actor/d_a_npc_ykw.h"
 #include "d/d_door_param2.h"
@@ -29,6 +33,7 @@
 #include "d/d_msg_object.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
+#include "c/c_damagereaction.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
@@ -96,8 +101,19 @@ DEFINE_HOOK(&daNpc_Bans_c::isDelete, daNpc_Bans_c__isDelete);
 
 DEFINE_HOOK(&daNpc_Fairy_c::AppearDemoCall, daNpc_Fairy_c__AppearDemoCall);
 
+DEFINE_HOOK(&daNpcShad_c::Create, daNpcShad_c__Create);
+DEFINE_HOOK(&daNpcShad_c::wait_type1, daNpcShad_c__wait_type1);
+
+DEFINE_HOOK(&daNpc_Yelia_c::cutTakeWoodStatue, daNpc_Yelia_c__cutTakeWoodStatue);
+DEFINE_HOOK(&dSv_player_item_c::setWarashibeItem, dSv_player_item_c__setWarashibeItem);
+
 DEFINE_HOOK(&daNpc_ykM_c::isDelete, daNpc_ykM_c__isDelete);
 DEFINE_HOOK(&daNpc_ykW_c::isDelete, daNpc_ykW_c__isDelete);
+
+DEFINE_HOOK_SYMBOL("daE_MD_Create", int(fopAc_ac_c*), daE_MD_c__create);
+
+DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
+DEFINE_HOOK_SYMBOL("daObjMasterSword_Execute", int(daObjMasterSword_c*), daObjMasterSword_c__execute);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -1452,6 +1468,25 @@ HookAction hookPreNpcTChkEvtBit(ModContext*, void* args, void* retval, void*) {
 HookAction hookPreNpcFChkEvtBit(ModContext*, void* args, void* retval, void*) {
     u32 i_no = mods::arg<u32>(args, 0);
 
+    // shad handling
+    if (std::strcmp(dComIfGp_getStartStageName(), "R_SP209") == 0) {
+        switch (i_no) {
+        case 0x10B:
+            // spawn even if vanilla city requirements aren't met
+            *static_cast<BOOL*>(retval) = TRUE;
+            return HOOK_SKIP_ORIGINAL;
+        case 0x12E:
+        case 0x12F:
+            // skip vanilla cannon spawn failure and move checks
+            *static_cast<BOOL*>(retval) = FALSE;
+            return HOOK_SKIP_ORIGINAL;
+        case 0x311:
+            // despawn after custom flag is set
+            *static_cast<BOOL*>(retval) = dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x333]);
+            return HOOK_SKIP_ORIGINAL;
+        }
+    }
+
     switch (i_no) {
     case 0x169: // Checking if Raised Mirror in Mirror Chamber
         // Only let Auru despawn in randomizer if we already collected his item
@@ -1521,6 +1556,144 @@ void hookPostYkWIsDelete(ModContext*, void* args, void* retval, void*) {
     }
 }
 
+u8 hookNpcShadWaitType1_patchItemNo = dItemNo_NONE_e;
+bool hookNpcShadWaitType1_isPatchItemNo = false;
+HookAction hookPreNpcShadWaitType1(ModContext*, void* args, void* retval, void*) {
+    dEvt_control_c* event = dComIfGp_getEvent();
+    hookNpcShadWaitType1_isPatchItemNo = false;
+
+    if (event->mPreItemNo >= dItemNo_Randomizer_ANCIENT_DOCUMENT_e) {
+        // backup original item no so we can restore it in post hook
+        hookNpcShadWaitType1_patchItemNo = event->mPreItemNo;
+
+        // force item no so that the dominion rod check is forced regardless
+        // of which skybook you have
+        event->mPreItemNo = dItemNo_Randomizer_ANCIENT_DOCUMENT_e;
+
+        hookNpcShadWaitType1_isPatchItemNo = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostNpcShadWaitType1(ModContext*, void* args, void* retval, void*) {
+    if (hookNpcShadWaitType1_isPatchItemNo) {
+        dComIfGp_getEvent()->mPreItemNo = hookNpcShadWaitType1_patchItemNo;
+        hookNpcShadWaitType1_isPatchItemNo = false;
+    }
+}
+
+// kinda ugly way to handle the wood statue. using a flag here to tell when its the right time
+// to be overriding the setWarashibeItem call with offWarashibeItem instead. maybe look into
+// a better solution later
+bool hookYeliaTakeWoodStatue_isOffWarashibeItem = false;
+HookAction hookPreNpcYeliaCutTakeWoodStatue(ModContext*, void* args, void*, void*) {
+    hookYeliaTakeWoodStatue_isOffWarashibeItem = false;
+
+    auto* i_this = mods::arg<daNpc_Yelia_c*>(args, 0);
+    const int i_staffId = mods::arg<int>(args, 1);
+    const int yeliaStaffId = dComIfGp_evmng_getMyStaffId("Yelia", i_this, -1);
+    if (i_staffId != yeliaStaffId || !dComIfGp_getEventManager().getIsAddvance(i_staffId)) {
+        return HOOK_CONTINUE;
+    }
+
+    int* prm = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
+    if (prm != nullptr && *prm == 99) {
+        hookYeliaTakeWoodStatue_isOffWarashibeItem = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostNpcYeliaCutTakeWoodStatue(ModContext*, void*, void*, void*) {
+    hookYeliaTakeWoodStatue_isOffWarashibeItem = false;
+}
+
+HookAction hookPreSetWarashibeItem(ModContext*, void* args, void*, void*) {
+    if (!hookYeliaTakeWoodStatue_isOffWarashibeItem) {
+        return HOOK_CONTINUE;
+    }
+
+    const u8 itemNo = mods::arg<u8>(args, 1);
+    if (itemNo == dItemNo_NONE_e) {
+        offWarashibeItem(dItemNo_Randomizer_WOOD_STATUE_e);
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+// kinda hacky, force the SkipInfo check to always fail so that the armor always gets created,
+// then restore the original SkipInfo afterward. needed to make the ball and chain check respawn
+// if the player leaves the room without grabbing it
+daE_MD_c* hookEMdCreate_skipActor = nullptr;
+u8 hookEMdCreate_prevSkipInfo = 0;
+HookAction hookPreEMdCreate(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daE_MD_c*>(args, 0);
+    if (cDmr_SkipInfo == 0 || i_this->current.pos.z <= -1500.0f) {
+        return HOOK_CONTINUE;
+    }
+
+    hookEMdCreate_skipActor = i_this;
+    hookEMdCreate_prevSkipInfo = cDmr_SkipInfo;
+    cDmr_SkipInfo = 0;
+    return HOOK_CONTINUE;
+}
+
+void hookPostEMdCreate(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daE_MD_c*>(args, 0);
+    if (hookEMdCreate_skipActor != i_this) {
+        return;
+    }
+
+    cDmr_SkipInfo = hookEMdCreate_prevSkipInfo;
+    hookEMdCreate_skipActor = nullptr;
+    hookEMdCreate_prevSkipInfo = 0;
+}
+
+// functions are simple enough that replacing isn't too bad
+// todo: item service needs to be properly hooked up to this check i think instead of
+// using "randomizer_getItemAtLocation"
+void hookReplaceMasterSwordExecuteWait(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
+
+    if (daPy_getPlayerActorClass()->checkPriActorOwn(i_this)) {
+        for (int i = 0; i < dComIfGp_getAttention()->GetActionCount(); i++) {
+            if (dComIfGp_getAttention()->ActionTarget(i) == i_this) {
+                if (dComIfGp_getAttention()->getActionBtnB() != NULL &&
+                    dComIfGp_getAttention()->getActionBtnB()->mType == fopAc_attn_CARRY_e)
+                {
+                    dComIfGp_setDoStatusForce(8, 0);
+                }
+            }
+        }
+    }
+
+    if (fopAcM_checkCarryNow(i_this)) {
+        u8 itemToGive = randomizer_getItemAtLocation("Sacred Grove Pedestal Master Sword");
+        g_randomizerState.addItemToEventQueue(itemToGive);
+
+        itemToGive = randomizer_getItemAtLocation("Sacred Grove Pedestal Shadow Crystal");
+        g_randomizerState.addItemToEventQueue(itemToGive);
+
+        dComIfGs_onTmpBit(0x820);
+        dComIfGs_onEventBit(0x2120);
+    }
+}
+
+HookAction hookPreMasterSwordExecute(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
+
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::tempBitLabels[73])) {
+        // Don't automatically give the master sword in randomizer
+        fopAcM_delete(i_this);
+        *static_cast<int*>(retval) = 1;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
 }
 
 ModResult initialize() {
@@ -1534,6 +1707,12 @@ ModResult initialize() {
     if (mods::hook::add_post<originalFn>(hookFn) != MOD_OK) {         \
         mods::log::error("Failed to add post-hook for " #originalFn); \
         return MOD_ERROR;                                             \
+    }
+
+#define ADD_HOOK_REPLACE(originalFn, hookFn)                              \
+    if (mods::hook::replace<originalFn>(hookFn) != MOD_OK) {             \
+        mods::log::error("Failed to add replace-hook for " #originalFn); \
+        return MOD_ERROR;                                                \
     }
 
     ADD_HOOK_PRE(dFile_select_c__selectDataNameMove, hookPreSelectDataNameMove);
@@ -1599,8 +1778,21 @@ ModResult initialize() {
 
     ADD_HOOK_POST(daNpc_Fairy_c__AppearDemoCall, hookPostFairyAppearDemoCall);
 
+    ADD_HOOK_PRE(daNpcShad_c__wait_type1, hookPreNpcShadWaitType1);
+    ADD_HOOK_POST(daNpcShad_c__wait_type1, hookPostNpcShadWaitType1);
+
+    ADD_HOOK_PRE(daNpc_Yelia_c__cutTakeWoodStatue, hookPreNpcYeliaCutTakeWoodStatue);
+    ADD_HOOK_POST(daNpc_Yelia_c__cutTakeWoodStatue, hookPostNpcYeliaCutTakeWoodStatue);
+    ADD_HOOK_PRE(dSv_player_item_c__setWarashibeItem, hookPreSetWarashibeItem);
+
     ADD_HOOK_POST(daNpc_ykM_c__isDelete, hookPostYkMIsDelete);
     ADD_HOOK_POST(daNpc_ykW_c__isDelete, hookPostYkWIsDelete);
+
+    ADD_HOOK_PRE(daE_MD_c__create, hookPreEMdCreate);
+    ADD_HOOK_POST(daE_MD_c__create, hookPostEMdCreate);
+
+    ADD_HOOK_REPLACE(daObjMasterSword_c__executeWait, hookReplaceMasterSwordExecuteWait);
+    ADD_HOOK_PRE(daObjMasterSword_c__execute, hookPreMasterSwordExecute);
 
     return MOD_OK;
 }
@@ -1669,8 +1861,19 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daNpc_Fairy_c__AppearDemoCall>(svc_hook);
 
+    mods::hook::uninstall<daNpcShad_c__Create>(svc_hook);
+    mods::hook::uninstall<daNpcShad_c__wait_type1>(svc_hook);
+
+    mods::hook::uninstall<daNpc_Yelia_c__cutTakeWoodStatue>(svc_hook);
+    mods::hook::uninstall<dSv_player_item_c__setWarashibeItem>(svc_hook);
+
     mods::hook::uninstall<daNpc_ykM_c__isDelete>(svc_hook);
     mods::hook::uninstall<daNpc_ykW_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daE_MD_c__create>(svc_hook);
+
+    mods::hook::uninstall<daObjMasterSword_c__executeWait>(svc_hook);
+    mods::hook::uninstall<daObjMasterSword_c__execute>(svc_hook);
 
     return MOD_OK;
 }
