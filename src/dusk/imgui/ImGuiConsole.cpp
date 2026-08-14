@@ -240,22 +240,29 @@ namespace dusk {
 
     void ImGuiConsole::UpdateSettings() {
         static bool previousTurboActive = false;
+        static bool previousSlowActive = false;
         static float previousTimeScale = 1.0f;
 
-        const bool turboActive = getSettings().game.enableTurboKeybind &&
-                                 (ImGui::IsKeyDown(ImGuiKey_Tab) ||
-                                     getActionBindHoldAnyPort(ActionBinds::TURBO_SPEED_BUTTON));
+        const bool turboBound = isActionBoundAnyPort(ActionBinds::TURBO_SPEED_BUTTON);
+        const bool turboActive =
+            getSettings().game.enableTurboKeybind &&
+            (turboBound ? getActionBindHoldAnyPort(ActionBinds::TURBO_SPEED_BUTTON) :
+                          ImGui::IsKeyDown(ImGuiKey_Tab));
+        const bool slowDown = turboActive && ImGui::GetIO().KeyShift;
         if (turboActive != previousTurboActive) {
             getTransientSettings().turboMode = turboActive;
             presentation::update_frame_rate_preference();
             if (turboActive) {
                 previousTimeScale = aurora_get_timescale();
-                aurora_set_timescale(kTurboTimeScale);
+                aurora_set_timescale(slowDown ? 1.f / kTurboTimeScale : kTurboTimeScale);
             } else {
                 aurora_set_timescale(previousTimeScale);
             }
-            previousTurboActive = turboActive;
+        } else if (turboActive && slowDown != previousSlowActive) {
+            aurora_set_timescale(slowDown ? 1.f / kTurboTimeScale : kTurboTimeScale);
         }
+        previousTurboActive = turboActive;
+        previousSlowActive = slowDown;
 
         if (frame_interp::get_ui_tick_pending() && mDoMain::developmentMode == 1 && (mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == (PAD_TRIGGER_R | PAD_TRIGGER_L) && mDoCPd_c::getTrigY(PAD_1)) {
             getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
@@ -289,7 +296,7 @@ namespace dusk {
                 m_isHidden = true;
             }
         }
-        
+
         bool showMenu = !m_isHidden;
 
         // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,
