@@ -1,7 +1,7 @@
 #include <dolphin/dolphin.h>
 #include <dolphin/demo.h>
 
-u32 DEMOFontBitmap[768] ATTRIBUTE_ALIGN(32) = {
+ATTRIBUTE_ALIGN(32) u32 DEMOFontBitmap[768] = {
     0x00000000,
     0x00000000,
     0x00000000,

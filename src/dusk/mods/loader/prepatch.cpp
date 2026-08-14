@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 
 #if DUSK_HAS_PREPATCH
 #include <mach-o/dyld.h>
@@ -19,7 +19,7 @@
 namespace dusk::mods::prepatch {
 namespace {
 
-aurora::Module Log("dusk::mods::prepatch");
+constexpr borealis::Log Log{"dusk::mods::prepatch"};
 
 constexpr std::string_view kSiteMagic = "PS01";
 constexpr size_t kSiteHeaderSize = 12;

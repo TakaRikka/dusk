@@ -2,7 +2,7 @@
 #include "slot_map.hpp"
 
 #include "aurora/dvd.h"
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/overlay.h"
 
@@ -19,7 +19,7 @@ using namespace std::string_literals;
 namespace dusk::mods::svc {
 namespace {
 
-aurora::Module Log("dusk::mods::overlay");
+constexpr borealis::Log Log{"dusk::mods::overlay"};
 
 struct OverlayFileData {
     std::string bundlePath;

@@ -262,7 +262,7 @@ void WPADiManageHandler(OSAlarm*, OSContext*) {
     BTA_HhGetAclQueueInfo();
 }
 
-u8 __WPADiManageHandlerStack[4096] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) u8 __WPADiManageHandlerStack[4096];
 
 void WPADiManageHandler0(OSAlarm* alarm, OSContext* context) {
     OSSwitchFiberEx((u32)alarm, (u32)context, 0, 0, (u32)WPADiManageHandler, (u32)(__WPADiManageHandlerStack + sizeof(__WPADiManageHandlerStack)));

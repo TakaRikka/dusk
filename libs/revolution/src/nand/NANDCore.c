@@ -33,8 +33,8 @@ enum LibState {
 };
 
 static enum LibState s_libState = STATE_NOT_INITIALIZED;
-static char s_currentDir[64] ATTRIBUTE_ALIGN(32) = "/";
-static char s_homeDir[64] ATTRIBUTE_ALIGN(32) = "";
+ATTRIBUTE_ALIGN(32) static char s_currentDir[64] = "/";
+ATTRIBUTE_ALIGN(32) static char s_homeDir[64] = "";
 
 static BOOL nandOnShutdown(BOOL final, u32 event);
 void nandConvertPath(char* abspath, const char* wd, const char* relpath);
@@ -262,7 +262,7 @@ s32 nandConvertErrorCode(const ISFSError err) {
     for (; i < sizeof(ERRMAP) / 4; i = i + 2) {
         if (ERRMAP[i] == err) {
             if (err == ISFS_ERROR_ECC_CRIT || err == ISFS_ERROR_HMAC || err == ISFS_ERROR_UNKNOWN || err == IOS_ERROR_UNKNOWN || err == IOS_ERROR_ECC_CRIT) {
-                char buf[128] ATTRIBUTE_ALIGN(64);
+                ATTRIBUTE_ALIGN(64) char buf[128];
                 sprintf(buf, "ISFS error code: %d", err);
                 NANDLoggingAddMessageAsync(nandLoggingCallback, err, buf);
             }
@@ -279,7 +279,7 @@ s32 nandConvertErrorCode(const ISFSError err) {
 
     OSReport("CAUTION!  Unexpected error code [%d] was found.\n", err);
     {
-        char buf[128] ATTRIBUTE_ALIGN(64);
+        ATTRIBUTE_ALIGN(64) char buf[128];
         sprintf(buf, "ISFS unexpected error code: %d", err);
         NANDLoggingAddMessageAsync(nandLoggingCallback, err, buf);
     }

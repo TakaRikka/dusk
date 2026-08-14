@@ -1421,30 +1421,22 @@ set(DUSK_FILES
         src/dusk/achievements.cpp
         src/dusk/action_bindings.cpp
         src/dusk/action_bindings.h
-        src/dusk/android_frame_rate.cpp
-        src/dusk/android_frame_rate.hpp
         src/dusk/asserts.cpp
         src/dusk/autosave.cpp
         src/dusk/config.cpp
         src/dusk/config.hpp
-        src/dusk/crash_handler.cpp
-        src/dusk/crash_reporting.cpp
         src/dusk/data.cpp
         src/dusk/data.hpp
-        src/dusk/discord.cpp
-        src/dusk/discord.hpp
         src/dusk/discord_presence.cpp
         src/dusk/dvd_asset.cpp
         src/dusk/dvd_asset.hpp
         src/dusk/extras.c
-        src/dusk/file_select.cpp
-        src/dusk/file_select.hpp
         src/dusk/frame_interpolation.cpp
         src/dusk/game_clock.cpp
         src/dusk/gamepad_color.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
-        src/dusk/http/http.hpp
+        src/dusk/hq_minimap.cpp
         src/dusk/imgui/ImGuiActorSpawner.cpp
         src/dusk/imgui/ImGuiBloomWindow.cpp
         src/dusk/imgui/ImGuiBloomWindow.hpp
@@ -1481,6 +1473,9 @@ set(DUSK_FILES
         src/dusk/mods/loader/native_module.hpp
         src/dusk/mods/loader/prepatch.cpp
         src/dusk/mods/loader/prepatch.hpp
+        src/dusk/mods/item.hpp
+        src/dusk/mods/item_checks.cpp
+        src/dusk/mods/item_gives.cpp
         src/dusk/mods/log_buffer.cpp
         src/dusk/mods/log_buffer.hpp
         src/dusk/mods/manifest.cpp
@@ -1493,6 +1488,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/gfx.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/item.cpp
+        src/dusk/mods/svc/item.hpp
         src/dusk/mods/svc/log.cpp
         src/dusk/mods/svc/overlay.cpp
         src/dusk/mods/svc/registry.cpp
@@ -1508,6 +1505,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/stage.cpp
         src/dusk/mods/svc/stage.hpp
         src/dusk/mouse.cpp
+        src/dusk/presentation.cpp
+        src/dusk/presentation.hpp
         src/dusk/scope_guard.hpp
         src/dusk/settings.cpp
         src/dusk/speedrun.cpp
@@ -1583,19 +1582,10 @@ set(DUSK_FILES
         src/dusk/ui/warp.hpp
         src/dusk/ui/window.cpp
         src/dusk/ui/window.hpp
-        src/dusk/update_check.cpp
-        src/dusk/update_check.hpp
         src/dusk/version.cpp
         src/dusk/utilities.cpp
         src/helpers/batch.cpp
         src/helpers/endian.cpp
         src/helpers/offset_ptr.cpp
         src/helpers/string.cpp
-)
-
-set(DUSK_HTTP_BACKEND_FILES
-        src/dusk/http/no_backend.cpp
-        src/dusk/http/curl.cpp
-        src/dusk/http/winhttp.cpp
-        src/dusk/http/url_session.mm
 )

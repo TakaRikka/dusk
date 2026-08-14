@@ -1729,8 +1729,9 @@ BOOL daNpc_zrZ_c::ECut_clothesGet(int i_staffID) {
             }
             item_no = 0;
             if (mFlow.getEventId(&item_no) == 1) {
-                mItemID = fopAcM_createItemForPresentDemo(&current.pos, item_no,
-                                                          0, -1, -1, NULL, NULL);
+                DUSK_ITEM_CHECK("zora_armor", item_no, this);
+                mItemID = fopAcM_createItemForPresentDemo(
+                    &current.pos, item_no, 0, -1, -1, NULL, NULL DUSK_GIVE_TAG("zora_armor"));
             }
             break;
 

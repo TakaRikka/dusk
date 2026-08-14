@@ -1,5 +1,7 @@
 #pragma once
 
+#include <borealis/data.hpp>
+
 #include <filesystem>
 #include <string>
 
@@ -15,20 +17,12 @@
 #define DUSK_CAN_OPEN_DATA_FOLDER 0
 #endif
 
-#if (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST)
-#define DUSK_CAN_CHANGE_DATA_FOLDER 0
-#else
-#define DUSK_CAN_CHANGE_DATA_FOLDER 1
-#endif
-
 namespace dusk::data {
 
-struct Paths {
-    std::filesystem::path userPath;
-    std::filesystem::path cachePath;
-};
+using Paths = borealis::data::Paths;
 
-Paths initialize_data();
+borealis::data::Manager& manager();
+Paths initialize_data(const std::filesystem::path& userDirectoryOverride = {});
 std::filesystem::path base_path_relative(const std::filesystem::path& path);
 std::filesystem::path configured_data_path();
 std::filesystem::path cache_path();

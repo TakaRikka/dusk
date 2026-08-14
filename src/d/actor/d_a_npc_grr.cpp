@@ -1338,7 +1338,9 @@ int daNpc_grR_c::talk(void* param_1) {
             if (bVar1 && talkProc(NULL, TRUE, NULL)) {
                 if (mType == TYPE_0) {
                     if (mFlow.getEventId(&i_itemNo) == 1) {
-                        mItemID = fopAcM_createItemForPresentDemo(&current.pos, i_itemNo, 0, -1, -1, NULL, NULL);
+                        DUSK_ITEM_CHECK("key_shard_3:D_MN04", i_itemNo, this);
+                        mItemID = fopAcM_createItemForPresentDemo(&current.pos, i_itemNo, 0, -1, -1,
+                            NULL, NULL DUSK_GIVE_TAG("key_shard_3:D_MN04"));
 
                         if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                             s16 i_eventID = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);

@@ -136,7 +136,7 @@ void TRK__read_aram(__REGISTER int c, __REGISTER u32 p2, void* p3) {
 }
 
 void TRK__write_aram(__REGISTER int c, __REGISTER u32 p2, void* p3) {
-    u8 buff[32] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 buff[32];
     u32 err;
     __REGISTER int count = c;
     __REGISTER u32 bf;
