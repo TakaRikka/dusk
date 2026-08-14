@@ -19,6 +19,9 @@
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_npc_bans.h"
 #include "d/actor/d_a_tag_kmsg.h"
+#include "d/actor/d_a_npc_fairy.h"
+#include "d/actor/d_a_npc_ykm.h"
+#include "d/actor/d_a_npc_ykw.h"
 #include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
@@ -90,6 +93,11 @@ DEFINE_HOOK(&daNpcF_chkEvtBit, NpcF_chkEvtBit);
 DEFINE_HOOK(&daNpcF_c::orderEvent, daNpcF_c__orderEvent);
 
 DEFINE_HOOK(&daNpc_Bans_c::isDelete, daNpc_Bans_c__isDelete);
+
+DEFINE_HOOK(&daNpc_Fairy_c::AppearDemoCall, daNpc_Fairy_c__AppearDemoCall);
+
+DEFINE_HOOK(&daNpc_ykM_c::isDelete, daNpc_ykM_c__isDelete);
+DEFINE_HOOK(&daNpc_ykW_c::isDelete, daNpc_ykW_c__isDelete);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -1486,6 +1494,33 @@ HookAction hookPreNpcFOrderEvent(ModContext*, void* args, void* retval, void*) {
     return HOOK_CONTINUE;
 }
 
+void hookPostFairyAppearDemoCall(ModContext*, void* args, void* retval, void*) {
+    daNpc_Fairy_c* i_this = mods::arg<daNpc_Fairy_c*>(args, 0);
+
+    // randomizer overrides EVT_APPEAR_50F_04 set to always be EVT_APPEAR_50F_01
+    if (i_this->field_0xff4 == 12) {
+        i_this->field_0xff4 = 9;
+    }
+}
+
+void hookPostYkMIsDelete(ModContext*, void* args, void* retval, void*) {
+    daNpc_ykM_c* i_this = mods::arg<daNpc_ykM_c*>(args, 0);
+
+    if (i_this->mType == daNpc_ykM_c::TYPE_COOK) {
+        // We don't want cooking Yeto to leave the dungeon, even if the BK is obtained.
+        *static_cast<BOOL*>(retval) = FALSE;
+    }
+}
+
+void hookPostYkWIsDelete(ModContext*, void* args, void* retval, void*) {
+    daNpc_ykW_c* i_this = mods::arg<daNpc_ykW_c*>(args, 0);
+
+    if (i_this->field_0xf80 == 1) {
+        // We don't want Yeta to leave the dungeon, even if the BK is obtained.
+        *static_cast<BOOL*>(retval) = FALSE;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -1562,6 +1597,11 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(daNpc_Bans_c__isDelete, hookPreNpcBansIsDelete);
 
+    ADD_HOOK_POST(daNpc_Fairy_c__AppearDemoCall, hookPostFairyAppearDemoCall);
+
+    ADD_HOOK_POST(daNpc_ykM_c__isDelete, hookPostYkMIsDelete);
+    ADD_HOOK_POST(daNpc_ykW_c__isDelete, hookPostYkWIsDelete);
+
     return MOD_OK;
 }
 
@@ -1626,6 +1666,11 @@ ModResult uninstall() {
     mods::hook::uninstall<daNpcF_c__orderEvent>(svc_hook);
 
     mods::hook::uninstall<daNpc_Bans_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daNpc_Fairy_c__AppearDemoCall>(svc_hook);
+
+    mods::hook::uninstall<daNpc_ykM_c__isDelete>(svc_hook);
+    mods::hook::uninstall<daNpc_ykW_c__isDelete>(svc_hook);
 
     return MOD_OK;
 }
