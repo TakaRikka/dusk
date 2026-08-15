@@ -31,6 +31,7 @@ using ActionBindsMap = std::unordered_map<ActionBinds, ActionBindData>;
 ActionBindsMap& getActionBinds();
 
 bool isActionBound(ActionBinds action, u32 port);
+bool isActionBoundAnyPort(ActionBinds action);
 
 void updateActionBindings();
 

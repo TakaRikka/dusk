@@ -454,6 +454,10 @@ static int fopAc_Create(void* i_this) {
         actor->cullType = profile->cullType;
 
         fopAcM_prm_class* append = fopAcM_GetAppend(actor);
+#if TARGET_PC
+        actor->mItemGiveTag = append != NULL ? append->mItemGiveTag : 0;
+        actor->mItemGiveOriginalNo = append != NULL ? append->mItemGiveOriginalNo : 0xFF;
+#endif
         if (append != NULL) {
             fopAcM_SetParam(actor, append->base.parameters);
             actor->home.pos = append->base.position;

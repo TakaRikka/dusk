@@ -213,6 +213,7 @@ void ModLoader::init_services() {
             &svc::g_gfxModule,
             &svc::g_saveModule,
             &svc::g_stageModule,
+            &svc::g_itemModule,
         })
     {
         svc::register_module(*module);

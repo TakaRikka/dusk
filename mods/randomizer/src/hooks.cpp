@@ -5,20 +5,53 @@
 #include "flags.h"
 #include "stages.h"
 #include "tools.h"
+#include "item.hpp"
 #include "item_ids.h"
 
 #include <mods/svc/hook.hpp>
 #include <mods/svc/log.hpp>
 
+#include "c/c_damagereaction.h"
 #include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_b_bq.h"
+#include "d/actor/d_a_demo_item.h"
+#include "d/actor/d_a_door_shutter.h"
+#include "d/actor/d_a_e_md.h"
+#include "d/actor/d_a_e_mk.h"
+#include "d/actor/d_a_kytag08.h"
+#include "d/actor/d_a_mg_rod.h"
+#include "d/actor/d_a_npc4.h"
+#include "d/actor/d_a_npc_bans.h"
+#include "d/actor/d_a_npc_fairy.h"
+#include "d/actor/d_a_npc_shad.h"
+#include "d/actor/d_a_npc_yelia.h"
+#include "d/actor/d_a_npc_ykm.h"
+#include "d/actor/d_a_npc_ykw.h"
+#include "d/actor/d_a_npc_zrc.h"
+#include "d/actor/d_a_npc_zrz.h"
+#include "d/actor/d_a_obj_bosswarp.h"
+#include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_obj_swBallC.h"
+#include "d/actor/d_a_obj_zra_rock.h"
+#include "d/actor/d_a_tag_kmsg.h"
+#include "d/actor/d_a_tbox2.h"
+#include "d/d_door_param2.h"
+#include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
+#include "d/d_gameover.h"
 #include "d/d_meter2_info.h"
+#include "d/d_msg_object.h"
+#include "d/d_s_name.h"
+#include "d/d_s_play.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "m_Do/m_Do_Reset.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
-DEFINE_HOOK(&dFile_select_c::nameInput2, dFile_select_c__nameInput2);
+
+DEFINE_HOOK(&dFile_info_c::setSaveData, dFile_info_c__setSaveData);
 
 DEFINE_HOOK(&dSv_event_c::isEventBit, dSv_event_c__isEventBit);
 DEFINE_HOOK(&dSv_event_c::onEventBit, dSv_event_c__onEventBit);
@@ -36,8 +69,12 @@ DEFINE_HOOK(&dSv_player_item_c::setLineUpItem, dSv_player_item_c__setLineUpItem)
 
 DEFINE_HOOK(&dSv_info_c::onSwitch, dSv_info_c__onSwitch);
 
-/*DEFINE_HOOK_SYMBOL("__Z21dComIfGp_setNextStagePKcsaafjiasii",
-    void(char const*, s16, s8, s8, f32, u32, int, s8, s16, int, int), setNextStage);*/
+#ifdef _MSVC_LANG
+#define setNextStage_sig "?dComIfGp_setNextStage@@YAXPEBDFCCMIHCFHH@Z"
+#else
+#define setNextStage_sig "_Z21dComIfGp_setNextStagePKcsaafjiasii"
+#endif
+DEFINE_HOOK_SYMBOL(setNextStage_sig, void(char const *, s16, s8, s8, f32, u32, int, s8, s16, int, int), setNextStage);
 
 DEFINE_HOOK_SYMBOL("daObj_Gb_Create", int(fopAc_ac_c*), ObjGb_Create);
 
@@ -50,7 +87,91 @@ DEFINE_HOOK(&CheckFieldItemCreateHeap, dItemData_CheckFieldItemCreateHeap);
 DEFINE_HOOK(&dEvt_control_c::talkEnd, dEvt_control_c__talkEnd);
 
 DEFINE_HOOK(&dComIfG_play_c::getLayerNo_common_common, dComIfG_play_c__getLayerNo_common_common);
+DEFINE_HOOK(&dComIfGs_onStageSwitch, onStageSwitch);
 
+extern void getItemFunc(u8);
+DEFINE_HOOK(&getItemFunc, dItem_getItemFunc);
+
+extern int checkItemGet(u8 i_itemNo, int i_default);
+DEFINE_HOOK(&checkItemGet, dItem_checkItemGet);
+
+DEFINE_HOOK(&daAlink_c::decideDoStatus, daAlink_c__decideDoStatus);
+DEFINE_HOOK_SYMBOL("daAlink_searchBouDoor", void*(fopAc_ac_c*, void*), searchBouDoor);
+DEFINE_HOOK(&daAlink_c::checkGroundSpecialMode, daAlink_c__checkGroundSpecialMode);
+DEFINE_HOOK(&daAlink_c::setGetItemFace, daAlink_c__setGetItemFace);
+DEFINE_HOOK(&daAlink_c::setGetSubBgm, daAlink_c__setGetSubBgm);
+DEFINE_HOOK(&daAlink_c::procCoGetItem, daAlink_c__procCoGetItem);
+DEFINE_HOOK(&daAlink_c::procCoWarpInit, daAlink_c__procCoWarpInit);
+
+DEFINE_HOOK_SYMBOL("b_bq_end", void(b_bq_class*), bq_end);
+
+DEFINE_HOOK(&daDoor20_c::checkOpenMsgDoor, daDoor20_c__checkOpenMsgDoor);
+
+DEFINE_HOOK_SYMBOL("demo_camera_end", void(e_mk_class*), e_mk_demo_camera_end);
+
+DEFINE_HOOK(&dStage_changeScene4Event, changeScene4Event);
+DEFINE_HOOK_SYMBOL("dStage_playerInit", int(dStage_dt_c*, void*, int, void*), stage_playerInit);
+
+DEFINE_HOOK_SYMBOL("daKytag08_Execute", int(kytag08_class*), Kytag08_Execute);
+
+DEFINE_HOOK(&daNpcT_chkEvtBit, NpcT_chkEvtBit);
+DEFINE_HOOK(&daNpcF_chkEvtBit, NpcF_chkEvtBit);
+DEFINE_HOOK(&daNpcF_c::orderEvent, daNpcF_c__orderEvent);
+
+DEFINE_HOOK(&daNpc_Bans_c::isDelete, daNpc_Bans_c__isDelete);
+
+DEFINE_HOOK(&daNpc_Fairy_c::AppearDemoCall, daNpc_Fairy_c__AppearDemoCall);
+
+DEFINE_HOOK(&daNpcShad_c::Create, daNpcShad_c__Create);
+DEFINE_HOOK(&daNpcShad_c::wait_type1, daNpcShad_c__wait_type1);
+
+DEFINE_HOOK(&daNpc_Yelia_c::cutTakeWoodStatue, daNpc_Yelia_c__cutTakeWoodStatue);
+DEFINE_HOOK(&dSv_player_item_c::setWarashibeItem, dSv_player_item_c__setWarashibeItem);
+
+DEFINE_HOOK(&daNpc_ykM_c::isDelete, daNpc_ykM_c__isDelete);
+DEFINE_HOOK(&daNpc_ykW_c::isDelete, daNpc_ykW_c__isDelete);
+
+DEFINE_HOOK_SYMBOL("daE_MD_Create", int(fopAc_ac_c*), daE_MD_c__create);
+
+DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
+DEFINE_HOOK_SYMBOL("daObjMasterSword_Execute", int(daObjMasterSword_c*), daObjMasterSword_c__execute);
+
+DEFINE_HOOK(&dScnName_c::changeGameScene, dScnName_c__changeGameScene);
+
+DEFINE_HOOK(&daNpc_zrZ_c::isDelete, daNpc_zrZ_c__isDelete);
+
+DEFINE_HOOK(&daTbox2_c::Create, daTbox2_c__Create);
+DEFINE_HOOK(&daTbox2_c::setGetDemoItem, daTbox2_c__setGetDemoItem);
+
+DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
+
+DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
+DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
+
+DEFINE_HOOK_SYMBOL("daDitem_Execute", int(daDitem_c*), daDitem_c__execute);
+
+DEFINE_HOOK(&daObjBossWarp_c::demoProc, daObjBossWarp_c__demoProc);
+
+DEFINE_HOOK_SYMBOL("lure_heart", void(dmg_rod_class*), mgRod_lure_heart);
+DEFINE_HOOK_SYMBOL("uki_catch", void(dmg_rod_class*), mgRod_uki_catch);
+
+#ifdef _MSVC_LANG
+#define setEmptyBottle_noarg_sig "?setEmptyBottle@dSv_player_item_c@@QEAAXXZ"
+#else
+#define setEmptyBottle_noarg_sig "_ZN17dSv_player_item_c14setEmptyBottleEv"
+#endif
+DEFINE_HOOK_SYMBOL(setEmptyBottle_noarg_sig, void(dSv_player_item_c*), dSv_player_item_c__setEmptyBottle);
+
+DEFINE_HOOK(&daNpc_zrC_c::isDelete, daNpc_zrC_c__isDelete);
+
+DEFINE_HOOK(&daObjZraRock_c::create, daObjZraRock_c__create);
+
+#ifdef _MSVC_LANG
+#define phase_1_dScnPly_sig "?phase_1@@YAHPAUdScnPly_c@@@Z" // sig is wrong?
+#else
+#define phase_1_dScnPly_sig "_Z7phase_1P9dScnPly_c"
+#endif
+// DEFINE_HOOK_SYMBOL(phase_1_dScnPly_sig, int(dScnPly_c*), phase_1__dScnPly_c);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -135,12 +256,41 @@ HookAction hookPreSelectDataNameMove(ModContext*, void* args, void* retval, void
     return HOOK_SKIP_ORIGINAL;
 }
 
-void hookPostNameInput2(ModContext*, void* args, void* retval, void* userdata) {
-    dFile_select_c* i_this = mods::arg<dFile_select_c*>(args, 0);
+void hookPostSetSaveData(ModContext* ctx, void* args, void* retval, void* userdata) {
+    dFile_info_c* i_this = mods::arg<dFile_info_c*>(args, 0);
+    u8 i_dataNo = mods::arg<u8>(args, 3);
 
-    if (i_this->mIsSelectEnd) {
-        if (!randomizer_GetContext().mHash.empty()) {
-            session::setupRandomizerFile();
+    if (*static_cast<int*>(retval) == 0) {
+        char hash[64];
+        size_t size = sizeof(hash) - 1;
+
+        ModResult rt = session::svc_mng.save->peek_blob(ctx, i_dataNo, "seed_hash", hash, &size);
+        if (rt != MOD_OK || size == 0) {
+            // leave file text vanilla if seed hash isn't found
+            mods::log::debug("no seed_hash found for file {}", i_dataNo);
+            return;
+        }
+
+        hash[size] = 0;
+        const std::string curFileSeedHash = hash;
+        if (!curFileSeedHash.empty()) {
+            const auto setHBinding = [](J2DTextBox* tbox, J2DTextBoxHBinding bind) {
+                tbox->mFlags &= 0b0011;
+                tbox->mFlags |= ((bind & 3) << 2);
+            };
+
+            // Overwrite "Save time" text with "Randomizer"
+            auto saveTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'));
+            SafeStringCopy(saveTimeText->getStringPtr(), "Randomizer");
+            setHBinding(saveTimeText, J2DTextBoxHBinding::HBIND_LEFT);
+
+            // Overwrite the "Total play time" text with the seed hash
+            auto playTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'));
+            SafeStringCopy(playTimeText->getStringPtr(), curFileSeedHash.c_str());
+
+            // Give the text double the space on the menu incase the seed hash is long
+            setHBinding(playTimeText, J2DTextBoxHBinding::HBIND_LEFT);
+            playTimeText->resize(playTimeText->getWidth() * 2, playTimeText->getHeight());
         }
     }
 }
@@ -475,31 +625,57 @@ void hookPostSetLineUpItem(ModContext*, void* args, void*, void*) {
 }
 
 HookAction hookPreSaveInfoOnSwitch(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<dSv_info_c*>(args, 0);
+    const int i_no = mods::arg<int>(args, 1);
+    const int room_no = mods::arg<int>(args, 2);
+
     // Set custom flag for the Temple of Time pedestal strike
-    if (getStageID() == Sacred_Grove && mods::arg<int>(args, 1) == 0xEE) {
-        mods::arg<dSv_info_c*>(args, 0)->onSwitch(0x63, mods::arg<int>(args, 2));
+    if (getStageID() == Sacred_Grove && i_no == 0xEE) {
+        i_this->onSwitch(0x63, room_no);
+    }
+
+    // We check to see if the flag being set is for the UZR portal as a safety precaution.
+    if (daAlink_c::checkStageName("F_SP126") && i_no == 0x15 &&
+        dComIfGs_getTransformStatus() == TF_STATUS_WOLF)
+    {
+        // Set the flag to make Iza 1 available and set the memory bit for having talked to her
+        // after opening the portal as human.
+        dComIfGs_onEventBit(0xB02);
+        i_this->onSwitch(0x37, room_no);
+
+        // Note for the above stuff. This works for now. Eventually would like to adjust this to
+        // a FLW patch since I think we could accomplish similar results by having the conversation
+        // continue as normal regardless of form, but I haven't looked into it that much.
     }
     return HOOK_CONTINUE;
 }
 
-// TODO: item service
-/* HookAction hookPreExecItemGet(ModContext*, void* args, void*, void*) {
-    if (randomizer_IsActive()) {
-        const u8 item = mods::arg<u8>(args, 0);
-        item_funcs::exec_item_get(item);
-        dusk::mods::item_granted(item, mods::arg<u32>(args, 1), mods::arg<fopAc_ac_c*>(args, 2));
-        return HOOK_SKIP_ORIGINAL;
-    }
+bool hookLureHeart_isSkipGetItem = false;
+HookAction hookPreLureHeart(ModContext*, void* args, void*, void*) {
+    hookLureHeart_isSkipGetItem = true;
     return HOOK_CONTINUE;
-} */
+}
 
-/* HookAction hookPreCheckItemGet(ModContext*, void* args, void* retval, void*) {
-    if (randomizer_IsActive()) {
-        *static_cast<int*>(retval) = item_funcs::check_item_get(mods::arg<u8>(args, 0), mods::arg<int>(args, 1));
+void hookPostLureHeart(ModContext*, void*, void*, void*) {
+    hookLureHeart_isSkipGetItem = false;
+}
+
+HookAction hookPreGetItemFunc(ModContext*, void* args, void*, void*) {
+    const u8 item = mods::arg<u8>(args, 0);
+
+    // coming from lure_heart, don't give item here. let FLW message handle it
+    if (hookLureHeart_isSkipGetItem && item == dItemNo_KAKERA_HEART_e) {
         return HOOK_SKIP_ORIGINAL;
     }
-    return HOOK_CONTINUE;
-} */
+
+    item::exec_item_get(item);
+    return HOOK_SKIP_ORIGINAL;
+}
+
+ HookAction hookPreCheckItemGet(ModContext*, void* args, void* retval, void*) {
+    *static_cast<int*>(retval) = item::check_item_get(mods::arg<u8>(args, 0), mods::arg<int>(args, 1));
+    return HOOK_SKIP_ORIGINAL;
+}
 
 HookAction hookPreSetNextStage(ModContext*, void* args, void*, void*) {
     randomizer_checkAndOverrideEntranceData(
@@ -1161,6 +1337,1195 @@ HookAction hookPreGetLayerNo(ModContext*, void* args, void* retval, void*) {
     return HOOK_CONTINUE;
 }
 
+HookAction hookPreOnStageSwitch(ModContext*, void* args, void* retval, void*) {
+    const int i_stageNo = mods::arg<int>(args, 0);
+    const int i_no = mods::arg<int>(args, 1);
+
+    // Avoid trying to get the save table if stag info is NULL
+    if (dComIfGp_getStageStagInfo() == NULL) {
+        dComIfGs_onSaveSwitch(i_stageNo, i_no);
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreDecideDoStatus(ModContext*, void* args, void* retval, void*) {
+    daAlink_c* i_this = mods::arg<daAlink_c*>(args, 0);
+    bool set_status = false;
+
+    if (i_this->mAttList != NULL) {
+        s16 actor_name = fopAcM_GetName(i_this->field_0x27f4);
+        if (actor_name == fpcNm_Tag_Lv6Gate_e ||
+            (actor_name == fpcNm_TAG_KMSG_e && static_cast<daTag_KMsg_c*>(i_this->field_0x27f4)->getType() == 3))
+        {
+            // Separate check for striking sword into the pedestal for randomizer
+            if (!i_this->checkEquipAnime() && randomizer_checkTempleOfTimeRequirement()) {
+                i_this->setDoStatus(BUTTON_STATUS_STRIKE);
+                set_status = true;
+            }
+        }
+    }
+
+    if (set_status) {
+        i_this->decideCommonDoStatus();
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreSearchBouDoor(ModContext*, void* args, void* retval, void*) {
+    // In randomizer, we don't want Bo preventing us from entering his house on Day 2
+    if (daAlink_c::checkStageName("F_SP103"))
+    {
+        *static_cast<void**>(retval) = nullptr;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreCheckGroundSpecialMode(ModContext*, void* args, void* retval, void*) {
+    daAlink_c* i_this = mods::arg<daAlink_c*>(args, 0);
+
+    if (i_this->mLinkAcch.ChkGroundHit()
+        && !i_this->checkModeFlg(daAlink_c::MODE_PLAYER_FLY)
+        && !i_this->checkMagneBootsOn()
+        && i_this->checkEndResetFlg0(daAlink_c::ERFLG0_FORCE_WOLF_CHANGE))
+    {
+        u8 stage = getStageID();
+        // In rando, don't transform in twilight fog unless we have shadow crystal
+        if (!dComIfGs_isEventBit(TRANSFORMING_UNLOCKED) &&
+            (stage == Palace_of_Twilight || stage == Phantom_Zant_1 || stage == Phantom_Zant_2))
+        {
+            *static_cast<BOOL*>(retval) = FALSE;
+            return HOOK_SKIP_ORIGINAL;
+        }
+        *static_cast<BOOL*>(retval) = i_this->procCoMetamorphoseInit();
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostSetGetItemFace(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    const u16 i_itemNo = mods::arg<u16>(args, 1);
+
+    switch (i_itemNo) {
+    case dItemNo_Randomizer_WOOD_STICK_e:
+    case dItemNo_Randomizer_SWORD_e:
+    case dItemNo_Randomizer_SHIELD_e:
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    case dItemNo_Randomizer_MAGIC_LV1_e:
+        i_this->setFaceBasicBck(dRes_ID_ALANM_BCK_FI_e);
+        break;
+    case dItemNo_Randomizer_FOOLISH_ITEM_e:
+        i_this->setFaceBasicBck(dRes_ID_ALANM_BCK_FJ_e);
+        break;
+    }
+}
+
+HookAction hookPreSetGetSubBgm(ModContext*, void* args, void*, void*) {
+    enum {
+        SETYPE_HEART,
+        SETYPE_ITEM_GET,
+        SETYPE_ITEM_GET_MINI,
+        SETYPE_ITEM_GET_ME,
+        SETYPE_ITEM_GET_INSECT,
+        SETYPE_ITEM_GET_SMELL,
+        SETYPE_ITEM_GET_POU,
+        SETYPE_ITEM_GET_ME_S,
+        SETYPE_NONE,
+    };
+
+    static constexpr u8 getSeTypeRandomizer[255] = {
+        /* dItemNo_Randomizer_HEART_e             */ SETYPE_NONE,
+        /* dItemNo_Randomizer_GREEN_RUPEE_e       */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BLUE_RUPEE_e        */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_YELLOW_RUPEE_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_RED_RUPEE_e         */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_PURPLE_RUPEE_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ORANGE_RUPEE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SILVER_RUPEE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_S_MAGIC_e           */ SETYPE_NONE,
+        /* dItemNo_Randomizer_L_MAGIC_e           */ SETYPE_NONE,
+        /* dItemNo_Randomizer_BOMB_5_e            */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_10_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_20_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_30_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_10_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_20_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_30_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_1_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_PACHINKO_SHOT_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_FOOLISH_ITEM_e      */ SETYPE_NONE,
+        /* dItemNo_Randomizer_NOENTRY_20_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_21_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WATER_BOMB_5_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_WATER_BOMB_10_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_WATER_BOMB_20_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_WATER_BOMB_30_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_5_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_10_e    */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_20_e    */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_30_e    */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_RECOVERY_FAILY_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_TRIPLE_HEART_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SMALL_KEY_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_KAKERA_HEART_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_UTAWA_HEART_e       */ SETYPE_HEART,
+        /* dItemNo_Randomizer_MAP_e               */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_COMPUS_e            */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DUNGEON_EXIT_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOSS_KEY_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DUNGEON_BACK_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SWORD_e             */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MASTER_SWORD_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WOOD_SHIELD_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SHIELD_e            */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HYLIA_SHIELD_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_TKS_LETTER_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WEAR_CASUAL_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WEAR_KOKIRI_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ARMOR_e             */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WEAR_ZORA_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MAGIC_LV1_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DUNGEON_EXIT_2_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WALLET_LV1_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WALLET_LV2_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WALLET_LV3_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_55_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_56_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_57_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_58_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_59_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_60_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ZORAS_JEWEL_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HAWK_EYE_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WOOD_STICK_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOOMERANG_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SPINNER_e           */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_IRONBALL_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BOW_e               */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HOOKSHOT_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HVY_BOOTS_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_COPY_ROD_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_W_HOOKSHOT_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_KANTERA_e           */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_LIGHT_SWORD_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_FISHING_ROD_1_e     */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_PACHINKO_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_COPY_ROD_2_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_77_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_78_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOMB_BAG_LV2_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BOMB_BAG_LV1_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BOMB_IN_BAG_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_82_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LIGHT_ARROW_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ARROW_LV1_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ARROW_LV2_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_ARROW_LV3_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_87_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LURE_ROD_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOMB_ARROW_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HAWK_ARROW_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BEE_ROD_e           */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_JEWEL_ROD_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WORM_ROD_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_JEWEL_BEE_ROD_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_JEWEL_WORM_ROD_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_EMPTY_BOTTLE_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_RED_BOTTLE_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_GREEN_BOTTLE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BLUE_BOTTLE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_MILK_BOTTLE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HALF_MILK_BOTTLE_e  */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_OIL_BOTTLE_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WATER_BOTTLE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL_BOTTLE_2_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_RED_BOTTLE_2_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_UGLY_SOUP_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HOT_SPRING_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_FAIRY_e             */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HOT_SPRING_2_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL2_e              */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL_e               */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NORMAL_BOMB_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WATER_BOMB_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_POKE_BOMB_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_FAIRY_DROP_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WORM_e              */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_DROP_BOTTLE_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BEE_CHILD_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_RARE_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_CHUCHU_RED_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_BLUE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_GREEN_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_YELLOW_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_PURPLE_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV1_SOUP_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV2_SOUP_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV3_SOUP_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LETTER_e            */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BILL_e              */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WOOD_STATUE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_IRIAS_PENDANT_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HORSE_FLUTE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_133_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_134_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_135_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_136_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_137_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_138_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_139_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_140_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_141_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_142_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_143_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_RAFRELS_MEMO_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ASHS_SCRIBBLING_e   */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_146_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_147_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_148_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_149_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_150_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_151_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_152_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_153_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_154_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_155_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_YELLOW2_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL_BOTTLE3_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SHOP_BEE_CHILD_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_BLACK_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LIGHT_DROP_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_DROP_CONTAINER_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DROP_CONTAINER02_e  */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DROP_CONTAINER03_e  */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_FILLED_CONTAINER_e  */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_MIRROR_PIECE_2_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MIRROR_PIECE_3_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MIRROR_PIECE_4_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_168_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_169_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_170_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_171_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_172_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_173_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_174_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_175_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SMELL_YELIA_POUCH_e */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_PUMPKIN_e     */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_POH_e         */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_FISH_e        */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_CHILDREN_e    */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_MEDICINE_e    */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_NOENTRY_182_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_183_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_184_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_185_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_186_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_187_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_188_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_189_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_190_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_191_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_M_BEETLE_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_BEETLE_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_BUTTERFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_BUTTERFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_STAG_BEETLE_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_STAG_BEETLE_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_GRASSHOPPER_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_GRASSHOPPER_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_NANAFUSHI_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_NANAFUSHI_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_DANGOMUSHI_e      */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_DANGOMUSHI_e      */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_MANTIS_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_MANTIS_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_LADYBUG_e         */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_LADYBUG_e         */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_SNAIL_e           */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_SNAIL_e           */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_DRAGONFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_DRAGONFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_ANT_e             */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_ANT_e             */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_MAYFLY_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_MAYFLY_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_NOENTRY_216_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_217_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_218_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_219_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_220_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_221_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_222_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_223_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_POU_SPIRIT_e        */ SETYPE_ITEM_GET_POU,
+        /* dItemNo_Randomizer_NOENTRY_225_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_226_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_227_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_228_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_229_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_230_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_231_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_232_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_ANCIENT_DOCUMENT_e  */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_AIR_LETTER_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ANCIENT_DOCUMENT2_e */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_LV7_DUNGEON_EXIT_e  */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LINKS_SAVINGS_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SMALL_KEY2_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_POU_FIRE1_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_POU_FIRE2_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_POU_FIRE3_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_POU_FIRE4_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_BOSSRIDER_KEY_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_TOMATO_PUREE_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_TASTE_e             */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_LV5_BOSS_KEY_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SURFBOARD_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_KANTERA2_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_L2_KEY_PIECES1_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_L2_KEY_PIECES2_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_L2_KEY_PIECES3_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_KEY_OF_CARAVAN_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV2_BOSS_KEY_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_KEY_OF_FILONE_e     */ SETYPE_ITEM_GET_MINI,
+    };
+
+    static constexpr u32 bgmLabel[8] = {
+        Z2BGM_HEART_GET,       Z2BGM_ITEM_GET,       Z2BGM_ITEM_GET_MINI, Z2BGM_ITEM_GET_ME,
+        Z2BGM_ITEM_GET_INSECT, Z2BGM_ITEM_GET_SMELL, Z2BGM_ITEM_GET_POU,  Z2BGM_ITEM_GET_ME_S,
+    };
+
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    const int i_itemNo = mods::arg<int>(args, 1);
+    u32 se_type = getSeTypeRandomizer[i_itemNo];
+
+    if (se_type == SETYPE_ITEM_GET_ME && i_this->mProcVar4.field_0x3010 == 0) {
+        se_type = SETYPE_ITEM_GET_ME_S;
+    }
+
+    if (se_type != SETYPE_NONE || i_itemNo == dItemNo_Randomizer_FOOLISH_ITEM_e) {
+        mDoAud_subBgmStart(bgmLabel[se_type]);
+        dComIfGp_setMesgBgmOn();
+    }
+
+    return HOOK_SKIP_ORIGINAL;
+}
+
+HookAction hookPreProcCoGetItem(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    if (i_this->field_0x32cc != 0 || i_this->mProcVar2.field_0x300c != dItemNo_Randomizer_POU_SPIRIT_e) {
+        return HOOK_CONTINUE;
+    }
+
+    auto* item_partner_p = static_cast<daItemBase_c*>(fopAcM_getItemEventPartner(i_this));
+    if (item_partner_p == nullptr || fpcM_IsCreating(fpcM_GetID(item_partner_p))) {
+        return HOOK_CONTINUE;
+    }
+
+    // Don't show special text in rando
+    if (dComIfGs_getPohSpiritNum() == 20) {
+        i_this->field_0x32cc = i_this->mProcVar2.field_0x300c + 0x65;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+u8 hookProcCoWarpInit_prevSlot18 = dItemNo_NONE_e;
+bool hookProcCoWarpInit_restoreSlot18 = false;
+HookAction hookPreProcCoWarpInit(ModContext*, void* args, void*, void*) {
+    hookProcCoWarpInit_restoreSlot18 = false;
+
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    const int param_0 = mods::arg<int>(args, 1);
+    const int param_1 = mods::arg<int>(args, 2);
+
+    // copy necessary functionality from og function to set up patch state
+    if (param_0 != 0 || i_this->checkWolf()) {
+        return HOOK_CONTINUE;
+    }
+
+    const BOOL isSideWarp = param_1 == 0 &&
+        ((daAlink_c::checkStageName("F_SP125") && fopAcM_GetRoomNo(i_this) == 4) ||
+         (daAlink_c::checkStageName("D_MN08") && fopAcM_GetRoomNo(i_this) == 0));
+    if (isSideWarp || !i_this->checkBossRoom() || fopAcM_GetRoomNo(i_this) != 50) {
+        return HOOK_CONTINUE;
+    }
+
+    char stageName[32];
+    SAFE_STRCPY(stageName, dComIfGp_getStartStageName());
+
+    for (int i = 0; i < 32; i++) {
+        if ((s64)stageName[i] == 0) {
+            stageName[i - 1] = 0;
+            break;
+        }
+    }
+
+    if (!checkItemGet(dItemNo_DUNGEON_EXIT_e, 1) &&
+        !(checkItemGet(dItemNo_DUNGEON_BACK_e, 1) &&
+          strcmp(stageName, dComIfGs_getWarpStageName()) == 0))
+    {
+        return HOOK_CONTINUE;
+    }
+
+    // In rando, we only want to clear the Ooccoo slot if Ooccoo is in it.
+    // so continue with normal function if Ooccoo is in slot.
+    u8 ooccooSlot = dComIfGs_getItem(SLOT_18, false);
+    if (ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_e ||
+        ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_2_e ||
+        ooccooSlot == dItemNo_Randomizer_LV7_DUNGEON_EXIT_e)
+    {
+        return HOOK_CONTINUE;
+    }
+
+    hookProcCoWarpInit_prevSlot18 = ooccooSlot;
+    hookProcCoWarpInit_restoreSlot18 = true;
+    return HOOK_CONTINUE;
+}
+
+void hookPostProcCoWarpInit(ModContext*, void*, void*, void*) {
+    if (hookProcCoWarpInit_restoreSlot18) {
+        dComIfGs_setItem(SLOT_18, hookProcCoWarpInit_prevSlot18);
+        hookProcCoWarpInit_restoreSlot18 = false;
+    }
+}
+
+void hookPostBqEnd(ModContext*, void* args, void* retval, void*) {
+    // If the player is wolf, they will softlock after the defeat cutscene is completed.
+    checkTransformFromWolf();
+}
+
+HookAction hookPreCheckOpenMsgDoor(ModContext*, void* args, void* retval, void*) {
+    daDoor20_c* i_this = mods::arg<daDoor20_c*>(args, 0);
+    int* param_1 = mods::arg<int*>(args, 1);
+
+    if (!door_param2_c::isMsgDoor(i_this)) {
+        *static_cast<int*>(retval) = 1;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    int msgNo = door_param2_c::getMsgNo(i_this);
+    if (msgNo == 0xffff) {
+        *param_1 = 0;
+        *static_cast<int*>(retval) = 1;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    i_this->field_0x624.init(NULL, msgNo, 0, NULL);
+    int rv = 1;
+    // If we are in SPR, we don't want Yeta's msg flow to prevent us from opening the door if we haven't talked to her.
+    if (!daAlink_c::checkStageName("D_MN11")) {
+        rv = i_this->field_0x624.checkOpenDoor(i_this, param_1);
+    }
+    dMsgObject_endFlowGroup();
+    *static_cast<int*>(retval) = rv;
+    return HOOK_SKIP_ORIGINAL;
+}
+
+void hookPostEmkDemoCameraEnd(ModContext*, void* args, void* retval, void*) {
+    e_mk_class* i_this = mods::arg<e_mk_class*>(args, 0);
+
+    switch (i_this->demoSubMode) {
+    case 6:
+        if (i_this->demoCamCounter == 180) {
+            // If the player is wolf, they will void and lose the boomerang check.
+            checkTransformFromWolf();
+        }
+        break;
+    }
+}
+
+void hookPostChangeScene4Event(ModContext*, void* args, void* retval, void*) {
+    int i_exitId = mods::arg<int>(args, 0);
+    s8 room_no = mods::arg<s8>(args, 1);
+
+    stage_scls_info_dummy_class* scls;
+    if (room_no == -1) {
+        scls = dComIfGp_getStageSclsInfo();
+    } else {
+        dStage_roomDt_c* room = dComIfGp_roomControl_getStatusRoomDt(room_no);
+        scls = room->getSclsInfo();
+    }
+
+    if (scls == NULL) {
+        return;
+    }
+
+    stage_scls_info_class* scls_info = &scls->m_entries[i_exitId];
+
+    // If randomizer is active and we're loading the first spawn, set our starting time of day
+    if (std::strcmp(scls_info->mStage, "F_SP103")
+        && scls_info->mRoom == 1
+        && scls_info->mStart == 1)
+    {
+        dKy_set_nexttime(15.0f * randomizer_GetContext().mStartHour);
+        g_randomizerState.mUpdateTracker = true;
+    }
+}
+
+HookAction hookPreStagePlayerInit(ModContext*, void* args, void* retval, void*) {
+    void* i_data = mods::arg<void*>(args, 1);
+    int num = mods::arg<int>(args, 2);
+
+    stage_actor_class* player = (stage_actor_class*)((int*)i_data + 1);
+    stage_actor_data_class* player_data = player->m_entries;
+
+    // Modify entrance types in certain situations to avoid crashes
+    for (size_t i = 0; i < num; ++i) {
+        u8& entranceType = reinterpret_cast<u8*>(&player_data[i].base.parameters)[2];
+        switch (entranceType) {
+        // Only replace the entrance type if it is a door.
+        case 0x80:
+        case 0xA0:
+        case 0xB0:
+        {
+            if (dComIfGs_getTransformStatus() == TF_STATUS_WOLF) {
+                // Change the entrance type to play the animation of walking out of the
+                // loading zone instead of entering through the door.
+                entranceType = 0x50;
+            }
+            break;
+        }
+
+        // Water swimming entrance.
+        // If we have this, but there isn't any water to spawn in, the game hangs
+        case 0xD0:
+        {
+            // If there's no water, change to non-swimming entrance
+            if (getStageID() == Lake_Hylia && !dComIfGs_isEventBit(WARPED_METEOR_TO_ZORAS_DOMAIN)) {
+                entranceType = 0x50;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostKytag08Execute(ModContext*, void* args, void* retval, void*) {
+    kytag08_class* i_this = mods::arg<kytag08_class*>(args, 0);
+
+    if (i_this->mSizeTimer < 100 || dComIfGs_BossLife_public_Get() == 1) {
+        dComIfGs_BossLife_public_Set(0);
+        i_this->mTargetAvoidPos = i_this->current.pos;
+        i_this->mSizeTimer = 180;
+        mDoAud_startFogWipeTrigger(&i_this->current.pos);
+    }
+}
+
+HookAction hookPreNpcTChkEvtBit(ModContext*, void* args, void* retval, void*) {
+    u32 i_no = mods::arg<u32>(args, 0);
+
+    switch (i_no) {
+    case 0x153: // Checking if the player has Ending Blow
+        if (getStageID() == Hidden_Skill) {
+            *static_cast<BOOL*>(retval) = TRUE;
+            return HOOK_SKIP_ORIGINAL;
+        }
+        break;
+    case 0x40: // Checking if the player has completed Goron Mines
+        if (getStageID() == Kakariko_Village_Interiors) {
+            // Return true so Barnes will sell bombs no matter what
+            *static_cast<BOOL*>(retval) = TRUE;
+            return HOOK_SKIP_ORIGINAL;
+        }
+        break;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcFChkEvtBit(ModContext*, void* args, void* retval, void*) {
+    u32 i_no = mods::arg<u32>(args, 0);
+
+    // shad handling
+    if (std::strcmp(dComIfGp_getStartStageName(), "R_SP209") == 0) {
+        switch (i_no) {
+        case 0x10B:
+            // spawn even if vanilla city requirements aren't met
+            *static_cast<BOOL*>(retval) = TRUE;
+            return HOOK_SKIP_ORIGINAL;
+        case 0x12E:
+        case 0x12F:
+            // skip vanilla cannon spawn failure and move checks
+            *static_cast<BOOL*>(retval) = FALSE;
+            return HOOK_SKIP_ORIGINAL;
+        case 0x311:
+            // despawn after custom flag is set
+            *static_cast<BOOL*>(retval) = dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[0x333]);
+            return HOOK_SKIP_ORIGINAL;
+        }
+    }
+
+    switch (i_no) {
+    case 0x169: // Checking if Raised Mirror in Mirror Chamber
+        // Only let Auru despawn in randomizer if we already collected his item
+        if (getStageID() == Lake_Hylia) {
+            *static_cast<BOOL*>(retval) = dComIfGs_isEventBit(GOT_AURUS_MEMO);
+            return HOOK_SKIP_ORIGINAL;
+        }
+        break;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcBansIsDelete(ModContext*, void* args, void* retval, void*) {
+    daNpc_Bans_c* i_this = mods::arg<daNpc_Bans_c*>(args, 0);
+
+    switch (i_this->mType) {
+    case 3: // MAKING_BOMBS
+        *static_cast<BOOL*>(retval) = TRUE;
+        return HOOK_SKIP_ORIGINAL;
+    case 4: // SHOP
+        *static_cast<BOOL*>(retval) = FALSE;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcFOrderEvent(ModContext*, void* args, void* retval, void*) {
+    daNpcF_c* i_this = mods::arg<daNpcF_c*>(args, 0);
+    int& i_forceSpeak = mods::arg_ref<int>(args, 1);
+    u16 i_priority = mods::arg<u16>(args, 4);
+
+    // kinda hacky way to check for the state where Bo is trying to talk after getting Iron Boots
+    if (i_this->eventInfo.getArchiveName() == nullptr) {
+        return HOOK_CONTINUE;
+    }
+    const std::string arcName = i_this->eventInfo.getArchiveName();
+    if (arcName == "Bou4" && i_priority == 40) {
+        i_forceSpeak = FALSE;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostFairyAppearDemoCall(ModContext*, void* args, void* retval, void*) {
+    daNpc_Fairy_c* i_this = mods::arg<daNpc_Fairy_c*>(args, 0);
+
+    // randomizer overrides EVT_APPEAR_50F_04 set to always be EVT_APPEAR_50F_01
+    if (i_this->field_0xff4 == 12) {
+        i_this->field_0xff4 = 9;
+    }
+}
+
+void hookPostYkMIsDelete(ModContext*, void* args, void* retval, void*) {
+    daNpc_ykM_c* i_this = mods::arg<daNpc_ykM_c*>(args, 0);
+
+    if (i_this->mType == daNpc_ykM_c::TYPE_COOK) {
+        // We don't want cooking Yeto to leave the dungeon, even if the BK is obtained.
+        *static_cast<BOOL*>(retval) = FALSE;
+    }
+}
+
+void hookPostYkWIsDelete(ModContext*, void* args, void* retval, void*) {
+    daNpc_ykW_c* i_this = mods::arg<daNpc_ykW_c*>(args, 0);
+
+    if (i_this->field_0xf80 == 1) {
+        // We don't want Yeta to leave the dungeon, even if the BK is obtained.
+        *static_cast<BOOL*>(retval) = FALSE;
+    }
+}
+
+void hookPostNpcZrzIsDelete(ModContext*, void* args, void* retval, void*) {
+    if (dComIfGs_isEventBit(GOT_ZORA_ARMOR_FROM_RUTELA)) {
+        return;
+    }
+
+    auto* i_this = mods::arg<daNpc_zrZ_c*>(args, 0);
+    if (i_this->mDemoMode != 3) {
+        return;
+    }
+
+    const int roomNo = fopAcM_GetRoomNo(i_this);
+    if (dComIfGs_isSwitch(i_this->mSwitch1, roomNo) && dComIfGs_isSwitch(i_this->mSwitch2, roomNo)) {
+        *static_cast<BOOL*>(retval) = FALSE;
+    }
+}
+
+u8 hookNpcShadWaitType1_patchItemNo = dItemNo_NONE_e;
+bool hookNpcShadWaitType1_isPatchItemNo = false;
+HookAction hookPreNpcShadWaitType1(ModContext*, void* args, void* retval, void*) {
+    dEvt_control_c* event = dComIfGp_getEvent();
+    hookNpcShadWaitType1_isPatchItemNo = false;
+
+    if (event->mPreItemNo >= dItemNo_Randomizer_ANCIENT_DOCUMENT_e) {
+        // backup original item no so we can restore it in post hook
+        hookNpcShadWaitType1_patchItemNo = event->mPreItemNo;
+
+        // force item no so that the dominion rod check is forced regardless
+        // of which skybook you have
+        event->mPreItemNo = dItemNo_Randomizer_ANCIENT_DOCUMENT_e;
+
+        hookNpcShadWaitType1_isPatchItemNo = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostNpcShadWaitType1(ModContext*, void* args, void* retval, void*) {
+    if (hookNpcShadWaitType1_isPatchItemNo) {
+        dComIfGp_getEvent()->mPreItemNo = hookNpcShadWaitType1_patchItemNo;
+        hookNpcShadWaitType1_isPatchItemNo = false;
+    }
+}
+
+// kinda ugly way to handle the wood statue. using a flag here to tell when its the right time
+// to be overriding the setWarashibeItem call with offWarashibeItem instead. maybe look into
+// a better solution later
+bool hookYeliaTakeWoodStatue_isOffWarashibeItem = false;
+HookAction hookPreNpcYeliaCutTakeWoodStatue(ModContext*, void* args, void*, void*) {
+    hookYeliaTakeWoodStatue_isOffWarashibeItem = false;
+
+    auto* i_this = mods::arg<daNpc_Yelia_c*>(args, 0);
+    const int i_staffId = mods::arg<int>(args, 1);
+    const int yeliaStaffId = dComIfGp_evmng_getMyStaffId("Yelia", i_this, -1);
+    if (i_staffId != yeliaStaffId || !dComIfGp_getEventManager().getIsAddvance(i_staffId)) {
+        return HOOK_CONTINUE;
+    }
+
+    int* prm = dComIfGp_evmng_getMyIntegerP(i_staffId, "prm");
+    if (prm != nullptr && *prm == 99) {
+        hookYeliaTakeWoodStatue_isOffWarashibeItem = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostNpcYeliaCutTakeWoodStatue(ModContext*, void*, void*, void*) {
+    hookYeliaTakeWoodStatue_isOffWarashibeItem = false;
+}
+
+HookAction hookPreSetWarashibeItem(ModContext*, void* args, void*, void*) {
+    if (!hookYeliaTakeWoodStatue_isOffWarashibeItem) {
+        return HOOK_CONTINUE;
+    }
+
+    const u8 itemNo = mods::arg<u8>(args, 1);
+    if (itemNo == dItemNo_NONE_e) {
+        offWarashibeItem(dItemNo_Randomizer_WOOD_STATUE_e);
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+// kinda hacky, force the SkipInfo check to always fail so that the armor always gets created,
+// then restore the original SkipInfo afterward. needed to make the ball and chain check respawn
+// if the player leaves the room without grabbing it
+daE_MD_c* hookEMdCreate_skipActor = nullptr;
+u8 hookEMdCreate_prevSkipInfo = 0;
+HookAction hookPreEMdCreate(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daE_MD_c*>(args, 0);
+    if (cDmr_SkipInfo == 0 || i_this->current.pos.z <= -1500.0f) {
+        return HOOK_CONTINUE;
+    }
+
+    hookEMdCreate_skipActor = i_this;
+    hookEMdCreate_prevSkipInfo = cDmr_SkipInfo;
+    cDmr_SkipInfo = 0;
+    return HOOK_CONTINUE;
+}
+
+void hookPostEMdCreate(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daE_MD_c*>(args, 0);
+    if (hookEMdCreate_skipActor != i_this) {
+        return;
+    }
+
+    cDmr_SkipInfo = hookEMdCreate_prevSkipInfo;
+    hookEMdCreate_skipActor = nullptr;
+    hookEMdCreate_prevSkipInfo = 0;
+}
+
+// functions are simple enough that replacing isn't too bad
+// todo: item service needs to be properly hooked up to this check i think instead of
+// using "randomizer_getItemAtLocation"
+void hookReplaceMasterSwordExecuteWait(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
+
+    if (daPy_getPlayerActorClass()->checkPriActorOwn(i_this)) {
+        for (int i = 0; i < dComIfGp_getAttention()->GetActionCount(); i++) {
+            if (dComIfGp_getAttention()->ActionTarget(i) == i_this) {
+                if (dComIfGp_getAttention()->getActionBtnB() != NULL &&
+                    dComIfGp_getAttention()->getActionBtnB()->mType == fopAc_attn_CARRY_e)
+                {
+                    dComIfGp_setDoStatusForce(8, 0);
+                }
+            }
+        }
+    }
+
+    if (fopAcM_checkCarryNow(i_this)) {
+        u8 itemToGive = randomizer_getItemAtLocation("Sacred Grove Pedestal Master Sword");
+        g_randomizerState.addItemToEventQueue(itemToGive);
+
+        itemToGive = randomizer_getItemAtLocation("Sacred Grove Pedestal Shadow Crystal");
+        g_randomizerState.addItemToEventQueue(itemToGive);
+
+        dComIfGs_onTmpBit(0x820);
+        dComIfGs_onEventBit(0x2120);
+    }
+}
+
+HookAction hookPreMasterSwordExecute(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
+
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::tempBitLabels[73])) {
+        // Don't automatically give the master sword in randomizer
+        fopAcM_delete(i_this);
+        *static_cast<int*>(retval) = 1;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPost_dScnName_c__changeGameScene(ModContext* ctx, void* args, void* retval, void* userdata) {
+    if (!mDoRst::isReset() && !fopOvlpM_IsPeek()) {
+        randomizer::session::registerStartingLocation();
+    }
+}
+
+void hookPostTbox2Create(ModContext*, void* args, void* retval, void*) {
+    if (*static_cast<int*>(retval) != 1) {
+        return;
+    }
+
+    auto* i_this = mods::arg<daTbox2_c*>(args, 0);
+    u8 tboxId = fopAcM_GetParamBit(i_this, 16, 8);
+    if (tboxId == 0xFF || !dComIfGs_isTbox(tboxId)) {
+        return;
+    }
+    // If the flag for this box is set, open it
+
+    // Set the action for not allowing the player to open it
+    i_this->init_actionWait();
+
+    // Set the animation frame to open
+    i_this->mpBck->setFrame(i_this->mpBck->getEndFrame());
+
+    // Set collision to open
+    if (i_this->mpBgW != NULL) {
+        dComIfG_Bgsp().Release(i_this->mpBgW);
+    }
+    if (i_this->mBoxBgW != NULL) {
+        dComIfG_Bgsp().Regist(i_this->mBoxBgW, i_this);
+    }
+}
+
+HookAction hookPreTbox2SetGetDemoItem(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daTbox2_c*>(args, 0);
+    if (i_this->mReturnRupee) {
+        return HOOK_CONTINUE;
+    }
+
+    u8 tboxId = fopAcM_GetParamBit(i_this, 16, 8);
+    if (tboxId != 0xFF) {
+        dComIfGs_onTbox(tboxId);
+    }
+
+    return HOOK_CONTINUE;
+}
+
+u8 hookGameoverCreate_prevSlot18 = dItemNo_NONE_e;
+bool hookGameoverCreate_restoreSlot18 = false;
+HookAction hookPreGameoverCreate(ModContext*, void*, void*, void*) {
+    if (dMeter2Info_getGameOverType() == 1 && strcmp(dComIfGp_getLastPlayStageName(), "D_MN10A") == 0) {
+        // In rando, we only want to clear the Ooccoo slot if Ooccoo is in it.
+        // so continue with normal function if Ooccoo is in slot.
+        u8 ooccooSlot = dComIfGs_getItem(SLOT_18, false);
+        if (ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_e ||
+            ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_2_e)
+        {
+            return HOOK_CONTINUE;
+        }
+
+        hookGameoverCreate_prevSlot18 = ooccooSlot;
+        hookGameoverCreate_restoreSlot18 = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostGameoverCreate(ModContext*, void*, void*, void*) {
+    if (hookGameoverCreate_restoreSlot18) {
+        dComIfGs_setItem(SLOT_18, hookGameoverCreate_prevSlot18);
+        hookGameoverCreate_restoreSlot18 = false;
+    }
+}
+
+inline void createPalaceSolsRewardItem(daObjSwBallC_c* i_this) {
+    cXyz scale{1.0f, 1.0f, 1.0f};
+    cXyz position{250.0f, -200.0f, 11000.0f};
+    initCreatePlayerItem(
+        dItemNo_Randomizer_WOOD_STICK_e,
+        0x81,
+        &position,
+        fopAcM_GetRoomNo(i_this),
+        &i_this->shape_angle,
+        &scale);
+}
+
+void hookPostSwBallCreate(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjSwBallC_c*>(args, 0);
+    if (*static_cast<int*>(retval) != 1) {
+        return;
+    }
+
+    if (fopAcM_isSwitch(i_this, 0x3d) && fopAcM_isSwitch(i_this, 0x3e)) {
+        createPalaceSolsRewardItem(i_this);
+    }
+}
+
+HookAction hookPreSwBallActionWait(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjSwBallC_c*>(args, 0);
+    if (!fopAcM_isSwitch(i_this, 0x3d) ||
+        !fopAcM_isSwitch(i_this, 0x3e))
+    {
+        return HOOK_CONTINUE;
+    }
+
+    // Don't play the cutscene in rando, just spawn in the item for
+    // Palace of Twilight Collect Both Sols
+
+    dComIfGs_onTbox(10);
+    dComIfGs_onTbox(11);
+
+    i_this->calcLightBallScale();
+    i_this->field_0x574->setPlaySpeed(1.0f);
+    if (i_this->field_0x574->play() != 0 && !fopAcM_isSwitch(i_this, 0x3f)) {
+        fopAcM_onSwitch(i_this, 0x3f);
+        fopAcM_onSwitch(i_this, 0x27);
+        createPalaceSolsRewardItem(i_this);
+    }
+
+    return HOOK_SKIP_ORIGINAL;
+}
+
+void hookPostDitemExecute(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daDitem_c*>(args, 0);
+
+    // Certain items use field models that are too big to fit in link's hands so we want to scale them down to fit.
+    switch (i_this->m_itemNo) {
+    case dItemNo_Randomizer_MIRROR_PIECE_1_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_2_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_3_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_4_e:
+    {
+        i_this->scale.x = 0.05f;
+        break;
+    }
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    {
+        i_this->scale.x = 0.001f;
+        break;
+    }
+    }
+}
+
+// pretty ugly way of handling this, but oh well. basically, we reconstruct the actionTable
+// and use it to check that we're in the correct action before proceeding. then store info
+// about what level we're on, and use it in the post-hook to undo the flag that's normally set.
+daObjBossWarp_c* hookBossWarpDemoProc_patchActor = nullptr;
+int hookBossWarpDemoProc_nowLevel = -1;
+HookAction hookPreBossWarpDemoProc(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
+
+    hookBossWarpDemoProc_patchActor = nullptr;
+    hookBossWarpDemoProc_nowLevel = -1;
+
+    static const char* const actionTable[15] = {
+        "WAIT",
+        "APPEAR",
+        "DISAPPEAR",
+        "SCENE_CHG",
+        "STONE_FALL",
+        "STONE_MIDNA",
+        "WALK_TARGET1",
+        "APPEAR_END",
+        "STONE_DELETE",
+        "STONE_PUTAWAY",
+        "WCHECK",
+        "SETPOS",
+        "SCALING",
+        "STONE_SCALE",
+        "HEART_MOVE",
+    };
+
+    bool isRewardAction =
+        dComIfGp_evmng_getIsAddvance(i_this->mStaffId)
+        && dComIfGp_evmng_getMyActIdx(i_this->mStaffId, actionTable, 15, 0, 0) == 4;
+    if (!isRewardAction) {
+        return HOOK_CONTINUE;
+    }
+
+    // this was a static function in the original TU, so reconstructing it for use here
+    auto getNowLevel = []() {
+        static const char* const stages[9] = {
+            "D_MN05A",
+            "D_MN04A",
+            "D_MN01A",
+            "D_MN10A",
+            "D_MN11A",
+            "D_MN06A",
+            "D_MN07A",
+            "D_MN08A",
+            "D_MN01A",
+        };
+
+        for (int i = 0; i < 9; i++) {
+            if (std::strcmp(dComIfGp_getStartStageName(), stages[i]) == 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
+    hookBossWarpDemoProc_patchActor = i_this;
+    hookBossWarpDemoProc_nowLevel = getNowLevel();
+    return HOOK_CONTINUE;
+}
+
+void hookPostBossWarpDemoProc(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
+    if (hookBossWarpDemoProc_patchActor != i_this) {
+        return;
+    }
+
+    int level = hookBossWarpDemoProc_nowLevel;
+    hookBossWarpDemoProc_patchActor = nullptr;
+    hookBossWarpDemoProc_nowLevel = -1;
+
+    // undo the flag that was set in the original function
+    switch (level) {
+    case 0:
+        dComIfGs_offCollectCrystal(0);
+        break;
+    case 1:
+        dComIfGs_offCollectCrystal(1);
+        break;
+    case 2:
+        dComIfGs_offCollectCrystal(2);
+        break;
+    case 4:
+        dComIfGs_offCollectMirror(1);
+        break;
+    case 5:
+        dComIfGs_offCollectMirror(2);
+        break;
+    case 6:
+        dComIfGs_offCollectMirror(3);
+        break;
+    }
+}
+
+bool hookUkiCatch_isSkipSetBottle = false;
+HookAction hookPreUkiCatch(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<dmg_rod_class*>(args, 0);
+    hookUkiCatch_isSkipSetBottle = false;
+
+    fopAc_ac_c* mgfish_a = fopAcM_SearchByID(i_this->mg_fish_id);
+    mg_fish_class* mgfish = (mg_fish_class*)mgfish_a;
+    if (mgfish == nullptr) {
+        return HOOK_CONTINUE;
+    }
+
+    // replicating the bottle catch check here to remove rng check by overriding whatever catch
+    // you have if you meet the bottle catch conditions
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[468]) &&
+        strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0)
+    {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        cXyz bin_pos(6800.0f, 30.0f, -270.0f);
+        bin_pos -= player->current.pos;
+        if (bin_pos.abs() < 2500.0f) {
+            s16 angle = player->shape_angle.y - cM_atan2s(bin_pos.x, bin_pos.z);
+            if (angle < 0x4000 && angle > -0x4000) {
+                mgfish->mCaughtType = MG_CATCH_BIN;
+            }
+        }
+    }
+
+    // if catching a bottle, set a flag to skip giving an empty bottle so that the FLW patch
+    // can handle the check
+    if (mgfish->mCaughtType == MG_CATCH_BIN) {
+        hookUkiCatch_isSkipSetBottle = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostUkiCatch(ModContext*, void*, void*, void*) {
+    hookUkiCatch_isSkipSetBottle = false;
+}
+
+HookAction hookPreSetEmptyBottle(ModContext*, void*, void*, void*) {
+    // coming from uki_catch, skip giving bottle. let FLW patch handle it
+    if (hookUkiCatch_isSkipSetBottle) {
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreNpcZrCIsDelete(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daNpc_zrC_c*>(args, 0);
+    if (i_this->mType == 4
+        || i_this->mType == 0
+        || i_this->mType == 1
+        || (i_this->mType == 2 && daNpcF_chkEvtBit(0x108))
+        || i_this->mType == 3
+        )
+    {
+        *static_cast<BOOL*>(retval) = FALSE;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostObjZraRockCreate(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjZraRock_c*>(args, 0);
+    if (*static_cast<int*>(retval) != cPhs_ERROR_e) {
+        return;
+    }
+
+    // if returned cPhs_ERROR_e, check if it's because the switch was set.
+    if (dComIfGs_isSwitch((fopAcM_GetParam(i_this) >> 8) & 0xff, fopAcM_GetRoomNo(i_this))) {
+        // Don't delete the rock when we're following rutela
+        if (!dComIfGs_isEventBit(GOT_ZORA_ARMOR_FROM_RUTELA) && dComIfGs_isEventBit(ZORA_ESCORT_CLEARED)) {
+            *static_cast<int*>(retval) = cPhs_COMPLEATE_e;
+        }
+    }
+}
+
+void hookPostScnPlyPhase1(ModContext*, void*, void*, void*) {
+    if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
+        dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
+    {
+        // Undo item set for rando
+        dComIfGs_offItemFirstBit(dItemNo_HORSE_FLUTE_e);
+        dComIfGs_setItem(SLOT_21, dItemNo_NONE_e);
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -1176,8 +2541,16 @@ ModResult initialize() {
         return MOD_ERROR;                                             \
     }
 
+#define ADD_HOOK_REPLACE(originalFn, hookFn)                              \
+    if (mods::hook::replace<originalFn>(hookFn) != MOD_OK) {             \
+        mods::log::error("Failed to add replace-hook for " #originalFn); \
+        return MOD_ERROR;                                                \
+    }
+
     ADD_HOOK_PRE(dFile_select_c__selectDataNameMove, hookPreSelectDataNameMove);
     ADD_HOOK_PRE(dFile_select_c__dataSelect, hookPreDataSelect);
+
+    ADD_HOOK_POST(dFile_info_c__setSaveData, hookPostSetSaveData);
 
     ADD_HOOK_PRE(dSv_event_c__isEventBit, hookPreIsEventBit);
     ADD_HOOK_PRE(dSv_event_c__onEventBit, hookPreOnEventBit);
@@ -1195,7 +2568,7 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(dSv_info_c__onSwitch, hookPreSaveInfoOnSwitch);
 
-    //ADD_HOOK_PRE(setNextStage, hookPreSetNextStage);
+    ADD_HOOK_PRE(setNextStage, hookPreSetNextStage);
 
     ADD_HOOK_PRE(ObjGb_Create, hookPreObjGbCreate);
 
@@ -1207,9 +2580,200 @@ ModResult initialize() {
 
     ADD_HOOK_POST(dEvt_control_c__talkEnd, hookPostTalkEnd);
 
-    ADD_HOOK_POST(dFile_select_c__nameInput2, hookPostNameInput2);
-
     ADD_HOOK_PRE(dComIfG_play_c__getLayerNo_common_common, hookPreGetLayerNo);
+
+    ADD_HOOK_PRE(dItem_getItemFunc, hookPreGetItemFunc);
+    ADD_HOOK_PRE(dItem_checkItemGet, hookPreCheckItemGet);
+
+    ADD_HOOK_PRE(onStageSwitch, hookPreOnStageSwitch);
+
+    ADD_HOOK_PRE(daAlink_c__decideDoStatus, hookPreDecideDoStatus);
+    ADD_HOOK_PRE(searchBouDoor, hookPreSearchBouDoor);
+    ADD_HOOK_PRE(daAlink_c__checkGroundSpecialMode, hookPreCheckGroundSpecialMode);
+    ADD_HOOK_POST(daAlink_c__setGetItemFace, hookPostSetGetItemFace);
+    ADD_HOOK_PRE(daAlink_c__setGetSubBgm, hookPreSetGetSubBgm);
+    ADD_HOOK_PRE(daAlink_c__procCoGetItem, hookPreProcCoGetItem);
+    ADD_HOOK_PRE(daAlink_c__procCoWarpInit, hookPreProcCoWarpInit);
+    ADD_HOOK_POST(daAlink_c__procCoWarpInit, hookPostProcCoWarpInit);
+
+    ADD_HOOK_POST(bq_end, hookPostBqEnd);
+
+    ADD_HOOK_PRE(daDoor20_c__checkOpenMsgDoor, hookPreCheckOpenMsgDoor);
+
+    ADD_HOOK_POST(e_mk_demo_camera_end, hookPostEmkDemoCameraEnd);
+
+    ADD_HOOK_POST(changeScene4Event, hookPostChangeScene4Event);
+    ADD_HOOK_PRE(stage_playerInit, hookPreStagePlayerInit);
+
+    ADD_HOOK_POST(Kytag08_Execute, hookPostKytag08Execute);
+
+    ADD_HOOK_PRE(NpcT_chkEvtBit, hookPreNpcTChkEvtBit);
+    ADD_HOOK_PRE(NpcF_chkEvtBit, hookPreNpcFChkEvtBit);
+    ADD_HOOK_PRE(daNpcF_c__orderEvent, hookPreNpcFOrderEvent);
+
+    ADD_HOOK_PRE(daNpc_Bans_c__isDelete, hookPreNpcBansIsDelete);
+
+    ADD_HOOK_POST(daNpc_Fairy_c__AppearDemoCall, hookPostFairyAppearDemoCall);
+
+    ADD_HOOK_PRE(daNpcShad_c__wait_type1, hookPreNpcShadWaitType1);
+    ADD_HOOK_POST(daNpcShad_c__wait_type1, hookPostNpcShadWaitType1);
+
+    ADD_HOOK_PRE(daNpc_Yelia_c__cutTakeWoodStatue, hookPreNpcYeliaCutTakeWoodStatue);
+    ADD_HOOK_POST(daNpc_Yelia_c__cutTakeWoodStatue, hookPostNpcYeliaCutTakeWoodStatue);
+    ADD_HOOK_PRE(dSv_player_item_c__setWarashibeItem, hookPreSetWarashibeItem);
+
+    ADD_HOOK_POST(daNpc_ykM_c__isDelete, hookPostYkMIsDelete);
+    ADD_HOOK_POST(daNpc_ykW_c__isDelete, hookPostYkWIsDelete);
+
+    ADD_HOOK_PRE(daE_MD_c__create, hookPreEMdCreate);
+    ADD_HOOK_POST(daE_MD_c__create, hookPostEMdCreate);
+
+    ADD_HOOK_REPLACE(daObjMasterSword_c__executeWait, hookReplaceMasterSwordExecuteWait);
+    ADD_HOOK_PRE(daObjMasterSword_c__execute, hookPreMasterSwordExecute);
+
+    ADD_HOOK_POST(dScnName_c__changeGameScene, hookPost_dScnName_c__changeGameScene);
+
+    ADD_HOOK_POST(daNpc_zrZ_c__isDelete, hookPostNpcZrzIsDelete);
+
+    ADD_HOOK_POST(daTbox2_c__Create, hookPostTbox2Create);
+    ADD_HOOK_PRE(daTbox2_c__setGetDemoItem, hookPreTbox2SetGetDemoItem);
+
+    ADD_HOOK_PRE(dGameover_c___create, hookPreGameoverCreate);
+    ADD_HOOK_POST(dGameover_c___create, hookPostGameoverCreate);
+
+    ADD_HOOK_POST(daObjSwBallC_c__Create, hookPostSwBallCreate);
+    ADD_HOOK_PRE(daObjSwBallC_c__actionWait, hookPreSwBallActionWait);
+
+    ADD_HOOK_POST(daDitem_c__execute, hookPostDitemExecute);
+
+    ADD_HOOK_PRE(daObjBossWarp_c__demoProc, hookPreBossWarpDemoProc);
+    ADD_HOOK_POST(daObjBossWarp_c__demoProc, hookPostBossWarpDemoProc);
+
+    ADD_HOOK_PRE(mgRod_lure_heart, hookPreLureHeart);
+    ADD_HOOK_POST(mgRod_lure_heart, hookPostLureHeart);
+
+    ADD_HOOK_PRE(mgRod_uki_catch, hookPreUkiCatch);
+    ADD_HOOK_POST(mgRod_uki_catch, hookPostUkiCatch);
+
+    ADD_HOOK_PRE(dSv_player_item_c__setEmptyBottle, hookPreSetEmptyBottle);
+
+    ADD_HOOK_PRE(daNpc_zrC_c__isDelete, hookPreNpcZrCIsDelete);
+
+    ADD_HOOK_POST(daObjZraRock_c__create, hookPostObjZraRockCreate);
+
+    //ADD_HOOK_POST(phase_1__dScnPly_c, hookPostScnPlyPhase1);
+
+    return MOD_OK;
+}
+
+ModResult uninstall() {
+    auto svc_hook = session::svc_mng.hook;
+
+    mods::hook::uninstall<dFile_select_c__selectDataNameMove>(svc_hook);
+    mods::hook::uninstall<dFile_select_c__dataSelect>(svc_hook);
+
+    mods::hook::uninstall<dFile_info_c__setSaveData>(svc_hook);
+
+    mods::hook::uninstall<dSv_event_c__isEventBit>(svc_hook);
+    mods::hook::uninstall<dSv_event_c__onEventBit>(svc_hook);
+
+    mods::hook::uninstall<dSv_memBit_c__isSwitch>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__onSwitch>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__onDungeonItem>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__offDungeonItem>(svc_hook);
+    mods::hook::uninstall<dSv_memBit_c__isDungeonItem>(svc_hook);
+
+    mods::hook::uninstall<dSv_player_status_b_c__isDarkClearLV>(svc_hook);
+
+    mods::hook::uninstall<dSv_player_item_c__checkEmptyBottle>(svc_hook);
+    mods::hook::uninstall<dSv_player_item_c__setLineUpItem>(svc_hook);
+
+    mods::hook::uninstall<dSv_info_c__onSwitch>(svc_hook);
+    mods::hook::uninstall<setNextStage>();
+
+    mods::hook::uninstall<ObjGb_Create>(svc_hook);
+
+    mods::hook::uninstall<readItemTexture>(svc_hook);
+
+    mods::hook::uninstall<dShopSystem_c__seq_decide_yes>(svc_hook);
+
+    mods::hook::uninstall<dItemData_CheckFieldItemCreateHeap>(svc_hook);
+
+    mods::hook::uninstall<dEvt_control_c__talkEnd>(svc_hook);
+
+    mods::hook::uninstall<dComIfG_play_c__getLayerNo_common_common>(svc_hook);
+
+    mods::hook::uninstall<dItem_getItemFunc>(svc_hook);
+    mods::hook::uninstall<dItem_checkItemGet>(svc_hook);
+
+    mods::hook::uninstall<onStageSwitch>(svc_hook);
+
+    mods::hook::uninstall<daAlink_c__decideDoStatus>(svc_hook);
+    mods::hook::uninstall<searchBouDoor>(svc_hook);
+    mods::hook::uninstall<daAlink_c__checkGroundSpecialMode>(svc_hook);
+    mods::hook::uninstall<daAlink_c__setGetItemFace>(svc_hook);
+    mods::hook::uninstall<daAlink_c__setGetSubBgm>(svc_hook);
+    mods::hook::uninstall<daAlink_c__procCoGetItem>(svc_hook);
+    mods::hook::uninstall<daAlink_c__procCoWarpInit>(svc_hook);
+
+    mods::hook::uninstall<bq_end>(svc_hook);
+
+    mods::hook::uninstall<daDoor20_c__checkOpenMsgDoor>(svc_hook);
+
+    mods::hook::uninstall<e_mk_demo_camera_end>(svc_hook);
+
+    mods::hook::uninstall<changeScene4Event>(svc_hook);
+    mods::hook::uninstall<stage_playerInit>(svc_hook);
+
+    mods::hook::uninstall<Kytag08_Execute>(svc_hook);
+
+    mods::hook::uninstall<NpcT_chkEvtBit>(svc_hook);
+    mods::hook::uninstall<NpcF_chkEvtBit>(svc_hook);
+    mods::hook::uninstall<daNpcF_c__orderEvent>(svc_hook);
+
+    mods::hook::uninstall<daNpc_Bans_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daNpc_Fairy_c__AppearDemoCall>(svc_hook);
+
+    mods::hook::uninstall<daNpcShad_c__Create>(svc_hook);
+    mods::hook::uninstall<daNpcShad_c__wait_type1>(svc_hook);
+
+    mods::hook::uninstall<daNpc_Yelia_c__cutTakeWoodStatue>(svc_hook);
+    mods::hook::uninstall<dSv_player_item_c__setWarashibeItem>(svc_hook);
+
+    mods::hook::uninstall<daNpc_ykM_c__isDelete>(svc_hook);
+    mods::hook::uninstall<daNpc_ykW_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daE_MD_c__create>(svc_hook);
+
+    mods::hook::uninstall<daObjMasterSword_c__executeWait>(svc_hook);
+    mods::hook::uninstall<daObjMasterSword_c__execute>(svc_hook);
+
+    mods::hook::uninstall<dScnName_c__changeGameScene>();
+
+    mods::hook::uninstall<daNpc_zrZ_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daTbox2_c__Create>(svc_hook);
+    mods::hook::uninstall<daTbox2_c__setGetDemoItem>(svc_hook);
+
+    mods::hook::uninstall<dGameover_c___create>(svc_hook);
+
+    mods::hook::uninstall<daObjSwBallC_c__Create>(svc_hook);
+    mods::hook::uninstall<daObjSwBallC_c__actionWait>(svc_hook);
+
+    mods::hook::uninstall<daDitem_c__execute>(svc_hook);
+
+    mods::hook::uninstall<daObjBossWarp_c__demoProc>(svc_hook);
+
+    mods::hook::uninstall<mgRod_lure_heart>(svc_hook);
+    mods::hook::uninstall<mgRod_uki_catch>(svc_hook);
+    mods::hook::uninstall<dSv_player_item_c__setEmptyBottle>(svc_hook);
+
+    mods::hook::uninstall<daNpc_zrC_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daObjZraRock_c__create>(svc_hook);
+
+    //mods::hook::uninstall<phase_1__dScnPly_c>();
 
     return MOD_OK;
 }

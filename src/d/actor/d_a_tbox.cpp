@@ -1390,6 +1390,10 @@ u8 daTbox_c::getBombItemNoMain(u8 i_itemNo) {
 
 int daTbox_c::setGetDemoItem() {
     u8 item_no = getItemNo();
+#if TARGET_PC
+    const u32 giveTag = dusk::mods::item_give_tag_chest(getTboxNo());
+    item_no = dusk::mods::item_check_tagged(giveTag, mOriginalItemNo, this);
+#endif
     if (item_no == dItemNo_BOMB_5_e || item_no == dItemNo_BOMB_10_e || item_no == dItemNo_BOMB_20_e || item_no == dItemNo_BOMB_30_e ||
         item_no == dItemNo_WATER_BOMB_5_e || item_no == dItemNo_WATER_BOMB_10_e || item_no == dItemNo_WATER_BOMB_20_e || item_no == dItemNo_WATER_BOMB_30_e ||
         item_no == dItemNo_BOMB_INSECT_5_e || item_no == dItemNo_BOMB_INSECT_10_e || item_no == dItemNo_BOMB_INSECT_20_e || item_no == dItemNo_BOMB_INSECT_30_e)
@@ -1399,9 +1403,11 @@ int daTbox_c::setGetDemoItem() {
 
     fpc_ProcID item_id;
     if (field_0x718) {
-        item_id = fopAcM_createItemForPresentDemo(&current.pos, item_no, 1, -1, -1, NULL, NULL);
+        item_id = fopAcM_createItemForPresentDemo(
+            &current.pos, item_no, 1, -1, -1, NULL, NULL IF_DUSK_ARG(giveTag));
     } else {
-        item_id = fopAcM_createItemForTrBoxDemo(&current.pos, item_no, -1, -1, NULL, NULL);
+        item_id = fopAcM_createItemForTrBoxDemo(
+            &current.pos, item_no, -1, -1, NULL, NULL IF_DUSK_ARG(giveTag));
     }
 
     if (item_id != fpcM_ERROR_PROCESS_ID_e) {
@@ -1785,6 +1791,11 @@ void daTbox_c::mode_exec() {
 cPhs_Step daTbox_c::create1st() {
     if (!mParamsInit) {
         field_0x980 = home.angle.x;
+#if TARGET_PC
+        mOriginalItemNo = (home.angle.z >> 8) & 0xFF;
+        const u8 resolvedItem = dusk::mods::item_check_chest(getTboxNo(), mOriginalItemNo, this);
+        home.angle.z = static_cast<s16>((home.angle.z & ~0xFF00) | (resolvedItem << 8));
+#endif
         field_0x982 = home.angle.z;
         home.angle.z = 0;
         home.angle.x = 0;

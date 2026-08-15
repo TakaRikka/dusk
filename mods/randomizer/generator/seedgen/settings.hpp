@@ -10,6 +10,7 @@
 #include <set>
 #include <memory>
 #include <stdexcept>
+#include <cstdint>
 
 namespace randomizer::seedgen::settings
 {

@@ -1798,7 +1798,7 @@ void dMenu_Ring_c::drawSelectItem() {
         if (field_0x674[i] != 0) {
 #if TARGET_PC
             mSelectItemSlideElapsed[i] += dusk::game_clock::consume_interval(this);
-            const f32 u = std::min(mSelectItemSlideElapsed[i] / dusk::game_clock::period_for_original_frames(10.0f), 1.0f);
+            const f32 u = std::min(mSelectItemSlideElapsed[i] / (dusk::game_clock::kSimPeriod * 10.0f), 1.0f);
             if (u >= 1.0f) {
                 setSelectItemForce(i);
             } else {
