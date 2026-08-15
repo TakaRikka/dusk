@@ -300,7 +300,7 @@ void registerStartingLocation() {
         return;
     }
 
-    // Check that we aren't playing only with the setting "Mirror Chamber Access") == "Closed"
+    // Check that we aren't playing only with the setting Mirror Chamber Access set to Closed
     bool isExclusivelyMirrorChamber = false;
     const auto& mirrorChamberIt = ctx.mEntranceOverrides.find(RandomizerContext::EntranceOverride{
         .stageId = StageIDs::Mirror_Chamber,
@@ -323,20 +323,10 @@ void registerStartingLocation() {
         return;
     }
 
-    constexpr std::array<std::string_view,9> kDungeonNames = {
-        "D_MN01","D_MN04","D_MN05","D_MN06","D_MN07","D_MN08","D_MN09","D_MN10","D_MN11"
-    };
-
     dSv_player_return_place_c& returnPlace = dComIfGs_getSaveData()->mPlayer.getPlayerReturnPlace();
-    bool isDungeon = false;
-    for (const auto& name : kDungeonNames) {
-        if (returnPlace.getName() == name) {
-            isDungeon = true;
-            break;
-        }
-    }
-
-    if (isDungeon) {
+    
+    // If we are loading into a dungeon, preserve our original return place
+    if (std::string(returnPlace.getName()).find("D_MN") == 0) {
         // Force-set the entrance without the override
         g_dComIfG_gameInfo.play.mNextStage.getStartStage()->set(returnPlace.getName(), returnPlace.getRoomNo(), returnPlace.mPlayerStatus, -1);
         return;
@@ -344,7 +334,6 @@ void registerStartingLocation() {
 
     // Set the spawn to outside of link's house, which will get overrided later if we are replacing it
     returnPlace.set("F_SP103",1,1);
-    // g_dComIfG_gameInfo.play.mNextStage.getStartStage()->set("F_SP103", 1, 1, -1);
     dComIfGp_setNextStage("F_SP103", 1, 1, -1);
 }
 

@@ -158,9 +158,9 @@ namespace randomizer::logic::entrance
         int8_t GetRoomNo() const { return _roomNo; }
         int8_t GetLayerNo() const { return _layerNo; }
         int16_t GetPointNo() const { return _pointNo; }
-        bool SetGameInfo(const YAML::Node& node);
-        void SetCoupledDoor(int16_t entrance) { _coupledEntrance = entrance; }
-        int16_t getCoupledDoor() { return _coupledEntrance; }
+        void SetGameInfo(const YAML::Node& node);
+        void SetCoupledEntrances(const std::vector<int16_t>& entrances) { _coupledEntrances = entrances; }
+        const std::vector<int16_t>& getCoupledEntrances() const { return _coupledEntrances; }
 
        private:
         int _id = -1;
@@ -223,7 +223,7 @@ namespace randomizer::logic::entrance
         Entrance* _assumed = nullptr;
 
         // If the entrance is a coupled door, this is the other door's point to override
-        int16_t _coupledEntrance = -1;
+        std::vector<int16_t> _coupledEntrances = {};
     };
 
     using EntrancePool = std::vector<Entrance*>;

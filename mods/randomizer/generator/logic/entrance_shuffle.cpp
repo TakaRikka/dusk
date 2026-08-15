@@ -42,8 +42,8 @@ namespace randomizer::logic::entrance_shuffle
 
     void SetAllEntrancesData(world::World* world)
     {
-        // Keep track of which double door entrances are together
-        std::unordered_map<std::string, std::list<entrance::Entrance*>> coupledDoors = {};
+        // Keep track of which entrances are together
+        std::unordered_map<std::string, std::list<entrance::Entrance*>> coupledEntrances = {};
 
         auto entranceDataTree = LOAD_EMBED_YAML(RANDO_DATA_PATH "entrance_shuffle_data.yaml");
         for (const auto& entranceDataNode : entranceDataTree)
@@ -60,6 +60,21 @@ namespace randomizer::logic::entrance_shuffle
             }
 
             auto& forwardEntry = entranceDataNode["Forward"];
+
+            // If the entrance can't actually be mapped in-game, skip it 
+            auto stageString = forwardEntry["Stage"].as<std::string>();
+            auto roomString = forwardEntry["Stage"].as<std::string>();
+            if (stageString == "null" || stageString == "-1" || roomString == "null" || roomString == "-1") {
+                continue;
+            }
+            if (entranceDataNode["Return"]) {
+                stageString = entranceDataNode["Return"]["Stage"].as<std::string>();
+                roomString = entranceDataNode["Return"]["Stage"].as<std::string>();
+                if (stageString == "null" || stageString == "-1" || roomString == "null" || roomString == "-1") {
+                    continue;
+                }
+            }
+
             // Check to make sure all required fields are present for the forward entry
             YAMLVerifyFields(forwardEntry, "Connection" /*, "Info" */);
 
@@ -84,45 +99,50 @@ namespace randomizer::logic::entrance_shuffle
                     returnEntry["Alias"] ? returnEntry["Alias"].as<std::string>() : "");
                 forwardEntrance->BindTwoWay(returnEntrance);
 
-                // Add double door entrances to their respective tag group
-                if (entranceDataNode["Door Couple Tag"])
+                // Add coupled entrances to their respective tag group
+                if (entranceDataNode["Entrance Couple Tag"])
                 {
-                    auto tag = entranceDataNode["Door Couple Tag"].as<std::string>();
-                    if (!coupledDoors.contains(tag))
+                    auto tag = entranceDataNode["Entrance Couple Tag"].as<std::string>();
+                    if (!coupledEntrances.contains(tag))
                     {
-                        coupledDoors[tag] = {};
+                        coupledEntrances[tag] = {};
                     }
-                    coupledDoors.at(tag).push_back(forwardEntrance);
-                    coupledDoors.at(tag).push_back(returnEntrance);
+                    coupledEntrances.at(tag).push_back(forwardEntrance);
+                    coupledEntrances.at(tag).push_back(returnEntrance);
                 }
             }
         }
 
-        // If double doors are coupled, add the coupled door's info to the main door, remove the coupled door entrance, and
+        // If entrances are coupled, add the coupled entrance's spawn point to the main door, remove the coupled door entrance, and
         // rename the main door to be more general
         if (world->Setting("Decouple Double Door Entrances") == "Off")
         {
-            for (auto& [tag, doors] : coupledDoors)
+            for (auto& [tag, entrances] : coupledEntrances)
             {
-                while (!doors.empty())
+                while (!entrances.empty())
                 {
-                    auto mainDoor = doors.back();
-                    doors.pop_back();
+                    auto mainEntrance = entrances.back();
+                    entrances.pop_back();
 
-                    auto coupledDoorItr =
-                        std::ranges::find_if(doors,
-                                     [&](const auto& door) { return door->IsPrimary() == mainDoor->IsPrimary(); });
-                    auto coupledDoor = *coupledDoorItr;
+                    std::vector<int16_t> coupledPoints;
+                    for (auto it = entrances.begin(); it != entrances.end();) {
+                        auto coupledEntrance = *it;
+                        if (coupledEntrance->IsPrimary() == mainEntrance->IsPrimary()) {
+                            coupledPoints.push_back(coupledEntrance->GetPointNo());
 
-                    mainDoor->SetCoupledDoor(coupledDoor->GetPointNo());
+                            // Completely remove the coupled door from the world graph
+                            coupledEntrance->GetConnectedArea()->RemoveEntrance(coupledEntrance);
+                            coupledEntrance->GetParentArea()->RemoveExit(coupledEntrance);
+                            it = entrances.erase(it);
+                        }else{
+                            ++it;
+                        }
+                    }
 
-                    // Completely remove the coupled door from the world graph
-                    doors.erase(coupledDoorItr);
-                    coupledDoor->GetConnectedArea()->RemoveEntrance(coupledDoor);
-                    coupledDoor->GetParentArea()->RemoveExit(coupledDoor);
+                    mainEntrance->SetCoupledEntrances(std::move(coupledPoints));
 
                     // Change the main door's name to be more general
-                    mainDoor->GeneralizeName();
+                    mainEntrance->GeneralizeName();
                 }
             }
         }

@@ -665,8 +665,34 @@
   Exits:
     Upper Zoras River Izas House: Can_Open_Doors and Upper_Zoras_River_Portal
     Fishing Hole: Can_Open_Doors
-    Zoras Domain: Nothing
+    Upper Zoras River To Zoras Domain (On Land): Nothing
+    Upper Zoras River To Zoras Domain (Swimming): Nothing
+    Upper Zoras River To Zoras Domain (Underwater): Iron_Boots or Zora_Armor
     Lanayru Field: Nothing
+
+- Name: Upper Zoras River To Zoras Domain (On Land)
+  Map Sector: Lanayru Province
+  Region: Upper Zoras River
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain To Upper Zoras River (On Land): Nothing
+    Upper Zoras River: Nothing
+
+- Name: Upper Zoras River To Zoras Domain (Swimming)
+  Map Sector: Lanayru Province
+  Region: Upper Zoras River
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain To Upper Zoras River (Swimming): Nothing
+    Upper Zoras River: Nothing
+
+- Name: Upper Zoras River To Zoras Domain (Underwater)
+  Map Sector: Lanayru Province
+  Region: Upper Zoras River
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain To Upper Zoras River (Underwater): Iron_Boots or Zora_Armor
+    Upper Zoras River: Nothing
 
 - Name: Upper Zoras River Izas House
   Can Warp: True
@@ -718,7 +744,33 @@
     Zoras Domain West Ledge: Clawshot or Can_Midna_Jump or Twilight
     Zoras Domain Top of Waterfall: Clawshot or Can_Midna_Jump or Twilight
     Snowpeak Climb Lower: Not_Twilight
-    Upper Zoras River: Nothing
+    Zoras Domain To Upper Zoras River (On Land): Nothing
+    Zoras Domain To Upper Zoras River (Swimming): Nothing
+    Zoras Domain To Upper Zoras River (Underwater): Iron_Boots or Zora_Armor
+
+- Name: Zoras Domain To Upper Zoras River (On Land)
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Upper Zoras River To Zoras Domain (On Land): Nothing
+    Zoras Domain: Nothing
+
+- Name: Zoras Domain To Upper Zoras River (Swimming)
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Upper Zoras River To Zoras Domain (Swimming): Nothing
+    Zoras Domain: Nothing
+
+- Name: Zoras Domain To Upper Zoras River (Underwater)
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Upper Zoras River To Zoras Domain (Underwater): Nothing
+    Zoras Domain: Iron_Boots or Zora_Armor
 
 - Name: Zoras Domain West Ledge
   Map Sector: Lanayru Province
@@ -747,9 +799,44 @@
     Zoras Domain Shortcut Lower Boulder Rupee: Can_Smash
     Zoras Domain Shortcut Upper Boulder Rupee: Can_Smash
   Exits:
-    Zoras Throne Room: Nothing
+    Zoras Domain Top of Waterfall Center: Nothing
+    Zoras Domain Top of Waterfall West: Nothing
+    Zoras Domain Top of Waterfall East: Nothing
+    Zoras Domain Top of Waterfall Underwater: Iron_Boots or Zora_Armor
     Zoras Domain West Ledge: Can_Smash
     Zoras Domain: Nothing
+
+- Name: Zoras Domain Top of Waterfall Center
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall: Nothing
+    Zoras Throne Room Center: Nothing
+
+- Name: Zoras Domain Top of Waterfall West
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall: Nothing
+    Zoras Throne Room West: Nothing
+
+- Name: Zoras Domain Top of Waterfall East
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall: Nothing
+    Zoras Throne Room East: Iron_Boots or Zora_Armor
+
+- Name: Zoras Domain Top of Waterfall Underwater
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall: Nothing
+    Zoras Throne Room Underwater: Iron_Boots or Zora_Armor
 
 - Name: Zoras Throne Room
   Map Sector: Lanayru Province
@@ -769,4 +856,39 @@
     Zoras Domain Underwater Goron: Water_Bombs and Iron_Boots and Zora_Armor
     Zoras Domain Throne Room Twilit Insect: Can_Defeat_Lanayru_Twilit_Insect
   Exits:
-    Zoras Domain Top of Waterfall: Nothing
+    Zoras Throne Room Center: Nothing
+    Zoras Throne Room West: Nothing
+    Zoras Throne Room East: Nothing
+    Zoras Throne Room Underwater: Iron_Boots or Zora_Armor
+
+- Name: Zoras Throne Room Center
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall Center: Nothing
+    Zoras Throne Room: Nothing
+
+- Name: Zoras Throne Room West
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall West: Nothing
+    Zoras Throne Room: Nothing
+
+- Name: Zoras Throne Room East
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall East: Nothing
+    Zoras Throne Room: Nothing
+
+- Name: Zoras Throne Room Underwater
+  Map Sector: Lanayru Province
+  Region: Zoras Domain
+  Twilight: Lanayru
+  Exits:
+    Zoras Domain Top of Waterfall Underwater: Nothing
+    Zoras Throne Room: Iron_Boots or Zora_Armor
