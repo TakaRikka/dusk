@@ -12,6 +12,7 @@
 #include <mods/svc/log.hpp>
 
 #include "d/actor/d_a_alink.h"
+#include "d/actor/d_a_mg_rod.h"
 #include "d/actor/d_a_b_bq.h"
 #include "d/actor/d_a_door_shutter.h"
 #include "d/actor/d_a_e_md.h"
@@ -147,6 +148,16 @@ DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 DEFINE_HOOK_SYMBOL("daDitem_Execute", int(daDitem_c*), daDitem_c__execute);
 
 DEFINE_HOOK(&daObjBossWarp_c::demoProc, daObjBossWarp_c__demoProc);
+
+DEFINE_HOOK_SYMBOL("lure_heart", void(dmg_rod_class*), mgRod_lure_heart);
+DEFINE_HOOK_SYMBOL("uki_catch", void(dmg_rod_class*), mgRod_uki_catch);
+
+#ifdef _MSVC_LANG
+#define setEmptyBottle_noarg_sig "?setEmptyBottle@dSv_player_item_c@@QEAAXXZ"
+#else
+#define setEmptyBottle_noarg_sig "_ZN17dSv_player_item_c14setEmptyBottleEv"
+#endif
+DEFINE_HOOK_SYMBOL(setEmptyBottle_noarg_sig, void(dSv_player_item_c*), dSv_player_item_c__setEmptyBottle);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -625,8 +636,24 @@ HookAction hookPreSaveInfoOnSwitch(ModContext*, void* args, void*, void*) {
     return HOOK_CONTINUE;
 }
 
+bool hookLureHeart_isSkipGetItem = false;
+HookAction hookPreLureHeart(ModContext*, void* args, void*, void*) {
+    hookLureHeart_isSkipGetItem = true;
+    return HOOK_CONTINUE;
+}
+
+void hookPostLureHeart(ModContext*, void*, void*, void*) {
+    hookLureHeart_isSkipGetItem = false;
+}
+
 HookAction hookPreGetItemFunc(ModContext*, void* args, void*, void*) {
     const u8 item = mods::arg<u8>(args, 0);
+
+    // coming from lure_heart, don't give item here. let FLW message handle it
+    if (hookLureHeart_isSkipGetItem && item == dItemNo_KAKERA_HEART_e) {
+        return HOOK_SKIP_ORIGINAL;
+    }
+
     item::exec_item_get(item);
     return HOOK_SKIP_ORIGINAL;
 }
@@ -2395,6 +2422,55 @@ void hookPostBossWarpDemoProc(ModContext*, void* args, void*, void*) {
     }
 }
 
+bool hookUkiCatch_isSkipSetBottle = false;
+HookAction hookPreUkiCatch(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<dmg_rod_class*>(args, 0);
+    hookUkiCatch_isSkipSetBottle = false;
+
+    fopAc_ac_c* mgfish_a = fopAcM_SearchByID(i_this->mg_fish_id);
+    mg_fish_class* mgfish = (mg_fish_class*)mgfish_a;
+    if (mgfish == nullptr) {
+        return HOOK_CONTINUE;
+    }
+
+    // replicating the bottle catch check here to remove rng check by overriding whatever catch
+    // you have if you meet the bottle catch conditions
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[468]) &&
+        strcmp(dComIfGp_getStartStageName(), "F_SP127") == 0)
+    {
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        cXyz bin_pos(6800.0f, 30.0f, -270.0f);
+        bin_pos -= player->current.pos;
+        if (bin_pos.abs() < 2500.0f) {
+            s16 angle = player->shape_angle.y - cM_atan2s(bin_pos.x, bin_pos.z);
+            if (angle < 0x4000 && angle > -0x4000) {
+                mgfish->mCaughtType = MG_CATCH_BIN;
+            }
+        }
+    }
+
+    // if catching a bottle, set a flag to skip giving an empty bottle so that the FLW patch
+    // can handle the check
+    if (mgfish->mCaughtType == MG_CATCH_BIN) {
+        hookUkiCatch_isSkipSetBottle = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostUkiCatch(ModContext*, void*, void*, void*) {
+    hookUkiCatch_isSkipSetBottle = false;
+}
+
+HookAction hookPreSetEmptyBottle(ModContext*, void*, void*, void*) {
+    // coming from uki_catch, skip giving bottle. let FLW patch handle it
+    if (hookUkiCatch_isSkipSetBottle) {
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
 }
 
 ModResult initialize() {
@@ -2518,6 +2594,14 @@ ModResult initialize() {
     ADD_HOOK_PRE(daObjBossWarp_c__demoProc, hookPreBossWarpDemoProc);
     ADD_HOOK_POST(daObjBossWarp_c__demoProc, hookPostBossWarpDemoProc);
 
+    ADD_HOOK_PRE(mgRod_lure_heart, hookPreLureHeart);
+    ADD_HOOK_POST(mgRod_lure_heart, hookPostLureHeart);
+
+    ADD_HOOK_PRE(mgRod_uki_catch, hookPreUkiCatch);
+    ADD_HOOK_POST(mgRod_uki_catch, hookPostUkiCatch);
+
+    ADD_HOOK_PRE(dSv_player_item_c__setEmptyBottle, hookPreSetEmptyBottle);
+
     return MOD_OK;
 }
 
@@ -2619,6 +2703,10 @@ ModResult uninstall() {
     mods::hook::uninstall<daDitem_c__execute>(svc_hook);
 
     mods::hook::uninstall<daObjBossWarp_c__demoProc>(svc_hook);
+
+    mods::hook::uninstall<mgRod_lure_heart>(svc_hook);
+    mods::hook::uninstall<mgRod_uki_catch>(svc_hook);
+    mods::hook::uninstall<dSv_player_item_c__setEmptyBottle>(svc_hook);
 
     return MOD_OK;
 }
