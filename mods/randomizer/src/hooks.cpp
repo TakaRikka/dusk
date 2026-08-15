@@ -22,6 +22,7 @@
 #include "d/actor/d_a_tag_kmsg.h"
 #include "d/actor/d_a_npc_fairy.h"
 #include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_obj_bosswarp.h"
 #include "d/actor/d_a_obj_swBallC.h"
 #include "d/actor/d_a_npc_shad.h"
 #include "d/actor/d_a_tbox2.h"
@@ -29,6 +30,7 @@
 #include "d/actor/d_a_npc_ykm.h"
 #include "d/actor/d_a_npc_ykw.h"
 #include "d/actor/d_a_npc_zrz.h"
+#include "d/actor/d_a_demo_item.h"
 #include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
@@ -141,6 +143,10 @@ DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
 
 DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
 DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
+
+DEFINE_HOOK_SYMBOL("daDitem_Execute", int(daDitem_c*), daDitem_c__execute);
+
+DEFINE_HOOK(&daObjBossWarp_c::demoProc, daObjBossWarp_c__demoProc);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -2270,6 +2276,125 @@ HookAction hookPreSwBallActionWait(ModContext*, void* args, void*, void*) {
     return HOOK_SKIP_ORIGINAL;
 }
 
+void hookPostDitemExecute(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daDitem_c*>(args, 0);
+
+    // Certain items use field models that are too big to fit in link's hands so we want to scale them down to fit.
+    switch (i_this->m_itemNo) {
+    case dItemNo_Randomizer_MIRROR_PIECE_1_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_2_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_3_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_4_e:
+    {
+        i_this->scale.x = 0.05f;
+        break;
+    }
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    {
+        i_this->scale.x = 0.001f;
+        break;
+    }
+    }
+}
+
+// pretty ugly way of handling this, but oh well. basically, we reconstruct the actionTable
+// and use it to check that we're in the correct action before proceeding. then store info
+// about what level we're on, and use it in the post-hook to undo the flag that's normally set.
+daObjBossWarp_c* hookBossWarpDemoProc_patchActor = nullptr;
+int hookBossWarpDemoProc_nowLevel = -1;
+HookAction hookPreBossWarpDemoProc(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
+
+    hookBossWarpDemoProc_patchActor = nullptr;
+    hookBossWarpDemoProc_nowLevel = -1;
+
+    static const char* const actionTable[15] = {
+        "WAIT",
+        "APPEAR",
+        "DISAPPEAR",
+        "SCENE_CHG",
+        "STONE_FALL",
+        "STONE_MIDNA",
+        "WALK_TARGET1",
+        "APPEAR_END",
+        "STONE_DELETE",
+        "STONE_PUTAWAY",
+        "WCHECK",
+        "SETPOS",
+        "SCALING",
+        "STONE_SCALE",
+        "HEART_MOVE",
+    };
+
+    bool isRewardAction =
+        dComIfGp_evmng_getIsAddvance(i_this->mStaffId)
+        && dComIfGp_evmng_getMyActIdx(i_this->mStaffId, actionTable, 15, 0, 0) == 4;
+    if (!isRewardAction) {
+        return HOOK_CONTINUE;
+    }
+
+    // this was a static function in the original TU, so reconstructing it for use here
+    auto getNowLevel = []() {
+        static const char* const stages[9] = {
+            "D_MN05A",
+            "D_MN04A",
+            "D_MN01A",
+            "D_MN10A",
+            "D_MN11A",
+            "D_MN06A",
+            "D_MN07A",
+            "D_MN08A",
+            "D_MN01A",
+        };
+
+        for (int i = 0; i < 9; i++) {
+            if (std::strcmp(dComIfGp_getStartStageName(), stages[i]) == 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
+    hookBossWarpDemoProc_patchActor = i_this;
+    hookBossWarpDemoProc_nowLevel = getNowLevel();
+    return HOOK_CONTINUE;
+}
+
+void hookPostBossWarpDemoProc(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
+    if (hookBossWarpDemoProc_patchActor != i_this) {
+        return;
+    }
+
+    int level = hookBossWarpDemoProc_nowLevel;
+    hookBossWarpDemoProc_patchActor = nullptr;
+    hookBossWarpDemoProc_nowLevel = -1;
+
+    // undo the flag that was set in the original function
+    switch (level) {
+    case 0:
+        dComIfGs_offCollectCrystal(0);
+        break;
+    case 1:
+        dComIfGs_offCollectCrystal(1);
+        break;
+    case 2:
+        dComIfGs_offCollectCrystal(2);
+        break;
+    case 4:
+        dComIfGs_offCollectMirror(1);
+        break;
+    case 5:
+        dComIfGs_offCollectMirror(2);
+        break;
+    case 6:
+        dComIfGs_offCollectMirror(3);
+        break;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -2388,6 +2513,11 @@ ModResult initialize() {
     ADD_HOOK_POST(daObjSwBallC_c__Create, hookPostSwBallCreate);
     ADD_HOOK_PRE(daObjSwBallC_c__actionWait, hookPreSwBallActionWait);
 
+    ADD_HOOK_POST(daDitem_c__execute, hookPostDitemExecute);
+
+    ADD_HOOK_PRE(daObjBossWarp_c__demoProc, hookPreBossWarpDemoProc);
+    ADD_HOOK_POST(daObjBossWarp_c__demoProc, hookPostBossWarpDemoProc);
+
     return MOD_OK;
 }
 
@@ -2485,6 +2615,10 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daObjSwBallC_c__Create>(svc_hook);
     mods::hook::uninstall<daObjSwBallC_c__actionWait>(svc_hook);
+
+    mods::hook::uninstall<daDitem_c__execute>(svc_hook);
+
+    mods::hook::uninstall<daObjBossWarp_c__demoProc>(svc_hook);
 
     return MOD_OK;
 }
