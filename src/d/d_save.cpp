@@ -1828,7 +1828,7 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
         savedata->getPlayer().getPlayerInfo().setTotalTime(play_time);
     }
 
-    savedata->getPlayer().getPlayerStatusB().setDateIpl(OSGetTime());
+    savedata->getPlayer().getPlayerStatusB().setDateIpl(DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime()));
 
     memcpy(card_ptr, savedata, sizeof(dSv_save_c));
     card_ptr += 0x958;
@@ -2035,7 +2035,7 @@ void flagFile_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
     }
     case 102: {
         OSCalendarTime time;
-        OSTicksToCalendarTime(OSGetTime(), &time);
+        OSTicksToCalendarTime(DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime()), &time);
 
         const char* start_stage_name = dComIfGp_getStartStageName();
         char filename[64];

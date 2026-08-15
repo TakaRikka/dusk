@@ -75,5 +75,6 @@ extern const ServiceModule g_windowModule;
 extern const ServiceModule g_gfxModule;
 extern const ServiceModule g_saveModule;
 extern const ServiceModule g_stageModule;
+extern const ServiceModule g_itemModule;
 
 }  // namespace dusk::mods::svc

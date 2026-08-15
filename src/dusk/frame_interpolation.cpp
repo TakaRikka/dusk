@@ -147,6 +147,10 @@ void begin_frame(FrameInterpMode mode, bool is_sim_frame, float step) {
     g_enabled = mode != FrameInterpMode::Off;
     g_is_sim_frame = is_sim_frame;
     g_step = std::clamp(step, 0.0f, 1.0f);
+    if (!g_enabled) {
+        g_interpolating = false;
+        clear_replacements();
+    }
 }
 
 bool is_enabled() {

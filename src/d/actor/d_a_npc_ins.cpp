@@ -11,6 +11,10 @@
 #include "d/d_msg_object.h"
 #include <cstring>
 
+#if TARGET_PC
+static u8 s_givenInsectId = dItemNo_NONE_e;
+#endif
+
 enum Ins_RES_File_ID {
     /* BCK */
     /* 0x06 */ BCK_INS_F_HAPPY = 0x6,
@@ -1259,6 +1263,7 @@ int daNpcIns_c::waitPresent(void* param_1) {
                     daPy_py_c* player = daPy_getPlayerActorClass();
                     player->changeOriginalDemo();
                     player->changeDemoMode(0x25, 2, type, 0);
+                    IF_DUSK(s_givenInsectId = type;)
                 } else {
                     mInsectMsgNo = 0x719;
                 }
@@ -1487,7 +1492,17 @@ int daNpcIns_c::talk(void* param_1) {
                         OS_REPORT("会話終了時 イベントID=%d アイテムNo=%d\n", eventID, itemNo);
 
                         if (eventID == 1) {
-                            mItemID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, -1, NULL, NULL);
+#if TARGET_PC
+                            u32 itemGiveTag = 0;
+                            if (s_givenInsectId != dItemNo_NONE_e) {
+                                itemNo = dusk::mods::item_check_bug(
+                                    s_givenInsectId, itemNo & 0xFF, this);
+                                itemGiveTag = dusk::mods::item_give_tag_bug(s_givenInsectId);
+                                s_givenInsectId = dItemNo_NONE_e;
+                            }
+#endif
+                            mItemID = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1,
+                                -1, NULL, NULL IF_DUSK_ARG(itemGiveTag));
 
                             if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                                 daPy_getPlayerActorClass()->cancelOriginalDemo();

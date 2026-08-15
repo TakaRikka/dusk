@@ -931,7 +931,9 @@ static void get_demo(e_th_ball_class* i_this) {
     case 0:
         break;
     case 1:
-        demo_id = fopAcM_createItemForTrBoxDemo(&i_this->current.pos, dItemNo_IRONBALL_e, -1, fopAcM_GetRoomNo(i_this), NULL, NULL);
+        demo_id = fopAcM_createItemForTrBoxDemo(&i_this->current.pos,
+            DUSK_ITEM_CHECK_EXPR("ball_and_chain:D_MN11", dItemNo_IRONBALL_e, i_this), -1,
+            fopAcM_GetRoomNo(i_this), NULL, NULL DUSK_GIVE_TAG("ball_and_chain:D_MN11"));
         JUT_ASSERT(1670, demo_id != fpcM_ERROR_PROCESS_ID_e);
         i_this->mDemoMode = 2;
         break;

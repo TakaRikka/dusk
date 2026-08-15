@@ -1,5 +1,6 @@
 #include "save.hpp"
 
+#include "item.hpp"
 #include "registry.hpp"
 
 #include "aurora/lib/logging.hpp"
@@ -164,6 +165,7 @@ void save_slot_new(uint32_t slot) {
     store.mods.clear();
     store.snapshotValid = false;
     s_currentSlot = static_cast<int32_t>(slot);
+    item_gives_clear();
     Log.info("new save in slot {}; mod blob store cleared", slot);
     notify(slot, &SaveObserverRecord::onNewSave, "new-save");
 }
@@ -183,6 +185,7 @@ void save_slot_loaded(uint32_t slot, const void* slotData) {
         }
     }
     s_currentSlot = static_cast<int32_t>(slot);
+    item_gives_clear();
     notify(slot, &SaveObserverRecord::onLoaded, "save-loaded");
 }
 
@@ -222,6 +225,7 @@ void save_slot_erased(uint32_t slot) {
 
 void save_no_slot() {
     s_currentSlot = -1;
+    item_gives_clear();
 }
 
 namespace {
