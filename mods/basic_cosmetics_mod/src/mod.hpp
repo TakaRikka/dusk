@@ -46,8 +46,8 @@ struct TextureReplacementData {
     const char* arc{};
     const char* modelFileName{};
     const char* textureName{};
-    const uint64_t textureHash{};
-    const uint64_t tlutHash{};
+    uint64_t textureHash{};
+    uint64_t tlutHash{};
     TextureKey key = TEXTURE_KEY_INIT;
     TextureData data = TEXTURE_DATA_INIT;
     TextureReplacementHandle handle{};

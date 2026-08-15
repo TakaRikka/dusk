@@ -11,7 +11,6 @@ class J3DVertexData;
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "d/actor/d_a_alink.h"
-#include "gx/GXEnum.h"
 
 static void get_gx_tile_info(uint8_t format, uint32_t& tileWidth, uint32_t& tileHeight, uint32_t& tileSize) {
     switch (format) {
