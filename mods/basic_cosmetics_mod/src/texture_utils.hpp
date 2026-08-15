@@ -5,19 +5,14 @@
  * https://github.com/zsrtp/libtp_rel/blob/master/include/util/texture_utils.h
  */
 
-#include <cstdint>
+#include "mod.hpp"
 
-struct ResTIMG;
-struct J3DTextureBlock;
-class J3DModelFileData;
-class mDoDvdThd_mountArchive_c;
+#include <gx.h>
 
-ResTIMG* find_tex_header_in_tex_1_section(J3DTextureBlock* tex1Ptr, const char* textureName);
+#include <unordered_map>
 
-uint32_t swap_index_bits(bool leftIsGreater, uint32_t bits);
+uint32_t get_image_data_size(uint32_t format, uint32_t width, uint32_t height, uint32_t mipmapCount);
 
-void recolor_cmpr_texture(J3DTextureBlock* tex1Ptr, const char* textureName, const uint8_t* rgb);
+void recolor_texture(TextureReplacementData& replacementData, GXColor color, std::vector<u8>& newTextureDataOut);
 
-J3DTextureBlock* find_tex_1_in_bmd(J3DModelFileData* bmdPtr);
-
-void handle_texture_overrides_on_load(mDoDvdThd_mountArchive_c* mountArchive);
+std::unordered_map<ConfigVarHandle, std::list<TextureReplacementData>>& get_texture_replacements();

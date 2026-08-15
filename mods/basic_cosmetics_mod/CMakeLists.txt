@@ -12,6 +12,16 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     endif ()
 endif ()
 
+include(FetchContent)
+
+message(STATUS "basic_cosmetics_mod: Fetching xxhash")
+FetchContent_Declare(
+        xxhash
+        GIT_REPOSITORY https://github.com/Cyan4973/xxHash.git
+        GIT_TAG        v0.8.3
+)
+FetchContent_MakeAvailable(xxhash)
+
 set(COSMETIC_SOURCES src/color_utils.cpp src/midna_hair_color.cpp src/texture_utils.cpp src/hooks.cpp)
 
 add_mod(basic_cosmetics_mod
@@ -20,3 +30,5 @@ add_mod(basic_cosmetics_mod
     MOD_JSON mod.json
     RES_DIR  res
 )
+
+target_link_libraries(basic_cosmetics_mod PRIVATE xxHash::xxhash)

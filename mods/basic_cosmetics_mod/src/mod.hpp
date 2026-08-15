@@ -1,8 +1,13 @@
 #pragma once
 
 #include "mods/svc/config.h"
+#include "mods/svc/texture.h"
 
+#include <gx.h>
+
+#include <optional>
 #include <string>
+#include <vector>
 
 struct cvars {
     ConfigVarHandle herosTunicCapColor = 0;
@@ -37,8 +42,23 @@ struct cvars {
     ConfigVarHandle eponaColor = 0;
 };
 
+struct TextureReplacementData {
+    const char* arc{};
+    const char* modelFileName{};
+    const char* textureName{};
+    const uint64_t textureHash{};
+    const uint64_t tlutHash{};
+    TextureKey key = TEXTURE_KEY_INIT;
+    TextureData data = TEXTURE_DATA_INIT;
+    std::vector<u8> baseTextureData{};
+    bool loadedTextureData = false;
+    std::optional<GXColor> curColor{};
+};
+
 cvars& get_cvars();
 
 std::string get_str_option(ConfigVarHandle handle, const std::string& fallback);
 
 int64_t get_int_option(ConfigVarHandle handle, int64_t fallback);
+
+std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow = false);

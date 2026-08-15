@@ -1,8 +1,9 @@
 #include "mod.hpp"
-#include "hooks.hpp"
 #include "color_utils.hpp"
+#include "hooks.hpp"
 #include "midna_hair_color.hpp"
 #include "option_descriptions.hpp"
+#include "texture_utils.hpp"
 
 #include "mods/service.hpp"
 #include "mods/svc/config.h"
@@ -11,12 +12,19 @@
 #include "mods/svc/log.hpp"
 #include "mods/svc/ui.h"
 
+#include "d/d_com_inf_game.h"
+
+#include <xxhash.h>
+
+#include <optional>
+#include <ranges>
 #include <string>
 
 DEFINE_MOD();
 IMPORT_SERVICE(LogService, svc_log);
 IMPORT_SERVICE(ConfigService, svc_config);
 IMPORT_SERVICE(HookService, svc_hook);
+IMPORT_SERVICE(TextureService, svc_texture);
 IMPORT_SERVICE(UiService, svc_ui);
 
 static cvars g_cvars;
@@ -44,8 +52,36 @@ int64_t get_int_option(ConfigVarHandle handle, int64_t fallback) {
     return value;
 }
 
+// Helper for getting configVar color
+std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow /*= false*/) {
+    auto colorStr = get_str_option(handle, "");
+
+    // Convert to lowercase
+    for (auto& c : colorStr) {
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    }
+
+    if (is_valid_hex_color_str(colorStr) || (colorStr == "rainbow" && allowRainbow)) {
+        if (is_valid_hex_color_str(colorStr)) {
+            return hex_color_str_to_gx_color(colorStr);
+        }
+
+        if (allowRainbow) {
+            // Assume rainbow if not a valid hex str
+            auto color = get_rainbow_rgb(127.5f);
+            color.r /= 2;
+            color.g /= 2;
+            color.b /= 2;
+            return color;
+        }
+    }
+
+    return std::nullopt;
+}
+
 namespace {
 UiWindowHandle g_cosmeticsWindow = 0;
+bool g_loadedAllBaseTextures = false;
 
 ModResult register_str_option(
     const char* name, const char* defaultValue, ConfigVarHandle& outHandle, ModError* error) {
@@ -203,6 +239,110 @@ ModResult build_panel(ModContext*, UiElementHandle panel, void*, ModError*) {
 }
 }
 
+void load_base_texture_data() {
+
+    for (auto& [configVar, replacements] : get_texture_replacements()) {
+        for (auto& replacement : replacements) {
+            if (replacement.loadedTextureData) {
+                continue;
+            }
+
+            auto model = static_cast<J3DModelData*>(dComIfG_getObjectRes(replacement.arc, replacement.modelFileName));
+            if (model == nullptr) {
+                continue;
+            }
+
+            J3DTexture* tex = model->getTexture();
+            JUTNameTab* nametable = model->getTextureName();
+            if (tex != nullptr && nametable != nullptr) {
+                for (u16 i = 0; i < tex->getNum(); i++) {
+                    const char* texName = nametable->getName(i);
+                    if (texName != nullptr && std::strcmp(texName, replacement.textureName) == 0) {
+                        auto imageHeader = tex->getResTIMG(i);
+                        auto& key = replacement.key;
+                        auto& data = replacement.data;
+                        key.kind = TEXTURE_KEY_SOURCE;
+                        key.has_tlut = imageHeader->numColors > 0;
+                        key.width = imageHeader->width;
+                        key.height = imageHeader->height;
+                        key.gx_format = imageHeader->format;
+                        key.tlut_hash = replacement.tlutHash;
+
+                        auto size = get_image_data_size(imageHeader->format, imageHeader->width,
+                            imageHeader->height, imageHeader->mipmapEnabled ? imageHeader->mipmapCount : 1);
+                        replacement.baseTextureData.resize(size);
+                        std::memcpy(replacement.baseTextureData.data(), tex->getImgDataPtr(i), size);
+
+                        auto textureHash = XXH64(replacement.baseTextureData.data(), size, 0);
+                        replacement.key.texture_hash = textureHash;
+
+                        mods::log::debug("Loaded base texture data for {}. size: {:X} hash: {:X}", replacement.textureName, size, textureHash);
+                        replacement.loadedTextureData = true;
+
+                        data.width = imageHeader->width;
+                        data.height = imageHeader->height;
+                        data.mip_count = imageHeader->mipmapCount;
+                        data.size = size;
+                        data.gx_format = imageHeader->format;
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    g_loadedAllBaseTextures = std::ranges::all_of(get_texture_replacements() | std::views::values, [](auto& replacementList) {
+        return std::ranges::all_of(replacementList, [](const TextureReplacementData& replacement) {
+            return replacement.loadedTextureData;
+        });
+    });
+}
+
+ModResult check_and_set_recolored_textures() {
+    for (auto& [configVar, replacements] : get_texture_replacements()) {
+        if (configVar == 0) {
+            continue;
+        }
+
+        auto maybeColor = get_config_var_color(configVar);
+        if (!maybeColor.has_value()) {
+            continue;
+        }
+
+        auto color = maybeColor.value();
+        for (auto& replacement : replacements) {
+            if (!replacement.loadedTextureData) {
+                continue;
+            }
+
+            auto& curColor = replacement.curColor;
+            if (curColor == std::nullopt ||
+                curColor.value().r != color.r || curColor.value().g != color.g || curColor.value().b != color.b)
+            {
+                // Make a copy of the base texture data to recolor
+                auto newTexture = replacement.baseTextureData;
+                recolor_texture(replacement, color, newTexture);
+
+                replacement.data.data = newTexture.data();
+                replacement.data.size = newTexture.size();
+
+                // Register the new data
+                auto result = svc_texture->register_data(mod_ctx, &replacement.key, &replacement.data, nullptr);
+                if (result != MOD_OK) {
+                    mods::log::debug("Could not register_data for {}. Result: {}", replacement.textureName, static_cast<int>(result));
+                } else {
+                    mods::log::debug("Registered replacement for {}.", replacement.textureName, static_cast<int>(result));
+                }
+
+                curColor = color;
+            }
+        }
+    }
+
+    return MOD_OK;
+}
+
 #define REGISTER_COSMETIC_OPTION(option) \
     result = register_str_option(#option, NULL, g_cvars.option, error); \
     if (result != MOD_OK) { \
@@ -265,18 +405,27 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         return result;
     }
 
+    g_loadedAllBaseTextures = false;
     return MOD_OK;
 }
 
 MOD_EXPORT ModResult mod_update(ModError*) {
     update_rainbow_rgb(1.0f);
     set_all_midna_hair_colors();
+
+    if (!g_loadedAllBaseTextures) {
+        load_base_texture_data();
+    }
+
+    check_and_set_recolored_textures();
+
     return MOD_OK;
 }
 
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
     svc_log->info(mod_ctx, "basic_cosmetics_mod unloaded");
     g_cosmeticsWindow = 0;
+    get_texture_replacements().clear();
     return MOD_OK;
 }
 }

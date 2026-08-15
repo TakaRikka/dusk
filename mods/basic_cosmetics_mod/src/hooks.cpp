@@ -3,7 +3,6 @@
 #include "mod.hpp"
 #include "color_utils.hpp"
 #include "midna_hair_color.hpp"
-#include "texture_utils.hpp"
 #include "types.h"
 
 #include "mods/svc/hook.hpp"
@@ -35,49 +34,11 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_msg_scrn_base.h"
 #include "d/d_pane_class.h"
-#include "m_Do/m_Do_dvd_thread.h"
 #include "SSystem/SComponent/c_phase.h"
-
-#include <optional>
-
-// Main hook for recoloring textures on load
-DEFINE_HOOK_SYMBOL(
-    "mDoDvdThd_mountArchive_c::execute", s32(mDoDvdThd_mountArchive_c*), MountArchiveExecute);
-void mount_archive_execute_post(ModContext*, void* args, void* retval, void* userdata) {
-    auto archive = mods::arg<mDoDvdThd_mountArchive_c*>(args, 0);
-    handle_texture_overrides_on_load(archive);
-}
-
-// Helper for getting configVar color
-static std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow = false) {
-    auto colorStr = get_str_option(handle, "");
-
-    // Convert to lowercase
-    for (auto& c : colorStr) {
-        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    }
-
-    if (is_valid_hex_color_str(colorStr) || (colorStr == "rainbow" && allowRainbow)) {
-        if (is_valid_hex_color_str(colorStr)) {
-            return hex_color_str_to_gx_color(colorStr);
-        }
-        
-        if (allowRainbow) {
-            // Assume rainbow if not a valid hex str
-            auto color = get_rainbow_rgb(127.5f);
-            color.r /= 2;
-            color.g /= 2;
-            color.b /= 2;
-            return color;
-        }
-    }
-
-    return std::nullopt;
-}
 
 // Lantern ambience color
 DEFINE_HOOK(&dKy_WolfEyeLight_set, WolfEyeLightSet);
-void wolf_eye_light_set_post(ModContext*, void* args, void* retval, void* userdata) {
+void wolf_eye_light_set_post(ModContext*, void*, void*, void*) {
     auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
@@ -91,7 +52,7 @@ void wolf_eye_light_set_post(ModContext*, void* args, void* retval, void* userda
 
 // Lantern Sphere color
 DEFINE_HOOK(&daAlink_c::preKandelaarDraw, PreKandelaarDraw);
-void pre_kandelaar_draw_post(ModContext*, void* args, void* retval, void* userdata) {
+void pre_kandelaar_draw_post(ModContext*, void*, void*, void*) {
     auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
@@ -114,7 +75,7 @@ void pre_kandelaar_draw_post(ModContext*, void* args, void* retval, void* userda
 
 // Main Lantern Meter Color
 DEFINE_HOOK(&CPaneMgr::setBlackWhite, CPaneMgrSetBlackWhite);
-HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void* retval, void* userdata) {
+HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void*, void*) {
     // Check for magic meter
     auto pane = mods::arg<CPaneMgr*>(args, 0);
     if (dMeter2Info_getMeterClass() == NULL || pane != dMeter2Info_getMeterClass()->getMeterDrawPtr()->mpMagicMeter) {
@@ -141,7 +102,7 @@ HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void* retval, 
 
 // Lantern Icon Meter Color
 DEFINE_HOOK(&dKantera_icon_c::setNowGauge, KanteraIconSetNowGauge);
-void kantera_icon_set_now_gauge_post(ModContext*, void* args, void* retval, void* userdata) {
+void kantera_icon_set_now_gauge_post(ModContext*, void* args, void*, void*) {
     auto maybeLanternColor = get_config_var_color(get_cvars().lanternGlowColor, true);
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
@@ -155,7 +116,7 @@ void kantera_icon_set_now_gauge_post(ModContext*, void* args, void* retval, void
 
 // Light Sword Effect Color
 DEFINE_HOOK(&daAlink_c::setLightningSwordEffect, SetLightningSwordEffect);
-void set_lightning_sword_effect_post(ModContext*, void* args, void* retval, void* userdata) {
+void set_lightning_sword_effect_post(ModContext*, void* args, void*, void*) {
     auto maybeGlowColor = get_config_var_color(get_cvars().lightSwordGlowColor, true);
     if (maybeGlowColor.has_value()) {
         auto glowColor = maybeGlowColor.value();
@@ -603,7 +564,7 @@ void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void
 
 // Midna Charge Ring Color
 DEFINE_HOOK(&daAlink_c::setWolfLockDomeModel, SetWolfLockDomeModel);
-void wolf_lock_dome_model_post(ModContext*, void* args, void* retval, void* userdata) {
+void wolf_lock_dome_model_post(ModContext*, void*, void*, void*) {
     auto domeRingColorStr = get_str_option(get_cvars().midnaChargeRingColor, "");
     if (is_valid_hex_color_str(domeRingColorStr)) {
         auto domeRingColor = hex_color_str_to_gx_color(domeRingColorStr);
@@ -644,9 +605,6 @@ void wolf_lock_dome_model_post(ModContext*, void* args, void* retval, void* user
 
 ModResult add_all_hooks() {
     ModResult result{};
-
-    // Main hook for texture recoloring
-    ADD_POST_HOOK(MountArchiveExecute, mount_archive_execute_post, mountArchive_execute)
 
     // Hooks for lantern glow
     ADD_POST_HOOK(WolfEyeLightSet, wolf_eye_light_set_post, dKy_WolfEyeLight_set)

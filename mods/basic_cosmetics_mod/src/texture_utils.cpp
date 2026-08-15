@@ -8,99 +8,59 @@
 // Forward declaration needed for J3DModelLoader to be happy
 class J3DVertexData;
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
-#include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTNameTab.h"
-#include "JSystem/JUtility/JUTTexture.h"
 #include "d/actor/d_a_alink.h"
-#include "global.h"
 #include "gx/GXEnum.h"
-#include "m_Do/m_Do_dvd_thread.h"
 
-#include <list>
-
-ResTIMG* find_tex_header_in_tex_1_section(J3DTextureBlock* tex1Ptr, const char* textureName) {
-    if (tex1Ptr == nullptr) {
-        return nullptr;
+static void get_gx_tile_info(uint8_t format, uint32_t& tileWidth, uint32_t& tileHeight, uint32_t& tileSize) {
+    switch (format) {
+    case GX_TF_I8:
+    case GX_TF_IA4:
+    case GX_TF_C8:
+        tileWidth = 8; tileHeight = 4; tileSize = 32;
+        break;
+    case GX_TF_IA8:
+    case GX_TF_RGB565:
+    case GX_TF_RGB5A3:
+    case GX_TF_C14X2:
+        tileWidth = 4; tileHeight = 4; tileSize = 32;
+        break;
+    case GX_TF_RGBA8:
+        tileWidth = 4; tileHeight = 4; tileSize = 64;
+        break;
+    case GX_TF_I4:
+    case GX_TF_C4:
+    case GX_TF_CMPR:
+    default:
+        tileWidth = 8; tileHeight = 8; tileSize = 32;
+        break;
     }
-
-    auto strTable = JSUConvertOffsetToPtr<ResNTAB>(tex1Ptr, tex1Ptr->mpNameTable);
-    for (size_t i = 0; i < strTable->mEntryNum && i < tex1Ptr->mTextureNum; i++) {
-        const char* str = strTable->getName(i);
-
-        if (strcmp(str, textureName) == 0) {
-            return &JSUConvertOffsetToPtr<ResTIMG>(tex1Ptr, tex1Ptr->mpTextureRes)[i];
-        }
-    }
-
-    return nullptr;
 }
 
-void recolor_rgb5a3_texture(ResTIMG* texHeaderPtr, GXColor color)
-{
-    // Precompute lookup tables for both RGB555 (opaque) and RGB444 (translucent) modes
-    uint16_t recolors_rgb555[0x100];
-    uint16_t recolors_rgb444[0x100];
+uint32_t get_image_data_size(uint32_t format, uint32_t width, uint32_t height, uint32_t mipmapCount) {
 
-    for (int32_t i = 0; i < 0x100; i++) {
-        const uint8_t r = blend_overlay_channel(i, color.r);
-        const uint8_t g = blend_overlay_channel(i, color.g);
-        const uint8_t b = blend_overlay_channel(i, color.b);
+    uint32_t tileWidth, tileHeight, tileSize;
+    get_gx_tile_info(format, tileWidth, tileHeight, tileSize);
 
-        // Pack as RGB555: Bit 15 set to 1 + 5 bits R, G, B
-        recolors_rgb555[i] = 0x8000 | ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+    uint32_t totalSize = 0;
 
-        // Pack as RGB444: 4 bits R, G, B (Bit 15 remains 0)
-        recolors_rgb444[i] = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+    for (uint8_t i = 0; i < mipmapCount; ++i) {
+        // Round dimensions up to nearest tile boundary
+        uint32_t paddedWidth = (width + tileWidth - 1) & ~(tileWidth - 1);
+        uint32_t paddedHeight = (height + tileHeight - 1) & ~(tileHeight - 1);
+
+        uint32_t tilesX = paddedWidth / tileWidth;
+        uint32_t tilesY = paddedHeight / tileHeight;
+
+        totalSize += tilesX * tilesY * tileSize;
+
+        // Downscale dimensions for next mipmap level
+        width = std::max(1u, width >> 1);
+        height = std::max(1u, height >> 1);
     }
 
-    constexpr int32_t blockWidth = 4;
-    constexpr int32_t blockHeight = 4;
-
-    const int32_t roundedWidth = texHeaderPtr->width + ((blockWidth - (texHeaderPtr->width % blockWidth)) % blockWidth);
-    const int32_t roundedHeight = texHeaderPtr->height + ((blockHeight - (texHeaderPtr->height % blockHeight)) % blockHeight);
-
-    const int32_t totalPixels = roundedWidth * roundedHeight;
-
-    auto* pixelPtr = reinterpret_cast<BE<uint16_t>*>(JSUConvertOffsetToPtr<u8>(texHeaderPtr, texHeaderPtr->imageOffset));
-
-    for (int32_t i = 0; i < totalPixels; i++) {
-        const uint16_t rawPixel = pixelPtr[i];
-
-        // MSB determines if pixel is opaque or translucent
-        if (rawPixel & 0x8000) {
-            // Pixel is opaque
-            const uint8_t r5 = (rawPixel >> 10) & 0x1F;
-            const uint8_t g5 = (rawPixel >> 5) & 0x1F;
-            const uint8_t b5 = rawPixel & 0x1F;
-
-            // Expand 5-bit to 8-bit
-            const uint8_t r8 = (r5 << 3) | (r5 >> 2);
-            const uint8_t g8 = (g5 << 3) | (g5 >> 2);
-            const uint8_t b8 = (b5 << 3) | (b5 >> 2);
-
-            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
-
-            pixelPtr[i] = recolors_rgb555[grayVal];
-        } else {
-            // Pixel is translucent
-            const uint16_t alpha3 = rawPixel & 0x7000;
-
-            const uint8_t r4 = (rawPixel >> 8) & 0x0F;
-            const uint8_t g4 = (rawPixel >> 4) & 0x0F;
-            const uint8_t b4 = rawPixel & 0x0F;
-
-            // Expand 4-bit to 8-bit
-            const uint8_t r8 = (r4 << 4) | r4;
-            const uint8_t g8 = (g4 << 4) | g4;
-            const uint8_t b8 = (b4 << 4) | b4;
-
-            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
-
-            // Combine original alpha with recolored RGB444
-            pixelPtr[i] = alpha3 | recolors_rgb444[grayVal];
-        }
-    }
+    return totalSize;
 }
 
 // When left is greater than right
@@ -140,79 +100,152 @@ uint32_t swap_index_bits(bool leftIsGreater, uint32_t bits) {
     return bits ^ mask;
 }
 
-void recolor_cmpr_texture(ResTIMG* texHeaderPtr, GXColor color)
+void recolor_cmpr_texture(const TextureReplacementData& replacementData, const GXColor color, std::vector<u8>& newTextureDataOut)
 {
     uint16_t recolors[0x100];
     for (int32_t i = 0; i < 0x100; i++) {
         recolors[i] = blend_overlay_rgb_565(i, color);
     }
 
-    constexpr int32_t blockWidth = 8;
-    constexpr int32_t blockHeight = 8;
+    const uint8_t mipCount = (replacementData.data.mip_count > 0) ? replacementData.data.mip_count : 1;
+    uint32_t mipWidth = replacementData.key.width;
+    uint32_t mipHeight = replacementData.key.height;
 
-    const int32_t roundedWidth = texHeaderPtr->width + ((blockWidth - (texHeaderPtr->width % blockWidth)) % blockWidth);
-    const int32_t roundedHeight = texHeaderPtr->height + ((blockHeight - (texHeaderPtr->height % blockHeight)) % blockHeight);
+    uint8_t* currentAddr = newTextureDataOut.data();
 
-    const int32_t numBlocks = roundedWidth / blockWidth * roundedHeight / blockHeight;
+    for (uint8_t mip = 0; mip < mipCount; ++mip) {
+        // Round dimensions up to the nearest 8x8 tile boundary
+        const uint32_t roundedWidth = (mipWidth + 7) & ~7;
+        const uint32_t roundedHeight = (mipHeight + 7) & ~7;
 
-    const int32_t iterations = numBlocks * 4;
+        const uint32_t numBlocks = (roundedWidth / 8) * (roundedHeight / 8);
+        const uint32_t iterations = numBlocks * 4; // 4 CMPR sub-blocks per 8x8 tile
 
-    uint8_t* currentAddr = JSUConvertOffsetToPtr<u8>(texHeaderPtr, texHeaderPtr->imageOffset);
-    for (int32_t i = 0; i < iterations; i++) {
-        auto* rgb565Ptr = reinterpret_cast<BE<uint16_t>*>(currentAddr);
+        for (uint32_t i = 0; i < iterations; i++) {
+            auto* rgb565Ptr = reinterpret_cast<BE<uint16_t>*>(currentAddr);
 
-        auto leftRgb565 = rgb565Ptr[0];
-        auto rightRgb565 = rgb565Ptr[1];
-        const bool leftIsGreater = leftRgb565 > rightRgb565;
+            auto leftRgb565 = rgb565Ptr[0];
+            auto rightRgb565 = rgb565Ptr[1];
+            const bool leftIsGreater = leftRgb565 > rightRgb565;
 
-        const uint32_t leftGrayVal = desaturate_rgb_565(leftRgb565);
-        const uint32_t rightGrayVal = desaturate_rgb_565(rightRgb565);
+            const uint32_t leftGrayVal = desaturate_rgb_565(leftRgb565);
+            const uint32_t rightGrayVal = desaturate_rgb_565(rightRgb565);
 
-        uint16_t leftNewRgb565 = recolors[leftGrayVal];
-        uint16_t rightNewRgb565 = recolors[rightGrayVal];
+            uint16_t leftNewRgb565 = recolors[leftGrayVal];
+            uint16_t rightNewRgb565 = recolors[rightGrayVal];
 
-        bool needsBitSwap = false;
+            bool needsBitSwap = false;
 
-        if (leftIsGreater) {
-            if (leftNewRgb565 == rightNewRgb565) {
-                // Need to make sure that subtracting 1 does not mess
-                // everything up. For example, 0x1000 - 1 => 0x0fff which is
-                // a completely different color.
-                if ((leftNewRgb565 & 0x1f) == 0)
-                {
-                    // If left value has 0 blue, we change its blue to 1.
-                    leftNewRgb565 += 1;
+            if (leftIsGreater) {
+                if (leftNewRgb565 == rightNewRgb565) {
+                    // Need to make sure that subtracting 1 does not mess
+                    // everything up. For example, 0x1000 - 1 => 0x0fff which is
+                    // a completely different color.
+                    if ((leftNewRgb565 & 0x1f) == 0) {
+                        // If left value has 0 blue, we change its blue to 1.
+                        leftNewRgb565 += 1;
+                    }
+                    rightNewRgb565 = leftNewRgb565 - 1;
                 }
-                rightNewRgb565 = leftNewRgb565 - 1;
+                else if (leftNewRgb565 < rightNewRgb565) {
+                    needsBitSwap = true;
+                }
             }
-            else if (leftNewRgb565 < rightNewRgb565) {
+            else if (leftNewRgb565 > rightNewRgb565) {
                 needsBitSwap = true;
             }
+
+            if (needsBitSwap) {
+                // The left and right colors are swapping so that their values
+                // are relative in the same way. We need to update the bits
+                // referencing the palette entries to handle the swap.
+                const uint16_t temp = leftNewRgb565;
+                leftNewRgb565 = rightNewRgb565;
+                rightNewRgb565 = temp;
+
+                auto wordPtr = reinterpret_cast<BE<uint32_t>*>(currentAddr);
+                const uint32_t bits = wordPtr[1];
+
+                const uint32_t newBits = swap_index_bits(leftIsGreater, bits);
+                wordPtr[1] = newBits;
+            }
+
+            rgb565Ptr[0] = leftNewRgb565;
+            rgb565Ptr[1] = rightNewRgb565;
+
+            currentAddr += 8;
         }
-        else if (leftNewRgb565 > rightNewRgb565) {
-            needsBitSwap = true;
+
+        // Halve dimensions for the next mipmap level
+        mipWidth = std::max(1u, mipWidth >> 1);
+        mipHeight = std::max(1u, mipHeight >> 1);
+    }
+}
+
+void recolor_rgb5a3_texture(const TextureReplacementData& replacementData, const GXColor color, std::vector<u8>& newTextureDataOut)
+{
+    // Precompute lookup tables for both RGB555 (opaque) and RGB444 (translucent) modes
+    uint16_t recolors_rgb555[0x100];
+    uint16_t recolors_rgb444[0x100];
+
+    for (int32_t i = 0; i < 0x100; i++) {
+        const uint8_t r = blend_overlay_channel(i, color.r);
+        const uint8_t g = blend_overlay_channel(i, color.g);
+        const uint8_t b = blend_overlay_channel(i, color.b);
+
+        // Pack as RGB555: Bit 15 set to 1 + 5 bits R, G, B
+        recolors_rgb555[i] = 0x8000 | ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+
+        // Pack as RGB444: 4 bits R, G, B (Bit 15 remains 0)
+        recolors_rgb444[i] = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+    }
+
+    constexpr int32_t blockWidth = 4;
+    constexpr int32_t blockHeight = 4;
+
+    const int32_t roundedWidth = replacementData.key.width + ((blockWidth - (replacementData.key.width % blockWidth)) % blockWidth);
+    const int32_t roundedHeight = replacementData.key.height + ((blockHeight - (replacementData.key.height % blockHeight)) % blockHeight);
+
+    const int32_t totalPixels = roundedWidth * roundedHeight;
+
+    auto* pixelPtr = newTextureDataOut.data();
+
+    for (int32_t i = 0; i < totalPixels; i++) {
+        const uint16_t rawPixel = pixelPtr[i];
+
+        // MSB determines if pixel is opaque or translucent
+        if (rawPixel & 0x8000) {
+            // Pixel is opaque
+            const uint8_t r5 = (rawPixel >> 10) & 0x1F;
+            const uint8_t g5 = (rawPixel >> 5) & 0x1F;
+            const uint8_t b5 = rawPixel & 0x1F;
+
+            // Expand 5-bit to 8-bit
+            const uint8_t r8 = (r5 << 3) | (r5 >> 2);
+            const uint8_t g8 = (g5 << 3) | (g5 >> 2);
+            const uint8_t b8 = (b5 << 3) | (b5 >> 2);
+
+            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
+
+            pixelPtr[i] = recolors_rgb555[grayVal];
+        } else {
+            // Pixel is translucent
+            const uint16_t alpha3 = rawPixel & 0x7000;
+
+            const uint8_t r4 = (rawPixel >> 8) & 0x0F;
+            const uint8_t g4 = (rawPixel >> 4) & 0x0F;
+            const uint8_t b4 = rawPixel & 0x0F;
+
+            // Expand 4-bit to 8-bit
+            const uint8_t r8 = (r4 << 4) | r4;
+            const uint8_t g8 = (g4 << 4) | g4;
+            const uint8_t b8 = (b4 << 4) | b4;
+
+            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
+
+            // Combine original alpha with recolored RGB444
+            pixelPtr[i] = alpha3 | recolors_rgb444[grayVal];
         }
-
-        if (needsBitSwap) {
-            // The left and right colors are swapping so that their values
-            // are relative in the same way. We need to update the bits
-            // referencing the palette entries to handle the swap.
-
-            const uint16_t temp = leftNewRgb565;
-            leftNewRgb565 = rightNewRgb565;
-            rightNewRgb565 = temp;
-
-            auto wordPtr = reinterpret_cast<BE<uint32_t>*>(currentAddr);
-            const uint32_t bits = wordPtr[1];
-
-            const uint32_t newBits = swap_index_bits(leftIsGreater, bits);
-            wordPtr[1] = newBits;
-        }
-
-        rgb565Ptr[0] = leftNewRgb565;
-        rgb565Ptr[1] = rightNewRgb565;
-
-        currentAddr += 8;
     }
 }
 
@@ -283,84 +316,91 @@ static void encode_cmpr_sub_block(uint8_t* dst, const uint8_t pixels[16]) {
     dst[7] = static_cast<uint8_t>(indices & 0xFF);
 }
 
-bool convert_i8_to_cmpr(ResTIMG* texHeaderPtr) {
-
-    const uint16_t width = texHeaderPtr->width;
-    const uint16_t height = texHeaderPtr->height;
-
-    if (width % 8 != 0 || height % 8 != 0) {
+bool convert_i8_to_cmpr(TextureReplacementData& replacementData, std::vector<u8>& cmprOut) {
+    if (cmprOut.empty() || replacementData.key.width % 8 != 0 || replacementData.key.height % 8 != 0) {
         return false;
     }
 
-    const uint32_t tilesX = width / 8;
-    const uint32_t blocksY_CMPR = height / 8;
+    const uint8_t mipCount = (replacementData.data.mip_count > 0) ? replacementData.data.mip_count : 1;
+    uint32_t mipWidth = replacementData.key.width;
+    uint32_t mipHeight = replacementData.key.height;
 
-    auto* imageData = JSUConvertOffsetToPtr<uint8_t>(texHeaderPtr, texHeaderPtr->imageOffset);
-    uint8_t* writePtr = imageData;
+    const uint8_t* readPtr = cmprOut.data();
+    uint8_t* writePtr = cmprOut.data();
 
-    // Process image in 8x8 blocks
-    for (uint32_t by = 0; by < blocksY_CMPR; ++by) {
-        for (uint32_t bx = 0; bx < tilesX; ++bx) {
-            // Locate the two stacked 8x4 I8 tiles (32 bytes each) making up the 8x8 block
-            const uint32_t topTileIdx = (2 * by) * tilesX + bx;
-            const uint32_t bottomTileIdx = (2 * by + 1) * tilesX + bx;
+    for (uint8_t mip = 0; mip < mipCount; ++mip) {
+        const uint32_t paddedWidthI8 = (mipWidth + 7) & ~7;
+        const uint32_t paddedHeightI8 = (mipHeight + 3) & ~3;
+        const uint32_t tilesX_I8 = paddedWidthI8 / 8;
 
-            const uint8_t* topTileData = imageData + (topTileIdx * 32);
-            const uint8_t* bottomTileData = imageData + (bottomTileIdx * 32);
+        const uint32_t paddedWidthCMPR = (mipWidth + 7) & ~7;
+        const uint32_t paddedHeightCMPR = (mipHeight + 7) & ~7;
+        const uint32_t blocksX_CMPR = paddedWidthCMPR / 8;
+        const uint32_t blocksY_CMPR = paddedHeightCMPR / 8;
 
-            uint8_t subBlockPixels[4][16];
+        for (uint32_t by = 0; by < blocksY_CMPR; ++by) {
+            for (uint32_t bx = 0; bx < blocksX_CMPR; ++bx) {
+                const uint32_t topTileIdx = (2 * by) * tilesX_I8 + bx;
+                const uint32_t bottomTileIdx = (2 * by + 1) * tilesX_I8 + bx;
 
-            // Extract Sub-block 0 (Top-Left) and Sub-block 1 (Top-Right)
-            for (int row = 0; row < 4; ++row) {
-                for (int col = 0; col < 4; ++col) {
-                    subBlockPixels[0][row * 4 + col] = topTileData[row * 8 + col];
-                    subBlockPixels[1][row * 4 + col] = topTileData[row * 8 + col + 4];
+                const uint8_t* topTileData = readPtr + (topTileIdx * 32);
+                const uint8_t* bottomTileData = readPtr + (bottomTileIdx * 32);
+
+                uint8_t subBlockPixels[4][16];
+
+                for (int row = 0; row < 4; ++row) {
+                    for (int col = 0; col < 4; ++col) {
+                        subBlockPixels[0][row * 4 + col] = topTileData[row * 8 + col];
+                        subBlockPixels[1][row * 4 + col] = topTileData[row * 8 + col + 4];
+                    }
                 }
-            }
 
-            // Extract Sub-block 2 (Bottom-Left) and Sub-block 3 (Bottom-Right)
-            for (int row = 0; row < 4; ++row) {
-                for (int col = 0; col < 4; ++col) {
-                    subBlockPixels[2][row * 4 + col] = bottomTileData[row * 8 + col];
-                    subBlockPixels[3][row * 4 + col] = bottomTileData[row * 8 + col + 4];
+                for (int row = 0; row < 4; ++row) {
+                    for (int col = 0; col < 4; ++col) {
+                        subBlockPixels[2][row * 4 + col] = bottomTileData[row * 8 + col];
+                        subBlockPixels[3][row * 4 + col] = bottomTileData[row * 8 + col + 4];
+                    }
                 }
-            }
 
-            // Encode the 4 sub-blocks in CMPR order (32 bytes per 8x8 block)
-            for (const auto& subBlockPixel : subBlockPixels) {
-                encode_cmpr_sub_block(writePtr, subBlockPixel);
-                writePtr += 8;
+                // Write 32 bytes of CMPR output into the same buffer
+                for (const auto& subBlockPixel : subBlockPixels) {
+                    encode_cmpr_sub_block(writePtr, subBlockPixel);
+                    writePtr += 8;
+                }
             }
         }
+
+        const uint32_t tilesY_I8 = paddedHeightI8 / 4;
+        readPtr += tilesX_I8 * tilesY_I8 * 32;
+
+        mipWidth = std::max(1u, mipWidth >> 1);
+        mipHeight = std::max(1u, mipHeight >> 1);
     }
 
-    // Update ResTIMG header metadata
-    texHeaderPtr->format = GX_TF_CMPR; // 0x0E
-    texHeaderPtr->colorFormat = 0;
-    texHeaderPtr->numColors = 0;
-    texHeaderPtr->paletteOffset = 0;
+    // Resize for new CMPR image
+    const size_t finalSize = writePtr - cmprOut.data();
+    cmprOut.resize(finalSize);
+
+    // Update format
+    replacementData.data.gx_format = GX_TF_CMPR;
 
     return true;
 }
 
-void recolor_texture(J3DTextureBlock* tex1Ptr, const char* textureName, GXColor color) {
-    ResTIMG* texHeaderPtr = find_tex_header_in_tex_1_section(tex1Ptr, textureName);
-    if (texHeaderPtr == nullptr) {
-        return;
-    }
+void recolor_texture(TextureReplacementData& replacementData, GXColor color, std::vector<u8>& newTextureDataOut) {
 
-    switch (texHeaderPtr->format) {
+    switch (replacementData.key.gx_format) {
     case GX_TF_CMPR:
-        recolor_cmpr_texture(texHeaderPtr, color);
+        recolor_cmpr_texture(replacementData, color, newTextureDataOut);
         break;
     case GX_TF_RGB5A3:
-        recolor_rgb5a3_texture(texHeaderPtr, color);
+        recolor_rgb5a3_texture(replacementData, color, newTextureDataOut);
         break;
     case GX_TF_I8:
-        if (convert_i8_to_cmpr(texHeaderPtr)) {
-            recolor_cmpr_texture(texHeaderPtr, color);
+        if (convert_i8_to_cmpr(replacementData, newTextureDataOut)) {
+            recolor_cmpr_texture(replacementData, color, newTextureDataOut);
         } else {
-            mods::log::debug("Could not convert {} from i8 to cmpr", textureName);
+            mods::log::debug("Could not convert {} from i8 to cmpr", replacementData.textureName);
         }
         break;
     default:
@@ -368,182 +408,266 @@ void recolor_texture(J3DTextureBlock* tex1Ptr, const char* textureName, GXColor 
     }
 }
 
-J3DTextureBlock* find_tex_1_in_bmd(J3DModelFileData* bmdPtr)
-{
-    if (bmdPtr == nullptr) {
-        return nullptr;
-    }
+std::unordered_map<ConfigVarHandle, std::list<TextureReplacementData>>& get_texture_replacements() {
+    static std::unordered_map<ConfigVarHandle, std::list<TextureReplacementData>> replacements{};
 
-    if (bmdPtr->mMagic1 != MULTI_CHAR('J3D2')) {
-        // Model was not a BMD or BDL!
-        return nullptr;
-    }
-
-    if (bmdPtr->mMagic2 != MULTI_CHAR('bmd3') && bmdPtr->mMagic2 != MULTI_CHAR('bdl4')) {
-        // Model was not a BMD or BDL!
-        return nullptr;
-    }
-
-    J3DModelBlock* curBlock = bmdPtr->mBlocks;
-    for (int32_t i = 0; i < bmdPtr->mBlockNum; i++) {
-        if (curBlock->mBlockType == MULTI_CHAR('TEX1')) {
-            return static_cast<J3DTextureBlock*>(curBlock);
-        }
-
-        // Line taken from J3DModelLoader.cpp
-        curBlock = (J3DModelBlock*)((uintptr_t)curBlock + curBlock->mBlockSize);
-    }
-
-    return nullptr;
-}
-
-struct CosmeticOverride {
-    std::list<std::string_view> textures{};
-    ConfigVarHandle hexColor{0};
-};
-
-auto& get_cosmetic_overrides() {
-    static std::unordered_map<s32, std::unordered_map<std::string_view, std::list<CosmeticOverride>>> cosmeticOverrides{};
-    if (cosmeticOverrides.empty()) {
-        auto& g_cvars = get_cvars();
-        // Ordon Clothes Link Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Bmdl.arc")]["bmwr/al_swb.bmd"] = {
-            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
-        };
-        // Main Link Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Kmdl.arc")]["bmwr/al_head.bmd"] = {
-            {.textures = {"al_cap"},  .hexColor = g_cvars.herosTunicCapColor},
-            {.textures = {"al_hair"}, .hexColor = g_cvars.linkHairColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Kmdl.arc")]["bmwr/al.bmd"] = {
-            {.textures = {"al_upbody"},  .hexColor = g_cvars.herosTunicTorsoColor},
-            {.textures = {"al_lowbody"}, .hexColor = g_cvars.herosTunicSkirtColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Kmdl.arc")]["bmwr/al_bootsh.bmd"] = {
-            {.textures = {"al_bootsH"},  .hexColor = g_cvars.ironBootsColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Kmdl.arc")]["bmwr/al_swb.bmd"] = {
-            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
-        };
-        // Zora Armor Link Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Zmdl.arc")]["bmwr/zl_head.bmd"] = {
-            {.textures = {"zl_cap"},    .hexColor = g_cvars.zoraArmorCapColor},
-            {.textures = {"zl_helmet"}, .hexColor = g_cvars.zoraArmorHelmetColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Zmdl.arc")]["bmwr/zl.bmd"] = {
-            {.textures = {"zl_armor", "zl_armL"}, .hexColor = g_cvars.zoraArmorTorsoColor},
-            {.textures = {"zl_body"},             .hexColor = g_cvars.zoraArmorScalesColor},
-            {.textures = {"zl_boots"},            .hexColor = g_cvars.zoraArmorFlippersColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Zmdl.arc")]["bmwr/al_bootsh.bmd"] = {
-            {.textures = {"al_bootsH"},  .hexColor = g_cvars.ironBootsColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Zmdl.arc")]["bmwr/al_swb.bmd"] = {
-            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
-        };
-        // Zora Armor field model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_zora.arc")]["bmdr/o_gd_al_zora.bmd"] = {
-            {.textures = {"zl_armor"}, .hexColor = g_cvars.zoraArmorTorsoColor},
-            {.textures = {"zl_body"},  .hexColor = g_cvars.zoraArmorScalesColor},
-            {.textures = {"zl_helmet"}, .hexColor = g_cvars.zoraArmorHelmetColor},
-            {.textures = {"zl_cap"},    .hexColor = g_cvars.zoraArmorCapColor},
-        };
-        // Magic Armor Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Mmdl.arc")]["bmwr/al_bootsh.bmd"] = {
-            {.textures = {"al_bootsH"},  .hexColor = g_cvars.ironBootsColor},
-        };
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Mmdl.arc")]["bmwr/al_swb.bmd"] = {
-            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
-        };
-        // Ordon Sword Colors
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Alink.arc")]["bmwr/al_swa.bmd"] = {
-            {.textures = {"al_SWA", "hilight01"}, .hexColor = g_cvars.ordonSwordBladeColor},
-            {.textures = {"al_SWgripA"}, .hexColor = g_cvars.ordonSwordHandleColor},
-        };
-        // Master Sword Colors
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Alink.arc")]["bmwe/al_swm.bmd"] = {
-            {.textures = {"al_SWM"}, .hexColor = g_cvars.msBladeColor},
-            {.textures = {"al_SWgripM"}, .hexColor = g_cvars.msHandleColor},
-        };
-        // Boomerang Color
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Alink.arc")]["bmdr/al_boom.bmd"] = {
-            {.textures = {"L_al_boom00"}, .hexColor = g_cvars.boomerangColor},
-        };
-        // Spinner Color
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Alink.arc")]["bmdr/al_sp.bmd"] = {
-            {.textures = {"al_SP"}, .hexColor = g_cvars.spinnerColor},
-        };
-        // Epona Color
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Horse.arc")]["bmdr/hs.bmd"] = {
-            {.textures = {"hs_body", "hs_eye.1", "hs_eye.2", "hs_eye.3"}, .hexColor = g_cvars.eponaColor},
-        };
-        // Wolf Link Color
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/Wmdl.arc")]["bmwr/wl.bmd"] = {
-            {.textures = {"wl_body", "wl_eye.1", "wl_eye.2", "wl_eye.3", "wl_eye.4", "wl_eye.5"}, .hexColor = g_cvars.wolfLinkColor},
-        };
-        // Wooden Sword Item Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_SWB.arc")]["bmdr/o_gd_al_swb.bmd"] = {
-            {.textures = {"al_SWB"},  .hexColor = g_cvars.woodenSwordColor},
-        };
-        // Boomerang Item Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_boom.arc")]["bmdr/o_gd_boom.bmd"] = {
-            {.textures = {"L_al_boom00"}, .hexColor = g_cvars.boomerangColor},
-        };
-        // Iron Boots Item Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_boot.arc")]["bmwr/o_gd_al_bootsh.bmd"] = {
-            {.textures = {"al_bootsH"},  .hexColor = g_cvars.ironBootsColor},
-        };
-        // Spinner Item Model
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/O_gD_SP.arc")]["bmdr/o_gd_al_sp.bmd"] = {
-            {.textures = {"al_SP"}, .hexColor = g_cvars.spinnerColor},
-        };
-        // Gale Boomerang for Ook
-        cosmeticOverrides[DVDConvertPathToEntrynum("/res/Object/E_mk.arc")]["bmdr/bm.bmd"] = {
-            {.textures = {"L_al_boom00", "bm_boom"}, .hexColor = g_cvars.boomerangColor},
-        };
-    }
-    return cosmeticOverrides;
-}
-
-s32 get_entry_number(mDoDvdThd_mountArchive_c* mountArchive) {
-    return mountArchive->mEntryNumber;
-}
-
-void handle_texture_overrides_on_load(mDoDvdThd_mountArchive_c* mountArchive) {
-
-    auto entryNum = get_entry_number(mountArchive);
-    auto& cosmeticOverrides = get_cosmetic_overrides();
-    if (!cosmeticOverrides.contains(entryNum)) {
-        return;
-    }
-
-    for (const auto& [resName, overrides] : cosmeticOverrides[entryNum]) {
-
-        auto* archive = mountArchive->getArchive();
-        auto* entry = archive->findFsResource(resName.data(), 0);
-        if (!entry) {
-            continue;
-        }
-
-        auto* tex1Addr = find_tex_1_in_bmd(static_cast<J3DModelFileData*>(archive->fetchResource(entry, NULL)));
-        if (!tex1Addr) {
-            continue;
-        }
-
-        for (const auto& cosmeticOverride : overrides) {
-            const auto& [textures, hexColorVar] = cosmeticOverride;
-            const auto& hexColorStr = get_str_option(hexColorVar, "");
-            if (!is_valid_hex_color_str(hexColorStr)) {
-                mods::log::debug("Invalid Hex Str {}", hexColorStr);
-                continue;
-            }
-
-            auto color = hex_color_str_to_gx_color(hexColorStr);
-            if (tex1Addr) {
-                for (const auto& textureName : textures) {
-                    recolor_texture(tex1Addr, textureName.data(), color);
+    if (replacements.empty()) {
+        replacements = {
+            {get_cvars().herosTunicCapColor, {
+                {
+                    .arc = "Kmdl",
+                    .modelFileName = "al_head.bmd",
+                    .textureName = "al_cap",
                 }
-            }
-        }
+            }},
+            {get_cvars().herosTunicTorsoColor, {
+                {
+                    .arc = "Kmdl",
+                    .modelFileName = "al.bmd",
+                    .textureName = "al_upbody",
+                }
+            }},
+            {get_cvars().herosTunicSkirtColor, {
+                {
+                    .arc = "Kmdl",
+                    .modelFileName = "al.bmd",
+                    .textureName = "al_lowbody",
+                }
+            }},
+            {get_cvars().zoraArmorCapColor, {
+                {
+                    .arc = "Zmdl",
+                    .modelFileName = "zl_head.bmd",
+                    .textureName = "zl_cap",
+                }
+            }},
+            {get_cvars().zoraArmorHelmetColor, {
+                {
+                    .arc = "Zmdl",
+                    .modelFileName = "zl_head.bmd",
+                    .textureName = "zl_helmet",
+                }
+            }},
+            {get_cvars().zoraArmorTorsoColor, {
+                {
+                    .arc = "Zmdl",
+                    .modelFileName = "zl.bmd",
+                    .textureName = "zl_armor",
+                },
+                {
+                    .arc = "Zmdl",
+                    .modelFileName = "zl.bmd",
+                    .textureName = "zl_armL",
+                }
+            }},
+            {get_cvars().zoraArmorScalesColor, {
+                {
+                    .arc = "Zmdl",
+                    .modelFileName = "zl.bmd",
+                    .textureName = "zl_body",
+                }
+            }},
+            {get_cvars().zoraArmorFlippersColor, {
+                {
+                    .arc = "Zmdl",
+                    .modelFileName = "zl.bmd",
+                    .textureName = "zl_boots",
+                }
+            }},
+            {get_cvars().woodenSwordColor, {
+                {
+                    .arc = "Bmdl", // Ordon Clothes Model
+                    .modelFileName = "al_swb.bmd",
+                    .textureName = "al_SWB",
+                },
+                {
+                    .arc = "Kmdl", // Hero's Tunic Model
+                    .modelFileName = "al_swb.bmd",
+                    .textureName = "al_SWB",
+                },
+                {
+                    .arc = "Zmdl", // Zora Armor Model
+                    .modelFileName = "al_swb.bmd",
+                    .textureName = "al_SWB",
+                },
+                {
+                    .arc = "Mmdl", // Magic Armor Model
+                    .modelFileName = "al_swb.bmd",
+                    .textureName = "al_SWB",
+                },
+                {
+                    .arc = "O_gD_SWB", // Get Item Model
+                    .modelFileName = "o_gd_al_swb.bmd",
+                    .textureName = "al_SWB",
+                }
+            }},
+            {get_cvars().ordonSwordHandleColor, {
+                {
+                    .arc = "Alink",
+                    .modelFileName = "al_swa.bmd",
+                    .textureName = "al_SWgripA",
+                },
+                {
+                    .arc = "O_gD_SWA", // Get Item Model
+                    .modelFileName = "o_gd_al_swa.bmd",
+                    .textureName = "al_SWgripA",
+                }
+            }},
+            {get_cvars().ordonSwordBladeColor, {
+                {
+                    .arc = "Alink",
+                    .modelFileName = "al_swa.bmd",
+                    .textureName = "al_SWA",
+                }
+            }},
+            {get_cvars().msHandleColor, {
+                {
+                    .arc = "Alink",
+                    .modelFileName = "al_swm.bmd",
+                    .textureName = "al_SWgripM",
+                }
+            }},
+            {get_cvars().msBladeColor, {
+                {
+                    .arc = "Alink",
+                    .modelFileName = "al_swm.bmd",
+                    .textureName = "al_SWM",
+                }
+            }},
+            {get_cvars().boomerangColor, {
+                {
+                    .arc = "Alink", // Boomerang in Link's hand
+                    .modelFileName = "al_boom.bmd",
+                    .textureName = "L_al_boom00",
+                },
+                {
+                    .arc = "E_mk", // Boomerang in Ook's hand
+                    .modelFileName = "bm.bmd",
+                    .textureName = "L_al_boom00",
+                },
+                {
+                    .arc = "E_mk", // Boomerang in Ook's hand
+                    .modelFileName = "bm.bmd",
+                    .textureName = "bm_boom",
+                },
+                {
+                    .arc = "O_gD_boom", // Get Item Model
+                    .modelFileName = "o_gd_boom.bmd",
+                    .textureName = "L_al_boom00",
+                }
+            }},
+            {get_cvars().ironBootsColor, {
+                {
+                    .arc = "Bmdl", // Ordon Clothes Model
+                    .modelFileName = "al_bootsh.bmd",
+                    .textureName = "al_bootsH",
+                },
+                {
+                    .arc = "Kmdl", // Hero's Tunic Model
+                    .modelFileName = "al_bootsh.bmd",
+                    .textureName = "al_bootsH",
+                },
+                {
+                    .arc = "Zmdl", // Zora Armor Model
+                    .modelFileName = "al_bootsh.bmd",
+                    .textureName = "al_bootsH",
+                },
+                {
+                    .arc = "Mmdl", // Magic Armor Model
+                    .modelFileName = "al_bootsh.bmd",
+                    .textureName = "al_bootsH",
+                },
+                {
+                    .arc = "O_gD_boot", // Get Item Model
+                    .modelFileName = "o_gd_al_bootsh.bmd",
+                    .textureName = "al_bootsH",
+                }
+            }},
+            {get_cvars().spinnerColor, {
+                {
+                    .arc = "Alink", // Spinner used by Link
+                    .modelFileName = "al_sp.bmd",
+                    .textureName = "al_SP",
+                },
+                {
+                    .arc = "O_gD_SP", // Get Item Model
+                    .modelFileName = "o_gd_al_sp.bmd",
+                    .textureName = "al_SP",
+                }
+            }},
+            {get_cvars().linkHairColor, {
+                {
+                    .arc = "Bmdl", // Ordon Clothes Model
+                    .modelFileName = "bl_head.bmd",
+                    .textureName = "bl_hair",
+                },
+                {
+                    .arc = "Kmdl", // Hero's Tunic Model
+                    .modelFileName = "al_head.bmd",
+                    .textureName = "al_hair",
+                },
+                {
+                    .arc = "Mmdl", // Magic Armor Model
+                    .modelFileName = "ml_head.bmd",
+                    .textureName = "al_hair",
+                }
+            }},
+            {get_cvars().wolfLinkColor, {
+                {
+                    .arc = "Wmdl",
+                    .modelFileName = "wl.bmd",
+                    .textureName = "wl_body",
+                },
+                {
+                    .arc = "Wmdl",
+                    .modelFileName = "wl.bmd",
+                    .textureName = "wl_eye.1",
+                },
+                {
+                    .arc = "Wmdl",
+                    .modelFileName = "wl.bmd",
+                    .textureName = "wl_eye.2",
+                },
+                {
+                    .arc = "Wmdl",
+                    .modelFileName = "wl.bmd",
+                    .textureName = "wl_eye.3",
+                },
+                {
+                    .arc = "Wmdl",
+                    .modelFileName = "wl.bmd",
+                    .textureName = "wl_eye.4",
+                },
+                {
+                    .arc = "Wmdl",
+                    .modelFileName = "wl.bmd",
+                    .textureName = "wl_eye.5",
+                }
+            }},
+            {get_cvars().eponaColor, {
+                {
+                    .arc = "Horse",
+                    .modelFileName = "hs.bmd",
+                    .textureName = "hs_body",
+                },
+                {
+                    .arc = "Horse",
+                    .modelFileName = "hs.bmd",
+                    .textureName = "hs_eye.1",
+                },
+                {
+                    .arc = "Horse",
+                    .modelFileName = "hs.bmd",
+                    .textureName = "hs_eye.2",
+                },
+                {
+                    .arc = "Horse",
+                    .modelFileName = "hs.bmd",
+                    .textureName = "hs_eye.3",
+                },
+            }},
+        };
     }
+
+    return replacements;
 }
