@@ -35,4 +35,5 @@ void update();
 void deactivateSeed();
 void setupRandomizerFile();
 void registerStageEdits();
+void registerStartingLocation();
 }

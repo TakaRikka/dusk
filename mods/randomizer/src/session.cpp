@@ -135,7 +135,7 @@ bool activateSeed(const char* hash) {
     svc_mng.item->set_check_resolver(mod_ctx, nullptr, resolve_check, nullptr, &s_check_resolver);
     svc_mng.item->observe_gives(mod_ctx, observe_give, nullptr, &s_check_observer);
 
-    registerStageEdits();
+    registerStageEdits();    
     mods::log::info("activated seed {}", ctx.mHash);
     return true;
 }
@@ -290,6 +290,62 @@ void registerStageEdits() {
             }
         }
     }
+}
+
+// Set link to spawn outside of his house if we are playing with entrance rando and aren't already spawning in a dungeon
+void registerStartingLocation() {
+    auto& ctx = randomizer_GetContext();
+    
+    if (ctx.mEntranceOverrides.empty()) {
+        return;
+    }
+
+    // Check that we aren't playing only with the setting "Mirror Chamber Access") == "Closed"
+    bool isExclusivelyMirrorChamber = false;
+    const auto& mirrorChamberIt = ctx.mEntranceOverrides.find(RandomizerContext::EntranceOverride{
+        .stageId = StageIDs::Mirror_Chamber,
+        .roomNo = 4,
+        .mapLayer = -1,
+        .pointNo = 0
+    });
+    if (ctx.mEntranceOverrides.size() == 1 && mirrorChamberIt != ctx.mEntranceOverrides.end()) {
+        if (mirrorChamberIt->second == RandomizerContext::EntranceOverride{
+            .stageId = StageIDs::Bulblin_Camp,
+            .roomNo = 3,
+            .mapLayer = -1,
+            .pointNo = 3,
+        }) {
+            isExclusivelyMirrorChamber = true;
+        }
+    }
+    
+    if (isExclusivelyMirrorChamber) {
+        return;
+    }
+
+    constexpr std::array<std::string_view,9> kDungeonNames = {
+        "D_MN01","D_MN04","D_MN05","D_MN06","D_MN07","D_MN08","D_MN09","D_MN10","D_MN11"
+    };
+
+    dSv_player_return_place_c& returnPlace = dComIfGs_getSaveData()->mPlayer.getPlayerReturnPlace();
+    bool isDungeon = false;
+    for (const auto& name : kDungeonNames) {
+        if (returnPlace.getName() == name) {
+            isDungeon = true;
+            break;
+        }
+    }
+
+    if (isDungeon) {
+        // Force-set the entrance without the override
+        g_dComIfG_gameInfo.play.mNextStage.getStartStage()->set(returnPlace.getName(), returnPlace.getRoomNo(), returnPlace.mPlayerStatus, -1);
+        return;
+    }
+
+    // Set the spawn to outside of link's house, which will get overrided later if we are replacing it
+    returnPlace.set("F_SP103",1,1);
+    // g_dComIfG_gameInfo.play.mNextStage.getStartStage()->set("F_SP103", 1, 1, -1);
+    dComIfGp_setNextStage("F_SP103", 1, 1, -1);
 }
 
 void onNewSave(ModContext*, uint32_t, void*) {

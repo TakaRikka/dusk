@@ -13,6 +13,7 @@
 #include "../generator/randomizer.hpp"
 #include "../generator/utility/text.hpp"
 #include "../generator/utility/string.hpp"
+#include "../generator/logic/entrance_shuffle.hpp"
 
 #include <fstream>
 #include <mods/svc/log.hpp>
@@ -136,11 +137,11 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
     }
 
     for (const auto& [key, override] : mEntranceOverrides) {
-        out["mEntranceOverrides"][key] = std::bit_cast<int>(override);
+        out["mEntranceOverrides"][std::bit_cast<uint64_t>(key)] = std::bit_cast<uint64_t>(override);
     }
 
     for (const auto& [key, override] : mReturnToPlaceOverrides) {
-        out["mReturnToPlaceOverrides"][key] = std::bit_cast<int>(override);
+        out["mReturnToPlaceOverrides"][key] = std::bit_cast<uint64_t>(override);
     }
 
     seedData << YAML::Dump(out);
@@ -320,15 +321,15 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
 
     // Entrance Overrides
     for (const auto& entranceNode : in["mEntranceOverrides"]) {
-        auto key = entranceNode.first.as<int>();
-        auto override = std::bit_cast<EntranceOverride>(entranceNode.second.as<int>());
+        const auto key = std::bit_cast<EntranceOverride>(entranceNode.first.as<uint64_t>());;
+        const auto override = std::bit_cast<EntranceOverride>(entranceNode.second.as<uint64_t>());
         this->mEntranceOverrides[key] = override;
     }
 
     // Return to Place Overrides
     for (const auto& entranceNode : in["mReturnToPlaceOverrides"]) {
         auto key = entranceNode.first.as<int>();
-        auto override = std::bit_cast<EntranceOverride>(entranceNode.second.as<int>());
+        const auto override = std::bit_cast<EntranceOverride>(entranceNode.second.as<uint64_t>());
         this->mReturnToPlaceOverrides[key] = override;
     }
 
@@ -862,16 +863,21 @@ int randomizer_getItemAtLocation(const std::string& locationName) {
 
 void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo, s16& pointNo, s8& mapLayer) {
     RandomizerContext::EntranceOverride override = {
-        static_cast<u8>(getStageID(stageName)), roomNo, static_cast<s8>(pointNo), mapLayer
-    };
+        .stageId = static_cast<u8>(getStageID(stageName)), .roomNo = roomNo, .mapLayer = mapLayer, .pointNo = static_cast<s16>(pointNo)};
 
-    int key = std::bit_cast<int>(override);
-    if (randomizer_GetContext().mEntranceOverrides.contains(key)) {
-        auto& newOverride = randomizer_GetContext().mEntranceOverrides[key];
+    // Debugging: Dump mEntranceOverrides
+    // for (const auto& [key,val] : randomizer_GetContext().mEntranceOverrides) {
+    //     mods::log::debug("({},{},{},{}) -> ({},{},{},{})",key.stageId,key.roomNo,key.mapLayer,key.pointNo,val.stageId,val.roomNo,val.mapLayer,val.pointNo);
+    // }
+
+    // mods::log::debug("Original Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
+    if (randomizer_GetContext().mEntranceOverrides.contains(override)) {
+        auto& newOverride = randomizer_GetContext().mEntranceOverrides[override];
         stageName = allStages[newOverride.stageId];
         pointNo = newOverride.pointNo;
         roomNo = newOverride.roomNo;
         mapLayer = newOverride.mapLayer;
+        // mods::log::debug("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     }
 }
 
@@ -1723,39 +1729,18 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         }
     }
 
-    // Entrance Overrides
-    if (world->Setting("Mirror Chamber Access") == "Closed") {
-        // Set exiting the Arbiter's Grounds Boss Room to spawn at the Arbiter's Grounds entrance
-        // if mirror chamber access is closed
-        RandomizerContext::EntranceOverride original = {
-            StageIDs::Mirror_Chamber,
-            4,
-            0,
-            -1
-        };
-
-        RandomizerContext::EntranceOverride override = {
-            StageIDs::Bulblin_Camp,
-            3,
-            3,
-            -1
-        };
-
-        randoData.mEntranceOverrides[std::bit_cast<int>(original)] = override;
-    }
-
     // Vanilla Return to Place Overrides. Will need to change when boss/miniboss ER is implemented
-    static const std::list<std::pair<std::list<int>, RandomizerContext::EntranceOverride>> defaultPlaceOverrides{
-        {{Forest_Temple, Ook, Diababa},                      {Forest_Temple, 22, 0, -1}},
-        {{Goron_Mines, Dangoro, Fyrus},                      {Goron_Mines, 1, 0, -1}},
-        {{Lakebed_Temple, Deku_Toad, Morpheel},              {Lakebed_Temple, 0, 0, -1}},
-        {{Arbiters_Grounds, Death_Sword, Stallord},          {Arbiters_Grounds, 0, 0, -1}},
-        {{Snowpeak_Ruins, Darkhammer, Blizzeta},             {Snowpeak_Ruins, 0, 0, -1}},
-        {{Temple_of_Time, Darknut, Armogohma},               {Temple_of_Time, 0, 0, -1}},
-        {{City_in_the_Sky, Aeralfos, Argorok},               {City_in_the_Sky, 0, 3, -1}},
+    static const std::vector<std::pair<std::vector<int>, RandomizerContext::EntranceOverride>> defaultPlaceOverrides{
+        {{Forest_Temple, Ook, Diababa},                      {.stageId = Forest_Temple, .roomNo = 22, .mapLayer = -1, .pointNo = 0}},
+        {{Goron_Mines, Dangoro, Fyrus},                      {.stageId = Goron_Mines, .roomNo = 1, .mapLayer = -1, .pointNo = 0}},
+        {{Lakebed_Temple, Deku_Toad, Morpheel},              {.stageId = Lakebed_Temple, .roomNo = 0, .mapLayer = -1, .pointNo = 0}},
+        {{Arbiters_Grounds, Death_Sword, Stallord},          {.stageId = Arbiters_Grounds, .roomNo = 0, .mapLayer = -1, .pointNo = 0}},
+        {{Snowpeak_Ruins, Darkhammer, Blizzeta},             {.stageId = Snowpeak_Ruins, .roomNo = 0, .mapLayer = -1, .pointNo = 0}},
+        {{Temple_of_Time, Darknut, Armogohma},               {.stageId = Temple_of_Time, .roomNo = 0, .mapLayer = -1, .pointNo = 0}},
+        {{City_in_the_Sky, Aeralfos, Argorok},               {.stageId = City_in_the_Sky, .roomNo = 0, .mapLayer = -1, .pointNo = 3}},
         {{Palace_of_Twilight, Phantom_Zant_1,
-                Phantom_Zant_2, Zant_Main_Room, Zant_Fight}, {Palace_of_Twilight, 0, 0, -1}},
-        {{Hyrule_Castle, Ganondorf_Castle, Ganondorf_Field}, {Hyrule_Castle, 11, 0, -1}},
+                Phantom_Zant_2, Zant_Main_Room, Zant_Fight},     {.stageId = Palace_of_Twilight, .roomNo = 0, .mapLayer = -1, .pointNo = 0}},
+        {{Hyrule_Castle, Ganondorf_Castle, Ganondorf_Field}, {.stageId = Hyrule_Castle, .roomNo = 11, .mapLayer = -1, .pointNo = 0}},
     };
 
     // Return to Place Overrides
@@ -1763,6 +1748,48 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         for (auto stage : stages) {
             randoData.mReturnToPlaceOverrides[stage] = returnPlace;
         }
+    }
+
+    // Apply entrance randomization
+    auto shuffleData = LOAD_EMBED_YAML(RANDO_DATA_PATH "entrance_shuffle_data.yaml");
+    if (world->AnyEntranceRandomizerEnabled()) {
+        for (const auto& entrance : world->GetShuffledEntrances()) {
+            randomizer::logic::entrance::Entrance* replacesEntrance = entrance->GetReplaces();
+            RandomizerContext::EntranceOverride forward = {.stageId = entrance->GetStageId(), .roomNo = entrance->GetRoomNo(), .mapLayer = entrance->GetLayerNo(), .pointNo = entrance->GetPointNo()};
+            RandomizerContext::EntranceOverride replaces = {.stageId = replacesEntrance->GetStageId(), .roomNo = replacesEntrance->GetRoomNo(), .mapLayer = replacesEntrance->GetLayerNo(), .pointNo = replacesEntrance->GetPointNo()};
+            if (forward.stageId == 0xFF || replaces.stageId == 0xFF || forward.roomNo == -1 || replaces.roomNo == -1) {
+                continue;
+            }
+            randoData.mEntranceOverrides[forward] = replaces;
+
+            // Set an override for the second door, if the entrance is coupled
+            if (entrance->getCoupledDoor() != -1) {
+                RandomizerContext::EntranceOverride coupled = {.stageId = entrance->GetStageId(), .roomNo = entrance->GetRoomNo(), .mapLayer = entrance->GetLayerNo(), .pointNo = entrance->getCoupledDoor()};
+                randoData.mEntranceOverrides[coupled] = replaces;
+            }
+        }
+    }
+
+    if (world->Setting("Mirror Chamber Access") == "Closed") {
+        // Set exiting the Arbiter's Grounds Boss Room to spawn at the Arbiter's Grounds entrance
+        // if mirror chamber access is closed
+        RandomizerContext::EntranceOverride original = {
+            .stageId = StageIDs::Mirror_Chamber,
+            .roomNo = 4,
+            .mapLayer = -1,
+            .pointNo = 0,
+        };
+
+        RandomizerContext::EntranceOverride override = {
+            .stageId = StageIDs::Bulblin_Camp,
+            .roomNo = 3,
+            .mapLayer = -1,
+            .pointNo = 3,
+        };
+
+        // Check if we are already overriding the bulblin camp entrance, and correctly override the entrance
+        const auto& it = randoData.mEntranceOverrides.find(override);
+        randoData.mEntranceOverrides[original] = (it != randoData.mEntranceOverrides.end()) ? it->second : override;
     }
 
     return std::move(randoData);

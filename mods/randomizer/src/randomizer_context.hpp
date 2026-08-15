@@ -20,7 +20,7 @@
 class RandomizerContext {
 public:
     static constexpr size_t ACTR_CRC_SIZE = 32;
-    static constexpr size_t TGSC_CRC_SIZE = 35; // 3 extra bytes for scale x, y, z
+    static constexpr size_t TGSC_CRC_SIZE = 35;  // 3 extra bytes for scale x, y, z
     static constexpr size_t OBJ_DELETE_SIZE = 1;
     static constexpr u8 ROOM_STAGE = 0xFF;
 
@@ -37,7 +37,7 @@ public:
     std::unordered_map<u8, std::list<u8>> mStartRegionFlags{};
     std::list<u8> mStartingInventory{};
 
-    struct itemLocationData{
+    struct itemLocationData {
         int itemId{0xFF};
         int stage{0xFF};
         u16 flag{0xFFFF};
@@ -50,7 +50,7 @@ public:
     std::unordered_map<u16, u8> mSkyCharacterOverrides{};
     std::unordered_map<u16, u8> mGoldenWolfOverrides{};
     std::unordered_map<u16, u8> mShopOverrides{};
-    std::unordered_map<u16, u16> mTwilitInsectOverrides{}; // Just used in tracker for now
+    std::unordered_map<u16, u16> mTwilitInsectOverrides{};  // Just used in tracker for now
     std::unordered_map<u32, itemLocationData> mFlowItemMessageOverrides{};
     std::unordered_map<std::string, itemLocationData> mItemLocations{};
 
@@ -71,15 +71,26 @@ public:
     // Map of language -> map of key -> string
     std::unordered_map<int, std::unordered_map<u32, std::string>> mTextOverrides{};
 
+    // Padded to 8 bytes so bit_cast can convert it to a uint64_t
     struct EntranceOverride {
         u8 stageId = 0xFF;
         s8 roomNo = -1;
-        s8 pointNo = -1;
         s8 mapLayer = -1;
+        u8 _pad0;
+        s16 pointNo = -1;
+        u16 _pad1;
+        bool operator==(const EntranceOverride& rhs) const = default;
     };
 
-    // keyed by stageId << 24 | pointNo << 16 | roomNo << 8 | mapLayer
-    std::unordered_map<int, EntranceOverride> mEntranceOverrides{};
+    // Packs an EntranceOverride into a uint64_t
+    struct EntranceOverrideHash {
+        size_t operator()(const EntranceOverride& x) const noexcept {
+            return std::hash<uint64_t>{}(std::bit_cast<uint64_t>(x));
+        }
+    };
+
+    std::unordered_map<EntranceOverride, EntranceOverride, EntranceOverrideHash>
+        mEntranceOverrides{};
 
     // Overrides for returning to spawn. Keyed by stageId
     std::unordered_map<int, EntranceOverride> mReturnToPlaceOverrides{};
@@ -153,7 +164,7 @@ public:
 
     static constexpr u8 EVENT_ITEM_QUEUE_SIZE = 10;
 
-    RandomizerState() {mInitialized = false;}
+    RandomizerState() { mInitialized = false; }
 
     int _create();
     int _delete();
@@ -161,19 +172,19 @@ public:
     int draw();
     void addItemToEventQueue(u8 item);
     void initGiveItemToPlayer();
-    //void handleBonkDamage();
+    // void handleBonkDamage();
     void handleTimeOfDayChange();
     void handleTimeSpeed();
     void offLoad();
 
     void handlePoeItem(u8 bitSw);
 
-    u8 getGiveItemToPlayerStatus() const { return mEventItemStatus;}
+    u8 getGiveItemToPlayerStatus() const { return mEventItemStatus; }
     u8 getTimeChange() const { return mTimeChange; }
     bool getRoomReloadingState() const { return mRoomReloadingState; }
     bool getHasPendingToDChange() const { return mHasPendingToDChange; }
 
-    void setGiveItemToPlayerStatus(u8 status) { mEventItemStatus = status;}
+    void setGiveItemToPlayerStatus(u8 status) { mEventItemStatus = status; }
     void setHasPendingToDChange(bool hasPending) { mHasPendingToDChange = hasPending; }
     void setTimeChange(u8 newTimeChange) { mTimeChange = newTimeChange; }
     void setRoomReloadingState(bool newState) { mRoomReloadingState = newState; }
@@ -217,7 +228,8 @@ int randomizer_getItemAtLocation(const std::string& locationName);
 /*
  * @brief Overrides the given entrance paramaters if an override exists for them
  */
-void randomizer_checkAndOverrideEntranceData(const char*& i_Name, s8& i_RoomNo, s16& i_Point, s8& i_Layer);
+void randomizer_checkAndOverrideEntranceData(
+    const char*& i_Name, s8& i_RoomNo, s16& i_Point, s8& i_Layer);
 /*
  * @brief Puts the associated flag into the randomizer state's temporary flag
  * variable. This allows the tracker/Archipelago to know a location has been checked
@@ -285,4 +297,4 @@ u32 getStageObjCRC32(u8* data, size_t size);
  */
 bool GenerateAndWriteSeed(std::string& generationStatusMsg);
 
-#endif //DUSK_RANDOMIZER_CONTEXT_HPP
+#endif  // DUSK_RANDOMIZER_CONTEXT_HPP

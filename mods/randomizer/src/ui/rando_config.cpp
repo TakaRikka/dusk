@@ -420,6 +420,17 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
     add_select_setting(leftPane, "Lower Hyrule Castle Chandelier");
     add_select_setting(leftPane, "Skip Bridge Donation");
 
+    add_section(leftPane, "Entrance Randomizer Settings");
+    add_select_setting(leftPane, "Randomize Starting Spawn");
+    add_select_setting(leftPane, "Randomize Dungeon Entrances");
+    add_select_setting(leftPane, "Randomize Boss Entrances");
+    add_select_setting(leftPane, "Randomize Grotto Entrances");
+    add_select_setting(leftPane, "Randomize Cave Entrances");
+    add_select_setting(leftPane, "Randomize Interior Entrances");
+    add_select_setting(leftPane, "Randomize Overworld Entrances");
+    add_select_setting(leftPane, "Decouple Double Door Entrances");
+    add_select_setting(leftPane, "Decouple Entrances");
+
     add_section(leftPane, "Additional Settings");
     add_select_setting(leftPane, "Starting Time of Day");
     add_select_setting(leftPane, "Logic Transform Anywhere");
