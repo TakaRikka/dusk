@@ -889,6 +889,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             "during some cutscenes, particularly on ultra-wide displays. "
                             "Visuals beyond the original intended framing may appear buggy."
             });
+        config_bool_select(leftPane, rightPane, getSettings().game.disableLetterboxing,
+            {
+                .key = "Disable Letterboxing",
+                .helpText = "Disable the top and bottom black bars during L-targeting, aiming, "
+                            "cutscenes, dialogue, etc."
+            });
     });
 
     add_tab("Input", [this](Rml::Element* content) {
