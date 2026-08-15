@@ -1528,6 +1528,12 @@ void dCamera_c::CalcTrimSize() {
         OS_REPORT("%06d: camera: trim: keep\n", mFrameCounter);
     }
 
+#if TARGET_PC
+    if (dusk::getSettings().game.disableLetterboxing) {
+        mTrimHeight = 0.0f;
+    }
+#endif
+
     if (mCurState == 1) {
         mCurState = 0;
     } else if (mCurState == 2) {
