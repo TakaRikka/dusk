@@ -10,6 +10,10 @@ namespace dusk::presentation {
 namespace {
 
 float preferred_frame_rate() {
+    if (getTransientSettings().turboMode) {
+        return 0.0f;
+    }
+
     switch (getSettings().game.enableFrameInterpolation.getValue()) {
     case FrameInterpMode::Off:
         return 30.0f;

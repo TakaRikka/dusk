@@ -527,7 +527,7 @@ void myExceptionCallback(u16, OSContext*, u32, u32) {
     u32 btnHold;
     u32 btnTrig;
 
-    mDoMain::sHungUpTime = OSGetTime();
+    mDoMain::sHungUpTime = DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime());
     OSReportEnable();
     cAPICPad_recalibrate();
     // "Vibration stopping & resetting to default\n"
