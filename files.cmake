@@ -1436,6 +1436,7 @@ set(DUSK_FILES
         src/dusk/gamepad_color.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
+        src/dusk/hq_minimap.cpp
         src/dusk/imgui/ImGuiActorSpawner.cpp
         src/dusk/imgui/ImGuiBloomWindow.cpp
         src/dusk/imgui/ImGuiBloomWindow.hpp
