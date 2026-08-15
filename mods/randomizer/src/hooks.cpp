@@ -81,6 +81,10 @@ DEFINE_HOOK(&checkItemGet, dItem_checkItemGet);
 DEFINE_HOOK(&daAlink_c::decideDoStatus, daAlink_c__decideDoStatus);
 DEFINE_HOOK_SYMBOL("daAlink_searchBouDoor", void*(fopAc_ac_c*, void*), searchBouDoor);
 DEFINE_HOOK(&daAlink_c::checkGroundSpecialMode, daAlink_c__checkGroundSpecialMode);
+DEFINE_HOOK(&daAlink_c::setGetItemFace, daAlink_c__setGetItemFace);
+DEFINE_HOOK(&daAlink_c::setGetSubBgm, daAlink_c__setGetSubBgm);
+DEFINE_HOOK(&daAlink_c::procCoGetItem, daAlink_c__procCoGetItem);
+DEFINE_HOOK(&daAlink_c::procCoWarpInit, daAlink_c__procCoWarpInit);
 
 DEFINE_HOOK_SYMBOL("b_bq_end", void(b_bq_class*), bq_end);
 
@@ -567,9 +571,27 @@ void hookPostSetLineUpItem(ModContext*, void* args, void*, void*) {
 }
 
 HookAction hookPreSaveInfoOnSwitch(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<dSv_info_c*>(args, 0);
+    const int i_no = mods::arg<int>(args, 1);
+    const int room_no = mods::arg<int>(args, 2);
+
     // Set custom flag for the Temple of Time pedestal strike
-    if (getStageID() == Sacred_Grove && mods::arg<int>(args, 1) == 0xEE) {
-        mods::arg<dSv_info_c*>(args, 0)->onSwitch(0x63, mods::arg<int>(args, 2));
+    if (getStageID() == Sacred_Grove && i_no == 0xEE) {
+        i_this->onSwitch(0x63, room_no);
+    }
+
+    // We check to see if the flag being set is for the UZR portal as a safety precaution.
+    if (daAlink_c::checkStageName("F_SP126") && i_no == 0x15 &&
+        dComIfGs_getTransformStatus() == TF_STATUS_WOLF)
+    {
+        // Set the flag to make Iza 1 available and set the memory bit for having talked to her
+        // after opening the portal as human.
+        dComIfGs_onEventBit(0xB02);
+        i_this->onSwitch(0x37, room_no);
+
+        // Note for the above stuff. This works for now. Eventually would like to adjust this to
+        // a FLW patch since I think we could accomplish similar results by having the conversation
+        // continue as normal regardless of form, but I haven't looked into it that much.
     }
     return HOOK_CONTINUE;
 }
@@ -1317,6 +1339,396 @@ HookAction hookPreCheckGroundSpecialMode(ModContext*, void* args, void* retval, 
     return HOOK_CONTINUE;
 }
 
+void hookPostSetGetItemFace(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    const u16 i_itemNo = mods::arg<u16>(args, 1);
+
+    switch (i_itemNo) {
+    case dItemNo_Randomizer_WOOD_STICK_e:
+    case dItemNo_Randomizer_SWORD_e:
+    case dItemNo_Randomizer_SHIELD_e:
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    case dItemNo_Randomizer_MAGIC_LV1_e:
+        i_this->setFaceBasicBck(dRes_ID_ALANM_BCK_FI_e);
+        break;
+    case dItemNo_Randomizer_FOOLISH_ITEM_e:
+        i_this->setFaceBasicBck(dRes_ID_ALANM_BCK_FJ_e);
+        break;
+    }
+}
+
+HookAction hookPreSetGetSubBgm(ModContext*, void* args, void*, void*) {
+    enum {
+        SETYPE_HEART,
+        SETYPE_ITEM_GET,
+        SETYPE_ITEM_GET_MINI,
+        SETYPE_ITEM_GET_ME,
+        SETYPE_ITEM_GET_INSECT,
+        SETYPE_ITEM_GET_SMELL,
+        SETYPE_ITEM_GET_POU,
+        SETYPE_ITEM_GET_ME_S,
+        SETYPE_NONE,
+    };
+
+    static constexpr u8 getSeTypeRandomizer[255] = {
+        /* dItemNo_Randomizer_HEART_e             */ SETYPE_NONE,
+        /* dItemNo_Randomizer_GREEN_RUPEE_e       */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BLUE_RUPEE_e        */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_YELLOW_RUPEE_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_RED_RUPEE_e         */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_PURPLE_RUPEE_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ORANGE_RUPEE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SILVER_RUPEE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_S_MAGIC_e           */ SETYPE_NONE,
+        /* dItemNo_Randomizer_L_MAGIC_e           */ SETYPE_NONE,
+        /* dItemNo_Randomizer_BOMB_5_e            */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_10_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_20_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_30_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_10_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_20_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_30_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_ARROW_1_e           */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_PACHINKO_SHOT_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_FOOLISH_ITEM_e      */ SETYPE_NONE,
+        /* dItemNo_Randomizer_NOENTRY_20_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_21_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WATER_BOMB_5_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_WATER_BOMB_10_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_WATER_BOMB_20_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_WATER_BOMB_30_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_5_e     */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_10_e    */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_20_e    */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_BOMB_INSECT_30_e    */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_RECOVERY_FAILY_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_TRIPLE_HEART_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SMALL_KEY_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_KAKERA_HEART_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_UTAWA_HEART_e       */ SETYPE_HEART,
+        /* dItemNo_Randomizer_MAP_e               */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_COMPUS_e            */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DUNGEON_EXIT_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOSS_KEY_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DUNGEON_BACK_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SWORD_e             */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MASTER_SWORD_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WOOD_SHIELD_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SHIELD_e            */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HYLIA_SHIELD_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_TKS_LETTER_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WEAR_CASUAL_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WEAR_KOKIRI_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ARMOR_e             */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WEAR_ZORA_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MAGIC_LV1_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DUNGEON_EXIT_2_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WALLET_LV1_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WALLET_LV2_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WALLET_LV3_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_55_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_56_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_57_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_58_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_59_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_60_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ZORAS_JEWEL_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HAWK_EYE_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WOOD_STICK_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOOMERANG_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SPINNER_e           */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_IRONBALL_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BOW_e               */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HOOKSHOT_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_HVY_BOOTS_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_COPY_ROD_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_W_HOOKSHOT_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_KANTERA_e           */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_LIGHT_SWORD_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_FISHING_ROD_1_e     */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_PACHINKO_e          */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_COPY_ROD_2_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_77_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_78_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOMB_BAG_LV2_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BOMB_BAG_LV1_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BOMB_IN_BAG_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_82_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LIGHT_ARROW_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ARROW_LV1_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ARROW_LV2_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_ARROW_LV3_e         */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_87_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LURE_ROD_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BOMB_ARROW_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HAWK_ARROW_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BEE_ROD_e           */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_JEWEL_ROD_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WORM_ROD_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_JEWEL_BEE_ROD_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_JEWEL_WORM_ROD_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_EMPTY_BOTTLE_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_RED_BOTTLE_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_GREEN_BOTTLE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BLUE_BOTTLE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_MILK_BOTTLE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HALF_MILK_BOTTLE_e  */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_OIL_BOTTLE_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WATER_BOTTLE_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL_BOTTLE_2_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_RED_BOTTLE_2_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_UGLY_SOUP_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HOT_SPRING_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_FAIRY_e             */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HOT_SPRING_2_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL2_e              */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL_e               */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NORMAL_BOMB_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WATER_BOMB_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_POKE_BOMB_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_FAIRY_DROP_e        */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_WORM_e              */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_DROP_BOTTLE_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_BEE_CHILD_e         */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_RARE_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_CHUCHU_RED_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_BLUE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_GREEN_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_YELLOW_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_PURPLE_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV1_SOUP_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV2_SOUP_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV3_SOUP_e          */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LETTER_e            */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_BILL_e              */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_WOOD_STATUE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_IRIAS_PENDANT_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_HORSE_FLUTE_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_133_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_134_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_135_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_136_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_137_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_138_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_139_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_140_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_141_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_142_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_143_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_RAFRELS_MEMO_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ASHS_SCRIBBLING_e   */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_146_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_147_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_148_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_149_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_150_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_151_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_152_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_153_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_154_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_155_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_YELLOW2_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_OIL_BOTTLE3_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SHOP_BEE_CHILD_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_CHUCHU_BLACK_e      */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LIGHT_DROP_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_DROP_CONTAINER_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DROP_CONTAINER02_e  */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_DROP_CONTAINER03_e  */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_FILLED_CONTAINER_e  */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_MIRROR_PIECE_2_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MIRROR_PIECE_3_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_MIRROR_PIECE_4_e    */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_168_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_169_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_170_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_171_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_172_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_173_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_174_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_175_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SMELL_YELIA_POUCH_e */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_PUMPKIN_e     */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_POH_e         */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_FISH_e        */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_CHILDREN_e    */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_SMELL_MEDICINE_e    */ SETYPE_ITEM_GET_SMELL,
+        /* dItemNo_Randomizer_NOENTRY_182_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_183_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_184_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_185_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_186_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_187_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_188_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_189_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_190_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_NOENTRY_191_e       */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_M_BEETLE_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_BEETLE_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_BUTTERFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_BUTTERFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_STAG_BEETLE_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_STAG_BEETLE_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_GRASSHOPPER_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_GRASSHOPPER_e     */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_NANAFUSHI_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_NANAFUSHI_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_DANGOMUSHI_e      */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_DANGOMUSHI_e      */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_MANTIS_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_MANTIS_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_LADYBUG_e         */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_LADYBUG_e         */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_SNAIL_e           */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_SNAIL_e           */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_DRAGONFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_DRAGONFLY_e       */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_ANT_e             */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_ANT_e             */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_M_MAYFLY_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_F_MAYFLY_e          */ SETYPE_ITEM_GET_INSECT,
+        /* dItemNo_Randomizer_NOENTRY_216_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_217_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_218_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_219_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_220_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_221_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_222_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_223_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_POU_SPIRIT_e        */ SETYPE_ITEM_GET_POU,
+        /* dItemNo_Randomizer_NOENTRY_225_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_226_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_227_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_228_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_229_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_230_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_231_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_NOENTRY_232_e       */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_ANCIENT_DOCUMENT_e  */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_AIR_LETTER_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_ANCIENT_DOCUMENT2_e */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_LV7_DUNGEON_EXIT_e  */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LINKS_SAVINGS_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_SMALL_KEY2_e        */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_POU_FIRE1_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_POU_FIRE2_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_POU_FIRE3_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_POU_FIRE4_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_BOSSRIDER_KEY_e     */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_TOMATO_PUREE_e      */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_TASTE_e             */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_LV5_BOSS_KEY_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_SURFBOARD_e         */ SETYPE_NONE,
+        /* dItemNo_Randomizer_KANTERA2_e          */ SETYPE_ITEM_GET_ME,
+        /* dItemNo_Randomizer_L2_KEY_PIECES1_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_L2_KEY_PIECES2_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_L2_KEY_PIECES3_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_KEY_OF_CARAVAN_e    */ SETYPE_ITEM_GET_MINI,
+        /* dItemNo_Randomizer_LV2_BOSS_KEY_e      */ SETYPE_ITEM_GET,
+        /* dItemNo_Randomizer_KEY_OF_FILONE_e     */ SETYPE_ITEM_GET_MINI,
+    };
+
+    static constexpr u32 bgmLabel[8] = {
+        Z2BGM_HEART_GET,       Z2BGM_ITEM_GET,       Z2BGM_ITEM_GET_MINI, Z2BGM_ITEM_GET_ME,
+        Z2BGM_ITEM_GET_INSECT, Z2BGM_ITEM_GET_SMELL, Z2BGM_ITEM_GET_POU,  Z2BGM_ITEM_GET_ME_S,
+    };
+
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    const int i_itemNo = mods::arg<int>(args, 1);
+    u32 se_type = getSeTypeRandomizer[i_itemNo];
+
+    if (se_type == SETYPE_ITEM_GET_ME && i_this->mProcVar4.field_0x3010 == 0) {
+        se_type = SETYPE_ITEM_GET_ME_S;
+    }
+
+    if (se_type != SETYPE_NONE || i_itemNo == dItemNo_Randomizer_FOOLISH_ITEM_e) {
+        mDoAud_subBgmStart(bgmLabel[se_type]);
+        dComIfGp_setMesgBgmOn();
+    }
+
+    return HOOK_SKIP_ORIGINAL;
+}
+
+HookAction hookPreProcCoGetItem(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    if (i_this->field_0x32cc != 0 || i_this->mProcVar2.field_0x300c != dItemNo_Randomizer_POU_SPIRIT_e) {
+        return HOOK_CONTINUE;
+    }
+
+    auto* item_partner_p = static_cast<daItemBase_c*>(fopAcM_getItemEventPartner(i_this));
+    if (item_partner_p == nullptr || fpcM_IsCreating(fpcM_GetID(item_partner_p))) {
+        return HOOK_CONTINUE;
+    }
+
+    // Don't show special text in rando
+    if (dComIfGs_getPohSpiritNum() == 20) {
+        i_this->field_0x32cc = i_this->mProcVar2.field_0x300c + 0x65;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+u8 hookProcCoWarpInit_prevSlot18 = dItemNo_NONE_e;
+bool hookProcCoWarpInit_restoreSlot18 = false;
+HookAction hookPreProcCoWarpInit(ModContext*, void* args, void*, void*) {
+    hookProcCoWarpInit_restoreSlot18 = false;
+
+    auto* i_this = mods::arg<daAlink_c*>(args, 0);
+    const int param_0 = mods::arg<int>(args, 1);
+    const int param_1 = mods::arg<int>(args, 2);
+
+    // copy necessary functionality from og function to set up patch state
+    if (param_0 != 0 || i_this->checkWolf()) {
+        return HOOK_CONTINUE;
+    }
+
+    const BOOL isSideWarp = param_1 == 0 &&
+        ((daAlink_c::checkStageName("F_SP125") && fopAcM_GetRoomNo(i_this) == 4) ||
+         (daAlink_c::checkStageName("D_MN08") && fopAcM_GetRoomNo(i_this) == 0));
+    if (isSideWarp || !i_this->checkBossRoom() || fopAcM_GetRoomNo(i_this) != 50) {
+        return HOOK_CONTINUE;
+    }
+
+    char stageName[32];
+    SAFE_STRCPY(stageName, dComIfGp_getStartStageName());
+
+    for (int i = 0; i < 32; i++) {
+        if ((s64)stageName[i] == 0) {
+            stageName[i - 1] = 0;
+            break;
+        }
+    }
+
+    if (!checkItemGet(dItemNo_DUNGEON_EXIT_e, 1) &&
+        !(checkItemGet(dItemNo_DUNGEON_BACK_e, 1) &&
+          strcmp(stageName, dComIfGs_getWarpStageName()) == 0))
+    {
+        return HOOK_CONTINUE;
+    }
+
+    // In rando, we only want to clear the Ooccoo slot if Ooccoo is in it.
+    // so continue with normal function if Ooccoo is in slot.
+    u8 ooccooSlot = dComIfGs_getItem(SLOT_18, false);
+    if (ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_e ||
+        ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_2_e ||
+        ooccooSlot == dItemNo_Randomizer_LV7_DUNGEON_EXIT_e)
+    {
+        return HOOK_CONTINUE;
+    }
+
+    hookProcCoWarpInit_prevSlot18 = ooccooSlot;
+    hookProcCoWarpInit_restoreSlot18 = true;
+    return HOOK_CONTINUE;
+}
+
+void hookPostProcCoWarpInit(ModContext*, void*, void*, void*) {
+    if (hookProcCoWarpInit_restoreSlot18) {
+        dComIfGs_setItem(SLOT_18, hookProcCoWarpInit_prevSlot18);
+        hookProcCoWarpInit_restoreSlot18 = false;
+    }
+}
+
 void hookPostBqEnd(ModContext*, void* args, void* retval, void*) {
     // If the player is wolf, they will softlock after the defeat cutscene is completed.
     checkTransformFromWolf();
@@ -1758,6 +2170,11 @@ ModResult initialize() {
     ADD_HOOK_PRE(daAlink_c__decideDoStatus, hookPreDecideDoStatus);
     ADD_HOOK_PRE(searchBouDoor, hookPreSearchBouDoor);
     ADD_HOOK_PRE(daAlink_c__checkGroundSpecialMode, hookPreCheckGroundSpecialMode);
+    ADD_HOOK_POST(daAlink_c__setGetItemFace, hookPostSetGetItemFace);
+    ADD_HOOK_PRE(daAlink_c__setGetSubBgm, hookPreSetGetSubBgm);
+    ADD_HOOK_PRE(daAlink_c__procCoGetItem, hookPreProcCoGetItem);
+    ADD_HOOK_PRE(daAlink_c__procCoWarpInit, hookPreProcCoWarpInit);
+    ADD_HOOK_POST(daAlink_c__procCoWarpInit, hookPostProcCoWarpInit);
 
     ADD_HOOK_POST(bq_end, hookPostBqEnd);
 
@@ -1841,6 +2258,10 @@ ModResult uninstall() {
     mods::hook::uninstall<daAlink_c__decideDoStatus>(svc_hook);
     mods::hook::uninstall<searchBouDoor>(svc_hook);
     mods::hook::uninstall<daAlink_c__checkGroundSpecialMode>(svc_hook);
+    mods::hook::uninstall<daAlink_c__setGetItemFace>(svc_hook);
+    mods::hook::uninstall<daAlink_c__setGetSubBgm>(svc_hook);
+    mods::hook::uninstall<daAlink_c__procCoGetItem>(svc_hook);
+    mods::hook::uninstall<daAlink_c__procCoWarpInit>(svc_hook);
 
     mods::hook::uninstall<bq_end>(svc_hook);
 
