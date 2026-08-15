@@ -85,8 +85,7 @@ public:
     // Packs an EntranceOverride into a uint64_t
     struct EntranceOverrideHash {
         size_t operator()(const EntranceOverride& x) const noexcept {
-            return std::hash<uint64_t>{}(
-                ((uint64_t)x.stageId << 32) | (x.roomNo << 24) | (x.mapLayer << 16) | x.pointNo);
+            return std::hash<uint64_t>{}(std::bit_cast<uint64_t>(x));
         }
     };
 

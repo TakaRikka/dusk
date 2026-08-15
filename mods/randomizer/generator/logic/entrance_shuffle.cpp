@@ -114,7 +114,7 @@ namespace randomizer::logic::entrance_shuffle
                                      [&](const auto& door) { return door->IsPrimary() == mainDoor->IsPrimary(); });
                     auto coupledDoor = *coupledDoorItr;
 
-                    // TODO: Add the coupled door's info to the main door
+                    mainDoor->SetCoupledDoor(coupledDoor->GetPointNo());
 
                     // Completely remove the coupled door from the world graph
                     doors.erase(coupledDoorItr);

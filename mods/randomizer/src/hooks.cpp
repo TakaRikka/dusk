@@ -33,6 +33,9 @@
 #include "d/d_msg_object.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
+#include "d/d_s_name.h"
+#include "f_op/f_op_overlap_mng.h"
+#include "m_Do/m_Do_Reset.h"
 #include "c/c_damagereaction.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
@@ -118,6 +121,8 @@ DEFINE_HOOK_SYMBOL("daE_MD_Create", int(fopAc_ac_c*), daE_MD_c__create);
 
 DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
 DEFINE_HOOK_SYMBOL("daObjMasterSword_Execute", int(daObjMasterSword_c*), daObjMasterSword_c__execute);
+
+DEFINE_HOOK(&dScnName_c::changeGameScene, dScnName_c__changeGameScene);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -1525,6 +1530,9 @@ HookAction hookPreNpcFOrderEvent(ModContext*, void* args, void* retval, void*) {
     u16 i_priority = mods::arg<u16>(args, 4);
 
     // kinda hacky way to check for the state where Bo is trying to talk after getting Iron Boots
+    if (i_this->eventInfo.getArchiveName() == nullptr) {
+        return HOOK_CONTINUE;
+    }
     const std::string arcName = i_this->eventInfo.getArchiveName();
     if (arcName == "Bou4" && i_priority == 40) {
         i_forceSpeak = FALSE;
@@ -1698,6 +1706,12 @@ HookAction hookPreMasterSwordExecute(ModContext*, void* args, void* retval, void
     return HOOK_CONTINUE;
 }
 
+void hookPost_dScnName_c__changeGameScene(ModContext* ctx, void* args, void* retval, void* userdata) {
+    if (!mDoRst::isReset() && !fopOvlpM_IsPeek()) {
+        randomizer::session::registerStartingLocation();
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -1798,6 +1812,8 @@ ModResult initialize() {
     ADD_HOOK_REPLACE(daObjMasterSword_c__executeWait, hookReplaceMasterSwordExecuteWait);
     ADD_HOOK_PRE(daObjMasterSword_c__execute, hookPreMasterSwordExecute);
 
+    ADD_HOOK_POST(dScnName_c__changeGameScene, hookPost_dScnName_c__changeGameScene);
+
     return MOD_OK;
 }
 
@@ -1879,6 +1895,8 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daObjMasterSword_c__executeWait>(svc_hook);
     mods::hook::uninstall<daObjMasterSword_c__execute>(svc_hook);
+
+    mods::hook::uninstall<dScnName_c__changeGameScene>();
 
     return MOD_OK;
 }

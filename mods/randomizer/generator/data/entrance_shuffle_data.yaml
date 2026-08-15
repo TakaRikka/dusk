@@ -1222,7 +1222,7 @@
   Forward:
     Connection: Kakariko Renados Sanctuary -> Kakariko Renados Sanctuary Basement
     Stage: 75
-    Room: 5
+    Room: 7
     Spawn: "00"
     Spawn Type: "FF"
     Parameters: "FFFF"

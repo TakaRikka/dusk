@@ -867,17 +867,17 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
 
     // Debugging: Dump mEntranceOverrides
     // for (const auto& [key,val] : randomizer_GetContext().mEntranceOverrides) {
-    //     mods::log::info("({},{},{},{}) -> ({},{},{},{})",key.stageId,key.roomNo,key.mapLayer,key.pointNo,val.stageId,val.roomNo,val.mapLayer,val.pointNo);
+    //     mods::log::debug("({},{},{},{}) -> ({},{},{},{})",key.stageId,key.roomNo,key.mapLayer,key.pointNo,val.stageId,val.roomNo,val.mapLayer,val.pointNo);
     // }
 
+    // mods::log::debug("Original Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     if (randomizer_GetContext().mEntranceOverrides.contains(override)) {
         auto& newOverride = randomizer_GetContext().mEntranceOverrides[override];
-        mods::log::debug("Original Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
         stageName = allStages[newOverride.stageId];
         pointNo = newOverride.pointNo;
         roomNo = newOverride.roomNo;
         mapLayer = newOverride.mapLayer;
-        mods::log::debug("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
+        // mods::log::debug("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     }
 }
 
@@ -1729,27 +1729,6 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         }
     }
 
-    // Entrance Overrides
-    if (world->Setting("Mirror Chamber Access") == "Closed") {
-        // Set exiting the Arbiter's Grounds Boss Room to spawn at the Arbiter's Grounds entrance
-        // if mirror chamber access is closed
-        RandomizerContext::EntranceOverride original = {
-            .stageId = StageIDs::Mirror_Chamber,
-            .roomNo = 4,
-            .mapLayer = -1,
-            .pointNo = 0,
-        };
-
-        RandomizerContext::EntranceOverride override = {
-            .stageId = StageIDs::Bulblin_Camp,
-            .roomNo = 3,
-            .mapLayer = -1,
-            .pointNo = 3,
-        };
-
-        randoData.mEntranceOverrides[original] = override;
-    }
-
     // Vanilla Return to Place Overrides. Will need to change when boss/miniboss ER is implemented
     static const std::vector<std::pair<std::vector<int>, RandomizerContext::EntranceOverride>> defaultPlaceOverrides{
         {{Forest_Temple, Ook, Diababa},                      {.stageId = Forest_Temple, .roomNo = 22, .mapLayer = -1, .pointNo = 0}},
@@ -1781,8 +1760,36 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
             if (forward.stageId == 0xFF || replaces.stageId == 0xFF || forward.roomNo == -1 || replaces.roomNo == -1) {
                 continue;
             }
-            randoData.mEntranceOverrides[replaces] = forward;
+            randoData.mEntranceOverrides[forward] = replaces;
+
+            // Set an override for the second door, if the entrance is coupled
+            if (entrance->getCoupledDoor() != -1) {
+                RandomizerContext::EntranceOverride coupled = {.stageId = entrance->GetStageId(), .roomNo = entrance->GetRoomNo(), .mapLayer = entrance->GetLayerNo(), .pointNo = entrance->getCoupledDoor()};
+                randoData.mEntranceOverrides[coupled] = replaces;
+            }
         }
+    }
+
+    if (world->Setting("Mirror Chamber Access") == "Closed") {
+        // Set exiting the Arbiter's Grounds Boss Room to spawn at the Arbiter's Grounds entrance
+        // if mirror chamber access is closed
+        RandomizerContext::EntranceOverride original = {
+            .stageId = StageIDs::Mirror_Chamber,
+            .roomNo = 4,
+            .mapLayer = -1,
+            .pointNo = 0,
+        };
+
+        RandomizerContext::EntranceOverride override = {
+            .stageId = StageIDs::Bulblin_Camp,
+            .roomNo = 3,
+            .mapLayer = -1,
+            .pointNo = 3,
+        };
+
+        // Check if we are already overriding the bulblin camp entrance, and correctly override the entrance
+        const auto& it = randoData.mEntranceOverrides.find(override);
+        randoData.mEntranceOverrides[original] = (it != randoData.mEntranceOverrides.end()) ? it->second : override;
     }
 
     return std::move(randoData);
