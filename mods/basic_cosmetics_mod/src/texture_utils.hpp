@@ -9,6 +9,7 @@
 
 #include <gx.h>
 
+#include <list>
 #include <unordered_map>
 
 uint32_t get_image_data_size(uint32_t format, uint32_t width, uint32_t height, uint32_t mipmapCount);
