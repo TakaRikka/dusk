@@ -70,6 +70,11 @@ void JUTVideo::preRetraceProc(u32 retrace_count) {
 
     OSTick tick = DUSK_IF_ELSE(static_cast<OSTick>(OSGetNativeTime()), OSGetTick());
     sVideoInterval = tick - sVideoLastTick;
+#if TARGET_PC
+    if (sVideoInterval <= 0) {
+        sVideoInterval = 1;
+    }
+#endif
     sVideoLastTick = tick;
 
     JUTXfb* xfb = JUTXfb::getManager();

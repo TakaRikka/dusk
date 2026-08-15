@@ -899,6 +899,7 @@ bool ModLoader::activate_mod(LoadedMod& mod) {
 }
 
 void ModLoader::deactivate_mod(LoadedMod& mod) {
+    svc::modules_mod_deactivating(mod);
     if (mod.initialized && mod.native && mod.native->fn_shutdown) {
         log::write(mod.metadata.id, LOG_LEVEL_TRACE, "calling mod_shutdown");
         try {

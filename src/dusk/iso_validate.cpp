@@ -40,10 +40,25 @@ constexpr auto AcceptedDiscs = std::to_array<borealis::disc::AcceptedDisc>({
         .gameId = "GZ2P01",
         .expectedHash = borealis::disc::parse_xxh3_128("9ef597588b0035ca9e91b333fa9a8a7e"),
     },
+    {
+        .gameId = "RZDE01", .revision = 0,
+        .expectedHash = borealis::disc::parse_xxh3_128("b3d91fbea59e5c66934d04c01566728e"),
+    },
+    {
+        .gameId = "RZDE01", .revision = 2,
+        .expectedHash = borealis::disc::parse_xxh3_128("c3ec420921a1b36d6ae43f576491d25c"),
+    },
+    {
+        .gameId = "RZDJ01",
+        .expectedHash = borealis::disc::parse_xxh3_128("d3866821c7fc6999e6e8bbef8b6875aa"),
+    },
+    {
+        .gameId = "RZDP01",
+        .expectedHash = borealis::disc::parse_xxh3_128("6095a924a57e5fb4294ac96fb85a09a1"),
+    },
 });
 
-constexpr auto RecognizedGameIds =
-    std::to_array<std::string_view>({"RZDE01", "RZDJ01", "RZDK01", "RZDP01"});
+constexpr auto RecognizedGameIds = std::to_array<std::string_view>({"RZDK01"});
 
 constexpr borealis::disc::Catalog DiscCatalog{
     .acceptedDiscs = AcceptedDiscs,
@@ -92,6 +107,7 @@ void update_info(const borealis::disc::Result& result, DiscInfo& info) noexcept 
     if (!result.metadata.gameId.empty()) {
         info.platform = result.metadata.platform;
         info.region = region_from_game_id(result.metadata.gameId);
+        info.revision = result.metadata.revision;
     }
 }
 

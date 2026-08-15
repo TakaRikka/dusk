@@ -4,6 +4,7 @@
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
 #include "dusk/iso_validate.hpp"
+#include "dusk/language.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
 #include "modal.hpp"
@@ -291,7 +292,7 @@ std::string get_error_msg(iso::ValidationError error) {
     case iso::ValidationError::WrongGame:
         return "The selected game is not supported by Dusklight.";
     case iso::ValidationError::WrongVersion:
-        return "Dusklight currently supports GameCube USA and PAL disc images only.";
+        return "Dusklight does not currently support the Wii's Korean version.";
     case iso::ValidationError::Canceled:
         return "Disc verification was canceled. Dusklight cannot guarantee the selected disc "
                "image is compatible.";
@@ -317,6 +318,24 @@ void persist_disc_choice(const std::string& path, iso::ValidationError validatio
     }
 }
 
+void apply_language_for_disc(const iso::DiscInfo& info) {
+    const auto langs = language::available_languages(info);
+    auto& language = getSettings().game.language;
+    const GameLanguage previous = language.getValue();
+    if (std::ranges::find(langs, previous) != langs.end()) {
+        return;
+    }
+
+    const GameLanguage fallback = langs.front();
+    language.setValue(fallback);
+    config::save();
+
+    auto& state = prelaunch_state();
+    state.initialLanguage = fallback;
+    state.unavailableLanguage = previous;
+    state.pendingLanguageUnavailableNotice = true;
+}
+
 void apply_valid_disc_result(
     const std::string& path, const iso::DiscInfo& info, iso::ValidationError validation) {
     auto& state = prelaunch_state();
@@ -329,6 +348,7 @@ void apply_valid_disc_result(
         state.activeDiscInfo = info;
     }
     persist_disc_choice(path, validation);
+    apply_language_for_disc(info);
 }
 
 void apply_disc_verification_result(const DiscVerificationResult& result) {
@@ -548,6 +568,7 @@ void refresh_configured_disc_state() noexcept {
         if (state.configuredDiscPath == state.activeDiscPath) {
             state.activeDiscInfo = info;
         }
+        apply_language_for_disc(info);
         return;
     }
 
@@ -629,6 +650,36 @@ void try_push_verification_modal(Document& host) {
             },
         .onDismiss = dismiss,
         .icon = "error",
+    }));
+}
+
+void try_push_language_unavailable_modal(Document& host) {
+    auto& state = prelaunch_state();
+
+    if (!state.pendingLanguageUnavailableNotice) {
+        return;
+    }
+    state.pendingLanguageUnavailableNotice = false;
+
+    const Rml::String bodyRml = fmt::format(
+        "<b>{}</b> is not available on this disc. Language has been reset to <b>{}</b>.",
+        language::language_name(state.unavailableLanguage),
+        language::language_name(getSettings().game.language.getValue()));
+
+    auto dismiss = [](Modal& modal) { modal.pop(); };
+
+    host.push(std::make_unique<Modal>(Modal::Props{
+        .title = "Language unavailable",
+        .bodyRml = bodyRml,
+        .actions =
+            {
+                ModalAction{
+                    .label = "OK",
+                    .onPressed = dismiss,
+                },
+            },
+        .onDismiss = dismiss,
+        .icon = "warning",
     }));
 }
 
@@ -844,6 +895,7 @@ void Prelaunch::update() {
 
     if (top_document() == this) {
         try_push_verification_modal(*this);
+        try_push_language_unavailable_modal(*this);
     }
 
     const auto& state = prelaunch_state();
@@ -917,6 +969,9 @@ void Prelaunch::update() {
                 break;
             case iso::Region::NorthAmerica:
                 innerRML += "USA";
+                if (state.activeDiscInfo.platform == iso::Platform::Wii) {
+                    innerRML += fmt::format(" Rev. {}", state.activeDiscInfo.revision);
+                }
                 break;
             case iso::Region::Korea:
                 innerRML += "KOR";
