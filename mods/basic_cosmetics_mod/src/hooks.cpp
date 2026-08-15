@@ -650,3 +650,37 @@ ModResult add_all_hooks() {
 
     return MOD_OK;
 }
+
+#define UNINSTALL_HOOK(defined_hook) mods::hook::uninstall<defined_hook>(svc_hook);
+
+ModResult remove_all_hooks() {
+    UNINSTALL_HOOK(WolfEyeLightSet)
+    UNINSTALL_HOOK(PreKandelaarDraw)
+    UNINSTALL_HOOK(CPaneMgrSetBlackWhite)
+    UNINSTALL_HOOK(KanteraIconSetNowGauge)
+    UNINSTALL_HOOK(SetWolfLockDomeModel)
+    UNINSTALL_HOOK(SetLightningSwordEffect)
+    UNINSTALL_HOOK(MidnaCreate)
+    UNINSTALL_HOOK(MidnaSetBodyPartMatrix)
+    UNINSTALL_HOOK(MidnaSetBodyPartMatrix)
+    UNINSTALL_HOOK(dMeter2Init)
+    UNINSTALL_HOOK(FileInfoSetHeartCount)
+    UNINSTALL_HOOK(ScreenInitButton)
+    UNINSTALL_HOOK(MenuSaveScreenSet)
+    UNINSTALL_HOOK(FileSelectScreenSet)
+    UNINSTALL_HOOK(BrightCheckScreenSet)
+    UNINSTALL_HOOK(MenuRingCreate)
+    UNINSTALL_HOOK(MenuCollect2DCreate)
+    UNINSTALL_HOOK(MenuFishingScreenSetDoIcon)
+    UNINSTALL_HOOK(MenuInsectScreenSetDoIcon)
+    UNINSTALL_HOOK(MenuLetterScreenSetDoIcon)
+    UNINSTALL_HOOK(MenuOptionCreate)
+    UNINSTALL_HOOK(MenuSkillScreenSetDoIcon)
+    UNINSTALL_HOOK(OutFontCreatePane)
+    UNINSTALL_HOOK(OutFontSetDrawFont)
+    UNINSTALL_HOOK(MenuFMapCreate)
+    UNINSTALL_HOOK(MsgObjectTalkStartInit)
+    UNINSTALL_HOOK(MeterHakushaCreate)
+    UNINSTALL_HOOK(ItemBaseCreateItemHeap)
+    return MOD_OK;
+}

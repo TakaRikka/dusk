@@ -50,6 +50,7 @@ struct TextureReplacementData {
     const uint64_t tlutHash{};
     TextureKey key = TEXTURE_KEY_INIT;
     TextureData data = TEXTURE_DATA_INIT;
+    TextureReplacementHandle handle{};
     std::vector<u8> baseTextureData{};
     bool loadedTextureData = false;
     std::optional<GXColor> curColor{};

@@ -241,12 +241,16 @@ ModResult build_panel(ModContext*, UiElementHandle panel, void*, ModError*) {
 
 void load_base_texture_data() {
 
-    for (auto& [configVar, replacements] : get_texture_replacements()) {
+    // Go through each texture we can recolor and attempt to load and store
+    // the texture data for future recoloring
+    for (auto& replacements : get_texture_replacements() | std::views::values) {
         for (auto& replacement : replacements) {
+            // If we've already loaded the texture data, don't load it again
             if (replacement.loadedTextureData) {
                 continue;
             }
 
+            // Try to get the model this texture is part of. If we can't get it, try again later
             auto model = static_cast<J3DModelData*>(dComIfG_getObjectRes(replacement.arc, replacement.modelFileName));
             if (model == nullptr) {
                 continue;
@@ -258,6 +262,9 @@ void load_base_texture_data() {
                 for (u16 i = 0; i < tex->getNum(); i++) {
                     const char* texName = nametable->getName(i);
                     if (texName != nullptr && std::strcmp(texName, replacement.textureName) == 0) {
+
+                        // Once we've found the texture, set all our TextureKey and TextureData fields
+                        // that we can set right now.
                         auto imageHeader = tex->getResTIMG(i);
                         auto& key = replacement.key;
                         auto& data = replacement.data;
@@ -266,13 +273,17 @@ void load_base_texture_data() {
                         key.width = imageHeader->width;
                         key.height = imageHeader->height;
                         key.gx_format = imageHeader->format;
+
+                        // Currently, no replaced textures have a tlut
                         key.tlut_hash = replacement.tlutHash;
 
+                        // Calculate the size of the image data
                         auto size = get_image_data_size(imageHeader->format, imageHeader->width,
                             imageHeader->height, imageHeader->mipmapEnabled ? imageHeader->mipmapCount : 1);
                         replacement.baseTextureData.resize(size);
                         std::memcpy(replacement.baseTextureData.data(), tex->getImgDataPtr(i), size);
 
+                        // Calculate the texture hash
                         auto textureHash = XXH64(replacement.baseTextureData.data(), size, 0);
                         replacement.key.texture_hash = textureHash;
 
@@ -292,6 +303,7 @@ void load_base_texture_data() {
         }
     }
 
+    // If we've loaded all base textures for recoloring, then we don't need to call this function again
     g_loadedAllBaseTextures = std::ranges::all_of(get_texture_replacements() | std::views::values, [](auto& replacementList) {
         return std::ranges::all_of(replacementList, [](const TextureReplacementData& replacement) {
             return replacement.loadedTextureData;
@@ -301,10 +313,12 @@ void load_base_texture_data() {
 
 ModResult check_and_set_recolored_textures() {
     for (auto& [configVar, replacements] : get_texture_replacements()) {
+        // If the configvar hasn't been set, don't continue
         if (configVar == 0) {
             continue;
         }
 
+        // If we don't have a valid color, don't continue either
         auto maybeColor = get_config_var_color(configVar);
         if (!maybeColor.has_value()) {
             continue;
@@ -312,10 +326,12 @@ ModResult check_and_set_recolored_textures() {
 
         auto color = maybeColor.value();
         for (auto& replacement : replacements) {
+            // If we haven't loaded the base texture yet, don't try to recolor it
             if (!replacement.loadedTextureData) {
                 continue;
             }
 
+            // If our color hasn't changed, don't try to recolor
             auto& curColor = replacement.curColor;
             if (curColor == std::nullopt ||
                 curColor.value().r != color.r || curColor.value().g != color.g || curColor.value().b != color.b)
@@ -328,7 +344,7 @@ ModResult check_and_set_recolored_textures() {
                 replacement.data.size = newTexture.size();
 
                 // Register the new data
-                auto result = svc_texture->register_data(mod_ctx, &replacement.key, &replacement.data, nullptr);
+                auto result = svc_texture->register_data(mod_ctx, &replacement.key, &replacement.data, &replacement.handle);
                 if (result != MOD_OK) {
                     mods::log::debug("Could not register_data for {}. Result: {}", replacement.textureName, static_cast<int>(result));
                 } else {
@@ -341,6 +357,16 @@ ModResult check_and_set_recolored_textures() {
     }
 
     return MOD_OK;
+}
+
+void unregister_all_texture_handles() {
+    for (auto& replacements : get_texture_replacements() | std::views::values) {
+        for (auto& replacement : replacements) {
+            if (replacement.handle != 0) {
+                svc_texture->unregister(mod_ctx, replacement.handle);
+            }
+        }
+    }
 }
 
 #define REGISTER_COSMETIC_OPTION(option) \
@@ -425,7 +451,10 @@ MOD_EXPORT ModResult mod_update(ModError*) {
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
     svc_log->info(mod_ctx, "basic_cosmetics_mod unloaded");
     g_cosmeticsWindow = 0;
+    remove_all_hooks();
+    unregister_all_texture_handles();
     get_texture_replacements().clear();
     return MOD_OK;
 }
+
 }
