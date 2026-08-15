@@ -67,7 +67,7 @@ public:
     u8 getModelType() { return fopAcM_GetParamBit(this, 8, 4); }
     u8 getItemNo() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
+// private:
     /* 0x718 */ u8 mReturnRupee;
     /* 0x71C */ request_of_phase_process_class mPhase;
     /* 0x724 */ J3DModel* mpModel;

@@ -22,10 +22,13 @@
 #include "d/actor/d_a_tag_kmsg.h"
 #include "d/actor/d_a_npc_fairy.h"
 #include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_obj_swBallC.h"
 #include "d/actor/d_a_npc_shad.h"
+#include "d/actor/d_a_tbox2.h"
 #include "d/actor/d_a_npc_yelia.h"
 #include "d/actor/d_a_npc_ykm.h"
 #include "d/actor/d_a_npc_ykw.h"
+#include "d/actor/d_a_npc_zrz.h"
 #include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
@@ -34,6 +37,7 @@
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
 #include "d/d_s_name.h"
+#include "d/d_gameover.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
 #include "c/c_damagereaction.h"
@@ -127,6 +131,16 @@ DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
 DEFINE_HOOK_SYMBOL("daObjMasterSword_Execute", int(daObjMasterSword_c*), daObjMasterSword_c__execute);
 
 DEFINE_HOOK(&dScnName_c::changeGameScene, dScnName_c__changeGameScene);
+
+DEFINE_HOOK(&daNpc_zrZ_c::isDelete, daNpc_zrZ_c__isDelete);
+
+DEFINE_HOOK(&daTbox2_c::Create, daTbox2_c__Create);
+DEFINE_HOOK(&daTbox2_c::setGetDemoItem, daTbox2_c__setGetDemoItem);
+
+DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
+
+DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
+DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -1980,6 +1994,22 @@ void hookPostYkWIsDelete(ModContext*, void* args, void* retval, void*) {
     }
 }
 
+void hookPostNpcZrzIsDelete(ModContext*, void* args, void* retval, void*) {
+    if (dComIfGs_isEventBit(GOT_ZORA_ARMOR_FROM_RUTELA)) {
+        return;
+    }
+
+    auto* i_this = mods::arg<daNpc_zrZ_c*>(args, 0);
+    if (i_this->mDemoMode != 3) {
+        return;
+    }
+
+    const int roomNo = fopAcM_GetRoomNo(i_this);
+    if (dComIfGs_isSwitch(i_this->mSwitch1, roomNo) && dComIfGs_isSwitch(i_this->mSwitch2, roomNo)) {
+        *static_cast<BOOL*>(retval) = FALSE;
+    }
+}
+
 u8 hookNpcShadWaitType1_patchItemNo = dItemNo_NONE_e;
 bool hookNpcShadWaitType1_isPatchItemNo = false;
 HookAction hookPreNpcShadWaitType1(ModContext*, void* args, void* retval, void*) {
@@ -2124,6 +2154,122 @@ void hookPost_dScnName_c__changeGameScene(ModContext* ctx, void* args, void* ret
     }
 }
 
+void hookPostTbox2Create(ModContext*, void* args, void* retval, void*) {
+    if (*static_cast<int*>(retval) != 1) {
+        return;
+    }
+
+    auto* i_this = mods::arg<daTbox2_c*>(args, 0);
+    u8 tboxId = fopAcM_GetParamBit(i_this, 16, 8);
+    if (tboxId == 0xFF || !dComIfGs_isTbox(tboxId)) {
+        return;
+    }
+    // If the flag for this box is set, open it
+
+    // Set the action for not allowing the player to open it
+    i_this->init_actionWait();
+
+    // Set the animation frame to open
+    i_this->mpBck->setFrame(i_this->mpBck->getEndFrame());
+
+    // Set collision to open
+    if (i_this->mpBgW != NULL) {
+        dComIfG_Bgsp().Release(i_this->mpBgW);
+    }
+    if (i_this->mBoxBgW != NULL) {
+        dComIfG_Bgsp().Regist(i_this->mBoxBgW, i_this);
+    }
+}
+
+HookAction hookPreTbox2SetGetDemoItem(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daTbox2_c*>(args, 0);
+    if (i_this->mReturnRupee) {
+        return HOOK_CONTINUE;
+    }
+
+    u8 tboxId = fopAcM_GetParamBit(i_this, 16, 8);
+    if (tboxId != 0xFF) {
+        dComIfGs_onTbox(tboxId);
+    }
+
+    return HOOK_CONTINUE;
+}
+
+u8 hookGameoverCreate_prevSlot18 = dItemNo_NONE_e;
+bool hookGameoverCreate_restoreSlot18 = false;
+HookAction hookPreGameoverCreate(ModContext*, void*, void*, void*) {
+    if (dMeter2Info_getGameOverType() == 1 && strcmp(dComIfGp_getLastPlayStageName(), "D_MN10A") == 0) {
+        // In rando, we only want to clear the Ooccoo slot if Ooccoo is in it.
+        // so continue with normal function if Ooccoo is in slot.
+        u8 ooccooSlot = dComIfGs_getItem(SLOT_18, false);
+        if (ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_e ||
+            ooccooSlot == dItemNo_Randomizer_DUNGEON_EXIT_2_e)
+        {
+            return HOOK_CONTINUE;
+        }
+
+        hookGameoverCreate_prevSlot18 = ooccooSlot;
+        hookGameoverCreate_restoreSlot18 = true;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostGameoverCreate(ModContext*, void*, void*, void*) {
+    if (hookGameoverCreate_restoreSlot18) {
+        dComIfGs_setItem(SLOT_18, hookGameoverCreate_prevSlot18);
+        hookGameoverCreate_restoreSlot18 = false;
+    }
+}
+
+inline void createPalaceSolsRewardItem(daObjSwBallC_c* i_this) {
+    cXyz scale{1.0f, 1.0f, 1.0f};
+    cXyz position{250.0f, -200.0f, 11000.0f};
+    initCreatePlayerItem(
+        dItemNo_Randomizer_WOOD_STICK_e,
+        0x81,
+        &position,
+        fopAcM_GetRoomNo(i_this),
+        &i_this->shape_angle,
+        &scale);
+}
+
+void hookPostSwBallCreate(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjSwBallC_c*>(args, 0);
+    if (*static_cast<int*>(retval) != 1) {
+        return;
+    }
+
+    if (fopAcM_isSwitch(i_this, 0x3d) && fopAcM_isSwitch(i_this, 0x3e)) {
+        createPalaceSolsRewardItem(i_this);
+    }
+}
+
+HookAction hookPreSwBallActionWait(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjSwBallC_c*>(args, 0);
+    if (!fopAcM_isSwitch(i_this, 0x3d) ||
+        !fopAcM_isSwitch(i_this, 0x3e))
+    {
+        return HOOK_CONTINUE;
+    }
+
+    // Don't play the cutscene in rando, just spawn in the item for
+    // Palace of Twilight Collect Both Sols
+
+    dComIfGs_onTbox(10);
+    dComIfGs_onTbox(11);
+
+    i_this->calcLightBallScale();
+    i_this->field_0x574->setPlaySpeed(1.0f);
+    if (i_this->field_0x574->play() != 0 && !fopAcM_isSwitch(i_this, 0x3f)) {
+        fopAcM_onSwitch(i_this, 0x3f);
+        fopAcM_onSwitch(i_this, 0x27);
+        createPalaceSolsRewardItem(i_this);
+    }
+
+    return HOOK_SKIP_ORIGINAL;
+}
+
 }
 
 ModResult initialize() {
@@ -2231,6 +2377,17 @@ ModResult initialize() {
 
     ADD_HOOK_POST(dScnName_c__changeGameScene, hookPost_dScnName_c__changeGameScene);
 
+    ADD_HOOK_POST(daNpc_zrZ_c__isDelete, hookPostNpcZrzIsDelete);
+
+    ADD_HOOK_POST(daTbox2_c__Create, hookPostTbox2Create);
+    ADD_HOOK_PRE(daTbox2_c__setGetDemoItem, hookPreTbox2SetGetDemoItem);
+
+    ADD_HOOK_PRE(dGameover_c___create, hookPreGameoverCreate);
+    ADD_HOOK_POST(dGameover_c___create, hookPostGameoverCreate);
+
+    ADD_HOOK_POST(daObjSwBallC_c__Create, hookPostSwBallCreate);
+    ADD_HOOK_PRE(daObjSwBallC_c__actionWait, hookPreSwBallActionWait);
+
     return MOD_OK;
 }
 
@@ -2318,6 +2475,16 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjMasterSword_c__execute>(svc_hook);
 
     mods::hook::uninstall<dScnName_c__changeGameScene>();
+
+    mods::hook::uninstall<daNpc_zrZ_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daTbox2_c__Create>(svc_hook);
+    mods::hook::uninstall<daTbox2_c__setGetDemoItem>(svc_hook);
+
+    mods::hook::uninstall<dGameover_c___create>(svc_hook);
+
+    mods::hook::uninstall<daObjSwBallC_c__Create>(svc_hook);
+    mods::hook::uninstall<daObjSwBallC_c__actionWait>(svc_hook);
 
     return MOD_OK;
 }
