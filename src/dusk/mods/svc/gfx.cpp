@@ -128,23 +128,34 @@ GfxSlot* resolve_owned_slot_locked(LoadedMod& mod, uint64_t handle, GfxSlotKind 
     return &entry->value;
 }
 
-void collect_mod_types_locked(LoadedMod& owner, std::vector<aurora::gfx::DrawTypeId>& drawIds,
+void take_mod_types_locked(LoadedMod& owner, std::vector<aurora::gfx::DrawTypeId>& drawIds,
     std::vector<aurora::gfx::EncoderTaskId>& taskIds) {
-    s_slots.for_each([&](uint64_t, const auto& entry) {
+    std::vector<uint64_t> drawHandles;
+    std::vector<uint64_t> taskHandles;
+    s_slots.for_each([&](uint64_t handle, const auto& entry) {
         if (entry.owner != &owner) {
             return;
         }
         const auto& slot = entry.value;
         if (slot.kind == GfxSlotKind::DrawType && slot.auroraDrawId != aurora::gfx::InvalidDrawType)
         {
-            drawIds.push_back(slot.auroraDrawId);
+            drawHandles.push_back(handle);
         } else if ((slot.kind == GfxSlotKind::ComputeType ||
                        slot.kind == GfxSlotKind::PresentTarget) &&
                    slot.auroraTaskId != aurora::gfx::InvalidEncoderTask)
         {
-            taskIds.push_back(slot.auroraTaskId);
+            taskHandles.push_back(handle);
         }
     });
+    for (const auto handle : drawHandles) {
+        auto* entry = s_slots.find(handle);
+        drawIds.push_back(std::exchange(entry->value.auroraDrawId, aurora::gfx::InvalidDrawType));
+    }
+    for (const auto handle : taskHandles) {
+        auto* entry = s_slots.find(handle);
+        taskIds.push_back(
+            std::exchange(entry->value.auroraTaskId, aurora::gfx::InvalidEncoderTask));
+    }
 }
 
 void unregister_aurora_types(const std::vector<aurora::gfx::DrawTypeId>& drawIds,
@@ -154,6 +165,19 @@ void unregister_aurora_types(const std::vector<aurora::gfx::DrawTypeId>& drawIds
     }
     for (const auto id : taskIds) {
         aurora::gfx::unregister_encoder_task_type(id);
+    }
+}
+
+void gfx_mod_deactivating(LoadedMod& mod) {
+    std::vector<aurora::gfx::DrawTypeId> drawIds;
+    std::vector<aurora::gfx::EncoderTaskId> taskIds;
+    {
+        std::lock_guard lock{s_mutex};
+        take_mod_types_locked(mod, drawIds, taskIds);
+    }
+    unregister_aurora_types(drawIds, taskIds);
+    if (!drawIds.empty() || !taskIds.empty()) {
+        aurora::gfx::synchronize();
     }
 }
 
@@ -810,8 +834,10 @@ ModResult gfx_unregister_present_target(LoadedMod& mod, uint64_t handle) {
         auroraId = slot->auroraTaskId;
     }
 
-    aurora::gfx::unregister_encoder_task_type(auroraId);
-    aurora::gfx::synchronize();
+    if (auroraId != aurora::gfx::InvalidEncoderTask) {
+        aurora::gfx::unregister_encoder_task_type(auroraId);
+        aurora::gfx::synchronize();
+    }
 
     std::optional<GfxSlotMap::Entry> removed;
     {
@@ -969,17 +995,8 @@ void gfx_run_stage(
     }
 }
 
-void gfx_remove_mod(LoadedMod& mod) {
-    std::vector<aurora::gfx::DrawTypeId> drawIds;
-    std::vector<aurora::gfx::EncoderTaskId> taskIds;
-    {
-        std::lock_guard lock{s_mutex};
-        collect_mod_types_locked(mod, drawIds, taskIds);
-    }
-    unregister_aurora_types(drawIds, taskIds);
-    if (!drawIds.empty() || !taskIds.empty()) {
-        aurora::gfx::synchronize();
-    }
+void gfx_mod_detached(LoadedMod& mod) {
+    gfx_mod_deactivating(mod);
 
     std::vector<GfxSlotMap::Entry> entries;
     {
@@ -1000,7 +1017,7 @@ void gfx_remove_mod(LoadedMod& mod) {
     }
 }
 
-void gfx_drain_worker_failures() {
+void gfx_frame_begin() {
     std::vector<WorkerFailure> failures;
     {
         std::lock_guard lock{s_mutex};
@@ -1013,7 +1030,7 @@ void gfx_drain_worker_failures() {
     for (const auto& failure : failures) {
         for (auto& mod : ModLoader::instance().mods()) {
             if (mod.metadata.id == failure.modId && mod.active) {
-                gfx_remove_mod(mod);
+                gfx_mod_detached(mod);
                 fail_mod(mod, MOD_ERROR, failure.message);
                 break;
             }
@@ -1384,8 +1401,9 @@ constinit const ServiceModule g_gfxModule{
     .majorVersion = GFX_SERVICE_MAJOR,
     .minorVersion = GFX_SERVICE_MINOR,
     .service = &s_gfxService,
-    .modDetached = gfx_remove_mod,
-    .frameBegin = gfx_drain_worker_failures,
+    .modDeactivating = gfx_mod_deactivating,
+    .modDetached = gfx_mod_detached,
+    .frameBegin = gfx_frame_begin,
 };
 
 }  // namespace dusk::mods::svc
