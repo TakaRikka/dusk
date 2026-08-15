@@ -11,39 +11,42 @@
 #include <mods/svc/hook.hpp>
 #include <mods/svc/log.hpp>
 
+#include "c/c_damagereaction.h"
 #include "d/actor/d_a_alink.h"
-#include "d/actor/d_a_mg_rod.h"
 #include "d/actor/d_a_b_bq.h"
+#include "d/actor/d_a_demo_item.h"
 #include "d/actor/d_a_door_shutter.h"
 #include "d/actor/d_a_e_md.h"
 #include "d/actor/d_a_e_mk.h"
 #include "d/actor/d_a_kytag08.h"
+#include "d/actor/d_a_mg_rod.h"
 #include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_npc_bans.h"
-#include "d/actor/d_a_tag_kmsg.h"
 #include "d/actor/d_a_npc_fairy.h"
-#include "d/actor/d_a_obj_master_sword.h"
-#include "d/actor/d_a_obj_bosswarp.h"
-#include "d/actor/d_a_obj_swBallC.h"
 #include "d/actor/d_a_npc_shad.h"
-#include "d/actor/d_a_tbox2.h"
 #include "d/actor/d_a_npc_yelia.h"
 #include "d/actor/d_a_npc_ykm.h"
 #include "d/actor/d_a_npc_ykw.h"
+#include "d/actor/d_a_npc_zrc.h"
 #include "d/actor/d_a_npc_zrz.h"
-#include "d/actor/d_a_demo_item.h"
+#include "d/actor/d_a_obj_bosswarp.h"
+#include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_obj_swBallC.h"
+#include "d/actor/d_a_obj_zra_rock.h"
+#include "d/actor/d_a_tag_kmsg.h"
+#include "d/actor/d_a_tbox2.h"
 #include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
+#include "d/d_gameover.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
+#include "d/d_s_name.h"
+#include "d/d_s_play.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
-#include "d/d_s_name.h"
-#include "d/d_gameover.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
-#include "c/c_damagereaction.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
@@ -158,6 +161,17 @@ DEFINE_HOOK_SYMBOL("uki_catch", void(dmg_rod_class*), mgRod_uki_catch);
 #define setEmptyBottle_noarg_sig "_ZN17dSv_player_item_c14setEmptyBottleEv"
 #endif
 DEFINE_HOOK_SYMBOL(setEmptyBottle_noarg_sig, void(dSv_player_item_c*), dSv_player_item_c__setEmptyBottle);
+
+DEFINE_HOOK(&daNpc_zrC_c::isDelete, daNpc_zrC_c__isDelete);
+
+DEFINE_HOOK(&daObjZraRock_c::create, daObjZraRock_c__create);
+
+#ifdef _MSVC_LANG
+#define phase_1_dScnPly_sig "?phase_1@@YAHPAUdScnPly_c@@@Z" // sig is wrong?
+#else
+#define phase_1_dScnPly_sig "_Z7phase_1P9dScnPly_c"
+#endif
+// DEFINE_HOOK_SYMBOL(phase_1_dScnPly_sig, int(dScnPly_c*), phase_1__dScnPly_c);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -2471,6 +2485,47 @@ HookAction hookPreSetEmptyBottle(ModContext*, void*, void*, void*) {
     return HOOK_CONTINUE;
 }
 
+HookAction hookPreNpcZrCIsDelete(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daNpc_zrC_c*>(args, 0);
+    if (i_this->mType == 4
+        || i_this->mType == 0
+        || i_this->mType == 1
+        || (i_this->mType == 2 && daNpcF_chkEvtBit(0x108))
+        || i_this->mType == 3
+        )
+    {
+        *static_cast<BOOL*>(retval) = FALSE;
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostObjZraRockCreate(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjZraRock_c*>(args, 0);
+    if (*static_cast<int*>(retval) != cPhs_ERROR_e) {
+        return;
+    }
+
+    // if returned cPhs_ERROR_e, check if it's because the switch was set.
+    if (dComIfGs_isSwitch((fopAcM_GetParam(i_this) >> 8) & 0xff, fopAcM_GetRoomNo(i_this))) {
+        // Don't delete the rock when we're following rutela
+        if (!dComIfGs_isEventBit(GOT_ZORA_ARMOR_FROM_RUTELA) && dComIfGs_isEventBit(ZORA_ESCORT_CLEARED)) {
+            *static_cast<int*>(retval) = cPhs_COMPLEATE_e;
+        }
+    }
+}
+
+void hookPostScnPlyPhase1(ModContext*, void*, void*, void*) {
+    if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
+        dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
+    {
+        // Undo item set for rando
+        dComIfGs_offItemFirstBit(dItemNo_HORSE_FLUTE_e);
+        dComIfGs_setItem(SLOT_21, dItemNo_NONE_e);
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -2602,6 +2657,12 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(dSv_player_item_c__setEmptyBottle, hookPreSetEmptyBottle);
 
+    ADD_HOOK_PRE(daNpc_zrC_c__isDelete, hookPreNpcZrCIsDelete);
+
+    ADD_HOOK_POST(daObjZraRock_c__create, hookPostObjZraRockCreate);
+
+    //ADD_HOOK_POST(phase_1__dScnPly_c, hookPostScnPlyPhase1);
+
     return MOD_OK;
 }
 
@@ -2707,6 +2768,12 @@ ModResult uninstall() {
     mods::hook::uninstall<mgRod_lure_heart>(svc_hook);
     mods::hook::uninstall<mgRod_uki_catch>(svc_hook);
     mods::hook::uninstall<dSv_player_item_c__setEmptyBottle>(svc_hook);
+
+    mods::hook::uninstall<daNpc_zrC_c__isDelete>(svc_hook);
+
+    mods::hook::uninstall<daObjZraRock_c__create>(svc_hook);
+
+    //mods::hook::uninstall<phase_1__dScnPly_c>();
 
     return MOD_OK;
 }
