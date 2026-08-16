@@ -68,6 +68,13 @@ enum class MagicArmorMode : u8 {
     COSMETIC = 4,
 };
 
+enum class LetterboxMode : u8 {
+    Off = 0,
+    On = 1,
+    CutsceneOnly = 2,
+    GameplayOnly = 3,
+};
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -121,6 +128,12 @@ template <>
 struct ConfigEnumRange<MagicArmorMode> {
     static constexpr auto min = MagicArmorMode::NORMAL;
     static constexpr auto max = MagicArmorMode::COSMETIC;
+};
+
+template <>
+struct ConfigEnumRange<LetterboxMode> {
+    static constexpr auto min = LetterboxMode::Off;
+    static constexpr auto max = LetterboxMode::GameplayOnly;
 };
 
 template <>
@@ -209,7 +222,7 @@ struct UserSettings {
         ConfigVar<Resampler> resampler;
         ConfigVar<bool> enableMapBackground;
         ConfigVar<bool> disableCutscenePillarboxing;
-        ConfigVar<bool> disableLetterboxing;
+        ConfigVar<LetterboxMode> disableLetterboxing;
         ConfigVar<bool> enableHighQualityMinimapTextures;
 
         // Audio
@@ -313,6 +326,13 @@ struct UserSettings {
 UserSettings& getSettings();
 
 void registerSettings();
+
+inline bool isLetterboxingDisabled(bool inCutscene) {
+    const auto mode = getSettings().game.disableLetterboxing.getValue();
+    return mode == LetterboxMode::On ||
+           (mode == LetterboxMode::CutsceneOnly && inCutscene) ||
+           (mode == LetterboxMode::GameplayOnly && !inCutscene);
+}
 
 // Transient settings
 
