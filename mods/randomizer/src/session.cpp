@@ -372,6 +372,11 @@ void onSaveLoaded(ModContext*, uint32_t, void*) {
     loadAncientDocumentNum();
 }
 
+void onSaveWritten(ModContext*, uint32_t, void*) {
+    const std::string hash = randomizer_GetContext().mHash;
+    svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
+}
+
 ModResult initialize(const ServiceManager& services) {
     svc_mng = services;
 
@@ -379,7 +384,7 @@ ModResult initialize(const ServiceManager& services) {
         svc_mng.mod_ctx,
         onNewSave,
         onSaveLoaded,
-        nullptr,
+        onSaveWritten,
         nullptr,
         &s_save_observer);
     if (rt != MOD_OK) {
