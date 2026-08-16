@@ -179,7 +179,6 @@ dialogSelectModeState g_dialogSelectModeState = SelectReady;
 
 namespace randomizer::hooks {
 namespace {
-UiDialogHandle playModeDialog{0};
 HookAction hookPreDataSelect(ModContext*, void* args, void* retval, void* userdata) {
     ui::g_dialogSelectModeState = ui::SelectReady;
     ui::g_file_select_window_ctx.is_proceed = false;
@@ -198,57 +197,12 @@ HookAction hookPreSelectDataNameMove(ModContext*, void* args, void* retval, void
     bool isFileRecScale = i_this->fileRecScaleAnm2();
     bool isModoruTxtDisp = i_this->modoruTxtDispAnm();
 
-    // if selected vanilla mode, let transition occur as normal
-    if (ui::g_dialogSelectModeState == ui::SelectVanilla) {
-        return HOOK_CONTINUE;
-    }
-
     if (ui::g_dialogSelectModeState == ui::SelectReady && isHeaderTxtChange == true && isFileRecScale == true && isModoruTxtDisp == true) {
         ui::g_dialogSelectModeState = ui::SelectWait;
 
-        auto buildDialog = [i_this]() {
-            UiDialogDesc desc = UI_DIALOG_DESC_INIT;
-            desc.title = "Play Type";
-            desc.body_rml = "What mode would you like to play?";
-            desc.icon = "question-mark";
-            desc.variant = UI_DIALOG_NORMAL;
-
-            UiDialogAction actions[2];
-            actions[0] = {
-                .label = "Vanilla",
-                .on_pressed = [](ModContext* ctx, UiDialogHandle dialogHandle, void*) {
-                    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
-                    randomizer_GetContext() = RandomizerContext();
-                    ui::g_dialogSelectModeState = ui::SelectVanilla;
-                    session::svc_mng.ui->dialog_close(ctx, dialogHandle);
-                },
-                .user_data = nullptr,
-                .keep_open = false,
-            };
-            actions[1] = {
-                .label = "Randomizer",
-                .on_pressed = [](ModContext* ctx, UiDialogHandle dialogHandle, void* userdata) {
-                    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
-                    ui::g_dialogSelectModeState = ui::SelectRandomizer;
-                    ui::buildFileSelectGateMenu(static_cast<dFile_select_c*>(userdata));
-                    session::svc_mng.ui->dialog_close(ctx, dialogHandle);
-                },
-                .user_data = i_this,
-                .keep_open = false,
-            };
-            desc.actions = actions;
-            desc.action_count = 2;
-
-            if (session::svc_mng.ui->dialog_push(session::svc_mng.mod_ctx, &desc, &playModeDialog) != MOD_OK) {
-                mods::log::error("Failed to push dialog");
-                return MOD_ERROR;
-            }
-
-            return MOD_OK;
-        };
-
-        if (buildDialog() != MOD_OK) {
-            mods::log::error("Failed to build dialog");
+        ModResult rt = ui::buildFileSelectGateMenu(i_this);
+        if (rt != MOD_OK) {
+            mods::log::error("Failed to build menu");
             return HOOK_CONTINUE;
         }
     }
@@ -1863,7 +1817,7 @@ void hookPostChangeScene4Event(ModContext*, void* args, void* retval, void*) {
     stage_scls_info_class* scls_info = &scls->m_entries[i_exitId];
 
     // If randomizer is active and we're loading the first spawn, set our starting time of day
-    if (std::strcmp(scls_info->mStage, "F_SP103")
+    if (std::strcmp(scls_info->mStage, "F_SP103") == 0
         && scls_info->mRoom == 1
         && scls_info->mStart == 1)
     {

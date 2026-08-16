@@ -16,8 +16,6 @@ namespace randomizer::ui {
 enum dialogSelectModeState : uint8_t {
     SelectReady,
     SelectWait,
-    SelectVanilla,
-    SelectRandomizer
 };
 extern dialogSelectModeState g_dialogSelectModeState;
 
