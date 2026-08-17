@@ -11,7 +11,8 @@
 #include "tools.h"
 #include "verify_item_functions.h"
 
-static void item_func_FOOLISH_ITEM() {
+namespace {
+void item_func_FOOLISH_ITEM() {
     // Failsafe: Make sure the count does not somehow exceed 100
     if (g_randomizerState.mFoolishItemCount < 100)
     {
@@ -19,15 +20,15 @@ static void item_func_FOOLISH_ITEM() {
     }
 }
 
-static void item_func_ORDON_PORTAL() {
+void item_func_ORDON_PORTAL() {
     dComIfGs_onStageSwitch(0x0, 0x34); // Unlock Ordon Portal
 }
 
-static void item_func_SOUTH_FARON_PORTAL() {
+void item_func_SOUTH_FARON_PORTAL() {
     dComIfGs_onStageSwitch(0x2, 0x47); // Unlock S Faron Portal
 }
 
-static void item_func_UPPER_ZORAS_RIVER_PORTAL() {
+void item_func_UPPER_ZORAS_RIVER_PORTAL() {
     dComIfGs_onStageSwitch(0x4, 0x17); // Talked to Iza before portal
     dComIfGs_onStageSwitch(0x4, 0x37); // Talked to Iza after portal
     dComIfGs_onStageSwitch(0x4, 0x15); // Unlock UZR Portal
@@ -36,201 +37,201 @@ static void item_func_UPPER_ZORAS_RIVER_PORTAL() {
     dComIfGs_onEventBit(0xB02); // Iza 1 Minigame Unlocked
 }
 
-static void item_func_CASTLE_TOWN_PORTAL() {
+void item_func_CASTLE_TOWN_PORTAL() {
     dComIfGs_onStageSwitch(0x6, 0x3); // Unlock Castle Town Portal
 }
 
-static void item_func_GERUDO_DESERT_PORTAL() {
+void item_func_GERUDO_DESERT_PORTAL() {
     dComIfGs_onStageSwitch(0xA, 0x15); // Unlock Desert Portal
 }
 
-static void item_func_NORTH_FARON_PORTAL() {
+void item_func_NORTH_FARON_PORTAL() {
     dComIfGs_onStageSwitch(0x2, 0x2); // Unlock N Faron Portal
 }
 
-static void item_func_KAKARIKO_GORGE_PORTAL() {
+void item_func_KAKARIKO_GORGE_PORTAL() {
     dComIfGs_onStageSwitch(0x6, 0x15); // Unlock Gorge Portal
 }
 
-static void item_func_KAKARIKO_VILLAGE_PORTAL() {
+void item_func_KAKARIKO_VILLAGE_PORTAL() {
     dComIfGs_onStageSwitch(0x3, 0x1F); // Unlock Kak Portal
 }
 
-static void item_func_DEATH_MOUNTAIN_PORTAL() {
+void item_func_DEATH_MOUNTAIN_PORTAL() {
     dComIfGs_onStageSwitch(0x3, 0x15); // Unlock DM Portal
 }
 
-static void item_func_ZORAS_DOMAIN_PORTAL() {
+void item_func_ZORAS_DOMAIN_PORTAL() {
     dComIfGs_onStageSwitch(0x4, 0x2); // Unlock ZD Portal
 }
 
-static void item_func_FOREST_SMALL_KEY() {
+void item_func_FOREST_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x10);
     dComIfGs_setKeyNum(0x10, currentKeys + 1);
 }
 
-static void item_func_MINES_SMALL_KEY() {
+void item_func_MINES_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x11);
     dComIfGs_setKeyNum(0x11, currentKeys + 1);
 }
 
-static void item_func_LAKEBED_SMALL_KEY() {
+void item_func_LAKEBED_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x12);
     dComIfGs_setKeyNum(0x12, currentKeys + 1);
 }
 
-static void item_func_ARBITERS_SMALL_KEY() {
+void item_func_ARBITERS_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x13);
     dComIfGs_setKeyNum(0x13, currentKeys + 1);
 }
 
-static void item_func_SNOWPEAK_SMALL_KEY() {
+void item_func_SNOWPEAK_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x14);
     dComIfGs_setKeyNum(0x14, currentKeys + 1);
 }
 
-static void item_func_TEMPLE_OF_TIME_SMALL_KEY() {
+void item_func_TEMPLE_OF_TIME_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x15);
     dComIfGs_setKeyNum(0x15, currentKeys + 1);
 }
 
-static void item_func_CITY_SMALL_KEY() {
+void item_func_CITY_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x16);
     dComIfGs_setKeyNum(0x16, currentKeys + 1);
 }
 
-static void item_func_PALACE_SMALL_KEY() {
+void item_func_PALACE_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x17);
     dComIfGs_setKeyNum(0x17, currentKeys + 1);
 }
 
-static void item_func_HYRULE_SMALL_KEY() {
+void item_func_HYRULE_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0x18);
     dComIfGs_setKeyNum(0x18, currentKeys + 1);
 }
 
-static void item_func_CAMP_SMALL_KEY() {
+void item_func_CAMP_SMALL_KEY() {
     u8 currentKeys = getAreaKeyNum(0xA);
     dComIfGs_setKeyNum(0xA, currentKeys + 1);
 }
 
-static void item_func_LAKE_HYLIA_PORTAL() {
+void item_func_LAKE_HYLIA_PORTAL() {
     dComIfGs_onStageSwitch(0x4, 0xA); // Unlock Lake Portal
 }
 
-static void item_func_FOREST_BOSS_KEY() {
+void item_func_FOREST_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x10);
 }
 
-static void item_func_LAKEBED_BOSS_KEY() {
+void item_func_LAKEBED_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x12);
 }
 
-static void item_func_ARBITERS_BOSS_KEY() {
+void item_func_ARBITERS_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x13);
 }
 
-static void item_func_TEMPLE_OF_TIME_BOSS_KEY() {
+void item_func_TEMPLE_OF_TIME_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x15);
 }
 
-static void item_func_CITY_BOSS_KEY() {
+void item_func_CITY_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x16);
 }
 
-static void item_func_PALACE_BOSS_KEY() {
+void item_func_PALACE_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x17);
 }
 
-static void item_func_HYRULE_BOSS_KEY() {
+void item_func_HYRULE_BOSS_KEY() {
     dComIfGs_onDungeonItemBossKey(0x18);
 }
 
-static void item_func_FOREST_COMPASS() {
+void item_func_FOREST_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x10);
 }
 
-static void item_func_MINES_COMPASS() {
+void item_func_MINES_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x11);
 }
 
-static void item_func_LAKEBED_COMPASS() {
+void item_func_LAKEBED_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x12);
 }
 
-static void item_func_ARBITERS_COMPASS() {
+void item_func_ARBITERS_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x13);
 }
 
-static void item_func_SNOWPEAK_COMPASS() {
+void item_func_SNOWPEAK_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x14);
 }
 
-static void item_func_TEMPLE_OF_TIME_COMPASS() {
+void item_func_TEMPLE_OF_TIME_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x15);
 }
 
-static void item_func_CITY_COMPASS() {
+void item_func_CITY_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x16);
 }
 
-static void item_func_PALACE_COMPASS() {
+void item_func_PALACE_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x17);
 }
 
-static void item_func_HYRULE_COMPASS() {
+void item_func_HYRULE_COMPASS() {
     dComIfGs_onDungeonItemCompass(0x18);
 }
 
-static void item_func_MIRROR_CHAMBER_PORTAL() {
+void item_func_MIRROR_CHAMBER_PORTAL() {
     dComIfGs_onStageSwitch(0xA, 0x28); // Unlock MC Portal
 }
 
-static void item_func_SNOWPEAK_PORTAL() {
+void item_func_SNOWPEAK_PORTAL() {
     dComIfGs_onStageSwitch(0x8, 0x15); // Unlock Snowpeak Portal
 }
 
-static void item_func_FOREST_MAP() {
+void item_func_FOREST_MAP() {
     dComIfGs_onDungeonItemMap(0x10);
 }
 
-static void item_func_MINES_MAP() {
+void item_func_MINES_MAP() {
     dComIfGs_onDungeonItemMap(0x11);
 }
 
-static void item_func_LAKEBED_MAP() {
+void item_func_LAKEBED_MAP() {
     dComIfGs_onDungeonItemMap(0x12);
 }
 
-static void item_func_ARBITERS_MAP() {
+void item_func_ARBITERS_MAP() {
     dComIfGs_onDungeonItemMap(0x13);
 }
 
-static void item_func_SNOWPEAK_MAP() {
+void item_func_SNOWPEAK_MAP() {
     dComIfGs_onDungeonItemMap(0x14);
 }
 
-static void item_func_TEMPLE_OF_TIME_MAP() {
+void item_func_TEMPLE_OF_TIME_MAP() {
     dComIfGs_onDungeonItemMap(0x15);
 }
 
-static void item_func_CITY_MAP() {
+void item_func_CITY_MAP() {
     dComIfGs_onDungeonItemMap(0x16);
 }
 
-static void item_func_PALACE_MAP() {
+void item_func_PALACE_MAP() {
     dComIfGs_onDungeonItemMap(0x17);
 }
 
-static void item_func_HYRULE_MAP() {
+void item_func_HYRULE_MAP() {
     dComIfGs_onDungeonItemMap(0x18);
 }
 
-static void item_func_SACRED_GROVE_PORTAL() {
+void item_func_SACRED_GROVE_PORTAL() {
     dComIfGs_onStageSwitch(0x7, 0x64); // Unlock Grove Portal
 }
 
-static void item_func_FUSED_SHADOW_1() {
+void item_func_FUSED_SHADOW_1() {
     dComIfGs_onCollectCrystal(0);
     /*
     Adding rando code until framework is implemented
@@ -242,7 +243,7 @@ static void item_func_FUSED_SHADOW_1() {
     */
 }
 
-static void item_func_FUSED_SHADOW_2() {
+void item_func_FUSED_SHADOW_2() {
     dComIfGs_onCollectCrystal(1);
     /*
     Adding rando code until framework is implemented
@@ -254,7 +255,7 @@ static void item_func_FUSED_SHADOW_2() {
     */
 }
 
-static void item_func_FUSED_SHADOW_3() {
+void item_func_FUSED_SHADOW_3() {
     dComIfGs_onCollectCrystal(2);
     /*
     Adding rando code until framework is implemented
@@ -272,148 +273,270 @@ static void item_func_FUSED_SHADOW_3() {
     */
 }
 
-static void item_func_MIRROR_PIECE_1() {
+void item_func_MIRROR_PIECE_1() {
     dComIfGs_onCollectMirror(0);
 }
 
-static void item_func_ENDING_BLOW() {
+void item_func_ENDING_BLOW() {
     dComIfGs_onEventBit(0x2904);
 }
 
-static void item_func_SHIELD_ATTACK() {
+void item_func_SHIELD_ATTACK() {
     dComIfGs_onEventBit(0x2908);
 }
 
-static void item_func_BACK_SLICE() {
+void item_func_BACK_SLICE() {
     dComIfGs_onEventBit(0x2902);
 }
 
-static void item_func_HELM_SPLITTER() {
+void item_func_HELM_SPLITTER() {
     dComIfGs_onEventBit(0x2901);
 }
 
-static void item_func_MORTAL_DRAW() {
+void item_func_MORTAL_DRAW() {
     dComIfGs_onEventBit(0x2A80);
 }
 
-static void item_func_JUMP_STRIKE() {
+void item_func_JUMP_STRIKE() {
     dComIfGs_onEventBit(0x2A40);
 }
 
-static void item_func_GREAT_SPIN() {
+void item_func_GREAT_SPIN() {
     dComIfGs_onEventBit(0x2A20);
 }
 
-static void item_func_ELDIN_BRIDGE_PORTAL() {
+void item_func_ELDIN_BRIDGE_PORTAL() {
     dComIfGs_onStageSwitch(0x6, 0x63); // Unlock Eldin Bridge Portal
 }
 
-static int item_getcheck_func_ORDON_PORTAL() {
+int item_getcheck_func_ORDON_PORTAL() {
     return dComIfGs_isStageSwitch(0x0, 0x34); // Unlock Ordon Portal
 }
 
-static int item_getcheck_func_SOUTH_FARON_PORTAL() {
+int item_getcheck_func_SOUTH_FARON_PORTAL() {
     return dComIfGs_isStageSwitch(0x2, 0x47); // Unlock S Faron Portal
 }
 
-static int item_getcheck_func_UPPER_ZORAS_RIVER_PORTAL() {
+int item_getcheck_func_UPPER_ZORAS_RIVER_PORTAL() {
     return dComIfGs_isStageSwitch(0x4, 0x15); // Unlock UZR Portal
 }
 
-static int item_getcheck_func_CASTLE_TOWN_PORTAL() {
+int item_getcheck_func_CASTLE_TOWN_PORTAL() {
     return dComIfGs_isStageSwitch(0x6, 0x3); // Unlock Castle Town Portal
 }
 
-static int item_getcheck_func_GERUDO_DESERT_PORTAL() {
+int item_getcheck_func_GERUDO_DESERT_PORTAL() {
     return dComIfGs_isStageSwitch(0xA, 0x15); // Unlock Desert Portal
 }
 
-static int item_getcheck_func_NORTH_FARON_PORTAL() {
+int item_getcheck_func_NORTH_FARON_PORTAL() {
     return dComIfGs_isStageSwitch(0x2, 0x2); // Unlock N Faron Portal
 }
 
-static int item_getcheck_func_KAKARIKO_GORGE_PORTAL() {
+int item_getcheck_func_KAKARIKO_GORGE_PORTAL() {
     return dComIfGs_isStageSwitch(0x6, 0x15); // Unlock Gorge Portal
 }
 
-static int item_getcheck_func_KAKARIKO_VILLAGE_PORTAL() {
+int item_getcheck_func_KAKARIKO_VILLAGE_PORTAL() {
     return dComIfGs_isStageSwitch(0x3, 0x1F); // Unlock Kak Portal
 }
 
-static int item_getcheck_func_DEATH_MOUNTAIN_PORTAL() {
+int item_getcheck_func_DEATH_MOUNTAIN_PORTAL() {
     return dComIfGs_isStageSwitch(0x3, 0x15); // Unlock DM Portal
 }
 
-static int item_getcheck_func_ZORAS_DOMAIN_PORTAL() {
+int item_getcheck_func_ZORAS_DOMAIN_PORTAL() {
     return dComIfGs_isStageSwitch(0x4, 0x2); // Unlock ZD Portal
 }
 
-static int item_getcheck_func_CAMP_SMALL_KEY() {
+int item_getcheck_func_CAMP_SMALL_KEY() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_CAMP_SMALL_KEY_e);
 }
 
-static int item_getcheck_func_LAKE_HYLIA_PORTAL() {
+int item_getcheck_func_LAKE_HYLIA_PORTAL() {
     return dComIfGs_isStageSwitch(0x4, 0xA); // Unlock Lake Portal
 }
 
-static int item_getcheck_func_MIRROR_CHAMBER_PORTAL() {
+int item_getcheck_func_MIRROR_CHAMBER_PORTAL() {
     return dComIfGs_isStageSwitch(0xA, 0x28); // Unlock MC Portal
 }
 
-static int item_getcheck_func_SNOWPEAK_PORTAL() {
+int item_getcheck_func_SNOWPEAK_PORTAL() {
     return dComIfGs_isStageSwitch(0x8, 0x15); // Unlock Snowpeak Portal
 }
 
-static int item_getcheck_func_SACRED_GROVE_PORTAL() {
+int item_getcheck_func_SACRED_GROVE_PORTAL() {
     return dComIfGs_isStageSwitch(0x7, 0x64); // Unlock Grove Portal
 }
 
-static int item_getcheck_func_FUSED_SHADOW_1() {
+int item_getcheck_func_FUSED_SHADOW_1() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_FUSED_SHADOW_1_e);
 }
 
-static int item_getcheck_func_FUSED_SHADOW_2() {
+int item_getcheck_func_FUSED_SHADOW_2() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_FUSED_SHADOW_2_e);
 }
 
-static int item_getcheck_func_FUSED_SHADOW_3() {
+int item_getcheck_func_FUSED_SHADOW_3() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_FUSED_SHADOW_3_e);
 }
 
-static int item_getcheck_func_MIRROR_PIECE_1() {
+int item_getcheck_func_MIRROR_PIECE_1() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_MIRROR_PIECE_1_e);
 }
 
-static int item_getcheck_func_ENDING_BLOW() {
+int item_getcheck_func_ENDING_BLOW() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_ENDING_BLOW_e);
 }
 
-static int item_getcheck_func_SHIELD_ATTACK() {
+int item_getcheck_func_SHIELD_ATTACK() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_SHIELD_ATTACK_e);
 }
 
-static int item_getcheck_func_BACK_SLICE() {
+int item_getcheck_func_BACK_SLICE() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_BACK_SLICE_e);
 }
 
-static int item_getcheck_func_HELM_SPLITTER() {
+int item_getcheck_func_HELM_SPLITTER() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_HELM_SPLITTER_e);
 }
 
-static int item_getcheck_func_MORTAL_DRAW() {
+int item_getcheck_func_MORTAL_DRAW() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_MORTAL_DRAW_e);
 }
 
-static int item_getcheck_func_JUMP_STRIKE() {
+int item_getcheck_func_JUMP_STRIKE() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_JUMP_STRIKE_e);
 }
 
-static int item_getcheck_func_GREAT_SPIN() {
+int item_getcheck_func_GREAT_SPIN() {
     return dComIfGs_isItemFirstBit(dItemNo_Randomizer_GREAT_SPIN_e);
 }
 
-static int item_getcheck_func_ELDIN_BRIDGE_PORTAL() {
+int item_getcheck_func_ELDIN_BRIDGE_PORTAL() {
     return dComIfGs_isStageSwitch(0x6, 0x63); // Unlock Eldin Bridge Portal
+}
+
+void randomizer_item_func_MAGIC_LV1() {
+    dComIfGs_onEventBit(0xD04); // Can transform at will
+    dComIfGs_onEventBit(0x501); // Midna Charge Unlocked
+}
+
+void randomizer_item_func_WOOD_STICK() {
+    dComIfGs_setCollectSword(COLLECT_WOODEN_SWORD);
+    dComIfGs_setSelectEquipSword(dItemNo_WOOD_STICK_e);
+}
+
+void randomizer_item_func_COPY_ROD_2() {
+    dComIfGs_onEventBit(0x2580); // Power up dominion rod
+}
+
+void randomizer_item_func_LETTER() {
+    if (dComIfGs_getItem(SLOT_21, true) != dItemNo_Randomizer_HORSE_FLUTE_e)
+        dComIfGs_setItem(SLOT_21, dItemNo_Randomizer_LETTER_e);
+}
+
+void randomizer_item_func_BILL() {
+    if (dComIfGs_getItem(SLOT_21, true) != dItemNo_Randomizer_HORSE_FLUTE_e)
+        dComIfGs_setItem(SLOT_21, dItemNo_Randomizer_BILL_e);
+}
+
+void randomizer_item_func_WOOD_STATUE() {
+    /* dSv_event_flag_c::F_283 - Hyrule Field - Get wood carving */
+    dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[283]);
+    if (dComIfGs_getItem(SLOT_21, true) != dItemNo_Randomizer_HORSE_FLUTE_e)
+        dComIfGs_setItem(SLOT_21, dItemNo_Randomizer_WOOD_STATUE_e);
+}
+
+void randomizer_item_func_IRIAS_PENDANT() {
+    if (dComIfGs_getItem(SLOT_21, true) != dItemNo_Randomizer_HORSE_FLUTE_e)
+        dComIfGs_setItem(SLOT_21, dItemNo_Randomizer_IRIAS_PENDANT_e);
+}
+
+void randomizer_item_func_HORSE_FLUTE() {
+    if (dComIfGs_getItem(SLOT_21, true) == dItemNo_Randomizer_NONE_e)
+        dComIfGs_setItem(SLOT_21, dItemNo_Randomizer_HORSE_FLUTE_e);
+}
+
+void randomizer_item_func_RAFRELS_MEMO() {
+    dComIfGs_setItem(SLOT_7, dItemNo_Randomizer_RAFRELS_MEMO_e);
+}
+
+void randomizer_item_func_ASHS_SCRIBBLING() {
+    if (!dComIfGs_isEventBit(0x3B80)) { // Got earring from Ralis
+        dComIfGs_setItem(SLOT_19, dItemNo_Randomizer_ASHS_SCRIBBLING_e);
+    }
+}
+
+void randomizer_item_func_DROP_CONTAINER03() {
+    dComIfGs_onLightDropGetFlag(LANAYRU_VESSEL);
+    dComIfGs_onEventBit(0x1E80); // Malo Mart Fundraising Starts
+}
+
+void randomizer_item_func_MIRROR_PIECE_2() {
+    dComIfGs_onCollectMirror(1);
+}
+
+void randomizer_item_func_MIRROR_PIECE_3() {
+    dComIfGs_onCollectMirror(2);
+}
+
+void randomizer_item_func_MIRROR_PIECE_4() {
+    dComIfGs_onCollectMirror(3);
+}
+
+void randomizer_item_func_POU_SPIRIT() {
+    dComIfGs_addPohSpiritNum();
+}
+
+void randomizer_item_func_AIR_LETTER() {
+    u8 letterCount = getAncientDocumentNum();
+    setAncientDocumentNum(letterCount + 1);
+}
+
+void randomizer_item_func_ANCIENT_DOCUMENT2() {
+    dComIfGs_onEventBit(0x3B08); // Repaired Cannon at Lake
+    setAncientDocumentNum(6);
+}
+
+void randomizer_item_func_SMALL_KEY2() {
+    dComIfGs_onStageSwitch(0x2, 0x14); // Unlock North Faron Gate
+}
+
+void randomizer_item_func_BOSSRIDER_KEY() {
+    dComIfGs_onStageSwitch(0x3, 0x69); // Started Escort
+    dComIfGs_onStageSwitch(0x3, 0x65); // Followed Rutella to Graveyard
+    dComIfGs_onEventBit(0x840); // Started Zora Escort
+    dComIfGs_onEventBit(0x810); // Completed Zora Escort
+}
+
+void randomizer_item_func_TOMATO_PUREE() {
+    dComIfGs_onEventBit(0x480); // Told Yeta about Pumpkin
+    dComIfGs_onEventBit(0x2); // Yeto put Pumpkin in Soup
+    dComIfGs_onEventBit(0x1440); // SPR Lobby Door Unlocked
+    dComIfGs_onStageSwitch(0x14, 0x12); // Unlock North Door
+}
+
+void randomizer_item_func_TASTE() {
+    dComIfGs_onEventBit(0x120); // Told Yeta about Cheese
+    dComIfGs_onEventBit(0x1); // Yeto put Pumpkin in Soup
+    dComIfGs_onEventBit(0x1420); // SPR Lobby west Door Unlocked
+    dComIfGs_onStageSwitch(0x14, 0x13); // Unlock West Door
+}
+
+void randomizer_item_func_LV5_BOSS_KEY() {
+    dComIfGs_onDungeonItemBossKey(0x14);
+}
+
+void randomizer_item_func_LV2_BOSS_KEY() {
+    dComIfGs_onDungeonItemBossKey(0x11);
+    execItemGet(dItemNo_Randomizer_L2_KEY_PIECES3_e);
+}
+
+void randomizer_item_func_KEY_OF_FILONE() {
+    dComIfGs_onStageSwitch(0x2, 0xC); // Unlock Coro Gate
+}
+
 }
 
 static void (*item_func_ptr_randomizer[256])() = {
@@ -467,7 +590,7 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0x2F */ item_func_WEAR_KOKIRI,
     /* 0x30 */ item_func_ARMOR,
     /* 0x31 */ item_func_WEAR_ZORA,
-    /* 0x32 */ item_func_MAGIC_LV1,
+    /* 0x32 */ randomizer_item_func_MAGIC_LV1,
     /* 0x33 */ item_func_DUNGEON_EXIT_2,
     /* 0x34 */ item_func_WALLET_LV1,
     /* 0x35 */ item_func_WALLET_LV2,
@@ -480,7 +603,7 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0x3C */ item_func_NORTH_FARON_PORTAL,
     /* 0x3D */ item_func_ZORAS_JEWEL,
     /* 0x3E */ item_func_HAWK_EYE,
-    /* 0x3F */ item_func_WOOD_STICK,
+    /* 0x3F */ randomizer_item_func_WOOD_STICK,
     /* 0x40 */ item_func_BOOMERANG,
     /* 0x41 */ item_func_SPINNER,
     /* 0x42 */ item_func_IRONBALL,
@@ -493,7 +616,7 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0x49 */ item_func_LIGHT_SWORD,
     /* 0x4A */ item_func_FISHING_ROD_1,
     /* 0x4B */ item_func_PACHINKO,
-    /* 0x4C */ item_func_COPY_ROD_2,
+    /* 0x4C */ randomizer_item_func_COPY_ROD_2,
     /* 0x4D */ item_func_KAKARIKO_GORGE_PORTAL,
     /* 0x4E */ item_func_KAKARIKO_VILLAGE_PORTAL,
     /* 0x4F */ item_func_BOMB_BAG_LV2,
@@ -545,11 +668,11 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0x7D */ item_func_LV1_SOUP,
     /* 0x7E */ item_func_LV2_SOUP,
     /* 0x7F */ item_func_LV3_SOUP,
-    /* 0x80 */ item_func_LETTER,
-    /* 0x81 */ item_func_BILL,
-    /* 0x82 */ item_func_WOOD_STATUE,
-    /* 0x83 */ item_func_IRIAS_PENDANT,
-    /* 0x84 */ item_func_HORSE_FLUTE,
+    /* 0x80 */ randomizer_item_func_LETTER,
+    /* 0x81 */ randomizer_item_func_BILL,
+    /* 0x82 */ randomizer_item_func_WOOD_STATUE,
+    /* 0x83 */ randomizer_item_func_IRIAS_PENDANT,
+    /* 0x84 */ randomizer_item_func_HORSE_FLUTE,
     /* 0x85 */ item_func_FOREST_SMALL_KEY,
     /* 0x86 */ item_func_MINES_SMALL_KEY,
     /* 0x87 */ item_func_LAKEBED_SMALL_KEY,
@@ -561,8 +684,8 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0x8D */ item_func_HYRULE_SMALL_KEY,
     /* 0x8E */ item_func_CAMP_SMALL_KEY,
     /* 0x8F */ item_func_LAKE_HYLIA_PORTAL,
-    /* 0x90 */ item_func_RAFRELS_MEMO,
-    /* 0x91 */ item_func_ASHS_SCRIBBLING,
+    /* 0x90 */ randomizer_item_func_RAFRELS_MEMO,
+    /* 0x91 */ randomizer_item_func_ASHS_SCRIBBLING,
     /* 0x92 */ item_func_FOREST_BOSS_KEY,
     /* 0x93 */ item_func_LAKEBED_BOSS_KEY,
     /* 0x94 */ item_func_ARBITERS_BOSS_KEY,
@@ -580,11 +703,11 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0xA0 */ item_func_LIGHT_DROP,
     /* 0xA1 */ item_func_DROP_CONTAINER,
     /* 0xA2 */ item_func_DROP_CONTAINER02,
-    /* 0xA3 */ item_func_DROP_CONTAINER03,
+    /* 0xA3 */ randomizer_item_func_DROP_CONTAINER03,
     /* 0xA4 */ item_func_FILLED_CONTAINER,
-    /* 0xA5 */ item_func_MIRROR_PIECE_2,
-    /* 0xA6 */ item_func_MIRROR_PIECE_3,
-    /* 0xA7 */ item_func_MIRROR_PIECE_4,
+    /* 0xA5 */ randomizer_item_func_MIRROR_PIECE_2,
+    /* 0xA6 */ randomizer_item_func_MIRROR_PIECE_3,
+    /* 0xA7 */ randomizer_item_func_MIRROR_PIECE_4,
     /* 0xA8 */ item_func_ARBITERS_COMPASS,
     /* 0xA9 */ item_func_SNOWPEAK_COMPASS,
     /* 0xAA */ item_func_TEMPLE_OF_TIME_COMPASS,
@@ -641,7 +764,7 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0xDD */ item_func_noentry,
     /* 0xDE */ item_func_noentry,
     /* 0xDF */ item_func_noentry,
-    /* 0xE0 */ item_func_POU_SPIRIT,
+    /* 0xE0 */ randomizer_item_func_POU_SPIRIT,
     /* 0xE1 */ item_func_ENDING_BLOW,
     /* 0xE2 */ item_func_SHIELD_ATTACK,
     /* 0xE3 */ item_func_BACK_SLICE,
@@ -651,29 +774,80 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0xE7 */ item_func_GREAT_SPIN,
     /* 0xE8 */ item_func_ELDIN_BRIDGE_PORTAL,
     /* 0xE9 */ item_func_ANCIENT_DOCUMENT,
-    /* 0xEA */ item_func_AIR_LETTER,
-    /* 0xEB */ item_func_ANCIENT_DOCUMENT2,
+    /* 0xEA */ randomizer_item_func_AIR_LETTER,
+    /* 0xEB */ randomizer_item_func_ANCIENT_DOCUMENT2,
     /* 0xEC */ item_func_LV7_DUNGEON_EXIT,
     /* 0xED */ item_func_LINKS_SAVINGS,
-    /* 0xEE */ item_func_SMALL_KEY2,
+    /* 0xEE */ randomizer_item_func_SMALL_KEY2,
     /* 0xEF */ item_func_POU_FIRE1,
     /* 0xF0 */ item_func_POU_FIRE2,
     /* 0xF1 */ item_func_POU_FIRE3,
     /* 0xF2 */ item_func_POU_FIRE4,
-    /* 0xF3 */ item_func_BOSSRIDER_KEY,
-    /* 0xF4 */ item_func_TOMATO_PUREE,
-    /* 0xF5 */ item_func_TASTE,
-    /* 0xF6 */ item_func_LV5_BOSS_KEY,
+    /* 0xF3 */ randomizer_item_func_BOSSRIDER_KEY,
+    /* 0xF4 */ randomizer_item_func_TOMATO_PUREE,
+    /* 0xF5 */ randomizer_item_func_TASTE,
+    /* 0xF6 */ randomizer_item_func_LV5_BOSS_KEY,
     /* 0xF7 */ item_func_SURFBOARD,
     /* 0xF8 */ item_func_KANTERA2,
     /* 0xF9 */ item_func_L2_KEY_PIECES1,
     /* 0xFA */ item_func_L2_KEY_PIECES2,
     /* 0xFB */ item_func_L2_KEY_PIECES3,
     /* 0xFC */ item_func_KEY_OF_CARAVAN,
-    /* 0xFD */ item_func_LV2_BOSS_KEY,
-    /* 0xFE */ item_func_KEY_OF_FILONE,
+    /* 0xFD */ randomizer_item_func_LV2_BOSS_KEY,
+    /* 0xFE */ randomizer_item_func_KEY_OF_FILONE,
     /* 0xFF */ item_func_noentry,
 };
+
+namespace {
+int randomizer_item_getcheck_func_MAGIC_LV1() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_MAGIC_LV1_e);
+}
+
+int randomizer_item_getcheck_func_WALLET_LV2() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_WALLET_LV2_e);
+}
+
+int randomizer_item_getcheck_func_WALLET_LV3() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_WALLET_LV3_e);
+}
+
+int randomizer_item_getcheck_func_LETTER() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_LETTER_e);
+}
+
+int randomizer_item_getcheck_func_BILL() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_BILL_e);
+}
+
+int randomizer_item_getcheck_func_WOOD_STATUE() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_WOOD_STATUE_e);
+}
+
+int randomizer_item_getcheck_func_IRIAS_PENDANT() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_IRIAS_PENDANT_e);
+}
+
+int randomizer_item_getcheck_func_HORSE_FLUTE() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_HORSE_FLUTE_e);
+}
+
+int randomizer_item_getcheck_func_MIRROR_PIECE_2() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_MIRROR_PIECE_2_e);
+}
+
+int randomizer_item_getcheck_func_MIRROR_PIECE_3() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_MIRROR_PIECE_3_e);
+}
+
+int randomizer_item_getcheck_func_MIRROR_PIECE_4() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_MIRROR_PIECE_4_e);
+}
+
+int randomizer_item_getcheck_func_BOSSRIDER_KEY() {
+    return dComIfGs_isItemFirstBit(dItemNo_Randomizer_BOSSRIDER_KEY_e);
+}
+
+}
 
 static int (*item_getcheck_func_ptr_randomizer[256])() = {
     /* 0x00 */ item_getcheck_func_HEART,
@@ -726,11 +900,11 @@ static int (*item_getcheck_func_ptr_randomizer[256])() = {
     /* 0x2F */ item_getcheck_func_WEAR_KOKIRI,
     /* 0x30 */ item_getcheck_func_ARMOR,
     /* 0x31 */ item_getcheck_func_WEAR_ZORA,
-    /* 0x32 */ item_getcheck_func_MAGIC_LV1,
+    /* 0x32 */ randomizer_item_getcheck_func_MAGIC_LV1,
     /* 0x33 */ item_getcheck_func_DUNGEON_EXIT_2,
     /* 0x34 */ item_getcheck_func_WALLET_LV1,
-    /* 0x35 */ item_getcheck_func_WALLET_LV2,
-    /* 0x36 */ item_getcheck_func_WALLET_LV3,
+    /* 0x35 */ randomizer_item_getcheck_func_WALLET_LV2,
+    /* 0x36 */ randomizer_item_getcheck_func_WALLET_LV3,
     /* 0x37 */ item_getcheck_func_noentry,
     /* 0x38 */ item_getcheck_func_noentry,
     /* 0x39 */ item_getcheck_func_UPPER_ZORAS_RIVER_PORTAL,
@@ -804,11 +978,11 @@ static int (*item_getcheck_func_ptr_randomizer[256])() = {
     /* 0x7D */ item_getcheck_func_LV1_SOUP,
     /* 0x7E */ item_getcheck_func_LV2_SOUP,
     /* 0x7F */ item_getcheck_func_LV3_SOUP,
-    /* 0x80 */ item_getcheck_func_LETTER,
-    /* 0x81 */ item_getcheck_func_BILL,
-    /* 0x82 */ item_getcheck_func_WOOD_STATUE,
-    /* 0x83 */ item_getcheck_func_IRIAS_PENDANT,
-    /* 0x84 */ item_getcheck_func_HORSE_FLUTE,
+    /* 0x80 */ randomizer_item_getcheck_func_LETTER,
+    /* 0x81 */ randomizer_item_getcheck_func_BILL,
+    /* 0x82 */ randomizer_item_getcheck_func_WOOD_STATUE,
+    /* 0x83 */ randomizer_item_getcheck_func_IRIAS_PENDANT,
+    /* 0x84 */ randomizer_item_getcheck_func_HORSE_FLUTE,
     /* 0x85 */ item_getcheck_func_noentry,
     /* 0x86 */ item_getcheck_func_noentry,
     /* 0x87 */ item_getcheck_func_noentry,
@@ -841,9 +1015,9 @@ static int (*item_getcheck_func_ptr_randomizer[256])() = {
     /* 0xA2 */ item_getcheck_func_DROP_CONTAINER02,
     /* 0xA3 */ item_getcheck_func_DROP_CONTAINER03,
     /* 0xA4 */ item_getcheck_func_FILLED_CONTAINER,
-    /* 0xA5 */ item_getcheck_func_MIRROR_PIECE_2,
-    /* 0xA6 */ item_getcheck_func_MIRROR_PIECE_3,
-    /* 0xA7 */ item_getcheck_func_MIRROR_PIECE_4,
+    /* 0xA5 */ randomizer_item_getcheck_func_MIRROR_PIECE_2,
+    /* 0xA6 */ randomizer_item_getcheck_func_MIRROR_PIECE_3,
+    /* 0xA7 */ randomizer_item_getcheck_func_MIRROR_PIECE_4,
     /* 0xA8 */ item_getcheck_func_noentry,
     /* 0xA9 */ item_getcheck_func_noentry,
     /* 0xAA */ item_getcheck_func_noentry,
@@ -919,7 +1093,7 @@ static int (*item_getcheck_func_ptr_randomizer[256])() = {
     /* 0xF0 */ item_getcheck_func_POU_FIRE2,
     /* 0xF1 */ item_getcheck_func_POU_FIRE3,
     /* 0xF2 */ item_getcheck_func_POU_FIRE4,
-    /* 0xF3 */ item_getcheck_func_BOSSRIDER_KEY,
+    /* 0xF3 */ randomizer_item_getcheck_func_BOSSRIDER_KEY,
     /* 0xF4 */ item_getcheck_func_TOMATO_PUREE,
     /* 0xF5 */ item_getcheck_func_TASTE,
     /* 0xF6 */ item_getcheck_func_LV5_BOSS_KEY,

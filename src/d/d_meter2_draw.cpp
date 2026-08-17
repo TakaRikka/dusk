@@ -1386,6 +1386,22 @@ void dMeter2Draw_c::initButtonCross() {
     dMeter2Info_getString(
         0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju9')))->getStringPtr(), NULL);
 
+#if TARGET_PC
+    // These panes are not wide enough for French text (and possibly other languages)
+    // on Wii PAL. Resize them to always match their counterparts in later releases.
+    static u64 const juTags[] = {
+        MULTI_CHAR('cont_ju0'), MULTI_CHAR('cont_ju1'), MULTI_CHAR('cont_ju2'),
+        MULTI_CHAR('cont_ju3'), MULTI_CHAR('cont_ju4'), MULTI_CHAR('cont_ju5'),
+        MULTI_CHAR('cont_ju6'), MULTI_CHAR('cont_ju7'), MULTI_CHAR('cont_ju8'),
+        MULTI_CHAR('cont_ju9'),
+    };
+
+    for (u64 tag : juTags) {
+        J2DPane* pane = mpScreen->search(tag);
+        pane->resize(120.0f, pane->getHeight());
+    }
+#endif
+
     mpButtonCrossParent->setAlphaRate(0.0f);
     drawButtonCross(g_drawHIO.mButtonCrossOFFPosX, g_drawHIO.mButtonCrossOFFPosY);
 }

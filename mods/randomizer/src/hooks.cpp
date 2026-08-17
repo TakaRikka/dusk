@@ -133,7 +133,7 @@ DEFINE_HOOK(&daNpc_ykW_c::isDelete, daNpc_ykW_c__isDelete);
 
 DEFINE_HOOK_SYMBOL("daE_MD_Create", int(fopAc_ac_c*), daE_MD_c__create);
 
-DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
+DEFINE_HOOK(&fopAcM_orderMapToolEvent, orderMapToolEvent);
 DEFINE_HOOK_SYMBOL("daObjMasterSword_Execute", int(daObjMasterSword_c*), daObjMasterSword_c__execute);
 
 DEFINE_HOOK(&dScnName_c::changeGameScene, dScnName_c__changeGameScene);
@@ -179,7 +179,6 @@ dialogSelectModeState g_dialogSelectModeState = SelectReady;
 
 namespace randomizer::hooks {
 namespace {
-UiDialogHandle playModeDialog{0};
 HookAction hookPreDataSelect(ModContext*, void* args, void* retval, void* userdata) {
     ui::g_dialogSelectModeState = ui::SelectReady;
     ui::g_file_select_window_ctx.is_proceed = false;
@@ -198,57 +197,12 @@ HookAction hookPreSelectDataNameMove(ModContext*, void* args, void* retval, void
     bool isFileRecScale = i_this->fileRecScaleAnm2();
     bool isModoruTxtDisp = i_this->modoruTxtDispAnm();
 
-    // if selected vanilla mode, let transition occur as normal
-    if (ui::g_dialogSelectModeState == ui::SelectVanilla) {
-        return HOOK_CONTINUE;
-    }
-
     if (ui::g_dialogSelectModeState == ui::SelectReady && isHeaderTxtChange == true && isFileRecScale == true && isModoruTxtDisp == true) {
         ui::g_dialogSelectModeState = ui::SelectWait;
 
-        auto buildDialog = [i_this]() {
-            UiDialogDesc desc = UI_DIALOG_DESC_INIT;
-            desc.title = "Play Type";
-            desc.body_rml = "What mode would you like to play?";
-            desc.icon = "question-mark";
-            desc.variant = UI_DIALOG_NORMAL;
-
-            UiDialogAction actions[2];
-            actions[0] = {
-                .label = "Vanilla",
-                .on_pressed = [](ModContext* ctx, UiDialogHandle dialogHandle, void*) {
-                    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
-                    randomizer_GetContext() = RandomizerContext();
-                    ui::g_dialogSelectModeState = ui::SelectVanilla;
-                    session::svc_mng.ui->dialog_close(ctx, dialogHandle);
-                },
-                .user_data = nullptr,
-                .keep_open = false,
-            };
-            actions[1] = {
-                .label = "Randomizer",
-                .on_pressed = [](ModContext* ctx, UiDialogHandle dialogHandle, void* userdata) {
-                    mDoAud_seStartMenu(Z2SE_SY_CURSOR_OK);
-                    ui::g_dialogSelectModeState = ui::SelectRandomizer;
-                    ui::buildFileSelectGateMenu(static_cast<dFile_select_c*>(userdata));
-                    session::svc_mng.ui->dialog_close(ctx, dialogHandle);
-                },
-                .user_data = i_this,
-                .keep_open = false,
-            };
-            desc.actions = actions;
-            desc.action_count = 2;
-
-            if (session::svc_mng.ui->dialog_push(session::svc_mng.mod_ctx, &desc, &playModeDialog) != MOD_OK) {
-                mods::log::error("Failed to push dialog");
-                return MOD_ERROR;
-            }
-
-            return MOD_OK;
-        };
-
-        if (buildDialog() != MOD_OK) {
-            mods::log::error("Failed to build dialog");
+        ModResult rt = ui::buildFileSelectGateMenu(i_this);
+        if (rt != MOD_OK) {
+            mods::log::error("Failed to build menu");
             return HOOK_CONTINUE;
         }
     }
@@ -1863,7 +1817,7 @@ void hookPostChangeScene4Event(ModContext*, void* args, void* retval, void*) {
     stage_scls_info_class* scls_info = &scls->m_entries[i_exitId];
 
     // If randomizer is active and we're loading the first spawn, set our starting time of day
-    if (std::strcmp(scls_info->mStage, "F_SP103")
+    if (std::strcmp(scls_info->mStage, "F_SP103") == 0
         && scls_info->mRoom == 1
         && scls_info->mStart == 1)
     {
@@ -2152,47 +2106,36 @@ void hookPostEMdCreate(ModContext*, void* args, void*, void*) {
     hookEMdCreate_prevSkipInfo = 0;
 }
 
-// functions are simple enough that replacing isn't too bad
-// todo: item service needs to be properly hooked up to this check i think instead of
-// using "randomizer_getItemAtLocation"
-void hookReplaceMasterSwordExecuteWait(ModContext*, void* args, void*, void*) {
-    auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
+HookAction hookPreOrderMapToolEvent(ModContext*, void* args, void*, void*) {
+    auto eventId = mods::arg<u8>(args, 1);
 
-    if (daPy_getPlayerActorClass()->checkPriActorOwn(i_this)) {
-        for (int i = 0; i < dComIfGp_getAttention()->GetActionCount(); i++) {
-            if (dComIfGp_getAttention()->ActionTarget(i) == i_this) {
-                if (dComIfGp_getAttention()->getActionBtnB() != NULL &&
-                    dComIfGp_getAttention()->getActionBtnB()->mType == fopAc_attn_CARRY_e)
-                {
-                    dComIfGp_setDoStatusForce(8, 0);
-                }
-            }
-        }
-    }
-
-    if (fopAcM_checkCarryNow(i_this)) {
-        u8 itemToGive = randomizer_getItemAtLocation("Sacred Grove Pedestal Master Sword");
-        g_randomizerState.addItemToEventQueue(itemToGive);
-
-        itemToGive = randomizer_getItemAtLocation("Sacred Grove Pedestal Shadow Crystal");
-        g_randomizerState.addItemToEventQueue(itemToGive);
-
+    // skip starting the master sword cutscene so we can handle the checks manually
+    if (daAlink_c::checkStageName("F_SP117") && eventId == 2) {
+        // Set the necessary flags to de-spawn the MS and set the save file event flag.
         dComIfGs_onTmpBit(0x820);
         dComIfGs_onEventBit(0x2120);
+        return HOOK_SKIP_ORIGINAL;
     }
+
+    return HOOK_CONTINUE;
 }
 
 HookAction hookPreMasterSwordExecute(ModContext*, void* args, void* retval, void*) {
     auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
 
+    (i_this->*i_this->mActionFunc[1])();
+    dComIfG_Ccsp()->Set(&i_this->mCyl);
+
+    i_this->mBtk.play();
+    i_this->mBrk.play();
+
     if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::tempBitLabels[73])) {
         // Don't automatically give the master sword in randomizer
         fopAcM_delete(i_this);
-        *static_cast<int*>(retval) = 1;
-        return HOOK_SKIP_ORIGINAL;
     }
 
-    return HOOK_CONTINUE;
+    *static_cast<int*>(retval) = 1;
+    return HOOK_SKIP_ORIGINAL;
 }
 
 void hookPost_dScnName_c__changeGameScene(ModContext* ctx, void* args, void* retval, void* userdata) {
@@ -2628,7 +2571,7 @@ ModResult initialize() {
     ADD_HOOK_PRE(daE_MD_c__create, hookPreEMdCreate);
     ADD_HOOK_POST(daE_MD_c__create, hookPostEMdCreate);
 
-    ADD_HOOK_REPLACE(daObjMasterSword_c__executeWait, hookReplaceMasterSwordExecuteWait);
+    ADD_HOOK_PRE(orderMapToolEvent, hookPreOrderMapToolEvent);
     ADD_HOOK_PRE(daObjMasterSword_c__execute, hookPreMasterSwordExecute);
 
     ADD_HOOK_POST(dScnName_c__changeGameScene, hookPost_dScnName_c__changeGameScene);
@@ -2746,7 +2689,7 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daE_MD_c__create>(svc_hook);
 
-    mods::hook::uninstall<daObjMasterSword_c__executeWait>(svc_hook);
+    mods::hook::uninstall<orderMapToolEvent>(svc_hook);
     mods::hook::uninstall<daObjMasterSword_c__execute>(svc_hook);
 
     mods::hook::uninstall<dScnName_c__changeGameScene>();

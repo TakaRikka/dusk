@@ -37,6 +37,7 @@ using VerificationStatus = borealis::disc::Progress;
 struct DiscInfo {
     Platform platform = Platform::Unknown;
     Region region = Region::NorthAmerica;
+    std::uint8_t revision = 0;
 };
 
 ValidationError inspect(const char* path, DiscInfo& info);

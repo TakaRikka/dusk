@@ -19,7 +19,7 @@ struct ServiceRecord {
 };
 
 // A host service and its lifecycle hooks. Every hook is optional. Frame and lifecycle hooks run in
-// registration order, modDetached in reverse registration order.
+// registration order, teardown hooks in reverse registration order.
 struct ServiceModule {
     const char* id = nullptr;
     uint16_t majorVersion = 0;
@@ -28,6 +28,9 @@ struct ServiceModule {
 
     // One-time setup, at registration (ModLoader::init_services).
     void (*initialize)() = nullptr;
+    // A mod is beginning deactivation: stop callbacks that may execute concurrently. Service state
+    // remains registered so mod_shutdown may release it normally.
+    void (*modDeactivating)(LoadedMod& mod) = nullptr;
     // A mod is going away (deactivation or failed activation): drop all state held for it.
     // Runs after the mod's mod_shutdown and before its library unloads, so pointers into
     // the mod are still valid but must not be called.
@@ -55,6 +58,7 @@ const ServiceRecord* find_service(
 const ServiceRecord* find_service_record(const char* serviceId, uint16_t majorVersion);
 
 ModResult register_module(const ServiceModule& module);
+void modules_mod_deactivating(LoadedMod& mod);
 void modules_mod_detached(LoadedMod& mod);
 void modules_lifecycle_applied();
 void modules_frame_begin();

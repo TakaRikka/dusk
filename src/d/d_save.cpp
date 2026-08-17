@@ -1086,7 +1086,7 @@ void dSv_player_config_c::setVibration(u8 i_status) {
 
 u8 dSv_player_config_c::getPalLanguage() const {
 #if TARGET_PC || VERSION == VERSION_GCN_PAL
-    IF_DUSK_BLOCK(dusk::version::getGameVersion() == dusk::version::GameVersion::GcnPal)
+    IF_DUSK_BLOCK(dusk::version::isRegionPal())
     switch (OSGetLanguage()) {
     case 0:
         return LANGUAGE_ENGLISH;

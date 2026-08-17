@@ -5,7 +5,13 @@
 - A Windows, Linux, or macOS device 
 - iOS device connected to computer via USB 
 - Dusklight IPA file (download the latest `Dusklight-vX.X.X-ios-arm64.ipa` from the [releases page](https://github.com/TwilitRealm/dusklight/releases))
-- Legally acquired game disc - `GZ2E01` (Gamecube USA) or `GZ2PE01` (Gamecube PAL)
+- Legally acquired game disc:
+  - `GZ2E01` (GameCube USA)
+  - `GZ2P01` (GameCube PAL)
+  - `GZ2J01` (GameCube JPN)
+  - `RZDE01` (Wii USA Rev. 0 *or* Rev. 2)
+  - `RZDP01` (Wii PAL)
+  - `RZDJ01` (Wii JPN)
 
 ## 1. Install iloader
 

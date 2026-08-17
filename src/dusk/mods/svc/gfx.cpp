@@ -9,8 +9,10 @@
 
 #include <aurora/gfx.hpp>
 #include <aurora/webgpu.hpp>
+#include <dolphin/gx/GXAurora.h>
 #include <fmt/format.h>
 
+#include <algorithm>
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
@@ -126,23 +128,34 @@ GfxSlot* resolve_owned_slot_locked(LoadedMod& mod, uint64_t handle, GfxSlotKind 
     return &entry->value;
 }
 
-void collect_mod_types_locked(LoadedMod& owner, std::vector<aurora::gfx::DrawTypeId>& drawIds,
+void take_mod_types_locked(LoadedMod& owner, std::vector<aurora::gfx::DrawTypeId>& drawIds,
     std::vector<aurora::gfx::EncoderTaskId>& taskIds) {
-    s_slots.for_each([&](uint64_t, const auto& entry) {
+    std::vector<uint64_t> drawHandles;
+    std::vector<uint64_t> taskHandles;
+    s_slots.for_each([&](uint64_t handle, const auto& entry) {
         if (entry.owner != &owner) {
             return;
         }
         const auto& slot = entry.value;
         if (slot.kind == GfxSlotKind::DrawType && slot.auroraDrawId != aurora::gfx::InvalidDrawType)
         {
-            drawIds.push_back(slot.auroraDrawId);
+            drawHandles.push_back(handle);
         } else if ((slot.kind == GfxSlotKind::ComputeType ||
                        slot.kind == GfxSlotKind::PresentTarget) &&
                    slot.auroraTaskId != aurora::gfx::InvalidEncoderTask)
         {
-            taskIds.push_back(slot.auroraTaskId);
+            taskHandles.push_back(handle);
         }
     });
+    for (const auto handle : drawHandles) {
+        auto* entry = s_slots.find(handle);
+        drawIds.push_back(std::exchange(entry->value.auroraDrawId, aurora::gfx::InvalidDrawType));
+    }
+    for (const auto handle : taskHandles) {
+        auto* entry = s_slots.find(handle);
+        taskIds.push_back(
+            std::exchange(entry->value.auroraTaskId, aurora::gfx::InvalidEncoderTask));
+    }
 }
 
 void unregister_aurora_types(const std::vector<aurora::gfx::DrawTypeId>& drawIds,
@@ -153,6 +166,49 @@ void unregister_aurora_types(const std::vector<aurora::gfx::DrawTypeId>& drawIds
     for (const auto id : taskIds) {
         aurora::gfx::unregister_encoder_task_type(id);
     }
+}
+
+void gfx_mod_deactivating(LoadedMod& mod) {
+    std::vector<aurora::gfx::DrawTypeId> drawIds;
+    std::vector<aurora::gfx::EncoderTaskId> taskIds;
+    {
+        std::lock_guard lock{s_mutex};
+        take_mod_types_locked(mod, drawIds, taskIds);
+    }
+    unregister_aurora_types(drawIds, taskIds);
+    if (!drawIds.empty() || !taskIds.empty()) {
+        aurora::gfx::synchronize();
+    }
+}
+
+GfxAttachmentSemantic gfx_attachment_semantic(aurora::gfx::ColorAttachmentSemantic semantic) {
+    switch (semantic) {
+    case aurora::gfx::ColorAttachmentSemantic::SceneColor:
+        return GFX_ATTACHMENT_SCENE_COLOR;
+    case aurora::gfx::ColorAttachmentSemantic::Normal:
+        return GFX_ATTACHMENT_NORMAL;
+    case aurora::gfx::ColorAttachmentSemantic::Auxiliary:
+        return GFX_ATTACHMENT_AUXILIARY;
+    }
+    return GFX_ATTACHMENT_AUXILIARY;
+}
+
+GfxRenderTargetLayout gfx_render_target_layout(const aurora::gfx::RenderTargetLayout& layout) {
+    GfxRenderTargetLayout result = GFX_RENDER_TARGET_LAYOUT_INIT;
+    result.key = layout.key;
+    result.color_attachment_count =
+        std::min<uint32_t>(layout.colorAttachmentCount, GFX_MAX_COLOR_ATTACHMENTS);
+    for (uint32_t i = 0; i < result.color_attachment_count; ++i) {
+        result.color_attachments[i] = {
+            .semantic = gfx_attachment_semantic(layout.colorAttachments[i].semantic),
+            .format = static_cast<WGPUTextureFormat>(layout.colorAttachments[i].format),
+            .width = layout.colorAttachments[i].width,
+            .height = layout.colorAttachments[i].height,
+        };
+    }
+    result.depth_stencil_format = static_cast<WGPUTextureFormat>(layout.depthStencilFormat);
+    result.sample_count = layout.sampleCount;
+    return result;
 }
 
 void draw_trampoline(const aurora::gfx::DrawContext& ctx, const wgpu::RenderPassEncoder& pass,
@@ -184,12 +240,12 @@ void draw_trampoline(const aurora::gfx::DrawContext& ctx, const wgpu::RenderPass
         .index_buffer = ctx.indexBuffer.Get(),
         .uniform_buffer = ctx.uniformBuffer.Get(),
         .storage_buffer = ctx.storageBuffer.Get(),
-        .color_format = static_cast<WGPUTextureFormat>(ctx.colorFormat),
-        .depth_format = static_cast<WGPUTextureFormat>(ctx.depthFormat),
-        .sample_count = ctx.sampleCount,
-        .target_width = ctx.targetWidth,
-        .target_height = ctx.targetHeight,
+        .color_format = static_cast<WGPUTextureFormat>(
+            ctx.layout.colorAttachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].format),
+        .depth_format = static_cast<WGPUTextureFormat>(ctx.layout.depthStencilFormat),
+        .sample_count = ctx.layout.sampleCount,
         .uses_reversed_z = aurora::gfx::uses_reversed_z(),
+        .layout = gfx_render_target_layout(ctx.layout),
     };
 
     std::string failure;
@@ -778,8 +834,10 @@ ModResult gfx_unregister_present_target(LoadedMod& mod, uint64_t handle) {
         auroraId = slot->auroraTaskId;
     }
 
-    aurora::gfx::unregister_encoder_task_type(auroraId);
-    aurora::gfx::synchronize();
+    if (auroraId != aurora::gfx::InvalidEncoderTask) {
+        aurora::gfx::unregister_encoder_task_type(auroraId);
+        aurora::gfx::synchronize();
+    }
 
     std::optional<GfxSlotMap::Entry> removed;
     {
@@ -903,6 +961,7 @@ void gfx_run_stage(
         .game_viewport = gameViewport,
     };
 
+    AuroraGXSync();
     for (const auto& entry : entries) {
         {
             std::lock_guard lock{s_mutex};
@@ -924,6 +983,7 @@ void gfx_run_stage(
             fail_mod(*entry.owner, MOD_ERROR, "unknown exception in gfx stage callback");
         }
 
+        AuroraGXSync();
         if (aurora::gfx::is_offscreen() != wasOffscreen) {
             aurora::gfx::ResolvedTargets discarded;
             aurora::gfx::resolve_pass(
@@ -935,17 +995,8 @@ void gfx_run_stage(
     }
 }
 
-void gfx_remove_mod(LoadedMod& mod) {
-    std::vector<aurora::gfx::DrawTypeId> drawIds;
-    std::vector<aurora::gfx::EncoderTaskId> taskIds;
-    {
-        std::lock_guard lock{s_mutex};
-        collect_mod_types_locked(mod, drawIds, taskIds);
-    }
-    unregister_aurora_types(drawIds, taskIds);
-    if (!drawIds.empty() || !taskIds.empty()) {
-        aurora::gfx::synchronize();
-    }
+void gfx_mod_detached(LoadedMod& mod) {
+    gfx_mod_deactivating(mod);
 
     std::vector<GfxSlotMap::Entry> entries;
     {
@@ -966,7 +1017,7 @@ void gfx_remove_mod(LoadedMod& mod) {
     }
 }
 
-void gfx_drain_worker_failures() {
+void gfx_frame_begin() {
     std::vector<WorkerFailure> failures;
     {
         std::lock_guard lock{s_mutex};
@@ -979,7 +1030,7 @@ void gfx_drain_worker_failures() {
     for (const auto& failure : failures) {
         for (auto& mod : ModLoader::instance().mods()) {
             if (mod.metadata.id == failure.modId && mod.active) {
-                gfx_remove_mod(mod);
+                gfx_mod_detached(mod);
                 fail_mod(mod, MOD_ERROR, failure.message);
                 break;
             }
@@ -1027,6 +1078,19 @@ ModResult gfx_get_device_info(ModContext* context, GfxDeviceInfo* outInfo) {
         outInfo->instance = instance.Get();
         outInfo->adapter = adapter.Get();
     }
+    return MOD_OK;
+}
+
+ModResult gfx_get_scene_target_layout(ModContext* context, GfxRenderTargetLayout* outLayout) {
+    if (outLayout == nullptr || outLayout->struct_size < sizeof(GfxRenderTargetLayout) ||
+        mod_from_context(context) == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    const uint32_t structSize = outLayout->struct_size;
+    *outLayout = gfx_render_target_layout(aurora::gfx::scene_render_target_layout());
+    outLayout->struct_size = structSize;
     return MOD_OK;
 }
 
@@ -1327,6 +1391,7 @@ constexpr GfxService s_gfxService{
     .resize_present_target = gfx_resize_present_target_impl,
     .unregister_present_target = gfx_unregister_present_target_impl,
     .push_present = gfx_push_present_impl,
+    .get_scene_target_layout = gfx_get_scene_target_layout,
 };
 
 }  // namespace
@@ -1336,8 +1401,9 @@ constinit const ServiceModule g_gfxModule{
     .majorVersion = GFX_SERVICE_MAJOR,
     .minorVersion = GFX_SERVICE_MINOR,
     .service = &s_gfxService,
-    .modDetached = gfx_remove_mod,
-    .frameBegin = gfx_drain_worker_failures,
+    .modDeactivating = gfx_mod_deactivating,
+    .modDetached = gfx_mod_detached,
+    .frameBegin = gfx_frame_begin,
 };
 
 }  // namespace dusk::mods::svc

@@ -1208,9 +1208,11 @@ void dMeterButton_c::screenInitButton() {
 
     for (int i = 0; i < 10; i++) {
 #if TARGET_PC
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             mpTextBox[i] = (J2DTextBox*)mpButtonScreen->search(text_tag[i]);
-            mpButtonScreen->search(ftext_tag[i])->hide();
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mpButtonScreen->search(ftext_tag[i])->hide();
+            }
         } else {
             mpTextBox[i] = (J2DTextBox*)mpButtonScreen->search(ftext_tag[i]);
             mpButtonScreen->search(text_tag[i])->hide();

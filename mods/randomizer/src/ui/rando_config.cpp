@@ -264,9 +264,11 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
     add_string_input(leftPane,
         "Seed String",
         "Current value of the seed used by the randomizer for generation. Leave blank for a random value.",
-        32,
+        31,
         [](ModContext*, void*, UiControlValue* out_value) {
-            out_value->string_value = GetRandomizerConfig().GetSeed().c_str();
+            static char buffer[32];
+            strncpy(buffer,GetRandomizerConfig().GetSeed().c_str(),31);
+            out_value->string_value = buffer;
         },
         [](ModContext*, void*, const UiControlValue* value) {
             GetRandomizerConfig().SetSeed(value->string_value);

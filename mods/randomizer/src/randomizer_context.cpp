@@ -867,17 +867,17 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
 
     // Debugging: Dump mEntranceOverrides
     // for (const auto& [key,val] : randomizer_GetContext().mEntranceOverrides) {
-    //     mods::log::debug("({},{},{},{}) -> ({},{},{},{})",key.stageId,key.roomNo,key.mapLayer,key.pointNo,val.stageId,val.roomNo,val.mapLayer,val.pointNo);
+    //     mods::log::info("({},{},{},{}) -> ({},{},{},{})",key.stageId,key.roomNo,key.mapLayer,key.pointNo,val.stageId,val.roomNo,val.mapLayer,val.pointNo);
     // }
 
-    // mods::log::debug("Original Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
+    // mods::log::info("Original Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     if (randomizer_GetContext().mEntranceOverrides.contains(override)) {
         auto& newOverride = randomizer_GetContext().mEntranceOverrides[override];
         stageName = allStages[newOverride.stageId];
         pointNo = newOverride.pointNo;
         roomNo = newOverride.roomNo;
         mapLayer = newOverride.mapLayer;
-        // mods::log::debug("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
+        // mods::log::info("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     }
 }
 
@@ -1751,7 +1751,6 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
     }
 
     // Apply entrance randomization
-    auto shuffleData = LOAD_EMBED_YAML(RANDO_DATA_PATH "entrance_shuffle_data.yaml");
     if (world->AnyEntranceRandomizerEnabled()) {
         for (const auto& entrance : world->GetShuffledEntrances()) {
             randomizer::logic::entrance::Entrance* replacesEntrance = entrance->GetReplaces();
@@ -1762,9 +1761,9 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
             }
             randoData.mEntranceOverrides[forward] = replaces;
 
-            // Set an override for the second door, if the entrance is coupled
-            if (entrance->getCoupledDoor() != -1) {
-                RandomizerContext::EntranceOverride coupled = {.stageId = entrance->GetStageId(), .roomNo = entrance->GetRoomNo(), .mapLayer = entrance->GetLayerNo(), .pointNo = entrance->getCoupledDoor()};
+            // Set overrides for all coupled entrances
+            for (const auto& point : entrance->getCoupledEntrances()) {
+                RandomizerContext::EntranceOverride coupled = {.stageId = entrance->GetStageId(), .roomNo = entrance->GetRoomNo(), .mapLayer = entrance->GetLayerNo(), .pointNo = point};
                 randoData.mEntranceOverrides[coupled] = replaces;
             }
         }
