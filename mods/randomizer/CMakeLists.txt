@@ -13,6 +13,11 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     endif ()
 endif ()
 
+# Synchronize MSVC runtime library in debug builds
+if (MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+endif ()
+
 # Generator dependencies, linked statically into the mod library (no CRT crossing).
 include(FetchContent)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
