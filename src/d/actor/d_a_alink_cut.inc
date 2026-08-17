@@ -817,11 +817,16 @@ BOOL daAlink_c::checkDownAttackState() {
 }
 
 BOOL daAlink_c::checkCutLargeTurnState() const {
-    #if TARGET_PC
-    if (dusk::getSettings().game.alwaysGreatspin) {
+#if TARGET_PC
+    const auto alwaysGreatspinMode = dusk::getSettings().game.alwaysGreatspin.getValue();
+    if (alwaysGreatspinMode == dusk::AlwaysGreatspinMode::ALWAYS) {
         return TRUE;
     }
-    #endif
+    if (alwaysGreatspinMode == dusk::AlwaysGreatspinMode::AFTER_SKILL && 
+        (dComIfGs_isEventBit(dSv_event_flag_c::F_0344) || checkNoResetFlg3(FLG3_TRANING_CUT_LARGE_TURN))) {
+        return TRUE;
+    }
+#endif
 
     return ((dComIfGs_isEventBit(dSv_event_flag_c::F_0344) || checkNoResetFlg3(FLG3_TRANING_CUT_LARGE_TURN))
             && dComIfGs_getLife() == dComIfGs_getMaxLifeGauge()
