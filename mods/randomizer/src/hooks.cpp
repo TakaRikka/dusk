@@ -7,6 +7,7 @@
 #include "tools.h"
 #include "item.hpp"
 #include "item_ids.h"
+#include "verify_item_functions.h"
 
 #include <mods/svc/hook.hpp>
 #include <mods/svc/log.hpp>
@@ -39,6 +40,8 @@
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
 #include "d/d_gameover.h"
+#include "d/d_menu_item_explain.h"
+#include "d/d_menu_ring.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_s_name.h"
@@ -172,6 +175,12 @@ DEFINE_HOOK(&daObjZraRock_c::create, daObjZraRock_c__create);
 #define phase_1_dScnPly_sig "_Z7phase_1P9dScnPly_c"
 #endif
 // DEFINE_HOOK_SYMBOL(phase_1_dScnPly_sig, int(dScnPly_c*), phase_1__dScnPly_c);
+
+DEFINE_HOOK(&dMenu_Ring_c::textScaleHIO, dMenu_Ring_c__textScaleHIO);
+DEFINE_HOOK_SYMBOL("dMenu_Ring_c::~dMenu_Ring_c", void(dMenu_Ring_c*), dMenu_Ring_c__destructor);
+DEFINE_HOOK(&dMenu_Ring_c::setActiveCursor, dMenu_Ring_c__setActiveCursor);
+DEFINE_HOOK(&dMenu_Ring_c::getItemMaxNum, dMenu_Ring_c__getItemMaxNum);
+DEFINE_HOOK(&dMenu_Ring_c::getItemNum, dMenu_Ring_c__getItemNum);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -2469,6 +2478,115 @@ void hookPostScnPlyPhase1(ModContext*, void*, void*, void*) {
     }
 }
 
+J2DPicture* dpadIcon{};
+void hookPostMenuRingTextScaleHIO(ModContext*, void* args, void*, void*) {
+    auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
+    if (menuRing->mItemSlots[menuRing->mCurrentSlot] == 0x15) {
+        // Draw d-pad icon to indicate switching between Ilia quest items
+        if (getWarashibeItemCount() >= 2) {
+            if (dpadIcon == nullptr) {
+                dpadIcon = JKR_NEW J2DPicture((ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "font_51.bti"));
+            }
+            dpadIcon->setAlpha(menuRing->mAlphaRate * 255.0);
+            dpadIcon->draw(menuRing->mCenterPosX + 330.f, menuRing->mCenterPosY + 194.f, 30.f, 30.f, false, false, false);
+        }
+    }
+}
+
+void hookPostMenuRingDestructor(ModContext*, void*, void*, void*) {
+    if (dpadIcon != nullptr) {
+        JKR_DELETE(dpadIcon);
+        dpadIcon = nullptr;
+    }
+}
+
+void hookPostMenuRingSetActiveCursor(ModContext*, void* args, void*, void*) {
+    auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
+
+    // Copy if else chain from inside the function but without any of the effects
+    u8 item = dComIfGs_getItem(menuRing->mItemSlots[menuRing->mCurrentSlot], false);
+    if (menuRing->mStatus == dMenu_Ring_c::STATUS_WAIT &&
+        menuRing->mOldStatus != dMenu_Ring_c::STATUS_EXPLAIN_FORCE &&
+        menuRing->mOldStatus != dMenu_Ring_c::STATUS_EXPLAIN &&
+        menuRing->mpItemExplain->getStatus() == 0)
+    {
+        if (mDoCPd_c::getTrigR(PAD_1) && !menuRing->mPlayerIsWolf && item != dItemNo_NONE_e) {
+
+        } else if (mDoCPd_c::getTrigX(PAD_1) && !menuRing->mPlayerIsWolf && item != dItemNo_NONE_e) {
+
+        } else if (mDoCPd_c::getTrigY(PAD_1) && !menuRing->mPlayerIsWolf && item != dItemNo_NONE_e) {
+
+        } else if (mDoCPd_c::getTrigX(PAD_1) || mDoCPd_c::getTrigY(PAD_1)) {
+
+        }
+        // And add our conditional onto the end
+        else if (menuRing->mItemSlots[menuRing->mCurrentSlot] == 0x15) {
+            // Allow switching quest items if dpad right is pressed
+            if (mDoCPd_c::getTrigRight(PAD_1)) {
+                setNextWarashibeItem();
+                // Update slot image
+                for (int i = 0; i < menuRing->mTotalItemTexToAlloc; i++) {
+                    if (menuRing->mItemSlots[i] == 0x15) {
+                        u8 questItem = dComIfGs_getItem(menuRing->mItemSlots[i], false);
+
+                        s32 i_textureNum =
+                            dMeter2Info_readItemTexture(questItem, menuRing->mpItemBuf[i][0], NULL, menuRing->mpItemBuf[i][1], NULL,
+                                                        menuRing->mpItemBuf[i][2], NULL, NULL, NULL, -1);
+                        for (int k = 0; k < i_textureNum; k++) {
+                            // Delete old texture so we aren't leaking memory
+                            if (menuRing->mpItemTex[i][k] != NULL) {
+                                JKR_DELETE(menuRing->mpItemTex[i][k]);
+                            }
+
+                            menuRing->mpItemTex[i][k] = JKR_NEW J2DPicture(menuRing->mpItemBuf[i][k]);
+                            menuRing->mpItemTex[i][k]->setBasePosition(J2DBasePosition_4);
+                        }
+                        dMeter2Info_setItemColor(questItem, menuRing->mpItemTex[i][0], menuRing->mpItemTex[i][1], menuRing->mpItemTex[i][2], NULL);
+                        u8 texScale = dItem_data::getTexScale(questItem);
+                        f32 fVar1 = (texScale / 100.0f);
+                        f32 fVar2 = (menuRing->mpItemBuf[i][0]->width / 48.0f);
+                        fVar1 = fVar2 * fVar1;
+                        menuRing->mItemSlotParam1[i] = fVar1;
+                        menuRing->mItemSlotParam2[i] = (menuRing->mpItemBuf[i][0]->height / 48.0f * (texScale / 100.0f));
+                    }
+                }
+            }
+        }
+    }
+}
+
+void hookPostMenuRingGetItemMaxNum(ModContext*, void* args, void* retval, void*) {
+    auto i_slotNo = mods::arg<u8>(args, 1);
+    auto ret = static_cast<u8*>(retval);
+
+    u8 item = dComIfGs_getItem(i_slotNo, false);
+    switch (item) {
+    case dItemNo_Randomizer_ANCIENT_DOCUMENT_e:
+    case dItemNo_Randomizer_AIR_LETTER_e:
+    case dItemNo_Randomizer_ANCIENT_DOCUMENT2_e:
+        *ret = 6;
+        break;
+    default:
+        break;
+    }
+}
+
+void hookPostMenuRingGetItemNum(ModContext*, void* args, void* retval, void*) {
+    auto i_slotNo = mods::arg<u8>(args, 1);
+    auto ret = static_cast<u8*>(retval);
+
+    u8 item = dComIfGs_getItem(i_slotNo, false);
+    switch (item) {
+    case dItemNo_Randomizer_ANCIENT_DOCUMENT_e:
+    case dItemNo_Randomizer_AIR_LETTER_e:
+    case dItemNo_Randomizer_ANCIENT_DOCUMENT2_e:
+        *ret = getAncientDocumentNum();
+        break;
+    default:
+        break;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -2606,6 +2724,12 @@ ModResult initialize() {
 
     //ADD_HOOK_POST(phase_1__dScnPly_c, hookPostScnPlyPhase1);
 
+    ADD_HOOK_POST(dMenu_Ring_c__textScaleHIO, hookPostMenuRingTextScaleHIO);
+    ADD_HOOK_POST(dMenu_Ring_c__destructor, hookPostMenuRingDestructor);
+    ADD_HOOK_POST(dMenu_Ring_c__setActiveCursor, hookPostMenuRingSetActiveCursor);
+    ADD_HOOK_POST(dMenu_Ring_c__getItemMaxNum, hookPostMenuRingGetItemMaxNum);
+    ADD_HOOK_POST(dMenu_Ring_c__getItemNum, hookPostMenuRingGetItemNum);
+
     return MOD_OK;
 }
 
@@ -2717,6 +2841,12 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjZraRock_c__create>(svc_hook);
 
     //mods::hook::uninstall<phase_1__dScnPly_c>();
+
+    mods::hook::uninstall<dMenu_Ring_c__textScaleHIO>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__destructor>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__setActiveCursor>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__getItemMaxNum>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__getItemNum>(svc_hook);
 
     return MOD_OK;
 }
