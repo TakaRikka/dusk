@@ -912,10 +912,6 @@ void daItem_c::itemGet() {
     }
 #endif
     switch (m_itemNo) {
-#if TARGET_PC
-    case dItemNo_UTAWA_HEART_e:
-    case dItemNo_KAKERA_HEART_e:
-#endif
     case dItemNo_HEART_e:
         mDoAud_seStart(Z2SE_HEART_PIECE_GET, NULL, 0, 0);
         execItemGet(m_itemNo IF_DUSK_ARG(mItemGiveTag) IF_DUSK_ARG(this));
@@ -957,9 +953,6 @@ void daItem_c::itemGet() {
     case dItemNo_PACHINKO_SHOT_e:
         mDoAud_seStart(Z2SE_CONSUMP_ITEM_GET, NULL, 0, 0);
         execItemGet(m_itemNo IF_DUSK_ARG(mItemGiveTag) IF_DUSK_ARG(this));
-#if TARGET_PC
-        break;
-#endif
     default:
 #if TARGET_PC
         if (mItemOverridden) {

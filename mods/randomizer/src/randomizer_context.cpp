@@ -630,7 +630,7 @@ int RandomizerState::execute() {
     if (daAlink_getAlinkActorClass()) {
         currentReloadingState = daAlink_getAlinkActorClass()->checkRestartRoom();
         // Handle giving item to the player at any time.
-        initGiveItemToPlayer();
+        //initGiveItemToPlayer();
     }
     else {
         currentReloadingState = true;

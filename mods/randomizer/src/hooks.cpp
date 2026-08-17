@@ -36,6 +36,8 @@
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "d/actor/d_a_tag_kmsg.h"
 #include "d/actor/d_a_tbox2.h"
+#include "d/actor/d_a_obj_item.h"
+#include "d/actor/d_a_obj_life_container.h"
 #include "d/d_door_param2.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
@@ -48,6 +50,7 @@
 #include "d/d_s_play.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
+#include "d/d_item.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
 
@@ -181,6 +184,16 @@ DEFINE_HOOK_SYMBOL("dMenu_Ring_c::~dMenu_Ring_c", void(dMenu_Ring_c*), dMenu_Rin
 DEFINE_HOOK(&dMenu_Ring_c::setActiveCursor, dMenu_Ring_c__setActiveCursor);
 DEFINE_HOOK(&dMenu_Ring_c::getItemMaxNum, dMenu_Ring_c__getItemMaxNum);
 DEFINE_HOOK(&dMenu_Ring_c::getItemNum, dMenu_Ring_c__getItemNum);
+
+DEFINE_HOOK(&daItem_c::CreateInit, daItem_c__CreateInit);
+DEFINE_HOOK(&daItem_c::itemActionForBoomerang, daItem_c__itemActionForBoomerang);
+DEFINE_HOOK(&daItem_c::itemGetNextExecute, daItem_c__itemGetNextExecute);
+DEFINE_HOOK(&daItem_c::itemGet, daItem_c__itemGet);
+
+DEFINE_HOOK(&daObjLife_c::setEffect, daObjLife_c__setEffect);
+DEFINE_HOOK(&daObjLife_c::create, daObjLife_c__create);
+DEFINE_HOOK(&daObjLife_c::actionGetDemo, daObjLife_c__actionGetDemo);
+DEFINE_HOOK(&daObjLife_c::calcScale, daObjLife_c__calcScale);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -2587,6 +2600,326 @@ void hookPostMenuRingGetItemNum(ModContext*, void* args, void* retval, void*) {
     }
 }
 
+void hookPostItemCreateInit(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daItem_c*>(args, 0);
+
+    switch (i_this->m_itemNo) {
+    case dItemNo_Randomizer_KAKERA_HEART_e:
+    case dItemNo_Randomizer_UTAWA_HEART_e:
+    case dItemNo_Randomizer_ARROW_1_e:
+    case dItemNo_Randomizer_ARROW_10_e:
+    case dItemNo_Randomizer_ARROW_20_e:
+    case dItemNo_Randomizer_ARROW_30_e:
+    case dItemNo_Randomizer_GREEN_RUPEE_e:
+    case dItemNo_Randomizer_BLUE_RUPEE_e:
+    case dItemNo_Randomizer_YELLOW_RUPEE_e:
+    case dItemNo_Randomizer_RED_RUPEE_e:
+    case dItemNo_Randomizer_PURPLE_RUPEE_e:
+    case dItemNo_Randomizer_ORANGE_RUPEE_e:
+    case dItemNo_Randomizer_SILVER_RUPEE_e:
+    case dItemNo_Randomizer_HEART_e:
+        i_this->mItemScale.setall(1.0f);
+        break;
+    case dItemNo_Randomizer_BOW_e:
+        i_this->mItemScale.setall(1.5f);
+        break;
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_1_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_2_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_3_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_4_e:
+        i_this->mItemScale.setall(0.7f);
+        break;
+    default:
+        i_this->mItemScale.setall(2.0f);
+        break;
+    }
+}
+
+HookAction hookPreItemActionForBoomerang(ModContext*, void* args, void* retval, void*) {
+    *static_cast<int*>(retval) = 1;
+    return HOOK_SKIP_ORIGINAL;
+}
+
+HookAction hookPreItemItemGetNextExecute(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daItem_c*>(args, 0);
+
+    if (!i_this->checkFlag(daItem_c::FLAG_DELETE_ITEM_e) && !i_this->checkFlag(daItem_c::FLAG_INIT_GET_ITEM_e)) {
+        i_this->setFlag(daItem_c::FLAG_INIT_GET_ITEM_e);
+        BOOL haveItem = false;
+
+        switch (i_this->m_itemNo) {
+        case dItemNo_HEART_e:
+        case dItemNo_GREEN_RUPEE_e:
+        case dItemNo_ARROW_10_e:
+        case dItemNo_ARROW_20_e:
+        case dItemNo_ARROW_30_e:
+        case dItemNo_ARROW_1_e:
+            i_this->procInitSimpleGetDemo();
+            i_this->itemGet();
+            break;
+        case dItemNo_BLUE_RUPEE_e:
+        case dItemNo_YELLOW_RUPEE_e:
+        case dItemNo_RED_RUPEE_e:
+        case dItemNo_PURPLE_RUPEE_e:
+        case dItemNo_ORANGE_RUPEE_e:
+        case dItemNo_SILVER_RUPEE_e:
+        case dItemNo_PACHINKO_SHOT_e:
+            if (daPy_getPlayerActorClass()->checkCanoeRide() ||
+                daPy_getPlayerActorClass()->checkHorseRide() ||
+                daPy_getPlayerActorClass()->checkBoardRide()) // Check snowboarding for rando
+            {
+                if (checkItemGet(i_this->m_itemNo, 1)) {
+                    haveItem = true;
+                }
+                i_this->procInitSimpleGetDemo();
+                i_this->itemGet();
+
+                if (!haveItem) {
+                    dComIfGs_offItemFirstBit(i_this->m_itemNo);
+                }
+            } else if (!checkItemGet(i_this->m_itemNo, 1)) {
+                i_this->procInitGetDemoEvent();
+            } else {
+                i_this->procInitSimpleGetDemo();
+                i_this->itemGet();
+            }
+            break;
+        default:
+            if (i_this->mItemOverridden) {
+                i_this->procInitGetDemoEvent();
+                break;
+            }
+        }
+
+        fopAcM_onItem(i_this, i_this->mItemBitNo);
+        i_this->mCcCyl.SetTgType(0);
+        i_this->mCcCyl.OffCoSPrmBit(1);
+        i_this->mCcCyl.ClrTgHit();
+        i_this->mCcCyl.ClrCoHit();
+    }
+
+    return HOOK_SKIP_ORIGINAL;
+}
+
+HookAction hookPreItemItemGet(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daItem_c*>(args, 0);
+
+    // we can safely skip the original here as long as it's not a progressive item
+    switch (i_this->m_itemNo) {
+    // Play sound for heart pieces and containers as well
+    case dItemNo_UTAWA_HEART_e:
+    case dItemNo_KAKERA_HEART_e:
+        mDoAud_seStart(Z2SE_HEART_PIECE_GET, NULL, 0, 0);
+        execItemGet(i_this->m_itemNo, i_this->mItemGiveTag, i_this);
+        return HOOK_SKIP_ORIGINAL;
+    case dItemNo_BOOMERANG_e:
+        mDoAud_seStart(Z2SE_CONSUMP_ITEM_GET, NULL, 0, 0);
+        execItemGet(i_this->m_itemNo, i_this->mItemGiveTag, i_this);
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreObjLifeSetEffect(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjLife_c*>(args, 0);
+
+    // In randomizer, we don't want rupees or poe souls to sparkle. They are bright enough.
+    switch (i_this->m_itemNo) {
+    case dItemNo_Randomizer_GREEN_RUPEE_e:
+    case dItemNo_Randomizer_BLUE_RUPEE_e:
+    case dItemNo_Randomizer_RED_RUPEE_e:
+    case dItemNo_Randomizer_YELLOW_RUPEE_e:
+    case dItemNo_Randomizer_LINKS_SAVINGS_e:
+    case dItemNo_Randomizer_PURPLE_RUPEE_e:
+    case dItemNo_Randomizer_ORANGE_RUPEE_e:
+    case dItemNo_Randomizer_SILVER_RUPEE_e:
+    case dItemNo_Randomizer_POU_SPIRIT_e:
+        return HOOK_SKIP_ORIGINAL;
+    }
+
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreObjLifeCreate(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjLife_c*>(args, 0);
+    // it's safe to do this here since the actor init condition will be set, preventing the
+    // original ct call from running again
+    if (!fopAcM_CheckCondition(i_this, fopAcCnd_INIT_e)) {
+        fopAcM_ct_placement(i_this, daObjLife_c);
+        fopAcM_OnCondition(i_this, fopAcCnd_INIT_e);
+    }
+
+    if (!i_this->mIsPrmsInit) {
+        u32 params = fopAcM_GetParam(i_this);
+        u8 itemId = params & 0xFF;
+        u8 roomNo = fopAcM_GetRoomNo(i_this);
+
+        if (itemId == dItemNo_Randomizer_ENDING_BLOW_e) {
+            auto goldenWolfFlags = getCurrentGoldenWolfFlags(roomNo);
+            // Don't spawn this item if we haven't howled at the howling stone, or if we've already
+            // obtained the item
+            if ((goldenWolfFlags.howledAtStoneFlag != 0xFFFF && !dComIfGs_isEventBit(goldenWolfFlags.howledAtStoneFlag)) ||
+                dComIfGs_isEventBit(goldenWolfFlags.obtainedItemFlag))
+            {
+                *static_cast<int*>(retval) = cPhs_ERROR_e;
+                return HOOK_SKIP_ORIGINAL;
+            }
+
+            // Store the map marker flag and obtained item flags to turn off/on later if
+            // the player collects the item
+            i_this->home.angle.z = goldenWolfFlags.mapMarkerFlag;
+            i_this->home.angle.x = static_cast<s16>(goldenWolfFlags.obtainedItemFlag);
+        }
+
+        // Also adjust the height of the object depending on the item
+        switch (itemId) {
+        case dItemNo_Randomizer_MASTER_SWORD_e:
+        case dItemNo_Randomizer_LIGHT_SWORD_e:
+        case dItemNo_Randomizer_WOOD_SHIELD_e:
+        case dItemNo_Randomizer_HYLIA_SHIELD_e:
+        case dItemNo_Randomizer_SHIELD_e:
+        case dItemNo_Randomizer_SPINNER_e:
+        {
+            i_this->current.pos.y += 30.f;
+            break;
+        }
+        case dItemNo_Randomizer_WOOD_STICK_e:
+        {
+            i_this->current.pos.y += 60.f;
+            break;
+        }
+        case dItemNo_Randomizer_SWORD_e:
+        case dItemNo_Randomizer_MIRROR_PIECE_1_e:
+        case dItemNo_Randomizer_MIRROR_PIECE_2_e:
+        case dItemNo_Randomizer_MIRROR_PIECE_3_e:
+        case dItemNo_Randomizer_MIRROR_PIECE_4_e:
+        case dItemNo_Randomizer_FUSED_SHADOW_1_e:
+        case dItemNo_Randomizer_FUSED_SHADOW_2_e:
+        case dItemNo_Randomizer_FUSED_SHADOW_3_e:
+        case dItemNo_Randomizer_COPY_ROD_e:
+        case dItemNo_Randomizer_COPY_ROD_2_e:
+        {
+            i_this->current.pos.y += 50.f;
+            break;
+        }
+
+        case dItemNo_Randomizer_BOW_e:
+        {
+            i_this->current.pos.y += 55.f;
+            break;
+        }
+        case dItemNo_Randomizer_BOOMERANG_e:
+        case dItemNo_Randomizer_FISHING_ROD_1_e:
+        case dItemNo_Randomizer_ARROW_LV2_e:
+        case dItemNo_Randomizer_ARROW_LV3_e:
+        {
+            i_this->current.pos.y += 40.f;
+            break;
+        }
+        case dItemNo_Randomizer_FOREST_SMALL_KEY_e:
+        case dItemNo_Randomizer_MINES_SMALL_KEY_e:
+        case dItemNo_Randomizer_LAKEBED_SMALL_KEY_e:
+        case dItemNo_Randomizer_ARBITERS_SMALL_KEY_e:
+        case dItemNo_Randomizer_SNOWPEAK_SMALL_KEY_e:
+        case dItemNo_Randomizer_TEMPLE_OF_TIME_SMALL_KEY_e:
+        case dItemNo_Randomizer_CITY_SMALL_KEY_e:
+        case dItemNo_Randomizer_PALACE_SMALL_KEY_e:
+        case dItemNo_Randomizer_HYRULE_SMALL_KEY_e:
+        case dItemNo_Randomizer_FOREST_BOSS_KEY_e:
+        case dItemNo_Randomizer_LAKEBED_BOSS_KEY_e:
+        case dItemNo_Randomizer_ARBITERS_BOSS_KEY_e:
+        case dItemNo_Randomizer_TEMPLE_OF_TIME_BOSS_KEY_e:
+        case dItemNo_Randomizer_CITY_BOSS_KEY_e:
+        case dItemNo_Randomizer_PALACE_BOSS_KEY_e:
+        case dItemNo_Randomizer_HYRULE_BOSS_KEY_e:
+        case dItemNo_Randomizer_SMALL_KEY2_e:
+        case dItemNo_Randomizer_LV5_BOSS_KEY_e:
+        case dItemNo_Randomizer_CAMP_SMALL_KEY_e:
+        case dItemNo_Randomizer_BOSSRIDER_KEY_e:
+        case dItemNo_Randomizer_PACHINKO_e:
+        case dItemNo_Randomizer_BOMB_BAG_LV2_e:
+        case dItemNo_Randomizer_BOMB_BAG_LV1_e:
+        case dItemNo_Randomizer_BOMB_IN_BAG_e:
+        case dItemNo_Randomizer_NORMAL_BOMB_e:
+        case dItemNo_Randomizer_POU_SPIRIT_e:
+        {
+            i_this->current.pos.y += 20.f;
+            break;
+        }
+        case dItemNo_Randomizer_ARMOR_e:
+        {
+            i_this->current.pos.y += 25.f;
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostObjLifeActionGetDemo(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjLife_c*>(args, 0);
+
+    // In randomizer, turn off the map marker flag for this golden wolf replacement item
+    // if we're collecting it. We store the map marker flag in unused home.angle.z
+    // Also set the flag for having collected this golden wolf item, stored in home.angle.x
+    if (static_cast<u16>(i_this->home.angle.z) != 0xFFFF) {
+        dComIfGs_offSwitch(static_cast<u16>(i_this->home.angle.z), fopAcM_GetRoomNo(i_this));
+    }
+    if (static_cast<u16>(i_this->home.angle.x) != 0xFFFF) {
+        dComIfGs_onEventBit(static_cast<u16>(i_this->home.angle.x));
+    }
+}
+
+HookAction hookPreObjLifeCalcScale(ModContext*, void* args, void* retval, void*) {
+    auto* i_this = mods::arg<daObjLife_c*>(args, 0);
+
+    // Change scale for certain items
+    f32 newScale = 1.0f;
+    switch (i_this->m_itemNo) {
+    case dItemNo_Randomizer_KAKERA_HEART_e:
+    case dItemNo_Randomizer_UTAWA_HEART_e:
+    case dItemNo_Randomizer_ARROW_10_e:
+    case dItemNo_Randomizer_ARROW_20_e:
+    case dItemNo_Randomizer_ARROW_30_e:
+        newScale = 1.0f;
+        break;
+    case dItemNo_Randomizer_BOW_e:
+        newScale = 1.5f;
+        break;
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_1_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_2_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_3_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_4_e:
+        newScale = 0.7f;
+        break;
+    default:
+        newScale = 2.0f;
+    }
+
+    cLib_chaseF(&i_this->field_0x954, 1.0f, 0.2f);
+    if (i_this->field_0x954 == newScale) {
+        cLib_chaseF(&i_this->field_0x94c, 0.0f, 0.05f);
+        i_this->field_0x950 = i_this->field_0x94c * cM_ssin(i_this->field_0x95e * 3000);
+
+        if (i_this->field_0x95e < 1000) {
+            i_this->field_0x95e++;
+        }
+    } else {
+        i_this->field_0x950 = 0.0f;
+    }
+
+    i_this->scale.setall(i_this->field_0x950 + i_this->field_0x954);
+    return HOOK_SKIP_ORIGINAL;
+}
+
 }
 
 ModResult initialize() {
@@ -2730,6 +3063,16 @@ ModResult initialize() {
     ADD_HOOK_POST(dMenu_Ring_c__getItemMaxNum, hookPostMenuRingGetItemMaxNum);
     ADD_HOOK_POST(dMenu_Ring_c__getItemNum, hookPostMenuRingGetItemNum);
 
+    ADD_HOOK_POST(daItem_c__CreateInit, hookPostItemCreateInit);
+    ADD_HOOK_PRE(daItem_c__itemActionForBoomerang, hookPreItemActionForBoomerang)
+    ADD_HOOK_PRE(daItem_c__itemGetNextExecute, hookPreItemItemGetNextExecute);
+    ADD_HOOK_PRE(daItem_c__itemGet, hookPreItemItemGet);
+
+    ADD_HOOK_PRE(daObjLife_c__setEffect, hookPreObjLifeSetEffect);
+    ADD_HOOK_PRE(daObjLife_c__create, hookPreObjLifeCreate);
+    ADD_HOOK_POST(daObjLife_c__actionGetDemo, hookPostObjLifeActionGetDemo);
+    ADD_HOOK_PRE(daObjLife_c__calcScale, hookPreObjLifeCalcScale);
+
     return MOD_OK;
 }
 
@@ -2847,6 +3190,16 @@ ModResult uninstall() {
     mods::hook::uninstall<dMenu_Ring_c__setActiveCursor>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__getItemMaxNum>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__getItemNum>(svc_hook);
+
+    mods::hook::uninstall<daItem_c__CreateInit>(svc_hook);
+    mods::hook::uninstall<daItem_c__itemActionForBoomerang>(svc_hook);
+    mods::hook::uninstall<daItem_c__itemGetNextExecute>(svc_hook);
+    mods::hook::uninstall<daItem_c__itemGet>(svc_hook);
+
+    mods::hook::uninstall<daObjLife_c__setEffect>(svc_hook);
+    mods::hook::uninstall<daObjLife_c__create>(svc_hook);
+    mods::hook::uninstall<daObjLife_c__actionGetDemo>(svc_hook);
+    mods::hook::uninstall<daObjLife_c__calcScale>(svc_hook);
 
     return MOD_OK;
 }

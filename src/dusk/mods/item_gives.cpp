@@ -171,7 +171,7 @@ void dispatch_demo_give() {
 
     daAlink_c* link = daAlink_getAlinkActorClass();
     dComIfGp_getEvent()->setGtItm(s_inFlightItem);
-    link->procCoGetItemInit();
+    link->mProcID = daAlink_c::PROC_GET_ITEM;
     const s16 eventIndex = dComIfGp_getEventManager().getEventIdx(link, "DEFAULT_GETITEM", 0xFF);
     fopAcM_orderChangeEventId(link, eventIndex, 1, 0xFFFF);
 }
