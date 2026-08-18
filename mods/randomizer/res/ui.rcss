@@ -1,0 +1,69 @@
+.excluded-locations-pane-right {
+    overflow: hidden;
+    padding: 0dp;
+    gap: 0dp;
+}
+
+.excluded-locations-pane-left {
+    padding: 0dp;
+}
+
+.clear-all-button {
+    margin: 12dp 24dp;
+    margin-bottom: 0dp;
+}
+
+.filter-input {
+    margin: 6dp 24dp;
+    height: 40dp;
+}
+
+.excluded-location-button {
+    margin: 6dp 24dp;
+    margin-bottom: 0dp;
+}
+
+.excluded-locations-header {
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    text-transform: uppercase;
+
+    margin-top: 22dp;
+    margin-bottom: 0dp;
+    text-align: center;
+    font-size: 25dp;
+    opacity: 1;
+}
+
+.excluded-locations-subheader {
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    text-transform: uppercase;
+    opacity: 0.25;
+    padding-top: 12dp;
+
+    margin-top: 0dp;
+    margin-bottom: 21dp;
+    text-align: center;
+    font-size: 15dp;
+}
+
+.excluded-locations-pane {
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    gap: 8dp;
+    overflow-y: hidden;
+    font-size: 20dp;
+    border-top: 1dp #92875B;
+}
+
+.excluded-locations-pane-right {
+    padding-left: 5dp;
+    gap: 8dp;
+    overflow-y: hidden;
+    font-size: 20dp;
+    border-top: 1dp #92875B;
+}

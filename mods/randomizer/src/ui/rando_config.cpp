@@ -8,6 +8,7 @@
 #include "../../generator/seedgen/seed.hpp"
 #include "../../generator/utility/string.hpp"
 #include "../../generator/utility/text.hpp"
+#include "../../generator/utility/yaml.hpp"
 
 #include "rando_seed_generation.hpp"
 #include "config_store.hpp"
@@ -15,6 +16,7 @@
 #include <mutex>
 #include <thread>
 #include <map>
+#include <unordered_set>
 
 #include "../randomizer_context.hpp"
 #include "d/d_file_select.h"
@@ -105,7 +107,7 @@ FileSelectGateWindowCtx g_file_select_window_ctx{};
 
 namespace {
 // Control Helpers
-void add_button(UiElementHandle pane, const char* label, const char* help_rml,
+ModResult add_button(UiElementHandle pane, const char* label, const char* help_rml,
     UiPressedFn on_pressed, void* userdata = nullptr, UiElementHandle* out_handle = nullptr)
 {
     UiControlDesc desc = UI_CONTROL_DESC_INIT;
@@ -114,7 +116,7 @@ void add_button(UiElementHandle pane, const char* label, const char* help_rml,
     desc.help_rml = help_rml;
     desc.on_pressed = on_pressed;
     desc.user_data = userdata;
-    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+    return session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
 void add_section(UiElementHandle pane, const char* label) {
@@ -643,9 +645,195 @@ ModResult updateStartingInventoryTab(ModContext* ctx, void*, ModError*) {
 }
 
 // Excluded Locations Tab
+UiElementHandle exlocHeaderElem = 0;
+UiElementHandle exlocSubHeaderElem = 0;
+UiElementHandle exlocRightPaneElem = 0;
+UiElementHandle exlocLeftPaneElem = 0;
+UiElementHandle exlocClearBtnElem = 0;
+// UiElementHandle exlocFilterInputElem = 0;
+std::string exlocFilter{};
+
+struct ExcludedTabLocData {
+    std::string name {};
+    std::string lowercaseName{};
+    std::unordered_set<std::string> categories{};
+};
+
+auto& getExcludedLocationsList() {
+    static std::list<ExcludedTabLocData> locationsForExcludedTab;
+
+    // If we haven't loaded the locations to display for the excluded locations tab, load them up
+    if (locationsForExcludedTab.empty()) {
+        auto locationDataTree = LOAD_EMBED_YAML(RANDO_DATA_PATH "locations.yaml");
+        for (const auto& locationNode : locationDataTree) {
+            ExcludedTabLocData excludedTabLocData{};
+            auto& name = excludedTabLocData.name;
+            auto& lowercaseName = excludedTabLocData.lowercaseName;
+            name = locationNode["Name"].as<std::string>();
+            lowercaseName = name;
+            std::transform(lowercaseName.begin(), lowercaseName.end(), lowercaseName.begin(),
+           [](unsigned char c) { return std::tolower(c); });
+
+            for (const auto& category : locationNode["Categories"]) {
+                excludedTabLocData.categories.insert(category.as<std::string>());
+            }
+
+            if (locationNode["Metadata"].IsMap()) {
+                for (const auto& data : locationNode["Metadata"]) {
+                    excludedTabLocData.categories.insert(data.first.as<std::string>());
+                }
+            }
+
+            // Don't include warp portals
+            if (excludedTabLocData.categories.contains("Warp Portal")) {
+                continue;
+            }
+
+            // Certain locations we don't include for now
+            if (randomizer::utility::str::Contains(excludedTabLocData.name,
+                "Renados Letter", "Telma Invoice", "Wooden Statue", "Ilia Charm",
+                "Defeat Ganondorf", "Twilit Insect", "Twilit Bloat", "Hint"))
+            {
+                continue;
+            }
+
+            locationsForExcludedTab.push_back(excludedTabLocData);
+        }
+
+        locationsForExcludedTab.sort([](const auto& a, const auto& b) {
+            return a.name < b.name;
+        });
+    }
+
+    // Create the vector we're going to return
+    static std::vector<const std::string*> locationNames{};
+    locationNames.clear();
+
+    // Get settings values
+    auto& randoSettings = GetRandomizerConfig().GetSettings().GetMap();
+    bool goldenBugs = randoSettings.at("Golden Bugs") == "On";
+    bool skyCharacters = randoSettings.at("Sky Characters") == "On";
+    bool npcs = randoSettings.at("Gifts From NPCs") == "On";
+    bool shops = randoSettings.at("Shop Items") == "On";
+    bool goldenWolves = randoSettings.at("Hidden Skills") == "On";
+    bool hiddenRupees = randoSettings.at("Hidden Rupees") == "On";
+    bool freestandingRupees = randoSettings.at("Freestanding Rupees") == "On";
+    bool overworldPoes = randoSettings.at("Poe Souls").IsAnyOf("Overworld", "All");
+    bool dungeonPoes = randoSettings.at("Poe Souls").IsAnyOf("Dungeon", "All");
+
+    // Create lowercase filter
+    std::string lowercaseFilter = exlocFilter;
+    std::transform(lowercaseFilter.begin(), lowercaseFilter.end(), lowercaseFilter.begin(),
+               [](unsigned char c) { return std::tolower(c); });
+
+    // Add relevant location names
+    for (const auto& locData : locationsForExcludedTab) {
+        // Skip categories that aren't shuffled
+        auto& cats = locData.categories;
+        if ((!goldenBugs && cats.contains("Golden Bug")) ||
+            (!skyCharacters && cats.contains("Sky Character")) ||
+            (!npcs && cats.contains("Npc")) ||
+            (!shops && cats.contains("Shop")) ||
+            (!goldenWolves && cats.contains("Golden Wolf")) ||
+            (!hiddenRupees && cats.contains("Rupee - Hidden")) ||
+            (!freestandingRupees && cats.contains("Rupee - Freestanding")) ||
+            (!overworldPoes && cats.contains("Poe") && cats.contains("Overworld")) ||
+            (!dungeonPoes && cats.contains("Poe") && cats.contains("Dungeon")))
+        {
+            continue;
+        }
+
+        // Don't add this location if it doesn't match the current filter
+        if (locData.lowercaseName.find(lowercaseFilter) == std::string::npos) {
+            continue;
+        }
+
+        locationNames.push_back(&locData.name);
+    }
+
+    return locationNames;
+}
+
 ModResult buildExcludedLocationsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
+    using namespace session;
+    auto mod_ctx = svc_mng.mod_ctx;
+
+    svc_mng.ui->elem_set_class(mod_ctx, leftPane, "excluded-locations-pane-left", true);
+    svc_mng.ui->elem_set_class(mod_ctx, rightPane, "excluded-locations-pane-right", true);
+
+    add_button(leftPane,
+        "Clear All",
+        "",
+        [](ModContext*, void*) {
+            GetRandomizerConfig().GetSettings().GetModifiableExcludedLocations().clear();
+        },
+        nullptr,
+        &exlocClearBtnElem);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocClearBtnElem, "clear-all-button", true);
+
+    // TODO: leaving out filter for now, since we're building all the buttons at tab init.
+    // try to reimplement later when UiService is able to support something closer to the original impl
+    /* add_string_input(leftPane,
+        "Filter",
+        "",
+        256,
+        [](ModContext*, void*, UiControlValue* out_value) {
+            out_value->string_value = exlocFilter.c_str();
+        },
+        [](ModContext*, void*, const UiControlValue* value) {
+            exlocFilter = value->string_value;
+        },
+        &exlocFilterInputElem);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocFilterInputElem, "filter-input", true); */
+
+    svc_mng.ui->pane_add_rml(mod_ctx, leftPane, "", &exlocLeftPaneElem);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocLeftPaneElem, "excluded-locations-pane", true);
+
+    auto exlocList = getExcludedLocationsList();
+    for (auto e : exlocList) {
+        UiElementHandle handle{};
+        add_button(leftPane,
+            e->c_str(),
+            "",
+            [](ModContext*, void* userdata) {
+                std::string locationName = static_cast<const char*>(userdata);
+                auto& excludedLocations = GetRandomizerConfig().GetSettings().GetModifiableExcludedLocations();
+
+                if (excludedLocations.contains(locationName)) {
+                    excludedLocations.erase(locationName);
+                } else {
+                    excludedLocations.insert(locationName);
+                }
+
+                SaveRandomizerConfig();
+            },
+            (void*)e->data(),
+            &handle);
+        svc_mng.ui->elem_set_class(mod_ctx, handle, "excluded-location-button", true);
+    }
+
+    svc_mng.ui->pane_add_text(mod_ctx, rightPane, "Current Excluded Locations", &exlocHeaderElem);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocHeaderElem, "excluded-locations-header", true);
+
+    svc_mng.ui->pane_add_text(mod_ctx, rightPane, "Re-select a location to remove it", &exlocSubHeaderElem);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocSubHeaderElem, "excluded-locations-subheader", true);
+
+    svc_mng.ui->pane_add_rml(mod_ctx, rightPane, "", &exlocRightPaneElem);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocRightPaneElem, "excluded-locations-pane-right", true);
+    return MOD_OK;
+}
+
+ModResult updateExcludedLocationsTab(ModContext* ctx, void*, ModError*) {
+    using namespace session;
+    std::string rml = "";
+
+    for (const auto& location : GetRandomizerConfig().GetSettings().GetExcludedLocations()) {
+        rml += fmt::format("• {}<br/>", location);
+    }
+
+    svc_mng.ui->elem_set_rml(svc_mng.mod_ctx, exlocRightPaneElem, rml.c_str());
     return MOD_OK;
 }
 
@@ -674,6 +862,7 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
     tabs[4].struct_size = sizeof(UiTabDesc);
     tabs[4].title = "Excluded Locations";
     tabs[4].build = buildExcludedLocationsTab;
+    tabs[4].update = updateExcludedLocationsTab;
 
     UiWindowDesc desc = UI_WINDOW_DESC_INIT;
     desc.tabs = tabs;
@@ -798,6 +987,7 @@ ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {
     tabs[5].struct_size = sizeof(UiTabDesc);
     tabs[5].title = "Excluded Locations";
     tabs[5].build = buildExcludedLocationsTab;
+    tabs[5].update = updateExcludedLocationsTab;
 
     UiWindowDesc desc = UI_WINDOW_DESC_INIT;
     desc.tabs = tabs;
