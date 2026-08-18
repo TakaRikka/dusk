@@ -3213,6 +3213,8 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjLife_c__actionGetDemo>(svc_hook);
     mods::hook::uninstall<daObjLife_c__calcScale>(svc_hook);
 
+    mods::hook::uninstall<getCollectSmell>(svc_hook);
+
     return MOD_OK;
 }
 }
