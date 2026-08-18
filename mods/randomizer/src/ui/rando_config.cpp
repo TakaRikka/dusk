@@ -498,6 +498,8 @@ void on_pressed_starting_inventory_item(ModContext*, void* userdata) {
         inventory.at(itemName) = newCount;
     }
     SaveRandomizerConfig();
+
+    mDoAud_seStartMenu(Z2SE_SY_NAME_CURSOR);
 }
 
 template <int Max = 1>
