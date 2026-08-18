@@ -33,10 +33,68 @@
 
 #define GFX_SERVICE_ID "dev.twilitrealm.dusklight.gfx"
 #define GFX_SERVICE_MAJOR 1u
-#define GFX_SERVICE_MINOR 1u
+#define GFX_SERVICE_MINOR 2u
 
 /* Maximum size for push_draw payload */
 #define GFX_INLINE_DRAW_PAYLOAD_SIZE 128u
+#define GFX_MAX_COLOR_ATTACHMENTS 8u
+#define GFX_SCENE_COLOR_ATTACHMENT_INDEX 0u
+
+typedef enum GfxAttachmentSemantic {
+    GFX_ATTACHMENT_SCENE_COLOR,
+    GFX_ATTACHMENT_NORMAL,
+    GFX_ATTACHMENT_AUXILIARY,
+} GfxAttachmentSemantic;
+
+typedef struct GfxColorAttachmentLayout {
+    GfxAttachmentSemantic semantic;
+    WGPUTextureFormat format;
+    uint32_t width;
+    uint32_t height;
+} GfxColorAttachmentLayout;
+
+typedef struct GfxRenderTargetLayout {
+    uint32_t struct_size;
+    uint64_t key;
+    /* At least one; scene color is at GFX_SCENE_COLOR_ATTACHMENT_INDEX. */
+    uint32_t color_attachment_count;
+    GfxColorAttachmentLayout color_attachments[GFX_MAX_COLOR_ATTACHMENTS];
+    WGPUTextureFormat depth_stencil_format;
+    uint32_t sample_count;
+} GfxRenderTargetLayout;
+
+#define GFX_RENDER_TARGET_LAYOUT_INIT                                                              \
+    {sizeof(GfxRenderTargetLayout), 0u, 0u,                                                        \
+        {{GFX_ATTACHMENT_AUXILIARY, WGPUTextureFormat_Undefined}}, WGPUTextureFormat_Undefined,    \
+        1u}
+
+/*
+ * Initializes pipeline color targets for a render-target layout. Only scene color is writable;
+ * callers that write another semantic should override that target afterward.
+ */
+static uint32_t gfx_init_color_target_states(const GfxRenderTargetLayout* layout,
+    WGPUColorTargetState targets[GFX_MAX_COLOR_ATTACHMENTS], const WGPUBlendState* scene_blend,
+    WGPUColorWriteMask scene_write_mask) {
+    if (layout == NULL || targets == NULL) {
+        return 0;
+    }
+    const uint32_t count = layout->color_attachment_count < GFX_MAX_COLOR_ATTACHMENTS ?
+                               layout->color_attachment_count :
+                               GFX_MAX_COLOR_ATTACHMENTS;
+    for (uint32_t i = 0; i < GFX_MAX_COLOR_ATTACHMENTS; ++i) {
+        WGPUColorTargetState target = WGPU_COLOR_TARGET_STATE_INIT;
+        if (i < count) {
+            target.format = layout->color_attachments[i].format;
+            target.writeMask = WGPUColorWriteMask_None;
+        }
+        targets[i] = target;
+    }
+    if (count != 0) {
+        targets[GFX_SCENE_COLOR_ATTACHMENT_INDEX].blend = scene_blend;
+        targets[GFX_SCENE_COLOR_ATTACHMENT_INDEX].writeMask = scene_write_mask;
+    }
+    return count;
+}
 
 /* 0 is never a valid handle. */
 typedef uint64_t GfxDrawTypeHandle;
@@ -51,8 +109,8 @@ typedef struct GfxRange {
 } GfxRange;
 
 /*
- * Device and scene pass configuration. Valid from mod_initialize onward and stable for the
- * session. Offscreen passes from create_pass are always single-sample.
+ * Device and legacy primary scene-pass configuration. Use get_scene_target_layout when creating
+ * scene pipelines. Offscreen passes from create_pass are always single-sample.
  */
 typedef struct GfxDeviceInfo {
     uint32_t struct_size;
@@ -83,12 +141,18 @@ typedef struct GfxDrawContext {
     WGPUBuffer index_buffer;
     WGPUBuffer uniform_buffer;
     WGPUBuffer storage_buffer;
+    /* deprecated: use layout.color_attachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].format */
     WGPUTextureFormat color_format;
+    /* deprecated: use layout.depth_stencil_format */
     WGPUTextureFormat depth_format;
+    /* deprecated: use layout.sample_count */
     uint32_t sample_count;
+    /* deprecated: use layout.color_attachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].width */
     uint32_t target_width;
+    /* deprecated: use layout.color_attachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].height */
     uint32_t target_height;
     bool uses_reversed_z;
+    GfxRenderTargetLayout layout; /* added in GfxService 1.2 */
 } GfxDrawContext;
 
 typedef void (*GfxDrawFn)(ModContext* ctx, const GfxDrawContext* draw_ctx, const void* payload,
@@ -269,6 +333,10 @@ typedef struct GfxService {
      */
     ModResult (*push_present)(
         ModContext* ctx, GfxPresentTargetHandle handle, const void* payload, size_t payload_size);
+
+    /* Minor version 2 */
+
+    ModResult (*get_scene_target_layout)(ModContext* ctx, GfxRenderTargetLayout* out_layout);
 } GfxService;
 
 MOD_DECLARE_SERVICE(GfxService, svc_gfx, GFX_SERVICE_ID, GFX_SERVICE_MAJOR, GFX_SERVICE_MINOR);

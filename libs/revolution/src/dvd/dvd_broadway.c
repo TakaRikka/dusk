@@ -8,15 +8,15 @@ static volatile u8 requestInProgress = FALSE;
 static u8 breakRequested;
 static u8 callbackInProgress;
 
-static u32 registerBuf[8] ATTRIBUTE_ALIGN(32);
-static u32 statusRegister[8] ATTRIBUTE_ALIGN(32);
-static u32 controlRegister[8] ATTRIBUTE_ALIGN(32);
-static s32 lastTicketError[8] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 registerBuf[8];
+ATTRIBUTE_ALIGN(32) static u32 statusRegister[8];
+ATTRIBUTE_ALIGN(32) static u32 controlRegister[8];
+ATTRIBUTE_ALIGN(32) static s32 lastTicketError[8];
 
 static u32 readLength;
 static u32 spinUpValue;
 
-static diRegVals_t diRegValCache ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static diRegVals_t diRegValCache;
 
 static u8 DVDLowInitCalled = FALSE;
 
@@ -42,8 +42,8 @@ typedef struct dvdContext {
 
 static int freeDvdContext = 0;
 static u8 dvdContextsInited = FALSE;
-static dvdContext_t dvdContexts[4] ATTRIBUTE_ALIGN(32);
-static IOSIoVector ioVec[10] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static dvdContext_t dvdContexts[4];
+ATTRIBUTE_ALIGN(32) static IOSIoVector ioVec[10];
 
 static void* ddrAllocAligned32(const int size) {
     void* low, *high;

@@ -26,8 +26,8 @@
             android:resource="@xml/game_mode_config" />
 
         <provider
-            android:name="dev.twilitrealm.dusk.DuskDocumentsProvider"
-            android:authorities="dev.twilitrealm.dusk.documents"
+            android:name="dev.encounter.borealis.BorealisDocumentsProvider"
+            android:authorities="${applicationId}.documents"
             android:exported="true"
             android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">

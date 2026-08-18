@@ -726,11 +726,18 @@ void daE_HP_c::executeDead() {
             fopAcM_onSwitch(this, bitSw);
         }
 
-        dComIfGs_addPohSpiritNum();
+#if TARGET_PC
+        mItemCheckOverridden =
+            dusk::mods::item_check_poe(bitSw, dItemNo_POU_SPIRIT_e, this) != dItemNo_POU_SPIRIT_e;
+        if (mItemCheckOverridden) {
+            dusk::mods::item_check_enqueue_poe(bitSw, dItemNo_POU_SPIRIT_e);
+        } else
+#endif
+            dComIfGs_addPohSpiritNum();
 
         field_0x784 = -1;
 
-        if (dComIfGs_getPohSpiritNum() == 20) {
+        if (dComIfGs_getPohSpiritNum() == 20 IF_DUSK(&&!mItemCheckOverridden)) {
             dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[0x1c9]);
         }
 
@@ -752,13 +759,13 @@ void daE_HP_c::executeDead() {
                     field_0x788 = 1;
                 }
             }
-        } else if (field_0x788 != 0) {
+        } else if (field_0x788 != 0 IF_DUSK(|| mItemCheckOverridden)) {
             fopAcM_createDisappear(this, &current.pos, 8, 3, 0xff);
             fopAcM_delete(this);
         } else {
             if (field_0x784 == -1) {
-                field_0x784 = fopAcM_createItemForPresentDemo(&current.pos, dItemNo_POU_SPIRIT_e, 0, -1,
-                                                              -1, 0, 0);
+                field_0x784 = fopAcM_createItemForPresentDemo(&current.pos, dItemNo_POU_SPIRIT_e, 0,
+                    -1, -1, 0, 0 IF_DUSK_ARG(dusk::mods::item_give_tag_poe(bitSw)));
             }
 
             if (fopAcM_IsExecuting(field_0x784) != FALSE) {

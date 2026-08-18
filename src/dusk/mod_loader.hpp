@@ -166,6 +166,8 @@ struct LoadedMod {
     std::filesystem::path dir;
     // Stable UTF-8 storage for HostService::mod_dir.
     std::string dirUtf8;
+    // Stable UTF-8 storage for HostService::data_dir.
+    std::string dataDirUtf8;
 
     uint32_t searchDirIndex = 0;
     // Native lib is dlopen'd in place and stays resident for the session. Reload is unsupported.

@@ -184,19 +184,22 @@ fopAcM_prm_class* fopAcM_CreateAppend() {
         append->scale.z = 10;
         append->parent_id = fpcM_ERROR_PROCESS_ID_e;
         append->argument = -1;
+        IF_DUSK(append->mItemGiveOriginalNo = 0xFF;)
     }
     return append;
 }
 
 fopAcM_prm_class* createAppend(u16 i_setId, u32 i_parameters, const cXyz* i_pos, int i_roomNo,
-                               const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
-                               fpc_ProcID i_parentId) {
+    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
+    fpc_ProcID i_parentId IF_DUSK_ARG(u32 i_itemGiveTag) IF_DUSK_ARG(u8 i_itemOriginalNo)) {
     fopAcM_prm_class* append = fopAcM_CreateAppend();
     if (append == NULL) {
         return NULL;
     }
 
     append->base.setID = i_setId;
+    IF_DUSK(append->mItemGiveTag = i_itemGiveTag;)
+    IF_DUSK(append->mItemGiveOriginalNo = i_itemOriginalNo;)
 
     if (i_pos != NULL) {
         append->base.position = *i_pos;
@@ -253,10 +256,10 @@ s32 fopAcM_delete(fpc_ProcID i_actorID) {
 }
 
 fpc_ProcID fopAcM_create(s16 i_procName, u16 i_setId, u32 i_parameters, const cXyz* i_pos,
-                         int i_roomNo, const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
-                         createFunc i_createFunc) {
+    int i_roomNo, const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
+    createFunc i_createFunc IF_DUSK_ARG(u32 i_itemGiveTag)) {
     fopAcM_prm_class* append = createAppend(i_setId, i_parameters, i_pos, i_roomNo, i_angle,
-                                            i_scale, i_argument, fpcM_ERROR_PROCESS_ID_e);
+        i_scale, i_argument, fpcM_ERROR_PROCESS_ID_e IF_DUSK_ARG(i_itemGiveTag));
     if (append == NULL) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -265,16 +268,17 @@ fpc_ProcID fopAcM_create(s16 i_procName, u16 i_setId, u32 i_parameters, const cX
 }
 
 fpc_ProcID fopAcM_create(s16 i_procName, u32 i_parameters, const cXyz* i_pos, int i_roomNo,
-                         const csXyz* i_angle, const cXyz* i_scale, s8 i_argument) {
+    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument IF_DUSK_ARG(u32 i_itemGiveTag)) {
     return fopAcM_create(i_procName, 0xFFFF, i_parameters, i_pos, i_roomNo, i_angle, i_scale,
-                         i_argument, NULL);
+        i_argument, NULL IF_DUSK_ARG(i_itemGiveTag));
 }
 
 fopAc_ac_c* fopAcM_fastCreate(s16 i_procName, u32 i_parameters, const cXyz* i_pos, int i_roomNo,
-                              const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
-                              createFunc i_createFunc, void* i_createFuncData) {
-    fopAcM_prm_class* append = createAppend(0xFFFF, i_parameters, i_pos, i_roomNo, i_angle, i_scale,
-                                            i_argument, fpcM_ERROR_PROCESS_ID_e);
+    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument, createFunc i_createFunc,
+    void* i_createFuncData IF_DUSK_ARG(u32 i_itemGiveTag) IF_DUSK_ARG(u8 i_itemOriginalNo)) {
+    fopAcM_prm_class* append =
+        createAppend(0xFFFF, i_parameters, i_pos, i_roomNo, i_angle, i_scale, i_argument,
+            fpcM_ERROR_PROCESS_ID_e IF_DUSK_ARG(i_itemGiveTag) IF_DUSK_ARG(i_itemOriginalNo));
     if (append == NULL) {
         return NULL;
     }
@@ -1385,8 +1389,8 @@ fopAc_ac_c* fopAcM_getEventPartner(fopAc_ac_c const* i_actor) {
 }
 
 fpc_ProcID fopAcM_createItemForPresentDemo(cXyz const* i_pos, int i_itemNo, u8 param_2,
-                                           int i_itemBitNo, int i_roomNo, csXyz const* i_angle,
-                                           cXyz const* i_scale) {
+    int i_itemBitNo, int i_roomNo, csXyz const* i_angle,
+    cXyz const* i_scale IF_DUSK_ARG(u32 i_itemGiveTag)) {
     JUT_ASSERT(3214, 0 <= i_itemNo && i_itemNo < 256);
     dComIfGp_event_setGtItm(i_itemNo);
 
@@ -1395,14 +1399,14 @@ fpc_ProcID fopAcM_createItemForPresentDemo(cXyz const* i_pos, int i_itemNo, u8 p
         return fpcM_ERROR_PROCESS_ID_e;
     }
 
-    return fopAcM_createDemoItem(i_pos, i_itemNo, i_itemBitNo, i_angle, i_roomNo, i_scale, param_2);
+    return fopAcM_createDemoItem(i_pos, i_itemNo, i_itemBitNo, i_angle, i_roomNo, i_scale,
+        param_2 IF_DUSK_ARG(i_itemGiveTag));
 }
 
 fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz const* i_pos, int i_itemNo, int i_itemBitNo,
-                                         int i_roomNo, csXyz const* i_angle, cXyz const* i_scale) {
-   
-   JUT_ASSERT(3259, 0 <= i_itemNo && i_itemNo < 256);
-   dComIfGp_event_setGtItm(i_itemNo);
+    int i_roomNo, csXyz const* i_angle, cXyz const* i_scale IF_DUSK_ARG(u32 i_itemGiveTag)) {
+    JUT_ASSERT(3259, 0 <= i_itemNo && i_itemNo < 256);
+    dComIfGp_event_setGtItm(i_itemNo);
 
     if (i_itemNo == dItemNo_NONE_e) {
         OS_REPORT("ゲットデモ用なのに「ハズレ」です！[%d]\n", i_itemNo); // Even though it is for a Get Demo, it is a 'Miss'!
@@ -1410,7 +1414,8 @@ fpc_ProcID fopAcM_createItemForTrBoxDemo(cXyz const* i_pos, int i_itemNo, int i_
     }
 
     u8 param_7 = 0;
-    return fopAcM_createDemoItem(i_pos, i_itemNo, i_itemBitNo, i_angle, i_roomNo, i_scale, param_7);
+    return fopAcM_createDemoItem(i_pos, i_itemNo, i_itemBitNo, i_angle, i_roomNo, i_scale,
+        param_7 IF_DUSK_ARG(i_itemGiveTag));
 }
 
 struct ItemTableList {
@@ -1566,8 +1571,8 @@ fpc_ProcID fopAcM_createItemFromTable(cXyz const* i_pos, int i_itemNo, int i_ite
 }
 
 fpc_ProcID fopAcM_createDemoItem(const cXyz* i_pos, int i_itemNo, int i_itemBitNo,
-                                 const csXyz* i_angle, int i_roomNo, const cXyz* scale,
-                                 u8 param_7) {
+    const csXyz* i_angle, int i_roomNo, const cXyz* scale,
+    u8 param_7 IF_DUSK_ARG(u32 i_itemGiveTag)) {
     // clang-format off
     JUT_ASSERT(3824, 0 <= i_itemNo && i_itemNo < 256 && (-1 <= i_itemBitNo && i_itemBitNo < (dSv_info_c::DAN_ITEM + dSv_info_c::MEMORY_ITEM + dSv_info_c::ZONE_ITEM )) || i_itemBitNo == 255);
     // clang-format on
@@ -1577,17 +1582,29 @@ fpc_ProcID fopAcM_createDemoItem(const cXyz* i_pos, int i_itemNo, int i_itemBitN
     }
 
     u32 params = (i_itemNo & 0xFF) << 0x0 | (i_itemBitNo & 0x7F) << 0x8 | (param_7 & 0xFF) << 0x10;
-    return fopAcM_create(fpcNm_Demo_Item_e, params, i_pos, i_roomNo, i_angle, scale, -1);
+    return fopAcM_create(
+        fpcNm_Demo_Item_e, params, i_pos, i_roomNo, i_angle, scale, -1 IF_DUSK_ARG(i_itemGiveTag));
 }
 
 fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomNo,
-                                    const csXyz* i_angle, const cXyz* i_scale, f32 i_speedF,
-                                    f32 i_speedY, int param_8) {
+    const csXyz* i_angle, const cXyz* i_scale, f32 i_speedF, f32 i_speedY,
+    int param_8 IF_DUSK_ARG(const char* i_itemCheckName)) {
     int _ = -1;
+#if TARGET_PC
+    const u8 originalItemNo = i_itemNo & 0xFF;
+    u32 giveTag;
+    if (i_itemCheckName != NULL) {
+        i_itemNo = dusk::mods::item_check(i_itemCheckName, originalItemNo, NULL);
+        giveTag = dusk::mods::item_give_tag(i_itemCheckName);
+    } else {
+        i_itemNo = dusk::mods::item_check_boss(originalItemNo, NULL);
+        giveTag = dusk::mods::item_give_tag_boss();
+    }
+#endif
     u32 params = 0xFFFF0000 | param_8 << 8 | (i_itemNo & 0xFF);
 
-    fopAc_ac_c* actor = fopAcM_fastCreate(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle,
-                                          i_scale, -1, NULL, NULL);
+    fopAc_ac_c* actor = fopAcM_fastCreate(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo,
+        i_angle, i_scale, -1, NULL, NULL IF_DUSK_ARG(giveTag) IF_DUSK_ARG(originalItemNo));
     if (actor != NULL) {
         actor->speedF = i_speedF;
         actor->speed.y = i_speedY;

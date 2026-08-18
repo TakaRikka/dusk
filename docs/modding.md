@@ -209,8 +209,8 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
 }
 ```
 
-Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. Note that the bundle is read-only; for writable
-storage, use the directory from `svc_host->mod_dir(mod_ctx)`.
+Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
+`HostService::data_dir` for persistent storage.
 
 ### HostService (`mods/svc/host.h`)
 
@@ -219,9 +219,17 @@ Mod metadata and runtime interaction with the loader:
 ```cpp
 IMPORT_SERVICE(HostService, svc_host);
 
-const char* id  = svc_host->mod_id(mod_ctx);
-const char* dir = svc_host->mod_dir(mod_ctx);  // writable per-mod directory
-svc_host->fail(mod_ctx, MOD_ERROR, "something unrecoverable happened");  // disables the mod
+// Temporary mod data directory, wiped on startup
+const char* cacheDir = svc_host->mod_dir(mod_ctx);
+
+// Persistent mod data directory
+const char* dataDir = nullptr;
+if (svc_host->data_dir(mod_ctx, &dataDir) == MOD_OK) {
+    // ...
+}
+
+// Report an error and disable the mod
+svc_host->fail(mod_ctx, MOD_ERROR, "something unrecoverable happened");
 ```
 
 `get_service`/`publish_service` provide dynamic service lookup; see [Exporting Services](#exporting-services).
@@ -625,6 +633,9 @@ if (svc_camera->get_camera(mod_ctx, game_view, &camera) == MOD_OK) {
 first in-game frame. Projection matrices match the renderer's WebGPU clip convention and renderer depth convention
 (reversed-Z by default).
 
+Camera operators allow overriding the main camera. When an operator callback returns true, its values replace the camera
+state for the current frame. Register and unregister using `register_camera_operator` / `unregister_camera_operator`.
+
 ### ActorService (`mods/svc/actor.h`)
 
 A service that manages registering and creating custom actors. These actors will be run by the game as if they are part of the engine. These actors can be created by the game either by its 16-bit actor name, or a 7-character long name that can
@@ -1001,6 +1012,6 @@ const char* nativeDir = svc_host->native_dir(mod_ctx);  // read-only
 ```
 
 Libraries loaded explicitly by the mod remain its responsibility: stop their threads and unload them during
-`mod_shutdown`. Do not write into `native_dir`; use `mod_dir` for writable state. Native library namespaces are
-process-wide on some platforms, so two mods cannot safely assume that incompatible libraries with the same filename
-will remain isolated.
+`mod_shutdown`. Do not write into `native_dir`; use `data_dir` for persistent storage or `mod_dir` for temporary
+(session) storage. Native library namespaces are process-wide on some platforms, so two mods cannot safely assume that
+incompatible libraries with the same filename will remain isolated.

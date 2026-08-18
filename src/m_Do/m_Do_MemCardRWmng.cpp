@@ -320,7 +320,7 @@ static void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
 #endif
 
     OSCalendarTime time;
-    OSTicksToCalendarTime(OSGetTime(), &time);
+    OSTicksToCalendarTime(DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime()), &time);
 
 #if TARGET_PC
     if (dusk::version::isRegionPal()) {

@@ -53,4 +53,14 @@ ModResult hook_replace(HookReplaceFn callback, const HookOptions* options = null
     return hook::replace<Entry>(callback, options);
 }
 
+template <class Entry>
+ModResult hook_uninstall(const HookService* hooks) {
+    return hook::uninstall<Entry>(hooks);
+}
+
+template <class Entry>
+ModResult hook_uninstall() {
+    return hook::uninstall<Entry>();
+}
+
 }  // namespace mods

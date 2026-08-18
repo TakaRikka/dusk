@@ -37,6 +37,7 @@ int daObjSword_c::Create() {
 cPhs_Step daObjSword_c::create() {
     fopAcM_ct(this, daObjSword_c);
     m_itemNo = 0x28;
+    DUSK_ITEM_CHECK("ordon_sword", m_itemNo, this);
     if (fopAcM_isItem(this, getItemBit())) {
         return cPhs_ERROR_e;
     }
@@ -71,8 +72,9 @@ int daObjSword_c::initActionOrderGetDemo() {
     hide();
     fopAcM_orderItemEvent(this, 0, 0);
     eventInfo.onCondition(8);
-    mProcID = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this),
-                                            NULL, NULL);
+    mProcID =
+        fopAcM_createItemForTrBoxDemo(&current.pos, DUSK_ITEM_CHECK_EXPR("ordon_sword", 0x28, this),
+            -1, fopAcM_GetRoomNo(this), NULL, NULL DUSK_GIVE_TAG("ordon_sword"));
     setStatus(1);
     return 1;
 }

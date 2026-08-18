@@ -85,7 +85,7 @@ NWC24Err NWC24iSynchronizeRtcCounter(BOOL param_0) {
 }
 
 NWC24Err NWC24SuspendScheduler(void) {
-    static u8 susResult[0x20] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) static u8 susResult[0x20];
     NWC24Err rt = NWC24_OK;
     NWC24Err closeRt = NWC24_OK;
     IOSFd fd;

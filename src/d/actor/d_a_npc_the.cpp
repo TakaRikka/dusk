@@ -823,8 +823,9 @@ BOOL daNpcThe_c::talk(void* param_0) {
                     }
                     int item_no = 0;
                     if (mFlow.getEventId(&item_no) == 1) {
+                        DUSK_ITEM_CHECK("telma_invoice", item_no, this);
                         mItemID = fopAcM_createItemForPresentDemo(&current.pos, item_no, 0, -1, -1,
-                                                                  NULL, NULL);
+                            NULL, NULL DUSK_GIVE_TAG("telma_invoice"));
                         if (mItemID != -1) {
                             s16 event_id = dComIfGp_getEventManager().getEventIdx(
                                 this, "DEFAULT_GETITEM", 0xff);

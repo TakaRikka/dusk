@@ -9,7 +9,7 @@
 
 namespace dusk::mods::loader {
 namespace {
-aurora::Module Log{"dusk::mods::loader"};
+constexpr borealis::Log Log{"dusk::mods::loader"};
 
 struct Edge {
     size_t provider;

@@ -2,22 +2,27 @@
 
 namespace dusk::game_clock {
 
-void ensure_initialized();
-void reset_frame_timer();
+// Amount of time that a simulation tick advances
+constexpr float kSimPeriod = 1.0f / 30.0f;
+constexpr float kUiMaximumDt = 0.05f;
+constexpr float kUiInitialDt = 1.0f / 60.0f;
 
-constexpr float sim_pace() { return 1.0f / 30.0f; }
-constexpr float period_for_original_frames(float frame_count) { return frame_count * sim_pace(); }
-constexpr float ui_maximum_dt() { return 0.05f; }
-constexpr float ui_initial_dt() { return 1.0f / 60.0f; }
-
-struct MainLoopPacer {
-    float presentation_dt_seconds;
-    bool is_interpolating;
-    int sim_ticks_to_run;
-    float sim_pace;
+struct FrameTiming {
+    // Amount of time elapsed in seconds since the last advance
+    float dt;
+    // Whether interpolation is active
+    bool interpolating;
+    // Run simulation and presentation separately (for interpolation or time scaling)
+    bool separatePresentation;
+    // Number of simulation ticks to run
+    int numSimTicks;
 };
+extern FrameTiming g_frameTiming;
 
-MainLoopPacer advance_main_loop();
+void initialize();
+void reset();
+const FrameTiming& advance();
+void begin_sim_tick();
 void commit_sim_tick();
 float sample_interpolation_step();
 

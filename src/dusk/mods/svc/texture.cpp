@@ -1,6 +1,6 @@
 #include "registry.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/texture.h"
 
@@ -29,7 +29,7 @@ struct TextureRawData {
     uint32_t gxFormat = 0;
 };
 
-aurora::Module Log("dusk::mods::textures");
+constexpr borealis::Log Log{"dusk::mods::textures"};
 
 // Referenced by Aurora's lazy virtual-file reads (from arbitrary threads, under Aurora's registry
 // lock) and by raw-entry spans. Immutable after construction; freed only after the corresponding

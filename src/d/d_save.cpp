@@ -1086,7 +1086,7 @@ void dSv_player_config_c::setVibration(u8 i_status) {
 
 u8 dSv_player_config_c::getPalLanguage() const {
 #if TARGET_PC || VERSION == VERSION_GCN_PAL
-    IF_DUSK_BLOCK(dusk::version::getGameVersion() == dusk::version::GameVersion::GcnPal)
+    IF_DUSK_BLOCK(dusk::version::isRegionPal())
     switch (OSGetLanguage()) {
     case 0:
         return LANGUAGE_ENGLISH;
@@ -1828,7 +1828,7 @@ int dSv_info_c::memory_to_card(char* card_ptr, int dataNum) {
         savedata->getPlayer().getPlayerInfo().setTotalTime(play_time);
     }
 
-    savedata->getPlayer().getPlayerStatusB().setDateIpl(OSGetTime());
+    savedata->getPlayer().getPlayerStatusB().setDateIpl(DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime()));
 
     memcpy(card_ptr, savedata, sizeof(dSv_save_c));
     card_ptr += 0x958;
@@ -2035,7 +2035,7 @@ void flagFile_c::listenPropertyEvent(const JORPropertyEvent* i_event) {
     }
     case 102: {
         OSCalendarTime time;
-        OSTicksToCalendarTime(OSGetTime(), &time);
+        OSTicksToCalendarTime(DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime()), &time);
 
         const char* start_stage_name = dComIfGp_getStartStageName();
         char filename[64];

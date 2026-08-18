@@ -109,6 +109,7 @@ int daItemShield_c::__CreateHeap() {
 int daItemShield_c::create() {
     fopAcM_ct(this, daItemShield_c);
     m_itemNo = dItemNo_WOOD_SHIELD_e;
+    DUSK_ITEM_CHECK("ordon_shield", m_itemNo, this);
     if (fopAcM_isSwitch(this, getSwBit2())) {
         OS_REPORT("木の盾：もう取ったので出ません\n");
         return cPhs_ERROR_e;
@@ -240,8 +241,9 @@ int daItemShield_c::initActionOrderGetDemo() {
     daItemBase_c::hide();
     fopAcM_orderItemEvent(this, 0, 0);
     eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
-    mItemId =
-        fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), 0, 0);
+    mItemId = fopAcM_createItemForTrBoxDemo(&current.pos,
+        DUSK_ITEM_CHECK_EXPR("ordon_shield", dItemNo_WOOD_SHIELD_e, this), -1,
+        fopAcM_GetRoomNo(this), 0, 0 DUSK_GIVE_TAG("ordon_shield"));
     JUT_ASSERT(682, mItemId != fpcM_ERROR_PROCESS_ID_e)
     setStatus(STATUS_ORDERGETDEMO);
     return 1;

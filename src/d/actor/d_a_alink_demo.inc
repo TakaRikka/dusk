@@ -2260,6 +2260,12 @@ int daAlink_c::procCoGetItemInit() {
     s16 var_r22 = 0;
     BOOL var_r31 = FALSE;
     BOOL var_r30 = FALSE;
+#if TARGET_PC
+    // Queued grants have no event partner, so create the demo item from the event's GtItm.
+    if (dusk::mods::item_give_queue_dispatching()) {
+        mDemo.setParam0(0x100);
+    }
+#endif
     if (mProcID == PROC_GET_ITEM || mProcID == PROC_INSECT_CATCH ||
         (mProcID == PROC_PREACTION_UNEQUIP && !checkNoUpperAnime()))
     {
@@ -2299,7 +2305,7 @@ int daAlink_c::procCoGetItemInit() {
         }
 
         fpc_ProcID item_partner_id = fopAcM_createItemForPresentDemo(&current.pos, item_no, 0, -1,
-                                                              fopAcM_GetRoomNo(this), NULL, NULL);
+            fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(dusk::mods::item_give_queue_take_tag()));
         if (item_partner_id != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(item_partner_id);
         }

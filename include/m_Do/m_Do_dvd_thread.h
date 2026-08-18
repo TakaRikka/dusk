@@ -130,8 +130,8 @@ private:
 };  // Size = 0x28
 
 struct mDoDvdThdStack {
-    u8 stack[4096];
-} ATTRIBUTE_ALIGN(16);
+    ATTRIBUTE_ALIGN(16) u8 stack[4096];
+};
 
 struct mDoDvdThd {
     static s32 main(void*);

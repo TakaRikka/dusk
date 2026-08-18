@@ -42,7 +42,7 @@ JUTVideo::JUTVideo(GXRenderModeObj const* param_0) {
     mRetraceCount = VIGetRetraceCount();
     field_0x10 = 1;
     field_0x18 = 0;
-    sVideoLastTick = OSGetTick();
+    sVideoLastTick = DUSK_IF_ELSE(static_cast<OSTick>(OSGetNativeTime()), OSGetTick());
     sVideoInterval = 670000;
     mPreRetraceCallback = VISetPreRetraceCallback(preRetraceProc);
     mPostRetraceCallback = VISetPostRetraceCallback(postRetraceProc);
@@ -68,8 +68,13 @@ void JUTVideo::preRetraceProc(u32 retrace_count) {
         (*sManager->mPreCallback)(retrace_count);
     }
 
-    OSTick tick = OSGetTick();
+    OSTick tick = DUSK_IF_ELSE(static_cast<OSTick>(OSGetNativeTime()), OSGetTick());
     sVideoInterval = tick - sVideoLastTick;
+#if TARGET_PC
+    if (sVideoInterval <= 0) {
+        sVideoInterval = 1;
+    }
+#endif
     sVideoLastTick = tick;
 
     JUTXfb* xfb = JUTXfb::getManager();

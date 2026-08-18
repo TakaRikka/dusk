@@ -8,7 +8,8 @@
 
 /*
  * Read-only access to the res/ tree of the calling mod's own bundle. Reload serves the new
- * bundle's contents. For writable storage, use HostService::mod_dir.
+ * bundle's contents. Use HostService::data_dir for persistent storage or HostService::mod_dir
+ * for temporary storage.
  */
 
 #define RESOURCE_SERVICE_ID "dev.twilitrealm.dusklight.resource"

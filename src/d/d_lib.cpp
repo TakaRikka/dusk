@@ -300,7 +300,7 @@ BOOL dLib_checkActorInRectangle(fopAc_ac_c* param_0, fopAc_ac_c* param_1, cXyz c
 }
 
 u32 dLib_getExpandSizeFromAramArchive(JKRAramArchive* i_aramArchive, char const* param_2) {
-    u8 header[32] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 header[32];
     JUT_ASSERT(1252, i_aramArchive != NULL);
     u32 address = i_aramArchive->getAramAddress(param_2);
     if (address == 0) {

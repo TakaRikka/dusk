@@ -41,7 +41,7 @@ WUDControlBlock _wcb;
 WUDDevInfo _work;
 static WUDDiscResp _discResp;
 SCBtDeviceInfoArray _scArray;
-u8 __WUDHandlerStack[0x1000] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) u8 __WUDHandlerStack[0x1000];
 
 extern u8 _scFlush;
 

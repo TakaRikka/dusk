@@ -11,9 +11,16 @@ const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;
 
 #if TARGET_PC
-#include "dusk/dvd_asset.hpp"
-using GameVersion = dusk::version::GameVersion;
-static u8* l_J_Ohana00_64TEX_get() { static u8 buf[0x800]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9060}, {GameVersion::GcnPal, 0x9060}, {GameVersion::GcnJpn, 0x9060}}, 0x800), true); return buf; }
+DEFINE_GRASS_ASSET(l_J_Ohana00_64TEX, u8, 0x800, {
+    {GameVersion::GcnUsa,     0x9060},
+    {GameVersion::GcnPal,     0x9060},
+    {GameVersion::GcnJpn,     0x9060},
+    {GameVersion::WiiUsaRev0, 0x7B60},
+    {GameVersion::WiiUsa,     0x7BC0},
+    {GameVersion::WiiPal,     0x7BC0},
+    {GameVersion::WiiJpn,     0x7BC0},
+});
+
 #define l_J_Ohana00_64TEX (l_J_Ohana00_64TEX_get())
 
 // from d_grass.inc
@@ -115,12 +122,46 @@ static u8 l_flowerTexCoord[] = {
     0x3E, 0xA7, 0x72, 0xD6, 0xBD, 0x2F, 0x46, 0xAA};
 
 #if TARGET_PC
-using GameVersion = dusk::version::GameVersion;
+DEFINE_GRASS_ASSET(l_J_hana00DL, u8, 0x150, {
+    {GameVersion::GcnUsa,     0x9D20},
+    {GameVersion::GcnPal,     0x9D20},
+    {GameVersion::GcnJpn,     0x9D20},
+    {GameVersion::WiiUsaRev0, 0x8820},
+    {GameVersion::WiiUsa,     0x8880},
+    {GameVersion::WiiPal,     0x8880},
+    {GameVersion::WiiJpn,     0x8880},
+});
 
-static u8* l_J_hana00DL_get()   { static u8 buf[0x150]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9D20}, {GameVersion::GcnPal, 0x9D20}, {GameVersion::GcnJpn, 0x9D20}}, 0x150), true); return buf; }
-static u8* l_J_hana00_cDL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9E80}, {GameVersion::GcnPal, 0x9E80}, {GameVersion::GcnJpn, 0x9E80}}, 0xDE),  true); return buf; }
-static u8* l_matDL_get()        { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0x9F60}, {GameVersion::GcnPal, 0x9F60}, {GameVersion::GcnJpn, 0x9F60}}, 0x99),  true); return buf; }
-static u8* l_matLight4DL_get()  { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xA000}, {GameVersion::GcnPal, 0xA000}, {GameVersion::GcnJpn, 0xA000}}, 0x99),  true); return buf; }
+DEFINE_GRASS_ASSET(l_J_hana00_cDL, u8, 0xDE, {
+    {GameVersion::GcnUsa,     0x9E80},
+    {GameVersion::GcnPal,     0x9E80},
+    {GameVersion::GcnJpn,     0x9E80},
+    {GameVersion::WiiUsaRev0, 0x8980},
+    {GameVersion::WiiUsa,     0x89E0},
+    {GameVersion::WiiPal,     0x89E0},
+    {GameVersion::WiiJpn,     0x89E0},
+});
+
+DEFINE_GRASS_ASSET(l_matDL, u8, 0x99, {
+    {GameVersion::GcnUsa,     0x9F60},
+    {GameVersion::GcnPal,     0x9F60},
+    {GameVersion::GcnJpn,     0x9F60},
+    {GameVersion::WiiUsaRev0, 0x8A60},
+    {GameVersion::WiiUsa,     0x8AC0},
+    {GameVersion::WiiPal,     0x8AC0},
+    {GameVersion::WiiJpn,     0x8AC0},
+});
+
+DEFINE_GRASS_ASSET(l_matLight4DL, u8, 0x99, {
+    {GameVersion::GcnUsa,     0xA000},
+    {GameVersion::GcnPal,     0xA000},
+    {GameVersion::GcnJpn,     0xA000},
+    {GameVersion::WiiUsaRev0, 0x8B00},
+    {GameVersion::WiiUsa,     0x8B60},
+    {GameVersion::WiiPal,     0x8B60},
+    {GameVersion::WiiJpn,     0x8B60},
+});
+
 #define l_J_hana00DL   (l_J_hana00DL_get())
 #define l_J_hana00_cDL (l_J_hana00_cDL_get())
 #define l_matDL        (l_matDL_get())
@@ -141,8 +182,16 @@ const u16 l_J_Ohana01_64128_0419TEX__width = 63;
 const u16 l_J_Ohana01_64128_0419TEX__height = 127;
 
 #if TARGET_PC
-using GameVersion = dusk::version::GameVersion;
-static u8* l_J_Ohana01_64128_0419TEX_get() { static u8 buf[0x1000]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xA0A0}, {GameVersion::GcnPal, 0xA0A0}, {GameVersion::GcnJpn, 0xA0A0}}, 0x1000), true); return buf; }
+DEFINE_GRASS_ASSET(l_J_Ohana01_64128_0419TEX, u8, 0x1000, {
+    {GameVersion::GcnUsa,     0xA0A0},
+    {GameVersion::GcnPal,     0xA0A0},
+    {GameVersion::GcnJpn,     0xA0A0},
+    {GameVersion::WiiUsaRev0, 0x8BA0},
+    {GameVersion::WiiUsa,     0x8C00},
+    {GameVersion::WiiPal,     0x8C00},
+    {GameVersion::WiiJpn,     0x8C00},
+});
+
 #define l_J_Ohana01_64128_0419TEX (l_J_Ohana01_64128_0419TEX_get())
 #else
 #include "assets/l_J_Ohana01_64128_0419TEX.h"
@@ -274,13 +323,56 @@ static u8 l_flowerTexCoord2[] = {
     0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x80, 0x3F, 0x79, 0x40, 0x1B, 0x7D, 0x52, 0x3F, 0x51, 0x10, 0x6F};
 
 #if TARGET_PC
-using GameVersion = dusk::version::GameVersion;
+DEFINE_GRASS_ASSET(l_J_hana01DL, u8, 0x138, {
+    {GameVersion::GcnUsa,     0xB7C0},
+    {GameVersion::GcnPal,     0xB7C0},
+    {GameVersion::GcnJpn,     0xB7C0},
+    {GameVersion::WiiUsaRev0, 0xA2C0},
+    {GameVersion::WiiUsa,     0xA320},
+    {GameVersion::WiiPal,     0xA320},
+    {GameVersion::WiiJpn,     0xA320},
+});
 
-static u8* l_J_hana01DL_get()      { static u8 buf[0x138]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xB7C0}, {GameVersion::GcnPal, 0xB7C0}, {GameVersion::GcnJpn, 0xB7C0}}, 0x138), true); return buf; }
-static u8* l_J_hana01_c_00DL_get() { static u8 buf[0xDE];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xB900}, {GameVersion::GcnPal, 0xB900}, {GameVersion::GcnJpn, 0xB900}}, 0xDE),  true); return buf; }
-static u8* l_J_hana01_c_01DL_get() { static u8 buf[0x128]; static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xB9E0}, {GameVersion::GcnPal, 0xB9E0}, {GameVersion::GcnJpn, 0xB9E0}}, 0x128), true); return buf; }
-static u8* l_mat2DL_get()          { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xBB20}, {GameVersion::GcnPal, 0xBB20}, {GameVersion::GcnJpn, 0xBB20}}, 0x99),  true); return buf; }
-static u8* l_mat2Light4DL_get()    { static u8 buf[0x99];  static bool _ = (dusk::LoadArchivedRelAsset(buf, 'AMEM', "d_a_grass.rel", {{GameVersion::GcnUsa, 0xBBC0}, {GameVersion::GcnPal, 0xBBC0}, {GameVersion::GcnJpn, 0xBBC0}}, 0x99),  true); return buf; }
+DEFINE_GRASS_ASSET(l_J_hana01_c_00DL, u8, 0xDE, {
+    {GameVersion::GcnUsa,     0xB900},
+    {GameVersion::GcnPal,     0xB900},
+    {GameVersion::GcnJpn,     0xB900},
+    {GameVersion::WiiUsaRev0, 0xA400},
+    {GameVersion::WiiUsa,     0xA460},
+    {GameVersion::WiiPal,     0xA460},
+    {GameVersion::WiiJpn,     0xA460},
+});
+
+DEFINE_GRASS_ASSET(l_J_hana01_c_01DL, u8, 0x128, {
+    {GameVersion::GcnUsa,     0xB9E0},
+    {GameVersion::GcnPal,     0xB9E0},
+    {GameVersion::GcnJpn,     0xB9E0},
+    {GameVersion::WiiUsaRev0, 0xA4E0},
+    {GameVersion::WiiUsa,     0xA540},
+    {GameVersion::WiiPal,     0xA540},
+    {GameVersion::WiiJpn,     0xA540},
+});
+
+DEFINE_GRASS_ASSET(l_mat2DL, u8, 0x99, {
+    {GameVersion::GcnUsa,     0xBB20},
+    {GameVersion::GcnPal,     0xBB20},
+    {GameVersion::GcnJpn,     0xBB20},
+    {GameVersion::WiiUsaRev0, 0xA620},
+    {GameVersion::WiiUsa,     0xA680},
+    {GameVersion::WiiPal,     0xA680},
+    {GameVersion::WiiJpn,     0xA680},
+});
+
+DEFINE_GRASS_ASSET(l_mat2Light4DL, u8, 0x99, {
+    {GameVersion::GcnUsa,     0xBBC0},
+    {GameVersion::GcnPal,     0xBBC0},
+    {GameVersion::GcnJpn,     0xBBC0},
+    {GameVersion::WiiUsaRev0, 0xA6C0},
+    {GameVersion::WiiUsa,     0xA720},
+    {GameVersion::WiiPal,     0xA720},
+    {GameVersion::WiiJpn,     0xA720},
+});
+
 #define l_J_hana01DL      (l_J_hana01DL_get())
 #define l_J_hana01_c_00DL (l_J_hana01_c_00DL_get())
 #define l_J_hana01_c_01DL (l_J_hana01_c_01DL_get())

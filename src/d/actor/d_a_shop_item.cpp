@@ -11,6 +11,20 @@
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "d/d_item_data.h"
+
+const ResourceData& daShopItem_c::getResourceData() const {
+    if (mItemOverridden) {
+        return mOverrideData;
+    }
+    return mData[mShopItemID];
+}
+#define SHOP_RESOURCE_DATA getResourceData()
+#else
+#define SHOP_RESOURCE_DATA mData[mShopItemID]
+#endif
+
 const char* daShopItem_c::getShopArcname() {
     switch (m_itemNo) {
     case dItemNo_NONE_e:
@@ -88,7 +102,29 @@ const char* daShopItem_c::getShopArcname() {
         return NULL;
     }
 
-    return mData[mShopItemID].get_arcName();
+#if TARGET_PC
+    if (m_itemNo != dItemNo_NONE_e && mItemGiveOriginalNo == dItemNo_NONE_e) {
+        mItemGiveOriginalNo = m_itemNo;
+        const u8 resolvedItem = dusk::mods::item_check_shop(mItemGiveOriginalNo, this);
+        mItemOverridden = resolvedItem != mItemGiveOriginalNo;
+        if (mItemOverridden) {
+            mOverrideData = mData[mShopItemID];
+            mOverrideData.mArcName = dItem_data::getArcName(resolvedItem);
+            mOverrideData.mBmdName = dItem_data::getBmdName(resolvedItem);
+            mOverrideData.mBtkName = dItem_data::getBtkName(resolvedItem);
+            mOverrideData.mBckName = dItem_data::getBckName(resolvedItem);
+            mOverrideData.mBrkName = dItem_data::getBrkName(resolvedItem);
+            mOverrideData.mBtpName = dItem_data::getBtpName(resolvedItem);
+            mOverrideData.mTevFrm = dItem_data::getTevFrm(resolvedItem);
+            mOverrideData.mBtpFrm = -1;
+            mOverrideData.mFlag = static_cast<u32>(-1);
+            mOverrideData.mOffsetY = mShopItemID == SHOP_ITEMNO_ARMOR ? 60.0f : 15.0f;
+            mOverrideData.mScale = 1.0f;
+        }
+    }
+#endif
+
+    return SHOP_RESOURCE_DATA.get_arcName();
 }
 
 DUSK_GAME_DATA const f32 daShopItem_c::m_cullfar_max = 5000.0f;
@@ -104,6 +140,11 @@ u16 daShopItem_c::getHeapSize() {
     OS_REPORT("ShopItemID [%u]\n", a_ShopItemID);
     ASSERT(a_ShopItemID < SHOP_ITEMNO_MAX);
 
+#if TARGET_PC
+    if (mItemOverridden) {
+        return 0x8000;
+    }
+#endif
     return HeapSizeTbl[a_ShopItemID];
 }
 
@@ -119,11 +160,11 @@ void daShopItem_c::CreateInit() {
 
     if (strcmp("R_SP109", dComIfGp_getStartStageName()) == 0 && dComIfGp_getStartStageRoomNo() == 1)
     {
-        scale.set(mData[mShopItemID].get_scale() * 0.8f, mData[mShopItemID].get_scale() * 0.8f,
-                  mData[mShopItemID].get_scale() * 0.8f);
+        scale.set(SHOP_RESOURCE_DATA.get_scale() * 0.8f, SHOP_RESOURCE_DATA.get_scale() * 0.8f,
+            SHOP_RESOURCE_DATA.get_scale() * 0.8f);
     } else {
-        scale.set(mData[mShopItemID].get_scale(), mData[mShopItemID].get_scale(),
-                  mData[mShopItemID].get_scale());
+        scale.set(SHOP_RESOURCE_DATA.get_scale(), SHOP_RESOURCE_DATA.get_scale(),
+            SHOP_RESOURCE_DATA.get_scale());
     }
 
     home.pos = current.pos;
@@ -137,8 +178,8 @@ void daShopItem_c::set_mtx() {
     if (daShopItem_prm::getGroup(this) == 15) {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     } else {
-        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mData[mShopItemID].get_offsetY(),
-                               current.pos.z);
+        mDoMtx_stack_c::transS(
+            current.pos.x, current.pos.y + SHOP_RESOURCE_DATA.get_offsetY(), current.pos.z);
     }
 
     MTXCopy(mDoMtx_stack_c::get(), mMtx);
@@ -147,8 +188,8 @@ void daShopItem_c::set_mtx() {
     if (daShopItem_prm::getGroup(this) == 15) {
         mDoMtx_stack_c::ZXYrotM(-11300, 32700, 7300);
     } else {
-        mDoMtx_stack_c::ZXYrotM(mAngleX + mData[mShopItemID].get_angleX(),
-                                mData[mShopItemID].get_angleY(), mData[mShopItemID].get_angleZ());
+        mDoMtx_stack_c::ZXYrotM(mAngleX + SHOP_RESOURCE_DATA.get_angleX(),
+            SHOP_RESOURCE_DATA.get_angleY(), SHOP_RESOURCE_DATA.get_angleZ());
     }
 
     mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
@@ -156,7 +197,7 @@ void daShopItem_c::set_mtx() {
     if (daShopItem_prm::getGroup(this) == 15) {
         mDoMtx_stack_c::XrotM(0);
     } else {
-        mDoMtx_stack_c::XrotM(mData[mShopItemID].get_angleOffsetX());
+        mDoMtx_stack_c::XrotM(SHOP_RESOURCE_DATA.get_angleOffsetX());
     }
 
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -190,28 +231,30 @@ void daShopItem_c::setShadow() {
 }
 
 BOOL daShopItem_c::chkFlag(int i_flag) {
-    return mData[mShopItemID].get_flag() & i_flag;
+    return SHOP_RESOURCE_DATA.get_flag() & i_flag;
 }
 
 s8 daShopItem_c::getTevFrm() {
-    return mData[mShopItemID].get_tevfrm();
+    return SHOP_RESOURCE_DATA.get_tevfrm();
 }
 
 s8 daShopItem_c::getBtpFrm() {
-    return mData[mShopItemID].get_btpfrm();
+    return SHOP_RESOURCE_DATA.get_btpfrm();
 }
 
 u8 daShopItem_c::getShadowSize() {
-    return mData[mShopItemID].get_shadowSize();
+    return SHOP_RESOURCE_DATA.get_shadowSize();
 }
 
 u8 daShopItem_c::getCollisionH() {
-    return mData[mShopItemID].get_collisionH();
+    return SHOP_RESOURCE_DATA.get_collisionH();
 }
 
 u8 daShopItem_c::getCollisionR() {
-    return mData[mShopItemID].get_collisionR();
+    return SHOP_RESOURCE_DATA.get_collisionR();
 }
+
+#undef SHOP_RESOURCE_DATA
 
 int daShopItem_c::_create() {
     fopAcM_ct(this, daShopItem_c);
