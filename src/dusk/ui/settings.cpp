@@ -72,6 +72,13 @@ constexpr std::array kInterpolationModes = {
     "Unlimited",
 };
 
+constexpr std::array kLetterboxModes = {
+    "Off",
+    "On",
+    "Only During Gameplay",
+    "Only During Cutscenes",
+};
+
 constexpr std::array kTouchTargetingLabels = {
     "Hybrid",
     "Hold",
@@ -101,13 +108,6 @@ constexpr std::array kMagicArmorModes = {
     "Double Defense",
     "Invincible",
     "Cosmetic",
-};
-
-constexpr std::array kLetterboxModes = {
-    "Off",
-    "On",
-    "Only During Cutscenes",
-    "Only During Gameplay",
 };
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
