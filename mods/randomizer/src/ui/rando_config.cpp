@@ -7,6 +7,7 @@
 #include "../paths.hpp"
 #include "../../generator/seedgen/seed.hpp"
 #include "../../generator/utility/string.hpp"
+#include "../../generator/utility/text.hpp"
 
 #include "rando_seed_generation.hpp"
 #include "config_store.hpp"
@@ -484,9 +485,158 @@ ModResult buildHintsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPan
 }
 
 // Starting Inventory Tab
+UiElementHandle startingInventoryRmlElem = 0;
+
+template <int Max = 1>
+void on_pressed_starting_inventory_item(ModContext*, void* userdata) {
+    const char* itemName = static_cast<const char*>(userdata);
+    auto& inventory = GetRandomizerConfig().GetSettings().GetModifiableStartingInventory();
+    int newCount = inventory[itemName] + 1;
+    if (newCount > Max) {
+        inventory.erase(itemName);
+    } else {
+        inventory.at(itemName) = newCount;
+    }
+    SaveRandomizerConfig();
+}
+
+template <int Max = 1>
+void add_starting_inventory_item(UiElementHandle leftPane, const char* displayName, const char* itemName = "") {
+    if (std::strcmp(itemName, "") == 0) {
+        itemName = displayName;
+    }
+
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_BUTTON;
+    desc.label = displayName;
+    desc.help_rml = "";
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.on_pressed = on_pressed_starting_inventory_item<Max>;
+    desc.user_data = (void*)itemName;
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, leftPane, &desc, nullptr);
+};
+
 ModResult buildStartingInventoryTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
+    add_button(leftPane,
+        "Clear Selected Starting Items",
+        "",
+        [](ModContext*, void*) {
+            auto& inventory = GetRandomizerConfig().GetSettings().GetModifiableStartingInventory();
+            inventory.clear();
+            SaveRandomizerConfig();
+        });
+
+    add_section(leftPane, "Main Items");
+    add_starting_inventory_item(leftPane, "Shadow Crystal");
+    add_starting_inventory_item(leftPane, "Horse Call");
+    add_starting_inventory_item<2>(leftPane, "Fishing Rod", "Progressive Fishing Rod");
+    add_starting_inventory_item(leftPane, "Slingshot");
+    add_starting_inventory_item(leftPane, "Lantern");
+    add_starting_inventory_item(leftPane, "Gale Boomerang");
+    add_starting_inventory_item(leftPane, "Iron Boots");
+    add_starting_inventory_item<3>(leftPane, "Bow", "Progressive Bow");
+    add_starting_inventory_item(leftPane, "Hawkeye");
+    add_starting_inventory_item<3>(leftPane, "Bomb Bags", "Bomb Bag");
+    add_starting_inventory_item(leftPane, "Giant Bomb Bags", "Giant Bomb Bag");
+    add_starting_inventory_item<2>(leftPane, "Clawshot", "Progressive Clawshot");
+    add_starting_inventory_item(leftPane, "Spinner");
+    add_starting_inventory_item(leftPane, "Ball and Chain");
+    add_starting_inventory_item<2>(leftPane, "Dominion Rod", "Progressive Dominion Rod");
+    add_starting_inventory_item(leftPane, "Empty Bottle");
+    add_starting_inventory_item(leftPane, "Auru's Memo", "Aurus Memo");
+    add_starting_inventory_item(leftPane, "Ashei's Sketch", "Asheis Sketch");
+    add_starting_inventory_item<7>(leftPane, "Sky Book", "Progressive Sky Book");
+
+    add_section(leftPane, "Gear Screen");
+    add_starting_inventory_item<4>(leftPane, "Sword", "Progressive Sword");
+    add_starting_inventory_item(leftPane, "Ordon Shield");
+    add_starting_inventory_item(leftPane, "Hylian Shield");
+    add_starting_inventory_item(leftPane, "Zora Armor");
+    add_starting_inventory_item(leftPane, "Magic Armor");
+    add_starting_inventory_item<2>(leftPane, "Wallet", "Progressive Wallet");
+    add_starting_inventory_item<7>(leftPane, "Hidden Skills", "Progressive Hidden Skill");
+    add_starting_inventory_item<60>(leftPane, "Poe Souls", "Poe Soul");
+    add_starting_inventory_item<3>(leftPane, "Fused Shadows", "Progressive Fused Shadow");
+    add_starting_inventory_item<4>(leftPane, "Mirror Shards", "Progressive Mirror Shard");
+
+    add_section(leftPane, "Overworld Keys");
+    add_starting_inventory_item(leftPane, "Gate Keys");
+    add_starting_inventory_item(leftPane, "Gerudo Desert Bulblin Camp Key");
+
+    add_section(leftPane, "Dungeon Items");
+    add_starting_inventory_item<4>(leftPane, "Forest Temple Small Keys", "Forest Temple Small Key");
+    add_starting_inventory_item<3>(leftPane, "Goron Mines Small Keys", "Goron Mines Small Key");
+    add_starting_inventory_item<3>(leftPane, "Lakebed Temple Small Keys", "Lakebed Temple Small Key");
+    add_starting_inventory_item<5>(leftPane, "Arbiter's Grounds Small Keys", "Arbiters Grounds Small Key");
+    add_starting_inventory_item<4>(leftPane, "Snowpeak Ruins Small Keys", "Snowpeak Ruins Small Key");
+    add_starting_inventory_item(leftPane, "Ordon Pumpkin");
+    add_starting_inventory_item(leftPane, "Ordon Cheese");
+    add_starting_inventory_item<4>(leftPane, "Temple of Time Small Keys", "Temple of Time Small Key");
+    add_starting_inventory_item<1>(leftPane, "City in the Sky Small Keys", "City in the Sky Small Key");
+    add_starting_inventory_item<7>(leftPane, "Palace of Twilight Small Keys", "Palace of Twilight Small Key");
+    add_starting_inventory_item<3>(leftPane, "Hyrule Castle Small Keys", "Hyrule Castle Small Key");
+
+    add_starting_inventory_item(leftPane, "Forest Temple Big Key");
+    add_starting_inventory_item<3>(leftPane, "Goron Mines Key Shards", "Goron Mines Key Shard");
+    add_starting_inventory_item(leftPane, "Lakebed Temple Big Key");
+    add_starting_inventory_item(leftPane, "Arbiter's Grounds Big Key", "Arbiters Grounds Big Key");
+    add_starting_inventory_item(leftPane, "Snowpeak Ruins Bedroom Key");
+    add_starting_inventory_item(leftPane, "Temple of Time Big Key");
+    add_starting_inventory_item(leftPane, "City in the Sky Big Key");
+    add_starting_inventory_item(leftPane, "Palace of Twilight Big Key");
+    add_starting_inventory_item(leftPane, "Hyrule Castle Big Key");
+
+    add_section(leftPane, "Warp Portals");
+    add_starting_inventory_item(leftPane, "Gerudo Desert Portal");
+    add_starting_inventory_item(leftPane, "Mirror Chamber Portal");
+    add_starting_inventory_item(leftPane, "Snowpeak Portal");
+    add_starting_inventory_item(leftPane, "Sacred Grove Portal");
+    add_starting_inventory_item(leftPane, "Bridge of Eldin Portal");
+    add_starting_inventory_item(leftPane, "Upper Zora's River Portal", "Upper Zoras River Portal");
+
+    add_section(rightPane, "Selected Starting Items");
+    session::svc_mng.ui->pane_add_rml(session::svc_mng.mod_ctx, rightPane, "", &startingInventoryRmlElem);
+
+    return MOD_OK;
+}
+
+ModResult updateStartingInventoryTab(ModContext* ctx, void*, ModError*) {
+    const auto& inventory = GetRandomizerConfig().GetSettings().GetStartingInventory();
+    const auto& layoutOrder = GetStartingInventoryLayoutOrder();
+
+    std::string rightPaneRml = "";
+    for (const auto& [itemText, itemName] : layoutOrder) {
+        if (!inventory.contains(itemName)) {
+            continue;
+        }
+
+        int count = inventory.at(itemName);
+        if (count <= 0) {
+            continue;
+        }
+
+        // If we have a prettier name for the item, prioritize that
+        std::string prettyItemName = fmt::format("{} x{}", itemName, count);
+        if (randomizer::textObjectExists(prettyItemName)) {
+            rightPaneRml += fmt::format("• {}<br/>", randomizer::getTextStr(prettyItemName));
+        }
+        // Display the count before the itemname for these items
+        else if (itemName.find("Small Key") != std::string::npos ||
+            itemName.find("Shard") != std::string::npos ||
+            itemName.find("Fused Shadow") != std::string::npos ||
+            itemName.find("Hidden Skill") != std::string::npos ||
+            itemName == "Poe Soul" ||
+            itemName == "Bomb Bag")
+        {
+            rightPaneRml += fmt::format("• {} {}<br/>", count, itemText);
+        } else {
+            rightPaneRml += fmt::format("• {}<br/>", itemName);
+        }
+    }
+
+    session::svc_mng.ui->elem_set_rml(session::svc_mng.mod_ctx, startingInventoryRmlElem, rightPaneRml.c_str());
     return MOD_OK;
 }
 
@@ -517,6 +667,7 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
     tabs[3].struct_size = sizeof(UiTabDesc);
     tabs[3].title = "Starting Inventory";
     tabs[3].build = buildStartingInventoryTab;
+    tabs[3].update = updateStartingInventoryTab;
 
     tabs[4].struct_size = sizeof(UiTabDesc);
     tabs[4].title = "Excluded Locations";
@@ -640,6 +791,7 @@ ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {
     tabs[4].struct_size = sizeof(UiTabDesc);
     tabs[4].title = "Starting Inventory";
     tabs[4].build = buildStartingInventoryTab;
+    tabs[4].update = updateStartingInventoryTab;
 
     tabs[5].struct_size = sizeof(UiTabDesc);
     tabs[5].title = "Excluded Locations";
