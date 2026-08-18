@@ -229,7 +229,7 @@ int randomizer_getItemAtLocation(const std::string& locationName);
  * @brief Overrides the given entrance paramaters if an override exists for them
  */
 void randomizer_checkAndOverrideEntranceData(
-    const char*& i_Name, s8& i_RoomNo, s16& i_Point, s8& i_Layer);
+    const char*& i_Name, s8& i_RoomNo, s16& i_Point, s8& i_Layer, u32& lastMode);
 /*
  * @brief Puts the associated flag into the randomizer state's temporary flag
  * variable. This allows the tracker/Archipelago to know a location has been checked

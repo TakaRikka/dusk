@@ -861,7 +861,7 @@ int randomizer_getItemAtLocation(const std::string& locationName) {
     return randomizer_GetContext().mItemLocations[nameLookupOverride(locationName)].itemId;
 }
 
-void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo, s16& pointNo, s8& mapLayer) {
+void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo, s16& pointNo, s8& mapLayer, u32& lastMode) {
     RandomizerContext::EntranceOverride override = {
         .stageId = static_cast<u8>(getStageID(stageName)), .roomNo = roomNo, .mapLayer = mapLayer, .pointNo = static_cast<s16>(pointNo)};
 
@@ -871,12 +871,28 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
     // }
 
     // mods::log::info("Original Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
-    if (randomizer_GetContext().mEntranceOverrides.contains(override)) {
-        auto& newOverride = randomizer_GetContext().mEntranceOverrides[override];
+
+    auto it = randomizer_GetContext().mEntranceOverrides.find(override);
+    if (it == randomizer_GetContext().mEntranceOverrides.end()) {
+        // If the specific layer specified isn't found, search the overrides again for layer -1
+        // This is used to resolve issues where a transition (like the door to the past) requests
+        // A specific layer to load
+        override.mapLayer = -1;
+        it = randomizer_GetContext().mEntranceOverrides.find(override);
+    }
+
+    if (it != randomizer_GetContext().mEntranceOverrides.end()) {
+        const auto& newOverride = it->second;
         stageName = allStages[newOverride.stageId];
         pointNo = newOverride.pointNo;
         roomNo = newOverride.roomNo;
         mapLayer = newOverride.mapLayer;
+
+        // Override the lastSceneMode if we are coming from a wolf dig hole
+        if ((lastMode&0xF) == 9) {
+            lastMode = (lastMode&0xFFFFFFF0);
+        }
+
         // mods::log::info("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     }
 }

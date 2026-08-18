@@ -2122,7 +2122,7 @@
     Connection: Sacred Grove Lower -> Lost Woods Lower Battle Arena
     Alias: Sacred Grove -> Lost Woods Lower Battle Arena
     Stage: 54
-    Room: 1
+    Room: 3
     Spawn: 1
     Spawn Type: "50"
     Parameters: "F01F"
@@ -2157,7 +2157,7 @@
     Spawn: 0
     Spawn Type: "00"
     Parameters: "F012"
-    State: 2
+    State: -1
   Return:
     Connection: Sacred Grove Past -> Sacred Grove Upper
     Alias: Sacred Grove Past -> Sacred Grove
@@ -2166,7 +2166,7 @@
     Spawn: 5
     Spawn Type: "10"
     Parameters: "F032"
-    State: 2
+    State: -1
 
 - Type: Overworld
   Forward:

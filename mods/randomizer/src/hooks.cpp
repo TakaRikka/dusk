@@ -658,7 +658,8 @@ HookAction hookPreSetNextStage(ModContext*, void* args, void*, void*) {
         mods::arg_ref<char const*>(args, 0),
         mods::arg_ref<s8>(args, 2),
         mods::arg_ref<s16>(args, 1),
-        mods::arg_ref<s8>(args, 3)
+        mods::arg_ref<s8>(args, 3),
+        mods::arg_ref<u32>(args, 5)
     );
     return HOOK_CONTINUE;
 }
