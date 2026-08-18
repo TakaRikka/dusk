@@ -39,6 +39,7 @@
 #include "d/actor/d_a_obj_item.h"
 #include "d/actor/d_a_obj_life_container.h"
 #include "d/d_door_param2.h"
+#include "d/d_event.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
 #include "d/d_gameover.h"
@@ -196,6 +197,8 @@ DEFINE_HOOK(&daObjLife_c::actionGetDemo, daObjLife_c__actionGetDemo);
 DEFINE_HOOK(&daObjLife_c::calcScale, daObjLife_c__calcScale);
 
 DEFINE_HOOK_SYMBOL("dComIfGs_getCollectSmell", u8(), getCollectSmell);
+
+DEFINE_HOOK(&dEvt_control_c::skipper, dEvt_control_c__skipper);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -2930,6 +2933,88 @@ void hookPostGetCollectSmell(ModContext*, void*, void* retval, void*) {
     }
 }
 
+// Can't think of a better way to do this for now other than replacing the whole function,
+// but we can try to revisit later
+void hookReplaceEvtControlSkipper(ModContext*, void* args, void* retval, void*) {
+    auto evtControl = mods::arg<dEvt_control_c*>(args, 0);
+
+    bool doSkip = false;
+    bool canSkip = false;
+
+    evtControl->offFlag2(8);
+
+    if (evtControl->mEventStatus == 1) {
+        if (evtControl->mSkipFunc != NULL) {
+            canSkip = true;
+        }
+
+        bool is_trig_skipbtn = mDoCPd_c::getTrigStart(PAD_1);
+        // Automatically skip cutscenes in rando if Skip Major Cutscenes is on
+        if (is_trig_skipbtn || (canSkip &&
+             randomizer_GetContext().mSettings[RandomizerContext::SKIP_MAJOR_CUTSCENES] == RandomizerContext::ON)) {
+            if (evtControl->mSkipTimer > 0) {
+                evtControl->mSkipTimer = -1;
+
+                if (canSkip && evtControl->mIsSkipFade) {
+                    mDoGph_gInf_c::fadeOut(0.1f);
+                }
+            } else if (evtControl->mSkipTimer == 0) {
+                evtControl->mSkipTimer = 1;
+            }
+        }
+
+        if (evtControl->mSkipTimer > 0) {
+            if (canSkip) {
+                dComIfGp_setSButtonStatusForce(0x43, 1);
+            } else {
+                dComIfGp_setSButtonStatusForce(0x4D, 1);
+            }
+
+            if (evtControl->mSkipTimer++ > 45) {
+                evtControl->mSkipTimer = 0;
+            }
+        } else if (evtControl->mSkipTimer != 0) {
+            if (canSkip && evtControl->mIsSkipFade) {
+                if (evtControl->mSkipTimer-- < -20) {
+                    doSkip = true;
+                    evtControl->mSkipTimer = 0;
+                }
+            } else {
+                if (canSkip) {
+                    doSkip = true;
+                }
+                evtControl->mSkipTimer = 0;
+            }
+        }
+
+        if (doSkip) {
+            dMsgObject_onKillMessageFlag();
+
+            fopAc_ac_c* skipActor = evtControl->convPId(evtControl->mSkipActorId);
+            if (skipActor == NULL) {
+                OS_REPORT("\x1b[31m%06d: event: Skip ordered actor DEAD!! (%d) \n\x1b[m", g_Counter.mCounter0, mSkipActorId);
+                skipActor = dComIfGp_getPlayer(0);
+            }
+
+            int skipRet = evtControl->mSkipFunc(skipActor, evtControl->mSkipParameter);
+            evtControl->onFlag2(8);
+
+            if (skipRet != 0) {
+                evtControl->mSkipFunc = NULL;
+
+                if (skipRet == 2) {
+                    evtControl->onFlag2(1);
+                } else {
+                    evtControl->onFlag2(2);
+                }
+            }
+        }
+    }
+
+    *static_cast<bool*>(retval) = doSkip;
+}
+
+
 }
 
 ModResult initialize() {
@@ -3085,6 +3170,8 @@ ModResult initialize() {
 
     ADD_HOOK_POST(getCollectSmell, hookPostGetCollectSmell);
 
+    ADD_HOOK_REPLACE(dEvt_control_c__skipper, hookReplaceEvtControlSkipper);
+
     return MOD_OK;
 }
 
@@ -3214,6 +3301,8 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjLife_c__calcScale>(svc_hook);
 
     mods::hook::uninstall<getCollectSmell>(svc_hook);
+
+    mods::hook::uninstall<dEvt_control_c__skipper>(svc_hook);
 
     return MOD_OK;
 }
