@@ -3491,7 +3491,7 @@ char* dMeter2Draw_c::getActionString(u8 i_action, u8 i_type, u8* param_2) {
             }
 
             if (param_2 != NULL) {
-                *param_2 = mesg_entry.output_type;
+                *param_2 = mesg_entry.draw_type;
 
                 if (g_drawHIO.mButtonATextActionID == 0x3E6) {
                     *param_2 = 7;
@@ -3508,7 +3508,7 @@ char* dMeter2Draw_c::getActionString(u8 i_action, u8 i_type, u8* param_2) {
         }
 
         if (param_2 != NULL) {
-            *param_2 = mesg_entry.output_type;
+            *param_2 = mesg_entry.draw_type;
 
             if (i_action_num[i_action] == 0x3E6) {
                 *param_2 = 7;

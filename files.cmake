@@ -1412,6 +1412,7 @@ set(DOLPHIN_FILES
 
 set(DUSK_FILES
         include/helpers/batch.hpp
+        include/helpers/bits.hpp
         include/helpers/endian_gx.hpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/OSContext.cpp
@@ -1487,6 +1488,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/config.hpp
         src/dusk/mods/svc/game.cpp
         src/dusk/mods/svc/gfx.cpp
+        src/dusk/mods/svc/flow.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
         src/dusk/mods/svc/item.cpp
