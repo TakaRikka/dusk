@@ -97,8 +97,8 @@ constexpr std::array kMenuScalingModeLabels = {
 
 constexpr std::array kAlwaysGreatspinModes = {
     "Off",
+    "After Learning Skill",
     "Always",
-    "After Skill",
 };
 
 constexpr std::array kMagicArmorModes = {
