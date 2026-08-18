@@ -577,12 +577,6 @@ HookAction hookPreCheckEmptyBottle(ModContext*, void*, void* retval, void*) {
 }
 
 void hookPostSetLineUpItem(ModContext*, void* args, void*, void*) {
-    // Allow rando to use all item slots. Checks the loaded hash rather than
-    // randomizer_IsActive() because this runs on file select.
-    if (randomizer_GetContext().mHash.empty()) {
-        return;
-    }
-
     auto* i_this = mods::arg<dSv_player_item_c*>(args, 0);
     if (i_this->mItems[7] == dItemNo_NONE_e) {
         return;
