@@ -195,6 +195,8 @@ DEFINE_HOOK(&daObjLife_c::create, daObjLife_c__create);
 DEFINE_HOOK(&daObjLife_c::actionGetDemo, daObjLife_c__actionGetDemo);
 DEFINE_HOOK(&daObjLife_c::calcScale, daObjLife_c__calcScale);
 
+DEFINE_HOOK_SYMBOL("dComIfGs_getCollectSmell", u8(), getCollectSmell);
+
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
 }
@@ -2492,25 +2494,25 @@ void hookPostScnPlyPhase1(ModContext*, void*, void*, void*) {
     }
 }
 
-J2DPicture* dpadIcon{};
+J2DPicture* g_dpadIcon{};
 void hookPostMenuRingTextScaleHIO(ModContext*, void* args, void*, void*) {
     auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
     if (menuRing->mItemSlots[menuRing->mCurrentSlot] == 0x15) {
         // Draw d-pad icon to indicate switching between Ilia quest items
         if (getWarashibeItemCount() >= 2) {
-            if (dpadIcon == nullptr) {
-                dpadIcon = JKR_NEW J2DPicture((ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "font_51.bti"));
+            if (g_dpadIcon == nullptr) {
+                g_dpadIcon = JKR_NEW J2DPicture((ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "font_51.bti"));
             }
-            dpadIcon->setAlpha(menuRing->mAlphaRate * 255.0);
-            dpadIcon->draw(menuRing->mCenterPosX + 330.f, menuRing->mCenterPosY + 194.f, 30.f, 30.f, false, false, false);
+            g_dpadIcon->setAlpha(menuRing->mAlphaRate * 255.0);
+            g_dpadIcon->draw(menuRing->mCenterPosX + 330.f, menuRing->mCenterPosY + 194.f, 30.f, 30.f, false, false, false);
         }
     }
 }
 
 void hookPostMenuRingDestructor(ModContext*, void*, void*, void*) {
-    if (dpadIcon != nullptr) {
-        JKR_DELETE(dpadIcon);
-        dpadIcon = nullptr;
+    if (g_dpadIcon != nullptr) {
+        JKR_DELETE(g_dpadIcon);
+        g_dpadIcon = nullptr;
     }
 }
 
@@ -2921,6 +2923,13 @@ HookAction hookPreObjLifeCalcScale(ModContext*, void* args, void* retval, void*)
     return HOOK_SKIP_ORIGINAL;
 }
 
+void hookPostGetCollectSmell(ModContext*, void*, void* retval, void*) {
+    auto currentSmell = static_cast<u8*>(retval);
+    if (getStageID() == Snowpeak && dComIfGs_isEventBit(GOT_REEKFISH_SCENT)) {
+        *currentSmell = dItemNo_Randomizer_SMELL_FISH_e;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -3073,6 +3082,8 @@ ModResult initialize() {
     ADD_HOOK_PRE(daObjLife_c__create, hookPreObjLifeCreate);
     ADD_HOOK_POST(daObjLife_c__actionGetDemo, hookPostObjLifeActionGetDemo);
     ADD_HOOK_PRE(daObjLife_c__calcScale, hookPreObjLifeCalcScale);
+
+    ADD_HOOK_POST(getCollectSmell, hookPostGetCollectSmell);
 
     return MOD_OK;
 }
