@@ -48,6 +48,13 @@ enum class FrameInterpMode : u8 {
     Unlimited = 2,
 };
 
+enum class LetterboxMode : u8 {
+    Off = 0,
+    On = 1,
+    GameplayOnly = 2,
+    CutsceneOnly = 3,
+};
+
 enum class TouchTargeting : u8 {
     Hybrid = 0,
     Hold = 1,
@@ -66,13 +73,6 @@ enum class MagicArmorMode : u8 {
     DOUBLE_DEFENSE = 2,
     INVINCIBLE = 3,
     COSMETIC = 4,
-};
-
-enum class LetterboxMode : u8 {
-    Off = 0,
-    On = 1,
-    CutsceneOnly = 2,
-    GameplayOnly = 3,
 };
 
 namespace config {
@@ -113,6 +113,12 @@ struct ConfigEnumRange<FrameInterpMode> {
 };
 
 template <>
+struct ConfigEnumRange<LetterboxMode> {
+    static constexpr auto min = LetterboxMode::Off;
+    static constexpr auto max = LetterboxMode::CutsceneOnly;
+};
+
+template <>
 struct ConfigEnumRange<TouchTargeting> {
     static constexpr auto min = TouchTargeting::Hybrid;
     static constexpr auto max = TouchTargeting::Switch;
@@ -128,12 +134,6 @@ template <>
 struct ConfigEnumRange<MagicArmorMode> {
     static constexpr auto min = MagicArmorMode::NORMAL;
     static constexpr auto max = MagicArmorMode::COSMETIC;
-};
-
-template <>
-struct ConfigEnumRange<LetterboxMode> {
-    static constexpr auto min = LetterboxMode::Off;
-    static constexpr auto max = LetterboxMode::GameplayOnly;
 };
 
 template <>
