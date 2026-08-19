@@ -1,0 +1,7 @@
+{
+  "id": "dev.twilitrealm.flow_demo",
+  "name": "[Demo] Flow & Messages",
+  "version": "1.0.0",
+  "author": "Twilit Realm",
+  "description": "Adds a FlowService demonstration submenu to Midna's menu."
+}
