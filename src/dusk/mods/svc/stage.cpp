@@ -130,7 +130,9 @@ bool stage_apply_actor_edits(void* actorData, void* actorPrm, size_t recordSize,
     }
 
     std::memcpy(actorData, winner->record.data(), winner->record.size());
-    std::memcpy(actorPrm, winner->record.data() + 8, winner->record.size() - 8);
+    if (actorPrm) {
+        std::memcpy(actorPrm, winner->record.data() + 8, winner->record.size() - 8);
+    }
     return true;
 }
 
