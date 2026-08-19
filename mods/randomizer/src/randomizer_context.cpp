@@ -1569,16 +1569,16 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
             if (type == "branch") {
                 auto branch = reinterpret_cast<mesg_flow_node_branch*>(&value);
                 branch->type = 2;
-                branch->field_0x1 = flowNode["num results"].as<u8>();
+                branch->result_count = flowNode["num results"].as<u8>();
                 branch->query_idx = flowNode["query"].as<u16>();
                 branch->param = flowNode["parameters"].as<u16>();
                 branch->next_node_idx = flowNode["next node index"].as<u16>();
                 // If we're using custom result indices
                 if (flowNode["results"]) {
                     auto& results = flowNode["results"];
-                    if (results.size() != branch->field_0x1) {
+                    if (results.size() != branch->result_count) {
                         throw std::runtime_error(fmt::format("Flow results size for {} "
-                            "do not match num results. (expected: {}. size: {})", name, branch->field_0x1, results.size()));
+                            "do not match num results. (expected: {}. size: {})", name, branch->result_count, results.size()));
                     }
                     for (const auto& resultNode : results) {
                         auto resultIndex = handleCustomFlowID(resultNode.as<std::string>());
