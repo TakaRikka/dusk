@@ -7691,7 +7691,9 @@ bool dCamera_c::freeCamera() {
 
     if (touchCameraMoved) {
         mCamParam.mManualMode = 1;
-        const f32 yawInput = dusk::getSettings().game.invertCameraXAxis ? -touchYawDp : touchYawDp;
+        const bool effectiveInvertX =
+            dusk::getSettings().game.enableMirrorMode ^ dusk::getSettings().game.invertCameraXAxis;
+        const f32 yawInput = effectiveInvertX ? -touchYawDp : touchYawDp;
         const f32 pitchInput =
             touchPitchDp * (dusk::getSettings().game.invertCameraYAxis ? -1.0f : 1.0f);
         mCamParam.freeXAngle += yawInput * dusk::getSettings().game.touchCameraXSensitivity *
