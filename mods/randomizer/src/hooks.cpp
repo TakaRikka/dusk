@@ -2481,13 +2481,29 @@ void hookPostObjZraRockCreate(ModContext*, void* args, void* retval, void*) {
     }
 }
 
+bool g_horseCallFirstBit = false;
+u8 g_slot21Item = 0;
+HookAction hookPreScnPlyPhase1(ModContext*, void*, void*, void*) {
+    if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
+        dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
+    {
+        // Save item info for rando to restore after function runs
+        g_horseCallFirstBit = dComIfGs_isItemFirstBit(dItemNo_HORSE_FLUTE_e);
+        g_slot21Item = dComIfGs_getItem(SLOT_21, false);
+    }
+
+    return HOOK_CONTINUE;
+}
+
 void hookPostScnPlyPhase1(ModContext*, void*, void*, void*) {
     if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
         dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
     {
-        // Undo item set for rando
-        dComIfGs_offItemFirstBit(dItemNo_HORSE_FLUTE_e);
-        dComIfGs_setItem(SLOT_21, dItemNo_NONE_e);
+        // Restore item info
+        if (!g_horseCallFirstBit) {
+            dComIfGs_offItemFirstBit(dItemNo_HORSE_FLUTE_e);
+        }
+        dComIfGs_setItem(SLOT_21, g_slot21Item);
     }
 }
 
@@ -3144,7 +3160,8 @@ ModResult initialize() {
 
     ADD_HOOK_POST(daObjZraRock_c__create, hookPostObjZraRockCreate);
 
-    //ADD_HOOK_POST(phase_1__dScnPly_c, hookPostScnPlyPhase1);
+    // ADD_HOOK_PRE(phase_1__dScnPly_c, hookPreScnPlyPhase1);
+    // ADD_HOOK_POST(phase_1__dScnPly_c, hookPostScnPlyPhase1);
 
     ADD_HOOK_POST(dMenu_Ring_c__textScaleHIO, hookPostMenuRingTextScaleHIO);
     ADD_HOOK_POST(dMenu_Ring_c__destructor, hookPostMenuRingDestructor);
