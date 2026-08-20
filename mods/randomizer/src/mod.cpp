@@ -19,6 +19,7 @@ IMPORT_SERVICE(ItemService, svc_item);
 IMPORT_SERVICE(FlowService, svc_flow);
 IMPORT_SERVICE(MessageService, svc_message);
 IMPORT_SERVICE(GameModeService, svc_game_mode);
+IMPORT_SERVICE(TextureService, svc_texture);
 
 extern "C" {
 
@@ -37,6 +38,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         svc_flow,
         svc_message,
         svc_game_mode,
+        svc_texture,
     });
     if (result != MOD_OK) {
         return mods::set_error(error, result, "failed to initialize session");

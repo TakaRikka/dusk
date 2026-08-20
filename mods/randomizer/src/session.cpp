@@ -339,12 +339,6 @@ void registerStartingLocation() {
     dComIfGp_setNextStage("F_SP103", 1, 1, -1);
 }
 
-void shutdown() {
-    deactivateSeed();
-    hooks::uninstall();
-    svc_mng.save->unobserve_saves(mod_ctx, s_save_observer);
-}
-
 ModResult onNewSave(void*, ModError*) {
     const std::string hash = g_pending_seed_hash;
     if (hash.empty())
@@ -387,6 +381,8 @@ void onSaveWritten(ModContext*, uint32_t, void*) {
     svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
 }
 
+TextureReplacementHandle logoTexHandle{};
+
 ModResult onGameModeActivated(void*, ModError* error) {
     ModResult result = hooks::initialize();
     if (result != MOD_OK) {
@@ -404,8 +400,20 @@ ModResult onGameModeActivated(void*, ModError* error) {
         return mods::set_error(error, result, "failed to initialize save observation");
     }
 
+    result = svc_mng.texture->register_file(mod_ctx, "res/tex1_608x100_0c1c70378fb8cb46_6.png", &logoTexHandle);
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to register texture replacement");
+    }
+
     mods::log::info("randomizer game mode activated");
     return MOD_OK;
+}
+
+void shutdown() {
+    deactivateSeed();
+    hooks::uninstall();
+    svc_mng.save->unobserve_saves(mod_ctx, s_save_observer);
+    svc_mng.texture->unregister(mod_ctx, logoTexHandle);
 }
 
 ModResult onGameModeDeactivated(void*, ModError* error) {
