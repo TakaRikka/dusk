@@ -9,7 +9,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 1u
+#define UI_SERVICE_MINOR 2u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -291,6 +291,10 @@ typedef struct UiService {
 
     /* Enqueue a toast notification. */
     ModResult (*push_toast)(ModContext* ctx, const UiToastDesc* desc);
+
+    /* Minor version 2 */
+    ModResult (*get_clipboard_text)(ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength);
+    ModResult (*set_clipboard_text)(ModContext* ctx, const char* text);
 } UiService;
 
 MOD_DECLARE_SERVICE(UiService, svc_ui, UI_SERVICE_ID, UI_SERVICE_MAJOR, UI_SERVICE_MINOR);
