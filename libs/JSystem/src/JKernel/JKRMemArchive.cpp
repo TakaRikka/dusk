@@ -136,10 +136,9 @@ bool JKRMemArchive::open(void* buffer, u32 bufferSize, JKRMemBreakFlag flag) {
 void* JKRMemArchive::fetchResource(SDIFileEntry* fileEntry, u32* resourceSize) {
     JUT_ASSERT(555, isMounted());
 
-#ifdef TARGET_PC
-    void* overlay_data = getOverlayData(fileEntry, resourceSize);
-    if (overlay_data) {
-        return overlay_data;
+#if TARGET_PC
+    if (void* data = getOverlayData(fileEntry, resourceSize); data != nullptr) {
+        return data;
     }
 #endif
 
@@ -158,9 +157,8 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
                                    u32* resourceSize) {
     JUT_ASSERT(595, isMounted());
 
-#ifdef TARGET_PC
-    void* overlay_data = getOverlayCopyData(buffer, bufferSize, fileEntry, resourceSize);
-    if (overlay_data) {
+#if TARGET_PC
+    if (copyOverlayData(buffer, bufferSize, fileEntry, resourceSize)) {
         return buffer;
     }
 #endif
@@ -188,7 +186,8 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
 
 void JKRMemArchive::removeResourceAll(void) {
     JUT_ASSERT(642, isMounted());
-    IF_DUSK(removeOverlayResourceAll();)
+
+    IF_DUSK(removeAllOverlayResources();)
 
     if (mArcInfoBlock == NULL)
         return;
@@ -208,7 +207,12 @@ void JKRMemArchive::removeResourceAll(void) {
 
 bool JKRMemArchive::removeResource(void* resource) {
     JUT_ASSERT(673, isMounted());
-    IF_DUSK(removeOverlayResource(resource);)
+
+#if TARGET_PC
+    if (removeOverlayResource(resource, true)) {
+        return true;
+    }
+#endif
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry)
@@ -249,9 +253,8 @@ u32 JKRMemArchive::fetchResource_subroutine(u8* src, u32 srcLength, u8* dst, u32
 }
 
 u32 JKRMemArchive::getExpandedResSize(const void* resource) const {
-#ifdef TARGET_PC
-    u32 overlaySize;
-    if (getOverlayFileSize(resource, &overlaySize)) {
+#if TARGET_PC
+    if (u32 overlaySize; getOverlayResourceSize(resource, &overlaySize)) {
         return overlaySize;
     }
 #endif

@@ -6,10 +6,10 @@
 #include "global.h"
 #include "helpers/endian.h"
 
-#ifdef TARGET_PC
+#if TARGET_PC
+#include <atomic>
 #include <string>
 #include <unordered_map>
-#include <vector>
 #endif
 
 class JKRHeap;
@@ -214,79 +214,36 @@ public:
     /* 0x54 */ const char* mStringTable;
 
 #if TARGET_PC
+    u32 getFileSize(SDIFileEntry* entry) const;
+    void* getOverlayData(SDIFileEntry* entry, u32* outSize);
+    bool getOverlayFileSize(SDIFileEntry* entry, u32* outSize) const;
+    static void notifyOverlayFilesChanged();
+
+protected:
     void** mFileData;
 
-    std::unordered_map<s32, std::vector<u8>> mFileIdxToArcOverlayData;  // Owns all overlayed data
-    std::string mArcOverlaysPath;  // Used to check if overlays are currently registered to a path
-
-    // Get the path of the current archive on the dvd file system, and change the ending from .arc
-    // to _arc/
-    void buildArcOverlaysPath();
-
-    std::unordered_map<s32, std::string> mIdxToPathMap;
-    // Fill mIdxToPathMap which maps every File ID in the arhive to a string that gives the full path
-    // inside of the archive
-    void buildIdToPathMap(u32 dirIndex, const std::string& currentPath);
-
-    // Given a pointer to a file entry, loads and returns a pointer to overlayed data, if it exists.
-    // Otherwise, returns NULL. The loaded archive data is stored as a shared_ptr within
-    // mFileIdxToArcOverlayData.
-    void* getOverlayData(SDIFileEntry* entry, u32* out_size);
-
-    void* getOverlayCopyData(void* buffer, u32 bufferSize, SDIFileEntry* entry, u32* out_size);
-
-    // Returns false when the entry isn't overlayed
-    bool getOverlayFileSize(SDIFileEntry* entry, u32* out_size) const {
-        const auto& it = mFileIdxToArcOverlayData.find(entry->index);
-        if (it != mFileIdxToArcOverlayData.end()) {
-            *out_size = it->second.size();
-            return true;
-        }
-
-        *out_size = entry->getSize();
-        return false;
-    }
-
-    // Returns false when the entry isn't overlayed
-    bool getOverlayFileSize(const void* data, u32* out_size) const {
-        for (auto it = mFileIdxToArcOverlayData.begin(); it != mFileIdxToArcOverlayData.end(); ++it) {
-            if (it->second.data() == data) {
-                *out_size = it->second.size();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    u32 getFileSize(SDIFileEntry* entry) const {
+    struct ArcOverlayResource {
+        u32 entryIndex;
         u32 size;
-        getOverlayFileSize(entry, &size);
-        return size;
-    }
+        u64 generation;
+    };
 
-    void removeOverlayResource(void* resource) {
-        for (auto it = mFileIdxToArcOverlayData.begin(); it != mFileIdxToArcOverlayData.end(); ++it) {
-            if (it->second.data() == resource) {
-                mFileIdxToArcOverlayData.erase(it);
-                break;
-            }
-        }
-    }
+    // Resource pointers remain valid until removed through the JKR resource APIs.
+    // That way, any pointers to old overlay data remain valid even when the overlay changed.
+    std::unordered_map<void*, ArcOverlayResource> mArcOverlayResources;
+    mutable std::unordered_map<u32, void*> mActiveArcOverlayResources;
+    mutable std::string mArcOverlaysPath;
+    mutable std::unordered_map<u32, std::string> mIdxToPathMap;
+    mutable bool mArcOverlaysPathResolved = false;
 
-    // Given a path into an archive, free a resource. Make sure when calling this that there are no
-    // pointers to the underlying resource stored anywhere or else it will crash!
-    void removeOverlayResource(const char* path) {
-        SDIFileEntry* entry = findFsResource(path, 0);
-        if (entry == nullptr) {
-            return;
-        }
-        const auto& it = mFileIdxToArcOverlayData.find(entry->index);
-        mFileIdxToArcOverlayData.erase(it);
-    }
-
-    // Frees all currently loaded overlay data
-    void removeOverlayResourceAll() { mFileIdxToArcOverlayData = {}; }
-
+    bool buildArcOverlaysPath() const;
+    void buildIndexToPathMap(u32 dirIndex, const std::string& currentPath) const;
+    bool getOverlayPath(SDIFileEntry* entry, std::string& path) const;
+    void* getActiveOverlayData(SDIFileEntry* entry, u32* outSize) const;
+    bool copyOverlayData(void* buffer, u32 bufferSize, SDIFileEntry* entry, u32* outSize);
+    bool getOverlayResourceSize(const void* data, u32* outSize) const;
+    bool removeOverlayResource(void* resource, bool freeResource);
+    void removeAllOverlayResources();
 #endif
 
 protected:
@@ -319,6 +276,9 @@ public:
 
 protected:
     static DUSK_GAME_DATA u32 sCurrentDirID;
+#if TARGET_PC
+    static std::atomic<u64> sArcOverlayGeneration;
+#endif
 };
 
 inline JKRCompression JKRConvertAttrToCompressionType(int attr) {

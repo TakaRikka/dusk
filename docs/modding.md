@@ -280,9 +280,8 @@ svc_overlay->remove(mod_ctx, handle);
 on the disc are added as new files. Changes are applied at the next frame boundary, and data the game already read
 stays in memory until the file is re-read: sometimes a scene reload, and in the worst case, a full restart.
 
-*Note: Keep in mind that the game keeps some archive files always loaded at runtime. To allow for
-hot-swapping, there is code to re-load any overlayed data during a loadingscreen within the
-`static int phase_1(dScnPly_c* i_this)` function in `d_s_play.cpp`*
+Dusklight reloads core archive files during scene transitions so modifications to Link, Midna or other globally-loaded
+data get refreshed without a full restart.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
@@ -769,12 +768,11 @@ For reference parameters (e.g. `const cXyz& pos`), `arg_ref<cXyz>` yields a dire
 
 Files placed under `overlay/` in the `.dusk` archive override game files at the corresponding path, equivalent to
 replacing files in the .iso. This requires no code: an archive with just `mod.json` and `overlay/` is a complete mod.
-Additionally, replacing a `.arc` Archive file with a directory of the same name allows a user to
-overlay a specific file within an archive.
+To replace a file within an `.arc` archive, replace the archive suffix with a directory and place the replacement at
+its path within the archive.
 
-- Example: A file in `overlay/Audiores/Stream/menu_select.ast` will overlay the audio stream for the main title.
-- Example: A file in `overlay/res/Layout/main2D/main2d/timg/midona64.bti` will overlay the icon for midna in the
-game's ui
+- `overlay/Audiores/Stream/menu_select.ast` replaces the main title's audio stream.
+- `overlay/res/Layout/main2D/main2d/timg/midona64.bti` replaces Midna's UI icon inside `main2D.arc`.
 
 Files placed under `textures/` register as texture replacements, and act just like the user's general
 `texture_replacements/` directory: Dolphin-style naming, matched by texture hash

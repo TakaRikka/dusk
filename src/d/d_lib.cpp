@@ -310,14 +310,12 @@ u32 dLib_getExpandSizeFromAramArchive(JKRAramArchive* i_aramArchive, char const*
                                        0, 0, 0xffffffff, 0);
     JUT_ASSERT(1260, readAddress == header);
     JKRArchive::SDIFileEntry* entry = i_aramArchive->findFsResource(param_2, 0);
-#ifdef TARGET_PC
-    // If this resource is overlayed, return the overlayed size
-    u32 overlayedSize;
-    if (i_aramArchive->getOverlayData(entry,&overlayedSize)) {
-        return ALIGN_NEXT(overlayedSize,32);
+    JUT_ASSERT(1263, entry != NULL);
+#if TARGET_PC
+    if (u32 size; i_aramArchive->getOverlayFileSize(entry, &size)) {
+        return ALIGN_NEXT(size, 32);
     }
 #endif
-    JUT_ASSERT(1263, entry != NULL);
     u32 uVar1 = ALIGN_NEXT(JKRDecompExpandSize(header), 32);
     u32 uVar5 = ALIGN_NEXT(entry->data_size, 32);
     return uVar1 > uVar5 ? uVar1 : uVar5;

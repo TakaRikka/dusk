@@ -226,11 +226,10 @@ bool JKRCompArchive::open(s32 entryNum) {
 
 void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
     JUT_ASSERT(597, isMounted());
-    
-#ifdef TARGET_PC
-    void* overlay_data = getOverlayData(fileEntry, pSize);
-    if (overlay_data) {
-        return overlay_data;
+
+#if TARGET_PC
+    if (void* data = getOverlayData(fileEntry, pSize); data != nullptr) {
+        return data;
     }
 #endif
 
@@ -283,9 +282,8 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
     u32 size = 0;
     JUT_ASSERT(708, isMounted());
 
-#ifdef TARGET_PC
-    void* overlay_data = getOverlayCopyData(data, compressedSize, fileEntry, pSize);
-    if (overlay_data) {
+#if TARGET_PC
+    if (copyOverlayData(data, compressedSize, fileEntry, pSize)) {
         return data;
     }
 #endif
@@ -335,7 +333,7 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
 
 void JKRCompArchive::removeResourceAll() {
     if (mArcInfoBlock != NULL && mMountMode != MOUNT_MEM) {
-        IF_DUSK(removeOverlayResourceAll();)
+        IF_DUSK(removeAllOverlayResources();)
         SDIFileEntry* fileEntry = mFiles;
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
             int tmp = fileEntry->type_flags_and_name_offset >> 0x18;
@@ -353,7 +351,11 @@ void JKRCompArchive::removeResourceAll() {
 }
 
 bool JKRCompArchive::removeResource(void* resource) {
-    IF_DUSK(removeOverlayResource(resource);)
+#if TARGET_PC
+    if (removeOverlayResource(resource, true)) {
+        return true;
+    }
+#endif
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry)
@@ -375,10 +377,9 @@ u32 JKRCompArchive::getExpandedResSize(const void *resource) const
         return getResSize(resource);
     }
 
-#ifdef TARGET_PC
-    u32 overlaySize;
-    if (getOverlayFileSize(resource, &overlaySize)) {
-        return overlaySize;
+#if TARGET_PC
+    if (u32 size; getOverlayResourceSize(resource, &size)) {
+        return size;
     }
 #endif
 

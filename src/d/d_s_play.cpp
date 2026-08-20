@@ -1154,49 +1154,6 @@ static int phase_0(dScnPly_c* i_this) {
 static int phase_1(dScnPly_c* i_this) {
     dStage_roomControl_c::setProcID(fopScnM_GetID(i_this));
 
-#ifdef TARGET_PC
-    // Free any overlay resources that are loaded by always-loaded archives
-#define FREE_OVERLAY(x) {                 \
-    JKRArchive* arc = x;                  \
-    if (arc) {                            \
-        arc->removeOverlayResourceAll();  \
-    }}
-
-    FREE_OVERLAY(dComIfGp_getFieldMapArchive2())
-    FREE_OVERLAY(dComIfGp_getAnmArchive())
-    FREE_OVERLAY(dComIfGp_getFmapResArchive())
-    FREE_OVERLAY(dComIfGp_getDmapResArchive())
-    FREE_OVERLAY(dComIfGp_getCollectResArchive())
-    FREE_OVERLAY(dComIfGp_getItemIconArchive())
-    FREE_OVERLAY(dComIfGp_getAllMapArchive())
-    FREE_OVERLAY(dComIfGp_getRingResArchive())
-    FREE_OVERLAY(dComIfGp_getNameResArchive())
-    FREE_OVERLAY(dComIfGp_getDemoMsgArchive())
-    FREE_OVERLAY(dComIfGp_getMeterButtonArchive())
-    FREE_OVERLAY(dComIfGp_getCardIconResArchive())
-    FREE_OVERLAY(dComIfGp_getMsgDtArchive())
-    FREE_OVERLAY(dComIfGp_getMsgCommonArchive())
-    for (int i = 0; i < 7; i++) {
-        JKRArchive* arc = dComIfGp_getMsgArchive(i);
-        if (arc) {
-            arc->removeOverlayResourceAll();
-        }
-    }
-    // SYNC_OVERLAY(dComIfGp_getFontArchive()) // Pointers to font data seem to be static
-    // SYNC_OVERLAY(dComIfGp_getRubyArchive()) // Same with here
-    FREE_OVERLAY(dComIfGp_getMain2DArchive())
-    dRes_info_c* res = dComIfG_getObjectResInfo("Always");
-    if (res && res->getArchive()) {
-        res->getArchive()->removeOverlayResourceAll();
-    }
-    res = dComIfG_getObjectResInfo("Alink");
-    if (res && res->getArchive()) {
-        res->getArchive()->removeOverlayResourceAll();
-    }
-
-#undef SYNC_OVERLAY
-#endif
-
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
 
     if (dComIfGp_getStartStageLayer() < 0 && daPy_py_c::checkRoomRestartStart()) {

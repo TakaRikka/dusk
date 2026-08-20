@@ -147,14 +147,13 @@ cleanup:
 
 void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
     JUT_ASSERT(428, isMounted());
-    
-#ifdef TARGET_PC
-    void* overlay_data = getOverlayData(fileEntry, returnSize);
-    if (overlay_data) {
-        return overlay_data;
+
+#if TARGET_PC
+    if (void* data = getOverlayData(fileEntry, returnSize); data != nullptr) {
+        return data;
     }
 #endif
-    
+
     u32 tempReturnSize;
     if (returnSize == NULL) {
         returnSize = &tempReturnSize;
@@ -190,9 +189,8 @@ void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
                                    u32* returnSize) {
     JUT_ASSERT(504, isMounted());
 
-#ifdef TARGET_PC
-    void* overlay_data = getOverlayCopyData(buffer, bufferSize, fileEntry, returnSize);
-    if (overlay_data) {
+#if TARGET_PC
+    if (copyOverlayData(buffer, bufferSize, fileEntry, returnSize)) {
         return buffer;
     }
 #endif
@@ -360,10 +358,9 @@ u32 JKRDvdArchive::getExpandedResSize(const void* resource) const {
         return getResSize(resource);
     }
 
-#ifdef TARGET_PC
-    u32 overlaySize;
-    if (getOverlayFileSize(resource, &overlaySize)) {
-        return overlaySize;
+#if TARGET_PC
+    if (u32 size; getOverlayResourceSize(resource, &size)) {
+        return size;
     }
 #endif
 

@@ -2,6 +2,7 @@
 #include "slot_map.hpp"
 
 #include <borealis/log.hpp>
+#include "JSystem/JKernel/JKRArchive.h"
 #include "aurora/dvd.h"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/overlay.h"
@@ -75,7 +76,6 @@ void find_overlay_files(std::vector<AuroraOverlayFile>& files, LoadedMod& mod,
         assert(!overlayPath.starts_with('/'));
         overlayPath.insert(0, "/");
 
-        // Register the overlay as a file
         const auto size = mod.bundle->getFileSize(file);
 
         const auto id = s_nextOverlayId++;
@@ -202,6 +202,7 @@ void overlay_sync_files() {
 
     Log.debug("Registering {} overlay file(s).", files.size());
     aurora_dvd_overlay_files(files.data(), files.size(), nullptr);
+    JKRArchive::notifyOverlayFilesChanged();
 
     for (const auto& file : files) {
         std::free(const_cast<char*>(file.fileName));
