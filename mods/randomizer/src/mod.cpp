@@ -16,11 +16,14 @@ IMPORT_SERVICE(ConfigService, svc_config);
 IMPORT_SERVICE(SaveService, svc_save);
 IMPORT_SERVICE(StageService, svc_stage);
 IMPORT_SERVICE(ItemService, svc_item);
+IMPORT_SERVICE(FlowService, svc_flow);
+IMPORT_SERVICE(MessageService, svc_message);
+IMPORT_SERVICE(GameModeService, svc_game_mode);
 
 extern "C" {
 
 MOD_EXPORT ModResult mod_initialize(ModError* error) {
-    ModResult result = randomizer::session::initialize({
+     ModResult result = randomizer::session::initialize({
         mod_ctx,
         svc_host,
         svc_log,
@@ -31,14 +34,12 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         svc_save,
         svc_stage,
         svc_item,
+        svc_flow,
+        svc_message,
+        svc_game_mode,
     });
     if (result != MOD_OK) {
         return mods::set_error(error, result, "failed to initialize session");
-    }
-
-    result = randomizer::hooks::initialize();
-    if (result != MOD_OK) {
-        return mods::set_error(error, result, "failed to initialize hooks");
     }
 
     result = randomizer::ui::initialize();
@@ -51,14 +52,12 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
 }
 
 MOD_EXPORT ModResult mod_update(ModError*) {
-    randomizer::ui::update();
-    randomizer::session::update();
+    // we register update function with game mode service, so no need to do anything here
     return MOD_OK;
 }
 
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
-    randomizer::session::deactivateSeed();
-    randomizer::hooks::uninstall();
+    randomizer::session::shutdown();
     svc_log->info(mod_ctx, "randomizer unloaded");
     return MOD_OK;
 }
