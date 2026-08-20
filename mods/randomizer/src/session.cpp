@@ -3,6 +3,8 @@
 #include <mods/svc/log.hpp>
 
 #include "randomizer_context.hpp"
+#include "hooks.hpp"
+#include "ui/ui.hpp"
 #include "flags.h"
 #include "item_ids.h"
 #include "tools.h"
@@ -337,31 +339,38 @@ void registerStartingLocation() {
     dComIfGp_setNextStage("F_SP103", 1, 1, -1);
 }
 
-void onNewSave(ModContext*, uint32_t, void*) {
+void shutdown() {
+    deactivateSeed();
+    hooks::uninstall();
+    svc_mng.save->unobserve_saves(mod_ctx, s_save_observer);
+}
+
+ModResult onNewSave(void*, ModError*) {
     const std::string hash = g_pending_seed_hash;
     if (hash.empty())
-        return;
+        return MOD_ERROR;
 
     if (!activateSeed(hash.c_str()))
-        return;
+        return MOD_ERROR;
 
     svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
     setupRandomizerFile();
+    return MOD_OK;
 }
 
-void onSaveLoaded(ModContext*, uint32_t, void*) {
+ModResult onSaveLoaded(void*, ModError*) {
     size_t size = 0;
     if (svc_mng.save->get_blob(mod_ctx, kSeedHashBlobName, nullptr, &size) != MOD_OK || size == 0) {
         mods::log::error("seed_hash not found!");
         deactivateSeed();
-        return;
+        return MOD_ERROR;
     }
 
     std::string hash(size, '\0');
     if (svc_mng.save->get_blob(mod_ctx, kSeedHashBlobName, hash.data(), &size) != MOD_OK) {
         mods::log::error("failed to get seed_hash!");
         deactivateSeed();
-        return;
+        return MOD_ERROR;
     }
 
     if (randomizer_GetContext().mHash != hash) {
@@ -370,6 +379,7 @@ void onSaveLoaded(ModContext*, uint32_t, void*) {
     }
 
     loadAncientDocumentNum();
+    return MOD_OK;
 }
 
 void onSaveWritten(ModContext*, uint32_t, void*) {
@@ -377,20 +387,56 @@ void onSaveWritten(ModContext*, uint32_t, void*) {
     svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
 }
 
-ModResult initialize(const ServiceManager& services) {
-    svc_mng = services;
+ModResult onGameModeActivated(void*, ModError* error) {
+    ModResult result = hooks::initialize();
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize hooks");
+    }
 
-    ModResult rt = svc_mng.save->observe_saves(
+    result = svc_mng.save->observe_saves(
         svc_mng.mod_ctx,
-        onNewSave,
-        onSaveLoaded,
+        nullptr,
+        nullptr,
         onSaveWritten,
         nullptr,
         &s_save_observer);
-    if (rt != MOD_OK) {
-        return rt;
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize save observation");
     }
 
+    mods::log::info("randomizer game mode activated");
+    return MOD_OK;
+}
+
+ModResult onGameModeDeactivated(void*, ModError* error) {
+    shutdown();
+
+    mods::log::info("randomizer game mode deactivated");
+    return MOD_OK;
+}
+
+ModResult onGameModeUpdate(void*, ModError* error) {
+    ui::update();
+    session::update();
+    return MOD_OK;
+}
+
+ModResult initialize(const ServiceManager& services) {
+    svc_mng = services;
+
+    const GameModeDesc gameModeDesc = {
+        .struct_size = sizeof(GameModeDesc),
+        .game_mode_id = "randomizer",
+        .full_name = "Randomizer",
+        .save_name = "randomizer",
+        .user_data = nullptr,
+        .on_activated = onGameModeActivated,
+        .on_deactivated = onGameModeDeactivated,
+        .on_save_loaded = onSaveLoaded,
+        .on_new_save = onNewSave,
+        .on_tick = onGameModeUpdate,
+    };
+    svc_mng.game_mode->register_game_mode(mod_ctx, &gameModeDesc);
     return MOD_OK;
 }
 

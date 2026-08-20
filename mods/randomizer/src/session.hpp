@@ -9,6 +9,9 @@
 #include "mods/svc/save.h"
 #include "mods/svc/stage.h"
 #include "mods/svc/item.h"
+#include "mods/svc/flow.h"
+#include "mods/svc/message.h"
+#include "mods/svc/game_mode.h"
 
 #include <string>
 
@@ -24,6 +27,9 @@ struct ServiceManager {
     const SaveService* save;
     const StageService* stage;
     const ItemService* item;
+    const FlowService* flow;
+    const MessageService* message;
+    const GameModeService* game_mode;
 };
 
 extern ServiceManager svc_mng;
@@ -31,6 +37,7 @@ extern std::string g_pending_seed_hash;
 
 ModResult initialize(const ServiceManager& services);
 void update();
+void shutdown();
 
 void deactivateSeed();
 void setupRandomizerFile();
