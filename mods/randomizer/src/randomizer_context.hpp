@@ -156,45 +156,29 @@ public:
         CHANGE_TO_DAY,
     };
 
-    enum EventItemStatus {
-        QUEUE_EMPTY,
-        ITEM_IN_QUEUE,
-        CLEAR_QUEUE,
-    };
-
-    static constexpr u8 EVENT_ITEM_QUEUE_SIZE = 10;
-
     RandomizerState() { mInitialized = false; }
 
     int _create();
     int _delete();
     int execute();
     int draw();
-    void addItemToEventQueue(u8 item);
-    void initGiveItemToPlayer();
+
     // void handleBonkDamage();
     void handleTimeOfDayChange();
     void handleTimeSpeed();
     void offLoad();
 
-    void handlePoeItem(u8 bitSw);
-
-    u8 getGiveItemToPlayerStatus() const { return mEventItemStatus; }
     u8 getTimeChange() const { return mTimeChange; }
     bool getRoomReloadingState() const { return mRoomReloadingState; }
     bool getHasPendingToDChange() const { return mHasPendingToDChange; }
 
-    void setGiveItemToPlayerStatus(u8 status) { mEventItemStatus = status; }
     void setHasPendingToDChange(bool hasPending) { mHasPendingToDChange = hasPending; }
     void setTimeChange(u8 newTimeChange) { mTimeChange = newTimeChange; }
     void setRoomReloadingState(bool newState) { mRoomReloadingState = newState; }
 
     bool mInitialized{false};
-    int mFileNum{-1};
-    u8 mEventItemStatus{};
     bool mHasPendingToDChange{false};
     u8 mTimeChange{};
-    u8 mEventItemQueue[EVENT_ITEM_QUEUE_SIZE];
     bool mRoomReloadingState{false};
 
     // Used to store an item id for a flow message override so that we can give the item
