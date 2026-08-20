@@ -22,7 +22,7 @@ struct msg_class;
 // all mesg_flow_node structs members might be wrong
 struct mesg_flow_node {
     /* 0x00 */ u8 type;
-    /* 0x01 */ u8 field_0x1;
+    /* 0x01 */ u8 subtype;
     /* 0x02 */ BE(u16) msg_index;
     /* 0x04 */ BE(u16) next_node_idx;
     /* 0x06 */ BE(u16) unk_0x6;
@@ -30,7 +30,7 @@ struct mesg_flow_node {
 
 struct mesg_flow_node_branch {
     /* 0x00 */ u8 type;
-    /* 0x01 */ u8 field_0x1;
+    /* 0x01 */ u8 result_count;
     /* 0x02 */ BE(u16) query_idx;
     /* 0x04 */ BE(u16) param;
     /* 0x06 */ BE(u16) next_node_idx;

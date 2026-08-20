@@ -189,12 +189,6 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         return mods::set_error(error, MOD_ERROR, "failed to register mod panel");
     }
 
-    if (open_window() != MOD_OK) {
-        svc_gfx->unregister_stage_hook(mod_ctx, g_stageHook);
-        g_stageHook = 0;
-        return mods::set_error(error, MOD_ERROR, "failed to open auxiliary window");
-    }
-
     mods::log::info("auxiliary WebGPU window ready");
     return MOD_OK;
 }

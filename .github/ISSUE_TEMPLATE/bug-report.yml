@@ -68,13 +68,18 @@ body:
     required: true
 
 - type: dropdown
-  id: game-region
+  id: game-disc
   attributes:
-    label: Game Region
-    description: The game region you are playing on
+    label: Game Disc
+    description: The game disc you are playing on
     options:
-    - NTSC-U (North America)
-    - PAL (Europe)
+    - GameCube NTSC-U (North America)
+    - GameCube PAL (Europe)
+    - GameCube NTSC-J (Japan)
+    - Wii NTSC-U (North America) Revision 0
+    - Wii NTSC-U (North America) Revision 2
+    - Wii PAL (Europe)
+    - Wii NTSC-J (Japan)
   validations:
     required: true
 

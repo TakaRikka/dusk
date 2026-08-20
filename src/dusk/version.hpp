@@ -5,18 +5,19 @@
  */
 namespace dusk::version {
     enum class GameVersion : u8 {
-        GcnUsa = VERSION_GCN_USA,
-        GcnPal = VERSION_GCN_PAL,
-        GcnJpn = VERSION_GCN_JPN,
-        WiiUsaRev0 = VERSION_WII_USA_R0,
-        WiiUsa = VERSION_WII_USA_R2,
-        WiiPal = VERSION_WII_PAL,
-        WiiJpn = VERSION_WII_JPN,
-        WiiKor = VERSION_WII_KOR,
+        WiiUsaRev0,
+        WiiPal,
+        WiiJpn,
+        GcnUsa,
+        GcnPal,
+        GcnJpn,
+        WiiUsa,
+        WiiKor,
     };
 
     bool isGcn();
     bool isWii();
+    bool isJpnOrLessThanWiiJpn();
     bool isPalOrAtLeastWiiR2();
 
     bool isRegionPal();
@@ -60,5 +61,15 @@ namespace dusk::version {
         }
 
         return defaultValue;
+    }
+
+    template<typename T>
+    T platformSelect(const T& gcn, const T& wii) {
+        return isGcn() ? gcn : wii;
+    }
+
+    template<typename T>
+    T regionSelect(const T& usa, const T& pal, const T& jpn) {
+        return isRegionUsa() ? usa : isRegionPal() ? pal : jpn;
     }
 }  // namespace dusk::version

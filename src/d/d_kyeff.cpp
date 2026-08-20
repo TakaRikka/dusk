@@ -118,7 +118,7 @@ static int dKyeff_Create(kankyo_class* i_this) {
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") == 0) {
         camera_process_class* camera = dComIfGp_getCamera(0);
-        OSTime time = OSGetTime();
+        OSTime time = DUSK_IF_ELSE(OSGetSystemTime(), OSGetTime());
         OSTicksToCalendarTime(time, &calendar);
 
         g_env_light.global_wind_influence.vec.x = 1.0f;

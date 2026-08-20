@@ -16,7 +16,7 @@
  * of letting them corrupt memory.
  */
 #define GAME_SERVICE_ID "dev.twilitrealm.dusklight.game"
-#define GAME_SERVICE_MAJOR 1u
+#define GAME_SERVICE_MAJOR 2u
 #define GAME_SERVICE_MINOR 0u
 
 typedef struct GameService {

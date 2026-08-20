@@ -19,15 +19,16 @@ static int fopOvlpReq_phase_Done(overlap_request_class* i_overlapReq) {
         i_overlapReq->field_0x8 = 0;
         i_overlapReq->field_0xc = 0;
 
-        #if TARGET_PC
+#if TARGET_PC
         if (dusk::getSettings().game.speedrunMode) {
             if (dusk::m_speedrunInfo.m_isRunStarted) {
                 dusk::m_speedrunInfo.m_isPauseIGT = false;
-                dusk::m_speedrunInfo.m_totalLoadTime += OSGetTime() - dusk::m_speedrunInfo.m_loadStartTimestamp;
+                dusk::m_speedrunInfo.m_totalLoadTime +=
+                    OSGetTime() - dusk::m_speedrunInfo.m_loadStartTimestamp;
                 dusk::m_speedrunInfo.m_loadStartTimestamp = OSGetTime();
             }
         }
-        #endif
+#endif
         return cPhs_NEXT_e;
     }
 

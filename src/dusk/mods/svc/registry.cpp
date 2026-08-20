@@ -150,6 +150,14 @@ ModResult register_module(const ServiceModule& module) {
     return MOD_OK;
 }
 
+void modules_mod_deactivating(LoadedMod& mod) {
+    for (const auto* module : s_modules | std::views::reverse) {
+        if (module->modDeactivating != nullptr) {
+            module->modDeactivating(mod);
+        }
+    }
+}
+
 void modules_mod_detached(LoadedMod& mod) {
     for (const auto* module : s_modules | std::views::reverse) {
         if (module->modDetached != nullptr) {
@@ -213,6 +221,9 @@ void ModLoader::init_services() {
             &svc::g_gfxModule,
             &svc::g_saveModule,
             &svc::g_stageModule,
+            &svc::g_itemModule,
+            &svc::g_flowModule,
+            &svc::g_messageModule,
         })
     {
         svc::register_module(*module);

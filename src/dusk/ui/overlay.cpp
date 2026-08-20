@@ -203,10 +203,19 @@ void remove_element(Rml::Element*& elem) noexcept {
 
 }  // namespace
 
-static std::string FormatTime(OSTime ticks) {
-    OSCalendarTime t;
-    OSTicksToCalendarTime(ticks, &t);
-    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", t.hour, t.min, t.sec, t.msec);
+static std::string FormatElapsedTime(OSTime ticksElapsed) {
+    using namespace std::chrono;
+
+    milliseconds ms{OSTicksToMilliseconds(ticksElapsed)};
+
+    const hours hr = duration_cast<hours>(ms);
+    ms -= hr;
+    const minutes min = duration_cast<minutes>(ms);
+    ms -= min;
+    const seconds sec = duration_cast<seconds>(ms);
+    ms -= sec;
+
+    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", hr.count(), min.count(), sec.count(), ms.count());
 }
 
 Overlay::Overlay() : Document(kDocumentSource, true, DocumentScope::Overlay) {
@@ -317,33 +326,33 @@ void Overlay::update() {
                 mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigY(PAD_1))
             {
                 if (m_speedrunInfo.m_isRunStarted) {
-                    m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
-                    m_speedrunInfo.m_isRunStarted = false;
+                    m_speedrunInfo.stopRun();
                 }
             }
 
-            OSTime elapsedTime = 0;
+            OSTime rtaElapsedTime = 0;
             if (m_speedrunInfo.m_isRunStarted) {
-                elapsedTime = OSGetTime() - m_speedrunInfo.m_startTimestamp;
-            } else if (m_speedrunInfo.m_endTimestamp != 0) {
-                elapsedTime = m_speedrunInfo.m_endTimestamp;
+                rtaElapsedTime = OSGetNativeTime() - m_speedrunInfo.m_rtaStartTimestamp;
+            } else if (m_speedrunInfo.m_rtaTimer != 0) {
+                rtaElapsedTime = m_speedrunInfo.m_rtaTimer;
             }
 
-            if (!m_speedrunInfo.m_isPauseIGT) {
-                m_speedrunInfo.m_igtTimer = elapsedTime - m_speedrunInfo.m_totalLoadTime;
+            if (m_speedrunInfo.m_isRunStarted && !m_speedrunInfo.m_isPauseIGT) {
+                m_speedrunInfo.m_igtTimer = OSGetTime() - m_speedrunInfo.m_igtStartTimestamp -
+                                            m_speedrunInfo.m_totalLoadTime;
             }
 
             mSpeedrunTimer->SetAttribute("open", "");
 
             if (getSettings().game.showSpeedrunRTATimer) {
                 mSpeedrunRta->SetAttribute("open", "");
-                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatTime(elapsedTime))));
+                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatElapsedTime(rtaElapsedTime))));
             } else {
                 mSpeedrunRta->RemoveAttribute("open");
             }
 
             mSpeedrunIgt->SetInnerRML(
-                escape(fmt::format("IGT  {}", FormatTime(m_speedrunInfo.m_igtTimer))));
+                escape(fmt::format("IGT  {}", FormatElapsedTime(m_speedrunInfo.m_igtTimer))));
         } else {
             mSpeedrunTimer->RemoveAttribute("open");
         }

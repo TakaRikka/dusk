@@ -170,7 +170,7 @@ void daDitem_c::actionEvent() {
 
     if (chkDead()) {
         if (!chkArgFlag(0x1)) {
-            execItemGet(m_itemNo);
+            execItemGet(m_itemNo IF_DUSK_ARG(mItemGiveTag) IF_DUSK_ARG(this));
         }
 
         if (m_itemNo == dItemNo_KAKERA_HEART_e) {

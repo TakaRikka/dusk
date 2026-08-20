@@ -33,6 +33,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 # Folder-based instead of target-based organization
 # in Visual Studio and Xcode generators
@@ -518,6 +519,7 @@ if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR
     add_subdirectory(mods/ao_mod)
     add_subdirectory(mods/shadow_mod)
     add_subdirectory(mods/window_demo)
+    add_subdirectory(mods/flow_demo)
 endif ()
 
 if (APPLE)

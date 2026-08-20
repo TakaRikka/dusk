@@ -32,6 +32,7 @@ int daObjZCloth_c::Create() {
 int daObjZCloth_c::create() {
     fopAcM_ct(this, daObjZCloth_c);
     m_itemNo = 0x31;
+    DUSK_ITEM_CHECK("zora_armor", m_itemNo, this);
     int phase = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
     if (phase == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, (heapCallbackFunc)CheckFieldItemCreateHeap, 0x2fb0)) {
