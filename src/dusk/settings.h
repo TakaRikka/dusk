@@ -33,6 +33,7 @@ enum class GameLanguage : u8 {
     French = OS_LANGUAGE_FRENCH,
     Spanish = OS_LANGUAGE_SPANISH,
     Italian = OS_LANGUAGE_ITALIAN,
+    Japanese = 6,
 };
 
 enum class DiscVerificationState : u8 {
@@ -89,7 +90,7 @@ struct ConfigEnumRange<Resampler> {
 template <>
 struct ConfigEnumRange<GameLanguage> {
     static constexpr auto min = GameLanguage::English;
-    static constexpr auto max = GameLanguage::Italian;
+    static constexpr auto max = GameLanguage::Japanese;
 };
 
 template <>
@@ -284,6 +285,8 @@ struct UserSettings {
         ConfigVar<bool> removeQuestMapMarkers;
         ConfigVar<bool> showInputViewer;
         ConfigVar<bool> showInputViewerGyro;
+
+        ConfigVar<std::string> lastSelectedGameModeId;
     } game;
 
     struct {

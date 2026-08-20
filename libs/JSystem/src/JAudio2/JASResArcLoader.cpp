@@ -17,7 +17,7 @@ size_t JASResArcLoader::getResSize(JKRArchive const* i_archiveP, u16 i_resourceI
         return 0;
 	}
 
-    return file->data_size;
+    return DUSK_IF_ELSE(i_archiveP->getFileSize(file), file->data_size);
 }
 
 size_t JASResArcLoader::getResMaxSize(JKRArchive const* i_archiveP) {
@@ -27,9 +27,16 @@ size_t JASResArcLoader::getResMaxSize(JKRArchive const* i_archiveP) {
     for (index = 0; index < fileEntries; index++) {
         JKRArchive::SDIFileEntry* file = i_archiveP->findIdxResource(index);
         if (file) {
+#if TARGET_PC
+            const u32 fileSize = i_archiveP->getFileSize(file);
+            if (maxSize < fileSize) {
+                maxSize = fileSize;
+            }
+#else
             if (maxSize < file->data_size) {
                 maxSize = file->data_size;
             }
+#endif
         }
     }
 

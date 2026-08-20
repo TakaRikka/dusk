@@ -25,6 +25,9 @@ Modal::Modal(Props props) : WindowSmall("modal", "modal-dialog"), mProps(std::mo
 
     auto* actions = append(mDialog, "div");
     actions->SetClass("modal-actions", true);
+    if (props.isVertical) {
+        actions->SetClass("modal-actions-vertical", true);
+    }
 
     for (auto& action : mProps.actions) {
         add_action(std::move(action));
@@ -87,9 +90,11 @@ bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
 
     int direction = 0;
-    if (cmd == NavCommand::Left) {
+    NavCommand prevCommand = mProps.isVertical ? NavCommand::Up : NavCommand::Left;
+    NavCommand nextCommand = mProps.isVertical ? NavCommand::Down : NavCommand::Right;
+    if (cmd == prevCommand) {
         direction = -1;
-    } else if (cmd == NavCommand::Right) {
+    } else if (cmd == nextCommand) {
         direction = 1;
     } else {
         return false;

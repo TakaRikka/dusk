@@ -9,11 +9,15 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_msg_string.h"
-#include "dusk/livesplit.h"
-#include "dusk/imgui/ImGuiConsole.hpp"
-#include "dusk/speedrun.h"
 #include "m_Do/m_Do_controller_pad.h"
+
+#ifdef TARGET_PC
 #include <dusk/autosave.h>
+#include "dusk/game_mode.hpp"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/livesplit.h"
+#include "dusk/speedrun.h"
+#endif
 
 #include "dusk/version.hpp"
 
@@ -83,7 +87,9 @@ void dBrightCheck_c::screenSet() {
     JUT_ASSERT(0, mBrightCheck.Scr != NULL);
     mBrightCheck.Scr->setPriority("zelda_option_check.blo", 0x1100000, mArchive);
 
+    IF_DUSK_BLOCK(dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
     mBrightCheck.Scr->search(MULTI_CHAR('g_abtn_n'))->hide();
+    IF_DUSK_BLOCK_END
 
     #if TARGET_PC
     J2DTextBox* settings_text;
@@ -113,9 +119,11 @@ void dBrightCheck_c::screenSet() {
     J2DTextBox* btna_text[5];
     for (int i = 0; i < 5; i++) {
         #if TARGET_PC
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             btna_text[i] = (J2DTextBox*)mBrightCheck.Scr->search(tv_btnA[i]);
-            mBrightCheck.Scr->search(ftv_btnA[i])->hide();
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mBrightCheck.Scr->search(ftv_btnA[i])->hide();
+            }
         } else {
             btna_text[i] = (J2DTextBox*)mBrightCheck.Scr->search(ftv_btnA[i]);
             mBrightCheck.Scr->search(tv_btnA[i])->hide();
@@ -182,15 +190,6 @@ void dBrightCheck_c::modeMove() {
     if (mDoCPd_c::getTrigA(PAD_1) || mDoCPd_c::getTrigStart(PAD_1)) {
         mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
 #ifdef TARGET_PC
-        if (dusk::getSettings().game.speedrunMode && !dusk::getSettings().game.hideTvSettingsScreen) {
-            // start a new run if a run isn't already in progress
-            if (!dusk::m_speedrunInfo.m_isRunStarted) {
-                dusk::resetForSpeedrunMode();
-                dusk::m_speedrunInfo.startRun();
-                dusk::speedrun::start();
-            }
-        }
-
         toggleAutoSave(true);
 #endif
         mCompleteCheck = true;
@@ -222,7 +221,9 @@ void dBrightCheck_c::brightCheckWide() {
 
     // Confirm A Button
     mBrightCheck.Scr->search(MULTI_CHAR('abtn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mBrightCheck.Scr->search(MULTI_CHAR('gcabtn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+        mBrightCheck.Scr->search(MULTI_CHAR('gcabtn_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    }
 
     // Text
     mBrightCheck.Scr->search(MULTI_CHAR('menu_6n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);

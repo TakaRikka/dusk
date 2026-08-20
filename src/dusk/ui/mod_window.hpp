@@ -59,7 +59,6 @@ public:
     ~ModWindow() override;
 
     void update() override;
-    void force_close() { Document::hide(true); }
 
 private:
     Desc mDesc;

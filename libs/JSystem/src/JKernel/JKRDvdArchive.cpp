@@ -147,6 +147,13 @@ cleanup:
 
 void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
     JUT_ASSERT(428, isMounted());
+
+#if TARGET_PC
+    if (void* data = getOverlayData(fileEntry, returnSize); data != nullptr) {
+        return data;
+    }
+#endif
+
     u32 tempReturnSize;
     if (returnSize == NULL) {
         returnSize = &tempReturnSize;
@@ -181,6 +188,13 @@ void* JKRDvdArchive::fetchResource(SDIFileEntry* fileEntry, u32* returnSize) {
 void* JKRDvdArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry,
                                    u32* returnSize) {
     JUT_ASSERT(504, isMounted());
+
+#if TARGET_PC
+    if (copyOverlayData(buffer, bufferSize, fileEntry, returnSize)) {
+        return buffer;
+    }
+#endif
+
     u32 size = fileEntry->data_size;
     JKRCompression fileCompression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 24));
 
@@ -343,6 +357,12 @@ u32 JKRDvdArchive::getExpandedResSize(const void* resource) const {
     if (!mExpandedSize) {
         return getResSize(resource);
     }
+
+#if TARGET_PC
+    if (u32 size; getOverlayResourceSize(resource, &size)) {
+        return size;
+    }
+#endif
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry) {

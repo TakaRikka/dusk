@@ -20,12 +20,12 @@
 #include "dolphin/gx/GXPixel.h"
 #include "dolphin/gx/GXTransform.h"
 #include "m_Do/m_Do_mtx.h"
-#include "mods/svc/hook.hpp"
 #include "mods/service.hpp"
 #include "mods/svc/camera.h"
 #include "mods/svc/config.h"
 #include "mods/svc/gfx.h"
 #include "mods/svc/hook.h"
+#include "mods/svc/hook.hpp"
 #include "mods/svc/log.h"
 #include "mods/svc/resource.h"
 #include "mods/svc/ui.h"
@@ -69,6 +69,7 @@ GfxStageHookHandle g_frameBeforeHudHook = 0;
 UiWindowHandle g_controlsWindow = 0;
 ResourceBuffer g_shaderSource = RESOURCE_BUFFER_INIT;
 GfxDeviceInfo g_deviceInfo = GFX_DEVICE_INFO_INIT;
+GfxRenderTargetLayout g_sceneTargetLayout = GFX_RENDER_TARGET_LAYOUT_INIT;
 WGPURenderPipeline g_compositePipeline = nullptr;       // multiply blend
 WGPURenderPipeline g_compositeDebugPipeline = nullptr;  // no blend (debug views)
 WGPUBindGroupLayout g_compositeLayout = nullptr;
@@ -399,18 +400,16 @@ bool build_composite_pipeline(
             .srcFactor = WGPUBlendFactor_Zero,
             .dstFactor = WGPUBlendFactor_One},
     };
-    WGPUColorTargetState colorTarget = WGPU_COLOR_TARGET_STATE_INIT;
-    colorTarget.format = g_deviceInfo.color_format;
-    if (blend) {
-        colorTarget.blend = &blendState;
-    }
+    WGPUColorTargetState colorTargets[GFX_MAX_COLOR_ATTACHMENTS];
+    const uint32_t colorTargetCount = gfx_init_color_target_states(
+        &g_sceneTargetLayout, colorTargets, blend ? &blendState : nullptr, WGPUColorWriteMask_All);
     WGPUFragmentState fragment = WGPU_FRAGMENT_STATE_INIT;
     fragment.module = module;
     fragment.entryPoint = {"fs_main", WGPU_STRLEN};
-    fragment.targetCount = 1;
-    fragment.targets = &colorTarget;
+    fragment.targetCount = colorTargetCount;
+    fragment.targets = colorTargets;
     WGPUDepthStencilState depthStencil = WGPU_DEPTH_STENCIL_STATE_INIT;
-    depthStencil.format = g_deviceInfo.depth_format;
+    depthStencil.format = g_sceneTargetLayout.depth_stencil_format;
     depthStencil.depthWriteEnabled = WGPUOptionalBool_False;
     depthStencil.depthCompare = WGPUCompareFunction_Always;
 
@@ -420,7 +419,7 @@ bool build_composite_pipeline(
     pipelineDesc.vertex.entryPoint = {"vs_main", WGPU_STRLEN};
     pipelineDesc.primitive.topology = WGPUPrimitiveTopology_TriangleList;
     pipelineDesc.depthStencil = &depthStencil;
-    pipelineDesc.multisample.count = g_deviceInfo.sample_count;
+    pipelineDesc.multisample.count = g_sceneTargetLayout.sample_count;
     pipelineDesc.fragment = &fragment;
     outPipeline = wgpuDeviceCreateRenderPipeline(g_deviceInfo.device, &pipelineDesc);
     wgpuShaderModuleRelease(module);
@@ -518,7 +517,7 @@ WGPUBindGroup create_composite_bind_group(WGPUDevice device, WGPUBindGroupLayout
 // Render worker thread: fullscreen deferred-shadow composite.
 void on_draw(
     ModContext*, const GfxDrawContext* ctx, const void* payload, size_t payloadSize, void*) {
-    if (payloadSize != sizeof(DrawPayload)) {
+    if (payloadSize != sizeof(DrawPayload) || ctx->layout.key != g_sceneTargetLayout.key) {
         return;
     }
     DrawPayload data;
@@ -1242,6 +1241,9 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
 
     if (svc_gfx->get_device_info(mod_ctx, &g_deviceInfo) != MOD_OK) {
         return mods::set_error(error, MOD_ERROR, "failed to query device info");
+    }
+    if (svc_gfx->get_scene_target_layout(mod_ctx, &g_sceneTargetLayout) != MOD_OK) {
+        return mods::set_error(error, MOD_ERROR, "failed to query scene target layout");
     }
     if (!build_composite_pipeline(true, g_compositePipeline, g_compositeLayout) ||
         !build_composite_pipeline(false, g_compositeDebugPipeline, g_compositeDebugLayout))

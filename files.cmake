@@ -1412,6 +1412,7 @@ set(DOLPHIN_FILES
 
 set(DUSK_FILES
         include/helpers/batch.hpp
+        include/helpers/bits.hpp
         include/helpers/endian_gx.hpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/OSContext.cpp
@@ -1433,6 +1434,7 @@ set(DUSK_FILES
         src/dusk/extras.c
         src/dusk/frame_interpolation.cpp
         src/dusk/game_clock.cpp
+        src/dusk/game_mode.cpp
         src/dusk/gamepad_color.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
@@ -1457,6 +1459,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiStubLog.cpp
         src/dusk/io.cpp
         src/dusk/iso_validate.cpp
+        src/dusk/language.cpp
+        src/dusk/language.hpp
         src/dusk/layout.cpp
         src/dusk/livesplit.cpp
         src/dusk/logging.cpp
@@ -1485,6 +1489,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/config.hpp
         src/dusk/mods/svc/game.cpp
         src/dusk/mods/svc/gfx.cpp
+        src/dusk/mods/svc/flow.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
         src/dusk/mods/svc/item.cpp
@@ -1497,6 +1502,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/texture.cpp
         src/dusk/mods/svc/ui.cpp
         src/dusk/mods/svc/ui.hpp
+        src/dusk/mods/svc/game_mode.cpp
         src/dusk/mods/svc/window.cpp
         src/dusk/mods/svc/window.hpp
         src/dusk/mods/svc/save.cpp

@@ -26,10 +26,18 @@ void init() {
 
     if (game == "GZ2E"sv) {
         gameVersion = GameVersion::GcnUsa;
-    } else if (game == "GZ2P") {
+    } else if (game == "GZ2P"sv) {
         gameVersion = GameVersion::GcnPal;
-    } else if (game == "GZ2J") {
+    } else if (game == "GZ2J"sv) {
         gameVersion = GameVersion::GcnJpn;
+    } else if (game == "RZDE"sv && diskId.gameVersion == 0) {
+        gameVersion = GameVersion::WiiUsaRev0;
+    } else if (game == "RZDE"sv && diskId.gameVersion == 2) {
+        gameVersion = GameVersion::WiiUsa;
+    } else if (game == "RZDP"sv) {
+        gameVersion = GameVersion::WiiPal;
+    } else if (game == "RZDJ"sv) {
+        gameVersion = GameVersion::WiiJpn;
     } else {
         // TODO: Handle remaining valid versions.
         DuskLog.fatal("Unknown/unsupported game version in disc: {}", game);
@@ -52,8 +60,12 @@ bool isWii() {
         || getGameVersion() == GameVersion::WiiKor;
 }
 
+bool isJpnOrLessThanWiiJpn() {
+    return isRegionJpn() || getGameVersion() < GameVersion::WiiJpn;
+}
+
 bool isPalOrAtLeastWiiR2() {
-    return getGameVersion() == GameVersion::GcnPal || getGameVersion() >= GameVersion::WiiUsa;
+    return isRegionPal() || (isWii() && getGameVersion() != GameVersion::WiiUsaRev0);
 }
 
 bool isRegionJpn() {

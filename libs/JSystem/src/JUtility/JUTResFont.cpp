@@ -71,7 +71,7 @@ void JUTResFont::initJoinedTexture() {
     int pageCount = 0;
     u32 pageNumCells = block.numRows * block.numColumns;
 
-    if (dusk::version::getGameVersion() == dusk::version::GameVersion::GcnJpn) {
+    if (dusk::version::isRegionJpn()) {
         pageCount = 1;
         if (pageNumCells > 0 && block.endCode > block.startCode) {
             pageCount = (block.endCode - block.startCode + pageNumCells - 1) / pageNumCells;

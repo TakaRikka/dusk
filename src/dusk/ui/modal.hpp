@@ -20,6 +20,7 @@ public:
         std::function<void(Modal&)> onDismiss;
         Rml::String variant;
         Rml::String icon = "";
+        bool isVertical;
     };
 
     explicit Modal(Props props);

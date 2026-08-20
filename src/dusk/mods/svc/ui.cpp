@@ -29,6 +29,8 @@
 #include <utility>
 #include <vector>
 
+#include "SDL3/SDL_clipboard.h"
+
 namespace dusk::mods::svc::ui_impl {
 namespace {
 
@@ -424,7 +426,6 @@ public:
     }
 
     void close() { pop(); }
-    void force_close() { Document::hide(true); }
 
 private:
     std::function<void()> m_onDestroyed;
@@ -929,7 +930,7 @@ void ui_sync_menu_tabs() {
     }
     s_menuTabsDirty = false;
     if (aurora::rmlui::is_initialized()) {
-        ui::MenuBar::rebuild();
+        ui::MenuBar::refresh_tabs();
     }
 }
 
@@ -1017,14 +1018,14 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Window: {
             auto* window = static_cast<ui::ModWindow*>(slot.document);
             if (window != nullptr) {
-                window->force_close();
+                window->force_hide(true);
             }
             break;
         }
         case UiSlotKind::Dialog: {
             auto* dialog = static_cast<ModDialog*>(slot.document);
             if (dialog != nullptr) {
-                dialog->force_close();
+                dialog->force_hide(true);
             }
             break;
         }
@@ -1035,6 +1036,43 @@ void ui_remove_mod(LoadedMod& mod) {
             break;
         }
     }
+}
+
+ModResult ui_get_clipboard_text(LoadedMod& mod, char* buffer, size_t bufferSize, size_t* outLength) {
+    if (outLength != nullptr) {
+        *outLength = 0;
+    }
+
+    std::string text;
+    if (SDL_HasClipboardText()) {
+        char* textPtr = SDL_GetClipboardText();
+        text = textPtr != nullptr ? textPtr : "";
+        SDL_free(textPtr);
+        if (text.empty()) {
+            return MOD_ERROR;
+        }
+    }
+
+    if (outLength != nullptr) {
+        *outLength = text.size();
+    }
+
+    if (buffer == nullptr) {
+        return MOD_OK;
+    }
+    if (bufferSize < text.size() + 1) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    memcpy(buffer, text.c_str(), text.size() + 1);
+    return MOD_OK;
+}
+
+ModResult ui_set_clipboard_text(LoadedMod& mod, const char* text) {
+    if (!SDL_SetClipboardText(text)) {
+        return MOD_ERROR;
+    }
+    return MOD_OK;
 }
 
 }  // namespace dusk::mods::svc::ui_impl
@@ -1368,6 +1406,23 @@ ModResult ui_dialog_add_action(
     return ui_impl::ui_dialog_add_action(*mod, dialog, *action);
 }
 
+ModResult ui_get_clipboard_text(ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength) {
+    auto* mod = mod_from_context(ctx);
+    if (mod == nullptr || (buffer == nullptr && bufferSize != 0)) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    return ui_impl::ui_get_clipboard_text(*mod, buffer, bufferSize, outLength);
+}
+
+ModResult ui_set_clipboard_text(ModContext* ctx, const char* text) {
+    auto* mod = mod_from_context(ctx);
+    if (mod == nullptr || text == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return ui_impl::ui_set_clipboard_text(*mod, text);
+}
+
 constexpr UiService s_uiService{
     .header = SERVICE_HEADER(UiService, UI_SERVICE_MAJOR, UI_SERVICE_MINOR),
     .register_mods_panel = ui_register_mods_panel,
@@ -1394,6 +1449,8 @@ constexpr UiService s_uiService{
     .register_menu_tab = ui_register_menu_tab,
     .unregister_menu_tab = ui_unregister_menu_tab,
     .push_toast = ui_push_toast,
+    .get_clipboard_text = ui_get_clipboard_text,
+    .set_clipboard_text = ui_set_clipboard_text,
 };
 
 }  // namespace
