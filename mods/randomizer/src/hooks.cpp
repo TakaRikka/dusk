@@ -181,7 +181,14 @@ DEFINE_HOOK(&daObjZraRock_c::create, daObjZraRock_c__create);
 // DEFINE_HOOK_SYMBOL(phase_1_dScnPly_sig, int(dScnPly_c*), phase_1__dScnPly_c);
 
 DEFINE_HOOK(&dMenu_Ring_c::textScaleHIO, dMenu_Ring_c__textScaleHIO);
-DEFINE_HOOK_SYMBOL("dMenu_Ring_c::~dMenu_Ring_c", void(dMenu_Ring_c*), dMenu_Ring_c__destructor);
+
+#ifdef _MSVC_LANG
+#define dMenu_Ring_c__destructor_sig "??1dMenu_Ring_c@@UEAA@XZ"
+#else
+#define dMenu_Ring_c__destructor_sig "_ZN12dMenu_Ring_cD1Ev"
+#endif
+DEFINE_HOOK_SYMBOL(dMenu_Ring_c__destructor_sig, void(dMenu_Ring_c*), dMenu_Ring_c__destructor);
+
 DEFINE_HOOK(&dMenu_Ring_c::setActiveCursor, dMenu_Ring_c__setActiveCursor);
 DEFINE_HOOK(&dMenu_Ring_c::getItemMaxNum, dMenu_Ring_c__getItemMaxNum);
 DEFINE_HOOK(&dMenu_Ring_c::getItemNum, dMenu_Ring_c__getItemNum);
