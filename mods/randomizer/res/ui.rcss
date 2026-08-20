@@ -1,5 +1,4 @@
 .excluded-locations-pane-right {
-    overflow: hidden;
     padding: 0dp;
     gap: 0dp;
 }
@@ -60,10 +59,12 @@
     border-top: 1dp #92875B;
 }
 
-.excluded-locations-pane-right {
-    padding-left: 5dp;
+.excluded-locations-inner-pane-right {
     gap: 8dp;
-    overflow-y: hidden;
     font-size: 20dp;
     border-top: 1dp #92875B;
+}
+
+.excluded-locations-inner-pane-right > span {
+    padding-left: 10dp;
 }

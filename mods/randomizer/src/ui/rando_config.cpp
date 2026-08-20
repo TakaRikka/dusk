@@ -1,6 +1,7 @@
 #include "rando_config.hpp"
 
 #include <mods/svc/log.hpp>
+#include <mods/svc/ui.hpp>
 
 #include "../session.hpp"
 #include "../tools.h"
@@ -324,7 +325,6 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
     }
 
     add_section(leftPane, "Permalink");
-
     {
         std::string help_rml = "Copy your current settings permalink to share with others.<br/>";
         help_rml += fmt::format(
@@ -334,15 +334,38 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
             "Copy Permalink",
             help_rml.c_str(),
             [](ModContext*, void*) {
-                // TODO: need SDL clipboard access
+                mods::ui::set_clipboard_text(GetRandomizerConfig().GetPermalink().data());
+
+                UiToastDesc desc = UI_TOAST_DESC_INIT;
+                desc.title_rml = "Randomizer";
+                desc.body_rml = "Permalink Copied";
+                desc.duration_ms = 3000;
+                session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
             });
     }
-
     add_button(leftPane,
         "Paste Permalink",
         "Paste in a permalink from your clipboard. This will overwrite your current settings.",
         [](ModContext*, void*) {
-            // TODO: need SDL clipboard access
+            std::string text;
+            ModResult rt = mods::ui::get_clipboard_text(text);
+            if (rt != MOD_OK) {
+                return;
+            }
+
+            auto result = GetRandomizerConfig().LoadFromPermalink(text);
+            if (result.has_value()) {
+                mods::log::error("Failed to load permalink: {}", result.value());
+                return;
+            }
+
+            SaveRandomizerConfig();
+
+            UiToastDesc desc = UI_TOAST_DESC_INIT;
+            desc.title_rml = "Randomizer";
+            desc.body_rml = "Applied Permalink";
+            desc.duration_ms = 3000;
+            session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
         });
 
     add_section(leftPane, "Presets");
@@ -821,7 +844,7 @@ ModResult buildExcludedLocationsTab(ModContext* ctx, UiWindowHandle, UiElementHa
     svc_mng.ui->elem_set_class(mod_ctx, exlocSubHeaderElem, "excluded-locations-subheader", true);
 
     svc_mng.ui->pane_add_rml(mod_ctx, rightPane, "", &exlocRightPaneElem);
-    svc_mng.ui->elem_set_class(mod_ctx, exlocRightPaneElem, "excluded-locations-pane-right", true);
+    svc_mng.ui->elem_set_class(mod_ctx, exlocRightPaneElem, "excluded-locations-inner-pane-right", true);
     return MOD_OK;
 }
 
@@ -830,7 +853,7 @@ ModResult updateExcludedLocationsTab(ModContext* ctx, void*, ModError*) {
     std::string rml = "";
 
     for (const auto& location : GetRandomizerConfig().GetSettings().GetExcludedLocations()) {
-        rml += fmt::format("• {}<br/>", location);
+        rml += fmt::format("<span>• {}</span><br/>", location);
     }
 
     svc_mng.ui->elem_set_rml(svc_mng.mod_ctx, exlocRightPaneElem, rml.c_str());

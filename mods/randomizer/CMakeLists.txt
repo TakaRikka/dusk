@@ -126,6 +126,7 @@ target_link_libraries(randomizer PRIVATE yaml-cpp::yaml-cpp base64pp randomizer_
 
 string(LENGTH "${CMAKE_CURRENT_SOURCE_DIR}/" RANDOMIZER_SOURCE_PATH_SIZE)
 target_compile_definitions(randomizer PRIVATE
+        RANDOMIZER_VERSION="1.0.0"
         RANDO_DATA_PATH="generator/data/"
         SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
 )
@@ -134,6 +135,7 @@ target_compile_definitions(randomizer PRIVATE
 add_executable(randomizer_generator ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator_only.cpp ${RANDOMIZER_GENERATOR_SOURCES})
 target_link_libraries(randomizer_generator PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
 target_compile_definitions(randomizer_generator PRIVATE
+        RANDOMIZER_VERSION="1.0.0"
         RANDO_DATA_PATH="generator/data/"
         SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
         RANDO_SAVE_PATH="${CMAKE_BINARY_DIR}/randomizer/"
@@ -143,6 +145,7 @@ target_compile_definitions(randomizer_generator PRIVATE
 add_executable(randomizer_generator_tests ${CMAKE_CURRENT_SOURCE_DIR}/generator/test/test.cpp ${RANDOMIZER_GENERATOR_SOURCES})
 target_link_libraries(randomizer_generator_tests PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
 target_compile_definitions(randomizer_generator_tests PRIVATE
+        RANDOMIZER_VERSION="1.0.0"
         RANDO_DATA_PATH="generator/data/"
         SOURCE_PATH_SIZE=${RANDOMIZER_SOURCE_PATH_SIZE}
         RANDO_SAVE_PATH="${CMAKE_BINARY_DIR}/randomizer/"
