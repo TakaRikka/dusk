@@ -1151,6 +1151,7 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
             // set flag to move to name screen after window close
             g_file_select_window_ctx.is_proceed = true;
             session::svc_mng.ui->window_close(session::svc_mng.mod_ctx, *static_cast<UiWindowHandle*>(userdata));
+            mDoAud_seStartMenu(Z2SE_SY_NEW_FILE);
         };
         desc.user_data = &g_file_select_window_ctx.window_handle;
         desc.is_disabled = [](ModContext*, void*) {
