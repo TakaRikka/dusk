@@ -16,11 +16,6 @@
 class dFile_info_c;
 class J2DPicture;
 
-#if TARGET_PC
-
-
-#endif
-
 class dDlst_FileSel_c : public dDlst_base_c {
 public:
     void draw();

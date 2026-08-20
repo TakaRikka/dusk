@@ -29,6 +29,7 @@ add_mod(basic_cosmetics_mod
     SOURCES  src/mod.cpp ${COSMETIC_SOURCES}
     MOD_JSON mod.json
     RES_DIR  res
+    BUNDLE
 )
 
 target_link_libraries(basic_cosmetics_mod PRIVATE xxHash::xxhash)
