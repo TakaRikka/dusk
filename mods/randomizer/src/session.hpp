@@ -12,6 +12,7 @@
 #include "mods/svc/flow.h"
 #include "mods/svc/message.h"
 #include "mods/svc/game_mode.h"
+#include "mods/svc/texture.h"
 
 #include <string>
 
@@ -30,6 +31,7 @@ struct ServiceManager {
     const FlowService* flow;
     const MessageService* message;
     const GameModeService* game_mode;
+    const TextureService* texture;
 };
 
 extern ServiceManager svc_mng;
