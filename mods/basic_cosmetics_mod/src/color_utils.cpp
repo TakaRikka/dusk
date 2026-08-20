@@ -1,7 +1,6 @@
 #include "color_utils.hpp"
 
-uint8_t desaturate_rgb_565(uint16_t rgb565Val)
-{
+uint8_t desaturate_rgb_565(uint16_t rgb565Val) {
     const uint32_t r = (rgb565Val & 0xf800) >> 11;
     const uint32_t g = (rgb565Val & 0x7e0) >> 5;
     const uint32_t b = rgb565Val & 0x1f;
@@ -12,28 +11,23 @@ uint8_t desaturate_rgb_565(uint16_t rgb565Val)
     uint8_t shifted = (combined >> 24) & 0xff;
 
     // Check if should round up shifted value.
-    if (shifted < 0xff && combined & 0x00800000)
-    {
+    if (shifted < 0xff && combined & 0x00800000) {
         shifted += 1;
     }
 
     return shifted;
 }
 
-uint16_t blend_overlay_rgb_565(uint8_t grayVal, GXColor color)
-{
+uint16_t blend_overlay_rgb_565(uint8_t grayVal, GXColor color) {
     uint32_t rTimes255, gTimes255, bTimes255;
 
-    if (grayVal <= 0x7f)
-    {
+    if (grayVal <= 0x7f) {
         const uint32_t grayTimesTwo = 2 * grayVal;
 
         rTimes255 = grayTimesTwo * color.r;
         gTimes255 = grayTimesTwo * color.g;
         bTimes255 = grayTimesTwo * color.b;
-    }
-    else
-    {
+    } else {
         const uint32_t multiplier = 2 * (255 - grayVal);
 
         rTimes255 = 255 * 255 - multiplier * (255 - color.r);
@@ -50,8 +44,7 @@ uint16_t blend_overlay_rgb_565(uint8_t grayVal, GXColor color)
 }
 
 // Helper function to perform overlay blending on a single 8-bit color channel
-uint8_t blend_overlay_channel(uint8_t base, uint8_t blend)
-{
+uint8_t blend_overlay_channel(uint8_t base, uint8_t blend) {
     if (base < 128) {
         return static_cast<uint8_t>((2 * base * blend) / 255);
     }
@@ -60,7 +53,8 @@ uint8_t blend_overlay_channel(uint8_t base, uint8_t blend)
 }
 
 bool is_valid_hex_color_str(std::string_view hexStr) {
-    return hexStr.find_first_not_of("0123456789ABCDEFabcdef") == std::string_view::npos && hexStr.length() == 6;
+    return hexStr.find_first_not_of("0123456789ABCDEFabcdef") == std::string_view::npos &&
+           hexStr.length() == 6;
 }
 
 GXColor hex_color_str_to_gx_color(const std::string& hexColorStr) {

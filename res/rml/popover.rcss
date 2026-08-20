@@ -1,0 +1,184 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+popover {
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    font-family: "Fira Sans";
+    font-size: 14dp;
+    color: #E0DBC8;
+    border-radius: 14dp;
+    border: 2dp #92875B;
+    background-color: rgba(21, 22, 16, 96%);
+    backdrop-filter: blur(5dp);
+    box-shadow: 0 6dp 24dp 2dp rgba(0, 0, 0, 55%);
+    filter: opacity(0);
+    transform: scale(0.95);
+    transform-origin: center;
+    transition: filter transform 0.15s cubic-in-out;
+    focus: auto;
+}
+
+popover[open] {
+    filter: opacity(1);
+    transform: scale(1);
+}
+
+popover.color-picker {
+    width: 280dp;
+    padding: 18dp;
+    gap: 10dp;
+}
+
+color-sv {
+    display: block;
+    position: relative;
+    width: 240dp;
+    height: 150dp;
+    border-radius: 8dp;
+    box-shadow: rgba(146, 135, 91, 50%) 0 0 0 1dp;
+    drag: drag;
+    focus: auto;
+}
+
+color-hue,
+color-alpha {
+    display: block;
+    position: relative;
+    width: 240dp;
+    height: 14dp;
+    border-radius: 7dp;
+    box-shadow: rgba(146, 135, 91, 50%) 0 0 0 1dp;
+    drag: drag;
+    focus: auto;
+}
+
+color-sv:focus-visible,
+color-hue:focus-visible,
+color-alpha:focus-visible {
+    box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+color-sv.adjusting,
+color-hue.adjusting,
+color-alpha.adjusting {
+    box-shadow: #FFFFFF 0 0 0 3dp;
+}
+
+color-hue {
+    decorator: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+}
+
+color-cursor {
+    display: block;
+    position: absolute;
+    width: 14dp;
+    height: 14dp;
+    border-radius: 7dp;
+    border: 2dp #ffffff;
+    box-shadow: 0 0 4dp 1dp rgba(0, 0, 0, 70%);
+    pointer-events: none;
+}
+
+color-heading {
+    display: block;
+    margin-top: 2dp;
+    font-family: "Fira Sans Condensed";
+    font-weight: bold;
+    font-size: 13dp;
+    text-transform: uppercase;
+    color: rgba(224, 219, 200, 55%);
+}
+
+color-presets {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5dp;
+}
+
+color-history {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5dp;
+}
+
+button.color-swatch-button {
+    width: 25dp;
+    height: 25dp;
+    padding: 0;
+    border-radius: 7dp;
+}
+
+color-chip {
+    display: block;
+    flex: 0 0 20dp;
+    width: 20dp;
+    height: 20dp;
+    border-radius: 5dp;
+    box-shadow: rgba(255, 255, 255, 45%) 0 0 0 1dp;
+}
+
+button.color-swatch-button color-chip {
+    width: 25dp;
+    height: 25dp;
+    border-radius: 7dp;
+}
+
+color-chip.empty,
+color-swatch.empty {
+    background-color: rgba(224, 219, 200, 12%);
+    decorator: linear-gradient(135deg, rgba(224, 219, 200, 0) 45%,
+        rgba(194, 164, 45, 70%) 48%, rgba(194, 164, 45, 70%) 52%,
+        rgba(224, 219, 200, 0) 55%);
+}
+
+color-footer {
+    display: flex;
+    align-items: center;
+    gap: 6dp;
+    padding-top: 2dp;
+}
+
+button {
+    background-color: rgba(17, 16, 10, 35%);
+    padding: 4dp 8dp;
+    border-radius: 8dp;
+    box-shadow: rgba(146, 135, 91, 30%) 0 0 0 1dp;
+    color: #E0DBC8;
+    cursor: pointer;
+    focus: auto;
+}
+
+button:hover,
+button:focus-visible {
+    background-color: rgba(204, 184, 119, 20%);
+    box-shadow: #C2A42D 0 0 0 2dp;
+}
+
+button:active {
+    background-color: rgba(204, 184, 119, 40%);
+}
+
+color-value {
+    display: block;
+    flex: 1 1 auto;
+    text-align: right;
+    font-family: "Noto Mono";
+    font-size: 12dp;
+    color: #FFFFFF;
+    cursor: pointer;
+    focus: auto;
+}
+
+color-value:hover,
+color-value:focus-visible {
+    color: #C2A42D;
+}

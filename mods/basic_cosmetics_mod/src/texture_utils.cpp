@@ -5,8 +5,6 @@
 #include "mods/svc/config.h"
 #include "mods/svc/log.hpp"
 
-// Forward declaration needed for J3DModelLoader to be happy
-class J3DVertexData;
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTNameTab.h"
@@ -199,52 +197,58 @@ void recolor_rgb5a3_texture(const TextureReplacementData& replacementData, const
         recolors_rgb444[i] = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
     }
 
-    constexpr int32_t blockWidth = 4;
-    constexpr int32_t blockHeight = 4;
+    const uint8_t mipCount =
+        replacementData.data.mip_count > 0 ? replacementData.data.mip_count : 1;
+    uint32_t mipWidth = replacementData.key.width;
+    uint32_t mipHeight = replacementData.key.height;
+    auto* pixelPtr = reinterpret_cast<BE<uint16_t>*>(newTextureDataOut.data());
 
-    const int32_t roundedWidth = replacementData.key.width + ((blockWidth - (replacementData.key.width % blockWidth)) % blockWidth);
-    const int32_t roundedHeight = replacementData.key.height + ((blockHeight - (replacementData.key.height % blockHeight)) % blockHeight);
+    for (uint8_t mip = 0; mip < mipCount; ++mip) {
+        const uint32_t roundedWidth = (mipWidth + 3) & ~3;
+        const uint32_t roundedHeight = (mipHeight + 3) & ~3;
+        const uint32_t totalPixels = roundedWidth * roundedHeight;
 
-    const int32_t totalPixels = roundedWidth * roundedHeight;
+        for (uint32_t i = 0; i < totalPixels; i++) {
+            const uint16_t rawPixel = pixelPtr[i];
 
-    auto* pixelPtr = newTextureDataOut.data();
+            // MSB determines if pixel is opaque or translucent
+            if (rawPixel & 0x8000) {
+                // Pixel is opaque
+                const uint8_t r5 = (rawPixel >> 10) & 0x1F;
+                const uint8_t g5 = (rawPixel >> 5) & 0x1F;
+                const uint8_t b5 = rawPixel & 0x1F;
 
-    for (int32_t i = 0; i < totalPixels; i++) {
-        const uint16_t rawPixel = pixelPtr[i];
+                // Expand 5-bit to 8-bit
+                const uint8_t r8 = (r5 << 3) | (r5 >> 2);
+                const uint8_t g8 = (g5 << 3) | (g5 >> 2);
+                const uint8_t b8 = (b5 << 3) | (b5 >> 2);
 
-        // MSB determines if pixel is opaque or translucent
-        if (rawPixel & 0x8000) {
-            // Pixel is opaque
-            const uint8_t r5 = (rawPixel >> 10) & 0x1F;
-            const uint8_t g5 = (rawPixel >> 5) & 0x1F;
-            const uint8_t b5 = rawPixel & 0x1F;
+                const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
 
-            // Expand 5-bit to 8-bit
-            const uint8_t r8 = (r5 << 3) | (r5 >> 2);
-            const uint8_t g8 = (g5 << 3) | (g5 >> 2);
-            const uint8_t b8 = (b5 << 3) | (b5 >> 2);
+                pixelPtr[i] = recolors_rgb555[grayVal];
+            } else {
+                // Pixel is translucent
+                const uint16_t alpha3 = rawPixel & 0x7000;
 
-            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
+                const uint8_t r4 = (rawPixel >> 8) & 0x0F;
+                const uint8_t g4 = (rawPixel >> 4) & 0x0F;
+                const uint8_t b4 = rawPixel & 0x0F;
 
-            pixelPtr[i] = recolors_rgb555[grayVal];
-        } else {
-            // Pixel is translucent
-            const uint16_t alpha3 = rawPixel & 0x7000;
+                // Expand 4-bit to 8-bit
+                const uint8_t r8 = (r4 << 4) | r4;
+                const uint8_t g8 = (g4 << 4) | g4;
+                const uint8_t b8 = (b4 << 4) | b4;
 
-            const uint8_t r4 = (rawPixel >> 8) & 0x0F;
-            const uint8_t g4 = (rawPixel >> 4) & 0x0F;
-            const uint8_t b4 = rawPixel & 0x0F;
+                const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
 
-            // Expand 4-bit to 8-bit
-            const uint8_t r8 = (r4 << 4) | r4;
-            const uint8_t g8 = (g4 << 4) | g4;
-            const uint8_t b8 = (b4 << 4) | b4;
-
-            const uint8_t grayVal = static_cast<uint8_t>((r8 * 77 + g8 * 150 + b8 * 29) >> 8);
-
-            // Combine original alpha with recolored RGB444
-            pixelPtr[i] = alpha3 | recolors_rgb444[grayVal];
+                // Combine original alpha with recolored RGB444
+                pixelPtr[i] = alpha3 | recolors_rgb444[grayVal];
+            }
         }
+
+        pixelPtr += totalPixels;
+        mipWidth = std::max(1u, mipWidth >> 1);
+        mipHeight = std::max(1u, mipHeight >> 1);
     }
 }
 
@@ -316,16 +320,25 @@ static void encode_cmpr_sub_block(uint8_t* dst, const uint8_t pixels[16]) {
 }
 
 bool convert_i8_to_cmpr(TextureReplacementData& replacementData, std::vector<u8>& cmprOut) {
-    if (cmprOut.empty() || replacementData.key.width % 8 != 0 || replacementData.key.height % 8 != 0) {
+    if (cmprOut.empty()) {
         return false;
     }
 
     const uint8_t mipCount = (replacementData.data.mip_count > 0) ? replacementData.data.mip_count : 1;
+    const auto expectedInputSize = get_image_data_size(
+        GX_TF_I8, replacementData.key.width, replacementData.key.height, mipCount);
+    if (cmprOut.size() < expectedInputSize) {
+        return false;
+    }
+
+    const auto sourceData = cmprOut;
+    std::vector<u8> convertedData(get_image_data_size(
+        GX_TF_CMPR, replacementData.key.width, replacementData.key.height, mipCount));
     uint32_t mipWidth = replacementData.key.width;
     uint32_t mipHeight = replacementData.key.height;
 
-    const uint8_t* readPtr = cmprOut.data();
-    uint8_t* writePtr = cmprOut.data();
+    const uint8_t* readPtr = sourceData.data();
+    uint8_t* writePtr = convertedData.data();
 
     for (uint8_t mip = 0; mip < mipCount; ++mip) {
         const uint32_t paddedWidthI8 = (mipWidth + 7) & ~7;
@@ -339,29 +352,28 @@ bool convert_i8_to_cmpr(TextureReplacementData& replacementData, std::vector<u8>
 
         for (uint32_t by = 0; by < blocksY_CMPR; ++by) {
             for (uint32_t bx = 0; bx < blocksX_CMPR; ++bx) {
-                const uint32_t topTileIdx = (2 * by) * tilesX_I8 + bx;
-                const uint32_t bottomTileIdx = (2 * by + 1) * tilesX_I8 + bx;
+                uint8_t subBlockPixels[4][16]{};
 
-                const uint8_t* topTileData = readPtr + (topTileIdx * 32);
-                const uint8_t* bottomTileData = readPtr + (bottomTileIdx * 32);
+                for (uint32_t subBlockY = 0; subBlockY < 2; ++subBlockY) {
+                    for (uint32_t subBlockX = 0; subBlockX < 2; ++subBlockX) {
+                        const uint32_t subBlock = subBlockY * 2 + subBlockX;
+                        for (uint32_t row = 0; row < 4; ++row) {
+                            for (uint32_t col = 0; col < 4; ++col) {
+                                const uint32_t x = bx * 8 + subBlockX * 4 + col;
+                                const uint32_t y = by * 8 + subBlockY * 4 + row;
+                                if (x >= mipWidth || y >= mipHeight) {
+                                    continue;
+                                }
 
-                uint8_t subBlockPixels[4][16];
-
-                for (int row = 0; row < 4; ++row) {
-                    for (int col = 0; col < 4; ++col) {
-                        subBlockPixels[0][row * 4 + col] = topTileData[row * 8 + col];
-                        subBlockPixels[1][row * 4 + col] = topTileData[row * 8 + col + 4];
+                                const uint32_t tile = (y / 4) * tilesX_I8 + (x / 8);
+                                const uint32_t tileOffset = (y % 4) * 8 + (x % 8);
+                                subBlockPixels[subBlock][row * 4 + col] =
+                                    readPtr[tile * 32 + tileOffset];
+                            }
+                        }
                     }
                 }
 
-                for (int row = 0; row < 4; ++row) {
-                    for (int col = 0; col < 4; ++col) {
-                        subBlockPixels[2][row * 4 + col] = bottomTileData[row * 8 + col];
-                        subBlockPixels[3][row * 4 + col] = bottomTileData[row * 8 + col + 4];
-                    }
-                }
-
-                // Write 32 bytes of CMPR output into the same buffer
                 for (const auto& subBlockPixel : subBlockPixels) {
                     encode_cmpr_sub_block(writePtr, subBlockPixel);
                     writePtr += 8;
@@ -376,9 +388,7 @@ bool convert_i8_to_cmpr(TextureReplacementData& replacementData, std::vector<u8>
         mipHeight = std::max(1u, mipHeight >> 1);
     }
 
-    // Resize for new CMPR image
-    const size_t finalSize = writePtr - cmprOut.data();
-    cmprOut.resize(finalSize);
+    cmprOut.swap(convertedData);
 
     // Update format
     replacementData.data.gx_format = GX_TF_CMPR;

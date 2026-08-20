@@ -5,7 +5,8 @@
 
 #include <array>
 
-static constexpr std::array<std::array<GXColor, 9>, 10> midnaHairColors = {{
+namespace {
+constexpr std::array<std::array<GXColor, 9>, 10> kMidnaHairColors = {{
     // Default
     {{
         /*l_lNormalKColor*/ /*l_normalKColor*/  /*l_normalColor*/
@@ -71,71 +72,44 @@ static constexpr std::array<std::array<GXColor, 9>, 10> midnaHairColors = {{
     }}
 }};
 
-static struct {
-    GXColorS10 l_normalColor = { 0x50, 0x00, 0x00, 0x00 };
-    GXColor l_normalKColor = { 0xB4, 0x87, 0x00, 0x00 };
-    GXColor l_normalKColor2 = { 0x00, 0xC3, 0xC3, 0x00 };
-    GXColorS10 l_bigColor = { 0xFF, 0x64, 0x78, 0x00 };
-    GXColor l_bigKColor = { 0x1E, 0x00, 0x00, 0x00 };
-    GXColor l_lNormalKColor = { 0xFF, 0xDC, 0x00, 0x00 };
-    GXColor l_lNormalKColor2 = { 0x00, 0xC3, 0xEB, 0x00 };
-    GXColorS10 l_lBigColor = { 0xFF, 0x78, 0x00, 0x00 };
-    GXColor l_lBigKColor2 = { 0xAA, 0xFF, 0xC3, 0x00 };
-} currentMidnaHairColors;
+size_t get_midna_hair_color_index(ConfigVarHandle handle) {
+    const auto optionIndex = get_int_option(handle, 0);
+    if (optionIndex < 0 || optionIndex >= static_cast<int64_t>(kMidnaHairColors.size())) {
+        return 0;
+    }
+    return static_cast<size_t>(optionIndex);
+}
+}
+
+MidnaHairColors g_currentMidnaHairColors = {
+    .normalColor = {0x50, 0x00, 0x00, 0x00},
+    .normalKColor = {0xB4, 0x87, 0x00, 0x00},
+    .normalKColor2 = {0x00, 0xC3, 0xC3, 0x00},
+    .bigColor = {0xFF, 0x64, 0x78, 0x00},
+    .bigKColor = {0x1E, 0x00, 0x00, 0x00},
+    .lNormalKColor = {0xFF, 0xDC, 0x00, 0x00},
+    .lNormalKColor2 = {0x00, 0xC3, 0xEB, 0x00},
+    .lBigColor = {0xFF, 0x78, 0x00, 0x00},
+    .lBigKColor2 = {0xAA, 0xFF, 0xC3, 0x00},
+};
 
 void set_all_midna_hair_colors() {
     auto& g_cvars = get_cvars();
-    auto hairBaseColor = get_int_option(g_cvars.midnaHairBaseColor, 0);
-    auto hairTipsColor = get_int_option(g_cvars.midnaHairTipsColor, 0);
+    auto hairBaseColor = get_midna_hair_color_index(g_cvars.midnaHairBaseColor);
+    auto hairTipsColor = get_midna_hair_color_index(g_cvars.midnaHairTipsColor);
 
     // Colors we have to convert to GXColorS10
-    auto& normalColor = midnaHairColors.at(hairBaseColor)[2];
-    auto& bigColor = midnaHairColors.at(hairBaseColor)[5];
-    auto& lBigColor = midnaHairColors.at(hairBaseColor)[4];
+    auto& normalColor = kMidnaHairColors.at(hairBaseColor)[2];
+    auto& bigColor = kMidnaHairColors.at(hairBaseColor)[5];
+    auto& lBigColor = kMidnaHairColors.at(hairBaseColor)[4];
 
-    currentMidnaHairColors.l_normalColor = GXColorS10{normalColor.r, normalColor.g, normalColor.b};
-    currentMidnaHairColors.l_normalKColor = midnaHairColors.at(hairBaseColor)[1];
-    currentMidnaHairColors.l_normalKColor2 = midnaHairColors.at(hairTipsColor)[7];
-    currentMidnaHairColors.l_bigColor = GXColorS10{bigColor.r, bigColor.g, bigColor.b};
-    currentMidnaHairColors.l_bigKColor = midnaHairColors.at(hairBaseColor)[3];
-    currentMidnaHairColors.l_lNormalKColor = midnaHairColors.at(hairBaseColor)[0];
-    currentMidnaHairColors.l_lNormalKColor2 = midnaHairColors.at(hairTipsColor)[6];
-    currentMidnaHairColors.l_lBigColor = GXColorS10{lBigColor.r, lBigColor.g, lBigColor.b};
-    currentMidnaHairColors.l_lBigKColor2 = midnaHairColors.at(hairTipsColor)[8];
-}
-
-const GXColorS10* get_midna_hair_normalColor() {
-    return &currentMidnaHairColors.l_normalColor;
-}
-
-const GXColor* get_midna_hair_normalKColor() {
-    return &currentMidnaHairColors.l_normalKColor;
-}
-
-const GXColor* get_midna_hair_normalKColor2() {
-    return &currentMidnaHairColors.l_normalKColor2;
-}
-
-const GXColorS10* get_midna_hair_bigColor() {
-    return &currentMidnaHairColors.l_bigColor;
-}
-
-const GXColor* get_midna_hair_bigKColor() {
-    return &currentMidnaHairColors.l_bigKColor;
-}
-
-const GXColor* get_midna_hair_lNormalKColor() {
-    return &currentMidnaHairColors.l_lNormalKColor;
-}
-
-const GXColor* get_midna_hair_lNormalKColor2() {
-    return &currentMidnaHairColors.l_lNormalKColor2;
-}
-
-const GXColorS10* get_midna_hair_lBigColor() {
-    return &currentMidnaHairColors.l_lBigColor;
-}
-
-const GXColor* get_midna_hair_lBigKColor2() {
-    return &currentMidnaHairColors.l_lBigKColor2;
+    g_currentMidnaHairColors.normalColor = GXColorS10{normalColor.r, normalColor.g, normalColor.b};
+    g_currentMidnaHairColors.normalKColor = kMidnaHairColors.at(hairBaseColor)[1];
+    g_currentMidnaHairColors.normalKColor2 = kMidnaHairColors.at(hairTipsColor)[7];
+    g_currentMidnaHairColors.bigColor = GXColorS10{bigColor.r, bigColor.g, bigColor.b};
+    g_currentMidnaHairColors.bigKColor = kMidnaHairColors.at(hairBaseColor)[3];
+    g_currentMidnaHairColors.lNormalKColor = kMidnaHairColors.at(hairBaseColor)[0];
+    g_currentMidnaHairColors.lNormalKColor2 = kMidnaHairColors.at(hairTipsColor)[6];
+    g_currentMidnaHairColors.lBigColor = GXColorS10{lBigColor.r, lBigColor.g, lBigColor.b};
+    g_currentMidnaHairColors.lBigKColor2 = kMidnaHairColors.at(hairTipsColor)[8];
 }

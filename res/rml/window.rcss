@@ -278,6 +278,40 @@ select-button input {
     font-size: 20dp;
 }
 
+select-button.group-button icon {
+    flex: 0 0 24dp;
+    margin-left: auto;
+    width: 24dp;
+    height: 24dp;
+    font-size: 24dp;
+    color: inherit;
+    decorator: text("&#xe5cc;" center center);
+}
+
+select-button.group-button value {
+    display: none;
+}
+
+select-button.color-input value {
+    min-width: 0;
+    font-family: "Noto Mono";
+    font-size: 15dp;
+}
+
+select-button.color-input color-swatch {
+    display: block;
+    flex: 0 0 48dp;
+    width: 48dp;
+    height: 24dp;
+    border-radius: 7dp;
+    box-shadow: rgba(255, 255, 255, 45%) 0 0 0 1dp;
+}
+
+select-button.color-input color-swatch.empty {
+    background-color: rgba(224, 219, 200, 12%);
+    decorator: linear-gradient(135deg, rgba(224, 219, 200, 0) 45%, rgba(194, 164, 45, 70%) 48%, rgba(194, 164, 45, 70%) 52%, rgba(224, 219, 200, 0) 55%);
+}
+
 icon {
     width: 1em;
     height: 1em;

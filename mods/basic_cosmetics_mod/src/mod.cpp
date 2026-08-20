@@ -2,7 +2,6 @@
 #include "color_utils.hpp"
 #include "hooks.hpp"
 #include "midna_hair_color.hpp"
-#include "option_descriptions.hpp"
 #include "texture_utils.hpp"
 
 #include "mods/service.hpp"
@@ -38,7 +37,9 @@ std::string get_str_option(ConfigVarHandle handle, const std::string& fallback) 
     size_t outLength{};
     svc_config->get_string(mod_ctx, handle, NULL, 0, &outLength);
     value.resize(outLength);
-    if (handle == 0 || svc_config->get_string(mod_ctx, handle, value.data(), value.size() + 1, &outLength) != MOD_OK) {
+    if (handle == 0 || svc_config->get_string(
+                           mod_ctx, handle, value.data(), value.size() + 1, &outLength) != MOD_OK)
+    {
         return fallback;
     }
     return value;
@@ -53,35 +54,121 @@ int64_t get_int_option(ConfigVarHandle handle, int64_t fallback) {
 }
 
 // Helper for getting configVar color
-std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow /*= false*/) {
+std::optional<GXColor> get_config_var_color(ConfigVarHandle handle, bool allowRainbow) {
     auto colorStr = get_str_option(handle, "");
-
     // Convert to lowercase
     for (auto& c : colorStr) {
         c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
     }
-
-    if (is_valid_hex_color_str(colorStr) || (colorStr == "rainbow" && allowRainbow)) {
-        if (is_valid_hex_color_str(colorStr)) {
-            return hex_color_str_to_gx_color(colorStr);
-        }
-
-        if (allowRainbow) {
-            // Assume rainbow if not a valid hex str
-            auto color = get_rainbow_rgb(127.5f);
-            color.r /= 2;
-            color.g /= 2;
-            color.b /= 2;
-            return color;
-        }
+    if (colorStr == "rainbow" && allowRainbow) {
+        auto color = get_rainbow_rgb(127.5f);
+        color.r /= 2;
+        color.g /= 2;
+        color.b /= 2;
+        return color;
     }
-
+    if (is_valid_hex_color_str(colorStr)) {
+        return hex_color_str_to_gx_color(colorStr);
+    }
     return std::nullopt;
 }
 
 namespace {
 UiWindowHandle g_cosmeticsWindow = 0;
 bool g_loadedAllBaseTextures = false;
+constexpr uint32_t kTextureLoadRetryFrames = 30;
+uint32_t g_textureLoadRetryCountdown = 0;
+
+constexpr const char* kOverlayPresets[] = {
+    "ab706e",
+    "6382a0",
+    "94749a",
+    "ec8644",
+    "b9ab00",
+    "ec9fc8",
+    "505154",
+    "f8f7f4",
+    "91723e",
+};
+
+constexpr const char* kLightPresets[] = {
+    "ff0000",
+    "f68821",
+    "f6f321",
+    "00ff00",
+    "0000ff",
+    "8000ff",
+    "a0a0a0",
+    "30d0d0",
+};
+
+constexpr const char* kRainbowLightPresets[] = {
+    "rainbow",
+    "ff0000",
+    "f68821",
+    "f6f321",
+    "00ff00",
+    "0000ff",
+    "8000ff",
+    "a0a0a0",
+};
+
+constexpr const char* kAButtonPresets[] = {
+    "ff0000",
+    "ff5000",
+    "ffaf00",
+    "0080ff",
+    "0000ff",
+    "8000ff",
+    "5555ff",
+    "ff20ff",
+};
+
+constexpr const char* kBButtonPresets[] = {
+    "ffff40",
+    "ffa0ff",
+    "00e87b",
+    "00aaff",
+    "6078ff",
+    "000000",
+    "00f3ff",
+};
+
+constexpr const char* kXyButtonPresets[] = {
+    "ff0000",
+    "ff8200",
+    "f7df00",
+    "70ff00",
+    "00bd11",
+    "0000ff",
+    "800088",
+    "000000",
+    "ff00aa",
+    "00ffff",
+};
+
+constexpr const char* kZButtonPresets[] = {
+    "ff0000",
+    "ff8200",
+    "f7df00",
+    "70ff00",
+    "00bd11",
+    "800088",
+    "000000",
+    "00ffff",
+};
+
+constexpr const char* kChargeRingPresets[] = {
+    "ff9f9f",
+    "ff0000",
+    "ffff00",
+    "00ff00",
+    "0000ff",
+    "ff00ff",
+    "331900",
+    "feffff",
+    "000000",
+};
 
 ModResult register_str_option(
     const char* name, const char* defaultValue, ConfigVarHandle& outHandle, ModError* error) {
@@ -114,32 +201,22 @@ void add_control(UiElementHandle pane, const UiControlDesc& desc) {
     }
 }
 
-void add_cosmetic_option(UiElementHandle left, ConfigVarHandle cvar, const char* name, const char* helpRml) {
+template <size_t N>
+void add_cosmetic_option(
+    UiElementHandle pane, ConfigVarHandle cvar, const char* name, const char* const (&presets)[N]) {
     UiControlDesc control = UI_CONTROL_DESC_INIT;
-    control.kind = UI_CONTROL_STRING;
+    control.kind = UI_CONTROL_COLOR;
     control.label = name;
-    control.help_rml = helpRml;
     control.binding = UI_BINDING_CONFIG_VAR;
     control.config_var = cvar;
-    control.max_length = 6;
-    add_control(left, control);
-}
-
-void add_cosmetic_option_with_rainbow(UiElementHandle left, ConfigVarHandle cvar, const char* name, const char* helpRml) {
-    UiControlDesc control = UI_CONTROL_DESC_INIT;
-    control.kind = UI_CONTROL_STRING;
-    control.label = name;
-    control.help_rml = helpRml;
-    control.binding = UI_BINDING_CONFIG_VAR;
-    control.config_var = cvar;
-    control.max_length = 7;
-    add_control(left, control);
+    control.color_presets = presets;
+    control.color_preset_count = N;
+    add_control(pane, control);
 }
 
 void add_midna_hair_option(UiElementHandle left, ConfigVarHandle cvar, const std::string& name) {
     static const char* kMidnaHairOptions[] = {
-        "Default", "Pink", "Red", "Yellow", "Green", "Blue", "Purple", "Brown", "White", "Black"
-    };
+        "Default", "Pink", "Red", "Yellow", "Green", "Blue", "Purple", "Brown", "White", "Black"};
     UiControlDesc control = UI_CONTROL_DESC_INIT;
     control.kind = UI_CONTROL_SELECT;
     control.label = name.c_str();
@@ -151,56 +228,120 @@ void add_midna_hair_option(UiElementHandle left, ConfigVarHandle cvar, const std
     add_control(left, control);
 }
 
+void add_group(
+    UiElementHandle groups, UiElementHandle colors, const char* label, UiGroupBuildFn build) {
+    UiGroupDesc group = UI_GROUP_DESC_INIT;
+    group.label = label;
+    group.build = build;
+    const auto result = svc_ui->pane_add_group(mod_ctx, groups, colors, &group, nullptr);
+    if (result != MOD_OK) {
+        mods::log::debug("pane_add_group failed {}", static_cast<int>(result));
+    }
+}
+
+ModResult build_hero_tunic_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Hero's Tunic");
+    add_cosmetic_option(pane, g_cvars.herosTunicCapColor, "Cap", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.herosTunicTorsoColor, "Body", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.herosTunicSkirtColor, "Skirt", kOverlayPresets);
+    return MOD_OK;
+}
+
+ModResult build_zora_armor_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Zora Armor");
+    add_cosmetic_option(pane, g_cvars.zoraArmorCapColor, "Cap", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.zoraArmorHelmetColor, "Helmet", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.zoraArmorTorsoColor, "Torso", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.zoraArmorScalesColor, "Scales", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.zoraArmorFlippersColor, "Flippers", kOverlayPresets);
+    return MOD_OK;
+}
+
+ModResult build_sword_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Swords");
+    add_cosmetic_option(pane, g_cvars.woodenSwordColor, "Wooden Sword", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.ordonSwordBladeColor, "Ordon Blade", kLightPresets);
+    add_cosmetic_option(pane, g_cvars.ordonSwordHandleColor, "Ordon Handle", kLightPresets);
+    add_cosmetic_option(pane, g_cvars.msBladeColor, "Master Sword Blade", kLightPresets);
+    add_cosmetic_option(pane, g_cvars.msHandleColor, "Master Sword Handle", kLightPresets);
+    add_cosmetic_option(
+        pane, g_cvars.lightSwordGlowColor, "Light Sword Glow", kRainbowLightPresets);
+    return MOD_OK;
+}
+
+ModResult build_equipment_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Equipment");
+    add_cosmetic_option(pane, g_cvars.lanternGlowColor, "Lantern Glow", kRainbowLightPresets);
+    add_cosmetic_option(pane, g_cvars.boomerangColor, "Gale Boomerang", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.ironBootsColor, "Iron Boots", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.spinnerColor, "Spinner", kOverlayPresets);
+    return MOD_OK;
+}
+
+ModResult build_button_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Buttons");
+    add_cosmetic_option(pane, g_cvars.aButtonColor, "A Button", kAButtonPresets);
+    add_cosmetic_option(pane, g_cvars.bButtonColor, "B Button", kBButtonPresets);
+    add_cosmetic_option(pane, g_cvars.xButtonColor, "X Button", kXyButtonPresets);
+    add_cosmetic_option(pane, g_cvars.yButtonColor, "Y Button", kXyButtonPresets);
+    add_cosmetic_option(pane, g_cvars.zButtonColor, "Z Button", kZButtonPresets);
+    return MOD_OK;
+}
+
+ModResult build_hud_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "HUD");
+    add_cosmetic_option(pane, g_cvars.heartColor, "Hearts", kBButtonPresets);
+    return MOD_OK;
+}
+
+ModResult build_link_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Link");
+    add_cosmetic_option(pane, g_cvars.linkHairColor, "Hair", kOverlayPresets);
+    return MOD_OK;
+}
+
+ModResult build_midna_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Midna");
+    add_cosmetic_option(pane, g_cvars.midnaChargeRingColor, "Charge Ring", kChargeRingPresets);
+    return MOD_OK;
+}
+
+ModResult build_companion_colors(ModContext*, UiElementHandle pane, void*, ModError*) {
+    svc_ui->pane_add_section(mod_ctx, pane, "Companions");
+    add_cosmetic_option(pane, g_cvars.wolfLinkColor, "Wolf Link", kOverlayPresets);
+    add_cosmetic_option(pane, g_cvars.eponaColor, "Epona", kOverlayPresets);
+    return MOD_OK;
+}
+
 ModResult build_equipment_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
-    (void)right;
-
-    add_cosmetic_option(left, g_cvars.herosTunicCapColor, "Hero's Tunic Cap Color", kLinksCapColorsExplanation);
-    add_cosmetic_option(left, g_cvars.herosTunicTorsoColor, "Hero's Tunic Body Color", kLinksShirtColorsExplanation);
-    add_cosmetic_option(left, g_cvars.herosTunicSkirtColor, "Hero's Tunic Skirt Color", kLinksSkirtColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorCapColor, "Zora Armor Cap Color", kZoraCapColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorHelmetColor, "Zora Armor Helmet Color", kZoraHelmetColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorTorsoColor, "Zora Armor Torso Color", kZoraTorsoColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorScalesColor, "Zora Armor Scales Color", kZoraScalesColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zoraArmorFlippersColor, "Zora Armor Flippers Color", kZoraFlippersColorsExplanation);
-    add_cosmetic_option_with_rainbow(left, g_cvars.lanternGlowColor, "Lantern Glow Color", kLanternGlowColorsExplanation);
-    add_cosmetic_option(left, g_cvars.woodenSwordColor, "Wooden Sword Color", kWoodenSwordColorsExplanation);
-    add_cosmetic_option(left, g_cvars.ordonSwordBladeColor, "Ordon Sword Blade Color", kOrdonBladeColorsExplanation);
-    add_cosmetic_option(left, g_cvars.ordonSwordHandleColor, "Ordon Sword Handle Color", kOrdonHandleColorsExplanation);
-    add_cosmetic_option(left, g_cvars.msBladeColor, "Master Sword Blade Color", kMSBladeColorsExplanation);
-    add_cosmetic_option(left, g_cvars.msHandleColor, "Master Sword Handle Color", kMSHandleColorsExplanation);
-    add_cosmetic_option_with_rainbow(left, g_cvars.lightSwordGlowColor, "Light Sword Glow Color", kSwordGlowColorsExplanation);
-    add_cosmetic_option(left, g_cvars.boomerangColor, "Boomerang Color", kBoomerangColorsExplanation);
-    add_cosmetic_option(left, g_cvars.ironBootsColor, "Iron Boots Color", kIronBootsColorsExplanation);
-    add_cosmetic_option(left, g_cvars.spinnerColor, "Spinner Color", kSpinnerColorsExplanation);
+    svc_ui->pane_add_section(mod_ctx, left, "Color Groups");
+    add_group(left, right, "Hero's Tunic", build_hero_tunic_colors);
+    add_group(left, right, "Zora Armor", build_zora_armor_colors);
+    add_group(left, right, "Swords", build_sword_colors);
+    add_group(left, right, "Equipment", build_equipment_colors);
 
     return MOD_OK;
 }
 
 ModResult build_ui_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
-    (void)right;
-
-    add_cosmetic_option(left, g_cvars.aButtonColor, "A Button Color", kAButtonColorsExplanation);
-    add_cosmetic_option(left, g_cvars.bButtonColor, "B Button Color", kBButtonColorsExplanation);
-    add_cosmetic_option(left, g_cvars.xButtonColor, "X Button Color", kXButtonColorsExplanation);
-    add_cosmetic_option(left, g_cvars.yButtonColor, "Y Button Color", kYButtonColorsExplanation);
-    add_cosmetic_option(left, g_cvars.zButtonColor, "Z Button Color", kZButtonColorsExplanation);
-    add_cosmetic_option(left, g_cvars.heartColor, "Heart Color", kHeartColorsExplanation);
+    svc_ui->pane_add_section(mod_ctx, left, "Color Groups");
+    add_group(left, right, "Buttons", build_button_colors);
+    add_group(left, right, "HUD", build_hud_colors);
 
     return MOD_OK;
 }
 
 ModResult build_misc_colors_tab(
     ModContext*, UiWindowHandle, UiElementHandle left, UiElementHandle right, void*, ModError*) {
-    (void)right;
-
+    svc_ui->pane_add_section(mod_ctx, left, "Hair Presets");
     add_midna_hair_option(left, g_cvars.midnaHairBaseColor, "Midna's Hair Base Color");
     add_midna_hair_option(left, g_cvars.midnaHairTipsColor, "Midna's Hair Tips Color");
-    add_cosmetic_option(left, g_cvars.midnaChargeRingColor, "Midna Charge Ring Color", kChargeRingColorsExplanation);
-    add_cosmetic_option(left, g_cvars.linkHairColor, "Link's Hair Color", kLinksHairColorsExplanation);
-    add_cosmetic_option(left, g_cvars.wolfLinkColor, "Wolf Link Color", kWolfLinkColorsExplanation);
-    add_cosmetic_option(left, g_cvars.eponaColor, "Epona Color", kEponaColorsExplanation);
+    svc_ui->pane_add_section(mod_ctx, left, "Color Groups");
+    add_group(left, right, "Link", build_link_colors);
+    add_group(left, right, "Midna", build_midna_colors);
+    add_group(left, right, "Companions", build_companion_colors);
 
     return MOD_OK;
 }
@@ -214,11 +355,11 @@ void on_open_cosmetics_menu(ModContext*, void*) {
         return;
     }
     UiTabDesc tabs[] = {UI_TAB_DESC_INIT, UI_TAB_DESC_INIT, UI_TAB_DESC_INIT};
-    tabs[0].title = "Equipment Colors";
+    tabs[0].title = "Equipment";
     tabs[0].build = build_equipment_colors_tab;
-    tabs[1].title = "UI Colors";
+    tabs[1].title = "Interface";
     tabs[1].build = build_ui_colors_tab;
-    tabs[2].title = "Misc Colors";
+    tabs[2].title = "Characters";
     tabs[2].build = build_misc_colors_tab;
     UiWindowDesc desc = UI_WINDOW_DESC_INIT;
     desc.tabs = tabs;
@@ -231,16 +372,15 @@ void on_open_cosmetics_menu(ModContext*, void*) {
 
 ModResult build_panel(ModContext*, UiElementHandle panel, void*, ModError*) {
     UiControlDesc control = UI_CONTROL_DESC_INIT;
-    control.kind = UI_CONTROL_BUTTON;
+    control.kind = UI_CONTROL_GROUP;
     control.label = "Open Cosmetics Menu";
     control.on_pressed = on_open_cosmetics_menu;
     add_control(panel, control);
     return MOD_OK;
 }
-}
+}  // namespace
 
 void load_base_texture_data() {
-
     // Go through each texture we can recolor and attempt to load and store
     // the texture data for future recoloring
     for (auto& replacements : get_texture_replacements() | std::views::values) {
@@ -250,8 +390,15 @@ void load_base_texture_data() {
                 continue;
             }
 
+            // Avoid noisy resource lookups until the archive has finished loading.
+            auto* resInfo = dComIfG_getObjectResInfo(replacement.arc);
+            if (resInfo == nullptr || resInfo->getArchive() == nullptr) {
+                continue;
+            }
+
             // Try to get the model this texture is part of. If we can't get it, try again later
-            auto model = static_cast<J3DModelData*>(dComIfG_getObjectRes(replacement.arc, replacement.modelFileName));
+            auto model = static_cast<J3DModelData*>(
+                dComIfG_getObjectRes(replacement.arc, replacement.modelFileName));
             if (model == nullptr) {
                 continue;
             }
@@ -262,9 +409,8 @@ void load_base_texture_data() {
                 for (u16 i = 0; i < tex->getNum(); i++) {
                     const char* texName = nametable->getName(i);
                     if (texName != nullptr && std::strcmp(texName, replacement.textureName) == 0) {
-
-                        // Once we've found the texture, set all our TextureKey and TextureData fields
-                        // that we can set right now.
+                        // Once we've found the texture, set all our TextureKey and TextureData
+                        // fields that we can set right now.
                         auto imageHeader = tex->getResTIMG(i);
                         auto& key = replacement.key;
                         auto& data = replacement.data;
@@ -278,21 +424,30 @@ void load_base_texture_data() {
                         key.tlut_hash = replacement.tlutHash;
 
                         // Calculate the size of the image data
-                        auto size = get_image_data_size(imageHeader->format, imageHeader->width,
-                            imageHeader->height, imageHeader->mipmapEnabled ? imageHeader->mipmapCount : 1);
+                        const uint32_t mipCount =
+                            imageHeader->mipmapEnabled ?
+                                std::max<uint32_t>(imageHeader->mipmapCount, 1) :
+                                1;
+                        auto size = get_image_data_size(
+                            imageHeader->format, imageHeader->width, imageHeader->height, mipCount);
                         replacement.baseTextureData.resize(size);
-                        std::memcpy(replacement.baseTextureData.data(), tex->getImgDataPtr(i), size);
+                        std::memcpy(
+                            replacement.baseTextureData.data(), tex->getImgDataPtr(i), size);
 
-                        // Calculate the texture hash
-                        auto textureHash = XXH64(replacement.baseTextureData.data(), size, 0);
+                        // Source texture keys hash only the base mip level.
+                        const auto baseMipSize = get_image_data_size(
+                            imageHeader->format, imageHeader->width, imageHeader->height, 1);
+                        auto textureHash =
+                            XXH64(replacement.baseTextureData.data(), baseMipSize, 0);
                         replacement.key.texture_hash = textureHash;
 
-                        mods::log::debug("Loaded base texture data for {}. size: {:X} hash: {:X}", replacement.textureName, size, textureHash);
+                        mods::log::debug("Loaded base texture data for {}. size: {:X} hash: {:X}",
+                            replacement.textureName, size, textureHash);
                         replacement.loadedTextureData = true;
 
                         data.width = imageHeader->width;
                         data.height = imageHeader->height;
-                        data.mip_count = imageHeader->mipmapCount;
+                        data.mip_count = mipCount;
                         data.size = size;
                         data.gx_format = imageHeader->format;
 
@@ -303,12 +458,15 @@ void load_base_texture_data() {
         }
     }
 
-    // If we've loaded all base textures for recoloring, then we don't need to call this function again
-    g_loadedAllBaseTextures = std::ranges::all_of(get_texture_replacements() | std::views::values, [](auto& replacementList) {
-        return std::ranges::all_of(replacementList, [](const TextureReplacementData& replacement) {
-            return replacement.loadedTextureData;
+    // If we've loaded all base textures for recoloring, then we don't need to call this function
+    // again
+    g_loadedAllBaseTextures = std::ranges::all_of(
+        get_texture_replacements() | std::views::values, [](auto& replacementList) {
+            return std::ranges::all_of(
+                replacementList, [](const TextureReplacementData& replacement) {
+                    return replacement.loadedTextureData;
+                });
         });
-    });
 }
 
 ModResult check_and_set_recolored_textures() {
@@ -318,9 +476,20 @@ ModResult check_and_set_recolored_textures() {
             continue;
         }
 
-        // If we don't have a valid color, don't continue either
         auto maybeColor = get_config_var_color(configVar);
         if (!maybeColor.has_value()) {
+            // An empty or invalid option means the original texture should be restored.
+            for (auto& replacement : replacements) {
+                if (replacement.handle != 0) {
+                    auto result = svc_texture->unregister(mod_ctx, replacement.handle);
+                    if (result != MOD_OK) {
+                        mods::log::debug("Could not unregister replacement for {}. Result: {}",
+                            replacement.textureName, static_cast<int>(result));
+                    }
+                    replacement.handle = 0;
+                }
+                replacement.curColor.reset();
+            }
             continue;
         }
 
@@ -333,25 +502,40 @@ ModResult check_and_set_recolored_textures() {
 
             // If our color hasn't changed, don't try to recolor
             auto& curColor = replacement.curColor;
-            if (curColor == std::nullopt ||
-                curColor.value().r != color.r || curColor.value().g != color.g || curColor.value().b != color.b)
+            if (curColor == std::nullopt || curColor.value().r != color.r ||
+                curColor.value().g != color.g || curColor.value().b != color.b)
             {
                 // Make a copy of the base texture data to recolor
                 auto newTexture = replacement.baseTextureData;
                 recolor_texture(replacement, color, newTexture);
 
-                replacement.data.data = newTexture.data();
-                replacement.data.size = newTexture.size();
+                TextureData newTextureData = replacement.data;
+                newTextureData.data = newTexture.data();
+                newTextureData.size = newTexture.size();
 
-                // Register the new data
-                auto result = svc_texture->register_data(mod_ctx, &replacement.key, &replacement.data, &replacement.handle);
+                // Keep the current replacement active if registering the new one fails.
+                TextureReplacementHandle newHandle{};
+                auto result = svc_texture->register_data(
+                    mod_ctx, &replacement.key, &newTextureData, &newHandle);
                 if (result != MOD_OK) {
-                    mods::log::debug("Could not register_data for {}. Result: {}", replacement.textureName, static_cast<int>(result));
+                    mods::log::debug("Could not register_data for {}. Result: {}",
+                        replacement.textureName, static_cast<int>(result));
                 } else {
-                    mods::log::debug("Registered replacement for {}.", replacement.textureName, static_cast<int>(result));
-                }
+                    mods::log::debug("Registered replacement for {}.", replacement.textureName,
+                        static_cast<int>(result));
+                    auto oldHandle = replacement.handle;
+                    replacement.handle = newHandle;
+                    curColor = color;
 
-                curColor = color;
+                    if (oldHandle != 0) {
+                        result = svc_texture->unregister(mod_ctx, oldHandle);
+                        if (result != MOD_OK) {
+                            mods::log::debug(
+                                "Could not unregister previous replacement for {}. Result: {}",
+                                replacement.textureName, static_cast<int>(result));
+                        }
+                    }
+                }
             }
         }
     }
@@ -364,16 +548,18 @@ void unregister_all_texture_handles() {
         for (auto& replacement : replacements) {
             if (replacement.handle != 0) {
                 svc_texture->unregister(mod_ctx, replacement.handle);
+                replacement.handle = 0;
             }
+            replacement.curColor.reset();
         }
     }
 }
 
-#define REGISTER_COSMETIC_OPTION(option) \
-    result = register_str_option(#option, NULL, g_cvars.option, error); \
-    if (result != MOD_OK) { \
-        return result; \
-    } \
+#define REGISTER_COSMETIC_OPTION(option)                                                           \
+    result = register_str_option(#option, NULL, g_cvars.option, error);                            \
+    if (result != MOD_OK) {                                                                        \
+        return result;                                                                             \
+    }
 
 extern "C" {
 MOD_EXPORT ModResult mod_initialize(ModError* error) {
@@ -432,6 +618,7 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
     }
 
     g_loadedAllBaseTextures = false;
+    g_textureLoadRetryCountdown = 0;
     return MOD_OK;
 }
 
@@ -440,7 +627,12 @@ MOD_EXPORT ModResult mod_update(ModError*) {
     set_all_midna_hair_colors();
 
     if (!g_loadedAllBaseTextures) {
-        load_base_texture_data();
+        if (g_textureLoadRetryCountdown == 0) {
+            load_base_texture_data();
+            g_textureLoadRetryCountdown = kTextureLoadRetryFrames;
+        } else {
+            --g_textureLoadRetryCountdown;
+        }
     }
 
     check_and_set_recolored_textures();
@@ -454,7 +646,8 @@ MOD_EXPORT ModResult mod_shutdown(ModError*) {
     remove_all_hooks();
     unregister_all_texture_handles();
     get_texture_replacements().clear();
+    g_loadedAllBaseTextures = false;
+    g_textureLoadRetryCountdown = 0;
     return MOD_OK;
 }
-
 }

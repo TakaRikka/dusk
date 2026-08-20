@@ -1,13 +1,14 @@
 #include "hooks.hpp"
 
-#include "mod.hpp"
 #include "color_utils.hpp"
 #include "midna_hair_color.hpp"
+#include "mod.hpp"
 #include "types.h"
 
 #include "mods/svc/hook.hpp"
 #include "mods/svc/log.hpp"
 
+#include "SSystem/SComponent/c_phase.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_midna.h"
 #include "d/d_a_item_static.h"
@@ -25,16 +26,15 @@
 #include "d/d_menu_ring.h"
 #include "d/d_menu_save.h"
 #include "d/d_menu_skill.h"
-#include "d/d_meter_button.h"
-#include "d/d_meter_hakusha.h"
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
+#include "d/d_meter_button.h"
+#include "d/d_meter_hakusha.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_out_font.h"
 #include "d/d_msg_scrn_base.h"
 #include "d/d_pane_class.h"
-#include "SSystem/SComponent/c_phase.h"
 
 // Lantern ambience color
 DEFINE_HOOK(&dKy_WolfEyeLight_set, WolfEyeLightSet);
@@ -57,7 +57,9 @@ void pre_kandelaar_draw_post(ModContext*, void*, void*, void*) {
     if (maybeLanternColor.has_value()) {
         auto lanternColor = maybeLanternColor.value();
 
-        J3DMaterial* mat_p = daAlink_getAlinkActorClass()->mpKanteraGlowModel->getModelData()->getMaterialNodePointer(0);
+        J3DMaterial* mat_p = daAlink_getAlinkActorClass()
+                                 ->mpKanteraGlowModel->getModelData()
+                                 ->getMaterialNodePointer(0);
 
         J3DGXColorS10 color;
         color.r = lanternColor.r;
@@ -78,7 +80,9 @@ DEFINE_HOOK(&CPaneMgr::setBlackWhite, CPaneMgrSetBlackWhite);
 HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void*, void*) {
     // Check for magic meter
     auto pane = mods::arg<CPaneMgr*>(args, 0);
-    if (dMeter2Info_getMeterClass() == NULL || pane != dMeter2Info_getMeterClass()->getMeterDrawPtr()->mpMagicMeter) {
+    if (dMeter2Info_getMeterClass() == NULL ||
+        pane != dMeter2Info_getMeterClass()->getMeterDrawPtr()->mpMagicMeter)
+    {
         return HOOK_CONTINUE;
     }
 
@@ -86,7 +90,8 @@ HookAction cpane_mgr_set_black_white_pre(ModContext*, void* args, void*, void*) 
     auto& black = mods::arg_ref<JUtility::TColor>(args, 1);
     auto& white = mods::arg_ref<JUtility::TColor>(args, 2);
     if (black != JUtility::TColor(255, 255, 140, 255) &&
-        white != JUtility::TColor(230, 170, 0, 255)) {
+        white != JUtility::TColor(230, 170, 0, 255))
+    {
         return HOOK_CONTINUE;
     }
 
@@ -141,8 +146,8 @@ void recolor_ui_button(ConfigVarHandle option, u64 tag, J2DScreen* screen) {
         auto color = hex_color_str_to_gx_color(buttonColorStr);
         auto element = static_cast<J2DPicture*>(screen->search(tag));
         if (element != nullptr) {
-            element->setBlackWhite(JUtility::TColor(0, 0, 0, 0),
-                JUtility::TColor(color.r, color.g, color.b, 0xFF));
+            element->setBlackWhite(
+                JUtility::TColor(0, 0, 0, 0), JUtility::TColor(color.r, color.g, color.b, 0xFF));
         }
     }
 }
@@ -154,12 +159,13 @@ void d_meter_2_init_post(ModContext*, void* args, void*, void*) {
     auto screen = dMeter2Draw->getMainScreenPtr();
 
     // Heart tags on main UI
-    static constexpr std::array kHeartTags = {
-        MULTI_CHAR('hear_00'), MULTI_CHAR('hear_01'), MULTI_CHAR('hear_02'), MULTI_CHAR('hear_03'), MULTI_CHAR('hear_04'), MULTI_CHAR('hear_05'), MULTI_CHAR('hear_06'),
-        MULTI_CHAR('hear_07'), MULTI_CHAR('hear_08'), MULTI_CHAR('hear_09'), MULTI_CHAR('hear_10'), MULTI_CHAR('hear_11'), MULTI_CHAR('hear_12'), MULTI_CHAR('hear_13'),
-        MULTI_CHAR('hear_14'), MULTI_CHAR('hear_15'), MULTI_CHAR('hear_16'), MULTI_CHAR('hear_17'), MULTI_CHAR('hear_18'), MULTI_CHAR('hear_19'), MULTI_CHAR('bigh_00'),
-        MULTI_CHAR('bigh_01'), MULTI_CHAR('bigh_02'), MULTI_CHAR('bigh_03')
-    };
+    static constexpr std::array kHeartTags = {MULTI_CHAR('hear_00'), MULTI_CHAR('hear_01'),
+        MULTI_CHAR('hear_02'), MULTI_CHAR('hear_03'), MULTI_CHAR('hear_04'), MULTI_CHAR('hear_05'),
+        MULTI_CHAR('hear_06'), MULTI_CHAR('hear_07'), MULTI_CHAR('hear_08'), MULTI_CHAR('hear_09'),
+        MULTI_CHAR('hear_10'), MULTI_CHAR('hear_11'), MULTI_CHAR('hear_12'), MULTI_CHAR('hear_13'),
+        MULTI_CHAR('hear_14'), MULTI_CHAR('hear_15'), MULTI_CHAR('hear_16'), MULTI_CHAR('hear_17'),
+        MULTI_CHAR('hear_18'), MULTI_CHAR('hear_19'), MULTI_CHAR('bigh_00'), MULTI_CHAR('bigh_01'),
+        MULTI_CHAR('bigh_02'), MULTI_CHAR('bigh_03')};
 
     auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
     if (maybeHeartColor.has_value()) {
@@ -185,10 +191,27 @@ void file_info_set_heart_count_post(ModContext*, void* args, void*, void*) {
     auto fileInfo = mods::arg<dFile_info_c*>(args, 0);
 
     // Heart tags on file select
-    static constexpr std::array kFileSelectHeartTags {
-        MULTI_CHAR('hear_20'), MULTI_CHAR('hear_21'), MULTI_CHAR('hear_22'), MULTI_CHAR('hear_23'), MULTI_CHAR('hear_24'), MULTI_CHAR('hear_25'), MULTI_CHAR('hear_26'),
-        MULTI_CHAR('hear_27'), MULTI_CHAR('hear_28'), MULTI_CHAR('hear_29'), MULTI_CHAR('hear_30'), MULTI_CHAR('hear_31'), MULTI_CHAR('hear_32'), MULTI_CHAR('hear_33'),
-        MULTI_CHAR('hear_34'), MULTI_CHAR('hear_35'), MULTI_CHAR('hear_36'), MULTI_CHAR('hear_37'), MULTI_CHAR('hear_38'), MULTI_CHAR('hear_39'),
+    static constexpr std::array kFileSelectHeartTags{
+        MULTI_CHAR('hear_20'),
+        MULTI_CHAR('hear_21'),
+        MULTI_CHAR('hear_22'),
+        MULTI_CHAR('hear_23'),
+        MULTI_CHAR('hear_24'),
+        MULTI_CHAR('hear_25'),
+        MULTI_CHAR('hear_26'),
+        MULTI_CHAR('hear_27'),
+        MULTI_CHAR('hear_28'),
+        MULTI_CHAR('hear_29'),
+        MULTI_CHAR('hear_30'),
+        MULTI_CHAR('hear_31'),
+        MULTI_CHAR('hear_32'),
+        MULTI_CHAR('hear_33'),
+        MULTI_CHAR('hear_34'),
+        MULTI_CHAR('hear_35'),
+        MULTI_CHAR('hear_36'),
+        MULTI_CHAR('hear_37'),
+        MULTI_CHAR('hear_38'),
+        MULTI_CHAR('hear_39'),
     };
 
     auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
@@ -360,21 +383,19 @@ DEFINE_HOOK(&COutFont_c::createPane, OutFontCreatePane);
 void out_font_create_pane_post(ModContext*, void* args, void*, void*) {
     auto outFont = mods::arg<COutFont_c*>(args, 0);
     auto paneArr = outFont->mpPane;
-    
+
     auto maybeAButtonColor = get_config_var_color(get_cvars().aButtonColor);
     if (maybeAButtonColor.has_value()) {
         auto aButtonColor = maybeAButtonColor.value();
-        paneArr[0]->setBlackWhite(
-            JUtility::TColor(255, 255, 255, 0),
-            JUtility::TColor(aButtonColor.r,aButtonColor.g,aButtonColor.b, 255));
+        paneArr[0]->setBlackWhite(JUtility::TColor(255, 255, 255, 0),
+            JUtility::TColor(aButtonColor.r, aButtonColor.g, aButtonColor.b, 255));
     }
 
     auto maybeBButtonColor = get_config_var_color(get_cvars().bButtonColor);
     if (maybeBButtonColor.has_value()) {
         auto bButtonColor = maybeBButtonColor.value();
-        paneArr[1]->setBlackWhite(
-            JUtility::TColor(255, 255, 255, 0),
-            JUtility::TColor(bButtonColor.r,bButtonColor.g,bButtonColor.b, 255));
+        paneArr[1]->setBlackWhite(JUtility::TColor(255, 255, 255, 0),
+            JUtility::TColor(bButtonColor.r, bButtonColor.g, bButtonColor.b, 255));
     }
 
     // Condition copied from hooked function
@@ -386,13 +407,15 @@ void out_font_create_pane_post(ModContext*, void* args, void*, void*) {
     auto maybeXButtonColor = get_config_var_color(get_cvars().xButtonColor);
     if (maybeXButtonColor.has_value()) {
         auto xButtonColor = maybeXButtonColor.value();
-        paneArr[5]->setBlackWhite(xyBlack, JUtility::TColor(xButtonColor.r,xButtonColor.g,xButtonColor.b, 255));
+        paneArr[5]->setBlackWhite(
+            xyBlack, JUtility::TColor(xButtonColor.r, xButtonColor.g, xButtonColor.b, 255));
     }
 
     auto maybeYButtonColor = get_config_var_color(get_cvars().yButtonColor);
     if (maybeYButtonColor.has_value()) {
         auto yButtonColor = maybeYButtonColor.value();
-        paneArr[6]->setBlackWhite(xyBlack, JUtility::TColor(yButtonColor.r,yButtonColor.g,yButtonColor.b, 255));
+        paneArr[6]->setBlackWhite(
+            xyBlack, JUtility::TColor(yButtonColor.r, yButtonColor.g, yButtonColor.b, 255));
     }
 }
 
@@ -405,7 +428,7 @@ void out_font_set_draw_font_post(ModContext*, void* args, void*, void*) {
     if (maybeHeartColor.has_value()) {
         auto heartColor = maybeHeartColor.value();
         u32 heartColor_u32 = heartColor.r << 24 | heartColor.g << 16 | heartColor.b << 8 | 0xFF;
-        if (outFontSet->getType() == 0x1B) { // Heart icon type
+        if (outFontSet->getType() == 0x1B) {  // Heart icon type
             outFontSet->mColor = heartColor_u32;
         }
     }
@@ -419,7 +442,9 @@ void item_base_create_item_heap_post(ModContext*, void* args, void*, void*) {
         return;
     }
     auto itemNo = itemBase->m_itemNo;
-    if (itemNo == dItemNo_HEART_e || itemNo == dItemNo_UTAWA_HEART_e || itemNo == dItemNo_KAKERA_HEART_e) {
+    if (itemNo == dItemNo_HEART_e || itemNo == dItemNo_UTAWA_HEART_e ||
+        itemNo == dItemNo_KAKERA_HEART_e)
+    {
         auto maybeHeartColor = get_config_var_color(get_cvars().heartColor);
         if (maybeHeartColor.has_value()) {
             auto heartColor = maybeHeartColor.value();
@@ -427,13 +452,17 @@ void item_base_create_item_heap_post(ModContext*, void* args, void*, void*) {
 
             // Edit inner heart material color for Piece of Heart / Heart Container
             if (itemNo == dItemNo_UTAWA_HEART_e || itemNo == dItemNo_KAKERA_HEART_e) {
-                *itemBase->mpModel->getModelData()->getMaterialNodePointer(3)->getTevKColor(1) = heartColor;
-                *itemBase->mpModel->getModelData()->getMaterialNodePointer(3)->getTevColor(1) = heartColorS10;
+                *itemBase->mpModel->getModelData()->getMaterialNodePointer(3)->getTevKColor(1) =
+                    heartColor;
+                *itemBase->mpModel->getModelData()->getMaterialNodePointer(3)->getTevColor(1) =
+                    heartColorS10;
             }
 
-            const u8 heartColorRGB[3] = {heartColor.r,heartColor.g,heartColor.b};
-            u8** cRegTable = reinterpret_cast<u8**>(&itemBase->mpBrkAnm->getBrkAnm()->mAnmCRegDataR);
-            u8** kRegTable = reinterpret_cast<u8**>(&itemBase->mpBrkAnm->getBrkAnm()->mAnmKRegDataR);
+            const u8 heartColorRGB[3] = {heartColor.r, heartColor.g, heartColor.b};
+            u8** cRegTable =
+                reinterpret_cast<u8**>(&itemBase->mpBrkAnm->getBrkAnm()->mAnmCRegDataR);
+            u8** kRegTable =
+                reinterpret_cast<u8**>(&itemBase->mpBrkAnm->getBrkAnm()->mAnmKRegDataR);
 
             for (int i = 0; i < 3; i++) {
                 u8* cReg = cRegTable[i];
@@ -454,7 +483,6 @@ void item_base_create_item_heap_post(ModContext*, void* args, void*, void*) {
                     cReg[0x1B] = curColor;
                     kReg[0x13] = curColor;
                     kReg[0x1B] = curColor;
-
                 }
                 if (itemNo == dItemNo_UTAWA_HEART_e) {
                     cReg[0x13] = curColor;
@@ -478,13 +506,13 @@ void midna_create_post(ModContext*, void* args, void* retval, void*) {
     }
 
     auto midna = mods::arg<daMidna_c*>(args, 0);
-    midna->field_0x6e0 = *get_midna_hair_normalColor();
+    midna->field_0x6e0 = g_currentMidnaHairColors.normalColor;
     if (dKy_darkworld_check()) {
-        midna->field_0x6e8 = *get_midna_hair_normalKColor();
-        midna->field_0x6ec = *get_midna_hair_normalKColor2();
+        midna->field_0x6e8 = g_currentMidnaHairColors.normalKColor;
+        midna->field_0x6ec = g_currentMidnaHairColors.normalKColor2;
     } else {
-        midna->field_0x6e8 = *get_midna_hair_lNormalKColor();
-        midna->field_0x6ec = *get_midna_hair_lNormalKColor2();
+        midna->field_0x6e8 = g_currentMidnaHairColors.lNormalKColor;
+        midna->field_0x6ec = g_currentMidnaHairColors.lNormalKColor2;
     }
 }
 
@@ -515,12 +543,17 @@ void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void
         midna->field_0x6ec = midnaField0x6ec;
 
         // Statement copied from inside function to determine colors
-        bool bigColors = midna->checkStateFlg0(daMidna_c::FLG0_UNK_10000000) ||
+        bool bigColors =
+            midna->checkStateFlg0(daMidna_c::FLG0_UNK_10000000) ||
             midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_HAIR].mResID ||
-            midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_S_TAKES].mResID ||
-            midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_S_WAITS].mResID ||
-            midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_S_PACKAWAY].mResID ||
-            midna->mBckHeap[2].getIdx() == daMidna_c::m_anmDataTable[daMidna_c::ANM_GRABST].mResID ||
+            midna->mBckHeap[2].getIdx() ==
+                daMidna_c::m_anmDataTable[daMidna_c::ANM_S_TAKES].mResID ||
+            midna->mBckHeap[2].getIdx() ==
+                daMidna_c::m_anmDataTable[daMidna_c::ANM_S_WAITS].mResID ||
+            midna->mBckHeap[2].getIdx() ==
+                daMidna_c::m_anmDataTable[daMidna_c::ANM_S_PACKAWAY].mResID ||
+            midna->mBckHeap[2].getIdx() ==
+                daMidna_c::m_anmDataTable[daMidna_c::ANM_GRABST].mResID ||
             midna->checkEndResetStateFlg0(daMidna_c::ERFLG0_UNK_40) ||
             dComIfGp_checkPlayerStatus1(0, 0x800000);
 
@@ -530,22 +563,22 @@ void midna_set_body_part_matrix_post(ModContext*, void* args, void* retval, void
 
         // Set our own colors
         if (bigColors) {
-            kcolor1 = *get_midna_hair_bigKColor();
+            kcolor1 = g_currentMidnaHairColors.bigKColor;
             if (dKy_darkworld_check()) {
-                color = *get_midna_hair_bigColor();
-                kcolor2 = *get_midna_hair_normalKColor2();
+                color = g_currentMidnaHairColors.bigColor;
+                kcolor2 = g_currentMidnaHairColors.normalKColor2;
             } else {
-                color = *get_midna_hair_lBigColor();
-                kcolor2 = *get_midna_hair_lBigKColor2();
+                color = g_currentMidnaHairColors.lBigColor;
+                kcolor2 = g_currentMidnaHairColors.lBigKColor2;
             }
         } else {
-            color = *get_midna_hair_normalColor();
+            color = g_currentMidnaHairColors.normalColor;
             if (dKy_darkworld_check()) {
-                kcolor1 = *get_midna_hair_normalKColor();
-                kcolor2 = *get_midna_hair_normalKColor2();
+                kcolor1 = g_currentMidnaHairColors.normalKColor;
+                kcolor2 = g_currentMidnaHairColors.normalKColor2;
             } else {
-                kcolor1 = *get_midna_hair_lNormalKColor();
-                kcolor2 = *get_midna_hair_lNormalKColor2();
+                kcolor1 = g_currentMidnaHairColors.lNormalKColor;
+                kcolor2 = g_currentMidnaHairColors.lNormalKColor2;
             }
         }
 
@@ -570,37 +603,39 @@ void wolf_lock_dome_model_post(ModContext*, void*, void*, void*) {
         auto domeRingColor = hex_color_str_to_gx_color(domeRingColorStr);
         const u8 domeWave1RGBA[3] = {domeRingColor.r, domeRingColor.g, domeRingColor.b};
         const u8 domeWave2RGBA[3] = {domeRingColor.r, domeRingColor.g, domeRingColor.b};
-        u8** chromaRegisterTable = reinterpret_cast<u8**>(&daAlink_getAlinkActorClass()->field_0x0724->mAnmCRegDataR);
+        u8** chromaRegisterTable =
+            reinterpret_cast<u8**>(&daAlink_getAlinkActorClass()->field_0x0724->mAnmCRegDataR);
 
-        for (int i = 0; i < 3; i++)
-        {
+        for (int i = 0; i < 3; i++) {
             u8* currentTable = chromaRegisterTable[i];
             const u8 currentWave1Color = domeWave1RGBA[i];
             const u8 currentWave2Color = domeWave2RGBA[i];
             const u8 currentBaseColor = (currentWave1Color + currentWave2Color) / 2;
 
-            currentTable[0x3] = currentBaseColor;  // Set Alpha for the ring base
-            currentTable[0x13] = currentWave1Color; // Set Alpha for ring wave 1
-            currentTable[0x23] = currentWave2Color; // Set Alpha for ring wave 2
-            currentTable[0xB] = currentBaseColor;  // Set Alpha for darkworld ring base
-            currentTable[0x1B] = currentWave1Color; // Set Alpha for darkworld ring wave 1
-            currentTable[0x2B] = currentWave2Color; // Set Alpha for darkworld ring wave 2
+            currentTable[0x3] = currentBaseColor;    // Set Alpha for the ring base
+            currentTable[0x13] = currentWave1Color;  // Set Alpha for ring wave 1
+            currentTable[0x23] = currentWave2Color;  // Set Alpha for ring wave 2
+            currentTable[0xB] = currentBaseColor;    // Set Alpha for darkworld ring base
+            currentTable[0x1B] = currentWave1Color;  // Set Alpha for darkworld ring wave 1
+            currentTable[0x2B] = currentWave2Color;  // Set Alpha for darkworld ring wave 2
         }
     }
 }
 
-#define ADD_POST_HOOK(defined_hook, function, original) \
-    result = mods::hook::add_post<defined_hook>(function); \
-    if (result != MOD_OK) { \
-        mods::log::debug("failed to add post hook to" #original ", Result {}", static_cast<int>(result)); \
-        return result; \
+#define ADD_POST_HOOK(defined_hook, function, original)                                            \
+    result = mods::hook::add_post<defined_hook>(function);                                         \
+    if (result != MOD_OK) {                                                                        \
+        mods::log::debug(                                                                          \
+            "failed to add post hook to" #original ", Result {}", static_cast<int>(result));       \
+        return result;                                                                             \
     }
 
-#define ADD_PRE_HOOK(defined_hook, function, original) \
-    result = mods::hook::add_pre<defined_hook>(function); \
-    if (result != MOD_OK) { \
-        mods::log::debug("failed to add pre hook to" #original ", Result {}", static_cast<int>(result)); \
-        return result; \
+#define ADD_PRE_HOOK(defined_hook, function, original)                                             \
+    result = mods::hook::add_pre<defined_hook>(function);                                          \
+    if (result != MOD_OK) {                                                                        \
+        mods::log::debug(                                                                          \
+            "failed to add pre hook to" #original ", Result {}", static_cast<int>(result));        \
+        return result;                                                                             \
     }
 
 ModResult add_all_hooks() {
@@ -612,18 +647,22 @@ ModResult add_all_hooks() {
 
     // Hooks for lantern meter color
     ADD_PRE_HOOK(CPaneMgrSetBlackWhite, cpane_mgr_set_black_white_pre, CPaneMgr::setBlackWhite)
-    ADD_POST_HOOK(KanteraIconSetNowGauge, kantera_icon_set_now_gauge_post, dKantera_icon_c::setNowGauge)
+    ADD_POST_HOOK(
+        KanteraIconSetNowGauge, kantera_icon_set_now_gauge_post, dKantera_icon_c::setNowGauge)
 
     // Hook for midna charge ring
     ADD_POST_HOOK(SetWolfLockDomeModel, wolf_lock_dome_model_post, daAlink_c::setWolfLockDomeModel)
 
     // Hook for light sword glow
-    ADD_POST_HOOK(SetLightningSwordEffect, set_lightning_sword_effect_post, daAlink_c::setLightningSwordEffect)
+    ADD_POST_HOOK(SetLightningSwordEffect, set_lightning_sword_effect_post,
+        daAlink_c::setLightningSwordEffect)
 
     // Hooks for Midna Hair Color
     ADD_POST_HOOK(MidnaCreate, midna_create_post, daMidna_c::create)
-    ADD_PRE_HOOK(MidnaSetBodyPartMatrix, midna_set_body_part_matrix_pre, daMidna_c::setBodyPartMatrix)
-    ADD_POST_HOOK(MidnaSetBodyPartMatrix, midna_set_body_part_matrix_post, daMidna_c::setBodyPartMatrix)
+    ADD_PRE_HOOK(
+        MidnaSetBodyPartMatrix, midna_set_body_part_matrix_pre, daMidna_c::setBodyPartMatrix)
+    ADD_POST_HOOK(
+        MidnaSetBodyPartMatrix, midna_set_body_part_matrix_post, daMidna_c::setBodyPartMatrix)
 
     // Hooks for UI colors
     ADD_POST_HOOK(dMeter2Init, d_meter_2_init_post, dMeter2Draw_c::init)
@@ -634,19 +673,25 @@ ModResult add_all_hooks() {
     ADD_POST_HOOK(BrightCheckScreenSet, bright_check_screen_set_post, dBrightCheck_c::screenSet)
     ADD_POST_HOOK(MenuRingCreate, menu_ring_create_post, dMenu_Ring_c::_create)
     ADD_POST_HOOK(MenuCollect2DCreate, menu_collect_2D_create_post, dMenu_Collect2D_c::_create)
-    ADD_POST_HOOK(MenuFishingScreenSetDoIcon, menu_fishing_screen_set_do_icon_post, dMenu_Fishing_c::screenSetDoIcon)
-    ADD_POST_HOOK(MenuInsectScreenSetDoIcon, menu_insect_screen_set_do_icon_post, dMenu_Insect_c::screenSetDoIcon)
-    ADD_POST_HOOK(MenuLetterScreenSetDoIcon, menu_letter_screen_set_do_icon_post, dMenu_Letter_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuFishingScreenSetDoIcon, menu_fishing_screen_set_do_icon_post,
+        dMenu_Fishing_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuInsectScreenSetDoIcon, menu_insect_screen_set_do_icon_post,
+        dMenu_Insect_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuLetterScreenSetDoIcon, menu_letter_screen_set_do_icon_post,
+        dMenu_Letter_c::screenSetDoIcon)
     ADD_POST_HOOK(MenuOptionCreate, menu_option_create_post, dMenu_Option_c::_create)
-    ADD_POST_HOOK(MenuSkillScreenSetDoIcon, menu_skill_screen_set_do_icon_post, dMenu_Skill_c::screenSetDoIcon)
+    ADD_POST_HOOK(MenuSkillScreenSetDoIcon, menu_skill_screen_set_do_icon_post,
+        dMenu_Skill_c::screenSetDoIcon)
     ADD_POST_HOOK(OutFontCreatePane, out_font_create_pane_post, COutFont_c::createPane)
     ADD_POST_HOOK(OutFontSetDrawFont, out_font_set_draw_font_post, COutFontSet_c::drawFont)
     ADD_POST_HOOK(MenuFMapCreate, menu_fmap_create_post, dMenu_Fmap_c::_create)
-    ADD_POST_HOOK(MsgObjectTalkStartInit, msg_object_talk_start_init_post, dMsgObject_c::talkStartInit)
+    ADD_POST_HOOK(
+        MsgObjectTalkStartInit, msg_object_talk_start_init_post, dMsgObject_c::talkStartInit)
     ADD_POST_HOOK(MeterHakushaCreate, meter_hakusha_create_post, dMeterHakusha_c::_create)
 
     // Heart Model Color
-    ADD_POST_HOOK(ItemBaseCreateItemHeap, item_base_create_item_heap_post, daItemBase_c::CreateItemHeap)
+    ADD_POST_HOOK(
+        ItemBaseCreateItemHeap, item_base_create_item_heap_post, daItemBase_c::CreateItemHeap)
 
     return MOD_OK;
 }
