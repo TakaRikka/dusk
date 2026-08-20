@@ -1172,6 +1172,10 @@ ModResult buildMenuTab() {
     return session::svc_mng.ui->register_menu_tab(session::svc_mng.mod_ctx, &desc, &g_menu_tab);
 }
 
+ModResult removeMenuTab() {
+    return session::svc_mng.ui->unregister_menu_tab(session::svc_mng.mod_ctx, g_menu_tab);
+}
+
 ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {
     UiTabDesc tabs[6]{};
 
