@@ -153,6 +153,23 @@ void add_select(UiElementHandle pane, const char* label, const char* help_rml, c
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
+void add_number_input(UiElementHandle pane, const char* label, const char* help_rml, int64_t min,
+    int64_t max, int64_t step, UiControlGetFn getFn, UiControlSetFn setFn,
+    UiElementHandle* out_handle = nullptr)
+{
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_NUMBER;
+    desc.label = label;
+    desc.help_rml = help_rml;
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.get = getFn;
+    desc.set = setFn;
+    desc.min = min;
+    desc.max = max;
+    desc.step = step;
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
 void add_select_setting(UiElementHandle pane, const char* key, UiElementHandle* out_handle = nullptr)
 {
     auto setting = FindSetting(key);
@@ -251,6 +268,62 @@ void add_select_number_setting(UiElementHandle pane, const char* key, UiElementH
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
+void add_number_setting(UiElementHandle pane, const char* label, const char* key,
+    UiPredicateFn isDisabledFn, UiElementHandle* out_handle = nullptr)
+{
+    std::string fullOptionalKey = key;
+
+    // check if setting exists
+    auto randoSettings = seedgen::settings::GetAllSettingsInfo();
+    if (!randoSettings->contains(fullOptionalKey)) {
+        return;
+    }
+    auto curSetting = FindSetting(fullOptionalKey);
+    const auto& options = curSetting->GetInfo()->GetOptions();
+    int64_t min = std::stoi(options.front());
+    int64_t max = std::stoi(options.back());
+
+    auto getFn = [](ModContext*, void* user_data, UiControlValue* out_value) {
+        std::string fullOptionalKey = static_cast<const char*>(user_data);
+
+        // check if setting exists
+        auto randoSettings = seedgen::settings::GetAllSettingsInfo();
+        if (!randoSettings->contains(fullOptionalKey)) {
+            return;
+        }
+
+        auto setting = FindSetting(fullOptionalKey);
+        out_value->int_value = setting->GetCurrentOptionAsNumber();
+    };
+
+    auto setFn = [](ModContext*, void* user_data, const UiControlValue* value) {
+        std::string fullOptionalKey = static_cast<const char*>(user_data);
+
+        // check if setting exists
+        auto randoSettings = seedgen::settings::GetAllSettingsInfo();
+        if (!randoSettings->contains(fullOptionalKey)) {
+            return;
+        }
+
+        auto setting = FindSetting(fullOptionalKey);
+        setting->SetCurrentOption(std::to_string(value->int_value));
+    };
+
+    UiControlDesc desc = UI_CONTROL_DESC_INIT;
+    desc.kind = UI_CONTROL_NUMBER;
+    desc.label = label;
+    desc.help_rml = "";
+    desc.binding = UI_BINDING_CALLBACKS;
+    desc.get = getFn;
+    desc.set = setFn;
+    desc.is_disabled = isDisabledFn;
+    desc.user_data = (void*)key;
+    desc.min = min;
+    desc.max = max;
+    desc.step = 1;
+    session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
+}
+
 // Seed Management Tab
 ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
@@ -284,7 +357,7 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
         if (!std::filesystem::exists(seed_dir))
             std::filesystem::create_directory(seed_dir);
 
-        std::string help_rml = "Delete any seed not currently being used.";
+        std::string help_rml = "Select a seed above to delete it.";
 
         std::vector<std::string> seedHashes;
         for (const auto& entry : std::filesystem::directory_iterator(seed_dir)) {
@@ -408,6 +481,64 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
 
     add_section(leftPane, "Access Options");
     add_select_setting(leftPane, "Hyrule Barrier Requirements");
+
+    // pretty ugly way of doing this, but it works for now
+    add_number_setting(leftPane,
+        "Required Fused Shadows",
+        "Hyrule Barrier Fused Shadows",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Barrier Requirements");
+            if (setting->GetCurrentOption() != "Fused Shadows") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Mirror Shards",
+        "Hyrule Barrier Mirror Shards",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Barrier Requirements");
+            if (setting->GetCurrentOption() != "Mirror Shards") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Dungeons",
+        "Hyrule Barrier Dungeons",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Barrier Requirements");
+            if (setting->GetCurrentOption() != "Dungeons") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Poe Souls",
+        "Hyrule Barrier Poe Souls",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Barrier Requirements");
+            if (setting->GetCurrentOption() != "Poe Souls") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Hearts",
+        "Hyrule Barrier Hearts",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Barrier Requirements");
+            if (setting->GetCurrentOption() != "Hearts") {
+                return true;
+            }
+
+            return false;
+        });
+
     add_select_setting(leftPane, "Palace of Twilight Requirements");
     add_select_setting(leftPane, "Faron Woods Logic");
     add_select_setting(leftPane, "Mirror Chamber Access");
@@ -429,7 +560,65 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
     add_select_setting(leftPane, "Small Keys");
     add_select_setting(leftPane, "Big Keys");
     add_select_setting(leftPane, "Maps and Compasses");
+
     add_select_setting(leftPane, "Hyrule Castle Big Key Requirements");
+    // pretty ugly way of doing this, but it works for now
+    add_number_setting(leftPane,
+        "Required Fused Shadows",
+        "Hyrule Castle Big Key Fused Shadows",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Castle Big Key Requirements");
+            if (setting->GetCurrentOption() != "Fused Shadows") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Mirror Shards",
+        "Hyrule Castle Big Key Mirror Shards",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Castle Big Key Requirements");
+            if (setting->GetCurrentOption() != "Mirror Shards") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Dungeons",
+        "Hyrule Castle Big Key Dungeons",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Castle Big Key Requirements");
+            if (setting->GetCurrentOption() != "Dungeons") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Poe Souls",
+        "Hyrule Castle Big Key Poe Souls",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Castle Big Key Requirements");
+            if (setting->GetCurrentOption() != "Poe Souls") {
+                return true;
+            }
+
+            return false;
+        });
+    add_number_setting(leftPane,
+        "Required Hearts",
+        "Hyrule Castle Big Key Hearts",
+        [](ModContext*, void*) {
+            auto setting = FindSetting("Hyrule Castle Big Key Requirements");
+            if (setting->GetCurrentOption() != "Hearts") {
+                return true;
+            }
+
+            return false;
+        });
+
     add_select_setting(leftPane, "Dungeon Rewards Can Be Anywhere");
     add_select_setting(leftPane, "No Small Keys on Bosses");
     add_select_setting(leftPane, "Unrequired Dungeons Are Barren");
