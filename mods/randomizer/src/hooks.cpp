@@ -54,14 +54,19 @@
 #include "d/d_item.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
+#include "Z2AudioLib/Z2SceneMgr.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
 
 DEFINE_HOOK(&dFile_info_c::setSaveData, dFile_info_c__setSaveData);
 
+DEFINE_HOOK(&Z2SceneMgr::setSceneName, Z2SceneMgr__setSceneName);
+
 DEFINE_HOOK(&dSv_event_c::isEventBit, dSv_event_c__isEventBit);
 DEFINE_HOOK(&dSv_event_c::onEventBit, dSv_event_c__onEventBit);
+
+DEFINE_HOOK(&dComIfGs_isStageSwitch, isStageSwitch);
 
 DEFINE_HOOK(&dSv_memBit_c::isSwitch, dSv_memBit_c__isSwitch);
 DEFINE_HOOK(&dSv_memBit_c::onSwitch, dSv_memBit_c__onSwitch);
@@ -276,9 +281,36 @@ void hookPostSetSaveData(ModContext* ctx, void* args, void* retval, void* userda
     }
 }
 
+bool isInZ2SceneMgrSetSceneName = false;
+HookAction hookPreZ2SceneMgrSetSceneName(ModContext*, void* args, void* retval, void* userdata) {
+    isInZ2SceneMgrSetSceneName = true;
+    return HOOK_CONTINUE;
+}
+
+void hookPostZ2SceneMgrSetSceneName(ModContext*, void* args, void* retval, void* userdata) {
+    isInZ2SceneMgrSetSceneName = false;
+}
+
 HookAction hookPreIsEventBit(ModContext*, void* args, void* retval, void*) {
     const u16 i_no = mods::arg<u16>(args, 1);
     auto& out = *static_cast<BOOL*>(retval);
+
+    // Special checks when the game is setting up boss room audio in Z2SceneMgr::setSceneName
+    if (isInZ2SceneMgrSetSceneName) {
+        switch (i_no) {
+        case FOREST_TEMPLE_CLEARED:
+        case LAKEBED_TEMPLE_CLEARED:
+        case ARBITERS_GROUNDS_CLEARED:
+        case TEMPLE_OF_TIME_CLEARED:
+            // If we're setting up audio, return whether the boss is defeated rather than if we've
+            // completed the temple. Otherwise, we won't get the boss music depending on some
+            // randomizer settings.
+            out = dComIfGs_isStageBossEnemy();
+            return HOOK_SKIP_ORIGINAL;
+        default:
+            break;
+        }
+    }
 
     switch (i_no) {
     case BO_TALKED_TO_YOU_AFTER_OPENING_IRON_BOOTS_CHEST: {
@@ -446,6 +478,24 @@ HookAction hookPreOnEventBit(ModContext*, void* args, void*, void*) {
     default:
         break;
     }
+    return HOOK_CONTINUE;
+}
+
+HookAction hookPreIsStageSwitch(ModContext*, void* args, void* retval, void*) {
+    auto i_stageNo = mods::arg<int>(args, 0);
+    auto i_no = mods::arg<int>(args, 1);
+    auto& out = *static_cast<BOOL*>(retval);
+
+    // Special checks when the game is setting up boss room audio in Z2SceneMgr::setSceneName
+    if (isInZ2SceneMgrSetSceneName &&
+        ((i_stageNo == 4 && i_no == 0xE) ||  // Lakebed Temple Boss
+        (i_stageNo == 0xA && i_no == 0xA) || // Arbiters Grounds Boss
+        (i_stageNo == 7 && i_no == 0x18)))   // Temple of Time Boss
+    {
+        out = dComIfGs_isStageBossEnemy();
+        return HOOK_SKIP_ORIGINAL;
+    }
+
     return HOOK_CONTINUE;
 }
 
@@ -3051,8 +3101,13 @@ ModResult initialize() {
 
     ADD_HOOK_POST(dFile_info_c__setSaveData, hookPostSetSaveData);
 
+    ADD_HOOK_PRE(Z2SceneMgr__setSceneName, hookPreZ2SceneMgrSetSceneName);
+    ADD_HOOK_POST(Z2SceneMgr__setSceneName, hookPostZ2SceneMgrSetSceneName);
+
     ADD_HOOK_PRE(dSv_event_c__isEventBit, hookPreIsEventBit);
     ADD_HOOK_PRE(dSv_event_c__onEventBit, hookPreOnEventBit);
+
+    ADD_HOOK_PRE(isStageSwitch, hookPreIsStageSwitch);
 
     ADD_HOOK_PRE(dSv_memBit_c__isSwitch, hookPreMembitIsSwitch);
     ADD_HOOK_PRE(dSv_memBit_c__onSwitch, hookPreMembitOnSwitch);
@@ -3194,8 +3249,12 @@ ModResult uninstall() {
 
     mods::hook::uninstall<dFile_info_c__setSaveData>(svc_hook);
 
+    mods::hook::uninstall<Z2SceneMgr__setSceneName>(svc_hook);
+
     mods::hook::uninstall<dSv_event_c__isEventBit>(svc_hook);
     mods::hook::uninstall<dSv_event_c__onEventBit>(svc_hook);
+
+    mods::hook::uninstall<isStageSwitch>(svc_hook);
 
     mods::hook::uninstall<dSv_memBit_c__isSwitch>(svc_hook);
     mods::hook::uninstall<dSv_memBit_c__onSwitch>(svc_hook);
