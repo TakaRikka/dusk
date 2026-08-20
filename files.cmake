@@ -1434,6 +1434,7 @@ set(DUSK_FILES
         src/dusk/extras.c
         src/dusk/frame_interpolation.cpp
         src/dusk/game_clock.cpp
+        src/dusk/game_mode.cpp
         src/dusk/gamepad_color.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
@@ -1501,6 +1502,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/texture.cpp
         src/dusk/mods/svc/ui.cpp
         src/dusk/mods/svc/ui.hpp
+        src/dusk/mods/svc/game_mode.cpp
         src/dusk/mods/svc/window.cpp
         src/dusk/mods/svc/window.hpp
         src/dusk/mods/svc/save.cpp

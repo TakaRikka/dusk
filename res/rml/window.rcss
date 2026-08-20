@@ -519,3 +519,13 @@ progress.verification-progress-bar {
     flex: 0 0 auto;
     padding-top: 4dp;
 }
+
+.modal-actions-vertical {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.modal-actions-vertical button.modal-btn {
+    flex: 0 0 auto;
+    width: 100%;
+}

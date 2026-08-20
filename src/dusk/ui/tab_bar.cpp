@@ -94,14 +94,14 @@ TabBar::TabBar(Rml::Element* parent, Props props)
 bool TabBar::focus() {
     if (mProps.selectedTabIndex >= 0 && mProps.selectedTabIndex < mTabs.size()) {
         // Try to focus the currently selected tab
-        if (mTabs[mProps.selectedTabIndex].button.focus()) {
+        if (mTabs[mProps.selectedTabIndex].button->focus()) {
             mLastFocusedTabIndex = mProps.selectedTabIndex;
             return true;
         }
     }
     // Otherwise, focus the first enabled tab
     for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
-        if (mTabs[i].button.focus()) {
+        if (mTabs[i].button->focus()) {
             mLastFocusedTabIndex = i;
             return true;
         }
@@ -115,8 +115,8 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     if (selected && callback) {
         callback();
     }
-    auto& button = add_child<Button>(Button::Props{title}, "tab");
-    button.on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
+    auto button = std::make_unique<Button>(mRoot, Button::Props{title}, "tab");
+    button->on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
             if (mProps.autoSelect) {
                 mDoAud_seStartMenu(kSoundTabChanged);
@@ -127,7 +127,7 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
         return false;
     });
     if (selected) {
-        button.set_selected(true);
+        button->set_selected(true);
     }
     if (mEndSpacer != nullptr) {
         auto spacer = mRoot->RemoveChild(mEndSpacer);
@@ -135,16 +135,26 @@ void TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     }
     mTabs.emplace_back(Tab{
         .title = title,
-        .button = button,
+        .button = std::move(button),
         .callback = std::move(callback),
     });
+}
+
+void TabBar::clear_tabs() {
+    mProps.selectedTabIndex = -1;
+    mLastFocusedTabIndex = -1;
+    while (!mTabs.empty()) {
+        auto* element = mTabs.back().button->root();
+        mTabs.pop_back();
+        mRoot->RemoveChild(element);
+    }
 }
 
 bool TabBar::set_active_tab(int index) {
     if (index == -1) {
         // Clear currently selected tab
         for (auto& tab : mTabs) {
-            tab.button.set_selected(false);
+            tab.button->set_selected(false);
         }
         mProps.selectedTabIndex = -1;
         return true;
@@ -154,10 +164,10 @@ bool TabBar::set_active_tab(int index) {
         return false;
     }
     const auto& tab = mTabs[index];
-    if (tab.button.focus()) {
+    if (tab.button->focus()) {
         mLastFocusedTabIndex = index;
         for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
-            mTabs[i].button.set_selected(i == index);
+            mTabs[i].button->set_selected(i == index);
         }
         mProps.selectedTabIndex = index;
         if (tab.callback) {
@@ -177,24 +187,36 @@ void TabBar::refresh_active_tab() {
     }
 }
 
-int TabBar::focused_tab_index() const {
-    return mLastFocusedTabIndex;
+Rml::String TabBar::focused_tab_title() const {
+    if (mLastFocusedTabIndex < 0 || mLastFocusedTabIndex >= static_cast<int>(mTabs.size())) {
+        return {};
+    }
+    return mTabs[mLastFocusedTabIndex].title;
 }
 
 bool TabBar::focus_tab(int index) {
     if (index < 0 || index >= mTabs.size() || index == mProps.selectedTabIndex) {
         return false;
     }
-    if (mTabs[index].button.focus()) {
+    if (mTabs[index].button->focus()) {
         mLastFocusedTabIndex = index;
         return true;
     }
     return false;
 }
 
+bool TabBar::focus_tab(const Rml::String& title) {
+    for (int i = 0; i < static_cast<int>(mTabs.size()); ++i) {
+        if (mTabs[i].title == title) {
+            return focus_tab(i);
+        }
+    }
+    return false;
+}
+
 int TabBar::tab_containing(Rml::Element* element) const {
     for (int i = 0; i < mTabs.size(); ++i) {
-        if (mTabs[i].button.contains(element)) {
+        if (mTabs[i].button->contains(element)) {
             return i;
         }
     }

@@ -9,6 +9,10 @@
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
+#if TARGET_PC
+#include "mods/svc/game_mode.h"
+#endif
+
 class dFile_info_c;
 class J2DPicture;
 
@@ -420,6 +424,13 @@ public:
     bool pointerMenuSelect();
     bool pointerCopyDataToSelect();
     bool pointerYesNoSelect(bool errorSelect);
+    void backToDataSelectMove() {
+        headerTxtSet(0x43, 1, 0);
+        fileRecScaleAnmInitSet2(0.0f, 1.0f);
+        nameMoveAnmInitSet(0xd29, 0xd1f);
+        modoruTxtDispAnmInit(0);
+        mDataSelProc = DATASELPROC_NAME_TO_DATA_SELECT_MOVE;
+    }
     #endif
     void _draw();
     void errorMoveAnmInitSet(int, int);
@@ -733,6 +744,8 @@ public:
     #endif
 #ifdef TARGET_PC
     dDlst_FileSelFade_c mFadeDlst;
+    bool mGameModeSaveStartBuildUi = true;
+    GameModeNewSaveState mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
 #endif
 
     #if PLATFORM_WII || PLATFORM_SHIELD

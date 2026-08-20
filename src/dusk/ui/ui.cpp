@@ -267,6 +267,24 @@ void uncover_top_document() noexcept {
     input::sync_input_block();
 }
 
+Document* find_document(DocumentScope scope) noexcept {
+    for (auto& doc : std::views::reverse(sDocumentStack)) {
+        if (!doc->closed() && doc->scope() == scope) {
+            return doc.get();
+        }
+    }
+    return nullptr;
+}
+
+void close_documents_except(DocumentScope scope) noexcept {
+    for (auto& doc : sDocumentStack) {
+        if (!doc->closed() && doc->scope() != scope) {
+            doc->force_hide(true);
+        }
+    }
+    input::sync_input_block();
+}
+
 bool any_document_visible() noexcept {
     return std::any_of(sDocumentStack.begin(), sDocumentStack.end(),
         [](const auto& doc) { return doc && doc->visible(); });
@@ -330,13 +348,10 @@ void update() noexcept {
         sPassiveDocuments.erase(first, last);
     }
 
-    // If no documents have focus, explicitly focus the top one
-    if (auto* context = aurora::rmlui::get_context();
-        context != nullptr && (context->GetFocusElement() == nullptr ||
-                                  context->GetFocusElement() == context->GetRootElement()))
-    {
+    // Keep focus on the highest active document.
+    if (aurora::rmlui::get_context() != nullptr) {
         for (auto& doc : std::views::reverse(sDocumentStack)) {
-            if (doc->active() && doc->focus()) {
+            if (doc->active() && (doc->has_focus() || doc->focus())) {
                 break;
             }
         }
@@ -460,10 +475,6 @@ Insets safe_area_insets(Rml::Context* context) noexcept {
 
 void push_toast(Toast toast) noexcept {
     sToasts.push_back(std::move(toast));
-}
-
-std::vector<std::unique_ptr<Document>>& get_document_stack() noexcept {
-    return sDocumentStack;
 }
 
 std::deque<Toast>& get_toasts() noexcept {

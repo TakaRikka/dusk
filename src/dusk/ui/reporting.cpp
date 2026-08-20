@@ -61,6 +61,7 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal", "modal-dialog") {
             if (cmd == NavCommand::Confirm) {
                 apply();
                 hide(true);
+                mDoAud_seStartMenu(kSoundClick);
                 return true;
             }
             return false;

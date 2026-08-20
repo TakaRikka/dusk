@@ -112,6 +112,11 @@ public:
         mSerialNo = serial_no;
     }
 
+#ifdef TARGET_PC
+    void setFileName(const std::string& fileName);
+    const char* getFileName();
+#endif
+
     /* 0x0000 */ u8 mData[SAVEFILE_SIZE];
     /* 0x1FBC */ u8 mChannel;
     /* 0x1FBD */ u8 mCopyToPos;
@@ -124,6 +129,11 @@ public:
     /* 0x1FEC */ s32 mNandState;
     /* 0x1FF0 */ u64 mSerialNo;
     /* 0x1FF8 */ u32 mDataVersion;
+#ifdef TARGET_PC
+    bool mInitialized;
+    std::string mFileName;
+#endif
+
 };  // Size: 0x2000
 
 STATIC_ASSERT(sizeof(mDoMemCd_Ctrl_c) == 8192);
@@ -227,6 +237,16 @@ inline void mDoMemCd_LoadNAND() {
 
 inline s32 mDoMemCd_checkNANDFile() {
     return g_mDoMemCd_control.chekNANDFile();
+}
+#endif
+
+#ifdef TARGET_PC
+inline void mDoMemCd_SetFileName(const std::string& fileName) {
+    g_mDoMemCd_control.setFileName(fileName);
+}
+
+inline const char* mDoMemCd_GetFileName() {
+    return g_mDoMemCd_control.getFileName();
 }
 #endif
 

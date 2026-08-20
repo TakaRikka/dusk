@@ -636,6 +636,125 @@ first in-game frame. Projection matrices match the renderer's WebGPU clip conven
 Camera operators allow overriding the main camera. When an operator callback returns true, its values replace the camera
 state for the current frame. Register and unregister using `register_camera_operator` / `unregister_camera_operator`.
 
+### GameModeService (`mods/svc/game_mode.h`)
+
+Allows a mod to register a game mode with callbacks for key gameplay and save lifecycle events. Registered game modes
+appear in the prelaunch menu. Game modes may use a unique set of saves by configuring `save_name`; leave it empty to use
+the vanilla `gczelda2` save.
+
+```cpp
+IMPORT_SERVICE(LogService, svc_log);
+IMPORT_SERVICE(HookService, svc_hook);
+IMPORT_SERVICE(GameModeService, svc_game_mode);
+
+DEFINE_HOOK(fopAcM_createItem, CreateItem);
+
+#define MY_GAME_MODE_ID "game-mode-id"
+
+static HookAction my_function_hook(ModContext* ctx, void* args, void*, void*) {
+    // If we wish to have this hook only run while the gamemode is registered, we need to hook the function from the
+    // gamemode's onActivatedFunction, and uninstall the hook during the onDeactivatedFunction. Example below.
+    // Alternatively, check with `svc_game_mode->is_active(mod_ctx, MY_GAME_MODE_ID, &active) == MOD_OK && active`.
+    return HOOK_CONTINUE;
+}
+
+ModResult on_game_mode_activated(void*, ModError* outError) {
+    // Setup the gamemode, Add any hooks that are gamemode specific
+    // Overlay any files that are gamemode specific
+    ModResult result = mods::hook_add_pre<CreateItem>(svc_hook, my_function_hook);
+    if (result != MOD_OK) {
+        return mods::set_error(outError, result, "failed to install fopAcM_createItem hook");
+    }
+    return MOD_OK;
+}
+
+ModResult on_game_mode_deactivated(void*, ModError* outError) {
+    // Uninstall any hooks that are gamemode specific
+    // Remove any file overlays that are gamemode specific
+    ModResult result = mods::hook_uninstall<CreateItem>();
+    if (result != MOD_OK) {
+        return mods::set_error(outError, result, "failed to uninstall fopAcM_createItem hook");
+    }
+    return MOD_OK;
+}
+
+ModResult on_save_loaded(void*, ModError*) {
+    // This function will be invoked by the game as a save is loaded
+    return MOD_OK;
+}
+
+const GameModeDesc gameModeDesc = {
+    .struct_size = sizeof(GameModeDesc),
+    .game_mode_id = MY_GAME_MODE_ID,
+    .full_name = "My Game Mode",
+    .save_name = "my-unique-save",
+    .user_data = nullptr,
+    .on_activated = on_game_mode_activated,
+    .on_deactivated = on_game_mode_deactivated,
+    .on_save_loaded = on_save_loaded,
+};
+svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
+```
+
+A game mode can also open UI for per-save settings when creating a new file. The state begins as
+`GAME_MODE_STATE_PENDING` and remains valid until the mod selects `PROCEED` or `RETURN`.
+
+```cpp
+IMPORT_SERVICE(GameModeService, svc_game_mode);
+IMPORT_SERVICE(UiService, svc_ui);
+
+ModResult on_new_save_select(void*, GameModeNewSaveState* state, ModError* outError) {
+    static GameModeNewSaveState* newSaveState;
+    static UiWindowHandle windowHandle;
+
+    newSaveState = state;
+
+    UiTabDesc tabs[1]{};
+
+    tabs[0].struct_size = sizeof(UiTabDesc);
+    tabs[0].title = "Play";
+    tabs[0].build = [](ModContext* ctx, UiWindowHandle, UiElementHandle leftPane, UiElementHandle rightPane, void*, ModError*) {
+        UiControlDesc desc = UI_CONTROL_DESC_INIT;
+        desc.kind = UI_CONTROL_BUTTON;
+        desc.label = "Play";
+        desc.help_rml = "Play Button";
+        desc.on_pressed = [](ModContext* ctx, void* userdata) {
+            *newSaveState = GAME_MODE_STATE_PROCEED;
+            svc_ui->window_close(ctx, *static_cast<UiWindowHandle*>(userdata));
+        };
+        desc.user_data = &windowHandle;
+        svc_ui->pane_add_control(mod_ctx, leftPane, &desc, nullptr);
+        return MOD_OK;
+    };
+
+    UiWindowDesc desc = UI_WINDOW_DESC_INIT;
+    desc.tabs = tabs;
+    desc.tab_count = 1;
+    desc.on_closed = [](ModContext *, UiWindowHandle, void *userdata) {
+        // If closing the window through backing out, return to file select
+        if (*newSaveState == GAME_MODE_STATE_PENDING) {
+            *newSaveState = GAME_MODE_STATE_RETURN;
+        }
+    };
+
+    ModResult result = svc_ui->window_push(mod_ctx, &desc, &windowHandle);
+    if (result != MOD_OK) {
+        return mods::set_error(outError, result, "failed to open new-save settings");
+    }
+    return MOD_OK;
+}
+
+const GameModeDesc gameModeDesc = {
+    .struct_size = sizeof(GameModeDesc),
+    .game_mode_id = "my-game-mode-id",
+    .full_name = "My Game Mode",
+    .save_name = "my-unique-save",
+    .on_new_save_select = on_new_save_select,
+};
+svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
+
+```
+
 ---
 
 ## Hooking Game Functions

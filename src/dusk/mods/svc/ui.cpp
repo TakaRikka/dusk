@@ -426,7 +426,6 @@ public:
     }
 
     void close() { pop(); }
-    void force_close() { Document::hide(true); }
 
 private:
     std::function<void()> m_onDestroyed;
@@ -931,7 +930,7 @@ void ui_sync_menu_tabs() {
     }
     s_menuTabsDirty = false;
     if (aurora::rmlui::is_initialized()) {
-        ui::MenuBar::rebuild();
+        ui::MenuBar::refresh_tabs();
     }
 }
 
@@ -1019,14 +1018,14 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Window: {
             auto* window = static_cast<ui::ModWindow*>(slot.document);
             if (window != nullptr) {
-                window->force_close();
+                window->force_hide(true);
             }
             break;
         }
         case UiSlotKind::Dialog: {
             auto* dialog = static_cast<ModDialog*>(slot.document);
             if (dialog != nullptr) {
-                dialog->force_close();
+                dialog->force_hide(true);
             }
             break;
         }
