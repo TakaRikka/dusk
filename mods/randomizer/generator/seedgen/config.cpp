@@ -13,8 +13,6 @@
 #include <fmt/format.h>
 #include <iostream>
 
-#include "mods/svc/log.hpp"
-
 // Fields which aren't part of settings_list.yaml
 constexpr std::string_view SEED = "Seed";
 constexpr std::string_view PLANDOMIZER = "Plandomizer";
