@@ -319,7 +319,7 @@
   Tracker Important: True
   Default Option: "Off"
   Options:
-    - "Off": "After completing Lakebed Temple, you will be required to complete the Midna's Desperate Hour section of the game. Note that some overworld poes require Midna's Desperate Hour to be completed before they spawn in."
+    - "Off": "After completing Lakebed Temple, you will be required to complete the Midna's Desperate Hour section of the game. Note that some overworld poes require Midna's Desperate Hour to be completed before they spawn in. The Midna Charge Attack will also not be available in the light world until Midna's Desperate Hour is completed."
     - "On": "The Midna's Desperate Hour section of the game will be completed from the start."
 
 - Name: Skip Minor Cutscenes
