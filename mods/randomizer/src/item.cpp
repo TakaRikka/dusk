@@ -485,10 +485,6 @@ void randomizer_item_func_MIRROR_PIECE_4() {
     dComIfGs_onCollectMirror(3);
 }
 
-void randomizer_item_func_POU_SPIRIT() {
-    dComIfGs_addPohSpiritNum();
-}
-
 void randomizer_item_func_AIR_LETTER() {
     u8 letterCount = getAncientDocumentNum();
     setAncientDocumentNum(letterCount + 1);
@@ -764,7 +760,7 @@ static void (*item_func_ptr_randomizer[256])() = {
     /* 0xDD */ item_func_noentry,
     /* 0xDE */ item_func_noentry,
     /* 0xDF */ item_func_noentry,
-    /* 0xE0 */ randomizer_item_func_POU_SPIRIT,
+    /* 0xE0 */ item_func_POU_SPIRIT,
     /* 0xE1 */ item_func_ENDING_BLOW,
     /* 0xE2 */ item_func_SHIELD_ATTACK,
     /* 0xE3 */ item_func_BACK_SLICE,

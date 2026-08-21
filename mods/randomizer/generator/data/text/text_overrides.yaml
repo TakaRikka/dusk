@@ -401,25 +401,57 @@
 
 # Completely Custom Text IDs
 - Name: Custom Midna Call Need Something Text
-  Attributes: 0x07D30000150D0100FF000D001F1F0400
+  Style:
+    Speaker: 0x15
+    Box Kind: 0x0D
+    Draw Type: 1
+    Speaker Mood: 0x0D
+    Talk Animation: 0x1F
+    Face Animation: 0x1F
 
 - Name: Custom Midna Call 3 Choice Text
-  Attributes: 0x07F8000015000000FF00000000000400
+  Style:
+    Speaker: 0x15
+    Talk Animation: 0
+    Face Animation: 0
 
 - Name: Custom Midna Call 2 Choice Text
-  Attributes: 0x07F8000015000000FF00000000000400
+  Style:
+    Speaker: 0x15
+    Talk Animation: 0
+    Face Animation: 0
 
 - Name: Custom Midna Call Hints Text
-  Attributes: 0x07D30000150D0100FF000D001F1F0400
+  Style:
+    Speaker: 0x15
+    Box Kind: 0x0D
+    Draw Type: 1
+    Speaker Mood: 0x0D
+    Talk Animation: 0x1F
+    Face Animation: 0x1F
 
 - Name: Return to Spawn Dungeon Intro Text
-  Attributes: 0x07D30000150D0100FF000D001F1F0400
+  Style:
+    Speaker: 0x15
+    Box Kind: 0x0D
+    Draw Type: 1
+    Speaker Mood: 0x0D
+    Talk Animation: 0x1F
+    Face Animation: 0x1F
 
 - Name: Return to Spawn Dungeon Choice Text
-  Attributes: 0x07F60000150D0000FF00000000000400
+  Style:
+    Speaker: 0x15
+    Box Kind: 0x0D
+    Talk Animation: 0
+    Face Animation: 0
 
 - Name: Return to Spawn Dungeon No Choice Text
-  Attributes: 0x07F60000150D0000FF00000000000400
+  Style:
+    Speaker: 0x15
+    Box Kind: 0x0D
+    Talk Animation: 0
+    Face Animation: 0
 
 - Name: Ordon Hint Sign Text
 

@@ -80,3 +80,11 @@ const char allStages[78][8] = {
     "R_SP300", // 76
     "R_SP301"  // 77
 };
+
+// Message groups are the STAG metadata for the corresponding allStages entry.
+const unsigned char allStageMessageGroups[78] = {
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 1, 8, 1, 1, 6, 2, 3, 2, 8, 7, 6, 8, 4, 6, 6, 8, 8, 8, 6,
+    6, 8, 7, 6, 6, 1, 4, 6, 2, 3, 4, 7, 6, 4, 4, 2, 5, 4,
+};

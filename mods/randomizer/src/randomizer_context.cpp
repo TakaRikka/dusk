@@ -16,17 +16,97 @@
 #include "../generator/logic/entrance_shuffle.hpp"
 
 #include <fstream>
+#include <type_traits>
+#include <unordered_set>
 #include <mods/svc/log.hpp>
 
-#include "custom_flow_ids.hpp"
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_class.h"
-#include "d/d_msg_flow.h"
 #include "m_Do/m_Do_audio.h"
+
+namespace {
+
+const char* flow_node_type_name(RandomizerContext::FlowNodeType type) {
+    switch (type) {
+    case RandomizerContext::FlowNodeType::MESSAGE:
+        return "message";
+    case RandomizerContext::FlowNodeType::BRANCH:
+        return "branch";
+    case RandomizerContext::FlowNodeType::EVENT:
+        return "event";
+    }
+    return "";
+}
+
+RandomizerContext::FlowNodeType parse_flow_node_type(const YAML::Node& node) {
+    const auto type = node.as<std::string>();
+    if (type == "message") {
+        return RandomizerContext::FlowNodeType::MESSAGE;
+    }
+    if (type == "branch") {
+        return RandomizerContext::FlowNodeType::BRANCH;
+    }
+    if (type == "event") {
+        return RandomizerContext::FlowNodeType::EVENT;
+    }
+    throw std::runtime_error("Unknown flow node type: " + type);
+}
+
+void write_flow_reference(
+    YAML::Node node, const RandomizerContext::FlowReference& reference) {
+    if (reference.nativeId.has_value()) {
+        node = reference.nativeId.value();
+    } else {
+        node = reference.name;
+    }
+}
+
+RandomizerContext::FlowReference parse_flow_reference(const YAML::Node& node) {
+    RandomizerContext::FlowReference reference{};
+    try {
+        reference.nativeId = node.as<u16>();
+    } catch (const YAML::BadConversion&) {
+        reference.name = node.as<std::string>();
+    }
+    return reference;
+}
+
+void write_message_style(
+    YAML::Node node, const RandomizerContext::MessageStyleData& style) {
+    node["eventLabelId"] = style.eventLabelId;
+    node["speaker"] = style.speaker;
+    node["boxKind"] = style.boxKind;
+    node["drawType"] = style.drawType;
+    node["boxPosition"] = style.boxPosition;
+    node["lineAlignment"] = style.lineAlignment;
+    node["speakerMood"] = style.speakerMood;
+    node["cameraAttr"] = style.cameraAttr;
+    node["talkAnim"] = style.talkAnim;
+    node["faceAnim"] = style.faceAnim;
+    node["trailingData"] = style.trailingData;
+}
+
+RandomizerContext::MessageStyleData parse_message_style(const YAML::Node& node) {
+    RandomizerContext::MessageStyleData style{};
+    style.eventLabelId = node["eventLabelId"].as<u16>();
+    style.speaker = node["speaker"].as<u8>();
+    style.boxKind = node["boxKind"].as<u8>();
+    style.drawType = node["drawType"].as<u8>();
+    style.boxPosition = node["boxPosition"].as<u8>();
+    style.lineAlignment = node["lineAlignment"].as<u8>();
+    style.speakerMood = node["speakerMood"].as<u8>();
+    style.cameraAttr = node["cameraAttr"].as<u8>();
+    style.talkAnim = node["talkAnim"].as<u8>();
+    style.faceAnim = node["faceAnim"].as<u8>();
+    style.trailingData = node["trailingData"].as<u16>();
+    return style;
+}
+
+}  // namespace
 
 std::optional<std::string> RandomizerContext::WriteToFile() {
 
@@ -36,6 +116,7 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
     }
 
     YAML::Node out{};
+    out["formatVersion"] = FORMAT_VERSION;
 
     for (const auto& [setting, option] : this->mSettings) {
         out["mSettings"][setting] = option;
@@ -76,13 +157,6 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
 
     out["mTwilitInsectOverrides"] = mTwilitInsectOverrides;
 
-    for (const auto& [key, data] : this->mFlowItemMessageOverrides) {
-        auto node = out["mFlowItemMessageOverrides"][key];
-        node["itemId"] = data.itemId;
-        node["stage"] = data.stage;
-        node["flag"] = data.flag;
-    }
-
     for (const auto& [name, data] : this->mItemLocations) {
         auto node = out["mItemLocations"][name];
         node["itemId"] = data.itemId;
@@ -95,23 +169,64 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
 
     for (const auto& [stageRoomLayer, actorPatches] : this->mObjectPatches) {
         for (const auto& [actorCRC, actorPatch] : actorPatches) {
-            out["mObjectPatches"][stageRoomLayer][actorCRC] = ContainerToHexString(actorPatch);
+            auto node = out["mObjectPatches"][stageRoomLayer][actorCRC];
+            node["data"] = ContainerToHexString(actorPatch.bytes);
+            if (!actorPatch.flow.empty()) {
+                node["flow"] = actorPatch.flow;
+            }
         }
     }
 
     for (const auto& [stageRoomLayer, newActors] : this->mObjectAdditions) {
         for (const auto& actor : newActors) {
-            out["mObjectAdditions"][stageRoomLayer].push_back(ContainerToHexString(actor));
+            YAML::Node node{};
+            node["data"] = ContainerToHexString(actor.bytes);
+            if (!actor.flow.empty()) {
+                node["flow"] = actor.flow;
+            }
+            out["mObjectAdditions"][stageRoomLayer].push_back(node);
         }
     }
 
-
-    out["mFlowPatches"] = this->mFlowPatches;
-
-    for (const auto& [key, branchOverrides]: this->mFlowPatchesBranchOverrides) {
-        for (auto override : branchOverrides) {
-            out["mFlowPatchesBranchOverrides"][key].push_back(override);
+    for (const auto& flow : mFlowNodes) {
+        YAML::Node node{};
+        node["type"] = flow_node_type_name(flow.type);
+        node["group"] = flow.group;
+        if (flow.patchIndex.has_value()) {
+            node["patchIndex"] = flow.patchIndex.value();
+        } else {
+            node["name"] = flow.name;
         }
+        node["parameters"] = flow.parameters;
+        if (!flow.operation.empty()) {
+            node["operation"] = flow.operation;
+        }
+        if (flow.type == FlowNodeType::MESSAGE) {
+            write_flow_reference(node["message"], flow.message);
+        }
+        if (flow.type != FlowNodeType::BRANCH) {
+            write_flow_reference(node["next"], flow.next);
+        }
+        for (const auto& result : flow.results) {
+            YAML::Node resultNode{};
+            write_flow_reference(resultNode, result);
+            node["results"].push_back(resultNode);
+        }
+        out["mFlowNodes"].push_back(node);
+    }
+
+    for (const auto& message : mCustomMessages) {
+        YAML::Node node{};
+        node["group"] = message.group;
+        node["name"] = message.name;
+        write_message_style(node["style"], message.style);
+        for (const auto& [language, text] : message.text) {
+            const auto languageName = randomizer::languageToString(
+                static_cast<randomizer::Text::Language>(language));
+            node["text"][languageName] = YAML::Binary(
+                reinterpret_cast<const unsigned char*>(text.data()), text.size());
+        }
+        out["mCustomMessages"].push_back(node);
     }
 
     // Dump text overrides as binary to avoid losing intentional null characters
@@ -131,10 +246,6 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
     }
     textData << YAML::EndMap;
     textData << YAML::EndMap;
-
-    for (const auto& [key, override] : mAttributeOverrides) {
-        out["mAttributeOverrides"][key] = ContainerToHexString(override);
-    }
 
     for (const auto& [key, override] : mEntranceOverrides) {
         out["mEntranceOverrides"][std::bit_cast<uint64_t>(key)] = std::bit_cast<uint64_t>(override);
@@ -161,6 +272,11 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
     }
 
     auto in = LoadYAML(this->GetSeedDataPath());
+    if (!in["formatVersion"] || in["formatVersion"].as<u32>() != FORMAT_VERSION) {
+        mods::log::error("Seed {} uses an obsolete data format and must be regenerated", hash);
+        mHash.clear();
+        return "Seed data format is obsolete; regenerate this seed";
+    }
 
     // Necessary settings
     for (const auto& settingNode : in["mSettings"] ) {
@@ -248,12 +364,6 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
         itemData.flag = node["flag"].as<u16>();
     };
 
-    // FLW Override items
-    for (const auto& flwNode : in["mFlowItemMessageOverrides"]) {
-        u32 key = flwNode.first.as<u32>();
-        retrieveItemData(this->mFlowItemMessageOverrides[key], flwNode.second);
-    }
-
     // Items we call by location name
     for (const auto& locationNode : in["mItemLocations"]) {
         const auto& locationName = nameLookupOverride(locationNode.first.as<std::string>());
@@ -270,7 +380,11 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
         u32 stageRoomLayer = stageRoomLayerNode.first.as<u32>();
         for (const auto& actorPatchNode : stageRoomLayerNode.second) {
             u32 actorCRC = actorPatchNode.first.as<u32>();
-            this->mObjectPatches[stageRoomLayer][actorCRC] = HexToBytes(actorPatchNode.second.as<std::string>());
+            auto& actor = this->mObjectPatches[stageRoomLayer][actorCRC];
+            actor.bytes = HexToBytes(actorPatchNode.second["data"].as<std::string>());
+            if (actorPatchNode.second["flow"]) {
+                actor.flow = actorPatchNode.second["flow"].as<std::string>();
+            }
         }
     }
 
@@ -278,24 +392,52 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
     for (const auto& stageNode: in["mObjectAdditions"]) {
         u32 stageRoomLayer = stageNode.first.as<u32>();
         for (const auto& objectData : stageNode.second) {
-            this->mObjectAdditions[stageRoomLayer].emplace_back(HexToBytes(objectData.as<std::string>()));
+            ActorData actor{};
+            actor.bytes = HexToBytes(objectData["data"].as<std::string>());
+            if (objectData["flow"]) {
+                actor.flow = objectData["flow"].as<std::string>();
+            }
+            this->mObjectAdditions[stageRoomLayer].push_back(std::move(actor));
         }
     }
 
-    // Flow Patches
-    for (const auto& flowNode: in["mFlowPatches"]) {
-        auto key = flowNode.first.as<u32>();
-        auto value = flowNode.second.as<u64>();
-        this->mFlowPatches[key] = value;
+    for (const auto& flowNode : in["mFlowNodes"]) {
+        FlowNode flow{};
+        flow.type = parse_flow_node_type(flowNode["type"]);
+        flow.group = flowNode["group"].as<u8>();
+        if (flowNode["patchIndex"]) {
+            flow.patchIndex = flowNode["patchIndex"].as<u16>();
+        } else {
+            flow.name = flowNode["name"].as<std::string>();
+        }
+        flow.parameters = flowNode["parameters"].as<u32>();
+        if (flowNode["operation"]) {
+            flow.operation = flowNode["operation"].as<std::string>();
+        }
+        if (flowNode["message"]) {
+            flow.message = parse_flow_reference(flowNode["message"]);
+        }
+        if (flowNode["next"]) {
+            flow.next = parse_flow_reference(flowNode["next"]);
+        }
+        for (const auto& result : flowNode["results"]) {
+            flow.results.push_back(parse_flow_reference(result));
+        }
+        mFlowNodes.push_back(std::move(flow));
     }
 
-    // Flow Patch Branch Overrides
-    for (const auto& flowNode : in["mFlowPatchesBranchOverrides"]) {
-        auto key = flowNode.first.as<u32>();
-        for (const auto& branchNode : flowNode.second) {
-            auto override = branchNode.as<u16>();
-            this->mFlowPatchesBranchOverrides[key].push_back(override);
+    for (const auto& messageNode : in["mCustomMessages"]) {
+        CustomMessage message{};
+        message.group = messageNode["group"].as<u8>();
+        message.name = messageNode["name"].as<std::string>();
+        message.style = parse_message_style(messageNode["style"]);
+        for (const auto& textNode : messageNode["text"]) {
+            const auto language = randomizer::stringToLanguage(textNode.first.as<std::string>());
+            const auto binary = textNode.second.as<YAML::Binary>();
+            message.text[language] =
+                std::string(reinterpret_cast<const char*>(binary.data()), binary.size());
         }
+        mCustomMessages.push_back(std::move(message));
     }
 
     // Text Overrides
@@ -308,15 +450,6 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
             std::string text(reinterpret_cast<const char*>(binary.data()), binary.size());
             this->mTextOverrides[language][key] = std::move(text);
         }
-    }
-
-    // Attribute Overrides
-    for (const auto& attributeNode : in["mAttributeOverrides"]) {
-        auto key = attributeNode.first.as<u32>();
-        std::vector<u8> overrideVec = HexToBytes(attributeNode.second.as<std::string>());
-        std::array<u8, 20> override{};
-        std::copy(overrideVec.begin(), overrideVec.end(), override.begin());
-        this->mAttributeOverrides[key] = override;
     }
 
     // Entrance Overrides
@@ -792,7 +925,11 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
     }
 }
 
-void randomizer_setTempFlag(RandomizerContext::itemLocationData data) {
+void randomizer_setTempFlag(const RandomizerContext::itemLocationData& data) {
+    if (data.flag == 0xFFFF) {
+        return;
+    }
+
     // If stage is 0xFF, then this is an event flag
     if (data.stage == 0xFF) {
         g_randomizerState.mTrackerTempEventFlag = data.flag;
@@ -807,14 +944,6 @@ void randomizer_setTempFlag(RandomizerContext::itemLocationData data) {
     else {
         dComIfGs_onItem(data.flag, getStageSaveId(data.stage));
     }
-}
-
-void randomizer_setTempFlagForLocation(const std::string& locationName) {
-    randomizer_setTempFlag(randomizer_GetContext().mItemLocations[nameLookupOverride(locationName)]);
-}
-
-void randomizer_setTempFlagForFLWOverride(u32 key) {
-    randomizer_setTempFlag(randomizer_GetContext().mFlowItemMessageOverrides[key]);
 }
 
 bool randomizer_checkTempleOfTimeRequirement() {
@@ -1014,67 +1143,8 @@ void parseObjPatchData(stage_tgsc_data_class& object, const YAML::Node& patchNod
     }
 }
 
-static std::array<u8, 20> CreateAttributeData(const YAML::Node& node, const std::string& name) {
-    auto attributesStr = node.as<std::string>();
-    auto attributesVec = HexToBytes(attributesStr);
-    if (attributesVec.size() != 16) {
-        throw std::runtime_error(fmt::format("Attributes for Text Override {} "
-                                             "are the wrong length. (Expected: 16, Actual: {}", name, attributesVec.size()));
-    }
-
-    std::array<u8, 20> attributes{};
-    for (size_t i = 0; i < attributesVec.size(); ++i) {
-        attributes[i + 4] = attributesVec[i];
-    }
-    return attributes;
-}
-
 RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
     RandomizerContext randoData{};
-
-    // Give custom flows and messages new indices as we read them in/create them
-    std::unordered_map<std::string, u16> customMessageIDs{};
-    std::unordered_map<std::string, u16> customFlowIDs{};
-    std::unordered_set<u16> usedMessageIDs{};
-    std::unordered_set<u16> usedFlowIDs{};
-    u16 curCustomMessageID = BASE_CUSTOM_MSG_AND_FLOW_ID;
-    u16 curCustomFlowID = BASE_CUSTOM_MSG_AND_FLOW_ID;
-
-    // Helper functions for assigning new custom flow IDs/message IDs
-    auto handleCustomID = [](const std::string& name, auto& customIds, auto& usedIds, u16& curCustomID) {
-        u16 resultIndex{};
-        // Check to see if we're setting a custom index
-        auto resultInt = randomizer::utility::str::toInt(name);
-        // If we have a regular index, then use that directly
-        if (resultInt.has_value()) {
-            resultIndex = resultInt.value();
-        } else {
-            // If we don't, assume we're setting the index as custom
-            if (customIds.contains(name)) {
-                resultIndex = customIds[name];
-            } else {
-                while (usedIds.contains(curCustomID)) {
-                    ++curCustomID;
-                }
-                auto newIndex = curCustomID++;
-                resultIndex = newIndex;
-                customIds[name] = newIndex;
-            }
-        }
-
-        usedIds.insert(resultIndex);
-        return resultIndex;
-    };
-
-
-    auto handleCustomFlowID = [&](const std::string& name) {
-        return handleCustomID(name, customFlowIDs, usedFlowIDs, curCustomFlowID);
-    };
-
-
-    auto handleCustomMessageID = [&](const std::string& name) {
-        return handleCustomID(name, customMessageIDs, usedMessageIDs, curCustomMessageID);
-    };
 
     // Settings we need to check ingame
     for (const auto& [setting, info] : *randomizer::seedgen::settings::GetAllSettingsInfo()) {
@@ -1206,71 +1276,6 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
             }
         };
 
-        // Items that we determine the text of and then give during a FLW message
-        if (location->HasCategories("FLW Message")) {
-            for (const auto& flwMessageNode : metaData["FLW Message"]) {
-                u8 group = flwMessageNode["Group"].as<u8>();
-                u16 messageId = flwMessageNode["Message Id"].as<u16>();
-                u32 key = (group << 16) | messageId;
-                randoData.mFlowItemMessageOverrides[key].itemId = location->GetCurrentItem()->GetID();
-                getNodeFlags(randoData.mFlowItemMessageOverrides[key], metaData);
-            }
-        }
-
-        // Items that are given by FLW events. Override the item in the existing event with the
-        // randomized item
-        if (location->HasCategories("FLW Event")) {
-            for (const auto& flwEventNode : metaData["FLW Event"]) {
-                u8 group = flwEventNode["Group"].as<u8>();
-                u16 index = handleCustomFlowID(flwEventNode["Index"].as<std::string>());
-                mesg_flow_node_event event{};
-                event.type = 3; // event type node
-                event.event_idx = 8;
-                event.next_node_idx = handleCustomFlowID(flwEventNode["Next Node Index"].as<std::string>());
-                auto params = flwEventNode["Parameters"].as<u32>();
-                // Zero out the spot for the item id
-                params &= 0xFFFFFF00;
-                // Put in the item id
-                params |= location->GetCurrentItem()->GetID();
-                // Set the params in the correct order
-                event.params[0] = (params >> 24) & 0xFF;
-                event.params[1] = (params >> 16) & 0xFF;
-                event.params[2] = (params >> 8) & 0xFF;
-                event.params[3] = params & 0xFF;
-
-                // Construct another FLW node to set the associated flag in a temporary variable
-                // right before we receive the item. This ensures that a tracker/AP can pick up
-                // on the fact that we've received the item.
-                auto newFlwIndex = handleCustomFlowID(location->GetName() + " Flag Set Node");
-                mesg_flow_node_event flagEvent{};
-                flagEvent.type = 3; // event type node
-                flagEvent.event_idx = 46; // Set temporary randomizer flag
-
-                u8 stage{0xFF};
-                u16 flag{0xFFFF};
-                if (metaData["Event Flag"]) {
-                    flag = metaData["Event Flag"].as<u16>();
-                } else if (metaData["Switch Flag"]) {
-                    stage = metaData["Switch Flag"]["Stage"].as<u8>();
-                    flag = metaData["Switch Flag"]["Flag"].as<u8>();
-                }
-                flagEvent.params[0] = 0;
-                flagEvent.params[1] = stage;
-                flagEvent.params[2] = (flag >> 8) & 0xFF;
-                flagEvent.params[3] = flag & 0xFF;
-
-                // Store the modified FLW nodes. The flag event takes the place of the original
-                // index we're modifying and then leads into the custom index of the event that
-                // sets up the item id
-                flagEvent.next_node_idx = newFlwIndex;
-                u32 key = (group << 16) | index;
-                randoData.mFlowPatches[key] = std::bit_cast<u64>(flagEvent);
-
-                key = (CUSTOM_BMG_GROUP << 16) | newFlwIndex;
-                randoData.mFlowPatches[key] = std::bit_cast<u64>(event);
-            }
-        }
-
         // Items that we lookup just by calling their location name
         if (location->HasCategories("Name Lookup")) {
             for (const auto& locationNameNode : metaData["Name Lookup"]) {
@@ -1350,6 +1355,7 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         randoData.mStartHour = 24;
 
     // Actor Patches
+    std::unordered_map<std::string, u8> objectFlowGroups{};
     auto actorPatches = LOAD_EMBED_YAML(RANDO_DATA_PATH "object_patches.yaml");
     for (const auto& stageNode : actorPatches) {
         const auto& stageName = stageNode.first.as<std::string>();
@@ -1377,20 +1383,36 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
                 u32 objectCRC32 = getStageObjCRC32(reinterpret_cast<u8*>(&object), objDataSize);
 
                 // Depending on the action, store data on this actor
-                std::vector<u8> actorData(0);
+                RandomizerContext::ActorData actorData{};
+                if (objectNode["flow"]) {
+                    actorData.flow = objectNode["flow"].as<std::string>();
+                    const int stageId = getStageID(stageName.c_str());
+                    if (stageId < 0 ||
+                        static_cast<size_t>(stageId) >= std::size(allStageMessageGroups))
+                    {
+                        throw std::runtime_error("Unknown stage for flow-bearing actor: " + stageName);
+                    }
+                    const u8 group = allStageMessageGroups[stageId];
+                    const auto [found, inserted] = objectFlowGroups.emplace(actorData.flow, group);
+                    if (!inserted && found->second != group) {
+                        throw std::runtime_error(
+                            "Actor flow is referenced from multiple message groups: " + actorData.flow);
+                    }
+                    object.base.angle.x = 0;
+                }
                 // If we're patching this object, Then override the object with whatever parts are being patched
                 // and add that patch data to our actorData
                 if (action == "patch") {
                     parseObjPatchData(object, objectNode["patch"]);
-                    actorData.resize(objDataSize);
-                    std::memcpy(actorData.data(), &object, objDataSize);
+                    actorData.bytes.resize(objDataSize);
+                    std::memcpy(actorData.bytes.data(), &object, objDataSize);
                 } else if (action == "add") {
                     // If we're adding the object, add it's regular data to the actorData
-                    actorData.resize(objDataSize);
-                    std::memcpy(actorData.data(), &object, objDataSize);
+                    actorData.bytes.resize(objDataSize);
+                    std::memcpy(actorData.bytes.data(), &object, objDataSize);
                 } else if (action == "delete") {
                     // If we're deleting this actor, give it a specific size to indicate we're deleting it
-                    actorData.resize(RandomizerContext::OBJ_DELETE_SIZE);
+                    actorData.bytes.resize(RandomizerContext::OBJ_DELETE_SIZE);
                 } else {
                     // Unknown action. Don't continue
                     throw std::runtime_error("object patch action \"" + action + "\" not recognized");
@@ -1415,228 +1437,225 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         }
     }
 
-    // Flow Patches
+    auto source_reference = [](const YAML::Node& node) {
+        RandomizerContext::FlowReference reference{};
+        const auto value = node.as<std::string>();
+        if (const auto numeric = randomizer::utility::str::toInt(value); numeric.has_value()) {
+            if (numeric.value() < 0 || numeric.value() > 0xffff) {
+                throw std::runtime_error("Flow reference is outside the 16-bit range: " + value);
+            }
+            reference.nativeId = static_cast<u16>(numeric.value());
+        } else {
+            reference.name = value;
+        }
+        return reference;
+    };
+
+    std::unordered_map<std::string, std::unordered_set<u8>> customMessageGroups{};
+    std::unordered_map<std::string, std::string> splitMessageStyles{};
     auto flowPatches = LOAD_EMBED_YAML(RANDO_DATA_PATH "flow_patches.yaml");
     for (const auto& groupNode : flowPatches) {
-        u8 groupNo = groupNode.first.as<u8>();
+        const auto groupName = groupNode.first.as<std::string>();
+        const bool customSection = groupName == "custom";
+        const u8 defaultGroup = customSection ? 0 : groupNode.first.as<u8>();
         for (const auto& flowNode : groupNode.second) {
-            // Check to see if this patch is contingent on a specific setting
-            if (flowNode["only if"]) {
-                const auto& condition = flowNode["only if"].as<std::string>();
-                // If the required condition isn't set, then skip this one
-                if (!world->EvaluateSettingCondition(condition)) {
-                    continue;
-                }
+            if (flowNode["only if"] &&
+                !world->EvaluateSettingCondition(flowNode["only if"].as<std::string>()))
+            {
+                continue;
             }
-            std::string name{};
-            std::list<u16> indices{};
-            if (flowNode["index"]) {
-                // If we're specifying a sequence of indices
-                if (flowNode["index"].IsSequence()) {
-                    for (const auto& indexNode : flowNode["index"]) {
-                        auto index = indexNode.as<u16>();
-                        indices.push_back(index);
-                        usedFlowIDs.insert(index);
-                    }
-                    name = std::to_string(indices.front());
-                }
-                // If we have just a single index
-                else if (flowNode["index"].IsScalar()) {
-                    auto index = flowNode["index"].as<u16>();
-                    indices.push_back(index);
-                    name = std::to_string(index);
-                    usedFlowIDs.insert(index);
-                }
 
-                // If we're specifying an index as well as a name, add the index to the custom
-                // ids
-                if (flowNode["name"]) {
-                    name = flowNode["name"].as<std::string>();
-                    customFlowIDs[name] = indices.front();
+            RandomizerContext::FlowNode flow{};
+            flow.type = parse_flow_node_type(flowNode["type"]);
+
+            std::vector<u16> patchIndices{};
+            if (customSection) {
+                flow.name = flowNode["name"].as<std::string>();
+                if (flowNode["group"]) {
+                    flow.group = flowNode["group"].as<u8>();
+                } else if (const auto found = objectFlowGroups.find(flow.name);
+                           found != objectFlowGroups.end())
+                {
+                    flow.group = found->second;
+                } else {
+                    throw std::runtime_error("Custom flow has no message group: " + flow.name);
                 }
             } else {
-                name = flowNode["name"].as<std::string>();
-                indices.push_back(handleCustomFlowID(flowNode["name"].as<std::string>()));
-            }
-
-            const auto& type = flowNode["type"].as<std::string>();
-            u64 value{};
-            if (type == "branch") {
-                auto branch = reinterpret_cast<mesg_flow_node_branch*>(&value);
-                branch->type = 2;
-                branch->result_count = flowNode["num results"].as<u8>();
-                branch->query_idx = flowNode["query"].as<u16>();
-                branch->param = flowNode["parameters"].as<u16>();
-                branch->next_node_idx = flowNode["next node index"].as<u16>();
-                // If we're using custom result indices
-                if (flowNode["results"]) {
-                    auto& results = flowNode["results"];
-                    if (results.size() != branch->result_count) {
-                        throw std::runtime_error(fmt::format("Flow results size for {} "
-                            "do not match num results. (expected: {}. size: {})", name, branch->result_count, results.size()));
+                flow.group = defaultGroup;
+                if (flowNode["index"].IsSequence()) {
+                    for (const auto& index : flowNode["index"]) {
+                        patchIndices.push_back(index.as<u16>());
                     }
-                    for (const auto& resultNode : results) {
-                        auto resultIndex = handleCustomFlowID(resultNode.as<std::string>());
-                        for (auto index : indices) {
-                            u32 key = (groupNo << 16) | index;
-                            randoData.mFlowPatchesBranchOverrides[key].push_back(resultIndex);
-                        }
-                    }
+                } else {
+                    patchIndices.push_back(flowNode["index"].as<u16>());
                 }
             }
-            else if (type == "event") {
-                auto event = reinterpret_cast<mesg_flow_node_event*>(&value);
-                event->type = 3;
-                event->event_idx = flowNode["event"].as<u8>();
-                event->next_node_idx = handleCustomFlowID(flowNode["next node index"].as<std::string>());
-                u32 params = flowNode["parameters"].as<u32>();
-                event->params[0] = (params >> 24) & 0xFF;
-                event->params[1] = (params >> 16) & 0xFF;
-                event->params[2] = (params >> 8) & 0xFF;
-                event->params[3] = params & 0xFF;
-            } else if (type == "message") {
-                auto message = reinterpret_cast<mesg_flow_node*>(&value);
-                message->type = 1;
-                message->msg_index = handleCustomMessageID(flowNode["inf index"].as<std::string>());
-                message->next_node_idx = handleCustomFlowID(flowNode["next flow index"].as<std::string>());
 
-                // If a custom message is too long, split it up among additional flow/message nodes
-                if (message->msg_index >= BASE_CUSTOM_MSG_AND_FLOW_ID) {
-                    auto textName = flowNode["inf index"].as<std::string>();
-                    if (world->GetTextDatabase().contains(textName)) {
-                        auto& text = world->GetTextObject(textName);
-                        if (text.IsTooLong()) {
-                            // Get the attributes for the text at this ID. Pretty inefficient since we
-                            // have to loop through every element unfortunately
-                            std::optional<std::array<u8, 20>> customAttributes{};
-                            auto textOverrides = LOAD_EMBED_YAML(RANDO_DATA_PATH "text/text_overrides.yaml");
-                            for (const auto& overrideNode : textOverrides) {
-                                const auto& overrideName = overrideNode["Name"].as<std::string>();
-                                if (overrideName == textName && overrideNode["Attributes"]) {
-                                    customAttributes = CreateAttributeData(overrideNode["Attributes"], textName);
-                                    break;
-                                }
+            if (flow.type == RandomizerContext::FlowNodeType::BRANCH) {
+                flow.parameters = flowNode["parameters"].as<u32>();
+                flow.operation = flowNode["query"].as<std::string>();
+                for (const auto& result : flowNode["results"]) {
+                    flow.results.push_back(source_reference(result));
+                }
+                if (flow.parameters > 0xffff || flow.results.empty() ||
+                    flow.results.size() > 0xff)
+                {
+                    throw std::runtime_error("Flow branch has invalid parameters or results");
+                }
+            } else if (flow.type == RandomizerContext::FlowNodeType::EVENT) {
+                flow.parameters = flowNode["parameters"].as<u32>();
+                flow.operation = flowNode["event"].as<std::string>();
+                flow.next = source_reference(flowNode["next"]);
+            } else {
+                flow.message = source_reference(flowNode["message"]);
+                flow.next = source_reference(flowNode["next"]);
+                if (!flow.message.nativeId.has_value()) {
+                    customMessageGroups[flow.message.name].insert(flow.group);
+                    if (world->GetTextDatabase().contains(flow.message.name)) {
+                        auto& text = world->GetTextObject(flow.message.name);
+                        // The game still owns textbox pagination, so preserve the existing
+                        // per-message limit while representing overflow as ordinary flow nodes.
+                        const auto extraText = text.SplitToFitTextLimits();
+                        if (!extraText.empty()) {
+                            const auto originalNext = flow.next;
+                            std::vector<std::string> extraNames{};
+                            for (size_t i = 0; i < extraText.size(); ++i) {
+                                auto extraName = flow.message.name + std::to_string(i + 1);
+                                world->AddNewText(extraName) = extraText[i];
+                                splitMessageStyles[extraName] = flow.message.name;
+                                customMessageGroups[extraName].insert(flow.group);
+                                extraNames.push_back(std::move(extraName));
                             }
-
-
-                            // Add each split text as a new custom message entry. The original entry
-                            // still exists but has been sliced down to fit properly.
-                            auto extraText = text.SplitToFitTextLimits();
-                            std::vector<mesg_flow_node> newMsgFlows{};
-                            for (size_t i = 0; i < extraText.size(); i++) {
-                                // Add this custom text to the world
-                                auto extraTextName = textName + std::to_string(i + 1);
-                                world->AddNewText(extraTextName) = extraText[i];
-
-                                // Create new Flow and Message Ids for the split text object
-                                auto newCustomFlowIndex = handleCustomFlowID(extraTextName);
-                                auto newCustomMessageIndex = handleCustomMessageID(extraTextName);
-
-                                // Create the new flow node. We're storing its own flow index with
-                                // itself for now, but we'll shift it back to the previous node later
-                                mesg_flow_node newMsgFlow{};
-                                newMsgFlow.type = 1;
-                                newMsgFlow.msg_index = newCustomMessageIndex;
-                                newMsgFlow.next_node_idx = newCustomFlowIndex;
-
-                                newMsgFlows.push_back(newMsgFlow);
-
-                                //Add the custom text to the rando data
-                                u32 key = (CUSTOM_BMG_GROUP << 16) | newCustomMessageIndex;
-                                for (auto language : randomizer::supportedLanguages) {
-                                    std::string newText = extraText[i].mText[language];
-                                    randomizer::applyMessageCodes(newText);
-                                    randoData.mTextOverrides[language][key] = newText;
-                                }
-
-                                // Add custom attribute data as well if it exists
-                                if (customAttributes.has_value()) {
-                                    auto attributes = customAttributes.value();
-
-                                    // Set the message id in the attribute data
-                                    attributes[4] = newCustomMessageIndex >> 8;
-                                    attributes[5] = newCustomMessageIndex & 0xFF;
-
-                                    randoData.mAttributeOverrides[key] = attributes;
-                                }
-                            }
-
-                            // Shift all the next_node_idx fields back a node and set the original
-                            // next node idx as the next node idx for the final of the new flows
-                            auto finalNodeIdx = message->next_node_idx;
-                            message->next_node_idx = newMsgFlows[0].next_node_idx;
-                            for (size_t i = 0; i < newMsgFlows.size(); i++) {
-                                auto& curFlow = newMsgFlows[i];
-                                auto curFlowIdx = curFlow.next_node_idx;
-                                if (i == newMsgFlows.size() - 1) {
-                                    curFlow.next_node_idx = finalNodeIdx;
-                                } else {
-                                    curFlow.next_node_idx = newMsgFlows[i + 1].next_node_idx;
-                                }
-
-                                // Also Add the new custom flows to our rando data
-                                u32 key = (CUSTOM_BMG_GROUP << 16) | curFlowIdx;
-                                randoData.mFlowPatches[key] = std::bit_cast<u64>(curFlow);
+                            flow.next = {.name = extraNames.front()};
+                            for (size_t i = 0; i < extraNames.size(); ++i) {
+                                RandomizerContext::FlowNode extraFlow{
+                                    .type = RandomizerContext::FlowNodeType::MESSAGE,
+                                    .group = flow.group,
+                                    .name = extraNames[i],
+                                    .message = {.name = extraNames[i]},
+                                    .next = i + 1 < extraNames.size() ?
+                                                RandomizerContext::FlowReference{
+                                                    .name = extraNames[i + 1]} :
+                                                originalNext,
+                                };
+                                randoData.mFlowNodes.push_back(std::move(extraFlow));
                             }
                         }
                     }
                 }
             }
-            for (auto index : indices) {
-                u32 key = (groupNo << 16) | index;
-                randoData.mFlowPatches[key] = value;
+
+            if (customSection) {
+                randoData.mFlowNodes.push_back(std::move(flow));
+            } else {
+                for (const u16 patchIndex : patchIndices) {
+                    auto patch = flow;
+                    patch.patchIndex = patchIndex;
+                    randoData.mFlowNodes.push_back(std::move(patch));
+                }
             }
         }
     }
 
-    // Text Overrides
+    std::array<std::unordered_set<std::string>, 9> flowNames{};
+    for (const auto& flow : randoData.mFlowNodes) {
+        if (flow.group >= flowNames.size()) {
+            throw std::runtime_error("Flow node has an invalid message group");
+        }
+        if (!flow.patchIndex.has_value() &&
+            (flow.name.empty() || !flowNames[flow.group].insert(flow.name).second))
+        {
+            throw std::runtime_error("Custom flow name is empty or duplicated: " + flow.name);
+        }
+    }
+    auto validate_flow_reference = [&](u8 group, const RandomizerContext::FlowReference& reference) {
+        if (!reference.nativeId.has_value() &&
+            (reference.name.empty() || !flowNames[group].contains(reference.name)))
+        {
+            throw std::runtime_error(fmt::format(
+                "Unresolved flow reference in group {}: {}", group, reference.name));
+        }
+    };
+    for (const auto& [name, group] : objectFlowGroups) {
+        validate_flow_reference(group, {.name = name});
+    }
+    for (const auto& flow : randoData.mFlowNodes) {
+        if (flow.type == RandomizerContext::FlowNodeType::BRANCH) {
+            for (const auto& result : flow.results) {
+                validate_flow_reference(flow.group, result);
+            }
+        } else {
+            validate_flow_reference(flow.group, flow.next);
+        }
+    }
+
+    auto parse_style = [](const YAML::Node& node) {
+        RandomizerContext::MessageStyleData style{};
+        if (!node) {
+            return style;
+        }
+        auto set = [&](const char* key, auto& field) {
+            if (node[key]) {
+                field = node[key].as<std::remove_reference_t<decltype(field)>>();
+            }
+        };
+        set("Event Label", style.eventLabelId);
+        set("Speaker", style.speaker);
+        set("Box Kind", style.boxKind);
+        set("Draw Type", style.drawType);
+        set("Box Position", style.boxPosition);
+        set("Line Alignment", style.lineAlignment);
+        set("Speaker Mood", style.speakerMood);
+        set("Camera", style.cameraAttr);
+        set("Talk Animation", style.talkAnim);
+        set("Face Animation", style.faceAnim);
+        set("Trailing Data", style.trailingData);
+        return style;
+    };
+
     auto textOverrides = LOAD_EMBED_YAML(RANDO_DATA_PATH "text/text_overrides.yaml");
+    std::unordered_map<std::string, YAML::Node> textDefinitions{};
     for (const auto& overrideNode : textOverrides) {
-        // Check to see if this override is contingent on a specific setting
-        if (overrideNode["Only If"]) {
-            const auto& condition = overrideNode["Only If"].as<std::string>();
-            // If the required condition isn't set, then skip this one
-            if (!world->EvaluateSettingCondition(condition)) {
-                continue;
-            }
+        const auto name = overrideNode["Name"].as<std::string>();
+        textDefinitions.emplace(name, overrideNode);
+        if (!overrideNode["Message Id"] ||
+            (overrideNode["Only If"] &&
+                !world->EvaluateSettingCondition(overrideNode["Only If"].as<std::string>())))
+        {
+            continue;
         }
-        const auto& name = overrideNode["Name"].as<std::string>();
-        u8 group;
-        u16 messageId;
-        if (overrideNode["Group"]) {
-            group = overrideNode["Group"].as<u8>();
-        } else {
-            // If no group specified, assume custom bmg group
-            group = CUSTOM_BMG_GROUP;
-        }
-        if (overrideNode["Message Id"]) {
-            messageId = overrideNode["Message Id"].as<u16>();
-        } else {
-            // If no message id specified, assume a custom one
-            messageId = handleCustomMessageID(overrideNode["Name"].as<std::string>());
-        }
-        u32 key = (group << 16) | messageId;
-        for (auto language : randomizer::supportedLanguages) {
-            std::string text;
-            if (world->GetTextDatabase().contains(name)) {
-                text = world->GetText(name, randomizer::Text::STANDARD, language);
-            } else {
-                text = randomizer::getTextStr(name, randomizer::Text::STANDARD, language);
-            }
-
+        const u8 group = overrideNode["Group"].as<u8>();
+        const u16 messageId = overrideNode["Message Id"].as<u16>();
+        const u32 key = static_cast<u32>(group) << 16 | messageId;
+        for (const auto language : randomizer::supportedLanguages) {
+            std::string text = world->GetTextDatabase().contains(name) ?
+                                   world->GetText(name, randomizer::Text::STANDARD, language) :
+                                   randomizer::getTextStr(name, randomizer::Text::STANDARD, language);
             randomizer::applyMessageCodes(text);
-            randoData.mTextOverrides[language][key] = text;
+            randoData.mTextOverrides[language][key] = std::move(text);
         }
+    }
 
-        // If we have custom attributes
-        if (overrideNode["Attributes"]) {
-            auto attributes = CreateAttributeData(overrideNode["Attributes"], name);
-
-            // Set the message id in the attribute data
-            attributes[4] = messageId >> 8;
-            attributes[5] = messageId & 0xFF;
-
-            randoData.mAttributeOverrides[key] = attributes;
+    for (const auto& [name, groups] : customMessageGroups) {
+        const auto styleName = splitMessageStyles.contains(name) ? splitMessageStyles[name] : name;
+        const auto definition = textDefinitions.find(styleName);
+        if (definition == textDefinitions.end()) {
+            throw std::runtime_error("Custom flow message has no text definition: " + styleName);
+        }
+        for (const u8 group : groups) {
+            RandomizerContext::CustomMessage message{
+                .group = group,
+                .name = name,
+                .style = parse_style(definition->second["Style"]),
+            };
+            for (const auto language : randomizer::supportedLanguages) {
+                std::string text = world->GetTextDatabase().contains(name) ?
+                                       world->GetText(name, randomizer::Text::STANDARD, language) :
+                                       randomizer::getTextStr(name, randomizer::Text::STANDARD, language);
+                randomizer::applyMessageCodes(text);
+                message.text[language] = std::move(text);
+            }
+            randoData.mCustomMessages.push_back(std::move(message));
         }
     }
 

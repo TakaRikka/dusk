@@ -188,8 +188,6 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
         g_stageHook = 0;
         return mods::set_error(error, MOD_ERROR, "failed to register mod panel");
     }
-
-    mods::log::info("auxiliary WebGPU window ready");
     return MOD_OK;
 }
 

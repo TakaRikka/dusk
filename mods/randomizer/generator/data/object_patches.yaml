@@ -12,8 +12,9 @@ D_MN01:
         x: -4765.38037
         y: -1.21
         z: 272.192261
+      flow: Lakebed Temple Hint Sign
       angle:
-        x: 21125 # Flow node id
+        x: 0
         y: 0x46B9
         z: 0x0000
       set id: 0xFFFF
@@ -32,8 +33,9 @@ D_MN04:
         x: 11394.1855
         y: 2878.65
         z: -17913.05
+      flow: Goron Mines Hint Sign
       angle:
-        x: 21124 # Flow node id
+        x: 0
         y: 0xD556
         z: 0x0000
       set id: 0xFFFF
@@ -52,8 +54,9 @@ D_MN05:
         x: -1972.11682
         y: 3150
         z: 7610.9751
+      flow: Forest Temple Hint Sign
       angle:
-        x: 21123 # Flow node id
+        x: 0
         y: 0x6000
         z: 0x0000
       set id: 0xFFFF
@@ -72,8 +75,9 @@ D_MN06:
         x: -618.9335
         y: 725.0
         z: 3112.2
+      flow: Temple of Time First Hint Sign
       angle:
-        x: 21128 # Flow node id
+        x: 0
         y: 0x8000
         z: 0x0000
       set id: 0xFFFF
@@ -90,8 +94,9 @@ D_MN06:
         x: -3885.2157
         y: 4450.0
         z: -6353.38135
+      flow: Temple of Time Second Hint Sign
       angle:
-        x: 21129 # Flow node id
+        x: 0
         y: 0x2000
         z: 0x0000
       set id: 0xFFFF
@@ -155,8 +160,9 @@ D_MN07:
         x: 3376.54
         y: 0.0
         z: -12709.0352
+      flow: City in the Sky Hint Sign
       angle:
-        x: 21130 # Flow node id
+        x: 0
         y: 0xC846
         z: 0x0000
       set id: 0xFFFF
@@ -237,8 +243,9 @@ D_MN08:
         x: 679.0
         y: -200.0
         z: 9311.0
+      flow: Palace of Twilight Hint Sign
       angle:
-        x: 21131 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -257,8 +264,9 @@ D_MN09:
         x: 0.0
         y: 25.0
         z: 11625.0
+      flow: Hyrule Castle Hint Sign
       angle:
-        x: 21132 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -277,8 +285,9 @@ D_MN10:
         x: -349.4044
         y: 450.0
         z: -2876.90771
+      flow: Arbiters Grounds Hint Sign
       angle:
-        x: 21126 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -297,8 +306,9 @@ D_MN11:
         x: -530.0
         y: 0.0
         z: -669.69
+      flow: Snowpeak Ruins Hint Sign
       angle:
-        x: 21127 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -317,8 +327,9 @@ D_SB01:
         x: -1191.42
         y: 1100.0
         z: -260.65
+      flow: Cave of Ordeals Hint Sign
       angle:
-        x: 21133 # Flow node id
+        x: 0
         y: 0xE483
         z: 0x0000
       set id: 0xFFFF
@@ -337,8 +348,9 @@ D_SB03:
         x: -2897.38672
         y: -1636.68994
         z: -17674.8691
+      flow: Lake Lantern Cave Hint Sign
       angle:
-        x: 21117 # Flow node id
+        x: 0
         y: 0x3E21
         z: 0x0000
       set id: 0xFFFF
@@ -533,8 +545,9 @@ F_SP103:
         x: 687.89
         y: 800.0
         z: -1424.16
+      flow: Ordon Hint Sign
       angle:
-        x: 21100 # Flow node id
+        x: 0
         y: 0xA019
         z: 0x0000
       set id: 0xFFFF
@@ -586,8 +599,9 @@ F_SP108:
         x: -12423.8467
         y: 273.277985
         z: -11518.958
+      flow: South Faron Woods Hint Sign
       angle:
-        x: 21101 # Flow node id
+        x: 0
         y: 0x9228
         z: 0x0000
       set id: 0xFFFF
@@ -721,8 +735,9 @@ F_SP109:
         x: -3347.52734
         y: 2999.16138
         z: -2865.99341
+      flow: Kakariko Village Hint Sign
       angle:
-        x: 21105 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -786,8 +801,9 @@ F_SP111:
         x: 21765.9863
         y: 500.0
         z: -62.247
+      flow: Kakariko Graveyard Hint Sign
       angle:
-        x: 21106 # Flow node id
+        x: 0
         y: 0xC000
         z: 0x0000
       set id: 0xFFFF
@@ -1217,8 +1233,9 @@ F_SP113:
         x: -2964.84839
         y: -2500.0
         z: 17146.2676
+      flow: Zoras Domain Hint Sign
       angle:
-        x: 21119 # Flow node id
+        x: 0
         y: 0xAF09
         z: 0x0000
       set id: 0xFFFF
@@ -1240,8 +1257,9 @@ F_SP114:
         x: 15931.9238
         y: -14389.4912
         z: -17388.1992
+      flow: Snowpeak Hint Sign
       angle:
-        x: 21120 # Flow node id
+        x: 0
         y: 0x2C5A
         z: 0x0000
       set id: 0xFFFF
@@ -1854,8 +1872,9 @@ F_SP115:
         x: -109203.461
         y: -7220.0
         z: 33083.7344
+      flow: Lake Hylia Hint Sign
       angle:
-        x: 21115 # Flow node id
+        x: 0
         y: 0x64B5
         z: 0x0000
       set id: 0xFFFF
@@ -2030,8 +2049,9 @@ F_SP115:
         x: -309.997833
         y: -1614.82178
         z: 157.970795
+      flow: Lanayru Spring Hint Sign
       angle:
-        x: 21116 # Flow node id
+        x: 0
         y: 0x8000
         z: 0x0000
       set id: 0xFFFF
@@ -2071,8 +2091,9 @@ F_SP116:
         x: 0.0
         y: -200.0
         z: 835.0
+      flow: Castle Town Center Hint Sign
       angle:
-        x: 21112 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -2229,8 +2250,9 @@ F_SP117:
         x: -1543.0
         y: 1725.0
         z: 7964.85498
+      flow: Sacred Grove Hint Sign
       angle:
-        x: 21102 # Flow node id
+        x: 0
         y: 0x4000
         z: 0x0000
       set id: 0xFFFF
@@ -2377,8 +2399,9 @@ F_SP118:
         x: -568.556152
         y: 260.0
         z: -3969.31
+      flow: Bulblin Camp Hint Sign
       angle:
-        x: 21122 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -2531,8 +2554,9 @@ F_SP121:
         x: -12433.2744
         y: -1075.2218
         z: 20885.7129
+      flow: Eldin Field Hint Sign
       angle:
-        x: 21107 # Flow node id
+        x: 0
         y: 0x8000
         z: 0x0000
       set id: 0xFFFF
@@ -2769,8 +2793,9 @@ F_SP121:
         x: -10116.0215
         y: -4923.46191
         z: 43064.4375
+      flow: Kakariko Gorge Hint Sign
       angle:
-        x: 21104 # Flow node id
+        x: 0
         y: 0x0789
         z: 0x0000
       set id: 0xFFFF
@@ -2862,8 +2887,9 @@ F_SP121:
         x: -46039.4922
         y: -9250.0
         z: 81859.2891
+      flow: Faron Field Hint Sign
       angle:
-        x: 21103 # Flow node id
+        x: 0
         y: 0x8000
         z: 0x0000
       set id: 0xFFFF
@@ -2930,8 +2956,9 @@ F_SP121:
         x: 18468.8418
         y: 1580.0
         z: -63560.9531
+      flow: North Eldin Field Hint Sign
       angle:
-        x: 21108 # Flow node id
+        x: 0
         y: 0xCDC6
         z: 0x0000
       set id: 0xFFFF
@@ -3177,8 +3204,9 @@ F_SP121:
         x: -64943.7422
         y: -1359.66711
         z: -31897.8828
+      flow: Lanayru Field Hint Sign
       angle:
-        x: 21110 # Flow node id
+        x: 0
         y: 0xE223
         z: 0x0000
       set id: 0xFFFF
@@ -3403,8 +3431,9 @@ F_SP121:
         x: -94678.8672
         y: -3900.0
         z: 18410.543
+      flow: Lake Hylia Bridge Hint Sign
       angle:
-        x: 21114 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -3727,8 +3756,9 @@ F_SP122:
         x: -80699.5
         y: -765.58374
         z: 1903.61462
+      flow: Beside Castle Town Hint Sign
       angle:
-        x: 21111 # Flow node id
+        x: 0
         y: 0x25B7
         z: 0x0000
       set id: 0xFFFF
@@ -4012,8 +4042,9 @@ F_SP122:
         x: -51500.0
         y: -5500.0
         z: 27368.3086
+      flow: Outside South Castle Town Hint Sign
       angle:
-        x: 21113 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF
@@ -4096,8 +4127,9 @@ F_SP124:
         x: 20356.23
         y: 556.7
         z: 38694.8047
+      flow: Gerudo Desert Hint Sign
       angle:
-        x: 21121 # Flow node id
+        x: 0
         y: 0x0099
         z: 0x0000
       set id: 0xFFFF
@@ -4692,8 +4724,9 @@ F_SP127:
         x: -2924.74585
         y: 35.0
         z: 8386.28906
+      flow: Fishing Hole Hint Sign
       angle:
-        x: 21118 # Flow node id
+        x: 0
         y: 0x8000
         z: 0x0000
       set id: 0xFFFF
@@ -4716,8 +4749,9 @@ F_SP128:
         x: 5161.03
         y: 0.0
         z: -5264.33
+      flow: Hidden Village Hint Sign
       angle:
-        x: 21109 # Flow node id
+        x: 0
         y: 0x0000
         z: 0x0000
       set id: 0xFFFF

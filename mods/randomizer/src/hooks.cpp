@@ -31,7 +31,6 @@
 #include "d/actor/d_a_npc_zrc.h"
 #include "d/actor/d_a_npc_zrz.h"
 #include "d/actor/d_a_obj_bosswarp.h"
-#include "d/actor/d_a_obj_master_sword.h"
 #include "d/actor/d_a_obj_swBallC.h"
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "d/actor/d_a_tag_kmsg.h"
@@ -145,9 +144,6 @@ DEFINE_HOOK(&daNpc_ykW_c::isDelete, daNpc_ykW_c__isDelete);
 
 DEFINE_HOOK_SYMBOL("daE_MD_Create", int(fopAc_ac_c*), daE_MD_c__create);
 
-DEFINE_HOOK(&fopAcM_orderMapToolEvent, orderMapToolEvent);
-DEFINE_HOOK_SYMBOL("daObjMasterSword_Execute", int(daObjMasterSword_c*), daObjMasterSword_c__execute);
-
 DEFINE_HOOK(&dScnName_c::changeGameScene, dScnName_c__changeGameScene);
 
 DEFINE_HOOK(&daNpc_zrZ_c::isDelete, daNpc_zrZ_c__isDelete);
@@ -177,13 +173,6 @@ DEFINE_HOOK_SYMBOL(setEmptyBottle_noarg_sig, void(dSv_player_item_c*), dSv_playe
 DEFINE_HOOK(&daNpc_zrC_c::isDelete, daNpc_zrC_c__isDelete);
 
 DEFINE_HOOK(&daObjZraRock_c::create, daObjZraRock_c__create);
-
-#ifdef _MSVC_LANG
-#define phase_1_dScnPly_sig "?phase_1@@YAHPAUdScnPly_c@@@Z" // sig is wrong?
-#else
-#define phase_1_dScnPly_sig "_Z7phase_1P9dScnPly_c"
-#endif
-// DEFINE_HOOK_SYMBOL(phase_1_dScnPly_sig, int(dScnPly_c*), phase_1__dScnPly_c);
 
 DEFINE_HOOK(&dMenu_Ring_c::textScaleHIO, dMenu_Ring_c__textScaleHIO);
 
@@ -1806,7 +1795,8 @@ HookAction hookPreProcCoGetItem(ModContext*, void* args, void*, void*) {
     }
 
     // Don't show special text in rando
-    if (dComIfGs_getPohSpiritNum() == 20) {
+    const u8 nextPoeCount = dComIfGs_getPohSpiritNum() + 1;
+    if (nextPoeCount == 20 || nextPoeCount == 60) {
         i_this->field_0x32cc = i_this->mProcVar2.field_0x300c + 0x65;
     }
 
@@ -2226,38 +2216,6 @@ void hookPostEMdCreate(ModContext*, void* args, void*, void*) {
     hookEMdCreate_prevSkipInfo = 0;
 }
 
-HookAction hookPreOrderMapToolEvent(ModContext*, void* args, void*, void*) {
-    auto eventId = mods::arg<u8>(args, 1);
-
-    // skip starting the master sword cutscene so we can handle the checks manually
-    if (daAlink_c::checkStageName("F_SP117") && eventId == 2) {
-        // Set the necessary flags to de-spawn the MS and set the save file event flag.
-        dComIfGs_onTmpBit(0x820);
-        dComIfGs_onEventBit(0x2120);
-        return HOOK_SKIP_ORIGINAL;
-    }
-
-    return HOOK_CONTINUE;
-}
-
-HookAction hookPreMasterSwordExecute(ModContext*, void* args, void* retval, void*) {
-    auto* i_this = mods::arg<daObjMasterSword_c*>(args, 0);
-
-    (i_this->*i_this->mActionFunc[1])();
-    dComIfG_Ccsp()->Set(&i_this->mCyl);
-
-    i_this->mBtk.play();
-    i_this->mBrk.play();
-
-    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::tempBitLabels[73])) {
-        // Don't automatically give the master sword in randomizer
-        fopAcM_delete(i_this);
-    }
-
-    *static_cast<int*>(retval) = 1;
-    return HOOK_SKIP_ORIGINAL;
-}
-
 void hookPost_dScnName_c__changeGameScene(ModContext* ctx, void* args, void* retval, void* userdata) {
     if (!mDoRst::isReset() && !fopOvlpM_IsPeek()) {
         randomizer::session::registerStartingLocation();
@@ -2576,32 +2534,6 @@ void hookPostObjZraRockCreate(ModContext*, void* args, void* retval, void*) {
         if (!dComIfGs_isEventBit(GOT_ZORA_ARMOR_FROM_RUTELA) && dComIfGs_isEventBit(ZORA_ESCORT_CLEARED)) {
             *static_cast<int*>(retval) = cPhs_COMPLEATE_e;
         }
-    }
-}
-
-bool g_horseCallFirstBit = false;
-u8 g_slot21Item = 0;
-HookAction hookPreScnPlyPhase1(ModContext*, void*, void*, void*) {
-    if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
-        dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
-    {
-        // Save item info for rando to restore after function runs
-        g_horseCallFirstBit = dComIfGs_isItemFirstBit(dItemNo_HORSE_FLUTE_e);
-        g_slot21Item = dComIfGs_getItem(SLOT_21, false);
-    }
-
-    return HOOK_CONTINUE;
-}
-
-void hookPostScnPlyPhase1(ModContext*, void*, void*, void*) {
-    if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
-        dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
-    {
-        // Restore item info
-        if (!g_horseCallFirstBit) {
-            dComIfGs_offItemFirstBit(dItemNo_HORSE_FLUTE_e);
-        }
-        dComIfGs_setItem(SLOT_21, g_slot21Item);
     }
 }
 
@@ -3230,9 +3162,6 @@ ModResult initialize() {
     ADD_HOOK_PRE(daE_MD_c__create, hookPreEMdCreate);
     ADD_HOOK_POST(daE_MD_c__create, hookPostEMdCreate);
 
-    ADD_HOOK_PRE(orderMapToolEvent, hookPreOrderMapToolEvent);
-    ADD_HOOK_PRE(daObjMasterSword_c__execute, hookPreMasterSwordExecute);
-
     ADD_HOOK_POST(dScnName_c__changeGameScene, hookPost_dScnName_c__changeGameScene);
 
     ADD_HOOK_POST(daNpc_zrZ_c__isDelete, hookPostNpcZrzIsDelete);
@@ -3262,9 +3191,6 @@ ModResult initialize() {
     ADD_HOOK_PRE(daNpc_zrC_c__isDelete, hookPreNpcZrCIsDelete);
 
     ADD_HOOK_POST(daObjZraRock_c__create, hookPostObjZraRockCreate);
-
-    // ADD_HOOK_PRE(phase_1__dScnPly_c, hookPreScnPlyPhase1);
-    // ADD_HOOK_POST(phase_1__dScnPly_c, hookPostScnPlyPhase1);
 
     ADD_HOOK_POST(dMenu_Ring_c__textScaleHIO, hookPostMenuRingTextScaleHIO);
     ADD_HOOK_POST(dMenu_Ring_c__destructor, hookPostMenuRingDestructor);
@@ -3373,9 +3299,6 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daE_MD_c__create>(svc_hook);
 
-    mods::hook::uninstall<orderMapToolEvent>(svc_hook);
-    mods::hook::uninstall<daObjMasterSword_c__execute>(svc_hook);
-
     mods::hook::uninstall<dScnName_c__changeGameScene>();
 
     mods::hook::uninstall<daNpc_zrZ_c__isDelete>(svc_hook);
@@ -3399,8 +3322,6 @@ ModResult uninstall() {
     mods::hook::uninstall<daNpc_zrC_c__isDelete>(svc_hook);
 
     mods::hook::uninstall<daObjZraRock_c__create>(svc_hook);
-
-    //mods::hook::uninstall<phase_1__dScnPly_c>();
 
     mods::hook::uninstall<dMenu_Ring_c__textScaleHIO>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__destructor>(svc_hook);

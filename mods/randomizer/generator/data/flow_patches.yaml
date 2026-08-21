@@ -1,7 +1,5 @@
 # Patches for NPC text flows
 
-# NOTE: All data is expressed in little endian
-
 0: # zel_00.bmg
   # Change the following indices of Midna's flows to jump to our custom choices
   # instead. These are all the flow jumps that normally determine which "Talk to Midna"
@@ -18,9 +16,9 @@
       - 0x1BC
       - 0x1C9
     type: event
-    event: 42
+    event: no-op
     parameters: 0x00000000
-    next node index: Custom Midna Call Begin
+    next: Custom Midna Call Begin
 
 1: # zel_01.bmg - Ordon Village
   # Patch the flow in Bo's house that normally prevents us from leaving without
@@ -28,33 +26,29 @@
   # no matter what
   - index: 0x8F
     type: branch
-    num results: 2
-    query: 21
+    query: item owned
     parameters: 0x0045
-    next node index: 0x4B
     results:
       - 0x90
       - 0x90
 
 2: # zel_02.bmg
-  # Patch Barnes branch to see if you can buy the bomb bag to use
-  # query 54 (custom event check) instead of query 22 (how many bomb bags the player has)
+  # Patch Barnes to use the randomizer purchase flag instead of counting bomb bags.
   - index: 0x47C
     type: branch
-    num results: 2
-    query: 53
+    query: randomizer event flag
     parameters: 0x004D
-    next node index: 0x340
+    results:
+      - 0x47D
+      - 0x485
 
   # Change the flow of buying the red potion item in Kak Malo Mart to not check for an empty bottle first
   # if the item is randomized. Change both branch paths to lead to the same next node
   - only if: Shop_Items == On
     index: 0x43F
     type: branch
-    num results: 2
-    query: 24
+    query: empty bottles
     parameters: 0x00000001
-    next node index: 0x2EA
     results:
       - 0x440
       - 0x440
@@ -64,59 +58,58 @@
   - only if: Shop_Items == On
     index: 0x445
     type: event
-    event: 3
+    event: remove rupees
     parameters: 0x0000001E
-    next node index: Kakariko Malo Mart Red Potion Sold Out
+    next: Kakariko Malo Mart Red Potion Sold Out
 
   # Change the flow of buying the wooden shield in Kak Malo Mart to set the sold out flag if shop
   # items are randomized
   - only if: Shop_Items == On
     index: 0x417
     type: event
-    event: 3
+    event: remove rupees
     parameters: 0x00000032
-    next node index: Kakariko Malo Mart Wooden Shield Sold Out
+    next: Kakariko Malo Mart Wooden Shield Sold Out
 
 #3: # zel_03.bmg
 4: # zel_04.bmg - Castle Town
   # Patch Charlo to check for 100 rupees instead of 30
   - index: 0x34A
     type: branch
-    num results: 2
-    query: 6
+    query: rupees
     parameters: 0x0064
-    next node index: 0x222
+    results:
+      - 0x34E
+      - 0x342
 
   # Patch Charlo to take 100 rupees from Link instead of 30
   - index: 0x34E
     type: event
-    event: 41
+    event: add donation
     parameters: 0x00000064
-    next node index: 0x226
+    next: 0x357
 
   # Patch Charlo to add 100 rupees to his counter instead of 30
   - index: 0x357
     type: event
-    event: 3
+    event: remove rupees
     parameters: 0x00000064
-    next node index: 0x22B
+    next: 0x350
 
   # Patch Malo Mart door person to not check for time of day.
   # Change from branch node that checks time of day to event node
   # that does nothing.
   - index: 0x1A5
     type: event
-    event: 42
+    event: no-op
     parameters: 0x00000000
-    next node index: 0x10C
+    next: 0x1A4
 
   # Patch Jovani flow so that we can turn in poe souls before completing MDH
   - index: 0x832
     type: branch
-    num results: 2
-    query: 1
+    query: event flag
     parameters: 0x01C8
-    next node index: 0x763
     results:
       - 0x834 # Skip over 0x833 and go directly to 0x834
       - 0x84E
@@ -126,54 +119,53 @@
   # talking to him for the first time with 60 souls
   - index: 0x844
     type: message
-    inf index: 0x322
-    next flow index: 0x851
+    message: 0x322
+    next: 0x851
 
   # Patch Jovani to check if we've received the 20 reward yet at
   # the end of the 60 reward sequence.
   - index: 0x81F
     type: event
-    event: 14
+    event: set switch
     parameters: 0x00000063
-    next node index: Jovani Check 20 Reward Obtained
+    next: Jovani Check 20 Reward Obtained
 
   # Patch the flow of showing the Doctor the Invoice to call our custom
   # event which calls offWarashibeItem instead of setWarashibeItem
   - index: 0x2D7
     type: event
-    event: 47
+    event: randomizer remove trade item
     parameters: 0x00000081
-    next node index: 0x1D3
+    next: 0x2D8
 
 5: # zel_05.bmg
   # Patch Yeta flow to always give the map check even if the player has obtained the Ordon Cheese
   - index: 0x8
     type: event
-    event: 42
+    event: no-op
     parameters: 0x00000000
-    next node index: 0x8
+    next: 0x6
 
   # Patch Yeta flow to always give the map check even if the player has obtained the Ordon Cheese
   - index: 0x5
     type: event
-    event: 42
+    event: no-op
     parameters: 0x00000000
-    next node index: 0x3
+    next: 0xC
 
-  # Patch Gor Liggs to not set the flag for the third key shard
-  # Change event index 17 to event index 42 which does nothing
+  # Patch Gor Liggs to not set the flag for the third key shard.
   - index: 0x258
     type: event
-    event: 42
+    event: no-op
     parameters: 0x00000000
-    next node index: 0x1AC
+    next: 0x248
 
   # Patch Cave of Ordeals Great Fairy to skip over the check
   # for an empty bottle the first time
   - index: 0x850
     type: message
-    inf index: 0x25B
-    next flow index: 0x202
+    message: 0x25B
+    next: 0x202
 
 #6: # zel_06.bmg
 #7: # zel_07.bmg
@@ -181,19 +173,18 @@
   # Skip over the node which deletes auru's memo from the inventory after showing it to Fyer
   - index: 0x53
     type: message
-    inf index: 0xA7
-    next flow index: 0x54 # Go directly to 0x54 instead of 0x5D
+    message: 0xA7
+    next: 0x54 # Go directly to 0x54 instead of 0x5D
 
 # Custom Flow Nodes
-9:
+custom:
   # Start of custom midna call tree. Begin by checking if we can change time
   # of day to see if we show that choice
   - name: Custom Midna Call Begin
+    group: 0
     type: branch
-    num results: 2
-    query: 54
+    query: randomizer change time
     parameters: 0x0000
-    next node index: 0xFFFF
     results:
       - Custom Midna Call 3 Choice Select Setup # Can change time of day
       - Custom Midna Call 2 Choice Select Setup # Can not change time of day
@@ -203,27 +194,29 @@
   #################################################
 
   - name: Custom Midna Call 2 Choice Select Setup
+    group: 0
     type: event
-    event: 13
+    event: select vertical
     parameters: 0x00000003
-    next node index: Custom Midna Call 2 Choice Intro
+    next: Custom Midna Call 2 Choice Intro
 
   - name: Custom Midna Call 2 Choice Intro
+    group: 0
     type: message
-    inf index: Custom Midna Call Need Something Text
-    next flow index: Custom Midna Call 2 Choice
+    message: Custom Midna Call Need Something Text
+    next: Custom Midna Call 2 Choice
 
   - name: Custom Midna Call 2 Choice
+    group: 0
     type: message
-    inf index: Custom Midna Call 2 Choice Text
-    next flow index: Custom Midna Call 2 Choice Branch
+    message: Custom Midna Call 2 Choice Text
+    next: Custom Midna Call 2 Choice Branch
 
   - name: Custom Midna Call 2 Choice Branch
+    group: 0
     type: branch
-    num results: 3
-    query: 35
+    query: select 2 cancel
     parameters: 0x0000
-    next node index: 0xFFFF
     results:
       - Custom Midna Call Hints                  # Hints
       - Custom Midna Call Return to Spawn Branch # Return to Spawn
@@ -234,27 +227,29 @@
   #################################################
 
   - name: Custom Midna Call 3 Choice Select Setup
+    group: 0
     type: event
-    event: 13
+    event: select vertical
     parameters: 0x00000004
-    next node index: Custom Midna Call 3 Choice Intro
+    next: Custom Midna Call 3 Choice Intro
 
   - name: Custom Midna Call 3 Choice Intro
+    group: 0
     type: message
-    inf index: Custom Midna Call Need Something Text
-    next flow index: Custom Midna Call 3 Choice
+    message: Custom Midna Call Need Something Text
+    next: Custom Midna Call 3 Choice
 
   - name: Custom Midna Call 3 Choice
+    group: 0
     type: message
-    inf index: Custom Midna Call 3 Choice Text
-    next flow index: Custom Midna Call 3 Choice Branch
+    message: Custom Midna Call 3 Choice Text
+    next: Custom Midna Call 3 Choice Branch
 
   - name: Custom Midna Call 3 Choice Branch
+    group: 0
     type: branch
-    num results: 4
-    query: 36
+    query: select 3 cancel
     parameters: 0x0000
-    next node index: 0xFFFF
     results:
       - Custom Midna Call Hints                  # Hints
       - Custom Midna Call Change Time            # Change time of day
@@ -266,22 +261,23 @@
   #################################################
 
   - name: Custom Midna Call Hints
+    group: 0
     type: message
-    inf index: Custom Midna Call Hints Text
-    next flow index: 0xFFFF
+    message: Custom Midna Call Hints Text
+    next: 0xFFFF
 
   - name: Custom Midna Call Change Time
+    group: 0
     type: event
-    event: 44
+    event: randomizer change time
     parameters: 0x00000000
-    next node index: 0x116
+    next: 0xFFFF
 
   - name: Custom Midna Call Return to Spawn Branch
+    group: 0
     type: branch
-    num results: 3
-    query: 55
+    query: randomizer return to spawn
     parameters: 0x0000
-    next node index: 0xFFFF
     results:
       - Return to Spawn Dungeon Choice Select Setup
       - Return to Spawn Dungeon No Choice Select Setup
@@ -292,27 +288,29 @@
   #################################################
 
   - name: Return to Spawn Dungeon Choice Select Setup
+    group: 0
     type: event
-    event: 13
+    event: select vertical
     parameters: 0x00000004
-    next node index: Return to Spawn Dungeon Choice Intro
+    next: Return to Spawn Dungeon Choice Intro
 
   - name: Return to Spawn Dungeon Choice Intro
+    group: 0
     type: message
-    inf index: Return to Spawn Dungeon Intro Text
-    next flow index: Return to Spawn Dungeon Choice
+    message: Return to Spawn Dungeon Intro Text
+    next: Return to Spawn Dungeon Choice
 
   - name: Return to Spawn Dungeon Choice
+    group: 0
     type: message
-    inf index: Return to Spawn Dungeon Choice Text
-    next flow index: Return to Spawn Dungeon Choice Branch
+    message: Return to Spawn Dungeon Choice Text
+    next: Return to Spawn Dungeon Choice Branch
 
   - name: Return to Spawn Dungeon Choice Branch
+    group: 0
     type: branch
-    num results: 4
-    query: 36
+    query: select 3 cancel
     parameters: 0x0000
-    next node index: 0xFFFF
     results:
       - Return to Dungeon Spawn # Dungeon entrance
       - 0xFFFF                  # Nevermind
@@ -324,27 +322,29 @@
   #################################################
 
   - name: Return to Spawn Dungeon No Choice Select Setup
+    group: 0
     type: event
-    event: 13
+    event: select vertical
     parameters: 0x00000003
-    next node index: Return to Spawn Dungeon No Choice Intro
+    next: Return to Spawn Dungeon No Choice Intro
 
   - name: Return to Spawn Dungeon No Choice Intro
+    group: 0
     type: message
-    inf index: Return to Spawn Dungeon Intro Text
-    next flow index: Return to Spawn No Dungeon Choice
+    message: Return to Spawn Dungeon Intro Text
+    next: Return to Spawn Dungeon No Choice
 
   - name: Return to Spawn Dungeon No Choice
+    group: 0
     type: message
-    inf index: Return to Spawn Dungeon No Choice Text
-    next flow index: Return to Spawn Dungeon No Choice Branch
+    message: Return to Spawn Dungeon No Choice Text
+    next: Return to Spawn Dungeon No Choice Branch
 
   - name: Return to Spawn Dungeon No Choice Branch
+    group: 0
     type: branch
-    num results: 3
-    query: 35
+    query: select 2 cancel
     parameters: 0x0000
-    next node index: 0xFFFF
     results:
       - 0xFFFF               # Nevermind
       - Return to Base Spawn # Spawn
@@ -354,40 +354,43 @@
   #            RETURN TO SPAWN EVENTS             #
   #################################################
 
-  # Use custom event index 45 to setup returning to spawn. A non-zero
-  # parameter value indicates to try and use a place override if one
-  # exists for the current stage
+  # A non-zero parameter uses the current stage's place override when one exists.
   - name: Return to Dungeon Spawn
+    group: 0
     type: event
-    event: 45
+    event: randomizer return to spawn
     parameters: 0x00000001
-    next node index: 0x116
+    next: 0xFFFF
 
-  # Use custom event index 45 to setup returning to spawn. A parameter
-  # value of zero indicates to always return to the starting spawn
+  # A zero parameter always returns to the starting spawn.
   - name: Return to Base Spawn
+    group: 0
     type: event
-    event: 45
+    event: randomizer return to spawn
     parameters: 0x00000000
-    next node index: 0x116
+    next: 0xFFFF
 
   #################################################
   #              KAKARIKO MALO MART               #
   #################################################
 
-  # Run event 24 which sets the shop sold out flag
+  # Set the shop sold-out flag.
   - name: Kakariko Malo Mart Red Potion Sold Out
+    only if: Shop_Items == On
+    group: 2
     type: event
-    event: 24
+    event: shop sold out
     parameters: 0x00000000
-    next node index: 0x2F2
+    next: 0x449
 
-  # Run event 24 which sets the shop sold out flag
+  # Set the shop sold-out flag.
   - name: Kakariko Malo Mart Wooden Shield Sold Out
+    only if: Shop_Items == On
+    group: 2
     type: event
-    event: 24
+    event: shop sold out
     parameters: 0x00000000
-    next node index: 0x2D0
+    next: 0x41C
 
   #################################################
   #                    JOVANI                     #
@@ -396,219 +399,191 @@
   # Check to see if we've obtained the 20 Poe Soul Reward.
   # If we haven't then branch to giving the reward
   - name: Jovani Check 20 Reward Obtained
+    group: 4
     type: branch
-    num results: 2
-    query: 1
+    query: event flag
     parameters: 0x0272
-    next node index: 0xFFFF
     results:
       - 0xFFFF # Yes, we've obtained the reward, do nothing
       - Jovani Give 20 Reward
+
+  - name: Jovani Give 20 Reward
+    group: 4
+    type: event
+    event: start event
+    parameters: 0x00010075
+    next: 0x851
 
   #################################################
   #                  HINT SIGNS                   #
   #################################################
 
   - name: Ordon Hint Sign
-    index: 21100
     type: message
-    inf index: Ordon Hint Sign Text
-    next flow index: 0xFFFF
+    message: Ordon Hint Sign Text
+    next: 0xFFFF
 
   - name: South Faron Woods Hint Sign
-    index: 21101
     type: message
-    inf index: South Faron Woods Hint Sign Text
-    next flow index: 0xFFFF
+    message: South Faron Woods Hint Sign Text
+    next: 0xFFFF
 
   - name: Sacred Grove Hint Sign
-    index: 21102
     type: message
-    inf index: Sacred Grove Hint Sign Text
-    next flow index: 0xFFFF
+    message: Sacred Grove Hint Sign Text
+    next: 0xFFFF
 
   - name: Faron Field Hint Sign
-    index: 21103
     type: message
-    inf index: Faron Field Hint Sign Text
-    next flow index: 0xFFFF
+    message: Faron Field Hint Sign Text
+    next: 0xFFFF
 
   - name: Kakariko Gorge Hint Sign
-    index: 21104
     type: message
-    inf index: Kakariko Gorge Hint Sign Text
-    next flow index: 0xFFFF
+    message: Kakariko Gorge Hint Sign Text
+    next: 0xFFFF
 
   - name: Kakariko Village Hint Sign
-    index: 21105
     type: message
-    inf index: Kakariko Village Hint Sign Text
-    next flow index: 0xFFFF
+    message: Kakariko Village Hint Sign Text
+    next: 0xFFFF
 
   - name: Kakariko Graveyard Hint Sign
-    index: 21106
     type: message
-    inf index: Kakariko Graveyard Hint Sign Text
-    next flow index: 0xFFFF
+    message: Kakariko Graveyard Hint Sign Text
+    next: 0xFFFF
 
   - name: Eldin Field Hint Sign
-    index: 21107
     type: message
-    inf index: Eldin Field Hint Sign Text
-    next flow index: 0xFFFF
+    message: Eldin Field Hint Sign Text
+    next: 0xFFFF
 
   - name: North Eldin Field Hint Sign
-    index: 21108
     type: message
-    inf index: North Eldin Field Hint Sign Text
-    next flow index: 0xFFFF
+    message: North Eldin Field Hint Sign Text
+    next: 0xFFFF
 
   - name: Hidden Village Hint Sign
-    index: 21109
     type: message
-    inf index: Hidden Village Hint Sign Text
-    next flow index: 0xFFFF
+    message: Hidden Village Hint Sign Text
+    next: 0xFFFF
 
   - name: Lanayru Field Hint Sign
-    index: 21110
     type: message
-    inf index: Lanayru Field Hint Sign Text
-    next flow index: 0xFFFF
+    message: Lanayru Field Hint Sign Text
+    next: 0xFFFF
 
   - name: Beside Castle Town Hint Sign
-    index: 21111
     type: message
-    inf index: Beside Castle Town Hint Sign Text
-    next flow index: 0xFFFF
+    message: Beside Castle Town Hint Sign Text
+    next: 0xFFFF
 
   - name: Castle Town Center Hint Sign
-    index: 21112
     type: message
-    inf index: Castle Town Center Hint Sign Text
-    next flow index: 0xFFFF
+    message: Castle Town Center Hint Sign Text
+    next: 0xFFFF
 
   - name: Outside South Castle Town Hint Sign
-    index: 21113
     type: message
-    inf index: Outside South Castle Town Hint Sign Text
-    next flow index: 0xFFFF
+    message: Outside South Castle Town Hint Sign Text
+    next: 0xFFFF
 
   - name: Lake Hylia Bridge Hint Sign
-    index: 21114
     type: message
-    inf index: Lake Hylia Bridge Hint Sign Text
-    next flow index: 0xFFFF
+    message: Lake Hylia Bridge Hint Sign Text
+    next: 0xFFFF
 
   - name: Lake Hylia Hint Sign
-    index: 21115
     type: message
-    inf index: Lake Hylia Hint Sign Text
-    next flow index: 0xFFFF
+    message: Lake Hylia Hint Sign Text
+    next: 0xFFFF
 
   - name: Lanayru Spring Hint Sign
-    index: 21116
     type: message
-    inf index: Lanayru Spring Hint Sign Text
-    next flow index: 0xFFFF
+    message: Lanayru Spring Hint Sign Text
+    next: 0xFFFF
 
   - name: Lake Lantern Cave Hint Sign
-    index: 21117
     type: message
-    inf index: Lake Lantern Cave Hint Sign Text
-    next flow index: 0xFFFF
+    message: Lake Lantern Cave Hint Sign Text
+    next: 0xFFFF
 
   - name: Fishing Hole Hint Sign
-    index: 21118
     type: message
-    inf index: Fishing Hole Hint Sign Text
-    next flow index: 0xFFFF
+    message: Fishing Hole Hint Sign Text
+    next: 0xFFFF
 
   - name: Zoras Domain Hint Sign
-    index: 21119
     type: message
-    inf index: Zoras Domain Hint Sign Text
-    next flow index: 0xFFFF
+    message: Zoras Domain Hint Sign Text
+    next: 0xFFFF
 
   - name: Snowpeak Hint Sign
-    index: 21120
     type: message
-    inf index: Snowpeak Hint Sign Text
-    next flow index: 0xFFFF
+    message: Snowpeak Hint Sign Text
+    next: 0xFFFF
 
   - name: Gerudo Desert Hint Sign
-    index: 21121
     type: message
-    inf index: Gerudo Desert Hint Sign Text
-    next flow index: 0xFFFF
+    message: Gerudo Desert Hint Sign Text
+    next: 0xFFFF
 
   - name: Bulblin Camp Hint Sign
-    index: 21122
     type: message
-    inf index: Bulblin Camp Hint Sign Text
-    next flow index: 0xFFFF
+    message: Bulblin Camp Hint Sign Text
+    next: 0xFFFF
 
   - name: Forest Temple Hint Sign
-    index: 21123
     type: message
-    inf index: Forest Temple Hint Sign Text
-    next flow index: 0xFFFF
+    message: Forest Temple Hint Sign Text
+    next: 0xFFFF
 
   - name: Goron Mines Hint Sign
-    index: 21124
     type: message
-    inf index: Goron Mines Hint Sign Text
-    next flow index: 0xFFFF
+    message: Goron Mines Hint Sign Text
+    next: 0xFFFF
 
   - name: Lakebed Temple Hint Sign
-    index: 21125
     type: message
-    inf index: Lakebed Temple Hint Sign Text
-    next flow index: 0xFFFF
+    message: Lakebed Temple Hint Sign Text
+    next: 0xFFFF
 
   - name: Arbiters Grounds Hint Sign
-    index: 21126
     type: message
-    inf index: Arbiters Grounds Hint Sign Text
-    next flow index: 0xFFFF
+    message: Arbiters Grounds Hint Sign Text
+    next: 0xFFFF
 
   - name: Snowpeak Ruins Hint Sign
-    index: 21127
     type: message
-    inf index: Snowpeak Ruins Hint Sign Text
-    next flow index: 0xFFFF
+    message: Snowpeak Ruins Hint Sign Text
+    next: 0xFFFF
 
   - name: Temple of Time First Hint Sign
-    index: 21128
     type: message
-    inf index: Temple of Time First Hint Sign Text
-    next flow index: 0xFFFF
+    message: Temple of Time First Hint Sign Text
+    next: 0xFFFF
 
   - name: Temple of Time Second Hint Sign
-    index: 21129
     type: message
-    inf index: Temple of Time Second Hint Sign Text
-    next flow index: 0xFFFF
+    message: Temple of Time Second Hint Sign Text
+    next: 0xFFFF
 
   - name: City in the Sky Hint Sign
-    index: 21130
     type: message
-    inf index: City in the Sky Hint Sign Text
-    next flow index: 0xFFFF
+    message: City in the Sky Hint Sign Text
+    next: 0xFFFF
 
   - name: Palace of Twilight Hint Sign
-    index: 21131
     type: message
-    inf index: Palace of Twilight Hint Sign Text
-    next flow index: 0xFFFF
+    message: Palace of Twilight Hint Sign Text
+    next: 0xFFFF
 
   - name: Hyrule Castle Hint Sign
-    index: 21132
     type: message
-    inf index: Hyrule Castle Hint Sign Text
-    next flow index: 0xFFFF
+    message: Hyrule Castle Hint Sign Text
+    next: 0xFFFF
 
   - name: Cave of Ordeals Hint Sign
-    index: 21133
     type: message
-    inf index: Cave of Ordeals Hint Sign Text
-    next flow index: 0xFFFF
+    message: Cave of Ordeals Hint Sign Text
+    next: 0xFFFF

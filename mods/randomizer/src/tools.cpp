@@ -12,6 +12,7 @@
 #include "stages.h"
 #include "verify_item_functions.h"
 
+#include <mods/items.h>
 #include <mods/svc/log.hpp>
 
 bool playerIsInRoomStage(s32 room, const char* stage)
@@ -505,40 +506,57 @@ randomizer::logic::item_pool::ItemPool getSaveItemPool(randomizer::logic::world:
 std::string nameLookupOverride(const std::string& locationName) {
     // [generator name], [service name]
     static std::unordered_map<std::string, std::string> nameLookup = {
-        {"Arbiters Grounds Dungeon Reward", "dungeon_reward:D_MN10"},
-        {"Ashei Sketch", "ashei_sketch"},
-        {"Auru Gift To Fyer", "auru_memo"},
-        {"Cave of Ordeals Great Fairy Reward", "fairy_reward:D_SB01"},
-        {"Charlo Donation Blessing", "prayer_reward"},
-        {"Coro Bottle", "coro_bottle"},
-        {"Gift From Ralis", "coral_earring"},
-        {"Goron Mines Gor Amato Key Shard", "key_shard_1:D_MN04"},
-        {"Goron Mines Gor Ebizo Key Shard", "key_shard_2:D_MN04"},
-        {"Goron Mines Gor Liggs Key Shard", "key_shard_3:D_MN04"},
-        {"Herding Goats Reward", "goats_reward"},
-        {"Hyrule Castle King Bulblin Key", "bulblin_key:D_MN09"},
-        {"Ilia Charm", "ilia_charm"},
-        {"Iza Helping Hand", "iza_reward_1"},
-        {"Iza Raging Rapids Minigame", "iza_reward_2"},
-        {"Jovani 20 Poe Soul Reward", "jovani_reward_1"},
-        {"Jovani 60 Poe Soul Reward", "jovani_reward_2"},
-        {"Ordon Cat Rescue", "sera_reward"},
-        {"Ordon Shield", "ordon_shield"},
-        {"Ordon Sword", "ordon_sword"},
-        {"Plumm Fruit Balloon Minigame", "plumm_minigame_reward"},
-        {"Renados Letter", "renado_letter"},
-        {"Rutelas Blessing", "zora_armor"},
-        {"Skybook From Impaz", "skybook"},
-        {"Snowboard Racing Prize", "snowboard_race_reward"},
-        {"Snowpeak Ruins Ball and Chain", "ball_and_chain:D_MN11"},
-        {"Snowpeak Ruins Mansion Map", "dungeon_map:D_MN11"},
-        {"STAR Prize 1", "star_reward_1"},
-        {"STAR Prize 2", "star_reward_2"},
-        {"Talo Sharpshooting", "archery_reward:F_SP109"},
-        {"Telma Invoice", "telma_invoice"},
-        {"Uli Cradle Delivery", "uli_cradle_reward"},
-        {"Wooden Statue", "wood_statue"},
-        {"Zoras Domain Underwater Goron", "goron_reward:F_SP113"},
+        {"Arbiters Grounds Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_ARBITERS},
+        {"Ashei Sketch", ITEM_CHECK_ASHEI_SKETCH},
+        {"Auru Gift To Fyer", ITEM_CHECK_AURU_MEMO},
+        {"Cave of Ordeals Great Fairy Reward", ITEM_CHECK_FAIRY_REWARD},
+        {"Charlo Donation Blessing", ITEM_CHECK_PRAYER_REWARD},
+        {"Coro Bottle", ITEM_CHECK_CORO_BOTTLE},
+        {"Fishing Hole Bottle", ITEM_CHECK_FISHING_BOTTLE},
+        {"Fishing Hole Heart Piece", ITEM_CHECK_FISHING_HEART_PIECE},
+        {"Forest Temple Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_FOREST},
+        {"Gift From Ralis", ITEM_CHECK_CORAL_EARRING},
+        {"Goron Mines Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_GORON},
+        {"Goron Mines Gor Amato Key Shard", ITEM_CHECK_KEY_SHARD_1},
+        {"Goron Mines Gor Ebizo Key Shard", ITEM_CHECK_KEY_SHARD_2},
+        {"Goron Mines Gor Liggs Key Shard", ITEM_CHECK_KEY_SHARD_3},
+        {"Herding Goats Reward", ITEM_CHECK_GOATS_REWARD},
+        {"Hyrule Castle King Bulblin Key", ITEM_CHECK_BULBLIN_KEY},
+        {"Ilia Charm", ITEM_CHECK_ILIA_CHARM},
+        {"Ilia Memory Reward", ITEM_CHECK_ILIA_MEMORY},
+        {"Iza Helping Hand", ITEM_CHECK_IZA_REWARD_1},
+        {"Iza Raging Rapids Minigame", ITEM_CHECK_IZA_REWARD_2},
+        {"Jovani 20 Poe Soul Reward", ITEM_CHECK_JOVANI_REWARD_1},
+        {"Jovani 60 Poe Soul Reward", ITEM_CHECK_JOVANI_REWARD_2},
+        {"Kakariko Village Malo Mart Hawkeye", "shop:R_SP109:62"},
+        {"Kakariko Village Malo Mart Hylian Shield", "shop:R_SP109:44"},
+        {"Kakariko Village Malo Mart Red Potion", "shop:R_SP109:97"},
+        {"Kakariko Village Malo Mart Wooden Shield", "shop:R_SP109:43"},
+        {"Castle Town Malo Mart Magic Armor", "shop:R_SP160:48"},
+        {"Lakebed Temple Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_LAKEBED},
+        {"Ordon Cat Rescue", ITEM_CHECK_SERA_REWARD},
+        {"Ordon Shield", ITEM_CHECK_ORDON_SHIELD},
+        {"Ordon Sword", ITEM_CHECK_ORDON_SWORD},
+        {"Plumm Fruit Balloon Minigame", ITEM_CHECK_PLUMM_REWARD},
+        {"Renados Letter", ITEM_CHECK_RENADO_LETTER},
+        {"Rutelas Blessing", ITEM_CHECK_ZORA_ARMOR},
+        {"Sacred Grove Pedestal Master Sword", ITEM_CHECK_MASTER_SWORD},
+        {"Sacred Grove Pedestal Shadow Crystal", ITEM_CHECK_SHADOW_CRYSTAL},
+        {"Sera Shop Slingshot", "shop:R_SP01:75"},
+        {"Skybook From Impaz", ITEM_CHECK_SKYBOOK},
+        {"Snowboard Racing Prize", ITEM_CHECK_SNOWBOARD_REWARD},
+        {"Snowpeak Ruins Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_SNOWPEAK},
+        {"Snowpeak Ruins Ball and Chain", ITEM_CHECK_BALL_AND_CHAIN},
+        {"Snowpeak Ruins Mansion Map", ITEM_CHECK_DUNGEON_MAP_SNOWPEAK},
+        {"STAR Prize 1", ITEM_CHECK_STAR_REWARD_1},
+        {"STAR Prize 2", ITEM_CHECK_STAR_REWARD_2},
+        {"Talo Sharpshooting", ITEM_CHECK_ARCHERY_REWARD},
+        {"Telma Invoice", ITEM_CHECK_TELMA_INVOICE},
+        {"Temple of Time Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_TIME},
+        {"Uli Cradle Delivery", ITEM_CHECK_ULI_CRADLE_REWARD},
+        {"Wooden Statue", ITEM_CHECK_WOOD_STATUE},
+        {"City in the Sky Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_CITY},
+        {"Zoras Domain Underwater Goron", ITEM_CHECK_GORON_REWARD},
     };
 
     for (auto& [oldName, newName] : nameLookup) {
@@ -645,12 +663,6 @@ int getLocationItem(randomizer::logic::location::Location* location) {
         auto stage = twilitInsectNode[0]["Stage"].as<u8>();
         auto key = (stage << 8) | flag;
         return context.mTwilitInsectOverrides[key];
-    }
-    if (auto& flwNode = locationMeta["FLW Message"]) {
-        auto group = flwNode[0]["Group"].as<u16>();
-        auto messageId = flwNode[0]["Message Id"].as<u16>();
-        u32 key = (group << 16) | messageId;
-        return context.mFlowItemMessageOverrides[key].itemId;
     }
     if (auto& nameNode = locationMeta["Name Lookup"]) {
         auto name = nameLookupOverride(nameNode[0].as<std::string>());
