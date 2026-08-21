@@ -446,6 +446,12 @@ u8* dMsgFlow_c::getMsgDataBlock(char const* block_tag) {
 }
 
 u16 dMsgFlow_c::getInitNodeIndex(u16 param_1) {
+#if TARGET_PC
+    if (param_1 >= dusk::flow::kCustomNodeMin) {
+        return param_1;
+    }
+#endif
+
     u8* var_r30 = NULL;
     u16 var_r27 = -1;
 
