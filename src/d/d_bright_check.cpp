@@ -9,11 +9,15 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_msg_string.h"
-#include "dusk/livesplit.h"
-#include "dusk/imgui/ImGuiConsole.hpp"
-#include "dusk/speedrun.h"
 #include "m_Do/m_Do_controller_pad.h"
+
+#ifdef TARGET_PC
 #include <dusk/autosave.h>
+#include "dusk/game_mode.hpp"
+#include "dusk/imgui/ImGuiConsole.hpp"
+#include "dusk/livesplit.h"
+#include "dusk/speedrun.h"
+#endif
 
 #include "dusk/version.hpp"
 
@@ -186,15 +190,6 @@ void dBrightCheck_c::modeMove() {
     if (mDoCPd_c::getTrigA(PAD_1) || mDoCPd_c::getTrigStart(PAD_1)) {
         mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
 #ifdef TARGET_PC
-        if (dusk::getSettings().game.speedrunMode && !dusk::getSettings().game.hideTvSettingsScreen) {
-            // start a new run if a run isn't already in progress
-            if (!dusk::m_speedrunInfo.m_isRunStarted) {
-                dusk::resetForSpeedrunMode();
-                dusk::m_speedrunInfo.startRun();
-                dusk::speedrun::start();
-            }
-        }
-
         toggleAutoSave(true);
 #endif
         mCompleteCheck = true;

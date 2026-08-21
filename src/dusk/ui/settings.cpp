@@ -381,7 +381,7 @@ void add_speedrun_disabled_option(Pane& leftPane, Pane& rightPane, ConfigVar<boo
     config_bool_select(leftPane, rightPane, var, {
         .key = key,
         .helpText = helpText,
-        .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+        .isDisabled = [] { return dusk::speedrun::isActive(); },
     });
 }
 
@@ -702,7 +702,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Pause on Focus Lost",
                 .helpText = "Pause the game when window focus is lost.",
-                .isDisabled = [] { return IsMobile || getSettings().game.speedrunMode; },
+                .isDisabled = [] { return IsMobile || dusk::speedrun::isActive(); },
             });
         leftPane.register_control(
             leftPane.add_select_button({
@@ -887,7 +887,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Disable Cutscene Pillarboxing",
                 .helpText = "Disable black bars on the left and right sides of the screen "
                             "during some cutscenes, particularly on ultra-wide displays. "
-                            "Visuals beyond the original intended framing may appear buggy."
+                            "Visuals beyond the original intended framing may appear buggy.",
             });
     });
 
@@ -906,9 +906,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         };
 
         leftPane.add_section("Inputs");
-        leftPane.register_control(leftPane.add_button("Configure Inputs").on_pressed([this] {
-            push(std::make_unique<ControllerConfigWindow>());
-        }),
+        leftPane.register_control(
+            leftPane.add_group_button({.text = "Configure Inputs"}).on_pressed([this] {
+                push(std::make_unique<ControllerConfigWindow>());
+            }),
             rightPane, [](Pane& pane) {
                 pane.clear();
                 pane.add_text("Open input binding configuration.");
@@ -925,7 +926,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Touch Controls", getSettings().game.enableTouchControls,
             "Enables controls overlay for touch screens.<br/><br/>Press and drag on the left side "
             "of the screen to move, and on the right side of the screen to control the camera.");
-        auto& customizeTouchLayout = leftPane.add_button(ControlledButton::Props{
+        auto& customizeTouchLayout = leftPane.add_group_button(GroupButton::Props{
             .text = "Customize Layout",
             .isDisabled = [] { return !getSettings().game.enableTouchControls; },
         });
@@ -935,23 +936,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.clear();
                 pane.add_text("Open the touch controls layout editor.");
             });
-        leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Touch Targeting",
-                                      .getValue =
-                                          [] {
-                                              return touch_targeting_label(
-                                                  getSettings().game.touchTargeting.getValue());
-                                          },
-                                      .isDisabled =
-                                          [] { return !getSettings().game.enableTouchControls; },
-                                      .isModified =
-                                          [] {
-                                              const auto& targeting =
-                                                  getSettings().game.touchTargeting;
-                                              return targeting.getValue() !=
-                                                     targeting.getDefaultValue();
-                                          },
-                                  }),
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Touch Targeting",
+                .getValue =
+                    [] {
+                        return touch_targeting_label(getSettings().game.touchTargeting.getValue());
+                    },
+                .isDisabled = [] { return !getSettings().game.enableTouchControls; },
+                .isModified =
+                    [] {
+                        const auto& targeting = getSettings().game.touchTargeting;
+                        return targeting.getValue() != targeting.getDefaultValue();
+                    },
+            }),
             rightPane, [](Pane& pane) {
                 pane.clear();
                 for (int i = 0; i < static_cast<int>(kTouchTargetingLabels.size()); ++i) {
@@ -1063,7 +1061,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
             "Hold Tab to increase game speed by up to 4x.",
-            [] { return getSettings().game.speedrunMode.getValue(); });
+            [] { return dusk::speedrun::isActive(); });
         addOption("Reset Key (" + Rml::String{hotkeys::DO_RESET} + ")",
             getSettings().game.enableResetKeybind,
             "Press " + Rml::String{hotkeys::DO_RESET} + " to reset the game.");
@@ -1176,7 +1174,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         getSettings().game.damageMultiplier.setValue(value);
                         config::save();
                     },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
                 .isModified =
                     [] {
                         return getSettings().game.damageMultiplier.getValue() !=
@@ -1237,16 +1235,16 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText =
                     "Enables speedrunning options while restricting certain gameplay modifiers.",
                 .onChange =
-                    [](bool enabled) {
+                    [this](bool enabled) {
                         if (enabled) {
-                            resetForSpeedrunMode();
+                            dusk::speedrun::registerSpeedrunGameMode();
                         } else {
-                            restoreFromSpeedrunMode();
-                            if (getSettings().game.liveSplitEnabled) {
-                                speedrun::disconnectLiveSplit();
+                            if (dusk::speedrun::isActive()) {
+                                pop();
                             }
+                            dusk::speedrun::unregisterSpeedrunGameMode();
                         }
-                        MenuBar::rebuild();
+                        MenuBar::refresh_tabs();
                     },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.liveSplitEnabled,
@@ -1262,13 +1260,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             speedrun::disconnectLiveSplit();
                         }
                     },
-                .isDisabled = [] { return IsMobile || !getSettings().game.speedrunMode; },
+                .isDisabled = [] { return IsMobile || !dusk::speedrun::isActive(); },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showSpeedrunRTATimer,
             {
                 .key = "Show RTA",
                 .helpText = "Display the RTA timer. IGT is always visible.",
-                .isDisabled = [] { return !getSettings().game.speedrunMode; },
+                .isDisabled = [] { return !dusk::speedrun::isActive(); },
             });
     });
 
@@ -1317,7 +1315,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     [] {
                         return kMagicArmorModes[static_cast<u8>(getSettings().game.armorRupeeDrain.getValue())];
                     },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
                 .isModified =
                     [] {
                         return getSettings().game.armorRupeeDrain.getValue() !=
@@ -1363,6 +1361,16 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     "replacements, and other app data.");
             });
 #endif
+        leftPane.register_control(leftPane.add_button("Restart to Main Menu").on_pressed([this] {
+            mDoAud_seStartMenu(kSoundClick);
+            pop();
+            ui::prelaunch_state().returnToPrelaunchOnReset = true;
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }),
+            rightPane, [](Pane& pane) {
+                pane.add_text("Restart Dusklight to the pre-launch menu to change settings, game "
+                              "modes, or mods.");
+            });
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Notifications",
@@ -1451,8 +1459,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
                 .key = "Skip Dusklight Main Menu",
-                .helpText = "When starting Dusklight, skip the main menu and boot straight into the "
-                            "game if a disc image is available.",
+                .helpText =
+                    "When starting Dusklight, skip the main menu and boot straight into the "
+                    "game if a disc image is available.<br/><br/>Note: If any mods register game "
+                    "modes, this option will be ignored.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
             {
@@ -1481,8 +1491,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Show advanced settings and debugging tools with "
                             "Shift+F1.<br/><br/><icon class=\"warning\"/> WARNING: Debugging tools "
                             "can easily break your game. Do not use on a regular save!",
-                .onChange = [](bool) { MenuBar::rebuild(); },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .onChange = [](bool) { MenuBar::refresh_tabs(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showInputViewer,
             {
