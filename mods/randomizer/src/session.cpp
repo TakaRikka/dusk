@@ -10,11 +10,19 @@
 #include "tools.h"
 #include "stages.h"
 #include "item.hpp"
+#include "messages.hpp"
 #include "verify_item_functions.h"
 
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_meter2_info.h"
+
+#include <mods/items.h>
+
+#include <cstdlib>
+#include <cstring>
+#include <optional>
+#include <string_view>
 
 namespace randomizer::session {
 ServiceManager svc_mng;
@@ -31,6 +39,18 @@ struct DerivedKey {
     int stage_id;
     u16 key;
 };
+
+std::optional<int> parse_stage_check(const char* name, std::string_view prefix) {
+    if (std::strncmp(name, prefix.data(), prefix.size()) != 0) {
+        return std::nullopt;
+    }
+    const char* stage = name + prefix.size();
+    if (*stage == '\0' || std::strchr(stage, ':') != nullptr) {
+        return std::nullopt;
+    }
+    const int stageId = getStageID(stage);
+    return stageId >= 0 ? std::optional{stageId} : std::nullopt;
+}
 
 std::optional<DerivedKey> parse_derived(const char* name, std::string_view prefix) {
     if (std::strncmp(name, prefix.data(), prefix.size()) != 0) {
@@ -64,14 +84,14 @@ bool resolve_check(ModContext*, const ItemCheckInfo* info, uint8_t* out_item, vo
     auto& ctx = randomizer_GetContext();
 
     if (auto it = ctx.mItemLocations.find(info->name); it != ctx.mItemLocations.end()) {
-        *out_item = static_cast<uint8_t>(it->second.itemId);
+        *out_item = static_cast<uint8_t>(verifyProgressiveItem(it->second.itemId));
         return true;
     }
 
-    if (auto key = parse_derived(info->name, "chest:")) {
+    if (auto key = parse_derived(info->name, ITEM_CHECK_CHEST_PREFIX)) {
         return lookup_override(ctx.mTreasureChestOverrides, key->key, out_item, false);
     }
-    if (auto key = parse_derived(info->name, "freestanding:")) {
+    if (auto key = parse_derived(info->name, ITEM_CHECK_FREESTANDING_PREFIX)) {
         if (key->stage_id == Ook) {
             if (auto it = ctx.mItemLocations.find("Forest Temple Gale Boomerang");
                 it != ctx.mItemLocations.end()) {
@@ -82,18 +102,23 @@ bool resolve_check(ModContext*, const ItemCheckInfo* info, uint8_t* out_item, vo
         }
         return lookup_override(ctx.mFreestandingItemOverrides, key->key, out_item, true);
     }
-    if (auto key = parse_derived(info->name, "poe:")) {
-        return lookup_override(ctx.mPoeOverrides, key->key, out_item, false);
+    if (auto key = parse_derived(info->name, ITEM_CHECK_POE_PREFIX)) {
+        return lookup_override(ctx.mPoeOverrides, key->key, out_item, true);
     }
-    if (auto key = parse_derived(info->name, "shop:")) {
+    if (auto stageId = parse_stage_check(info->name, ITEM_CHECK_BOSS_PREFIX)) {
+        const u16 key = static_cast<u16>((*stageId << 8) | 0x9F);
+        return lookup_override(ctx.mFreestandingItemOverrides, key, out_item, true);
+    }
+    if (auto key = parse_derived(info->name, ITEM_CHECK_SHOP_PREFIX)) {
         return lookup_override(ctx.mShopOverrides, key->key, out_item, true);
     }
-    if (auto key = parse_derived(info->name, "sky:")) {
+    if (auto key = parse_derived(info->name, ITEM_CHECK_SKY_PREFIX)) {
         return lookup_override(ctx.mSkyCharacterOverrides, key->key, out_item, true);
     }
 
-    if (std::strncmp(info->name, "bug:", 4) == 0) {
-        const u8 insect = static_cast<u8>(std::atoi(info->name + 4));
+    constexpr std::string_view bugPrefix{ITEM_CHECK_BUG_PREFIX};
+    if (std::strncmp(info->name, bugPrefix.data(), bugPrefix.size()) == 0) {
+        const u8 insect = static_cast<u8>(std::atoi(info->name + bugPrefix.size()));
         if (auto it = ctx.mBugRewardOverrides.find(insect); it != ctx.mBugRewardOverrides.end()) {
             *out_item = static_cast<uint8_t>(verifyProgressiveItem(it->second));
             return true;
@@ -110,17 +135,20 @@ void observe_give(ModContext*, const ItemGiveInfo* info, void*) {
     }
 
     auto& ctx = randomizer_GetContext();
-    if (ctx.mItemLocations.contains(info->check_name)) {
-        randomizer_setTempFlagForLocation(info->check_name);
+    if (const auto it = ctx.mItemLocations.find(info->check_name);
+        it != ctx.mItemLocations.end())
+    {
+        randomizer_setTempFlag(it->second);
     }
 
-    if (std::strcmp(info->check_name, "dungeon_reward:D_MN10") == 0) {
-        dComIfGs_onItem(0x9E, -1);
-    } else if (auto key = parse_derived(info->check_name, "freestanding:");
-               key && key->stage_id == Ook)
+    if (auto key = parse_derived(info->check_name, ITEM_CHECK_FREESTANDING_PREFIX);
+        key && key->stage_id == Ook)
     {
-        dComIfGs_onItem(0x9D, -1);
-        randomizer_setTempFlagForLocation("Forest Temple Gale Boomerang");
+        if (const auto it = ctx.mItemLocations.find("Forest Temple Gale Boomerang");
+            it != ctx.mItemLocations.end())
+        {
+            randomizer_setTempFlag(it->second);
+        }
     }
 }
 
@@ -129,6 +157,11 @@ bool activateSeed(const char* hash) {
     ctx = RandomizerContext();
     if (auto err = ctx.LoadFromHash(hash); err.has_value() || ctx.mHash.empty()) {
         mods::log::error("failed to load seed {}", hash);
+        return false;
+    }
+
+    if (messages::activate(ctx) != MOD_OK) {
+        ctx = RandomizerContext{};
         return false;
     }
 
@@ -158,6 +191,7 @@ void deactivateSeed() {
     }
     s_stage_edits.clear();
 
+    messages::deactivate();
     item::restore_item_data_tables();
     randomizer_GetContext() = RandomizerContext{};
     g_randomizerState = RandomizerState{};
@@ -437,6 +471,11 @@ ModResult onGameModeUpdate(void*, ModError* error) {
 
 ModResult initialize(const ServiceManager& services) {
     svc_mng = services;
+
+    const ModResult messageResult = messages::initialize();
+    if (messageResult != MOD_OK) {
+        return messageResult;
+    }
 
     const GameModeDesc gameModeDesc = {
         .struct_size = sizeof(GameModeDesc),

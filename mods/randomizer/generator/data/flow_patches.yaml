@@ -405,6 +405,12 @@
       - 0xFFFF # Yes, we've obtained the reward, do nothing
       - Jovani Give 20 Reward
 
+  - name: Jovani Give 20 Reward
+    type: event
+    event: 8
+    parameters: 0x00010075
+    next node index: 0x77E
+
   #################################################
   #                  HINT SIGNS                   #
   #################################################

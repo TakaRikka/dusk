@@ -76,13 +76,6 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
 
     out["mTwilitInsectOverrides"] = mTwilitInsectOverrides;
 
-    for (const auto& [key, data] : this->mFlowItemMessageOverrides) {
-        auto node = out["mFlowItemMessageOverrides"][key];
-        node["itemId"] = data.itemId;
-        node["stage"] = data.stage;
-        node["flag"] = data.flag;
-    }
-
     for (const auto& [name, data] : this->mItemLocations) {
         auto node = out["mItemLocations"][name];
         node["itemId"] = data.itemId;
@@ -247,12 +240,6 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
         itemData.stage = node["stage"].as<int>();
         itemData.flag = node["flag"].as<u16>();
     };
-
-    // FLW Override items
-    for (const auto& flwNode : in["mFlowItemMessageOverrides"]) {
-        u32 key = flwNode.first.as<u32>();
-        retrieveItemData(this->mFlowItemMessageOverrides[key], flwNode.second);
-    }
 
     // Items we call by location name
     for (const auto& locationNode : in["mItemLocations"]) {
@@ -792,7 +779,11 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
     }
 }
 
-void randomizer_setTempFlag(RandomizerContext::itemLocationData data) {
+void randomizer_setTempFlag(const RandomizerContext::itemLocationData& data) {
+    if (data.flag == 0xFFFF) {
+        return;
+    }
+
     // If stage is 0xFF, then this is an event flag
     if (data.stage == 0xFF) {
         g_randomizerState.mTrackerTempEventFlag = data.flag;
@@ -807,14 +798,6 @@ void randomizer_setTempFlag(RandomizerContext::itemLocationData data) {
     else {
         dComIfGs_onItem(data.flag, getStageSaveId(data.stage));
     }
-}
-
-void randomizer_setTempFlagForLocation(const std::string& locationName) {
-    randomizer_setTempFlag(randomizer_GetContext().mItemLocations[nameLookupOverride(locationName)]);
-}
-
-void randomizer_setTempFlagForFLWOverride(u32 key) {
-    randomizer_setTempFlag(randomizer_GetContext().mFlowItemMessageOverrides[key]);
 }
 
 bool randomizer_checkTempleOfTimeRequirement() {
@@ -1205,71 +1188,6 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
                 itemData.flag = metaData["Item Flag"]["Flag"].as<u8>();
             }
         };
-
-        // Items that we determine the text of and then give during a FLW message
-        if (location->HasCategories("FLW Message")) {
-            for (const auto& flwMessageNode : metaData["FLW Message"]) {
-                u8 group = flwMessageNode["Group"].as<u8>();
-                u16 messageId = flwMessageNode["Message Id"].as<u16>();
-                u32 key = (group << 16) | messageId;
-                randoData.mFlowItemMessageOverrides[key].itemId = location->GetCurrentItem()->GetID();
-                getNodeFlags(randoData.mFlowItemMessageOverrides[key], metaData);
-            }
-        }
-
-        // Items that are given by FLW events. Override the item in the existing event with the
-        // randomized item
-        if (location->HasCategories("FLW Event")) {
-            for (const auto& flwEventNode : metaData["FLW Event"]) {
-                u8 group = flwEventNode["Group"].as<u8>();
-                u16 index = handleCustomFlowID(flwEventNode["Index"].as<std::string>());
-                mesg_flow_node_event event{};
-                event.type = 3; // event type node
-                event.event_idx = 8;
-                event.next_node_idx = handleCustomFlowID(flwEventNode["Next Node Index"].as<std::string>());
-                auto params = flwEventNode["Parameters"].as<u32>();
-                // Zero out the spot for the item id
-                params &= 0xFFFFFF00;
-                // Put in the item id
-                params |= location->GetCurrentItem()->GetID();
-                // Set the params in the correct order
-                event.params[0] = (params >> 24) & 0xFF;
-                event.params[1] = (params >> 16) & 0xFF;
-                event.params[2] = (params >> 8) & 0xFF;
-                event.params[3] = params & 0xFF;
-
-                // Construct another FLW node to set the associated flag in a temporary variable
-                // right before we receive the item. This ensures that a tracker/AP can pick up
-                // on the fact that we've received the item.
-                auto newFlwIndex = handleCustomFlowID(location->GetName() + " Flag Set Node");
-                mesg_flow_node_event flagEvent{};
-                flagEvent.type = 3; // event type node
-                flagEvent.event_idx = 46; // Set temporary randomizer flag
-
-                u8 stage{0xFF};
-                u16 flag{0xFFFF};
-                if (metaData["Event Flag"]) {
-                    flag = metaData["Event Flag"].as<u16>();
-                } else if (metaData["Switch Flag"]) {
-                    stage = metaData["Switch Flag"]["Stage"].as<u8>();
-                    flag = metaData["Switch Flag"]["Flag"].as<u8>();
-                }
-                flagEvent.params[0] = 0;
-                flagEvent.params[1] = stage;
-                flagEvent.params[2] = (flag >> 8) & 0xFF;
-                flagEvent.params[3] = flag & 0xFF;
-
-                // Store the modified FLW nodes. The flag event takes the place of the original
-                // index we're modifying and then leads into the custom index of the event that
-                // sets up the item id
-                flagEvent.next_node_idx = newFlwIndex;
-                u32 key = (group << 16) | index;
-                randoData.mFlowPatches[key] = std::bit_cast<u64>(flagEvent);
-
-                key = (CUSTOM_BMG_GROUP << 16) | newFlwIndex;
-                randoData.mFlowPatches[key] = std::bit_cast<u64>(event);
-            }
-        }
 
         // Items that we lookup just by calling their location name
         if (location->HasCategories("Name Lookup")) {

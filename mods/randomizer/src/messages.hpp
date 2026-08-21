@@ -1,15 +1,13 @@
 #pragma once
 
-#include <dolphin/types.h>
+#include <mods/api.h>
 
-// Forward declaration
-namespace JMessage {
-struct TProcessor;
-struct TControl;
-}
+class RandomizerContext;
 
-void HandleTextOverrides(JMessage::TControl* control, JMessage::TProcessor const* pProcessor, int groupID, int index);
+namespace randomizer::messages {
 
-bool HandleCustomText(JMessage::TControl* control, u16 msgId);
+ModResult initialize();
+ModResult activate(RandomizerContext& context);
+void deactivate();
 
-char* GetTextOverride(s16 groupID, u32 messageId);
+}  // namespace randomizer::messages

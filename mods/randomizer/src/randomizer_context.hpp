@@ -51,7 +51,6 @@ public:
     std::unordered_map<u16, u8> mGoldenWolfOverrides{};
     std::unordered_map<u16, u8> mShopOverrides{};
     std::unordered_map<u16, u16> mTwilitInsectOverrides{};  // Just used in tracker for now
-    std::unordered_map<u32, itemLocationData> mFlowItemMessageOverrides{};
     std::unordered_map<std::string, itemLocationData> mItemLocations{};
 
     u8 mStartHour{0};
@@ -181,12 +180,6 @@ public:
     u8 mTimeChange{};
     bool mRoomReloadingState{false};
 
-    // Used to store an item id for a flow message override so that we can give the item
-    // once the textbox is closed instead of when the message appears. This lines up
-    // more naturally with the timing of when the game normally gives items and affects
-    // things like the sound of the rupee counter going up.
-    u8 mFlowMessageItemId{0};
-
     int mFoolishItemCount{0};
     bool mUpdateTracker{false};
     bool mShowTracker{false};
@@ -219,11 +212,7 @@ void randomizer_checkAndOverrideEntranceData(
  * variable. This allows the tracker/Archipelago to know a location has been checked
  * when the item is received instead of some indeterminate amount of time afterward.
  */
-void randomizer_setTempFlag(RandomizerContext::itemLocationData);
-
-void randomizer_setTempFlagForLocation(const std::string& locationName);
-
-void randomizer_setTempFlagForFLWOverride(u32 key);
+void randomizer_setTempFlag(const RandomizerContext::itemLocationData&);
 
 bool randomizer_checkTempleOfTimeRequirement();
 
