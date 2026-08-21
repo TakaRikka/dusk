@@ -1367,7 +1367,48 @@ HookAction hookPreGetLayerNo(ModContext*, void* args, void* retval, void*) {
         }
     }
 
-    return HOOK_CONTINUE;
+    if (layer == 14) {
+        // Warped meteor to Zora's Domain
+        if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[65])) {
+            // Stage is Zora's River, Zora's Domain, Lake Hylia, Castle Town, Telma's Bar, R_SP115,
+            // Hyrule Field, Upper Zora's River, or Outside Castle Town
+            if (!strcmp(i_stageName, "F_SP112") || !strcmp(i_stageName, "F_SP113") ||
+                !strcmp(i_stageName, "F_SP115") || !strcmp(i_stageName, "F_SP116") ||
+                (!strcmp(i_stageName, "R_SP116") && i_roomNo == 5) ||
+                !strcmp(i_stageName, "R_SP115") || !strcmp(i_stageName, "F_SP121") ||
+                !strcmp(i_stageName, "F_SP126") || !strcmp(i_stageName, "F_SP122"))
+            {
+                // Stage is Hyrule Field
+                if (!strcmp(i_stageName, "F_SP121")) {
+                    if (i_roomNo >= 9 && i_roomNo <= 14) {
+                        layer = 13;
+                    }
+                } else {
+                    layer = 13;
+                }
+            }
+        }
+
+        // Stage is Hyrule Castle Sewers and room is Prison Cell
+        if (!strcmp(i_stageName, "R_SP107") && i_roomNo == 0) {
+            // Haven't been to Hyrule Castle Sewers
+            if (!dComIfGs_isEventBit(0x4D08)) {
+                layer = 11;
+            }
+        }
+        // Stage and room is Zant Throne Room
+        else if (!strcmp(i_stageName, "D_MN08A") && i_roomNo == 10)
+        {
+            // Defeated Zant
+            if (dComIfGs_isEventBit(0x5410)) {
+                layer = 1;
+            } else {
+                layer = 0;
+            }
+        }
+    }
+
+    return HOOK_SKIP_ORIGINAL;
 }
 
 HookAction hookPreOnStageSwitch(ModContext*, void* args, void* retval, void*) {
