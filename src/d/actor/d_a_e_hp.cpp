@@ -727,13 +727,20 @@ void daE_HP_c::executeDead() {
         }
 
 #if TARGET_PC
-        mItemCheckOverridden =
-            dusk::mods::item_check_poe(bitSw, dItemNo_POU_SPIRIT_e, this) != dItemNo_POU_SPIRIT_e;
-        if (mItemCheckOverridden) {
-            dusk::mods::item_check_enqueue_poe(bitSw, dItemNo_POU_SPIRIT_e);
-        } else
+        const auto itemCheck = dusk::mods::item_check_commit(
+            dusk::mods::item_give_tag_poe(bitSw), dItemNo_POU_SPIRIT_e, this);
+        mItemCheckOverridden = itemCheck.itemNo != dItemNo_POU_SPIRIT_e;
+        if (itemCheck.itemNo == dItemNo_POU_SPIRIT_e) {
 #endif
             dComIfGs_addPohSpiritNum();
+#if TARGET_PC
+        }
+        if (itemCheck.itemNo == dItemNo_NONE_e) {
+            dusk::mods::item_check_complete(itemCheck, this);
+        } else if (itemCheck.itemNo != dItemNo_POU_SPIRIT_e) {
+            dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::Demo);
+        }
+#endif
 
         field_0x784 = -1;
 

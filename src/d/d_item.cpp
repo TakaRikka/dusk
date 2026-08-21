@@ -741,8 +741,12 @@ void item_func_ARMOR() {}
 void item_func_WEAR_ZORA() {}
 
 void item_func_MAGIC_LV1() {
+#if TARGET_PC
+    dComIfGs_onEventBit(0xD04);
+#else
     dComIfGp_setItemMagicCount(16);
     dComIfGp_setItemMaxMagicCount(16);
+#endif
 }
 
 void item_func_DUNGEON_EXIT_2() {
@@ -1411,7 +1415,11 @@ int item_getcheck_func_WEAR_ZORA() {
 }
 
 int item_getcheck_func_MAGIC_LV1() {
+#if TARGET_PC
+    return dComIfGs_isEventBit(0xD04);
+#else
     return -1;
+#endif
 }
 
 int item_getcheck_func_DUNGEON_EXIT_2() {

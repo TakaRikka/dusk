@@ -1495,9 +1495,11 @@ int daNpcIns_c::talk(void* param_1) {
 #if TARGET_PC
                             u32 itemGiveTag = 0;
                             if (s_givenInsectId != dItemNo_NONE_e) {
-                                itemNo = dusk::mods::item_check_bug(
-                                    s_givenInsectId, itemNo & 0xFF, this);
-                                itemGiveTag = dusk::mods::item_give_tag_bug(s_givenInsectId);
+                                const auto itemCheck = dusk::mods::item_check_commit(
+                                    dusk::mods::item_give_tag_bug(s_givenInsectId), itemNo & 0xFF,
+                                    this);
+                                itemNo = itemCheck.itemNo;
+                                itemGiveTag = itemCheck.tag;
                                 s_givenInsectId = dItemNo_NONE_e;
                             }
 #endif

@@ -17,10 +17,12 @@ typedef uint64_t ItemGiveHandle;
 /*
  * Item check resolution and inventory grants.
  *
- * Check names are case-sensitive. Resolvers must be free of side effects because the game may
- * resolve a check more than once, including once for display and again when granting the item.
- * Registrations and pending grants are removed when the calling mod is detached. Callbacks run
- * on the game thread.
+ * Check names are case-sensitive. Resolvers must be free of side effects because previews may be
+ * resolved repeatedly. For checks representing a non-item side effect, vanilla_item is 0xFF:
+ * resolving to 0xFF preserves that side effect, while resolving to another item replaces it.
+ *
+ * Registrations and pending grants are removed when the calling mod is detached. Callbacks run on
+ * the game thread. Check names are listed in <mods/items.h>.
  */
 
 /* Host-owned callback data, valid only for the duration of the callback. */
@@ -72,14 +74,14 @@ typedef struct ItemService {
 
     ModResult (*clear_check_resolver)(ModContext* ctx, ItemCheckHandle handle);
 
-    /* Resolve without granting an item or notifying give observers. */
+    /* Resolve a live preview without granting an item or notifying give observers. */
     ModResult (*resolve_check)(
         ModContext* ctx, const char* name, uint8_t vanilla_item, uint8_t* out_item);
 
     /*
      * Add a grant to the global FIFO. check_name may be NULL unless ITEM_GIVE_RESOLVE is set.
-     * Returns MOD_UNAVAILABLE when the queue is full. Entries wait until gameplay is in a safe
-     * state and are cleared when the active save slot changes.
+     * Entries wait until gameplay is in a safe state and are cleared when the active save slot
+     * changes.
      */
     ModResult (*give_item)(
         ModContext* ctx, const char* check_name, uint8_t item_no, uint32_t flags);

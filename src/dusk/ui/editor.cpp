@@ -275,7 +275,7 @@ std::map<int, itemInfo> itemMap = {
     {dItemNo_WEAR_KOKIRI_e, {"Hero's Clothes"}},
     {dItemNo_ARMOR_e, {"Magic Armor"}},
     {dItemNo_WEAR_ZORA_e, {"Zora Armor"}},
-    {dItemNo_MAGIC_LV1_e, {"Magic Level 1"}},
+    {dItemNo_SHADOW_CRYSTAL_e, {"Shadow Crystal"}},
     {dItemNo_DUNGEON_EXIT_2_e, {"Ooccoo Sr.", ITEMTYPE_EQUIP_e}},
     {dItemNo_WALLET_LV1_e, {"Wallet"}},
     {dItemNo_WALLET_LV2_e, {"Big Wallet"}},

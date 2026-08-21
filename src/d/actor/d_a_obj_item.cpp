@@ -287,7 +287,11 @@ int daItem_c::_daItem_create() {
     BOOL flag = dItem_data::chkFlag(m_itemNo, 2);
 
 #if DEBUG
+#if TARGET_PC
+    if (dItem_fieldModelArc(m_itemNo) == NULL) {
+#else
     if (dItem_data::getFieldArc(m_itemNo) == NULL) {
+#endif
         // "Item Num<%d>: No Resource Archive specified!!\n"
         OS_REPORT_ERROR("アイテム番号<%d>:リソースのアーカイブ指定がありません！！\n", m_itemNo);
         return cPhs_ERROR_e;
@@ -319,6 +323,20 @@ int daItem_c::_daItem_create() {
     if (flag) {
         CreateInit();
     } else {
+#if TARGET_PC
+        // Resolved items may have no field model; display their get-demo model instead.
+        if (dItem_data::getFieldArc(m_itemNo) == NULL) {
+            phase_state = dComIfG_resLoad(&mPhase, dItem_data::getArcName(m_itemNo));
+            if (phase_state == cPhs_COMPLEATE_e) {
+                if (!fopAcM_entrySolidHeap(this, CheckItemCreateHeap, 0x4000)) {
+                    return cPhs_ERROR_e;
+                }
+
+                CreateInit();
+            }
+            return phase_state;
+        }
+#endif
         phase_state = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
         if (phase_state == cPhs_COMPLEATE_e) {
             if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap,
@@ -412,7 +430,11 @@ int daItem_c::_daItem_delete() {
         mSparkleEmtr.remove();
     }
 
+#if TARGET_PC
+    DeleteBase(dItem_fieldModelArc(m_itemNo));
+#else
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
+#endif
     return 1;
 }
 
@@ -520,9 +542,10 @@ void daItem_c::procInitGetDemoEvent() {
 
 #if TARGET_PC
     const u8 displayItemNo = m_itemNo;
-    if (mItemOverridden) {
-        m_itemNo = dusk::mods::item_check_tagged(mItemGiveTag, mOriginalItemNo, this);
-    }
+    const auto itemCheck = dusk::mods::item_check_commit(mItemGiveTag, mOriginalItemNo, this);
+    m_itemNo = itemCheck.itemNo;
+    mItemGiveTag = itemCheck.tag;
+    mItemOverridden = m_itemNo != mOriginalItemNo;
 #endif
     m_item_id = fopAcM_createItemForTrBoxDemo(
         &current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(mItemGiveTag));
@@ -907,9 +930,10 @@ void daItem_c::itemGetNextExecute() {
 void daItem_c::itemGet() {
 #if TARGET_PC
     const u8 displayItemNo = m_itemNo;
-    if (mItemOverridden) {
-        m_itemNo = dusk::mods::item_check_tagged(mItemGiveTag, mOriginalItemNo, this);
-    }
+    const auto itemCheck = dusk::mods::item_check_commit(mItemGiveTag, mOriginalItemNo, this);
+    m_itemNo = itemCheck.itemNo;
+    mItemGiveTag = itemCheck.tag;
+    mItemOverridden = m_itemNo != mOriginalItemNo;
 #endif
     switch (m_itemNo) {
 #if TARGET_PC

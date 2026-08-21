@@ -1592,6 +1592,12 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
     int _ = -1;
 #if TARGET_PC
     const u8 originalItemNo = i_itemNo & 0xFF;
+    // Overridden item checks do not set StageLife, so boss containers
+    // also need a persistent local item bit.
+    constexpr u8 kBossHeartContainerFlag = 0x9F;
+    if (originalItemNo == dItemNo_UTAWA_HEART_e && param_8 == -1) {
+        param_8 = kBossHeartContainerFlag;
+    }
     u32 giveTag;
     if (i_itemCheckName != NULL) {
         i_itemNo = dusk::mods::item_check(i_itemCheckName, originalItemNo, NULL);

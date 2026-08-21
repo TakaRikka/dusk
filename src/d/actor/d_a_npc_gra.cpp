@@ -4019,14 +4019,16 @@ BOOL daNpc_grA_c::talk(void*) {
         if (r26 && talkProc(NULL, TRUE, NULL)) {
             if (mFlow.getEventId(&sp8) == 1) {
 #if TARGET_PC
-                const char* itemCheckName = nullptr;
+                u32 itemGiveTag = 0;
                 if (sp8 == dItemNo_BOMB_IN_BAG_e) {
-                    itemCheckName = "goron_reward:F_SP113";
-                    sp8 = dusk::mods::item_check(itemCheckName, sp8, this);
+                    const auto itemCheck =
+                        dusk::mods::item_check_commit("goron_reward:F_SP113", sp8, this);
+                    sp8 = itemCheck.itemNo;
+                    itemGiveTag = itemCheck.tag;
                 }
 #endif
                 field_0x1480 = fopAcM_createItemForPresentDemo(&current.pos, sp8, 0, -1, -1, NULL,
-                    NULL IF_DUSK_ARG(dusk::mods::item_give_tag(itemCheckName)));
+                    NULL IF_DUSK_ARG(itemGiveTag));
                 if (field_0x1480 != fpcM_ERROR_PROCESS_ID_e) {
                     s16 r25 = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
                     dComIfGp_getEvent()->reset(this);

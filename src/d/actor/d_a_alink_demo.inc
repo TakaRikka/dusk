@@ -1027,6 +1027,9 @@ void daAlink_c::setGetItemFace(u16 i_itemNo) {
         || i_itemNo == dItemNo_ANCIENT_DOCUMENT2_e
         || i_itemNo == dItemNo_DROP_CONTAINER_e
         || i_itemNo == dItemNo_DROP_CONTAINER02_e
+#if TARGET_PC
+        || i_itemNo == dItemNo_SHADOW_CRYSTAL_e
+#endif
         || i_itemNo == dItemNo_DROP_CONTAINER03_e)
     {
         setFaceBasicBck(dRes_ID_ALANM_BCK_FI_e);
@@ -2009,7 +2012,11 @@ void daAlink_c::setGetSubBgm(int i_itemNo) {
         /* dItemNo_WEAR_KOKIRI_e       */ SETYPE_NONE,
         /* dItemNo_ARMOR_e             */ SETYPE_ITEM_GET,
         /* dItemNo_WEAR_ZORA_e         */ SETYPE_ITEM_GET,
+#if TARGET_PC
+        /* dItemNo_SHADOW_CRYSTAL_e    */ SETYPE_ITEM_GET,
+#else
         /* dItemNo_MAGIC_LV1_e         */ SETYPE_NONE,
+#endif
         /* dItemNo_DUNGEON_EXIT_2_e    */ SETYPE_ITEM_GET_MINI,
         /* dItemNo_WALLET_LV1_e        */ SETYPE_NONE,
         /* dItemNo_WALLET_LV2_e        */ SETYPE_ITEM_GET,
@@ -2307,8 +2314,13 @@ int daAlink_c::procCoGetItemInit() {
             item_no = dComIfGp_event_getGtItm();
         }
 
+#if TARGET_PC
+        const u32 giveTag = mDemo.getParam0() != 0x100 && mDemo.getParam1() != 0 ?
+                                static_cast<u32>(mDemo.getParam1()) :
+                                dusk::mods::item_give_queue_take_tag();
+#endif
         fpc_ProcID item_partner_id = fopAcM_createItemForPresentDemo(&current.pos, item_no, 0, -1,
-            fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(dusk::mods::item_give_queue_take_tag()));
+            fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(giveTag));
         if (item_partner_id != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(item_partner_id);
         }

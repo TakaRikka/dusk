@@ -36,6 +36,7 @@
 #include "dusk/language.hpp"
 #include "dusk/logging.h"
 #include "dusk/menu_pointer.h"
+#include "dusk/mods/item.hpp"
 #include "dusk/mods/svc/flow.hpp"
 #include "dusk/settings.h"
 #include "dusk/version.hpp"
@@ -832,6 +833,9 @@ u32 dMsgObject_c::getMessageIndex(u32 param_0) {
 
 u32 dMsgObject_c::getRevoMessageIndex(u32 param_1) {
 #if TARGET_PC
+    const u16 sourceGroup = param_1 > 5000 ? static_cast<u16>(s_groupID) : 0;
+    param_1 = dusk::mods::item_check_message(sourceGroup, param_1);
+
     u16 customGroup = 0;
     if (param_1 <= 0xffff &&
         dusk::flow::custom_message_group(static_cast<u16>(param_1), customGroup))

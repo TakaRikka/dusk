@@ -14,6 +14,11 @@
 #include "d/actor/d_a_obj_ystone.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/mods/item.hpp"
+#include "mods/items.h"
+#endif
+
 static DUSK_CONST char* l_arcName = "ef_Portal";
 
 static char const* l_clearEvName[9] = {
@@ -76,6 +81,27 @@ static int getNowLevel() {
     }
     return -1;
 }
+
+#if TARGET_PC
+static const char* dungeon_reward_check_name(int level) {
+    switch (level) {
+    case 0:
+        return ITEM_CHECK_DUNGEON_REWARD_FOREST;
+    case 1:
+        return ITEM_CHECK_DUNGEON_REWARD_GORON;
+    case 2:
+        return ITEM_CHECK_DUNGEON_REWARD_LAKEBED;
+    case 4:
+        return ITEM_CHECK_DUNGEON_REWARD_SNOWPEAK;
+    case 5:
+        return ITEM_CHECK_DUNGEON_REWARD_TIME;
+    case 6:
+        return ITEM_CHECK_DUNGEON_REWARD_CITY;
+    default:
+        return nullptr;
+    }
+}
+#endif
 
 void daObjBossWarp_c::initBaseMtx() {
     scale.y = 0.15f;
@@ -485,6 +511,9 @@ int daObjBossWarp_c::demoProc() {
             player->onSceneChangeArea(scene, 0xff, 0);
             break;
         case 4:  // STONE_FALL
+#if TARGET_PC
+        {
+#endif
             if (ystone != NULL) {
                 mYstonePos = ystone->current.pos;
                 if (getNowLevel() < 3) {
@@ -506,28 +535,52 @@ int daObjBossWarp_c::demoProc() {
             mDoMtx_stack_c::multVec(&mYstoneTargetPos, &mYstoneTargetPos);
             mYstonePos.x = mYstoneTargetPos.x;
             mYstonePos.z = mYstoneTargetPos.z;
-            switch (getNowLevel()) {
-            case 0:
-                dComIfGs_onCollectCrystal(0);
-                break;
-            case 1:
-                dComIfGs_onCollectCrystal(1);
-                break;
-            case 2:
-                dComIfGs_onCollectCrystal(2);
-                break;
-            case 4:
-                dComIfGs_onCollectMirror(1);
-                break;
-            case 5:
-                dComIfGs_onCollectMirror(2);
-                break;
-            case 6:
-                dComIfGs_onCollectMirror(3);
-                break;
+#if TARGET_PC
+            int level = getNowLevel();
+            const char* checkName = dungeon_reward_check_name(level);
+            dusk::mods::ItemCheckResult itemCheck{};
+            bool applyVanillaReward = true;
+            if (checkName != nullptr) {
+                itemCheck = dusk::mods::item_check_commit(checkName, dItemNo_NONE_e, this);
+                applyVanillaReward = itemCheck.itemNo == dItemNo_NONE_e;
             }
+            if (applyVanillaReward) {
+                switch (level) {
+#else
+            switch (getNowLevel()) {
+#endif
+                case 0:
+                    dComIfGs_onCollectCrystal(0);
+                    break;
+                case 1:
+                    dComIfGs_onCollectCrystal(1);
+                    break;
+                case 2:
+                    dComIfGs_onCollectCrystal(2);
+                    break;
+                case 4:
+                    dComIfGs_onCollectMirror(1);
+                    break;
+                case 5:
+                    dComIfGs_onCollectMirror(2);
+                    break;
+                case 6:
+                    dComIfGs_onCollectMirror(3);
+                    break;
+                }
+#if TARGET_PC
+                if (checkName != nullptr) {
+                    dusk::mods::item_check_complete(itemCheck, this);
+                }
+            } else {
+                dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::Silent);
+            }
+#endif
             mCounter = 0;
             break;
+#if TARGET_PC
+        }
+#endif
         case 5:  // STONE_MIDNA
             mCounter = 0;
             break;

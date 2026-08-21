@@ -1133,9 +1133,9 @@ static void e_po_dead(e_po_class* i_this) {
             camera_player->mCamera.SetTrimSize(0);
             dComIfGp_event_reset();
 #if TARGET_PC
-            if (dusk::mods::item_check_poe(i_this->BitSW, dItemNo_POU_SPIRIT_e, a_this) ==
-                dItemNo_POU_SPIRIT_e)
-            {
+            const auto itemCheck = dusk::mods::item_check_commit(
+                dusk::mods::item_give_tag_poe(i_this->BitSW), dItemNo_POU_SPIRIT_e, a_this);
+            if (itemCheck.itemNo == dItemNo_POU_SPIRIT_e) {
 #endif
                 dComIfGs_addPohSpiritNum();
 #if !PLATFORM_SHIELD
@@ -1145,6 +1145,11 @@ static void e_po_dead(e_po_class* i_this) {
             }
 #endif
 #if TARGET_PC
+            dusk::mods::item_check_complete(itemCheck, a_this);
+            } else if (itemCheck.itemNo == dItemNo_NONE_e) {
+                dusk::mods::item_check_complete(itemCheck, a_this);
+            } else {
+                dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::Demo);
             }
 #endif
             daPy_getPlayerActorClass()->cancelOriginalDemo();
@@ -1274,10 +1279,16 @@ static void e_po_dead(e_po_class* i_this) {
         } else {
             if (i_this->field_0x75C == -1) {
 #if TARGET_PC
-                const u8 itemNo =
-                    dusk::mods::item_check_poe(i_this->BitSW, dItemNo_POU_SPIRIT_e, a_this);
-                i_this->field_0x75C = fopAcM_createItemForPresentDemo(&a_this->current.pos, itemNo,
-                    0, -1, -1, NULL, NULL, dusk::mods::item_give_tag_poe(i_this->BitSW));
+                const auto itemCheck = dusk::mods::item_check_commit(
+                    dusk::mods::item_give_tag_poe(i_this->BitSW), dItemNo_POU_SPIRIT_e, a_this);
+                if (itemCheck.itemNo == dItemNo_NONE_e) {
+                    dusk::mods::item_check_complete(itemCheck, a_this);
+                    i_this->field_0x75B = 1;
+                } else {
+                    i_this->field_0x75C = fopAcM_createItemForPresentDemo(
+                        &a_this->current.pos, itemCheck.itemNo, 0, -1, -1, NULL, NULL,
+                        itemCheck.tag);
+                }
 #else
                 i_this->field_0x75C = fopAcM_createItemForPresentDemo(&a_this->current.pos, 0xE0, 0,
                                                                       -1, -1, NULL, NULL);
