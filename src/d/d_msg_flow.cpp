@@ -43,6 +43,11 @@ u16 message_id(const MessageEntryData& entry) {
     return static_cast<u16>(static_cast<u16>(entry.bytes[4]) << 8 | entry.bytes[5]);
 }
 
+u16 flow_group(int flowId) {
+    const bool isCommonFlow = flowId >= 3000 && flowId < dusk::flow::kCustomNodeMin;
+    return isCommonFlow ? 0 : static_cast<u16>(dMsgObject_getGroupID());
+}
+
 }  // namespace
 #endif
 
@@ -70,8 +75,7 @@ void dMsgFlow_c::init(fopAc_ac_c* i_partner, int i_flowID, int param_2, fopAc_ac
         dMsgObject_changeFlowGroup(i_flowID);
 
 #if TARGET_PC
-        dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(),
-            i_flowID >= 3000 ? 0 : static_cast<u16>(dMsgObject_getGroupID()));
+        dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(), flow_group(i_flowID));
 #endif
 
         if (param_2 == 0) {
@@ -399,8 +403,7 @@ void dMsgFlow_c::setInitValueGroupChange(int i_msgNo, fopAc_ac_c** i_talkPartner
 
     dMsgObject_changeFlowGroup(i_msgNo);
 #if TARGET_PC
-    dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(),
-        i_msgNo >= 3000 ? 0 : static_cast<u16>(dMsgObject_getGroupID()));
+    dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(), flow_group(i_msgNo));
 #endif
     setInitValue(0);
 
