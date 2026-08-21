@@ -115,6 +115,7 @@ struct QueuedGive {
     uint8_t itemNo = 0;
     bool silent = false;
     bool resolveAtDispatch = false;
+    bool forced = false;
 };
 
 std::deque<QueuedGive> s_giveQueue;
@@ -124,6 +125,11 @@ int s_inFlightRetries = 0;
 bool s_inFlight = false;
 bool s_inFlightSpawned = false;
 bool s_dispatchingSilent = false;
+
+bool has_forced_give() {
+    return std::any_of(
+        s_giveQueue.begin(), s_giveQueue.end(), [](const QueuedGive& give) { return give.forced; });
+}
 
 bool safe_to_dispatch() {
     daAlink_c* link = daAlink_getAlinkActorClass();
@@ -188,6 +194,35 @@ void dispatch_demo_give() {
     link->mProcID = daAlink_c::PROC_GET_ITEM;
     const s16 eventIndex = dComIfGp_getEventManager().getEventIdx(link, "DEFAULT_GETITEM", 0xFF);
     fopAcM_orderChangeEventId(link, eventIndex, 1, 0xFFFF);
+}
+
+void dispatch_next_give() {
+    while (!s_giveQueue.empty()) {
+        while (!s_giveQueue.empty() && s_giveQueue.front().silent) {
+            const QueuedGive give = s_giveQueue.front();
+            s_giveQueue.pop_front();
+            dispatch_silent_give(give);
+        }
+        if (s_giveQueue.empty()) {
+            return;
+        }
+
+        const QueuedGive give = s_giveQueue.front();
+        s_giveQueue.pop_front();
+
+        uint8_t itemNo = 0;
+        if (!resolve_queued_give(give, ITEM_GIVE_ORIGIN_QUEUE, itemNo)) {
+            continue;
+        }
+
+        s_inFlightGive = give;
+        s_inFlightItem = itemNo;
+        s_inFlightRetries = 0;
+        s_inFlight = true;
+        s_inFlightSpawned = false;
+        dispatch_demo_give();
+        return;
+    }
 }
 
 }  // namespace
@@ -259,7 +294,11 @@ bool item_check_enqueue(ItemCheckResult check, ItemGiveMode mode) {
         .tag = check.tag,
         .itemNo = committed->resolvedItem,
         .silent = mode == ItemGiveMode::Silent,
+        .forced = mode == ItemGiveMode::ForcedDemo,
     });
+    if (mode == ItemGiveMode::ForcedDemo && !s_inFlight) {
+        dispatch_next_give();
+    }
     return true;
 }
 
@@ -307,11 +346,14 @@ uint32_t item_give_queue_take_tag() {
 namespace svc {
 
 void item_gives_tick() {
-    if ((!s_inFlight && s_giveQueue.empty()) || !safe_to_dispatch()) {
+    if (!s_inFlight && s_giveQueue.empty()) {
         return;
     }
 
     if (s_inFlight) {
+        if (!safe_to_dispatch()) {
+            return;
+        }
         if (++s_inFlightRetries > kGiveMaxRetries) {
             Log.error("item {:#x} for '{}' did not complete after {} attempts; dropping it",
                 s_inFlightItem,
@@ -328,29 +370,10 @@ void item_gives_tick() {
         return;
     }
 
-    while (!s_giveQueue.empty() && s_giveQueue.front().silent) {
-        const QueuedGive give = s_giveQueue.front();
-        s_giveQueue.pop_front();
-        dispatch_silent_give(give);
-    }
-    if (s_giveQueue.empty()) {
+    if (!has_forced_give() && !safe_to_dispatch()) {
         return;
     }
-
-    const QueuedGive give = s_giveQueue.front();
-    uint8_t itemNo = 0;
-    if (!resolve_queued_give(give, ITEM_GIVE_ORIGIN_QUEUE, itemNo)) {
-        s_giveQueue.pop_front();
-        return;
-    }
-
-    s_giveQueue.pop_front();
-    s_inFlightGive = give;
-    s_inFlightItem = itemNo;
-    s_inFlightRetries = 0;
-    s_inFlight = true;
-    s_inFlightSpawned = false;
-    dispatch_demo_give();
+    dispatch_next_give();
 }
 
 void item_gives_clear() {

@@ -10,6 +10,7 @@ namespace dusk::mods {
 enum class ItemGiveMode : uint8_t {
     Demo,
     Silent,
+    ForcedDemo,
 };
 
 struct ItemCheckResult {

@@ -1156,7 +1156,15 @@ void item_func_M_MAYFLY() {}
 
 void item_func_F_MAYFLY() {}
 
-void item_func_POU_SPIRIT() {}
+void item_func_POU_SPIRIT() {
+#if TARGET_PC
+    dComIfGs_addPohSpiritNum();
+    if (dComIfGs_getPohSpiritNum() == 20) {
+        /* dSv_event_flag_c::F_0457 - Castle Town - Revived cat */
+        dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[457]);
+    }
+#endif
+}
 
 void item_func_ANCIENT_DOCUMENT() {
     dComIfGs_setItem(SLOT_22, dItemNo_ANCIENT_DOCUMENT_e);

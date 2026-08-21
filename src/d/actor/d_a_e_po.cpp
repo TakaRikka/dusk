@@ -1135,24 +1135,22 @@ static void e_po_dead(e_po_class* i_this) {
 #if TARGET_PC
             const auto itemCheck = dusk::mods::item_check_commit(
                 dusk::mods::item_give_tag_poe(i_this->BitSW), dItemNo_POU_SPIRIT_e, a_this);
-            if (itemCheck.itemNo == dItemNo_POU_SPIRIT_e) {
-#endif
-                dComIfGs_addPohSpiritNum();
+            daPy_getPlayerActorClass()->cancelOriginalDemo();
+            if (itemCheck.itemNo == dItemNo_NONE_e) {
+                dusk::mods::item_check_complete(itemCheck, a_this);
+            } else {
+                dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::ForcedDemo);
+            }
+#else
+            dComIfGs_addPohSpiritNum();
 #if !PLATFORM_SHIELD
             if (dComIfGs_getPohSpiritNum() == 0x14) {
                 /* dSv_event_flag_c::F_0457 - Castle Town - Revived cat */
                 dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[457]);
             }
 #endif
-#if TARGET_PC
-            dusk::mods::item_check_complete(itemCheck, a_this);
-            } else if (itemCheck.itemNo == dItemNo_NONE_e) {
-                dusk::mods::item_check_complete(itemCheck, a_this);
-            } else {
-                dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::Demo);
-            }
-#endif
             daPy_getPlayerActorClass()->cancelOriginalDemo();
+#endif
         } else if (mArg0Check(i_this, 0) != 0) {
             if (!fopAcM_isSwitch(a_this, 0x22)) {
                 if (fopAcM_SearchByID(i_this->field_0x5B8, &local_1b0_actor) != 0 &&

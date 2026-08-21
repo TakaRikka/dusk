@@ -97,7 +97,7 @@ public:
     /* 0xDEC */ u8 field_0xdec[0xdf9 - 0xdec];
     /* 0xDF9 */ u8 field_0xdf9;
 #if TARGET_PC
-    bool mItemCheckOverridden;
+    bool mItemCheckHandled;
 #endif
 };
 

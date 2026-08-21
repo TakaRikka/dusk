@@ -2545,6 +2545,16 @@ int daAlink_c::procCoGetItem() {
                     } else if (mProcVar2.field_0x300c == 0x23 && checkStageName("D_MN11")) {
                         field_0x32cc = 0x5C0;
                     } else if (mProcVar2.field_0x300c == 0xE0) {
+#if TARGET_PC
+                        // Dusklight increments the Poe count when the displayed item is granted.
+                        if (dComIfGs_getPohSpiritNum() + 1 == 20) {
+                            field_0x32cc = 0x4CF;
+                        } else if (dComIfGs_getPohSpiritNum() + 1 == 60) {
+                            field_0x32cc = 0x4D0;
+                        } else {
+                            field_0x32cc = mProcVar2.field_0x300c + 0x65;
+                        }
+#else
                         if (dComIfGs_getPohSpiritNum() == 20) {
                             field_0x32cc = 0x4CF;
                         } else if (dComIfGs_getPohSpiritNum() == 60) {
@@ -2552,6 +2562,7 @@ int daAlink_c::procCoGetItem() {
                         } else {
                             field_0x32cc = mProcVar2.field_0x300c + 0x65;
                         }
+#endif
                     } else if (mProcVar2.field_0x300c == 0x21) {
                         static u32 const heartPieceMessage[5] = {0x86, 0x9C, 0x9D, 0x9E, 0x9F};
                         field_0x32cc = heartPieceMessage[dComIfGs_getMaxLife() % 5];
