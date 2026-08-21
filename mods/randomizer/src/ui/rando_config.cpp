@@ -14,6 +14,7 @@
 #include "rando_seed_generation.hpp"
 #include "config_store.hpp"
 
+#include <algorithm>
 #include <mutex>
 #include <thread>
 #include <map>
@@ -107,6 +108,31 @@ UiMenuTabHandle g_menu_tab{};
 FileSelectGateWindowCtx g_file_select_window_ctx{};
 
 namespace {
+std::vector<std::string> get_compatible_seed_hashes() {
+    const std::filesystem::path seedDir = paths::GetRandomizerSeedsPath();
+    std::filesystem::create_directories(seedDir);
+
+    std::vector<std::string> seedHashes;
+    for (const auto& entry : std::filesystem::directory_iterator(seedDir)) {
+        if (!entry.is_directory()) {
+            continue;
+        }
+
+        try {
+            const YAML::Node seedData = LoadYAML(entry.path() / "seed.dat");
+            if (seedData["formatVersion"] &&
+                seedData["formatVersion"].as<u32>() == RandomizerContext::FORMAT_VERSION) {
+                seedHashes.push_back(entry.path().filename().string());
+            }
+        } catch (const std::exception&) {
+            // Incomplete or malformed seeds cannot be activated and should not be offered.
+        }
+    }
+
+    std::ranges::sort(seedHashes);
+    return seedHashes;
+}
+
 // Control Helpers
 ModResult add_button(UiElementHandle pane, const char* label, const char* help_rml,
     UiPressedFn on_pressed, void* userdata = nullptr, UiElementHandle* out_handle = nullptr)
@@ -353,18 +379,9 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
         });
 
     {
-        std::filesystem::path seed_dir = paths::GetRandomizerSeedsPath();
-        if (!std::filesystem::exists(seed_dir))
-            std::filesystem::create_directory(seed_dir);
-
         std::string help_rml = "Select a seed above to delete it.";
 
-        std::vector<std::string> seedHashes;
-        for (const auto& entry : std::filesystem::directory_iterator(seed_dir)) {
-            if (entry.is_directory()) {
-                seedHashes.push_back(entry.path().filename().string());
-            }
-        }
+        const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
 
         std::vector<const char*> availableSeeds;
         for (const auto& hash : seedHashes) {
@@ -380,20 +397,16 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
                 out_value->int_value = 0;
             },
             [](ModContext*, void*, const UiControlValue* value) {
-                int idx = 0;
-                for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
-                    if (entry.is_directory()) {
-                        if (idx == value->int_value) {
-                            std::string hash = entry.path().filename().string();
-                            if (randomizer_GetContext().mHash == hash) {
-                                randomizer_GetContext() = RandomizerContext{};
-                            }
-                            std::filesystem::remove_all(entry);
-                            break;
-                        }
-                        idx++;
-                    }
+                const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
+                if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= seedHashes.size()) {
+                    return;
                 }
+
+                const std::string& hash = seedHashes[value->int_value];
+                if (randomizer_GetContext().mHash == hash) {
+                    randomizer_GetContext() = RandomizerContext{};
+                }
+                std::filesystem::remove_all(paths::GetRandomizerSeedsPath() / hash);
             });
     }
 
@@ -1087,24 +1100,20 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
 ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
-    std::filesystem::path seed_dir = paths::GetRandomizerSeedsPath();
-    if (!std::filesystem::exists(seed_dir))
-        std::filesystem::create_directory(seed_dir);
+    const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
 
     std::string help_rml = "";
-    if (std::filesystem::is_empty(seed_dir)) {
+    if (seedHashes.empty()) {
         help_rml = "No seeds generated! You can generate a seed from the Seed Management Tab.";
     } else {
         help_rml = "Choose which seed you want to play.";
     }
 
-    std::vector<std::string> seedHashes;
-    for (const auto& entry : std::filesystem::directory_iterator(seed_dir)) {
-        if (entry.is_directory()) {
-            seedHashes.push_back(entry.path().filename().string());
-        }
+    if (!session::g_pending_seed_hash.empty() &&
+        !std::ranges::contains(seedHashes, session::g_pending_seed_hash)) {
+        session::g_pending_seed_hash.clear();
     }
-    
+
     std::vector<const char*> availableSeeds;
     for (const auto& hash : seedHashes) {
         availableSeeds.push_back(hash.c_str());
@@ -1116,30 +1125,23 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
         availableSeeds.data(),
         availableSeeds.size(),
         [](ModContext*, void*, UiControlValue* out_value) {
-            int idx = 0;
-            for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
-                if (entry.is_directory()) {
-                    std::string hash = entry.path().filename().string();
-                    if (session::g_pending_seed_hash == hash) {
-                        break;
-                    }
-                    idx++;
-                }
+            const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
+            const auto selected = std::ranges::find(seedHashes, session::g_pending_seed_hash);
+            if (selected == seedHashes.end()) {
+                out_value->int_value = 0;
+                return;
             }
 
-            out_value->int_value = idx;
+            out_value->int_value = static_cast<int32_t>(std::distance(seedHashes.begin(), selected));
         },
         [](ModContext*, void*, const UiControlValue* value) {
-            int idx = 0;
-            for (const auto& entry : std::filesystem::directory_iterator(paths::GetRandomizerSeedsPath())) {
-                if (entry.is_directory()) {
-                    if (idx == value->int_value) {
-                        session::g_pending_seed_hash = entry.path().filename().string();
-                        break;
-                    }
-                    idx++;
-                }
+            const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
+            if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= seedHashes.size()) {
+                session::g_pending_seed_hash.clear();
+                return;
             }
+
+            session::g_pending_seed_hash = seedHashes[value->int_value];
         });
 
     {

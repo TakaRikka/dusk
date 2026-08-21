@@ -56,16 +56,20 @@ RandomizerContext::FlowNodeType parse_flow_node_type(const YAML::Node& node) {
     throw std::runtime_error("Unknown flow node type: " + type);
 }
 
-void write_flow_reference(
-    YAML::Node node, const RandomizerContext::FlowReference& reference) {
+YAML::Node write_flow_reference(const RandomizerContext::FlowReference& reference) {
+    YAML::Node node{};
     if (reference.nativeId.has_value()) {
         node = reference.nativeId.value();
     } else {
         node = reference.name;
     }
+    return node;
 }
 
 RandomizerContext::FlowReference parse_flow_reference(const YAML::Node& node) {
+    if (!node.IsScalar()) {
+        throw std::runtime_error("Flow reference must be a node ID or name");
+    }
     RandomizerContext::FlowReference reference{};
     try {
         reference.nativeId = node.as<u16>();
@@ -78,15 +82,15 @@ RandomizerContext::FlowReference parse_flow_reference(const YAML::Node& node) {
 void write_message_style(
     YAML::Node node, const RandomizerContext::MessageStyleData& style) {
     node["eventLabelId"] = style.eventLabelId;
-    node["speaker"] = style.speaker;
-    node["boxKind"] = style.boxKind;
-    node["drawType"] = style.drawType;
-    node["boxPosition"] = style.boxPosition;
-    node["lineAlignment"] = style.lineAlignment;
-    node["speakerMood"] = style.speakerMood;
-    node["cameraAttr"] = style.cameraAttr;
-    node["talkAnim"] = style.talkAnim;
-    node["faceAnim"] = style.faceAnim;
+    node["speaker"] = static_cast<u16>(style.speaker);
+    node["boxKind"] = static_cast<u16>(style.boxKind);
+    node["drawType"] = static_cast<u16>(style.drawType);
+    node["boxPosition"] = static_cast<u16>(style.boxPosition);
+    node["lineAlignment"] = static_cast<u16>(style.lineAlignment);
+    node["speakerMood"] = static_cast<u16>(style.speakerMood);
+    node["cameraAttr"] = static_cast<u16>(style.cameraAttr);
+    node["talkAnim"] = static_cast<u16>(style.talkAnim);
+    node["faceAnim"] = static_cast<u16>(style.faceAnim);
     node["trailingData"] = style.trailingData;
 }
 
@@ -191,7 +195,7 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
     for (const auto& flow : mFlowNodes) {
         YAML::Node node{};
         node["type"] = flow_node_type_name(flow.type);
-        node["group"] = flow.group;
+        node["group"] = static_cast<u16>(flow.group);
         if (flow.patchIndex.has_value()) {
             node["patchIndex"] = flow.patchIndex.value();
         } else {
@@ -202,22 +206,20 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
             node["operation"] = flow.operation;
         }
         if (flow.type == FlowNodeType::MESSAGE) {
-            write_flow_reference(node["message"], flow.message);
+            node["message"] = write_flow_reference(flow.message);
         }
         if (flow.type != FlowNodeType::BRANCH) {
-            write_flow_reference(node["next"], flow.next);
+            node["next"] = write_flow_reference(flow.next);
         }
         for (const auto& result : flow.results) {
-            YAML::Node resultNode{};
-            write_flow_reference(resultNode, result);
-            node["results"].push_back(resultNode);
+            node["results"].push_back(write_flow_reference(result));
         }
         out["mFlowNodes"].push_back(node);
     }
 
     for (const auto& message : mCustomMessages) {
         YAML::Node node{};
-        node["group"] = message.group;
+        node["group"] = static_cast<u16>(message.group);
         node["name"] = message.name;
         write_message_style(node["style"], message.style);
         for (const auto& [language, text] : message.text) {
