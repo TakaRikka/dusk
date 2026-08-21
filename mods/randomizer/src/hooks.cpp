@@ -2977,7 +2977,7 @@ HookAction hookPreObjLifeCalcScale(ModContext*, void* args, void* retval, void*)
         newScale = 2.0f;
     }
 
-    cLib_chaseF(&i_this->field_0x954, 1.0f, 0.2f);
+    cLib_chaseF(&i_this->field_0x954, newScale, 0.2f);
     if (i_this->field_0x954 == newScale) {
         cLib_chaseF(&i_this->field_0x94c, 0.0f, 0.05f);
         i_this->field_0x950 = i_this->field_0x94c * cM_ssin(i_this->field_0x95e * 3000);
