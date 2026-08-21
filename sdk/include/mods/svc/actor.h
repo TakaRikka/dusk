@@ -16,7 +16,7 @@ typedef struct {
                          // It should have a unique prefix to differentiate itself from both game
                          // actors and actors that may be registered by other mods
 
-    uint16_t priorityGroup; /* priorityGroup is the priority for when execute will be called on the
+    uint16_t priority_group; /* priorityGroup is the priority for when execute will be called on the
     actor. Here are the main groups:
     0: The room manager actor
     1: Game scenes
@@ -33,28 +33,28 @@ typedef struct {
     */
 
     size_t process_size;   // Size of the actor class (use sizeof(my_actor_class))
-    int16_t drawPriority;  // an enum value that is prefixed with fpcDwPi. Select an existing value
+    int16_t draw_priority;  // an enum value that is prefixed with fpcDwPi. Select an existing value
                            // from the fpcDwPi to pick a draw priority matching the actor you wish
                            // to match priorities with.
-    int (*createFunction)(
-        void*);  // Called after the actor is spawned, return type is a enum value of cPhs_Step
-    int (*deleteFunction)(
-        void*);  // Called after the actor has been requested to be deleted. Used to free resources
-    int (*executeFunction)(void*);   // Called once per game tick, the actor's priorityGroup
-                                     // determines when it will run relative to other actors
-    int (*isDeleteFunction)(void*);  // Returns 1 when the actor can be deleted
-    int (*drawFunction)(void*);      // Called to draw the actor
     uint32_t status;   // Flags from fopAc_Status_e enum (all have fopAcStts_UNK_0x40000_e, a lot
                        // have fopAcStts_UNK_0x4000_e, add fopAcStts_CULL_e to enable culling)
     uint8_t group;     // The actor type. An enum value from fopAc_Group_e (fopAc_ACTOR_e,
                        // fopAc_ENEMY_e, fopAc_NPC_e)
-    uint8_t cullType;  // Enum value from fopAc_Cull_e
-} ProfileDesc;
+    uint8_t cull_type;  // Enum value from fopAc_Cull_e
+    int (*create_function)(
+        void*);  // Called after the actor is spawned, return type is a enum value of cPhs_Step
+    int (*delete_function)(
+        void*);  // Called after the actor has been requested to be deleted. Used to free resources
+    int (*execute_function)(void*);   // Called once per game tick, the actor's priorityGroup
+                                     // determines when it will run relative to other actors
+    int (*is_delete_function)(void*);  // Returns 1 when the actor can be deleted
+    int (*draw_function)(void*);      // Called to draw the actor
+} ActorProfileDesc;
 
 typedef struct {
     uint32_t parameters; // The parameters to be passed to the actor
     int8_t argument; // The argument to be passed to the actor (acts as an extra byte for a parameter)
-    int8_t roomNum; // The room to spawn the actor in
+    int8_t room_num; // The room to spawn the actor in
     struct {
         float x;
         float y;
@@ -70,12 +70,12 @@ typedef struct {
         float y;
         float z;
     } scale;
-    int (*createFunction)(void*); // Optional: A custom function to run when the actor is created.
+    int (*create_function)(void*); // Optional: A custom function to run when the actor is created.
 } ActorSpawnParams;
 
 typedef struct ActorService {
     ServiceHeader header;
-    ModResult (*register_actor)(ModContext* ctx, const ProfileDesc* desc,
+    ModResult (*register_actor)(ModContext* ctx, const ActorProfileDesc* desc,
         ProfileName* outProfileName, ActorHandle* outActorHandle);
     ModResult (*unregister_actor)(ModContext* ctx, ActorHandle handle);
     ModResult (*create_actor_from_name)(

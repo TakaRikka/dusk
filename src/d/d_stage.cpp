@@ -1549,9 +1549,9 @@ const char* dStage_getName(s16 procName, s8 argument) {
     static char tmp_name[dStage_NAME_LENGTH];
 
 #ifdef TARGET_PC
-    std::string name = dusk::mods::svc::actor_impl::get_full_name_from_proc_name(procName);
+    std::string_view name = dusk::mods::svc::actor_impl::get_full_name_from_proc_name(procName);
     if (name != "") {
-        strncpy(tmp_name,name.c_str(),sizeof(tmp_name)-1);
+        strncpy(tmp_name,name.data(),sizeof(tmp_name)-1);
         tmp_name[7] = '\0'; 
         return tmp_name;
     }

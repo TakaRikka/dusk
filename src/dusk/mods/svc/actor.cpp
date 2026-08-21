@@ -23,12 +23,12 @@ SlotMap<std::unique_ptr<ActorSlot>> s_slots;
 std::unordered_map<s16, ActorHandle> procNameToHandle;
 std::unordered_map<std::string, ActorHandle> fullNameToHandle;
 
-ModResult register_actor(ModContext* ctx, const ProfileDesc* desc, ProfileName* outProfileName,
+ModResult register_actor(ModContext* ctx, const ActorProfileDesc* desc, ProfileName* outProfileName,
     ActorHandle* outActorHandle) {
     const auto handle = s_slots.emplace(*ctx->mod,
         std::make_unique<ActorSlot>(
-            ActorSlot{{desc->createFunction, desc->deleteFunction, desc->executeFunction,
-                          desc->isDeleteFunction, desc->drawFunction},
+            ActorSlot{{desc->create_function, desc->delete_function, desc->execute_function,
+                          desc->is_delete_function, desc->draw_function},
                 {
                     {},  // Set after registered
                     0,   // Set after registered to a slot
@@ -36,7 +36,7 @@ ModResult register_actor(ModContext* ctx, const ProfileDesc* desc, ProfileName* 
                 },
                 {
                     /* Layer ID     */ fpcLy_CURRENT_e,
-                    /* List ID      */ desc->priorityGroup,
+                    /* List ID      */ desc->priority_group,
                     /* List Prio    */ fpcPi_CURRENT_e,  // Always fpcPi_CURRENT_e
                     /* Proc Name    */ 0,
                     /* Proc SubMtd  */ &g_fpcLf_Method.base,  // usually: &g_fpcLf_Method.base
@@ -44,11 +44,11 @@ ModResult register_actor(ModContext* ctx, const ProfileDesc* desc, ProfileName* 
                     /* Size Other   */ 0,                     // Always 0
                     /* Parameters   */ 0,                     // Always 0
                     /* Leaf SubMtd  */ &g_fopAc_Method.base,  // usually &g_fopAc_Method.base
-                    /* Draw Prio    */ desc->drawPriority,
+                    /* Draw Prio    */ desc->draw_priority,
                     /* Actor SubMtd */ nullptr,  // set this later
                     /* Status       */ desc->status,
                     /* Group        */ desc->group,
-                    /* Cull Type    */ desc->cullType,
+                    /* Cull Type    */ desc->cull_type,
                 }}));
 
     s32 procNameFull = fpcNm_MAX_NUM + s_slots.index_of(handle);
@@ -149,8 +149,8 @@ ModResult create_actor(
     cXyz pos = {params->position.x, params->position.y, params->position.z};
     csXyz angle = {params->angle.x, params->angle.y, params->angle.z};
     cXyz scale = {params->scale.x, params->scale.y, params->scale.z};
-    fpc_ProcID id = fopAcM_create(name, 0xFFFF, params->parameters, &pos, params->roomNum, &angle,
-        &scale, params->argument, params->createFunction);
+    fpc_ProcID id = fopAcM_create(name, 0xFFFF, params->parameters, &pos, params->room_num, &angle,
+        &scale, params->argument, params->create_function);
 
     if (id == fpcM_ERROR_PROCESS_ID_e) {
         Log.error("Error Creating Actor with profile name {}", name);
@@ -182,8 +182,8 @@ ModResult create_child_actor(ModContext* ctx, ProfileName name, ActorId parentID
     cXyz pos = {params->position.x, params->position.y, params->position.z};
     csXyz angle = {params->angle.x, params->angle.y, params->angle.z};
     cXyz scale = {params->scale.x, params->scale.y, params->scale.z};
-    fpc_ProcID id = fopAcM_createChild(name, parentID, params->parameters, &pos, params->roomNum,
-        &angle, &scale, params->argument, params->createFunction);
+    fpc_ProcID id = fopAcM_createChild(name, parentID, params->parameters, &pos, params->room_num,
+        &angle, &scale, params->argument, params->create_function);
 
     if (id == fpcM_ERROR_PROCESS_ID_e) {
         Log.error("Error Creating Actor with profile name {} as child of actor with id {}", name,
@@ -317,7 +317,7 @@ constinit const ServiceModule g_actorModule{
     .majorVersion = ACTOR_SERVICE_MAJOR,
     .minorVersion = ACTOR_SERVICE_MINOR,
     .service = &s_actorService,
-    .modDetached = actor_impl::actor_remove_mod,
+    .modDeactivating = actor_impl::actor_remove_mod,
 };
 
 }  // namespace dusk::mods::svc
