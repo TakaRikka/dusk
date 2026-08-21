@@ -411,7 +411,47 @@ if (DUSK_ENABLE_CODE_MODS)
     setup_symbol_manifest(dusklight)
 endif ()
 
-# Hook reliability: guaranteed patchable entries on the game ABI surface, and no identical-code folding.
+# Hook reliability: prevent auto-inlining, guarantee patchable function entries,
+# and disable identical-code folding for game functions.
+set(DUSK_GAME_ABI_INLINE_OPTIONS)
+if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
+                $<$<COMPILE_LANGUAGE:CXX>:-finline-hint-functions>)
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
+                $<$<COMPILE_LANGUAGE:CXX>:-flive-patching=inline-clone>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-small-functions>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions-called-once>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-early-inlining>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp-clone>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-sra>
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-partial-inlining>)
+    endif ()
+endif ()
+
+if (DUSK_GAME_ABI_INLINE_OPTIONS)
+    set(_game_abi_files ${GAME_BASE_FILES} ${GAME_DEBUG_FILES})
+    list(FILTER _game_abi_files EXCLUDE REGEX "^src/dusk/")
+    set_property(SOURCE ${_game_abi_files} APPEND PROPERTY
+            COMPILE_OPTIONS ${DUSK_GAME_ABI_INLINE_OPTIONS})
+
+    foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
+        target_compile_options(${jsystem_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+    endforeach()
+    foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
+            aurora_os aurora_pad aurora_si aurora_vi)
+        if (TARGET ${_sdk_lib})
+            get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
+            if (NOT _sdk_lib_imported)
+                target_compile_options(${_sdk_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+            endif ()
+        endif ()
+    endforeach ()
+endif ()
+
 if (MSVC)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:/hotpatch>)
@@ -421,11 +461,11 @@ if (MSVC)
     else ()
         target_link_options(dusklight PRIVATE /FUNCTIONPADMIN /OPT:NOICF)
     endif ()
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang)$")
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
         set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
     else ()
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,5>)
+        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,4>)
     endif ()
 endif ()
 

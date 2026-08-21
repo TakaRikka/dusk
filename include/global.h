@@ -123,6 +123,14 @@ inline int __builtin_clz(unsigned int v) {
 #endif
 #define DUSK_GAME_EXTERN extern DUSK_GAME_DATA
 
+#if defined(_MSC_VER)
+#define DUSK_NOINLINE __declspec(noinline)
+#elif defined(__GNUC__)
+#define DUSK_NOINLINE __attribute__((noinline))
+#else
+#define DUSK_NOINLINE
+#endif
+
 #define FAST_DIV(x, n) (x >> (n / 2))
 
 #define SQUARE(x) ((x) * (x))
