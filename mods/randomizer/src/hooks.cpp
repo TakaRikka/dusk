@@ -1397,6 +1397,7 @@ HookAction hookPreGetLayerNo(ModContext*, void* args, void* retval, void*) {
         }
     }
 
+    *static_cast<int*>(retval) = layer;
     return HOOK_SKIP_ORIGINAL;
 }
 
