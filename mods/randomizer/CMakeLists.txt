@@ -120,6 +120,7 @@ add_mod(randomizer
     SOURCES  src/mod.cpp ${RANDOMIZER_GENERATOR_SOURCES} ${RANDOMIZER_SOURCES}
     MOD_JSON mod.json
     RES_DIR  res
+    BUNDLE
 )
 
 target_link_libraries(randomizer PRIVATE yaml-cpp::yaml-cpp base64pp randomizer_embeds)
