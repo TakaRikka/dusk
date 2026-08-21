@@ -20,11 +20,13 @@
 #include <algorithm>
 #include <chrono>
 #include <climits>
+#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -248,18 +250,16 @@ void wire_callback_binding(
         if (!slot_live(guardHandle)) {
             return value;
         }
-        guarded_call(*modPtr, "control getter", [&] {
-            get(modPtr->context.get(), userData, &value);
-        });
+        guarded_call(
+            *modPtr, "control getter", [&] { get(modPtr->context.get(), userData, &value); });
         return value;
     };
     const auto setValue = [modPtr, set, userData, guardHandle](const UiControlValue& value) {
         if (!slot_live(guardHandle)) {
             return;
         }
-        guarded_call(*modPtr, "control setter", [&] {
-            set(modPtr->context.get(), userData, &value);
-        });
+        guarded_call(
+            *modPtr, "control setter", [&] { set(modPtr->context.get(), userData, &value); });
     };
     switch (desc.kind) {
     case UI_CONTROL_TOGGLE:
@@ -280,6 +280,7 @@ void wire_callback_binding(
         };
         break;
     case UI_CONTROL_STRING:
+    case UI_CONTROL_COLOR:
         spec.getString = [getValue]() -> Rml::String {
             const UiControlValue value = getValue();
             return value.string_value != nullptr ? value.string_value : "";
@@ -358,7 +359,8 @@ bool wire_config_var_binding(LoadedMod& mod, const UiControlDesc& desc, ui::ModC
         }
         return true;
     }
-    case UI_CONTROL_STRING: {
+    case UI_CONTROL_STRING:
+    case UI_CONTROL_COLOR: {
         const auto find = [modPtr, varHandle] {
             return static_cast<ConfigVar<std::string>*>(
                 config_find_var(*modPtr, varHandle, CONFIG_VAR_STRING));
@@ -401,9 +403,8 @@ void on_mod_window_destroyed(uint64_t handle) {
     const UiWindowClosedFn onClosed = released->value.onClosed;
     void* userData = released->value.onClosedUserData;
     if (mod != nullptr && onClosed != nullptr) {
-        guarded_call(*mod, "window on_closed callback", [&] {
-            onClosed(mod->context.get(), handle, userData);
-        });
+        guarded_call(*mod, "window on_closed callback",
+            [&] { onClosed(mod->context.get(), handle, userData); });
     }
 }
 
@@ -451,9 +452,8 @@ ui::ModalAction make_dialog_action(LoadedMod& mod, uint64_t handle, const UiDial
                     return;  // already being torn down
                 }
                 if (fn != nullptr) {
-                    guarded_call(*modPtr, "dialog action callback", [&] {
-                        fn(modPtr->context.get(), handle, userData);
-                    });
+                    guarded_call(*modPtr, "dialog action callback",
+                        [&] { fn(modPtr->context.get(), handle, userData); });
                 }
                 // The callback may have closed the dialog already
                 if (!keepOpen && dialog_open(handle)) {
@@ -494,9 +494,8 @@ void ui_update_mods_panels(LoadedMod& mod) {
     if (!mod.active || panel.update == nullptr) {
         return;
     }
-    invoke_mod_ui_callback(mod, "mod UI panel update", [&](ModError* error) {
-        return panel.update(mod.context.get(), panel.userData, error);
-    });
+    invoke_mod_ui_callback(mod, "mod UI panel update",
+        [&](ModError* error) { return panel.update(mod.context.get(), panel.userData, error); });
 }
 
 ModResult ui_pane_add_section(LoadedMod& mod, uint64_t pane, const char* title) {
@@ -568,15 +567,16 @@ ModResult ui_pane_add_control(
     spec.isModified = wrap_predicate(mod, desc.is_modified, desc.user_data, pane);
     switch (desc.kind) {
     case UI_CONTROL_BUTTON:
-        spec.kind = ui::ModControlSpec::Kind::Button;
+    case UI_CONTROL_GROUP:
+        spec.kind = desc.kind == UI_CONTROL_BUTTON ? ui::ModControlSpec::Kind::Button :
+                                                     ui::ModControlSpec::Kind::Group;
         spec.onPressed = [modPtr = &mod, fn = desc.on_pressed, userData = desc.user_data,
                              guardHandle = pane] {
             if (!slot_live(guardHandle)) {
                 return;
             }
-            guarded_call(*modPtr, "control on_pressed callback", [&] {
-                fn(modPtr->context.get(), userData);
-            });
+            guarded_call(*modPtr, "control on_pressed callback",
+                [&] { fn(modPtr->context.get(), userData); });
         };
         break;
     case UI_CONTROL_TOGGLE:
@@ -599,6 +599,13 @@ ModResult ui_pane_add_control(
         spec.kind = ui::ModControlSpec::Kind::String;
         spec.maxLength = desc.max_length < 1 ? -1 : desc.max_length;
         break;
+    case UI_CONTROL_COLOR:
+        spec.kind = ui::ModControlSpec::Kind::Color;
+        spec.colorAlpha = desc.color_alpha;
+        for (size_t i = 0; i < desc.color_preset_count; ++i) {
+            spec.colorPresets.emplace_back(desc.color_presets[i]);
+        }
+        break;
     case UI_CONTROL_SELECT:
         spec.kind = ui::ModControlSpec::Kind::Select;
         if (slot->helpPane == nullptr) {
@@ -614,7 +621,7 @@ ModResult ui_pane_add_control(
         return MOD_INVALID_ARGUMENT;
     }
 
-    if (desc.kind != UI_CONTROL_BUTTON) {
+    if (desc.kind != UI_CONTROL_BUTTON && desc.kind != UI_CONTROL_GROUP) {
         if (desc.binding == UI_BINDING_CONFIG_VAR) {
             if (!wire_config_var_binding(mod, desc, spec)) {
                 Log.error("[{}] pane_add_control: config var handle {:#x} is unknown or its type "
@@ -637,6 +644,39 @@ ModResult ui_pane_add_control(
     if (outElem != nullptr) {
         auto& elemSlot = alloc_slot(mod, UiSlotKind::Control, *outElem);
         track_element(*outElem, elemSlot, *control->root());
+    }
+    return MOD_OK;
+}
+
+ModResult ui_pane_add_group(LoadedMod& mod, uint64_t groupPaneHandle, uint64_t targetPaneHandle,
+    const UiGroupDesc& desc, uint64_t* outElem) {
+    auto* groupSlot = resolve(mod, groupPaneHandle, UiSlotKind::Pane, "pane_add_group");
+    auto* targetSlot = resolve(mod, targetPaneHandle, UiSlotKind::Pane, "pane_add_group");
+    if (groupSlot == nullptr || targetSlot == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    if (groupSlot->helpPane != targetSlot->pane) {
+        Log.error("[{}] pane_add_group: panes are not a paired tab layout", mod.metadata.id);
+        return MOD_UNSUPPORTED;
+    }
+
+    auto* groupPane = groupSlot->pane;
+    auto* targetPane = targetSlot->pane;
+    auto& button = groupPane->add_group_button(ui::GroupButton::Props{.text = desc.label});
+    groupPane->register_control(button, *targetPane,
+        [modPtr = &mod, groupPaneHandle, targetPaneHandle, build = desc.build,
+            userData = desc.user_data](ui::Pane&) {
+            if (!slot_live(groupPaneHandle) || !slot_live(targetPaneHandle) || !modPtr->active) {
+                return;
+            }
+            invoke_mod_ui_callback(*modPtr, "mod UI group build", [&](ModError* error) {
+                return build(modPtr->context.get(), targetPaneHandle, userData, error);
+            });
+        });
+
+    if (outElem != nullptr) {
+        auto& elemSlot = alloc_slot(mod, UiSlotKind::Control, *outElem);
+        track_element(*outElem, elemSlot, *button.root());
     }
     return MOD_OK;
 }
@@ -798,9 +838,8 @@ ModResult ui_dialog_push(LoadedMod& mod, const UiDialogDesc& desc, uint64_t& out
             return;  // already being torn down
         }
         if (fn != nullptr) {
-            guarded_call(*modPtr, "dialog on_dismiss callback", [&] {
-                fn(modPtr->context.get(), handle, userData);
-            });
+            guarded_call(*modPtr, "dialog on_dismiss callback",
+                [&] { fn(modPtr->context.get(), handle, userData); });
         }
         if (dialog_open(handle)) {
             static_cast<ModDialog&>(modal).close();
@@ -810,8 +849,8 @@ ModResult ui_dialog_push(LoadedMod& mod, const UiDialogDesc& desc, uint64_t& out
         props.actions.push_back(make_dialog_action(mod, handle, desc.actions[i]));
     }
 
-    auto dialog =
-        std::make_unique<ModDialog>(std::move(props), [handle] { on_mod_dialog_destroyed(handle); });
+    auto dialog = std::make_unique<ModDialog>(
+        std::move(props), [handle] { on_mod_dialog_destroyed(handle); });
     if (auto* slot = slot_from_handle(handle)) {
         slot->document = dialog.get();
     }
@@ -915,9 +954,8 @@ std::vector<ModMenuTabEntry> ui_mod_menu_tabs() {
                     if (!slot_live(handle) || !modPtr->active) {
                         return;  // registered by a since-unloaded mod image
                     }
-                    guarded_call(*modPtr, "menu tab on_selected callback", [&] {
-                        fn(modPtr->context.get(), userData);
-                    });
+                    guarded_call(*modPtr, "menu tab on_selected callback",
+                        [&] { fn(modPtr->context.get(), userData); });
                 }});
         }
     }
@@ -1038,7 +1076,8 @@ void ui_remove_mod(LoadedMod& mod) {
     }
 }
 
-ModResult ui_get_clipboard_text(LoadedMod& mod, char* buffer, size_t bufferSize, size_t* outLength) {
+ModResult ui_get_clipboard_text(
+    LoadedMod& mod, char* buffer, size_t bufferSize, size_t* outLength) {
     if (outLength != nullptr) {
         *outLength = 0;
     }
@@ -1082,17 +1121,37 @@ namespace {
 
 // Validation of the tagged control descriptor: required fields per kind/binding. Value
 // translation and cvar wiring live in loader/ui.cpp.
+bool valid_color_preset(const char* value, bool alpha) {
+    const std::string_view text{value};
+    if (text == "rainbow") {
+        return true;
+    }
+    if (text.size() != 6 && (!alpha || text.size() != 8)) {
+        return false;
+    }
+    return std::ranges::all_of(text, [](char c) {
+        return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+    });
+}
+
 bool valid_control_desc(const UiControlDesc& desc) {
-    if (desc.struct_size < sizeof(UiControlDesc) || desc.label == nullptr) {
+    constexpr size_t kLegacyDescSize = offsetof(UiControlDesc, color_presets);
+    if (desc.struct_size < kLegacyDescSize || desc.label == nullptr) {
         return false;
     }
     switch (desc.kind) {
     case UI_CONTROL_BUTTON:
+    case UI_CONTROL_GROUP:
         return desc.on_pressed != nullptr;
     case UI_CONTROL_TOGGLE:
     case UI_CONTROL_NUMBER:
     case UI_CONTROL_STRING:
     case UI_CONTROL_SELECT:
+        break;
+    case UI_CONTROL_COLOR:
+        if (desc.struct_size < sizeof(UiControlDesc)) {
+            return false;
+        }
         break;
     default:
         return false;
@@ -1103,6 +1162,18 @@ bool valid_control_desc(const UiControlDesc& desc) {
         }
         for (size_t i = 0; i < desc.option_count; ++i) {
             if (desc.options[i] == nullptr) {
+                return false;
+            }
+        }
+    }
+    if (desc.kind == UI_CONTROL_COLOR && desc.color_preset_count != 0) {
+        if (desc.color_presets == nullptr) {
+            return false;
+        }
+        for (size_t i = 0; i < desc.color_preset_count; ++i) {
+            if (desc.color_presets[i] == nullptr ||
+                !valid_color_preset(desc.color_presets[i], desc.color_alpha))
+            {
                 return false;
             }
         }
@@ -1181,6 +1252,20 @@ ModResult ui_pane_add_control(ModContext* context, UiElementHandle pane, const U
         return MOD_INVALID_ARGUMENT;
     }
     return ui_impl::ui_pane_add_control(*mod, pane, *desc, outElem);
+}
+
+ModResult ui_pane_add_group(ModContext* context, UiElementHandle groupPane,
+    UiElementHandle targetPane, const UiGroupDesc* desc, UiElementHandle* outElem) {
+    if (outElem != nullptr) {
+        *outElem = 0;
+    }
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || groupPane == 0 || targetPane == 0 || desc == nullptr ||
+        desc->struct_size < sizeof(UiGroupDesc) || desc->label == nullptr || desc->build == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return ui_impl::ui_pane_add_group(*mod, groupPane, targetPane, *desc, outElem);
 }
 
 ModResult ui_elem_set_text(ModContext* context, UiElementHandle elem, const char* text) {
@@ -1406,7 +1491,8 @@ ModResult ui_dialog_add_action(
     return ui_impl::ui_dialog_add_action(*mod, dialog, *action);
 }
 
-ModResult ui_get_clipboard_text(ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength) {
+ModResult ui_get_clipboard_text(
+    ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength) {
     auto* mod = mod_from_context(ctx);
     if (mod == nullptr || (buffer == nullptr && bufferSize != 0)) {
         return MOD_INVALID_ARGUMENT;
@@ -1451,6 +1537,7 @@ constexpr UiService s_uiService{
     .push_toast = ui_push_toast,
     .get_clipboard_text = ui_get_clipboard_text,
     .set_clipboard_text = ui_set_clipboard_text,
+    .pane_add_group = ui_pane_add_group,
 };
 
 }  // namespace

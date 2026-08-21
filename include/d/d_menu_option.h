@@ -117,7 +117,7 @@ public:
         return ((u8)mUseFlag & (u8)i_flag) != 0 ? true : false;
     }
 
-private:
+// private:
     /* 0x004 */ J2DScreen* mpBackScreen;
     /* 0x008 */ J2DScreen* mpScreen;
     /* 0x00C */ J2DScreen* mpClipScreen;

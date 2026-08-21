@@ -9,6 +9,7 @@
 class J3DModelData;
 class J3DMaterialTable;
 struct J3DModelHierarchy;
+class J3DVertexData;
 
 #if TARGET_PC
 #define OFFSET_PTR_V0 BE(u32)

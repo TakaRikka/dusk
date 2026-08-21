@@ -196,6 +196,13 @@ cleanup:
 
 void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
     JUT_ASSERT(442, isMounted());
+
+#if TARGET_PC
+    if (void* data = getOverlayData(pEntry, pOutSize); data != nullptr) {
+        return data;
+    }
+#endif
+
     u32 outSize;
     u8* outBuf;
     if (pOutSize == NULL) {
@@ -231,6 +238,13 @@ void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
 void* JKRAramArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* pEntry,
                                     u32* resourceSize) {
     JUT_ASSERT(515, isMounted());
+
+#if TARGET_PC
+    if (copyOverlayData(buffer, bufferSize, pEntry, resourceSize)) {
+        return buffer;
+    }
+#endif
+
     u32 size = pEntry->data_size;
     if (size > bufferSize) {
         size = bufferSize;
@@ -336,6 +350,12 @@ u32 JKRAramArchive::getExpandedResSize(const void* ptr) const {
     if (mExpandedSize == NULL) {
         return this->getResSize(ptr);
     }
+
+#if TARGET_PC
+    if (u32 size; getOverlayResourceSize(ptr, &size)) {
+        return size;
+    }
+#endif
 
     JKRArchive::SDIFileEntry* entry = this->findPtrResource(ptr);
     if (entry == NULL) {

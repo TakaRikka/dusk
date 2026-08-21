@@ -23,6 +23,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/utilities.hpp"
 #include "dusk/version.hpp"
 
 #if TARGET_PC
@@ -4153,11 +4154,43 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 }
 
 #if TARGET_PC
+
+static dusk::utils::PaneCache mSelDtPanes[] = {
+    {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n2'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('gray_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('b_base'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('b_base1'), 0.0f, 0.0f, false},
+};
+
+static dusk::utils::PaneCache fileSelPanes[] = {
+    {MULTI_CHAR('w_uzu00'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu01'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu02'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu03'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu04'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu05'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu06'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu07'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu08'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu09'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msg'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msE'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msR'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for1'), 0.0f, 0.0f, false},
+};
+
 void dFile_select_c::fileSelectWide() {
     static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
-        for (PaneCache& entry : mSelDtPanes) {
+        for (dusk::utils::PaneCache& entry : mSelDtPanes) {
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX(); 
@@ -4165,7 +4198,7 @@ void dFile_select_c::fileSelectWide() {
                 entry.cached = true;
             }
         }
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -4179,13 +4212,13 @@ void dFile_select_c::fileSelectWide() {
     // Reset all panes
     mSelDt.ScrDt->scale(1.0f, 1.0f);
     mSelDt.ScrDt->translate(0.0f, 0.0f);
-    for (PaneCache& entry : mSelDtPanes) {
+    for (dusk::utils::PaneCache& entry : mSelDtPanes) {
         J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);
     }
-    for (PaneCache& entry : fileSelPanes) {
+    for (dusk::utils::PaneCache& entry : fileSelPanes) {
         J2DPane* pane = fileSel.Scr->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
@@ -4257,7 +4290,7 @@ void dFile_select_c::fileSelectWide() {
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
         // Spirals & Memory Card Text
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         }
@@ -4283,7 +4316,7 @@ void dFile_select_c::fileSelectWide() {
         const f32 wideShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (wideScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
         const f32 ultraShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (ultraScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
 
-        for (PaneCache& entry : mSelDtPanes) {
+        for (dusk::utils::PaneCache& entry : mSelDtPanes) {
             const size_t index = &entry - mSelDtPanes;
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             pane->setBasePosition(J2DBasePosition_0);
@@ -4351,7 +4384,7 @@ void dFile_select_c::fileSelectWide() {
         }
 
         // Spirals & Memory Card Text
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         }

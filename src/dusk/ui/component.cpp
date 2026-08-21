@@ -68,6 +68,15 @@ void Component::listen(Rml::Element* element, Rml::EventId event,
         std::make_unique<ScopedEventListener>(element, event, std::move(callback), capture));
 }
 
+void Component::listen(Rml::Element* element, const Rml::String& event,
+    ScopedEventListener::Callback callback, bool capture) {
+    if (element == nullptr) {
+        element = mRoot;
+    }
+    mListeners.emplace_back(
+        std::make_unique<ScopedEventListener>(element, event, std::move(callback), capture));
+}
+
 bool Component::contains(Rml::Element* element) const {
     for (const auto* node = element; node != nullptr; node = node->GetParentNode()) {
         if (node == mRoot) {

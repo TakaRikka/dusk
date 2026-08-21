@@ -4,6 +4,8 @@ union SDL_Event;
 
 namespace dusk::ui::input {
 
+inline constexpr char kNavAxisEvent[] = "navaxis";
+
 void handle_event(const SDL_Event& event) noexcept;
 void update_input() noexcept;
 void reset_input_state() noexcept;
