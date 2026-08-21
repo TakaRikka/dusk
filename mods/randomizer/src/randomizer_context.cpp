@@ -408,12 +408,8 @@ RandomizerState g_randomizerState;
 
 int RandomizerState::_create() {
     mInitialized = true;
-    mEventItemStatus = QUEUE_EMPTY;
     mHasPendingToDChange = false;
     // g_customMenuRing._initialize();
-    for (int i = 0; i < EVENT_ITEM_QUEUE_SIZE; i++) {
-        mEventItemQueue[i] = 0;
-    }
     return 1;
 }
 
@@ -629,8 +625,6 @@ int RandomizerState::execute() {
     // Any custom functionality that relies on Link's actor being on a stage
     if (daAlink_getAlinkActorClass()) {
         currentReloadingState = daAlink_getAlinkActorClass()->checkRestartRoom();
-        // Handle giving item to the player at any time.
-        //initGiveItemToPlayer();
     }
     else {
         currentReloadingState = true;
@@ -653,105 +647,6 @@ int RandomizerState::execute() {
 
 int RandomizerState::draw() {
     return 1;
-}
-
-void RandomizerState::handlePoeItem(u8 bitSw)
-{
-    u16 key = getStageID() << 8 | bitSw;
-    u8 item = randomizer_GetContext().mPoeOverrides[key];
-    addItemToEventQueue(item);
-    daAlink_getAlinkActorClass()->procWolfAtnActorMoveInit();
-}
-
-void RandomizerState::addItemToEventQueue(u8 item)
-{
-    for (int i = 0; i < EVENT_ITEM_QUEUE_SIZE; i++)
-    {
-        if (mEventItemQueue[i] == 0)
-        {
-            mEventItemQueue[i] = item;
-            break;
-        }
-    }
-}
-
-void RandomizerState::initGiveItemToPlayer()
-{
-    switch (daAlink_getAlinkActorClass()->mProcID)
-    {
-        case daAlink_c::PROC_WAIT:
-        case daAlink_c::PROC_TIRED_WAIT:
-        case daAlink_c::PROC_MOVE:
-        case daAlink_c::PROC_WOLF_WAIT:
-        case daAlink_c::PROC_WOLF_TIRED_WAIT:
-        case daAlink_c::PROC_WOLF_MOVE:
-        case daAlink_c::PROC_ATN_MOVE:
-        case daAlink_c::PROC_WOLF_ATN_AC_MOVE:
-        {
-            // Check if link is currently in a cutscene
-            if (daAlink_getAlinkActorClass()->checkEventRun())
-            {
-                break;
-            }
-
-            // Ensure that link is not currently in a message-based event.
-            int event_item_id = 0;
-            if (daAlink_getAlinkActorClass()->mMsgFlow.getEventId(&event_item_id) != 0)
-            {
-                break;
-            }
-
-            u8 itemToGive = 0xFF;
-
-            for (int i = 0; i < EVENT_ITEM_QUEUE_SIZE; i++)
-            {
-                const u8 storedItem = mEventItemQueue[i];
-
-                if (storedItem)
-                {
-                    const u8 giveItemToPlayerStatus = getGiveItemToPlayerStatus();
-
-                    // If we have the call to clear the queue, then we want to clear the item and break out.
-                    if (giveItemToPlayerStatus == CLEAR_QUEUE)
-                    {
-                        mEventItemQueue[i] = 0;
-                        setGiveItemToPlayerStatus(QUEUE_EMPTY);
-                        break;
-                    }
-
-                    // If the queue is empty and we have an item to give, update the queue state.
-                    else if (giveItemToPlayerStatus == QUEUE_EMPTY)
-                    {
-                        setGiveItemToPlayerStatus(ITEM_IN_QUEUE);
-                    }
-
-                    itemToGive = verifyProgressiveItem(storedItem);
-                    break;
-                }
-            }
-
-            // if there is no item to give, break out of the case.
-            if (itemToGive == 0xFF)
-            {
-                break;
-            }
-
-            g_dComIfG_gameInfo.play.getEvent()->setGtItm(itemToGive);
-
-            // Set the process value for getting an item to start the "get item" cutscene when next available.
-            daAlink_getAlinkActorClass()->mProcID = daAlink_c::PROC_GET_ITEM;
-
-            //  Get the event index for the "Get Item" event.
-            const s16 eventIdx = dComIfGp_getEventManager().getEventIdx((fopAc_ac_c*)daAlink_getAlinkActorClass(),"DEFAULT_GETITEM",0xFF);
-
-            // Finally we want to modify the event stack to prioritize our custom event so that it happens next.
-            fopAcM_orderChangeEventId(daAlink_getAlinkActorClass(), eventIdx, 1, 0xFFFF);
-        }
-        default:
-        {
-            break;
-        }
-    }
 }
 
 void RandomizerState::handleTimeOfDayChange()

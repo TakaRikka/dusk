@@ -441,8 +441,8 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
             session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
         });
 
-    add_section(leftPane, "Presets");
-
+    // TODO: need some ui service updates to properly support this. disabling for now
+    /* add_section(leftPane, "Presets");
     add_button(leftPane,
         "Save Current Settings as Preset",
         "Save the current settings to your list of presets.",
@@ -455,7 +455,7 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
         "Choose an existing preset to load from.",
         [](ModContext*, void*) {
             // TODO
-        });
+        }); */
 
     return MOD_OK;
 }
@@ -1170,6 +1170,10 @@ ModResult buildMenuTab() {
     desc.on_selected = OnMenuTabSelected;
 
     return session::svc_mng.ui->register_menu_tab(session::svc_mng.mod_ctx, &desc, &g_menu_tab);
+}
+
+ModResult removeMenuTab() {
+    return session::svc_mng.ui->unregister_menu_tab(session::svc_mng.mod_ctx, g_menu_tab);
 }
 
 ModResult buildFileSelectGateMenu(dFile_select_c* fileSelect) {

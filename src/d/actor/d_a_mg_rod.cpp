@@ -5874,8 +5874,8 @@ static int dmg_rod_Execute(dmg_rod_class* i_this) {
     #if TARGET_PC
     if (dusk::getSettings().game.buttonFishing) {
         if ((item_any_fishing_rod(dComIfGp_getSelectItem(0)) && mDoCPd_c::getHoldX(PAD_1)) ||
-            (item_any_fishing_rod(dComIfGp_getSelectItem(1)) && mDoCPd_c::getHoldY(PAD_1)))
-        {
+            (item_any_fishing_rod(dComIfGp_getSelectItem(1)) && mDoCPd_c::getHoldY(PAD_1)) ||
+            (i_this->action == ACTION_LURE_STANDBY && mDoCPd_c::getTrigB(PAD_1))) {
             i_this->rod_stick_y = -1.0f;
             i_this->rod_substick_y = -1.0f;
         }

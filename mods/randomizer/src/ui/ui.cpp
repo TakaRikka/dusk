@@ -8,6 +8,8 @@
 #include "rando_config.hpp"
 
 namespace randomizer::ui {
+UiStyleHandle styleHandle{};
+
 ModResult initialize() {
     ModResult res;
 
@@ -15,7 +17,7 @@ ModResult initialize() {
         session::svc_mng.mod_ctx,
         UI_SCOPE_WINDOW,
         "ui.rcss",
-        nullptr);
+        &styleHandle);
     if (res != MOD_OK) {
         mods::log::error("failed to register rcss!");
         return res;
@@ -32,6 +34,12 @@ ModResult initialize() {
 
 void update() {
     UpdateSeedGenerationDialog();
+}
+
+ModResult shutdown() {
+    removeMenuTab();
+    session::svc_mng.ui->unregister_styles(mod_ctx, styleHandle);
+    return MOD_OK;
 }
 
 }

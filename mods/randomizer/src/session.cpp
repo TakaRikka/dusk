@@ -405,6 +405,11 @@ ModResult onGameModeActivated(void*, ModError* error) {
         return mods::set_error(error, result, "failed to register texture replacement");
     }
 
+    result = ui::initialize();
+    if (result != MOD_OK) {
+        return mods::set_error(error, result, "failed to initialize ui");
+    }
+
     mods::log::info("randomizer game mode activated");
     return MOD_OK;
 }
@@ -412,6 +417,7 @@ ModResult onGameModeActivated(void*, ModError* error) {
 void shutdown() {
     deactivateSeed();
     hooks::uninstall();
+    ui::shutdown();
     svc_mng.save->unobserve_saves(mod_ctx, s_save_observer);
     svc_mng.texture->unregister(mod_ctx, logoTexHandle);
 }

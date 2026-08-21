@@ -5,4 +5,5 @@
 namespace randomizer::ui {
 ModResult initialize();
 void update();
+ModResult shutdown();
 }

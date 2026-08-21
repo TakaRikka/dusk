@@ -262,14 +262,16 @@ Installs hooks on game functions and resolves symbols by name. You'll rarely cal
 ### OverlayService (`mods/svc/overlay.h`)
 
 Registers DVD file overlays at runtime: the dynamic counterpart to the static `overlay/` directory (see
-[Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, or with a caller-owned buffer
+[Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, a file within an archive,
+or with a caller-owned buffer
 (copied on registration):
 
 ```cpp
 IMPORT_SERVICE(OverlayService, svc_overlay);
 
 OverlayHandle handle = 0;
-svc_overlay->add_file(mod_ctx, "/res/Msgus.arc", "res/replacement.arc", &handle);
+svc_overlay->add_file(mod_ctx, "/Movie/demo_movie98_00.thp", "res/replacement.thp", &handle); // Replaces the demo movie
+svc_overlay->add_file(mod_ctx, "/res/Object/Kmdl/archive/bmwr/al.bmd", "res/link_model.bmd", &handle); // Replaces link's model
 svc_overlay->add_buffer(mod_ctx, "/generated.txt", data, size, nullptr);
 svc_overlay->remove(mod_ctx, handle);
 ```
@@ -277,6 +279,9 @@ svc_overlay->remove(mod_ctx, handle);
 `disc_path` must be absolute (leading `/`) and is matched against the disc case-insensitively. Paths that don't exist
 on the disc are added as new files. Changes are applied at the next frame boundary, and data the game already read
 stays in memory until the file is re-read: sometimes a scene reload, and in the worst case, a full restart.
+
+Dusklight reloads core archive files during scene transitions so modifications to Link, Midna or other globally-loaded
+data get refreshed without a full restart.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
@@ -469,8 +474,8 @@ per-window RCSS. A non-`MOD_OK` result from `build`/`update` fails your mod, as 
 callback.
 
 **Controls:** `pane_add_control` adds an input row described by a `UiControlDesc`: `UI_CONTROL_BUTTON`,
-`UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, or `UI_CONTROL_SELECT`. Values bind with callbacks or
-directly to a config var.
+`UI_CONTROL_GROUP`, `UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, `UI_CONTROL_SELECT`, or
+`UI_CONTROL_COLOR`. Values bind with callbacks or directly to a config var.
 
 ```cpp
 UiControlDesc control = UI_CONTROL_DESC_INIT;
@@ -483,9 +488,13 @@ svc_ui->pane_add_control(mod_ctx, leftPane, &control, nullptr);
 ```
 
 `UI_BINDING_CONFIG_VAR` wires persistence, change notifications, and the modified indicator automatically. The var
-type must match the control: `TOGGLE` = bool, `NUMBER` and `SELECT` = int, `STRING` = string. Float vars are not
-bindable; use callbacks and convert. `help_rml` and `SELECT` option lists render in a help pane, so `SELECT` controls
-are only available inside window tabs.
+type must match the control: `TOGGLE` = bool, `NUMBER` and `SELECT` = int, `STRING` and `COLOR` = string. Float vars
+are not bindable; use callbacks and convert. `help_rml` and `SELECT` option lists render in a help pane, so `SELECT`
+controls are only available inside window tabs.
+
+`pane_add_group` adds a category button to a window tab's left pane. Focusing the button clears the paired right pane
+and calls the group's build callback with that pane, which is useful for organizing related controls without adding
+more tabs.
 
 **Windows:** `window_push` pushes a tabbed two-pane window onto the document stack and shows it. Each tab's `build`
 receives the window handle plus fresh left and right pane handles on every activation. The optional per-tab `update`
@@ -882,6 +891,11 @@ For reference parameters (e.g. `const cXyz& pos`), `arg_ref<cXyz>` yields a dire
 
 Files placed under `overlay/` in the `.dusk` archive override game files at the corresponding path, equivalent to
 replacing files in the .iso. This requires no code: an archive with just `mod.json` and `overlay/` is a complete mod.
+To replace a file within an `.arc` archive, replace the archive suffix with a directory and place the replacement at
+its path within the archive.
+
+- `overlay/Audiores/Stream/menu_select.ast` replaces the main title's audio stream.
+- `overlay/res/Layout/main2D/main2d/timg/midona64.bti` replaces Midna's UI icon inside `main2D.arc`.
 
 Files placed under `textures/` register as texture replacements, and act just like the user's general
 `texture_replacements/` directory: Dolphin-style naming, matched by texture hash
