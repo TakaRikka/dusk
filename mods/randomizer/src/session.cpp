@@ -292,15 +292,15 @@ void registerStageEdits() {
 
         const u8 room = (key >> 8) & 0xFF;
         const s8 layer = static_cast<s8>(key & 0xFF);
-        for (const auto& [crc, bytes] : patches) {
+        for (const auto& [crc, actor] : patches) {
             StageActorHandle handle{};
 
             ModResult res;
-            if (bytes.size() == RandomizerContext::OBJ_DELETE_SIZE) {
+            if (actor.bytes.size() == RandomizerContext::OBJ_DELETE_SIZE) {
                 res = svc_mng.stage->delete_actor(mod_ctx, stage, room, layer, crc, &handle);
             } else {
-                res = svc_mng.stage->patch_actor(
-                    mod_ctx, stage, room, layer, crc, bytes.data(), bytes.size(), &handle);
+                res = svc_mng.stage->patch_actor(mod_ctx, stage, room, layer, crc,
+                    actor.bytes.data(), actor.bytes.size(), &handle);
             }
 
             if (res == MOD_OK) {
@@ -317,10 +317,11 @@ void registerStageEdits() {
 
         const u8 room = (key >> 8) & 0xFF;
         const s8 layer = static_cast<s8>(key & 0xFF);
-        for (const auto& bytes : additions) {
+        for (const auto& actor : additions) {
             StageActorHandle handle{};
             ModResult rt;
-            rt = svc_mng.stage->add_actor(mod_ctx, stage, room, layer, bytes.data(), bytes.size(), &handle);
+            rt = svc_mng.stage->add_actor(mod_ctx, stage, room, layer, actor.bytes.data(),
+                actor.bytes.size(), &handle);
             if (rt == MOD_OK) {
                 s_stage_edits.push_back(handle);
             }

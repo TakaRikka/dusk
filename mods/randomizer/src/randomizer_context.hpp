@@ -19,6 +19,7 @@
  */
 class RandomizerContext {
 public:
+    static constexpr u32 FORMAT_VERSION = 2;
     static constexpr size_t ACTR_CRC_SIZE = 32;
     static constexpr size_t TGSC_CRC_SIZE = 35;  // 3 extra bytes for scale x, y, z
     static constexpr size_t OBJ_DELETE_SIZE = 1;
@@ -56,17 +57,62 @@ public:
     u8 mStartHour{0};
     u8 mMapBits{};
 
-    std::unordered_map<u32, std::unordered_map<u32, std::vector<u8>>> mObjectPatches{};
-    std::unordered_map<u32, std::list<std::vector<u8>>> mObjectAdditions{};
-    // std::unordered_map<u32, std::unordered_set<u32>> mTgscDeletions{};
-    std::unordered_map<u32, u64> mFlowPatches{};
-    std::unordered_map<u32, std::vector<u16>> mFlowPatchesBranchOverrides{};
-    std::unordered_map<u32, std::array<u8, 20>> mAttributeOverrides{};
+    struct ActorData {
+        std::vector<u8> bytes{};
+        std::string flow{};
+    };
 
-    // struct TextOverride {
-    //     std::array<u8, 16> mAttributes{};
-    //     std::string mText{};
-    // };
+    std::unordered_map<u32, std::unordered_map<u32, ActorData>> mObjectPatches{};
+    std::unordered_map<u32, std::list<ActorData>> mObjectAdditions{};
+    // std::unordered_map<u32, std::unordered_set<u32>> mTgscDeletions{};
+
+    struct FlowReference {
+        std::optional<u16> nativeId{};
+        std::string name{};
+    };
+
+    enum class FlowNodeType : u8 {
+        MESSAGE,
+        BRANCH,
+        EVENT,
+    };
+
+    struct FlowNode {
+        FlowNodeType type{};
+        u8 group{};
+        std::optional<u16> patchIndex{};
+        std::string name{};
+        std::string operation{};
+        FlowReference message{};
+        FlowReference next{};
+        std::vector<FlowReference> results{};
+        u32 parameters{};
+    };
+
+    struct MessageStyleData {
+        u16 eventLabelId{};
+        u8 speaker{0x24};
+        u8 boxKind{};
+        u8 drawType{};
+        u8 boxPosition{};
+        u8 lineAlignment{};
+        u8 speakerMood{};
+        u8 cameraAttr{};
+        u8 talkAnim{0x02};
+        u8 faceAnim{0x03};
+        u16 trailingData{0x0400};
+    };
+
+    struct CustomMessage {
+        u8 group{};
+        std::string name{};
+        MessageStyleData style{};
+        std::unordered_map<int, std::string> text{};
+    };
+
+    std::vector<FlowNode> mFlowNodes{};
+    std::vector<CustomMessage> mCustomMessages{};
+
     // Map of language -> map of key -> string
     std::unordered_map<int, std::unordered_map<u32, std::string>> mTextOverrides{};
 

@@ -83,3 +83,4 @@ enum StageIDs
     };
 
 extern const char allStages[78][8];
+extern const unsigned char allStageMessageGroups[78];
