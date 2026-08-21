@@ -25,6 +25,9 @@ static std::string generationStatusMsg{};
 
 void OnDialogActionOK(ModContext* ctx, UiDialogHandle dialogHandle, void*) {
     mDoAud_seStartMenu(Z2SE_SY_MENU_BACK);
+    if (seedGenDialog == dialogHandle) {
+        seedGenDialog = 0;
+    }
     session::svc_mng.ui->dialog_close(ctx, dialogHandle);
 }
 
@@ -63,6 +66,9 @@ static ModResult buildDialog() {
 }
 
 void GenerateRandomizerSeed() {
+    if (seedGenStatus.load() != SeedGenerateStatus::Ready) {
+        return;
+    }
     if (buildDialog() != MOD_OK) {
         return;
     }
@@ -75,6 +81,10 @@ void GenerateRandomizerSeed() {
 
 ModResult UpdateSeedGenerationDialog() {
     if (seedGenDialog == 0) {
+        const auto status = seedGenStatus.load();
+        if (status == SeedGenerateStatus::Success || status == SeedGenerateStatus::Error) {
+            seedGenStatus.store(SeedGenerateStatus::Ready);
+        }
         return MOD_OK;
     }
 

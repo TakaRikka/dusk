@@ -1467,7 +1467,6 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
 
             RandomizerContext::FlowNode flow{};
             flow.type = parse_flow_node_type(flowNode["type"]);
-            flow.parameters = flowNode["parameters"].as<u32>();
 
             std::vector<u16> patchIndices{};
             if (customSection) {
@@ -1493,6 +1492,7 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
             }
 
             if (flow.type == RandomizerContext::FlowNodeType::BRANCH) {
+                flow.parameters = flowNode["parameters"].as<u32>();
                 flow.operation = flowNode["query"].as<std::string>();
                 for (const auto& result : flowNode["results"]) {
                     flow.results.push_back(source_reference(result));
@@ -1503,6 +1503,7 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
                     throw std::runtime_error("Flow branch has invalid parameters or results");
                 }
             } else if (flow.type == RandomizerContext::FlowNodeType::EVENT) {
+                flow.parameters = flowNode["parameters"].as<u32>();
                 flow.operation = flowNode["event"].as<std::string>();
                 flow.next = source_reference(flowNode["next"]);
             } else {
