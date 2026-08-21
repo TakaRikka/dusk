@@ -114,4 +114,6 @@ bool consume_menu_notification_request() noexcept;
 const char* battery_icon(SDL_PowerState state, int level) noexcept;
 const char* connection_state_icon(SDL_JoystickConnectionState state) noexcept;
 
+void apply_scale() noexcept;
+
 }  // namespace dusk::ui

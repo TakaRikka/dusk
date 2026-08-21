@@ -1,6 +1,7 @@
 #include "dusk/settings.h"
 #include <aurora/aurora.h>
 #include "dusk/config.hpp"
+#include "dusk/ui/ui.hpp"
 #include "dusk/game_mode.hpp"
 
 namespace dusk {
@@ -16,6 +17,7 @@ UserSettings g_userSettings = {
         .rememberWindowSize {"video.rememberWindowSize", false},
         .lastWindowWidth {"video.lastWindowWidth", 0},
         .lastWindowHeight {"video.lastWindowHeight", 0},
+        .uiScale {"video.uiScale", 100},
     },
 
     .audio = {
@@ -228,6 +230,8 @@ void registerSettings() {
     Register(g_userSettings.video.rememberWindowSize);
     Register(g_userSettings.video.lastWindowWidth);
     Register(g_userSettings.video.lastWindowHeight);
+    Register(g_userSettings.video.uiScale, 
+        [](const int&, const int&) { dusk::ui::apply_scale(); });
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
