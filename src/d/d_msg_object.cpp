@@ -1865,7 +1865,11 @@ void dMsgObject_c::readMessageGroupLocal(mDoDvdThd_mountXArchive_c** p_arcMount)
 
 void dMsgObject_c::changeFlowGroupLocal(s32 param_0) {
     mFlowChk = 1;
+#if TARGET_PC
+    changeGroup(param_0 >= 3000 && param_0 < dusk::flow::kCustomNodeMin ? (s16)0 : s_groupID);
+#else
     changeGroup(param_0 >= 3000 ? (s16)0 : s_groupID);
+#endif
 }
 
 void dMsgObject_c::demoMessageGroupLocal() {
