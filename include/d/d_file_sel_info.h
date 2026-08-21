@@ -37,7 +37,7 @@ public:
     CPaneMgrAlpha* getNoDatBase() { return mNoDatBase; }
     void draw() { _draw(); }
 
-private:
+// private:
     /* 0x04 */ JKRArchive* mArchive;
     /* 0x08 */ dDlst_FileInfo_c mFileInfo;
     /* 0x1C */ u8 field_0x1c[4];

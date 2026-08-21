@@ -154,7 +154,7 @@ public:
     }
 #endif
 
-private:
+// private:
     /* 0x004 */ item_params mItemParams[4];
     /* 0x074 */ JKRExpHeap* heap;
     /* 0x078 */ J2DScreen* mpScreen;

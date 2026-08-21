@@ -27,18 +27,20 @@ public:
 
     // Attributes
     /* 0x04 */ BE(u16) message_id;
-    /* 0x06 */ BE(u16) event_label_id;
-    /* 0x08 */ u8 se_speaker;
-    /* 0x09 */ u8 fuki_kind;
-    /* 0x0A */ u8 output_type;
-    /* 0x0B */ u8 fuki_pos_type;
-    /* 0x0C */ u8 unk_0xc;
-    /* 0x0D */ u8 unk_0xd;
-    /* 0x0E */ u8 se_mood;
-    /* 0x0F */ u8 camera_id;
-    /* 0x10 */ u8 base_anm_id;
-    /* 0x11 */ u8 face_anm_id;
-    /* 0x12 */ BE(u16) unk_0x12;
+    /* 0x06 */ BE(u16) event_label_id;  // saveBitLabels index set when the message displays
+    /* 0x08 */ u8 speaker;              // Z2SpeechMgr2 voice bank ID
+    /* 0x09 */ u8 box_kind;             // screen class, see dMsgObject_c::talkStartInit
+    /* 0x0A */ u8 draw_type;            // text pacing, see jmessage_tSequenceProcessor::do_begin
+    /* 0x0B */ u8 box_position;         // see dMsgObject_c::fukiPosCalc
+    /* 0x0C */ u8 item_no;              // unused; legacy dItemNo, 0xFF = none
+    /* 0x0D */ u8 line_alignment;       // 0 centered (JP only), 1 left; also copied to
+                                        // jmessage_tReference::mForm
+    /* 0x0E */ u8 speaker_mood;         // grunt emotion index for the voice bank
+    /* 0x0F */ u8 camera_attr;          // 1-10 talk-actor slot, >=11 talk-camera style
+    /* 0x10 */ u8 talk_anim;            // NPC talk motion attribute
+    /* 0x11 */ u8 face_anim;            // NPC talk face attribute
+    /* 0x12 */ u8 lines_per_page;       // unused; runtime uses getLineMax()
+    /* 0x13 */ u8 _pad;
 };
 
 class JMSMesgInfo_c {

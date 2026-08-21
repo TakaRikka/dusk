@@ -1,6 +1,7 @@
 #ifndef DUSK_ISO_VALIDATE_HPP
 #define DUSK_ISO_VALIDATE_HPP
 
+#include "dusk/settings.h"
 #include <borealis/disc.hpp>
 
 #include <cstdint>

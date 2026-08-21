@@ -10,10 +10,12 @@ namespace dusk::ui {
 struct ModControlSpec {
     enum class Kind : u8 {
         Button,
+        Group,
         Toggle,
         Number,
         String,
         Select,
+        Color,
     };
 
     Kind kind = Kind::Button;
@@ -36,6 +38,8 @@ struct ModControlSpec {
     Rml::String suffix;
     std::vector<Rml::String> options;
     int maxLength = -1;
+    std::vector<Rml::String> colorPresets;
+    bool colorAlpha = false;
 };
 
 Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec);
@@ -59,7 +63,6 @@ public:
     ~ModWindow() override;
 
     void update() override;
-    void force_close() { Document::hide(true); }
 
 private:
     Desc mDesc;

@@ -23,10 +23,13 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
+#ifdef TARGET_PC
+#include "dusk/game_mode.hpp"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
 #include "dusk/speedrun.h"
 #include "dusk/version.hpp"
+#endif
 
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();
@@ -4016,9 +4019,9 @@ int daAlink_c::procGanonFinishInit() {
     onEndResetFlg1(ERFLG1_SHIELD_BACKBONE);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.speedrunMode) {
-        if (dusk::m_speedrunInfo.m_isRunStarted) {
-            dusk::m_speedrunInfo.stopRun();
+    if (dusk::speedrun::isActive()) {
+        if (dusk::speedrun::g_speedrunInfo.m_isRunStarted) {
+            dusk::speedrun::g_speedrunInfo.stopRun();
         }
     }
 #endif

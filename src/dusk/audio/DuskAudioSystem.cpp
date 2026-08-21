@@ -35,7 +35,7 @@ static void SDLCALL GetNewAudio(
 /**
  * Render an entire new frame of audio and output it to SDL3.
  * Note: "audio frames" are unrelated to video frames.
- * @return Amount of audio samples rendered.
+ * @return Amount of audio samples rendered in bytes.
  */
 static int RenderNewAudioFrame();
 
@@ -121,7 +121,7 @@ int RenderNewAudioFrame() {
         JASAudioThread::snIntCount -= 1;
     }
 
-    return static_cast<u16>(countSubframes) * DSP_SUBFRAME_SIZE;
+    return static_cast<u16>(countSubframes) * sizeof(OutputSubframe);
 }
 
 static void InterleaveOutputData(const OutputSubframe& data, std::span<f32> target) {

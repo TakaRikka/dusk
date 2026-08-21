@@ -7,7 +7,10 @@
 #include "f_op/f_op_overlap_req.h"
 #include "f_pc/f_pc_manager.h"
 
+#ifdef TARGET_PC
+#include "dusk/game_mode.hpp"
 #include "dusk/speedrun.h"
+#endif
 
 void fopOvlpReq_SetPeektime(overlap_request_class*, u16);
 
@@ -20,12 +23,12 @@ static int fopOvlpReq_phase_Done(overlap_request_class* i_overlapReq) {
         i_overlapReq->field_0xc = 0;
 
 #if TARGET_PC
-        if (dusk::getSettings().game.speedrunMode) {
-            if (dusk::m_speedrunInfo.m_isRunStarted) {
-                dusk::m_speedrunInfo.m_isPauseIGT = false;
-                dusk::m_speedrunInfo.m_totalLoadTime +=
-                    OSGetTime() - dusk::m_speedrunInfo.m_loadStartTimestamp;
-                dusk::m_speedrunInfo.m_loadStartTimestamp = OSGetTime();
+        if (dusk::speedrun::isActive()) {
+            if (dusk::speedrun::g_speedrunInfo.m_isRunStarted) {
+                dusk::speedrun::g_speedrunInfo.m_isPauseIGT = false;
+                dusk::speedrun::g_speedrunInfo.m_totalLoadTime +=
+                    OSGetTime() - dusk::speedrun::g_speedrunInfo.m_loadStartTimestamp;
+                dusk::speedrun::g_speedrunInfo.m_loadStartTimestamp = OSGetTime();
             }
         }
 #endif
@@ -96,9 +99,9 @@ static int fopOvlpReq_phase_Create(overlap_request_class* i_overlapReq) {
         fpcM_Create(i_overlapReq->procname, NULL, NULL);
 
 #if TARGET_PC
-    if (dusk::m_speedrunInfo.m_isRunStarted) {
-        dusk::m_speedrunInfo.m_isPauseIGT = true;
-        dusk::m_speedrunInfo.m_loadStartTimestamp = OSGetTime();
+    if (dusk::speedrun::isActive() && dusk::speedrun::g_speedrunInfo.m_isRunStarted) {
+        dusk::speedrun::g_speedrunInfo.m_isPauseIGT = true;
+        dusk::speedrun::g_speedrunInfo.m_loadStartTimestamp = OSGetTime();
     }
 #endif
 

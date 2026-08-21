@@ -24,6 +24,7 @@
 #include "JSystem/JUtility/JUTConsole.h"
 
 #ifdef TARGET_PC
+#include "dusk/game_mode.hpp"
 #include "dusk/language.hpp"
 #include "dusk/logging.h"
 #include "dusk/main.h"
@@ -808,6 +809,11 @@ void dScnLogo_c::nextSceneChange() {
                 if (status == 1) {
                     dusk::mods::svc::save_slot_loaded(
                         saveSlot, buf + saveSlot * SAVEDATA_SIZE);
+                    const dusk::gamemode::GameMode* gameMode =
+                        dusk::gamemode::getGameModeManager().getCurrentGameMode();
+                    if (gameMode) {
+                        gameMode->invokeOnSaveLoadedFunction();
+                    }
                 }
 
                 dComIfGs_gameStart();

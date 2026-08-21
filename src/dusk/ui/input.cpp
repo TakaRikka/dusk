@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 
 #include "dusk/action_bindings.h"
 
@@ -24,6 +25,8 @@ constexpr double kGamepadRepeatRampDuration = 1.0;
 constexpr double kGamepadMenuChordGraceDuration = 0.12;
 constexpr Sint16 kGamepadAxisPressThreshold = 16384;
 constexpr Sint16 kGamepadAxisReleaseThreshold = 12000;
+constexpr float kNavAxisDeadZone = 0.12f;
+constexpr double kMaxNavAxisDt = 0.05;
 constexpr int kGamepadAxisDirectionCount = SDL_GAMEPAD_AXIS_COUNT * 2;
 constexpr int kMenuTapFingerCount = 3;
 constexpr float kMenuTapMoveThreshold = 12.0f;
@@ -59,6 +62,10 @@ std::array<GamepadRepeatState, kGamepadAxisDirectionCount> sGamepadAxisRepeats;
 std::array<u32, PAD_MAX_CONTROLLERS> sPadHoldMasks;
 std::array<bool, PAD_MAX_CONTROLLERS> sMenuChordConsumed;
 TouchTapState sTouchMenuTap;
+Rml::Vector2f sNavAxis;
+std::array<Rml::Vector2f, SDL_GAMEPAD_AXIS_COUNT> sNavAxisContributions;
+SDL_JoystickID sNavAxisSource = 0;
+double sLastInputUpdateAt = 0.0;
 
 double now_seconds() noexcept {
     return static_cast<double>(SDL_GetTicksNS()) / 1000000000.0;
@@ -335,7 +342,9 @@ Rml::Input::KeyIdentifier map_gamepad_button(const SDL_GamepadButtonEvent& event
         }
     }
 
-    if (nativeButton == SDL_GAMEPAD_BUTTON_BACK && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port)) {
+    if (nativeButton == SDL_GAMEPAD_BUTTON_BACK &&
+        !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port))
+    {
         return Rml::Input::KI_F1;
     }
 
@@ -365,6 +374,138 @@ Rml::Input::KeyIdentifier map_gamepad_axis(
     }
 
     return Rml::Input::KI_UNKNOWN;
+}
+
+struct LogicalNavAxis {
+    enum class Component {
+        None,
+        X,
+        Y,
+    };
+
+    Component component = Component::None;
+    float direction = 0.0f;
+};
+
+LogicalNavAxis logical_nav_axis(PADAxis axis) noexcept {
+    switch (axis) {
+    case PAD_AXIS_LEFT_X_POS:
+        return {LogicalNavAxis::Component::X, 1.0f};
+    case PAD_AXIS_LEFT_X_NEG:
+        return {LogicalNavAxis::Component::X, -1.0f};
+    case PAD_AXIS_LEFT_Y_POS:
+        return {LogicalNavAxis::Component::Y, -1.0f};
+    case PAD_AXIS_LEFT_Y_NEG:
+        return {LogicalNavAxis::Component::Y, 1.0f};
+    default:
+        return {};
+    }
+}
+
+struct LogicalNavAxisMapping {
+    LogicalNavAxis active;
+    bool participates = false;
+};
+
+LogicalNavAxisMapping mapped_logical_nav_axis(const SDL_GamepadAxisEvent& event) noexcept {
+    u32 port = 0;
+    if (find_event_port(event.which, port)) {
+        LogicalNavAxisMapping result;
+        const PADAxisSign activeSign = event.value < 0 ? AXIS_SIGN_NEGATIVE : AXIS_SIGN_POSITIVE;
+        for (const PADAxisSign sign : {AXIS_SIGN_NEGATIVE, AXIS_SIGN_POSITIVE}) {
+            PADAxis axis = 0;
+            if (!find_mapped_pad_axis(port, static_cast<SDL_GamepadAxis>(event.axis), sign, axis)) {
+                continue;
+            }
+            const auto logical = logical_nav_axis(axis);
+            if (logical.component == LogicalNavAxis::Component::None) {
+                continue;
+            }
+            result.participates = true;
+            if (event.value != 0 && sign == activeSign) {
+                result.active = logical;
+            }
+        }
+        return result;
+    }
+
+    switch (static_cast<SDL_GamepadAxis>(event.axis)) {
+    case SDL_GAMEPAD_AXIS_LEFTX:
+        return {
+            .active = {LogicalNavAxis::Component::X, event.value < 0 ? -1.0f : 1.0f},
+            .participates = true,
+        };
+    case SDL_GAMEPAD_AXIS_LEFTY:
+        return {
+            .active = {LogicalNavAxis::Component::Y, event.value < 0 ? -1.0f : 1.0f},
+            .participates = true,
+        };
+    default:
+        return {};
+    }
+}
+
+float normalize_nav_axis(Sint16 value) noexcept {
+    const float normalized =
+        value < 0 ? -static_cast<float>(value) / 32768.0f : static_cast<float>(value) / 32767.0f;
+    if (normalized <= kNavAxisDeadZone) {
+        return 0.0f;
+    }
+    return (normalized - kNavAxisDeadZone) / (1.0f - kNavAxisDeadZone);
+}
+
+bool update_nav_axis(const SDL_GamepadAxisEvent& event) noexcept {
+    const auto mapping = mapped_logical_nav_axis(event);
+    const int axisIndex = static_cast<int>(event.axis);
+    if (!mapping.participates || axisIndex < 0 || axisIndex >= SDL_GAMEPAD_AXIS_COUNT) {
+        return false;
+    }
+
+    const float magnitude = normalize_nav_axis(event.value);
+    if (magnitude != 0.0f && mapping.active.component != LogicalNavAxis::Component::None &&
+        sNavAxisSource != event.which)
+    {
+        sNavAxis = {};
+        sNavAxisContributions = {};
+        sNavAxisSource = event.which;
+    } else if (sNavAxisSource != 0 && sNavAxisSource != event.which) {
+        return false;
+    }
+
+    auto& contribution = sNavAxisContributions[axisIndex];
+    contribution = {};
+    if (mapping.active.component == LogicalNavAxis::Component::X) {
+        contribution.x = mapping.active.direction * magnitude;
+    } else if (mapping.active.component == LogicalNavAxis::Component::Y) {
+        contribution.y = mapping.active.direction * magnitude;
+    }
+
+    const Rml::Vector2f previous = sNavAxis;
+    sNavAxis = {};
+    for (const auto value : sNavAxisContributions) {
+        if (std::abs(value.x) > std::abs(sNavAxis.x)) {
+            sNavAxis.x = value.x;
+        }
+        if (std::abs(value.y) > std::abs(sNavAxis.y)) {
+            sNavAxis.y = value.y;
+        }
+    }
+    if (sNavAxis.x == 0.0f && sNavAxis.y == 0.0f) {
+        sNavAxisSource = 0;
+    }
+    return sNavAxis != previous;
+}
+
+void dispatch_nav_axis(Rml::Context& context, double dtSeconds) noexcept {
+    auto* target = context.GetFocusElement();
+    if (target == nullptr) {
+        return;
+    }
+    target->DispatchEvent(kNavAxisEvent, {
+                                             {"x", Rml::Variant{sNavAxis.x}},
+                                             {"y", Rml::Variant{sNavAxis.y}},
+                                             {"dt", Rml::Variant{static_cast<float>(dtSeconds)}},
+                                         });
 }
 
 bool is_repeatable_key(Rml::Input::KeyIdentifier key) noexcept {
@@ -657,7 +798,9 @@ void process_axis_direction(
     if (chorded) {
         consume_menu_chord(port, context);
     }
-    const auto key = chorded && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port) ? Rml::Input::KI_F1 : map_gamepad_axis(event, sign);
+    const auto key = chorded && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port) ?
+                         Rml::Input::KI_F1 :
+                         map_gamepad_axis(event, sign);
     if (key == Rml::Input::KI_UNKNOWN) {
         return;
     }
@@ -695,6 +838,9 @@ void release_input_block() noexcept {
 void reset_input_state() noexcept {
     clear_gamepad_repeats();
     reset_touch_menu_tap();
+    sNavAxis = {};
+    sNavAxisContributions = {};
+    sNavAxisSource = 0;
 }
 
 void handle_event(const SDL_Event& event) noexcept {
@@ -728,6 +874,9 @@ void handle_event(const SDL_Event& event) noexcept {
     }
 
     if (event.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
+        if (update_nav_axis(event.gaxis)) {
+            dispatch_nav_axis(*context, 0.0);
+        }
         process_axis_direction(*context, event.gaxis, AXIS_SIGN_POSITIVE);
         process_axis_direction(*context, event.gaxis, AXIS_SIGN_NEGATIVE);
         sync_input_block();
@@ -744,7 +893,9 @@ void handle_event(const SDL_Event& event) noexcept {
         if (chorded) {
             consume_menu_chord(port, *context);
         }
-        const auto key = chorded && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port) ? Rml::Input::KI_F1 : map_gamepad_button(event.gbutton);
+        const auto key = chorded && !isActionBound(ActionBinds::OPEN_DUSKLIGHT_MENU, port) ?
+                             Rml::Input::KI_F1 :
+                             map_gamepad_button(event.gbutton);
         if (key != Rml::Input::KI_UNKNOWN) {
             bool deferred = false;
             if (repeat != nullptr) {
@@ -782,6 +933,10 @@ void update_input() noexcept {
     auto* context = aurora::rmlui::get_context();
     if (context != nullptr) {
         const double now = now_seconds();
+        const double dtSeconds = sLastInputUpdateAt == 0.0 ?
+                                     0.0 :
+                                     std::clamp(now - sLastInputUpdateAt, 0.0, kMaxNavAxisDt);
+        sLastInputUpdateAt = now;
         auto process_repeats = [context, now](auto& repeats) {
             for (auto& repeat : repeats) {
                 if (!repeat.held) {
@@ -814,9 +969,11 @@ void update_input() noexcept {
         };
         process_repeats(sGamepadButtonRepeats);
         process_repeats(sGamepadAxisRepeats);
+        dispatch_nav_axis(*context, dtSeconds);
     } else {
         reset_input_state();
+        sLastInputUpdateAt = 0.0;
     }
 }
 
-}  // namespace dusk::ui
+}  // namespace dusk::ui::input

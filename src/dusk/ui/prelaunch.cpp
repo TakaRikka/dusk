@@ -3,10 +3,12 @@
 #include "dusk/app_info.hpp"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
+#include "dusk/game_mode.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/language.hpp"
 #include "dusk/main.h"
 #include "dusk/settings.h"
+#include "dusk/ui/menu_bar.hpp"
 #include "modal.hpp"
 #include "mods_window.hpp"
 #include "preset.hpp"
@@ -34,6 +36,8 @@
 namespace dusk::ui {
 namespace {
 constexpr borealis::Log PrelaunchLog{"dusk::ui::prelaunch"};
+
+PrelaunchState sPrelaunchState;
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -527,7 +531,144 @@ void file_dialog_callback(borealis::file_select::Result result) {
     begin_disc_verification(result.locations.front());
 }
 
-PrelaunchState sPrelaunchState;
+std::vector<const gamemode::GameMode*> carousel_game_modes() {
+    const auto& registered = gamemode::getGameModeManager().getRegisteredGameModes();
+    std::vector<const gamemode::GameMode*> modes;
+    modes.reserve(registered.size());
+
+    if (const auto vanilla = registered.find(gamemode::kVanillaGameModeId);
+        vanilla != registered.end())
+    {
+        modes.push_back(&vanilla->second);
+    }
+    for (const auto& [id, mode] : registered) {
+        if (id != gamemode::kVanillaGameModeId) {
+            modes.push_back(&mode);
+        }
+    }
+    std::ranges::sort(modes.begin() + std::min<size_t>(1, modes.size()), modes.end(),
+        [](const auto* lhs, const auto* rhs) { return lhs->getFullName() < rhs->getFullName(); });
+    return modes;
+}
+
+std::string game_mode_button_text() {
+    if (prelaunch_state().activeDiscPath.empty()) {
+        return "Select Disc Image";
+    }
+    const auto* currentGameMode = gamemode::getGameModeManager().getCurrentGameMode();
+    if (currentGameMode == nullptr || currentGameMode->getId() == gamemode::kVanillaGameModeId) {
+        return "Play";
+    }
+    return currentGameMode->getFullName();
+}
+
+class GameModeButton final : public Button {
+public:
+    GameModeButton(Rml::Element* parent, ButtonCallback onPressed) : Button{parent, ""} {
+        root()->SetClass("game-mode-button", true);
+        mPrevious = append(root(), "game-mode-previous");
+        mLabelViewport = append(root(), "game-mode-label-viewport");
+        for (auto& label : mLabels) {
+            label = append(mLabelViewport, "game-mode-label");
+        }
+        mNext = append(root(), "game-mode-next");
+
+        Component::listen(mPrevious, Rml::EventId::Click, [this](Rml::Event& event) {
+            cycle(-1);
+            event.StopPropagation();
+        });
+        Component::listen(mNext, Rml::EventId::Click, [this](Rml::Event& event) {
+            cycle(1);
+            event.StopPropagation();
+        });
+        Component::listen(root(), Rml::EventId::Keydown, [this](Rml::Event& event) {
+            const auto command = map_nav_event(event);
+            if (command == NavCommand::Left || command == NavCommand::Right) {
+                cycle(command == NavCommand::Left ? -1 : 1);
+                event.StopPropagation();
+            }
+        });
+        on_pressed(std::move(onPressed));
+        refresh(0);
+    }
+
+    void update() override {
+        refresh(0);
+        Button::update();
+    }
+
+private:
+    bool can_cycle() const {
+        return !prelaunch_state().activeDiscPath.empty() &&
+               gamemode::getGameModeManager().getRegisteredGameModes().size() > 1;
+    }
+
+    void cycle(int direction) {
+        const auto modes = carousel_game_modes();
+        if (!can_cycle() || modes.empty()) {
+            return;
+        }
+
+        const auto* current = gamemode::getGameModeManager().getCurrentGameMode();
+        const auto currentIt = std::ranges::find_if(modes, [current](const auto* mode) {
+            return current != nullptr && mode->getId() == current->getId();
+        });
+        const int currentIndex =
+            currentIt == modes.end() ? 0 : static_cast<int>(currentIt - modes.begin());
+        const int count = static_cast<int>(modes.size());
+        const int nextIndex = ((currentIndex + direction) % count + count) % count;
+        const auto nextId = modes[nextIndex]->getId();
+        if (gamemode::getGameModeManager().setCurrentGameMode(nextId)) {
+            mDoAud_seStartMenu(kSoundItemChange);
+        }
+        refresh(direction);
+    }
+
+    void refresh(int direction) {
+        root()->SetClass("can-cycle", can_cycle());
+
+        const auto text = game_mode_button_text();
+        if (text == mText) {
+            return;
+        }
+        mText = text;
+        if (direction == 0) {
+            mLabels[mActiveLabel]->SetInnerRML(escape(text));
+            mLabels[mActiveLabel]->SetProperty(
+                Rml::PropertyId::Left, Rml::Property{0.0f, Rml::Unit::PERCENT});
+            mLabels[mActiveLabel]->SetClass("active", true);
+            mLabels[1 - mActiveLabel]->SetClass("active", false);
+            return;
+        }
+
+        constexpr float kSlideDistance = 100.0f;
+        constexpr float kSlideDuration = 0.24f;
+        auto* outgoing = mLabels[mActiveLabel];
+        mActiveLabel = 1 - mActiveLabel;
+        auto* incoming = mLabels[mActiveLabel];
+        incoming->SetInnerRML(escape(text));
+
+        const Rml::Property incomingOffset{
+            static_cast<float>(direction) * kSlideDistance, Rml::Unit::PERCENT};
+        const Rml::Property outgoingOffset{
+            static_cast<float>(-direction) * kSlideDistance, Rml::Unit::PERCENT};
+
+        outgoing->Animate(Rml::PropertyId::Left, outgoingOffset, kSlideDuration,
+            Rml::Tween{Rml::Tween::Cubic, Rml::Tween::InOut});
+        incoming->Animate(Rml::PropertyId::Left, Rml::Property{0.0f, Rml::Unit::PERCENT},
+            kSlideDuration, Rml::Tween{Rml::Tween::Cubic, Rml::Tween::InOut}, 1, false, 0.0f,
+            &incomingOffset);
+        outgoing->SetClass("active", false);
+        incoming->SetClass("active", true);
+    }
+
+    Rml::Element* mPrevious = nullptr;
+    Rml::Element* mLabelViewport = nullptr;
+    std::array<Rml::Element*, 2> mLabels{};
+    Rml::Element* mNext = nullptr;
+    Rml::String mText;
+    std::size_t mActiveLabel = 0;
+};
 
 }  // namespace
 
@@ -743,61 +884,25 @@ void try_apply_mirrored_layout(Rml::Element* body) {
     body->SetClass("mirrored", getSettings().game.enableMirrorMode.getValue());
 }
 
-Prelaunch::Prelaunch()
-    : Document(kDocumentSource, false, DocumentScope::Prelaunch),
-      mRoot(mDocument->GetElementById("root")) {
+void Prelaunch::refresh_menu_buttons() {
+    auto* prelaunch = static_cast<Prelaunch*>(find_document(DocumentScope::Prelaunch));
+    if (prelaunch == nullptr) {
+        return;
+    }
+    auto* menuList = prelaunch->mDocument->GetElementById("menu-list");
+    while (menuList->GetNumChildren() > 0) {
+        menuList->RemoveChild(menuList->GetChild(0));
+    }
+    prelaunch->mMenuButtons.clear();
+    prelaunch->build_menu_buttons();
+}
+
+Prelaunch::Prelaunch() : Document(kDocumentSource, false, DocumentScope::Prelaunch) {
+    mRoot = mDocument->GetElementById("root");
     ensure_initialized();
     begin_update_check();
 
-    if (auto* menuList = mDocument->GetElementById("menu-list")) {
-        auto& state = prelaunch_state();
-        const bool activeDiscLoaded = !state.activeDiscPath.empty();
-        mMenuButtons.push_back(
-            std::make_unique<Button>(menuList, activeDiscLoaded ? "Play" : "Select Disc Image"));
-        mMenuButtons.back()->on_pressed([this] {
-            if (prelaunch_state().activeDiscPath.empty()) {
-                open_iso_picker();
-                return;
-            }
-
-            mDoAud_seStartMenu(kSoundPlay);
-            show_menu_notification();
-
-            if (getSettings().audio.menuSounds) {
-                JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
-                if (*handle) {
-                    (*handle)->stop(60);
-                    (*handle)->releaseHandle();
-                }
-            }
-
-            if (g_mDoMemCd_control.mCardCommand == mDoMemCd_Ctrl_c::Command_e::COMM_NONE_e) {
-                mDoMemCd_ThdInit();
-            }
-
-            IsGameLaunched = true;
-            pop();
-        });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-1");
-
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
-        mMenuButtons.back()->on_pressed([this] {
-            mRestartSuppressed = false;
-            push(std::make_unique<SettingsWindow>(true));
-        });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
-
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Mods"));
-        mMenuButtons.back()->on_pressed([this] {
-            mRestartSuppressed = false;
-            push(std::make_unique<ModsWindow>());
-        });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
-
-        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
-        mMenuButtons.back()->on_pressed([] { IsRunning = false; });
-        apply_intro_animation(mMenuButtons.back()->root(), "delay-4");
-    }
+    build_menu_buttons();
 
     mDiscStatus = mDocument->GetElementById("disc-status");
     mDiscDetail = mDocument->GetElementById("disc-version");
@@ -835,6 +940,68 @@ Prelaunch::Prelaunch()
     });
 }
 
+void Prelaunch::build_menu_buttons() {
+    if (auto* menuList = mDocument->GetElementById("menu-list")) {
+        // Restore the previously selected game mode before creating the play control.
+        gamemode::getGameModeManager().setGameModeToPrevious();
+
+        auto playButton = std::make_unique<GameModeButton>(menuList, [this] {
+            if (prelaunch_state().activeDiscPath.empty()) {
+                open_iso_picker();
+                return;
+            }
+
+            if (const auto* gameMode = gamemode::getGameModeManager().getCurrentGameMode();
+                gameMode != nullptr && !gameMode->invokeOnPlayFunction())
+            {
+                gamemode::getGameModeManager().setCurrentGameMode(gamemode::kVanillaGameModeId);
+                return;
+            }
+
+            mDoAud_seStartMenu(kSoundPlay);
+            show_menu_notification();
+
+            if (getSettings().audio.menuSounds) {
+                JAISoundHandle* handle = g_mEnvSeMgr.field_0x144.getHandle();
+                if (*handle) {
+                    (*handle)->stop(60);
+                    (*handle)->releaseHandle();
+                }
+            }
+
+            if (g_mDoMemCd_control.mCardCommand == mDoMemCd_Ctrl_c::Command_e::COMM_NONE_e) {
+                mDoMemCd_ThdInit();
+            }
+
+            prelaunch_state().firstLaunch = false;
+            IsGameLaunched = true;
+            hide(true);
+            MenuBar::refresh_tabs();
+        });
+        apply_intro_animation(playButton->root(), "delay-1");
+        mMenuButtons.push_back(std::move(playButton));
+
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Settings"));
+        mMenuButtons.back()->on_pressed([this] {
+            mRestartSuppressed = false;
+            bool showPrelaunchSettings = prelaunch_state().firstLaunch;
+            push(std::make_unique<SettingsWindow>(showPrelaunchSettings));
+        });
+        apply_intro_animation(mMenuButtons.back()->root(), "delay-2");
+
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Mods"));
+        mMenuButtons.back()->on_pressed([this] {
+            mRestartSuppressed = false;
+            push(std::make_unique<ModsWindow>());
+        });
+        apply_intro_animation(mMenuButtons.back()->root(), "delay-3");
+
+        mMenuButtons.push_back(std::make_unique<Button>(menuList, "Quit"));
+        mMenuButtons.back()->on_pressed([] { IsRunning = false; });
+        apply_intro_animation(mMenuButtons.back()->root(), "delay-4");
+    }
+}
+
 void Prelaunch::show() {
     Document::show();
     mDocument->SetAttribute("open", "");
@@ -846,14 +1013,14 @@ void Prelaunch::show() {
             modal.pop();
         };
         std::vector<ModalAction> actions;
-        if constexpr (dusk::SupportsProcessRestart) {
+        if constexpr (SupportsProcessRestart) {
             actions.push_back(ModalAction{
                 .label = "Restart later",
                 .onPressed = dismiss,
             });
             actions.push_back(ModalAction{
                 .label = "Restart now",
-                .onPressed = [](Modal&) { dusk::RequestRestart(); },
+                .onPressed = [](Modal&) { RequestRestart(); },
             });
         } else {
             actions.push_back(ModalAction{
@@ -864,7 +1031,7 @@ void Prelaunch::show() {
         push(std::make_unique<Modal>(Modal::Props{
             .title = "Apply Options",
             .bodyRml =
-                dusk::SupportsProcessRestart ?
+                SupportsProcessRestart ?
                     "A restart is required to apply selected options.<br/><br/>Restart now to "
                     "apply them immediately?" :
                     "A restart is required to apply selected options.<br/><br/>Close and reopen "
@@ -914,8 +1081,8 @@ void Prelaunch::update() {
         mEntranceAnimationStarted = true;
     }
 
-    if (!mMenuButtons.empty()) {
-        mMenuButtons[0]->set_text(activeDiscLoaded ? "Play" : "Select Disc Image");
+    for (const auto& button : mMenuButtons) {
+        button->update();
     }
 
     const auto discStatusLabel = mDiscStatus->GetElementById("disc-status-label");
@@ -1022,6 +1189,14 @@ void Prelaunch::update() {
     }
 
     Document::update();
+}
+
+void return_to_prelaunch() noexcept {
+    close_documents_except(DocumentScope::MenuBar);
+    if (auto* menuBar = find_document(DocumentScope::MenuBar)) {
+        menuBar->force_hide(false);
+    }
+    push_document(std::make_unique<Prelaunch>(), true);
 }
 
 bool Prelaunch::focus() {

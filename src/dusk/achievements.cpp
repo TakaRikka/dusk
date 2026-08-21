@@ -1,25 +1,26 @@
 #include "dusk/achievements.h"
-#include "dusk/io.hpp"
-#include "dusk/main.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_item_data.h"
-#include "d/d_map_path_fmap.h"
-#include "d/d_stage.h"
-#include "d/d_menu_fmap.h"
 #include "JSystem/JKernel/JKRArchive.h"
-#include "d/d_meter2_info.h"
 #include "d/actor/d_a_alink.h"
-#include "d/actor/d_a_ni.h"
-#include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_b_gnd.h"
 #include "d/actor/d_a_b_ob.h"
+#include "d/actor/d_a_ni.h"
+#include "d/actor/d_a_npc4.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_demo.h"
+#include "d/d_item_data.h"
+#include "d/d_map_path_fmap.h"
+#include "d/d_menu_fmap.h"
+#include "d/d_meter2_info.h"
+#include "d/d_stage.h"
+#include "dusk/game_mode.hpp"
+#include "dusk/io.hpp"
+#include "dusk/logging.h"
+#include "dusk/main.h"
+#include "dusk/speedrun.h"
 #include "dusk/ui/ui.hpp"
-#include "f_pc/f_pc_name.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_name.h"
-#include "dusk/logging.h"
 
 #include <filesystem>
 #include <algorithm>
@@ -1302,6 +1303,12 @@ void AchievementSystem::processEntry(Entry& e) {
 }
 
 void AchievementSystem::tick() {
+    // Until we implement an AchievementService, achievements will be unavailible in custom gamemodes
+    if (dusk::gamemode::getGameModeManager().isCurrentGameMode(dusk::gamemode::kVanillaGameModeId) == false
+        && dusk::gamemode::getGameModeManager().isCurrentGameMode(dusk::speedrun::kSpeedrunGameModeId) == false) {
+        m_signals.clear();
+        return;
+    }
     if (!m_loaded) {
         load();
     }

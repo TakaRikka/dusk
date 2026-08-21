@@ -15,6 +15,37 @@
 #include "SSystem/SComponent/c_math.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "dusk/mods/svc/flow.hpp"
+
+namespace {
+
+template <typename Node>
+bool resolve_flow_node(u16 index, Node& outNode) {
+    FlowNodeData data{};
+    if (!dusk::flow::resolve_node(dMsgObject_getMsgDtPtr(), index, data)) {
+        return false;
+    }
+    static_assert(sizeof(Node) == sizeof(data.bytes));
+    std::memcpy(&outNode, data.bytes, sizeof(outNode));
+    return true;
+}
+
+bool resolve_flow_edge(u16 index, u16& outTarget) {
+    return dusk::flow::resolve_edge(dMsgObject_getMsgDtPtr(), index, outTarget);
+}
+
+bool resolve_flow_message(u16 index, MessageEntryData& outEntry) {
+    return dusk::flow::resolve_message_entry(dMsgObject_getMsgDtPtr(), index, outEntry);
+}
+
+u16 message_id(const MessageEntryData& entry) {
+    return static_cast<u16>(static_cast<u16>(entry.bytes[4]) << 8 | entry.bytes[5]);
+}
+
+}  // namespace
+#endif
+
 dMsgFlow_c::dMsgFlow_c() {
     mNonStopJunpFlowFlag = 0;
     setInitValue(1);
@@ -37,6 +68,11 @@ void dMsgFlow_c::init(fopAc_ac_c* i_partner, int i_flowID, int param_2, fopAc_ac
         u16 prevFlowID = i_flowID;
 
         dMsgObject_changeFlowGroup(i_flowID);
+
+#if TARGET_PC
+        dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(),
+            i_flowID >= 3000 ? 0 : static_cast<u16>(dMsgObject_getGroupID()));
+#endif
 
         if (param_2 == 0) {
             setInitValue(1);
@@ -107,17 +143,37 @@ int dMsgFlow_c::checkOpenDoor(fopAc_ac_c* i_speaker_p, int* param_2) {
     mesg_flow_node_event* event_node = NULL;
 
     while ((nodeIdx != 0xFFFF && !var_r27) && !var_r25) {
+#if TARGET_PC
+        FlowNodeData resolvedData{};
+        if (!dusk::flow::resolve_node(dMsgObject_getMsgDtPtr(), nodeIdx, resolvedData)) {
+            break;
+        }
+        u8 type = resolvedData.bytes[0];
+#else
         u8 type = mFlowNodeTBL[nodeIdx].message.type;
+#endif
 
         switch(type) {
         case NODETYPE_MESSAGE_e: {
+#if TARGET_PC
+            mesg_flow_node resolved{};
+            std::memcpy(&resolved, resolvedData.bytes, sizeof(resolved));
+            msg_node = &resolved;
+#else
             msg_node = &mFlowNodeTBL[nodeIdx].message;
+#endif
             nodeIdx = msg_node->next_node_idx;
             var_r26++;
             break;
         }
         case NODETYPE_BRANCH_e: {
+#if TARGET_PC
+            mesg_flow_node_branch resolved{};
+            std::memcpy(&resolved, resolvedData.bytes, sizeof(resolved));
+            branch_node = &resolved;
+#else
             branch_node = (mesg_flow_node_branch*)&mFlowNodeTBL[nodeIdx].branch;
+#endif
 
             switch(branch_node->query_idx) {
             case 0:
@@ -130,13 +186,38 @@ int dMsgFlow_c::checkOpenDoor(fopAc_ac_c* i_speaker_p, int* param_2) {
                 break;
             }
 
+#if TARGET_PC
+            u16 query_ret;
+            if (branch_node->query_idx >= dusk::flow::kCustomQueryMin) {
+                query_ret = dusk::flow::dispatch_query(branch_node->query_idx, i_speaker_p,
+                    branch_node->param, branch_node->result_count, FLOW_QUERY_PHASE_PROBE, nodeIdx);
+            } else if (branch_node->query_idx < FLOW_QUERY_BUILTIN_COUNT) {
+                query_ret =
+                    (this->*mQueryList[branch_node->query_idx])(branch_node, i_speaker_p, 0);
+            } else {
+                break;
+            }
+#else
             u16 query_ret = (this->*mQueryList[branch_node->query_idx])(branch_node, i_speaker_p, 0);
+#endif
             u16 spE = branch_node->next_node_idx + query_ret;
+#if TARGET_PC
+            if (!resolve_flow_edge(spE, nodeIdx)) {
+                nodeIdx = 0xffff;
+            }
+#else
             nodeIdx = mFlowIdxTBL[spE];
+#endif
             break;
         }
         case NODETYPE_EVENT_e: {
+#if TARGET_PC
+            mesg_flow_node_event resolved{};
+            std::memcpy(&resolved, resolvedData.bytes, sizeof(resolved));
+            event_node = &resolved;
+#else
             event_node = &mFlowNodeTBL[nodeIdx].event;
+#endif
 
             switch(event_node->event_idx) {
             case 12:
@@ -151,7 +232,13 @@ int dMsgFlow_c::checkOpenDoor(fopAc_ac_c* i_speaker_p, int* param_2) {
                 var_r25 = TRUE;
                 break;
             default:
+#if TARGET_PC
+                if (!resolve_flow_edge(event_node->next_node_idx, nodeIdx)) {
+                    nodeIdx = 0xffff;
+                }
+#else
                 nodeIdx = mFlowIdxTBL[event_node->next_node_idx];
+#endif
                 break;
             }
             break;
@@ -311,6 +398,10 @@ void dMsgFlow_c::setInitValueGroupChange(int i_msgNo, fopAc_ac_c** i_talkPartner
     u16 var_r28 = i_msgNo;
 
     dMsgObject_changeFlowGroup(i_msgNo);
+#if TARGET_PC
+    dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(),
+        i_msgNo >= 3000 ? 0 : static_cast<u16>(dMsgObject_getGroupID()));
+#endif
     setInitValue(0);
 
     mFlow_p = getMsgDataBlock("FLW1");
@@ -387,7 +478,16 @@ void dMsgFlow_c::setNodeIndex(u16 i_nodeIdx, fopAc_ac_c** i_talkPartners) {
         dMsgObject_endFlowGroup();
         field_0x26 = 1;
     } else {
+#if TARGET_PC
+        FlowNodeData resolvedData{};
+        if (!dusk::flow::resolve_node(dMsgObject_getMsgDtPtr(), i_nodeIdx, resolvedData)) {
+            setNodeIndex(0xffff, i_talkPartners);
+            return;
+        }
+        switch (resolvedData.bytes[0]) {
+#else
         switch (mFlowNodeTBL[i_nodeIdx].message.type) {
+#endif
         case 0:
             break;
         case NODETYPE_MESSAGE_e:
@@ -397,7 +497,13 @@ void dMsgFlow_c::setNodeIndex(u16 i_nodeIdx, fopAc_ac_c** i_talkPartners) {
             break;
         case NODETYPE_EVENT_e:
             mesg_flow_node_event* node = NULL;
+#if TARGET_PC
+            mesg_flow_node_event resolved{};
+            std::memcpy(&resolved, resolvedData.bytes, sizeof(resolved));
+            node = &resolved;
+#else
             node = &mFlowNodeTBL[i_nodeIdx].event;
+#endif
 
             if (node->event_idx == 21 || node->event_idx == 32 || node->event_idx == 33) {
                 if (node->event_idx == 21) {
@@ -447,13 +553,24 @@ int dMsgFlow_c::setSelectMsg(mesg_flow_node* i_flowNode_p, mesg_flow_node* param
 
     mesg_flow_node* var_r29 = NULL;
 
+#if TARGET_PC
+    MessageEntryData selectionEntry{};
+    MessageEntryData messageEntry{};
+    if (!resolve_flow_message(param_2->msg_index, selectionEntry) ||
+        !resolve_flow_message(i_flowNode_p->msg_index, messageEntry))
+    {
+        return 0;
+    }
+    temp_r25 = message_id(selectionEntry);
+    msg_no = message_id(messageEntry);
+#else
     inf_p = (BE(u16)*)getMsgDataBlock("INF1");
-
     var_r29 = param_2;
     temp_r25 = ((inf_p + (var_r29->msg_index) * 10))[10];
 
     var_r29 = i_flowNode_p;
     msg_no = ((inf_p + (var_r29->msg_index) * 10))[10];
+#endif
 
     // "Message Set (Select)"
     OS_REPORT("\x1B[44;37mメッセ−ジセット（選択）　　　　　　\x1B[m|:");
@@ -495,9 +612,17 @@ int dMsgFlow_c::setNormalMsg(mesg_flow_node* i_flowNode_p, fopAc_ac_c* i_speaker
     mesg_flow_node* var_r29 = NULL;
     u16 msg_no;
 
+#if TARGET_PC
+    MessageEntryData messageEntry{};
+    if (!resolve_flow_message(i_flowNode_p->msg_index, messageEntry)) {
+        return 0;
+    }
+    msg_no = message_id(messageEntry);
+#else
     var_r29 = i_flowNode_p;
     inf_p = (BE(u16)*)getMsgDataBlock("INF1");
     msg_no = (inf_p + (var_r29->msg_index) * 10)[10];
+#endif
 
     // "Message Set"
     OS_REPORT("\x1B[44;37mメッセ−ジセット　　　　　　　　　　\x1B[m|:");
@@ -536,13 +661,45 @@ int dMsgFlow_c::setNormalMsg(mesg_flow_node* i_flowNode_p, fopAc_ac_c* i_speaker
 
 int dMsgFlow_c::messageNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartners) {
     mesg_flow_node* flowNode_p = NULL;
+#if TARGET_PC
+    mesg_flow_node resolvedFlowNode{};
+    if (!resolve_flow_node(mNodeIdx, resolvedFlowNode)) {
+        setNodeIndex(0xffff, i_talkPartners);
+        return 1;
+    }
+    flowNode_p = &resolvedFlowNode;
+#else
     flowNode_p = &mFlowNodeTBL[mNodeIdx].message;
+#endif
 
     if (field_0x25 != 0) {
         if (mSelType != SELTYPE_NONE_e) {
             u16 aNextNodeIndex = flowNode_p->next_node_idx;
             JUT_ASSERT(1051, 0xFFFF != aNextNodeIndex);
 
+#if TARGET_PC
+            mesg_flow_node nextNode{};
+            if (!resolve_flow_node(aNextNodeIndex, nextNode)) {
+                setNodeIndex(0xffff, i_talkPartners);
+                return 1;
+            }
+            if (mSelType == SELTYPE_VERTICAL_e && nextNode.type == NODETYPE_MESSAGE_e) {
+                if (setSelectMsg(flowNode_p, &nextNode, i_speaker_p)) {
+                    mNodeIdx = aNextNodeIndex;
+                    mSelType = SELTYPE_NONE_e;
+                    field_0x25 = 0;
+                }
+            } else if (mSelType == SELTYPE_HORIZONTAL_e && nextNode.type == NODETYPE_BRANCH_e) {
+                if (setNormalMsg(flowNode_p, i_speaker_p)) {
+                    mSelType = SELTYPE_NONE_e;
+                    field_0x25 = 0;
+                }
+            } else {
+                OS_REPORT("★sel select mesg ===> %d, %d, %d\n", mSelType, aNextNodeIndex, nextNode.type);
+                setNodeIndex(0xffff, i_talkPartners);
+                return 1;
+            }
+#else
             if (mSelType == SELTYPE_VERTICAL_e && mFlowNodeTBL[aNextNodeIndex].message.type == NODETYPE_MESSAGE_e) {
                 JUT_ASSERT(1056, NODETYPE_MESSAGE_e == mFlowNodeTBL[aNextNodeIndex].message.type);
                 if (setSelectMsg(&mFlowNodeTBL[mNodeIdx].message, &mFlowNodeTBL[aNextNodeIndex].message, i_speaker_p)) {
@@ -559,8 +716,13 @@ int dMsgFlow_c::messageNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPart
                 OS_REPORT("★sel select mesg ===> %d, %d, %d\n", mSelType, aNextNodeIndex, mFlowNodeTBL[aNextNodeIndex].message.type);
                 JUT_ASSERT(1077, FALSE);
             }
+#endif
         } else {
+#if TARGET_PC
+            if (setNormalMsg(flowNode_p, i_speaker_p)) {
+#else
             if (setNormalMsg(&mFlowNodeTBL[mNodeIdx].message, i_speaker_p)) {
+#endif
                 field_0x25 = 0;
             }
         }
@@ -609,8 +771,20 @@ int dMsgFlow_c::messageNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPart
         case 18:
             setNodeIndex(flowNode_p->next_node_idx, i_talkPartners);
 
+#if TARGET_PC
+            if (flowNode_p->next_node_idx == 0xffff) {
+                return 1;
+            }
+            mesg_flow_node resolvedNext{};
+            if (!resolve_flow_node(flowNode_p->next_node_idx, resolvedNext)) {
+                setNodeIndex(0xffff, i_talkPartners);
+                return 1;
+            }
+            mesg_flow_node* var_r26 = &resolvedNext;
+#else
             mesg_flow_node* var_r26 = &mFlowNodeTBL[flowNode_p->next_node_idx].message;
-            if (var_r26->field_0x1 == 0x15 || var_r26->field_0x1 == 0x20 || var_r26->field_0x1 == 0x21) {
+#endif
+            if (var_r26->subtype == 0x15 || var_r26->subtype == 0x20 || var_r26->subtype == 0x21) {
                 return 0;
             }
 
@@ -623,23 +797,81 @@ int dMsgFlow_c::messageNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPart
 
 int dMsgFlow_c::branchNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartners) {
     mesg_flow_node_branch* node = NULL;
+#if TARGET_PC
+    mesg_flow_node_branch resolvedNode{};
+    if (!resolve_flow_node(mNodeIdx, resolvedNode)) {
+        setNodeIndex(0xffff, i_talkPartners);
+        return 1;
+    }
+    node = &resolvedNode;
+    u16 proc_status;
+    if (node->query_idx >= dusk::flow::kCustomQueryMin) {
+        proc_status = dusk::flow::dispatch_query(node->query_idx, i_speaker_p, node->param,
+            node->result_count, FLOW_QUERY_PHASE_EXECUTE, mNodeIdx);
+    } else if (node->query_idx < FLOW_QUERY_BUILTIN_COUNT) {
+        proc_status = (this->*mQueryList[node->query_idx])(node, i_speaker_p, 1);
+    } else {
+        setNodeIndex(0xffff, i_talkPartners);
+        return 1;
+    }
+#else
     node = &mFlowNodeTBL[mNodeIdx].branch;
     u16 proc_status = (this->*mQueryList[node->query_idx])(node, i_speaker_p, 1);
+#endif
 
     u16 var_r28 = node->next_node_idx + proc_status;
+#if TARGET_PC
+    u16 target = 0xffff;
+    resolve_flow_edge(var_r28, target);
+    setNodeIndex(target, i_talkPartners);
+#else
     setNodeIndex(mFlowIdxTBL[var_r28], i_talkPartners);
+#endif
     return 1;
 }
 
 int dMsgFlow_c::eventNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartners) {
     mesg_flow_node_event* node = NULL;
+#if TARGET_PC
+    mesg_flow_node_event resolvedNode{};
+    if (!resolve_flow_node(mNodeIdx, resolvedNode)) {
+        setNodeIndex(0xffff, i_talkPartners);
+        return 1;
+    }
+    node = &resolvedNode;
+    int proc_status = 1;
+    if (node->event_idx >= dusk::flow::kCustomEventMin) {
+        dusk::flow::dispatch_event(node->event_idx, i_speaker_p, node->params);
+    } else if (node->event_idx < FLOW_EVENT_BUILTIN_COUNT) {
+        proc_status = (this->*mEventList[node->event_idx])(node, i_speaker_p);
+    } else {
+        setNodeIndex(0xffff, i_talkPartners);
+        return 1;
+    }
+#else
     node = &mFlowNodeTBL[mNodeIdx].event;
     int proc_status = (this->*mEventList[node->event_idx])(node, i_speaker_p);
+#endif
+
+#if TARGET_PC
+    if (node->event_idx >= dusk::flow::kCustomEventMin) {
+        u16 target = 0xffff;
+        resolve_flow_edge(node->next_node_idx, target);
+        setNodeIndex(target, i_talkPartners);
+        return 1;
+    }
+#endif
 
     switch (node->event_idx) {
     case 8: {
         getParam(&mEventId, &field_0x30, node->params);
+#if TARGET_PC
+        u16 target = 0xffff;
+        resolve_flow_edge(node->next_node_idx, target);
+        setNodeIndex(target, i_talkPartners);
+#else
         setNodeIndex(mFlowIdxTBL[node->next_node_idx], i_talkPartners);
+#endif
 
         if (field_0x26 != 0) {
             break;
@@ -684,7 +916,13 @@ int dMsgFlow_c::eventNodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartne
             return 0;
         }
     default:
+#if TARGET_PC
+        u16 target = 0xffff;
+        resolve_flow_edge(node->next_node_idx, target);
+        setNodeIndex(target, i_talkPartners);
+#else
         setNodeIndex(mFlowIdxTBL[node->next_node_idx], i_talkPartners);
+#endif
     }
 
     return 1;
@@ -705,7 +943,16 @@ int dMsgFlow_c::nodeProc(fopAc_ac_c* i_speaker_p, fopAc_ac_c** i_talkPartners) {
             aSpeaker_p = i_talkPartners[field_0x38];
         }
 
+#if TARGET_PC
+        FlowNodeData resolvedNode{};
+        if (!dusk::flow::resolve_node(dMsgObject_getMsgDtPtr(), mNodeIdx, resolvedNode)) {
+            setNodeIndex(0xffff, i_talkPartners);
+            break;
+        }
+        u8 type = resolvedNode.bytes[0];
+#else
         u8 type = mFlowNodeTBL[mNodeIdx].message.type;
+#endif
         switch (type) {
         case NODETYPE_MESSAGE_e:
             proc_status = messageNodeProc(aSpeaker_p, i_talkPartners);
