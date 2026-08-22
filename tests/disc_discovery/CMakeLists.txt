@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.25)
+project(dusklight_disc_discovery_tests LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+enable_testing()
+add_executable(rules_test rules_test.cpp)
+target_include_directories(rules_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
+add_test(NAME rules_test COMMAND rules_test)
