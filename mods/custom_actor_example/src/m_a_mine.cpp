@@ -1,20 +1,15 @@
-/*
- * m_a_obj_wrock.cpp
- * An example actor for a rock that can be placed in the world.
- */
-
-#include "m_a_obj_wrock.hpp"
+#include "m_a_mine.hpp"
 #include "d/d_com_inf_game.h"
-#include "res/Object/WRock.h"
+#include "res/Object/O_mD_jira.h"
 #include "mod.hpp"
 
 // The name of the archive in /res/Object/
-static const char* l_resName = "Wrock";
+static const char* l_resName = "O_mD_jira";
 
 // The actor's heap (for resources) should be enough to hold the data for the model and collision
-static constexpr u32 heap_size = ALIGN_NEXT(13952, 0x20) + ALIGN_NEXT(1920, 0x20);
+static constexpr u32 heap_size = ALIGN_NEXT(16832, 0x20);
 
-maObj_Wrock_c::~maObj_Wrock_c() {
+ma_Mine_c::~ma_Mine_c() {
     // Called every time the actor is deleted
 
     // Remove the collider from the world's collision
@@ -27,7 +22,7 @@ maObj_Wrock_c::~maObj_Wrock_c() {
     dComIfG_resDelete(&mPhase, l_resName);
 }
 
-cPhs_Step maObj_Wrock_c::create() {
+cPhs_Step ma_Mine_c::create() {
     // Because of how the actor system works, an actor's constructor doesn't get called when an
     // actor is created. We need to manually do it here with the following function:
     if (!mod_fopAcM_ct(this)) {
@@ -65,10 +60,10 @@ cPhs_Step maObj_Wrock_c::create() {
 
 // Initializes the heap that all instances of this actor will use for resources
 // Gets called from the callback in fopAcM_entrySolidHeap
-int maObj_Wrock_c::CreateHeap() {
+int ma_Mine_c::CreateHeap() {
     // Get the bmd data from the archive and initialize it
     J3DModelData* model_data =
-        (J3DModelData*)dComIfG_getObjectRes(l_resName, dRes_INDEX_WROCK_BMD_WROCK_e);
+        (J3DModelData*)dComIfG_getObjectRes(l_resName, dRes_INDEX_O_MD_JIRA_BMD_O_MD_JIRAI_e);
     if (model_data == NULL) {
         return 0;
     }
@@ -77,30 +72,20 @@ int maObj_Wrock_c::CreateHeap() {
         return 0;
     }
 
-    // Get the dzb collision data from the archive and initialize it
-    mpCollider = JKR_NEW dBgW();
-    if (mpCollider == NULL) {
-        return 0;
-    }
-    cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes(l_resName, dRes_INDEX_WROCK_DZB_WROCK_e);
-    if (mpCollider->Set(dzb, 1, &mColliderMtx) == true) {
-        return 0;
-    }
-    mpCollider->SetCrrFunc(dBgS_MoveBGProc_Typical);
     return 1;
 }
 
-int maObj_Wrock_c::createHeapCallBack(fopAc_ac_c* i_this) {
-    return static_cast<maObj_Wrock_c*>(i_this)->CreateHeap();
+int ma_Mine_c::createHeapCallBack(fopAc_ac_c* i_this) {
+    return static_cast<ma_Mine_c*>(i_this)->CreateHeap();
 }
 
-int maObj_Wrock_c::Delete() {
+int ma_Mine_c::Delete() {
     // Call the destructor anytime we delete the actor
-    this->~maObj_Wrock_c();
+    this->~ma_Mine_c();
     return 1;
 }
 
-int maObj_Wrock_c::Execute() {
+int ma_Mine_c::Execute() {
     // Update collision with the world
     mAcch.CrrPos(dComIfG_Bgsp());
 
@@ -135,64 +120,57 @@ int maObj_Wrock_c::Execute() {
     return 1;
 }
 
-int maObj_Wrock_c::Draw() {
+int ma_Mine_c::Draw() {
     // Update the model's lighting with the scene
     g_env_light.settingTevStruct(0x20, &current.pos, &tevStr);
     g_env_light.setLightTevColorType_MAJI(mpModel, &tevStr);
-
-    // Set the current dlist to BG Which means that shadows can be cast on it
-    // Because of the messy collider, the shadows don't look great, but this is here as an example
-    dComIfGd_setListBG();
 
     // Set the bmd model to be drawn when the display list is executed
     mDoExt_modelUpdateDL(mpModel);
 
     // Cast a shadow for the actor onto the ground.
     // We can only do this if we are drawing to the normal dlist, not the BG dlist
-    // if (mGroundH != -G_CM3D_F_INF) {
-    //     mShadow = dComIfGd_setShadow(mShadow, 1, mpModel, &current.pos,
-    //                                  2000.0f, 0.0f,
-    //                                  current.pos.y, mGroundH, mGndChk, &tevStr, 0,
-    //                                  1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
-    // }
-
-    // Reset the active dlist
-    dComIfGd_setList();
+    if (mGroundH != -G_CM3D_F_INF) {
+        mShadow = dComIfGd_setShadow(mShadow, 1, mpModel, &current.pos,
+                                     100.0f, 0.0f,
+                                     current.pos.y, mGroundH, mGndChk, &tevStr, 0,
+                                     1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
+    }
 
     return 1;
 }
 
-static cPhs_Step maObj_Wrock_Create(void* i_this) {
-    return static_cast<maObj_Wrock_c*>(i_this)->create();
+static cPhs_Step ma_Mine_create(void* i_this) {
+    return static_cast<ma_Mine_c*>(i_this)->create();
 }
 
-static int maObj_Wrock_Delete(void* i_this) {
-    return static_cast<maObj_Wrock_c*>(i_this)->Delete();
+static int maMine_Delete(void* i_this) {
+    return static_cast<ma_Mine_c*>(i_this)->Delete();
 }
 
-static int maObj_Wrock_Execute(void* i_this) {
-    return static_cast<maObj_Wrock_c*>(i_this)->Execute();
+static int maMine_Execute(void* i_this) {
+    return static_cast<ma_Mine_c*>(i_this)->Execute();
 }
 
-static int maObj_Wrock_Draw(void* i_this) {
-    return static_cast<maObj_Wrock_c*>(i_this)->Draw();
+static int maMine_Draw(void* i_this) {
+    return static_cast<ma_Mine_c*>(i_this)->Draw();
 }
 
-static int maObj_Wrock_IsDelete(void* i_this) {
+static int maMine_IsDelete(void* i_this) {
     return 1;
 }
 
-s16 maObj_Wrock_c::sProcName = -1;
-ActorHandle maObj_Wrock_c::sActorHandle = -1;
-const ActorProfileDesc maObj_Wrock_c::sProfile = {.name = MAOBJ_WROCK_NAME,
+s16 ma_Mine_c::sProcName = -1;
+ActorHandle ma_Mine_c::sActorHandle = -1;
+const ActorProfileDesc ma_Mine_c::sProfile = {.name = MA_MINE_NAME,
     .priority_group = 7,
-    .process_size = sizeof(maObj_Wrock_c),
+    .process_size = sizeof(ma_Mine_c),
     .draw_priority = fpcDwPi_OBJ_LBOX_e,  // An unused draw priority
     .status = fopAcStts_UNK_0x40000_e | fopAcStts_UNK_0x4000_e | fopAcStts_CULL_e,
     .group = fopAc_ACTOR_e,
     .cull_type = fopAc_CULLBOX_CUSTOM_e,
-    .create_function = maObj_Wrock_Create,
-    .delete_function = maObj_Wrock_Delete,
-    .execute_function = maObj_Wrock_Execute,
-    .is_delete_function = maObj_Wrock_IsDelete,
-    .draw_function = maObj_Wrock_Draw};
+    .create_function = ma_Mine_create,
+    .delete_function = maMine_Delete,
+    .execute_function = maMine_Execute,
+    .is_delete_function = maMine_IsDelete,
+    .draw_function = maMine_Draw};

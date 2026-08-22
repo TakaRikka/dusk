@@ -11,9 +11,9 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"
 
-#define MAOBJ_WROCK_NAME "wrock"
+#define MA_MINE_NAME "m_mine"
 
-class maObj_Wrock_c : public fopAc_ac_c {
+class ma_Mine_c : public fopAc_ac_c {
 public:
     request_of_phase_process_class mPhase;
     J3DModel* mpModel;
@@ -25,7 +25,7 @@ public:
     f32 mGroundH;
     int mShadow;
 
-    virtual ~maObj_Wrock_c();
+    virtual ~ma_Mine_c();
     cPhs_Step create();
     int CreateHeap();
     int Delete();

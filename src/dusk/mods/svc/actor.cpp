@@ -25,6 +25,12 @@ std::unordered_map<std::string, ActorHandle> fullNameToHandle;
 
 ModResult register_actor(ModContext* ctx, const ActorProfileDesc* desc, ProfileName* outProfileName,
     ActorHandle* outActorHandle) {
+
+    // If another mod has already registered an actor with this name, note a conflict
+    if (get_stageinfo_from_full_name(desc->name)) {
+        return MOD_CONFLICT;
+    }
+
     const auto handle = s_slots.emplace(*ctx->mod,
         std::make_unique<ActorSlot>(
             ActorSlot{{desc->create_function, desc->delete_function, desc->execute_function,
@@ -94,6 +100,34 @@ static void remove_handle_from_maps(ActorHandle handle) {
     procNameToHandle.erase(it2);
 }
 
+// Iterates through the global list of actors to be deleted, and force-deletes all actors of a
+// specific process name
+bool finish_delete_all_actors_of_name(s16 procName) {
+    bool ret = true;
+
+    node_list_class* delete_actor_list = &g_fpcDtTg_Queue;
+    if (delete_actor_list->mSize == 0) {
+        return true;
+    }
+    node_class* node = delete_actor_list->mpHead;
+    node_class* pNext = NODE_GET_NEXT(node);
+    while (node) {
+        delete_tag_class* tag = ((delete_tag_class*)node);
+        base_process_class* proc = (base_process_class*)tag->base.mpTagData;
+        if (proc->name == procName) {
+            tag->timer = 0;
+            int del_status = fpcDtTg_Do(
+                tag, [](void* proc) { return fpcDt_deleteMethod((base_process_class*)proc); });
+            if (del_status == 0) {
+                ret = false;
+            }
+        }
+        node = pNext;
+        pNext = NODE_GET_NEXT(pNext);
+    }
+    return ret;
+}
+
 ModResult unregister_actor(ModContext* ctx, ActorHandle handle) {
     auto slot = s_slots.find(handle);
     if (slot == nullptr) {
@@ -104,6 +138,8 @@ ModResult unregister_actor(ModContext* ctx, ActorHandle handle) {
     // are unregistering. This may be unsafe under some circumstances, but this is the cleanest way
     // to implement unregistering actors at runtime without the game crashing.
 
+    s16 actorProcName = slot->value->profile.base.base.name;
+
     node_list_class* actorList = &g_fopAcTg_Queue;
     bool isDelete = false;
     if (actorList->mSize > 0) {
@@ -112,30 +148,28 @@ ModResult unregister_actor(ModContext* ctx, ActorHandle handle) {
 
         while (node) {
             fopAc_ac_c* actor = (fopAc_ac_c*)((create_tag_class*)node)->mpTagData;
-            if (actor->name == slot->value->profile.base.base.name) {
+            if (actor->name == actorProcName) {
                 isDelete = true;
-                fopAcM_delete(actor);  // Request a delete
+                // Request a delete, keep calling delete until it can be deleted and returns true
+                // Note: For whatever reason if a custom actor will outright refused to be deleted,
+                // this will hang forever!
+                while (!fopAcM_delete(actor)) {
+                    // Keep trying to delete the actor here. Some actors that manage multiple DVD
+                    // loads during their lifetime may wish to deny being deleted until all loads
+                    // are finished. This loop is here to make sure each actor agress to be deleted.
+                };
             }
             node = pNext;
             pNext = NODE_GET_NEXT(pNext);
         }
     }
 
+    // All the actors we have just requested to delete are in a queue. We need to clear out that
+    // queue so all actors we want to delete are gone by the time this function returns
     if (isDelete) {
-        node_list_class* delete_actor_list = &g_fpcDtTg_Queue;
-        if (delete_actor_list->mSize > 0) {
-            node_class* node = delete_actor_list->mpHead;
-            node_class* pNext = NODE_GET_NEXT(node);
-
-            while (node) {
-                ((delete_tag_class*)node)->timer =
-                    0;  // Set the timer to 0, force a delete when fpcDt_Handler is called
-
-                node = pNext;
-                pNext = NODE_GET_NEXT(pNext);
-            }
+        while (!finish_delete_all_actors_of_name(actorProcName)) {
+            // Same here: keep re-trying a delete until it is successful
         }
-        fpcDt_Handler();  // Delete all actors currently in the delete queue
     }
 
     remove_handle_from_maps(handle);

@@ -7,6 +7,7 @@
 typedef struct base_process_class base_process_class;
 
 BOOL fpcDt_IsComplete();
+int fpcDt_deleteMethod(base_process_class* i_proc);
 int fpcDt_ToDeleteQ(base_process_class* i_proc);
 int fpcDt_ToQueue(base_process_class* i_proc);
 void fpcDt_Handler();

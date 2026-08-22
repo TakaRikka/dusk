@@ -806,19 +806,19 @@ ProfileDesc profDesc = {
     .name = "AUnique", // The name used by the stage loader to load the actor with.
                        // It has a character limit of 7. This should be universally
                        // unique both between the game and other mods.
-    .priorityGroup = 7, // When, relative to other actors _Execute should run
+    .priority_group = 7, // When, relative to other actors _Execute should run
                         // See: mods/svc/actor.h
     .process_size = sizeof(myActor_c),
-    .drawPriority = fpcDwPi_OBJ_LBOX_e, // Defines when the actor should be drawn relative
+    .draw_priority = fpcDwPi_OBJ_LBOX_e, // Defines when the actor should be drawn relative
                                         // to other actors (see f_pc_draw_priority.h)
-    .createFunction = myActor_Create,
-    .deleteFunction = myActor_Delete,
-    .executeFunction = myActor_Execute,
-    .isDeleteFunction = myActor_IsDelete,
-    .drawFunction = myActor_Draw,
     .status = fopAcStts_CULL_e  | fopAcStts_UNK_0x4000_e | fopAcStts_UNK_0x40000_e,
-    .group = fopAc_ACTOR_e,
-    .cullType = fopAc_CULLBOX_CUSTOM_e
+    .group = fopAc_ACTOR_e, // Can be fopAc_ACTOR_e, fopAc_PLAYER_e, fopAc_ENEMY_e, or fopAc_NPC_e
+    .cull_type = fopAc_CULLBOX_CUSTOM_e
+    .create_function = myActor_Create,
+    .delete_function = myActor_Delete,
+    .execute_function = myActor_Execute,
+    .is_delete_function = myActor_IsDelete,
+    .draw_function = myActor_Draw,
 };
 svc_actor->register_actor(mod_ctx, &profDesc, &actor_name, &actor_handle);
 
@@ -828,7 +828,7 @@ if (plr) {
     ActorSpawnParams spawnParams = {
         .parameters = 0,
         .argument = 0,
-        .roomNum = fopAcM_GetRoomNo(plr),
+        .room_num = fopAcM_GetRoomNo(plr),
         .position = {plr->current.pos.x,plr->current.pos.y,plr->current.pos.z},
         .angle = {plr->current.angle.x,plr->current.angle.y,plr->current.angle.z},
         .scale = {1.0f,1.0f,1.0f}

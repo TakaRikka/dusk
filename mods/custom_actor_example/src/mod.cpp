@@ -7,6 +7,7 @@
 #include "d/d_com_inf_game.h"
 
 #include "m_a_obj_wrock.hpp"
+#include "m_a_mine.hpp"
 
 DEFINE_MOD();
 IMPORT_SERVICE(LogService, svc_log);
@@ -30,7 +31,26 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
             .setID = 0xFFFF}};
     
     
-    if (svc_stage->add_actor(mod_ctx, "F_SP108", 0, -1, &wrockParams, sizeof(wrockParams), &wrock_faron_woods_handle) != MOD_OK) {
+    if (svc_stage->add_actor(mod_ctx, "F_SP108", 0, -1, &wrockParams, sizeof(wrockParams), nullptr) != MOD_OK) {
+        mods::log::error("Adding wrock to F_SP108 Failed!");
+        return MOD_ERROR;
+    }
+
+        if (svc_actor->register_actor(mod_ctx, &ma_Mine_c::sProfile, &ma_Mine_c::sProcName,
+            &ma_Mine_c::sActorHandle) != MOD_OK)
+    {
+        mods::log::error("Failed to register actor " MA_MINE_NAME);
+        return MOD_ERROR;
+    }
+
+    stage_actor_data_class mineParams = stage_actor_data_class{.name = MA_MINE_NAME,
+        .base = {.parameters = 0,
+            .position = {-15475.0f, 689.0f, 6690.0f},
+            .angle = {0, 0, 0},
+            .setID = 0xFFFF}};
+    
+    
+    if (svc_stage->add_actor(mod_ctx, "F_SP108", 0, -1, &mineParams, sizeof(mineParams), nullptr) != MOD_OK) {
         mods::log::error("Adding wrock to F_SP108 Failed!");
         return MOD_ERROR;
     }
