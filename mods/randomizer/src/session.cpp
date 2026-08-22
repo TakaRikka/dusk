@@ -84,12 +84,12 @@ std::optional<u16> parse_flag_check(const char* name, std::string_view prefix) {
 }
 
 template <typename Map>
-bool lookup_override(const Map& map, u16 key, uint8_t* out_item, bool progressive) {
+bool lookup_override(const Map& map, u16 key, uint8_t* out_item) {
     const auto it = map.find(key);
     if (it == map.end()) {
         return false;
     }
-    *out_item = progressive ? static_cast<uint8_t>(verifyProgressiveItem(it->second)) : it->second;
+    *out_item = static_cast<uint8_t>(verifyProgressiveItem(it->second));
     return true;
 }
 
@@ -102,7 +102,7 @@ bool resolve_check(ModContext*, const ItemCheckInfo* info, uint8_t* out_item, vo
     }
 
     if (auto key = parse_derived(info->name, ITEM_CHECK_CHEST_PREFIX)) {
-        return lookup_override(ctx.mTreasureChestOverrides, key->key, out_item, false);
+        return lookup_override(ctx.mTreasureChestOverrides, key->key, out_item);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_FREESTANDING_PREFIX)) {
         if (key->stage_id == Ook) {
@@ -113,23 +113,23 @@ bool resolve_check(ModContext*, const ItemCheckInfo* info, uint8_t* out_item, vo
             }
             return false;
         }
-        return lookup_override(ctx.mFreestandingItemOverrides, key->key, out_item, true);
+        return lookup_override(ctx.mFreestandingItemOverrides, key->key, out_item);
     }
     if (auto flag = parse_flag_check(info->name, ITEM_CHECK_GOLDEN_WOLF_PREFIX)) {
-        return lookup_override(ctx.mGoldenWolfOverrides, *flag, out_item, true);
+        return lookup_override(ctx.mGoldenWolfOverrides, *flag, out_item);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_POE_PREFIX)) {
-        return lookup_override(ctx.mPoeOverrides, key->key, out_item, true);
+        return lookup_override(ctx.mPoeOverrides, key->key, out_item);
     }
     if (auto stageId = parse_stage_check(info->name, ITEM_CHECK_BOSS_PREFIX)) {
         const u16 key = static_cast<u16>((*stageId << 8) | 0x9F);
-        return lookup_override(ctx.mFreestandingItemOverrides, key, out_item, true);
+        return lookup_override(ctx.mFreestandingItemOverrides, key, out_item);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_SHOP_PREFIX)) {
-        return lookup_override(ctx.mShopOverrides, key->key, out_item, true);
+        return lookup_override(ctx.mShopOverrides, key->key, out_item);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_SKY_PREFIX)) {
-        return lookup_override(ctx.mSkyCharacterOverrides, key->key, out_item, true);
+        return lookup_override(ctx.mSkyCharacterOverrides, key->key, out_item);
     }
 
     constexpr std::string_view bugPrefix{ITEM_CHECK_BUG_PREFIX};
