@@ -31,6 +31,13 @@
       <key>CFBundlePrimaryIcon</key>
       <string>App Icon</string>
     </dict>
+    <key>TVTopShelfImage</key>
+    <dict>
+      <key>TVTopShelfPrimaryImage</key>
+      <string>Top Shelf Image</string>
+      <key>TVTopShelfPrimaryImageWide</key>
+      <string>Top Shelf Image Wide</string>
+    </dict>
     <key>MinimumOSVersion</key>
     <string>${DEPLOYMENT_TARGET}</string>
     <key>LSRequiresIPhoneOS</key>
