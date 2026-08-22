@@ -3,6 +3,7 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 udid="$(tvos_device_udid)"
+tvos_require_device_reachable "$udid"
 console=""
 [[ "${1:-}" == "--console" ]] && console="--console"
 tvos_log "launching $TVOS_BUNDLE_ID on $TVOS_DEVICE_NAME"

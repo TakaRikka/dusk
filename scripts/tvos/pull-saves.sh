@@ -3,6 +3,7 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 udid="$(tvos_device_udid)"
+tvos_require_device_reachable "$udid"
 dest="${1:-$TVOS_FORK_ROOT/../backups/dusklight-tvos-$(date +%Y%m%d-%H%M%S)}"
 mkdir -p "$dest"
 xcrun devicectl device copy from --device "$udid" --domain-type appDataContainer --domain-identifier "$TVOS_BUNDLE_ID" \

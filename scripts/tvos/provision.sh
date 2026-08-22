@@ -3,6 +3,7 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 udid="$(tvos_device_udid)"
+tvos_require_device_reachable "$udid"
 seed_src="$TVOS_FORK_ROOT/scripts/tvos/provision-seed"
 seed_build="$TVOS_FORK_ROOT/build/provision-seed"
 tvos_log "seeding profile for $TVOS_TEAM_ID.$TVOS_BUNDLE_ID on device $udid"

@@ -35,6 +35,40 @@ PY
     [[ $rc -eq 0 ]] || tvos_fail "no paired tvOS device named '$TVOS_DEVICE_NAME' (set DUSK_TVOS_DEVICE=<udid> or DUSK_TVOS_DEVICE_NAME)"
 }
 
+# Fails unless the target Apple TV currently has a devicectl tunnel. Every device operation
+# (install/launch/copy/provision) needs one, and a sleeping or off-network Apple TV reports
+# tunnelState "unavailable" -- otherwise the underlying tool fails much later with a vaguer error.
+# Optional arg: the device UDID (matched exactly); without it the device is matched by name.
+tvos_require_device_reachable() {
+    local want_udid="${1:-}" json state
+    json="$(mktemp)"
+    xcrun devicectl list devices --json-output "$json" >/dev/null 2>&1 \
+        || { rm -f "$json"; tvos_fail "devicectl failed; is Xcode installed?"; }
+    state="$(python3 - "$json" "$TVOS_DEVICE_NAME" "$want_udid" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1]))
+want_name, want_udid = sys.argv[2], sys.argv[3]
+for dev in data.get("result", {}).get("devices", []):
+    hp = dev.get("hardwareProperties", {})
+    dp = dev.get("deviceProperties", {})
+    if want_udid:
+        if hp.get("udid") != want_udid:
+            continue
+    elif hp.get("platform") != "tvOS" or dp.get("name") != want_name:
+        continue
+    print(dev.get("connectionProperties", {}).get("tunnelState", "unknown"))
+    break
+else:
+    print("device not listed")
+PY
+)"
+    rm -f "$json"
+    case "$state" in
+        unavailable|"device not listed")
+            tvos_fail "Apple TV '$TVOS_DEVICE_NAME' is not reachable (tunnelState=$state) — wake it with the remote and make sure it is on the same network" ;;
+    esac
+}
+
 # Prints the path of the newest tvOS provisioning profile for TEAM.BUNDLE; prints nothing if none.
 # `ls -t` gives newest-first and the first match returns immediately -- no `| head`, which would
 # close the pipe under the still-running loop (BrokenPipe noise from security/python3).
