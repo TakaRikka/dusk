@@ -9,7 +9,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 3u
+#define UI_SERVICE_MINOR 4u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -127,11 +127,14 @@ typedef struct UiControlDesc {
     {sizeof(UiControlDesc), UI_CONTROL_BUTTON, NULL, NULL, UI_BINDING_CALLBACKS, 0u, NULL, NULL,   \
         NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false}
 
+/* Build pane contents. A non-MOD_OK result fails the mod. */
+typedef ModResult (*UiPaneBuildFn)(
+    ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error);
+
 /* Build the panel contents. `panel` accepts the pane_add_* functions; it and
  * every element created in it are destroyed (handles invalidated) whenever the
  * panel is rebuilt, e.g. on tab switches. A non-MOD_OK result fails the mod. */
-typedef ModResult (*UiPanelBuildFn)(
-    ModContext* ctx, UiElementHandle panel, void* user_data, ModError* out_error);
+typedef UiPaneBuildFn UiPanelBuildFn;
 /* Called every frame while the panel is the visible tab. */
 typedef ModResult (*UiPanelUpdateFn)(ModContext* ctx, void* user_data, ModError* out_error);
 
@@ -147,8 +150,7 @@ typedef struct UiModsPanelDesc {
 
 /* Builds the contents associated with a group button. The target pane is cleared immediately
  * before this callback and is valid only while its tab remains built. */
-typedef ModResult (*UiGroupBuildFn)(
-    ModContext* ctx, UiElementHandle target_pane, void* user_data, ModError* out_error);
+typedef UiPaneBuildFn UiGroupBuildFn;
 
 typedef struct UiGroupDesc {
     uint32_t struct_size;
@@ -216,11 +218,15 @@ typedef struct UiDialogDesc {
     /* Fired on cancel (B/Escape) before the dialog closes; the dialog always
      * closes on dismiss. */
     UiDialogActionFn on_dismiss;
-    void* user_data; /* passed to on_dismiss */
+    void* user_data; /* passed to build and on_dismiss */
+    /* Optional content builder. The pane is rendered below body_rml and above the actions. Its
+     * handle and all child element handles remain valid until the dialog closes.
+     * Added in UiService minor version 4. */
+    UiPaneBuildFn build;
 } UiDialogDesc;
 
 #define UI_DIALOG_DESC_INIT                                                                        \
-    {sizeof(UiDialogDesc), NULL, NULL, UI_DIALOG_NORMAL, NULL, NULL, 0u, NULL, NULL}
+    {sizeof(UiDialogDesc), NULL, NULL, UI_DIALOG_NORMAL, NULL, NULL, 0u, NULL, NULL, NULL}
 
 /* A tab added to the in-game menu bar. */
 typedef struct UiMenuTabDesc {

@@ -516,10 +516,32 @@ svc_ui->window_push(mod_ctx, &desc, &window);
 ```
 
 **Dialogs:** `dialog_push` shows a modal dialog. `variant` picks the style, `icon` optionally overrides the variant's
-default icon, and actions become buttons. After an action's `on_pressed` returns, the dialog closes unless the action
-sets `keep_open`. A `keep_open` action can close it later (or immediately) with `dialog_close`. Cancel fires
-`on_dismiss` if present and always closes. `dialog_set_body`, `dialog_set_icon`, and `dialog_add_action` mutate a live
-dialog.
+default icon, and actions become buttons. The optional `build` callback allows you to add controls to a pane between
+the body and actions. It uses the same text, progress, and control builders as panels.
+
+```cpp
+ModResult build_dialog(ModContext*, UiElementHandle pane, void*, ModError*) {
+    UiControlDesc input = UI_CONTROL_DESC_INIT;
+    input.kind = UI_CONTROL_STRING;
+    input.label = "Name";
+    input.get = get_name;
+    input.set = set_name;
+    return svc_ui->pane_add_control(mod_ctx, pane, &input, nullptr);
+}
+
+UiDialogAction action = {"Save", save, nullptr, false};
+UiDialogDesc dialog = UI_DIALOG_DESC_INIT;
+dialog.title = "New Preset";
+dialog.body_rml = "Choose a name for the preset.";
+dialog.actions = &action;
+dialog.action_count = 1;
+dialog.build = build_dialog;
+svc_ui->dialog_push(mod_ctx, &dialog, nullptr);
+```
+
+After an action's `on_pressed`, the dialog closes unless the action sets `keep_open`. It can then be closed later
+(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body`, `dialog_set_icon`,
+and `dialog_add_action` mutate a live dialog.
 
 **Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
 RCSS class; `warning` uses the built-in warning appearance, and mods can define their own types. A duration of 0 uses

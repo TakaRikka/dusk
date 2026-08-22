@@ -17,6 +17,7 @@ public:
     explicit Pane(Rml::Element* parent, Type type);
 
     bool focus() override;
+    bool focus_last();
     void update() override;
 
     void set_selected_item(int index);

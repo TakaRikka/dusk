@@ -776,6 +776,7 @@ int game_main(int argc, char* argv[]) {
 
     dusk::texture_replacements::reload();
     dusk::ui::initialize();
+    dusk::ui::apply_scale();
     dusk::ui::push_document(std::make_unique<dusk::ui::Overlay>(), true, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::TouchControls>(), false, true);
     dusk::ui::push_document(std::make_unique<dusk::ui::MenuBar>(), false);

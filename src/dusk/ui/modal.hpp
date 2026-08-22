@@ -1,6 +1,7 @@
 #pragma once
 
 #include "button.hpp"
+#include "pane.hpp"
 #include "window.hpp"
 
 namespace dusk::ui {
@@ -20,13 +21,15 @@ public:
         std::function<void(Modal&)> onDismiss;
         Rml::String variant;
         Rml::String icon = "";
-        bool isVertical;
+        bool isVertical = false;
     };
 
     explicit Modal(Props props);
 
+    void update() override;
     bool focus() override;
 
+    Pane& content_pane();
     void add_action(ModalAction action);
     void set_body(const Rml::String& bodyRml);
     void set_icon(const Rml::String& icon);
@@ -38,7 +41,10 @@ private:
     void dismiss();
 
     Props mProps;
-    std::vector<std::unique_ptr<Button> > mButtons;
+    Rml::Element* mContentRoot = nullptr;
+    std::unique_ptr<Pane> mContentPane;
+    std::function<void(Modal&)> mPendingAction;
+    std::vector<std::unique_ptr<Button>> mButtons;
 };
 
 }  // namespace dusk::ui
