@@ -7,6 +7,9 @@
 
 #include "d/actor/d_a_e_po.h"
 #include "d/actor/d_a_obj_poFire.h"
+#if TARGET_PC
+#include "d/actor/d_a_alink.h"
+#endif
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 #include "f_op/f_op_actor_enemy.h"
@@ -1139,6 +1142,7 @@ static void e_po_dead(e_po_class* i_this) {
             if (itemCheck.itemNo == dItemNo_NONE_e) {
                 dusk::mods::item_check_complete(itemCheck, a_this);
             } else {
+                daAlink_getAlinkActorClass()->procWolfAtnActorMoveInit();
                 dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::ForcedDemo);
             }
 #else
