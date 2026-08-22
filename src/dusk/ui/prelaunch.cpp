@@ -3,6 +3,7 @@
 #include "dusk/app_info.hpp"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
+#include "dusk/disc_discovery.hpp"
 #include "dusk/game_mode.hpp"
 #include "dusk/iso_validate.hpp"
 #include "dusk/language.hpp"
@@ -824,6 +825,48 @@ void try_push_language_unavailable_modal(Document& host) {
     }));
 }
 
+void try_push_disc_choice_modal(Document& host) {
+    auto& state = prelaunch_state();
+    if (!state.pendingDiscChoiceNotice) {
+        return;
+    }
+    state.pendingDiscChoiceNotice = false;
+    auto dismiss = [](Modal& modal) { modal.pop(); };
+
+    if (state.pendingDiscChoices.empty()) {
+        host.push(std::make_unique<Modal>(Modal::Props{
+            .title = "No disc image found",
+            .bodyRml = "Dusklight looked in the app bundle (<b>disc/</b>) and in the data folder "
+                       "(<b>discs/</b>) but found no disc image.<br/><br/>Bundle one at build time "
+                       "(DUSK_BUNDLED_DISC) or copy one into the data folder, then relaunch.",
+            .actions = {ModalAction{.label = "OK", .onPressed = dismiss}},
+            .onDismiss = dismiss,
+            .icon = "warning",
+        }));
+        return;
+    }
+
+    std::vector<ModalAction> actions;
+    for (const std::string& path : state.pendingDiscChoices) {
+        actions.push_back(ModalAction{
+            .label = borealis::file_select::display_name(path),
+            .onPressed =
+                [path](Modal& modal) {
+                    begin_disc_verification(path);
+                    modal.pop();
+                },
+        });
+    }
+    actions.push_back(ModalAction{.label = "Cancel", .onPressed = dismiss});
+    host.push(std::make_unique<Modal>(Modal::Props{
+        .title = "Select Disc Image",
+        .bodyRml = "Several disc images were found. Choose one:",
+        .actions = std::move(actions),
+        .onDismiss = dismiss,
+        .isVertical = true,
+    }));
+}
+
 void ensure_initialized() noexcept {
     auto& state = prelaunch_state();
     if (state.initialized) {
@@ -840,10 +883,37 @@ void ensure_initialized() noexcept {
     state.errorString.clear();
     state.initialized = true;
     refresh_configured_disc_state();
+
+    // tvOS: no file dialog — if exactly one disc image is available, verify it right away so the
+    // user only has to press Play.
+    if (disc_discovery::needed() && state.configuredDiscPath.empty() &&
+        sDiscVerificationTask == nullptr)
+    {
+        auto candidates = disc_discovery::scan();
+        if (candidates.size() == 1) {
+            PrelaunchLog.info(
+                "Auto-selecting discovered disc: {}", candidates.front().path.string());
+            begin_disc_verification(candidates.front().path.string());
+        }
+    }
 }
 
 void open_iso_picker() noexcept {
     ensure_initialized();
+    if (disc_discovery::needed()) {
+        auto candidates = disc_discovery::scan();
+        if (candidates.size() == 1) {
+            begin_disc_verification(candidates.front().path.string());
+            return;
+        }
+        auto& state = prelaunch_state();
+        state.pendingDiscChoices.clear();
+        for (const auto& c : candidates) {
+            state.pendingDiscChoices.push_back(c.path.string());
+        }
+        state.pendingDiscChoiceNotice = true;
+        return;
+    }
     borealis::file_select::open_file(
         {
             .parentWindow = aurora::window::get_sdl_window(),
@@ -1063,6 +1133,7 @@ void Prelaunch::update() {
     if (top_document() == this) {
         try_push_verification_modal(*this);
         try_push_language_unavailable_modal(*this);
+        try_push_disc_choice_modal(*this);
     }
 
     const auto& state = prelaunch_state();

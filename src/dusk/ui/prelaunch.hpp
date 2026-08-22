@@ -63,6 +63,10 @@ struct PrelaunchState {
     iso::DiscInfo pendingDiscInfo{};
     iso::ValidationError pendingDiscValidation = iso::ValidationError::Unknown;
     bool returnToPrelaunchOnReset = false;
+    // tvOS (no file dialog): candidates found by disc discovery, shown by
+    // try_push_disc_choice_modal.
+    bool pendingDiscChoiceNotice = false;
+    std::vector<std::string> pendingDiscChoices;
 };
 
 PrelaunchState& prelaunch_state() noexcept;
