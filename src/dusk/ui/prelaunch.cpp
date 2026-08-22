@@ -884,9 +884,10 @@ void ensure_initialized() noexcept {
     state.initialized = true;
     refresh_configured_disc_state();
 
-    // tvOS: no file dialog — if exactly one disc image is available, verify it right away so the
-    // user only has to press Play.
-    if (disc_discovery::needed() && state.configuredDiscPath.empty() &&
+    // tvOS: no file dialog — when no configured disc can launch, and exactly one disc image is
+    // available, verify it right away so the user only has to press Play.
+    if (disc_discovery::needed() &&
+        (state.configuredDiscPath.empty() || !state.configuredDiscCanLaunch) &&
         sDiscVerificationTask == nullptr)
     {
         auto candidates = disc_discovery::scan();

@@ -77,5 +77,6 @@ void open_iso_picker() noexcept;
 bool is_restart_pending() noexcept;
 void try_push_verification_modal(Document& host);
 void try_push_language_unavailable_modal(Document& host);
+void try_push_disc_choice_modal(Document& host);
 
 }  // namespace dusk::ui

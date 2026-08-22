@@ -1562,6 +1562,7 @@ void SettingsWindow::update() {
     if (mPrelaunch && top_document() == this) {
         try_push_verification_modal(*this);
         try_push_language_unavailable_modal(*this);
+        try_push_disc_choice_modal(*this);
     }
 
     Window::update();
