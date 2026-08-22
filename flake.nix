@@ -233,6 +233,7 @@
               "-DAURORA_NOD_PROVIDER=system"
               "-DAURORA_SDL3_PROVIDER=system"
               "-DBUILD_SHARED_LIBS=OFF"
+              "-DCMAKE_FIND_PACKAGE_TARGETS_GLOBAL=ON"
             ]
             ++ lib.mapAttrsToList (key: src: "-DFETCHCONTENT_SOURCE_DIR_${key}=${src}") fetchContentDirs;
 
