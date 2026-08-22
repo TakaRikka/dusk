@@ -23,7 +23,8 @@ if [[ $no_disc -eq 0 && -z "$disc" ]]; then
     while IFS= read -r f; do
         found+=("$f")
         case "$f" in *.rvz|*.RVZ) rvz+=("$f");; esac
-    done < <(find "$workspace" -maxdepth 1 -type f \( -iname '*.iso' -o -iname '*.rvz' -o -iname '*.gcm' -o -iname '*.wbfs' -o -iname '*.wia' -o -iname '*.ciso' -o -iname '*.gcz' \) | sort)
+    done < <(find "$workspace" -maxdepth 1 -type f \( -iname '*.iso' -o -iname '*.gcm' -o -iname '*.ciso' -o -iname '*.gcz' -o -iname '*.nfs' \
+        -o -iname '*.rvz' -o -iname '*.wbfs' -o -iname '*.wia' -o -iname '*.tgc' \) | sort)
     if [[ ${#found[@]} -eq 1 ]]; then disc="${found[0]}"
     elif [[ ${#rvz[@]} -eq 1 ]]; then disc="${rvz[0]}"; tvos_log "several disc images in $workspace — preferring the .rvz"
     else tvos_fail "found ${#found[@]} disc images in $workspace (and ${#rvz[@]} .rvz); pass --disc <path> or --no-disc"; fi
