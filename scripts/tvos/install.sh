@@ -6,5 +6,5 @@ app="${1:-$TVOS_INSTALL_APP}"
 [[ -f "$app/embedded.mobileprovision" ]] || tvos_fail "$app is not signed — run scripts/tvos/sign.sh"
 udid="$(tvos_device_udid)"
 tvos_log "installing $(du -sh "$app" | cut -f1) to $TVOS_DEVICE_NAME ($udid) — large bundles take a few minutes"
-xcrun devicectl device install app --device "$udid" "$app" 2>&1 | tee "$TVOS_LOG_DIR/install-device.log" | tail -5
+xcrun devicectl device install app --device "$udid" "$app" 2>&1 | tee "$TVOS_LOG_DIR/install-device.log" | tail -5 || true
 grep -qiE 'installed|success' "$TVOS_LOG_DIR/install-device.log" || tvos_fail "install failed — see $TVOS_LOG_DIR/install-device.log (is the Apple TV awake and on the same network?)"
