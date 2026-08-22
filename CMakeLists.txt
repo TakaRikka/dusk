@@ -302,7 +302,7 @@ include(files.cmake)
 # TODO: version handling for res includes
 
 set(DUSK_BUNDLE_NAME Dusklight)
-set(DUSK_BUNDLE_IDENTIFIER dev.twilitrealm.dusk)
+set(DUSK_BUNDLE_IDENTIFIER dev.twilitrealm.dusk CACHE STRING "Bundle identifier (Apple) / app id")
 set(DUSK_COMPANY_NAME "Twilit Realm")
 set(DUSK_FILE_DESCRIPTION "Dusklight")
 set(DUSK_PRODUCT_NAME "Dusklight")
@@ -708,3 +708,18 @@ foreach (target IN LISTS BINARY_TARGETS)
 endforeach ()
 
 install_bundled_mods()
+
+# tvOS/iOS: optionally bundle a disc image into the installed app (Dusklight.app/disc/<name>).
+# The image is copied at install time only, so the build tree never holds a second copy.
+set(DUSK_BUNDLED_DISC "" CACHE FILEPATH "Disc image (iso/gcm/rvz/…) to copy into the iOS/tvOS app bundle at install time")
+if (DUSK_BUNDLED_DISC)
+    if (NOT EXISTS "${DUSK_BUNDLED_DISC}")
+        message(FATAL_ERROR "DUSK_BUNDLED_DISC does not exist: ${DUSK_BUNDLED_DISC}")
+    endif ()
+    if (IOS OR TVOS)
+        install(FILES "${DUSK_BUNDLED_DISC}" DESTINATION "${CMAKE_INSTALL_PREFIX}/${DUSK_BUNDLE_NAME}.app/disc")
+        message(STATUS "dusklight: bundling disc at install time: ${DUSK_BUNDLED_DISC}")
+    else ()
+        message(WARNING "DUSK_BUNDLED_DISC is only used for iOS/tvOS bundles; ignored on this platform")
+    endif ()
+endif ()

@@ -35,6 +35,16 @@
     <string>${DEPLOYMENT_TARGET}</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
+    <key>UIDeviceFamily</key>
+    <array>
+      <integer>3</integer>
+    </array>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+      <string>arm64</string>
+    </array>
+    <key>GCSupportsControllerUserInteraction</key>
+    <true/>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.adventure-games</string>
     <key>NSHumanReadableCopyright</key>
