@@ -34,14 +34,31 @@ if [[ $no_disc -eq 0 ]]; then [[ -f "$disc" ]] || tvos_fail "disc not found: $di
 cd "$TVOS_FORK_ROOT"
 # The Rust `cc` crate stamps libnod's C objects with the SDK version unless this is set (linker warnings otherwise).
 export TVOS_DEPLOYMENT_TARGET="${TVOS_DEPLOYMENT_TARGET:-14.5}"
+# `set -e` aborts on a failing pipeline before PIPESTATUS can be read, and the build pipeline's
+# trailing grep exits 1 whenever it matches nothing (i.e. on success) -- so each pipeline runs with
+# -e off just long enough to capture the *first* stage's status.
 tvos_log "configure (preset tvos-default, bundle id $TVOS_BUNDLE_ID)"
+set +e
 cmake --preset tvos-default -DDUSK_BUNDLE_IDENTIFIER="$TVOS_BUNDLE_ID" "$disc_arg" ${mods_flag:+"$mods_flag"} 2>&1 | tee "$TVOS_LOG_DIR/configure.log" | tail -3
+rc=${PIPESTATUS[0]}
+set -e
+[[ $rc -eq 0 ]] || tvos_fail "configure failed (cmake exit $rc) — see $TVOS_LOG_DIR/configure.log"
 [[ $configure_only -eq 1 ]] && { tvos_log "configure only — done"; exit 0; }
 tvos_log "build (all targets — the preset's default target list omits the in-tree mods that install needs)"
-cmake --build --preset tvos-default --target all 2>&1 | tee "$TVOS_LOG_DIR/build.log" | grep -E 'error:|FAILED|ninja: build stopped' || true
-grep -qE 'FAILED|ninja: build stopped' "$TVOS_LOG_DIR/build.log" && tvos_fail "build failed — see $TVOS_LOG_DIR/build.log"
+set +e
+cmake --build --preset tvos-default --target all 2>&1 | tee "$TVOS_LOG_DIR/build.log" | grep -E 'error:|FAILED|ninja: build stopped'
+rc=${PIPESTATUS[0]}
+set -e
+[[ $rc -eq 0 ]] || tvos_fail "build failed (cmake exit $rc) — see $TVOS_LOG_DIR/build.log"
+if grep -qE 'FAILED|ninja: build stopped' "$TVOS_LOG_DIR/build.log"; then
+    tvos_fail "build failed — see $TVOS_LOG_DIR/build.log"
+fi
 tvos_log "install -> $TVOS_INSTALL_APP"
 rm -rf "$TVOS_INSTALL_APP"
+set +e
 cmake --install "$TVOS_BUILD_DIR" 2>&1 | tee "$TVOS_LOG_DIR/install.log" | tail -2
+rc=${PIPESTATUS[0]}
+set -e
+[[ $rc -eq 0 ]] || tvos_fail "install failed (cmake exit $rc) — see $TVOS_LOG_DIR/install.log"
 [[ -x "$TVOS_INSTALL_APP/$TVOS_APP_NAME" ]] || tvos_fail "install did not produce $TVOS_INSTALL_APP"
 tvos_log "done: $(du -sh "$TVOS_INSTALL_APP" | cut -f1) at $TVOS_INSTALL_APP"
