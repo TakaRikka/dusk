@@ -133,6 +133,23 @@ std::vector<std::string> get_compatible_seed_hashes() {
     return seedHashes;
 }
 
+std::vector<std::string> get_presets() {
+    const std::filesystem::path presetsDir = paths::GetRandomizerPresetsPath();
+    std::filesystem::create_directories(presetsDir);
+
+    std::vector<std::string> presets;
+    for (const auto& entry : std::filesystem::directory_iterator(presetsDir)) {
+        try {
+            presets.push_back(entry.path().filename().string());
+        } catch (const std::exception&) {
+
+        }
+    }
+
+    std::ranges::sort(presets);
+    return presets;
+}
+
 // Control Helpers
 ModResult add_button(UiElementHandle pane, const char* label, const char* help_rml,
     UiPressedFn on_pressed, void* userdata = nullptr, UiElementHandle* out_handle = nullptr)
@@ -350,6 +367,144 @@ void add_number_setting(UiElementHandle pane, const char* label, const char* key
     session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
 
+// Presets
+void SaveNewRandomizerPreset(const std::string& presetName, bool overwriteExisting);
+
+void onOverwriteDialogYes(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
+    auto presetName = static_cast<const char*>(user_data);
+    session::svc_mng.ui->dialog_close(mod_ctx, dialog);
+    SaveNewRandomizerPreset(presetName, true);
+};
+
+void onOverwriteDialogNo(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
+    session::svc_mng.ui->dialog_close(mod_ctx, dialog);
+};
+
+void SaveNewRandomizerPreset(const std::string& presetName, bool overwriteExisting /*= false*/) {
+    const std::filesystem::path presetsDir = paths::GetRandomizerPresetsPath();
+    if (!exists(presetsDir))
+        std::filesystem::create_directories(presetsDir);
+
+    auto presetFilepath = paths::GetRandomizerPresetsPath() / (presetName + ".yaml");
+
+    // If the preset exists, ask the user if they want to overwrite it. If so, call this function
+    // again but force overwrite the existing preset
+    if (std::filesystem::exists(presetFilepath) && !overwriteExisting) {
+        UiDialogAction actions[] = {
+            {"No", onOverwriteDialogNo, nullptr, false},
+            {"Yes", onOverwriteDialogYes, nullptr, false},
+        };
+
+        actions[1].user_data = (void*)presetName.data();
+
+        const std::string body_rml = "A preset with the name " + presetName + " already exists. Do you wish to overwrite it?";
+        UiDialogDesc desc = UI_DIALOG_DESC_INIT;
+        desc.icon = "information";
+        desc.title = "Overwrite Existing Preset";
+        desc.body_rml = body_rml.c_str();
+        desc.actions = actions;
+        desc.action_count = 2;
+        session::svc_mng.ui->dialog_push(mod_ctx, &desc, nullptr);
+        return;
+    }
+
+    // If there was an error trying to save, let the user know
+    try {
+        GetRandomizerConfig().WriteSettingsToFile(presetFilepath);
+    } catch (std::exception& e) {
+        std::string body_rml = fmt::format("Error: {}", e.what());
+        UiToastDesc desc = UI_TOAST_DESC_INIT;
+        desc.title_rml = "Error Saving Preset";
+        desc.body_rml = body_rml.c_str();
+        desc.duration_ms = 6000;
+        session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
+        mods::log::error("Error saving preset: {}", e.what());
+        return;
+    }
+
+    std::string body_rml = fmt::format("Saved preset {}", presetName);
+    UiToastDesc desc = UI_TOAST_DESC_INIT;
+    desc.title_rml = "";
+    desc.body_rml = body_rml.c_str();
+    desc.duration_ms = 3000;
+    session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
+}
+
+void ApplyExistingRandomizerPreset(const std::filesystem::path& presetFilePath) {
+    // Don't overwrite the seed with the one from the preset
+    auto seed = GetRandomizerConfig().GetSeed();
+    try {
+        GetRandomizerConfig().LoadFromFile(presetFilePath, paths::GetRandomizerPreferencesPath(), false, true);
+        GetRandomizerConfig().SetSeed(seed);
+    } catch (std::exception& e) {
+        std::string body_rml = fmt::format("Error: {}", e.what());
+        UiToastDesc desc = UI_TOAST_DESC_INIT;
+        desc.title_rml = "Error Loading Preset";
+        desc.body_rml = body_rml.c_str();
+        desc.duration_ms = 6000;
+        desc.type = "error";
+        session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
+        mods::log::error("Error loading preset: {}", e.what());
+        return;
+    }
+
+    std::string body_rml = fmt::format("Loaded preset {}", presetFilePath.stem().generic_string());
+    UiToastDesc desc = UI_TOAST_DESC_INIT;
+    desc.title_rml = "";
+    desc.body_rml = body_rml.c_str();
+    desc.duration_ms = 3000;
+    session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
+}
+
+UiDialogHandle g_presetDialog{};
+std::string g_presetInputText{};
+
+void onPresetDialogSave(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
+    if (!g_presetInputText.empty()) {
+        SaveNewRandomizerPreset(g_presetInputText, false);
+    }
+
+    g_presetDialog = 0;
+    session::svc_mng.ui->dialog_close(mod_ctx, dialog);
+};
+
+void onPresetDialogCancel(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
+    if (g_presetDialog == dialog)
+        g_presetDialog = 0;
+};
+
+void buildPresetSaveDialog(ModContext* ctx, void* user_data) {
+    if (g_presetDialog != 0)
+        return;
+
+    UiDialogAction actions[] = {
+        {"Save", onPresetDialogSave, nullptr, false},
+        {"Cancel", onPresetDialogCancel, nullptr, false},
+    };
+
+    auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {
+        UiControlDesc input = UI_CONTROL_DESC_INIT;
+        input.kind = UI_CONTROL_STRING;
+        input.label = "";
+        input.get = [](ModContext*, void*, UiControlValue* value) {
+            value->string_value = g_presetInputText.c_str();
+        };
+        input.set = [](ModContext*, void*, const UiControlValue* value) {
+            g_presetInputText = value->string_value != nullptr ? value->string_value : "";
+        };
+        return session::svc_mng.ui->pane_add_control(mod_ctx, pane, &input, nullptr);
+    };
+
+    UiDialogDesc desc = UI_DIALOG_DESC_INIT;
+    desc.icon = "information";
+    desc.title = "Preset Name";
+    desc.body_rml = "";
+    desc.actions = actions;
+    desc.action_count = std::size(actions);
+    desc.build = buildPaneFn;
+    session::svc_mng.ui->dialog_push(mod_ctx, &desc, &g_presetDialog);
+}
+
 // Seed Management Tab
 ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
@@ -454,21 +609,37 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
             session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
         });
 
-    // TODO: need some ui service updates to properly support this. disabling for now
-    /* add_section(leftPane, "Presets");
+    add_section(leftPane, "Presets");
     add_button(leftPane,
         "Save Current Settings as Preset",
         "Save the current settings to your list of presets.",
-        [](ModContext*, void*) {
-            // TODO
-        });
+        buildPresetSaveDialog);
 
-    add_button(leftPane,
-        "Load Preset",
-        "Choose an existing preset to load from.",
-        [](ModContext*, void*) {
-            // TODO
-        }); */
+    {
+        const std::vector<std::string> presets = get_presets();
+
+        std::vector<const char*> availablePresets;
+        for (const auto& p : presets) {
+            availablePresets.push_back(p.c_str());
+        }
+
+        add_select(leftPane,
+            "Load Preset",
+            "Choose an existing preset to load from.",
+            availablePresets.data(),
+            availablePresets.size(),
+            [](ModContext*, void*, UiControlValue* out_value) {
+                out_value->int_value = 0;
+            },
+            [](ModContext*, void*, const UiControlValue* value) {
+                const std::vector<std::string> presets = get_presets();
+                if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= presets.size()) {
+                    return;
+                }
+
+                ApplyExistingRandomizerPreset(paths::GetRandomizerPresetsPath() / presets[value->int_value]);
+            });
+    }
 
     return MOD_OK;
 }
