@@ -18,6 +18,7 @@
 #include "d/d_kankyo.h"
 #include "d/d_kantera_icon_meter.h"
 #include "d/d_menu_collect.h"
+#include "d/d_menu_dmap.h"
 #include "d/d_menu_fishing.h"
 #include "d/d_menu_fmap2D.h"
 #include "d/d_menu_insect.h"
@@ -345,7 +346,7 @@ void menu_skill_screen_set_do_icon_post(ModContext*, void* args, void*, void*) {
     recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
 }
 
-// A, B, and Z buttons on the map screen
+// A, B, and Z buttons on the field map screen
 DEFINE_HOOK(&dMenu_Fmap_c::_create, MenuFMapCreate);
 void menu_fmap_create_post(ModContext*, void* args, void*, void*) {
     auto menuFMap = mods::arg<dMenu_Fmap_c*>(args, 0);
@@ -354,6 +355,16 @@ void menu_fmap_create_post(ModContext*, void* args, void*, void*) {
     recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
     recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn1'), screen);
     recolor_ui_button(get_cvars().zButtonColor, MULTI_CHAR('zbtn'), screen);
+}
+
+// A and B buttons on the dungeon map screen
+DEFINE_HOOK_SYMBOL("dMenu_DmapBg_c::buttonIconScreenInit", void(dMenu_DmapBg_c*), MenuDMapButtonIconScreenInit);
+void menu_dmap_button_icon_screen_init_post(ModContext*, void* args, void*, void*) {
+    auto menuDMap = mods::arg<dMenu_DmapBg_c*>(args, 0);
+    auto screen = menuDMap->mButtonScreen;
+
+    recolor_ui_button(get_cvars().aButtonColor, MULTI_CHAR('a_btn'), screen);
+    recolor_ui_button(get_cvars().bButtonColor, MULTI_CHAR('b_btn'), screen);
 }
 
 // A button on the howling screen
@@ -685,6 +696,8 @@ ModResult add_all_hooks() {
     ADD_POST_HOOK(OutFontCreatePane, out_font_create_pane_post, COutFont_c::createPane)
     ADD_POST_HOOK(OutFontSetDrawFont, out_font_set_draw_font_post, COutFontSet_c::drawFont)
     ADD_POST_HOOK(MenuFMapCreate, menu_fmap_create_post, dMenu_Fmap_c::_create)
+    ADD_POST_HOOK(MenuDMapButtonIconScreenInit, menu_dmap_button_icon_screen_init_post,
+        dMenu_DmapBg_c::buttonIconScreenInit)
     ADD_POST_HOOK(
         MsgObjectTalkStartInit, msg_object_talk_start_init_post, dMsgObject_c::talkStartInit)
     ADD_POST_HOOK(MeterHakushaCreate, meter_hakusha_create_post, dMeterHakusha_c::_create)
@@ -724,6 +737,7 @@ ModResult remove_all_hooks() {
     UNINSTALL_HOOK(OutFontCreatePane)
     UNINSTALL_HOOK(OutFontSetDrawFont)
     UNINSTALL_HOOK(MenuFMapCreate)
+    UNINSTALL_HOOK(MenuDMapButtonIconScreenInit)
     UNINSTALL_HOOK(MsgObjectTalkStartInit)
     UNINSTALL_HOOK(MeterHakushaCreate)
     UNINSTALL_HOOK(ItemBaseCreateItemHeap)
