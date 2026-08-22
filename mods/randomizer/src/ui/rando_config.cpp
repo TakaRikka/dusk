@@ -545,7 +545,55 @@ void buildPresetLoadDialog(ModContext* ctx, void* user_data) {
     session::svc_mng.ui->dialog_push(mod_ctx, &desc, &g_presetLoadDialog);
 }
 
+std::vector<std::string> g_seedHashes = {};
+
 // Seed Management Tab
+UiDialogHandle g_seedDeleteDialog{};
+void onSeedDeleteCancel(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
+    session::svc_mng.ui->dialog_close(ctx, dialog);
+}
+
+void onSeedDelete(ModContext* ctx, void* user_data) {
+    std::string hash = static_cast<const char*>(user_data);
+    if (randomizer_GetContext().mHash == hash) {
+        randomizer_GetContext() = RandomizerContext{};
+    }
+    std::filesystem::remove_all(paths::GetRandomizerSeedsPath() / hash);
+    session::svc_mng.ui->dialog_close(ctx, g_seedDeleteDialog);
+}
+
+void buildSeedDeleteDialog(ModContext* ctx, void* user_data) {
+    UiDialogAction actions[] = {
+        {"Cancel", onSeedDeleteCancel, nullptr, false},
+    };
+
+    auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {
+        g_seedHashes = get_compatible_seed_hashes();
+
+        for (const auto& hash : g_seedHashes) {
+            ModResult rt = add_button(pane,
+                hash.c_str(),
+                "",
+                onSeedDelete,
+                (void*)hash.c_str());
+            if (rt != MOD_OK) {
+                return rt;
+            }
+        }
+
+        return MOD_OK;
+    };
+
+    UiDialogDesc desc = UI_DIALOG_DESC_INIT;
+    desc.icon = "information";
+    desc.title = "Delete Seed";
+    desc.body_rml = "";
+    desc.actions = actions;
+    desc.action_count = std::size(actions);
+    desc.build = buildPaneFn;
+    session::svc_mng.ui->dialog_push(mod_ctx, &desc, &g_seedDeleteDialog);
+}
+
 ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
@@ -573,37 +621,10 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
             SaveRandomizerConfig();
         });
 
-    {
-        std::string help_rml = "Select a seed above to delete it.";
-
-        const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
-
-        std::vector<const char*> availableSeeds;
-        for (const auto& hash : seedHashes) {
-            availableSeeds.push_back(hash.c_str());
-        }
-
-        add_select(leftPane,
-            "Delete Seeds",
-            help_rml.c_str(),
-            availableSeeds.data(),
-            availableSeeds.size(),
-            [](ModContext*, void*, UiControlValue* out_value) {
-                out_value->int_value = 0;
-            },
-            [](ModContext*, void*, const UiControlValue* value) {
-                const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
-                if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= seedHashes.size()) {
-                    return;
-                }
-
-                const std::string& hash = seedHashes[value->int_value];
-                if (randomizer_GetContext().mHash == hash) {
-                    randomizer_GetContext() = RandomizerContext{};
-                }
-                std::filesystem::remove_all(paths::GetRandomizerSeedsPath() / hash);
-            });
-    }
+    add_button(leftPane,
+        "Delete Seed",
+        "Delete a selected seed.",
+        buildSeedDeleteDialog);
 
     add_section(leftPane, "Permalink");
     {
@@ -1287,26 +1308,25 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
 }
 
 // Play Tab
-std::vector<std::string> playTabSeedHashes = {};
 ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
-    playTabSeedHashes = get_compatible_seed_hashes();
+    g_seedHashes = get_compatible_seed_hashes();
 
     std::string help_rml = "";
-    if (playTabSeedHashes.empty()) {
+    if (g_seedHashes.empty()) {
         help_rml = "No seeds generated! You can generate a seed from the Seed Management Tab.";
     } else {
         help_rml = "Choose which seed you want to play.";
     }
 
     if (!session::g_pending_seed_hash.empty() &&
-        !std::ranges::contains(playTabSeedHashes, session::g_pending_seed_hash)) {
+        !std::ranges::contains(g_seedHashes, session::g_pending_seed_hash)) {
         session::g_pending_seed_hash.clear();
     }
 
     std::vector<const char*> availableSeeds;
-    for (const auto& hash : playTabSeedHashes) {
+    for (const auto& hash : g_seedHashes) {
         availableSeeds.push_back(hash.c_str());
     }
 
@@ -1316,21 +1336,21 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
         availableSeeds.data(),
         availableSeeds.size(),
         [](ModContext*, void*, UiControlValue* out_value) {
-            const auto selected = std::ranges::find(playTabSeedHashes, session::g_pending_seed_hash);
-            if (selected == playTabSeedHashes.end()) {
+            const auto selected = std::ranges::find(g_seedHashes, session::g_pending_seed_hash);
+            if (selected == g_seedHashes.end()) {
                 out_value->int_value = 0;
                 return;
             }
 
-            out_value->int_value = static_cast<int32_t>(std::distance(playTabSeedHashes.begin(), selected));
+            out_value->int_value = static_cast<int32_t>(std::distance(g_seedHashes.begin(), selected));
         },
         [](ModContext*, void*, const UiControlValue* value) {
-            if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= playTabSeedHashes.size()) {
+            if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= g_seedHashes.size()) {
                 session::g_pending_seed_hash.clear();
                 return;
             }
 
-            session::g_pending_seed_hash = playTabSeedHashes[value->int_value];
+            session::g_pending_seed_hash = g_seedHashes[value->int_value];
         });
 
     {
