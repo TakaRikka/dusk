@@ -75,6 +75,12 @@ if (TVOS)
   # protobuf.cmake hard-errors when cross-compiling without a host protoc, and
   # protobuf is only needed for TINT_BUILD_IR_BINARY, which we don't use.
   set(DAWN_BUILD_PROTOBUF OFF CACHE BOOL "Build the protobuf dependencies" FORCE)
+  # CMake's FindSQLite3 calls pkg_check_modules() without checking whether
+  # find_package(PkgConfig) succeeded. The preset disables PkgConfig, but
+  # FreeType's include(FindPkgConfig) defines the macro globally, so the call
+  # expands PKG_CONFIG_VERSION to nothing and fails to parse. Build the
+  # amalgamation instead, like android-base does for zstd.
+  set(CMAKE_DISABLE_FIND_PACKAGE_SQLite3 TRUE)
 endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
