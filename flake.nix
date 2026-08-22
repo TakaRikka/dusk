@@ -17,26 +17,26 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
 
-      dawnVersion = "v20260618.032059";
+      dawnVersion = "v20260807.225922";
       nodVersion = "v2.0.0-alpha.10";
       versionSuffix = "nix-" + (self.shortRev or self.dirtyShortRev or "dirty");
 
       dawnInfo = {
         "x86_64-linux" = {
           triple = "linux-x86_64";
-          hash = "sha256-GFSd573b+VQx/VmFdNQgWDd0V9ayQlcw0Zuopke12ak=";
+          hash = "sha256-deRtiZ221q6PO9zejJBwa56fCM63KEh6y2p7nM+MOYU=";
         };
         "aarch64-linux" = {
           triple = "linux-aarch64";
-          hash = "sha256-ZaoP7BAjBMnfAv2/AMRi3FNH2ZtyqASCSFyU/oB2Mzg=";
+          hash = "sha256-WUs7dDxNbQtt5x8AIDmVuFWhcZVgSyUUuRJvr5yrREo=";
         };
         "aarch64-darwin" = {
           triple = "darwin-arm64";
-          hash = "sha256-HT+qtlLaSHyoXPrUcXgcTGa877X5YfzbxRD4bJb7i1Y=";
+          hash = "sha256-pM15OoUdHZ84Y9iORsvgahE6FzvQFOtjry0nNWvIqHo=";
         };
         "x86_64-darwin" = {
           triple = "darwin-x86_64";
-          hash = "sha256-cUNaCbA7rlKSukDVKGaVEVw0Zt1+mSbaHbmUCMvMVWc=";
+          hash = "sha256-4qDs7eeEw89oEr37H5/vpjLHWaZf8216flaLmhyx5GY=";
         };
       };
 
