@@ -808,7 +808,8 @@ ModResult ui_window_close(LoadedMod& mod, uint64_t handle) {
     return MOD_OK;
 }
 
-ModResult ui_dialog_push(LoadedMod& mod, const UiDialogDesc& desc, uint64_t& outHandle) {
+ModResult ui_dialog_push(
+    LoadedMod& mod, const UiDialogDesc& desc, UiPaneBuildFn build, uint64_t& outHandle) {
     outHandle = 0;
     if (!aurora::rmlui::is_initialized()) {
         return MOD_UNAVAILABLE;
@@ -851,6 +852,16 @@ ModResult ui_dialog_push(LoadedMod& mod, const UiDialogDesc& desc, uint64_t& out
 
     auto dialog = std::make_unique<ModDialog>(
         std::move(props), [handle] { on_mod_dialog_destroyed(handle); });
+    if (build != nullptr) {
+        auto& pane = dialog->content_pane();
+        const uint64_t paneHandle = wrap_pane(mod, pane, nullptr);
+        invoke_mod_ui_callback(mod, "mod UI dialog build", [&](ModError* error) {
+            return build(mod.context.get(), paneHandle, desc.user_data, error);
+        });
+        if (!mod.active) {
+            return MOD_ERROR;
+        }
+    }
     if (auto* slot = slot_from_handle(handle)) {
         slot->document = dialog.get();
     }
@@ -1338,7 +1349,8 @@ ModResult ui_dialog_push(ModContext* context, const UiDialogDesc* desc, UiDialog
         *outDialog = 0;
     }
     auto* mod = mod_from_context(context);
-    if (mod == nullptr || desc == nullptr || desc->struct_size < sizeof(UiDialogDesc) ||
+    constexpr size_t kLegacyDescSize = offsetof(UiDialogDesc, build);
+    if (mod == nullptr || desc == nullptr || desc->struct_size < kLegacyDescSize ||
         desc->title == nullptr || desc->body_rml == nullptr || desc->actions == nullptr ||
         desc->action_count == 0 || desc->variant > UI_DIALOG_DANGER)
     {
@@ -1349,8 +1361,9 @@ ModResult ui_dialog_push(ModContext* context, const UiDialogDesc* desc, UiDialog
             return MOD_INVALID_ARGUMENT;
         }
     }
+    const UiPaneBuildFn build = desc->struct_size >= sizeof(UiDialogDesc) ? desc->build : nullptr;
     uint64_t handle = 0;
-    const auto result = ui_impl::ui_dialog_push(*mod, *desc, handle);
+    const auto result = ui_impl::ui_dialog_push(*mod, *desc, build, handle);
     if (result == MOD_OK && outDialog != nullptr) {
         *outDialog = handle;
     }

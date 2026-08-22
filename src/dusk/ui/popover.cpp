@@ -52,6 +52,10 @@ Popover::Popover(Rml::Element* anchor, Side side, const Rml::String& windowClass
         true);
 }
 
+Popover::~Popover() {
+    notify_close(false);
+}
+
 void Popover::show() {
     Document::show();
     reposition();
@@ -60,7 +64,7 @@ void Popover::show() {
 }
 
 void Popover::hide(bool close) {
-    notify_close();
+    notify_close(true);
     mBody->RemoveAttribute("open");
     mPendingClose = close;
 }
@@ -136,13 +140,13 @@ void Popover::reposition() {
     mBody->SetProperty(Rml::PropertyId::Top, Rml::Property{pos.y, Rml::Unit::PX});
 }
 
-void Popover::notify_close() {
+void Popover::notify_close(bool restoreFocus) {
     if (mOnClose) {
         auto callback = std::move(mOnClose);
         mOnClose = nullptr;
         callback();
     }
-    if (mAnchor != nullptr && mAnchor->IsVisible(true)) {
+    if (restoreFocus && mAnchor != nullptr && mAnchor->IsVisible(true)) {
         mAnchor->Focus(true);
     }
 }
