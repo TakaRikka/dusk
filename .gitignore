@@ -53,3 +53,16 @@ compile_commands.json
 pipeline_cache.bin
 
 extract
+
+# game dumps — never commit (tvOS port)
+*.iso
+*.rvz
+*.gcm
+*.wbfs
+*.wia
+*.ciso
+*.gcz
+*.z64
+*.n64
+*.v64
+build/logs/
