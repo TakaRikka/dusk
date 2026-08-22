@@ -1097,25 +1097,26 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
 }
 
 // Play Tab
+std::vector<std::string> playTabSeedHashes = {};
 ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
-    const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
+    playTabSeedHashes = get_compatible_seed_hashes();
 
     std::string help_rml = "";
-    if (seedHashes.empty()) {
+    if (playTabSeedHashes.empty()) {
         help_rml = "No seeds generated! You can generate a seed from the Seed Management Tab.";
     } else {
         help_rml = "Choose which seed you want to play.";
     }
 
     if (!session::g_pending_seed_hash.empty() &&
-        !std::ranges::contains(seedHashes, session::g_pending_seed_hash)) {
+        !std::ranges::contains(playTabSeedHashes, session::g_pending_seed_hash)) {
         session::g_pending_seed_hash.clear();
     }
 
     std::vector<const char*> availableSeeds;
-    for (const auto& hash : seedHashes) {
+    for (const auto& hash : playTabSeedHashes) {
         availableSeeds.push_back(hash.c_str());
     }
 
@@ -1125,23 +1126,21 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
         availableSeeds.data(),
         availableSeeds.size(),
         [](ModContext*, void*, UiControlValue* out_value) {
-            const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
-            const auto selected = std::ranges::find(seedHashes, session::g_pending_seed_hash);
-            if (selected == seedHashes.end()) {
+            const auto selected = std::ranges::find(playTabSeedHashes, session::g_pending_seed_hash);
+            if (selected == playTabSeedHashes.end()) {
                 out_value->int_value = 0;
                 return;
             }
 
-            out_value->int_value = static_cast<int32_t>(std::distance(seedHashes.begin(), selected));
+            out_value->int_value = static_cast<int32_t>(std::distance(playTabSeedHashes.begin(), selected));
         },
         [](ModContext*, void*, const UiControlValue* value) {
-            const std::vector<std::string> seedHashes = get_compatible_seed_hashes();
-            if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= seedHashes.size()) {
+            if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= playTabSeedHashes.size()) {
                 session::g_pending_seed_hash.clear();
                 return;
             }
 
-            session::g_pending_seed_hash = seedHashes[value->int_value];
+            session::g_pending_seed_hash = playTabSeedHashes[value->int_value];
         });
 
     {
