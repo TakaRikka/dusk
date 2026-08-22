@@ -35,22 +35,26 @@ PY
     [[ $rc -eq 0 ]] || tvos_fail "no paired tvOS device named '$TVOS_DEVICE_NAME' (set DUSK_TVOS_DEVICE=<udid> or DUSK_TVOS_DEVICE_NAME)"
 }
 
-# Prints the path of a tvOS provisioning profile for TEAM.BUNDLE, newest first; empty if none.
+# Prints the path of the newest tvOS provisioning profile for TEAM.BUNDLE; prints nothing if none.
+# `ls -t` gives newest-first and the first match returns immediately -- no `| head`, which would
+# close the pipe under the still-running loop (BrokenPipe noise from security/python3).
 tvos_profile_path() {
-    local f plist
-    for f in "$TVOS_PROFILE_DIR"/*.mobileprovision; do
+    local f plist ok
+    while IFS= read -r f; do
         [[ -f "$f" ]] || continue
         plist="$(mktemp)"
         security cms -D -i "$f" >"$plist" 2>/dev/null || { rm -f "$plist"; continue; }
-        python3 - "$f" "$plist" "$TVOS_TEAM_ID.$TVOS_BUNDLE_ID" <<'PY'
+        ok=0
+        python3 - "$plist" "$TVOS_TEAM_ID.$TVOS_BUNDLE_ID" 2>/dev/null <<'PY' || ok=$?
 import plistlib, sys
-p = plistlib.load(open(sys.argv[2], "rb"))
+p = plistlib.load(open(sys.argv[1], "rb"))
 appid = p.get("Entitlements", {}).get("application-identifier", "")
-if "tvOS" in p.get("Platform", []) and appid == sys.argv[3]:
-    print(sys.argv[1])
+sys.exit(0 if "tvOS" in p.get("Platform", []) and appid == sys.argv[2] else 1)
 PY
         rm -f "$plist"
-    done | head -n 1
+        if [[ $ok -eq 0 ]]; then printf '%s\n' "$f"; return 0; fi
+    done < <(ls -t "$TVOS_PROFILE_DIR"/*.mobileprovision 2>/dev/null)
+    return 0
 }
 
 # Prints the SHA-1 of the Apple Development identity for the team (OU match).
