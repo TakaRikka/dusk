@@ -1688,7 +1688,9 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
         for (i = 0; i < num; i++) {
 #ifdef TARGET_PC
             // If, for whatever reason, we want to patch the point ID, we need to do it here.
-            dusk::mods::svc::stage_apply_actor_edits(player_data, nullptr, sizeof(*player_data), i_stage->getRoomNo());
+            if (!dusk::mods::svc::stage_apply_actor_edits(player_data, nullptr, sizeof(*player_data), i_stage->getRoomNo())) {
+                continue; // If the spawn is deleted, check the next one
+            }
 #endif
             if ((u8)player_data->base.angle.z == unk) {
                 break;
@@ -1711,7 +1713,8 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
                 const stage_actor_data_class* i_record =  static_cast<const stage_actor_data_class*>(record);
                 auto* params = static_cast<newActors_userData*>(user);
                 
-                if (i_record->base.angle.z == params->pointNo && strncmp(i_record->name,"Link",7) == 0) {
+                // We don't cast i_record->base.angle.z to a u8 here so we can register any spawn point within the s16 range
+                if (i_record->base.angle.z == params->pointNo && size == sizeof(stage_actor_data_class) && strncmp(i_record->name,"Link",7) == 0) {
                     std::memcpy(params->out_point, i_record, size);
                     params->out_pointSet = true;
                 }
