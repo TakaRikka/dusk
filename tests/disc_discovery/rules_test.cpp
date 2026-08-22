@@ -39,6 +39,30 @@ int main() {
     CHECK(out[2].path == fs::path{"/data/a.iso"} && out[2].origin == "data");
     CHECK(out[3].path == fs::path{"/data/discs/b.rvz"} && out[3].origin == "data");
 
+    // dedupe is first-occurrence-wins, not best-rank-wins: the same path appears first with
+    // origin "data" and again later with origin "bundle" (a better rank); the survivor must
+    // keep the first occurrence's origin and therefore sort in the "data" group.
+    std::vector<Candidate> dup_different_origin{
+        {fs::path{"/dup/tp.iso"}, "data"},
+        {fs::path{"/dup/tp.iso"}, "bundle"},
+    };
+    auto dup_out = select_candidates(dup_different_origin);
+    CHECK(dup_out.size() == 1);
+    CHECK(dup_out[0].path == fs::path{"/dup/tp.iso"} && dup_out[0].origin == "data");
+
+    // origins other than "bundle"/"data" fall into the lowest-priority "other" tier and sort
+    // after both known origins.
+    std::vector<Candidate> other_origin{
+        {fs::path{"/app/disc/a.iso"}, "bundle"},
+        {fs::path{"/data/a.iso"}, "data"},
+        {fs::path{"/misc/other.iso"}, "other"},
+    };
+    auto other_out = select_candidates(other_origin);
+    CHECK(other_out.size() == 3);
+    CHECK(other_out[0].path == fs::path{"/app/disc/a.iso"} && other_out[0].origin == "bundle");
+    CHECK(other_out[1].path == fs::path{"/data/a.iso"} && other_out[1].origin == "data");
+    CHECK(other_out[2].path == fs::path{"/misc/other.iso"} && other_out[2].origin == "other");
+
     std::puts("rules_test OK");
     return 0;
 }
