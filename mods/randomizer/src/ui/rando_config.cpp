@@ -456,7 +456,8 @@ void ApplyExistingRandomizerPreset(const std::filesystem::path& presetFilePath) 
     session::svc_mng.ui->push_toast(session::svc_mng.mod_ctx, &desc);
 }
 
-UiDialogHandle g_presetDialog{};
+UiDialogHandle g_presetSaveDialog{};
+UiDialogHandle g_presetLoadDialog{};
 std::string g_presetInputText{};
 
 void onPresetDialogSave(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
@@ -464,19 +465,15 @@ void onPresetDialogSave(ModContext* ctx, UiDialogHandle dialog, void* user_data)
         SaveNewRandomizerPreset(g_presetInputText, false);
     }
 
-    g_presetDialog = 0;
+    g_presetSaveDialog = 0;
     session::svc_mng.ui->dialog_close(mod_ctx, dialog);
 };
 
 void onPresetDialogCancel(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
-    if (g_presetDialog == dialog)
-        g_presetDialog = 0;
+    session::svc_mng.ui->dialog_close(mod_ctx, dialog);
 };
 
 void buildPresetSaveDialog(ModContext* ctx, void* user_data) {
-    if (g_presetDialog != 0)
-        return;
-
     UiDialogAction actions[] = {
         {"Save", onPresetDialogSave, nullptr, false},
         {"Cancel", onPresetDialogCancel, nullptr, false},
@@ -502,7 +499,50 @@ void buildPresetSaveDialog(ModContext* ctx, void* user_data) {
     desc.actions = actions;
     desc.action_count = std::size(actions);
     desc.build = buildPaneFn;
-    session::svc_mng.ui->dialog_push(mod_ctx, &desc, &g_presetDialog);
+    session::svc_mng.ui->dialog_push(mod_ctx, &desc, &g_presetSaveDialog);
+}
+
+void onPresetDialogLoadCancel(ModContext* ctx, UiDialogHandle dialog, void* user_data) {
+    session::svc_mng.ui->dialog_close(ctx, dialog);
+}
+
+void onPresetLoad(ModContext* ctx, void* user_data) {
+    auto preset = static_cast<const char*>(user_data);
+    ApplyExistingRandomizerPreset(paths::GetRandomizerPresetsPath() / preset);
+    session::svc_mng.ui->dialog_close(ctx, g_presetLoadDialog);
+}
+
+std::vector<std::string> presetList{};
+void buildPresetLoadDialog(ModContext* ctx, void* user_data) {
+    UiDialogAction actions[] = {
+        {"Cancel", onPresetDialogLoadCancel, nullptr, false},
+    };
+
+    auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {
+        presetList = get_presets();
+
+        for (const auto& preset : presetList) {
+            ModResult rt = add_button(pane,
+                preset.c_str(),
+                "",
+                onPresetLoad,
+                (void*)preset.c_str());
+            if (rt != MOD_OK) {
+                return rt;
+            }
+        }
+
+        return MOD_OK;
+    };
+
+    UiDialogDesc desc = UI_DIALOG_DESC_INIT;
+    desc.icon = "information";
+    desc.title = "Load Preset";
+    desc.body_rml = "";
+    desc.actions = actions;
+    desc.action_count = std::size(actions);
+    desc.build = buildPaneFn;
+    session::svc_mng.ui->dialog_push(mod_ctx, &desc, &g_presetLoadDialog);
 }
 
 // Seed Management Tab
@@ -615,31 +655,10 @@ ModResult buildSeedManagementTab(ModContext* ctx, UiWindowHandle, UiElementHandl
         "Save the current settings to your list of presets.",
         buildPresetSaveDialog);
 
-    {
-        const std::vector<std::string> presets = get_presets();
-
-        std::vector<const char*> availablePresets;
-        for (const auto& p : presets) {
-            availablePresets.push_back(p.c_str());
-        }
-
-        add_select(leftPane,
-            "Load Preset",
-            "Choose an existing preset to load from.",
-            availablePresets.data(),
-            availablePresets.size(),
-            [](ModContext*, void*, UiControlValue* out_value) {
-                out_value->int_value = 0;
-            },
-            [](ModContext*, void*, const UiControlValue* value) {
-                const std::vector<std::string> presets = get_presets();
-                if (value->int_value < 0 || static_cast<size_t>(value->int_value) >= presets.size()) {
-                    return;
-                }
-
-                ApplyExistingRandomizerPreset(paths::GetRandomizerPresetsPath() / presets[value->int_value]);
-            });
-    }
+    add_button(leftPane,
+        "Load Preset",
+        "Choose an existing preset to load from.",
+        buildPresetLoadDialog);
 
     return MOD_OK;
 }
