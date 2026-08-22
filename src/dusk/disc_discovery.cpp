@@ -33,10 +33,15 @@ bool needed() noexcept {
 }
 
 std::vector<Candidate> scan() {
-    std::vector<Candidate> found;
-    collect(data::base_path_relative("disc"), "bundle", found);
+    const std::filesystem::path bundlePath = data::base_path_relative("disc");
     const std::filesystem::path dataPath = data::configured_data_path();
-    collect(dataPath / "discs", "data", found);
+    const std::filesystem::path dataDiscsPath = dataPath / "discs";
+    DiscoveryLog.info("disc discovery: scanning bundle '{}', data '{}', data/discs '{}'",
+        bundlePath.string(), dataPath.string(), dataDiscsPath.string());
+
+    std::vector<Candidate> found;
+    collect(bundlePath, "bundle", found);
+    collect(dataDiscsPath, "data", found);
     collect(dataPath, "data", found);
     auto selected = select_candidates(std::move(found));
     DiscoveryLog.info("disc discovery: {} candidate(s)", selected.size());
