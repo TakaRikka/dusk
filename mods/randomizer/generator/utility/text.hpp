@@ -60,8 +60,8 @@ namespace randomizer {
             PLURALITY_MAX,
         };
 
-        static constexpr size_t MAX_LINE_WIDTH_ITEM_TEXTBOX = 441;
-        static constexpr size_t MAX_LINE_WIDTH_NORMAL_TEXTBOX = 750;
+        static constexpr float MAX_LINE_WIDTH_ITEM_TEXTBOX = 14.0f;
+        static constexpr float MAX_LINE_WIDTH_NORMAL_TEXTBOX = 17.0f;
         static constexpr size_t MAX_NEWLINES_PER_MESSAGE = 40;
         static constexpr size_t LINES_PER_BOX = 4;
 
@@ -80,7 +80,7 @@ namespace randomizer {
          */
         void Replace(const std::string& oldText, const Text& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
         void Replace(const std::string& oldText, const std::string& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
-        void BreakLines(int maxLineWidth = MAX_LINE_WIDTH_NORMAL_TEXTBOX);
+        void BreakLines(float maxLineWidth = MAX_LINE_WIDTH_NORMAL_TEXTBOX);
 
         // Inserts newlines to pad the text to the next box
         void PadToNextBox();
@@ -126,7 +126,7 @@ namespace randomizer {
     Text addColor(const Text& t, Text::Color color, int count = 1);
 
     // Adds newlines in appropriate places to properly break the text string for textboxes
-    void breakLines(std::string& str, int maxLineWidth);
+    void breakLines(std::string& str, float maxStrLength);
 
     // Replaces the message codes in the string with the ingame hex equivalents
     void applyMessageCodes(std::string&);

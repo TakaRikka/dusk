@@ -60,7 +60,7 @@ namespace randomizer {
         }
     }
 
-    void Text::BreakLines(int maxLineWidth /*= MAX_LINE_WIDTH_ITEM_TEXTBOX*/) {
+    void Text::BreakLines(float maxLineWidth /*= MAX_LINE_WIDTH_ITEM_TEXTBOX*/) {
         for (auto& text : mText) {
             breakLines(text, maxLineWidth);
         }
@@ -441,21 +441,21 @@ namespace randomizer {
         {"<silver>",         "\x1A\x06\xFF\x00\x00\x0B"sv},
     };
 
-    void breakLines(std::string& str, int maxLineWidth) {
+    void breakLines(std::string& str, float maxStrLength) {
 
         // Randomizer Only shouldn't rely on needing access to the iso
 #ifndef RANDOMIZER_ONLY
         // Get game's font
         auto gameFont = mDoExt_getMesgFont();
 #endif
-        int curLineWidth = 0;
+        float curLineWidth = 0.f;
         size_t i = 0;
         size_t previousSpace = 0;
         while (i < str.length()) {
 
             // Skip over control codes since they don't get displayed
             std::string code{};
-            for (const auto& [messageCode, replacement] : messageCodes) {
+            for (const auto& messageCode : messageCodes | std::views::keys) {
                 if (str.substr(i, messageCode.length()) == messageCode) {
                     code = messageCode;
                     break;
@@ -464,9 +464,8 @@ namespace randomizer {
 
             if (!code.empty()) {
                 // Assume worst case for player name width.
-                // 8 chars max * max char width
                 if (code == "<player name>") {
-                    curLineWidth += 8 * 21;
+                    curLineWidth += 8.f;
                 }
                 i += code.length();
                 continue;
@@ -479,27 +478,26 @@ namespace randomizer {
             }
             // If we encounter an already inserted newline, reset the counter
             else if (str[i] == '\n') {
-                curLineWidth = 0;
+                curLineWidth = 0.f;
                 ++i;
                 continue;
             }
 
 
 #ifndef RANDOMIZER_ONLY
-            JUTFont::TWidth width{};
-            gameFont->getWidthEntry(str[i], &width);
-            curLineWidth += /*width.field_0x0 + */width.field_0x1;
+            auto width = gameFont->getWidth(str[i]);
+            curLineWidth += width / static_cast<float>(gameFont->getCellWidth());
 #else
             // Assume worst case with no iso access
-            curLineWidth += 21;
+            curLineWidth += 1;
 #endif
             // If we exceed the maximum line width, replace the
             // previous space with a newline and start counting
             // from the newline again
-            if (curLineWidth > maxLineWidth) {
+            if (curLineWidth > maxStrLength) {
                 str[previousSpace] = '\n';
                 i = previousSpace;
-                curLineWidth = 0;
+                curLineWidth = 0.f;
             }
 
             ++i;
