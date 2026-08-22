@@ -70,6 +70,12 @@ endif ()
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
   set(DAWN_USE_WAYLAND ON CACHE BOOL "Enable support for Wayland surface" FORCE)
 endif ()
+if (TVOS)
+  # No prebuilt Dawn package for tvOS, so it is built from source. Dawn's
+  # protobuf.cmake hard-errors when cross-compiling without a host protoc, and
+  # protobuf is only needed for TINT_BUILD_IR_BINARY, which we don't use.
+  set(DAWN_BUILD_PROTOBUF OFF CACHE BOOL "Build the protobuf dependencies" FORCE)
+endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
 set(AURORA_ENABLE_RMLUI ON CACHE BOOL "Enable RmlUi UI support" FORCE)
