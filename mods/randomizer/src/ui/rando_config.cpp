@@ -152,13 +152,14 @@ std::vector<std::string> get_presets() {
 
 // Control Helpers
 ModResult add_button(UiElementHandle pane, const char* label, const char* help_rml,
-    UiPressedFn on_pressed, void* userdata = nullptr, UiElementHandle* out_handle = nullptr)
+    UiPressedFn on_pressed, UiPredicateFn is_disabled = nullptr, void* userdata = nullptr, UiElementHandle* out_handle = nullptr)
 {
     UiControlDesc desc = UI_CONTROL_DESC_INIT;
     desc.kind = UI_CONTROL_BUTTON;
     desc.label = label;
     desc.help_rml = help_rml;
     desc.on_pressed = on_pressed;
+    desc.is_disabled = is_disabled;
     desc.user_data = userdata;
     return session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, pane, &desc, out_handle);
 }
@@ -526,6 +527,7 @@ void buildPresetLoadDialog(ModContext* ctx, void* user_data) {
                 preset.c_str(),
                 "",
                 onPresetLoad,
+                nullptr,
                 (void*)preset.c_str());
             if (rt != MOD_OK) {
                 return rt;
@@ -562,6 +564,17 @@ void onSeedDelete(ModContext* ctx, void* user_data) {
     session::svc_mng.ui->dialog_close(ctx, g_seedDeleteDialog);
 }
 
+bool isSeedDeleteDisabled(ModContext* ctx, void* user_data) {
+    std::string_view seedHash = static_cast<const char*>(user_data);
+
+    // Seed hashes in this dialog have the file they're being used on appended to the end
+    if (seedHash.contains("(File")) {
+        return true;
+    }
+
+    return false;
+}
+
 void buildSeedDeleteDialog(ModContext* ctx, void* user_data) {
     UiDialogAction actions[] = {
         {"Cancel", onSeedDeleteCancel, nullptr, false},
@@ -570,12 +583,33 @@ void buildSeedDeleteDialog(ModContext* ctx, void* user_data) {
     auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {
         g_seedHashes = get_compatible_seed_hashes();
 
-        for (const auto& hash : g_seedHashes) {
+        // Get hashes of seeds which are actively being used
+        std::array<std::string, 3> fileHashes{"", "", ""};
+        for (size_t fileNum = 0; fileNum < 3; ++fileNum) {
+            char hash[64];
+            size_t size = sizeof(hash) - 1;
+            ModResult rt = session::svc_mng.save->peek_blob(ctx, fileNum, "seed_hash", hash, &size);
+            if (rt == MOD_OK && size > 0) {
+                fileHashes[fileNum] = std::string(hash, size);
+            }
+        }
+
+        for (auto& seedHash : g_seedHashes) {
+            // Append the file a seed is being used on to the hash in this dialog
+            auto originalHash = seedHash;
+            for (size_t fileNum = 0; fileNum < 3; ++fileNum) {
+                auto& fileHash = fileHashes[fileNum];
+                if (originalHash == fileHash) {
+                    seedHash += " (File " + std::to_string(fileNum + 1) + ')';
+                }
+            }
+
             ModResult rt = add_button(pane,
-                hash.c_str(),
+                seedHash.c_str(),
                 "",
                 onSeedDelete,
-                (void*)hash.c_str());
+                isSeedDeleteDisabled,
+                (void*)seedHash.c_str());
             if (rt != MOD_OK) {
                 return rt;
             }
@@ -1245,6 +1279,7 @@ ModResult buildExcludedLocationsTab(ModContext* ctx, UiWindowHandle, UiElementHa
 
                 SaveRandomizerConfig();
             },
+            nullptr,
             (void*)e->data(),
             &handle);
         svc_mng.ui->elem_set_class(mod_ctx, handle, "excluded-location-button", true);
