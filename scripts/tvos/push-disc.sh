@@ -3,10 +3,12 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
-# Data dir = SDL pref path = Library/Caches/<org>/<app>/ ; discs/ underneath it is scanned by disc discovery.
-# ASSUMPTION (org "Twilit Realm", app "Dusklight") — NOT yet confirmed on-device. Check the data path
-# printed in the launch console output (scripts/tvos/launch.sh --console) and fix this one line if it differs.
-TVOS_DATA_SUBDIR="Library/Caches/Twilit Realm/Dusklight"
+# Data dir = SDL pref path = Library/Caches/<orgName>/<appName>/ ; discs/ underneath it is scanned
+# by disc discovery. orgName/appName come from dusk::AppInfo (src/dusk/app_info.hpp) and are passed
+# straight to SDL_GetPrefPath by borealis (extern/borealis/src/data.cpp), which on tvOS formats
+# "<NSCachesDirectory>/<org>/<app>/". Derived, not yet confirmed on-device: check the data path in
+# the launch console output (scripts/tvos/launch.sh --console) and fix this one line if it differs.
+TVOS_DATA_SUBDIR="Library/Caches/TwilitRealm/Dusklight"
 
 disc="${1:?usage: push-disc.sh <disc image>}"
 [[ -f "$disc" ]] || tvos_fail "not found: $disc"
