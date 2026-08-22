@@ -1,17 +1,34 @@
 # Dusklight on Apple TV (tvOS) — personal fork notes
 
-Status: 2026-08-22 — configures and builds via the `tvos-default` CMake preset; an unsigned
-`Dusklight.app` is produced under `build/install/`. Signing, install, and the first on-device
-launch are scripted (`sign.sh`, `install.sh`, `launch.sh`) but **not yet run against the device**:
-the paired Apple TV ("<YOUR_DEVICE_NAME>", confirmed via `xcrun devicectl list devices` as an
-Apple TV 4K (3rd generation) / `AppleTV14,1`) is currently asleep/unavailable, and no tvOS
-provisioning profile exists yet (Task 5, `scripts/tvos/provision.sh`, not written yet). Not
-upstreamed.
+Status: 2026-08-23 — configures and builds via the `tvos-default` CMake preset; an unsigned
+`Dusklight.app` is produced under `build/install/`. Provisioning, signing, install, and the first
+on-device launch are all scripted (`provision.sh`, `sign.sh`, `install.sh`, `launch.sh`) but
+**not yet run against the device**: the paired Apple TV ("<YOUR_DEVICE_NAME>", confirmed via
+`xcrun devicectl list devices` as an Apple TV 4K (3rd generation) / `AppleTV14,1`) is asleep —
+`connectionProperties.tunnelState` reads `unavailable` — so no tvOS provisioning profile exists
+yet. Not upstreamed.
 
 ## One-time setup
-1. `scripts/tvos/setup.sh` — CMake/Ninja/Python/Xcode tvOS SDK checks, Rust nightly + `aarch64-apple-tvos`.
-2. Pair the Apple TV with Xcode (Settings ▸ Remotes and Devices ▸ Remote App and Devices), keep it awake.
-3. `scripts/tvos/provision.sh` — creates the tvOS development profile for `dev.twilitrealm.dusk` (team <YOUR_TEAM_ID>) and registers the device. Requires the Apple ID of that team in Xcode ▸ Settings ▸ Accounts.
+1. `scripts/tvos/setup.sh` — CMake/Ninja/Python/Xcode tvOS SDK checks, Rust nightly +
+   `aarch64-apple-tvos`. It also warns (without downloading anything) when the tvOS *platform*
+   component matching the SDK version is missing.
+2. `xcodebuild -downloadPlatform tvOS` — **required for `provision.sh`**. Having the tvOS SDK is
+   not enough: device-targeted `xcodebuild` resolves `-destination` against the installed platform
+   and otherwise refuses with *"tvOS 26.5 is not installed. Please download and install the
+   platform from Xcode ▸ Settings ▸ Components"*. Run on this Mac on **2026-08-23** (3.76 GB
+   download; `xcrun simctl runtime list` now shows `tvOS 26.5 (23L470)`).
+3. Pair the Apple TV with Xcode (Settings ▸ Remotes and Devices ▸ Remote App and Devices), keep it awake.
+4. `scripts/tvos/provision.sh` — creates the tvOS development profile for `dev.twilitrealm.dusk` (team
+   <YOUR_TEAM_ID>) and registers the device. Requires the Apple ID of that team in Xcode ▸ Settings ▸
+   Accounts. The seed project is generated with `-DCMAKE_XCODE_GENERATE_SCHEME=ON` and built with
+   `-scheme` rather than `-target`: xcodebuild silently ignores `-destination` when only a target is
+   given ("Ignoring provided run destination because no scheme was passed"), which would leave
+   `-allowProvisioningDeviceRegistration` with no device to register.
+
+Every device-facing script (`provision.sh`, `install.sh`, `launch.sh`, `pull-saves.sh`,
+`push-saves.sh`, `push-disc.sh`) first calls `tvos_require_device_reachable` and stops with
+`Apple TV '<name>' is not reachable (tunnelState=<value>) — wake it with the remote and make sure
+it is on the same network` when the Apple TV has no devicectl tunnel.
 
 ## Build, sign, install, launch
 - `scripts/tvos/build.sh [--disc <path>] [--no-disc] [--no-mods] [--configure-only]` — configures
@@ -20,18 +37,25 @@ upstreamed.
   `build/install/Dusklight.app`. Exports `TVOS_DEPLOYMENT_TARGET=14.5` for the build — without it,
   the Rust `cc` crate stamps libnod's C objects with the wrong SDK version and the link step warns.
   - Disc selection when neither `--disc` nor `--no-disc` is given: the script looks for disc images
-    (`.iso .rvz .gcm .wbfs .wia .ciso .gcz`) in the directory that contains the fork. Exactly one
+    (`.iso .gcm .ciso .gcz .nfs .rvz .wbfs .wia .tgc` — the same set as `kDiscExtensions` in
+    `src/dusk/disc_discovery_rules.hpp`) in the directory that contains the fork. Exactly one
     match is bundled as-is; with several candidates and exactly one `.rvz` among them, the `.rvz` is
     preferred (smallest install) even if e.g. an `.iso` sits alongside it; any other combination is a
     hard error asking for an explicit `--disc <path>` or `--no-disc`.
   - `--no-mods` passes `-DDUSK_ENABLE_CODE_MODS=OFF`, for when the in-tree mods fail to build.
-- `scripts/tvos/sign.sh [app-path]` — embeds the Task 5 provisioning profile as
+- `scripts/tvos/sign.sh [app-path]` — embeds the profile created by `provision.sh` as
   `embedded.mobileprovision`, derives entitlements from it, and code-signs nested code (mods under
   `Frameworks/*.so`, `*.dylib`, `*.framework`) before signing the app bundle itself.
-- `scripts/tvos/install.sh [app]` — `xcrun devicectl device install app` to the paired device; fails
-  fast if the app has no `embedded.mobileprovision` (i.e. `sign.sh` hasn't run yet).
-- `scripts/tvos/launch.sh [--console]` — `xcrun devicectl device process launch --terminate-existing`
-  for `dev.twilitrealm.dusk`; `--console` attaches and streams stdout/stderr until Ctrl-C.
+- `scripts/tvos/install.sh [app]` — `xcrun devicectl device install app` to the paired device.
+  It checks device reachability *before* the local `embedded.mobileprovision` check: a sleeping
+  Apple TV needs a walk to the living room, while "is not signed" is fixed by rerunning `sign.sh`
+  at the keyboard, so the slow fix surfaces first and both can proceed in parallel.
+- `scripts/tvos/launch.sh [--console | --console-seconds N]` —
+  `xcrun devicectl device process launch --terminate-existing` for `dev.twilitrealm.dusk`.
+  `--console` attaches and streams stdout/stderr until Ctrl-C. `--console-seconds N` streams for N
+  seconds and then detaches (the app keeps running on the device), recording the stream to
+  `build/logs/launch-console.log`. It exists because this Mac has neither `timeout(1)` nor
+  `gtimeout(1)`, so `timeout 60 scripts/tvos/launch.sh --console` is not available.
 
 ## How the disc is found
 No file dialog on tvOS. `src/dusk/disc_discovery*` scans `Dusklight.app/disc/` then
@@ -46,14 +70,39 @@ container with `scripts/tvos/pull-saves.sh [dest dir]` (default destination:
 `scripts/tvos/push-saves.sh <backup dir>`. Both treat `Library/Caches` as one tree — config,
 save/card files, and any cached disc data all move together.
 
-`push-disc.sh`'s destination (`Library/Caches/Twilit Realm/Dusklight/discs/<file>`) assumes the
-SDL pref path uses org name `"Twilit Realm"` and app name `"Dusklight"` — **this is an assumption,
-not yet confirmed on-device**. It is isolated to one variable, `TVOS_DATA_SUBDIR`, near the top of
-the script; once the real data path is known (it is printed in the `launch.sh --console` output),
-fixing that one line is enough.
+`push-disc.sh`'s destination is `Library/Caches/TwilitRealm/Dusklight/discs/<file>`, derived (not
+guessed) from the source: `dusk::AppInfo` sets `orgName = "TwilitRealm"` / `appName = "Dusklight"`
+(`src/dusk/app_info.hpp`), borealis passes both straight to `SDL_GetPrefPath`
+(`extern/borealis/src/data.cpp`), and SDL's tvOS implementation formats
+`"<NSCachesDirectory>/<org>/<app>/"`. On tvOS the data path is the preference path: borealis' only
+other default (`useDocumentsOnIOS`) is gated on `isIOS`, which is `TARGET_OS_IOS && !TARGET_OS_TV`.
+Still **to be confirmed on-device** — the real path is printed by disc discovery in the
+`launch.sh --console` output. It is isolated to one variable, `TVOS_DATA_SUBDIR`, near the top of
+the script, so fixing that one line is enough if it differs.
+
+## App icon and top shelf
+`platforms/tvos/Info.plist.in` declares `CFBundleIcons ▸ CFBundlePrimaryIcon = "App Icon"` and
+`TVTopShelfImage`, so the bundle needs a compiled asset catalog or tvOS has nothing to draw.
+`platforms/tvos/Assets.xcassets` holds **placeholder** solid-colour art (App Icon 400×240 / 800×480
+as a two-layer parallax stack — actool rejects a single layer with *"The image stack 'App Icon'
+must have at least 2 layers"* — plus Top Shelf Image 1920×720 and Top Shelf Image Wide 2320×720,
+each with a @2x variant). `platforms/tvos/Assets.car` is the compiled result, picked up by the
+`file(GLOB_RECURSE DUSK_RESOURCE_FILES ...)` in `CMakeLists.txt`. Regenerate after editing the
+catalog:
+
+```sh
+xcrun actool platforms/tvos/Assets.xcassets --compile platforms/tvos \
+    --platform appletvos --minimum-deployment-target 14.5 --target-device tv \
+    --app-icon "App Icon" --output-partial-info-plist /tmp/tvos-assets-partial.plist
+```
+
+The partial plist is only a cross-check that the generated keys match `Info.plist.in`; it is not
+consumed by the build.
 
 ## Observed on device
-Observed on device: pending — to be filled after the first device session (not yet run as of 2026-08-22).
+Observed on device: pending — to be filled after the first device session (not yet run as of
+2026-08-23; the Apple TV has been asleep throughout, and nothing has been installed or launched
+on it).
 
 ## Fixes needed on top of upstream 41d5148
 Two configure-time fixes were needed to get the tvOS cross-compile working at all, both already
