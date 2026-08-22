@@ -92,6 +92,7 @@ public:
     u8 mOriginalItemNo;
     bool mItemOverridden;
     bool mOverrideHover;
+    bool mGoldenWolfItem;
 #endif
 };
 

@@ -70,6 +70,19 @@ std::optional<DerivedKey> parse_derived(const char* name, std::string_view prefi
     return DerivedKey{stage_id, static_cast<u16>((stage_id << 8) | (n & 0xFF))};
 }
 
+std::optional<u16> parse_flag_check(const char* name, std::string_view prefix) {
+    if (std::strncmp(name, prefix.data(), prefix.size()) != 0) {
+        return std::nullopt;
+    }
+    const char* value = name + prefix.size();
+    char* end = nullptr;
+    const unsigned long flag = std::strtoul(value, &end, 10);
+    if (value == end || *end != '\0' || flag > 0xFFFF) {
+        return std::nullopt;
+    }
+    return static_cast<u16>(flag);
+}
+
 template <typename Map>
 bool lookup_override(const Map& map, u16 key, uint8_t* out_item, bool progressive) {
     const auto it = map.find(key);
@@ -101,6 +114,9 @@ bool resolve_check(ModContext*, const ItemCheckInfo* info, uint8_t* out_item, vo
             return false;
         }
         return lookup_override(ctx.mFreestandingItemOverrides, key->key, out_item, true);
+    }
+    if (auto flag = parse_flag_check(info->name, ITEM_CHECK_GOLDEN_WOLF_PREFIX)) {
+        return lookup_override(ctx.mGoldenWolfOverrides, *flag, out_item, true);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_POE_PREFIX)) {
         return lookup_override(ctx.mPoeOverrides, key->key, out_item, true);

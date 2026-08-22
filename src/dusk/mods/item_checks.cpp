@@ -143,6 +143,10 @@ std::string freestanding_check_name(uint8_t bitNo) {
     return fmt::format("freestanding:{}:{}", current_stage_name(), bitNo);
 }
 
+std::string golden_wolf_check_name(uint16_t eventFlag) {
+    return fmt::format("golden_wolf:{}", eventFlag);
+}
+
 std::string poe_check_name(uint8_t bitNo) {
     return fmt::format("poe:{}:{}", current_stage_name(), bitNo);
 }
@@ -274,6 +278,14 @@ uint8_t item_check_freestanding(uint8_t bitNo, uint8_t itemNo, fopAc_ac_c* item)
     return item_check(name.c_str(), itemNo, item);
 }
 
+uint8_t item_check_golden_wolf(uint16_t eventFlag, uint8_t itemNo, fopAc_ac_c* item) {
+    if (s_modChecks.empty()) {
+        return itemNo;
+    }
+    const auto name = golden_wolf_check_name(eventFlag);
+    return item_check(name.c_str(), itemNo, item);
+}
+
 uint8_t item_check_shop(uint8_t itemNo, fopAc_ac_c* giver) {
     if (s_modChecks.empty()) {
         return itemNo;
@@ -312,6 +324,10 @@ uint32_t item_give_tag_boss() {
 
 uint32_t item_give_tag_freestanding(uint8_t bitNo) {
     return item_give_tag(freestanding_check_name(bitNo).c_str());
+}
+
+uint32_t item_give_tag_golden_wolf(uint16_t eventFlag) {
+    return item_give_tag(golden_wolf_check_name(eventFlag).c_str());
 }
 
 uint32_t item_give_tag_poe(uint8_t bitNo) {

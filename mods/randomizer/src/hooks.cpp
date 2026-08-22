@@ -11,6 +11,7 @@
 
 #include <mods/svc/hook.hpp>
 #include <mods/svc/log.hpp>
+#include <mods/items.h>
 
 #include "c/c_damagereaction.h"
 #include "d/actor/d_a_alink.h"
@@ -2812,17 +2813,33 @@ HookAction hookPreObjLifeCreate(ModContext*, void* args, void* retval, void*) {
             auto goldenWolfFlags = getCurrentGoldenWolfFlags(roomNo);
             // Don't spawn this item if we haven't howled at the howling stone, or if we've already
             // obtained the item
-            if ((goldenWolfFlags.howledAtStoneFlag != 0xFFFF && !dComIfGs_isEventBit(goldenWolfFlags.howledAtStoneFlag)) ||
-                dComIfGs_isEventBit(goldenWolfFlags.obtainedItemFlag))
+            if (goldenWolfFlags.obtainedItemFlag == 0xFFFF ||
+                (goldenWolfFlags.howledAtStoneFlag != 0xFFFF &&
+                    !dComIfGs_isEventBit(goldenWolfFlags.howledAtStoneFlag)) ||
+                dComIfGs_isEventBit(goldenWolfFlags.obtainedItemFlag) ||
+                !randomizer_GetContext().mGoldenWolfOverrides.contains(
+                    goldenWolfFlags.obtainedItemFlag))
             {
                 *static_cast<int*>(retval) = cPhs_ERROR_e;
                 return HOOK_SKIP_ORIGINAL;
             }
 
-            // Store the map marker flag and obtained item flags to turn off/on later if
-            // the player collects the item
+            // The actor moves these placement angles into field_0x938/field_0x93a during create.
             i_this->home.angle.z = goldenWolfFlags.mapMarkerFlag;
             i_this->home.angle.x = static_cast<s16>(goldenWolfFlags.obtainedItemFlag);
+
+            i_this->mItemGiveOriginalNo = itemId;
+            i_this->mGoldenWolfItem = true;
+            const std::string checkName =
+                std::string{ITEM_CHECK_GOLDEN_WOLF_PREFIX} +
+                std::to_string(goldenWolfFlags.obtainedItemFlag);
+            if (session::svc_mng.item->resolve_check(session::svc_mng.mod_ctx, checkName.c_str(),
+                    itemId, &itemId) != MOD_OK)
+            {
+                *static_cast<int*>(retval) = cPhs_ERROR_e;
+                return HOOK_SKIP_ORIGINAL;
+            }
+            fopAcM_SetParam(i_this, (params & 0xFFFFFF00) | itemId);
         }
 
         // Also adjust the height of the object depending on the item
@@ -2913,18 +2930,23 @@ HookAction hookPreObjLifeCreate(ModContext*, void* args, void* retval, void*) {
     return HOOK_CONTINUE;
 }
 
-void hookPostObjLifeActionGetDemo(ModContext*, void* args, void*, void*) {
+HookAction hookPreObjLifeActionGetDemo(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<daObjLife_c*>(args, 0);
 
-    // In randomizer, turn off the map marker flag for this golden wolf replacement item
-    // if we're collecting it. We store the map marker flag in unused home.angle.z
-    // Also set the flag for having collected this golden wolf item, stored in home.angle.x
-    if (static_cast<u16>(i_this->home.angle.z) != 0xFFFF) {
-        dComIfGs_offSwitch(static_cast<u16>(i_this->home.angle.z), fopAcM_GetRoomNo(i_this));
+    if (!i_this->mGoldenWolfItem || !dComIfGp_evmng_endCheck("DEFAULT_GETITEM"))
+    {
+        return HOOK_CONTINUE;
     }
-    if (static_cast<u16>(i_this->home.angle.x) != 0xFFFF) {
-        dComIfGs_onEventBit(static_cast<u16>(i_this->home.angle.x));
+
+    const u16 mapMarkerFlag = static_cast<u16>(i_this->field_0x93a);
+    const u16 obtainedItemFlag = static_cast<u16>(i_this->field_0x938);
+    if (mapMarkerFlag != 0xFFFF) {
+        dComIfGs_offSwitch(mapMarkerFlag, fopAcM_GetRoomNo(i_this));
     }
+    if (obtainedItemFlag != 0xFFFF) {
+        dComIfGs_onEventBit(obtainedItemFlag);
+    }
+    return HOOK_CONTINUE;
 }
 
 HookAction hookPreObjLifeCalcScale(ModContext*, void* args, void* retval, void*) {
@@ -3231,7 +3253,7 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(daObjLife_c__setEffect, hookPreObjLifeSetEffect);
     ADD_HOOK_PRE(daObjLife_c__create, hookPreObjLifeCreate);
-    ADD_HOOK_POST(daObjLife_c__actionGetDemo, hookPostObjLifeActionGetDemo);
+    ADD_HOOK_PRE(daObjLife_c__actionGetDemo, hookPreObjLifeActionGetDemo);
     ADD_HOOK_PRE(daObjLife_c__calcScale, hookPreObjLifeCalcScale);
 
     ADD_HOOK_POST(getCollectSmell, hookPostGetCollectSmell);

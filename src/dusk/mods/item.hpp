@@ -25,12 +25,14 @@ ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* 
 uint8_t item_check_chest(uint8_t boxNo, uint8_t itemNo, fopAc_ac_c* chest);
 uint8_t item_check_boss(uint8_t itemNo, fopAc_ac_c* boss);
 uint8_t item_check_freestanding(uint8_t bitNo, uint8_t itemNo, fopAc_ac_c* item);
+uint8_t item_check_golden_wolf(uint16_t eventFlag, uint8_t itemNo, fopAc_ac_c* item);
 uint8_t item_check_shop(uint8_t itemNo, fopAc_ac_c* giver);
 
 uint32_t item_give_tag(const char* name);
 uint32_t item_give_tag_chest(uint8_t boxNo);
 uint32_t item_give_tag_boss();
 uint32_t item_give_tag_freestanding(uint8_t bitNo);
+uint32_t item_give_tag_golden_wolf(uint16_t eventFlag);
 uint32_t item_give_tag_poe(uint8_t bitNo);
 uint32_t item_give_tag_shop(uint8_t itemNo);
 uint32_t item_give_tag_bug(uint8_t insectId);
