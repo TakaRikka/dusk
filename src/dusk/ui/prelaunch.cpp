@@ -846,10 +846,39 @@ void try_push_disc_choice_modal(Document& host) {
         return;
     }
 
-    std::vector<ModalAction> actions;
+    // Disc discovery scans three directories, so two candidates can share a filename (e.g.
+    // <data>/discs/game.iso and <data>/game.iso) and render as two identical chooser entries.
+    // Suffix only the colliding labels with their parent directory name.
+    std::vector<std::string> labels;
+    labels.reserve(state.pendingDiscChoices.size());
     for (const std::string& path : state.pendingDiscChoices) {
+        labels.push_back(borealis::file_select::display_name(path));
+    }
+    std::vector<bool> ambiguous(labels.size(), false);
+    for (std::size_t i = 0; i < labels.size(); ++i) {
+        for (std::size_t j = i + 1; j < labels.size(); ++j) {
+            if (labels[i] == labels[j]) {
+                ambiguous[i] = true;
+                ambiguous[j] = true;
+            }
+        }
+    }
+    for (std::size_t i = 0; i < labels.size(); ++i) {
+        if (!ambiguous[i]) {
+            continue;
+        }
+        const std::string parent =
+            std::filesystem::path{state.pendingDiscChoices[i]}.parent_path().filename().string();
+        if (!parent.empty()) {
+            labels[i] = fmt::format("{} ({})", labels[i], parent);
+        }
+    }
+
+    std::vector<ModalAction> actions;
+    for (std::size_t i = 0; i < state.pendingDiscChoices.size(); ++i) {
+        const std::string path = state.pendingDiscChoices[i];
         actions.push_back(ModalAction{
-            .label = borealis::file_select::display_name(path),
+            .label = labels[i],
             .onPressed =
                 [path](Modal& modal) {
                     begin_disc_verification(path);
