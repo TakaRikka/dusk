@@ -2,6 +2,7 @@
 
 #include "button.hpp"
 #include "component.hpp"
+#include "group_button.hpp"
 #include "select_button.hpp"
 
 namespace dusk::ui {
@@ -16,6 +17,7 @@ public:
     explicit Pane(Rml::Element* parent, Type type);
 
     bool focus() override;
+    bool focus_last();
     void update() override;
 
     void set_selected_item(int index);
@@ -25,6 +27,9 @@ public:
     Rml::Element* add_section(const Rml::String& text);
     ControlledButton& add_button(ControlledButton::Props props) {
         return add_child<ControlledButton>(std::move(props));
+    }
+    GroupButton& add_group_button(GroupButton::Props props) {
+        return add_child<GroupButton>(std::move(props));
     }
     Button& add_button(Rml::String text) { return add_child<Button>(std::move(text)); }
     ControlledSelectButton& add_select_button(ControlledSelectButton::Props props) {

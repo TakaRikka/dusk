@@ -88,7 +88,7 @@ int fopMsg_Create(void* i_this) {
             a_this->talk_actor = append->talk_actor;
             a_this->pos = append->pos;
             a_this->msg_idx = append->msg_idx;
-            a_this->field_0xf0 = append->field_0x14;
+            a_this->select_msg_idx = append->select_msg_idx;
             a_this->field_0xf4 = append->field_0x18;
         }
     }

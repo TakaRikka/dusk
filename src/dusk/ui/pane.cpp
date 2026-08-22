@@ -163,6 +163,15 @@ bool Pane::focus() {
     return false;
 }
 
+bool Pane::focus_last() {
+    for (auto child = mChildren.rbegin(); child != mChildren.rend(); ++child) {
+        if ((*child)->focus()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 Rml::Element* Pane::add_section(const Rml::String& text) {
     auto* elem = append(mRoot, "div");
     elem->SetClass("section-heading", true);

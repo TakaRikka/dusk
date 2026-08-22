@@ -30,13 +30,16 @@
 #include "m_Do/m_Do_lib.h"
 
 #if TARGET_PC
+#include <algorithm>
+#include <array>
+#include <vector>
 #include "dusk/language.hpp"
+#include "dusk/logging.h"
 #include "dusk/menu_pointer.h"
+#include "dusk/mods/item.hpp"
+#include "dusk/mods/svc/flow.hpp"
 #include "dusk/settings.h"
 #include "dusk/version.hpp"
-#include <vector>
-#include <array>
-#include <algorithm>
 #endif
 
 static void dMsgObject_addFundRaising(s16 param_0);
@@ -324,7 +327,7 @@ int dMsgObject_c::_create(msg_class* param_1) {
 
     field_0x124 = NULL;
     field_0x100 = param_1;
-    field_0x16c = -1;
+    mCurrentGroupID = -1;
     field_0x16e = -1;
     mNowTalkFlowNo = 0;
     mpTalkActor = NULL;
@@ -411,7 +414,7 @@ int dMsgObject_c::_create(msg_class* param_1) {
     field_0x197 = 0;
     mMessageID = 1000;
     field_0x158 = mMessageID;
-    field_0x15c = 0;
+    mSelectMessageID = 0;
     field_0x172 = 0;
     setStatusLocal(1);
     mpMsgString = JKR_NEW dMsgString_c();
@@ -679,14 +682,14 @@ static u32 getMirrorMsgOverride(u32 msgId) {
 }
 #endif
 
-void dMsgObject_c::setMessageIndex(u32 revoIndex, u32 param_2, bool param_3) {
+void dMsgObject_c::setMessageIndex(u32 revoIndex, u32 i_selectMsgID, bool param_3) {
     field_0x158 = revoIndex;
     revoIndex = getRevoMessageIndex(revoIndex);
     if (field_0x4cc == 0) {
         mNoDemoFlag = 1;
     }
     mMessageID = revoIndex;
-    field_0x15c = param_2;
+    mSelectMessageID = i_selectMsgID;
     field_0x4d1 = 0;
     if (mpTalkPartner != field_0x13c && mpTalkPartner != NULL) {
         dComIfGp_event_setTalkPartner(mpTalkPartner);
@@ -701,12 +704,58 @@ void dMsgObject_c::setMessageIndex(u32 revoIndex, u32 param_2, bool param_3) {
 
     JMSMesgInfo_c* pMsg = (JMSMesgInfo_c*)((char*)mpMsgDt + 0x20);
     u8* iVar2 = (u8*)pMsg + pMsg->header.size;
-    u32 msg_id = getMessageIndex(revoIndex);
-    dComIfGp_setMesgCameraAttrInfo(pMsg->entries[msg_id].camera_id);
-    if (field_0x15c == 1000) {
-        mpRefer->setSelMsgPtr(NULL);
+#if TARGET_PC
+    const void* customEntry = NULL;
+    const char* customText = NULL;
+    u16 customGroup = 0;
+    if (dusk::flow::custom_message_group(static_cast<u16>(revoIndex), customGroup)) {
+        if (dusk::flow::custom_message_for_control(
+                mpCtrl, static_cast<u16>(revoIndex), customEntry, customText))
+        {
+            dComIfGp_setMesgCameraAttrInfo(static_cast<const u8*>(customEntry)[0x0f]);
+        }
     } else {
-        u32 msgIndex = getMessageIndex(field_0x15c);
+#endif
+    u32 msg_id = getMessageIndex(revoIndex);
+    dComIfGp_setMesgCameraAttrInfo(pMsg->entries[msg_id].camera_attr);
+#if TARGET_PC
+    }
+    const auto setSelectionMessage = [&] {
+        const void* selectionEntry = NULL;
+        const char* selectionText = NULL;
+        u16 selectionGroup = 0;
+        if (dusk::flow::custom_message_group(static_cast<u16>(mSelectMessageID), selectionGroup)) {
+            if (dusk::flow::custom_message_for_control(
+                    mpCtrl, static_cast<u16>(mSelectMessageID), selectionEntry, selectionText))
+            {
+                mpRefer->setSelMsgPtr(const_cast<char*>(selectionText));
+            } else {
+                mpRefer->setSelMsgPtr(NULL);
+            }
+            return;
+        }
+        u32 msgIndex = getMessageIndex(mSelectMessageID);
+        if (msgIndex == 0x264) {
+            mpRefer->setSelMsgPtr(NULL);
+            return;
+        }
+        char* nativeText = (char*)(iVar2 + pMsg->entries[msgIndex].string_offset + 8);
+        const void* resolvedEntry = &pMsg->entries[msgIndex];
+        const char* resolvedText = nativeText;
+        dusk::flow::resolve_message_for_control(mpCtrl, mpMsgDt, static_cast<u16>(msgIndex),
+            resolvedEntry, nativeText, resolvedEntry, resolvedText);
+        mpRefer->setSelMsgPtr(const_cast<char*>(resolvedText));
+    };
+#endif
+    if (mSelectMessageID == 1000) {
+        mpRefer->setSelMsgPtr(NULL);
+#if TARGET_PC
+    } else {
+        setSelectionMessage();
+    }
+#else
+    } else {
+        u32 msgIndex = getMessageIndex(mSelectMessageID);
         if (msgIndex == 0x264) {
             mpRefer->setSelMsgPtr(NULL);
         } else {
@@ -714,6 +763,7 @@ void dMsgObject_c::setMessageIndex(u32 revoIndex, u32 param_2, bool param_3) {
             mpRefer->setSelMsgPtr(my_ptr);
         }
     }
+#endif
     if (param_3) {
         mpCtrl->setMessageID(mMessageID, 0, NULL);
     }
@@ -726,7 +776,7 @@ void dMsgObject_c::setMessageIndexDemo(u32 revoMsgIndex, bool param_2) {
     field_0x4d4 = 1;
     dMsgObject_onCameraCancelFlag();
     mMessageID = revoMsgIndex;
-    field_0x15c = 0x264;
+    mSelectMessageID = 0x264;
     field_0x4d1 = 0;
     if (mpTalkPartner != field_0x13c && mpTalkPartner != NULL) {
         dComIfGp_event_setTalkPartner(mpTalkPartner);
@@ -740,8 +790,23 @@ void dMsgObject_c::setMessageIndexDemo(u32 revoMsgIndex, bool param_2) {
     mpRefer->setPageNum(field_0x172);
     JMSMesgInfo_c* info_header_p = (JMSMesgInfo_c*)((char*)mpMsgDt + 0x20);
     JMSMesgInfo_c* reg_25 = (JMSMesgInfo_c*)((char*) info_header_p + info_header_p->header.size);
+#if TARGET_PC
+    const void* customEntry = NULL;
+    const char* customText = NULL;
+    u16 customGroup = 0;
+    if (dusk::flow::custom_message_group(static_cast<u16>(revoMsgIndex), customGroup)) {
+        if (dusk::flow::custom_message_for_control(
+                mpCtrl, static_cast<u16>(revoMsgIndex), customEntry, customText))
+        {
+            dComIfGp_setMesgCameraAttrInfo(static_cast<const u8*>(customEntry)[0x0f]);
+        }
+    } else {
+#endif
     int ind = getMessageIndex(revoMsgIndex);
-    dComIfGp_setMesgCameraAttrInfo(info_header_p->entries[ind].camera_id);
+    dComIfGp_setMesgCameraAttrInfo(info_header_p->entries[ind].camera_attr);
+#if TARGET_PC
+    }
+#endif
     mpRefer->setSelMsgPtr(NULL);
     if (param_2) {
         mpCtrl->setMessageID(mMessageID, 0, NULL);
@@ -767,10 +832,24 @@ u32 dMsgObject_c::getMessageIndex(u32 param_0) {
 }
 
 u32 dMsgObject_c::getRevoMessageIndex(u32 param_1) {
-#if TARGET_PC 
-    if (!dusk::getSettings().game.enableMirrorMode) { 
-        if (!g_MsgObject_HIO_c.mMessageDisplay) { return param_1; } } 
-    if (param_1 == getMirrorMsgOverride(param_1)) { return param_1; } 
+#if TARGET_PC
+    const u16 sourceGroup = param_1 > 5000 ? static_cast<u16>(s_groupID) : 0;
+    param_1 = dusk::mods::item_check_message(sourceGroup, param_1);
+
+    u16 customGroup = 0;
+    if (param_1 <= 0xffff &&
+        dusk::flow::custom_message_group(static_cast<u16>(param_1), customGroup))
+    {
+        return param_1;
+    }
+    if (!dusk::getSettings().game.enableMirrorMode) {
+        if (!g_MsgObject_HIO_c.mMessageDisplay) {
+            return param_1;
+        }
+    }
+    if (param_1 == getMirrorMsgOverride(param_1)) {
+        return param_1;
+    }
 #else 
     if (!g_MsgObject_HIO_c.mMessageDisplay) { return param_1; } 
 #endif
@@ -826,6 +905,14 @@ u32 dMsgObject_c::getMessageIDAlways(u32 param_0) {
 }
 
 s16 dMsgObject_c::getMessageGroup(u32 param_0) {
+#if TARGET_PC
+    u16 customGroup = 0;
+    if (param_0 <= 0xffff &&
+        dusk::flow::custom_message_group(static_cast<u16>(param_0), customGroup))
+    {
+        return static_cast<s16>(customGroup);
+    }
+#endif
     s16 messageGroup = 0;
     OS_REPORT("getMessgeGroup! msg no====>%d\n", param_0);
     if (param_0 > 5000) {
@@ -852,7 +939,7 @@ void dMsgObject_c::waitProc() {
                     if (mMessageID >= 0x47f && mMessageID <= 0x487) {
                         setMessageIndexDemo(mMessageID, true);
                     } else {
-                        setMessageIndex(mMessageID, field_0x15c, true);
+                        setMessageIndex(mMessageID, mSelectMessageID, true);
                     }
                 }
             }
@@ -1099,7 +1186,7 @@ void dMsgObject_c::continueProc() {
         field_0x199 = 0;
         updateEquipBombInfoLocal();
         offAutoMessageFlagLocal();
-        setMessageIndex(field_0x100->msg_idx, field_0x100->field_0xf0, true);
+        setMessageIndex(field_0x100->msg_idx, field_0x100->select_msg_idx, true);
         mpScrnDraw->fukiPosCalc(pRef->getFukiPosType());
         SAFE_STRCPY(pRef->getTextPtr(), "");
         SAFE_STRCPY(pRef->getTextSPtr(), "");
@@ -1351,7 +1438,7 @@ void dMsgObject_c::endProc() {
         }
         mMessageID = 0;
         field_0x158 = mMessageID;
-        field_0x15c = 1000;
+        mSelectMessageID = 1000;
         field_0x172 = 0;
         field_0x199 = 0;
         mpRefer->setPageNum(field_0x172);
@@ -1423,12 +1510,22 @@ void dMsgObject_c::talkStartInit() {
     field_0x19b = 0;
     bool bVar1 = false;
     if (mFukiKind != mpRefer->getFukiKind()) {
+#if TARGET_PC
+        // Safety check if MESSAGE_BOX_NOTICE is requested during a conversation
+        if (mpScrnDraw != NULL && mpRefer->getFukiKind() == 15 &&
+            dComIfGp_isHeapLockFlag() == 5) {
+            DuskLog.error("MESSAGE_BOX_NOTICE cannot be created during a conversation\n");
+        } else {
+#endif
         if (mpScrnDraw != NULL) {
             delete_screen(false);
             dVar19 = 1.0f;
             bVar1 = true;
         }
         mFukiKind = mpRefer->getFukiKind();
+#if TARGET_PC
+        }
+#endif
     }
     if (dComIfGp_isHeapLockFlag() == 8 ||
         (dComIfGp_isHeapLockFlag() == 5 && dMeter2Info_isFloatingMessageVisible() && !field_0x4cd))
@@ -1782,25 +1879,28 @@ void dMsgObject_c::endFlowGroupLocal() {
 
 void dMsgObject_c::changeGroupLocal(s16 param_1) {
     JKRHeap* prevHeap = mDoExt_setCurrentHeap(dComIfGp_getMsgExpHeap());
-    if (field_0x16c != param_1) {
+    if (mCurrentGroupID != param_1) {
         if (mFlowChk != 0) {
             JUT_ASSERT(3688, mFlowChk != 2);
             mFlowChk = 2;
         }
         OS_REPORT("group change =====> %d\n", param_1);
         if (param_1 >= 1) {
-            OS_REPORT("bmg data change =====> %d --> %d\n", field_0x16c, param_1);
-            if (field_0x16c == 0) {
+            OS_REPORT("bmg data change =====> %d --> %d\n", mCurrentGroupID, param_1);
+            if (mCurrentGroupID == 0) {
                 field_0x19d = 1;
             }
             mpMsgDt = dMeter2Info_getStageMsgResource();
         } else {
             mpMsgDt = mpMsgRes;
         }
-        if (field_0x16c >= 0) {
+        if (mCurrentGroupID >= 0) {
             field_0x124->parse(mpMsgDt, 0x80);
         }
-        field_0x16c = param_1;
+#if TARGET_PC
+        dusk::flow::bind_resource(mpMsgDt, static_cast<u16>(param_1));
+#endif
+        mCurrentGroupID = param_1;
     }
     mDoExt_setCurrentHeap(prevHeap);
 }

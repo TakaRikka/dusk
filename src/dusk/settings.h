@@ -158,6 +158,7 @@ struct UserSettings {
         ConfigVar<bool> rememberWindowSize;
         ConfigVar<int> lastWindowWidth;
         ConfigVar<int> lastWindowHeight;
+        ConfigVar<int> uiScale;
     } video;
 
     struct {
@@ -299,6 +300,8 @@ struct UserSettings {
         ConfigVar<bool> removeQuestMapMarkers;
         ConfigVar<bool> showInputViewer;
         ConfigVar<bool> showInputViewerGyro;
+
+        ConfigVar<std::string> lastSelectedGameModeId;
     } game;
 
     struct {

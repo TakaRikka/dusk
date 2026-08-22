@@ -16,6 +16,10 @@
 #include "f_op/f_op_camera_mng.h"
 #include <cstring>
 
+#if TARGET_PC
+#include "mods/items.h"
+#endif
+
 class daE_RDB_HIO_c : public JORReflexible {
 public:
     daE_RDB_HIO_c();
@@ -1250,9 +1254,18 @@ static void demo_camera(e_rdb_class* i_this) {
             }
 
             if (iVar1 != 0) {
-                daPy_getPlayerActorClass()->changeDemoMode(11,
-                    DUSK_ITEM_CHECK_EXPR("bulblin_key:D_MN09", dItemNo_SMALL_KEY_e, &i_this->enemy), 0,
-                    0);
+#if TARGET_PC
+                const auto itemCheck = dusk::mods::item_check_commit(
+                    ITEM_CHECK_BULBLIN_KEY, dItemNo_SMALL_KEY_e, &i_this->enemy);
+                if (itemCheck.itemNo == dItemNo_NONE_e) {
+                    dusk::mods::item_check_complete(itemCheck, &i_this->enemy);
+                }
+                daPy_getPlayerActorClass()->changeDemoMode(
+                    11, itemCheck.itemNo == dItemNo_NONE_e ? 0 : itemCheck.itemNo,
+                    itemCheck.itemNo == dItemNo_NONE_e ? 0 : static_cast<int>(itemCheck.tag), 0);
+#else
+                daPy_getPlayerActorClass()->changeDemoMode(11, dItemNo_SMALL_KEY_e, 0, 0);
+#endif
                 i_this->mDemoMode = 12;
                 i_this->field_0x10aa = 0;
                 i_this->field_0xfe5 = 1;

@@ -927,15 +927,15 @@ void jmessage_tMeasureProcessor::do_begin(void const* pEntry, char const* pszTex
     pReference->setRevoMessageID(0);
     field_0x38 = 1.0f;
 
-    mSeSpeaker = ((JMSMesgEntry_c*)pEntry)->se_speaker;
-    mSeMood = ((JMSMesgEntry_c*)pEntry)->se_mood;
+    mSeSpeaker = ((JMSMesgEntry_c*)pEntry)->speaker;
+    mSeMood = ((JMSMesgEntry_c*)pEntry)->speaker_mood;
 
     for (int i = 0; i < DUSK_IF_ELSE((dusk::version::isRegionJpn() ? 30 : D_MSG_CLASS_PAGE_CNT_MAX), D_MSG_CLASS_PAGE_CNT_MAX); i++) {
         pReference->setLineLength(i, 0.0f, 0.0f);
         pReference->setPageLine(i, 0);
         pReference->setPageLineMax(i, 0);
         pReference->setPageType(i, 0);
-        pReference->setLineArrange(i, ((JMSMesgEntry_c*)pEntry)->unk_0xd);
+        pReference->setLineArrange(i, ((JMSMesgEntry_c*)pEntry)->line_alignment);
         pReference->setLineScale(i, 100);
 
         if (pReference->isPlaceName() || pReference->isStaffRoll() || pReference->isBossName() ||
@@ -948,11 +948,11 @@ void jmessage_tMeasureProcessor::do_begin(void const* pEntry, char const* pszTex
             }
 
 #if TARGET_PC
-            if (!dusk::version::isRegionJpn() && ((JMSMesgEntry_c*)pEntry)->unk_0xd == 0) {
+            if (!dusk::version::isRegionJpn() && ((JMSMesgEntry_c*)pEntry)->line_alignment == 0) {
                 pReference->setLineArrange(i, 1);
             }
 #elif !REGION_JPN
-            if (((JMSMesgEntry_c*)pEntry)->unk_0xd == 0) {
+            if (((JMSMesgEntry_c*)pEntry)->line_alignment == 0) {
                 pReference->setLineArrange(i, 1);
             }
 #endif
@@ -1896,7 +1896,7 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     mpEntry = pEntry;
     mpText = pszText;
 
-    if (((JMSMesgEntry_c*)pEntry)->fuki_kind == 8) {
+    if (((JMSMesgEntry_c*)pEntry)->box_kind == 8) {
         field_0xa8 = g_MsgObject_HIO_c.mDisplaySpeedSpirit;
     } else {
         field_0xa8 = g_MsgObject_HIO_c.mDisplaySpeed;
@@ -1910,8 +1910,8 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     field_0xb2 = 0;
     field_0xaa = 0;
     field_0xac = 0;
-    field_0xb4 = ((JMSMesgEntry_c*)pEntry)->se_speaker;
-    field_0xb3 = ((JMSMesgEntry_c*)pEntry)->se_mood;
+    field_0xb4 = ((JMSMesgEntry_c*)pEntry)->speaker;
+    field_0xb3 = ((JMSMesgEntry_c*)pEntry)->speaker_mood;
 
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
     pReference->resetCharCnt();
@@ -1924,8 +1924,8 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     pReference->setNowTagScale(0);
     pReference->calcDistance();
 
-    dComIfGp_setMesgAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->base_anm_id);
-    dComIfGp_setMesgFaceAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->face_anm_id);
+    dComIfGp_setMesgAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->talk_anim);
+    dComIfGp_setMesgFaceAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->face_anim);
 
     if (dComIfGp_isHeapLockFlag() == 2) {
         pReference->setFukiPosType(1);
@@ -1933,20 +1933,20 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
         if (dComIfGp_isHeapLockFlag() == 3) {
             pReference->setFukiPosType(0);
         } else {
-            pReference->setFukiPosType(((JMSMesgEntry_c*)pEntry)->fuki_pos_type);
+            pReference->setFukiPosType(((JMSMesgEntry_c*)pEntry)->box_position);
         }
     }
 
-    pReference->setFukiKind(((JMSMesgEntry_c*)pEntry)->fuki_kind);
+    pReference->setFukiKind(((JMSMesgEntry_c*)pEntry)->box_kind);
 
     if (dMsgObject_getMsgOutputType() != 0xFF) {
         pReference->setForm(dMsgObject_getMsgOutputType());
     } else {
-        pReference->setForm(((JMSMesgEntry_c*)pEntry)->output_type);
+        pReference->setForm(((JMSMesgEntry_c*)pEntry)->draw_type);
     }
 
-    pReference->setArrange(((JMSMesgEntry_c*)pEntry)->unk_0xd);
-    pReference->setForm(((JMSMesgEntry_c*)pEntry)->unk_0xd);
+    pReference->setArrange(((JMSMesgEntry_c*)pEntry)->line_alignment);
+    pReference->setForm(((JMSMesgEntry_c*)pEntry)->line_alignment);
     pReference->setMsgID(((JMSMesgEntry_c*)pEntry)->message_id);
 
     if (((JMSMesgEntry_c*)pEntry)->event_label_id != 0) {
@@ -1980,7 +1980,7 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     if (dMsgObject_getMsgOutputType() != 0xFF) {
         field_0xae = dMsgObject_getMsgOutputType();
     } else {
-        field_0xae = ((JMSMesgEntry_c*)pEntry)->output_type;
+        field_0xae = ((JMSMesgEntry_c*)pEntry)->draw_type;
     }
 
     if (mForceForm != 0xFF) {

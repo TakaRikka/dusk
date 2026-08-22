@@ -9,7 +9,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 1u
+#define UI_SERVICE_MINOR 4u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -51,6 +51,8 @@ typedef enum UiControlKind {
     UI_CONTROL_NUMBER = 2, /* integer stepper with min/max/step */
     UI_CONTROL_STRING = 3, /* text input */
     UI_CONTROL_SELECT = 4, /* one of `options`; the value is the option index */
+    UI_CONTROL_COLOR = 5,  /* RGB/RGBA color string with a picker */
+    UI_CONTROL_GROUP = 6,  /* navigation row (on_pressed) */
 } UiControlKind;
 
 typedef enum UiControlBinding {
@@ -60,14 +62,14 @@ typedef enum UiControlBinding {
     /* The control reads and writes `config_var` (a ConfigService handle owned by the calling mod)
      * directly: persistence, change notifications and the modified indicator (value != default) are
      * wired automatically. The var type must match the control kind: TOGGLE = bool, NUMBER and
-     * SELECT = int, STRING = string. Float vars are not bindable; use callbacks. */
+     * SELECT = int, STRING and COLOR = string. Float vars are not bindable; use callbacks. */
     UI_BINDING_CONFIG_VAR = 1,
 } UiControlBinding;
 
 /* Tagged by the control's kind: TOGGLE reads bool_value, NUMBER and SELECT read int_value, STRING
- * reads string_value. string_value passed to a setter is only valid during the call; a getter
- * should point it at storage owned by the mod (e.g. a static buffer) that stays valid until the
- * next call into the mod — the host copies it right after the getter returns. */
+ * and COLOR read string_value. string_value passed to a setter is only valid during the call; a
+ * getter should point it at storage owned by the mod (e.g. a static buffer) that stays valid until
+ * the next call into the mod — the host copies it right after the getter returns. */
 typedef struct UiControlValue {
     uint32_t struct_size;
     bool bool_value;
@@ -91,11 +93,11 @@ typedef struct UiControlDesc {
     /* Optional RML shown as contextual help when the control is focused or hovered. Only rendered
      * where a help pane exists (mod window tabs). */
     const char* help_rml;
-    UiControlBinding binding;   /* ignored for BUTTON */
+    UiControlBinding binding;   /* ignored for BUTTON and GROUP */
     ConfigVarHandle config_var; /* UI_BINDING_CONFIG_VAR */
-    UiControlGetFn get;         /* UI_BINDING_CALLBACKS (all kinds but BUTTON) */
-    UiControlSetFn set;         /* UI_BINDING_CALLBACKS (all kinds but BUTTON) */
-    UiPressedFn on_pressed;     /* BUTTON only. Required for BUTTON. */
+    UiControlGetFn get;         /* UI_BINDING_CALLBACKS (all kinds but BUTTON/GROUP) */
+    UiControlSetFn set;         /* UI_BINDING_CALLBACKS (all kinds but BUTTON/GROUP) */
+    UiPressedFn on_pressed;     /* BUTTON/GROUP only. Required for both. */
     UiPredicateFn is_disabled;  /* optional */
     /* Optional override for the modified indicator. CONFIG_VAR controls derive it from value !=
      * default when this is NULL. */
@@ -115,17 +117,24 @@ typedef struct UiControlDesc {
     const char* const* options;
     size_t option_count;
     int32_t max_length; /* STRING: maximum input length; < 1 means unlimited */
+    /* COLOR: optional RRGGBB/RRGGBBAA values for presets. "rainbow" is a special value. */
+    const char* const* color_presets;
+    size_t color_preset_count;
+    bool color_alpha; /* COLOR: use RRGGBBAA values instead of RRGGBB */
 } UiControlDesc;
 
 #define UI_CONTROL_DESC_INIT                                                                       \
     {sizeof(UiControlDesc), UI_CONTROL_BUTTON, NULL, NULL, UI_BINDING_CALLBACKS, 0u, NULL, NULL,   \
-        NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0}
+        NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false}
+
+/* Build pane contents. A non-MOD_OK result fails the mod. */
+typedef ModResult (*UiPaneBuildFn)(
+    ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error);
 
 /* Build the panel contents. `panel` accepts the pane_add_* functions; it and
  * every element created in it are destroyed (handles invalidated) whenever the
  * panel is rebuilt, e.g. on tab switches. A non-MOD_OK result fails the mod. */
-typedef ModResult (*UiPanelBuildFn)(
-    ModContext* ctx, UiElementHandle panel, void* user_data, ModError* out_error);
+typedef UiPaneBuildFn UiPanelBuildFn;
 /* Called every frame while the panel is the visible tab. */
 typedef ModResult (*UiPanelUpdateFn)(ModContext* ctx, void* user_data, ModError* out_error);
 
@@ -138,6 +147,19 @@ typedef struct UiModsPanelDesc {
 } UiModsPanelDesc;
 
 #define UI_MODS_PANEL_DESC_INIT {sizeof(UiModsPanelDesc), NULL, NULL, NULL}
+
+/* Builds the contents associated with a group button. The target pane is cleared immediately
+ * before this callback and is valid only while its tab remains built. */
+typedef UiPaneBuildFn UiGroupBuildFn;
+
+typedef struct UiGroupDesc {
+    uint32_t struct_size;
+    const char* label;    /* required */
+    UiGroupBuildFn build; /* required */
+    void* user_data;
+} UiGroupDesc;
+
+#define UI_GROUP_DESC_INIT {sizeof(UiGroupDesc), NULL, NULL, NULL}
 
 /* Build one tab of a mod window. `left_pane` is the interactive column,
  * `right_pane` shows contextual help (controls' help_rml and SELECT options
@@ -196,11 +218,15 @@ typedef struct UiDialogDesc {
     /* Fired on cancel (B/Escape) before the dialog closes; the dialog always
      * closes on dismiss. */
     UiDialogActionFn on_dismiss;
-    void* user_data; /* passed to on_dismiss */
+    void* user_data; /* passed to build and on_dismiss */
+    /* Optional content builder. The pane is rendered below body_rml and above the actions. Its
+     * handle and all child element handles remain valid until the dialog closes.
+     * Added in UiService minor version 4. */
+    UiPaneBuildFn build;
 } UiDialogDesc;
 
 #define UI_DIALOG_DESC_INIT                                                                        \
-    {sizeof(UiDialogDesc), NULL, NULL, UI_DIALOG_NORMAL, NULL, NULL, 0u, NULL, NULL}
+    {sizeof(UiDialogDesc), NULL, NULL, UI_DIALOG_NORMAL, NULL, NULL, 0u, NULL, NULL, NULL}
 
 /* A tab added to the in-game menu bar. */
 typedef struct UiMenuTabDesc {
@@ -291,6 +317,19 @@ typedef struct UiService {
 
     /* Enqueue a toast notification. */
     ModResult (*push_toast)(ModContext* ctx, const UiToastDesc* desc);
+
+    /* Minor version 2 */
+
+    ModResult (*get_clipboard_text)(
+        ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength);
+    ModResult (*set_clipboard_text)(ModContext* ctx, const char* text);
+
+    /* Minor version 3 */
+
+    /* Add a group button to one pane that builds controls in its paired pane.
+     * The panes must be the left and right handles from the same UiTabBuildFn call. */
+    ModResult (*pane_add_group)(ModContext* ctx, UiElementHandle group_pane,
+        UiElementHandle target_pane, const UiGroupDesc* desc, UiElementHandle* out_elem);
 } UiService;
 
 MOD_DECLARE_SERVICE(UiService, svc_ui, UI_SERVICE_ID, UI_SERVICE_MAJOR, UI_SERVICE_MINOR);

@@ -278,7 +278,7 @@ public:
     u8 getEndStatus() { return mEndStatus; }
     void setUseType(u8 type) { mUseType = type; }
 
-private:
+// private:
     /* 0x0004 */ JKRArchive* mpArchive;
     /* 0x0008 */ mDoDvdThd_mountArchive_c* mpMount;
     /* 0x000C */ STControl* stick;

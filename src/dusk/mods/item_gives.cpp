@@ -17,6 +17,7 @@
 #include <exception>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace dusk::mods {
@@ -27,6 +28,8 @@ aurora::Module Log{"dusk::mods::item_gives"};
 // deque keeps previously returned c_str pointers valid if a callback interns another name.
 std::deque<std::string> s_giveNames;
 std::unordered_map<std::string, uint32_t> s_giveNameIds;
+
+detail::ItemCommitStore s_committedChecks;
 
 const char* item_give_name(uint32_t tag) {
     if (tag == 0 || tag > s_giveNames.size()) {
@@ -92,7 +95,18 @@ void notify_gives(const char* checkName, uint8_t itemNo, fopAc_ac_c* giver, Item
     }
 }
 
-constexpr size_t kGiveQueueLimit = 64;
+void complete_check(uint8_t itemNo, uint32_t giveTag, fopAc_ac_c* giver, ItemGiveOrigin origin) {
+    if (const auto* committed = s_committedChecks.find(giveTag);
+        committed != nullptr && committed->resolvedItem != itemNo)
+    {
+        Log.error("committed check '{}' completed with item {:#x} instead of {:#x}",
+            item_give_name(giveTag) != nullptr ? item_give_name(giveTag) : "", itemNo,
+            committed->resolvedItem);
+    }
+    s_committedChecks.erase(giveTag);
+    notify_gives(item_give_name(giveTag), itemNo, giver, origin);
+}
+
 constexpr int kGiveMaxRetries = 5;
 
 struct QueuedGive {
@@ -101,6 +115,7 @@ struct QueuedGive {
     uint8_t itemNo = 0;
     bool silent = false;
     bool resolveAtDispatch = false;
+    bool forced = false;
 };
 
 std::deque<QueuedGive> s_giveQueue;
@@ -110,6 +125,11 @@ int s_inFlightRetries = 0;
 bool s_inFlight = false;
 bool s_inFlightSpawned = false;
 bool s_dispatchingSilent = false;
+
+bool has_forced_give() {
+    return std::any_of(
+        s_giveQueue.begin(), s_giveQueue.end(), [](const QueuedGive& give) { return give.forced; });
+}
 
 bool safe_to_dispatch() {
     daAlink_c* link = daAlink_getAlinkActorClass();
@@ -142,13 +162,13 @@ bool safe_to_dispatch() {
 bool resolve_queued_give(const QueuedGive& give, ItemGiveOrigin origin, uint8_t& outItem) {
     outItem = give.itemNo;
     if (give.resolveAtDispatch) {
-        outItem = item_check(item_give_name(give.tag), give.itemNo, nullptr);
+        outItem = item_check_commit(give.tag, give.itemNo, nullptr).itemNo;
     }
     if (outItem != dItemNo_NONE_e) {
         return true;
     }
 
-    notify_gives(item_give_name(give.tag), dItemNo_NONE_e, nullptr, origin);
+    complete_check(dItemNo_NONE_e, give.tag, nullptr, origin);
     return false;
 }
 
@@ -171,9 +191,38 @@ void dispatch_demo_give() {
 
     daAlink_c* link = daAlink_getAlinkActorClass();
     dComIfGp_getEvent()->setGtItm(s_inFlightItem);
-    link->procCoGetItemInit();
+    link->mProcID = daAlink_c::PROC_GET_ITEM;
     const s16 eventIndex = dComIfGp_getEventManager().getEventIdx(link, "DEFAULT_GETITEM", 0xFF);
     fopAcM_orderChangeEventId(link, eventIndex, 1, 0xFFFF);
+}
+
+void dispatch_next_give() {
+    while (!s_giveQueue.empty()) {
+        while (!s_giveQueue.empty() && s_giveQueue.front().silent) {
+            const QueuedGive give = s_giveQueue.front();
+            s_giveQueue.pop_front();
+            dispatch_silent_give(give);
+        }
+        if (s_giveQueue.empty()) {
+            return;
+        }
+
+        const QueuedGive give = s_giveQueue.front();
+        s_giveQueue.pop_front();
+
+        uint8_t itemNo = 0;
+        if (!resolve_queued_give(give, ITEM_GIVE_ORIGIN_QUEUE, itemNo)) {
+            continue;
+        }
+
+        s_inFlightGive = give;
+        s_inFlightItem = itemNo;
+        s_inFlightRetries = 0;
+        s_inFlight = true;
+        s_inFlightSpawned = false;
+        dispatch_demo_give();
+        return;
+    }
 }
 
 }  // namespace
@@ -192,21 +241,82 @@ uint32_t item_give_tag(const char* name) {
     return tag;
 }
 
-uint8_t item_check_tagged(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* giver) {
+ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* giver) {
     const char* name = item_give_name(giveTag);
-    return name != nullptr ? item_check(name, itemNo, giver) : itemNo;
+    if (name == nullptr) {
+        return {.tag = giveTag, .itemNo = itemNo};
+    }
+
+    if (const auto* committed = s_committedChecks.find(giveTag); committed != nullptr) {
+        if (committed->vanillaItem != itemNo) {
+            Log.error("committed check '{}' changed vanilla item from {:#x} to {:#x}", name,
+                committed->vanillaItem, itemNo);
+        }
+        return {.tag = giveTag, .itemNo = committed->resolvedItem};
+    }
+
+    const auto& committed =
+        s_committedChecks.commit(giveTag, itemNo, [&] { return item_check(name, itemNo, giver); });
+    return {.tag = giveTag, .itemNo = committed.resolvedItem};
 }
 
-void item_check_enqueue(const char* name, uint8_t itemNo) {
-    if (s_giveQueue.size() >= kGiveQueueLimit) {
-        Log.warn("item give queue is full; dropping check '{}'", name != nullptr ? name : "");
-        return;
-    }
+ItemCheckResult item_check_commit(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
+    return item_check_commit(item_give_tag(name), itemNo, giver);
+}
+
+void item_check_enqueue_deferred(const char* name, uint8_t itemNo) {
     s_giveQueue.push_back({
         .tag = item_give_tag(name),
         .itemNo = itemNo,
         .resolveAtDispatch = true,
     });
+}
+
+bool item_check_enqueue(ItemCheckResult check, ItemGiveMode mode) {
+    auto* committed = s_committedChecks.find(check.tag);
+    if (committed == nullptr) {
+        Log.error("cannot enqueue uncommitted check '{}'",
+            item_give_name(check.tag) != nullptr ? item_give_name(check.tag) : "");
+        return false;
+    }
+    if (committed->resolvedItem != check.itemNo) {
+        Log.error("committed check '{}' changed item from {:#x} to {:#x}",
+            item_give_name(check.tag) != nullptr ? item_give_name(check.tag) : "", check.itemNo,
+            committed->resolvedItem);
+        return false;
+    }
+    if (committed->queued) {
+        return false;
+    }
+
+    committed->queued = true;
+    s_giveQueue.push_back({
+        .tag = check.tag,
+        .itemNo = committed->resolvedItem,
+        .silent = mode == ItemGiveMode::Silent,
+        .forced = mode == ItemGiveMode::ForcedDemo,
+    });
+    if (mode == ItemGiveMode::ForcedDemo && !s_inFlight) {
+        dispatch_next_give();
+    }
+    return true;
+}
+
+void item_check_complete(ItemCheckResult check, fopAc_ac_c* giver) {
+    complete_check(check.itemNo, check.tag, giver, ITEM_GIVE_ORIGIN_GAME);
+}
+
+void item_check_cancel(uint32_t giveTag) {
+    s_committedChecks.erase(giveTag);
+    std::erase_if(s_giveQueue,
+        [&](const QueuedGive& give) { return give.owner == nullptr && give.tag == giveTag; });
+}
+
+void item_check_clear_committed() {
+    std::erase_if(s_giveQueue, [&](const QueuedGive& give) {
+        return give.owner == nullptr && s_committedChecks.contains(give.tag);
+    });
+    s_committedChecks.clear();
 }
 
 void item_granted(uint8_t itemNo, uint32_t giveTag, fopAc_ac_c* giver) {
@@ -218,7 +328,7 @@ void item_granted(uint8_t itemNo, uint32_t giveTag, fopAc_ac_c* giver) {
         s_inFlight = false;
         s_inFlightSpawned = false;
     }
-    notify_gives(item_give_name(giveTag), itemNo, giver, origin);
+    complete_check(itemNo, giveTag, giver, origin);
 }
 
 bool item_give_queue_dispatching() {
@@ -236,17 +346,21 @@ uint32_t item_give_queue_take_tag() {
 namespace svc {
 
 void item_gives_tick() {
-    if ((!s_inFlight && s_giveQueue.empty()) || !safe_to_dispatch()) {
+    if (!s_inFlight && s_giveQueue.empty()) {
         return;
     }
 
     if (s_inFlight) {
+        if (!safe_to_dispatch()) {
+            return;
+        }
         if (++s_inFlightRetries > kGiveMaxRetries) {
             Log.error("item {:#x} for '{}' did not complete after {} attempts; dropping it",
                 s_inFlightItem,
                 item_give_name(s_inFlightGive.tag) != nullptr ? item_give_name(s_inFlightGive.tag) :
                                                                 "",
                 kGiveMaxRetries);
+            item_check_cancel(s_inFlightGive.tag);
             s_inFlight = false;
             s_inFlightSpawned = false;
             return;
@@ -256,29 +370,10 @@ void item_gives_tick() {
         return;
     }
 
-    while (!s_giveQueue.empty() && s_giveQueue.front().silent) {
-        const QueuedGive give = s_giveQueue.front();
-        s_giveQueue.pop_front();
-        dispatch_silent_give(give);
-    }
-    if (s_giveQueue.empty()) {
+    if (!has_forced_give() && !safe_to_dispatch()) {
         return;
     }
-
-    const QueuedGive give = s_giveQueue.front();
-    uint8_t itemNo = 0;
-    if (!resolve_queued_give(give, ITEM_GIVE_ORIGIN_QUEUE, itemNo)) {
-        s_giveQueue.pop_front();
-        return;
-    }
-
-    s_giveQueue.pop_front();
-    s_inFlightGive = give;
-    s_inFlightItem = itemNo;
-    s_inFlightRetries = 0;
-    s_inFlight = true;
-    s_inFlightSpawned = false;
-    dispatch_demo_give();
+    dispatch_next_give();
 }
 
 void item_gives_clear() {
@@ -289,12 +384,10 @@ void item_gives_clear() {
     s_giveQueue.clear();
     s_inFlight = false;
     s_inFlightSpawned = false;
+    s_committedChecks.clear();
 }
 
 ModResult item_give_enqueue(LoadedMod& mod, const char* checkName, uint8_t itemNo, uint32_t flags) {
-    if (s_giveQueue.size() >= kGiveQueueLimit) {
-        return MOD_UNAVAILABLE;
-    }
     s_giveQueue.push_back({
         .owner = &mod,
         .tag = item_give_tag(checkName),

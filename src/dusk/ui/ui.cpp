@@ -214,6 +214,8 @@ void handle_event(const SDL_Event& event) noexcept {
             });
         }
         sConnectedGamepads.erase(event.gdevice.which);
+    } else if (event.type == SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED) {
+        apply_scale();
     }
     input::handle_event(event);
 }
@@ -263,6 +265,24 @@ Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) 
 void uncover_top_document() noexcept {
     if (auto* doc = top_document()) {
         doc->uncover();
+    }
+    input::sync_input_block();
+}
+
+Document* find_document(DocumentScope scope) noexcept {
+    for (auto& doc : std::views::reverse(sDocumentStack)) {
+        if (!doc->closed() && doc->scope() == scope) {
+            return doc.get();
+        }
+    }
+    return nullptr;
+}
+
+void close_documents_except(DocumentScope scope) noexcept {
+    for (auto& doc : sDocumentStack) {
+        if (!doc->closed() && doc->scope() != scope) {
+            doc->force_hide(true);
+        }
     }
     input::sync_input_block();
 }
@@ -330,13 +350,10 @@ void update() noexcept {
         sPassiveDocuments.erase(first, last);
     }
 
-    // If no documents have focus, explicitly focus the top one
-    if (auto* context = aurora::rmlui::get_context();
-        context != nullptr && (context->GetFocusElement() == nullptr ||
-                                  context->GetFocusElement() == context->GetRootElement()))
-    {
+    // Keep focus on the highest active document.
+    if (aurora::rmlui::get_context() != nullptr) {
         for (auto& doc : std::views::reverse(sDocumentStack)) {
-            if (doc->active() && doc->focus()) {
+            if (doc->active() && (doc->has_focus() || doc->focus())) {
                 break;
             }
         }
@@ -462,10 +479,6 @@ void push_toast(Toast toast) noexcept {
     sToasts.push_back(std::move(toast));
 }
 
-std::vector<std::unique_ptr<Document>>& get_document_stack() noexcept {
-    return sDocumentStack;
-}
-
 std::deque<Toast>& get_toasts() noexcept {
     return sToasts;
 }
@@ -478,6 +491,16 @@ bool consume_menu_notification_request() noexcept {
     const bool requested = sMenuNotificationRequested;
     sMenuNotificationRequested = false;
     return requested;
+}
+
+void apply_scale() noexcept {
+    const auto userScale = getSettings().video.uiScale.getValue();
+    auto scale = 0.0f;
+    if (userScale != 0) {
+        const auto displayScale = aurora::window::get_window_size().scale;
+        scale = static_cast<float>(userScale) / 100.0f * (displayScale > 0.0f ? displayScale : 1.0f);
+    }
+    aurora::rmlui::set_ui_scale(scale);
 }
 
 }  // namespace dusk::ui

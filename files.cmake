@@ -1412,6 +1412,7 @@ set(DOLPHIN_FILES
 
 set(DUSK_FILES
         include/helpers/batch.hpp
+        include/helpers/bits.hpp
         include/helpers/endian_gx.hpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/OSContext.cpp
@@ -1433,6 +1434,7 @@ set(DUSK_FILES
         src/dusk/extras.c
         src/dusk/frame_interpolation.cpp
         src/dusk/game_clock.cpp
+        src/dusk/game_mode.cpp
         src/dusk/gamepad_color.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
@@ -1487,6 +1489,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/config.hpp
         src/dusk/mods/svc/game.cpp
         src/dusk/mods/svc/gfx.cpp
+        src/dusk/mods/svc/flow.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
         src/dusk/mods/svc/item.cpp
@@ -1499,6 +1502,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/texture.cpp
         src/dusk/mods/svc/ui.cpp
         src/dusk/mods/svc/ui.hpp
+        src/dusk/mods/svc/game_mode.cpp
         src/dusk/mods/svc/window.cpp
         src/dusk/mods/svc/window.hpp
         src/dusk/mods/svc/save.cpp
@@ -1521,6 +1525,8 @@ set(DUSK_FILES
         src/dusk/ui/bool_button.hpp
         src/dusk/ui/button.cpp
         src/dusk/ui/button.hpp
+        src/dusk/ui/color_input.cpp
+        src/dusk/ui/color_input.hpp
         src/dusk/ui/component.cpp
         src/dusk/ui/component.hpp
         src/dusk/ui/controller_config.cpp
@@ -1534,6 +1540,8 @@ set(DUSK_FILES
         src/dusk/ui/event.hpp
         src/dusk/ui/graphics_tuner.cpp
         src/dusk/ui/graphics_tuner.hpp
+        src/dusk/ui/group_button.cpp
+        src/dusk/ui/group_button.hpp
         src/dusk/ui/icon_provider.cpp
         src/dusk/ui/icon_provider.hpp
         src/dusk/ui/input.cpp
@@ -1551,12 +1559,16 @@ set(DUSK_FILES
         src/dusk/ui/mods_window.cpp
         src/dusk/ui/mods_window.hpp
         src/dusk/ui/nav_types.hpp
+        src/dusk/ui/nav_group.cpp
+        src/dusk/ui/nav_group.hpp
         src/dusk/ui/number_button.cpp
         src/dusk/ui/number_button.hpp
         src/dusk/ui/overlay.cpp
         src/dusk/ui/overlay.hpp
         src/dusk/ui/pane.cpp
         src/dusk/ui/pane.hpp
+        src/dusk/ui/popover.cpp
+        src/dusk/ui/popover.hpp
         src/dusk/ui/prelaunch.cpp
         src/dusk/ui/prelaunch.hpp
         src/dusk/ui/preset.cpp

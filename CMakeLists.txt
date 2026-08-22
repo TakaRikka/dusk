@@ -425,7 +425,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang)$")
     if (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
         set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
     else ()
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,5>)
+        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,4>)
     endif ()
 endif ()
 
@@ -519,6 +519,8 @@ if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR
     add_subdirectory(mods/ao_mod)
     add_subdirectory(mods/shadow_mod)
     add_subdirectory(mods/window_demo)
+    add_subdirectory(mods/flow_demo)
+    add_subdirectory(mods/basic_cosmetics_mod)
 endif ()
 
 if (APPLE)

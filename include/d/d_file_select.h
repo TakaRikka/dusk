@@ -9,41 +9,12 @@
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 
+#if TARGET_PC
+#include "mods/svc/game_mode.h"
+#endif
+
 class dFile_info_c;
 class J2DPicture;
-
-#if TARGET_PC
-static PaneCache mSelDtPanes[] = {
-    {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('ken_n0'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('ken_n1'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('fuku_n0'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('fuku_n1'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('fuku_n2'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('gray_n'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('b_base'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('b_base1'), 0.0f, 0.0f, false},
-};
-
-static PaneCache fileSelPanes[] = {
-    {MULTI_CHAR('w_uzu00'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu01'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu02'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu03'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu04'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu05'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu06'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu07'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu08'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_uzu09'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_er_msg'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_er_msE'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('w_er_msR'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('er_for0'), 0.0f, 0.0f, false},
-    {MULTI_CHAR('er_for1'), 0.0f, 0.0f, false},
-};
-#endif
 
 class dDlst_FileSel_c : public dDlst_base_c {
 public:
@@ -420,6 +391,13 @@ public:
     bool pointerMenuSelect();
     bool pointerCopyDataToSelect();
     bool pointerYesNoSelect(bool errorSelect);
+    void backToDataSelectMove() {
+        headerTxtSet(0x43, 1, 0);
+        fileRecScaleAnmInitSet2(0.0f, 1.0f);
+        nameMoveAnmInitSet(0xd29, 0xd1f);
+        modoruTxtDispAnmInit(0);
+        mDataSelProc = DATASELPROC_NAME_TO_DATA_SELECT_MOVE;
+    }
     #endif
     void _draw();
     void errorMoveAnmInitSet(int, int);
@@ -733,6 +711,8 @@ public:
     #endif
 #ifdef TARGET_PC
     dDlst_FileSelFade_c mFadeDlst;
+    bool mGameModeSaveStartBuildUi = true;
+    GameModeNewSaveState mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
 #endif
 
     #if PLATFORM_WII || PLATFORM_SHIELD

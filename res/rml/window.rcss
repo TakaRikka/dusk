@@ -48,6 +48,12 @@ window.modal {
     max-width: 640dp;
 }
 
+@media (max-height: 896dp) {
+    window.modal {
+        max-height: 100%;
+    }
+}
+
 window[open] {
     filter: opacity(1);
     transform: scale(1);
@@ -59,6 +65,16 @@ window[open] {
     }
     window {
         box-shadow: none;
+    }
+}
+
+@media (max-width: 768dp) {
+    body {
+        padding: 16dp;
+    }
+    window.modal {
+        width: 100%;
+        max-width: 100%;
     }
 }
 
@@ -278,6 +294,40 @@ select-button input {
     font-size: 20dp;
 }
 
+select-button.group-button icon {
+    flex: 0 0 24dp;
+    margin-left: auto;
+    width: 24dp;
+    height: 24dp;
+    font-size: 24dp;
+    color: inherit;
+    decorator: text("&#xe5cc;" center center);
+}
+
+select-button.group-button value {
+    display: none;
+}
+
+select-button.color-input value {
+    min-width: 0;
+    font-family: "Noto Mono";
+    font-size: 15dp;
+}
+
+select-button.color-input color-swatch {
+    display: block;
+    flex: 0 0 48dp;
+    width: 48dp;
+    height: 24dp;
+    border-radius: 7dp;
+    box-shadow: rgba(255, 255, 255, 45%) 0 0 0 1dp;
+}
+
+select-button.color-input color-swatch.empty {
+    background-color: rgba(224, 219, 200, 12%);
+    decorator: linear-gradient(135deg, rgba(224, 219, 200, 0) 45%, rgba(194, 164, 45, 70%) 48%, rgba(194, 164, 45, 70%) 52%, rgba(224, 219, 200, 0) 55%);
+}
+
 icon {
     width: 1em;
     height: 1em;
@@ -385,14 +435,17 @@ progress {
     margin: 6dp 0 2dp 0;
 }
 
+progress fill {
+    background-color: rgba(194, 164, 45, 80%);
+    border-radius: 3dp;
+}
+
 progress.progress-done fill {
     background-color: #44aa22;
-    border-radius: 3dp;
 }
 
 progress.progress-ongoing fill {
     background-color: #2255bb;
-    border-radius: 3dp;
 }
 
 button.achievement-clear {
@@ -432,7 +485,9 @@ button.achievement-clear {
     padding: 24dp;
     gap: 20dp;
     flex: 0 1 auto;
+    min-height: 0;
     width: 100%;
+    overflow: hidden;
     text-align: left;
 }
 
@@ -473,7 +528,7 @@ window.modal.danger .modal-header icon {
 .modal-body {
     display: block;
     width: 100%;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
     font-size: 20dp;
     color: #FFFFFF;
@@ -483,6 +538,37 @@ window.modal.danger .modal-header icon {
 .modal-body span.tip {
     font-size: 14dp;
     color: #92875B;
+}
+
+.modal-content {
+    display: none;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.modal-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content pane {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+    gap: 8dp;
+    overflow: hidden auto;
+}
+
+.modal-content pane > * {
+    flex: 0 0 auto;
+}
+
+.modal-content pane > spacer {
+    display: none;
 }
 
 .verification-progress {
@@ -518,4 +604,36 @@ progress.verification-progress-bar {
     width: 100%;
     flex: 0 0 auto;
     padding-top: 4dp;
+}
+
+.modal-actions-vertical {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.modal-actions-vertical button.modal-btn {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+@media (max-height: 640dp) {
+    .modal-dialog {
+        padding: 16dp;
+        gap: 12dp;
+    }
+
+    .modal-body {
+        font-size: 17dp;
+    }
+}
+
+@media (max-width: 640dp) {
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions button.modal-btn {
+        flex: 0 0 auto;
+        width: 100%;
+    }
 }

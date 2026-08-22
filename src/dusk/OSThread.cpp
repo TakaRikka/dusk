@@ -509,6 +509,12 @@ BOOL OSJoinThread(OSThread* thread, void** val) {
             *(s32*)val = (s32)(intptr_t)thread->val;
         }
         thread->state = 0;
+
+        {
+            std::lock_guard mapLock(GetThreadDataMutex());
+            GetThreadDataMap().erase(thread);
+        }
+        sActiveThreadCount--;
         return 1;
     }
     return 0;

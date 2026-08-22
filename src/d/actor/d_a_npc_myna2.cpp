@@ -1192,14 +1192,16 @@ int daNpc_myna2_c::ECut_gameGoalSuccess(int i_staffId) {
             int itemNo = 0;
             if (mFlow.getEventId(&itemNo) == 1) {
 #if TARGET_PC
-                const char* itemCheckName = nullptr;
+                u32 itemGiveTag = 0;
                 if (itemNo == dItemNo_KAKERA_HEART_e) {
-                    itemCheckName = "plumm_minigame_reward";
-                    itemNo = dusk::mods::item_check(itemCheckName, itemNo, this);
+                    const auto itemCheck =
+                        dusk::mods::item_check_commit("plumm_minigame_reward", itemNo, this);
+                    itemNo = itemCheck.itemNo;
+                    itemGiveTag = itemCheck.tag;
                 }
 #endif
                 mItemPid = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, -1, NULL,
-                    NULL IF_DUSK_ARG(dusk::mods::item_give_tag(itemCheckName)));
+                    NULL IF_DUSK_ARG(itemGiveTag));
             }
             break;
         }
