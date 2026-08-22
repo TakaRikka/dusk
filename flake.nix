@@ -181,7 +181,7 @@
               pkgs.sdl3
               pkgs.freetype
               pkgs.zstd
-              pkgs.cxxopts
+             (pkgs.cxxopts.override { enableUnicodeHelp = false; })
               pkgs.nlohmann_json
               pkgs.xxhash
               pkgs.abseil-cpp
