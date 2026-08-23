@@ -727,8 +727,8 @@ HookAction hookPreObjGbCreate(ModContext*, void* args, void* retval, void*) {
 }
 
 void hookPostReadItemTexture(ModContext*, void* args, void*, void*) {
-    const u8 item_no = mods::arg<u8>(args, 1);
-    void* tex_buf1 = mods::arg<void*>(args, 2);
+    const u8 item_no = mods::arg<u8>(args, 0);
+    void* tex_buf1 = mods::arg<void*>(args, 1);
     if (tex_buf1 == nullptr || item_no != dItemNo_Randomizer_MAGIC_LV1_e) {
         return;
     }
