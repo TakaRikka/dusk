@@ -71,13 +71,43 @@ void install_lifecycle_watch();
 void on_card_init(bool rawCardImage, const char* gameName, const char* company);
 
 /**
- * Marks the mirror dirty and schedules a debounced flush. Called from the tail of
- * mDoMemCd_Ctrl_c::store() on MemCardThread; does no I/O and takes no lock.
+ * Snapshots the card bytes and schedules a debounced flush.
+ *
+ * Called from the tail of mDoMemCd_Ctrl_c::store() on MemCardThread, holding no
+ * lock. The read happens here, not on the mirror's queue, because this is the one
+ * moment the file is known to be whole: this is the only writer thread and the
+ * write has completed. store() writes the .gci in several non-atomic steps, so a
+ * later read can catch it torn -- and the mirror's digest would then certify the
+ * torn bytes rather than reject them.
+ *
+ * The cost is one stat plus one 32 KB read per card file, on the memory card
+ * thread and never on the game loop. Everything else -- hashing, the envelope,
+ * NSUserDefaults -- happens on the mirror's own queue.
  */
 void note_save_written();
 
-/** Cancels any pending debounce and flushes synchronously. */
+/**
+ * Cancels any pending debounce and flushes, waiting a bounded time for it.
+ *
+ * Returns as soon as the flush completes, or after roughly two seconds if it has
+ * not -- whichever comes first. Called from a UIKit lifecycle callback running
+ * under a system watchdog, so it must never block indefinitely; an overrunning
+ * flush is logged and left to finish on the mirror's own queue.
+ *
+ * Returns immediately when nothing has changed since the last flush.
+ */
 void flush_now(const char* reason);
+
+/**
+ * Stops the mirror: removes the SDL event watch, abandons any pending debounced
+ * flush, runs one last bounded flush if anything is unsaved, and then makes every
+ * entry point a no-op so nothing can touch the globals as they are destroyed.
+ *
+ * Call from the shutdown path *before* logging is torn down, and while the memory
+ * card thread is idle. Safe to call more than once, and safe to call without a
+ * matching init().
+ */
+void shutdown();
 
 }  // namespace dusk::tvos::save_mirror
 

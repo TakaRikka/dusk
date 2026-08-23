@@ -45,6 +45,15 @@ constexpr const char* kTag = "[save-mirror]";
 // Debounce window for coalescing a burst of save writes.
 constexpr std::int64_t kDebounceNanos = 2ll * NSEC_PER_SEC;
 
+// How long a lifecycle or shutdown flush may hold up its caller.
+//
+// applicationWillTerminate and applicationDidEnterBackground run under a system
+// watchdog with a hard budget, and SDL invokes an event watch while holding its
+// event lock. An unbounded dispatch_sync there risks the app being killed for
+// being slow -- by the very feature whose entire job is to survive being killed.
+// A flush that overruns is logged loudly and left to finish on its own queue.
+constexpr std::int64_t kBoundedFlushNanos = 2ll * NSEC_PER_SEC;
+
 // The scan roots and the config-class allowlist live in save_mirror_core.hpp
 // (kRegionDirs, kCardDirs, kSupportFileNames, kControllerSuffix) so that the
 // scanner below and classify_entry() read the same list and cannot drift apart.
@@ -56,6 +65,14 @@ std::atomic<std::uint64_t> g_generation{0};
 std::atomic<bool> g_initClaimed{false};
 std::atomic<bool> g_started{false};
 std::atomic<bool> g_watchInstalled{false};
+
+// Teardown, in two steps. g_stopping is raised first and stops new work from
+// starting; g_stopped is raised last, once the final flush is done, after which
+// every path into the mirror is a no-op. Without them a debounced block could run
+// against destroyed globals up to the full debounce window after shutdown, and
+// the SDL event watch was never removed at all.
+std::atomic<bool> g_stopping{false};
+std::atomic<bool> g_stopped{false};
 
 // Set whenever there is something new to mirror, cleared by a flush that stored
 // it. Without this every transient interruption -- and tvOS produces a great many
@@ -488,6 +505,9 @@ std::vector<std::string> scan_support_names(const fs::path& dataRoot) {
 // The flush proper. Reached only through flush_on_queue() below, which is the
 // exception barrier.
 void flush_impl(const char* reason) {
+    if (g_stopped.load()) {
+        return;
+    }
     const State state = snapshot_state();
     if (state.dataRoot.empty()) {
         DuskLog.error("{} flush({}) skipped: data root is not set", kTag, reason);
@@ -909,6 +929,9 @@ void note_save_written() {
     const std::uint64_t generation = g_generation.fetch_add(1) + 1;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kDebounceNanos), g_queue, ^{
       try {
+          if (g_stopping.load()) {
+              return;  // shutdown has started; the globals are on their way out
+          }
           if (g_generation.load() != generation) {
               return;  // superseded by a later save inside the debounce window
           }
@@ -921,20 +944,71 @@ void note_save_written() {
     });
 }
 
-void flush_now(const char* reason) {
-    if (!g_started.load()) {
-        return;
-    }
+namespace {
+
+// Runs the flush on g_queue and waits at most kBoundedFlushNanos for it.
+// Returns false on timeout, having logged it.
+bool flush_bounded(const char* reason) {
     // Cancel any pending debounce: a save completed less than the debounce window
     // before backgrounding must not be lost.
     g_generation.fetch_add(1);
-    dispatch_sync(g_queue, ^{
+
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_async(group, g_queue, ^{
       @autoreleasepool {
           flush_on_queue(reason);
-          [[NSUserDefaults standardUserDefaults] synchronize];
       }
     });
+    if (dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, kBoundedFlushNanos)) != 0) {
+        DuskLog.error("{} flush({}) has not finished within {} s; returning to the caller rather "
+                      "than holding the main thread any longer. It is still running on the mirror "
+                      "queue and will complete if the app survives.",
+            kTag, reason, kBoundedFlushNanos / NSEC_PER_SEC);
+        return false;
+    }
     DuskLog.info("{} synchronous flush({}) complete", kTag, reason);
+    return true;
+}
+
+}  // namespace
+
+void flush_now(const char* reason) {
+    if (!g_started.load() || g_stopping.load()) {
+        return;
+    }
+    // Nothing has changed since the last flush, so there is nothing to write and
+    // no reason to hold up a lifecycle callback. store() already synchronizes on
+    // every flush, so a clean mirror is a mirror that is already on disk.
+    if (!g_dirty.load()) {
+        DuskLog.info("{} flush({}) skipped: nothing has changed since the last flush", kTag,
+            reason);
+        return;
+    }
+    flush_bounded(reason);
+}
+
+void shutdown() {
+    if (!g_started.load() || g_stopping.exchange(true)) {
+        return;
+    }
+
+    // Removed before the final flush: SDL must not be able to call back into a
+    // mirror that is being torn down.
+    if (g_watchInstalled.exchange(false)) {
+        SDL_RemoveEventWatch(lifecycle_event_watch, nullptr);
+        DuskLog.info("{} lifecycle watch removed", kTag);
+    }
+
+    if (g_dirty.load()) {
+        flush_bounded("shutdown");
+    } else {
+        DuskLog.info("{} shutdown: nothing has changed since the last flush", kTag);
+    }
+
+    // Published last. From here every entry point and every block still queued is
+    // a no-op, so nothing can reach the non-trivial globals as they are destroyed.
+    g_stopped.store(true);
+    DuskLog.info("{} stopped", kTag);
 }
 
 }  // namespace dusk::tvos::save_mirror

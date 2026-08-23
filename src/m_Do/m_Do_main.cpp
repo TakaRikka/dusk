@@ -775,6 +775,12 @@ int game_main(int argc, char* argv[]) {
     // Run ImGui UI loop if Aurora couldn't initialize a backend
     if (auroraInfo.backend == BACKEND_NULL) {
         launchUILoop();
+#if DUSK_TVOS_SAVE_MIRROR
+        // Before logging is torn down, so the mirror's own shutdown lines land in
+        // the log, and before aurora_shutdown() so the SDL event watch is removed
+        // while SDL is still up.
+        dusk::tvos::save_mirror::shutdown();
+#endif
         borealis::sentry::shutdown();
         borealis::log::shutdown();
         fflush(stdout);
@@ -889,6 +895,12 @@ int game_main(int argc, char* argv[]) {
 
             // pre game launch ui main loop
             if (!launchUILoop()) {
+#if DUSK_TVOS_SAVE_MIRROR
+                // Before logging is torn down, so the mirror's own shutdown lines land in
+                // the log, and before aurora_shutdown() so the SDL event watch is removed
+                // while SDL is still up.
+                dusk::tvos::save_mirror::shutdown();
+#endif
                 borealis::sentry::shutdown();
                 borealis::log::shutdown();
                 fflush(stdout);
@@ -984,6 +996,12 @@ int game_main(int argc, char* argv[]) {
         daMP_c::m_myObj->daMP_c_Finish();
     }
 
+#if DUSK_TVOS_SAVE_MIRROR
+    // Before logging is torn down, so the mirror's own shutdown lines land in
+    // the log, and before aurora_shutdown() so the SDL event watch is removed
+    // while SDL is still up.
+    dusk::tvos::save_mirror::shutdown();
+#endif
     borealis::sentry::shutdown();
     borealis::log::shutdown();
     fflush(stdout);
