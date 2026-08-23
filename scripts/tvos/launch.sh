@@ -4,8 +4,14 @@
 #   scripts/tvos/launch.sh --console             launch and stream stdout/stderr until Ctrl-C
 #   scripts/tvos/launch.sh --console-seconds N   stream for N seconds, then detach
 # --console-seconds exists because this Mac has neither timeout(1) nor gtimeout(1), so
-# `timeout 60 scripts/tvos/launch.sh --console` is not available. Detaching only stops the
-# stream; the app keeps running on the device.
+# `timeout 60 scripts/tvos/launch.sh --console` is not available. It is for capturing a bounded
+# boot log, NOT for starting a play session: devicectl's console is attached to the app, and the
+# app may be terminated when that console goes away. Detaching kills the *local* devicectl process
+# with SIGKILL -- SIGTERM was worse, devicectl forwards it to the app and that always killed it --
+# but whether the app survives losing its console has not been checked on the device. Tell which
+# happened by looking at the TV: still on screen means it survived; back at the home screen means
+# it did not. Either way, the gameplay run is plain `scripts/tvos/launch.sh`, which attaches no
+# console at all.
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -14,7 +20,9 @@ usage() {
 usage: scripts/tvos/launch.sh [--console | --console-seconds N]
   (no flag)            launch and return immediately
   --console            launch and stream stdout/stderr until Ctrl-C
-  --console-seconds N  stream for N seconds, then detach (the app keeps running)
+  --console-seconds N  stream for N seconds, then kill the local console. For a bounded boot
+                       log: the app on the device may be terminated along with the console, so
+                       use the no-flag form for the gameplay run.
 USAGE
 }
 
@@ -47,12 +55,19 @@ if [[ -n "$seconds" ]]; then
     xcrun devicectl device process launch --device "$udid" --terminate-existing --console \
         "$TVOS_BUNDLE_ID" > >(tee "$log") 2>&1 &
     pid=$!
-    trap 'kill "$pid" 2>/dev/null || true' EXIT INT TERM
+    # SIGKILL, not SIGTERM: devicectl forwards SIGTERM on to the app on the device, so the old
+    # `kill "$pid"` terminated the very app this was supposed to leave running. SIGKILL cannot be
+    # forwarded, so only the local process dies -- though the app may still go down with its
+    # console. The trap keeps Ctrl-C and SIGTERM from leaving devicectl behind.
+    trap 'kill -KILL "$pid" 2>/dev/null || true' EXIT INT TERM
     sleep "$seconds"
-    kill "$pid" 2>/dev/null || true
+    kill -KILL "$pid" 2>/dev/null || true
     wait "$pid" 2>/dev/null || true
     trap - EXIT INT TERM
-    tvos_log "console detached after ${seconds}s (the app keeps running on the device) — log: $log"
+    tvos_log "console detached after ${seconds}s — log: $log"
+    tvos_log "the app may have been terminated with the console — look at the TV: still on screen"
+    tvos_log "means it survived, back at the home screen means it did not. For the gameplay run use"
+    tvos_log "plain scripts/tvos/launch.sh, which attaches no console."
 elif [[ $console -eq 1 ]]; then
     xcrun devicectl device process launch --device "$udid" --terminate-existing --console "$TVOS_BUNDLE_ID"
 else

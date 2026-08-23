@@ -70,9 +70,19 @@ it is on the same network` when the Apple TV has no devicectl tunnel.
 - `scripts/tvos/launch.sh [--console | --console-seconds N]` —
   `xcrun devicectl device process launch --terminate-existing` for `dev.twilitrealm.dusk`.
   `--console` attaches and streams stdout/stderr until Ctrl-C. `--console-seconds N` streams for N
-  seconds and then detaches (the app keeps running on the device), recording the stream to
+  seconds and then kills the local console, recording the stream to
   `build/logs/launch-console.log`. It exists because this Mac has neither `timeout(1)` nor
   `gtimeout(1)`, so `timeout 60 scripts/tvos/launch.sh --console` is not available.
+  - **`--console-seconds` is for capturing a bounded boot log, not for starting a play session.**
+    devicectl's console is attached to the app, and **the app may be terminated when the console
+    detaches.** An earlier version of this page claimed the app keeps running; that was wrong. The
+    script sent `SIGTERM` to the local `devicectl` process, and devicectl forwards `SIGTERM` on to
+    the app, so the app died every time. It now sends `SIGKILL`, which cannot be forwarded — but
+    whether the app survives *losing* its console has not been tested on the device.
+  - **How to tell which happened:** look at the TV. Still on screen, the app survived the detach;
+    back at the tvOS home screen, it did not.
+  - **Use plain `scripts/tvos/launch.sh` for the gameplay run.** It attaches no console, so there
+    is nothing to detach later.
 
 ## How the disc is found
 No file dialog on tvOS. `src/dusk/disc_discovery*` scans `Dusklight.app/disc/` then
