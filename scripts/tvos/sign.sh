@@ -34,8 +34,12 @@ if [[ $allow_incomplete -eq 0 ]]; then
     # scripts/tvos/push-disc.sh afterwards).
     if [[ ! -d "$app/disc" ]]; then
         missing="$missing"$'\n'"  - disc/ is missing — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh"
-    elif [[ -z "$(ls -A "$app/disc" 2>/dev/null)" ]]; then
-        missing="$missing"$'\n'"  - disc/ is empty — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh"
+    # A non-empty disc/ is not enough: a Finder visit alone drops a .DS_Store in it, and `ls -A`
+    # counted that as content. Require an actual disc image -- same extension set as build.sh's
+    # workspace scan and kDiscExtensions in src/dusk/disc_discovery_rules.hpp.
+    elif ! find "$app/disc" -maxdepth 1 -type f \( -iname '*.iso' -o -iname '*.gcm' -o -iname '*.ciso' -o -iname '*.gcz' -o -iname '*.nfs' \
+            -o -iname '*.rvz' -o -iname '*.wbfs' -o -iname '*.wia' -o -iname '*.tgc' \) -print -quit 2>/dev/null | grep -q .; then
+        missing="$missing"$'\n'"  - disc/ has no disc image — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh (a stray .DS_Store or similar doesn't count; need one of .iso/.gcm/.ciso/.gcz/.nfs/.rvz/.wbfs/.wia/.tgc)"
     fi
     # The compiled asset catalog: Info.plist's CFBundleIcons and TVTopShelfImage name catalog sets,
     # which only resolve inside one. tvOS draws no icon without it and a device can refuse install.
