@@ -134,7 +134,8 @@ target_compile_definitions(randomizer PRIVATE
 
 # standalone randomizer generator for testing
 add_executable(randomizer_generator ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator_only.cpp ${RANDOMIZER_GENERATOR_SOURCES})
-target_link_libraries(randomizer_generator PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
+target_link_libraries(randomizer_generator PRIVATE
+        dusklight_mod_api yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
 target_compile_definitions(randomizer_generator PRIVATE
         RANDOMIZER_VERSION="1.0.0"
         RANDO_DATA_PATH="generator/data/"
@@ -144,7 +145,8 @@ target_compile_definitions(randomizer_generator PRIVATE
 
 # standalone tests
 add_executable(randomizer_generator_tests ${CMAKE_CURRENT_SOURCE_DIR}/generator/test/test.cpp ${RANDOMIZER_GENERATOR_SOURCES})
-target_link_libraries(randomizer_generator_tests PRIVATE yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
+target_link_libraries(randomizer_generator_tests PRIVATE
+        dusklight_mod_api yaml-cpp::yaml-cpp base64pp fmt::fmt randomizer_embeds)
 target_compile_definitions(randomizer_generator_tests PRIVATE
         RANDOMIZER_VERSION="1.0.0"
         RANDO_DATA_PATH="generator/data/"
