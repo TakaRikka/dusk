@@ -176,8 +176,12 @@ bool load_stored(ParseResult& outResult) {
 
 void store(const MirrorEnvelope& envelope) {
     NSString* key = [NSString stringWithUTF8String:kDefaultsKey];
-    [[NSUserDefaults standardUserDefaults] setObject:to_object(encode_envelope(envelope))
-                                              forKey:key];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:to_object(encode_envelope(envelope)) forKey:key];
+    // Modern tvOS persists defaults on its own schedule, but the whole point of
+    // the mirror is to survive a kill that arrives at a bad moment, so push it out
+    // now rather than trusting the next automatic write-back.
+    [defaults synchronize];
 }
 
 // ---------------------------------------------------------------------------
@@ -370,6 +374,8 @@ void flush_on_queue(const char* reason) {
     // exactly the purge this feature exists for; dropping the save from the mirror
     // at that moment would throw away the only surviving copy.
     if (savedNames.empty() && hadStored && stored.status == ParseStatus::Ok) {
+        const char* why = state.saveMirroringEnabled ? "no card file on disk"
+                                                     : "save mirroring disabled for this session";
         for (const auto& entry : stored.envelope.entries) {
             if (classify_entry(entry.name) != EntryClass::Save) {
                 continue;
@@ -379,9 +385,8 @@ void flush_on_queue(const char* reason) {
                     kTag, reason, entry.name);
                 continue;
             }
-            DuskLog.info("{} flush({}): no card file on disk, carrying mirrored {} forward "
-                         "({} bytes)",
-                kTag, reason, entry.name, entry.size);
+            DuskLog.info("{} flush({}): {}, carrying mirrored {} forward ({} bytes)", kTag,
+                reason, why, entry.name, entry.size);
             entries.push_back(entry);
             savedNames.push_back(entry.name);
         }
@@ -418,10 +423,25 @@ void flush_on_queue(const char* reason) {
 
     const std::int64_t sequence =
         (hadStored && stored.status == ParseStatus::Ok) ? stored.envelope.sequence + 1 : 1;
+
+    // The disc is not open during the pre-launch UI, so a background flush can
+    // happen before the game id is known. Inherit the stored one rather than
+    // stamping "unknown" over it -- that would fail the game-id check on the next
+    // restore and quietly strand the mirrored save.
+    std::string gameId = state.gameId;
+    if (gameId.empty()) {
+        if (hadStored && stored.status == ParseStatus::Ok && !stored.envelope.gameId.empty()) {
+            gameId = stored.envelope.gameId;
+            DuskLog.info("{} flush({}): game id not known yet, keeping the stored id {}", kTag,
+                reason, gameId);
+        } else {
+            gameId = "unknown";
+        }
+    }
+
     const auto timestamp = static_cast<std::int64_t>(std::time(nullptr));
-    const MirrorEnvelope envelope = build_envelope(kAppId,
-        state.gameId.empty() ? std::string("unknown") : state.gameId, sequence, timestamp,
-        std::move(entries));
+    const MirrorEnvelope envelope =
+        build_envelope(kAppId, gameId, sequence, timestamp, std::move(entries));
 
     store(envelope);
 
