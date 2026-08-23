@@ -24,7 +24,9 @@ To sign with that other team instead, override `DUSK_TVOS_TEAM_ID`. Not upstream
    not enough: device-targeted `xcodebuild` resolves `-destination` against the installed platform
    and otherwise refuses with *"tvOS 26.5 is not installed. Please download and install the
    platform from Xcode ▸ Settings ▸ Components"*. Run on this Mac on **2026-08-23** (3.76 GB
-   download; `xcrun simctl runtime list` now shows `tvOS 26.5 (23L470)`).
+   download; confirmed the device-side way `setup.sh` now checks — not the simulator-runtime
+   listing this page just warned proves nothing — `AppleTVOS.platform/Developer/SDKs/AppleTVOS26.5.sdk`
+   exists under Xcode).
 3. Pair the Apple TV with Xcode (Settings ▸ Remotes and Devices ▸ Remote App and Devices), keep it awake.
 4. `scripts/tvos/provision.sh` — creates the tvOS development profile for `dev.twilitrealm.dusk` (team
    <YOUR_TEAM_ID>) and registers the device. Requires the Apple ID of that team in Xcode ▸ Settings ▸
