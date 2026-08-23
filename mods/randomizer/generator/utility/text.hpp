@@ -18,6 +18,7 @@ namespace randomizer {
             SPANISH,
             ITALIAN,
             // End of ordering for dSv_config_language
+            DUTCH,
             JAPANESE, // Not supported yet
             LANGUAGE_MAX
         };
@@ -63,7 +64,8 @@ namespace randomizer {
         static constexpr float MAX_LINE_WIDTH_ITEM_TEXTBOX = 14.0f;
         static constexpr float MAX_LINE_WIDTH_NORMAL_TEXTBOX = 17.0f;
         static constexpr size_t MAX_NEWLINES_PER_MESSAGE = 40;
-        static constexpr size_t LINES_PER_BOX = 4;
+        static constexpr size_t LINES_PER_BOX_LATIN = 4;
+        static constexpr size_t LINES_PER_BOX_JP = 3;
 
         Text() = default;
         explicit Text(const std::string& str);
@@ -101,7 +103,8 @@ namespace randomizer {
         Text::SPANISH,
         Text::FRENCH,
         Text::GERMAN,
-        Text::ITALIAN
+        Text::ITALIAN,
+        Text::JAPANESE
     };
 
     // std::u16string apply_name_color(std::u16string str, const Color& color);
@@ -126,7 +129,7 @@ namespace randomizer {
     Text addColor(const Text& t, Text::Color color, int count = 1);
 
     // Adds newlines in appropriate places to properly break the text string for textboxes
-    void breakLines(std::string& str, float maxStrLength);
+    void breakLines(std::string& str, float maxStrLength, int lang);
 
     // Replaces the message codes in the string with the ingame hex equivalents
     void applyMessageCodes(std::string&);

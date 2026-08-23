@@ -268,11 +268,19 @@ void hookPostSetSaveData(ModContext* ctx, void* args, void* retval, void* userda
 
             // Overwrite "Save time" text with "Randomizer"
             auto saveTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'));
+            // If this text is hidden, then we're playing on JP
+            if (!saveTimeText->isVisible()) {
+                saveTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('w_s_t_01'));
+            }
             SafeStringCopy(saveTimeText->getStringPtr(), "Randomizer");
             setHBinding(saveTimeText, J2DTextBoxHBinding::HBIND_LEFT);
 
             // Overwrite the "Total play time" text with the seed hash
             auto playTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'));
+            // If this text is hidden, then we're playing on JP
+            if (!playTimeText->isVisible()) {
+                playTimeText = (J2DTextBox*)i_this->mFileInfo.Scr->search(MULTI_CHAR('w_p_t_01'));
+            }
             SafeStringCopy(playTimeText->getStringPtr(), curFileSeedHash.c_str());
 
             // Give the text double the space on the menu incase the seed hash is long

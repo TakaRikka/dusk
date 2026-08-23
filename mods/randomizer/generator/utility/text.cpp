@@ -2,6 +2,7 @@
 
 #include "string.hpp"
 #include "yaml.hpp"
+#include "shiftjis_table.hpp"
 
 #include <fmt/format.h>
 
@@ -45,15 +46,17 @@ namespace randomizer {
 
             static const std::locale latin1Locale(localeName);
 
-            for (auto& text : mText) {
-                if (!text.empty()) {
+            for (size_t lang = 0; lang < mText.size(); ++lang) {
+                auto& text = mText[lang];
+                if (!text.empty() && lang != JAPANESE) {
                     text[0] = std::toupper(text[0], latin1Locale);
                 }
             }
         } catch (const std::runtime_error&) {
             // Fallback incase the system completely lacks the requested locale definition
-            for (auto& text : mText) {
-                if (!text.empty()) {
+            for (size_t lang = 0; lang < mText.size(); ++lang) {
+                auto& text = mText[lang];
+                if (!text.empty() && lang != JAPANESE) {
                     text[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(text[0])));
                 }
             }
@@ -61,16 +64,22 @@ namespace randomizer {
     }
 
     void Text::BreakLines(float maxLineWidth /*= MAX_LINE_WIDTH_ITEM_TEXTBOX*/) {
-        for (auto& text : mText) {
-            breakLines(text, maxLineWidth);
+        for (size_t lang = 0; lang < mText.size(); ++lang) {
+            auto& text = mText[lang];
+            breakLines(text, maxLineWidth, lang);
         }
     }
 
     void Text::PadToNextBox() {
         BreakLines();
-        for (auto& text : mText) {
+        for (size_t lang = 0; lang < mText.size(); ++lang) {
+            auto& text = mText[lang];
+            auto linesPerBox = LINES_PER_BOX_LATIN;
+            if (lang == JAPANESE) {
+                linesPerBox = LINES_PER_BOX_JP;
+            }
             size_t numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
-            while (numNewLines == 0 || text.back() != '\n' || numNewLines % LINES_PER_BOX != 0) {
+            while (numNewLines == 0 || text.back() != '\n' || numNewLines % linesPerBox != 0) {
                 text += '\n';
                 ++numNewLines;
             }
@@ -113,12 +122,16 @@ namespace randomizer {
             // Split each string into the appropriate number of objects
             for (size_t textIdx = 0; textIdx < mText.size(); ++textIdx) {
                 auto& textStr = mText[textIdx];
+                auto linesPerBox = LINES_PER_BOX_LATIN;
+                if (textIdx == JAPANESE) {
+                    linesPerBox = LINES_PER_BOX_JP;
+                }
                 // Calculate how many newlines we're allowing in this string per message
                 // Different languages may have different amounts of newlines
                 double numNewLines = std::ranges::count_if(textStr, [](char c){return c == '\n';});
                 auto newLinesPerMessage  = static_cast<size_t>(std::ceil(numNewLines / numTextObjects));
                 // Keep the number of lines as a multiple of how many lines are in a box so we don't split in the middle of a textbox
-                while (newLinesPerMessage % LINES_PER_BOX != 0) {
+                while (newLinesPerMessage % linesPerBox != 0) {
                     ++newLinesPerMessage;
                 }
 
@@ -212,6 +225,7 @@ namespace randomizer {
             {"french",   Text::FRENCH},
             {"german",   Text::GERMAN},
             {"italian",  Text::ITALIAN},
+            {"dutch",    Text::DUTCH},
             {"japanese", Text::JAPANESE}
         };
 
@@ -236,6 +250,8 @@ namespace randomizer {
                 return "german";
             case Text::ITALIAN:
                 return "italian";
+            case Text::DUTCH:
+                return "dutch";
             case Text::JAPANESE:
                 return "japanese";
             default:
@@ -299,17 +315,74 @@ namespace randomizer {
         return latin1Str;
     }
 
+std::string UTF8ToShiftJIS(const std::string& utf8Str) {
+    std::string sjisStr;
+    sjisStr.reserve(utf8Str.length());
+
+    size_t read_pos = 0;
+    size_t len = utf8Str.length();
+
+    while (read_pos < len) {
+        uint32_t codepoint = 0;
+        unsigned char c = utf8Str[read_pos];
+
+        // Decode UTF-8 sequence to Unicode codepoint
+        if (c < 0x80) {
+            codepoint = c;
+            read_pos += 1;
+        } else if ((c & 0xE0) == 0xC0 && (read_pos + 1 < len)) {
+            codepoint = ((c & 0x1F) << 6) | (utf8Str[read_pos + 1] & 0x3F);
+            read_pos += 2;
+        } else if ((c & 0xF0) == 0xE0 && (read_pos + 2 < len)) {
+            codepoint = ((c & 0x0F) << 12) |
+                        ((utf8Str[read_pos + 1] & 0x3F) << 6) |
+                        (utf8Str[read_pos + 2] & 0x3F);
+            read_pos += 3;
+        } else if ((c & 0xF8) == 0xF0 && (read_pos + 3 < len)) {
+            codepoint = ((c & 0x07) << 18) |
+                        ((utf8Str[read_pos + 1] & 0x3F) << 12) |
+                        ((utf8Str[read_pos + 2] & 0x3F) << 6) |
+                        (utf8Str[read_pos + 3] & 0x3F);
+            read_pos += 4;
+        } else {
+            throw std::runtime_error(fmt::format("Invalid UTF-8 byte sequence in \"{}\"", utf8Str));
+        }
+
+        // Convert Codepoint to Shift-JIS
+        if (codepoint < 0x80) {
+            // Standard ASCII maps directly (Note: 0x5C is '\' in ASCII, '¥' in JIS X 0201)
+            sjisStr.push_back(static_cast<char>(codepoint));
+        } else if (codepoint >= 0xFF61 && codepoint <= 0xFF9F) {
+            // Half-width Katakana (U+FF61 - U+FF9F -> 0xA1 - 0xDF)
+            sjisStr.push_back(static_cast<char>(codepoint - 0xFF61 + 0xA1));
+        } else {
+            // Full-width Kana / Kanji lookup
+            auto it = unicodeToShiftJISMap.find(codepoint);
+            if (it == unicodeToShiftJISMap.end()) {
+                throw std::runtime_error(fmt::format("Codepoint U+{:04X} cannot be represented in Shift-JIS", codepoint));
+            }
+
+            uint16_t sjisVal = it->second;
+            sjisStr.push_back(static_cast<char>((sjisVal >> 8) & 0xFF)); // Lead byte
+            sjisStr.push_back(static_cast<char>(sjisVal & 0xFF));        // Trail byte
+        }
+    }
+
+    return sjisStr;
+}
+
     static void LoadTextData(TextDatabase& tb) {
         struct LanguageEntry {
             std::string language;
             std::string languageData;
         };
         auto files = std::to_array<LanguageEntry>({
-            {"english", GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/english.yaml")},
-            {"spanish", GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/spanish.yaml")},
-            {"french",  GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/french.yaml")},
-            {"german",  GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/german.yaml")},
-            {"italian", GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/italian.yaml")},
+            {"english",  GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/english.yaml")},
+            {"spanish",  GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/spanish.yaml")},
+            {"french",   GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/french.yaml")},
+            {"german",   GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/german.yaml")},
+            {"italian",  GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/italian.yaml")},
+            {"japanese", GET_EMBED_DATA(RANDO_DATA_PATH "text/languages/japanese.yaml")},
         });
 
         for (const auto& file : files) {
@@ -324,8 +397,7 @@ namespace randomizer {
                     if (language != Text::JAPANESE) {
                         tb[name][type].mText[language] = UTF8ToLatin1(text);
                     } else {
-                        // Probably have to handle Japanese another way at some point
-                        tb[name][type].mText[language] = text;
+                        tb[name][type].mText[language] = UTF8ToShiftJIS(text);
                     }
                     if (typeData["Gender"]) {
                         tb[name][type].mGender[language] = stringToGender(typeData["Gender"].as<std::string>());
@@ -421,6 +493,7 @@ namespace randomizer {
         {"<fast>",           "\x1A\x05\x00\x00\x01"sv},
         {"<slow>",           "\x1A\x05\x00\x00\x02"sv},
         {"<begin choice>",   "\x1A\x05\x00\x00\x20"sv},
+        {"<char kyo>",       "\x1A\x05\x04\x00\x0A"sv}, // Special JP character
         {"<male>",           "\x1A\x05\x06\x00\x02"sv},
         {"<female>",         "\x1A\x05\x06\x00\x03"sv},
         {"<2 way choice 1>", "\x1A\x06\x00\x00\x08\x01"sv},
@@ -441,18 +514,45 @@ namespace randomizer {
         {"<silver>",         "\x1A\x06\xFF\x00\x00\x0B"sv},
     };
 
-    void breakLines(std::string& str, float maxStrLength) {
-
+    void breakLines(std::string& str, float maxStrLength, int lang) {
         // Randomizer Only shouldn't rely on needing access to the iso
-#ifndef RANDOMIZER_ONLY
+    #ifndef RANDOMIZER_ONLY
         // Get game's font
         auto gameFont = mDoExt_getMesgFont();
-#endif
+    #endif
+
         float curLineWidth = 0.f;
         size_t i = 0;
-        size_t previousSpace = 0;
-        while (i < str.length()) {
+        size_t lastBreakOpportunity = 0;
 
+        // Check if a byte is a Shift-JIS lead byte
+        auto isSJISLeadByte = [&](uint8_t c) {
+            return ((c >= 0x81 && c <= 0x9F) || (c >= 0xE0 && c <= 0xFC)) && lang == Text::JAPANESE;
+        };
+
+        // Check if a Shift-JIS 2-byte character is a prohibited line-start character
+        auto isProhibitedLineStart = [](uint16_t sjisChar) {
+            switch (sjisChar) {
+                case 0x8141: // 、 (Comma)
+                case 0x8142: // 。 (Period)
+                case 0x8143: // ,
+                case 0x8144: // .
+                case 0x8168: // 」 (Closing Quote)
+                case 0x816A: // 』
+                case 0x816C: // ） (Closing Paren)
+                case 0x816E: // ］
+                case 0x8170: // ｝
+                case 0x815B: // ー (Katakana Prolonged Sound Mark)
+                case 0x8145: // ・ (Middle Dot)
+                case 0x8148: // ?
+                case 0x8149: // !
+                    return true;
+                default:
+                    return false;
+            }
+        };
+
+        while (i < str.length()) {
             // Skip over control codes since they don't get displayed
             std::string code{};
             for (const auto& messageCode : messageCodes | std::views::keys) {
@@ -471,42 +571,67 @@ namespace randomizer {
                 continue;
             }
 
-            // Keep track of the previous space to replace with
-            // a line break when we reach the maximum width
-            if (str[i] == ' ') {
-                previousSpace = i;
-            }
+            uint8_t c1 = static_cast<uint8_t>(str[i]);
+
             // If we encounter an already inserted newline, reset the counter
-            else if (str[i] == '\n') {
+            if (c1 == '\n') {
                 curLineWidth = 0.f;
                 ++i;
+                lastBreakOpportunity = i;
                 continue;
             }
 
+            uint16_t sjisChar = c1;
+            size_t charLen = 1;
 
-#ifndef RANDOMIZER_ONLY
-            auto width = gameFont->getWidth(str[i]);
+            if (isSJISLeadByte(c1) && (i + 1 < str.length())) {
+                uint8_t c2 = static_cast<uint8_t>(str[i + 1]);
+                sjisChar = (static_cast<uint16_t>(c1) << 8) | c2;
+                charLen = 2;
+            }
+
+            // Keep track of the previous space to replace with
+            // a line break when we reach the maximum width. For Japanese,
+            // we can insert a newline anywhere we don't have a prohibited
+            // line start character
+            if (c1 == ' ') {
+                lastBreakOpportunity = i;
+            } else if (charLen == 2 && !isProhibitedLineStart(sjisChar)) {
+                // In Japanese, every character boundary is a potential line break (unless prohibited by punctuation)
+                lastBreakOpportunity = i;
+            }
+
+    #ifndef RANDOMIZER_ONLY
+            float width = static_cast<float>(gameFont->getWidth(sjisChar));
             curLineWidth += width / static_cast<float>(gameFont->getCellWidth());
-#else
+    #else
             // Assume worst case with no iso access
-            curLineWidth += 1;
-#endif
+            curLineWidth += (charLen == 2) ? 2.f : 1.f;
+    #endif
+
             // If we exceed the maximum line width, replace the
             // previous space with a newline and start counting
             // from the newline again
-            if (curLineWidth > maxStrLength) {
-                str[previousSpace] = '\n';
-                i = previousSpace;
+            if (curLineWidth > maxStrLength && lastBreakOpportunity > 0) {
+                if (str[lastBreakOpportunity] == ' ') {
+                    str[lastBreakOpportunity] = '\n';
+                    i = lastBreakOpportunity + 1;
+                } else {
+                    // Insert a newline directly between Japanese characters
+                    str.insert(lastBreakOpportunity, "\n");
+                    i = lastBreakOpportunity + 1;
+                }
                 curLineWidth = 0.f;
+                lastBreakOpportunity = 0;
+                continue;
             }
 
-            ++i;
+            i += charLen;
         }
 
-#ifndef RANDOMIZER_ONLY
-        // Free game's font
+    #ifndef RANDOMIZER_ONLY
         mDoExt_removeMesgFont();
-#endif
+    #endif
     }
 
     void applyMessageCodes(std::string& str) {
@@ -533,6 +658,7 @@ namespace randomizer {
         std::string german{};
         std::string italian{};
         std::string spanish{};
+        std::string japanese{};
         for (int i = 0; i < texts.size(); ++i) {
             auto& text = texts[i];
 
@@ -543,24 +669,28 @@ namespace randomizer {
                 german += text.mText[Text::GERMAN];
                 italian += text.mText[Text::ITALIAN];
                 spanish += text.mText[Text::SPANISH];
+                japanese += text.mText[Text::JAPANESE];
             } else if (i == texts.size() - 1 && texts.size() == 2) {
                 english += " and " + text.mText[Text::ENGLISH];
                 french += " and " + text.mText[Text::FRENCH];
                 german += " and " + text.mText[Text::GERMAN];
                 italian += " and " + text.mText[Text::ITALIAN];
                 spanish += " and " + text.mText[Text::SPANISH];
+                japanese += " and " + text.mText[Text::JAPANESE];
             } else if (i == texts.size() - 1) {
                 english += ", and " + text.mText[Text::ENGLISH];
                 french += ", and " + text.mText[Text::FRENCH];
                 german += ", and " + text.mText[Text::GERMAN];
                 italian += ", and " + text.mText[Text::ITALIAN];
                 spanish += ", and " + text.mText[Text::SPANISH];
+                japanese += ", and " + text.mText[Text::JAPANESE];
             } else {
                 english += ", " + text.mText[Text::ENGLISH];
                 french += ", " + text.mText[Text::FRENCH];
                 german += ", " + text.mText[Text::GERMAN];
                 italian += ", " + text.mText[Text::ITALIAN];
                 spanish += ", " + text.mText[Text::SPANISH];
+                japanese += ", " + text.mText[Text::JAPANESE];
             }
         }
 
@@ -570,6 +700,7 @@ namespace randomizer {
         listingText.mText[Text::GERMAN] = german;
         listingText.mText[Text::ITALIAN] = italian;
         listingText.mText[Text::SPANISH] = spanish;
+        listingText.mText[Text::JAPANESE] = japanese;
         return listingText;
     }
 }; // namespace Text

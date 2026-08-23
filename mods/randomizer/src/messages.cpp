@@ -141,7 +141,7 @@ ModResult register_custom_messages(const RandomizerContext& context, MessageIdMa
         const auto style = message_style(definition.style);
         std::vector<mods::flow::MessageVariant> variants;
         for (const auto& [language, text] : definition.text) {
-            if (language < MESSAGE_LANGUAGE_ENGLISH || language > MESSAGE_LANGUAGE_ITALIAN) {
+            if (language < MESSAGE_LANGUAGE_ENGLISH || language > MESSAGE_LANGUAGE_JAPANESE) {
                 continue;
             }
             variants.emplace_back(static_cast<MessageLanguage>(language),
@@ -198,7 +198,7 @@ bool formatted_override(
 
 ModResult register_native_overrides(const RandomizerContext& context) {
     for (const auto& [language, overrides] : context.mTextOverrides) {
-        if (language < MESSAGE_LANGUAGE_ENGLISH || language > MESSAGE_LANGUAGE_ITALIAN) {
+        if (language < MESSAGE_LANGUAGE_ENGLISH || language > MESSAGE_LANGUAGE_JAPANESE) {
             continue;
         }
         for (const auto& [key, value] : overrides) {
