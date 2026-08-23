@@ -404,6 +404,226 @@ int main() {
         CHECK(emptyDecision.reason == RestoreReason::NoEntries);
     }
 
+    // -------------------------------------------------- scoped validation
+    // A corrupt config entry must not stand between the player and a good save,
+    // and the reverse must hold for the config pass.
+    {
+        MirrorEnvelope badSupport = multi_save_envelope();
+        badSupport.entries[2].data[0] ^= 0xff;  // config.json no longer hashes
+        CHECK(check_envelope(badSupport, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::All) == EnvelopeStatus::DigestMismatch);
+        CHECK(check_envelope(badSupport, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::SavesOnly) == EnvelopeStatus::Ok);
+        CHECK(check_envelope(badSupport, kAppId, kGameId, GameIdPolicy::Ignore,
+                  EntryScope::SupportOnly) == EnvelopeStatus::DigestMismatch);
+        CHECK(decide_restore(false, &badSupport, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::SavesOnly).restore);
+
+        MirrorEnvelope badSave = multi_save_envelope();
+        badSave.entries[1].data[0] ^= 0xff;  // the Card B save no longer hashes
+        CHECK(check_envelope(badSave, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::SavesOnly) == EnvelopeStatus::DigestMismatch);
+        CHECK(check_envelope(badSave, kAppId, kGameId, GameIdPolicy::Ignore,
+                  EntryScope::SupportOnly) == EnvelopeStatus::Ok);
+
+        // A mirror holding no entry of the requested class reports NoEntries for
+        // that class rather than passing vacuously.
+        std::vector<MirrorEntry> configOnly;
+        configOnly.push_back(make_entry("config.json", {'{', '}'}));
+        const MirrorEnvelope noSave = build_envelope(kAppId, kGameId, 1, 2, std::move(configOnly));
+        CHECK(check_envelope(noSave, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::SavesOnly) == EnvelopeStatus::NoEntries);
+        CHECK(check_envelope(noSave, kAppId, kGameId, GameIdPolicy::Ignore,
+                  EntryScope::SupportOnly) == EnvelopeStatus::Ok);
+
+        // A wrong totalBytes still fails the whole-envelope check, and is
+        // deliberately not consulted by the narrowed passes.
+        MirrorEnvelope wrongTotal = multi_save_envelope();
+        wrongTotal.totalBytes += 1;
+        CHECK(check_envelope(wrongTotal, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::All) == EnvelopeStatus::TotalMismatch);
+        CHECK(check_envelope(wrongTotal, kAppId, kGameId, GameIdPolicy::Require,
+                  EntryScope::SavesOnly) == EnvelopeStatus::Ok);
+    }
+
+    // ------------------------------------------------------- restore plan
+    {
+        const MirrorEnvelope both = multi_save_envelope();
+
+        // Both cards gone: both are restored.
+        const RestorePlan none = plan_restore(both, EntryClass::Save, {});
+        CHECK(!none.primaryPresent);
+        CHECK(none.missing.size() == 2);
+        CHECK(none.missing[0] == kSavePath);
+        CHECK(none.missing[1] == kSavePathB);
+        CHECK(none.present.empty());
+
+        // Both cards present: nothing to do.
+        const RestorePlan all = plan_restore(both, EntryClass::Save, {kSavePath, kSavePathB});
+        CHECK(all.primaryPresent);
+        CHECK(all.missing.empty());
+        CHECK(all.present.size() == 2);
+
+        // THE F1 CASE. One card file survived, the other was purged. The
+        // survivor must not suppress the restore of the one that is gone --
+        // the mirror holds its only copy and the next flush replaces the mirror.
+        const RestorePlan partial = plan_restore(both, EntryClass::Save, {kSavePath});
+        CHECK(!partial.primaryPresent);
+        CHECK(partial.missing.size() == 1);
+        CHECK(partial.missing[0] == kSavePathB);
+        CHECK(partial.present.size() == 1);
+        CHECK(partial.present[0] == kSavePath);
+
+        // The other slot purged instead, so the answer cannot come from ordering.
+        const RestorePlan otherWay = plan_restore(both, EntryClass::Save, {kSavePathB});
+        CHECK(!otherWay.primaryPresent);
+        CHECK(otherWay.missing.size() == 1);
+        CHECK(otherWay.missing[0] == kSavePath);
+
+        // Classes do not leak into each other's plan.
+        const RestorePlan support = plan_restore(both, EntryClass::Support, {});
+        CHECK(support.missing.size() == 1);
+        CHECK(support.missing[0] == "config.json");
+
+        // No entry of the requested class: not "already present".
+        std::vector<MirrorEntry> configOnly;
+        configOnly.push_back(make_entry("config.json", {'{', '}'}));
+        const MirrorEnvelope noSave = build_envelope(kAppId, kGameId, 1, 2, std::move(configOnly));
+        const RestorePlan empty = plan_restore(noSave, EntryClass::Save, {});
+        CHECK(!empty.primaryPresent);
+        CHECK(empty.missing.empty());
+        CHECK(empty.present.empty());
+    }
+
+    // --------------------------------------------------------- flush plan
+    {
+        const MirrorEnvelope stored = multi_save_envelope();
+
+        // No stored mirror at all: nothing to carry, sequence starts at 1.
+        const FlushPlan fresh = plan_flush(nullptr, {kSavePath}, kGameId, kAppId);
+        CHECK(fresh.carried.empty());
+        CHECK(fresh.gameId == kGameId);
+        CHECK(fresh.sequence == 1);
+        CHECK(fresh.mayReplaceStored);
+
+        // No mirror and no disc open: the id is explicitly unknown, never blank.
+        CHECK(plan_flush(nullptr, {}, "", kAppId).gameId == kUnknownGameId);
+
+        // THE F1 CASE, flush half. One card was captured from disk this flush,
+        // the other was not -- so the other's stored copy must survive. The
+        // pre-fix rule ("carry forward only when *no* card file was found")
+        // dropped it, and the restore half could not have saved it either.
+        const FlushPlan partial = plan_flush(&stored, {kSavePath}, kGameId, kAppId);
+        CHECK(partial.carried.size() == 1);
+        CHECK(partial.carried[0].name == kSavePathB);
+        CHECK(partial.carried[0].data == stored.entries[1].data);
+        CHECK(partial.considered.size() == 2);
+        CHECK(partial.considered[0].name == kSavePath);
+        CHECK(partial.considered[0].status == CarryForward::Superseded);
+        CHECK(partial.considered[1].name == kSavePathB);
+        CHECK(partial.considered[1].status == CarryForward::Carried);
+        CHECK(partial.sequence == stored.sequence + 1);
+        CHECK(partial.mayReplaceStored);
+        CHECK(!partial.droppedForeignSave);
+
+        // Both captured: nothing is carried, and the config entry is never
+        // carried either (it is re-read from disk every flush).
+        const FlushPlan all = plan_flush(&stored, {kSavePath, kSavePathB}, kGameId, kAppId);
+        CHECK(all.carried.empty());
+        CHECK(all.considered.size() == 2);
+
+        // Nothing captured -- the purge this feature exists for. Both survive.
+        const FlushPlan purged = plan_flush(&stored, {}, kGameId, kAppId);
+        CHECK(purged.carried.size() == 2);
+        CHECK(purged.mayReplaceStored);
+
+        // A stored entry that fails its own digest is not propagated.
+        MirrorEnvelope corrupt = stored;
+        corrupt.entries[1].data[7] ^= 0xff;
+        const FlushPlan dropped = plan_flush(&corrupt, {}, kGameId, kAppId);
+        CHECK(dropped.carried.size() == 1);
+        CHECK(dropped.carried[0].name == kSavePath);
+        CHECK(dropped.considered[1].status == CarryForward::Corrupt);
+        CHECK(!dropped.droppedForeignSave);  // corrupt is not an identity refusal
+        CHECK(dropped.mayReplaceStored);
+
+        // THE F8 CASE. A mirror from another region must never be relabelled
+        // with this session's id: that would make it restorable for the wrong
+        // game, which §3.1 forbids outright.
+        MirrorEnvelope otherRegion = stored;
+        otherRegion.gameId = "GZ2E01";
+        const FlushPlan foreign = plan_flush(&otherRegion, {kSavePath}, kGameId, kAppId);
+        CHECK(foreign.gameId == kGameId);  // this session's id, not the stored one
+        CHECK(foreign.carried.empty());    // and nothing wearing it
+        CHECK(foreign.considered.size() == 2);
+        CHECK(foreign.considered[0].status == CarryForward::ForeignGame);
+        CHECK(foreign.considered[1].status == CarryForward::ForeignGame);
+        CHECK(foreign.droppedForeignSave);
+        // There is a live save to protect, so the trade is allowed.
+        CHECK(foreign.mayReplaceStored);
+
+        // ... but with nothing of our own to protect, a config-only flush must
+        // not spend another game's save on it.
+        const FlushPlan foreignIdle = plan_flush(&otherRegion, {}, kGameId, kAppId);
+        CHECK(foreignIdle.carried.empty());
+        CHECK(foreignIdle.droppedForeignSave);
+        CHECK(!foreignIdle.mayReplaceStored);
+
+        // The disc is not open: the id is unknown, so the stored mirror is not
+        // foreign -- it is inherited whole, id included. This is the pre-launch
+        // background flush, and downgrading it to "unknown" would strand the save.
+        const FlushPlan preLaunch = plan_flush(&otherRegion, {}, "", kAppId);
+        CHECK(preLaunch.gameId == "GZ2E01");
+        CHECK(preLaunch.carried.size() == 2);
+        CHECK(!preLaunch.droppedForeignSave);
+        CHECK(preLaunch.mayReplaceStored);
+
+        // A mirror written by the sibling port, or by a schema this build does
+        // not know, is never adopted and never quietly discarded either.
+        MirrorEnvelope otherApp = stored;
+        otherApp.app = "banjo";
+        const FlushPlan foreignApp = plan_flush(&otherApp, {}, kGameId, kAppId);
+        CHECK(foreignApp.carried.empty());
+        CHECK(foreignApp.considered[0].status == CarryForward::ForeignApp);
+        CHECK(!foreignApp.mayReplaceStored);
+        CHECK(foreignApp.gameId == kGameId);
+
+        MirrorEnvelope otherSchema = stored;
+        otherSchema.schema = kSchemaVersion + 1;
+        const FlushPlan foreignSchema = plan_flush(&otherSchema, {}, "", kAppId);
+        CHECK(foreignSchema.carried.empty());
+        CHECK(foreignSchema.considered[0].status == CarryForward::ForeignSchema);
+        CHECK(!foreignSchema.mayReplaceStored);
+        // An id may not be inherited across a schema this build cannot read.
+        CHECK(foreignSchema.gameId == kUnknownGameId);
+
+        // A stored mirror with no id of its own is ours to label.
+        MirrorEnvelope unlabelled = stored;
+        unlabelled.gameId = "";
+        const FlushPlan adopt = plan_flush(&unlabelled, {}, kGameId, kAppId);
+        CHECK(adopt.gameId == kGameId);
+        CHECK(adopt.carried.size() == 2);
+        CHECK(!adopt.droppedForeignSave);
+    }
+
+    // ------------------------------------------------- allowlist agreement
+    // The scanner in save_mirror.mm walks kRegionDirs x kCardDirs and the
+    // kSupportFileNames list; classify_entry has to accept exactly what that
+    // walk can produce, or the two drift and files are scanned but never stored.
+    for (const auto region : kRegionDirs) {
+        for (const auto card : kCardDirs) {
+            const std::string path = std::string(region) + "/" + std::string(card) + "/x.gci";
+            CHECK(classify_entry(path) == EntryClass::Save);
+            CHECK(is_card_save_path(path));
+        }
+    }
+    for (const auto name : kSupportFileNames) {
+        CHECK(classify_entry(name) == EntryClass::Support);
+    }
+    CHECK(classify_entry(std::string("Xbox One") + std::string(kControllerSuffix)) ==
+        EntryClass::Support);
+    CHECK(classify_entry(kControllerSuffix) == EntryClass::Excluded);
+
     std::puts("core_test OK");
     return 0;
 }

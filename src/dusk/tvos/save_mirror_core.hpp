@@ -39,6 +39,42 @@ inline constexpr std::uint64_t kSizeLimitBytes = 400u * 1024u;
 // A GameCube memory card file is a fixed 0x40 header + 0x8000 of data.
 inline constexpr std::uint64_t kCardFileBytes = 32832;
 
+// Refuse to read a candidate file larger than the entire budget. Such a file can
+// never be stored, so reading it would only be a way to spend memory before
+// failing -- and it is the cheap defence against a runaway config.json.
+inline constexpr std::uint64_t kMaxEntryBytes = kSizeLimitBytes;
+
+// The id stamped on an envelope built while the disc is not open and no id could
+// be inherited. It matches no real disc id, so such a mirror is never restored
+// over a save -- but the config-class pass, which ignores the id, still uses it.
+inline constexpr const char* kUnknownGameId = "unknown";
+
+// ---------------------------------------------------------------------------
+// The allowlist
+//
+// Single definition. classify_entry() below and the directory scan in
+// save_mirror.mm both read these, so the two cannot drift apart -- a file the
+// scanner picks up is exactly a file the classifier accepts.
+// ---------------------------------------------------------------------------
+
+// Card region directories aurora's GCI-folder backend can produce. Scanned
+// rather than derived, so the mirror never has to know the disc's region.
+inline constexpr std::string_view kRegionDirs[] = {"USA", "EUR", "JAP"};
+inline constexpr std::string_view kCardDirs[] = {"Card A", "Card B"};
+
+// Config-class files, at the top level of the data root.
+inline constexpr std::string_view kSupportFileNames[] = {
+    "config.json",
+    "achievements.json",
+    "mod_saves.json",
+    "controller_ports.dat",
+    "keyboard_bindings.dat",
+};
+
+// Per-pad mapping files are named after the controller, so they are matched by
+// suffix rather than listed.
+inline constexpr std::string_view kControllerSuffix = ".controller";
+
 // ---------------------------------------------------------------------------
 // SHA-256
 // ---------------------------------------------------------------------------
@@ -178,8 +214,26 @@ enum class GameIdPolicy {
     Ignore,
 };
 
+// Which entries a validation pass is responsible for.
+//
+// The restore happens in two independent passes -- config-class files early in
+// start-up, saves later -- and each writes only its own class. Validating the
+// other class's entries as well would let one corrupt config entry stand between
+// the player and their save, which is the opposite of what the digests are for.
+enum class EntryScope {
+    // Every entry must validate, and totalBytes must agree with their sum. The
+    // whole-envelope check.
+    All,
+    // Only Save-class entries must validate. NoEntries then means "no save in
+    // this mirror". totalBytes is not checked: it is a cross-check over entries
+    // this scope deliberately does not look at, so it cannot mean anything here.
+    SavesOnly,
+    // The mirror image of SavesOnly, for the config-class pass.
+    SupportOnly,
+};
+
 EnvelopeStatus check_envelope(const MirrorEnvelope& envelope, std::string_view expectedApp,
-    std::string_view expectedGameId, GameIdPolicy policy);
+    std::string_view expectedGameId, GameIdPolicy policy, EntryScope scope = EntryScope::All);
 
 const char* to_string(EnvelopeStatus status);
 
@@ -235,8 +289,97 @@ struct RestoreDecision {
 // `primaryPresent` is checked first and short-circuits: a present save is never
 // overwritten, however good the mirror looks.
 RestoreDecision decide_restore(bool primaryPresent, const MirrorEnvelope* envelope,
-    std::string_view expectedApp, std::string_view expectedGameId, GameIdPolicy policy);
+    std::string_view expectedApp, std::string_view expectedGameId, GameIdPolicy policy,
+    EntryScope scope = EntryScope::All);
 
 const char* to_string(RestoreReason reason);
+
+// ---------------------------------------------------------------------------
+// Restore plan
+// ---------------------------------------------------------------------------
+
+// Which of a mirror's entries have to be written back, decided per entry.
+//
+// A card can hold several files, and a purge can take one of them and leave
+// another. One global "is the save present?" flag answers that case wrongly in
+// both directions: it suppresses the restore of the file that is gone because a
+// sibling survived, and there is no second chance -- the next flush replaces the
+// mirror. So presence is decided per entry, by name, and only the entries whose
+// own target file is absent are restored.
+struct RestorePlan {
+    // Stored entries of the requested class whose own target file is absent.
+    std::vector<std::string> missing;
+    // ... and those whose target file is already there. Never overwritten.
+    std::vector<std::string> present;
+    // True only when the mirror holds at least one entry of this class and every
+    // one of them is already on disk: the "nothing to do" case. False when the
+    // mirror holds none, so the envelope is still validated and the reason
+    // logged rather than silently reported as "already present".
+    bool primaryPresent = false;
+};
+
+// `presentNames` lists the entry names whose target file the caller found on
+// disk; anything not in it counts as missing.
+RestorePlan plan_restore(const MirrorEnvelope& envelope, EntryClass entryClass,
+    const std::vector<std::string>& presentNames);
+
+// ---------------------------------------------------------------------------
+// Flush plan
+// ---------------------------------------------------------------------------
+
+// What became of one Save entry of the stored mirror when the next envelope was
+// planned.
+enum class CarryForward {
+    // Kept: its file is gone from disk and the mirror holds the only copy.
+    Carried,
+    // A freshly captured entry of the same name replaces it.
+    Superseded,
+    // Its recorded size or digest disagrees with its payload; refuse to
+    // propagate a save that already failed validation once.
+    Corrupt,
+    // The stored mirror belongs to another app...
+    ForeignApp,
+    // ... to another game id, and the live id is known and says so ...
+    ForeignGame,
+    // ... or to an envelope version this build does not understand.
+    ForeignSchema,
+};
+
+struct CarriedEntry {
+    std::string name;
+    CarryForward status = CarryForward::Carried;
+};
+
+struct FlushPlan {
+    // Stored Save entries the new envelope must keep, in stored order. Appended
+    // to whatever the caller captured from disk.
+    std::vector<MirrorEntry> carried;
+    // Every Save entry of the stored mirror with the reason for its fate, so a
+    // device log can account for each one.
+    std::vector<CarriedEntry> considered;
+    // The id the new envelope must carry.
+    std::string gameId;
+    // Diagnostic only, per §3.1: never used to pick a winner.
+    std::int64_t sequence = 1;
+    // A stored Save entry was refused on identity grounds.
+    bool droppedForeignSave = false;
+    // False when writing the new envelope would destroy the only copy of a save
+    // this session may not adopt, and there is no live save to protect in
+    // exchange. The caller then leaves the stored mirror alone.
+    bool mayReplaceStored = true;
+};
+
+// Decides what the next envelope inherits from the stored one: which stored Save
+// entries survive, what game id the result carries, and whether writing it is
+// allowed at all.
+//
+// Pure by construction, so the rule that used to live in the flush is testable:
+// a function of the stored mirror (null when there is none or it is unreadable),
+// the entry names captured from disk this flush, and the live game id ("" while
+// the disc is not open).
+FlushPlan plan_flush(const MirrorEnvelope* stored, const std::vector<std::string>& freshSaveNames,
+    std::string_view liveGameId, std::string_view expectedApp);
+
+const char* to_string(CarryForward status);
 
 }  // namespace dusk::tvos::save_mirror

@@ -94,6 +94,11 @@ bool ends_with(std::string_view value, std::string_view suffix) {
            value.compare(value.size() - suffix.size(), suffix.size(), suffix) == 0;
 }
 
+template <typename Range, typename T>
+bool contains(const Range& range, const T& value) {
+    return std::find(std::begin(range), std::end(range), value) != std::end(range);
+}
+
 }  // namespace
 
 std::string sha256_hex(const std::uint8_t* data, std::size_t size) {
@@ -155,10 +160,7 @@ bool is_card_save_path(std::string_view relativePath) {
     if (parts.size() != 3) {
         return false;
     }
-    if (parts[0] != "USA" && parts[0] != "EUR" && parts[0] != "JAP") {
-        return false;
-    }
-    if (parts[1] != "Card A" && parts[1] != "Card B") {
+    if (!contains(kRegionDirs, parts[0]) || !contains(kCardDirs, parts[1])) {
         return false;
     }
     return parts[2].size() > 4 && ends_with(parts[2], ".gci");
@@ -180,19 +182,12 @@ EntryClass classify_entry(std::string_view relativePath) {
     }
 
     const std::string& name = parts[0];
-    static constexpr std::string_view kSupportNames[] = {
-        "config.json",
-        "achievements.json",
-        "mod_saves.json",
-        "controller_ports.dat",
-        "keyboard_bindings.dat",
-    };
-    for (const auto candidate : kSupportNames) {
-        if (name == candidate) {
-            return EntryClass::Support;
-        }
+    if (contains(kSupportFileNames, name)) {
+        return EntryClass::Support;
     }
-    if (name.size() > 11 && ends_with(name, ".controller")) {
+    // "> size" and not ">=": a file called exactly ".controller" is a dotfile,
+    // not a pad mapping.
+    if (name.size() > kControllerSuffix.size() && ends_with(name, kControllerSuffix)) {
         return EntryClass::Support;
     }
     return EntryClass::Excluded;
@@ -424,8 +419,24 @@ const char* to_string(ParseStatus status) {
 // Validation
 // ---------------------------------------------------------------------------
 
+namespace {
+
+bool in_scope(std::string_view name, EntryScope scope) {
+    switch (scope) {
+    case EntryScope::All:
+        return true;
+    case EntryScope::SavesOnly:
+        return classify_entry(name) == EntryClass::Save;
+    case EntryScope::SupportOnly:
+        return classify_entry(name) == EntryClass::Support;
+    }
+    return false;
+}
+
+}  // namespace
+
 EnvelopeStatus check_envelope(const MirrorEnvelope& envelope, std::string_view expectedApp,
-    std::string_view expectedGameId, GameIdPolicy policy) {
+    std::string_view expectedGameId, GameIdPolicy policy, EntryScope scope) {
     if (envelope.schema != kSchemaVersion) {
         return EnvelopeStatus::SchemaMismatch;
     }
@@ -435,10 +446,13 @@ EnvelopeStatus check_envelope(const MirrorEnvelope& envelope, std::string_view e
     if (policy == GameIdPolicy::Require && envelope.gameId != expectedGameId) {
         return EnvelopeStatus::GameIdMismatch;
     }
-    if (envelope.entries.empty()) {
-        return EnvelopeStatus::NoEntries;
-    }
+
+    std::size_t inScope = 0;
     for (const auto& entry : envelope.entries) {
+        if (!in_scope(entry.name, scope)) {
+            continue;
+        }
+        ++inScope;
         if (entry.size != entry.data.size()) {
             return EnvelopeStatus::SizeMismatch;
         }
@@ -446,7 +460,16 @@ EnvelopeStatus check_envelope(const MirrorEnvelope& envelope, std::string_view e
             return EnvelopeStatus::DigestMismatch;
         }
     }
-    if (envelope.totalBytes != total_bytes(envelope.entries)) {
+    if (inScope == 0) {
+        return EnvelopeStatus::NoEntries;
+    }
+
+    // totalBytes is a cross-check over the whole entry array. Under a narrowed
+    // scope the entries it sums are deliberately not all validated, so it can
+    // only report a disagreement this pass is not responsible for -- and letting
+    // it fail here would put a corrupt config entry between the player and a
+    // perfectly good save.
+    if (scope == EntryScope::All && envelope.totalBytes != total_bytes(envelope.entries)) {
         return EnvelopeStatus::TotalMismatch;
     }
     return EnvelopeStatus::Ok;
@@ -547,7 +570,8 @@ const char* to_string(GuardStatus status) {
 // ---------------------------------------------------------------------------
 
 RestoreDecision decide_restore(bool primaryPresent, const MirrorEnvelope* envelope,
-    std::string_view expectedApp, std::string_view expectedGameId, GameIdPolicy policy) {
+    std::string_view expectedApp, std::string_view expectedGameId, GameIdPolicy policy,
+    EntryScope scope) {
     RestoreDecision decision;
 
     // Checked before anything else: a save that is already on disk is never
@@ -561,7 +585,7 @@ RestoreDecision decide_restore(bool primaryPresent, const MirrorEnvelope* envelo
         return decision;
     }
 
-    switch (check_envelope(*envelope, expectedApp, expectedGameId, policy)) {
+    switch (check_envelope(*envelope, expectedApp, expectedGameId, policy, scope)) {
     case EnvelopeStatus::Ok:
         decision.restore = true;
         decision.reason = RestoreReason::Restore;
@@ -589,6 +613,132 @@ RestoreDecision decide_restore(bool primaryPresent, const MirrorEnvelope* envelo
         break;
     }
     return decision;
+}
+
+RestorePlan plan_restore(const MirrorEnvelope& envelope, EntryClass entryClass,
+    const std::vector<std::string>& presentNames) {
+    RestorePlan plan;
+    for (const auto& entry : envelope.entries) {
+        if (classify_entry(entry.name) != entryClass) {
+            continue;
+        }
+        if (contains(presentNames, entry.name)) {
+            plan.present.push_back(entry.name);
+        } else {
+            plan.missing.push_back(entry.name);
+        }
+    }
+    // "Nothing to do" needs at least one entry to have been already there. With
+    // no entries of this class at all the caller must still validate and report,
+    // not claim the save was present.
+    plan.primaryPresent = plan.missing.empty() && !plan.present.empty();
+    return plan;
+}
+
+// ---------------------------------------------------------------------------
+// Flush plan
+// ---------------------------------------------------------------------------
+
+FlushPlan plan_flush(const MirrorEnvelope* stored, const std::vector<std::string>& freshSaveNames,
+    std::string_view liveGameId, std::string_view expectedApp) {
+    FlushPlan plan;
+    plan.gameId = std::string(liveGameId);
+
+    if (stored == nullptr) {
+        if (plan.gameId.empty()) {
+            plan.gameId = kUnknownGameId;
+        }
+        return plan;
+    }
+
+    plan.sequence = stored->sequence + 1;
+
+    // Identity gate, applied to the stored mirror as a whole. A mirror may only
+    // hand its saves to the next envelope when it is unambiguously about this
+    // app, this envelope version and this game -- where "this game" includes the
+    // case where the disc is not open yet and the live id is simply not known.
+    CarryForward identity = CarryForward::Carried;
+    if (stored->schema != kSchemaVersion) {
+        identity = CarryForward::ForeignSchema;
+    } else if (stored->app != expectedApp) {
+        identity = CarryForward::ForeignApp;
+    } else if (!liveGameId.empty() && !stored->gameId.empty() && stored->gameId != liveGameId) {
+        identity = CarryForward::ForeignGame;
+    }
+
+    // The new envelope inherits the stored id only when the live one is unknown,
+    // and only from a mirror that passed the gate. Stamping this session's id
+    // over another game's save would make it restorable for the wrong game --
+    // exactly what §3.1 says must be impossible -- so an entry that cannot keep
+    // its own id is dropped instead of relabelled.
+    if (plan.gameId.empty()) {
+        plan.gameId = (identity == CarryForward::Carried && !stored->gameId.empty())
+                          ? stored->gameId
+                          : std::string(kUnknownGameId);
+    }
+
+    for (const auto& entry : stored->entries) {
+        // Support entries are re-read from disk on every flush, so there is
+        // nothing to carry: they are not state the mirror is the last copy of.
+        if (classify_entry(entry.name) != EntryClass::Save) {
+            continue;
+        }
+
+        CarriedEntry decision{entry.name, identity};
+        if (identity == CarryForward::Carried) {
+            if (contains(freshSaveNames, entry.name)) {
+                // Its file is on disk and was captured this flush; the fresh
+                // bytes win. Decided per entry, so a card that lost one file and
+                // kept another carries forward exactly the one that is gone.
+                decision.status = CarryForward::Superseded;
+            } else if (entry.size != entry.data.size() ||
+                       sha256_hex(entry.data) != entry.digest)
+            {
+                decision.status = CarryForward::Corrupt;
+            }
+        }
+
+        switch (decision.status) {
+        case CarryForward::Carried:
+            plan.carried.push_back(entry);
+            break;
+        case CarryForward::ForeignApp:
+        case CarryForward::ForeignGame:
+        case CarryForward::ForeignSchema:
+            plan.droppedForeignSave = true;
+            break;
+        case CarryForward::Superseded:
+        case CarryForward::Corrupt:
+            break;
+        }
+        plan.considered.push_back(std::move(decision));
+    }
+
+    // Refusing to adopt a save and then overwriting the mirror that holds it
+    // destroys the only copy. When this session has a save of its own to
+    // protect, that trade is worth making and is logged; when it has none, the
+    // flush would be spending someone else's save on a config update, so the
+    // stored mirror is left alone instead.
+    plan.mayReplaceStored = !(plan.droppedForeignSave && freshSaveNames.empty());
+    return plan;
+}
+
+const char* to_string(CarryForward status) {
+    switch (status) {
+    case CarryForward::Carried:
+        return "carried-forward";
+    case CarryForward::Superseded:
+        return "superseded-by-disk";
+    case CarryForward::Corrupt:
+        return "corrupt";
+    case CarryForward::ForeignApp:
+        return "foreign-app";
+    case CarryForward::ForeignGame:
+        return "foreign-game";
+    case CarryForward::ForeignSchema:
+        return "foreign-schema";
+    }
+    return "unknown";
 }
 
 const char* to_string(RestoreReason reason) {
