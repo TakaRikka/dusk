@@ -1371,6 +1371,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             mDoAud_seStartMenu(kSoundClick);
             pop();
             ui::prelaunch_state().returnToPrelaunchOnReset = true;
+            ui::prelaunch_state().firstLaunch = true;
             JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
         }),
             rightPane, [](Pane& pane) {
