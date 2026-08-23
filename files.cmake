@@ -1548,6 +1548,8 @@ set(DUSK_FILES
         src/dusk/ui/input.hpp
         src/dusk/ui/logs_window.cpp
         src/dusk/ui/logs_window.hpp
+        src/dusk/ui/list.cpp
+        src/dusk/ui/list.hpp
         src/dusk/ui/menu_bar.cpp
         src/dusk/ui/menu_bar.hpp
         src/dusk/ui/mod_texture_provider.cpp

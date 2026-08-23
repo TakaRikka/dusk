@@ -39,6 +39,7 @@ struct ModControlSpec {
     Rml::String suffix;
     std::vector<Rml::String> options;
     int maxLength = -1;
+    bool stringSetOnChange = false;
     std::vector<Rml::String> colorPresets;
     bool colorAlpha = false;
 };

@@ -12,6 +12,7 @@ public:
         Rml::String key;
         Rml::String type = "text";
         int maxLength = -1;
+        bool setOnChange = false;
     };
 
     BaseStringButton(Rml::Element* parent, Props props);
@@ -30,13 +31,15 @@ private:
     void stop_editing(bool commit = true, bool refocusRoot = false);
 
     Rml::ElementFormControlInput* mInputElem = nullptr;
-    std::vector<std::unique_ptr<ScopedEventListener> > mInputListeners;
+    std::vector<std::unique_ptr<ScopedEventListener>> mInputListeners;
     Rml::String mType;
     int mMaxLength;
     int mPendingInputFocusFrames = 0;
     bool mPendingStopEditing = false;
     bool mPendingCommit = true;
     bool mPendingRefocusRoot = false;
+    bool mSetOnChange = false;
+    Rml::String mOriginalValue;
 };
 
 class StringButton : public BaseStringButton {
@@ -48,6 +51,7 @@ public:
         std::function<bool()> isDisabled;
         std::function<bool()> isModified;
         int maxLength = -1;
+        bool setOnChange = false;
     };
 
     StringButton(Rml::Element* parent, Props props);
