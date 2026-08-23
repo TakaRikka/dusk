@@ -10,8 +10,12 @@ yet. Not upstreamed.
 
 ## One-time setup
 1. `scripts/tvos/setup.sh` — CMake/Ninja/Python/Xcode tvOS SDK checks, Rust nightly +
-   `aarch64-apple-tvos`. It also warns (without downloading anything) when the tvOS *platform*
-   component matching the SDK version is missing.
+   `aarch64-apple-tvos`. It also warns (without downloading anything) when the tvOS *device*
+   platform matching the SDK version is missing — it looks for the versioned SDK under
+   `AppleTVOS.platform/Developer/SDKs/`, since a *simulator*-runtime listing
+   (`xcrun simctl runtime list`) proves nothing about the device side. What that check still cannot
+   prove without the Apple TV is that `-destination platform=tvOS,id=<udid>` resolves for the
+   paired device.
 2. `xcodebuild -downloadPlatform tvOS` — **required for `provision.sh`**. Having the tvOS SDK is
    not enough: device-targeted `xcodebuild` resolves `-destination` against the installed platform
    and otherwise refuses with *"tvOS 26.5 is not installed. Please download and install the
