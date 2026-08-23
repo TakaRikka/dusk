@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.25)
+project(dusklight_save_mirror_tests LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+enable_testing()
+add_executable(core_test core_test.cpp "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/tvos/save_mirror_core.cpp")
+target_include_directories(core_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
+add_test(NAME core_test COMMAND core_test)
