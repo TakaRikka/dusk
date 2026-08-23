@@ -15,6 +15,7 @@ std::vector<std::uint8_t> filled(std::size_t size, std::uint8_t byte) {
 }
 
 constexpr const char* kSavePath = "EUR/Card A/01-GZ2P-gczelda2.gci";
+constexpr const char* kSavePathB = "EUR/Card B/01-GZ2P-gczelda2.gci";
 constexpr const char* kGameId = "GZ2P01";
 
 MirrorEnvelope sample_envelope() {
@@ -22,6 +23,17 @@ MirrorEnvelope sample_envelope() {
     entries.push_back(make_entry(kSavePath, filled(kCardFileBytes, 0xA5)));
     entries.push_back(make_entry("config.json", {'{', '}', '\n'}));
     return build_envelope(kAppId, kGameId, 7, 1766000000, std::move(entries));
+}
+
+// Two cards plus a config file. The flush routinely produces this shape -- both
+// card slots are scanned -- and it is the only shape that can catch validation
+// that stops after the first entry.
+MirrorEnvelope multi_save_envelope() {
+    std::vector<MirrorEntry> entries;
+    entries.push_back(make_entry(kSavePath, filled(kCardFileBytes, 0xA5)));
+    entries.push_back(make_entry(kSavePathB, filled(kCardFileBytes, 0x5A)));
+    entries.push_back(make_entry("config.json", {'{', '}', '\n'}));
+    return build_envelope(kAppId, kGameId, 9, 1766000001, std::move(entries));
 }
 
 }  // namespace
@@ -181,6 +193,62 @@ int main() {
             EnvelopeStatus::NoEntries);
     }
 
+    // ------------------------------------- validation beyond the first entry
+    // Everything above tampers with entries[0]. A "validate only the first
+    // entry" bug would pass every one of those assertions, so each rejection is
+    // re-proven on an entry that is *not* first -- including the last one.
+    {
+        const MirrorEnvelope good = multi_save_envelope();
+        CHECK(good.entries.size() == 3);
+        CHECK(good.totalBytes == kCardFileBytes * 2 + 3);
+        CHECK(check_envelope(good, kAppId, kGameId, GameIdPolicy::Require) == EnvelopeStatus::Ok);
+
+        // A multi-entry envelope must survive the plist round-trip intact, with
+        // every entry's payload distinguishable from its neighbours'.
+        const ParseResult parsed = parse_envelope(encode_envelope(good));
+        CHECK(parsed.status == ParseStatus::Ok);
+        CHECK(parsed.envelope.entries.size() == 3);
+        for (std::size_t i = 0; i < good.entries.size(); ++i) {
+            CHECK(parsed.envelope.entries[i].name == good.entries[i].name);
+            CHECK(parsed.envelope.entries[i].data == good.entries[i].data);
+            CHECK(parsed.envelope.entries[i].digest == good.entries[i].digest);
+        }
+        CHECK(parsed.envelope.entries[0].digest != parsed.envelope.entries[1].digest);
+
+        // Second entry (a Save), payload flipped: the digest must catch it.
+        MirrorEnvelope secondCorrupt = good;
+        secondCorrupt.entries[1].data[0] ^= 0xff;
+        CHECK(check_envelope(secondCorrupt, kAppId, kGameId, GameIdPolicy::Require) ==
+            EnvelopeStatus::DigestMismatch);
+
+        // Last entry, payload flipped.
+        MirrorEnvelope lastCorrupt = good;
+        lastCorrupt.entries[2].data[1] ^= 0xff;
+        CHECK(check_envelope(lastCorrupt, kAppId, kGameId, GameIdPolicy::Require) ==
+            EnvelopeStatus::DigestMismatch);
+
+        // Second entry, recorded size inflated: caught before the digest.
+        MirrorEnvelope secondSize = good;
+        secondSize.entries[1].size += 1;
+        CHECK(check_envelope(secondSize, kAppId, kGameId, GameIdPolicy::Require) ==
+            EnvelopeStatus::SizeMismatch);
+
+        // Last entry, payload truncated so its recorded size no longer matches.
+        MirrorEnvelope lastSize = good;
+        lastSize.entries[2].data.pop_back();
+        CHECK(check_envelope(lastSize, kAppId, kGameId, GameIdPolicy::Require) ==
+            EnvelopeStatus::SizeMismatch);
+
+        // ...and the restore decision must inherit every one of those refusals,
+        // not just the ones that happen to hit entries[0].
+        CHECK(decide_restore(false, &secondCorrupt, kAppId, kGameId, GameIdPolicy::Require)
+                  .reason == RestoreReason::DigestMismatch);
+        CHECK(!decide_restore(false, &lastCorrupt, kAppId, kGameId, GameIdPolicy::Require).restore);
+        CHECK(decide_restore(false, &secondSize, kAppId, kGameId, GameIdPolicy::Require).reason ==
+            RestoreReason::SizeMismatch);
+        CHECK(!decide_restore(false, &lastSize, kAppId, kGameId, GameIdPolicy::Require).restore);
+    }
+
     // ------------------------------------------------------------ size guard
     {
         // Fits: nothing is shed.
@@ -311,6 +379,29 @@ int main() {
         otherSchema.schema = 99;
         CHECK(decide_restore(false, &otherSchema, kAppId, kGameId, GameIdPolicy::Require).reason ==
             RestoreReason::SchemaMismatch);
+
+        // The three remaining EnvelopeStatus values must each surface as their
+        // own RestoreReason rather than collapsing into a generic refusal --
+        // the reason string is the only diagnosis a device log ever gets.
+        MirrorEnvelope shortEntry = good;
+        shortEntry.entries[1].data.pop_back();
+        const RestoreDecision shortDecision =
+            decide_restore(false, &shortEntry, kAppId, kGameId, GameIdPolicy::Require);
+        CHECK(!shortDecision.restore);
+        CHECK(shortDecision.reason == RestoreReason::SizeMismatch);
+
+        MirrorEnvelope wrongTotal = good;
+        wrongTotal.totalBytes -= 1;
+        const RestoreDecision totalDecision =
+            decide_restore(false, &wrongTotal, kAppId, kGameId, GameIdPolicy::Require);
+        CHECK(!totalDecision.restore);
+        CHECK(totalDecision.reason == RestoreReason::TotalMismatch);
+
+        const MirrorEnvelope empty = build_envelope(kAppId, kGameId, 3, 4, {});
+        const RestoreDecision emptyDecision =
+            decide_restore(false, &empty, kAppId, kGameId, GameIdPolicy::Require);
+        CHECK(!emptyDecision.restore);
+        CHECK(emptyDecision.reason == RestoreReason::NoEntries);
     }
 
     std::puts("core_test OK");
