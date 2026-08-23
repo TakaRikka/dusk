@@ -57,6 +57,12 @@ std::atomic<bool> g_initClaimed{false};
 std::atomic<bool> g_started{false};
 std::atomic<bool> g_watchInstalled{false};
 
+// Set whenever there is something new to mirror, cleared by a flush that stored
+// it. Without this every transient interruption -- and tvOS produces a great many
+// -- paid for a full scan, a SHA-256 and an NSUserDefaults rewrite that changed
+// nothing but the sequence number, which §3.1 says is diagnostic only.
+std::atomic<bool> g_dirty{false};
+
 std::mutex g_stateMutex;
 fs::path g_dataRoot;            // guarded by g_stateMutex
 std::string g_gameId;           // guarded by g_stateMutex; empty until on_card_init
@@ -377,6 +383,72 @@ std::vector<fs::path> scan_card_files(const fs::path& dataRoot) {
     return found;
 }
 
+// ---------------------------------------------------------------------------
+// Save snapshot
+//
+// The card bytes are read on the thread that wrote them, at the point where the
+// write is known to be finished -- never later, from the mirror queue.
+//
+// mDoMemCd_Ctrl_c::store() (src/m_Do/m_Do_MemCard.cpp:293-348) reaches the disk
+// through three to five separate, non-atomic writes. A flush that re-opened the
+// .gci from the queue -- a debounced one at T+2s, or a lifecycle one at any
+// moment -- could therefore read a file that is part old and part new. And a torn
+// read is worse than a failed one here: make_entry() hashes whatever it is
+// handed, so check_envelope() would certify the torn bytes as intact and a later
+// restore would write them over the player's save.
+//
+// The tail of store() is the one place the file is known to be whole: it is the
+// only writer thread and the write has completed. §5 of the design puts the
+// sibling port's snapshot in the same position for the same reason.
+//
+// The hook does the read and hands the buffer over; building the entries -- which
+// means hashing -- and storing the envelope stay on the queue.
+//
+// Config-class files are deliberately *not* snapshotted here. They have no single
+// writer thread to hook (dusk::config::save, the achievements writer and the pad
+// mapping writers are independent), config.json is already written atomically
+// (src/dusk/config.cpp:530-560 writes a temp file and renames), and a support
+// file that is caught mid-write costs settings rather than progress. §5 makes the
+// same call for the sibling port: "the mirror picks the config files up on its
+// next flush rather than hooking each config writer".
+// ---------------------------------------------------------------------------
+
+using SaveBytes = std::vector<std::pair<std::string, std::vector<std::uint8_t>>>;
+
+std::mutex g_snapshotMutex;
+SaveBytes g_snapshot;         // guarded by g_snapshotMutex
+bool g_haveSnapshot = false;  // guarded by g_snapshotMutex
+
+// Runs on the writer thread: MemCardThread via note_save_written(), the start-up
+// thread via on_card_init(). The I/O happens first and the lock is taken only to
+// hand the result over, so no lock is ever held across a read.
+// Returns how many card files were captured.
+std::size_t capture_save_snapshot(const fs::path& dataRoot) {
+    SaveBytes captured;
+    for (const auto& path : scan_card_files(dataRoot)) {
+        std::vector<std::uint8_t> data;
+        if (!read_file(path, data)) {
+            DuskLog.warn("{} snapshot: could not read card file {}", kTag, path_string(path));
+            continue;
+        }
+        captured.emplace_back(path_string(path.lexically_relative(dataRoot)), std::move(data));
+    }
+
+    const std::size_t count = captured.size();
+    std::lock_guard<std::mutex> lock(g_snapshotMutex);
+    g_snapshot = std::move(captured);
+    g_haveSnapshot = true;
+    return count;
+}
+
+// Copied rather than consumed: a lifecycle flush that follows no new save must
+// still see the last bytes known to be whole.
+bool copy_save_snapshot(SaveBytes& out) {
+    std::lock_guard<std::mutex> lock(g_snapshotMutex);
+    out = g_snapshot;
+    return g_haveSnapshot;
+}
+
 std::vector<std::string> scan_support_names(const fs::path& dataRoot) {
     std::vector<std::string> names;
     for (const auto name : kSupportFileNames) {
@@ -422,48 +494,67 @@ void flush_impl(const char* reason) {
         return;
     }
 
+    // Read before anything is gathered. A save that lands while this flush is
+    // running must leave the mirror dirty, and note_save_written() bumps the
+    // generation before it schedules, so an unchanged generation at the end is
+    // proof that nothing was missed.
+    const std::uint64_t generationAtStart = g_generation.load();
+
     ParseResult stored;
     const bool hadStored = load_stored(stored);
+    if (hadStored && stored.status != ParseStatus::Ok) {
+        DuskLog.warn("{} flush({}): the stored mirror is unreadable ({}{}{}) and will be replaced",
+            kTag, reason, to_string(stored.status), stored.detail.empty() ? "" : ": ",
+            stored.detail);
+    }
+    const MirrorEnvelope* storedEnvelope =
+        (hadStored && stored.status == ParseStatus::Ok) ? &stored.envelope : nullptr;
 
     std::vector<MirrorEntry> entries;
 
-    // Saves.
-    std::vector<std::string> savedNames;
+    // Saves, from the snapshot the writer thread handed over. Never re-read from
+    // here: see the Save snapshot section above for why a queue-side read of a
+    // .gci can be torn and why the digest cannot tell.
+    std::vector<std::string> freshSaveNames;
     if (state.saveMirroringEnabled) {
-        for (const auto& path : scan_card_files(state.dataRoot)) {
-            std::vector<std::uint8_t> data;
-            if (!read_file(path, data)) {
-                DuskLog.warn("{} flush({}): could not read card file {}", kTag, reason,
-                    path_string(path));
-                continue;
+        SaveBytes snapshot;
+        if (copy_save_snapshot(snapshot)) {
+            for (auto& [name, data] : snapshot) {
+                freshSaveNames.push_back(name);
+                entries.push_back(make_entry(name, std::move(data)));
             }
-            const std::string relative = path_string(path.lexically_relative(state.dataRoot));
-            entries.push_back(make_entry(relative, std::move(data)));
-            savedNames.push_back(relative);
+        } else {
+            DuskLog.info("{} flush({}): no card snapshot has been taken yet this session", kTag,
+                reason);
         }
     }
 
-    // If no card file is on disk right now, carry the mirrored one forward rather
-    // than replacing the mirror with a save-less envelope. A missing card file is
-    // exactly the purge this feature exists for; dropping the save from the mirror
-    // at that moment would throw away the only surviving copy.
-    if (savedNames.empty() && hadStored && stored.status == ParseStatus::Ok) {
-        const char* why = state.saveMirroringEnabled ? "no card file on disk"
-                                                     : "save mirroring disabled for this session";
-        for (const auto& entry : stored.envelope.entries) {
-            if (classify_entry(entry.name) != EntryClass::Save) {
-                continue;
-            }
-            if (sha256_hex(entry.data) != entry.digest || entry.data.size() != entry.size) {
-                DuskLog.warn("{} flush({}): stored save entry {} failed validation, dropping it",
-                    kTag, reason, entry.name);
-                continue;
-            }
-            DuskLog.info("{} flush({}): {}, carrying mirrored {} forward ({} bytes)", kTag,
-                reason, why, entry.name, entry.size);
-            entries.push_back(entry);
-            savedNames.push_back(entry.name);
-        }
+    // What the next envelope inherits from the stored one -- which stored saves
+    // survive, what game id the result wears, whether the write is allowed at all.
+    // All of it decided in save_mirror_core, where it is tested.
+    FlushPlan plan = plan_flush(storedEnvelope, freshSaveNames, state.gameId, kAppId);
+    for (const auto& decision : plan.considered) {
+        DuskLog.info("{} flush({}): stored save entry {} -> {}", kTag, reason, decision.name,
+            to_string(decision.status));
+    }
+    if (!plan.mayReplaceStored) {
+        DuskLog.error("{} flush({}) ABORTED: the stored mirror holds a save this session may not "
+                      "adopt, and there is no save of our own to protect in exchange. Leaving it "
+                      "alone -- launch the matching disc once to recover it.",
+            kTag, reason);
+        return;
+    }
+    if (plan.droppedForeignSave) {
+        DuskLog.error("{} flush({}): the stored mirror belonged to another game and is being "
+                      "replaced by this session's save. Its entries are listed above and are not "
+                      "recoverable from the mirror after this write.",
+            kTag, reason);
+    }
+    for (auto& carried : plan.carried) {
+        DuskLog.info("{} flush({}): carrying mirrored {} forward ({} bytes); its file is not on "
+                     "disk",
+            kTag, reason, carried.name, carried.size);
+        entries.push_back(std::move(carried));
     }
 
     // Config-class files.
@@ -495,33 +586,25 @@ void flush_impl(const char* reason) {
             reason, name, kSizeLimitBytes);
     }
 
-    const std::int64_t sequence =
-        (hadStored && stored.status == ParseStatus::Ok) ? stored.envelope.sequence + 1 : 1;
-
-    // The disc is not open during the pre-launch UI, so a background flush can
-    // happen before the game id is known. Inherit the stored one rather than
-    // stamping "unknown" over it -- that would fail the game-id check on the next
-    // restore and quietly strand the mirrored save.
-    std::string gameId = state.gameId;
-    if (gameId.empty()) {
-        if (hadStored && stored.status == ParseStatus::Ok && !stored.envelope.gameId.empty()) {
-            gameId = stored.envelope.gameId;
-            DuskLog.info("{} flush({}): game id not known yet, keeping the stored id {}", kTag,
-                reason, gameId);
-        } else {
-            gameId = "unknown";
-        }
+    if (state.gameId.empty() && plan.gameId != kUnknownGameId) {
+        DuskLog.info("{} flush({}): game id not known yet, keeping the stored id {}", kTag, reason,
+            plan.gameId);
     }
 
     const auto timestamp = static_cast<std::int64_t>(std::time(nullptr));
     const MirrorEnvelope envelope =
-        build_envelope(kAppId, gameId, sequence, timestamp, std::move(entries));
+        build_envelope(kAppId, plan.gameId, plan.sequence, timestamp, std::move(entries));
 
     if (!store(envelope)) {
         DuskLog.error("{} flush({}) FAILED to store sequence {}; the previous mirror is what "
                       "survives a purge from here",
             kTag, reason, envelope.sequence);
         return;
+    }
+
+    // Only now, and only if nothing changed while this ran.
+    if (g_generation.load() == generationAtStart) {
+        g_dirty.store(false);
     }
 
     DuskLog.info("{} flush({}) wrote sequence {} for game {}: {} entries, {} bytes (raw {}, "
@@ -621,8 +704,11 @@ void init(const fs::path& dataRoot) {
 
         // GameIdPolicy::Ignore: config-class files are not game state, and the
         // disc is not open yet, so there is no id to compare against.
-        const RestoreDecision decision = decide_restore(
-            /*primaryPresent=*/false, &stored.envelope, kAppId, "", GameIdPolicy::Ignore);
+        // EntryScope::SupportOnly: a corrupt *save* entry says nothing about the
+        // config files, and must not block restoring them.
+        const RestoreDecision decision =
+            decide_restore(/*primaryPresent=*/false, &stored.envelope, kAppId, "",
+                GameIdPolicy::Ignore, EntryScope::SupportOnly);
         if (!decision.restore) {
             DuskLog.warn("{} restore(config): declined ({})", kTag, to_string(decision.reason));
             return;
@@ -652,6 +738,11 @@ void init(const fs::path& dataRoot) {
         DuskLog.info("{} restore(config): {} restored, {} already present (mirror sequence {}, "
                      "game {})",
             kTag, restored, skipped, stored.envelope.sequence, stored.envelope.gameId);
+        if (restored > 0) {
+            // A restored config is state the next flush has to re-mirror, because
+            // the game will rewrite it from its own in-memory view soon enough.
+            g_dirty.store(true);
+        }
     }
     } catch (...) {
         // Start-up must survive a mirror that cannot be read. The game's own
@@ -711,16 +802,6 @@ void on_card_init(bool rawCardImage, const char* gameName, const char* company) 
 
     try {
     @autoreleasepool {
-        const auto cardFiles = scan_card_files(dataRoot);
-        bool primaryPresent = false;
-        for (const auto& path : cardFiles) {
-            if (file_present(path)) {
-                primaryPresent = true;
-                DuskLog.info("{} restore(save): {} is present on disk", kTag,
-                    path_string(path.lexically_relative(dataRoot)));
-            }
-        }
-
         ParseResult stored;
         const bool hadStored = load_stored(stored);
         if (hadStored && stored.status != ParseStatus::Ok) {
@@ -730,33 +811,67 @@ void on_card_init(bool rawCardImage, const char* gameName, const char* company) 
         const MirrorEnvelope* envelope =
             (hadStored && stored.status == ParseStatus::Ok) ? &stored.envelope : nullptr;
 
-        const RestoreDecision decision =
-            decide_restore(primaryPresent, envelope, kAppId, gameId, GameIdPolicy::Require);
-        if (!decision.restore) {
-            DuskLog.info("{} restore(save): declined ({})", kTag, to_string(decision.reason));
-            return;
+        // Presence is asked per entry, against that entry's own target path. A
+        // card can hold several files and a purge can take one and leave another;
+        // one global "is the save present?" flag suppresses the restore of the
+        // file that is gone because a sibling survived, and there is no second
+        // chance -- the next flush replaces the mirror.
+        RestorePlan restorePlan;
+        if (envelope != nullptr) {
+            std::vector<std::string> present;
+            for (const auto& entry : envelope->entries) {
+                if (classify_entry(entry.name) != EntryClass::Save) {
+                    continue;
+                }
+                if (file_present(dataRoot / entry.name)) {
+                    present.push_back(entry.name);
+                }
+            }
+            restorePlan = plan_restore(*envelope, EntryClass::Save, present);
+            for (const auto& name : restorePlan.present) {
+                DuskLog.info("{} restore(save): {} is present on disk; not touched", kTag, name);
+            }
         }
 
-        int restored = 0;
-        for (const auto& entry : envelope->entries) {
-            if (classify_entry(entry.name) != EntryClass::Save) {
-                continue;
+        // EntryScope::SavesOnly: a corrupt config entry must not stand between
+        // the player and a save that validates perfectly well.
+        const RestoreDecision decision = decide_restore(restorePlan.primaryPresent, envelope,
+            kAppId, gameId, GameIdPolicy::Require, EntryScope::SavesOnly);
+        if (!decision.restore) {
+            DuskLog.info("{} restore(save): declined ({})", kTag, to_string(decision.reason));
+        } else {
+            int restored = 0;
+            for (const auto& entry : envelope->entries) {
+                if (std::find(restorePlan.missing.begin(), restorePlan.missing.end(),
+                        entry.name) == restorePlan.missing.end())
+                {
+                    continue;  // not a save, or its own file is already there
+                }
+                const fs::path target = dataRoot / entry.name;
+                std::string error;
+                if (!write_atomic(target, entry.data, error)) {
+                    DuskLog.error("{} restore(save): failed to write {}: {}", kTag,
+                        path_string(target), error);
+                    continue;
+                }
+                DuskLog.info("{} restore(save): restored {} ({} bytes, {}) from mirror sequence {} "
+                             "written at unix {}",
+                    kTag, entry.name, entry.size, entry.digest.substr(0, 12), envelope->sequence,
+                    envelope->timestamp);
+                ++restored;
             }
-            const fs::path target = dataRoot / entry.name;
-            std::string error;
-            if (!write_atomic(target, entry.data, error)) {
-                DuskLog.error("{} restore(save): failed to write {}: {}", kTag,
-                    path_string(target), error);
-                continue;
-            }
-            DuskLog.info("{} restore(save): restored {} ({} bytes, {}) from mirror sequence {} "
-                         "written at unix {}",
-                kTag, entry.name, entry.size, entry.digest.substr(0, 12), envelope->sequence,
-                envelope->timestamp);
-            ++restored;
+            DuskLog.info("{} restore(save): {} restored, {} already present", kTag, restored,
+                restorePlan.present.size());
         }
-        if (restored == 0) {
-            DuskLog.warn("{} restore(save): mirror validated but held no card file", kTag);
+
+        // Whatever happened above, this is the writer thread's first chance to
+        // hand the mirror a set of card bytes it knows are whole. Without it a
+        // player who already has a save but never writes another one -- the exact
+        // state the device is in today -- would never be mirrored at all.
+        const std::size_t captured = capture_save_snapshot(dataRoot);
+        DuskLog.info("{} card snapshot taken: {} file(s)", kTag, captured);
+        if (captured > 0) {
+            g_dirty.store(true);
         }
     }
     } catch (...) {
@@ -770,8 +885,27 @@ void note_save_written() {
     if (!g_started.load()) {
         return;
     }
-    // Runs on MemCardThread with no lock held: mark dirty, schedule, return.
-    // Never touch the filesystem or NSUserDefaults from here.
+
+    // Runs on MemCardThread with no lock held, at the tail of
+    // mDoMemCd_Ctrl_c::store(). This is the only moment the card file is known to
+    // be whole -- this is the writer thread and the write has finished -- so the
+    // bytes are read here and handed to the mirror, and everything else (hashing,
+    // the envelope, NSUserDefaults) stays on the queue. See the Save snapshot
+    // section for why reading them from the queue instead can tear.
+    //
+    // The cost is one stat plus one 32 KB read per card file. MemCardThread is
+    // not the game loop, and it has just done considerably more I/O than this.
+    try {
+        const State state = snapshot_state();
+        if (!state.dataRoot.empty() && state.saveMirroringEnabled) {
+            capture_save_snapshot(state.dataRoot);
+        }
+    } catch (...) {
+        // Never throw into the game's card thread.
+        log_escaped("save snapshot");
+    }
+
+    g_dirty.store(true);
     const std::uint64_t generation = g_generation.fetch_add(1) + 1;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kDebounceNanos), g_queue, ^{
       try {
