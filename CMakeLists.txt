@@ -407,6 +407,23 @@ if (ENABLE_ASAN)
     target_sources(dusklight PRIVATE src/dusk/asan_options.c)
 endif ()
 
+if (TVOS)
+    # tvOS save mirror. tvOS may reclaim Library/Caches at any time, which is
+    # where the memory card lives, so the card and the small config-class files
+    # are mirrored into NSUserDefaults on every save write.
+    #
+    # save_mirror_core.cpp is plain C++ with no Apple dependency and is covered by
+    # host tests (tests/save_mirror); save_mirror.mm holds only the NSUserDefaults
+    # access and the SDL event watch. Both are tvOS-only: no other platform
+    # compiles either file, and the call sites are guarded by
+    # DUSK_TVOS_SAVE_MIRROR from src/dusk/tvos/save_mirror.hpp.
+    target_sources(dusklight PRIVATE
+            src/dusk/tvos/save_mirror.mm
+            src/dusk/tvos/save_mirror_core.cpp)
+    set_target_properties(dusklight PROPERTIES OBJCXX_STANDARD 20 OBJCXX_STANDARD_REQUIRED ON)
+    set_source_files_properties(src/dusk/tvos/save_mirror.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+endif ()
+
 target_compile_definitions(dusklight PRIVATE ${GAME_COMPILE_DEFS})
 target_include_directories(dusklight PRIVATE ${miniz_SOURCE_DIR})
 target_link_libraries(dusklight PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBRARIES})
