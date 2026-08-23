@@ -69,6 +69,7 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
             .isDisabled = s.isDisabled,
             .isModified = s.isModified,
             .maxLength = s.maxLength,
+            .setOnChange = s.stringSetOnChange,
         });
         break;
     case ModControlSpec::Kind::Color:

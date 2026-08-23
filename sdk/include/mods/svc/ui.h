@@ -9,7 +9,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 2u
-#define UI_SERVICE_MINOR 0u
+#define UI_SERVICE_MINOR 1u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -66,6 +66,11 @@ typedef enum UiControlBinding {
     UI_BINDING_CONFIG_VAR = 1,
 } UiControlBinding;
 
+typedef enum UiStringSetMode {
+    UI_STRING_SET_ON_COMMIT = 0, /* invokes `set` when input is committed */
+    UI_STRING_SET_ON_CHANGE = 1, /* invokes `set` on every text change (e.g. while typing) */
+} UiStringSetMode;
+
 /* Tagged by the control's kind: TOGGLE reads bool_value, NUMBER and SELECT read int_value, STRING
  * and COLOR read string_value. string_value passed to a setter is only valid during the call; a
  * getter should point it at storage owned by the mod (e.g. a static buffer) that stays valid until
@@ -120,13 +125,44 @@ typedef struct UiControlDesc {
     /* COLOR: optional RRGGBB/RRGGBBAA values for presets. "rainbow" is a special value. */
     const char* const* color_presets;
     size_t color_preset_count;
-    bool color_alpha;          /* COLOR: use RRGGBBAA values instead of RRGGBB */
-    UiPredicateFn is_selected; /* BUTTON/GROUP: pptional selected state */
+    bool color_alpha;                /* COLOR: use RRGGBBAA values instead of RRGGBB */
+    UiPredicateFn is_selected;       /* BUTTON/GROUP: optional selected state */
+    UiStringSetMode string_set_mode; /* STRING: when to invoke the setter */
 } UiControlDesc;
 
 #define UI_CONTROL_DESC_INIT                                                                       \
     {sizeof(UiControlDesc), UI_CONTROL_BUTTON, NULL, NULL, UI_BINDING_CALLBACKS, 0u, NULL, NULL,   \
-        NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false, NULL}
+        NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false, NULL,           \
+        UI_STRING_SET_ON_COMMIT}
+
+typedef uint64_t UiListHandle;
+
+/* Must be initialized with UI_LIST_ITEM_INIT */
+typedef struct UiListItem {
+    uint32_t struct_size;
+    uint64_t key;      /* required; unique, stable item key */
+    const char* label; /* required; visible item text */
+} UiListItem;
+
+#define UI_LIST_ITEM_INIT {sizeof(UiListItem), 0u, NULL}
+
+typedef void (*UiListPressedFn)(
+    ModContext* ctx, UiListHandle list, uint64_t item_key, void* user_data);
+typedef bool (*UiListPredicateFn)(
+    ModContext* ctx, UiListHandle list, uint64_t item_key, void* user_data);
+
+/* Must be initialized with UI_LIST_DESC_INIT */
+typedef struct UiListDesc {
+    uint32_t struct_size;
+    const UiListItem* items; /* optional; initial set of items */
+    size_t item_count;
+    UiListPressedFn on_pressed;    /* required */
+    UiListPredicateFn is_selected; /* optional; polled only for render-visible rows */
+    UiListPredicateFn is_disabled; /* optional; polled only for render-visible rows */
+    void* user_data;
+} UiListDesc;
+
+#define UI_LIST_DESC_INIT {sizeof(UiListDesc), NULL, 0u, NULL, NULL, NULL, NULL}
 
 /* Build pane contents. A non-MOD_OK result fails the mod. */
 typedef ModResult (*UiPaneBuildFn)(
@@ -324,6 +360,13 @@ typedef struct UiService {
     ModResult (*get_clipboard_text)(
         ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength);
     ModResult (*set_clipboard_text)(ModContext* ctx, const char* text);
+
+    /* A scrollable virtualized list of items. */
+    ModResult (*pane_add_list)(
+        ModContext* ctx, UiElementHandle pane, const UiListDesc* desc, UiListHandle* out_list);
+    /* Replace all items in a list with a new set. */
+    ModResult (*list_set_items)(
+        ModContext* ctx, UiListHandle list, const UiListItem* items, size_t item_count);
 } UiService;
 
 MOD_DECLARE_SERVICE(UiService, svc_ui, UI_SERVICE_ID, UI_SERVICE_MAJOR, UI_SERVICE_MINOR);

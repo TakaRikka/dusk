@@ -192,8 +192,6 @@ void ModsWindow::build_content(Rml::Element* content) {
 
     if (mods::ModLoader::instance().mods().empty()) {
         listPane.add_text("No mods installed.");
-        listPane.finalize();
-        detailPane.finalize();
         return;
     }
 
@@ -214,8 +212,6 @@ void ModsWindow::build_content(Rml::Element* content) {
     }
     build_detail(detailPane, *mSelectedMod);
     mark_current_entry();
-
-    listPane.finalize();
 }
 
 void ModsWindow::build_detail(Pane& pane, mods::LoadedMod& mod) {
@@ -279,8 +275,6 @@ void ModsWindow::build_detail(Pane& pane, mods::LoadedMod& mod) {
     if (mod.active) {
         mods::svc::ui_build_mods_panels(mod, pane);
     }
-
-    pane.finalize();
 }
 
 void ModsWindow::mark_current_entry() {
