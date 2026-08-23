@@ -57,6 +57,12 @@ it is on the same network` when the Apple TV has no devicectl tunnel.
     `keychain-access-groups` entry ending in `.*`, are rewritten to `<YOUR_TEAM_ID>.dev.twilitrealm.dusk`;
     signing with `<YOUR_TEAM_ID>.*` verbatim produces an app the Apple TV rejects. Everything else in
     the entitlements is passed through untouched, and every rewrite is logged.
+  - **It refuses an incomplete bundle.** Before signing anything it asserts that the bundle holds a
+    non-empty `disc/` directory **and** `Assets.car`, and otherwise stops with the list of what is
+    missing and the rebuild command (`scripts/tvos/build.sh`). A stale or half-built bundle
+    otherwise signs and installs happily and only fails on the TV. `--allow-incomplete` skips the
+    check — that is the flag for a deliberate `--no-disc` build you intend to feed with
+    `push-disc.sh`.
 - `scripts/tvos/install.sh [app]` — `xcrun devicectl device install app` to the paired device.
   It checks device reachability *before* the local `embedded.mobileprovision` check: a sleeping
   Apple TV needs a walk to the living room, while "is not signed" is fixed by rerunning `sign.sh`

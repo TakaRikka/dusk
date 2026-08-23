@@ -2,8 +2,50 @@
 # Sign the installed tvOS app with the personal-team development profile.
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
-app="${1:-$TVOS_INSTALL_APP}"
+usage() {
+    cat <<'USAGE'
+usage: scripts/tvos/sign.sh [--allow-incomplete] [app bundle]
+  app bundle           defaults to the built build/install/Dusklight.app
+  --allow-incomplete   sign anyway when the completeness check below fails
+USAGE
+}
+
+allow_incomplete=0
+app=""
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --allow-incomplete) allow_incomplete=1; shift ;;
+        -h|--help) usage; exit 0 ;;
+        -*) usage >&2; tvos_fail "unknown argument: $1" ;;
+        *) [[ -z "$app" ]] || { usage >&2; tvos_fail "unexpected extra argument: $1"; }
+           app="$1"; shift ;;
+    esac
+done
+app="${app:-$TVOS_INSTALL_APP}"
 [[ -d "$app" ]] || tvos_fail "app bundle not found: $app (run scripts/tvos/build.sh)"
+
+# A stale or half-built bundle signs and installs perfectly happily, and only fails on the TV --
+# an hour into a device session that cannot be repeated cheaply. Assert here, at the keyboard,
+# that the bundle holds what this app cannot run without.
+if [[ $allow_incomplete -eq 0 ]]; then
+    missing=""
+    # The disc image: tvOS has no file dialog, and disc discovery scans Dusklight.app/disc/ first.
+    # A deliberate --no-disc build is the case --allow-incomplete exists for (push it with
+    # scripts/tvos/push-disc.sh afterwards).
+    if [[ ! -d "$app/disc" ]]; then
+        missing="$missing"$'\n'"  - disc/ is missing — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh"
+    elif [[ -z "$(ls -A "$app/disc" 2>/dev/null)" ]]; then
+        missing="$missing"$'\n'"  - disc/ is empty — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh"
+    fi
+    # The compiled asset catalog: Info.plist's CFBundleIcons and TVTopShelfImage name catalog sets,
+    # which only resolve inside one. tvOS draws no icon without it and a device can refuse install.
+    [[ -f "$app/Assets.car" ]] \
+        || missing="$missing"$'\n'"  - Assets.car is missing — Info.plist names asset-catalog sets that only resolve inside a compiled catalog"
+    [[ -z "$missing" ]] || tvos_fail "$app is incomplete:$missing
+
+Rebuild with: scripts/tvos/build.sh
+(or re-run with --allow-incomplete to sign it as it stands)"
+fi
 profile="$(tvos_profile_path)"; [[ -n "$profile" ]] || tvos_fail "no tvOS profile for $TVOS_TEAM_ID.$TVOS_BUNDLE_ID — run scripts/tvos/provision.sh"
 identity="$(tvos_identity_sha || true)"; [[ -n "$identity" ]] || tvos_fail "no 'Apple Development' identity for team $TVOS_TEAM_ID in the keychain"
 
