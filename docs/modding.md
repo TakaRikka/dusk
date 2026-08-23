@@ -529,7 +529,11 @@ ModResult build_dialog(ModContext*, UiElementHandle pane, void*, ModError*) {
     return svc_ui->pane_add_control(mod_ctx, pane, &input, nullptr);
 }
 
-UiDialogAction action = {"Save", save, nullptr, false};
+UiDialogAction action = UI_DIALOG_ACTION_INIT;
+action.label = "Save";
+action.on_pressed = save;
+action.is_disabled = is_save_disabled;
+
 UiDialogDesc dialog = UI_DIALOG_DESC_INIT;
 dialog.title = "New Preset";
 dialog.body_rml = "Choose a name for the preset.";
@@ -540,8 +544,8 @@ svc_ui->dialog_push(mod_ctx, &dialog, nullptr);
 ```
 
 After an action's `on_pressed`, the dialog closes unless the action sets `keep_open`. It can then be closed later
-(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body`, `dialog_set_icon`,
-and `dialog_add_action` mutate a live dialog.
+(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body` and 
+`dialog_set_icon` mutate a live dialog.
 
 **Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
 RCSS class; `warning` uses the built-in warning appearance, and mods can define their own types. A duration of 0 uses

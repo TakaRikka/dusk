@@ -10,6 +10,7 @@ class Modal;
 struct ModalAction {
     Rml::String label;
     std::function<void(Modal&)> onPressed;
+    std::function<bool()> isDisabled;
 };
 
 class Modal : public WindowSmall {
@@ -30,7 +31,6 @@ public:
     bool focus() override;
 
     Pane& content_pane();
-    void add_action(ModalAction action);
     void set_body(const Rml::String& bodyRml);
     void set_icon(const Rml::String& icon);
 
@@ -38,6 +38,7 @@ protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 
 private:
+    void add_action(ModalAction action);
     void dismiss();
 
     Props mProps;

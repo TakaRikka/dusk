@@ -202,10 +202,6 @@ DEFINE_HOOK_SYMBOL("dComIfGs_getCollectSmell", u8(), getCollectSmell);
 
 DEFINE_HOOK(&dEvt_control_c::skipper, dEvt_control_c__skipper);
 
-DEFINE_HOOK_SYMBOL("getFontCCColorTable", u32(u8, u8), getCCColorTable);
-DEFINE_HOOK_SYMBOL("getFontGCColorTable", u32(u8, u8), getGCColorTable);
-
-
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
 }
@@ -3089,28 +3085,6 @@ void hookReplaceEvtControlSkipper(ModContext*, void* args, void* retval, void*) 
     *static_cast<bool*>(retval) = doSkip;
 }
 
-void hookPostGetColorTable(ModContext*, void* args, void* retval, void* userdata) {
-    auto& returnColor = *static_cast<u32*>(retval);
-    if (returnColor != 0xFFFFFFFF) {
-        return;
-    }
-
-    auto i_color = mods::arg<u8>(args, 0);
-    switch (i_color) {
-    case 9:
-        returnColor = 0x4BBE4BFF; // Dark Green
-        break;
-    case 10:
-        returnColor = 0x4B96D7FF; // Blue
-        break;
-    case 11:
-        returnColor = 0xBFBFBFFF; // Silver
-        break;
-    default:
-        break;
-    }
-}
-
 }
 
 ModResult initialize() {
@@ -3268,9 +3242,6 @@ ModResult initialize() {
 
     ADD_HOOK_REPLACE(dEvt_control_c__skipper, hookReplaceEvtControlSkipper);
 
-    ADD_HOOK_POST(getCCColorTable, hookPostGetColorTable);
-    ADD_HOOK_POST(getGCColorTable, hookPostGetColorTable);
-
     return MOD_OK;
 }
 
@@ -3401,9 +3372,6 @@ ModResult uninstall() {
     mods::hook::uninstall<getCollectSmell>(svc_hook);
 
     mods::hook::uninstall<dEvt_control_c__skipper>(svc_hook);
-
-    mods::hook::uninstall<getCCColorTable>(svc_hook);
-    mods::hook::uninstall<getGCColorTable>(svc_hook);
 
     return MOD_OK;
 }

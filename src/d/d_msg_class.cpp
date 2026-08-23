@@ -16,6 +16,21 @@
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
 #include "dusk/scope_guard.hpp"
+#include "helpers/bits.hpp"
+
+static bool read_full_color(const void* data, u32 size, u32& ccColor, u32& gcColor) {
+    if (size == 4) {
+        ccColor = dusk::read_bits<u32>(data);
+        gcColor = ccColor;
+        return true;
+    }
+    if (size == 8) {
+        ccColor = dusk::read_bits<u32>(data);
+        gcColor = dusk::read_bits<u32>(static_cast<const u8*>(data) + sizeof(ccColor));
+        return true;
+    }
+    return false;
+}
 #endif
 
 #if TARGET_PC
@@ -400,6 +415,9 @@ jmessage_tReference::jmessage_tReference() {
     resetCharCountBuffer();
     mNowColorType = 0;
     mTopColorType = 0;
+#if TARGET_PC
+    resetColors();
+#endif
     mButtonTagStopFlag = 0;
     mPageEndCount = 0;
     mSelectNum = 0;
@@ -594,6 +612,13 @@ void jmessage_tReference::pageSend() {
     if (mNowColorType != mTopColorType) {
         mTopColorType = mNowColorType;
     }
+#if TARGET_PC
+    mTopFullColor = mNowFullColor;
+    if (mNowFullColor) {
+        mTopCCColor = mNowCCColor;
+        mTopGCColor = mNowGCColor;
+    }
+#endif
 
     mTopWordCount = mNowWordCount;
     mCharAlpha = 0.0f;
@@ -1917,6 +1942,9 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     pReference->resetCharCnt();
     pReference->setNowColorType(0);
     pReference->setTopColorType(0);
+#if TARGET_PC
+    pReference->resetColors();
+#endif
     pReference->setNowWordCount(0);
     pReference->setTopWordCount(0);
     pReference->setBatchColorFlag(0);
@@ -2280,9 +2308,21 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
         return true;
     case MSGTAG_GROUP(255):
         switch (i_tag) {
-        case MSGTAG_COLOR:
+        case MSGTAG_COLOR: {
+#if TARGET_PC
+            u32 ccColor;
+            u32 gcColor;
+            if (read_full_color(i_data, i_size, ccColor, gcColor)) {
+                pReference->setFullColor(ccColor, gcColor);
+            } else if (i_size == 1) {
+                pReference->clearNowFullColor();
+                pReference->setNowColorType(*(u8*)i_data & 0xFF);
+            }
+#else
             pReference->setNowColorType(*(u8*)i_data & 0xFF);
+#endif
             return true;
+        }
         case MSGTAG_SCALE:
             pReference->setNowTagScale(*(BE(u16)*)i_data & 0xFFFF);
             return true;
@@ -2863,7 +2903,15 @@ void jmessage_tRenderingProcessor::do_begin(void const* pEntry, char const* pszT
         do_scale(field_0x44);
     }
 
+#if TARGET_PC
+    if (pReference->hasTopFullColor()) {
+        do_fullcolor(pReference->getTopCCColor(), pReference->getTopGCColor());
+    } else {
+        do_color(pReference->getTopColorType());
+    }
+#else
     do_color(pReference->getTopColorType());
+#endif
     pReference->resetDrawLightCount();
 
     do_widthcenter();
@@ -3017,9 +3065,20 @@ bool jmessage_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_s
         return 1;
     case MSGTAG_GROUP(255):
         switch (i_tag) {
-        case MSGTAG_COLOR:
+        case MSGTAG_COLOR: {
+#if TARGET_PC
+            u32 ccColor;
+            u32 gcColor;
+            if (read_full_color(i_data, i_size, ccColor, gcColor)) {
+                do_fullcolor(ccColor, gcColor);
+            } else if (i_size == 1) {
+                do_color(*(u8*)i_data & 0xFF);
+            }
+#else
             do_color(*(u8*)i_data & 0xFF);
+#endif
             return 1;
+        }
         case MSGTAG_SCALE:
             field_0x13c = *(BE(u16)*)i_data & 0xFFFF;
             do_scale(field_0x13c / 100.0f);
@@ -3629,6 +3688,18 @@ void jmessage_tRenderingProcessor::do_color(u8 i_colorNo) {
             mCCColor, mGCColor);
     do_strcat(buffer, false, false, false);
 }
+
+#if TARGET_PC
+void jmessage_tRenderingProcessor::do_fullcolor(u32 ccColor, u32 gcColor) {
+    mColorNo = 0xFF;
+    mCCColor = ccColor;
+    mGCColor = gcColor;
+
+    char buffer[40];
+    SAFE_SPRINTF(buffer, "\x1B" "CC[%08x]" "\x1B" "GC[%08x]", mCCColor, mGCColor);
+    do_strcat(buffer, false, false, false);
+}
+#endif
 
 void jmessage_tRenderingProcessor::do_scale(f32 param_1) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
@@ -4684,9 +4755,20 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
     switch(i_tag & 0xFF0000) {
     case MSGTAG_GROUP(255):
         switch(i_tag) {
-        case MSGTAG_COLOR:
+        case MSGTAG_COLOR: {
+#if TARGET_PC
+            u32 ccColor;
+            u32 gcColor;
+            if (read_full_color(i_data, i_size, ccColor, gcColor)) {
+                do_fullcolor(ccColor, gcColor);
+            } else if (i_size == 1) {
+                do_color(*(u8*)i_data & 0xFF);
+            }
+#else
             do_color(*(u8*)i_data & 0xFF);
+#endif
             break;
+        }
         case MSGTAG_SCALE:
             do_scale(*(BE(u16)*)i_data / 100.0f);
             break;
@@ -5335,6 +5417,14 @@ void jmessage_string_tRenderingProcessor::do_color(u8 i_colorNo) {
     SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
     do_strcat(buffer);
 }
+
+#if TARGET_PC
+void jmessage_string_tRenderingProcessor::do_fullcolor(u32 ccColor, u32 gcColor) {
+    char buffer[32];
+    SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
+    do_strcat(buffer);
+}
+#endif
 
 void jmessage_string_tRenderingProcessor::do_scale(f32 i_scale) {
     J2DTextBox::TFontSize fontSize;

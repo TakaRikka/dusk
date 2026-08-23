@@ -4,6 +4,8 @@
 #include "yaml.hpp"
 #include "shiftjis_table.hpp"
 
+#include <mods/svc/flow.hpp>
+
 #include <fmt/format.h>
 
 #include <ranges>
@@ -15,6 +17,20 @@
 #endif
 
 namespace randomizer {
+namespace {
+
+std::string text_color_code(uint32_t rgba) {
+    const auto message =
+        mods::flow::MessageBuilder{}.text_color(rgba).build(MESSAGE_LANGUAGE_ENGLISH);
+    const auto& bytes = message.text();
+    return {reinterpret_cast<const char*>(bytes.data()), bytes.size() - 1};
+}
+
+const auto kDarkGreenMessageCode = text_color_code(0x4BBE4BFF);
+const auto kBlueMessageCode = text_color_code(0x4B96D7FF);
+const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
+
+}  // namespace
 
     Text::Text(const std::string& str) {
         for (auto& text : mText) {
@@ -508,10 +524,9 @@ std::string UTF8ToShiftJIS(const std::string& utf8Str) {
         {"<yellow>",         "\x1A\x06\xFF\x00\x00\x04"sv},
         {"<purple>",         "\x1A\x06\xFF\x00\x00\x06"sv},
         {"<orange>",         "\x1A\x06\xFF\x00\x00\x08"sv},
-        // custom colors
-        {"<dark green>",     "\x1A\x06\xFF\x00\x00\x09"sv},
-        {"<blue>",           "\x1A\x06\xFF\x00\x00\x0A"sv},
-        {"<silver>",         "\x1A\x06\xFF\x00\x00\x0B"sv},
+        {"<dark green>",     kDarkGreenMessageCode},
+        {"<blue>",           kBlueMessageCode},
+        {"<silver>",         kSilverMessageCode},
     };
 
     void breakLines(std::string& str, float maxStrLength, int lang) {

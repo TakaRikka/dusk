@@ -3,10 +3,12 @@
 #include "config.hpp"
 #include "registry.hpp"
 #include "slot_map.hpp"
+#include "ui_v1.hpp"
 
 #include <borealis/log.hpp>
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
+#include "dusk/mods/log_buffer.hpp"
 #include "dusk/ui/menu_bar.hpp"
 #include "dusk/ui/mod_window.hpp"
 #include "dusk/ui/modal.hpp"
@@ -440,10 +442,8 @@ void push_stacked_document(std::unique_ptr<ui::Document> document) {
     }
 }
 
-// Shared by dialog_push and dialog_add_action; the guard handle keeps a
-// pressed callback from calling into a torn-down mod.
 ui::ModalAction make_dialog_action(LoadedMod& mod, uint64_t handle, const UiDialogAction& action) {
-    return {
+    ui::ModalAction result{
         .label = action.label,
         .onPressed =
             [modPtr = &mod, handle, fn = action.on_pressed, userData = action.user_data,
@@ -461,6 +461,17 @@ ui::ModalAction make_dialog_action(LoadedMod& mod, uint64_t handle, const UiDial
                 }
             },
     };
+    if (action.is_disabled != nullptr) {
+        result.isDisabled = [modPtr = &mod, handle, fn = action.is_disabled,
+                                userData = action.user_data] {
+            if (!dialog_open(handle)) {
+                return false;
+            }
+            return guarded_call(*modPtr, "dialog action is_disabled callback", false,
+                [&] { return fn(modPtr->context.get(), userData); });
+        };
+    }
+    return result;
 }
 
 }  // namespace
@@ -570,6 +581,9 @@ ModResult ui_pane_add_control(
     case UI_CONTROL_GROUP:
         spec.kind = desc.kind == UI_CONTROL_BUTTON ? ui::ModControlSpec::Kind::Button :
                                                      ui::ModControlSpec::Kind::Group;
+        if (desc.struct_size >= sizeof(UiControlDesc)) {
+            spec.isSelected = wrap_predicate(mod, desc.is_selected, desc.user_data, pane);
+        }
         spec.onPressed = [modPtr = &mod, fn = desc.on_pressed, userData = desc.user_data,
                              guardHandle = pane] {
             if (!slot_live(guardHandle)) {
@@ -808,8 +822,7 @@ ModResult ui_window_close(LoadedMod& mod, uint64_t handle) {
     return MOD_OK;
 }
 
-ModResult ui_dialog_push(
-    LoadedMod& mod, const UiDialogDesc& desc, UiPaneBuildFn build, uint64_t& outHandle) {
+ModResult ui_dialog_push(LoadedMod& mod, const UiDialogDesc& desc, uint64_t& outHandle) {
     outHandle = 0;
     if (!aurora::rmlui::is_initialized()) {
         return MOD_UNAVAILABLE;
@@ -846,17 +859,20 @@ ModResult ui_dialog_push(
             static_cast<ModDialog&>(modal).close();
         }
     };
+    auto* actionData = reinterpret_cast<const std::byte*>(desc.actions);
     for (size_t i = 0; i < desc.action_count; ++i) {
-        props.actions.push_back(make_dialog_action(mod, handle, desc.actions[i]));
+        const auto& action = *reinterpret_cast<const UiDialogAction*>(actionData);
+        props.actions.push_back(make_dialog_action(mod, handle, action));
+        actionData += action.struct_size;
     }
 
     auto dialog = std::make_unique<ModDialog>(
         std::move(props), [handle] { on_mod_dialog_destroyed(handle); });
-    if (build != nullptr) {
+    if (desc.build != nullptr) {
         auto& pane = dialog->content_pane();
         const uint64_t paneHandle = wrap_pane(mod, pane, nullptr);
         invoke_mod_ui_callback(mod, "mod UI dialog build", [&](ModError* error) {
-            return build(mod.context.get(), paneHandle, desc.user_data, error);
+            return desc.build(mod.context.get(), paneHandle, desc.user_data, error);
         });
         if (!mod.active) {
             return MOD_ERROR;
@@ -895,15 +911,6 @@ ModResult ui_dialog_set_icon(LoadedMod& mod, uint64_t handle, const char* icon) 
         return MOD_INVALID_ARGUMENT;
     }
     static_cast<ModDialog*>(slot->document)->set_icon(icon);
-    return MOD_OK;
-}
-
-ModResult ui_dialog_add_action(LoadedMod& mod, uint64_t handle, const UiDialogAction& action) {
-    auto* slot = resolve(mod, handle, UiSlotKind::Dialog, "dialog_add_action");
-    if (slot == nullptr || slot->document == nullptr) {
-        return MOD_INVALID_ARGUMENT;
-    }
-    static_cast<ModDialog*>(slot->document)->add_action(make_dialog_action(mod, handle, action));
     return MOD_OK;
 }
 
@@ -1147,6 +1154,7 @@ bool valid_color_preset(const char* value, bool alpha) {
 
 bool valid_control_desc(const UiControlDesc& desc) {
     constexpr size_t kLegacyDescSize = offsetof(UiControlDesc, color_presets);
+    constexpr size_t kColorDescSize = offsetof(UiControlDesc, is_selected);
     if (desc.struct_size < kLegacyDescSize || desc.label == nullptr) {
         return false;
     }
@@ -1160,7 +1168,7 @@ bool valid_control_desc(const UiControlDesc& desc) {
     case UI_CONTROL_SELECT:
         break;
     case UI_CONTROL_COLOR:
-        if (desc.struct_size < sizeof(UiControlDesc)) {
+        if (desc.struct_size < kColorDescSize) {
             return false;
         }
         break;
@@ -1349,21 +1357,24 @@ ModResult ui_dialog_push(ModContext* context, const UiDialogDesc* desc, UiDialog
         *outDialog = 0;
     }
     auto* mod = mod_from_context(context);
-    constexpr size_t kLegacyDescSize = offsetof(UiDialogDesc, build);
-    if (mod == nullptr || desc == nullptr || desc->struct_size < kLegacyDescSize ||
+    if (mod == nullptr || desc == nullptr || desc->struct_size < sizeof(UiDialogDesc) ||
         desc->title == nullptr || desc->body_rml == nullptr || desc->actions == nullptr ||
         desc->action_count == 0 || desc->variant > UI_DIALOG_DANGER)
     {
         return MOD_INVALID_ARGUMENT;
     }
+    auto* actionData = reinterpret_cast<const std::byte*>(desc->actions);
     for (size_t i = 0; i < desc->action_count; ++i) {
-        if (desc->actions[i].label == nullptr) {
+        const auto* action = reinterpret_cast<const UiDialogAction*>(actionData);
+        if (action->struct_size < sizeof(UiDialogAction) ||
+            action->struct_size % alignof(UiDialogAction) != 0 || action->label == nullptr)
+        {
             return MOD_INVALID_ARGUMENT;
         }
+        actionData += action->struct_size;
     }
-    const UiPaneBuildFn build = desc->struct_size >= sizeof(UiDialogDesc) ? desc->build : nullptr;
     uint64_t handle = 0;
-    const auto result = ui_impl::ui_dialog_push(*mod, *desc, build, handle);
+    const auto result = ui_impl::ui_dialog_push(*mod, *desc, handle);
     if (result == MOD_OK && outDialog != nullptr) {
         *outDialog = handle;
     }
@@ -1495,15 +1506,6 @@ ModResult ui_dialog_set_icon(ModContext* context, UiDialogHandle dialog, const c
     return ui_impl::ui_dialog_set_icon(*mod, dialog, icon);
 }
 
-ModResult ui_dialog_add_action(
-    ModContext* context, UiDialogHandle dialog, const UiDialogAction* action) {
-    auto* mod = mod_from_context(context);
-    if (mod == nullptr || dialog == 0 || action == nullptr || action->label == nullptr) {
-        return MOD_INVALID_ARGUMENT;
-    }
-    return ui_impl::ui_dialog_add_action(*mod, dialog, *action);
-}
-
 ModResult ui_get_clipboard_text(
     ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength) {
     auto* mod = mod_from_context(ctx);
@@ -1522,8 +1524,55 @@ ModResult ui_set_clipboard_text(ModContext* ctx, const char* text) {
     return ui_impl::ui_set_clipboard_text(*mod, text);
 }
 
-constexpr UiService s_uiService{
-    .header = SERVICE_HEADER(UiService, UI_SERVICE_MAJOR, UI_SERVICE_MINOR),
+ModResult ui_v1_dialog_push(
+    ModContext* context, const ui_v1::UiDialogDesc* desc, UiDialogHandle* outDialog) {
+    if (outDialog != nullptr) {
+        *outDialog = 0;
+    }
+    constexpr size_t kLegacyDescSize = offsetof(ui_v1::UiDialogDesc, build);
+    if (desc == nullptr || desc->struct_size < kLegacyDescSize || desc->actions == nullptr ||
+        desc->action_count == 0)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    std::vector<UiDialogAction> actions;
+    actions.reserve(desc->action_count);
+    for (size_t i = 0; i < desc->action_count; ++i) {
+        UiDialogAction action = UI_DIALOG_ACTION_INIT;
+        action.label = desc->actions[i].label;
+        action.on_pressed = desc->actions[i].on_pressed;
+        action.user_data = desc->actions[i].user_data;
+        action.keep_open = desc->actions[i].keep_open;
+        actions.push_back(action);
+    }
+
+    UiDialogDesc translated = UI_DIALOG_DESC_INIT;
+    translated.title = desc->title;
+    translated.body_rml = desc->body_rml;
+    translated.variant = desc->variant;
+    translated.icon = desc->icon;
+    translated.actions = actions.data();
+    translated.action_count = actions.size();
+    translated.on_dismiss = desc->on_dismiss;
+    translated.user_data = desc->user_data;
+    translated.build = desc->struct_size >= sizeof(ui_v1::UiDialogDesc) ? desc->build : nullptr;
+    return ui_dialog_push(context, &translated, outDialog);
+}
+
+ModResult ui_v1_dialog_add_action(
+    ModContext* context, UiDialogHandle, const ui_v1::UiDialogAction*) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    log::write(
+        mod->metadata.id, LOG_LEVEL_WARN, "UiService v1 dialog_add_action is no longer supported");
+    return MOD_UNSUPPORTED;
+}
+
+constexpr ui_v1::UiService s_uiService_v1{
+    .header = SERVICE_HEADER(ui_v1::UiService, ui_v1::kMajorVersion, ui_v1::kMinorVersion),
     .register_mods_panel = ui_register_mods_panel,
     .pane_add_section = ui_pane_add_section,
     .pane_add_text = ui_pane_add_text,
@@ -1536,11 +1585,11 @@ constexpr UiService s_uiService{
     .elem_set_class = ui_elem_set_class,
     .window_push = ui_window_push,
     .window_close = ui_window_close,
-    .dialog_push = ui_dialog_push,
+    .dialog_push = ui_v1_dialog_push,
     .dialog_close = ui_dialog_close,
     .dialog_set_body = ui_dialog_set_body,
     .dialog_set_icon = ui_dialog_set_icon,
-    .dialog_add_action = ui_dialog_add_action,
+    .dialog_add_action = ui_v1_dialog_add_action,
     .is_any_document_visible = ui_is_any_document_visible,
     .register_styles = ui_register_styles,
     .register_styles_file = ui_register_styles_file,
@@ -1551,6 +1600,36 @@ constexpr UiService s_uiService{
     .get_clipboard_text = ui_get_clipboard_text,
     .set_clipboard_text = ui_set_clipboard_text,
     .pane_add_group = ui_pane_add_group,
+};
+
+constexpr UiService s_uiService{
+    .header = SERVICE_HEADER(UiService, UI_SERVICE_MAJOR, UI_SERVICE_MINOR),
+    .register_mods_panel = ui_register_mods_panel,
+    .pane_add_section = ui_pane_add_section,
+    .pane_add_text = ui_pane_add_text,
+    .pane_add_rml = ui_pane_add_rml,
+    .pane_add_progress = ui_pane_add_progress,
+    .pane_add_control = ui_pane_add_control,
+    .pane_add_group = ui_pane_add_group,
+    .elem_set_text = ui_elem_set_text,
+    .elem_set_rml = ui_elem_set_rml,
+    .elem_set_progress = ui_elem_set_progress,
+    .elem_set_class = ui_elem_set_class,
+    .window_push = ui_window_push,
+    .window_close = ui_window_close,
+    .dialog_push = ui_dialog_push,
+    .dialog_close = ui_dialog_close,
+    .dialog_set_body = ui_dialog_set_body,
+    .dialog_set_icon = ui_dialog_set_icon,
+    .is_any_document_visible = ui_is_any_document_visible,
+    .register_styles = ui_register_styles,
+    .register_styles_file = ui_register_styles_file,
+    .unregister_styles = ui_unregister_styles,
+    .register_menu_tab = ui_register_menu_tab,
+    .unregister_menu_tab = ui_unregister_menu_tab,
+    .push_toast = ui_push_toast,
+    .get_clipboard_text = ui_get_clipboard_text,
+    .set_clipboard_text = ui_set_clipboard_text,
 };
 
 }  // namespace
@@ -1566,6 +1645,13 @@ void ui_update_mods_panels(LoadedMod& mod) {
 std::vector<ModMenuTabEntry> ui_mod_menu_tabs() {
     return ui_impl::ui_mod_menu_tabs();
 }
+
+constinit const ServiceModule g_uiModule_v1{
+    .id = UI_SERVICE_ID,
+    .majorVersion = ui_v1::kMajorVersion,
+    .minorVersion = ui_v1::kMinorVersion,
+    .service = &s_uiService_v1,
+};
 
 constinit const ServiceModule g_uiModule{
     .id = UI_SERVICE_ID,

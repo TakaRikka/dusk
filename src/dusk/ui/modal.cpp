@@ -45,6 +45,9 @@ void Modal::update() {
     if (mContentPane != nullptr) {
         mContentPane->update();
     }
+    for (const auto& button : mButtons) {
+        button->update();
+    }
     if (mPendingAction) {
         auto action = std::move(mPendingAction);
         action(*this);
@@ -62,7 +65,11 @@ Pane& Modal::content_pane() {
 
 void Modal::add_action(ModalAction action) {
     auto* actions = mDialog->QuerySelector(".modal-actions");
-    auto btn = std::make_unique<Button>(actions, action.label);
+    auto btn =
+        std::make_unique<ControlledButton>(actions, ControlledButton::Props{
+                                                        .text = std::move(action.label),
+                                                        .isDisabled = std::move(action.isDisabled),
+                                                    });
     btn->root()->SetClass("modal-btn", true);
     btn->on_pressed([this, callback = std::move(action.onPressed)] {
         if (!callback) {
@@ -100,8 +107,10 @@ bool Modal::focus() {
     if (mContentPane != nullptr && mContentPane->focus()) {
         return true;
     }
-    if (!mButtons.empty()) {
-        return mButtons.front()->focus();
+    for (const auto& button : mButtons) {
+        if (button->focus()) {
+            return true;
+        }
     }
     return false;
 }
@@ -122,11 +131,13 @@ bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
 
     auto* target = event.GetTargetElement();
-    if (mContentPane != nullptr && mContentPane->contains(target) && cmd == NavCommand::Down &&
-        !mButtons.empty() && mButtons.front()->focus())
-    {
-        mDoAud_seStartMenu(kSoundItemFocus);
-        return true;
+    if (mContentPane != nullptr && mContentPane->contains(target) && cmd == NavCommand::Down) {
+        for (const auto& button : mButtons) {
+            if (button->focus()) {
+                mDoAud_seStartMenu(kSoundItemFocus);
+                return true;
+            }
+        }
     }
     if (mContentPane != nullptr && cmd == NavCommand::Up &&
         std::ranges::any_of(
@@ -150,10 +161,13 @@ bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 
     for (int i = 0; i < static_cast<int>(mButtons.size()); ++i) {
         if (mButtons[i]->contains(target)) {
-            const int next = i + direction;
-            if (next >= 0 && next < static_cast<int>(mButtons.size()) && mButtons[next]->focus()) {
-                mDoAud_seStartMenu(kSoundItemFocus);
-                return true;
+            for (int next = i + direction; next >= 0 && next < static_cast<int>(mButtons.size());
+                next += direction)
+            {
+                if (mButtons[next]->focus()) {
+                    mDoAud_seStartMenu(kSoundItemFocus);
+                    return true;
+                }
             }
             return false;
         }
