@@ -4,24 +4,40 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 usage() {
     cat <<'USAGE'
-usage: scripts/tvos/sign.sh [--allow-incomplete] [app bundle]
+usage: scripts/tvos/sign.sh [--allow-incomplete] [--] [app bundle]
   app bundle           defaults to the built build/install/Dusklight.app
   --allow-incomplete   sign anyway when the completeness check below fails
+  --                   end of options; the next argument is the app bundle path even
+                       if it begins with -
 USAGE
 }
 
 allow_incomplete=0
 app=""
+app_given=0
+terminated=0
 while [[ $# -gt 0 ]]; do
+    if [[ $terminated -eq 1 ]]; then
+        [[ $app_given -eq 0 ]] || { usage >&2; tvos_fail "unexpected extra argument: $1"; }
+        app="$1"; app_given=1; shift; continue
+    fi
     case "$1" in
+        --) terminated=1; shift ;;
         --allow-incomplete) allow_incomplete=1; shift ;;
         -h|--help) usage; exit 0 ;;
         -*) usage >&2; tvos_fail "unknown argument: $1" ;;
-        *) [[ -z "$app" ]] || { usage >&2; tvos_fail "unexpected extra argument: $1"; }
-           app="$1"; shift ;;
+        *) [[ $app_given -eq 0 ]] || { usage >&2; tvos_fail "unexpected extra argument: $1"; }
+           app="$1"; app_given=1; shift ;;
     esac
 done
-app="${app:-$TVOS_INSTALL_APP}"
+if [[ $app_given -eq 1 ]]; then
+    # An explicit "" is a mistake, not a request for the default -- e.g. a shell variable that
+    # expanded empty. Silently falling back with ${app:-$TVOS_INSTALL_APP} would sign the wrong
+    # bundle without telling anyone.
+    [[ -n "$app" ]] || tvos_fail "app bundle path must not be empty"
+else
+    app="$TVOS_INSTALL_APP"
+fi
 [[ -d "$app" ]] || tvos_fail "app bundle not found: $app (run scripts/tvos/build.sh)"
 
 # A stale or half-built bundle signs and installs perfectly happily, and only fails on the TV --
