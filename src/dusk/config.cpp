@@ -1,4 +1,5 @@
 #include "dusk/config.hpp"
+#include "dusk/tvos/save_mirror.hpp"
 #include "absl/container/flat_hash_map.h"
 #include "fmt/format.h"
 #include "nlohmann/json.hpp"
@@ -553,6 +554,11 @@ void save() {
         const auto tempConfigJsonPath = GetTempConfigJsonPath(configJsonPath);
         io::FileStream::WriteAllText(tempConfigJsonPath, j.dump(4));
         ReplaceFile(tempConfigJsonPath, configJsonPath);
+#if DUSK_TVOS_SAVE_MIRROR
+        // tvOS may reclaim Library/Caches, where this file lives. One atomic
+        // store; the bytes are read by the mirror's own queue at flush time.
+        dusk::tvos::save_mirror::note_support_written();
+#endif
     } catch (const std::exception& e) {
         DuskConfigLog.error("Failed to save config to '{}': {}", configPathString, e.what());
     }

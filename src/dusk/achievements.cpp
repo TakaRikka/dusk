@@ -18,6 +18,7 @@
 #include "dusk/logging.h"
 #include "dusk/main.h"
 #include "dusk/speedrun.h"
+#include "dusk/tvos/save_mirror.hpp"
 #include "dusk/ui/ui.hpp"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_name.h"
@@ -1239,6 +1240,11 @@ void AchievementSystem::save() {
             dusk::ConfigPath / ACHIEVEMENTS_FILENAME,
             j.dump(2)
         );
+#if DUSK_TVOS_SAVE_MIRROR
+        // tvOS may reclaim Library/Caches, where this file lives. One atomic
+        // store; the bytes are read by the mirror's own queue at flush time.
+        dusk::tvos::save_mirror::note_support_written();
+#endif
     } catch (const std::exception&) {}
 }
 

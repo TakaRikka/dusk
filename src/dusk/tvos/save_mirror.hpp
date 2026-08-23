@@ -87,6 +87,18 @@ void on_card_init(bool rawCardImage, const char* gameName, const char* company);
 void note_save_written();
 
 /**
+ * Marks the mirror dirty because a config-class file has just been written.
+ *
+ * Unlike note_save_written() this takes no snapshot and schedules nothing: the
+ * support files are read from the mirror's queue at flush time, and settings are
+ * not progress, so they ride the next flush rather than forcing one. All this
+ * does is stop that flush from being skipped as "nothing has changed".
+ *
+ * Cheap enough to call from any config writer: one atomic store, no I/O, no lock.
+ */
+void note_support_written();
+
+/**
  * Cancels any pending debounce and flushes, waiting a bounded time for it.
  *
  * Returns as soon as the flush completes, or after roughly two seconds if it has

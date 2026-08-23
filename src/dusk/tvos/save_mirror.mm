@@ -701,6 +701,11 @@ void init(const fs::path& dataRoot) {
     g_queue = dispatch_queue_create("dev.twilitrealm.dusk.save-mirror",
         dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_UTILITY, 0));
     g_started.store(true);
+    // The first flush of a session always runs. It establishes the baseline
+    // mirror -- the save as it is at launch plus whatever config files exist --
+    // and it is the only thing that covers the support files this fork cannot
+    // hook, the pad mappings aurora writes.
+    g_dirty.store(true);
 
     DuskLog.info("{} started; data root {}, key '{}', budget {} bytes", kTag,
         path_string(dataRoot), kDefaultsKey, kSizeLimitBytes);
@@ -758,11 +763,6 @@ void init(const fs::path& dataRoot) {
         DuskLog.info("{} restore(config): {} restored, {} already present (mirror sequence {}, "
                      "game {})",
             kTag, restored, skipped, stored.envelope.sequence, stored.envelope.gameId);
-        if (restored > 0) {
-            // A restored config is state the next flush has to re-mirror, because
-            // the game will rewrite it from its own in-memory view soon enough.
-            g_dirty.store(true);
-        }
     }
     } catch (...) {
         // Start-up must survive a mirror that cannot be read. The game's own
@@ -971,6 +971,13 @@ bool flush_bounded(const char* reason) {
 }
 
 }  // namespace
+
+void note_support_written() {
+    if (!g_started.load() || g_stopping.load()) {
+        return;
+    }
+    g_dirty.store(true);
+}
 
 void flush_now(const char* reason) {
     if (!g_started.load() || g_stopping.load()) {
