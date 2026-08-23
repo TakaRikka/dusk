@@ -5,8 +5,12 @@ Status: 2026-08-23 — configures and builds via the `tvos-default` CMake preset
 on-device launch are all scripted (`provision.sh`, `sign.sh`, `install.sh`, `launch.sh`) but
 **not yet run against the device**: the paired Apple TV ("<YOUR_DEVICE_NAME>", confirmed via
 `xcrun devicectl list devices` as an Apple TV 4K (3rd generation) / `AppleTV14,1`) is asleep —
-`connectionProperties.tunnelState` reads `unavailable` — so no tvOS provisioning profile exists
-yet. Not upstreamed.
+`connectionProperties.tunnelState` reads `unavailable`. No tvOS provisioning profile exists *for
+this app's team* (`<YOUR_TEAM_ID>`) yet — `provision.sh` mints one during the device session. This Mac
+does already hold one unrelated tvOS profile: a wildcard (`application-identifier = <REDACTED_TEAM_ID>.*`)
+for a different team, "<REDACTED>" (`<REDACTED_TEAM_ID>`), created 2026-03-09. `tvos_profile_path`
+correctly ignores it, since it matches neither `<YOUR_TEAM_ID>.dev.twilitrealm.dusk` nor `<YOUR_TEAM_ID>.*`.
+To sign with that other team instead, override `DUSK_TVOS_TEAM_ID`. Not upstreamed.
 
 ## One-time setup
 1. `scripts/tvos/setup.sh` — CMake/Ninja/Python/Xcode tvOS SDK checks, Rust nightly +
