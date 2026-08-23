@@ -11,8 +11,10 @@ TVOS_BUILD_DIR="$TVOS_FORK_ROOT/build/tvos-default"
 TVOS_INSTALL_APP="$TVOS_FORK_ROOT/build/install/$TVOS_APP_NAME.app"
 TVOS_LOG_DIR="$TVOS_FORK_ROOT/build/logs"
 # Overridable so the profile lookup can be exercised against a mock directory without touching
-# the real one.
-TVOS_PROFILE_DIR="${TVOS_PROFILE_DIR:-$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles}"
+# the real one. DUSK_TVOS_PROFILE_DIR takes precedence; the bare TVOS_PROFILE_DIR is kept for
+# compatibility but, unlike every other knob here, was not namespaced -- an exported value would
+# silently redirect Banjo's lookup too.
+TVOS_PROFILE_DIR="${DUSK_TVOS_PROFILE_DIR:-${TVOS_PROFILE_DIR:-$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles}}"
 
 tvos_log()  { printf '[tvos] %s\n' "$*"; }
 # Like tvos_log but on stderr, for a function whose stdout a caller captures (tvos_profile_path).
