@@ -726,15 +726,27 @@ HookAction hookPreObjGbCreate(ModContext*, void* args, void* retval, void*) {
     return HOOK_CONTINUE;
 }
 
+const std::map<u8, const char*> kCustomItemImages = {
+    {dItemNo_Randomizer_MAGIC_LV1_e, "shadow_crystal.bti"},
+    {dItemNo_Randomizer_FUSED_SHADOW_1_e, "fused_shadow_1.bti"},
+    {dItemNo_Randomizer_FUSED_SHADOW_2_e, "fused_shadow_2.bti"},
+    {dItemNo_Randomizer_FUSED_SHADOW_3_e, "fused_shadow_3.bti"},
+    {dItemNo_Randomizer_MIRROR_PIECE_1_e, "mirror_shard_1.bti"},
+    {dItemNo_Randomizer_MIRROR_PIECE_2_e, "mirror_shard_2.bti"},
+    {dItemNo_Randomizer_MIRROR_PIECE_3_e, "mirror_shard_3.bti"},
+    {dItemNo_Randomizer_MIRROR_PIECE_4_e, "mirror_shard_4.bti"},
+};
+
 void hookPostReadItemTexture(ModContext*, void* args, void*, void*) {
     const u8 item_no = mods::arg<u8>(args, 0);
     void* tex_buf1 = mods::arg<void*>(args, 1);
-    if (tex_buf1 == nullptr || item_no != dItemNo_Randomizer_MAGIC_LV1_e) {
+    if (tex_buf1 == nullptr || !kCustomItemImages.contains(item_no)) {
         return;
     }
 
     ResourceBuffer bti = RESOURCE_BUFFER_INIT;
-    if (session::svc_mng.resource->load(session::svc_mng.mod_ctx, "shadow_crystal.bti", &bti) == MOD_OK) {
+    auto& imagePath = kCustomItemImages.at(item_no);
+    if (session::svc_mng.resource->load(session::svc_mng.mod_ctx, imagePath, &bti) == MOD_OK) {
         std::memcpy(tex_buf1, bti.data, bti.size < 0xC00 ? bti.size : 0xC00);
         session::svc_mng.resource->free(session::svc_mng.mod_ctx, &bti);
     }
