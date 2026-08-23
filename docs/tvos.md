@@ -87,6 +87,9 @@ it is on the same network` when the Apple TV has no devicectl tunnel.
     back at the tvOS home screen, it did not.
   - **Use plain `scripts/tvos/launch.sh` for the gameplay run.** It attaches no console, so there
     is nothing to detach later.
+  - The detach sends `SIGKILL` to the local `devicectl`, which gives it no chance to flush, so the
+    last buffered lines of `build/logs/launch-console.log` can be missing. For a complete capture
+    use plain `--console`.
 
 ## How the disc is found
 No file dialog on tvOS. `src/dusk/disc_discovery*` scans `Dusklight.app/disc/` then

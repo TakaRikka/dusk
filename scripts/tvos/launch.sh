@@ -58,7 +58,9 @@ if [[ -n "$seconds" ]]; then
     # SIGKILL, not SIGTERM: devicectl forwards SIGTERM on to the app on the device, so the old
     # `kill "$pid"` terminated the very app this was supposed to leave running. SIGKILL cannot be
     # forwarded, so only the local process dies -- though the app may still go down with its
-    # console. The trap keeps Ctrl-C and SIGTERM from leaving devicectl behind.
+    # console. The trap keeps Ctrl-C and SIGTERM from leaving devicectl behind. Tradeoff: SIGKILL
+    # gives devicectl no chance to flush, so the last buffered console lines can be missing from
+    # $log -- use plain --console for a complete capture.
     trap 'kill -KILL "$pid" 2>/dev/null || true' EXIT INT TERM
     sleep "$seconds"
     kill -KILL "$pid" 2>/dev/null || true
