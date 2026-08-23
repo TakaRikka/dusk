@@ -128,7 +128,8 @@ ui-list {
     min-height: 0;
 }
 
-pane > ui-list {
+window content pane > ui-list,
+.modal-content pane > ui-list {
     flex: 1 1 0;
     min-width: 0;
     min-height: 0;
