@@ -392,8 +392,8 @@ void SaveNewRandomizerPreset(const std::string& presetName, bool overwriteExisti
     // again but force overwrite the existing preset
     if (std::filesystem::exists(presetFilepath) && !overwriteExisting) {
         UiDialogAction actions[] = {
-            {"No", onOverwriteDialogNo, nullptr, false},
-            {"Yes", onOverwriteDialogYes, nullptr, false},
+            {sizeof(UiDialogAction), "No", onOverwriteDialogNo, nullptr, false, nullptr},
+            {sizeof(UiDialogAction), "Yes", onOverwriteDialogYes, nullptr, false, nullptr},
         };
 
         actions[1].user_data = (void*)presetName.data();
@@ -476,8 +476,8 @@ void onPresetDialogCancel(ModContext* ctx, UiDialogHandle dialog, void* user_dat
 
 void buildPresetSaveDialog(ModContext* ctx, void* user_data) {
     UiDialogAction actions[] = {
-        {"Save", onPresetDialogSave, nullptr, false},
-        {"Cancel", onPresetDialogCancel, nullptr, false},
+        {sizeof(UiDialogAction), "Save", onPresetDialogSave, nullptr, false, nullptr},
+        {sizeof(UiDialogAction), "Cancel", onPresetDialogCancel, nullptr, false, nullptr},
     };
 
     auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {
@@ -516,7 +516,7 @@ void onPresetLoad(ModContext* ctx, void* user_data) {
 std::vector<std::string> presetList{};
 void buildPresetLoadDialog(ModContext* ctx, void* user_data) {
     UiDialogAction actions[] = {
-        {"Cancel", onPresetDialogLoadCancel, nullptr, false},
+        {sizeof(UiDialogAction), "Cancel", onPresetDialogLoadCancel, nullptr, false, nullptr},
     };
 
     auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {
@@ -577,7 +577,7 @@ bool isSeedDeleteDisabled(ModContext* ctx, void* user_data) {
 
 void buildSeedDeleteDialog(ModContext* ctx, void* user_data) {
     UiDialogAction actions[] = {
-        {"Cancel", onSeedDeleteCancel, nullptr, false},
+        {sizeof(UiDialogAction), "Cancel", onSeedDeleteCancel, nullptr, false, nullptr},
     };
 
     auto buildPaneFn = [](ModContext* ctx, UiElementHandle pane, void* user_data, ModError* out_error) {

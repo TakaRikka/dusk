@@ -49,10 +49,15 @@ static ModResult buildDialog() {
     desc.variant = UI_DIALOG_NORMAL;
 
     UiDialogAction action = {
+        .struct_size = sizeof(UiDialogAction),
         .label = "OK",
         .on_pressed = OnDialogActionOK,
         .user_data = nullptr,
         .keep_open = false,
+        .is_disabled = [](ModContext*, void*) {
+            // disable button while seed is generating
+            return seedGenStatus.load() == SeedGenerateStatus::Generating;
+        }
     };
     desc.actions = &action;
     desc.action_count = 1;
