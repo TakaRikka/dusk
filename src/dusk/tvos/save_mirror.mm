@@ -17,16 +17,20 @@
 #import <Foundation/Foundation.h>
 #include <dispatch/dispatch.h>
 
+#include <algorithm>
 #include <atomic>
 #include <cerrno>
 #include <cstring>
 #include <ctime>
+#include <exception>
 #include <mutex>
 #include <string>
 #include <system_error>
+#include <utility>
 #include <vector>
 
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 namespace fs = std::filesystem;
@@ -41,23 +45,15 @@ constexpr const char* kTag = "[save-mirror]";
 // Debounce window for coalescing a burst of save writes.
 constexpr std::int64_t kDebounceNanos = 2ll * NSEC_PER_SEC;
 
-// Card region directories aurora's GCI-folder backend can produce. Scanned rather
-// than derived, so the mirror does not need to know the disc region.
-constexpr const char* kRegionDirs[] = {"USA", "EUR", "JAP"};
-constexpr const char* kCardDirs[] = {"Card A", "Card B"};
-
-// Config-class files, relative to the data root. Kept in sync with
-// classify_entry(); anything here that classify_entry() rejects is skipped.
-constexpr const char* kSupportFiles[] = {
-    "config.json",
-    "achievements.json",
-    "mod_saves.json",
-    "controller_ports.dat",
-    "keyboard_bindings.dat",
-};
+// The scan roots and the config-class allowlist live in save_mirror_core.hpp
+// (kRegionDirs, kCardDirs, kSupportFileNames, kControllerSuffix) so that the
+// scanner below and classify_entry() read the same list and cannot drift apart.
 
 dispatch_queue_t g_queue;
 std::atomic<std::uint64_t> g_generation{0};
+// Claims init(); the mirror is only usable once g_started goes true, which
+// happens after g_queue exists.
+std::atomic<bool> g_initClaimed{false};
 std::atomic<bool> g_started{false};
 std::atomic<bool> g_watchInstalled{false};
 
@@ -79,6 +75,26 @@ State snapshot_state() {
 
 std::string path_string(const fs::path& path) {
     return borealis::io::fs_path_to_string(path);
+}
+
+// The one place an escaped exception becomes a log line instead of a crash.
+//
+// Every entry point below runs either inside a dispatch block, inside an SDL C
+// callback, or on the game's own memory-card thread -- none of which has a
+// handler above it, so a throw terminates the process. std::filesystem is the
+// live risk: a readdir that fails part-way through a scan throws, and a Caches
+// reclaim landing mid-scan is precisely the situation this whole feature exists
+// to survive. Call from inside a catch block; `throw;` rethrows the exception
+// currently being handled.
+void log_escaped(const char* where) {
+    try {
+        throw;
+    } catch (const std::exception& e) {
+        DuskLog.error("{} {}: unhandled exception ({}); the stored mirror is unchanged", kTag,
+            where, e.what());
+    } catch (...) {
+        DuskLog.error("{} {}: unhandled exception; the stored mirror is unchanged", kTag, where);
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -174,26 +190,55 @@ bool load_stored(ParseResult& outResult) {
     return true;
 }
 
-void store(const MirrorEnvelope& envelope) {
+// Returns false when the write cannot be confirmed. setObject: reports nothing,
+// so success is checked two ways: synchronize must say the write-back worked, and
+// the key must read back. Without that a flush onto a full disk would be logged
+// as a success and the mirror silently left at its previous contents.
+bool store(const MirrorEnvelope& envelope) {
     NSString* key = [NSString stringWithUTF8String:kDefaultsKey];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:to_object(encode_envelope(envelope)) forKey:key];
     // Modern tvOS persists defaults on its own schedule, but the whole point of
     // the mirror is to survive a kill that arrives at a bad moment, so push it out
     // now rather than trusting the next automatic write-back.
-    [defaults synchronize];
+    const bool synchronized = [defaults synchronize] == YES;
+    const bool readable = [defaults objectForKey:key] != nil;
+    if (!synchronized || !readable) {
+        DuskLog.error("{} the mirror could not be written to NSUserDefaults (synchronize {}, "
+                      "key readable {})",
+            kTag, synchronized, readable);
+        return false;
+    }
+    return true;
 }
 
 // ---------------------------------------------------------------------------
 // File I/O
 // ---------------------------------------------------------------------------
 
+// Reads at most kMaxEntryBytes. The size is checked before a single byte is read:
+// a file larger than the whole NSUserDefaults budget can never be stored, so
+// reading it would only be a way to spend memory before failing -- and that is
+// the cheap defence against a config.json that has run away.
 bool read_file(const fs::path& path, std::vector<std::uint8_t>& out) {
     const int fd = ::open(path.c_str(), O_RDONLY | O_CLOEXEC);
     if (fd < 0) {
         return false;
     }
+    struct stat info = {};
+    if (::fstat(fd, &info) != 0 || !S_ISREG(info.st_mode)) {
+        ::close(fd);
+        return false;
+    }
+    if (static_cast<std::uint64_t>(info.st_size) > kMaxEntryBytes) {
+        DuskLog.warn("{} {} is {} bytes, past the {} byte per-entry cap; not mirrored", kTag,
+            path_string(path), static_cast<std::uint64_t>(info.st_size), kMaxEntryBytes);
+        ::close(fd);
+        return false;
+    }
+
     out.clear();
+    out.reserve(static_cast<std::size_t>(info.st_size));
     std::uint8_t buffer[64 * 1024];
     for (;;) {
         const ssize_t got = ::read(fd, buffer, sizeof(buffer));
@@ -206,6 +251,15 @@ bool read_file(const fs::path& path, std::vector<std::uint8_t>& out) {
         }
         if (got == 0) {
             break;
+        }
+        // The file grew while it was being read. Storing the prefix would mirror
+        // a save nobody ever wrote, so give up instead of truncating.
+        if (out.size() + static_cast<std::size_t>(got) > kMaxEntryBytes) {
+            DuskLog.warn("{} {} grew past the {} byte per-entry cap while being read; not mirrored",
+                kTag, path_string(path), kMaxEntryBytes);
+            ::close(fd);
+            out.clear();
+            return false;
         }
         out.insert(out.end(), buffer, buffer + got);
     }
@@ -286,27 +340,37 @@ bool file_present(const fs::path& path) {
     return got == 1;
 }
 
+// Both scans use directory_iterator's error_code form throughout, including the
+// increment. The range-for spelling increments by calling the *throwing*
+// overload, so a readdir that fails part-way -- a Caches reclaim landing mid-scan
+// -- throws out of a dispatch block or an SDL callback and takes the process with
+// it. `ec` on the increment turns that into an early stop and a log line.
 std::vector<fs::path> scan_card_files(const fs::path& dataRoot) {
     std::vector<fs::path> found;
-    std::error_code ec;
-    for (const char* region : kRegionDirs) {
-        for (const char* card : kCardDirs) {
-            const fs::path dir = dataRoot / region / card;
-            if (!fs::is_directory(dir, ec) || ec) {
+    for (const auto region : kRegionDirs) {
+        for (const auto card : kCardDirs) {
+            const fs::path dir = dataRoot / std::string(region) / std::string(card);
+            std::error_code probe;
+            if (!fs::is_directory(dir, probe) || probe) {
                 continue;
             }
-            for (const auto& entry : fs::directory_iterator(dir, ec)) {
-                if (ec) {
-                    break;
-                }
-                if (!entry.is_regular_file(ec) || ec) {
+            std::error_code walk;
+            for (auto it = fs::directory_iterator(dir, walk), end = fs::directory_iterator();
+                 !walk && it != end; it.increment(walk))
+            {
+                std::error_code stat;
+                if (!it->is_regular_file(stat) || stat) {
                     continue;
                 }
-                const std::string relative =
-                    std::string(region) + "/" + card + "/" + entry.path().filename().string();
+                const std::string relative = std::string(region) + "/" + std::string(card) + "/" +
+                                             it->path().filename().string();
                 if (classify_entry(relative) == EntryClass::Save) {
-                    found.push_back(entry.path());
+                    found.push_back(it->path());
                 }
+            }
+            if (walk) {
+                DuskLog.warn("{} scan of {} stopped early: {}", kTag, path_string(dir),
+                    walk.message());
             }
         }
     }
@@ -315,23 +379,32 @@ std::vector<fs::path> scan_card_files(const fs::path& dataRoot) {
 
 std::vector<std::string> scan_support_names(const fs::path& dataRoot) {
     std::vector<std::string> names;
-    for (const char* name : kSupportFiles) {
+    for (const auto name : kSupportFileNames) {
         names.emplace_back(name);
     }
-    std::error_code ec;
-    for (const auto& entry : fs::directory_iterator(dataRoot, ec)) {
-        if (ec) {
-            break;
-        }
-        if (!entry.is_regular_file(ec) || ec) {
+
+    // The fixed names above are looked for whether or not they exist; the scan
+    // only has to find the pad mappings, which are named after the controller.
+    std::error_code walk;
+    for (auto it = fs::directory_iterator(dataRoot, walk), end = fs::directory_iterator();
+         !walk && it != end; it.increment(walk))
+    {
+        std::error_code stat;
+        if (!it->is_regular_file(stat) || stat) {
             continue;
         }
-        const std::string name = entry.path().filename().string();
-        if (classify_entry(name) == EntryClass::Support &&
-            name.find(".controller") != std::string::npos)
-        {
-            names.push_back(name);
+        std::string name = it->path().filename().string();
+        if (classify_entry(name) != EntryClass::Support) {
+            continue;
         }
+        if (std::find(names.begin(), names.end(), name) != names.end()) {
+            continue;
+        }
+        names.push_back(std::move(name));
+    }
+    if (walk) {
+        DuskLog.warn("{} scan of {} stopped early: {}", kTag, path_string(dataRoot),
+            walk.message());
     }
     return names;
 }
@@ -340,8 +413,9 @@ std::vector<std::string> scan_support_names(const fs::path& dataRoot) {
 // Flush
 // ---------------------------------------------------------------------------
 
-// Runs on g_queue only.
-void flush_on_queue(const char* reason) {
+// The flush proper. Reached only through flush_on_queue() below, which is the
+// exception barrier.
+void flush_impl(const char* reason) {
     const State state = snapshot_state();
     if (state.dataRoot.empty()) {
         DuskLog.error("{} flush({}) skipped: data root is not set", kTag, reason);
@@ -443,7 +517,12 @@ void flush_on_queue(const char* reason) {
     const MirrorEnvelope envelope =
         build_envelope(kAppId, gameId, sequence, timestamp, std::move(entries));
 
-    store(envelope);
+    if (!store(envelope)) {
+        DuskLog.error("{} flush({}) FAILED to store sequence {}; the previous mirror is what "
+                      "survives a purge from here",
+            kTag, reason, envelope.sequence);
+        return;
+    }
 
     DuskLog.info("{} flush({}) wrote sequence {} for game {}: {} entries, {} bytes (raw {}, "
                  "shed {}), guard {}",
@@ -455,6 +534,18 @@ void flush_on_queue(const char* reason) {
     }
 }
 
+// Runs on g_queue only, and never throws. A dispatch block has no handler above
+// it, so an exception escaping this function would terminate the app -- which is
+// the worst possible response to the transient filesystem failure that most
+// likely caused it.
+void flush_on_queue(const char* reason) {
+    try {
+        flush_impl(reason);
+    } catch (...) {
+        log_escaped("flush");
+    }
+}
+
 // ---------------------------------------------------------------------------
 // SDL lifecycle watch
 // ---------------------------------------------------------------------------
@@ -463,17 +554,24 @@ bool SDLCALL lifecycle_event_watch(void*, SDL_Event* event) {
     // aurora installs its own watch (extern/aurora/lib/window.cpp) and handles
     // neither of these events; this one is independent so the submodule stays
     // untouched. SDL invokes watches on the thread that pushes the event, which
-    // for these two is UIKit's main thread -- so the synchronous flush below
-    // happens inside the system callback, while the app is still allowed to run.
-    switch (event->type) {
-    case SDL_EVENT_WILL_ENTER_BACKGROUND:
-        flush_now("will-enter-background");
-        break;
-    case SDL_EVENT_TERMINATING:
-        flush_now("terminating");
-        break;
-    default:
-        break;
+    // for these two is UIKit's main thread -- so the flush below happens inside
+    // the system callback, while the app is still allowed to run.
+    //
+    // This is a C callback reached from SDL's own event pump: an exception
+    // crossing it is undefined behaviour long before anything could catch it.
+    try {
+        switch (event->type) {
+        case SDL_EVENT_WILL_ENTER_BACKGROUND:
+            flush_now("will-enter-background");
+            break;
+        case SDL_EVENT_TERMINATING:
+            flush_now("terminating");
+            break;
+        default:
+            break;
+        }
+    } catch (...) {
+        log_escaped("lifecycle watch");
     }
     return true;
 }
@@ -485,7 +583,11 @@ bool SDLCALL lifecycle_event_watch(void*, SDL_Event* event) {
 // ---------------------------------------------------------------------------
 
 void init(const fs::path& dataRoot) {
-    if (g_started.exchange(true)) {
+    // g_initClaimed makes init() one-shot; g_started is what every other entry
+    // point tests, and it is published *after* the queue exists. Publishing it
+    // first left a window in which note_save_written() would dispatch onto a null
+    // queue.
+    if (g_initClaimed.exchange(true)) {
         return;
     }
 
@@ -495,6 +597,7 @@ void init(const fs::path& dataRoot) {
     }
     g_queue = dispatch_queue_create("dev.twilitrealm.dusk.save-mirror",
         dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_UTILITY, 0));
+    g_started.store(true);
 
     DuskLog.info("{} started; data root {}, key '{}', budget {} bytes", kTag,
         path_string(dataRoot), kDefaultsKey, kSizeLimitBytes);
@@ -502,6 +605,7 @@ void init(const fs::path& dataRoot) {
     // Config-class restore. Runs before the config is read so a restored
     // config.json is the one that gets loaded; otherwise the next config save
     // would write in-memory defaults straight back over it.
+    try {
     @autoreleasepool {
         ParseResult stored;
         const bool hadStored = load_stored(stored);
@@ -548,6 +652,11 @@ void init(const fs::path& dataRoot) {
         DuskLog.info("{} restore(config): {} restored, {} already present (mirror sequence {}, "
                      "game {})",
             kTag, restored, skipped, stored.envelope.sequence, stored.envelope.gameId);
+    }
+    } catch (...) {
+        // Start-up must survive a mirror that cannot be read. The game's own
+        // config defaults are a recoverable inconvenience; a crash here is not.
+        log_escaped("restore(config)");
     }
 }
 
@@ -600,6 +709,7 @@ void on_card_init(bool rawCardImage, const char* gameName, const char* company) 
 
     DuskLog.info("{} card ready: game {}, GCI folder format", kTag, gameId);
 
+    try {
     @autoreleasepool {
         const auto cardFiles = scan_card_files(dataRoot);
         bool primaryPresent = false;
@@ -649,6 +759,11 @@ void on_card_init(bool rawCardImage, const char* gameName, const char* company) 
             DuskLog.warn("{} restore(save): mirror validated but held no card file", kTag);
         }
     }
+    } catch (...) {
+        // Reached from the game's card thread start-up. A mirror that cannot be
+        // read must cost the player a restore, not the launch.
+        log_escaped("restore(save)");
+    }
 }
 
 void note_save_written() {
@@ -659,11 +774,15 @@ void note_save_written() {
     // Never touch the filesystem or NSUserDefaults from here.
     const std::uint64_t generation = g_generation.fetch_add(1) + 1;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kDebounceNanos), g_queue, ^{
-      if (g_generation.load() != generation) {
-          return;  // superseded by a later save inside the debounce window
-      }
-      @autoreleasepool {
-          flush_on_queue("save-write");
+      try {
+          if (g_generation.load() != generation) {
+              return;  // superseded by a later save inside the debounce window
+          }
+          @autoreleasepool {
+              flush_on_queue("save-write");
+          }
+      } catch (...) {
+          log_escaped("debounced flush");
       }
     });
 }
