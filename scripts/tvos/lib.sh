@@ -10,9 +10,13 @@ TVOS_FORK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 TVOS_BUILD_DIR="$TVOS_FORK_ROOT/build/tvos-default"
 TVOS_INSTALL_APP="$TVOS_FORK_ROOT/build/install/$TVOS_APP_NAME.app"
 TVOS_LOG_DIR="$TVOS_FORK_ROOT/build/logs"
-TVOS_PROFILE_DIR="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
+# Overridable so the profile lookup can be exercised against a mock directory without touching
+# the real one.
+TVOS_PROFILE_DIR="${TVOS_PROFILE_DIR:-$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles}"
 
 tvos_log()  { printf '[tvos] %s\n' "$*"; }
+# Like tvos_log but on stderr, for a function whose stdout a caller captures (tvos_profile_path).
+tvos_note() { printf '[tvos] %s\n' "$*" >&2; }
 tvos_fail() { printf '[tvos] ERROR: %s\n' "$*" >&2; exit 1; }
 
 # Prints the UDID of the target Apple TV. Honors $DUSK_TVOS_DEVICE (UDID) first.
@@ -69,25 +73,50 @@ PY
     esac
 }
 
-# Prints the path of the newest tvOS provisioning profile for TEAM.BUNDLE; prints nothing if none.
-# `ls -t` gives newest-first and the first match returns immediately -- no `| head`, which would
-# close the pipe under the still-running loop (BrokenPipe noise from security/python3).
+# Prints the path of the newest tvOS provisioning profile usable for TEAM.BUNDLE; prints nothing
+# if there is none. Two kinds are accepted, in this order of preference:
+#   1. an exact `application-identifier` of TEAM.BUNDLE;
+#   2. a team wildcard, `application-identifier` = TEAM.* -- which is what Xcode actually mints for
+#      an entitlement-free tvOS app ("tvOS Team Provisioning Profile: *"). Signing with the
+#      wildcard entitlements verbatim would give the app `application-identifier = TEAM.*`, which
+#      the device rejects, so sign.sh narrows them to TEAM.BUNDLE before calling codesign.
+# An exact match wins even when a wildcard profile is newer, so the whole directory is scanned
+# before falling back. The note saying which kind was chosen goes to *stderr*: callers capture this
+# function's stdout as the path.
+# `ls -t` gives newest-first -- no `| head`, which would close the pipe under the still-running
+# loop (BrokenPipe noise from security/python3).
 tvos_profile_path() {
-    local f plist ok
+    local f plist kind wildcard=""
     while IFS= read -r f; do
         [[ -f "$f" ]] || continue
         plist="$(mktemp)"
         security cms -D -i "$f" >"$plist" 2>/dev/null || { rm -f "$plist"; continue; }
-        ok=0
-        python3 - "$plist" "$TVOS_TEAM_ID.$TVOS_BUNDLE_ID" 2>/dev/null <<'PY' || ok=$?
+        kind=0
+        python3 - "$plist" "$TVOS_TEAM_ID.$TVOS_BUNDLE_ID" "$TVOS_TEAM_ID.*" 2>/dev/null <<'PY' || kind=$?
 import plistlib, sys
 p = plistlib.load(open(sys.argv[1], "rb"))
+if "tvOS" not in p.get("Platform", []):
+    sys.exit(1)
 appid = p.get("Entitlements", {}).get("application-identifier", "")
-sys.exit(0 if "tvOS" in p.get("Platform", []) and appid == sys.argv[2] else 1)
+if appid == sys.argv[2]:
+    sys.exit(0)   # exact TEAM.BUNDLE
+if appid == sys.argv[3]:
+    sys.exit(3)   # team wildcard TEAM.*
+sys.exit(1)
 PY
         rm -f "$plist"
-        if [[ $ok -eq 0 ]]; then printf '%s\n' "$f"; return 0; fi
+        case $kind in
+            0) tvos_note "profile: exact match for $TVOS_TEAM_ID.$TVOS_BUNDLE_ID — $f"
+               printf '%s\n' "$f"; return 0 ;;
+            3) [[ -n "$wildcard" ]] || wildcard="$f" ;;
+        esac
     done < <(ls -t "$TVOS_PROFILE_DIR"/*.mobileprovision 2>/dev/null)
+    if [[ -n "$wildcard" ]]; then
+        tvos_note "profile: no exact match for $TVOS_TEAM_ID.$TVOS_BUNDLE_ID — falling back to the"
+        tvos_note "         team wildcard $TVOS_TEAM_ID.* — $wildcard"
+        tvos_note "         (sign.sh narrows its entitlements to $TVOS_TEAM_ID.$TVOS_BUNDLE_ID)"
+        printf '%s\n' "$wildcard"
+    fi
     return 0
 }
 

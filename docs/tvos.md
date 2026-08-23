@@ -46,6 +46,17 @@ it is on the same network` when the Apple TV has no devicectl tunnel.
 - `scripts/tvos/sign.sh [app-path]` — embeds the profile created by `provision.sh` as
   `embedded.mobileprovision`, derives entitlements from it, and code-signs nested code (mods under
   `Frameworks/*.so`, `*.dylib`, `*.framework`) before signing the app bundle itself.
+  - **Which profile.** `lib.sh`'s `tvos_profile_path` prefers a tvOS profile whose
+    `application-identifier` is exactly `<YOUR_TEAM_ID>.dev.twilitrealm.dusk`; failing that it falls back
+    to a team wildcard, `<YOUR_TEAM_ID>.*` — which is what Xcode actually mints for an entitlement-free
+    tvOS app ("tvOS Team Provisioning Profile: *"). An exact match wins even when a wildcard profile
+    is newer. The function prints which kind it chose on **stderr**, because callers capture its
+    stdout as the path. The directory searched is
+    `~/Library/Developer/Xcode/UserData/Provisioning Profiles` unless `TVOS_PROFILE_DIR` overrides it.
+  - **Wildcard entitlements are narrowed before signing.** `application-identifier`, and any
+    `keychain-access-groups` entry ending in `.*`, are rewritten to `<YOUR_TEAM_ID>.dev.twilitrealm.dusk`;
+    signing with `<YOUR_TEAM_ID>.*` verbatim produces an app the Apple TV rejects. Everything else in
+    the entitlements is passed through untouched, and every rewrite is logged.
 - `scripts/tvos/install.sh [app]` — `xcrun devicectl device install app` to the paired device.
   It checks device reachability *before* the local `embedded.mobileprovision` check: a sleeping
   Apple TV needs a walk to the living room, while "is not signed" is fixed by rerunning `sign.sh`

@@ -7,19 +7,49 @@ app="${1:-$TVOS_INSTALL_APP}"
 profile="$(tvos_profile_path)"; [[ -n "$profile" ]] || tvos_fail "no tvOS profile for $TVOS_TEAM_ID.$TVOS_BUNDLE_ID — run scripts/tvos/provision.sh"
 identity="$(tvos_identity_sha || true)"; [[ -n "$identity" ]] || tvos_fail "no 'Apple Development' identity for team $TVOS_TEAM_ID in the keychain"
 
-# One path, created once and removed once: the old `ent="$(mktemp -t dusk-ent).plist"` made a
-# temp file and then wrote to a *different* name, leaking the first and leaving the second behind
-# on any failure. The trap covers every exit, including tvos_fail's.
+# One path per temp file, created once and removed once: the old `ent="$(mktemp -t dusk-ent).plist"`
+# made a temp file and then wrote to a *different* name, leaking the first and leaving the second
+# behind on any failure. The trap covers every exit, including tvos_fail's.
 ent="$(mktemp -t dusk-ent)"
-trap 'rm -f "$ent"' EXIT
-# plistlib.load() seeks its stream, which a pipe cannot do ("io.UnsupportedOperation: File or
-# stream is not seekable"), so this aborted before the profile was even copied into the bundle.
-# Read the bytes first and parse them with plistlib.loads().
-security cms -D -i "$profile" | python3 -c '
+prof="$(mktemp -t dusk-prof)"
+trap 'rm -f "$ent" "$prof"' EXIT
+# Decode to a file rather than piping into python: plistlib.load() seeks its stream, and a pipe
+# cannot ("io.UnsupportedOperation: File or stream is not seekable"). lib.sh decodes the same way.
+security cms -D -i "$profile" >"$prof" 2>/dev/null \
+    || tvos_fail "could not decode $profile (security cms -D failed)"
+# A team wildcard profile carries `application-identifier = TEAM.*` (and often the same wildcard in
+# keychain-access-groups). Signing with those verbatim gives the installed app an identifier the
+# Apple TV rejects, so narrow the wildcards -- and only the wildcards -- to the concrete bundle id.
+# Every other entitlement is passed through untouched.
+rewrites="$(python3 - "$prof" "$ent" "$TVOS_TEAM_ID.$TVOS_BUNDLE_ID" <<'PY'
 import plistlib, sys
-p = plistlib.loads(sys.stdin.buffer.read())
-plistlib.dump(p["Entitlements"], sys.stdout.buffer)' > "$ent" \
-    || tvos_fail "could not extract entitlements from $profile"
+
+src, dst, appid = sys.argv[1], sys.argv[2], sys.argv[3]
+ent = plistlib.load(open(src, "rb")).get("Entitlements")
+if not isinstance(ent, dict):
+    sys.stderr.write("the profile carries no Entitlements dictionary\n")
+    sys.exit(1)
+
+cur = ent.get("application-identifier")
+if isinstance(cur, str) and cur.endswith(".*"):
+    ent["application-identifier"] = appid
+    print("application-identifier: %s -> %s" % (cur, appid))
+
+groups = ent.get("keychain-access-groups")
+if isinstance(groups, list):
+    for i, g in enumerate(groups):
+        if isinstance(g, str) and g.endswith(".*"):
+            groups[i] = appid
+            print("keychain-access-groups[%d]: %s -> %s" % (i, g, appid))
+
+with open(dst, "wb") as f:
+    plistlib.dump(ent, f)
+PY
+)" || tvos_fail "could not extract entitlements from $profile"
+if [[ -n "$rewrites" ]]; then
+    tvos_log "wildcard profile — narrowing entitlements to $TVOS_TEAM_ID.$TVOS_BUNDLE_ID:"
+    printf '%s\n' "$rewrites" | sed 's/^/[tvos]   /'
+fi
 cp "$profile" "$app/embedded.mobileprovision"
 tvos_log "entitlements: $(plutil -p "$ent" | grep application-identifier)"
 
