@@ -8,8 +8,8 @@
 #endif
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
-#define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 5u
+#define UI_SERVICE_MAJOR 2u
+#define UI_SERVICE_MINOR 0u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -120,9 +120,8 @@ typedef struct UiControlDesc {
     /* COLOR: optional RRGGBB/RRGGBBAA values for presets. "rainbow" is a special value. */
     const char* const* color_presets;
     size_t color_preset_count;
-    bool color_alpha; /* COLOR: use RRGGBBAA values instead of RRGGBB */
-    /* Optional selected state for BUTTON/GROUP. Added in UiService minor version 5. */
-    UiPredicateFn is_selected;
+    bool color_alpha;          /* COLOR: use RRGGBBAA values instead of RRGGBB */
+    UiPredicateFn is_selected; /* BUTTON/GROUP: pptional selected state */
 } UiControlDesc;
 
 #define UI_CONTROL_DESC_INIT                                                                       \
@@ -198,14 +197,16 @@ typedef struct UiWindowDesc {
 
 typedef void (*UiDialogActionFn)(ModContext* ctx, UiDialogHandle dialog, void* user_data);
 
-/* Note: array element without struct_size; a future change requires appending
- * a v2 desc struct rather than growing this one. */
 typedef struct UiDialogAction {
+    uint32_t struct_size;
     const char* label; /* required */
     UiDialogActionFn on_pressed;
     void* user_data;
-    bool keep_open; /* false = the dialog closes after on_pressed returns */
+    bool keep_open;            /* false = the dialog closes after on_pressed returns */
+    UiPredicateFn is_disabled; /* optional; polled every frame while the dialog is visible */
 } UiDialogAction;
+
+#define UI_DIALOG_ACTION_INIT {sizeof(UiDialogAction), NULL, NULL, NULL, false, NULL}
 
 typedef struct UiDialogDesc {
     uint32_t struct_size;
@@ -222,8 +223,7 @@ typedef struct UiDialogDesc {
     UiDialogActionFn on_dismiss;
     void* user_data; /* passed to build and on_dismiss */
     /* Optional content builder. The pane is rendered below body_rml and above the actions. Its
-     * handle and all child element handles remain valid until the dialog closes.
-     * Added in UiService minor version 4. */
+     * handle and all child element handles remain valid until the dialog closes. */
     UiPaneBuildFn build;
 } UiDialogDesc;
 
@@ -270,6 +270,10 @@ typedef struct UiService {
         ModContext* ctx, UiElementHandle pane, float value, UiElementHandle* out_elem);
     ModResult (*pane_add_control)(ModContext* ctx, UiElementHandle pane, const UiControlDesc* desc,
         UiElementHandle* out_elem);
+    /* Add a group button to one pane that builds controls in its paired pane.
+     * The panes must be the left and right handles from the same UiTabBuildFn call. */
+    ModResult (*pane_add_group)(ModContext* ctx, UiElementHandle group_pane,
+        UiElementHandle target_pane, const UiGroupDesc* desc, UiElementHandle* out_elem);
 
     /* Element updates. The handle kind must match the setter (text/rml on text
      * rows, progress on progress bars). */
@@ -291,9 +295,6 @@ typedef struct UiService {
     ModResult (*dialog_set_body)(ModContext* ctx, UiDialogHandle dialog, const char* body_rml);
     /* Replace the dialog icon ("" removes it; names as in UiDialogDesc.icon). */
     ModResult (*dialog_set_icon)(ModContext* ctx, UiDialogHandle dialog, const char* icon);
-    /* Append one action button (same callback rules as at push). */
-    ModResult (*dialog_add_action)(
-        ModContext* ctx, UiDialogHandle dialog, const UiDialogAction* action);
 
     /* Whether any focus-stack document is currently visible (visible documents block gamepad
      * input). */
@@ -320,18 +321,9 @@ typedef struct UiService {
     /* Enqueue a toast notification. */
     ModResult (*push_toast)(ModContext* ctx, const UiToastDesc* desc);
 
-    /* Minor version 2 */
-
     ModResult (*get_clipboard_text)(
         ModContext* ctx, char* buffer, size_t bufferSize, size_t* outLength);
     ModResult (*set_clipboard_text)(ModContext* ctx, const char* text);
-
-    /* Minor version 3 */
-
-    /* Add a group button to one pane that builds controls in its paired pane.
-     * The panes must be the left and right handles from the same UiTabBuildFn call. */
-    ModResult (*pane_add_group)(ModContext* ctx, UiElementHandle group_pane,
-        UiElementHandle target_pane, const UiGroupDesc* desc, UiElementHandle* out_elem);
 } UiService;
 
 MOD_DECLARE_SERVICE(UiService, svc_ui, UI_SERVICE_ID, UI_SERVICE_MAJOR, UI_SERVICE_MINOR);

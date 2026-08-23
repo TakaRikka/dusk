@@ -72,6 +72,7 @@ extern const ServiceModule g_hookModule;
 extern const ServiceModule g_overlayModule;
 extern const ServiceModule g_textureModule;
 extern const ServiceModule g_configModule;
+extern const ServiceModule g_uiModule_v1;
 extern const ServiceModule g_uiModule;
 extern const ServiceModule g_gameModule;
 extern const ServiceModule g_cameraModule;
