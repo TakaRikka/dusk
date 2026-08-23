@@ -4707,7 +4707,11 @@ int daAlink_c::setStartProcInit() {
         }
 
         if (mEquipItem == 0
+#if TARGET_PC
+            || (!dusk::getSettings().game.unrestrictedItems.getValue() && (!checkCastleTownUseItem(mEquipItem) 
+#else
             || !checkCastleTownUseItem(mEquipItem)
+#endif
             || (checkCloudSea() && mEquipItem != 0x103)
             || checkCanoeStart()
             || (isHorseStart
@@ -4715,7 +4719,7 @@ int daAlink_c::setStartProcInit() {
                 && !checkBowAndSlingItem(mEquipItem)
                 && mEquipItem != dItemNo_BOOMERANG_e
                 && mEquipItem != dItemNo_KANTERA_e
-                && !checkHookshotItem(mEquipItem))
+                && !checkHookshotItem(mEquipItem)) IF_DUSK()))
             )
         {
             mEquipItem = dItemNo_NONE_e;
@@ -12135,7 +12139,7 @@ BOOL daAlink_c::checkItemChangeFromButton() {
             #if PLATFORM_GCN
             dComIfGs_getSelectEquipSword() != dItemNo_NONE_e &&
             #endif
-            !checkNotBattleStage()
+            (!checkNotBattleStage() IF_DUSK(|| dusk::getSettings().game.unrestrictedItems.getValue()))
             && !checkCanoeRide()
             && (!checkModeFlg(0x40000) || checkEquipHeavyBoots())
             && mEquipItem != 0x103
@@ -14583,7 +14587,12 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
 
     if (checkSpinnerRide()
         || sel_item == dItemNo_BOMB_BAG_LV1_e
+#if TARGET_PC
+        || (!dusk::getSettings().game.unrestrictedItems.getValue()
+        && (((sel_item == dItemNo_KANTERA_e || checkOilBottleItem(sel_item)) && checkWaterInKandelaarOffset(mWaterY))
+#else
         || ((sel_item == dItemNo_KANTERA_e || checkOilBottleItem(sel_item)) && checkWaterInKandelaarOffset(mWaterY))
+#endif
         || (checkCanoeRide() && checkStageName("F_SP127"))
         || checkCloudSea()
         || ((checkModeFlg(0x40000) || checkNoResetFlg0(FLG0_WATER_IN_MOVE)) && !checkAcceptUseItemInWater(sel_item))
@@ -14594,7 +14603,7 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
         || ((mGndPolySpecialCode == dBgW_SPCODE_HEAVY_SNOW || mGndPolyAtt1 == 1 || mGndPolyAtt1 == 2 || mWaterY - current.pos.y > (daSpinner_c::getWaterSinkLimit() - 5.0f) || (field_0x2fbc == 6 && mWaterY - current.pos.y >= 0.0f) || mGndPolyAtt1 == 3) && sel_item == dItemNo_SPINNER_e)
         || (checkBossRoom() && checkDungeonWarpItem(sel_item))
         || (sel_item == dItemNo_DUNGEON_EXIT_e && (checkLv7DungeonShop() || (checkStageName("D_MN07") && fopAcM_isSwitch(this, 0x4D) && !fopAcM_isSwitch(this, 0x18)) || (checkStageName("D_MN10") && fopAcM_GetRoomNo(this) == 15)))
-        || (checkMagneBootsOn() && sel_item != 0x103 && !checkDrinkBottleItem(sel_item) && sel_item != dItemNo_HVY_BOOTS_e && !checkBowItem(sel_item))
+        || (checkMagneBootsOn() && sel_item != 0x103 && !checkDrinkBottleItem(sel_item) && sel_item != dItemNo_HVY_BOOTS_e && !checkBowItem(sel_item)) IF_DUSK()))
         )
     {
         return ITEM_PROC_NONE;
