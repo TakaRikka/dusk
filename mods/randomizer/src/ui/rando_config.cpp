@@ -1118,19 +1118,18 @@ ModResult updateStartingInventoryTab(ModContext* ctx, void*, ModError*) {
 UiElementHandle exlocHeaderElem = 0;
 UiElementHandle exlocSubHeaderElem = 0;
 UiElementHandle exlocRightPaneElem = 0;
-UiElementHandle exlocLeftPaneElem = 0;
 UiElementHandle exlocClearBtnElem = 0;
-// UiElementHandle exlocFilterInputElem = 0;
+UiListHandle exlocList = 0;
 std::string exlocFilter{};
 
 struct ExcludedTabLocData {
-    std::string name {};
+    std::string name{};
     std::string lowercaseName{};
     std::unordered_set<std::string> categories{};
 };
 
-auto& getExcludedLocationsList() {
-    static std::list<ExcludedTabLocData> locationsForExcludedTab;
+const std::vector<ExcludedTabLocData>& excluded_location_catalog() {
+    static std::vector<ExcludedTabLocData> locationsForExcludedTab;
 
     // If we haven't loaded the locations to display for the excluded locations tab, load them up
     if (locationsForExcludedTab.empty()) {
@@ -1142,7 +1141,7 @@ auto& getExcludedLocationsList() {
             name = locationNode["Name"].as<std::string>();
             lowercaseName = name;
             std::transform(lowercaseName.begin(), lowercaseName.end(), lowercaseName.begin(),
-           [](unsigned char c) { return std::tolower(c); });
+                [](unsigned char c) { return std::tolower(c); });
 
             for (const auto& category : locationNode["Categories"]) {
                 excludedTabLocData.categories.insert(category.as<std::string>());
@@ -1160,25 +1159,24 @@ auto& getExcludedLocationsList() {
             }
 
             // Certain locations we don't include for now
-            if (randomizer::utility::str::Contains(excludedTabLocData.name,
-                "Renados Letter", "Telma Invoice", "Wooden Statue", "Ilia Charm",
-                "Defeat Ganondorf", "Twilit Insect", "Twilit Bloat", "Hint"))
+            if (utility::str::Contains(excludedTabLocData.name, "Renados Letter", "Telma Invoice",
+                    "Wooden Statue", "Ilia Charm", "Defeat Ganondorf", "Twilit Insect",
+                    "Twilit Bloat", "Hint"))
             {
                 continue;
             }
 
-            locationsForExcludedTab.push_back(excludedTabLocData);
+            locationsForExcludedTab.push_back(std::move(excludedTabLocData));
         }
 
-        locationsForExcludedTab.sort([](const auto& a, const auto& b) {
-            return a.name < b.name;
-        });
+        std::ranges::sort(
+            locationsForExcludedTab, [](const auto& a, const auto& b) { return a.name < b.name; });
     }
 
-    // Create the vector we're going to return
-    static std::vector<const std::string*> locationNames{};
-    locationNames.clear();
+    return locationsForExcludedTab;
+}
 
+std::vector<UiListItem> excluded_location_items() {
     // Get settings values
     auto& randoSettings = GetRandomizerConfig().GetSettings().GetMap();
     bool goldenBugs = randoSettings.at("Golden Bugs") == "On";
@@ -1194,17 +1192,18 @@ auto& getExcludedLocationsList() {
     // Create lowercase filter
     std::string lowercaseFilter = exlocFilter;
     std::transform(lowercaseFilter.begin(), lowercaseFilter.end(), lowercaseFilter.begin(),
-               [](unsigned char c) { return std::tolower(c); });
+        [](unsigned char c) { return std::tolower(c); });
 
-    // Add relevant location names
-    for (const auto& locData : locationsForExcludedTab) {
+    std::vector<UiListItem> items;
+    const auto& catalog = excluded_location_catalog();
+    items.reserve(catalog.size());
+    for (size_t i = 0; i < catalog.size(); ++i) {
+        const auto& locData = catalog[i];
         // Skip categories that aren't shuffled
-        auto& cats = locData.categories;
+        const auto& cats = locData.categories;
         if ((!goldenBugs && cats.contains("Golden Bug")) ||
-            (!skyCharacters && cats.contains("Sky Character")) ||
-            (!npcs && cats.contains("Npc")) ||
-            (!shops && cats.contains("Shop")) ||
-            (!goldenWolves && cats.contains("Golden Wolf")) ||
+            (!skyCharacters && cats.contains("Sky Character")) || (!npcs && cats.contains("Npc")) ||
+            (!shops && cats.contains("Shop")) || (!goldenWolves && cats.contains("Golden Wolf")) ||
             (!hiddenRupees && cats.contains("Rupee - Hidden")) ||
             (!freestandingRupees && cats.contains("Rupee - Freestanding")) ||
             (!overworldPoes && cats.contains("Poe") && cats.contains("Overworld")) ||
@@ -1218,81 +1217,98 @@ auto& getExcludedLocationsList() {
             continue;
         }
 
-        locationNames.push_back(&locData.name);
+        UiListItem item = UI_LIST_ITEM_INIT;
+        item.key = i;
+        item.label = locData.name.c_str();
+        items.push_back(item);
     }
 
-    return locationNames;
+    return items;
+}
+
+void refresh_excluded_location_items() {
+    if (exlocList == 0) {
+        return;
+    }
+    const auto items = excluded_location_items();
+    session::svc_mng.ui->list_set_items(
+        session::svc_mng.mod_ctx, exlocList, items.data(), items.size());
 }
 
 ModResult buildExcludedLocationsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
-    UiElementHandle rightPane, void*, ModError*)
-{
+    UiElementHandle rightPane, void*, ModError*) {
     using namespace session;
     auto mod_ctx = svc_mng.mod_ctx;
+    exlocList = 0;
 
     svc_mng.ui->elem_set_class(mod_ctx, leftPane, "excluded-locations-pane-left", true);
     svc_mng.ui->elem_set_class(mod_ctx, rightPane, "excluded-locations-pane-right", true);
 
-    add_button(leftPane,
-        "Clear All",
-        "",
+    add_button(
+        leftPane, "Clear All", "",
         [](ModContext*, void*) {
             GetRandomizerConfig().GetSettings().GetModifiableExcludedLocations().clear();
+            SaveRandomizerConfig();
         },
-        nullptr,
-        &exlocClearBtnElem);
+        nullptr, &exlocClearBtnElem);
     svc_mng.ui->elem_set_class(mod_ctx, exlocClearBtnElem, "clear-all-button", true);
 
-    // TODO: leaving out filter for now, since we're building all the buttons at tab init.
-    // try to reimplement later when UiService is able to support something closer to the original impl
-    /* add_string_input(leftPane,
-        "Filter",
-        "",
-        256,
-        [](ModContext*, void*, UiControlValue* out_value) {
-            out_value->string_value = exlocFilter.c_str();
-        },
-        [](ModContext*, void*, const UiControlValue* value) {
-            exlocFilter = value->string_value;
-        },
-        &exlocFilterInputElem);
-    svc_mng.ui->elem_set_class(mod_ctx, exlocFilterInputElem, "filter-input", true); */
+    UiControlDesc filter = UI_CONTROL_DESC_INIT;
+    filter.kind = UI_CONTROL_STRING;
+    filter.label = "Filter";
+    filter.binding = UI_BINDING_CALLBACKS;
+    filter.get = [](ModContext*, void*, UiControlValue* outValue) {
+        outValue->string_value = exlocFilter.c_str();
+    };
+    filter.set = [](ModContext*, void*, const UiControlValue* value) {
+        exlocFilter = value->string_value;
+        refresh_excluded_location_items();
+    };
+    filter.max_length = 256;
+    filter.string_set_mode = UI_STRING_SET_ON_CHANGE;
+    svc_mng.ui->pane_add_control(mod_ctx, leftPane, &filter, nullptr);
 
-    svc_mng.ui->pane_add_rml(mod_ctx, leftPane, "", &exlocLeftPaneElem);
-    svc_mng.ui->elem_set_class(mod_ctx, exlocLeftPaneElem, "excluded-locations-pane", true);
-
-    auto exlocList = getExcludedLocationsList();
-    for (auto e : exlocList) {
-        UiElementHandle handle{};
-        add_button(leftPane,
-            e->c_str(),
-            "",
-            [](ModContext*, void* userdata) {
-                std::string locationName = static_cast<const char*>(userdata);
-                auto& excludedLocations = GetRandomizerConfig().GetSettings().GetModifiableExcludedLocations();
-
-                if (excludedLocations.contains(locationName)) {
-                    excludedLocations.erase(locationName);
-                } else {
-                    excludedLocations.insert(locationName);
-                }
-
-                SaveRandomizerConfig();
-            },
-            nullptr,
-            (void*)e->data(),
-            &handle);
-        svc_mng.ui->elem_set_class(mod_ctx, handle, "excluded-location-button", true);
+    const auto items = excluded_location_items();
+    UiListDesc list = UI_LIST_DESC_INIT;
+    list.items = items.data();
+    list.item_count = items.size();
+    list.on_pressed = [](ModContext*, UiListHandle, uint64_t key, void*) {
+        const auto& catalog = excluded_location_catalog();
+        if (key >= catalog.size()) {
+            return;
+        }
+        const auto& locationName = catalog[key].name;
+        auto& excludedLocations =
+            GetRandomizerConfig().GetSettings().GetModifiableExcludedLocations();
+        if (excludedLocations.contains(locationName)) {
+            excludedLocations.erase(locationName);
+        } else {
+            excludedLocations.insert(locationName);
+        }
+        SaveRandomizerConfig();
+    };
+    list.is_selected = [](ModContext*, UiListHandle, uint64_t key, void*) {
+        const auto& catalog = excluded_location_catalog();
+        return key < catalog.size() &&
+               GetRandomizerConfig().GetSettings().GetExcludedLocations().contains(
+                   catalog[key].name);
+    };
+    const ModResult listResult = svc_mng.ui->pane_add_list(mod_ctx, leftPane, &list, &exlocList);
+    if (listResult != MOD_OK) {
+        return listResult;
     }
+    svc_mng.ui->elem_set_class(mod_ctx, exlocList, "excluded-locations-list", true);
 
     svc_mng.ui->pane_add_text(mod_ctx, rightPane, "Current Excluded Locations", &exlocHeaderElem);
     svc_mng.ui->elem_set_class(mod_ctx, exlocHeaderElem, "excluded-locations-header", true);
 
-    svc_mng.ui->pane_add_text(mod_ctx, rightPane, "Re-select a location to remove it", &exlocSubHeaderElem);
+    svc_mng.ui->pane_add_text(
+        mod_ctx, rightPane, "Re-select a location to remove it", &exlocSubHeaderElem);
     svc_mng.ui->elem_set_class(mod_ctx, exlocSubHeaderElem, "excluded-locations-subheader", true);
 
     svc_mng.ui->pane_add_rml(mod_ctx, rightPane, "", &exlocRightPaneElem);
-    svc_mng.ui->elem_set_class(mod_ctx, exlocRightPaneElem, "excluded-locations-inner-pane-right", true);
+    svc_mng.ui->elem_set_class(
+        mod_ctx, exlocRightPaneElem, "excluded-locations-inner-pane-right", true);
     return MOD_OK;
 }
 

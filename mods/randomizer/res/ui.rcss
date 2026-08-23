@@ -3,25 +3,6 @@
     gap: 0dp;
 }
 
-.excluded-locations-pane-left {
-    padding: 0dp;
-}
-
-.clear-all-button {
-    margin: 12dp 24dp;
-    margin-bottom: 0dp;
-}
-
-.filter-input {
-    margin: 6dp 24dp;
-    height: 40dp;
-}
-
-.excluded-location-button {
-    margin: 6dp 24dp;
-    margin-bottom: 0dp;
-}
-
 .excluded-locations-header {
     font-family: "Fira Sans Condensed";
     font-weight: bold;
@@ -47,16 +28,13 @@
     font-size: 15dp;
 }
 
-.excluded-locations-pane {
-    display: flex;
-    flex-flow: column;
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 0;
-    gap: 8dp;
-    overflow-y: hidden;
+.excluded-locations-list {
     font-size: 20dp;
     border-top: 1dp #92875B;
+}
+
+.excluded-locations-list:not(:first-child) ui-list-content {
+    padding-top: 8dp;
 }
 
 .excluded-locations-inner-pane-right {
