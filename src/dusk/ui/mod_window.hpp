@@ -29,6 +29,7 @@ struct ModControlSpec {
     std::function<void(int)> setInt;
     std::function<Rml::String()> getString;
     std::function<void(Rml::String)> setString;
+    std::function<bool()> isSelected;
     std::function<bool()> isDisabled;
     std::function<bool()> isModified;
     int min = 0;

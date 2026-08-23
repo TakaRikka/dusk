@@ -17,6 +17,7 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
     case ModControlSpec::Kind::Button:
         control = &pane.add_button(ControlledButton::Props{
                                        .text = s.label,
+                                       .isSelected = s.isSelected,
                                        .isDisabled = s.isDisabled,
                                    })
                        .on_pressed([shared] {
@@ -28,6 +29,7 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
     case ModControlSpec::Kind::Group:
         control = &pane.add_group_button(GroupButton::Props{
                                              .text = s.label,
+                                             .isSelected = s.isSelected,
                                              .isDisabled = s.isDisabled,
                                          })
                        .on_pressed([shared] {
