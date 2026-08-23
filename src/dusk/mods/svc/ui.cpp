@@ -570,6 +570,9 @@ ModResult ui_pane_add_control(
     case UI_CONTROL_GROUP:
         spec.kind = desc.kind == UI_CONTROL_BUTTON ? ui::ModControlSpec::Kind::Button :
                                                      ui::ModControlSpec::Kind::Group;
+        if (desc.struct_size >= sizeof(UiControlDesc)) {
+            spec.isSelected = wrap_predicate(mod, desc.is_selected, desc.user_data, pane);
+        }
         spec.onPressed = [modPtr = &mod, fn = desc.on_pressed, userData = desc.user_data,
                              guardHandle = pane] {
             if (!slot_live(guardHandle)) {
@@ -1147,6 +1150,7 @@ bool valid_color_preset(const char* value, bool alpha) {
 
 bool valid_control_desc(const UiControlDesc& desc) {
     constexpr size_t kLegacyDescSize = offsetof(UiControlDesc, color_presets);
+    constexpr size_t kColorDescSize = offsetof(UiControlDesc, is_selected);
     if (desc.struct_size < kLegacyDescSize || desc.label == nullptr) {
         return false;
     }
@@ -1160,7 +1164,7 @@ bool valid_control_desc(const UiControlDesc& desc) {
     case UI_CONTROL_SELECT:
         break;
     case UI_CONTROL_COLOR:
-        if (desc.struct_size < sizeof(UiControlDesc)) {
+        if (desc.struct_size < kColorDescSize) {
             return false;
         }
         break;

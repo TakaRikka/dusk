@@ -11,6 +11,7 @@
 #include "JSystem/JMessage/control.h"
 #include "JSystem/JMessage/processor.h"
 #include "JSystem/JMessage/resource.h"
+#include "d/d_msg_class.h"
 
 #include <algorithm>
 #include <array>
@@ -467,11 +468,19 @@ bool valid_encoded_text(const uint8_t* text, size_t size) {
         if (text[offset] == 0) {
             return offset + 1 == size;
         }
-        if (text[offset] == 0x1a) {
+        if (text[offset] == JMessage::data::gcTagBegin) {
             if (offset + 2 > size || text[offset + 1] < 5 || text[offset + 1] > size - offset) {
                 return false;
             }
-            offset += text[offset + 1];
+            const size_t tagSize = text[offset + 1];
+            const uint32_t tag =
+                MSGTAG_GROUP(text[offset + 2]) | read_bits<uint16_t>(text + offset + 3);
+            const size_t argumentSize = tagSize - 5;
+            if (tag == MSGTAG_COLOR && argumentSize != 1 && argumentSize != 4 && argumentSize != 8)
+            {
+                return false;
+            }
+            offset += tagSize;
         } else {
             ++offset;
         }
@@ -490,7 +499,7 @@ size_t encoded_text_size(const ResourceInfo& resource, const char* text) {
         if (bytes[offset] == 0) {
             return offset + 1;
         }
-        if (bytes[offset] == 0x1a) {
+        if (bytes[offset] == JMessage::data::gcTagBegin) {
             if (offset + 2 > maximum || bytes[offset + 1] < 5 ||
                 bytes[offset + 1] > maximum - offset)
             {

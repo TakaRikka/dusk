@@ -500,7 +500,20 @@ public:
     }
     MessageBuilder& text_color(MessageTextColor color) {
         const auto index = static_cast<uint8_t>(color);
-        return raw_tag(255, 0, {&index, 1});
+        return raw_tag(0xFF, 0, {&index, 1});
+    }
+    /* Full 32-bit text color (Dusklight extension) */
+    MessageBuilder& text_color(uint32_t rgba) {
+        std::array<uint8_t, 4> arguments{};
+        write_bits(arguments.data(), rgba);
+        return raw_tag(0xFF, 0, arguments);
+    }
+    /* Full 32-bit text vertical gradient colors (Dusklight extension) */
+    MessageBuilder& text_color(uint32_t upperRgba, uint32_t lowerRgba) {
+        std::array<uint8_t, 8> arguments{};
+        write_bits(arguments.data(), upperRgba);
+        write_bits(arguments.data() + sizeof(upperRgba), lowerRgba);
+        return raw_tag(0xFF, 0, arguments);
     }
     MessageBuilder& text_scale(uint16_t percent) { return timed_tag(255, 1, percent); }
     MessageBuilder& character_delay(uint16_t frames) { return timed_tag(0, 6, frames); }

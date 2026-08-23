@@ -8,7 +8,7 @@
 
 #define MESSAGE_SERVICE_ID "dev.twilitrealm.dusklight.message"
 #define MESSAGE_SERVICE_MAJOR 1u
-#define MESSAGE_SERVICE_MINOR 0u
+#define MESSAGE_SERVICE_MINOR 1u
 
 typedef uint16_t MessageId;
 typedef uint64_t MessageHandle;

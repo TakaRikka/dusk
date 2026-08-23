@@ -9,7 +9,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 1u
-#define UI_SERVICE_MINOR 4u
+#define UI_SERVICE_MINOR 5u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -102,7 +102,7 @@ typedef struct UiControlDesc {
     /* Optional override for the modified indicator. CONFIG_VAR controls derive it from value !=
      * default when this is NULL. */
     UiPredicateFn is_modified;
-    /* Passed to every callback above. */
+    /* Passed to every callback. */
     void* user_data;
     /* NUMBER: inclusive clamp range and step. min == max means the defaults (0 .. INT32_MAX); step
      * < 1 means 1. */
@@ -121,11 +121,13 @@ typedef struct UiControlDesc {
     const char* const* color_presets;
     size_t color_preset_count;
     bool color_alpha; /* COLOR: use RRGGBBAA values instead of RRGGBB */
+    /* Optional selected state for BUTTON/GROUP. Added in UiService minor version 5. */
+    UiPredicateFn is_selected;
 } UiControlDesc;
 
 #define UI_CONTROL_DESC_INIT                                                                       \
     {sizeof(UiControlDesc), UI_CONTROL_BUTTON, NULL, NULL, UI_BINDING_CALLBACKS, 0u, NULL, NULL,   \
-        NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false}
+        NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false, NULL}
 
 /* Build pane contents. A non-MOD_OK result fails the mod. */
 typedef ModResult (*UiPaneBuildFn)(
