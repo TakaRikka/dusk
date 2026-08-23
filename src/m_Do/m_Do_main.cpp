@@ -71,6 +71,7 @@
 #include "dusk/mouse.h"
 #include "dusk/os.h"
 #include "dusk/presentation.hpp"
+#include "dusk/tvos/save_mirror.hpp"
 #include "dusk/ui/menu_bar.hpp"
 #include "dusk/ui/overlay.hpp"
 #include "dusk/ui/prelaunch.hpp"
@@ -653,6 +654,15 @@ int game_main(int argc, char* argv[]) {
 
     log_build_info();
 
+#if DUSK_TVOS_SAVE_MIRROR
+    // Deliberately before the config is read: tvOS may have purged Library/Caches,
+    // and a restored config.json has to be the one that gets loaded -- otherwise
+    // the next config save writes in-memory defaults straight back over it.
+    // The disc is not open yet, so this pass covers config-class files only; the
+    // memory card is restored from mDoMemCd_Ctrl_c::ThdInit().
+    dusk::tvos::save_mirror::init(dusk::ConfigPath);
+#endif
+
     dusk::config::load_from_user_preferences();
     ApplyCVarOverrides(parsed_arg_options["cvar"]);
     borealis::sentry::Options sentryOptions{
@@ -722,6 +732,13 @@ int game_main(int argc, char* argv[]) {
         config.allowTextureDumps = false;
         auroraInfo = aurora_initialize(argc, argv, &config);
     }
+
+#if DUSK_TVOS_SAVE_MIRROR
+    // SDL is up now, so the background/terminate watch can be installed. aurora
+    // has its own watch (extern/aurora/lib/window.cpp) which handles neither
+    // event; this one is separate so the submodule stays untouched.
+    dusk::tvos::save_mirror::install_lifecycle_watch();
+#endif
 
     dusk::presentation::update_frame_rate_preference();
 

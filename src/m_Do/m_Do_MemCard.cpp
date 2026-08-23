@@ -8,6 +8,7 @@
 #include "JSystem/JKernel/JKRAssertHeap.h"
 #include "dusk/main.h"
 #include "dusk/os.h"
+#include "dusk/tvos/save_mirror.hpp"
 #include "dusk/version.hpp"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
@@ -82,6 +83,14 @@ void mDoMemCd_Ctrl_c::ThdInit() {
         return;
     }
     CARDSetLoadType((CARDFileType)dusk::getSettings().backend.cardFileType.getValue());
+#if DUSK_TVOS_SAVE_MIRROR
+    // Deliberately before CARDInit() below: when no card file is found it creates
+    // and formats a fresh one, after which the save no longer looks missing and
+    // the tvOS mirror would never be applied.
+    dusk::tvos::save_mirror::on_card_init(
+        dusk::getSettings().backend.cardFileType.getValue() == CARD_RAWIMAGE,
+        dusk::version::getDiskID().gameName, dusk::version::getDiskID().company);
+#endif
 #endif
 
 #if !PLATFORM_SHIELD
@@ -325,6 +334,17 @@ void mDoMemCd_Ctrl_c::store() {
     }
 
     field_0x1fc8 = 1;
+
+#if DUSK_TVOS_SAVE_MIRROR
+    if (mCardState == CARD_STATE_WRITE_e) {
+        // Every save path (autosave, the in-game save menu, file-select
+        // create/erase/copy) converges here, and by this point aurora's GCI
+        // backend has already flushed and closed the file. This runs on
+        // MemCardThread holding no lock, so it only marks the mirror dirty and
+        // returns -- the copy itself happens on the mirror's own queue.
+        dusk::tvos::save_mirror::note_save_written();
+    }
+#endif
 }
 #endif
 
