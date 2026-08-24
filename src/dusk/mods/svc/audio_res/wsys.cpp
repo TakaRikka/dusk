@@ -267,12 +267,16 @@ void sync_audio_replacements() {
     absl::flat_hash_map<AudioWaveKey, AudioWaveReplacementValue> new_map;
 
     for (auto const& mod : ModLoader::instance().active_mods()) {
-        for (auto const& slot : s_waveReplacements.take_all(mod)) {
-            auto const wave_info = wave_info_from_slot(slot.value);
+        s_waveReplacements.for_each([&](auto, auto entry) {
+             if (entry.owner != &mod) {
+                 return;
+             }
+
+            auto const wave_info = wave_info_from_slot(entry.value);
             new_map.emplace(
-                AudioWaveKey(slot.value.bank, slot.value.wave_id),
-                AudioWaveReplacementValue(wave_info, slot.value.data));
-        }
+                AudioWaveKey(entry.value.bank, entry.value.wave_id),
+                AudioWaveReplacementValue(wave_info, entry.value.data));
+        });
     }
 
     // Log.info("new: {}, old: {}", new_map.size(), s_replacements.size());
