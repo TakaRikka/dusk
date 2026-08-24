@@ -8,6 +8,9 @@
 #include "d/actor/d_a_npc_grc.h"
 #include "d/actor/d_a_npc.h"
 #include "Z2AudioLib/Z2Instances.h"
+#if TARGET_PC
+#include "mods/items.h"
+#endif
 #include <cstring>
 
 enum grC_RES_File_ID {
@@ -1476,8 +1479,27 @@ BOOL daNpc_grC_c::talk(void* param_1) {
                 rv = TRUE;
 
                 if (mFlow.getEventId(&i_itemNo) == 1) {
-                    mItemID = fopAcM_createItemForPresentDemo(&current.pos, i_itemNo, 0, -1, -1, NULL, NULL);
+#if TARGET_PC
+                    const bool isCastleTownShop =
+                        strcmp(dComIfGp_getStartStageName(), "R_SP160") == 0 &&
+                        (i_itemNo == dItemNo_RED_BOTTLE_e || i_itemNo == dItemNo_OIL_BOTTLE_e);
+                    u32 itemGiveTag = 0;
+                    if (isCastleTownShop) {
+                        const auto itemCheck = dusk::mods::item_check_commit(
+                            dusk::mods::item_give_tag_shop(i_itemNo), i_itemNo, this);
+                        i_itemNo = itemCheck.itemNo;
+                        itemGiveTag = itemCheck.tag;
+                    }
 
+                    if (isCastleTownShop && i_itemNo == dItemNo_NONE_e) {
+                        dusk::mods::item_check_complete({itemGiveTag, dItemNo_NONE_e}, this);
+                    } else {
+                        mItemID = fopAcM_createItemForPresentDemo(
+                            &current.pos, i_itemNo, 0, -1, -1, NULL, NULL, itemGiveTag);
+                    }
+#else
+                    mItemID = fopAcM_createItemForPresentDemo(&current.pos, i_itemNo, 0, -1, -1, NULL, NULL);
+#endif
                     if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                         s16 i_eventID = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
                         dComIfGp_getEvent()->reset(this);

@@ -2416,6 +2416,66 @@
       - STAR Prize 2
     Event Flag: 0x2301
 
+- Name: Castle Town Goron Shop Red Potion
+  Original Item: Red Potion Shop
+  Categories:
+    - Overworld
+    - Castle Town
+    - Shop
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 73
+        Item: 0x61
+    Name Lookup:
+      - Castle Town Goron Shop Red Potion
+    Event Flag: 0x6340
+
+- Name: Castle Town Goron Shop Lantern Oil
+  Original Item: Lantern Oil Shop
+  Categories:
+    - Overworld
+    - Castle Town
+    - Shop
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 73
+        Item: 0x66
+    Name Lookup:
+      - Castle Town Goron Shop Lantern Oil
+    Event Flag: 0x6320
+
+- Name: Castle Town Goron Shop Hylian Shield
+  Original Item: Hylian Shield
+  Categories:
+    - Overworld
+    - Castle Town
+    - Shop
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 73
+        Item: 0x2C
+    Name Lookup:
+      - Castle Town Goron Shop Hylian Shield
+    Event Flag: 0x6380
+
+- Name: Castle Town Goron Shop Arrow Refill
+  Original Item: Arrows 30
+  Categories:
+    - Overworld
+    - Castle Town
+    - Shop
+    - ARC
+  Metadata:
+    Shop:
+      - Stage: 53
+        Item: 0x10
+    Name Lookup:
+      - Castle Town Goron Shop Arrow Refill
+    Event Flag: 0x6310
+
 - Name: Castle Town Malo Mart Magic Armor
   Original Item: Magic Armor
   Categories:

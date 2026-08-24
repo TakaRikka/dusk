@@ -22,7 +22,7 @@
 
 1: # zel_01.bmg - Ordon Village
   # Patch the flow in Bo's house that normally prevents us from leaving without
-  # Having the iron boots. Patch it so we take the flow which allows us to leave
+  # having the iron boots. Patch it so we take the flow which allows us to leave
   # no matter what
   - index: 0x8F
     type: branch
@@ -137,6 +137,128 @@
     event: randomizer remove trade item
     parameters: 0x00000081
     next: 0x2D8
+
+  # Check custom flag for Goron selling Hylian Shield
+  - only if: Shop_Items == On
+    index: 0xA16
+    type: branch
+    query: event flag
+    parameters: 0x032F
+    results:
+      - 0xA10
+      - 0xA02
+
+  # Set custom flag when buying item from Goron selling Hylian Shield
+  - only if: Shop_Items == On
+    index: 0xA1C
+    type: event
+    event: set event flag
+    parameters: 0x032F
+    next: 0xA1A
+
+  # Check custom flag for Goron selling Red Potion
+  - only if: Shop_Items == On
+    index: 0x9BF
+    type: branch
+    query: event flag
+    parameters: 0x0330
+    results:
+      - 0x9B7
+      - 0x9AA
+
+  # Set custom flag when buying item from Goron selling Red Potion
+  - only if: Shop_Items == On
+    index: 0x9BD
+    type: event
+    event: set event flag
+    parameters: 0x0330
+    next: 0x9BE
+
+  # Make the empty bottle check always proceed to the rupee check
+  - only if: Shop_Items == On
+    index: 0x9A8
+    type: branch
+    query: empty bottles
+    parameters: 0x0001
+    results:
+      - 0x9B6
+      - 0x9B6
+
+  # Check custom flag for Goron selling lantern oil
+  - only if: Shop_Items == On
+    index: 0x9A6
+    type: branch
+    query: event flag
+    parameters: 0x0331
+    results:
+      - 0x9A2
+      - 0x97C
+
+  # Set custom flag when buying item from Goron selling red potion
+  - only if: Shop_Items == On
+    index: 0x97D
+    type: event
+    event: set event flag
+    parameters: 0x0331
+    next: 0x997
+
+  # Make the empty bottle check always proceed to the rupee check
+  - only if: Shop_Items == On
+    index: 0x97F
+    type: branch
+    query: empty bottles
+    parameters: 0x0001
+    results:
+      - 0x980
+      - 0x980
+
+  # Always branch the same direction regardless of whether we've gone through MDH
+  - only if: Shop_Items == On
+    index: 0x988
+    type: branch
+    query: event flag
+    parameters: 0x00FA
+    results:
+      - 0x998
+      - 0x998
+
+  # Check custom flag for Goron who sells 30 Arrows
+  - only if: Shop_Items == On
+    index: 0x9C1
+    type: branch
+    query: event flag
+    parameters: 0x0332
+    results:
+      - 0x9CD
+      - 0x9DD
+
+  # Set custom flag when buying item from Goron selling 30 Arrows
+  - only if: Shop_Items == On
+    index: 0x9FC
+    type: event
+    event: set event flag
+    parameters: 0x0332
+    next: 0x9FD
+
+  # Skip directly to the rupee check when buying from the Goron who sells arrows
+  - only if: Shop_Items == On
+    index: 0x9C4
+    type: branch
+    query: select 2
+    parameters: 0x0000
+    results:
+      - 0x9C5
+      - 0x9FB
+
+  # Always branch the same direction regardless of whether we've gone through MDH
+  - only if: Shop_Items == On
+    index: 0x9DD
+    type: branch
+    query: event flag
+    parameters: 0x00FA
+    results:
+      - 0x9E8
+      - 0x9E8
 
 5: # zel_05.bmg
   # Patch Yeta flow to always give the map check even if the player has obtained the Ordon Cheese

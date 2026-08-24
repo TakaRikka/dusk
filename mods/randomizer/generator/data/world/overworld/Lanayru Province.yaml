@@ -199,6 +199,10 @@
 
 - Name: Castle Town Goron House
   Can Transform: If Transform Anywhere
+  Locations:
+    Castle Town Goron Shop Red Potion: Nothing
+    Castle Town Goron Shop Lantern Oil: Nothing
+    Castle Town Goron Shop Hylian Shield: Nothing
   Exits:
     Castle Town Goron House West Door Interior: Nothing
     Castle Town Goron House East Door Interior: Nothing
@@ -207,6 +211,8 @@
 - Name: Castle Town Goron House Ledge
   Twilight: Lanayru
   Can Transform: If Transform Anywhere
+  Locations:
+    Castle Town Goron Shop Arrow Refill: Can_Complete_Lanayru_Twilight
   Exits:
     Castle Town Goron House: Nothing
 

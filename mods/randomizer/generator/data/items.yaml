@@ -412,9 +412,9 @@
   Importance: Major
   Id: 0x65
 
-#- Name: Lantern Oil Shop
-#  Importance: Junk
-#  Id: 0x66
+- Name: Lantern Oil Shop
+  Importance: Junk
+  Id: 0x66
 
 #- Name: Water
 #  Importance: Junk

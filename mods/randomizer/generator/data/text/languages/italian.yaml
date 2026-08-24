@@ -498,6 +498,14 @@ Bottle with Half Milk:
   Cryptic:
     Text: a {baby bottle}
 
+Lantern Oil Shop:
+  Standard:
+    Text: Lantern Oil Shop
+  Pretty:
+    Text: some {Lantern Oil}
+  Cryptic:
+    Text: an {oil refill}
+
 Fairy Tears:
   Standard:
     Text: Fairy Tears
@@ -2180,6 +2188,65 @@ Charlo Donation Ask Text Template:
     Text: |-
       For <Item Pretty Name>...
       Would you please make a donation?<begin choice>
+
+Castle Town Goron Red Potion Confirmation Initial Text Template:
+  Standard:
+    Text: |-
+      You can buy <Item Pretty Name> for only <purple>40 Rupees<white>!<begin choice>
+
+Castle Town Goron Red Potion Confirmation Later Text Template:
+  Standard:
+    Text: |-
+      Buy it Brother! I am talking about <Item Pretty Name> for <purple>40 Rupees<white>!<begin choice>
+
+Castle Town Goron Lantern Oil Confirmation Initial Text Template:
+  Standard:
+    Text: |-
+      So, Brother, would you buy <Item Pretty Name> from me for <purple>30 Rupees<white>?<begin choice>
+
+Castle Town Goron Lantern Oil Confirmation Later Text Template:
+  Standard:
+    Text: |-
+      Just buy <Item Pretty Name> from me for <purple>30 Rupees<white>, OK?<begin choice>
+
+Castle Town Goron Arrow Refill Secret Text Template:
+  Standard:
+    Text: |-
+      Despite all that is going on, if you
+      think you need <Item Pretty Name>, just let me know, Brother.
+
+Castle Town Goron Arrow Refill Confirmation Initial Text Template:
+  Standard:
+    Text: |-
+      So... Would you want to buy <Item Pretty Name> for <purple>40 Rupees<white>?<begin choice>
+
+Castle Town Goron Arrow Refill Embarrassing Text Template:
+  Standard:
+    Text: |-
+      It is embarrassing that the only
+      thing I can do for you, our
+      benefactor, is sell you <Item Pretty Name>.
+
+Castle Town Goron Arrow Refill Let Me Know Text Template:
+  Standard:
+    Text: |-
+      I insist you let me know if you
+      should ever need <Item Pretty Name>, Brother.
+
+Castle Town Goron Arrow Refill Confirmation Later Text Template:
+  Standard:
+    Text: |-
+      So... Would you want to buy <Item Pretty Name> for <purple>40 Rupees<white>?<begin choice>
+
+Castle Town Goron Hylian Shield Confirmation Initial Text Template:
+  Standard:
+    Text: |-
+      Anyway... Would you want <Item Pretty Name> for <purple>210 Rupees<white>?<begin choice>
+
+Castle Town Goron Hylian Shield Confirmation Later Text Template:
+  Standard:
+    Text: |-
+      Would you want <Item Pretty Name> for <purple>210 Rupees<white>?<begin choice>
 
 Coro Bottle Offer 1 Text Template:
   Standard:

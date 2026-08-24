@@ -228,6 +228,7 @@ bool resolve_query(const std::string& name, FlowQueryId& out) {
         {"rupees", FLOW_QUERY_RUPEES},
         {"item owned", FLOW_QUERY_ITEM_OWNED},
         {"empty bottles", FLOW_QUERY_EMPTY_BOTTLES},
+        {"select 2", FLOW_QUERY_SELECT_2},
         {"select 2 cancel", FLOW_QUERY_SELECT_2_CANCEL},
         {"select 3 cancel", FLOW_QUERY_SELECT_3_CANCEL},
     };
@@ -249,6 +250,7 @@ bool resolve_query(const std::string& name, FlowQueryId& out) {
 
 bool resolve_event(const std::string& name, FlowEventId& out) {
     static const std::unordered_map<std::string, FlowEventId> builtins{
+        {"set event flag", FLOW_EVENT_SET_EVENT_FLAG},
         {"remove rupees", FLOW_EVENT_REMOVE_RUPEES},
         {"start event", FLOW_EVENT_START_EVENT},
         {"select vertical", FLOW_EVENT_SELECT_VERTICAL},

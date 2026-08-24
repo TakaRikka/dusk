@@ -929,6 +929,25 @@ namespace randomizer::logic::hints {
                 "Castle Town Malo Mart Magic Armor After Purchase Text", "Castle Town Malo Mart Magic Armor Text",
                 "Castle Town Malo Mart Magic Armor Sold Out Text"}, Text::ORANGE);
 
+            doItemTextReplacement(world, "Castle Town Goron Shop Red Potion",
+                {"Castle Town Goron Red Potion Confirmation Initial Text",
+                    "Castle Town Goron Red Potion Confirmation Later Text"}, Text::ORANGE);
+
+            doItemTextReplacement(world, "Castle Town Goron Shop Lantern Oil",
+                {"Castle Town Goron Lantern Oil Confirmation Initial Text",
+                    "Castle Town Goron Lantern Oil Confirmation Later Text"}, Text::ORANGE);
+
+            doItemTextReplacement(world, "Castle Town Goron Shop Arrow Refill",
+                {"Castle Town Goron Arrow Refill Confirmation Initial Text",
+                    "Castle Town Goron Arrow Refill Confirmation Later Text",
+                    "Castle Town Goron Arrow Refill Secret Text",
+                    "Castle Town Goron Arrow Refill Embarrassing Text",
+                    "Castle Town Goron Arrow Refill Let Me Know Text"}, Text::ORANGE);
+
+            doItemTextReplacement(world, "Castle Town Goron Shop Hylian Shield",
+                {"Castle Town Goron Hylian Shield Confirmation Initial Text",
+                    "Castle Town Goron Hylian Shield Confirmation Later Text"}, Text::ORANGE);
+
             doItemTextReplacement(world, "Coro Bottle", {"Coro Bottle Offer 1 Text",
                 "Coro Bottle Offer 2 Text", "Coro Bottle Offer 3 Text", "Coro Bottle Offer 4 Text"}, Text::ORANGE);
         }
