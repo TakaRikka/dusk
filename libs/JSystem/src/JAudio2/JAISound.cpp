@@ -63,7 +63,7 @@ void JAISoundParams::mixOutAll(const JASSoundParams& inParams, JASSoundParams* o
 
 JAISound::JAISound() : params_() {}
 
-void JAISound::start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience) {
+void JAISound::start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience IF_DUSK_ARG(std::shared_ptr<SoundTableReplacementSlot> replacement)) {
     handle_ = NULL;
     soundID_ = id;
     status_.init();
@@ -72,9 +72,10 @@ void JAISound::start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPt
     audience_ = audience;
     prepareCount_ = 0;
     count_ = 0;
+    IF_DUSK(this->replacement = std::move(replacement));
 
     if (posPtr != NULL && audience_ != NULL) {
-        audible_ = audience_->newAudible(*posPtr, soundID_, NULL, 0);
+        audible_ = audience_->newAudible(*posPtr, soundID_, NULL, 0 IF_DUSK_ARG(getReplacement()));
     } else {
         audible_ = NULL;
     }
@@ -98,7 +99,7 @@ void JAISound::newAudible(const JGeometry::TVec3<f32>& pos,
     }
 
     JUT_ASSERT(157, audience_);
-    audible_ = audience_->newAudible(pos, soundID_, param_1, param_2);
+    audible_ = audience_->newAudible(pos, soundID_, param_1, param_2 IF_DUSK_ARG(getReplacement()));
 }
 
 void JAISound::stop(u32 fadeTime) {

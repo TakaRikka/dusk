@@ -20,7 +20,7 @@ public:
     JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* soundStrategyMgr);
     void JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
                                               const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience,
-                                              int category);
+                                              int category IF_DUSK_ARG(std::shared_ptr<StreamReplacementSlot> replacement));
     bool prepare_prepareStream_();
     void prepare_();
     void prepare_startStream_();

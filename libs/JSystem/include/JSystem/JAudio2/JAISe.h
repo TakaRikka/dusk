@@ -43,7 +43,7 @@ public:
     void startTrack_(const JASSoundParams& params);
     void JAISeCategoryMgr_mixOut_(bool, const JASSoundParams& params, JAISoundActivity activity);
     void JAISeCategoryMgr_calc_();
-    void JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience);
+    void JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience IF_DUSK_ARG(std::shared_ptr<SoundEffectReplacementSlot> replacement));
     bool prepare_getSeqData_();
     void prepare_();
 

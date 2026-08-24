@@ -47,7 +47,12 @@ namespace {
                 mStreamFileDVDEntryNums[i] = DVDConvertPathToEntrynum(stack_14.getFilePath(i));
             }
         }
-        virtual s32 getStreamFileEntry(JAISoundID id) {
+        virtual s32 getStreamFileEntry(JAISoundID id IF_DUSK_ARG(StreamReplacementSlot2 const* replacement)) {
+#if TARGET_PC
+            if (replacement) {
+                CRASH("TStreamDataMgr::getStreamFileEntry not implemented for replacements");
+            }
+#endif
             u32 short_id = id.id_.info.waveID;
             if (short_id >= mNumStreamFiles) {
                 return -1;

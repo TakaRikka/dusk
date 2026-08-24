@@ -25,6 +25,16 @@ MOD_EXPORT ModResult mod_initialize(ModError*) {
         "res/go.opus",
         nullptr,
         &handle);
+
+    constexpr AudioSoundTableEffectInfo effect(128, 1, 1.5);
+
+    svc_audio_res->replace_sound_table_effect(
+        mod_ctx,
+        SE_CATEGORY_CHARA_SE,
+        0, // MIDNA_APPEAR
+        &effect,
+        nullptr);
+
     return MOD_OK;
 }
 

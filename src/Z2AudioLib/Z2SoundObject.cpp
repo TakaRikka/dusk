@@ -70,7 +70,7 @@ void Z2SoundObjBase::dispose() {
     for (i = getFirst(); i != NULL; i = i->getNext()) {
         handle = i->getObject();
         if (handle != NULL && *handle) {
-            if ((Z2GetSoundInfo()->getSwBit((*handle)->getID()) & 0x8000) != 0) {
+            if ((Z2GetSoundInfo()->getSwBit((*handle)->getID() IF_DUSK_ARG((*handle)->getReplacement())) & SOUND_SW_POOL_FLAG_2) != 0) {
                 handle->releaseSound();
             } else {
                 (*handle)->stop();
@@ -82,7 +82,7 @@ void Z2SoundObjBase::dispose() {
 }
 
 bool Z2SoundObjBase::stopOK(Z2SoundHandlePool& handlePool) {
-    if ((Z2GetSoundInfo()->getSwBit(handlePool->getID()) & 0x8000) != 0) {
+    if ((Z2GetSoundInfo()->getSwBit(handlePool->getID() IF_DUSK_ARG(handlePool->getReplacement())) & SOUND_SW_POOL_FLAG_2) != 0) {
         return false;
     } else {
         return true;
@@ -112,7 +112,7 @@ Z2SoundHandlePool* Z2SoundObjBase::startSound(JAISoundID soundID, u32 mapinfo, s
 
     Z2SoundHandlePool* handle = getHandleSoundID(soundID);
     if (handle != NULL) {
-        if ((Z2GetSoundInfo()->getSwBit(soundID) & 0x4000) != 0) {
+        if ((Z2GetSoundInfo()->getSwBit(soundID IF_DUSK_ARG((*handle)->getReplacement())) & SOUND_SW_POOL_FLAG_1) != 0) {
             handle = NULL;
         } else {
             return NULL;

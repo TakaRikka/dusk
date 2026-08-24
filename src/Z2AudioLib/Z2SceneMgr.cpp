@@ -1642,7 +1642,7 @@ void Z2SceneMgr::setSceneName(char* spot, s32 room, s32 layer) {
             JSUList<JAIStream>* stream_list = Z2GetSoundMgr()->getStreamMgr()->getStreamList();
             JSULink<JAIStream>* stream;
             for (stream = stream_list->getFirst(); stream != NULL; stream = stream->getNext()) {
-                if (bVar2 || sound_table->getTypeID(stream->getObject()->getID()) != SOUND_TYPEID_STREAM) {
+                if (bVar2 || sound_table->getTypeID(stream->getObject()->getID() IF_DUSK_ARG(stream->getObject()->getReplacement())) != SOUND_TYPEID_STREAM) {
                     stream->getObject()->stop(Z2Param::SCENE_CHANGE_BGM_FADEOUT_TIME);
                 }
             }

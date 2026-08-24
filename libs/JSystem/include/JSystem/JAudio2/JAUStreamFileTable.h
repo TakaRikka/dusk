@@ -29,7 +29,7 @@ struct JAUStreamFileTable {
  * 
  */
 struct JAUStreamDataMgr_StreamFileTable : public JAIStreamDataMgr, JAUStreamFileTable {
-    virtual s32 getStreamFileEntry(JAISoundID);
+    virtual s32 getStreamFileEntry(JAISoundID IF_DUSK_ARG(StreamReplacementSlot2 const*));
     virtual ~JAUStreamDataMgr_StreamFileTable() {}
 };
 

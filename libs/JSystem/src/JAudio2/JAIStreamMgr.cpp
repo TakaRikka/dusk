@@ -14,13 +14,13 @@ JAIStreamMgr::JAIStreamMgr(bool setInstance) : JASGlobalInstance<JAIStreamMgr>(s
     mActivity.init();
 }
 
-bool JAIStreamMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr) {
+bool JAIStreamMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr IF_DUSK_ARG(std::shared_ptr<dusk::mods::svc::audio_res::bst::StreamReplacementSlot> replacement)) {
     JUT_ASSERT(37, streamDataMgr_);
     if (handle != NULL && *handle) {
         (*handle)->stop();
     }
 
-    s32 streamFileEntry = streamDataMgr_->getStreamFileEntry(id);
+    s32 streamFileEntry = streamDataMgr_->getStreamFileEntry(id IF_DUSK_ARG(replacement.get()));
     if (streamFileEntry < 0) {
         JUT_WARN(46, "Cannot find the stream file entry for ID:%08x\n", id.id_.composite_)
         return false;
@@ -38,9 +38,9 @@ bool JAIStreamMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeom
         return false;
     }
 
-    stream->JAIStreamMgr_startID_(id, streamFileEntry, posPtr, mAudience, category);
+    stream->JAIStreamMgr_startID_(id, streamFileEntry, posPtr, mAudience, category IF_DUSK_ARG(replacement));
     if (soundInfo != NULL) {
-        soundInfo->getStreamInfo(id, stream);
+        soundInfo->getStreamInfo(id, stream IF_DUSK_ARG(replacement.get()));
     }
 
     if (handle != NULL) {

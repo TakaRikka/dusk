@@ -52,6 +52,11 @@
 #define SOUND_SW_IGNORE_FX_MIX        0x0000'0004
 
 /**
+ * Mute all BGM sequences while this sound is playing.
+ */
+#define SOUND_SW_MUTE_BGM             0x0000'0008
+
+/**
  * Offset to shift to access @see SOUND_SW_RANDOM_PITCH_MASK
  */
 #define SOUND_SW_RANDOM_PITCH_OFFSET  4
@@ -83,9 +88,20 @@
 #define SOUND_SW_IGNORE_DOLBY         0x0000'2000
 
 /**
+ * Unsure. Relates to Z2 pooling of sound handles.
+ */
+#define SOUND_SW_POOL_FLAG_1          0x0000'4000
+
+/**
+ * Unsure. Relates to Z2 pooling of sound handles.
+ */
+#define SOUND_SW_POOL_FLAG_2          0x0000'8000
+
+/**
  * 3-bit mask used to select a volume distance/falloff class for this sound.
  */
 #define SOUND_SW_VOL_DIST_BIT_MASK    0x0007'0000
+#define SOUND_SW_VOL_DIST_BIT_OFFSET  16
 
 /**
  * Limit minimum volume of this sound (after distance falloff) to 0.2.
@@ -97,6 +113,7 @@
  * @see SOUND_SW_VOL_DIST_BIT_MASK must be zero for this to work.
  */
 #define SOUND_SW_VOL_DIST_BIT_2_MASK  0x0070'0000
+#define SOUND_SW_VOL_DIST_BIT_2_OFFSET 20
 
 /**
  * Mark sound as "far away" or "culled" when at max distance (selected by distance class).
@@ -290,13 +307,17 @@ struct JAUSoundTableGroup {
  * 
  */
 struct JAUSoundTable : public JASGlobalInstance<JAUSoundTable> {
+#if TARGET_PC
+    using SoundTableReplacementSlot = dusk::mods::svc::audio_res::bst::SoundTableReplacementSlot;
+#endif
+
     JAUSoundTable(bool setInstance) : JASGlobalInstance<JAUSoundTable>(setInstance) {
     }
     ~JAUSoundTable() {}
     
     void init(void const*);
-    u8 getTypeID(JAISoundID) const;
-    JAUSoundTableItem* getData(JAISoundID) const;
+    u8 getTypeID(JAISoundID IF_DUSK_ARG(SoundTableReplacementSlot const*)) const;
+    JAUSoundTableItem DUSK_CONST* getData(JAISoundID  IF_DUSK_ARG(SoundTableReplacementSlot const*)) const;
     int getNumGroups_inSection(u8) const;
     int getNumItems_inGroup(u8, u8) const;
 

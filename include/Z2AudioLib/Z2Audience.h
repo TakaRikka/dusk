@@ -266,7 +266,8 @@ struct Z2Audience : public JAIAudience, public JASGlobalInstance<Z2Audience> {
 
     virtual ~Z2Audience();
     virtual JAIAudible* newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID soundID,
-                                                  const JGeometry::TVec3<f32>*, u32);
+                                                  const JGeometry::TVec3<f32>*, u32
+                                                  IF_DUSK_ARG(dusk::mods::svc::audio_res::bst::SoundTableReplacementSlot const*));
     virtual int getMaxChannels();
     virtual void deleteAudible(JAIAudible* audible);
     virtual u32 calcPriority(JAIAudible* audible);

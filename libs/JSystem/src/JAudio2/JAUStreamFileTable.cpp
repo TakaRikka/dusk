@@ -31,7 +31,12 @@ const char* JAUStreamFileTable::getFilePath(int index) const {
     return (char*)(data + *(int*)(data + 8 + (index * sizeof(s32))));
 }
 
-s32 JAUStreamDataMgr_StreamFileTable::getStreamFileEntry(JAISoundID soundId) {
+s32 JAUStreamDataMgr_StreamFileTable::getStreamFileEntry(JAISoundID soundId IF_DUSK_ARG(StreamReplacementSlot2 const* replacement)) {
+#if TARGET_PC
+    if (replacement) {
+        CRASH("JAUStreamDataMgr_StreamFileTable::getStreamFileEntry not implemented for replacements");
+    }
+#endif
     const char* filePath = getFilePath(soundId.id_.info.waveID);
     if (filePath == NULL) {
         return -1;

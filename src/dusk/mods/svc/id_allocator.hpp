@@ -14,7 +14,7 @@ class PlainIdAllocator {
     T alloc_max;
 
 public:
-    explicit PlainIdAllocator(T first, T max=std::numeric_limits<T>::max())
+    constexpr explicit PlainIdAllocator(T first, T max=std::numeric_limits<T>::max())
         : alloc_next(first), alloc_max(max) {
 
     }

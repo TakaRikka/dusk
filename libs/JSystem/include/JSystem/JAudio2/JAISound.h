@@ -6,7 +6,16 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
 #include "helpers/endian.h"
-#include <cstdint>
+
+#if TARGET_PC
+#include <memory>
+
+namespace dusk::mods::svc::audio_res::bst {
+struct SoundTableReplacementSlot;
+struct SoundEffectReplacementSlot;
+struct StreamReplacementSlot;
+}
+#endif
 
 class JAISound;
 
@@ -271,10 +280,16 @@ class JAITempoMgr;
  */
 class JAISound {
 public:
+#if TARGET_PC
+    using SoundTableReplacementSlot = dusk::mods::svc::audio_res::bst::SoundTableReplacementSlot;
+    using SoundEffectReplacementSlot = dusk::mods::svc::audio_res::bst::SoundEffectReplacementSlot;
+    using StreamReplacementSlot = dusk::mods::svc::audio_res::bst::StreamReplacementSlot;
+#endif
+
     void releaseHandle();
     void attachHandle(JAISoundHandle* handle);
     JAISound();
-    void start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience);
+    void start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience IF_DUSK_ARG(std::shared_ptr<SoundTableReplacementSlot> replacement));
     bool acceptsNewAudible() const;
     void newAudible(const JGeometry::TVec3<f32>&, JGeometry::TVec3<f32> const*, u32,
                                    JAIAudience*);
@@ -297,6 +312,11 @@ public:
     virtual bool JAISound_tryDie_() = 0;
 
     JAISoundID getID() const { return soundID_; }
+#if TARGET_PC
+    SoundTableReplacementSlot* getReplacement() const {
+        return replacement.get();
+    }
+#endif
     u32 getAnimationState() const { return status_.state.flags.animationState; }
     bool isAnimated() const { return getAnimationState() != 0; }
     void setAnimationState(u32 state) {
@@ -380,6 +400,9 @@ public:
     /* 0x34 */ u32 priority_;
     /* 0x38 */ s32 count_;
     /* 0x3C */ JAISoundParams params_;
+#if TARGET_PC
+    std::shared_ptr<SoundTableReplacementSlot> replacement;
+#endif
 };  // Size: 0x98
 
 STATIC_ASSERT(sizeof(JAISound) == 0x98);

@@ -4,6 +4,7 @@
 #include "JSystem/JAudio2/JAISoundHandles.h"
 #include "JSystem/JAudio2/JAISoundInfo.h"
 #include "JSystem/JAudio2/JASReport.h"
+#include "dusk/mods/svc/audio_res/bst.hpp"
 
 bool JAISeCategoryMgr::isUsingSeqData(const JAISeqDataRegion& seqDataRegion) {
     {
@@ -284,7 +285,7 @@ void JAISeMgr::mixOut() {
     }
 }
 
-bool JAISeMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr) {
+bool JAISeMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr IF_DUSK_ARG(std::shared_ptr<dusk::mods::svc::audio_res::bst::SoundEffectReplacementSlot> replacement)) {
     if (handle && *handle) {
         (*handle)->stop();
     }
@@ -294,7 +295,7 @@ bool JAISeMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry
     u32 category;
     if (soundInfoPtr != NULL) {
         category = soundInfoPtr->getCategory(id);
-        priority = soundInfoPtr->getPriority(id);
+        priority = soundInfoPtr->getPriority(id IF_DUSK_ARG(replacement.get()));
     } else {
         category = id.id_.info.type.parts.groupID;
         priority = 0;
@@ -309,10 +310,10 @@ bool JAISeMgr::startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry
     } 
 
     JAIAudience* audiencePtr = getAudience(category);
-    se->JAISeMgr_startID_(id, posPtr, audiencePtr);
+    se->JAISeMgr_startID_(id, posPtr, audiencePtr IF_DUSK_ARG(replacement));
 
     if (soundInfoPtr != NULL) {
-        soundInfoPtr->getSeInfo(id, se);
+        soundInfoPtr->getSeInfo(id, se IF_DUSK_ARG(replacement.get()));
     }
 
     if (handle != NULL) {

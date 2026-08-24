@@ -521,14 +521,15 @@ void Z2Audience::setAudioCamera(f32 (*viewMatrix)[4], Vec& pos, Vec& param_2, f3
 }
 
 JAIAudible* Z2Audience::newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID soundID,
-                                   const JGeometry::TVec3<f32>* param_2, u32 param_3) {
+                                   const JGeometry::TVec3<f32>* param_2, u32 param_3
+                                   IF_DUSK_ARG(dusk::mods::svc::audio_res::bst::SoundTableReplacementSlot const* replacement)) {
     u32 channelNum = param_3 | ~((1 << mNumPlayers) + -1);
     if (channelNum == 0xFFFFFFFF) {
         JUT_WARN(826, "%s", "You masked all audible channels !");
         return NULL;
     }
 
-    JAUAudibleParam params = Z2GetSoundInfo()->getAudibleSwFull(soundID);
+    JAUAudibleParam params = Z2GetSoundInfo()->getAudibleSwFull(soundID IF_DUSK_ARG(replacement));
     bool x = params.field_0x0.bytes.mDopplerPower != 0;
 
     Z2Audible* audible = JKR_NEW Z2Audible(pos, param_2, channelNum, x);
