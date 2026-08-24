@@ -23,12 +23,10 @@
 #endif
 
 #define fopAcM_ct(ptr, ClassName)                                           \
-    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "UH OH"); } \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \
         fopAcM_ct_placement(ptr, ClassName);                                \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
-    } \
-    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "Oh come on"); }
+    }
 
 
 #define fopAcM_RegisterDeleteID(i_this, actor_name_str)                     \

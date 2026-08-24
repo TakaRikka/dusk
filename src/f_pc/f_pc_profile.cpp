@@ -5,8 +5,9 @@
 
 #include "f_pc/f_pc_profile.h"
 
-#ifdef TARGET_PC
+#if TARGET_PC
 #include "dusk/mods/svc/actor.hpp"
+#include "f_pc/f_pc_name.h"
 #endif
 
 #ifndef __MWERKS__
@@ -21,13 +22,16 @@ process_profile_definition** g_fpcPf_ProfileList_p;
 #endif
 
 process_profile_definition DUSK_CONST* fpcPf_Get(s16 i_profname) {
-#ifdef TARGET_PC
+#if TARGET_PC
     // Check if a mod has registered an actor with i_profname. Fallback to the profile list if it
     // doesn't exist.
     process_profile_definition* profile =
         dusk::mods::svc::actor_impl::get_profile_from_proc_name(i_profname);
     if (profile != nullptr) {
         return profile;
+    }
+    if (i_profname < 0 || i_profname >= fpcNm_MAX_NUM) {
+        return nullptr;
     }
 #endif
 

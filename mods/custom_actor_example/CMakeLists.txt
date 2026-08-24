@@ -18,5 +18,4 @@ add_mod(custom_actor_example
     SOURCES  src/mod.cpp src/m_a_obj_wrock.cpp src/m_a_mine.cpp
     MOD_JSON mod.json
     RES_DIR  res
-    BUNDLE
 )

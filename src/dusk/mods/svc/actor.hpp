@@ -8,6 +8,9 @@ namespace dusk::mods::svc::actor_impl {
 
 struct ActorSlot {
     actor_method_class methodTable;
+    int (*deleteFunction)(void*);
+    int (*isDeleteFunction)(void*);
+    bool forceDelete;
     dStage_objectNameInf objNameInf;
     actor_process_profile_definition profile;
 };

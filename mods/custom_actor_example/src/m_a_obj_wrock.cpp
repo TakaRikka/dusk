@@ -6,7 +6,6 @@
 #include "m_a_obj_wrock.hpp"
 #include "d/d_com_inf_game.h"
 #include "res/Object/WRock.h"
-#include "mod.hpp"
 
 // The name of the archive in /res/Object/
 static const char* l_resName = "Wrock";
@@ -29,10 +28,8 @@ maObj_Wrock_c::~maObj_Wrock_c() {
 
 cPhs_Step maObj_Wrock_c::create() {
     // Because of how the actor system works, an actor's constructor doesn't get called when an
-    // actor is created. We need to manually do it here with the following function:
-    if (!mod_fopAcM_ct(this)) {
-        return cPhs_ERROR_e;
-    }
+    // actor is created. We need to manually do it here with the following macro:
+    fopAcM_ct(this, maObj_Wrock_c);
 
     // The create function gets called until we return cPhs_COMPLEATE_e while an actor is loading.
     // We request to load the archive here, and wait until the dvd completes loading it
@@ -178,7 +175,7 @@ static int maObj_Wrock_Draw(void* i_this) {
     return static_cast<maObj_Wrock_c*>(i_this)->Draw();
 }
 
-static int maObj_Wrock_IsDelete(void* i_this) {
+static int maObj_Wrock_IsDelete(void*) {
     return 1;
 }
 

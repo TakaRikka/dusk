@@ -773,7 +773,7 @@ be loaded by a stage.
 #include "mods/svc/actor.h"
 IMPORT_SERVICE(ActorService, svc_actor);
 
-class myActor_c : public fopAc_ac_c {}
+class myActor_c : public fopAc_ac_c {};
 
 int myActor_Create(void* i_this) {
     // Ran several times, until it returns cPhs_COMPLEATE_e to allow for async loading
@@ -802,10 +802,10 @@ int myActor_Draw(void* i_this) {
 
 s16 actor_name; // The process name that can be used by the game to load the actor
 ActorHandle actor_handle;
-ProfileDesc profDesc = {
+ActorProfileDesc profDesc = {
     .name = "AUnique", // The name used by the stage loader to load the actor with.
-                       // It has a character limit of 7. This should be universally
-                       // unique both between the game and other mods.
+                       // It has a character limit of 7 and must be unique among active
+                       // mod actors. Matching a game actor name overrides stage lookup.
     .priority_group = 7, // When, relative to other actors _Execute should run
                         // See: mods/svc/actor.h
     .process_size = sizeof(myActor_c),
@@ -813,7 +813,7 @@ ProfileDesc profDesc = {
                                         // to other actors (see f_pc_draw_priority.h)
     .status = fopAcStts_CULL_e  | fopAcStts_UNK_0x4000_e | fopAcStts_UNK_0x40000_e,
     .group = fopAc_ACTOR_e, // Can be fopAc_ACTOR_e, fopAc_PLAYER_e, fopAc_ENEMY_e, or fopAc_NPC_e
-    .cull_type = fopAc_CULLBOX_CUSTOM_e
+    .cull_type = fopAc_CULLBOX_CUSTOM_e,
     .create_function = myActor_Create,
     .delete_function = myActor_Delete,
     .execute_function = myActor_Execute,

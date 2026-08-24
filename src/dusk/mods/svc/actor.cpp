@@ -7,12 +7,16 @@
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/mod_loader.hpp"
+#include "dusk/mods/loader/loader.hpp"
 
 #include <fmt/format.h>
 
 #include "d/d_stage.h"
 #include "f_op/f_op_actor_tag.h"
 #include "f_pc/f_pc_deletor.h"
+
+#include <cstring>
+#include <vector>
 
 namespace dusk::mods::svc::actor_impl {
 namespace {
@@ -23,18 +27,60 @@ SlotMap<std::unique_ptr<ActorSlot>> s_slots;
 std::unordered_map<s16, ActorHandle> procNameToHandle;
 std::unordered_map<std::string, ActorHandle> fullNameToHandle;
 
+ActorSlot* get_actor_slot(void* actorPtr) {
+    auto* actor = static_cast<fopAc_ac_c*>(actorPtr);
+    const auto handle = procNameToHandle.find(actor->name);
+    if (handle == procNameToHandle.end()) {
+        return nullptr;
+    }
+    auto* slot = s_slots.find(handle->second);
+    return slot != nullptr ? slot->value.get() : nullptr;
+}
+
+int actor_is_delete(void* actorPtr) {
+    auto* slot = get_actor_slot(actorPtr);
+    if (slot == nullptr || slot->forceDelete) {
+        return 1;
+    }
+    return slot->isDeleteFunction(actorPtr);
+}
+
+int actor_delete(void* actorPtr) {
+    auto* slot = get_actor_slot(actorPtr);
+    if (slot == nullptr) {
+        return 1;
+    }
+    const bool forceDelete = slot->forceDelete;
+    const int result = slot->deleteFunction(actorPtr);
+    return forceDelete ? 1 : result;
+}
+
 ModResult register_actor(ModContext* ctx, const ActorProfileDesc* desc, ProfileName* outProfileName,
     ActorHandle* outActorHandle) {
+    auto* owner = mod_from_context(ctx);
+    if (owner == nullptr || desc == nullptr || outProfileName == nullptr ||
+        outActorHandle == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+    if (desc->name[0] == '\0' || std::memchr(desc->name, '\0', sizeof(desc->name)) == nullptr ||
+        desc->process_size < sizeof(fopAc_ac_c) || desc->create_function == nullptr ||
+        desc->delete_function == nullptr || desc->execute_function == nullptr ||
+        desc->is_delete_function == nullptr || desc->draw_function == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
 
     // If another mod has already registered an actor with this name, note a conflict
     if (get_stageinfo_from_full_name(desc->name)) {
         return MOD_CONFLICT;
     }
 
-    const auto handle = s_slots.emplace(*ctx->mod,
+    const auto handle = s_slots.emplace(*owner,
         std::make_unique<ActorSlot>(
-            ActorSlot{{desc->create_function, desc->delete_function, desc->execute_function,
-                          desc->is_delete_function, desc->draw_function},
+            ActorSlot{{desc->create_function, actor_delete, desc->execute_function, actor_is_delete,
+                          desc->draw_function},
+                desc->delete_function, desc->is_delete_function, false,
                 {
                     {},  // Set after registered
                     0,   // Set after registered to a slot
@@ -79,7 +125,7 @@ ModResult register_actor(ModContext* ctx, const ActorProfileDesc* desc, ProfileN
 }
 
 // Must be called before the slot associated with the handle is erased
-static void remove_handle_from_maps(ActorHandle handle) {
+void remove_handle_from_maps(ActorHandle handle) {
     auto entry = s_slots.find(handle);
     if (entry == nullptr) {
         return;
@@ -87,93 +133,87 @@ static void remove_handle_from_maps(ActorHandle handle) {
 
     std::string fullName = entry->value->objNameInf.name;
 
-    const auto& it = fullNameToHandle.find(fullName);
-    if (it == fullNameToHandle.end()) {
-        return;
+    const auto it = fullNameToHandle.find(fullName);
+    if (it != fullNameToHandle.end()) {
+        fullNameToHandle.erase(it);
     }
-    fullNameToHandle.erase(it);
 
-    const auto& it2 = procNameToHandle.find(entry->value->profile.base.base.name);
-    if (it2 == procNameToHandle.end()) {
-        return;
+    const auto it2 = procNameToHandle.find(entry->value->profile.base.base.name);
+    if (it2 != procNameToHandle.end()) {
+        procNameToHandle.erase(it2);
     }
-    procNameToHandle.erase(it2);
 }
 
-// Iterates through the global list of actors to be deleted, and force-deletes all actors of a
-// specific process name
-bool finish_delete_all_actors_of_name(s16 procName) {
-    bool ret = true;
-
-    node_list_class* delete_actor_list = &g_fpcDtTg_Queue;
-    if (delete_actor_list->mSize == 0) {
-        return true;
+void request_delete_all_actors_of_name(s16 procName) {
+    node_class* node = g_fopAcTg_Queue.mpHead;
+    while (node != nullptr) {
+        node_class* next = NODE_GET_NEXT(node);
+        auto* actor =
+            static_cast<fopAc_ac_c*>(reinterpret_cast<create_tag_class*>(node)->mpTagData);
+        if (actor->name == procName) {
+            fopAcM_delete(actor);
+        }
+        node = next;
     }
-    node_class* node = delete_actor_list->mpHead;
-    node_class* pNext = NODE_GET_NEXT(node);
-    while (node) {
-        delete_tag_class* tag = ((delete_tag_class*)node);
-        base_process_class* proc = (base_process_class*)tag->base.mpTagData;
+}
+
+bool finish_delete_all_actors_of_name(s16 procName) {
+    bool complete = true;
+
+    node_class* node = g_fpcDtTg_Queue.mpHead;
+    while (node != nullptr) {
+        node_class* next = NODE_GET_NEXT(node);
+        auto* tag = reinterpret_cast<delete_tag_class*>(node);
+        auto* proc = static_cast<base_process_class*>(tag->base.mpTagData);
         if (proc->name == procName) {
             tag->timer = 0;
-            int del_status = fpcDtTg_Do(
+            const int deleteStatus = fpcDtTg_Do(
                 tag, [](void* proc) { return fpcDt_deleteMethod((base_process_class*)proc); });
-            if (del_status == 0) {
-                ret = false;
+            if (deleteStatus == 0) {
+                complete = false;
             }
         }
-        node = pNext;
-        pNext = NODE_GET_NEXT(pNext);
+        node = next;
     }
-    return ret;
+    return complete;
+}
+
+bool has_actor_of_name(s16 procName) {
+    node_class* node = g_fopAcTg_Queue.mpHead;
+    while (node != nullptr) {
+        auto* actor =
+            static_cast<fopAc_ac_c*>(reinterpret_cast<create_tag_class*>(node)->mpTagData);
+        if (actor->name == procName) {
+            return true;
+        }
+        node = NODE_GET_NEXT(node);
+    }
+    return false;
 }
 
 ModResult unregister_actor(ModContext* ctx, ActorHandle handle) {
-    auto slot = s_slots.find(handle);
+    auto* owner = mod_from_context(ctx);
+    if (owner == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    auto* slot = s_slots.find_owned(handle, *owner);
     if (slot == nullptr) {
-        return MOD_ERROR;
+        return MOD_INVALID_ARGUMENT;
     }
 
-    // Search through the current actor list and request a delete to all actors of the type that we
-    // are unregistering. This may be unsafe under some circumstances, but this is the cleanest way
-    // to implement unregistering actors at runtime without the game crashing.
-
-    s16 actorProcName = slot->value->profile.base.base.name;
-
-    node_list_class* actorList = &g_fopAcTg_Queue;
-    bool isDelete = false;
-    if (actorList->mSize > 0) {
-        node_class* node = actorList->mpHead;
-        node_class* pNext = NODE_GET_NEXT(node);
-
-        while (node) {
-            fopAc_ac_c* actor = (fopAc_ac_c*)((create_tag_class*)node)->mpTagData;
-            if (actor->name == actorProcName) {
-                isDelete = true;
-                // Request a delete, keep calling delete until it can be deleted and returns true
-                // Note: For whatever reason if a custom actor will outright refused to be deleted,
-                // this will hang forever!
-                while (!fopAcM_delete(actor)) {
-                    // Keep trying to delete the actor here. Some actors that manage multiple DVD
-                    // loads during their lifetime may wish to deny being deleted until all loads
-                    // are finished. This loop is here to make sure each actor agress to be deleted.
-                };
-            }
-            node = pNext;
-            pNext = NODE_GET_NEXT(pNext);
-        }
-    }
-
-    // All the actors we have just requested to delete are in a queue. We need to clear out that
-    // queue so all actors we want to delete are gone by the time this function returns
-    if (isDelete) {
-        while (!finish_delete_all_actors_of_name(actorProcName)) {
-            // Same here: keep re-trying a delete until it is successful
-        }
+    const s16 actorProcName = slot->value->profile.base.base.name;
+    slot->value->forceDelete = true;
+    request_delete_all_actors_of_name(actorProcName);
+    const bool deletesFinished = finish_delete_all_actors_of_name(actorProcName);
+    if (!deletesFinished || has_actor_of_name(actorProcName)) {
+        slot->value->forceDelete = false;
+        Log.warn("Actor profile '{}' could not be unregistered synchronously",
+            slot->value->objNameInf.name);
+        return MOD_UNAVAILABLE;
     }
 
     remove_handle_from_maps(handle);
-    s_slots.erase(handle);
+    s_slots.erase_owned(handle, *owner);
 
     return MOD_OK;
 }
@@ -268,13 +308,15 @@ ModResult get_actor_room_num(ModContext* ctx, ActorId actorId, int8_t* outRoomNu
 }
 
 ModResult delete_actor(ModContext* ctx, ActorId actorId) {
+    if (mod_from_context(ctx) == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
     fopAc_ac_c* actor = fopAcM_SearchByID(actorId);
     if (actor == nullptr) {
         Log.warn("Attempted to delete actor with ID ({}) but it doesn't exist!", actorId);
         return MOD_OK;
     }
-    fopAcM_delete(actor);
-    return MOD_OK;
+    return fopAcM_delete(actor) != 0 ? MOD_OK : MOD_UNAVAILABLE;
 }
 
 }  // namespace
@@ -316,14 +358,19 @@ dStage_objectNameInf* get_stageinfo_from_full_name(const std::string& name) {
 }
 
 void actor_remove_mod(LoadedMod& mod) {
+    std::vector<ActorHandle> handles;
     s_slots.for_each([&](const ActorHandle handle, const auto& slot) {
         if (slot.owner == &mod) {
-            unregister_actor(mod.context.get(), handle);
+            handles.push_back(handle);
         }
     });
 
-    // Erase to make sure all slots are cleared
-    s_slots.erase_all(mod);
+    for (const auto handle : handles) {
+        const auto result = unregister_actor(mod.context.get(), handle);
+        if (result != MOD_OK) {
+            Log.error("Actor profile could not be removed during mod deactivation");
+        }
+    }
 }
 
 }  // namespace dusk::mods::svc::actor_impl

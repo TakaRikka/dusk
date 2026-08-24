@@ -1,7 +1,6 @@
 #include "m_a_mine.hpp"
 #include "d/d_com_inf_game.h"
 #include "res/Object/O_mD_jira.h"
-#include "mod.hpp"
 
 // The name of the archive in /res/Object/
 static const char* l_resName = "O_mD_jira";
@@ -25,9 +24,7 @@ ma_Mine_c::~ma_Mine_c() {
 cPhs_Step ma_Mine_c::create() {
     // Because of how the actor system works, an actor's constructor doesn't get called when an
     // actor is created. We need to manually do it here with the following function:
-    if (!mod_fopAcM_ct(this)) {
-        return cPhs_ERROR_e;
-    }
+    fopAcM_ct(this, ma_Mine_c);
 
     // The create function gets called until we return cPhs_COMPLEATE_e while an actor is loading.
     // We request to load the archive here, and wait until the dvd completes loading it
@@ -131,10 +128,8 @@ int ma_Mine_c::Draw() {
     // Cast a shadow for the actor onto the ground.
     // We can only do this if we are drawing to the normal dlist, not the BG dlist
     if (mGroundH != -G_CM3D_F_INF) {
-        mShadow = dComIfGd_setShadow(mShadow, 1, mpModel, &current.pos,
-                                     100.0f, 0.0f,
-                                     current.pos.y, mGroundH, mGndChk, &tevStr, 0,
-                                     1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
+        mShadow = dComIfGd_setShadow(mShadow, 1, mpModel, &current.pos, 100.0f, 0.0f, current.pos.y,
+            mGroundH, mGndChk, &tevStr, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
     }
 
     return 1;
@@ -156,7 +151,7 @@ static int maMine_Draw(void* i_this) {
     return static_cast<ma_Mine_c*>(i_this)->Draw();
 }
 
-static int maMine_IsDelete(void* i_this) {
+static int maMine_IsDelete(void*) {
     return 1;
 }
 

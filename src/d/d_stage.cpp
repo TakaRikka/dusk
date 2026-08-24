@@ -1525,13 +1525,14 @@ static void dummy0() {
 }
 
 dStage_objectNameInf* dStage_searchName(char const* objName) {
-#ifdef TARGET_PC
-    dStage_objectNameInf* info = dusk::mods::svc::actor_impl::get_stageinfo_from_full_name(objName);
+#if TARGET_PC
+    dStage_objectNameInf* info =
+        dusk::mods::svc::actor_impl::get_stageinfo_from_full_name(objName);
     if (info != nullptr) {
         return info;
     }
 #endif
-    
+
     dStage_objectNameInf* obj = l_objectName;
 
     for (u32 i = 0; i < ARRAY_SIZEU(l_objectName); i++) {
@@ -1548,15 +1549,14 @@ dStage_objectNameInf* dStage_searchName(char const* objName) {
 const char* dStage_getName(s16 procName, s8 argument) {
     static char tmp_name[dStage_NAME_LENGTH];
 
-#ifdef TARGET_PC
-    std::string_view name = dusk::mods::svc::actor_impl::get_full_name_from_proc_name(procName);
-    if (name != "") {
-        strncpy(tmp_name,name.data(),sizeof(tmp_name)-1);
-        tmp_name[7] = '\0'; 
+#if TARGET_PC
+    const char* name = dusk::mods::svc::actor_impl::get_full_name_from_proc_name(procName);
+    if (name[0] != '\0') {
+        strncpy(tmp_name, name, sizeof(tmp_name) - 1);
+        tmp_name[sizeof(tmp_name) - 1] = '\0';
         return tmp_name;
     }
 #endif
-    
 
     dStage_objectNameInf* obj = l_objectName;
     char* tmp = NULL;
