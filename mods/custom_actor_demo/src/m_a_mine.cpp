@@ -23,7 +23,7 @@ ma_Mine_c::~ma_Mine_c() {
 
 cPhs_Step ma_Mine_c::create() {
     // Because of how the actor system works, an actor's constructor doesn't get called when an
-    // actor is created. We need to manually do it here with the following function:
+    // actor is created. We need to manually do it here with the following ma:
     fopAcM_ct(this, ma_Mine_c);
 
     // The create function gets called until we return cPhs_COMPLEATE_e while an actor is loading.

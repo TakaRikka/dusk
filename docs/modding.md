@@ -807,10 +807,10 @@ ActorProfileDesc profDesc = {
                        // It has a character limit of 7 and must be unique among active
                        // mod actors. Matching a game actor name overrides stage lookup.
     .priority_group = 7, // When, relative to other actors _Execute should run
-                        // See: mods/svc/actor.h
+                         // See: mods/svc/actor.h
     .process_size = sizeof(myActor_c),
     .draw_priority = fpcDwPi_OBJ_LBOX_e, // Defines when the actor should be drawn relative
-                                        // to other actors (see f_pc_draw_priority.h)
+                                         // to other actors (see f_pc_draw_priority.h)
     .status = fopAcStts_CULL_e  | fopAcStts_UNK_0x4000_e | fopAcStts_UNK_0x40000_e,
     .group = fopAc_ACTOR_e, // Can be fopAc_ACTOR_e, fopAc_PLAYER_e, fopAc_ENEMY_e, or fopAc_NPC_e
     .cull_type = fopAc_CULLBOX_CUSTOM_e,
@@ -829,9 +829,9 @@ if (plr) {
         .parameters = 0,
         .argument = 0,
         .room_num = fopAcM_GetRoomNo(plr),
-        .position = {plr->current.pos.x,plr->current.pos.y,plr->current.pos.z},
-        .angle = {plr->current.angle.x,plr->current.angle.y,plr->current.angle.z},
-        .scale = {1.0f,1.0f,1.0f}
+        .position = {plr->current.pos.x, plr->current.pos.y, plr->current.pos.z},
+        .angle = {plr->current.angle.x, plr->current.angle.y, plr->current.angle.z},
+        .scale = {1.0f, 1.0f, 1.0f}
     };
     ActorId created_actor_id;
     svc_actor->create_actor(mod_ctx, actor_name, &spawnParams, &created_actor_id);
