@@ -532,10 +532,12 @@ s32 fopAcM_delete(fpc_ProcID i_actorID);
 
 fpc_ProcID fopAcM_create(s16 i_procName, u16 i_setId, u32 i_parameters, const cXyz* i_pos,
     int i_roomNo, const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
-    createFunc i_createFunc IF_DUSK_ARG(u32 i_itemGiveTag = 0));
+    createFunc i_createFunc IF_DUSK_ARG(u32 i_itemGiveTag = 0)
+        IF_DUSK_ARG(u8 i_itemOriginalNo = 0xFF));
 
 fpc_ProcID fopAcM_create(s16 i_procName, u32 i_parameters, const cXyz* i_pos, int i_roomNo,
-    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument IF_DUSK_ARG(u32 i_itemGiveTag = 0));
+    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument IF_DUSK_ARG(u32 i_itemGiveTag = 0)
+        IF_DUSK_ARG(u8 i_itemOriginalNo = 0xFF));
 
 inline fpc_ProcID fopAcM_Create(s16 i_procName, createFunc i_createFunc, void* params) {
     return fpcM_Create(i_procName, i_createFunc,params);

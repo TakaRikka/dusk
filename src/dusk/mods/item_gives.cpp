@@ -97,11 +97,11 @@ void notify_gives(const char* checkName, uint8_t itemNo, fopAc_ac_c* giver, Item
 
 void complete_check(uint8_t itemNo, uint32_t giveTag, fopAc_ac_c* giver, ItemGiveOrigin origin) {
     if (const auto* committed = s_committedChecks.find(giveTag);
-        committed != nullptr && committed->resolvedItem != itemNo)
+        committed != nullptr && committed->resolution.item != itemNo)
     {
         Log.error("committed check '{}' completed with item {:#x} instead of {:#x}",
             item_give_name(giveTag) != nullptr ? item_give_name(giveTag) : "", itemNo,
-            committed->resolvedItem);
+            committed->resolution.item);
     }
     s_committedChecks.erase(giveTag);
     notify_gives(item_give_name(giveTag), itemNo, giver, origin);
@@ -241,10 +241,19 @@ uint32_t item_give_tag(const char* name) {
     return tag;
 }
 
+ItemCheckResolution item_check_resolve(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* giver) {
+    if (const auto* committed = s_committedChecks.find(giveTag); committed != nullptr) {
+        return committed->resolution;
+    }
+    const char* name = item_give_name(giveTag);
+    return name != nullptr ? item_check_resolve(name, itemNo, giver) :
+                             ItemCheckResolution{.item = itemNo, .display_item = itemNo};
+}
+
 ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* giver) {
     const char* name = item_give_name(giveTag);
     if (name == nullptr) {
-        return {.tag = giveTag, .itemNo = itemNo};
+        return {.tag = giveTag, .itemNo = itemNo, .displayItemNo = itemNo};
     }
 
     if (const auto* committed = s_committedChecks.find(giveTag); committed != nullptr) {
@@ -252,12 +261,20 @@ ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* 
             Log.error("committed check '{}' changed vanilla item from {:#x} to {:#x}", name,
                 committed->vanillaItem, itemNo);
         }
-        return {.tag = giveTag, .itemNo = committed->resolvedItem};
+        return {
+            .tag = giveTag,
+            .itemNo = committed->resolution.item,
+            .displayItemNo = committed->resolution.display_item,
+        };
     }
 
-    const auto& committed =
-        s_committedChecks.commit(giveTag, itemNo, [&] { return item_check(name, itemNo, giver); });
-    return {.tag = giveTag, .itemNo = committed.resolvedItem};
+    const auto& committed = s_committedChecks.commit(
+        giveTag, itemNo, [&] { return item_check_resolve(name, itemNo, giver); });
+    return {
+        .tag = giveTag,
+        .itemNo = committed.resolution.item,
+        .displayItemNo = committed.resolution.display_item,
+    };
 }
 
 ItemCheckResult item_check_commit(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
@@ -279,10 +296,10 @@ bool item_check_enqueue(ItemCheckResult check, ItemGiveMode mode) {
             item_give_name(check.tag) != nullptr ? item_give_name(check.tag) : "");
         return false;
     }
-    if (committed->resolvedItem != check.itemNo) {
+    if (committed->resolution.item != check.itemNo) {
         Log.error("committed check '{}' changed item from {:#x} to {:#x}",
             item_give_name(check.tag) != nullptr ? item_give_name(check.tag) : "", check.itemNo,
-            committed->resolvedItem);
+            committed->resolution.item);
         return false;
     }
     if (committed->queued) {
@@ -292,7 +309,7 @@ bool item_check_enqueue(ItemCheckResult check, ItemGiveMode mode) {
     committed->queued = true;
     s_giveQueue.push_back({
         .tag = check.tag,
-        .itemNo = committed->resolvedItem,
+        .itemNo = committed->resolution.item,
         .silent = mode == ItemGiveMode::Silent,
         .forced = mode == ItemGiveMode::ForcedDemo,
     });

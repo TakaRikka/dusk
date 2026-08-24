@@ -50,7 +50,7 @@ bool daItemBase_c::chkDead() {
 int CheckItemCreateHeap(fopAc_ac_c* i_this) {
     daItemBase_c* a_this = static_cast<daItemBase_c*>(i_this);
 
-    u8 item_no = a_this->getItemNo();
+    u8 item_no = DUSK_IF_ELSE(a_this->getDisplayItemNo(), a_this->getItemNo());
     return a_this->CreateItemHeap(dItem_data::getArcName(item_no), dItem_data::getBmdName(item_no),
                                   dItem_data::getBtkName(item_no), dItem_data::getBpkName(item_no),
                                   dItem_data::getBckName(item_no), dItem_data::getBxaName(item_no),
@@ -67,7 +67,7 @@ const char* dItem_fieldModelArc(u8 itemNo) {
 int CheckFieldItemCreateHeap(fopAc_ac_c* i_this) {
     daItemBase_c* a_this = static_cast<daItemBase_c*>(i_this);
 
-    u8 item_no = a_this->getItemNo();
+    u8 item_no = DUSK_IF_ELSE(a_this->getDisplayItemNo(), a_this->getItemNo());
     return a_this->CreateItemHeap(
         dItem_data::getFieldArc(item_no), dItem_data::getItemBmdName(item_no),
         dItem_data::getItemBtkName(item_no), dItem_data::getItemBpkName(item_no),
