@@ -12,6 +12,9 @@
 #include "d/actor/d_a_npc_gra.h"
 #include "d/actor/d_a_tag_gra.h"
 #include "Z2AudioLib/Z2Instances.h"
+#if TARGET_PC
+#include "mods/items.h"
+#endif
 #include <cstring>
 
 DUSK_GAME_DATA const daNpc_grA_HIOParam daNpc_grA_Param_c::m = {
@@ -1323,7 +1326,7 @@ BOOL daNpc_grA_c::isDelete() {
             return FALSE;
         }
         fopAcM_createItemForBoss(&current.pos, 0x21, fopAcM_GetRoomNo(this), NULL, NULL, 0.0f, 0.0f,
-                                 0x80);
+                                 0x80 IF_DUSK_ARG(ITEM_CHECK_GORON_SPRINGWATER_RUSH));
         return TRUE;
     }
     return TRUE;
@@ -2812,7 +2815,7 @@ BOOL daNpc_grA_c::ECut_carrySpaWater(int i_staffID) {
             c.y += 200.0f;
             csXyz c2(0, fopAcM_searchPlayerAngleY(this), 0);
             fopAcM_createItemForBoss(&c, 0x21, fopAcM_GetRoomNo(this), &c2, NULL, 0.0f, 20.0f,
-                                     0x80);
+                                     0x80 IF_DUSK_ARG(ITEM_CHECK_GORON_SPRINGWATER_RUSH));
         } break;
         }
     }

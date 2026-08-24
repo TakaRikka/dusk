@@ -105,17 +105,19 @@ const char* daShopItem_c::getShopArcname() {
 #if TARGET_PC
     if (m_itemNo != dItemNo_NONE_e && mItemGiveOriginalNo == dItemNo_NONE_e) {
         mItemGiveOriginalNo = m_itemNo;
-        const u8 resolvedItem = dusk::mods::item_check_shop(mItemGiveOriginalNo, this);
-        mItemOverridden = resolvedItem != mItemGiveOriginalNo;
+        mItemGiveTag = dusk::mods::item_give_tag_shop(mItemGiveOriginalNo);
+        const auto [_, displayItem] =
+            dusk::mods::item_check_resolve(mItemGiveTag, mItemGiveOriginalNo, this);
+        mItemOverridden = displayItem != mItemGiveOriginalNo;
         if (mItemOverridden) {
             mOverrideData = mData[mShopItemID];
-            mOverrideData.mArcName = dItem_data::getArcName(resolvedItem);
-            mOverrideData.mBmdName = dItem_data::getBmdName(resolvedItem);
-            mOverrideData.mBtkName = dItem_data::getBtkName(resolvedItem);
-            mOverrideData.mBckName = dItem_data::getBckName(resolvedItem);
-            mOverrideData.mBrkName = dItem_data::getBrkName(resolvedItem);
-            mOverrideData.mBtpName = dItem_data::getBtpName(resolvedItem);
-            mOverrideData.mTevFrm = dItem_data::getTevFrm(resolvedItem);
+            mOverrideData.mArcName = dItem_data::getArcName(displayItem);
+            mOverrideData.mBmdName = dItem_data::getBmdName(displayItem);
+            mOverrideData.mBtkName = dItem_data::getBtkName(displayItem);
+            mOverrideData.mBckName = dItem_data::getBckName(displayItem);
+            mOverrideData.mBrkName = dItem_data::getBrkName(displayItem);
+            mOverrideData.mBtpName = dItem_data::getBtpName(displayItem);
+            mOverrideData.mTevFrm = dItem_data::getTevFrm(displayItem);
             mOverrideData.mBtpFrm = -1;
             mOverrideData.mFlag = static_cast<u32>(-1);
             mOverrideData.mOffsetY = mShopItemID == SHOP_ITEMNO_ARMOR ? 60.0f : 15.0f;

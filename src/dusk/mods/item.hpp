@@ -1,7 +1,10 @@
 #pragma once
 
+#include "mods/svc/item.h"
+
 #include <cstdint>
 #include <unordered_map>
+#include <utility>
 
 class fopAc_ac_c;
 
@@ -16,8 +19,11 @@ enum class ItemGiveMode : uint8_t {
 struct ItemCheckResult {
     uint32_t tag = 0;
     uint8_t itemNo = 0;
+    uint8_t displayItemNo = 0;
 };
 
+ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_ac_c* giver);
+ItemCheckResolution item_check_resolve(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* giver);
 uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver);
 ItemCheckResult item_check_commit(const char* name, uint8_t itemNo, fopAc_ac_c* giver);
 ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* giver);
@@ -54,7 +60,7 @@ uint32_t item_give_queue_take_tag();
 namespace detail {
 struct CommittedCheck {
     uint8_t vanillaItem = 0;
-    uint8_t resolvedItem = 0;
+    ItemCheckResolution resolution{};
     bool queued = false;
 };
 
@@ -77,10 +83,13 @@ public:
             return existing->second;
         }
 
-        const uint8_t resolvedItem = std::forward<ResolveFn>(resolve)();
+        const ItemCheckResolution resolution = std::forward<ResolveFn>(resolve)();
         return mChecks
-            .emplace(
-                giveTag, CommittedCheck{.vanillaItem = vanillaItem, .resolvedItem = resolvedItem})
+            .emplace(giveTag,
+                CommittedCheck{
+                    .vanillaItem = vanillaItem,
+                    .resolution = resolution,
+                })
             .first->second;
     }
 

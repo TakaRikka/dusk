@@ -8,7 +8,7 @@
 
 #define ITEM_SERVICE_ID "dev.twilitrealm.dusklight.item"
 #define ITEM_SERVICE_MAJOR 2u
-#define ITEM_SERVICE_MINOR 0u
+#define ITEM_SERVICE_MINOR 1u
 
 /* 0 is never a valid handle. */
 typedef uint64_t ItemCheckHandle;
@@ -31,11 +31,17 @@ typedef struct ItemCheckInfo {
     const void* giver_actor; /* fopAc_ac_c*, or NULL when unavailable */
     uint8_t vanilla_item;
     uint8_t current_item;
+    uint8_t current_display_item;
 } ItemCheckInfo;
 
-/* Return true and write out_item to replace current_item, or false to leave it unchanged. */
+typedef struct ItemCheckResolution {
+    uint8_t item;
+    uint8_t display_item; /* leave unset (0xFF/NONE) to use the item */
+} ItemCheckResolution;
+
+/* Return true and write out_result to replace the result, or false to leave it unchanged. */
 typedef bool (*ItemCheckResolveFn)(
-    ModContext* ctx, const ItemCheckInfo* info, uint8_t* out_item, void* user_data);
+    ModContext* ctx, const ItemCheckInfo* info, ItemCheckResolution* out_result, void* user_data);
 
 typedef enum ItemGiveOrigin {
     ITEM_GIVE_ORIGIN_GAME = 0,

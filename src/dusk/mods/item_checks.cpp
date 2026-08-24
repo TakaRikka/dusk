@@ -186,9 +186,9 @@ void invalidate_committed_check(const std::string& name) {
 
 }  // namespace
 
-uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
+ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
     if (name == nullptr || *name == '\0' || s_modChecks.empty()) {
-        return itemNo;
+        return {.item = itemNo, .display_item = itemNo};
     }
 
     // Callbacks may change registrations, so copy the applicable chain before invoking one.
@@ -228,6 +228,7 @@ uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
         .giver_actor = giver,
         .vanilla_item = itemNo,
         .current_item = itemNo,
+        .current_display_item = itemNo,
     };
     for (const auto& resolve : resolves) {
         if (!resolve.mod->active) {
@@ -235,13 +236,21 @@ uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
         }
         if (resolve.fixedValue) {
             info.current_item = resolve.itemNo;
+            info.current_display_item = resolve.itemNo;
             continue;
         }
 
-        uint8_t resolvedItem = info.current_item;
+        ItemCheckResolution resolution{
+            .item = info.current_item,
+            .display_item = dItemNo_NONE_e,
+        };
         try {
-            if (resolve.fn(resolve.mod->context.get(), &info, &resolvedItem, resolve.userData)) {
-                info.current_item = resolvedItem;
+            if (resolve.fn(resolve.mod->context.get(), &info, &resolution, resolve.userData)) {
+                if (resolution.display_item == UINT8_MAX) {
+                    resolution.display_item = resolution.item;
+                }
+                info.current_item = resolution.item;
+                info.current_display_item = resolution.display_item;
             }
         } catch (const std::exception& e) {
             fail_mod(*resolve.mod, MOD_ERROR,
@@ -251,7 +260,14 @@ uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
                 fmt::format("Unknown exception in item check resolver for '{}'", name));
         }
     }
-    return info.current_item;
+    return {
+        .item = info.current_item,
+        .display_item = info.current_display_item,
+    };
+}
+
+uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
+    return item_check_resolve(name, itemNo, giver).item;
 }
 
 uint8_t item_check_chest(uint8_t boxNo, uint8_t itemNo, fopAc_ac_c* chest) {

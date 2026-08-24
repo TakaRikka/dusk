@@ -1,6 +1,6 @@
 /**
  * @file d_a_obj_smallkey.cpp
- * 
+ *
 */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -119,9 +119,9 @@ int daKey_c::Create() {
     mCcCyl.SetStts(&mCcStts);
     mCcCyl.SetCoHitCallback(keyGetCoCallBack);
     mCcCyl.SetTgHitCallback(keyGetTgCallBack);
-    mCcCyl.SetR(dItem_data::getR(m_itemNo));
-    mCcCyl.SetH(dItem_data::getH(m_itemNo));
-    
+    mCcCyl.SetR(DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo)));
+    mCcCyl.SetH(DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)));
+
     fopAcM_SetCullSize(this, fopAc_CULLSPHERE_0_e);
 
     if (getSwNo() == 0xFF) {
@@ -155,7 +155,21 @@ int daKey_c::create() {
         mIsPrmInit = TRUE;
     }
 
+#if TARGET_PC
+    mItemGiveTag = dusk::mods::item_give_tag_freestanding(getSaveBitNo());
+    const auto [item, displayItem] =
+        dusk::mods::item_check_resolve(mItemGiveTag, dItemNo_SMALL_KEY_e, this);
+    m_itemNo = item;
+    if (m_itemNo == dItemNo_NONE_e) {
+        // Keep the pickup visible until the empty check is collected.
+        m_itemNo = dItemNo_SMALL_KEY_e;
+        setDisplayItemNo(dItemNo_NONE_e);
+    } else {
+        setDisplayItemNo(displayItem);
+    }
+#else
     m_itemNo = dItemNo_SMALL_KEY_e;
+#endif
 
     if (strcmp(dComIfGp_getStartStageName(), "F_SP118") == 0) {
         OS_REPORT(" SMKEY 0\n");
@@ -170,9 +184,21 @@ int daKey_c::create() {
         return cPhs_ERROR_e;
     }
 
+#if TARGET_PC
+    const u8 displayItemNo = getDisplayItemNo();
+    int phase_state = dComIfG_resLoad(&mPhase, dItem_fieldModelArc(displayItemNo));
+#else
     int phase_state = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
+#endif
     if (phase_state == cPhs_COMPLEATE_e) {
+#if TARGET_PC
+        const bool useModelFallback = dItem_data::getFieldArc(displayItemNo) == NULL;
+        if (!fopAcM_entrySolidHeap(
+                this, useModelFallback ? CheckItemCreateHeap : CheckFieldItemCreateHeap, 0x4000))
+        {
+#else
         if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, 0x840)) {
+#endif
             return cPhs_ERROR_e;
         }
 
@@ -317,10 +343,26 @@ int daKey_c::initActionOrderGetDemo() {
     hide();
     effectStop();
 
+#if TARGET_PC
+    const auto itemCheck =
+        dusk::mods::item_check_commit(mItemGiveTag, dItemNo_SMALL_KEY_e, this);
+    m_itemNo = itemCheck.itemNo;
+    if (m_itemNo == dItemNo_NONE_e) {
+        dusk::mods::item_check_complete(itemCheck, this);
+        dComIfGs_onTbox(getSaveBitNo());
+        dTres_c::offStatus(getSaveBitNo(), 1);
+        dComIfGp_event_reset();
+        fopAcM_delete(this);
+        return 1;
+    }
+#endif
+
     fopAcM_orderItemEvent(this, 0, 0);
     eventInfo.onCondition(8);
 
-    mItemId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), NULL, NULL);
+    mItemId = fopAcM_createItemForTrBoxDemo(
+        &current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), NULL,
+        NULL IF_DUSK_ARG(itemCheck.tag));
     JUT_ASSERT(699, mItemId != fpcM_ERROR_PROCESS_ID_e);
 
     setStatus(STATUS_ORDER_GET_DEMO_e);
@@ -387,8 +429,8 @@ int daKey_c::actionInitBoomerangCarry() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
 
-    u8 height = dItem_data::getH(m_itemNo);
-    u8 radius = dItem_data::getR(m_itemNo);
+    u8 height = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo));
+    u8 radius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo));
 
     mCcCyl.SetR(4.0f * radius);
     mCcCyl.SetH(4.0f * height);
@@ -527,7 +569,11 @@ int daKey_c::draw() {
 
 int daKey_c::_delete() {
     effectStop();
+#if TARGET_PC
+    DeleteBase(dItem_fieldModelArc(getDisplayItemNo()));
+#else
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
+#endif
     return 1;
 }
 

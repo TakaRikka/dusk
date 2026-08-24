@@ -158,8 +158,8 @@ void daItem_c::CreateInit() {
     mCcCyl.SetCoHitCallback(itemGetCoCallBack);
     mCcCyl.SetTgHitCallback(itemGetTgCallBack);
 
-    f32 cylHeight = dItem_data::getH(m_itemNo);
-    f32 cylRadius = dItem_data::getR(m_itemNo);
+    f32 cylHeight = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo));
+    f32 cylRadius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo));
 
     if (scale.x > 1.0f) {
         cylHeight *= scale.x;
@@ -267,12 +267,13 @@ int daItem_c::_daItem_create() {
 #if TARGET_PC
         const u32 params = fopAcM_GetParam(this);
         mOriginalItemNo = params & 0xFF;
-        const u8 resolvedItem = dusk::mods::item_check_freestanding(
-            daItem_prm::getItemBitNo(this), mOriginalItemNo, this);
-        mItemOverridden = resolvedItem != mOriginalItemNo;
         mItemGiveTag = dusk::mods::item_give_tag_freestanding(daItem_prm::getItemBitNo(this));
+        const auto [item, displayItem] =
+            dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
+        mItemOverridden = item != mOriginalItemNo;
+        setDisplayItemNo(displayItem);
         if (mItemOverridden) {
-            fopAcM_SetParam(this, (params & 0xFFFFFF00) | resolvedItem);
+            fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
         }
 #endif
         field_0x95d = true;
@@ -288,7 +289,7 @@ int daItem_c::_daItem_create() {
 
 #if DEBUG
 #if TARGET_PC
-    if (dItem_fieldModelArc(m_itemNo) == NULL) {
+    if (dItem_fieldModelArc(getDisplayItemNo()) == NULL) {
 #else
     if (dItem_data::getFieldArc(m_itemNo) == NULL) {
 #endif
@@ -324,23 +325,21 @@ int daItem_c::_daItem_create() {
         CreateInit();
     } else {
 #if TARGET_PC
-        // Resolved items may have no field model; display their get-demo model instead.
-        if (dItem_data::getFieldArc(m_itemNo) == NULL) {
-            phase_state = dComIfG_resLoad(&mPhase, dItem_data::getArcName(m_itemNo));
-            if (phase_state == cPhs_COMPLEATE_e) {
-                if (!fopAcM_entrySolidHeap(this, CheckItemCreateHeap, 0x4000)) {
-                    return cPhs_ERROR_e;
-                }
-
-                CreateInit();
-            }
-            return phase_state;
-        }
-#endif
+        const u8 displayItemNo = getDisplayItemNo();
+        phase_state = dComIfG_resLoad(&mPhase, dItem_fieldModelArc(displayItemNo));
+#else
         phase_state = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
+#endif
         if (phase_state == cPhs_COMPLEATE_e) {
+#if TARGET_PC
+            const bool useModelFallback = dItem_data::getFieldArc(displayItemNo) == NULL;
+            if (!fopAcM_entrySolidHeap(this,
+                    useModelFallback ? CheckItemCreateHeap : CheckFieldItemCreateHeap,
+                    useModelFallback ? 0x4000 : dItem_data::getFieldHeapSize(displayItemNo)))
+#else
             if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap,
                                        dItem_data::getFieldHeapSize(m_itemNo)))
+#endif
             {
                 return cPhs_ERROR_e;
             }
@@ -357,7 +356,7 @@ int daItem_c::_daItem_execute() {
     CountTimer();
 
     eyePos = current.pos;
-    eyePos.y += (f32)dItem_data::getH(m_itemNo) / 2;
+    eyePos.y += (f32)DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)) / 2;
 
     attention_info.position = current.pos;
 
@@ -431,7 +430,7 @@ int daItem_c::_daItem_delete() {
     }
 
 #if TARGET_PC
-    DeleteBase(dItem_fieldModelArc(m_itemNo));
+    DeleteBase(dItem_fieldModelArc(getDisplayItemNo()));
 #else
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
 #endif
@@ -604,8 +603,8 @@ void daItem_c::procInitBoomerangCarry() {
     scale = mItemScale;
     mBoomerangMove.initOffset(&current.pos);
 
-    u8 height = dItem_data::getH(m_itemNo);
-    u8 radius = dItem_data::getR(m_itemNo);
+    u8 height = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo));
+    u8 radius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo));
     mCcCyl.SetR((f32)radius * 2.0f);
     mCcCyl.SetH((f32)height * 2.0f);
     mCcCyl.OnCoSPrmBit(1);
