@@ -573,19 +573,10 @@ static bool checkFoolishItemEffectReady()
         return false;
     }
 
-    // Ensure there are pointers to the mMeterClass and mpMeterDraw structs
-    if (!dMeter2Info_getMeterClass())
-    {
-        return false;
-    }
-
-    if (!dMeter2Info_getMeterClass()->getMeterDrawPtr())
-    {
-        return false;
-    }
-
     // Make sure Z button isn't dimmed
-    if (dMeter2Info_getMeterClass()->getMeterDrawPtr()->getButtonZAlpha() != 1.f)
+    if (dComIfGs_isEventBit(MIDNA_ACCOMPANIES_WOLF) && dMeter2Info_getMeterClass() &&
+        dMeter2Info_getMeterClass()->getMeterDrawPtr() &&
+        dMeter2Info_getMeterClass()->getMeterDrawPtr()->getButtonZAlpha() != 1.f)
     {
         return false;
     }
@@ -1032,7 +1023,7 @@ void randomizer_returnToSpawn(bool tryOverride) {
     dComIfGp_setNextStage("F_SP103", 1, 1, -1);
 }
 
-u8 randomizer_getRandomFoolishItemModelID() {
+u8 randomizer_getRandomFoolishItemModelID(std::string_view checkName) {
     static constexpr auto foolishItemModels = std::to_array<u8>({
         dItemNo_Randomizer_ARMOR_e,
         dItemNo_Randomizer_WOOD_STICK_e,
@@ -1053,8 +1044,13 @@ u8 randomizer_getRandomFoolishItemModelID() {
         dItemNo_Randomizer_ANCIENT_DOCUMENT_e,
     });
 
-    u8 selectedModal = foolishItemModels[static_cast<int>(cM_rnd() * foolishItemModels.size()) % foolishItemModels.size()];
-    return verifyProgressiveItem(selectedModal);
+    static constexpr char separator = '\0';
+    const std::string& seedHash = randomizer_GetContext().mHash;
+    u32 hash = randomizer::utility::crc32(seedHash.data(), seedHash.size());
+    hash = randomizer::utility::crc32(&separator, sizeof(separator), hash);
+    hash = randomizer::utility::crc32(checkName.data(), checkName.size(), hash);
+    const u8 selectedModel = foolishItemModels[hash % foolishItemModels.size()];
+    return verifyProgressiveItem(selectedModel);
 }
 
 u32 getActorPatchesCurrentStageKey(u8 roomNo) {

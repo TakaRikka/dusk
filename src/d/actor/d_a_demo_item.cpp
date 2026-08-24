@@ -550,7 +550,7 @@ static int daDitem_Execute(daDitem_c* i_this) {
 }
 
 int daDitem_c::draw() {
-    switch (m_itemNo) {
+    switch (DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo)) {
     case dItemNo_WOOD_STICK_e:
         draw_WOOD_STICK();
         break;

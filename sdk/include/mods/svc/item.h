@@ -8,7 +8,7 @@
 
 #define ITEM_SERVICE_ID "dev.twilitrealm.dusklight.item"
 #define ITEM_SERVICE_MAJOR 2u
-#define ITEM_SERVICE_MINOR 1u
+#define ITEM_SERVICE_MINOR 2u
 
 /* 0 is never a valid handle. */
 typedef uint64_t ItemCheckHandle;
@@ -97,6 +97,13 @@ typedef struct ItemService {
         ModContext* ctx, ItemGiveObserveFn fn, void* user_data, ItemGiveHandle* out_handle);
 
     ModResult (*unobserve_gives)(ModContext* ctx, ItemGiveHandle handle);
+
+    /* Minor version 2 */
+
+    /* Resolve a live preview (item + display item) without granting an item or notifying give
+     * observers. */
+    ModResult (*resolve_check_full)(ModContext* ctx, const char* name, uint8_t vanilla_item,
+        ItemCheckResolution* out_resolution);
 } ItemService;
 
 MOD_DECLARE_SERVICE(ItemService, svc_item, ITEM_SERVICE_ID, ITEM_SERVICE_MAJOR, ITEM_SERVICE_MINOR);

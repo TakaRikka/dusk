@@ -10,6 +10,7 @@
 #include <optional>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -266,7 +267,7 @@ bool randomizer_mirrorChamberWallShouldExist();
 
 void randomizer_returnToSpawn(bool tryDungeon);
 
-u8 randomizer_getRandomFoolishItemModelID();
+u8 randomizer_getRandomFoolishItemModelID(std::string_view checkName);
 
 /**
  * Helper function to convert raw bytes of a container to a hex string
