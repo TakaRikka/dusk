@@ -838,7 +838,7 @@ if (plr) {
 }
 ```
 
-See `mods/custom_actor_example` for a more complete example.
+See `mods/custom_actor_demo` for a more complete example.
 
 ---
 

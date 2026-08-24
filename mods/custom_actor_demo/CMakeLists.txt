@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(custom_actor_example CXX)
+project(custom_actor_demo CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -13,7 +13,7 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     endif ()
 endif ()
 
-add_mod(custom_actor_example
+add_mod(custom_actor_demo
     FEATURES game fmt
     SOURCES  src/mod.cpp src/m_a_obj_wrock.cpp src/m_a_mine.cpp
     MOD_JSON mod.json

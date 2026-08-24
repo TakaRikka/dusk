@@ -63,7 +63,7 @@ MOD_EXPORT ModResult mod_initialize(ModError*) {
         return MOD_ERROR;
     }
 
-    mods::log::info("custom_actor_example initialized");
+    mods::log::info("custom_actor_demo initialized");
     return MOD_OK;
 }
 
@@ -72,7 +72,7 @@ MOD_EXPORT ModResult mod_update(ModError*) {
 }
 
 MOD_EXPORT ModResult mod_shutdown(ModError*) {
-    mods::log::info("custom_actor_example shutdown");
+    mods::log::info("custom_actor_demo shutdown");
     return MOD_OK;
 }
 }

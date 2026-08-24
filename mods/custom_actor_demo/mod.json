@@ -1,0 +1,7 @@
+{
+  "id": "dev.twilitrealm.custom_actor_demo",
+  "name": "[Demo] Custom Actor",
+  "version": "1.0.0",
+  "author": "Twilit Realm",
+  "description": "A mod to demonstrate how to create and use custom actors. Spawns a \"wrock\" in South Faron Woods."
+}
