@@ -1689,6 +1689,7 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
 #ifdef TARGET_PC
             // If, for whatever reason, we want to patch the point ID, we need to do it here.
             if (!dusk::mods::svc::stage_apply_actor_edits(player_data, nullptr, sizeof(*player_data), i_stage->getRoomNo())) {
+                player_data++;
                 continue; // If the spawn is deleted, check the next one
             }
 #endif
