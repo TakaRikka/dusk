@@ -83,61 +83,70 @@ std::optional<u16> parse_flag_check(const char* name, std::string_view prefix) {
     return static_cast<u16>(flag);
 }
 
+bool set_resolution(
+    const ItemCheckInfo* info, ItemCheckResolution* outResult, uint8_t resolvedItem) {
+    outResult->item = resolvedItem;
+    if (resolvedItem == dItemNo_Randomizer_FOOLISH_ITEM_e) {
+        outResult->display_item = randomizer_getRandomFoolishItemModelID(info->name);
+    }
+    return true;
+}
+
 template <typename Map>
-bool lookup_override(const Map& map, u16 key, uint8_t* out_item) {
+bool lookup_override(
+    const Map& map, u16 key, const ItemCheckInfo* info, ItemCheckResolution* outResult) {
     const auto it = map.find(key);
     if (it == map.end()) {
         return false;
     }
-    *out_item = static_cast<uint8_t>(verifyProgressiveItem(it->second));
-    return true;
+    return set_resolution(info, outResult, static_cast<uint8_t>(verifyProgressiveItem(it->second)));
 }
 
-bool resolve_check(ModContext*, const ItemCheckInfo* info, ItemCheckResolution* out, void*) {
+bool resolve_check(ModContext*, const ItemCheckInfo* info, ItemCheckResolution* outResult, void*) {
     auto& ctx = randomizer_GetContext();
 
     if (auto it = ctx.mItemLocations.find(info->name); it != ctx.mItemLocations.end()) {
-        out->item = static_cast<uint8_t>(verifyProgressiveItem(it->second.itemId));
-        return true;
+        return set_resolution(
+            info, outResult, static_cast<uint8_t>(verifyProgressiveItem(it->second.itemId)));
     }
 
     if (auto key = parse_derived(info->name, ITEM_CHECK_CHEST_PREFIX)) {
-        return lookup_override(ctx.mTreasureChestOverrides, key->key, &out->item);
+        return lookup_override(ctx.mTreasureChestOverrides, key->key, info, outResult);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_FREESTANDING_PREFIX)) {
         if (key->stage_id == Ook) {
             if (auto it = ctx.mItemLocations.find("Forest Temple Gale Boomerang");
                 it != ctx.mItemLocations.end()) {
-                out->item = static_cast<uint8_t>(verifyProgressiveItem(it->second.itemId));
-                return true;
+                return set_resolution(info, outResult,
+                    static_cast<uint8_t>(verifyProgressiveItem(it->second.itemId)));
             }
             return false;
         }
-        return lookup_override(ctx.mFreestandingItemOverrides, key->key, &out->item);
+        return lookup_override(ctx.mFreestandingItemOverrides, key->key, info, outResult);
     }
     if (auto flag = parse_flag_check(info->name, ITEM_CHECK_GOLDEN_WOLF_PREFIX)) {
-        return lookup_override(ctx.mGoldenWolfOverrides, *flag, &out->item);
+        return lookup_override(ctx.mGoldenWolfOverrides, *flag, info, outResult);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_POE_PREFIX)) {
-        return lookup_override(ctx.mPoeOverrides, key->key, &out->item);
+        return lookup_override(ctx.mPoeOverrides, key->key, info, outResult);
     }
     if (auto stageId = parse_stage_check(info->name, ITEM_CHECK_BOSS_PREFIX)) {
         const u16 key = static_cast<u16>((*stageId << 8) | 0x9F);
-        return lookup_override(ctx.mFreestandingItemOverrides, key, &out->item);
+        return lookup_override(ctx.mFreestandingItemOverrides, key, info, outResult);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_SHOP_PREFIX)) {
-        return lookup_override(ctx.mShopOverrides, key->key, &out->item);
+        return lookup_override(ctx.mShopOverrides, key->key, info, outResult);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_SKY_PREFIX)) {
-        return lookup_override(ctx.mSkyCharacterOverrides, key->key, &out->item);
+        return lookup_override(ctx.mSkyCharacterOverrides, key->key, info, outResult);
     }
 
     constexpr std::string_view bugPrefix{ITEM_CHECK_BUG_PREFIX};
     if (std::strncmp(info->name, bugPrefix.data(), bugPrefix.size()) == 0) {
         const u8 insect = static_cast<u8>(std::atoi(info->name + bugPrefix.size()));
         if (auto it = ctx.mBugRewardOverrides.find(insect); it != ctx.mBugRewardOverrides.end()) {
-            out->item = static_cast<uint8_t>(verifyProgressiveItem(it->second));
-            return true;
+            return set_resolution(
+                info, outResult, static_cast<uint8_t>(verifyProgressiveItem(it->second)));
         }
         return false;
     }

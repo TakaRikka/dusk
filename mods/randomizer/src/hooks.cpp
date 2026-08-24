@@ -32,6 +32,7 @@
 #include "d/actor/d_a_npc_zrc.h"
 #include "d/actor/d_a_npc_zrz.h"
 #include "d/actor/d_a_obj_bosswarp.h"
+#include "d/actor/d_a_shop_item.h"
 #include "d/actor/d_a_obj_swBallC.h"
 #include "d/actor/d_a_obj_zra_rock.h"
 #include "d/actor/d_a_tag_kmsg.h"
@@ -157,7 +158,9 @@ DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
 DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
 DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 
-DEFINE_HOOK_SYMBOL("daDitem_Execute", int(daDitem_c*), daDitem_c__execute);
+DEFINE_HOOK(&daDitem_c::CreateInit, daDitem_c__CreateInit);
+
+DEFINE_HOOK(&daShopItem_c::CreateInit, daShopItem_c__CreateInit);
 
 DEFINE_HOOK(&daObjBossWarp_c::demoProc, daObjBossWarp_c__demoProc);
 
@@ -195,6 +198,7 @@ DEFINE_HOOK(&daItem_c::itemGet, daItem_c__itemGet);
 
 DEFINE_HOOK(&daObjLife_c::setEffect, daObjLife_c__setEffect);
 DEFINE_HOOK(&daObjLife_c::create, daObjLife_c__create);
+DEFINE_HOOK(&daObjLife_c::Create, daObjLife_c__Create);
 DEFINE_HOOK(&daObjLife_c::actionGetDemo, daObjLife_c__actionGetDemo);
 DEFINE_HOOK(&daObjLife_c::calcScale, daObjLife_c__calcScale);
 
@@ -1797,7 +1801,7 @@ HookAction hookPreSetGetSubBgm(ModContext*, void* args, void*, void*) {
         se_type = SETYPE_ITEM_GET_ME_S;
     }
 
-    if (se_type != SETYPE_NONE || i_itemNo == dItemNo_Randomizer_FOOLISH_ITEM_e) {
+    if (se_type != SETYPE_NONE) {
         mDoAud_subBgmStart(bgmLabel[se_type]);
         dComIfGp_setMesgBgmOn();
     }
@@ -2360,25 +2364,50 @@ HookAction hookPreSwBallActionWait(ModContext*, void* args, void*, void*) {
     return HOOK_SKIP_ORIGINAL;
 }
 
-void hookPostDitemExecute(ModContext*, void* args, void* retval, void*) {
+void hookPostDitemCreateInit(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<daDitem_c*>(args, 0);
 
-    // Certain items use field models that are too big to fit in link's hands so we want to scale them down to fit.
-    switch (i_this->m_itemNo) {
+    // Certain items use field models that are too big to fit in link's hands so we want to scale
+    // them down to fit.
+    f32 modelScale = 0.0f;
+    switch (i_this->getDisplayItemNo()) {
     case dItemNo_Randomizer_MIRROR_PIECE_1_e:
     case dItemNo_Randomizer_MIRROR_PIECE_2_e:
     case dItemNo_Randomizer_MIRROR_PIECE_3_e:
     case dItemNo_Randomizer_MIRROR_PIECE_4_e:
-    {
-        i_this->scale.x = 0.05f;
+        modelScale = 0.05f;
         break;
-    }
     case dItemNo_Randomizer_MASTER_SWORD_e:
     case dItemNo_Randomizer_LIGHT_SWORD_e:
-    {
-        i_this->scale.x = 0.001f;
+        modelScale = 0.001f;
+        break;
+    default:
+        return;
+    }
+
+    i_this->setMaxScale(modelScale);
+    i_this->scale.setall(modelScale);
+    i_this->set_mtx();
+}
+
+void hookPostShopItemCreateInit(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daShopItem_c*>(args, 0);
+
+    switch (i_this->getDisplayItemNo()) {
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e: {
+        f32 modelScale = 0.35f;
+        if (strcmp("R_SP109", dComIfGp_getStartStageName()) == 0 &&
+            dComIfGp_getStartStageRoomNo() == 1)
+        {
+            modelScale *= 0.8f;
+        }
+        i_this->scale.setall(modelScale);
+        i_this->set_mtx();
         break;
     }
+    default:
+        break;
     }
 }
 
@@ -2671,7 +2700,7 @@ void hookPostMenuRingGetItemNum(ModContext*, void* args, void* retval, void*) {
 void hookPostItemCreateInit(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<daItem_c*>(args, 0);
 
-    switch (i_this->m_itemNo) {
+    switch (i_this->getDisplayItemNo()) {
     case dItemNo_Randomizer_KAKERA_HEART_e:
     case dItemNo_Randomizer_UTAWA_HEART_e:
     case dItemNo_Randomizer_ARROW_1_e:
@@ -2795,7 +2824,7 @@ HookAction hookPreObjLifeSetEffect(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<daObjLife_c*>(args, 0);
 
     // In randomizer, we don't want rupees or poe souls to sparkle. They are bright enough.
-    switch (i_this->m_itemNo) {
+    switch (i_this->getDisplayItemNo()) {
     case dItemNo_Randomizer_GREEN_RUPEE_e:
     case dItemNo_Randomizer_BLUE_RUPEE_e:
     case dItemNo_Randomizer_RED_RUPEE_e:
@@ -2857,90 +2886,95 @@ HookAction hookPreObjLifeCreate(ModContext*, void* args, void* retval, void*) {
             }
             fopAcM_SetParam(i_this, (params & 0xFFFFFF00) | itemId);
         }
+    }
 
-        // Also adjust the height of the object depending on the item
-        switch (itemId) {
-        case dItemNo_Randomizer_MASTER_SWORD_e:
-        case dItemNo_Randomizer_LIGHT_SWORD_e:
-        case dItemNo_Randomizer_WOOD_SHIELD_e:
-        case dItemNo_Randomizer_HYLIA_SHIELD_e:
-        case dItemNo_Randomizer_SHIELD_e:
-        case dItemNo_Randomizer_SPINNER_e:
-        {
-            i_this->current.pos.y += 30.f;
-            break;
-        }
-        case dItemNo_Randomizer_WOOD_STICK_e:
-        {
-            i_this->current.pos.y += 60.f;
-            break;
-        }
-        case dItemNo_Randomizer_SWORD_e:
-        case dItemNo_Randomizer_MIRROR_PIECE_1_e:
-        case dItemNo_Randomizer_MIRROR_PIECE_2_e:
-        case dItemNo_Randomizer_MIRROR_PIECE_3_e:
-        case dItemNo_Randomizer_MIRROR_PIECE_4_e:
-        case dItemNo_Randomizer_FUSED_SHADOW_1_e:
-        case dItemNo_Randomizer_FUSED_SHADOW_2_e:
-        case dItemNo_Randomizer_FUSED_SHADOW_3_e:
-        case dItemNo_Randomizer_COPY_ROD_e:
-        case dItemNo_Randomizer_COPY_ROD_2_e:
-        {
-            i_this->current.pos.y += 50.f;
-            break;
-        }
+    return HOOK_CONTINUE;
+}
 
-        case dItemNo_Randomizer_BOW_e:
-        {
-            i_this->current.pos.y += 55.f;
-            break;
-        }
-        case dItemNo_Randomizer_BOOMERANG_e:
-        case dItemNo_Randomizer_FISHING_ROD_1_e:
-        case dItemNo_Randomizer_ARROW_LV2_e:
-        case dItemNo_Randomizer_ARROW_LV3_e:
-        {
-            i_this->current.pos.y += 40.f;
-            break;
-        }
-        case dItemNo_Randomizer_FOREST_SMALL_KEY_e:
-        case dItemNo_Randomizer_MINES_SMALL_KEY_e:
-        case dItemNo_Randomizer_LAKEBED_SMALL_KEY_e:
-        case dItemNo_Randomizer_ARBITERS_SMALL_KEY_e:
-        case dItemNo_Randomizer_SNOWPEAK_SMALL_KEY_e:
-        case dItemNo_Randomizer_TEMPLE_OF_TIME_SMALL_KEY_e:
-        case dItemNo_Randomizer_CITY_SMALL_KEY_e:
-        case dItemNo_Randomizer_PALACE_SMALL_KEY_e:
-        case dItemNo_Randomizer_HYRULE_SMALL_KEY_e:
-        case dItemNo_Randomizer_FOREST_BOSS_KEY_e:
-        case dItemNo_Randomizer_LAKEBED_BOSS_KEY_e:
-        case dItemNo_Randomizer_ARBITERS_BOSS_KEY_e:
-        case dItemNo_Randomizer_TEMPLE_OF_TIME_BOSS_KEY_e:
-        case dItemNo_Randomizer_CITY_BOSS_KEY_e:
-        case dItemNo_Randomizer_PALACE_BOSS_KEY_e:
-        case dItemNo_Randomizer_HYRULE_BOSS_KEY_e:
-        case dItemNo_Randomizer_SMALL_KEY2_e:
-        case dItemNo_Randomizer_LV5_BOSS_KEY_e:
-        case dItemNo_Randomizer_CAMP_SMALL_KEY_e:
-        case dItemNo_Randomizer_BOSSRIDER_KEY_e:
-        case dItemNo_Randomizer_PACHINKO_e:
-        case dItemNo_Randomizer_BOMB_BAG_LV2_e:
-        case dItemNo_Randomizer_BOMB_BAG_LV1_e:
-        case dItemNo_Randomizer_BOMB_IN_BAG_e:
-        case dItemNo_Randomizer_NORMAL_BOMB_e:
-        case dItemNo_Randomizer_POU_SPIRIT_e:
-        {
-            i_this->current.pos.y += 20.f;
-            break;
-        }
-        case dItemNo_Randomizer_ARMOR_e:
-        {
-            i_this->current.pos.y += 25.f;
-            break;
-        }
-        default:
-            break;
-        }
+HookAction hookPreObjLifeCreateInit(ModContext*, void* args, void*, void*) {
+    auto* i_this = mods::arg<daObjLife_c*>(args, 0);
+
+    if (i_this->m_itemNo == dItemNo_Randomizer_FOOLISH_ITEM_e) {
+        const u8 stage = getStageID();
+        i_this->mOverrideHover = stage == Hyrule_Field || stage == Upper_Zoras_River ||
+                                 stage == Sacred_Grove || stage == Stallord ||
+                                 stage == Zant_Main_Room;
+    }
+
+    // Models use different origins, so keep their visible geometry above the pedestal or ground.
+    switch (i_this->getDisplayItemNo()) {
+    case dItemNo_Randomizer_MASTER_SWORD_e:
+    case dItemNo_Randomizer_LIGHT_SWORD_e:
+    case dItemNo_Randomizer_WOOD_SHIELD_e:
+    case dItemNo_Randomizer_HYLIA_SHIELD_e:
+    case dItemNo_Randomizer_SHIELD_e:
+    case dItemNo_Randomizer_SPINNER_e: {
+        i_this->current.pos.y += 30.f;
+        break;
+    }
+    case dItemNo_Randomizer_WOOD_STICK_e: {
+        i_this->current.pos.y += 60.f;
+        break;
+    }
+    case dItemNo_Randomizer_SWORD_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_1_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_2_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_3_e:
+    case dItemNo_Randomizer_MIRROR_PIECE_4_e:
+    case dItemNo_Randomizer_FUSED_SHADOW_1_e:
+    case dItemNo_Randomizer_FUSED_SHADOW_2_e:
+    case dItemNo_Randomizer_FUSED_SHADOW_3_e:
+    case dItemNo_Randomizer_COPY_ROD_e:
+    case dItemNo_Randomizer_COPY_ROD_2_e: {
+        i_this->current.pos.y += 50.f;
+        break;
+    }
+    case dItemNo_Randomizer_BOW_e: {
+        i_this->current.pos.y += 55.f;
+        break;
+    }
+    case dItemNo_Randomizer_BOOMERANG_e:
+    case dItemNo_Randomizer_FISHING_ROD_1_e:
+    case dItemNo_Randomizer_ARROW_LV2_e:
+    case dItemNo_Randomizer_ARROW_LV3_e: {
+        i_this->current.pos.y += 40.f;
+        break;
+    }
+    case dItemNo_Randomizer_FOREST_SMALL_KEY_e:
+    case dItemNo_Randomizer_MINES_SMALL_KEY_e:
+    case dItemNo_Randomizer_LAKEBED_SMALL_KEY_e:
+    case dItemNo_Randomizer_ARBITERS_SMALL_KEY_e:
+    case dItemNo_Randomizer_SNOWPEAK_SMALL_KEY_e:
+    case dItemNo_Randomizer_TEMPLE_OF_TIME_SMALL_KEY_e:
+    case dItemNo_Randomizer_CITY_SMALL_KEY_e:
+    case dItemNo_Randomizer_PALACE_SMALL_KEY_e:
+    case dItemNo_Randomizer_HYRULE_SMALL_KEY_e:
+    case dItemNo_Randomizer_FOREST_BOSS_KEY_e:
+    case dItemNo_Randomizer_LAKEBED_BOSS_KEY_e:
+    case dItemNo_Randomizer_ARBITERS_BOSS_KEY_e:
+    case dItemNo_Randomizer_TEMPLE_OF_TIME_BOSS_KEY_e:
+    case dItemNo_Randomizer_CITY_BOSS_KEY_e:
+    case dItemNo_Randomizer_PALACE_BOSS_KEY_e:
+    case dItemNo_Randomizer_HYRULE_BOSS_KEY_e:
+    case dItemNo_Randomizer_SMALL_KEY2_e:
+    case dItemNo_Randomizer_LV5_BOSS_KEY_e:
+    case dItemNo_Randomizer_CAMP_SMALL_KEY_e:
+    case dItemNo_Randomizer_BOSSRIDER_KEY_e:
+    case dItemNo_Randomizer_PACHINKO_e:
+    case dItemNo_Randomizer_BOMB_BAG_LV2_e:
+    case dItemNo_Randomizer_BOMB_BAG_LV1_e:
+    case dItemNo_Randomizer_BOMB_IN_BAG_e:
+    case dItemNo_Randomizer_NORMAL_BOMB_e:
+    case dItemNo_Randomizer_POU_SPIRIT_e: {
+        i_this->current.pos.y += 20.f;
+        break;
+    }
+    case dItemNo_Randomizer_ARMOR_e: {
+        i_this->current.pos.y += 25.f;
+        break;
+    }
+    default:
+        break;
     }
 
     return HOOK_CONTINUE;
@@ -2970,7 +3004,7 @@ HookAction hookPreObjLifeCalcScale(ModContext*, void* args, void* retval, void*)
 
     // Change scale for certain items
     f32 newScale = 1.0f;
-    switch (i_this->m_itemNo) {
+    switch (i_this->getDisplayItemNo()) {
     case dItemNo_Randomizer_KAKERA_HEART_e:
     case dItemNo_Randomizer_UTAWA_HEART_e:
     case dItemNo_Randomizer_ARROW_10_e:
@@ -3217,7 +3251,8 @@ ModResult initialize() {
     ADD_HOOK_POST(daObjSwBallC_c__Create, hookPostSwBallCreate);
     ADD_HOOK_PRE(daObjSwBallC_c__actionWait, hookPreSwBallActionWait);
 
-    ADD_HOOK_POST(daDitem_c__execute, hookPostDitemExecute);
+    ADD_HOOK_POST(daDitem_c__CreateInit, hookPostDitemCreateInit);
+    ADD_HOOK_POST(daShopItem_c__CreateInit, hookPostShopItemCreateInit);
 
     ADD_HOOK_PRE(daObjBossWarp_c__demoProc, hookPreBossWarpDemoProc);
     ADD_HOOK_POST(daObjBossWarp_c__demoProc, hookPostBossWarpDemoProc);
@@ -3247,6 +3282,7 @@ ModResult initialize() {
 
     ADD_HOOK_PRE(daObjLife_c__setEffect, hookPreObjLifeSetEffect);
     ADD_HOOK_PRE(daObjLife_c__create, hookPreObjLifeCreate);
+    ADD_HOOK_PRE(daObjLife_c__Create, hookPreObjLifeCreateInit);
     ADD_HOOK_PRE(daObjLife_c__actionGetDemo, hookPreObjLifeActionGetDemo);
     ADD_HOOK_PRE(daObjLife_c__calcScale, hookPreObjLifeCalcScale);
 
@@ -3353,7 +3389,8 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjSwBallC_c__Create>(svc_hook);
     mods::hook::uninstall<daObjSwBallC_c__actionWait>(svc_hook);
 
-    mods::hook::uninstall<daDitem_c__execute>(svc_hook);
+    mods::hook::uninstall<daDitem_c__CreateInit>(svc_hook);
+    mods::hook::uninstall<daShopItem_c__CreateInit>(svc_hook);
 
     mods::hook::uninstall<daObjBossWarp_c__demoProc>(svc_hook);
 
@@ -3378,6 +3415,7 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daObjLife_c__setEffect>(svc_hook);
     mods::hook::uninstall<daObjLife_c__create>(svc_hook);
+    mods::hook::uninstall<daObjLife_c__Create>(svc_hook);
     mods::hook::uninstall<daObjLife_c__actionGetDemo>(svc_hook);
     mods::hook::uninstall<daObjLife_c__calcScale>(svc_hook);
 
