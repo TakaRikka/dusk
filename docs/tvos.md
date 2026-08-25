@@ -116,14 +116,14 @@ guessed) from the source: `dusk::AppInfo` sets `orgName = "TwilitRealm"` / `appN
 (`extern/borealis/src/data.cpp`), and SDL's tvOS implementation formats
 `"<NSCachesDirectory>/<org>/<app>/"`. On tvOS the data path is the preference path: borealis' only
 other default (`useDocumentsOnIOS`) is gated on `isIOS`, which is `TARGET_OS_IOS && !TARGET_OS_TV`.
-Still **to be confirmed on-device** — the real path is printed by disc discovery in the
-`launch.sh --console` output. It is isolated to one variable, `TVOS_DATA_SUBDIR`, near the top of
-the script, so fixing that one line is enough if it differs.
+**Confirmed on device** (2026-08-24): disc discovery printed
+`.../Library/Caches/TwilitRealm/Dusklight/`, exactly as derived. `TVOS_DATA_SUBDIR` near the top of
+the script is correct and needs no change.
 
 ## App icon and top shelf
 `platforms/tvos/Info.plist.in` declares `CFBundleIcons ▸ CFBundlePrimaryIcon = "App Icon"` and
 `TVTopShelfImage`, so the bundle needs a compiled asset catalog or tvOS has nothing to draw.
-`platforms/tvos/Assets.xcassets` holds **placeholder** solid-colour art (App Icon 400×240 / 800×480
+`platforms/tvos/Assets.xcassets` holds the final artwork (App Icon 400×240 / 800×480
 as a two-layer parallax stack — actool rejects a single layer with *"The image stack 'App Icon'
 must have at least 2 layers"* — plus Top Shelf Image 1920×720 and Top Shelf Image Wide 2320×720,
 each with a @2x variant). `platforms/tvos/Assets.car` is the compiled result, picked up by the
@@ -140,9 +140,60 @@ The partial plist is only a cross-check that the generated keys match `Info.plis
 consumed by the build.
 
 ## Observed on device
-Observed on device: pending — to be filled after the first device session (not yet run as of
-2026-08-23; the Apple TV has been asleep throughout, and nothing has been installed or launched
-on it).
+Device: Apple TV 4K (3rd gen), tvOS 26.5, UDID `<YOUR_DEVICE_UDID>`. Sessions 2026-08-23
+through 2026-08-25.
+
+### Save persistence is proven end-to-end
+The mirror can reconstitute a save from `NSUserDefaults` alone. Verified 2026-08-25 by the strict
+form of the test, not the lenient one:
+
+1. `devicectl device uninstall app` — destroys the whole data container.
+2. Reinstall, then confirm `Library/Caches` **and** `Library/Preferences` both list `0 files`.
+3. Copy back *only* `Library/Preferences/dev.twilitrealm.dusk.plist` (40 KB). Nothing into `Caches`.
+4. Launch, boot to the file-select screen.
+
+Result: all seven config entries restored at startup, then at card mount
+
+```
+[save-mirror] card ready: game GZ2P01, GCI folder format
+[save-mirror] restore(save): restored EUR/Card A/01-GZ2P-gczelda2.gci (32832 bytes, a2ee8ee5b725)
+              from mirror sequence 93 written at unix 1787666465
+[save-mirror] restore(save): 1 restored, 0 already present
+```
+
+The restored file was **byte-identical** to a backup taken before the wipe (sha256
+`a2ee8ee5b7253bb58abdbfee36a4cc17e382418a0377124eb0d084919afa8f61`), and the game listed the save
+on its file-select screen. `0 already present` matters: this was a real restore, not the mirror
+declining because a file happened to exist.
+
+Two assumptions this retired. `cfprefsd` does **not** clobber a plist written underneath it into a
+fresh container — it is read intact on first launch. And the restore does not lose a race with the
+game's own card creation: `card ready` fires first, then `restore(save)`, then the snapshot.
+
+### devicectl cannot delete files in a data container
+There is no `remove`/`delete` subcommand — only `copy`, `info`, `install`, `notification`,
+`orientation`, `process`, `reboot`, `sysdiagnose`, `uninstall`. `copy to` merges over the
+destination and will not remove a file that is already there. So "purge `Library/Caches` and
+relaunch" **cannot** be run on a physical device; the uninstall/reinstall/restore-only-the-mirror
+sequence above is the workable substitute. On the simulator the container is on the host
+filesystem, where `rm -rf` works.
+
+### Install as an update; never delete first
+`scripts/tvos/install.sh` runs a plain `devicectl device install app` with no
+`--remove-existing-content`, which preserves the data container — verified across several
+reinstalls. Passing `--remove-existing-content`, or uninstalling first, destroys `Library/Caches`
+and `Library/Preferences` **together**, taking the save and the mirror that would rescue it. Always
+`pull-saves.sh` first, and pull `Library/Preferences` too — `pull-saves.sh` covers only `Caches`.
+
+### Known rough edges
+- The bundle UUID changes on every install, so the disc path stored in `config.json` fails
+  validation afterwards (`Saved DVD image path failed validation, clearing configured path`). Disc
+  discovery self-heals this by rescanning and auto-selecting, so it is cosmetic.
+- A flush that runs before `card ready` logs `its file is not on disk` for the save even when the
+  game is running, because the game id is not resolved yet. The carry-forward rule preserves the
+  mirrored bytes, so it is harmless — but it is a false negative in the file-presence check, and
+  file presence is what the restore decision keys on. Worth tightening.
+- SIGTERM is ignored by the app; SIGKILL is needed to terminate it from `devicectl`.
 
 ## Fixes needed on top of upstream 41d5148
 Two configure-time fixes were needed to get the tvOS cross-compile working at all, both already
