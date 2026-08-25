@@ -1216,7 +1216,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Makes text scroll immediately by holding B.");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Hold-to-Mash",
+                .key = "Hold Button to Mash",
                 .getValue = [] {
                     int count = 0;
                     int total = 0;
