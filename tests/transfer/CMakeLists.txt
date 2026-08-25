@@ -15,3 +15,13 @@ add_executable(upload_core_test
     "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/transfer/upload_core.cpp")
 target_include_directories(upload_core_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
 add_test(NAME upload_core_test COMMAND upload_core_test)
+
+add_executable(server_harness
+    server_harness.cpp
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/transfer/server.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/transfer/http_parse.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/transfer/upload_core.cpp")
+target_include_directories(server_harness PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
+find_package(Threads REQUIRED)
+target_link_libraries(server_harness PRIVATE Threads::Threads)
+add_test(NAME server_test COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/server_test.sh")
