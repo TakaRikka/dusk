@@ -547,6 +547,7 @@ std::string nameLookupOverride(const std::string& locationName) {
         {"Sacred Grove Pedestal Master Sword", ITEM_CHECK_MASTER_SWORD},
         {"Sacred Grove Pedestal Shadow Crystal", ITEM_CHECK_SHADOW_CRYSTAL},
         {"Sera Shop Slingshot", "shop:R_SP01:75"},
+        {"Shad Dominion Rod", ITEM_CHECK_SHAD_DOMINION_ROD},
         {"Skybook From Impaz", ITEM_CHECK_SKYBOOK},
         {"Snowboard Racing Prize", ITEM_CHECK_SNOWBOARD_REWARD},
         {"Snowpeak Ruins Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_SNOWPEAK},

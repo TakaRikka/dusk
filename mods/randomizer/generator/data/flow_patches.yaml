@@ -71,6 +71,13 @@
     parameters: 0x00000032
     next: Kakariko Malo Mart Wooden Shield Sold Out
 
+  # Patch Shad's flow to set the custom flag for receiving his item
+  - index: 0x946
+    type: event
+    event: set event flag
+    parameters: 0x0333
+    next: 0xFFFF
+
 #3: # zel_03.bmg
 4: # zel_04.bmg - Castle Town
   # Patch Charlo to check for 100 rupees instead of 30

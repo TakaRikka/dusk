@@ -120,6 +120,12 @@ constexpr std::array kMessageChecks{
         .vanillaItem = dItemNo_HORSE_FLUTE_e,
         .enqueueAtDisplay = false,
     },
+    MessageCheck{
+        .group = 2,
+        .messageId = 6531,
+        .name = ITEM_CHECK_SHAD_DOMINION_ROD,
+        .vanillaItem = dItemNo_COPY_ROD_2_e,
+    }
 };
 
 std::unordered_map<LoadedMod*, ModItemChecks> s_modChecks;

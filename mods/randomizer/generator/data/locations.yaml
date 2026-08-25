@@ -1509,6 +1509,18 @@
       - Ilia Memory Reward
     Event Flag: 0x5E04
 
+- Name: Shad Dominion Rod
+  Original Item: Progressive Dominion Rod
+  Categories:
+    - Overworld
+    - Npc
+    - Kakariko Village
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Shad Dominion Rod
+    Event Flag: 0x6308
+    
 - Name: Rutelas Blessing
   Original Item: Zora Armor
   Categories:

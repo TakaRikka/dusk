@@ -135,7 +135,6 @@ DEFINE_HOOK(&daNpc_Bans_c::isDelete, daNpc_Bans_c__isDelete);
 
 DEFINE_HOOK(&daNpc_Fairy_c::AppearDemoCall, daNpc_Fairy_c__AppearDemoCall);
 
-DEFINE_HOOK(&daNpcShad_c::Create, daNpcShad_c__Create);
 DEFINE_HOOK(&daNpcShad_c::wait_type1, daNpcShad_c__wait_type1);
 
 DEFINE_HOOK(&daNpc_Yelia_c::cutTakeWoodStatue, daNpc_Yelia_c__cutTakeWoodStatue);
@@ -3366,7 +3365,6 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daNpc_Fairy_c__AppearDemoCall>(svc_hook);
 
-    mods::hook::uninstall<daNpcShad_c__Create>(svc_hook);
     mods::hook::uninstall<daNpcShad_c__wait_type1>(svc_hook);
 
     mods::hook::uninstall<daNpc_Yelia_c__cutTakeWoodStatue>(svc_hook);
