@@ -9,3 +9,9 @@ add_executable(http_parse_test
     "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/transfer/http_parse.cpp")
 target_include_directories(http_parse_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
 add_test(NAME http_parse_test COMMAND http_parse_test)
+
+add_executable(upload_core_test
+    upload_core_test.cpp
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../src/dusk/transfer/upload_core.cpp")
+target_include_directories(upload_core_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../src")
+add_test(NAME upload_core_test COMMAND upload_core_test)
