@@ -1,5 +1,7 @@
 #include "prelaunch.hpp"
 
+#include "onboarding.hpp"
+
 #include "dusk/app_info.hpp"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
@@ -834,15 +836,9 @@ void try_push_disc_choice_modal(Document& host) {
     auto dismiss = [](Modal& modal) { modal.pop(); };
 
     if (state.pendingDiscChoices.empty()) {
-        host.push(std::make_unique<Modal>(Modal::Props{
-            .title = "No disc image found",
-            .bodyRml = "Dusklight looked in the app bundle (<b>disc/</b>) and in the data folder "
-                       "(<b>discs/</b>) but found no disc image.<br/><br/>Bundle one at build time "
-                       "(DUSK_BUNDLED_DISC) or copy one into the data folder, then relaunch.",
-            .actions = {ModalAction{.label = "OK", .onPressed = dismiss}},
-            .onDismiss = dismiss,
-            .icon = "warning",
-        }));
+        // Nothing anywhere. Rather than telling the user to rebuild the app with a disc baked in --
+        // which needs a Mac and Xcode -- offer to receive one over the network from any browser.
+        onboarding::push(host);
         return;
     }
 

@@ -5,6 +5,7 @@
 #include <borealis/disc.hpp>
 
 #include <cstdint>
+#include <string>
 #include <string_view>
 
 namespace dusk {
@@ -40,6 +41,11 @@ struct DiscInfo {
     Region region = Region::NorthAmerica;
     std::uint8_t revision = 0;
 };
+
+// The accepted disc ids as a JSON array literal, for the uploader page's pre-flight check.
+// Derived from the same AcceptedDiscs table dusk::iso::validate uses, so the catalog stays
+// single-sourced -- a disc the app accepts can never be one the page rejects.
+std::string accepted_game_ids_json();
 
 ValidationError inspect(const char* path, DiscInfo& info);
 ValidationError validate(const char* path, VerificationStatus& status, DiscInfo& info);

@@ -2,8 +2,10 @@
 
 #include <borealis/disc.hpp>
 
+#include <algorithm>
 #include <array>
 #include <string_view>
+#include <vector>
 
 #include "dusk/logging.h"
 #include "dusk/settings.h"
@@ -112,6 +114,27 @@ void update_info(const borealis::disc::Result& result, DiscInfo& info) noexcept 
 }
 
 }  // namespace
+
+std::string accepted_game_ids_json() {
+    std::string out = "[";
+    std::vector<std::string_view> seen;
+    for (const auto& disc : AcceptedDiscs) {
+        // Several entries share a game id across revisions; the page only needs each id once.
+        if (std::find(seen.begin(), seen.end(), disc.gameId) != seen.end()) {
+            continue;
+        }
+        seen.push_back(disc.gameId);
+        if (seen.size() > 1) {
+            out += ',';
+        }
+        out += '"';
+        out += disc.gameId;
+        out += '"';
+    }
+    out += ']';
+    return out;
+}
+
 
 ValidationError validate(const char* path, VerificationStatus& status, DiscInfo& info) {
     const auto result = borealis::disc::verify(

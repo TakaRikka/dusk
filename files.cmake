@@ -1429,6 +1429,9 @@ set(DUSK_FILES
         src/dusk/data.cpp
         src/dusk/data.hpp
         src/dusk/disc_discovery.cpp
+        src/dusk/transfer/http_parse.cpp
+        src/dusk/transfer/upload_core.cpp
+        src/dusk/transfer/server.cpp
         src/dusk/discord_presence.cpp
         src/dusk/dvd_asset.cpp
         src/dusk/dvd_asset.hpp
@@ -1571,6 +1574,7 @@ set(DUSK_FILES
         src/dusk/ui/popover.cpp
         src/dusk/ui/popover.hpp
         src/dusk/ui/prelaunch.cpp
+        src/dusk/ui/onboarding.cpp
         src/dusk/ui/prelaunch.hpp
         src/dusk/ui/preset.cpp
         src/dusk/ui/preset.hpp

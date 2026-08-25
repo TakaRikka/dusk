@@ -419,9 +419,11 @@ if (TVOS)
     # DUSK_TVOS_SAVE_MIRROR from src/dusk/tvos/save_mirror.hpp.
     target_sources(dusklight PRIVATE
             src/dusk/tvos/save_mirror.mm
-            src/dusk/tvos/save_mirror_core.cpp)
+            src/dusk/tvos/save_mirror_core.cpp
+            src/dusk/tvos/network_info.mm)
     set_target_properties(dusklight PROPERTIES OBJCXX_STANDARD 20 OBJCXX_STANDARD_REQUIRED ON)
-    set_source_files_properties(src/dusk/tvos/save_mirror.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    set_source_files_properties(src/dusk/tvos/save_mirror.mm src/dusk/tvos/network_info.mm
+        PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif ()
 
 target_compile_definitions(dusklight PRIVATE ${GAME_COMPILE_DEFS})
