@@ -101,7 +101,7 @@ int maObj_Wrock_c::Execute() {
     // Update collision with the world
     mAcch.CrrPos(dComIfG_Bgsp());
 
-    // Get the collision triangle below the actor
+    // Get the collision below the actor
     mGndChk = mAcch.m_gnd;
     mGroundH = mAcch.GetGroundH();
     if (mGroundH != -G_CM3D_F_INF) {

@@ -10,6 +10,7 @@
 // Definitions for collision
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"
+#include "d/d_cc_d.h"
 
 #define MA_MINE_NAME "m_mine"
 
@@ -18,12 +19,12 @@ public:
     request_of_phase_process_class mPhase;
     J3DModel* mpModel;
     dBgS_ObjAcch mAcch;
-    cBgS_GndChk mGndChk;
     dBgS_AcchCir mAcchCir;
     Mtx mColliderMtx;
-    dBgW* mpCollider;
-    f32 mGroundH;
-    int mShadow;
+    dCcD_Stts mCcStts;
+    dCcD_Sph mCollisionSphere;
+    Z2SoundObjSimple mSound;
+    s8 mReverb;
 
     virtual ~ma_Mine_c();
     cPhs_Step create();
@@ -31,7 +32,10 @@ public:
     int Delete();
     int Execute();
     int Draw();
+    void atHit(dCcD_GObjInf* i_atObjInf);
     static int createHeapCallBack(fopAc_ac_c*);
+    static void atHitCallback(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
+        fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf);
 
     static s16 sProcName;
     static ActorHandle sActorHandle;

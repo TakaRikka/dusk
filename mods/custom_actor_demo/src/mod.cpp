@@ -8,6 +8,8 @@
 #include "m_a_mine.hpp"
 #include "m_a_obj_wrock.hpp"
 
+#include <array>
+
 DEFINE_MOD();
 IMPORT_SERVICE(LogService, svc_log);
 IMPORT_SERVICE(ActorService, svc_actor);
@@ -46,21 +48,26 @@ MOD_EXPORT ModResult mod_initialize(ModError*) {
         return MOD_ERROR;
     }
 
-    const stage_actor_data_class mineParams{
-        .name = MA_MINE_NAME,
-        .base =
-            {
-                .parameters = 0,
-                .position = {-15475.0f, 689.0f, 6690.0f},
-                .angle = {0, 0, 0},
-                .setID = 0xFFFF,
-            },
-    };
-    if (svc_stage->add_actor(mod_ctx, "F_SP108", 0, -1, &mineParams, sizeof(mineParams), nullptr) !=
-        MOD_OK)
-    {
-        mods::log::error("Adding mine to F_SP108 Failed!");
-        return MOD_ERROR;
+    static const std::array<cXyz, 6> minePositions = {
+        {{-14445.0f, 11.0f, 1304.0f}, {-14557.0f, 7.0f, 990.0f}, {-14790.0f, 7.0f, 634.0f},
+            {-14829.0f, 0.0f, 144.0f}, {-14615.0f, 0.0f, -170.0f}, {-14283.0f, 10.0f, -420.0f}}};
+    for (const auto& pos : minePositions) {
+        const stage_actor_data_class mineParams{
+            .name = MA_MINE_NAME,
+            .base =
+                {
+                    .parameters = 0,
+                    .position = {pos.x, pos.y, pos.z},
+                    .angle = {0x2000, (s16)(pos.x*100000), 0}, // Adjusted and seemingly random angle
+                    .setID = 0xFFFF,
+                },
+        };
+        if (svc_stage->add_actor(
+                mod_ctx, "F_SP108", 0, -1, &mineParams, sizeof(mineParams), nullptr) != MOD_OK)
+        {
+            mods::log::error("Adding mine to F_SP108 Failed!");
+            return MOD_ERROR;
+        }
     }
 
     mods::log::info("custom_actor_demo initialized");

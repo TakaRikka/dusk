@@ -11,10 +11,8 @@ static constexpr u32 heap_size = ALIGN_NEXT(16832, 0x20);
 ma_Mine_c::~ma_Mine_c() {
     // Called every time the actor is deleted
 
-    // Remove the collider from the world's collision
-    if (mpCollider != NULL) {
-        dComIfG_Bgsp().Release(mpCollider);
-    }
+    // Delete the sound object
+    mSound.deleteObject();
 
     // Request to unload the archive (the data acts as a shared pointer, and only gets deleted when
     // the reference counter goes to zero)
@@ -35,19 +33,56 @@ cPhs_Step ma_Mine_c::create() {
             return cPhs_ERROR_e;
         }
 
-        // Register the actor's collider to the current world's collision
-        if (mpCollider != NULL) {
-            if (dComIfG_Bgsp().Regist(mpCollider, this) == true) {
-                return cPhs_ERROR_e;
-            }
-        }
+        // Setup our collision sphere and register it to the world
+        // Set a circle "wall" of 30 units around the actor
+        mAcchCir.SetWall(30.0f, 30.0f);
+        mAcch.Set(this, 1, &mAcchCir);
+        mAcch.ClrWaterNone();
+        mAcch.SetRoofCrrHeight(60.0f);
+        mAcch.SetWaterCheckOffset(10000.0f);
+        mAcch.SetWtrChkMode(2);
+        mAcch.OnLineCheck();
+
+        mCcStts.Init(30, 0xFF, this);
+
+        // Collision Sphere for the actor (copied from Bomb Actor)
+        static const dCcD_SrcSph
+            l_sphSrc = {.mObjInf =
+                            {
+                                .mObj = {.mFlags = 0x0,
+                                    .mSrcObjHitInf = {.mObjAt = {.mType = AT_TYPE_BOMB,
+                                                          .mAtp = 0x4,
+                                                          .mBase = {.mSPrm = 0x1e}},
+                                        .mObjTg = {.mType = 0xd8fbffef, .mBase = {.mSPrm = 0x11}},
+                                        .mObjCo = {.mBase = {.mSPrm = 0x79}}}},
+                                .mGObjAt{.mSe = dCcD_SE_NONE,
+                                    .mHitMark = 0x0,
+                                    .mSpl = 0x1,
+                                    .mMtrl = 0x0,
+                                    .mBase = {.mGFlag = 0x0}},
+                                .mGObjTg{.mSe = dCcD_SE_NONE,
+                                    .mHitMark = 0x0,
+                                    .mSpl = 0x0,
+                                    .mMtrl = 0x0,
+                                    .mBase = {.mGFlag = 0x4}},
+                                .mGObjCo{.mBase = {.mGFlag = 0x0}},
+                            },
+                .mSphAttr = {.mSph = {.mCenter = {0.0f, 0.0f, 0.0f}, .mRadius = 80.0f}}};
+
+        mCollisionSphere.Set(l_sphSrc);
+        mCollisionSphere.SetStts(&mCcStts);
+
+        // We register a callback anytime the actor is hit (both attacks and is hit)
+        mCollisionSphere.SetAtHitCallback(atHitCallback);
+        mCollisionSphere.SetTgHitCallback(atHitCallback);
+        mCollisionSphere.OffTgSetBit();
+        mCollisionSphere.OffCoSetBit();
+        mCollisionSphere.OnAtSetBit();  // Enable the attack sphere
 
         // Set the initial matrix and cull box for the actor
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-        fopAcM_setCullSizeBox(this, -400.0f, -400.0f, -400.0f, 400.0f, 400.0f, 400.0f);
-
-        // Setup collision info (will be used in execute)
-        mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
+        fopAcM_SetMin(this, -36.0f, 0.0f, -36.0f);
+        fopAcM_SetMax(this, 36.0f, 66.0f, 36.0f);
 
         // Call execute so the actor's information in the world can be updated
         Execute();
@@ -69,6 +104,9 @@ int ma_Mine_c::CreateHeap() {
         return 0;
     }
 
+    // Create the sound object the actor will use
+    mSound.init(&current.pos, 1);
+
     return 1;
 }
 
@@ -85,17 +123,24 @@ int ma_Mine_c::Delete() {
 int ma_Mine_c::Execute() {
     // Update collision with the world
     mAcch.CrrPos(dComIfG_Bgsp());
+    mCollisionSphere.SetC(attention_info.position);
+    dComIfG_Ccsp()->Set(&mCollisionSphere);
 
-    // Get the collision triangle below the actor
-    mGndChk = mAcch.m_gnd;
-    mGroundH = mAcch.GetGroundH();
-    if (mGroundH != -G_CM3D_F_INF) {
+    // Get the collision below the actor
+    cBgS_GndChk groundChunk = mAcch.m_gnd;
+    f32 groundH = mAcch.GetGroundH();
+    if (groundH != -G_CM3D_F_INF) {
         // Set the actor's environment colors to match the room's current ones
-        tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(mGndChk);
-        tevStr.room_no = dComIfG_Bgsp().GetRoomId(mGndChk);
+        int roomNo = dComIfG_Bgsp().GetRoomId(groundChunk);
+        tevStr.YukaCol = dComIfG_Bgsp().GetPolyColor(groundChunk);
+        tevStr.room_no = roomNo;
 
         // Set the actor's room to be where it is sitting
-        fopAcM_SetRoomNo(this, dComIfG_Bgsp().GetRoomId(mGndChk));
+        mCcStts.SetRoomId(roomNo);
+        fopAcM_SetRoomNo(this, roomNo);
+
+        // Get the reverb info here that the actor can use when exploding
+        mReverb = dComIfGp_getReverb(roomNo);
     }
 
     // Update the model's transformation matrix to match the actor's transform
@@ -103,13 +148,6 @@ int ma_Mine_c::Execute() {
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mDoMtx_stack_c::scaleM(scale);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-
-    // Copy the model's transformation matrix to the collider's transformation matrix and update the
-    // collider
-    if (mpCollider != NULL) {
-        PSMTXCopy(mpModel->getBaseTRMtx(), mColliderMtx);
-        mpCollider->Move();
-    }
 
     // Set any attention flags (if needed)
     eyePos = attention_info.position = current.pos;
@@ -125,14 +163,32 @@ int ma_Mine_c::Draw() {
     // Set the bmd model to be drawn when the display list is executed
     mDoExt_modelUpdateDL(mpModel);
 
-    // Cast a shadow for the actor onto the ground.
-    // We can only do this if we are drawing to the normal dlist, not the BG dlist
-    if (mGroundH != -G_CM3D_F_INF) {
-        mShadow = dComIfGd_setShadow(mShadow, 1, mpModel, &current.pos, 100.0f, 0.0f, current.pos.y,
-            mGroundH, mGndChk, &tevStr, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
+    return 1;
+}
+
+void ma_Mine_c::atHit(dCcD_GObjInf* i_atObjInf) {
+    // Create particles with these IDs at the actor's position
+    static const u16 normalNameID[] = {
+        0x161, 0x162, 0x163, 0x164, 0x165, 0x166, 0x167, 0x168, 0x1EC};
+    for (int i = 0; i < ARRAY_SIZE(normalNameID); i++) {
+        dComIfGp_particle_setColor(normalNameID[i], &current.pos, &tevStr, NULL, NULL, 0.0f, 0xFF,
+            &shape_angle, &scale, NULL, -1, NULL);
     }
 
-    return 1;
+    // Create an explosion sound
+    mSound.startSound(Z2SE_OBJ_BOMB_EXPLODE, 0, mReverb);
+
+    // Vibrate the controller
+    dComIfGp_getVibration().StartShock(4, 31, cXyz(0.0f, 1.0f, 0.0f));
+
+    // Request to delete the actor so it disappears
+    fopAcM_delete(this);
+}
+
+void ma_Mine_c::atHitCallback(fopAc_ac_c* i_tgActor, dCcD_GObjInf* i_tgObjInf,
+    fopAc_ac_c* i_atActor, dCcD_GObjInf* i_atObjInf) {
+    // This callback gets triggered anytime an intersection happens with the object's collision sphere
+    ((ma_Mine_c*)i_tgActor)->atHit(i_atObjInf);
 }
 
 static cPhs_Step ma_Mine_create(void* i_this) {
