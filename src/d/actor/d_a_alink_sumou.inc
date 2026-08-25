@@ -185,6 +185,7 @@ int daAlink_c::procSumouMove() {
         return 1;
     }
 
+    IF_DUSK(const bool easySumo = DUSK_IF_ELSE(dusk::getSettings().game.holdToMash.sumo, false));
     daNpcWrestler_c* wrestler_p = (daNpcWrestler_c*)mCargoCarryAcKeep.getActor();
     daPy_frameCtrl_c* frameCtrl_p = mUnderFrameCtrl;
     f32 sp8;
@@ -200,7 +201,7 @@ int daAlink_c::procSumouMove() {
 
         sp8 = frameCtrl_p->getRate();
         if (mProcVar0.field_0x3008 != 0) {
-            if (doTrigger()) {
+            if (easySumo ? doButton() : doTrigger()) {
                 mProcVar0.field_0x3008--;
             }
 
@@ -224,7 +225,7 @@ int daAlink_c::procSumouMove() {
             field_0x3198 = ANM_SUMOU_PUSH_BACK;
         }
     } else if (mProcVar3.field_0x300e == 0) {
-        if (mProcVar2.field_0x300c > 0 && doTrigger()) {
+        if (mProcVar2.field_0x300c > 0 && (easySumo ? doButton() : doTrigger())) {
             mProcVar2.field_0x300c--;
         }
 
@@ -232,7 +233,7 @@ int daAlink_c::procSumouMove() {
         if (mSpeedModifier > 0.0f) {
             sp8 = frameCtrl_p->getRate();
 
-            if (doTrigger()) {
+            if (easySumo ? doButton() : doTrigger()) {
                 cLib_chaseF(&sp8, 1.5f, 0.1f);
             } else {
                 cLib_addCalc(&sp8, 1.0f, 0.5f, 0.05f, 0.02f);
