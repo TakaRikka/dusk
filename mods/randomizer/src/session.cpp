@@ -408,7 +408,9 @@ ModResult onNewSave(void*, ModError*) {
         return MOD_ERROR;
 
     svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
+    setAncientDocumentNum(0);
     setupRandomizerFile();
+    saveAncientDocumentNum();
     return MOD_OK;
 }
 
@@ -439,6 +441,7 @@ ModResult onSaveLoaded(void*, ModError*) {
 void onSaveWritten(ModContext*, uint32_t, void*) {
     const std::string hash = randomizer_GetContext().mHash;
     svc_mng.save->set_blob(svc_mng.mod_ctx, kSeedHashBlobName, hash.data(), hash.size());
+    saveAncientDocumentNum();
 }
 
 TextureReplacementHandle logoTexHandle{};
