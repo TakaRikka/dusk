@@ -2,11 +2,21 @@
 # Shared helpers for the tvOS scripts. Source this file; do not execute it.
 set -euo pipefail
 
-# Set these for your own Apple Developer team and Apple TV. They deliberately have no personal
-# defaults: a hardcoded team id or device name would be wrong for everyone but its author, and
-# would sign or install against the wrong target rather than failing.
+# Optional per-person settings, git-ignored. Sourced before the defaults below, so a value set
+# there behaves exactly like an exported variable -- and unlike exporting, it survives across
+# separate script invocations. That matters: build.sh bakes the bundle id into Info.plist, so a
+# shell that has the value for sign/install but not for build produces an app that installs
+# alongside the real one instead of updating it.
+_tvos_local_config="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config.local.sh"
+# shellcheck source=/dev/null
+[[ -f "$_tvos_local_config" ]] && source "$_tvos_local_config"
+
+# The team id and device name are genuinely per-person and have no sensible default: a hardcoded
+# value would be wrong for everyone but its author, and would sign or install against the wrong
+# target rather than failing. The bundle id is not per-person -- it is the app's identity, and it
+# matches DUSK_BUNDLE_IDENTIFIER in CMakeLists.txt and applicationId in the Android build.
 TVOS_TEAM_ID="${DUSK_TVOS_TEAM_ID:-}"
-TVOS_BUNDLE_ID="${DUSK_TVOS_BUNDLE_ID:-com.example.dusklight}"
+TVOS_BUNDLE_ID="${DUSK_TVOS_BUNDLE_ID:-dev.twilitrealm.dusk}"
 TVOS_APP_NAME="Dusklight"
 TVOS_DEVICE_NAME="${DUSK_TVOS_DEVICE_NAME:-}"
 TVOS_FORK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"

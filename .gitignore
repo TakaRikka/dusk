@@ -72,3 +72,6 @@ build/logs/
 # Assets.xcassets is built from the project's own res/ artwork and is what ships.
 platforms/tvos/Assets.car
 platforms/tvos/Assets.local.xcassets/
+
+# Per-person tvOS settings (see scripts/tvos/lib.sh)
+scripts/tvos/config.local.sh
