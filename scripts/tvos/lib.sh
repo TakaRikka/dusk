@@ -2,10 +2,13 @@
 # Shared helpers for the tvOS scripts. Source this file; do not execute it.
 set -euo pipefail
 
-TVOS_TEAM_ID="${DUSK_TVOS_TEAM_ID:-<YOUR_TEAM_ID>}"
-TVOS_BUNDLE_ID="${DUSK_TVOS_BUNDLE_ID:-dev.twilitrealm.dusk}"
+# Set these for your own Apple Developer team and Apple TV. They deliberately have no personal
+# defaults: a hardcoded team id or device name would be wrong for everyone but its author, and
+# would sign or install against the wrong target rather than failing.
+TVOS_TEAM_ID="${DUSK_TVOS_TEAM_ID:-}"
+TVOS_BUNDLE_ID="${DUSK_TVOS_BUNDLE_ID:-com.example.dusklight}"
 TVOS_APP_NAME="Dusklight"
-TVOS_DEVICE_NAME="${DUSK_TVOS_DEVICE_NAME:-<YOUR_DEVICE_NAME>}"
+TVOS_DEVICE_NAME="${DUSK_TVOS_DEVICE_NAME:-}"
 TVOS_FORK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 TVOS_BUILD_DIR="$TVOS_FORK_ROOT/build/tvos-default"
 TVOS_INSTALL_APP="$TVOS_FORK_ROOT/build/install/$TVOS_APP_NAME.app"
@@ -15,6 +18,10 @@ TVOS_LOG_DIR="$TVOS_FORK_ROOT/build/logs"
 # compatibility but, unlike every other knob here, was not namespaced -- an exported value would
 # silently redirect Banjo's lookup too.
 TVOS_PROFILE_DIR="${DUSK_TVOS_PROFILE_DIR:-${TVOS_PROFILE_DIR:-$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles}}"
+
+tvos_require_team_id() {
+    [[ -n "$TVOS_TEAM_ID" ]] || tvos_fail "set DUSK_TVOS_TEAM_ID to your Apple Developer team id (Xcode > Settings > Accounts)"
+}
 
 tvos_log()  { printf '[tvos] %s\n' "$*"; }
 # Like tvos_log but on stderr, for a function whose stdout a caller captures (tvos_profile_path).
@@ -38,6 +45,7 @@ for dev in data.get("result", {}).get("devices", []):
 sys.exit(1)
 PY
     rm -f "$json"
+    [[ -n "$TVOS_DEVICE_NAME" || -n "${DUSK_TVOS_DEVICE:-}" ]] || tvos_fail "set DUSK_TVOS_DEVICE_NAME to your Apple TV's name, or DUSK_TVOS_DEVICE to its udid"
     [[ $rc -eq 0 ]] || tvos_fail "no paired tvOS device named '$TVOS_DEVICE_NAME' (set DUSK_TVOS_DEVICE=<udid> or DUSK_TVOS_DEVICE_NAME)"
 }
 

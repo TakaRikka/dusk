@@ -38,6 +38,27 @@ export TVOS_DEPLOYMENT_TARGET="${TVOS_DEPLOYMENT_TARGET:-14.5}"
 # `set -e` aborts on a failing pipeline before PIPESTATUS can be read, and the build pipeline's
 # trailing grep exits 1 whenever it matches nothing (i.e. on success) -- so each pipeline runs with
 # -e off just long enough to capture the *first* stage's status.
+# Compile the icon catalog. Assets.car is a build artifact, not a tracked file: CMake globs it at
+# configure time, so it has to exist before the configure below. Assets.local.xcassets is an
+# optional personal override (git-ignored) -- when present it wins, so a personal build can carry
+# its own artwork without that artwork ever being committable.
+icon_src="$TVOS_FORK_ROOT/platforms/tvos/Assets.xcassets"
+if [[ -d "$TVOS_FORK_ROOT/platforms/tvos/Assets.local.xcassets" ]]; then
+    icon_src="$TVOS_FORK_ROOT/platforms/tvos/Assets.local.xcassets"
+    tvos_log "icons: using the local override (Assets.local.xcassets)"
+else
+    tvos_log "icons: using the committed catalog (Assets.xcassets)"
+fi
+icon_tmp="$(mktemp -d)"
+xcrun actool --compile "$icon_tmp" --platform appletvos --target-device tv \
+    --minimum-deployment-target 14.5 --app-icon "App Icon" \
+    --output-partial-info-plist "$icon_tmp/partial.plist" \
+    --enable-on-demand-resources NO "$icon_src" >"$TVOS_LOG_DIR/actool.log" 2>&1 \
+    || tvos_fail "actool failed — see $TVOS_LOG_DIR/actool.log"
+[[ -f "$icon_tmp/Assets.car" ]] || tvos_fail "actool produced no Assets.car — see $TVOS_LOG_DIR/actool.log"
+cp "$icon_tmp/Assets.car" "$TVOS_FORK_ROOT/platforms/tvos/Assets.car"
+rm -rf "$icon_tmp"
+
 tvos_log "configure (preset tvos-default, bundle id $TVOS_BUNDLE_ID)"
 set +e
 cmake --preset tvos-default -DDUSK_BUNDLE_IDENTIFIER="$TVOS_BUNDLE_ID" "$disc_arg" ${mods_flag:+"$mods_flag"} 2>&1 | tee "$TVOS_LOG_DIR/configure.log" | tail -3

@@ -66,3 +66,9 @@ extract
 *.n64
 *.v64
 build/logs/
+
+# tvOS icon catalog: Assets.car is compiled by scripts/tvos/build.sh, and Assets.local.xcassets
+# is an optional personal override for it. Neither belongs in the repo -- the committed
+# Assets.xcassets is built from the project's own res/ artwork and is what ships.
+platforms/tvos/Assets.car
+platforms/tvos/Assets.local.xcassets/

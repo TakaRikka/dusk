@@ -3,13 +3,13 @@
 Status: 2026-08-23 — configures and builds via the `tvos-default` CMake preset; an unsigned
 `Dusklight.app` is produced under `build/install/`. Provisioning, signing, install, and the first
 on-device launch are all scripted (`provision.sh`, `sign.sh`, `install.sh`, `launch.sh`) but
-**not yet run against the device**: the paired Apple TV ("<YOUR_DEVICE_NAME>", confirmed via
+**not yet run against the device**: the paired Apple TV (your paired Apple TV, confirmed via
 `xcrun devicectl list devices` as an Apple TV 4K (3rd generation) / `AppleTV14,1`) is asleep —
 `connectionProperties.tunnelState` reads `unavailable`. No tvOS provisioning profile exists *for
 this app's team* (`<YOUR_TEAM_ID>`) yet — `provision.sh` mints one during the device session. This Mac
 does already hold one unrelated tvOS profile: a wildcard (`application-identifier = <REDACTED_TEAM_ID>.*`)
 for a different team, "<REDACTED>" (`<REDACTED_TEAM_ID>`), created 2026-03-09. `tvos_profile_path`
-correctly ignores it, since it matches neither `<YOUR_TEAM_ID>.dev.twilitrealm.dusk` nor `<YOUR_TEAM_ID>.*`.
+correctly ignores it, since it matches neither `<YOUR_TEAM_ID>.com.example.dusklight` nor `<YOUR_TEAM_ID>.*`.
 To sign with that other team instead, override `DUSK_TVOS_TEAM_ID`. Not upstreamed.
 
 ## One-time setup
@@ -28,7 +28,7 @@ To sign with that other team instead, override `DUSK_TVOS_TEAM_ID`. Not upstream
    listing this page just warned proves nothing — `AppleTVOS.platform/Developer/SDKs/AppleTVOS26.5.sdk`
    exists under Xcode).
 3. Pair the Apple TV with Xcode (Settings ▸ Remotes and Devices ▸ Remote App and Devices), keep it awake.
-4. `scripts/tvos/provision.sh` — creates the tvOS development profile for `dev.twilitrealm.dusk` (team
+4. `scripts/tvos/provision.sh` — creates the tvOS development profile for `com.example.dusklight` (team
    <YOUR_TEAM_ID>) and registers the device. Requires the Apple ID of that team in Xcode ▸ Settings ▸
    Accounts. The seed project is generated with `-DCMAKE_XCODE_GENERATE_SCHEME=ON` and built with
    `-scheme` rather than `-target`: xcodebuild silently ignores `-destination` when only a target is
@@ -57,14 +57,14 @@ it is on the same network` when the Apple TV has no devicectl tunnel.
   `embedded.mobileprovision`, derives entitlements from it, and code-signs nested code (mods under
   `Frameworks/*.so`, `*.dylib`, `*.framework`) before signing the app bundle itself.
   - **Which profile.** `lib.sh`'s `tvos_profile_path` prefers a tvOS profile whose
-    `application-identifier` is exactly `<YOUR_TEAM_ID>.dev.twilitrealm.dusk`; failing that it falls back
+    `application-identifier` is exactly `<YOUR_TEAM_ID>.com.example.dusklight`; failing that it falls back
     to a team wildcard, `<YOUR_TEAM_ID>.*` — which is what Xcode actually mints for an entitlement-free
     tvOS app ("tvOS Team Provisioning Profile: *"). An exact match wins even when a wildcard profile
     is newer. The function prints which kind it chose on **stderr**, because callers capture its
     stdout as the path. The directory searched is
     `~/Library/Developer/Xcode/UserData/Provisioning Profiles` unless `TVOS_PROFILE_DIR` overrides it.
   - **Wildcard entitlements are narrowed before signing.** `application-identifier`, and any
-    `keychain-access-groups` entry ending in `.*`, are rewritten to `<YOUR_TEAM_ID>.dev.twilitrealm.dusk`;
+    `keychain-access-groups` entry ending in `.*`, are rewritten to `<YOUR_TEAM_ID>.com.example.dusklight`;
     signing with `<YOUR_TEAM_ID>.*` verbatim produces an app the Apple TV rejects. Everything else in
     the entitlements is passed through untouched, and every rewrite is logged.
   - **It refuses an incomplete bundle.** Before signing anything it asserts that the bundle holds a
@@ -78,7 +78,7 @@ it is on the same network` when the Apple TV has no devicectl tunnel.
   Apple TV needs a walk to the living room, while "is not signed" is fixed by rerunning `sign.sh`
   at the keyboard, so the slow fix surfaces first and both can proceed in parallel.
 - `scripts/tvos/launch.sh [--console | --console-seconds N]` —
-  `xcrun devicectl device process launch --terminate-existing` for `dev.twilitrealm.dusk`.
+  `xcrun devicectl device process launch --terminate-existing` for `com.example.dusklight`.
   `--console` attaches and streams stdout/stderr until Ctrl-C. `--console-seconds N` streams for N
   seconds and then kills the local console, recording the stream to
   `build/logs/launch-console.log`. It exists because this Mac has neither `timeout(1)` nor
@@ -149,7 +149,7 @@ form of the test, not the lenient one:
 
 1. `devicectl device uninstall app` — destroys the whole data container.
 2. Reinstall, then confirm `Library/Caches` **and** `Library/Preferences` both list `0 files`.
-3. Copy back *only* `Library/Preferences/dev.twilitrealm.dusk.plist` (40 KB). Nothing into `Caches`.
+3. Copy back *only* `Library/Preferences/com.example.dusklight.plist` (40 KB). Nothing into `Caches`.
 4. Launch, boot to the file-select screen.
 
 Result: all seven config entries restored at startup, then at card mount
