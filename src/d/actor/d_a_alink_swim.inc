@@ -1337,7 +1337,7 @@ int daAlink_c::procSwimHookshotMove() {
         return procSwimDiveInit();
     }
 
-    if (checkUpSwimButtonAccept() && (easySwim ? doButton() : doTrigger())) {
+    if (checkUpSwimButtonAccept() && doTrigger()) {
         field_0x3000 = 30;
         return procSwimMoveInit();
     }
