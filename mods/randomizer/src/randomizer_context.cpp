@@ -914,6 +914,19 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
             lastMode = (lastMode&0xFFFFFFF0);
         }
 
+        // Check if we are going through a randomized entrance with epona, reset the lastMode
+        // Todo: Create a list of entrances where epona is allowed and don't reset the lastMode if
+        // Epona can be rode there
+        if ((lastMode&0xF) == 2 || (lastMode&0xF) == 8) {
+            lastMode = (lastMode&0xFFFFFFF0);
+        }
+
+        // Override the spawn link will go to if we are going through the Telma's bar entrance during
+        // Lanayru twilight. The door is ajar in this layer, so going through the normal spawn doesn't work.
+        if (!dComIfGs_isDarkClearLV(2) && newOverride.stageId == 53 && roomNo == 3 && pointNo == 1) {
+            pointNo = 30;
+        }
+
         // mods::log::info("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
     }
 }

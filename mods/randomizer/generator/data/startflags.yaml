@@ -59,7 +59,6 @@ EventFlags:
     - 0x5E10 # Midna text after beating Forest Temple.
     - 0x1D40 # Listened to Fyer at drained lake.
     - 0x2201 # Plumm initial CS watched.
-    - 0x2310 # STAR initial CS watched.
     - 0x2602 # Talked to Yeto on Snowpeak.
     - 0x2840 # Used Ooccoo for the first time.
     - 0x3704 # Postman twilight text.
@@ -73,6 +72,8 @@ EventFlags:
     - 0x5940 # Met Postman for the first time.
     - 0x5D40 # Midna text after Kargarok flight.
     - 0x2502 # Watched cutscene with Yeto on top of mountain
+  - Skip_Minor_Cutscenes == On or Randomize_Interior_Entrances == On:
+    - 0x2310 # STAR initial CS watched.
   - Faron_Woods_Logic == Open:
     - 0x0602 # Forest Temple Story Flag
     - 0x0C40 # Talked to Farone after clearing Forest Temple
@@ -305,8 +306,9 @@ RegionFlags:
       - 0x7E # Jovani Chest CS
       - 0x50 # Set flag for Midna breaking Barrier CS.
       - 0xBC # Spawn Gengle by default as his actor interferes with the poe soul
-      - Skip_Minor_Cutscenes == On:
+      - Skip_Minor_Cutscenes == On or Randomize_Interior_Entrances == On:
         - 0x55 # STAR Tent intro CS.
+      - Skip_Minor_Cutscenes == On:
         - 0x7D # Jovani House intro CS.
       - Ilia_Memory_Quest >= Statue:
         - 0x56 # Remove invisible wall from Doctor
