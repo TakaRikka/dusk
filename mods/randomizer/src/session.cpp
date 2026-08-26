@@ -404,6 +404,7 @@ ModResult onNewSave(void*, ModError*) {
     if (hash.empty())
         return MOD_ERROR;
 
+    deactivateSeed();
     if (!activateSeed(hash.c_str()))
         return MOD_ERROR;
 
