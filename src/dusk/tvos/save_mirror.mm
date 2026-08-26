@@ -536,9 +536,11 @@ void flush_impl(const char* reason) {
     // here: see the Save snapshot section above for why a queue-side read of a
     // .gci can be torn and why the digest cannot tell.
     std::vector<std::string> freshSaveNames;
+    bool haveCardSnapshot = false;
     if (state.saveMirroringEnabled) {
         SaveBytes snapshot;
         if (copy_save_snapshot(snapshot)) {
+            haveCardSnapshot = true;
             for (auto& [name, data] : snapshot) {
                 freshSaveNames.push_back(name);
                 entries.push_back(make_entry(name, std::move(data)));
@@ -570,10 +572,17 @@ void flush_impl(const char* reason) {
                       "recoverable from the mirror after this write.",
             kTag, reason);
     }
+    // Say only what was actually established. A carried entry is one absent from this session's
+    // card snapshot, and the snapshot is an in-memory handover from the writer -- nothing here
+    // reads the filesystem, so this cannot claim the file is missing from disk. It usually is not:
+    // before the card initialises there is no snapshot at all, and every stored save looks absent.
+    // The old wording asserted a missing file and has sent at least one save-loss investigation
+    // down the wrong path.
     for (auto& carried : plan.carried) {
-        DuskLog.info("{} flush({}): carrying mirrored {} forward ({} bytes); its file is not on "
-                     "disk",
-            kTag, reason, carried.name, carried.size);
+        DuskLog.info("{} flush({}): carrying mirrored {} forward ({} bytes); {}", kTag, reason,
+            carried.name, carried.size,
+            haveCardSnapshot ? "it is not among this session's card files"
+                             : "the card has not been read yet this session");
         entries.push_back(std::move(carried));
     }
 
