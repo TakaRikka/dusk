@@ -195,6 +195,74 @@ and `Library/Preferences` **together**, taking the save and the mirror that woul
   file presence is what the restore decision keys on. Worth tightening.
 - SIGTERM is ignored by the app; SIGKILL is needed to terminate it from `devicectl`.
 
+## Supplying a disc without a Mac
+
+A build made with `--no-disc` carries no game data and can be handed to anyone: on first launch the
+app shows a URL, and a disc image is uploaded to it from a browser on the same network. No Xcode, no
+`devicectl`, no rebuild. `--disc` still works exactly as before and is still the right choice for a
+personal build, because a bundled disc lives in the read-only app bundle and therefore survives a
+tvOS purge, while an uploaded one sits in purgeable storage.
+
+**Verified end to end on device, 2026-08-26** (Apple TV 4K 3rd gen, tvOS 26.5):
+
+```
+disc discovery: 0 candidate(s)      <- no disc anywhere, onboarding shown
+disc discovery: 1 candidate(s)      <- after publish, without relaunching
+Disc verification status: verified
+Loading DVD image: .../discs/Legend of Zelda_ The - ... .rvz
+```
+
+The uploaded 902.7 MB `.rvz` was published into `<data dir>/discs/`, `.incoming/` was left empty,
+the picker picked it up without a restart, and the game ran.
+
+### How it fits together
+
+`src/dusk/transfer/` holds the whole subsystem. `http_parse.cpp` and `upload_core.cpp` are pure and
+covered by host tests in `tests/transfer/`; `server.cpp` owns the sockets. `src/dusk/ui/onboarding.cpp`
+puts it on screen and is reached from `prelaunch.cpp` when discovery returns nothing — first run and
+post-purge recovery are the same code path, because to the user they are the same situation.
+
+Bytes stage in `<data dir>/discs/.incoming/<id>` and are renamed into `discs/` only after
+`dusk::iso::validate` passes. That matters: `disc_discovery.cpp` matches on extension, so a partial
+file sitting in `discs/` would be offered as playable. It is safe to keep `.incoming/` inside
+`discs/` only because `collect()` uses a non-recursive `directory_iterator` and skips directories —
+switching it to `recursive_directory_iterator` would silently start offering partial uploads.
+
+The server runs only while the onboarding screen is up. The modal owns it, so dismissing the screen
+stops it; it never listens while the game is running.
+
+### Validation is two-tier, and the browser half is only a guard
+
+The page reads the six-byte game id out of a **raw `.iso`** header and rejects a wrong game before
+uploading anything. It cannot do this for `.rvz`, `.gcz`, `.wia` or `.ciso`: `borealis::disc` hashes
+the *decoded* disc (`extern/borealis/src/disc.cpp:295` feeds `api.read(...)` into XXH3-128), which is
+why one catalog hash covers every container format — and why a browser cannot reproduce it without
+porting those decoders. For compressed containers the page checks only the container magic, so a
+wrong `.rvz` still costs a full upload before being rejected on device with a specific reason.
+
+The accepted ids come from `dusk::iso::accepted_game_ids_json()`, derived from the same
+`AcceptedDiscs` table `validate` uses, so a disc the app accepts can never be one the page rejects.
+Served on device as `["GZ2E01","GZ2J01","GZ2P01","RZDE01","RZDJ01","RZDP01"]` — six ids from seven
+catalog rows, because `RZDE01` has two revisions and the page needs each id once.
+
+### Things worth knowing
+
+- **Resume is driven by the server, not the client.** The uploader advances by the offset the server
+  acknowledges, never by what it sent, and treats `409` as "re-sync and continue". `judge_chunk`
+  requires `offset == received`, which is what turns a retried chunk whose response was lost into a
+  refusal rather than a silent double append.
+- **The published filename is sanitised**, so `Legend of Zelda, The - Twilight Princess (Europe)
+  (En,Fr,De,Es,It).rvz` lands as `Legend of Zelda_ The - Twilight Princess _Europe_ _En_Fr_De_Es_It_.rvz`.
+  Commas and parentheses are outside `[A-Za-z0-9 ._-]`. Uglier, but the client-supplied name never
+  reaches a filesystem call unsanitised.
+- **`sign.sh` no longer refuses a build with no `disc/`.** Its completeness check used to treat that
+  as fatal because "a bundled disc is the only one discovery finds"; that is no longer true. It
+  reports a note instead. Do not reach for `--allow-incomplete` here — that flag exists to bypass
+  genuine incompleteness and would mask real problems in every future shareable build.
+- **Sizes:** a `--no-disc` bundle is 73M against 976M with the disc embedded.
+- **`HashMismatch` is not a transfer failure.** A correct upload of a bad dump lands there, and the
+  message says to re-dump rather than re-upload, because re-uploading cannot succeed.
+
 ## Fixes needed on top of upstream 41d5148
 Two configure-time fixes were needed to get the tvOS cross-compile working at all, both already
 committed on this branch on top of upstream commit `41d5148` ("UiService: Dialog controls (#2332)"):
