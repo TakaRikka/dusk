@@ -417,10 +417,17 @@ if (TVOS)
     # access and the SDL event watch. Both are tvOS-only: no other platform
     # compiles either file, and the call sites are guarded by
     # DUSK_TVOS_SAVE_MIRROR from src/dusk/tvos/save_mirror.hpp.
+    # The network transfer subsystem and the onboarding screen it drives are tvOS-only: server.cpp
+    # uses POSIX sockets, and the screen exists because tvOS has no file dialog. Listing them in the
+    # shared source list breaks every non-POSIX platform.
     target_sources(dusklight PRIVATE
             src/dusk/tvos/save_mirror.mm
             src/dusk/tvos/save_mirror_core.cpp
-            src/dusk/tvos/network_info.mm)
+            src/dusk/tvos/network_info.mm
+            src/dusk/transfer/http_parse.cpp
+            src/dusk/transfer/upload_core.cpp
+            src/dusk/transfer/server.cpp
+            src/dusk/ui/onboarding.cpp)
     set_target_properties(dusklight PROPERTIES OBJCXX_STANDARD 20 OBJCXX_STANDARD_REQUIRED ON)
     set_source_files_properties(src/dusk/tvos/save_mirror.mm src/dusk/tvos/network_info.mm
         PROPERTIES COMPILE_OPTIONS "-fobjc-arc")

@@ -1,6 +1,11 @@
 #include "prelaunch.hpp"
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+#if defined(__APPLE__) && TARGET_OS_TV
 #include "onboarding.hpp"
+#endif
 
 #include "dusk/app_info.hpp"
 #include "dusk/config.hpp"
@@ -836,9 +841,21 @@ void try_push_disc_choice_modal(Document& host) {
     auto dismiss = [](Modal& modal) { modal.pop(); };
 
     if (state.pendingDiscChoices.empty()) {
+#if defined(__APPLE__) && TARGET_OS_TV
         // Nothing anywhere. Rather than telling the user to rebuild the app with a disc baked in --
         // which needs a Mac and Xcode -- offer to receive one over the network from any browser.
+        // tvOS only: the transfer subsystem uses POSIX sockets, and this screen exists precisely
+        // because tvOS has no file dialog. Everywhere else the picker handles an empty result.
         onboarding::push(host);
+#else
+        host.push(std::make_unique<Modal>(Modal::Props{
+            .title = "No disc image found",
+            .bodyRml = "No disc image was found in the app or the data folder.",
+            .actions = {ModalAction{.label = "OK", .onPressed = dismiss}},
+            .onDismiss = dismiss,
+            .icon = "warning",
+        }));
+#endif
         return;
     }
 
