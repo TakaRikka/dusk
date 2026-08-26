@@ -101,10 +101,10 @@ jobs:
             platform: ios
             preset: x-ios-ci
             artifact_name: ios-appleclang-arm64
-          # - name: AppleClang tvOS arm64
-          #   platform: tvos
-          #   preset: x-tvos-ci
-          #   artifact_name: tvos-appleclang-arm64
+          - name: AppleClang tvOS arm64
+            platform: tvos
+            preset: x-tvos-ci
+            artifact_name: tvos-appleclang-arm64
 
     steps:
       - uses: actions/checkout@v6

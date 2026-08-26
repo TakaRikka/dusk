@@ -568,6 +568,40 @@ if (APPLE)
         "${DUSK_RESOURCE_DIR}/Assets.car"
         "${DUSK_RESOURCE_DIR}/Base.lproj/*"
         "${DUSK_RESOURCE_DIR}/Dusklight.icns")
+
+    if (TVOS)
+        # Compile the tvOS icon catalog as part of the build rather than shipping a prebuilt
+        # Assets.car. Info.plist.in names asset-catalog sets that only resolve inside a compiled
+        # catalog, so a bundle without one draws no icon and a device can refuse to install it --
+        # and any path that does not run scripts/tvos/build.sh (CI runs `cmake --build` directly)
+        # would otherwise produce exactly that.
+        #
+        # Assets.local.xcassets is an optional, git-ignored override, so a personal build can carry
+        # its own artwork without that artwork being committable.
+        set(DUSK_TVOS_CATALOG "${DUSK_RESOURCE_DIR}/Assets.xcassets")
+        if (EXISTS "${DUSK_RESOURCE_DIR}/Assets.local.xcassets")
+            set(DUSK_TVOS_CATALOG "${DUSK_RESOURCE_DIR}/Assets.local.xcassets")
+            message(STATUS "tvOS icons: using the local override (Assets.local.xcassets)")
+        endif ()
+        file(GLOB_RECURSE DUSK_TVOS_CATALOG_FILES "${DUSK_TVOS_CATALOG}/*")
+        set(DUSK_TVOS_ASSETS_DIR "${CMAKE_CURRENT_BINARY_DIR}/tvos-assets")
+        set(DUSK_TVOS_ASSETS_CAR "${DUSK_TVOS_ASSETS_DIR}/Assets.car")
+        add_custom_command(
+            OUTPUT "${DUSK_TVOS_ASSETS_CAR}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${DUSK_TVOS_ASSETS_DIR}"
+            COMMAND xcrun actool --compile "${DUSK_TVOS_ASSETS_DIR}"
+                    --platform appletvos --target-device tv
+                    --minimum-deployment-target 14.5 --app-icon "App Icon"
+                    --output-partial-info-plist "${DUSK_TVOS_ASSETS_DIR}/partial.plist"
+                    --enable-on-demand-resources NO "${DUSK_TVOS_CATALOG}"
+            DEPENDS ${DUSK_TVOS_CATALOG_FILES}
+            COMMENT "Compiling tvOS asset catalog"
+            VERBATIM)
+        set_source_files_properties("${DUSK_TVOS_ASSETS_CAR}" PROPERTIES
+            GENERATED TRUE
+            MACOSX_PACKAGE_LOCATION "Resources")
+        target_sources(dusklight PRIVATE "${DUSK_TVOS_ASSETS_CAR}")
+    endif ()
     file(GLOB_RECURSE DUSK_APP_RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/res/*")
     target_sources(dusklight PRIVATE ${DUSK_RESOURCE_FILES})
     target_sources(dusklight PRIVATE ${DUSK_APP_RESOURCE_FILES})
