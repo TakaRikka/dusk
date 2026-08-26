@@ -53,8 +53,7 @@ UserSettings g_userSettings = {
         .instantText {"game.instantText", false},
         .holdToMash {
             .sumo {"game.holdToMash.sumo", false},
-            .surface {"game.holdToMash.surface", false},
-            .zoraSwim {"game.holdToMash.zoraSwim", false},
+            .swimming {"game.holdToMash.swimming", false},
             .twilitBloat {"game.holdToMash.twilitBloat", false},
             .ganondorf {"game.holdToMash.ganondorf", false},
         },
@@ -268,8 +267,7 @@ void registerSettings() {
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
     Register(g_userSettings.game.holdToMash.sumo);
-    Register(g_userSettings.game.holdToMash.surface);
-    Register(g_userSettings.game.holdToMash.zoraSwim);
+    Register(g_userSettings.game.holdToMash.swimming);
     Register(g_userSettings.game.holdToMash.twilitBloat);
     Register(g_userSettings.game.holdToMash.ganondorf);
     Register(g_userSettings.game.sunsSong);
