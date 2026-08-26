@@ -679,10 +679,6 @@ namespace randomizer::logic::world
                   (this->Setting("Big Keys") == "Keysy" && originalItem->IsBigKey()) ||
                   (this->Setting("Maps and Compasses") == "Start With" &&
                    (originalItem->IsDungeonMap() || originalItem->IsCompass())))) ||
-                // Sky Characters are not randomized, but City in the Sky doesn't require Sky Book Characters (Sky characters
-                // shouldn't exist)
-                (this->Setting("Sky Characters") == "Off" && this->Setting("City Does Not Require Filled Skybook") == "On" &&
-                 location->HasCategories("Sky Character")) ||
                 // We're starting with a shop item, but shop items aren't randomized
                 (this->Setting("Shop Items") == "Off" && location->HasCategories("Shop") &&
                  utility::container::ElementInContainer(this->_startingItemPool, originalItem)))
