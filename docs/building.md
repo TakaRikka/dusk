@@ -42,6 +42,25 @@ Recommended IDEs:
 * [Visual Studio Code](https://code.visualstudio.com/download/)
 * [CLion](https://www.jetbrains.com/clion/)
 
+#### Additionally for Apple TV (tvOS)
+
+* Xcode is required (not optional), along with the tvOS platform itself. Having the tvOS SDK is not
+  enough — a device-targeted build resolves `-destination` against the installed platform and
+  otherwise refuses:
+
+```sh
+xcodebuild -downloadPlatform tvOS
+```
+
+* The Metal toolchain component, for compiling shaders:
+
+```sh
+xcodebuild -downloadComponent MetalToolchain
+```
+
+* The Rust `aarch64-apple-tvos` target. `scripts/tvos/setup.sh` checks all of the above and
+  installs the Rust toolchain pieces.
+
 ### Linux
 
 Actively tested on Ubuntu 24.04, Arch Linux & derivatives.
@@ -159,6 +178,34 @@ git pull
 cd dusklight
 git submodule update --init --recursive
 ```
+
+**Apple TV (tvOS)**
+
+tvOS builds go through a script rather than a preset directly, because the app has to be signed and
+installed onto a paired device before it can run:
+
+```sh
+scripts/tvos/setup.sh                            # one-time toolchain checks
+scripts/tvos/build.sh --disc /path/to/disc.rvz   # or --no-disc
+```
+
+`build.sh` configures with the `tvos-default` preset, builds every target (the preset's default
+target list omits the in-tree mods the install step needs), and installs into
+`build/install/Dusklight.app`. Useful flags:
+
+* `--disc <path>` bundles a disc image into the app. With neither `--disc` nor `--no-disc`, a
+  single disc image sitting beside the repository is used automatically; if several are present, a
+  `.rvz` is preferred as the smallest, and any other combination is an error.
+* `--no-disc` builds without game data. The app then asks for a disc over the local network on
+  first launch, which is what makes a build shareable.
+* `--no-mods` passes `-DDUSK_ENABLE_CODE_MODS=OFF`, for when the in-tree mods fail to build.
+* `--configure-only` stops after CMake configuration.
+
+The app icon catalog is compiled during the build; `platforms/tvos/Assets.car` is generated output
+and is not tracked. To use your own artwork, put a catalog at
+`platforms/tvos/Assets.local.xcassets` and it is preferred over the shipped one.
+
+See [tvos-install.md](tvos-install.md) for signing, installing and supplying a disc.
 
 **CLion (Windows / macOS / Linux)**
 
