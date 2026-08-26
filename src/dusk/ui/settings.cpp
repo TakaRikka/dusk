@@ -1222,8 +1222,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     int total = 0;
                     auto check = [&](bool enabled) { total++; if (enabled) count++; };
                     check(getSettings().game.holdToMash.sumo);
-                    check(getSettings().game.holdToMash.surface);
-                    check(getSettings().game.holdToMash.zoraSwim);
+                    check(getSettings().game.holdToMash.swimming);
                     check(getSettings().game.holdToMash.twilitBloat);
                     check(getSettings().game.holdToMash.ganondorf);
                     static thread_local char buf[12];
@@ -1233,10 +1232,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .isModified = [] {
                     return getSettings().game.holdToMash.sumo !=
                                 getSettings().game.holdToMash.sumo.getDefaultValue()
-                           || getSettings().game.holdToMash.surface !=
-                                  getSettings().game.holdToMash.surface.getDefaultValue()
-                           || getSettings().game.holdToMash.zoraSwim !=
-                                  getSettings().game.holdToMash.zoraSwim.getDefaultValue()
+                           || getSettings().game.holdToMash.swimming !=
+                                  getSettings().game.holdToMash.swimming.getDefaultValue()
                            || getSettings().game.holdToMash.twilitBloat !=
                                   getSettings().game.holdToMash.twilitBloat.getDefaultValue()
                            || getSettings().game.holdToMash.ganondorf !=
@@ -1258,8 +1255,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     });
                 };
                 addSubToggle("Sumo Wrestling", getSettings().game.holdToMash.sumo);
-                addSubToggle("Surface in Water", getSettings().game.holdToMash.surface);
-                addSubToggle("Zora Swimming", getSettings().game.holdToMash.zoraSwim);
+                addSubToggle("Swimming", getSettings().game.holdToMash.swimming);
                 addSubToggle("Stunned by Twilit Bloat", getSettings().game.holdToMash.twilitBloat);
                 addSubToggle("Ganondorf Chance", getSettings().game.holdToMash.ganondorf);
             });
