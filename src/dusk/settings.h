@@ -184,8 +184,7 @@ struct UserSettings {
         ConfigVar<bool> instantText;
         struct {
             ConfigVar<bool> sumo;
-            ConfigVar<bool> surface;
-            ConfigVar<bool> zoraSwim;
+            ConfigVar<bool> swimming;
             ConfigVar<bool> twilitBloat;
             ConfigVar<bool> ganondorf;
         } holdToMash;
