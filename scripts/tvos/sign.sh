@@ -45,17 +45,19 @@ fi
 # that the bundle holds what this app cannot run without.
 if [[ $allow_incomplete -eq 0 ]]; then
     missing=""
-    # The disc image: tvOS has no file dialog, and disc discovery scans Dusklight.app/disc/ first.
-    # A deliberate --no-disc build is the case --allow-incomplete exists for (push it with
-    # scripts/tvos/push-disc.sh afterwards).
+    # The disc image. This used to be fatal, on the reasoning that a bundled disc was the only one
+    # discovery could find without a Mac. That stopped being true once the app could receive one
+    # over the network: a bundle with no disc/ is now the ordinary shareable build, and the app
+    # asks for a disc on first launch. So this reports rather than refuses.
+    #
+    # A non-empty disc/ is still not enough to call it bundled: a Finder visit alone drops a
+    # .DS_Store in it, and `ls -A` counted that as content. Require an actual disc image -- same
+    # extension set as build.sh's workspace scan and kDiscExtensions in disc_discovery_rules.hpp.
     if [[ ! -d "$app/disc" ]]; then
-        missing="$missing"$'\n'"  - disc/ is missing — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh"
-    # A non-empty disc/ is not enough: a Finder visit alone drops a .DS_Store in it, and `ls -A`
-    # counted that as content. Require an actual disc image -- same extension set as build.sh's
-    # workspace scan and kDiscExtensions in src/dusk/disc_discovery_rules.hpp.
+        tvos_log "note: no bundled disc — this is a shareable build; the app will ask for one over the network on first launch"
     elif ! find "$app/disc" -maxdepth 1 -type f \( -iname '*.iso' -o -iname '*.gcm' -o -iname '*.ciso' -o -iname '*.gcz' -o -iname '*.nfs' \
             -o -iname '*.rvz' -o -iname '*.wbfs' -o -iname '*.wia' -o -iname '*.tgc' \) -print -quit 2>/dev/null | grep -q .; then
-        missing="$missing"$'\n'"  - disc/ has no disc image — tvOS has no file dialog, so a bundled disc is the only one discovery finds without push-disc.sh (a stray .DS_Store or similar doesn't count; need one of .iso/.gcm/.ciso/.gcz/.nfs/.rvz/.wbfs/.wia/.tgc)"
+        tvos_log "note: disc/ exists but holds no disc image (a stray .DS_Store doesn't count) — treating this as a shareable build"
     fi
     # The compiled asset catalog: Info.plist's CFBundleIcons and TVTopShelfImage name catalog sets,
     # which only resolve inside one. tvOS draws no icon without it and a device can refuse install.
