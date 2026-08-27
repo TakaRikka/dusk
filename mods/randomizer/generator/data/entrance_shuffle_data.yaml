@@ -1553,24 +1553,23 @@
     Parameters: "F01F"
     State: -1
 
-# Leave Disabled for now: The Spawn point changes based on progression
-# - Type: Interior
-#   Forward:
-#     Connection: Castle Town West -> Castle Town STAR Game
-#     Stage: 74
-#     Room: 7
-#     Spawn: 3
-#     Spawn Type: "10"
-#     Parameters: "F090"
-#     State: -1
-#   Return:
-#     Connection: Castle Town STAR Game -> Castle Town West
-#     Stage: 53
-#     Room: 2
-#     Spawn: 1
-#     Spawn Type: "10"
-#     Parameters: "F01F"
-#     State: -1
+- Type: Interior
+  Forward:
+    Connection: Castle Town West -> Castle Town STAR Game
+    Stage: 74
+    Room: 7
+    Spawn: 3
+    Spawn Type: "10"
+    Parameters: "F090"
+    State: -1
+  Return:
+    Connection: Castle Town STAR Game -> Castle Town West
+    Stage: 53
+    Room: 2
+    Spawn: 1
+    Spawn Type: "10"
+    Parameters: "F01F"
+    State: -1
 
 - Type: Interior
   Entrance Couple Tag: Castle Town Goron House
