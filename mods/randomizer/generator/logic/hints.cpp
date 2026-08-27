@@ -213,9 +213,9 @@ namespace randomizer::logic::hints {
             );
 
             for (auto& location: world->GetAllLocations()) {
-                // If this location is progression, then add its hint regions to
-                // the set of potentially barren regions
-                if (location->IsProgression()) {
+                // If this location is progression and does not have an expected item,
+                // then add its hint regions to the set of potentially barren regions
+                if (location->IsProgression() && !location->HasExpectedItem()) {
                     for (const auto& locAccess : location->GetAccessList()) {
                         for (const auto& hintRegion : locAccess->GetArea()->GetHintRegions()) {
                             world->GetBarrenRegions()[hintRegion] = {};
@@ -271,7 +271,7 @@ namespace randomizer::logic::hints {
             // required items (unless they can be in a barren region). Otherwise, add
             // the location to the list of locations in the barren region
             for (auto location : world->GetAllLocations()) {
-                if (!location->IsProgression()) {
+                if (!location->IsProgression() || location->HasExpectedItem()) {
                     continue;
                 }
 
