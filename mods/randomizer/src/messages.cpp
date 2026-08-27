@@ -227,6 +227,7 @@ bool resolve_query(const std::string& name, FlowQueryId& out) {
         {"event flag", FLOW_QUERY_EVENT_FLAG},
         {"rupees", FLOW_QUERY_RUPEES},
         {"item owned", FLOW_QUERY_ITEM_OWNED},
+        {"save switch", FLOW_QUERY_SAVE_SWITCH},
         {"empty bottles", FLOW_QUERY_EMPTY_BOTTLES},
         {"select 2", FLOW_QUERY_SELECT_2},
         {"select 2 cancel", FLOW_QUERY_SELECT_2_CANCEL},

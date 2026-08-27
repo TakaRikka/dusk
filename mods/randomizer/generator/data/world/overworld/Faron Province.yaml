@@ -1,4 +1,32 @@
 
+# PROLOGUE WOODS
+# A special region only available if the prologue isn't skipped that
+# allows prologue items to be placed in Faron Woods. All of Faron Woods
+# normally requires the Twilight to be completed before it's in logic
+# The prologue requires that none of the entrances necessary to complete
+# it are randomized, so we don't have to reproduce the whole region graph
+- Name: Prologue Woods
+  Map Sector: Faron Province
+  Region: Faron Woods
+  Can Warp: True
+  Can Change Time: True
+  Events:
+    Can Refill Lantern Oil: "'Can_Farm_Rupees'"
+  Locations:
+    Faron Woods Coro Boulder Rupee 1: Can_Smash
+    Faron Woods Coro Boulder Rupee 2: Can_Smash
+    Faron Woods Coro Boulder Rupee 3: Can_Smash
+    Faron Woods Coro Boulder Rupee 4: Can_Smash
+    Coro Lantern: Nothing
+    Coro Gate Key: Nothing
+    Coro Bottle: "'Can_Farm_Rupees'"
+    Faron Woods Owl Statue Sky Character: Restored_Dominion_Rod
+    Faron Woods Owl Statue Chest: Restored_Dominion_Rod and Can_Midna_Jump
+    South Faron Cave Chest: Can_Pass_Faron_Woods_Coro_Gate
+    Faron Mist Cave Open Chest: Can_Pass_Faron_Woods_Coro_Gate and Lantern # Not requiring lantern could lock this check out after completing the prologue
+    Faron Mist Cave Lantern Chest: Can_Pass_Faron_Woods_Coro_Gate and Lantern
+    North Faron Woods Deku Baba Chest: Can_Pass_Faron_Woods_Coro_Gate
+
 # SOUTH FARON WOODS
 
 - Name: South Faron Woods
@@ -15,7 +43,9 @@
     Faron Woods Coro Boulder Rupee 2: Can_Smash
     Faron Woods Coro Boulder Rupee 3: Can_Smash
     Faron Woods Coro Boulder Rupee 4: Can_Smash
-    Coro Bottle: Can_Complete_Prologue
+    Coro Lantern: Nothing
+    Coro Gate Key: Nothing
+    Coro Bottle: "'Can_Farm_Rupees'"
     South Faron Woods Twilit Insect in Tunnel 1: Can_Defeat_Faron_Twilit_Insect
     South Faron Woods Twilit Insect in Tunnel 2: Can_Defeat_Faron_Twilit_Insect
     South Faron Woods Coros House Exterior Twilit Insect: Can_Defeat_Faron_Twilit_Insect
@@ -23,7 +53,7 @@
   Exits:
     South Faron Woods Coros Ledge: Can_Midna_Jump or Twilight
     Faron Woods Coros House Lower: Can_Open_Doors
-    South Faron Woods Behind Gate: Nothing # Coro Key is Vanilla if forest is closed
+    South Faron Woods Behind Gate: Can_Dig or Faron_Woods_Coro_Key or Small_Keys == Keysy
     South Faron Woods Owl Statue Area: Can_Smash
     Faron Field: Can_Clear_Forest
     Ordon Bridge: Nothing
@@ -60,9 +90,9 @@
   Can Warp: True
   Can Change Time: True
   Events:
-    Can Move Faron Woods Owl Statue: Can_Clear_Forest and Restored_Dominion_Rod
+    Can Move Faron Woods Owl Statue: Restored_Dominion_Rod
   Locations:
-    Faron Woods Owl Statue Sky Character: Can_Clear_Forest and Restored_Dominion_Rod
+    Faron Woods Owl Statue Sky Character: Restored_Dominion_Rod
   Exits:
     South Faron Woods Above Owl Statue: Can_Midna_Jump and 'Can_Move_Faron_Woods_Owl_Statue'
     South Faron Woods: Can_Smash
@@ -88,7 +118,7 @@
     South Faron Woods Twilit Insect Behind Gate 2: Can_Defeat_Faron_Twilit_Insect
   Exits:
     Faron Woods Cave South: Nothing
-    South Faron Woods: Can_Dig or Can_Clear_Forest or 'Can_Access_South_Faron_Woods'
+    South Faron Woods: Can_Dig or Faron_Woods_Coro_Key or Small_Keys == Keysy
 
 # FARON WOODS CAVE
 

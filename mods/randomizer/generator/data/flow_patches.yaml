@@ -296,7 +296,58 @@
     message: 0x25B
     next: 0x202
 
-#6: # zel_06.bmg
+6: # zel_06.bmg - Faron Woods interiors and other shared areas
+  # Modify Coro's flow so that all 3 items can be collected at any time
+  # Change all start indices to first check for first item flag
+  - index:
+      - 0x4F
+      - 0xEE
+      - 0xFF
+      - 0x1C2
+    type: branch
+    query: event flag
+    parameters: 0x0080
+    results:
+      - 0x1B3 # Got first item
+      - 0x1AA # Haven't gotten first item
+
+  # Set flag for getting first item
+  - index: 0x1A9
+    type: event
+    event: set event flag
+    parameters: 0x0080
+    next: 0x1A5
+
+  - index: 0x1AA
+    type: message
+    message: 0x125
+    next: 0x1A6
+
+  # Check if we've gotten 2nd item
+  - index: 0x1B3
+    type: branch
+    query: save switch
+    parameters: 0x0032
+    results:
+      - 0x79  # Got 2nd item
+      - 0x1A4 # Haven't gotten 2nd item
+
+  - index: 0x1A4
+    type: message
+    message: 0xC2
+    next: 0xA1
+
+  - index: 0xA5
+    type: message
+    message: 0xC5
+    next: 0xB4
+
+  # Patch Coro waking up to jump to one of our flow entry points
+  - index: 0x78
+    type: message
+    message: 0xCD
+    next: 0x1C2
+
 #7: # zel_07.bmg
 8: # zel_08.bmg - HF, Outside CT, LH, UZR, Zora's River, KB2, Title Screen
   # Skip over the node which deletes auru's memo from the inventory after showing it to Fyer

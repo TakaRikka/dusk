@@ -41,6 +41,7 @@
   Exits:
     South Faron Woods: Can_Complete_Prologue
     Ordon Spring: Skip_Prologue == On or ('Can_Access_Outside_Links_House' and Sword and Slingshot)
+    Prologue Woods: Skip_Prologue == Off
 
 # ORDON VILLAGE
 
@@ -100,7 +101,7 @@
 
 - Name: Ordon Shield House
   Exits:
-    Ordon Shield House Upper Ledge: Wolf_Link
+    Ordon Shield House Upper Ledge: Can_Midna_Jump
     Ordon Village: Can_Open_Doors
 
 - Name: Ordon Shield House Upper Ledge
@@ -143,7 +144,7 @@
     Wrestling With Bo: Human_Link
   Exits:
     Ordon Bos House Right Door Interior: Nothing
-    Ordon Bos House Right Door Interior: Nothing
+    Ordon Bos House Left Door Interior: Nothing
 
 # ORDON RANCH
 

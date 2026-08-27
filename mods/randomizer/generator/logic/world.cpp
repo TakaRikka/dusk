@@ -815,6 +815,8 @@ namespace randomizer::logic::world
                                                                                   "Ordon Pumpkin",
                                                                                   "Ordon Cheese",
                                                                                   "North Faron Woods Gate Key",
+                                                                                  "Faron Woods Coro Key",
+                                                                                  "Gate Keys",
                                                                                   "Gerudo Desert Bulblin Camp Key"))
                 {
                     smallKeys.push_back(item.get());

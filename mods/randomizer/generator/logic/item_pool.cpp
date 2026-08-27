@@ -71,6 +71,7 @@ namespace randomizer::logic::item_pool
         {"Gate Keys", 1},
         {"Gerudo Desert Bulblin Camp Key", 1},
         {"North Faron Woods Gate Key", 1},
+        {"Faron Woods Coro Key", 1},
         {"Forest Temple Small Key", 4},
         {"Goron Mines Small Key", 3},
         {"Lakebed Temple Small Key", 3},
@@ -311,6 +312,7 @@ namespace randomizer::logic::item_pool
             std::list<std::string> smallKeys = {
                 {"Gate Keys"},
                 {"Gerudo Desert Bulblin Camp Key"},
+                {"Faron Woods Coro Key"},
                 {"Forest Temple Small Key"},
                 {"Goron Mines Small Key"},
                 {"Lakebed Temple Small Key"},

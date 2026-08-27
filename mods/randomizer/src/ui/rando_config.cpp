@@ -71,6 +71,7 @@ const std::vector<std::pair<std::string, std::string>>& GetStartingInventoryLayo
         {"Poe Souls", "Poe Soul"},
         {"Fused Shadows", "Progressive Fused Shadow"},
         {"Mirror Shards", "Progressive Mirror Shard"},
+        {"Faron Woods Coro Key", "Faron Woods Coro Key"},
         {"Gate Keys", "Gate Keys"},
         {"Gerudo Desert Bulblin Camp Key", "Gerudo Desert Bulblin Camp Key"},
         {"Forest Temple Small Keys", "Forest Temple Small Key"},
@@ -1036,6 +1037,7 @@ ModResult buildStartingInventoryTab(ModContext* ctx, UiWindowHandle, UiElementHa
     add_starting_inventory_item<4>(leftPane, "Mirror Shards", "Progressive Mirror Shard");
 
     add_section(leftPane, "Overworld Keys");
+    add_starting_inventory_item(leftPane, "Faron Woods Coro Key");
     add_starting_inventory_item(leftPane, "Gate Keys");
     add_starting_inventory_item(leftPane, "Gerudo Desert Bulblin Camp Key");
 

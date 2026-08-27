@@ -589,6 +589,29 @@ F_SP104:
 
 # Faron Woods
 F_SP108:
+  # Room 3 - Area near South Faron Woods Gate
+  3:
+    # Patch the gate before the tunnel to respect the open/closed flag
+    # used on other layers
+    - action: patch
+      name: K_Gate
+      parameters: 0x0FF0FFFF
+      position:
+        x: -17520.0
+        y: 200
+        z: -11195
+      angle:
+        x: 0x0000
+        y: 0x2666
+        z: 0x0000
+      set id: 0xFFFF
+      patch:
+        # Give this gate the flag for it being open/closed
+        parameters: 0x0FF0FF0C
+      layers:
+        - 1
+        - 5
+
   # Room 4 - Coro's Clearing
   4:
     # Add hint sign near on platform south of Coro's hut
@@ -689,6 +712,22 @@ F_SP108:
         - 9
         - 14
 
+    # Add Coro actor to twilight layer
+    - action: add
+      name: Kkri
+      parameters: 0x174EFF01
+      position:
+        x: -13505.0
+        y: 250.0
+        z: -14405.0
+      angle:
+        x: 0x0065
+        y: 0xC889
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14
+
   # Room 6 - North Faron Woods
   6:
     # Spawn Item for Golden Wolf in North Faron Woods layer 3
@@ -706,6 +745,44 @@ F_SP108:
       set id: 0xFFFF
       layers:
         - 3
+
+  # Room 8 - Statue Path
+  8:
+    # Add the bird statue to every layer
+    - action: add
+      name: CstaF
+      parameters: 0xFFFFFFF1
+      position:
+        x: -17500
+        y: -310
+        z: -20950
+      angle:
+        x: 0x0000
+        y: 0x3555
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+        - 14
+
+    # Add the sky character tag to every layer
+    - action: add
+      name: TagStat
+      parameters: 0x0001A0FF
+      position:
+        x: -17500
+        y: -310
+        z: -20950
+      angle:
+        x: 0x0000
+        y: 0x3555
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 0
+        - 1
+        - 14
 
 # Kakariko Village
 F_SP109:
@@ -4759,6 +4836,26 @@ F_SP128:
         - 0
         - 1
         - 2
+
+# Faron Woods Interiors
+R_SP108:
+  # Room 0 - Coro's Hut
+  0:
+    # Delete Coro actor from Twilight layer because we put him outside instead
+    - action: delete
+      name: Kkri
+      parameters: 0x174EFF01
+      position:
+        x: 477.466552734375
+        y: 150.0
+        z: 378.840606689453
+      angle:
+        x: 0x006C
+        y: 0xA16D
+        z: 0x0000
+      set id: 0xFFFF
+      layers:
+        - 14
 
 # Kakariko Village Interiors
 R_SP109:

@@ -487,6 +487,30 @@
   Metadata:
     - None
 
+- Name: Coro Lantern
+  Original Item: Lantern
+  Categories:
+    - Overworld
+    - Npc
+    - Faron Woods
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Coro Lantern
+    Event Flag: 0x0F01
+
+- Name: Coro Gate Key
+  Original Item: Faron Woods Coro Key
+  Categories:
+    - Overworld
+    - Npc
+    - Faron Woods
+    - ARC
+  Metadata:
+    Name Lookup:
+      - Coro Gate Key
+    Event Flag: 0x1A10
+
 - Name: Coro Bottle
   Original Item: Bottle with Lantern Oil
   Categories:

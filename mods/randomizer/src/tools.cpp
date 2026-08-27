@@ -512,6 +512,8 @@ std::string nameLookupOverride(const std::string& locationName) {
         {"Cave of Ordeals Great Fairy Reward", ITEM_CHECK_FAIRY_REWARD},
         {"Charlo Donation Blessing", ITEM_CHECK_PRAYER_REWARD},
         {"Coro Bottle", ITEM_CHECK_CORO_BOTTLE},
+        {"Coro Gate Key", ITEM_CHECK_CORO_GATE_KEY},
+        {"Coro Lantern", ITEM_CHECK_CORO_LANTERN},
         {"Fishing Hole Bottle", ITEM_CHECK_FISHING_BOTTLE},
         {"Fishing Hole Heart Piece", ITEM_CHECK_FISHING_HEART_PIECE},
         {"Forest Temple Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_FOREST},

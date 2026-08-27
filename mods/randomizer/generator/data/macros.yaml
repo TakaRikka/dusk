@@ -204,7 +204,9 @@ Can Defeat Zant: Master_Sword and Gale_Boomerang and (Iron_Boots or (Can_Do_Nich
                  Can_Refill_Air and Clawshot and Ball_and_Chain 
 
 Can Open North Faron Woods Gate: North_Faron_Woods_Gate_Key or Small_Keys == Keysy
-Can Complete Prologue: Skip_Prologue == On or (Sword and Slingshot and Can_Open_North_Faron_Woods_Gate)
+# Check for shadow crystal instead of Can_Dig so we aren't checking for wolf and human simultaneously
+Can Pass Faron Woods Coro Gate: Shadow_Crystal or Faron_Woods_Coro_Key or Small_Keys == Keysy
+Can Complete Prologue: Skip_Prologue == On or (Sword and Slingshot and Can_Open_North_Faron_Woods_Gate and Can_Pass_Faron_Woods_Coro_Gate)
 
 # You can only use warp portals from certain stages.
 # 'Can_Warp' is an event added to any logical area
