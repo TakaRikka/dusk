@@ -1364,10 +1364,13 @@ void OnMenuTabSelected(ModContext* ctx, void*) {
 ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane,
     UiElementHandle rightPane, void*, ModError*)
 {
-    g_seedHashes = get_compatible_seed_hashes();
+    g_seedHashes = {"None"};
+    for (const auto& hash : get_compatible_seed_hashes()) {
+        g_seedHashes.push_back(hash);
+    }
 
     std::string help_rml = "";
-    if (g_seedHashes.empty()) {
+    if (g_seedHashes.size() <= 1) {
         help_rml = "No seeds generated! You can generate a seed from the Seed Management Tab.";
     } else {
         help_rml = "Choose which seed you want to play.";
@@ -1419,7 +1422,7 @@ ModResult buildPlayTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPane
         };
         desc.user_data = &g_file_select_window_ctx.window_handle;
         desc.is_disabled = [](ModContext*, void*) {
-            return session::g_pending_seed_hash.empty();
+            return session::g_pending_seed_hash.empty() || session::g_pending_seed_hash == "None";
         };
         session::svc_mng.ui->pane_add_control(session::svc_mng.mod_ctx, leftPane, &desc, nullptr);
     }
