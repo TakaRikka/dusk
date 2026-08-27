@@ -543,9 +543,9 @@
     - "Any": "Item hints can be placed at any hint sign. If item hints are also part of Midna's hint text, then the hints will be split evenly between the two options."
 
 - Name: Number of Location Hints
-  Default Option: 5
+  Default Option: 7
   Options:
-    - 0-7: "Select the number of location hints you would like to generate."
+    - 0-15: "Select the number of location hints you would like to generate."
 
 - Name: Location Hints on Midna
   Default Option: "Off"
