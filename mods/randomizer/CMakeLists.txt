@@ -83,6 +83,7 @@ set(RANDOMIZER_GENERATOR_SOURCES
 )
 
 set(RANDOMIZER_SOURCES
+        src/draw.cpp
         src/flags.cpp
         src/messages.cpp
         src/randomizer_context.cpp

@@ -868,3 +868,10 @@ u8 getAreaKeyNum(int i_stageNo) {
 
     return dComIfGs_getSaveData()->getSave(i_stageNo).getBit().getKeyNum();
 }
+
+const char* getYesNoText(bool flag) {
+    if (flag) {
+        return "Yes";
+    }
+    return "No";
+}

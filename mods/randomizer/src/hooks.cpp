@@ -2,6 +2,7 @@
 #include "session.hpp"
 #include "randomizer_context.hpp"
 #include "ui/rando_config.hpp"
+#include "draw.hpp"
 #include "flags.h"
 #include "stages.h"
 #include "tools.h"
@@ -186,6 +187,9 @@ DEFINE_HOOK(&dMenu_Ring_c::textScaleHIO, dMenu_Ring_c__textScaleHIO);
 #endif
 DEFINE_HOOK_SYMBOL(dMenu_Ring_c__destructor_sig, void(dMenu_Ring_c*), dMenu_Ring_c__destructor);
 
+DEFINE_HOOK(&dMenu_Ring_c::_create, dMenu_Ring_c__create);
+DEFINE_HOOK(&dMenu_Ring_c::_move, dMenu_Ring_c__move);
+DEFINE_HOOK(&dMenu_Ring_c::_draw, dMenu_Ring_c__draw);
 DEFINE_HOOK(&dMenu_Ring_c::setActiveCursor, dMenu_Ring_c__setActiveCursor);
 DEFINE_HOOK(&dMenu_Ring_c::getItemMaxNum, dMenu_Ring_c__getItemMaxNum);
 DEFINE_HOOK(&dMenu_Ring_c::getItemNum, dMenu_Ring_c__getItemNum);
@@ -2587,26 +2591,230 @@ void hookPostObjZraRockCreate(ModContext*, void* args, void* retval, void*) {
     }
 }
 
-J2DPicture* g_dpadIcon{};
+// Things used for rando additional data
+struct ItemTexture {
+    J2DPicture* picture = nullptr;
+    u8 buffer[0xC00]{};
+};
+ItemTexture gmKeyIcon{};
+ItemTexture bedKeyIcon{};
+ItemTexture bigKeyIcon{};
+ItemTexture dungeonMapIcon{};
+ItemTexture compassIcon{};
+ItemTexture pumpkinIcon{};
+ItemTexture cheeseIcon{};
+J2DTextBox* itemWheelDunText = nullptr;
+J2DTextBox* itemWheelKeyText = nullptr;
+JUTFont* itemWheelTextFont = nullptr;
+bool shouldDisplayMenu = false;
+
+void hookPostMenuRingCreate(ModContext*, void*, void*, void*) {
+    itemWheelTextFont = mDoExt_getMesgFont();
+
+    // Setup our menu text
+    itemWheelDunText = JKR_NEW J2DTextBox();
+    itemWheelDunText->setFont(itemWheelTextFont);
+    itemWheelDunText->setFontSize(16.0f, 16.0f);
+    itemWheelDunText->setLineSpace(25.0f);
+    itemWheelKeyText = JKR_NEW J2DTextBox();
+    itemWheelKeyText->setFont(itemWheelTextFont);
+    itemWheelKeyText->setFontSize(16.0f, 16.0f);
+    itemWheelKeyText->setLineSpace(25.0f);
+
+    // Setup dungeon item picture icons
+    gmKeyIcon.picture = JKR_NEW J2DPicture();
+    bedKeyIcon.picture = JKR_NEW J2DPicture();
+    bigKeyIcon.picture = JKR_NEW J2DPicture();
+    dungeonMapIcon.picture = JKR_NEW J2DPicture();
+    compassIcon.picture = JKR_NEW J2DPicture();
+    pumpkinIcon.picture = JKR_NEW J2DPicture();
+    cheeseIcon.picture = JKR_NEW J2DPicture();
+
+    // Read dungeon item textures
+    dMeter2Info_readItemTexture(dItemNo_LV2_BOSS_KEY_e, &gmKeyIcon.buffer, gmKeyIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+    dMeter2Info_readItemTexture(dItemNo_LV5_BOSS_KEY_e, &bedKeyIcon.buffer, bedKeyIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+    dMeter2Info_readItemTexture(dItemNo_BOSS_KEY_e, &bigKeyIcon.buffer, bigKeyIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+    dMeter2Info_readItemTexture(dItemNo_MAP_e, &dungeonMapIcon.buffer, dungeonMapIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+    dMeter2Info_readItemTexture(dItemNo_COMPUS_e, &compassIcon.buffer, compassIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+    dMeter2Info_readItemTexture(dItemNo_TOMATO_PUREE_e, &pumpkinIcon.buffer, pumpkinIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+    dMeter2Info_readItemTexture(dItemNo_TASTE_e, &cheeseIcon.buffer, cheeseIcon.picture, NULL, NULL, NULL, NULL, NULL, NULL, -1);
+
+    // Get data to display on the menu
+    const u32 shadowsCount = numFusedShadows();
+    const u32 shardsCount = numMirrorShards();
+    const u8 ftKeyNum = getTempleKeysFound(0x10);
+    const u8 ftTotalKeyNum = 4;
+    const u8 gmKeyNum = getTempleKeysFound(0x11);
+    const u8 gmTotalKeyNum = 3;
+    const u8 lbtKeyNum = getTempleKeysFound(0x12);
+    const u8 lbtTotalKeyNum = 3;
+    const u8 agKeyNum = getTempleKeysFound(0x13);
+    const u8 agTotalKeyNum = 5;
+    const u8 sprKeyNum = getTempleKeysFound(0x14);
+    const u8 sprTotalKeyNum = 4;
+    const u8 totKeyNum = getTempleKeysFound(0x15);
+    const u8 totTotalKeyNum = 3;
+    const u8 citsKeyNum = getTempleKeysFound(0x16);
+    const u8 citsTotalKeyNum = 1;
+    const u8 potKeyNum = getTempleKeysFound(0x17);
+    const u8 potTotalKeyNum = 7;
+    const u8 hcKeyNum = getTempleKeysFound(0x18);
+    const u8 hcTotalKeyNum = 3;
+    const u8 campKeyNum = getTempleKeysFound(0xA);
+    const u8 campTotalKeyNum = 1;
+    bool hasFaronGateKey = dComIfGs_isStageSwitch(0x2, 0x14);
+    bool hasCoroGateKey = dComIfGs_isStageSwitch(0x2, 0xC);
+    bool hasGateKey = haveItem(dItemNo_BOSSRIDER_KEY_e);
+
+    // Create and set the text strings
+    char itemWheelTextBuf[300];
+    snprintf(itemWheelTextBuf, sizeof(itemWheelTextBuf), "Shadows: %d/3        Key Legend:\nShards: %d/4         Current (Total)\n\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", shadowsCount, shardsCount, "Forest", "Mines", "Lakebed", "Arbiters", "Snowpeak", "Time", "City", "Palace", "Hyrule", "Desert", "Faron Gate", "Coro Gate", "Gate Keys");
+    itemWheelDunText->setString(itemWheelTextBuf);
+
+    snprintf(itemWheelTextBuf, sizeof(itemWheelTextBuf), "\n\n\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%d (%d)\n%s\n%s\n%s\n", ftKeyNum, ftTotalKeyNum, gmKeyNum, gmTotalKeyNum, lbtKeyNum, lbtTotalKeyNum, agKeyNum, agTotalKeyNum, sprKeyNum, sprTotalKeyNum, totKeyNum, totTotalKeyNum, citsKeyNum, citsTotalKeyNum, potKeyNum, potTotalKeyNum, hcKeyNum, hcTotalKeyNum, campKeyNum, campTotalKeyNum, getYesNoText(hasFaronGateKey), getYesNoText(hasCoroGateKey),getYesNoText(hasGateKey));
+    itemWheelKeyText->setString(itemWheelTextBuf);
+}
+
+void hookPostMenuRingMove(ModContext*, void*, void*, void*) {
+    // Check every frame if we've toggled displaying the menu
+    if (mDoCPd_c::getTrigStart(PAD_1)) {
+        shouldDisplayMenu = !shouldDisplayMenu;
+    }
+}
+
+HookAction hookPreMenuRingDraw(ModContext*, void* args, void*, void*) {
+    auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
+
+    // Create the toggle text
+    J2DTextBox textbox;
+    JUtility::TColor white(255, 255, 255, 255);
+    textbox.setFont(itemWheelTextFont);
+    textbox.setFontSize(16.f, 16.f);
+    textbox.setLineSpace(16.f);
+    textbox.setString("Press Start\nto toggle\nadditional\ndata");
+    textbox.setCharColor(white);
+    textbox.setGradColor(white);
+    textbox.draw(menuRing->mCenterPosX + 465.f, menuRing->mCenterPosY + 157.f);
+
+    return HOOK_CONTINUE;
+}
+
+void hookPostMenuRingDraw(ModContext*, void* args, void* retval, void*) {
+    auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
+
+    if (shouldDisplayMenu) {
+        const f32 ringPosX = menuRing->mCenterPosX;
+        const f32 ringPosY = menuRing->mCenterPosY;
+        f32 windowPosXOffset = 95.f;
+        f32 windowPosYOffset = 20.f;
+        GXColor colorBlk = {0, 0, 0, 255};
+
+        // Draw the background first
+        drawFilledRect(ringPosX + windowPosXOffset, ringPosY + windowPosYOffset, 305.f, 410.f, colorBlk);
+
+        windowPosXOffset += 7.f;
+        windowPosYOffset += 20.f;
+
+        // Draw the text
+        itemWheelDunText->draw(ringPosX + windowPosXOffset, ringPosY + windowPosYOffset);
+        itemWheelKeyText->draw(ringPosX + windowPosXOffset + 120.f, ringPosY + windowPosYOffset);
+
+        windowPosYOffset += 58.f;
+
+        // For each dungeon draw map, compass, and big key icons
+        for (int i = 0x10; i < 0x19; i++) {
+            if (dComIfGs_isDungeonItemBossKey(i)) {
+                if (i == 0x11) {
+                    gmKeyIcon.picture->draw(ringPosX + windowPosXOffset + 170.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+                }
+                else if (i == 0x14) {
+                    bedKeyIcon.picture->draw(ringPosX + windowPosXOffset + 170.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+                }
+                else {
+                    bigKeyIcon.picture->draw(ringPosX + windowPosXOffset + 170.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+                }
+            }
+
+            if (dComIfGs_isDungeonItemMap(i)) {
+                dungeonMapIcon.picture->draw(ringPosX + windowPosXOffset + 195.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+            }
+            if (dComIfGs_isDungeonItemCompass(i)) {
+                compassIcon.picture->draw(ringPosX + windowPosXOffset + 220.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+            }
+
+            // For Snowpeak, draw pumpkin and cheese
+            if (i == 0x14) {
+                if (dComIfGs_isEventBit(TOLD_YETA_ABOUT_PUMPKIN)) {
+                    pumpkinIcon.picture->draw(ringPosX + windowPosXOffset + 245.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+                }
+                if (dComIfGs_isEventBit(TOLD_YETA_ABOUT_CHEESE)) {
+                    cheeseIcon.picture->draw(ringPosX + windowPosXOffset + 270.f, ringPosY + windowPosYOffset, 23.f, 23.f, false, false, false);
+                }
+            }
+            windowPosYOffset += 25.f;
+        }
+    }
+}
+
+J2DPicture* dpadIcon{};
 void hookPostMenuRingTextScaleHIO(ModContext*, void* args, void*, void*) {
     auto menuRing = mods::arg<dMenu_Ring_c*>(args, 0);
     if (menuRing->mItemSlots[menuRing->mCurrentSlot] == 0x15) {
         // Draw d-pad icon to indicate switching between Ilia quest items
         if (getWarashibeItemCount() >= 2) {
-            if (g_dpadIcon == nullptr) {
-                g_dpadIcon = JKR_NEW J2DPicture((ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "font_51.bti"));
+            if (dpadIcon == nullptr) {
+                dpadIcon = JKR_NEW J2DPicture((ResTIMG*)dComIfGp_getMain2DArchive()->getResource('TIMG', "font_51.bti"));
             }
-            g_dpadIcon->setAlpha(menuRing->mAlphaRate * 255.0);
-            g_dpadIcon->draw(menuRing->mCenterPosX + 330.f, menuRing->mCenterPosY + 194.f, 30.f, 30.f, false, false, false);
+            dpadIcon->setAlpha(menuRing->mAlphaRate * 255.0);
+            dpadIcon->draw(menuRing->mCenterPosX + 330.f, menuRing->mCenterPosY + 194.f, 30.f, 30.f, false, false, false);
         }
     }
 }
 
 void hookPostMenuRingDestructor(ModContext*, void*, void*, void*) {
-    if (g_dpadIcon != nullptr) {
-        JKR_DELETE(g_dpadIcon);
-        g_dpadIcon = nullptr;
+    // Free our custom menu stuff
+    if (dpadIcon != nullptr) {
+        JKR_DELETE(dpadIcon);
+        dpadIcon = nullptr;
     }
+    if (itemWheelDunText != nullptr) {
+        JKR_DELETE(itemWheelDunText);
+        itemWheelDunText = nullptr;
+    }
+    if (itemWheelKeyText != nullptr) {
+        JKR_DELETE(itemWheelKeyText);
+        itemWheelKeyText = nullptr;
+    }
+    if (gmKeyIcon.picture != nullptr) {
+        JKR_DELETE(gmKeyIcon.picture);
+        gmKeyIcon.picture = nullptr;
+    }
+    if (bedKeyIcon.picture != nullptr) {
+        JKR_DELETE(bedKeyIcon.picture);
+        bedKeyIcon.picture = nullptr;
+    }
+    if (bigKeyIcon.picture != nullptr) {
+        JKR_DELETE(bigKeyIcon.picture);
+        bigKeyIcon.picture = nullptr;
+    }
+    if (dungeonMapIcon.picture != nullptr) {
+        JKR_DELETE(dungeonMapIcon.picture);
+        dungeonMapIcon.picture = nullptr;
+    }
+    if (compassIcon.picture != nullptr) {
+        JKR_DELETE(compassIcon.picture);
+        compassIcon.picture = nullptr;
+    }
+    if (pumpkinIcon.picture != nullptr) {
+        JKR_DELETE(pumpkinIcon.picture);
+        pumpkinIcon.picture = nullptr;
+    }
+    if (cheeseIcon.picture != nullptr) {
+        JKR_DELETE(cheeseIcon.picture);
+        cheeseIcon.picture = nullptr;
+    }
+    mDoExt_removeMesgFont();
+    itemWheelTextFont = nullptr;
 }
 
 void hookPostMenuRingSetActiveCursor(ModContext*, void* args, void*, void*) {
@@ -3270,6 +3478,10 @@ ModResult initialize() {
 
     ADD_HOOK_POST(dMenu_Ring_c__textScaleHIO, hookPostMenuRingTextScaleHIO);
     ADD_HOOK_POST(dMenu_Ring_c__destructor, hookPostMenuRingDestructor);
+    ADD_HOOK_POST(dMenu_Ring_c__create, hookPostMenuRingCreate);
+    ADD_HOOK_POST(dMenu_Ring_c__move, hookPostMenuRingMove);
+    ADD_HOOK_PRE(dMenu_Ring_c__draw, hookPreMenuRingDraw);
+    ADD_HOOK_POST(dMenu_Ring_c__draw, hookPostMenuRingDraw);
     ADD_HOOK_POST(dMenu_Ring_c__setActiveCursor, hookPostMenuRingSetActiveCursor);
     ADD_HOOK_POST(dMenu_Ring_c__getItemMaxNum, hookPostMenuRingGetItemMaxNum);
     ADD_HOOK_POST(dMenu_Ring_c__getItemNum, hookPostMenuRingGetItemNum);
@@ -3402,6 +3614,9 @@ ModResult uninstall() {
 
     mods::hook::uninstall<dMenu_Ring_c__textScaleHIO>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__destructor>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__create>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__move>(svc_hook);
+    mods::hook::uninstall<dMenu_Ring_c__draw>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__setActiveCursor>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__getItemMaxNum>(svc_hook);
     mods::hook::uninstall<dMenu_Ring_c__getItemNum>(svc_hook);
