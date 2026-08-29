@@ -1569,7 +1569,7 @@ static void demo_camera_start(e_mk_class* i_this) {
     }
 }
 
-static void demo_camera_end(e_mk_class* i_this) {
+DUSK_NOINLINE static void demo_camera_end(e_mk_class* i_this) {
     fopEn_enemy_c* actor = (fopEn_enemy_c*)&i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* boomerang_p = (fopAc_ac_c*)fopAcM_SearchByID(i_this->boomerangId);

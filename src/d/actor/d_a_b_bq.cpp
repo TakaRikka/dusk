@@ -884,7 +884,7 @@ static s8 b_bq_attack(b_bq_class* i_this) {
     return set_dokuhaki;
 }
 
-static void b_bq_end(b_bq_class* i_this) {
+DUSK_NOINLINE static void b_bq_end(b_bq_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
     switch (i_this->mMode) {

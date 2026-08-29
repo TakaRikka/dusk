@@ -54,11 +54,11 @@ public:
     void actionOpenDemo();
     void init_actionOpenWait();
     void actionOpenWait();
-    int setGetDemoItem();
+    DUSK_NOINLINE int setGetDemoItem();
     BOOL boxCheck();
 
     virtual int CreateHeap();
-    virtual int Create();
+    DUSK_NOINLINE virtual int Create();
     virtual int Execute(Mtx**);
     virtual int Draw();
     virtual int Delete();

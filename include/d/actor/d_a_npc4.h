@@ -336,7 +336,7 @@ public:
     BOOL hitChk2(dCcD_Cyl*, BOOL, BOOL);
     void setDamage(int, int, int);
     int ctrlMsgAnm(int&, int&, fopAc_ac_c*, BOOL);
-    void orderEvent(int, DUSK_CONST char*, u16, u16, u8, u16);
+    DUSK_NOINLINE void orderEvent(int, DUSK_CONST char*, u16, u16, u8, u16);
     void changeEvent(DUSK_CONST char*, DUSK_CONST char*, u16, u16);
     BOOL chkActorInSight(fopAc_ac_c*, f32);
     BOOL chkActorInArea(fopAc_ac_c*, cXyz, cXyz, s16);

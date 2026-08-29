@@ -166,7 +166,7 @@ static int useHeapInit(fopAc_ac_c* actor) {
     return i_this->mpBgW->Set(pbGd, 1, &i_this->mBgMtx) == 1 ? 0 : 1;
 }
 
-static int daObj_Gb_Create(fopAc_ac_c* actor) {
+DUSK_NOINLINE static int daObj_Gb_Create(fopAc_ac_c* actor) {
     fopAcM_ct(actor, obj_gb_class);
     obj_gb_class* i_this = (obj_gb_class*)actor;
     int rv = dComIfG_resLoad(&i_this->mPhase, "Obj_gb");

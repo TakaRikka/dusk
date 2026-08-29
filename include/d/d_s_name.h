@@ -49,7 +49,7 @@ public:
     void brightCheckOpen();
     void brightCheck();
     void doPreLoadSetup();
-    void changeGameScene();
+    DUSK_NOINLINE void changeGameScene();
 
     #if VERSION == VERSION_GCN_PAL
     void bmg_data_set();

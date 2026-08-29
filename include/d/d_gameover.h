@@ -44,7 +44,7 @@ enum dGameover_Proc {
 
 class dGameover_c : public msg_class {
 public:
-    int _create();
+    DUSK_NOINLINE int _create();
     int _execute();
     void playerAnmWait_init();
     void playerAnmWait_proc();

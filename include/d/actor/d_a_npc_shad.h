@@ -158,7 +158,7 @@ public:
     bool wait_type0(void*);
     void setMotion(int, f32, BOOL);
     void setExpression(int, f32);
-    bool wait_type1(void*);
+    DUSK_NOINLINE bool wait_type1(void*);
     bool wait_type2(void*);
     bool talk(void*);
     bool demo(void*);

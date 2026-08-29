@@ -22,7 +22,7 @@ class dFile_info_c {
 public:
     dFile_info_c(JKRArchive*, u8);
     void screenSet();
-    int setSaveData(dSv_save_c*, int, u8);
+    DUSK_NOINLINE int setSaveData(dSv_save_c*, int, u8);
     void setHeartCnt(dSv_save_c*);
     void setSaveDate(dSv_save_c*);
     void setPlayTime(dSv_save_c*);

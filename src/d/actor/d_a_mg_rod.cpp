@@ -2876,7 +2876,7 @@ static void lure_bare(dmg_rod_class* i_this) {
     actor->speed.y = 0.0f;
 }
 
-static void lure_heart(dmg_rod_class* i_this) {
+DUSK_NOINLINE static void lure_heart(dmg_rod_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
     i_this->field_0xf64 = -5.0f + JREG_F(9);
@@ -4001,7 +4001,7 @@ static int bb_get(dmg_rod_class* i_this) {
     return 0;
 }
 
-static void uki_catch(dmg_rod_class* i_this) {
+DUSK_NOINLINE static void uki_catch(dmg_rod_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp20;

@@ -62,7 +62,7 @@ public:
     int seq_moving(fopAc_ac_c*, dMsgFlow_c*);
     int seq_decide(fopAc_ac_c*, dMsgFlow_c*);
     int seq_choose(fopAc_ac_c*, dMsgFlow_c*);
-    int seq_decide_yes(fopAc_ac_c*, dMsgFlow_c*);
+    DUSK_NOINLINE int seq_decide_yes(fopAc_ac_c*, dMsgFlow_c*);
     int seq_decide_no(fopAc_ac_c*, dMsgFlow_c*);
     int seq_finish(fopAc_ac_c*, dMsgFlow_c*);
     bool seq_event(fopAc_ac_c*, dMsgFlow_c*);

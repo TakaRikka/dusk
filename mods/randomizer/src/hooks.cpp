@@ -124,9 +124,14 @@ DEFINE_HOOK(&daDoor20_c::checkOpenMsgDoor, daDoor20_c__checkOpenMsgDoor);
 DEFINE_HOOK_SYMBOL("demo_camera_end", void(e_mk_class*), e_mk_demo_camera_end);
 
 DEFINE_HOOK(&dStage_changeScene4Event, changeScene4Event);
-DEFINE_HOOK_SYMBOL("dStage_playerInit", int(dStage_dt_c*, void*, int, void*), stage_playerInit);
 
+#ifdef _MSVC_LANG
+DEFINE_HOOK_SYMBOL("dStage_playerInit", int(dStage_dt_c*, void*, int, void*), stage_playerInit);
 DEFINE_HOOK_SYMBOL("daKytag08_Execute", int(kytag08_class*), Kytag08_Execute);
+#else
+DEFINE_HOOK_SYMBOL("_ZL17dStage_playerInitP11dStage_dt_cPviS1_", int(dStage_dt_c*, void*, int, void*), stage_playerInit);
+DEFINE_HOOK_SYMBOL("_ZL17daKytag08_ExecuteP13kytag08_class", int(kytag08_class*), Kytag08_Execute);
+#endif
 
 DEFINE_HOOK(&daNpcT_chkEvtBit, NpcT_chkEvtBit);
 DEFINE_HOOK(&daNpcF_chkEvtBit, NpcF_chkEvtBit);

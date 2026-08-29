@@ -15,12 +15,12 @@ class daObjSwBallC_c : public fopAc_ac_c {
 public:
     void initBaseMtx();
     void setBaseMtx();
-    int Create();
+    DUSK_NOINLINE int Create();
     int CreateHeap();
     int create();
     int execute();
     void event_proc_call();
-    void actionWait();
+    DUSK_NOINLINE void actionWait();
     void actionOrderEvent();
     void actionEvent();
     void actionDead();

@@ -55,7 +55,7 @@ public:
     f32 getSize2X();
     int CreateHeap();
     void setEventPrm();
-    int checkOpenMsgDoor(int*);
+    DUSK_NOINLINE int checkOpenMsgDoor(int*);
     int adjustmentAngle();
     int adjustmentProc();
     void setAngle();

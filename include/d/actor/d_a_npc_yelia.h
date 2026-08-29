@@ -69,7 +69,7 @@ public:
     BOOL setAction(BOOL (daNpc_Yelia_c::*)(void*));
     BOOL cutConversationAboutLoopHole(int);
     BOOL cutTWResistance(int);
-    BOOL cutTakeWoodStatue(int);
+    DUSK_NOINLINE BOOL cutTakeWoodStatue(int);
     BOOL cutClothTry(int);
     BOOL cutThankYou(int);
     BOOL wait(void*);

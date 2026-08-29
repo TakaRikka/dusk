@@ -487,7 +487,7 @@ void dSv_player_item_c::setEmptyBottleItemIn(u8 i_itemNo) {
     setBottleItemIn(dItemNo_EMPTY_BOTTLE_e, i_itemNo);
 }
 
-void dSv_player_item_c::setEmptyBottle() {
+DUSK_NOINLINE void dSv_player_item_c::setEmptyBottle() {
     for (int i = 0; i < 4; i++) {
         if (dComIfGs_getItem((u8)(i + SLOT_11), true) == dItemNo_NONE_e) {
             dComIfGs_setItem((u8)(i + SLOT_11), dItemNo_EMPTY_BOTTLE_e);

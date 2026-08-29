@@ -71,7 +71,7 @@ public:
     BOOL drawDbgInfo();
     void drawOtherMdls();
     u8 getTypeFromParam();
-    int isDelete();
+    DUSK_NOINLINE int isDelete();
     void reset();
     void playExpression();
     void playMotion();

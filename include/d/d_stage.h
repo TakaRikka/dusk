@@ -1373,7 +1373,7 @@ static int dStage_elstInfoInit(dStage_dt_c*, void*, int, void*);
 static int dStage_rppnInfoInit(dStage_dt_c*, void*, int, void*);
 static int dStage_rpatInfoInit(dStage_dt_c*, void*, int, void*);
 static int dStage_multInfoInit(dStage_dt_c*, void*, int, void*);
-static int dStage_playerInit(dStage_dt_c*, void*, int, void*);
+DUSK_NOINLINE static int dStage_playerInit(dStage_dt_c*, void*, int, void*);
 static int dStage_cameraInit(dStage_dt_c*, void*, int, void*);
 static int dStage_actorInit_always(dStage_dt_c*, void*, int, void*);
 static int dStage_roomReadInit(dStage_dt_c*, void*, int, void*);

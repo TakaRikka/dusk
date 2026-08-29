@@ -50,7 +50,7 @@ public:
     void actionChkEvent();
     void actionOrderCancelEvent();
     void actionCancelEvent();
-    int demoProc();
+    DUSK_NOINLINE int demoProc();
     void setGoal();
     int draw();
     int _delete();
