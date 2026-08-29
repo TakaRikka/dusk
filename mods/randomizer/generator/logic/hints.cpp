@@ -2,6 +2,7 @@
 
 #include "search.hpp"
 #include "world.hpp"
+#include "../utility/general.hpp"
 #include "../utility/platform.hpp"
 #include "../utility/string.hpp"
 #include "../utility/text.hpp"
@@ -43,6 +44,50 @@ namespace randomizer::logic::hints {
             }
         }
         return nullptr;
+    }
+
+    static void GenerateAgithaSignHint(world::WorldPool& worlds) {
+        for (auto& world : worlds) {
+            if (world->Setting("Agitha Hints") == "On") {
+
+                // Gather all the items in Agitha's Castle
+                std::map<item::Item*, int, utility::general::PointerLess> agithaItems{};
+                auto agithasCastleArea = world->GetArea("Castle Town Agithas House");
+                for (auto locAcc : agithasCastleArea->GetLocations()) {
+                    auto itemAtLocation = locAcc->GetLocation()->GetCurrentItem();
+                    if (!itemAtLocation->IsJunk() && !itemAtLocation->IsGoldenBug()) {
+                        agithaItems[itemAtLocation] += 1;
+                    }
+                }
+
+                auto& agithaSignText = world->AddNewText("Agithas Castle Sign Text");
+
+                if (agithaItems.empty()) {
+                    agithaSignText += getTextObject("Agithas Castle Zero Items Sign Text");
+                } else {
+                    agithaSignText += getTextObject("Agithas Castle Some Items Sign Text");
+
+                    std::vector<Text> agithaItemTexts{};
+                    for (const auto& [item, count] : agithaItems) {
+                        auto itemText = getTextObject(item->GetName());
+                        if (count > 1) {
+                            itemText += " x" + std::to_string(count);
+                        }
+                        itemText.Replace(getTextObject("Progressive Item Prefix"), "");
+                        agithaItemTexts.push_back(itemText);
+                    }
+
+                    auto agithaItemsListing = makeTextListing(agithaItemTexts);
+                    agithaSignText.Replace("<Items>", agithaItemsListing);
+                    agithaSignText.BreakLines(22.f);
+                    agithaSignText.mLinesPerBox = 7;
+                    agithaSignText.mNewLinesPerMessage = 7;
+
+                    // Set the font size and color before each separate box
+                    agithaSignText.mSplitMessagePrefix = "<font size 48><green>";
+                }
+            }
+        }
     }
 
     static void CalculatePossiblePathLocations(world::WorldPool& worlds) {
@@ -1069,6 +1114,8 @@ namespace randomizer::logic::hints {
     void GenerateAllHints(world::WorldPool& worlds) {
 
         utility::platform::Log("Generating Hints...");
+
+        GenerateAgithaSignHint(worlds);
 
         CalculatePossiblePathLocations(worlds);
         CalculatePossibleBarrenRegions(worlds);

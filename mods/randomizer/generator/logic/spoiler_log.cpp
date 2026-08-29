@@ -245,7 +245,7 @@ namespace randomizer::logic::spoiler_log
             }
         }
 
-                // Print Hints
+        // Print Hints
         spoilerLog << std::endl << "Hints:" << std::endl;
         for (const auto& world : worlds) {
             // Midna hints first
@@ -254,6 +254,14 @@ namespace randomizer::logic::spoiler_log
             auto midnaText = world->GetText("Custom Midna Call Hints Text");
             midnaText = utility::str::Replace(midnaText, "\n", "\n            ");
             spoilerLog << "            " << midnaText << std::endl;
+
+            // Then Agitha's Castle Sign
+            if (world->Setting("Agitha Hints") == "On") {
+                spoilerLog << "        Agitha's Castle Sign:" << std::endl;
+                auto agithaSignText = world->GetText("Agithas Castle Sign Text");
+                agithaSignText = utility::str::Replace(agithaSignText, "\n", "\n            ");
+                spoilerLog << "            " << agithaSignText << std::endl;
+            }
 
             spoilerLog << std::endl;
             // Put sign hints into a structure that will automatically sort them

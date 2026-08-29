@@ -267,6 +267,14 @@
       - 0x9E8
       - 0x9E8
 
+  # This is just a listing of the flow node for the AGITHA'S CASTLE text so that we
+  # can create new nodes if the text length overflows
+  - only if: Agitha_Hints == On
+    index: 0xA2D
+    type: message
+    message: Agithas Castle Sign Text
+    next: 0xFFFF
+
 5: # zel_05.bmg
   # Patch Yeta flow to always give the map check even if the player has obtained the Ordon Cheese
   - index: 0x8

@@ -7,4 +7,13 @@ namespace randomizer::utility::general
     {
         return ((first == t) || ...);
     }
+
+    struct PointerLess {
+        bool operator()(const auto* lhs, const auto* rhs) const {
+            if (!lhs || !rhs) {
+                return lhs < rhs;
+            }
+            return *lhs < *rhs;
+        }
+    };
 } // namespace randomizer::utility::general

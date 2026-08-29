@@ -432,6 +432,16 @@
   Group: 4
   Message Id: 6664
 
+- Only If: Agitha_Hints == On
+  Name: Agithas Castle Sign Text
+  Group: 4
+  Message Id: 8005
+  Style:
+    Box Kind: 0x02
+    Draw Type: 2
+    Box Position: 1
+    Trailing Data: 0x0800
+
 - Name: Coro Bottle Offer 1 Text
   Group: 6
   Message Id: 5216

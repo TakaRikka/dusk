@@ -95,6 +95,9 @@ namespace randomizer::utility::str {
                     const std::string& replacementStr,
                     uint32_t count) {
         std::string retStr = originalStr;
+        if (oldStr.empty()) {
+            return retStr;
+        }
         auto startPos = retStr.find(oldStr);
         for (int i = 0; i < count; ++i) {
             if (startPos == std::string::npos) {

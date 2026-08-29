@@ -95,7 +95,7 @@ namespace randomizer::logic::item
         return this->_importance == Importance::MINOR;
     }
 
-    bool Item::isJunk() const
+    bool Item::IsJunk() const
     {
         return this->_importance == Importance::JUNK;
     }

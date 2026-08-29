@@ -43,7 +43,7 @@ namespace randomizer::logic::item
         Importance GetImportance() const;
         bool IsMajor() const;
         bool IsMinor() const;
-        bool isJunk() const;
+        bool IsJunk() const;
         bool IsGameWinningItem() const;
         void AddChainLocation(location::Location* location);
         std::list<location::Location*> GetChainLocations() const;
