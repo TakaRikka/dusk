@@ -99,6 +99,15 @@ int daObjLife_c::Create() {
     mRotateSpeed = 7000;
 
 #if TARGET_PC
+    // Restore speeds that were skipped if created from a boss with create instead of fastCreate
+    auto bossItemSpeeds = dusk::mods::get_boss_item_actor_speeds();
+    if (bossItemSpeeds.f != 0.f || bossItemSpeeds.y != 0.f) {
+        mOverrideHover = false;
+        speedF = bossItemSpeeds.f;
+        speed.y = bossItemSpeeds.y;
+        dusk::mods::set_boss_item_actor_speeds(0.f, 0.f);
+    }
+
     if (mOverrideHover) {
         fopAcM_SetGravity(this, 0.0f);
         mRotateSpeed = 550;

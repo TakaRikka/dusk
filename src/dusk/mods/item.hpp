@@ -58,6 +58,13 @@ uint32_t item_check_message(uint16_t group, uint32_t messageId);
 bool item_give_queue_dispatching();
 uint32_t item_give_queue_take_tag();
 
+struct BossItemActorSpeeds {
+    f32 f;
+    f32 y;
+};
+void set_boss_item_actor_speeds(f32 f, f32 y);
+BossItemActorSpeeds get_boss_item_actor_speeds();
+
 namespace detail {
 struct CommittedCheck {
     uint8_t vanillaItem = 0;
