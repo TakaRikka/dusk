@@ -522,6 +522,7 @@ std::string nameLookupOverride(const std::string& locationName) {
         {"Goron Mines Gor Amato Key Shard", ITEM_CHECK_KEY_SHARD_1},
         {"Goron Mines Gor Ebizo Key Shard", ITEM_CHECK_KEY_SHARD_2},
         {"Goron Mines Gor Liggs Key Shard", ITEM_CHECK_KEY_SHARD_3},
+        {"Goron Springwater Rush", ITEM_CHECK_GORON_SPRINGWATER_RUSH},
         {"Herding Goats Reward", ITEM_CHECK_GOATS_REWARD},
         {"Hyrule Castle King Bulblin Key", ITEM_CHECK_BULBLIN_KEY},
         {"Ilia Charm", ITEM_CHECK_ILIA_CHARM},

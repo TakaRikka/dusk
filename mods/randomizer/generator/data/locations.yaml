@@ -1778,6 +1778,8 @@
     Freestanding Item:
       - Stage: 56
         Flag: 0x80
+    Name Lookup:
+        - Goron Springwater Rush
 
 - Name: Eldin Field Water Bomb Fish Grotto Chest
   Original Item: Purple Rupee
