@@ -14,6 +14,7 @@
 #include <mods/svc/log.hpp>
 #include <mods/items.h>
 
+#include "Z2AudioLib/Z2SceneMgr.h"
 #include "c/c_damagereaction.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_b_bq.h"
@@ -33,18 +34,20 @@
 #include "d/actor/d_a_npc_zrc.h"
 #include "d/actor/d_a_npc_zrz.h"
 #include "d/actor/d_a_obj_bosswarp.h"
-#include "d/actor/d_a_shop_item.h"
-#include "d/actor/d_a_obj_swBallC.h"
-#include "d/actor/d_a_obj_zra_rock.h"
-#include "d/actor/d_a_tag_kmsg.h"
-#include "d/actor/d_a_tbox2.h"
 #include "d/actor/d_a_obj_item.h"
 #include "d/actor/d_a_obj_life_container.h"
+#include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_obj_swBallC.h"
+#include "d/actor/d_a_obj_zra_rock.h"
+#include "d/actor/d_a_shop_item.h"
+#include "d/actor/d_a_tag_kmsg.h"
+#include "d/actor/d_a_tbox2.h"
 #include "d/d_door_param2.h"
 #include "d/d_event.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
 #include "d/d_gameover.h"
+#include "d/d_item.h"
 #include "d/d_menu_item_explain.h"
 #include "d/d_menu_ring.h"
 #include "d/d_meter2_info.h"
@@ -53,10 +56,8 @@
 #include "d/d_s_play.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
-#include "d/d_item.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
-#include "Z2AudioLib/Z2SceneMgr.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
@@ -208,6 +209,8 @@ DEFINE_HOOK(&daObjLife_c::calcScale, daObjLife_c__calcScale);
 DEFINE_HOOK_SYMBOL("dComIfGs_getCollectSmell", u8(), getCollectSmell);
 
 DEFINE_HOOK(&dEvt_control_c::skipper, dEvt_control_c__skipper);
+
+DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -3338,6 +3341,15 @@ void hookReplaceEvtControlSkipper(ModContext*, void* args, void* retval, void*) 
     *static_cast<bool*>(retval) = doSkip;
 }
 
+void hookPostMasterSwordExecuteWait(ModContext*, void* args, void* retval, void*) {
+    auto objMasterSword = mods::arg<daObjMasterSword_c*>(args, 0);
+
+    if (fopAcM_checkCarryNow(objMasterSword)) {
+        dComIfGs_onTmpBit(0x820);
+        objMasterSword->actor_status = 0;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -3501,6 +3513,8 @@ ModResult initialize() {
 
     ADD_HOOK_REPLACE(dEvt_control_c__skipper, hookReplaceEvtControlSkipper);
 
+    ADD_HOOK_POST(daObjMasterSword_c__executeWait, hookPostMasterSwordExecuteWait);
+
     return MOD_OK;
 }
 
@@ -3635,6 +3649,8 @@ ModResult uninstall() {
     mods::hook::uninstall<getCollectSmell>(svc_hook);
 
     mods::hook::uninstall<dEvt_control_c__skipper>(svc_hook);
+
+    mods::hook::uninstall<daObjMasterSword_c__executeWait>(svc_hook);
 
     return MOD_OK;
 }

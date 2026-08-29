@@ -20,6 +20,7 @@ struct ItemCheckResult {
     uint32_t tag = 0;
     uint8_t itemNo = 0;
     uint8_t displayItemNo = 0;
+    bool was_resolved = false;
 };
 
 ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_ac_c* giver);

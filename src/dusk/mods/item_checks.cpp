@@ -235,6 +235,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
         .vanilla_item = itemNo,
         .current_item = itemNo,
         .current_display_item = itemNo,
+        .was_resolved = false,
     };
     for (const auto& resolve : resolves) {
         if (!resolve.mod->active) {
@@ -243,6 +244,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
         if (resolve.fixedValue) {
             info.current_item = resolve.itemNo;
             info.current_display_item = resolve.itemNo;
+            info.was_resolved = true;
             continue;
         }
 
@@ -257,6 +259,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
                 }
                 info.current_item = resolution.item;
                 info.current_display_item = resolution.display_item;
+                info.was_resolved = true;
             }
         } catch (const std::exception& e) {
             fail_mod(*resolve.mod, MOD_ERROR,
@@ -269,6 +272,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
     return {
         .item = info.current_item,
         .display_item = info.current_display_item,
+        .was_resolved = info.was_resolved,
     };
 }
 

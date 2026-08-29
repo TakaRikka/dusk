@@ -462,7 +462,7 @@ int daDitem_c::create() {
     m_itemNo = daDitem_prm::getNo(this);
 
 #if TARGET_PC
-    const auto [item, displayItem] = dusk::mods::item_check_resolve(mItemGiveTag, m_itemNo, this);
+    const auto [item, displayItem, _] = dusk::mods::item_check_resolve(mItemGiveTag, m_itemNo, this);
     m_itemNo = item;
     setDisplayItemNo(displayItem);
     const char* arc_name = dItem_data::getArcName(displayItem);

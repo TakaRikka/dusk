@@ -8,7 +8,7 @@
 
 #define ITEM_SERVICE_ID "dev.twilitrealm.dusklight.item"
 #define ITEM_SERVICE_MAJOR 2u
-#define ITEM_SERVICE_MINOR 2u
+#define ITEM_SERVICE_MINOR 3u
 
 /* 0 is never a valid handle. */
 typedef uint64_t ItemCheckHandle;
@@ -32,11 +32,13 @@ typedef struct ItemCheckInfo {
     uint8_t vanilla_item;
     uint8_t current_item;
     uint8_t current_display_item;
+    bool was_resolved;
 } ItemCheckInfo;
 
 typedef struct ItemCheckResolution {
     uint8_t item;
     uint8_t display_item; /* leave unset (0xFF/NONE) to use the item */
+    bool was_resolved;
 } ItemCheckResolution;
 
 /* Return true and write out_result to replace the result, or false to leave it unchanged. */
