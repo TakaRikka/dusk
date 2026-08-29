@@ -158,7 +158,7 @@ DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
 DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
 DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 
-DEFINE_HOOK(&daDitem_c::CreateInit, daDitem_c__CreateInit);
+DEFINE_HOOK_SYMBOL("daDitem_c::execute", int(daDitem_c*), daDitem_c__execute);
 
 DEFINE_HOOK(&daShopItem_c::CreateInit, daShopItem_c__CreateInit);
 
@@ -2367,30 +2367,26 @@ HookAction hookPreSwBallActionWait(ModContext*, void* args, void*, void*) {
     return HOOK_SKIP_ORIGINAL;
 }
 
-void hookPostDitemCreateInit(ModContext*, void* args, void*, void*) {
+void hookPostDitemExecute(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<daDitem_c*>(args, 0);
 
     // Certain items use field models that are too big to fit in link's hands so we want to scale
     // them down to fit.
-    f32 modelScale = 0.0f;
+
     switch (i_this->getDisplayItemNo()) {
     case dItemNo_Randomizer_MIRROR_PIECE_1_e:
     case dItemNo_Randomizer_MIRROR_PIECE_2_e:
     case dItemNo_Randomizer_MIRROR_PIECE_3_e:
     case dItemNo_Randomizer_MIRROR_PIECE_4_e:
-        modelScale = 0.05f;
+        i_this->scale.x = 0.05f;
         break;
     case dItemNo_Randomizer_MASTER_SWORD_e:
     case dItemNo_Randomizer_LIGHT_SWORD_e:
-        modelScale = 0.001f;
+        i_this->scale.x = 0.001f;
         break;
     default:
         return;
     }
-
-    i_this->setMaxScale(modelScale);
-    i_this->scale.setall(modelScale);
-    i_this->set_mtx();
 }
 
 void hookPostShopItemCreateInit(ModContext*, void* args, void*, void*) {
@@ -3370,7 +3366,7 @@ ModResult initialize() {
     ADD_HOOK_POST(daObjSwBallC_c__Create, hookPostSwBallCreate);
     ADD_HOOK_PRE(daObjSwBallC_c__actionWait, hookPreSwBallActionWait);
 
-    ADD_HOOK_POST(daDitem_c__CreateInit, hookPostDitemCreateInit);
+    ADD_HOOK_POST(daDitem_c__execute, hookPostDitemExecute);
     ADD_HOOK_POST(daShopItem_c__CreateInit, hookPostShopItemCreateInit);
 
     ADD_HOOK_PRE(mgRod_lure_heart, hookPreLureHeart);
@@ -3510,7 +3506,7 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjSwBallC_c__Create>(svc_hook);
     mods::hook::uninstall<daObjSwBallC_c__actionWait>(svc_hook);
 
-    mods::hook::uninstall<daDitem_c__CreateInit>(svc_hook);
+    mods::hook::uninstall<daDitem_c__execute>(svc_hook);
     mods::hook::uninstall<daShopItem_c__CreateInit>(svc_hook);
 
     mods::hook::uninstall<mgRod_lure_heart>(svc_hook);
