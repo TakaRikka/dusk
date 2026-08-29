@@ -33,7 +33,6 @@
 #include "d/actor/d_a_npc_ykw.h"
 #include "d/actor/d_a_npc_zrc.h"
 #include "d/actor/d_a_npc_zrz.h"
-#include "d/actor/d_a_obj_bosswarp.h"
 #include "d/actor/d_a_obj_item.h"
 #include "d/actor/d_a_obj_life_container.h"
 #include "d/actor/d_a_obj_master_sword.h"
@@ -162,8 +161,6 @@ DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 DEFINE_HOOK(&daDitem_c::CreateInit, daDitem_c__CreateInit);
 
 DEFINE_HOOK(&daShopItem_c::CreateInit, daShopItem_c__CreateInit);
-
-DEFINE_HOOK(&daObjBossWarp_c::demoProc, daObjBossWarp_c__demoProc);
 
 DEFINE_HOOK_SYMBOL("lure_heart", void(dmg_rod_class*), mgRod_lure_heart);
 DEFINE_HOOK_SYMBOL("uki_catch", void(dmg_rod_class*), mgRod_uki_catch);
@@ -597,9 +594,9 @@ HookAction hookPreIsDungeonItem(ModContext*, void* args, void* retval, void*) {
         return HOOK_SKIP_ORIGINAL;
     case dSv_memBit_c::STAGE_BOSS_ENEMY: {
         // If we are in a dungeon or fighting a midboss, we don't want the boss being
-        // defeated to affect the gameplay.
+        // defeated to affect the gameplay. The check should still succeed in boss rooms.
         std::string stageName = dComIfGp_getStartStageName();
-        if (stageName.starts_with("D_MN")) {
+        if (stageName.starts_with("D_MN") && !stageName.ends_with("A")) {
             out = FALSE;
             return HOOK_SKIP_ORIGINAL;
         }
@@ -2417,103 +2414,6 @@ void hookPostShopItemCreateInit(ModContext*, void* args, void*, void*) {
     }
 }
 
-// pretty ugly way of handling this, but oh well. basically, we reconstruct the actionTable
-// and use it to check that we're in the correct action before proceeding. then store info
-// about what level we're on, and use it in the post-hook to undo the flag that's normally set.
-daObjBossWarp_c* hookBossWarpDemoProc_patchActor = nullptr;
-int hookBossWarpDemoProc_nowLevel = -1;
-HookAction hookPreBossWarpDemoProc(ModContext*, void* args, void*, void*) {
-    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
-
-    hookBossWarpDemoProc_patchActor = nullptr;
-    hookBossWarpDemoProc_nowLevel = -1;
-
-    static const char* const actionTable[15] = {
-        "WAIT",
-        "APPEAR",
-        "DISAPPEAR",
-        "SCENE_CHG",
-        "STONE_FALL",
-        "STONE_MIDNA",
-        "WALK_TARGET1",
-        "APPEAR_END",
-        "STONE_DELETE",
-        "STONE_PUTAWAY",
-        "WCHECK",
-        "SETPOS",
-        "SCALING",
-        "STONE_SCALE",
-        "HEART_MOVE",
-    };
-
-    bool isRewardAction =
-        dComIfGp_evmng_getIsAddvance(i_this->mStaffId)
-        && dComIfGp_evmng_getMyActIdx(i_this->mStaffId, actionTable, 15, 0, 0) == 4;
-    if (!isRewardAction) {
-        return HOOK_CONTINUE;
-    }
-
-    // this was a static function in the original TU, so reconstructing it for use here
-    auto getNowLevel = []() {
-        static const char* const stages[9] = {
-            "D_MN05A",
-            "D_MN04A",
-            "D_MN01A",
-            "D_MN10A",
-            "D_MN11A",
-            "D_MN06A",
-            "D_MN07A",
-            "D_MN08A",
-            "D_MN01A",
-        };
-
-        for (int i = 0; i < 9; i++) {
-            if (std::strcmp(dComIfGp_getStartStageName(), stages[i]) == 0) {
-                return i;
-            }
-        }
-
-        return -1;
-    };
-
-    hookBossWarpDemoProc_patchActor = i_this;
-    hookBossWarpDemoProc_nowLevel = getNowLevel();
-    return HOOK_CONTINUE;
-}
-
-void hookPostBossWarpDemoProc(ModContext*, void* args, void*, void*) {
-    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
-    if (hookBossWarpDemoProc_patchActor != i_this) {
-        return;
-    }
-
-    int level = hookBossWarpDemoProc_nowLevel;
-    hookBossWarpDemoProc_patchActor = nullptr;
-    hookBossWarpDemoProc_nowLevel = -1;
-
-    // undo the flag that was set in the original function
-    switch (level) {
-    case 0:
-        dComIfGs_offCollectCrystal(0);
-        break;
-    case 1:
-        dComIfGs_offCollectCrystal(1);
-        break;
-    case 2:
-        dComIfGs_offCollectCrystal(2);
-        break;
-    case 4:
-        dComIfGs_offCollectMirror(1);
-        break;
-    case 5:
-        dComIfGs_offCollectMirror(2);
-        break;
-    case 6:
-        dComIfGs_offCollectMirror(3);
-        break;
-    }
-}
-
 bool hookUkiCatch_isSkipSetBottle = false;
 HookAction hookPreUkiCatch(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<dmg_rod_class*>(args, 0);
@@ -3473,9 +3373,6 @@ ModResult initialize() {
     ADD_HOOK_POST(daDitem_c__CreateInit, hookPostDitemCreateInit);
     ADD_HOOK_POST(daShopItem_c__CreateInit, hookPostShopItemCreateInit);
 
-    ADD_HOOK_PRE(daObjBossWarp_c__demoProc, hookPreBossWarpDemoProc);
-    ADD_HOOK_POST(daObjBossWarp_c__demoProc, hookPostBossWarpDemoProc);
-
     ADD_HOOK_PRE(mgRod_lure_heart, hookPreLureHeart);
     ADD_HOOK_POST(mgRod_lure_heart, hookPostLureHeart);
 
@@ -3615,8 +3512,6 @@ ModResult uninstall() {
 
     mods::hook::uninstall<daDitem_c__CreateInit>(svc_hook);
     mods::hook::uninstall<daShopItem_c__CreateInit>(svc_hook);
-
-    mods::hook::uninstall<daObjBossWarp_c__demoProc>(svc_hook);
 
     mods::hook::uninstall<mgRod_lure_heart>(svc_hook);
     mods::hook::uninstall<mgRod_uki_catch>(svc_hook);
