@@ -337,7 +337,7 @@
     query: save switch
     parameters: 0x0032
     results:
-      - 0x79  # Got 2nd item
+      - 0x107 # Got 2nd item
       - 0x1A4 # Haven't gotten 2nd item
 
   - index: 0x1A4
