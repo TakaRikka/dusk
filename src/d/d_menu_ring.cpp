@@ -567,7 +567,7 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
 }
 
-DUSK_NOINLINE dMenu_Ring_c::~dMenu_Ring_c() {
+dMenu_Ring_c::~dMenu_Ring_c() {
     mpHeap->getTotalFreeSize();
     dMeter2Info_setItemExplainWindowStatus(0);
     for (int i = 0; i < 4; i++) {

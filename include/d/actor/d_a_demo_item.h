@@ -22,7 +22,7 @@ public:
         ACTION_END_e,
     };
 
-    DUSK_NOINLINE int CreateInit();
+    int CreateInit();
     void action();
     void actionStart();
     void actionEvent();

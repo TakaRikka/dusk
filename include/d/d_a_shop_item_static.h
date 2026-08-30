@@ -54,7 +54,7 @@ public:
     const ResourceData& getResourceData() const;
 #endif
     u16 getHeapSize();
-    DUSK_NOINLINE void CreateInit();
+    void CreateInit();
     void set_mtx();
     bool _execute();
     bool _draw();

@@ -70,7 +70,7 @@ public:
     int talkCheck(dEvt_order_c* order);
     int talkXyCheck(dEvt_order_c* order);
     int catchCheck(dEvt_order_c* order);
-    DUSK_NOINLINE int talkEnd();
+    int talkEnd();
     int demoCheck(dEvt_order_c* order);
     int demoEnd();
     int potentialCheck(dEvt_order_c* order);
@@ -87,7 +87,7 @@ public:
     void setSkipZev(void* skipActor, DUSK_CONST char* eventName);
     void onSkipFade();
     void offSkipFade();
-    DUSK_NOINLINE bool skipper();
+    bool skipper();
     int Step();
     int moveApproval(void*);
     BOOL compulsory(void*, const char* eventName, u16 hind);

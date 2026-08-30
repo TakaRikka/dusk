@@ -87,10 +87,7 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
             for (size_t lang = 0; lang < mText.size(); ++lang) {
                 auto& text = mText[lang];
                 if (!text.empty() && lang != JAPANESE) {
-                    char ch = text[0];
-                    if (ch >= 'a' && ch <= 'z')
-                        ch += 'A' - 'a';
-                    text[0] = ch;
+                    text[0] = std::toupper(text[0], latin1Locale);
                 }
             }
         } catch (const std::runtime_error&) {

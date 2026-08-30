@@ -197,7 +197,7 @@ public:
     int wait(int);
     int talk(int);
     int test(int);
-    DUSK_NOINLINE void AppearDemoCall();
+    void AppearDemoCall();
     void ReturnDemoCall();
     void PresentDemoCall();
     int cutAppear_10F_01(int);

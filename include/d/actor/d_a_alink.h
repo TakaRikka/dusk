@@ -1624,7 +1624,7 @@ public:
     BOOL setTalkStatus();
     f32 getFrontRollRate();
     void decideCommonDoStatus();
-    DUSK_NOINLINE void decideDoStatus();
+    void decideDoStatus();
     BOOL checkWaitAction();
     void setFallVoice();
     void setLandPassiveData();
@@ -1667,7 +1667,7 @@ public:
     void allUnequip(int);
     BOOL checkItemChangeFromButton();
     BOOL checkNextActionFromButton();
-    DUSK_NOINLINE BOOL checkGroundSpecialMode();
+    BOOL checkGroundSpecialMode();
     int commonCheckNextAction(int);
     int checkNextAction(int);
     void commonChangeItem();
@@ -2720,7 +2720,7 @@ public:
     void endDemoMode();
     fopAc_ac_c* getDemoLookActor();
     BOOL checkFlyAtnWait();
-    DUSK_NOINLINE void setGetItemFace(u16 i_itemNo);
+    void setGetItemFace(u16 i_itemNo);
     BOOL checkGrabTalkActor(fopAc_ac_c* i_actor);
     int setTalkStartBack(cXyz*);
     void setShapeAngleToTalkActor();
@@ -2751,9 +2751,9 @@ public:
     int procCoOpenTreasure();
     int procCoUnequipInit();
     int procCoUnequip();
-    DUSK_NOINLINE void setGetSubBgm(int i_itemNo);
+    void setGetSubBgm(int i_itemNo);
     int procCoGetItemInit();
-    DUSK_NOINLINE int procCoGetItem();
+    int procCoGetItem();
     int procCoTurnBackInit();
     int procCoTurnBack();
     int procDoorOpenInit();
@@ -2829,7 +2829,7 @@ public:
     void dungeonReturnWarp();
     void checkWarpStart();
     int warpModelTexScroll();
-    DUSK_NOINLINE int procCoWarpInit(int, int);
+    int procCoWarpInit(int, int);
     int procCoWarp();
     int commonWaitTurnInit();
     int commonGrabPutInit();

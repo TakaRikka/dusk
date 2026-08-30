@@ -23,10 +23,10 @@ public:
     };
 
     dMenu_Ring_c(JKRExpHeap*, STControl*, CSTControl*, u8);
-    DUSK_NOINLINE void _create();
+    void _create();
     void _delete();
-    DUSK_NOINLINE void _move();
-    DUSK_NOINLINE void _draw();
+    void _move();
+    void _draw();
     void setKanteraPos(f32, f32);
     bool isOpen();
     bool isMoveEnd();
@@ -40,7 +40,7 @@ public:
     void setJumpItem(bool);
     void setScale();
     void setNameString(u32);
-    DUSK_NOINLINE void setActiveCursor();
+    void setActiveCursor();
     void setMixItem();
     void drawItem();
     void drawItem2();
@@ -56,8 +56,8 @@ public:
     void drawSelectItem();
     void setSelectItemForce(int);
     u8 getCursorPos(u8);
-    DUSK_NOINLINE u8 getItemNum(u8);
-    DUSK_NOINLINE u8 getItemMaxNum(u8);
+    u8 getItemNum(u8);
+    u8 getItemMaxNum(u8);
     bool checkExplainForce();
     bool checkCombineBomb(int);
     void setCombineBomb(int);
@@ -67,7 +67,7 @@ public:
     bool isMixItemOn();
     bool isMixItemOff();
     void setMixMessage();
-    DUSK_NOINLINE void textScaleHIO();
+    void textScaleHIO();
     void textCentering();
     f32 clacEllipseFunction(f32, f32, f32);
     f32 calcDistance(f32, f32, f32, f32);

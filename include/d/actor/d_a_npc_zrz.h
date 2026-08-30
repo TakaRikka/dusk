@@ -81,7 +81,7 @@ public:
     u8 getTypeFromParam();
     /*  inline  */ u8 getPathNoFromParam() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     /*  inline  */ u8 getDemoMode() { return (fopAcM_GetParam(this) >> 0x10) & 0xf; }
-    DUSK_NOINLINE BOOL isDelete();
+    BOOL isDelete();
     void reset();
     void playExpression();
     void playMotion();

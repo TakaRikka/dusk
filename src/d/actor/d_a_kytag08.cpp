@@ -14,7 +14,7 @@ static int daKytag08_Draw(kytag08_class* i_this) {
     return 1;
 }
 
-DUSK_NOINLINE static int daKytag08_Execute(kytag08_class* i_this) {
+static int daKytag08_Execute(kytag08_class* i_this) {
     dScnKy_env_light_c* env_light = dKy_getEnvlight();
     daPy_py_c* player_p = daPy_getPlayerActorClass();
     JGeometry::TVec3<f32> particle_scale;

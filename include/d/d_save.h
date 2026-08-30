@@ -188,7 +188,7 @@ public:
     void init();
     void onDarkClearLV(int i_no);
     void offDarkClearLV(int i_no);
-    DUSK_NOINLINE BOOL isDarkClearLV(int i_no) const;
+    BOOL isDarkClearLV(int i_no) const;
     void onTransformLV(int i_no);
     void offTransformLV(int i_no);
     BOOL isTransformLV(int i_no) const;
@@ -324,7 +324,7 @@ public:
     void init();
     void setItem(int i_slotNo, u8 i_itemNo);
     u8 getItem(int i_slotNo, bool i_checkCombo) const;
-    DUSK_NOINLINE void setLineUpItem();
+    void setLineUpItem();
     u8 getLineUpItem(int i_slotNo) const;
     void setBottleItemIn(u8 curItemIn, u8 newItemIn);
     void setEmptyBottleItemIn(u8 i_itemNo);
@@ -334,7 +334,7 @@ public:
     void setEquipBottleItemEmpty(u8 curItemIn);
     u8 checkBottle(u8 i_itemNo);
     int checkInsectBottle();
-    DUSK_NOINLINE u8 checkEmptyBottle();
+    u8 checkEmptyBottle();
     void setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, bool i_setNum);
     void setBombBagItemIn(u8 i_curBomb, u8 i_newBomb, u8 i_bombNum, bool i_setNum);
     void setEmptyBombBagItemIn(u8 i_newBomb, bool i_setNum);
@@ -342,7 +342,7 @@ public:
     void setEmptyBombBag();
     void setEmptyBombBag(u8 i_newBomb, u8 i_bombNum);
     u8 checkBombBag(u8 i_itemNo);
-    DUSK_NOINLINE void setWarashibeItem(u8 i_itemNo);
+    void setWarashibeItem(u8 i_itemNo);
     void setRodTypeLevelUp();
     void setBaitItem(u8 i_itemNo);
 
@@ -642,16 +642,16 @@ public:
     void onTbox(int i_no);
     void offTbox(int i_no);
     BOOL isTbox(int i_no) const;
-    DUSK_NOINLINE void onSwitch(int i_no);
+    void onSwitch(int i_no);
     void offSwitch(int i_no);
-    DUSK_NOINLINE BOOL isSwitch(int i_no) const;
+    BOOL isSwitch(int i_no) const;
     BOOL revSwitch(int i_no);
     void onItem(int i_no);
     void offItem(int i_no);
     BOOL isItem(int i_no) const;
-    DUSK_NOINLINE void onDungeonItem(int i_no);
-    DUSK_NOINLINE void offDungeonItem(int i_no);
-    DUSK_NOINLINE s32 isDungeonItem(int i_no) const;
+    void onDungeonItem(int i_no);
+    void offDungeonItem(int i_no);
+    s32 isDungeonItem(int i_no) const;
 
     u8 getKeyNum() { return mKeyNum; }
     void setKeyNum(u8 i_keyNum) { mKeyNum = i_keyNum; }
@@ -693,9 +693,9 @@ public:
 class dSv_event_c {
 public:
     void init();
-    DUSK_NOINLINE void onEventBit(const u16 i_no);
+    void onEventBit(const u16 i_no);
     void offEventBit(const u16 i_no);
-    DUSK_NOINLINE int isEventBit(const u16 i_no) const;
+    int isEventBit(const u16 i_no) const;
     void setEventReg(u16 i_reg, u8 i_no);
     u8 getEventReg(u16 i_reg) const;
 
@@ -955,7 +955,7 @@ public:
     void putSave(int i_stageNo);
     void initZone();
     u32 createZone(int i_roomNo);
-    DUSK_NOINLINE void onSwitch(int i_no, int i_roomNo);
+    void onSwitch(int i_no, int i_roomNo);
     void offSwitch(int i_no, int i_roomNo);
     BOOL isSwitch(int i_no, int i_roomNo) const;
     BOOL revSwitch(int i_no, int i_roomNo);

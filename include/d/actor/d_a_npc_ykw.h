@@ -40,7 +40,7 @@ public:
     static void* srchYkm(void*, void*);
     fopAc_ac_c* getOtherYkmP(int);
     u8 getType();
-    DUSK_NOINLINE int isDelete();
+    int isDelete();
     void reset();
     void afterJntAnm(int);
     void setParam();

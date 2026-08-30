@@ -293,7 +293,7 @@ public:
     void dataSelectInAnmSet();
     void dataSelectIn();
     void dataSelectInit();
-    DUSK_NOINLINE void dataSelect();
+    void dataSelect();
     void dataSelectStart();
     void selectDataMoveAnmInitSet(int, int);
     bool selectDataMoveAnm();
@@ -301,7 +301,7 @@ public:
     void dataSelectMoveAnime();
     void makeRecInfo(u8);
     void selectDataOpenMove();
-    DUSK_NOINLINE void selectDataNameMove();
+    void selectDataNameMove();
     void selectDataOpenEraseMove();
     void menuSelect();
     void menuSelectStart();

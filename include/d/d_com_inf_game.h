@@ -431,7 +431,7 @@ public:
     void setNowVibration(u8 vib_status);
     u32 getNowVibration();
     void setStartStage(dStage_startStage_c* p_startStage);
-    DUSK_NOINLINE static int getLayerNo_common_common(char const* stageName, int roomId, int layer);
+    static int getLayerNo_common_common(char const* stageName, int roomId, int layer);
     static int getLayerNo_common(char const* stageName, int roomId, int layer);
     static int getLayerNo(int);
     void createParticle();
@@ -1212,7 +1212,7 @@ s8 dComIfGp_getReverb(int i_roomNo);
 bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_angle);
 stage_camera_class* dComIfGp_getRoomCamera(int i_roomNo);
 stage_arrow_class* dComIfGp_getRoomArrow(int i_roomNo);
-DUSK_NOINLINE void dComIfGp_setNextStage(char const* i_stage, s16 i_point, s8 i_roomNo, s8 i_layer, f32 i_lastSpeed,
+void dComIfGp_setNextStage(char const* i_stage, s16 i_point, s8 i_roomNo, s8 i_layer, f32 i_lastSpeed,
                            u32 i_lastMode, int, s8 i_wipe, s16 i_lastAngle, int param_9, int i_wipeSpeedT);
 void dComIfGp_setNextStage(char const* i_stage, s16 i_point, s8 i_roomNo, s8 i_layer);
 void dComIfGp_setSelectItem(int index);

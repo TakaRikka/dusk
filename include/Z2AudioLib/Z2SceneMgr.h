@@ -13,7 +13,7 @@ public:
     void setSceneExist(bool isSceneExist);
     void setFadeOutStart(u8 fadeType);
     void setFadeInStart(u8 fadeType);
-    DUSK_NOINLINE void setSceneName(char* spot, s32 room, s32 layer);
+    void setSceneName(char* spot, s32 room, s32 layer);
     void sceneChange(JAISoundID bgm, u8 seWave1, u8 seWave2, u8 bgmWave1, u8 bgmWave2, u8 demoWave,
                      bool);
     void framework();

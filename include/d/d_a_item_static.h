@@ -54,7 +54,7 @@ public:
     void setBaseMtx();
     void setBaseMtx_0();
     void setBaseMtx_1();
-    DUSK_NOINLINE void CreateInit();
+    void CreateInit();
     void setCullInfo();
     int _daItem_create();
     int _daItem_execute();
@@ -81,8 +81,8 @@ public:
     void mode_water_init();
     void mode_wait();
     void mode_water();
-    DUSK_NOINLINE void itemGetNextExecute();
-    DUSK_NOINLINE void itemGet();
+    void itemGetNextExecute();
+    void itemGet();
     BOOL checkCountTimer();
     BOOL checkPlayerGet();
     void checkYogan();
@@ -90,7 +90,7 @@ public:
     int itemActionForRupee();
     int itemActionForHeart();
     int itemActionForArrow();
-    DUSK_NOINLINE int itemActionForBoomerang();
+    int itemActionForBoomerang();
     void bg_check();
     void set_bound_se();
     int CountTimer();

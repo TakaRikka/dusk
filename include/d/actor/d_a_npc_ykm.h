@@ -210,7 +210,7 @@ public:
     static void* srchYkw(void*, void*);
     fopAc_ac_c* getOtherYkwP(int);
     u8 getType();
-    DUSK_NOINLINE BOOL isDelete();
+    BOOL isDelete();
     void reset();
     void afterJntAnm(int);
     void setParam();

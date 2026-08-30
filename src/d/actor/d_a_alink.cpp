@@ -11480,7 +11480,7 @@ int daAlink_c::orderTalk(int i_checkZTalk) {
     return 0;
 }
 
-DUSK_NOINLINE static void* daAlink_searchBouDoor(fopAc_ac_c* i_actor, void* i_data) {
+static void* daAlink_searchBouDoor(fopAc_ac_c* i_actor, void* i_data) {
     UNUSED(i_data);
 
     if (fopAcM_GetName(i_actor) == fpcNm_NPC_BOU_e && ((daNpc_Bou_c*)i_actor)->speakTo()) {

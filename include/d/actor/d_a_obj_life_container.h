@@ -25,23 +25,23 @@ public:
 
     void initBaseMtx();
     void setBaseMtx();
-    DUSK_NOINLINE int Create();
-    DUSK_NOINLINE void setEffect();
+    int Create();
+    void setEffect();
     void endEffect00();
     void endEffect02();
-    DUSK_NOINLINE int create();
+    int create();
     void bg_check();
     int actionWaitInit();
     int actionWait();
     int initActionOrderGetDemo();
     int actionOrderGetDemo();
-    DUSK_NOINLINE int actionGetDemo();
+    int actionGetDemo();
     int actionSwOnWait();
     int actionInitBoomerangCarry();
     int actionBoomerangCarry();
     int actionInitWait2();
     int actionWait2();
-    DUSK_NOINLINE void calcScale();
+    void calcScale();
     int execute();
     int draw();
     int _delete();

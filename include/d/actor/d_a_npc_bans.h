@@ -53,7 +53,7 @@ public:
     static int createHeapCallBack(fopAc_ac_c*);
     static int ctrlJointCallBack(J3DJoint*, int);
     u8 getType();
-    DUSK_NOINLINE BOOL isDelete();
+    BOOL isDelete();
     void reset();
     void afterJntAnm(int);
     void setParam();
