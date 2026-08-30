@@ -27,18 +27,20 @@ public:
 
     // Attributes
     /* 0x04 */ BE(u16) message_id;
-    /* 0x06 */ BE(u16) event_label_id;
-    /* 0x08 */ u8 se_speaker;
-    /* 0x09 */ u8 fuki_kind;
-    /* 0x0A */ u8 output_type;
-    /* 0x0B */ u8 fuki_pos_type;
-    /* 0x0C */ u8 unk_0xc;
-    /* 0x0D */ u8 unk_0xd;
-    /* 0x0E */ u8 se_mood;
-    /* 0x0F */ u8 camera_id;
-    /* 0x10 */ u8 base_anm_id;
-    /* 0x11 */ u8 face_anm_id;
-    /* 0x12 */ BE(u16) unk_0x12;
+    /* 0x06 */ BE(u16) event_label_id;  // saveBitLabels index set when the message displays
+    /* 0x08 */ u8 speaker;              // Z2SpeechMgr2 voice bank ID
+    /* 0x09 */ u8 box_kind;             // screen class, see dMsgObject_c::talkStartInit
+    /* 0x0A */ u8 draw_type;            // text pacing, see jmessage_tSequenceProcessor::do_begin
+    /* 0x0B */ u8 box_position;         // see dMsgObject_c::fukiPosCalc
+    /* 0x0C */ u8 item_no;              // unused; legacy dItemNo, 0xFF = none
+    /* 0x0D */ u8 line_alignment;       // 0 centered (JP only), 1 left; also copied to
+                                        // jmessage_tReference::mForm
+    /* 0x0E */ u8 speaker_mood;         // grunt emotion index for the voice bank
+    /* 0x0F */ u8 camera_attr;          // 1-10 talk-actor slot, >=11 talk-camera style
+    /* 0x10 */ u8 talk_anim;            // NPC talk motion attribute
+    /* 0x11 */ u8 face_anim;            // NPC talk face attribute
+    /* 0x12 */ u8 lines_per_page;       // unused; runtime uses getLineMax()
+    /* 0x13 */ u8 _pad;
 };
 
 class JMSMesgInfo_c {
@@ -119,6 +121,25 @@ struct jmessage_tReference : public JMessage::TReference {
     void setDemoFrame(u32 i_frame) { mDemoFrame = i_frame; }
     void setTopColorType(u8 i_colorType) { mTopColorType = i_colorType; }
     void setNowColorType(u8 i_colorType) { mNowColorType = i_colorType; }
+#if TARGET_PC
+    void resetColors() {
+        mNowCCColor = 0xFFFFFFFF;
+        mNowGCColor = 0xFFFFFFFF;
+        mTopCCColor = 0xFFFFFFFF;
+        mTopGCColor = 0xFFFFFFFF;
+        mNowFullColor = false;
+        mTopFullColor = false;
+    }
+    void setFullColor(u32 ccColor, u32 gcColor) {
+        mNowCCColor = ccColor;
+        mNowGCColor = gcColor;
+        mNowFullColor = true;
+    }
+    void clearNowFullColor() { mNowFullColor = false; }
+    bool hasTopFullColor() { return mTopFullColor; }
+    u32 getTopCCColor() { return mTopCCColor; }
+    u32 getTopGCColor() { return mTopGCColor; }
+#endif
     void setTopTagScale(u16 i_tagScale) { mTopTagScale = i_tagScale; }
     void setNowTagScale(u16 i_tagScale) { mNowTagScale = i_tagScale; }
     void setRevoMessageID(u32 i_msgID) { mRevoMessageID = i_msgID; }
@@ -363,6 +384,14 @@ struct jmessage_tReference : public JMessage::TReference {
     /* 0x1274 */ bool mSelectSetCancelFlag;
     /* 0x1275 */ bool mBombNameUseFlag;
     /* 0x1276 */ u8 mBatchColorFlag;
+#if TARGET_PC
+    u32 mNowCCColor;
+    u32 mNowGCColor;
+    u32 mTopCCColor;
+    u32 mTopGCColor;
+    bool mNowFullColor;
+    bool mTopFullColor;
+#endif
 };  // Size: 0x1278
 
 struct jmessage_tMeasureProcessor : public JMessage::TRenderingProcessor {
@@ -460,6 +489,9 @@ struct jmessage_tRenderingProcessor : public JMessage::TRenderingProcessor {
     void do_selwidthcenter(int);
     void do_heightcenter();
     void do_color(u8);
+#if TARGET_PC
+    void do_fullcolor(u32 ccColor, u32 gcColor);
+#endif
     void do_scale(f32);
     void do_linedown(s16);
     void do_transY(s16, bool);
@@ -638,6 +670,9 @@ struct jmessage_string_tRenderingProcessor : public JMessage::TRenderingProcesso
     void do_rubystrcat(char*);
     void do_outfont(u8);
     void do_color(u8);
+#if TARGET_PC
+    void do_fullcolor(u32 ccColor, u32 gcColor);
+#endif
     void do_scale(f32);
     void do_linedown(s16);
     void do_numset(s16);

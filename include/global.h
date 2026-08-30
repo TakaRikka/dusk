@@ -123,6 +123,14 @@ inline int __builtin_clz(unsigned int v) {
 #endif
 #define DUSK_GAME_EXTERN extern DUSK_GAME_DATA
 
+#if defined(_MSC_VER)
+#define DUSK_NOINLINE __declspec(noinline)
+#elif defined(__GNUC__)
+#define DUSK_NOINLINE __attribute__((noinline))
+#else
+#define DUSK_NOINLINE
+#endif
+
 #define FAST_DIV(x, n) (x >> (n / 2))
 
 #define SQUARE(x) ((x) * (x))
@@ -255,5 +263,24 @@ using std::isnan;
 
 #define DUSK_CONST IF_DUSK(const)
 #define DUSK_CONSTEXPR IF_DUSK(constexpr)
+
+#if TARGET_PC && defined(DUSK_BUILDING_GAME)
+#include "dusk/mods/item.hpp"
+#define DUSK_ITEM_CHECK(name, item_no, giver)                                                      \
+    (item_no) = ::dusk::mods::item_check_commit(name, (item_no), giver).itemNo
+#define DUSK_ITEM_CHECK_EXPR(name, item_no, giver)                                                 \
+    (::dusk::mods::item_check_commit(name, (item_no), giver).itemNo)
+#define DUSK_ITEM_CHECK_PREVIEW(name, item_no, giver)                                              \
+    (item_no) = ::dusk::mods::item_check(name, (item_no), giver)
+#define DUSK_ITEM_CHECK_PREVIEW_EXPR(name, item_no, giver)                                         \
+    (::dusk::mods::item_check(name, (item_no), giver))
+#define DUSK_GIVE_TAG(name) IF_DUSK_ARG(::dusk::mods::item_give_tag(name))
+#else
+#define DUSK_ITEM_CHECK(name, item_no, giver)
+#define DUSK_ITEM_CHECK_EXPR(name, item_no, giver) (item_no)
+#define DUSK_ITEM_CHECK_PREVIEW(name, item_no, giver)
+#define DUSK_ITEM_CHECK_PREVIEW_EXPR(name, item_no, giver) (item_no)
+#define DUSK_GIVE_TAG(name)
+#endif
 
 #endif

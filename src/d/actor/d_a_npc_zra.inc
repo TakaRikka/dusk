@@ -2609,8 +2609,23 @@ BOOL daNpc_zrA_c::ECut_thanksBlast(int i_staffID) {
         case 31: {
             int item_id = 0;
             if (mFlow.getEventId(&item_id) == 1) {
-                mItemID = fopAcM_createItemForPresentDemo(&current.pos, item_id,
-                                                          0, -1, -1, NULL, NULL);
+#if TARGET_PC
+                const char* itemCheckName = nullptr;
+                u32 itemGiveTag = 0;
+                if (item_id == dItemNo_BOMB_IN_BAG_e) {
+                    itemCheckName = "iza_reward_1";
+                } else if (item_id == dItemNo_BOMB_BAG_LV2_e) {
+                    itemCheckName = "iza_reward_2";
+                }
+                if (itemCheckName != nullptr) {
+                    const auto itemCheck =
+                        dusk::mods::item_check_commit(itemCheckName, item_id, this);
+                    item_id = itemCheck.itemNo;
+                    itemGiveTag = itemCheck.tag;
+                }
+#endif
+                mItemID = fopAcM_createItemForPresentDemo(&current.pos, item_id, 0, -1, -1, NULL,
+                    NULL IF_DUSK_ARG(itemGiveTag));
             }
             field_0x9eb = true;
             break;

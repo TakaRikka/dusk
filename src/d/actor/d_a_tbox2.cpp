@@ -138,6 +138,17 @@ int daTbox2_c::create1st() {
     fopAcM_ct(this, daTbox2_c);
     mModelType = getModelType();
 
+#if TARGET_PC
+    if (!mParamsInit) {
+        mOriginalItemNo = getItemNo();
+        int tboxNo = fopAcM_GetParamBit(this, 16, 8);
+        const u8 resolvedItem = dusk::mods::item_check_chest(tboxNo, mOriginalItemNo, this);
+        u32 params = (fopAcM_GetParam(this) & 0xFFFFFF00) | resolvedItem;
+        fopAcM_SetParam(this, params);
+        mParamsInit = true;
+    }
+#endif
+
     int phase_state = dComIfG_resLoad(&mPhase, l_arcName);
     if (phase_state == cPhs_COMPLEATE_e) {
         u32 heap_size;
@@ -370,12 +381,20 @@ void daTbox2_c::actionOpenWait() {
 
 int daTbox2_c::setGetDemoItem() {
     u8 item_no = getItemNo();
+#if TARGET_PC
+    int tboxNo = fopAcM_GetParamBit(this, 16, 8);
+    const auto itemCheck = dusk::mods::item_check_commit(
+        dusk::mods::item_give_tag_chest(tboxNo), mOriginalItemNo, this);
+    item_no = itemCheck.itemNo;
+#endif
 
     u32 partner_id;
     if (mReturnRupee) {
-        partner_id = fopAcM_createItemForPresentDemo(&current.pos, item_no, 1, -1, -1, NULL, NULL);
+        partner_id = fopAcM_createItemForPresentDemo(
+            &current.pos, item_no, 1, -1, -1, NULL, NULL IF_DUSK_ARG(itemCheck.tag));
     } else {
-        partner_id = fopAcM_createItemForTrBoxDemo(&current.pos, item_no, -1, -1, NULL, NULL);
+        partner_id = fopAcM_createItemForTrBoxDemo(
+            &current.pos, item_no, -1, -1, NULL, NULL IF_DUSK_ARG(itemCheck.tag));
     }
 
     if (partner_id != -1) {

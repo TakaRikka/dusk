@@ -16,5 +16,4 @@ add_mod(window_demo
     FEATURES fmt webgpu
     SOURCES src/logging.cpp src/mod.cpp
     MOD_JSON mod.json
-    BUNDLE
 )

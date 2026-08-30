@@ -318,6 +318,11 @@ public:
     /* 0x566 */ s8 field_0x566;
     /* 0x567 */ s8 field_0x567;
 
+#if TARGET_PC
+    u32 mItemGiveTag;
+    u8 mItemGiveOriginalNo;
+#endif
+
 #if !__MWERKS__
     s8 actor_last_base_field;
 #endif

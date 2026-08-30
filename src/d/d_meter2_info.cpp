@@ -1900,3 +1900,542 @@ void dMeter2Info_set2DVibrationT() {}
 void dMeter2Info_set2DVibration() {}
 
 void dMeter2Info_set2DVibrationM() {}
+
+#if TARGET_PC
+void dMeter2Info_Initialize() {
+    g_meter2_info.init();
+}
+
+dMeterMap_c* dMeter2Info_getMeterMapClass() {
+    return g_meter2_info.getMeterMapClass();
+}
+
+dMw_c* dMeter2Info_getMenuWindowClass() {
+    return g_meter2_info.getMenuWindowClass();
+}
+
+void dMeter2Info_setWindowStatus(u8 i_status) {
+    g_meter2_info.setWindowStatus(i_status);
+}
+
+CPaneMgr* dMeter2Info_getMeterItemPanePtr(s32 i_idx) {
+    return g_meter2_info.getMeterItemPanePtr(i_idx);
+}
+
+void dMeter2Info_getString(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
+    g_meter2_info.getString(i_stringID, o_string, i_msgEntry);
+}
+
+void dMeter2Info_getStringKanji(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
+    g_meter2_info.getStringKanji(i_stringID, o_string, i_msgEntry);
+}
+
+void dMeter2Info_getStringKana(u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry) {
+    g_meter2_info.getStringKana(i_stringID, o_string, i_msgEntry);
+}
+
+f32 dMeter2Info_getStringLength(JUTFont* i_font, f32 param_2, f32 param_3, char* i_string) {
+    return g_meter2_info.getStringLength(i_font, param_2, param_3, i_string);
+}
+
+f32 dMeter2Info_getStringLength(J2DTextBox* i_textbox, char* i_string) {
+    return g_meter2_info.getStringLength(i_textbox, i_string);
+}
+
+void dMeter2Info_setHotSpringTimer(u8 i_slotNo) {
+    g_meter2_info.setHotSpringTimer(i_slotNo);
+}
+
+u16 dMeter2Info_getOilGaugeBackUp() {
+    return g_meter2_info.getOilGaugeBackUp();
+}
+
+void dMeter2Info_setOilGaugeBackUp(u16 param_1) {
+    g_meter2_info.setOilGaugeBackUp(param_1);
+}
+
+void dMeter2Info_setSaveStageName(const char* i_stageName) {
+    g_meter2_info.setSaveStageName(i_stageName);
+}
+
+u8 dMeter2Info_getInsectSelectType() {
+    return g_meter2_info.getInsectSelectType();
+}
+
+void dMeter2Info_setInsectSelectType(u8 i_type) {
+    g_meter2_info.setInsectSelectType(i_type);
+}
+
+u8 dMeter2Info_getWarpStatus() {
+    return g_meter2_info.getWarpStatus();
+}
+
+void dMeter2Info_setWarpStatus(u8 i_status) {
+    return g_meter2_info.setWarpStatus(i_status);
+}
+
+int dMeter2Info_readItemTexture(u8 i_itemNo, void* i_texBuf1, J2DPicture* i_pic1, void* i_texBuf2,
+    J2DPicture* i_pic2, void* i_texBuf3, J2DPicture* i_pic3, void* i_texBuf4, J2DPicture* i_pic4,
+    int param_9) {
+    return g_meter2_info.readItemTexture(i_itemNo, i_texBuf1, i_pic1, i_texBuf2, i_pic2, i_texBuf3,
+        i_pic3, i_texBuf4, i_pic4, param_9);
+}
+
+void dMeter2Info_setItemColor(
+    u8 i_itemNo, J2DPicture* i_pic1, J2DPicture* i_pic2, J2DPicture* i_pic3, J2DPicture* i_pic4) {
+    g_meter2_info.setItemColor(i_itemNo, i_pic1, i_pic2, i_pic3, i_pic4);
+}
+
+u8 dMeter2Info_getWarpRoomNo() {
+    return g_meter2_info.getWarpRoomNo();
+}
+
+u8 dMeter2Info_getWarpPlayerNo() {
+    return g_meter2_info.getWarpPlayerNo();
+}
+
+cXyz& dMeter2Info_getWarpPos() {
+    return g_meter2_info.getWarpPos();
+}
+
+const char* dMeter2Info_getWarpStageName() {
+    return g_meter2_info.getWarpStageName();
+}
+
+void dMeter2Info_setNowCount(u8 i_count) {
+    g_meter2_info.setNowCount(i_count);
+}
+
+void dMeter2Info_setMaxCount(u8 i_count) {
+    g_meter2_info.setMaxCount(i_count);
+}
+
+BOOL dMeter2Info_isDirectUseItem(int param_0) {
+    return g_meter2_info.isDirectUseItem(param_0);
+}
+
+bool dMeter2Info_isUseButton(int i_buttonBit) {
+    return g_meter2_info.isUseButton(i_buttonBit);
+}
+
+void dMeter2Info_setMeterMapClass(dMeterMap_c* i_map) {
+    g_meter2_info.setMeterMapClass(i_map);
+}
+
+void dMeter2Info_decHotSpringTimer() {
+    g_meter2_info.decHotSpringTimer();
+}
+
+void dMeter2Info_allUseButton() {
+    g_meter2_info.allUseButton();
+}
+
+void dMeter2Info_offUseButton(int i_buttonBit) {
+    g_meter2_info.offUseButton(i_buttonBit);
+}
+
+void dMeter2Info_resetGameStatus() {
+    g_meter2_info.resetGameStatus();
+}
+
+void dMeter2Info_onGameStatus(int i_status) {
+    g_meter2_info.onGameStatus(i_status);
+}
+
+void dMeter2Info_setMapStatus(u8 i_status) {
+    g_meter2_info.setMapStatus(i_status);
+}
+
+u8 dMeter2Info_getMapStatus() {
+    return g_meter2_info.getMapStatus();
+}
+
+void dMeter2Info_setPauseStatus(u8 i_status) {
+    g_meter2_info.setPauseStatus(i_status);
+}
+
+void dMeter2Info_resetPauseStatus() {
+    g_meter2_info.resetPauseStatus();
+}
+
+u8 dMeter2Info_getPauseStatus() {
+    return g_meter2_info.getPauseStatus();
+}
+
+bool dMeter2Info_isGameStatus(int i_status) {
+    return g_meter2_info.isGameStatus(i_status);
+}
+
+bool dMeter2Info_isTouchKeyCheck(int i_status) {
+    return g_meter2_info.isTouchKeyCheck(i_status);
+}
+
+void dMeter2Info_setMapKeyDirection(u16 i_direction) {
+    g_meter2_info.setMapKeyDirection(i_direction);
+}
+
+bool dMeter2Info_isSub2DStatus(int i_flag) {
+    return g_meter2_info.isSub2DStatus(i_flag);
+}
+
+void dMeter2Info_offMenuInForce(int i_flag) {
+    g_meter2_info.offMenuInForce(i_flag);
+}
+
+bool dMeter2Info_isMenuInForce(int i_flag) {
+    return g_meter2_info.isMenuInForce(i_flag);
+}
+
+void dMeter2Info_setMenuWindowClass(dMw_c* i_menu) {
+    g_meter2_info.setMenuWindowClass(i_menu);
+}
+
+void dMeter2Info_resetWarpStatus() {
+    g_meter2_info.resetWarpStatus();
+}
+
+u16 dMeter2Info_getMapKeyDirection() {
+    return g_meter2_info.getMapKeyDirection();
+}
+
+u8 dMeter2Info_getWindowStatus() {
+    return g_meter2_info.getWindowStatus();
+}
+
+void dMeter2Info_setMsgResource(void* i_res) {
+    g_meter2_info.setMsgResource(i_res);
+}
+
+void dMeter2Info_setStageMsgResource(void* i_res) {
+    g_meter2_info.setStageMsgResource(i_res);
+}
+
+void dMeter2Info_setMsgUnitResource(void* i_res) {
+    g_meter2_info.setMsgUnitResource(i_res);
+}
+
+void* dMeter2Info_getMsgResource() {
+    return g_meter2_info.getMsgResource();
+}
+
+void* dMeter2Info_getStageMsgResource() {
+    return g_meter2_info.getStageMsgResource();
+}
+
+void* dMeter2Info_getMsgUnitResource() {
+    return g_meter2_info.getMsgUnitResource();
+}
+
+u8 dMeter2Info_getLightDropGetFlag(int i_no) {
+    return g_meter2_info.getLightDropGetFlag(i_no);
+}
+
+s32 dMeter2Info_getMeterStringType() {
+    return g_meter2_info.getMeterStringType();
+}
+
+void dMeter2Info_setMeterClass(dMeter2_c* i_meter) {
+    g_meter2_info.setMeterClass(i_meter);
+}
+
+void dMeter2Info_onLifeGaugeSE() {
+    g_meter2_info.onLifeGaugeSE();
+}
+
+void dMeter2Info_offLifeGaugeSE() {
+    g_meter2_info.offLifeGaugeSE();
+}
+
+u8 dMeter2Info_getLifeGaugeSE() {
+    return g_meter2_info.getLifeGaugeSE();
+}
+
+const char* dMeter2Info_getSaveStageName() {
+    return g_meter2_info.getSaveStageName();
+}
+
+void dMeter2Info_onShopTalkFlag() {
+    g_meter2_info.onShopTalkFlag();
+}
+
+void dMeter2Info_setLightDropGetFlag(int i_no, u8 i_flag) {
+    g_meter2_info.setLightDropGetFlag(i_no, i_flag);
+}
+
+u8 dMeter2Info_getRentalBombBag() {
+    return g_meter2_info.getRentalBombBag();
+}
+
+u8 dMeter2Info_getMiniGameItemSetFlag() {
+    return g_meter2_info.getMiniGameItemSetFlag();
+}
+
+void dMeter2Info_setMiniGameItem(u8 i_minigameFlag) {
+    g_meter2_info.setMiniGameItem(i_minigameFlag);
+}
+
+void dMeter2Info_resetMiniGameItem(bool i_saveItem) {
+    g_meter2_info.resetMiniGameItem(i_saveItem);
+}
+
+void dMeter2Info_setTableMapRegionNo(u8 i_regionNo) {
+    g_meter2_info.setTableMapRegionNo(i_regionNo);
+}
+
+void dMeter2Info_setGoldWolfMapType(u8 i_mapType) {
+    g_meter2_info.setGoldWolfMapType(i_mapType);
+}
+
+void dMeter2Info_changeWater(u8 i_slotNo) {
+    g_meter2_info.changeWater(i_slotNo);
+}
+
+void dMeter2Info_warpInProc() {
+    g_meter2_info.warpInProc();
+}
+
+void dMeter2Info_warpOutProc() {
+    g_meter2_info.warpOutProc();
+}
+
+dMeter2_c* dMeter2Info_getMeterClass() {
+    return g_meter2_info.getMeterClass();
+}
+
+s16 dMeter2Info_getMsgKeyWaitTimer() {
+    return g_meter2_info.getMsgKeyWaitTimer();
+}
+
+void dMeter2Info_onDirectUseItem(int param_0) {
+    g_meter2_info.onDirectUseItem(param_0);
+}
+
+void dMeter2Info_setFloatingFlow(u16 i_flowID, s16 i_msgTimer, bool i_wakuVisible) {
+    g_meter2_info.setFloatingFlow(i_flowID, i_msgTimer, i_wakuVisible);
+}
+
+u8 dMeter2Info_getGameOverType() {
+    return g_meter2_info.getGameOverType();
+}
+
+void dMeter2Info_setGameOverType(u8 i_gameoverType) {
+    g_meter2_info.setGameOverType(i_gameoverType);
+}
+
+void dMeter2Info_setMsgKeyWaitTimer(s16 i_waitTimer) {
+    g_meter2_info.setMsgKeyWaitTimer(i_waitTimer);
+}
+
+s32 dMeter2Info_getMsgTimeMs() {
+    return g_meter2_info.getMsgTimeMs();
+}
+
+s32 dMeter2Info_getTimeMs() {
+    return g_meter2_info.getTimeMs();
+}
+
+void dMeter2Info_setMsgTimeMs(s32 i_msgTime) {
+    g_meter2_info.setMsgTimeMs(i_msgTime);
+}
+
+void dMeter2Info_setTimeMs(s32 i_time) {
+    g_meter2_info.setTimeMs(i_time);
+}
+
+u8 dMeter2Info_getNowCount() {
+    return g_meter2_info.getNowCount();
+}
+
+u8 dMeter2Info_getMaxCount() {
+    return g_meter2_info.getMaxCount();
+}
+
+void dMeter2Info_setScopeZoomPointer(u8 param_0) {
+    g_meter2_info.setScopeZoomPointer(param_0);
+}
+
+void dMeter2Info_decMsgKeyWaitTimer() {
+    g_meter2_info.decMsgKeyWaitTimer();
+}
+
+bool dMeter2Info_isFloatingMessageVisible() {
+    return g_meter2_info.isFloatingMessageVisible();
+}
+
+u8 dMeter2Info_getItemExplainWindowStatus() {
+    return g_meter2_info.getItemExplainWindowStatus();
+}
+
+void dMeter2Info_setItemExplainWindowStatus(u8 i_value) {
+    g_meter2_info.setItemExplainWindowStatus(i_value);
+}
+
+void dMeter2Info_resetDirectUseItem() {
+    g_meter2_info.resetDirectUseItem();
+}
+
+u16 dMeter2Info_getFloatingFlowID() {
+    return g_meter2_info.getFloatingFlowID();
+}
+
+u8 dMeter2Info_getCollectCursorPosX() {
+    return g_meter2_info.getCollectCursorPosX();
+}
+
+u8 dMeter2Info_getCollectCursorPosY() {
+    return g_meter2_info.getCollectCursorPosY();
+}
+
+void dMeter2Info_setCollectCursorPosXY(u8 x, u8 y) {
+    g_meter2_info.setCollectCursorPosXY(x, y);
+}
+
+void dMeter2Info_onBlinkButton(int i_flag) {
+    g_meter2_info.onBlinkButton(i_flag);
+}
+
+bool dMeter2Info_isFloatingMessageWakuVisible() {
+    return g_meter2_info.isFloatingMessageWakuVisible();
+}
+
+bool dMeter2Info_isBlinkButton(int i_flag) {
+    return g_meter2_info.isBlinkButton(i_flag);
+}
+
+void dMeter2Info_resetBlinkButton() {
+    g_meter2_info.resetBlinkButton();
+}
+
+void dMeter2Info_resetFloatingMessage() {
+    g_meter2_info.resetFloatingMessage();
+}
+
+s16 dMeter2Info_decFloatingMessageTimer() {
+    return g_meter2_info.decFloatingMessageTimer();
+}
+
+s16 dMeter2Info_getFloatingMessageTimer() {
+    return g_meter2_info.getFloatingMessageTimer();
+}
+
+u16 dMeter2Info_getFloatingMessageID() {
+    return g_meter2_info.getFloatingMessageID();
+}
+
+s16 dMeter2Info_getHorseLifeCount() {
+    return g_meter2_info.getHorseLifeCount();
+}
+
+void dMeter2Info_setMeterString(s32 i_string) {
+    g_meter2_info.setMeterString(i_string);
+}
+
+void dMeter2Info_resetMeterString() {
+    g_meter2_info.resetMeterString();
+}
+
+void dMeter2Info_setMeterItemPanePtr(int i_no, CPaneMgr* i_pane) {
+    g_meter2_info.setMeterItemPanePtr(i_no, i_pane);
+}
+
+bool dMeter2Info_isShopTalkFlag() {
+    return g_meter2_info.isShopTalkFlag();
+}
+
+void dMeter2Info_setMapDrugFlag(bool i_flag) {
+    g_meter2_info.setMapDrugFlag(i_flag);
+}
+
+bool dMeter2Info_isTempBit(int i_bit) {
+    return g_meter2_info.isTempBit(i_bit);
+}
+
+void dMeter2Info_offSub2DStatus(int i_bit) {
+    g_meter2_info.offSub2DStatus(i_bit);
+}
+
+void dMeter2Info_onSub2DStatus(int i_bit) {
+    g_meter2_info.onSub2DStatus(i_bit);
+}
+
+void dMeter2Info_set2DWidth(f32 i_width) {
+    g_meter2_info.set2DWidth(i_width);
+}
+
+void dMeter2Info_set2DHeight(f32 i_height) {
+    g_meter2_info.set2DHeight(i_height);
+}
+
+void dMeter2Info_set2DPosH(f32 i_posH) {
+    g_meter2_info.set2DPosH(i_posH);
+}
+
+void dMeter2Info_set2DPosV(f32 i_posV) {
+    g_meter2_info.set2DPosV(i_posV);
+}
+
+void dMeter2Info_offShopTalkFlag() {
+    g_meter2_info.offShopTalkFlag();
+}
+
+void dMeter2Info_onUseButton(int i_button) {
+    g_meter2_info.onUseButton(i_button);
+}
+
+f32 dMeter2Info_get2DWidth() {
+    return g_meter2_info.get2DWidth();
+}
+
+f32 dMeter2Info_get2DHeight() {
+    return g_meter2_info.get2DHeight();
+}
+
+void dMeter2Info_setWarpInfo(const char* i_stageName, const cXyz& i_position, s16 i_angle,
+    u8 i_roomNo, u8 param_4, u8 i_warpPlayerNo) {
+    g_meter2_info.setWarpInfo(i_stageName, i_position, i_angle, i_roomNo, param_4, i_warpPlayerNo);
+}
+
+u8 dMeter2Info_getTableMapRegionNo() {
+    return g_meter2_info.getTableMapRegionNo();
+}
+
+u8 dMeter2Info_getGoldWolfMapType() {
+    return g_meter2_info.getGoldWolfMapType();
+}
+
+bool dMeter2Info_isWindowAccept(int param_0) {
+    return g_meter2_info.isWindowAccept(param_0);
+}
+
+void dMeter2Info_setHorseLifeCount(s16 i_count) {
+    g_meter2_info.setHorseLifeCount(i_count);
+}
+
+void dMeter2Info_offTempBit(int i_bit) {
+    g_meter2_info.offTempBit(i_bit);
+}
+
+void dMeter2Info_onTempBit(int i_bit) {
+    g_meter2_info.onTempBit(i_bit);
+}
+
+void dMeter2Info_setFloatingMessage(u16 i_msgID, s16 i_msgTimer, bool i_wakuVisible) {
+    g_meter2_info.setFloatingMessage(i_msgID, i_msgTimer, i_wakuVisible);
+}
+
+void dMeter2Info_setMiniGameCount(s8 i_count) {
+    g_meter2_info.setMiniGameCount(i_count);
+}
+
+void dMeter2Info_onWindowAccept(int param_0) {
+    g_meter2_info.onWindowAccept(param_0);
+}
+
+void dMeter2Info_offWindowAccept(int param_0) {
+    g_meter2_info.offWindowAccept(param_0);
+}
+
+void dMeter2Info_onMenuInForce(int param_0) {
+    g_meter2_info.onMenuInForce(param_0);
+}
+#endif

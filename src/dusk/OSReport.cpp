@@ -1,10 +1,10 @@
 #include <memory>
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "dusk/os.h"
 #include "os_report.h"
 
-aurora::Module Log("dusk::osReport");
+static constexpr borealis::Log Log{"dusk::osReport"};
 
 bool dusk::OSReportReallyForceEnable = false;
 

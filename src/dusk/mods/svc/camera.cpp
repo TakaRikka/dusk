@@ -1,13 +1,24 @@
 #include "registry.hpp"
+#include "slot_map.hpp"
 
+#include "dusk/camera_operators.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/camera.h"
 
+#include "SSystem/SComponent/c_angle.h"
+#include "d/d_camera.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_view.h"
 #include "m_Do/m_Do_mtx.h"
 
+#include <algorithm>
 #include <aurora/gfx.hpp>
 #include <cstring>
+#include <exception>
+#include <fmt/format.h>
+#include <string>
+#include <vector>
 
 namespace dusk::mods::svc {
 namespace {
@@ -117,9 +128,125 @@ ModResult camera_get_camera_from_view(
     return snapshot_view(static_cast<const view_class*>(gameView), outInfo);
 }
 
+struct CameraOperator {
+    std::string debugName;
+    int32_t priority = 0;
+    uint64_t sequence = 0;
+    CameraOperateFn operate = nullptr;
+    void* userData = nullptr;
+};
+
+SlotMap<CameraOperator> sOperators;
+uint64_t sNextOperatorSequence = 0;
+
+ModResult camera_register_operator(
+    ModContext* context, const CameraOperatorDesc* desc, CameraOperatorHandle* outHandle) {
+    if (outHandle != nullptr) {
+        *outHandle = 0;
+    }
+
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || desc == nullptr || desc->struct_size < sizeof(CameraOperatorDesc) ||
+        desc->debug_name == nullptr || desc->debug_name[0] == '\0' || desc->operate == nullptr ||
+        outHandle == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    *outHandle = sOperators.emplace(*mod, CameraOperator{
+                                              .debugName = desc->debug_name,
+                                              .priority = desc->priority,
+                                              .sequence = sNextOperatorSequence++,
+                                              .operate = desc->operate,
+                                              .userData = desc->user_data,
+                                          });
+    return MOD_OK;
+}
+
+ModResult camera_unregister_operator(ModContext* context, CameraOperatorHandle handle) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || handle == 0) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return sOperators.erase_owned(handle, *mod) ? MOD_OK : MOD_INVALID_ARGUMENT;
+}
+
+CameraOperatorState make_operator_state(const dCamera_c& camera) {
+    return CameraOperatorState{
+        .struct_size = sizeof(CameraOperatorState),
+        .frame_counter = camera.mFrameCounter,
+        .ticks = camera.mTicks,
+        .aspect = mDoGph_gInf_c::getAspect(),
+        .eye = {camera.mEye.x, camera.mEye.y, camera.mEye.z},
+        .center = {camera.mCenter.x, camera.mCenter.y, camera.mCenter.z},
+        .fovy = camera.mFovy,
+        .bank_degrees = camera.mBank.Degree(),
+    };
+}
+
+bool run_operators(dCamera_c* camera) {
+    auto* mainCamera = dComIfGp_getCamera(0);
+    if (camera == nullptr || mainCamera == nullptr || &mainCamera->mCamera != camera) {
+        return false;
+    }
+
+    struct PendingOperator {
+        CameraOperatorHandle handle;
+        CameraOperator value;
+        LoadedMod* owner;
+    };
+    std::vector<PendingOperator> operators;
+    sOperators.for_each([&](CameraOperatorHandle handle, const auto& entry) {
+        operators.push_back({.handle = handle, .value = entry.value, .owner = entry.owner});
+    });
+    std::ranges::sort(operators, [](const PendingOperator& lhs, const PendingOperator& rhs) {
+        if (lhs.value.priority != rhs.value.priority) {
+            return lhs.value.priority > rhs.value.priority;
+        }
+        return lhs.value.sequence < rhs.value.sequence;
+    });
+
+    const auto initialState = make_operator_state(*camera);
+    for (const auto& entry : operators) {
+        if (!entry.owner->active || sOperators.find(entry.handle) == nullptr) {
+            continue;
+        }
+
+        auto state = initialState;
+        bool useState = false;
+        try {
+            useState =
+                entry.value.operate(entry.owner->context.get(), &state, entry.value.userData);
+        } catch (const std::exception& e) {
+            fail_mod(*entry.owner, MOD_ERROR,
+                fmt::format(
+                    "exception in camera operator '{}': {}", entry.value.debugName, e.what()));
+        } catch (...) {
+            fail_mod(*entry.owner, MOD_ERROR,
+                fmt::format("unknown exception in camera operator '{}'", entry.value.debugName));
+        }
+
+        if (!useState) {
+            continue;
+        }
+
+        camera->Reset(cXyz{state.center[0], state.center[1], state.center[2]},
+            cXyz{state.eye[0], state.eye[1], state.eye[2]}, state.fovy,
+            cAngle::Degree_to_SAngle(state.bank_degrees));
+        return true;
+    }
+    return false;
+}
+
+void camera_mod_detached(LoadedMod& mod) {
+    sOperators.erase_all(mod);
+}
+
 constexpr CameraService s_cameraService{
     .header = SERVICE_HEADER(CameraService, CAMERA_SERVICE_MAJOR, CAMERA_SERVICE_MINOR),
     .get_camera = camera_get_camera_from_view,
+    .register_camera_operator = camera_register_operator,
+    .unregister_camera_operator = camera_unregister_operator,
 };
 
 }  // namespace
@@ -129,6 +256,11 @@ constinit const ServiceModule g_cameraModule{
     .majorVersion = CAMERA_SERVICE_MAJOR,
     .minorVersion = CAMERA_SERVICE_MINOR,
     .service = &s_cameraService,
+    .modDetached = camera_mod_detached,
 };
 
 }  // namespace dusk::mods::svc
+
+bool dusk::mods::camera_run_operators(dCamera_c* camera) {
+    return svc::run_operators(camera);
+}

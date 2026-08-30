@@ -20,8 +20,10 @@ public:
     virtual void hide(bool close);
     virtual void update();
     virtual bool focus();
+    bool has_focus() const;
     virtual bool visible() const;
     virtual bool active() const;
+    virtual bool permanent() const { return false; }
     virtual bool obscures_game() const { return false; }
     virtual void cover() {
         mWasVisible = visible();
@@ -64,7 +66,12 @@ public:
         hide(true);
         uncover_top_document();
     }
+    void force_hide(bool close) {
+        hide(close);
+        Document::hide(close);
+    }
 
+    bool pending_close() const { return mPendingClose; }
     bool closed() const { return mClosed; }
 
     bool handle_nav_event(Rml::Event& event);

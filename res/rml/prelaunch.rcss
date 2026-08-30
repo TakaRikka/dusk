@@ -143,6 +143,74 @@ eyebrow span {
     transition: decorator color opacity 0.1s linear-in-out;
 }
 
+#menu-list button.game-mode-button {
+    position: relative;
+    padding: 0;
+    overflow: visible;
+}
+
+#menu-list game-mode-label-viewport {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 8dp;
+    pointer-events: none;
+    z-index: 0;
+}
+
+#menu-list game-mode-label {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8dp 16dp;
+    opacity: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: opacity 0.24s cubic-in-out;
+}
+
+#menu-list game-mode-label.active {
+    opacity: 1;
+}
+
+#menu-list game-mode-previous,
+#menu-list game-mode-next {
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 48dp;
+    height: 54dp;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-size: 30dp;
+    z-index: 1;
+}
+
+#menu-list game-mode-previous {
+    left: -48dp;
+    decorator: text("&#xe5cb;" center center);
+}
+
+#menu-list game-mode-next {
+    right: -48dp;
+    decorator: text("&#xe5cc;" center center);
+}
+
+#menu-list button.game-mode-button.can-cycle game-mode-previous,
+#menu-list button.game-mode-button.can-cycle game-mode-next {
+    display: flex;
+}
+
 #menu-list button:hover,
 #menu-list button:focus-visible {
     color: black;

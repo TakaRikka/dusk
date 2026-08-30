@@ -1132,12 +1132,14 @@ static void e_po_dead(e_po_class* i_this) {
             camera_player->mCamera.Start();
             camera_player->mCamera.SetTrimSize(0);
             dComIfGp_event_reset();
+#if !TARGET_PC
             dComIfGs_addPohSpiritNum();
 #if !PLATFORM_SHIELD
             if (dComIfGs_getPohSpiritNum() == 0x14) {
                 /* dSv_event_flag_c::F_0457 - Castle Town - Revived cat */
                 dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[457]);
             }
+#endif
 #endif
             daPy_getPlayerActorClass()->cancelOriginalDemo();
         } else if (mArg0Check(i_this, 0) != 0) {
@@ -1265,8 +1267,21 @@ static void e_po_dead(e_po_class* i_this) {
             }
         } else {
             if (i_this->field_0x75C == -1) {
+#if TARGET_PC
+                const auto itemCheck = dusk::mods::item_check_commit(
+                    dusk::mods::item_give_tag_poe(i_this->BitSW), dItemNo_POU_SPIRIT_e, a_this);
+                if (itemCheck.itemNo == dItemNo_NONE_e) {
+                    dusk::mods::item_check_complete(itemCheck, a_this);
+                    i_this->field_0x75B = 1;
+                } else {
+                    i_this->field_0x75C = fopAcM_createItemForPresentDemo(
+                        &a_this->current.pos, itemCheck.itemNo, 0, -1, -1, NULL, NULL,
+                        itemCheck.tag);
+                }
+#else
                 i_this->field_0x75C = fopAcM_createItemForPresentDemo(&a_this->current.pos, 0xE0, 0,
                                                                       -1, -1, NULL, NULL);
+#endif
             }
             if (fopAcM_IsExecuting(i_this->field_0x75C)) {
                 i_this->field_0x762 =

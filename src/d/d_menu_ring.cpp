@@ -333,11 +333,13 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
         mpScreen->search(MULTI_CHAR('yx_te_s3'))->hide();
         mpScreen->search(MULTI_CHAR('yx_te_s4'))->hide();
         mpScreen->search(MULTI_CHAR('yx_text'))->hide();
+        IF_DUSK_BLOCK(dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn)
         mpScreen->search(MULTI_CHAR('fyx_te_1'))->hide();
         mpScreen->search(MULTI_CHAR('fyx_te_2'))->hide();
         mpScreen->search(MULTI_CHAR('fyx_te_3'))->hide();
         mpScreen->search(MULTI_CHAR('fyx_te_4'))->hide();
         mpScreen->search(MULTI_CHAR('fyx_tex'))->hide();
+        IF_DUSK_BLOCK_END
         mpScreen->search(MULTI_CHAR('x_btn_n'))->hide();
         mpScreen->search(MULTI_CHAR('y_btn_n'))->hide();
     }
@@ -345,9 +347,11 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     for (i = 0; i < 5; i++) {
 #if TARGET_PC
         J2DTextBox* fxy_TextBox;
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             fxy_TextBox = (J2DTextBox*)mpScreen->search(xy_text[i]);
-            mpScreen->search(fxy_text[i])->hide();
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mpScreen->search(fxy_text[i])->hide();
+            }
         } else {
             fxy_TextBox = (J2DTextBox*)mpScreen->search(fxy_text[i]);
             mpScreen->search(xy_text[i])->hide();
@@ -366,13 +370,17 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     for (i = 0; i < 5; i++) {
 #if TARGET_PC
         J2DTextBox* fc_TextBox;
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             if (dusk::getSettings().game.swapDirectSelect) {
                 fc_TextBox = (J2DTextBox*)mpScreen->search(c_text1[i]);
-                mpScreen->search(fc_text1[i])->hide();
+                if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                    mpScreen->search(fc_text1[i])->hide();
+                }
             } else {
                 fc_TextBox = (J2DTextBox*)mpScreen->search(c_text[i]);
-                mpScreen->search(fc_text[i])->hide();
+                if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                    mpScreen->search(fc_text[i])->hide();
+                }
             }
         } else {
             if (dusk::getSettings().game.swapDirectSelect) {
@@ -397,13 +405,17 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     for (i = 0; i < 5; i++) {
 #if TARGET_PC
         J2DTextBox* fc1_TextBox;
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             if (dusk::getSettings().game.swapDirectSelect) {
                 fc1_TextBox = (J2DTextBox*)mpScreen->search(c_text[i]);
-                mpScreen->search(fc_text[i])->hide();
+                if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                    mpScreen->search(fc_text[i])->hide();
+                }
             } else {
                 fc1_TextBox = (J2DTextBox*)mpScreen->search(c_text1[i]);
-                mpScreen->search(fc_text1[i])->hide();
+                if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                    mpScreen->search(fc_text1[i])->hide();
+                }
             }
         } else {
             if (dusk::getSettings().game.swapDirectSelect) {
@@ -427,9 +439,11 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
     for (int i = 0; i < 5; i++) {
 #if TARGET_PC
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             mpComboOffString[i] = (J2DTextBox*)mpScreen->search(t_on[i]);
-            mpScreen->search(ft_on[i])->hide();
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mpScreen->search(ft_on[i])->hide();
+            }
         } else {
             mpComboOffString[i] = (J2DTextBox*)mpScreen->search(ft_on[i]);
             mpScreen->search(t_on[i])->hide();
@@ -447,9 +461,11 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     }
     for (int i = 0; i < 5; i++) {
 #if TARGET_PC
-        if (dusk::version::isRegionJpn()) {
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
             mpBowArrowComboString[i] = (J2DTextBox*)mpScreen->search(t_off[i]);
-            mpScreen->search(ft_off[i])->hide();
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mpScreen->search(ft_off[i])->hide();
+            }
         } else {
             mpBowArrowComboString[i] = (J2DTextBox*)mpScreen->search(ft_off[i]);
             mpScreen->search(t_off[i])->hide();
@@ -486,19 +502,21 @@ dMenu_Ring_c::dMenu_Ring_c(JKRExpHeap* i_heap, STControl* i_stick, CSTControl* i
     mpCircle = JKR_NEW CPaneMgr(mpCenterScreen, MULTI_CHAR('circle_n'), 2, NULL);
     J2DTextBox* textBox[4];
 #if TARGET_PC
-    if (dusk::version::isRegionJpn()) {
+    if (dusk::version::isJpnOrLessThanWiiJpn()) {
         textBox[0] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n04'));
         textBox[1] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n05'));
         textBox[2] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n06'));
         textBox[3] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n07'));
-        J2DPane* pane = mpCenterScreen->search(MULTI_CHAR('fitem_n1'));
-        pane->mVisible = false;
-        pane = mpCenterScreen->search(MULTI_CHAR('fitem_n2'));
-        pane->mVisible = false;
-        pane = mpCenterScreen->search(MULTI_CHAR('fitem_n3'));
-        pane->mVisible = false;
-        pane = mpCenterScreen->search(MULTI_CHAR('fitem_n4'));
-        pane->mVisible = false;
+        if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+            J2DPane* pane = mpCenterScreen->search(MULTI_CHAR('fitem_n1'));
+            pane->mVisible = false;
+            pane = mpCenterScreen->search(MULTI_CHAR('fitem_n2'));
+            pane->mVisible = false;
+            pane = mpCenterScreen->search(MULTI_CHAR('fitem_n3'));
+            pane->mVisible = false;
+            pane = mpCenterScreen->search(MULTI_CHAR('fitem_n4'));
+            pane->mVisible = false;
+        }
     } else {
         textBox[0] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('fitem_n1'));
         textBox[1] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('fitem_n2'));
@@ -1292,17 +1310,11 @@ void dMenu_Ring_c::setScale() {
 void dMenu_Ring_c::setNameString(u32 i_stringID) {
     J2DTextBox* textBox[4];
 #if TARGET_PC
-    if (dusk::version::isRegionJpn()) {
-        textBox[0] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n04'));
-        textBox[1] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n05'));
-        textBox[2] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n06'));
-        textBox[3] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n07'));
-    } else {
-        textBox[0] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('fitem_n1'));
-        textBox[1] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('fitem_n2'));
-        textBox[2] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('fitem_n3'));
-        textBox[3] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('fitem_n4'));
-    }
+    const bool useDomestic = dusk::version::isJpnOrLessThanWiiJpn();
+    textBox[0] = (J2DTextBox*)mpCenterScreen->search(useDomestic ? MULTI_CHAR('item_n04') : MULTI_CHAR('fitem_n1'));
+    textBox[1] = (J2DTextBox*)mpCenterScreen->search(useDomestic ? MULTI_CHAR('item_n05') : MULTI_CHAR('fitem_n2'));
+    textBox[2] = (J2DTextBox*)mpCenterScreen->search(useDomestic ? MULTI_CHAR('item_n06') : MULTI_CHAR('fitem_n3'));
+    textBox[3] = (J2DTextBox*)mpCenterScreen->search(useDomestic ? MULTI_CHAR('item_n07') : MULTI_CHAR('fitem_n4'));
 #elif VERSION == VERSION_GCN_JPN
     textBox[0] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n04'));
     textBox[1] = (J2DTextBox*)mpCenterScreen->search(MULTI_CHAR('item_n05'));
@@ -1798,7 +1810,7 @@ void dMenu_Ring_c::drawSelectItem() {
         if (field_0x674[i] != 0) {
 #if TARGET_PC
             mSelectItemSlideElapsed[i] += dusk::game_clock::consume_interval(this);
-            const f32 u = std::min(mSelectItemSlideElapsed[i] / dusk::game_clock::period_for_original_frames(10.0f), 1.0f);
+            const f32 u = std::min(mSelectItemSlideElapsed[i] / (dusk::game_clock::kSimPeriod * 10.0f), 1.0f);
             if (u >= 1.0f) {
                 setSelectItemForce(i);
             } else {

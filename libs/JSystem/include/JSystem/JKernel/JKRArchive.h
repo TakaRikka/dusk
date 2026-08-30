@@ -6,11 +6,17 @@
 #include "global.h"
 #include "helpers/endian.h"
 
+#if TARGET_PC
+#include <atomic>
+#include <string>
+#include <unordered_map>
+#endif
+
 class JKRHeap;
 
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 struct SArcHeader {
     /* 0x00 */ BE(u32) signature;
@@ -25,7 +31,7 @@ struct SArcHeader {
 
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 struct SArcDataInfo {
     /* 0x00 */ BE(u32) num_nodes;
@@ -59,7 +65,7 @@ extern u32 sCurrentDirID__10JKRArchive;  // JKRArchive::sCurrentDirID
 
 /**
  * @ingroup jsystem-jkernel
- * 
+ *
  */
 class JKRArchive : public JKRFileLoader {
 public:
@@ -192,9 +198,7 @@ public:
     u32 countFile() const { return mArcInfoBlock->num_file_entries; }
     s32 countDirectory() const { return mArcInfoBlock->num_nodes; }
     u8 getMountMode() const { return mMountMode; }
-    bool isFileEntry(u32 param_0) const {
-        return getFileAttribute(param_0) & 1;
-    }
+    bool isFileEntry(u32 param_0) const { return getFileAttribute(param_0) & 1; }
 
 public:
     /* 0x00 */  // vtable
@@ -210,7 +214,36 @@ public:
     /* 0x54 */ const char* mStringTable;
 
 #if TARGET_PC
+    u32 getFileSize(SDIFileEntry* entry) const;
+    void* getOverlayData(SDIFileEntry* entry, u32* outSize);
+    bool getOverlayFileSize(SDIFileEntry* entry, u32* outSize) const;
+    static void notifyOverlayFilesChanged();
+
+protected:
     void** mFileData;
+
+    struct ArcOverlayResource {
+        u32 entryIndex;
+        u32 size;
+        u64 generation;
+    };
+
+    // Resource pointers remain valid until removed through the JKR resource APIs.
+    // That way, any pointers to old overlay data remain valid even when the overlay changed.
+    std::unordered_map<void*, ArcOverlayResource> mArcOverlayResources;
+    mutable std::unordered_map<u32, void*> mActiveArcOverlayResources;
+    mutable std::string mArcOverlaysPath;
+    mutable std::unordered_map<u32, std::string> mIdxToPathMap;
+    mutable bool mArcOverlaysPathResolved = false;
+
+    bool buildArcOverlaysPath() const;
+    void buildIndexToPathMap(u32 dirIndex, const std::string& currentPath) const;
+    bool getOverlayPath(SDIFileEntry* entry, std::string& path) const;
+    void* getActiveOverlayData(SDIFileEntry* entry, u32* outSize) const;
+    bool copyOverlayData(void* buffer, u32 bufferSize, SDIFileEntry* entry, u32* outSize);
+    bool getOverlayResourceSize(const void* data, u32* outSize) const;
+    bool removeOverlayResource(void* resource, bool freeResource);
+    void removeAllOverlayResources();
 #endif
 
 protected:
@@ -234,7 +267,7 @@ public:
         } else if (attr & JKRARCHIVE_ATTR_YAZ0) {
             return COMPRESSION_YAZ0;
         } else {
-           return COMPRESSION_YAY0;
+            return COMPRESSION_YAY0;
         }
     }
 
@@ -243,6 +276,9 @@ public:
 
 protected:
     static DUSK_GAME_DATA u32 sCurrentDirID;
+#if TARGET_PC
+    static std::atomic<u64> sArcOverlayGeneration;
+#endif
 };
 
 inline JKRCompression JKRConvertAttrToCompressionType(int attr) {
@@ -261,8 +297,8 @@ inline bool JKRRemoveResource(void* resource, JKRFileLoader* fileLoader) {
     return JKRFileLoader::removeResource(resource, fileLoader);
 }
 
-inline JKRArchive* JKRMountArchive(void* ptr, JKRHeap* heap,
-                                   JKRArchive::EMountDirection mountDirection) {
+inline JKRArchive* JKRMountArchive(
+    void* ptr, JKRHeap* heap, JKRArchive::EMountDirection mountDirection) {
     return JKRArchive::mount(ptr, heap, mountDirection);
 }
 

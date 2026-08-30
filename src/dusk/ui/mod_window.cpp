@@ -1,6 +1,7 @@
 #include "mod_window.hpp"
 
 #include "bool_button.hpp"
+#include "color_input.hpp"
 #include "number_button.hpp"
 #include "string_button.hpp"
 
@@ -16,8 +17,21 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
     case ModControlSpec::Kind::Button:
         control = &pane.add_button(ControlledButton::Props{
                                        .text = s.label,
+                                       .isSelected = s.isSelected,
                                        .isDisabled = s.isDisabled,
                                    })
+                       .on_pressed([shared] {
+                           if (shared->onPressed) {
+                               shared->onPressed();
+                           }
+                       });
+        break;
+    case ModControlSpec::Kind::Group:
+        control = &pane.add_group_button(GroupButton::Props{
+                                             .text = s.label,
+                                             .isSelected = s.isSelected,
+                                             .isDisabled = s.isDisabled,
+                                         })
                        .on_pressed([shared] {
                            if (shared->onPressed) {
                                shared->onPressed();
@@ -55,6 +69,18 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
             .isDisabled = s.isDisabled,
             .isModified = s.isModified,
             .maxLength = s.maxLength,
+            .setOnChange = s.stringSetOnChange,
+        });
+        break;
+    case ModControlSpec::Kind::Color:
+        control = &pane.add_child<ColorInput>(ColorInput::Props{
+            .key = s.label,
+            .getValue = s.getString,
+            .setValue = s.setString,
+            .isDisabled = s.isDisabled,
+            .isModified = s.isModified,
+            .presets = s.colorPresets,
+            .alpha = s.colorAlpha,
         });
         break;
     case ModControlSpec::Kind::Select:

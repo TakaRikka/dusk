@@ -150,6 +150,14 @@ ModResult register_module(const ServiceModule& module) {
     return MOD_OK;
 }
 
+void modules_mod_deactivating(LoadedMod& mod) {
+    for (const auto* module : s_modules | std::views::reverse) {
+        if (module->modDeactivating != nullptr) {
+            module->modDeactivating(mod);
+        }
+    }
+}
+
 void modules_mod_detached(LoadedMod& mod) {
     for (const auto* module : s_modules | std::views::reverse) {
         if (module->modDetached != nullptr) {
@@ -206,12 +214,19 @@ void ModLoader::init_services() {
             &svc::g_overlayModule,
             &svc::g_textureModule,
             &svc::g_configModule,
+            &svc::g_uiModule_v1,
             &svc::g_uiModule,
             &svc::g_gameModule,
             &svc::g_cameraModule,
             &svc::g_windowModule,
             &svc::g_gfxModule,
             &svc::g_audioResModule,
+            &svc::g_saveModule,
+            &svc::g_stageModule,
+            &svc::g_itemModule,
+            &svc::g_flowModule,
+            &svc::g_messageModule,
+            &svc::g_gamemodeModule,
         })
     {
         svc::register_module(*module);

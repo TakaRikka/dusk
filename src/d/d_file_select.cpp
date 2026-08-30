@@ -23,10 +23,13 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/utilities.hpp"
 #include "dusk/version.hpp"
 
 #if TARGET_PC
+#include "dusk/game_mode.hpp"
 #include "dusk/menu_pointer.h"
+#include "dusk/mods/svc/save.hpp"
 #include "helpers/string.hpp"
 
 namespace {
@@ -254,6 +257,10 @@ dFile_select_c::~dFile_select_c() {
 
 void dFile_select_c::_create() {
     int i;
+
+#if TARGET_PC
+    dusk::mods::svc::save_no_slot();
+#endif
 
     mDoGph_gInf_c::setFadeColor(static_cast<JUtility::TColor&>(g_blackColor));
     
@@ -1305,12 +1312,42 @@ void dFile_select_c::selectDataOpenMove() {
 void dFile_select_c::selectDataNameMove() {
     bool isHeaderTxtChange = headerTxtChangeAnm();
     bool isFileRecScale = fileRecScaleAnm2();
-    bool isNameMove = nameMoveAnm();
+    IF_NOT_DUSK(bool isNameMove = nameMoveAnm();)
     bool isModoruTxtDisp = modoruTxtDispAnm();
+
+#ifdef TARGET_PC
+    const dusk::gamemode::GameMode* gameMode =
+        dusk::gamemode::getGameModeManager().getCurrentGameMode();
+    if (gameMode) {
+        if (isHeaderTxtChange == true && isFileRecScale == true && isModoruTxtDisp == true) {
+            if (mGameModeSaveStartBuildUi) {
+                gameMode->invokeOnNewSaveSelectFunction(&mGameModeNewSaveState);
+                mGameModeSaveStartBuildUi = false;
+            }
+            if (mGameModeNewSaveState == GAME_MODE_STATE_RETURN) {
+                backToDataSelectMove();
+                mGameModeSaveStartBuildUi = true;
+                mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
+                return;
+            }
+            if (mGameModeNewSaveState != GAME_MODE_STATE_PROCEED) {
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+#endif
+
+    IF_DUSK(bool isNameMove = nameMoveAnm();)
 
     if (isHeaderTxtChange == true && isFileRecScale == true && isNameMove == true &&
         isModoruTxtDisp == true)
     {
+#ifdef TARGET_PC
+        mGameModeSaveStartBuildUi = true;
+        mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
+#endif
         mDataSelProc = DATASELPROC_NAME_INPUT_WAIT;
     }
 }
@@ -1390,6 +1427,15 @@ void dFile_select_c::menuSelectStart() {
         mIsSelectEnd = true;
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
         dComIfGs_setDataNum(mSelectNum);
+#if TARGET_PC
+        dusk::mods::svc::save_slot_loaded(mSelectNum, &mSaveData[mSelectNum]);
+
+        const dusk::gamemode::GameMode* gameMode =
+            dusk::gamemode::getGameModeManager().getCurrentGameMode();
+        if (gameMode) {
+            gameMode->invokeOnSaveLoadedFunction();
+        }
+#endif
     } else if (mSelectMenuNum == 0) {
         mSelIcon->setAlphaRate(0.0f);
         yesnoMenuMoveAnmInitSet(0x473, 0x47d);
@@ -1740,6 +1786,15 @@ void dFile_select_c::nameInput2() {
     case 2:
         dComIfGs_setHorseName(mpName->getInputStrPtr());
         mIsSelectEnd = true;
+#if TARGET_PC
+        dusk::mods::svc::save_slot_new(mSelectNum);
+        const dusk::gamemode::GameMode* gameMode =
+            dusk::gamemode::getGameModeManager().getCurrentGameMode();
+        if (gameMode) {
+            gameMode->invokeOnNewSaveFunction();
+            gameMode->invokeOnSaveLoadedFunction();
+        }
+#endif
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
     }
 }
@@ -2666,6 +2721,9 @@ void dFile_select_c::DataEraseWait2() {
         mDataSelProc = DATASELPROC_ERROR_MSG_PANE_MOVE;
     } else if (field_0x03b4 == 1) {
         mDoAud_seStart(Z2SE_SY_FILE_DELETE_OK, NULL, 0, 0);
+#if TARGET_PC
+        dusk::mods::svc::save_slot_erased(mSelectNum);
+#endif
         field_0x03b1 = 0;
         mDeleteEfPane[mSelectNum]->alphaAnimeStart(0);
         mFileInfoNoDatBasePane[mSelectNum]->alphaAnimeStart(0);
@@ -2769,6 +2827,9 @@ void dFile_select_c::DataCopyWait2() {
             mDataSelProc = DATASELPROC_ERROR_MSG_PANE_MOVE;
         } else if (field_0x03b4 == 1) {
             mDoAud_seStart(Z2SE_SY_FILE_COPY_OK, NULL, 0, 0);
+#if TARGET_PC
+            dusk::mods::svc::save_slot_copied(mCpDataNum, mCpDataToNum);
+#endif
             field_0x03b1 = 0;
             mCopyEfPane[mSelectNum]->alphaAnimeStart(0);
             mCopyEfPane[mCpDataToNum]->alphaAnimeStart(0);
@@ -4093,11 +4154,43 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 }
 
 #if TARGET_PC
+
+static dusk::utils::PaneCache mSelDtPanes[] = {
+    {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n2'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('gray_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('b_base'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('b_base1'), 0.0f, 0.0f, false},
+};
+
+static dusk::utils::PaneCache fileSelPanes[] = {
+    {MULTI_CHAR('w_uzu00'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu01'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu02'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu03'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu04'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu05'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu06'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu07'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu08'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu09'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msg'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msE'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msR'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for1'), 0.0f, 0.0f, false},
+};
+
 void dFile_select_c::fileSelectWide() {
     static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
-        for (PaneCache& entry : mSelDtPanes) {
+        for (dusk::utils::PaneCache& entry : mSelDtPanes) {
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX(); 
@@ -4105,7 +4198,7 @@ void dFile_select_c::fileSelectWide() {
                 entry.cached = true;
             }
         }
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -4119,13 +4212,13 @@ void dFile_select_c::fileSelectWide() {
     // Reset all panes
     mSelDt.ScrDt->scale(1.0f, 1.0f);
     mSelDt.ScrDt->translate(0.0f, 0.0f);
-    for (PaneCache& entry : mSelDtPanes) {
+    for (dusk::utils::PaneCache& entry : mSelDtPanes) {
         J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);
     }
-    for (PaneCache& entry : fileSelPanes) {
+    for (dusk::utils::PaneCache& entry : fileSelPanes) {
         J2DPane* pane = fileSel.Scr->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
@@ -4197,7 +4290,7 @@ void dFile_select_c::fileSelectWide() {
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
         // Spirals & Memory Card Text
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         }
@@ -4223,7 +4316,7 @@ void dFile_select_c::fileSelectWide() {
         const f32 wideShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (wideScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
         const f32 ultraShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (ultraScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
 
-        for (PaneCache& entry : mSelDtPanes) {
+        for (dusk::utils::PaneCache& entry : mSelDtPanes) {
             const size_t index = &entry - mSelDtPanes;
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             pane->setBasePosition(J2DBasePosition_0);
@@ -4291,7 +4384,7 @@ void dFile_select_c::fileSelectWide() {
         }
 
         // Spirals & Memory Card Text
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         }

@@ -7,11 +7,11 @@ const char* __MCCVersion = "<< Dolphin SDK - MCC\tdebug build: Apr  5 2004 03:57
 const char* __MCCVersion = "<< Dolphin SDK - MCC\trelease build: Apr  5 2004 04:15:49 (0x2301) >>";
 #endif
 
-static MCC_ChannelInfo gChannelInfo[16] ATTRIBUTE_ALIGN(32);
-static char gStreamWork[32] ATTRIBUTE_ALIGN(32);
-static char m_szAdapterMode[32] ATTRIBUTE_ALIGN(32);
-static char m_szInitCode[32] ATTRIBUTE_ALIGN(32);
-static MCC_Info channelInfo[16] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static MCC_ChannelInfo gChannelInfo[16];
+ATTRIBUTE_ALIGN(32) static char gStreamWork[32];
+ATTRIBUTE_ALIGN(32) static char m_szAdapterMode[32];
+ATTRIBUTE_ALIGN(32) static char m_szInitCode[32];
+ATTRIBUTE_ALIGN(32) static MCC_Info channelInfo[16];
 
 volatile static BOOL gIsChannelinfoDirty = TRUE;
 

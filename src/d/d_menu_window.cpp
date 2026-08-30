@@ -123,7 +123,13 @@ public:
 #endif
     }
 
-    void setCaptureFlag() { mFlag = 1; }
+    void setCaptureFlag() {
+        mFlag = 1;
+    #ifdef TARGET_PC
+        dusk::frame_interp::request_presentation_sync();
+    #endif
+    }
+
     bool checkDraw() { return mFlag; }
     u8 getAlpha() { return mAlpha; }
     u8 getTopFlag() { return mTopFlag; }
@@ -1092,10 +1098,6 @@ void dMw_c::dMw_ring_create(u8 i_origin) {
     }
 
     mpCapture->setCaptureFlag();
-
-#ifdef TARGET_PC
-    dusk::frame_interp::request_presentation_sync();
-#endif
 }
 
 bool dMw_c::dMw_ring_delete() {

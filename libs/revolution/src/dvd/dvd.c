@@ -44,7 +44,7 @@ static u32 LastError;
 static BOOL ResetRequired;
 static u32 MotorState;
 static volatile OSTime LastResetEnd;
-static u32 __DVDNumTmdBytes ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u32 __DVDNumTmdBytes;
 static DVDGameTOC* GameToc;
 static DVDPartitionInfo* PartInfo;
 static DVDPartitionInfo* BootGameInfo;
@@ -80,10 +80,10 @@ static DVDCommandBlock DummyCommandBlock;
 static OSAlarm ResetAlarm;
 static OSAlarm CoverAlarm;
 
-static u8 __DVDGameTocBuffer[OSRoundUp32B(sizeof(DVDGameTOC) * 4)] ATTRIBUTE_ALIGN(32);
-static u8 __DVDPartInfoBuffer[OSRoundUp32B(sizeof(DVDPartitionInfo) * 4)] ATTRIBUTE_ALIGN(32);
-static u8 __DVDTmdBuffer[OSRoundUp32B(sizeof(ESTitleMeta))]  ATTRIBUTE_ALIGN(32);
-static u8 __DVDTicketViewBuffer[OSRoundUp32B(sizeof(ESTicketView))] ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static u8 __DVDGameTocBuffer[OSRoundUp32B(sizeof(DVDGameTOC) * 4)];
+ATTRIBUTE_ALIGN(32) static u8 __DVDPartInfoBuffer[OSRoundUp32B(sizeof(DVDPartitionInfo) * 4)];
+ATTRIBUTE_ALIGN(32) static u8 __DVDTmdBuffer[OSRoundUp32B(sizeof(ESTitleMeta))];
+ATTRIBUTE_ALIGN(32) static u8 __DVDTicketViewBuffer[OSRoundUp32B(sizeof(ESTicketView))];
 
 static OSAlarm FatalAlarm;
 DVDCommandBlock __DVDStopMotorCommandBlock;

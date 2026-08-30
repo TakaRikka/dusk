@@ -1804,8 +1804,23 @@ int daNpcChin_c::_Evt_GameSucceed_CutMain(const int& param_0) {
                 itemId1 = 0;
             }
 
+#if TARGET_PC
+            const char* itemCheckName = nullptr;
+            u32 itemGiveTag = 0;
+            if (itemId1 == dItemNo_ARROW_LV2_e) {
+                itemCheckName = "star_reward_1";
+            } else if (itemId1 == dItemNo_ARROW_LV3_e) {
+                itemCheckName = "star_reward_2";
+            }
+            if (itemCheckName != nullptr) {
+                const auto itemCheck =
+                    dusk::mods::item_check_commit(itemCheckName, itemId1, this);
+                itemId1 = itemCheck.itemNo;
+                itemGiveTag = itemCheck.tag;
+            }
+#endif
             fpc_ProcID itemId2 = fopAcM_createItemForPresentDemo(&current.pos, itemId1, 0, -1, -1,
-                                                                 0, 0);
+                0, 0 IF_DUSK_ARG(itemGiveTag));
             if (itemId2 != -1) {
                 dComIfGp_event_setItemPartnerId(itemId2);
             }

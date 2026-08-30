@@ -238,5 +238,27 @@ ModResult replace(HookReplaceFn callback, const HookOptions* options = nullptr) 
     return replace<Entry>(svc_hook, callback, options);
 }
 
+template <class Entry>
+ModResult uninstall(const HookService* hooks) {
+    if (hooks == nullptr || !SERVICE_HAS(hooks, HookService, uninstall) ||
+        hooks->uninstall == nullptr || Entry::target == nullptr)
+    {
+        return MOD_UNAVAILABLE;
+    }
+
+    const ModResult result =
+        hooks->uninstall(mod_ctx, Entry::target, reinterpret_cast<void**>(&Entry::g_orig));
+    if (result == MOD_OK) {
+        Entry::hooks = nullptr;
+        Entry::g_orig = nullptr;
+    }
+    return result;
+}
+
+template <class Entry>
+ModResult uninstall() {
+    return uninstall<Entry>(svc_hook);
+}
+
 }  // namespace hook
 }  // namespace mods

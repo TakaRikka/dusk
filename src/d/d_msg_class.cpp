@@ -16,6 +16,21 @@
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
 #include "dusk/scope_guard.hpp"
+#include "helpers/bits.hpp"
+
+static bool read_full_color(const void* data, u32 size, u32& ccColor, u32& gcColor) {
+    if (size == 4) {
+        ccColor = dusk::read_bits<u32>(data);
+        gcColor = ccColor;
+        return true;
+    }
+    if (size == 8) {
+        ccColor = dusk::read_bits<u32>(data);
+        gcColor = dusk::read_bits<u32>(static_cast<const u8*>(data) + sizeof(ccColor));
+        return true;
+    }
+    return false;
+}
 #endif
 
 #if TARGET_PC
@@ -400,6 +415,9 @@ jmessage_tReference::jmessage_tReference() {
     resetCharCountBuffer();
     mNowColorType = 0;
     mTopColorType = 0;
+#if TARGET_PC
+    resetColors();
+#endif
     mButtonTagStopFlag = 0;
     mPageEndCount = 0;
     mSelectNum = 0;
@@ -594,6 +612,13 @@ void jmessage_tReference::pageSend() {
     if (mNowColorType != mTopColorType) {
         mTopColorType = mNowColorType;
     }
+#if TARGET_PC
+    mTopFullColor = mNowFullColor;
+    if (mNowFullColor) {
+        mTopCCColor = mNowCCColor;
+        mTopGCColor = mNowGCColor;
+    }
+#endif
 
     mTopWordCount = mNowWordCount;
     mCharAlpha = 0.0f;
@@ -927,15 +952,15 @@ void jmessage_tMeasureProcessor::do_begin(void const* pEntry, char const* pszTex
     pReference->setRevoMessageID(0);
     field_0x38 = 1.0f;
 
-    mSeSpeaker = ((JMSMesgEntry_c*)pEntry)->se_speaker;
-    mSeMood = ((JMSMesgEntry_c*)pEntry)->se_mood;
+    mSeSpeaker = ((JMSMesgEntry_c*)pEntry)->speaker;
+    mSeMood = ((JMSMesgEntry_c*)pEntry)->speaker_mood;
 
     for (int i = 0; i < DUSK_IF_ELSE((dusk::version::isRegionJpn() ? 30 : D_MSG_CLASS_PAGE_CNT_MAX), D_MSG_CLASS_PAGE_CNT_MAX); i++) {
         pReference->setLineLength(i, 0.0f, 0.0f);
         pReference->setPageLine(i, 0);
         pReference->setPageLineMax(i, 0);
         pReference->setPageType(i, 0);
-        pReference->setLineArrange(i, ((JMSMesgEntry_c*)pEntry)->unk_0xd);
+        pReference->setLineArrange(i, ((JMSMesgEntry_c*)pEntry)->line_alignment);
         pReference->setLineScale(i, 100);
 
         if (pReference->isPlaceName() || pReference->isStaffRoll() || pReference->isBossName() ||
@@ -948,11 +973,11 @@ void jmessage_tMeasureProcessor::do_begin(void const* pEntry, char const* pszTex
             }
 
 #if TARGET_PC
-            if (!dusk::version::isRegionJpn() && ((JMSMesgEntry_c*)pEntry)->unk_0xd == 0) {
+            if (!dusk::version::isRegionJpn() && ((JMSMesgEntry_c*)pEntry)->line_alignment == 0) {
                 pReference->setLineArrange(i, 1);
             }
 #elif !REGION_JPN
-            if (((JMSMesgEntry_c*)pEntry)->unk_0xd == 0) {
+            if (((JMSMesgEntry_c*)pEntry)->line_alignment == 0) {
                 pReference->setLineArrange(i, 1);
             }
 #endif
@@ -1896,7 +1921,7 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     mpEntry = pEntry;
     mpText = pszText;
 
-    if (((JMSMesgEntry_c*)pEntry)->fuki_kind == 8) {
+    if (((JMSMesgEntry_c*)pEntry)->box_kind == 8) {
         field_0xa8 = g_MsgObject_HIO_c.mDisplaySpeedSpirit;
     } else {
         field_0xa8 = g_MsgObject_HIO_c.mDisplaySpeed;
@@ -1910,13 +1935,16 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     field_0xb2 = 0;
     field_0xaa = 0;
     field_0xac = 0;
-    field_0xb4 = ((JMSMesgEntry_c*)pEntry)->se_speaker;
-    field_0xb3 = ((JMSMesgEntry_c*)pEntry)->se_mood;
+    field_0xb4 = ((JMSMesgEntry_c*)pEntry)->speaker;
+    field_0xb3 = ((JMSMesgEntry_c*)pEntry)->speaker_mood;
 
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
     pReference->resetCharCnt();
     pReference->setNowColorType(0);
     pReference->setTopColorType(0);
+#if TARGET_PC
+    pReference->resetColors();
+#endif
     pReference->setNowWordCount(0);
     pReference->setTopWordCount(0);
     pReference->setBatchColorFlag(0);
@@ -1924,8 +1952,8 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     pReference->setNowTagScale(0);
     pReference->calcDistance();
 
-    dComIfGp_setMesgAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->base_anm_id);
-    dComIfGp_setMesgFaceAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->face_anm_id);
+    dComIfGp_setMesgAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->talk_anim);
+    dComIfGp_setMesgFaceAnimeAttrInfo(((JMSMesgEntry_c*)pEntry)->face_anim);
 
     if (dComIfGp_isHeapLockFlag() == 2) {
         pReference->setFukiPosType(1);
@@ -1933,20 +1961,20 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
         if (dComIfGp_isHeapLockFlag() == 3) {
             pReference->setFukiPosType(0);
         } else {
-            pReference->setFukiPosType(((JMSMesgEntry_c*)pEntry)->fuki_pos_type);
+            pReference->setFukiPosType(((JMSMesgEntry_c*)pEntry)->box_position);
         }
     }
 
-    pReference->setFukiKind(((JMSMesgEntry_c*)pEntry)->fuki_kind);
+    pReference->setFukiKind(((JMSMesgEntry_c*)pEntry)->box_kind);
 
     if (dMsgObject_getMsgOutputType() != 0xFF) {
         pReference->setForm(dMsgObject_getMsgOutputType());
     } else {
-        pReference->setForm(((JMSMesgEntry_c*)pEntry)->output_type);
+        pReference->setForm(((JMSMesgEntry_c*)pEntry)->draw_type);
     }
 
-    pReference->setArrange(((JMSMesgEntry_c*)pEntry)->unk_0xd);
-    pReference->setForm(((JMSMesgEntry_c*)pEntry)->unk_0xd);
+    pReference->setArrange(((JMSMesgEntry_c*)pEntry)->line_alignment);
+    pReference->setForm(((JMSMesgEntry_c*)pEntry)->line_alignment);
     pReference->setMsgID(((JMSMesgEntry_c*)pEntry)->message_id);
 
     if (((JMSMesgEntry_c*)pEntry)->event_label_id != 0) {
@@ -1980,7 +2008,7 @@ void jmessage_tSequenceProcessor::do_begin(void const* pEntry, char const* pszTe
     if (dMsgObject_getMsgOutputType() != 0xFF) {
         field_0xae = dMsgObject_getMsgOutputType();
     } else {
-        field_0xae = ((JMSMesgEntry_c*)pEntry)->output_type;
+        field_0xae = ((JMSMesgEntry_c*)pEntry)->draw_type;
     }
 
     if (mForceForm != 0xFF) {
@@ -2280,9 +2308,21 @@ bool jmessage_tSequenceProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_si
         return true;
     case MSGTAG_GROUP(255):
         switch (i_tag) {
-        case MSGTAG_COLOR:
+        case MSGTAG_COLOR: {
+#if TARGET_PC
+            u32 ccColor;
+            u32 gcColor;
+            if (read_full_color(i_data, i_size, ccColor, gcColor)) {
+                pReference->setFullColor(ccColor, gcColor);
+            } else if (i_size == 1) {
+                pReference->clearNowFullColor();
+                pReference->setNowColorType(*(u8*)i_data & 0xFF);
+            }
+#else
             pReference->setNowColorType(*(u8*)i_data & 0xFF);
+#endif
             return true;
+        }
         case MSGTAG_SCALE:
             pReference->setNowTagScale(*(BE(u16)*)i_data & 0xFFFF);
             return true;
@@ -2863,7 +2903,15 @@ void jmessage_tRenderingProcessor::do_begin(void const* pEntry, char const* pszT
         do_scale(field_0x44);
     }
 
+#if TARGET_PC
+    if (pReference->hasTopFullColor()) {
+        do_fullcolor(pReference->getTopCCColor(), pReference->getTopGCColor());
+    } else {
+        do_color(pReference->getTopColorType());
+    }
+#else
     do_color(pReference->getTopColorType());
+#endif
     pReference->resetDrawLightCount();
 
     do_widthcenter();
@@ -3017,9 +3065,20 @@ bool jmessage_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, u32 i_s
         return 1;
     case MSGTAG_GROUP(255):
         switch (i_tag) {
-        case MSGTAG_COLOR:
+        case MSGTAG_COLOR: {
+#if TARGET_PC
+            u32 ccColor;
+            u32 gcColor;
+            if (read_full_color(i_data, i_size, ccColor, gcColor)) {
+                do_fullcolor(ccColor, gcColor);
+            } else if (i_size == 1) {
+                do_color(*(u8*)i_data & 0xFF);
+            }
+#else
             do_color(*(u8*)i_data & 0xFF);
+#endif
             return 1;
+        }
         case MSGTAG_SCALE:
             field_0x13c = *(BE(u16)*)i_data & 0xFFFF;
             do_scale(field_0x13c / 100.0f);
@@ -3629,6 +3688,18 @@ void jmessage_tRenderingProcessor::do_color(u8 i_colorNo) {
             mCCColor, mGCColor);
     do_strcat(buffer, false, false, false);
 }
+
+#if TARGET_PC
+void jmessage_tRenderingProcessor::do_fullcolor(u32 ccColor, u32 gcColor) {
+    mColorNo = 0xFF;
+    mCCColor = ccColor;
+    mGCColor = gcColor;
+
+    char buffer[40];
+    SAFE_SPRINTF(buffer, "\x1B" "CC[%08x]" "\x1B" "GC[%08x]", mCCColor, mGCColor);
+    do_strcat(buffer, false, false, false);
+}
+#endif
 
 void jmessage_tRenderingProcessor::do_scale(f32 param_1) {
     jmessage_tReference* pReference = (jmessage_tReference*)getReference();
@@ -4684,9 +4755,20 @@ bool jmessage_string_tRenderingProcessor::do_tag(u32 i_tag, void const* i_data, 
     switch(i_tag & 0xFF0000) {
     case MSGTAG_GROUP(255):
         switch(i_tag) {
-        case MSGTAG_COLOR:
+        case MSGTAG_COLOR: {
+#if TARGET_PC
+            u32 ccColor;
+            u32 gcColor;
+            if (read_full_color(i_data, i_size, ccColor, gcColor)) {
+                do_fullcolor(ccColor, gcColor);
+            } else if (i_size == 1) {
+                do_color(*(u8*)i_data & 0xFF);
+            }
+#else
             do_color(*(u8*)i_data & 0xFF);
+#endif
             break;
+        }
         case MSGTAG_SCALE:
             do_scale(*(BE(u16)*)i_data / 100.0f);
             break;
@@ -5335,6 +5417,14 @@ void jmessage_string_tRenderingProcessor::do_color(u8 i_colorNo) {
     SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
     do_strcat(buffer);
 }
+
+#if TARGET_PC
+void jmessage_string_tRenderingProcessor::do_fullcolor(u32 ccColor, u32 gcColor) {
+    char buffer[32];
+    SAFE_SPRINTF(buffer, "\x1b" "CC[%08x]" "\x1b" "GC[%08x]", ccColor, gcColor);
+    do_strcat(buffer);
+}
+#endif
 
 void jmessage_string_tRenderingProcessor::do_scale(f32 i_scale) {
     J2DTextBox::TFontSize fontSize;

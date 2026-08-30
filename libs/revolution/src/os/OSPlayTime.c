@@ -7,7 +7,7 @@
 
 #include "__os.h"
 
-OSAlarm __OSExpireAlarm ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) OSAlarm __OSExpireAlarm;
 OSTime __OSExpireTime;
 OSPlayTimeCallbackFunc __OSExpireCallback;
 BOOL __OSExpireSetExpiredFlag;
@@ -103,7 +103,7 @@ BOOL __OSWriteExpiredFlag(void) {
     s32 rv = 0;
     NANDFileInfo nInfo;
     BOOL openNInfo = FALSE;
-    u8 titleId[32] ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) u8 titleId[32];
 
     rv = NANDPrivateCreate("/shared2/expired", 63, 0);
 
@@ -162,7 +162,7 @@ BOOL __OSWriteExpiredFlagIfSet(void) {
 void* __OSPlayTimeRebootThread(void* args) {
     BOOL enabled;
     u32 frames, fadeShift = 1;
-    __OSExpireAIFadeStruct aiFade ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) __OSExpireAIFadeStruct aiFade;
 
     __OSExpireAIFade = &aiFade;
     memset(__OSExpireAIFade, 0, sizeof(__OSExpireAIFadeStruct));
@@ -227,9 +227,9 @@ out:
 s32 __OSGetPlayTime(ESTicketView* ticket, __OSPlayTimeType* type, u32* playTime) {
 	s32 rv;
 	u32 i;
-	ESLpEntry lpEntry[8] ATTRIBUTE_ALIGN(32);
+	ATTRIBUTE_ALIGN(32) ESLpEntry lpEntry[8];
 	u32 numCc = 0, seenOther = 0;
-	ESTicketView ticketAligned ATTRIBUTE_ALIGN(32);
+	ATTRIBUTE_ALIGN(32) ESTicketView ticketAligned;
 
     ASSERTLINE(601, ticket && type && playTime);
 
@@ -288,7 +288,7 @@ out:
 
 s32 __OSGetPlayTimeCurrent(__OSPlayTimeType* type, u32* playTime) {
     s32 rv;
-    ESTicketView ticket ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) ESTicketView ticket;
 
     ASSERTLINE(676, type && playTime);
 

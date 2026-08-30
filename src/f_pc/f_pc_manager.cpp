@@ -22,7 +22,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/game_clock.h"
 #endif
 
 #include "tracy/Tracy.hpp"
@@ -68,8 +68,8 @@ void fpcM_Management(fpcM_ManagementFunc i_preExecuteFn, fpcM_ManagementFunc i_p
             }
 
 #ifdef TARGET_PC
-            // FRAME INTERP NOTE: Called in m_Do_main when interp is enabled
-            if (!dusk::frame_interp::is_enabled())
+            // The main loop manages painting when simulation and presentation are separated.
+            if (!dusk::game_clock::g_frameTiming.separatePresentation)
 #endif
             {
                 cAPIGph_Painter();

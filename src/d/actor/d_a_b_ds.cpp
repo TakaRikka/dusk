@@ -19,6 +19,10 @@
 #include "f_op/f_op_actor_enemy.h"
 #include "Z2AudioLib/Z2Instances.h"
 
+#if TARGET_PC
+#include "mods/items.h"
+#endif
+
 enum daB_DS_Joint {
     DS_JNT_BACKBONE1,
     DS_JNT_BACKBONE2,
@@ -4084,6 +4088,11 @@ void daB_DS_c::executeBattle2Dead() {
             camera->mCamera.SetTrimSize(0);
             dComIfGp_event_reset();
             dComIfGs_onStageBossEnemy(0x13);
+#if TARGET_PC
+            // This reward has no original grant at this point in the cutscene.
+            dusk::mods::item_check_enqueue_deferred(
+                ITEM_CHECK_DUNGEON_REWARD_ARBITERS, dItemNo_NONE_e);
+#endif
             /* dSv_event_flag_c::F_0265 - Arbiter's Grounds - Arbiter's Grounds clear */
             dComIfGs_onEventBit(0x2010);
             fopAcM_delete(this);

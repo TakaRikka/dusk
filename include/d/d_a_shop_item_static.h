@@ -50,6 +50,9 @@ public:
     csXyz* getRotateP();
     cXyz* getPosP();
     const char* getShopArcname();
+#if TARGET_PC
+    const ResourceData& getResourceData() const;
+#endif
     u16 getHeapSize();
     void CreateInit();
     void set_mtx();
@@ -110,6 +113,10 @@ private:
     /* 0x960 */ s16 mAngleX;
     /* 0x962 */ s16 mAngleY;
     /* 0x964 */ u8 mShopItemID;
+#if TARGET_PC
+    ResourceData mOverrideData;
+    bool mItemOverridden;
+#endif
 };
 
 int CheckShopItemCreateHeap(fopAc_ac_c* i_this);

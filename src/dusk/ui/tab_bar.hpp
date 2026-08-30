@@ -10,7 +10,7 @@ using TabCallback = std::function<void()>;
 
 struct Tab {
     Rml::String title;
-    Button& button;
+    std::unique_ptr<Button> button;
     TabCallback callback;
 };
 
@@ -27,10 +27,12 @@ public:
     bool focus() override;
 
     void add_tab(const Rml::String& title, TabCallback callback);
+    void clear_tabs();
     bool set_active_tab(int index);
     void refresh_active_tab();
     bool focus_tab(int index);
-    int focused_tab_index() const;
+    bool focus_tab(const Rml::String& title);
+    Rml::String focused_tab_title() const;
     bool handle_nav_command(Rml::Event& event, NavCommand cmd);
 
 private:

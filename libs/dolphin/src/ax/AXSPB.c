@@ -3,7 +3,7 @@
 
 #include "__ax.h"
 
-static AXSPB __AXStudio ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) static AXSPB __AXStudio;
 
 static s32 __AXSpbAL;
 static s32 __AXSpbAR;

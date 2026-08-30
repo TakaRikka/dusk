@@ -311,9 +311,11 @@ private:
 class daMidna_c;
 class daSpinner_c;
 class daPy_py_c;
+#if !TARGET_PC
 inline daPy_py_c* dComIfGp_getLinkPlayer();
 inline BOOL dComIfGs_isEventBit(const u16);
 inline u32 dComIfGs_getLastSceneMode();
+#endif
 
 class daPy_py_c : public fopAc_ac_c {
 public:

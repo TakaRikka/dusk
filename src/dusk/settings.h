@@ -33,6 +33,7 @@ enum class GameLanguage : u8 {
     French = OS_LANGUAGE_FRENCH,
     Spanish = OS_LANGUAGE_SPANISH,
     Italian = OS_LANGUAGE_ITALIAN,
+    Japanese = 6,
 };
 
 enum class DiscVerificationState : u8 {
@@ -89,7 +90,7 @@ struct ConfigEnumRange<Resampler> {
 template <>
 struct ConfigEnumRange<GameLanguage> {
     static constexpr auto min = GameLanguage::English;
-    static constexpr auto max = GameLanguage::Italian;
+    static constexpr auto max = GameLanguage::Japanese;
 };
 
 template <>
@@ -144,6 +145,7 @@ struct UserSettings {
         ConfigVar<bool> rememberWindowSize;
         ConfigVar<int> lastWindowWidth;
         ConfigVar<int> lastWindowHeight;
+        ConfigVar<int> uiScale;
     } video;
 
     struct {
@@ -183,6 +185,7 @@ struct UserSettings {
         ConfigVar<bool> sunsSong;
         ConfigVar<bool> autoSave;
         ConfigVar<bool> enhancedMapMenus;
+        ConfigVar<bool> aimingReticle;
 
         // Preferences
         ConfigVar<bool> enableMirrorMode;
@@ -207,6 +210,7 @@ struct UserSettings {
         ConfigVar<Resampler> resampler;
         ConfigVar<bool> enableMapBackground;
         ConfigVar<bool> disableCutscenePillarboxing;
+        ConfigVar<bool> enableHighQualityMinimapTextures;
 
         // Audio
         ConfigVar<bool> noLowHpSound;
@@ -282,6 +286,10 @@ struct UserSettings {
         ConfigVar<bool> removeQuestMapMarkers;
         ConfigVar<bool> showInputViewer;
         ConfigVar<bool> showInputViewerGyro;
+        ConfigVar<bool> enableMoveLinkCombo;
+        ConfigVar<bool> enableTeleportCombo;
+
+        ConfigVar<std::string> lastSelectedGameModeId;
     } game;
 
     struct {
@@ -323,9 +331,26 @@ struct CollisionViewSettings {
     float drawRange;
 };
 
+struct TriggerViewSettings {
+    bool loadZones;
+    bool eventAreas;
+    bool switchAreas;
+    bool eventTags;
+    bool midnaStops;
+    bool twilightGates;
+    bool checkpoints;
+    bool paths;
+    bool transformDists;
+    bool attentionDists;
+    bool purpleMistAvoid;
+    bool leevers;
+    float opacity;
+};
+
 struct TransientSettings {
     CollisionViewSettings collisionView;
-    bool skipFrameRateLimit;
+    TriggerViewSettings triggerView;
+    bool turboMode;
     bool moveLinkActive;
     bool stateShareLoadActive;
 };

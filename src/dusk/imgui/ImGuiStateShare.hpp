@@ -24,8 +24,6 @@ private:
     void loadStatesFile();
     void saveStatesFile();
     void mergeFromFile(const std::string& path);
-    static void onMergeFileSelected(void* userdata, const char* path, const char* error);
-
     std::vector<SavedStateEntry> m_states;
     std::string m_statusMsg;
     std::optional<dSv_info_c>  m_pendingInfo;

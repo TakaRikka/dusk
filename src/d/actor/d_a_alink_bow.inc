@@ -551,7 +551,7 @@ void daAlink_c::setBowSight() {
         getArrowFlyData(&dist, &speed, TRUE);
         checkSightLine(dist, &sight_pos);
         mSight.setPos(&sight_pos);
-        mSight.offDrawFlg();
+        DUSK_IF_ELSE(dusk::getSettings().game.aimingReticle ? mSight.onDrawFlg() : mSight.offDrawFlg(), mSight.offDrawFlg());
     } else {
         mSight.offDrawFlg();
     }

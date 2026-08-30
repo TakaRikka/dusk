@@ -45,6 +45,12 @@ int CheckShopItemCreateHeap(fopAc_ac_c* i_this) {
     daShopItem_c* a_this1 = static_cast<daShopItem_c*>(i_this);
     daShopItem_c* a_this2 = static_cast<daShopItem_c*>(i_this);
 
+#if TARGET_PC
+    const ResourceData& data = a_this2->getResourceData();
+    return a_this1->CreateItemHeap(data.get_arcName(), data.get_bmdName(), data.get_btk1Name(),
+        data.get_bpk1Name(), data.get_bck1Name(), data.get_bxa1Name(), data.get_brk1Name(),
+        data.get_btp1Name());
+#else
     u8 a_ShopItemID = a_this2->getShopItemID();
     return a_this1->CreateItemHeap(daShopItem_c::mData[a_ShopItemID].get_arcName(),
                                   daShopItem_c::mData[a_ShopItemID].get_bmdName(),
@@ -54,4 +60,5 @@ int CheckShopItemCreateHeap(fopAc_ac_c* i_this) {
                                   daShopItem_c::mData[a_ShopItemID].get_bxa1Name(),
                                   daShopItem_c::mData[a_ShopItemID].get_brk1Name(),
                                   daShopItem_c::mData[a_ShopItemID].get_btp1Name());
+#endif
 }
