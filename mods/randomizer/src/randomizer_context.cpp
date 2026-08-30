@@ -156,8 +156,8 @@ std::optional<std::string> RandomizerContext::WriteToFile() {
     const std::unordered_map<u16, u16> u16GoldenWolfOverrides(this->mGoldenWolfOverrides.begin(), this->mGoldenWolfOverrides.end());
     out["mGoldenWolfOverrides"] = u16GoldenWolfOverrides;
 
-    const std::unordered_map<u16, u16> u16ShopOverrides(this->mShopOverrides.begin(), this->mShopOverrides.end());
-    out["mShopOverrides"] = u16ShopOverrides;
+    const std::unordered_map<u32, u16> u32ShopOverrides(this->mShopOverrides.begin(), this->mShopOverrides.end());
+    out["mShopOverrides"] = u32ShopOverrides;
 
     out["mTwilitInsectOverrides"] = mTwilitInsectOverrides;
 
@@ -348,7 +348,7 @@ std::optional<std::string> RandomizerContext::LoadFromHash(const std::string& ha
 
     // Shop Items
     for (const auto& shopNode : in["mShopOverrides"]) {
-        u16 key = shopNode.first.as<u16>();
+        u32 key = shopNode.first.as<u32>();
         u8 itemId = shopNode.second.as<u8>();
         this->mShopOverrides[key] = itemId;
     }
@@ -1252,12 +1252,13 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
         }
 
         // Shop Items
-        // Keyed by u16 of the stage and original shop item
+        // Keyed by u32 of 0xFF0000 (stage index), 0x00FF00 (room), and 0x0000FF (original shop item)
         if (location->HasCategories("Shop") && world->Setting("Shop Items") == "On") {
             for (const auto& shopNode : metaData["Shop"]) {
                 u8 stage = shopNode["Stage"].as<u8>();
+                u8 room = shopNode["Room"].as<u8>();
                 u8 originalItem = shopNode["Item"].as<u8>();
-                u16 key = (stage << 8) | originalItem;
+                u32 key = (stage << 16) | (room << 8) | originalItem;
                 randoData.mShopOverrides[key] = location->GetCurrentItem()->GetID();
             }
         }

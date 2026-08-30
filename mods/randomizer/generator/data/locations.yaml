@@ -56,6 +56,7 @@
   Metadata:
     Shop:
       - Stage: 65
+        Room: 1
         Item: 0x4B
     Name Lookup:
       - Sera Shop Slingshot
@@ -1350,6 +1351,7 @@
   Metadata:
     Shop:
       - Stage: 68
+        Room: 3
         Item: 0x3E
     Name Lookup:
       - Kakariko Village Malo Mart Hawkeye
@@ -1366,6 +1368,7 @@
   Metadata:
     Shop:
       - Stage: 68
+        Room: 3
         Item: 0x2C
     Name Lookup:
       - Kakariko Village Malo Mart Hylian Shield
@@ -1382,6 +1385,7 @@
   Metadata:
     Shop:
       - Stage: 68
+        Room: 3
         Item: 0x61
     Name Lookup:
       - Kakariko Village Malo Mart Red Potion
@@ -1398,6 +1402,7 @@
   Metadata:
     Shop:
       - Stage: 68
+        Room: 3
         Item: 0x2B
     Name Lookup:
       - Kakariko Village Malo Mart Wooden Shield
@@ -1449,6 +1454,7 @@
   Metadata:
     Shop:
       - Stage: 68
+        Room: 1
         Item: 0x50
     Event Flag: 0x0908
 
@@ -2464,6 +2470,7 @@
   Metadata:
     Shop:
       - Stage: 73
+        Room: 4
         Item: 0x61
     Name Lookup:
       - Castle Town Goron Shop Red Potion
@@ -2479,6 +2486,7 @@
   Metadata:
     Shop:
       - Stage: 73
+        Room: 4
         Item: 0x66
     Name Lookup:
       - Castle Town Goron Shop Lantern Oil
@@ -2494,6 +2502,7 @@
   Metadata:
     Shop:
       - Stage: 73
+        Room: 4
         Item: 0x2C
     Name Lookup:
       - Castle Town Goron Shop Hylian Shield
@@ -2509,6 +2518,7 @@
   Metadata:
     Shop:
       - Stage: 53
+        Room: 0
         Item: 0x10
     Name Lookup:
       - Castle Town Goron Shop Arrow Refill
@@ -2523,6 +2533,7 @@
   Metadata:
     Shop:
       - Stage: 73
+        Room: 0
         Item: 0x30
     Name Lookup:
       - Castle Town Malo Mart Magic Armor

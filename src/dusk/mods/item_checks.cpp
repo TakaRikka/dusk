@@ -158,7 +158,7 @@ std::string poe_check_name(uint8_t bitNo) {
 }
 
 std::string shop_check_name(uint8_t itemNo) {
-    return fmt::format("shop:{}:{}", current_stage_name(), itemNo);
+    return fmt::format("shop:{}:{}:{}", current_stage_name(), dStage_roomControl_c::getStayNo(), itemNo);
 }
 
 std::string bug_check_name(uint8_t insectId) {

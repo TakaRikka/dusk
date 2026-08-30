@@ -764,7 +764,7 @@ HookAction hookPreShopSeqDecideYes(ModContext*, void* args, void*, void*) {
     int item_no = 0;
 
     if (i_this->mFlow.getEventId(&item_no) == 1 && playerIsInRoomStage(3, "R_SP109")) {
-        const u16 key = static_cast<u16>((getStageID() << 8) | (item_no & 0xFF));
+        const u16 key = static_cast<u32>((getStageID() << 16) | (dStage_roomControl_c::getStayNo() << 8) | (item_no & 0xFF));
         if (randomizer_GetContext().mShopOverrides.contains(key)) {
             i_this->setSoldOutFlag();
         }

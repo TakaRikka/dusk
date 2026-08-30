@@ -70,6 +70,31 @@ std::optional<DerivedKey> parse_derived(const char* name, std::string_view prefi
     return DerivedKey{stage_id, static_cast<u16>((stage_id << 8) | (n & 0xFF))};
 }
 
+std::optional<u32> parse_shop_check(const char* name, std::string_view prefix) {
+    if (std::strncmp(name, prefix.data(), prefix.size()) != 0) {
+        return std::nullopt;
+    }
+    const char* stage_begin = name + prefix.size();
+    const char* stage_end = std::strchr(stage_begin, ':');
+    if (stage_end == nullptr) {
+        return std::nullopt;
+    }
+    const std::string stage{stage_begin, stage_end};
+    const int stage_id = getStageID(stage.c_str());
+    if (stage_id < 0) {
+        return std::nullopt;
+    }
+    const char* room_begin = stage_end + 1;
+    const char* room_end = std::strchr(room_begin, ':');
+    if (room_end == nullptr) {
+        return std::nullopt;
+    }
+    const std::string roomStr{room_begin, room_end};
+    u8 roomNo = std::atoi(roomStr.c_str());
+    const int itemNo = std::atoi(room_end + 1);
+    return static_cast<u32>((stage_id << 16) | (roomNo << 8) | (itemNo & 0xFF));
+}
+
 std::optional<u16> parse_flag_check(const char* name, std::string_view prefix) {
     if (std::strncmp(name, prefix.data(), prefix.size()) != 0) {
         return std::nullopt;
@@ -92,9 +117,9 @@ bool set_resolution(
     return true;
 }
 
-template <typename Map>
+template <typename Map, typename Key>
 bool lookup_override(
-    const Map& map, u16 key, const ItemCheckInfo* info, ItemCheckResolution* outResult) {
+    const Map& map, Key key, const ItemCheckInfo* info, ItemCheckResolution* outResult) {
     const auto it = map.find(key);
     if (it == map.end()) {
         return false;
@@ -134,8 +159,8 @@ bool resolve_check(ModContext*, const ItemCheckInfo* info, ItemCheckResolution* 
         const u16 key = static_cast<u16>((*stageId << 8) | 0x9F);
         return lookup_override(ctx.mFreestandingItemOverrides, key, info, outResult);
     }
-    if (auto key = parse_derived(info->name, ITEM_CHECK_SHOP_PREFIX)) {
-        return lookup_override(ctx.mShopOverrides, key->key, info, outResult);
+    if (auto key = parse_shop_check(info->name, ITEM_CHECK_SHOP_PREFIX)) {
+        return lookup_override(ctx.mShopOverrides, *key, info, outResult);
     }
     if (auto key = parse_derived(info->name, ITEM_CHECK_SKY_PREFIX)) {
         return lookup_override(ctx.mSkyCharacterOverrides, key->key, info, outResult);
