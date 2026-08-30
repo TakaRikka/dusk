@@ -1214,7 +1214,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Skips the delay when writing to the Memory Card.");
         addOption("Hold B for Instant Text", getSettings().game.instantText,
             "Makes text scroll immediately by holding B.");
-        addOption("Hold Button to Mash", getSettings().game.holdToMash,
+        addSpeedrunDisabledOption("Hold Button to Mash", getSettings().game.holdToMash,
             "Hold the indicated button to mash automatically.");
         addOption("No Climbing Miss Animation", getSettings().game.noMissClimbing,
             "Prevents Link from playing a struggle animation when grabbing ledges or "
