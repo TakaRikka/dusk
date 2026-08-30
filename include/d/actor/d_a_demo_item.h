@@ -43,10 +43,17 @@ public:
     virtual void setTevStr();
     virtual int __CreateHeap();
 
+#if TARGET_PC
+    int Delete();
+    int create();
+    int execute();
+    int draw();
+#else
     inline int Delete();
     inline int create();
     inline int execute();
     inline int draw();
+#endif
 
     void setAction(u8 i_action) { mAction = i_action; }
 

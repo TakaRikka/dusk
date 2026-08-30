@@ -428,7 +428,8 @@ if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
                 $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp>
                 $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp-clone>
                 $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-sra>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-partial-inlining>)
+                $<$<COMPILE_LANGUAGE:CXX>:-fno-partial-inlining>
+                $<$<COMPILE_LANGUAGE:CXX>:-fkeep-static-functions>)
     endif ()
 endif ()
 
