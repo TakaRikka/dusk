@@ -162,32 +162,22 @@ int daObjLife_c::create() {
         if (mItemGiveOriginalNo == dItemNo_NONE_e) {
             mOriginalItemNo = parameterItemNo;
             mItemGiveTag = dusk::mods::item_give_tag_freestanding(getSaveBitNo());
-            const auto [item, displayItem, _] =
+            const auto [item, displayItem, was_resolved] =
                 dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
             setDisplayItemNo(displayItem);
-            mItemOverridden = item != mOriginalItemNo;
+            mItemOverridden = was_resolved;
             if (mItemOverridden) {
                 fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
             }
         } else if (mGoldenWolfItem) {
             mOriginalItemNo = mItemGiveOriginalNo;
             mItemGiveTag = dusk::mods::item_give_tag_golden_wolf(static_cast<u16>(field_0x938));
-            const auto [item, displayItem, _] =
+            const auto [item, displayItem, was_resolved] =
                 dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
             setDisplayItemNo(displayItem);
-            mItemOverridden = item != mOriginalItemNo;
+            mItemOverridden = was_resolved;
             if (item != parameterItemNo) {
                 fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
-            }
-        } else if (mGoldenWolfItem) {
-            mOriginalItemNo = mItemGiveOriginalNo;
-            const u16 obtainedItemFlag = static_cast<u16>(field_0x938);
-            const u8 resolvedItem =
-                dusk::mods::item_check_golden_wolf(obtainedItemFlag, mOriginalItemNo, this);
-            mItemGiveTag = dusk::mods::item_give_tag_golden_wolf(obtainedItemFlag);
-            mItemOverridden = resolvedItem != mOriginalItemNo;
-            if (resolvedItem != parameterItemNo) {
-                fopAcM_SetParam(this, (params & 0xFFFFFF00) | resolvedItem);
             }
         } else {
             mOriginalItemNo = mItemGiveOriginalNo;
