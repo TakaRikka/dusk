@@ -798,7 +798,7 @@ namespace randomizer::logic::world
     void World::SetForbiddenItems()
     {
         // Prevent small keys from appearing on bosses if the setting is on
-        if (this->Setting("No Small Keys on Bosses") == "On")
+        if (this->Setting("Small Keys on Bosses") == "Off")
         {
             // Gather all boss locations (heart container and dungeon reward checks)
             auto bossLocations = this->GetAllLocations();
@@ -811,13 +811,14 @@ namespace randomizer::logic::world
             item_pool::ItemPool smallKeys = {};
             for (const auto& [itemName, item] : this->_itemTable)
             {
-                if (item->IsDungeonSmallKey() || utility::general::IsAnyOf(itemName,
-                                                                                  "Ordon Pumpkin",
-                                                                                  "Ordon Cheese",
-                                                                                  "North Faron Woods Gate Key",
-                                                                                  "Faron Woods Coro Key",
-                                                                                  "Gate Keys",
-                                                                                  "Gerudo Desert Bulblin Camp Key"))
+                if (item->IsDungeonSmallKey() ||
+                    utility::general::IsAnyOf(itemName,
+                      "Ordon Pumpkin",
+                      "Ordon Cheese",
+                      "North Faron Woods Gate Key",
+                      "Faron Woods Coro Key",
+                      "Gate Keys",
+                      "Gerudo Desert Bulblin Camp Key"))
                 {
                     smallKeys.push_back(item.get());
                 }

@@ -96,28 +96,28 @@
   Tracker Important: True
   Default Option: "Off"
   Options:
-    - "Off": "The Golden Bug locations across Hyrule will give the golden bug at that location in the base game."
+    - "Off": "The Golden Bug locations across Hyrule will not be randomized. You may still be expected to collect golden bugs if Agitha has important items."
     - "On": "The Golden Bug locations across Hyrule will be randomized."
 
 - Name: Sky Characters
   Tracker Important: True
   Default Option: "Off"
   Options:
-    - "Off": "The Sky Character locations across Hyrule will give Sky Characters."
+    - "Off": "The Sky Character locations across Hyrule will not be randomized. You may still be expected to collect Sky Characters."
     - "On": "The Sky Character locations across Hyrule will be randomized."
 
 - Name: Gifts From NPCs
   Tracker Important: True
   Default Option: "Off"
   Options:
-    - "Off": "Locations which involve an NPC giving you a gift will give the item expected from the base game."
+    - "Off": "Locations which involve an NPC giving you a gift will not be randomized. You may still be expected to talk to NPCs that give you important items."
     - "On": "Locations which involve an NPC giving you a gift will be randomized."
 
 - Name: Shop Items
   Tracker Important: True
   Default Option: "Off"
   Options:
-    - "Off": "Shop item locations will contain the item they have in the base game."
+    - "Off": "Shop items will not be randomized. You may still be expected to purchase shop items that are important."
     - "On": "Shop items will be randomized."
 
 - Name: Hidden Skills
@@ -270,7 +270,7 @@
     - "Off": "Dungeon reward items (Fused Shadows and Mirror Shards) will only appear at the end of dungeons."
     - "On": "Dungeon reward items (Fused Shadows and Mirror Shards) can appear anywhere."
 
-- Name: No Small Keys on Bosses
+- Name: Small Keys on Bosses
   Default Option: "Off"
   Options:
     - "Off": "Small keys will not be placed on boss heart container or dungeon reward checks."
