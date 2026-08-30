@@ -28,7 +28,7 @@
 #define SOUND_TYPEID_STREAM       0x70
 
 /**
- * Sound is a streamed music file. Unsure of difference from SOUND_TYPEID_STREAM
+ * Sound is a streamed music file. Stopped automatically on scene change by Z2SceneMgr.cpp
  */
 #define SOUND_TYPEID_STREAM_ALT   0x71
 
