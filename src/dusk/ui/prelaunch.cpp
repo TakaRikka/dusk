@@ -1192,10 +1192,7 @@ void Prelaunch::update() {
 }
 
 void return_to_prelaunch() noexcept {
-    close_documents_except(DocumentScope::MenuBar);
-    if (auto* menuBar = find_document(DocumentScope::MenuBar)) {
-        menuBar->force_hide(false);
-    }
+    close_all_documents();
     push_document(std::make_unique<Prelaunch>(), true);
 }
 

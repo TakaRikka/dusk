@@ -522,6 +522,7 @@ std::string nameLookupOverride(const std::string& locationName) {
         {"Goron Mines Gor Amato Key Shard", ITEM_CHECK_KEY_SHARD_1},
         {"Goron Mines Gor Ebizo Key Shard", ITEM_CHECK_KEY_SHARD_2},
         {"Goron Mines Gor Liggs Key Shard", ITEM_CHECK_KEY_SHARD_3},
+        {"Goron Springwater Rush", ITEM_CHECK_GORON_SPRINGWATER_RUSH},
         {"Herding Goats Reward", ITEM_CHECK_GOATS_REWARD},
         {"Hyrule Castle King Bulblin Key", ITEM_CHECK_BULBLIN_KEY},
         {"Ilia Charm", ITEM_CHECK_ILIA_CHARM},
@@ -530,15 +531,15 @@ std::string nameLookupOverride(const std::string& locationName) {
         {"Iza Raging Rapids Minigame", ITEM_CHECK_IZA_REWARD_2},
         {"Jovani 20 Poe Soul Reward", ITEM_CHECK_JOVANI_REWARD_1},
         {"Jovani 60 Poe Soul Reward", ITEM_CHECK_JOVANI_REWARD_2},
-        {"Kakariko Village Malo Mart Hawkeye", "shop:R_SP109:62"},
-        {"Kakariko Village Malo Mart Hylian Shield", "shop:R_SP109:44"},
-        {"Kakariko Village Malo Mart Red Potion", "shop:R_SP109:97"},
-        {"Kakariko Village Malo Mart Wooden Shield", "shop:R_SP109:43"},
-        {"Castle Town Malo Mart Magic Armor", "shop:R_SP160:48"},
-        {"Castle Town Goron Shop Arrow Refill", "shop:F_SP116:16"},
-        {"Castle Town Goron Shop Hylian Shield", "shop:R_SP160:44"},
-        {"Castle Town Goron Shop Lantern Oil", "shop:R_SP160:102"},
-        {"Castle Town Goron Shop Red Potion", "shop:R_SP160:97"},
+        {"Kakariko Village Malo Mart Hawkeye", "shop:R_SP109:3:62"},
+        {"Kakariko Village Malo Mart Hylian Shield", "shop:R_SP109:3:44"},
+        {"Kakariko Village Malo Mart Red Potion", "shop:R_SP109:3:97"},
+        {"Kakariko Village Malo Mart Wooden Shield", "shop:R_SP109:3:43"},
+        {"Castle Town Malo Mart Magic Armor", "shop:R_SP160:0:48"},
+        {"Castle Town Goron Shop Arrow Refill", "shop:F_SP116:0:16"},
+        {"Castle Town Goron Shop Hylian Shield", "shop:R_SP160:4:44"},
+        {"Castle Town Goron Shop Lantern Oil", "shop:R_SP160:4:102"},
+        {"Castle Town Goron Shop Red Potion", "shop:R_SP160:4:97"},
         {"Lakebed Temple Dungeon Reward", ITEM_CHECK_DUNGEON_REWARD_LAKEBED},
         {"Ordon Cat Rescue", ITEM_CHECK_SERA_REWARD},
         {"Ordon Shield", ITEM_CHECK_ORDON_SHIELD},
@@ -548,7 +549,7 @@ std::string nameLookupOverride(const std::string& locationName) {
         {"Rutelas Blessing", ITEM_CHECK_ZORA_ARMOR},
         {"Sacred Grove Pedestal Master Sword", ITEM_CHECK_MASTER_SWORD},
         {"Sacred Grove Pedestal Shadow Crystal", ITEM_CHECK_SHADOW_CRYSTAL},
-        {"Sera Shop Slingshot", "shop:R_SP01:75"},
+        {"Sera Shop Slingshot", "shop:R_SP01:1:75"},
         {"Shad Dominion Rod", ITEM_CHECK_SHAD_DOMINION_ROD},
         {"Skybook From Impaz", ITEM_CHECK_SKYBOOK},
         {"Snowboard Racing Prize", ITEM_CHECK_SNOWBOARD_REWARD},
@@ -661,8 +662,9 @@ int getLocationItem(randomizer::logic::location::Location* location) {
     }
     if (auto& shopNode = locationMeta["Shop"]) {
         u8 stage = shopNode[0]["Stage"].as<u8>();
+        u8 room = shopNode[0]["Room"].as<u8>();
         u8 originalItem = shopNode[0]["Item"].as<u8>();
-        u16 key = (stage << 8) | originalItem;
+        u32 key = (stage << 16) | (room << 8) | originalItem;
         return context.mShopOverrides[key];
     }
     if (auto& twilitInsectNode = locationMeta["Twilit Insect"]) {

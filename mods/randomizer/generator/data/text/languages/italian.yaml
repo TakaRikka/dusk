@@ -1200,9 +1200,9 @@ Goron Mines Key Shard:
   Cryptic:
     Text: "{one third of a key}"
 
-Coro Key:
+Faron Woods Coro Key:
   Standard:
-    Text: Coro Key
+    Text: Faron Woods Coro Key
   Pretty:
     Text: "{Coro's Key}"
   Cryptic:
@@ -1247,6 +1247,10 @@ Lanayru Twilight Tear:
     Text: a {Lanayru Twilight Tear}
   Cryptic:
     Text: a {tear of a lake spirit}
+
+Progressive Item Prefix:
+  Standard:
+    Text: "Progressive "
 
 # ITEM NAMES FOR PROGRESSIVE ITEMS
 Progressive Wallet x0:
@@ -2247,6 +2251,20 @@ Castle Town Goron Hylian Shield Confirmation Later Text Template:
   Standard:
     Text: |-
       Would you want <Item Pretty Name> for <purple>210 Rupees<white>?<begin choice>
+
+Agithas Castle Zero Items Sign Text:
+  Standard:
+    Text: |-
+      <font size 48>Please bring <purple>golden bugs<white> you find to Agitha's Castle.
+      
+      And tell them the princess awaits!
+
+Agithas Castle Some Items Sign Text:
+  Standard:
+    Text: |-
+      <font size 48>Please bring <yellow>golden bugs<white> you find to Agitha's Castle. I'll share <red>GREAT happiness<white> with you:
+      
+      <green><Items>
 
 Coro Bottle Offer 1 Text Template:
   Standard:

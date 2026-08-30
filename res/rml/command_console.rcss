@@ -1,0 +1,95 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    pointer-events: none;
+}
+
+console {
+    position: absolute;
+    bottom: 10dp;
+    left: 10dp;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 60%);
+    pointer-events: auto;
+    font-family: "Noto Mono";
+    font-size: 14dp;
+    color: #FFFFFF;
+    transition: background-color 0.8s linear-in-out;
+}
+
+output {
+    display: block;
+    overflow: hidden;
+    max-height: 480dp;
+    padding: 4dp 8dp;
+    line-height: 1.4em;
+}
+
+output[open] {
+    height: 480dp;
+    max-height: 480dp;
+    overflow-y: auto;
+}
+
+console:not([open]) {
+    pointer-events: none;
+}
+
+console:not([open])[fading] {
+    background-color: rgba(0, 0, 0, 0%);
+}
+
+console[open] {
+    background-color: rgba(0, 0, 0, 60%);
+    transition: none;
+}
+
+line {
+    display: block;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.8s linear-in-out;
+}
+
+output:not([open]) line[fading] {
+    opacity: 0;
+}
+
+output:not([open]) line[expired] {
+    display: none;
+}
+
+output[open] line {
+    opacity: 1;
+    transition: none;
+}
+
+line.cmd {
+    color: #FFD966;
+}
+
+console input {
+    display: none;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 40%);
+    border: 0dp;
+    border-top: 1dp rgba(255, 255, 255, 20%);
+    color: #FFFFFF;
+    font-family: "Noto Mono";
+    font-size: 14dp;
+    padding: 4dp 8dp;
+}
+
+console[open] input {
+    display: block;
+}

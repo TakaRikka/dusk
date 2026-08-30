@@ -51,7 +51,7 @@ public:
     std::unordered_map<u8, u8> mBugRewardOverrides{};
     std::unordered_map<u16, u8> mSkyCharacterOverrides{};
     std::unordered_map<u16, u8> mGoldenWolfOverrides{};
-    std::unordered_map<u16, u8> mShopOverrides{};
+    std::unordered_map<u32, u8> mShopOverrides{};
     std::unordered_map<u16, u16> mTwilitInsectOverrides{};  // Just used in tracker for now
     std::unordered_map<std::string, itemLocationData> mItemLocations{};
 

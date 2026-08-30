@@ -51,6 +51,28 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
         }
     }
 
+    void Text::Replace(const Text& oldText, const std::string& replacementText, uint32_t count /* = max*/) {
+        for (size_t i = 0; i < mText.size(); ++i) {
+            auto& curString = mText[i];
+            auto& oldString = oldText.mText[i];
+            curString = utility::str::Replace(curString, oldString, replacementText, count);
+        }
+    }
+
+    void Text::PopBack() {
+        for (auto& text : mText) {
+            if (!text.empty()) {
+                text.pop_back();
+            }
+        }
+    }
+
+    void Text::Clear() {
+        for (auto& text : mText) {
+            text.clear();
+        }
+    }
+
     void Text::Capitalize() {
         try {
             // Determine the platform-specific locale string
@@ -93,9 +115,9 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
         BreakLines();
         for (size_t lang = 0; lang < mText.size(); ++lang) {
             auto& text = mText[lang];
-            auto linesPerBox = LINES_PER_BOX_LATIN;
+            auto linesPerBox = mLinesPerBox;
             if (lang == JAPANESE) {
-                linesPerBox = LINES_PER_BOX_JP;
+                linesPerBox = mLinesPerBoxJP;
             }
             size_t numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
             while (numNewLines == 0 || text.back() != '\n' || numNewLines % linesPerBox != 0) {
@@ -117,7 +139,7 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
     bool Text::IsTooLong() const {
         for (auto& text : mText) {
             auto numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
-            if (numNewLines > MAX_NEWLINES_PER_MESSAGE) {
+            if (numNewLines > mNewLinesPerMessage) {
                 return true;
             }
         }
@@ -133,17 +155,23 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
             size_t numTextObjects{1};
             for (auto& text : mText) {
                 double numNewLines = std::ranges::count_if(text, [](char c){return c == '\n';});
-                auto curTextSplitAmount = static_cast<size_t>(std::ceil(numNewLines / MAX_NEWLINES_PER_MESSAGE));
+                auto curTextSplitAmount = static_cast<size_t>(std::ceil(numNewLines / mNewLinesPerMessage));
                 numTextObjects = std::max(curTextSplitAmount, numTextObjects);
             }
 
-            std::vector<Text> splitText{numTextObjects};
+            // Populate the Text vector with copies of this object to copy over the fields
+            auto splitText = std::vector(numTextObjects, *this);
+            // Clear the text
+            for (auto& text : splitText) {
+                text.Clear();
+            }
+
             // Split each string into the appropriate number of objects
             for (size_t textIdx = 0; textIdx < mText.size(); ++textIdx) {
                 auto& textStr = mText[textIdx];
-                auto linesPerBox = LINES_PER_BOX_LATIN;
+                auto linesPerBox = mLinesPerBox;
                 if (textIdx == JAPANESE) {
-                    linesPerBox = LINES_PER_BOX_JP;
+                    linesPerBox = mLinesPerBoxJP;
                 }
                 // Calculate how many newlines we're allowing in this string per message
                 // Different languages may have different amounts of newlines
@@ -157,6 +185,9 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
                 size_t splitIdx = 0;
                 do {
                     size_t pos = 0;
+                    if (newLinesPerMessage == 0) {
+                        pos = std::string::npos;
+                    }
                     for (int i = 0; i < newLinesPerMessage; ++i) {
                         pos = textStr.find('\n', pos);
                         if (pos == std::string::npos) {
@@ -186,6 +217,16 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
 
             // Reassign the vector everything except the first element
             splitText.assign(splitText.begin() + 1, splitText.end());
+
+            // Add the split message prefix to every box
+            if (!mSplitMessagePrefix.empty()) {
+                for (auto& textObj : splitText) {
+                    for (auto& text : textObj.mText) {
+                        text = mSplitMessagePrefix + text;
+                        applyMessageCodes(text);
+                    }
+                }
+            }
             return splitText;
         }
 
@@ -334,61 +375,61 @@ const auto kSilverMessageCode = text_color_code(0xBFBFBFFF);
         return latin1Str;
     }
 
-std::string UTF8ToShiftJIS(const std::string& utf8Str) {
-    std::string sjisStr;
-    sjisStr.reserve(utf8Str.length());
+    std::string UTF8ToShiftJIS(const std::string& utf8Str) {
+        std::string sjisStr;
+        sjisStr.reserve(utf8Str.length());
 
-    size_t read_pos = 0;
-    size_t len = utf8Str.length();
+        size_t read_pos = 0;
+        size_t len = utf8Str.length();
 
-    while (read_pos < len) {
-        uint32_t codepoint = 0;
-        unsigned char c = utf8Str[read_pos];
+        while (read_pos < len) {
+            uint32_t codepoint = 0;
+            unsigned char c = utf8Str[read_pos];
 
-        // Decode UTF-8 sequence to Unicode codepoint
-        if (c < 0x80) {
-            codepoint = c;
-            read_pos += 1;
-        } else if ((c & 0xE0) == 0xC0 && (read_pos + 1 < len)) {
-            codepoint = ((c & 0x1F) << 6) | (utf8Str[read_pos + 1] & 0x3F);
-            read_pos += 2;
-        } else if ((c & 0xF0) == 0xE0 && (read_pos + 2 < len)) {
-            codepoint = ((c & 0x0F) << 12) |
-                        ((utf8Str[read_pos + 1] & 0x3F) << 6) |
-                        (utf8Str[read_pos + 2] & 0x3F);
-            read_pos += 3;
-        } else if ((c & 0xF8) == 0xF0 && (read_pos + 3 < len)) {
-            codepoint = ((c & 0x07) << 18) |
-                        ((utf8Str[read_pos + 1] & 0x3F) << 12) |
-                        ((utf8Str[read_pos + 2] & 0x3F) << 6) |
-                        (utf8Str[read_pos + 3] & 0x3F);
-            read_pos += 4;
-        } else {
-            throw std::runtime_error(fmt::format("Invalid UTF-8 byte sequence in \"{}\"", utf8Str));
-        }
-
-        // Convert Codepoint to Shift-JIS
-        if (codepoint < 0x80) {
-            // Standard ASCII maps directly (Note: 0x5C is '\' in ASCII, '¥' in JIS X 0201)
-            sjisStr.push_back(static_cast<char>(codepoint));
-        } else if (codepoint >= 0xFF61 && codepoint <= 0xFF9F) {
-            // Half-width Katakana (U+FF61 - U+FF9F -> 0xA1 - 0xDF)
-            sjisStr.push_back(static_cast<char>(codepoint - 0xFF61 + 0xA1));
-        } else {
-            // Full-width Kana / Kanji lookup
-            auto it = unicodeToShiftJISMap.find(codepoint);
-            if (it == unicodeToShiftJISMap.end()) {
-                throw std::runtime_error(fmt::format("Codepoint U+{:04X} cannot be represented in Shift-JIS", codepoint));
+            // Decode UTF-8 sequence to Unicode codepoint
+            if (c < 0x80) {
+                codepoint = c;
+                read_pos += 1;
+            } else if ((c & 0xE0) == 0xC0 && (read_pos + 1 < len)) {
+                codepoint = ((c & 0x1F) << 6) | (utf8Str[read_pos + 1] & 0x3F);
+                read_pos += 2;
+            } else if ((c & 0xF0) == 0xE0 && (read_pos + 2 < len)) {
+                codepoint = ((c & 0x0F) << 12) |
+                            ((utf8Str[read_pos + 1] & 0x3F) << 6) |
+                            (utf8Str[read_pos + 2] & 0x3F);
+                read_pos += 3;
+            } else if ((c & 0xF8) == 0xF0 && (read_pos + 3 < len)) {
+                codepoint = ((c & 0x07) << 18) |
+                            ((utf8Str[read_pos + 1] & 0x3F) << 12) |
+                            ((utf8Str[read_pos + 2] & 0x3F) << 6) |
+                            (utf8Str[read_pos + 3] & 0x3F);
+                read_pos += 4;
+            } else {
+                throw std::runtime_error(fmt::format("Invalid UTF-8 byte sequence in \"{}\"", utf8Str));
             }
 
-            uint16_t sjisVal = it->second;
-            sjisStr.push_back(static_cast<char>((sjisVal >> 8) & 0xFF)); // Lead byte
-            sjisStr.push_back(static_cast<char>(sjisVal & 0xFF));        // Trail byte
-        }
-    }
+            // Convert Codepoint to Shift-JIS
+            if (codepoint < 0x80) {
+                // Standard ASCII maps directly (Note: 0x5C is '\' in ASCII, '¥' in JIS X 0201)
+                sjisStr.push_back(static_cast<char>(codepoint));
+            } else if (codepoint >= 0xFF61 && codepoint <= 0xFF9F) {
+                // Half-width Katakana (U+FF61 - U+FF9F -> 0xA1 - 0xDF)
+                sjisStr.push_back(static_cast<char>(codepoint - 0xFF61 + 0xA1));
+            } else {
+                // Full-width Kana / Kanji lookup
+                auto it = unicodeToShiftJISMap.find(codepoint);
+                if (it == unicodeToShiftJISMap.end()) {
+                    throw std::runtime_error(fmt::format("Codepoint U+{:04X} cannot be represented in Shift-JIS", codepoint));
+                }
 
-    return sjisStr;
-}
+                uint16_t sjisVal = it->second;
+                sjisStr.push_back(static_cast<char>((sjisVal >> 8) & 0xFF)); // Lead byte
+                sjisStr.push_back(static_cast<char>(sjisVal & 0xFF));        // Trail byte
+            }
+        }
+
+        return sjisStr;
+    }
 
     static void LoadTextData(TextDatabase& tb) {
         struct LanguageEntry {
@@ -530,6 +571,8 @@ std::string UTF8ToShiftJIS(const std::string& utf8Str) {
         {"<dark green>",     kDarkGreenMessageCode},
         {"<blue>",           kBlueMessageCode},
         {"<silver>",         kSilverMessageCode},
+        // TODO: Custom font sizes
+        {"<font size 48>",   "\x1A\x07\xFF\x00\x01\x00\x48"sv},
     };
 
     void breakLines(std::string& str, float maxStrLength, int lang) {

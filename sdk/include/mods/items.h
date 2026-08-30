@@ -10,7 +10,7 @@
 #define ITEM_CHECK_FREESTANDING_PREFIX "freestanding:"     /* <stage>:<bit> */
 #define ITEM_CHECK_GOLDEN_WOLF_PREFIX "golden_wolf:"       /* <event_flag> */
 #define ITEM_CHECK_POE_PREFIX "poe:"                       /* <stage>:<switch> */
-#define ITEM_CHECK_SHOP_PREFIX "shop:"                     /* <stage>:<item> */
+#define ITEM_CHECK_SHOP_PREFIX "shop:"                     /* <stage>:<room>:<item> */
 #define ITEM_CHECK_SKY_PREFIX "sky:"                       /* <stage>:<room> */
 #define ITEM_CHECK_DUNGEON_REWARD_PREFIX "dungeon_reward:" /* <stage> */
 

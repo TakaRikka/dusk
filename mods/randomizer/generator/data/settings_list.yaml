@@ -567,6 +567,12 @@
     - "Off": "All locations will be treated equally for location hints."
     - "On": "Certain locations which are time-consuming to check will be given priority for location hints."
 
+- Name: Agitha Hints
+  Default Option: "On"
+  Options:
+    - "Off": "The sign outside Agitha's Castle will not contain any hints."
+    - "On": "The sign outside Agitha's Castle will hint all major items that can be obtained from turning in golden bugs to Agitha."
+
 #############################
 ##   Entrance Randomizer   ##
 #############################
@@ -642,7 +648,7 @@
 - Name: Back Slice as Sword
   Default Option: "Off"
   Options:
-    - "Off": "Back Slicing without a sword can be logically required to do damage."
+    - "Off": "Back Slicing without a sword will not be logically required to do damage."
     - "On": "Back Slicing without a sword can be logically required to do damage."
     
 - Name: Ball and Chain Webs

@@ -18,6 +18,7 @@
 #include "dusk/config.hpp"
 #include "dusk/io.hpp"
 #include <borealis/io.hpp>
+#include "command_console.hpp"
 #include "icon_provider.hpp"
 #include "input.hpp"
 #include "mod_texture_provider.hpp"
@@ -68,6 +69,7 @@ void restyle_scope(DocumentScope scope) {
 
 std::deque<Toast> sToasts;
 bool sMenuNotificationRequested = false;
+bool sConsoleShortcutHeld = false;
 
 // Sometimes gamepads can connect and disconnect quickly, especially during
 // connection negotiation. In this case, we'll receive an _ADDED event for a
@@ -106,6 +108,7 @@ void shutdown() noexcept {
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();
+    sConsoleShortcutHeld = false;
     input::reset_input_state();
     input::release_input_block();
     sInitialized = false;
@@ -217,6 +220,28 @@ void handle_event(const SDL_Event& event) noexcept {
     } else if (event.type == SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED) {
         apply_scale();
     }
+    if (event.type == SDL_EVENT_WINDOW_FOCUS_LOST) {
+        sConsoleShortcutHeld = false;
+    }
+    if (event.type == SDL_EVENT_KEY_UP && event.key.key == SDLK_SLASH && sConsoleShortcutHeld) {
+        sConsoleShortcutHeld = false;
+        return;
+    }
+    if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_SLASH &&
+        getSettings().backend.enableAdvancedSettings)
+    {
+        auto* console = static_cast<CommandConsole*>(find_document(DocumentScope::CommandConsole));
+        if (sConsoleShortcutHeld) {
+            return;
+        }
+        if (console != nullptr && !console->input_active() && !event.key.repeat) {
+            sConsoleShortcutHeld = true;
+            bring_document_to_front(*console);
+            console->show();
+            input::sync_input_block();
+            return;
+        }
+    }
     input::handle_event(event);
 }
 
@@ -262,6 +287,17 @@ Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) 
     return ret;
 }
 
+void bring_document_to_front(Document& doc) noexcept {
+    const auto it = std::ranges::find_if(
+        sDocumentStack, [&doc](const auto& entry) { return entry.get() == &doc; });
+    if (it == sDocumentStack.end() || std::next(it) == sDocumentStack.end()) {
+        return;
+    }
+    auto entry = std::move(*it);
+    sDocumentStack.erase(it);
+    sDocumentStack.push_back(std::move(entry));
+}
+
 void uncover_top_document() noexcept {
     if (auto* doc = top_document()) {
         doc->uncover();
@@ -278,10 +314,10 @@ Document* find_document(DocumentScope scope) noexcept {
     return nullptr;
 }
 
-void close_documents_except(DocumentScope scope) noexcept {
+void close_all_documents() noexcept {
     for (auto& doc : sDocumentStack) {
-        if (!doc->closed() && doc->scope() != scope) {
-            doc->force_hide(true);
+        if (!doc->closed()) {
+            doc->force_hide(!doc->permanent());
         }
     }
     input::sync_input_block();
@@ -289,7 +325,7 @@ void close_documents_except(DocumentScope scope) noexcept {
 
 bool any_document_visible() noexcept {
     return std::any_of(sDocumentStack.begin(), sDocumentStack.end(),
-        [](const auto& doc) { return doc && doc->visible(); });
+        [](const auto& doc) { return doc && doc->visible() && !doc->pending_close(); });
 }
 
 bool is_prelaunch_open() noexcept {

@@ -1537,6 +1537,27 @@ dStage_objectNameInf* dStage_searchName(char const* objName) {
     return NULL;
 }
 
+#if TARGET_PC
+dStage_objectNameInf* dStage_searchNameCI(char const* objName) {
+    dStage_objectNameInf* obj = l_objectName;
+
+    for (u32 i = 0; i < ARRAY_SIZEU(l_objectName); i++) {
+        const char* a = obj->name;
+        const char* b = objName;
+        while (*a && *b && tolower((unsigned char)*a) == tolower((unsigned char)*b)) {
+            ++a;
+            ++b;
+        }
+        if (*a == '\0' && *b == '\0') {
+            return obj;
+        }
+        obj++;
+    }
+
+    return NULL;
+}
+#endif
+
 const char* dStage_getName(s16 procName, s8 argument) {
     static char tmp_name[dStage_NAME_LENGTH];
 

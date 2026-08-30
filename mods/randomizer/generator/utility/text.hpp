@@ -73,6 +73,11 @@ namespace randomizer {
         std::array<std::string, LANGUAGE_MAX> mText{};
         std::array<Gender, LANGUAGE_MAX> mGender{};
         std::array<Plurality, LANGUAGE_MAX> mPlurality{};
+        float mLineWidth = MAX_LINE_WIDTH_NORMAL_TEXTBOX;
+        size_t mNewLinesPerMessage = MAX_NEWLINES_PER_MESSAGE;
+        size_t mLinesPerBox = LINES_PER_BOX_LATIN;
+        size_t mLinesPerBoxJP = LINES_PER_BOX_JP;
+        std::string mSplitMessagePrefix{};
 
         /**
          *
@@ -82,6 +87,9 @@ namespace randomizer {
          */
         void Replace(const std::string& oldText, const Text& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
         void Replace(const std::string& oldText, const std::string& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
+        void Replace(const Text& oldText, const std::string& replacementText, uint32_t count = std::numeric_limits<uint32_t>::max());
+        void PopBack();
+        void Clear();
         void BreakLines(float maxLineWidth = MAX_LINE_WIDTH_NORMAL_TEXTBOX);
 
         // Inserts newlines to pad the text to the next box

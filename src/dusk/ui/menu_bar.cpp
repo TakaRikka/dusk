@@ -15,6 +15,7 @@
 #include "dusk/speedrun.h"
 #include "dusk/ui/prelaunch.hpp"
 #include "editor.hpp"
+#include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
 #include "imgui.h"
@@ -165,6 +166,10 @@ void MenuBar::build_tabs() {
             dusk::speedrun::g_speedrunInfo.reset();
             if (getSettings().game.liveSplitEnabled) {
                 dusk::speedrun::reset();
+            }
+            auto* playScene = fpcM_SearchByName(fpcNm_PLAY_SCENE_e);
+            if (playScene != nullptr) {
+                fopScnM_ChangeReq((scene_class*)playScene, fpcNm_NAME_SCENE_e, 0x7FFF, 0);
             }
             hide(false);
         });

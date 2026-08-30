@@ -954,6 +954,9 @@ ModResult buildHintsTab(ModContext* ctx, UiWindowHandle, UiElementHandle leftPan
     add_select_setting(leftPane, "Location Hints on Hint Signs");
     add_select_setting(leftPane, "Prioritize Remote Location Hints");
 
+    add_section(leftPane, "Miscellaneous Hints");
+    add_select_setting(leftPane, "Agitha Hints");
+
     return MOD_OK;
 }
 

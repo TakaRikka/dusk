@@ -1621,6 +1621,7 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
 
     if (i_itemNo != originalItemNo) {
         const u32 params = 0xFFFF0000 | param_8 << 8 | (i_itemNo & 0xFF);
+        dusk::mods::set_boss_item_actor_speeds(i_speedF, i_speedY);
         return fopAcM_create(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle,
             i_scale, -1, giveTag, originalItemNo);
     }

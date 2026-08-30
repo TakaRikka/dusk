@@ -14,6 +14,7 @@
 #include <mods/svc/log.hpp>
 #include <mods/items.h>
 
+#include "Z2AudioLib/Z2SceneMgr.h"
 #include "c/c_damagereaction.h"
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_b_bq.h"
@@ -32,19 +33,20 @@
 #include "d/actor/d_a_npc_ykw.h"
 #include "d/actor/d_a_npc_zrc.h"
 #include "d/actor/d_a_npc_zrz.h"
-#include "d/actor/d_a_obj_bosswarp.h"
-#include "d/actor/d_a_shop_item.h"
-#include "d/actor/d_a_obj_swBallC.h"
-#include "d/actor/d_a_obj_zra_rock.h"
-#include "d/actor/d_a_tag_kmsg.h"
-#include "d/actor/d_a_tbox2.h"
 #include "d/actor/d_a_obj_item.h"
 #include "d/actor/d_a_obj_life_container.h"
+#include "d/actor/d_a_obj_master_sword.h"
+#include "d/actor/d_a_obj_swBallC.h"
+#include "d/actor/d_a_obj_zra_rock.h"
+#include "d/actor/d_a_shop_item.h"
+#include "d/actor/d_a_tag_kmsg.h"
+#include "d/actor/d_a_tbox2.h"
 #include "d/d_door_param2.h"
 #include "d/d_event.h"
 #include "d/d_file_sel_info.h"
 #include "d/d_file_select.h"
 #include "d/d_gameover.h"
+#include "d/d_item.h"
 #include "d/d_menu_item_explain.h"
 #include "d/d_menu_ring.h"
 #include "d/d_meter2_info.h"
@@ -53,10 +55,8 @@
 #include "d/d_s_play.h"
 #include "d/d_save.h"
 #include "d/d_shop_system.h"
-#include "d/d_item.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_Reset.h"
-#include "Z2AudioLib/Z2SceneMgr.h"
 
 DEFINE_HOOK(&dFile_select_c::selectDataNameMove, dFile_select_c__selectDataNameMove);
 DEFINE_HOOK(&dFile_select_c::dataSelect, dFile_select_c__dataSelect);
@@ -163,11 +163,9 @@ DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
 DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
 DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 
-DEFINE_HOOK(&daDitem_c::CreateInit, daDitem_c__CreateInit);
+DEFINE_HOOK_SYMBOL("daDitem_c::execute", int(daDitem_c*), daDitem_c__execute);
 
 DEFINE_HOOK(&daShopItem_c::CreateInit, daShopItem_c__CreateInit);
-
-DEFINE_HOOK(&daObjBossWarp_c::demoProc, daObjBossWarp_c__demoProc);
 
 DEFINE_HOOK_SYMBOL("lure_heart", void(dmg_rod_class*), mgRod_lure_heart);
 DEFINE_HOOK_SYMBOL("uki_catch", void(dmg_rod_class*), mgRod_uki_catch);
@@ -213,6 +211,8 @@ DEFINE_HOOK(&daObjLife_c::calcScale, daObjLife_c__calcScale);
 DEFINE_HOOK_SYMBOL("dComIfGs_getCollectSmell", u8(), getCollectSmell);
 
 DEFINE_HOOK(&dEvt_control_c::skipper, dEvt_control_c__skipper);
+
+DEFINE_HOOK(&daObjMasterSword_c::executeWait, daObjMasterSword_c__executeWait);
 
 namespace randomizer::ui {
 dialogSelectModeState g_dialogSelectModeState = SelectReady;
@@ -599,9 +599,9 @@ HookAction hookPreIsDungeonItem(ModContext*, void* args, void* retval, void*) {
         return HOOK_SKIP_ORIGINAL;
     case dSv_memBit_c::STAGE_BOSS_ENEMY: {
         // If we are in a dungeon or fighting a midboss, we don't want the boss being
-        // defeated to affect the gameplay.
+        // defeated to affect the gameplay. The check should still succeed in boss rooms.
         std::string stageName = dComIfGp_getStartStageName();
-        if (stageName.starts_with("D_MN")) {
+        if (stageName.starts_with("D_MN") && !stageName.ends_with("A")) {
             out = FALSE;
             return HOOK_SKIP_ORIGINAL;
         }
@@ -769,7 +769,7 @@ HookAction hookPreShopSeqDecideYes(ModContext*, void* args, void*, void*) {
     int item_no = 0;
 
     if (i_this->mFlow.getEventId(&item_no) == 1 && playerIsInRoomStage(3, "R_SP109")) {
-        const u16 key = static_cast<u16>((getStageID() << 8) | (item_no & 0xFF));
+        const u16 key = static_cast<u32>((getStageID() << 16) | (dStage_roomControl_c::getStayNo() << 8) | (item_no & 0xFF));
         if (randomizer_GetContext().mShopOverrides.contains(key)) {
             i_this->setSoldOutFlag();
         }
@@ -2372,30 +2372,26 @@ HookAction hookPreSwBallActionWait(ModContext*, void* args, void*, void*) {
     return HOOK_SKIP_ORIGINAL;
 }
 
-void hookPostDitemCreateInit(ModContext*, void* args, void*, void*) {
+void hookPostDitemExecute(ModContext*, void* args, void*, void*) {
     auto* i_this = mods::arg<daDitem_c*>(args, 0);
 
     // Certain items use field models that are too big to fit in link's hands so we want to scale
     // them down to fit.
-    f32 modelScale = 0.0f;
+
     switch (i_this->getDisplayItemNo()) {
     case dItemNo_Randomizer_MIRROR_PIECE_1_e:
     case dItemNo_Randomizer_MIRROR_PIECE_2_e:
     case dItemNo_Randomizer_MIRROR_PIECE_3_e:
     case dItemNo_Randomizer_MIRROR_PIECE_4_e:
-        modelScale = 0.05f;
+        i_this->scale.x = 0.05f;
         break;
     case dItemNo_Randomizer_MASTER_SWORD_e:
     case dItemNo_Randomizer_LIGHT_SWORD_e:
-        modelScale = 0.001f;
+        i_this->scale.x = 0.001f;
         break;
     default:
         return;
     }
-
-    i_this->setMaxScale(modelScale);
-    i_this->scale.setall(modelScale);
-    i_this->set_mtx();
 }
 
 void hookPostShopItemCreateInit(ModContext*, void* args, void*, void*) {
@@ -2415,103 +2411,6 @@ void hookPostShopItemCreateInit(ModContext*, void* args, void*, void*) {
         break;
     }
     default:
-        break;
-    }
-}
-
-// pretty ugly way of handling this, but oh well. basically, we reconstruct the actionTable
-// and use it to check that we're in the correct action before proceeding. then store info
-// about what level we're on, and use it in the post-hook to undo the flag that's normally set.
-daObjBossWarp_c* hookBossWarpDemoProc_patchActor = nullptr;
-int hookBossWarpDemoProc_nowLevel = -1;
-HookAction hookPreBossWarpDemoProc(ModContext*, void* args, void*, void*) {
-    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
-
-    hookBossWarpDemoProc_patchActor = nullptr;
-    hookBossWarpDemoProc_nowLevel = -1;
-
-    static const char* const actionTable[15] = {
-        "WAIT",
-        "APPEAR",
-        "DISAPPEAR",
-        "SCENE_CHG",
-        "STONE_FALL",
-        "STONE_MIDNA",
-        "WALK_TARGET1",
-        "APPEAR_END",
-        "STONE_DELETE",
-        "STONE_PUTAWAY",
-        "WCHECK",
-        "SETPOS",
-        "SCALING",
-        "STONE_SCALE",
-        "HEART_MOVE",
-    };
-
-    bool isRewardAction =
-        dComIfGp_evmng_getIsAddvance(i_this->mStaffId)
-        && dComIfGp_evmng_getMyActIdx(i_this->mStaffId, actionTable, 15, 0, 0) == 4;
-    if (!isRewardAction) {
-        return HOOK_CONTINUE;
-    }
-
-    // this was a static function in the original TU, so reconstructing it for use here
-    auto getNowLevel = []() {
-        static const char* const stages[9] = {
-            "D_MN05A",
-            "D_MN04A",
-            "D_MN01A",
-            "D_MN10A",
-            "D_MN11A",
-            "D_MN06A",
-            "D_MN07A",
-            "D_MN08A",
-            "D_MN01A",
-        };
-
-        for (int i = 0; i < 9; i++) {
-            if (std::strcmp(dComIfGp_getStartStageName(), stages[i]) == 0) {
-                return i;
-            }
-        }
-
-        return -1;
-    };
-
-    hookBossWarpDemoProc_patchActor = i_this;
-    hookBossWarpDemoProc_nowLevel = getNowLevel();
-    return HOOK_CONTINUE;
-}
-
-void hookPostBossWarpDemoProc(ModContext*, void* args, void*, void*) {
-    auto* i_this = mods::arg<daObjBossWarp_c*>(args, 0);
-    if (hookBossWarpDemoProc_patchActor != i_this) {
-        return;
-    }
-
-    int level = hookBossWarpDemoProc_nowLevel;
-    hookBossWarpDemoProc_patchActor = nullptr;
-    hookBossWarpDemoProc_nowLevel = -1;
-
-    // undo the flag that was set in the original function
-    switch (level) {
-    case 0:
-        dComIfGs_offCollectCrystal(0);
-        break;
-    case 1:
-        dComIfGs_offCollectCrystal(1);
-        break;
-    case 2:
-        dComIfGs_offCollectCrystal(2);
-        break;
-    case 4:
-        dComIfGs_offCollectMirror(1);
-        break;
-    case 5:
-        dComIfGs_offCollectMirror(2);
-        break;
-    case 6:
-        dComIfGs_offCollectMirror(3);
         break;
     }
 }
@@ -3343,6 +3242,15 @@ void hookReplaceEvtControlSkipper(ModContext*, void* args, void* retval, void*) 
     *static_cast<bool*>(retval) = doSkip;
 }
 
+void hookPostMasterSwordExecuteWait(ModContext*, void* args, void* retval, void*) {
+    auto objMasterSword = mods::arg<daObjMasterSword_c*>(args, 0);
+
+    if (fopAcM_checkCarryNow(objMasterSword)) {
+        dComIfGs_onTmpBit(0x820);
+        objMasterSword->actor_status = 0;
+    }
+}
+
 }
 
 ModResult initialize() {
@@ -3463,11 +3371,8 @@ ModResult initialize() {
     ADD_HOOK_POST(daObjSwBallC_c__Create, hookPostSwBallCreate);
     ADD_HOOK_PRE(daObjSwBallC_c__actionWait, hookPreSwBallActionWait);
 
-    ADD_HOOK_POST(daDitem_c__CreateInit, hookPostDitemCreateInit);
+    ADD_HOOK_POST(daDitem_c__execute, hookPostDitemExecute);
     ADD_HOOK_POST(daShopItem_c__CreateInit, hookPostShopItemCreateInit);
-
-    ADD_HOOK_PRE(daObjBossWarp_c__demoProc, hookPreBossWarpDemoProc);
-    ADD_HOOK_POST(daObjBossWarp_c__demoProc, hookPostBossWarpDemoProc);
 
     ADD_HOOK_PRE(mgRod_lure_heart, hookPreLureHeart);
     ADD_HOOK_POST(mgRod_lure_heart, hookPostLureHeart);
@@ -3505,6 +3410,8 @@ ModResult initialize() {
     ADD_HOOK_POST(getCollectSmell, hookPostGetCollectSmell);
 
     ADD_HOOK_REPLACE(dEvt_control_c__skipper, hookReplaceEvtControlSkipper);
+
+    ADD_HOOK_POST(daObjMasterSword_c__executeWait, hookPostMasterSwordExecuteWait);
 
     return MOD_OK;
 }
@@ -3604,10 +3511,8 @@ ModResult uninstall() {
     mods::hook::uninstall<daObjSwBallC_c__Create>(svc_hook);
     mods::hook::uninstall<daObjSwBallC_c__actionWait>(svc_hook);
 
-    mods::hook::uninstall<daDitem_c__CreateInit>(svc_hook);
+    mods::hook::uninstall<daDitem_c__execute>(svc_hook);
     mods::hook::uninstall<daShopItem_c__CreateInit>(svc_hook);
-
-    mods::hook::uninstall<daObjBossWarp_c__demoProc>(svc_hook);
 
     mods::hook::uninstall<mgRod_lure_heart>(svc_hook);
     mods::hook::uninstall<mgRod_uki_catch>(svc_hook);
@@ -3640,6 +3545,8 @@ ModResult uninstall() {
     mods::hook::uninstall<getCollectSmell>(svc_hook);
 
     mods::hook::uninstall<dEvt_control_c__skipper>(svc_hook);
+
+    mods::hook::uninstall<daObjMasterSword_c__executeWait>(svc_hook);
 
     return MOD_OK;
 }

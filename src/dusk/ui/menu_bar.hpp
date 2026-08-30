@@ -20,6 +20,7 @@ public:
     void update() override;
     bool focus() override;
     bool visible() const override;
+    bool permanent() const override { return true; }
 
     static void refresh_tabs();
 

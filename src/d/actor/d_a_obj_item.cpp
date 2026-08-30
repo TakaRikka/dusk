@@ -268,7 +268,7 @@ int daItem_c::_daItem_create() {
         const u32 params = fopAcM_GetParam(this);
         mOriginalItemNo = params & 0xFF;
         mItemGiveTag = dusk::mods::item_give_tag_freestanding(daItem_prm::getItemBitNo(this));
-        const auto [item, displayItem] =
+        const auto [item, displayItem, _] =
             dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
         mItemOverridden = item != mOriginalItemNo;
         setDisplayItemNo(displayItem);
