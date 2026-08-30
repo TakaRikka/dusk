@@ -4,8 +4,6 @@
 #include "mods/svc/audio_res.h"
 
 #include "../registry.hpp"
-#include "wsys.hpp"
-#include "bst.hpp"
 
 namespace dusk::mods::svc {
 

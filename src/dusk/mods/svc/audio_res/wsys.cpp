@@ -1,3 +1,4 @@
+#include "audio_res.hpp"
 #include "wsys.hpp"
 #include "../slot_map.hpp"
 #include "../id_allocator.hpp"

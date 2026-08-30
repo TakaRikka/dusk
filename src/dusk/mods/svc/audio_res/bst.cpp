@@ -1,5 +1,6 @@
 #include "bst.hpp"
 
+#include "audio_res.hpp"
 #include "aurora/lib/logging.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/svc/id_allocator.hpp"
@@ -173,7 +174,7 @@ void remove_mod(LoadedMod const& mod) {
 
 void frame_end() {
     if (sound_replacements_dirty) {
-        sync_audio_replacements();
+        wsys::sync_audio_replacements();
     }
 }
 

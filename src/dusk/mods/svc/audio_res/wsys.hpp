@@ -104,28 +104,4 @@ using ContainerLoadFunction = ModResult (*)(LoadedMod const& mod, RuntimeWaveRep
 ModResult load_wav(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::span<u8 const> fileData);
 ModResult load_opus(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::span<u8 const> fileData);
 
-void frame_end();
-void remove_mod(LoadedMod& mod);
-void sync_audio_replacements();
-
-extern AudioWaveInfo const default_wave_info;
-
-ModResult insert_replace_wave(
-    ModContext* ctx,
-    AudioWaveBank bank,
-    u16 wave_id,
-    char const* file_name,
-    AudioWaveInfo const* wave_info,
-    AudioWaveHandle* out_handle);
-
-ModResult insert_add_wave(
-    ModContext* ctx,
-    AudioWaveBank bank,
-    char const* file_name,
-    AudioWaveInfo const* wave_info,
-    AudioWaveHandle* out_handle,
-    u16* out_wave_id);
-
-ModResult remove_wave(ModContext* ctx, AudioWaveHandle handle);
-
 }
