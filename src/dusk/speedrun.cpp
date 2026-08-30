@@ -56,10 +56,7 @@ void resetForSpeedrunMode() {
     getSettings().game.damageMultiplier.setSpeedrunValue(1);
     getSettings().game.instantDeath.setSpeedrunValue(false);
     getSettings().game.noHeartDrops.setSpeedrunValue(false);
-    getSettings().game.holdToMash.sumo.setSpeedrunValue(false);
-    getSettings().game.holdToMash.swimming.setSpeedrunValue(false);
-    getSettings().game.holdToMash.twilitBloat.setSpeedrunValue(false);
-    getSettings().game.holdToMash.ganondorf.setSpeedrunValue(false);
+    getSettings().game.holdToMash.setSpeedrunValue(false);
     getSettings().game.autoSave.setSpeedrunValue(false);
     getSettings().game.sunsSong.setSpeedrunValue(false);
 
