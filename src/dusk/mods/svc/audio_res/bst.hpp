@@ -39,7 +39,7 @@ struct StreamReplacementSlot final : SoundTableReplacementSlot {
     std::string file_path;
     bool stop_on_scene_change;
 
-    StreamReplacementSlot(bool mod_defined, u16 id, const AudioSoundTableStreamInfo& info);
+    StreamReplacementSlot(bool mod_defined, u16 id, char const* file_path, const AudioSoundTableStreamInfo& info);
 
     ~StreamReplacementSlot() override = default;
 
@@ -68,6 +68,8 @@ void frame_end();
 void remove_mod(LoadedMod const& mod);
 void sync_audio_replacements();
 
+extern AudioSoundTableEffectInfo const default_effect_info;
+
 ModResult replace_sound_table_effect(
     ModContext* ctx,
     SoundEffectCategory category_id,
@@ -82,14 +84,18 @@ ModResult add_sound_table_effect(
     AudioSoundTableHandle* out_handle,
     uint16_t* out_effect_id);
 
+extern AudioSoundTableStreamInfo const default_stream_info;
+
 ModResult replace_sound_table_stream(
     ModContext* ctx,
     uint16_t stream_id,
+    char const* file_path,
     AudioSoundTableStreamInfo const* info,
     AudioSoundTableHandle* out_handle);
 
 ModResult add_sound_table_stream(
     ModContext* ctx,
+    char const* file_path,
     AudioSoundTableStreamInfo const* info,
     AudioSoundTableHandle* out_handle,
     uint16_t* out_stream_id);

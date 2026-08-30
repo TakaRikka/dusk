@@ -108,6 +108,8 @@ void frame_end();
 void remove_mod(LoadedMod& mod);
 void sync_audio_replacements();
 
+extern AudioWaveInfo const default_wave_info;
+
 ModResult insert_replace_wave(
     ModContext* ctx,
     AudioWaveBank bank,

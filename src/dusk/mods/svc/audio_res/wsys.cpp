@@ -29,18 +29,18 @@ PlainIdAllocator<u16> sound_effect_id_allocator(5'000);
 PlainIdAllocator<u16> music_sample_id_allocator(1'000);
 
 PlainIdAllocator<u16>& id_allocator_for_bank(AudioWaveBank const bank) {
-    return bank == SoundEffects ? sound_effect_id_allocator : music_sample_id_allocator;
+    return bank == AUDIO_WAVE_BANK_SOUND_EFFECTS ? sound_effect_id_allocator : music_sample_id_allocator;
 }
 
 bool validate_raw_size(LoadedMod const& mod, std::string const& path, uintptr_t actual_size, AudioRawWave const& raw, u32& sample_count) {
     u32 samples_per_block;
     u32 bytes_per_block;
     switch (raw.format) {
-    case Adpcm4:
+    case AUDIO_WAVE_FORMAT_ADPCM4:
         samples_per_block = 16;
         bytes_per_block = 9;
         break;
-    case Pcm16:
+    case AUDIO_WAVE_FORMAT_PCM16:
         samples_per_block = 1;
         bytes_per_block = 2;
         break;
@@ -71,7 +71,7 @@ ModResult load_raw(
         return MOD_INVALID_ARGUMENT;
     }
 
-    if (slot.format == Pcm16) {
+    if (slot.format == AUDIO_WAVE_FORMAT_PCM16) {
         SampleDataPcm16 pcm16;
         pcm16.data.resize(sample_count);
         memcpy(pcm16.data.data(), file_contents.data(), file_contents.size());
@@ -179,6 +179,15 @@ ModResult insert_replace_wave_core(
         slot.loop = wave_info->loop;
         slot.loop_start_sample = wave_info->loop_start_sample;
         slot.loop_end_sample = wave_info->loop_end_sample;
+
+        if (slot.loop_end_sample > slot.sample_count) {
+            slot.loop_end_sample = slot.sample_count;
+        }
+
+        if (slot.loop_start_sample >= slot.loop_end_sample) {
+            Log.error("[{}] wave has start >= end", mod->metadata.id);
+            return MOD_INVALID_ARGUMENT;
+        }
     } else {
         slot.base_key = AUDIO_RES_DEFAULT_KEY;
         slot.loop = false;
@@ -201,6 +210,8 @@ ModResult insert_replace_wave_core(
 
 absl::flat_hash_map<AudioWaveKey, AudioWaveReplacementValue> s_replacements;
 std::mutex s_replacements_mutex;
+
+AudioWaveInfo const default_wave_info(AUDIO_RES_DEFAULT_KEY, false, 0, std::numeric_limits<u32>::max(), nullptr);
 
 ModResult remove_wave(ModContext* ctx, AudioWaveHandle handle) {
     auto* mod = mod_from_context(ctx);
@@ -239,7 +250,7 @@ ModResult insert_add_wave(
 
     *out_wave_id = 0;
 
-    if (bank != SoundEffects && bank != MusicSamples) {
+    if (bank != AUDIO_WAVE_BANK_SOUND_EFFECTS && bank != AUDIO_WAVE_BANK_MUSIC_SAMPLES) {
         return MOD_INVALID_ARGUMENT;
     }
 

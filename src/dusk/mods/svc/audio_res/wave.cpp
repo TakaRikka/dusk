@@ -135,7 +135,7 @@ ModResult load_wav(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::
 
     pcmData.be_swap();
 
-    slot.format = Pcm16;
+    slot.format = AUDIO_WAVE_FORMAT_PCM16;
     slot.sample_count = pcmData.size() / sizeof(u16);
     slot.data = std::make_unique<SampleDataPcm16>(std::move(pcmData));
 

@@ -13,14 +13,14 @@ MOD_EXPORT ModResult mod_initialize(ModError*) {
     AudioWaveHandle handle;
     svc_audio_res->replace_wave(
         mod_ctx,
-        SoundEffects,
+        AUDIO_WAVE_BANK_SOUND_EFFECTS,
         4238,
         "res/go.opus",
         nullptr,
         &handle);
     svc_audio_res->replace_wave(
         mod_ctx,
-        SoundEffects,
+        AUDIO_WAVE_BANK_SOUND_EFFECTS,
         4237,
         "res/go.opus",
         nullptr,

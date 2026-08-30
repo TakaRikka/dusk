@@ -35,6 +35,7 @@ bool validate_category(SoundEffectCategory const category) {
 }
 
 uint8_t volume_to_item(float volume) {
+    volume = std::clamp(volume, 0.0f, 2.0f);
     return static_cast<uint8_t>(volume * 127);
 }
 
@@ -90,8 +91,8 @@ u8 SoundEffectReplacementSlot::get_type_id() const {
 }
 
 StreamReplacementSlot::StreamReplacementSlot(
-    bool mod_defined, u16 id, const AudioSoundTableStreamInfo& info)
-    : SoundTableReplacementSlot(mod_defined, id), file_path(info.file_path) {
+    bool mod_defined, u16 id, char const* file_path, const AudioSoundTableStreamInfo& info)
+    : SoundTableReplacementSlot(mod_defined, id), file_path(file_path) {
     stop_on_scene_change = info.stop_on_scene_change;
     item.mPriority = info.priority;
     item.mVolume = volume_to_item(info.volume);
@@ -216,8 +217,12 @@ static ModResult insert_sound_table_effect_core(ModContext* ctx, SoundEffectCate
     }
 
     auto mod = mod_from_context(ctx);
-    if (mod == nullptr || info == nullptr || !validate_category(category_id)) {
+    if (mod == nullptr || !validate_category(category_id)) {
         return MOD_INVALID_ARGUMENT;
+    }
+
+    if (info == nullptr) {
+        info = &default_effect_info;
     }
 
     auto slot = std::make_shared<SoundEffectReplacementSlot>(mod_defined, effect_id, category_id, *info);
@@ -235,6 +240,8 @@ ModResult replace_sound_table_effect(ModContext* ctx, SoundEffectCategory catego
     uint16_t effect_id, AudioSoundTableEffectInfo const* info, AudioSoundTableHandle* out_handle) {
     return insert_sound_table_effect_core(ctx, category_id, effect_id, false, info, out_handle);
 }
+
+AudioSoundTableEffectInfo const default_effect_info(128, 1, 1);
 
 ModResult add_sound_table_effect(ModContext* ctx, SoundEffectCategory category_id,
     AudioSoundTableEffectInfo const* info, AudioSoundTableHandle* out_handle,
@@ -263,6 +270,7 @@ static ModResult insert_sound_table_stream_core(
     ModContext* ctx,
     uint16_t stream_id,
     bool mod_defined,
+    char const* file_path,
     AudioSoundTableStreamInfo const* info,
     AudioSoundTableHandle* out_handle) {
     if (out_handle != nullptr) {
@@ -270,11 +278,15 @@ static ModResult insert_sound_table_stream_core(
     }
 
     auto mod = mod_from_context(ctx);
-    if (mod == nullptr || info == nullptr) {
+    if (mod == nullptr || file_path == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
 
-    auto slot = std::make_shared<StreamReplacementSlot>(mod_defined, stream_id, *info);
+    if (info == nullptr) {
+        info = &default_stream_info;
+    }
+
+    auto slot = std::make_shared<StreamReplacementSlot>(mod_defined, stream_id, file_path, *info);
     sound_replacements_dirty = true;
 
     auto const handle = sound_replacements.emplace(*mod, std::move(slot));
@@ -285,12 +297,22 @@ static ModResult insert_sound_table_stream_core(
     return MOD_OK;
 }
 
+AudioSoundTableStreamInfo const default_stream_info(
+    128,
+    1,
+    {
+        STREAM_PAN_LEFT,
+        STREAM_PAN_RIGHT
+    });
+
 ModResult replace_sound_table_stream(ModContext* ctx, uint16_t stream_id,
+    char const* file_path,
     AudioSoundTableStreamInfo const* info, AudioSoundTableHandle* out_handle) {
-    return insert_sound_table_stream_core(ctx, stream_id, false, info, out_handle);
+    return insert_sound_table_stream_core(ctx, stream_id, false, file_path, info, out_handle);
 }
 
-ModResult add_sound_table_stream(ModContext* ctx, AudioSoundTableStreamInfo const* info,
+ModResult add_sound_table_stream(ModContext* ctx,
+    char const* file_path, AudioSoundTableStreamInfo const* info,
     AudioSoundTableHandle* out_handle, uint16_t* out_stream_id) {
     if (out_stream_id == nullptr) {
         return MOD_INVALID_ARGUMENT;
@@ -298,7 +320,7 @@ ModResult add_sound_table_stream(ModContext* ctx, AudioSoundTableStreamInfo cons
 
     auto const stream_id = stream_id_allocator.alloc();
 
-    auto const result = insert_sound_table_stream_core(ctx, stream_id, true, info, out_handle);
+    auto const result = insert_sound_table_stream_core(ctx, stream_id, true, file_path, info, out_handle);
     if (result != MOD_OK) {
         stream_id_allocator.free(stream_id);
     }

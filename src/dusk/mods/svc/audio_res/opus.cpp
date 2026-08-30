@@ -84,7 +84,7 @@ ModResult load_opus(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std:
     slot.data = std::make_shared<SampleDataPcm16>(std::move(pcm_buffer));
     slot.sample_rate = 48000; // Opus always decodes at 48 kHz.
     slot.sample_count = length;
-    slot.format = Pcm16;
+    slot.format = AUDIO_WAVE_FORMAT_PCM16;
 
     return MOD_OK;
 }

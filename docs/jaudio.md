@@ -26,7 +26,7 @@ All audio data is stored in `/Audiores` on the disc. Files are as follows:
 
 ### `/Audiores/Seqs/Z2SoundSeqs.arc`
 
-Contains the BMS instructions for all BMS-based music and sound effects. Not all data is kept in memory at once.
+Contains the BMS instructions for all BMS-based music. Not all data is kept in memory at once.
 
 ### `/Audiores/Stream/*.ast`
 
@@ -230,7 +230,7 @@ on scene changes in TP's game code.
 ```
 u8 mPriority;
 u8 mVolume; // Converted to float: mVolume * (1.0/127.0)
-u16 mStreamPanParameters; // Bitpacked, two bits per channel determining whether a channel is center (00), left (01), or right (10).
+u16 mStreamPanParameters; // Bitpacked, two bits per channel determining whether a channel is center (01), left (10), or right (11).
 char* mStreamFilePath[] : u32; // File path to the .ast on disc.
 ```
 
