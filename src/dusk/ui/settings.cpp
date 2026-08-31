@@ -440,24 +440,15 @@ SelectButton& config_int_select(Pane& leftPane, Pane& rightPane, ConfigVar<int>&
     return button;
 }
 
-template <typename T>
-void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var,
+void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane,
     const GraphicsTunerProps& props) {
+    const auto setting = GraphicsSetting::of(props.option);
     leftPane.register_control(
         leftPane
             .add_select_button({
                 .key = props.title,
-                .getValue =
-                    [&var, option = props.option] {
-                        if constexpr (std::is_same_v<T, float>) {
-                            return format_graphics_setting_value(
-                                option, float_setting_percent(var));
-                        } else {
-                            return format_graphics_setting_value(
-                                option, static_cast<int>(var.getValue()));
-                        }
-                    },
-                .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+                .getValue = [setting] { return setting.text(); },
+                .isModified = [setting] { return setting.isModified(); },
                 .submit = false,
             })
             .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
@@ -778,75 +769,50 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Resolution");
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.internalResolutionScale,
             GraphicsTunerProps{
                 .option = GraphicsOption::InternalResolution,
                 .title = "Internal Resolution",
                 .helpText = kInternalResolutionHelpText,
-                .valueMin = 0,
-                .valueMax = 12,
-                .defaultValue = 0,
             });
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.shadowResolutionMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::ShadowResolution,
                 .title = "Shadow Resolution",
                 .helpText = kShadowResolutionHelpText,
-                .valueMin = 1,
-                .valueMax = 8,
-                .defaultValue = 1,
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::Resampler,
                 .title = "Output Resampling",
                 .helpText = kResamplerHelpText,
-                .valueMin = static_cast<int>(Resampler::Bilinear),
-                .valueMax = static_cast<int>(Resampler::Area),
-                .defaultValue = static_cast<int>(Resampler::Bilinear),
             });
 
         leftPane.add_section("Post-Processing");
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMode,
                 .title = "Bloom",
                 .helpText = kBloomHelpText,
-                .valueMin = static_cast<int>(BloomMode::Off),
-                .valueMax = static_cast<int>(BloomMode::Dusk),
-                .defaultValue = static_cast<int>(BloomMode::Classic),
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
                 .title = "Bloom Brightness",
                 .helpText = kBloomBrightnessHelpText,
-                .valueMin = 0,
-                .valueMax = 100,
-                .defaultValue = 100,
-                .step = 10,
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::DepthOfFieldMode,
                 .title = "Depth of Field",
                 .helpText = kDepthOfFieldHelpText,
-                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
-                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
-                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
             });
 
         leftPane.add_section("Rendering");
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.enableTextureReplacements,
             GraphicsTunerProps{
                 .option = GraphicsOption::TextureReplacements,
                 .title = "Enable Texture Replacements",
                 .helpText = kTextureReplacementHelpText,
-                .valueMin = static_cast<int>(false),
-                .valueMax = static_cast<int>(true),
-                .defaultValue = static_cast<int>(false),
             });
         leftPane.register_control(
             leftPane.add_select_button({

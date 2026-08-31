@@ -1,6 +1,9 @@
 #include "graphics_tuner.hpp"
 
+#include "button.hpp"
+
 #include "dusk/config.hpp"
+#include "dusk/logging.h"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_audio.h"
 
@@ -9,6 +12,7 @@
 
 #include <algorithm>
 #include <string>
+#include <type_traits>
 
 namespace dusk::ui {
 namespace {
@@ -34,58 +38,82 @@ const Rml::String kDocumentSource = R"RML(
 </rml>
 )RML";
 
-int get_value(GraphicsOption option) {
-    switch (option) {
-    case GraphicsOption::InternalResolution:
-        return getSettings().game.internalResolutionScale.getValue();
-    case GraphicsOption::ShadowResolution:
-        return getSettings().game.shadowResolutionMultiplier.getValue();
-    case GraphicsOption::Resampler:
-        return static_cast<int>(getSettings().game.resampler.getValue());
-    case GraphicsOption::BloomMode:
-        return static_cast<int>(getSettings().game.bloomMode.getValue());
-    case GraphicsOption::BloomMultiplier:
-        return std::clamp(
-            static_cast<int>(getSettings().game.bloomMultiplier.getValue() * 100.0f + 0.5f), 0,
-            100);
-    case GraphicsOption::DepthOfFieldMode:
-        return static_cast<int>(getSettings().game.depthOfFieldMode.getValue());
-    case GraphicsOption::TextureReplacements:
-        return getSettings().game.enableTextureReplacements.getValue();
+Rml::String format_internal_resolution(int value) {
+    u32 width = 0;
+    u32 height = 0;
+    AuroraGetRenderSize(&width, &height);
+    if (value <= 0) {
+        return fmt::format("Auto ({}×{})", width, height);
     }
-    return 0;
+    return fmt::format("{}× ({}×{})", value, width, height);
 }
 
-void set_value(GraphicsOption option, int value) {
-    switch (option) {
-    case GraphicsOption::InternalResolution:
-        getSettings().game.internalResolutionScale.setValue(value);
-        break;
-    case GraphicsOption::ShadowResolution:
-        getSettings().game.shadowResolutionMultiplier.setValue(value);
-        break;
-    case GraphicsOption::Resampler: {
-        const auto sampler = static_cast<Resampler>(std::clamp(value,
-            static_cast<int>(Resampler::Bilinear),
-            static_cast<int>(Resampler::Area)));
-        getSettings().game.resampler.setValue(sampler);
-        break;
+Rml::String format_resampler(int value) {
+    switch (static_cast<Resampler>(value)) {
+    case Resampler::Bilinear:
+        return "Bilinear";
+    case Resampler::Area:
+        return "Area";
+    default:
+        return "";
     }
-    case GraphicsOption::BloomMode:
-        getSettings().game.bloomMode.setValue(static_cast<BloomMode>(std::clamp(
-            value, static_cast<int>(BloomMode::Off), static_cast<int>(BloomMode::Dusk))));
-        break;
-    case GraphicsOption::DepthOfFieldMode:
-        getSettings().game.depthOfFieldMode.setValue(static_cast<DepthOfFieldMode>(std::clamp(
-            value, static_cast<int>(DepthOfFieldMode::Off), static_cast<int>(DepthOfFieldMode::Dusk))));
-        break;
-    case GraphicsOption::BloomMultiplier:
-        getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
-        break;
-    case GraphicsOption::TextureReplacements:
-        getSettings().game.enableTextureReplacements.setValue(static_cast<bool>(value));
-        break;
+}
+
+Rml::String format_post_process_mode(int value) {
+    switch (static_cast<BloomMode>(value)) {
+    case BloomMode::Off:
+        return "Off";
+    case BloomMode::Classic:
+        return "Classic";
+    case BloomMode::Dusk:
+        return "Dusklight";
+    default:
+        return "";
     }
+}
+
+Rml::String format_times(int value) { return fmt::format("{}×", value); }
+
+Rml::String format_percent(int value) { return fmt::format("{}%", value); }
+
+Rml::String format_bool(int value) { return value ? "On" : "Off"; }
+
+template <typename T>
+int read_cvar(const ConfigVar<T>& var) {
+    if constexpr (std::is_same_v<T, float>) {
+        return static_cast<int>(var.getValue() * 100.0f + 0.5f);
+    } else {
+        return static_cast<int>(var.getValue());
+    }
+}
+
+template <typename T>
+void write_cvar(ConfigVar<T>& var, int value) {
+    if constexpr (std::is_same_v<T, float>) {
+        var.setValue(static_cast<float>(value) / 100.0f);
+    } else if constexpr (std::is_same_v<T, bool>) {
+        var.setValue(static_cast<bool>(value));
+    } else {
+        var.setValue(static_cast<T>(value));
+    }
+}
+
+template <auto Var, typename Min, typename Max, typename Def>
+const GraphicsSetting& bind(Min min, Max max, Def def, int step, Rml::String (*label)(int),
+    bool watchSize = false) {
+    static const GraphicsSetting desc{
+        .min = static_cast<int>(min),
+        .max = static_cast<int>(max),
+        .defaultValue = static_cast<int>(def),
+        .step = step,
+        .watchesRenderSize = watchSize,
+        .read = []() -> int { return read_cvar(Var()); },
+        .write = [](int value) { write_cvar(Var(), value); },
+        .label = label,
+        .cvarName = []() -> const char* { return Var().getName(); },
+        .isModified = []() -> bool { return Var().getValue() != Var().getDefaultValue(); },
+    };
+    return desc;
 }
 
 Rml::Element* create_stepped_carousel_root(Rml::Element* parent) {
@@ -113,6 +141,35 @@ void update_carousel_arrow_color(Rml::Element* arrow, bool dim) {
 
 }  // namespace
 
+const GraphicsSetting& GraphicsSetting::of(GraphicsOption option) {
+    switch (option) {
+    case GraphicsOption::InternalResolution:
+        return bind<[]() -> auto& { return getSettings().game.internalResolutionScale; }>(
+            0, 12, 0, 1, format_internal_resolution, true);
+    case GraphicsOption::ShadowResolution:
+        return bind<[]() -> auto& { return getSettings().game.shadowResolutionMultiplier; }>(
+            1, 8, 1, 1, format_times);
+    case GraphicsOption::Resampler:
+        return bind<[]() -> auto& { return getSettings().game.resampler; }>(
+            Resampler::Bilinear, Resampler::Area, Resampler::Bilinear, 1, format_resampler);
+    case GraphicsOption::BloomMode:
+        return bind<[]() -> auto& { return getSettings().game.bloomMode; }>(
+            BloomMode::Off, BloomMode::Dusk, BloomMode::Classic, 1, format_post_process_mode);
+    case GraphicsOption::BloomMultiplier:
+        return bind<[]() -> auto& { return getSettings().game.bloomMultiplier; }>(
+            0, 100, 100, 10, format_percent);
+    case GraphicsOption::DepthOfFieldMode:
+        return bind<[]() -> auto& { return getSettings().game.depthOfFieldMode; }>(
+            DepthOfFieldMode::Off, DepthOfFieldMode::Dusk, DepthOfFieldMode::Classic, 1,
+            format_post_process_mode);
+    case GraphicsOption::TextureReplacements:
+        return bind<[]() -> auto& { return getSettings().game.enableTextureReplacements; }>(
+            0, 1, 0, 1, format_bool);
+    }
+    DuskLog.error("{} is an invalid GraphicsOption", static_cast<int>(option));
+    abort();
+}
+
 SteppedCarousel::SteppedCarousel(Rml::Element* parent, Props props)
     : Component(create_stepped_carousel_root(parent)), mProps(std::move(props)) {
     mPrevElem = create_stepped_carousel_arrow(mRoot, "prev", "&#xe5cb;");
@@ -136,7 +193,9 @@ bool SteppedCarousel::focus() {
     return Component::focus();
 }
 
-void SteppedCarousel::update() {
+void SteppedCarousel::update() {}
+
+void SteppedCarousel::refresh() {
     if (mValueElem == nullptr) {
         return;
     }
@@ -178,59 +237,9 @@ void SteppedCarousel::apply(int value) {
     }
 }
 
-Rml::String format_graphics_setting_value(GraphicsOption option, int value) {
-    switch (option) {
-    case GraphicsOption::InternalResolution: {
-        u32 width = 0;
-        u32 height = 0;
-        AuroraGetRenderSize(&width, &height);
-        if (value <= 0) {
-            return fmt::format("Auto ({}×{})", width, height);
-        } else {
-            return fmt::format("{}× ({}×{})", value, width, height);
-        }
-    }
-    case GraphicsOption::ShadowResolution:
-        return fmt::format("{}×", value);
-    case GraphicsOption::Resampler:
-        switch (static_cast<Resampler>(value)) {
-        case Resampler::Bilinear:
-            return "Bilinear";
-        case Resampler::Area:
-            return "Area";
-        }
-        break;
-    case GraphicsOption::BloomMode:
-        switch (static_cast<BloomMode>(value)) {
-        case BloomMode::Off:
-            return "Off";
-        case BloomMode::Classic:
-            return "Classic";
-        case BloomMode::Dusk:
-            return "Dusklight";
-        }
-        break;
-    case GraphicsOption::DepthOfFieldMode:
-        switch (static_cast<DepthOfFieldMode>(value)) {
-        case DepthOfFieldMode::Off:
-            return "Off";
-        case DepthOfFieldMode::Classic:
-            return "Classic";
-        case DepthOfFieldMode::Dusk:
-            return "Dusklight";
-        }
-        break;
-    case GraphicsOption::BloomMultiplier:
-        return fmt::format("{}%", value);
-    case GraphicsOption::TextureReplacements:
-        return static_cast<bool>(value) ? "On" : "Off";
-    }
-    return "";
-}
-
 GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
-    : Document(kDocumentSource, false, DocumentScope::GraphicsTuner), mOption(props.option),
-      mValueMin(props.valueMin), mValueMax(props.valueMax), mDefaultValue(props.defaultValue) {
+    : Document(kDocumentSource, false, DocumentScope::GraphicsTuner),
+      mSetting(GraphicsSetting::of(props.option)) {
     if (mDocument == nullptr) {
         return;
     }
@@ -244,13 +253,12 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
     if (auto* carouselParent = mDocument->GetElementById("carousel-container")) {
         mCarousel = &add_component<SteppedCarousel>(carouselParent,
             SteppedCarousel::Props{
-                .min = mValueMin,
-                .max = mValueMax,
-                .step = props.step,
-                .getValue = [this] { return get_value(mOption); },
-                .onChange = [this](int value) { set_value(mOption, value); },
-                .formatValue =
-                    [this](int value) { return format_graphics_setting_value(mOption, value); },
+                .min = mSetting.min,
+                .max = mSetting.max,
+                .step = mSetting.step,
+                .getValue = [this] { return mSetting.read(); },
+                .onChange = [this](int value) { mSetting.set(value); },
+                .formatValue = [this](int value) { return mSetting.label(value); },
             });
     }
 
@@ -266,6 +274,17 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
         resetButton.root()->SetClass("reset", true);
     }
 
+    if (mCarousel != nullptr) {
+        if (const char* name = mSetting.cvarName()) {
+            mSubscription = config::subscribe(name,
+                [this](config::ConfigVarBase&, const void*) { mCarousel->refresh(); });
+        }
+        mCarousel->refresh();
+        if (mSetting.watchesRenderSize) {
+            AuroraGetRenderSize(&mLastRenderWidth, &mLastRenderHeight);
+        }
+    }
+
     // Hide document after transition completion
     mRoot = mDocument->GetElementById("root");
     listen(mRoot, Rml::EventId::Transitionend, [this](Rml::Event& event) {
@@ -275,6 +294,12 @@ GraphicsTuner::GraphicsTuner(GraphicsTunerProps props)
             Document::hide(mPendingClose);
         }
     });
+}
+
+GraphicsTuner::~GraphicsTuner() {
+    if (mSubscription != 0) {
+        config::unsubscribe(mSubscription);
+    }
 }
 
 void GraphicsTuner::show() {
@@ -293,6 +318,16 @@ void GraphicsTuner::hide(bool close) {
 }
 
 void GraphicsTuner::update() {
+    if (mSetting.watchesRenderSize && mCarousel != nullptr) {
+        u32 width = 0;
+        u32 height = 0;
+        AuroraGetRenderSize(&width, &height);
+        if (width != mLastRenderWidth || height != mLastRenderHeight) {
+            mLastRenderWidth = width;
+            mLastRenderHeight = height;
+            mCarousel->refresh();
+        }
+    }
     for (const auto& component : mComponents) {
         component->update();
     }
@@ -326,7 +361,7 @@ bool GraphicsTuner::handle_nav_command(Rml::Event& event, NavCommand cmd) {
 }
 
 void GraphicsTuner::reset_default() {
-    set_value(mOption, mDefaultValue);
+    mSetting.set(mSetting.defaultValue);
 }
 
 }  // namespace dusk::ui
