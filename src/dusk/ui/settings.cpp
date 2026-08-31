@@ -1214,51 +1214,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Skips the delay when writing to the Memory Card.");
         addOption("Hold B for Instant Text", getSettings().game.instantText,
             "Makes text scroll immediately by holding B.");
-        leftPane.register_control(
-            leftPane.add_select_button({
-                .key = "Hold Button to Mash",
-                .getValue = [] {
-                    int count = 0;
-                    int total = 0;
-                    auto check = [&](bool enabled) { total++; if (enabled) count++; };
-                    check(getSettings().game.holdToMash.sumo);
-                    check(getSettings().game.holdToMash.swimming);
-                    check(getSettings().game.holdToMash.twilitBloat);
-                    check(getSettings().game.holdToMash.ganondorf);
-                    static thread_local char buf[12];
-                    std::snprintf(buf, sizeof(buf), "%d / %d", count, total);
-                    return Rml::String{buf};
-                },
-                .isModified = [] {
-                    return getSettings().game.holdToMash.sumo !=
-                                getSettings().game.holdToMash.sumo.getDefaultValue()
-                           || getSettings().game.holdToMash.swimming !=
-                                  getSettings().game.holdToMash.swimming.getDefaultValue()
-                           || getSettings().game.holdToMash.twilitBloat !=
-                                  getSettings().game.holdToMash.twilitBloat.getDefaultValue()
-                           || getSettings().game.holdToMash.ganondorf !=
-                                  getSettings().game.holdToMash.ganondorf.getDefaultValue();
-                },
-            }),
-            rightPane, [](Pane& pane) {
-                pane.clear();
-                pane.add_rml(
-                    "Hold the indicated button to mash automatically.");
-                auto addSubToggle = [&pane](const Rml::String& text, ConfigVar<bool>& var) {
-                    pane.add_button({
-                        .text = text,
-                        .isSelected = [&var] { return var.getValue(); },
-                    }).on_pressed([&var] {
-                        mDoAud_seStartMenu(kSoundItemChange);
-                        var.setValue(!var.getValue());
-                        config::save();
-                    });
-                };
-                addSubToggle("Sumo Wrestling", getSettings().game.holdToMash.sumo);
-                addSubToggle("Swimming", getSettings().game.holdToMash.swimming);
-                addSubToggle("Stunned by Twilit Bloat", getSettings().game.holdToMash.twilitBloat);
-                addSubToggle("Ganondorf Chance", getSettings().game.holdToMash.ganondorf);
-            });
+        addSpeedrunDisabledOption("Hold Button to Mash", getSettings().game.holdToMash,
+            "Hold the indicated button to mash automatically.");
         addOption("No Climbing Miss Animation", getSettings().game.noMissClimbing,
             "Prevents Link from playing a struggle animation when grabbing ledges or "
             "climbing on vines.");

@@ -51,12 +51,7 @@ UserSettings g_userSettings = {
         .buttonFishing {"game.buttonFishing", false},
         .instantSaves {"game.instantSaves", false},
         .instantText {"game.instantText", false},
-        .holdToMash {
-            .sumo {"game.holdToMash.sumo", false},
-            .swimming {"game.holdToMash.swimming", false},
-            .twilitBloat {"game.holdToMash.twilitBloat", false},
-            .ganondorf {"game.holdToMash.ganondorf", false},
-        },
+        .holdToMash {"game.holdToMash", false},
         .sunsSong {"game.sunsSong", false},
         .autoSave {"game.autoSave", false},
         .enhancedMapMenus {"game.enhancedMapMenus", false},
@@ -266,10 +261,7 @@ void registerSettings() {
     Register(g_userSettings.game.buttonFishing);
     Register(g_userSettings.game.instantSaves);
     Register(g_userSettings.game.instantText);
-    Register(g_userSettings.game.holdToMash.sumo);
-    Register(g_userSettings.game.holdToMash.swimming);
-    Register(g_userSettings.game.holdToMash.twilitBloat);
-    Register(g_userSettings.game.holdToMash.ganondorf);
+    Register(g_userSettings.game.holdToMash);
     Register(g_userSettings.game.sunsSong);
     Register(g_userSettings.game.autoSave);
     Register(g_userSettings.game.enhancedMapMenus);

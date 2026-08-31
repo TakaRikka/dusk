@@ -182,12 +182,7 @@ struct UserSettings {
         ConfigVar<bool> buttonFishing;
         ConfigVar<bool> instantSaves;
         ConfigVar<bool> instantText;
-        struct {
-            ConfigVar<bool> sumo;
-            ConfigVar<bool> swimming;
-            ConfigVar<bool> twilitBloat;
-            ConfigVar<bool> ganondorf;
-        } holdToMash;
+        ConfigVar<bool> holdToMash;
         ConfigVar<bool> sunsSong;
         ConfigVar<bool> autoSave;
         ConfigVar<bool> enhancedMapMenus;
