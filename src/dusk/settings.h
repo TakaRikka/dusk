@@ -318,6 +318,9 @@ UserSettings& getSettings();
 
 void registerSettings();
 
+void applyInternalResolutionScale(int scale);
+void applyResampler(Resampler resampler);
+
 // Transient settings
 
 struct CollisionViewSettings {

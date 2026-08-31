@@ -1,17 +1,11 @@
 #include "graphics_tuner.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
-#include "m_Do/m_Do_audio.h"
-
-#include <aurora/aurora.h>
-#include <aurora/gfx.h>
-#include <dolphin/gx/GXAurora.h>
-#include <dolphin/vi.h>
-#include <fmt/format.h>
-
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
-#include "dusk/texture_replacements.hpp"
+#include "m_Do/m_Do_audio.h"
+
+#include <dolphin/gx/GXAurora.h>
+#include <fmt/format.h>
 
 #include <algorithm>
 #include <string>
@@ -66,7 +60,6 @@ void set_value(GraphicsOption option, int value) {
     switch (option) {
     case GraphicsOption::InternalResolution:
         getSettings().game.internalResolutionScale.setValue(value);
-        VISetFrameBufferScale(static_cast<float>(value));
         break;
     case GraphicsOption::ShadowResolution:
         getSettings().game.shadowResolutionMultiplier.setValue(value);
@@ -76,15 +69,6 @@ void set_value(GraphicsOption option, int value) {
             static_cast<int>(Resampler::Bilinear),
             static_cast<int>(Resampler::Area)));
         getSettings().game.resampler.setValue(sampler);
-        switch (sampler) {
-        case Resampler::Area:
-            aurora_set_resampler(SAMPLER_AREA);
-            break;
-        case Resampler::Bilinear:
-        default:
-            aurora_set_resampler(SAMPLER_BILINEAR);
-            break;
-        }
         break;
     }
     case GraphicsOption::BloomMode:
@@ -99,7 +83,7 @@ void set_value(GraphicsOption option, int value) {
         getSettings().game.bloomMultiplier.setValue(std::clamp(value, 0, 100) / 100.0f);
         break;
     case GraphicsOption::TextureReplacements:
-        texture_replacements::set_enabled(static_cast<bool>(value));
+        getSettings().game.enableTextureReplacements.setValue(static_cast<bool>(value));
         break;
     }
 }
