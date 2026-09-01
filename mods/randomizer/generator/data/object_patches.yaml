@@ -856,6 +856,7 @@ F_SP109:
       set id: 0xFFFF
       layers:
         - 2
+        - 3
         - 12
         - 14
 
