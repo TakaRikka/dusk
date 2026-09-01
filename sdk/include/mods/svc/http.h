@@ -8,7 +8,7 @@
 
 #define HTTP_SERVICE_ID "dev.twilitrealm.dusklight.http"
 #define HTTP_SERVICE_MAJOR 1u
-#define HTTP_SERVICE_MINOR 1u
+#define HTTP_SERVICE_MINOR 0u
 
 /* Handle for an in-flight request. 0 is never a valid handle. */
 typedef uint64_t HttpRequestHandle;
