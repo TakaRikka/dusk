@@ -239,6 +239,7 @@ public:
         int stage{-1};
         int flag{-1};
     } mTrackerTempItemFlag;
+    bool mTryOverrideNextEntrance{true};
 };
 
 extern RandomizerState g_randomizerState;
@@ -248,6 +249,11 @@ RandomizerContext& randomizer_GetContext();
 bool randomizer_IsActive();
 
 int randomizer_getItemAtLocation(const std::string& locationName);
+
+/*
+ * @brief Sets a flag to skip overriding the next entrance that gets set
+ */
+void randomizer_dontOverrideNextEntrance();
 
 /*
  * @brief Overrides the given entrance paramaters if an override exists for them

@@ -882,7 +882,17 @@ int randomizer_getItemAtLocation(const std::string& locationName) {
     return randomizer_GetContext().mItemLocations[nameLookupOverride(locationName)].itemId;
 }
 
+void randomizer_dontOverrideNextEntrance() {
+    g_randomizerState.mTryOverrideNextEntrance = false;
+}
+
 void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo, s16& pointNo, s8& mapLayer, u32& lastMode) {
+    if (!g_randomizerState.mTryOverrideNextEntrance) {
+        mods::log::debug("Skipping next entrance override");
+        g_randomizerState.mTryOverrideNextEntrance = true;
+        return;
+    }
+
     RandomizerContext::EntranceOverride override = {
         .stageId = static_cast<u8>(getStageID(stageName)), .roomNo = roomNo, .mapLayer = mapLayer, .pointNo = static_cast<s16>(pointNo)};
 
@@ -925,6 +935,12 @@ void randomizer_checkAndOverrideEntranceData(const char*& stageName, s8& roomNo,
         // Lanayru twilight. The door is ajar in this layer, so going through the normal spawn doesn't work.
         if (!dComIfGs_isDarkClearLV(2) && newOverride.stageId == 53 && roomNo == 3 && pointNo == 1) {
             pointNo = 30;
+        }
+
+        // If this is our starting spawn, also set it as our return place for saving
+        if (override.stageId == getStageID("F_SP103") && override.roomNo == 1 && override.pointNo == 1) {
+            auto& returnPlace = dComIfGs_getSaveData()->mPlayer.getPlayerReturnPlace();
+            returnPlace.set(stageName, roomNo, pointNo);
         }
 
         // mods::log::info("New Stage:{}, {}, {}, {}",stageName,roomNo,pointNo,mapLayer);
@@ -1010,6 +1026,8 @@ void randomizer_returnToSpawn(bool tryOverride) {
             entrance.pointNo = 2;
         }
 
+        // Don't attempt to override returning to a dungeon entrance
+        randomizer_dontOverrideNextEntrance();
         dComIfGp_setNextStage(allStages[entrance.stageId], entrance.pointNo, entrance.roomNo, entrance.mapLayer);
         return;
     }

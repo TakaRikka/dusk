@@ -379,51 +379,6 @@ void registerStageEdits() {
     }
 }
 
-// Set link to spawn outside of his house if we are playing with entrance rando and aren't already spawning in a dungeon
-void registerStartingLocation() {
-    auto& ctx = randomizer_GetContext();
-    
-    if (ctx.mEntranceOverrides.empty()) {
-        return;
-    }
-
-    // Check that we aren't playing only with the setting Mirror Chamber Access set to Closed
-    bool isExclusivelyMirrorChamber = false;
-    const auto& mirrorChamberIt = ctx.mEntranceOverrides.find(RandomizerContext::EntranceOverride{
-        .stageId = StageIDs::Mirror_Chamber,
-        .roomNo = 4,
-        .mapLayer = -1,
-        .pointNo = 0
-    });
-    if (ctx.mEntranceOverrides.size() == 1 && mirrorChamberIt != ctx.mEntranceOverrides.end()) {
-        if (mirrorChamberIt->second == RandomizerContext::EntranceOverride{
-            .stageId = StageIDs::Bulblin_Camp,
-            .roomNo = 3,
-            .mapLayer = -1,
-            .pointNo = 3,
-        }) {
-            isExclusivelyMirrorChamber = true;
-        }
-    }
-    
-    if (isExclusivelyMirrorChamber) {
-        return;
-    }
-
-    dSv_player_return_place_c& returnPlace = dComIfGs_getSaveData()->mPlayer.getPlayerReturnPlace();
-    
-    // If we are loading into a dungeon, preserve our original return place
-    if (std::string(returnPlace.getName()).find("D_MN") == 0) {
-        // Force-set the entrance without the override
-        g_dComIfG_gameInfo.play.mNextStage.getStartStage()->set(returnPlace.getName(), returnPlace.getRoomNo(), returnPlace.mPlayerStatus, -1);
-        return;
-    }
-
-    // Set the spawn to outside of link's house, which will get overrided later if we are replacing it
-    returnPlace.set("F_SP103",1,1);
-    dComIfGp_setNextStage("F_SP103", 1, 1, -1);
-}
-
 ModResult onNewSave(void*, ModError*) {
     const std::string hash = g_pending_seed_hash;
     if (hash.empty())
