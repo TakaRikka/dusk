@@ -231,7 +231,7 @@ Rml::String configured_data_path_display_name() {
         return "(none)";
     }
 
-    auto display = borealis::file_select::display_name(path);
+    auto display = borealis::io::display_name(path);
     if (display.empty()) {
         return path;
     }
@@ -493,7 +493,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 if (path.empty()) {
                                     display = "(none)";
                                 } else {
-                                    display = borealis::file_select::display_name(path);
+                                    display = borealis::io::display_name(path);
                                     if (display.empty()) {
                                         display = path;
                                     }
@@ -539,6 +539,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 {
                                     .parentWindow = aurora::window::get_sdl_window(),
                                     .defaultLocation = defaultLocation,
+                                    .requireRealPath = true,
                                 },
                                 &data_folder_dialog_callback);
                         });

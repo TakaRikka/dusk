@@ -18,6 +18,7 @@
 #include <SDL3/SDL_misc.h>
 #include <aurora/lib/window.hpp>
 #include <borealis/file_select.hpp>
+#include <borealis/io.hpp>
 #include <borealis/log.hpp>
 #include <borealis/update.hpp>
 #include <borealis/version.h>
@@ -130,42 +131,7 @@ struct DiscVerificationTask {
 std::unique_ptr<DiscVerificationTask> sDiscVerificationTask;
 bool sDiscVerificationModalPushed = false;
 
-struct UpdateCheckTask {
-    UpdateCheckTask() {
-        worker = std::thread([this] {
-            try {
-                result = borealis::update::check_latest_github_release(AppInfo);
-            } catch (const std::exception& e) {
-                result = {
-                    .status = borealis::update::Status::Failed,
-                    .message = fmt::format("Update check failed with exception: {}", e.what()),
-                };
-            } catch (...) {
-                result = {
-                    .status = borealis::update::Status::Failed,
-                    .message = "Update check failed with an unknown exception",
-                };
-            }
-            done.store(true, std::memory_order_release);
-        });
-    }
-
-    ~UpdateCheckTask() { join(); }
-
-    void join() {
-        if (worker.joinable()) {
-            worker.join();
-        }
-    }
-
-    [[nodiscard]] bool finished() const { return done.load(std::memory_order_acquire); }
-
-    borealis::update::Result result;
-    std::atomic_bool done = false;
-    std::thread worker;
-};
-
-std::unique_ptr<UpdateCheckTask> sUpdateCheckTask;
+borealis::Task<borealis::update::Result> sUpdateCheck;
 std::optional<borealis::update::Result> sUpdateCheckResult;
 
 bool verification_state_allows_launch(iso::ValidationError validation) noexcept {
@@ -243,20 +209,19 @@ void begin_update_check() {
     if (!getSettings().backend.checkForUpdates.getValue()) {
         return;
     }
-    if (sUpdateCheckTask != nullptr || sUpdateCheckResult.has_value()) {
+    if (sUpdateCheck || sUpdateCheckResult.has_value()) {
         return;
     }
-    sUpdateCheckTask = std::make_unique<UpdateCheckTask>();
+    sUpdateCheck = borealis::update::check_latest_github_release(AppInfo);
 }
 
 std::optional<borealis::update::Result> take_finished_update_check() {
-    if (sUpdateCheckTask == nullptr || !sUpdateCheckTask->finished()) {
+    if (!sUpdateCheck || !sUpdateCheck.ready()) {
         return std::nullopt;
     }
 
-    sUpdateCheckTask->join();
-    auto result = std::move(sUpdateCheckTask->result);
-    sUpdateCheckTask.reset();
+    auto result = sUpdateCheck.try_take();
+    sUpdateCheck = {};
     return result;
 }
 
@@ -479,7 +444,7 @@ private:
         }
 
         if (mFileName != nullptr) {
-            std::string fileName = borealis::file_select::display_name(sDiscVerificationTask->path);
+            std::string fileName = borealis::io::display_name(sDiscVerificationTask->path);
             if (fileName.empty()) {
                 fileName = sDiscVerificationTask->path;
             }
@@ -1167,7 +1132,7 @@ void Prelaunch::update() {
             sUpdateCheckResult = std::move(*result);
         }
 
-        if (sUpdateCheckTask != nullptr) {
+        if (sUpdateCheck) {
             mUpdateStatus->SetAttribute("state", "checking");
             mUpdateMessage->SetInnerRML("Checking for updates...");
         } else if (!sUpdateCheckResult.has_value() ||
