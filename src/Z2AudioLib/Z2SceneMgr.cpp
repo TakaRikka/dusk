@@ -1781,11 +1781,7 @@ void Z2SceneMgr::_load1stWaveInner_1() {
     if (field_0x1a && Z2GetSeqMgr()->checkBgmPlaying()) {
         OS_REPORT("[Z2SceneMgr::load1stDynamicWave]bgm StopCount = %d\n", 15);
         Z2GetSeqMgr()->bgmStop(15, 0);
-        #if TARGET_PC
-        load1stWait = dusk::getSettings().game.fastTransitions.getValue() ? -1 : -15;
-        #else
-        load1stWait = -15;
-        #endif
+        load1stWait = IF_DUSK(dusk::getSettings().game.fastTransitions.getValue() ? -1 :) -15;
     } else {
         _load1stWaveInner_2();
     }

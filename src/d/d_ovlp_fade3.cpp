@@ -142,9 +142,7 @@ dOvlpFd3_c::dOvlpFd3_c() {
     if (dusk::getSettings().game.fastTransitions) {
         time = 0;
     }
-    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + time);
-    #else
-    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + 90);
+    mDoGph_gInf_c::startFadeOut(XREG_S(3) + (field_0x11f >> 1) + IF_DUSK(dusk::getSettings().game.fastTransitions ? 0 :) 90);
     #endif
 }
 
@@ -174,13 +172,10 @@ void dOvlpFd3_c::execFadeOut() {
 
     if (mTimer < 0) {
         if (++mTimer == 0) {
-            #if TARGET_PC
-            if (!dusk::getSettings().game.fastTransitions)
-            #endif
-            {
-                mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
-                mTimer = XREG_S(2) + 90;
-            }
+            IF_DUSK_BLOCK(!dusk::getSettings().game.fastTransitions)
+            mDoGph_gInf_c::startFadeOut(XREG_S(1) + 75);
+            mTimer = XREG_S(2) + 90;
+            IF_DUSK_BLOCK_END
             mDoAud_setFadeOutStart(0);
         }
     } else {
