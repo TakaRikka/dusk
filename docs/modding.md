@@ -259,7 +259,7 @@ callback. Mod-owned persistent files belong in `HostService::data_dir`.
 
 ### HttpService (`mods/svc/http.h`)
 
-Asynchronous HTTPS service. C++ mods should use the helpers in `mods/svc/http.hpp`:
+Asynchronous HTTPS requests supporting HTTP/2 and TLS 1.2+. C++ mods should use the helpers in `mods/svc/http.hpp`:
 
 ```cpp
 #include "mods/svc/http.hpp"
