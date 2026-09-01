@@ -315,7 +315,7 @@
     - "Off": "You will be required to complete the Lanayru Twilight section of the game."
     - "On": "The Lanayru Twilight section of the game will be completed from the start."
 
-- Name: Skip Midna's Desparate Hour
+- Name: Skip Midna's Desperate Hour
   Tracker Important: True
   Default Option: "Off"
   Options:

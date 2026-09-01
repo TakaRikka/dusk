@@ -231,4 +231,11 @@ namespace randomizer::seedgen::settings
      */
     uint32_t GetSettingInfoHash();
 
+    /**
+     * @brief Updates an old setting name to the corresponding new one
+     * @param settingName The potentially old setting name
+     * @return True if the setting name was updated, false otherwise
+     */
+    bool UpdateOldSettingName(std::string& settingName);
+
 }; // namespace randomizer::seedgen::settings

@@ -887,7 +887,7 @@ ModResult buildSeedOptionsTab(ModContext* ctx, UiWindowHandle, UiElementHandle l
     add_select_setting(leftPane, "Faron Twilight Cleared");
     add_select_setting(leftPane, "Eldin Twilight Cleared");
     add_select_setting(leftPane, "Lanayru Twilight Cleared");
-    add_select_setting(leftPane, "Skip Midna's Desparate Hour");
+    add_select_setting(leftPane, "Skip Midna's Desperate Hour");
     add_select_setting(leftPane, "Skip Minor Cutscenes");
     add_select_setting(leftPane, "Skip Major Cutscenes");
     add_select_setting(leftPane, "Unlock Map Regions");

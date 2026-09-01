@@ -103,7 +103,7 @@ Has Damaging Item: Sword or Ball_and_Chain or Bow or Bombs or Iron_Boots or Wolf
 Can Hit Crystal Switch: Clawshot or Has_Damaging_Item
 Can Hit Crystal Switch at Range: Clawshot or Bow
 
-Can Complete MDH: Skip_Midna's_Desparate_Hour == On or ('Can_Access_Castle_Town_South' and 'Can_Complete_Lakebed_Temple')
+Can Complete MDH: Skip_Midna's_Desperate_Hour == On or ('Can_Access_Castle_Town_South' and 'Can_Complete_Lakebed_Temple')
 
 
 

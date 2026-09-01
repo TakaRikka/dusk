@@ -77,9 +77,9 @@ EventFlags:
     - 0x0602 # Forest Temple Story Flag
     - 0x0C40 # Talked to Farone after clearing Forest Temple
     - 0x5E10 # Midna text after Forest Temple completed
-  - Skip_Midna's_Desparate_Hour == On:
+  - Skip_Midna's_Desperate_Hour == On:
     - 0x0C01 # Midna's Desperate Hour started.
-    - 0x1E08 # Midna's Deseperate Hour Completed.
+    - 0x1E08 # Midna's Desperate Hour Completed.
   - Small_Keys == Keysy:
     - 0x0850 # Zora Escort started and completed.
     - 0x0480 # Told Yeta about pumpkin.
@@ -235,7 +235,7 @@ RegionFlags:
         - 0xB0 # Watched CS of Ooccoo running to Sky Cannon.
       - Lanayru_Twilight_Cleared == On:
         - 0x7F # Lake Hylia has water on Lake Hylia Map.
-      - Skip_Midna's_Desparate_Hour == On:
+      - Skip_Midna's_Desperate_Hour == On:
         - 0x51 # Set flag for MDH Cutscene in Lake Hylia
       - Lakebed_Does_Not_Require_Water_Bombs == On:
         - 0x70 # Blew up rock in front of lakebed CS.

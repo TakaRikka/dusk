@@ -412,4 +412,13 @@ namespace randomizer::seedgen::settings
         return settingsInfoHash;
     }
 
+    bool UpdateOldSettingName(std::string& settingName) {
+        if (settingName == "Skip Midna's Desparate Hour") {
+            settingName = "Skip Midna's Desperate Hour";
+            return true;
+        }
+
+        return false;
+    }
+
 }; // namespace randomizer::seedgen::settings

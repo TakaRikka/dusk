@@ -105,7 +105,12 @@ namespace randomizer::seedgen::config
         // Loop through all setting fields
         for (const auto& settingNode : settingsTree)
         {
-            const auto& settingName = settingNode.first.as<std::string>();
+            auto settingName = settingNode.first.as<std::string>();
+            if (settings::UpdateOldSettingName(settingName)) {
+                utility::platform::Log(std::string("Setting \"") + settingName +
+                    "\" was updated from \"" + settingNode.first.as<std::string>() + "\"");
+                rewriteSettings = true;
+            }
             // Insert the setting if it's in the info map
             if (settingInfoMap->contains(settingName))
             {
@@ -181,7 +186,12 @@ namespace randomizer::seedgen::config
         auto preferencesTree = LoadYAML(preferencesPath);
         for (const auto& preferenceNode : preferencesTree)
         {
-            const auto& preferenceName = preferenceNode.first.as<std::string>();
+            auto preferenceName = preferenceNode.first.as<std::string>();
+            if (settings::UpdateOldSettingName(preferenceName)) {
+                utility::platform::Log(std::string("Preference \"") + preferenceName +
+                    "\" was updated from \"" + preferenceNode.first.as<std::string>() + "\"");
+                rewritePreferences = true;
+            }
             // Insert the preference if it's in the info map
             if (settingInfoMap->contains(preferenceName))
             {
