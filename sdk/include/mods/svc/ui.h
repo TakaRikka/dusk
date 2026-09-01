@@ -2,6 +2,7 @@
 
 #include <mods/api.h>
 #include <mods/svc/config.h>
+#include <mods/svc/file.h>
 
 #ifdef __cplusplus
 #include <mods/service.hpp>
@@ -9,7 +10,7 @@
 
 #define UI_SERVICE_ID "dev.twilitrealm.dusklight.ui"
 #define UI_SERVICE_MAJOR 2u
-#define UI_SERVICE_MINOR 1u
+#define UI_SERVICE_MINOR 2u
 
 /*
  * UI primitives: a panel inside the host Mods window, mod-owned windows, dialogs, toasts,
@@ -53,6 +54,7 @@ typedef enum UiControlKind {
     UI_CONTROL_SELECT = 4, /* one of `options`; the value is the option index */
     UI_CONTROL_COLOR = 5,  /* RGB/RGBA color string with a picker */
     UI_CONTROL_GROUP = 6,  /* navigation row (on_pressed) */
+    UI_CONTROL_FILE_PICKER = 7, /* file/folder picker with an opaque string location */
 } UiControlKind;
 
 typedef enum UiControlBinding {
@@ -62,7 +64,8 @@ typedef enum UiControlBinding {
     /* The control reads and writes `config_var` (a ConfigService handle owned by the calling mod)
      * directly: persistence, change notifications and the modified indicator (value != default) are
      * wired automatically. The var type must match the control kind: TOGGLE = bool, NUMBER and
-     * SELECT = int, STRING and COLOR = string. Float vars are not bindable; use callbacks. */
+     * SELECT = int, STRING, COLOR and FILE_PICKER = string. Float vars are not bindable; use
+     * callbacks. */
     UI_BINDING_CONFIG_VAR = 1,
 } UiControlBinding;
 
@@ -71,10 +74,10 @@ typedef enum UiStringSetMode {
     UI_STRING_SET_ON_CHANGE = 1, /* invokes `set` on every text change (e.g. while typing) */
 } UiStringSetMode;
 
-/* Tagged by the control's kind: TOGGLE reads bool_value, NUMBER and SELECT read int_value, STRING
- * and COLOR read string_value. string_value passed to a setter is only valid during the call; a
- * getter should point it at storage owned by the mod (e.g. a static buffer) that stays valid until
- * the next call into the mod — the host copies it right after the getter returns. */
+/* Tagged by the control's kind: TOGGLE reads bool_value, NUMBER and SELECT read int_value, STRING,
+ * COLOR and FILE_PICKER read string_value. string_value passed to a setter is only valid during the
+ * call; a getter should point it at storage owned by the mod (e.g. a static buffer) that stays valid
+ * until the next call into the mod. The host copies it right after the getter returns. */
 typedef struct UiControlValue {
     uint32_t struct_size;
     bool bool_value;
@@ -128,12 +131,16 @@ typedef struct UiControlDesc {
     bool color_alpha;                /* COLOR: use RRGGBBAA values instead of RRGGBB */
     UiPredicateFn is_selected;       /* BUTTON/GROUP: optional selected state */
     UiStringSetMode string_set_mode; /* STRING: when to invoke the setter */
+    /* FILE_PICKER: optional file filters and folder selection mode. */
+    const FileFilter* file_filters;
+    size_t file_filter_count;
+    bool directory_mode;
 } UiControlDesc;
 
 #define UI_CONTROL_DESC_INIT                                                                       \
     {sizeof(UiControlDesc), UI_CONTROL_BUTTON, NULL, NULL, UI_BINDING_CALLBACKS, 0u, NULL, NULL,   \
         NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, 0u, 0, NULL, 0u, false, NULL,           \
-        UI_STRING_SET_ON_COMMIT}
+        UI_STRING_SET_ON_COMMIT, NULL, 0u, false}
 
 typedef uint64_t UiListHandle;
 

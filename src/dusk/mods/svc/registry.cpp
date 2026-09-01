@@ -9,6 +9,10 @@
 #include <unordered_map>
 #include <vector>
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
 namespace dusk::mods::svc {
 namespace {
 
@@ -210,6 +214,9 @@ void ModLoader::init_services() {
             &svc::g_hostModule,
             &svc::g_logModule,
             &svc::g_resourceModule,
+#if !defined(__APPLE__) || !TARGET_OS_TV
+            &svc::g_fileModule,
+#endif
             &svc::g_hookModule,
             &svc::g_overlayModule,
             &svc::g_textureModule,

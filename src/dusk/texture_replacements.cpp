@@ -26,11 +26,6 @@ void reload() {
                  s_directoryGroup.registrations.size());
 }
 
-void set_enabled(bool enabled) {
-    getSettings().game.enableTextureReplacements.setValue(enabled);
-    reload();
-}
-
 void shutdown() {
     aurora::texture::unregister_replacements(s_directoryGroup);
     s_directoryGroup.registrations.clear();

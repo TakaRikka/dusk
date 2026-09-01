@@ -68,6 +68,7 @@ void modules_shutdown();
 extern const ServiceModule g_hostModule;
 extern const ServiceModule g_logModule;
 extern const ServiceModule g_resourceModule;
+extern const ServiceModule g_fileModule;
 extern const ServiceModule g_hookModule;
 extern const ServiceModule g_overlayModule;
 extern const ServiceModule g_textureModule;

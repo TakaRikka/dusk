@@ -48,7 +48,7 @@ cmake_minimum_required(VERSION 3.26)
 project(my_mod CXX)
 
 if (NOT DUSKLIGHT_VERSION)
-  set(DUSKLIGHT_VERSION "76b56cd8b81809fce0a5c2a44e2f6d437591132f")
+    set(DUSKLIGHT_VERSION "76b56cd8b81809fce0a5c2a44e2f6d437591132f")
 endif ()
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/FetchDusklight.cmake")
 add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
@@ -211,6 +211,51 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
 
 Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
 `HostService::data_dir` for persistent storage.
+
+### FileService (`mods/svc/file.h`)
+
+Provides file and folder pickers, file I/O, exports and folder enumeration.
+
+A location is an opaque UTF-8 string returned by `pick_*`, `export_file`, `join`, or `create_child`.
+Save it and pass it back to the service. Never parse it or manually append path segments.
+
+```cpp
+#include "mods/svc/file.hpp"
+
+IMPORT_SERVICE(FileService, svc_file);
+
+mods::file::PickOptions options;
+options.filters.push_back({"Audio", "wav;ogg"});
+mods::file::pick_file(options, [](mods::file::PickResult result) {
+    if (result.status == MOD_OK && !result.locations.empty()) {
+        save_location(result.locations.front());
+    }
+});
+```
+
+Use `check` before reopening a saved location because removable storage or an access grant may no longer be available.
+`open` provides seekable streaming I/O. `read_all` allocates the entire file and should only be used when the file is
+small. Folder locations support `list` and child resolution through `join`. Only one picker can be open at a time.
+
+`create_child` never replaces an existing file and returns `MOD_CONFLICT` if one exists. Use the returned location;
+document providers may adjust the requested name. `write_all` is a convenience function over
+`open`/`write`/`flush`/`close`.
+
+```cpp
+std::string location;
+if (mods::file::create_child(folder, "report.txt", location) == MOD_OK) {
+    mods::file::write_all(location, report);
+}
+
+mods::file::export_file(location, "report.txt", [](mods::file::PickResult result) {
+    if (result.status == MOD_OK) {
+        remember_export_destination(result.locations.front());
+    }
+});
+```
+
+`export_file` copies an existing file to a user-selected destination and returns the destination location in its
+callback. Mod-owned persistent files belong in `HostService::data_dir`.
 
 ### HostService (`mods/svc/host.h`)
 
@@ -587,7 +632,7 @@ svc_ui->dialog_push(mod_ctx, &dialog, nullptr);
 ```
 
 After an action's `on_pressed`, the dialog closes unless the action sets `keep_open`. It can then be closed later
-(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body` and 
+(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body` and
 `dialog_set_icon` mutate a live dialog.
 
 **Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
