@@ -568,6 +568,11 @@ void file_initialize() {
     config::Register(s_pickerOverride);
 }
 
+bool file_available() {
+    const auto capabilities = borealis::file_select::capabilities();
+    return capabilities.canOpenFile || capabilities.canOpenFolder || capabilities.canExportFile;
+}
+
 ModResult copy_picker_override(
     std::string_view source, std::string_view destination, std::string& error) {
     try {
@@ -688,6 +693,7 @@ constinit const ServiceModule g_fileModule{
     .majorVersion = FILE_SERVICE_MAJOR,
     .minorVersion = FILE_SERVICE_MINOR,
     .service = &s_fileService,
+    .available = file_available,
     .initialize = file_initialize,
     .modDetached = file_remove_mod,
     .frameBegin = file_frame_begin,

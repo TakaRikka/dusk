@@ -26,6 +26,8 @@ struct ServiceModule {
     uint16_t minorVersion = 0;
     const void* service = nullptr;
 
+    // False prevents registration when a platform dependency is unavailable.
+    bool (*available)() = nullptr;
     // One-time setup, at registration (ModLoader::init_services).
     void (*initialize)() = nullptr;
     // A mod is beginning deactivation: stop callbacks that may execute concurrently. Service state
@@ -69,6 +71,7 @@ extern const ServiceModule g_hostModule;
 extern const ServiceModule g_logModule;
 extern const ServiceModule g_resourceModule;
 extern const ServiceModule g_fileModule;
+extern const ServiceModule g_httpModule;
 extern const ServiceModule g_hookModule;
 extern const ServiceModule g_overlayModule;
 extern const ServiceModule g_textureModule;
