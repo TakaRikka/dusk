@@ -83,10 +83,14 @@ extern void __dcbf(void*, int);
 extern void __dcbz(void*, int);
 extern void __sync();
 extern int __abs(int);
+#if defined(_MSVC_LANG) && !defined(__clang__)
+#define __memcpy memcpy
+#else
 #if defined(__has_builtin) && __has_builtin(__builtin_memcpy)
 #define __memcpy __builtin_memcpy
 #else
 #define __memcpy memcpy
+#endif
 #endif
 #ifdef __cplusplus
 }

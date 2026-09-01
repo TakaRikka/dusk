@@ -1239,7 +1239,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Speedrun Mode",
                 .helpText =
-                    "Enables speedrunning options while restricting certain gameplay modifiers.",
+                    "Enables Speedrun game mode option in the Dusklight launch menu.",
                 .onChange =
                     [this](bool enabled) {
                         if (enabled) {

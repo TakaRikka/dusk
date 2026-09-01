@@ -160,17 +160,12 @@ void MenuBar::build_tabs() {
     });
 
     if (dusk::speedrun::isActive()) {
-        mTabBar->add_tab("Reset Timer", [this] {
+        mTabBar->add_tab("Reset Run", [this] {
             mTabBar->set_active_tab(-1);
             mDoAud_seStartMenu(kSoundClick);
             dusk::speedrun::g_speedrunInfo.reset();
-            if (getSettings().game.liveSplitEnabled) {
-                dusk::speedrun::reset();
-            }
-            auto* playScene = fpcM_SearchByName(fpcNm_PLAY_SCENE_e);
-            if (playScene != nullptr) {
-                fopScnM_ChangeReq((scene_class*)playScene, fpcNm_NAME_SCENE_e, 0x7FFF, 0);
-            }
+            dusk::speedrun::reset();
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
             hide(false);
         });
     }
