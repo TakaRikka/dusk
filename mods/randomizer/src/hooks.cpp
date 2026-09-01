@@ -158,7 +158,7 @@ DEFINE_HOOK(&dGameover_c::_create, dGameover_c___create);
 DEFINE_HOOK(&daObjSwBallC_c::Create, daObjSwBallC_c__Create);
 DEFINE_HOOK(&daObjSwBallC_c::actionWait, daObjSwBallC_c__actionWait);
 
-DEFINE_HOOK_SYMBOL("daDitem_c::execute", int(daDitem_c*), daDitem_c__execute);
+DEFINE_HOOK_SYMBOL("daDitem_Execute", int(daDitem_c*), daDitem_c__execute);
 
 DEFINE_HOOK(&daShopItem_c::CreateInit, daShopItem_c__CreateInit);
 

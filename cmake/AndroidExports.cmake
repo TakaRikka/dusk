@@ -39,8 +39,6 @@ function(setup_android_exports target)
             --format version-script
             --exclude cmake_pch
             --exclude miniz
-            --exclude asan_options
-            --exclude src/dusk
             # Resolved from the Java side; the SDL ones live in the statically-linked
             # SDL archive, outside the provenance scan.
             --extra-sym JNI_OnLoad

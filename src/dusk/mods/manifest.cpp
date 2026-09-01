@@ -75,12 +75,12 @@ __declspec(allocate(".symdbh"))
 #if defined(__clang__)
 __attribute__((used))
 #endif
-constinit const SymdbDescriptor s_symdbDescriptor{kDescriptorMagic, 0, 0};
+constinit SymdbDescriptor s_symdbDescriptor{kDescriptorMagic, 0, 0};
 #elif defined(__APPLE__)
-__attribute__((section("__DATA,__symdbh"), used)) constinit const SymdbDescriptor
-    s_symdbDescriptor{kDescriptorMagic, 0, 0};
+__attribute__((section("__DATA,__symdbh"), used)) constinit SymdbDescriptor s_symdbDescriptor{
+    kDescriptorMagic, 0, 0};
 #else
-__attribute__((section("symdbh"), used)) constinit const SymdbDescriptor s_symdbDescriptor{
+__attribute__((section("symdbh"), used)) constinit SymdbDescriptor s_symdbDescriptor{
     kDescriptorMagic, 0, 0};
 #endif
 
@@ -92,7 +92,7 @@ struct State {
     uint64_t stringsLen = 0;
     uintptr_t imageBase = 0;
     // (rva, nameOff) of entries flagged kFlagInlineSites, sorted by rva
-    std::vector<std::pair<uint64_t, uint32_t> > inlineSites;
+    std::vector<std::pair<uint64_t, uint32_t>> inlineSites;
     bool loaded = false;
     bool initialized = false;
 };
