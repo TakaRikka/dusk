@@ -1314,7 +1314,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         return kAlwaysGreatspinModes[static_cast<u8>(
                             getSettings().game.alwaysGreatspin.getValue())];
                     },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
                 .isModified =
                     [] {
                         return getSettings().game.alwaysGreatspin.getValue() !=
