@@ -1,4 +1,4 @@
-DUSKLIGHT_MOD_1 {
+{
     global:
         mod_ctx;
         mod_initialize;
