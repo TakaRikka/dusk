@@ -589,6 +589,42 @@ F_SP104:
 
 # Faron Woods
 F_SP108:
+  # Room 0 - South Entrance
+  0:
+    # Delete the savmem during the intro cutscene on layer 13
+    - action: delete
+      name: Savmem
+      parameters: 0x0000FF00
+      position:
+        x: -17150.0
+        y: 2043.54736
+        z: 7700
+      angle:
+        x: 0x0062
+        y: 0xFFFF
+        z: 0xFFFF
+      set id: 0xFFFF
+      layers:
+        - 13
+
+  # Room 1 - Faron Spring
+  1:
+    # Delete the savmem during the intro cutscene on layer 13
+    - action: delete
+      name: Savmem
+      parameters: 0x0000FF06
+      position:
+        x: -21970.1992
+        y: 634.335815
+        z: -5970.08887
+      angle:
+        x: 0x0062
+        y: 0xFFFF
+        z: 0xFFFF
+      set id: 0xFFFF
+      layers:
+        - 13
+
   # Room 3 - Area near South Faron Woods Gate
   3:
     # Patch the gate before the tunnel to respect the open/closed flag
