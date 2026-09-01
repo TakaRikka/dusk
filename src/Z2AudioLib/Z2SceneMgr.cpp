@@ -75,11 +75,7 @@ void Z2SceneMgr::setFadeOutStart(u8 fadeType) {
     Z2GetSeqMgr()->bgmAllMute(33,  3.0f / 10.0f);
     Z2GetSeMgr()->seMoveVolumeAll(0.0f, 33);
     Z2GetSeqMgr()->setBattleBgmOff(true);
-    #if TARGET_PC
-    load1stWait = dusk::getSettings().game.fastTransitions ? 1 : 40;
-    #else
-    load1stWait = 40;
-    #endif
+    load1stWait = IF_DUSK(dusk::getSettings().game.fastTransitions ? 1 :) 40;
     timer = -1;
 }
 
