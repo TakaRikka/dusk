@@ -131,7 +131,7 @@ public:
     int Delete();
 
     static DUSK_GAME_DATA s16 const M_dir_base[4];
-        /* 0x05A0 */ request_of_phase_process_class mPhase;
+    /* 0x05A0 */ request_of_phase_process_class mPhase;
     /* 0x05A8 */ J3DModel* mpModel;
     /* 0x05AC */ mDoExt_brkAnm* mSerchBrk;
     /* 0x05B0 */ mDoExt_bckAnm* mBeamosBck;

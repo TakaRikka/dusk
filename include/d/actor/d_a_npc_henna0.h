@@ -12,7 +12,7 @@
  *
  */
 class d_a_npc_henna0 : public fopAc_ac_c {
-            /* 0x568 */ u8 field_0x568[0x828 - 0x568];
+        /* 0x568 */ u8 field_0x568[0x828 - 0x568];
 };
 
 STATIC_ASSERT(sizeof(d_a_npc_henna0) == 0x828);
