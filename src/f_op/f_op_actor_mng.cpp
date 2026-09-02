@@ -257,9 +257,10 @@ s32 fopAcM_delete(fpc_ProcID i_actorID) {
 
 fpc_ProcID fopAcM_create(s16 i_procName, u16 i_setId, u32 i_parameters, const cXyz* i_pos,
     int i_roomNo, const csXyz* i_angle, const cXyz* i_scale, s8 i_argument,
-    createFunc i_createFunc IF_DUSK_ARG(u32 i_itemGiveTag)) {
+    createFunc i_createFunc IF_DUSK_ARG(u32 i_itemGiveTag) IF_DUSK_ARG(u8 i_itemOriginalNo)) {
     fopAcM_prm_class* append = createAppend(i_setId, i_parameters, i_pos, i_roomNo, i_angle,
-        i_scale, i_argument, fpcM_ERROR_PROCESS_ID_e IF_DUSK_ARG(i_itemGiveTag));
+        i_scale, i_argument, fpcM_ERROR_PROCESS_ID_e IF_DUSK_ARG(i_itemGiveTag)
+            IF_DUSK_ARG(i_itemOriginalNo));
     if (append == NULL) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -268,9 +269,10 @@ fpc_ProcID fopAcM_create(s16 i_procName, u16 i_setId, u32 i_parameters, const cX
 }
 
 fpc_ProcID fopAcM_create(s16 i_procName, u32 i_parameters, const cXyz* i_pos, int i_roomNo,
-    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument IF_DUSK_ARG(u32 i_itemGiveTag)) {
+    const csXyz* i_angle, const cXyz* i_scale, s8 i_argument IF_DUSK_ARG(u32 i_itemGiveTag)
+        IF_DUSK_ARG(u8 i_itemOriginalNo)) {
     return fopAcM_create(i_procName, 0xFFFF, i_parameters, i_pos, i_roomNo, i_angle, i_scale,
-        i_argument, NULL IF_DUSK_ARG(i_itemGiveTag));
+        i_argument, NULL IF_DUSK_ARG(i_itemGiveTag) IF_DUSK_ARG(i_itemOriginalNo));
 }
 
 fopAc_ac_c* fopAcM_fastCreate(s16 i_procName, u32 i_parameters, const cXyz* i_pos, int i_roomNo,
@@ -1592,6 +1594,12 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
     int _ = -1;
 #if TARGET_PC
     const u8 originalItemNo = i_itemNo & 0xFF;
+    // Overridden item checks do not set StageLife, so boss containers
+    // also need a persistent local item bit.
+    constexpr u8 kBossHeartContainerFlag = 0x9F;
+    if (originalItemNo == dItemNo_UTAWA_HEART_e && param_8 == -1) {
+        param_8 = kBossHeartContainerFlag;
+    }
     u32 giveTag;
     if (i_itemCheckName != NULL) {
         i_itemNo = dusk::mods::item_check(i_itemCheckName, originalItemNo, NULL);
@@ -1599,6 +1607,22 @@ fpc_ProcID fopAcM_createItemForBoss(const cXyz* i_pos, int i_itemNo, int i_roomN
     } else {
         i_itemNo = dusk::mods::item_check_boss(originalItemNo, NULL);
         giveTag = dusk::mods::item_give_tag_boss();
+    }
+
+    if (i_itemNo == dItemNo_NONE_e) {
+        const auto itemCheck = dusk::mods::item_check_commit(giveTag, originalItemNo, NULL);
+        i_itemNo = itemCheck.itemNo;
+        if (i_itemNo == dItemNo_NONE_e) {
+            dusk::mods::item_check_complete(itemCheck, NULL);
+            dComIfGs_onItem(param_8, i_roomNo);
+            return fpcM_ERROR_PROCESS_ID_e;
+        }
+    }
+
+    if (i_itemNo != originalItemNo) {
+        const u32 params = 0xFFFF0000 | param_8 << 8 | (i_itemNo & 0xFF);
+        return fopAcM_create(fpcNm_Obj_LifeContainer_e, params, i_pos, i_roomNo, i_angle,
+            i_scale, -1, giveTag, originalItemNo);
     }
 #endif
     u32 params = 0xFFFF0000 | param_8 << 8 | (i_itemNo & 0xFF);

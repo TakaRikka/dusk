@@ -26,6 +26,7 @@ public:
 
     virtual void update();
     virtual bool focus();
+    virtual bool focus_from(NavCommand direction) { return focus(); }
 
     virtual bool selected() const { return mRoot->IsPseudoClassSet("selected"); }
     virtual void set_selected(bool selected);
@@ -34,10 +35,13 @@ public:
 
     void listen(Rml::Element* element, Rml::EventId event, ScopedEventListener::Callback callback,
         bool capture = false);
+    void listen(Rml::Element* element, const Rml::String& event,
+        ScopedEventListener::Callback callback, bool capture = false);
     bool contains(Rml::Element* element) const;
 
     template <typename T, typename... Args>
-    requires std::is_base_of_v<Component, T> T& add_child(Args&&... args) {
+        requires std::is_base_of_v<Component, T>
+    T& add_child(Args&&... args) {
         auto child = std::make_unique<T>(mRoot, std::forward<Args>(args)...);
         T& ref = *child;
         mChildren.emplace_back(std::move(child));
@@ -50,8 +54,9 @@ protected:
     void clear_children();
 
     Rml::Element* mRoot = nullptr;
-    std::vector<std::unique_ptr<Component> > mChildren;
-    std::vector<std::unique_ptr<ScopedEventListener> > mListeners;
+    Rml::Element* mDisabledFocusFallback = nullptr;
+    std::vector<std::unique_ptr<Component>> mChildren;
+    std::vector<std::unique_ptr<ScopedEventListener>> mListeners;
 };
 
 template <class Derived>

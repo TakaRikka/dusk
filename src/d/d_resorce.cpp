@@ -335,7 +335,7 @@ int dRes_info_c::loadResource() {
 #endif
                 void* res = mArchive->getIdxResource(fileIndex);
 #if TARGET_PC
-                u32 size = mArchive->findIdxResource(fileIndex)->data_size;
+                u32 size = mArchive->getFileSize(mArchive->findIdxResource(fileIndex));
                 std::string fileName = mArchive->mStringTable +
                         (mArchive->findIdxResource(fileIndex)->type_flags_and_name_offset & 0xFFFFFF);
                 DuskLog.debug("Loading Resource: {} (Size: {})", fileName, size);
@@ -369,7 +369,7 @@ int dRes_info_c::loadResource() {
                         parentHeap = NULL;
                     }
 
-                    int rt = dComIfG_setObjectRes(arcName, res, entry->data_size, parentHeap);
+                    int rt = dComIfG_setObjectRes(arcName, res, DUSK_IF_ELSE(mArchive->getFileSize(entry),entry->data_size), parentHeap);
                     JUT_ASSERT(788, rt);
                 } else if (nodeType == 'BMDP') {
 #if DEBUG

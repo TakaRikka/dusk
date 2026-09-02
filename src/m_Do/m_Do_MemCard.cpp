@@ -3,35 +3,35 @@
  * Memory Card Control
  */
 
-#include <card.h>
 #include "m_Do/m_Do_MemCard.h"
+#include <card.h>
 #include "JSystem/JKernel/JKRAssertHeap.h"
-#include "m_Do/m_Do_ext.h"
+#include "dusk/main.h"
+#include "dusk/os.h"
+#include "dusk/version.hpp"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
+#include "m_Do/m_Do_ext.h"
 #include "os_report.h"
-#include "dusk/os.h"
-#include "dusk/main.h"
-#include "dusk/version.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
+#include <cstring>
 #include <revolution/nand.h>
 #include <revolution/sc.h>
-#include <cstring>
 #endif
 
 #define SLOT_A 0
 
-#define CHECKSPACE_RESULT_READY    0
+#define CHECKSPACE_RESULT_READY 0
 #define CHECKSPACE_RESULT_INSSPACE 1
-#define CHECKSPACE_RESULT_NOENT    2
-#define CHECKSPACE_RESULT_ERROR    3
+#define CHECKSPACE_RESULT_NOENT 2
+#define CHECKSPACE_RESULT_ERROR 3
 
 #if PLATFORM_WII
 s32 my_CARDOpen(s32 chan, const char* fileName, CARDFileInfo* fileInfo) {
     CARDStat stat;
     DVDDiskID* diskID = DVDGetCurrentDiskID();
-    
+
     for (int i = 0; i < CARD_MAX_FILE; i++) {
         s32 ret = CARDGetStatus(chan, i, &stat);
         if (ret == CARD_RESULT_READY) {
@@ -57,10 +57,10 @@ s32 my_CARDOpen(s32 chan, const char* fileName, CARDFileInfo* fileInfo) {
 #endif
 
 #if PLATFORM_WII
-#define NAND_OPEN  NANDSafeOpen
+#define NAND_OPEN NANDSafeOpen
 #define NAND_CLOSE NANDSafeClose
 #elif PLATFORM_SHIELD
-#define NAND_OPEN  NANDSimpleSafeOpen
+#define NAND_OPEN NANDSimpleSafeOpen
 #define NAND_CLOSE NANDSimpleSafeClose
 #endif
 
@@ -77,15 +77,20 @@ static u8 MemCardStack[STACK_SIZE];
 static OSThread MemCardThread;
 
 void mDoMemCd_Ctrl_c::ThdInit() {
-    #if !PLATFORM_SHIELD
+#ifdef TARGET_PC
+    if (mInitialized) {
+        return;
+    }
     CARDSetLoadType((CARDFileType)dusk::getSettings().backend.cardFileType.getValue());
+#endif
 
+#if !PLATFORM_SHIELD
     char version[5] = {};
     char maker[3] = {};
     std::memcpy(version, dusk::version::getDiskID().gameName, 4);
     std::memcpy(maker, dusk::version::getDiskID().company, 2);
     CARDInit(version, maker);
-    #endif
+#endif
 
     mCopyToPos = 0;
     mProbeStat = 2;
@@ -93,6 +98,7 @@ void mDoMemCd_Ctrl_c::ThdInit() {
 
 #if TARGET_PC
     mCardCommand = COMM_ATTACH_e;
+    mInitialized = true;
 #else
     mCardCommand = COMM_NONE_e;
 #endif
@@ -101,8 +107,9 @@ void mDoMemCd_Ctrl_c::ThdInit() {
 
     OSInitMutex(&mMutex);
     OSInitCond(&mCond);
-    OSCreateThread(&MemCardThread, (void*(*)(void*))mDoMemCd_main, NULL, MemCardStack + sizeof(MemCardStack),
-                   sizeof(MemCardStack), OSGetThreadPriority(OSGetCurrentThread()) + 1, 1);
+    OSCreateThread(&MemCardThread, (void* (*)(void*))mDoMemCd_main, NULL,
+        MemCardStack + sizeof(MemCardStack), sizeof(MemCardStack),
+        OSGetThreadPriority(OSGetCurrentThread()) + 1, 1);
     OSResumeThread(&MemCardThread);
 
     // "Memory Card Thread Init\n"
@@ -112,23 +119,26 @@ void mDoMemCd_Ctrl_c::ThdInit() {
 void mDoMemCd_Ctrl_c::main() {
     do {
         OSLockMutex(&mMutex);
-        while (mCardCommand == COMM_NONE_e
 #ifdef TARGET_PC
-            && !dusk::IsShuttingDown
-#endif
-        ) {
+        bool shutdownThread = dusk::IsShuttingDown;
+        while (mCardCommand == COMM_NONE_e && !shutdownThread) {
             OSWaitCond(&mCond, &mMutex);
+            shutdownThread = dusk::IsShuttingDown;
         }
         OSUnlockMutex(&mMutex);
 
-#ifdef TARGET_PC
-        if (dusk::IsShuttingDown) {
+        if (shutdownThread) {
             break;
         }
+#else
+        while (mCardCommand == COMM_NONE_e) {
+            OSWaitCond(&mCond, &mMutex);
+        }
+        OSUnlockMutex(&mMutex);
 #endif
 
         switch (mCardCommand) {
-        #if PLATFORM_GCN || PLATFORM_WII
+#if PLATFORM_GCN || PLATFORM_WII
         case COMM_RESTORE_e:
             restore();
             break;
@@ -144,16 +154,16 @@ void mDoMemCd_Ctrl_c::main() {
         case COMM_DETACH_e:
             detach();
             break;
-        #elif PLATFORM_SHIELD
+#elif PLATFORM_SHIELD
         case COMM_RESTORE_e:
         case COMM_STORE_e:
         case COMM_FORMAT_e:
         case COMM_ATTACH_e:
         case COMM_DETACH_e:
             break;
-        #endif
+#endif
 
-        #if PLATFORM_WII || PLATFORM_SHIELD
+#if PLATFORM_WII || PLATFORM_SHIELD
         case COMM_RESTORE_NAND_e:
             restoreNAND();
             break;
@@ -163,7 +173,7 @@ void mDoMemCd_Ctrl_c::main() {
         case COMM_STORE_SETUP_NAND_e:
             storeSetUpNAND();
             break;
-        #endif
+#endif
         }
 
         OSLockMutex(&mMutex);
@@ -180,7 +190,7 @@ void mDoMemCd_Ctrl_c::update() {
         OSUnlockMutex(&mMutex);
         OSSignalCond(&mCond);
     } else if (getStatus(0) != 14) {
-        #if PLATFORM_GCN || PLATFORM_WII
+#if PLATFORM_GCN || PLATFORM_WII
         if (CARDProbe(SLOT_A) && getStatus(0) == 0) {
             OSLockMutex(&mMutex);
             mProbeStat = 0;
@@ -196,7 +206,7 @@ void mDoMemCd_Ctrl_c::update() {
             OSUnlockMutex(&mMutex);
             OSSignalCond(&mCond);
         }
-        #endif
+#endif
     }
 }
 
@@ -214,7 +224,12 @@ void mDoMemCd_Ctrl_c::restore() {
     CARDFileInfo file;
     field_0x1fc8 = 0;
 
-    s32 ret = CARD_OPEN(mChannel, "gczelda2", &file);
+#ifdef TARGET_PC
+    const char* fileName = getFileName();
+#else
+    const char* fileName = "gczelda2";
+#endif
+    s32 ret = CARD_OPEN(mChannel, fileName, &file);
     OS_REPORT("\x1b[43;30mCret=%d\n\x1b[m", ret);
     if (ret == CARD_RESULT_READY) {
         s32 ret2 = mDoMemCdRWm_Restore(&file, this, sizeof(mData));
@@ -271,12 +286,18 @@ void mDoMemCd_Ctrl_c::store() {
     s32 ret;
     field_0x1fc8 = 0;
 
+#ifdef TARGET_PC
+    const char* fileName = getFileName();
+#else
+    const char* fileName = "gczelda2";
+#endif
+
     if (mCardState == CARD_STATE_NO_FILE_e) {
-        #if PLATFORM_GCN
-        ret = CARDCreate(mChannel, "gczelda2", CARD_FILE_SIZE, &file);
-        #else
+#if PLATFORM_GCN
+        ret = CARDCreate(mChannel, fileName, CARD_FILE_SIZE, &file);
+#else
         ret = CARDCreate(mChannel, "zeldaTp.dat", CARD_FILE_SIZE, &file);
-        #endif
+#endif
         if (ret == CARD_RESULT_READY || ret == CARD_RESULT_EXIST) {
             mCardState = CARD_STATE_READY_e;
         } else {
@@ -285,7 +306,7 @@ void mDoMemCd_Ctrl_c::store() {
     }
 
     if (mCardState == CARD_STATE_READY_e) {
-        ret = CARD_OPEN(mChannel, "gczelda2", &file);
+        ret = CARD_OPEN(mChannel, fileName, &file);
         if (ret == CARD_RESULT_READY) {
             ret = mDoMemCdRWm_Store(&file, this, sizeof(mData));
             if (ret != CARD_RESULT_READY) {
@@ -527,7 +548,13 @@ s32 mDoMemCd_Ctrl_c::mount() {
 s32 mDoMemCd_Ctrl_c::loadfile() {
     CARDFileInfo file;
 
-    s32 ret = CARD_OPEN(mChannel, "gczelda2", &file);
+#ifdef TARGET_PC
+    const char* fileName = getFileName();
+#else
+    const char* fileName = "gczelda2";
+#endif
+
+    s32 ret = CARD_OPEN(mChannel, fileName, &file);
     if (ret == CARD_RESULT_READY) {
         CARDClose(&file);
         return TRUE;
@@ -543,7 +570,7 @@ s32 mDoMemCd_Ctrl_c::checkspace() {
 
     if (result != CARD_RESULT_READY) {
         setCardState(result);
-        return CHECKSPACE_RESULT_ERROR;  
+        return CHECKSPACE_RESULT_ERROR;
     }
 
     if (bytesNotUsed < CARD_FILE_SIZE) {
@@ -553,7 +580,7 @@ s32 mDoMemCd_Ctrl_c::checkspace() {
     if (filesNotUsed < 1) {
         return CHECKSPACE_RESULT_NOENT;
     }
-    
+
     return CHECKSPACE_RESULT_READY;
 }
 
@@ -596,7 +623,7 @@ void mDoMemCd_Ctrl_c::restoreNAND() {
     NANDFileInfo file;
     s32 ret, ret2;
 
-    field_0x1fc8 = 0;    
+    field_0x1fc8 = 0;
 
     ret = NANDOpen("zeldaTp.dat", &file, NAND_ACCESS_RW);
     OS_REPORT("\x1b[43;30mCret=%d\n\x1b[m", ret);
@@ -668,7 +695,8 @@ void mDoMemCd_Ctrl_c::storeNAND() {
         ret = NANDCreate("banner.bin", NAND_PERM_RUSR | NAND_PERM_WUSR | NAND_PERM_RGRP, 0);
         printf("NAND bannerFile Create ret:%d\n", ret);
         if (ret == NAND_RESULT_OK || ret == NAND_RESULT_EXISTS) {
-            ret = NAND_OPEN("banner.bin", &file, NAND_ACCESS_RW, l_safeCopyBuf, sizeof(l_safeCopyBuf));
+            ret = NAND_OPEN(
+                "banner.bin", &file, NAND_ACCESS_RW, l_safeCopyBuf, sizeof(l_safeCopyBuf));
             if (ret == NAND_RESULT_OK) {
                 ret = mDoMemCdRWm_StoreBannerNAND(&file);
                 if (ret == NAND_RESULT_OK) {
@@ -686,7 +714,8 @@ void mDoMemCd_Ctrl_c::storeNAND() {
         }
 
         if (ret == NAND_RESULT_OK) {
-            ret = NAND_OPEN("zeldaTp.dat", &file, NAND_ACCESS_RW, l_safeCopyBuf, sizeof(l_safeCopyBuf));
+            ret = NAND_OPEN(
+                "zeldaTp.dat", &file, NAND_ACCESS_RW, l_safeCopyBuf, sizeof(l_safeCopyBuf));
             if (ret == NAND_RESULT_OK) {
                 ret = mDoMemCdRWm_StoreNAND(&file, this, sizeof(mData));
                 if (ret == NAND_RESULT_OK) {
@@ -732,10 +761,11 @@ s32 mDoMemCd_Ctrl_c::SaveSyncNAND() {
 
 void mDoMemCd_Ctrl_c::storeSetUpNAND() {
     field_0x1fc8 = 0;
-    
-    while ((int)SCCheckStatus() != 0) {}
 
-    #if PLATFORM_WII
+    while ((int)SCCheckStatus() != 0) {
+    }
+
+#if PLATFORM_WII
     if (!SCFlush()) {
         mNandState = NAND_STATE_WRITE_e;
         printf("== 本体設定Write OK ==\n");
@@ -743,9 +773,9 @@ void mDoMemCd_Ctrl_c::storeSetUpNAND() {
         mNandState = NAND_STATE_FATAL_ERROR_e;
         printf("== 本体設定Write ERR ==\n");
     }
-    #else
+#else
     mNandState = NAND_STATE_WRITE_e;
-    #endif
+#endif
 
     field_0x1fc8 = 1;
 }
@@ -866,7 +896,7 @@ s32 mDoMemCd_Ctrl_c::checkspaceNAND() {
     s32 result = NANDCheck(3, 2, &answer);
     if (result != NAND_RESULT_OK) {
         setNandState(result);
-        return CHECKSPACE_RESULT_ERROR;  
+        return CHECKSPACE_RESULT_ERROR;
     }
 
     if (answer == 0) {
@@ -876,8 +906,34 @@ s32 mDoMemCd_Ctrl_c::checkspaceNAND() {
     } else if (answer & 10) {
         ret = 2;
     }
-    
+
     return ret;
+}
+#endif
+
+#ifdef TARGET_PC
+void mDoMemCd_Ctrl_c::setFileName(const std::string& fileName) {
+    if (mInitialized == false) {
+        mFileName = fileName;
+    } else {
+        OSLockMutex(&mMutex);
+        mFileName = fileName;
+        OSUnlockMutex(&mMutex);
+    }
+}
+
+const char* mDoMemCd_Ctrl_c::getFileName() {
+    const char* fileName = "gczelda2";
+    if (mInitialized) {
+        OSLockMutex(&mMutex);
+    }
+    if (!mFileName.empty()) {
+        fileName = mFileName.c_str();
+    }
+    if (mInitialized) {
+        OSUnlockMutex(&mMutex);
+    }
+    return fileName;
 }
 #endif
 

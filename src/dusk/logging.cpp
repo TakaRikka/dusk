@@ -14,6 +14,7 @@ constexpr std::string_view kStubFragments[] = {
     "Unimplemented: BP register"sv,
     "Unhandled BP register"sv,
     "Unhandled XF register"sv,
+    "Unhandled XF memory write"sv,
     "but selective updates are not implemented"sv,
 };
 

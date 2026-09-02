@@ -237,7 +237,7 @@ Rml::String configured_data_path_display_name() {
         return "(none)";
     }
 
-    auto display = borealis::file_select::display_name(path);
+    auto display = borealis::io::display_name(path);
     if (display.empty()) {
         return path;
     }
@@ -387,7 +387,7 @@ void add_speedrun_disabled_option(Pane& leftPane, Pane& rightPane, ConfigVar<boo
     config_bool_select(leftPane, rightPane, var, {
         .key = key,
         .helpText = helpText,
-        .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+        .isDisabled = [] { return dusk::speedrun::isActive(); },
     });
 }
 
@@ -446,24 +446,15 @@ SelectButton& config_int_select(Pane& leftPane, Pane& rightPane, ConfigVar<int>&
     return button;
 }
 
-template <typename T>
-void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var,
+void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane,
     const GraphicsTunerProps& props) {
+    const auto setting = GraphicsSetting::of(props.option);
     leftPane.register_control(
         leftPane
             .add_select_button({
                 .key = props.title,
-                .getValue =
-                    [&var, option = props.option] {
-                        if constexpr (std::is_same_v<T, float>) {
-                            return format_graphics_setting_value(
-                                option, float_setting_percent(var));
-                        } else {
-                            return format_graphics_setting_value(
-                                option, static_cast<int>(var.getValue()));
-                        }
-                    },
-                .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+                .getValue = [setting] { return setting.text(); },
+                .isModified = [setting] { return setting.isModified(); },
                 .submit = false,
             })
             .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
@@ -499,7 +490,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 if (path.empty()) {
                                     display = "(none)";
                                 } else {
-                                    display = borealis::file_select::display_name(path);
+                                    display = borealis::io::display_name(path);
                                     if (display.empty()) {
                                         display = path;
                                     }
@@ -545,6 +536,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 {
                                     .parentWindow = aurora::window::get_sdl_window(),
                                     .defaultLocation = defaultLocation,
+                                    .requireRealPath = true,
                                 },
                                 &data_folder_dialog_callback);
                         });
@@ -708,7 +700,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Pause on Focus Lost",
                 .helpText = "Pause the game when window focus is lost.",
-                .isDisabled = [] { return IsMobile || getSettings().game.speedrunMode; },
+                .isDisabled = [] { return IsMobile || dusk::speedrun::isActive(); },
             });
         leftPane.register_control(
             leftPane.add_select_button({
@@ -776,77 +768,58 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     },
                 .isDisabled = [] { return IsMobile; },
             });
+
+        config_int_select(leftPane, rightPane, getSettings().video.uiScale,
+            "UI Scale", 
+            "Scales the Dusklight interface relative to the display's DPI scale. Has no effect on the game's UI and HUD.",
+            50, 200, 25, {}, {}, "%");
+
         leftPane.add_section("Resolution");
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.internalResolutionScale,
             GraphicsTunerProps{
                 .option = GraphicsOption::InternalResolution,
                 .title = "Internal Resolution",
                 .helpText = kInternalResolutionHelpText,
-                .valueMin = 0,
-                .valueMax = 12,
-                .defaultValue = 0,
             });
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.shadowResolutionMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::ShadowResolution,
                 .title = "Shadow Resolution",
                 .helpText = kShadowResolutionHelpText,
-                .valueMin = 1,
-                .valueMax = 8,
-                .defaultValue = 1,
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::Resampler,
                 .title = "Output Resampling",
                 .helpText = kResamplerHelpText,
-                .valueMin = static_cast<int>(Resampler::Bilinear),
-                .valueMax = static_cast<int>(Resampler::Area),
-                .defaultValue = static_cast<int>(Resampler::Bilinear),
             });
 
         leftPane.add_section("Post-Processing");
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMode,
                 .title = "Bloom",
                 .helpText = kBloomHelpText,
-                .valueMin = static_cast<int>(BloomMode::Off),
-                .valueMax = static_cast<int>(BloomMode::Dusk),
-                .defaultValue = static_cast<int>(BloomMode::Classic),
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
                 .title = "Bloom Brightness",
                 .helpText = kBloomBrightnessHelpText,
-                .valueMin = 0,
-                .valueMax = 100,
-                .defaultValue = 100,
-                .step = 10,
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::DepthOfFieldMode,
                 .title = "Depth of Field",
                 .helpText = kDepthOfFieldHelpText,
-                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
-                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
-                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
             });
 
         leftPane.add_section("Rendering");
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.enableTextureReplacements,
             GraphicsTunerProps{
                 .option = GraphicsOption::TextureReplacements,
                 .title = "Enable Texture Replacements",
                 .helpText = kTextureReplacementHelpText,
-                .valueMin = static_cast<int>(false),
-                .valueMax = static_cast<int>(true),
-                .defaultValue = static_cast<int>(false),
             });
         leftPane.register_control(
             leftPane.add_select_button({
@@ -893,7 +866,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "Disable Cutscene Pillarboxing",
                 .helpText = "Disable black bars on the left and right sides of the screen "
                             "during some cutscenes, particularly on ultra-wide displays. "
-                            "Visuals beyond the original intended framing may appear buggy."
+                            "Visuals beyond the original intended framing may appear buggy.",
             });
     });
 
@@ -912,9 +885,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         };
 
         leftPane.add_section("Inputs");
-        leftPane.register_control(leftPane.add_button("Configure Inputs").on_pressed([this] {
-            push(std::make_unique<ControllerConfigWindow>());
-        }),
+        leftPane.register_control(
+            leftPane.add_group_button({.text = "Configure Inputs"}).on_pressed([this] {
+                push(std::make_unique<ControllerConfigWindow>());
+            }),
             rightPane, [](Pane& pane) {
                 pane.clear();
                 pane.add_text("Open input binding configuration.");
@@ -931,7 +905,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addOption("Touch Controls", getSettings().game.enableTouchControls,
             "Enables controls overlay for touch screens.<br/><br/>Press and drag on the left side "
             "of the screen to move, and on the right side of the screen to control the camera.");
-        auto& customizeTouchLayout = leftPane.add_button(ControlledButton::Props{
+        auto& customizeTouchLayout = leftPane.add_group_button(GroupButton::Props{
             .text = "Customize Layout",
             .isDisabled = [] { return !getSettings().game.enableTouchControls; },
         });
@@ -941,23 +915,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.clear();
                 pane.add_text("Open the touch controls layout editor.");
             });
-        leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Touch Targeting",
-                                      .getValue =
-                                          [] {
-                                              return touch_targeting_label(
-                                                  getSettings().game.touchTargeting.getValue());
-                                          },
-                                      .isDisabled =
-                                          [] { return !getSettings().game.enableTouchControls; },
-                                      .isModified =
-                                          [] {
-                                              const auto& targeting =
-                                                  getSettings().game.touchTargeting;
-                                              return targeting.getValue() !=
-                                                     targeting.getDefaultValue();
-                                          },
-                                  }),
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Touch Targeting",
+                .getValue =
+                    [] {
+                        return touch_targeting_label(getSettings().game.touchTargeting.getValue());
+                    },
+                .isDisabled = [] { return !getSettings().game.enableTouchControls; },
+                .isModified =
+                    [] {
+                        const auto& targeting = getSettings().game.touchTargeting;
+                        return targeting.getValue() != targeting.getDefaultValue();
+                    },
+            }),
             rightPane, [](Pane& pane) {
                 pane.clear();
                 for (int i = 0; i < static_cast<int>(kTouchTargetingLabels.size()); ++i) {
@@ -1069,7 +1040,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Tools");
         addOption("Turbo Key", getSettings().game.enableTurboKeybind,
             "Hold Tab to increase game speed by up to 4x.",
-            [] { return getSettings().game.speedrunMode.getValue(); });
+            [] { return dusk::speedrun::isActive(); });
         addOption("Reset Key (" + Rml::String{hotkeys::DO_RESET} + ")",
             getSettings().game.enableResetKeybind,
             "Press " + Rml::String{hotkeys::DO_RESET} + " to reset the game.");
@@ -1182,7 +1153,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         getSettings().game.damageMultiplier.setValue(value);
                         config::save();
                     },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
                 .isModified =
                     [] {
                         return getSettings().game.damageMultiplier.getValue() !=
@@ -1241,18 +1212,18 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Speedrun Mode",
                 .helpText =
-                    "Enables speedrunning options while restricting certain gameplay modifiers.",
+                    "Enables Speedrun game mode option in the Dusklight launch menu.",
                 .onChange =
-                    [](bool enabled) {
+                    [this](bool enabled) {
                         if (enabled) {
-                            resetForSpeedrunMode();
+                            dusk::speedrun::registerSpeedrunGameMode();
                         } else {
-                            restoreFromSpeedrunMode();
-                            if (getSettings().game.liveSplitEnabled) {
-                                speedrun::disconnectLiveSplit();
+                            if (dusk::speedrun::isActive()) {
+                                pop();
                             }
+                            dusk::speedrun::unregisterSpeedrunGameMode();
                         }
-                        MenuBar::rebuild();
+                        MenuBar::refresh_tabs();
                     },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.liveSplitEnabled,
@@ -1268,13 +1239,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             speedrun::disconnectLiveSplit();
                         }
                     },
-                .isDisabled = [] { return IsMobile || !getSettings().game.speedrunMode; },
+                .isDisabled = [] { return IsMobile || !dusk::speedrun::isActive(); },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showSpeedrunRTATimer,
             {
                 .key = "Show RTA",
                 .helpText = "Display the RTA timer. IGT is always visible.",
-                .isDisabled = [] { return !getSettings().game.speedrunMode; },
+                .isDisabled = [] { return !dusk::speedrun::isActive(); },
             });
     });
 
@@ -1355,7 +1326,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     [] {
                         return kMagicArmorModes[static_cast<u8>(getSettings().game.armorRupeeDrain.getValue())];
                     },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
                 .isModified =
                     [] {
                         return getSettings().game.armorRupeeDrain.getValue() !=
@@ -1401,6 +1372,16 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     "replacements, and other app data.");
             });
 #endif
+        leftPane.register_control(leftPane.add_button("Restart to Main Menu").on_pressed([this] {
+            mDoAud_seStartMenu(kSoundClick);
+            pop();
+            ui::prelaunch_state().returnToPrelaunchOnReset = true;
+            JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
+        }),
+            rightPane, [](Pane& pane) {
+                pane.add_text("Restart Dusklight to the pre-launch menu to change settings, game "
+                              "modes, or mods.");
+            });
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Notifications",
@@ -1489,8 +1470,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
                 .key = "Skip Dusklight Main Menu",
-                .helpText = "When starting Dusklight, skip the main menu and boot straight into the "
-                            "game if a disc image is available.",
+                .helpText =
+                    "When starting Dusklight, skip the main menu and boot straight into the "
+                    "game if a disc image is available.<br/><br/>Note: If any mods register game "
+                    "modes, this option will be ignored.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
             {
@@ -1519,8 +1502,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .helpText = "Show advanced settings and debugging tools with "
                             "Shift+F1.<br/><br/><icon class=\"warning\"/> WARNING: Debugging tools "
                             "can easily break your game. Do not use on a regular save!",
-                .onChange = [](bool) { MenuBar::rebuild(); },
-                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .onChange = [](bool) { MenuBar::refresh_tabs(); },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
             });
         config_bool_select(leftPane, rightPane, getSettings().game.showInputViewer,
             {
@@ -1577,6 +1560,20 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         add_speedrun_disabled_option(leftPane, rightPane, getSettings().game.recordingMode,
             "Recording Mode",
             "Disables the game HUD and all background music.<br/><br/>Useful for recording footage.");
+    });
+
+    add_tab("Tools", [this](Rml::Element* content) {
+        auto& leftPane = add_child<Pane>(content, Pane::Type::Controlled);
+        auto& rightPane = add_child<Pane>(content, Pane::Type::Uncontrolled);
+
+        leftPane.add_section("Link");
+        add_speedrun_disabled_option(leftPane, rightPane, getSettings().game.enableMoveLinkCombo,
+            "Move Link (L+R+Y)",
+            "Enables the L+R+Y button combo to toggle freely repositioning Link.");
+        add_speedrun_disabled_option(leftPane, rightPane, getSettings().game.enableTeleportCombo,
+            "Teleport (R+D-pad Up/Down)",
+            "R+D-pad Up stores Link's current position.<br/>"
+            "R+D-pad Down teleports Link back to it.");
     });
 }
 

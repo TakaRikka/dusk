@@ -1,12 +1,54 @@
 #include "dusk/speedrun.h"
-#include "dusk/settings.h"
-#include "dusk/config.hpp"
-#include "m_Do/m_Do_main.h"
 #include <aurora/aurora.h>
+#include "dusk/config.hpp"
+#include "dusk/game_mode.hpp"
+#include "dusk/livesplit.h"
+#include "dusk/settings.h"
+#include "m_Do/m_Do_main.h"
 
-namespace dusk {
+namespace dusk::speedrun {
 
-SpeedrunInfo m_speedrunInfo;
+SpeedrunInfo g_speedrunInfo;
+
+static void onSpeedrunModeActive() {
+    resetForSpeedrunMode();
+}
+
+static void onSpeedrunModeDeactive() {
+    restoreFromSpeedrunMode();
+    if (getSettings().game.liveSplitEnabled) {
+        speedrun::disconnectLiveSplit();
+    }
+    g_speedrunInfo.reset();
+    reset();
+}
+
+void registerSpeedrunGameMode() {
+    dusk::gamemode::GameMode speedrunGameMode{
+        kSpeedrunGameModeId, "Speedrun", "gczelda2-speedrun"};
+    speedrunGameMode.mOnSaveLoadedFunction = [] {
+        dusk::speedrun::start();
+        return true;
+    };
+    speedrunGameMode.mOnActivatedFunction = [] {
+        onSpeedrunModeActive();
+        return true;
+    };
+    speedrunGameMode.mOnDeactivatedFunction = [] {
+        onSpeedrunModeDeactive();
+        return true;
+    };
+    speedrunGameMode.mOnTickFunction = [] {
+        dusk::speedrun::onGameFrame();
+        return true;
+    };
+
+    dusk::gamemode::getGameModeManager().registerGameMode(speedrunGameMode);
+}
+
+void unregisterSpeedrunGameMode() {
+    dusk::gamemode::getGameModeManager().unregisterGameMode(kSpeedrunGameModeId);
+}
 
 void resetForSpeedrunMode() {
     mDoMain::developmentMode = -1;
@@ -42,12 +84,13 @@ void resetForSpeedrunMode() {
     getSettings().backend.enableAdvancedSettings.setSpeedrunValue(false);
     getSettings().game.recordingMode.setSpeedrunValue(false);
     getSettings().game.debugFlyCam.setSpeedrunValue(false);
+
+    getSettings().game.enableMoveLinkCombo.setSpeedrunValue(false);
+    getSettings().game.enableTeleportCombo.setSpeedrunValue(false);
 }
 
 static void clearSpeedrunOverrides() {
-    config::EnumerateRegistered([](config::ConfigVarBase& cvar) {
-        cvar.clearSpeedrunOverride();
-    });
+    config::EnumerateRegistered([](config::ConfigVarBase& cvar) { cvar.clearSpeedrunOverride(); });
 }
 
 void restoreFromSpeedrunMode() {
@@ -55,4 +98,4 @@ void restoreFromSpeedrunMode() {
     aurora_set_pause_on_focus_lost(getSettings().game.pauseOnFocusLost.getValue());
 }
 
-}  // namespace dusk
+}  // namespace dusk::speedrun

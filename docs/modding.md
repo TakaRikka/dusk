@@ -48,7 +48,7 @@ cmake_minimum_required(VERSION 3.26)
 project(my_mod CXX)
 
 if (NOT DUSKLIGHT_VERSION)
-  set(DUSKLIGHT_VERSION "76b56cd8b81809fce0a5c2a44e2f6d437591132f")
+    set(DUSKLIGHT_VERSION "76b56cd8b81809fce0a5c2a44e2f6d437591132f")
 endif ()
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/FetchDusklight.cmake")
 add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
@@ -212,6 +212,93 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
 Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
 `HostService::data_dir` for persistent storage.
 
+### FileService (`mods/svc/file.h`)
+
+Provides file and folder pickers, file I/O, exports and folder enumeration.
+
+A location is an opaque UTF-8 string returned by `pick_*`, `export_file`, `join`, or `create_child`.
+Save it and pass it back to the service. Never parse it or manually append path segments.
+
+```cpp
+#include "mods/svc/file.hpp"
+
+IMPORT_SERVICE(FileService, svc_file);
+
+mods::file::PickOptions options;
+options.filters.push_back({"Audio", "wav;ogg"});
+mods::file::pick_file(options, [](mods::file::PickResult result) {
+    if (result.status == MOD_OK && !result.locations.empty()) {
+        save_location(result.locations.front());
+    }
+});
+```
+
+Use `check` before reopening a saved location because removable storage or an access grant may no longer be available.
+`open` provides seekable streaming I/O. `read_all` allocates the entire file and should only be used when the file is
+small. Folder locations support `list` and child resolution through `join`. Only one picker can be open at a time.
+
+`create_child` never replaces an existing file and returns `MOD_CONFLICT` if one exists. Use the returned location;
+document providers may adjust the requested name. `write_all` is a convenience function over
+`open`/`write`/`flush`/`close`.
+
+```cpp
+std::string location;
+if (mods::file::create_child(folder, "report.txt", location) == MOD_OK) {
+    mods::file::write_all(location, report);
+}
+
+mods::file::export_file(location, "report.txt", [](mods::file::PickResult result) {
+    if (result.status == MOD_OK) {
+        remember_export_destination(result.locations.front());
+    }
+});
+```
+
+`export_file` copies an existing file to a user-selected destination and returns the destination location in its
+callback. Mod-owned persistent files belong in `HostService::data_dir`.
+
+### HttpService (`mods/svc/http.h`)
+
+Asynchronous HTTPS requests supporting HTTP/2 and TLS 1.2+. C++ mods should use the helpers in `mods/svc/http.hpp`:
+
+```cpp
+#include "mods/svc/http.hpp"
+
+IMPORT_SERVICE(HttpService, svc_http);
+
+mods::http::Pending pendingRequest;
+
+void fetch_manifest() {
+    mods::http::Request request{
+        .url = "https://example.com/manifest.json",
+        .maxBodyBytes = 256 * 1024,
+    };
+    pendingRequest = mods::http::request(request, [](mods::http::Response response) {
+        if (!response.ok()) {
+            handle_fetch_error(response.error, response.statusCode);
+            return;
+        }
+
+        std::string manifest{response.body.begin(), response.body.end()};
+        use_manifest(manifest);
+    });
+    if (!pendingRequest) {
+        handle_start_error(pendingRequest.result());
+    }
+}
+```
+
+Keep the returned `Pending` alive until completion. Dropping it or calling `cancel` requests cancellation. Callbacks run
+on the game thread.
+
+`Response::ok()` requires a 2xx status. Other HTTP statuses are valid responses, not transport errors, so always check
+`statusCode`. In-memory responses default to a 1 MiB limit; set `maxBodyBytes` to increase it if needed.
+
+For large responses, set `downloadPath` to an absolute path in the calling mod's `HostService::data_dir` or
+`HostService::mod_dir`. The response is streamed to disk instead of loaded in memory. On success, the callback receives
+an empty `body` and the final path in `downloadPath`. Check `Response::ok()` before using the file.
+`Pending::progress()` reports download progress when the server provides a total size.
+
 ### HostService (`mods/svc/host.h`)
 
 Mod metadata and runtime interaction with the loader:
@@ -262,14 +349,16 @@ Installs hooks on game functions and resolves symbols by name. You'll rarely cal
 ### OverlayService (`mods/svc/overlay.h`)
 
 Registers DVD file overlays at runtime: the dynamic counterpart to the static `overlay/` directory (see
-[Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, or with a caller-owned buffer
+[Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, a file within an archive,
+or with a caller-owned buffer
 (copied on registration):
 
 ```cpp
 IMPORT_SERVICE(OverlayService, svc_overlay);
 
 OverlayHandle handle = 0;
-svc_overlay->add_file(mod_ctx, "/res/Msgus.arc", "res/replacement.arc", &handle);
+svc_overlay->add_file(mod_ctx, "/Movie/demo_movie98_00.thp", "res/replacement.thp", &handle); // Replaces the demo movie
+svc_overlay->add_file(mod_ctx, "/res/Object/Kmdl/archive/bmwr/al.bmd", "res/link_model.bmd", &handle); // Replaces link's model
 svc_overlay->add_buffer(mod_ctx, "/generated.txt", data, size, nullptr);
 svc_overlay->remove(mod_ctx, handle);
 ```
@@ -277,6 +366,9 @@ svc_overlay->remove(mod_ctx, handle);
 `disc_path` must be absolute (leading `/`) and is matched against the disc case-insensitively. Paths that don't exist
 on the disc are added as new files. Changes are applied at the next frame boundary, and data the game already read
 stays in memory until the file is re-read: sometimes a scene reload, and in the worst case, a full restart.
+
+Dusklight reloads core archive files during scene transitions so modifications to Link, Midna or other globally-loaded
+data get refreshed without a full restart.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
@@ -469,8 +561,8 @@ per-window RCSS. A non-`MOD_OK` result from `build`/`update` fails your mod, as 
 callback.
 
 **Controls:** `pane_add_control` adds an input row described by a `UiControlDesc`: `UI_CONTROL_BUTTON`,
-`UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, or `UI_CONTROL_SELECT`. Values bind with callbacks or
-directly to a config var.
+`UI_CONTROL_GROUP`, `UI_CONTROL_TOGGLE`, `UI_CONTROL_NUMBER`, `UI_CONTROL_STRING`, `UI_CONTROL_SELECT`, or
+`UI_CONTROL_COLOR`. Values bind with callbacks or directly to a config var.
 
 ```cpp
 UiControlDesc control = UI_CONTROL_DESC_INIT;
@@ -483,9 +575,56 @@ svc_ui->pane_add_control(mod_ctx, leftPane, &control, nullptr);
 ```
 
 `UI_BINDING_CONFIG_VAR` wires persistence, change notifications, and the modified indicator automatically. The var
-type must match the control: `TOGGLE` = bool, `NUMBER` and `SELECT` = int, `STRING` = string. Float vars are not
-bindable; use callbacks and convert. `help_rml` and `SELECT` option lists render in a help pane, so `SELECT` controls
-are only available inside window tabs.
+type must match the control: `TOGGLE` = bool, `NUMBER` and `SELECT` = int, `STRING` and `COLOR` = string. Float vars
+are not bindable; use callbacks and convert. `help_rml` and `SELECT` option lists render in a help pane, so `SELECT`
+controls are only available inside window tabs.
+
+`pane_add_group` adds a category button to a window tab's left pane. Focusing the button clears the paired right pane
+and calls the group's build callback with that pane, which is useful for organizing related controls without adding
+more tabs.
+
+**Lists:** `pane_add_list` adds a scrollable virtualized list of items that can be efficiently updated and filtered.
+Keys must be unique and remain stable across replacements.
+
+```cpp
+UiListHandle locationList = 0;
+
+void replace_locations(std::string_view query) {
+    std::vector<UiListItem> items;
+    for (uint64_t i = 0; i < locations.size(); ++i) {
+        if (matches(locations[i], query)) {
+            UiListItem item = UI_LIST_ITEM_INIT;
+            item.key = i;
+            item.label = locations[i].c_str();
+            items.push_back(item);
+        }
+    }
+    svc_ui->list_set_items(mod_ctx, locationList, items.data(), items.size());
+}
+
+void set_filter(ModContext*, void*, const UiControlValue* value) {
+    replace_locations(value->string_value);
+}
+
+bool location_selected(ModContext*, UiListHandle, uint64_t key, void*) {
+    return selected_locations.contains(key);
+}
+
+UiControlDesc filter = UI_CONTROL_DESC_INIT;
+filter.kind = UI_CONTROL_STRING;
+filter.label = "Filter";
+filter.get = get_filter;
+filter.set = set_filter;
+filter.string_set_mode = UI_STRING_SET_ON_CHANGE; /* invoke `set` while typing */
+svc_ui->pane_add_control(mod_ctx, pane, &filter, nullptr);
+
+UiListDesc list = UI_LIST_DESC_INIT;
+/* items may be passed as a part of list creation, or set afterwards */
+list.on_pressed = location_pressed;
+list.is_selected = location_selected;
+svc_ui->pane_add_list(mod_ctx, pane, &list, &locationList);
+replace_locations(""); /* calls `list_set_items` */
+```
 
 **Windows:** `window_push` pushes a tabbed two-pane window onto the document stack and shows it. Each tab's `build`
 receives the window handle plus fresh left and right pane handles on every activation. The optional per-tab `update`
@@ -507,10 +646,36 @@ svc_ui->window_push(mod_ctx, &desc, &window);
 ```
 
 **Dialogs:** `dialog_push` shows a modal dialog. `variant` picks the style, `icon` optionally overrides the variant's
-default icon, and actions become buttons. After an action's `on_pressed` returns, the dialog closes unless the action
-sets `keep_open`. A `keep_open` action can close it later (or immediately) with `dialog_close`. Cancel fires
-`on_dismiss` if present and always closes. `dialog_set_body`, `dialog_set_icon`, and `dialog_add_action` mutate a live
-dialog.
+default icon, and actions become buttons. The optional `build` callback allows you to add controls to a pane between
+the body and actions. It uses the same text, progress, and control builders as panels.
+
+```cpp
+ModResult build_dialog(ModContext*, UiElementHandle pane, void*, ModError*) {
+    UiControlDesc input = UI_CONTROL_DESC_INIT;
+    input.kind = UI_CONTROL_STRING;
+    input.label = "Name";
+    input.get = get_name;
+    input.set = set_name;
+    return svc_ui->pane_add_control(mod_ctx, pane, &input, nullptr);
+}
+
+UiDialogAction action = UI_DIALOG_ACTION_INIT;
+action.label = "Save";
+action.on_pressed = save;
+action.is_disabled = is_save_disabled;
+
+UiDialogDesc dialog = UI_DIALOG_DESC_INIT;
+dialog.title = "New Preset";
+dialog.body_rml = "Choose a name for the preset.";
+dialog.actions = &action;
+dialog.action_count = 1;
+dialog.build = build_dialog;
+svc_ui->dialog_push(mod_ctx, &dialog, nullptr);
+```
+
+After an action's `on_pressed`, the dialog closes unless the action sets `keep_open`. It can then be closed later
+(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body` and
+`dialog_set_icon` mutate a live dialog.
 
 **Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
 RCSS class; `warning` uses the built-in warning appearance, and mods can define their own types. A duration of 0 uses
@@ -635,6 +800,125 @@ first in-game frame. Projection matrices match the renderer's WebGPU clip conven
 
 Camera operators allow overriding the main camera. When an operator callback returns true, its values replace the camera
 state for the current frame. Register and unregister using `register_camera_operator` / `unregister_camera_operator`.
+
+### GameModeService (`mods/svc/game_mode.h`)
+
+Allows a mod to register a game mode with callbacks for key gameplay and save lifecycle events. Registered game modes
+appear in the prelaunch menu. Game modes may use a unique set of saves by configuring `save_name`; leave it empty to use
+the vanilla `gczelda2` save.
+
+```cpp
+IMPORT_SERVICE(LogService, svc_log);
+IMPORT_SERVICE(HookService, svc_hook);
+IMPORT_SERVICE(GameModeService, svc_game_mode);
+
+DEFINE_HOOK(fopAcM_createItem, CreateItem);
+
+#define MY_GAME_MODE_ID "game-mode-id"
+
+static HookAction my_function_hook(ModContext* ctx, void* args, void*, void*) {
+    // If we wish to have this hook only run while the gamemode is registered, we need to hook the function from the
+    // gamemode's onActivatedFunction, and uninstall the hook during the onDeactivatedFunction. Example below.
+    // Alternatively, check with `svc_game_mode->is_active(mod_ctx, MY_GAME_MODE_ID, &active) == MOD_OK && active`.
+    return HOOK_CONTINUE;
+}
+
+ModResult on_game_mode_activated(void*, ModError* outError) {
+    // Setup the gamemode, Add any hooks that are gamemode specific
+    // Overlay any files that are gamemode specific
+    ModResult result = mods::hook_add_pre<CreateItem>(svc_hook, my_function_hook);
+    if (result != MOD_OK) {
+        return mods::set_error(outError, result, "failed to install fopAcM_createItem hook");
+    }
+    return MOD_OK;
+}
+
+ModResult on_game_mode_deactivated(void*, ModError* outError) {
+    // Uninstall any hooks that are gamemode specific
+    // Remove any file overlays that are gamemode specific
+    ModResult result = mods::hook_uninstall<CreateItem>();
+    if (result != MOD_OK) {
+        return mods::set_error(outError, result, "failed to uninstall fopAcM_createItem hook");
+    }
+    return MOD_OK;
+}
+
+ModResult on_save_loaded(void*, ModError*) {
+    // This function will be invoked by the game as a save is loaded
+    return MOD_OK;
+}
+
+const GameModeDesc gameModeDesc = {
+    .struct_size = sizeof(GameModeDesc),
+    .game_mode_id = MY_GAME_MODE_ID,
+    .full_name = "My Game Mode",
+    .save_name = "my-unique-save",
+    .user_data = nullptr,
+    .on_activated = on_game_mode_activated,
+    .on_deactivated = on_game_mode_deactivated,
+    .on_save_loaded = on_save_loaded,
+};
+svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
+```
+
+A game mode can also open UI for per-save settings when creating a new file. The state begins as
+`GAME_MODE_STATE_PENDING` and remains valid until the mod selects `PROCEED` or `RETURN`.
+
+```cpp
+IMPORT_SERVICE(GameModeService, svc_game_mode);
+IMPORT_SERVICE(UiService, svc_ui);
+
+ModResult on_new_save_select(void*, GameModeNewSaveState* state, ModError* outError) {
+    static GameModeNewSaveState* newSaveState;
+    static UiWindowHandle windowHandle;
+
+    newSaveState = state;
+
+    UiTabDesc tabs[1]{};
+
+    tabs[0].struct_size = sizeof(UiTabDesc);
+    tabs[0].title = "Play";
+    tabs[0].build = [](ModContext* ctx, UiWindowHandle, UiElementHandle leftPane, UiElementHandle rightPane, void*, ModError*) {
+        UiControlDesc desc = UI_CONTROL_DESC_INIT;
+        desc.kind = UI_CONTROL_BUTTON;
+        desc.label = "Play";
+        desc.help_rml = "Play Button";
+        desc.on_pressed = [](ModContext* ctx, void* userdata) {
+            *newSaveState = GAME_MODE_STATE_PROCEED;
+            svc_ui->window_close(ctx, *static_cast<UiWindowHandle*>(userdata));
+        };
+        desc.user_data = &windowHandle;
+        svc_ui->pane_add_control(mod_ctx, leftPane, &desc, nullptr);
+        return MOD_OK;
+    };
+
+    UiWindowDesc desc = UI_WINDOW_DESC_INIT;
+    desc.tabs = tabs;
+    desc.tab_count = 1;
+    desc.on_closed = [](ModContext *, UiWindowHandle, void *userdata) {
+        // If closing the window through backing out, return to file select
+        if (*newSaveState == GAME_MODE_STATE_PENDING) {
+            *newSaveState = GAME_MODE_STATE_RETURN;
+        }
+    };
+
+    ModResult result = svc_ui->window_push(mod_ctx, &desc, &windowHandle);
+    if (result != MOD_OK) {
+        return mods::set_error(outError, result, "failed to open new-save settings");
+    }
+    return MOD_OK;
+}
+
+const GameModeDesc gameModeDesc = {
+    .struct_size = sizeof(GameModeDesc),
+    .game_mode_id = "my-game-mode-id",
+    .full_name = "My Game Mode",
+    .save_name = "my-unique-save",
+    .on_new_save_select = on_new_save_select,
+};
+svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
+
+```
 
 ---
 
@@ -763,6 +1047,11 @@ For reference parameters (e.g. `const cXyz& pos`), `arg_ref<cXyz>` yields a dire
 
 Files placed under `overlay/` in the `.dusk` archive override game files at the corresponding path, equivalent to
 replacing files in the .iso. This requires no code: an archive with just `mod.json` and `overlay/` is a complete mod.
+To replace a file within an `.arc` archive, replace the archive suffix with a directory and place the replacement at
+its path within the archive.
+
+- `overlay/Audiores/Stream/menu_select.ast` replaces the main title's audio stream.
+- `overlay/res/Layout/main2D/main2d/timg/midona64.bti` replaces Midna's UI icon inside `main2D.arc`.
 
 Files placed under `textures/` register as texture replacements, and act just like the user's general
 `texture_replacements/` directory: Dolphin-style naming, matched by texture hash

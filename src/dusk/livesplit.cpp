@@ -1,46 +1,48 @@
 #if _WIN32
-    #include <winsock2.h>
-    #include <ws2tcpip.h>
-    using socket_t = SOCKET;
-    static void closeSocket(socket_t s) {
-        LINGER li{1, 0};
-        setsockopt(s, SOL_SOCKET, SO_LINGER, reinterpret_cast<const char*>(&li), sizeof(li));
-        closesocket(s);
-    }
-    static int socketError(socket_t s) {
-        int err = 0; int len = sizeof(err);
-        getsockopt(s, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&err), &len);
-        return err;
-    }
-    static constexpr int kSendFlags = 0;
+#include <winsock2.h>
+#include <ws2tcpip.h>
+using socket_t = SOCKET;
+static void closeSocket(socket_t s) {
+    LINGER li{1, 0};
+    setsockopt(s, SOL_SOCKET, SO_LINGER, reinterpret_cast<const char*>(&li), sizeof(li));
+    closesocket(s);
+}
+static int socketError(socket_t s) {
+    int err = 0;
+    int len = sizeof(err);
+    getsockopt(s, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&err), &len);
+    return err;
+}
+static constexpr int kSendFlags = 0;
 #else
-    #include <sys/socket.h>
-    #include <sys/select.h>
-    #include <netinet/in.h>
-    #include <arpa/inet.h>
-    #include <unistd.h>
-    #include <fcntl.h>
-    #include <errno.h>
-    using socket_t = int;
-    static void closeSocket(socket_t s) {
-        struct linger li{1, 0};
-        setsockopt(s, SOL_SOCKET, SO_LINGER, &li, sizeof(li));
-        close(s);
-    }
-    static int socketError(socket_t s) {
-        int err = 0; socklen_t len = sizeof(err);
-        getsockopt(s, SOL_SOCKET, SO_ERROR, &err, &len);
-        return err;
-    }
-    #ifndef INVALID_SOCKET
-        #define INVALID_SOCKET -1
-    #endif
+#include <arpa/inet.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <unistd.h>
+using socket_t = int;
+static void closeSocket(socket_t s) {
+    struct linger li{1, 0};
+    setsockopt(s, SOL_SOCKET, SO_LINGER, &li, sizeof(li));
+    close(s);
+}
+static int socketError(socket_t s) {
+    int err = 0;
+    socklen_t len = sizeof(err);
+    getsockopt(s, SOL_SOCKET, SO_ERROR, &err, &len);
+    return err;
+}
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
+#endif
 
-    #if defined(__APPLE__)
-        static constexpr int kSendFlags = 0;
-    #else
-        static constexpr int kSendFlags = MSG_NOSIGNAL;
-    #endif
+#if defined(__APPLE__)
+static constexpr int kSendFlags = 0;
+#else
+static constexpr int kSendFlags = MSG_NOSIGNAL;
+#endif
 #endif
 
 #include <cstdio>
@@ -49,18 +51,18 @@
 
 namespace dusk::speedrun {
 
-static bool     running           = false;
-static bool     startPending      = false;
-static uint64_t frameCount        = 0;
-static socket_t sock              = INVALID_SOCKET;
-static bool     wasLoading        = false;
-static bool     connected         = false;
-static bool     connectPending    = false;
-static bool     disconnectPending = false;
-static uint32_t idleProbeCounter  = 0;
-static uint32_t reconnectCounter  = 0;
-static char     storedHost[64]    = "127.0.0.1";
-static int      storedPort        = 16834;
+static bool running = false;
+static bool startPending = false;
+static uint64_t frameCount = 0;
+static socket_t sock = INVALID_SOCKET;
+static bool wasLoading = false;
+static bool connected = false;
+static bool connectPending = false;
+static bool disconnectPending = false;
+static uint32_t idleProbeCounter = 0;
+static uint32_t reconnectCounter = 0;
+static char storedHost[64] = "127.0.0.1";
+static int storedPort = 16834;
 
 static void sendCmd(const char* cmd) {
     if (sock == INVALID_SOCKET) {
@@ -122,9 +124,11 @@ void onGameFrame() {
 }
 
 void start() {
-    if (running) {
+    if (g_speedrunInfo.m_isRunStarted || running) {
         return;
     }
+    resetForSpeedrunMode();
+    g_speedrunInfo.startRun();
 
     running = true;
     startPending = true;
@@ -214,8 +218,16 @@ void disconnectLiveSplit() {
     connected = connectPending = disconnectPending = false;
 }
 
-bool consumeConnectedEvent()    { bool v = connectPending;    connectPending    = false; return v; }
-bool consumeDisconnectedEvent() { bool v = disconnectPending; disconnectPending = false; return v; }
+bool consumeConnectedEvent() {
+    bool v = connectPending;
+    connectPending = false;
+    return v;
+}
+bool consumeDisconnectedEvent() {
+    bool v = disconnectPending;
+    disconnectPending = false;
+    return v;
+}
 
 void updateLiveSplit() {
     if (sock == INVALID_SOCKET) {
@@ -267,7 +279,8 @@ void updateLiveSplit() {
 #else
                 || (r < 0 && errno != EAGAIN && errno != EWOULDBLOCK)
 #endif
-            ) {
+            )
+            {
                 if (connected) {
                     disconnectPending = true;
                 }
@@ -280,15 +293,12 @@ void updateLiveSplit() {
         return;
     }
 
-    const uint64_t totalMs  = frameCount * 1000 / 30;
+    const uint64_t totalMs = frameCount * 1000 / 30;
     const uint64_t totalSec = totalMs / 1000;
     char cmd[32];
     snprintf(cmd, sizeof(cmd), "setgametime %u:%02u:%02u.%03u",
-        static_cast<uint32_t>(totalSec / 3600),
-        static_cast<uint32_t>((totalSec / 60) % 60),
-        static_cast<uint32_t>(totalSec % 60),
-        static_cast<uint32_t>(totalMs % 1000)
-    );
+        static_cast<uint32_t>(totalSec / 3600), static_cast<uint32_t>((totalSec / 60) % 60),
+        static_cast<uint32_t>(totalSec % 60), static_cast<uint32_t>(totalMs % 1000));
     sendCmd(cmd);
 }
 
@@ -299,4 +309,4 @@ void shutdown() {
 #endif
 }
 
-}
+}  // namespace dusk::speedrun

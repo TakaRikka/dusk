@@ -9,7 +9,6 @@
 #include "imgui.h"
 #include <imgui_internal.h>
 
-#include "fmt/format.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiEngine.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -19,6 +18,7 @@
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/game_mode.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
 #include "dusk/presentation.hpp"
@@ -26,6 +26,7 @@
 #include "dusk/ui/ui.hpp"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
+#include "fmt/format.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
@@ -263,13 +264,6 @@ namespace dusk {
         }
         previousTurboActive = turboActive;
         previousSlowActive = slowDown;
-
-        if (frame_interp::get_ui_tick_pending() && mDoMain::developmentMode == 1 && (mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == (PAD_TRIGGER_R | PAD_TRIGGER_L) && mDoCPd_c::getTrigY(PAD_1)) {
-            getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
-        }
-        if (mDoMain::developmentMode != 1) {
-            getTransientSettings().moveLinkActive = false;
-        }
     }
 
     void ImGuiConsole::PreDraw() {
@@ -311,7 +305,7 @@ namespace dusk {
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
             m_isLaunchInitialized = true;
-            if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
+            if (dusk::speedrun::isActive() && getSettings().game.liveSplitEnabled) {
                 dusk::speedrun::connectLiveSplit();
             }
         }
@@ -383,7 +377,7 @@ namespace dusk {
 
         m_menuTools.ShowInputViewer();
 
-        if (dusk::IsGameLaunched && !dusk::getSettings().game.speedrunMode) {
+        if (dusk::IsGameLaunched && !dusk::speedrun::isActive()) {
             m_menuTools.ShowDebugOverlay();
             m_menuTools.ShowCameraOverlay();
             m_menuTools.ShowProcessManager();

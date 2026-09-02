@@ -12,6 +12,9 @@
 #include "d/actor/d_a_npc_gra.h"
 #include "d/actor/d_a_tag_gra.h"
 #include "Z2AudioLib/Z2Instances.h"
+#if TARGET_PC
+#include "mods/items.h"
+#endif
 #include <cstring>
 
 DUSK_GAME_DATA const daNpc_grA_HIOParam daNpc_grA_Param_c::m = {
@@ -1323,7 +1326,7 @@ BOOL daNpc_grA_c::isDelete() {
             return FALSE;
         }
         fopAcM_createItemForBoss(&current.pos, 0x21, fopAcM_GetRoomNo(this), NULL, NULL, 0.0f, 0.0f,
-                                 0x80);
+                                 0x80 IF_DUSK_ARG(ITEM_CHECK_GORON_SPRINGWATER_RUSH));
         return TRUE;
     }
     return TRUE;
@@ -2812,7 +2815,7 @@ BOOL daNpc_grA_c::ECut_carrySpaWater(int i_staffID) {
             c.y += 200.0f;
             csXyz c2(0, fopAcM_searchPlayerAngleY(this), 0);
             fopAcM_createItemForBoss(&c, 0x21, fopAcM_GetRoomNo(this), &c2, NULL, 0.0f, 20.0f,
-                                     0x80);
+                                     0x80 IF_DUSK_ARG(ITEM_CHECK_GORON_SPRINGWATER_RUSH));
         } break;
         }
     }
@@ -4019,14 +4022,16 @@ BOOL daNpc_grA_c::talk(void*) {
         if (r26 && talkProc(NULL, TRUE, NULL)) {
             if (mFlow.getEventId(&sp8) == 1) {
 #if TARGET_PC
-                const char* itemCheckName = nullptr;
+                u32 itemGiveTag = 0;
                 if (sp8 == dItemNo_BOMB_IN_BAG_e) {
-                    itemCheckName = "goron_reward:F_SP113";
-                    sp8 = dusk::mods::item_check(itemCheckName, sp8, this);
+                    const auto itemCheck =
+                        dusk::mods::item_check_commit("goron_reward:F_SP113", sp8, this);
+                    sp8 = itemCheck.itemNo;
+                    itemGiveTag = itemCheck.tag;
                 }
 #endif
                 field_0x1480 = fopAcM_createItemForPresentDemo(&current.pos, sp8, 0, -1, -1, NULL,
-                    NULL IF_DUSK_ARG(dusk::mods::item_give_tag(itemCheckName)));
+                    NULL IF_DUSK_ARG(itemGiveTag));
                 if (field_0x1480 != fpcM_ERROR_PROCESS_ID_e) {
                     s16 r25 = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
                     dComIfGp_getEvent()->reset(this);

@@ -226,6 +226,13 @@ bool JKRCompArchive::open(s32 entryNum) {
 
 void* JKRCompArchive::fetchResource(SDIFileEntry *fileEntry, u32 *pSize) {
     JUT_ASSERT(597, isMounted());
+
+#if TARGET_PC
+    if (void* data = getOverlayData(fileEntry, pSize); data != nullptr) {
+        return data;
+    }
+#endif
+
     u32 ptrSize;
     u32 size = fileEntry->data_size;
     int compression = JKRConvertAttrToCompressionType(u8(fileEntry->type_flags_and_name_offset >> 0x18));
@@ -274,6 +281,13 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
 {
     u32 size = 0;
     JUT_ASSERT(708, isMounted());
+
+#if TARGET_PC
+    if (copyOverlayData(data, compressedSize, fileEntry, pSize)) {
+        return data;
+    }
+#endif
+
     u32 fileSize = fileEntry->data_size;
     u32 alignedSize = ALIGN_NEXT(fileSize, 32);
     u32 fileFlag = fileEntry->type_flags_and_name_offset >> 0x18;
@@ -319,6 +333,7 @@ void *JKRCompArchive::fetchResource(void *data, u32 compressedSize, SDIFileEntry
 
 void JKRCompArchive::removeResourceAll() {
     if (mArcInfoBlock != NULL && mMountMode != MOUNT_MEM) {
+        IF_DUSK(removeAllOverlayResources();)
         SDIFileEntry* fileEntry = mFiles;
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
             int tmp = fileEntry->type_flags_and_name_offset >> 0x18;
@@ -336,6 +351,12 @@ void JKRCompArchive::removeResourceAll() {
 }
 
 bool JKRCompArchive::removeResource(void* resource) {
+#if TARGET_PC
+    if (removeOverlayResource(resource, true)) {
+        return true;
+    }
+#endif
+
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry)
         return false;
@@ -355,6 +376,12 @@ u32 JKRCompArchive::getExpandedResSize(const void *resource) const
     if (mExpandedSize == NULL) {
         return getResSize(resource);
     }
+
+#if TARGET_PC
+    if (u32 size; getOverlayResourceSize(resource, &size)) {
+        return size;
+    }
+#endif
 
     SDIFileEntry *fileEntry = findPtrResource(resource);
     if(!fileEntry) {

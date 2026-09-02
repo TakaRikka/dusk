@@ -5,15 +5,26 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include <cstdint>
 
+#if TARGET_PC
+#include "dusk/mods/svc/flow.hpp"
+#endif
+
 JMessage::TReference::~TReference() {}
 
 const char* JMessage::TReference::do_word(u32 param_0) const {
     return NULL;
 }
 
-JMessage::TProcessor::~TProcessor() {}
+JMessage::TProcessor::~TProcessor() {
+#if TARGET_PC
+    dusk::flow::release_message_processor(this);
+#endif
+}
 
 void JMessage::TProcessor::reset() {
+#if TARGET_PC
+    dusk::flow::release_message_processor(this);
+#endif
     on_resetStatus_(NULL);
     do_reset();
 }
@@ -44,6 +55,15 @@ const JMessage::TResource* JMessage::TProcessor::getResource_groupID(u16 u16Grou
 }
 
 u32 JMessage::TProcessor::toMessageCode_messageID(u32 uMsgID, u32 param_1, bool* pbValid) const {
+#if TARGET_PC
+    u32 customCode = 0;
+    if (dusk::flow::message_code_for_id(this, uMsgID, customCode)) {
+        if (pbValid != NULL) {
+            *pbValid = true;
+        }
+        return customCode;
+    }
+#endif
     const TResource* pResourceCache = (const TResource*)getResourceCache();
     if (pResourceCache != NULL) {
         u16 u16Index = pResourceCache->toMessageIndex_messageID(uMsgID, param_1, pbValid);
@@ -72,6 +92,74 @@ u32 JMessage::TProcessor::toMessageCode_messageID(u32 uMsgID, u32 param_1, bool*
 
     return 0xFFFFFFFF;
 }
+
+#if TARGET_PC
+void* JMessage::TProcessor::getMessageEntry_messageCode(u16 groupId, u16 index) const {
+    if (index >= dusk::flow::kCustomMessageMin) {
+        const TResource* customResource = NULL;
+        const void* customEntry = NULL;
+        const char* customText = NULL;
+        if (!dusk::flow::custom_message_for_processor(
+                NULL, this, index, customResource, customEntry, customText))
+        {
+            return NULL;
+        }
+        const_cast<TProcessor*>(this)->setResourceCache(const_cast<TResource*>(customResource));
+        return const_cast<void*>(customEntry);
+    }
+    const TResource* resource = getResource_groupID(groupId);
+    if (resource == NULL) {
+        return NULL;
+    }
+    void* nativeEntry = resource->getMessageEntry_messageIndex(index);
+    const char* nativeText =
+        nativeEntry != NULL ? resource->getMessageText_messageEntry(nativeEntry) : NULL;
+    const void* resolvedEntry = nativeEntry;
+    const char* resolvedText = nativeText;
+    dusk::flow::resolve_message(this, resource->oParse_THeader_.getRaw(), index, nativeEntry,
+        nativeText, resolvedEntry, resolvedText);
+    return const_cast<void*>(resolvedEntry);
+}
+
+const char* JMessage::TProcessor::getMessageText_messageCode(u16 groupId, u16 index) const {
+    if (index >= dusk::flow::kCustomMessageMin) {
+        const TResource* customResource = NULL;
+        const void* customEntry = NULL;
+        const char* customText = NULL;
+        if (!dusk::flow::custom_message_for_processor(
+                NULL, this, index, customResource, customEntry, customText))
+        {
+            return NULL;
+        }
+        const_cast<TProcessor*>(this)->setResourceCache(const_cast<TResource*>(customResource));
+        return customText;
+    }
+    const TResource* resource = getResource_groupID(groupId);
+    if (resource == NULL) {
+        return NULL;
+    }
+    const void* nativeEntry = resource->getMessageEntry_messageIndex(index);
+    const char* nativeText =
+        nativeEntry != NULL ? resource->getMessageText_messageEntry(nativeEntry) : NULL;
+    const void* resolvedEntry = nativeEntry;
+    const char* resolvedText = nativeText;
+    dusk::flow::resolve_message(this, resource->oParse_THeader_.getRaw(), index, nativeEntry,
+        nativeText, resolvedEntry, resolvedText);
+    return resolvedText;
+}
+
+const char* JMessage::TProcessor::on_message_limited(u16 index) const {
+    JUT_ASSERT(482, pResourceCache_!=NULL);
+    const void* nativeEntry = pResourceCache_->getMessageEntry_messageIndex(index);
+    const char* nativeText =
+        nativeEntry != NULL ? pResourceCache_->getMessageText_messageEntry(nativeEntry) : NULL;
+    const void* resolvedEntry = nativeEntry;
+    const char* resolvedText = nativeText;
+    dusk::flow::resolve_message(this, pResourceCache_->oParse_THeader_.getRaw(), index,
+        nativeEntry, nativeText, resolvedEntry, resolvedText);
+    return resolvedText;
+}
+#endif
 
 void JMessage::TProcessor::on_select_begin(char const* (*pfn)(JMessage::TProcessor*),
                                            void const* pOffset, char const* pcBase, u32 uNumber) {

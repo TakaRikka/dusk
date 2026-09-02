@@ -383,15 +383,18 @@ int daTbox2_c::setGetDemoItem() {
     u8 item_no = getItemNo();
 #if TARGET_PC
     int tboxNo = fopAcM_GetParamBit(this, 16, 8);
-    const u32 giveTag = dusk::mods::item_give_tag_chest(tboxNo);
-    item_no = dusk::mods::item_check_tagged(giveTag, mOriginalItemNo, this);
+    const auto itemCheck = dusk::mods::item_check_commit(
+        dusk::mods::item_give_tag_chest(tboxNo), mOriginalItemNo, this);
+    item_no = itemCheck.itemNo;
 #endif
 
     u32 partner_id;
     if (mReturnRupee) {
-        partner_id = fopAcM_createItemForPresentDemo(&current.pos, item_no, 1, -1, -1, NULL, NULL IF_DUSK_ARG(giveTag));
+        partner_id = fopAcM_createItemForPresentDemo(
+            &current.pos, item_no, 1, -1, -1, NULL, NULL IF_DUSK_ARG(itemCheck.tag));
     } else {
-        partner_id = fopAcM_createItemForTrBoxDemo(&current.pos, item_no, -1, -1, NULL, NULL IF_DUSK_ARG(giveTag));
+        partner_id = fopAcM_createItemForTrBoxDemo(
+            &current.pos, item_no, -1, -1, NULL, NULL IF_DUSK_ARG(itemCheck.tag));
     }
 
     if (partner_id != -1) {

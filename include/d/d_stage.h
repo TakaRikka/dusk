@@ -1351,6 +1351,9 @@ enum dStage_SaveTbl {
 
 const char* dStage_getName2(s16, s8);
 dStage_objectNameInf* dStage_searchName(const char*);
+#if TARGET_PC
+dStage_objectNameInf* dStage_searchNameCI(const char*);
+#endif
 static int dStage_stageKeepTresureInit(dStage_dt_c*, void*, int, void*);
 static int dStage_filiInfo2Init(dStage_dt_c*, void*, int, void*);
 static int dStage_mapPathInitCommonLayer(dStage_dt_c*, void*, int, void*);

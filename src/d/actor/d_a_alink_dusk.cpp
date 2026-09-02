@@ -113,6 +113,12 @@ void daAlink_c::handleQuickTransform() {
         return;
     }
 
+    // Ensure Link is not underwater
+    if (!checkNoResetFlg0(FLG0_SWIM_UP)) {
+        Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return;
+    }
+
     // Use the game's default checks for if the player can currently transform
     if (!m_midnaActor->checkMetamorphoseEnableBase()) {
         Z2GetAudioMgr()->seStart(Z2SE_SYS_ERROR, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);

@@ -46,8 +46,8 @@ extern "C" const unsigned char mod_meta_bounds_end[] __asm("section$end$__DATA$_
 #define MOD_META_BOUNDS_BEGIN (mod_meta_bounds_begin)
 #define MOD_META_BOUNDS_END (mod_meta_bounds_end)
 #else
-extern "C" const unsigned char __start_modmeta[];
-extern "C" const unsigned char __stop_modmeta[];
+extern "C" __attribute__((visibility("hidden"))) const unsigned char __start_modmeta[];
+extern "C" __attribute__((visibility("hidden"))) const unsigned char __stop_modmeta[];
 #define MOD_META_BOUNDS_DEFN
 #define MOD_META_BOUNDS_BEGIN (__start_modmeta)
 #define MOD_META_BOUNDS_END (__stop_modmeta)

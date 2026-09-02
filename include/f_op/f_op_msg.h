@@ -30,7 +30,7 @@ struct msg_class {
     /* 0xDC */ fopAc_ac_c* talk_actor;
     /* 0xE0 */ cXyz pos;
     /* 0xEC */ u32 msg_idx;
-    /* 0xF0 */ u32 field_0xf0;
+    /* 0xF0 */ u32 select_msg_idx;  // selection options message ID; 1000 = none
     /* 0xF4 */ u32 field_0xf4;
     /* 0xF8 */ u16 mode;
     /* 0xFA */ u8 select_idx;

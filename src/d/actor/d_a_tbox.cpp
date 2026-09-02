@@ -1391,8 +1391,9 @@ u8 daTbox_c::getBombItemNoMain(u8 i_itemNo) {
 int daTbox_c::setGetDemoItem() {
     u8 item_no = getItemNo();
 #if TARGET_PC
-    const u32 giveTag = dusk::mods::item_give_tag_chest(getTboxNo());
-    item_no = dusk::mods::item_check_tagged(giveTag, mOriginalItemNo, this);
+    const auto itemCheck = dusk::mods::item_check_commit(
+        dusk::mods::item_give_tag_chest(getTboxNo()), mOriginalItemNo, this);
+    item_no = itemCheck.itemNo;
 #endif
     if (item_no == dItemNo_BOMB_5_e || item_no == dItemNo_BOMB_10_e || item_no == dItemNo_BOMB_20_e || item_no == dItemNo_BOMB_30_e ||
         item_no == dItemNo_WATER_BOMB_5_e || item_no == dItemNo_WATER_BOMB_10_e || item_no == dItemNo_WATER_BOMB_20_e || item_no == dItemNo_WATER_BOMB_30_e ||
@@ -1404,10 +1405,10 @@ int daTbox_c::setGetDemoItem() {
     fpc_ProcID item_id;
     if (field_0x718) {
         item_id = fopAcM_createItemForPresentDemo(
-            &current.pos, item_no, 1, -1, -1, NULL, NULL IF_DUSK_ARG(giveTag));
+            &current.pos, item_no, 1, -1, -1, NULL, NULL IF_DUSK_ARG(itemCheck.tag));
     } else {
         item_id = fopAcM_createItemForTrBoxDemo(
-            &current.pos, item_no, -1, -1, NULL, NULL IF_DUSK_ARG(giveTag));
+            &current.pos, item_no, -1, -1, NULL, NULL IF_DUSK_ARG(itemCheck.tag));
     }
 
     if (item_id != fpcM_ERROR_PROCESS_ID_e) {

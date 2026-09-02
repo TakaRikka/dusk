@@ -363,10 +363,13 @@ int daTagStatue_c::demoProc() {
                 }
 
 #if TARGET_PC
-                item = dusk::mods::item_check_sky_character(item & 0xFF, this);
+                const auto itemCheck = dusk::mods::item_check_commit(
+                    dusk::mods::item_give_tag_sky_character(), item & 0xFF, this);
+                item = itemCheck.itemNo;
 #endif
-                mItemId = fopAcM_createItemForTrBoxDemo(&current.pos, item, -1,
-                    fopAcM_GetRoomNo(this), 0, 0 IF_DUSK_ARG(dusk::mods::item_give_tag_sky_character()));
+                mItemId =
+                    fopAcM_createItemForTrBoxDemo(&current.pos, item, -1, fopAcM_GetRoomNo(this), 0,
+                        0 IF_DUSK_ARG(itemCheck.tag));
 
                 JUT_ASSERT(580, mItemId != fpcM_ERROR_PROCESS_ID_e);
 

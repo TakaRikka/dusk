@@ -31,7 +31,7 @@ void fopMsgM_Delete(void* i_this) {
 }
 
 static fopMsg_prm_class* createAppend(fopAc_ac_c* i_talkActor, cXyz* i_pos, u32* i_msgIdx,
-                                      u32* param_3, fpc_ProcID param_4) {
+                                      u32* i_selectMsgIdx, fpc_ProcID param_4) {
     fopMsg_prm_class* append = (fopMsg_prm_class*)cMl::memalignB(-4, sizeof(fopMsg_prm_class));
     if (append == NULL) {
         return NULL;
@@ -46,10 +46,10 @@ static fopMsg_prm_class* createAppend(fopAc_ac_c* i_talkActor, cXyz* i_pos, u32*
         i_msgIdx = NULL;
     }
 
-    if (param_3 != NULL) {
-        append->field_0x14 = *param_3;
+    if (i_selectMsgIdx != NULL) {
+        append->select_msg_idx = *i_selectMsgIdx;
     } else {
-        param_3 = NULL;
+        i_selectMsgIdx = NULL;
     }
 
     if (i_pos != NULL) {
@@ -73,7 +73,7 @@ static fopMsg_prm_timer* createTimerAppend(int i_mode, u32 i_limitMs, u8 i_type,
 
     appen->talk_actor = NULL;
     appen->msg_idx = 0;
-    appen->field_0x14 = 0;
+    appen->select_msg_idx = 0;
     appen->pos = cXyz(0.0f, 0.0f, 0.0f);
     appen->field_0x18 = param_8;
     appen->timer_mode = i_mode;
@@ -88,9 +88,9 @@ static fopMsg_prm_timer* createTimerAppend(int i_mode, u32 i_limitMs, u8 i_type,
 }
 
 fpc_ProcID fopMsgM_create(s16 i_procName, fopAc_ac_c* i_talkActor, cXyz* i_pos, u32* i_msgIdx,
-                          u32* param_4, FastCreateReqFunc i_createFunc) {
+                          u32* i_selectMsgIdx, FastCreateReqFunc i_createFunc) {
     fopMsg_prm_class* append =
-        createAppend(i_talkActor, i_pos, i_msgIdx, param_4, fpcM_ERROR_PROCESS_ID_e);
+        createAppend(i_talkActor, i_pos, i_msgIdx, i_selectMsgIdx, fpcM_ERROR_PROCESS_ID_e);
     if (append == NULL) {
         return fpcM_ERROR_PROCESS_ID_e;
     }
@@ -115,7 +115,7 @@ void dummySet() {
     csXyz().set(0, 0, 0);
 }
 
-fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_talkActor, u32 param_2) {
+fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_talkActor, u32 i_selectMsgIdx) {
     if (dComIfGp_isHeapLockFlag() == 8) {
         dMeter2Info_getMeterClass()->emphasisButtonDelete();
     }
@@ -146,16 +146,16 @@ fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, fopAc_ac_c* i_talkActor, u32 param_2
     if (msg != NULL && msg->mode == fopMsg_MODE_MSG_PREPARING_e) {
         msg->pos.set(pos);
         msg->msg_idx = i_msgIdx;
-        msg->field_0xf0 = param_2;
+        msg->select_msg_idx = i_selectMsgIdx;
         msg->talk_actor = i_talkActor;
-        msg->setMessageIndex(i_msgIdx, param_2, false);
+        msg->setMessageIndex(i_msgIdx, i_selectMsgIdx, false);
         return i_msgID;
     }
 
     return 0;
 }
 
-fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, u32 param_1) {
+fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, u32 i_selectMsgIdx) {
     if (dComIfGp_isHeapLockFlag() == 8) {
         dMeter2Info_getMeterClass()->emphasisButtonDelete();
     }
@@ -177,15 +177,15 @@ fpc_ProcID fopMsgM_messageSet(u32 i_msgIdx, u32 param_1) {
         if (msg->mode == fopMsg_MODE_MSG_PREPARING_e) {
             msg->pos.set(pos);
             msg->msg_idx = i_msgIdx;
-            msg->field_0xf0 = param_1;
+            msg->select_msg_idx = i_selectMsgIdx;
             msg->talk_actor = actor;
             msg->setTalkPartner(NULL);
-            msg->setMessageIndex(i_msgIdx, param_1, false);
+            msg->setMessageIndex(i_msgIdx, i_selectMsgIdx, false);
             return i_msgID;
         } else if (msg->mode == fopMsg_MODE_MSG_CONTINUE_e) {
             msg->pos.set(pos);
             msg->msg_idx = i_msgIdx;
-            msg->field_0xf0 = param_1;
+            msg->select_msg_idx = i_selectMsgIdx;
             msg->talk_actor = actor;
             return i_msgID;
         }
@@ -217,7 +217,7 @@ fpc_ProcID fopMsgM_messageSetDemo(u32 i_msgidx) {
     if (msg != NULL && msg->mode == fopMsg_MODE_MSG_PREPARING_e) {
         msg->pos.set(pos);
         msg->msg_idx = i_msgidx;
-        msg->field_0xf0 = 1000;
+        msg->select_msg_idx = 1000;
         msg->talk_actor = NULL_;
         msg->setMessageIndexDemo(i_msgidx, false);
         return i_msgID;

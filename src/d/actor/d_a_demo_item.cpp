@@ -449,7 +449,7 @@ int daDitem_c::Delete() {
 
     endInsectEffect();
     mSound.deleteObject();
-    return DeleteBase(dItem_data::getArcName(m_itemNo));
+    return DeleteBase(dItem_data::getArcName(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo)));
 }
 
 static int daDitem_Delete(daDitem_c* i_this) {
@@ -461,8 +461,16 @@ int daDitem_c::create() {
 
     m_itemNo = daDitem_prm::getNo(this);
 
+#if TARGET_PC
+    const auto [item, displayItem] = dusk::mods::item_check_resolve(mItemGiveTag, m_itemNo, this);
+    m_itemNo = item;
+    setDisplayItemNo(displayItem);
+    const char* arc_name = dItem_data::getArcName(displayItem);
+    s16 bmd_name = dItem_data::getBmdName(displayItem);
+#else
     const char* arc_name = dItem_data::getArcName(m_itemNo);
     s16 bmd_name = dItem_data::getBmdName(m_itemNo);
+#endif
 
     if (bmd_name < 0 || arc_name == NULL) {
         if (bmd_name == 0) {
@@ -476,9 +484,13 @@ int daDitem_c::create() {
         }
 
         m_itemNo = dItemNo_GREEN_RUPEE_e;
+#if TARGET_PC
+        setDisplayItemNo(dItemNo_NONE_e);
+#endif
     }
 
-    int phase_state = dComIfG_resLoad(&mPhase, dItem_data::getArcName(m_itemNo));
+    int phase_state = dComIfG_resLoad(
+        &mPhase, dItem_data::getArcName(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo)));
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckItemCreateHeap, 0x80003390)) {
             return cPhs_ERROR_e;

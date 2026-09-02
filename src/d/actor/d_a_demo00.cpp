@@ -1090,6 +1090,13 @@ inline int daDemo00_c::execute() {
                             break;
                         }
                         case 1:
+#if TARGET_PC
+                            // Suppress demo22_01's M_077 write. On Dusklight, the transform flag
+                            // is set by the Shadow Crystal item.
+                            if (dSv_event_flag_c::saveBitLabels[sp0E] == dSv_event_flag_c::M_077) {
+                                break;
+                            }
+#endif
                             dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[sp0E]);
                             break;
 

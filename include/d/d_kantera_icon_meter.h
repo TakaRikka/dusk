@@ -30,7 +30,7 @@ public:
 
     void drawSelf() { mpKanteraIcon->draw(); }
 
-private:
+// private:
     /* 0x04 */ dDlst_KanteraIcon_c* mpKanteraIcon;
     /* 0x08 */ CPaneMgr* mpParent;
     /* 0x0C */ CPaneMgr* mpGauge;
