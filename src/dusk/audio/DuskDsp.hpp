@@ -12,8 +12,15 @@ namespace dusk::audio {
     constexpr int SampleRate = 32000;
 
     enum class OutputChannel : u8 {
-        LEFT,
-        RIGHT,
+        // same as SDL channel layout for 7.1
+        FRONT_LEFT,
+        FRONT_RIGHT,
+        FRONT_CENTER,
+        LFE,
+        REAR_LEFT,
+        REAR_RIGHT,
+        SURROUND_LEFT,
+        SURROUND_RIGHT,
         OutputChannel_MAX
     };
 
@@ -126,4 +133,5 @@ namespace dusk::audio {
     extern bool DumpAudio;
     extern bool EnableHrtf;
     extern f32 HrtfGain;
+    extern u8 OutChannelCount;
 }

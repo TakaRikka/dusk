@@ -25,13 +25,13 @@ UserSettings g_userSettings = {
     },
 
     .audio = {
+        .outputMode {"audio.outputMode", AudioOutputMode::StereoSpeakers},
         .masterVolume {"audio.masterVolume", 60},
         .mainMusicVolume {"audio.mainMusicVolume", 100},
         .subMusicVolume {"audio.subMusicVolume", 100},
         .soundEffectsVolume {"audio.soundEffectsVolume", 100},
         .fanfareVolume {"audio.fanfareVolume", 100},
         .enableReverb {"audio.enableReverb", true},
-        .enableHrtf {"audio.enableHrtf", false},
         .menuSounds {"audio.menuSounds", true},
     },
 
@@ -256,13 +256,13 @@ void registerSettings() {
         [](const int&, const int&) { dusk::ui::apply_scale(); });
 
     // Audio
+    Register(g_userSettings.audio.outputMode);
     Register(g_userSettings.audio.masterVolume);
     Register(g_userSettings.audio.mainMusicVolume);
     Register(g_userSettings.audio.subMusicVolume);
     Register(g_userSettings.audio.soundEffectsVolume);
     Register(g_userSettings.audio.fanfareVolume);
     Register(g_userSettings.audio.enableReverb);
-    Register(g_userSettings.audio.enableHrtf);
     Register(g_userSettings.audio.menuSounds);
 
     // Game

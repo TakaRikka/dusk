@@ -50,7 +50,7 @@ bool dusk::audio::EnableReverb = true;
 bool dusk::audio::DumpAudio = false;
 bool dusk::audio::EnableHrtf = false;
 f32 dusk::audio::HrtfGain = 0.5f;
-
+u8 dusk::audio::OutChannelCount = 0;
 
 // 3dB at 5kHz.
 static constexpr f32 HRTF_LP_K     = 0.75f;
@@ -512,10 +512,10 @@ static void ApplyPanning(
 
             switch (outChannel.mBusConnect) {
                 case 0x0D00:
-                    ch = OutputChannel::LEFT;
+                    ch = OutputChannel::FRONT_LEFT;
                     break;
                 case 0x0D60:
-                    ch = OutputChannel::RIGHT;
+                    ch = OutputChannel::FRONT_RIGHT;
                     break;
                 default:
                     break;
