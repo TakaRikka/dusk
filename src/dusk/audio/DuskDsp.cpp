@@ -102,13 +102,6 @@ static u32 ConvertSamplesToDataLength(const JASDsp::TChannel& channel, u32 sampl
 }
 
 /**
- * Converts a pitch value on a DSP channel to a sample rate.
- */
-constexpr static int PitchToSampleRate(u16 value) {
-    return static_cast<int>(static_cast<u64>(SampleRate) * value / 4096);
-}
-
-/**
  * Reset state for a DSP channel between independent playbacks.
  */
 static void ResetChannel(JASDsp::TChannel& channel, ChannelAuxData& aux) {
@@ -398,7 +391,7 @@ static void RenderChannel(
     }
 
     // how many input samples we step per output sample, aka the resampling ratio
-    f32 step = (f32)PitchToSampleRate(channel.mPitch) / SampleRate;
+    auto step = static_cast<f32>(channel.mPitch) / 4096.0f;
 
     // how many input samples to resample to DSP_SUBFRAME_SIZE output samples
     int needed = static_cast<int>(channelAux.resamplePos + DSP_SUBFRAME_SIZE * step) + 2;
