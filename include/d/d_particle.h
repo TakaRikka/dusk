@@ -312,7 +312,7 @@ public:
             u16 getNameId() { return mNameId; }
             dPa_levelEcallBack* getCallback() { return mCallback; }
 
-                    /* 0x00 */ u32 mId;
+            /* 0x00 */ u32 mId;
             /* 0x04 */ u16 mNameId;
             /* 0x06 */ u8 mStatus;
             /* 0x08 */ JPABaseEmitter* mEmitter;
