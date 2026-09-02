@@ -102,21 +102,6 @@ static u32 ConvertSamplesToDataLength(const JASDsp::TChannel& channel, u32 sampl
 }
 
 /**
- * Render the audio data contributed by a single DSP channel. Reads & decodes new input samples.
- */
-static void RenderChannel(
-    JASDsp::TChannel& channel,
-    ChannelAuxData& channelAux,
-    OutputSubframe& subframe);
-
-static void RenderOutputChannel(
-    const JASDsp::TChannel& sourceChannel,
-    ChannelAuxData& aux,
-    OutputChannel outputChannel,
-    const std::span<f32> inputSamples,
-    OutputSubframe& fullOutputSubframe);
-
-/**
  * Converts a pitch value on a DSP channel to a sample rate.
  */
 constexpr static int PitchToSampleRate(u16 value) {
@@ -203,16 +188,14 @@ static void GenerateEvolvingHarmonic() {
     }
 }
 
-
 static void RenderOscChannel(
     JASDsp::TChannel& channel,
     ChannelAuxData& channelAux,
-    OutputSubframe& subframe) {
+    DspSubframe& buf) {
     if (channel.mResetFlag)
         ResetChannel(channel, channelAux);
 
     const u32 pitch = channel.mPitch;
-    DspSubframe buf = {};
     const auto oscType = static_cast<OscType>(channel.mBytesPerBlock);
 
     switch (oscType) {
@@ -270,142 +253,6 @@ static void RenderOscChannel(
         DuskLog.error("RenderOscChannel: unimplemented oscillator type {}", channel.mBytesPerBlock);
         break;
     }
-
-    auto samples = std::span(buf).subspan(0, DSP_SUBFRAME_SIZE);
-    RenderOutputChannel(channel, channelAux, OutputChannel::LEFT,  samples, subframe);
-    RenderOutputChannel(channel, channelAux, OutputChannel::RIGHT, samples, subframe);
-}
-
-
-void dusk::audio::DspRender(OutputSubframe& subframe) {
-    ZoneScoped;
-    if (DumpAudio != sDumpWasActive) {
-        sDumpWasActive = DumpAudio;
-        if (DumpAudio) {
-            OpenChannelDumpFiles();
-        } else {
-            CloseChannelDumpFiles();
-        }
-    }
-
-    GenerateEvolvingHarmonic();
-
-    std::span channels(JASDsp::CH_BUF, DSP_CHANNELS);
-
-    DspSubframe reverbInputL = {};
-    DspSubframe reverbInputR = {};
-    bool anyReverbInput = false;
-
-    DspSubframe surroundBus = {};
-    bool anySurroundInput = false;
-
-    for (int i = 0; i < channels.size(); i++) {
-        auto& channel = channels[i];
-        auto& channelAux = ChannelAux[i];
-
-        if (!channel.mIsActive) {
-            continue;
-        }
-        else if (channel.mPauseFlag) {
-            // Not really sure what the practical difference between pause and
-            // deactivation is. Either avoids clearing state or allows the DSP to avoid popping?
-            continue;
-        }
-        else if (channel.mForcedStop) {
-            channel.mIsFinished = true;
-            continue;
-        }
-
-        OutputSubframe channelSubframe = {};
-        if (channel.mWaveAramAddress == 0) {
-            RenderOscChannel(channel, channelAux, channelSubframe);
-        } else {
-            ValidateChannel(channel);
-            RenderChannel(channel, channelAux, channelSubframe);
-        }
-
-        if (EnableReverb) {
-            // scale the input to the reverb rather than using wet/dry on the output.
-            // this way the reverb's internal buffers accumulate energy proportional to mAutoMixerFxMix,
-            // so any tail always decays at the correct level regardless of mAutoMixerFxMix changes
-            // prevents transients when the next sound starts playing with a different reverb level
-            // 600.0f was pulled out of my ass and just sounds good enough for console
-            f32 inputGain = (channel.mAutoMixerFxMix >> 8) / 600.0f;
-            if (inputGain > 0) {
-                anyReverbInput = true;
-                for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-                    reverbInputL[j] += channelSubframe.channels[0][j] * inputGain;
-                    reverbInputR[j] += channelSubframe.channels[1][j] * inputGain;
-                }
-            }
-        }
-
-        if (EnableHrtf && channel.mAutoMixerBeenSet) {
-            f32 dolby = (channel.mAutoMixerPanDolby & 0xFF) / 127.0f;
-            if (dolby > 0.0f) {
-                anySurroundInput = true;
-                f32 extract = dolby * HRTF_EXTRACT_MAX;
-                f32 frontScale = 1.0f - extract;
-                for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-                    f32 mono = (channelSubframe.channels[0][j] + channelSubframe.channels[1][j]) * 0.5f;
-                    surroundBus[j] += mono * extract;
-                    channelSubframe.channels[0][j] *= frontScale;
-                    channelSubframe.channels[1][j] *= frontScale;
-                }
-            }
-        }
-
-        if (DumpAudio && sChannelDumpFiles[i]) {
-            f32 interleaved[DSP_SUBFRAME_SIZE * 2];
-            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-                interleaved[j * 2 + 0] = channelSubframe.channels[0][j];
-                interleaved[j * 2 + 1] = channelSubframe.channels[1][j];
-            }
-            fwrite(interleaved, sizeof(f32), DSP_SUBFRAME_SIZE * 2, sChannelDumpFiles[i]);
-        }
-
-        for (int o = 0; o < subframe.channels.size(); o++) {
-            MixSubframe(subframe.channels[o], channelSubframe.channels[o]);
-        }
-    }
-
-    if (EnableReverb && (anyReverbInput || ReverbHasTail)) {
-        // Equivalent to -80 dBFS: rms = 1e-4, rms^2 = 1e-8, sumSq = 2 * N * 1e-8
-        constexpr f32 REVERB_ENERGY_EPSILON = 2.0f * DSP_SUBFRAME_SIZE * 1e-8f;
-        f32 wetEnergy = SharedReverb.processmix(
-            reverbInputL.data(), reverbInputR.data(),
-            subframe.channels[0].data(), subframe.channels[1].data(),
-            DSP_SUBFRAME_SIZE, 1, 1.0f
-        );
-        ReverbHasTail = wetEnergy >= REVERB_ENERGY_EPSILON;
-    }
-
-    if (EnableHrtf && anySurroundInput) {
-        // Two-pole LPF: -12 dB/oct above 3 kHz
-        for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-            sHrtfLp1 = (1.0f - HRTF_LP_K) * sHrtfLp1 + HRTF_LP_K * surroundBus[j];
-            sHrtfLp2 = (1.0f - HRTF_LP_K) * sHrtfLp2 + HRTF_LP_K * sHrtfLp1;
-            surroundBus[j] = sHrtfLp2;
-        }
-
-        // Mix into L and R
-        // L gets the filtered signal directly; R gets it allpass for mild decorrelation
-        for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
-            f32 s = surroundBus[j];
-
-            subframe.channels[0][j] += s * HrtfGain;
-
-            f32 r = -HRTF_ALLPASS_G * s + sHrtfApIn1 + HRTF_ALLPASS_G * sHrtfApOut1;
-            sHrtfApIn1  = s;
-            sHrtfApOut1 = r;
-            subframe.channels[1][j] += r * HrtfGain;
-        }
-    }
-
-    for (auto& channel : subframe.channels) {
-        ApplyVolume(channel, channel, PrevMasterVolume, MasterVolume);
-    }
-    PrevMasterVolume = MasterVolume;
 }
 
 /**
@@ -539,128 +386,12 @@ static void FillDecodeBuf(JASDsp::TChannel& channel, ChannelAuxData& aux, int ne
 }
 
 /**
- * Get the expected BusConnect value needed to define the given output channel in a DSP channel.
- */
-constexpr u16 GetBusConnect(const OutputChannel channel) {
-    switch (channel) {
-    // TODO: This is a guess for now.
-    case OutputChannel::LEFT:
-        return 0x0D00;
-    case OutputChannel::RIGHT:
-        return 0x0D60;
-    default:
-        CRASH("Invalid output channel!");
-    }
-}
-
-/**
- * For a DSP channel the JASDsp::OutputChannelConfig value targeting the given output channel.
- * Returns null if the DSP channel does not output to this output channel.
- */
-static const JASDsp::OutputChannelConfig* GetOutputConfig(
-    const JASDsp::TChannel& sourceChannel,
-    OutputChannel channel) {
-
-    auto busConnect = GetBusConnect(channel);
-    for (const auto& mOutputChannel : sourceChannel.mOutputChannels) {
-        auto config = &mOutputChannel;
-        if (config->mBusConnect == busConnect) {
-            return config;
-        }
-    }
-
-    return nullptr;
-}
-
-struct VolumeValue {
-    f32 Target;
-    f32 Init;
-};
-
-/**
- * Get the volume that the given DSP channel should render to the given output channel at.
- */
-static VolumeValue GetVolumeForOutputChannel(
-    const JASDsp::TChannel& sourceChannel,
-    OutputChannel outputChannel) {
-
-    u16 volume;
-    u16 initVolume;
-    f32 panValue = 1;
-    if (sourceChannel.mAutoMixerBeenSet) {
-        volume = sourceChannel.mAutoMixerVolume;
-        initVolume = sourceChannel.mAutoMixerInitVolume;
-
-        auto autoMixerPan = static_cast<f32>(sourceChannel.mAutoMixerPanDolby >> 8) / 127;
-
-        switch (outputChannel) {
-            case OutputChannel::LEFT:
-                panValue = 1 - autoMixerPan;
-                break;
-            case OutputChannel::RIGHT:
-                panValue = autoMixerPan;
-                break;
-            default:
-                CRASH("Unhandled output channel: OutputChannel");
-        }
-
-    } else {
-        auto config = GetOutputConfig(sourceChannel, outputChannel);
-        if (config == nullptr) {
-            return {0, 0};
-        }
-
-        volume = config->mTargetVolume;
-        initVolume = config->mCurrentVolume;
-    }
-
-    // TODO: interpolate to avoid popping.
-    f32 targetRatio = VolumeFromU16(volume);
-    targetRatio *= panValue;
-
-    f32 initRatio = VolumeFromU16(initVolume);
-    initRatio *= panValue;
-
-    return {targetRatio, initRatio};
-}
-
-/**
- * Given decoded & resampled input samples, render a DSP channel to a given output channel.
- */
-static void RenderOutputChannel(
-    const JASDsp::TChannel& sourceChannel,
-    ChannelAuxData& aux,
-    OutputChannel outputChannel,
-    const std::span<f32> inputSamples,
-    OutputSubframe& fullOutputSubframe) {
-
-    auto& outputSubframe = fullOutputSubframe[outputChannel];
-    assert(inputSamples.size() <= outputSubframe.size());
-
-    auto volume = GetVolumeForOutputChannel(sourceChannel, outputChannel);
-
-    f32 targetVolume = volume.Target;
-    auto& prevVolume = aux.PrevVolume(outputChannel);
-    if (std::isnan(prevVolume)) {
-        // Initialize previous volume to new volume on first render.
-        prevVolume = volume.Init;
-    }
-
-    if (prevVolume == 0 && targetVolume == 0) {
-        return;
-    }
-
-    ApplyVolume(outputSubframe, inputSamples, prevVolume, targetVolume);
-    prevVolume = targetVolume;
-}
-
-/**
- * Fetch, decode, resample, output
+ * Render the audio data contributed by a single DSP channel. Reads & decodes new input samples.
  */
 static void RenderChannel(
     JASDsp::TChannel& channel,
     ChannelAuxData& channelAux,
-    OutputSubframe& subframe) {
+    DspSubframe& buf) {
 
     if (channel.mResetFlag) {
         ResetChannel(channel, channelAux);
@@ -679,7 +410,6 @@ static void RenderChannel(
         channel.mIsFinished = true;
     }
 
-    DspSubframe audioLoadBuffer = {};
     f32 pos = channelAux.resamplePos;
     s16 prev = channelAux.resamplePrev;
     s16 next = channelAux.decodeBufCount > 0 ? channelAux.decodeBuf[0] : prev;
@@ -687,7 +417,7 @@ static void RenderChannel(
 
     // linear resampling and f32 conversion
     for (int i = 0; i < DSP_SUBFRAME_SIZE; i++) {
-        audioLoadBuffer[i] = (prev + pos * (next - prev)) / 32768.0f;
+        buf[i] = (prev + pos * (next - prev)) / 32768.0f;
         pos += step;
         while (pos >= 1.0f) {
             pos -= 1.0f;
@@ -705,7 +435,7 @@ static void RenderChannel(
 
     // IIR part 1, low-pass: out[n] = (in[n] - in[n-1]) * (coeff/128) + out[n-1]
     if (s16 coeff = channel.iir_filter_params[4]; coeff != 0) {
-        for (f32& sample : audioLoadBuffer) {
+        for (f32& sample : buf) {
             f32 out = std::clamp(
                 (sample - channelAux.prev_lp_in) * ((f32)coeff / 128.0f) + channelAux.prev_lp_out, -1.0f, 1.0f
             );
@@ -717,7 +447,7 @@ static void RenderChannel(
 
     // IIR part 2, biquad: out[n] = (b1*in[n-1] + b2*in[n-2] + a1*out[n-1] + a2*out[n-2]) / 32768
     if ((channel.mFilterMode & 0x20) != 0) {
-        for (f32& sample : audioLoadBuffer) {
+        for (f32& sample : buf) {
             f32 out = std::clamp((
                 channel.iir_filter_params[0] * channelAux.biq_in1  + // b1
                 channel.iir_filter_params[1] * channelAux.biq_in2  + // b2
@@ -740,28 +470,16 @@ static void RenderChannel(
     }
 
     channelAux.decodeBufCount = std::max(0, remainingDecodeBuf);
-
-    auto hasReadSamples = std::span(audioLoadBuffer).subspan(0, DSP_SUBFRAME_SIZE);
-
-    static_assert(OutputSubframe::NUM_CHANNELS == 2, "Keep RenderChannel in sync!");
-
-    RenderOutputChannel(channel, channelAux, OutputChannel::LEFT, hasReadSamples, subframe);
-    RenderOutputChannel(channel, channelAux, OutputChannel::RIGHT, hasReadSamples, subframe);
 }
 
-void dusk::audio::DspInit() {
-    SharedReverb.setwet(1.0f);
-    SharedReverb.setdry(0.0f);
-    SharedReverb.setroomsize(0.5f);
-    SharedReverb.setdamp(0.7f);
-    SharedReverb.setwidth(1.0f);
-    SharedReverb.setmode(0.0f);
-    SharedReverb.mute();
-}
+struct VolumeValue {
+    f32 Target;
+    f32 Init;
+};
 
-void dusk::audio::ApplyVolume(
+static void ApplyVolume(
     std::span<f32> dst,
-    const std::span<f32> src,
+    std::span<const f32> src,
     const f32 startVolume,
     const f32 endVolume) {
     assert(dst.size() >= src.size());
@@ -776,4 +494,209 @@ void dusk::audio::ApplyVolume(
             dst[i] = src[i] * (startVolume + i * step);
         }
     }
+}
+
+static void ApplyPanning(
+    const JASDsp::TChannel& voice,
+    ChannelAuxData& aux,
+    const DspSubframe& input,
+    OutputSubframe& output)
+{
+    std::array<VolumeValue, OutputSubframe::NUM_CHANNELS> volumes = {};
+
+    if (voice.mAutoMixerBeenSet) {
+        const auto volume = VolumeFromU16(voice.mAutoMixerVolume);
+        const auto initVolume = VolumeFromU16(voice.mAutoMixerInitVolume);
+
+        const auto right = static_cast<f32>(voice.mAutoMixerPanDolby >> 8) / 127.0f;
+        const auto left = 1.0f - right;
+
+        volumes[0] = {left * volume, left * initVolume};
+        volumes[1] = {right * volume, right * initVolume};
+    } else {
+        for (const auto& outChannel : voice.mOutputChannels) {
+            std::optional<OutputChannel> ch;
+
+            switch (outChannel.mBusConnect) {
+                case 0x0D00:
+                    ch = OutputChannel::LEFT;
+                    break;
+                case 0x0D60:
+                    ch = OutputChannel::RIGHT;
+                    break;
+                default:
+                    break;
+            }
+
+            if (ch) {
+                auto& v = volumes[static_cast<size_t>(*ch)];
+                v.Target = VolumeFromU16(outChannel.mTargetVolume);
+                v.Init = VolumeFromU16(outChannel.mCurrentVolume);
+            }
+        }
+    }
+
+    for (size_t i = 0; i < OutputSubframe::NUM_CHANNELS; i++) {
+        const auto ch = static_cast<OutputChannel>(i);
+        const auto& volume = volumes[i];
+
+        const f32 targetVolume = volume.Target;
+        auto& prevVolume = aux.PrevVolume(ch);
+
+        if (std::isnan(prevVolume)) {
+            // Initialize previous volume to new volume on first render.
+            prevVolume = volume.Init;
+        }
+
+        if (prevVolume == 0 && targetVolume == 0) {
+            continue;
+        }
+
+        ApplyVolume(output[ch], input, prevVolume, targetVolume);
+        prevVolume = targetVolume;
+    }
+}
+
+void dusk::audio::DspInit() {
+    SharedReverb.setwet(1.0f);
+    SharedReverb.setdry(0.0f);
+    SharedReverb.setroomsize(0.5f);
+    SharedReverb.setdamp(0.7f);
+    SharedReverb.setwidth(1.0f);
+    SharedReverb.setmode(0.0f);
+    SharedReverb.mute();
+}
+
+void dusk::audio::DspRender(OutputSubframe& subframe) {
+    ZoneScoped;
+    if (DumpAudio != sDumpWasActive) {
+        sDumpWasActive = DumpAudio;
+        if (DumpAudio) {
+            OpenChannelDumpFiles();
+        } else {
+            CloseChannelDumpFiles();
+        }
+    }
+
+    GenerateEvolvingHarmonic();
+
+    std::span voices(JASDsp::CH_BUF, DSP_CHANNELS);
+
+    DspSubframe reverbInputL = {};
+    DspSubframe reverbInputR = {};
+    bool anyReverbInput = false;
+
+    DspSubframe surroundBus = {};
+    bool anySurroundInput = false;
+
+    for (int i = 0; i < voices.size(); i++) {
+        auto& voice = voices[i];
+        auto& aux = ChannelAux[i];
+
+        if (!voice.mIsActive) {
+            continue;
+        }
+        else if (voice.mPauseFlag) {
+            // Not really sure what the practical difference between pause and
+            // deactivation is. Either avoids clearing state or allows the DSP to avoid popping?
+            continue;
+        }
+        else if (voice.mForcedStop) {
+            voice.mIsFinished = true;
+            continue;
+        }
+
+        DspSubframe monoBuf = {};
+        if (voice.mWaveAramAddress == 0) {
+            RenderOscChannel(voice, aux, monoBuf);
+        } else {
+            ValidateChannel(voice);
+            RenderChannel(voice, aux, monoBuf);
+        }
+
+        OutputSubframe buf = {};
+        ApplyPanning(voice, aux, monoBuf, buf);
+
+        if (EnableReverb) {
+            // scale the input to the reverb rather than using wet/dry on the output.
+            // this way the reverb's internal buffers accumulate energy proportional to mAutoMixerFxMix,
+            // so any tail always decays at the correct level regardless of mAutoMixerFxMix changes
+            // prevents transients when the next sound starts playing with a different reverb level
+            // 600.0f was pulled out of my ass and just sounds good enough for console
+            f32 inputGain = (voice.mAutoMixerFxMix >> 8) / 600.0f;
+            if (inputGain > 0) {
+                anyReverbInput = true;
+                for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                    reverbInputL[j] += buf.channels[0][j] * inputGain;
+                    reverbInputR[j] += buf.channels[1][j] * inputGain;
+                }
+            }
+        }
+
+        if (EnableHrtf && voice.mAutoMixerBeenSet) {
+            f32 dolby = (voice.mAutoMixerPanDolby & 0xFF) / 127.0f;
+            if (dolby > 0.0f) {
+                anySurroundInput = true;
+                f32 extract = dolby * HRTF_EXTRACT_MAX;
+                f32 frontScale = 1.0f - extract;
+                for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                    f32 mono = (buf.channels[0][j] + buf.channels[1][j]) * 0.5f;
+                    surroundBus[j] += mono * extract;
+                    buf.channels[0][j] *= frontScale;
+                    buf.channels[1][j] *= frontScale;
+                }
+            }
+        }
+
+        if (DumpAudio && sChannelDumpFiles[i]) {
+            f32 interleaved[DSP_SUBFRAME_SIZE * 2];
+            for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+                interleaved[j * 2 + 0] = buf.channels[0][j];
+                interleaved[j * 2 + 1] = buf.channels[1][j];
+            }
+            fwrite(interleaved, sizeof(f32), DSP_SUBFRAME_SIZE * 2, sChannelDumpFiles[i]);
+        }
+
+        for (int o = 0; o < subframe.channels.size(); o++) {
+            MixSubframe(subframe.channels[o], buf.channels[o]);
+        }
+    }
+
+    if (EnableReverb && (anyReverbInput || ReverbHasTail)) {
+        // Equivalent to -80 dBFS: rms = 1e-4, rms^2 = 1e-8, sumSq = 2 * N * 1e-8
+        constexpr f32 REVERB_ENERGY_EPSILON = 2.0f * DSP_SUBFRAME_SIZE * 1e-8f;
+        f32 wetEnergy = SharedReverb.processmix(
+            reverbInputL.data(), reverbInputR.data(),
+            subframe.channels[0].data(), subframe.channels[1].data(),
+            DSP_SUBFRAME_SIZE, 1, 1.0f
+        );
+        ReverbHasTail = wetEnergy >= REVERB_ENERGY_EPSILON;
+    }
+
+    if (EnableHrtf && anySurroundInput) {
+        // Two-pole LPF: -12 dB/oct above 3 kHz
+        for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+            sHrtfLp1 = (1.0f - HRTF_LP_K) * sHrtfLp1 + HRTF_LP_K * surroundBus[j];
+            sHrtfLp2 = (1.0f - HRTF_LP_K) * sHrtfLp2 + HRTF_LP_K * sHrtfLp1;
+            surroundBus[j] = sHrtfLp2;
+        }
+
+        // Mix into L and R
+        // L gets the filtered signal directly; R gets it allpass for mild decorrelation
+        for (int j = 0; j < DSP_SUBFRAME_SIZE; j++) {
+            f32 s = surroundBus[j];
+
+            subframe.channels[0][j] += s * HrtfGain;
+
+            f32 r = -HRTF_ALLPASS_G * s + sHrtfApIn1 + HRTF_ALLPASS_G * sHrtfApOut1;
+            sHrtfApIn1  = s;
+            sHrtfApOut1 = r;
+            subframe.channels[1][j] += r * HrtfGain;
+        }
+    }
+
+    for (auto& channel : subframe.channels) {
+        ApplyVolume(channel, channel, PrevMasterVolume, MasterVolume);
+    }
+    PrevMasterVolume = MasterVolume;
 }
