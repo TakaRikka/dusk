@@ -571,6 +571,7 @@ if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR
     add_subdirectory(mods/window_demo)
     add_subdirectory(mods/flow_demo)
     add_subdirectory(mods/basic_cosmetics_mod)
+    add_subdirectory(mods/randomizer)
 endif ()
 
 if (APPLE)

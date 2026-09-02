@@ -99,6 +99,15 @@ int daObjLife_c::Create() {
     mRotateSpeed = 7000;
 
 #if TARGET_PC
+    // Restore speeds that were skipped if created from a boss with create instead of fastCreate
+    auto bossItemSpeeds = dusk::mods::get_boss_item_actor_speeds();
+    if (bossItemSpeeds.f != 0.f || bossItemSpeeds.y != 0.f) {
+        mOverrideHover = false;
+        speedF = bossItemSpeeds.f;
+        speed.y = bossItemSpeeds.y;
+        dusk::mods::set_boss_item_actor_speeds(0.f, 0.f);
+    }
+
     if (mOverrideHover) {
         fopAcM_SetGravity(this, 0.0f);
         mRotateSpeed = 550;
@@ -153,20 +162,20 @@ int daObjLife_c::create() {
         if (mItemGiveOriginalNo == dItemNo_NONE_e) {
             mOriginalItemNo = parameterItemNo;
             mItemGiveTag = dusk::mods::item_give_tag_freestanding(getSaveBitNo());
-            const auto [item, displayItem] =
+            const auto [item, displayItem, was_resolved] =
                 dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
             setDisplayItemNo(displayItem);
-            mItemOverridden = item != mOriginalItemNo;
+            mItemOverridden = was_resolved;
             if (mItemOverridden) {
                 fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
             }
         } else if (mGoldenWolfItem) {
             mOriginalItemNo = mItemGiveOriginalNo;
             mItemGiveTag = dusk::mods::item_give_tag_golden_wolf(static_cast<u16>(field_0x938));
-            const auto [item, displayItem] =
+            const auto [item, displayItem, was_resolved] =
                 dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
             setDisplayItemNo(displayItem);
-            mItemOverridden = item != mOriginalItemNo;
+            mItemOverridden = was_resolved;
             if (item != parameterItemNo) {
                 fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
             }

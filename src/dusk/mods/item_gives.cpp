@@ -265,6 +265,7 @@ ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* 
             .tag = giveTag,
             .itemNo = committed->resolution.item,
             .displayItemNo = committed->resolution.display_item,
+            .was_resolved = committed->resolution.was_resolved,
         };
     }
 
@@ -274,6 +275,7 @@ ItemCheckResult item_check_commit(uint32_t giveTag, uint8_t itemNo, fopAc_ac_c* 
         .tag = giveTag,
         .itemNo = committed.resolution.item,
         .displayItemNo = committed.resolution.display_item,
+        .was_resolved = committed.resolution.was_resolved,
     };
 }
 

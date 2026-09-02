@@ -123,7 +123,7 @@ public:
     bool checkFlag(u16 flag) { return field_0x68e & flag; }
     void setAction(u8 action) { mAction = action; }
 
-private:
+// private:
     /* 0x56C */ request_of_phase_process_class mPhase1;
     /* 0x574 */ request_of_phase_process_class mPhase2;
     /* 0x57C */ J3DModel* mModel1;

@@ -257,6 +257,48 @@ mods::file::export_file(location, "report.txt", [](mods::file::PickResult result
 `export_file` copies an existing file to a user-selected destination and returns the destination location in its
 callback. Mod-owned persistent files belong in `HostService::data_dir`.
 
+### HttpService (`mods/svc/http.h`)
+
+Asynchronous HTTPS requests supporting HTTP/2 and TLS 1.2+. C++ mods should use the helpers in `mods/svc/http.hpp`:
+
+```cpp
+#include "mods/svc/http.hpp"
+
+IMPORT_SERVICE(HttpService, svc_http);
+
+mods::http::Pending pendingRequest;
+
+void fetch_manifest() {
+    mods::http::Request request{
+        .url = "https://example.com/manifest.json",
+        .maxBodyBytes = 256 * 1024,
+    };
+    pendingRequest = mods::http::request(request, [](mods::http::Response response) {
+        if (!response.ok()) {
+            handle_fetch_error(response.error, response.statusCode);
+            return;
+        }
+
+        std::string manifest{response.body.begin(), response.body.end()};
+        use_manifest(manifest);
+    });
+    if (!pendingRequest) {
+        handle_start_error(pendingRequest.result());
+    }
+}
+```
+
+Keep the returned `Pending` alive until completion. Dropping it or calling `cancel` requests cancellation. Callbacks run
+on the game thread.
+
+`Response::ok()` requires a 2xx status. Other HTTP statuses are valid responses, not transport errors, so always check
+`statusCode`. In-memory responses default to a 1 MiB limit; set `maxBodyBytes` to increase it if needed.
+
+For large responses, set `downloadPath` to an absolute path in the calling mod's `HostService::data_dir` or
+`HostService::mod_dir`. The response is streamed to disk instead of loaded in memory. On success, the callback receives
+an empty `body` and the final path in `downloadPath`. Check `Response::ok()` before using the file.
+`Pending::progress()` reports download progress when the server provides a total size.
+
 ### HostService (`mods/svc/host.h`)
 
 Mod metadata and runtime interaction with the loader:

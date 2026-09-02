@@ -185,6 +185,20 @@ function(add_mod target_name)
                 WINDOWS_EXPORT_ALL_SYMBOLS OFF)
         target_compile_features(${target_name} PRIVATE cxx_std_20)
         target_link_libraries(${target_name} PRIVATE dusklight_mod_api)
+
+        if (APPLE)
+            set(_mod_exports "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ModExports.exp")
+            target_link_options(${target_name} PRIVATE
+                    -Xlinker -exported_symbols_list -Xlinker "${_mod_exports}")
+            set_property(TARGET ${target_name} APPEND PROPERTY LINK_DEPENDS "${_mod_exports}")
+        elseif (UNIX)
+            set(_mod_exports "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ModExports.ver")
+            target_link_options(${target_name} PRIVATE
+                    "-Wl,--version-script=${_mod_exports}"
+                    -Wl,--no-undefined-version)
+            set_property(TARGET ${target_name} APPEND PROPERTY LINK_DEPENDS "${_mod_exports}")
+        endif ()
+
         foreach (_feature IN LISTS _features)
             target_link_libraries(${target_name} PRIVATE dusklight_mod_feature_${_feature})
             if (_feature STREQUAL "webgpu")

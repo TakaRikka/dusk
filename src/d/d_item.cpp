@@ -269,7 +269,10 @@ static void (*item_func_ptr[256])() = {
     item_func_noentry,
 };
 
-inline void getItemFunc(u8 i_itemNo) {
+#if !TARGET_PC
+inline
+#endif
+void getItemFunc(u8 i_itemNo) {
     dComIfGs_onItemFirstBit(i_itemNo);
     item_func_ptr[i_itemNo]();
 }

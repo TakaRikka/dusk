@@ -1483,6 +1483,7 @@ set(DUSK_FILES
         src/dusk/mods/loader/prepatch.cpp
         src/dusk/mods/loader/prepatch.hpp
         src/dusk/mods/item.hpp
+        src/dusk/mods/item_actor.cpp
         src/dusk/mods/item_checks.cpp
         src/dusk/mods/item_gives.cpp
         src/dusk/mods/log_buffer.cpp
@@ -1498,6 +1499,7 @@ set(DUSK_FILES
         src/dusk/mods/svc/flow.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/http.cpp
         src/dusk/mods/svc/item.cpp
         src/dusk/mods/svc/item.hpp
         src/dusk/mods/svc/log.cpp
