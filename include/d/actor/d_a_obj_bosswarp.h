@@ -60,7 +60,6 @@ public:
     bool isFirst() { return fopAcM_GetParamBit(this, 0x1b, 1); }
     void setAction(u8 action) { mAction = action; }
 
-// private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ J3DModel* mpModel;
     /* 0x574 */ mDoExt_btkAnm* mpBtkAnm[2];

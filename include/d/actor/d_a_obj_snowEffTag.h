@@ -23,7 +23,6 @@ public:
 
     int getArg0() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ bool mPlayedSound;
     /* 0x56C */ f32 mMaxSize;

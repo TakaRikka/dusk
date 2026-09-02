@@ -166,7 +166,6 @@ public:
 
     u32 getModelType() { return fopAcM_GetParam(this) >> 28; }
 
-private:
     /* 0xE40 */ NPC_KOLINB_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl field_0xe44;
     /* 0xF80 */ Mtx mMtx;

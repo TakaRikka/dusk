@@ -87,7 +87,6 @@ public:
     daE_OC_c* getTalkOc() { return mpTalk; }
     J3DModel* getOcModel() { return mpMorf->getModel(); }
 
-private:
     /* 0x5a0 */ request_of_phase_process_class mPhaseReqs[2];
     /* 0x5bc */ mDoExt_McaMorfSO* mpMorf;
     /* 0x5c0 */ J3DModel* mpModel;

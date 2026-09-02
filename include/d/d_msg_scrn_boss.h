@@ -15,7 +15,6 @@ public:
     virtual void fontAlpha(f32);
     virtual void fukiAlpha(f32);
 
-private:
     /* 0xC4 */ CPaneMgr* mpBaseParent;
     /* 0xC8 */ CPaneMgr* mpFontParent;
 };

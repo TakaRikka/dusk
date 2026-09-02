@@ -72,7 +72,6 @@ public:
         return 1;
     }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase1;
     /* 0x570 */ request_of_phase_process_class mPhase2;
     /* 0x578 */ request_of_phase_process_class mPhase3;

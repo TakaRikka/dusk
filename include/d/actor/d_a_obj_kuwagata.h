@@ -47,7 +47,6 @@ public:
     int create();
     inline int Draw();
 
-private:
     /* 0x590 */ dCcD_Stts mStts;
     /* 0x5CC */ dCcD_Sph mSph;
     /* 0x704 */ daPy_boomerangMove_c mBoomerangMove;

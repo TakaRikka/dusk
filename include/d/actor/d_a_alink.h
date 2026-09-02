@@ -77,7 +77,6 @@ public:
     virtual void draw();
     virtual ~daAlink_blur_c() {}
 
-    // private:
     /* 0x010 */ ResTIMG* m_blurTex;
     /* 0x014 */ int field_0x14;
     /* 0x018 */ u8 field_0x18[4];
@@ -113,7 +112,6 @@ public:
 
     void onAppearFlg() { mAppearFlg = true; }
 
-private:
     /* 0x04 */ s16 mHitFlg;
     /* 0x06 */ s16 mAppearFlg;
     /* 0x08 */ f32 mKeepMinY;

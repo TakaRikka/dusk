@@ -39,7 +39,6 @@ public:
     bool checkLock() { return fopAcM_GetParamBit(this, 5, 1); }
     u8 checkOpen() { return fopAcM_GetParamBit(this, 8, 4); }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ request_of_phase_process_class mKeyPhase;
     /* 0x5B0 */ J3DModel* mpModel;

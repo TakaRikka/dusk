@@ -29,7 +29,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x5A0 */ u32 mSmokeParticle1;
     /* 0x5A4 */ u32 mSmokeParticle2;
     /* 0x5A8 */ s16 mAction;

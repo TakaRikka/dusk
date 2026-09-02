@@ -113,7 +113,6 @@ public:
     u8 getPathID() { return (fopAcM_GetParam(this) & 0xFF00) >> 8; }
     u8 getBitSW() { return (fopAcM_GetParam(this) & 0xff0000) >> 16; }
 
-private:
     /* 0xE40 */ NPC_LEN_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;

@@ -13,7 +13,6 @@ public:
     void setScreen(J2DScreen* screen) { mp_scrn = screen; }
     J2DScreen* getScreen() { return mp_scrn; }
 
-private:
     /* 0x04 */ J2DScreen* mp_scrn;
 };
 
@@ -30,7 +29,6 @@ public:
 
     void drawSelf() { mpKanteraIcon->draw(); }
 
-// private:
     /* 0x04 */ dDlst_KanteraIcon_c* mpKanteraIcon;
     /* 0x08 */ CPaneMgr* mpParent;
     /* 0x0C */ CPaneMgr* mpGauge;

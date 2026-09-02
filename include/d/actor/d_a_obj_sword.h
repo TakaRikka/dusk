@@ -31,7 +31,6 @@ public:
     u8 getSwbit() { return fopAcM_GetParamBit(this, 8, 8); }
     void setStatus(u8 status) { mStatus = status; }
 
-private:
     /* 0x92c */ u32 field_0x92c;
     /* 0x930 */ fpc_ProcID mProcID;
     /* 0x934 */ u8 mStatus;

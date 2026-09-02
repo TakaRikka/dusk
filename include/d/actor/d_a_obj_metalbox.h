@@ -15,7 +15,6 @@
  *
  */
 class daObjMBox_c : public dBgS_MoveBgActor {
-private:
     /* 0x5a0 */ request_of_phase_process_class mPhase;
     /* 0x5a8 */ J3DModel* mpModel;
     /* 0x5ac */ dBgS_ObjAcch mAcch;

@@ -547,7 +547,6 @@ public:
     /* vt[91] */ virtual void setElst(dStage_Elst_c*) = 0;
     /* vt[92] */ virtual dStage_Elst_c* getElst(void) = 0;
 
-private:
     /* 0x04 */ s8 mRoomNo;
 };
 
@@ -1261,7 +1260,6 @@ public:
     static u8 mNoArcBank;
     #endif
 
-private:
     /* 0x0 */ u8 field_0x0[4];
 };
 
@@ -1276,7 +1274,6 @@ public:
     s8 getDarkArea() const { return mDarkArea; }
     void setDarkArea(s8 darkArea) { mDarkArea = darkArea; }
 
-private:
     /* 0x0 */ char mName[8];
     /* 0x8 */ s16 mPoint;
     /* 0xA */ s8 mRoomNo;
@@ -1297,7 +1294,6 @@ public:
     u8 getWipeSpeed() const { return wipe_speed; }
     dStage_startStage_c* getStartStage() { return this; }
 
-private:
     s8 enabled;
     s8 wipe;
     u8 wipe_speed;

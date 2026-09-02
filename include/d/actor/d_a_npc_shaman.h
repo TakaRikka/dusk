@@ -117,7 +117,6 @@ public:
     static DUSK_GAME_DATA const int mSceneChangeNoTable[48];
     static DUSK_GAME_DATA queryFunc mQueries[48];
 
-private:
     /* 0xE40 */ NPC_SHA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;

@@ -146,7 +146,6 @@ public:
     int create();
     daE_VA_c();
 
-private:
     /* 0x005AC */ request_of_phase_process_class mPhase;
     /* 0x005B4 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x005B8 */ mDoExt_McaMorfSO* mpEndEfMorf;

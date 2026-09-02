@@ -10,7 +10,6 @@ public:
 
     virtual ~dSvBit_childTransformHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 WF[4];
     /* 0x09 */ u8 field_0x9[4];
@@ -23,7 +22,6 @@ public:
 
     virtual ~dSvBit_childDarknessHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 TW[6];
     /* 0x0B */ u8 field_0xB[6];
@@ -36,7 +34,6 @@ public:
 
     virtual ~dSvBit_childOtherHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 mDropNum;
     /* 0x06 */ u8 field_0x6;
@@ -51,7 +48,6 @@ public:
 
     virtual ~dSvBit_childTbPerfectionHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x40];
     /* 0x45 */ u8 field_0x45[0x40];
@@ -64,7 +60,6 @@ public:
         mPerfectSave.init();
     }
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x08 */ dSvBit_childTbPerfectionHIO_c mPerfectSave;
 };
@@ -76,7 +71,6 @@ public:
 
     virtual ~dSvBit_childSwZoneHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ bool field_0x5[0x20];
     /* 0x25 */ bool field_0x25[0x20];
@@ -89,7 +83,6 @@ public:
 
     virtual ~dSvBit_childSwPerfectionHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x80];
     /* 0x85 */ u8 field_0x85[0x80];
@@ -102,7 +95,6 @@ public:
 
     virtual ~dSvBit_childSwOneZoneHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ bool field_0x5[0x10];
     /* 0x15 */ bool field_0x15[0x10];
@@ -115,7 +107,6 @@ public:
 
     virtual ~dSvBit_childSwDungeonHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x40];
     /* 0x45 */ u8 field_0x45[0x40];
@@ -131,7 +122,6 @@ public:
         field_0x1e0.init();
     }
 
-private:
     /* 0x004 */ u8 field_0x4;
     /* 0x008 */ dSvBit_childSwPerfectionHIO_c field_0x8;
     /* 0x110 */ dSvBit_childSwDungeonHIO_c field_0x110;
@@ -146,7 +136,6 @@ public:
 
     virtual ~dSvBit_childItZoneHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x20];
     /* 0x25 */ u8 field_0x25[0x20];
@@ -159,7 +148,6 @@ public:
 
     virtual ~dSvBit_childItPerfectionHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x20];
     /* 0x25 */ u8 field_0x25[0x20];
@@ -172,7 +160,6 @@ public:
 
     virtual ~dSvBit_childItOneZoneHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x10];
     /* 0x15 */ u8 field_0x15[0x10];
@@ -185,7 +172,6 @@ public:
 
     virtual ~dSvBit_childItDungeonHIO_c() {}
 
-private:
     /* 0x04 */ u8 field_0x4;
     /* 0x05 */ u8 field_0x5[0x80];
     /* 0x85 */ u8 field_0x85[0x80];
@@ -201,7 +187,6 @@ public:
         mOneZoneSave.init();
     }
 
-private:
     /* 0x004 */ u8 field_0x4;
     /* 0x008 */ dSvBit_childItPerfectionHIO_c mFullSave;
     /* 0x050 */ dSvBit_childItDungeonHIO_c mDungeonSave;

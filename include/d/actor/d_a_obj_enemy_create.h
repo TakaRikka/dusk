@@ -22,7 +22,6 @@ public:
     void NameChk();
     int create();
 
-private:
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 mEnemyNum;
     /* 0x56A */ u8 mActivateSw;

@@ -36,7 +36,6 @@ public:
     void setIdx(u8 idx) { this->idx = idx; }
 #endif
 
-private:
     /* 0x00 */ JKRSolidHeap* mpHeap;
     /* 0x04 */ J3DModel* mpModel;
     /* 0x08 */ int mCreateNum;
@@ -59,7 +58,6 @@ public:
 
     virtual ~dSmplMdl_draw_c();
 
-private:
     /* 0x04 */ diff_model_c mModel[8];
     /* 0xA4 */ int mListCount;
     /* 0xA8 */ modelList_c mList[500];

@@ -60,7 +60,6 @@ public:
     void offAnimeUpdate(int param_0) { field_0x114 &= ~(u8)(1 << param_0); }
     u8 getDPDPoint() { return mDPDPoint; }
 
-private:
     /* 0x004 */ J2DScreen* mpScreen;
     /* 0x008 */ J2DAnmTransform* mpAnmBck;
     /* 0x00C */ J2DAnmColorKey* mpAnmBpk;

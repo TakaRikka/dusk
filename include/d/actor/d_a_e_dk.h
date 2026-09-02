@@ -45,7 +45,6 @@ public:
     int create();
     daE_DK_c();
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorfSO;
     /* 0x5B8 */ mDoExt_McaMorfSO* mpCoreMorfSO;

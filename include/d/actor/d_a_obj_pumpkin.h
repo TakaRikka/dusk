@@ -56,7 +56,6 @@ public:
  *
  */
 class daObj_Pumpkin_c : public fopAc_ac_c {
-private:
     /* 0x568 */ OBJ_PUMPKIN_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhaseReq;
     /* 0x574 */ J3DModel* mpModel;

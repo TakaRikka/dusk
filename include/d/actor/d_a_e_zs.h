@@ -39,7 +39,6 @@ public:
     int CreateHeap();
     int create();
 
-private:
     /* 0x5ac */ request_of_phase_process_class mPhase;
     /* 0x5b4 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x5b8 */ Z2CreatureEnemy mSound;

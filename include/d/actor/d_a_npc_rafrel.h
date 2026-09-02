@@ -107,7 +107,6 @@ public:
 
     static DUSK_GAME_DATA int (daNpcRafrel_c::*mEvtSeqList[])(int);
 
-private:
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ J3DModel* mpItemModel;
     /* 0xBDC */ daNpcF_MatAnm_c* mpMatAnm;

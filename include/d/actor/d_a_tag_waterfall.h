@@ -22,7 +22,6 @@ public:
     int _delete();
     cPhs_Step create();
 
-private:
     /* 0x568 */ f32 mCylinderRadiusA;
     /* 0x56C */ f32 mCylinderRadiusB;
     /* 0x570 */ f32 mCylinderHeight;

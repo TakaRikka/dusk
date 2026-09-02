@@ -51,7 +51,6 @@ public:
     static DUSK_GAME_DATA daObjMasterSword_Attr_c const mAttr;
     static DUSK_GAME_DATA actionFunc ActionTable[];
 
-// private:
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ mDoExt_btkAnm mBtk;

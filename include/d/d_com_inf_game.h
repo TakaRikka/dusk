@@ -249,7 +249,6 @@ public:
     ~dComIfG_resLoader_c();
     int load(char const**, JKRHeap*);
 
-private:
     /* 0x0 */ const char** mResNameTable;
     /* 0x4 */ request_of_phase_process_class mPhase;
     /* 0xC */ u8 mLoadIndex;

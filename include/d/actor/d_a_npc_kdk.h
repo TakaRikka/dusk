@@ -12,7 +12,6 @@
  *
  */
 class daNpcKdk_c : public fopAc_ac_c {
-private:
     /* 0x568 */ u8 field_0x568[0xFA0 - 0x568];
 };
 

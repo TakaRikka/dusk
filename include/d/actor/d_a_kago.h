@@ -140,7 +140,6 @@ public:
     void setEatYm() { field_0x6d8 |= (u8) 4; }
     MtxP getMouthMtx() { return mAnm_p->getModel()->getAnmMtx(7); }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ mDoExt_McaMorfSO* mAnm_p;
     /* 0x574 */ Z2CreatureEnemy mSound;

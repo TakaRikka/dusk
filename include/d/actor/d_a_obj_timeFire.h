@@ -28,7 +28,6 @@ public:
     u8 getEndTime() { return fopAcM_GetParamBit(this, 16, 8); }
     u8 getScale() { return fopAcM_GetParamBit(this, 24, 8); }
 
-private:
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 field_0x569;
     /* 0x56A */ u8 mStartTime;

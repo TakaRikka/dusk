@@ -232,7 +232,6 @@ public:
 
     static DUSK_GAME_DATA EventFn DUSK_CONST mEvtSeqList[7];
 
-private:
     /* 0xB48 */ Z2Creature mSound;
     /* 0xBD8 */ daNpcWrestler_HIOParam* field_0xbd8;
     /* 0xBDC */ daNpcWrestler_HIOParamSub* field_0xbdc;

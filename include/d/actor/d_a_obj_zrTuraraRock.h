@@ -30,7 +30,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x568 */ dCcD_Stts mCcStatus;
     /* 0x5A4 */ dCcD_Sph mCcSph;
     /* 0x6DC */ request_of_phase_process_class mPhaseReq;

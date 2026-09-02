@@ -76,7 +76,6 @@ public:
         mStartStalactiteShake = false;
     }
 
-private:
     /* 0x584 */ request_of_phase_process_class mPhase;
     /* 0x58C */ J3DModel* mpModel;
     /* 0x590 */ mDoExt_btkAnm mVTexScrollAnm;

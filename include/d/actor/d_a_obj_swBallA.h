@@ -41,7 +41,6 @@ public:
     void onFlag(u8 idx, u8 val) { field_0x5af[idx] |= val; }
     u8 checkFlag(u8 idx, u8 val) { return field_0x5af[idx] & val; }
 
-private:
     /* 0x57C */ request_of_phase_process_class field_0x57c;
     /* 0x584 */ J3DModel* mModel;
     /* 0x588 */ mDoExt_btkAnm* field_0x588;

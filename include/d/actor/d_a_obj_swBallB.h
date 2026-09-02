@@ -44,7 +44,6 @@ public:
     void setLightOn() { field_0x5ac = 1; }
     void setLightOff() { field_0x5ad = 1; }
 
-private:
     /* 0x57C */ request_of_phase_process_class field_0x57c;
     /* 0x584 */ J3DModel* mModel;
     /* 0x588 */ mDoExt_btkAnm* field_0x588;

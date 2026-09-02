@@ -24,7 +24,6 @@ public:
     void push_player();
     int draw();
     int _delete();
-private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ u8 pad[4];
     /* 0x574 */ dCcD_Stts mCylColliderStts;

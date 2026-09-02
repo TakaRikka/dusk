@@ -93,7 +93,6 @@ public:
     JUtility::TColor getInitBlack() { return mInitBlack; }
     JUtility::TColor getInitWhite() { return mInitWhite; }
 
-private:
     /* 0x1C */ void* mpFirstStackSize;
     /* 0x20 */ s16* field_0x20;
     /* 0x24 */ JGeometry::TVec2<f32> mInitPos;

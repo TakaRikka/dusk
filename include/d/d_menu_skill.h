@@ -58,7 +58,6 @@ public:
 
     u8 getStatus() { return mStatus; }
 
-// private:
     /* 0x004 */ JKRExpHeap* mpHeap;
     /* 0x008 */ JKRArchive* mpArchive;
     /* 0x00C */ STControl* mpStick;

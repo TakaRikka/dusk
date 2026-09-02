@@ -48,7 +48,6 @@ public:
     static f32 getFlyInitY() { return 40.0f; }
     static f32 getFlyInitZ() { return 50.0f; }
 
-private:
     /* 0x568 */ J3DModel* mpBallModel;
     /* 0x56C */ mDoExt_bckAnm mBck;
     /* 0x588 */ J3DAnmTevRegKey* mpBallBrk;

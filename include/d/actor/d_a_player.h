@@ -25,7 +25,6 @@ public:
         mNowSetFlg = 0;
     }
 
-private:
     /* 0x14 */ u16 mEndFlg;
     /* 0x16 */ u16 mNowSetFlg;
 };
@@ -70,7 +69,6 @@ public:
     static DUSK_GAME_DATA s16 m_dropAngleY;
     static DUSK_GAME_DATA s16 m_eventKeepFlg;
 
-private:
     /* 0x0 */ u8 field_0x0;
     /* 0x2 */ s16 field_0x2;
     /* 0x4 */ f32 m_offsetY;
@@ -151,7 +149,6 @@ public:
     fopAc_ac_c* getActor() const { return mActor; }
     fopAc_ac_c* getActorConst() const { return mActor; }
 
-private:
     /* 0x0 */ fpc_ProcID mID;
     /* 0x4 */ fopAc_ac_c* mActor;
 };  // Size: 0x8
@@ -296,7 +293,6 @@ public:
     void resetDemoType() { setDemoType(0); }
     void setStartDemoType() { setDemoType(DEMO_TYPE_START_e); }
 
-private:
     /* 0x00 */ u16 mDemoType;
     /* 0x02 */ s16 mDemoMoveAngle;
     /* 0x04 */ s16 mTimer;

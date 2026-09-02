@@ -40,7 +40,6 @@ public:
     cPhs_Step create();
     daE_FB_c();
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x5B8 */ mDoExt_invisibleModel mInvisibleModel;

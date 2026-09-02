@@ -41,7 +41,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x05A0 */ u8 mSwBit;
     /* 0x05A1 */ u8 mAction;
     /* 0x05A2 */ u8 field_0x5a2;

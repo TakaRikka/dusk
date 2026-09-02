@@ -63,7 +63,6 @@ public:
     static DUSK_GAME_DATA dCcD_SrcCyl const s_CcDCyl;
     static DUSK_GAME_DATA exeProc s_exeProc[3];
     
-private:
     /* 0x568 */ int mVibrationTimer;
     /* 0x578 */ u8 mMode;
     /* 0x579 */ bool field_0x579;

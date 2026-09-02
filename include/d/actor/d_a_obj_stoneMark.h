@@ -23,7 +23,6 @@ public:
     int draw();
     int _delete();
 
-private:
     /* 0x0568 */ request_of_phase_process_class mpPhase;
     /* 0x0570 */ TGXTexObj mTexObj;
     /* 0x0590 */ dBgS_ObjAcch mObjAcch;

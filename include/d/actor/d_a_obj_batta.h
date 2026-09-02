@@ -43,7 +43,6 @@ public:
         return mActionFunc == i_func;
     }
 
-private:
     /* 0x590 */ Z2Creature mCreature;
     /* 0x620 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x624 */ mDoExt_brkAnm* mBrk;

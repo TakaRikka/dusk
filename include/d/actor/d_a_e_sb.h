@@ -57,7 +57,6 @@ public:
     int Delete();
     void setBaseMtx();
     cPhs_Step Create();
-private:
     /* 0x5AC */ int field_0x5ac;
     /* 0x5B0 */ int field_0x5b0;
     /* 0x5B4 */ int field_0x5b4;
@@ -78,7 +77,6 @@ private:
 public:
     /* 0x5EC */ cXyz* field_0x5ec;
     /* 0x5F0 */ f32 field_0x5f0;
-private:
     /* 0x5F4 */ cXyz field_0x5f4;
     /* 0x600 */ s16 field_0x600;
     /* 0x602 */ u8 field_0x602;

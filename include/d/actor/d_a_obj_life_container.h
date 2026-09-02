@@ -64,7 +64,6 @@ public:
         current.pos = new_pos;
     }
 
-// private:
     /* 0x92C */ fpc_ProcID mItemId;
     /* 0x930 */ int mCounter;
     /* 0x934 */ u8 mStatus;
