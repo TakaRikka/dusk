@@ -182,6 +182,7 @@ std::optional<aurora::rmlui::RuntimeTexture> mod_texture_provider(std::string_vi
         .rgba8 =
             std::span{reinterpret_cast<const std::byte*>(image.pixels.data()), image.pixels.size()},
         .premultipliedAlpha = true,
+        .generateMipmaps = true,
     };
 }
 
