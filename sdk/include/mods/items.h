@@ -10,7 +10,7 @@
 #define ITEM_CHECK_FREESTANDING_PREFIX "freestanding:"     /* <stage>:<bit> */
 #define ITEM_CHECK_GOLDEN_WOLF_PREFIX "golden_wolf:"       /* <event_flag> */
 #define ITEM_CHECK_POE_PREFIX "poe:"                       /* <stage>:<switch> */
-#define ITEM_CHECK_SHOP_PREFIX "shop:"                     /* <stage>:<item> */
+#define ITEM_CHECK_SHOP_PREFIX "shop:"                     /* <stage>:<room>:<item> */
 #define ITEM_CHECK_SKY_PREFIX "sky:"                       /* <stage>:<room> */
 #define ITEM_CHECK_DUNGEON_REWARD_PREFIX "dungeon_reward:" /* <stage> */
 
@@ -21,6 +21,8 @@
 #define ITEM_CHECK_BULBLIN_KEY "bulblin_key:D_MN09"
 #define ITEM_CHECK_CORAL_EARRING "coral_earring"
 #define ITEM_CHECK_CORO_BOTTLE "coro_bottle"
+#define ITEM_CHECK_CORO_GATE_KEY "coro_gate_key"
+#define ITEM_CHECK_CORO_LANTERN "coro_lantern"
 #define ITEM_CHECK_DUNGEON_MAP_SNOWPEAK "dungeon_map:D_MN11"
 #define ITEM_CHECK_FAIRY_REWARD "fairy_reward:D_SB01"
 #define ITEM_CHECK_FISHING_BOTTLE "fishing_bottle"

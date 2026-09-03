@@ -1291,6 +1291,7 @@ public:
     }
     void set(const char*, s8, s16, s8, s8, u8);
     void offEnable() { enabled = 0; }
+    void onEnable() { enabled = 1; }
     BOOL isEnable() const { return enabled; }
     s8 getWipe() const { return wipe; }
     u8 getWipeSpeed() const { return wipe_speed; }
@@ -1351,6 +1352,9 @@ enum dStage_SaveTbl {
 
 const char* dStage_getName2(s16, s8);
 dStage_objectNameInf* dStage_searchName(const char*);
+#if TARGET_PC
+dStage_objectNameInf* dStage_searchNameCI(const char*);
+#endif
 static int dStage_stageKeepTresureInit(dStage_dt_c*, void*, int, void*);
 static int dStage_filiInfo2Init(dStage_dt_c*, void*, int, void*);
 static int dStage_mapPathInitCommonLayer(dStage_dt_c*, void*, int, void*);

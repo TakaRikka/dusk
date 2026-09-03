@@ -43,6 +43,7 @@
 #include "dusk/autosave.h"
 #include "dusk/memory.h"
 #include "dusk/mods/item.hpp"
+#include "dusk/trigger_viewer.h"
 #include "dusk/ui/ui.hpp"
 #include "mods/items.h"
 #endif
@@ -676,6 +677,10 @@ static int dScnPly_Draw(dScnPly_c* i_this) {
 
         dComIfG_Ccsp()->Draw();
         dComIfG_Bgsp().Draw();
+
+        #if TARGET_PC
+        dusk::TriggerView::execute();
+        #endif
 
         #if DEBUG
         dPath_Draw();

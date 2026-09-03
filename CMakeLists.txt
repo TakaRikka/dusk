@@ -91,7 +91,7 @@ option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled 
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structure" OFF)
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
-option(DUSK_ENABLE_CODE_MODS "Enable code mods" OFF)
+option(DUSK_ENABLE_CODE_MODS "Enable code mods" ON)
 
 set(DUSK_HAS_FUNCHOOK OFF)
 if (DUSK_ENABLE_CODE_MODS AND (NOT APPLE OR CMAKE_SYSTEM_NAME STREQUAL "Darwin"))
@@ -304,7 +304,7 @@ include(cmake/GameABIConfig.cmake)
 find_package(Threads REQUIRED)
 set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::log borealis::presentation borealis::sentry borealis::update freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
+    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::io borealis::log borealis::presentation borealis::sentry borealis::update freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)
 if (DUSK_HAS_FUNCHOOK)
     list(APPEND GAME_LIBS funchook-static)
@@ -384,20 +384,31 @@ if (CMAKE_CXX_LINK_GROUP_USING_RESCAN_SUPPORTED OR CMAKE_LINK_GROUP_USING_RESCAN
     set(JSYSTEM_LINK_LIBRARIES "$<LINK_GROUP:RESCAN,${JSYSTEM_LIBRARIES}>")
 endif ()
 
-set(DUSK_FILES src/dusk/main.cpp ${GAME_BASE_FILES} ${GAME_DEBUG_FILES} ${miniz_SOURCE_DIR}/miniz.c)
+set(_dusklight_all_files src/dusk/main.cpp ${GAME_BASE_FILES} ${GAME_DEBUG_FILES})
+set(DUSK_INTERNAL_FILES ${_dusklight_all_files})
+list(FILTER DUSK_INTERNAL_FILES INCLUDE REGEX "^src/dusk/")
+set(GAME_FILES ${_dusklight_all_files})
+list(FILTER GAME_FILES EXCLUDE REGEX "^src/dusk/")
+
+add_library(dusk_internal OBJECT ${DUSK_INTERNAL_FILES})
+if (ENABLE_ASAN)
+    target_sources(dusk_internal PRIVATE src/dusk/asan_options.c)
+endif ()
+target_compile_definitions(dusk_internal PRIVATE ${GAME_COMPILE_DEFS})
+target_include_directories(dusk_internal PRIVATE ${miniz_SOURCE_DIR})
+target_link_libraries(dusk_internal PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LIBRARIES})
+target_precompile_headers(dusk_internal PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
+
 if(ANDROID)
-    add_library(dusklight SHARED ${DUSK_FILES})
+    add_library(dusklight SHARED ${GAME_FILES} ${miniz_SOURCE_DIR}/miniz.c)
 else ()
-    add_executable(dusklight ${DUSK_FILES})
+    add_executable(dusklight ${GAME_FILES} ${miniz_SOURCE_DIR}/miniz.c)
 endif ()
 borealis_configure_android_application(dusklight)
-if (ENABLE_ASAN)
-    target_sources(dusklight PRIVATE src/dusk/asan_options.c)
-endif ()
 
 target_compile_definitions(dusklight PRIVATE ${GAME_COMPILE_DEFS})
 target_include_directories(dusklight PRIVATE ${miniz_SOURCE_DIR})
-target_link_libraries(dusklight PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBRARIES})
+target_link_libraries(dusklight PRIVATE dusk_internal aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBRARIES})
 target_precompile_headers(dusklight PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
 
 if (DUSK_ENABLE_CODE_MODS)
@@ -413,76 +424,75 @@ endif ()
 
 # Hook reliability: prevent auto-inlining, guarantee patchable function entries,
 # and disable identical-code folding for game functions.
-set(DUSK_GAME_ABI_INLINE_OPTIONS)
-if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
-    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
-                $<$<COMPILE_LANGUAGE:CXX>:-finline-hint-functions>)
-    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
-                $<$<COMPILE_LANGUAGE:CXX>:-flive-patching=inline-clone>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-small-functions>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions-called-once>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-early-inlining>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp-clone>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-sra>
-                $<$<COMPILE_LANGUAGE:CXX>:-fno-partial-inlining>)
-    endif ()
-endif ()
-
-if (DUSK_GAME_ABI_INLINE_OPTIONS)
-    set(_game_abi_files ${GAME_BASE_FILES} ${GAME_DEBUG_FILES})
-    list(FILTER _game_abi_files EXCLUDE REGEX "^src/dusk/")
-    set_property(SOURCE ${_game_abi_files} APPEND PROPERTY
-            COMPILE_OPTIONS ${DUSK_GAME_ABI_INLINE_OPTIONS})
-
-    foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
-        target_compile_options(${jsystem_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
-    endforeach()
-    foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
-            aurora_os aurora_pad aurora_si aurora_vi)
-        if (TARGET ${_sdk_lib})
-            get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
-            if (NOT _sdk_lib_imported)
-                target_compile_options(${_sdk_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
-            endif ()
+if (DUSK_ENABLE_CODE_MODS)
+    set(DUSK_GAME_ABI_INLINE_OPTIONS)
+    if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+        if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
+                    $<$<COMPILE_LANGUAGE:CXX>:-finline-hint-functions>)
+        elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
+                    $<$<COMPILE_LANGUAGE:CXX>:-flive-patching=inline-clone>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-small-functions>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions-called-once>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-early-inlining>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp-clone>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-sra>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-partial-inlining>)
         endif ()
-    endforeach ()
-endif ()
+    endif ()
 
-if (MSVC)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:/hotpatch>)
-    endif ()
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
-        target_link_options(dusklight PRIVATE /FUNCTIONPADMIN:16 /OPT:NOICF)
-    else ()
-        target_link_options(dusklight PRIVATE /FUNCTIONPADMIN /OPT:NOICF)
-    endif ()
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
-    if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
-    else ()
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,4>)
-    endif ()
-endif ()
+    if (DUSK_GAME_ABI_INLINE_OPTIONS)
+        target_compile_options(dusklight PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
 
-if (DEFINED DUSK_PATCHABLE_ENTRY_FLAG)
-    target_compile_options(dusklight PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
-    foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
-        target_compile_options(${jsystem_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
-    endforeach()
-    foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
-            aurora_os aurora_pad aurora_si aurora_vi)
-        if (TARGET ${_sdk_lib})
-            get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
-            if (NOT _sdk_lib_imported)
-                target_compile_options(${_sdk_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+        foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
+            target_compile_options(${jsystem_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+        endforeach()
+        foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
+                aurora_os aurora_pad aurora_si aurora_vi)
+            if (TARGET ${_sdk_lib})
+                get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
+                if (NOT _sdk_lib_imported)
+                    target_compile_options(${_sdk_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+                endif ()
             endif ()
+        endforeach ()
+    endif ()
+
+    if (MSVC)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:/hotpatch>)
         endif ()
-    endforeach ()
+        if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+            target_link_options(dusklight PRIVATE /FUNCTIONPADMIN:16 /OPT:NOICF)
+        else ()
+            target_link_options(dusklight PRIVATE /FUNCTIONPADMIN /OPT:NOICF)
+        endif ()
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
+        if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
+            set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
+        else ()
+            set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,4>)
+        endif ()
+    endif ()
+
+    if (DEFINED DUSK_PATCHABLE_ENTRY_FLAG)
+        target_compile_options(dusklight PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+        foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
+            target_compile_options(${jsystem_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+        endforeach()
+        foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
+                aurora_os aurora_pad aurora_si aurora_vi)
+            if (TARGET ${_sdk_lib})
+                get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
+                if (NOT _sdk_lib_imported)
+                    target_compile_options(${_sdk_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+                endif ()
+            endif ()
+        endforeach ()
+    endif ()
 endif ()
 
 if (WIN32)
@@ -561,6 +571,7 @@ if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR
     add_subdirectory(mods/window_demo)
     add_subdirectory(mods/flow_demo)
     add_subdirectory(mods/basic_cosmetics_mod)
+    add_subdirectory(mods/randomizer)
 endif ()
 
 if (APPLE)

@@ -89,6 +89,26 @@ namespace dusk {
                 ImGui::EndMenu();
             }
 
+            auto& triggerView = getTransientSettings().triggerView;
+            if (ImGui::BeginMenu("Trigger View")) {
+                ImGui::Checkbox("Load Zones", &triggerView.loadZones);
+                ImGui::Checkbox("Event Areas", &triggerView.eventAreas);
+                ImGui::Checkbox("Event Tags", &triggerView.eventTags);
+                ImGui::Checkbox("Switch Areas", &triggerView.switchAreas);
+                ImGui::Checkbox("Midna Stops", &triggerView.midnaStops);
+                ImGui::Checkbox("Twilight Gates", &triggerView.twilightGates);
+                ImGui::Checkbox("Checkpoints", &triggerView.checkpoints);
+                ImGui::Checkbox("Paths", &triggerView.paths);
+                ImGui::Separator();
+                ImGui::Checkbox("Transform Distances", &triggerView.transformDists);
+                ImGui::Checkbox("Attention Distances", &triggerView.attentionDists);
+                ImGui::Checkbox("Purple Mist Avoid", &triggerView.purpleMistAvoid);
+                ImGui::Checkbox("Leever Ranges", &triggerView.leevers);
+                ImGui::Separator();
+                ImGui::SliderFloat("Opacity##triggers", &triggerView.opacity, 0.0f, 100.0f);
+                ImGui::EndMenu();
+            }
+
             if (!dusk::IsGameLaunched) {
                 ImGui::BeginDisabled();
             }

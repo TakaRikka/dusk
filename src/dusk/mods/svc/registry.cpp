@@ -138,6 +138,9 @@ const ServiceRecord* find_service_record(const char* serviceId, const uint16_t m
 }
 
 ModResult register_module(const ServiceModule& module) {
+    if (module.available != nullptr && !module.available()) {
+        return MOD_UNAVAILABLE;
+    }
     const auto result = register_service(
         module.id, module.majorVersion, module.minorVersion, module.service, nullptr, false);
     if (result != MOD_OK) {
@@ -210,6 +213,8 @@ void ModLoader::init_services() {
             &svc::g_hostModule,
             &svc::g_logModule,
             &svc::g_resourceModule,
+            &svc::g_fileModule,
+            &svc::g_httpModule,
             &svc::g_hookModule,
             &svc::g_overlayModule,
             &svc::g_textureModule,

@@ -7,6 +7,7 @@
 #include <new>
 #include <utility>
 #include <cstdint>
+#include <type_traits>
 
 class JKRHeap;
 typedef void (*JKRErrorHandler)(void*, u32, int);

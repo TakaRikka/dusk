@@ -84,6 +84,7 @@ void Document::show() {
             focus();
         }
     }
+    mPendingClose = false;
 }
 
 void Document::hide(bool close) {

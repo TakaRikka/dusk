@@ -200,6 +200,7 @@ void save_slot_written(uint32_t slot, const void* slotData) {
         store.snapshotCrc = utils::crc32(slotData, kQuestLogSize);
     }
     flush_sidecar();
+    s_currentSlot = static_cast<int32_t>(slot);
     notify(slot, &SaveObserverRecord::onWritten, "save-written");
 }
 

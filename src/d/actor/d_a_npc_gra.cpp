@@ -4022,16 +4022,53 @@ BOOL daNpc_grA_c::talk(void*) {
         if (r26 && talkProc(NULL, TRUE, NULL)) {
             if (mFlow.getEventId(&sp8) == 1) {
 #if TARGET_PC
+                const u8 originalItem = sp8;
                 u32 itemGiveTag = 0;
-                if (sp8 == dItemNo_BOMB_IN_BAG_e) {
+                bool isItemCheck = false;
+                if (originalItem == dItemNo_BOMB_IN_BAG_e) {
                     const auto itemCheck =
-                        dusk::mods::item_check_commit("goron_reward:F_SP113", sp8, this);
+                        dusk::mods::item_check_commit("goron_reward:F_SP113", originalItem, this);
                     sp8 = itemCheck.itemNo;
                     itemGiveTag = itemCheck.tag;
+                    isItemCheck = true;
+                } else {
+                    const char* stage = dComIfGp_getStartStageName();
+                    const bool isAdultGoronShop = (strcmp(stage, "R_SP160") == 0 && originalItem == dItemNo_HYLIA_SHIELD_e) ||
+                                                  (strcmp(stage, "F_SP116") == 0 && originalItem == dItemNo_ARROW_30_e);
+                    if (isAdultGoronShop) {
+                        const auto itemCheck = dusk::mods::item_check_commit(
+                            dusk::mods::item_give_tag_shop(originalItem), originalItem, this);
+                        sp8 = itemCheck.itemNo;
+                        itemGiveTag = itemCheck.tag;
+                        isItemCheck = true;
+                    }
                 }
-#endif
+
+                if (isItemCheck && sp8 == dItemNo_NONE_e) {
+                    dusk::mods::item_check_complete({itemGiveTag, dItemNo_NONE_e}, this);
+                    r29 = 1;
+                    if (mType == 0xb) {
+                        field_0x1691 = 1;
+                    }
+                } else {
+                    field_0x1480 = fopAcM_createItemForPresentDemo(
+                        &current.pos, sp8, 0, -1, -1, NULL, NULL, itemGiveTag);
+                    if (field_0x1480 != fpcM_ERROR_PROCESS_ID_e) {
+                        s16 r25 =
+                            dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
+                        dComIfGp_getEvent()->reset(this);
+                        fopAcM_orderChangeEventId(this, r25, 1, -1);
+                        field_0x9ec = 1;
+                        r29 = 1;
+                        mOrderNewEvt = 1;
+                        if (mType == 0xb) {
+                            field_0x1691 = 1;
+                        }
+                    }
+                }
+#else
                 field_0x1480 = fopAcM_createItemForPresentDemo(&current.pos, sp8, 0, -1, -1, NULL,
-                    NULL IF_DUSK_ARG(itemGiveTag));
+                    NULL);
                 if (field_0x1480 != fpcM_ERROR_PROCESS_ID_e) {
                     s16 r25 = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xff);
                     dComIfGp_getEvent()->reset(this);
@@ -4043,6 +4080,7 @@ BOOL daNpc_grA_c::talk(void*) {
                         field_0x1691 = 1;
                     }
                 }
+#endif
             } else {
                 if (mType == 0xa && field_0x1486 == 0 && daNpcF_chkEvtBit(0x187)) {
                     dComIfGp_getEvent()->reset(this);

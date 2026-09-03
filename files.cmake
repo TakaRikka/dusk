@@ -244,7 +244,7 @@ set(DOLZEL_FILES
         src/CaptureScreen.cpp
 )
 if(DEBUG)
-    list(APPEND DOLZEL_FILES src/d/d_event_debug.cpp)
+        list(APPEND DOLZEL_FILES src/d/d_event_debug.cpp)
 endif(DEBUG)
 
 set(Z2AUDIOLIB_FILES
@@ -1404,10 +1404,10 @@ set(REL_FILES
 )
 
 set(DOLPHIN_FILES
-    libs/dolphin/src/gf/GFGeometry.cpp
-    libs/dolphin/src/gf/GFLight.cpp
-    libs/dolphin/src/gf/GFPixel.cpp
-    libs/dolphin/src/gf/GFTev.cpp
+        libs/dolphin/src/gf/GFGeometry.cpp
+        libs/dolphin/src/gf/GFLight.cpp
+        libs/dolphin/src/gf/GFPixel.cpp
+        libs/dolphin/src/gf/GFTev.cpp
 )
 
 set(DUSK_FILES
@@ -1433,11 +1433,16 @@ set(DUSK_FILES
         src/dusk/dvd_asset.hpp
         src/dusk/extras.c
         src/dusk/frame_interpolation.cpp
+        src/dusk/commands.cpp
+        src/dusk/commands.hpp
         src/dusk/game_clock.cpp
         src/dusk/game_mode.cpp
         src/dusk/gamepad_color.cpp
         src/dusk/globals.cpp
         src/dusk/gyro.cpp
+        src/dusk/game_combos.cpp
+        src/dusk/trigger_viewer.cpp
+        #src/dusk/m_Do_ext_dusk.cpp
         src/dusk/hq_minimap.cpp
         src/dusk/imgui/ImGuiActorSpawner.cpp
         src/dusk/imgui/ImGuiBloomWindow.cpp
@@ -1478,6 +1483,7 @@ set(DUSK_FILES
         src/dusk/mods/loader/prepatch.cpp
         src/dusk/mods/loader/prepatch.hpp
         src/dusk/mods/item.hpp
+        src/dusk/mods/item_actor.cpp
         src/dusk/mods/item_checks.cpp
         src/dusk/mods/item_gives.cpp
         src/dusk/mods/log_buffer.cpp
@@ -1487,11 +1493,13 @@ set(DUSK_FILES
         src/dusk/mods/svc/camera.cpp
         src/dusk/mods/svc/config.cpp
         src/dusk/mods/svc/config.hpp
+        src/dusk/mods/svc/file.cpp
         src/dusk/mods/svc/game.cpp
         src/dusk/mods/svc/gfx.cpp
         src/dusk/mods/svc/flow.cpp
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
+        src/dusk/mods/svc/http.cpp
         src/dusk/mods/svc/item.cpp
         src/dusk/mods/svc/item.hpp
         src/dusk/mods/svc/log.cpp
@@ -1521,6 +1529,8 @@ set(DUSK_FILES
         src/dusk/touch_camera.cpp
         src/dusk/ui/achievements.cpp
         src/dusk/ui/achievements.hpp
+        src/dusk/ui/command_console.cpp
+        src/dusk/ui/command_console.hpp
         src/dusk/ui/bool_button.cpp
         src/dusk/ui/bool_button.hpp
         src/dusk/ui/button.cpp
@@ -1542,6 +1552,8 @@ set(DUSK_FILES
         src/dusk/ui/graphics_tuner.hpp
         src/dusk/ui/group_button.cpp
         src/dusk/ui/group_button.hpp
+        src/dusk/ui/file_button.cpp
+        src/dusk/ui/file_button.hpp
         src/dusk/ui/icon_provider.cpp
         src/dusk/ui/icon_provider.hpp
         src/dusk/ui/input.cpp
