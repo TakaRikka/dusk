@@ -1,5 +1,6 @@
 #include "runtime.hpp"
 
+#include "Luau/Common.h"
 #include "luacode.h"
 #include "mods/runtime.h"
 #include "mods/service.hpp"
@@ -13,6 +14,9 @@
 #include <optional>
 #include <string_view>
 #include <utility>
+
+LUAU_FASTFLAG(LuauIntegerLibrary)
+LUAU_FASTFLAG(LuauIntegerType2)
 
 DEFINE_MOD();
 IMPORT_OPTIONAL_SERVICE(LogService, svc_log);
@@ -453,9 +457,8 @@ bool to_int64(lua_State* state, int index, int64_t& outValue) {
         return false;
     }
     const double value = lua_tonumber(state, index);
-    constexpr double kInt64Min = -9223372036854775808.0;
-    constexpr double kInt64MaxExclusive = 9223372036854775808.0;
-    if (!std::isfinite(value) || value < kInt64Min || value >= kInt64MaxExclusive ||
+    constexpr double kMaxSafeInteger = 9007199254740991.0;
+    if (!std::isfinite(value) || value < -kMaxSafeInteger || value > kMaxSafeInteger ||
         std::trunc(value) != value)
     {
         return false;
@@ -592,6 +595,8 @@ void push_handle(lua_State* state, Vm& vm, uint64_t value, HandleKind kind, cons
 
 extern "C" {
 MOD_EXPORT ModResult mod_initialize(ModError*) {
+    FFlag::LuauIntegerType2.value = true;
+    FFlag::LuauIntegerLibrary.value = true;
     return MOD_OK;
 }
 

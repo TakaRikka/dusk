@@ -1,6 +1,7 @@
 --!strict
 
-export type ConfigValue = boolean | number | string
+export type IntegerInput = integer | number
+export type ConfigValue = boolean | integer | number | string
 export type ConfigVar<T> = {
     get: (self: ConfigVar<T>) -> T,
     set: (self: ConfigVar<T>, value: T) -> (),
@@ -27,23 +28,23 @@ export type OverlayModule = {
 }
 export type TextureHandle = { unregister: (self: TextureHandle) -> () }
 export type TextureKey = {
-    texture_hash: number,
-    tlut_hash: number?,
-    width: number,
-    height: number,
-    gx_format: number,
+    texture_hash: integer,
+    tlut_hash: integer?,
+    width: IntegerInput,
+    height: IntegerInput,
+    gx_format: IntegerInput,
     has_tlut: boolean?,
 }
 export type TextureData = {
     data: string,
-    width: number?,
-    height: number?,
-    mip_count: number?,
-    gx_format: number?,
+    width: IntegerInput?,
+    height: IntegerInput?,
+    mip_count: IntegerInput?,
+    gx_format: IntegerInput?,
 }
 export type TextureModule = {
-    hash_wildcard: number,
-    tlut_wildcard: number,
+    hash_wildcard: integer,
+    tlut_wildcard: integer,
     register_file: (bundlePath: string) -> TextureHandle,
     register_data: (key: TextureKey, data: TextureData) -> TextureHandle,
 }
@@ -72,13 +73,13 @@ export type UiControlDesc = {
     is_disabled: (() -> boolean)?,
     is_modified: (() -> boolean)?,
     is_selected: (() -> boolean)?,
-    min: number?,
-    max: number?,
-    step: number?,
+    min: IntegerInput?,
+    max: IntegerInput?,
+    step: IntegerInput?,
     prefix: string?,
     suffix: string?,
     options: {string}?,
-    max_length: number?,
+    max_length: IntegerInput?,
     color_presets: {string}?,
     color_alpha: boolean?,
     string_set_mode: ("commit" | "change")?,
@@ -86,12 +87,12 @@ export type UiControlDesc = {
     directory_mode: boolean?,
 }
 export type UiGroupDesc = { label: string, build: (pane: UiElement) -> () }
-export type UiListItem = { key: number, label: string }
+export type UiListItem = { key: IntegerInput, label: string }
 export type UiListDesc = {
     items: {UiListItem}?,
-    on_pressed: (list: UiList, key: number) -> (),
-    is_selected: ((list: UiList, key: number) -> boolean)?,
-    is_disabled: ((list: UiList, key: number) -> boolean)?,
+    on_pressed: (list: UiList, key: integer) -> (),
+    is_selected: ((list: UiList, key: integer) -> boolean)?,
+    is_disabled: ((list: UiList, key: integer) -> boolean)?,
 }
 export type UiList = { set_items: (self: UiList, items: {UiListItem}) -> () }
 export type UiWindow = { close: (self: UiWindow) -> () }
@@ -123,7 +124,7 @@ export type UiModule = {
     register_styles: (scope: string, rcss: string) -> UiStyle,
     register_styles_file: (scope: string, path: string) -> UiStyle,
     register_menu_tab: (desc: {label: string, on_selected: () -> ()}) -> UiMenuTab,
-    push_toast: (desc: {type: string?, title_rml: string?, body_rml: string?, duration_ms: number?}) -> (),
+    push_toast: (desc: {type: string?, title_rml: string?, body_rml: string?, duration_ms: IntegerInput?}) -> (),
     get_clipboard_text: () -> string,
     set_clipboard_text: (text: string) -> (),
 }

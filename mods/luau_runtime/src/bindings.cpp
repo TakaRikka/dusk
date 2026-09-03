@@ -10,6 +10,23 @@ namespace {
 constexpr char kOverlayMetatable[] = "dusklight.overlay_handle";
 constexpr char kTextureMetatable[] = "dusklight.texture_handle";
 
+uint64_t get_hash_field(lua_State* state, int table, const char* field, bool required) {
+    lua_getfield(state, table, field);
+    if (lua_isnil(state, -1)) {
+        lua_pop(state, 1);
+        if (required) {
+            luaL_error(state, "field '%s' is required", field);
+        }
+        return 0;
+    }
+    if (!lua_isinteger64(state, -1)) {
+        luaL_error(state, "field '%s' must be an integer", field);
+    }
+    const uint64_t value = static_cast<uint64_t>(lua_tointeger64(state, -1, nullptr));
+    lua_pop(state, 1);
+    return value;
+}
+
 int log_write(lua_State* state, LogLevel level, int messageIndex) {
     Vm& vm = vm_from_upvalue(state);
     if (svc_log == nullptr) {
@@ -213,8 +230,8 @@ int texture_register_data(lua_State* state) {
 
     TextureKey key = TEXTURE_KEY_INIT;
     key.kind = TEXTURE_KEY_SOURCE;
-    key.texture_hash = static_cast<uint64_t>(get_optional_int(state, 1, "texture_hash", 0));
-    key.tlut_hash = static_cast<uint64_t>(get_optional_int(state, 1, "tlut_hash", 0));
+    key.texture_hash = get_hash_field(state, 1, "texture_hash", true);
+    key.tlut_hash = get_hash_field(state, 1, "tlut_hash", false);
     key.width = static_cast<uint32_t>(get_optional_int(state, 1, "width", 0));
     key.height = static_cast<uint32_t>(get_optional_int(state, 1, "height", 0));
     key.gx_format = static_cast<uint32_t>(get_optional_int(state, 1, "gx_format", 0));
