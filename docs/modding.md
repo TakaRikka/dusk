@@ -167,10 +167,12 @@ add_mod(my_mod
 
 Available features:
 
-- `fmt`: Provides the header-only `{fmt}` library and the formatted logging helpers in `mods/svc/log.hpp`.
+- `fmt`: Provides the header-only `{fmt}` library and the formatted logging helpers in
+  [`mods/svc/log.hpp`](../sdk/include/mods/svc/log.hpp).
 - `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
   range of compatibility with Dusklight versions and a slightly faster build process.
-- `webgpu`: Allows importing the WebGPU API (`webgpu/webgpu.h`). Must be enabled when using
+- `webgpu`: Allows importing the WebGPU API
+  ([`webgpu/webgpu.h`](https://github.com/encounter/dawn/blob/main/include/webgpu/webgpu.h)). Must be enabled when using
   [GfxService](#gfxservice-modssvcgfxh).
 
 Building produces `my_mod.dusk` in `build/mods/`. Copy the `.dusk` into the user mods folder:
@@ -303,7 +305,7 @@ if a newer function is present (i.e. running on a new enough Dusklight version).
 
 ## Built-in Services
 
-### LogService (`mods/svc/log.h`)
+### LogService ([`mods/svc/log.h`](../sdk/include/mods/svc/log.h))
 
 **C++**
 
@@ -325,7 +327,7 @@ log.info("spawned the thing")
 
 Messages appear in the console prefixed with your mod ID. Messages are plain UTF-8 strings and are copied before the
 call returns. C++ mods can enable `add_mod(... FEATURES fmt)` and use the formatted logging helpers in
-`mods/svc/log.hpp`:
+[`mods/svc/log.hpp`](../sdk/include/mods/svc/log.hpp):
 
 ```cpp
 #include <mods/svc/log.hpp>
@@ -334,7 +336,7 @@ mods::log::info("spawned actor {} at ({}, {})", actorName, x, y);
 mods::log::warn("health is down to {:.1f}%", healthPercent);
 ```
 
-### ResourceService (`mods/svc/resource.h`)
+### ResourceService ([`mods/svc/resource.h`](../sdk/include/mods/svc/resource.h))
 
 Loads files from the `res/` tree of your `.dusk` archive. Paths are relative to `res/` (pass `"config.txt"`, not
 `"res/config.txt"`); absolute paths and `..` are rejected.
@@ -361,7 +363,7 @@ local contents = resource.load("config.txt")
 Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
 `HostService::data_dir` for persistent storage.
 
-### FileService (`mods/svc/file.h`)
+### FileService ([`mods/svc/file.h`](../sdk/include/mods/svc/file.h))
 
 Provides file and folder pickers, file I/O, exports and folder enumeration.
 
@@ -406,9 +408,10 @@ mods::file::export_file(location, "report.txt", [](mods::file::PickResult result
 `export_file` copies an existing file to a user-selected destination and returns the destination location in its
 callback. Mod-owned persistent files belong in `HostService::data_dir`.
 
-### HttpService (`mods/svc/http.h`)
+### HttpService ([`mods/svc/http.h`](../sdk/include/mods/svc/http.h))
 
-Asynchronous HTTPS requests supporting HTTP/2 and TLS 1.2+. C++ mods should use the helpers in `mods/svc/http.hpp`:
+Asynchronous HTTPS requests supporting HTTP/2 and TLS 1.2+. C++ mods should use the helpers in
+[`mods/svc/http.hpp`](../sdk/include/mods/svc/http.hpp):
 
 ```cpp
 #include "mods/svc/http.hpp"
@@ -448,7 +451,7 @@ For large responses, set `downloadPath` to an absolute path in the calling mod's
 an empty `body` and the final path in `downloadPath`. Check `Response::ok()` before using the file.
 `Pending::progress()` reports download progress when the server provides a total size.
 
-### HostService (`mods/svc/host.h`)
+### HostService ([`mods/svc/host.h`](../sdk/include/mods/svc/host.h))
 
 Mod metadata and runtime interaction with the loader.
 
@@ -506,12 +509,13 @@ svc_host->watch_mod_lifecycle(mod_ctx, on_mod_lifecycle, nullptr, &watch);
 `MOD_LIFECYCLE_DETACHED` fires on the game thread at a lifecycle safe point, after the subject's `mod_shutdown` ran and
 every service dropped its state. For your own mod's teardown, use `mod_shutdown` instead.
 
-### HookService (`mods/svc/hook.h`)
+### HookService ([`mods/svc/hook.h`](../sdk/include/mods/svc/hook.h))
 
 Installs hooks on game functions and resolves symbols by name. You'll rarely call it directly; use the typed helpers in
-`mods/svc/hook.hpp` described in [Hooking Game Functions](#hooking-game-functions).
+[`mods/svc/hook.hpp`](../sdk/include/mods/svc/hook.hpp) described in
+[Hooking Game Functions](#hooking-game-functions).
 
-### OverlayService (`mods/svc/overlay.h`)
+### OverlayService ([`mods/svc/overlay.h`](../sdk/include/mods/svc/overlay.h))
 
 Registers DVD file overlays at runtime: the dynamic counterpart to the static `overlay/` directory (see
 [Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, a file within an archive,
@@ -546,7 +550,7 @@ data get refreshed without a full restart.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
-### TextureService (`mods/svc/texture.h`)
+### TextureService ([`mods/svc/texture.h`](../sdk/include/mods/svc/texture.h))
 
 Registers texture replacements at runtime: the dynamic counterpart to the static `textures/` directory (see
 [Asset Overlays](#asset-overlays)). Two forms: raw texel data with an explicit key, or an encoded `.dds`/`.png` from
@@ -588,7 +592,7 @@ at registration. Registrations follow your mod's lifecycle.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
-### ConfigService (`mods/svc/config.h`)
+### ConfigService ([`mods/svc/config.h`](../sdk/include/mods/svc/config.h))
 
 Persistent, mod-scoped configuration variables. Each var is stored in the user's `config.json` under
 `mod.<escaped mod id>.<name>` (escaping: `.` → `_`, `_` → `__`, so `com.example.my_mod` becomes `com_example_my__mod`),
@@ -637,7 +641,7 @@ Change callbacks fire on the game thread whenever the value changes at runtime (
 Writes that store the same value are silent. Values applied from `config.json` or `--cvar` at registration do
 **not** fire callbacks; read the value after `register_var` for the starting state.
 
-### SaveService (`mods/svc/save.h`)
+### SaveService ([`mods/svc/save.h`](../sdk/include/mods/svc/save.h))
 
 Stores named binary blobs for each save slot. Blob names are scoped to the calling mod, and each mod may store up to
 `SAVE_BLOB_BUDGET_BYTES` per slot. The service copies data passed to `set_blob`.
@@ -670,7 +674,7 @@ buffer contract as `get_blob`. Pass a `NULL` buffer to either read function to q
 are cleared. Observers are removed automatically when the mod is detached, so the output handle is only needed for
 manual unregistration. Save callbacks run on the game thread.
 
-### StageService (`mods/svc/stage.h`)
+### StageService ([`mods/svc/stage.h`](../sdk/include/mods/svc/stage.h))
 
 Allows making changes to a stage's "stage info" (contents of .dzs/.dzr files).
 (Currently only supports editing actor nodes.)
@@ -719,7 +723,7 @@ Stage names may contain up to 8 characters. For patches and deletions, room `0xf
 layer; additions require a specific room. Edits are removed when the mod is detached. If multiple mods edit the same
 record, the later-loaded mod wins.
 
-### UiService (`mods/svc/ui.h`)
+### UiService ([`mods/svc/ui.h`](../sdk/include/mods/svc/ui.h))
 
 Integrate seamlessly with Dusklight's UI system: add controls and buttons to your mod's detail pane in the Mods window,
 create custom windows and modal dialogs, apply custom RCSS stylesheets (anywhere!), and add menu bar tabs.
@@ -915,7 +919,7 @@ existing documents restyle immediately, and future ones pick it up when created.
 host styles and may override them. Scope selectors tightly (use `[mod-id="..."]`!), especially for `UI_SCOPE_WINDOW`,
 unless changing host UI is intentional.
 
-### WindowService (`mods/svc/window.h`)
+### WindowService ([`mods/svc/window.h`](../sdk/include/mods/svc/window.h))
 
 Allows creating new windows that can be rendered to via `GfxService`.
 
@@ -935,12 +939,13 @@ one present target may be attached to a WindowService window at a time.
 
 New windows are hidden by default so a mod can finish attaching graphics before calling `show_window`.
 
-### GfxService (`mods/svc/gfx.h`)
+### GfxService ([`mods/svc/gfx.h`](../sdk/include/mods/svc/gfx.h))
 
 **Requires `add_mod(... FEATURES webgpu)`**
 
-Direct WebGPU access at various stages of the rendering pipeline. Mods use the `wgpu*` C API (via `webgpu/webgpu.h`) for
-custom draws and compute dispatches. Mods must manage their own WebGPU state, including pipelines and bind groups.
+Direct WebGPU access at various stages of the rendering pipeline. Mods use the `wgpu*` C API (via
+[`webgpu/webgpu.h`](https://github.com/encounter/dawn/blob/main/include/webgpu/webgpu.h)) for custom draws and compute
+dispatches. Mods must manage their own WebGPU state, including pipelines and bind groups.
 
 ```cpp
 IMPORT_SERVICE(GfxService, svc_gfx);
@@ -990,7 +995,7 @@ To create a `WGPUSurface` manually, `GfxDeviceInfo` holds the `WGPUInstance` and
 `push_present` must be called every frame from a GfxService stage callback. If surface was lost, `push_present` returns
 `MOD_ERROR`. Unregister and re-register the target before trying again.
 
-### CameraService (`mods/svc/camera.h`)
+### CameraService ([`mods/svc/camera.h`](../sdk/include/mods/svc/camera.h))
 
 Converts a game view provided by a render callback into WebGPU-convention camera data. Matrix fields are column-major
 `float[16]` values using the matrix * column-vector convention (transpose of the game's row-major `Mtx`/`Mtx44` layout),
@@ -1012,7 +1017,7 @@ first in-game frame. Projection matrices match the renderer's WebGPU clip conven
 Camera operators allow overriding the main camera. When an operator callback returns true, its values replace the camera
 state for the current frame. Register and unregister using `register_camera_operator` / `unregister_camera_operator`.
 
-### GameModeService (`mods/svc/game_mode.h`)
+### GameModeService ([`mods/svc/game_mode.h`](../sdk/include/mods/svc/game_mode.h))
 
 Allows a mod to register a game mode with callbacks for key gameplay and save lifecycle events. Registered game modes
 appear in the prelaunch menu. Game modes may use a unique set of saves by configuring `save_name`; leave it empty to use
@@ -1138,7 +1143,7 @@ svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
 **Requires `add_mod(... FEATURES game)`**
 
 Mods may hook the vast majority of game functions, including file-local static, private and virtual functions.
-`mods/svc/hook.hpp` provides typed helpers over the hook service:
+[`mods/svc/hook.hpp`](../sdk/include/mods/svc/hook.hpp) provides typed helpers over the hook service:
 
 ```cpp
 #include "mods/svc/hook.hpp"
