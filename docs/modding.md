@@ -172,7 +172,7 @@ Available features:
 - `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
   range of compatibility with Dusklight versions and a slightly faster build process.
 - `webgpu`: Allows importing the WebGPU API
-  ([`webgpu/webgpu.h`](https://github.com/encounter/dawn/blob/main/include/webgpu/webgpu.h)). Must be enabled when using
+  ([`webgpu/webgpu.h`](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h)). Must be enabled when using
   [GfxService](#gfxservice-modssvcgfxh).
 
 Building produces `my_mod.dusk` in `build/mods/`. Copy the `.dusk` into the user mods folder:
@@ -944,7 +944,7 @@ New windows are hidden by default so a mod can finish attaching graphics before 
 **Requires `add_mod(... FEATURES webgpu)`**
 
 Direct WebGPU access at various stages of the rendering pipeline. Mods use the `wgpu*` C API (via
-[`webgpu/webgpu.h`](https://github.com/encounter/dawn/blob/main/include/webgpu/webgpu.h)) for custom draws and compute
+[`webgpu/webgpu.h`](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h)) for custom draws and compute
 dispatches. Mods must manage their own WebGPU state, including pipelines and bind groups.
 
 ```cpp
