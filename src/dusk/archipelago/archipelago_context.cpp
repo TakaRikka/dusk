@@ -2,10 +2,12 @@
 
 #include <array>
 #include <thread>
+#include <unordered_map>
 
 #include "Archipelago.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
+#include "d/d_map_path_dmap.h"
 #include "d/actor/d_a_alink.h"
 #include "dusk/config.hpp"
 #include "dusk/logging.h"
@@ -111,6 +113,214 @@ ArchipelagoContext& instance() {
     static ArchipelagoContext instance;
     return instance;
 }
+
+// Stage code -> display name, mirroring the apworld's ClientUtils.py STAGE_TO_NAME. poptracker's
+// autotracking keys off these exact strings, so keep it in sync with the apworld client.
+static const std::unordered_map<std::string, std::string> sStageCodeToName = {
+    {"D_MN01", "Lakebed Temple"},
+    {"D_MN04", "Goron Mines"},
+    {"D_MN05", "Forest Temple"},
+    {"D_MN06", "Temple of Time"},
+    {"D_MN07", "City in the Sky"},
+    {"D_MN08", "Palace of Twilight"},
+    {"D_MN09", "Hyrule Castle"},
+    {"D_MN10", "Arbiter's Grounds"},
+    {"D_MN11", "Snowpeak Ruins"},
+    {"D_SB00", "Ice Block Cave"},
+    {"D_SB01", "Cave or Ordeals"},
+    {"D_SB02", "Kakariko Gorge Lantern Cave"},
+    {"D_SB03", "Lake Hylia Lantern Cave"},
+    {"D_SB04", "Goron Stockcave"},
+    {"D_SB05", "Grotto 1"},
+    {"D_SB06", "Grotto 2"},
+    {"D_SB07", "Grotto 3"},
+    {"D_SB08", "Grotto 4"},
+    {"D_SB09", "Grotto 5"},
+    {"D_SB10", "Faron Woods Cave"},
+    {"F_SP00", "Ordon Ranch"},
+    {"F_SP102", "Title Screen"},
+    {"F_SP103", "Ordon Village"},
+    {"F_SP104", "Ordon Spring"},
+    {"F_SP108", "Faron Woods"},
+    {"F_SP109", "Kakariko Village"},
+    {"F_SP110", "Death Mountain"},
+    {"F_SP111", "Kakariko Graveyard"},
+    {"F_SP112", "Zora's River"},
+    {"F_SP113", "Zora's Domain"},
+    {"F_SP114", "Snowpeak"},
+    {"F_SP115", "Lake Hylia"},
+    {"F_SP116", "Hyrule Castle Town"},
+    {"F_SP117", "Sacred Grove"},
+    {"F_SP118", "Bulblin Camp"},
+    {"F_SP121", "Hyrule Field"},
+    {"F_SP122", "Castle Town Fields"},
+    {"F_SP123", "King Bulbin Fights"},
+    {"F_SP124", "Gerudo Desert"},
+    {"F_SP125", "Mirror Chamber"},
+    {"F_SP126", "Upper Zora's River"},
+    {"F_SP127", "Fishing Pond"},
+    {"F_SP128", "Hidden Village"},
+    {"F_SP200", "Shade's Realm"},
+    {"R_SP01", "Ordon Interiors"},
+    {"R_SP107", "Sewers"},
+    {"R_SP108", "Coro's Lantern Shop"},
+    {"R_SP109", "Kakriko Interiors"},
+    {"R_SP110", "Death Mountain Sumo Hall"},
+    {"R_SP116", "Hyrule Castle Town Interiors (Telma's bar)"},
+    {"R_SP127", "Hena's Cabin"},
+    {"R_SP128", "Impaz's House"},
+    {"R_SP160", "Hyrule Castle Town Interiors (Jovani, Agitha, Shops, etc)"},
+    {"R_SP161", "Star Tent"},
+    {"R_SP209", "Sanctuary Basement"},
+    {"R_SP300", "Light Arrow cutscenes"},
+    {"R_SP301", "Hyrule Castle cutscenes"},
+    {"S_MV000", "Deleted"},
+};
+
+// Reads the null-or-length-terminated 8 byte stage code out of the live game state.
+static std::string ReadCurrentStageCode() {
+    const char* raw = dComIfGp_getStartStageName();
+    std::string code;
+    for (int i = 0; i < 8 && raw[i] != '\0'; ++i) {
+        code.push_back(raw[i]);
+    }
+    return code;
+}
+
+// Resolves a raw stage code to its AP display name, or nullptr if unknown. Dungeon boss-room
+// sub-stages ("D_MN01A") are folded to the base 6-char dungeon code first, as ClientUtils.py does.
+static const std::string* ResolveStageName(std::string stageCode) {
+    if (stageCode.rfind("D_MN", 0) == 0 && stageCode.size() > 6) {
+        stageCode.resize(6);
+    }
+
+    auto it = sStageCodeToName.find(stageCode);
+    if (it == sStageCodeToName.end())
+        return nullptr;
+    return &it->second;
+}
+
+static std::string ToJsonStringLiteral(const std::string& value) {
+    std::string out = "\"";
+    for (char c : value) {
+        if (c == '"' || c == '\\')
+            out.push_back('\\');
+        out.push_back(c);
+    }
+    out.push_back('"');
+    return out;
+}
+
+static void SetTrackedIntDataStorage(const std::string& key, int value, int defaultValue) {
+    AP_SetServerDataRequest request;
+    request.key = key;
+    request.type = AP_DataType::Int;
+    request.want_reply = false;
+    request.default_value = &defaultValue;
+    AP_DataStorageOperation replaceOp;
+    replaceOp.operation = "replace";
+    replaceOp.value = &value;
+    request.operations = {replaceOp};
+    AP_BulkSetServerData(&request);
+}
+
+static void SetTrackedStringDataStorage(const std::string& key, const std::string& value, const std::string& defaultValue) {
+    AP_SetServerDataRequest request;
+    request.key = key;
+    request.type = AP_DataType::Raw;
+    request.want_reply = false;
+    std::string jsonDefault = ToJsonStringLiteral(defaultValue);
+    request.default_value = &jsonDefault;
+    std::string jsonValue = ToJsonStringLiteral(value);
+    AP_DataStorageOperation replaceOp;
+    replaceOp.operation = "replace";
+    replaceOp.value = &jsonValue;
+    request.operations = {replaceOp};
+    AP_BulkSetServerData(&request);
+}
+
+// Sent as bare JSON literals (true/false), not JSON strings, matching the apworld client and what
+// poptracker's autotracking expects.
+static void SetTrackedBoolDataStorage(const std::string& key, bool value, bool defaultValue) {
+    AP_SetServerDataRequest request;
+    request.key = key;
+    request.type = AP_DataType::Raw;
+    request.want_reply = false;
+    std::string jsonDefault = defaultValue ? "true" : "false";
+    request.default_value = &jsonDefault;
+    std::string jsonValue = value ? "true" : "false";
+    AP_DataStorageOperation replaceOp;
+    replaceOp.operation = "replace";
+    replaceOp.value = &jsonValue;
+    request.operations = {replaceOp};
+    AP_BulkSetServerData(&request);
+}
+
+// Howling Stones: byte+bitmask offsets into dComIfGs_getSaveInfo(), from the apworld's
+// ClientUtils.py. Scents/quest-items/Memory Reward don't read correctly this way on this build;
+// they use sEventBitTrackingEntries below instead.
+struct FlagTrackingEntry {
+    const char* key;
+    std::size_t offset;
+    u8 mask;
+};
+
+static const std::array<FlagTrackingEntry, 6> sFlagTrackingEntries = {{
+    {"Death Mountain Stone", 0x82A, 0x80},
+    {"Zora River Stone", 0x82A, 0x40},
+    {"Sacred Grove Stone", 0x82A, 0x20},
+    {"Lake Hylia Stone", 0x82A, 0x10},
+    {"Snowpeak Stone", 0x82A, 0x8},
+    {"Hidden Village Stone", 0x82A, 0x4},
+}};
+
+static bool ReadSaveInfoFlag(std::size_t offset, u8 mask) {
+    auto* base = reinterpret_cast<const u8*>(dComIfGs_getSaveInfo());
+    return (base[offset] & mask) != 0;
+}
+
+// Scents/quest-items/Memory Reward, read via dComIfGs_isEventBit(rawFlagValue). Most values are
+// cross-checked against randomizer/generator/data/startflags.yaml; "Youth Scent", "Ilias Scent"
+// and "Memory Reward" are inferred from d_save_bit_labels.inc and lower-confidence.
+struct EventBitTrackingEntry {
+    const char* key;
+    u16 flagValue;
+};
+
+static const std::array<EventBitTrackingEntry, 10> sEventBitTrackingEntries = {{
+    {"Youth Scent", 0x2240},
+    {"Ilias Scent", 0x2220},
+    {"Medicine Scent", 0x2F04},
+    {"ReekFish Scent", 0x6120},
+    {"Poe Scent", 0x6210},
+    {"Renados letter", 0x0F80},
+    {"Telmas Invoice", 0x2710},
+    {"Wooden Statue", 0x2204},
+    {"Ilias Charm", 0x2280},
+    {"Memory Reward", 0x2320},
+}};
+
+static bool ReadEventBit(u16 flagValue) {
+    return dComIfGs_isEventBit(flagValue) != 0;
+}
+
+// The 8 boss-defeated keys. clearFlagValue is the vanilla dungeon-clear event bit, which
+// UpdateFlagTrackingData() reads (see the note there).
+struct BossTrackingEntry {
+    const char* key;
+    u16 clearFlagValue;
+};
+
+static const std::array<BossTrackingEntry, 8> sBossTrackingEntries = {{
+    {"Diababa Defeated", 0x0602},
+    {"Fyrus Defeated", 0x0701},
+    {"Morpheel Defeated", 0x0904},
+    {"Stallord Defeated", 0x2010},
+    {"Blizzeta Defeated", 0x2008},
+    {"Armogohma Defeated", 0x2004},
+    {"Argorok Defeated", 0x2002},
+    {"Zant Defeated", 0x4680},
+}};
 
 const SettingsNameConvert& GetAPSettingNameConvert(const std::string& apSettingName) {
     for (const auto& entry : sArchiSettingToDusklight) {
@@ -364,8 +574,9 @@ std::string ArchipelagoContext::GetArchipelagoSeedName() {
 }
 
 void ArchipelagoContext::GetSeedDirectoryPath(std::filesystem::path& outPath) {
-    if (IsConnected()) {
-        auto& roomInfo = instance().m_roomInfo;
+    // Also require IsRoomInfoReady(): with an empty seed_name this would resolve to "archipelago/AP_",
+    // a bogus directory with no dedup history. Leaving outPath untouched makes that visible to callers.
+    if (IsConnected() && IsRoomInfoReady()) {
         outPath = ui::GetRandomizerPath() / "archipelago" / GetArchipelagoSeedName();
     }
 }
@@ -398,6 +609,13 @@ bool ArchipelagoContext::ConnectToServer(int file, bool isBlocking) {
         std::lock_guard<std::mutex> lock(instance().m_queueMutex);
         instance().m_receivedItemsQueue.clear();
     }
+
+    // Reset the tracking-data "last sent" caches so the new connection resends a full set.
+    instance().m_lastSentStageName.clear();
+    instance().m_lastSentRoom = std::numeric_limits<int>::min();
+    instance().m_lastSentFloor = std::numeric_limits<int>::min();
+    instance().m_lastSentLayer = std::numeric_limits<int>::min();
+    instance().m_lastSentFlags.clear();
 
     instance().LoadTempItemInfo();
 
@@ -481,6 +699,10 @@ bool ArchipelagoContext::IsConnected() {
     return status == AP_ConnectionStatus::Connected || status == AP_ConnectionStatus::Authenticated;
 }
 
+bool ArchipelagoContext::IsRoomInfoReady() {
+    return !instance().m_roomInfo.seed_name.empty();
+}
+
 void ArchipelagoContext::MessageThreadFunc() {
     DuskLog.info("AP Thread started.");
 
@@ -498,9 +720,87 @@ void ArchipelagoContext::MessageThreadFunc() {
     DuskLog.info("AP Thread ended.");
 }
 
+void ArchipelagoContext::UpdateMapTrackingData() {
+    // Team is hardcoded to 0 (AP doesn't use multiple teams yet; matches poptracker's fallback).
+    const int team = 0;
+    const int slot = AP_GetPlayerID();
+    const std::string keyPrefix = "TP_" + std::to_string(team) + "_" + std::to_string(slot) + "_";
+
+    std::string stageCode = ReadCurrentStageCode();
+    const std::string* stageName = ResolveStageName(stageCode);
+    if (!stageName) {
+        DuskLog.warn("UpdateMapTrackingData: unrecognized stage code '{}', not sending Current Stage update", stageCode);
+    } else if (*stageName != instance().m_lastSentStageName) {
+        SetTrackedStringDataStorage(keyPrefix + "Current Stage", *stageName, "Menu");
+        instance().m_lastSentStageName = *stageName;
+    }
+
+    int room = dStage_roomControl_c::getStayNo();
+    if (room != instance().m_lastSentRoom) {
+        SetTrackedIntDataStorage(keyPrefix + "Current Room", room, -1);
+        instance().m_lastSentRoom = room;
+    }
+
+    // Send the raw unsigned byte (basements wrap to 255/254/253), matching the apworld's client.
+    int floor = static_cast<u8>(dMapInfo_c::mNowStayFloorNo);
+    if (floor != instance().m_lastSentFloor) {
+        SetTrackedIntDataStorage(keyPrefix + "Current Floor", floor, -1);
+        instance().m_lastSentFloor = floor;
+    }
+
+    int layer = dComIfGp_getStartStageLayer();
+    if (layer != instance().m_lastSentLayer) {
+        SetTrackedIntDataStorage(keyPrefix + "Current Layer", layer, -1);
+        instance().m_lastSentLayer = layer;
+    }
+
+    AP_CommitServerData();
+}
+
+void ArchipelagoContext::UpdateFlagTrackingData() {
+    // See UpdateMapTrackingData() for why team is hardcoded to 0.
+    const int team = 0;
+    const int slot = AP_GetPlayerID();
+    const std::string keyPrefix = "TP_" + std::to_string(team) + "_" + std::to_string(slot) + "_";
+
+    for (const auto& entry : sFlagTrackingEntries) {
+        bool value = ReadSaveInfoFlag(entry.offset, entry.mask);
+        auto it = instance().m_lastSentFlags.find(entry.key);
+        if (it != instance().m_lastSentFlags.end() && it->second == value)
+            continue;
+        SetTrackedBoolDataStorage(keyPrefix + entry.key, value, false);
+        instance().m_lastSentFlags[entry.key] = value;
+    }
+
+    for (const auto& entry : sEventBitTrackingEntries) {
+        bool value = ReadEventBit(entry.flagValue);
+        auto it = instance().m_lastSentFlags.find(entry.key);
+        if (it != instance().m_lastSentFlags.end() && it->second == value)
+            continue;
+        SetTrackedBoolDataStorage(keyPrefix + entry.key, value, false);
+        instance().m_lastSentFlags[entry.key] = value;
+    }
+
+    // Boss-defeated state comes from the dungeon-clear event bit; dComIfGs_isStageBossEnemy()
+    // reads false for bosses in dungeons other than the one you're currently in.
+    for (const auto& entry : sBossTrackingEntries) {
+        bool defeated = ReadEventBit(entry.clearFlagValue);
+        auto it = instance().m_lastSentFlags.find(entry.key);
+        if (it != instance().m_lastSentFlags.end() && it->second == defeated)
+            continue;
+        SetTrackedBoolDataStorage(keyPrefix + entry.key, defeated, false);
+        instance().m_lastSentFlags[entry.key] = defeated;
+    }
+
+    AP_CommitServerData();
+}
+
 void ArchipelagoContext::Execute() {
     if (!IsConnected())
         return;
+
+    UpdateMapTrackingData();
+    UpdateFlagTrackingData();
 
     // backfill the per-species "Misc." flag for any golden bugs already obtained before this fix
     // existed, so previously-received bugs are picked up by Agitha/the bug menu without needing to
@@ -558,8 +858,15 @@ void ArchipelagoContext::Execute() {
 
     // update location checks here if we need to
     if (instance().m_isUpdateLocations) {
-        UpdateCheckedLocations();
+        UpdateCheckedLocations(true);
         instance().m_isUpdateLocations = false;
+        instance().m_locationRescanTimer = 0;
+    }
+    // ~1s backstop for checks whose flag is set outside execItemGet() (AG poe soul pulls, Agitha
+    // bug rewards). Re-reads the real game flags, so it's independent of how the flag was set.
+    else if (IsReceivedLocationScouts() && ++instance().m_locationRescanTimer >= 60) {
+        instance().m_locationRescanTimer = 0;
+        UpdateCheckedLocations();
     }
 }
 
@@ -629,27 +936,24 @@ bool ArchipelagoContext::shouldSkipDuplicateItem(const ReceivedItemEntry& entry)
     // always be deduped, reset or not; everything else keeps the original reset-bypass behavior,
     // since re-granting equipment/one-off items after the wipe is harmless.
     //
-    // Progressive Sky Book (AP id 123) has the exact same problem despite looking flag-gated at the
-    // top level: getProgressiveSkybook() resolves every receive after the first two into "Air Letter",
-    // which does the same unconditional dComIfGs_setAncientDocumentNum(letterCount + 1) with no
-    // "already counted" check - so it's just as vulnerable to replay-induced over-counting as keys.
-    //
-    // Piece of Heart / Heart Container (AP ids 23/24) are the same shape of bug: item_func_KAKERA_HEART/
-    // UTUWA_HEART call dComIfGp_setItemMaxLifeCount(), which does an unconditional mItemMaxLifeCount +=
-    // max - re-processing one of these on replay permanently inflates max health.
+    // Piece of Heart/Heart Container and Progressive Sky Book also lack an "already counted" guard,
+    // but unlike keys their backing state IS wiped by HandleResetInventory(), so replaying their
+    // full history against the wiped baseline reconstructs the correct total. Deduping them
+    // permanently would instead lose them after a reset (observed with Progressive Sky Book).
     const bool isSmallKeyItem = (entry.relativeId >= 54 && entry.relativeId <= 62) || entry.relativeId == 66;
-    const bool isSkyBookItem = entry.relativeId == 123;
-    const bool isHeartItem = entry.relativeId == 23 || entry.relativeId == 24;
-    const bool isNonIdempotentCounter = isSmallKeyItem || isSkyBookItem || isHeartItem;
 
-    // Items delivered with no location (AP's "precollected"/start-inventory items, which the
-    // pre-existing `netItem.location != -1` check this replaced already anticipated as a real,
-    // expected value) can't use any location-based dedup at all. For ordinary items that's fine -
-    // re-granting an idempotent item is harmless - but the non-idempotent counters above still need
-    // *some* persistent dedup, or a location-less key/skybook/heart delivery would replay and
-    // over-count on every single reconnect with zero protection. Dedup those via (player,
-    // relativeId) instead, in a key range (bit 47 set) that can never collide with a real
-    // apLocationId, which this codebase's location ids never approach.
+    // Ice Trap (AP id 131) has no backing state at all: its freeze effect already played and
+    // HandleResetInventory() can't wipe it, so a processed trap must stay deduped, reset or not, or
+    // every reconnect resync stacks another freeze. Dedup below is keyed by (player, location), so
+    // each distinct trap still fires once.
+    const bool isIceTrap = entry.relativeId == 131;
+
+    const bool isNonIdempotentCounter = isSmallKeyItem || isIceTrap;
+
+    // Location-less items (AP precollected/start-inventory) can't use location-based dedup. That's
+    // harmless for idempotent items, but a location-less key would over-count on every reconnect,
+    // so dedup those via (player, relativeId) in a key range (bit 47 set) that can't collide with
+    // a real apLocationId.
     if (entry.location == -1) {
         if (!isNonIdempotentCounter)
             return false;
@@ -742,6 +1046,10 @@ void ArchipelagoContext::HandleResetInventory() {
     // reset collect (poes, shards, swords)
     playerInfo.getCollect().init();
 
+    // The above don't touch the Sky Book letter count; zero it too so its replay (see
+    // shouldSkipDuplicateItem()) starts from a clean baseline.
+    dComIfGs_setAncientDocumentNum(0);
+
     playerInfo.getPlayerStatusA().setMaxLife(15);
     playerInfo.getPlayerStatusA().setWalletSize(WALLET);
     // dont reset rupees, and instead reject rupee updates while refilling inv
@@ -829,7 +1137,7 @@ void ArchipelagoContext::HandleReceiveLocationScout(const std::vector<AP_Network
 }
 // TODO: atm this is a sort of lazy solution to not having direct access to what location was checked when an execItemGet is called
 // so eventually finding a way to properly associate locations with their respective item get funcs would benefit this system
-void ArchipelagoContext::UpdateCheckedLocations() {
+void ArchipelagoContext::UpdateCheckedLocations(bool warnIfNoChange) {
     auto& world = instance().m_archiWorld;
     std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
@@ -859,7 +1167,7 @@ void ArchipelagoContext::UpdateCheckedLocations() {
         }
     }
 
-    if (!changed) {
+    if (!changed && warnIfNoChange) {
         DuskLog.warn("No locations had any changes! this might not be normal.");
     }
 }
@@ -1198,6 +1506,12 @@ void ArchipelagoContext::GenerateLocalWorldData() {
     std::filesystem::path workingDir;
 
     GetSeedDirectoryPath(workingDir);
+
+    if (workingDir.empty()) {
+        DuskLog.fatal("GenerateLocalWorldData: seed directory path is empty (Room Info not "
+            "received yet) - aborting world data generation instead of using a bogus directory.");
+        return;
+    }
 
     if (std::filesystem::exists(workingDir)) {
         instance().m_config.LoadFromFile(workingDir / "settings.yaml", workingDir / "preferences.yaml");

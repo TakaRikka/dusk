@@ -128,6 +128,26 @@ void HandleArchipelagoConnect() {
         return;
     }
 
+    // seed_name arrives asynchronously after connect; GenerateLocalWorldData() needs it to
+    // resolve the seed folder, so wait for it (with a timeout) before continuing.
+    constexpr auto kRoomInfoTimeout = std::chrono::seconds(5);
+    const auto roomInfoWaitStart = std::chrono::steady_clock::now();
+
+    while (!archi::ArchipelagoContext::IsRoomInfoReady()) {
+        if (!archi::ArchipelagoContext::IsConnected()) {
+            DuskLog.error("Lost connection while waiting for room info.");
+            connectStatus.store(ArchiConnectModal::ConnectionStatus::Error);
+            return;
+        }
+        if (std::chrono::steady_clock::now() - roomInfoWaitStart > kRoomInfoTimeout) {
+            DuskLog.error("Room info (seed name) not received after {}s, giving up.", kRoomInfoTimeout.count());
+            archi::ArchipelagoContext::DisconnectFromServer();
+            connectStatus.store(ArchiConnectModal::ConnectionStatus::Error);
+            return;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
+
     archi::ArchipelagoContext::GenerateLocalWorldData();
 
     connectStatus.store(ArchiConnectModal::ConnectionStatus::Success);

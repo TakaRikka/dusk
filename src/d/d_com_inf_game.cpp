@@ -15,6 +15,7 @@
 #include "d/d_menu_window_HIO.h"
 #include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
+#include "d/d_msg_object.h"
 #include "d/d_simple_model.h"
 #include "d/d_timer.h"
 #include "f_op/f_op_msg_mng.h"
@@ -2985,6 +2986,13 @@ void dComIfGs_setupRandomizerSave() {
     for (const auto& flag : randoData.mStartEventFlags) {
         dComIfGs_onEventBit(flag);
     }
+
+    // Head-start both donation counters to 950 (goal is 1000) so only a small final donation finishes them.
+    dMsgObject_setOffering(950); // Charlo
+    if (randoData.mSettings[RandomizerContext::SKIP_BRIDGE_DONATION] == RandomizerContext::OFF) {
+        dMsgObject_setFundRaising(950); // Malo Mart bridge
+    }
+
     // Region Flags
     for (const auto& [region, flags] : randoData.mStartRegionFlags) {
         for (const auto& flag : flags) {

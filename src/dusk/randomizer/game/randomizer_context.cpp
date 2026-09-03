@@ -581,6 +581,25 @@ static void updateGoalFlags() {
             dComIfGs_onEventBit(FIXED_THE_MIRROR_OF_TWILIGHT);
         }
     }
+
+    // Re-derive the Goron Mines elder ladder switches from the "talked to elder" event bits;
+    // the randomizer's key-shard shortcut skips the dialogue that vanilla uses to set them.
+    {
+        constexpr int GM_SAVE_ID       = 0x11;  // D_MN04
+        constexpr int GM_SW_ELDER_LAD1 = 0x27;
+        constexpr int GM_SW_ELDER_LAD2 = 0x28;
+
+        if (dComIfGs_isEventBit(TALKED_TO_GOR_AMATO_IN_GORON_MINES) ||
+            dComIfGs_isEventBit(TALKED_TO_GOR_EBIZO_IN_GORON_MINES) ||
+            dComIfGs_isEventBit(TALKED_TO_GOR_LIGGS_IN_GORON_MINES)) {
+            if (!dComIfGs_isStageSwitch(GM_SAVE_ID, GM_SW_ELDER_LAD1)) {
+                dComIfGs_onStageSwitch(GM_SAVE_ID, GM_SW_ELDER_LAD1);
+            }
+            if (!dComIfGs_isStageSwitch(GM_SAVE_ID, GM_SW_ELDER_LAD2)) {
+                dComIfGs_onStageSwitch(GM_SAVE_ID, GM_SW_ELDER_LAD2);
+            }
+        }
+    }
 }
 
 int RandomizerState::execute() {
@@ -1071,12 +1090,10 @@ RandomizerContext WriteSeedData(randomizer::logic::world::World* world) {
 
         const auto& metaData = location->GetMetadata();
 
-        // The 10 categories checked in this block (Chest, Poe, Freestanding Item, Bug Reward,
-        // Sky Character, Golden Wolf, Twilit Insect, Name Lookup, FLW Message, Shop) are exactly
-        // RandomizerContext::kAtomicallyGrantedLocationCategories - ArchipelagoContext::
-        // hasAtomicLocalGrant() depends on that same list to decide which locations grant their
-        // item atomically/locally. Adding a category here without adding it to that shared list
-        // (or vice versa) will silently misclassify the new category's dedup behavior.
+        // Populates the per-category override tables below. Categories that also grant their item
+        // locally must be listed in RandomizerContext::kAtomicallyGrantedLocationCategories, which
+        // hasAtomicLocalGrant() uses for dedup. "Twilit Insect" and "Bug Reward" are intentionally
+        // not in that list: their tables are tracker-only and their item comes from the network.
 
         // Chest Overrides
         // Keyed by u16 of 0xFF00 (stage index) and 0x00FF (tbox id)

@@ -26,20 +26,15 @@ public:
     static constexpr size_t OBJ_DELETE_SIZE = 1;
     static constexpr u8 ROOM_STAGE = 0xFF;
 
-    // Location categories whose randomized item gets embedded directly into a local object/NPC/
-    // dialogue lookup (mTreasureChestOverrides, mPoeOverrides, mFreestandingItemOverrides,
-    // mBugRewardOverrides, mSkyCharacterOverrides, mGoldenWolfOverrides, mTwilitInsectOverrides,
-    // mItemLocations, mFlowItemMessageOverrides, mShopOverrides) and granted the instant the player
-    // physically interacts with it, atomically with the location's checked-state - see each
-    // `location->HasCategories(...)` block in randomizer_context.cpp's world-gen loop (~line 1076
-    // onward) for the per-category override-table population, and
-    // ArchipelagoContext::hasAtomicLocalGrant() (archipelago_context.cpp) for the dedup logic that
-    // depends on this same category set. Both sides must reference this single list - a category
-    // added to one without the other already caused one real bug (Iza's Helping Hand double-granting
-    // a Poe Soul when "Name Lookup" was initially missing from the dedup side).
+    // Location categories whose randomized item is embedded into a local object/NPC/dialogue lookup
+    // and granted atomically when the player interacts with it. hasAtomicLocalGrant() (in
+    // archipelago_context.cpp) reads this same list for dedup, so both sides must stay in sync.
+    // "Twilit Insect" and "Bug Reward" are intentionally excluded: nothing in actor code grants
+    // from their tables, so their item only arrives via the network. Listing them here would let
+    // dedup discard that only source. Their override tables stay populated for the tracker's getLocationItem().
     static constexpr std::array kAtomicallyGrantedLocationCategories = {
-        "Chest", "Poe", "Freestanding Item", "Bug Reward", "Sky Character", "Golden Wolf",
-        "Twilit Insect", "Name Lookup", "FLW Message", "Shop"
+        "Chest", "Poe", "Freestanding Item", "Sky Character", "Golden Wolf",
+        "Name Lookup", "FLW Message", "Shop"
     };
 
     RandomizerContext() = default;

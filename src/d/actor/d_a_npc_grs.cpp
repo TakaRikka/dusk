@@ -1199,11 +1199,8 @@ int daNpc_grS_c::talk(void* param_0) {
                     if (randomizer_IsActive()) {
                         unkInt2 = verifyProgressiveItem(randomizer_getItemAtLocation("Goron Mines Gor Amato Key Shard"));
                         randomizer_setTempFlagForLocation("Goron Mines Gor Amato Key Shard");
-                        // Vanilla sets this later in Gor Amato's full dialogue tree (see the "late"
-                        // note on this location in locations.yaml), which is also what normally lets
-                        // the player past him. The randomizer shortcuts straight to spawning the
-                        // substituted item and skips the rest of that dialogue, so without this the
-                        // flag - and passage past him - never actually unlocks.
+                        // The randomizer skips the rest of the elder's dialogue; set the
+                        // "talked to" bit here (updateGoalFlags() derives the ladder switches from it).
                         dComIfGs_onEventBit(TALKED_TO_GOR_AMATO_IN_GORON_MINES);
                     }
 #endif

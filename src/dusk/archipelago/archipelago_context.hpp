@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <mutex>
 #include <string>
 
@@ -60,6 +61,10 @@ namespace dusk::archi
         bool m_isAllowUpdateLocations = false;
         bool m_isEnableDeathLink = false;
 
+        // Frame counter for the periodic UpdateCheckedLocations() backstop in Execute(), for checks
+        // whose flag is set outside execItemGet() (AG poe soul pulls, Agitha bug rewards).
+        int m_locationRescanTimer = 0;
+
         // AP Data
         std::unordered_map<std::string, GameLocationInfo> m_locationItemInfo;
         std::map<int, bool> m_initLocationCollectState;
@@ -89,6 +94,24 @@ namespace dusk::archi
         std::string getLocationNameFromApId(int apId) const;
 
         bool tryKillPlayer();
+
+        // Push the "TP_{team}_{slot}_Current Stage/Room/Floor/Layer" datastorage keys that
+        // poptracker's autotracking reads for map tabs. Only sends keys whose value changed.
+        static void UpdateMapTrackingData();
+
+        // Push the scent/quest-item/howling-stone/memory-reward and 8 boss-defeated datastorage
+        // keys that poptracker's autotracking reads. Only sends keys whose value changed.
+        static void UpdateFlagTrackingData();
+
+        // Last values sent by UpdateMapTrackingData(); sentinel-initialized so the first call
+        // after connecting sends a full set.
+        std::string m_lastSentStageName;
+        int m_lastSentRoom = std::numeric_limits<int>::min();
+        int m_lastSentFloor = std::numeric_limits<int>::min();
+        int m_lastSentLayer = std::numeric_limits<int>::min();
+
+        // Last values sent by UpdateFlagTrackingData(), keyed by AP key name.
+        std::unordered_map<std::string, bool> m_lastSentFlags;
     public:
         ArchipelagoContext();
 
@@ -118,6 +141,10 @@ namespace dusk::archi
 
         static bool IsConnected();
 
+        // True once seed_name has arrived (filled asynchronously after connect). Callers that need
+        // the seed directory must wait for this, not just IsConnected().
+        static bool IsRoomInfoReady();
+
         // State Handlers
 
         static void MessageThreadFunc();
@@ -130,7 +157,7 @@ namespace dusk::archi
 
         static void HandleReceiveLocationScout(const std::vector<AP_NetworkItem>& items);
 
-        static void UpdateCheckedLocations();
+        static void UpdateCheckedLocations(bool warnIfNoChange = false);
 
         static void SetNeedUpdateLocations(bool update);
 
