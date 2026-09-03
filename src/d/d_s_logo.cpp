@@ -24,9 +24,12 @@
 #include "JSystem/JUtility/JUTConsole.h"
 
 #ifdef TARGET_PC
+#include "dusk/game_mode.hpp"
+#include "dusk/language.hpp"
 #include "dusk/logging.h"
-#include "dusk/version.hpp"
 #include "dusk/main.h"
+#include "dusk/mods/svc/save.hpp"
+#include "dusk/version.hpp"
 #include "m_Do/m_Do_MemCard.h"
 #endif
 
@@ -52,8 +55,8 @@ struct homeBtnData {
 #if TARGET_PC
 using namespace dusk::version;
 
-#define LOGO_ARC versionSelect<const char*>({{GameVersion::GcnJpn, "Logo"}, {GameVersion::GcnPal, "LogoPal"}}, "LogoUs")
-#define MSG_PATH versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Msgjp/bmgres.arc"}}, "/res/Msgus/bmgres.arc")
+#define LOGO_ARC regionSelect<const char*>("LogoUs", "LogoPal", "Logo")
+#define MSG_PATH regionSelect<const char*>("/res/Msgus/bmgres.arc", "/res/Msgus/bmgres.arc", "/res/Msgjp/bmgres.arc")
 #elif VERSION == VERSION_SHIELD
 #define LOGO_ARC "LogoUs"
 #define MSG_PATH  "/res/Msgcn/bmgres.arc"
@@ -76,7 +79,20 @@ using namespace dusk::version;
 #define PROGRESSIVE_MODE_ON  OS_PROGRESSIVE_MODE_ON
 #endif
 
-#if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+// TODO: Probably shouldn't actually load LayoutRevo, so I disabled it for now
+#if TARGET_PC && 0
+using namespace dusk::version;
+
+#define FMAP_RES_PATH platformSelect("/res/Layout/fmapres.arc", "/res/LayoutRevo/fmapresR.arc")
+#define DMAP_RES_PATH platformSelect("/res/Layout/dmapres.arc", "/res/LayoutRevo/dmapresR.arc")
+#define COLLECT_RES_PATH platformSelect("/res/Layout/clctres.arc", "/res/LayoutRevo/clctresR.arc")
+
+#define MSG_COM_PATH platformSelect("/res/Layout/msgcom.arc", "/res/LayoutRevo/msgcomR.arc")
+#define MSG_RES0_PATH platformSelect("/res/Layout/msgres00.arc", "/res/LayoutRevo/msgres00R.arc")
+#define MSG_RES1_PATH platformSelect("/res/Layout/msgres01.arc", "/res/LayoutRevo/msgres01R.arc")
+#define MSG_RES2_PATH platformSelect("/res/Layout/msgres02.arc", "/res/LayoutRevo/msgres02R.arc")
+#define MSG_RES3_PATH platformSelect("/res/Layout/msgres03.arc", "/res/LayoutRevo/msgres03R.arc")
+#elif PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
 #define FMAP_RES_PATH "/res/LayoutRevo/fmapresR.arc"
 #define DMAP_RES_PATH "/res/LayoutRevo/dmapresR.arc"
 #define COLLECT_RES_PATH "/res/LayoutRevo/clctresR.arc"
@@ -98,7 +114,10 @@ using namespace dusk::version;
 #define MSG_RES3_PATH "/res/Layout/msgres03.arc"
 #endif
 
-#if PLATFORM_WII || PLATFORM_SHIELD
+#if TARGET_PC
+#define ICON_RES_PATH "/res/CardIcon/cardicon.arc"
+#define PARTICLE_COM_PATH platformSelect<const char*>("/res/Particle/common.jpc", "/res/Particle/common-r.jpc")
+#elif PLATFORM_WII || PLATFORM_SHIELD
 #define ICON_RES_PATH "/res/WiiBannerIcon/bannerIcon.arc"
 #define PARTICLE_COM_PATH "/res/Particle/common-r.jpc"
 #else
@@ -106,7 +125,13 @@ using namespace dusk::version;
 #define PARTICLE_COM_PATH "/res/Particle/common.jpc"
 #endif
 
-#if PLATFORM_WII
+// TODO: Probably shouldn't actually load LayoutRevo, so I disabled it for now
+#if TARGET_PC && 0
+#define RING_RES_PATH platformSelect("/res/Layout/ringres.arc", "/res/LayoutRevo/ringresR.arc")
+#define ITEM_INF_RES_PATH platformSelect("/res/Layout/itmInfRes.arc", "/res/LayoutRevo/itmInfResR.arc")
+#define BUTTON_RES_PATH platformSelect("/res/Layout/button.arc", "/res/LayoutRevo/buttonR.arc")
+#define MAIN2D_PATH platformSelect("/res/Layout/main2D.arc", "/res/LayoutRevo/main2DR.arc")
+#elif PLATFORM_WII
 #define RING_RES_PATH "/res/LayoutRevo/ringresR.arc"
 #define ITEM_INF_RES_PATH "/res/LayoutRevo/itmInfResR.arc"
 #define BUTTON_RES_PATH "/res/LayoutRevo/buttonR.arc"
@@ -771,15 +796,25 @@ void dScnLogo_c::nextSceneChange() {
                     status = mDoMemCd_LoadSync(buf, sizeof(buf), 0);
                     // Wait until the card is loaded
                 } while (status == 0);
-            
+
+                const uint32_t saveSlot = dusk::SaveRequested - 1;
                 if (status == 1) {
-                    dComIfGs_setCardToMemory(buf, dusk::SaveRequested - 1);
+                    dComIfGs_setCardToMemory(buf, saveSlot);
                 } else {
                     dComIfGs_init();
                 }
-            
+
                 dComIfGs_setNoFile(dusk::SaveRequested);
-                dComIfGs_setDataNum(dusk::SaveRequested-1);
+                dComIfGs_setDataNum(saveSlot);
+                if (status == 1) {
+                    dusk::mods::svc::save_slot_loaded(
+                        saveSlot, buf + saveSlot * SAVEDATA_SIZE);
+                    const dusk::gamemode::GameMode* gameMode =
+                        dusk::gamemode::getGameModeManager().getCurrentGameMode();
+                    if (gameMode) {
+                        gameMode->invokeOnSaveLoadedFunction();
+                    }
+                }
 
                 dComIfGs_gameStart();
             
@@ -856,7 +891,7 @@ dScnLogo_c::~dScnLogo_c() {
     JKR_DELETE(mProgressiveSel);
 
     #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
+    if (isRegionPal()) {
         mpPalLogoResCommand->getArchive()->removeResourceAll();
         mpPalLogoResCommand->getArchive()->unmount();
         mpPalLogoResCommand->destroy();
@@ -967,7 +1002,14 @@ dScnLogo_c::~dScnLogo_c() {
     mDoExt_getRubyFont();
     mDoExt_setAraCacheSize(free_size - aram_heap->getTotalFreeSize());
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (isRegionJpn()) {
+        if (dComIfGp_getFontArchive() != NULL) {
+            dComIfGp_getFontArchive()->unmount();
+            dComIfGp_setFontArchive(NULL);
+        }
+    }
+#elif VERSION == VERSION_GCN_JPN
     if (dComIfGp_getFontArchive() != NULL) {
         dComIfGp_getFontArchive()->unmount();
         dComIfGp_setFontArchive(NULL);
@@ -1024,7 +1066,7 @@ static int phase_0(dScnLogo_c* i_this) {
     JKRHEAP_NAME(i_this->mLogo01Heap, "Logo01");
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
-    IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)
+    IF_DUSK_BLOCK(isRegionPal())
     switch (i_this->getPalLanguage()) {
     case 1:
         i_this->mpPalLogoResCommand = mDoDvdThd_mountArchive_c::create("/res/Layout/LogoPalGm.arc", 0, NULL);
@@ -1065,7 +1107,7 @@ static int phase_1(dScnLogo_c* i_this) {
     #endif
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
-    IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)
+    IF_DUSK_BLOCK(isRegionPal())
     if (!mDoDvdThd::SyncWidthSound) {
         return cPhs_INIT_e;
     }
@@ -1300,7 +1342,7 @@ void dScnLogo_c::logoInitGC() {
     mDolbyLogo = JKR_NEW dDlst_2D_c(dolbyImg, 189, 150, 232, 112, 255);
 
 #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
+    if (isRegionPal()) {
         u8 language = getPalLanguage();
         if (language >= 5) {
             language = 0;
@@ -1563,30 +1605,15 @@ void dScnLogo_c::dvdDataLoad() {
     mpButtonCommand = aramMount(BUTTON_RES_PATH, mDoExt_getJ2dHeap());
     mpCardIconCommand = aramMount(ICON_RES_PATH, mDoExt_getJ2dHeap());
 
-    #if TARGET_PC
-    if (getGameVersion() == GameVersion::GcnPal) {
-        switch (getPalLanguage()) {
-        case 1:
-            mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
-            break;
-        case 2:
-            mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
-            break;
-        case 3:
-            mpBmgResCommand = onMemMount("/res/Msgsp/bmgres.arc");
-            break;
-        case 4:
-            mpBmgResCommand = onMemMount("/res/Msgit/bmgres.arc");
-            break;
-        case 0:
-        default:
-            mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
-            break;
-        }
-    } else {
-        mpBmgResCommand = onMemMount(MSG_PATH);
-    }
-    #elif VERSION == VERSION_GCN_PAL
+#if TARGET_PC
+#if AVOID_UB
+    static char bmgPath[32];
+#else
+    static char bmgPath[22];
+#endif
+    snprintf(bmgPath, sizeof(bmgPath), "/res/%s/bmgres.arc", dusk::language::msg_folder());
+    mpBmgResCommand = onMemMount(bmgPath);
+#elif VERSION == VERSION_GCN_PAL
     switch (getPalLanguage()) {
     case 1:
         mpBmgResCommand = onMemMount("/res/Msgde/bmgres.arc");
@@ -1605,7 +1632,7 @@ void dScnLogo_c::dvdDataLoad() {
         mpBmgResCommand = onMemMount("/res/Msguk/bmgres.arc");
         break;
     }
-    #elif VERSION == VERSION_SHIELD_DEBUG
+#elif VERSION == VERSION_SHIELD_DEBUG
     switch (getPalLanguage()) {
     case 2:
         mpBmgResCommand = onMemMount("/res/Msgfr/bmgres.arc");
@@ -1617,9 +1644,9 @@ void dScnLogo_c::dvdDataLoad() {
         mpBmgResCommand = onMemMount("/res/Msgus/bmgres.arc");
         break;
     }
-    #else
+#else
     mpBmgResCommand = onMemMount(MSG_PATH);
-    #endif
+#endif
 
     mpMsgComCommand = aramMount(MSG_COM_PATH, mDoExt_getJ2dHeap());
     mpMsgResCommand[0] = aramMount(MSG_RES0_PATH, mDoExt_getJ2dHeap());
@@ -1627,8 +1654,10 @@ void dScnLogo_c::dvdDataLoad() {
     mpMsgResCommand[2] = aramMount(MSG_RES2_PATH, mDoExt_getJ2dHeap());
     mpMsgResCommand[3] = aramMount(MSG_RES3_PATH, mDoExt_getJ2dHeap());
 #if TARGET_PC
-    const auto res4Path = versionSelect<const char*>({{GameVersion::GcnJpn, "/res/Layout/msgres04.arc"}}, "/res/Layout/msgres04F.arc");
-    mpMsgResCommand[4] = aramMount( res4Path, mDoExt_getJ2dHeap());
+    const auto res4Path = regionSelect<const char*>("/res/Layout/msgres04F.arc",
+                                                    "/res/Layout/msgres04F.arc",
+                                                    "/res/Layout/msgres04.arc");
+    mpMsgResCommand[4] = aramMount(res4Path, mDoExt_getJ2dHeap());
 #elif VERSION == VERSION_GCN_JPN
     mpMsgResCommand[4] = aramMount("/res/Layout/msgres04.arc", mDoExt_getJ2dHeap());
 #else
@@ -1640,16 +1669,12 @@ void dScnLogo_c::dvdDataLoad() {
     mpMain2DCommand = onMemMount(MAIN2D_PATH);
 
 #if TARGET_PC
-    const auto fontResPath = versionSelect<const char*>(
-        {
-            {GameVersion::GcnJpn, "/res/Fontjp/fontres.arc"},
-            {GameVersion::GcnPal, "/res/Fonteu/fontres.arc"},
-        }, "/res/Fontus/fontres.arc");
-    const auto fontRubyPath = versionSelect<const char*>(
-        {
-            {GameVersion::GcnJpn, "/res/Fontjp/rubyres.arc"},
-            {GameVersion::GcnPal, "/res/Fonteu/rubyres.arc"},
-        }, "/res/Fontus/rubyres.arc");
+    const auto fontResPath = regionSelect<const char*>("/res/Fontus/fontres.arc",
+                                                       "/res/Fonteu/fontres.arc",
+                                                       "/res/Fontjp/fontres.arc");
+    const auto fontRubyPath = regionSelect<const char*>("/res/Fontus/rubyres.arc",
+                                                        "/res/Fonteu/rubyres.arc",
+                                                        "/res/Fontjp/rubyres.arc");
 
     // Note: GCN_JPN mounts this archive as tail instead of head.
     // I'm guessing this is fine since we have more RAM.

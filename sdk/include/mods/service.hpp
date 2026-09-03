@@ -40,13 +40,13 @@ inline ModResult set_error(ModError* outError, ModResult code, const char* messa
     };                                                                                             \
     }
 
-// Declares `static const service_type* variable`, filled in by the host before mod_initialize.
+// Defines `const service_type* variable`, filled in by the host before mod_initialize.
 // Required imports are guaranteed non-null (the mod fails to load otherwise); optional imports
 // must be checked against nullptr before use. The unversioned macros use the latest minor version;
 // set an explicit version to target an older minor version for backwards compatibility.
 #define IMPORT_SERVICE_EX(                                                                         \
     service_type, variable, service_id_value, major_value, min_minor_value, flags_value)           \
-    static const service_type* variable = nullptr;                                                 \
+    const service_type* variable = nullptr;                                                        \
     MOD_META_RECORD static constinit ModMetaImport mod_meta_import_##variable = {                  \
         {sizeof(ModMetaImport), MOD_META_IMPORT, static_cast<uint8_t>(flags_value)},               \
         static_cast<uint16_t>(major_value),                                                        \

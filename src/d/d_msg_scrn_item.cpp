@@ -24,6 +24,8 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     if (param_3 != NULL) {
         field_0x138 = param_3;
@@ -198,7 +200,53 @@ dMsgScrnItem_c::dMsgScrnItem_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
 
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxItemScaleX, g_MsgObject_HIO_c.mBoxItemScaleY);
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        if (dComIfGs_getOptRuby() == 0) {
+            mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+            JUT_ASSERT(407, mpTm_c[0] != NULL);
+
+            mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+            JUT_ASSERT(410, mpTm_c[1] != NULL);
+
+            mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_w'), 0, NULL);
+            JUT_ASSERT(413, mpTm_c[2] != NULL);
+
+            mpTmr_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+            JUT_ASSERT(416, mpTmr_c[0] != NULL);
+
+            mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+            JUT_ASSERT(419, mpTmr_c[1] != NULL);
+
+            mpTmr_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_w'), 0, NULL);
+            JUT_ASSERT(422, mpTmr_c[2] != NULL);
+
+            mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+            mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
+            mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
+        } else {
+            mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+            JUT_ASSERT(407, mpTm_c[0] != NULL);
+            mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
+            JUT_ASSERT(410, mpTm_c[1] != NULL);
+            mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, 't3_w', 0, NULL);
+            JUT_ASSERT(413, mpTm_c[2] != NULL);
+            mpTxScreen->search(MULTI_CHAR('n_3line'))->show();
+            mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+            mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
+        }
+    } else {
+        mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+        JUT_ASSERT(407, mpTm_c[0] != NULL);
+        mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
+        JUT_ASSERT(410, mpTm_c[1] != NULL);
+        mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, 't4_w', 0, NULL);
+        JUT_ASSERT(413, mpTm_c[2] != NULL);
+        mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+        mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+        mpTxScreen->search(MULTI_CHAR('n_e4line'))->show();
+    }
+#elif VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
         mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
         JUT_ASSERT(407, mpTm_c[0] != NULL);

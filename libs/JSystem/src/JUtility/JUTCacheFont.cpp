@@ -56,6 +56,10 @@ void JUTCacheFont::initialize_state() {
     mCacheBuffer = NULL;
     field_0x9c = NULL;
     field_0xa0 = NULL;
+
+#if TARGET_PC
+    mJoinedTextureHeight = 0;
+#endif
 }
 
 int JUTCacheFont::getMemorySize(ResFONT const* p_font, u16* o_widCount, u32* o_widSize,
@@ -203,7 +207,7 @@ bool JUTCacheFont::allocArea(void* cacheBuffer, u32 param_1, JKRHeap* heap) {
         }
     }
 
-    field_0x94 = mMaxSheetSize + 0x40;
+    field_0x94 = mMaxSheetSize + sizeof(TCachePage);
     mCachePage = param_1 / field_0x94;
     u32 v1 = field_0x94 * mCachePage;
     if (mCachePage == 0) {
@@ -346,7 +350,23 @@ void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo* param_0,
                                     JUTCacheFont::TCachePage* pCachePage, int* param_2, int* param_3) {
     TGlyphCacheInfo* pGylphCacheInfo = pCachePage;
     int* r30 = param_2;
+#if TARGET_PC
+    // TODO: proper fix to account for 64bit ptr sizes
+    ResFONT::GLY1* glyph = (ResFONT::GLY1*)param_0;
+    pGylphCacheInfo->field_0x8 = glyph->startCode;
+    pGylphCacheInfo->field_0xa = glyph->endCode;
+    pGylphCacheInfo->field_0xc = glyph->cellWidth;
+    pGylphCacheInfo->field_0xe = glyph->cellHeight;
+    pGylphCacheInfo->field_0x10 = glyph->textureSize;
+    pGylphCacheInfo->mTexFormat = glyph->textureFormat;
+    pGylphCacheInfo->field_0x16 = glyph->numRows;
+    pGylphCacheInfo->field_0x18 = glyph->numColumns;
+    pGylphCacheInfo->mWidth = glyph->textureWidth;
+    pGylphCacheInfo->mHeight = glyph->textureHeight;
+    pGylphCacheInfo->field_0x1e = 0;
+#else
     memcpy(pGylphCacheInfo, param_0, sizeof(TGlyphCacheInfo));
+#endif
     prepend(pGylphCacheInfo);
     int iVar3 = pGylphCacheInfo->field_0x16 * pGylphCacheInfo->field_0x18;
     int iVar2 = *r30 / iVar3;
@@ -364,7 +384,11 @@ void JUTCacheFont::getGlyphFromAram(JUTCacheFont::TGlyphCacheInfo* param_0,
                     GX_ANISO_1);
 }
 
+#if TARGET_PC
+void JUTCacheFont::loadImage(int param_0, GXTexMapID texMapId FONT_DRAW_CTX) {
+#else
 void JUTCacheFont::loadImage(int param_0, GXTexMapID texMapId) {
+#endif
     TCachePage* cachePage = loadCache_char_subroutine(&param_0, false);
     if (cachePage != NULL) {
         mWidth = cachePage->field_0xc * (param_0 % (int)cachePage->field_0x16);
@@ -421,6 +445,16 @@ JUTCacheFont::TCachePage* JUTCacheFont::loadCache_char_subroutine(int* param_0, 
 }
 
 void JUTCacheFont::invalidiateAllCache() {
+#if TARGET_PC
+    u8* cacheBuffer = (u8*)mCacheBuffer;
+    for (int i = 0; i < mCachePage; i++) {
+        TGlyphCacheInfo* current = (TGlyphCacheInfo*)cacheBuffer;
+        current->mPrev = i == 0 ? NULL : (TGlyphCacheInfo*)(cacheBuffer - field_0x94);
+        current->mNext = i == mCachePage - 1 ? NULL : (TGlyphCacheInfo*)(cacheBuffer + field_0x94);
+        cacheBuffer = cacheBuffer + field_0x94;
+    }
+    field_0xa8 = (intptr_t)cacheBuffer - field_0x94;
+#else
     int* cacheBuffer = (int*)mCacheBuffer;
     for (int i = 0; i < mCachePage; i++) {
         *cacheBuffer = i == 0 ? 0 : (intptr_t)cacheBuffer - field_0x94;
@@ -428,6 +462,7 @@ void JUTCacheFont::invalidiateAllCache() {
         cacheBuffer = (int*)((intptr_t)cacheBuffer + field_0x94);
     }
     field_0xa8 = (intptr_t)cacheBuffer - field_0x94;
+#endif
     field_0xa4 = (TGlyphCacheInfo*)mCacheBuffer;
     field_0x9c = NULL;
     field_0xa0 = NULL;

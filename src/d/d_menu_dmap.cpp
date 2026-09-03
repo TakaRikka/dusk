@@ -26,6 +26,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
 #include "helpers/string.hpp"
 
 #if TARGET_PC
@@ -312,6 +313,16 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
     static u64 const cont_bt[5] = {MULTI_CHAR('cont_bt'), MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4')};
     static u64 const font_at[5] = {MULTI_CHAR('font_at'), MULTI_CHAR('font_at1'), MULTI_CHAR('font_at2'), MULTI_CHAR('font_at3'), MULTI_CHAR('font_at4')};
     static u64 const font_bt[5] = {MULTI_CHAR('font_bt'), MULTI_CHAR('font_bt1'), MULTI_CHAR('font_bt2'), MULTI_CHAR('font_bt3'), MULTI_CHAR('font_bt4')};
+
+    #if TARGET_PC
+    static u64 const c_tag_jpn[2] = {
+        MULTI_CHAR('c_text_s'), MULTI_CHAR('c_text')
+    };
+
+    static u64 const c_tag[2] = {
+        MULTI_CHAR('f_text_s'), MULTI_CHAR('f_text')
+    };
+    #else
     static u64 const c_tag[2] = {
         #if VERSION == VERSION_GCN_JPN
         MULTI_CHAR('c_text_s'), MULTI_CHAR('c_text')
@@ -319,6 +330,7 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
         MULTI_CHAR('f_text_s'), MULTI_CHAR('f_text')
         #endif
     };
+    #endif
 
     mButtonScreen = JKR_NEW J2DScreen();
     JUT_ASSERT(916, mButtonScreen != NULL);
@@ -358,7 +370,25 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
     mpJButton = NULL;
 
     for (int i = 0; i < 5; i++) {
-        #if VERSION == VERSION_GCN_JPN
+        #if TARGET_PC
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
+            ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->setFont(mDoExt_getMesgFont());
+            ((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->setFont(mDoExt_getMesgFont());
+            ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->setString(32, "");
+            ((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->setString(32, "");
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                ((J2DTextBox*)mButtonScreen->search(font_at[i]))->hide();
+                ((J2DTextBox*)mButtonScreen->search(font_bt[i]))->hide();
+            }
+        } else {
+            ((J2DTextBox*)mButtonScreen->search(font_at[i]))->setFont(mDoExt_getMesgFont());
+            ((J2DTextBox*)mButtonScreen->search(font_bt[i]))->setFont(mDoExt_getMesgFont());
+            ((J2DTextBox*)mButtonScreen->search(font_at[i]))->setString(32, "");
+            ((J2DTextBox*)mButtonScreen->search(font_bt[i]))->setString(32, "");
+            ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->hide();
+            ((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->hide();
+        }
+        #elif VERSION == VERSION_GCN_JPN
         ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->setFont(mDoExt_getMesgFont());
         ((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->setFont(mDoExt_getMesgFont());
         ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->setString(32, "");
@@ -380,7 +410,7 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
 
     J2DTextBox* textBox;
     for (int i = 0; i < 2; i++) {
-        textBox = ((J2DTextBox*)mButtonScreen->search(c_tag[i]));
+        textBox = (J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? c_tag_jpn[i] : c_tag[i], c_tag[i]));
         textBox->setFont(mDoExt_getMesgFont());
         textBox->setString(32, "");
     }
@@ -397,6 +427,14 @@ void dMenu_DmapBg_c::buttonIconScreenInit() {
 }
 
 void dMenu_DmapBg_c::setAButtonString(u32 i_msgNo) {
+#if TARGET_PC
+    static u64 const cont_at_jpn[5] = {
+        MULTI_CHAR('cont_at'), MULTI_CHAR('cont_at1'), MULTI_CHAR('cont_at2'), MULTI_CHAR('cont_at3'), MULTI_CHAR('cont_at4')
+    };
+    static u64 const cont_at[5] = {
+        MULTI_CHAR('font_at'), MULTI_CHAR('font_at1'), MULTI_CHAR('font_at2'), MULTI_CHAR('font_at3'), MULTI_CHAR('font_at4')
+    };
+#else
     static u64 const cont_at[5] = {
         #if VERSION == VERSION_GCN_JPN
         MULTI_CHAR('cont_at'), MULTI_CHAR('cont_at1'), MULTI_CHAR('cont_at2'), MULTI_CHAR('cont_at3'), MULTI_CHAR('cont_at4')
@@ -404,16 +442,26 @@ void dMenu_DmapBg_c::setAButtonString(u32 i_msgNo) {
         MULTI_CHAR('font_at'), MULTI_CHAR('font_at1'), MULTI_CHAR('font_at2'), MULTI_CHAR('font_at3'), MULTI_CHAR('font_at4')
         #endif
     };
+#endif
+
     for (int i = 0; i < 5; i++) {
         if (i_msgNo == 0) {
-            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(cont_at[i]))->getStringPtr(), "");
+            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? cont_at_jpn[i] : cont_at[i], cont_at[i])))->getStringPtr(), "");
         } else {
-            dMeter2Info_getStringKanji(i_msgNo, ((J2DTextBox*)mButtonScreen->search(cont_at[i]))->getStringPtr(), NULL);
+            dMeter2Info_getStringKanji(i_msgNo, ((J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? cont_at_jpn[i] : cont_at[i], cont_at[i])))->getStringPtr(), NULL);
         }
     }
 }
 
 void dMenu_DmapBg_c::setBButtonString(u32 i_msgNo) {
+#if TARGET_PC
+    static u64 const cont_bt_jpn[5] = {
+        MULTI_CHAR('cont_bt'), MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4')
+    };
+    static u64 const cont_bt[5] = {
+        MULTI_CHAR('font_bt'), MULTI_CHAR('font_bt1'), MULTI_CHAR('font_bt2'), MULTI_CHAR('font_bt3'), MULTI_CHAR('font_bt4')
+    };
+#else
     static u64 const cont_bt[5] = {
         #if VERSION == VERSION_GCN_JPN
         MULTI_CHAR('cont_bt'), MULTI_CHAR('cont_bt1'), MULTI_CHAR('cont_bt2'), MULTI_CHAR('cont_bt3'), MULTI_CHAR('cont_bt4')
@@ -421,11 +469,13 @@ void dMenu_DmapBg_c::setBButtonString(u32 i_msgNo) {
         MULTI_CHAR('font_bt'), MULTI_CHAR('font_bt1'), MULTI_CHAR('font_bt2'), MULTI_CHAR('font_bt3'), MULTI_CHAR('font_bt4')
         #endif
     };
+#endif
+
     for (int i = 0; i < 5; i++) {
         if (i_msgNo == 0) {
-            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->getStringPtr(), "");
+            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? cont_bt_jpn[i] : cont_bt[i], cont_bt[i])))->getStringPtr(), "");
         } else {
-            dMeter2Info_getStringKanji(i_msgNo, ((J2DTextBox*)mButtonScreen->search(cont_bt[i]))->getStringPtr(), NULL);
+            dMeter2Info_getStringKanji(i_msgNo, ((J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? cont_bt_jpn[i] : cont_bt[i], cont_bt[i])))->getStringPtr(), NULL);
         }
     }
 }
@@ -437,6 +487,14 @@ static f32 player_py;
 DUSK_GAME_DATA dMenu_Dmap_c* dMenu_Dmap_c::myclass;
 
 void dMenu_DmapBg_c::setCButtonString(u32 i_msgNo) {
+#if TARGET_PC
+    static u64 const c_tag_jpn[2] = {
+        MULTI_CHAR('c_text_s'), MULTI_CHAR('c_text')
+    };
+    static u64 const c_tag[2] = {
+        MULTI_CHAR('f_text_s'), MULTI_CHAR('f_text')
+    };
+#else
     static u64 const c_tag[2] = {
         #if VERSION == VERSION_GCN_JPN
         MULTI_CHAR('c_text_s'), MULTI_CHAR('c_text')
@@ -444,6 +502,7 @@ void dMenu_DmapBg_c::setCButtonString(u32 i_msgNo) {
         MULTI_CHAR('f_text_s'), MULTI_CHAR('f_text')
         #endif
     };
+#endif
     int i;
 
     u32 msgNo;
@@ -455,12 +514,12 @@ void dMenu_DmapBg_c::setCButtonString(u32 i_msgNo) {
 
     if (msgNo == 0) {
         for (i = 0; i < 2; i++) {
-            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(c_tag[i]))->getStringPtr(), "");
+            SAFE_STRCPY(((J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? c_tag_jpn[i] : c_tag[i], c_tag[i])))->getStringPtr(), "");
         }
         mpCButton->setAlphaRate(0.5f);
     } else {
         for (i = 0; i < 2; i++) {
-            dMeter2Info_getStringKanji(msgNo, ((J2DTextBox*)mButtonScreen->search(c_tag[i]))->getStringPtr(), NULL);
+            dMeter2Info_getStringKanji(msgNo, ((J2DTextBox*)mButtonScreen->search(DUSK_IF_ELSE(dusk::version::isJpnOrLessThanWiiJpn() ? c_tag_jpn[i] : c_tag[i], c_tag[i])))->getStringPtr(), NULL);
         }
         mpCButton->setAlphaRate(1.0f);
     }
@@ -519,7 +578,16 @@ void dMenu_DmapBg_c::baseScreenInit() {
     mpDrawCursor->setAlphaRate(1.0f);
     mpDrawCursor->setParam(0.95f, 0.9f, 0.1f, 0.6f, 0.5f);
 
-    #if VERSION == VERSION_GCN_JPN
+    #if TARGET_PC
+    J2DTextBox* uVar9;
+    if (dusk::version::isRegionJpn()) {
+        uVar9 = (J2DTextBox*)mBaseScreen->search(MULTI_CHAR('t_t00'));
+        mBaseScreen->search(MULTI_CHAR('f_t_00'))->hide();
+    } else {
+        uVar9 = (J2DTextBox*)mBaseScreen->search(MULTI_CHAR('f_t_00'));
+        mBaseScreen->search(MULTI_CHAR('t_t00'))->hide();
+    }
+    #elif VERSION == VERSION_GCN_JPN
     J2DTextBox* uVar9 = (J2DTextBox*)mBaseScreen->search(MULTI_CHAR('t_t00'));
     mBaseScreen->search(MULTI_CHAR('f_t_00'))->hide();
     #else
@@ -549,7 +617,12 @@ void dMenu_DmapBg_c::setFloorMessage() {
         0x036E, 0x036F, 0x03DC, 0x03DD, 0x03D9, 0x03D8,
     };
 
-    #if VERSION == VERSION_GCN_JPN
+    #if TARGET_PC
+    u64 tag0 = dusk::version::isRegionJpn() ? MULTI_CHAR('ffoor0_0') : MULTI_CHAR('floor0_0');
+    #define FLOOR_TAG(A, B) (tag0 | (A<<16) | (B))
+    u64 tag1 = dusk::version::isRegionJpn() ? MULTI_CHAR('floor0_0') : MULTI_CHAR('ffoor0_0');
+    #define FFOOR_TAG(A, B) (tag1 | (A<<16) | (B))
+    #elif VERSION == VERSION_GCN_JPN
     #define FLOOR_TAG(A, B) (MULTI_CHAR('ffoor0_0') | (A<<16) | (B))
     #define FFOOR_TAG(A, B) (MULTI_CHAR('floor0_0') | (A<<16) | (B))
     #else
@@ -922,8 +995,10 @@ void dMenu_DmapBg_c::dMapBgWide() {
     mButtonScreen->search(MULTI_CHAR('c_btn'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mButtonScreen->search(MULTI_CHAR('c_text_s'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
     mButtonScreen->search(MULTI_CHAR('c_text'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mButtonScreen->search(MULTI_CHAR('f_text_s'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
-    mButtonScreen->search(MULTI_CHAR('f_text'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+        mButtonScreen->search(MULTI_CHAR('f_text_s'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+        mButtonScreen->search(MULTI_CHAR('f_text'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
+    }
 
     // Decorations
     mButtonScreen->search(MULTI_CHAR('kazari_n'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);

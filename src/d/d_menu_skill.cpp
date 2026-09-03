@@ -18,6 +18,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
 #endif
@@ -467,7 +469,27 @@ void dMenu_Skill_c::screenSetMenu() {
     mpParent = JKR_NEW CPaneMgr(mpMenuScreen, MULTI_CHAR('n_all'), 2, NULL);
     mpParent->setAlphaRate(0.0f);
     for (int i = 0; i < 7; i++) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            mpFTagPicture[i][0] = (J2DTextBox*)mpMenuScreen->search(tag_sub0[i]);
+            mpFTagPicture[i][1] = (J2DTextBox*)mpMenuScreen->search(tag_sub1[i]);
+            mpFTagPicture[i][2] = (J2DTextBox*)mpMenuScreen->search(tag_name0[i]);
+            mpFTagPicture[i][3] = (J2DTextBox*)mpMenuScreen->search(tag_name1[i]);
+            mpMenuScreen->search(ftag_sub0[i])->hide();
+            mpMenuScreen->search(ftag_sub1[i])->hide();
+            mpMenuScreen->search(ftag_name0[i])->hide();
+            mpMenuScreen->search(ftag_name1[i])->hide();
+        } else {
+            mpFTagPicture[i][0] = (J2DTextBox*)mpMenuScreen->search(ftag_sub0[i]);
+            mpFTagPicture[i][1] = (J2DTextBox*)mpMenuScreen->search(ftag_sub1[i]);
+            mpFTagPicture[i][2] = (J2DTextBox*)mpMenuScreen->search(ftag_name0[i]);
+            mpFTagPicture[i][3] = (J2DTextBox*)mpMenuScreen->search(ftag_name1[i]);
+            mpMenuScreen->search(tag_sub0[i])->hide();
+            mpMenuScreen->search(tag_sub1[i])->hide();
+            mpMenuScreen->search(tag_name0[i])->hide();
+            mpMenuScreen->search(tag_name1[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         mpFTagPicture[i][0] = (J2DTextBox*)mpMenuScreen->search(tag_sub0[i]);
         mpFTagPicture[i][1] = (J2DTextBox*)mpMenuScreen->search(tag_sub1[i]);
         mpFTagPicture[i][2] = (J2DTextBox*)mpMenuScreen->search(tag_name0[i]);
@@ -522,7 +544,16 @@ void dMenu_Skill_c::screenSetMenu() {
             mSelectWhite[i] = mpFTagPicture[1][i]->getWhite();
         }
     }
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    J2DTextBox* textBox;
+    if (dusk::version::isRegionJpn()) {
+        textBox = (J2DTextBox*)mpMenuScreen->search(MULTI_CHAR('t_t00'));
+        mpMenuScreen->search(MULTI_CHAR('f_t00'))->hide();
+    } else {
+        textBox = (J2DTextBox*)mpMenuScreen->search(MULTI_CHAR('f_t00'));
+        mpMenuScreen->search(MULTI_CHAR('t_t00'))->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     J2DTextBox* textBox = (J2DTextBox*)mpMenuScreen->search(MULTI_CHAR('t_t00'));
     mpMenuScreen->search(MULTI_CHAR('f_t00'))->hide();
 #else
@@ -551,7 +582,15 @@ void dMenu_Skill_c::screenSetLetter() {
     mpLetterScreen = JKR_NEW J2DScreen();
     mpLetterScreen->setPriority("zelda_ougi_info.blo", 0x20000, mpArchive);
     dPaneClass_showNullPane(mpLetterScreen);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        mpTextPane = JKR_NEW CPaneMgr(mpLetterScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+        mpLetterScreen->search(MULTI_CHAR('n_e4line'))->hide();
+    } else {
+        mpTextPane = JKR_NEW CPaneMgr(mpLetterScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+        mpLetterScreen->search(MULTI_CHAR('n_3line'))->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     mpTextPane = JKR_NEW CPaneMgr(mpLetterScreen, MULTI_CHAR('mg_3line'), 0, NULL);
     mpLetterScreen->search(MULTI_CHAR('n_e4line'))->hide();
 #else
@@ -564,7 +603,15 @@ void dMenu_Skill_c::screenSetLetter() {
     J2DTextBox* paneString = (J2DTextBox*)mpTextPane->getPanePtr();
     paneString->setString(0x200, "");
     for (int i = 0; i < 4; i++) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            mpNameString[i] = (J2DTextBox*)mpLetterScreen->search(name_tag[i]);
+            mpLetterScreen->search(fame_tag[i])->hide();
+        } else {
+            mpNameString[i] = (J2DTextBox*)mpLetterScreen->search(fame_tag[i]);
+            mpLetterScreen->search(name_tag[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         mpNameString[i] = (J2DTextBox*)mpLetterScreen->search(name_tag[i]);
         mpLetterScreen->search(fame_tag[i])->hide();
 #else

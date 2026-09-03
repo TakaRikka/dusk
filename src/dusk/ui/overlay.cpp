@@ -1,6 +1,6 @@
 #include "overlay.hpp"
 
-#include "aurora/lib/logging.hpp"
+#include <borealis/log.hpp>
 #include "controller_config.hpp"
 #include "dusk/achievements.h"
 #include "dusk/action_bindings.h"
@@ -24,7 +24,7 @@
 
 namespace dusk::ui {
 namespace {
-aurora::Module Log{"dusk::ui::overlay"};
+constexpr borealis::Log Log{"dusk::ui::overlay"};
 
 const Rml::String kDocumentSource = R"RML(
 <rml>
@@ -71,6 +71,9 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
     }
 
     auto* elem = append(parent, "toast");
+    if (!toast.modId.empty()) {
+        elem->SetAttribute("mod-id", toast.modId);
+    }
     if (!toast.type.empty()) {
         elem->SetClass(toast.type, true);
     }
@@ -200,10 +203,19 @@ void remove_element(Rml::Element*& elem) noexcept {
 
 }  // namespace
 
-static std::string FormatTime(OSTime ticks) {
-    OSCalendarTime t;
-    OSTicksToCalendarTime(ticks, &t);
-    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", t.hour, t.min, t.sec, t.msec);
+static std::string FormatElapsedTime(OSTime ticksElapsed) {
+    using namespace std::chrono;
+
+    milliseconds ms{OSTicksToMilliseconds(ticksElapsed)};
+
+    const hours hr = duration_cast<hours>(ms);
+    ms -= hr;
+    const minutes min = duration_cast<minutes>(ms);
+    ms -= min;
+    const seconds sec = duration_cast<seconds>(ms);
+    ms -= sec;
+
+    return fmt::format("{0:02}:{1:02}:{2:02}.{3:03}", hr.count(), min.count(), sec.count(), ms.count());
 }
 
 Overlay::Overlay() : Document(kDocumentSource, true, DocumentScope::Overlay) {
@@ -289,7 +301,7 @@ void Overlay::update() {
     update_pipeline_progress();
 
 #if !(defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS && !TARGET_OS_MACCATALYST))
-    if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
+    if (dusk::speedrun::isActive() && getSettings().game.liveSplitEnabled) {
         dusk::speedrun::updateLiveSplit();
         if (dusk::speedrun::consumeConnectedEvent()) {
             push_toast({.title = "LiveSplit connected", .duration = std::chrono::seconds(3)});
@@ -301,46 +313,46 @@ void Overlay::update() {
 #endif
 
     if (mSpeedrunTimer != nullptr && mSpeedrunRta != nullptr && mSpeedrunIgt != nullptr) {
-        if (getSettings().game.speedrunMode) {
+        if (dusk::speedrun::isActive()) {
             // L+R+A+Start to reset timer
             if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) &&
                 mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigZ(PAD_1))
             {
-                m_speedrunInfo.reset();
+                dusk::speedrun::g_speedrunInfo.reset();
             }
 
             // L+R+A+Y to manually stop timer
             if (mDoCPd_c::getHoldL(PAD_1) && mDoCPd_c::getHoldR(PAD_1) &&
                 mDoCPd_c::getHoldA(PAD_1) && mDoCPd_c::getTrigY(PAD_1))
             {
-                if (m_speedrunInfo.m_isRunStarted) {
-                    m_speedrunInfo.m_endTimestamp = OSGetTime() - m_speedrunInfo.m_startTimestamp;
-                    m_speedrunInfo.m_isRunStarted = false;
+                if (speedrun::g_speedrunInfo.m_isRunStarted) {
+                    speedrun::g_speedrunInfo.stopRun();
                 }
             }
 
-            OSTime elapsedTime = 0;
-            if (m_speedrunInfo.m_isRunStarted) {
-                elapsedTime = OSGetTime() - m_speedrunInfo.m_startTimestamp;
-            } else if (m_speedrunInfo.m_endTimestamp != 0) {
-                elapsedTime = m_speedrunInfo.m_endTimestamp;
+            OSTime rtaElapsedTime = 0;
+            if (speedrun::g_speedrunInfo.m_isRunStarted) {
+                rtaElapsedTime = OSGetNativeTime() - speedrun::g_speedrunInfo.m_rtaStartTimestamp;
+            } else if (speedrun::g_speedrunInfo.m_rtaTimer != 0) {
+                rtaElapsedTime = speedrun::g_speedrunInfo.m_rtaTimer;
             }
 
-            if (!m_speedrunInfo.m_isPauseIGT) {
-                m_speedrunInfo.m_igtTimer = elapsedTime - m_speedrunInfo.m_totalLoadTime;
+            if (speedrun::g_speedrunInfo.m_isRunStarted && !speedrun::g_speedrunInfo.m_isPauseIGT) {
+                speedrun::g_speedrunInfo.m_igtTimer = OSGetTime() - speedrun::g_speedrunInfo.m_igtStartTimestamp -
+                                            speedrun::g_speedrunInfo.m_totalLoadTime;
             }
 
             mSpeedrunTimer->SetAttribute("open", "");
 
             if (getSettings().game.showSpeedrunRTATimer) {
                 mSpeedrunRta->SetAttribute("open", "");
-                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatTime(elapsedTime))));
+                mSpeedrunRta->SetInnerRML(escape(fmt::format("RTA  {}", FormatElapsedTime(rtaElapsedTime))));
             } else {
                 mSpeedrunRta->RemoveAttribute("open");
             }
 
             mSpeedrunIgt->SetInnerRML(
-                escape(fmt::format("IGT  {}", FormatTime(m_speedrunInfo.m_igtTimer))));
+                escape(fmt::format("IGT  {}", FormatElapsedTime(speedrun::g_speedrunInfo.m_igtTimer))));
         } else {
             mSpeedrunTimer->RemoveAttribute("open");
         }

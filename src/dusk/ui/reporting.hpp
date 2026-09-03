@@ -1,6 +1,6 @@
 #pragma once
 
-#if DUSK_ENABLE_SENTRY_NATIVE
+#if BOREALIS_HAS_SENTRY
 
 #include "component.hpp"
 #include "window.hpp"

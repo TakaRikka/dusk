@@ -20,13 +20,15 @@ public:
     void update() override;
     bool focus() override;
     bool visible() const override;
+    bool permanent() const override { return true; }
 
-    static void rebuild();
+    static void refresh_tabs();
 
 protected:
     bool handle_nav_command(Rml::Event& event, NavCommand cmd) override;
 
 private:
+    void build_tabs();
     void update_safe_area() noexcept;
 
     Rml::Element* mRoot;
@@ -34,7 +36,7 @@ private:
     std::unique_ptr<Button> mCloseButton;
     Insets mTabBarPadding;
     float mTopMargin = 0.f;
-    int mFocusedTabIndex = -1;
+    Rml::String mFocusedTabTitle;
 };
 
 }  // namespace dusk::ui

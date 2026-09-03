@@ -12,6 +12,8 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
+
+#include "dusk/version.hpp"
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #endif
@@ -2386,10 +2388,12 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* ppos, GXColor& unused, u8** tex) {
     u8 draw_sun = false;
     u16 date = dComIfGs_getDate();
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
+    IF_DUSK_BLOCK(dusk::version::isRegionJpn())
     if (g_env_light.hide_vrbox) {
         return;
     }
+    IF_DUSK_BLOCK_END
 #endif
 
     if (strcmp(dComIfGp_getStartStageName(), "F_SP200") == 0) {
@@ -2754,10 +2758,12 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* ppos, GXColor& param_2, u8** tex) {
     static s16 S_rot_work1 = 0;
     static s16 S_rot_work2 = 0;
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
+    IF_DUSK_BLOCK(dusk::version::isRegionJpn())
     if (g_env_light.hide_vrbox) {
         return;
     }
+    IF_DUSK_BLOCK_END
 #endif
 
     Mtx camMtx;
@@ -4223,10 +4229,12 @@ void dKyr_drawStar(Mtx drawMtx, u8** tex) {
         csXyz(0, 30000, 19000),
     };
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
+    IF_DUSK_BLOCK(dusk::version::isRegionJpn())
     if (g_env_light.hide_vrbox) {
         return;
     }
+    IF_DUSK_BLOCK_END
 #endif
 
     if (star_packet->mEffectNum != 0) {
@@ -4770,10 +4778,12 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** tex) {
     int pass = 1;
     f32 spC4 = 0.0f;
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
+    IF_DUSK_BLOCK(dusk::version::isRegionJpn())
     if (g_env_light.hide_vrbox) {
         return;
     }
+    IF_DUSK_BLOCK_END
 #endif
 
     cXyz sp15C;

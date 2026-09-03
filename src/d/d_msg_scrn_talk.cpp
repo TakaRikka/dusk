@@ -20,8 +20,18 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 #if TARGET_PC
 #include "dusk/settings.h"
+#endif
+
+#if TARGET_PC
+#define STR_BUF_LEN 528
+#elif VERSION == VERSION_GCN_JPN
+#define STR_BUF_LEN 528
+#else
+#define STR_BUF_LEN 512
 #endif
 
 dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
@@ -100,7 +110,12 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     JUT_ASSERT(153, mpMg_c[1] != NULL);
     OSInitFastCast();
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+   if (dusk::version::isRegionJpn())
+       field_0xf4 = 0.0f;
+   else
+       field_0xf4 = -10.0f;
+#elif VERSION == VERSION_GCN_JPN
     field_0xf4 = 0.0f;
 #else
     field_0xf4 = -10.0f;
@@ -110,7 +125,68 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     JUT_ASSERT(176, mpPmP_c != NULL);
     mpPmP_c->scale(g_MsgObject_HIO_c.mBoxTalkScaleX, g_MsgObject_HIO_c.mBoxTalkScaleY);
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+   if (dusk::version::isRegionJpn()) {
+       if (dComIfGs_getOptRuby() == 0) {
+           mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+           mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+
+           mpTmr_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+           if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
+               mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s1'), 0, NULL);
+               mpTm_c[3] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s2'), 0, NULL);
+               mpTm_c[4] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s3'), 0, NULL);
+               mpTm_c[5] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s4'), 0, NULL);
+               mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s1'), 0, NULL);
+               mpTmr_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s2'), 0, NULL);
+           } else {
+               mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+           }
+
+           mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+           mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
+           mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
+       } else {
+           mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+           mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
+
+           if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
+               mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s1'), 0, NULL);
+               JUT_ASSERT(189, mpTm_c[2] != NULL);
+               mpTm_c[3] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s2'), 0, NULL);
+               JUT_ASSERT(191, mpTm_c[3] != NULL);
+               mpTm_c[4] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s3'), 0, NULL);
+               JUT_ASSERT(193, mpTm_c[4] != NULL);
+               mpTm_c[5] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3_s4'), 0, NULL);
+               JUT_ASSERT(193, mpTm_c[5] != NULL);
+           }
+
+           mpTxScreen->search(MULTI_CHAR('n_3line'))->show();
+           mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+           mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
+       }
+   } else {
+       mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+       JUT_ASSERT(182, mpTm_c[0] != NULL);
+       mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
+       JUT_ASSERT(185, mpTm_c[1] != NULL);
+
+       if (dMsgObject_getMsgObjectClass()->getFukiKind() == 8) {
+           mpTm_c[2] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s1'), 0, NULL);
+           JUT_ASSERT(189, mpTm_c[2] != NULL);
+           mpTm_c[3] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s2'), 0, NULL);
+           JUT_ASSERT(191, mpTm_c[3] != NULL);
+           mpTm_c[4] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s3'), 0, NULL);
+           JUT_ASSERT(193, mpTm_c[4] != NULL);
+           mpTm_c[5] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t4_s4'), 0, NULL);
+           JUT_ASSERT(193, mpTm_c[5] != NULL);
+       }
+
+       mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+       mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+       mpTxScreen->search(MULTI_CHAR('n_e4line'))->show();
+   }
+#elif VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
         mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
         mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
@@ -173,19 +249,11 @@ dMsgScrnTalk_c::dMsgScrnTalk_c(u8 param_1, u8 param_2, JKRExpHeap* param_3) {
     for (int i = 0; i < 6; i++) {
         if (mpTm_c[i] != NULL) {
             ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-            ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x210, "");
-#else
-            ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x200, "");
-#endif
+            ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(STR_BUF_LEN, "");
         }
         if (mpTmr_c[i] != NULL) {
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-            ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(0x210, "");
-#else
-            ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(0x200, "");
-#endif
+            ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(STR_BUF_LEN, "");
         }
     }
     if (dMsgObject_getMsgObjectClass()->getFukiKind() != 8) {

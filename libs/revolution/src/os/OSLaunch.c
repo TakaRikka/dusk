@@ -8,7 +8,7 @@ void __OSRelaunchTitle(u32 resetCode) {
     s32 rc = 0;
     u32 ticketCnt = 1;
     ESTicketView* tik = NULL;
-    ESTitleId titleId ATTRIBUTE_ALIGN(32);
+    ATTRIBUTE_ALIGN(32) ESTitleId titleId;
     __OSPlayTimeType type = OSPLAYTIME_PERMANENT;
     u32 remain = 0;
     u8* bi2 = NULL;

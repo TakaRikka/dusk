@@ -5,7 +5,7 @@
 #
 # Usage (from a mod project):
 #   add_subdirectory(<dusk>/sdk dusk-sdk EXCLUDE_FROM_ALL)
-#   add_mod(my_mod FEATURES game webgpu SOURCES ... MOD_JSON mod.json)
+#   add_mod(my_mod FEATURES fmt game webgpu SOURCES ... MOD_JSON mod.json)
 #
 # On platforms where mods link against the game binary (Windows/Apple/Android), a
 # version-independent link stub is downloaded automatically unless DUSK_GAME_EXE is set.
@@ -24,11 +24,6 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Version detection & version.h
-include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/DetectVersion.cmake")
-detect_version()
-configure_version_header()
 
 # Mod API and optional feature header surfaces
 include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/GameABIConfig.cmake")

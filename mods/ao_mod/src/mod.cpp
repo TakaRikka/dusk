@@ -53,6 +53,7 @@ ResourceBuffer g_denoiseSource = RESOURCE_BUFFER_INIT;
 ResourceBuffer g_compositeSource = RESOURCE_BUFFER_INIT;
 
 GfxDeviceInfo g_deviceInfo = GFX_DEVICE_INFO_INIT;
+GfxRenderTargetLayout g_sceneTargetLayout = GFX_RENDER_TARGET_LAYOUT_INIT;
 WGPUComputePipeline g_preprocessPipeline = nullptr;
 WGPUComputePipeline g_mip4Pipeline = nullptr;
 WGPUComputePipeline g_gtaoPipeline = nullptr;
@@ -226,19 +227,17 @@ bool build_composite_pipeline(
                 .dstFactor = WGPUBlendFactor_One,
             },
     };
-    WGPUColorTargetState colorTarget = WGPU_COLOR_TARGET_STATE_INIT;
-    colorTarget.format = g_deviceInfo.color_format;
-    if (blend) {
-        colorTarget.blend = &blendState;
-    }
+    WGPUColorTargetState colorTargets[GFX_MAX_COLOR_ATTACHMENTS];
+    const uint32_t colorTargetCount = gfx_init_color_target_states(
+        &g_sceneTargetLayout, colorTargets, blend ? &blendState : nullptr, WGPUColorWriteMask_All);
     WGPUFragmentState fragment = WGPU_FRAGMENT_STATE_INIT;
     fragment.module = module;
     fragment.entryPoint = {"fs_main", WGPU_STRLEN};
-    fragment.targetCount = 1;
-    fragment.targets = &colorTarget;
+    fragment.targetCount = colorTargetCount;
+    fragment.targets = colorTargets;
     // Depth state must match the EFB pass despite never touching depth.
     WGPUDepthStencilState depthStencil = WGPU_DEPTH_STENCIL_STATE_INIT;
-    depthStencil.format = g_deviceInfo.depth_format;
+    depthStencil.format = g_sceneTargetLayout.depth_stencil_format;
     depthStencil.depthWriteEnabled = WGPUOptionalBool_False;
     depthStencil.depthCompare = WGPUCompareFunction_Always;
 
@@ -248,7 +247,7 @@ bool build_composite_pipeline(
     pipelineDesc.vertex.entryPoint = {"vs_main", WGPU_STRLEN};
     pipelineDesc.primitive.topology = WGPUPrimitiveTopology_TriangleList;
     pipelineDesc.depthStencil = &depthStencil;
-    pipelineDesc.multisample.count = g_deviceInfo.sample_count;
+    pipelineDesc.multisample.count = g_sceneTargetLayout.sample_count;
     pipelineDesc.fragment = &fragment;
     outPipeline = wgpuDeviceCreateRenderPipeline(g_deviceInfo.device, &pipelineDesc);
     wgpuShaderModuleRelease(module);
@@ -504,7 +503,7 @@ void on_compute(
 // Render worker thread: composite the AO over the scene (or show it, in debug view).
 void on_draw(
     ModContext*, const GfxDrawContext* ctx, const void* payload, size_t payloadSize, void*) {
-    if (payloadSize != sizeof(CompositePayload)) {
+    if (payloadSize != sizeof(CompositePayload) || ctx->layout.key != g_sceneTargetLayout.key) {
         return;
     }
     CompositePayload data;
@@ -815,6 +814,9 @@ MOD_EXPORT ModResult mod_initialize(ModError* error) {
 
     if (svc_gfx->get_device_info(mod_ctx, &g_deviceInfo) != MOD_OK) {
         return mods::set_error(error, MOD_ERROR, "failed to query device info");
+    }
+    if (svc_gfx->get_scene_target_layout(mod_ctx, &g_sceneTargetLayout) != MOD_OK) {
+        return mods::set_error(error, MOD_ERROR, "failed to query scene target layout");
     }
     if (!build_compute_pipeline("AO preprocess depth", g_preprocessSource, "preprocess_depth",
             g_preprocessPipeline, g_preprocessLayout) ||

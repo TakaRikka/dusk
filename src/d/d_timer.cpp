@@ -24,6 +24,7 @@
 #include <cstring>
 
 #include "dusk/frame_interpolation.h"
+#include "dusk/version.hpp"
 
 static int dTimer_createStart2D(s32 param_0, u16 param_1);
 
@@ -1430,7 +1431,7 @@ void dDlst_TimerScrnDraw_c::playBckAnimation(f32 i_frame) {
     mpGetInParent->getPanePtr()->setAnimation((J2DAnmTransform*)NULL);
 }
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
 bool dDlst_TimerScrnDraw_c::isLeadByte(int i_char) {
     return (i_char >= 0x81 && i_char <= 0x9f) || (i_char >= 0xe0 && i_char <= 0xfc);
 }
@@ -1466,7 +1467,18 @@ void dDlst_TimerScrnDraw_c::drawPikari(int i_no) {
                 var_f25 * static_cast<J2DTextBox*>(mpGetInText->getPanePtr())->getCharSpace();
         }
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            if (isLeadByte(c)) {
+                c = ((string[str_idx] & 0xFF) << 8) | (string[str_idx + 1] & 0xFF);
+                str_idx++;
+            } else {
+                c = string[str_idx] & 0xFF;
+            }
+        } else {
+            c = string[str_idx] & 0xFF;
+        }
+#elif VERSION == VERSION_GCN_JPN
         if (isLeadByte(c)) {
             c = ((string[str_idx] & 0xFF) << 8) | (string[str_idx + 1] & 0xFF);
             str_idx++;
@@ -1492,7 +1504,18 @@ void dDlst_TimerScrnDraw_c::drawPikari(int i_no) {
                 var_f25 * static_cast<J2DTextBox*>(mpGetInText->getPanePtr())->getCharSpace();
         }
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            if (isLeadByte(c)) {
+                c = ((string[str_idx] & 0xFF) << 8) | (string[str_idx + 1] & 0xFF);
+                str_idx++;
+            } else {
+                c = string[str_idx] & 0xFF;
+            }
+        } else {
+            c = string[str_idx] & 0xFF;
+        }
+#elif VERSION == VERSION_GCN_JPN
         if (isLeadByte(c)) {
             c = ((string[str_idx] & 0xFF) << 8) | (string[str_idx + 1] & 0xFF);
             str_idx++;

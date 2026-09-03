@@ -10,6 +10,8 @@
 
 #include "nav_types.hpp"
 
+#include "Z2AudioLib/Z2SeMgr.h"
+
 namespace dusk::ui {
 class Document;
 
@@ -17,6 +19,7 @@ using clock = std::chrono::steady_clock;
 
 enum class DocumentScope : u8 {
     None,
+    CommandConsole,
     Prelaunch,
     Window,
     MenuBar,
@@ -30,6 +33,7 @@ struct Toast {
     Rml::String title;
     Rml::String content;
     clock::duration duration;
+    Rml::String modId;
 };
 
 // Button clicked/pressed
@@ -84,10 +88,13 @@ void update() noexcept;
 
 Document& push_document(
     std::unique_ptr<Document> doc, bool show = true, bool passive = false) noexcept;
+void bring_document_to_front(Document& doc) noexcept;
 bool register_scoped_styles(DocumentScope scope, std::string id, const std::string& rcss) noexcept;
 void unregister_scoped_styles(DocumentScope scope, std::string_view id) noexcept;
 void apply_scoped_styles(Document& doc) noexcept;
 void uncover_top_document() noexcept;
+Document* find_document(DocumentScope scope) noexcept;
+void close_all_documents() noexcept;
 bool any_document_visible() noexcept;
 bool is_prelaunch_open() noexcept;
 bool game_obscured_below(const Document& doc) noexcept;
@@ -101,8 +108,6 @@ Rml::Element* append_text(Rml::Element* parent, const Rml::String& text) noexcep
 NavCommand map_nav_event(const Rml::Event& event) noexcept;
 Insets safe_area_insets(Rml::Context* context) noexcept;
 
-std::vector<std::unique_ptr<Document>>& get_document_stack() noexcept;
-
 void push_toast(Toast toast) noexcept;
 std::deque<Toast>& get_toasts() noexcept;
 void show_menu_notification() noexcept;
@@ -110,5 +115,7 @@ bool consume_menu_notification_request() noexcept;
 
 const char* battery_icon(SDL_PowerState state, int level) noexcept;
 const char* connection_state_icon(SDL_JoystickConnectionState state) noexcept;
+
+void apply_scale() noexcept;
 
 }  // namespace dusk::ui

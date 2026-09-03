@@ -1,6 +1,9 @@
 #include "registry.hpp"
 
 #include "dusk/mods/loader/loader.hpp"
+#if DUSK_HAS_PREPATCH
+#include "dusk/mods/loader/prepatch.hpp"
+#endif
 #include "dusk/mods/manifest.hpp"
 #include "mods/svc/hook.h"
 
@@ -9,11 +12,14 @@
 #include "dusk/mods/log_buffer.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <cstring>
 #include <exception>
 #include <fmt/format.h>
+#if DUSK_HAS_FUNCHOOK
 #include <funchook.h>
+#endif
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -48,8 +54,7 @@ struct HookSlot {
 // One per mod that requested a hook on a target: its template-generated trampoline and the
 // address of its Hook::g_orig, both living in the mod's dylib. Any candidate's trampoline
 // is interchangeable (dispatch walks the shared HookSlot), so when the active installer's mod
-// unloads, the funchook detour is handed off to a surviving candidate and every candidate's
-// *orig_store is rewritten to the new original pointer.
+// unloads, the backend is handed off to a surviving candidate.
 struct HookCandidate {
     ModContext* context = nullptr;
     void* trampoline = nullptr;
@@ -57,10 +62,31 @@ struct HookCandidate {
     uint64_t order = 0;
 };
 
-struct InstalledHook {
+enum class BackendKind {
+    None,
+#if DUSK_HAS_FUNCHOOK
+    Funchook,
+#endif
+#if DUSK_HAS_PREPATCH
+    Prepatch,
+#endif
+};
+
+struct InstalledBackend {
+    BackendKind kind = BackendKind::None;
+#if DUSK_HAS_FUNCHOOK
     funchook_t* handle = nullptr;
+#endif
+#if DUSK_HAS_PREPATCH
+    prepatch::Site prepatchSite{};
+#endif
+};
+
+struct InstalledHook {
+    InstalledBackend backend{};
     void* original = nullptr;
     ModContext* active = nullptr;
+    void** activeStore = nullptr;
     std::vector<HookCandidate> candidates;
 };
 
@@ -116,6 +142,15 @@ void sort_hooks(std::vector<T>& hooks) {
         }
         return a.order < b.order;
     });
+}
+
+bool erase_callbacks(HookSlot& slot, ModContext* context) {
+    std::erase_if(slot.pre, [&](const PreHookFn& hook) { return hook.context == context; });
+    std::erase_if(slot.post, [&](const VoidHookFn& hook) { return hook.context == context; });
+    if (slot.replace.context == context) {
+        slot.replace = {};
+    }
+    return slot.pre.empty() && slot.post.empty() && slot.replace.replaceCallback == nullptr;
 }
 
 // Once a hook is installed, funchook has patched the target's entry: its bytes lead to the
@@ -205,7 +240,8 @@ void* resolve_target(void* addr) {
     return addr;
 }
 
-funchook_t* install_trampoline(void* fnAddr, void* trampoline, void** outOriginal) {
+#if DUSK_HAS_FUNCHOOK
+funchook_t* install_funchook(void* fnAddr, void* trampoline, void** outOriginal) {
     funchook_t* fh = funchook_create();
     if (fh == nullptr) {
         DuskLog.warn("HookSystem: funchook_create failed for {:p}", fnAddr);
@@ -214,17 +250,140 @@ funchook_t* install_trampoline(void* fnAddr, void* trampoline, void** outOrigina
 
     void* fn = fnAddr;
     const int prep = funchook_prepare(fh, &fn, trampoline);
+    if (prep == 0) {
+        *outOriginal = fn;
+    }
     const int inst = prep == 0 ? funchook_install(fh, 0) : -1;
     if (prep != 0 || inst != 0) {
         const char* message = funchook_error_message(fh);
         DuskLog.warn("HookSystem: funchook failed for {:p} (prepare={} install={}): {}", fnAddr,
             prep, inst, message != nullptr && message[0] != '\0' ? message : "no details");
         funchook_destroy(fh);
+        *outOriginal = nullptr;
         return nullptr;
     }
-
-    *outOriginal = fn;
     return fh;
+}
+#endif
+
+bool install_backend(
+    void* fnAddr, void* trampoline, InstalledBackend& outBackend, void** originalStore) {
+#if DUSK_HAS_PREPATCH
+    if (const auto site = prepatch::lookup(fnAddr)) {
+        *originalStore = site->original;
+        prepatch::publish(*site, trampoline);
+        outBackend.kind = BackendKind::Prepatch;
+        outBackend.prepatchSite = *site;
+        return true;
+    }
+#endif
+
+#if DUSK_HAS_FUNCHOOK
+    funchook_t* handle = install_funchook(fnAddr, trampoline, originalStore);
+    if (handle == nullptr) {
+        return false;
+    }
+    outBackend.kind = BackendKind::Funchook;
+    outBackend.handle = handle;
+    return true;
+#else
+#if DUSK_HAS_PREPATCH
+    DuskLog.warn("HookSystem: prepatch backend cannot install target {:p}: {}", fnAddr,
+        prepatch::available() ? "target has no valid gateway" : prepatch::unavailable_reason());
+#else
+    DuskLog.warn("HookSystem: no hook backend can install target {:p}", fnAddr);
+#endif
+    return false;
+#endif
+}
+
+void deactivate_backend(void* target, InstalledBackend& backend) {
+#if DUSK_HAS_PREPATCH
+    if (backend.kind == BackendKind::Prepatch) {
+        prepatch::publish(backend.prepatchSite, nullptr);
+        backend = {};
+        return;
+    }
+#endif
+#if DUSK_HAS_FUNCHOOK
+    if (backend.kind == BackendKind::Funchook) {
+        const int uninst = funchook_uninstall(backend.handle, 0);
+        const int destr = funchook_destroy(backend.handle);
+        if (uninst != 0 || destr != 0) {
+            DuskLog.warn("HookSystem: funchook uninstall/destroy for {:p} returned {}/{}", target,
+                uninst, destr);
+        }
+    }
+#else
+    (void)target;
+#endif
+    backend = {};
+}
+
+bool handoff_backend(
+    void* target, InstalledHook& entry, const HookCandidate& candidate, void** outOriginal) {
+#if DUSK_HAS_PREPATCH
+    if (entry.backend.kind == BackendKind::Prepatch) {
+        *candidate.origStore = entry.original;
+        prepatch::publish(entry.backend.prepatchSite, candidate.trampoline);
+        *outOriginal = entry.original;
+        return true;
+    }
+#endif
+#if DUSK_HAS_FUNCHOOK
+    InstalledBackend backend;
+    if (!install_backend(target, candidate.trampoline, backend, candidate.origStore)) {
+        return false;
+    }
+    entry.backend = backend;
+    *outOriginal = *candidate.origStore;
+    return true;
+#else
+    (void)target;
+    (void)candidate;
+    (void)outOriginal;
+    return false;
+#endif
+}
+
+bool handoff_hook(void* target, InstalledHook& entry) {
+#if DUSK_HAS_PREPATCH
+    const bool prepatched = entry.backend.kind == BackendKind::Prepatch;
+#else
+    constexpr bool prepatched = false;
+#endif
+    if (!prepatched) {
+        deactivate_backend(target, entry.backend);
+    }
+
+    entry.active = nullptr;
+    entry.activeStore = nullptr;
+    for (auto& candidate : entry.candidates) {
+        void* original = nullptr;
+        if (!handoff_backend(target, entry, candidate, &original)) {
+            continue;
+        }
+        entry.original = original;
+        entry.active = candidate.context;
+        entry.activeStore = candidate.origStore;
+        break;
+    }
+
+    if (entry.active == nullptr) {
+        DuskLog.warn("HookSystem: no reinstallable trampoline for {:p}; hooks there are "
+                     "disabled until a mod reinstalls one",
+            target);
+        for (auto& candidate : entry.candidates) {
+            *candidate.origStore = target;
+        }
+        deactivate_backend(target, entry.backend);
+        return false;
+    }
+
+    for (auto& candidate : entry.candidates) {
+        *candidate.origStore = entry.original;
+    }
+    return true;
 }
 
 ModResult hook_install(ModContext* context, void* fnAddr, void* trampolineFn, void** outOriginal) {
@@ -272,18 +431,17 @@ ModResult hook_install(ModContext* context, void* fnAddr, void* trampolineFn, vo
             name != nullptr ? name : "?", fnAddr, mod_id_from_context(context));
     }
 
-    void* original = nullptr;
-    funchook_t* fh = install_trampoline(fnAddr, trampolineFn, &original);
-    if (fh == nullptr) {
+    InstalledBackend backend;
+    if (!install_backend(fnAddr, trampolineFn, backend, outOriginal)) {
         return MOD_ERROR;
     }
 
     auto& entry = s_installed[key];
-    entry.handle = fh;
-    entry.original = original;
+    entry.backend = backend;
+    entry.original = *outOriginal;
     entry.active = context;
+    entry.activeStore = outOriginal;
     entry.candidates.push_back({context, trampolineFn, outOriginal, s_nextOrder++});
-    *outOriginal = original;
     return MOD_OK;
 }
 
@@ -350,6 +508,57 @@ ModResult hook_replace(
         return MOD_OK;
     }
     return MOD_INVALID_ARGUMENT;
+}
+
+ModResult hook_uninstall(ModContext* context, void* fnAddr, void** originalFnSlot) {
+    if (context == nullptr || fnAddr == nullptr || originalFnSlot == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    fnAddr = resolve_target(fnAddr);
+    if (!declared_target(context, fnAddr)) {
+        return reject_undeclared(context, fnAddr);
+    }
+
+    const auto key = reinterpret_cast<uintptr_t>(fnAddr);
+    const auto installedIt = s_installed.find(key);
+    if (installedIt == s_installed.end()) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    auto& entry = installedIt->second;
+    const auto candidateIt =
+        std::ranges::find_if(entry.candidates, [&](const HookCandidate& candidate) {
+            return candidate.context == context && candidate.origStore == originalFnSlot;
+        });
+    if (candidateIt == entry.candidates.end()) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    if (const auto registryIt = s_registry.find(key);
+        registryIt != s_registry.end() && erase_callbacks(registryIt->second, context))
+    {
+        s_registry.erase(registryIt);
+    }
+
+    const bool removedActive = entry.activeStore == originalFnSlot;
+    entry.candidates.erase(candidateIt);
+    *originalFnSlot = nullptr;
+    if (!removedActive) {
+        return MOD_OK;
+    }
+
+    auto* target = reinterpret_cast<void*>(key);
+    if (entry.candidates.empty()) {
+        deactivate_backend(target, entry.backend);
+        s_installed.erase(installedIt);
+        return MOD_OK;
+    }
+    if (!handoff_hook(target, entry)) {
+        s_installed.erase(installedIt);
+        return MOD_ERROR;
+    }
+    return MOD_OK;
 }
 
 ModResult hook_dispatch_pre(
@@ -543,19 +752,66 @@ bool resolve_symbol_checked(const char* symbol, bool requireCode, void** out, st
     return false;
 }
 
-/* Decode a HOOK_MEM record's pointer-to-member representation into the target code address,
- * mirroring what calling through the mfp would invoke. Virtual members hook the class's own
- * overrider, read from its vtable (resolved from the symbol manifest). */
-void* resolve_member_record(
-    const ModMetaHookMem& record, const char* vtableSymbol, std::string& why) {
-    uintptr_t words[2];
-    std::memcpy(words, record.pmf, sizeof(words));
+/*
+ * Decodes a member hook record's pointer-to-member representation into the target code address.
+ * Virtual members prefer their named overrider, then fall back to reading the primary vtable slot.
+ */
+void* resolve_member_record(const unsigned char* pmf, size_t pmfSize, const char* vtableSymbol,
+    const char* displayName, std::string& why) {
+    if (pmfSize < sizeof(uintptr_t)) {
+        why = "truncated pointer-to-member representation";
+        return nullptr;
+    }
+    uintptr_t words[2]{};
+    std::memcpy(words, pmf, std::min(sizeof(words), pmfSize));
 
 #if defined(_WIN32)
     const void* fn = reinterpret_cast<const void*>(words[0]);
+    if (fn == nullptr) {
+        why = "null pointer-to-member target";
+        return nullptr;
+    }
     const size_t slot = vcall_slot_offset(fn);
     if (slot == static_cast<size_t>(-1)) {  // not a vcall thunk: direct address
         return const_cast<void*>(fn);
+    }
+
+    // A display name resolves the actual overrider rather than an ABI vcall thunk. Besides being
+    // more direct, this covers secondary vtables: the MSVC representation has `this` adjustment
+    // but does not have the base-path suffix used by the decorated vtable symbol.
+    std::string displayWhy;
+    void* displayTarget = nullptr;
+    if (displayName[0] != '\0' &&
+        resolve_symbol_checked(displayName, true, &displayTarget, displayWhy))
+    {
+        return displayTarget;
+    }
+
+    int32_t thisAdjustment = 0;
+    if (pmfSize >= sizeof(uintptr_t) + sizeof(thisAdjustment)) {
+        std::memcpy(&thisAdjustment, pmf + sizeof(uintptr_t), sizeof(thisAdjustment));
+    }
+    if (thisAdjustment != 0) {
+        why = fmt::format(
+            "virtual member requires a {}-byte this adjustment and its overrider did not "
+            "resolve by name ({})",
+            thisAdjustment, displayWhy);
+        return nullptr;
+    }
+    int32_t firstVirtualField = 0;
+    if (pmfSize > MOD_META_HOOK_MEM_CAPACITY && pmfSize >= sizeof(uintptr_t) + 2 * sizeof(int32_t))
+    {
+        std::memcpy(&firstVirtualField, pmf + sizeof(uintptr_t) + sizeof(int32_t), sizeof(int32_t));
+    }
+    int32_t secondVirtualField = 0;
+    if (pmfSize > MOD_META_HOOK_MEM_CAPACITY && pmfSize >= sizeof(uintptr_t) + 3 * sizeof(int32_t))
+    {
+        std::memcpy(
+            &secondVirtualField, pmf + sizeof(uintptr_t) + 2 * sizeof(int32_t), sizeof(int32_t));
+    }
+    if (firstVirtualField != 0 || secondVirtualField != 0) {
+        why = fmt::format("virtual-base member did not resolve by name ({})", displayWhy);
+        return nullptr;
     }
     if (vtableSymbol[0] == '\0') {
         why = "class name is not representable as a vtable symbol";
@@ -583,10 +839,18 @@ void* resolve_member_record(
     if (!isVirtual) {  // non-virtual: the address itself
         return reinterpret_cast<void*>(words[0]);
     }
+
+    std::string displayWhy;
+    void* displayTarget = nullptr;
+    if (displayName[0] != '\0' &&
+        resolve_symbol_checked(displayName, true, &displayTarget, displayWhy))
+    {
+        return displayTarget;
+    }
     if (thisAdjust != 0) {
-        // this-adjusting mfp (member of a secondary base): the slot offset is relative to a
-        // vtable we can't locate. Hook the overrider by name instead.
-        why = "virtual member of a secondary base; hook the overrider by name";
+        // The slot is relative to a secondary vtable whose base path is not encoded in the mfp.
+        why = fmt::format(
+            "virtual member of a secondary base did not resolve by name ({})", displayWhy);
         return nullptr;
     }
     if (vtableSymbol[0] == '\0') {
@@ -613,13 +877,7 @@ void hook_remove_mod(LoadedMod& mod) {
     s_declaredTargets.erase(context);
 
     for (auto it = s_registry.begin(); it != s_registry.end();) {
-        auto& slot = it->second;
-        std::erase_if(slot.pre, [&](const PreHookFn& hook) { return hook.context == context; });
-        std::erase_if(slot.post, [&](const VoidHookFn& hook) { return hook.context == context; });
-        if (slot.replace.context == context) {
-            slot.replace = {};
-        }
-        if (slot.pre.empty() && slot.post.empty() && slot.replace.replaceCallback == nullptr) {
+        if (erase_callbacks(it->second, context)) {
             it = s_registry.erase(it);
         } else {
             ++it;
@@ -638,52 +896,18 @@ void hook_remove_mod(LoadedMod& mod) {
         }
 
         auto* target = reinterpret_cast<void*>(it->first);
-        const int uninst = funchook_uninstall(entry.handle, 0);
-        const int destr = funchook_destroy(entry.handle);
-        if (uninst != 0 || destr != 0) {
-            DuskLog.warn("HookSystem: funchook uninstall/destroy for {:p} returned {}/{}", target,
-                uninst, destr);
-        }
-        entry.handle = nullptr;
-        entry.active = nullptr;
-
         if (entry.candidates.empty()) {
+            deactivate_backend(target, entry.backend);
             it = s_installed.erase(it);
             continue;
         }
 
-        // Hand the detour off to a surviving candidate (lowest registration order first; the
-        // vector is append-ordered). A candidate whose install fails stays in the list: its
-        // g_orig must still track the current original pointer.
-        for (auto& cand : entry.candidates) {
-            void* original = nullptr;
-            funchook_t* fh = install_trampoline(target, cand.trampoline, &original);
-            if (fh == nullptr) {
-                continue;
-            }
-            entry.handle = fh;
-            entry.original = original;
-            entry.active = cand.context;
-            DuskLog.info("HookSystem: reinstalled trampoline for {:p}: {} -> {} (tramp={:p})",
-                target, mod_id_from_context(context), mod_id_from_context(cand.context),
-                cand.trampoline);
-            break;
-        }
-
-        if (entry.active == nullptr) {
-            DuskLog.warn("HookSystem: no reinstallable trampoline for {:p}; hooks there are "
-                         "disabled until a mod reinstalls one",
-                target);
-            for (auto& cand : entry.candidates) {
-                *cand.origStore = target;
-            }
+        if (!handoff_hook(target, entry)) {
             it = s_installed.erase(it);
             continue;
         }
-
-        for (auto& cand : entry.candidates) {
-            *cand.origStore = entry.original;
-        }
+        DuskLog.info("HookSystem: replaced trampoline for {:p}: {} -> {}", target,
+            mod_id_from_context(context), mod_id_from_context(entry.active));
         ++it;
     }
 }
@@ -700,6 +924,9 @@ ModResult hook_add_post(ModContext*, void*, HookPostFn, const HookOptions*) {
     return MOD_UNSUPPORTED;
 }
 ModResult hook_replace(ModContext*, void*, HookReplaceFn, const HookOptions*) {
+    return MOD_UNSUPPORTED;
+}
+ModResult hook_uninstall(ModContext*, void*, void**) {
     return MOD_UNSUPPORTED;
 }
 ModResult hook_dispatch_pre(ModContext*, void*, void*, void*, int* outSkipOriginal) {
@@ -742,6 +969,7 @@ constexpr HookService s_hookService{
     .dispatch_pre = hook_dispatch_pre,
     .dispatch_post = hook_dispatch_post,
     .resolve = hook_resolve,
+    .uninstall = hook_uninstall,
 };
 
 }  // namespace
@@ -772,14 +1000,24 @@ void hook_resolve_mod_records(LoadedMod& mod) {
             unresolved("<fn>", "null link-time target", &record->resolved);
         }
     }
-    for (auto* record : mod.native->parsed.hookMems) {
+    const auto resolveMember = [&](auto* record, const unsigned char* pmf, size_t pmfSize) {
+        const char* displayName = hook_mem_display_name(*record);
         std::string why;
-        void* target = resolve_member_record(*record, hook_mem_vtable_symbol(*record), why);
+        void* target =
+            resolve_member_record(pmf, pmfSize, hook_mem_vtable_symbol(*record), displayName, why);
         if (target != nullptr) {
             resolved(target, &record->resolved);
         } else {
-            unresolved(hook_mem_display_name(*record), why, &record->resolved);
+            unresolved(displayName, why, &record->resolved);
         }
+    };
+    for (auto* record : mod.native->parsed.hookMems) {
+        resolveMember(record, record->pmf, sizeof(record->pmf));
+    }
+    for (auto* record : mod.native->parsed.hookMemExts) {
+        alignas(std::max_align_t) unsigned char pmf[MOD_META_HOOK_MEM_EXT_CAPACITY]{};
+        record->materialize(pmf);
+        resolveMember(record, pmf, record->pmf_size);
     }
     for (auto* record : mod.native->parsed.hookNames) {
         const char* name = hook_name_symbol(*record);

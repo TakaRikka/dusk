@@ -7,6 +7,8 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include <gx.h>
 
+#include "dusk/version.hpp"
+
 JUTResFont::JUTResFont() {
     initialize_state();
     JUTFont::initialize_state();
@@ -68,8 +70,16 @@ void JUTResFont::initJoinedTexture() {
 
     int pageCount = 0;
     u32 pageNumCells = block.numRows * block.numColumns;
-    for (u32 code = block.startCode; code < block.endCode; code += pageNumCells) {
-        pageCount += 1;
+
+    if (dusk::version::isRegionJpn()) {
+        pageCount = 1;
+        if (pageNumCells > 0 && block.endCode > block.startCode) {
+            pageCount = (block.endCode - block.startCode + pageNumCells - 1) / pageNumCells;
+        }
+    } else {
+        for (u32 code = block.startCode; code < block.endCode; code += pageNumCells) {
+            pageCount += 1;
+        }
     }
 
     mJoinedTextureHeight = block.textureHeight * pageCount;
@@ -273,12 +283,19 @@ f32 JUTResFont::drawChar_scale(f32 pos_x, f32 pos_y, f32 scale_x, f32 scale_y, i
 
     u16 texW  = mpGlyphBlocks[field_0x66]->textureWidth;
 #if TARGET_PC
-    u16 texH  = mJoinedTextureHeight;
+    // JUTCacheFont does not set mJoinedTextureHeight (it uses per-page textures via loadImage override).
+    // Fall back to the individual glyph block's textureHeight in that case.
+    u16 texH  = mJoinedTextureHeight > 0 ? (u16)mJoinedTextureHeight : (u16)mpGlyphBlocks[field_0x66]->textureHeight;
 #else
     u16 texH  = mpGlyphBlocks[field_0x66]->textureHeight;
 #endif
-    u16 cellW = mpGlyphBlocks[field_0x66]->cellWidth;
 
+#if AVOID_UB
+    if (texW == 0) texW = 1;
+    if (texH == 0) texH = 1;
+#endif
+
+    u16 cellW = mpGlyphBlocks[field_0x66]->cellWidth;
     u16 cellH = mpGlyphBlocks[field_0x66]->cellHeight;
     s32 u1 = (mWidth * 0x8000) / texW;
     s32 v1 = (mHeight * 0x8000) / texH;

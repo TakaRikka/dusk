@@ -23,8 +23,13 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
+#include "dusk/utilities.hpp"
+#include "dusk/version.hpp"
+
 #if TARGET_PC
+#include "dusk/game_mode.hpp"
 #include "dusk/menu_pointer.h"
+#include "dusk/mods/svc/save.hpp"
 #include "helpers/string.hpp"
 
 namespace {
@@ -252,6 +257,10 @@ dFile_select_c::~dFile_select_c() {
 
 void dFile_select_c::_create() {
     int i;
+
+#if TARGET_PC
+    dusk::mods::svc::save_no_slot();
+#endif
 
     mDoGph_gInf_c::setFadeColor(static_cast<JUtility::TColor&>(g_blackColor));
     
@@ -1303,12 +1312,42 @@ void dFile_select_c::selectDataOpenMove() {
 void dFile_select_c::selectDataNameMove() {
     bool isHeaderTxtChange = headerTxtChangeAnm();
     bool isFileRecScale = fileRecScaleAnm2();
-    bool isNameMove = nameMoveAnm();
+    IF_NOT_DUSK(bool isNameMove = nameMoveAnm();)
     bool isModoruTxtDisp = modoruTxtDispAnm();
+
+#ifdef TARGET_PC
+    const dusk::gamemode::GameMode* gameMode =
+        dusk::gamemode::getGameModeManager().getCurrentGameMode();
+    if (gameMode) {
+        if (isHeaderTxtChange == true && isFileRecScale == true && isModoruTxtDisp == true) {
+            if (mGameModeSaveStartBuildUi) {
+                gameMode->invokeOnNewSaveSelectFunction(&mGameModeNewSaveState);
+                mGameModeSaveStartBuildUi = false;
+            }
+            if (mGameModeNewSaveState == GAME_MODE_STATE_RETURN) {
+                backToDataSelectMove();
+                mGameModeSaveStartBuildUi = true;
+                mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
+                return;
+            }
+            if (mGameModeNewSaveState != GAME_MODE_STATE_PROCEED) {
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+#endif
+
+    IF_DUSK(bool isNameMove = nameMoveAnm();)
 
     if (isHeaderTxtChange == true && isFileRecScale == true && isNameMove == true &&
         isModoruTxtDisp == true)
     {
+#ifdef TARGET_PC
+        mGameModeSaveStartBuildUi = true;
+        mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
+#endif
         mDataSelProc = DATASELPROC_NAME_INPUT_WAIT;
     }
 }
@@ -1388,6 +1427,15 @@ void dFile_select_c::menuSelectStart() {
         mIsSelectEnd = true;
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
         dComIfGs_setDataNum(mSelectNum);
+#if TARGET_PC
+        dusk::mods::svc::save_slot_loaded(mSelectNum, &mSaveData[mSelectNum]);
+
+        const dusk::gamemode::GameMode* gameMode =
+            dusk::gamemode::getGameModeManager().getCurrentGameMode();
+        if (gameMode) {
+            gameMode->invokeOnSaveLoadedFunction();
+        }
+#endif
     } else if (mSelectMenuNum == 0) {
         mSelIcon->setAlphaRate(0.0f);
         yesnoMenuMoveAnmInitSet(0x473, 0x47d);
@@ -1738,6 +1786,21 @@ void dFile_select_c::nameInput2() {
     case 2:
         dComIfGs_setHorseName(mpName->getInputStrPtr());
         mIsSelectEnd = true;
+#if TARGET_PC
+        dusk::mods::svc::save_slot_new(mSelectNum);
+        const dusk::gamemode::GameMode* gameMode =
+                dusk::gamemode::getGameModeManager().getCurrentGameMode();
+        if (gameMode) {
+            gameMode->invokeOnNewSaveFunction();
+        }
+
+        // only do OnSaveLoaded callback here if hiding the brightness check screen
+        if (dusk::getSettings().game.hideTvSettingsScreen) {
+            if (gameMode) {
+                gameMode->invokeOnSaveLoadedFunction();
+            }
+        }
+#endif
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
     }
 }
@@ -2664,6 +2727,9 @@ void dFile_select_c::DataEraseWait2() {
         mDataSelProc = DATASELPROC_ERROR_MSG_PANE_MOVE;
     } else if (field_0x03b4 == 1) {
         mDoAud_seStart(Z2SE_SY_FILE_DELETE_OK, NULL, 0, 0);
+#if TARGET_PC
+        dusk::mods::svc::save_slot_erased(mSelectNum);
+#endif
         field_0x03b1 = 0;
         mDeleteEfPane[mSelectNum]->alphaAnimeStart(0);
         mFileInfoNoDatBasePane[mSelectNum]->alphaAnimeStart(0);
@@ -2767,6 +2833,9 @@ void dFile_select_c::DataCopyWait2() {
             mDataSelProc = DATASELPROC_ERROR_MSG_PANE_MOVE;
         } else if (field_0x03b4 == 1) {
             mDoAud_seStart(Z2SE_SY_FILE_COPY_OK, NULL, 0, 0);
+#if TARGET_PC
+            dusk::mods::svc::save_slot_copied(mCpDataNum, mCpDataToNum);
+#endif
             field_0x03b1 = 0;
             mCopyEfPane[mSelectNum]->alphaAnimeStart(0);
             mCopyEfPane[mCpDataToNum]->alphaAnimeStart(0);
@@ -3184,8 +3253,10 @@ void dFile_select_c::screenSet() {
     static u64 l_nouseTag[15] = {MULTI_CHAR('w_mcheck'), MULTI_CHAR('w_tabi1'),  MULTI_CHAR('w_tabi2'),  MULTI_CHAR('w_tabi3'), MULTI_CHAR('w_doko_c'),
                                  MULTI_CHAR('w_uwa_c'),  MULTI_CHAR('w_cp_chu'), MULTI_CHAR('w_cpsita'), MULTI_CHAR('w_cp_x'),  'w_de',
                                  MULTI_CHAR('w_de_chu'), MULTI_CHAR('w_desita'), MULTI_CHAR('w_de_x'),   MULTI_CHAR('w_name'),  MULTI_CHAR('w_h_name')};
-
-#if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+#if TARGET_PC
+    static u64 l_tagName21_jpn[2] = {MULTI_CHAR('w_tabi_s'), MULTI_CHAR('w_tabi_x')};
+    static u64 l_tagName21[2] = {MULTI_CHAR('t_for'), MULTI_CHAR('t_for1')};
+#elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     static u64 l_tagName21[2] = {MULTI_CHAR('w_tabi_s'), MULTI_CHAR('w_tabi_x')};
 #else
     static u64 l_tagName21[2] = {MULTI_CHAR('t_for'), MULTI_CHAR('t_for1')};
@@ -3194,7 +3265,10 @@ void dFile_select_c::screenSet() {
     static u64 l_tagName18[3] = {MULTI_CHAR('w_de_ef0'), MULTI_CHAR('w_de_ef1'), MULTI_CHAR('w_de_ef2')};
     static u64 l_tagName19[3] = {MULTI_CHAR('w_cp_ef0'), MULTI_CHAR('w_cp_ef1'), MULTI_CHAR('w_cp_ef2')};
 
-#if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+#if TARGET_PC
+    static u64 l_tagName20_jpn[2] = {MULTI_CHAR('w_er_msg'), MULTI_CHAR('w_er_msR')};
+    static u64 l_tagName20[2] = {MULTI_CHAR('er_for0'), MULTI_CHAR('er_for1')};
+#elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     static u64 l_tagName20[2] = {MULTI_CHAR('w_er_msg'), MULTI_CHAR('w_er_msR')};
 #else
     static u64 l_tagName20[2] = {MULTI_CHAR('er_for0'), MULTI_CHAR('er_for1')};
@@ -3230,7 +3304,19 @@ void dFile_select_c::screenSet() {
     mBbtnPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_bbtn'), 2, NULL);
     mAbtnPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_n_abtn'), 2, NULL);
 
-#if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        mModoruTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
+        mKetteiTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
+        fileSel.Scr->search(MULTI_CHAR('f_modo'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('f_kete'))->hide();
+    } else {
+        mModoruTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_modo'), 2, NULL);
+        mKetteiTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('f_kete'), 2, NULL);
+        fileSel.Scr->search(MULTI_CHAR('w_modo'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('w_kete'))->hide();
+    }
+#elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     mModoruTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_modo'), 2, NULL);
     mKetteiTxtPane = JKR_NEW CPaneMgrAlpha(fileSel.Scr, MULTI_CHAR('w_kete'), 2, NULL);
     fileSel.Scr->search(MULTI_CHAR('f_modo'))->hide();
@@ -3306,7 +3392,17 @@ void dFile_select_c::screenSet() {
         fileSel.Scr->search(l_nouseTag[i])->hide();
     }
 
-#if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        fileSel.Scr->search(MULTI_CHAR('t_for'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('t_for1'))->hide();
+    } else {
+        fileSel.Scr->search(MULTI_CHAR('w_tabi_s'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('w_tabi_x'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('w_mgn1'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('w_mgn2'))->hide();
+    }
+#elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     fileSel.Scr->search(MULTI_CHAR('t_for'))->hide();
     fileSel.Scr->search(MULTI_CHAR('t_for1'))->hide();
 #else
@@ -3317,10 +3413,20 @@ void dFile_select_c::screenSet() {
 #endif
 
     for (int i = 0; i < 2; i++) {
-        mHeaderTxtPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, l_tagName21[i], 0, NULL);
+        mHeaderTxtPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, DUSK_IF_ELSE(dusk::version::isRegionJpn() ? l_tagName21_jpn[i] : l_tagName21[i], l_tagName21[i]), 0, NULL);
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setFont(fileSel.font[0]);
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setString(512, "");
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setFontSize(21.0f, 21.0f);
+            ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setLineSpace(22.0f);
+            ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setCharSpace(2.0f);
+        } else {
+            ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setFontSize(24.0f, 24.0f);
+            ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setLineSpace(20.0f);
+            ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setCharSpace(0.0f);
+        }
+#elif VERSION == VERSION_GCN_JPN
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setFontSize(21.0f, 21.0f);
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setLineSpace(22.0f);
         ((J2DTextBox*)mHeaderTxtPane[i]->getPanePtr())->setCharSpace(2.0f);
@@ -3361,8 +3467,15 @@ void dFile_select_c::screenSet() {
     field_0x0208 = 0;
     field_0x0209 = 0;
     mErrorMsgPane = fileSel.Scr->search(MULTI_CHAR('w_er_n'));
-
-#if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        fileSel.Scr->search(MULTI_CHAR('er_for0'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('er_for1'))->hide();
+    } else {
+        fileSel.Scr->search(MULTI_CHAR('w_er_msg'))->hide();
+        fileSel.Scr->search(MULTI_CHAR('w_er_msR'))->hide();
+    }
+#elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     fileSel.Scr->search(MULTI_CHAR('er_for0'))->hide();
     fileSel.Scr->search(MULTI_CHAR('er_for1'))->hide();
 #else
@@ -3373,17 +3486,27 @@ void dFile_select_c::screenSet() {
     fileSel.Scr->search(MULTI_CHAR('w_er_msE'))->hide();
 
     for (int i = 0; i < 2; i++) {
-        mErrorMsgTxtPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, l_tagName20[i], 0, NULL);
+        mErrorMsgTxtPane[i] = JKR_NEW CPaneMgrAlpha(fileSel.Scr, DUSK_IF_ELSE(dusk::version::isRegionJpn() ? l_tagName20_jpn[i] : l_tagName20[i], l_tagName20[i]), 0, NULL);
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setFont(fileSel.font[0]);
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setString(512, "");
 
-#if (VERSION != VERSION_GCN_JPN) && (VERSION != VERSION_WII_JPN)
+#if TARGET_PC || ((VERSION != VERSION_GCN_JPN) && (VERSION != VERSION_WII_JPN))
+        IF_DUSK_BLOCK(!dusk::version::isRegionJpn())
         mErrorMsgTxtPane[i]->getPanePtr()->resize(440.0f, 198.0f);
+        IF_DUSK_BLOCK_END
 #endif
 
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setFontSize(21.0f, 21.0f);
 
-#if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setLineSpace(22.0f);
+            ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setCharSpace(2.0f);
+        } else {
+            ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setLineSpace(21.0f);
+            ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setCharSpace(1.0f);
+        }
+#elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setLineSpace(22.0f);
         ((J2DTextBox*)mErrorMsgTxtPane[i]->getPanePtr())->setCharSpace(2.0f);
 #else
@@ -3579,7 +3702,15 @@ void dFile_select_c::screenSetYesNo() {
 
     for (int i = 0; i < 2; i++) {
         mYnSelPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName012[i], 0, NULL);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            mYnSelTxtPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName013[i], 0, NULL);
+            mYnSel.ScrYn->search(l_tagName013U[i])->hide();
+        } else {
+            mYnSelTxtPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName013U[i], 0, NULL);
+            mYnSel.ScrYn->search(l_tagName013[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         mYnSelTxtPane[i] = JKR_NEW CPaneMgr(mYnSel.ScrYn, l_tagName013[i], 0, NULL);
         mYnSel.ScrYn->search(l_tagName013U[i])->hide();
 #else
@@ -3657,7 +3788,15 @@ void dFile_select_c::screenSet3Menu() {
 
     for (int i = 0; i < 3; i++) {
         m3mSelPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName1[i], 0, NULL);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            m3mSelTextPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName011[i], 0, NULL);
+            m3mSel.Scr3m->search(l_tagName011U[i])->hide();
+        } else {
+            m3mSelTextPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName011U[i], 0, NULL);
+            m3mSel.Scr3m->search(l_tagName011[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         m3mSelTextPane[i] = JKR_NEW CPaneMgr(m3mSel.Scr3m, l_tagName011[i], 0, NULL);
         m3mSel.Scr3m->search(l_tagName011U[i])->hide();
 #else
@@ -3777,7 +3916,12 @@ void dFile_select_c::headerTxtSet(u16 i_msgId, u8 i_type, u8 param_3) {
         SAFE_STRCPY(mHeaderStringPtr[dispIdx], "");
     } else {
         static f32 fontsize[2] = {21.0f, 27.0f};
-        #if VERSION == VERSION_GCN_JPN
+        #if TARGET_PC
+        static f32 linespace_jpn[2] = {22.0f, 20.0f};
+        static f32 charspace_jpn[2] = {2.0f, 3.0f};
+        static f32 linespace[2] = {21.0f, 20.0f};
+        static f32 charspace[2] = {0.0f, 0.0f};
+        #elif VERSION == VERSION_GCN_JPN
             static f32 linespace[2] = {22.0f, 20.0f};
             static f32 charspace[2] = {2.0f, 3.0f};
         #else
@@ -3787,8 +3931,8 @@ void dFile_select_c::headerTxtSet(u16 i_msgId, u8 i_type, u8 param_3) {
 
         ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr())->setFont(fileSel.font[i_type]);
         ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr())->setFontSize(fontsize[i_type], fontsize[i_type]);
-        ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr())->setLineSpace(linespace[i_type]);
-        ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr())->setCharSpace(charspace[i_type]);
+        ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr())->setLineSpace(DUSK_IF_ELSE(dusk::version::isRegionJpn() ? linespace_jpn[i_type] : linespace[i_type], linespace[i_type]));
+        ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr())->setCharSpace(DUSK_IF_ELSE(dusk::version::isRegionJpn() ? charspace_jpn[i_type] : charspace[i_type], charspace[i_type]));
         fileSel.mMessageString->getString(i_msgId,
                                           ((J2DTextBox*)mHeaderTxtPane[dispIdx]->getPanePtr()), NULL,
                                           fileSel.font[i_type], NULL, 0);
@@ -4016,11 +4160,43 @@ bool dFile_select_c::yesnoWakuAlpahAnm(u8 param_1) {
 }
 
 #if TARGET_PC
+
+static dusk::utils::PaneCache mSelDtPanes[] = {
+    {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n2'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('gray_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('b_base'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('b_base1'), 0.0f, 0.0f, false},
+};
+
+static dusk::utils::PaneCache fileSelPanes[] = {
+    {MULTI_CHAR('w_uzu00'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu01'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu02'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu03'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu04'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu05'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu06'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu07'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu08'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_uzu09'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msg'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msE'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_msR'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('er_for1'), 0.0f, 0.0f, false},
+};
+
 void dFile_select_c::fileSelectWide() {
     static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
-        for (PaneCache& entry : mSelDtPanes) {
+        for (dusk::utils::PaneCache& entry : mSelDtPanes) {
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX(); 
@@ -4028,7 +4204,7 @@ void dFile_select_c::fileSelectWide() {
                 entry.cached = true;
             }
         }
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -4042,13 +4218,13 @@ void dFile_select_c::fileSelectWide() {
     // Reset all panes
     mSelDt.ScrDt->scale(1.0f, 1.0f);
     mSelDt.ScrDt->translate(0.0f, 0.0f);
-    for (PaneCache& entry : mSelDtPanes) {
+    for (dusk::utils::PaneCache& entry : mSelDtPanes) {
         J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);
     }
-    for (PaneCache& entry : fileSelPanes) {
+    for (dusk::utils::PaneCache& entry : fileSelPanes) {
         J2DPane* pane = fileSel.Scr->search(entry.tag);
         pane->setBasePosition(J2DBasePosition_4);
         pane->scale(1.0f, 1.0f);
@@ -4120,7 +4296,7 @@ void dFile_select_c::fileSelectWide() {
         mSelDt.ScrDt->search(MULTI_CHAR('fuku_n2'))->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
 
         // Spirals & Memory Card Text
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         }
@@ -4146,7 +4322,7 @@ void dFile_select_c::fileSelectWide() {
         const f32 wideShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (wideScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
         const f32 ultraShiftFactor = mSelDt.ScrDt->search(MULTI_CHAR('gray_n'))->getTranslateX() * (ultraScaleFactor - mDoGph_gInf_c::hudAspectScaleDown);
 
-        for (PaneCache& entry : mSelDtPanes) {
+        for (dusk::utils::PaneCache& entry : mSelDtPanes) {
             const size_t index = &entry - mSelDtPanes;
             J2DPane* pane = mSelDt.ScrDt->search(entry.tag);
             pane->setBasePosition(J2DBasePosition_0);
@@ -4214,7 +4390,7 @@ void dFile_select_c::fileSelectWide() {
         }
 
         // Spirals & Memory Card Text
-        for (PaneCache& entry : fileSelPanes) {
+        for (dusk::utils::PaneCache& entry : fileSelPanes) {
             J2DPane* pane = fileSel.Scr->search(entry.tag);
             pane->scale(mDoGph_gInf_c::hudAspectScaleDown, 1.0f);
         }

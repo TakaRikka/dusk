@@ -958,8 +958,23 @@ int daNpc_Pouya_c::cutHaveFavorToAsk(int param_0) {
                 switch (evt_id) {
                 case 1:
                     if (mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
+#if TARGET_PC
+                        const char* itemCheckName = nullptr;
+                        u32 itemGiveTag = 0;
+                        if (local_64 == dItemNo_DROP_BOTTLE_e) {
+                            itemCheckName = "jovani_reward_1";
+                        } else if (local_64 == dItemNo_SILVER_RUPEE_e) {
+                            itemCheckName = "jovani_reward_2";
+                        }
+                        if (itemCheckName != nullptr) {
+                            const auto itemCheck =
+                                dusk::mods::item_check_commit(itemCheckName, local_64, this);
+                            local_64 = itemCheck.itemNo;
+                            itemGiveTag = itemCheck.tag;
+                        }
+#endif
                         mItemPartnerId = fopAcM_createItemForPresentDemo(&current.pos, local_64, 0,
-                                                                         -1, -1, 0, 0);
+                            -1, -1, 0, 0 IF_DUSK_ARG(itemGiveTag));
                     }
                     if (fopAcM_IsExecuting(mItemPartnerId)) {
                         field_0xfce = 1;

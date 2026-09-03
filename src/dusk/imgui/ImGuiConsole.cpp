@@ -1,14 +1,14 @@
 #include <algorithm>
 #include <array>
+#include <aurora/aurora.h>
+#include <chrono>
 #include <numeric>
 #include <string_view>
-#include <chrono>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h"
 #include <imgui_internal.h>
 
-#include "fmt/format.h"
 #include "ImGuiConsole.hpp"
 #include "ImGuiEngine.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
@@ -18,12 +18,15 @@
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/game_mode.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"
+#include "dusk/presentation.hpp"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
+#include "fmt/format.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
@@ -37,6 +40,8 @@ using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace {
+constexpr float kTurboTimeScale = 4.f;
+
 ImGuiWindow* FindDragScrollWindow(ImGuiWindow* window) {
     while (window != nullptr) {
         const bool canScrollX = window->ScrollMax.x > 0.0f;
@@ -235,15 +240,30 @@ namespace dusk {
     }
 
     void ImGuiConsole::UpdateSettings() {
-        getTransientSettings().skipFrameRateLimit = getSettings().game.enableTurboKeybind &&
-            (ImGui::IsKeyDown(ImGuiKey_Tab) || getActionBindHoldAnyPort(ActionBinds::TURBO_SPEED_BUTTON));
+        static bool previousTurboActive = false;
+        static bool previousSlowActive = false;
+        static float previousTimeScale = 1.0f;
 
-        if (dusk::frame_interp::get_ui_tick_pending() && mDoMain::developmentMode == 1 && (mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == (PAD_TRIGGER_R | PAD_TRIGGER_L) && mDoCPd_c::getTrigY(PAD_1)) {
-            getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
+        const bool turboBound = isActionBoundAnyPort(ActionBinds::TURBO_SPEED_BUTTON);
+        const bool turboActive =
+            getSettings().game.enableTurboKeybind &&
+            (turboBound ? getActionBindHoldAnyPort(ActionBinds::TURBO_SPEED_BUTTON) :
+                          ImGui::IsKeyDown(ImGuiKey_Tab));
+        const bool slowDown = turboActive && ImGui::GetIO().KeyShift;
+        if (turboActive != previousTurboActive) {
+            getTransientSettings().turboMode = turboActive;
+            presentation::update_frame_rate_preference();
+            if (turboActive) {
+                previousTimeScale = aurora_get_timescale();
+                aurora_set_timescale(slowDown ? 1.f / kTurboTimeScale : kTurboTimeScale);
+            } else {
+                aurora_set_timescale(previousTimeScale);
+            }
+        } else if (turboActive && slowDown != previousSlowActive) {
+            aurora_set_timescale(slowDown ? 1.f / kTurboTimeScale : kTurboTimeScale);
         }
-        if (mDoMain::developmentMode != 1) {
-            getTransientSettings().moveLinkActive = false;
-        }
+        previousTurboActive = turboActive;
+        previousSlowActive = slowDown;
     }
 
     void ImGuiConsole::PreDraw() {
@@ -270,7 +290,7 @@ namespace dusk {
                 m_isHidden = true;
             }
         }
-        
+
         bool showMenu = !m_isHidden;
 
         // The menu bar renders with ImGuiCol_WindowBg behind it. We just want ImGuiCol_MenuBarBg,
@@ -285,7 +305,7 @@ namespace dusk {
 
         if (dusk::IsGameLaunched && !m_isLaunchInitialized) {
             m_isLaunchInitialized = true;
-            if (getSettings().game.speedrunMode && getSettings().game.liveSplitEnabled) {
+            if (dusk::speedrun::isActive() && getSettings().game.liveSplitEnabled) {
                 dusk::speedrun::connectLiveSplit();
             }
         }
@@ -357,7 +377,7 @@ namespace dusk {
 
         m_menuTools.ShowInputViewer();
 
-        if (dusk::IsGameLaunched && !dusk::getSettings().game.speedrunMode) {
+        if (dusk::IsGameLaunched && !dusk::speedrun::isActive()) {
             m_menuTools.ShowDebugOverlay();
             m_menuTools.ShowCameraOverlay();
             m_menuTools.ShowProcessManager();

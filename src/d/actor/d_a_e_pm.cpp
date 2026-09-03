@@ -19,6 +19,7 @@
 #include "d/actor/d_a_obj_smw_stone.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
+#include "dusk/version.hpp"
 
 class daE_PM_HIO_c {
 public:
@@ -816,10 +817,12 @@ void daE_PM_c::DemoBeforeEscape() {
             for (int i = 0; i < 4; i++) {
                 e_fs_class* puppet;
                 if (fopAcM_SearchByID(mPuppetID[i], (fopAc_ac_c**)&puppet)) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
+                    IF_DUSK_BLOCK(dusk::version::isRegionJpn())
                     if (puppet == NULL) {
                         continue;
                     }
+                    IF_DUSK_BLOCK_END
 #endif
                     puppet->mAction = e_fs_class::ACT_END;
                     puppet->mMode = 0;

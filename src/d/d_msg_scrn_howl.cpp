@@ -4,20 +4,21 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_msg_scrn_howl.h"
-#include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_graphic.h"
-#include "d/d_msg_object.h"
-#include "d/d_pane_class.h"
+#include "JSystem/J2DGraph/J2DGrafContext.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "JSystem/JUtility/JUTTexture.h"
+#include "Z2AudioLib/Z2WolfHowlMgr.h"
 #include "d/actor/d_a_alink.h"
 #include "d/d_meter2.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_meter2_info.h"
-#include "JSystem/JUtility/JUTTexture.h"
-#include "JSystem/JUtility/JUTAssert.h"
-#include "JSystem/J2DGraph/J2DGrafContext.h"
-#include "JSystem/J2DGraph/J2DScreen.h"
-#include "Z2AudioLib/Z2WolfHowlMgr.h"
+#include "d/d_msg_object.h"
+#include "d/d_msg_scrn_howl.h"
+#include "d/d_pane_class.h"
+#include "dusk/version.hpp"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
 
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
@@ -89,7 +90,21 @@ dMsgScrnHowl_c::dMsgScrnHowl_c() {
     JUT_ASSERT(96, mpButtonIcon[1] != NULL);
     mpButtonText[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('gr_txt_n'), 2, NULL);
     JUT_ASSERT(98, mpButtonText[1] != NULL);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    J2DTextBox* piStack_19c;
+    J2DTextBox* piStack_1a0;
+    if (dusk::version::isRegionJpn()) {
+        piStack_19c = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_l_info'));
+        piStack_1a0 = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_r_info'));
+        mpScreen->search(MULTI_CHAR('fgr_info'))->hide();
+        mpScreen->search(MULTI_CHAR('fgl_info'))->hide();
+    } else {
+        piStack_19c = (J2DTextBox*)mpScreen->search(MULTI_CHAR('fgl_info'));
+        piStack_1a0 = (J2DTextBox*)mpScreen->search(MULTI_CHAR('fgr_info'));
+        mpScreen->search(MULTI_CHAR('g_l_info'))->hide();
+        mpScreen->search(MULTI_CHAR('g_r_info'))->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     J2DTextBox* piStack_19c = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_l_info'));
     J2DTextBox* piStack_1a0 = (J2DTextBox*)mpScreen->search(MULTI_CHAR('g_r_info'));
     mpScreen->search(MULTI_CHAR('fgr_info'))->hide();

@@ -64,7 +64,7 @@ public:
         current.pos = new_pos;
     }
 
-private:
+// private:
     /* 0x92C */ fpc_ProcID mItemId;
     /* 0x930 */ int mCounter;
     /* 0x934 */ u8 mStatus;
@@ -88,6 +88,12 @@ private:
     /* 0x99C */ dPa_followEcallBack mEffect2;
     /* 0x9B0 */ Z2SoundObjSimple mSound;
     /* 0x9D0 */ u8 mIsHookCarry;
+#if TARGET_PC
+    u8 mOriginalItemNo;
+    bool mItemOverridden;
+    bool mOverrideHover;
+    bool mGoldenWolfItem;
+#endif
 };
 
 STATIC_ASSERT(sizeof(daObjLife_c) == 0x9d4);

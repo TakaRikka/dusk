@@ -1,10 +1,11 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_msg_scrn_boss.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "d/d_msg_object.h"
+#include "d/d_msg_scrn_boss.h"
 #include "d/d_pane_class.h"
+#include "dusk/version.hpp"
 
 #if TARGET_PC
 #include "dusk/settings.h"
@@ -37,8 +38,10 @@ dMsgScrnBoss_c::dMsgScrnBoss_c() {
     for (int i = 0; i < 7; i++) {
         mpTm_c[i] = JKR_NEW CPaneMgr(mpScreen, t_tag[i], 0, NULL);
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getRubyFont());
-#if VERSION != VERSION_GCN_JPN
+#if TARGET_PC || VERSION != VERSION_GCN_JPN
+        IF_DUSK_BLOCK(!dusk::version::isRegionJpn())
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setCharSpace(1.0f);
+        IF_DUSK_BLOCK_END
 #endif
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x100, "");
     }

@@ -4,13 +4,14 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
+#include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_file_sel_warning.h"
 #include "d/d_msg_string.h"
 #include "d/d_pane_class.h"
-#include "JSystem/J2DGraph/J2DScreen.h"
-#include "JSystem/J2DGraph/J2DAnmLoader.h"
-#include "JSystem/J2DGraph/J2DTextBox.h"
-#include "d/d_com_inf_game.h"
+#include "dusk/version.hpp"
 
 typedef void (dFile_warning_c::*procFunc)();
 static procFunc fileWarningProc[] = {&dFile_warning_c::modeWait, &dFile_warning_c::modeMove};
@@ -63,7 +64,19 @@ void dFile_warning_c::screenSet() {
     JUT_ASSERT(0, mpRootPane != NULL);
     field_0x34 = mpRootPane->getTranslateY();
 
-#if REGION_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        mFileWarn.Scr->search(MULTI_CHAR('ms_for_2'))->hide();
+        mFileWarn.Scr->search(MULTI_CHAR('ms_for_3'))->hide();
+
+        field_0x20 = static_cast<J2DTextBox*>(mFileWarn.Scr->search(MULTI_CHAR('w_msg_jp')));
+    } else {
+        mFileWarn.Scr->search(MULTI_CHAR('w_msg_jp'))->hide();
+        mFileWarn.Scr->search(MULTI_CHAR('ms_for_2'))->hide();
+
+        field_0x20 = static_cast<J2DTextBox*>(mFileWarn.Scr->search(MULTI_CHAR('ms_for_3')));
+    }
+#elif REGION_JPN
     mFileWarn.Scr->search(MULTI_CHAR('ms_for_2'))->hide();
     mFileWarn.Scr->search(MULTI_CHAR('ms_for_3'))->hide();
 

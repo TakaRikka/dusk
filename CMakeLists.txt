@@ -5,10 +5,11 @@ if (NOT CMAKE_BUILD_TYPE)
             "Build type options: Debug Release RelWithDebInfo MinSizeRel" FORCE)
 endif ()
 
-include(cmake/DetectVersion.cmake)
-detect_version()
+include(extern/borealis/cmake/DetectVersion.cmake)
+borealis_detect_version()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-project(dusklight LANGUAGES C CXX VERSION ${DUSK_VERSION_STRING})
+project(dusklight LANGUAGES C CXX VERSION ${BOREALIS_APP_VERSION})
+
 if (APPLE)
     enable_language(OBJC OBJCXX)
 endif ()
@@ -32,6 +33,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 # Folder-based instead of target-based organization
 # in Visual Studio and Xcode generators
@@ -74,6 +76,8 @@ set(AURORA_ENABLE_RMLUI ON CACHE BOOL "Enable RmlUi UI support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 target_compile_definitions(aurora_mtx PRIVATE MTX_USE_PS=1)
 
+add_subdirectory(extern/borealis EXCLUDE_FROM_ALL)
+
 add_subdirectory(libs/freeverb)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -85,11 +89,38 @@ endif ()
 option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
-option(DUSK_ENABLE_UPDATE_CHECKER "Enable update checking support" ON)
-option(DUSK_ENABLE_SENTRY_NATIVE "Enable sentry-native crash reporting support" OFF)
 option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structure" OFF)
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
-option(DUSK_ENABLE_CODE_MODS "Enable code mods" OFF)
+option(DUSK_ENABLE_CODE_MODS "Enable code mods" ON)
+
+set(DUSK_HAS_FUNCHOOK OFF)
+if (DUSK_ENABLE_CODE_MODS AND (NOT APPLE OR CMAKE_SYSTEM_NAME STREQUAL "Darwin"))
+    set(DUSK_HAS_FUNCHOOK ON)
+endif ()
+set(DUSK_HAS_FUNCHOOK ${DUSK_HAS_FUNCHOOK} CACHE INTERNAL "Enable funchook" FORCE)
+
+set(_target_architectures ${CMAKE_OSX_ARCHITECTURES})
+if (NOT _target_architectures)
+    set(_target_architectures ${CMAKE_SYSTEM_PROCESSOR})
+endif ()
+list(LENGTH _target_architectures _target_arch_count)
+set(DUSK_HAS_PREPATCH OFF)
+if (DUSK_ENABLE_CODE_MODS AND APPLE AND _target_arch_count EQUAL 1)
+    list(GET _target_architectures 0 _target_arch)
+    if (_target_arch STREQUAL "arm64")
+        set(DUSK_HAS_PREPATCH ON)
+    endif ()
+endif ()
+set(DUSK_HAS_PREPATCH ${DUSK_HAS_PREPATCH} CACHE INTERNAL "Enable symgen prepatch support" FORCE)
+
+if (DUSK_ENABLE_CODE_MODS AND CMAKE_SYSTEM_NAME MATCHES "^(iOS|tvOS)$")
+    list(LENGTH CMAKE_OSX_ARCHITECTURES _mobile_arch_count)
+    if (NOT _mobile_arch_count EQUAL 1 OR NOT CMAKE_OSX_ARCHITECTURES STREQUAL "arm64")
+        message(FATAL_ERROR
+                "iOS/tvOS code mods require a single arm64 architecture; got "
+                "CMAKE_OSX_ARCHITECTURES='${CMAKE_OSX_ARCHITECTURES}'")
+    endif ()
+endif ()
 
 # Edit & Continue
 if (MSVC)
@@ -121,6 +152,7 @@ if (DUSK_MOVIE_SUPPORT)
             -DENABLE_SHARED=OFF
             -DWITH_TURBOJPEG=ON
             -DWITH_JAVA=OFF
+            -DCMAKE_INSTALL_LIBDIR=lib
         )
         if (CMAKE_TOOLCHAIN_FILE)
             get_filename_component(_jpeg_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
@@ -164,24 +196,21 @@ if (DUSK_MOVIE_SUPPORT)
     endif ()
 endif ()
 
-if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
     # -Wno-multichar: Multi-character constants ('ABCD') are implementation-defined but all compilers
     #   (CW, GCC, Clang, MSVC) encode them identically in big-endian order.
     #   For >4-char literals (which GCC/Clang truncate to int), use the MULTI_CHAR() macro.
     # -Wdeprecated-declarations: JSystem uses std::iterator, deprecated in C++17
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar -Wno-trigraphs -Wno-deprecated-declarations")
-    set(CMAKE_INSTALL_RPATH "$ORIGIN")
-    set(CMAKE_BUILD_RPATH "$ORIGIN")
-elseif (APPLE)
-    add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN")
-    set(CMAKE_BUILD_RPATH "$ORIGIN")
-elseif (MSVC)
     add_compile_options(
-        $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
-        $<$<COMPILE_LANGUAGE:C,CXX>:/MP>
-        $<$<COMPILE_LANGUAGE:C,CXX>:/FS>
+        $<$<COMPILE_LANGUAGE:C,CXX>:-Wno-multichar>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-trigraphs>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-declarations>
+    )
+elseif (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    add_compile_options(
+            $<$<COMPILE_LANGUAGE:C,CXX>:/bigobj>
+            $<$<COMPILE_LANGUAGE:C,CXX>:/MP>
+            $<$<COMPILE_LANGUAGE:C,CXX>:/FS>
     )
 
     if (NOT DUSK_BUILD_WARNINGS)
@@ -196,21 +225,18 @@ elseif (MSVC)
     add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
 endif ()
 
+if (CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN")
+    set(CMAKE_BUILD_RPATH "$ORIGIN")
+elseif (APPLE)
+    add_compile_options(-Wno-declaration-after-statement -Wno-non-pod-varargs)
+    set(CMAKE_INSTALL_RPATH "@loader_path")
+    set(CMAKE_BUILD_RPATH "@loader_path")
+endif ()
+
 include(FetchContent)
 
 # Declare all dependencies first so CMake can download them in parallel
-message(STATUS "dusklight: Fetching cxxopts")
-FetchContent_Declare(cxxopts
-    URL https://github.com/jarro2783/cxxopts/archive/refs/tags/v3.3.1.tar.gz
-    URL_HASH SHA256=3bfc70542c521d4b55a46429d808178916a579b28d048bd8c727ee76c39e2072
-    DOWNLOAD_EXTRACT_TIMESTAMP FALSE
-)
-message(STATUS "dusklight: Fetching nlohmann/json")
-FetchContent_Declare(json
-    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
-    URL_HASH SHA256=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
-    DOWNLOAD_EXTRACT_TIMESTAMP FALSE
-)
 message(STATUS "dusklight: Fetching miniz")
 FetchContent_Declare(miniz
     URL https://github.com/richgel999/miniz/releases/download/3.0.2/miniz-3.0.2.zip
@@ -218,8 +244,8 @@ FetchContent_Declare(miniz
     EXCLUDE_FROM_ALL
 )
 
-set(_fetch_content_deps cxxopts json miniz)
-if (DUSK_ENABLE_CODE_MODS)
+set(_fetch_content_deps miniz)
+if (DUSK_HAS_FUNCHOOK)
     message(STATUS "dusklight: Fetching funchook")
     # cmake/PatchFunchook.cmake patches funchook's cmake/capstone.cmake.in to inject a
     # PATCH_COMMAND into capstone's inner ExternalProject. That PATCH_COMMAND runs
@@ -253,39 +279,11 @@ if (DUSK_ENABLE_CODE_MODS)
 endif ()
 FetchContent_MakeAvailable(${_fetch_content_deps})
 
-if (DUSK_ENABLE_SENTRY_NATIVE)
-    message(STATUS "dusklight: Fetching sentry-native")
-    set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-    set(SENTRY_BACKEND crashpad CACHE STRING "" FORCE)
-    if (WIN32)
-        set(SENTRY_TRANSPORT winhttp CACHE STRING "" FORCE)
-    endif ()
-    set(SENTRY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-    set(SENTRY_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-    set(SENTRY_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
-    FetchContent_Declare(sentry_native
-        GIT_REPOSITORY https://github.com/getsentry/sentry-native.git
-        GIT_TAG 0.13.6
-        GIT_SHALLOW TRUE
-        GIT_PROGRESS TRUE
-        GIT_SUBMODULES_RECURSE TRUE
-    )
-    if (NOT sentry_native_POPULATED)
-        FetchContent_Populate(sentry_native)
-        set(_dusk_skip_install_rules ${CMAKE_SKIP_INSTALL_RULES})
-        set(CMAKE_SKIP_INSTALL_RULES ON)
-        add_subdirectory(${sentry_native_SOURCE_DIR} ${sentry_native_BINARY_DIR} EXCLUDE_FROM_ALL)
-        set(CMAKE_SKIP_INSTALL_RULES ${_dusk_skip_install_rules})
-    endif ()
-endif ()
-
 # Use signed char on ARM to match the original game (and x86)
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" _arch)
 if(_arch MATCHES "^(arm|aarch64)" AND CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
     add_compile_options(-fsigned-char)
 endif()
-
-configure_version_header()
 
 include(files.cmake)
 
@@ -299,66 +297,22 @@ set(DUSK_PRODUCT_NAME "Dusklight")
 set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES})
-source_group("dusklight" FILES ${DUSK_FILES} ${DUSK_HTTP_BACKEND_FILES})
+source_group("dusklight" FILES ${DUSK_FILES})
 
 include(cmake/GameABIConfig.cmake)
 
 find_package(Threads REQUIRED)
 set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
 set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
+    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::io borealis::log borealis::presentation borealis::sentry borealis::update freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)
-if (DUSK_ENABLE_CODE_MODS)
+if (DUSK_HAS_FUNCHOOK)
     list(APPEND GAME_LIBS funchook-static)
-endif ()
-
-if (DUSK_ENABLE_SENTRY_NATIVE)
-    list(APPEND GAME_LIBS sentry)
-    list(APPEND GAME_COMPILE_DEFS DUSK_ENABLE_SENTRY_NATIVE=1 SENTRY_BUILD_STATIC=1)
 endif ()
 
 if (WIN32)
     list(APPEND GAME_LIBS Ws2_32)
-    if (CMAKE_BUILD_TYPE STREQUAL Debug)
-        list(APPEND GAME_LIBS dbghelp)
-        list(APPEND GAME_COMPILE_DEFS DUSK_CRASH_DBGHELP=1)
-    endif ()
 endif ()
-
-set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/no_backend.cpp)
-if (DUSK_ENABLE_UPDATE_CHECKER)
-    list(APPEND GAME_COMPILE_DEFS DUSK_ENABLE_UPDATE_CHECKER=1)
-    if (WIN32)
-        set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/winhttp.cpp)
-        list(APPEND GAME_LIBS winhttp)
-        list(APPEND GAME_COMPILE_DEFS DUSK_HTTP_BACKEND_WINHTTP=1)
-        message(STATUS "dusklight: Enabled update checker (WinHTTP)")
-    elseif (ANDROID)
-        set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/android.cpp)
-        list(APPEND GAME_COMPILE_DEFS DUSK_HTTP_BACKEND_ANDROID=1)
-        message(STATUS "dusklight: Enabled update checker (Android)")
-    elseif (APPLE)
-        find_library(FOUNDATION_FRAMEWORK Foundation REQUIRED)
-        set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/url_session.mm)
-        set_source_files_properties(src/dusk/http/url_session.mm PROPERTIES COMPILE_FLAGS -fobjc-arc)
-        list(APPEND GAME_LIBS ${FOUNDATION_FRAMEWORK})
-        list(APPEND GAME_COMPILE_DEFS DUSK_HTTP_BACKEND_URLSESSION=1)
-        message(STATUS "dusklight: Enabled update checker (NSURLSession)")
-    elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
-        find_package(CURL QUIET OPTIONAL_COMPONENTS HTTPS SSL)
-        if (CURL_FOUND AND CURL_HTTPS_FOUND AND CURL_SSL_FOUND)
-            set(DUSK_HTTP_BACKEND_SOURCE src/dusk/http/curl.cpp)
-            list(APPEND GAME_LIBS CURL::libcurl)
-            list(APPEND GAME_COMPILE_DEFS DUSK_HTTP_BACKEND_LIBCURL=1)
-            message(STATUS "dusklight: Enabled update checker (libcurl)")
-        else ()
-            message(STATUS "dusklight: Disabled update checker (libcurl + HTTPS/SSL not found)")
-        endif ()
-    else ()
-        message(STATUS "dusklight: Disabled update checker (unsupported platform)")
-    endif ()
-endif ()
-list(APPEND DUSK_FILES ${DUSK_HTTP_BACKEND_SOURCE})
 
 if (DUSK_MOVIE_SUPPORT)
     if (TARGET libjpeg-turbo::turbojpeg-static)
@@ -369,18 +323,12 @@ if (DUSK_MOVIE_SUPPORT)
     list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
-set(DUSK_ENABLE_DISCORD_DEFAULT ON)
-if (DEFINED DUSK_ENABLE_DISCORD_RPC AND NOT DEFINED DUSK_ENABLE_DISCORD)
-    set(DUSK_ENABLE_DISCORD_DEFAULT ${DUSK_ENABLE_DISCORD_RPC})
-endif ()
-option(DUSK_ENABLE_DISCORD "Enable Discord Rich Presence support" ${DUSK_ENABLE_DISCORD_DEFAULT})
-if (DUSK_ENABLE_DISCORD AND NOT ANDROID AND NOT IOS AND NOT TVOS)
-    list(APPEND GAME_COMPILE_DEFS DUSK_DISCORD=1)
-endif ()
-
 if (DUSK_ENABLE_CODE_MODS)
     list(APPEND GAME_COMPILE_DEFS DUSK_CODE_MODS=1)
 endif ()
+list(APPEND GAME_COMPILE_DEFS
+        DUSK_HAS_FUNCHOOK=$<BOOL:${DUSK_HAS_FUNCHOOK}>
+        DUSK_HAS_PREPATCH=$<BOOL:${DUSK_HAS_PREPATCH}>)
 
 if (DUSK_PACKAGE_INSTALL)
     include(GNUInstallDirs)
@@ -436,20 +384,31 @@ if (CMAKE_CXX_LINK_GROUP_USING_RESCAN_SUPPORTED OR CMAKE_LINK_GROUP_USING_RESCAN
     set(JSYSTEM_LINK_LIBRARIES "$<LINK_GROUP:RESCAN,${JSYSTEM_LIBRARIES}>")
 endif ()
 
-set(DUSK_FILES src/dusk/main.cpp ${GAME_BASE_FILES} ${GAME_DEBUG_FILES} ${miniz_SOURCE_DIR}/miniz.c)
-if(ANDROID)
-    add_library(dusklight SHARED ${DUSK_FILES})
-    set_target_properties(dusklight PROPERTIES OUTPUT_NAME main)
-else ()
-    add_executable(dusklight ${DUSK_FILES})
-endif ()
+set(_dusklight_all_files src/dusk/main.cpp ${GAME_BASE_FILES} ${GAME_DEBUG_FILES})
+set(DUSK_INTERNAL_FILES ${_dusklight_all_files})
+list(FILTER DUSK_INTERNAL_FILES INCLUDE REGEX "^src/dusk/")
+set(GAME_FILES ${_dusklight_all_files})
+list(FILTER GAME_FILES EXCLUDE REGEX "^src/dusk/")
+
+add_library(dusk_internal OBJECT ${DUSK_INTERNAL_FILES})
 if (ENABLE_ASAN)
-    target_sources(dusklight PRIVATE src/dusk/asan_options.c)
+    target_sources(dusk_internal PRIVATE src/dusk/asan_options.c)
 endif ()
+target_compile_definitions(dusk_internal PRIVATE ${GAME_COMPILE_DEFS})
+target_include_directories(dusk_internal PRIVATE ${miniz_SOURCE_DIR})
+target_link_libraries(dusk_internal PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LIBRARIES})
+target_precompile_headers(dusk_internal PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
+
+if(ANDROID)
+    add_library(dusklight SHARED ${GAME_FILES} ${miniz_SOURCE_DIR}/miniz.c)
+else ()
+    add_executable(dusklight ${GAME_FILES} ${miniz_SOURCE_DIR}/miniz.c)
+endif ()
+borealis_configure_android_application(dusklight)
 
 target_compile_definitions(dusklight PRIVATE ${GAME_COMPILE_DEFS})
 target_include_directories(dusklight PRIVATE ${miniz_SOURCE_DIR})
-target_link_libraries(dusklight PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBRARIES})
+target_link_libraries(dusklight PRIVATE dusk_internal aurora::main ${GAME_LIBS} ${JSYSTEM_LINK_LIBRARIES})
 target_precompile_headers(dusklight PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
 
 if (DUSK_ENABLE_CODE_MODS)
@@ -463,28 +422,77 @@ if (DUSK_ENABLE_CODE_MODS)
     setup_symbol_manifest(dusklight)
 endif ()
 
-# Hook reliability: guaranteed patchable entries on the game ABI surface, and no identical-code folding.
-if (MSVC)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:/hotpatch>)
+# Hook reliability: prevent auto-inlining, guarantee patchable function entries,
+# and disable identical-code folding for game functions.
+if (DUSK_ENABLE_CODE_MODS)
+    set(DUSK_GAME_ABI_INLINE_OPTIONS)
+    if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+        if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
+                    $<$<COMPILE_LANGUAGE:CXX>:-finline-hint-functions>)
+        elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            list(APPEND DUSK_GAME_ABI_INLINE_OPTIONS
+                    $<$<COMPILE_LANGUAGE:CXX>:-flive-patching=inline-clone>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-small-functions>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-inline-functions-called-once>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-early-inlining>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-cp-clone>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-ipa-sra>
+                    $<$<COMPILE_LANGUAGE:CXX>:-fno-partial-inlining>)
+        endif ()
     endif ()
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
-        target_link_options(dusklight PRIVATE /FUNCTIONPADMIN:16 /OPT:NOICF)
-    else ()
-        target_link_options(dusklight PRIVATE /FUNCTIONPADMIN /OPT:NOICF)
+
+    if (DUSK_GAME_ABI_INLINE_OPTIONS)
+        target_compile_options(dusklight PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+
+        foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
+            target_compile_options(${jsystem_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+        endforeach()
+        foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
+                aurora_os aurora_pad aurora_si aurora_vi)
+            if (TARGET ${_sdk_lib})
+                get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
+                if (NOT _sdk_lib_imported)
+                    target_compile_options(${_sdk_lib} PRIVATE ${DUSK_GAME_ABI_INLINE_OPTIONS})
+                endif ()
+            endif ()
+        endforeach ()
     endif ()
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
-    else ()
-        set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,5>)
+
+    if (MSVC)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:/hotpatch>)
+        endif ()
+        if (CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+            target_link_options(dusklight PRIVATE /FUNCTIONPADMIN:16 /OPT:NOICF)
+        else ()
+            target_link_options(dusklight PRIVATE /FUNCTIONPADMIN /OPT:NOICF)
+        endif ()
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
+        if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" OR CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
+            set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=2,1>)
+        else ()
+            set(DUSK_PATCHABLE_ENTRY_FLAG $<$<COMPILE_LANGUAGE:C,CXX>:-fpatchable-function-entry=10,4>)
+        endif ()
     endif ()
-endif ()
-if (DEFINED DUSK_PATCHABLE_ENTRY_FLAG)
-    target_compile_options(dusklight PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
-    foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
-        target_compile_options(${jsystem_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
-    endforeach()
+
+    if (DEFINED DUSK_PATCHABLE_ENTRY_FLAG)
+        target_compile_options(dusklight PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+        foreach(jsystem_lib IN LISTS JSYSTEM_LIBRARIES)
+            target_compile_options(${jsystem_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+        endforeach()
+        foreach(_sdk_lib aurora_card aurora_core aurora_dvd aurora_gd aurora_gx aurora_mtx
+                aurora_os aurora_pad aurora_si aurora_vi)
+            if (TARGET ${_sdk_lib})
+                get_target_property(_sdk_lib_imported ${_sdk_lib} IMPORTED)
+                if (NOT _sdk_lib_imported)
+                    target_compile_options(${_sdk_lib} PRIVATE ${DUSK_PATCHABLE_ENTRY_FLAG})
+                endif ()
+            endif ()
+        endforeach ()
+    endif ()
 endif ()
 
 if (WIN32)
@@ -510,17 +518,9 @@ if (TARGET crashpad_handler)
     )
 endif ()
 
-if (ANDROID)
-    # SDLActivity loads SDL_main via dlsym on Android. Since aurora::main is a static
-    # archive, force an undefined reference so the linker keeps the SDL_main object.
-    target_link_options(dusklight PRIVATE "-Wl,-u,SDL_main")
-endif ()
-
 if (CMAKE_SYSTEM_NAME STREQUAL Linux)
     target_link_options(dusklight PRIVATE "-Wl,--build-id=sha1")
     target_link_libraries(dusklight PRIVATE dl)
-elseif (ANDROID)
-    target_link_options(dusklight PRIVATE "-Wl,--build-id=sha1")
 endif ()
 
 if (NOT APPLE)
@@ -568,6 +568,10 @@ if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR
     add_subdirectory(mods/template_mod)
     add_subdirectory(mods/ao_mod)
     add_subdirectory(mods/shadow_mod)
+    add_subdirectory(mods/window_demo)
+    add_subdirectory(mods/flow_demo)
+    add_subdirectory(mods/basic_cosmetics_mod)
+    add_subdirectory(mods/randomizer)
 endif ()
 
 if (APPLE)
@@ -601,8 +605,8 @@ if (APPLE)
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_BUNDLE_NAME ${DUSK_BUNDLE_NAME}
         MACOSX_BUNDLE_GUI_IDENTIFIER ${DUSK_BUNDLE_IDENTIFIER}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${DUSK_VERSION_STRING}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${DUSK_SHORT_VERSION_STRING}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${BOREALIS_APP_VERSION}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${BOREALIS_APP_SHORT_VERSION}
         MACOSX_BUNDLE_INFO_PLIST ${DUSK_INFO_PLIST}
         OUTPUT_NAME Dusklight
         XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "YES"
@@ -612,13 +616,13 @@ if (APPLE)
         list(APPEND _apple_bundle_properties
             XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS ${DUSK_ENTITLEMENTS})
     endif ()
-    if (NOT IOS AND NOT TVOS)
+    if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         list(APPEND _apple_bundle_properties
             XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME "YES")
     endif ()
     set_target_properties(dusklight PROPERTIES ${_apple_bundle_properties})
 
-    if (NOT IOS AND NOT TVOS AND NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
+    if (CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
         set(_sign_nested_commands)
         if (TARGET crashpad_handler)
             list(APPEND _sign_nested_commands
@@ -633,21 +637,6 @@ if (APPLE)
             VERBATIM
         )
     endif ()
-endif ()
-
-if (APPLE AND NOT IOS AND NOT TVOS)
-    find_library(APPKIT_FRAMEWORK AppKit REQUIRED)
-    target_sources(dusklight PRIVATE src/dusk/file_select_macos.mm)
-    set_source_files_properties(src/dusk/file_select_macos.mm PROPERTIES COMPILE_FLAGS -fobjc-arc)
-    target_link_libraries(dusklight PRIVATE ${APPKIT_FRAMEWORK})
-endif ()
-
-if (IOS)
-    find_library(UIKIT_FRAMEWORK UIKit REQUIRED)
-    find_library(UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK UniformTypeIdentifiers REQUIRED)
-    target_sources(dusklight PRIVATE src/dusk/ios/FileSelectDialog.m)
-    set_source_files_properties(src/dusk/ios/FileSelectDialog.m PROPERTIES COMPILE_FLAGS -fobjc-arc)
-    target_link_libraries(dusklight PRIVATE ${UIKIT_FRAMEWORK} ${UNIFORM_TYPE_IDENTIFIERS_FRAMEWORK})
 endif ()
 
 include(extern/aurora/cmake/AuroraCopyRuntimeDLLs.cmake)

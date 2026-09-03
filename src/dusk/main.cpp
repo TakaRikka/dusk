@@ -8,6 +8,7 @@
 #include "d/actor/d_a_movie_player.h"
 #include "dusk/main.h"
 #include "dusk/io.hpp"
+#include <borealis/io.hpp>
 
 #include <algorithm>
 #include <array>
@@ -93,7 +94,7 @@ bool RestartProcess(int argc, char* argv[]) {
 
     std::vector<std::string> args;
     args.reserve(static_cast<size_t>(std::max(argc, 1)));
-    args.push_back(dusk::io::fs_path_to_string(executablePath));
+    args.push_back(borealis::io::fs_path_to_string(executablePath));
     for (int i = 1; i < argc; ++i) {
         args.emplace_back(argv[i] != nullptr ? argv[i] : "");
     }

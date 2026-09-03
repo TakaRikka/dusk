@@ -19,11 +19,15 @@
 #include "dusk/frame_interpolation.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 #if TARGET_PC
 #include "helpers/string.hpp"
 #endif
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+#define STR_BUF_LEN 528
+#elif VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528
 #else
 #define STR_BUF_LEN 512
@@ -261,7 +265,15 @@ void dMeterButton_c::draw() {
         SAFE_STRCPY(tmp_buf, static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getStringPtr());
         mpTextScreen->draw(0.0f, 0.0f, graf_ctx);
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            mpString_c->getString(mMsgID, static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr()), NULL, NULL,
+                                  NULL, 12);
+        } else {
+            mpString_c->getString(mMsgID, static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr()), NULL, NULL,
+                                  NULL, 8);
+        }
+#elif VERSION == VERSION_GCN_JPN
         mpString_c->getString(mMsgID, static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr()), NULL, NULL,
                               NULL, 12);
 #else
@@ -1195,7 +1207,17 @@ void dMeterButton_c::screenInitButton() {
     field_0x4d9 = 0xFF;
 
     for (int i = 0; i < 10; i++) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isJpnOrLessThanWiiJpn()) {
+            mpTextBox[i] = (J2DTextBox*)mpButtonScreen->search(text_tag[i]);
+            if (dusk::version::getGameVersion() >= dusk::version::GameVersion::WiiJpn) {
+                mpButtonScreen->search(ftext_tag[i])->hide();
+            }
+        } else {
+            mpTextBox[i] = (J2DTextBox*)mpButtonScreen->search(ftext_tag[i]);
+            mpButtonScreen->search(text_tag[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         mpTextBox[i] = (J2DTextBox*)mpButtonScreen->search(text_tag[i]);
         mpButtonScreen->search(ftext_tag[i])->hide();
 #else
@@ -1468,7 +1490,50 @@ void dMeterButton_c::screenInitText() {
     mpTmRoot_c = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_null'), 0, NULL);
     JUT_ASSERT(2499, mpTmRoot_c != NULL);
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        if (dComIfGs_getOptRuby() == 0) {
+            mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+
+            mpTm_c[1] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+
+            field_0x0ec[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+
+            field_0x0ec[1] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+
+            mpTextScreen->search(MULTI_CHAR('n_3line'))->hide();
+            mpTextScreen->search(MULTI_CHAR('n_3fline'))->show();
+            mpTextScreen->search(MULTI_CHAR('n_e4line'))->hide();
+        } else {
+            mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+
+            mpTm_c[1] = JKR_NEW CPaneMgr(mpTextScreen, 't3_s', 0, NULL);
+
+            field_0x0ec[0] = NULL;
+            field_0x0ec[1] = NULL;
+            OS_REPORT("[%s] %d\n", __FILE__, __LINE__);
+
+            mpTextScreen->search(MULTI_CHAR('n_3line'))->show();
+            mpTextScreen->search(MULTI_CHAR('n_3fline'))->hide();
+            mpTextScreen->search(MULTI_CHAR('n_e4line'))->hide();
+        }
+    } else {
+        mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+        JUT_ASSERT(2504, mpTm_c[0] != NULL);
+
+        mpTm_c[1] = JKR_NEW CPaneMgr(mpTextScreen, 't4_s', 0, NULL);
+        JUT_ASSERT(2507, mpTm_c[1] != NULL);
+
+        field_0x0ec[0] = NULL;
+        field_0x0ec[1] = NULL;
+
+        OS_REPORT("[%s] %d\n", __FILE__, 2512);
+
+        mpTextScreen->search(MULTI_CHAR('n_3line'))->hide();
+        mpTextScreen->search(MULTI_CHAR('n_3fline'))->hide();
+        mpTextScreen->search(MULTI_CHAR('n_e4line'))->show();
+    }
+#elif VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
         mpTm_c[0] = JKR_NEW CPaneMgr(mpTextScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
 
@@ -1516,19 +1581,11 @@ void dMeterButton_c::screenInitText() {
     f32 line_space = static_cast<J2DTextBox*>(mpTm_c[0]->getPanePtr())->getLineSpace();
     for (int i = 0; i < 2; i++) {
         static_cast<J2DTextBox*>(mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-        static_cast<J2DTextBox*>(mpTm_c[i]->getPanePtr())->setString(0x210, "");
-#else
-        static_cast<J2DTextBox*>(mpTm_c[i]->getPanePtr())->setString(0x200, "");
-#endif
+        static_cast<J2DTextBox*>(mpTm_c[i]->getPanePtr())->setString(STR_BUF_LEN, "");
 
         if (field_0x0ec[i] != NULL) {
             static_cast<J2DTextBox*>(field_0x0ec[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-            static_cast<J2DTextBox*>(field_0x0ec[i]->getPanePtr())->setString(0x210, "");
-#else
-            static_cast<J2DTextBox*>(field_0x0ec[i]->getPanePtr())->setString(0x200, "");
-#endif
+            static_cast<J2DTextBox*>(field_0x0ec[i]->getPanePtr())->setString(STR_BUF_LEN, "");
             static_cast<J2DTextBox*>(field_0x0ec[i]->getPanePtr())->setLineSpace(line_space);
         }
     }

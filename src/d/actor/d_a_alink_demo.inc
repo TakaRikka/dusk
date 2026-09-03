@@ -23,9 +23,13 @@
 #include "d/actor/d_a_npc_tkc.h"
 #include <cstring>
 
+#ifdef TARGET_PC
+#include "dusk/game_mode.hpp"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/settings.h"
 #include "dusk/speedrun.h"
+#include "dusk/version.hpp"
+#endif
 
 BOOL daAlink_c::checkEventRun() const {
     return dComIfGp_event_runCheck() || checkPlayerDemoMode();
@@ -1023,6 +1027,9 @@ void daAlink_c::setGetItemFace(u16 i_itemNo) {
         || i_itemNo == dItemNo_ANCIENT_DOCUMENT2_e
         || i_itemNo == dItemNo_DROP_CONTAINER_e
         || i_itemNo == dItemNo_DROP_CONTAINER02_e
+#if TARGET_PC
+        || i_itemNo == dItemNo_SHADOW_CRYSTAL_e
+#endif
         || i_itemNo == dItemNo_DROP_CONTAINER03_e)
     {
         setFaceBasicBck(dRes_ID_ALANM_BCK_FI_e);
@@ -2005,7 +2012,11 @@ void daAlink_c::setGetSubBgm(int i_itemNo) {
         /* dItemNo_WEAR_KOKIRI_e       */ SETYPE_NONE,
         /* dItemNo_ARMOR_e             */ SETYPE_ITEM_GET,
         /* dItemNo_WEAR_ZORA_e         */ SETYPE_ITEM_GET,
+#if TARGET_PC
+        /* dItemNo_SHADOW_CRYSTAL_e    */ SETYPE_ITEM_GET,
+#else
         /* dItemNo_MAGIC_LV1_e         */ SETYPE_NONE,
+#endif
         /* dItemNo_DUNGEON_EXIT_2_e    */ SETYPE_ITEM_GET_MINI,
         /* dItemNo_WALLET_LV1_e        */ SETYPE_NONE,
         /* dItemNo_WALLET_LV2_e        */ SETYPE_ITEM_GET,
@@ -2259,6 +2270,12 @@ int daAlink_c::procCoGetItemInit() {
     s16 var_r22 = 0;
     BOOL var_r31 = FALSE;
     BOOL var_r30 = FALSE;
+#if TARGET_PC
+    // Queued grants have no event partner, so create the demo item from the event's GtItm.
+    if (dusk::mods::item_give_queue_dispatching()) {
+        mDemo.setParam0(0x100);
+    }
+#endif
     if (mProcID == PROC_GET_ITEM || mProcID == PROC_INSECT_CATCH ||
         (mProcID == PROC_PREACTION_UNEQUIP && !checkNoUpperAnime()))
     {
@@ -2297,8 +2314,13 @@ int daAlink_c::procCoGetItemInit() {
             item_no = dComIfGp_event_getGtItm();
         }
 
+#if TARGET_PC
+        const u32 giveTag = mDemo.getParam0() != 0x100 && mDemo.getParam1() != 0 ?
+                                static_cast<u32>(mDemo.getParam1()) :
+                                dusk::mods::item_give_queue_take_tag();
+#endif
         fpc_ProcID item_partner_id = fopAcM_createItemForPresentDemo(&current.pos, item_no, 0, -1,
-                                                              fopAcM_GetRoomNo(this), NULL, NULL);
+            fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(giveTag));
         if (item_partner_id != fpcM_ERROR_PROCESS_ID_e) {
             dComIfGp_event_setItemPartnerId(item_partner_id);
         }
@@ -2523,6 +2545,16 @@ int daAlink_c::procCoGetItem() {
                     } else if (mProcVar2.field_0x300c == 0x23 && checkStageName("D_MN11")) {
                         field_0x32cc = 0x5C0;
                     } else if (mProcVar2.field_0x300c == 0xE0) {
+#if TARGET_PC
+                        // Dusklight increments the Poe count when the displayed item is granted.
+                        if (dComIfGs_getPohSpiritNum() + 1 == 20) {
+                            field_0x32cc = 0x4CF;
+                        } else if (dComIfGs_getPohSpiritNum() + 1 == 60) {
+                            field_0x32cc = 0x4D0;
+                        } else {
+                            field_0x32cc = mProcVar2.field_0x300c + 0x65;
+                        }
+#else
                         if (dComIfGs_getPohSpiritNum() == 20) {
                             field_0x32cc = 0x4CF;
                         } else if (dComIfGs_getPohSpiritNum() == 60) {
@@ -2530,6 +2562,7 @@ int daAlink_c::procCoGetItem() {
                         } else {
                             field_0x32cc = mProcVar2.field_0x300c + 0x65;
                         }
+#endif
                     } else if (mProcVar2.field_0x300c == 0x21) {
                         static u32 const heartPieceMessage[5] = {0x86, 0x9C, 0x9D, 0x9E, 0x9F};
                         field_0x32cc = heartPieceMessage[dComIfGs_getMaxLife() % 5];
@@ -4009,9 +4042,9 @@ int daAlink_c::procGanonFinishInit() {
     onEndResetFlg1(ERFLG1_SHIELD_BACKBONE);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.speedrunMode) {
-        if (dusk::m_speedrunInfo.m_isRunStarted) {
-            dusk::m_speedrunInfo.stopRun();
+    if (dusk::speedrun::isActive()) {
+        if (dusk::speedrun::g_speedrunInfo.m_isRunStarted) {
+            dusk::speedrun::g_speedrunInfo.stopRun();
         }
     }
 #endif
@@ -4399,8 +4432,10 @@ void daAlink_c::checkWarpStart() {
         if (dMeter2Info_getWarpStatus() == WARP_STATUS_DECIDED_e ||
             dComIfGp_event_compulsory(this, 0, 0xFFFF))
         {
-            #if VERSION != VERSION_GCN_JPN && VERSION != VERSION_SHIELD_DEBUG
+            #if TARGET_PC || (VERSION != VERSION_GCN_JPN && VERSION != VERSION_SHIELD_DEBUG)
+            IF_DUSK_BLOCK(!dusk::version::isRegionJpn())
             onNoResetFlg0(FLG0_UNK_4000);
+            IF_DUSK_BLOCK_END
             #endif
 
             if (dMeter2Info_getWarpStatus() == WARP_STATUS_DECIDED_e) {
@@ -4428,8 +4463,10 @@ void daAlink_c::checkWarpStart() {
                 fopAcM_orderOtherEvent(this, portal, 0xFFFF, 1, 1);
             } else {
                 mDemo.setSpecialDemoType();
-                #if VERSION == VERSION_GCN_JPN || VERSION == VERSION_SHIELD_DEBUG
+                #if TARGET_PC || (VERSION == VERSION_GCN_JPN || VERSION == VERSION_SHIELD_DEBUG)
+                IF_DUSK_BLOCK(dusk::version::isRegionJpn())
                 onNoResetFlg0(FLG0_UNK_4000);
+                IF_DUSK_BLOCK_END
                 #endif
 
                 if (dMeter2Info_getWarpStatus() == 1) {
@@ -4513,10 +4550,12 @@ int daAlink_c::procCoWarpInit(int param_0, int param_1) {
                 soundId = Z2SE_WOLF_WARP_IN_TATE;
             }
 
-            #if VERSION == VERSION_GCN_JPN || VERSION == VERSION_SHIELD_DEBUG
+            #if TARGET_PC || (VERSION == VERSION_GCN_JPN || VERSION == VERSION_SHIELD_DEBUG)
+            IF_DUSK_BLOCK(dusk::version::isRegionJpn())
             if (param_1) {
                 onNoResetFlg0(FLG0_UNK_4000);
             }
+            IF_DUSK_BLOCK_END
             #endif
 
             if (param_1) {

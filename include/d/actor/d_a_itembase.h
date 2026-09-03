@@ -32,6 +32,12 @@ struct daItemBase_data {
 class daItemBase_c : public fopAc_ac_c {
 public:
     u8 getItemNo();
+#if TARGET_PC
+    u8 getDisplayItemNo() const {
+        return mDisplayItemNo != 0xFF ? mDisplayItemNo : m_itemNo;
+    }
+    void setDisplayItemNo(u8 itemNo) { mDisplayItemNo = itemNo; }
+#endif
     void hide();
     void show();
     void changeDraw();
@@ -79,6 +85,9 @@ public:
     /* 0x928 */ s16 m_get_timer;
     /* 0x92A */ u8 m_itemNo;
     /* 0x92B */ u8 field_0x92b;
+#if TARGET_PC
+    u8 mDisplayItemNo = 0xFF;
+#endif
 };
 
 #endif /* D_A_D_A_ITEMBASE_H */

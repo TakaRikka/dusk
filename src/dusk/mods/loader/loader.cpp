@@ -2,6 +2,8 @@
 #include "dusk/logging.h"
 #include "dusk/mod_loader.hpp"
 
+#include <borealis/io.hpp>
+
 #include <algorithm>
 #include <chrono>
 #include <cstring>
@@ -26,6 +28,9 @@
 #include "miniz.h"
 #include "native_module.hpp"
 #include "nlohmann/json.hpp"
+#if DUSK_HAS_PREPATCH
+#include "prepatch.hpp"
+#endif
 
 using namespace std::string_literals;
 using namespace std::string_view_literals;
@@ -82,7 +87,7 @@ static constexpr std::string_view k_nativeLibName = ""sv;
 
 namespace dusk::mods {
 namespace {
-aurora::Module Log{"dusk::mods::loader"};
+constexpr borealis::Log Log{"dusk::mods::loader"};
 ModLoader g_modLoader;
 constexpr std::string_view k_nativeLibDir = "lib/"sv;
 
@@ -279,7 +284,7 @@ static ModMetadata load_metadata(const std::filesystem::path& modPath, ModBundle
     validate_mod_id(metaId);
 
     if (metaName.empty()) {
-        metaName = io::fs_path_to_string(modPath.stem());
+        metaName = borealis::io::fs_path_to_string(modPath.stem());
     }
     if (metaVersion.empty()) {
         metaVersion = "?"s;
@@ -411,6 +416,28 @@ static bool parse_meta(NativeMod& native, LoadedMod& mod) {
             parsed.hookMems.push_back(record);
             break;
         }
+        case MOD_META_HOOK_MEM_EXT: {
+            if (size <= sizeof(ModMetaHookMemExt)) {
+                return invalid("truncated extended hook record");
+            }
+            auto* record = reinterpret_cast<ModMetaHookMemExt*>(const_cast<uint8_t*>(cursor));
+            if (record->pmf_size <= MOD_META_HOOK_MEM_CAPACITY ||
+                record->pmf_size > MOD_META_HOOK_MEM_EXT_CAPACITY || record->materialize == nullptr)
+            {
+                return invalid("bad extended hook member-pointer size");
+            }
+            const char* strings = reinterpret_cast<const char*>(cursor) + sizeof(ModMetaHookMemExt);
+            const size_t capacity = size - sizeof(ModMetaHookMemExt);
+            if (!terminated_within(strings, capacity)) {
+                return invalid("unterminated extended hook vtable symbol");
+            }
+            const size_t vtableLen = std::char_traits<char>::length(strings);
+            if (!terminated_within(strings + vtableLen + 1, capacity - vtableLen - 1)) {
+                return invalid("unterminated extended hook display name");
+            }
+            parsed.hookMemExts.push_back(record);
+            break;
+        }
         case MOD_META_HOOK_NAME: {
             if (size <= sizeof(ModMetaHookName)) {
                 return invalid("truncated hook record");
@@ -491,7 +518,7 @@ std::filesystem::path ModLoader::external_native_lib_path(const LoadedMod& mod) 
         return {};
     }
     fs::path path = libDir / fs::path(mod.metadata.id +
-                                      io::fs_path_to_string(fs::path(k_nativeLibName).extension()));
+                                      borealis::io::fs_path_to_string(fs::path(k_nativeLibName).extension()));
     std::error_code ec;
     if (!fs::is_regular_file(path, ec)) {
         return {};
@@ -519,7 +546,7 @@ void ModLoader::load_native(
         return;
     }
     mod.dir = fs::absolute(scratchDir);
-    mod.dirUtf8 = io::fs_path_to_string(mod.dir);
+    mod.dirUtf8 = borealis::io::fs_path_to_string(mod.dir);
 
     fs::path libPath;
     fs::path runtimeDir;
@@ -641,7 +668,7 @@ void ModLoader::load_native(
 
     mod.nativePath = fs::absolute(libPath);
     mod.nativeDir = fs::absolute(runtimeDir);
-    mod.nativeDirUtf8 = io::fs_path_to_string(mod.nativeDir);
+    mod.nativeDirUtf8 = borealis::io::fs_path_to_string(mod.nativeDir);
     mod.native = std::move(nativeMod);
     mod.nativeStatus = NativeModStatus::Loaded;
     runtimeDirRollback.release();
@@ -872,6 +899,7 @@ bool ModLoader::activate_mod(LoadedMod& mod) {
 }
 
 void ModLoader::deactivate_mod(LoadedMod& mod) {
+    svc::modules_mod_deactivating(mod);
     if (mod.initialized && mod.native && mod.native->fn_shutdown) {
         log::write(mod.metadata.id, LOG_LEVEL_TRACE, "calling mod_shutdown");
         try {
@@ -906,6 +934,9 @@ void ModLoader::init() {
     m_initialized = true;
 
     manifest::initialize();
+#if DUSK_HAS_PREPATCH
+    prepatch::initialize();
+#endif
 
     if (m_searchDirs.empty()) {
         Log.warn("no mod search directories configured; mod loading skipped");

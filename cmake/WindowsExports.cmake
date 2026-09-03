@@ -62,8 +62,6 @@ function(setup_windows_exports target)
             --out "${_def}"
             --exclude cmake_pch
             --exclude miniz
-            --exclude asan_options
-            --exclude src/dusk
             --max-exports 58000
             ${_sdk_args}
             ${_forward_args}

@@ -7,7 +7,7 @@
 static IOSFd s_fd = -255;
 static IOSError s_err = ISFS_ERROR_UNKNOWN;
 static int s_stage;
-static char s_message[256] ATTRIBUTE_ALIGN(64);
+ATTRIBUTE_ALIGN(64) static char s_message[256];
 static NANDLoggingCallback s_callback = 0;
 
 static void asyncRoutine(ISFSError, void*);
@@ -70,8 +70,8 @@ static void callbackRoutine(BOOL result) {
 
 static void asyncRoutine(ISFSError result, void *ctxt) {
     ISFSError ret = ISFS_ERROR_UNKNOWN;
-    static char s_rBuf[256] ATTRIBUTE_ALIGN(64);
-    static char s_wBuf[256] ATTRIBUTE_ALIGN(64);
+    ATTRIBUTE_ALIGN(64) static char s_rBuf[256];
+    ATTRIBUTE_ALIGN(64) static char s_wBuf[256];
     ++s_stage;
 
     if (s_stage == 2) {

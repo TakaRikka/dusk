@@ -1681,7 +1681,9 @@ int daNpc_grO_c::talk(void* param_1) {
             if (facePlayerFlag && talkProc(NULL, TRUE, NULL)) {
                 if (mType == TYPE_MINES) {
                     if (mFlow.getEventId(&itemId) == 1) {
-                        mItemID = fopAcM_createItemForPresentDemo(&current.pos, itemId, 0, -1, -1, NULL, NULL);
+                        DUSK_ITEM_CHECK("key_shard_2:D_MN04", itemId, this);
+                        mItemID = fopAcM_createItemForPresentDemo(&current.pos, itemId, 0, -1, -1,
+                            NULL, NULL DUSK_GIVE_TAG("key_shard_2:D_MN04"));
                         if (mItemID != fpcM_ERROR_PROCESS_ID_e) {
                             s16 eventIdx = dComIfGp_getEventManager().getEventIdx(this, "DEFAULT_GETITEM", 0xFF);
                             dComIfGp_getEvent()->reset(this);

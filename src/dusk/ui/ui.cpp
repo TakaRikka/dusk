@@ -17,6 +17,8 @@
 #include "aurora/lib/window.hpp"
 #include "dusk/config.hpp"
 #include "dusk/io.hpp"
+#include <borealis/io.hpp>
+#include "command_console.hpp"
 #include "icon_provider.hpp"
 #include "input.hpp"
 #include "mod_texture_provider.hpp"
@@ -27,7 +29,7 @@ namespace dusk::ui {
 namespace {
 
 void load_font(const char* filename, bool fallback = false) {
-    Rml::LoadFontFace(io::fs_path_to_string(resource_path(filename)), fallback);
+    Rml::LoadFontFace(borealis::io::fs_path_to_string(resource_path(filename)), fallback);
 }
 
 bool sInitialized = false;
@@ -67,6 +69,7 @@ void restyle_scope(DocumentScope scope) {
 
 std::deque<Toast> sToasts;
 bool sMenuNotificationRequested = false;
+bool sConsoleShortcutHeld = false;
 
 // Sometimes gamepads can connect and disconnect quickly, especially during
 // connection negotiation. In this case, we'll receive an _ADDED event for a
@@ -105,6 +108,7 @@ void shutdown() noexcept {
     sDocumentStack.clear();
     sPassiveDocuments.clear();
     sConnectedGamepads.clear();
+    sConsoleShortcutHeld = false;
     input::reset_input_state();
     input::release_input_block();
     sInitialized = false;
@@ -213,6 +217,30 @@ void handle_event(const SDL_Event& event) noexcept {
             });
         }
         sConnectedGamepads.erase(event.gdevice.which);
+    } else if (event.type == SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED) {
+        apply_scale();
+    }
+    if (event.type == SDL_EVENT_WINDOW_FOCUS_LOST) {
+        sConsoleShortcutHeld = false;
+    }
+    if (event.type == SDL_EVENT_KEY_UP && event.key.key == SDLK_SLASH && sConsoleShortcutHeld) {
+        sConsoleShortcutHeld = false;
+        return;
+    }
+    if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_SLASH &&
+        getSettings().backend.enableAdvancedSettings)
+    {
+        auto* console = static_cast<CommandConsole*>(find_document(DocumentScope::CommandConsole));
+        if (sConsoleShortcutHeld) {
+            return;
+        }
+        if (console != nullptr && !console->input_active() && !event.key.repeat) {
+            sConsoleShortcutHeld = true;
+            bring_document_to_front(*console);
+            console->show();
+            input::sync_input_block();
+            return;
+        }
     }
     input::handle_event(event);
 }
@@ -259,6 +287,17 @@ Document& push_document(std::unique_ptr<Document> doc, bool show, bool passive) 
     return ret;
 }
 
+void bring_document_to_front(Document& doc) noexcept {
+    const auto it = std::ranges::find_if(
+        sDocumentStack, [&doc](const auto& entry) { return entry.get() == &doc; });
+    if (it == sDocumentStack.end() || std::next(it) == sDocumentStack.end()) {
+        return;
+    }
+    auto entry = std::move(*it);
+    sDocumentStack.erase(it);
+    sDocumentStack.push_back(std::move(entry));
+}
+
 void uncover_top_document() noexcept {
     if (auto* doc = top_document()) {
         doc->uncover();
@@ -266,9 +305,27 @@ void uncover_top_document() noexcept {
     input::sync_input_block();
 }
 
+Document* find_document(DocumentScope scope) noexcept {
+    for (auto& doc : std::views::reverse(sDocumentStack)) {
+        if (!doc->closed() && doc->scope() == scope) {
+            return doc.get();
+        }
+    }
+    return nullptr;
+}
+
+void close_all_documents() noexcept {
+    for (auto& doc : sDocumentStack) {
+        if (!doc->closed()) {
+            doc->force_hide(!doc->permanent());
+        }
+    }
+    input::sync_input_block();
+}
+
 bool any_document_visible() noexcept {
     return std::any_of(sDocumentStack.begin(), sDocumentStack.end(),
-        [](const auto& doc) { return doc && doc->visible(); });
+        [](const auto& doc) { return doc && doc->visible() && !doc->pending_close(); });
 }
 
 bool is_prelaunch_open() noexcept {
@@ -329,13 +386,10 @@ void update() noexcept {
         sPassiveDocuments.erase(first, last);
     }
 
-    // If no documents have focus, explicitly focus the top one
-    if (auto* context = aurora::rmlui::get_context();
-        context != nullptr && (context->GetFocusElement() == nullptr ||
-                                  context->GetFocusElement() == context->GetRootElement()))
-    {
+    // Keep focus on the highest active document.
+    if (aurora::rmlui::get_context() != nullptr) {
         for (auto& doc : std::views::reverse(sDocumentStack)) {
-            if (doc->active() && doc->focus()) {
+            if (doc->active() && (doc->has_focus() || doc->focus())) {
                 break;
             }
         }
@@ -461,10 +515,6 @@ void push_toast(Toast toast) noexcept {
     sToasts.push_back(std::move(toast));
 }
 
-std::vector<std::unique_ptr<Document>>& get_document_stack() noexcept {
-    return sDocumentStack;
-}
-
 std::deque<Toast>& get_toasts() noexcept {
     return sToasts;
 }
@@ -477,6 +527,16 @@ bool consume_menu_notification_request() noexcept {
     const bool requested = sMenuNotificationRequested;
     sMenuNotificationRequested = false;
     return requested;
+}
+
+void apply_scale() noexcept {
+    const auto userScale = getSettings().video.uiScale.getValue();
+    auto scale = 0.0f;
+    if (userScale != 0) {
+        const auto displayScale = aurora::window::get_window_size().scale;
+        scale = static_cast<float>(userScale) / 100.0f * (displayScale > 0.0f ? displayScale : 1.0f);
+    }
+    aurora::rmlui::set_ui_scale(scale);
 }
 
 }  // namespace dusk::ui

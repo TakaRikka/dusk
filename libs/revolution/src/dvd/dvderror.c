@@ -11,8 +11,8 @@ static NANDCommandBlock NandCb;
 static NANDFileInfo NandInfo;
 static DVDCBCallback Callback;
 static u32 NextOffset;
-DVDErrorInfo __ErrorInfo ATTRIBUTE_ALIGN(32);
-DVDErrorInfo __FirstErrorInfo ATTRIBUTE_ALIGN(32);
+ATTRIBUTE_ALIGN(32) DVDErrorInfo __ErrorInfo;
+ATTRIBUTE_ALIGN(32) DVDErrorInfo __FirstErrorInfo;
 
 void cbForNandClose(s32 result, NANDCommandBlock* block) {
     if (Callback) {

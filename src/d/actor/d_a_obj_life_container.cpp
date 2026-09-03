@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_obj_life_container.h"
+#include "d/d_a_itembase_static.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_item_data.h"
@@ -87,8 +88,8 @@ int daObjLife_c::Create() {
     mCcCyl.SetStts(&mCcStts);
     mCcCyl.SetCoHitCallback(lifeGetCoCallBack);
     mCcCyl.SetTgHitCallback(lifeGetTgCallBack);
-    mCcCyl.SetR(dItem_data::getR(m_itemNo));
-    mCcCyl.SetH(dItem_data::getH(m_itemNo));
+    mCcCyl.SetR(DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo)));
+    mCcCyl.SetH(DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)));
 
     fopAcM_SetCullSize(this, fopAc_CULLSPHERE_0_e);
     fopAcM_SetGravity(this, -3.2f);
@@ -97,6 +98,21 @@ int daObjLife_c::Create() {
     field_0x94c = 0.7f;
     mRotateSpeed = 7000;
 
+#if TARGET_PC
+    // Restore speeds that were skipped if created from a boss with create instead of fastCreate
+    auto bossItemSpeeds = dusk::mods::get_boss_item_actor_speeds();
+    if (bossItemSpeeds.f != 0.f || bossItemSpeeds.y != 0.f) {
+        mOverrideHover = false;
+        speedF = bossItemSpeeds.f;
+        speed.y = bossItemSpeeds.y;
+        dusk::mods::set_boss_item_actor_speeds(0.f, 0.f);
+    }
+
+    if (mOverrideHover) {
+        fopAcM_SetGravity(this, 0.0f);
+        mRotateSpeed = 550;
+    }
+#endif
     setEffect();
     mSound.init(&current.pos, 1);
     return 1;
@@ -140,6 +156,41 @@ int daObjLife_c::create() {
         home.angle.x = home.angle.z = 0;
         current.angle.x = current.angle.z = 0;
         shape_angle.x = shape_angle.z = 0;
+#if TARGET_PC
+        const u32 params = fopAcM_GetParam(this);
+        const u8 parameterItemNo = params & 0xFF;
+        if (mItemGiveOriginalNo == dItemNo_NONE_e) {
+            mOriginalItemNo = parameterItemNo;
+            mItemGiveTag = dusk::mods::item_give_tag_freestanding(getSaveBitNo());
+            const auto [item, displayItem, was_resolved] =
+                dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
+            setDisplayItemNo(displayItem);
+            mItemOverridden = was_resolved;
+            if (mItemOverridden) {
+                fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
+            }
+        } else if (mGoldenWolfItem) {
+            mOriginalItemNo = mItemGiveOriginalNo;
+            mItemGiveTag = dusk::mods::item_give_tag_golden_wolf(static_cast<u16>(field_0x938));
+            const auto [item, displayItem, was_resolved] =
+                dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
+            setDisplayItemNo(displayItem);
+            mItemOverridden = was_resolved;
+            if (item != parameterItemNo) {
+                fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
+            }
+        } else {
+            mOriginalItemNo = mItemGiveOriginalNo;
+            setDisplayItemNo(
+                dusk::mods::item_check_resolve(mItemGiveTag, parameterItemNo, this)
+                    .display_item);
+            mItemOverridden = parameterItemNo != mOriginalItemNo;
+        }
+        mOverrideHover =
+            mItemOverridden &&
+            (mOriginalItemNo == dItemNo_UTAWA_HEART_e ||
+                (mOriginalItemNo >= dItemNo_M_BEETLE_e && mOriginalItemNo <= dItemNo_F_MAYFLY_e));
+#endif
         mIsPrmsInit = true;
     }
 
@@ -153,15 +204,28 @@ int daObjLife_c::create() {
         return cPhs_ERROR_e;
     }
 
-    if (m_itemNo == dItemNo_UTAWA_HEART_e && dComIfGs_isStageLife()) {
+    if (m_itemNo == dItemNo_UTAWA_HEART_e && dComIfGs_isStageLife() IF_DUSK(&&!mItemOverridden)) {
         return cPhs_ERROR_e;
     }
 
+#if TARGET_PC
+    // Resolved items may have no field model; display their get-demo model instead.
+    const u8 displayItemNo = getDisplayItemNo();
+    const bool useGetModel = dItem_data::getFieldArc(displayItemNo) == NULL;
+    int phase_state = dComIfG_resLoad(&mPhase, dItem_fieldModelArc(displayItemNo));
+    if (phase_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(
+                this, useGetModel ? CheckItemCreateHeap : CheckFieldItemCreateHeap, 0x4000))
+        {
+            return cPhs_ERROR_e;
+        }
+#else
     int phase_state = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap, 0x4000)) {
             return cPhs_ERROR_e;
         }
+#endif
 
         if (!Create()) {
             return cPhs_ERROR_e;
@@ -296,8 +360,19 @@ int daObjLife_c::initActionOrderGetDemo() {
     fopAcM_orderItemEvent(this, 0, 0);
     eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
 
-    mItemId = fopAcM_createItemForTrBoxDemo(&current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), NULL, NULL);
+#if TARGET_PC
+    const u8 displayItemNo = m_itemNo;
+    const auto itemCheck = dusk::mods::item_check_commit(mItemGiveTag, mOriginalItemNo, this);
+    m_itemNo = itemCheck.itemNo;
+    mItemGiveTag = itemCheck.tag;
+    mItemOverridden = m_itemNo != mOriginalItemNo;
+#endif
+    mItemId = fopAcM_createItemForTrBoxDemo(
+        &current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(mItemGiveTag));
     JUT_ASSERT(699, mItemId != fpcM_ERROR_PROCESS_ID_e);
+#if TARGET_PC
+    m_itemNo = displayItemNo;
+#endif
 
     setStatus(STATUS_ORDER_GET_DEMO_e);
     return 1;
@@ -360,8 +435,8 @@ int daObjLife_c::actionInitBoomerangCarry() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
 
-    f32 height = dItem_data::getH(m_itemNo) * 4.0f;
-    f32 radius = dItem_data::getR(m_itemNo) * 4.0f;
+    f32 height = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)) * 4.0f;
+    f32 radius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo)) * 4.0f;
     mCcCyl.SetR(radius);
     mCcCyl.SetH(height);
 
@@ -482,7 +557,11 @@ int daObjLife_c::_delete() {
     endEffect00();
     endEffect02();
 
+#if TARGET_PC
+    DeleteBase(dItem_fieldModelArc(getDisplayItemNo()));
+#else
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
+#endif
     return 1;
 }
 

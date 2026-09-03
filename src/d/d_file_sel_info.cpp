@@ -46,8 +46,19 @@ void dFile_info_c::screenSet() {
 
     J2DTextBox* info_text[4];
     
-
-    #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+    #if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_s_t_01'));
+        info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_p_t_01'));
+        mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'))->hide();
+        mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'))->hide();
+    } else {
+        info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'));
+        info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_p_t_02'));
+        mFileInfo.Scr->search(MULTI_CHAR('w_s_t_01'))->hide();
+        mFileInfo.Scr->search(MULTI_CHAR('w_p_t_01'))->hide();
+    }
+    #elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_s_t_01'));
     info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_p_t_01'));
     mFileInfo.Scr->search(MULTI_CHAR('f_s_t_02'))->hide();
@@ -66,7 +77,19 @@ void dFile_info_c::screenSet() {
     dMeter2Info_getString(0x3D0, info_text[0]->getStringPtr(), NULL);  // Save time
     dMeter2Info_getString(0x3D1, info_text[1]->getStringPtr(), NULL);  // Total play time
 
-    #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+    #if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_name01'));
+        info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_new_1'));
+        mFileInfo.Scr->search(MULTI_CHAR('f_name01'))->hide();
+        mFileInfo.Scr->search(MULTI_CHAR('f_new_1'))->hide();
+    } else {
+        info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_name01'));
+        info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('f_new_1'));
+        mFileInfo.Scr->search(MULTI_CHAR('w_name01'))->hide();
+        mFileInfo.Scr->search(MULTI_CHAR('w_new_1'))->hide();
+    }
+    #elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     info_text[0] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_name01'));
     info_text[1] = (J2DTextBox*)mFileInfo.Scr->search(MULTI_CHAR('w_new_1'));
     mFileInfo.Scr->search(MULTI_CHAR('f_name01'))->hide();

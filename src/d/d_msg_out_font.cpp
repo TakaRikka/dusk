@@ -1,11 +1,12 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_msg_out_font.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
+#include "d/d_msg_out_font.h"
 #include "dusk/frame_interpolation.h"
+#include "dusk/version.hpp"
 #include "f_op/f_op_msg_mng.h"
 
 COutFontSet_c::COutFontSet_c() {
@@ -289,8 +290,10 @@ void COutFont_c::initialize() {
 
 void COutFont_c::drawFont(J2DTextBox* i_textbox, u8 i_type, f32 i_posX, f32 i_posY, f32 i_sizeX,
                           f32 i_sizeY, u32 i_color, u8 i_alpha) {
-#if VERSION != VERSION_GCN_JPN
+#if TARGET_PC || VERSION != VERSION_GCN_JPN
+    IF_DUSK_BLOCK(!dusk::version::isRegionJpn())
     i_posY += 1.0f;
+    IF_DUSK_BLOCK_END;
 #endif
     for (int i = 0; i < 35; i++) {
         if (mpOfs[i]->getType() == 0x47) {
@@ -380,7 +383,15 @@ void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param
                     break;
                 case 5:
                 case 6: {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+                    if (dusk::version::isRegionJpn()) {
+                        posY -= 2.0f;
+                        sizeY -= 2.0f;
+                    } else {
+                        posY += 1.0f;
+                        sizeY -= 3.0f;
+                    }
+#elif VERSION == VERSION_GCN_JPN
                     posY -= 2.0f;
                     sizeY -= 2.0f;
 #else

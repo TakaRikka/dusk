@@ -4,6 +4,7 @@
 
 #include <array>
 #include <cstddef>
+#include <cstring>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -45,8 +46,8 @@ extern "C" const unsigned char mod_meta_bounds_end[] __asm("section$end$__DATA$_
 #define MOD_META_BOUNDS_BEGIN (mod_meta_bounds_begin)
 #define MOD_META_BOUNDS_END (mod_meta_bounds_end)
 #else
-extern "C" const unsigned char __start_modmeta[];
-extern "C" const unsigned char __stop_modmeta[];
+extern "C" __attribute__((visibility("hidden"))) const unsigned char __start_modmeta[];
+extern "C" __attribute__((visibility("hidden"))) const unsigned char __stop_modmeta[];
 #define MOD_META_BOUNDS_DEFN
 #define MOD_META_BOUNDS_BEGIN (__start_modmeta)
 #define MOD_META_BOUNDS_END (__stop_modmeta)
@@ -185,8 +186,17 @@ struct HookMemRecord {
     uint32_t reserved;
     union {
         F fn;
-        unsigned char raw[16];
+        unsigned char raw[MOD_META_HOOK_MEM_CAPACITY];
     } pmf;
+    void* resolved;
+    char names[N];
+};
+
+template <size_t N>
+struct HookMemExtRecord {
+    ModMetaRecord rec;
+    uint32_t pmfSize;
+    ModMetaHookMemMaterializeFn materialize;
     void* resolved;
     char names[N];
 };
@@ -231,18 +241,84 @@ consteval auto make_hook_mem_names() {
     return r;
 }
 
-/*
- * MSVC constant-evaluates a pointer-to-member only when every other operand in the
- * initializer is a literal: no consteval calls, constexpr-object copies, or default
- * member initializers.
- */
-template <auto Target, char... Cs>
-struct HookMemHolder {
+#if defined(__GNUC__) && !defined(__clang__) && defined(__ELF__)
+/* https://gcc.gnu.org/bugzilla/show_bug.cgi?id=41091 prevents inline static template members from
+ * sharing an explicit ELF section with ordinary variables. GCC can instead constant-evaluate a
+ * file-local record at each DEFINE_HOOK. */
+template <auto Target>
+void materialize_hook_mem(unsigned char* outPmf) {
+    const auto target = Target;
+    std::memcpy(outPmf, &target, sizeof(target));
+}
+
+template <auto Target, FixedString Disp>
+consteval auto make_local_hook_record() {
     using F = decltype(Target);
-    static_assert(sizeof(F) <= 16, "unsupported pointer-to-member representation");
+    if constexpr (std::is_member_function_pointer_v<F>) {
+        constexpr auto names = make_hook_mem_names<Target, Disp>();
+        static_assert(sizeof(F) <= MOD_META_HOOK_MEM_EXT_CAPACITY,
+            "unsupported pointer-to-member representation");
+        if constexpr (sizeof(F) > MOD_META_HOOK_MEM_CAPACITY) {
+            HookMemExtRecord<names.len> record = {
+                {sizeof(HookMemExtRecord<names.len>), MOD_META_HOOK_MEM_EXT, 0}, sizeof(F),
+                materialize_hook_mem<Target>, nullptr, {}};
+            for (size_t i = 0; i < names.len; ++i) {
+                record.names[i] = names.chars[i];
+            }
+            return record;
+        } else {
+            HookMemRecord<F, names.len> record = {
+                {sizeof(HookMemRecord<F, names.len>), MOD_META_HOOK_MEM, 0}, 0, {Target}, nullptr,
+                {}};
+            for (size_t i = 0; i < names.len; ++i) {
+                record.names[i] = names.chars[i];
+            }
+            return record;
+        }
+    } else {
+        static_assert(std::is_pointer_v<F> && std::is_function_v<std::remove_pointer_t<F>>,
+            "hook target must be a function or member function");
+        return HookFnRecord<F>{{sizeof(HookFnRecord<F>), MOD_META_HOOK_FN, 0}, 0, Target, nullptr};
+    }
+}
+#endif
+
+/*
+ * MSVC constant-evaluates a compact pointer-to-member only when every other operand in the
+ * initializer is a literal: no consteval calls, constexpr-object copies, or default member
+ * initializers. It cannot constant-initialize the 24-byte general representation at all, so the
+ * extended record points at a compiler-generated materializer while keeping the metadata itself
+ * constant-initialized for static tooling.
+ */
+template <auto Target, bool Extended, char... Cs>
+struct HookMemHolderImpl;
+
+template <auto Target, char... Cs>
+struct HookMemHolderImpl<Target, false, Cs...> {
+    using F = decltype(Target);
     MOD_META_RECORD static constinit inline HookMemRecord<F, sizeof...(Cs)> record = {
         {sizeof(HookMemRecord<F, sizeof...(Cs)>), MOD_META_HOOK_MEM, 0}, 0, {Target}, nullptr,
         {Cs...}};
+};
+
+template <auto Target, char... Cs>
+struct HookMemHolderImpl<Target, true, Cs...> {
+    using F = decltype(Target);
+    static void materialize(unsigned char* outPmf) {
+        const F target = Target;
+        std::memcpy(outPmf, &target, sizeof(target));
+    }
+    MOD_META_RECORD static constinit inline HookMemExtRecord<sizeof...(Cs)> record = {
+        {sizeof(HookMemExtRecord<sizeof...(Cs)>), MOD_META_HOOK_MEM_EXT, 0}, sizeof(F), materialize,
+        nullptr, {Cs...}};
+};
+
+template <auto Target, char... Cs>
+struct HookMemHolder
+    : HookMemHolderImpl<Target, (sizeof(decltype(Target)) > MOD_META_HOOK_MEM_CAPACITY), Cs...> {
+    using F = decltype(Target);
+    static_assert(sizeof(F) <= MOD_META_HOOK_MEM_EXT_CAPACITY,
+        "unsupported pointer-to-member representation");
 };
 
 template <auto Target>

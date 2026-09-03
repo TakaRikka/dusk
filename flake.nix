@@ -2,6 +2,7 @@
   description = "Dusklight — native PC port of the Twilight Princess decompilation";
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+  inputs.self.submodules = true;
 
   outputs =
     { self, nixpkgs }:
@@ -58,21 +59,6 @@
           hasNodPrebuilt = nodPrebuiltInfo ? ${system};
 
           aurora = builtins.pathExists "${self}/extern/aurora/CMakeLists.txt";
-          needSubmodules = ''
-            dusklight: The aurora submodule is not vendored. Add submodules=1 to build.
-
-            As a flake input:
-
-            dusklight.url = "git+https://github.com/TwilitRealm/dusklight?ref=main&submodules=1";
-
-            nix command:
-
-            nix run 'git+https://github.com/TwilitRealm/dusklight?submodules=1'
-
-            Local checkout:
-
-            nix run '.?submodules=1#dusklight'
-          '';
 
           dawn = pkgs.fetchzip {
             url = "https://github.com/encounter/dawn/releases/download/${dawnVersion}/dawn-${dawnInfo.${system}.triple}.tar.gz";
@@ -140,6 +126,14 @@
             JSON = pkgs.nlohmann_json.src;
             XXHASH = pkgs.xxhash.src;
             ZSTD = pkgs.zstd.src;
+
+
+            MINIZ = pkgs.fetchzip {
+              url = "https://github.com/richgel999/miniz/releases/download/3.0.2/miniz-3.0.2.zip";
+              hash = "sha256-DXysXkQEmoDAMMg1F8KexkwpXNyiHNzLJqXR9SMEkxk=";
+              stripRoot = false;
+            };
+
             FMT = pkgs.fetchzip {
               url = "https://github.com/fmtlib/fmt/archive/refs/tags/12.1.0.tar.gz";
               hash = "sha256-ZmI1Dv0ZabPlxa02OpERI47jp7zFfjpeWCy1WyuPYZ0=";
@@ -165,19 +159,16 @@
           };
 
           dusklight =
-            if !aurora then
-              throw needSubmodules
-            else
-              pkgs.stdenv.mkDerivation {
-                pname = "dusklight";
-                version = versionSuffix;
-                src = ./.;
+            pkgs.stdenv.mkDerivation {
+              pname = "dusklight";
+              version = versionSuffix;
+              src = ./.;
 
-                postUnpack = ''
-                  chmod -R u+w "$sourceRoot"
-                  substituteInPlace "$sourceRoot/extern/aurora/CMakeLists.txt" \
-                    --replace-warn "add_subdirectory(tests)" ""
-                '';
+              postUnpack = ''
+                chmod -R u+w "$sourceRoot"
+                substituteInPlace "$sourceRoot/extern/aurora/CMakeLists.txt" \
+                  --replace-warn "add_subdirectory(tests)" ""
+              '';
 
                 nativeBuildInputs = [
                   pkgs.cmake
@@ -237,7 +228,7 @@
                 ninjaFlags = [ "dusklight" ];
 
                 cmakeFlags = [
-                  "-DDUSK_VERSION_OVERRIDE=${versionSuffix}"
+                  "-DBOREALIS_APP_VERSION_OVERRIDE=${versionSuffix}"
                   "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
                   "-DAURORA_DAWN_PROVIDER=package"
                   "-DAURORA_DAWN_LINKAGE=static"

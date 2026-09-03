@@ -5,39 +5,41 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_menu_collect.h"
-#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
-#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include <cstring>
+#include <os.h>
+#include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
+#include "JSystem/J3DGraphLoader/J3DModelLoader.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "d/actor/d_a_alink.h"
-#include "d/d_select_cursor.h"
+#include "d/d_item.h"
+#include "d/d_lib.h"
+#include "d/d_menu_collect.h"
 #include "d/d_menu_fishing.h"
 #include "d/d_menu_insect.h"
 #include "d/d_menu_letter.h"
 #include "d/d_menu_option.h"
 #include "d/d_menu_save.h"
 #include "d/d_menu_skill.h"
+#include "d/d_menu_window.h"
+#include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_string.h"
 #include "d/d_pane_class.h"
-#include "d/d_item.h"
-#include "d/d_lib.h"
-#include "d/d_meter2_info.h"
-#include <os.h>
-#include <cstring>
+#include "d/d_select_cursor.h"
+#include "dusk/version.hpp"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
-#include "JSystem/J2DGraph/J2DAnmLoader.h"
-#include "JSystem/J2DGraph/J2DGrafContext.h"
-#include "d/d_menu_window.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
+#include "dusk/utilities.hpp"
 #endif
 
 typedef void (dMenu_Collect2D_c::*initFunc)();
@@ -100,11 +102,44 @@ dMenu_Collect2D_c::~dMenu_Collect2D_c() {
 }
 
 #if TARGET_PC
+static dusk::utils::PaneCache mpScreenPanes[] = {
+    {MULTI_CHAR('sa_tex_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('op_tex_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('heart_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('wolf_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('item_0_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('item_1_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('item_2_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fish_3_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('lett_4_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('maki_5_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('fuku_n2'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('tate_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('tate_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n0'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('ken_n1'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('kabu_6n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('t_t00'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('f_t00'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('itemn_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('infotxtn'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('sa_op_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('title_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('menu_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('w_er_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('center_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('info_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('lavel_n'), 0.0f, 0.0f, false},
+    {MULTI_CHAR('modelbgn'), 0.0f, 0.0f, false},
+};
+
 void dMenu_Collect2D_c::menuCollectWide() {
     static bool cachedPanes = false;
     // Get pre-scale values for each pane
     if (!cachedPanes) {
-        for (PaneCache& entry : mpScreenPanes) {
+        for (dusk::utils::PaneCache& entry : mpScreenPanes) {
             J2DPane* pane = mpScreen->search(entry.tag);
             if (!entry.cached) {
                 entry.origTransX = pane->getTranslateX();
@@ -118,7 +153,7 @@ void dMenu_Collect2D_c::menuCollectWide() {
     // Reset all panes
     mpScreen->scale(1.0f, 1.0f);
     mpScreen->translate(0.0f, 0.0f);
-    for (PaneCache& entry : mpScreenPanes) {
+    for (dusk::utils::PaneCache& entry : mpScreenPanes) {
         J2DPane* pane = mpScreen->search(entry.tag);
         pane->scale(1.0f, 1.0f);
         pane->translate(entry.origTransX, entry.origTransY);
@@ -438,7 +473,21 @@ void dMenu_Collect2D_c::screenSet() {
     static const u64 text_a_tag[5] = {MULTI_CHAR('atext1_1'), MULTI_CHAR('atext1_2'), MULTI_CHAR('atext1_3'), MULTI_CHAR('atext1_4'), MULTI_CHAR('atext1_5')};
     static const u64 text_b_tag[5] = {MULTI_CHAR('btext1_1'), MULTI_CHAR('btext1_2'), MULTI_CHAR('btext1_3'), MULTI_CHAR('btext1_4'), MULTI_CHAR('btext1_5')};
 
-#if REGION_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->setFont(mDoExt_getRubyFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->setString(0x20, "");
+        dMeter2Info_getStringKanji(
+            0x3E1, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->getStringPtr(), NULL);
+        mpScreen->search(MULTI_CHAR('f_t00'))->hide();
+    } else {
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_t00')))->setFont(mDoExt_getRubyFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_t00')))->setString(0x20, "");
+        dMeter2Info_getStringKanji(
+            0x3E1, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_t00')))->getStringPtr(), NULL);
+        mpScreen->search(MULTI_CHAR('t_t00'))->hide();
+    }
+#elif REGION_JPN
     static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->setFont(mDoExt_getRubyFont());
     static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('t_t00')))->setString(0x20, "");
     dMeter2Info_getStringKanji(
@@ -453,7 +502,31 @@ void dMenu_Collect2D_c::screenSet() {
 #endif
 
     for (int i = 0; i < 3; i++) {
-#if REGION_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            static_cast<J2DTextBox*>(mpScreen->search(text_sv[i]))->setFont(mDoExt_getMesgFont());
+            static_cast<J2DTextBox*>(mpScreen->search(text_op[i]))->setFont(mDoExt_getMesgFont());
+            static_cast<J2DTextBox*>(mpScreen->search(text_sv[i]))->setString(0x20, "");
+            static_cast<J2DTextBox*>(mpScreen->search(text_op[i]))->setString(0x20, "");
+            dMeter2Info_getStringKanji(
+                0x60, static_cast<J2DTextBox*>(mpScreen->search(text_sv[i]))->getStringPtr(), NULL);
+            dMeter2Info_getStringKanji(
+                0x5F, static_cast<J2DTextBox*>(mpScreen->search(text_op[i]))->getStringPtr(), NULL);
+            mpScreen->search(ftext_sv[i])->hide();
+            mpScreen->search(ftext_op[i])->hide();
+        } else {
+            static_cast<J2DTextBox*>(mpScreen->search(ftext_sv[i]))->setFont(mDoExt_getMesgFont());
+            static_cast<J2DTextBox*>(mpScreen->search(ftext_op[i]))->setFont(mDoExt_getMesgFont());
+            static_cast<J2DTextBox*>(mpScreen->search(ftext_sv[i]))->setString(0x20, "");
+            static_cast<J2DTextBox*>(mpScreen->search(ftext_op[i]))->setString(0x20, "");
+            dMeter2Info_getStringKanji(
+                0x60, static_cast<J2DTextBox*>(mpScreen->search(ftext_sv[i]))->getStringPtr(), NULL);
+            dMeter2Info_getStringKanji(
+                0x5F, static_cast<J2DTextBox*>(mpScreen->search(ftext_op[i]))->getStringPtr(), NULL);
+            mpScreen->search(text_sv[i])->hide();
+            mpScreen->search(text_op[i])->hide();
+        }
+#elif REGION_JPN
         static_cast<J2DTextBox*>(mpScreen->search(text_sv[i]))->setFont(mDoExt_getMesgFont());
         static_cast<J2DTextBox*>(mpScreen->search(text_op[i]))->setFont(mDoExt_getMesgFont());
         static_cast<J2DTextBox*>(mpScreen->search(text_sv[i]))->setString(0x20, "");
@@ -487,7 +560,49 @@ void dMenu_Collect2D_c::screenSet() {
         static_cast<J2DTextBox*>(mpScreenIcon->search(text_b_tag[i]))->setString(0x20, "");
     }
 
-#if REGION_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->setString(0x100, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->setString(0x100, "");
+
+        mpScreen->search(MULTI_CHAR('item_n04'))->hide();
+        mpScreen->search(MULTI_CHAR('item_n05'))->hide();
+        mpScreen->search(MULTI_CHAR('item_n06'))->hide();
+        mpScreen->search(MULTI_CHAR('item_n07'))->hide();
+        mpScreen->search(MULTI_CHAR('f_text1'))->hide();
+        mpScreen->search(MULTI_CHAR('f_text0'))->hide();
+    } else {
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n06')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n07')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n06')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n07')))->setString(0x20, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->setFont(mDoExt_getMesgFont());
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->setString(0x100, "");
+        static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->setString(0x100, "");
+
+        mpScreen->search(MULTI_CHAR('item_n00'))->hide();
+        mpScreen->search(MULTI_CHAR('item_n01'))->hide();
+        mpScreen->search(MULTI_CHAR('item_n02'))->hide();
+        mpScreen->search(MULTI_CHAR('item_n03'))->hide();
+        mpScreen->search(MULTI_CHAR('i_text1'))->hide();
+        mpScreen->search(MULTI_CHAR('i_text0'))->hide();
+    }
+#elif REGION_JPN
     static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->setFont(mDoExt_getMesgFont());
     static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->setFont(mDoExt_getMesgFont());
     static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->setFont(mDoExt_getMesgFont());
@@ -2337,35 +2452,69 @@ void dMenu_Collect2D_c::_draw() {
     mpScreen->draw(0.0f, 0.0f, grafPort);
 
     if (mItemNameString == 0) {
-#if REGION_JPN
+#if TARGET_PC
+        TEXT_SPAN stringPtr1;
+        if (dusk::version::isRegionJpn()) {
+            stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->getStringPtr();
+        } else {
+            stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->getStringPtr();
+        }
+#elif REGION_JPN
         TEXT_SPAN stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')))->getStringPtr();
 #else
         TEXT_SPAN stringPtr1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')))->getStringPtr();
 #endif
         SAFE_STRCPY(stringPtr1, "");
 
-#if REGION_JPN
+#if TARGET_PC
+        TEXT_SPAN stringPtr0;
+        if (dusk::version::isRegionJpn()) {
+            stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->getStringPtr();
+        } else {
+            stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->getStringPtr();
+        }
+#elif REGION_JPN
         TEXT_SPAN stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')))->getStringPtr();
 #else
         TEXT_SPAN stringPtr0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')))->getStringPtr();
 #endif
         SAFE_STRCPY(stringPtr0, "");
     } else {
-#if REGION_JPN
+#if TARGET_PC
+        J2DTextBox* textBox1;
+        if (dusk::version::isRegionJpn()) {
+            textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')));
+        } else {
+            textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')));
+        }
+#elif REGION_JPN
         J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text1')));
 #else
         J2DTextBox* textBox1 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text1')));
 #endif
         mpString->getString(mItemNameString, textBox1, NULL, NULL, NULL, 0);
 
-#if REGION_JPN
+#if TARGET_PC
+        J2DTextBox* textBox0;
+        if (dusk::version::isRegionJpn()) {
+            textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')));
+        } else {
+            textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')));
+        }
+#elif REGION_JPN
         J2DTextBox* textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')));
 #else
         J2DTextBox* textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')));
 #endif
         mpString->getString(mItemNameString, textBox0, NULL, NULL, NULL, 0);
 
-#if REGION_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')));
+        } else {
+            textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')));
+        }
+#elif REGION_JPN
         textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('i_text0')));
 #else
         textBox0 = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('f_text0')));
@@ -2448,7 +2597,29 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
         if (uVar6 == 0) {
             setItemNameStringNull();
         } else {
-#if REGION_JPN
+#if TARGET_PC
+            if (dusk::version::isRegionJpn()) {
+                TEXT_SPAN stringPtr =
+                static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+                stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n01')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+                stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n02')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+                stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n03')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+            } else {
+                TEXT_SPAN stringPtr =
+                static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n04')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+                stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n05')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+                stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n06')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+                stringPtr = static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n07')))->getStringPtr();
+                dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
+            }
+#elif REGION_JPN
             TEXT_SPAN stringPtr =
                 static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('item_n00')))->getStringPtr();
             dMeter2Info_getStringKanji(uVar6, stringPtr, NULL);
@@ -2475,7 +2646,26 @@ void dMenu_Collect2D_c::setItemNameString(u8 param_0, u8 param_1) {
 
 void dMenu_Collect2D_c::setItemNameStringNull() {
     mItemNameString = 0;
-#if REGION_JPN
+#if TARGET_PC
+    J2DTextBox* textBox;
+    if (dusk::version::isRegionJpn()) {
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n00'));
+        SAFE_STRCPY(textBox->getStringPtr(), "");
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n01'));
+        SAFE_STRCPY(textBox->getStringPtr(), "");
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n02'));
+        SAFE_STRCPY(textBox->getStringPtr(), "");
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n03'));
+    } else {
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n04'));
+        SAFE_STRCPY(textBox->getStringPtr(), "");
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n05'));
+        SAFE_STRCPY(textBox->getStringPtr(), "");
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n06'));
+        SAFE_STRCPY(textBox->getStringPtr(), "");
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n07'));
+    }
+#elif REGION_JPN
     J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n00'));
     SAFE_STRCPY(textBox->getStringPtr(), "");
     textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('item_n01'));

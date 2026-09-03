@@ -3,9 +3,10 @@
  *
 */
 
-#include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_e_mm_mt.h"
 #include "d/d_cc_d.h"
+#include "d/dolzel_rel.h"  // IWYU pragma: keep
+#include "dusk/version.hpp"
 #include "f_op/f_op_actor_enemy.h"
 
 static int daE_MM_MT_Draw(e_mm_mt_class* i_this) {
@@ -802,7 +803,9 @@ static int daE_MM_MT_Create(fopAc_ac_c* i_this) {
         if (i_this->argument == 1) {
             fopAcM_OffStatus(i_this, 0x80000);
             helmasaurShell->m_sphere.SetAtType(
-                #if VERSION == VERSION_GCN_JPN
+                #if TARGET_PC
+                dusk::version::isRegionJpn() ? AT_TYPE_CSTATUE_SWING : 0xD8FBBDFF
+                #elif VERSION == VERSION_GCN_JPN
                 AT_TYPE_CSTATUE_SWING
                 #else
                 0xD8FBBDFF

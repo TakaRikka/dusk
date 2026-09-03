@@ -19,15 +19,20 @@ struct ServiceRecord {
 };
 
 // A host service and its lifecycle hooks. Every hook is optional. Frame and lifecycle hooks run in
-// registration order, modDetached in reverse registration order.
+// registration order, teardown hooks in reverse registration order.
 struct ServiceModule {
     const char* id = nullptr;
     uint16_t majorVersion = 0;
     uint16_t minorVersion = 0;
     const void* service = nullptr;
 
+    // False prevents registration when a platform dependency is unavailable.
+    bool (*available)() = nullptr;
     // One-time setup, at registration (ModLoader::init_services).
     void (*initialize)() = nullptr;
+    // A mod is beginning deactivation: stop callbacks that may execute concurrently. Service state
+    // remains registered so mod_shutdown may release it normally.
+    void (*modDeactivating)(LoadedMod& mod) = nullptr;
     // A mod is going away (deactivation or failed activation): drop all state held for it.
     // Runs after the mod's mod_shutdown and before its library unloads, so pointers into
     // the mod are still valid but must not be called.
@@ -55,6 +60,7 @@ const ServiceRecord* find_service(
 const ServiceRecord* find_service_record(const char* serviceId, uint16_t majorVersion);
 
 ModResult register_module(const ServiceModule& module);
+void modules_mod_deactivating(LoadedMod& mod);
 void modules_mod_detached(LoadedMod& mod);
 void modules_lifecycle_applied();
 void modules_frame_begin();
@@ -64,13 +70,23 @@ void modules_shutdown();
 extern const ServiceModule g_hostModule;
 extern const ServiceModule g_logModule;
 extern const ServiceModule g_resourceModule;
+extern const ServiceModule g_fileModule;
+extern const ServiceModule g_httpModule;
 extern const ServiceModule g_hookModule;
 extern const ServiceModule g_overlayModule;
 extern const ServiceModule g_textureModule;
 extern const ServiceModule g_configModule;
+extern const ServiceModule g_uiModule_v1;
 extern const ServiceModule g_uiModule;
 extern const ServiceModule g_gameModule;
 extern const ServiceModule g_cameraModule;
+extern const ServiceModule g_windowModule;
 extern const ServiceModule g_gfxModule;
+extern const ServiceModule g_saveModule;
+extern const ServiceModule g_stageModule;
+extern const ServiceModule g_itemModule;
+extern const ServiceModule g_flowModule;
+extern const ServiceModule g_messageModule;
+extern const ServiceModule g_gamemodeModule;
 
 }  // namespace dusk::mods::svc

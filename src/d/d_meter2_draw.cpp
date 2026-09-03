@@ -23,6 +23,8 @@
 #include "dusk/frame_interpolation.h"
 #include <cstring>
 
+#include "dusk/version.hpp"
+
 #if TARGET_PC
 #include "dusk/settings.h"
 #include "dusk/ui/icon_provider.hpp"
@@ -59,6 +61,27 @@ void dAnchorHudScale(CPaneMgr* i_pane, HudCorner i_corner, f32* io_x, f32* io_y,
 #endif
 
 dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
+#if TARGET_PC
+    // correct hio data here because we can't do runtime disc checks in sinit data constructors
+    if (dusk::version::isRegionJpn()) {
+        g_drawHIO.mButtonATextSpacing = -2.0f;
+        for (int i = 0; i < 6; i++) {
+            static f32 const finfoPosX_jpn[6] = {-27.0f, 0.0f, -12.0f, 0.0f, -12.0f, -32.8f};
+            static f32 const fishnPosX_jpn[6] = {-27.0f, 0.0f, -12.0f, 0.0f, -12.0f, -32.8f};
+            g_drawHIO.mFishListScreen.mFishCountSizePosX[i] = finfoPosX_jpn[i];
+            g_drawHIO.mFishListScreen.mFishInfoPosX[i] = fishnPosX_jpn[i];
+        }
+    } else {
+        g_drawHIO.mButtonATextSpacing = 1.0f;
+        for (int i = 0; i < 6; i++) {
+            static f32 const finfoPosX[6] = {-17.0f, 0.0f, -14.0f, 0.0f, -12.0f, -32.8f};
+            static f32 const fishnPosX[6] = {-17.0f, 0.0f, -14.0f, 0.0f, -12.0f, -32.8f};
+            g_drawHIO.mFishListScreen.mFishCountSizePosX[i] = finfoPosX[i];
+            g_drawHIO.mFishListScreen.mFishInfoPosX[i] = fishnPosX[i];
+        }
+    }
+#endif
+
     OS_REPORT("enter dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap *mp_heap)\n");
 
     heap = mp_heap;
@@ -161,7 +184,8 @@ dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     }
 
     J2DTextBox::TFontSize font_size;
-#if VERSION != VERSION_GCN_JPN
+#if TARGET_PC || VERSION != VERSION_GCN_JPN
+    IF_DUSK_BLOCK(!dusk::version::isRegionJpn())
     font_size.mSizeX = 17.0f;
     font_size.mSizeY = 20.0f;
     for (int i = 0; i < 5; i++) {
@@ -170,6 +194,21 @@ dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
         static_cast<J2DTextBox*>(mpXYText[i][0]->getPanePtr())->setFontSize(font_size);
         static_cast<J2DTextBox*>(mpXYText[i][1]->getPanePtr())->setFontSize(font_size);
         static_cast<J2DTextBox*>(mpXYText[i][2]->getPanePtr())->setFontSize(font_size);
+    }
+    IF_DUSK_BLOCK_END
+#endif
+
+#if TARGET_PC
+    if (dusk::version::isLessThanWiiJpn()) {
+        if (J2DPicture* b_btn = static_cast<J2DPicture*>(mpScreen->search(MULTI_CHAR('b_btn')))) {
+            b_btn->setAlpha(255);
+            b_btn->setWhite(JUtility::TColor(195, 63, 63, 255));
+        }
+
+        for (int i = 0; i < 5; i++) {
+            static_cast<J2DTextBox*>(mpXYText[i][0]->getPanePtr())->setCharSpace(0.0f);
+            static_cast<J2DTextBox*>(mpXYText[i][1]->getPanePtr())->setCharSpace(0.0f);
+        }
     }
 #endif
 
@@ -1361,6 +1400,22 @@ void dMeter2Draw_c::initButtonCross() {
     dMeter2Info_getString(
         0x62, static_cast<J2DTextBox*>(mpScreen->search(MULTI_CHAR('cont_ju9')))->getStringPtr(), NULL);
 
+#if TARGET_PC
+    // These panes are not wide enough for French text (and possibly other languages)
+    // on Wii PAL. Resize them to always match their counterparts in later releases.
+    static u64 const juTags[] = {
+        MULTI_CHAR('cont_ju0'), MULTI_CHAR('cont_ju1'), MULTI_CHAR('cont_ju2'),
+        MULTI_CHAR('cont_ju3'), MULTI_CHAR('cont_ju4'), MULTI_CHAR('cont_ju5'),
+        MULTI_CHAR('cont_ju6'), MULTI_CHAR('cont_ju7'), MULTI_CHAR('cont_ju8'),
+        MULTI_CHAR('cont_ju9'),
+    };
+
+    for (u64 tag : juTags) {
+        J2DPane* pane = mpScreen->search(tag);
+        pane->resize(120.0f, pane->getHeight());
+    }
+#endif
+
     mpButtonCrossParent->setAlphaRate(0.0f);
     drawButtonCross(g_drawHIO.mButtonCrossOFFPosX, g_drawHIO.mButtonCrossOFFPosY);
 }
@@ -2419,7 +2474,7 @@ void dMeter2Draw_c::drawButtonA(u8 i_action, f32 i_posX, f32 i_posY, f32 i_textP
     mpButtonA->paneTrans(i_posX, i_posY);
     mpTextA->scale(var_f30 * i_scale, var_f30 * i_scale);
     mpTextA->paneTrans(g_drawHIO.mButtonATextPosX + i_textPosX,
-                       g_drawHIO.mButtonATextPosY + i_textPosY);
+                       g_drawHIO.mButtonATextPosY + i_textPosY IF_DUSK(+ (dusk::version::isLessThanWiiJpn() ? 6.0f : 0.0f)));
 }
 
 void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_posY, f32 i_textPosX,
@@ -2617,6 +2672,11 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
 
     static u64 const tag[] = {MULTI_CHAR('item_x_n'), MULTI_CHAR('item_y_n')};
 
+#if TARGET_PC
+    const float btnXOffsetX = dusk::version::isLessThanWiiJpn() ? 2.0f : 0.0f;
+    const float btnXOffsetY = dusk::version::isLessThanWiiJpn() ? 38.0f : 0.0f;
+#endif
+
     if (!param_3) {
         mpScreen->search(tag[i_no])->hide();
 
@@ -2663,7 +2723,8 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
 
         if (i_no == SELECT_X_e) {
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
-            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
+            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX IF_DUSK(- btnXOffsetX),
+                                      g_drawHIO.mButtonXYTextPosY IF_DUSK(+ btnXOffsetY));
         } else if (i_no == SELECT_Y_e) {
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
             mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
@@ -2725,7 +2786,8 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
             mpLightXY[0]->setAlphaRate(mButtonXItemBaseAlpha[var_r29] * field_0x7f0);
 
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
-            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
+            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX IF_DUSK(- btnXOffsetX),
+                                      g_drawHIO.mButtonXYTextPosY IF_DUSK(+ btnXOffsetY));
         } else if (i_no == SELECT_Y_e) {
             mpButtonXY[1]->scale(g_drawHIO.mButtonYScale, g_drawHIO.mButtonYScale);
             mpButtonXY[1]->paneTrans(g_drawHIO.mButtonYPosX, g_drawHIO.mButtonYPosY);
@@ -3450,7 +3512,7 @@ char* dMeter2Draw_c::getActionString(u8 i_action, u8 i_type, u8* param_2) {
             }
 
             if (param_2 != NULL) {
-                *param_2 = mesg_entry.output_type;
+                *param_2 = mesg_entry.draw_type;
 
                 if (g_drawHIO.mButtonATextActionID == 0x3E6) {
                     *param_2 = 7;
@@ -3467,7 +3529,7 @@ char* dMeter2Draw_c::getActionString(u8 i_action, u8 i_type, u8* param_2) {
         }
 
         if (param_2 != NULL) {
-            *param_2 = mesg_entry.output_type;
+            *param_2 = mesg_entry.draw_type;
 
             if (i_action_num[i_action] == 0x3E6) {
                 *param_2 = 7;

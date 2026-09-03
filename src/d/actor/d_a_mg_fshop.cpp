@@ -1783,7 +1783,13 @@ static int daFshop_Create(fopAc_ac_c* actor) {
             };
 
             if (sp10 == 1) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+                if (dusk::version::isRegionJpn()) {
+                    sp24 = dComIfGs_getEventReg(check_kind[i]);
+                } else {
+                    sp24 = 2.54f * dComIfGs_getEventReg(check_kind[i]);
+                }
+#elif VERSION == VERSION_GCN_JPN
                 sp24 = dComIfGs_getEventReg(check_kind[i]);
 #else
                 sp24 = 2.54f * dComIfGs_getEventReg(check_kind[i]);

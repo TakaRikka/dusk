@@ -14,6 +14,7 @@
 #include "d/d_com_inf_game.h"
 #include "dusk/data.hpp"
 #include "dusk/dusk.h"
+#include "dusk/speedrun.h"
 #include "dusk/main.h"
 #include "dusk/os.h"
 #include "m_Do/m_Do_main.h"
@@ -25,10 +26,6 @@
 #include <TargetConditionals.h>
 #endif
 
-namespace aurora::gx {
-extern bool enableLodBias;
-}
-
 namespace dusk {
     ImGuiMenuTools::ImGuiMenuTools() {}
 
@@ -38,7 +35,7 @@ namespace dusk {
                 ImGui::BeginDisabled();
             }
 
-            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+            ImGui::BeginDisabled(dusk::speedrun::isActive());
 
             ImGui::MenuItem("Save Editor", hotkeys::SHOW_SAVE_EDITOR, &m_showSaveEditor);
             ImGui::MenuItem("State Share", hotkeys::SHOW_STATE_SHARE, &m_showStateShare);
@@ -60,7 +57,7 @@ namespace dusk {
         }
 
         if (ImGui::BeginMenu("Debug")) {
-            ImGui::BeginDisabled(getSettings().game.speedrunMode);
+            ImGui::BeginDisabled(dusk::speedrun::isActive());
 
             bool developmentMode = mDoMain::developmentMode == 1;
             if (ImGui::Checkbox("Development Mode", &developmentMode)) {
@@ -76,7 +73,6 @@ namespace dusk {
                     getSettings().game.disableWaterRefraction.setValue(disableWaterRefraction);
                     config::save();
                 }
-                ImGui::Checkbox("Enable LOD Bias", &aurora::gx::enableLodBias);
                 ImGui::EndMenu();
             }
 
@@ -90,6 +86,26 @@ namespace dusk {
                 ImGui::Checkbox("Enable Target Collider view", &collisionView.enableTgView);
                 ImGui::Checkbox("Enable Push Collider view", &collisionView.enableCoView);
                 ImGui::SliderFloat("Opacity##colliders", &collisionView.colliderViewOpacity, 0.0f, 100.0f);
+                ImGui::EndMenu();
+            }
+
+            auto& triggerView = getTransientSettings().triggerView;
+            if (ImGui::BeginMenu("Trigger View")) {
+                ImGui::Checkbox("Load Zones", &triggerView.loadZones);
+                ImGui::Checkbox("Event Areas", &triggerView.eventAreas);
+                ImGui::Checkbox("Event Tags", &triggerView.eventTags);
+                ImGui::Checkbox("Switch Areas", &triggerView.switchAreas);
+                ImGui::Checkbox("Midna Stops", &triggerView.midnaStops);
+                ImGui::Checkbox("Twilight Gates", &triggerView.twilightGates);
+                ImGui::Checkbox("Checkpoints", &triggerView.checkpoints);
+                ImGui::Checkbox("Paths", &triggerView.paths);
+                ImGui::Separator();
+                ImGui::Checkbox("Transform Distances", &triggerView.transformDists);
+                ImGui::Checkbox("Attention Distances", &triggerView.attentionDists);
+                ImGui::Checkbox("Purple Mist Avoid", &triggerView.purpleMistAvoid);
+                ImGui::Checkbox("Leever Ranges", &triggerView.leevers);
+                ImGui::Separator();
+                ImGui::SliderFloat("Opacity##triggers", &triggerView.opacity, 0.0f, 100.0f);
                 ImGui::EndMenu();
             }
 

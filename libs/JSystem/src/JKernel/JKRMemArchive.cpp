@@ -135,6 +135,13 @@ bool JKRMemArchive::open(void* buffer, u32 bufferSize, JKRMemBreakFlag flag) {
 
 void* JKRMemArchive::fetchResource(SDIFileEntry* fileEntry, u32* resourceSize) {
     JUT_ASSERT(555, isMounted());
+
+#if TARGET_PC
+    if (void* data = getOverlayData(fileEntry, resourceSize); data != nullptr) {
+        return data;
+    }
+#endif
+
     if (!JKAR_DATA(fileEntry)) {
         JKAR_DATA(fileEntry) = mArchiveData + fileEntry->data_offset;
     }
@@ -149,6 +156,13 @@ void* JKRMemArchive::fetchResource(SDIFileEntry* fileEntry, u32* resourceSize) {
 void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* fileEntry,
                                    u32* resourceSize) {
     JUT_ASSERT(595, isMounted());
+
+#if TARGET_PC
+    if (copyOverlayData(buffer, bufferSize, fileEntry, resourceSize)) {
+        return buffer;
+    }
+#endif
+
     u32 srcLength = fileEntry->data_size;
     if (srcLength > bufferSize) {
         srcLength = bufferSize;
@@ -173,6 +187,8 @@ void* JKRMemArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* f
 void JKRMemArchive::removeResourceAll(void) {
     JUT_ASSERT(642, isMounted());
 
+    IF_DUSK(removeAllOverlayResources();)
+
     if (mArcInfoBlock == NULL)
         return;
     if (mMountMode == MOUNT_MEM)
@@ -191,6 +207,12 @@ void JKRMemArchive::removeResourceAll(void) {
 
 bool JKRMemArchive::removeResource(void* resource) {
     JUT_ASSERT(673, isMounted());
+
+#if TARGET_PC
+    if (removeOverlayResource(resource, true)) {
+        return true;
+    }
+#endif
 
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (!fileEntry)
@@ -231,6 +253,12 @@ u32 JKRMemArchive::fetchResource_subroutine(u8* src, u32 srcLength, u8* dst, u32
 }
 
 u32 JKRMemArchive::getExpandedResSize(const void* resource) const {
+#if TARGET_PC
+    if (u32 overlaySize; getOverlayResourceSize(resource, &overlaySize)) {
+        return overlaySize;
+    }
+#endif
+
     SDIFileEntry* fileEntry = findPtrResource(resource);
     if (fileEntry == NULL)
         return -1;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <filesystem>
-
 namespace dusk {
 
 extern bool IsRunning;
@@ -20,8 +19,6 @@ struct StageRequest {
     s8 layer;
 };
 extern StageRequest StageRequested;
-
-
 
 #if defined(__ANDROID__) || (defined(TARGET_OS_IOS) && TARGET_OS_IOS) ||                           \
     (defined(TARGET_OS_TV) && TARGET_OS_TV)

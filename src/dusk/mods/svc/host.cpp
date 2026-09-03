@@ -1,13 +1,17 @@
 #include "registry.hpp"
 #include "slot_map.hpp"
 
+#include "dusk/main.h"
 #include "dusk/mods/loader/loader.hpp"
+#include "dusk/mods/log_buffer.hpp"
 #include "dusk/mods/manifest.hpp"
 #include "fmt/format.h"
 
 #include <algorithm>
+#include <borealis/io.hpp>
+#include <borealis/version.h>
+#include <filesystem>
 #include <vector>
-#include <version.h>
 
 namespace dusk::mods::svc {
 namespace {
@@ -66,6 +70,41 @@ const char* host_mod_dir(ModContext* context) {
 const char* host_native_dir(ModContext* context) {
     const auto* mod = mod_from_context(context);
     return mod != nullptr ? mod->nativeDirUtf8.c_str() : "";
+}
+
+ModResult host_data_dir(ModContext* context, const char** outPath) {
+    if (outPath == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    *outPath = nullptr;
+
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    if (mod->dataDirUtf8.empty()) {
+        namespace fs = std::filesystem;
+        std::error_code ec;
+        const fs::path path = fs::absolute(dusk::ConfigPath / "mod_data" / mod->metadata.id, ec);
+        if (ec) {
+            log::write(mod->metadata.id, LOG_LEVEL_ERROR,
+                "failed to resolve persistent mod data directory: {}", ec.message());
+            return MOD_ERROR;
+        }
+
+        fs::create_directories(path, ec);
+        if (ec) {
+            log::write(mod->metadata.id, LOG_LEVEL_ERROR,
+                "failed to create persistent mod data directory {}: {}",
+                borealis::io::fs_path_to_string(path), ec.message());
+            return MOD_ERROR;
+        }
+        mod->dataDirUtf8 = borealis::io::fs_path_to_string(path);
+    }
+
+    *outPath = mod->dataDirUtf8.c_str();
+    return MOD_OK;
 }
 
 struct LifecycleWatcher {
@@ -135,7 +174,7 @@ void host_mod_detached(LoadedMod& mod) {
 
 constinit HostService s_hostService{
     .header = SERVICE_HEADER(HostService, HOST_SERVICE_MAJOR, HOST_SERVICE_MINOR),
-    .version = DUSK_VERSION_STRING,
+    .version = BOREALIS_APP_VERSION,
     .build_id = nullptr,
     .build_id_len = 0,
     .get_service = host_get_service,
@@ -148,6 +187,7 @@ constinit HostService s_hostService{
     .watch_mod_lifecycle = host_watch_mod_lifecycle,
     .unwatch_mod_lifecycle = host_unwatch_mod_lifecycle,
     .native_dir = host_native_dir,
+    .data_dir = host_data_dir,
 };
 
 }  // namespace

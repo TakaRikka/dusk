@@ -14,7 +14,9 @@
 #include <cstdio>
 #include <cstring>
 
-#if VERSION == VERSION_GCN_JPN
+#include "dusk/version.hpp"
+
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528
 #else
 #define STR_BUF_LEN 512
@@ -95,7 +97,13 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
         mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
         mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            field_0x50 = 0.0f;
+        } else {
+            field_0x50 = -10.0f;
+        }
+#elif VERSION == VERSION_GCN_JPN
         field_0x50 = 0.0f;
 #else
         field_0x50 = -10.0f;
@@ -109,7 +117,48 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
 
         mpScreen->search(MULTI_CHAR('n_all'))->scale(g_MsgObject_HIO_c.mBoxTalkScaleX,
                                          g_MsgObject_HIO_c.mBoxTalkScaleY);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            field_0x50 = 0.0f;
+
+            if (dComIfGs_getOptRuby() == 0) {
+                mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3flin'), 0, NULL);
+                mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('t3f_s'), 0, NULL);
+
+                mpTmr_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f'), 0, NULL);
+                mpTmr_c[1] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3f_s'), 0, NULL);
+
+                mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+                mpTxScreen->search(MULTI_CHAR('n_3fline'))->show();
+                mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
+            } else {
+                mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_3line'), 0, NULL);
+                mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't3_s', 0, NULL);
+
+                mpTmr_c[0] = NULL;
+                mpTmr_c[1] = NULL;
+
+                mpTxScreen->search(MULTI_CHAR('n_3line'))->show();
+                mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+                mpTxScreen->search(MULTI_CHAR('n_e4line'))->hide();
+            }
+        } else {
+            field_0x50 = -10.0f;
+
+            mpTm_c[0] = JKR_NEW CPaneMgr(mpTxScreen, MULTI_CHAR('mg_e4lin'), 0, NULL);
+            JUT_ASSERT(162, mpTm_c[0] != NULL);
+
+            mpTm_c[1] = JKR_NEW CPaneMgr(mpTxScreen, 't4_s', 0, NULL);
+            JUT_ASSERT(165, mpTm_c[1] != NULL);
+
+            mpTmr_c[0] = NULL;
+            mpTmr_c[1] = NULL;
+
+            mpTxScreen->search(MULTI_CHAR('n_3line'))->hide();
+            mpTxScreen->search(MULTI_CHAR('n_3fline'))->hide();
+            mpTxScreen->search(MULTI_CHAR('n_e4line'))->show();
+        }
+#elif VERSION == VERSION_GCN_JPN
         field_0x50 = 0.0f;
 
         if (dComIfGs_getOptRuby() == 0) {
@@ -160,20 +209,12 @@ dMsgScrnExplain_c::dMsgScrnExplain_c(STControl* i_stick, u8 param_1, bool i_isUs
     f32 lineSpace = ((J2DTextBox*)mpTm_c[0]->getPanePtr())->getLineSpace();
     for (int i = 0; i < 2; i++) {
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-        ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x210, "");
-#else
-        ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x200, "");
-#endif
+        ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(STR_BUF_LEN, "");
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setLineSpace(lineSpace);
 
         if (mpTmr_c[i] != NULL) {
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-            ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(0x210, "");
-#else
-            ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(0x200, "");
-#endif
+            ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setString(STR_BUF_LEN, "");
             ((J2DTextBox*)mpTmr_c[i]->getPanePtr())->setLineSpace(lineSpace);
         }
     }
@@ -320,7 +361,13 @@ void dMsgScrnExplain_c::draw(J2DOrthoGraph* i_graf) {
     SAFE_STRCPY(string_buf, ((J2DTextBox*)mpTm_c[0]->getPanePtr())->getStringPtr());
 
     mpTxScreen->draw(0.0f, 0.0f, (J2DGrafContext*)i_graf);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        mpString_c->getString(mOpenMsgId, (J2DTextBox*)mpTm_c[0]->getPanePtr(), NULL, NULL, NULL, 12);
+    } else {
+        mpString_c->getString(mOpenMsgId, (J2DTextBox*)mpTm_c[0]->getPanePtr(), NULL, NULL, NULL, 8);
+    }
+#elif VERSION == VERSION_GCN_JPN
     mpString_c->getString(mOpenMsgId, (J2DTextBox*)mpTm_c[0]->getPanePtr(), NULL, NULL, NULL, 12);
 #else
     mpString_c->getString(mOpenMsgId, (J2DTextBox*)mpTm_c[0]->getPanePtr(), NULL, NULL, NULL, 8);

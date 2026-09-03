@@ -328,6 +328,150 @@ void dMeter2Info_onWide2D();
 void dMeter2Info_offWide2D();
 #endif
 
+#if TARGET_PC
+DUSK_NOINLINE void dMeter2Info_Initialize();
+DUSK_NOINLINE dMeterMap_c* dMeter2Info_getMeterMapClass();
+DUSK_NOINLINE dMw_c* dMeter2Info_getMenuWindowClass();
+DUSK_NOINLINE void dMeter2Info_setWindowStatus(u8 i_status);
+DUSK_NOINLINE CPaneMgr* dMeter2Info_getMeterItemPanePtr(s32 i_idx);
+DUSK_NOINLINE void dMeter2Info_getString(
+    u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry);
+DUSK_NOINLINE void dMeter2Info_getStringKanji(
+    u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry);
+DUSK_NOINLINE void dMeter2Info_getStringKana(
+    u32 i_stringID, TEXT_SPAN o_string, JMSMesgEntry_c* i_msgEntry);
+DUSK_NOINLINE f32 dMeter2Info_getStringLength(
+    JUTFont* i_font, f32 param_2, f32 param_3, char* i_string);
+DUSK_NOINLINE f32 dMeter2Info_getStringLength(J2DTextBox* i_textbox, char* i_string);
+DUSK_NOINLINE void dMeter2Info_setHotSpringTimer(u8 i_slotNo);
+DUSK_NOINLINE u16 dMeter2Info_getOilGaugeBackUp();
+DUSK_NOINLINE void dMeter2Info_setOilGaugeBackUp(u16 param_1);
+DUSK_NOINLINE void dMeter2Info_setSaveStageName(const char* i_stageName);
+DUSK_NOINLINE u8 dMeter2Info_getInsectSelectType();
+DUSK_NOINLINE void dMeter2Info_setInsectSelectType(u8 i_type);
+DUSK_NOINLINE u8 dMeter2Info_getWarpStatus();
+DUSK_NOINLINE void dMeter2Info_setWarpStatus(u8 i_status);
+DUSK_NOINLINE int dMeter2Info_readItemTexture(u8 i_itemNo, void* i_texBuf1, J2DPicture* i_pic1,
+    void* i_texBuf2, J2DPicture* i_pic2, void* i_texBuf3, J2DPicture* i_pic3, void* i_texBuf4,
+    J2DPicture* i_pic4, int param_9);
+DUSK_NOINLINE void dMeter2Info_setItemColor(
+    u8 i_itemNo, J2DPicture* i_pic1, J2DPicture* i_pic2, J2DPicture* i_pic3, J2DPicture* i_pic4);
+DUSK_NOINLINE u8 dMeter2Info_getWarpRoomNo();
+DUSK_NOINLINE u8 dMeter2Info_getWarpPlayerNo();
+DUSK_NOINLINE cXyz& dMeter2Info_getWarpPos();
+DUSK_NOINLINE const char* dMeter2Info_getWarpStageName();
+DUSK_NOINLINE void dMeter2Info_setNowCount(u8 i_count);
+DUSK_NOINLINE void dMeter2Info_setMaxCount(u8 i_count);
+DUSK_NOINLINE BOOL dMeter2Info_isDirectUseItem(int param_0);
+DUSK_NOINLINE bool dMeter2Info_isUseButton(int i_buttonBit);
+DUSK_NOINLINE void dMeter2Info_setMeterMapClass(dMeterMap_c* i_map);
+DUSK_NOINLINE void dMeter2Info_decHotSpringTimer();
+DUSK_NOINLINE void dMeter2Info_allUseButton();
+DUSK_NOINLINE void dMeter2Info_offUseButton(int i_buttonBit);
+DUSK_NOINLINE void dMeter2Info_resetGameStatus();
+DUSK_NOINLINE void dMeter2Info_onGameStatus(int i_status);
+DUSK_NOINLINE void dMeter2Info_setMapStatus(u8 i_status);
+DUSK_NOINLINE u8 dMeter2Info_getMapStatus();
+DUSK_NOINLINE void dMeter2Info_setPauseStatus(u8 i_status);
+DUSK_NOINLINE void dMeter2Info_resetPauseStatus();
+DUSK_NOINLINE u8 dMeter2Info_getPauseStatus();
+DUSK_NOINLINE bool dMeter2Info_isGameStatus(int i_status);
+DUSK_NOINLINE bool dMeter2Info_isTouchKeyCheck(int i_status);
+DUSK_NOINLINE void dMeter2Info_setMapKeyDirection(u16 i_direction);
+DUSK_NOINLINE bool dMeter2Info_isSub2DStatus(int i_flag);
+DUSK_NOINLINE void dMeter2Info_offMenuInForce(int i_flag);
+DUSK_NOINLINE bool dMeter2Info_isMenuInForce(int i_flag);
+DUSK_NOINLINE void dMeter2Info_setMenuWindowClass(dMw_c* i_menu);
+DUSK_NOINLINE void dMeter2Info_resetWarpStatus();
+DUSK_NOINLINE u16 dMeter2Info_getMapKeyDirection();
+DUSK_NOINLINE u8 dMeter2Info_getWindowStatus();
+DUSK_NOINLINE void dMeter2Info_setMsgResource(void* i_res);
+DUSK_NOINLINE void dMeter2Info_setStageMsgResource(void* i_res);
+DUSK_NOINLINE void dMeter2Info_setMsgUnitResource(void* i_res);
+DUSK_NOINLINE void* dMeter2Info_getMsgResource();
+DUSK_NOINLINE void* dMeter2Info_getStageMsgResource();
+DUSK_NOINLINE void* dMeter2Info_getMsgUnitResource();
+DUSK_NOINLINE u8 dMeter2Info_getLightDropGetFlag(int i_no);
+DUSK_NOINLINE s32 dMeter2Info_getMeterStringType();
+DUSK_NOINLINE void dMeter2Info_setMeterClass(dMeter2_c* i_meter);
+DUSK_NOINLINE void dMeter2Info_onLifeGaugeSE();
+DUSK_NOINLINE void dMeter2Info_offLifeGaugeSE();
+DUSK_NOINLINE u8 dMeter2Info_getLifeGaugeSE();
+DUSK_NOINLINE const char* dMeter2Info_getSaveStageName();
+DUSK_NOINLINE void dMeter2Info_onShopTalkFlag();
+DUSK_NOINLINE void dMeter2Info_setLightDropGetFlag(int i_no, u8 i_flag);
+DUSK_NOINLINE u8 dMeter2Info_getRentalBombBag();
+DUSK_NOINLINE u8 dMeter2Info_getMiniGameItemSetFlag();
+DUSK_NOINLINE void dMeter2Info_setMiniGameItem(u8 i_minigameFlag);
+DUSK_NOINLINE void dMeter2Info_resetMiniGameItem(bool i_saveItem);
+DUSK_NOINLINE void dMeter2Info_setTableMapRegionNo(u8 i_regionNo);
+DUSK_NOINLINE void dMeter2Info_setGoldWolfMapType(u8 i_mapType);
+DUSK_NOINLINE void dMeter2Info_changeWater(u8 i_slotNo);
+DUSK_NOINLINE void dMeter2Info_warpInProc();
+DUSK_NOINLINE void dMeter2Info_warpOutProc();
+DUSK_NOINLINE dMeter2_c* dMeter2Info_getMeterClass();
+DUSK_NOINLINE s16 dMeter2Info_getMsgKeyWaitTimer();
+DUSK_NOINLINE void dMeter2Info_onDirectUseItem(int param_0);
+DUSK_NOINLINE void dMeter2Info_setFloatingFlow(u16 i_flowID, s16 i_msgTimer, bool i_wakuVisible);
+DUSK_NOINLINE u8 dMeter2Info_getGameOverType();
+DUSK_NOINLINE void dMeter2Info_setGameOverType(u8 i_gameoverType);
+DUSK_NOINLINE void dMeter2Info_setMsgKeyWaitTimer(s16 i_waitTimer);
+DUSK_NOINLINE s32 dMeter2Info_getMsgTimeMs();
+DUSK_NOINLINE s32 dMeter2Info_getTimeMs();
+DUSK_NOINLINE void dMeter2Info_setMsgTimeMs(s32 i_msgTime);
+DUSK_NOINLINE void dMeter2Info_setTimeMs(s32 i_time);
+DUSK_NOINLINE u8 dMeter2Info_getNowCount();
+DUSK_NOINLINE u8 dMeter2Info_getMaxCount();
+DUSK_NOINLINE void dMeter2Info_setScopeZoomPointer(u8 param_0);
+DUSK_NOINLINE void dMeter2Info_decMsgKeyWaitTimer();
+DUSK_NOINLINE bool dMeter2Info_isFloatingMessageVisible();
+DUSK_NOINLINE u8 dMeter2Info_getItemExplainWindowStatus();
+DUSK_NOINLINE void dMeter2Info_setItemExplainWindowStatus(u8 i_value);
+DUSK_NOINLINE void dMeter2Info_resetDirectUseItem();
+DUSK_NOINLINE u16 dMeter2Info_getFloatingFlowID();
+DUSK_NOINLINE u8 dMeter2Info_getCollectCursorPosX();
+DUSK_NOINLINE u8 dMeter2Info_getCollectCursorPosY();
+DUSK_NOINLINE void dMeter2Info_setCollectCursorPosXY(u8 x, u8 y);
+DUSK_NOINLINE void dMeter2Info_onBlinkButton(int i_flag);
+DUSK_NOINLINE bool dMeter2Info_isFloatingMessageWakuVisible();
+DUSK_NOINLINE bool dMeter2Info_isBlinkButton(int i_flag);
+DUSK_NOINLINE void dMeter2Info_resetBlinkButton();
+DUSK_NOINLINE void dMeter2Info_resetFloatingMessage();
+DUSK_NOINLINE s16 dMeter2Info_decFloatingMessageTimer();
+DUSK_NOINLINE s16 dMeter2Info_getFloatingMessageTimer();
+DUSK_NOINLINE u16 dMeter2Info_getFloatingMessageID();
+DUSK_NOINLINE s16 dMeter2Info_getHorseLifeCount();
+DUSK_NOINLINE void dMeter2Info_setMeterString(s32 i_string);
+DUSK_NOINLINE void dMeter2Info_resetMeterString();
+DUSK_NOINLINE void dMeter2Info_setMeterItemPanePtr(int i_no, CPaneMgr* i_pane);
+DUSK_NOINLINE bool dMeter2Info_isShopTalkFlag();
+DUSK_NOINLINE void dMeter2Info_setMapDrugFlag(bool i_flag);
+DUSK_NOINLINE bool dMeter2Info_isTempBit(int i_bit);
+DUSK_NOINLINE void dMeter2Info_offSub2DStatus(int i_bit);
+DUSK_NOINLINE void dMeter2Info_onSub2DStatus(int i_bit);
+DUSK_NOINLINE void dMeter2Info_set2DWidth(f32 i_width);
+DUSK_NOINLINE void dMeter2Info_set2DHeight(f32 i_height);
+DUSK_NOINLINE void dMeter2Info_set2DPosH(f32 i_posH);
+DUSK_NOINLINE void dMeter2Info_set2DPosV(f32 i_posV);
+DUSK_NOINLINE void dMeter2Info_offShopTalkFlag();
+DUSK_NOINLINE void dMeter2Info_onUseButton(int i_button);
+DUSK_NOINLINE f32 dMeter2Info_get2DWidth();
+DUSK_NOINLINE f32 dMeter2Info_get2DHeight();
+DUSK_NOINLINE void dMeter2Info_setWarpInfo(const char* i_stageName, const cXyz& i_position,
+    s16 i_angle, u8 i_roomNo, u8 param_4, u8 i_warpPlayerNo);
+DUSK_NOINLINE u8 dMeter2Info_getTableMapRegionNo();
+DUSK_NOINLINE u8 dMeter2Info_getGoldWolfMapType();
+DUSK_NOINLINE bool dMeter2Info_isWindowAccept(int param_0);
+DUSK_NOINLINE void dMeter2Info_setHorseLifeCount(s16 i_count);
+DUSK_NOINLINE void dMeter2Info_offTempBit(int i_bit);
+DUSK_NOINLINE void dMeter2Info_onTempBit(int i_bit);
+DUSK_NOINLINE void dMeter2Info_setFloatingMessage(u16 i_msgID, s16 i_msgTimer, bool i_wakuVisible);
+DUSK_NOINLINE void dMeter2Info_setMiniGameCount(s8 i_count);
+DUSK_NOINLINE void dMeter2Info_onWindowAccept(int param_0);
+DUSK_NOINLINE void dMeter2Info_offWindowAccept(int param_0);
+DUSK_NOINLINE void dMeter2Info_onMenuInForce(int param_0);
+
+#else
 inline void dMeter2Info_Initialize() {
     g_meter2_info.init();
 }
@@ -864,5 +1008,7 @@ inline void dMeter2Info_offWindowAccept(int param_0) {
 inline void dMeter2Info_onMenuInForce(int param_0) {
     g_meter2_info.onMenuInForce(param_0);
 }
+
+#endif
 
 #endif /* D_METER_D_METER2_INFO_H */

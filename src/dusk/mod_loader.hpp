@@ -73,6 +73,7 @@ struct ModMetaParsed {
     std::vector<ModMetaExport*> exports;
     std::vector<ModMetaHookFn*> hookFns;
     std::vector<ModMetaHookMem*> hookMems;
+    std::vector<ModMetaHookMemExt*> hookMemExts;
     std::vector<ModMetaHookName*> hookNames;
 };
 
@@ -81,6 +82,15 @@ inline const char* hook_mem_vtable_symbol(const ModMetaHookMem& rec) {
 }
 
 inline const char* hook_mem_display_name(const ModMetaHookMem& rec) {
+    const char* vtable = hook_mem_vtable_symbol(rec);
+    return vtable + std::char_traits<char>::length(vtable) + 1;
+}
+
+inline const char* hook_mem_vtable_symbol(const ModMetaHookMemExt& rec) {
+    return reinterpret_cast<const char*>(&rec) + sizeof(ModMetaHookMemExt);
+}
+
+inline const char* hook_mem_display_name(const ModMetaHookMemExt& rec) {
     const char* vtable = hook_mem_vtable_symbol(rec);
     return vtable + std::char_traits<char>::length(vtable) + 1;
 }
@@ -156,6 +166,8 @@ struct LoadedMod {
     std::filesystem::path dir;
     // Stable UTF-8 storage for HostService::mod_dir.
     std::string dirUtf8;
+    // Stable UTF-8 storage for HostService::data_dir.
+    std::string dataDirUtf8;
 
     uint32_t searchDirIndex = 0;
     // Native lib is dlopen'd in place and stays resident for the session. Reload is unsupported.

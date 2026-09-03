@@ -5,12 +5,13 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_msg_scrn_place.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "d/d_camera.h"
 #include "d/d_msg_object.h"
+#include "d/d_msg_scrn_place.h"
 #include "d/d_pane_class.h"
+#include "dusk/version.hpp"
 
 #if TARGET_PC
 #include "dusk/settings.h"
@@ -32,7 +33,13 @@ dMsgScrnPlace_c::dMsgScrnPlace_c() {
     }
 
     mpScreen = JKR_NEW J2DScreen();
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        mpScreen->setPriority("zelda_stage_title.blo", 0x20000, dComIfGp_getMsgArchive(4));
+    } else {
+        mpScreen->setPriority("zelda_stage_title_foreign.blo", 0x20000, dComIfGp_getMsgArchive(4));
+    }
+#elif VERSION == VERSION_GCN_JPN
     mpScreen->setPriority("zelda_stage_title.blo", 0x20000, dComIfGp_getMsgArchive(4));
 #else
     mpScreen->setPriority("zelda_stage_title_foreign.blo", 0x20000, dComIfGp_getMsgArchive(4));
@@ -59,7 +66,9 @@ dMsgScrnPlace_c::dMsgScrnPlace_c() {
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setFont(mDoExt_getRubyFont());
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setString(0x80, "");
 #if VERSION != VERSION_GCN_JPN
+        IF_DUSK_BLOCK(!dusk::version::isRegionJpn())
         ((J2DTextBox*)mpTm_c[i]->getPanePtr())->setCharSpace(1.0f);
+        IF_DUSK_BLOCK_END
 #endif
     }
 

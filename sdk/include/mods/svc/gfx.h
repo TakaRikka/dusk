@@ -1,6 +1,11 @@
 #pragma once
 
 #include <mods/api.h>
+#include <mods/svc/window.h>
+
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
 
 #if !defined(DUSK_BUILDING_GAME) && !defined(DUSK_MOD_FEATURE_WEBGPU)
 #error "mods/svc/gfx.h requires add_mod(... FEATURES webgpu)"
@@ -28,15 +33,74 @@
 
 #define GFX_SERVICE_ID "dev.twilitrealm.dusklight.gfx"
 #define GFX_SERVICE_MAJOR 1u
-#define GFX_SERVICE_MINOR 0u
+#define GFX_SERVICE_MINOR 2u
 
 /* Maximum size for push_draw payload */
 #define GFX_INLINE_DRAW_PAYLOAD_SIZE 128u
+#define GFX_MAX_COLOR_ATTACHMENTS 8u
+#define GFX_SCENE_COLOR_ATTACHMENT_INDEX 0u
+
+typedef enum GfxAttachmentSemantic {
+    GFX_ATTACHMENT_SCENE_COLOR,
+    GFX_ATTACHMENT_NORMAL,
+    GFX_ATTACHMENT_AUXILIARY,
+} GfxAttachmentSemantic;
+
+typedef struct GfxColorAttachmentLayout {
+    GfxAttachmentSemantic semantic;
+    WGPUTextureFormat format;
+    uint32_t width;
+    uint32_t height;
+} GfxColorAttachmentLayout;
+
+typedef struct GfxRenderTargetLayout {
+    uint32_t struct_size;
+    uint64_t key;
+    /* At least one; scene color is at GFX_SCENE_COLOR_ATTACHMENT_INDEX. */
+    uint32_t color_attachment_count;
+    GfxColorAttachmentLayout color_attachments[GFX_MAX_COLOR_ATTACHMENTS];
+    WGPUTextureFormat depth_stencil_format;
+    uint32_t sample_count;
+} GfxRenderTargetLayout;
+
+#define GFX_RENDER_TARGET_LAYOUT_INIT                                                              \
+    {sizeof(GfxRenderTargetLayout), 0u, 0u,                                                        \
+        {{GFX_ATTACHMENT_AUXILIARY, WGPUTextureFormat_Undefined}}, WGPUTextureFormat_Undefined,    \
+        1u}
+
+/*
+ * Initializes pipeline color targets for a render-target layout. Only scene color is writable;
+ * callers that write another semantic should override that target afterward.
+ */
+static uint32_t gfx_init_color_target_states(const GfxRenderTargetLayout* layout,
+    WGPUColorTargetState targets[GFX_MAX_COLOR_ATTACHMENTS], const WGPUBlendState* scene_blend,
+    WGPUColorWriteMask scene_write_mask) {
+    if (layout == NULL || targets == NULL) {
+        return 0;
+    }
+    const uint32_t count = layout->color_attachment_count < GFX_MAX_COLOR_ATTACHMENTS ?
+                               layout->color_attachment_count :
+                               GFX_MAX_COLOR_ATTACHMENTS;
+    for (uint32_t i = 0; i < GFX_MAX_COLOR_ATTACHMENTS; ++i) {
+        WGPUColorTargetState target = WGPU_COLOR_TARGET_STATE_INIT;
+        if (i < count) {
+            target.format = layout->color_attachments[i].format;
+            target.writeMask = WGPUColorWriteMask_None;
+        }
+        targets[i] = target;
+    }
+    if (count != 0) {
+        targets[GFX_SCENE_COLOR_ATTACHMENT_INDEX].blend = scene_blend;
+        targets[GFX_SCENE_COLOR_ATTACHMENT_INDEX].writeMask = scene_write_mask;
+    }
+    return count;
+}
 
 /* 0 is never a valid handle. */
 typedef uint64_t GfxDrawTypeHandle;
 typedef uint64_t GfxStageHookHandle;
 typedef uint64_t GfxComputeTypeHandle;
+typedef uint64_t GfxPresentTargetHandle;
 
 /* A suballocation in one of the shared per-frame streaming buffers. */
 typedef struct GfxRange {
@@ -45,8 +109,8 @@ typedef struct GfxRange {
 } GfxRange;
 
 /*
- * Device and scene pass configuration. Valid from mod_initialize onward and stable for the
- * session. Offscreen passes from create_pass are always single-sample.
+ * Device and legacy primary scene-pass configuration. Use get_scene_target_layout when creating
+ * scene pipelines. Offscreen passes from create_pass are always single-sample.
  */
 typedef struct GfxDeviceInfo {
     uint32_t struct_size;
@@ -56,11 +120,13 @@ typedef struct GfxDeviceInfo {
     WGPUTextureFormat depth_format; /* scene depth target format */
     uint32_t sample_count;          /* scene pass MSAA sample count */
     bool uses_reversed_z;           /* true means depth 1.0 is near */
+    WGPUInstance instance;          /* borrowed; added in GfxService 1.1 */
+    WGPUAdapter adapter;            /* borrowed; added in GfxService 1.1 */
 } GfxDeviceInfo;
 
 #define GFX_DEVICE_INFO_INIT                                                                       \
     {sizeof(GfxDeviceInfo), NULL, NULL, WGPUTextureFormat_Undefined, WGPUTextureFormat_Undefined,  \
-        1u, false}
+        1u, false, NULL, NULL}
 
 /*
  * Passed to GfxDrawFn on the render worker thread; valid only during the call. The pass pipeline,
@@ -75,12 +141,18 @@ typedef struct GfxDrawContext {
     WGPUBuffer index_buffer;
     WGPUBuffer uniform_buffer;
     WGPUBuffer storage_buffer;
+    /* deprecated: use layout.color_attachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].format */
     WGPUTextureFormat color_format;
+    /* deprecated: use layout.depth_stencil_format */
     WGPUTextureFormat depth_format;
+    /* deprecated: use layout.sample_count */
     uint32_t sample_count;
+    /* deprecated: use layout.color_attachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].width */
     uint32_t target_width;
+    /* deprecated: use layout.color_attachments[GFX_SCENE_COLOR_ATTACHMENT_INDEX].height */
     uint32_t target_height;
     bool uses_reversed_z;
+    GfxRenderTargetLayout layout; /* added in GfxService 1.2 */
 } GfxDrawContext;
 
 typedef void (*GfxDrawFn)(ModContext* ctx, const GfxDrawContext* draw_ctx, const void* payload,
@@ -168,6 +240,48 @@ typedef struct GfxComputeTypeDesc {
 
 #define GFX_COMPUTE_TYPE_DESC_INIT {sizeof(GfxComputeTypeDesc), NULL, NULL, NULL}
 
+/*
+ * Invoked on the render worker while the frame encoder is open. The target texture and view have
+ * been acquired by the host and are borrowed for the callback. Record all target work on encoder,
+ * leave no pass open, and do not finish, submit, or present it. The host submits the shared command
+ * buffer and presents the target after submission. The streaming buffers contain data appended on
+ * the game thread before push_present.
+ */
+typedef struct GfxPresentContext {
+    uint32_t struct_size;
+    WGPUDevice device;
+    WGPUQueue queue;
+    WGPUCommandEncoder encoder;
+    WGPUTexture target_texture;
+    WGPUTextureView target_view;
+    WGPUTextureFormat target_format;
+    uint32_t target_width;
+    uint32_t target_height;
+    WGPUBuffer vertex_buffer;
+    WGPUBuffer index_buffer;
+    WGPUBuffer uniform_buffer;
+    WGPUBuffer storage_buffer;
+} GfxPresentContext;
+
+typedef void (*GfxPresentFn)(ModContext* ctx, const GfxPresentContext* present_ctx,
+    const void* payload, size_t payload_size, void* user_data);
+
+typedef struct GfxPresentTargetDesc {
+    uint32_t struct_size;
+    const char* label; /* optional debug label */
+    uint32_t width;    /* required for raw surfaces; ignored for WindowService windows */
+    uint32_t height;
+    WGPUTextureUsage usage; /* 0 defaults to RenderAttachment */
+    WGPUTextureFormat preferred_format;
+    WGPUCompositeAlphaMode preferred_alpha_mode;
+    GfxPresentFn render;
+    void* user_data;
+} GfxPresentTargetDesc;
+
+#define GFX_PRESENT_TARGET_DESC_INIT                                                               \
+    {sizeof(GfxPresentTargetDesc), NULL, 0u, 0u, WGPUTextureUsage_None,                            \
+        WGPUTextureFormat_Undefined, WGPUCompositeAlphaMode_Auto, NULL, NULL}
+
 typedef struct GfxService {
     ServiceHeader header;
 
@@ -200,15 +314,29 @@ typedef struct GfxService {
     ModResult (*resolve_pass)(
         ModContext* ctx, const GfxResolveDesc* desc, GfxResolvedTargets* out_targets);
     ModResult (*create_pass)(ModContext* ctx, uint32_t width, uint32_t height);
+
+    /* Minor version 1 */
+
+    ModResult (*register_present_target)(ModContext* ctx, WGPUSurface surface,
+        const GfxPresentTargetDesc* desc, GfxPresentTargetHandle* out_handle);
+    ModResult (*register_window_present_target)(ModContext* ctx, WindowHandle window,
+        const GfxPresentTargetDesc* desc, GfxPresentTargetHandle* out_handle);
+    /* Raw-surface targets only; WindowService target resizes are managed automatically. */
+    ModResult (*resize_present_target)(
+        ModContext* ctx, GfxPresentTargetHandle handle, uint32_t width, uint32_t height);
+    ModResult (*unregister_present_target)(ModContext* ctx, GfxPresentTargetHandle handle);
+    /*
+     * MOD_OK means the task was queued.
+     * MOD_UNAVAILABLE means no task could be queued now (for example, a window has no pixel size).
+     * MOD_ERROR means an earlier task found the surface lost or deterministically invalid;
+     * unregister and recreate the target before pushing again.
+     */
+    ModResult (*push_present)(
+        ModContext* ctx, GfxPresentTargetHandle handle, const void* payload, size_t payload_size);
+
+    /* Minor version 2 */
+
+    ModResult (*get_scene_target_layout)(ModContext* ctx, GfxRenderTargetLayout* out_layout);
 } GfxService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<GfxService> {
-    static constexpr const char* id = GFX_SERVICE_ID;
-    static constexpr uint16_t major_version = GFX_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = GFX_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(GfxService, svc_gfx, GFX_SERVICE_ID, GFX_SERVICE_MAJOR, GFX_SERVICE_MINOR);

@@ -52,7 +52,7 @@ public:
     s32 createStart(u16);
     bool checkStartAnimeEnd();
     void playBckAnimation(f32);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
     bool isLeadByte(int);
 #endif
     void drawPikari(int);

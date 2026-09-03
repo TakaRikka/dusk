@@ -11,7 +11,10 @@
 #include "Z2AudioLib/SpotName.h"
 #include "os_report.h"
 
+#if TARGET_PC
 #include "dusk/audio.h"
+#include "dusk/version.hpp"
+#endif
 
 Z2SeqMgr::Z2SeqMgr() : JASGlobalInstance<Z2SeqMgr>(true) {
     mMainBgmMaster.forceIn();
@@ -584,7 +587,7 @@ void Z2SeqMgr::bgmStreamPlay() {
     }
 
     #if !PLATFORM_SHIELD
-    else if (getStreamBgmID() == 0x2000000) {
+    else if (getStreamBgmID() == 0x2000000 IF_DUSK(&& dusk::version::isGcn())) {
         if (mStreamBgmHandle) {
             mStreamBgmHandle->stop();
         }

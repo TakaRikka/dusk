@@ -21,6 +21,7 @@
 #include "dusk/achievements.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/ui/touch_controls.hpp"
+#include "dusk/version.hpp"
 
 static void enable_turn_page_controls(bool enabled) {
     const auto controlOverride =
@@ -30,7 +31,9 @@ static void enable_turn_page_controls(bool enabled) {
 }
 #endif
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+#define D_MENU_LETTER_LINE_MAX (dusk::version::isRegionJpn() ? 9 : 12)
+#elif VERSION == VERSION_GCN_JPN
 #define D_MENU_LETTER_LINE_MAX 9
 #else
 #define D_MENU_LETTER_LINE_MAX 12
@@ -459,7 +462,16 @@ void dMenu_Letter_c::wait_move() {
         }
 
         if (mProcess == 1 || mProcess == 2) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+            J2DTextBox* textBox;
+            if (dusk::version::isRegionJpn()) {
+                textBox = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('t_t00'));
+                mpBaseScreen->search(MULTI_CHAR('f_t_00'))->hide();
+            } else {
+                textBox = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('f_t_00'));
+                mpBaseScreen->search(MULTI_CHAR('t_t00'))->hide();
+            }
+#elif VERSION == VERSION_GCN_JPN
             J2DTextBox* textBox = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('t_t00'));
             mpBaseScreen->search(MULTI_CHAR('f_t_00'))->hide();
 #else
@@ -811,6 +823,15 @@ void dMenu_Letter_c::screenSetMenu() {
     static const u64 tag_frame[6] = {
         MULTI_CHAR('flame_00'), MULTI_CHAR('flame_01'), MULTI_CHAR('flame_02'), MULTI_CHAR('flame_03'), MULTI_CHAR('flame_04'), MULTI_CHAR('flame_05'),
     };
+
+#if TARGET_PC
+    static const u64 tag_menu0_jpn[6] = {
+        MULTI_CHAR('menu_t0'), MULTI_CHAR('menu_t1'), MULTI_CHAR('menu_t2'), MULTI_CHAR('menu_t3'), MULTI_CHAR('menu_t4'), MULTI_CHAR('menu_t5'),
+    };
+    static const u64 tag_menu0[6] = {
+        MULTI_CHAR('fenu_t0'), MULTI_CHAR('fenu_t1'), MULTI_CHAR('fenu_t2'), MULTI_CHAR('fenu_t3'), MULTI_CHAR('fenu_t4'), MULTI_CHAR('fenu_t5'),
+    };
+#else
     static const u64 tag_menu0[6] = {
 #if VERSION == VERSION_GCN_JPN
         MULTI_CHAR('menu_t0'), MULTI_CHAR('menu_t1'), MULTI_CHAR('menu_t2'), MULTI_CHAR('menu_t3'), MULTI_CHAR('menu_t4'), MULTI_CHAR('menu_t5'),
@@ -818,6 +839,16 @@ void dMenu_Letter_c::screenSetMenu() {
         MULTI_CHAR('fenu_t0'), MULTI_CHAR('fenu_t1'), MULTI_CHAR('fenu_t2'), MULTI_CHAR('fenu_t3'), MULTI_CHAR('fenu_t4'), MULTI_CHAR('fenu_t5'),
 #endif
     };
+#endif
+
+#if TARGET_PC
+    static const u64 tag_menu1_jpn[6] = {
+        MULTI_CHAR('menu_f6'), MULTI_CHAR('menu_f7'), MULTI_CHAR('menu_t8'), MULTI_CHAR('menu_t9'), MULTI_CHAR('menu_t10'), MULTI_CHAR('menu_t11'),
+    };
+    static const u64 tag_menu1[6] = {
+        MULTI_CHAR('fenu_t6'), MULTI_CHAR('fenu_t7'), MULTI_CHAR('fenu_t8'), MULTI_CHAR('fenu_t9'), MULTI_CHAR('fenu_t10'), MULTI_CHAR('fenu_t11'),
+    };
+#else
     static const u64 tag_menu1[6] = {
 #if VERSION == VERSION_GCN_JPN
         MULTI_CHAR('menu_f6'), MULTI_CHAR('menu_f7'), MULTI_CHAR('menu_t8'), MULTI_CHAR('menu_t9'), MULTI_CHAR('menu_t10'), MULTI_CHAR('menu_t11'),
@@ -825,6 +856,8 @@ void dMenu_Letter_c::screenSetMenu() {
         MULTI_CHAR('fenu_t6'), MULTI_CHAR('fenu_t7'), MULTI_CHAR('fenu_t8'), MULTI_CHAR('fenu_t9'), MULTI_CHAR('fenu_t10'), MULTI_CHAR('fenu_t11'),
 #endif
     };
+#endif
+
     static const u64 tag_midoku[6] = {
         MULTI_CHAR('midoku_0'), MULTI_CHAR('midoku_1'), MULTI_CHAR('midoku_2'), MULTI_CHAR('midoku_3'), MULTI_CHAR('midoku_4'), MULTI_CHAR('midoku_5'),
     };
@@ -838,7 +871,27 @@ void dMenu_Letter_c::screenSetMenu() {
     JUT_ASSERT(1161, mpParent[0] != NULL);
     mpParent[0]->setAlphaRate(0.0f);
     for (int i = 0; i < 6; i++) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            field_0x124[i][0] = (J2DTextBox*)mpMenuScreen->search(tag_sub0[i]);
+            field_0x124[i][1] = (J2DTextBox*)mpMenuScreen->search(tag_sub1[i]);
+            field_0x124[i][2] = (J2DTextBox*)mpMenuScreen->search(tag_name0[i]);
+            field_0x124[i][3] = (J2DTextBox*)mpMenuScreen->search(tag_name1[i]);
+            mpMenuScreen->search(ftag_sub0[i])->hide();
+            mpMenuScreen->search(ftag_sub1[i])->hide();
+            mpMenuScreen->search(ftag_name0[i])->hide();
+            mpMenuScreen->search(ftag_name1[i])->hide();
+        } else {
+            field_0x124[i][0] = (J2DTextBox*)mpMenuScreen->search(ftag_sub0[i]);
+            field_0x124[i][1] = (J2DTextBox*)mpMenuScreen->search(ftag_sub1[i]);
+            field_0x124[i][2] = (J2DTextBox*)mpMenuScreen->search(ftag_name0[i]);
+            field_0x124[i][3] = (J2DTextBox*)mpMenuScreen->search(ftag_name1[i]);
+            mpMenuScreen->search(tag_sub0[i])->hide();
+            mpMenuScreen->search(tag_sub1[i])->hide();
+            mpMenuScreen->search(tag_name0[i])->hide();
+            mpMenuScreen->search(tag_name1[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         field_0x124[i][0] = (J2DTextBox*)mpMenuScreen->search(tag_sub0[i]);
         field_0x124[i][1] = (J2DTextBox*)mpMenuScreen->search(tag_sub1[i]);
         field_0x124[i][2] = (J2DTextBox*)mpMenuScreen->search(tag_name0[i]);
@@ -868,8 +921,8 @@ void dMenu_Letter_c::screenSetMenu() {
     }
     for (int i = 0; i < 6; i++) {
         field_0x34[i][0] = mpMenuScreen->search(tag_frame[i]);
-        field_0x34[i][1] = mpMenuScreen->search(tag_menu0[i]);
-        field_0x34[i][2] = mpMenuScreen->search(tag_menu1[i]);
+        field_0x34[i][1] = mpMenuScreen->search(DUSK_IF_ELSE(dusk::version::isRegionJpn() ? tag_menu0_jpn[i] : tag_menu0[i], tag_menu0[i]));
+        field_0x34[i][2] = mpMenuScreen->search(DUSK_IF_ELSE(dusk::version::isRegionJpn() ? tag_menu1_jpn[i] : tag_menu1[i], tag_menu1[i]));
         field_0x34[i][3] = mpMenuScreen->search(tag_letter[i]);
         field_0x34[i][4] = mpMenuScreen->search(tag_midoku[i]);
         if (i < field_0x373) {
@@ -909,7 +962,27 @@ void dMenu_Letter_c::screenSetMenu() {
     mpDMYParent = JKR_NEW CPaneMgr(mpMenuDMYScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(1285, mpDMYParent != NULL);
     for (int i = 0; i < 6; i++) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            field_0x184[i][0] = (J2DTextBox*)mpMenuDMYScreen->search(tag_sub0[i]);
+            field_0x184[i][1] = (J2DTextBox*)mpMenuDMYScreen->search(tag_sub1[i]);
+            field_0x184[i][2] = (J2DTextBox*)mpMenuDMYScreen->search(tag_name0[i]);
+            field_0x184[i][3] = (J2DTextBox*)mpMenuDMYScreen->search(tag_name1[i]);
+            mpMenuDMYScreen->search(ftag_sub0[i])->hide();
+            mpMenuDMYScreen->search(ftag_sub1[i])->hide();
+            mpMenuDMYScreen->search(ftag_name0[i])->hide();
+            mpMenuDMYScreen->search(ftag_name1[i])->hide();
+        } else {
+            field_0x184[i][0] = (J2DTextBox*)mpMenuDMYScreen->search(ftag_sub0[i]);
+            field_0x184[i][1] = (J2DTextBox*)mpMenuDMYScreen->search(ftag_sub1[i]);
+            field_0x184[i][2] = (J2DTextBox*)mpMenuDMYScreen->search(ftag_name0[i]);
+            field_0x184[i][3] = (J2DTextBox*)mpMenuDMYScreen->search(ftag_name1[i]);
+            mpMenuDMYScreen->search(tag_sub0[i])->hide();
+            mpMenuDMYScreen->search(tag_sub1[i])->hide();
+            mpMenuDMYScreen->search(tag_name0[i])->hide();
+            mpMenuDMYScreen->search(tag_name1[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         field_0x184[i][0] = (J2DTextBox*)mpMenuDMYScreen->search(tag_sub0[i]);
         field_0x184[i][1] = (J2DTextBox*)mpMenuDMYScreen->search(tag_sub1[i]);
         field_0x184[i][2] = (J2DTextBox*)mpMenuDMYScreen->search(tag_name0[i]);
@@ -964,7 +1037,16 @@ void dMenu_Letter_c::screenSetBase() {
     mpParent[1] = JKR_NEW CPaneMgr(mpBaseScreen, MULTI_CHAR('n_all'), 2, NULL);
     JUT_ASSERT(1372, mpParent[1] != NULL);
     mpParent[1]->setAlphaRate(0.0f);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    J2DTextBox* piVar9;
+    if (dusk::version::isRegionJpn()) {
+        piVar9 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('t_t00'));
+        mpBaseScreen->search(MULTI_CHAR('f_t_00'))->hide();
+    } else {
+        piVar9 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('f_t_00'));
+        mpBaseScreen->search(MULTI_CHAR('t_t00'))->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     J2DTextBox* piVar9 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('t_t00'));
     mpBaseScreen->search(MULTI_CHAR('f_t_00'))->hide();
 #else
@@ -975,7 +1057,31 @@ void dMenu_Letter_c::screenSetBase() {
     piVar9->setFont(mDoExt_getSubFont());
     dComIfGp_setMessageCountNumber(field_0x374 + (field_0x36f + 1) * 100);
     mpString->getString(0x4d6, piVar9, NULL, NULL, NULL, 0);
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    J2DTextBox* text1;
+    J2DTextBox* text2;
+    J2DTextBox* text3;
+    J2DTextBox* text4;
+    if (dusk::version::isRegionJpn()) {
+        text1 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('wps_text'));
+        text2 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('w_p_text'));
+        text3 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('g_ps_txt'));
+        text4 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('g_p_text'));
+        mpBaseScreen->search(MULTI_CHAR('fwpstex1'))->hide();
+        mpBaseScreen->search(MULTI_CHAR('fwp_tex1'))->hide();
+        mpBaseScreen->search(MULTI_CHAR('fgps_tx1'))->hide();
+        mpBaseScreen->search(MULTI_CHAR('fgp_tex1'))->hide();
+    } else {
+        text1 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('fwpstex1'));
+        text2 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('fwp_tex1'));
+        text3 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('fgps_tx1'));
+        text4 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('fgp_tex1'));
+        mpBaseScreen->search(MULTI_CHAR('wps_text'))->hide();
+        mpBaseScreen->search(MULTI_CHAR('w_p_text'))->hide();
+        mpBaseScreen->search(MULTI_CHAR('g_ps_txt'))->hide();
+        mpBaseScreen->search(MULTI_CHAR('g_p_text'))->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     J2DTextBox* text1 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('wps_text'));
     J2DTextBox* text2 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('w_p_text'));
     J2DTextBox* text3 = (J2DTextBox*)mpBaseScreen->search(MULTI_CHAR('g_ps_txt'));
@@ -1059,7 +1165,96 @@ void dMenu_Letter_c::screenSetLetter() {
     JUT_ASSERT(1511, fg != false);
     dPaneClass_showNullPane(mpLetterScreen[0]);
 
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        if (dComIfGs_getOptRuby() == 0) {
+            field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('t3f_s'), 0, NULL);
+            field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3flin'), 0, NULL);
+            field_0x2f4[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3f_s'), 0, NULL);
+            field_0x2f4[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3f'), 0, NULL);
+            mpLetterScreen[0]->search('t4_s')->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('mg_e4lin'))->hide();
+            mpLetterScreen[0]->search('t3_s')->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('mg_3line'))->hide();
+            mpLineParent = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('jp_fri_n'), 0, NULL);
+            JUT_ASSERT(1530, mpLineParent != NULL);
+            for (int i = 0; i < 12; i++) {
+                static u64 const line_tag[12] = {
+                    MULTI_CHAR('line00'), MULTI_CHAR('line01'), MULTI_CHAR('line02'), MULTI_CHAR('line03'), MULTI_CHAR('line04'), MULTI_CHAR('line05'),
+                    MULTI_CHAR('line06'), MULTI_CHAR('line07'), MULTI_CHAR('line08'),
+                };
+
+                if (line_tag[i] != 0) {
+                    field_0x25c[i] = (J2DTextBox*)mpLetterScreen[0]->search(line_tag[i]);
+                } else {
+                    field_0x25c[i] = NULL;
+                }
+            }
+            mpLetterScreen[0]->search('jp_n')->hide();
+            mpLetterScreen[0]->search('us_n')->hide();
+
+            ((J2DTextBox*)field_0x2f4[0]->getPanePtr())->setLineSpace(((J2DTextBox*)field_0x2ec[0]->getPanePtr())->getLineSpace());
+            ((J2DTextBox*)field_0x2f4[1]->getPanePtr())->setLineSpace(((J2DTextBox*)field_0x2ec[1]->getPanePtr())->getLineSpace());
+        } else {
+            field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], 't3_s', 0, NULL);
+            field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3line'), 0, NULL);
+            for (int i = 0; i < 2; i++) {
+                field_0x2f4[i] = NULL;
+            }
+            mpLetterScreen[0]->search('t4_s')->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('mg_e4lin'))->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('t3f_s'))->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('mg_3flin'))->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('mg_3f_s'))->hide();
+            mpLetterScreen[0]->search(MULTI_CHAR('mg_3f'))->hide();
+            mpLineParent = JKR_NEW CPaneMgr(mpLetterScreen[0], 'jp_n', 0, NULL);
+            JUT_ASSERT(1530, mpLineParent != NULL);
+            for (int i = 0; i < 12; i++) {
+                static u64 const line_tag[12] = {
+                    MULTI_CHAR('line21'), MULTI_CHAR('line22'), MULTI_CHAR('line23'), MULTI_CHAR('line24'), MULTI_CHAR('line25'), MULTI_CHAR('line26'),
+                    MULTI_CHAR('line27'), MULTI_CHAR('line28'), MULTI_CHAR('line29'),
+                };
+
+                if (line_tag[i] != 0) {
+                    field_0x25c[i] = (J2DTextBox*)mpLetterScreen[0]->search(line_tag[i]);
+                } else {
+                    field_0x25c[i] = NULL;
+                }
+            }
+
+            mpLetterScreen[0]->search(MULTI_CHAR('jp_fri_n'))->hide();
+            mpLetterScreen[0]->search('us_n')->hide();
+        }
+    } else {
+        static u64 const line_tag[12] = {
+            MULTI_CHAR('line09'), MULTI_CHAR('line10'), MULTI_CHAR('line11'), MULTI_CHAR('line12'), MULTI_CHAR('line13'), MULTI_CHAR('line14'),
+            MULTI_CHAR('line15'), MULTI_CHAR('line16'), MULTI_CHAR('line17'), MULTI_CHAR('line18'), MULTI_CHAR('line19'), MULTI_CHAR('line20'),
+        };
+
+        field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], 't4_s', 0, NULL);
+        field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_e4lin'), 0, NULL);
+        for (int i = 0; i < 2; i++) {
+            field_0x2f4[i] = NULL;
+        }
+        mpLetterScreen[0]->search(MULTI_CHAR('t3f_s'))->hide();
+        mpLetterScreen[0]->search(MULTI_CHAR('mg_3flin'))->hide();
+        mpLetterScreen[0]->search(MULTI_CHAR('mg_3f_s'))->hide();
+        mpLetterScreen[0]->search(MULTI_CHAR('mg_3f'))->hide();
+        mpLetterScreen[0]->search('t3_s')->hide();
+        mpLetterScreen[0]->search(MULTI_CHAR('mg_3line'))->hide();
+        mpLineParent = JKR_NEW CPaneMgr(mpLetterScreen[0], 'us_n', 0, NULL);
+        JUT_ASSERT(1530, mpLineParent != NULL);
+        for (int i = 0; i < 12; i++) {
+            if (line_tag[i] != 0) {
+                field_0x25c[i] = (J2DTextBox*)mpLetterScreen[0]->search(line_tag[i]);
+            } else {
+                field_0x25c[i] = NULL;
+            }
+        }
+        mpLetterScreen[0]->search(MULTI_CHAR('jp_fri_n'))->hide();
+        mpLetterScreen[0]->search('jp_n')->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     if (dComIfGs_getOptRuby() == 0) {
         field_0x2ec[0] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('t3f_s'), 0, NULL);
         field_0x2ec[1] = JKR_NEW CPaneMgr(mpLetterScreen[0], MULTI_CHAR('mg_3flin'), 0, NULL);
@@ -1148,20 +1343,20 @@ void dMenu_Letter_c::screenSetLetter() {
     mpLetterScreen[0]->search('jp_n')->hide();
 #endif
 
+#if TARGET_PC
+#define STR_BUF_LEN 528
+#elif VERSION == VERSION_GCN_JPN
+#define STR_BUF_LEN 528
+#else
+#define STR_BUF_LEN 512
+#endif
+
     for (int i = 0; i < 2; i++) {
         ((J2DTextBox*)field_0x2ec[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-        ((J2DTextBox*)field_0x2ec[i]->getPanePtr())->setString(0x210, "");
-#else
-        ((J2DTextBox*)field_0x2ec[i]->getPanePtr())->setString(0x200, "");
-#endif
+        ((J2DTextBox*)field_0x2ec[i]->getPanePtr())->setString(STR_BUF_LEN, "");
         if (field_0x2f4[i] != NULL) {
             ((J2DTextBox*)field_0x2f4[i]->getPanePtr())->setFont(mDoExt_getMesgFont());
-#if VERSION == VERSION_GCN_JPN
-            ((J2DTextBox*)field_0x2f4[i]->getPanePtr())->setString(0x210, "");
-#else
-            ((J2DTextBox*)field_0x2f4[i]->getPanePtr())->setString(0x200, "");
-#endif
+            ((J2DTextBox*)field_0x2f4[i]->getPanePtr())->setString(STR_BUF_LEN, "");
         }
     }
     field_0x1e4[0] = (J2DTextBox*)mpLetterScreen[0]->search(MULTI_CHAR('p_texts'));

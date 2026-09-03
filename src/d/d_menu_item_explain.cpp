@@ -5,25 +5,26 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include "d/d_menu_item_explain.h"
+#include <cstdio>
+#include <cstring>
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include <cstdio>
-#include <cstring>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_kantera_icon_meter.h"
 #include "d/d_lib.h"
-#include "d/d_select_cursor.h"
+#include "d/d_menu_item_explain.h"
 #include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
-#include "d/d_msg_string.h"
-#include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_graphic.h"
 #include "d/d_msg_scrn_3select.h"
 #include "d/d_msg_scrn_arrow.h"
+#include "d/d_msg_string.h"
+#include "d/d_select_cursor.h"
+#include "dusk/version.hpp"
+#include "m_Do/m_Do_controller_pad.h"
+#include "m_Do/m_Do_graphic.h"
 
 typedef void (dMenu_ItemExplain_c::*initFunc)();
 static initFunc init_process[] = {
@@ -103,7 +104,16 @@ dMenu_ItemExplain_c::dMenu_ItemExplain_c(JKRExpHeap* i_heap, JKRArchive* i_archi
     mDescAlpha = 0.0f;
     field_0x78 = 0;
     mAlphaRatio = 201.0f;
-#if VERSION == VERSION_GCN_JPN
+
+#if TARGET_PC
+    if (dusk::version::isRegionJpn()) {
+        mpInfoText = JKR_NEW CPaneMgr(mpInfoScreen, MULTI_CHAR('i_text4'), 0, NULL);
+        mpInfoScreen->search(MULTI_CHAR('i_text1'))->hide();
+    } else {
+        mpInfoText = JKR_NEW CPaneMgr(mpInfoScreen, MULTI_CHAR('i_text1'), 0, NULL);
+        mpInfoScreen->search(MULTI_CHAR('i_text4'))->hide();
+    }
+#elif VERSION == VERSION_GCN_JPN
     mpInfoText = JKR_NEW CPaneMgr(mpInfoScreen, MULTI_CHAR('i_text4'), 0, NULL);
     mpInfoScreen->search(MULTI_CHAR('i_text1'))->hide();
 #else
@@ -114,7 +124,15 @@ dMenu_ItemExplain_c::dMenu_ItemExplain_c(JKRExpHeap* i_heap, JKRArchive* i_archi
     ((J2DTextBox*)(mpInfoText->getPanePtr()))->setString(0x200, "");
     mpInfoText->show();
     for (int i = 0; i < 4; i++) {
-#if VERSION == VERSION_GCN_JPN
+#if TARGET_PC
+        if (dusk::version::isRegionJpn()) {
+            mpNameText[i] = JKR_NEW CPaneMgr(mpInfoScreen, name_tag[i], 0, NULL);
+            mpInfoScreen->search(fame_tag[i])->hide();
+        } else {
+            mpNameText[i] = JKR_NEW CPaneMgr(mpInfoScreen, fame_tag[i], 0, NULL);
+            mpInfoScreen->search(name_tag[i])->hide();
+        }
+#elif VERSION == VERSION_GCN_JPN
         mpNameText[i] = JKR_NEW CPaneMgr(mpInfoScreen, name_tag[i], 0, NULL);
         mpInfoScreen->search(fame_tag[i])->hide();
 #else

@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 #define TEXTURE_SERVICE_ID "dev.twilitrealm.dusklight.texture"
 #define TEXTURE_SERVICE_MAJOR 1u
 #define TEXTURE_SERVICE_MINOR 0u
@@ -70,20 +74,12 @@ typedef struct TextureService {
      * "tex1_{w}x{h}_{hash}_{fmt}.dds"); "_mipN" sidecars next to it are picked up automatically.
      * The file is decoded lazily on first use by the renderer.
      */
-    ModResult (*register_file)(ModContext* ctx, const char* bundle_path,
-        TextureReplacementHandle* out_handle);
+    ModResult (*register_file)(
+        ModContext* ctx, const char* bundle_path, TextureReplacementHandle* out_handle);
 
     /* Remove a replacement previously registered by the calling mod. */
     ModResult (*unregister)(ModContext* ctx, TextureReplacementHandle handle);
 } TextureService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<TextureService> {
-    static constexpr const char* id = TEXTURE_SERVICE_ID;
-    static constexpr uint16_t major_version = TEXTURE_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = TEXTURE_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(
+    TextureService, svc_texture, TEXTURE_SERVICE_ID, TEXTURE_SERVICE_MAJOR, TEXTURE_SERVICE_MINOR);

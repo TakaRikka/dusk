@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef DUSK_DISCORD
+#if BOREALIS_HAS_DISCORD
 
 namespace dusk::discord {
 
@@ -11,4 +11,4 @@ void shutdown();
 
 }  // namespace dusk::discord
 
-#endif  // DUSK_DISCORD
+#endif  // BOREALIS_HAS_DISCORD

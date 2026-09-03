@@ -67,7 +67,7 @@ public:
     u8 getModelType() { return fopAcM_GetParamBit(this, 8, 4); }
     u8 getItemNo() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
+// private:
     /* 0x718 */ u8 mReturnRupee;
     /* 0x71C */ request_of_phase_process_class mPhase;
     /* 0x724 */ J3DModel* mpModel;
@@ -83,6 +83,10 @@ private:
     /* 0xAC0 */ u8 field_0xAC0[0xAC4 - 0xAC0];
     /* 0xAC4 */ int mStaffIdx;
     /* 0xAC8 */ dBgW* mBoxBgW;
+#if TARGET_PC
+    bool mParamsInit;
+    u8 mOriginalItemNo;
+#endif
 };
 
 STATIC_ASSERT(sizeof(daTbox2_c) == 0xACC);

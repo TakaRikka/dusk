@@ -1,12 +1,19 @@
 #ifndef DUSK_ISO_VALIDATE_HPP
 #define DUSK_ISO_VALIDATE_HPP
 
-#include <atomic>
+#include "dusk/settings.h"
+#include <borealis/disc.hpp>
+
+#include <cstdint>
+#include <string_view>
+
+namespace dusk {
+enum class DiscVerificationState : uint8_t;
+}
 
 namespace dusk::iso {
-struct KnownDisc;
 
-enum class ValidationError : u8 {
+enum class ValidationError : uint8_t {
     Unknown = 0,
     IOError,
     InvalidImage,
@@ -17,15 +24,21 @@ enum class ValidationError : u8 {
     Success
 };
 
-struct VerificationStatus {
-    std::atomic_size_t bytesRead = 0;
-    std::atomic_size_t bytesTotal = 0;
-    const KnownDisc* knownDisc = nullptr;
-    std::atomic_bool shouldCancel = false;
+using Platform = borealis::disc::Platform;
+
+enum class Region : uint8_t {
+    NorthAmerica,
+    Europe,
+    Japan,
+    Korea,
 };
 
+using VerificationStatus = borealis::disc::Progress;
+
 struct DiscInfo {
-    bool isPal = false;
+    Platform platform = Platform::Unknown;
+    Region region = Region::NorthAmerica;
+    std::uint8_t revision = 0;
 };
 
 ValidationError inspect(const char* path, DiscInfo& info);

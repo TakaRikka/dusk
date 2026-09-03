@@ -305,7 +305,16 @@ void dMenu_Fishing_c::screenSetBase() {
     mpFishInfoParent[0] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('info_blu'), 0, NULL);
     mpFishInfoParent[1] = JKR_NEW CPaneMgr(mpScreen, MULTI_CHAR('info_red'), 0, NULL);
 
-    #if (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
+    #if TARGET_PC
+    J2DTextBox* textBox;
+    if (dusk::version::isRegionJpn()) {
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('t_t00'));
+        mpScreen->search(MULTI_CHAR('f_t00'))->hide();
+    } else {
+        textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('f_t00'));
+        mpScreen->search(MULTI_CHAR('t_t00'))->hide();
+    }
+    #elif (VERSION == VERSION_GCN_JPN) || (VERSION == VERSION_WII_JPN)
     J2DTextBox* textBox = (J2DTextBox*)mpScreen->search(MULTI_CHAR('t_t00'));
     mpScreen->search(MULTI_CHAR('f_t00'))->hide();
     #else
@@ -334,7 +343,9 @@ void dMenu_Fishing_c::screenSetBase() {
         field_0x19c[1][i]->setString(0x20, "");
 
         mpFishNameString[i] = (J2DTextBox*)mpScreen->search(name_0[i]);
+        IF_DUSK_BLOCK(dusk::version::isGcn())
         mpScreen->search(fname_0[i])->hide();
+        IF_DUSK_BLOCK_END
         mpFishNameString[i]->setFont(mDoExt_getSubFont());
         mpFishNameString[i]->setString(0x20, "");
         dMeter2Info_getStringKanji(name_id[i], mpFishNameString[i]->getStringPtr(), NULL);

@@ -8,6 +8,10 @@ public:
     dMsgUnit_c();
     void setTag(int, int, TEXT_SPAN, bool);
 
+#if TARGET_PC
+    void setTag_jpn(int, int, TEXT_SPAN, bool);
+#endif
+
     virtual ~dMsgUnit_c();
 };
 

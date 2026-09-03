@@ -174,10 +174,14 @@ struct TProcessor {
     }
     void on_character(int iCharacter) { do_character(iCharacter); }
 
+#if TARGET_PC
+    const char* on_message_limited(u16 u16Index) const;
+#else
     const char* on_message_limited(u16 u16Index) const {
         JUT_ASSERT(482, pResourceCache_!=NULL);
         return pResourceCache_->getMessageText_messageIndex(u16Index);
     }
+#endif
 
     bool on_setBegin_isReady_() const { return do_setBegin_isReady_(); }
 
@@ -195,6 +199,10 @@ struct TProcessor {
         return 1;
     }
 
+#if TARGET_PC
+    void* getMessageEntry_messageCode(u16 u16Code, u16 u16Index) const;
+    const char* getMessageText_messageCode(u16 u16Code, u16 u16Index) const;
+#else
     void* getMessageEntry_messageCode(u16 u16Code, u16 u16Index) const {
         const TResource* pResource = getResource_groupID(u16Code);
 
@@ -214,6 +222,7 @@ struct TProcessor {
 
         return pResourceCache_->getMessageText_messageEntry(pEntry);
     }
+#endif
 
     void stack_pushCurrent_(const char* pszText) {
         oStack_.push(getCurrent());
