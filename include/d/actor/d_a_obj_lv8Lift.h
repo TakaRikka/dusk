@@ -68,7 +68,6 @@ public:
 
     static DUSK_GAME_DATA f32 const mSpeed[16];
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;
     /* 0x5AC */ mDoExt_btkAnm mBtk;

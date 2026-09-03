@@ -40,7 +40,6 @@ public:
     };
     static DUSK_GAME_DATA const BckTbl m_bckIdxTable[];
 
-private:
     /* 0x5A0 */ const char* m_arcName;
     /* 0x5A4 */ request_of_phase_process_class m_phase;
     /* 0x5AC */ J3DModel* mp_model;

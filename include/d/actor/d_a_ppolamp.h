@@ -25,7 +25,6 @@ public:
     void moveSwing();
     void initParam();
 
-private:
     /* 0x574 */ J3DModel* mModel1;
     /* 0x578 */ J3DModel* mModel2;
     /* 0x57C */ mDoExt_bckAnm mBck;

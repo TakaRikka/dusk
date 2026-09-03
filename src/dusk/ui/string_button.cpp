@@ -6,8 +6,8 @@ namespace dusk::ui {
 
 BaseStringButton::BaseStringButton(Rml::Element* parent, Props props)
     : BaseControlledSelectButton(parent, {std::move(props.key)}), mType(std::move(props.type)),
-      mMaxLength(props.maxLength) {
-    mInputListeners.reserve(4);
+      mMaxLength(props.maxLength), mSetOnChange(props.setOnChange) {
+    mInputListeners.reserve(5);
 }
 
 void BaseStringButton::update() {
@@ -35,8 +35,9 @@ void BaseStringButton::start_editing() {
     if (mInputElem == nullptr) {
         return;
     }
+    mOriginalValue = input_value();
     mInputElem->SetAttribute("type", mType);
-    mInputElem->SetAttribute("value", input_value());
+    mInputElem->SetAttribute("value", mOriginalValue);
     if (mMaxLength > -1) {
         mInputElem->SetAttribute("maxlength", mMaxLength);
     }
@@ -58,7 +59,10 @@ void BaseStringButton::start_editing() {
         mInputElem, Rml::EventId::Textinput, [this](Rml::Event& event) {
             if (event.GetTargetElement() == mInputElem) {
                 const Rml::String text = event.GetParameter("text", Rml::String{});
-                if (!text.empty() && std::ranges::all_of(text, [](const char c) { return c == '\r' || c == '\n' || c == '\t'; })) {
+                if (!text.empty() &&
+                    std::ranges::all_of(
+                        text, [](const char c) { return c == '\r' || c == '\n' || c == '\t'; }))
+                {
                     event.StopImmediatePropagation();
                 }
             }
@@ -78,6 +82,14 @@ void BaseStringButton::start_editing() {
         mInputElem, Rml::EventId::Click, [](Rml::Event& event) { event.StopPropagation(); }));
     mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(mInputElem,
         Rml::EventId::Blur, [this](Rml::Event&) { request_stop_editing(true, false); }));
+    if (mSetOnChange) {
+        mInputListeners.emplace_back(std::make_unique<ScopedEventListener>(
+            mInputElem, Rml::EventId::Change, [this](Rml::Event& event) {
+                if (event.GetTargetElement() == mInputElem) {
+                    set_value(mInputElem->GetValue());
+                }
+            }));
+    }
 }
 
 void BaseStringButton::request_stop_editing(bool commit, bool refocusRoot) {
@@ -123,12 +135,15 @@ void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
     if (!is_editing()) {
         return;
     }
-    if (commit) {
+    if (!mSetOnChange && commit) {
         set_value(mInputElem->GetValue());
+    } else if (mSetOnChange && !commit) {
+        set_value(mOriginalValue);
     }
     mInputListeners.clear();
     mRoot->RemoveChild(mInputElem);
     mInputElem = nullptr;
+    mOriginalValue.clear();
 
     // Restore value element
     mValueElem->SetProperty(Rml::PropertyId::Visibility, Rml::Style::Visibility::Visible);
@@ -140,7 +155,12 @@ void BaseStringButton::stop_editing(bool commit, bool refocusRoot) {
 }
 
 StringButton::StringButton(Rml::Element* parent, Props props)
-    : BaseStringButton(parent, {.key = std::move(props.key), .maxLength = props.maxLength}),
+    : BaseStringButton(parent,
+          {
+              .key = std::move(props.key),
+              .maxLength = props.maxLength,
+              .setOnChange = props.setOnChange,
+          }),
       mGetValue(std::move(props.getValue)), mSetValue(std::move(props.setValue)),
       mIsDisabled(std::move(props.isDisabled)), mIsModified(std::move(props.isModified)) {}
 

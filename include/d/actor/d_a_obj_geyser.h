@@ -62,7 +62,6 @@ public:
     u8 getArg3() { return fopAcM_GetParamBit(this, 24, 8); }
     u8 getSwNo() { return 0xFF; }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;
     /* 0x5AC */ dCcD_Stts mCcStts;

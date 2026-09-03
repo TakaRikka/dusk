@@ -53,7 +53,6 @@ public:
     virtual int Draw();
     virtual int Delete();
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel[2];
     /* 0x5B0 */ s16 field_0x5b0;

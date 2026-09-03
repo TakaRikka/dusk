@@ -83,7 +83,6 @@ public:
     MtxP getBackMtx() { return mpMorf->getModel()->getAnmMtx(1); }
     fpc_ProcID getDemoId() { return mDemoID; }
 
-private:
     /* 0x05AC */ request_of_phase_process_class mPhase[3];
     /* 0x05C4 */ J3DModel* mpChestModel;
     /* 0x05C8 */ J3DModel* mpSpitModel;

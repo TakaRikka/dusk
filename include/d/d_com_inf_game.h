@@ -20,11 +20,6 @@
 #if defined(DUSK_BUILDING_GAME)
 #include <tracy/Tracy.hpp>
 #include "dusk/settings.h"
-#else
-#ifndef ZoneScoped
-#define ZoneScoped
-#define ZoneScopedN(name)
-#endif
 #endif
 
 enum dComIfG_ButtonStatus {
@@ -254,7 +249,6 @@ public:
     ~dComIfG_resLoader_c();
     int load(char const**, JKRHeap*);
 
-private:
     /* 0x0 */ const char** mResNameTable;
     /* 0x4 */ request_of_phase_process_class mPhase;
     /* 0xC */ u8 mLoadIndex;
@@ -1276,6 +1270,938 @@ int dComIfGd_setShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3
                        f32 param_5, f32 param_6, f32 param_7, cBgS_PolyInfo& param_8,
                        dKy_tevstr_c* param_9, s16 param_10, f32 param_11, TGXTexObj* param_12);
 
+#if TARGET_PC
+DUSK_NOINLINE dSv_info_c* dComIfGs_getSaveInfo();
+DUSK_NOINLINE dSv_save_c* dComIfGs_getSaveData();
+DUSK_NOINLINE u16 dComIfGs_getMaxLife();
+DUSK_NOINLINE void dComIfGs_setMaxLife(u8 i_maxLife);
+DUSK_NOINLINE u16 dComIfGs_getLife();
+DUSK_NOINLINE void dComIfGs_setLife(u16 i_life);
+DUSK_NOINLINE u16 dComIfGs_getRupee();
+DUSK_NOINLINE void dComIfGs_setRupee(u16 i_rupees);
+DUSK_NOINLINE u16 dComIfGs_getMaxOil();
+DUSK_NOINLINE void dComIfGs_setMaxOil(u16 i_maxOil);
+DUSK_NOINLINE u16 dComIfGs_getOil();
+DUSK_NOINLINE void dComIfGs_setOil(u16 i_oil);
+DUSK_NOINLINE u8 dComIfGs_getSelectEquipClothes();
+DUSK_NOINLINE u8 dComIfGs_getSelectEquipSword();
+DUSK_NOINLINE u8 dComIfGs_getSelectEquipShield();
+DUSK_NOINLINE u8 dComIfGs_getCollectSmell();
+DUSK_NOINLINE void dComIfGs_setCollectSmell(u8 smell);
+DUSK_NOINLINE u8 dComIfGs_getBButtonItemKey();
+DUSK_NOINLINE void dComIfGs_setBButtonItemKey(u8 i_itemNo);
+DUSK_NOINLINE u8 dComIfGs_getWalletSize();
+DUSK_NOINLINE void dComIfGs_setWalletSize(u8 i_size);
+DUSK_NOINLINE u8 dComIfGs_getMaxMagic();
+DUSK_NOINLINE void dComIfGs_setMaxMagic(u8 i_maxMagic);
+DUSK_NOINLINE u8 dComIfGs_getMagic();
+DUSK_NOINLINE void dComIfGs_setMagic(u8 i_magic);
+DUSK_NOINLINE u8 dComIfGs_getTransformStatus();
+DUSK_NOINLINE void dComIfGs_setTransformStatus(u8 i_status);
+DUSK_NOINLINE u8 dComIfGs_getSelectItemIndex(int i_no);
+DUSK_NOINLINE u16 dComIfGs_getRupeeMax();
+DUSK_NOINLINE void dComIfGs_offGetMagicUseFlag();
+DUSK_NOINLINE s32 dComIfGs_isGetMagicUseFlag();
+DUSK_NOINLINE f32 dComIfGs_getTime();
+DUSK_NOINLINE void dComIfGs_setTime(f32 i_time);
+DUSK_NOINLINE u16 dComIfGs_getDate();
+DUSK_NOINLINE void dComIfGs_setDate(u16 i_date);
+DUSK_NOINLINE void dComIfGs_onDarkClearLV(int i_no);
+DUSK_NOINLINE void dComIfGs_offDarkClearLV(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isDarkClearLV(int i_no);
+DUSK_NOINLINE void dComIfGs_onTransformLV(int i_no);
+DUSK_NOINLINE void dComIfGs_offTransformLV(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isTransformLV(int i_no);
+DUSK_NOINLINE cXyz dComIfGs_getHorseRestartPos();
+DUSK_NOINLINE s16 dComIfGs_getHorseRestartAngleY();
+DUSK_NOINLINE const char* dComIfGs_getHorseRestartStageName();
+DUSK_NOINLINE s8 dComIfGs_getHorseRestartRoomNo();
+DUSK_NOINLINE void dComIfGs_setHorseRestart(
+    const char* i_stageName, cXyz& i_pos, s16 i_angle, s8 i_roomNo);
+DUSK_NOINLINE cXyz dComIfGs_getPlayerFieldLastStayPos();
+DUSK_NOINLINE s16 dComIfGs_getPlayerFieldLastStayAngleY();
+DUSK_NOINLINE char* dComIfGs_getPlayerFieldLastStayName();
+DUSK_NOINLINE u8 dComIfGs_getPlayerFieldLastStayRegionNo();
+DUSK_NOINLINE bool dComIfGs_isPlayerFieldLastStayFieldDataExistFlag();
+DUSK_NOINLINE void dComIfGs_offPlayerFieldLastStayFieldDataExistFlag();
+DUSK_NOINLINE void dComIfGs_onPlayerFieldLastStayFieldDataExistFlag();
+DUSK_NOINLINE BOOL dComIfGs_isRegionBit(int i_region);
+DUSK_NOINLINE void dComIfGs_onRegionBit(int i_region);
+DUSK_NOINLINE void dComIfGs_setPlayerFieldLastStayInfo(
+    const char* i_stage, cXyz& i_pos, s16 i_angle, s8 i_point, u8 i_region);
+DUSK_NOINLINE cXyz dComIfGs_getLastWarpMarkPlayerPos();
+DUSK_NOINLINE s16 dComIfGs_getLastWarpMarkPlayerAngleY();
+DUSK_NOINLINE const char* dComIfGs_getLastWarpMarkStageName();
+DUSK_NOINLINE u8 dComIfGs_getLastWarpMarkRoomNo();
+DUSK_NOINLINE s8 dComIfGs_getLastWarpAcceptStage();
+DUSK_NOINLINE void dComIfGs_setLastWarpAcceptStage(s8 param_0);
+DUSK_NOINLINE void dComIfGs_resetLastWarpAcceptStage();
+DUSK_NOINLINE void dComIfGs_setItem(int i_slotNo, u8 i_itemNo);
+DUSK_NOINLINE u8 dComIfGs_getItem(int i_slotNo, bool i_checkCombo);
+DUSK_NOINLINE void dComIfGs_setLineUpItem();
+DUSK_NOINLINE u8 dComIfGs_getLineUpItem(int i_slotNo);
+DUSK_NOINLINE void dComIfGs_setBottleItemIn(u8 curItem, u8 newItem);
+DUSK_NOINLINE void dComIfGs_setEmptyBottleItemIn(u8 i_itemNo);
+DUSK_NOINLINE void dComIfGs_setEmptyBottle();
+DUSK_NOINLINE void dComIfGs_setEmptyBottle(u8 i_itemNo);
+DUSK_NOINLINE void dComIfGs_setEquipBottleItemIn(u8 i_curItem, u8 i_newItem);
+DUSK_NOINLINE void dComIfGs_setEquipBottleItemEmpty(u8 i_curItem);
+DUSK_NOINLINE u8 dComIfGs_checkBottle(u8 i_itemNo);
+DUSK_NOINLINE u8 dComIfGs_checkInsectBottle();
+DUSK_NOINLINE u8 dComIfGs_checkEmptyBottle();
+DUSK_NOINLINE void dComIfGs_setEmptyBombBagItemIn(u8 i_newBomb, bool i_setNum);
+DUSK_NOINLINE void dComIfGs_setEmptyBombBagItemIn(u8 i_newBomb, u8 i_bombNum, bool i_setNum);
+DUSK_NOINLINE void dComIfGs_setEmptyBombBag();
+DUSK_NOINLINE void dComIfGs_setEmptyBombBag(u8 i_newBomb, u8 i_bombNum);
+DUSK_NOINLINE u8 dComIfGs_checkBombBag(u8 i_itemNo);
+DUSK_NOINLINE void dComIfGs_setWarashibeItem(u8 i_itemNo);
+DUSK_NOINLINE void dComIfGs_setRodTypeLevelUp();
+DUSK_NOINLINE void dComIfGs_setBaitItem(u8 i_item);
+DUSK_NOINLINE void dComIfGs_onItemFirstBit(u8 i_itemNo);
+DUSK_NOINLINE void dComIfGs_offItemFirstBit(u8 i_itemNo);
+DUSK_NOINLINE int dComIfGs_isItemFirstBit(u8 i_no);
+DUSK_NOINLINE u8 dComIfGs_getArrowNum();
+DUSK_NOINLINE void dComIfGs_setArrowNum(u8 i_arrowNum);
+DUSK_NOINLINE u8 dComIfGs_getPachinkoNum();
+DUSK_NOINLINE void dComIfGs_setPachinkoNum(u8 i_num);
+DUSK_NOINLINE u8 dComIfGs_getPachinkoMax();
+DUSK_NOINLINE void dComIfGs_setBombNum(u8 i_num);
+DUSK_NOINLINE void dComIfGs_setBombNum(u8 i_bagIdx, u8 i_bombNum);
+DUSK_NOINLINE u8 dComIfGs_getBombNum(u8 i_bagIdx);
+DUSK_NOINLINE void dComIfGs_setBottleNum(u8 i_bottleIdx, u8 i_bottleNum);
+DUSK_NOINLINE void dComIfGs_addBottleNum(u8 i_bottleIdx, s16 i_num);
+DUSK_NOINLINE u8 dComIfGs_getBottleNum(u8 i_bottleIdx);
+DUSK_NOINLINE u8 dComIfGs_getArrowMax();
+DUSK_NOINLINE void dComIfGs_setArrowMax(u8 i_arrowMax);
+DUSK_NOINLINE void dComIfGs_setBombMax(u8 i_max);
+DUSK_NOINLINE void dComIfGs_setBombMax(u8 i_type, u8 i_max);
+DUSK_NOINLINE u8 dComIfGs_getBombMax();
+DUSK_NOINLINE u8 dComIfGs_getBombMax(u8 i_bombType);
+DUSK_NOINLINE void dComIfGs_setPohSpiritNum(u8 i_num);
+DUSK_NOINLINE u8 dComIfGs_getPohSpiritNum();
+DUSK_NOINLINE void dComIfGs_addPohSpiritNum();
+DUSK_NOINLINE BOOL dComIfGs_isCollectClothes(u8 i_clothesNo);
+DUSK_NOINLINE void dComIfGs_setCollectClothes(u8 i_clothesNo);
+DUSK_NOINLINE void dComIfGs_setCollectSword(u8 i_swordNo);
+DUSK_NOINLINE void dComIfGs_setCollectShield(u8 i_shieldNo);
+DUSK_NOINLINE BOOL dComIfGs_isCollectClothing(u8 i_clothesNo);
+DUSK_NOINLINE void dComIfGs_offCollectClothes(u8 i_clothesNo);
+DUSK_NOINLINE BOOL dComIfGs_isCollectSword(u8 i_swordNo);
+DUSK_NOINLINE void dComIfGs_offCollectSword(u8 i_swordNo);
+DUSK_NOINLINE BOOL dComIfGs_isCollectShield(u8 i_item);
+DUSK_NOINLINE void dComIfGs_offCollectShield(u8 i_shieldNo);
+DUSK_NOINLINE void dComIfGs_onCollectCrystal(u8 i_item);
+DUSK_NOINLINE void dComIfGs_offCollectCrystal(u8 i_item);
+DUSK_NOINLINE bool dComIfGs_isCollectCrystal(u8 i_item);
+DUSK_NOINLINE void dComIfGs_onCollectMirror(u8 i_item);
+DUSK_NOINLINE void dComIfGs_offCollectMirror(u8 i_item);
+DUSK_NOINLINE bool dComIfGs_isCollectMirror(u8 i_item);
+DUSK_NOINLINE void dComIfGs_setLightDropNum(u8 i_level, u8 i_num);
+DUSK_NOINLINE u8 dComIfGs_getLightDropNum(u8 i_nowLevel);
+DUSK_NOINLINE void dComIfGs_onLightDropGetFlag(u8 i_nowLevel);
+DUSK_NOINLINE void dComIfGs_offLightDropGetFlag(u8 i_level);
+DUSK_NOINLINE BOOL dComIfGs_isLightDropGetFlag(u8 i_nowLevel);
+DUSK_NOINLINE void dComIfGs_onLetterGetFlag(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isLetterGetFlag(int i_no);
+DUSK_NOINLINE void dComIfGs_onLetterReadFlag(int i_no);
+DUSK_NOINLINE int dComIfGs_isLetterReadFlag(int i_no);
+DUSK_NOINLINE u8 dComIfGs_getGetNumber(int i_no);
+DUSK_NOINLINE void dComIfGs_setGetNumber(int i_no, u8 i_value);
+DUSK_NOINLINE void dComIfGs_addFishNum(u8 param_0);
+DUSK_NOINLINE u16 dComIfGs_getFishNum(u8 param_0);
+DUSK_NOINLINE u8 dComIfGs_getFishSize(u8 param_0);
+DUSK_NOINLINE void dComIfGs_setFishSize(u8 param_0, u8 param_1);
+DUSK_NOINLINE OSTime dComIfGs_getTotalTime();
+DUSK_NOINLINE void dComIfGs_addDeathCount();
+DUSK_NOINLINE u16 dComIfGs_getDeathCount();
+DUSK_NOINLINE TEXT_SPAN dComIfGs_getPlayerName();
+DUSK_NOINLINE void dComIfGs_setPlayerName(const char* i_name);
+DUSK_NOINLINE TEXT_SPAN dComIfGs_getHorseName();
+DUSK_NOINLINE void dComIfGs_setHorseName(const char* i_name);
+DUSK_NOINLINE u8 dComIfGs_getClearCount();
+
+// Ruby inline names are from TWW debug.
+DUSK_NOINLINE u8 dComIfGs_getOptRuby();
+DUSK_NOINLINE void dComIfGs_setOptRuby(u8 i_ruby);
+DUSK_NOINLINE u8 dComIfGs_getOptAttentionType();
+DUSK_NOINLINE void dComIfGs_setOptAttentionType(u8 i_attentionType);
+DUSK_NOINLINE void dComIfGs_setOptCalibrateDist(u16 i_calibrateDist);
+DUSK_NOINLINE void dComIfGs_setOptCalValue(s8 i_calValue);
+DUSK_NOINLINE u8 dComIfGs_getOptCameraControl();
+DUSK_NOINLINE void dComIfGs_setOptCameraControl(u8 i_cameraControl);
+DUSK_NOINLINE u8 dComIfGs_getOptPointer();
+DUSK_NOINLINE void dComIfGs_setOptPointer(u8 i_pointer);
+DUSK_NOINLINE u8 dComIfGs_checkOptVibration();
+DUSK_NOINLINE u8 dComIfGs_getOptSound();
+DUSK_NOINLINE void dComIfGs_setOptSound(u8 i_mode);
+DUSK_NOINLINE u8 dComIfGs_getOptVibration();
+DUSK_NOINLINE void dComIfGs_setOptVibration(u8 i_status);
+DUSK_NOINLINE u8 dComIfGs_getPalLanguage();
+DUSK_NOINLINE BOOL dComIfGs_isSaveTbox(int i_stageNo, int i_no);
+DUSK_NOINLINE void dComIfGs_onSaveSwitch(int i_stageNo, int i_no);
+DUSK_NOINLINE void dComIfGs_offSaveSwitch(int i_stageNo, int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isSaveSwitch(int i_stageNo, int i_no);
+DUSK_NOINLINE void dComIfGs_onSaveVisitedRoom(int param_0, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_offSaveVisitedRoom(int param_0, int i_roomNo);
+DUSK_NOINLINE BOOL dComIfGs_isSaveVisitedRoom(int param_0, int i_roomNo);
+DUSK_NOINLINE void* dComIfGs_getPEventBit();
+DUSK_NOINLINE void dComIfGs_onEventBit(const u16 i_flag);
+DUSK_NOINLINE void dComIfGs_offEventBit(const u16 i_flag);
+DUSK_NOINLINE BOOL dComIfGs_isEventBit(const u16 i_flag);
+DUSK_NOINLINE void dComIfGs_setEventReg(u16 reg, u8 value);
+DUSK_NOINLINE u8 dComIfGs_getEventReg(u16 reg);
+DUSK_NOINLINE int dComIfGs_getHookGameTime();
+DUSK_NOINLINE void dComIfGs_setHookGameTime(u32 i_time);
+DUSK_NOINLINE u32 dComIfGs_getBalloonScore();
+DUSK_NOINLINE void dComIfGs_setBalloonScore(u32 i_score);
+DUSK_NOINLINE int dComIfGs_getRaceGameTime();
+DUSK_NOINLINE void dComIfGs_setRaceGameTime(int i_time);
+DUSK_NOINLINE u8 dComIfGs_getKeyNum();
+DUSK_NOINLINE void dComIfGs_setKeyNum(u8 i_keyNum);
+DUSK_NOINLINE void dComIfGs_onDungeonItemMap();
+DUSK_NOINLINE void dComIfGs_offDungeonItemMap();
+DUSK_NOINLINE s32 dComIfGs_isDungeonItemMap();
+DUSK_NOINLINE void dComIfGs_onDungeonItemCompass();
+DUSK_NOINLINE void dComIfGs_offDungeonItemCompass();
+DUSK_NOINLINE s32 dComIfGs_isDungeonItemCompass();
+DUSK_NOINLINE void dComIfGs_onDungeonItemBossKey();
+DUSK_NOINLINE void dComIfGs_offDungeonItemBossKey();
+DUSK_NOINLINE s32 dComIfGs_isDungeonItemBossKey();
+DUSK_NOINLINE void dComIfGs_onStageBossEnemy();
+DUSK_NOINLINE void dComIfGs_offStageBossEnemy();
+DUSK_NOINLINE s32 dComIfGs_isStageBossEnemy();
+DUSK_NOINLINE void dComIfGs_onStageLife();
+DUSK_NOINLINE void dComIfGs_offStageLife();
+DUSK_NOINLINE s32 dComIfGs_isStageLife();
+DUSK_NOINLINE void dComIfGs_onStageBossDemo();
+DUSK_NOINLINE void dComIfGs_offStageBossDemo();
+DUSK_NOINLINE s32 dComIfGs_isStageBossDemo();
+DUSK_NOINLINE void dComIfGs_onDungeonItemWarp();
+DUSK_NOINLINE void dComIfGs_offDungeonItemWarp();
+DUSK_NOINLINE s32 dComIfGs_isDungeonItemWarp();
+DUSK_NOINLINE void dComIfGs_onStageMiddleBoss();
+DUSK_NOINLINE void dComIfGs_offStageMiddleBoss();
+DUSK_NOINLINE BOOL dComIfGs_isStageMiddleBoss();
+DUSK_NOINLINE void dComIfGs_onTbox(int i_no);
+DUSK_NOINLINE void dComIfGs_offTbox(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isTbox(int i_no);
+DUSK_NOINLINE void dComIfGs_onSaveSwitch(int i_no);
+DUSK_NOINLINE void dComIfGs_offSaveSwitch(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isSaveSwitch(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isSaveItem(int i_no);
+DUSK_NOINLINE void dComIfGs_onSaveDunSwitch(int i_swNo);
+DUSK_NOINLINE void dComIfGs_offSaveDunSwitch(int i_swNo);
+DUSK_NOINLINE BOOL dComIfGs_isSaveDunSwitch(int i_no);
+DUSK_NOINLINE BOOL dComIfGs_isSaveDunItem(int i_no);
+DUSK_NOINLINE void dComIfGs_resetDan();
+DUSK_NOINLINE void dComIfGs_initDan(s8 i_stageNo);
+DUSK_NOINLINE void dComIfGs_clearRoomSwitch(int i_zoneNo);
+DUSK_NOINLINE void dComIfGs_clearRoomItem(int i_zoneNo);
+DUSK_NOINLINE void dComIfGs_onSvZoneSwitch(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_offSvZoneSwitch(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE BOOL dComIfGs_isSvZoneSwitch(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_onSvOneZoneSwitch(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_offSvOneZoneSwitch(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE BOOL dComIfGs_isSvOneZoneSwitch(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_onSvZoneItem(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_offSvZoneItem(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE BOOL dComIfGs_isSvZoneItem(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_onSvOneZoneItem(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_offSvOneZoneItem(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE BOOL dComIfGs_isSvOneZoneItem(int i_zoneNo, int i_swBit);
+DUSK_NOINLINE void dComIfGs_removeZone(int i_zoneNo);
+DUSK_NOINLINE s8 dComIfGs_getRestartRoomNo();
+DUSK_NOINLINE s16 dComIfGs_getStartPoint();
+DUSK_NOINLINE void dComIfGs_setStartPoint(s16 i_point);
+DUSK_NOINLINE s16 dComIfGs_getRestartRoomAngleY();
+DUSK_NOINLINE const cXyz& dComIfGs_getRestartRoomPos();
+DUSK_NOINLINE u32 dComIfGs_getRestartRoomParam();
+DUSK_NOINLINE void dComIfGs_setRestartRoomParam(u32 i_param);
+DUSK_NOINLINE f32 dComIfGs_getLastSceneSpeedF();
+DUSK_NOINLINE u32 dComIfGs_getLastSceneMode();
+DUSK_NOINLINE s16 dComIfGs_getLastSceneAngleY();
+DUSK_NOINLINE void dComIfGs_setRestartRoom(const cXyz& i_position, s16 i_angle, s8 i_roomNo);
+DUSK_NOINLINE void dComIfGs_onTmpBit(const u16 i_flag);
+DUSK_NOINLINE void dComIfGs_offTmpBit(const u16 i_flag);
+DUSK_NOINLINE BOOL dComIfGs_isTmpBit(const u16 i_flag);
+DUSK_NOINLINE void dComIfGs_setTmpReg(u16 i_reg, u8 i_no);
+DUSK_NOINLINE u8 dComIfGs_getTmpReg(const u16 i_reg);
+DUSK_NOINLINE dSv_turnRestart_c& dComIfGs_getTurnRestart();
+DUSK_NOINLINE const cXyz& dComIfGs_getTurnRestartPos();
+DUSK_NOINLINE u32 dComIfGs_getTurnRestartParam();
+DUSK_NOINLINE s16 dComIfGs_getTurnRestartAngleY();
+DUSK_NOINLINE s8 dComIfGs_getTurnRestartRoomNo();
+DUSK_NOINLINE void dComIfGs_setTurnRestart(
+    const cXyz& i_position, s16 i_angle, s8 param_2, u32 i_param);
+DUSK_NOINLINE u8 dComIfGs_getDataNum();
+DUSK_NOINLINE void dComIfGs_setDataNum(u8 i_num);
+DUSK_NOINLINE u8 dComIfGs_getNewFile();
+DUSK_NOINLINE void dComIfGs_setNewFile(u8 i_fileNo);
+DUSK_NOINLINE u8 dComIfGs_getNoFile();
+DUSK_NOINLINE void dComIfGs_setNoFile(u8 i_file);
+DUSK_NOINLINE s64 dComIfGs_getSaveStartTime();
+DUSK_NOINLINE void dComIfGs_setSaveStartTime(s64 i_time);
+DUSK_NOINLINE s64 dComIfGs_getSaveTotalTime();
+DUSK_NOINLINE void dComIfGs_setSaveTotalTime(s64 i_time);
+DUSK_NOINLINE void dComIfGs_init();
+DUSK_NOINLINE void dComIfGs_getSave(int i_stageNo);
+DUSK_NOINLINE void dComIfGs_putSave(int i_stageNo);
+DUSK_NOINLINE void dComIfGs_initZone();
+DUSK_NOINLINE int dComIfGs_createZone(int roomNo);
+DUSK_NOINLINE void dComIfGs_onSwitch(int i_no, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_offSwitch(int i_no, int i_roomNo);
+DUSK_NOINLINE BOOL dComIfGs_isSwitch(int i_no, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_revSwitch(int i_no, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_onItem(int i_bitNo, int i_roomNo);
+DUSK_NOINLINE bool dComIfGs_isItem(int i_bitNo, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_onActor(int i_bitNo, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_offActor(int i_no, int i_roomNo);
+DUSK_NOINLINE BOOL dComIfGs_isActor(int i_no, int i_roomNo);
+DUSK_NOINLINE void dComIfGs_setMemoryToCard(u8* i_saveData, int i_dataNum);
+DUSK_NOINLINE void dComIfGs_setCardToMemory(u8* card_ptr, int dataNum);
+DUSK_NOINLINE void dComIfGs_setInitDataToCard(u8* i_saveData, int i_dataNum);
+DUSK_NOINLINE u8 dComIfGs_getWolfAbility(int i_idx);
+DUSK_NOINLINE s8 dComIfGs_Grass_hide_Check();
+DUSK_NOINLINE dStage_startStage_c* dComIfGp_getStartStage();
+DUSK_NOINLINE void dComIfGp_setStartStage(dStage_startStage_c* p_startStage);
+DUSK_NOINLINE const char* dComIfGp_getStartStageName();
+DUSK_NOINLINE s16 dComIfGp_getStartStagePoint();
+DUSK_NOINLINE s8 dComIfGp_getStartStageRoomNo();
+DUSK_NOINLINE s8 dComIfGp_getStartStageLayer();
+DUSK_NOINLINE void dComIfGp_setStartStageLayer(s8 layer);
+DUSK_NOINLINE s8 dComIfGp_getStartStageDarkArea();
+DUSK_NOINLINE void dComIfGp_setStartStageDarkArea(s8 darkArea);
+DUSK_NOINLINE dStage_startStage_c* dComIfGp_getNextStartStage();
+DUSK_NOINLINE const char* dComIfGp_getNextStageName();
+DUSK_NOINLINE s16 dComIfGp_getNextStagePoint();
+DUSK_NOINLINE s16 dComIfGp_getNextStageRoomNo();
+DUSK_NOINLINE s16 dComIfGp_getNextStageLayer();
+DUSK_NOINLINE BOOL dComIfGp_isEnableNextStage();
+DUSK_NOINLINE void dComIfGp_offEnableNextStage();
+DUSK_NOINLINE s8 dComIfGp_getNextStageWipe();
+DUSK_NOINLINE u8 dComIfGp_getNextStageWipeSpeed();
+DUSK_NOINLINE dStage_stageDt_c* dComIfGp_getStage();
+DUSK_NOINLINE roomRead_class* dComIfGp_getStageRoom();
+DUSK_NOINLINE stage_palette_info_class* dComIfGp_getStagePaletteInfo();
+DUSK_NOINLINE stage_pselect_info_class* dComIfGp_getStagePselectInfo();
+DUSK_NOINLINE stage_envr_info_class* dComIfGp_getStageEnvrInfo();
+DUSK_NOINLINE stage_vrboxcol_info_class* dComIfGp_getStageVrboxcolInfo();
+DUSK_NOINLINE stage_plight_info_class* dComIfGp_getStagePlightInfo();
+DUSK_NOINLINE int dComIfGp_getStagePaletteNumInfo();
+DUSK_NOINLINE int dComIfGp_getStagePselectNumInfo();
+DUSK_NOINLINE int dComIfGp_getStageEnvrNumInfo();
+DUSK_NOINLINE int dComIfGp_getStageVrboxcolNumInfo();
+DUSK_NOINLINE int dComIfGp_getStagePlightNumInfo();
+DUSK_NOINLINE stage_stag_info_class* dComIfGp_getStageStagInfo();
+DUSK_NOINLINE stage_scls_info_dummy_class* dComIfGp_getStageSclsInfo();
+DUSK_NOINLINE dStage_Multi_c* dComIfGp_getMulti();
+DUSK_NOINLINE void dComIfGp_setOldMulti();
+DUSK_NOINLINE void dComIfGp_resetOldMulti();
+DUSK_NOINLINE s16 dComIfGp_getStageWorldRollAngleX();
+DUSK_NOINLINE s16 dComIfGp_getStageWorldRollDirAngleY();
+DUSK_NOINLINE int dComIfGp_roomControl_getStayNo();
+DUSK_NOINLINE BOOL dComIfGp_roomControl_getTimePass();
+DUSK_NOINLINE void dComIfGp_roomControl_setTimePass(int isPassing);
+DUSK_NOINLINE dKy_tevstr_c* dComIfGp_roomControl_getTevStr(int i_roomNo);
+DUSK_NOINLINE void dComIfGp_roomControl_setStatusFlag(int i_roomNo, u8 flag);
+DUSK_NOINLINE void dComIfGp_roomControl_onStatusFlag(int i_roomNo, u8 flag);
+DUSK_NOINLINE void dComIfGp_roomControl_offStatusFlag(int i_roomNo, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_roomControl_checkStatusFlag(int i_roomNo, u8 flag);
+DUSK_NOINLINE s32 dComIfGp_roomControl_getZoneNo(int i_roomNo);
+DUSK_NOINLINE void dComIfGp_roomControl_setZoneNo(int roomNo, int zoneNo);
+DUSK_NOINLINE void dComIfGp_roomControl_init();
+DUSK_NOINLINE void dComIfGp_roomControl_initZone();
+DUSK_NOINLINE dStage_roomDt_c* dComIfGp_roomControl_getStatusRoomDt(int room_no);
+DUSK_NOINLINE void dComIfGp_roomControl_setStayNo(int stayNo);
+DUSK_NOINLINE BOOL dComIfGp_roomControl_checkRoomDisp(int i_roomNo);
+DUSK_NOINLINE int dComIfGp_roomControl_loadRoom(int param_0, u8* param_1, bool param_2);
+DUSK_NOINLINE void dComIfGp_roomControl_zoneCountCheck(int i_roomNo);
+DUSK_NOINLINE dEvt_control_c* dComIfGp_getEvent();
+DUSK_NOINLINE u16 dComIfGp_event_chkEventFlag(u16 i_flag);
+DUSK_NOINLINE void dComIfGp_event_onEventFlag(u16 i_flag);
+DUSK_NOINLINE void dComIfGp_event_onHindFlag(u16 i_flag);
+DUSK_NOINLINE void dComIfGp_event_offHindFlag(u16 i_flag);
+DUSK_NOINLINE u8 dComIfGp_event_getMode();
+DUSK_NOINLINE BOOL dComIfGp_event_runCheck();
+DUSK_NOINLINE u16 dComIfGp_event_checkHind(u16 i_hindFlag);
+DUSK_NOINLINE BOOL dComIfGp_event_chkTalkXY();
+DUSK_NOINLINE u8 dComIfGp_event_getPreItemNo();
+DUSK_NOINLINE f32 dComIfGp_event_getCullRate();
+DUSK_NOINLINE void dComIfGp_event_setCullRate(f32 i_rate);
+DUSK_NOINLINE int dComIfGp_event_order(u16 i_type, u16 i_prio, u16 i_flags, u16 i_hindFlags,
+    void* i_requestActor, void* i_targetActor, s16 i_eventID, u8 i_mapToolId);
+DUSK_NOINLINE void dComIfGp_event_reset();
+DUSK_NOINLINE int dComIfGp_event_moveApproval(void* i_actor);
+DUSK_NOINLINE BOOL dComIfGp_event_compulsory(
+    void* i_actor, const char* i_eventname, u16 i_hindFlag);
+DUSK_NOINLINE void dComIfGp_event_remove();
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_event_getPt1();
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_event_getPt2();
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_event_getTalkPartner();
+DUSK_NOINLINE void dComIfGp_event_setTalkPartner(void* i_actor);
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_event_getItemPartner();
+DUSK_NOINLINE void dComIfGp_event_setItemPartner(void* i_actor);
+DUSK_NOINLINE void dComIfGp_event_setItemPartnerId(fpc_ProcID i_id);
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_event_getDoorPartner();
+DUSK_NOINLINE void dComIfGp_event_setDoorPartner(void* i_partner);
+DUSK_NOINLINE u8 dComIfGp_event_getGtItm();
+DUSK_NOINLINE void dComIfGp_event_setGtItm(u8 i_itemNo);
+DUSK_NOINLINE dEvent_manager_c& dComIfGp_getEventManager();
+DUSK_NOINLINE dEvent_manager_c* dComIfGp_getPEvtManager();
+DUSK_NOINLINE int dComIfGp_evmng_cameraPlay();
+DUSK_NOINLINE int dComIfGp_evmng_startDemo(int i_mapToolId);
+DUSK_NOINLINE void dComIfGp_evmng_create();
+DUSK_NOINLINE void dComIfGp_evmng_remove();
+DUSK_NOINLINE bool dComIfGp_evmng_existence(s16 eventId);
+DUSK_NOINLINE s16 dComIfGp_evmng_getEventIdx(const char* eventName, u8 mapToolID);
+DUSK_NOINLINE bool dComIfGp_evmng_existence(const char* eventname);
+DUSK_NOINLINE BOOL dComIfGp_evmng_isMapToolCamera(u8 mapToolID);
+DUSK_NOINLINE BOOL dComIfGp_evmng_startCheck(s16 i_eventId);
+DUSK_NOINLINE BOOL dComIfGp_evmng_startCheck(char const* i_eventname);
+DUSK_NOINLINE BOOL dComIfGp_evmng_endCheck(s16 i_eventID);
+DUSK_NOINLINE BOOL dComIfGp_evmng_endCheck(const char* i_eventname);
+DUSK_NOINLINE int dComIfGp_evmng_getMyStaffId(
+    const char* i_staffname, fopAc_ac_c* i_actor, int i_tagId);
+DUSK_NOINLINE int dComIfGp_evmng_getIsAddvance(int i_staffId);
+DUSK_NOINLINE int dComIfGp_evmng_getMyActIdx(int i_staffId, DUSK_CONST char* DUSK_CONST* i_actions,
+    int i_actionNum, BOOL param_3, BOOL param_4);
+DUSK_NOINLINE f32* dComIfGp_evmng_getMyFloatP(int i_staffId, DUSK_CONST char* i_dataname);
+DUSK_NOINLINE cXyz* dComIfGp_evmng_getMyXyzP(int i_staffId, DUSK_CONST char* i_dataname);
+DUSK_NOINLINE int* dComIfGp_evmng_getMyIntegerP(int i_staffId, DUSK_CONST char* i_dataname);
+DUSK_NOINLINE char* dComIfGp_evmng_getMyStringP(int i_staffId, DUSK_CONST char* i_dataname);
+DUSK_NOINLINE int dComIfGp_evmng_getMySubstanceNum(int i_staffId, DUSK_CONST char* i_dataname);
+DUSK_NOINLINE void dComIfGp_evmng_cutEnd(int i_staffId);
+DUSK_NOINLINE void dComIfGp_evmng_setGoal(cXyz* i_pos);
+DUSK_NOINLINE cXyz* dComIfGp_evmng_getGoal();
+DUSK_NOINLINE BOOL dComIfGp_evmng_ChkPresentEnd();
+DUSK_NOINLINE int dComIfGp_evmng_checkStartDemo();
+DUSK_NOINLINE dAttention_c* dComIfGp_getAttention();
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_att_getZHint();
+DUSK_NOINLINE int dComIfGp_att_ZHintRequest(fopAc_ac_c* param_1, int param_2);
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_att_getCatghTarget();
+DUSK_NOINLINE u8 dComIfGp_att_getCatchChgItem();
+DUSK_NOINLINE int dComIfGp_att_CatchRequest(fopAc_ac_c* param_0, u8 param_1, f32 i_horizontalDist,
+    f32 i_upDist, f32 i_downDist, s16 i_angle, int param_5);
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_att_getLookTarget();
+DUSK_NOINLINE void dComIfGp_att_LookRequest(fopAc_ac_c* param_0, f32 i_horizontalDist, f32 i_upDist,
+    f32 i_downDist, s16 i_angle, int param_5);
+DUSK_NOINLINE dVibration_c& dComIfGp_getVibration();
+DUSK_NOINLINE JKRAramArchive* dComIfGp_getFieldMapArchive2();
+DUSK_NOINLINE void dComIfGp_setFieldMapArchive2(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getMsgArchive(int idx);
+DUSK_NOINLINE void dComIfGp_setMsgArchive(int i, JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getDemoMsgArchive();
+DUSK_NOINLINE void dComIfGp_setDemoMsgArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getMeterButtonArchive();
+DUSK_NOINLINE void dComIfGp_setMeterButtonArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getFontArchive();
+DUSK_NOINLINE void dComIfGp_setFontArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getRubyArchive();
+DUSK_NOINLINE void dComIfGp_setRubyArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getAnmArchive();
+DUSK_NOINLINE void dComIfGp_setAnmArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getCollectResArchive();
+DUSK_NOINLINE void dComIfGp_setCollectResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getFmapResArchive();
+DUSK_NOINLINE void dComIfGp_setFmapResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getDmapResArchive();
+DUSK_NOINLINE void dComIfGp_setDmapResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getOptionResArchive();
+DUSK_NOINLINE void dComIfGp_setOptionResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getItemIconArchive();
+DUSK_NOINLINE void dComIfGp_setItemIconArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getNameResArchive();
+DUSK_NOINLINE void dComIfGp_setNameResArchive(JKRArchive* arc);
+DUSK_NOINLINE void dComIfGp_setErrorResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getAllMapArchive();
+DUSK_NOINLINE void dComIfGp_setAllMapArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getMsgCommonArchive();
+DUSK_NOINLINE void dComIfGp_setMsgCommonArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getRingResArchive();
+DUSK_NOINLINE void dComIfGp_setRingResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getCardIconResArchive();
+DUSK_NOINLINE void dComIfGp_setCardIconResArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getMsgDtArchive();
+DUSK_NOINLINE JKRArchive* dComIfGp_getMsgDtArchive(int idx);
+DUSK_NOINLINE void dComIfGp_setMsgDtArchive(int i, JKRArchive* arc);
+DUSK_NOINLINE JKRArchive* dComIfGp_getMain2DArchive();
+DUSK_NOINLINE void dComIfGp_setMain2DArchive(JKRArchive* arc);
+DUSK_NOINLINE JKRExpHeap* dComIfGp_particle_getResHeap();
+DUSK_NOINLINE void dComIfGp_particle_levelExecute(u32 param_0);
+DUSK_NOINLINE void dComIfGp_particle_createCommon(const void* data);
+DUSK_NOINLINE void dComIfGp_particle_readScene(u8 particle_no, mDoDvdThd_toMainRam_c** param_1);
+DUSK_NOINLINE void dComIfGp_particle_createScene(const void* param_0);
+DUSK_NOINLINE void dComIfGp_particle_removeScene(bool param_0);
+DUSK_NOINLINE void dComIfGp_particle_cleanup();
+DUSK_NOINLINE void dComIfGp_particle_calc3D();
+DUSK_NOINLINE void dComIfGp_particle_calc2D();
+DUSK_NOINLINE void dComIfGp_particle_calcMenu();
+DUSK_NOINLINE void dComIfGp_particle_draw(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFog(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawP1(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawProjection(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawNormalPri0_A(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawNormalPri0_B(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFogPri0_A(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFogPri0_B(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFogPri1(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFogPri2(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFogPri3(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawFogPri4(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawDarkworld(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_drawScreen(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_draw2Dgame(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_draw2Dfore(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_draw2Dback(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_draw2DmenuFore(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_particle_draw2DmenuBack(JPADrawInfo* i_drawInfo);
+DUSK_NOINLINE void dComIfGp_setHitMark(u16 i_hitmark, fopAc_ac_c* param_1, const cXyz* param_2,
+    const csXyz* param_3, const cXyz* param_4, u32 i_atType);
+DUSK_NOINLINE void dComIfGp_particle_setWaterRipple(u32* param_0, cBgS_PolyInfo& param_1,
+    const cXyz* param_2, f32 param_3, const dKy_tevstr_c* param_4, const cXyz* param_5, s8 param_6);
+DUSK_NOINLINE u32 dComIfGp_particle_setPolyColor(u32 param_0, u16 param_1, cBgS_PolyInfo& param_2,
+    const cXyz* param_3, const dKy_tevstr_c* param_4, const csXyz* param_5, const cXyz* param_6,
+    int param_7, dPa_levelEcallBack* param_8, s8 param_9, const cXyz* param_10);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_setPolyColor(u16 param_1, cBgS_PolyInfo& param_2,
+    const cXyz* param_3, const dKy_tevstr_c* param_4, const csXyz* param_5, const cXyz* param_6,
+    int param_7, dPa_levelEcallBack* param_8, s8 param_9, const cXyz* param_10);
+DUSK_NOINLINE void dComIfGp_particle_setSimple(u16 param_0, cXyz* i_pos, u8 param_2,
+    GXColor& param_3, GXColor& param_4, int param_5, float param_6);
+DUSK_NOINLINE u32 dComIfGp_particle_setStopContinue(u32 param_0);
+DUSK_NOINLINE u32 dComIfGp_particle_setSimpleFoot(u32 param_0, u32* param_1, cBgS_PolyInfo& param_2,
+    cXyz const* param_3, dKy_tevstr_c const* param_4, int param_5, csXyz const* param_6,
+    cXyz const* param_7, dPa_levelEcallBack* param_8, s8 param_9, cXyz const* param_10);
+DUSK_NOINLINE u16 dComIfGp_particle_setCommonPoly(u32* param_0, cBgS_PolyInfo* param_1,
+    const cXyz* param_2, const cXyz* param_3, const dKy_tevstr_c* param_4, u32 param_5, u32 param_6,
+    const csXyz* param_7, const cXyz* param_8, s8 param_9);
+DUSK_NOINLINE void dComIfGp_particle_levelEmitterOnEventMove(u32 param_0);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_getEmitter(u32 param_0);
+DUSK_NOINLINE u32 dComIfGp_particle_set(u32 param_0, u16 param_1, const cXyz* i_pos,
+    const dKy_tevstr_c* param_3, const csXyz* i_rotation, const cXyz* i_scale, u8 i_alpha,
+    dPa_levelEcallBack* param_7, s8 param_8, const GXColor* param_9, const GXColor* param_10,
+    const cXyz* param_11);
+DUSK_NOINLINE u32 dComIfGp_particle_set(u32 param_0, u16 param_1, const cXyz* i_pos,
+    const csXyz* i_rotation, const cXyz* i_scale, u8 param_5, dPa_levelEcallBack* param_6,
+    s8 param_7, const GXColor* param_8, const GXColor* param_9, const cXyz* param_10);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_set(u16 i_resID, const cXyz* i_pos,
+    const dKy_tevstr_c* param_3, const csXyz* i_rotation, const cXyz* i_scale, u8 i_alpha,
+    dPa_levelEcallBack* i_callback, s8 param_8, const GXColor* i_prmColor,
+    const GXColor* i_envColor, const cXyz* i_particleScale);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_set(u16 i_resID, const cXyz* i_pos,
+    const csXyz* i_rotation, const cXyz* i_scale, u8 i_alpha, dPa_levelEcallBack* i_callback,
+    s8 param_7, const GXColor* i_prmColor, const GXColor* i_envColor, const cXyz* i_particleScale);
+DUSK_NOINLINE u32 dComIfGp_particle_set(
+    u32 param_0, u16 param_1, const cXyz* i_pos, const dKy_tevstr_c* param_3);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_set(
+    u16 i_resID, const cXyz* i_pos, const csXyz* i_rotation, const cXyz* i_scale);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_set(u16 i_resID, const cXyz* i_pos,
+    const dKy_tevstr_c* param_2, const csXyz* i_rotation, const cXyz* i_scale);
+DUSK_NOINLINE u32 dComIfGp_particle_set(
+    u32 param_0, u16 param_1, const cXyz* i_pos, const csXyz* param_3, const cXyz* param_4);
+DUSK_NOINLINE u32 dComIfGp_particle_setColor(u32 param_0, u16 param_1, const cXyz* i_pos,
+    const dKy_tevstr_c* param_3, const GXColor* param_4, const GXColor* param_5, f32 param_6,
+    u8 param_7, const csXyz* param_8, const cXyz* param_9, dPa_levelEcallBack* param_10,
+    s8 param_11, const cXyz* param_12);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_setColor(u16 param_0, const cXyz* i_pos,
+    const dKy_tevstr_c* param_2, const GXColor* param_3, const GXColor* param_4, f32 param_5,
+    u8 param_6, const csXyz* param_7, const cXyz* param_8, dPa_levelEcallBack* param_9, s8 param_10,
+    const cXyz* param_11);
+DUSK_NOINLINE JPABaseEmitter* dComIfGp_particle_setColor(u16 param_0, const cXyz* i_pos,
+    const dKy_tevstr_c* param_2, const GXColor* param_3, const GXColor* param_4, f32 param_5,
+    u8 param_6);
+DUSK_NOINLINE u32 dComIfGp_particle_getHeapSize();
+DUSK_NOINLINE u32 dComIfGp_particle_getSceneHeapSize();
+DUSK_NOINLINE int dComIfGp_particle_getEmitterNum();
+DUSK_NOINLINE int dComIfGp_particle_getParticleNum();
+DUSK_NOINLINE dSmplMdl_draw_c* dComIfGp_getSimpleModel();
+DUSK_NOINLINE int dComIfGp_getWindowNum();
+DUSK_NOINLINE void dComIfGp_setWindowNum(int num);
+DUSK_NOINLINE s8 dComIfGp_getLayerOld();
+DUSK_NOINLINE s32 dComIfGp_checkStatus(u16 flags);
+DUSK_NOINLINE void dComIfGp_setStatus(u16 status);
+DUSK_NOINLINE void dComIfGp_onStatus(u16 i_status);
+DUSK_NOINLINE dDlst_window_c* dComIfGp_getWindow(int i);
+DUSK_NOINLINE void dComIfGp_setWindow(u8 i, f32 param_1, f32 param_2, f32 param_3, f32 param_4,
+    f32 param_5, f32 param_6, int camID, int mode);
+DUSK_NOINLINE camera_process_class* dComIfGp_getCamera(int idx);
+DUSK_NOINLINE void dComIfGp_setCamera(int i, camera_class* cam);
+DUSK_NOINLINE int dComIfGp_getCameraWinID(int idx);
+DUSK_NOINLINE int dComIfGp_getCameraPlayer1ID(int idx);
+DUSK_NOINLINE int dComIfGp_getCameraPlayer2ID(int idx);
+DUSK_NOINLINE u32 dComIfGp_getCameraAttentionStatus(int i_no);
+DUSK_NOINLINE BOOL dComIfGp_checkCameraAttentionStatus(int i, u32 flag);
+DUSK_NOINLINE void dComIfGp_onCameraAttentionStatus(int i, u32 flag);
+DUSK_NOINLINE void dComIfGp_offCameraAttentionStatus(int i, u32 flag);
+DUSK_NOINLINE void dComIfGp_setCameraInfo(
+    int camIdx, camera_class* p_cam, int param_2, int param_3, int param_4);
+DUSK_NOINLINE f32 dComIfGp_getCameraZoomScale(int i_no);
+DUSK_NOINLINE void dComIfGp_setCameraZoomScale(int i_no, f32 i_scale);
+DUSK_NOINLINE f32 dComIfGp_getCameraZoomForcus(int i_no);
+DUSK_NOINLINE void dComIfGp_setCameraZoomForcus(int i_no, f32 i_focus);
+DUSK_NOINLINE const char* dComIfGp_getCameraParamFileName(int i);
+DUSK_NOINLINE void dComIfGp_setCameraParamFileName(int i, char* name);
+DUSK_NOINLINE void dComIfGp_saveCameraPosition(
+    int i, cXyz* i_pos, cXyz* i_target, f32 i_fovy, s16 i_bank);
+DUSK_NOINLINE void dComIfGp_loadCameraPosition(
+    int i, cXyz* o_pos, cXyz* o_target, f32* o_fovy, s16* o_bank);
+DUSK_NOINLINE fopAc_ac_c* dComIfGp_getPlayer(int idx);
+DUSK_NOINLINE void dComIfGp_setPlayer(int i, fopAc_ac_c* player);
+DUSK_NOINLINE int dComIfGp_getPlayerCameraID(int idx);
+DUSK_NOINLINE void dComIfGp_setPlayerInfo(int plyrIdx, fopAc_ac_c* ptr, int camIdx);
+DUSK_NOINLINE daPy_py_c* dComIfGp_getLinkPlayer();
+DUSK_NOINLINE daHorse_c* dComIfGp_getHorseActor();
+DUSK_NOINLINE void dComIfGp_setLinkPlayer(fopAc_ac_c* ptr);
+DUSK_NOINLINE void dComIfGp_setHorseActor(fopAc_ac_c* i_horse);
+DUSK_NOINLINE void dComIfGp_setPlayerPtr(int i, fopAc_ac_c* ptr);
+DUSK_NOINLINE dMsgObject_c* dComIfGp_getMsgObjectClass();
+DUSK_NOINLINE void dComIfGp_setMsgObjectClass(dMsgObject_c* obj);
+DUSK_NOINLINE f32 dComIfGp_getItemLifeCount();
+DUSK_NOINLINE u8 dComIfGp_getItemLifeCountType();
+DUSK_NOINLINE void dComIfGp_setItemLifeCount(f32 amount, u8 type);
+DUSK_NOINLINE void dComIfGp_clearItemLifeCount();
+DUSK_NOINLINE s32 dComIfGp_getItemRupeeCount();
+DUSK_NOINLINE void dComIfGp_setItemRupeeCount(s32 amount);
+DUSK_NOINLINE void dComIfGp_clearItemRupeeCount();
+DUSK_NOINLINE s16 dComIfGp_getItemKeyNumCount();
+DUSK_NOINLINE void dComIfGp_setItemKeyNumCount(s16 count);
+DUSK_NOINLINE void dComIfGp_clearItemKeyNumCount();
+DUSK_NOINLINE s16 dComIfGp_getItemMaxLifeCount();
+DUSK_NOINLINE void dComIfGp_setItemMaxLifeCount(s16 count);
+DUSK_NOINLINE void dComIfGp_clearItemMaxLifeCount();
+DUSK_NOINLINE void dComIfGp_setItemMagicCount(s16 count);
+DUSK_NOINLINE void dComIfGp_setItemNowMagic(s16 magic);
+DUSK_NOINLINE void dComIfGp_setItemMaxMagicCount(s16 count);
+DUSK_NOINLINE s32 dComIfGp_getItemOilCount();
+DUSK_NOINLINE void dComIfGp_setItemOilCount(s32 oil);
+DUSK_NOINLINE void dComIfGp_setItemMaxOilCount(s32 oil);
+DUSK_NOINLINE void dComIfGp_clearItemOilCount();
+DUSK_NOINLINE s32 dComIfGp_getItemNowOil();
+DUSK_NOINLINE void dComIfGp_setItemNowOil(s32 oil);
+DUSK_NOINLINE s32 dComIfGp_getItemMaxOilCount();
+DUSK_NOINLINE void dComIfGp_clearItemMaxOilCount();
+DUSK_NOINLINE int dComIfGp_getOxygen();
+DUSK_NOINLINE void dComIfGp_setOxygen(s32 oxygen);
+DUSK_NOINLINE int dComIfGp_getNowOxygen();
+DUSK_NOINLINE void dComIfGp_setNowOxygen(s32 oxygen);
+DUSK_NOINLINE s32 dComIfGp_getMaxOxygen();
+DUSK_NOINLINE void dComIfGp_setMaxOxygen(s32 i_oxygen);
+DUSK_NOINLINE s32 dComIfGp_getOxygenCount();
+DUSK_NOINLINE void dComIfGp_setOxygenCount(s32 oxygen);
+DUSK_NOINLINE void dComIfGp_clearOxygenCount();
+DUSK_NOINLINE void dComIfGp_setMaxOxygenCount(s32 oxygen);
+DUSK_NOINLINE s32 dComIfGp_getMaxOxygenCount();
+DUSK_NOINLINE void dComIfGp_clearMaxOxygenCount();
+DUSK_NOINLINE s16 dComIfGp_getItemArrowNumCount();
+DUSK_NOINLINE void dComIfGp_setItemArrowNumCount(s16 count);
+DUSK_NOINLINE void dComIfGp_clearItemArrowNumCount();
+DUSK_NOINLINE s16 dComIfGp_getItemPachinkoNumCount();
+DUSK_NOINLINE void dComIfGp_setItemPachinkoNumCount(s16 count);
+DUSK_NOINLINE void dComIfGp_clearItemPachinkoNumCount();
+DUSK_NOINLINE s16 dComIfGp_getItemMaxArrowNumCount();
+DUSK_NOINLINE int dComIfGp_getMessageCountNumber();
+DUSK_NOINLINE void dComIfGp_setMessageCountNumber(s32 number);
+DUSK_NOINLINE u16 dComIfGp_getItemNowLife();
+DUSK_NOINLINE void dComIfGp_setItemNowLife(u16 life);
+DUSK_NOINLINE u8 dComIfGp_getMesgStatus();
+DUSK_NOINLINE u8 dComIfGp_getRStatus();
+DUSK_NOINLINE bool dComIfGp_isRSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setRStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getRStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getRSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setRStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getAStatus();
+DUSK_NOINLINE bool dComIfGp_isASetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setAStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getAStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getASetFlagForce();
+DUSK_NOINLINE void dComIfGp_setAStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getNunStatus();
+DUSK_NOINLINE bool dComIfGp_isNunSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setNunStatus(u8 status, u8 param_1, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getBottleStatus();
+DUSK_NOINLINE bool dComIfGp_isBottleSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setBottleStatus(u8 param_0, u8 param_1);
+DUSK_NOINLINE u8 dComIfGp_getBottleStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getBottleSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setBottleStatusForce(u8 param_0, u8 param_1);
+DUSK_NOINLINE u8 dComIfGp_getRemoConStatus();
+DUSK_NOINLINE bool dComIfGp_isRemoConSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setRemoConStatus(u8 status, u8 param_1, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getDoStatus();
+DUSK_NOINLINE bool dComIfGp_isDoSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setDoStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getDoStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getDoSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setDoStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_get3DStatus();
+DUSK_NOINLINE u8 dComIfGp_get3DDirection();
+DUSK_NOINLINE bool dComIfGp_is3DSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_set3DStatus(u8 status, u8 direction, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_get3DStatusForce();
+DUSK_NOINLINE u8 dComIfGp_get3DDirectionForce();
+DUSK_NOINLINE u8 dComIfGp_get3DSetFlagForce();
+DUSK_NOINLINE void dComIfGp_set3DStatusForce(u8 status, u8 direction, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getCStickStatus();
+DUSK_NOINLINE u8 dComIfGp_getCStickDirection();
+DUSK_NOINLINE bool dComIfGp_isCStickSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setCStickStatus(u8 status, u8 param_1, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getCStickStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getCStickDirectionForce();
+DUSK_NOINLINE u8 dComIfGp_getCStickSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setCStickStatusForce(u8 status, u8 param_1, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getSButtonStatus();
+DUSK_NOINLINE bool dComIfGp_isSButtonSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setSButtonStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getSButtonStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getSButtonSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setSButtonStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getZStatus();
+DUSK_NOINLINE bool dComIfGp_isZSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setZStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getZStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getZSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setZStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getXStatus();
+DUSK_NOINLINE bool dComIfGp_isXSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setXStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getXStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getXSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setXStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getYStatus();
+DUSK_NOINLINE bool dComIfGp_isYSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setYStatus(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getYStatusForce();
+DUSK_NOINLINE u8 dComIfGp_getYSetFlagForce();
+DUSK_NOINLINE void dComIfGp_setYStatusForce(u8 status, u8 flag);
+DUSK_NOINLINE u8 dComIfGp_getNunZStatus();
+DUSK_NOINLINE bool dComIfGp_isNunZSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setNunZStatus(u8 param_0, u8 param_1);
+DUSK_NOINLINE u8 dComIfGp_getNunCStatus();
+DUSK_NOINLINE bool dComIfGp_isNunCSetFlag(u8 flag);
+DUSK_NOINLINE void dComIfGp_setNunCStatus(u8 param_0, u8 param_1);
+DUSK_NOINLINE void dComIfGp_setSelectEquipClothes(u8 i_clothNo);
+DUSK_NOINLINE void dComIfGp_setSelectEquipSword(u8 i_swordNo);
+DUSK_NOINLINE void dComIfGp_setSelectEquipShield(u8 i_shieldNo);
+DUSK_NOINLINE u8 dComIfGp_getMesgAnimeAttrInfo();
+DUSK_NOINLINE void dComIfGp_setMesgAnimeAttrInfo(u8 param_1);
+DUSK_NOINLINE void dComIfGp_clearMesgAnimeAttrInfo();
+DUSK_NOINLINE u8 dComIfGp_getMesgFaceAnimeAttrInfo();
+DUSK_NOINLINE void dComIfGp_setMesgFaceAnimeAttrInfo(u8 id);
+DUSK_NOINLINE void dComIfGp_clearMesgFaceAnimeAttrInfo();
+DUSK_NOINLINE void dComIfGp_clearMesgAnimeTagInfo();
+DUSK_NOINLINE void dComIfGp_setItem(u8 slot, u8 i_no);
+DUSK_NOINLINE u8 dComIfGp_getAdvanceDirection();
+DUSK_NOINLINE void dComIfGp_setAdvanceDirection(u8 i_dir);
+DUSK_NOINLINE u8 dComIfGp_checkMesgCancelButton();
+DUSK_NOINLINE void dComIfGp_setMesgCancelButton(u8 button);
+DUSK_NOINLINE u8 dComIfGp_getGameoverStatus();
+DUSK_NOINLINE void dComIfGp_setGameoverStatus(u8 i_status);
+DUSK_NOINLINE u8 dComIfGp_isHeapLockFlag();
+DUSK_NOINLINE u8 dComIfGp_getSubHeapLockFlag(int idx);
+DUSK_NOINLINE void dComIfGp_setSubHeapLockFlag(int idx, u8 status);
+DUSK_NOINLINE u8 dComIfGp_getNeedLightDropNum();
+DUSK_NOINLINE void dComIfGp_setNeedLightDropNum(u8 i_num);
+DUSK_NOINLINE u8 dComIfGp_checkMesgBgm();
+DUSK_NOINLINE void dComIfGp_setMesgBgmOff();
+DUSK_NOINLINE void dComIfGp_setMesgBgmOn();
+DUSK_NOINLINE u8 dComIfGp_isPauseFlag();
+DUSK_NOINLINE void dComIfGp_offPauseFlag();
+DUSK_NOINLINE void dComIfGp_onPauseFlag();
+DUSK_NOINLINE u8 dComIfGp_getOxygenShowFlag();
+DUSK_NOINLINE void dComIfGp_offOxygenShowFlag();
+DUSK_NOINLINE void dComIfGp_onOxygenShowFlag();
+DUSK_NOINLINE u8 dComIfGp_2dShowCheck();
+DUSK_NOINLINE void dComIfGp_2dShowOn();
+DUSK_NOINLINE void dComIfGp_2dShowOff();
+DUSK_NOINLINE JKRExpHeap* dComIfGp_getExpHeap2D();
+DUSK_NOINLINE void dComIfGp_setExpHeap2D(void* heap);
+DUSK_NOINLINE JKRExpHeap* dComIfGp_getSubExpHeap2D(int idx);
+DUSK_NOINLINE void dComIfGp_setSubExpHeap2D(int idx, void* heap);
+DUSK_NOINLINE JKRExpHeap* dComIfGp_getMsgExpHeap();
+DUSK_NOINLINE void dComIfGp_setMsgExpHeap(void* heap);
+DUSK_NOINLINE dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo();
+DUSK_NOINLINE void dComIfGp_setMesgCameraTagInfo(int id);
+DUSK_NOINLINE void dComIfGp_clearMesgCameraTagInfo();
+DUSK_NOINLINE void dComIfGp_setMesgCameraAttrInfo(int param_1);
+DUSK_NOINLINE void dComIfGp_clearMesgCameraAttrInfo();
+DUSK_NOINLINE void dComIfGp_setMesgCameraInfoActor(fopAc_ac_c* param_1, fopAc_ac_c* param_2,
+    fopAc_ac_c* param_3, fopAc_ac_c* param_4, fopAc_ac_c* param_5, fopAc_ac_c* param_6,
+    fopAc_ac_c* param_7, fopAc_ac_c* param_8, fopAc_ac_c* param_9, fopAc_ac_c* param_10);
+DUSK_NOINLINE u32 dComIfGp_checkPlayerStatus0(int param_0, u32 flag);
+DUSK_NOINLINE u32 dComIfGp_checkPlayerStatus1(int param_0, u32 flag);
+DUSK_NOINLINE void dComIfGp_setPlayerStatus0(int param_0, u32 flag);
+DUSK_NOINLINE void dComIfGp_setPlayerStatus1(int param_0, u32 flag);
+DUSK_NOINLINE void dComIfGp_clearPlayerStatus0(int param_0, u32 flag);
+DUSK_NOINLINE void dComIfGp_clearPlayerStatus1(int param_0, u32 flag);
+DUSK_NOINLINE void dComIfGp_setCurrentWindow(dDlst_window_c* i_window);
+DUSK_NOINLINE void dComIfGp_setCurrentView(view_class* i_view);
+DUSK_NOINLINE void dComIfGp_setCurrentViewport(view_port_class* i_viewport);
+DUSK_NOINLINE J2DGrafContext* dComIfGp_getCurrentGrafPort();
+DUSK_NOINLINE void dComIfGp_setCurrentGrafPort(J2DOrthoGraph* i_graf);
+DUSK_NOINLINE void* dComIfGp_getItemTable();
+DUSK_NOINLINE void dComIfGp_setItemTable(void* data);
+DUSK_NOINLINE char* dComIfGp_getLastPlayStageName();
+DUSK_NOINLINE void dComIfGp_setLastPlayStageName(char* name);
+DUSK_NOINLINE void dComIfGp_init();
+DUSK_NOINLINE void dComIfGp_itemDataInit();
+DUSK_NOINLINE void dComIfGp_setItemBombNumCount(u8 i_item, s16 count);
+DUSK_NOINLINE s16 dComIfGp_getItemBombNumCount(u8 i_no);
+DUSK_NOINLINE void dComIfGp_clearItemBombNumCount(u8 i_no);
+DUSK_NOINLINE s16 dComIfGp_getItemMaxBombNumCount();
+DUSK_NOINLINE void dComIfGp_setNowVibration(u8 status);
+DUSK_NOINLINE u32 dComIfGp_getNowVibration();
+DUSK_NOINLINE void dComIfGp_particle_create();
+DUSK_NOINLINE void dComIfGp_createSimpleModel();
+DUSK_NOINLINE void dComIfGp_deleteSimpleModel();
+DUSK_NOINLINE void dComIfGp_drawSimpleModel();
+DUSK_NOINLINE int dComIfGp_addSimpleModel(J3DModelData* i_modelData, int roomNo, u8 i_drawBG);
+DUSK_NOINLINE void dComIfGp_removeSimpleModel(J3DModelData* i_modelData, int roomNo);
+DUSK_NOINLINE void dComIfGp_entrySimpleModel(J3DModel* model, int roomNo);
+DUSK_NOINLINE void dComIfG_ct();
+DUSK_NOINLINE dBgS& dComIfG_Bgsp();
+DUSK_NOINLINE dCcS* dComIfG_Ccsp();
+DUSK_NOINLINE dCcS& dComIfG_Ccsp2();
+DUSK_NOINLINE void dComIfG_setTimerNowTimeMs(int time);
+DUSK_NOINLINE int dComIfG_getTimerNowTimeMs();
+DUSK_NOINLINE void dComIfG_setTimerLimitTimeMs(int i_time);
+DUSK_NOINLINE int dComIfG_getTimerLimitTimeMs();
+DUSK_NOINLINE void dComIfG_setTimerMode(int mode);
+DUSK_NOINLINE int dComIfG_getTimerMode();
+DUSK_NOINLINE void dComIfG_setTimerType(u8 i_type);
+DUSK_NOINLINE u8 dComIfG_getTimerType();
+DUSK_NOINLINE void dComIfG_setTimerPtr(dTimer_c* i_ptr);
+DUSK_NOINLINE dTimer_c* dComIfG_getTimerPtr();
+
+/**
+ * Attempts to add a new Object Resource Archive (*.arc) into the Resource Control.
+ * @param i_arcName Name of archive to be added
+ * @param i_mountDirection The direction to mount the archive. mDoDvd_MOUNT_DIRECTION_HEAD or
+ * mDoDvd_MOUNT_DIRECTION_TAIL
+ * @param i_heap Pointer to heap to load resources into
+ * @return TRUE if successful, FALSE otherwise
+ */
+DUSK_NOINLINE int dComIfG_setObjectRes(const char* i_arcName, u8 i_mountDirection, JKRHeap* i_heap);
+DUSK_NOINLINE int dComIfG_setObjectRes(
+    const char* i_arcName, void* i_archiveRes, u32 i_bufferSize, JKRHeap* i_heap);
+
+/**
+ * Attempts to add a new Stage Resource Archive (*.arc) into the Resource Control.
+ * @param i_arcName Name of archive to be added
+ * @param i_heap Pointer to heap to load resources into
+ * @return TRUE if successful, FALSE otherwise
+ */
+DUSK_NOINLINE int dComIfG_setStageRes(const char* i_arcName, JKRHeap* i_heap);
+DUSK_NOINLINE int dComIfG_syncObjectRes(const char* i_arcName);
+DUSK_NOINLINE int dComIfG_syncStageRes(const char* i_arcName);
+DUSK_NOINLINE int dComIfG_deleteObjectResMain(const char* i_arcName);
+DUSK_NOINLINE int dComIfG_deleteStageRes(const char* i_arcName);
+DUSK_NOINLINE void* dComIfG_getStageRes(const char* i_arcName, const char* i_resName);
+DUSK_NOINLINE void* dComIfG_getObjectRes(const char* i_arcName, const char* i_resName);
+DUSK_NOINLINE void* dComIfG_getObjectRes(const char* i_arcName, int i_index);
+DUSK_NOINLINE void dComIfG_dumpResControl();
+DUSK_NOINLINE dRes_info_c* dComIfG_getObjectResInfo(const char* i_arcName);
+DUSK_NOINLINE dRes_info_c* dComIfG_getStageResInfo(const char* i_arcName);
+DUSK_NOINLINE int dComIfG_syncAllObjectRes();
+DUSK_NOINLINE void* dComIfG_getObjectIDRes(const char* i_arcName, u16 i_resID);
+DUSK_NOINLINE int dComIfG_getObjctResName2Index(const char* i_arcName, const char* i_resName);
+DUSK_NOINLINE u8 dComIfG_getBrightness();
+DUSK_NOINLINE void dComIfG_setBrightness(u8 brightness);
+DUSK_NOINLINE BOOL dComIfG_isDebugMode();
+DUSK_NOINLINE u32 dComIfG_getTrigB(u32 i_padNo);
+#if DEBUG
+DUSK_NOINLINE u32 dComIfG_getObjectAllSize();
+DUSK_NOINLINE u32 dComIfG_getStageAllSize();
+DUSK_NOINLINE u32 dComIfG_getObjectSize(const char* i_arcName);
+DUSK_NOINLINE u32 dComIfG_getStageSize(const char* i_arcName);
+DUSK_NOINLINE void dComIfG_initStopwatch();
+#endif
+
+DUSK_NOINLINE int dComIfGd_setRealShadow(u32 param_0, s8 param_1, J3DModel* param_2, cXyz* param_3,
+    f32 param_4, f32 param_5, dKy_tevstr_c* param_6);
+DUSK_NOINLINE int dComIfGd_setSimpleShadow(
+    cXyz* pos, f32 param_1, f32 param_2, cXyz* param_3, s16 angle, f32 param_5, TGXTexObj* tex);
+DUSK_NOINLINE bool dComIfGd_addRealShadow(u32 key, J3DModel* model);
+DUSK_NOINLINE void dComIfGd_drawListItem3d();
+
+#if VERSION > VERSION_GCN_JPN
+DUSK_NOINLINE void dComIfGd_drawListCursor();
+#endif
+
+DUSK_NOINLINE void dComIfGd_reset();
+DUSK_NOINLINE void dComIfGd_set2DOpa(dDlst_base_c* dlst);
+DUSK_NOINLINE void dComIfGd_set2DXlu(dDlst_base_c* dlst);
+DUSK_NOINLINE void dComIfGd_set2DOpaTop(dDlst_base_c* dlst);
+DUSK_NOINLINE void dComIfGd_setCopy2D(dDlst_base_c* dlst);
+DUSK_NOINLINE view_class* dComIfGd_getView();
+DUSK_NOINLINE Mtx44* dComIfGd_getProjViewMtx();
+DUSK_NOINLINE MtxP dComIfGd_getInvViewMtx();
+DUSK_NOINLINE view_port_class* dComIfGd_getViewport();
+DUSK_NOINLINE MtxP dComIfGd_getViewRotMtx();
+DUSK_NOINLINE MtxP dComIfGd_getViewMtx();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getListFilter();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getOpaListIndScreen();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getListPacket();
+DUSK_NOINLINE void dComIfGd_setListSky();
+DUSK_NOINLINE void dComIfGd_setListDark();
+DUSK_NOINLINE void dComIfGd_setListInvisisble();
+DUSK_NOINLINE void dComIfGd_setListDarkBG();
+DUSK_NOINLINE void dComIfGd_setXluListDarkBG();
+DUSK_NOINLINE void dComIfGd_setList();
+DUSK_NOINLINE void dComIfGd_setListItem3D();
+DUSK_NOINLINE void dComIfGd_setList3Dlast();
+DUSK_NOINLINE void dComIfGd_setXluList2DScreen();
+DUSK_NOINLINE void dComIfGd_setXluListBG();
+DUSK_NOINLINE void dComIfGd_setListBG();
+DUSK_NOINLINE void dComIfGd_setListIndScreen();
+DUSK_NOINLINE void dComIfGd_setListMiddle();
+DUSK_NOINLINE void dComIfGd_setListZxlu();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getOpaList();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getOpaListBG();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getOpaListDark();
+DUSK_NOINLINE J3DDrawBuffer* dComIfGd_getXluListBG();
+DUSK_NOINLINE void dComIfGd_setListFilter();
+DUSK_NOINLINE void dComIfGd_init();
+DUSK_NOINLINE void dComIfGd_peekZ(s16 param_0, s16 param_1, u32* param_2);
+DUSK_NOINLINE void dComIfGd_peekZdata();
+DUSK_NOINLINE void dComIfGd_setView(view_class* view);
+DUSK_NOINLINE void dComIfGd_setWindow(dDlst_window_c* window);
+DUSK_NOINLINE void dComIfGd_setViewport(view_port_class* port);
+DUSK_NOINLINE void dComIfGd_entryZSortListZxlu(J3DPacket* i_packet, cXyz& param_1);
+DUSK_NOINLINE void dComIfGd_entryZSortXluList(J3DPacket* i_packet, cXyz& param_1);
+DUSK_NOINLINE void dComIfGd_drawCopy2D();
+DUSK_NOINLINE void dComIfGd_drawOpaListSky();
+DUSK_NOINLINE void dComIfGd_drawXluListSky();
+DUSK_NOINLINE void dComIfGd_drawOpaListBG();
+DUSK_NOINLINE void dComIfGd_drawOpaListDarkBG();
+DUSK_NOINLINE void dComIfGd_drawOpaListMiddle();
+DUSK_NOINLINE void dComIfGd_drawOpaList();
+DUSK_NOINLINE void dComIfGd_drawOpaListDark();
+DUSK_NOINLINE void dComIfGd_drawOpaListPacket();
+DUSK_NOINLINE void dComIfGd_drawXluListBG();
+DUSK_NOINLINE void dComIfGd_drawXluListDarkBG();
+DUSK_NOINLINE void dComIfGd_drawXluList();
+DUSK_NOINLINE void dComIfGd_drawXluListDark();
+DUSK_NOINLINE void dComIfGd_drawXluListInvisible();
+DUSK_NOINLINE void dComIfGd_drawOpaListInvisible();
+DUSK_NOINLINE void dComIfGd_drawXluListZxlu();
+DUSK_NOINLINE void dComIfGd_drawXluList2DScreen();
+DUSK_NOINLINE void dComIfGd_drawOpaList3Dlast();
+DUSK_NOINLINE void dComIfGd_draw2DOpa();
+DUSK_NOINLINE void dComIfGd_draw2DOpaTop();
+DUSK_NOINLINE void dComIfGd_draw2DXlu();
+DUSK_NOINLINE void dComIfGd_drawOpaListFilter();
+DUSK_NOINLINE void dComIfGd_drawIndScreen();
+DUSK_NOINLINE void dComIfGd_drawListZxlu();
+DUSK_NOINLINE void dComIfGd_drawShadow(Mtx param_0);
+DUSK_NOINLINE void dComIfGd_imageDrawShadow(Mtx param_0);
+DUSK_NOINLINE void dComIfGd_set3DlineMat(mDoExt_3DlineMat_c* param_0);
+DUSK_NOINLINE void dComIfGd_set3DlineMatDark(mDoExt_3DlineMat_c* param_0);
+
+#if PLATFORM_WII || VERSION == VERSION_SHIELD_DEBUG
+DUSK_NOINLINE void dComIfGd_setListCursor();
+#endif
+
+#else
 inline dSv_info_c* dComIfGs_getSaveInfo() {
     return &g_dComIfG_gameInfo.info;
 }
@@ -1440,11 +2366,7 @@ inline BOOL dComIfGs_isTransformLV(int i_no) {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerStatusB().isTransformLV(i_no);
 }
 
-#if TARGET_PC
-inline cXyz dComIfGs_getHorseRestartPos() {
-#else
 inline cXyz& dComIfGs_getHorseRestartPos() {
-#endif
     return g_dComIfG_gameInfo.info.getPlayer().getHorsePlace().getPos();
 }
 
@@ -1465,11 +2387,7 @@ inline void dComIfGs_setHorseRestart(const char* i_stageName, cXyz& i_pos, s16 i
     g_dComIfG_gameInfo.info.getPlayer().getHorsePlace().set(i_stageName, i_pos, i_angle, i_roomNo);
 }
 
-#if TARGET_PC
-inline cXyz dComIfGs_getPlayerFieldLastStayPos() {
-#else
 inline cXyz& dComIfGs_getPlayerFieldLastStayPos() {
-#endif
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerFieldLastStayInfo().getPos();
 }
 
@@ -1511,11 +2429,7 @@ inline void dComIfGs_setPlayerFieldLastStayInfo(const char* i_stage, cXyz& i_pos
                                                                          i_point, i_region);
 }
 
-#if TARGET_PC
-inline cXyz dComIfGs_getLastWarpMarkPlayerPos() {
-#else
 inline cXyz& dComIfGs_getLastWarpMarkPlayerPos() {
-#endif
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerLastMarkInfo().getPos();
 }
 
@@ -1852,12 +2766,6 @@ inline OSTime dComIfGs_getTotalTime() {
 inline void dComIfGs_addDeathCount() {
     g_dComIfG_gameInfo.info.getPlayer().getPlayerInfo().addDeathCount();
 }
-
-#if TARGET_PC
-inline u16 dComIfGs_getDeathCount() {
-    return g_dComIfG_gameInfo.info.getPlayer().getPlayerInfo().getDeathCount();
-}
-#endif
 
 inline TEXT_SPAN dComIfGs_getPlayerName() {
     return g_dComIfG_gameInfo.info.getPlayer().getPlayerInfo().getPlayerName();
@@ -3125,133 +4033,114 @@ inline void dComIfGp_particle_calcMenu() {
 }
 
 inline void dComIfGp_particle_draw(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawNormal(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFog(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawNormalFog(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawP1(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawNormalP1(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawProjection(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawProjection(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawNormalPri0_A(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawNormalPri0_A(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawNormalPri0_B(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawNormalPri0_B(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFogPri0_A(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogPri0_A(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFogPri0_B(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogPri0_B(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFogPri1(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogPri1(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFogPri2(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogPri2(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFogPri3(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogPri3(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawFogPri4(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogPri4(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawDarkworld(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawDarkworld(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_drawScreen(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->drawFogScreen(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_draw2Dgame(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->draw2Dgame(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_draw2Dfore(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->draw2Dfore(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_draw2Dback(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->draw2Dback(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_draw2DmenuFore(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->draw2DmenuFore(i_drawInfo);
     }
 }
 
 inline void dComIfGp_particle_draw2DmenuBack(JPADrawInfo* i_drawInfo) {
-    ZoneScoped;
     if (g_dComIfG_gameInfo.play.getParticle() != NULL) {
         g_dComIfG_gameInfo.play.getParticle()->draw2DmenuBack(i_drawInfo);
     }
@@ -4771,150 +5660,114 @@ inline void dComIfGd_setViewport(view_port_class* port) {
 }
 
 inline void dComIfGd_entryZSortListZxlu(J3DPacket* i_packet, cXyz& param_1) {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.entryZSortListZxlu(i_packet, param_1);
 }
 
 inline void dComIfGd_entryZSortXluList(J3DPacket* i_packet, cXyz& param_1) {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.entryZSortXluList(i_packet, param_1);
 }
 
 inline void dComIfGd_drawCopy2D() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawCopy2D();
 }
 
 inline void dComIfGd_drawOpaListSky() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListSky();
 }
 
 inline void dComIfGd_drawXluListSky() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListSky();
 }
 
 inline void dComIfGd_drawOpaListBG() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListBG();
 }
 
 inline void dComIfGd_drawOpaListDarkBG() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListDarkBG();
 }
 
 inline void dComIfGd_drawOpaListMiddle() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListMiddle();
 }
 
 inline void dComIfGd_drawOpaList() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaList();
 }
 
 inline void dComIfGd_drawOpaListDark() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListDark();
 }
 
 inline void dComIfGd_drawOpaListPacket() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListPacket();
 }
 
 inline void dComIfGd_drawXluListBG() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListBG();
 }
 
 inline void dComIfGd_drawXluListDarkBG() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListDarkBG();
 }
 
 inline void dComIfGd_drawXluList() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluList();
 }
 
 inline void dComIfGd_drawXluListDark() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListDark();
 }
 
-#if TARGET_PC
-void dComIfGd_drawXluListInvisible();
-#else
 inline void dComIfGd_drawXluListInvisible() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListInvisible();
 }
-#endif
 
-#if TARGET_PC
-void dComIfGd_drawOpaListInvisible();
-#else
 inline void dComIfGd_drawOpaListInvisible() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListInvisible();
 }
-#endif
 
 inline void dComIfGd_drawXluListZxlu() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListZxlu();
 }
 
 inline void dComIfGd_drawXluList2DScreen() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluList2DScreen();
 }
 
 inline void dComIfGd_drawOpaList3Dlast() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaList3Dlast();
 }
 
 inline void dComIfGd_draw2DOpa() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.draw2DOpa();
 }
 
 inline void dComIfGd_draw2DOpaTop() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.draw2DOpaTop();
 }
 
 inline void dComIfGd_draw2DXlu() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.draw2DXlu();
 }
 
 inline void dComIfGd_drawOpaListFilter() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListFilter();
 }
 
 inline void dComIfGd_drawIndScreen() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawOpaListP0();
 }
 
 inline void dComIfGd_drawListZxlu() {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawXluListZxlu();
 }
 
 inline void dComIfGd_drawShadow(Mtx param_0) {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.drawShadow(param_0);
 }
 
 inline void dComIfGd_imageDrawShadow(Mtx param_0) {
-    ZoneScoped;
     g_dComIfG_gameInfo.drawlist.imageDrawShadow(param_0);
 }
 
@@ -4931,6 +5784,8 @@ inline void dComIfGd_setListCursor() {
     g_dComIfG_gameInfo.drawlist.setOpaListCursor();
     g_dComIfG_gameInfo.drawlist.setXluListCursor();
 }
+#endif
+
 #endif
 
 #endif /* D_COM_D_COM_INF_GAME_H */

@@ -39,7 +39,6 @@ public:
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     int getSw2No() { return fopAcM_GetParamBit(this, 8, 8); }
 
-private:
     /* 0x5A8 */  // dEvLib_callback_c
     /* 0x5B8 */ Mtx mBgMtx;
     /* 0x5E8 */ Mtx mMtx;

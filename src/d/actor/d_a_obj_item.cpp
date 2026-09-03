@@ -158,8 +158,8 @@ void daItem_c::CreateInit() {
     mCcCyl.SetCoHitCallback(itemGetCoCallBack);
     mCcCyl.SetTgHitCallback(itemGetTgCallBack);
 
-    f32 cylHeight = dItem_data::getH(m_itemNo);
-    f32 cylRadius = dItem_data::getR(m_itemNo);
+    f32 cylHeight = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo));
+    f32 cylRadius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo));
 
     if (scale.x > 1.0f) {
         cylHeight *= scale.x;
@@ -267,12 +267,13 @@ int daItem_c::_daItem_create() {
 #if TARGET_PC
         const u32 params = fopAcM_GetParam(this);
         mOriginalItemNo = params & 0xFF;
-        const u8 resolvedItem = dusk::mods::item_check_freestanding(
-            daItem_prm::getItemBitNo(this), mOriginalItemNo, this);
-        mItemOverridden = resolvedItem != mOriginalItemNo;
         mItemGiveTag = dusk::mods::item_give_tag_freestanding(daItem_prm::getItemBitNo(this));
+        const auto [item, displayItem, _] =
+            dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
+        mItemOverridden = item != mOriginalItemNo;
+        setDisplayItemNo(displayItem);
         if (mItemOverridden) {
-            fopAcM_SetParam(this, (params & 0xFFFFFF00) | resolvedItem);
+            fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
         }
 #endif
         field_0x95d = true;
@@ -287,7 +288,11 @@ int daItem_c::_daItem_create() {
     BOOL flag = dItem_data::chkFlag(m_itemNo, 2);
 
 #if DEBUG
+#if TARGET_PC
+    if (dItem_fieldModelArc(getDisplayItemNo()) == NULL) {
+#else
     if (dItem_data::getFieldArc(m_itemNo) == NULL) {
+#endif
         // "Item Num<%d>: No Resource Archive specified!!\n"
         OS_REPORT_ERROR("アイテム番号<%d>:リソースのアーカイブ指定がありません！！\n", m_itemNo);
         return cPhs_ERROR_e;
@@ -319,10 +324,22 @@ int daItem_c::_daItem_create() {
     if (flag) {
         CreateInit();
     } else {
+#if TARGET_PC
+        const u8 displayItemNo = getDisplayItemNo();
+        phase_state = dComIfG_resLoad(&mPhase, dItem_fieldModelArc(displayItemNo));
+#else
         phase_state = dComIfG_resLoad(&mPhase, dItem_data::getFieldArc(m_itemNo));
+#endif
         if (phase_state == cPhs_COMPLEATE_e) {
+#if TARGET_PC
+            const bool useModelFallback = dItem_data::getFieldArc(displayItemNo) == NULL;
+            if (!fopAcM_entrySolidHeap(this,
+                    useModelFallback ? CheckItemCreateHeap : CheckFieldItemCreateHeap,
+                    useModelFallback ? 0x4000 : dItem_data::getFieldHeapSize(displayItemNo)))
+#else
             if (!fopAcM_entrySolidHeap(this, CheckFieldItemCreateHeap,
                                        dItem_data::getFieldHeapSize(m_itemNo)))
+#endif
             {
                 return cPhs_ERROR_e;
             }
@@ -339,7 +356,7 @@ int daItem_c::_daItem_execute() {
     CountTimer();
 
     eyePos = current.pos;
-    eyePos.y += (f32)dItem_data::getH(m_itemNo) / 2;
+    eyePos.y += (f32)DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)) / 2;
 
     attention_info.position = current.pos;
 
@@ -412,7 +429,11 @@ int daItem_c::_daItem_delete() {
         mSparkleEmtr.remove();
     }
 
+#if TARGET_PC
+    DeleteBase(dItem_fieldModelArc(getDisplayItemNo()));
+#else
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
+#endif
     return 1;
 }
 
@@ -520,9 +541,10 @@ void daItem_c::procInitGetDemoEvent() {
 
 #if TARGET_PC
     const u8 displayItemNo = m_itemNo;
-    if (mItemOverridden) {
-        m_itemNo = dusk::mods::item_check_tagged(mItemGiveTag, mOriginalItemNo, this);
-    }
+    const auto itemCheck = dusk::mods::item_check_commit(mItemGiveTag, mOriginalItemNo, this);
+    m_itemNo = itemCheck.itemNo;
+    mItemGiveTag = itemCheck.tag;
+    mItemOverridden = m_itemNo != mOriginalItemNo;
 #endif
     m_item_id = fopAcM_createItemForTrBoxDemo(
         &current.pos, m_itemNo, -1, fopAcM_GetRoomNo(this), NULL, NULL IF_DUSK_ARG(mItemGiveTag));
@@ -581,8 +603,8 @@ void daItem_c::procInitBoomerangCarry() {
     scale = mItemScale;
     mBoomerangMove.initOffset(&current.pos);
 
-    u8 height = dItem_data::getH(m_itemNo);
-    u8 radius = dItem_data::getR(m_itemNo);
+    u8 height = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo));
+    u8 radius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo));
     mCcCyl.SetR((f32)radius * 2.0f);
     mCcCyl.SetH((f32)height * 2.0f);
     mCcCyl.OnCoSPrmBit(1);
@@ -907,15 +929,12 @@ void daItem_c::itemGetNextExecute() {
 void daItem_c::itemGet() {
 #if TARGET_PC
     const u8 displayItemNo = m_itemNo;
-    if (mItemOverridden) {
-        m_itemNo = dusk::mods::item_check_tagged(mItemGiveTag, mOriginalItemNo, this);
-    }
+    const auto itemCheck = dusk::mods::item_check_commit(mItemGiveTag, mOriginalItemNo, this);
+    m_itemNo = itemCheck.itemNo;
+    mItemGiveTag = itemCheck.tag;
+    mItemOverridden = m_itemNo != mOriginalItemNo;
 #endif
     switch (m_itemNo) {
-#if TARGET_PC
-    case dItemNo_UTAWA_HEART_e:
-    case dItemNo_KAKERA_HEART_e:
-#endif
     case dItemNo_HEART_e:
         mDoAud_seStart(Z2SE_HEART_PIECE_GET, NULL, 0, 0);
         execItemGet(m_itemNo IF_DUSK_ARG(mItemGiveTag) IF_DUSK_ARG(this));
@@ -957,9 +976,6 @@ void daItem_c::itemGet() {
     case dItemNo_PACHINKO_SHOT_e:
         mDoAud_seStart(Z2SE_CONSUMP_ITEM_GET, NULL, 0, 0);
         execItemGet(m_itemNo IF_DUSK_ARG(mItemGiveTag) IF_DUSK_ARG(this));
-#if TARGET_PC
-        break;
-#endif
     default:
 #if TARGET_PC
         if (mItemOverridden) {

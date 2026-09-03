@@ -198,6 +198,20 @@ dMeter2Draw_c::dMeter2Draw_c(JKRExpHeap* mp_heap) {
     IF_DUSK_BLOCK_END
 #endif
 
+#if TARGET_PC
+    if (dusk::version::isLessThanWiiJpn()) {
+        if (J2DPicture* b_btn = static_cast<J2DPicture*>(mpScreen->search(MULTI_CHAR('b_btn')))) {
+            b_btn->setAlpha(255);
+            b_btn->setWhite(JUtility::TColor(195, 63, 63, 255));
+        }
+
+        for (int i = 0; i < 5; i++) {
+            static_cast<J2DTextBox*>(mpXYText[i][0]->getPanePtr())->setCharSpace(0.0f);
+            static_cast<J2DTextBox*>(mpXYText[i][1]->getPanePtr())->setCharSpace(0.0f);
+        }
+    }
+#endif
+
     init();
     field_0xa8 = 0;
     field_0x1e4 = 0;
@@ -2460,7 +2474,7 @@ void dMeter2Draw_c::drawButtonA(u8 i_action, f32 i_posX, f32 i_posY, f32 i_textP
     mpButtonA->paneTrans(i_posX, i_posY);
     mpTextA->scale(var_f30 * i_scale, var_f30 * i_scale);
     mpTextA->paneTrans(g_drawHIO.mButtonATextPosX + i_textPosX,
-                       g_drawHIO.mButtonATextPosY + i_textPosY);
+                       g_drawHIO.mButtonATextPosY + i_textPosY IF_DUSK(+ (dusk::version::isLessThanWiiJpn() ? 6.0f : 0.0f)));
 }
 
 void dMeter2Draw_c::drawButtonB(u8 i_action, bool param_1, f32 i_posX, f32 i_posY, f32 i_textPosX,
@@ -2658,6 +2672,11 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
 
     static u64 const tag[] = {MULTI_CHAR('item_x_n'), MULTI_CHAR('item_y_n')};
 
+#if TARGET_PC
+    const float btnXOffsetX = dusk::version::isLessThanWiiJpn() ? 2.0f : 0.0f;
+    const float btnXOffsetY = dusk::version::isLessThanWiiJpn() ? 38.0f : 0.0f;
+#endif
+
     if (!param_3) {
         mpScreen->search(tag[i_no])->hide();
 
@@ -2704,7 +2723,8 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
 
         if (i_no == SELECT_X_e) {
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
-            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
+            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX IF_DUSK(- btnXOffsetX),
+                                      g_drawHIO.mButtonXYTextPosY IF_DUSK(+ btnXOffsetY));
         } else if (i_no == SELECT_Y_e) {
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
             mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
@@ -2766,7 +2786,8 @@ void dMeter2Draw_c::drawButtonXY(int i_no, u8 i_itemNo, u8 i_action, bool param_
             mpLightXY[0]->setAlphaRate(mButtonXItemBaseAlpha[var_r29] * field_0x7f0);
 
             mpTextXY[i_no]->scale(g_drawHIO.mButtonXYTextScale, g_drawHIO.mButtonXYTextScale);
-            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX, g_drawHIO.mButtonXYTextPosY);
+            mpTextXY[i_no]->paneTrans(g_drawHIO.mButtonXYTextPosX IF_DUSK(- btnXOffsetX),
+                                      g_drawHIO.mButtonXYTextPosY IF_DUSK(+ btnXOffsetY));
         } else if (i_no == SELECT_Y_e) {
             mpButtonXY[1]->scale(g_drawHIO.mButtonYScale, g_drawHIO.mButtonYScale);
             mpButtonXY[1]->paneTrans(g_drawHIO.mButtonYPosX, g_drawHIO.mButtonYPosY);

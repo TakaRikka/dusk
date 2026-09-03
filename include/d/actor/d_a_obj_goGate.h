@@ -40,7 +40,6 @@ public:
     u32 getLR() { return fopAcM_GetParamBit(this, 8, 8); }
     u32 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpModel;
     /* 0x5AC */ u8 mMode;

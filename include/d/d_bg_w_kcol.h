@@ -117,7 +117,6 @@ public:
 
     void getTri1Pos(KC_PrismData* pd, Vec** nrm) const { *nrm = &m_pkc_head->m_pos_data[pd->pos_i]; }
 
-private:
     /* 0x18 */ KC_Header* m_pkc_head;
     /* 0x1C */ dBgPlc m_code;
     /* 0x20 */ cM3dGAab m_bnd;

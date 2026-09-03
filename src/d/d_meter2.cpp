@@ -606,7 +606,8 @@ void dMeter2_c::moveLife() {
             life_count = (dComIfGs_getMaxLife() / 5) * 4;
         }
 
-        s16 new_life = dComIfGs_getLife() + dComIfGp_getItemLifeCount();
+        DUSK_IF_ELSE(int, s16) new_life = dComIfGs_getLife() + dComIfGp_getItemLifeCount(); // prevent an overflow with really large damage values
+
         if (new_life > life_count) {
             new_life = life_count;
         } else if (new_life < 0) {

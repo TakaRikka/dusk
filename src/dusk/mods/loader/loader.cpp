@@ -5,6 +5,7 @@
 #include <borealis/io.hpp>
 
 #include <algorithm>
+#include <charconv>
 #include <chrono>
 #include <cstring>
 #include <filesystem>
@@ -269,7 +270,57 @@ static std::string resolve_image_path(ModBundle& bundle, const std::string& modI
     return {};
 }
 
-static ModMetadata load_metadata(const std::filesystem::path& modPath, ModBundle& bundle) {
+struct LoadedManifest {
+    ModMetadata metadata;
+    std::optional<DelegatedModRuntime> runtime;
+};
+
+static uint16_t parse_runtime_version_component(std::string_view text, std::string_view fieldName) {
+    uint32_t value = 0;
+    const auto [end, error] = std::from_chars(text.data(), text.data() + text.size(), value);
+    if (text.empty() || error != std::errc{} || end != text.data() + text.size() ||
+        value > UINT16_MAX)
+    {
+        throw InvalidModDataException(fmt::format("Invalid {} in runtime version pin", fieldName));
+    }
+    return static_cast<uint16_t>(value);
+}
+
+static std::optional<DelegatedModRuntime> parse_runtime(const nlohmann::json& manifest) {
+    const auto field = manifest.find("runtime");
+    if (field == manifest.end()) {
+        return std::nullopt;
+    }
+    if (!field->is_string()) {
+        throw InvalidModDataException("runtime must be a string");
+    }
+
+    const std::string pin = field->get<std::string>();
+    const auto at = pin.rfind('@');
+    if (at == std::string::npos || at == 0 || at + 1 == pin.size() || pin.find('@') != at ||
+        at >= MOD_META_SERVICE_ID_SIZE)
+    {
+        throw InvalidModDataException(
+            "runtime must be a service id followed by @major or @major.minor");
+    }
+
+    const std::string_view version{pin.data() + at + 1, pin.size() - at - 1};
+    const auto dot = version.find('.');
+    if (dot != std::string_view::npos && version.find('.', dot + 1) != std::string_view::npos) {
+        throw InvalidModDataException("runtime version pin has too many components");
+    }
+
+    DelegatedModRuntime result;
+    result.id = pin.substr(0, at);
+    result.major = parse_runtime_version_component(
+        dot == std::string_view::npos ? version : version.substr(0, dot), "major version");
+    if (dot != std::string_view::npos) {
+        result.minMinor = parse_runtime_version_component(version.substr(dot + 1), "minor version");
+    }
+    return result;
+}
+
+static LoadedManifest load_manifest(const std::filesystem::path& modPath, ModBundle& bundle) {
     const auto metaJson = bundle.readFile("mod.json");
     auto j = nlohmann::json::parse(metaJson);
 
@@ -297,14 +348,18 @@ static ModMetadata load_metadata(const std::filesystem::path& modPath, ModBundle
     std::string bannerPath =
         resolve_image_path(bundle, metaId, "banner", metaBanner, "res/banner.png"s);
 
-    return ModMetadata{
-        std::move(metaId),
-        std::move(metaName),
-        std::move(metaVersion),
-        std::move(metaAuthor),
-        std::move(metaDescription),
-        std::move(iconPath),
-        std::move(bannerPath),
+    return LoadedManifest{
+        .metadata =
+            {
+                std::move(metaId),
+                std::move(metaName),
+                std::move(metaVersion),
+                std::move(metaAuthor),
+                std::move(metaDescription),
+                std::move(iconPath),
+                std::move(bannerPath),
+            },
+        .runtime = parse_runtime(j),
     };
 }
 
@@ -517,8 +572,8 @@ std::filesystem::path ModLoader::external_native_lib_path(const LoadedMod& mod) 
     if (libDir.empty()) {
         return {};
     }
-    fs::path path = libDir / fs::path(mod.metadata.id +
-                                      borealis::io::fs_path_to_string(fs::path(k_nativeLibName).extension()));
+    fs::path path = libDir / fs::path(mod.metadata.id + borealis::io::fs_path_to_string(
+                                                            fs::path(k_nativeLibName).extension()));
     std::error_code ec;
     if (!fs::is_regular_file(path, ec)) {
         return {};
@@ -684,6 +739,13 @@ bool ModLoader::load_native_if_present(LoadedMod& mod) {
     }
 
     const auto& native = std::get<NativeRuntimeLocation>(result);
+    if (mod.runtime.has_value() &&
+        (native.anyLibs || (mod.inPlace && !external_native_lib_path(mod).empty())))
+    {
+        mod.nativeStatus = NativeModStatus::InvalidBundle;
+        fail_mod(mod, MOD_CONFLICT, "A mod cannot declare both runtime and native code");
+        return false;
+    }
     if (!native.anyLibs && !(mod.inPlace && !external_native_lib_path(mod).empty())) {
         mod.nativeStatus = NativeModStatus::None;
         return true;
@@ -728,7 +790,7 @@ static ModManifestInfo build_manifest_info(const ModMetaParsed& parsed) {
             continue;
         }
         info.imports.push_back({record->service_id.chars, record->major_version,
-            (record->rec.flags & SERVICE_IMPORT_OPTIONAL) == 0});
+            record->min_minor_version, (record->rec.flags & SERVICE_IMPORT_OPTIONAL) == 0});
     }
     info.exports.reserve(parsed.exports.size());
     for (const auto* record : parsed.exports) {
@@ -801,21 +863,22 @@ void ModLoader::try_load_mod(
         return;
     }
 
-    ModMetadata metadata;
+    LoadedManifest manifest;
     try {
-        metadata = load_metadata(modPath, *bundle);
+        manifest = load_manifest(modPath, *bundle);
     } catch (const std::exception& e) {
         Log.error("bad mod.json in {}: {}", data::abbreviated_path_string(modPath), e.what());
         return;
     }
 
-    if (const auto* existing = find_mod(metadata.id)) {
+    if (const auto* existing = find_mod(manifest.metadata.id)) {
         if (existing->searchDirIndex < searchDirIndex) {
-            log::write(metadata.id, LOG_LEVEL_INFO, "{} shadowed by higher-priority duplicate {}",
+            log::write(manifest.metadata.id, LOG_LEVEL_INFO,
+                "{} shadowed by higher-priority duplicate {}",
                 data::abbreviated_path_string(modPath),
                 data::abbreviated_path_string(existing->modPath));
         } else {
-            log::write(metadata.id, LOG_LEVEL_ERROR, "duplicate mod id, not loading {}",
+            log::write(manifest.metadata.id, LOG_LEVEL_ERROR, "duplicate mod id, not loading {}",
                 data::abbreviated_path_string(modPath));
         }
         return;
@@ -827,12 +890,29 @@ void ModLoader::try_load_mod(
     mod.modPath = fs::absolute(modPath);
     mod.searchDirIndex = searchDirIndex;
     mod.inPlace = m_searchDirs[searchDirIndex].inPlaceNative && fromDir;
-    mod.metadata = std::move(metadata);
+    mod.metadata = std::move(manifest.metadata);
+    mod.runtime = std::move(manifest.runtime);
     mod.bundle = std::move(bundle);
     mod.context = std::make_unique<ModContext>();
     mod.context->mod = &mod;
     mod.cvarIsEnabled =
         std::make_unique<ConfigVar<bool>>(mod_enabled_cvar_name(mod.metadata.id), true);
+    if (mod.runtime.has_value()) {
+        const auto& runtime = *mod.runtime;
+        mod.manifestInfo.imports.push_back({runtime.id, runtime.major, runtime.minMinor, true});
+
+        std::error_code ec;
+        mod.dir = fs::absolute(m_cacheDir / mod.metadata.id / "data", ec);
+        if (!ec) {
+            fs::create_directories(mod.dir, ec);
+        }
+        if (ec) {
+            fail_mod(mod, MOD_ERROR,
+                fmt::format("Failed to create script scratch directory: {}", ec.message()));
+        } else {
+            mod.dirUtf8 = borealis::io::fs_path_to_string(mod.dir);
+        }
+    }
     if (load_native_if_present(mod) && mod.native) {
         mod.manifestInfo = build_manifest_info(mod.native->parsed);
     }
@@ -846,12 +926,12 @@ bool ModLoader::activate_mod(LoadedMod& mod) {
     mod.active = true;
 
     // Asset-only mods have no lifecycle beyond their overlay files.
-    if (!mod.native) {
+    if (!mod.native && !mod.runtime.has_value()) {
         mod.enabledApplied = true;
         return true;
     }
 
-    if (!mod.servicesRegistered) {
+    if (mod.native && !mod.servicesRegistered) {
         if (!register_static_service_exports(mod)) {
             log::write(mod.metadata.id, LOG_LEVEL_ERROR, "failed to register service exports");
             deactivate_mod(mod);
@@ -860,30 +940,60 @@ bool ModLoader::activate_mod(LoadedMod& mod) {
         mod.servicesRegistered = true;
     }
 
-    if (!resolve_service_imports(mod)) {
+    if (mod.native && !resolve_service_imports(mod)) {
         log::write(mod.metadata.id, LOG_LEVEL_ERROR, "failed to resolve service imports");
         deactivate_mod(mod);
         return false;
     }
 
-    svc::hook_resolve_mod_records(mod);
+    if (mod.native) {
+        svc::hook_resolve_mod_records(mod);
+        *mod.native->contextSymbol = mod.context.get();
+    } else {
+        auto& runtime = *mod.runtime;
+        const auto* record = svc::find_service(runtime.id.c_str(), runtime.major, runtime.minMinor);
+        if (record == nullptr) {
+            fail_mod(mod, MOD_UNAVAILABLE,
+                describe_missing_import(runtime.id.c_str(), runtime.major, runtime.minMinor));
+            deactivate_mod(mod);
+            return false;
+        }
 
-    *mod.native->contextSymbol = mod.context.get();
+        const auto* service = static_cast<const ModRuntimeService*>(record->service);
+        constexpr size_t kRequiredSize = offsetof(ModRuntimeService, deactivate) +
+                                         sizeof(((ModRuntimeService*)nullptr)->deactivate);
+        if (record->provider == nullptr || service == nullptr ||
+            service->header.struct_size < kRequiredSize || service->activate == nullptr ||
+            service->update == nullptr || service->deactivate == nullptr)
+        {
+            fail_mod(mod, MOD_UNAVAILABLE,
+                fmt::format("Runtime service {}@{} has an invalid lifecycle contract", runtime.id,
+                    runtime.major));
+            deactivate_mod(mod);
+            return false;
+        }
+        runtime.service = service;
+        runtime.providerContext = record->provider->context.get();
+    }
 
-    log::write(mod.metadata.id, LOG_LEVEL_TRACE, "calling mod_initialize");
+    const char* initializeName = mod.native ? "mod_initialize" : "runtime activate";
+    log::write(mod.metadata.id, LOG_LEVEL_TRACE, "calling {}", initializeName);
     try {
         ModError error = MOD_ERROR_INIT;
-        const auto result = mod.native->fn_initialize(&error);
+        const auto result = mod.native ?
+                                mod.native->fn_initialize(&error) :
+                                mod.runtime->service->activate(
+                                    mod.runtime->providerContext, mod.context.get(), &error);
         if (result == MOD_OK && !mod.loadFailed) {
             mod.initialized = true;
-            log::write(mod.metadata.id, LOG_LEVEL_TRACE, "mod_initialize succeeded");
+            log::write(mod.metadata.id, LOG_LEVEL_TRACE, "{} succeeded", initializeName);
         } else if (result != MOD_OK && !mod.loadFailed) {
-            fail_mod(mod, result, lifecycle_error_message("mod_initialize", result, error));
+            fail_mod(mod, result, lifecycle_error_message(initializeName, result, error));
         }
     } catch (const std::exception& e) {
-        fail_mod(mod, MOD_ERROR, fmt::format("Exception in mod_initialize: {}", e.what()));
+        fail_mod(mod, MOD_ERROR, fmt::format("Exception in {}: {}", initializeName, e.what()));
     } catch (...) {
-        fail_mod(mod, MOD_ERROR, "Unknown exception in mod_initialize");
+        fail_mod(mod, MOD_ERROR, fmt::format("Unknown exception in {}", initializeName));
     }
 
     warn_unpublished_deferred_exports(mod);
@@ -900,21 +1010,31 @@ bool ModLoader::activate_mod(LoadedMod& mod) {
 
 void ModLoader::deactivate_mod(LoadedMod& mod) {
     svc::modules_mod_deactivating(mod);
-    if (mod.initialized && mod.native && mod.native->fn_shutdown) {
-        log::write(mod.metadata.id, LOG_LEVEL_TRACE, "calling mod_shutdown");
+    if (mod.initialized && ((mod.native && mod.native->fn_shutdown) ||
+                               (mod.runtime.has_value() && mod.runtime->service != nullptr)))
+    {
+        const char* shutdownName = mod.native ? "mod_shutdown" : "runtime deactivate";
+        log::write(mod.metadata.id, LOG_LEVEL_TRACE, "calling {}", shutdownName);
         try {
             ModError error = MOD_ERROR_INIT;
-            const auto result = mod.native->fn_shutdown(&error);
+            const auto result = mod.native ?
+                                    mod.native->fn_shutdown(&error) :
+                                    mod.runtime->service->deactivate(
+                                        mod.runtime->providerContext, mod.context.get(), &error);
             if (result == MOD_OK) {
-                log::write(mod.metadata.id, LOG_LEVEL_TRACE, "mod_shutdown succeeded");
+                log::write(mod.metadata.id, LOG_LEVEL_TRACE, "{} succeeded", shutdownName);
             } else {
-                log::write(mod.metadata.id, LOG_LEVEL_ERROR, "mod_shutdown failed: {}",
-                    lifecycle_error_message("mod_shutdown", result, error));
+                log::write(mod.metadata.id, LOG_LEVEL_ERROR, "{} failed: {}", shutdownName,
+                    lifecycle_error_message(shutdownName, result, error));
             }
         } catch (...) {
         }
     }
     mod.initialized = false;
+    if (mod.runtime.has_value()) {
+        mod.runtime->service = nullptr;
+        mod.runtime->providerContext = nullptr;
+    }
 
     if (mod.servicesRegistered) {
         svc::remove_services_for_provider(mod);
@@ -1168,29 +1288,35 @@ bool ModLoader::reload_bundle(LoadedMod& mod) {
         data::abbreviated_path_string(mod.modPath));
 
     std::shared_ptr<ModBundle> newBundle;
-    ModMetadata newMetadata;
+    LoadedManifest newManifest;
     try {
         std::error_code ec;
         newBundle = load_bundle(mod.modPath, fs::is_directory(mod.modPath, ec));
-        newMetadata = load_metadata(mod.modPath, *newBundle);
+        newManifest = load_manifest(mod.modPath, *newBundle);
     } catch (const std::exception& e) {
         fail_mod(mod, MOD_ERROR, fmt::format("Reload failed: {}", e.what()));
         return false;
     }
 
-    if (newMetadata.id != mod.metadata.id) {
+    if (newManifest.metadata.id != mod.metadata.id) {
         fail_mod(mod, MOD_CONFLICT,
-            fmt::format("Mod ID changed on reload ('{}'); restart required", newMetadata.id));
+            fmt::format(
+                "Mod ID changed on reload ('{}'); restart required", newManifest.metadata.id));
         return false;
     }
 
-    mod.metadata = std::move(newMetadata);
+    mod.metadata = std::move(newManifest.metadata);
+    mod.runtime = std::move(newManifest.runtime);
     // In-flight readers of the old bundle keep it alive through their shared_ptr.
     mod.bundle = std::move(newBundle);
     mod.loadFailed = false;
     mod.failureReason.clear();
 
     ModManifestInfo newInfo;
+    if (mod.runtime.has_value()) {
+        const auto& runtime = *mod.runtime;
+        newInfo.imports.push_back({runtime.id, runtime.major, runtime.minMinor, true});
+    }
     if (!load_native_if_present(mod)) {
         return false;
     }
@@ -1364,17 +1490,23 @@ void ModLoader::tick() {
     apply_pending_requests();
 
     for (auto& mod : mods()) {
-        if (!mod.active || !mod.native) {
+        if (!mod.active || (!mod.native && !mod.runtime.has_value())) {
             continue;
         }
         try {
             ModError error = MOD_ERROR_INIT;
-            const auto result = mod.native->fn_update(&error);
+            const bool delegated = !mod.native;
+            const auto result = delegated ?
+                                    mod.runtime->service->update(
+                                        mod.runtime->providerContext, mod.context.get(), &error) :
+                                    mod.native->fn_update(&error);
             if (result != MOD_OK) {
-                fail_mod(mod, result, lifecycle_error_message("mod_update", result, error));
+                fail_mod(mod, result,
+                    lifecycle_error_message(
+                        delegated ? "runtime update" : "mod_update", result, error));
             }
         } catch (const std::exception& e) {
-            fail_mod(mod, MOD_ERROR, fmt::format("Exception in mod_update: {}", e.what()));
+            fail_mod(mod, MOD_ERROR, fmt::format("Exception in mod update: {}", e.what()));
         } catch (...) {
             fail_mod(mod, MOD_ERROR, "Unknown exception in mod_update");
         }

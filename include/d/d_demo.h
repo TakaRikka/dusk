@@ -155,7 +155,6 @@ public:
     f32 getAnmTransition() { return mAnmTransition; }
     u32 getShapeId() { return mShape; }
 
-private:
     /* 0x04 */ u16 mFlags;
     /* 0x08 */ cXyz mTrans;
     /* 0x14 */ cXyz mScale;
@@ -220,7 +219,6 @@ public:
     f32 getFovy() { return mProjFovy; }
     f32 getRoll() { return mViewRoll; }
 
-private:
     /* 0x04 */ u8 mFlags;
     /* 0x08 */ f32 mProjNear;
     /* 0x0C */ f32 mProjFar;
@@ -247,7 +245,6 @@ public:
 
     void onEnable(u8 flag) { mFlags |= flag; }
 
-private:
     /* 0x04 */ u8 mFlags;
     /* 0x05 */ GXColor mColor;
 };
@@ -275,7 +272,6 @@ public:
 
     void onEnable(u8 flag) { mFlags |= flag; }
 
-private:
     /* 0x04 */ u8 mFlags;
     /* 0x08 */ JStage::TELight mLightType;
     /* 0x0C */ GXDistAttnFn mDistAttenFn;
@@ -309,7 +305,6 @@ public:
 
     void onEnable(u8 flag) { mFlags |= flag; }
 
-private:
     /* 0x04 */ u8 mFlags;
     /* 0x05 */ s8 mFogType;
     /* 0x08 */ f32 mStartZ;
@@ -327,7 +322,6 @@ public:
 
     void setObject(dDemo_object_c* i_object) { mpObject = i_object; }
 
-private:
     /* 0x4 */ dDemo_object_c* mpObject;
 };
 

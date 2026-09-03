@@ -18,7 +18,6 @@ public:
     int execute();
     int _delete();
 
-private:
     /* 0x568 */ cXyz mSePositions[2];
     /* 0x580 */ JPABaseEmitter* mParticles[4];
     /* 0x590 */ u8 unused_0x590[0x594 - 0x590];

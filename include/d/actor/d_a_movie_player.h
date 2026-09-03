@@ -166,7 +166,6 @@ public:
 
     static DUSK_GAME_DATA daMP_c* m_myObj;
 
-private:
     /* 0x568 */ u32 (*mpGetMovieRestFrame)(void);
     /* 0x56C */ void (*mpSetPercentMovieVol)(f32);
     /* 0x570 */ u32 (*mpTHPGetTotalFrame)(void);

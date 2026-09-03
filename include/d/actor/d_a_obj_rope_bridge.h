@@ -44,7 +44,6 @@ public:
     u8 getSwbit2() { return fopAcM_GetParamBit(this, 24, 8); }
     u8 getType() { return fopAcM_GetParamBit(this, 16, 2); }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ request_of_phase_process_class mRopePhase;
     /* 0x5B0 */ J3DModel* mpBrgModel;

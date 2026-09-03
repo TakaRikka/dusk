@@ -100,6 +100,7 @@ public:
     NodeRef next(uint16_t target) const;
     /* Set a branch node's result targets */
     NodeRef results(std::initializer_list<uint16_t> targets) const;
+    NodeRef results(std::span<const uint16_t> targets) const;
 
     uint16_t id() const { return mId; }
     operator uint16_t() const { return mId; }
@@ -150,6 +151,35 @@ public:
     GraphBuilder& patch_edge(uint16_t edgeIndex, uint16_t targetNode) {
         if (mResult == MOD_OK) {
             mResult = svc_flow->patch_edge(mod_ctx, mHandle, edgeIndex, targetNode);
+        }
+        return *this;
+    }
+    GraphBuilder& patch_branch(uint16_t nodeIndex, FlowQueryId query, uint16_t parameter,
+        std::span<const uint16_t> targets) {
+        if (mResult != MOD_OK || targets.empty() || targets.size() > 0xff) {
+            if (mResult == MOD_OK) {
+                mResult = MOD_INVALID_ARGUMENT;
+            }
+            return *this;
+        }
+        uint16_t first = 0;
+        mResult = svc_flow->add_edges(
+            mod_ctx, mHandle, targets.data(), static_cast<uint16_t>(targets.size()), &first);
+        if (mResult == MOD_OK) {
+            patch_node(nodeIndex,
+                branch(static_cast<uint8_t>(targets.size()), query, parameter, first));
+        }
+        return *this;
+    }
+    GraphBuilder& patch_event(uint16_t nodeIndex, FlowEventId eventId,
+        std::array<uint8_t, 4> params, uint16_t target) {
+        if (mResult != MOD_OK) {
+            return *this;
+        }
+        uint16_t edge = 0;
+        mResult = svc_flow->add_edges(mod_ctx, mHandle, &target, 1, &edge);
+        if (mResult == MOD_OK) {
+            patch_node(nodeIndex, event(eventId, edge, params));
         }
         return *this;
     }
@@ -232,7 +262,7 @@ private:
         }
     }
 
-    void set_results(uint16_t id, std::initializer_list<uint16_t> targets) {
+    void set_results(uint16_t id, std::span<const uint16_t> targets) {
         if (mResult != MOD_OK) {
             return;
         }
@@ -246,7 +276,7 @@ private:
         node->wired = true;
         uint16_t first = 0;
         mResult = svc_flow->add_edges(
-            mod_ctx, mHandle, targets.begin(), static_cast<uint16_t>(targets.size()), &first);
+            mod_ctx, mHandle, targets.data(), static_cast<uint16_t>(targets.size()), &first);
         if (mResult == MOD_OK) {
             node->data.bytes[1] = static_cast<uint8_t>(targets.size());
             write_bits(node->data.bytes + 6, first);
@@ -266,6 +296,10 @@ inline NodeRef NodeRef::next(uint16_t target) const {
 }
 
 inline NodeRef NodeRef::results(std::initializer_list<uint16_t> targets) const {
+    return results(std::span{targets.begin(), targets.size()});
+}
+
+inline NodeRef NodeRef::results(std::span<const uint16_t> targets) const {
     if (mBuilder != nullptr) {
         mBuilder->set_results(mId, targets);
     }
@@ -368,6 +402,10 @@ public:
     [[nodiscard]] constexpr MessageStyle face_anim(uint8_t value) const {
         return set_u8(17, value);
     }
+    /* INF1 bytes 18-19, normally 0x0400. */
+    [[nodiscard]] constexpr MessageStyle trailing_data(uint16_t value) const {
+        return set_u16(18, value);
+    }
     [[nodiscard]] constexpr const MessageEntryData& data() const { return mData; }
 
 private:
@@ -432,6 +470,9 @@ public:
     MessageBuilder& camera_attr(uint8_t value) { return style(&MessageStyle::camera_attr, value); }
     MessageBuilder& talk_anim(uint8_t value) { return style(&MessageStyle::talk_anim, value); }
     MessageBuilder& face_anim(uint8_t value) { return style(&MessageStyle::face_anim, value); }
+    MessageBuilder& trailing_data(uint16_t value) {
+        return style(&MessageStyle::trailing_data, value);
+    }
 
     /* Content builder functions */
     MessageBuilder& text(std::string_view value) {
@@ -459,7 +500,20 @@ public:
     }
     MessageBuilder& text_color(MessageTextColor color) {
         const auto index = static_cast<uint8_t>(color);
-        return raw_tag(255, 0, {&index, 1});
+        return raw_tag(0xFF, 0, {&index, 1});
+    }
+    /* Full 32-bit text color (Dusklight extension) */
+    MessageBuilder& text_color(uint32_t rgba) {
+        std::array<uint8_t, 4> arguments{};
+        write_bits(arguments.data(), rgba);
+        return raw_tag(0xFF, 0, arguments);
+    }
+    /* Full 32-bit text vertical gradient colors (Dusklight extension) */
+    MessageBuilder& text_color(uint32_t upperRgba, uint32_t lowerRgba) {
+        std::array<uint8_t, 8> arguments{};
+        write_bits(arguments.data(), upperRgba);
+        write_bits(arguments.data() + sizeof(upperRgba), lowerRgba);
+        return raw_tag(0xFF, 0, arguments);
     }
     MessageBuilder& text_scale(uint16_t percent) { return timed_tag(255, 1, percent); }
     MessageBuilder& character_delay(uint16_t frames) { return timed_tag(0, 6, frames); }

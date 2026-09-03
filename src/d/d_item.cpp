@@ -269,7 +269,10 @@ static void (*item_func_ptr[256])() = {
     item_func_noentry,
 };
 
-inline void getItemFunc(u8 i_itemNo) {
+#if !TARGET_PC
+inline
+#endif
+void getItemFunc(u8 i_itemNo) {
     dComIfGs_onItemFirstBit(i_itemNo);
     item_func_ptr[i_itemNo]();
 }
@@ -741,8 +744,12 @@ void item_func_ARMOR() {}
 void item_func_WEAR_ZORA() {}
 
 void item_func_MAGIC_LV1() {
+#if TARGET_PC
+    dComIfGs_onEventBit(0xD04);
+#else
     dComIfGp_setItemMagicCount(16);
     dComIfGp_setItemMaxMagicCount(16);
+#endif
 }
 
 void item_func_DUNGEON_EXIT_2() {
@@ -1152,7 +1159,15 @@ void item_func_M_MAYFLY() {}
 
 void item_func_F_MAYFLY() {}
 
-void item_func_POU_SPIRIT() {}
+void item_func_POU_SPIRIT() {
+#if TARGET_PC
+    dComIfGs_addPohSpiritNum();
+    if (dComIfGs_getPohSpiritNum() == 20) {
+        /* dSv_event_flag_c::F_0457 - Castle Town - Revived cat */
+        dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[457]);
+    }
+#endif
+}
 
 void item_func_ANCIENT_DOCUMENT() {
     dComIfGs_setItem(SLOT_22, dItemNo_ANCIENT_DOCUMENT_e);
@@ -1411,7 +1426,11 @@ int item_getcheck_func_WEAR_ZORA() {
 }
 
 int item_getcheck_func_MAGIC_LV1() {
+#if TARGET_PC
+    return dComIfGs_isEventBit(0xD04);
+#else
     return -1;
+#endif
 }
 
 int item_getcheck_func_DUNGEON_EXIT_2() {

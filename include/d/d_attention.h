@@ -18,7 +18,6 @@ public:
 
     fopAc_ac_c* getZHintTarget() { return convPId(field_0x8); }
 
-private:
     /* 0x0 */ fpc_ProcID mHintActorID;
     /* 0x4 */ int mPriority;
     /* 0x8 */ fpc_ProcID field_0x8;
@@ -34,7 +33,6 @@ public:
     fopAc_ac_c* getCatghTarget() { return convPId(mCatghTargetID); }
     u8 getChangeItem() { return mChangeItem; }
 
-private:
     /* 0x00 */ fpc_ProcID mRequestActorID;
     /* 0x04 */ int field_0x4;
     /* 0x08 */ f32 mDistance;
@@ -120,7 +118,6 @@ public:
 
     fopAc_ac_c* getLookTarget() { return convPId(mLookTargetID); }
 
-private:
     fpc_ProcID mRequestActorID;
     int field_0x4;
     f32 mDistance;

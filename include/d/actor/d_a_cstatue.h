@@ -101,7 +101,6 @@ public:
 
     static DUSK_GAME_DATA u16 const m_bckIdxTable[daCstatueType_N][7];
 
-private:
     /* 0x568 */ const char* mResName;
     /* 0x56C */ request_of_phase_process_class mPhaseReq;
     /* 0x574 */ J3DModel* mModel;

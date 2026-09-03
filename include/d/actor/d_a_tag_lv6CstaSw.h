@@ -16,7 +16,6 @@ public:
 
     u32 getSw() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x568 */ u8 mSwitch;
     /* 0x569 */ u8 unused[0x570 - 0x569];
 };

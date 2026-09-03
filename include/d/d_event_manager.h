@@ -112,7 +112,6 @@ public:
     dEvM_HIO_c& getEventHIO();
     #endif
 
-private:
     /* 0x000 */ dEvDtBase_c mEventList[BASE_MAX];
     /* 0x18C */ int mCameraPlay;
     /* 0x190 */ dEvent_exception_c mException;

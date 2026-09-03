@@ -42,7 +42,6 @@ public:
         return fopAcM_GetParamBit(this,28,2) == 0;
     }
 
-private:
     /* 0x568 */ fpc_ProcID mProcIds[2];
     /* 0x570 */ u8 mRunTimer;
     /* 0x571 */ u8 mAction;

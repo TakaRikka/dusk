@@ -30,7 +30,6 @@ public:
     u8 getType() { return fopAcM_GetParamBit(this, 24, 4); }
     bool checkPullLBall() { return fopAcM_GetParamBit(this, 28, 2) == 0; }
 
-private:
     /* 0x568 */ fpc_ProcID mBallIDs[8];
     /* 0x588 */ u8 mTimer;
     /* 0x589 */ u8 mAction;

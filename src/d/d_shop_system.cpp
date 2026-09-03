@@ -906,15 +906,17 @@ int dShopSystem_c::seq_start(fopAc_ac_c* actor, dMsgFlow_c* i_flow) {
                 if (mFlow.getEventId(&itemNo) == 1) {
                     if (mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
 #if TARGET_PC
-                        const char* itemCheckName = nullptr;
+                        u32 itemGiveTag = 0;
                         if (itemNo == dItemNo_HALF_MILK_BOTTLE_e) {
-                            itemCheckName = "sera_reward";
-                            itemNo = dusk::mods::item_check(itemCheckName, itemNo, actor);
+                            const auto itemCheck =
+                                dusk::mods::item_check_commit("sera_reward", itemNo, actor);
+                            itemNo = itemCheck.itemNo;
+                            itemGiveTag = itemCheck.tag;
                         }
 #endif
                         mItemPartnerId =
                             fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, -1, NULL,
-                                NULL IF_DUSK_ARG(dusk::mods::item_give_tag(itemCheckName)));
+                                NULL IF_DUSK_ARG(itemGiveTag));
                     }
 
                     if (fpcEx_IsExist(mItemPartnerId)) {
@@ -1205,7 +1207,9 @@ int dShopSystem_c::seq_decide_yes(fopAc_ac_c* actor, dMsgFlow_c* i_flow) {
             if (mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
 #if TARGET_PC
                 const u32 itemGiveTag = dusk::mods::item_give_tag_shop(itemNo & 0xFF);
-                itemNo = dusk::mods::item_check_shop(itemNo & 0xFF, actor);
+                const auto itemCheck =
+                    dusk::mods::item_check_commit(itemGiveTag, itemNo & 0xFF, actor);
+                itemNo = itemCheck.itemNo;
 #endif
                 mItemPartnerId = fopAcM_createItemForPresentDemo(
                     &current.pos, itemNo, 0, -1, -1, NULL, NULL IF_DUSK_ARG(itemGiveTag));

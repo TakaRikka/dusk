@@ -60,8 +60,12 @@ bool isWii() {
         || getGameVersion() == GameVersion::WiiKor;
 }
 
+bool isLessThanWiiJpn() {
+    return getGameVersion() < GameVersion::WiiJpn;
+}
+
 bool isJpnOrLessThanWiiJpn() {
-    return isRegionJpn() || getGameVersion() < GameVersion::WiiJpn;
+    return isRegionJpn() || isLessThanWiiJpn();
 }
 
 bool isPalOrAtLeastWiiR2() {

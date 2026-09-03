@@ -50,7 +50,6 @@ public:
     void KeyWaitPosMove();
     #endif
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ JKRHeap* mpHeap;
     /* 0x574 */ J3DModel* mpModel;

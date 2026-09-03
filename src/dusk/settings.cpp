@@ -1,7 +1,12 @@
 #include "dusk/settings.h"
-#include <aurora/aurora.h>
+
 #include "dusk/config.hpp"
 #include "dusk/game_mode.hpp"
+#include "dusk/texture_replacements.hpp"
+#include "dusk/ui/ui.hpp"
+
+#include <aurora/aurora.h>
+#include <dolphin/vi.h>
 
 namespace dusk {
 
@@ -16,6 +21,7 @@ UserSettings g_userSettings = {
         .rememberWindowSize {"video.rememberWindowSize", false},
         .lastWindowWidth {"video.lastWindowWidth", 0},
         .lastWindowHeight {"video.lastWindowHeight", 0},
+        .uiScale {"video.uiScale", 100},
     },
 
     .audio = {
@@ -158,6 +164,8 @@ UserSettings g_userSettings = {
         .removeQuestMapMarkers {"game.removeQuestMapMarkers", false},
         .showInputViewer {"game.showInputViewer", false},
         .showInputViewerGyro {"game.showInputViewerGyro", false},
+        .enableMoveLinkCombo {"game.enableMoveLinkCombo", false},
+        .enableTeleportCombo {"game.enableTeleportCombo", false},
         .lastSelectedGameModeId {"game.lastSelectedGameModeId", gamemode::kVanillaGameModeId}
     },
 
@@ -217,6 +225,22 @@ UserSettings& getSettings() {
     return g_userSettings;
 }
 
+void applyInternalResolutionScale(int scale) {
+    VISetFrameBufferScale(static_cast<float>(scale));
+}
+
+void applyResampler(Resampler resampler) {
+    switch (resampler) {
+    case Resampler::Area:
+        aurora_set_resampler(SAMPLER_AREA);
+        break;
+    case Resampler::Bilinear:
+    default:
+        aurora_set_resampler(SAMPLER_BILINEAR);
+        break;
+    }
+}
+
 void registerSettings() {
     // Video
     Register(g_userSettings.video.enableFullscreen);
@@ -228,6 +252,8 @@ void registerSettings() {
     Register(g_userSettings.video.rememberWindowSize);
     Register(g_userSettings.video.lastWindowWidth);
     Register(g_userSettings.video.lastWindowHeight);
+    Register(g_userSettings.video.uiScale, 
+        [](const int&, const int&) { dusk::ui::apply_scale(); });
 
     // Audio
     Register(g_userSettings.audio.masterVolume);
@@ -280,9 +306,12 @@ void registerSettings() {
     Register(g_userSettings.game.bloomMultiplier);
     Register(g_userSettings.game.depthOfFieldMode);
     Register(g_userSettings.game.disableWaterRefraction);
-    Register(g_userSettings.game.enableTextureReplacements);
-    Register(g_userSettings.game.internalResolutionScale);
-    Register(g_userSettings.game.resampler);
+    Register(g_userSettings.game.enableTextureReplacements,
+        [](const bool&, const bool&) { texture_replacements::reload(); });
+    Register(g_userSettings.game.internalResolutionScale,
+        [](const int& value, const int&) { applyInternalResolutionScale(value); });
+    Register(g_userSettings.game.resampler,
+        [](const Resampler& value, const Resampler&) { applyResampler(value); });
     Register(g_userSettings.game.shadowResolutionMultiplier);
     Register(g_userSettings.game.enableMapBackground);
     Register(g_userSettings.game.disableCutscenePillarboxing);
@@ -308,6 +337,8 @@ void registerSettings() {
     Register(g_userSettings.game.removeQuestMapMarkers);
     Register(g_userSettings.game.showInputViewer);
     Register(g_userSettings.game.showInputViewerGyro);
+    Register(g_userSettings.game.enableMoveLinkCombo);
+    Register(g_userSettings.game.enableTeleportCombo);
     Register(g_userSettings.game.lastSelectedGameModeId);
     Register(g_userSettings.game.fastSpinner);
     Register(g_userSettings.game.infiniteHearts);
@@ -398,6 +429,21 @@ static TransientSettings g_transientSettings = {
         .terrainViewOpacity = 50.0f,
         .colliderViewOpacity = 50.0f,
         .drawRange = 100.0f,
+    },
+    .triggerView = {
+        .loadZones = false,
+        .eventAreas = false,
+        .switchAreas = false,
+        .eventTags = false,
+        .midnaStops = false,
+        .twilightGates = false,
+        .checkpoints = false,
+        .paths = false,
+        .transformDists = false,
+        .attentionDists = false,
+        .purpleMistAvoid = false,
+        .leevers = false,
+        .opacity = 75.0f,
     },
     .turboMode = false,
 };

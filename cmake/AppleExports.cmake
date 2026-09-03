@@ -46,8 +46,6 @@ function(setup_apple_exports target)
             --out "${_exp}"
             --exclude cmake_pch
             --exclude miniz
-            --exclude asan_options
-            --exclude src/dusk
             ${_sdk_args}
             COMMENT "Generating dusklight exports"
             VERBATIM)

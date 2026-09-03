@@ -130,7 +130,6 @@ public:
     void setNextNameStr(char* i_name) { SAFE_STRCPY(mNextNameStr,i_name); }
     void draw() { _draw(); }
 
-private:
     /* 0x004 */ STControl* stick;
     /* 0x008 */ JKRArchive* archive;
     /* 0x00C */ dDlst_NameIN_c nameIn;

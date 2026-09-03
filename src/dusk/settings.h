@@ -145,6 +145,7 @@ struct UserSettings {
         ConfigVar<bool> rememberWindowSize;
         ConfigVar<int> lastWindowWidth;
         ConfigVar<int> lastWindowHeight;
+        ConfigVar<int> uiScale;
     } video;
 
     struct {
@@ -285,6 +286,8 @@ struct UserSettings {
         ConfigVar<bool> removeQuestMapMarkers;
         ConfigVar<bool> showInputViewer;
         ConfigVar<bool> showInputViewerGyro;
+        ConfigVar<bool> enableMoveLinkCombo;
+        ConfigVar<bool> enableTeleportCombo;
 
         ConfigVar<std::string> lastSelectedGameModeId;
     } game;
@@ -315,6 +318,9 @@ UserSettings& getSettings();
 
 void registerSettings();
 
+void applyInternalResolutionScale(int scale);
+void applyResampler(Resampler resampler);
+
 // Transient settings
 
 struct CollisionViewSettings {
@@ -328,8 +334,25 @@ struct CollisionViewSettings {
     float drawRange;
 };
 
+struct TriggerViewSettings {
+    bool loadZones;
+    bool eventAreas;
+    bool switchAreas;
+    bool eventTags;
+    bool midnaStops;
+    bool twilightGates;
+    bool checkpoints;
+    bool paths;
+    bool transformDists;
+    bool attentionDists;
+    bool purpleMistAvoid;
+    bool leevers;
+    float opacity;
+};
+
 struct TransientSettings {
     CollisionViewSettings collisionView;
+    TriggerViewSettings triggerView;
     bool turboMode;
     bool moveLinkActive;
     bool stateShareLoadActive;

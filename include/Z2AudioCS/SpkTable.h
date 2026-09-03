@@ -31,7 +31,6 @@ public:
         return (SpkTableParams*)mEntryOffset + num;
     }
 
-    // private:
     /* 0x00 */ bool mIsInitialized;
     /* 0x04 */ s32 mNumOfSound;
     /* 0x08 */ u32 mEntryOffset;

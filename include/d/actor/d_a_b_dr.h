@@ -82,7 +82,6 @@ public:
     u8 onTarget() { return mTarget = true; }
     u8 isBack() { return arg0; }
 
-private:
     /* 0x05AC */ request_of_phase_process_class mPhase;
     /* 0x05B4 */ mDoExt_McaMorfSO* mpModelMorf;
     /* 0x05B8 */ J3DModel* mpPartModel;

@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <ranges>
 #include <string>
 #include <string_view>
@@ -10,6 +11,7 @@
 #include "dusk/config.hpp"
 #include "dusk/config_var.hpp"
 #include "mods/api.h"
+#include "mods/runtime.h"
 
 namespace dusk::mods {
 struct LoadedMod;
@@ -35,6 +37,7 @@ struct ModManifestInfo {
     struct Import {
         std::string id;
         uint16_t major = 0;
+        uint16_t minMinor = 0;
         bool required = false;
         bool operator==(const Import&) const = default;
     };
@@ -46,6 +49,19 @@ struct ModManifestInfo {
     std::vector<Import> imports;
     std::vector<Export> exports;
     bool operator==(const ModManifestInfo&) const = default;
+};
+
+struct DelegatedModRuntime {
+    std::string id;
+    uint16_t major = 0;
+    uint16_t minMinor = 0;
+
+    const ModRuntimeService* service = nullptr;
+    ModContext* providerContext = nullptr;
+
+    bool operator==(const DelegatedModRuntime& other) const {
+        return id == other.id && major == other.major && minMinor == other.minMinor;
+    }
 };
 
 struct ModMetadata {
@@ -180,7 +196,7 @@ struct LoadedMod {
     bool loadFailed = false;
     std::string failureReason;
 
-    // mod_initialize succeeded; a mod_shutdown is owed on deactivation.
+    // Initialization succeeded; shutdown is owed on deactivation.
     bool initialized = false;
     // Static service exports are currently present in the registry.
     bool servicesRegistered = false;
@@ -202,6 +218,7 @@ struct LoadedMod {
 
     NativeModStatus nativeStatus = NativeModStatus::None;
     std::unique_ptr<NativeMod> native;
+    std::optional<DelegatedModRuntime> runtime;
     std::unique_ptr<ModContext> context;
 
     // Shared with overlay file registrations so in-flight DVD reads survive disable/reload.

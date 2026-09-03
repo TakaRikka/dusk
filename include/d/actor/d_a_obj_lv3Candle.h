@@ -29,7 +29,6 @@ public:
     int getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
     int getType() { return fopAcM_GetParamBit(this, 8, 8); }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ J3DModel* mpModel;
     /* 0x574 */ u8 mType;

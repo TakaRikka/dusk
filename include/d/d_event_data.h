@@ -190,7 +190,6 @@ public:
     int getCurrentCut() { return mCurrentCut; }
     int getStartCut() { return mStartCut; }
 
-    // private:
     /* 0x00 */ char mName[8];
     /* 0x08 */ u8 mWork[0x18]; // PROBLEM: this buffer is now too small for StaffWork to fit in
     /* 0x20 */ BE(s32) mTagID;
@@ -293,7 +292,6 @@ public:
 
     static const int FlagMax = 0x2800;
 
-private:
     u32 mFlags[320];
 };  // Size = 0x500
 
@@ -346,7 +344,6 @@ public:
     void setIDataP(int* p_idata) { mIDataP = p_idata; }
     void setSDataP(char* p_sdata) { mSDataP = p_sdata; }
 
-    // private:
     /* 0x00 */ event_binary_data_header* mHeaderP;
     /* 0x04 */ dEvDtEvent_c* mEventP;
     /* 0x08 */ dEvDtStaff_c* mStaffP;

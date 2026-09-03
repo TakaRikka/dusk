@@ -14,6 +14,7 @@ public:
     };
 
     Popover(Rml::Element* anchor, Side side, const Rml::String& windowClass = "");
+    ~Popover() override;
 
     void show() override;
     void hide(bool close) override;
@@ -32,7 +33,7 @@ protected:
 
 private:
     void reposition();
-    void notify_close();
+    void notify_close(bool restoreFocus);
 
     Rml::Element* mAnchor = nullptr;
     Side mSide;

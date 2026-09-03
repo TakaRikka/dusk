@@ -145,7 +145,6 @@ public:
 
     static DUSK_GAME_DATA EventFn mEvtSeqList[6];
 
-private:
     /* 0xB48 */ Z2Creature mCreatureSound;
     /* 0xBD8 */ J3DModel* mModelBow;
     /* 0xBDC */ J3DModel* mModelQuiver;

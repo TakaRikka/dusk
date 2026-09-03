@@ -56,7 +56,6 @@ public:
     int draw();
     int _delete();
 
-private:
     /* 0x0568 */ request_of_phase_process_class mPhase;
     /* 0x0570 */ J3DModel* mpModel;
     /* 0x0574 */ dBgS_ObjAcch mChkObj;

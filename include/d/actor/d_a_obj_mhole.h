@@ -36,7 +36,6 @@ public:
     u8 getKind() { return fopAcM_GetParamBit(this, 12, 4); }
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mpModel;
     /* 0x574 */ mDoExt_brkAnm* mpBrkAnm;

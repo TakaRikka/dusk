@@ -54,7 +54,6 @@ public:
     u32 checkAction(actionFunc func) { return field_0xb58 == func; }
     bool checkNormalAttk() { return checkAction(&daE_OctBg_c::normal_attack); }
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* field_0x5b4;
     /* 0x5B8 */ mDoExt_brkAnm* field_0x5b8;

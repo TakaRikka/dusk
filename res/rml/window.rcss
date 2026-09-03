@@ -48,6 +48,12 @@ window.modal {
     max-width: 640dp;
 }
 
+@media (max-height: 896dp) {
+    window.modal {
+        max-height: 100%;
+    }
+}
+
 window[open] {
     filter: opacity(1);
     transform: scale(1);
@@ -59,6 +65,16 @@ window[open] {
     }
     window {
         box-shadow: none;
+    }
+}
+
+@media (max-width: 768dp) {
+    body {
+        padding: 16dp;
+    }
+    window.modal {
+        width: 100%;
+        max-width: 100%;
     }
 }
 
@@ -91,7 +107,6 @@ window content pane {
     min-width: 0;
     min-height: 0;
     padding: 24dp;
-    padding-bottom: 0dp;
     gap: 8dp;
     overflow: hidden auto;
     font-size: 20dp;
@@ -105,6 +120,76 @@ window content pane > * {
     flex: 0 0 auto;
 }
 
+ui-list {
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+window content pane > ui-list,
+.modal-content pane > ui-list {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+ui-list-viewport {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden auto;
+}
+
+ui-list-content {
+    display: flex;
+    flex-flow: column;
+    gap: 8dp;
+    min-width: 0;
+}
+
+ui-list-content > button.ui-list-row {
+    flex: 0 0 auto;
+}
+
+ui-list-empty {
+    display: block;
+    padding: 16dp;
+    text-align: center;
+    opacity: 0.45;
+}
+
+window content pane > ui-list {
+    margin-left: -24dp;
+    margin-right: -24dp;
+}
+
+window content pane > ui-list:first-child {
+    margin-top: -24dp;
+}
+
+window content pane > ui-list:last-child {
+    margin-bottom: -24dp;
+}
+
+window content pane > ui-list ui-list-content,
+window content pane > ui-list ui-list-empty {
+    padding-left: 24dp;
+    padding-right: 24dp;
+}
+
+window content pane > ui-list:first-child ui-list-content,
+window content pane > ui-list:first-child ui-list-empty {
+    padding-top: 24dp;
+}
+
+window content pane > ui-list:last-child ui-list-content,
+window content pane > ui-list:last-child ui-list-empty {
+    padding-bottom: 24dp;
+}
+
 window content pane:last-of-type > div {
     line-height: 1.625;
 }
@@ -113,14 +198,6 @@ window content pane:last-of-type > div {
     display: block;
     font-size: 16dp;
     color: rgba(224, 219, 200, 65%);
-}
-
-window content pane > spacer {
-    display: block;
-    /* Completes the 24dp bottom inset after the pane's 8dp gap. */
-    flex: 0 0 16dp;
-    height: 16dp;
-    pointer-events: none;
 }
 
 scrollbarvertical {
@@ -419,14 +496,17 @@ progress {
     margin: 6dp 0 2dp 0;
 }
 
+progress fill {
+    background-color: rgba(194, 164, 45, 80%);
+    border-radius: 3dp;
+}
+
 progress.progress-done fill {
     background-color: #44aa22;
-    border-radius: 3dp;
 }
 
 progress.progress-ongoing fill {
     background-color: #2255bb;
-    border-radius: 3dp;
 }
 
 button.achievement-clear {
@@ -466,7 +546,9 @@ button.achievement-clear {
     padding: 24dp;
     gap: 20dp;
     flex: 0 1 auto;
+    min-height: 0;
     width: 100%;
+    overflow: hidden;
     text-align: left;
 }
 
@@ -507,7 +589,7 @@ window.modal.danger .modal-header icon {
 .modal-body {
     display: block;
     width: 100%;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
     font-size: 20dp;
     color: #FFFFFF;
@@ -517,6 +599,33 @@ window.modal.danger .modal-header icon {
 .modal-body span.tip {
     font-size: 14dp;
     color: #92875B;
+}
+
+.modal-content {
+    display: none;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.modal-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content pane {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+    gap: 8dp;
+    overflow: hidden auto;
+}
+
+.modal-content pane > * {
+    flex: 0 0 auto;
 }
 
 .verification-progress {
@@ -562,4 +671,26 @@ progress.verification-progress-bar {
 .modal-actions-vertical button.modal-btn {
     flex: 0 0 auto;
     width: 100%;
+}
+
+@media (max-height: 640dp) {
+    .modal-dialog {
+        padding: 16dp;
+        gap: 12dp;
+    }
+
+    .modal-body {
+        font-size: 17dp;
+    }
+}
+
+@media (max-width: 640dp) {
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions button.modal-btn {
+        flex: 0 0 auto;
+        width: 100%;
+    }
 }

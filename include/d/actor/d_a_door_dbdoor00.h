@@ -41,7 +41,6 @@ public:
 
     void setAction(u8 i_action) { mAction = i_action; }
 
-// private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ request_of_phase_process_class mPhaseReq2;
     /* 0x578 */ J3DModel* mpModel;

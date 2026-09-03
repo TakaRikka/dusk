@@ -51,7 +51,6 @@ public:
     inline int draw();
     inline int createHeap();
 
-private:
     /* 0x568 */ J3DModel* model;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ Mtx mMtx;

@@ -17,7 +17,7 @@ class daObj_Gadget_HIO_c;
  *
  */
 class daObj_Gadget_c : public fopAc_ac_c {
-private:
+public:
     /* 0x568 */ daObj_Gadget_HIO_c* field_0x568;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mModel;

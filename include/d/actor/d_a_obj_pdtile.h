@@ -35,7 +35,6 @@ public:
 
     u8 getType() { return fopAcM_GetParamBit(this, 0, 4); }
 
-private:
     /* 0x5A8 */ Mtx mBgMtx;
     /* 0x5D8 */ Mtx field_0x5d8;
     /* 0x608 */ J3DModel* mModel;

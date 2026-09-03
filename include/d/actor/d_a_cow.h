@@ -208,7 +208,6 @@ public:
     u8 getCowIn() { return mCowIn; }
     u8 getNoNearCheckTimer() { return mNoNearCheckTimer; }
 
-private:
     /* 0x568 */ u16 mFlags;
     /* 0x56c */ request_of_phase_process_class mPhase;
     /* 0x574 */ mDoExt_McaMorfSO* mpMorf;

@@ -17,7 +17,7 @@ public:
     explicit Pane(Rml::Element* parent, Type type);
 
     bool focus() override;
-    void update() override;
+    bool focus_last();
 
     void set_selected_item(int index);
     Component& register_control(
@@ -36,12 +36,10 @@ public:
     }
     Rml::Element* add_text(const Rml::String& text);
     Rml::Element* add_rml(const Rml::String& rml);
-    void finalize();
     void clear();
 
 private:
     Type mType;
-    bool finalized = false;
 };
 
 }  // namespace dusk::ui

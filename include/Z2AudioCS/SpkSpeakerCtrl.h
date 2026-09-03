@@ -41,7 +41,6 @@ public:
     static bool checkRadioSensitivity(s32 chan);
     static bool isSubmitPlayByRadioSensitivity(s32 chan);
 
-private:
 };
 
 #endif /* Z2AUDIOCS_SPKSPEAKERCTRL_H */

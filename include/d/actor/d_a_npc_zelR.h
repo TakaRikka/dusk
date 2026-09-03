@@ -96,7 +96,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList;
     static DUSK_GAME_DATA EventFn mCutList[1];
 
-private:
     /* 0xE40 */ NPC_ZELR_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;

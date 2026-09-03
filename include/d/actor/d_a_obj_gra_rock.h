@@ -33,7 +33,6 @@ public:
 
     static DUSK_GAME_DATA dCcD_SrcCyl const mCcDCyl;
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhases[5];
     /* 0x5C8 */ J3DModel* mModel;
     /* 0x5CC */ mDoExt_btpAnm mBtp;

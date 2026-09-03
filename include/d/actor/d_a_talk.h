@@ -22,7 +22,6 @@ public:
     u16 getStatus();
     u32 messageSet();
 
-private:
     /* 0x568 */ dMsgFlow_c mMsgFlow;
     /* 0x5B4 */ u32 mMessageID;
 };

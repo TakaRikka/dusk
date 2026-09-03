@@ -179,7 +179,6 @@ public:
     cXyz* GetHitPosP() { return &mHitPos; }
     void ClrHit() { dCcD_GAtTgCoCommonBase::ClrActorInfo(); }
 
-    // private:
     /* 0x1C */ u8 mSe;
     /* 0x1D */ u8 mMtrl;
     /* 0x1E */ u8 mHitMark;
@@ -215,7 +214,6 @@ public:
     u8 GetSe() { return mSe; }
     void ClrHit() { dCcD_GAtTgCoCommonBase::ClrActorInfo(); }
 
-private:
     /* 0x1C */ u8 mSe;
     /* 0x1D */ u8 mMtrl;
     /* 0x1E */ u8 mHitMark;
@@ -258,7 +256,6 @@ public:
     void SetTgSpl(dCcG_Tg_Spl spl) { mTg = spl; }
     void OnNoActor() { field_0x1C |= 1; }
 
-    // private:
     /* 0x04 */ u8 mAt;
     /* 0x05 */ u8 mTg;
     /* 0x06 */ u8 mRoomId;

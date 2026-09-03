@@ -42,7 +42,10 @@
 #if TARGET_PC
 #include "dusk/autosave.h"
 #include "dusk/memory.h"
+#include "dusk/mods/item.hpp"
+#include "dusk/trigger_viewer.h"
 #include "dusk/ui/ui.hpp"
+#include "mods/items.h"
 #endif
 
 #if DEBUG
@@ -675,6 +678,10 @@ static int dScnPly_Draw(dScnPly_c* i_this) {
         dComIfG_Ccsp()->Draw();
         dComIfG_Bgsp().Draw();
 
+        #if TARGET_PC
+        dusk::TriggerView::execute();
+        #endif
+
         #if DEBUG
         dPath_Draw();
         #endif
@@ -1192,11 +1199,35 @@ static int phase_1(dScnPly_c* i_this) {
     }
 
     // Stage: Ordon Spring, Room: Ordon Spring
+#if TARGET_PC
+    const bool iliaMemoryArrival =
+        !strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
+        dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12;
+    const u32 iliaMemoryTag = dusk::mods::item_give_tag(ITEM_CHECK_ILIA_MEMORY);
+    if (!iliaMemoryArrival) {
+        dusk::mods::item_check_cancel(iliaMemoryTag);
+    }
+    if (iliaMemoryArrival)
+#else
     if (!strcmp(dComIfGp_getStartStageName(), "F_SP104") && dComIfGp_getStartStageRoomNo() == 1 &&
         dComIfGp_getStartStagePoint() == 23 && dComIfGp_getStartStageLayer() == 12)
+#endif
     {
-        dComIfGs_onItemFirstBit(dItemNo_HORSE_FLUTE_e);
-        dComIfGs_setItem(SLOT_21, dItemNo_HORSE_FLUTE_e);
+#if TARGET_PC
+        const auto itemCheck =
+            dusk::mods::item_check_commit(iliaMemoryTag, dItemNo_HORSE_FLUTE_e, nullptr);
+        if (itemCheck.itemNo == dItemNo_HORSE_FLUTE_e) {
+#endif
+            dComIfGs_onItemFirstBit(dItemNo_HORSE_FLUTE_e);
+            dComIfGs_setItem(SLOT_21, dItemNo_HORSE_FLUTE_e);
+#if TARGET_PC
+            dusk::mods::item_check_complete(itemCheck, nullptr);
+        } else if (itemCheck.itemNo == dItemNo_NONE_e) {
+            dusk::mods::item_check_complete(itemCheck, nullptr);
+        } else {
+            dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::Silent);
+        }
+#endif
     }
 
     if ((u8)dKy_darkworld_stage_check(dComIfGp_getStartStageName(),

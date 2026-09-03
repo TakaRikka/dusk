@@ -30,7 +30,6 @@ public:
     bool isSet() { return mIsSet; }
     daGlwSph_c* getpSph() { return mpSph; }
 
-private:
     /* 0x0 */ daGlwSph_c* mpSph;
     /* 0x4 */ s8 mIsSet;
 };

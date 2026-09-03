@@ -79,7 +79,6 @@ public:
 
     static DUSK_GAME_DATA EvtSeq DUSK_CONST mEvtSeqList[];
 
-private:
     /* 0xB48 */ Z2CreatureCitizen mSound;
     /* 0xBEC */ u8 field_0xBEC[0xBF0 - 0xBEC];
     /* 0xBF0 */ daNpcF_Lookat_c mLookat;

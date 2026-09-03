@@ -25,7 +25,6 @@ public:
     inline const void* getResource(void) const { return mWaveData; }
     inline void* getResource(void) { return mWaveData; }
 
-private:
     /* 0x00 */ void* mWaveData;
 };
 

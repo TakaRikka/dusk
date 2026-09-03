@@ -24,7 +24,6 @@ public:
     int _delete();
     int create();
 
-private:
     /* 0x5AC */ Mtx field_0x5ac;
     /* 0x5DC */ cXyz field_0x5dc;
     /* 0x5E8 */ f32 field_0x5e8;

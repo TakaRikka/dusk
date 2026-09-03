@@ -66,7 +66,6 @@ public:
     void onPlayAllAnime() { field_0xb4 = 0xff; }
     void offPlayAllAnime() { field_0xb4 = 0; }
 
-private:
     /* 0x04 */ J2DScreen* mpScreen;
     /* 0x08 */ J2DPane* mpPane;
     /* 0x0C */ dSelect_icon_c* mpSelectIcon;

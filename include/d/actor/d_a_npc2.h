@@ -15,7 +15,6 @@ public:
     fopAc_ac_c* getActor();
     virtual ~daBaseNpc_acMngr_c() {}
 
-private:
     /* 0x04 */ fpc_ProcID mActorId;
 };
 

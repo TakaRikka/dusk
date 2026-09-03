@@ -44,7 +44,6 @@ public:
         return (Z2SoundHandlePool*)getNth(index);
     }
 
-private:
     /* 0xC */ u8 handleNum_;
 };
 
