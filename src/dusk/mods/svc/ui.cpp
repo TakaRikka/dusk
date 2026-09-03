@@ -915,7 +915,7 @@ ModResult ui_window_close(LoadedMod& mod, uint64_t handle) {
     if (slot == nullptr || slot->document == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    slot->document->hide(true);
+    slot->document->pop();
     return MOD_OK;
 }
 
@@ -1164,6 +1164,7 @@ void ui_remove_mod(LoadedMod& mod) {
     if (s_modMenuTabs.erase(&mod) != 0) {
         s_menuTabsDirty = true;
     }
+    bool restoreCoveredDocument = false;
     auto entries = s_slots.take_all(mod);
     for (auto& entry : entries) {
         auto& slot = entry.value;
@@ -1171,6 +1172,7 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Window: {
             auto* window = static_cast<ui::ModWindow*>(slot.document);
             if (window != nullptr) {
+                restoreCoveredDocument |= ui::top_document() == window;
                 window->force_hide(true);
             }
             break;
@@ -1178,6 +1180,7 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Dialog: {
             auto* dialog = static_cast<ModDialog*>(slot.document);
             if (dialog != nullptr) {
+                restoreCoveredDocument |= ui::top_document() == dialog;
                 dialog->force_hide(true);
             }
             break;
@@ -1188,6 +1191,9 @@ void ui_remove_mod(LoadedMod& mod) {
         default:
             break;
         }
+    }
+    if (restoreCoveredDocument) {
+        ui::uncover_top_document();
     }
 }
 

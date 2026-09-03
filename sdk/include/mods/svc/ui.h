@@ -19,9 +19,9 @@
  * All calls must be made on the game thread from mod callbacks (initialize, update, hooks, or UI
  * callbacks). Handles are opaque, generation-checked ids; a stale or unknown handle fails with
  * MOD_INVALID_ARGUMENT. Element handles die with the content that owns them: a panel or tab rebuild
- * destroys the previous build's elements, so re-acquire handles inside the build callback rather
- * than caching them. Strings are UTF-8 and, in both directions, only valid for the duration of the
- * call.
+ * destroys the previous build's elements, so re-acquire handles in each build callback and use them
+ * only until the next rebuild. Strings are UTF-8 and, in both directions, only valid for the
+ * duration of the call.
  */
 
 /* 0 is never a valid handle. */

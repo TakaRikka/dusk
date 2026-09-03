@@ -1,35 +1,137 @@
 # Dusklight Mod API
 
-Mods are `.dusk` bundles: zip archives that can contain code (in the form of native libraries), resources, DVD overlay
+Mods are `.dusk` bundles: zip archives that can contain code (native libraries or scripts), resources, DVD overlay
 files, and texture replacements. Mods may be enabled, disabled and reloaded at runtime.
 
-When code mods are loaded, they get dynamically linked by the operating system to the running game process. The mod
+There are three types of mods:
+
+- **Asset-only mods**: Mods that contain no code, and may replace files on the game disc ("overlays") and provide
+  replacement textures (texture packs).
+- **Native mods (C++)**: Fully-featured, with the ability to interop with game code and hook functions. Must be compiled
+  for every supported platform. (See [mod-template](https://github.com/TwilitRealm/mod-template))
+- **Script mods (Luau)**: Simple, widely-compatible, but can only access provided services.
+
+## Table of Contents
+
+1. [mod.json](#modjson)
+2. [Asset-only Mods](#asset-only-mods)
+3. [Native Mods (C++)](#native-mods)
+4. [Script Mods (Luau)](#script-mods)
+5. [Services](#services)
+6. [Built-in Services](#built-in-services)
+7. [Hooking Game Functions](#hooking-game-functions)
+8. [Asset Overlays](#asset-overlays)
+9. [Runtime Lifecycle](#runtime-lifecycle)
+10. [Error Handling](#error-handling)
+11. [Advanced](#advanced)
+
+---
+
+## mod.json
+
+Every mod starts with a single file, a `mod.json`:
+
+```json
+{
+  "id": "com.example.my_mod",
+  "name": "My Mod",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "description": "A short description shown in the mod manager.",
+  "icon": "res/icon.png",
+  "banner": "res/banner.png"
+}
+```
+
+`id` is required: a unique, stable identifier (reverse-DNS style; periods, underscores, and lowercase alphanumerics).
+Everything else is optional but recommended.
+
+`icon` and `banner` are bundle paths to PNG images that display in the in-game mod manager and mod website. A square
+icon (1:1), and a banner (~3.5:1, minimum 800px width). If omitted, `res/icon.png` and `res/banner.png` are used
+automatically when present.
+
+Simply create a zip file with a `mod.json`, and rename it to `.dusk`. That's it!
+
+---
+
+## Asset-only Mods
+
+```
+my_mod.dusk
+├── mod.json
+├── res/       (optional bundled resources)
+├── overlay/   (optional game file overrides)
+└── textures/  (optional texture replacements)
+```
+
+Place files in `overlay/` to replace the disc version of that file. Examples:
+
+- `overlay/Movie/demo_movie98_00.thp`: Replaces `Movie/demo_movie98_00.thp` on disc.
+- `overlay/res/Object/Kmdl/archive/bmwr/al.bmd`: Replaces `archive/bmwr/al.bmd` _within_ `res/Object/Kmdl.arc` without
+  overwriting the entire `.arc`.
+
+Place textures in `textures/` to automatically register them as texture replacements when active. These follow the same
+[Dolphin-compatible naming scheme](#textureservice-modssvctextureh) as the user `<data>/texture_replacements/`
+directory. Directories are scanned recursively. Examples:
+
+- `textures/tex1_256x128_e6a4c7be9bf48305_14.dds`: Replaces the Hero's Clothes texture.
+
+Simply zip the `mod.json` and adjacent folders, then rename to `.dusk`. Then, copy the `.dusk` into the user mods
+folder:
+
+- Windows: `%APPDATA%\TwilitRealm\Dusklight\mods`
+- Linux: `~/.local/share/TwilitRealm/Dusklight/mods`
+- macOS: `~/Library/Application Support/TwilitRealm/Dusklight/mods`
+
+---
+
+## Native Mods
+
+Mods built with [mod-template](https://github.com/TwilitRealm/mod-template) are native C++ mods. Native mods are very
+powerful and can interact with and [hook](#hooking-game-functions) game code directly. All features are available to
+native mods.
+
+Example C++ mod:
+
+```cpp
+#include "mods/service.hpp"
+#include "mods/svc/log.h"
+
+DEFINE_MOD();                          // once, in exactly one translation unit
+IMPORT_SERVICE(LogService, svc_log);   // resolved by the loader before mod_initialize
+
+extern "C" {
+
+MOD_EXPORT ModResult mod_initialize(ModError* error) {
+    svc_log->info(mod_ctx, "hello from my_mod");
+    return MOD_OK;
+}
+
+MOD_EXPORT ModResult mod_update(ModError* error) {   // called every frame
+    return MOD_OK;
+}
+
+MOD_EXPORT ModResult mod_shutdown(ModError* error) {
+    return MOD_OK;
+}
+
+}
+```
+
+When native mods are loaded, they get dynamically linked by the operating system to the running game process. The mod
 exports lifecycle functions that Dusklight calls into (`mod_initialize`, `mod_update`, `mod_shutdown`), and the mod
 communicates with the host via **services**: plain C APIs, individually versioned. Dusklight exports several built-in
 services, and mods may export services of their own, permitting framework mods and cross-mod integration.
 
-Beyond services, mods have full access to the original game's code: include game headers, call directly into any public
-function, read and write data fields, and hook the vast majority of game functions.
+Beyond services, native mods have full access to the original game's code: include game headers, call directly into any
+public function, read and write data fields, and hook the vast majority of game functions.
 
-## Table of Contents
+### Quick Start (Native Mods)
 
-1. [Getting Started](#getting-started)
-2. [mod.json](#modjson)
-3. [Anatomy of a Code Mod](#anatomy-of-a-code-mod)
-4. [Services](#services)
-5. [Built-in Services](#built-in-services)
-6. [Hooking Game Functions](#hooking-game-functions)
-7. [Asset Overlays](#asset-overlays)
-8. [Runtime Lifecycle](#runtime-lifecycle)
-9. [Error Handling](#error-handling)
-10. [Advanced](#advanced)
-
----
-
-## Getting Started
-
-Fork the [mod template](https://github.com/TwilitRealm/mod-template), a self-contained CMake project that uses the
-Dusklight mod SDK.
+Create a repository from
+the [mod-template](https://github.com/new?template_name=mod-template&template_owner=TwilitRealm),
+a self-contained CMake project that uses the Dusklight mod SDK. It includes a GitHub Actions CI workflow that builds the
+mod for every supported platform.
 
 ```
 my_mod/
@@ -81,63 +183,101 @@ Passing `--mods <dir>` on the command line replaces the user directory with one 
 
 ---
 
-## mod.json
+## Script Mods
+
+For simpler use cases where direct game code access and hooks aren't necessary, Luau mods are also supported.
+Luau mods do not need to be compiled, and are always supported on all platforms. However, they can only use services
+that are provided as Luau modules.
+
+Mods can utilize Luau to add UI elements to their mod panel, use configuration variables, and dynamically swap out
+models/textures at runtime (e.g. to switch model variants or disable certain replacements) while remaining widely
+compatible.
+
+Example mod structure:
+
+```
+my_luau_mod.dusk
+├── mod.json
+└── res/
+    ├── main.luau
+    └── lib/util.luau
+```
+
+Set the `runtime` to `dev.twilitrealm.luau@1.0` in `mod.json`:
 
 ```json
 {
-  "id": "com.example.my_mod",
-  "name": "My Mod",
+  "id": "com.example.my_luau_mod",
+  "name": "My Script Mod",
   "version": "1.0.0",
-  "author": "Your Name",
-  "description": "A short description shown in the mod manager.",
-  "icon": "res/my_icon.png",
-  "banner": "res/my_banner.png"
+  "runtime": "dev.twilitrealm.luau@1.0"
 }
 ```
 
-`id` is required: a unique, stable identifier (reverse-DNS style; periods, underscores, and alphanumerics). Everything
-else is optional but recommended.
+`res/main.luau` runs once when the mod activates. Register optional update and shutdown callbacks through
+`dusklight.host`:
 
-`icon` and `banner` are bundle-relative paths to PNG images for the in-game mod manager: the square icon (e.g.
-512x512), the banner (~3.5:1). If omitted, `res/icon.png` and `res/banner.png` are used automatically when present.
-
----
-
-## Anatomy of a Code Mod
-
-```cpp
-#include "mods/service.hpp"
-#include "mods/svc/log.h"
-
-DEFINE_MOD();                          // once, in exactly one translation unit
-IMPORT_SERVICE(LogService, svc_log);   // resolved by the loader before mod_initialize
-
-extern "C" {
-
-MOD_EXPORT ModResult mod_initialize(ModError* error) {
-    svc_log->info(mod_ctx, "hello from my_mod");
-    return MOD_OK;
-}
-
-MOD_EXPORT ModResult mod_update(ModError* error) {   // called every frame
-    return MOD_OK;
-}
-
-MOD_EXPORT ModResult mod_shutdown(ModError* error) {
-    return MOD_OK;
-}
-}
+```lua
+local host = require("dusklight.host")
+host.on_update(function()
+    -- Runs every frame
+end)
+host.on_shutdown(function()
+    -- Runs on mod deactivation
+end)
 ```
 
-All three lifecycle exports are required. `mod_ctx` is your mod's identity token, set by the loader before
-`mod_initialize` runs. Pass it as the first argument to every service call.
+Require script modules with `./` or `../` paths relative to the requiring file. The runtime appends `.luau` and rejects
+paths that escape `res/`.
+
+The runtime provides these modules:
+
+- `dusklight.log`: `write`, `trace`, `debug`, `info`, `warn`, and `error`.
+- `dusklight.host`: host `version`, mod metadata and directories, lifecycle callbacks, and `fail`.
+- `dusklight.config`: bool, integer, float, and string variables with `get`, `set`, and subscriptions.
+- `dusklight.resource`: binary-safe reads from the mod's `res/` tree.
+- `dusklight.overlay`: file and copied-buffer overlays with removable handles.
+- `dusklight.texture`: encoded-file and raw-data replacements with unregisterable handles.
+- `dusklight.ui`: Mods panels, controls, lists, windows, dialogs, styles, menu tabs, toasts, and clipboard access.
+
+For completion and type checking, add `sdk/luau/dusklight.d.luau` to the `luau-lsp.types.definitionFiles` setting.
+
+Configurable overlay example:
+
+```lua
+local config = require("dusklight.config")
+local overlay = require("dusklight.overlay")
+
+local hood = config.register({ name = "hood", type = "bool", default = true })
+local current
+
+local function apply(enabled)
+    if current then current:remove() end
+    current = overlay.add_file("/res/Object/Alink.arc",
+        enabled and "res/alink_hood.arc" or "res/alink_nohood.arc")
+end
+
+hood:subscribe(apply)
+apply(hood:get())
+```
+
+To create a script mod, copy `sdk/luau/template`, edit its manifest and source, then zip the `mod.json` and adjacent
+folders and rename to `.dusk`. Copy the `.dusk` into the user mods folder:
+
+- Windows: `%APPDATA%\TwilitRealm\Dusklight\mods`
+- Linux: `~/.local/share/TwilitRealm/Dusklight/mods`
+- macOS: `~/Library/Application Support/TwilitRealm/Dusklight/mods`
+
+**Restrictions:** The Luau VM has no raw filesystem, network, or game-code access. Each script mod has a 64 MiB memory
+limit. Calls are interrupted after 250 ms for updates and UI callbacks or 5 seconds for lifecycle calls. An uncaught
+error, timeout, or memory exhaustion fails and disables the mod.
 
 ---
 
 ## Services
 
-A service is a struct of C function pointers with a version header. You declare what you use at file scope, and the
-loader resolves it before your mod initializes:
+A service is a struct of C function pointers with a version header. Import services at file scope, and the loader
+resolves them before initializing the mod:
 
 ```cpp
 IMPORT_SERVICE(LogService, svc_log);              // required, latest minor version
@@ -145,7 +285,7 @@ IMPORT_SERVICE_VERSION(LogService, svc_log, 0);   // required, minimum minor ver
 IMPORT_OPTIONAL_SERVICE(SomeService, svc_maybe);  // may be null
 ```
 
-A service must be imported in only **one** file (usually your `mod.cpp`). Other files may simply use `svc_log` or
+A service should be imported in only **one** file (usually your `mod.cpp`). Other files may simply use `svc_log` or
 `mods::log::` after including the appropriate header.
 
 Each service is individually versioned, and there may be multiple major versions of a service provided at once,
@@ -153,26 +293,19 @@ allowing backwards compatibility with older mods while still changing services f
 bump is a breaking change, treated as a different service entirely. For **additive** changes, a service appends new
 functions to the end of the struct without breaking existing callers and simply bumps the minor version.
 
-`IMPORT_SERVICE` and `IMPORT_OPTIONAL_SERVICE` require the latest minor version compiled against, making every field in
-the service safe to call. A mod can use `IMPORT_SERVICE_VERSION` (or its optional counterpart) with an older minor
-version to remain compatible with older Dusklight versions, then use `SERVICE_HAS` to check at runtime for fields added
-after that explicitly requested version.
-
-The contract (see `sdk/include/mods/api.h` for the full version):
-
-- **A required import is guaranteed valid.** If the service is missing or too old, the mod fails to load with a clear
-  error. No need to null check at call sites.
-- **Anything at or below the minor version you imported can be called unconditionally.** The default macros import
-  the service type's current minor version; the versioned macros explicitly override that minimum.
-- Optional imports may be null; check once in `mod_initialize`.
-- Fields newer than your imported minor version must be gated behind `SERVICE_HAS(service, ServiceType, field)` plus a
-  null check.
+`IMPORT_SERVICE` and `IMPORT_OPTIONAL_SERVICE` require the latest minor version compiled against, guaranteeing that
+every function is present. If a mod doesn't use (or may operate without) functions added in later minor versions, and
+wants to remain compatible with older Dusklight versions, it may use `IMPORT_SERVICE_VERSION` or
+`IMPORT_OPTIONAL_SERVICE_VERSION` to require an older minor version. It can then check `SERVICE_HAS` at runtime to see
+if a newer function is present (i.e. running on a new enough Dusklight version).
 
 ---
 
 ## Built-in Services
 
 ### LogService (`mods/svc/log.h`)
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(LogService, svc_log);
@@ -181,6 +314,13 @@ svc_log->info(mod_ctx, "spawned the thing");
 svc_log->warn(mod_ctx, "that looks wrong");
 svc_log->error(mod_ctx, "very bad");
 svc_log->write(mod_ctx, LOG_LEVEL_DEBUG, "verbose details");
+```
+
+**Luau**
+
+```lua
+local log = require("dusklight.log")
+log.info("spawned the thing")
 ```
 
 Messages appear in the console prefixed with your mod ID. Messages are plain UTF-8 strings and are copied before the
@@ -199,6 +339,8 @@ mods::log::warn("health is down to {:.1f}%", healthPercent);
 Loads files from the `res/` tree of your `.dusk` archive. Paths are relative to `res/` (pass `"config.txt"`, not
 `"res/config.txt"`); absolute paths and `..` are rejected.
 
+**C++**
+
 ```cpp
 IMPORT_SERVICE(ResourceService, svc_resource);
 
@@ -207,6 +349,13 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
     // buf.data / buf.size
     svc_resource->free(mod_ctx, &buf);
 }
+```
+
+**Luau**
+
+```lua
+local resource = require("dusklight.resource")
+local contents = resource.load("config.txt")
 ```
 
 Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
@@ -301,7 +450,9 @@ an empty `body` and the final path in `downloadPath`. Check `Response::ok()` bef
 
 ### HostService (`mods/svc/host.h`)
 
-Mod metadata and runtime interaction with the loader:
+Mod metadata and runtime interaction with the loader.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(HostService, svc_host);
@@ -317,6 +468,20 @@ if (svc_host->data_dir(mod_ctx, &dataDir) == MOD_OK) {
 
 // Report an error and disable the mod
 svc_host->fail(mod_ctx, MOD_ERROR, "something unrecoverable happened");
+```
+
+**Luau**
+
+```lua
+local host = require("dusklight.host")
+local dataDir = host.data_dir()
+host.on_update(function()
+    -- Runs every frame
+end)
+host.on_shutdown(function()
+    -- Runs on mod deactivation
+end)
+host.fail("something unrecoverable happened")
 ```
 
 `get_service`/`publish_service` provide dynamic service lookup; see [Exporting Services](#exporting-services).
@@ -350,8 +515,9 @@ Installs hooks on game functions and resolves symbols by name. You'll rarely cal
 
 Registers DVD file overlays at runtime: the dynamic counterpart to the static `overlay/` directory (see
 [Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, a file within an archive,
-or with a caller-owned buffer
-(copied on registration):
+or with a caller-owned buffer (copied on registration).
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(OverlayService, svc_overlay);
@@ -361,6 +527,14 @@ svc_overlay->add_file(mod_ctx, "/Movie/demo_movie98_00.thp", "res/replacement.th
 svc_overlay->add_file(mod_ctx, "/res/Object/Kmdl/archive/bmwr/al.bmd", "res/link_model.bmd", &handle); // Replaces link's model
 svc_overlay->add_buffer(mod_ctx, "/generated.txt", data, size, nullptr);
 svc_overlay->remove(mod_ctx, handle);
+```
+
+**Luau**
+
+```lua
+local overlay = require("dusklight.overlay")
+local replacement = overlay.add_file("/Movie/demo_movie98_00.thp", "res/replacement.thp")
+replacement:remove()
 ```
 
 `disc_path` must be absolute (leading `/`) and is matched against the disc case-insensitively. Paths that don't exist
@@ -376,7 +550,9 @@ See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
 Registers texture replacements at runtime: the dynamic counterpart to the static `textures/` directory (see
 [Asset Overlays](#asset-overlays)). Two forms: raw texel data with an explicit key, or an encoded `.dds`/`.png` from
-your bundle whose filename encodes the key:
+your bundle whose filename encodes the key.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(TextureService, svc_texture);
@@ -397,6 +573,14 @@ svc_texture->register_data(mod_ctx, &key, &data, nullptr);
 svc_texture->unregister(mod_ctx, handle);
 ```
 
+**Luau**
+
+```lua
+local texture = require("dusklight.texture")
+local replacement = texture.register_file("res/tex1_32x32_$_6.png")
+replacement:unregister()
+```
+
 Filenames use the same Dolphin-style convention as the user's `texture_replacements` directory:
 `tex1_{w}x{h}_{texhash}[_{tluthash}]_{fmt}.dds|.png`, where hashes may be `$` (wildcard). `_mipN` sidecar files next to
 a registered file are picked up automatically. Files are decoded lazily on first use by the renderer; raw data is copied
@@ -408,7 +592,9 @@ See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
 Persistent, mod-scoped configuration variables. Each var is stored in the user's `config.json` under
 `mod.<escaped mod id>.<name>` (escaping: `.` → `_`, `_` → `__`, so `com.example.my_mod` becomes `com_example_my__mod`),
-next to the host's own settings:
+next to the host's own settings.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(ConfigService, svc_config);
@@ -430,6 +616,17 @@ void on_speed_changed(ModContext* ctx, ConfigVarHandle var, const ConfigVarValue
     /* value->float_value is the new value, previous->float_value the old one */
 }
 svc_config->subscribe(mod_ctx, var, on_speed_changed, nullptr, nullptr);
+```
+
+**Luau**
+
+```lua
+local config = require("dusklight.config")
+local speed = config.register({ name = "speedMultiplier", type = "float", default = 1.0 })
+speed:subscribe(function(value, previous)
+    -- React to the new value.
+end)
+speed:set(2.0)
 ```
 
 Types: `CONFIG_VAR_BOOL` (`bool`), `CONFIG_VAR_INT` (`int64_t`), `CONFIG_VAR_FLOAT` (`double`), `CONFIG_VAR_STRING`
@@ -532,6 +729,8 @@ content is rebuilt, and `update` runs every frame while that mod is selected. Wh
 pane carries your mod's id as a `mod-id` attribute (like custom window roots), so scoped RCSS can target it (e.g.
 `[mod-id="com.example.mod"]`).
 
+**C++**
+
 ```cpp
 IMPORT_SERVICE(UiService, svc_ui);
 
@@ -553,6 +752,18 @@ UiModsPanelDesc panel = UI_MODS_PANEL_DESC_INIT;
 panel.build = build;
 panel.update = update;
 svc_ui->register_mods_panel(mod_ctx, &panel);
+```
+
+**Luau**
+
+```lua
+local ui = require("dusklight.ui")
+ui.register_mods_panel({
+    build = function(panel)
+        panel:add_section("Status")
+        panel:add_text("running")
+    end,
+})
 ```
 
 Element setters must match the element kind: `elem_set_text`/`elem_set_rml` on text rows, and `elem_set_progress` on
