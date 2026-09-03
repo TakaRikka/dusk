@@ -7,3 +7,6 @@
 [submodule "mods/randomizer"]
 	path = mods/randomizer
 	url = https://github.com/TwilitRealm/dusklight-randomizer.git
+[submodule "mods/cosmetics"]
+	path = mods/cosmetics
+	url = https://github.com/TwilitRealm/dusklight-cosmetics
