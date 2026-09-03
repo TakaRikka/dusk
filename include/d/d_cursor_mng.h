@@ -95,6 +95,7 @@ class dCsr_mng_c {
         BOOL set(mDoGph_gInf_c::csr_c* i_csr, u16, u8, u8);
     };
 
+public:
     dCsr_mng_c() : is_csr_on(true) {
     }
 

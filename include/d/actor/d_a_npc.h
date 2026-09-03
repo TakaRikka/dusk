@@ -29,6 +29,7 @@ struct daNpc_GetParam3 {  // name unknown
 };
 
 class daNpcT_ActorMngr_c {
+public:
     /* 0x0 */ fpc_ProcID mActorID;
 
 public:
@@ -43,6 +44,7 @@ public:
 };
 
 class daNpcT_MatAnm_c : public J3DMaterialAnm {
+public:
     /* 0x0F4 */ mutable f32 field_0xF4;
     /* 0x0F8 */ mutable f32 field_0xF8;
     /* 0x0FC */ f32 mNowOffsetX;
@@ -214,6 +216,7 @@ public:
 };
 
 class daNpcT_JntAnm_c {
+public:
     /* 0x000 */ daNpcT_ActorMngr_c mActrMngr;
     /* 0x008 */ cXyz mPos;
     /* 0x014 */ cXyz mAttnPos;

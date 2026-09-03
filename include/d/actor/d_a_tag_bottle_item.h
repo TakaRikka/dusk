@@ -8,6 +8,7 @@ class daTag_BottleItem_c;
 typedef int (daTag_BottleItem_c::*ProcessFunc)(void*);
 
 class daTag_BottleItem_c : public fopAc_ac_c {
+public:
     /* 0x0568 */ ProcessFunc mProcessFunc;
     /* 0x056C */ u16 mEventType;
     /* 0x0576 */ u8 mBottleItemType;

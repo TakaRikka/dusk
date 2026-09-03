@@ -13,6 +13,7 @@
 class fopAc_ac_c;
 
 class dBgS_AcchCir : public cBgS_PolyInfo {
+public:
     /* 0x10 */ u32 m_flags;
     /* 0x14 */ cM3dGCir m_cir;
     /* 0x28 */ f32 m_wall_rr;

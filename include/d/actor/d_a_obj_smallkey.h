@@ -14,6 +14,7 @@
  *
  */
 class daKey_c : public daItemBase_c {
+public:
     void seStartTwinkle_private(u32);
 
 public:
