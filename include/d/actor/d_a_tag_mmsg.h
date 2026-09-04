@@ -14,7 +14,6 @@ public:
     void onUseFlg() { mUseFlg = true; }
     bool checkNoAttention() const { return mAttention == 0xFF; }
 
-private:
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 field_0x569;
     /* 0x56A */ u8 mAttention;

@@ -33,7 +33,6 @@ public:
     int getSw2No() { return fopAcM_GetParamBit(this, 8, 8); };
     int getEvent() { return fopAcM_GetParamBit(this, 0x10, 8); };
 
-private:
     /* 0x5B8 */ Mtx mMtx1;
     /* 0x5E8 */ Mtx mMtx2;
     /* 0x618 */ J3DModel* mModel;

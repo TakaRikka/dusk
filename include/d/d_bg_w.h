@@ -346,7 +346,6 @@ public:
     void SetArrowStickCallback(dBgW_ArrowStickCallback func) { m_arrow_stick_callback = func; }
     void OnMoveFlag() { m_flags |= (u8)1; }
 
-private:
     /* 0xB0 */ dBgW_CrrFunc m_crr_func;
     /* 0xB4 */ dBgW_RideCallback m_ride_callback;
     /* 0xB8 */ dBgW_ArrowStickCallback m_arrow_stick_callback;

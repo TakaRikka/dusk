@@ -43,6 +43,11 @@ u16 message_id(const MessageEntryData& entry) {
     return static_cast<u16>(static_cast<u16>(entry.bytes[4]) << 8 | entry.bytes[5]);
 }
 
+u16 flow_group(int flowId) {
+    const bool isCommonFlow = flowId >= 3000 && flowId < dusk::flow::kCustomNodeMin;
+    return isCommonFlow ? 0 : static_cast<u16>(dMsgObject_getGroupID());
+}
+
 }  // namespace
 #endif
 
@@ -70,8 +75,7 @@ void dMsgFlow_c::init(fopAc_ac_c* i_partner, int i_flowID, int param_2, fopAc_ac
         dMsgObject_changeFlowGroup(i_flowID);
 
 #if TARGET_PC
-        dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(),
-            i_flowID >= 3000 ? 0 : static_cast<u16>(dMsgObject_getGroupID()));
+        dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(), flow_group(i_flowID));
 #endif
 
         if (param_2 == 0) {
@@ -399,8 +403,7 @@ void dMsgFlow_c::setInitValueGroupChange(int i_msgNo, fopAc_ac_c** i_talkPartner
 
     dMsgObject_changeFlowGroup(i_msgNo);
 #if TARGET_PC
-    dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(),
-        i_msgNo >= 3000 ? 0 : static_cast<u16>(dMsgObject_getGroupID()));
+    dusk::flow::bind_resource(dMsgObject_getMsgDtPtr(), flow_group(i_msgNo));
 #endif
     setInitValue(0);
 
@@ -446,6 +449,12 @@ u8* dMsgFlow_c::getMsgDataBlock(char const* block_tag) {
 }
 
 u16 dMsgFlow_c::getInitNodeIndex(u16 param_1) {
+#if TARGET_PC
+    if (param_1 >= dusk::flow::kCustomNodeMin) {
+        return param_1;
+    }
+#endif
+
     u8* var_r30 = NULL;
     u16 var_r27 = -1;
 
@@ -1753,7 +1762,7 @@ u16 dMsgFlow_c::query042(mesg_flow_node_branch* i_flowNode_p, fopAc_ac_c* i_spea
     daMidna_c* midna_p = daPy_py_c::getMidnaActor();
 
     u8 ret = 0;
-    if (strcmp("F_SP116", dComIfGp_getStartStageName()) == 0 && dComIfGs_isSaveDunSwitch(60)) {
+    if (strcmp("F_SP116", dComIfGp_getStartStageName()) == 0 && dComIfGs_isSaveDunSwitch(60) IF_DUSK(&& !dusk::getSettings().game.canTransformAnywhere)) {
         ret = 4;
     } else if (midna_p->checkNpcNear()) {
         ret = 1;

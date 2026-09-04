@@ -25,7 +25,6 @@ public:
 
     u32 getNameArg_0() { return fopAcM_GetParamBit(this, 0, 4); }
 
-private:
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dBgW* mpBgW;
     /* 0x57C */ Mtx mMtx;

@@ -52,7 +52,6 @@ public:
     void CreateChk();
     int Create();
 
-private:
     /* 0x5AC */ u8 field_0x5AC[0x5B1 - 0x5AC];
     /* 0x5B1 */ u8 mUpDownMode;
     /* 0x5B2 */ u8 field_0x5B2[0x5B6 - 0x5B2];

@@ -50,7 +50,6 @@ public:
         return this->speed.y != 0.0f;
     };
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;
     /* 0x5A8 */ Mtx mMtx;
     /* 0x5D8 */ u8 field_0x5d8;

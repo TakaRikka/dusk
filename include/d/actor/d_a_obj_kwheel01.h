@@ -27,7 +27,6 @@ public:
     int Delete();
     bool eventStart();
 
-private:
     /* 0x5B8 */ Mtx mNewBgMtx;
     /* 0x5E8 */ Mtx mTransformMtx;
     /* 0x618 */ J3DModel* mpModel;

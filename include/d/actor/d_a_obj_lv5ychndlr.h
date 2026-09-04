@@ -26,7 +26,6 @@ public:
     virtual int Delete();
     virtual ~daObjYchndlr_c() {}
 
-private:
     /* 0x5A8 */ Mtx field_0x5a8;
     /* 0x5D8 */ Mtx field_0x5d8;
     /* 0x608 */ J3DModel* mpChandlierModel;

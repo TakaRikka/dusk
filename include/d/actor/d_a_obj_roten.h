@@ -25,7 +25,6 @@ public:
     char DUSK_CONST* getResName();
     virtual ~daObj_Roten_c();
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mModel;
     /* 0x5AC */ JPABaseEmitter* mEmitters[2];

@@ -187,7 +187,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[11];
     static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[11];
 
-private:
     /* 0xE40 */ NPC_PACHI_MARO_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 mType;

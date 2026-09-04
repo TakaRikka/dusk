@@ -161,7 +161,6 @@ public:
         return 0;
     }
 
-private:
     /* 0x0E40 */ NPC_KOLIN_HIO_CLASS* mpHIO;
     /* 0x0E44 */ J3DModel* mpClothModel;
     /* 0x0E48 */ dCcD_Cyl field_0xe48;

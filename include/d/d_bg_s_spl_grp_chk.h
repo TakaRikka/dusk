@@ -30,7 +30,6 @@ public:
     cXyz& GetPosP() { return m_ground; }
     f32 GetRoof() { return m_roof; }
 
-private:
     /* 0x3C */ cXyz m_ground;
     /* 0x48 */ f32 m_roof;
     /* 0x4C */ f32 m_height;

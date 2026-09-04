@@ -104,7 +104,6 @@ public:
     JSUList<Z2SoundObjBase>* getAllList() { return &allList_; }
     #endif
 
-private:
     /* 0x00 */ JSUList<Z2CreatureEnemy> field_0x0;
     #if PARTIAL_DEBUG || DEBUG
     /* 0x0C */ JSUList<Z2SoundObjBase> allList_;

@@ -1,0 +1,7 @@
+{
+  "id": "dev.twilitrealm.luau",
+  "name": "Luau Support",
+  "version": "1.0.0",
+  "author": "Twilit Realm",
+  "description": "Luau script runtime for mods"
+}

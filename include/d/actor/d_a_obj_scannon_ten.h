@@ -60,7 +60,6 @@ public:
     static DUSK_GAME_DATA const ExeProc s_exeProc[];
     static DUSK_GAME_DATA const ExeProc s_demoExeProc[][2];
 
-private:
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ mDoExt_bckAnm mBck;
     /* 0x594 */ dBgW* mpBgW;

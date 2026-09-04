@@ -28,7 +28,6 @@ public:
 
     void setDemoStart() { mDemoStart = 1; }
 
-private:
     friend class daNpc_zrZ_c;
 
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;

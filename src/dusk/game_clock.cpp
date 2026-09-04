@@ -50,6 +50,16 @@ void reset() {
     s_simTickActive = false;
 }
 
+void set_sim_rate(float hz) {
+    const float maximumHz = aurora::time::kMaximumTimeScale / kSimPeriod;
+    aurora::time::set_scale(std::clamp(hz, 1.0f, maximumHz) * kSimPeriod);
+    reset();
+}
+
+float get_sim_rate() {
+    return aurora::time::scale() / kSimPeriod;
+}
+
 const FrameTiming& advance() {
     const auto nativeNow = native_clock::now();
     const auto gameNow = game_clock::now();

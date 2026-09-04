@@ -3,6 +3,8 @@
 #include "pane.hpp"
 #include "window.hpp"
 
+#include <borealis/file_select.hpp>
+
 #include <climits>
 
 namespace dusk::ui {
@@ -16,6 +18,7 @@ struct ModControlSpec {
         String,
         Select,
         Color,
+        FilePicker,
     };
 
     Kind kind = Kind::Button;
@@ -29,6 +32,7 @@ struct ModControlSpec {
     std::function<void(int)> setInt;
     std::function<Rml::String()> getString;
     std::function<void(Rml::String)> setString;
+    std::function<bool()> isSelected;
     std::function<bool()> isDisabled;
     std::function<bool()> isModified;
     int min = 0;
@@ -38,8 +42,11 @@ struct ModControlSpec {
     Rml::String suffix;
     std::vector<Rml::String> options;
     int maxLength = -1;
+    bool stringSetOnChange = false;
     std::vector<Rml::String> colorPresets;
     bool colorAlpha = false;
+    std::vector<borealis::file_select::Filter> fileFilters;
+    bool directoryMode = false;
 };
 
 Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec);

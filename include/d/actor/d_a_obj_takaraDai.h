@@ -26,7 +26,6 @@ public:
 
     u32 getSwBit() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mpBaseModel;
     /* 0x5AC */ J3DModel* mpTopModel;

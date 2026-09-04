@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
-project(basic_cosmetics_mod CXX)
+project(custom_actor_demo CXX)
+set(CMAKE_CXX_STANDARD 20)
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(DUSK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../.." CACHE PATH "Path to dusk source root")
@@ -12,24 +13,9 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     endif ()
 endif ()
 
-include(FetchContent)
-
-message(STATUS "basic_cosmetics_mod: Fetching xxhash")
-FetchContent_Declare(
-        xxhash
-        GIT_REPOSITORY https://github.com/Cyan4973/xxHash.git
-        GIT_TAG        v0.8.3
-)
-FetchContent_MakeAvailable(xxhash)
-
-set(COSMETIC_SOURCES src/color_utils.cpp src/midna_hair_color.cpp src/texture_utils.cpp src/hooks.cpp)
-
-add_mod(basic_cosmetics_mod
+add_mod(custom_actor_demo
     FEATURES game fmt
-    SOURCES  src/mod.cpp ${COSMETIC_SOURCES}
+    SOURCES  src/mod.cpp src/m_a_obj_wrock.cpp src/m_a_mine.cpp
     MOD_JSON mod.json
     RES_DIR  res
-    BUNDLE
 )
-
-target_link_libraries(basic_cosmetics_mod PRIVATE xxHash::xxhash)

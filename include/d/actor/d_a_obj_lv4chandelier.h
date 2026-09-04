@@ -43,7 +43,6 @@ public:
     int getAddChain2() { return fopAcM_GetParamBit(this, 12, 4); }
     int getSw() { return fopAcM_GetParamBit(this, 16, 8); }
 
-private:
     /* 0x05A8 */ Mtx field_0x5a8;
     /* 0x05D8 */ Mtx field_0x5d8;
     /* 0x0608 */ J3DModel* mModel;

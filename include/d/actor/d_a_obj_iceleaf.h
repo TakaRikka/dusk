@@ -61,7 +61,6 @@ public:
     u8 checkRideStatus() { return fopAcM_GetParamBit(this, 0x10, 8); }
     u8 getSwbit() { return fopAcM_GetParamBit(this, 8, 8); }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mpModel;
     /* 0x574 */ dBgS_ObjAcch mAcch;

@@ -26,7 +26,6 @@ public:
     int _delete();
     u8 getSwNo();
     
-private:
     /* 0x0570 */ dCcD_Stts mStts;
     /* 0x05AC */ dCcD_Cps mCps;
     /* 0x06F0 */ cM3dGCpsS mCapsule;

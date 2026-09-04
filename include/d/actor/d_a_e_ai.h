@@ -48,7 +48,6 @@ public:
     int CreateHeap();
     int Create();
 
-private:
     /* 0x5AC */ JPABaseEmitter* mpEmitter;
     /* 0x5B0 */ request_of_phase_process_class m_phase;
     /* 0x5B8 */ u8 field_0x5b8;

@@ -8,8 +8,9 @@
 #define ITEM_CHECK_BUG_PREFIX "bug:"                       /* <insect_item> */
 #define ITEM_CHECK_CHEST_PREFIX "chest:"                   /* <stage>:<box> */
 #define ITEM_CHECK_FREESTANDING_PREFIX "freestanding:"     /* <stage>:<bit> */
+#define ITEM_CHECK_GOLDEN_WOLF_PREFIX "golden_wolf:"       /* <event_flag> */
 #define ITEM_CHECK_POE_PREFIX "poe:"                       /* <stage>:<switch> */
-#define ITEM_CHECK_SHOP_PREFIX "shop:"                     /* <stage>:<item> */
+#define ITEM_CHECK_SHOP_PREFIX "shop:"                     /* <stage>:<room>:<item> */
 #define ITEM_CHECK_SKY_PREFIX "sky:"                       /* <stage>:<room> */
 #define ITEM_CHECK_DUNGEON_REWARD_PREFIX "dungeon_reward:" /* <stage> */
 
@@ -20,12 +21,15 @@
 #define ITEM_CHECK_BULBLIN_KEY "bulblin_key:D_MN09"
 #define ITEM_CHECK_CORAL_EARRING "coral_earring"
 #define ITEM_CHECK_CORO_BOTTLE "coro_bottle"
+#define ITEM_CHECK_CORO_GATE_KEY "coro_gate_key"
+#define ITEM_CHECK_CORO_LANTERN "coro_lantern"
 #define ITEM_CHECK_DUNGEON_MAP_SNOWPEAK "dungeon_map:D_MN11"
 #define ITEM_CHECK_FAIRY_REWARD "fairy_reward:D_SB01"
 #define ITEM_CHECK_FISHING_BOTTLE "fishing_bottle"
 #define ITEM_CHECK_FISHING_HEART_PIECE "fishing_heart_piece"
 #define ITEM_CHECK_GOATS_REWARD "goats_reward"
 #define ITEM_CHECK_GORON_REWARD "goron_reward:F_SP113"
+#define ITEM_CHECK_GORON_SPRINGWATER_RUSH "goron_springwater_rush"
 #define ITEM_CHECK_ILIA_CHARM "ilia_charm"
 #define ITEM_CHECK_ILIA_MEMORY "ilia_memory"
 #define ITEM_CHECK_IZA_REWARD_1 "iza_reward_1"
@@ -41,6 +45,7 @@
 #define ITEM_CHECK_PRAYER_REWARD "prayer_reward"
 #define ITEM_CHECK_RENADO_LETTER "renado_letter"
 #define ITEM_CHECK_SERA_REWARD "sera_reward"
+#define ITEM_CHECK_SHAD_DOMINION_ROD "shad_dominion_rod"
 #define ITEM_CHECK_SKYBOOK "skybook"
 #define ITEM_CHECK_SNOWBOARD_REWARD "snowboard_race_reward"
 #define ITEM_CHECK_STAR_REWARD_1 "star_reward_1"

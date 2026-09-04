@@ -46,7 +46,6 @@ public:
     void setAction(u8 action) { mAction = action; }
     void setMoveMode(u8 mode) { mMoveMode = mode; }
 
-private:
     /* 0x5a0 */ request_of_phase_process_class mPhase;
     /* 0x5a8 */ J3DModel* mModel;
     /* 0x5ac */ s16 mEventIdx;

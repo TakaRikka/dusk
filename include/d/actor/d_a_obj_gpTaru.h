@@ -46,7 +46,6 @@ public:
     static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
     static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
-private:
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ u8 mMode;

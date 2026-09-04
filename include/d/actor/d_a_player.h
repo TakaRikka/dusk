@@ -25,7 +25,6 @@ public:
         mNowSetFlg = 0;
     }
 
-private:
     /* 0x14 */ u16 mEndFlg;
     /* 0x16 */ u16 mNowSetFlg;
 };
@@ -70,7 +69,6 @@ public:
     static DUSK_GAME_DATA s16 m_dropAngleY;
     static DUSK_GAME_DATA s16 m_eventKeepFlg;
 
-private:
     /* 0x0 */ u8 field_0x0;
     /* 0x2 */ s16 field_0x2;
     /* 0x4 */ f32 m_offsetY;
@@ -91,6 +89,14 @@ private:
 #define PLAYER_CREATE_ANM_HEAP(heap, type, name) (heap).createHeap(type)
 #endif
 
+#if TARGET_PC
+inline u32 daPy_getAnmResourceSize(u16 i_resId, u32 i_minSize) {
+    JKRArchive* archive = dComIfGp_getAnmArchive();
+    u32 size = archive->getFileSize(archive->findIdxResource(i_resId));
+    return size > i_minSize ? size : i_minSize;
+}
+#endif
+
 class daPy_anmHeap_c {
 public:
     enum daAlinkHEAP_TYPE {
@@ -107,6 +113,9 @@ public:
     void* mallocBuffer();
 #if TARGET_PC
     void createHeap(daAlinkHEAP_TYPE i_heapType, const char* name);
+    void reserveBuffer(u16 i_resId);
+    void* allocTempBuffer(u16 i_resId, u32* io_size);
+    void freeTempBuffers();
 #else
     void createHeap(daAlinkHEAP_TYPE i_heapType);
 #endif
@@ -136,6 +145,10 @@ public:
     /* 0x08 */ u32 mBufferSize;
     /* 0x0C */ u8* mBuffer;
     /* 0x10 */ JKRSolidHeap* mAnimeHeap;
+#if TARGET_PC
+    u8* mOwnedBuffer = NULL;
+    void** mTempBuffers = NULL;
+#endif
 };  // Size = 0x14
 
 class daPy_actorKeep_c {
@@ -151,7 +164,6 @@ public:
     fopAc_ac_c* getActor() const { return mActor; }
     fopAc_ac_c* getActorConst() const { return mActor; }
 
-private:
     /* 0x0 */ fpc_ProcID mID;
     /* 0x4 */ fopAc_ac_c* mActor;
 };  // Size: 0x8
@@ -296,7 +308,6 @@ public:
     void resetDemoType() { setDemoType(0); }
     void setStartDemoType() { setDemoType(DEMO_TYPE_START_e); }
 
-private:
     /* 0x00 */ u16 mDemoType;
     /* 0x02 */ s16 mDemoMoveAngle;
     /* 0x04 */ s16 mTimer;
@@ -311,9 +322,11 @@ private:
 class daMidna_c;
 class daSpinner_c;
 class daPy_py_c;
+#if !TARGET_PC
 inline daPy_py_c* dComIfGp_getLinkPlayer();
 inline BOOL dComIfGs_isEventBit(const u16);
 inline u32 dComIfGs_getLastSceneMode();
+#endif
 
 class daPy_py_c : public fopAc_ac_c {
 public:

@@ -48,7 +48,6 @@ public:
     u8 getIDNum() { return mIDNum; }
     void setFireFlag(u8 flag) { mFireFlag = flag; }
 
-private:
     /* 0x5B8 */ request_of_phase_process_class mPhase;
     /* 0x5C0 */ J3DModel* mpModel;
     /* 0x5C4 */ cXyz mFirePos;

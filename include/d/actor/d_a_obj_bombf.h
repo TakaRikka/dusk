@@ -21,7 +21,6 @@ public:
     int execute();
     int draw();
 
-private:
     /* 0x568 */ request_of_phase_process_class field_0x568;
     /* 0x570 */ J3DModel* field_0x570;
     /* 0x574 */ u32 field_0x574;

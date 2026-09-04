@@ -103,7 +103,6 @@ public:
     static DUSK_GAME_DATA const char* mCutNameList;
     static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[1];
 
-private:
     /* 0xE40 */ NPC_ZELDA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl;
     /* 0xF80 */ u8 field_0xf80;

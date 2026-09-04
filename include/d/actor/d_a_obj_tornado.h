@@ -30,7 +30,6 @@ public:
     u8 getTimer() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0x18, 8); }
 
-private:
     /* 0x568 */ dCcD_Stts mStts;
     /* 0x5A4 */ dCcD_Cps mCps;
     /* 0x6E8 */ cM3dGCpsS mWindCps;

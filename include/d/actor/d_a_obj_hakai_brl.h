@@ -34,7 +34,6 @@ public:
 
     static DUSK_GAME_DATA dCcD_SrcCyl const s_CcDCyl;
 
-private:
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ dCcD_Stts mStts;
     /* 0x5B4 */ dCcD_Cyl mCyl;

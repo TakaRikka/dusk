@@ -8,7 +8,7 @@
 
 #define ITEM_SERVICE_ID "dev.twilitrealm.dusklight.item"
 #define ITEM_SERVICE_MAJOR 2u
-#define ITEM_SERVICE_MINOR 0u
+#define ITEM_SERVICE_MINOR 3u
 
 /* 0 is never a valid handle. */
 typedef uint64_t ItemCheckHandle;
@@ -31,11 +31,19 @@ typedef struct ItemCheckInfo {
     const void* giver_actor; /* fopAc_ac_c*, or NULL when unavailable */
     uint8_t vanilla_item;
     uint8_t current_item;
+    uint8_t current_display_item;
+    bool was_resolved;
 } ItemCheckInfo;
 
-/* Return true and write out_item to replace current_item, or false to leave it unchanged. */
+typedef struct ItemCheckResolution {
+    uint8_t item;
+    uint8_t display_item; /* leave unset (0xFF/NONE) to use the item */
+    bool was_resolved;
+} ItemCheckResolution;
+
+/* Return true and write out_result to replace the result, or false to leave it unchanged. */
 typedef bool (*ItemCheckResolveFn)(
-    ModContext* ctx, const ItemCheckInfo* info, uint8_t* out_item, void* user_data);
+    ModContext* ctx, const ItemCheckInfo* info, ItemCheckResolution* out_result, void* user_data);
 
 typedef enum ItemGiveOrigin {
     ITEM_GIVE_ORIGIN_GAME = 0,
@@ -91,6 +99,13 @@ typedef struct ItemService {
         ModContext* ctx, ItemGiveObserveFn fn, void* user_data, ItemGiveHandle* out_handle);
 
     ModResult (*unobserve_gives)(ModContext* ctx, ItemGiveHandle handle);
+
+    /* Minor version 2 */
+
+    /* Resolve a live preview (item + display item) without granting an item or notifying give
+     * observers. */
+    ModResult (*resolve_check_full)(ModContext* ctx, const char* name, uint8_t vanilla_item,
+        ItemCheckResolution* out_resolution);
 } ItemService;
 
 MOD_DECLARE_SERVICE(ItemService, svc_item, ITEM_SERVICE_ID, ITEM_SERVICE_MAJOR, ITEM_SERVICE_MINOR);

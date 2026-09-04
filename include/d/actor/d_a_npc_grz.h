@@ -119,7 +119,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mEvtCutNameList[7];
     static DUSK_GAME_DATA cutFunc DUSK_CONST mEvtCutList[7];
 
-private:
     /* 0x0B48 */ Z2Creature mSound;
     /* 0x0BD8 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0x0BDC */ daNpcF_Lookat_c mLookat;

@@ -53,7 +53,6 @@ public:
 
     static DUSK_GAME_DATA actionFunc ActionTable[1][2];
 
-private:
     /* 0x9EC */ J3DModel* mpModel;
     /* 0x9F0 */ PathTrace_c m_path;
     /* 0xA18 */ actionFunc* mAction;

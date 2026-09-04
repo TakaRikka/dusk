@@ -148,7 +148,6 @@ public:
         field_0x9fc = 1;
     }
 
-private:
     /* 0x718 */ u8 field_0x718;
     /* 0x71C */ request_of_phase_process_class mPhase;
     /* 0x724 */ J3DModel* mpModel;

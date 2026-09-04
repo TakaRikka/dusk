@@ -68,7 +68,6 @@ public:
     u8 getMoveEnd() { return mMoveEnd; }
     u32 getID() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x584 */ request_of_phase_process_class mPhase;
     /* 0x58C */ int mStaffID;
     /* 0x590 */ s16 unk590;

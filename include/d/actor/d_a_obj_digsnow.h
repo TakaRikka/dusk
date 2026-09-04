@@ -50,7 +50,6 @@ public:
     void startDig() { mMode = ACTION_DIG_e; }
     void endDig() { mMode = ACTION_END_e; }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;
     /* 0x5A8 */ J3DModel* mpModel;
     /* 0x5AC */ dBgS_ObjAcch mAcch;

@@ -113,7 +113,6 @@ public:
 
     void setAction(u8 i_action) { mMode = i_action; }
 
-private:
     /* 0x057C */ request_of_phase_process_class mPhase;
     /* 0x0584 */ dBgS_AcchCir mAcchCir;
     /* 0x05C4 */ dCcD_Stts mCcStts;

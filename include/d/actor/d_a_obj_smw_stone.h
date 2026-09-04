@@ -29,7 +29,6 @@ public:
     u8 getSwBit0() { return fopAcM_GetParamBit(this, 0, 8); }
     void deleteStone() { mDelete = true; }
 
-private:
     /* 0x574 */ cBgS_PolyInfo mPolyInfo;
     /* 0x584 */ J3DModel* mpModel;
     /* 0x588 */ dBgW* mpBgW;

@@ -45,7 +45,6 @@ public:
     int getParamType() { return (shape_angle.x & 0xFF00) >> 8; }
     u8 getType() { return mType; }
 
-private:
     /* 0x5B8 */ request_of_phase_process_class mPhase;
     /* 0x5C0 */ J3DModel* mpModel1;
     /* 0x5C4 */ J3DModel* mpModel2;

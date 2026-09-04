@@ -7,6 +7,9 @@
 
 #include "d/actor/d_a_npc_kkri.h"
 #include "d/actor/d_a_e_ym.h"
+#if TARGET_PC
+#include "mods/items.h"
+#endif
 #include <cstring>
 
 static DUSK_CONSTEXPR int l_bmdData[2][2] = {
@@ -1183,16 +1186,39 @@ int daNpc_Kkri_c::talk(void*) {
                         if (mItemPartnerId == fpcM_ERROR_PROCESS_ID_e) {
 #if TARGET_PC
                             u32 itemGiveTag = 0;
-                            if (item_no == dItemNo_OIL_BOTTLE3_e) {
-                                const auto itemCheck =
-                                    dusk::mods::item_check_commit("coro_bottle", item_no, this);
+                            const char* itemCheckName = nullptr;
+                            switch (item_no) {
+                            case dItemNo_OIL_BOTTLE3_e:
+                                itemCheckName = ITEM_CHECK_CORO_BOTTLE;
+                                break;
+                            case dItemNo_KANTERA_e:
+                                itemCheckName = ITEM_CHECK_CORO_LANTERN;
+                                break;
+                            case dItemNo_KEY_OF_FILONE_e:
+                                itemCheckName = ITEM_CHECK_CORO_GATE_KEY;
+                                break;
+                            }
+
+                            if (itemCheckName != nullptr) {
+                                const auto itemCheck = dusk::mods::item_check_commit(
+                                    itemCheckName, item_no, this);
                                 item_no = itemCheck.itemNo;
                                 itemGiveTag = itemCheck.tag;
                             }
+
+                            if (item_no == dItemNo_NONE_e && itemCheckName != nullptr) {
+                                dusk::mods::item_check_complete({itemGiveTag, dItemNo_NONE_e}, this);
+                                field_0xfd5 = 1;
+                                mEvtNo = 1;
+                                evtChange();
+                            } else {
+                                mItemPartnerId = fopAcM_createItemForPresentDemo(
+                                    &current.pos, item_no, 0, -1, -1, NULL, NULL, itemGiveTag);
+                            }
+#else
+                            mItemPartnerId = fopAcM_createItemForPresentDemo(
+                                &current.pos, item_no, 0, -1, -1, NULL, NULL);
 #endif
-                            mItemPartnerId = fopAcM_createItemForPresentDemo(&current.pos, item_no,
-                                0, -1, -1, NULL,
-                                NULL IF_DUSK_ARG(itemGiveTag));
                         }
 
                         if (fopAcM_IsExecuting(mItemPartnerId)) {

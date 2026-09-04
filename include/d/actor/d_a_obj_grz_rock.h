@@ -28,7 +28,6 @@ public:
 
     void setSmashFlag(u8 i_smashFlag) { mSmashFlag = i_smashFlag; }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase[1];
     /* 0x5A0 */ J3DModel* mpModel;
     /* 0x5AC */ dBgS_ObjAcch mBgc;

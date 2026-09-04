@@ -65,7 +65,6 @@ public:
 
     cXyz& getLocalOffset() { return mLocalOffset; }
 
-private:
     /* 0x568 */ u8 field_0x568[0x56C - 0x568];
     /* 0x56C */ Z2SoundObjSimple mSound;
     /* 0x58C */ u8 field_0x58C[0x590 - 0x58C];

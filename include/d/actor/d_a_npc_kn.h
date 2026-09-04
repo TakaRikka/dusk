@@ -421,7 +421,6 @@ public:
     static DUSK_GAME_DATA fopAc_ac_c* mFindActorPtrs[50];
     static DUSK_GAME_DATA int mFindCount;
 
-private:
     /* 0x0E44 */ J3DModel* mpPodModel;
     /* 0x0E48 */ mDoExt_invisibleModel mInvisModel;
     /* 0x0E50 */ dKy_tevstr_c mTevStr;

@@ -59,7 +59,6 @@ public:
     u8 getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getSwNo2() { return fopAcM_GetParamBit(this, 8, 8); }
 
-private:
     /* 0x5A0 */ u8 field_0x5a0[8];  // unused
     /* 0x5A8 */ J3DModel* mpModel;
     /* 0x5AC */ dBgS_ObjAcch mAcch;

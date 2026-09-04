@@ -41,7 +41,7 @@ public:
  *
  */
 class daObj_SMTile_c : public fopAc_ac_c {
-private:
+public:
     /* 0x568 */ mDoExt_brkAnm mBrk;
     /* 0x580 */ OBJ_SMTILE_HIO_CLASS* mpHIO;
     /* 0x584 */ request_of_phase_process_class mPhase;

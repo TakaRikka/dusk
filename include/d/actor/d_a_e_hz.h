@@ -64,7 +64,6 @@ public:
     void setInitPos();
     int create();
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;
     /* 0x5B4 */ request_of_phase_process_class mPhaseReq2;
     /* 0x5BC */ mDoExt_McaMorfSO* mpMorfSO;

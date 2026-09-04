@@ -6,7 +6,7 @@
 typedef void (*dCcMassS_ObjCallback)(fopAc_ac_c*, cXyz*, u32);
 
 class dCcMassS_Obj {
-private:
+public:
     /* 0x00 */ cCcD_Obj* mpObj;
     /* 0x04 */ u8 mPriority;
     /* 0x08 */ dCcMassS_ObjCallback mpAreaCheckFunc;
@@ -28,7 +28,7 @@ public:
 STATIC_ASSERT(0x20 == sizeof(dCcMassS_Obj));
 
 class dCcMassS_HitInf {
-private:
+public:
     /* 0x00 */ cCcD_Obj* mpArea;
     /* 0x04 */ cCcD_Obj* mpAtObj;
     /* 0x08 */ cCcD_Obj* mpCoObj;

@@ -107,7 +107,6 @@ window content pane {
     min-width: 0;
     min-height: 0;
     padding: 24dp;
-    padding-bottom: 0dp;
     gap: 8dp;
     overflow: hidden auto;
     font-size: 20dp;
@@ -121,6 +120,76 @@ window content pane > * {
     flex: 0 0 auto;
 }
 
+ui-list {
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+window content pane > ui-list,
+.modal-content pane > ui-list {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+ui-list-viewport {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden auto;
+}
+
+ui-list-content {
+    display: flex;
+    flex-flow: column;
+    gap: 8dp;
+    min-width: 0;
+}
+
+ui-list-content > button.ui-list-row {
+    flex: 0 0 auto;
+}
+
+ui-list-empty {
+    display: block;
+    padding: 16dp;
+    text-align: center;
+    opacity: 0.45;
+}
+
+window content pane > ui-list {
+    margin-left: -24dp;
+    margin-right: -24dp;
+}
+
+window content pane > ui-list:first-child {
+    margin-top: -24dp;
+}
+
+window content pane > ui-list:last-child {
+    margin-bottom: -24dp;
+}
+
+window content pane > ui-list ui-list-content,
+window content pane > ui-list ui-list-empty {
+    padding-left: 24dp;
+    padding-right: 24dp;
+}
+
+window content pane > ui-list:first-child ui-list-content,
+window content pane > ui-list:first-child ui-list-empty {
+    padding-top: 24dp;
+}
+
+window content pane > ui-list:last-child ui-list-content,
+window content pane > ui-list:last-child ui-list-empty {
+    padding-bottom: 24dp;
+}
+
 window content pane:last-of-type > div {
     line-height: 1.625;
 }
@@ -129,14 +198,6 @@ window content pane:last-of-type > div {
     display: block;
     font-size: 16dp;
     color: rgba(224, 219, 200, 65%);
-}
-
-window content pane > spacer {
-    display: block;
-    /* Completes the 24dp bottom inset after the pane's 8dp gap. */
-    flex: 0 0 16dp;
-    height: 16dp;
-    pointer-events: none;
 }
 
 scrollbarvertical {
@@ -565,10 +626,6 @@ window.modal.danger .modal-header icon {
 
 .modal-content pane > * {
     flex: 0 0 auto;
-}
-
-.modal-content pane > spacer {
-    display: none;
 }
 
 .verification-progress {

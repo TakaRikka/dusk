@@ -33,7 +33,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x5a0 */ cXyz field_0x5a0[8];
     /* 0x600 */ cXyz field_0x600[8];
     /* 0x660 */ csXyz field_0x660[8];
@@ -53,7 +52,6 @@ private:
 public:
     /* 0x6e8 */ s16 field_0x6e8;
     /* 0x6ec */ Z2Creature mSound;
-private:
     /* 0x077c */ u8 field_0x77c[4];
     /* 0x0780 */ J3DModel* mpModel[8];
     /* 0x07a0 */ u8 field_0x7a0[0x7a4 - 0x7a0];

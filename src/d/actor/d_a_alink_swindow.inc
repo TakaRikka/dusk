@@ -11,6 +11,16 @@ static int daAlink_modelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_headModelCallBack(J3DJoint* i_joint, int param_1);
 static int daAlink_wolfModelCallBack(J3DJoint* i_joint, int param_1);
 
+#if TARGET_PC
+static void* read_anm_resource(void** o_buffer, u16 i_resIdx, u32 i_fixedSize) {
+    u32 size = daPy_getAnmResourceSize(i_resIdx, i_fixedSize);
+    *o_buffer = JKRAllocFromSysHeap(size, 0x20);
+    JUT_ASSERT(__LINE__, *o_buffer);
+    JKRReadIdxResource(*o_buffer, size, i_resIdx, dComIfGp_getAnmArchive());
+    return *o_buffer;
+}
+#endif
+
 void daAlink_c::setArcName(BOOL i_isWolf) {
     if (i_isWolf) {
         mArcName = l_wArcName;
@@ -247,8 +257,10 @@ void daAlink_c::changeModelDataDirectWolf(int param_0) {
 void daAlink_c::initStatusWindow() {
     onNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
     
+#if !TARGET_PC
     void* tmpBuffer = JKR_NEW_ARRAY_ARGS(void*, 0x500, 0x20);
     JUT_ASSERT(394, tmpBuffer);
+#endif
 
     u16 bckResIdx, btpResIdx, btkResIdx;
     if (checkWolf()) {
@@ -268,7 +280,11 @@ void daAlink_c::initStatusWindow() {
         changeModelDataDirect(0);
     }
 
+#if TARGET_PC
+    void* tmpBuffer = read_anm_resource(&mAnmBuffers[0], bckResIdx, 0x1400);
+#else
     JKRReadIdxResource(tmpBuffer, 0x1400, bckResIdx, dComIfGp_getAnmArchive());
+#endif
     m_sWindowBck = JKR_NEW mDoExt_bckAnm();
     JUT_ASSERT(428, m_sWindowBck);
 
@@ -276,20 +292,28 @@ void daAlink_c::initStatusWindow() {
         JUT_ASSERT(433, FALSE);
     }
 
+#if TARGET_PC
+    tmpBuffer = read_anm_resource(&mAnmBuffers[1], btpResIdx, 0x400);
+#else
     tmpBuffer = JKR_NEW_ARRAY_ARGS(void*, 0x100, 0x20);
     JUT_ASSERT(437, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btpResIdx, dComIfGp_getAnmArchive());
+#endif
     // this should call J3DAnmLoaderDataBase::load(const void*) but it breaks retail
     J3DAnmTexPattern* btp = (J3DAnmTexPattern*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
     btp->setFrame(0.0f);
     btp->searchUpdateMaterialID(field_0x06c0);
     field_0x06c0->entryTexNoAnimator(btp);
 
+#if TARGET_PC
+    tmpBuffer = read_anm_resource(&mAnmBuffers[2], btkResIdx, 0x400);
+#else
     tmpBuffer = JKR_NEW_ARRAY_ARGS(void*, 0x100, 0x20);
     JUT_ASSERT(449, tmpBuffer);
 
     JKRReadIdxResource(tmpBuffer, 0x400, btkResIdx, dComIfGp_getAnmArchive());
+#endif
     // this should call J3DAnmLoaderDataBase::load(const void*) but it breaks retail
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)J3DAnmLoaderDataBase::load(tmpBuffer, J3DLOADER_UNK_FLAG0);
     btk->setFrame(0.0f);
@@ -387,4 +411,12 @@ void daAlink_c::resetStatusWindow() {
 
     offNoResetFlg2(FLG2_STATUS_WINDOW_DRAW);
     m_sWindowBck = NULL;
+#if TARGET_PC
+    for (int i = 0; i < 3; i++) {
+        if (mAnmBuffers[i] != NULL) {
+            JKRFreeToSysHeap(mAnmBuffers[i]);
+            mAnmBuffers[i] = NULL;
+        }
+    }
+#endif
 }

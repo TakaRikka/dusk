@@ -33,7 +33,6 @@ public:
 
     void setStatus(u8 i_status) { mStatus = i_status; }
 
-private:
     /* 0x92C */ u32 field_0x92c;
     /* 0x930 */ s32 field_0x930;
     /* 0x934 */ u8 mStatus;
