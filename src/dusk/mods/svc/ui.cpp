@@ -1,8 +1,8 @@
 #include "ui.hpp"
 
 #include "config.hpp"
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 #include "ui_v1.hpp"
 
 #include <borealis/log.hpp>
@@ -45,8 +45,7 @@ constexpr size_t kUiControlSelectedSize =
     offsetof(UiControlDesc, is_selected) + sizeof(UiPredicateFn);
 constexpr size_t kUiControlStringSetModeSize =
     offsetof(UiControlDesc, string_set_mode) + sizeof(UiStringSetMode);
-constexpr size_t kUiControlFilePickerSize =
-    offsetof(UiControlDesc, directory_mode) + sizeof(bool);
+constexpr size_t kUiControlFilePickerSize = offsetof(UiControlDesc, directory_mode) + sizeof(bool);
 constexpr size_t kUiListItemV21Size = offsetof(UiListItem, label) + sizeof(const char*);
 constexpr size_t kUiListDescV21Size = offsetof(UiListDesc, user_data) + sizeof(void*);
 
@@ -650,8 +649,7 @@ ModResult ui_pane_add_control(
         spec.kind = ui::ModControlSpec::Kind::FilePicker;
         spec.directoryMode = desc.directory_mode;
         for (size_t i = 0; i < desc.file_filter_count; ++i) {
-            spec.fileFilters.push_back(
-                {desc.file_filters[i].name, desc.file_filters[i].pattern});
+            spec.fileFilters.push_back({desc.file_filters[i].name, desc.file_filters[i].pattern});
         }
         break;
     case UI_CONTROL_SELECT:

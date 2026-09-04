@@ -2,8 +2,8 @@
 #include "dusk/mods/svc/actor.hpp"
 
 #include "config.hpp"
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 
 #include "aurora/lib/logging.hpp"
 #include "dusk/mod_loader.hpp"

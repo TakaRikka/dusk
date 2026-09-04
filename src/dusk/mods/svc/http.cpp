@@ -1,21 +1,20 @@
 #include "registry.hpp"
 
-#include "slot_map.hpp"
+#include "internal.hpp"
+#include "net.hpp"
 
-#include "dusk/app_info.hpp"
 #include "dusk/main.h"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/http.h"
 
 #include <borealis/http.hpp>
 #include <borealis/io.hpp>
-#include <borealis/version.h>
+#include <borealis/url.hpp>
 #include <fmt/format.h>
 #include <xxhash.h>
 
 #include <algorithm>
 #include <cassert>
-#include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
@@ -38,6 +37,15 @@ constexpr size_t MaxRequestBodyBytes = 16 * 1024 * 1024;
 constexpr size_t DefaultResponseBodyBytes = 1024 * 1024;
 constexpr size_t MaxResponseBodyBytes = 64 * 1024 * 1024;
 constexpr std::chrono::milliseconds DefaultTimeout{10000};
+constexpr std::string_view ReservedHeaders[]{
+    "User-Agent",
+    "Host",
+    "Content-Length",
+    "Connection",
+    "Accept-Encoding",
+    "Range",
+    "If-Range",
+};
 
 struct PendingRequest {
     HttpCompleteFn callback = nullptr;
@@ -52,53 +60,9 @@ static_assert(std::is_nothrow_move_constructible_v<PendingRequest>);
 
 SlotMap<PendingRequest> s_requests;
 
-bool ascii_iequals(std::string_view left, std::string_view right) {
-    return left.size() == right.size() && std::ranges::equal(left, right, [](char a, char b) {
-        return std::tolower(static_cast<unsigned char>(a)) ==
-               std::tolower(static_cast<unsigned char>(b));
-    });
-}
-
-bool is_reserved_header(std::string_view name) {
-    constexpr std::string_view reserved[]{
-        "User-Agent",
-        "Host",
-        "Content-Length",
-        "Connection",
-        "Accept-Encoding",
-        "Range",
-        "If-Range",
-    };
-    return std::ranges::any_of(
-        reserved, [&](std::string_view value) { return ascii_iequals(name, value); });
-}
-
-bool valid_header_name(std::string_view name) {
-    constexpr std::string_view separators{"()<>@,;:\\\"/[]?={} \t"};
-    return !name.empty() && std::ranges::all_of(name, [&](unsigned char value) {
-        return value > 32 && value < 127 &&
-               separators.find(static_cast<char>(value)) == std::string_view::npos;
-    });
-}
-
 bool valid_url(std::string_view url) {
-    constexpr std::string_view scheme{"https://"};
-    if (!url.starts_with(scheme) || url.size() <= scheme.size() || url.size() > MaxUrlBytes) {
-        return false;
-    }
-    if (std::ranges::any_of(url, [](unsigned char value) { return value <= 32 || value == 127; })) {
-        return false;
-    }
-    const auto authorityEnd = url.find_first_of("/?#", scheme.size());
-    const auto authority = url.substr(scheme.size(), authorityEnd - scheme.size());
-    return !authority.empty();
-}
-
-bool declares_http_import(const LoadedMod& mod) {
-    return std::ranges::any_of(
-        mod.manifestInfo.imports, [](const ModManifestInfo::Import& serviceImport) {
-            return serviceImport.id == HTTP_SERVICE_ID;
-        });
+    const auto parsed = url.size() <= MaxUrlBytes ? borealis::url::parse(url) : std::nullopt;
+    return parsed && parsed->scheme == "https";
 }
 
 std::filesystem::path normalized_absolute(const std::filesystem::path& path, std::error_code& ec) {
@@ -311,14 +275,8 @@ void http_frame_begin() {
             .download_path = downloadSucceeded ? publishedPath.c_str() : nullptr,
         };
 
-        try {
-            callback(owner->context.get(), handle, &snapshot, userData);
-        } catch (const std::exception& exception) {
-            fail_mod(*owner, MOD_ERROR,
-                std::string{"exception in HTTP completion callback: "} + exception.what());
-        } catch (...) {
-            fail_mod(*owner, MOD_ERROR, "unknown exception in HTTP completion callback");
-        }
+        guarded_callback(*owner, "HTTP completion callback",
+            [&] { callback(owner->context.get(), handle, &snapshot, userData); });
         s_requests.erase(handle);
     }
 }
@@ -343,17 +301,6 @@ bool staging_path_in_use(const LoadedMod& mod, const std::filesystem::path& path
     return inUse;
 }
 
-std::string user_agent_version(std::string_view version) {
-    std::string result{version};
-    for (char& ch : result) {
-        const auto value = static_cast<unsigned char>(ch);
-        if (value <= 32 || value >= 127) {
-            ch = '_';
-        }
-    }
-    return result;
-}
-
 ModResult start_request(LoadedMod& mod, const HttpRequestDesc& desc, HttpCompleteFn callback,
     void* userData, HttpRequestHandle& outHandle) {
     const std::string_view url{desc.url};
@@ -376,9 +323,7 @@ ModResult start_request(LoadedMod& mod, const HttpRequestDesc& desc, HttpComplet
         }
         const std::string_view name{header.name};
         const std::string_view value{header.value};
-        const bool invalidValue = std::ranges::any_of(
-            value, [](unsigned char ch) { return (ch < 32 && ch != '\t') || ch == 127; });
-        if (!valid_header_name(name) || invalidValue || is_reserved_header(name) ||
+        if (!valid_header(name, value, ReservedHeaders, true) ||
             name.size() > MaxHeaderBytes - headerBytes)
         {
             return MOD_INVALID_ARGUMENT;
@@ -450,8 +395,7 @@ ModResult start_request(LoadedMod& mod, const HttpRequestDesc& desc, HttpComplet
     }
     request.headers.push_back({
         .name = "User-Agent",
-        .value = fmt::format("{}/{} {}/{}", AppName, BOREALIS_APP_VERSION, mod.metadata.id,
-            user_agent_version(mod.metadata.version)),
+        .value = user_agent(mod),
     });
 
     auto task = borealis::http::start(std::move(request));
@@ -487,14 +431,10 @@ ModResult http_request(ModContext* context, const HttpRequestDesc* desc, HttpCom
     {
         return MOD_INVALID_ARGUMENT;
     }
-    if (!declares_http_import(*mod)) {
+    if (!declares_import(*mod, HTTP_SERVICE_ID)) {
         return MOD_UNSUPPORTED;
     }
-    try {
-        return start_request(*mod, *desc, callback, userData, *outHandle);
-    } catch (...) {
-        return MOD_ERROR;
-    }
+    return start_request(*mod, *desc, callback, userData, *outHandle);
 }
 
 ModResult http_progress(ModContext* context, HttpRequestHandle handle, HttpProgress* outProgress) {
@@ -550,9 +490,9 @@ bool http_available() {
 
 constexpr HttpService s_httpService{
     .header = SERVICE_HEADER(HttpService, HTTP_SERVICE_MAJOR, HTTP_SERVICE_MINOR),
-    .request = http_request,
-    .progress = http_progress,
-    .cancel = http_cancel,
+    .request = SERVICE_FUNCTION(http_request),
+    .progress = SERVICE_FUNCTION(http_progress),
+    .cancel = SERVICE_FUNCTION(http_cancel),
 };
 
 }  // namespace

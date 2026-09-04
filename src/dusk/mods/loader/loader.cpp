@@ -1027,7 +1027,12 @@ void ModLoader::deactivate_mod(LoadedMod& mod) {
                 log::write(mod.metadata.id, LOG_LEVEL_ERROR, "{} failed: {}", shutdownName,
                     lifecycle_error_message(shutdownName, result, error));
             }
+        } catch (const std::exception& exception) {
+            log::write(
+                mod.metadata.id, LOG_LEVEL_ERROR, "{} threw: {}", shutdownName, exception.what());
         } catch (...) {
+            log::write(
+                mod.metadata.id, LOG_LEVEL_ERROR, "{} threw an unknown exception", shutdownName);
         }
     }
     mod.initialized = false;

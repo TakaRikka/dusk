@@ -451,6 +451,82 @@ For large responses, set `downloadPath` to an absolute path in the calling mod's
 an empty `body` and the final path in `downloadPath`. Check `Response::ok()` before using the file.
 `Pending::progress()` reports download progress when the server provides a total size.
 
+### WebSocketService ([`mods/svc/websocket.h`](../sdk/include/mods/svc/websocket.h))
+
+WebSocket client connections with text or binary messages. Secure `wss://` URLs are supported everywhere. Insecure
+`ws://` is limited to `localhost`, `127.0.0.1`, and `[::1]`.
+
+```cpp
+#include "mods/svc/websocket.hpp"
+
+IMPORT_SERVICE(WebSocketService, svc_websocket);
+
+mods::ws::Connection connection;
+
+MOD_EXPORT ModResult mod_initialize(ModError*) {
+    connection = mods::ws::connect({.url = "wss://example.com/events"});
+    return connection ? MOD_OK : connection.result();
+}
+
+MOD_EXPORT ModResult mod_update(ModError*) {
+    mods::ws::Event event;
+    while (mods::ws::poll(event)) {
+        if (event.type == WEBSOCKET_EVENT_MESSAGE) {
+            consume(event.data);
+        } else if (event.type == WEBSOCKET_EVENT_CLOSED) {
+            schedule_reconnect(event.error);
+        }
+    }
+    return MOD_OK;
+}
+```
+
+Keep the `Connection` alive and drain `mods::ws::poll()` regularly, usually on every `mod_update` tick. A connection
+emits an (optional) `OPEN` event, zero to many `MESSAGE` events, and exactly one `CLOSED` event.
+
+**Restrictions:** A mod may only open four connections at once. Messages have a 1 MiB limit by default, and may request
+up to 16 MiB. Unread data is limited to 16 MiB and the outbound queue to 4 MiB. `send` returns `MOD_CONFLICT` when the
+outbound queue is full. Dropping the `Connection` or deactivating the mod attempts to gracefully close with code 1001,
+until the close deadline expires.
+
+### NetService ([`mods/svc/net.h`](../sdk/include/mods/svc/net.h))
+
+Asynchronous raw TCP and UDP networking. Endpoints can be `tcp://host:port` or `udp://host:port`. TCP connections and
+`resolve` accept hostnames. Listeners and UDP endpoints require IP literals.
+
+```cpp
+#include "mods/svc/net.hpp"
+
+IMPORT_SERVICE(NetService, svc_net);
+
+mods::net::BindOutcome bound;
+mods::net::Socket listener;
+mods::net::Socket client;
+
+MOD_EXPORT ModResult mod_initialize(ModError*) {
+    listener = mods::net::listen("tcp://127.0.0.1:0", &bound);
+    client = mods::net::connect(bound.local);
+    return listener && client ? MOD_OK : MOD_ERROR;
+}
+
+MOD_EXPORT ModResult mod_update(ModError*) {
+    mods::net::Event event;
+    while (mods::net::poll(event)) {
+        if (event.type == NET_EVENT_ACCEPTED) {
+            remember_client(mods::net::adopt(event.accepted));
+        } else if (event.type == NET_EVENT_STREAM_DATA) {
+            consume(event.data);
+        }
+    }
+    return MOD_OK;
+}
+```
+
+`send` and `send_to` copy the payload and return `MOD_CONFLICT` when the socket's outbound queue is full. `stats`
+reports queued bytes, traffic, dropped inbound datagrams, and asynchronous UDP send failures.
+
+**Restrictions:** A mod may only have 32 streams, 4 listeners, 4 UDP sockets, and 8 DNS resolutions active at once.
+
 ### HostService ([`mods/svc/host.h`](../sdk/include/mods/svc/host.h))
 
 Mod metadata and runtime interaction with the loader.

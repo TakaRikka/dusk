@@ -1,6 +1,6 @@
 #include "registry.hpp"
 
-#include "slot_map.hpp"
+#include "internal.hpp"
 
 #include <aurora/lib/window.hpp>
 #include <borealis/file_select.hpp>

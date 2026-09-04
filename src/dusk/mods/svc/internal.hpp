@@ -1,5 +1,10 @@
 #pragma once
 
+#include "../loader/loader.hpp"
+#include "../log_buffer.hpp"
+
+#include <fmt/format.h>
+
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -106,9 +111,7 @@ public:
         return erase(handle);
     }
 
-    size_t erase_all(const LoadedMod& owner) {
-        return take_all(owner).size();
-    }
+    size_t erase_all(const LoadedMod& owner) { return take_all(owner).size(); }
 
     template <typename Fn>
     void for_each(Fn&& fn) const {
@@ -123,9 +126,7 @@ public:
     }
 
     // Returns the index of the handle within the slot map.
-    static constexpr uint32_t index_of(Handle handle) {
-        return handle_index(handle);
-    }
+    static constexpr uint32_t index_of(Handle handle) { return handle_index(handle); }
 
 private:
     struct Slot {
@@ -189,5 +190,69 @@ private:
     std::vector<uint32_t> m_freeSlots;
 };
 
+template <typename T>
+class PerMod {
+public:
+    template <typename... Args>
+    T& get_or_create(LoadedMod& mod, Args&&... args) {
+        auto& state = m_states[&mod];
+        if (!state) {
+            state = std::make_unique<T>(std::forward<Args>(args)...);
+        }
+        return *state;
+    }
+
+    T* find(LoadedMod& mod) {
+        const auto found = m_states.find(&mod);
+        return found != m_states.end() ? found->second.get() : nullptr;
+    }
+
+    const T* find(const LoadedMod& mod) const {
+        const auto found = m_states.find(&mod);
+        return found != m_states.end() ? found->second.get() : nullptr;
+    }
+
+    void erase(LoadedMod& mod) { m_states.erase(&mod); }
+    bool contains(const LoadedMod& mod) const { return m_states.contains(&mod); }
+    void clear() { m_states.clear(); }
+
+private:
+    std::unordered_map<const LoadedMod*, std::unique_ptr<T>> m_states;
+};
+
+template <typename Fn>
+ModResult guarded(ModContext* context, std::string_view operation, Fn&& fn) noexcept {
+    try {
+        return fn();
+    } catch (const std::exception& exception) {
+        log::emit(log::Source::Mod, mod_id_from_context(context), LOG_LEVEL_ERROR,
+            fmt::format("{}: {}", operation, exception.what()));
+    } catch (...) {
+        log::emit(log::Source::Mod, mod_id_from_context(context), LOG_LEVEL_ERROR,
+            fmt::format("{}: unknown exception", operation));
+    }
+    return MOD_ERROR;
+}
+
+// Wraps a mod callback, attempting to catch any escaping exceptions.
+// Immediately logs and fails the mod.
+template <typename Fn>
+void guarded_callback(LoadedMod& mod, std::string_view operation, Fn&& fn) noexcept {
+    try {
+        fn();
+    } catch (const std::exception& exception) {
+        fail_mod(mod, MOD_ERROR, fmt::format("exception in {}: {}", operation, exception.what()));
+    } catch (...) {
+        fail_mod(mod, MOD_ERROR, fmt::format("unknown exception in {}", operation));
+    }
+}
+
 }  // namespace svc
 }  // namespace dusk::mods
+
+// Wraps service functions, catching C++ exceptions to avoid unwinding into mod code.
+#define SERVICE_FUNCTION(function)                                                                 \
+    [](ModContext* context, auto... arguments) -> ModResult {                                      \
+        return ::dusk::mods::svc::guarded(                                                         \
+            context, #function, [&] { return function(context, arguments...); });                  \
+    }
