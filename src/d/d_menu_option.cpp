@@ -876,7 +876,7 @@ void dMenu_Option_c::vib_init() {
 
 void dMenu_Option_c::vib_move() {
     bool upTrigger = mpStick->checkUpTrigger();
-    bool downTrigger = mpStick->checkDownTrigger();
+    IF_NOT_DUSK(bool downTrigger =) mpStick->checkDownTrigger();
     bool leftTrigger = checkLeftTrigger();
     bool rightTrigger = checkRightTrigger();
 
@@ -891,10 +891,14 @@ void dMenu_Option_c::vib_move() {
         field_0x3ef = PROC_ATTEN_e;
 #endif
         Z2GetAudioMgr()->seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-    } else if (downTrigger) {
+    }
+#ifndef TARGET_PC
+    else if (downTrigger) {
         field_0x3ef = OPTION_SELECT(PROC_SOUND_e);
         Z2GetAudioMgr()->seStart(Z2SE_SY_CURSOR_OPTION, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-    } else if (leftTrigger) {
+    } 
+#endif
+    else if (leftTrigger) {
         if (isRumbleSupported()) {
             if (field_0x3ea == 0) {
                 field_0x3ea = 1;
@@ -1369,8 +1373,7 @@ void dMenu_Option_c::calibration_close2_move() {
 
 void dMenu_Option_c::menuVisible() {
     for (int i = 0; i < 6; i++) {
-        if (i < OPTION_SELECT(PROC_CHANGE_MOVE_e))
-        {
+        if (i < OPTION_SELECT(DUSK_IF_ELSE(PROC_SOUND_e, PROC_CHANGE_MOVE_e))) {
             menuShow(i);
         } else {
             menuHide(i);
@@ -2478,7 +2481,7 @@ bool dMenu_Option_c::isRumbleSupported() {
 #if TARGET_PC
 bool dMenu_Option_c::pointerConfirmSelect() {
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
-    for (u8 i = 0; i < (dusk::version::isRegionJpn() ? 4 : 3); ++i) {
+    for (u8 i = 0; i < (dusk::version::isRegionJpn() ? 3 : 2); ++i) {
         if (dusk::menu_pointer::hit_pane(mpMenuPane[i], 8.0f)) {
             dusk::menu_pointer::set_hover_target(i);
             return false;
@@ -2502,7 +2505,7 @@ bool dMenu_Option_c::pointerConfirmSelect() {
 bool dMenu_Option_c::dpdMenuMove() {
 #if TARGET_PC
     dusk::menu_pointer::begin_context(dusk::menu_pointer::Context::Options);
-    for (u8 i = 0; i < (dusk::version::isRegionJpn() ? 4 : 3); ++i) {
+    for (u8 i = 0; i < (dusk::version::isRegionJpn() ? 3 : 2); ++i) {
         if (!dusk::menu_pointer::hit_pane(mpMenuPane[i], 8.0f)) {
             continue;
         }
@@ -2581,20 +2584,6 @@ bool dMenu_Option_c::dpdMenuMove() {
                 Z2GetAudioMgr()->seStart(Z2SE_SY_OPTION_SWITCH, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
                                          -1.0f, 0);
             }
-            return true;
-        case PROC_SOUND_e:
-            if (field_0x3e9 == 0) {
-                field_0x3e9 = 2;
-            } else {
-                field_0x3e9--;
-            }
-            field_0x3da = 5;
-            mDoAud_setOutputMode(dMo_soundMode[field_0x3e9]);
-            setSoundMode(dMo_soundMode[field_0x3e9]);
-            field_0x3ef = OPTION_SELECT(PROC_CHANGE_MOVE_e);
-            field_0x3f5 = OPTION_SELECT(PROC_SOUND_e);
-            Z2GetAudioMgr()->seStart(Z2SE_SY_OPTION_SWITCH, NULL, 0, 0, 1.0f, 1.0f, -1.0f,
-                                     -1.0f, 0);
             return true;
         }
     }

@@ -3,6 +3,7 @@
 #include "JSystem/JAudio2/JASDriverIF.h"
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASDSPInterface.h"
+#include "dusk/settings.h"
 #include <os.h>
 
 void JASDriver::setDSPLevel(f32 param_0) {
@@ -30,7 +31,18 @@ void JASDriver::setOutputMode(u32 mode) {
 }
 
 u32 JASDriver::getOutputMode() {
+#ifdef TARGET_PC
+    switch (dusk::getSettings().audio.outputMode) {
+        case dusk::AudioOutputMode::StereoSpeakers:
+            return JAS_OUTPUT_STEREO;
+        case dusk::AudioOutputMode::StereoHeadphones:
+        case dusk::AudioOutputMode::Surround6ch:
+        case dusk::AudioOutputMode::Surround8ch:
+            return JAS_OUTPUT_SURROUND;
+    }
+#else
     return JASDriver::JAS_SYSTEM_OUTPUT_MODE;
+#endif
 }
 
 void JASDriver::waitSubFrame() {

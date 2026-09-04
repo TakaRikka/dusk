@@ -173,11 +173,7 @@ void JASChannel::updateEffectorParam(JASDsp::TChannel* i_channel, u16* i_mixerVo
 
     f32 pan = 0.5f;
     f32 dolby = 0.0f;
-#if TARGET_PC
-    u32 effectiveOutputMode = dusk::audio::EnableHrtf ? JAS_OUTPUT_SURROUND : JASDriver::getOutputMode();
-#else
     u32 effectiveOutputMode = JASDriver::getOutputMode();
-#endif
     switch (effectiveOutputMode) {
     case JAS_OUTPUT_MONO:
         break;

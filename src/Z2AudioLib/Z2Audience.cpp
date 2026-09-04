@@ -745,16 +745,26 @@ f32 Z2Audience::calcRelPosPan(const Vec& param_0, int camID) {
 f32 Z2Audience::calcRelPosDolby(const Vec& param_0, int camID) {
     f32 fVar1 = param_0.z + mAudioCamera[camID].getDolbyCenterZ();
 #if TARGET_PC
-    if (dusk::audio::EnableHrtf) {
+    const auto mode = dusk::getSettings().audio.outputMode.getValue();
+    if (mode >= dusk::AudioOutputMode::StereoHeadphones) {
         // Normalize the direction so result is purely front/back orientation,
         // independent of how far away the sound is
-        f32 lenSq = param_0.x * param_0.x + param_0.y * param_0.y + param_0.z * param_0.z;
+        f32 lenSq = param_0.x * param_0.x + param_0.z * param_0.z;
+        if (mode == dusk::AudioOutputMode::StereoHeadphones) {
+            // original HRTF math
+            lenSq += param_0.y * param_0.y;
+        }
         if (lenSq < 0.0001f) {
             return 0.5f;
         }
         f32 zNorm = param_0.z / sqrtf(lenSq);
         f32 t = (zNorm + 1.0f) * 0.5f;
-        return 0.5f - 0.5f * cosf(t * static_cast<f32>(M_PI));
+        if (mode == dusk::AudioOutputMode::StereoHeadphones) {
+            // original HRTF math
+            return 0.5f - 0.5f * cosf(t * static_cast<f32>(M_PI));
+        } else {
+            return t;
+        }
     }
 #endif
     if (fVar1 > mSetting.field_0x48) {

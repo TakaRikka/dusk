@@ -19,6 +19,8 @@ namespace dusk::audio {
      */
     void Initialize();
 
+    void Reinitialize();
+
     void SetEnableReverb(bool value);
 
     void SetMasterVolume(f32 value);
