@@ -4,6 +4,7 @@
 #if !TARGET_PC
 #include <thp.h>
 #else
+#include <dolphin/thp.h>
 #include <atomic>
 #include <chrono>
 #endif
@@ -17,29 +18,6 @@ struct daMP_THPReadBuffer {
 };
 
 #if TARGET_PC
-// Copying here because thp.h is probably erroneous in the dolphin lib,
-// and it's kind of a problem being there (Aurora owns the headers).
-// TODO: Move this stuff in decomp?
-typedef struct THPAudioRecordHeader {
-    BE(u32) offsetNextChannel;
-    BE(u32) sampleSize;
-    BE(s16) lCoef[8][2];
-    BE(s16) rCoef[8][2];
-    BE(s16) lYn1;
-    BE(s16) lYn2;
-    BE(s16) rYn1;
-    BE(s16) rYn2;
-} THPAudioRecordHeader;
-
-typedef struct THPAudioDecodeInfo {
-    u8* encodeData;
-    u32 offsetNibbles;
-    u8 predictor;
-    u8 scale;
-    s16 yn1;
-    s16 yn2;
-} THPAudioDecodeInfo;
-
 typedef struct THPTextureSet {
 	u8* ytexture;
 	u8* utexture;
@@ -85,10 +63,6 @@ typedef struct THPHeader {
 	/* 0x28 */ BE(u32) movieDataOffsets;
 	/* 0x2C */ BE(u32) finalFrameDataOffsets;
 } THPHeader;
-
-static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
-static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info);
-static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
 
 #define THP_AUDIO_BUFFER_COUNT 3
 #define THP_READ_BUFFER_COUNT  10
