@@ -224,6 +224,12 @@ daPy_anmHeap_c::~daPy_anmHeap_c() {
     if (mAnimeHeap != NULL) {
         mDoExt_destroySolidHeap(mAnimeHeap);
     }
+#if TARGET_PC
+    freeTempBuffers();
+    if (mOwnedBuffer != NULL) {
+        JKRFreeToSysHeap(mOwnedBuffer);
+    }
+#endif
 }
 
 void daPy_anmHeap_c::initData() {
@@ -236,6 +242,56 @@ void* daPy_anmHeap_c::mallocBuffer() {
     mBuffer = JKR_NEW_ARRAY_ARGS(u8, mBufferSize, 0x20);
     return mBuffer;
 }
+
+#if TARGET_PC
+constexpr u32 kAlignment = 0x20;
+
+void daPy_anmHeap_c::reserveBuffer(u16 i_resId) {
+    // Ensure mBuffer is large enough to hold the resource
+    u32 size = daPy_getAnmResourceSize(i_resId, mBufferSize);
+    if (size <= mBufferSize) {
+        return;
+    }
+
+    // If not, replace it with a new buffer allocated from the system heap. Callers still copy
+    // archive data in on every load: setAnmTransform bswaps key tables in place, so we can't point
+    // it at the archive's cached copy directly.
+    u8* buffer = static_cast<u8*>(JKRAllocFromSysHeap(size, kAlignment));
+    JUT_ASSERT(__LINE__, buffer != NULL);
+    if (mOwnedBuffer != NULL) {
+        JKRFreeToSysHeap(mOwnedBuffer);
+    }
+    mOwnedBuffer = buffer;  // Mark it as owned so we release it later
+    mBuffer = buffer;
+    mBufferSize = size;
+}
+
+void* daPy_anmHeap_c::allocTempBuffer(u16 i_resId, u32* io_size) {
+    // Check if the resource can fit in io_size
+    u32 size = daPy_getAnmResourceSize(i_resId, *io_size);
+    if (size <= *io_size) {
+        return JKR_NEW_ARRAY_ARGS(u8, *io_size, kAlignment);
+    }
+
+    // If not, allocate a new temp buffer from the system heap, plus kAlignment extra bytes.
+    // We stash a pointer to the next buffer at the beginning, forming a chain so we can free
+    // them all later.
+    void** temp = static_cast<void**>(JKRAllocFromSysHeap(kAlignment + size, kAlignment));
+    JUT_ASSERT(__LINE__, temp != NULL);
+    *temp = mTempBuffers;
+    mTempBuffers = temp;
+    *io_size = size;
+    return reinterpret_cast<u8*>(temp) + kAlignment;
+}
+
+void daPy_anmHeap_c::freeTempBuffers() {
+    while (mTempBuffers != NULL) {
+        void** temp = mTempBuffers;
+        mTempBuffers = static_cast<void**>(*temp);
+        JKRFreeToSysHeap(temp);
+    }
+}
+#endif
 
 void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, const char* name) {
     u32 size;
@@ -310,6 +366,7 @@ void* daPy_anmHeap_c::loadData(u16 i_resId) {
     };
 
     if (mArcNo == 0xFFFF) {
+        IF_DUSK(reserveBuffer(i_resId);)
         JKRReadIdxResource(mBuffer, mBufferSize, i_resId, dComIfGp_getAnmArchive());
         #if DEBUG
         daPy_aramBufferCheck(mBuffer, mBufferSize);
@@ -363,6 +420,7 @@ void* daPy_anmHeap_c::loadDataDemoRID(u16 i_resID, u16 i_arcNo) {
 
 JKRHeap* daPy_anmHeap_c::setAnimeHeap() {
     mAnimeHeap->freeAll();
+    IF_DUSK(freeTempBuffers();)
     return mDoExt_setCurrentHeap(mAnimeHeap);
 }
 

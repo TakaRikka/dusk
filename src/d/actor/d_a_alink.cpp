@@ -4313,7 +4313,9 @@ int daAlink_c::createHeap() {
         return 0;
     }
 
-    JKRReadIdxResource(mFaceBckHeap.getBuffer(), 0xC00, dRes_ID_ALANM_BCK_FAT_e, dComIfGp_getAnmArchive());
+    IF_DUSK(mFaceBckHeap.reserveBuffer(dRes_ID_ALANM_BCK_FAT_e);)
+    JKRReadIdxResource(mFaceBckHeap.getBuffer(), DUSK_IF_ELSE(mFaceBckHeap.getBufferSize(), 0xC00),
+                       dRes_ID_ALANM_BCK_FAT_e, dComIfGp_getAnmArchive());
     J3DAnmTransform* bck = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(mFaceBckHeap.getBuffer());
     if (!mFaceBck.init(bck, FALSE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false)) {
         return 0;
@@ -14307,7 +14309,11 @@ BOOL daAlink_c::checkMagicArmorWearAbility() const {
 
 J3DModelData* daAlink_c::loadAramBmd(u16 i_resIdx, u32 i_bufSize) {
     JKRArchive* anmArchive = dComIfGp_getAnmArchive();
+#if TARGET_PC
+    u8* tmpBuffer = (u8*)mItemHeap[field_0x2fa0].allocTempBuffer(i_resIdx, &i_bufSize);
+#else
     u8* tmpBuffer = JKR_NEW_ARRAY_ARGS(u8, i_bufSize, 0x20);
+#endif
 
     JKRReadIdxResource(tmpBuffer, i_bufSize, i_resIdx, anmArchive);
     #if DEBUG
@@ -14328,7 +14334,11 @@ J3DModelData* daAlink_c::loadAramBmd(u16 i_resIdx, u32 i_bufSize) {
 }
 
 void* daAlink_c::loadAram(u16 i_resIdx, u32 i_bufSize) {
+#if TARGET_PC
+    u8* tmpBuffer = (u8*)mItemHeap[field_0x2fa0].allocTempBuffer(i_resIdx, &i_bufSize);
+#else
     u8* tmpBuffer = JKR_NEW_ARRAY_ARGS(u8, i_bufSize, 0x20);
+#endif
     JKRReadIdxResource(tmpBuffer, i_bufSize, i_resIdx, dComIfGp_getAnmArchive());
     #if DEBUG
     daPy_aramBufferCheck(tmpBuffer, i_bufSize);

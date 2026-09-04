@@ -89,6 +89,14 @@ public:
 #define PLAYER_CREATE_ANM_HEAP(heap, type, name) (heap).createHeap(type)
 #endif
 
+#if TARGET_PC
+inline u32 daPy_getAnmResourceSize(u16 i_resId, u32 i_minSize) {
+    JKRArchive* archive = dComIfGp_getAnmArchive();
+    u32 size = archive->getFileSize(archive->findIdxResource(i_resId));
+    return size > i_minSize ? size : i_minSize;
+}
+#endif
+
 class daPy_anmHeap_c {
 public:
     enum daAlinkHEAP_TYPE {
@@ -105,6 +113,9 @@ public:
     void* mallocBuffer();
 #if TARGET_PC
     void createHeap(daAlinkHEAP_TYPE i_heapType, const char* name);
+    void reserveBuffer(u16 i_resId);
+    void* allocTempBuffer(u16 i_resId, u32* io_size);
+    void freeTempBuffers();
 #else
     void createHeap(daAlinkHEAP_TYPE i_heapType);
 #endif
@@ -134,6 +145,10 @@ public:
     /* 0x08 */ u32 mBufferSize;
     /* 0x0C */ u8* mBuffer;
     /* 0x10 */ JKRSolidHeap* mAnimeHeap;
+#if TARGET_PC
+    u8* mOwnedBuffer = NULL;
+    void** mTempBuffers = NULL;
+#endif
 };  // Size = 0x14
 
 class daPy_actorKeep_c {
