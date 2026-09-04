@@ -193,6 +193,8 @@ void save_slot_written(uint32_t slot, const void* slotData) {
     if (slot >= kSlotCount) {
         return;
     }
+    s_currentSlot = static_cast<int32_t>(slot);
+    notify(slot, &SaveObserverRecord::onWritten, "save-written");
     load_sidecar();
     auto& store = s_slots[slot];
     if (slotData != nullptr) {
@@ -200,8 +202,6 @@ void save_slot_written(uint32_t slot, const void* slotData) {
         store.snapshotCrc = utils::crc32(slotData, kQuestLogSize);
     }
     flush_sidecar();
-    s_currentSlot = static_cast<int32_t>(slot);
-    notify(slot, &SaveObserverRecord::onWritten, "save-written");
 }
 
 void save_slot_copied(uint32_t fromSlot, uint32_t toSlot) {
