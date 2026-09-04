@@ -1,6 +1,7 @@
 #include <dusk/archipelago/archipelago_context.hpp>
 
 #include <array>
+#include <deque>
 #include <thread>
 #include <unordered_map>
 
@@ -180,6 +181,10 @@ static const std::unordered_map<std::string, std::string> sStageCodeToName = {
 // Reads the null-or-length-terminated 8 byte stage code out of the live game state.
 static std::string ReadCurrentStageCode() {
     const char* raw = dComIfGp_getStartStageName();
+    if (raw == nullptr) {
+        // null between stages / during load
+        return {};
+    }
     std::string code;
     for (int i = 0; i < 8 && raw[i] != '\0'; ++i) {
         code.push_back(raw[i]);
@@ -211,49 +216,65 @@ static std::string ToJsonStringLiteral(const std::string& value) {
     return out;
 }
 
-static void SetTrackedIntDataStorage(const std::string& key, int value, int defaultValue) {
+// AP_BulkSetServerData() stashes &request->status and AP_CommitServerData() writes back through it
+// later, so the request must outlive the commit. The caller keeps these in a std::deque (stable
+// element addresses) rather than a local that dies on helper return.
+struct PendingServerData {
     AP_SetServerDataRequest request;
-    request.key = key;
-    request.type = AP_DataType::Int;
-    request.want_reply = false;
-    request.default_value = &defaultValue;
+    std::string jsonDefault;
+    std::string jsonValue;
+    int intDefault = 0;
+    int intValue = 0;
+};
+
+static void SetTrackedIntDataStorage(std::deque<PendingServerData>& pending,
+    const std::string& key, int value, int defaultValue) {
+    auto& p = pending.emplace_back();
+    p.intValue = value;
+    p.intDefault = defaultValue;
+    p.request.key = key;
+    p.request.type = AP_DataType::Int;
+    p.request.want_reply = false;
+    p.request.default_value = &p.intDefault;
     AP_DataStorageOperation replaceOp;
     replaceOp.operation = "replace";
-    replaceOp.value = &value;
-    request.operations = {replaceOp};
-    AP_BulkSetServerData(&request);
+    replaceOp.value = &p.intValue;
+    p.request.operations = {replaceOp};
+    AP_BulkSetServerData(&p.request);
 }
 
-static void SetTrackedStringDataStorage(const std::string& key, const std::string& value, const std::string& defaultValue) {
-    AP_SetServerDataRequest request;
-    request.key = key;
-    request.type = AP_DataType::Raw;
-    request.want_reply = false;
-    std::string jsonDefault = ToJsonStringLiteral(defaultValue);
-    request.default_value = &jsonDefault;
-    std::string jsonValue = ToJsonStringLiteral(value);
+static void SetTrackedStringDataStorage(std::deque<PendingServerData>& pending,
+    const std::string& key, const std::string& value, const std::string& defaultValue) {
+    auto& p = pending.emplace_back();
+    p.jsonDefault = ToJsonStringLiteral(defaultValue);
+    p.jsonValue = ToJsonStringLiteral(value);
+    p.request.key = key;
+    p.request.type = AP_DataType::Raw;
+    p.request.want_reply = false;
+    p.request.default_value = &p.jsonDefault;
     AP_DataStorageOperation replaceOp;
     replaceOp.operation = "replace";
-    replaceOp.value = &jsonValue;
-    request.operations = {replaceOp};
-    AP_BulkSetServerData(&request);
+    replaceOp.value = &p.jsonValue;
+    p.request.operations = {replaceOp};
+    AP_BulkSetServerData(&p.request);
 }
 
 // Sent as bare JSON literals (true/false), not JSON strings, matching the apworld client and what
 // poptracker's autotracking expects.
-static void SetTrackedBoolDataStorage(const std::string& key, bool value, bool defaultValue) {
-    AP_SetServerDataRequest request;
-    request.key = key;
-    request.type = AP_DataType::Raw;
-    request.want_reply = false;
-    std::string jsonDefault = defaultValue ? "true" : "false";
-    request.default_value = &jsonDefault;
-    std::string jsonValue = value ? "true" : "false";
+static void SetTrackedBoolDataStorage(std::deque<PendingServerData>& pending,
+    const std::string& key, bool value, bool defaultValue) {
+    auto& p = pending.emplace_back();
+    p.jsonDefault = defaultValue ? "true" : "false";
+    p.jsonValue = value ? "true" : "false";
+    p.request.key = key;
+    p.request.type = AP_DataType::Raw;
+    p.request.want_reply = false;
+    p.request.default_value = &p.jsonDefault;
     AP_DataStorageOperation replaceOp;
     replaceOp.operation = "replace";
-    replaceOp.value = &jsonValue;
-    request.operations = {replaceOp};
-    AP_BulkSetServerData(&request);
+    replaceOp.value = &p.jsonValue;
+    p.request.operations = {replaceOp};
+    AP_BulkSetServerData(&p.request);
 }
 
 // Howling Stones: byte+bitmask offsets into dComIfGs_getSaveInfo(), from the apworld's
@@ -349,6 +370,10 @@ const char* getMessageTypeName(AP_MessageType type) {
 
 void ParseMessageData() {
     auto msg = AP_GetLatestMessage();
+    if (msg == nullptr) {
+        // race with the pending-message poll
+        return;
+    }
 
     switch (msg->type) {
     case AP_MessageType::ItemSend: {
@@ -726,31 +751,34 @@ void ArchipelagoContext::UpdateMapTrackingData() {
     const int slot = AP_GetPlayerID();
     const std::string keyPrefix = "TP_" + std::to_string(team) + "_" + std::to_string(slot) + "_";
 
+    // requests must outlive the AP_CommitServerData() below
+    std::deque<PendingServerData> pending;
+
     std::string stageCode = ReadCurrentStageCode();
     const std::string* stageName = ResolveStageName(stageCode);
     if (!stageName) {
         DuskLog.warn("UpdateMapTrackingData: unrecognized stage code '{}', not sending Current Stage update", stageCode);
     } else if (*stageName != instance().m_lastSentStageName) {
-        SetTrackedStringDataStorage(keyPrefix + "Current Stage", *stageName, "Menu");
+        SetTrackedStringDataStorage(pending, keyPrefix + "Current Stage", *stageName, "Menu");
         instance().m_lastSentStageName = *stageName;
     }
 
     int room = dStage_roomControl_c::getStayNo();
     if (room != instance().m_lastSentRoom) {
-        SetTrackedIntDataStorage(keyPrefix + "Current Room", room, -1);
+        SetTrackedIntDataStorage(pending, keyPrefix + "Current Room", room, -1);
         instance().m_lastSentRoom = room;
     }
 
     // Send the raw unsigned byte (basements wrap to 255/254/253), matching the apworld's client.
     int floor = static_cast<u8>(dMapInfo_c::mNowStayFloorNo);
     if (floor != instance().m_lastSentFloor) {
-        SetTrackedIntDataStorage(keyPrefix + "Current Floor", floor, -1);
+        SetTrackedIntDataStorage(pending, keyPrefix + "Current Floor", floor, -1);
         instance().m_lastSentFloor = floor;
     }
 
     int layer = dComIfGp_getStartStageLayer();
     if (layer != instance().m_lastSentLayer) {
-        SetTrackedIntDataStorage(keyPrefix + "Current Layer", layer, -1);
+        SetTrackedIntDataStorage(pending, keyPrefix + "Current Layer", layer, -1);
         instance().m_lastSentLayer = layer;
     }
 
@@ -763,12 +791,15 @@ void ArchipelagoContext::UpdateFlagTrackingData() {
     const int slot = AP_GetPlayerID();
     const std::string keyPrefix = "TP_" + std::to_string(team) + "_" + std::to_string(slot) + "_";
 
+    // requests must outlive the AP_CommitServerData() below
+    std::deque<PendingServerData> pending;
+
     for (const auto& entry : sFlagTrackingEntries) {
         bool value = ReadSaveInfoFlag(entry.offset, entry.mask);
         auto it = instance().m_lastSentFlags.find(entry.key);
         if (it != instance().m_lastSentFlags.end() && it->second == value)
             continue;
-        SetTrackedBoolDataStorage(keyPrefix + entry.key, value, false);
+        SetTrackedBoolDataStorage(pending, keyPrefix + entry.key, value, false);
         instance().m_lastSentFlags[entry.key] = value;
     }
 
@@ -777,7 +808,7 @@ void ArchipelagoContext::UpdateFlagTrackingData() {
         auto it = instance().m_lastSentFlags.find(entry.key);
         if (it != instance().m_lastSentFlags.end() && it->second == value)
             continue;
-        SetTrackedBoolDataStorage(keyPrefix + entry.key, value, false);
+        SetTrackedBoolDataStorage(pending, keyPrefix + entry.key, value, false);
         instance().m_lastSentFlags[entry.key] = value;
     }
 
@@ -788,7 +819,7 @@ void ArchipelagoContext::UpdateFlagTrackingData() {
         auto it = instance().m_lastSentFlags.find(entry.key);
         if (it != instance().m_lastSentFlags.end() && it->second == defeated)
             continue;
-        SetTrackedBoolDataStorage(keyPrefix + entry.key, defeated, false);
+        SetTrackedBoolDataStorage(pending, keyPrefix + entry.key, defeated, false);
         instance().m_lastSentFlags[entry.key] = defeated;
     }
 
@@ -1139,6 +1170,11 @@ void ArchipelagoContext::HandleReceiveLocationScout(const std::vector<AP_Network
 // so eventually finding a way to properly associate locations with their respective item get funcs would benefit this system
 void ArchipelagoContext::UpdateCheckedLocations(bool warnIfNoChange) {
     auto& world = instance().m_archiWorld;
+    if (world == nullptr) {
+        // Execute() calls this every frame once scouts arrive; world data may not be ready yet
+        DuskLog.warn("UpdateCheckedLocations: archipelago world not generated yet - skipping");
+        return;
+    }
     std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     bool changed = false;
@@ -1179,6 +1215,8 @@ void ArchipelagoContext::SetNeedUpdateLocations(bool update) {
 
 bool ArchipelagoContext::IsLocationChecked(int locId) {
     auto& world = instance().m_archiWorld;
+    if (world == nullptr)
+        return false;
     std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     for (const auto& [locName, locInfo] : instance().m_locationItemInfo) {
@@ -1201,6 +1239,8 @@ bool ArchipelagoContext::hasAtomicLocalGrant(int64_t apLocationId) {
     // The category list this checks against (RandomizerContext::kAtomicallyGrantedLocationCategories)
     // is shared with randomizer_context.cpp's world-gen override-table population, so the two sides
     // can't drift independently - see that constant's declaration for the full reasoning.
+    if (m_archiWorld == nullptr)
+        return false;
     std::lock_guard<std::mutex> lock(m_locationInfoMutex);
     for (const auto& [locName, locInfo] : m_locationItemInfo) {
         if (locInfo.apLocationId == apLocationId) {
@@ -1244,7 +1284,7 @@ void ArchipelagoContext::SetLocationChecked(int locId, bool collected) {
             locInfo.collected = collected;
 
             // update location flags if possible
-            auto location = world->GetLocation(locInfo.locationName, true);
+            auto location = world ? world->GetLocation(locInfo.locationName, true) : nullptr;
             if (!location || !location->IsProgression())
                 return;
 
@@ -1258,6 +1298,8 @@ void ArchipelagoContext::SetLocationChecked(int locId, bool collected) {
 
 void ArchipelagoContext::UpdateLocationState(int locId, bool collected) {
     auto& world = instance().m_archiWorld;
+    if (world == nullptr)
+        return;
     std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
 
     for (const auto& [locName, locInfo] : instance().m_locationItemInfo) {
@@ -1276,6 +1318,8 @@ void ArchipelagoContext::UpdateLocationState(int locId, bool collected) {
 
 void ArchipelagoContext::UpdateAllLocationState() {
     auto& world = instance().m_archiWorld;
+    if (world == nullptr)
+        return;
     std::lock_guard<std::mutex> lock(instance().m_locationInfoMutex);
     // TODO: find out why some locations seem to keep their collection state upon reset (bugs)
 
@@ -1418,7 +1462,12 @@ void ArchipelagoContext::CreateArchipelagoWorld() {
     auto trackerRando = randomizer::Randomizer(workingDir);
     trackerRando.GenerateTrackerWorld(false);
 
-    instance().m_archiWorld = std::move(trackerRando.GetWorlds().front());
+    auto& worlds = trackerRando.GetWorlds();
+    if (worlds.empty()) {
+        DuskLog.error("CreateArchipelagoWorld: GenerateTrackerWorld produced no worlds - archipelago world stays null");
+        return;
+    }
+    instance().m_archiWorld = std::move(worlds.front());
 }
 
 void ArchipelagoContext::FillArchipelagoWorld() {
@@ -1469,6 +1518,10 @@ void ArchipelagoContext::FillArchipelagoWorld() {
 
 void ArchipelagoContext::CreateRandomizerContext() {
     auto& world = instance().m_archiWorld;
+    if (world == nullptr) {
+        DuskLog.error("CreateRandomizerContext: archipelago world was not created - aborting");
+        return;
+    }
 
     // Set hint texts before writing context
     randomizer::logic::hints::GenerateAllHints(world);
