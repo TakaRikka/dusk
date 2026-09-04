@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <mutex>
 #include <string>
 
@@ -28,8 +29,29 @@ namespace dusk::archi
             bool collected = false;
         };
 
-        std::vector<std::pair<int, bool>> m_receivedItemsQueue;
+        struct ReceivedItemEntry {
+            int relativeId;
+            bool notify;
+            int player;
+            int64_t location;
+            bool wasResetPending;
+        };
+
+        // Lock ordering: if a caller needs both, always acquire m_queueMutex before
+        // m_locationInfoMutex (Execute()'s drain does this via IsReceivedLocationScouts()). No path
+        // currently acquires them in the reverse order - keep it that way, or this becomes a
+        // lock-order-inversion deadlock risk.
+        std::vector<ReceivedItemEntry> m_receivedItemsQueue;
         std::mutex m_queueMutex;
+
+        // Guards m_locationItemInfo: HandleReceiveLocationScout() mutates it from the AP network
+        // thread (via AP_SetLocationInfoCallback), while Execute() and everything it calls
+        // (hasAtomicLocalGrant, IsLocationChecked, UpdateCheckedLocations, etc.) reads/mutates it
+        // from the main thread every frame. Plain mutex is sufficient - traced every locking
+        // function below and none call another while already holding this lock, and AP_SendItem()
+        // (called from UpdateCheckedLocations while holding it) only queues a websocket send with
+        // no synchronous callback re-entry into this code.
+        std::mutex m_locationInfoMutex;
 
         // Rando Data
         randomizer::seedgen::config::Config m_config;
@@ -38,6 +60,10 @@ namespace dusk::archi
         bool m_isNeedResetInv = false;
         bool m_isAllowUpdateLocations = false;
         bool m_isEnableDeathLink = false;
+
+        // Frame counter for the periodic UpdateCheckedLocations() backstop in Execute(), for checks
+        // whose flag is set outside execItemGet() (AG poe soul pulls, Agitha bug rewards).
+        int m_locationRescanTimer = 0;
 
         // AP Data
         std::unordered_map<std::string, GameLocationInfo> m_locationItemInfo;
@@ -57,11 +83,35 @@ namespace dusk::archi
 
         void itemRecvImpl(int id, bool notify);
 
+        bool shouldSkipDuplicateItem(const ReceivedItemEntry& entry);
+
+        void persistProcessedItems();
+
+        bool hasAtomicLocalGrant(int64_t apLocationId);
+
         int getItemIdFromApId(int apId);
 
         std::string getLocationNameFromApId(int apId) const;
 
         bool tryKillPlayer();
+
+        // Push the "TP_{team}_{slot}_Current Stage/Room/Floor/Layer" datastorage keys that
+        // poptracker's autotracking reads for map tabs. Only sends keys whose value changed.
+        static void UpdateMapTrackingData();
+
+        // Push the scent/quest-item/howling-stone/memory-reward and 8 boss-defeated datastorage
+        // keys that poptracker's autotracking reads. Only sends keys whose value changed.
+        static void UpdateFlagTrackingData();
+
+        // Last values sent by UpdateMapTrackingData(); sentinel-initialized so the first call
+        // after connecting sends a full set.
+        std::string m_lastSentStageName;
+        int m_lastSentRoom = std::numeric_limits<int>::min();
+        int m_lastSentFloor = std::numeric_limits<int>::min();
+        int m_lastSentLayer = std::numeric_limits<int>::min();
+
+        // Last values sent by UpdateFlagTrackingData(), keyed by AP key name.
+        std::unordered_map<std::string, bool> m_lastSentFlags;
     public:
         ArchipelagoContext();
 
@@ -91,6 +141,10 @@ namespace dusk::archi
 
         static bool IsConnected();
 
+        // True once seed_name has arrived (filled asynchronously after connect). Callers that need
+        // the seed directory must wait for this, not just IsConnected().
+        static bool IsRoomInfoReady();
+
         // State Handlers
 
         static void MessageThreadFunc();
@@ -103,7 +157,7 @@ namespace dusk::archi
 
         static void HandleReceiveLocationScout(const std::vector<AP_NetworkItem>& items);
 
-        static void UpdateCheckedLocations();
+        static void UpdateCheckedLocations(bool warnIfNoChange = false);
 
         static void SetNeedUpdateLocations(bool update);
 

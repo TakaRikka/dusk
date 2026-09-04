@@ -11,6 +11,8 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "d/d_com_inf_game.h"
+#include "dusk/randomizer/game/flags.h"
 #include "dusk/randomizer/game/verify_item_functions.h"
 #endif
 
@@ -1346,6 +1348,9 @@ int daNpc_grR_c::talk(void* param_1) {
                         if (randomizer_IsActive()) {
                             i_itemNo = verifyProgressiveItem(randomizer_getItemAtLocation("Goron Mines Gor Liggs Key Shard"));
                             randomizer_setTempFlagForLocation("Goron Mines Gor Liggs Key Shard");
+                            // The randomizer skips the rest of the elder's dialogue; set the
+                            // "talked to" bit here (updateGoalFlags() derives the ladder switches from it).
+                            dComIfGs_onEventBit(TALKED_TO_GOR_LIGGS_IN_GORON_MINES);
                         }
 #endif
                         mItemID = fopAcM_createItemForPresentDemo(&current.pos, i_itemNo, 0, -1, -1, NULL, NULL);

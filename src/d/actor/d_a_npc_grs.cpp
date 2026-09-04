@@ -12,6 +12,8 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "d/d_com_inf_game.h"
+#include "dusk/randomizer/game/flags.h"
 #include "dusk/randomizer/game/verify_item_functions.h"
 #endif
 enum Event_Cut_Nums {
@@ -1197,6 +1199,9 @@ int daNpc_grS_c::talk(void* param_0) {
                     if (randomizer_IsActive()) {
                         unkInt2 = verifyProgressiveItem(randomizer_getItemAtLocation("Goron Mines Gor Amato Key Shard"));
                         randomizer_setTempFlagForLocation("Goron Mines Gor Amato Key Shard");
+                        // The randomizer skips the rest of the elder's dialogue; set the
+                        // "talked to" bit here (updateGoalFlags() derives the ladder switches from it).
+                        dComIfGs_onEventBit(TALKED_TO_GOR_AMATO_IN_GORON_MINES);
                     }
 #endif
                     mPresentItemId =

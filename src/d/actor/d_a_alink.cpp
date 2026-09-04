@@ -13,6 +13,7 @@
 #include "JSystem/JHostIO/JORServer.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "SSystem/SComponent/c_math.h"
+#include "dusk/logging.h"
 #include "d/d_item.h"
 #include "d/d_meter2_draw.h"
 #include "d/d_pane_class.h"

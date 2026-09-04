@@ -19,6 +19,9 @@ namespace dusk {
 extern bool StubLogEnabled;
 
 extern aurora::Module DuskLog;
+// Dedicated module for tracing the AP item-receive -> event-item-queue -> in-game-grant pipeline.
+// Grep the log file for "| ap_items]" to isolate just this flow.
+extern aurora::Module ApItemLog;
 
 #ifndef NDEBUG
 #define STUB_LOG() DuskLog.debug("{} is a stub", __FUNCTION__)

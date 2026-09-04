@@ -1693,9 +1693,17 @@ static void demo_camera(e_s1_class* i_this) {
 #if TARGET_PC
                 if (randomizer_IsActive() && daAlink_c::checkStageName("F_SP126")) {
                     // We check to see if the flag being set is for the UZR portal as a safety precaution.
-                    if (i_this->mSwBit == 0x15 && g_dComIfG_gameInfo.info.getSavedata().getPlayer().getPlayerStatusA().getTransformStatus())
+                    // NOTE: this used to also require getTransformStatus() (wolf form) here, despite the
+                    // old comment claiming it was gating on "human" - getTransformStatus() actually
+                    // returns true for WOLF (see d_a_alink_wolf.inc setTransformStatus(1) on wolf
+                    // transform, setTransformStatus(0) on returning to human), so the old check silently
+                    // skipped this whole block whenever the fight was won as human, leaving 0xB02 unset
+                    // even though the switch itself (and thus the portal) had already unlocked. Winning
+                    // the fight in either form should unlock Iza's minigame the same way, so the form
+                    // check has been dropped entirely.
+                    if (i_this->mSwBit == 0x15)
                     {
-                        // Set the flag to make Iza 1 available and set the memory bit for having talked to her after opening the portal as human.
+                        // Set the flag to make Iza 1 available and set the memory bit for having talked to her after opening the portal.
                         dComIfGs_onEventBit(0xB02);
                         dComIfGs_onSwitch(0x37, fopAcM_GetRoomNo(a_this));
                     }

@@ -334,6 +334,7 @@ void aurora_log_callback(AuroraLogLevel level, const char* module, const char* m
 
 
 aurora::Module DuskLog("dusk");
+aurora::Module ApItemLog("ap_items");
 
 void dusk::InitializeFileLogging(const std::filesystem::path& configDir, AuroraLogLevel logLevel) {
     if (!g_logStateAlive.load(std::memory_order_acquire)) {

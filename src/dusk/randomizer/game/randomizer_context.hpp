@@ -4,6 +4,7 @@
 #include <dolphin/types.h>
 
 #include <array>
+#include <deque>
 #include <list>
 #include <iomanip>
 #include <optional>
@@ -25,6 +26,17 @@ public:
     static constexpr size_t OBJ_DELETE_SIZE = 1;
     static constexpr u8 ROOM_STAGE = 0xFF;
 
+    // Location categories whose randomized item is embedded into a local object/NPC/dialogue lookup
+    // and granted atomically when the player interacts with it. hasAtomicLocalGrant() (in
+    // archipelago_context.cpp) reads this same list for dedup, so both sides must stay in sync.
+    // "Twilit Insect" and "Bug Reward" are intentionally excluded: nothing in actor code grants
+    // from their tables, so their item only arrives via the network. Listing them here would let
+    // dedup discard that only source. Their override tables stay populated for the tracker's getLocationItem().
+    static constexpr std::array kAtomicallyGrantedLocationCategories = {
+        "Chest", "Poe", "Freestanding Item", "Sky Character", "Golden Wolf",
+        "Name Lookup", "FLW Message", "Shop"
+    };
+
     RandomizerContext() = default;
 
     bool mCreatingSave{false};
@@ -37,6 +49,14 @@ public:
     std::list<u16> mStartEventFlags{};
     std::unordered_map<u8, std::list<u8>> mStartRegionFlags{};
     std::list<u8> mStartingInventory{};
+
+    // Tracks (player, location) pairs for items already received from OTHER players, so a resync
+    // on reconnect doesn't re-grant them. AP location IDs are shared globally across all players of
+    // the same game (not per-player), so a plain location-id check can't distinguish "my location"
+    // from "the same-numbered location in someone else's world" - this explicit record is necessary
+    // because IsLocationChecked() only reflects this player's own location-collected state, which is
+    // meaningless for items found by someone else. Encoded as (player << 48) | (location & 0xFFFFFFFFFFFF).
+    std::unordered_set<u64> mProcessedNetworkItems{};
 
     struct itemLocationData{
         int itemId{0xFF};
@@ -85,6 +105,11 @@ public:
     std::optional<std::string> LoadFromHash(const std::string& hash);
     std::optional<std::string> LoadFromPath(const fspath& path);
     std::filesystem::path GetSeedDataPath() const;
+
+    static u64 EncodeNetworkItemKey(int player, int64_t location) {
+        return (static_cast<u64>(static_cast<u32>(player)) << 48) |
+               (static_cast<u64>(location) & 0xFFFFFFFFFFFFULL);
+    }
 
     enum Settings {
         HYRULE_BARRIER_REQUIREMENTS,
@@ -149,8 +174,6 @@ public:
         CLEAR_QUEUE,
     };
 
-    static constexpr u8 EVENT_ITEM_QUEUE_SIZE = 10;
-
     RandomizerState() {mInitialized = false;}
 
     int _create();
@@ -181,7 +204,9 @@ public:
     u8 mEventItemStatus{};
     bool mHasPendingToDChange{false};
     u8 mTimeChange{};
-    u8 mEventItemQueue[EVENT_ITEM_QUEUE_SIZE];
+    // Unbounded FIFO of items waiting for the get-item cutscene. Was previously a fixed-size array
+    // that silently dropped items once full during a large multiworld sync burst.
+    std::deque<u8> mEventItemQueue;
     bool mRoomReloadingState{false};
 
     // Used to store an item id for a flow message override so that we can give the item

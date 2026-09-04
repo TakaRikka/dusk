@@ -1187,6 +1187,7 @@ void dComIfGs_setMixItemIndex(int i_no, u8 item_index);
 u8 dComIfGs_getSelectMixItemNoArrowIndex(int i_selmixItemIdx);
 u8 dComIfGs_getMixItemIndex(int i_no);
 u8 dComIfGs_checkGetInsectNum();
+void dComIfGs_syncInsectMiscFlags();
 u8 dComIfGs_checkGetItem(u8 i_itemNo);
 u8 dComIfGs_getBottleMax();
 void dComIfGs_gameStart();
