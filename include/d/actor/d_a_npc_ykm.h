@@ -287,7 +287,6 @@ public:
 
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[10];
     static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[10];
-// private:
     /* 0x0E40 */ mDoExt_McaMorfSO* mFishModelMorf;
     /* 0x0E44 */ mDoExt_McaMorfSO* mLeafModelMorf;
     /* 0x0E48 */ NPC_YKM_HIO_CLASS* mpHIO;

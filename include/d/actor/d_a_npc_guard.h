@@ -62,7 +62,6 @@ public:
 
     static DUSK_GAME_DATA actionFunc ActionTable[7][2];
 
-private:
     /* 0xAC8 */ J3DModel* mpModel;
     /* 0xACC */ J3DModel* mpModel2;
     /* 0xAD0 */ J3DAnmTransformKey* mpAnmKey;

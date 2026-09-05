@@ -18,7 +18,9 @@
 #include <os.h>
 #include <stdint.h>
 
-#include "tracy/Tracy.hpp"
+#if TARGET_PC
+#include <tracy/Tracy.hpp>
+#endif
 
 DUSK_GAME_DATA s16* JASDriver::sDmaDacBuffer[3];
 

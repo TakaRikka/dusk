@@ -102,7 +102,6 @@ public:
     /* 0x04 */ u8 field_0x4_debug;
     /* 0x08 */ int field_0x8_debug;
 #endif
-private:
     /* 0x04 */ J2DPicture* mMapJ2DPicture;
     /* 0x08 */ dMap_c* mMap;
     /* 0x0C */ s32 mIsCompass;

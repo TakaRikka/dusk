@@ -706,26 +706,23 @@ public:
     /* 0x2374 */ u8 mFadeFlag;
     /* 0x2375 */ bool mHasDrawn;
 
-    #if PLATFORM_GCN
+#if PLATFORM_GCN
     /* 0x2378 */ J2DPicture* mpFadePict;
-    #endif
-#ifdef TARGET_PC
+#endif
+
+#if PLATFORM_WII || PLATFORM_SHIELD
+    /* 0x2376 */ u8 field_0x2376[SAVEFILE_SIZE];
+    /* 0x4332 */ u8 field_0x4332;
+    /* 0x4333 */ u8 field_0x4333;
+#endif
+
+#if TARGET_PC
     dDlst_FileSelFade_c mFadeDlst;
     bool mGameModeSaveStartBuildUi = true;
     GameModeNewSaveState mGameModeNewSaveState = GAME_MODE_STATE_PENDING;
 #endif
-
-    #if PLATFORM_WII || PLATFORM_SHIELD
-    /* 0x2376 */ u8 field_0x2376[SAVEFILE_SIZE];
-    /* 0x4332 */ u8 field_0x4332;
-    /* 0x4333 */ u8 field_0x4333;
-    #endif
 };
 
-#ifdef TARGET_PC
-STATIC_ASSERT(sizeof(dFile_select_c) == 0x237C + sizeof(dDlst_FileSelFade_c));
-#else
 STATIC_ASSERT(sizeof(dFile_select_c) == 0x237C);
-#endif
 
 #endif /* D_FILE_D_FILE_SELECT_H */

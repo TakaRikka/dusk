@@ -129,7 +129,6 @@ public:
     J2DPicture* getBlackTex() { return mpBlackTex; }
     u8 getSubWindowOpenCheck() { return mSubWindowOpenCheck; }
 
-// private:
     /* 0x004 */ JKRExpHeap* mpHeap;
     /* 0x008 */ JKRExpHeap* mpSubHeap;
     /* 0x00C */ void* field_0xc;
@@ -225,7 +224,6 @@ public:
 
     static DUSK_GAME_DATA f32 mViewOffsetY;
 
-private:
     /* 0x004 */ JKRExpHeap* mpHeap;
     /* 0x008 */ JKRSolidHeap* mpSolidHeap;
     /* 0x00C */ dMenu_Collect2D_c* mpCollect2D;
@@ -260,7 +258,6 @@ public:
     bool isKeyCheck() { return mpCollect2D->isKeyCheck(); }
     bool isOutCheck() { return mpCollect2D->isOutCheck(); }
 
-private:
     /* 0x4 */ dMenu_Collect2D_c* mpCollect2D;
     /* 0x8 */ dMenu_Collect3D_c* mpCollect3D;
 };

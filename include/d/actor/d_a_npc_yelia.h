@@ -104,7 +104,6 @@ public:
 
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[6];
     static DUSK_GAME_DATA int (daNpc_Yelia_c::*mCutList[6])(int);
-private:
     /* 0xE40 */ NPC_YELIA_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCcCyl;
     /* 0xF80 */ u8 mType;

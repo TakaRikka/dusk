@@ -1,9 +1,9 @@
 #pragma once
 
+#include "mods/svc/hook.h"
+
 #include <cstdint>
 #include <vector>
-
-#include "mods/svc/hook.h"
 
 namespace dusk::mods::manifest {
 

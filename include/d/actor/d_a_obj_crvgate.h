@@ -50,7 +50,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x5A0 */ s32 mEventID;
     /* 0x5A4 */ bool mFlagGateClosed;
     /* 0x5A5 */ bool field_0x5a5;

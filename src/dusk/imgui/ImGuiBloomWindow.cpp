@@ -1,10 +1,12 @@
-#include <algorithm>
-
-#include "imgui.h"
-
 #include "ImGuiBloomWindow.hpp"
+
 #include "ImGuiMenuTools.hpp"
+
 #include "m_Do/m_Do_graphic.h"
+
+#include <imgui.h>
+
+#include <algorithm>
 
 namespace dusk {
 namespace {

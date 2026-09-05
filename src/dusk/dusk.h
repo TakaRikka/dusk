@@ -1,8 +1,7 @@
 #pragma once
 
 #include <aurora/aurora.h>
-
-#include "aurora/gfx.h"
+#include <aurora/gfx.h>
 
 extern AuroraInfo auroraInfo;
 

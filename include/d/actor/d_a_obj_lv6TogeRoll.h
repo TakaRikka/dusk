@@ -66,7 +66,6 @@ public:
     static DUSK_GAME_DATA dCcD_SrcSph mCcDSph;
     static DUSK_GAME_DATA dCcD_SrcCps mCcDCps;
 
-private:
     /* 0x05A0 */ request_of_phase_process_class mPhase;
     /* 0x05A8 */ J3DModel* mpModel;
     /* 0x05AC */ u8 mPathID;

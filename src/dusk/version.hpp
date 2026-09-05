@@ -17,6 +17,7 @@ namespace dusk::version {
 
     bool isGcn();
     bool isWii();
+    bool isLessThanWiiJpn();
     bool isJpnOrLessThanWiiJpn();
     bool isPalOrAtLeastWiiR2();
 

@@ -116,7 +116,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[4];
     static DUSK_GAME_DATA int (daNpc_Kakashi_c::* DUSK_CONST mCutList[])(int);
 
-private:
     /* 0x0E40 */ NPC_KAKASHI_HIO_CLASS* mpHIO;
     /* 0x0E44 */ Z2SoundObjSimple mSound;
     /* 0x0E64 */ dCcD_Cyl mCcCyl;

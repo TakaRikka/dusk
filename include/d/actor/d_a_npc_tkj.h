@@ -97,7 +97,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
     static DUSK_GAME_DATA int (daNpcTkj_c::* DUSK_CONST mCutList[])(int);
 
-private:
     /* 0xE40 */ NPC_TKJ_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCcCyl;
     /* 0xF80 */ u8 mType;

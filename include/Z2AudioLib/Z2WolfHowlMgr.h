@@ -70,7 +70,6 @@ public:
     u8 getReleaseTimer() { return mReleaseTimer; }
     u8 getCorrectCurveID() { return mCorrectCurveID; }
 
-private:
     /* 0x00 */ JAISoundHandle mWolfHowlHandle;
     /* 0x04 */ JAISoundHandle mWindStoneHandle;
     /* 0x08 */ JAISoundHandle mGuideHandle;

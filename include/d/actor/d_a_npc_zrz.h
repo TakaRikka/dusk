@@ -114,7 +114,6 @@ public:
     void himoCalc();
     void adjustShapeAngle() {}
 
-// private:
     /* 0x0B48 */ Z2Creature mCreatureSound;
     /* 0x0BD8 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0x0BDC */ mDoExt_invisibleModel mInvisibleModel;

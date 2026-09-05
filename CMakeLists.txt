@@ -72,6 +72,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Linux)
 endif ()
 set(AURORA_ENABLE_DVD ON CACHE BOOL "Enable DVD API support" FORCE)
 set(AURORA_ENABLE_CARD ON CACHE BOOL "Enable CARD API support" FORCE)
+set(AURORA_ENABLE_THP ON CACHE BOOL "Enable THP decoder" FORCE)
 set(AURORA_ENABLE_RMLUI ON CACHE BOOL "Enable RmlUi UI support" FORCE)
 add_subdirectory(extern/aurora EXCLUDE_FROM_ALL)
 target_compile_definitions(aurora_mtx PRIVATE MTX_USE_PS=1)
@@ -88,7 +89,6 @@ endif ()
 
 option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
-option(DUSK_MOVIE_SUPPORT "If on, compile against libjpeg-turbo to enable THP file decoding" ON)
 option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structure" OFF)
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
 option(DUSK_ENABLE_CODE_MODS "Enable code mods" ON)
@@ -130,69 +130,6 @@ if (MSVC)
     endif ()
     if (CMAKE_MSVC_DEBUG_INFORMATION_FORMAT STREQUAL "EditAndContinue")
         add_link_options("/INCREMENTAL")
-    endif ()
-endif ()
-
-if (DUSK_MOVIE_SUPPORT)
-    find_package(libjpeg-turbo 3.0 CONFIG QUIET)
-    if (libjpeg-turbo_FOUND)
-        message(STATUS "dusklight: Using system libjpeg-turbo")
-    else ()
-        message(STATUS "dusklight: Fetching libjpeg-turbo")
-        include(ExternalProject)
-        set(_jpeg_install_dir ${CMAKE_BINARY_DIR}/libjpeg-turbo-install)
-        if (WIN32)
-            set(_jpeg_lib ${_jpeg_install_dir}/lib/turbojpeg-static.lib)
-        else ()
-            set(_jpeg_lib ${_jpeg_install_dir}/lib/libturbojpeg.a)
-        endif ()
-        set(_jpeg_cmake_args
-            -DCMAKE_INSTALL_PREFIX=${_jpeg_install_dir}
-            -DCMAKE_PROJECT_INCLUDE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/WindowsTargetProcessor.cmake
-            -DENABLE_SHARED=OFF
-            -DWITH_TURBOJPEG=ON
-            -DWITH_JAVA=OFF
-            -DCMAKE_INSTALL_LIBDIR=lib
-        )
-        if (CMAKE_TOOLCHAIN_FILE)
-            get_filename_component(_jpeg_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
-            list(APPEND _jpeg_cmake_args -DCMAKE_TOOLCHAIN_FILE=${_jpeg_toolchain_file})
-        endif ()
-        set(_jpeg_passthrough_vars
-            ANDROID_ABI
-            ANDROID_PLATFORM
-            CMAKE_BUILD_TYPE
-            CMAKE_C_COMPILER
-            CMAKE_C_COMPILER_LAUNCHER
-            CMAKE_MAKE_PROGRAM
-            CMAKE_MSVC_RUNTIME_LIBRARY
-            CMAKE_MSVC_DEBUG_INFORMATION_FORMAT
-            CMAKE_OSX_ARCHITECTURES
-            CMAKE_OSX_DEPLOYMENT_TARGET
-            CMAKE_OSX_SYSROOT
-            DEPLOYMENT_TARGET
-            ENABLE_ARC
-            ENABLE_BITCODE
-            PLATFORM
-        )
-        foreach(_var IN LISTS _jpeg_passthrough_vars)
-            if (DEFINED ${_var})
-                list(APPEND _jpeg_cmake_args -D${_var}=${${_var}})
-            endif ()
-        endforeach ()
-        ExternalProject_Add(libjpeg-turbo-ext
-            URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.0.tar.gz
-            URL_HASH SHA256=35fec2e1ddfb05ecf6d93e50bc57c1e54bc81c16d611ddf6eff73fff266d8285
-            CMAKE_ARGS ${_jpeg_cmake_args}
-            BUILD_BYPRODUCTS ${_jpeg_lib}
-        )
-        file(MAKE_DIRECTORY ${_jpeg_install_dir}/include)
-        add_library(libjpeg-turbo::turbojpeg-static STATIC IMPORTED GLOBAL)
-        set_target_properties(libjpeg-turbo::turbojpeg-static PROPERTIES
-            IMPORTED_LOCATION ${_jpeg_lib}
-            INTERFACE_INCLUDE_DIRECTORIES ${_jpeg_install_dir}/include
-        )
-        add_dependencies(libjpeg-turbo::turbojpeg-static libjpeg-turbo-ext)
     endif ()
 endif ()
 
@@ -303,8 +240,8 @@ include(cmake/GameABIConfig.cmake)
 
 find_package(Threads REQUIRED)
 set(GAME_COMPILE_DEFS DUSK_BUILDING_GAME=1)
-set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd
-    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::io borealis::log borealis::presentation borealis::sentry borealis::update freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
+set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::pad aurora::mtx aurora::os aurora::dvd aurora::thp
+    aurora::card borealis::cli borealis::crash borealis::data borealis::disc borealis::discord borealis::file_select borealis::io borealis::log borealis::net borealis::presentation borealis::sentry borealis::update borealis::ws freeverb cxxopts::cxxopts absl::flat_hash_map nlohmann_json::nlohmann_json TracyClient fmt::fmt
     Threads::Threads zstd::libzstd dusklight_game_headers)
 if (DUSK_HAS_FUNCHOOK)
     list(APPEND GAME_LIBS funchook-static)
@@ -312,15 +249,6 @@ endif ()
 
 if (WIN32)
     list(APPEND GAME_LIBS Ws2_32)
-endif ()
-
-if (DUSK_MOVIE_SUPPORT)
-    if (TARGET libjpeg-turbo::turbojpeg-static)
-        list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg-static)
-    else ()
-        list(APPEND GAME_LIBS libjpeg-turbo::turbojpeg)
-    endif ()
-    list(APPEND GAME_COMPILE_DEFS MOVIE_SUPPORT=1)
 endif ()
 
 if (DUSK_ENABLE_CODE_MODS)
@@ -565,12 +493,14 @@ include(cmake/ModSDK.cmake)
 
 if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     add_custom_target(dusklight_mods) # Aggregate target for all in-tree mods
+    add_subdirectory(mods/luau_runtime)
     add_subdirectory(mods/template_mod)
     add_subdirectory(mods/ao_mod)
     add_subdirectory(mods/shadow_mod)
     add_subdirectory(mods/window_demo)
     add_subdirectory(mods/flow_demo)
-    add_subdirectory(mods/basic_cosmetics_mod)
+    add_subdirectory(mods/custom_actor_demo)
+    add_subdirectory(mods/cosmetics)
     add_subdirectory(mods/randomizer)
 endif ()
 

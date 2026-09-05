@@ -1,20 +1,21 @@
-#include "dusk/audio/DuskAudioSystem.h"
+#include "DuskAudioSystem.h"
 
-#include <SDL3/SDL_init.h>
-#include <array>
-#include <cassert>
-#include <span>
+#include "DuskDsp.hpp"
 
 #include "JSystem/JAudio2/JASAiCtrl.h"
+#include "JSystem/JAudio2/JASAudioThread.h"
 #include "JSystem/JAudio2/JASChannel.h"
 #include "JSystem/JAudio2/JASCriticalSection.h"
+#include "JSystem/JAudio2/JASDriverIF.h"
 #include "JSystem/JAudio2/JASDSPChannel.h"
 #include "JSystem/JAudio2/JASHeapCtrl.h"
 
-#include "DuskDsp.hpp"
-#include "JSystem/JAudio2/JASAudioThread.h"
-#include "JSystem/JAudio2/JASDriverIF.h"
-#include "tracy/Tracy.hpp"
+#include <SDL3/SDL_init.h>
+#include <tracy/Tracy.hpp>
+
+#include <array>
+#include <cassert>
+#include <span>
 
 using namespace dusk::audio;
 

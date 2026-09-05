@@ -1,15 +1,16 @@
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 
-#include <borealis/log.hpp>
-#include "JSystem/JKernel/JKRArchive.h"
-#include "aurora/dvd.h"
 #include "dusk/mods/loader/loader.hpp"
 #include "mods/svc/overlay.h"
 
+#include "JSystem/JKernel/JKRArchive.h"
+
+#include <aurora/dvd.h>
+#include <borealis/log.hpp>
+
 #include <algorithm>
 #include <cstdint>
-#include <cstring>
 #include <mutex>
 #include <string_view>
 #include <unordered_map>

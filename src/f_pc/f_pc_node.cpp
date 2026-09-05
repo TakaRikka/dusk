@@ -8,10 +8,10 @@
 #include "f_pc/f_pc_debug_sv.h"
 
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
+
 #include "f_op/f_op_draw_iter.h"
 #include "f_pc/f_pc_manager.h"
-
-#include "dusk/frame_interpolation.h"
 #endif
 
 int fpcNd_DrawMethod(nodedraw_method_class* i_method_class, void* i_data) {

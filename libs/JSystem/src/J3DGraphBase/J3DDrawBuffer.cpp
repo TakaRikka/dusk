@@ -8,7 +8,10 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "tracy/Tracy.hpp"
+
+#if TARGET_PC
+#include <tracy/Tracy.hpp>
+#endif
 
 void J3DDrawBuffer::calcZRatio() {
     mZRatio = (mZFar - mZNear) / (f32)mEntryTableSize;

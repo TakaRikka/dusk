@@ -8,23 +8,19 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstdio>
 #include <cstring>
-
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
+#include "f_op/f_op_msg_mng.h"
+
+#if TARGET_PC
 #include "dusk/utilities.hpp"
 #include "dusk/version.hpp"
-#include "f_op/f_op_msg_mng.h"
 
 static bool isPalOrJpn() {
     return dusk::version::isRegionPal() || dusk::version::isRegionJpn();
 }
 
-#if TARGET_PC
 #define SJIS_MOJI(wmoji) ((static_cast<u16>(static_cast<u8>((wmoji)[0])) << 8) | static_cast<u8>((wmoji)[1]))
-#else
-#define SJIS_MOJI(wmoji) *(u16*)wmoji
-#endif
 
-#if TARGET_PC
 static const char* l_mojiHira[65] = {
     "\x82\xA0", "\x82\xA2", "\x82\xA4", "\x82\xA6", "\x82\xA8", "\x82\xA9", "\x82\xAB", "\x82\xAD", "\x82\xAF", "\x82\xB1", "\x82\xB3", "\x82\xB5", "\x82\xB7",
     "\x82\xB9", "\x82\xBB", "\x82\xBD", "\x82\xBF", "\x82\xC2", "\x82\xC4", "\x82\xC6", "\x82\xC8", "\x82\xC9", "\x82\xCA", "\x82\xCB", "\x82\xCC", "\x82\xCD",
@@ -80,6 +76,8 @@ static const char* l_mojiEisu[65] = {
     "X", "k", "x", ",", "L", "Y", "l", "y", ".", "M", "Z", "m", "z", " ",
 };
 #else
+#define SJIS_MOJI(wmoji) *(u16*)wmoji
+
 static const char* l_mojiHira[65] = {
     "あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す",
     "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は",
@@ -1090,9 +1088,7 @@ void dName_c::selectCursorMove() {
     ((J2DTextBox*)mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr())
         ->setWhite(JUtility::TColor(0xC8, 0xC8, 0xC8, 0xFF));
 
-    #if TARGET_PC
-    nameWide();
-    #endif
+    IF_DUSK(nameWide());
 
     Vec pos = mMojiIcon[mCharRow + mCharColumn * 5]->getGlobalVtxCenter(false, 0);
     mSelIcon->setPos(pos.x, pos.y, mMojiIcon[mCharRow + mCharColumn * 5]->getPanePtr(), true);

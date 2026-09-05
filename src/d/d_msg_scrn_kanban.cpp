@@ -12,10 +12,10 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_msg_scrn_kanban.h"
 #include "d/d_pane_class.h"
-#include "dusk/version.hpp"
 
 #if TARGET_PC
 #include "dusk/settings.h"
+#include "dusk/version.hpp"
 #endif
 
 dMsgScrnKanban_c::dMsgScrnKanban_c(JKRExpHeap* param_0) {

@@ -3,12 +3,14 @@
 #include "item.hpp"
 #include "registry.hpp"
 
-#include "aurora/lib/logging.hpp"
-#include "d/d_save.h"
 #include "dusk/main.h"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/utilities.hpp"
 #include "mods/svc/save.h"
+
+#include "d/d_save.h"
+
+#include <aurora/lib/logging.hpp>
 
 #include <fstream>
 #include <string_view>
@@ -193,6 +195,8 @@ void save_slot_written(uint32_t slot, const void* slotData) {
     if (slot >= kSlotCount) {
         return;
     }
+    s_currentSlot = static_cast<int32_t>(slot);
+    notify(slot, &SaveObserverRecord::onWritten, "save-written");
     load_sidecar();
     auto& store = s_slots[slot];
     if (slotData != nullptr) {
@@ -200,8 +204,6 @@ void save_slot_written(uint32_t slot, const void* slotData) {
         store.snapshotCrc = utils::crc32(slotData, kQuestLogSize);
     }
     flush_sidecar();
-    s_currentSlot = static_cast<int32_t>(slot);
-    notify(slot, &SaveObserverRecord::onWritten, "save-written");
 }
 
 void save_slot_copied(uint32_t fromSlot, uint32_t toSlot) {

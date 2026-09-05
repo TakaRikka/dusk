@@ -5,8 +5,11 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include <mtx.h>
 
-#include "JSystem/JMath/JMath.h"
+#if TARGET_PC
 #include "helpers/endian.h"
+
+#include "JSystem/JMath/JMath.h"
+#endif
 
 extern u8 g_printCurrentHeapDebug;
 DUSK_GAME_EXTERN u8 g_printOtherHeapDebug;

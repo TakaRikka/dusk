@@ -1490,6 +1490,7 @@ set(DUSK_FILES
         src/dusk/mods/log_buffer.hpp
         src/dusk/mods/manifest.cpp
         src/dusk/mods/manifest.hpp
+        src/dusk/mods/svc/actor.cpp
         src/dusk/mods/svc/camera.cpp
         src/dusk/mods/svc/config.cpp
         src/dusk/mods/svc/config.hpp
@@ -1500,6 +1501,9 @@ set(DUSK_FILES
         src/dusk/mods/svc/hook.cpp
         src/dusk/mods/svc/host.cpp
         src/dusk/mods/svc/http.cpp
+        src/dusk/mods/svc/net.cpp
+        src/dusk/mods/svc/net.hpp
+        src/dusk/mods/svc/websocket.cpp
         src/dusk/mods/svc/item.cpp
         src/dusk/mods/svc/item.hpp
         src/dusk/mods/svc/log.cpp

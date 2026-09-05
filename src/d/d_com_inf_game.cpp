@@ -19,17 +19,18 @@
 #include "d/d_timer.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene_mng.h"
-#include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
 #include <cstdio>
 #include <cstring>
 
-#include "helpers/string.hpp"
 
 #if TARGET_PC
 #include "dusk/settings.h"
+#include "helpers/string.hpp"
+
+#include "m_Do/m_Do_MemCard.h"
 #endif
 
 void dComIfG_play_c::ct() {
@@ -1245,12 +1246,12 @@ BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     }
     #endif
 
-    #ifdef TARGET_PC
+#if TARGET_PC
     if (!mDoMemCd_isCardCommNone()) {
         return 0;
     }
     g_mDoMemCd_control.SaveSync();
-    #endif
+#endif
 
     dComIfG_changeOpeningScene(i_scene, fpcNm_OPENING_SCENE_e);
     mDoAud_bgmStop(30);

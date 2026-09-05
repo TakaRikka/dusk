@@ -1,14 +1,15 @@
 #if BOREALIS_HAS_DISCORD
+#include "discord_presence.hpp"
 
-#include "dusk/discord_presence.hpp"
+#include "app_info.hpp"
+#include "logging.h"
+#include "main.h"
+#include "map_loader_definitions.h"
+
 #include "d/d_com_inf_game.h"
-#include "dusk/app_info.hpp"
-#include "dusk/logging.h"
-#include "dusk/main.h"
-#include "dusk/map_loader_definitions.h"
-#include "fmt/format.h"
 
 #include <borealis/discord.hpp>
+#include <fmt/format.h>
 
 #include <chrono>
 #include <string>

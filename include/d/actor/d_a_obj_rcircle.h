@@ -25,7 +25,6 @@ public:
 
     int getSwBit() { return fopAcM_GetParamBit(this, 0, 8) & 0xFF; }
 
-private:
     /* 0x574 */ mDoExt_brkAnm mBrk;
     /* 0x58C */ mDoExt_btkAnm mBtk;
     /* 0x5A4 */ J3DModel* mpModel;

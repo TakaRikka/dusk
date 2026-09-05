@@ -47,7 +47,6 @@ public:
     s32 getBgmLoadStatus(u32 wave) { return getWaveLoadStatus(wave, 1); }
     u8 getDemoSeWaveNum() { return loadedDemoWave; }
 
-// private:
     /* 0x00 */ JAISoundID BGM_ID;
     /* 0x04 */ int sceneNum;
     /* 0x08 */ int timer;

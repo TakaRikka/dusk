@@ -53,7 +53,7 @@ public:
  *
  */
 class daObj_YBag_c : public fopAc_ac_c {
-private:
+public:
     /* 0x568 */ request_of_phase_process_class mPhases[3];
     /* 0x580 */ J3DModel* mModel;
     /* 0x584 */ OBJ_YBAG_HIO_CLASS* mpHIO;

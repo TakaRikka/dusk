@@ -1,15 +1,16 @@
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 
 #include "dusk/main.h"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/log_buffer.hpp"
 #include "dusk/mods/manifest.hpp"
-#include "fmt/format.h"
 
-#include <algorithm>
 #include <borealis/io.hpp>
 #include <borealis/version.h>
+#include <fmt/format.h>
+
+#include <algorithm>
 #include <filesystem>
 #include <vector>
 

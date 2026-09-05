@@ -3,17 +3,16 @@
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/svc/item.hpp"
-
-#include "aurora/lib/logging.hpp"
-#include "d/d_com_inf_game.h"
-#include "d/d_item_data.h"
 #include "mods/items.h"
 
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+
+#include <aurora/lib/logging.hpp>
 #include <fmt/format.h>
 
 #include <algorithm>
 #include <array>
-#include <cstring>
 #include <exception>
 #include <string>
 #include <unordered_map>

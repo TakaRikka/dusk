@@ -112,7 +112,6 @@ public:
 
     static DUSK_GAME_DATA EventFn DUSK_CONST mEvtSeqList[1];
 
-private:
     /* 0xB48 */ J3DModel* mpModel1;
     /* 0xB4C */ J3DModel* mpModel2;
     /* 0xB50 */ Z2CreatureCitizen mCreature;

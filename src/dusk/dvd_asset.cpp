@@ -1,12 +1,13 @@
 #include "dusk/dvd_asset.hpp"
+
 #include "dusk/logging.h"
 #include "helpers/endian.h"
-#include "dolphin/dvd.h"
+
 #include "DynamicLink.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRDvdRipper.h"
 
-#include <cstring>
+#include <dolphin/dvd.h>
 
 namespace dusk {
 

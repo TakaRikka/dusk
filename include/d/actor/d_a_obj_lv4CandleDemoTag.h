@@ -43,7 +43,6 @@ public:
     virtual ~dalv4CandleDemoTag_c() {}
     virtual bool eventStart();
 
-private:
     /* 0x584 */ u8 mMode;
     /* 0x585 */ u8 mPathID;
     /* 0x586 */ u8 mSwNG;

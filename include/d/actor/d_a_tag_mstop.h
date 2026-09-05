@@ -17,7 +17,6 @@ public:
     int execute();
     bool checkNoAttention() const { return field_0x56b == 0xFF; }
 
-private:
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 mSwitch;
     /* 0x56A */ u8 field_0x56a;

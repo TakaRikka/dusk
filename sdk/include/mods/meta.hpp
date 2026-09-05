@@ -13,21 +13,27 @@
  * modmeta records. Each IMPORT_SERVICE/EXPORT_SERVICE/DEFINE_HOOK use places one
  * constant-initialized record object in the metadata section.
  */
+#if defined(__has_attribute) && __has_attribute(no_sanitize)
+#define MOD_META_NO_ASAN __attribute__((no_sanitize("address")))
+#else
+#define MOD_META_NO_ASAN
+#endif
+
 #if defined(_WIN32)
 #pragma section("modmeta$a", read, write)
 #pragma section("modmeta$d", read, write)
 #pragma section("modmeta$z", read, write)
 #if defined(__clang__)
-#define MOD_META_RECORD __declspec(allocate("modmeta$d")) __attribute__((used))
+#define MOD_META_RECORD __declspec(allocate("modmeta$d")) __attribute__((used)) MOD_META_NO_ASAN
 #else
 #define MOD_META_RECORD __declspec(allocate("modmeta$d"))
 #endif
 #elif defined(__APPLE__)
-#define MOD_META_RECORD __attribute__((section("__DATA,__modmeta"), used))
+#define MOD_META_RECORD __attribute__((section("__DATA,__modmeta"), used)) MOD_META_NO_ASAN
 #elif defined(__has_attribute) && __has_attribute(retain)
-#define MOD_META_RECORD __attribute__((section("modmeta"), used, retain))
+#define MOD_META_RECORD __attribute__((section("modmeta"), used, retain)) MOD_META_NO_ASAN
 #else
-#define MOD_META_RECORD __attribute__((section("modmeta"), used))
+#define MOD_META_RECORD __attribute__((section("modmeta"), used)) MOD_META_NO_ASAN
 #endif
 
 /* Section bounds for the mod_meta descriptor */

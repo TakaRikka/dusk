@@ -221,7 +221,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[6];
     static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[6];
     static DUSK_GAME_DATA dCcD_SrcSph DUSK_CONST mStoneCcDSph;
-private:
     /* 0x0E40 */ NPC_HANJO_HIO_CLASS* mpHIO;
     /* 0x0E44 */ J3DModel* mModel1;
     /* 0x0E48 */ J3DModel* mModel2;

@@ -23,7 +23,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x568 */ u8 field_0x568[0x574 - 0x568];
     /* 0x574 */ u8 mMode;
     /* 0x575 */ u8 field_0x575;

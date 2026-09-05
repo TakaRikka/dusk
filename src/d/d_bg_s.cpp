@@ -11,12 +11,14 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
+#if TARGET_PC || DEBUG
 #include "d/d_debug_viewer.h"
 #include "d/d_bg_s_capt_poly.h"
+#endif
 
 #if TARGET_PC
-#include "helpers/offset_ptr.h"
 #include "dusk/settings.h"
+#include "helpers/offset_ptr.h"
 #endif
 
 #if DEBUG
@@ -29,7 +31,6 @@ int g_shdw_counter;
 int g_sph_counter;
 int g_capt_poly_counter;
 #endif
-
 
 void dBgS_HIO::genMessage(JORMContext* mctx) {
 #if DEBUG

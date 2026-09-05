@@ -1,15 +1,16 @@
 #include "mods_window.hpp"
 
-#include "dusk/mod_loader.hpp"
-#include "dusk/mods/svc/ui.hpp"
-#include "fmt/format.h"
 #include "logs_window.hpp"
 #include "mod_texture_provider.hpp"
-#include "mods/svc/http.h"
 #include "pane.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
+#include "dusk/mod_loader.hpp"
+#include "dusk/mods/svc/net.hpp"
+#include "dusk/mods/svc/ui.hpp"
+
 #include "m_Do/m_Do_audio.h"
+
+#include <fmt/format.h>
 
 #include <memory>
 #include <ranges>
@@ -44,7 +45,7 @@ ModStatus mod_status(const mods::LoadedMod& mod) {
 bool mod_uses_network(const mods::LoadedMod& mod) {
     return std::ranges::any_of(
         mod.manifestInfo.imports, [](const mods::ModManifestInfo::Import& serviceImport) {
-            return serviceImport.id == HTTP_SERVICE_ID;
+            return mods::svc::is_network_service(serviceImport.id);
         });
 }
 

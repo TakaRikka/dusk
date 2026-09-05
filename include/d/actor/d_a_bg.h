@@ -57,7 +57,6 @@ public:
     inline int execute();
     inline int isDelete();
 
-private:
     /* 0x568 */ u8 field_0x568[0x570 - 0x568];
     /* 0x570 */ daBg_Part mBgParts[6];
     /* 0x5E8 */ dBgW* mpBgW;

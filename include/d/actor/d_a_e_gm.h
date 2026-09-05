@@ -62,7 +62,6 @@ public:
     BOOL checkAction(actionFunc action) { return mAction == action; }
     BOOL checkOldAction(actionFunc action) { return mOldAction == action; }
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ dBgS_AcchCir mAcchCir;
     /* 0x5F4 */ dBgS_ObjAcch mObjAcch;

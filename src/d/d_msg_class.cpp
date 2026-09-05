@@ -1,21 +1,21 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
+#include "d/d_msg_class.h"
 #include <cstdio>
 #include <cstring>
-#include "JSystem/J2DGraph/J2DTextBox.h"
-#include "JSystem/JUtility/JUTFont.h"
-#include "d/d_lib.h"
 #include "d/d_meter2_info.h"
-#include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
-#include "d/d_msg_out_font.h"
 #include "d/d_msg_unit.h"
-#include "dusk/version.hpp"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "d/d_msg_out_font.h"
 #include "m_Do/m_Do_graphic.h"
+#include "d/d_lib.h"
+#include "JSystem/JUtility/JUTFont.h"
 
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
 #include "dusk/scope_guard.hpp"
+#include "dusk/version.hpp"
 #include "helpers/bits.hpp"
 
 static bool read_full_color(const void* data, u32 size, u32& ccColor, u32& gcColor) {
@@ -31,9 +31,7 @@ static bool read_full_color(const void* data, u32 size, u32& ccColor, u32& gcCol
     }
     return false;
 }
-#endif
 
-#if TARGET_PC
 #define CHAR_CODE_MALE_ICON        (dusk::version::isRegionJpn() ? 0x8189 : 0xB2)
 #define CHAR_CODE_FEMALE_ICON      (dusk::version::isRegionJpn() ? 0x818A : 0xB3)
 #define CHAR_CODE_STAR_ICON        (dusk::version::isRegionJpn() ? 0x819A : 0xB1)

@@ -35,7 +35,6 @@ public:
     u32 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
     void setAction(u8 i_action) { mAction = i_action; }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ J3DModel* mpModel;
     /* 0x574 */ f32 mOffsetY;

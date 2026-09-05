@@ -6,11 +6,14 @@
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
+
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#endif
 
 DUSK_GAME_DATA u16 J3DShapeMtx::sMtxLoadCache[10];
 
-#ifdef TARGET_PC
+#if TARGET_PC
 static void J3DFrameInterpConcat(MtxP lhs, MtxP rhs, Mtx out) {
     if (!dusk::frame_interp::lookup_concat_replacement(lhs, rhs, out)) {
         MTXConcat(lhs, rhs, out);

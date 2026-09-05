@@ -78,7 +78,6 @@ public:
     u16 checkFlag(u16 flag) { return mFlags & flag; }
     s16 getAngleY() { return shape_angle.y; }
 
-private:
     /* 0x5B0 */ request_of_phase_process_class mPhase;
     /* 0x5B8 */ J3DModel* mpModel;
     /* 0x5BC */ dCcD_Stts mCcStts;

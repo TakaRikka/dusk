@@ -24,7 +24,6 @@ public:
 
     u32 getSwbit() { return (u8) fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhaseReq;
     /* 0x570 */ J3DModel* mpModel;
     /* 0x574 */ mDoExt_btkAnm* mpBtk;

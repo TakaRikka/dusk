@@ -14,7 +14,6 @@
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_msg_string.h"
 #include "d/d_select_cursor.h"
-#include "dusk/version.hpp"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
@@ -25,8 +24,9 @@
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/menu_pointer.h"
-#include "dusk/settings.h"
 #include "dusk/mods/svc/save.hpp"
+#include "dusk/settings.h"
+#include "dusk/version.hpp"
 #endif
 
 static int SelStartFrameTbl[3] = {
@@ -1452,6 +1452,12 @@ void dMenu_save_c::memCardDataSaveWait() {
 
     mCmdState = g_mDoMemCd_control.SaveSync();
     if (mCmdState != 0) {
+#if TARGET_PC
+        if (mCmdState == 1) {
+                dusk::mods::svc::save_slot_written(
+                    mSelectedFile, mSaveBuffer + mSelectedFile * QUEST_LOG_SIZE);
+            }
+#endif
         printf("save cmdState %d\n", mCmdState);
         mMenuProc = PROC_MEMCARD_DATA_SAVE_WAIT2;
     }
@@ -1468,10 +1474,6 @@ void dMenu_save_c::memCardDataSaveWait2() {
         mDoAud_seStart(Z2SE_SY_FILE_SAVE_OK, NULL, 0, 0);
         dComIfGs_setDataNum(mSelectedFile);
         dComIfGs_setNoFile(0);
-
-#if TARGET_PC
-        dusk::mods::svc::save_slot_written(mSelectedFile, mSaveBuffer + mSelectedFile * QUEST_LOG_SIZE);
-#endif
 
         if (mUseType == TYPE_WHITE_EVENT || mUseType == TYPE_BLACK_EVENT) {
             headerTxtSet(0x530);  // Saved.

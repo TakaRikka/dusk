@@ -1,4 +1,5 @@
 #include "helpers/batch.hpp"
+
 #include "dusk/logging.h"
 
 #include <aurora/dl.hpp>

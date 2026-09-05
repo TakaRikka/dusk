@@ -16,8 +16,6 @@
 #include <cstdio>
 #include <cstring>
 
-#include "dusk/version.hpp"
-
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include <revolution/sc.h>
 #include <revolution/wpad.h>
@@ -28,11 +26,11 @@
 #endif
 
 #if TARGET_PC
-#include <f_ap/f_ap_game.h>
 #include "dusk/game_mode.hpp"
 #include "dusk/settings.h"
-
+#include "dusk/version.hpp"
 #include "helpers/string.hpp"
+
 #define strcpy SafeStringCopy
 #endif
 

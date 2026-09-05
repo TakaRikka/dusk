@@ -56,7 +56,6 @@ public:
 
     static DUSK_GAME_DATA const actionFunc ActionTable[][2];
 
-private:
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ mDoExt_bckAnm* mpBck;
     /* 0x570 */ request_of_phase_process_class mPhase;

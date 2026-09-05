@@ -1,11 +1,15 @@
 #include "dusk/config.hpp"
-#include "absl/container/flat_hash_map.h"
-#include "fmt/format.h"
-#include "nlohmann/json.hpp"
 
+#include "dusk/action_bindings.h"
 #include "dusk/io.hpp"
-#include <borealis/io.hpp>
+#include "dusk/logging.h"
+#include "dusk/main.h"
 #include "dusk/settings.h"
+
+#include <absl/container/flat_hash_map.h>
+#include <borealis/io.hpp>
+#include <fmt/format.h>
+#include <nlohmann/json.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -17,10 +21,6 @@
 #include <system_error>
 #include <utility>
 #include <vector>
-
-#include "dusk/action_bindings.h"
-#include "dusk/logging.h"
-#include "dusk/main.h"
 
 namespace dusk::config {
 namespace {

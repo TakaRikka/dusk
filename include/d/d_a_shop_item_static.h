@@ -107,7 +107,6 @@ public:
         SHOP_ITEMNO_MAX,
     };
 
-private:
     /* 0x92C */ Mtx mMtx;
     /* 0x95C */ int field_0x95c;
     /* 0x960 */ s16 mAngleX;

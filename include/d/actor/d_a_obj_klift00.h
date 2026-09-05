@@ -33,7 +33,6 @@ public:
         LOCK_e = (1 << 6), NO_BASE_DISP = (1 << 7)
     };
 
-private:
     struct ChainPos {
         cXyz mDeltaPosVector;
         cXyz mCurrentPos;

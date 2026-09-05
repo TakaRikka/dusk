@@ -1,29 +1,29 @@
 #include "ui.hpp"
 
-#include <RmlUi/Core.h>
-#include <SDL3/SDL_events.h>
-#include <SDL3/SDL_gamepad.h>
-#include <SDL3/SDL_joystick.h>
-#include <SDL3/SDL_power.h>
-#include <SDL3/SDL_video.h>
-#include <absl/container/flat_hash_set.h>
-#include <aurora/rmlui.hpp>
-#include <fmt/format.h>
-
-#include <algorithm>
-#include <filesystem>
-#include <ranges>
-
-#include "aurora/lib/window.hpp"
-#include "dusk/config.hpp"
-#include "dusk/io.hpp"
-#include <borealis/io.hpp>
 #include "command_console.hpp"
 #include "icon_provider.hpp"
 #include "input.hpp"
 #include "mod_texture_provider.hpp"
 #include "prelaunch.hpp"
 #include "window.hpp"
+
+#include "dusk/config.hpp"
+
+#include <absl/container/flat_hash_set.h>
+#include <aurora/lib/window.hpp>
+#include <aurora/rmlui.hpp>
+#include <borealis/io.hpp>
+#include <fmt/format.h>
+#include <RmlUi/Core.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_joystick.h>
+#include <SDL3/SDL_power.h>
+#include <SDL3/SDL_video.h>
+
+#include <algorithm>
+#include <filesystem>
+#include <ranges>
 
 namespace dusk::ui {
 namespace {

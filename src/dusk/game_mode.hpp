@@ -1,7 +1,8 @@
 #pragma once
 
-#include "d/d_file_select.h"
 #include "mods/svc/game_mode.h"
+
+#include "d/d_file_select.h"
 
 #include <functional>
 #include <map>

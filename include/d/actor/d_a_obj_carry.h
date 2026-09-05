@@ -407,7 +407,6 @@ public:
     /* 0xE26 */ u8 field_0xe26;
     /* 0xE27 */ u8 field_0xe27;
 
-private:
     u16 getType_private() { return field_0xd18 >> 1 & 0x1f; }
 };
 

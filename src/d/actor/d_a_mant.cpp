@@ -11,9 +11,10 @@
 #include "d/d_com_inf_game.h"
 
 #if TARGET_PC
-#include <aurora/texture.hpp>
 #include "dusk/dvd_asset.hpp"
 #include "dusk/frame_interpolation.h"
+
+#include <aurora/texture.hpp>
 
 #include <type_traits>
 

@@ -15,7 +15,9 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
+#endif
 
 static DUSK_CONSTEXPR int l_bmdData[4][2] = {
     {14, 1}, {26, 2},

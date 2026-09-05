@@ -20,7 +20,6 @@ public:
 
     static const int ZELDA_CODE_SIZE = sizeof(sBgPc);
 
-private:
     /* 0x00 */ sBgPlc* m_base;
 };
 

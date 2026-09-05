@@ -4542,9 +4542,7 @@ static void demo_camera(e_wb_class* i_this) {
             i_this->demo_cam_way_spd.z = fabsf(i_this->demo_cam_way.z - i_this->demo_cam_ctr.z);
             i_this->demo_cam_morf = 0;
             pla->setPlayerPosAndAngle(&pla->current.pos, pla->shape_angle.y - 4000, 0);
-#if TARGET_PC
-            dusk::frame_interp::request_presentation_sync();
-#endif
+            IF_DUSK(dusk::frame_interp::request_presentation_sync());
         }
         if (i_this->demo_timer == 345) {
             daPy_getPlayerActorClass()->setThrowDamage(boss->enemy.shape_angle.y - 8000 + TREG_S(8),
@@ -4791,9 +4789,7 @@ static void demo_camera(e_wb_class* i_this) {
                     i_this->demo_cam_eye.x += 300.0f + VREG_F(8);
                     i_this->demo_cam_eye.y += 150.0f + VREG_F(9);
                     i_this->demo_cam_eye.z -= 1400.0f + VREG_F(10);
-#if TARGET_PC
-                    dusk::frame_interp::request_presentation_sync();
-#endif
+                    IF_DUSK(dusk::frame_interp::request_presentation_sync());
                 }
             } else {
                 i_this->demo_cam_eye = enemy->current.pos;

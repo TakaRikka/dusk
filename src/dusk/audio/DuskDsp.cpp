@@ -1,21 +1,21 @@
+#include "DuskDsp.hpp"
+
+#include "Adpcm.hpp"
+#include "DuskAudioSystem.h"
+#include "global.h"
+
+#include "dusk/logging.h"
+#include "helpers/endian.h"
+
 #include <ar.h>
 #include <dolphin/os.h>
-
-#include "DuskDsp.hpp"
+#include <freeverb/revmodel.hpp>
+#include <tracy/Tracy.hpp>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstdio>
 #include <span>
-
-#include "Adpcm.hpp"
-#include "dusk/audio/DuskAudioSystem.h"
-#include "dusk/logging.h"
-#include "freeverb/revmodel.hpp"
-#include "global.h"
-#include "helpers/endian.h"
-#include "tracy/Tracy.hpp"
 
 using namespace dusk::audio;
 

@@ -2,7 +2,10 @@
 #define D_D_TRESURE_H
 
 #include <mtx.h>
+
+#if TARGET_PC
 #include "helpers/offset_ptr.h"
+#endif
 
 class dTres_c {
 public:

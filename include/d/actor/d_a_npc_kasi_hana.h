@@ -206,7 +206,6 @@ public:
     static DUSK_GAME_DATA f32 mTargetTagDist;
     static DUSK_GAME_DATA s16 mWolfAngle;
 
-private:
     /* 0x0B48 */ Z2CreatureCitizen mSound;
     /* 0x0BEC */ u8 field_0xbec[0xbf0 - 0xbec];
     /* 0x0BF0 */ daNpcF_Lookat_c mLookat;

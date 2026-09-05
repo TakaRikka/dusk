@@ -37,7 +37,6 @@ public:
     s32 getIronBallId() { return mIronBallId; }
     void startBomb() { mStartBomb = 0xffff; }
 
-private:
     /* 0x5b8 */ Mtx mMtx;
     /* 0x5e8 */ J3DModel* mpModel;
     /* 0x5ec */ dCcD_Stts mStts;

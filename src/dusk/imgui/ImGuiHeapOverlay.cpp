@@ -1,13 +1,15 @@
-#include <array>
-#include <optional>
-
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
+
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "absl/container/flat_hash_map.h"
-#include "imgui.h"
+
+#include <absl/container/flat_hash_map.h>
+#include <imgui.h>
+
+#include <array>
+#include <optional>
 
 struct OpenHeapData {
     bool Safe;

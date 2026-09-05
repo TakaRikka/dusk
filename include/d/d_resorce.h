@@ -51,7 +51,6 @@ public:
     static const int NAME_MAX = 9;
 #endif
 
-private:
     /* 0x00 */ char mArchiveName[11];
     /* 0x0C */ u16 mCount;
     /* 0x10 */ mDoDvdThd_mountArchive_c* mDMCommand;

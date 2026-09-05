@@ -1,11 +1,10 @@
 #include "ui.hpp"
 
 #include "config.hpp"
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 #include "ui_v1.hpp"
 
-#include <borealis/log.hpp>
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/log_buffer.hpp"
@@ -16,15 +15,16 @@
 #include "dusk/ui/ui.hpp"
 #include "mods/svc/ui.h"
 
-#include <RmlUi/Core.h>
 #include <aurora/rmlui.hpp>
+#include <borealis/log.hpp>
 #include <fmt/format.h>
+#include <SDL3/SDL_clipboard.h>
+#include <RmlUi/Core.h>
 
 #include <algorithm>
 #include <chrono>
 #include <climits>
 #include <cstddef>
-#include <cstdint>
 #include <functional>
 #include <limits>
 #include <memory>
@@ -37,16 +37,13 @@
 #include <utility>
 #include <vector>
 
-#include "SDL3/SDL_clipboard.h"
-
 namespace {
 
 constexpr size_t kUiControlSelectedSize =
     offsetof(UiControlDesc, is_selected) + sizeof(UiPredicateFn);
 constexpr size_t kUiControlStringSetModeSize =
     offsetof(UiControlDesc, string_set_mode) + sizeof(UiStringSetMode);
-constexpr size_t kUiControlFilePickerSize =
-    offsetof(UiControlDesc, directory_mode) + sizeof(bool);
+constexpr size_t kUiControlFilePickerSize = offsetof(UiControlDesc, directory_mode) + sizeof(bool);
 constexpr size_t kUiListItemV21Size = offsetof(UiListItem, label) + sizeof(const char*);
 constexpr size_t kUiListDescV21Size = offsetof(UiListDesc, user_data) + sizeof(void*);
 
@@ -650,8 +647,7 @@ ModResult ui_pane_add_control(
         spec.kind = ui::ModControlSpec::Kind::FilePicker;
         spec.directoryMode = desc.directory_mode;
         for (size_t i = 0; i < desc.file_filter_count; ++i) {
-            spec.fileFilters.push_back(
-                {desc.file_filters[i].name, desc.file_filters[i].pattern});
+            spec.fileFilters.push_back({desc.file_filters[i].name, desc.file_filters[i].pattern});
         }
         break;
     case UI_CONTROL_SELECT:
@@ -915,7 +911,7 @@ ModResult ui_window_close(LoadedMod& mod, uint64_t handle) {
     if (slot == nullptr || slot->document == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    slot->document->hide(true);
+    slot->document->pop();
     return MOD_OK;
 }
 
@@ -1164,6 +1160,7 @@ void ui_remove_mod(LoadedMod& mod) {
     if (s_modMenuTabs.erase(&mod) != 0) {
         s_menuTabsDirty = true;
     }
+    bool restoreCoveredDocument = false;
     auto entries = s_slots.take_all(mod);
     for (auto& entry : entries) {
         auto& slot = entry.value;
@@ -1171,6 +1168,7 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Window: {
             auto* window = static_cast<ui::ModWindow*>(slot.document);
             if (window != nullptr) {
+                restoreCoveredDocument |= ui::top_document() == window;
                 window->force_hide(true);
             }
             break;
@@ -1178,6 +1176,7 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Dialog: {
             auto* dialog = static_cast<ModDialog*>(slot.document);
             if (dialog != nullptr) {
+                restoreCoveredDocument |= ui::top_document() == dialog;
                 dialog->force_hide(true);
             }
             break;
@@ -1188,6 +1187,9 @@ void ui_remove_mod(LoadedMod& mod) {
         default:
             break;
         }
+    }
+    if (restoreCoveredDocument) {
+        ui::uncover_top_document();
     }
 }
 

@@ -1,8 +1,8 @@
 #include "dusk/logging.h"
 
-#include <string_view>
+#include <tracy/Tracy.hpp>
 
-#include "tracy/Tracy.hpp"
+#include <string_view>
 
 bool StubLogEnabled = true;
 

@@ -718,13 +718,21 @@ int dShopSystem_c::itemRotate() {
     return 1;
 }
 
+#if TARGET_PC
+#define D_SHOP_SELECTED_ITEM_NO                                                                    \
+    ((mCursorPos > 0 && mCursorPos <= ITEM_MAX_e) ? dShopSystem_itemNo[mCursorPos - 1] :           \
+                                                    dItemNo_NONE_e)
+#else
+#define D_SHOP_SELECTED_ITEM_NO dShopSystem_itemNo[mCursorPos - 1]
+#endif
+
 int dShopSystem_c::itemZoom(cXyz* param_0) {
     cXyz local_1c;
 
     if (field_0xf60 >= 0) {
         local_1c.set(*param_0);
 
-        if (dShopSystem_itemNo[mCursorPos - 1] == dItemNo_OIL_BOTTLE_e) {
+        if (D_SHOP_SELECTED_ITEM_NO == dItemNo_OIL_BOTTLE_e) {
             mItemCtrl.setZoomAnime(mCursorPos, &local_1c,
                                    g_cursorHIO.mSeraShopObjZoomAngleX + -5000,
                                    isFlag(8) ? true : false);
@@ -775,9 +783,9 @@ int dShopSystem_c::itemZoom(cXyz* param_0) {
                              g_cursorHIO.mObjZoom.z + 150.0f);
             } else {
                 if (mMasterType == 5) {
-                    if (dShopSystem_itemNo[mCursorPos - 1] == dItemNo_ARROW_10_e ||
-                        dShopSystem_itemNo[mCursorPos - 1] == dItemNo_ARROW_20_e ||
-                        dShopSystem_itemNo[mCursorPos - 1] == dItemNo_ARROW_30_e)
+                    if (D_SHOP_SELECTED_ITEM_NO == dItemNo_ARROW_10_e ||
+                        D_SHOP_SELECTED_ITEM_NO == dItemNo_ARROW_20_e ||
+                        D_SHOP_SELECTED_ITEM_NO == dItemNo_ARROW_30_e)
                     {
                         local_34.set(g_cursorHIO.mObjZoom.x, -50.0f + g_cursorHIO.mObjZoom.y + 5.0f,
                                      (g_cursorHIO.mObjZoom.z + 250.0f) - 60.0f);
@@ -808,7 +816,7 @@ int dShopSystem_c::itemZoom(cXyz* param_0) {
 
         u8 dvar1 = mMasterType;
         if (dvar1 == 1) {
-            if (dShopSystem_itemNo[mCursorPos - 1] == dItemNo_OIL_BOTTLE_e) {
+            if (D_SHOP_SELECTED_ITEM_NO == dItemNo_OIL_BOTTLE_e) {
                 mItemCtrl.setZoomAnime(mCursorPos, &local_1c,
                                        g_cursorHIO.mShopObjZoomAngleX + -7000,
                                        isFlag(8) ? true : false);
@@ -817,7 +825,7 @@ int dShopSystem_c::itemZoom(cXyz* param_0) {
                                        isFlag(8) ? true : false);
             }
         } else if (dvar1 == 2) {
-            if (dShopSystem_itemNo[mCursorPos - 1] == dItemNo_RED_BOTTLE_e) {
+            if (D_SHOP_SELECTED_ITEM_NO == dItemNo_RED_BOTTLE_e) {
                 mItemCtrl.setZoomAnime(mCursorPos, &local_1c, g_cursorHIO.mShopObjZoomAngleX - 3000,
                                        isFlag(8) ? true : false);
             } else {
@@ -825,9 +833,9 @@ int dShopSystem_c::itemZoom(cXyz* param_0) {
                                        isFlag(8) ? true : false);
             }
         } else if (dvar1 == 5) {
-            if (dShopSystem_itemNo[mCursorPos - 1] == dItemNo_ARROW_10_e ||
-                dShopSystem_itemNo[mCursorPos - 1] == dItemNo_ARROW_20_e ||
-                dShopSystem_itemNo[mCursorPos - 1] == dItemNo_ARROW_30_e)
+            if (D_SHOP_SELECTED_ITEM_NO == dItemNo_ARROW_10_e ||
+                D_SHOP_SELECTED_ITEM_NO == dItemNo_ARROW_20_e ||
+                D_SHOP_SELECTED_ITEM_NO == dItemNo_ARROW_30_e)
             {
                 mItemCtrl.setZoomAnime(mCursorPos, &local_1c, g_cursorHIO.mShopObjZoomAngleX - 4000,
                                        isFlag(8) ? true : false);
@@ -849,6 +857,8 @@ int dShopSystem_c::itemZoom(cXyz* param_0) {
 
     return 1;
 }
+
+#undef D_SHOP_SELECTED_ITEM_NO
 
 int dShopSystem_c::seq_wait(fopAc_ac_c* param_0, dMsgFlow_c* param_1) {
     return 0;

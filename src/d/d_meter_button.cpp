@@ -16,18 +16,15 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_msg_string.h"
 #include "d/d_pane_class.h"
-#include "dusk/frame_interpolation.h"
 #include <cstring>
 
-#include "dusk/version.hpp"
-
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
+#include "dusk/version.hpp"
 #include "helpers/string.hpp"
 #endif
 
-#if TARGET_PC
-#define STR_BUF_LEN 528
-#elif VERSION == VERSION_GCN_JPN
+#if TARGET_PC || VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528
 #else
 #define STR_BUF_LEN 512
@@ -297,22 +294,19 @@ void dMeterButton_c::draw() {
 
             s16 temp_r6 = g_drawHIO.mEmpButton.mRepeatHitFrameNum;
             s16 temp_r6_2 = g_drawHIO.mEmpButton.mRepeatHitFrameNum / 2;
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                field_0x4b8[i]++;
+            IF_DUSK_BLOCK(dusk::frame_interp::get_ui_tick_pending())
+            field_0x4b8[i]++;
 
-                if (field_0x4b8[i] >= temp_r6) {
-                    field_0x4b8[i] = 0;
+            if (field_0x4b8[i] >= temp_r6) {
+                field_0x4b8[i] = 0;
 
-                    if (field_0x4bc[i] == 0) {
-                        field_0x4bc[i] = 1;
-                    } else {
-                        field_0x4bc[i] = 0;
-                    }
+                if (field_0x4bc[i] == 0) {
+                    field_0x4bc[i] = 1;
+                } else {
+                    field_0x4bc[i] = 0;
                 }
             }
+            IF_DUSK_BLOCK_END
 
             f32 var_f2;
             if (temp_r6_2 < field_0x4b8[i]) {
@@ -384,7 +378,7 @@ void dMeterButton_c::draw() {
             }
 
             if (var_r3) {
-#ifdef TARGET_PC
+#if TARGET_PC
                 if (dusk::frame_interp::get_ui_tick_pending()) {
                     mWasListen[i] = var_r22;
                     mWasRepeat[i] = var_r23;
@@ -394,11 +388,7 @@ void dMeterButton_c::draw() {
                 }
 #endif
                 if (var_r22) {
-#ifdef TARGET_PC
-                    if (field_0x2e8[i] == 18.0f && dusk::frame_interp::get_ui_tick_pending())
-#else
-                    if (field_0x2e8[i] == 18.0f)
-#endif
+                    if (field_0x2e8[i] == 18.0f IF_DUSK(&& dusk::frame_interp::get_ui_tick_pending()))
                     {
                         mDoAud_seStart(Z2SE_SY_HINT_BUTTON_BLINK, NULL, 0, 0);
                     }

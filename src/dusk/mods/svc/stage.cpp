@@ -2,12 +2,13 @@
 
 #include "registry.hpp"
 
-#include "aurora/lib/logging.hpp"
 #include "dusk/mods/loader/loader.hpp"
+#include "dusk/utilities.hpp"
 #include "mods/svc/stage.h"
 
 #include "d/d_com_inf_game.h"
-#include "dusk/utilities.hpp"
+
+#include <aurora/lib/logging.hpp>
 
 #include <string>
 #include <string_view>
@@ -130,7 +131,9 @@ bool stage_apply_actor_edits(void* actorData, void* actorPrm, size_t recordSize,
     }
 
     std::memcpy(actorData, winner->record.data(), winner->record.size());
-    std::memcpy(actorPrm, winner->record.data() + 8, winner->record.size() - 8);
+    if (actorPrm) {
+        std::memcpy(actorPrm, winner->record.data() + 8, winner->record.size() - 8);
+    }
     return true;
 }
 

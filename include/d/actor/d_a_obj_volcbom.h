@@ -84,7 +84,6 @@ public:
     u8 getArg0() { return fopAcM_GetParamBit(this, 16, 8); }
     u16 getMsgID() { return mMsgID; }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mModel1;
     /* 0x5AC */ mDoExt_btkAnm* mBtk1;

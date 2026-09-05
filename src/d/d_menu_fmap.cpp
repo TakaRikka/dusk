@@ -1,33 +1,33 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <cstdio>
-#include <cstring>
+#include "d/d_menu_fmap.h"
+#include "SSystem/SComponent/c_math.h"
 #include "JSystem/JKernel/JKRAramArchive.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
-#include "SSystem/SComponent/c_math.h"
-#include "d/actor/d_a_midna.h"
-#include "d/actor/d_a_player.h"
+#include <cstdio>
+#include <cstring>
+#include "f_op/f_op_msg_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_menu_fmap.h"
 #include "d/d_menu_fmap2D.h"
 #include "d/d_menu_fmap_map.h"
 #include "d/d_menu_window.h"
-#include "d/d_meter2_draw.h"
-#include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
 #include "d/d_meter_map.h"
+#include "d/d_meter2_draw.h"
+#include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_stage.h"
-#include "dusk/version.hpp"
-#include "f_op/f_op_msg_mng.h"
-#include "helpers/string.hpp"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_midna.h"
 
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/memory.h"
+#include "dusk/version.hpp"
+#include "helpers/string.hpp"
 #endif
 
 static dMf_HIO_c g_fmHIO;
@@ -783,7 +783,6 @@ void dMenu_Fmap_c::all_map_proc() {
             {
                 setAreaName(mTitleName[mpDraw2DBack->getSelectRegion()]);
                 mpDraw2DBack->setSpotCursor(0);
-
             } else {
                 setAreaNameZero();
             }
@@ -1273,7 +1272,7 @@ void dMenu_Fmap_c::spot_map_proc() {
         f32 pos_y = mpDraw2DBack->getMapAreaGlobalCenterPosY() - mDoGph_gInf_c::getHeightF() * 0.5f;
         mpMenuFmapMap->getPointStagePathInnerNo(getNowFmapRegionData(), pos_x, pos_y,
                                                 mStayStageNo, &stage_no, &room_no);
-        
+
         if (mStageCursor != stage_no || mResetAreaName) {
             mStageCursor = stage_no;
             mRoomCursor = room_no;

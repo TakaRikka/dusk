@@ -20,7 +20,9 @@
 #include "m_Do/m_Do_ext.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
+#endif
 
 #if DEBUG
 class daNpc_ykW_HIO_c : public mDoHIO_entry_c {

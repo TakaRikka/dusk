@@ -1,7 +1,8 @@
 #include "helpers/endian.h"
-#include <dolphin/gx.h>
-#include "SSystem/SComponent/c_xyz.h"
+
 #include "helpers/endian_gx.hpp"
+
+#include "SSystem/SComponent/c_xyz.h"
 
 #define IMPL_ENUM(type) \
     template <> \

@@ -25,11 +25,11 @@
 #include <cstring>
 
 #include "JSystem/JAudio2/JASDriverIF.h"
-#include "dusk/version.hpp"
 
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
 #include "dusk/ui/touch_controls.hpp"
+#include "dusk/version.hpp"
 #endif
 
 typedef void (dMenu_Option_c::*initFunc)();

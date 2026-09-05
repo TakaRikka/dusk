@@ -237,7 +237,6 @@ public:
         }
     }
 
-private:
     /* 0xB48 */ J3DModel* mBookKnifeModel;
     /* 0xB4C */ J3DModel* mKomonshoModel;
     /* 0xB50 */ Z2Creature mSound;

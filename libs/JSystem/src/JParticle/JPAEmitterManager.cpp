@@ -8,7 +8,9 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include <gx.h>
 
+#if TARGET_PC
 #include "tracy/Tracy.hpp"
+#endif
 
 JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHeap, u8 i_gidMax,
                                      u8 i_ridMax) {

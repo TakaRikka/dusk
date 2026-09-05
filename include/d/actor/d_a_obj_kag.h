@@ -39,7 +39,6 @@ public:
     void kag_setParticle();
     inline int CreateHeap();
     inline int draw();
-private:
     /* 0x590 */ request_of_phase_process_class mPhase;
     /* 0x598 */ Z2Creature mSound;
     /* 0x628 */ mDoExt_McaMorfSO* mpModelMorf;

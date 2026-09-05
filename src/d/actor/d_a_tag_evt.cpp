@@ -8,7 +8,9 @@
 #include "f_op/f_op_actor_mng.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
+#endif
 
 static DUSK_CONST char* l_evtNameList[] = {
     NULL,

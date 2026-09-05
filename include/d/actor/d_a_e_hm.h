@@ -65,7 +65,6 @@ public:
     void CheckWall();
     void CreateStyle();
     int Create();
-private:
     /* 0x5AC */ u8 field_0x5ac;
     /* 0x5AD */ u8 field_0x5ad;
     /* 0x5AE */ u8 field_0x5ae;

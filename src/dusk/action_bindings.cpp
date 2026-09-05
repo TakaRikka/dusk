@@ -1,8 +1,9 @@
 #include "dusk/action_bindings.h"
 
-#include "aurora/lib/input.hpp"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
+
+#include <aurora/lib/input.hpp>
 
 namespace dusk {
 

@@ -17,7 +17,6 @@ public:
 
 STATIC_ASSERT(sizeof(kita_s) == 0x60);
 
-
 /**
  * @ingroup actors-objects
  * @class obj_kita_class

@@ -41,7 +41,6 @@ public:
 
     enum Type_e { TYPE_LARGE_GOLD, TYPE_SMALL_PLATINUM };
 
-private:
     enum QuadrantalAngle_e { DEG_INVALID = -1, DEG_0, DEG_90, DEG_180, DEG_270, DEG_MAX};
 
     /* 0x5B8 */ Mtx mNewBgMtx;

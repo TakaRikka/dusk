@@ -50,7 +50,6 @@ public:
     virtual int Draw();
     virtual int Delete();
 
-private:
     /* 0x05A0 */ u8 field_0x5A0[0x05A4 - 0x05A0];
     /* 0x05A4 */ int mMode;
     /* 0x05A8 */ s16 field_0x5a8;

@@ -33,7 +33,6 @@ public:
     u16 getMaterialId() { return mMaterialId; }
     dKy_tevstr_c* getTevstr() { return mpTevstr; }
 
-private:
     /* 0x10 */ J3DModelData* mpModelData;
     /* 0x14 */ dKy_tevstr_c* mpTevstr;
     /* 0x18 */ u16 mMaterialId;
@@ -55,7 +54,6 @@ public:
 
     static DUSK_GAME_DATA dMdl_mng_c* m_myObj;
 
-private:
     /* 0x00 */ dMdl_c field_0x0[4];
     /* 0x80 */ u8 field_0x80;
 };

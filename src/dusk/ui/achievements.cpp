@@ -1,11 +1,13 @@
 #include "achievements.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
-#include "dusk/achievements.h"
-#include "fmt/format.h"
-#include "m_Do/m_Do_audio.h"
 #include "nav_types.hpp"
 #include "pane.hpp"
+
+#include "dusk/achievements.h"
+
+#include "m_Do/m_Do_audio.h"
+
+#include <fmt/format.h>
 
 namespace dusk::ui {
 namespace {

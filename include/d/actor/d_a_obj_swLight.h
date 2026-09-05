@@ -47,7 +47,6 @@ public:
     u8 getOnTime() { return fopAcM_GetParamBit(this, 16, 8); }
     u8 getEvent() { return (u8)field_0xb22; }
 
-private:
     /* 0x5B0 */ request_of_phase_process_class mPhase;
     /* 0x5B8 */ J3DModel* mpModel;
     /* 0x6F4 */ dCcD_Stts mStts;

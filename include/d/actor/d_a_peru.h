@@ -189,7 +189,6 @@ public:
     static DUSK_GAME_DATA const char* mCutNameList[3];
     static DUSK_GAME_DATA cutAppearFunc mCutList[3];
 
-private:
     /* 0x0E40 */ daNpcT_ActorMngr_c mActors[3];
     /* 0x0E58 */ int field_0xe58;
     /* 0x0E5C */ actionFunc mActionFunc;

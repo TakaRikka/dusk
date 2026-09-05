@@ -12,17 +12,18 @@
 #include "global.h"
 #include <stdint.h>
 
-#ifdef TARGET_PC
+#if TARGET_PC
 #include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/logging.h"
 #include "dusk/settings.h"
 #include "dusk/time.h"
-#include "f_op/f_op_overlap_mng.h"
 #include "helpers/gx_helper.h"
 
-#include "SDL3/SDL_timer.h"
-#include "tracy/Tracy.hpp"
+#include "f_op/f_op_overlap_mng.h"
+
+#include <SDL3/SDL_timer.h>
+#include <tracy/Tracy.hpp>
 
 #include <chrono>
 #endif

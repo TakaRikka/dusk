@@ -73,7 +73,6 @@ public:
     void onFlag(u16 flag) { field_0x60c |= flag; }
     int checkFlag(u16 flag) { return field_0x60c & flag; }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase1;
     /* 0x570 */ request_of_phase_process_class mPhase2;
     /* 0x578 */ J3DModel* mModel1;

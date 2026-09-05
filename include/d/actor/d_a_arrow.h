@@ -110,7 +110,6 @@ public:
 
     void setModelMatrix(MtxP mtx) { mpModel->setBaseTRMtx(mtx); }
 
-private:
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ dBgS_ArrowLinChk field_0x56c;
     /* 0x5DC */ dBgS_ObjLinChk field_0x5dc;

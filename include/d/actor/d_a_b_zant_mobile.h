@@ -33,7 +33,6 @@ public:
     bool isSearchContinue() { return mSearchContinue != false; }
     void offSearchContinue() { mSearchContinue = false; }
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x5B8 */ mDoExt_brkAnm* mpBrk;

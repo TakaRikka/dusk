@@ -1,14 +1,14 @@
 #include "window.hpp"
 
-#include "aurora/lib/window.hpp"
-#include "aurora/rmlui.hpp"
-#include "fmt/format.h"
-#include "magic_enum.hpp"
 #include "pane.hpp"
 #include "ui.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
+
+#include <aurora/lib/window.hpp>
+#include <aurora/rmlui.hpp>
+#include <fmt/format.h>
+#include <magic_enum.hpp>
 
 #include <algorithm>
 #include <cmath>

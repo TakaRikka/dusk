@@ -27,7 +27,6 @@ public:
     u8 getType() { return fopAcM_GetParamBit(this, 0, 8); }
     u8 getLightInf() { return fopAcM_GetParamBit(this, 8, 8); }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhaseReq;
     /* 0x5A8 */ J3DModel* mpModel;
     /* 0x5AC */ mDoExt_bckAnm* mpBckAnm;

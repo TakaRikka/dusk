@@ -259,7 +259,6 @@ public:
 
     static DUSK_GAME_DATA const Group* mGroupTbl[4];
 
-private:
     /* 0x568 */ fpc_ProcID* childProcIds;
     /* 0x56C */ dPath* mPath;
     /* 0x570 */ int startTime;
