@@ -11875,7 +11875,9 @@ BOOL daAlink_c::checkItemAction() {
             return true;
         }
 
-        if (!checkFishingRodItem(mEquipItem) || !(mWaterY - current.pos.y > 70.0f)) {
+        if (!checkFishingRodItem(mEquipItem) || !(mWaterY - current.pos.y > 70.0f)
+    IF_DUSK(|| (dusk::getSettings().game.unrestrictedItems.getValue() &&
+            mLinkAcch.ChkGroundHit() && !checkNoResetFlg0(FLG0_SWIM_UP)))) {
             onResetFlg1(RFLG0_FISHINGROD_USE_ACCEPT);
 
             if (checkReadyItem() && (itemTrigger() || (checkBoomerangCatchAnime() && itemButton()))) {
