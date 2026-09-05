@@ -5085,7 +5085,8 @@ int daAlink_c::create() {
     setAttentionPos();
     setItemActor();
 
-    if ((dComIfGs_getLastSceneMode() & 0x400000) && !checkWolf() && !checkNotHeavyBootsStage() &&
+    if ((dComIfGs_getLastSceneMode() & 0x400000) && !checkWolf() && (!checkNotHeavyBootsStage()
+IF_DUSK(|| dusk::getSettings().game.unrestrictedItems.getValue())) &&
         !isHorseStart && !isEnteringLV7)
     {
         setHeavyBoots(1);
@@ -18250,7 +18251,9 @@ int daAlink_c::execute() {
 
         if (checkEquipHeavyBoots()) {
             int itemButton = checkItemSetButton(dItemNo_HVY_BOOTS_e);
-            if (itemButton == 2 || checkNotHeavyBootsStage()) {
+            if (itemButton == 2 || (checkNotHeavyBootsStage()
+        IF_DUSK(&& !dusk::getSettings().game.unrestrictedItems.getValue())))
+            {
                 if (!dComIfGp_checkPlayerStatus1(0, 0x10000) || !checkHookshotRoofLv7Boss()) {
                     setHeavyBoots(0);
                 }
