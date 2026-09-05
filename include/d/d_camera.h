@@ -962,6 +962,7 @@ public:
     void Stop();
     void Stay();
     bool ChangeModeOK(s32);
+    IF_DUSK(int resolveModeStyle(s32, s32);)
     void initPad();
     void updatePad();
     void initMonitor();
