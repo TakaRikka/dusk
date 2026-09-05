@@ -32,6 +32,13 @@ cd platforms/android
 ./gradlew :app:assembleDebug
 ```
 
+To install a development build alongside the official app, override its
+application ID:
+
+```bash
+DUSK_APPLICATION_ID=dev.twilitrealm.dusk.dev ./gradlew :app:assembleDebug
+```
+
 Output APK:
 
 - `app/build/outputs/apk/debug/app-arm64-v8a-debug.apk`
