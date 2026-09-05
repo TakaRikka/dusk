@@ -13,7 +13,8 @@ BOOL daAlink_c::checkZoraWearMaskDraw() {
 
 BOOL daAlink_c::checkAcceptUseItemInWater(u16 i_itemNo) const {
 #if TARGET_PC
-    if (dusk::getSettings().game.unrestrictedItems.getValue()) {
+    if (dusk::getSettings().game.unrestrictedItems.getValue()) &&
+        !checkNoResetFlg0(FLG0_SWIM_UP) && checkBootsOrArmorHeavy()) {
         return true;
     }
 #endif
