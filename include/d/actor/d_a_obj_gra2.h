@@ -243,7 +243,6 @@ public:
     void setDemoMode(s16 mDemoMode) { mDemoCamMode = mDemoMode; }
     s16 getDemoMode() { return mDemoCamMode; }
 
-private:
     /* 0x0A48 */ u16 field_0xa48;
     /* 0x0A4C */ OBJ_GRA_HIO_CLASS* mpHIO;
     /* 0x0A50 */ Process field_0xa50;

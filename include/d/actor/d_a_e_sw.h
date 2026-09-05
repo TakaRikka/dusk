@@ -82,7 +82,6 @@ public:
     bool d_checkOldAction(void (daE_SW_c::*action)()) {
         return field_0xb0c == action;
     }
-private:
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpModelMorf;
     /* 0x5B8 */ Z2CreatureEnemy mSound;

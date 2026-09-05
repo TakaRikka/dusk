@@ -29,7 +29,6 @@ public:
     int Delete();
     bool eventStart();
 
-private:
     /* 0x5B8 */ request_of_phase_process_class mPhase;
     /* 0x5C0 */ J3DModel* mpModel;
     /* 0x5C4 */ mDoExt_btkAnm mRefractionAnm; // Applied to water surface

@@ -45,7 +45,6 @@ public:
         return cPhs_COMPLEATE_e;
     }
 
-private:
     /* 0x568 */ u8 field_0x568[8];
     /* 0x570 */ cXyz mVtxA;
     /* 0x57C */ cXyz mVtxB;

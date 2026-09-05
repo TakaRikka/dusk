@@ -24,7 +24,6 @@ public:
     int execute();
     int _delete();
 
-private:
     /* 0x568 */ JPABaseEmitter* mParticle;
 };
 

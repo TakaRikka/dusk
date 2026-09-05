@@ -46,7 +46,6 @@ public:
     const KazoNekoAttr& attr() { return M_attr; }
 
     static DUSK_GAME_DATA KazoNekoAttr const M_attr;
-private:
     /* 0x568 */ J3DModel* mModel;
     /* 0x56C */ J3DModel* mArmModels[4];
     /* 0x57C */ request_of_phase_process_class mPhase;

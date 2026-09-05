@@ -65,7 +65,6 @@ public:
         (this->*mpActionFunc[1])();
     }
 
-private:
     /* 0x5A0 */ J3DModel* mpModel;
     /* 0x5A4 */ request_of_phase_process_class mPhaseReq;
     /* 0x5AC */ daObjMirrorScrew_actionFunc* mpActionFunc;

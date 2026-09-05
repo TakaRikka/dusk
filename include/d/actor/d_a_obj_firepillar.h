@@ -47,7 +47,6 @@ public:
     int draw();
     int _delete();
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ int field_0x570;
     /* 0x574 */ dBgS_ObjAcch mAcch;

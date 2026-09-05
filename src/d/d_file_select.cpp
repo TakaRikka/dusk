@@ -1789,10 +1789,16 @@ void dFile_select_c::nameInput2() {
 #if TARGET_PC
         dusk::mods::svc::save_slot_new(mSelectNum);
         const dusk::gamemode::GameMode* gameMode =
-            dusk::gamemode::getGameModeManager().getCurrentGameMode();
+                dusk::gamemode::getGameModeManager().getCurrentGameMode();
         if (gameMode) {
             gameMode->invokeOnNewSaveFunction();
-            gameMode->invokeOnSaveLoadedFunction();
+        }
+
+        // only do OnSaveLoaded callback here if hiding the brightness check screen
+        if (dusk::getSettings().game.hideTvSettingsScreen) {
+            if (gameMode) {
+                gameMode->invokeOnSaveLoadedFunction();
+            }
         }
 #endif
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;

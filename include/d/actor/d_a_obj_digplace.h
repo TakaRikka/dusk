@@ -17,7 +17,6 @@ public:
     int create();
     int execute();
 
-private:
     /* 0x568 */ u8 mType;
     /* 0x569 */ u8 mSwitch;
     /* 0x56A */ u8 mDigFlg;

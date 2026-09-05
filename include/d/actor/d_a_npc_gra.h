@@ -142,7 +142,6 @@ public:
     typedef BOOL (daNpc_grA_c::*cut_type)(int);
     static DUSK_GAME_DATA cut_type DUSK_CONST mEvtCutList[];
 
-private:
     typedef BOOL (daNpc_grA_c::*daNpc_grA_c_Action)(void*);
     
     /* 0x0B48 */ Z2Creature mCreature;

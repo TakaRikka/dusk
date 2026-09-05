@@ -30,7 +30,6 @@ public:
     virtual void drawOutFontLocal(J2DTextBox*, f32);
     virtual void drawFontLocal(J2DTextBox*, u8, f32, f32, f32, f32, u32, u8);
 
-private:
     /* 0x04 */ JMessage::TResourceContainer* mpResCont;
     /* 0x08 */ jmessage_string_tControl* mpCtrl;
     /* 0x0C */ jmessage_string_tReference* mpRefer;

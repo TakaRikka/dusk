@@ -34,7 +34,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x05A0 */ int field_0x5a0;
     /* 0x05A4 */ int mAction;
     /* 0x05A8 */ u8 field_0x5a8;

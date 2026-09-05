@@ -88,8 +88,8 @@ int daObjLife_c::Create() {
     mCcCyl.SetStts(&mCcStts);
     mCcCyl.SetCoHitCallback(lifeGetCoCallBack);
     mCcCyl.SetTgHitCallback(lifeGetTgCallBack);
-    mCcCyl.SetR(dItem_data::getR(m_itemNo));
-    mCcCyl.SetH(dItem_data::getH(m_itemNo));
+    mCcCyl.SetR(DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo)));
+    mCcCyl.SetH(DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)));
 
     fopAcM_SetCullSize(this, fopAc_CULLSPHERE_0_e);
     fopAcM_SetGravity(this, -3.2f);
@@ -99,6 +99,15 @@ int daObjLife_c::Create() {
     mRotateSpeed = 7000;
 
 #if TARGET_PC
+    // Restore speeds that were skipped if created from a boss with create instead of fastCreate
+    auto bossItemSpeeds = dusk::mods::get_boss_item_actor_speeds();
+    if (bossItemSpeeds.f != 0.f || bossItemSpeeds.y != 0.f) {
+        mOverrideHover = false;
+        speedF = bossItemSpeeds.f;
+        speed.y = bossItemSpeeds.y;
+        dusk::mods::set_boss_item_actor_speeds(0.f, 0.f);
+    }
+
     if (mOverrideHover) {
         fopAcM_SetGravity(this, 0.0f);
         mRotateSpeed = 550;
@@ -152,16 +161,30 @@ int daObjLife_c::create() {
         const u8 parameterItemNo = params & 0xFF;
         if (mItemGiveOriginalNo == dItemNo_NONE_e) {
             mOriginalItemNo = parameterItemNo;
-            const u8 resolvedItem =
-                dusk::mods::item_check_freestanding(getSaveBitNo(), mOriginalItemNo, this);
             mItemGiveTag = dusk::mods::item_give_tag_freestanding(getSaveBitNo());
-            mItemOverridden = resolvedItem != mOriginalItemNo;
+            const auto [item, displayItem, was_resolved] =
+                dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
+            setDisplayItemNo(displayItem);
+            mItemOverridden = was_resolved;
             if (mItemOverridden) {
-                fopAcM_SetParam(this, (params & 0xFFFFFF00) | resolvedItem);
+                fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
+            }
+        } else if (mGoldenWolfItem) {
+            mOriginalItemNo = mItemGiveOriginalNo;
+            mItemGiveTag = dusk::mods::item_give_tag_golden_wolf(static_cast<u16>(field_0x938));
+            const auto [item, displayItem, was_resolved] =
+                dusk::mods::item_check_resolve(mItemGiveTag, mOriginalItemNo, this);
+            setDisplayItemNo(displayItem);
+            mItemOverridden = was_resolved;
+            if (item != parameterItemNo) {
+                fopAcM_SetParam(this, (params & 0xFFFFFF00) | item);
             }
         } else {
             mOriginalItemNo = mItemGiveOriginalNo;
-            mItemOverridden = parameterItemNo != mItemGiveOriginalNo;
+            setDisplayItemNo(
+                dusk::mods::item_check_resolve(mItemGiveTag, parameterItemNo, this)
+                    .display_item);
+            mItemOverridden = parameterItemNo != mOriginalItemNo;
         }
         mOverrideHover =
             mItemOverridden &&
@@ -187,8 +210,9 @@ int daObjLife_c::create() {
 
 #if TARGET_PC
     // Resolved items may have no field model; display their get-demo model instead.
-    const bool useGetModel = dItem_data::getFieldArc(m_itemNo) == NULL;
-    int phase_state = dComIfG_resLoad(&mPhase, dItem_fieldModelArc(m_itemNo));
+    const u8 displayItemNo = getDisplayItemNo();
+    const bool useGetModel = dItem_data::getFieldArc(displayItemNo) == NULL;
+    int phase_state = dComIfG_resLoad(&mPhase, dItem_fieldModelArc(displayItemNo));
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(
                 this, useGetModel ? CheckItemCreateHeap : CheckFieldItemCreateHeap, 0x4000))
@@ -411,8 +435,8 @@ int daObjLife_c::actionInitBoomerangCarry() {
     mCcCyl.OnTgSPrmBit(1);
     mCcCyl.OnCoSPrmBit(1);
 
-    f32 height = dItem_data::getH(m_itemNo) * 4.0f;
-    f32 radius = dItem_data::getR(m_itemNo) * 4.0f;
+    f32 height = DUSK_IF_ELSE(getCollisionH(), dItem_data::getH(m_itemNo)) * 4.0f;
+    f32 radius = DUSK_IF_ELSE(getCollisionR(), dItem_data::getR(m_itemNo)) * 4.0f;
     mCcCyl.SetR(radius);
     mCcCyl.SetH(height);
 
@@ -534,7 +558,7 @@ int daObjLife_c::_delete() {
     endEffect02();
 
 #if TARGET_PC
-    DeleteBase(dItem_fieldModelArc(m_itemNo));
+    DeleteBase(dItem_fieldModelArc(getDisplayItemNo()));
 #else
     DeleteBase(dItem_data::getFieldArc(m_itemNo));
 #endif

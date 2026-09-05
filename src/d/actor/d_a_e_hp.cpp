@@ -733,6 +733,7 @@ void daE_HP_c::executeDead() {
         if (itemCheck.itemNo == dItemNo_NONE_e) {
             dusk::mods::item_check_complete(itemCheck, this);
         } else {
+            daAlink_getAlinkActorClass()->procWolfAtnActorMoveInit();
             dusk::mods::item_check_enqueue(itemCheck, dusk::mods::ItemGiveMode::ForcedDemo);
         }
 #else

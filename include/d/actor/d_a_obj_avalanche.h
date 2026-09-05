@@ -46,7 +46,6 @@ public:
     u8 getEvId() { return fopAcM_GetParamBit(this, 8, 8); }
     void setAction(u8 action) { mAction = action; }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class mPhase;
     /* 0x5A8 */ J3DModel* mModel;
     /* 0x5AC */ mDoExt_bckAnm* mBckAnm;

@@ -134,7 +134,6 @@ public:
     static const int PALETTE_NUMBER = 50;
 #endif
 
-private:
     /* 0x34 */ s32 m_outSideBlackLineCnt;
     /* 0x38 */ s32 field_0x38;
     /* 0x3C */ s32 field_0x3c;
@@ -199,7 +198,6 @@ public:
 
     static dMap_c* m_mySelfPointer;
 
-private:
     /* 0x40 */ dMap_prm_res_s* m_res_src;
     /* 0x44 */ dMap_prm_res_s* m_res;
     /* 0x48 */ ResTIMG* mResTIMG;

@@ -54,6 +54,7 @@ protected:
     void clear_children();
 
     Rml::Element* mRoot = nullptr;
+    Rml::Element* mDisabledFocusFallback = nullptr;
     std::vector<std::unique_ptr<Component>> mChildren;
     std::vector<std::unique_ptr<ScopedEventListener>> mListeners;
 };

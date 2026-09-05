@@ -83,7 +83,6 @@ public:
     static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireFirst[][2])();
     static DUSK_GAME_DATA void (daSCannon_c::*DUSK_CONST s_demoExeProc_FireSecond[][2])();
 
-private:
     /* 0x574 */ request_of_phase_process_class mZevPhase;
     /* 0x57C */ request_of_phase_process_class mPtlPhase;
     /* 0x584 */ mDoExt_bckAnm mBck;

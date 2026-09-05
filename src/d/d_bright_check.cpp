@@ -191,6 +191,14 @@ void dBrightCheck_c::modeMove() {
         mDoAud_seStart(Z2SE_ENTER_GAME, NULL, 0, 0);
 #ifdef TARGET_PC
         toggleAutoSave(true);
+
+        if (!dusk::getSettings().game.hideTvSettingsScreen) {
+            const dusk::gamemode::GameMode* gameMode =
+            dusk::gamemode::getGameModeManager().getCurrentGameMode();
+            if (gameMode) {
+                gameMode->invokeOnSaveLoadedFunction();
+            }
+        }
 #endif
         mCompleteCheck = true;
         mMode = MODE_WAIT_e;

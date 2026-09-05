@@ -54,7 +54,6 @@ public:
         /* 0x4 */ ACT_DAMAGE,
     };
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x5B8 */ J3DModel* mpEggModel;

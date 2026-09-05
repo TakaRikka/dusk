@@ -55,7 +55,6 @@ public:
     bool CreateChk();
     int create();
 
-private:
     /* 0x590 */ dBgS_ObjAcch mAcch;
     /* 0x768 */ dBgS_GndChk mGndChk;
     /* 0x7BC */ u8 field_0x7bc[0x7c0 - 0x7bc];

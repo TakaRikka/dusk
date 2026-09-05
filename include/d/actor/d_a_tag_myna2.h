@@ -12,7 +12,6 @@ public:
     int getMode() { return fopAcM_GetParam(this) & 0xFF; }
     f32 getExtent() { return scale.x * 100.0f;}
 
-private:
     /* 0x568 */ u32 mSwitchNo;
     /* 0x56C */ u32 mMode;
     /* 0x570 */ s16 mTimer;

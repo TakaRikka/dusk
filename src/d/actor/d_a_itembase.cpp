@@ -242,21 +242,21 @@ BOOL daItemBase_c::chkFlag(int i_flag) {
 }
 
 s8 daItemBase_c::getTevFrm() {
-    return dItem_data::getTevFrm(m_itemNo);
+    return dItem_data::getTevFrm(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo));
 }
 
 s8 daItemBase_c::getBtpFrm() {
-    return dItem_data::getBtpFrm(m_itemNo);
+    return dItem_data::getBtpFrm(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo));
 }
 
 u8 daItemBase_c::getShadowSize() {
-    return dItem_data::getShadowSize(m_itemNo);
+    return dItem_data::getShadowSize(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo));
 }
 
 u8 daItemBase_c::getCollisionH() {
-    return dItem_data::getH(m_itemNo);
+    return dItem_data::getH(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo));
 }
 
 u8 daItemBase_c::getCollisionR() {
-    return dItem_data::getR(m_itemNo);
+    return dItem_data::getR(DUSK_IF_ELSE(getDisplayItemNo(), m_itemNo));
 }

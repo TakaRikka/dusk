@@ -1,14 +1,15 @@
 #include "ui.hpp"
 
 #include "config.hpp"
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 #include "ui_v1.hpp"
 
 #include <borealis/log.hpp>
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/log_buffer.hpp"
+#include "dusk/ui/list.hpp"
 #include "dusk/ui/menu_bar.hpp"
 #include "dusk/ui/mod_window.hpp"
 #include "dusk/ui/modal.hpp"
@@ -25,15 +26,30 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <limits>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
 #include "SDL3/SDL_clipboard.h"
+
+namespace {
+
+constexpr size_t kUiControlSelectedSize =
+    offsetof(UiControlDesc, is_selected) + sizeof(UiPredicateFn);
+constexpr size_t kUiControlStringSetModeSize =
+    offsetof(UiControlDesc, string_set_mode) + sizeof(UiStringSetMode);
+constexpr size_t kUiControlFilePickerSize = offsetof(UiControlDesc, directory_mode) + sizeof(bool);
+constexpr size_t kUiListItemV21Size = offsetof(UiListItem, label) + sizeof(const char*);
+constexpr size_t kUiListDescV21Size = offsetof(UiListDesc, user_data) + sizeof(void*);
+
+}  // namespace
 
 namespace dusk::mods::svc::ui_impl {
 namespace {
@@ -47,6 +63,7 @@ enum class UiSlotKind : u8 {
     Text,
     Progress,
     Control,
+    List,
     Style,
     MenuTab,
 };
@@ -65,6 +82,8 @@ const char* slot_kind_name(UiSlotKind kind) {
         return "progress";
     case UiSlotKind::Control:
         return "control";
+    case UiSlotKind::List:
+        return "list";
     case UiSlotKind::Style:
         return "style";
     case UiSlotKind::MenuTab:
@@ -83,6 +102,8 @@ struct UiSlot {
     // Pane payload
     ui::Pane* pane = nullptr;
     ui::Pane* helpPane = nullptr;
+    // List payload
+    ui::List* list = nullptr;
     // Window/Dialog payload (non-owning; the document stack owns the document)
     ui::Document* document = nullptr;
     UiWindowClosedFn onClosed = nullptr;
@@ -283,6 +304,7 @@ void wire_callback_binding(
         break;
     case UI_CONTROL_STRING:
     case UI_CONTROL_COLOR:
+    case UI_CONTROL_FILE_PICKER:
         spec.getString = [getValue]() -> Rml::String {
             const UiControlValue value = getValue();
             return value.string_value != nullptr ? value.string_value : "";
@@ -362,7 +384,8 @@ bool wire_config_var_binding(LoadedMod& mod, const UiControlDesc& desc, ui::ModC
         return true;
     }
     case UI_CONTROL_STRING:
-    case UI_CONTROL_COLOR: {
+    case UI_CONTROL_COLOR:
+    case UI_CONTROL_FILE_PICKER: {
         const auto find = [modPtr, varHandle] {
             return static_cast<ConfigVar<std::string>*>(
                 config_find_var(*modPtr, varHandle, CONFIG_VAR_STRING));
@@ -581,7 +604,7 @@ ModResult ui_pane_add_control(
     case UI_CONTROL_GROUP:
         spec.kind = desc.kind == UI_CONTROL_BUTTON ? ui::ModControlSpec::Kind::Button :
                                                      ui::ModControlSpec::Kind::Group;
-        if (desc.struct_size >= sizeof(UiControlDesc)) {
+        if (desc.struct_size >= kUiControlSelectedSize) {
             spec.isSelected = wrap_predicate(mod, desc.is_selected, desc.user_data, pane);
         }
         spec.onPressed = [modPtr = &mod, fn = desc.on_pressed, userData = desc.user_data,
@@ -612,12 +635,21 @@ ModResult ui_pane_add_control(
     case UI_CONTROL_STRING:
         spec.kind = ui::ModControlSpec::Kind::String;
         spec.maxLength = desc.max_length < 1 ? -1 : desc.max_length;
+        spec.stringSetOnChange = desc.struct_size >= kUiControlStringSetModeSize &&
+                                 desc.string_set_mode == UI_STRING_SET_ON_CHANGE;
         break;
     case UI_CONTROL_COLOR:
         spec.kind = ui::ModControlSpec::Kind::Color;
         spec.colorAlpha = desc.color_alpha;
         for (size_t i = 0; i < desc.color_preset_count; ++i) {
             spec.colorPresets.emplace_back(desc.color_presets[i]);
+        }
+        break;
+    case UI_CONTROL_FILE_PICKER:
+        spec.kind = ui::ModControlSpec::Kind::FilePicker;
+        spec.directoryMode = desc.directory_mode;
+        for (size_t i = 0; i < desc.file_filter_count; ++i) {
+            spec.fileFilters.push_back({desc.file_filters[i].name, desc.file_filters[i].pattern});
         }
         break;
     case UI_CONTROL_SELECT:
@@ -659,6 +691,69 @@ ModResult ui_pane_add_control(
         auto& elemSlot = alloc_slot(mod, UiSlotKind::Control, *outElem);
         track_element(*outElem, elemSlot, *control->root());
     }
+    return MOD_OK;
+}
+
+ModResult ui_pane_add_list(LoadedMod& mod, uint64_t pane, const UiListDesc& desc,
+    std::vector<ui::List::Item> items, uint64_t& outHandle) {
+    outHandle = 0;
+    auto* paneSlot = resolve(mod, pane, UiSlotKind::Pane, "pane_add_list");
+    if (paneSlot == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    auto* paneComponent = paneSlot->pane;
+
+    uint64_t handle = 0;
+    alloc_slot(mod, UiSlotKind::List, handle);
+
+    ui::List::Props props;
+    props.items = std::move(items);
+    props.onPressed = [modPtr = &mod, handle, fn = desc.on_pressed, userData = desc.user_data](
+                          uint64_t key) {
+        if (!slot_live(handle)) {
+            return;
+        }
+        guarded_call(*modPtr, "list on_pressed callback",
+            [&] { fn(modPtr->context.get(), handle, key, userData); });
+    };
+    if (desc.is_selected != nullptr) {
+        props.isSelected = [modPtr = &mod, handle, fn = desc.is_selected,
+                               userData = desc.user_data](uint64_t key) {
+            if (!slot_live(handle)) {
+                return false;
+            }
+            return guarded_call(*modPtr, "list is_selected callback", false,
+                [&] { return fn(modPtr->context.get(), handle, key, userData); });
+        };
+    }
+    if (desc.is_disabled != nullptr) {
+        props.isDisabled = [modPtr = &mod, handle, fn = desc.is_disabled,
+                               userData = desc.user_data](uint64_t key) {
+            if (!slot_live(handle)) {
+                return false;
+            }
+            return guarded_call(*modPtr, "list is_disabled callback", false,
+                [&] { return fn(modPtr->context.get(), handle, key, userData); });
+        };
+    }
+
+    auto& list = paneComponent->add_child<ui::List>(std::move(props));
+    auto* listSlot = slot_from_handle(handle);
+    if (listSlot == nullptr) {
+        return MOD_ERROR;
+    }
+    listSlot->list = &list;
+    track_element(handle, *listSlot, *list.root());
+    outHandle = handle;
+    return MOD_OK;
+}
+
+ModResult ui_list_set_items(LoadedMod& mod, uint64_t handle, std::vector<ui::List::Item> items) {
+    auto* slot = resolve(mod, handle, UiSlotKind::List, "list_set_items");
+    if (slot == nullptr || slot->list == nullptr) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    slot->list->set_items(std::move(items));
     return MOD_OK;
 }
 
@@ -818,7 +913,7 @@ ModResult ui_window_close(LoadedMod& mod, uint64_t handle) {
     if (slot == nullptr || slot->document == nullptr) {
         return MOD_INVALID_ARGUMENT;
     }
-    slot->document->hide(true);
+    slot->document->pop();
     return MOD_OK;
 }
 
@@ -1067,6 +1162,7 @@ void ui_remove_mod(LoadedMod& mod) {
     if (s_modMenuTabs.erase(&mod) != 0) {
         s_menuTabsDirty = true;
     }
+    bool restoreCoveredDocument = false;
     auto entries = s_slots.take_all(mod);
     for (auto& entry : entries) {
         auto& slot = entry.value;
@@ -1074,6 +1170,7 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Window: {
             auto* window = static_cast<ui::ModWindow*>(slot.document);
             if (window != nullptr) {
+                restoreCoveredDocument |= ui::top_document() == window;
                 window->force_hide(true);
             }
             break;
@@ -1081,6 +1178,7 @@ void ui_remove_mod(LoadedMod& mod) {
         case UiSlotKind::Dialog: {
             auto* dialog = static_cast<ModDialog*>(slot.document);
             if (dialog != nullptr) {
+                restoreCoveredDocument |= ui::top_document() == dialog;
                 dialog->force_hide(true);
             }
             break;
@@ -1091,6 +1189,9 @@ void ui_remove_mod(LoadedMod& mod) {
         default:
             break;
         }
+    }
+    if (restoreCoveredDocument) {
+        ui::uncover_top_document();
     }
 }
 
@@ -1172,7 +1273,25 @@ bool valid_control_desc(const UiControlDesc& desc) {
             return false;
         }
         break;
+    case UI_CONTROL_FILE_PICKER:
+        if (desc.struct_size < kUiControlFilePickerSize ||
+            (desc.file_filter_count != 0 && desc.file_filters == nullptr))
+        {
+            return false;
+        }
+        for (size_t i = 0; i < desc.file_filter_count; ++i) {
+            if (desc.file_filters[i].name == nullptr || desc.file_filters[i].pattern == nullptr) {
+                return false;
+            }
+        }
+        break;
     default:
+        return false;
+    }
+    if (desc.kind == UI_CONTROL_STRING && desc.struct_size >= kUiControlStringSetModeSize &&
+        desc.string_set_mode != UI_STRING_SET_ON_COMMIT &&
+        desc.string_set_mode != UI_STRING_SET_ON_CHANGE)
+    {
         return false;
     }
     if (desc.kind == UI_CONTROL_SELECT) {
@@ -1205,6 +1324,36 @@ bool valid_control_desc(const UiControlDesc& desc) {
     default:
         return false;
     }
+}
+
+bool copy_list_items(
+    const UiListItem* items, size_t itemCount, std::vector<ui::List::Item>& outItems) {
+    if (itemCount != 0 && items == nullptr) {
+        return false;
+    }
+
+    std::vector<ui::List::Item> copy;
+    copy.reserve(itemCount);
+    std::unordered_set<uint64_t> keys;
+    keys.reserve(itemCount);
+    auto cursor = reinterpret_cast<uintptr_t>(items);
+    for (size_t i = 0; i < itemCount; ++i) {
+        const auto* item = reinterpret_cast<const UiListItem*>(cursor);
+        const size_t recordSize = item->struct_size;
+        if (recordSize < kUiListItemV21Size || recordSize % alignof(UiListItem) != 0 ||
+            cursor > std::numeric_limits<uintptr_t>::max() - recordSize)
+        {
+            return false;
+        }
+        if (item->label == nullptr || !keys.insert(item->key).second) {
+            return false;
+        }
+        copy.push_back({.key = item->key, .label = item->label});
+        cursor += recordSize;
+    }
+
+    outItems = std::move(copy);
+    return true;
 }
 
 ModResult ui_register_mods_panel(ModContext* context, const UiModsPanelDesc* desc) {
@@ -1271,6 +1420,45 @@ ModResult ui_pane_add_control(ModContext* context, UiElementHandle pane, const U
         return MOD_INVALID_ARGUMENT;
     }
     return ui_impl::ui_pane_add_control(*mod, pane, *desc, outElem);
+}
+
+ModResult ui_pane_add_list(
+    ModContext* context, UiElementHandle pane, const UiListDesc* desc, UiListHandle* outList) {
+    if (outList != nullptr) {
+        *outList = 0;
+    }
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || pane == 0 || desc == nullptr || desc->struct_size < kUiListDescV21Size ||
+        desc->on_pressed == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+    std::vector<ui::List::Item> items;
+    if ((desc->items != nullptr || desc->item_count > 0) &&
+        !copy_list_items(desc->items, desc->item_count, items))
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+
+    uint64_t handle = 0;
+    const ModResult result = ui_impl::ui_pane_add_list(*mod, pane, *desc, std::move(items), handle);
+    if (result == MOD_OK && outList != nullptr) {
+        *outList = handle;
+    }
+    return result;
+}
+
+ModResult ui_list_set_items(
+    ModContext* context, UiListHandle list, const UiListItem* items, size_t itemCount) {
+    auto* mod = mod_from_context(context);
+    if (mod == nullptr || list == 0) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    std::vector<ui::List::Item> copiedItems;
+    if (!copy_list_items(items, itemCount, copiedItems)) {
+        return MOD_INVALID_ARGUMENT;
+    }
+    return ui_impl::ui_list_set_items(*mod, list, std::move(copiedItems));
 }
 
 ModResult ui_pane_add_group(ModContext* context, UiElementHandle groupPane,
@@ -1630,6 +1818,8 @@ constexpr UiService s_uiService{
     .push_toast = ui_push_toast,
     .get_clipboard_text = ui_get_clipboard_text,
     .set_clipboard_text = ui_set_clipboard_text,
+    .pane_add_list = ui_pane_add_list,
+    .list_set_items = ui_list_set_items,
 };
 
 }  // namespace

@@ -18,7 +18,6 @@ public:
     u16 getValueNumber() { return mValueNum; }
     void setValueNumber(u16 valueNum) { mValueNum = valueNum; }
 
-private:
     /* 0x56C */ void* mpParentPtr;
     /* 0x570 */ u16 field_0x570;
     /* 0x572 */ u16 mFlowNodeNum;

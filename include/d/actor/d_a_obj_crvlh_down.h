@@ -28,7 +28,6 @@ public:
     virtual int Draw();
     virtual int Delete();
 
-private:
     /* 0x5A0 */ fpc_ProcID field_0x5a0;
     /* 0x5A4 */ fpc_ProcID field_0x5a4;
     /* 0x5A8 */ cXyz field_0x5a8;

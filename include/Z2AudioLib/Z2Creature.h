@@ -67,7 +67,6 @@ public:
     void playVoice(int);
     virtual Z2SoundHandlePool* startCreatureVoice(JAISoundID soundID, s8 reverb);
 
-private:
     /* 0xA0 */ s8 mCitizenID;
     /* 0xA1 */ s8 field_0xa1;
     /* 0xA2 */ bool mLinkSearch;

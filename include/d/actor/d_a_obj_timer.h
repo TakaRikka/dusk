@@ -54,7 +54,6 @@ class Act_c : public fopAc_ac_c {
             return daObj::PrmAbstract(this, PRM_2, PRM_24);
         }
         
-    private:
         /* 0x568 */ int field_0x568;
         /* 0x56C */ int field_0x56c;
         /* 0x570 */ u8 field_0x570;

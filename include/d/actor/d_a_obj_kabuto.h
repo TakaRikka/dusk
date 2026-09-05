@@ -47,7 +47,6 @@ public:
     cPhs_Step create();
     inline int Draw();
 
-private:
     /* 0x590 */ dCcD_Stts mCcStts;
     /* 0x5CC */ dCcD_Sph mCcSph;
     /* 0x704 */ daPy_boomerangMove_c mBoomerangMove;

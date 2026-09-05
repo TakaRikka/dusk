@@ -496,6 +496,7 @@ int daMidna_c::createHeap() {
         }
     }
 
+    IF_DUSK(mBckHeap[0].reserveBuffer(0x1DC);)
     JKRReadIdxResource(mBckHeap[0].getBuffer(), mBckHeap[0].getBufferSize(), 0x1DC, dComIfGp_getAnmArchive());
     J3DAnmTransform* md_anm = (J3DAnmTransform*)J3DAnmLoaderDataBase::load(mBckHeap[0].getBuffer());
     modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcName, 14);
@@ -3300,7 +3301,7 @@ int daMidna_c::execute() {
             if (!checkStateFlg0(FLG0_UNK_8000)) {
                 offStateFlg0((daMidna_FLG0)(FLG0_NPC_NEAR | FLG0_NPC_FAR));
                 BOOL far_;
-                if (fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &far_)) {
+                if (fopAcIt_Judge((fopAcIt_JudgeFunc)daMidna_searchNpc, &far_) IF_DUSK(&& !dusk::getSettings().game.canTransformAnywhere)) {
                     if (!far_) {
                         onStateFlg0(FLG0_NPC_NEAR);
                     } else {

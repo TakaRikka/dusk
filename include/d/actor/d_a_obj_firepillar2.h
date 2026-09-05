@@ -51,7 +51,6 @@ public:
     u8 getArg0() { return fopAcM_GetParamBit(this,8,8); }
     u8 getSwNo() { return fopAcM_GetParamBit(this,0,8); }
 
-private:
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModel* mModel;
     /* 0x574 */ mDoExt_bckAnm* mBck;

@@ -25,7 +25,6 @@ public:
 
     u32 getType() { return fopAcM_GetParamBit(this, 0, 4); }
 
-private:
     /* 0x5A8 */ Mtx mMtx[2];
     /* 0x608 */ J3DModel* mpModel;
     /* 0x60C */ s32 field_0x60c;

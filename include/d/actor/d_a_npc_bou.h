@@ -168,7 +168,6 @@ public:
         return 0;
     }
 
-private:
     /* 0xE40 */ NPC_BOU_HIO_CLASS* mpHIO;
     /* 0xE44 */ dCcD_Cyl mCyl1;
     /* 0xF80 */ u8 mType;

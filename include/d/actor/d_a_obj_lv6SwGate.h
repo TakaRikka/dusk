@@ -38,7 +38,6 @@ public:
 
     static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
     static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
-private:
     /* 0x5A0  */ dCcD_Stts mCcStts;
     /* 0x5DC  */ dCcD_Cyl mCcDCyls[12];
     /* 0x14AC */ request_of_phase_process_class mPhase;

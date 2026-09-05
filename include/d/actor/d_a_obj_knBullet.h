@@ -26,7 +26,6 @@ public:
     u8 getActionMode() { return mActionMode; }
     void setActionMode(u8 i_action) { mActionMode = i_action; }
 
-private:
     /* 0x568 */ Mtx mMtx;
     /* 0x598 */ dCcD_Stts mCcStts;
     /* 0x5D4 */ dCcD_Sph mCcSph;

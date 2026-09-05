@@ -1,87 +1,35 @@
 # Dusklight Mod API
 
-Mods are `.dusk` bundles: zip archives that can contain code (in the form of native libraries), resources, DVD overlay
+Mods are `.dusk` bundles: zip archives that can contain code (native libraries or scripts), resources, DVD overlay
 files, and texture replacements. Mods may be enabled, disabled and reloaded at runtime.
 
-When code mods are loaded, they get dynamically linked by the operating system to the running game process. The mod
-exports lifecycle functions that Dusklight calls into (`mod_initialize`, `mod_update`, `mod_shutdown`), and the mod
-communicates with the host via **services**: plain C APIs, individually versioned. Dusklight exports several built-in
-services, and mods may export services of their own, permitting framework mods and cross-mod integration.
+There are three types of mods:
 
-Beyond services, mods have full access to the original game's code: include game headers, call directly into any public
-function, read and write data fields, and hook the vast majority of game functions.
+- **Asset-only mods**: Mods that contain no code, and may replace files on the game disc ("overlays") and provide
+  replacement textures (texture packs).
+- **Native mods (C++)**: Fully-featured, with the ability to interop with game code and hook functions. Must be compiled
+  for every supported platform. (See [mod-template](https://github.com/TwilitRealm/mod-template))
+- **Script mods (Luau)**: Simple, widely-compatible, but can only access provided services.
 
 ## Table of Contents
 
-1. [Getting Started](#getting-started)
-2. [mod.json](#modjson)
-3. [Anatomy of a Code Mod](#anatomy-of-a-code-mod)
-4. [Services](#services)
-5. [Built-in Services](#built-in-services)
-6. [Hooking Game Functions](#hooking-game-functions)
-7. [Asset Overlays](#asset-overlays)
-8. [Runtime Lifecycle](#runtime-lifecycle)
-9. [Error Handling](#error-handling)
-10. [Advanced](#advanced)
-
----
-
-## Getting Started
-
-Fork the [mod template](https://github.com/TwilitRealm/mod-template), a self-contained CMake project that uses the
-Dusklight mod SDK.
-
-```
-my_mod/
-├── CMakeLists.txt
-├── mod.json
-├── src/mod.cpp
-├── res/       (optional bundled resources)
-├── overlay/   (optional game file overrides)
-└── textures/  (optional texture replacements)
-```
-
-**CMakeLists.txt:**
-
-```cmake
-cmake_minimum_required(VERSION 3.26)
-project(my_mod CXX)
-
-if (NOT DUSKLIGHT_VERSION)
-  set(DUSKLIGHT_VERSION "76b56cd8b81809fce0a5c2a44e2f6d437591132f")
-endif ()
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/FetchDusklight.cmake")
-add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
-
-add_mod(my_mod
-        FEATURES game fmt      # remove game for service-only mods; add webgpu for GfxService
-        SOURCES src/mod.cpp
-        MOD_JSON mod.json
-        RES_DIR res            # mod resources, including icon.png and banner.png
-        OVERLAY_DIR overlay    # game file overlays; remove if unused
-        TEXTURES_DIR textures  # texture replacements; remove if unused
-)
-```
-
-Available features:
-
-- `fmt`: Provides the header-only `{fmt}` library and the formatted logging helpers in `mods/svc/log.hpp`.
-- `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
-  range of compatibility with Dusklight versions and a slightly faster build process.
-- `webgpu`: Allows importing the WebGPU API (`webgpu/webgpu.h`). Must be enabled when using
-  [GfxService](#gfxservice-modssvcgfxh).
-
-Building produces `my_mod.dusk` in `build/mods/`. Copy the `.dusk` into the user mods folder:
-
-- Windows: `%APPDATA%\TwilitRealm\Dusklight\mods`
-- Linux: `~/.local/share/TwilitRealm/Dusklight/mods`
-- macOS: `~/Library/Application Support/TwilitRealm/Dusklight/mods`
-
-Passing `--mods <dir>` on the command line replaces the user directory with one of your choosing.
+1. [mod.json](#modjson)
+2. [Asset-only Mods](#asset-only-mods)
+3. [Native Mods (C++)](#native-mods)
+4. [Script Mods (Luau)](#script-mods)
+5. [Services](#services)
+6. [Built-in Services](#built-in-services)
+7. [Hooking Game Functions](#hooking-game-functions)
+8. [Asset Overlays](#asset-overlays)
+9. [Runtime Lifecycle](#runtime-lifecycle)
+10. [Error Handling](#error-handling)
+11. [Advanced](#advanced)
 
 ---
 
 ## mod.json
+
+Every mod starts with a single file, a `mod.json`:
 
 ```json
 {
@@ -90,20 +38,60 @@ Passing `--mods <dir>` on the command line replaces the user directory with one 
   "version": "1.0.0",
   "author": "Your Name",
   "description": "A short description shown in the mod manager.",
-  "icon": "res/my_icon.png",
-  "banner": "res/my_banner.png"
+  "icon": "res/icon.png",
+  "banner": "res/banner.png"
 }
 ```
 
-`id` is required: a unique, stable identifier (reverse-DNS style; periods, underscores, and alphanumerics). Everything
-else is optional but recommended.
+`id` is required: a unique, stable identifier (reverse-DNS style; periods, underscores, and lowercase alphanumerics).
+Everything else is optional but recommended.
 
-`icon` and `banner` are bundle-relative paths to PNG images for the in-game mod manager: the square icon (e.g.
-512x512), the banner (~3.5:1). If omitted, `res/icon.png` and `res/banner.png` are used automatically when present.
+`icon` and `banner` are bundle paths to PNG images that display in the in-game mod manager and mod website. A square
+icon (1:1), and a banner (~3.5:1, minimum 800px width). If omitted, `res/icon.png` and `res/banner.png` are used
+automatically when present.
+
+Simply create a zip file with a `mod.json`, and rename it to `.dusk`. That's it!
 
 ---
 
-## Anatomy of a Code Mod
+## Asset-only Mods
+
+```
+my_mod.dusk
+├── mod.json
+├── res/       (optional bundled resources)
+├── overlay/   (optional game file overrides)
+└── textures/  (optional texture replacements)
+```
+
+Place files in `overlay/` to replace the disc version of that file. Examples:
+
+- `overlay/Movie/demo_movie98_00.thp`: Replaces `Movie/demo_movie98_00.thp` on disc.
+- `overlay/res/Object/Kmdl/archive/bmwr/al.bmd`: Replaces `archive/bmwr/al.bmd` _within_ `res/Object/Kmdl.arc` without
+  overwriting the entire `.arc`.
+
+Place textures in `textures/` to automatically register them as texture replacements when active. These follow the same
+[Dolphin-compatible naming scheme](#textureservice-modssvctextureh) as the user `<data>/texture_replacements/`
+directory. Directories are scanned recursively. Examples:
+
+- `textures/tex1_256x128_e6a4c7be9bf48305_14.dds`: Replaces the Hero's Clothes texture.
+
+Simply zip the `mod.json` and adjacent folders, then rename to `.dusk`. Then, copy the `.dusk` into the user mods
+folder:
+
+- Windows: `%APPDATA%\TwilitRealm\Dusklight\mods`
+- Linux: `~/.local/share/TwilitRealm/Dusklight/mods`
+- macOS: `~/Library/Application Support/TwilitRealm/Dusklight/mods`
+
+---
+
+## Native Mods
+
+Mods built with [mod-template](https://github.com/TwilitRealm/mod-template) are native C++ mods. Native mods are very
+powerful and can interact with and [hook](#hooking-game-functions) game code directly. All features are available to
+native mods.
+
+Example C++ mod:
 
 ```cpp
 #include "mods/service.hpp"
@@ -126,18 +114,172 @@ MOD_EXPORT ModResult mod_update(ModError* error) {   // called every frame
 MOD_EXPORT ModResult mod_shutdown(ModError* error) {
     return MOD_OK;
 }
+
 }
 ```
 
-All three lifecycle exports are required. `mod_ctx` is your mod's identity token, set by the loader before
-`mod_initialize` runs. Pass it as the first argument to every service call.
+When native mods are loaded, they get dynamically linked by the operating system to the running game process. The mod
+exports lifecycle functions that Dusklight calls into (`mod_initialize`, `mod_update`, `mod_shutdown`), and the mod
+communicates with the host via **services**: plain C APIs, individually versioned. Dusklight exports several built-in
+services, and mods may export services of their own, permitting framework mods and cross-mod integration.
+
+Beyond services, native mods have full access to the original game's code: include game headers, call directly into any
+public function, read and write data fields, and hook the vast majority of game functions.
+
+### Quick Start (Native Mods)
+
+Create a repository from
+the [mod-template](https://github.com/new?template_name=mod-template&template_owner=TwilitRealm),
+a self-contained CMake project that uses the Dusklight mod SDK. It includes a GitHub Actions CI workflow that builds the
+mod for every supported platform.
+
+```
+my_mod/
+├── CMakeLists.txt
+├── mod.json
+├── src/mod.cpp
+├── res/       (optional bundled resources)
+├── overlay/   (optional game file overrides)
+└── textures/  (optional texture replacements)
+```
+
+**CMakeLists.txt:**
+
+```cmake
+cmake_minimum_required(VERSION 3.26)
+project(my_mod CXX)
+
+if (NOT DUSKLIGHT_VERSION)
+    set(DUSKLIGHT_VERSION "76b56cd8b81809fce0a5c2a44e2f6d437591132f")
+endif ()
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/FetchDusklight.cmake")
+add_subdirectory("${DUSKLIGHT_DIR}/sdk" dusklight-sdk EXCLUDE_FROM_ALL)
+
+add_mod(my_mod
+        FEATURES game fmt      # remove game for service-only mods; add webgpu for GfxService
+        SOURCES src/mod.cpp
+        MOD_JSON mod.json
+        RES_DIR res            # mod resources, including icon.png and banner.png
+        OVERLAY_DIR overlay    # game file overlays; remove if unused
+        TEXTURES_DIR textures  # texture replacements; remove if unused
+)
+```
+
+Available features:
+
+- `fmt`: Provides the header-only `{fmt}` library and the formatted logging helpers in
+  [`mods/svc/log.hpp`](../sdk/include/mods/svc/log.hpp).
+- `game`: Allows calling into and hooking game code. Mods that **only** use services may omit it, providing a wider
+  range of compatibility with Dusklight versions and a slightly faster build process.
+- `webgpu`: Allows importing the WebGPU API
+  ([`webgpu/webgpu.h`](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h)). Must be enabled when using
+  [GfxService](#gfxservice-modssvcgfxh).
+
+Building produces `my_mod.dusk` in `build/mods/`. Copy the `.dusk` into the user mods folder:
+
+- Windows: `%APPDATA%\TwilitRealm\Dusklight\mods`
+- Linux: `~/.local/share/TwilitRealm/Dusklight/mods`
+- macOS: `~/Library/Application Support/TwilitRealm/Dusklight/mods`
+
+Passing `--mods <dir>` on the command line replaces the user directory with one of your choosing.
+
+---
+
+## Script Mods
+
+For simpler use cases where direct game code access and hooks aren't necessary, Luau mods are also supported.
+Luau mods do not need to be compiled, and are always supported on all platforms. However, they can only use services
+that are provided as Luau modules.
+
+Mods can utilize Luau to add UI elements to their mod panel, use configuration variables, and dynamically swap out
+models/textures at runtime (e.g. to switch model variants or disable certain replacements) while remaining widely
+compatible.
+
+Example mod structure:
+
+```
+my_luau_mod.dusk
+├── mod.json
+└── res/
+    ├── main.luau
+    └── lib/util.luau
+```
+
+Set the `runtime` to `dev.twilitrealm.luau@1.0` in `mod.json`:
+
+```json
+{
+  "id": "com.example.my_luau_mod",
+  "name": "My Script Mod",
+  "version": "1.0.0",
+  "runtime": "dev.twilitrealm.luau@1.0"
+}
+```
+
+`res/main.luau` runs once when the mod activates. Register optional update and shutdown callbacks through
+`dusklight.host`:
+
+```lua
+local host = require("dusklight.host")
+host.on_update(function()
+    -- Runs every frame
+end)
+host.on_shutdown(function()
+    -- Runs on mod deactivation
+end)
+```
+
+Require script modules with `./` or `../` paths relative to the requiring file. The runtime appends `.luau` and rejects
+paths that escape `res/`.
+
+The runtime provides these modules:
+
+- `dusklight.log`: `write`, `trace`, `debug`, `info`, `warn`, and `error`.
+- `dusklight.host`: host `version`, mod metadata and directories, lifecycle callbacks, and `fail`.
+- `dusklight.config`: bool, integer, float, and string variables with `get`, `set`, and subscriptions.
+- `dusklight.resource`: binary-safe reads from the mod's `res/` tree.
+- `dusklight.overlay`: file and copied-buffer overlays with removable handles.
+- `dusklight.texture`: encoded-file and raw-data replacements with unregisterable handles.
+- `dusklight.ui`: Mods panels, controls, lists, windows, dialogs, styles, menu tabs, toasts, and clipboard access.
+
+For completion and type checking, add `sdk/luau/dusklight.d.luau` to the `luau-lsp.types.definitionFiles` setting.
+
+Configurable overlay example:
+
+```lua
+local config = require("dusklight.config")
+local overlay = require("dusklight.overlay")
+
+local hood = config.register({ name = "hood", type = "bool", default = true })
+local current
+
+local function apply(enabled)
+    if current then current:remove() end
+    current = overlay.add_file("/res/Object/Alink.arc",
+        enabled and "res/alink_hood.arc" or "res/alink_nohood.arc")
+end
+
+hood:subscribe(apply)
+apply(hood:get())
+```
+
+To create a script mod, copy `sdk/luau/template`, edit its manifest and source, then zip the `mod.json` and adjacent
+folders and rename to `.dusk`. Copy the `.dusk` into the user mods folder:
+
+- Windows: `%APPDATA%\TwilitRealm\Dusklight\mods`
+- Linux: `~/.local/share/TwilitRealm/Dusklight/mods`
+- macOS: `~/Library/Application Support/TwilitRealm/Dusklight/mods`
+
+**Restrictions:** The Luau VM has no raw filesystem, network, or game-code access. Each script mod has a 64 MiB memory
+limit. Calls are interrupted after 250 ms for updates and UI callbacks or 5 seconds for lifecycle calls. An uncaught
+error, timeout, or memory exhaustion fails and disables the mod.
 
 ---
 
 ## Services
 
-A service is a struct of C function pointers with a version header. You declare what you use at file scope, and the
-loader resolves it before your mod initializes:
+A service is a struct of C function pointers with a version header. Import services at file scope, and the loader
+resolves them before initializing the mod:
 
 ```cpp
 IMPORT_SERVICE(LogService, svc_log);              // required, latest minor version
@@ -145,7 +287,7 @@ IMPORT_SERVICE_VERSION(LogService, svc_log, 0);   // required, minimum minor ver
 IMPORT_OPTIONAL_SERVICE(SomeService, svc_maybe);  // may be null
 ```
 
-A service must be imported in only **one** file (usually your `mod.cpp`). Other files may simply use `svc_log` or
+A service should be imported in only **one** file (usually your `mod.cpp`). Other files may simply use `svc_log` or
 `mods::log::` after including the appropriate header.
 
 Each service is individually versioned, and there may be multiple major versions of a service provided at once,
@@ -153,26 +295,19 @@ allowing backwards compatibility with older mods while still changing services f
 bump is a breaking change, treated as a different service entirely. For **additive** changes, a service appends new
 functions to the end of the struct without breaking existing callers and simply bumps the minor version.
 
-`IMPORT_SERVICE` and `IMPORT_OPTIONAL_SERVICE` require the latest minor version compiled against, making every field in
-the service safe to call. A mod can use `IMPORT_SERVICE_VERSION` (or its optional counterpart) with an older minor
-version to remain compatible with older Dusklight versions, then use `SERVICE_HAS` to check at runtime for fields added
-after that explicitly requested version.
-
-The contract (see `sdk/include/mods/api.h` for the full version):
-
-- **A required import is guaranteed valid.** If the service is missing or too old, the mod fails to load with a clear
-  error. No need to null check at call sites.
-- **Anything at or below the minor version you imported can be called unconditionally.** The default macros import
-  the service type's current minor version; the versioned macros explicitly override that minimum.
-- Optional imports may be null; check once in `mod_initialize`.
-- Fields newer than your imported minor version must be gated behind `SERVICE_HAS(service, ServiceType, field)` plus a
-  null check.
+`IMPORT_SERVICE` and `IMPORT_OPTIONAL_SERVICE` require the latest minor version compiled against, guaranteeing that
+every function is present. If a mod doesn't use (or may operate without) functions added in later minor versions, and
+wants to remain compatible with older Dusklight versions, it may use `IMPORT_SERVICE_VERSION` or
+`IMPORT_OPTIONAL_SERVICE_VERSION` to require an older minor version. It can then check `SERVICE_HAS` at runtime to see
+if a newer function is present (i.e. running on a new enough Dusklight version).
 
 ---
 
 ## Built-in Services
 
-### LogService (`mods/svc/log.h`)
+### LogService ([`mods/svc/log.h`](../sdk/include/mods/svc/log.h))
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(LogService, svc_log);
@@ -183,9 +318,16 @@ svc_log->error(mod_ctx, "very bad");
 svc_log->write(mod_ctx, LOG_LEVEL_DEBUG, "verbose details");
 ```
 
+**Luau**
+
+```lua
+local log = require("dusklight.log")
+log.info("spawned the thing")
+```
+
 Messages appear in the console prefixed with your mod ID. Messages are plain UTF-8 strings and are copied before the
 call returns. C++ mods can enable `add_mod(... FEATURES fmt)` and use the formatted logging helpers in
-`mods/svc/log.hpp`:
+[`mods/svc/log.hpp`](../sdk/include/mods/svc/log.hpp):
 
 ```cpp
 #include <mods/svc/log.hpp>
@@ -194,10 +336,12 @@ mods::log::info("spawned actor {} at ({}, {})", actorName, x, y);
 mods::log::warn("health is down to {:.1f}%", healthPercent);
 ```
 
-### ResourceService (`mods/svc/resource.h`)
+### ResourceService ([`mods/svc/resource.h`](../sdk/include/mods/svc/resource.h))
 
 Loads files from the `res/` tree of your `.dusk` archive. Paths are relative to `res/` (pass `"config.txt"`, not
 `"res/config.txt"`); absolute paths and `..` are rejected.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(ResourceService, svc_resource);
@@ -209,12 +353,185 @@ if (svc_resource->load(mod_ctx, "config.txt", &buf) == MOD_OK) {
 }
 ```
 
+**Luau**
+
+```lua
+local resource = require("dusklight.resource")
+local contents = resource.load("config.txt")
+```
+
 Missing files return `MOD_UNAVAILABLE`. Always `free` what you `load`. The bundle is read-only; use
 `HostService::data_dir` for persistent storage.
 
-### HostService (`mods/svc/host.h`)
+### FileService ([`mods/svc/file.h`](../sdk/include/mods/svc/file.h))
 
-Mod metadata and runtime interaction with the loader:
+Provides file and folder pickers, file I/O, exports and folder enumeration.
+
+A location is an opaque UTF-8 string returned by `pick_*`, `export_file`, `join`, or `create_child`.
+Save it and pass it back to the service. Never parse it or manually append path segments.
+
+```cpp
+#include "mods/svc/file.hpp"
+
+IMPORT_SERVICE(FileService, svc_file);
+
+mods::file::PickOptions options;
+options.filters.push_back({"Audio", "wav;ogg"});
+mods::file::pick_file(options, [](mods::file::PickResult result) {
+    if (result.status == MOD_OK && !result.locations.empty()) {
+        save_location(result.locations.front());
+    }
+});
+```
+
+Use `check` before reopening a saved location because removable storage or an access grant may no longer be available.
+`open` provides seekable streaming I/O. `read_all` allocates the entire file and should only be used when the file is
+small. Folder locations support `list` and child resolution through `join`. Only one picker can be open at a time.
+
+`create_child` never replaces an existing file and returns `MOD_CONFLICT` if one exists. Use the returned location;
+document providers may adjust the requested name. `write_all` is a convenience function over
+`open`/`write`/`flush`/`close`.
+
+```cpp
+std::string location;
+if (mods::file::create_child(folder, "report.txt", location) == MOD_OK) {
+    mods::file::write_all(location, report);
+}
+
+mods::file::export_file(location, "report.txt", [](mods::file::PickResult result) {
+    if (result.status == MOD_OK) {
+        remember_export_destination(result.locations.front());
+    }
+});
+```
+
+`export_file` copies an existing file to a user-selected destination and returns the destination location in its
+callback. Mod-owned persistent files belong in `HostService::data_dir`.
+
+### HttpService ([`mods/svc/http.h`](../sdk/include/mods/svc/http.h))
+
+Asynchronous HTTPS requests supporting HTTP/2 and TLS 1.2+. C++ mods should use the helpers in
+[`mods/svc/http.hpp`](../sdk/include/mods/svc/http.hpp):
+
+```cpp
+#include "mods/svc/http.hpp"
+
+IMPORT_SERVICE(HttpService, svc_http);
+
+mods::http::Pending pendingRequest;
+
+void fetch_manifest() {
+    mods::http::Request request{
+        .url = "https://example.com/manifest.json",
+        .maxBodyBytes = 256 * 1024,
+    };
+    pendingRequest = mods::http::request(request, [](mods::http::Response response) {
+        if (!response.ok()) {
+            handle_fetch_error(response.error, response.statusCode);
+            return;
+        }
+
+        std::string manifest{response.body.begin(), response.body.end()};
+        use_manifest(manifest);
+    });
+    if (!pendingRequest) {
+        handle_start_error(pendingRequest.result());
+    }
+}
+```
+
+Keep the returned `Pending` alive until completion. Dropping it or calling `cancel` requests cancellation. Callbacks run
+on the game thread.
+
+`Response::ok()` requires a 2xx status. Other HTTP statuses are valid responses, not transport errors, so always check
+`statusCode`. In-memory responses default to a 1 MiB limit; set `maxBodyBytes` to increase it if needed.
+
+For large responses, set `downloadPath` to an absolute path in the calling mod's `HostService::data_dir` or
+`HostService::mod_dir`. The response is streamed to disk instead of loaded in memory. On success, the callback receives
+an empty `body` and the final path in `downloadPath`. Check `Response::ok()` before using the file.
+`Pending::progress()` reports download progress when the server provides a total size.
+
+### WebSocketService ([`mods/svc/websocket.h`](../sdk/include/mods/svc/websocket.h))
+
+WebSocket client connections with text or binary messages. Secure `wss://` URLs are supported everywhere. Insecure
+`ws://` is limited to `localhost`, `127.0.0.1`, and `[::1]`.
+
+```cpp
+#include "mods/svc/websocket.hpp"
+
+IMPORT_SERVICE(WebSocketService, svc_websocket);
+
+mods::ws::Connection connection;
+
+MOD_EXPORT ModResult mod_initialize(ModError*) {
+    connection = mods::ws::connect({.url = "wss://example.com/events"});
+    return connection ? MOD_OK : connection.result();
+}
+
+MOD_EXPORT ModResult mod_update(ModError*) {
+    mods::ws::Event event;
+    while (mods::ws::poll(event)) {
+        if (event.type == WEBSOCKET_EVENT_MESSAGE) {
+            consume(event.data);
+        } else if (event.type == WEBSOCKET_EVENT_CLOSED) {
+            schedule_reconnect(event.error);
+        }
+    }
+    return MOD_OK;
+}
+```
+
+Keep the `Connection` alive and drain `mods::ws::poll()` regularly, usually on every `mod_update` tick. A connection
+emits an (optional) `OPEN` event, zero to many `MESSAGE` events, and exactly one `CLOSED` event.
+
+**Restrictions:** A mod may only open four connections at once. Messages have a 1 MiB limit by default, and may request
+up to 16 MiB. Unread data is limited to 16 MiB and the outbound queue to 4 MiB. `send` returns `MOD_CONFLICT` when the
+outbound queue is full. Dropping the `Connection` or deactivating the mod attempts to gracefully close with code 1001,
+until the close deadline expires.
+
+### NetService ([`mods/svc/net.h`](../sdk/include/mods/svc/net.h))
+
+Asynchronous raw TCP and UDP networking. Endpoints can be `tcp://host:port` or `udp://host:port`. TCP connections and
+`resolve` accept hostnames. Listeners and UDP endpoints require IP literals.
+
+```cpp
+#include "mods/svc/net.hpp"
+
+IMPORT_SERVICE(NetService, svc_net);
+
+mods::net::BindOutcome bound;
+mods::net::Socket listener;
+mods::net::Socket client;
+
+MOD_EXPORT ModResult mod_initialize(ModError*) {
+    listener = mods::net::listen("tcp://127.0.0.1:0", &bound);
+    client = mods::net::connect(bound.local);
+    return listener && client ? MOD_OK : MOD_ERROR;
+}
+
+MOD_EXPORT ModResult mod_update(ModError*) {
+    mods::net::Event event;
+    while (mods::net::poll(event)) {
+        if (event.type == NET_EVENT_ACCEPTED) {
+            remember_client(mods::net::adopt(event.accepted));
+        } else if (event.type == NET_EVENT_STREAM_DATA) {
+            consume(event.data);
+        }
+    }
+    return MOD_OK;
+}
+```
+
+`send` and `send_to` copy the payload and return `MOD_CONFLICT` when the socket's outbound queue is full. `stats`
+reports queued bytes, traffic, dropped inbound datagrams, and asynchronous UDP send failures.
+
+**Restrictions:** A mod may only have 32 streams, 4 listeners, 4 UDP sockets, and 8 DNS resolutions active at once.
+
+### HostService ([`mods/svc/host.h`](../sdk/include/mods/svc/host.h))
+
+Mod metadata and runtime interaction with the loader.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(HostService, svc_host);
@@ -230,6 +547,20 @@ if (svc_host->data_dir(mod_ctx, &dataDir) == MOD_OK) {
 
 // Report an error and disable the mod
 svc_host->fail(mod_ctx, MOD_ERROR, "something unrecoverable happened");
+```
+
+**Luau**
+
+```lua
+local host = require("dusklight.host")
+local dataDir = host.data_dir()
+host.on_update(function()
+    -- Runs every frame
+end)
+host.on_shutdown(function()
+    -- Runs on mod deactivation
+end)
+host.fail("something unrecoverable happened")
 ```
 
 `get_service`/`publish_service` provide dynamic service lookup; see [Exporting Services](#exporting-services).
@@ -254,17 +585,19 @@ svc_host->watch_mod_lifecycle(mod_ctx, on_mod_lifecycle, nullptr, &watch);
 `MOD_LIFECYCLE_DETACHED` fires on the game thread at a lifecycle safe point, after the subject's `mod_shutdown` ran and
 every service dropped its state. For your own mod's teardown, use `mod_shutdown` instead.
 
-### HookService (`mods/svc/hook.h`)
+### HookService ([`mods/svc/hook.h`](../sdk/include/mods/svc/hook.h))
 
 Installs hooks on game functions and resolves symbols by name. You'll rarely call it directly; use the typed helpers in
-`mods/svc/hook.hpp` described in [Hooking Game Functions](#hooking-game-functions).
+[`mods/svc/hook.hpp`](../sdk/include/mods/svc/hook.hpp) described in
+[Hooking Game Functions](#hooking-game-functions).
 
-### OverlayService (`mods/svc/overlay.h`)
+### OverlayService ([`mods/svc/overlay.h`](../sdk/include/mods/svc/overlay.h))
 
 Registers DVD file overlays at runtime: the dynamic counterpart to the static `overlay/` directory (see
 [Asset Overlays](#asset-overlays)). Overlay a disc path with a file from your bundle, a file within an archive,
-or with a caller-owned buffer
-(copied on registration):
+or with a caller-owned buffer (copied on registration).
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(OverlayService, svc_overlay);
@@ -276,6 +609,14 @@ svc_overlay->add_buffer(mod_ctx, "/generated.txt", data, size, nullptr);
 svc_overlay->remove(mod_ctx, handle);
 ```
 
+**Luau**
+
+```lua
+local overlay = require("dusklight.overlay")
+local replacement = overlay.add_file("/Movie/demo_movie98_00.thp", "res/replacement.thp")
+replacement:remove()
+```
+
 `disc_path` must be absolute (leading `/`) and is matched against the disc case-insensitively. Paths that don't exist
 on the disc are added as new files. Changes are applied at the next frame boundary, and data the game already read
 stays in memory until the file is re-read: sometimes a scene reload, and in the worst case, a full restart.
@@ -285,11 +626,13 @@ data get refreshed without a full restart.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
-### TextureService (`mods/svc/texture.h`)
+### TextureService ([`mods/svc/texture.h`](../sdk/include/mods/svc/texture.h))
 
 Registers texture replacements at runtime: the dynamic counterpart to the static `textures/` directory (see
 [Asset Overlays](#asset-overlays)). Two forms: raw texel data with an explicit key, or an encoded `.dds`/`.png` from
-your bundle whose filename encodes the key:
+your bundle whose filename encodes the key.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(TextureService, svc_texture);
@@ -310,6 +653,14 @@ svc_texture->register_data(mod_ctx, &key, &data, nullptr);
 svc_texture->unregister(mod_ctx, handle);
 ```
 
+**Luau**
+
+```lua
+local texture = require("dusklight.texture")
+local replacement = texture.register_file("res/tex1_32x32_$_6.png")
+replacement:unregister()
+```
+
 Filenames use the same Dolphin-style convention as the user's `texture_replacements` directory:
 `tex1_{w}x{h}_{texhash}[_{tluthash}]_{fmt}.dds|.png`, where hashes may be `$` (wildcard). `_mipN` sidecar files next to
 a registered file are picked up automatically. Files are decoded lazily on first use by the renderer; raw data is copied
@@ -317,11 +668,13 @@ at registration. Registrations follow your mod's lifecycle.
 
 See [Asset Overlays](#asset-overlays) for priority and conflict handling.
 
-### ConfigService (`mods/svc/config.h`)
+### ConfigService ([`mods/svc/config.h`](../sdk/include/mods/svc/config.h))
 
 Persistent, mod-scoped configuration variables. Each var is stored in the user's `config.json` under
 `mod.<escaped mod id>.<name>` (escaping: `.` → `_`, `_` → `__`, so `com.example.my_mod` becomes `com_example_my__mod`),
-next to the host's own settings:
+next to the host's own settings.
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(ConfigService, svc_config);
@@ -345,6 +698,17 @@ void on_speed_changed(ModContext* ctx, ConfigVarHandle var, const ConfigVarValue
 svc_config->subscribe(mod_ctx, var, on_speed_changed, nullptr, nullptr);
 ```
 
+**Luau**
+
+```lua
+local config = require("dusklight.config")
+local speed = config.register({ name = "speedMultiplier", type = "float", default = 1.0 })
+speed:subscribe(function(value, previous)
+    -- React to the new value.
+end)
+speed:set(2.0)
+```
+
 Types: `CONFIG_VAR_BOOL` (`bool`), `CONFIG_VAR_INT` (`int64_t`), `CONFIG_VAR_FLOAT` (`double`), `CONFIG_VAR_STRING`
 (UTF-8; `get_string` copies into a caller buffer, pass a `NULL` buffer with size 0 to query the length). Accessors are
 typed and must match the registration.
@@ -353,7 +717,7 @@ Change callbacks fire on the game thread whenever the value changes at runtime (
 Writes that store the same value are silent. Values applied from `config.json` or `--cvar` at registration do
 **not** fire callbacks; read the value after `register_var` for the starting state.
 
-### SaveService (`mods/svc/save.h`)
+### SaveService ([`mods/svc/save.h`](../sdk/include/mods/svc/save.h))
 
 Stores named binary blobs for each save slot. Blob names are scoped to the calling mod, and each mod may store up to
 `SAVE_BLOB_BUDGET_BYTES` per slot. The service copies data passed to `set_blob`.
@@ -386,7 +750,7 @@ buffer contract as `get_blob`. Pass a `NULL` buffer to either read function to q
 are cleared. Observers are removed automatically when the mod is detached, so the output handle is only needed for
 manual unregistration. Save callbacks run on the game thread.
 
-### StageService (`mods/svc/stage.h`)
+### StageService ([`mods/svc/stage.h`](../sdk/include/mods/svc/stage.h))
 
 Allows making changes to a stage's "stage info" (contents of .dzs/.dzr files).
 (Currently only supports editing actor nodes.)
@@ -435,7 +799,7 @@ Stage names may contain up to 8 characters. For patches and deletions, room `0xf
 layer; additions require a specific room. Edits are removed when the mod is detached. If multiple mods edit the same
 record, the later-loaded mod wins.
 
-### UiService (`mods/svc/ui.h`)
+### UiService ([`mods/svc/ui.h`](../sdk/include/mods/svc/ui.h))
 
 Integrate seamlessly with Dusklight's UI system: add controls and buttons to your mod's detail pane in the Mods window,
 create custom windows and modal dialogs, apply custom RCSS stylesheets (anywhere!), and add menu bar tabs.
@@ -444,6 +808,8 @@ create custom windows and modal dialogs, apply custom RCSS stylesheets (anywhere
 content is rebuilt, and `update` runs every frame while that mod is selected. While your mod is selected, the detail
 pane carries your mod's id as a `mod-id` attribute (like custom window roots), so scoped RCSS can target it (e.g.
 `[mod-id="com.example.mod"]`).
+
+**C++**
 
 ```cpp
 IMPORT_SERVICE(UiService, svc_ui);
@@ -466,6 +832,18 @@ UiModsPanelDesc panel = UI_MODS_PANEL_DESC_INIT;
 panel.build = build;
 panel.update = update;
 svc_ui->register_mods_panel(mod_ctx, &panel);
+```
+
+**Luau**
+
+```lua
+local ui = require("dusklight.ui")
+ui.register_mods_panel({
+    build = function(panel)
+        panel:add_section("Status")
+        panel:add_text("running")
+    end,
+})
 ```
 
 Element setters must match the element kind: `elem_set_text`/`elem_set_rml` on text rows, and `elem_set_progress` on
@@ -495,6 +873,49 @@ controls are only available inside window tabs.
 `pane_add_group` adds a category button to a window tab's left pane. Focusing the button clears the paired right pane
 and calls the group's build callback with that pane, which is useful for organizing related controls without adding
 more tabs.
+
+**Lists:** `pane_add_list` adds a scrollable virtualized list of items that can be efficiently updated and filtered.
+Keys must be unique and remain stable across replacements.
+
+```cpp
+UiListHandle locationList = 0;
+
+void replace_locations(std::string_view query) {
+    std::vector<UiListItem> items;
+    for (uint64_t i = 0; i < locations.size(); ++i) {
+        if (matches(locations[i], query)) {
+            UiListItem item = UI_LIST_ITEM_INIT;
+            item.key = i;
+            item.label = locations[i].c_str();
+            items.push_back(item);
+        }
+    }
+    svc_ui->list_set_items(mod_ctx, locationList, items.data(), items.size());
+}
+
+void set_filter(ModContext*, void*, const UiControlValue* value) {
+    replace_locations(value->string_value);
+}
+
+bool location_selected(ModContext*, UiListHandle, uint64_t key, void*) {
+    return selected_locations.contains(key);
+}
+
+UiControlDesc filter = UI_CONTROL_DESC_INIT;
+filter.kind = UI_CONTROL_STRING;
+filter.label = "Filter";
+filter.get = get_filter;
+filter.set = set_filter;
+filter.string_set_mode = UI_STRING_SET_ON_CHANGE; /* invoke `set` while typing */
+svc_ui->pane_add_control(mod_ctx, pane, &filter, nullptr);
+
+UiListDesc list = UI_LIST_DESC_INIT;
+/* items may be passed as a part of list creation, or set afterwards */
+list.on_pressed = location_pressed;
+list.is_selected = location_selected;
+svc_ui->pane_add_list(mod_ctx, pane, &list, &locationList);
+replace_locations(""); /* calls `list_set_items` */
+```
 
 **Windows:** `window_push` pushes a tabbed two-pane window onto the document stack and shows it. Each tab's `build`
 receives the window handle plus fresh left and right pane handles on every activation. The optional per-tab `update`
@@ -544,7 +965,7 @@ svc_ui->dialog_push(mod_ctx, &dialog, nullptr);
 ```
 
 After an action's `on_pressed`, the dialog closes unless the action sets `keep_open`. It can then be closed later
-(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body` and 
+(or immediately) with `dialog_close`. Cancel fires `on_dismiss` and always closes. `dialog_set_body` and
 `dialog_set_icon` mutate a live dialog.
 
 **Toasts:** `push_toast` enqueues a notification. Titles and bodies accept RML. The optional `type` is applied as an
@@ -574,7 +995,7 @@ existing documents restyle immediately, and future ones pick it up when created.
 host styles and may override them. Scope selectors tightly (use `[mod-id="..."]`!), especially for `UI_SCOPE_WINDOW`,
 unless changing host UI is intentional.
 
-### WindowService (`mods/svc/window.h`)
+### WindowService ([`mods/svc/window.h`](../sdk/include/mods/svc/window.h))
 
 Allows creating new windows that can be rendered to via `GfxService`.
 
@@ -594,12 +1015,13 @@ one present target may be attached to a WindowService window at a time.
 
 New windows are hidden by default so a mod can finish attaching graphics before calling `show_window`.
 
-### GfxService (`mods/svc/gfx.h`)
+### GfxService ([`mods/svc/gfx.h`](../sdk/include/mods/svc/gfx.h))
 
 **Requires `add_mod(... FEATURES webgpu)`**
 
-Direct WebGPU access at various stages of the rendering pipeline. Mods use the `wgpu*` C API (via `webgpu/webgpu.h`) for
-custom draws and compute dispatches. Mods must manage their own WebGPU state, including pipelines and bind groups.
+Direct WebGPU access at various stages of the rendering pipeline. Mods use the `wgpu*` C API (via
+[`webgpu/webgpu.h`](https://github.com/webgpu-native/webgpu-headers/blob/main/webgpu.h)) for custom draws and compute
+dispatches. Mods must manage their own WebGPU state, including pipelines and bind groups.
 
 ```cpp
 IMPORT_SERVICE(GfxService, svc_gfx);
@@ -649,7 +1071,7 @@ To create a `WGPUSurface` manually, `GfxDeviceInfo` holds the `WGPUInstance` and
 `push_present` must be called every frame from a GfxService stage callback. If surface was lost, `push_present` returns
 `MOD_ERROR`. Unregister and re-register the target before trying again.
 
-### CameraService (`mods/svc/camera.h`)
+### CameraService ([`mods/svc/camera.h`](../sdk/include/mods/svc/camera.h))
 
 Converts a game view provided by a render callback into WebGPU-convention camera data. Matrix fields are column-major
 `float[16]` values using the matrix * column-vector convention (transpose of the game's row-major `Mtx`/`Mtx44` layout),
@@ -671,7 +1093,7 @@ first in-game frame. Projection matrices match the renderer's WebGPU clip conven
 Camera operators allow overriding the main camera. When an operator callback returns true, its values replace the camera
 state for the current frame. Register and unregister using `register_camera_operator` / `unregister_camera_operator`.
 
-### GameModeService (`mods/svc/game_mode.h`)
+### GameModeService ([`mods/svc/game_mode.h`](../sdk/include/mods/svc/game_mode.h))
 
 Allows a mod to register a game mode with callbacks for key gameplay and save lifecycle events. Registered game modes
 appear in the prelaunch menu. Game modes may use a unique set of saves by configuring `save_name`; leave it empty to use
@@ -790,6 +1212,82 @@ svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
 
 ```
 
+### ActorService (`mods/svc/actor.h`)
+
+A service that manages registering and creating custom actors. These actors will be run by the game as if they are part of the engine. These actors can be created by the game either by its 16-bit actor name, or a 7-character long name that can
+be loaded by a stage.
+
+```cpp
+#include "mods/svc/actor.h"
+IMPORT_SERVICE(ActorService, svc_actor);
+
+class myActor_c : public fopAc_ac_c {};
+
+int myActor_Create(void* i_this) {
+    // Ran several times, until it returns cPhs_COMPLEATE_e to allow for async loading
+    return cPhs_COMPLEATE_e;
+}
+
+int myActor_Delete(void* i_this) {
+    // Free resources here
+    return 1;
+}
+
+int myActor_Execute(void* i_this) {
+    // Ran once per game tick
+    return 1;
+}
+
+int myActor_IsDelete(void* i_this) {
+    // Returns 1 when the actor can be deleted
+    return 1;
+}
+
+int myActor_Draw(void* i_this) {
+    // Code to draw the actor
+    return 1;
+}
+
+s16 actor_name; // The process name that can be used by the game to load the actor
+ActorHandle actor_handle;
+ActorProfileDesc profDesc = {
+    .name = "AUnique", // The name used by the stage loader to load the actor with.
+                       // It has a character limit of 7 and must be unique among active
+                       // mod actors. Matching a game actor name overrides stage lookup.
+    .priority_group = 7, // When, relative to other actors _Execute should run
+                         // See: mods/svc/actor.h
+    .process_size = sizeof(myActor_c),
+    .draw_priority = fpcDwPi_OBJ_LBOX_e, // Defines when the actor should be drawn relative
+                                         // to other actors (see f_pc_draw_priority.h)
+    .status = fopAcStts_CULL_e  | fopAcStts_UNK_0x4000_e | fopAcStts_UNK_0x40000_e,
+    .group = fopAc_ACTOR_e, // Can be fopAc_ACTOR_e, fopAc_PLAYER_e, fopAc_ENEMY_e, or fopAc_NPC_e
+    .cull_type = fopAc_CULLBOX_CUSTOM_e,
+    .create_function = myActor_Create,
+    .delete_function = myActor_Delete,
+    .execute_function = myActor_Execute,
+    .is_delete_function = myActor_IsDelete,
+    .draw_function = myActor_Draw,
+};
+svc_actor->register_actor(mod_ctx, &profDesc, &actor_name, &actor_handle);
+
+// Spawn the actor at the player's position
+fopAc_ac_c* plr = dComIfGp_getPlayer(0);
+if (plr) {
+    ActorSpawnParams spawnParams = {
+        .parameters = 0,
+        .argument = 0,
+        .room_num = fopAcM_GetRoomNo(plr),
+        .position = {plr->current.pos.x, plr->current.pos.y, plr->current.pos.z},
+        .angle = {plr->current.angle.x, plr->current.angle.y, plr->current.angle.z},
+        .scale = {1.0f, 1.0f, 1.0f}
+    };
+    ActorId created_actor_id;
+    svc_actor->create_actor(mod_ctx, actor_name, &spawnParams, &created_actor_id);
+}
+```
+
+See `mods/custom_actor_demo` for a more complete example.
+
 ---
 
 ## Hooking Game Functions
@@ -797,7 +1295,7 @@ svc_game_mode->register_game_mode(mod_ctx, &gameModeDesc);
 **Requires `add_mod(... FEATURES game)`**
 
 Mods may hook the vast majority of game functions, including file-local static, private and virtual functions.
-`mods/svc/hook.hpp` provides typed helpers over the hook service:
+[`mods/svc/hook.hpp`](../sdk/include/mods/svc/hook.hpp) provides typed helpers over the hook service:
 
 ```cpp
 #include "mods/svc/hook.hpp"

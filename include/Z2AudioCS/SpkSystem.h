@@ -28,7 +28,6 @@ public:
     inline SpkData* getData(void) const { return mData; }
     inline SpkMixingBuffer* getMixingBuffer(void) const { return mMixingBuffer; }
 
-private:
     /* 0x00 */ JKRHeap* mHeap;
     /* 0x04 */ SpkData* mData;
     /* 0x08 */ SpkMixingBuffer* mMixingBuffer;

@@ -185,8 +185,6 @@ AchievementsWindow::AchievementsWindow() {
                 *confirmingAll = false;
                 clearAllPtr->set_text("Clear All Achievements");
             });
-
-            pane.finalize();
         });
     }
 }

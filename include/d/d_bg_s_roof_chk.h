@@ -17,7 +17,6 @@ public:
     f32 GetNowY() { return mNowY; }
     cXyz* GetPosP() { return &m_pos; }
 
-private:
     /* 0x3C */ cXyz m_pos;
     /* 0x48 */ int field_0x48;
     /* 0x4C */ f32 mNowY;

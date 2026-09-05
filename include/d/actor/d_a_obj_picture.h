@@ -45,7 +45,6 @@ public:
 #endif
     static DUSK_GAME_DATA dCcD_SrcCyl s_CcDCyl_pic_at;
 
-private:
     /* 0x574 */ dCcD_Stts field_0x574;
     /* 0x5B0 */ dCcD_Stts field_0x5b0;
     /* 0x5EC */ dCcD_Stts field_0x5ec;

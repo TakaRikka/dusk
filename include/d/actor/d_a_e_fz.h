@@ -63,7 +63,6 @@ public:
     s32 CreateHeap();
     s32 create();
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhaseReq;   /**< Phase request used when creating the actor. */
     /* 0x5B4 */ J3DModel* mpModel;                          /**< Pointer to the Mini Freezard's model. */
     /* 0x5B8 */ mDoExt_invisibleModel mInvisibleModel;      /**< Invisible model used for the Mini Freezard. */

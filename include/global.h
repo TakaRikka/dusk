@@ -83,10 +83,14 @@ extern void __dcbf(void*, int);
 extern void __dcbz(void*, int);
 extern void __sync();
 extern int __abs(int);
+#if defined(_MSVC_LANG) && !defined(__clang__)
+#define __memcpy memcpy
+#else
 #if defined(__has_builtin) && __has_builtin(__builtin_memcpy)
 #define __memcpy __builtin_memcpy
 #else
 #define __memcpy memcpy
+#endif
 #endif
 #ifdef __cplusplus
 }
@@ -122,6 +126,14 @@ inline int __builtin_clz(unsigned int v) {
 #define DUSK_GAME_DATA
 #endif
 #define DUSK_GAME_EXTERN extern DUSK_GAME_DATA
+
+#if defined(_MSC_VER)
+#define DUSK_NOINLINE __declspec(noinline)
+#elif defined(__GNUC__)
+#define DUSK_NOINLINE __attribute__((noinline))
+#else
+#define DUSK_NOINLINE
+#endif
 
 #define FAST_DIV(x, n) (x >> (n / 2))
 

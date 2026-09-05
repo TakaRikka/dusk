@@ -31,7 +31,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     /* 0x5A0 */ bool mUseAlphaModel;
     /* 0x5A1 */ u8 field_0x5a1[0x5AC - 0x5A1];
     /* 0x5AC */ s16 mMode;

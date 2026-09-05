@@ -131,7 +131,6 @@ public:
     int CreateHeap();
     int create();
 
-private:
     /* 0x05AC */ request_of_phase_process_class mPhaseReq1;
     /* 0x05B4 */ request_of_phase_process_class mPhaseReq2;
     /* 0x05BC */ J3DModel* mpPartModels[16];

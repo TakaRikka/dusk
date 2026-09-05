@@ -1452,6 +1452,12 @@ void dMenu_save_c::memCardDataSaveWait() {
 
     mCmdState = g_mDoMemCd_control.SaveSync();
     if (mCmdState != 0) {
+#if TARGET_PC
+        if (mCmdState == 1) {
+                dusk::mods::svc::save_slot_written(
+                    mSelectedFile, mSaveBuffer + mSelectedFile * QUEST_LOG_SIZE);
+            }
+#endif
         printf("save cmdState %d\n", mCmdState);
         mMenuProc = PROC_MEMCARD_DATA_SAVE_WAIT2;
     }
@@ -1468,10 +1474,6 @@ void dMenu_save_c::memCardDataSaveWait2() {
         mDoAud_seStart(Z2SE_SY_FILE_SAVE_OK, NULL, 0, 0);
         dComIfGs_setDataNum(mSelectedFile);
         dComIfGs_setNoFile(0);
-
-#if TARGET_PC
-        dusk::mods::svc::save_slot_written(mSelectedFile, mSaveBuffer + mSelectedFile * QUEST_LOG_SIZE);
-#endif
 
         if (mUseType == TYPE_WHITE_EVENT || mUseType == TYPE_BLACK_EVENT) {
             headerTxtSet(0x530);  // Saved.
