@@ -396,6 +396,7 @@ template class ConfigImpl<MenuScaling>;
 template class ConfigImpl<Resampler>;
 template class ConfigImpl<MagicArmorMode>;
 template class ConfigImpl<ui::ControlLayout>;
+template class ConfigImpl<LedStatusMode>;
 
 void Register(ConfigVarBase& configVar) {
     const std::string_view name = configVar.getName();

@@ -318,27 +318,58 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
     addPageButton(Page::Actions, "Custom Action Bindings");
 
     leftPane.add_section("Options");
-    leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
-                                  .key = "Enable LED Status",
-                                  .getValue =
-                                      [port] {
-                                          return getSettings().game.enableLED[port].getValue();
-                                      },
-                                  .setValue =
-                                      [port](const bool value) {
-                                          getSettings().game.enableLED[port].setValue(value);
-                                      },
-                                  .isDisabled = [port] {
-                                      return !input::pad_has_led(port);
-                                  },
-                                  .valueOverride = [port] {
-                                      if (!input::pad_has_led(port))
-                                          return "Not Supported";
+    leftPane.register_control(
+        leftPane.add_select_button({
+            .key = "LED Status Mode",
+            .getValue =
+                [port] {
+                    if (getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::GAME_STATE) {
+                        return "Game's state";
+                    }
+                    else if (getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::PLAYER_HP) {
+                        return "Player's HP";
+                    } else {
+                        return "Off";
+                    }
+                },
+            .isDisabled = [port] {
+                return !input::pad_has_led(port);
+            },
+        }),
+        rightPane, [this, port](Pane& pane) {
+            pane.add_button({
+                .text = "Off",
+                .isSelected = [port] {
+                    return getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::OFF;
+                },
+            })
+            .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundClick);
+                getSettings().game.ledStatusMode[port].setValue(LedStatusMode::OFF);
+            });
 
-                                      return "";
-                                  }}),
-        rightPane, [](Pane& pane) {
-            pane.add_text("Sets the controller's lighting color based on the game's state.");
+            pane.add_button({
+                .text = "Game's state",
+                .isSelected = [port] {
+                    return getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::GAME_STATE;
+                },
+            })
+            .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundClick);
+                getSettings().game.ledStatusMode[port].setValue(LedStatusMode::GAME_STATE);
+            });
+
+            pane.add_button({
+                .text = "Player's HP",
+                .isSelected = [port] {
+                    return getSettings().game.ledStatusMode[port].getValue() == LedStatusMode::PLAYER_HP;
+                },
+            })
+            .on_pressed([this, port] {
+                mDoAud_seStartMenu(kSoundClick);
+                getSettings().game.ledStatusMode[port].setValue(LedStatusMode::PLAYER_HP);
+            });
+            pane.add_text("Sets the controller's lighting color based on the game's state (such as the current outfit) or the current player's HP.");
         });
     leftPane.register_control(leftPane.add_child<BoolButton>(BoolButton::Props{
                                   .key = "Enable Dead Zones",

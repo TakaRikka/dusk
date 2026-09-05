@@ -122,11 +122,11 @@ UserSettings g_userSettings = {
         .debugFlyCam {"game.debugFlyCam", false},
         .debugFlyCamLockEvents {"game.debugFlyCamLockEvents", true},
         .allowBackgroundInput {"game.allowBackgroundInput", true},
-        .enableLED {
-            ConfigVar<bool>{"game.enableLED_port0", true},
-            ConfigVar<bool>{"game.enableLED_port1", true},
-            ConfigVar<bool>{"game.enableLED_port2", true},
-            ConfigVar<bool>{"game.enableLED_port3", true},
+        .ledStatusMode {
+            ConfigVar<LedStatusMode>{"game.ledStatusMode_port0", LedStatusMode::GAME_STATE},
+            ConfigVar<LedStatusMode>{"game.ledStatusMode_port1", LedStatusMode::GAME_STATE},
+            ConfigVar<LedStatusMode>{"game.ledStatusMode_port2", LedStatusMode::GAME_STATE},
+            ConfigVar<LedStatusMode>{"game.ledStatusMode_port3", LedStatusMode::GAME_STATE},
         },
         .swapDirectSelect {"game.swapDirectSelect", false},
 
@@ -354,6 +354,7 @@ void registerSettings() {
     Register(g_userSettings.game.alwaysGreatspin);
     Register(g_userSettings.game.invincibleEnemies);
     Register(g_userSettings.game.enableFrameInterpolation);
+    // Input
     Register(g_userSettings.game.enableGyroAim);
     Register(g_userSettings.game.enableGyroRollgoal);
     Register(g_userSettings.game.gyroSensitivityX);
@@ -376,10 +377,10 @@ void registerSettings() {
     Register(g_userSettings.game.debugFlyCam);
     Register(g_userSettings.game.debugFlyCamLockEvents);
     Register(g_userSettings.game.allowBackgroundInput);
-    Register(g_userSettings.game.enableLED[0]);
-    Register(g_userSettings.game.enableLED[1]);
-    Register(g_userSettings.game.enableLED[2]);
-    Register(g_userSettings.game.enableLED[3]);
+    Register(g_userSettings.game.ledStatusMode[0]);
+    Register(g_userSettings.game.ledStatusMode[1]);
+    Register(g_userSettings.game.ledStatusMode[2]);
+    Register(g_userSettings.game.ledStatusMode[3]);
     Register(g_userSettings.game.swapDirectSelect);
 
     Register(g_userSettings.backend.isoPath);
