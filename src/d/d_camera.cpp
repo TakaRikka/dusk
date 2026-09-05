@@ -668,12 +668,27 @@ void dCamera_c::Stay() {
     mCurState = 1;
 }
 
+#if TARGET_PC
+int dCamera_c::resolveModeStyle(s32 i_type, s32 i_mode) {
+    int style = mCamTypeData[i_type].field_0x18[mIsWolf][i_mode];
+    if (style < 0 && dusk::getSettings().game.unrestrictedItems.getValue() &&
+        strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0) {
+        style = mCamTypeData[specialType[CAM_TYPE_FIELD_S]].field_0x18[mIsWolf][i_mode];
+    }
+    return style;
+}
+#endif
+
 bool dCamera_c::ChangeModeOK(s32 param_0) {
     if (dComIfGp_evmng_cameraPlay() || chkFlag(0x20000000)) {
         return 0;
     }
 
+#if TARGET_PC
+    return !(resolveModeStyle(mCurType, param_0) < 0);
+#else
     return !(mCamTypeData[mCurType].field_0x18[mIsWolf][param_0] < 0);
+#endif
 }
 
 void dCamera_c::initPad() {
@@ -866,7 +881,17 @@ void dCamera_c::updatePad() {
     }
     temp1 = sp68;
 
+#if TARGET_PC
+    bool subjectStyleValid = mCamTypeData[mCurType].field_0x18[temp1][4] >= 0;
+    if (!subjectStyleValid && dusk::getSettings().game.unrestrictedItems.getValue() &&
+        strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0) {
+        subjectStyleValid = mCamTypeData[specialType[CAM_TYPE_FIELD_S]].field_0x18[temp1][4] >= 0;
+    }
+
+    if (!subjectStyleValid) {
+#else
     if (mCamTypeData[mCurType].field_0x18[temp1][4] < 0) {
+#endif
         sp6B = false;
         if (mGear == -1) {
             mGear = 0;
@@ -1147,7 +1172,11 @@ bool dCamera_c::Run() {
 
     mNextMode = nextMode(mCurMode);
     if ((iVar8 != mIsWolf || mNextMode != mCurMode)
+#if TARGET_PC
+        && resolveModeStyle(mCurType, mNextMode) >= 0
+#else
         && mCamTypeData[mCurType].field_0x18[mIsWolf][mNextMode] >= 0
+#endif
         && onModeChange(mCurMode, mNextMode))
     {
         if (mCamSetup.CheckFlag(0x8000)) {
@@ -1162,7 +1191,11 @@ bool dCamera_c::Run() {
         mCurMode = 0;
     }
 
+#if TARGET_PC
+    int style = resolveModeStyle(mCurType, mCurMode);
+#else
     int style = mCamTypeData[mCurType].field_0x18[mIsWolf][mCurMode];
+#endif
     if (style >= 0 && mCamStyle != style && onStyleChange(mCamStyle, style)) {
         u32 id = mCamParam.Id(style);
         if (mCamSetup.CheckFlag(0x8000)) {
@@ -1826,7 +1859,11 @@ s32 dCamera_c::nextMode(s32 i_curMode) {
         }
     }
 
+#if TARGET_PC
+    if (resolveModeStyle(mCurType, next_mode) >= 0) {
+#else
     if (mCamTypeData[mCurType].field_0x18[mIsWolf][next_mode] >= 0) {
+#endif
         if (next_mode != 2) {
             mLockOnActorID = -1;
         }
