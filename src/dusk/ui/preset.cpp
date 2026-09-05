@@ -53,8 +53,6 @@ void applyPresetDusk() {
     s.game.enableGyroAim.setValue(true);
     s.game.autoSave.setValue(true);
     s.game.menuScalingMode.setValue(MenuScaling::Dusklight);
-    s.game.mapHeartPieceCount.setValue(true);
-    s.game.mapGoldBugCount.setValue(true);
     s.game.enhancedMapMenus.setValue(true);
     s.game.enableMenuPointer.setValue(true);
 }

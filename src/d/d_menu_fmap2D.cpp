@@ -2844,17 +2844,26 @@ void dMenu_Fmap2DTop_c::draw() {
     mpTitleScreen->draw(mTransX, mTransY, ctx);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.mapHeartPieceCount) {
+    if (dusk::getSettings().game.enhancedMapMenus) {
         int nowHeartPieceCount = 0;
         int totalHeartPieceCount = 0;
+        int nowGoldBugCount = 0;
+        int totalGoldBugCount = 0;
+        int nowPoeCount = 0;
+        int totalPoeCount = 0;
+
         dMenuMapCommon_c::getFmapHeartPieceCount(mSelectRegionNo, nowHeartPieceCount, totalHeartPieceCount);
+        dMenuMapCommon_c::getFmapPoeCount(mSelectRegionNo, nowPoeCount, totalPoeCount);
+        dMenuMapCommon_c::getFmapGoldBugCount(mSelectRegionNo, nowGoldBugCount, totalGoldBugCount);
+        
+        const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
+        
         if (totalHeartPieceCount > 0) {
-            const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
-            const f32 y = (dusk::getSettings().game.mapGoldBugCount && dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && 
-                dusk::getSettings().game.enhancedMapMenus && dComIfGs_isEventBit(dSv_event_flag_c::F_0456))
+            const f32 y = (dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0 &&
+                dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0)
                 ? 304.0f
-                : ((dusk::getSettings().game.mapGoldBugCount && dComIfGs_isEventBit(dSv_event_flag_c::F_0380)) ||
-                    (dusk::getSettings().game.enhancedMapMenus && dComIfGs_isEventBit(dSv_event_flag_c::F_0456)))
+                : ((dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0) ||
+                    (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0))
                     ? 342.0f
                     : 380.0f;
 
@@ -2874,15 +2883,9 @@ void dMenu_Fmap2DTop_c::draw() {
             mpHeartPieceCountPane->setGradColor(0xC8C8C8FF);
             mpHeartPieceCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
         }
-    }
-
-    if (dusk::getSettings().game.mapGoldBugCount) {
-        int nowGoldBugCount = 0;
-        int totalGoldBugCount = 0;
-        dMenuMapCommon_c::getFmapGoldBugCount(mSelectRegionNo, nowGoldBugCount, totalGoldBugCount);
+        
         if (dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0) {
-            const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
-            const f32 y = (dusk::getSettings().game.enhancedMapMenus && dComIfGs_isEventBit(dSv_event_flag_c::F_0456))
+            const f32 y = (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0)
                 ? 342.0f
                 : 380.0f;
 
@@ -2902,14 +2905,8 @@ void dMenu_Fmap2DTop_c::draw() {
             mpGoldBugCountPane->setGradColor(0xC8C8C8FF);
             mpGoldBugCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
         }
-    }
-    
-    if (dusk::getSettings().game.enhancedMapMenus) {
-        int nowPoeCount = 0;
-        int totalPoeCount = 0;
-        dMenuMapCommon_c::getFmapPoeCount(mSelectRegionNo, nowPoeCount, totalPoeCount);
+        
         if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
-            const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
             const f32 y = 380.0f;
             constexpr f32 iconsize = 48.0f * 0.8f;
 

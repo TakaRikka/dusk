@@ -1152,7 +1152,7 @@ void dMenu_DmapBg_c::draw() {
     mButtonScreen->draw(field_0xd94, field_0xd98, grafContext);
 
 #if TARGET_PC
-    if (dusk::getSettings().game.mapHeartPieceCount) {
+    if (dusk::getSettings().game.enhancedMapMenus) {
         int nowHeartPieceCount = 0;
         int totalHeartPieceCount = 0;
         dMenuMapCommon_c::getDmapHeartPieceCount(dComIfGp_getStartStageName(), nowHeartPieceCount, totalHeartPieceCount);
@@ -1176,17 +1176,12 @@ void dMenu_DmapBg_c::draw() {
             mpHeartPieceCountPane->setGradColor(0xC8C8C8FF);
             mpHeartPieceCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
         }
-    }
-    
-    if (dusk::getSettings().game.enhancedMapMenus) {
+
         int nowPoeCount = 0;
         int totalPoeCount = 0;
         dMenuMapCommon_c::getDmapPoeCount(dComIfGp_getStartStageName(), nowPoeCount, totalPoeCount);
         if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
-            const f32 x = (dusk::getSettings().game.mapHeartPieceCount)
-                ? field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f) + 70.0f
-                : field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f);
-
+            const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f) + 70.0f;
             const f32 y = 410.0f;
             constexpr f32 iconsize = 48.0f * 0.8f;
 
