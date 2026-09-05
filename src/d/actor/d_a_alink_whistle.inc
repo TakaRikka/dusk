@@ -205,7 +205,8 @@ int daAlink_c::procGrassWhistleWait() {
                 resetSpecialEvent();
             } else {
                 int temp_r4;
-                if ((mProcVar2.field_0x300c == 1 || mProcVar2.field_0x300c == 3) && horse_p != NULL) {
+                if ((mProcVar2.field_0x300c == 1 || mProcVar2.field_0x300c == 3) && horse_p != NULL
+            IF_DUSK(&& checkNoResetFlg0(FLG0_SWIM_UP))) {
                     temp_r4 = horse_p->callHorse(&current.pos);
                 } else {
                     temp_r4 = 0;
