@@ -342,6 +342,11 @@ int J3DShapePacket::newDifferedDisplayList(u32 diffFlags) {
 void J3DShapePacket::prepareDraw() const {
     mpModel->getVertexBuffer()->setArray();
     j3dSys.setModel(mpModel);
+#if TARGET_PC
+    if (mpModel->getMtxCalcMode() == 2) {
+        mpModel->prepare_presentation_view();
+    }
+#endif
     j3dSys.setShapePacket((J3DShapePacket*)this);
 
     J3DShapeMtx::setLODFlag(mpModel->checkFlag(J3DMdlFlag_EnableLOD) != 0);

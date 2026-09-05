@@ -59,7 +59,7 @@ public:
     int Draw();
     int Delete();
 #if TARGET_PC
-    friend void daL8Lift_interp_callback(bool isSimFrame, void* pUserWork);
+    friend void daL8Lift_interp_callback(void* pUserWork);
 #endif
 
     u8 getPthID() { return fopAcM_GetParamBit(this, 0, 8); }

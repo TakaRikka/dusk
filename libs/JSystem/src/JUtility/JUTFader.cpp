@@ -9,8 +9,9 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 
 #ifdef TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+
 #include <algorithm>
-#include "dusk/frame_interpolation.h"
 #endif
 
 JUTFader::JUTFader(int x, int y, int width, int height, JUtility::TColor pColor)
@@ -74,8 +75,8 @@ void JUTFader::control() {
 void JUTFader::draw() {
     if (mColor.a != 0) {
 #ifdef TARGET_PC
-        if (dusk::frame_interp::is_enabled() && mDuration != 0) {
-            const auto step = dusk::frame_interp::get_interpolation_step();
+        if (dusk::interp::is_enabled() && mDuration != 0) {
+            const auto step = dusk::interp::get_interpolation_step();
             const auto progress = static_cast<f32>(mTimer) / static_cast<f32>(mDuration);
             const auto timer = mTimer - 1 + step + progress;
             auto alpha = timer / mDuration;

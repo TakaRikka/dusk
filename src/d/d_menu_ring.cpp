@@ -30,8 +30,8 @@
 #include <cstdio>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
 #include "dusk/game_clock.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
 #include "dusk/ui/touch_controls.hpp"
@@ -760,13 +760,13 @@ void dMenu_Ring_c::_draw() {
         f32 simX = 0.0f;
         f32 simY = 0.0f;
         bool restoreSimPos = false;
-        if (dusk::frame_interp::is_enabled() && mAlphaRate >= 1.0f) {
+        if (dusk::interp::is_enabled() && mAlphaRate >= 1.0f) {
             simX = mpDrawCursor->getPositionX();
             simY = mpDrawCursor->getPositionY();
 
             const bool isAngular = (mStatus == STATUS_MOVE) && !mDirectSelectActive;
 
-            if (dusk::frame_interp::get_ui_tick_pending()) {
+            if (dusk::interp::get_ui_tick_pending()) {
                 mCursorInterpPrevX = mCursorInterpCurrX;
                 mCursorInterpPrevY = mCursorInterpCurrY;
                 mCursorInterpPrevAngle = mCursorInterpCurrAngle;
@@ -790,7 +790,7 @@ void dMenu_Ring_c::_draw() {
                 }
             }
             if (mCursorInterpInit) {
-                const f32 step = dusk::frame_interp::get_interpolation_step();
+                const f32 step = dusk::interp::get_interpolation_step();
                 if (mCursorInterpPrevAngular && mCursorInterpCurrAngular) {
                     const s16 delta = mCursorInterpCurrAngle - mCursorInterpPrevAngle;
                     const s16 lerpedAngle = mCursorInterpPrevAngle + (s16)(delta * step);

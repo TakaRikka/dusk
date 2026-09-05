@@ -15,7 +15,7 @@
 #include "global.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 
 #include <tracy/Tracy.hpp>
 
@@ -839,7 +839,7 @@ bool JPAResource::calc(JPAEmitterWorkData* work, JPABaseEmitter* emtr) {
 
 #ifdef TARGET_PC
         if (((pBsp && pBsp->getDirType() == 3) || (pCsp && pCsp->getDirType() == 3)) &&
-            dusk::frame_interp::is_enabled())
+            dusk::interp::is_enabled())
         {
             // ensure mGlobalEmtrDir is valid
             calcWorkData_d(work);

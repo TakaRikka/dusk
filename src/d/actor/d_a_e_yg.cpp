@@ -10,9 +10,11 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "d/actor/d_a_obj_carry.h"
 #include "Z2AudioLib/Z2Instances.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/settings.h"
 #include "f_op/f_op_actor_enemy.h"
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 enum E_yg_RES_File_ID {
     /* BCK */
@@ -137,13 +139,13 @@ static BOOL pl_check(e_yg_class* i_this, f32 i_dist) {
 }
 
 #if TARGET_PC
-static void daE_YG_interp_callback(bool isSimFrame, void* pUserWork) {
+static void daE_YG_interp_callback(void* pUserWork) {
     e_yg_class* i_this = (e_yg_class*)pUserWork;
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     if (!i_this->mTentacleInterpPrevValid || !i_this->mTentacleInterpCurrValid) {
         return;
     }
-    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const f32 alpha = dusk::interp::get_interpolation_step();
     for (int s = 0; s < e_yg_class::TENTACLE_STRAND_COUNT; s++) {
         cXyz* dst = i_this->mLineMat.getPos(s);
         for (int i = 0; i < e_yg_class::TENTACLE_SEGMENT_COUNT; i++) {
@@ -191,7 +193,7 @@ static int daE_YG_Draw(e_yg_class* i_this) {
     dComIfGd_set3DlineMatDark(&i_this->mLineMat);
 
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled()) {
+    if (dusk::interp::is_enabled()) {
         if (i_this->mTentacleInterpCurrValid) {
             memcpy(i_this->mTentacleInterpPrev, i_this->mTentacleInterpCurr, sizeof(i_this->mTentacleInterpCurr));
             i_this->mTentacleInterpPrevValid = true;
@@ -202,7 +204,7 @@ static int daE_YG_Draw(e_yg_class* i_this) {
                    e_yg_class::TENTACLE_SEGMENT_COUNT * sizeof(cXyz));
         }
         i_this->mTentacleInterpCurrValid = true;
-        dusk::frame_interp::add_interpolation_callback(&daE_YG_interp_callback, i_this);
+        dusk::interp::add_interpolation_callback(&daE_YG_interp_callback, i_this);
     }
 #endif
 

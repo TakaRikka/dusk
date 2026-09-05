@@ -24,7 +24,7 @@
 #include "d/actor/d_a_midna.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/memory.h"
 #include "dusk/version.hpp"
 #include "helpers/string.hpp"
@@ -1152,7 +1152,7 @@ void dMenu_Fmap_c::zoom_spot_to_region_init() {
     field_0x1ec = 1.0f;
 #if TARGET_PC
     // Frame interp note: field_0x122d used to be set every draw, causing flickering. Do it here instead.
-    if (dusk::frame_interp::is_enabled()) {
+    if (dusk::interp::is_enabled()) {
         mpDraw2DBack->resetScrollArrowMask();
     }
 #endif

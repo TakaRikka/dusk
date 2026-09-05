@@ -20,7 +20,7 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/ui/touch_controls.hpp"
 #include "dusk/version.hpp"
 
@@ -358,13 +358,10 @@ void dMenu_Fmap2DBack_c::draw() {
         scrollAreaDraw();
     }
 
-#ifdef TARGET_PC
-    if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-    {
-        blinkMove(30);
-        moveLightDropAnime();
-    }
+    IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+    blinkMove(30);
+    moveLightDropAnime();
+    IF_DUSK_BLOCK_END
     setCenterPosX(field_0x11dc, 1);
     drawIcon(mTransX, mTransZ, mAlphaRate, field_0xfa8 * mSpotTextureFadeAlpha);
 
@@ -399,16 +396,13 @@ void dMenu_Fmap2DBack_c::draw() {
                         (mArrowPos3DZ + control_ypos + fVar3) - fVar5, &mArrowPos2DX,
                         &mArrowPos2DY);
 
-#ifdef TARGET_PC
-        if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-        {
-            field_0x11e0 -= g_fmapHIO.mCursorSpeed;
+        IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+        field_0x11e0 -= g_fmapHIO.mCursorSpeed;
 
-            if (field_0x11e0 < 0.0f) {
-                field_0x11e0 += 360.0f;
-            }
+        if (field_0x11e0 < 0.0f) {
+            field_0x11e0 += 360.0f;
         }
+        IF_DUSK_BLOCK_END
 
         mpPointParent->getPanePtr()->rotate(mpPointParent->getSizeX() / 2.0f,
                                             mpPointParent->getSizeY() / 2.0f, ROTATE_Z,
@@ -448,7 +442,7 @@ void dMenu_Fmap2DBack_c::draw() {
     if (field_0x122d) {
         mpMeterHaihai->drawHaihai(field_0x122d);
 #if TARGET_PC
-        if (!dusk::frame_interp::is_enabled()) {
+        if (!dusk::interp::is_enabled()) {
             field_0x122d = 0;
         }
 #else
@@ -1868,20 +1862,17 @@ void dMenu_Fmap2DBack_c::calcBlink() {
                                  t * (g_fmapHIO.mMapBlink[i + 1].mUnselectedRegion.mBlinkSpeed -
                                       g_fmapHIO.mMapBlink[i].mUnselectedRegion.mBlinkSpeed);
 
-#if TARGET_PC
-    if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-    {
-        field_0x1218++;
-        if (field_0x1218 >= selected_blink_speed) {
-            field_0x1218 = 0;
-        }
-
-        field_0x121a++;
-        if (field_0x121a >= unselected_blink_speed) {
-            field_0x121a = 0;
-        }
+    IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+    field_0x1218++;
+    if (field_0x1218 >= selected_blink_speed) {
+        field_0x1218 = 0;
     }
+
+    field_0x121a++;
+    if (field_0x121a >= unselected_blink_speed) {
+        field_0x121a = 0;
+    }
+    IF_DUSK_BLOCK_END
 
     f32 t_selected = 0.0f;
     f32 t_unselected = 0.0f;

@@ -6,7 +6,6 @@
 #include "dusk/action_bindings.h"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
-#include "dusk/frame_interpolation.h"
 #include "dusk/game_mode.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/main.h"

@@ -13,7 +13,7 @@
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 
 using GameVersion = dusk::version::GameVersion;
 
@@ -608,11 +608,12 @@ dGrass_packet_c::dGrass_packet_c() {
 
 #if TARGET_PC
 static MtxP get_model_mtx(Mtx modelMtx, Mtx storage) {
-    if (dusk::frame_interp::lookup_replacement(modelMtx, storage)) {
+    if (dusk::interp::lookup_replacement(modelMtx, storage)) {
         cMtx_concat(j3dSys.getViewMtx(), storage, storage);
-        return storage;
+    } else {
+        cMtx_concat(j3dSys.getViewMtx(), modelMtx, storage);
     }
-    return modelMtx;
+    return storage;
 }
 
 static void transform_positions(
@@ -1193,16 +1194,12 @@ void dGrass_packet_c::draw() {
                 GXSetChanAmbColor(GX_COLOR0A0, sp38);
 
                 if (!cLib_checkBit<u8>(var_r29->field_0x01, 2)) {
-#ifdef TARGET_PC
-                    Mtx grass_mtx;
-                    if (dusk::frame_interp::lookup_replacement(reinterpret_cast<const void*>(&var_r29->m_modelMtx), grass_mtx)) {
-                        cMtx_concat(j3dSys.getViewMtx(), grass_mtx, grass_mtx);
-                        GXLoadPosMtxImm(grass_mtx, 0);
-                    } else
+#if TARGET_PC
+                    Mtx grassMtx;
+                    GXLoadPosMtxImm(get_model_mtx(var_r29->m_modelMtx, grassMtx), 0);
+#else
+                    GXLoadPosMtxImm(var_r29->m_modelMtx, 0);
 #endif
-                    {
-                        GXLoadPosMtxImm(var_r29->m_modelMtx, 0);
-                    }
                     GXLoadNrmMtxImm(j3dSys.getViewMtx(), 0);
                     if (var_r29->field_0x05 <= 3 || var_r29->field_0x05 >= 10) {
                         if (var_r29->field_0x02 < -1) {
@@ -1445,7 +1442,11 @@ void dGrass_packet_c::update() {
                         }
                     }
 
+#if TARGET_PC
+                    cMtx_copy(mDoMtx_stack_c::get(), data_p->m_modelMtx);
+#else
                     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), data_p->m_modelMtx);
+#endif
                 } else {
                     mDoMtx_stack_c::transS(data_p->m_pos.x, data_p->m_pos.y, data_p->m_pos.z);
                     mDoMtx_stack_c::YrotM(i * 3535);
@@ -1456,11 +1457,13 @@ void dGrass_packet_c::update() {
 
                     f32 scale = ((((s16)data_p->m_pos.x * 3535) & 0xFFF) / 4096.0f) * 0.3f + 0.7f;
                     mDoMtx_stack_c::scaleM(scale, scale, scale);
+#if TARGET_PC
+                    cMtx_copy(mDoMtx_stack_c::get(), data_p->m_modelMtx);
+#else
                     cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), data_p->m_modelMtx);
-                }
-#ifdef TARGET_PC
-                dusk::frame_interp::record_final_mtx(mDoMtx_stack_c::get(), data_p->m_modelMtx);
 #endif
+                }
+                IF_DUSK(dusk::interp::record_final_mtx(mDoMtx_stack_c::get(), data_p->m_modelMtx));
             }
         }
         data_p++;

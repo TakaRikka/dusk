@@ -21,8 +21,7 @@
 #include "m_Do/m_Do_graphic.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
-#include "dusk/settings.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 // POSIX already defines a macro with this name, but we know that this specific name is
@@ -596,15 +595,12 @@ void dMsgScrnHowl_c::drawWave() {
                 f17 = local_60;
                 f18 = local_64;
             } else {
-#if TARGET_PC
-                if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-                {
-                    field_0x2134++;
-                    if (field_0x2134 > 30) {
-                        field_0x2134 = 0;
-                    }
+                IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+                field_0x2134++;
+                if (field_0x2134 > 30) {
+                    field_0x2134 = 0;
                 }
+                IF_DUSK_BLOCK_END
                 if (field_0x2134 < 15) {
                     local_dc = field_0x2134 / 15.0f;
                 } else {

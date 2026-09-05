@@ -21,8 +21,7 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/dusk.h"
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 
 namespace {
 // FRAME INTERP NOTE: Sim tick control point snapshots for interpolation
@@ -3035,7 +3034,7 @@ void daHorse_c::copyReinPos() {
     }
 #if TARGET_PC
     if (field_0x1204 > 0) {
-        const uint64_t simSeq = dusk::frame_interp::sim_tick_seq();
+        const uint64_t simSeq = dusk::interp::sim_tick_seq();
         if (simSeq != s_horseReinSimRolledSeq) {
             s_horseReinSimRolledSeq = simSeq;
             if (s_horseReinSimCurrValid && s_horseReinSimNumCurr > 0) {
@@ -3165,7 +3164,7 @@ void daHorse_c::setReinPosNormalSubstance() {
 #if TARGET_PC
 void daHorse_c::lerpControlPoints(f32 alpha) {
     // FRAME INTERP NOTE: Currently only lerping points for Epona's reins. Need a more global solution.
-    if (!dusk::frame_interp::is_enabled() || !s_horseReinSimPrevValid || !s_horseReinSimCurrValid) {
+    if (!dusk::interp::is_enabled() || !s_horseReinSimPrevValid || !s_horseReinSimCurrValid) {
         return;
     }
     const int nCurr = s_horseReinSimNumCurr;

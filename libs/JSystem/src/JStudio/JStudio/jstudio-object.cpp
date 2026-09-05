@@ -4,7 +4,7 @@
 
 #if TARGET_PC
 #include "dusk/audio.h"
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/settings.h"
 #endif
 
@@ -655,10 +655,10 @@ value_or_fun:
 
 value:
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled() && u <= 5 &&
+    if (dusk::interp::is_enabled() && u <= 5 &&
         (operation == data::UNK_0x2 || operation == data::UNK_0x3 || operation == data::UNK_0x12))
     {
-        dusk::frame_interp::request_presentation_sync();
+        dusk::interp::request_presentation_sync();
     }
 #endif
     adaptor->adaptor_setVariableValue(control, u, operation, param_2, param_3);
@@ -666,11 +666,11 @@ value:
 
 value_n:
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled() &&
+    if (dusk::interp::is_enabled() &&
         (pN == TAdaptor_camera::sauVariableValue_3_POSITION_XYZ || pN == TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ) &&
         (operation == data::UNK_0x2 || operation == data::UNK_0x3 || operation == data::UNK_0x12))
     {
-        dusk::frame_interp::request_presentation_sync();
+        dusk::interp::request_presentation_sync();
     }
 #endif
     adaptor->adaptor_setVariableValue_n(control, pN, u, operation, param_2, param_3);

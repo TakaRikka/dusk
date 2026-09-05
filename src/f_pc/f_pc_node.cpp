@@ -8,7 +8,7 @@
 #include "f_pc/f_pc_debug_sv.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/game_clock.h"
 
 #include "f_op/f_op_draw_iter.h"
 #include "f_pc/f_pc_manager.h"
@@ -26,7 +26,7 @@ int fpcNd_Draw(process_node_class* i_procNode) {
         layer_class* save_layer = fpcLy_CurrentLayer();
         fpcLy_SetCurrentLayer(&var_r28->layer);
 #if TARGET_PC
-        if (!i_procNode->draw_interp_frame && !dusk::frame_interp::is_sim_frame()) {
+        if (!i_procNode->draw_interp_frame && !dusk::game_clock::is_sim_frame()) {
             for (create_tag_class* i = fopDwIt_Begin(); i != NULL; i = fopDwIt_Next(i)) {
                 void* process = i->mpTagData;
                 fpcM_Draw(process);

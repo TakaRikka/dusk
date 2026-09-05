@@ -11,7 +11,7 @@
 #include "f_op/f_op_actor_enemy.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 class daE_DB_HIO_c : public JORReflexible {
@@ -71,12 +71,12 @@ static BOOL leaf_anm_init(e_db_class* i_this, int i_anm, f32 i_morf, u8 i_mode, 
 }
 
 #if TARGET_PC
-static void daE_DB_interp_callback(bool isSimFrame, void* pUserWork) {
+static void daE_DB_interp_callback(void* pUserWork) {
     e_db_class* i_this = (e_db_class*)pUserWork;
     if (!i_this->mStalkLineInterpPrevValid || !i_this->mStalkLineInterpCurrValid) {
         return;
     }
-    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const f32 alpha = dusk::interp::get_interpolation_step();
     cXyz* dst = i_this->stalkLine.getPos(0);
     for (int i = 0; i < 12; i++) {
         const cXyz& p0 = i_this->mStalkLineInterpPrev[i];
@@ -116,14 +116,14 @@ static int daE_DB_Draw(e_db_class* i_this) {
     i_this->stalkLine.update(12, l_color, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->stalkLine);
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled()) {
+    if (dusk::interp::is_enabled()) {
         if (i_this->mStalkLineInterpCurrValid) {
             memcpy(i_this->mStalkLineInterpPrev, i_this->mStalkLineInterpCurr, sizeof(i_this->mStalkLineInterpCurr));
             i_this->mStalkLineInterpPrevValid = true;
         }
         memcpy(i_this->mStalkLineInterpCurr, i_this->stalkLine.getPos(0), 12 * sizeof(cXyz));
         i_this->mStalkLineInterpCurrValid = true;
-        dusk::frame_interp::add_interpolation_callback(&daE_DB_interp_callback, i_this);
+        dusk::interp::add_interpolation_callback(&daE_DB_interp_callback, i_this);
     }
 #endif
 

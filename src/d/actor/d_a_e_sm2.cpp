@@ -15,7 +15,7 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 class daE_SM2_HIO_c : public fOpAcm_HIO_entry_c {
@@ -81,7 +81,7 @@ static int nodeCallBack(J3DJoint* i_joint, int param_1) {
 }
 
 #if TARGET_PC
-static void daE_SM2_interp_callback(bool isSimFrame, void* pUserWork) {
+static void daE_SM2_interp_callback(void* pUserWork) {
     e_sm2_class* i_this = static_cast<e_sm2_class*>(pUserWork);
     if (i_this == NULL) {
         return;
@@ -133,7 +133,7 @@ static int daE_SM2_Draw(e_sm2_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->enemy;
 
 #if TARGET_PC
-    dusk::frame_interp::add_interpolation_callback(&daE_SM2_interp_callback, i_this);
+    dusk::interp::add_interpolation_callback(&daE_SM2_interp_callback, i_this);
 #endif
 
     g_env_light.settingTevStruct(0, &actor->current.pos, &actor->tevStr);

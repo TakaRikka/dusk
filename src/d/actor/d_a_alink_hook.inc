@@ -10,7 +10,7 @@
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/settings.h"
 
 static const int HS_CHAIN_MAX_LINKS = 600;
@@ -137,8 +137,8 @@ void daAlink_c::hsChainShape_c::draw() {
     } else {
 #if TARGET_PC
         cXyz hsInterpTop, hsInterpRoot, hsInterpSubRoot, hsInterpSubTop;
-        if (dusk::frame_interp::is_enabled() && alink->mHsChainInterpPrevValid && alink->mHsChainInterpCurrValid) {
-            const f32 alpha = dusk::frame_interp::get_interpolation_step();
+        if (dusk::interp::is_enabled() && alink->mHsChainInterpPrevValid && alink->mHsChainInterpCurrValid) {
+            const f32 alpha = dusk::interp::get_interpolation_step();
             hsInterpTop    = alink->mHsChainInterpPrevTop    + (alink->mHsChainInterpCurrTop    - alink->mHsChainInterpPrevTop)    * alpha;
             hsInterpRoot   = alink->mHsChainInterpPrevRoot   + (alink->mHsChainInterpCurrRoot   - alink->mHsChainInterpPrevRoot)   * alpha;
             hsInterpSubRoot = alink->mHsChainInterpPrevSubRoot + (alink->mHsChainInterpCurrSubRoot - alink->mHsChainInterpPrevSubRoot) * alpha;
@@ -244,7 +244,7 @@ void daAlink_c::hsChainShape_c::draw() {
 }
 
 #if TARGET_PC
-static void ironBallChainInterpCallback(bool isSimFrame, void* pUserWork) {
+static void ironBallChainInterpCallback(void* pUserWork) {
     static_cast<daAlink_c*>(pUserWork)->onIronBallChainInterpCallback();
 }
 
@@ -256,7 +256,7 @@ void daAlink_c::onIronBallChainInterpCallback() {
         return;
     }
 
-    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const f32 alpha = dusk::interp::get_interpolation_step();
 
     for (int i = 0; i < IRON_BALL_CHAIN_COUNT; i++) {
         mIronBallChainPos[i] = mIBChainInterpPrevPos[i] + (mIBChainInterpCurrPos[i] - mIBChainInterpPrevPos[i]) * alpha;

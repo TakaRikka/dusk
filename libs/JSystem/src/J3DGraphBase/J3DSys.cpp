@@ -7,7 +7,7 @@
 #include "global.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "helpers/gx_helper.h"
 
 #include <tracy/Tracy.hpp>
@@ -379,7 +379,7 @@ void J3DSys::reinitPixelProc() {
 #if TARGET_PC
 void J3DSys::setViewMtx(const Mtx m) {
     Mtx patched;
-    if (dusk::frame_interp::lookup_replacement(m, patched)) {
+    if (dusk::interp::lookup_replacement(m, patched)) {
         m = patched;
     }
     MTXCopy(m, mViewMtx);
