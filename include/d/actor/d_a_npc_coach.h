@@ -297,7 +297,6 @@ public:
 
     static DUSK_GAME_DATA daNpcCoach_Attr_c const M_attr;
     static u16 const ParticleName[10];
-private:
     /* 0x0568 */ daNpcChHorse_c mChHorse;
     /* 0x0E7C */ daNpcChHarness_c mChHarness;
     /* 0x15D0 */ daNpcChCoach_c mChCoach;

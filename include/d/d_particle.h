@@ -261,7 +261,6 @@ public:
     void setRate(f32 rate) { mRate = rate; }
     void setMaxCnt(int i_maxCnt) { mMaxCnt = i_maxCnt; }
 
-private:
     /* 0x04 */ f32 mRate;
     /* 0x08 */ int mMaxCnt;
     /* 0x0C */ cXyz const* field_0xc;
@@ -313,7 +312,6 @@ public:
             u16 getNameId() { return mNameId; }
             dPa_levelEcallBack* getCallback() { return mCallback; }
 
-        private:
             /* 0x00 */ u32 mId;
             /* 0x04 */ u16 mNameId;
             /* 0x06 */ u8 mStatus;
@@ -510,7 +508,6 @@ public:
     static DUSK_GAME_DATA dPa_particleTracePcallBack_c mParticleTracePCB;
     static DUSK_GAME_DATA u8 mStatus;
 
-private:
     /* 0x000 */ JKRSolidHeap* mHeap;
     /* 0x004 */ JPAResourceManager* mCommonResMng;
     /* 0x008 */ JKRExpHeap* m_resHeap;

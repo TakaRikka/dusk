@@ -594,7 +594,6 @@ public:
     dSv_player_info_c& getPlayerInfo() { return mPlayerInfo; }
     dSv_player_config_c& getConfig() { return mConfig; }
 
-private:
     /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
     /* 0x028 */ dSv_player_status_b_c mPlayerStatusB;
     /* 0x040 */ dSv_horse_place_c mHorsePlace;
@@ -892,7 +891,6 @@ public:
 
 class dSv_reserve_c {
 public:
-private:
     u8 unk[80];
 };
 

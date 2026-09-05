@@ -1,8 +1,6 @@
-#include <algorithm>
 #include <array>
 #include <aurora/aurora.h>
 #include <chrono>
-#include <numeric>
 #include <string_view>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -13,10 +11,8 @@
 #include "ImGuiEngine.hpp"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "dusk/action_bindings.h"
-#include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
-#include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/game_mode.hpp"
 #include "dusk/livesplit.h"
@@ -27,8 +23,6 @@
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
 #include "fmt/format.h"
-#include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_main.h"
 #include "tracy/Tracy.hpp"
 
 #if _WIN32
@@ -264,13 +258,6 @@ namespace dusk {
         }
         previousTurboActive = turboActive;
         previousSlowActive = slowDown;
-
-        if (frame_interp::get_ui_tick_pending() && mDoMain::developmentMode == 1 && (mDoCPd_c::getHold(PAD_1) & (PAD_TRIGGER_R | PAD_TRIGGER_L)) == (PAD_TRIGGER_R | PAD_TRIGGER_L) && mDoCPd_c::getTrigY(PAD_1)) {
-            getTransientSettings().moveLinkActive = !getTransientSettings().moveLinkActive;
-        }
-        if (mDoMain::developmentMode != 1) {
-            getTransientSettings().moveLinkActive = false;
-        }
     }
 
     void ImGuiConsole::PreDraw() {

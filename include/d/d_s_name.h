@@ -56,7 +56,6 @@ public:
     void tex_data_set();
     #endif
 
-private:
     #if VERSION == VERSION_GCN_PAL
     u8 field_0x1c4_pal[0x28];
     #endif

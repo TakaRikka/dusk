@@ -49,7 +49,6 @@ public:
     void onForceSelect() { mForceSelect = 1; }
     void setKeyWaitTimer(s16 timer) { mKeyWaitTimer = timer; }
 
-private:
     /* 0x04 */ dMsgString_c* mpString_c;
     /* 0x08 */ CPaneMgr* mpTm_c[2];
     /* 0x10 */ CPaneMgr* mpTmr_c[2];

@@ -129,7 +129,6 @@ void LogsWindow::build_content(Rml::Element* content) {
     mScrollElem = pane.root();
     mLinesElem = append(pane.root(), "div");
     mLinesElem->SetClass("log-lines", true);
-    pane.finalize();
 
     listen(mScrollElem, Rml::EventId::Scroll, [this](Rml::Event&) {
         const float bottom = mScrollElem->GetScrollHeight() - mScrollElem->GetClientHeight();

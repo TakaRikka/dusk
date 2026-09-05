@@ -123,7 +123,6 @@ public:
 
     static DUSK_GAME_DATA EventFn mEvtSeqList[4];
 
-private:
     /* 0xB48 */ Z2Creature mCreatureSound;
     /* 0xBD8 */ daNpcF_MatAnm_c* mpMatAnm;
     /* 0xBDC */ daNpcF_Lookat_c mLookat;

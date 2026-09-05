@@ -28,6 +28,7 @@
 #include "dusk/mods/svc/stage.hpp"
 #include <format>
 #include <fmt/ranges.h>
+#include "dusk/mods/svc/actor.hpp"
 #endif
 
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe,
@@ -1524,6 +1525,14 @@ static void dummy0() {
 }
 
 dStage_objectNameInf* dStage_searchName(char const* objName) {
+#if TARGET_PC
+    dStage_objectNameInf* info =
+        dusk::mods::svc::actor_impl::get_stageinfo_from_full_name(objName);
+    if (info != nullptr) {
+        return info;
+    }
+#endif
+
     dStage_objectNameInf* obj = l_objectName;
 
     for (u32 i = 0; i < ARRAY_SIZEU(l_objectName); i++) {
@@ -1537,8 +1546,38 @@ dStage_objectNameInf* dStage_searchName(char const* objName) {
     return NULL;
 }
 
+#if TARGET_PC
+dStage_objectNameInf* dStage_searchNameCI(char const* objName) {
+    dStage_objectNameInf* obj = l_objectName;
+
+    for (u32 i = 0; i < ARRAY_SIZEU(l_objectName); i++) {
+        const char* a = obj->name;
+        const char* b = objName;
+        while (*a && *b && tolower((unsigned char)*a) == tolower((unsigned char)*b)) {
+            ++a;
+            ++b;
+        }
+        if (*a == '\0' && *b == '\0') {
+            return obj;
+        }
+        obj++;
+    }
+
+    return NULL;
+}
+#endif
+
 const char* dStage_getName(s16 procName, s8 argument) {
     static char tmp_name[dStage_NAME_LENGTH];
+
+#if TARGET_PC
+    const char* name = dusk::mods::svc::actor_impl::get_full_name_from_proc_name(procName);
+    if (name[0] != '\0') {
+        strncpy(tmp_name, name, sizeof(tmp_name) - 1);
+        tmp_name[sizeof(tmp_name) - 1] = '\0';
+        return tmp_name;
+    }
+#endif
 
     dStage_objectNameInf* obj = l_objectName;
     char* tmp = NULL;
@@ -1593,17 +1632,15 @@ DUSK_GAME_DATA dStage_roomControl_c::roomDzs_c dStage_roomControl_c::m_roomDzs;
 u8 dStage_roomControl_c::mNoArcBank;
 #endif
 
+static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm
+                                IF_DUSK_ARG(size_t recordSize = sizeof(stage_actor_data_class))) {
 #if TARGET_PC
-static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm,
-                               size_t recordSize = sizeof(stage_actor_data_class)) {
     if (!dusk::mods::svc::stage_apply_actor_edits(i_actorData, i_actorPrm, recordSize,
             i_actorPrm->room_no))
     {
         JKRFree(i_actorPrm);
         return;
     }
-#else
-static void dStage_actorCreate(stage_actor_data_class* i_actorData, fopAcM_prm_class* i_actorPrm) {
 #endif
     dStage_objectNameInf* actorInf = dStage_searchName(i_actorData->name);
 
@@ -1666,6 +1703,8 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
     fopAcM_prm_class* appen = fopAcM_CreateAppend();
     JUT_ASSERT(1586, appen != NULL);
 
+    IF_DUSK(stage_actor_data_class newPoint{};) // data stored on the stack for any newly registered spawn points
+
     int point = dComIfGp_getStartStagePoint();
     u32 roomParam = dComIfGs_getRestartRoomParam();
     if (point == -2 || point == -3) {
@@ -1686,6 +1725,13 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
 
         int i;
         for (i = 0; i < num; i++) {
+#ifdef TARGET_PC
+            // If, for whatever reason, we want to patch the point ID, we need to do it here.
+            if (!dusk::mods::svc::stage_apply_actor_edits(player_data, nullptr, sizeof(*player_data), i_stage->getRoomNo())) {
+                player_data++;
+                continue; // If the spawn is deleted, check the next one
+            }
+#endif
             if ((u8)player_data->base.angle.z == unk) {
                 break;
             }
@@ -1693,16 +1739,43 @@ static int dStage_playerInit(dStage_dt_c* i_stage, void* i_data, int num, void* 
         }
         if (i == num) {
 #if TARGET_PC
-            std::vector<s16> valid_points;
-            valid_points.reserve(num);
-            player_data = player->m_entries;
-            for (i = 0; i < num; i++) {
-                valid_points.push_back(player_data->base.angle.z);
-                player_data++;
+            // Search through all new actor edits and return the point data via userdata
+            struct newActors_userData {
+                stage_actor_data_class* out_point;
+                bool out_pointSet;
+                int16_t pointNo;
+            };
+            newActors_userData params = {
+                &newPoint, false, (int16_t)unk
+            };
+            dusk::mods::svc::stage_create_new_actors(i_stage->getRoomNo(),
+        [](void* user, const void* record, size_t size) {
+                const stage_actor_data_class* i_record =  static_cast<const stage_actor_data_class*>(record);
+                auto* params = static_cast<newActors_userData*>(user);
+                
+                // We don't cast i_record->base.angle.z to a u8 here so we can register any spawn point within the s16 range
+                if (i_record->base.angle.z == params->pointNo && size == sizeof(stage_actor_data_class) && strncmp(i_record->name,"Link",7) == 0) {
+                    std::memcpy(params->out_point, i_record, size);
+                    params->out_pointSet = true;
+                }
+            },
+            &params);
+
+            if (params.out_pointSet) {
+                player_data = &newPoint;
+            } else {
+                // If the requested spawn point isn't found, print all valid points within the log 
+                std::vector<s16> valid_points;
+                valid_points.reserve(num);
+                player_data = player->m_entries;
+                for (i = 0; i < num; i++) {
+                    valid_points.push_back(player_data->base.angle.z);
+                    player_data++;
+                }
+                std::ranges::sort(valid_points);
+                DuskLog.fatal("Failed to find player start point for next stage! Requested point: {}, Valid points: [{}]",
+                              point, fmt::join(valid_points, ", "));
             }
-            std::ranges::sort(valid_points);
-            DuskLog.fatal("Failed to find player start point for next stage! Requested point: {}, Valid points: [{}]",
-                          point, fmt::join(valid_points, ", "));
 #else
             OS_REPORT_ERROR("プレイヤーが発見できません。[No.%d]\n切り替えの情報や処理の確認をお願いします。\n", point);
 #endif
@@ -2108,12 +2181,8 @@ static int dStage_doorInfoInit(dStage_dt_c* i_stage, void* i_data, int entryNum,
             appen->base = actor_data->base;
             appen->room_no = (int)i_stage->getRoomNo();
             appen->scale = tgsc_data->scale;
-#if TARGET_PC
-            dStage_actorCreate(actor_data, appen,
-                sizeof(stage_actor_data_class) + sizeof(fopAcM_prmScale_class));
-#else
-            dStage_actorCreate(actor_data, appen);
-#endif
+            dStage_actorCreate(actor_data, appen IF_DUSK_ARG(
+                sizeof(stage_actor_data_class) + sizeof(fopAcM_prmScale_class)));
         }
         tgsc_data++;
     }
@@ -2546,6 +2615,11 @@ static void dusk_stage_svc_new_actor_create(dStage_dt_c* i_stage) {
             stage_tgsc_data_class object{};
             std::memcpy(&object, record, size);
 
+            if (strncmp(object.name,"Link",7) == 0) {
+                // We create new spawns for Link during dStage_playerInit. Ignore them here so we don't get duplicates.
+                return;
+            }
+
             fopAcM_prm_class* appen = fopAcM_CreateAppend();
             if (appen != nullptr) {
                 appen->base = object.base;
@@ -2757,9 +2831,7 @@ void dStage_dt_c_roomReLoader(void* i_data, dStage_dt_c* i_stage, int param_2) {
     };
 
     dStage_dt_c_decode(i_data, i_stage, l_funcTable, ARRAY_SIZEU(l_funcTable));
-#if TARGET_PC
-    dusk_stage_svc_new_actor_create(i_stage);
-#endif
+    IF_DUSK(dusk_stage_svc_new_actor_create(i_stage));
     layerActorLoader(i_data, i_stage, param_2);
 }
 

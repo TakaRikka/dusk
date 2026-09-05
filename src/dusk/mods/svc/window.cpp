@@ -1,7 +1,7 @@
 #include "window.hpp"
 
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 
 #include <borealis/log.hpp>
 #include "dusk/mods/loader/loader.hpp"

@@ -36,7 +36,6 @@ public:
     void setCoR(f32 i_value) { mCoR = i_value; }
     void setCoH(f32 i_value) { mCoH = i_value; }
 
-private:
     /* 0x568 */ dCcD_Cyl mCyl;
     /* 0x6A4 */ dCcD_Stts mStts;
     /* 0x6E0 */ u8 mCoHitValid;

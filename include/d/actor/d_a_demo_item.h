@@ -55,7 +55,6 @@ public:
     void setOffsetPos(cXyz i_pos) { mOffsetPos = i_pos; }
     void setMaxScale(f32 i_scale) { mMaxScale = i_scale; }
 
-private:
     /* 0x92C */ cXyz mOffsetPos;
     /* 0x938 */ f32 mMaxScale;
     /* 0x93C */ u8 field_0x93c;

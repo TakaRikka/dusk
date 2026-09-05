@@ -40,7 +40,6 @@ public:
     bool CreateChk();
     cPhs_Step create();
 
-private:
     /* 0x590 */ dBgS_GndChk mGndChk;
     /* 0x5E4 */ u8 field_0x5e4[4];
     /* 0x5E8 */ u8 mAction;

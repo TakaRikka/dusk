@@ -50,7 +50,6 @@ public:
 
     u8 getSwbit() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x5B0 */ request_of_phase_process_class mPhase;
     /* 0x5B8 */ J3DModel* mpModel;
     /* 0x5BC */ dBgS_ObjAcch field_0x5bc;

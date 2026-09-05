@@ -20,7 +20,6 @@ public:
     void col_init();
     void col_set();
 
-private:
     /* 0x568 */ dCcD_Stts mStts;
     /* 0x5A4 */ dCcD_Cyl mCyl;
     /* 0x6E0 */ u8 field_0x6e0;

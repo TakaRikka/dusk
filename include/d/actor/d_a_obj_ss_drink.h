@@ -50,7 +50,6 @@ public:
     static DUSK_GAME_DATA dCcD_SrcGObjInf const mCcDObjInfo;
     static DUSK_GAME_DATA dCcD_SrcCyl DUSK_CONST mCcDCyl;
 
-private:
     /* 0x578 */ mDoExt_btpAnm* mpBtpAnm;
     /* 0x57C */ mDoExt_brkAnm* mpBrkAnm;
     /* 0x580 */ u8 field_0x580;

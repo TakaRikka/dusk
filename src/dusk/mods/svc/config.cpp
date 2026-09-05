@@ -1,7 +1,7 @@
 #include "config.hpp"
 
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 
 #include <borealis/log.hpp>
 #include "dusk/config.hpp"

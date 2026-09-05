@@ -36,7 +36,6 @@ public:
     int Draw();
     int Delete();
 
-private:
     friend class daNpc_zrZ_c;
 
     /* 0x5A0 */ request_of_phase_process_class mPhase;

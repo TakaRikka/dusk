@@ -21,7 +21,6 @@ public:
     void onDigStart() { field_0x568 = 1; }
     s16 getSceneNum() const { return field_0x56c; }
 
-private:
     /* 0x568 */ u8 field_0x568;
     /* 0x569 */ u8 field_0x569;
     /* 0x56A */ u8 field_0x56a;

@@ -56,7 +56,6 @@ public:
     inline int daObjLdy_Draw();
     inline int daObjLdy_Execute();
 
-private:
     static DUSK_GAME_DATA const daObjLdy_Attr_c mAttr;
 
     /* 0x568 */ J3DModel* mpModel;

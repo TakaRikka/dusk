@@ -120,6 +120,12 @@ constexpr std::array kMessageChecks{
         .vanillaItem = dItemNo_HORSE_FLUTE_e,
         .enqueueAtDisplay = false,
     },
+    MessageCheck{
+        .group = 2,
+        .messageId = 6531,
+        .name = ITEM_CHECK_SHAD_DOMINION_ROD,
+        .vanillaItem = dItemNo_COPY_ROD_2_e,
+    }
 };
 
 std::unordered_map<LoadedMod*, ModItemChecks> s_modChecks;
@@ -143,12 +149,16 @@ std::string freestanding_check_name(uint8_t bitNo) {
     return fmt::format("freestanding:{}:{}", current_stage_name(), bitNo);
 }
 
+std::string golden_wolf_check_name(uint16_t eventFlag) {
+    return fmt::format("golden_wolf:{}", eventFlag);
+}
+
 std::string poe_check_name(uint8_t bitNo) {
     return fmt::format("poe:{}:{}", current_stage_name(), bitNo);
 }
 
 std::string shop_check_name(uint8_t itemNo) {
-    return fmt::format("shop:{}:{}", current_stage_name(), itemNo);
+    return fmt::format("shop:{}:{}:{}", current_stage_name(), dStage_roomControl_c::getStayNo(), itemNo);
 }
 
 std::string bug_check_name(uint8_t insectId) {
@@ -182,9 +192,9 @@ void invalidate_committed_check(const std::string& name) {
 
 }  // namespace
 
-uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
+ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
     if (name == nullptr || *name == '\0' || s_modChecks.empty()) {
-        return itemNo;
+        return {.item = itemNo, .display_item = itemNo};
     }
 
     // Callbacks may change registrations, so copy the applicable chain before invoking one.
@@ -224,6 +234,8 @@ uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
         .giver_actor = giver,
         .vanilla_item = itemNo,
         .current_item = itemNo,
+        .current_display_item = itemNo,
+        .was_resolved = false,
     };
     for (const auto& resolve : resolves) {
         if (!resolve.mod->active) {
@@ -231,13 +243,23 @@ uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
         }
         if (resolve.fixedValue) {
             info.current_item = resolve.itemNo;
+            info.current_display_item = resolve.itemNo;
+            info.was_resolved = true;
             continue;
         }
 
-        uint8_t resolvedItem = info.current_item;
+        ItemCheckResolution resolution{
+            .item = info.current_item,
+            .display_item = dItemNo_NONE_e,
+        };
         try {
-            if (resolve.fn(resolve.mod->context.get(), &info, &resolvedItem, resolve.userData)) {
-                info.current_item = resolvedItem;
+            if (resolve.fn(resolve.mod->context.get(), &info, &resolution, resolve.userData)) {
+                if (resolution.display_item == UINT8_MAX) {
+                    resolution.display_item = resolution.item;
+                }
+                info.current_item = resolution.item;
+                info.current_display_item = resolution.display_item;
+                info.was_resolved = true;
             }
         } catch (const std::exception& e) {
             fail_mod(*resolve.mod, MOD_ERROR,
@@ -247,7 +269,15 @@ uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
                 fmt::format("Unknown exception in item check resolver for '{}'", name));
         }
     }
-    return info.current_item;
+    return {
+        .item = info.current_item,
+        .display_item = info.current_display_item,
+        .was_resolved = info.was_resolved,
+    };
+}
+
+uint8_t item_check(const char* name, uint8_t itemNo, fopAc_ac_c* giver) {
+    return item_check_resolve(name, itemNo, giver).item;
 }
 
 uint8_t item_check_chest(uint8_t boxNo, uint8_t itemNo, fopAc_ac_c* chest) {
@@ -271,6 +301,14 @@ uint8_t item_check_freestanding(uint8_t bitNo, uint8_t itemNo, fopAc_ac_c* item)
         return itemNo;
     }
     const auto name = freestanding_check_name(bitNo);
+    return item_check(name.c_str(), itemNo, item);
+}
+
+uint8_t item_check_golden_wolf(uint16_t eventFlag, uint8_t itemNo, fopAc_ac_c* item) {
+    if (s_modChecks.empty()) {
+        return itemNo;
+    }
+    const auto name = golden_wolf_check_name(eventFlag);
     return item_check(name.c_str(), itemNo, item);
 }
 
@@ -312,6 +350,10 @@ uint32_t item_give_tag_boss() {
 
 uint32_t item_give_tag_freestanding(uint8_t bitNo) {
     return item_give_tag(freestanding_check_name(bitNo).c_str());
+}
+
+uint32_t item_give_tag_golden_wolf(uint16_t eventFlag) {
+    return item_give_tag(golden_wolf_check_name(eventFlag).c_str());
 }
 
 uint32_t item_give_tag_poe(uint8_t bitNo) {

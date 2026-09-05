@@ -156,7 +156,6 @@ public:
     static DUSK_GAME_DATA char DUSK_CONST* DUSK_CONST mCutNameList[2];
     static DUSK_GAME_DATA cutFunc DUSK_CONST mCutList[2];
 
-private:
     /* 0x0E40 */ mDoExt_McaMorfSO* mpFlagModelMorf;
     /* 0x0E44 */ NPC_POST_HIO_CLASS* mHIO;
     /* 0x0E48 */ J3DModel* mpLetterModels[2];

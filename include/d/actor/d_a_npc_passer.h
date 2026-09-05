@@ -123,7 +123,6 @@ public:
     static DUSK_GAME_DATA seqFunc m_seq26_funcTbl[3];
     static DUSK_GAME_DATA seqFunc m_seq27_funcTbl[1];
 
-private:
     /* 0xAC8 */ J3DModel* mpModel;
     /* 0xACC */ PathTrace_c m_path;
     /* 0xAF4 */ daNpcPasser_c::actionFunc* mAction;

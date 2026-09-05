@@ -107,7 +107,6 @@ public:
         mRnd.init(r0, r1, r2);
     }
 
-private:
     /* 0x04 */ cM_rnd_c mRnd;
     /* 0x10 */ cXyz field_0x10;
     /* 0x1C */ GXColor mLineColor;
@@ -129,7 +128,6 @@ public:
     void setAlpha(u8 alpha) { mAlpha = alpha; }
     J2DPicture* getPicture() { return &mpPicture; }
 
-private:
     /* 0x004 */ u8 field_0x4;
     /* 0x008 */ J2DPicture mpPicture;
     /* 0x158 */ s16 mPosX;
@@ -271,7 +269,6 @@ public:
     void setZsortNext(dDlst_shadowReal_c* next) { mZsortNext = next; }
     void setZsortPre(dDlst_shadowReal_c* pre) { mZsortPre = pre; }
 
-private:
     /* 0x0000 */ u8 mState;
     /* 0x0001 */ u8 field_0x1;
     /* 0x0002 */ u8 mModelNum;
@@ -303,7 +300,6 @@ public:
 
     static DUSK_GAME_DATA TGXTexObj mSimpleTexObj;
 
-private:
     /* 0x00000 */ u8 field_0x0;
     /* 0x00001 */ u8 mRealNum;
     /* 0x00002 */ u8 mSimpleNum;
@@ -332,7 +328,6 @@ public:
     view_port_class* getViewPort() { return &mViewport; }
     scissor_class* getScissor() { return &mViewport.scissor; }
 
-private:
     /* 0x00 */ view_port_class mViewport;
     /* 0x28 */ s8 mCameraID;
     /* 0x29 */ u8 mMode;
@@ -518,7 +513,6 @@ public:
     static DUSK_GAME_DATA f32 mWipeSpeed;
     static DUSK_GAME_DATA u8 mWipe;
 
-private:
     /* 0x00000 */ J3DDrawBuffer* mDrawBuffers[DB_LIST_MAX];
     /* 0x00054 */ dDlst_base_c* mpCopy2DDrawLists[4];
     /* 0x00064 */ dDlst_base_c** mpCopy2DStart;

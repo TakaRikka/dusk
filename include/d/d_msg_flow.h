@@ -188,7 +188,6 @@ public:
     static DUSK_GAME_DATA queryFunc mQueryList[53];
     static DUSK_GAME_DATA eventFunc mEventList[43];
 
-private:
     /* 0x04 */ u8* mFlow_p;
     /* 0x08 */ u8* mLabelInfo_p;
     /* 0x0C */ union mesg_flow {

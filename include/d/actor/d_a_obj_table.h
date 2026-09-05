@@ -27,7 +27,6 @@ public:
 
     s16 getMessageNo() { return fopAcM_GetParam(this) & 0xFFFF; }
 
-private:
     /* 0x5A0 */ J3DModel* mpModel;
     /* 0x5A4 */ request_of_phase_process_class mPhaseReq;
     /* 0x5AC */ dMsgFlow_c mMsgFlow;

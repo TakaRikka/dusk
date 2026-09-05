@@ -45,7 +45,6 @@ public:
 
     void noEffect() { field_0x56c = 1; }
 
-private:
     /* 0x568 vtable */
     /* 0x56C */ u8 field_0x56c;
 };

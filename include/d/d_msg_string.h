@@ -39,7 +39,6 @@ public:
         drawOutFontLocal(param_0, param_1);
     }
 
-private:
     /* 0x24 */ COutFont_c* mpOutFont;
     /* 0x28 */ u8 field_0x28;
 };

@@ -115,6 +115,14 @@ mod-entry .mod-entry-status.failed {
     color: #cc4444;
 }
 
+mod-entry .mod-entry-network {
+    margin-left: 6dp;
+    padding: 1dp 5dp;
+    border-radius: 5dp;
+    background-color: rgba(67, 151, 219, 20%);
+    color: #6fb7ef;
+}
+
 mod-entry .mod-entry-desc {
     font-size: 14dp;
     line-height: 1.3;
@@ -215,5 +223,10 @@ window.mods .mod-description {
 .status-badge.failed,
 .mod-info-label.failed {
     color: #cc4444;
+    opacity: 1;
+}
+
+.status-badge.network {
+    color: #6fb7ef;
     opacity: 1;
 }

@@ -125,7 +125,6 @@ public:
         field_0xb68 = 0.0f;
     }
     
-private:
     /* 0x568 */ OBJ_KAGO_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* field_0x574;

@@ -68,7 +68,7 @@ public:
     JKRMemArchive* getArchive() const { return mArchive; }
     JKRHeap* getHeap() const { return mHeap; }
 
-// private:
+private:
     /* 0x14 */ u8 mMountDirection;
     /* 0x18 */ s32 mEntryNumber;
     /* 0x1C */ JKRMemArchive* mArchive;

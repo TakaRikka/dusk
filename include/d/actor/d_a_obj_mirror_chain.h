@@ -47,7 +47,6 @@ public:
     u8 getSwitchNo() { return (fopAcM_GetParam(this) >> 8) & 0xff; }
     void setAnmSpeed(f32 speed) { mpBckAnm->setPlaySpeed(speed); }
 
-private:
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ J3DModel* mpPortalModel;
     /* 0x570 */ mDoExt_bckAnm* mpBckAnm;

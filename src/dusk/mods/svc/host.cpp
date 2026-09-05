@@ -1,5 +1,5 @@
+#include "internal.hpp"
 #include "registry.hpp"
-#include "slot_map.hpp"
 
 #include "dusk/main.h"
 #include "dusk/mods/loader/loader.hpp"

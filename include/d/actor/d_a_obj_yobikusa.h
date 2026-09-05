@@ -87,7 +87,6 @@ public:
         return var_r31 > 0;
     }
 
-private:
     /* 0x568 */ J3DModel* mpActiveModel;
     /* 0x56C */ J3DModel* mpModelTypeA;
     /* 0x570 */ J3DModel* mpModelTypeB;

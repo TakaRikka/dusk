@@ -49,13 +49,24 @@ void Component::set_disabled(bool value) {
     if (Component::disabled() == value) {
         return;
     }
+    auto* context = mRoot->GetContext();
     if (value) {
+        if (context != nullptr && context->GetFocusElement() == mRoot) {
+            // RmlUi moves focus to the parent when a focused control is disabled.
+            mDisabledFocusFallback = mRoot->GetParentNode();
+        }
         mRoot->SetAttribute("disabled", "");
         mRoot->SetPseudoClass("disabled", true);
         mRoot->Blur();
     } else {
+        const bool restoreFocus = mDisabledFocusFallback != nullptr && context != nullptr &&
+                                  context->GetFocusElement() == mDisabledFocusFallback;
         mRoot->RemoveAttribute("disabled");
         mRoot->SetPseudoClass("disabled", false);
+        mDisabledFocusFallback = nullptr;
+        if (restoreFocus) {
+            focus();
+        }
     }
 }
 

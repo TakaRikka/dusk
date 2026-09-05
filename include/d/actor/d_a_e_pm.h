@@ -84,7 +84,6 @@ public:
     u8 SwitchChk() { return mStage; }
     u8 DoorChk() { return mDoorAction; }
 
-private:
     /* 0x5AC */ fpc_ProcID mPuppetID[4];
     /* 0x5BC */ u8 field_0x5bc[0x5DC - 0x5BC];
     /* 0x5DC */ u8 mDoorAction;

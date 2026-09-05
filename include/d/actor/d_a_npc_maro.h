@@ -187,7 +187,6 @@ public:
         return (fopAcM_GetParam(this) & 0xF000000) >> 24;
     }
 
-private:
     /* 0x0F7C */ NPC_MARO_HIO_CLASS* mpHIO;
     /* 0x0F80 */ dCcD_Cyl mCyl1;
     /* 0x10BC */ int field_0x10bc;

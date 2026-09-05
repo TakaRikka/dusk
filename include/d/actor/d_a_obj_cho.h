@@ -46,7 +46,6 @@ public:
     cPhs_Step create();
     inline int Draw();
 
-private:
     /* 0x590 */ dBgS_AcchCir mAcchCir;
     /* 0x5D0 */ dBgS_ObjAcch mAcch;
     /* 0x7A8 */ dCcD_Stts mCcStts;

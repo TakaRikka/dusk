@@ -99,7 +99,6 @@ public:
 
     void forceDelete() { mDeleteFlg = true; }
 
-private:
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ mDoExt_bckAnm mBck;
     /* 0x588 */ J3DAnmTransform* mpSpoutBck;

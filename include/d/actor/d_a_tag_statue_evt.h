@@ -25,7 +25,6 @@ public:
     int draw();
     int _delete();
 
-private:
     /* 0x568 */ request_of_phase_process_class mArcPhase;
     /* 0x570 */ request_of_phase_process_class mEvArcPhase;
     /* 0x578 */ J3DModel* mpModel;

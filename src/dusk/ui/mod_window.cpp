@@ -2,6 +2,7 @@
 
 #include "bool_button.hpp"
 #include "color_input.hpp"
+#include "file_button.hpp"
 #include "number_button.hpp"
 #include "string_button.hpp"
 
@@ -69,6 +70,7 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
             .isDisabled = s.isDisabled,
             .isModified = s.isModified,
             .maxLength = s.maxLength,
+            .setOnChange = s.stringSetOnChange,
         });
         break;
     case ModControlSpec::Kind::Color:
@@ -80,6 +82,17 @@ Component* build_mod_control(Pane& pane, Pane* helpPane, ModControlSpec spec) {
             .isModified = s.isModified,
             .presets = s.colorPresets,
             .alpha = s.colorAlpha,
+        });
+        break;
+    case ModControlSpec::Kind::FilePicker:
+        control = &pane.add_child<FileButton>(FileButton::Props{
+            .key = s.label,
+            .getValue = s.getString,
+            .setValue = s.setString,
+            .isDisabled = s.isDisabled,
+            .isModified = s.isModified,
+            .filters = s.fileFilters,
+            .directoryMode = s.directoryMode,
         });
         break;
     case ModControlSpec::Kind::Select:

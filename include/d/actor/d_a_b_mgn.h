@@ -92,7 +92,6 @@ public:
     bool isDown() { return mDownFlag != 0; }
     bool isAppear() { return mAppearFlag != 0; }
 
-private:
     /* 0x05AC */ request_of_phase_process_class mMgnPhase;
     /* 0x05B4 */ request_of_phase_process_class mMgnePhase;
     /* 0x05BC */ mDoExt_McaMorfSO* mpMgnModelMorf;

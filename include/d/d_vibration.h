@@ -94,7 +94,6 @@ public:
     static DUSK_GAME_DATA const vib_pattern MQ_patt[VIBMODE_Q_MAX];
     static DUSK_GAME_DATA const vib_pattern CQ_patt[VIBMODE_Q_MAX];
 
-private:
 #if DEBUG
     /* 0x00 */ dVibTest_c mVibTest;
 #elif PARTIAL_DEBUG

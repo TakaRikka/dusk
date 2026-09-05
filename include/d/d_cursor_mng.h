@@ -95,7 +95,7 @@ class dCsr_mng_c {
         BOOL set(mDoGph_gInf_c::csr_c* i_csr, u16, u8, u8);
     };
 
-private:
+public:
     dCsr_mng_c() : is_csr_on(true) {
     }
 
@@ -116,7 +116,6 @@ public:
 
     static dCsr_mng_c* m_myObj;
 
-private:
     /* 0x00 */ list_c m_csr_list;
     /* 0x08 */ list_c m_obj_list;
     /* 0x10 */ bool is_csr_on;
