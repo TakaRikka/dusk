@@ -14598,6 +14598,8 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
     if (checkSpinnerRide()
         || sel_item == dItemNo_BOMB_BAG_LV1_e
 #if TARGET_PC
+        || ((checkModeFlg(0x40000) || checkNoResetFlg0(FLG0_WATER_IN_MOVE)) && !checkAcceptUseItemInWater(sel_item))
+        || (checkModeFlg(0x40000) && sel_item == dItemNo_WATER_BOMB_e)
         || (!dusk::getSettings().game.unrestrictedItems.getValue()
         && (((sel_item == dItemNo_KANTERA_e || checkOilBottleItem(sel_item)) && checkWaterInKandelaarOffset(mWaterY))
 #else
@@ -14605,8 +14607,10 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
 #endif
         || (checkCanoeRide() && checkStageName("F_SP127"))
         || checkCloudSea()
+#if !TARGET_PC
         || ((checkModeFlg(0x40000) || checkNoResetFlg0(FLG0_WATER_IN_MOVE)) && !checkAcceptUseItemInWater(sel_item))
         || (checkModeFlg(0x40000) && sel_item == dItemNo_WATER_BOMB_e)
+#endif
         || !checkCastleTownUseItem(sel_item)
         || (checkBoardRide() && sel_item != 0x103)
         || (checkModeFlg(0x400) && (sel_item == dItemNo_EMPTY_BOTTLE_e || sel_item == dItemNo_POKE_BOMB_e || sel_item == dItemNo_IRONBALL_e || sel_item == dItemNo_COPY_ROD_e || checkFishingRodItem(sel_item)))
