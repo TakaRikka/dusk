@@ -8,7 +8,10 @@
 #include "d/d_item_data.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JHostIO/JORReflexible.h"
+
+#if TARGET_PC
 #include "helpers/endian.h"
+#endif
 
 static const int DEFAULT_SELECT_ITEM_INDEX = 0;
 static const int MAX_SELECT_ITEM = 4;

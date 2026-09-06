@@ -1,19 +1,14 @@
+#include "dusk/logging.h"
+#include "dusk/main.h"
+
 #include <dolphin/dolphin.h>
 #include <dolphin/gx.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
-#include <cstdlib>
-#include <cstdint>
+#include <tracy/Tracy.hpp>
+
+#include <condition_variable>
 #include <memory>
 #include <mutex>
-#include <condition_variable>
 #include <unordered_map>
-#include <memory>
-#include <dusk/logging.h>
-#include <dusk/main.h>
-
-#include "tracy/Tracy.hpp"
 
 #ifndef _WIN32
 #include <sys/time.h>

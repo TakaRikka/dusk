@@ -1,13 +1,9 @@
 #ifndef DUSK_IMGUI_MENUTOOLS_HPP
 #define DUSK_IMGUI_MENUTOOLS_HPP
-
-#include <aurora/aurora.h>
-#include <queue>
-#include <string>
-
-#include "imgui.h"
 #include "ImGuiSaveEditor.hpp"
 #include "ImGuiStateShare.hpp"
+
+#include <string>
 
 namespace dusk {
     class ImGuiMenuTools {

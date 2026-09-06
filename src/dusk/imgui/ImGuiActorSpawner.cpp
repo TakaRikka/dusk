@@ -1,11 +1,12 @@
-#include "imgui.h"
-
 #include "ImGuiMenuTools.hpp"
+
 #include "d/actor/d_a_alink.h"
-#include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
+
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+
+#include <imgui.h>
 
 namespace dusk {
 namespace {

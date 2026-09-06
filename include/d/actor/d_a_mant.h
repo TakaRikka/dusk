@@ -92,10 +92,7 @@ public:
     /* 0x39A4 */ cM_rnd_c mMantRng;
 #endif
 };
-#if TARGET_PC
-STATIC_ASSERT(sizeof(mant_class) == 0x39ac);
-#else
+
 STATIC_ASSERT(sizeof(mant_class) == 0x39a4);
-#endif
 
 #endif /* D_A_MANT_H */

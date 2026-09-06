@@ -6,9 +6,12 @@
 #include "d/d_bg_w_base.h"
 #include <mtx.h>
 #include <types.h>
-#include "helpers/offset_ptr.h"
+
+#if TARGET_PC
 #include "helpers/endian.h"
 #include "helpers/endian_ssystem.h"
+#include "helpers/offset_ptr.h"
+#endif
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;

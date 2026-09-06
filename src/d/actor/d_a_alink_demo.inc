@@ -2387,7 +2387,7 @@ int daAlink_c::procCoGetItemInit() {
     if (var_r31 != 0) {
         mProcVar3.field_0x300e = -0x8000;
         mProcVar4.field_0x3010 = 1;
-    } else if (mDemo.getParam1() == 2) {
+    } else if (mDemo.getParam1() == DUSK_IF_ELSE(dusk::mods::item_give_tag("prayer_reward"), 2)) {
         mProcVar3.field_0x300e = 0;
     } else {
         mProcVar3.field_0x300e = shape_angle.y - (fopCamM_GetAngleY(dComIfGp_getCamera(field_0x317c)) + 0x8000);

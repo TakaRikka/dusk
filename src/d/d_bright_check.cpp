@@ -11,15 +11,14 @@
 #include "d/d_msg_string.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#ifdef TARGET_PC
-#include <dusk/autosave.h>
+#if TARGET_PC
+#include "dusk/autosave.h"
 #include "dusk/game_mode.hpp"
 #include "dusk/imgui/ImGuiConsole.hpp"
 #include "dusk/livesplit.h"
 #include "dusk/speedrun.h"
-#endif
-
 #include "dusk/version.hpp"
+#endif
 
 dBrightCheck_c::dBrightCheck_c(JKRArchive* i_archive) {
     mArchive = i_archive;

@@ -8,11 +8,12 @@
 #include "d/actor/d_a_tag_kmsg.h"
 #include <types.h>
 #include <cstring>
-
-#include "helpers/string.hpp"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg.h"
 
+#if TARGET_PC
+#include "helpers/string.hpp"
+#endif
 
 static DUSK_CONSTEXPR daNpc_GetParam1 l_bmdData[9] = {
     {36, 1}, {36, 1}, {35, 1}, {37, 1}, {38, 1}, {3, 2}, {3, 2}, {4, 2}, {5, 2},

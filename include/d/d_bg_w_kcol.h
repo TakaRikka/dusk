@@ -6,7 +6,10 @@
 #include "d/d_bg_plc.h"
 #include "d/d_bg_s_sph_chk.h"
 #include "d/d_bg_w_base.h"
+
+#if TARGET_PC
 #include "helpers/offset_ptr.h"
+#endif
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;

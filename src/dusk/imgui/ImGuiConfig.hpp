@@ -2,7 +2,8 @@
 #define DUSK_IMGUICONFIG_HPP
 
 #include "dusk/config.hpp"
-#include "imgui.h"
+
+#include <imgui.h>
 
 namespace dusk::config {
     inline bool ImGuiCheckbox(const char* title, ConfigVar<bool>& var) {

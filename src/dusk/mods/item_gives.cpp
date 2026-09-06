@@ -4,13 +4,13 @@
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/svc/item.hpp"
 
-#include "aurora/lib/logging.hpp"
 #include "d/actor/d_a_alink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
 #include "f_op/f_op_actor_mng.h"
 
+#include <aurora/lib/logging.hpp>
 #include <fmt/format.h>
 
 #include <deque>

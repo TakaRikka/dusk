@@ -3,7 +3,10 @@
 
 #include "global.h"
 #include "f_pc/f_pc_base.h"
+
+#if TARGET_PC
 #include "helpers/endian.h"
+#endif
 
 struct msg_class;
 

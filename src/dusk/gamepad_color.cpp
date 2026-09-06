@@ -1,13 +1,16 @@
-#include <cmath>
-#include <SSystem/SComponent/c_xyz.h>
-#include <d/d_com_inf_game.h>
-#include <d/actor/d_a_player.h>
-#include <d/actor/d_a_alink.h>
-#include <dusk/gamepad_color.h>
+#include "dusk/gamepad_color.h"
 
 #include "ui/controller_config.hpp"
 
+#include "d/d_com_inf_game.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_alink.h"
+
+#include <SSystem/SComponent/c_xyz.h>
+
 #include <pad.h>
+
+#include <cmath>
 
 namespace dusk::input {
 

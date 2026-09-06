@@ -1,25 +1,26 @@
-#include "fmt/format.h"
-#include "imgui.h"
-#include "aurora/gfx.h"
-
-#include "ImGuiConfig.hpp"
-#include "dusk/hotkeys.h"
-#include "dusk/settings.h"
-#include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
 
+#include "ImGuiConfig.hpp"
+#include "ImGuiConsole.hpp"
 #include "ImGuiEngine.hpp"
+
+#include "dusk/data.hpp"
+#include "dusk/dusk.h"
+#include "dusk/hotkeys.h"
+#include "dusk/main.h"
+#include "dusk/os.h"
+#include "dusk/settings.h"
+#include "dusk/speedrun.h"
+
 #include "d/actor/d_a_alink.h"
 #include "d/actor/d_a_horse.h"
 #include "d/d_com_inf_game.h"
-#include "dusk/data.hpp"
-#include "dusk/dusk.h"
-#include "dusk/speedrun.h"
-#include "dusk/main.h"
-#include "dusk/os.h"
 #include "m_Do/m_Do_main.h"
 
+#include <aurora/gfx.h>
 #include <aurora/lib/internal.hpp>
+#include <fmt/format.h>
+#include <imgui.h>
 #include <SDL3/SDL_misc.h>
 
 #if defined(__APPLE__)

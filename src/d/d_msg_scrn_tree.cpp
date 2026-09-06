@@ -8,10 +8,10 @@
 #include "d/d_msg_out_font.h"
 #include "d/d_msg_scrn_tree.h"
 #include "d/d_pane_class.h"
-#include "dusk/version.hpp"
 
 #if TARGET_PC
 #include "dusk/settings.h"
+#include "dusk/version.hpp"
 #endif
 
 dMsgScrnTree_c::dMsgScrnTree_c(JUTFont* param_0, JKRExpHeap* param_1) {

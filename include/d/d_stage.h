@@ -4,10 +4,14 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_data.h"
-#include "helpers/offset_ptr.h"
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
+
+#if TARGET_PC
+#include "helpers/offset_ptr.h"
+
 #include "os_report.h"
+#endif
 
 enum StageType {
     /* 0x0 */ ST_FIELD,

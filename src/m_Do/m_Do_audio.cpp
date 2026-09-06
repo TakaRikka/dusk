@@ -12,10 +12,11 @@
 #include "d/d_debug_viewer.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_dvd_thread.h"
-#include "tracy/Tracy.hpp"
 
 #if TARGET_PC
 #include "dusk/settings.h"
+
+#include <tracy/Tracy.hpp>
 #endif
 
 #if PLATFORM_WII || PLATFORM_SHIELD

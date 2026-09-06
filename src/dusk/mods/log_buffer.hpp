@@ -1,13 +1,12 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include <string_view>
-#include <vector>
+#include "mods/svc/log.h"
 
 #include <fmt/format.h>
 
-#include "mods/svc/log.h"
+#include <cstdint>
+#include <string>
+#include <vector>
 
 namespace dusk::mods::log {
 

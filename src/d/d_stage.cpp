@@ -22,13 +22,13 @@
 #include <cstdio>
 #include <cstring>
 
-#include "dusk/logging.h"
-#include "helpers/string.hpp"
 #if TARGET_PC
-#include "dusk/mods/svc/stage.hpp"
-#include <format>
-#include <fmt/ranges.h>
+#include "dusk/logging.h"
 #include "dusk/mods/svc/actor.hpp"
+#include "dusk/mods/svc/stage.hpp"
+#include "helpers/string.hpp"
+
+#include <fmt/ranges.h>
 #endif
 
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe,

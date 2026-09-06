@@ -2,7 +2,10 @@
 #define D_MSG_D_MSG_FLOW_H
 
 #include <types.h>
+
+#if TARGET_PC
 #include "helpers/endian.h"
+#endif
 
 enum {
     NODETYPE_MESSAGE_e = 1,

@@ -5,9 +5,12 @@
 #include "d/d_meter2_info.h"
 #include "d/d_msg_object.h"
 #include "d/d_msg_out_font.h"
+#include "f_op/f_op_msg_mng.h"
+
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/version.hpp"
-#include "f_op/f_op_msg_mng.h"
+#endif
 
 COutFontSet_c::COutFontSet_c() {
     initialize();
@@ -315,9 +318,8 @@ void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param
         sp256[i] = field_0x1b4[i];
     }
 
-#ifdef TARGET_PC
-    bool uiTickPending = dusk::frame_interp::get_ui_tick_pending();
-    if (!uiTickPending) {
+#if TARGET_PC
+    if (dusk::frame_interp::get_ui_tick_pending()) {
         for (int i = 0; i < 70; i++) {
             sp256[i] = -1;
         }
@@ -526,15 +528,12 @@ void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param
                 case 20:
                 case 21:
                 case 22:
-#ifdef TARGET_PC
-                    if (uiTickPending)
-#endif
-                    {
-                        field_0x1b4[type]++;
-                        if (field_0x1b4[type] >= 28) {
-                            field_0x1b4[type] = 0;
-                        }
+                    IF_DUSK_BLOCK(dusk::frame_interp::get_ui_tick_pending())
+                    field_0x1b4[type]++;
+                    if (field_0x1b4[type] >= 28) {
+                        field_0x1b4[type] = 0;
                     }
+                    IF_DUSK_BLOCK_END
 
                     mpPane[type]->rotate(0.5f * sizeX, 0.5f * sizeY, ROTATE_Z,
                                          (360.0f * (f32)field_0x1b4[type]) / 28.0f);

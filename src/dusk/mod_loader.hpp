@@ -1,5 +1,10 @@
 #pragma once
 
+#include "dusk/config.hpp"
+#include "dusk/config_var.hpp"
+#include "mods/api.h"
+#include "mods/runtime.h"
+
 #include <filesystem>
 #include <memory>
 #include <optional>
@@ -7,11 +12,6 @@
 #include <string>
 #include <string_view>
 #include <vector>
-
-#include "dusk/config.hpp"
-#include "dusk/config_var.hpp"
-#include "mods/api.h"
-#include "mods/runtime.h"
 
 namespace dusk::mods {
 struct LoadedMod;

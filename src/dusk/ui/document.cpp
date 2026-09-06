@@ -1,9 +1,10 @@
 #include "document.hpp"
 
-#include "aurora/rmlui.hpp"
 #include "ui.hpp"
 
 #include "m_Do/m_Do_audio.h"
+
+#include <aurora/rmlui.hpp>
 
 #include <algorithm>
 

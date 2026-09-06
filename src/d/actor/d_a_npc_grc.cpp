@@ -8,10 +8,11 @@
 #include "d/actor/d_a_npc_grc.h"
 #include "d/actor/d_a_npc.h"
 #include "Z2AudioLib/Z2Instances.h"
+#include <cstring>
+
 #if TARGET_PC
 #include "mods/items.h"
 #endif
-#include <cstring>
 
 enum grC_RES_File_ID {
     /* BCK */

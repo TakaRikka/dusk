@@ -5,7 +5,6 @@
 #include "registry.hpp"
 #include "ui_v1.hpp"
 
-#include <borealis/log.hpp>
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/log_buffer.hpp"
@@ -16,15 +15,16 @@
 #include "dusk/ui/ui.hpp"
 #include "mods/svc/ui.h"
 
-#include <RmlUi/Core.h>
 #include <aurora/rmlui.hpp>
+#include <borealis/log.hpp>
 #include <fmt/format.h>
+#include <SDL3/SDL_clipboard.h>
+#include <RmlUi/Core.h>
 
 #include <algorithm>
 #include <chrono>
 #include <climits>
 #include <cstddef>
-#include <cstdint>
 #include <functional>
 #include <limits>
 #include <memory>
@@ -36,8 +36,6 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-
-#include "SDL3/SDL_clipboard.h"
 
 namespace {
 

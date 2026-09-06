@@ -2,12 +2,13 @@
 
 #include "registry.hpp"
 
-#include "aurora/lib/logging.hpp"
 #include "dusk/mods/loader/loader.hpp"
+#include "dusk/utilities.hpp"
 #include "mods/svc/stage.h"
 
 #include "d/d_com_inf_game.h"
-#include "dusk/utilities.hpp"
+
+#include <aurora/lib/logging.hpp>
 
 #include <string>
 #include <string_view>

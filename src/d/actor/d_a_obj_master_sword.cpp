@@ -11,9 +11,10 @@
 #include "d/d_meter2_info.h"
 
 #if TARGET_PC
-#include "d/d_item.h"
 #include "dusk/mods/item.hpp"
 #include "mods/items.h"
+
+#include "d/d_item.h"
 #endif
 
 DUSK_GAME_DATA daObjMasterSword_Attr_c const daObjMasterSword_c::mAttr = {1.0f};

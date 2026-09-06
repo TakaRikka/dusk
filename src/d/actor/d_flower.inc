@@ -5,7 +5,9 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_counter.h"
 
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#endif
 
 const u16 l_J_Ohana00_64TEX__width = 63;
 const u16 l_J_Ohana00_64TEX__height = 63;

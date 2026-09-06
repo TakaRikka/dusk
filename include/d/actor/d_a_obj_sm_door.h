@@ -53,5 +53,4 @@ public:
 
 STATIC_ASSERT(sizeof(daObjSM_DOOR_c) == 0x858);
 
-
 #endif /* D_A_OBJ_SM_DOOR_H */

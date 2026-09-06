@@ -14,7 +14,6 @@
 #include "d/d_msg_scrn_explain.h"
 #include "d/d_msg_string.h"
 #include "d/d_select_cursor.h"
-#include "dusk/version.hpp"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
@@ -25,8 +24,9 @@
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/menu_pointer.h"
-#include "dusk/settings.h"
 #include "dusk/mods/svc/save.hpp"
+#include "dusk/settings.h"
+#include "dusk/version.hpp"
 #endif
 
 static int SelStartFrameTbl[3] = {

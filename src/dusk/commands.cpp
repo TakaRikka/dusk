@@ -1,30 +1,32 @@
 #include "commands.hpp"
 
-#include "JSystem/JUtility/JUTGamePad.h"
-#include "SSystem/SComponent/c_math.h"
-#include "SSystem/SComponent/c_sxyz.h"
-#include "SSystem/SComponent/c_xyz.h"
+#include "game_clock.h"
+
 #include "c/c_damagereaction.h"
 #include "d/actor/d_a_alink.h"
+#include "d/d_camera.h"
 #include "d/d_com_inf_actor.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_camera.h"
 #include "d/d_kankyo.h"
 #include "d/d_stage.h"
-#include "dusk/game_clock.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_layer.h"
 #include "f_pc/f_pc_layer_iter.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_node.h"
 
+#include "JSystem/JUtility/JUTGamePad.h"
+#include "SSystem/SComponent/c_math.h"
+#include "SSystem/SComponent/c_sxyz.h"
+#include "SSystem/SComponent/c_xyz.h"
+
+#include <fmt/format.h>
+
 #include <algorithm>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
-
-#include "fmt/format.h"
 
 namespace dusk {
 namespace {

@@ -16,8 +16,10 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-#include "helpers/string.hpp"
+#if TARGET_PC
 #include "dusk/version.hpp"
+#include "helpers/string.hpp"
+#endif
 
 typedef void (dMenu_Fishing_c::*initFunc)();
 DUSK_GAME_DATA initFunc map_init_process[] = {

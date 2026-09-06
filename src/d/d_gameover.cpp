@@ -14,7 +14,9 @@
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/gx_helper.h"
+#endif
 
 class dGov_HIO_c : public mDoHIO_entry_c {
 public:

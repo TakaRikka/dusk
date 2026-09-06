@@ -1,11 +1,12 @@
-#include "m_Do/m_Do_controller_pad.h"
-
-#include "imgui.h"
-#include <imgui_internal.h>
 #include "ImGuiConsole.hpp"
+
 #include "dusk/settings.h"
 
+#include "m_Do/m_Do_controller_pad.h"
+
 #include <dolphin/pad.h>
+#include <imgui.h>
+#include <imgui_internal.h>
 
 namespace dusk {
     void ImGuiMenuTools::ShowInputViewer() {

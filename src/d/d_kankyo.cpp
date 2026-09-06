@@ -8275,9 +8275,7 @@ static int dKy_Create(void* i_this) {
     kankyo_class* kankyo = (kankyo_class*)i_this;
     BOOL next_time_set = false;
 
-#if TARGET_PC
-    kankyo->base.draw_interp_frame = true;
-#endif
+    IF_DUSK(kankyo->base.draw_interp_frame = true);
 
     stage_envr_info_class* stage_envr_p = dComIfGp_getStageEnvrInfo();
     if (stage_envr_p != NULL && dComIfGp_getStartStageRoomNo() != -1) {

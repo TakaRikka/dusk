@@ -22,10 +22,9 @@
 #include <cstdio>
 #include <cstring>
 
-#include "dusk/version.hpp"
-
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
+#include "dusk/version.hpp"
 #endif
 
 typedef void (dMenu_Insect_c::*initFunc)();

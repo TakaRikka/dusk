@@ -8,9 +8,10 @@
 #include "f_pc/f_pc_leaf.h"
 #include "f_pc/f_pc_node.h"
 #include "f_pc/f_pc_pause.h"
-#include "dusk/frame_interpolation.h"
-#include <cstdio>
+
+#if TARGET_PC
 #include "dusk/logging.h"
+#endif
 
 int fpcDw_Execute(base_process_class* i_proc) {
     if (!fpcPause_IsEnable(i_proc, 2)) {

@@ -7,10 +7,11 @@
 
 #include "d/actor/d_a_npc_kkri.h"
 #include "d/actor/d_a_e_ym.h"
+#include <cstring>
+
 #if TARGET_PC
 #include "mods/items.h"
 #endif
-#include <cstring>
 
 static DUSK_CONSTEXPR int l_bmdData[2][2] = {
     {35, 1},

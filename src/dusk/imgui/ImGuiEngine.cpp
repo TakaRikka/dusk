@@ -1,17 +1,17 @@
 #include "ImGuiEngine.hpp"
 
+#include "dusk/logging.h"
+
+#include <aurora/imgui.h>
+#include <aurora/lib/window.hpp>
+#include <fmt/format.h>
 #include <SDL3/SDL_filesystem.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_surface.h>
 #include <SDL3/SDL_video.h>
-#include <aurora/imgui.h>
-#include <cmath>
-#include <cstring>
-#include <fmt/format.h>
-#include <string>
 
-#include "aurora/lib/window.hpp"
-#include "dusk/logging.h"
+#include <cmath>
+#include <string>
 
 #ifdef IMGUI_ENABLE_FREETYPE
 #include "misc/freetype/imgui_freetype.h"

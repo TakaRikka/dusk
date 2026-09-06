@@ -36,5 +36,4 @@ public:
 
 STATIC_ASSERT(sizeof(obj_gb_class) == 0x6bc);
 
-
 #endif /* D_A_OBJ_GB_H */

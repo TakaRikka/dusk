@@ -1,9 +1,11 @@
-#include <vector>
-#include <mutex>
+#include "ImGuiMenuTools.hpp"
 
 #include "dusk/logging.h"
-#include "imgui.h"
-#include "ImGuiMenuTools.hpp"
+
+#include <imgui.h>
+
+#include <mutex>
+#include <vector>
 
 namespace dusk {
     static ImGuiTextBuffer StubLogBuffer;

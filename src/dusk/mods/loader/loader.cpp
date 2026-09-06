@@ -1,37 +1,37 @@
 #include "loader.hpp"
-#include "dusk/logging.h"
-#include "dusk/mod_loader.hpp"
-
-#include <borealis/io.hpp>
-
-#include <algorithm>
-#include <charconv>
-#include <chrono>
-#include <cstring>
-#include <filesystem>
-#include <fstream>
-#include <string>
-#include <string_view>
-#include <utility>
-#include <variant>
 
 #include "../manifest.hpp"
 #include "depgraph.hpp"
+#include "native_module.hpp"
+#if DUSK_HAS_PREPATCH
+#include "prepatch.hpp"
+#endif
+
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
 #include "dusk/io.hpp"
+#include "dusk/logging.h"
+#include "dusk/mod_loader.hpp"
 #include "dusk/mods/log_buffer.hpp"
 #include "dusk/mods/svc/config.hpp"
 #include "dusk/mods/svc/hook.hpp"
 #include "dusk/mods/svc/registry.hpp"
 #include "dusk/ui/mods_window.hpp"
 #include "dusk/ui/ui.hpp"
-#include "miniz.h"
-#include "native_module.hpp"
-#include "nlohmann/json.hpp"
-#if DUSK_HAS_PREPATCH
-#include "prepatch.hpp"
-#endif
+
+#include <borealis/io.hpp>
+#include <miniz.h>
+#include <nlohmann/json.hpp>
+
+#include <algorithm>
+#include <charconv>
+#include <chrono>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <string_view>
+#include <utility>
+#include <variant>
 
 using namespace std::string_literals;
 using namespace std::string_view_literals;

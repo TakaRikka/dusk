@@ -15,8 +15,10 @@
 
 #include <cstring>
 
+#if TARGET_PC
 #include "dusk/version.hpp"
 #include "helpers/string.hpp"
+#endif
 
 enum ITEMICON_RES_FILE_ID {
     ITEMICON_BTI_ARI_MESU_00=0x3,

@@ -23,9 +23,9 @@
 
 #if TARGET_PC
 #include "dusk/game_clock.h"
-#endif
 
-#include "tracy/Tracy.hpp"
+#include <tracy/Tracy.hpp>
+#endif
 
 void fpcM_Draw(void* i_proc) {
     fpcDw_Execute((base_process_class*)i_proc);

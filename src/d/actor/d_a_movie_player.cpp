@@ -14,34 +14,31 @@
 #pragma optimization_level 4
 #pragma optimize_for_size off
 
-#include <cstring>
+#include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JAudio2/JASAiCtrl.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
-#include "Z2AudioLib/Z2Instances.h"
 #include "d/actor/d_a_movie_player.h"
-
+#include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_overlap_mng.h"
+#include <cstring>
+
+#if TARGET_PC
+#include "dusk/layout.hpp"
+#include "dusk/os.h"
+#include "helpers/gx_helper.h"
 
 #include "JSystem/JAudio2/JASCriticalSection.h"
 
-#if TARGET_PC
-#include "helpers/gx_helper.h"
-#include "dusk/os.h"
-#include "dusk/layout.hpp"
-#endif
-
-inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
-    return *(BE(s32)*)readBuf->ptr;
-}
-
-#if TARGET_PC
 // idk what OS_THREAD_ATTR_DETACH does, and it stops OSThreadJoin()
 // probably the difference doesn't matter since we are using OS threads anyways.
 #define OS_THREAD_ATTR 0
 #else
 #define OS_THREAD_ATTR OS_THREAD_ATTR_DETACH
 #endif
+
+inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
+    return *(BE(s32)*)readBuf->ptr;
+}
 
 #if !TARGET_PC
 #if defined(__cplusplus)
@@ -4241,10 +4238,6 @@ static void daMP_ActivePlayer_Main() {
         OSReport("Error happen");
     }
 }
-
-#if TARGET_PC && 0
-#include "imgui.h"
-#endif
 
 static void daMP_ActivePlayer_Draw() {
 #if TARGET_PC

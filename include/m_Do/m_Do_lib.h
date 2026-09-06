@@ -2,13 +2,10 @@
 #define M_DO_M_DO_LIB_H
 
 #include "JSystem/J3DU/J3DUClipper.h"
-#include <dolphin/gx/GXStruct.h>
 
 #if TARGET_PC
-#include "JSystem/JGeometry.h"
-#endif
-
 #include "helpers/gx_helper.h"
+#endif
 
 typedef struct Vec Vec;
 struct ResTIMG;

@@ -12,9 +12,10 @@
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "SSystem/SComponent/c_phase.h"
+
+#if TARGET_PC
 #include "helpers/endian_ssystem.h"
 
-#if !__MWERKS__
 // mwerks compiler makes value initialization act like default initialization so we need
 // to be explicit about default initialization in modern compilers
 #define fopAcM_ct_placement(ptr, ClassName) JKR_NEW_ARGS (ptr) ClassName
@@ -27,7 +28,6 @@
         fopAcM_ct_placement(ptr, ClassName);                                \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
     }
-
 
 #define fopAcM_RegisterDeleteID(i_this, actor_name_str)                     \
     ("Delete -> " actor_name_str "(id=%d)\n", fopAcM_GetID(i_this))

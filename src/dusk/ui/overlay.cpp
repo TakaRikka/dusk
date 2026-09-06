@@ -1,22 +1,25 @@
 #include "overlay.hpp"
 
-#include <borealis/log.hpp>
 #include "controller_config.hpp"
+#include "window.hpp"
+
 #include "dusk/achievements.h"
 #include "dusk/action_bindings.h"
 #include "dusk/livesplit.h"
 #include "dusk/settings.h"
 #include "dusk/speedrun.h"
-#include "fmt/format.h"
-#include "magic_enum.hpp"
-#include "window.hpp"
 
+#include "m_Do/m_Do_main.h"
+
+#include <aurora/gfx.h>
+#include <borealis/log.hpp>
+#include <dolphin/pad.h>
+#include <fmt/format.h>
+#include <magic_enum.hpp>
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_timer.h>
+
 #include <algorithm>
-#include <aurora/gfx.h>
-#include <dolphin/pad.h>
-#include <m_Do/m_Do_main.h>
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>

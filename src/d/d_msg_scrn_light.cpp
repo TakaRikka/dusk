@@ -6,7 +6,10 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_pane_class.h"
+
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#endif
 
 class dMsgScrnLight_HIO_c {
 public:

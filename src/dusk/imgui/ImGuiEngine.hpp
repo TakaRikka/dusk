@@ -1,8 +1,8 @@
 #pragma once
 
+#include <imgui.h>
+
 #include <memory>
-#include "imgui.h"
-#include "misc/cpp/imgui_stdlib.h"
 
 namespace dusk {
 class ImGuiEngine {

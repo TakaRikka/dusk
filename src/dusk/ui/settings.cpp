@@ -1,41 +1,38 @@
 #include "settings.hpp"
 
-#include "aurora/gfx.h"
 #include "bool_button.hpp"
 #include "controller_config.hpp"
-#include "dusk/app_info.hpp"
-#include "dusk/audio/DuskAudioSystem.h"
-#include "dusk/audio/DuskDsp.hpp"
-#include "dusk/config.hpp"
-#include "dusk/hotkeys.h"
-#include "dusk/data.hpp"
-#include "dusk/imgui/ImGuiEngine.hpp"
-#include "dusk/io.hpp"
-#include "dusk/language.hpp"
-#include "dusk/presentation.hpp"
-#include <borealis/io.hpp>
-#include <borealis/file_select.hpp>
-#include "dusk/livesplit.h"
-#include "dusk/discord_presence.hpp"
-#include "dusk/speedrun.h"
 #include "graphics_tuner.hpp"
-#include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
 #include "modal.hpp"
 #include "number_button.hpp"
-#include "menu_bar.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "touch_controls_editor.hpp"
 #include "ui.hpp"
 
-#include <aurora/lib/window.hpp>
-#include <SDL3/SDL_filesystem.h>
-#include <fmt/format.h>
+#include "dusk/app_info.hpp"
+#include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
+#include "dusk/config.hpp"
+#include "dusk/data.hpp"
+#include "dusk/discord_presence.hpp"
+#include "dusk/hotkeys.h"
+#include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/language.hpp"
+#include "dusk/livesplit.h"
+#include "dusk/presentation.hpp"
+#include "dusk/speedrun.h"
 
+#include <aurora/gfx.h>
+#include <aurora/lib/window.hpp>
+#include <borealis/file_select.hpp>
+#include <borealis/io.hpp>
 #if BOREALIS_HAS_SENTRY
 #include <borealis/sentry.hpp>
 #endif
+#include <fmt/format.h>
+#include <SDL3/SDL_filesystem.h>
 
 #include <algorithm>
 #include <filesystem>

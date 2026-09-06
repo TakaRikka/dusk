@@ -29,14 +29,13 @@
 
 #include <cstdio>
 
-#include "dusk/version.hpp"
-
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/game_clock.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/settings.h"
 #include "dusk/ui/touch_controls.hpp"
+#include "dusk/version.hpp"
 #endif
 
 typedef void (dMenu_Ring_c::*initFunc)();

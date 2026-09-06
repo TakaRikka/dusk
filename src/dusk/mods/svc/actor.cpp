@@ -1,21 +1,18 @@
 #include "mods/svc/actor.h"
-#include "dusk/mods/svc/actor.hpp"
 
-#include "config.hpp"
+#include "actor.hpp"
 #include "internal.hpp"
 #include "registry.hpp"
 
-#include "aurora/lib/logging.hpp"
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
-
-#include <fmt/format.h>
 
 #include "d/d_stage.h"
 #include "f_op/f_op_actor_tag.h"
 #include "f_pc/f_pc_deletor.h"
 
-#include <cstring>
+#include <aurora/lib/logging.hpp>
+
 #include <vector>
 
 namespace dusk::mods::svc::actor_impl {

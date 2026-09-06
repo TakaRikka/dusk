@@ -1,24 +1,26 @@
 #include "ImGuiStateShare.hpp"
-#include "ImGuiMenuTools.hpp"
+
 #include "ImGuiConsole.hpp"
+#include "ImGuiMenuTools.hpp"
 
-#include "imgui.h"
-#include "fmt/format.h"
-#include "absl/strings/escaping.h"
-#include "nlohmann/json.hpp"
-
-#include "d/d_com_inf_game.h"
-#include "dusk/main.h"
+#include "dusk/autosave.h"
 #include "dusk/io.hpp"
 #include "dusk/logging.h"
+#include "dusk/main.h"
 #include "dusk/settings.h"
+
+#include "d/d_com_inf_game.h"
 #include "f_op/f_op_overlap_mng.h"
+
+#include <absl/strings/escaping.h>
+#include <aurora/lib/window.hpp>
 #include <borealis/file_select.hpp>
-#include "aurora/lib/window.hpp"
+#include <fmt/format.h>
+#include <imgui.h>
+#include <nlohmann/json.hpp>
+#include <zstd.h>
 
 #include <unordered_set>
-#include <zstd.h>
-#include <dusk/autosave.h>
 
 namespace dusk {
 

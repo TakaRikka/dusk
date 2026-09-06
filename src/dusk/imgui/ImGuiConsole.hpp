@@ -1,15 +1,14 @@
 #ifndef DUSK_IMGUI_HPP
 #define DUSK_IMGUI_HPP
+#include "ImGuiMenuTools.hpp"
 
-#include <deque>
-#include <string>
-#include <string_view>
+#include "dusk/main.h"
 
 #include <aurora/aurora.h>
+#include <imgui.h>
 
-#include "ImGuiMenuTools.hpp"
-#include "dusk/main.h"
-#include "imgui.h"
+#include <string>
+#include <string_view>
 
 union SDL_Event;
 struct ImGuiWindow;

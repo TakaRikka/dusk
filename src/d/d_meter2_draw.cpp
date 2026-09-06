@@ -20,14 +20,14 @@
 #include "d/d_msg_class.h"
 #include "d/d_msg_object.h"
 #include "d/d_pane_class.h"
-#include "dusk/frame_interpolation.h"
 #include <cstring>
 
-#include "dusk/version.hpp"
-
 #if TARGET_PC
+#include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
 #include "dusk/ui/icon_provider.hpp"
+#include "dusk/version.hpp"
+
 #include <algorithm>
 
 namespace {

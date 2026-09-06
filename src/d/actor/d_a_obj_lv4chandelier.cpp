@@ -12,10 +12,6 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 
-#ifndef __MWERKS__
-#include "helpers/math.h"
-#endif
-
 #if DEBUG
 class daObjLv4Chan_HIO_c : public mDoHIO_entry_c {
 public:
