@@ -143,6 +143,14 @@ dMenu_DmapBg_c::dMenu_DmapBg_c(JKRExpHeap* i_heap, STControl* i_stick) {
     field_0xdd0 = 0;
 
 #if TARGET_PC
+    mpHeartPieceCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("o_heart_kakera_48.bti", dComIfGp_getItemIconArchive()));
+
+    mpHeartPieceCountPane = JKR_NEW J2DTextBox();
+    if (mpHeartPieceCountPane != nullptr) {
+        mpHeartPieceCountPane->setFontSize(15.0f, 15.0f);
+        mpHeartPieceCountPane->setFont(mDoExt_getMesgFont());
+    }
+    
     mpPoeCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("ni_item_icon_pou.bti", dComIfGp_getItemIconArchive()));
 
     mpPoeCountPane = JKR_NEW J2DTextBox();
@@ -852,6 +860,12 @@ dMenu_DmapBg_c::~dMenu_DmapBg_c() {
     }
 
 #if TARGET_PC
+    JKR_DELETE(mpHeartPieceCountIcon);
+    mpHeartPieceCountIcon = NULL;
+
+    JKR_DELETE(mpHeartPieceCountPane);
+    mpHeartPieceCountPane = NULL;
+    
     JKR_DELETE(mpPoeCountIcon);
     mpPoeCountIcon = NULL;
 
@@ -1138,16 +1152,45 @@ void dMenu_DmapBg_c::draw() {
 
 #if TARGET_PC
     if (dusk::getSettings().game.enhancedMapMenus) {
+        int nowHeartPieceCount = 0;
+        int totalHeartPieceCount = 0;
         int nowPoeCount = 0;
         int totalPoeCount = 0;
-        dMenuMapCommon_c::getDmapPoeCount(dComIfGp_getStartStageName(), nowPoeCount, totalPoeCount);
-        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
-            const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f);
-            const f32 y = 410.0f;
-            constexpr f32 iconsize = 48.0f * 0.8f;
 
-            if (mpPoeCountIcon != nullptr)
-                mpPoeCountIcon->draw(x - 35.0f, y - 25.0f, iconsize, iconsize, false, false, false);
+        dMenuMapCommon_c::getDmapHeartPieceCount(dComIfGp_getStartStageName(), nowHeartPieceCount, totalHeartPieceCount);
+        dMenuMapCommon_c::getDmapPoeCount(dComIfGp_getStartStageName(), nowPoeCount, totalPoeCount);
+        
+        const f32 y = 410.0f;
+
+        if (totalHeartPieceCount > 0) {
+            const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f);
+            constexpr f32 heartPieceWidth = 53.0f * 0.8f;
+            constexpr f32 heartPieceHeight = 40.0f * 0.8f;
+
+            if (mpHeartPieceCountIcon != nullptr) {
+                mpHeartPieceCountIcon->draw(x - 45.0f, y - 20.0f, heartPieceWidth, heartPieceHeight, false, false, false);
+            }
+
+            char counter_text[6];
+            snprintf(counter_text, sizeof(counter_text), "%d/%d", nowHeartPieceCount, totalHeartPieceCount);
+            mpHeartPieceCountPane->setString(counter_text);
+
+            mpHeartPieceCountPane->setCharColor(0x000000FF);
+            mpHeartPieceCountPane->setGradColor(0x000000FF);
+            mpHeartPieceCountPane->draw(x + 1, y + 1, FB_WIDTH, HBIND_LEFT);
+
+            mpHeartPieceCountPane->setCharColor(0xC8C8C8FF);
+            mpHeartPieceCountPane->setGradColor(0xC8C8C8FF);
+            mpHeartPieceCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
+        }
+
+        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
+            const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f) + 70.0f;
+            constexpr f32 poeSize = 48.0f * 0.8f;
+
+            if (mpPoeCountIcon != nullptr) {
+                mpPoeCountIcon->draw(x - 43.0f, y - 24.0f, poeSize, poeSize, false, false, false);
+            }
 
             char counter_text[6];
             snprintf(counter_text, sizeof(counter_text), "%d/%d", nowPoeCount, totalPoeCount);

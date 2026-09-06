@@ -185,8 +185,10 @@ public:
     /* 0xDDA */ u8 field_0xdda;
 
 #if TARGET_PC
-    J2DTextBox* mpPoeCountPane;
+    J2DPicture* mpHeartPieceCountIcon;
+    J2DTextBox* mpHeartPieceCountPane;
     J2DPicture* mpPoeCountIcon;
+    J2DTextBox* mpPoeCountPane;
 #endif
 };
 

@@ -2635,6 +2635,22 @@ dMenu_Fmap2DTop_c::dMenu_Fmap2DTop_c(JKRExpHeap* i_heap, STControl* i_stick) {
 #endif
 
 #if TARGET_PC
+    mpHeartPieceCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("o_heart_kakera_48.bti", dComIfGp_getItemIconArchive()));
+
+    mpHeartPieceCountPane = JKR_NEW J2DTextBox();
+    if (mpHeartPieceCountPane != nullptr) {
+        mpHeartPieceCountPane->setFontSize(15.0f, 15.0f);
+        mpHeartPieceCountPane->setFont(mDoExt_getMesgFont());
+    }
+    
+    mpGoldBugCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("kabuto_osu_00.bti", dComIfGp_getItemIconArchive()));
+
+    mpGoldBugCountPane = JKR_NEW J2DTextBox();
+    if (mpGoldBugCountPane != nullptr) {
+        mpGoldBugCountPane->setFontSize(15.0f, 15.0f);
+        mpGoldBugCountPane->setFont(mDoExt_getMesgFont());
+    }
+    
     mpPoeCountIcon = JKR_NEW J2DPicture((ResTIMG*)JKRGetNameResource("ni_item_icon_pou.bti", dComIfGp_getItemIconArchive()));
 
     mpPoeCountPane = JKR_NEW J2DTextBox();
@@ -2710,6 +2726,18 @@ dMenu_Fmap2DTop_c::~dMenu_Fmap2DTop_c() {
     mpAnm = NULL;
 
 #if TARGET_PC
+    JKR_DELETE(mpHeartPieceCountIcon);
+    mpHeartPieceCountIcon = NULL;
+
+    JKR_DELETE(mpHeartPieceCountPane);
+    mpHeartPieceCountPane = NULL;
+    
+    JKR_DELETE(mpGoldBugCountIcon);
+    mpGoldBugCountIcon = NULL;
+
+    JKR_DELETE(mpGoldBugCountIcon);
+    mpGoldBugCountPane = NULL;
+    
     JKR_DELETE(mpPoeCountIcon);
     mpPoeCountIcon = NULL;
 
@@ -2815,16 +2843,78 @@ void dMenu_Fmap2DTop_c::draw() {
 
 #if TARGET_PC
     if (dusk::getSettings().game.enhancedMapMenus) {
+        int nowHeartPieceCount = 0;
+        int totalHeartPieceCount = 0;
+        int nowGoldBugCount = 0;
+        int totalGoldBugCount = 0;
         int nowPoeCount = 0;
         int totalPoeCount = 0;
-        dMenuMapCommon_c::getFmapPoeCount(mSelectRegionNo, nowPoeCount, totalPoeCount);
-        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
-            const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
-            const f32 y = 380.0f;
-            constexpr f32 iconsize = 48.0f * 0.8f;
 
-            if (mpPoeCountIcon != nullptr)
-                mpPoeCountIcon->draw(x - 35.0f, y - 25.0f, iconsize, iconsize, false, false, false);
+        dMenuMapCommon_c::getFmapHeartPieceCount(mSelectRegionNo, nowHeartPieceCount, totalHeartPieceCount);
+        dMenuMapCommon_c::getFmapPoeCount(mSelectRegionNo, nowPoeCount, totalPoeCount);
+        dMenuMapCommon_c::getFmapGoldBugCount(mSelectRegionNo, nowGoldBugCount, totalGoldBugCount);
+        
+        const f32 x = mTransX + mDoGph_gInf_c::ScaleHUDXRight(485.0f);
+        
+        if (totalHeartPieceCount > 0) {
+            const f32 y = (dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0 &&
+                dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0)
+                ? 304.0f
+                : ((dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0) ||
+                    (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0))
+                    ? 342.0f
+                    : 380.0f;
+            constexpr f32 heartPieceWidth = 53.0f * 0.8f;
+            constexpr f32 heartPieceHeight = 40.0f * 0.8f;
+
+            if (mpHeartPieceCountIcon != nullptr) {
+                mpHeartPieceCountIcon->draw(x - 45.0f, y - 20.0f, heartPieceWidth, heartPieceHeight, false, false, false);
+            }
+
+            char counter_text[6];
+            snprintf(counter_text, sizeof(counter_text), "%d/%d", nowHeartPieceCount, totalHeartPieceCount);
+            mpHeartPieceCountPane->setString(counter_text);
+
+            mpHeartPieceCountPane->setCharColor(0x000000FF);
+            mpHeartPieceCountPane->setGradColor(0x000000FF);
+            mpHeartPieceCountPane->draw(x + 1, y + 1, FB_WIDTH, HBIND_LEFT);
+
+            mpHeartPieceCountPane->setCharColor(0xC8C8C8FF);
+            mpHeartPieceCountPane->setGradColor(0xC8C8C8FF);
+            mpHeartPieceCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
+        }
+        
+        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0380) && totalGoldBugCount > 0) {
+            const f32 y = (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0)
+                ? 342.0f
+                : 380.0f;
+            constexpr f32 goldBugWidth = 56.0f * 0.8f;
+            constexpr f32 goldBugHeight = 47.0f * 0.8f;
+
+            if (mpGoldBugCountIcon != nullptr) {
+                mpGoldBugCountIcon->draw(x - 47.0f, y - 24.0f, 56.0f * 0.8f, 47.0f * 0.8f, false, false, false);
+            }
+
+            char counter_text[6];
+            snprintf(counter_text, sizeof(counter_text), "%d/%d", nowGoldBugCount, totalGoldBugCount);
+            mpGoldBugCountPane->setString(counter_text);
+
+            mpGoldBugCountPane->setCharColor(0x000000FF);
+            mpGoldBugCountPane->setGradColor(0x000000FF);
+            mpGoldBugCountPane->draw(x + 1, y + 1, FB_WIDTH, HBIND_LEFT);
+
+            mpGoldBugCountPane->setCharColor(0xC8C8C8FF);
+            mpGoldBugCountPane->setGradColor(0xC8C8C8FF);
+            mpGoldBugCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
+        }
+        
+        if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
+            const f32 y = 380.0f;
+            constexpr f32 poeSize = 48.0f * 0.8f;
+
+            if (mpPoeCountIcon != nullptr) {
+                mpPoeCountIcon->draw(x - 43.0f, y - 24.0f, poeSize, poeSize, false, false, false);
+            }
 
             char counter_text[6];
             snprintf(counter_text, sizeof(counter_text), "%d/%d", nowPoeCount, totalPoeCount);

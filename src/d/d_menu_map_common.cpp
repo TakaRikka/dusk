@@ -756,6 +756,175 @@ void dMenuMapCommon_c::debugIcon() {
 #if TARGET_PC
 static constexpr struct {
     std::string_view stagename;
+    u8 chest_flag_no;
+    s8 region_id;
+    u8 save_id;
+} l_heartPieceChestInfo[] = {
+    // Dungeons
+    {"D_MN01", 0x05, -1, 0x12}, // Lakebed Temple Chandelier Chest
+    {"D_MN01", 0x08, -1, 0x12}, // Lakebed Temple East Lower Waterwheel Bridge Chest
+    {"D_MN04", 0x14, -1, 0x11}, // Goron Mines Magnet Maze Chest
+    {"D_MN04", 0x09, -1, 0x11}, // Goron Mines After Crystal Switch Room Magnet Wall Chest
+    {"D_MN05", 0x1F, -1, 0x10}, // Forest Temple West Deku Like Chest
+    {"D_MN05", 0x13, -1, 0x10}, // Forest Temple West Tile Worm Chest Behind Stairs
+    {"D_MN06", 0x05, -1, 0x15}, // Temple of Time Armos Antechamber Statue Chest
+    {"D_MN06", 0x0C, -1, 0x15}, // Temple of Time Moving Wall Dinalfos Room Chest
+    {"D_MN07", 0x06, -1, 0x16}, // City in the Sky Baba Tower Alcove Chest
+    {"D_MN07", 0x09, -1, 0x16}, // City in the Sky West Garden Ledge Chest
+    {"D_MN08", 0x1E, -1, 0x17}, // Palace of Twilight West Wing Chest Behind Wall of Darkness
+    {"D_MN08", 0x00, -1, 0x17}, // Palace of Twilight East Wing First Room East Alcove Chest
+    {"D_MN10", 0x13, -1, 0x13}, // Arbiter's Grounds Torch Room East Chest
+    {"D_MN10", 0x1A, -1, 0x13}, // Arbiter's Grounds Spinner Room Stalfos Alcove Chest
+    {"D_MN11", 0x15, -1, 0x14}, // Snowpeak Ruins Lobby Chandelier Chest
+    {"D_MN11", 0x19, -1, 0x14}, // Snowpeak Ruins Broken Floor Chest
+
+    // Sub-Dungeons
+    {"D_SB00", 0x00, 3, 0x19}, // Lanayru Ice Block Puzzle Cave Chest
+    {"D_SB01", 0x3E, 2, 0x19}, // Eldin Lantern Cave Lantern Chest
+    {"D_SB03", 0x03, 3, 0x1A}, // Lake Lantern Cave End Lantern Chest
+    {"D_SB04", 0x3E, 2, 0x1A}, // Eldin Stockcave Lowest Chest
+
+    // Field Spots
+    {"F_SP108", 0x1A, 1, 0x02}, // Faron Mist Cave Lantern Chest
+    {"F_SP108", 0x1E, 1, 0x02}, // Faron Woods Owl Statue Chest
+    {"F_SP109", 0x15, 2, 0x03}, // Eldin Spring Underwater Chest
+    {"F_SP110", 0x16, 2, 0x03}, // Death Mountain Alcove Chest
+    {"F_SP115", 0x00, 3, 0x04}, // Flight By Fowl Second Platform Chest
+    {"F_SP115", 0x1D, 3, 0x04}, // Lanayru Spring Back Room Lantern Chest
+    {"F_SP117", 0x03, 1, 0x07}, // Sacred Grove Baba Serpent Grotto Chest
+    {"F_SP117", 0x01, 1, 0x07}, // Sacred Grove Past Owl Statue Chest
+    {"F_SP121", 0x05, 2, 0x06}, // Kakariko Gorge Double Clawshot Chest
+    {"F_SP121", 0x02, 2, 0x06}, // Eldin Field Bomb Rock Chest
+    {"F_SP121", 0x03, 2, 0x06}, // Bridge of Eldin Owl Statue Chest
+    {"F_SP121", 0x02, 3, 0x06}, // Eldin Field Stalfos Grotto Stalfos Chest
+    {"F_SP121", 0x08, 3, 0x06}, // Lanayru Field Spinner Track Chest
+};
+
+static constexpr struct {
+    u8 item_flag_no;
+    s8 region_id;
+    u8 save_id;
+} l_heartPieceItemInfo[] = {
+    {0x81, 1, 0x06}, // Faron Field Tree Heart Piece
+    {0x82, 2, 0x06}, // Kakariko Gorge Spire Heart Piece
+    {0x8C, 2, 0x03}, // Kakariko Village Bomb Rock Spire Heart Piece
+    {0x80, 2, 0X06}, // Goron Springwater Rush
+    {0x8B, 2, 0x03}, // Cats Hide and Seek Minigame
+    {0x80, 3, 0x0B}, // Fishing Hole Heart Piece
+    {0x9F, 4, 0x0A}, // Bulblin Camp Roasted Boar
+};
+
+static constexpr struct {
+    u16 event_flag_no;
+    s8 region_id;
+} l_heartPieceEventInfo[] = {
+    {0x4240, 0}, // Herding Goats Reward
+    {0x0920, 2}, // Talo Sharpshooting
+    {0x2480, 3}, // Charlo Donation Blessing
+    {0x2380, 3}, // Plumm Fruit Balloon Minigame
+    {0x3B10, 5}, // Snowboard Racing Prize
+};
+
+void dMenuMapCommon_c::getDmapHeartPieceCount(const std::string& stageName, int& nowCount, int& totalCount) {
+    nowCount = 0;
+    totalCount = 0;
+
+    for (const auto& i : l_heartPieceChestInfo) {
+        if (stageName == i.stagename) {
+            if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == i.save_id) {
+                nowCount += dComIfGs_isTbox(i.chest_flag_no);
+            } else {
+                nowCount += dComIfGs_isSaveTbox(i.save_id, i.chest_flag_no);
+            }
+            totalCount++;
+        }
+    }
+}
+
+void dMenuMapCommon_c::getFmapHeartPieceCount(const int regionNo, int& nowCount, int& totalCount) {
+    nowCount = 0;
+    totalCount = 0;
+
+    if (regionNo < 0)
+        return;
+
+    for (const auto& i : l_heartPieceChestInfo) {
+        if (regionNo == i.region_id) {
+            if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == i.save_id) {
+                nowCount += dComIfGs_isTbox(i.chest_flag_no);
+            } else {
+                nowCount += dComIfGs_isSaveTbox(i.save_id, i.chest_flag_no);
+            }
+            totalCount++;
+        }
+    }
+
+    for (const auto& i : l_heartPieceItemInfo) {
+        if (regionNo == i.region_id) {
+            if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == i.save_id) {
+                nowCount += dComIfGs_isItem(i.item_flag_no, -1);
+            } else {
+                nowCount += dComIfGs_isItem(i.save_id, i.item_flag_no);
+            }
+            totalCount++;
+        }
+    }
+
+    for (const auto& i : l_heartPieceEventInfo) {
+        if (regionNo == i.region_id) {
+            nowCount += dComIfGs_isEventBit(i.event_flag_no);
+            totalCount++;
+        }
+    }
+}
+
+static constexpr struct {
+    u8 item_no;
+    s8 region_id;
+} l_goldBugInfo[] = {
+    {dItemNo_M_ANT_e, 2},
+    {dItemNo_F_ANT_e, 2},
+    {dItemNo_M_MAYFLY_e, 4},
+    {dItemNo_F_MAYFLY_e, 4},
+    {dItemNo_M_BEETLE_e, 1},
+    {dItemNo_F_BEETLE_e, 1},
+    {dItemNo_M_MANTIS_e, 3},
+    {dItemNo_F_MANTIS_e, 3},
+    {dItemNo_M_STAG_BEETLE_e, 3},
+    {dItemNo_F_STAG_BEETLE_e, 3},
+    {dItemNo_M_DANGOMUSHI_e, 2},
+    {dItemNo_F_DANGOMUSHI_e, 2},
+    {dItemNo_M_BUTTERFLY_e, 3},
+    {dItemNo_F_BUTTERFLY_e, 3},
+    {dItemNo_M_LADYBUG_e, 3},
+    {dItemNo_F_LADYBUG_e, 3},
+    {dItemNo_M_SNAIL_e, 1},
+    {dItemNo_F_SNAIL_e, 1},
+    {dItemNo_M_NANAFUSHI_e, 2},
+    {dItemNo_F_NANAFUSHI_e, 2},
+    {dItemNo_M_GRASSHOPPER_e, 2},
+    {dItemNo_F_GRASSHOPPER_e, 2},
+    {dItemNo_M_DRAGONFLY_e, 3},
+    {dItemNo_F_DRAGONFLY_e, 3},
+};
+
+void dMenuMapCommon_c::getFmapGoldBugCount(int regionNo, int& nowCount, int& totalCount) {
+    nowCount = 0;
+    totalCount = 0;
+
+    if (regionNo < 0)
+        return;
+
+    for (const auto& i : l_goldBugInfo) {
+        if (regionNo == i.region_id) {
+            nowCount += dComIfGs_isItemFirstBit(i.item_no);
+            totalCount++;
+        }
+    }
+}
+
+static constexpr struct {
+    std::string_view stagename;
     u8 switch_no;
     s8 region_id;
     u8 save_id;
