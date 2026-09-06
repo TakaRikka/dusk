@@ -14727,7 +14727,12 @@ int daAlink_c::checkNewItemChange(u8 i_selItemIdx) {
         if ((checkBombItem(sel_item) && !dComIfGp_getSelectItemNum(i_selItemIdx))
             || ((sel_item == dItemNo_NORMAL_BOMB_e || sel_item == dItemNo_WATER_BOMB_e) && mActiveBombNum >= 3)
             || (sel_item == dItemNo_IRONBALL_e && (!mLinkAcch.ChkGroundHit() || checkModeFlg(0x70C52)))
+#if TARGET_PC
+            || (sel_item == dItemNo_KANTERA_e && (checkEndResetFlg1(ERFLG1_UNK_4)
+            || (!checkLanternIgnoresWater() && (checkNoResetFlg0(FLG0_WATER_IN_MOVE) || checkModeFlg(0x40000))))))
+#else
             || (sel_item == dItemNo_KANTERA_e && (checkNoResetFlg0(FLG0_WATER_IN_MOVE) || checkEndResetFlg1(ERFLG1_UNK_4) || checkModeFlg(0x40000))))
+#endif
         {
             return ITEM_PROC_NONE;
         }
@@ -14871,7 +14876,7 @@ void daAlink_c::setLight() {
         offNoResetFlg1(FLG1_UNK_80);
     } else {
         if (checkNoResetFlg2(FLG2_UNK_1) || checkEndResetFlg1(ERFLG1_UNK_4)) {
-            if (dComIfGs_getOil() != 0 && !checkNoResetFlg2(FLG2_KANDELAAR_LIGHT_OFF) && ((checkNoResetFlg2(FLG2_UNK_1) && !checkFreezeDamage()) || checkEndResetFlg1(ERFLG1_UNK_10))) {
+            if (dComIfGs_getOil() != 0 && IF_DUSK(!(checkLanternIgnoresWater() && checkWaterInKandelaarOffset(mWaterY)) &&) !checkNoResetFlg2(FLG2_KANDELAAR_LIGHT_OFF) && ((checkNoResetFlg2(FLG2_UNK_1) && !checkFreezeDamage()) || checkEndResetFlg1(ERFLG1_UNK_10))) {
                 onNoResetFlg1(FLG1_UNK_80);
 
                 if (!checkEventRun() && !checkEndResetFlg1(ERFLG1_UNK_4)) {
