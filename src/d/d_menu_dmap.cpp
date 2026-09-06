@@ -1155,13 +1155,21 @@ void dMenu_DmapBg_c::draw() {
     if (dusk::getSettings().game.enhancedMapMenus) {
         int nowHeartPieceCount = 0;
         int totalHeartPieceCount = 0;
+        int nowPoeCount = 0;
+        int totalPoeCount = 0;
+
         dMenuMapCommon_c::getDmapHeartPieceCount(dComIfGp_getStartStageName(), nowHeartPieceCount, totalHeartPieceCount);
+        dMenuMapCommon_c::getDmapPoeCount(dComIfGp_getStartStageName(), nowPoeCount, totalPoeCount);
+        
+        const f32 y = 410.0f;
+
         if (totalHeartPieceCount > 0) {
             const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f);
-            const f32 y = 410.0f;
+            constexpr f32 heartPieceWidth = 53.0f * 0.8f;
+            constexpr f32 heartPieceHeight = 40.0f * 0.8f;
 
             if (mpHeartPieceCountIcon != nullptr) {
-                mpHeartPieceCountIcon->draw(x - 45.0f, y - 20.0f, 53 * 0.8f, 40 * 0.8f, false, false, false);
+                mpHeartPieceCountIcon->draw(x - 45.0f, y - 20.0f, heartPieceWidth, heartPieceHeight, false, false, false);
             }
 
             char counter_text[6];
@@ -1177,16 +1185,12 @@ void dMenu_DmapBg_c::draw() {
             mpHeartPieceCountPane->draw(x, y, FB_WIDTH, HBIND_LEFT);
         }
 
-        int nowPoeCount = 0;
-        int totalPoeCount = 0;
-        dMenuMapCommon_c::getDmapPoeCount(dComIfGp_getStartStageName(), nowPoeCount, totalPoeCount);
         if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
             const f32 x = field_0xd94 + mDoGph_gInf_c::ScaleHUDXLeft(80.0f) + 70.0f;
-            const f32 y = 410.0f;
-            constexpr f32 iconsize = 48.0f * 0.8f;
+            constexpr f32 poeSize = 48.0f * 0.8f;
 
             if (mpPoeCountIcon != nullptr) {
-                mpPoeCountIcon->draw(x - 43.0f, y - 24.0f, iconsize, iconsize, false, false, false);
+                mpPoeCountIcon->draw(x - 43.0f, y - 24.0f, poeSize, poeSize, false, false, false);
             }
 
             char counter_text[6];

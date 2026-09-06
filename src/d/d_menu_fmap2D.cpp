@@ -2866,9 +2866,11 @@ void dMenu_Fmap2DTop_c::draw() {
                     (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0))
                     ? 342.0f
                     : 380.0f;
+            constexpr f32 heartPieceWidth = 53.0f * 0.8f;
+            constexpr f32 heartPieceHeight = 40.0f * 0.8f;
 
             if (mpHeartPieceCountIcon != nullptr) {
-                mpHeartPieceCountIcon->draw(x - 45.0f, y - 20.0f, 53.0f * 0.8f, 40.0f * 0.8f, false, false, false);
+                mpHeartPieceCountIcon->draw(x - 45.0f, y - 20.0f, heartPieceWidth, heartPieceHeight, false, false, false);
             }
 
             char counter_text[6];
@@ -2888,6 +2890,8 @@ void dMenu_Fmap2DTop_c::draw() {
             const f32 y = (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0)
                 ? 342.0f
                 : 380.0f;
+            constexpr f32 goldBugWidth = 56.0f * 0.8f;
+            constexpr f32 goldBugHeight = 47.0f * 0.8f;
 
             if (mpGoldBugCountIcon != nullptr) {
                 mpGoldBugCountIcon->draw(x - 47.0f, y - 24.0f, 56.0f * 0.8f, 47.0f * 0.8f, false, false, false);
@@ -2908,10 +2912,10 @@ void dMenu_Fmap2DTop_c::draw() {
         
         if (dComIfGs_isEventBit(dSv_event_flag_c::F_0456) && totalPoeCount > 0) {
             const f32 y = 380.0f;
-            constexpr f32 iconsize = 48.0f * 0.8f;
+            constexpr f32 poeSize = 48.0f * 0.8f;
 
             if (mpPoeCountIcon != nullptr) {
-                mpPoeCountIcon->draw(x - 43.0f, y - 24.0f, iconsize, iconsize, false, false, false);
+                mpPoeCountIcon->draw(x - 43.0f, y - 24.0f, poeSize, poeSize, false, false, false);
             }
 
             char counter_text[6];
