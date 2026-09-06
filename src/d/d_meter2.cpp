@@ -27,6 +27,7 @@
 #if TARGET_PC
 #include "dusk/memory.h"
 #include "dusk/settings.h"
+#include "d/actor/d_a_alink.h"
 
 namespace {
 
@@ -2800,6 +2801,7 @@ void dMeter2_c::alphaAnimeKantera() {
     if (dComIfGs_getMaxOil() == 0 || dComIfGs_getItem(SLOT_1, true) != dItemNo_KANTERA_e ||
         !daPy_getPlayerActorClass()->checkUseKandelaar(0) || (mStatus & 0x4000) ||
         ((mStatus & 0x40) && dComIfGp_event_checkHind(0x400)) || dComIfGp_getOxygenShowFlag() ||
+        IF_DUSK(daAlink_getAlinkActorClass()->checkLanternInWater() ||)
         ((daPy_getPlayerActorClass()->getSumouMode() != 0) ||
          (daPy_getPlayerActorClass()->checkCanoeSlider() &&
           (dComIfG_getTimerMode() == 3 || dComIfG_getTimerMode() == 4)) ||
