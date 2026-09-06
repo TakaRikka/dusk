@@ -1312,6 +1312,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             });
         addCheat("Invincible Enemies", getSettings().game.invincibleEnemies,
             "Prevents enemies from taking damage.");
+
+        leftPane.add_section("World");
+        addCheat("System Time Sync", getSettings().game.systemTimeSync,
+            "Synchronizes in-game time with the system clock.");
     });
 
     add_tab("Interface", [this](Rml::Element* content) {
