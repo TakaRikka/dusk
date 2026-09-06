@@ -206,7 +206,7 @@ void daItem_c::CreateInit() {
     initBaseMtx();
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 
-    if (m_itemNo == dItemNo_BOOMERANG_e IF_DUSK(&&!mItemOverridden)) {
+    if (DUSK_IF_ELSE(mOriginalItemNo, m_itemNo) == dItemNo_BOOMERANG_e) {
         itemGetNextExecute();
     } else if ((m_itemNo == dItemNo_ORANGE_RUPEE_e || m_itemNo == dItemNo_SILVER_RUPEE_e) &&
                mSparkleEmtr.getEmitter() == NULL)
@@ -563,7 +563,7 @@ void daItem_c::procWaitGetDemoEvent() {
             dComIfGp_event_setItemPartnerId(m_item_id);
         }
     } else {
-        if (m_itemNo == dItemNo_BOOMERANG_e IF_DUSK(&&!mItemOverridden)) {
+        if (DUSK_IF_ELSE(mOriginalItemNo, m_itemNo) == dItemNo_BOOMERANG_e) {
             fopAcM_orderItemEvent(this, 0, 0);
             eventInfo.onCondition(dEvtCnd_CANGETITEM_e);
             return;
@@ -787,32 +787,44 @@ void daItem_c::mode_wait() {
         mAcch.SetGrndNone();
     }
 
-    switch (m_itemNo) {
-    case dItemNo_HEART_e:
-        itemActionForHeart();
-        break;
-    case dItemNo_ARROW_10_e:
-    case dItemNo_ARROW_20_e:
-    case dItemNo_ARROW_30_e:
-    case dItemNo_ARROW_1_e:
-    case dItemNo_PACHINKO_SHOT_e:
-    case dItemNo_LIGHT_ARROW_e:
-        itemActionForArrow();
-        break;
-    case dItemNo_BOOMERANG_e:
+#if TARGET_PC
+    if (mOriginalItemNo == dItemNo_BOOMERANG_e) {
         itemActionForBoomerang();
-        break;
-    case dItemNo_GREEN_RUPEE_e:
-    case dItemNo_BLUE_RUPEE_e:
-    case dItemNo_YELLOW_RUPEE_e:
-    case dItemNo_RED_RUPEE_e:
-    case dItemNo_PURPLE_RUPEE_e:
-    case dItemNo_ORANGE_RUPEE_e:
-    case dItemNo_SILVER_RUPEE_e:
-    default:
-        itemActionForRupee();
-        break;
+    } else {
+#endif
+        switch (m_itemNo) {
+        case dItemNo_HEART_e:
+            itemActionForHeart();
+            break;
+        case dItemNo_ARROW_10_e:
+        case dItemNo_ARROW_20_e:
+        case dItemNo_ARROW_30_e:
+        case dItemNo_ARROW_1_e:
+        case dItemNo_PACHINKO_SHOT_e:
+        case dItemNo_LIGHT_ARROW_e:
+            itemActionForArrow();
+            break;
+        case dItemNo_BOOMERANG_e:
+            // The boomerang check is already handled above, so if we got here, it's guaranteed to be
+            // an override. Fallthrough to the rupee action
+#if !TARGET_PC
+            itemActionForBoomerang();
+            break;
+#endif
+        case dItemNo_GREEN_RUPEE_e:
+        case dItemNo_BLUE_RUPEE_e:
+        case dItemNo_YELLOW_RUPEE_e:
+        case dItemNo_RED_RUPEE_e:
+        case dItemNo_PURPLE_RUPEE_e:
+        case dItemNo_ORANGE_RUPEE_e:
+        case dItemNo_SILVER_RUPEE_e:
+        default:
+            itemActionForRupee();
+            break;
+        }
+#if TARGET_PC
     }
+#endif
 
     if (field_0x9c0 == 0 && mAcch.ChkWaterHit() && mAcch.m_wtr.GetHeight() > current.pos.y) {
         mode_water_init();
@@ -868,55 +880,64 @@ void daItem_c::itemGetNextExecute() {
         setFlag(FLAG_INIT_GET_ITEM_e);
         BOOL haveItem = false;
 
-        switch (m_itemNo) {
-        case dItemNo_HEART_e:
-        case dItemNo_GREEN_RUPEE_e:
-        case dItemNo_ARROW_10_e:
-        case dItemNo_ARROW_20_e:
-        case dItemNo_ARROW_30_e:
-        case dItemNo_ARROW_1_e:
-            procInitSimpleGetDemo();
-            itemGet();
-            break;
-        case dItemNo_BLUE_RUPEE_e:
-        case dItemNo_YELLOW_RUPEE_e:
-        case dItemNo_RED_RUPEE_e:
-        case dItemNo_PURPLE_RUPEE_e:
-        case dItemNo_ORANGE_RUPEE_e:
-        case dItemNo_SILVER_RUPEE_e:
-        case dItemNo_PACHINKO_SHOT_e:
-            if (daPy_getPlayerActorClass()->checkCanoeRide() ||
-                daPy_getPlayerActorClass()->checkHorseRide())
-            {
-                if (checkItemGet(m_itemNo, 1)) {
-                    haveItem = true;
-                }
-                procInitSimpleGetDemo();
-                itemGet();
-
-                if (!haveItem) {
-                    dComIfGs_offItemFirstBit(m_itemNo);
-                }
-            } else if (!checkItemGet(m_itemNo, 1)) {
-                procInitGetDemoEvent();
-            } else {
-                procInitSimpleGetDemo();
-                itemGet();
-            }
-            break;
-        case dItemNo_BOOMERANG_e:
-            procInitGetDemoEvent();
-            break;
-        default:
 #if TARGET_PC
-            if (mItemOverridden) {
+        // Always call demo event for the original boomerang check
+        if (mOriginalItemNo == dItemNo_BOOMERANG_e) {
+            procInitGetDemoEvent();
+        } else {
+#endif
+            switch (m_itemNo) {
+            case dItemNo_HEART_e:
+            case dItemNo_GREEN_RUPEE_e:
+            case dItemNo_ARROW_10_e:
+            case dItemNo_ARROW_20_e:
+            case dItemNo_ARROW_30_e:
+            case dItemNo_ARROW_1_e:
+                procInitSimpleGetDemo();
+                itemGet();
+                break;
+            case dItemNo_BLUE_RUPEE_e:
+            case dItemNo_YELLOW_RUPEE_e:
+            case dItemNo_RED_RUPEE_e:
+            case dItemNo_PURPLE_RUPEE_e:
+            case dItemNo_ORANGE_RUPEE_e:
+            case dItemNo_SILVER_RUPEE_e:
+            case dItemNo_PACHINKO_SHOT_e:
+                if (daPy_getPlayerActorClass()->checkCanoeRide() ||
+                    daPy_getPlayerActorClass()->checkHorseRide())
+                {
+                    if (checkItemGet(m_itemNo, 1)) {
+                        haveItem = true;
+                    }
+                    procInitSimpleGetDemo();
+                    itemGet();
+
+                    if (!haveItem) {
+                        dComIfGs_offItemFirstBit(m_itemNo);
+                    }
+                } else if (!checkItemGet(m_itemNo, 1)) {
+                    procInitGetDemoEvent();
+                } else {
+                    procInitSimpleGetDemo();
+                    itemGet();
+                }
+                break;
+            case dItemNo_BOOMERANG_e:
                 procInitGetDemoEvent();
                 break;
-            }
+            default:
+#if TARGET_PC
+                if (mItemOverridden) {
+                    procInitGetDemoEvent();
+                    break;
+                }
 #endif
-            // "[daItem_c] Get process not defined[%d]\n"
-            OS_REPORT_ERROR("[daItem_c]ゲット処理が定義されていません[%d]\n", m_itemNo);
+                // "[daItem_c] Get process not defined[%d]\n"
+                OS_REPORT_ERROR("[daItem_c]ゲット処理が定義されていません[%d]\n", m_itemNo);
+            }
+#if TARGET_PC
         }
+#endif
 
         fopAcM_onItem(this, mItemBitNo);
         mCcCyl.SetTgType(0);
@@ -968,6 +989,13 @@ void daItem_c::itemGet() {
         execItemGet(m_itemNo IF_DUSK_ARG(mItemGiveTag) IF_DUSK_ARG(this));
         break;
     case dItemNo_BOOMERANG_e:
+#if TARGET_PC
+        if (mItemOverridden) {
+            mDoAud_seStart(Z2SE_CONSUMP_ITEM_GET, NULL, 0, 0);
+            execItemGet(m_itemNo, mItemGiveTag, this);
+            break;
+        }
+#endif
         break;
     case dItemNo_ARROW_10_e:
     case dItemNo_ARROW_20_e:
@@ -1297,7 +1325,7 @@ void daItem_c::initSpeed(BOOL i_noTypeChk) {
     u8 type = daItem_prm::getType(this);
 
     if (!i_noTypeChk) {
-        if (type == TYPE_WAIT_e || type == TYPE_BOOM_HIT_e || m_itemNo == dItemNo_BOOMERANG_e) {
+        if (type == TYPE_WAIT_e || type == TYPE_BOOM_HIT_e || DUSK_IF_ELSE(mOriginalItemNo, m_itemNo) == dItemNo_BOOMERANG_e) {
             y_speed = 0.0f;
             speedf = 0.0f;
         } else if (type == TYPE_LAUNCH_NO_RND_e || type == TYPE_FIXED_PLACE_e) {
