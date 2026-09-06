@@ -299,13 +299,6 @@ public:
     /* 0x168C */ u8 field_0x168c;
     /* 0x168D */ u8 field_0x168d;
     /* 0x168E */ u8 HIOInit;
-
-#if TARGET_PC
-    cXyz mLineInterpPrev[MG_ROD_LURE_LINE_LEN];
-    cXyz mLineInterpCurr[MG_ROD_LURE_LINE_LEN];
-    bool mLineInterpPrevValid;
-    bool mLineInterpCurrValid;
-#endif
 };
 
 #endif /* D_A_MG_ROD_H */

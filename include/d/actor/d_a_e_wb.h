@@ -221,12 +221,6 @@ public:
     /* 0x17E4 */ u8 field_0x17e4[0x17e8 - 0x17e4];
     /* 0x17E8 */ f32 ride_speed_max;  ///< @brief Speed rate for riding calculations.
 #if TARGET_PC
-    cXyz himo_mat_interp_prev[2][16];
-    cXyz himo_mat_interp_curr[2][16];
-    cXyz himo_tex_interp_prev[2];
-    cXyz himo_tex_interp_curr[2];
-    bool himo_interp_prev_valid;
-    bool himo_interp_curr_valid;
     s8 demo_cam_sync_ticks;
 #endif
 };

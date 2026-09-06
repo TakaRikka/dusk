@@ -81,15 +81,6 @@ public:
     /* 0x306D */ u8 field_0x306D[0x307C - 0x306D];
     /* 0x307C */ u32 mBodyEffEmtrID;
     /* 0x3080 */ u8 mInitHIO;
-
-#if TARGET_PC
-    static const int HAIR_STRAND_COUNT = 22;
-    static const int HAIR_SEGMENT_COUNT = 16;
-    cXyz mHairInterpPrev[HAIR_STRAND_COUNT * HAIR_SEGMENT_COUNT];
-    cXyz mHairInterpCurr[HAIR_STRAND_COUNT * HAIR_SEGMENT_COUNT];
-    bool mHairInterpPrevValid;
-    bool mHairInterpCurrValid;
-#endif
 };
 
 STATIC_ASSERT(sizeof(e_s1_class) == 0x3084);

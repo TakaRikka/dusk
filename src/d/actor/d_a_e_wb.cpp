@@ -21,6 +21,7 @@
 #include <cstring>
 
 #if TARGET_PC
+#include "dusk/dusk.h"
 #include "dusk/interp/frame_interpolation.h"
 #endif
 
@@ -186,30 +187,6 @@ static s8 lbl_244_bss_47;
 static bool hio_set;
 
 static daE_WB_HIO_c l_HIO;
-
-#if TARGET_PC
-static void e_wb_rein_interp_callback(void* pUserWork) {
-    e_wb_class* i_this = (e_wb_class*)pUserWork;
-    if (!i_this->himo_interp_prev_valid || !i_this->himo_interp_curr_valid) {
-        return;
-    }
-    const f32 alpha = dusk::interp::get_interpolation_step();
-    for (int r = 0; r < 2; r++) {
-        cXyz* dst = i_this->himo_mat[r].getPos(0);
-        for (int i = 0; i < 16; i++) {
-            const cXyz& p0 = i_this->himo_mat_interp_prev[r][i];
-            const cXyz& p1 = i_this->himo_mat_interp_curr[r][i];
-            dst[i] = p0 + (p1 - p0) * alpha;
-        }
-    }
-    cXyz* dst = i_this->himo_tex.getPos(0);
-    for (int i = 0; i < 2; i++) {
-        const cXyz& p0 = i_this->himo_tex_interp_prev[i];
-        const cXyz& p1 = i_this->himo_tex_interp_curr[i];
-        dst[i] = p0 + (p1 - p0) * alpha;
-    }
-}
-#endif
 
 static void himo_control1(e_wb_class* i_this, cXyz* i_pos, int i_no, s8 param_3) {
     fopEn_enemy_c* enemy = &i_this->enemy;
@@ -535,21 +512,6 @@ static int daE_WB_Draw(e_wb_class* i_this) {
         dComIfGd_set3DlineMat(&i_this->himo_mat[1]);
         i_this->himo_tex.update(2, l_color, &actor->tevStr);
         dComIfGd_set3DlineMat(&i_this->himo_tex);
-#if TARGET_PC
-        if (dusk::interp::is_enabled()) {
-            if (i_this->himo_interp_curr_valid) {
-                memcpy(i_this->himo_mat_interp_prev, i_this->himo_mat_interp_curr, sizeof(i_this->himo_mat_interp_curr));
-                memcpy(i_this->himo_tex_interp_prev, i_this->himo_tex_interp_curr, sizeof(i_this->himo_tex_interp_curr));
-                i_this->himo_interp_prev_valid = true;
-            }
-            for (int r = 0; r < 2; r++) {
-                memcpy(i_this->himo_mat_interp_curr[r], i_this->himo_mat[r].getPos(0), 16 * sizeof(cXyz));
-            }
-            memcpy(i_this->himo_tex_interp_curr, i_this->himo_tex.getPos(0), 2 * sizeof(cXyz));
-            i_this->himo_interp_curr_valid = true;
-            dusk::interp::add_interpolation_callback(&e_wb_rein_interp_callback, i_this);
-        }
-#endif
     }
 
     return 1;

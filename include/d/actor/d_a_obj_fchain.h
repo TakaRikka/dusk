@@ -31,10 +31,6 @@ public:
     csXyz* getAngle() { return field_0x8a4; }
     J3DModelData* getModelData() { return mModelData; }
 
-#if TARGET_PC
-    void onInterpCallback();
-#endif
-
     /* 0x568 */ request_of_phase_process_class mPhase;
     /* 0x570 */ J3DModelData* mModelData;
     /* 0x574 */ daObjFchain_shape_c mShape;
@@ -45,14 +41,6 @@ public:
     /* 0x694 */ cXyz field_0x694[22];
     /* 0x79C */ cXyz field_0x79c[22];
     /* 0x8A4 */ csXyz field_0x8a4[22];
-
-#if TARGET_PC
-    static const int CHAIN_COUNT = 22;
-    cXyz mChainInterpPrev[CHAIN_COUNT];
-    cXyz mChainInterpCurr[CHAIN_COUNT];
-    bool mChainInterpPrevValid;
-    bool mChainInterpCurrValid;
-#endif
 };
 
 STATIC_ASSERT(sizeof(daObjFchain_c) == 0x928);

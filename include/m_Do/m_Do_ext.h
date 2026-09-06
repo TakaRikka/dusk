@@ -542,10 +542,18 @@ public:
     virtual void setMaterial() = 0;
     virtual void draw() = 0;
 #if TARGET_PC
-    virtual void refreshGeometryForPresentationEye(const cXyz& eye) {}
+    virtual void captureInterpPoints() {}
+    virtual void refreshGeometryForPresentation() {}
 #endif
 
     /* 0x4 */ mDoExt_3DlineMat_c* field_0x4;
+
+#if TARGET_PC
+protected:
+    u8 mInterpKind;
+    f32 mInterpWidth;
+    u16 mInterpTaper;
+#endif
 };
 
 class mDoExt_3DlineMat0_c : public mDoExt_3DlineMat_c {
@@ -567,6 +575,10 @@ public:
     virtual int getMaterialID() { return 0; }
     virtual void setMaterial();
     virtual void draw();
+#if TARGET_PC
+    void captureInterpPoints() override;
+    void refreshGeometryForPresentation() override;
+#endif
 
     cXyz* getPos(int param_0) { return field_0x18[param_0].field_0x0; }
     f32* getSize(int param_0) { return field_0x18[param_0].field_0x4; }
@@ -585,18 +597,14 @@ class dKy_tevstr_c;
 class mDoExt_3DlineMat1_c : public mDoExt_3DlineMat_c {
 public:
     int init(u16, u16, ResTIMG*, int);
-#if TARGET_PC
-    void update(int, GXColor&, dKy_tevstr_c*, const cXyz* presentationEye = nullptr);
-    void update(int, f32, GXColor&, u16, dKy_tevstr_c*, const cXyz* presentationEye = nullptr);
-#else
     void update(int, GXColor&, dKy_tevstr_c*);
     void update(int, f32, GXColor&, u16, dKy_tevstr_c*);
-#endif
     int getMaterialID() { return 1; }
     void setMaterial();
     void draw();
 #if TARGET_PC
-    void refreshGeometryForPresentationEye(const cXyz& eye) override;
+    void captureInterpPoints() override;
+    void refreshGeometryForPresentation() override;
 #endif
 
     cXyz* getPos(int i_idx) { return mpLines[i_idx].field_0x0; }
@@ -611,11 +619,6 @@ private:
     /* 0x34 */ u16 field_0x34;
     /* 0x36 */ u8 mIsDrawn;
     /* 0x38 */ mDoExt_3Dline_c* mpLines;
-#if TARGET_PC
-    u8 mInterpLineKind;
-    f32 mInterpLineF;
-    u16 mInterpLineU16;
-#endif
 };
 
 class mDoExt_3DlineMat2_c : public mDoExt_3DlineMat1_c {
