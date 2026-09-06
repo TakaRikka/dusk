@@ -24,21 +24,21 @@ struct BlockHeader {
 */
 class JUTResFont : public JUTFont {
 public:
-    virtual ~JUTResFont();
-    virtual void setGX();
-    virtual void setGX(JUtility::TColor, JUtility::TColor);
-    virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool FONT_DRAW_CTX);
-    virtual int getLeading() const;
-    virtual s32 getAscent() const;
-    virtual s32 getDescent() const;
-    virtual s32 getHeight() const;
-    virtual s32 getWidth() const;
-    virtual void getWidthEntry(int, JUTFont::TWidth*) const;
-    virtual s32 getCellWidth() const;
-    virtual s32 getCellHeight() const;
-    virtual int getFontType() const;
-    virtual ResFONT* getResFont() const;
-    virtual bool isLeadByte(int) const;
+    virtual ~JUTResFont() DUSK_OVERRIDE;
+    virtual void setGX() DUSK_OVERRIDE;
+    virtual void setGX(JUtility::TColor, JUtility::TColor) DUSK_OVERRIDE;
+    virtual f32 drawChar_scale(f32, f32, f32, f32, int, bool FONT_DRAW_CTX) DUSK_OVERRIDE;
+    virtual int getLeading() const DUSK_OVERRIDE;
+    virtual s32 getAscent() const DUSK_OVERRIDE;
+    virtual s32 getDescent() const DUSK_OVERRIDE;
+    virtual s32 getHeight() const DUSK_OVERRIDE;
+    virtual s32 getWidth() const DUSK_OVERRIDE;
+    virtual void getWidthEntry(int, JUTFont::TWidth*) const DUSK_OVERRIDE;
+    virtual s32 getCellWidth() const DUSK_OVERRIDE;
+    virtual s32 getCellHeight() const DUSK_OVERRIDE;
+    virtual int getFontType() const DUSK_OVERRIDE;
+    virtual ResFONT* getResFont() const DUSK_OVERRIDE;
+    virtual bool isLeadByte(int) const DUSK_OVERRIDE;
     virtual void loadImage(int, GXTexMapID FONT_DRAW_CTX);
     virtual void setBlock();
 

@@ -18,7 +18,7 @@ private:
     JKRAram(u32, u32, s32);
     virtual ~JKRAram();
 
-    /* vt[03] */ void* run(void); /* override */
+    /* vt[03] */ void* run(void) DUSK_OVERRIDE;
 
 public:
     u32 getAudioMemory() const { return mAudioMemoryPtr; }

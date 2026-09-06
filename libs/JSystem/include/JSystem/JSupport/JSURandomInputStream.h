@@ -12,11 +12,11 @@ public:
     JSURandomInputStream() {}
     virtual ~JSURandomInputStream() {}
 
-    /* vt[3] */ virtual s32 getAvailable() const /* override */ {
+    /* vt[3] */ virtual s32 getAvailable() const DUSK_OVERRIDE {
         return getLength() - getPosition();
     }
-    /* vt[4] */ virtual s32 skip(s32);            /* override */
-    /* vt[5] */ virtual u32 readData(void*, s32) = 0;
+    /* vt[4] */ virtual s32 skip(s32) DUSK_OVERRIDE;
+    /* vt[5] */ virtual u32 readData(void*, s32) DUSK_OVERRIDE = 0;
     /* vt[6] */ virtual s32 getLength() const = 0;
     /* vt[7] */ virtual s32 getPosition() const = 0;
     /* vt[8] */ virtual s32 seekPos(s32, JSUStreamSeekFrom) = 0;

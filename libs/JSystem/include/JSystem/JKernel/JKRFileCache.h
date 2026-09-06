@@ -35,17 +35,17 @@ protected:
     void convStrLower(char*) const;
 
 public:
-    /* vt[04] */ virtual bool becomeCurrent(const char*);                /* override */
-    /* vt[05] */ virtual void* getResource(const char*);                 /* override */
-    /* vt[06] */ virtual void* getResource(u32, const char*);            /* override */
-    /* vt[07] */ virtual u32 readResource(void*, u32, const char*);      /* override */
-    /* vt[08] */ virtual u32 readResource(void*, u32, u32, const char*); /* override */
-    /* vt[09] */ virtual void removeResourceAll(void);                   /* override */
-    /* vt[10] */ virtual bool removeResource(void*);                     /* override */
-    /* vt[11] */ virtual bool detachResource(void*);                     /* override */
-    /* vt[12] */ virtual u32 getResSize(const void*) const;              /* override */
-    /* vt[13] */ virtual u32 countFile(const char*) const;               /* override */
-    /* vt[14] */ virtual JKRFileFinder* getFirstFile(const char*) const; /* override */
+    /* vt[04] */ virtual bool becomeCurrent(const char*) DUSK_OVERRIDE;
+    /* vt[05] */ virtual void* getResource(const char*) DUSK_OVERRIDE;
+    /* vt[06] */ virtual void* getResource(u32, const char*) DUSK_OVERRIDE;
+    /* vt[07] */ virtual u32 readResource(void*, u32, const char*) DUSK_OVERRIDE;
+    /* vt[08] */ virtual u32 readResource(void*, u32, u32, const char*) DUSK_OVERRIDE;
+    /* vt[09] */ virtual void removeResourceAll(void) DUSK_OVERRIDE;
+    /* vt[10] */ virtual bool removeResource(void*) DUSK_OVERRIDE;
+    /* vt[11] */ virtual bool detachResource(void*) DUSK_OVERRIDE;
+    /* vt[12] */ virtual u32 getResSize(const void*) const DUSK_OVERRIDE;
+    /* vt[13] */ virtual u32 countFile(const char*) const DUSK_OVERRIDE;
+    /* vt[14] */ virtual JKRFileFinder* getFirstFile(const char*) const DUSK_OVERRIDE;
     /* vt[15] */ virtual void* getFsResource(const char*);
     /* vt[16] */ virtual void* getNameResource(u32, const char*);
     /* vt[17] */ virtual u32 readFsResource(void*, u32, const char*);

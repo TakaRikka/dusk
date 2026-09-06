@@ -21,12 +21,12 @@ public:
     bool open(s32, JKRArchive::EMountDirection);
     bool open(void*, u32, JKRMemBreakFlag);
 
-    /* vt[09] */ void removeResourceAll(void); /* override */
-    /* vt[10] */ bool removeResource(void*);   /* override */
+    /* vt[09] */ void removeResourceAll(void) DUSK_OVERRIDE;
+    /* vt[10] */ bool removeResource(void*) DUSK_OVERRIDE;
 
-    /* vt[15] */ u32 getExpandedResSize(const void*) const;            /* override */
-    /* vt[16] */ void* fetchResource(SDIFileEntry*, u32*);             /* override */
-    /* vt[17] */ void* fetchResource(void*, u32, SDIFileEntry*, u32*); /* override */
+    /* vt[15] */ u32 getExpandedResSize(const void*) const DUSK_OVERRIDE;
+    /* vt[16] */ void* fetchResource(SDIFileEntry*, u32*) DUSK_OVERRIDE;
+    /* vt[17] */ void* fetchResource(void*, u32, SDIFileEntry*, u32*) DUSK_OVERRIDE;
 
 public:
     static u32 fetchResource_subroutine(u8*, u32, u8*, u32, JKRCompression);

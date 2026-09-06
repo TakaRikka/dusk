@@ -267,6 +267,7 @@ using std::isnan;
 
 #define DUSK_CONST IF_DUSK(const)
 #define DUSK_CONSTEXPR IF_DUSK(constexpr)
+#define DUSK_OVERRIDE IF_DUSK(override)
 
 #if TARGET_PC && defined(DUSK_BUILDING_GAME)
 #include "dusk/mods/item.hpp"

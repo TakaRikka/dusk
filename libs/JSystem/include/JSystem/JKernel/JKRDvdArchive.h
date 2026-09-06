@@ -16,9 +16,9 @@ public:
 
     bool open(s32);
 
-    /* vt[15] */ virtual u32 getExpandedResSize(const void*) const;            /* override */
-    /* vt[16] */ virtual void* fetchResource(SDIFileEntry*, u32*);             /* override */
-    /* vt[17] */ virtual void* fetchResource(void*, u32, SDIFileEntry*, u32*); /* override */
+    /* vt[15] */ virtual u32 getExpandedResSize(const void*) const DUSK_OVERRIDE;
+    /* vt[16] */ virtual void* fetchResource(SDIFileEntry*, u32*) DUSK_OVERRIDE;
+    /* vt[17] */ virtual void* fetchResource(void*, u32, SDIFileEntry*, u32*) DUSK_OVERRIDE;
 
 public:
     static u32 fetchResource_subroutine(s32, u32, u32, u8*, u32, JKRCompression, JKRCompression);

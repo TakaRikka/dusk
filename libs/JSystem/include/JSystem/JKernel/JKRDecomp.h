@@ -44,7 +44,7 @@ private:
     JKRDecomp(s32);
     virtual ~JKRDecomp();
 
-    /* vt[03] */ virtual void* run(); /* override */
+    /* vt[03] */ virtual void* run() DUSK_OVERRIDE;
 
 public:
     static JKRDecomp* create(s32);

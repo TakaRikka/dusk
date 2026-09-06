@@ -48,7 +48,7 @@ private:
     JKRAramStream(s32);
     virtual ~JKRAramStream();
 
-    /* vt[03] */ void* run(void); /* override */
+    /* vt[03] */ void* run(void) DUSK_OVERRIDE;
 
 public:
     static JKRAramStream* create(s32);

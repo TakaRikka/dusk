@@ -592,9 +592,9 @@ public:
     void update(int, GXColor&, dKy_tevstr_c*);
     void update(int, f32, GXColor&, u16, dKy_tevstr_c*);
 #endif
-    int getMaterialID() { return 1; }
-    void setMaterial();
-    void draw();
+    int getMaterialID() DUSK_OVERRIDE { return 1; }
+    void setMaterial() DUSK_OVERRIDE;
+    void draw() DUSK_OVERRIDE;
 #if TARGET_PC
     void refreshGeometryForPresentationEye(const cXyz& eye) override;
 #endif
