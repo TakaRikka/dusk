@@ -17,7 +17,7 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 DUSK_GAME_DATA const daNpc_Toby_HIOParam daNpc_Toby_Param_c::m = {
@@ -1402,7 +1402,7 @@ int daNpc_Toby_c::cutRepairSCannon(int arg0) {
                 old.pos = current.pos;
                 setAngle(cM_deg2s(5.0f * f32(mPath.getArg0())));
                 mEventTimer = mPath.getArg2();
-                IF_DUSK(dusk::frame_interp::request_presentation_sync());
+                IF_DUSK(dusk::interp::request_presentation_sync());
             }
         } else if (!mHide) {
             mHide = 1;

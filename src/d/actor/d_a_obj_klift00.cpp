@@ -11,8 +11,10 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/settings.h"
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 struct daObjKLift00_HIO_c : public mDoHIO_entry_c {
     daObjKLift00_HIO_c();
@@ -444,7 +446,7 @@ int daObjKLift00_c::Execute(Mtx** i_mtx) {
 }
 
 #if TARGET_PC
-static void klift00_interp_callback(bool isSimFrame, void* pUserWork) {
+static void klift00_interp_callback(void* pUserWork) {
     static_cast<daObjKLift00_c*>(pUserWork)->onInterpCallback();
 }
 
@@ -453,7 +455,7 @@ void daObjKLift00_c::onInterpCallback() {
         return;
     }
 
-    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const f32 alpha = dusk::interp::get_interpolation_step();
     cXyz savedPositions[64];
 
     for (int i = 0; i < mNumChains; i++) {
@@ -493,7 +495,7 @@ int daObjKLift00_c::Draw() {
     dComIfGd_setList();
 
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled()) {
+    if (dusk::interp::is_enabled()) {
         if (mChainInterpCurrValid) {
             memcpy(mChainInterpPrev, mChainInterpCurr, mNumChains * sizeof(cXyz));
             mChainInterpPrevValid = true;
@@ -504,7 +506,7 @@ int daObjKLift00_c::Draw() {
         }
         
         mChainInterpCurrValid = true;
-        dusk::frame_interp::add_interpolation_callback(&klift00_interp_callback, this);
+        dusk::interp::add_interpolation_callback(&klift00_interp_callback, this);
     }
 #endif
 

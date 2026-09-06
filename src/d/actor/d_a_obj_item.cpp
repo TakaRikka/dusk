@@ -17,7 +17,7 @@
 #include "m_Do/m_Do_mtx.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_polyinfo, f32 i_scale) {
@@ -36,7 +36,7 @@ static f32 Reflect(cXyz* i_vec, cBgS_PolyInfo const& i_polyinfo, f32 i_scale) {
 }
 
 #if TARGET_PC
-static void d_a_obj_item_interp_callback(bool isSimFrame, void* pUserWork) {
+static void d_a_obj_item_interp_callback(void* pUserWork) {
     daItem_c* item = static_cast<daItem_c*>(pUserWork);
     if (item == NULL || item->mpModel == NULL || !item->chkDraw()) {
         return;
@@ -412,7 +412,7 @@ int daItem_c::_daItem_draw() {
     }
 
 #if TARGET_PC
-    dusk::frame_interp::add_interpolation_callback(&d_a_obj_item_interp_callback, this);
+    dusk::interp::add_interpolation_callback(&d_a_obj_item_interp_callback, this);
 #endif
 
     if (chkDraw()) {

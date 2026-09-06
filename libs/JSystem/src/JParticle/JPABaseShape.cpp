@@ -10,7 +10,7 @@
 #include <gx.h>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 
 #include <tracy/Tracy.hpp>
 #endif
@@ -552,7 +552,7 @@ static void submit_particle_quad(
 void JPAInterpBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     Mtx ptclPosMtx;
     MTXTrans(ptclPosMtx, ptcl->mPosition.x, ptcl->mPosition.y, ptcl->mPosition.z);
-    dusk::frame_interp::record_final_mtx(ptclPosMtx, ptcl);
+    dusk::interp::record_final_mtx(ptclPosMtx, ptcl);
 }
 
 void JPAInterpRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
@@ -564,7 +564,7 @@ void JPAInterpRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     ptclPosMtx[0][1] = -sinRot;
     ptclPosMtx[1][0] = sinRot;
     ptclPosMtx[1][1] = cosRot;
-    dusk::frame_interp::record_final_mtx(ptclPosMtx, ptcl);
+    dusk::interp::record_final_mtx(ptclPosMtx, ptcl);
 }
 #endif
 
@@ -577,7 +577,7 @@ void JPADrawBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl JPA_DRAW_C
     JGeometry::TVec3<f32> pos;
 #if TARGET_PC
     Mtx ptclPosMtx;
-    if (dusk::frame_interp::lookup_replacement(ptcl, ptclPosMtx)) {
+    if (dusk::interp::lookup_replacement(ptcl, ptclPosMtx)) {
         pos.set(ptclPosMtx[0][3], ptclPosMtx[1][3], ptclPosMtx[2][3]);
         MTXMultVec(work->mPosCamMtx, &pos, &pos);
     } else
@@ -617,7 +617,7 @@ void JPADrawRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* ptcl JPA_DRA
 #if TARGET_PC
     Mtx ptclPosMtx;
     MTXTrans(ptclPosMtx, ptcl->mPosition.x, ptcl->mPosition.y, ptcl->mPosition.z);
-    if (dusk::frame_interp::lookup_replacement(ptcl, ptclPosMtx)) {
+    if (dusk::interp::lookup_replacement(ptcl, ptclPosMtx)) {
         pos.set(ptclPosMtx[0][3], ptclPosMtx[1][3], ptclPosMtx[2][3]);
         sinRot = ptclPosMtx[1][0];
         cosRot = ptclPosMtx[0][0];
@@ -994,7 +994,7 @@ void JPAInterpDirection(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     posMtx[2][2] = axisZ.z;
     posMtx[2][3] = ptcl->mPosition.z;
     p_plane[work->mPlaneType](posMtx, scaleX, scaleY);
-    dusk::frame_interp::record_final_mtx(posMtx, ptcl);
+    dusk::interp::record_final_mtx(posMtx, ptcl);
 }
 
 void JPAInterpRotDirection(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
@@ -1037,7 +1037,7 @@ void JPAInterpRotDirection(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     mtx2[2][2] = axisZ.z;
     mtx2[2][3] = ptcl->mPosition.z;
     MTXConcat(mtx2, mtx1, mtx1);
-    dusk::frame_interp::record_final_mtx(mtx1, ptcl);
+    dusk::interp::record_final_mtx(mtx1, ptcl);
 }
 #endif
 
@@ -1050,7 +1050,7 @@ void JPADrawDirection(JPAEmitterWorkData* work, JPABaseParticle* ptcl JPA_DRAW_C
 
     Mtx posMtx;
 #if TARGET_PC
-    if (!dusk::frame_interp::lookup_replacement(ptcl, posMtx) &&
+    if (!dusk::interp::lookup_replacement(ptcl, posMtx) &&
         !make_direction_mtx(work, ptcl, posMtx))
     {
         return;
@@ -1113,7 +1113,7 @@ void JPADrawRotDirection(JPAEmitterWorkData* work, JPABaseParticle* ptcl JPA_DRA
     Mtx mtx1;
     Mtx mtx2;
 #if TARGET_PC
-    if (!dusk::frame_interp::lookup_replacement(ptcl, mtx1) &&
+    if (!dusk::interp::lookup_replacement(ptcl, mtx1) &&
         !make_rot_direction_mtx(work, ptcl, mtx1))
     {
         return;

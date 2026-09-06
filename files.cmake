@@ -1432,7 +1432,6 @@ set(DUSK_FILES
         src/dusk/dvd_asset.cpp
         src/dusk/dvd_asset.hpp
         src/dusk/extras.c
-        src/dusk/frame_interpolation.cpp
         src/dusk/commands.cpp
         src/dusk/commands.hpp
         src/dusk/game_clock.cpp
@@ -1462,6 +1461,8 @@ set(DUSK_FILES
         src/dusk/imgui/ImGuiStateShare.cpp
         src/dusk/imgui/ImGuiStateShare.hpp
         src/dusk/imgui/ImGuiStubLog.cpp
+        src/dusk/interp/camera.cpp
+        src/dusk/interp/frame_interpolation.cpp
         src/dusk/io.cpp
         src/dusk/iso_validate.cpp
         src/dusk/language.cpp

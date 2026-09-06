@@ -10,9 +10,11 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_com_inf_game.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/settings.h"
 #include <cstring>
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 static char const l_arcName[] = "Fchain";
 
@@ -296,7 +298,7 @@ void daObjFchain_shape_c::draw() {
 }
 
 #if TARGET_PC
-static void fchain_interp_callback(bool isSimFrame, void* pUserWork) {
+static void fchain_interp_callback(void* pUserWork) {
     static_cast<daObjFchain_c*>(pUserWork)->onInterpCallback();
 }
 
@@ -305,7 +307,7 @@ void daObjFchain_c::onInterpCallback() {
         return;
     }
 
-    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const f32 alpha = dusk::interp::get_interpolation_step();
 
     for (int i = 0; i < CHAIN_COUNT; i++) {
         const cXyz& p0 = mChainInterpPrev[i];
@@ -325,7 +327,7 @@ int daObjFchain_c::draw() {
         dComIfGd_getOpaListDark()->entryImm(&mShape, 0);
 
 #if TARGET_PC
-        if (dusk::frame_interp::is_enabled()) {
+        if (dusk::interp::is_enabled()) {
             if (mChainInterpCurrValid) {
                 memcpy(mChainInterpPrev, mChainInterpCurr, sizeof(mChainInterpCurr));
                 mChainInterpPrevValid = true;
@@ -333,7 +335,7 @@ int daObjFchain_c::draw() {
 
             memcpy(mChainInterpCurr, field_0x694, sizeof(mChainInterpCurr));
             mChainInterpCurrValid = true;
-            dusk::frame_interp::add_interpolation_callback(&fchain_interp_callback, this);
+            dusk::interp::add_interpolation_callback(&fchain_interp_callback, this);
         }
 #endif
     }

@@ -22,7 +22,7 @@
 #include "m_Do/m_Do_graphic.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/menu_pointer.h"
 #include "dusk/mods/svc/save.hpp"
 #include "dusk/settings.h"
@@ -828,44 +828,38 @@ void dMenu_save_c::saveSelAnm() {
 }
 
 void dMenu_save_c::selFileWakuAnm() {
-#if TARGET_PC
-    if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-    {
-        mFileWakuAnmFrame += 2;
-        if (mFileWakuAnmFrame >= mpFileWakuAnm->getFrameMax()) {
-            mFileWakuAnmFrame -= mpFileWakuAnm->getFrameMax();
-        }
-
-        mFileWakuRotAnmFrame += 2;
-        if (mFileWakuRotAnmFrame >= mpFileWakuRotAnm->getFrameMax()) {
-            mFileWakuRotAnmFrame -= mpFileWakuRotAnm->getFrameMax();
-        }
+    IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+    mFileWakuAnmFrame += 2;
+    if (mFileWakuAnmFrame >= mpFileWakuAnm->getFrameMax()) {
+        mFileWakuAnmFrame -= mpFileWakuAnm->getFrameMax();
     }
+
+    mFileWakuRotAnmFrame += 2;
+    if (mFileWakuRotAnmFrame >= mpFileWakuRotAnm->getFrameMax()) {
+        mFileWakuRotAnmFrame -= mpFileWakuRotAnm->getFrameMax();
+    }
+    IF_DUSK_BLOCK_END
     mpFileWakuAnm->setFrame(mFileWakuAnmFrame);
     mpFileWakuRotAnm->setFrame(mFileWakuRotAnmFrame);
 }
 
 void dMenu_save_c::bookIconAnm() {
-#if TARGET_PC
-    if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-    {
-        field_0x154 += 2;
-        if (field_0x154 >= field_0x150->getFrameMax()) {
-            field_0x154 -= field_0x150->getFrameMax();
-        }
-
-        field_0x15c += 2;
-        if (field_0x15c >= field_0x158->getFrameMax()) {
-            field_0x15c -= field_0x158->getFrameMax();
-        }
-
-        field_0x164 += 2;
-        if (field_0x164 >= field_0x160->getFrameMax()) {
-            field_0x164 -= field_0x160->getFrameMax();
-        }
+    IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+    field_0x154 += 2;
+    if (field_0x154 >= field_0x150->getFrameMax()) {
+        field_0x154 -= field_0x150->getFrameMax();
     }
+
+    field_0x15c += 2;
+    if (field_0x15c >= field_0x158->getFrameMax()) {
+        field_0x15c -= field_0x158->getFrameMax();
+    }
+
+    field_0x164 += 2;
+    if (field_0x164 >= field_0x160->getFrameMax()) {
+        field_0x164 -= field_0x160->getFrameMax();
+    }
+    IF_DUSK_BLOCK_END
     field_0x150->setFrame(field_0x154);
     field_0x158->setFrame(field_0x15c);
     field_0x160->setFrame(field_0x164);

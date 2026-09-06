@@ -53,11 +53,13 @@
 
 #if TARGET_PC
 #include "dusk/action_bindings.h"
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/settings.h"
+#include "helpers/string.hpp"
+
 #include "res/Object/Alink.h"
+
 #include <cstring>
-#include <helpers/string.hpp>
 #endif
 
 static int daAlink_Create(fopAc_ac_c* i_this);
@@ -5993,7 +5995,7 @@ void daAlink_c::setItemMatrix(int param_0) {
 
         mDoMtx_stack_c::XrotS(-0x8000);
 #ifdef TARGET_PC
-        if (dusk::frame_interp::is_enabled()) {
+        if (dusk::interp::is_enabled()) {
             Mtx boot_mtx;
             mDoMtx_concat(mpLinkModel->getAnmMtx(0x18), mDoMtx_stack_c::get(), boot_mtx);
             mpLinkBootModels[1]->setAnmMtx(1, boot_mtx);
@@ -19792,7 +19794,7 @@ int daAlink_c::draw() {
                 dComIfGd_getOpaListDark()->entryImm(mpHookChain, 0);
 
 #if TARGET_PC
-                if (dusk::frame_interp::is_enabled()) {
+                if (dusk::interp::is_enabled()) {
                     if (mEquipItem == dItemNo_IRONBALL_e &&
                         mIronBallChainPos != NULL && mIronBallChainAngle != NULL)
                     {
@@ -19808,7 +19810,7 @@ int daAlink_c::draw() {
                         mIBChainInterpCurrHandRoot = mHookshotTopPos;
                         mIBChainInterpCurrValid = true;
 
-                        dusk::frame_interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
+                        dusk::interp::add_interpolation_callback(&ironBallChainInterpCallback, this);
                     } else {
                         if (mHsChainInterpCurrValid) {
                             mHsChainInterpPrevTop = mHsChainInterpCurrTop;

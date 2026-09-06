@@ -6,7 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 
 #include "d/actor/d_a_balloon_2D.h"
-#include "dusk/frame_interpolation.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
@@ -20,6 +19,10 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 class daBalloon2D_HIO_c : public mDoHIO_entry_c {
 public:
@@ -439,12 +442,9 @@ void daBalloon2D_c::setComboAlpha() {
 void daBalloon2D_c::drawAddScore() {
     for (s32 i = 19; i >= 0; i--) {
         if (field_0x5f8[i].field_0xe != 0) {
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                field_0x5f8[i].field_0xe--;
-            }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            field_0x5f8[i].field_0xe--;
+            IF_DUSK_BLOCK_END
             s32 score3;
             s32 score2;
             s32 score = field_0x5f8[i].field_0xc;
@@ -452,13 +452,10 @@ void daBalloon2D_c::drawAddScore() {
             u8 local_88 = 0xff;
             f32 dVar11 = 30.0f;
             f32 dVar9 = 30.0f;
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                field_0x5f8[i].field_0x0.x += cM_ssin(temp0) * 0.3f;
-                field_0x5f8[i].field_0x0.y -= 1.0f;
-            }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            field_0x5f8[i].field_0x0.x += cM_ssin(temp0) * 0.3f;
+            field_0x5f8[i].field_0x0.y -= 1.0f;
+            IF_DUSK_BLOCK_END
             if (field_0x5f8[i].field_0xe < 10) {
                 f32 fVar5 = field_0x5f8[i].field_0xe / 10.0f;
                 local_88 = fVar5 * 255.0f;

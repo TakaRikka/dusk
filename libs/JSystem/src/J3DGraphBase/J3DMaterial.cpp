@@ -373,6 +373,10 @@ s32 J3DMaterial::newSingleSharedDisplayList(u32 dlSize) {
 
 #if TARGET_PC
 bool J3DMaterial::needsInterpCallBack() const {
+    if (mMaterialAnm != NULL) {
+        return true;
+    }
+
     for (int i = 0, n = getTexGenNum(); i < n; i++) {
         J3DTexMtx* pTexMtx = mTexGenBlock->getTexMtx(i);
         if (pTexMtx != NULL) {

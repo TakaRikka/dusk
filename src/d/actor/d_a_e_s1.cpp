@@ -14,9 +14,11 @@
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_enemy.h"
 #include "f_op/f_op_camera_mng.h"
-#include "dusk/frame_interpolation.h"
-#include "dusk/settings.h"
 #include <cstring>
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 class daE_S1_HIO_c {
 public:
@@ -102,12 +104,12 @@ static void anm_init(e_s1_class* i_this, int i_resNo, f32 i_morf, u8 i_attr, f32
 }
 
 #if TARGET_PC
-static void daE_S1_interp_callback(bool isSimFrame, void* pUserWork) {
+static void daE_S1_interp_callback(void* pUserWork) {
     e_s1_class* i_this = (e_s1_class*)pUserWork;
     if (!i_this->mHairInterpPrevValid || !i_this->mHairInterpCurrValid) {
         return;
     }
-    const f32 alpha = dusk::frame_interp::get_interpolation_step();
+    const f32 alpha = dusk::interp::get_interpolation_step();
     for (int s = 0; s < e_s1_class::HAIR_STRAND_COUNT; s++) {
         cXyz* dst = i_this->mLineMat.getPos(s);
         for (int i = 0; i < e_s1_class::HAIR_SEGMENT_COUNT; i++) {
@@ -161,7 +163,7 @@ static int daE_S1_Draw(e_s1_class* i_this) {
     dComIfGd_set3DlineMatDark(&i_this->mLineMat);
 
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled()) {
+    if (dusk::interp::is_enabled()) {
         if (i_this->mHairInterpCurrValid) {
             memcpy(i_this->mHairInterpPrev, i_this->mHairInterpCurr, sizeof(i_this->mHairInterpCurr));
             i_this->mHairInterpPrevValid = true;
@@ -172,7 +174,7 @@ static int daE_S1_Draw(e_s1_class* i_this) {
                    e_s1_class::HAIR_SEGMENT_COUNT * sizeof(cXyz));
         }
         i_this->mHairInterpCurrValid = true;
-        dusk::frame_interp::add_interpolation_callback(&daE_S1_interp_callback, i_this);
+        dusk::interp::add_interpolation_callback(&daE_S1_interp_callback, i_this);
     }
 #endif
 

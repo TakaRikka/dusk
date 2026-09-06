@@ -340,18 +340,31 @@ void daAlink_c::setHorseStirrup() {
         mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30bc));
         mDoMtx_stack_c::transM(-2.0f, -11.0f, 1.5f);       
         mDoMtx_stack_c::ZXYrotM(0, -0x8000, 0x4000);
+#if TARGET_PC
+        horse->m_model->setAnmMtx(0x17, mDoMtx_stack_c::get());
+#else
         mDoMtx_copy(mDoMtx_stack_c::get(), horse->getLeftStirrupMtx());
+#endif
     }
 
     if (field_0x2fab & 2) {
         mDoMtx_stack_c::copy(mpLinkModel->getAnmMtx(field_0x30be));
         mDoMtx_stack_c::transM(-2.0f, 11.0f, 1.5f);     
         mDoMtx_stack_c::ZrotM(-0x4000);
+#if TARGET_PC
+        horse->m_model->setAnmMtx(0x19, mDoMtx_stack_c::get());
+#else
         mDoMtx_copy(mDoMtx_stack_c::get(), horse->getRightStirrupMtx());
+#endif
     }
 
     if (field_0x2fab & 3) {
         horse->calcWeightEnvMtx();
+#if TARGET_PC
+        for (u16 i = 0; i < horse->m_model->getModelData()->getWEvlpMtxNum(); i++) {
+            dusk::interp::record_final_mtx(horse->m_model->getWeightAnmMtx(i));
+        }
+#endif
     }
 
     int hand_type = getReinHandType();

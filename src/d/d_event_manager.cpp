@@ -339,10 +339,13 @@ bool dEvent_manager_c::setObjectArchive(DUSK_CONST char* arcname) {
         rt = dComIfG_getObjectRes(arcname, DataFileName);
 #if TARGET_PC
         if (rt != nullptr && strcmp(arcname, "Prayer") == 0) {
-            // pointer to Prayer event `011get_item` prm0 in it's event_list.dat
+            // pointer to Prayer event `011get_item` prm0 in its event_list.dat
             u8* itemNo = static_cast<u8*>(rt) + 0x927;
             *itemNo =
                 dusk::mods::item_check("prayer_reward", dItemNo_KAKERA_HEART_e, NULL);
+            // set the proper item give tag
+            u32* prm1 = reinterpret_cast<u32*>(static_cast<u8*>(rt) + 0x928);
+            *prm1 = dusk::mods::item_give_tag("prayer_reward");
         }
 #endif
         int base_status = mEventList[BASE_ACTOR].init((char*)rt, -1);

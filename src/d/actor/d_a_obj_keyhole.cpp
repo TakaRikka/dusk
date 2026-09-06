@@ -10,8 +10,9 @@
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
 #include "Z2AudioLib/Z2Instances.h"
+
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 daObj_Keyhole_HIO_c::daObj_Keyhole_HIO_c() {
@@ -57,8 +58,8 @@ static int daObj_Keyhole_Draw(obj_keyhole_class* i_this) {
         kh_chain_s* chain_s = &i_this->chain_s[i];
         for (int j = 0; j < i_this->chain_num; j++) {
 #if TARGET_PC
-            if (dusk::frame_interp::is_enabled() && i_this->mChainInterpPrevValid && i_this->mChainInterpCurrValid) {
-                const f32 alpha = dusk::frame_interp::get_interpolation_step();
+            if (dusk::interp::is_enabled() && i_this->mChainInterpPrevValid && i_this->mChainInterpCurrValid) {
+                const f32 alpha = dusk::interp::get_interpolation_step();
                 Mtx mtx;
                 const f32* p0 = (const f32*)i_this->mChainInterpPrev[i][j];
                 const f32* p1 = (const f32*)i_this->mChainInterpCurr[i][j];
@@ -390,7 +391,7 @@ static void chain_move(obj_keyhole_class* i_this) {
     }
 
 #if TARGET_PC
-    if (dusk::frame_interp::is_enabled()) {
+    if (dusk::interp::is_enabled()) {
         if (i_this->mChainInterpCurrValid) {
             memcpy(i_this->mChainInterpPrev, i_this->mChainInterpCurr, sizeof(i_this->mChainInterpCurr));
             i_this->mChainInterpPrevValid = true;
