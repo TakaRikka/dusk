@@ -8,7 +8,9 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
+#endif
 
 void dBgp_c::material_c::draw() {
     material_c* material = this;

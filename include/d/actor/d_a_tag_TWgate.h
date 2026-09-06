@@ -118,7 +118,6 @@ public:
 #endif
     static DUSK_GAME_DATA const actionFunc ActionTable[][2];
 
-private:
     /* 0x568 */ mDoExt_McaMorfSO* mpMorf;
     /* 0x56C */ request_of_phase_process_class mPhaseZevArc;
     /* 0x574 */ request_of_phase_process_class mPhaseMdRes;

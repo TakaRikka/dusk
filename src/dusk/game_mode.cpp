@@ -1,9 +1,13 @@
 #include "dusk/game_mode.hpp"
-#include "JSystem/JUtility/JUTGamePad.h"
-#include "aurora/lib/logging.hpp"
+
 #include "dusk/config.hpp"
 #include "dusk/ui/prelaunch.hpp"
+
 #include "m_Do/m_Do_MemCard.h"
+
+#include "JSystem/JUtility/JUTGamePad.h"
+
+#include <aurora/lib/logging.hpp>
 
 namespace dusk::gamemode {
 namespace {

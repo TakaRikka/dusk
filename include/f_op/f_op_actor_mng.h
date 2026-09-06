@@ -12,9 +12,10 @@
 #include "f_pc/f_pc_manager.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "SSystem/SComponent/c_phase.h"
+
+#if TARGET_PC
 #include "helpers/endian_ssystem.h"
 
-#if !__MWERKS__
 // mwerks compiler makes value initialization act like default initialization so we need
 // to be explicit about default initialization in modern compilers
 #define fopAcM_ct_placement(ptr, ClassName) JKR_NEW_ARGS (ptr) ClassName
@@ -23,13 +24,10 @@
 #endif
 
 #define fopAcM_ct(ptr, ClassName)                                           \
-    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "UH OH"); } \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                     \
         fopAcM_ct_placement(ptr, ClassName);                                \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                           \
-    } \
-    if ((ptr)->layer_tag.layer == NULL) { OSPanic(__FILE__, __LINE__, "Oh come on"); }
-
+    }
 
 #define fopAcM_RegisterDeleteID(i_this, actor_name_str)                     \
     ("Delete -> " actor_name_str "(id=%d)\n", fopAcM_GetID(i_this))

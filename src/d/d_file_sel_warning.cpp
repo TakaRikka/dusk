@@ -11,7 +11,10 @@
 #include "d/d_file_sel_warning.h"
 #include "d/d_msg_string.h"
 #include "d/d_pane_class.h"
+
+#if TARGET_PC
 #include "dusk/version.hpp"
+#endif
 
 typedef void (dFile_warning_c::*procFunc)();
 static procFunc fileWarningProc[] = {&dFile_warning_c::modeWait, &dFile_warning_c::modeMove};

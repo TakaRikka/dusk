@@ -16,7 +16,6 @@ public:
 
     s32 getType() { return mType; }
 
-private:
     u8 getType_private() { return fopAcM_GetParamBit(this, 8, 4); }
 
     /* 0x568 */ u8 mType;

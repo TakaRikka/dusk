@@ -14,7 +14,9 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
+#endif
 
 // Need 0xC bytes of padding with no symbol between dMenu_Calibration_c::__vtable and the end of
 // .data
@@ -25,7 +27,7 @@ public:
     virtual void virt_func_0() = 0;
 };
 class dummy_child_class : dummy_abstract_class {
-#ifdef TARGET_PC
+#if TARGET_PC
     virtual void virt_func_0() {}
 #else
     virtual void virt_func_0();

@@ -13,7 +13,6 @@ public:
 
     u16 getMessageNo() { return home.angle.z; }
 
-private:
     /* 0x568 */ u16 mMessageNo;
     /* 0x56C */ int mMessageStatus;
 };

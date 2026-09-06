@@ -4,7 +4,8 @@
 #include "pane.hpp"
 
 #include "dusk/map_loader_definitions.h"
-#include "fmt/format.h"
+
+#include <fmt/format.h>
 
 namespace dusk::ui {
 namespace {

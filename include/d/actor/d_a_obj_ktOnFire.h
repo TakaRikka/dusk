@@ -26,7 +26,6 @@ public:
     static DUSK_GAME_DATA const dCcD_SrcGObjInf mCcDObjInfo;
     static DUSK_GAME_DATA dCcD_SrcCyl mCcDCyl;
 
-private:
     /* 0x568 */ dCcD_Stts mCcStts;
     /* 0x5A4 */ dCcD_Cyl mCcCyl;
     /* 0x6E0 */ u8 mWaitTime;

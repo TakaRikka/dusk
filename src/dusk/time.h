@@ -1,9 +1,9 @@
 #pragma once
 
+#include <SDL3/SDL_timer.h>
+
 #include <array>
 #include <numeric>
-
-#include "SDL3/SDL_timer.h"
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN

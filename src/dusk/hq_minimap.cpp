@@ -1,6 +1,7 @@
-#include "aurora/texture.hpp"
 #include "dusk/texture_replacements.hpp"
-#include "fmt/format.h"
+
+#include <aurora/texture.hpp>
+#include <fmt/format.h>
 
 #include <array>
 #include <cassert>

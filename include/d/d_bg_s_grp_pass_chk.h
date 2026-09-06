@@ -25,7 +25,6 @@ public:
     void OnAll() { mGrp |= FULL_GRP; }
     u32 MaskNormalGrp() { return mGrp & NORMAL_GRP; }
     u32 MaskWaterGrp() { return mGrp & WATER_GRP; }
-private:
     /* 0x4 */ u32 mGrp;
 };
 

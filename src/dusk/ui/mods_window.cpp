@@ -1,16 +1,19 @@
 #include "mods_window.hpp"
 
-#include "dusk/mod_loader.hpp"
-#include "dusk/mods/svc/ui.hpp"
-#include "fmt/format.h"
 #include "logs_window.hpp"
 #include "mod_texture_provider.hpp"
 #include "pane.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
+#include "dusk/mod_loader.hpp"
+#include "dusk/mods/svc/net.hpp"
+#include "dusk/mods/svc/ui.hpp"
+
 #include "m_Do/m_Do_audio.h"
 
+#include <fmt/format.h>
+
 #include <memory>
+#include <ranges>
 #include <string>
 #include <string_view>
 
@@ -39,6 +42,13 @@ ModStatus mod_status(const mods::LoadedMod& mod) {
     return {"", "Disabled"};
 }
 
+bool mod_uses_network(const mods::LoadedMod& mod) {
+    return std::ranges::any_of(
+        mod.manifestInfo.imports, [](const mods::ModManifestInfo::Import& serviceImport) {
+            return mods::svc::is_network_service(serviceImport.id);
+        });
+}
+
 // Truncates to at most maxBytes without splitting a UTF-8 sequence.
 std::string snippet(std::string_view text, size_t maxBytes) {
     if (text.size() <= maxBytes) {
@@ -63,16 +73,19 @@ public:
             iconRml = R"(<icon class="mod-icon placeholder"/>)";
         }
         const auto status = mod_status(mod);
+        const auto networkBadge = mod_uses_network(mod) ?
+                                      R"(<span class="mod-entry-network">Network</span>)" :
+                                      Rml::String{};
         mRoot->SetInnerRML(fmt::format(
             R"({})"
             R"(<div class="mod-entry-info">)"
             R"(<div class="mod-entry-name"><span class="mod-entry-name-text">{}</span>)"
             R"(<span class="mod-entry-version">v{}</span></div>)"
-            R"(<div class="mod-entry-sub">{} - <span class="mod-entry-status {}">{}</span></div>)"
+            R"(<div class="mod-entry-sub">{} - <span class="mod-entry-status {}">{}</span>{}</div>)"
             R"(<div class="mod-entry-desc">{}</div>)"
             R"(</div>)",
             iconRml, escape(mod.metadata.name), escape(mod.metadata.version),
-            escape(mod.metadata.author), status.badgeClass, status.text,
+            escape(mod.metadata.author), status.badgeClass, status.text, networkBadge,
             escape(snippet(mod.metadata.description, 90))));
         mRoot->SetClass("inactive", !mod.active);
         mRoot->SetClass("failed", mod.loadFailed);
@@ -224,6 +237,9 @@ void ModsWindow::build_detail(Pane& pane, mods::LoadedMod& mod) {
         const auto status = mod_status(mod);
         statusBadge = fmt::format(
             R"(&nbsp;<span class="status-badge {}">{}</span>)", status.badgeClass, status.text);
+    }
+    if (mod_uses_network(mod)) {
+        statusBadge += R"(&nbsp;<span class="status-badge network">Network</span>)";
     }
     pane.add_rml(fmt::format(R"(<div class="mod-title">{} )"
                              R"(<span class="mod-title-version">v{}</span>{}</div>)"

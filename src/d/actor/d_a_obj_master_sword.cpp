@@ -11,9 +11,10 @@
 #include "d/d_meter2_info.h"
 
 #if TARGET_PC
-#include "d/d_item.h"
 #include "dusk/mods/item.hpp"
 #include "mods/items.h"
+
+#include "d/d_item.h"
 #endif
 
 DUSK_GAME_DATA daObjMasterSword_Attr_c const daObjMasterSword_c::mAttr = {1.0f};
@@ -151,11 +152,7 @@ void daObjMasterSword_c::create_init() {
 int daObjMasterSword_c::create() {
     fopAcM_ct(this, daObjMasterSword_c);
 
-#if TARGET_PC
-    if (dComIfGs_isEventBit(dSv_event_flag_c::F_0264)) {
-#else
     if (dComIfGs_isEventBit(dSv_event_flag_c::saveBitLabels[getFlagNo()])) {
-#endif
         return cPhs_ERROR_e;
     }
 
@@ -199,7 +196,7 @@ int daObjMasterSword_c::execute() {
 #if TARGET_PC
         const auto masterSword = dusk::mods::item_check_commit(
             ITEM_CHECK_MASTER_SWORD, dItemNo_MASTER_SWORD_e, this);
-        if (masterSword.itemNo == dItemNo_MASTER_SWORD_e) {
+        if (!masterSword.was_resolved) {
             dComIfGs_onItemFirstBit(dItemNo_MASTER_SWORD_e);
             dMeter2Info_setSword(dItemNo_MASTER_SWORD_e, false);
             dComIfGs_setSelectEquipSword(dItemNo_MASTER_SWORD_e);
@@ -214,7 +211,7 @@ int daObjMasterSword_c::execute() {
 
         const auto shadowCrystal = dusk::mods::item_check_commit(
             ITEM_CHECK_SHADOW_CRYSTAL, dItemNo_SHADOW_CRYSTAL_e, this);
-        if (shadowCrystal.itemNo == dItemNo_SHADOW_CRYSTAL_e) {
+        if (!shadowCrystal.was_resolved) {
             execItemGet(shadowCrystal.itemNo, shadowCrystal.tag, this);
         } else if (shadowCrystal.itemNo == dItemNo_NONE_e) {
             dusk::mods::item_check_complete(shadowCrystal, this);
@@ -222,15 +219,14 @@ int daObjMasterSword_c::execute() {
             dusk::mods::item_check_enqueue(shadowCrystal, dusk::mods::ItemGiveMode::Demo);
         }
 
-        dComIfGs_onEventBit(dSv_event_flag_c::F_0264);
 #else
         dComIfGs_onItemFirstBit(dItemNo_MASTER_SWORD_e);
         dMeter2Info_setSword(dItemNo_MASTER_SWORD_e, false);
         dComIfGs_setSelectEquipSword(dItemNo_MASTER_SWORD_e);
 
         dComIfGp_setItemLifeCount(dComIfGs_getMaxLife(), 0);
-        dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[getFlagNo()]);
 #endif
+        dComIfGs_onEventBit(dSv_event_flag_c::saveBitLabels[getFlagNo()]);
         fopAcM_delete(this);
     }
 

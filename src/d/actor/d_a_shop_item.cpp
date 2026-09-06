@@ -106,8 +106,9 @@ const char* daShopItem_c::getShopArcname() {
     if (m_itemNo != dItemNo_NONE_e && mItemGiveOriginalNo == dItemNo_NONE_e) {
         mItemGiveOriginalNo = m_itemNo;
         mItemGiveTag = dusk::mods::item_give_tag_shop(mItemGiveOriginalNo);
-        const auto [_, displayItem] =
+        const auto [_, displayItem, was_resolved] =
             dusk::mods::item_check_resolve(mItemGiveTag, mItemGiveOriginalNo, this);
+        setDisplayItemNo(displayItem);
         mItemOverridden = displayItem != mItemGiveOriginalNo;
         if (mItemOverridden) {
             mOverrideData = mData[mShopItemID];

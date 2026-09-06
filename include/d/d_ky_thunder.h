@@ -25,7 +25,6 @@ public:
 
     ~dThunder_c() { mDoExt_destroySolidHeap(mpHeap); }
 
-private:
     /* 0x0F8 */ JKRSolidHeap* mpHeap;
     /* 0x0FC */ dThunder_modelInfo_c mModelInfo;
     /* 0x138 */ cXyz field_0x138;

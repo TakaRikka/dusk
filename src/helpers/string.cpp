@@ -1,5 +1,6 @@
 #include "helpers/string.hpp"
-#include "fmt/format.h"
+
+#include <fmt/format.h>
 
 namespace {
 void strncpyProxy(char* dst, const char* src, size_t count) {

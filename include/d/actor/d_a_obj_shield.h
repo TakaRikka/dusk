@@ -59,7 +59,6 @@ public:
     void setStatus(u8 status) { mStatus = status; }
     void setAction(u8 action) { mAction = action; }
 
-private:
     /* 0x92C */ fpc_ProcID mItemId;
     /* 0x930 */ int mRotAngleCoeff;
     /* 0x934 */ u8 mStatus;

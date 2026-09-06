@@ -8,30 +8,27 @@
 // weak data from it (unlike here).
 
 #include "d/d_particle.h"
-#include <cstdio>
-#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
-#include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "d/d_jnt_col.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "JSystem/JMath/JMATrigonometric.h"
+#include "JSystem/J3DGraphBase/J3DMaterial.h"
+#include "JSystem/J3DGraphAnimator/J3DMaterialAnm.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
-#include "SSystem/SComponent/c_math.h"
-#include "d/actor/d_a_player.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_jnt_col.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "d/d_s_play.h"
-#include "f_op/f_op_actor_mng.h"
-#include "m_Do/m_Do_graphic.h"
+#include <cstdio>
+#include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_lib.h"
-#include "tracy/Tracy.hpp"
+#include "m_Do/m_Do_graphic.h"
+#include "f_op/f_op_actor_mng.h"
+#include "d/actor/d_a_player.h"
+#include "SSystem/SComponent/c_math.h"
 
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
-#endif
 
-#ifndef __MWERKS__
-#include "helpers/math.h"
+#include <tracy/Tracy.hpp>
 #endif
 
 #if DEBUG

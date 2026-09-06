@@ -54,7 +54,6 @@ public:
 
     virtual ~CPaneMgrAlphaMorf();
 
-private:
     /* 0x1C */ void* mpFirstSaveAlpha;
     /* 0x20 */ u8* field_0x20;
     /* 0x24 */ void* mpFirstGetAlpha;

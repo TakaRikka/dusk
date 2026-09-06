@@ -6,7 +6,10 @@
 
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DFifo.h"
-#include <dusk/logging.h>
+
+#if TARGET_PC
+#include "dusk/logging.h"
+#endif
 
 void J3DGDSetGenMode(u8 nTexGens, u8 nChans, u8 nTevs, u8 nInds,
                      GXCullMode cm) {

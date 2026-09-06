@@ -1,10 +1,11 @@
 #include "dusk/game_clock.h"
 
-#include <algorithm>
+#include "dusk/frame_interpolation.h"
+
 #include <aurora/time.hpp>
+
+#include <algorithm>
 #include <chrono>
-#include <cmath>
-#include <dusk/frame_interpolation.h>
 #include <unordered_map>
 
 namespace dusk::game_clock {

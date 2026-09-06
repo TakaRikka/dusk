@@ -20,10 +20,9 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include <cstring>
 
-#include "dusk/version.hpp"
-
 #if TARGET_PC
 #include "dusk/settings.h"
+#include "dusk/version.hpp"
 #endif
 
 #if TARGET_PC

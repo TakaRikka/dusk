@@ -25,8 +25,6 @@ public:
     int Draw();
     int Delete();
 
-// private:
-
     /* 0x5A0  */ dBgW* unk5A0;
     /* 0x5A4  */ u32 unk5A4;
     /* 0x5A8  */ u32 unk5A8;

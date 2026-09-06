@@ -1,41 +1,38 @@
 #include "settings.hpp"
 
-#include "aurora/gfx.h"
 #include "bool_button.hpp"
 #include "controller_config.hpp"
-#include "dusk/app_info.hpp"
-#include "dusk/audio/DuskAudioSystem.h"
-#include "dusk/audio/DuskDsp.hpp"
-#include "dusk/config.hpp"
-#include "dusk/hotkeys.h"
-#include "dusk/data.hpp"
-#include "dusk/imgui/ImGuiEngine.hpp"
-#include "dusk/io.hpp"
-#include "dusk/language.hpp"
-#include "dusk/presentation.hpp"
-#include <borealis/io.hpp>
-#include <borealis/file_select.hpp>
-#include "dusk/livesplit.h"
-#include "dusk/discord_presence.hpp"
-#include "dusk/speedrun.h"
 #include "graphics_tuner.hpp"
-#include "m_Do/m_Do_main.h"
 #include "menu_bar.hpp"
 #include "modal.hpp"
 #include "number_button.hpp"
-#include "menu_bar.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "touch_controls_editor.hpp"
 #include "ui.hpp"
 
-#include <aurora/lib/window.hpp>
-#include <SDL3/SDL_filesystem.h>
-#include <fmt/format.h>
+#include "dusk/app_info.hpp"
+#include "dusk/audio/DuskAudioSystem.h"
+#include "dusk/audio/DuskDsp.hpp"
+#include "dusk/config.hpp"
+#include "dusk/data.hpp"
+#include "dusk/discord_presence.hpp"
+#include "dusk/hotkeys.h"
+#include "dusk/imgui/ImGuiEngine.hpp"
+#include "dusk/language.hpp"
+#include "dusk/livesplit.h"
+#include "dusk/presentation.hpp"
+#include "dusk/speedrun.h"
 
+#include <aurora/gfx.h>
+#include <aurora/lib/window.hpp>
+#include <borealis/file_select.hpp>
+#include <borealis/io.hpp>
 #if BOREALIS_HAS_SENTRY
 #include <borealis/sentry.hpp>
 #endif
+#include <fmt/format.h>
+#include <SDL3/SDL_filesystem.h>
 
 #include <algorithm>
 #include <filesystem>
@@ -231,7 +228,7 @@ Rml::String configured_data_path_display_name() {
         return "(none)";
     }
 
-    auto display = borealis::file_select::display_name(path);
+    auto display = borealis::io::display_name(path);
     if (display.empty()) {
         return path;
     }
@@ -440,24 +437,15 @@ SelectButton& config_int_select(Pane& leftPane, Pane& rightPane, ConfigVar<int>&
     return button;
 }
 
-template <typename T>
-void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane, ConfigVar<T>& var,
+void graphics_tuner_control(Window& window, Pane& leftPane, Pane& rightPane,
     const GraphicsTunerProps& props) {
+    const auto setting = GraphicsSetting::of(props.option);
     leftPane.register_control(
         leftPane
             .add_select_button({
                 .key = props.title,
-                .getValue =
-                    [&var, option = props.option] {
-                        if constexpr (std::is_same_v<T, float>) {
-                            return format_graphics_setting_value(
-                                option, float_setting_percent(var));
-                        } else {
-                            return format_graphics_setting_value(
-                                option, static_cast<int>(var.getValue()));
-                        }
-                    },
-                .isModified = [&var] { return var.getValue() != var.getDefaultValue(); },
+                .getValue = [setting] { return setting.text(); },
+                .isModified = [setting] { return setting.isModified(); },
                 .submit = false,
             })
             .on_nav_command([&window, props](Rml::Event&, NavCommand cmd) {
@@ -493,7 +481,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 if (path.empty()) {
                                     display = "(none)";
                                 } else {
-                                    display = borealis::file_select::display_name(path);
+                                    display = borealis::io::display_name(path);
                                     if (display.empty()) {
                                         display = path;
                                     }
@@ -539,6 +527,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                                 {
                                     .parentWindow = aurora::window::get_sdl_window(),
                                     .defaultLocation = defaultLocation,
+                                    .requireRealPath = true,
                                 },
                                 &data_folder_dialog_callback);
                         });
@@ -778,75 +767,50 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Resolution");
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.internalResolutionScale,
             GraphicsTunerProps{
                 .option = GraphicsOption::InternalResolution,
                 .title = "Internal Resolution",
                 .helpText = kInternalResolutionHelpText,
-                .valueMin = 0,
-                .valueMax = 12,
-                .defaultValue = 0,
             });
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.shadowResolutionMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::ShadowResolution,
                 .title = "Shadow Resolution",
                 .helpText = kShadowResolutionHelpText,
-                .valueMin = 1,
-                .valueMax = 8,
-                .defaultValue = 1,
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.resampler,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::Resampler,
                 .title = "Output Resampling",
                 .helpText = kResamplerHelpText,
-                .valueMin = static_cast<int>(Resampler::Bilinear),
-                .valueMax = static_cast<int>(Resampler::Area),
-                .defaultValue = static_cast<int>(Resampler::Bilinear),
             });
 
         leftPane.add_section("Post-Processing");
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMode,
                 .title = "Bloom",
                 .helpText = kBloomHelpText,
-                .valueMin = static_cast<int>(BloomMode::Off),
-                .valueMax = static_cast<int>(BloomMode::Dusk),
-                .defaultValue = static_cast<int>(BloomMode::Classic),
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
                 .title = "Bloom Brightness",
                 .helpText = kBloomBrightnessHelpText,
-                .valueMin = 0,
-                .valueMax = 100,
-                .defaultValue = 100,
-                .step = 10,
             });
-        graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.depthOfFieldMode,
+        graphics_tuner_control(*this, leftPane, rightPane,
             GraphicsTunerProps{
                 .option = GraphicsOption::DepthOfFieldMode,
                 .title = "Depth of Field",
                 .helpText = kDepthOfFieldHelpText,
-                .valueMin = static_cast<int>(DepthOfFieldMode::Off),
-                .valueMax = static_cast<int>(DepthOfFieldMode::Dusk),
-                .defaultValue = static_cast<int>(DepthOfFieldMode::Classic),
             });
 
         leftPane.add_section("Rendering");
         graphics_tuner_control(*this, leftPane, rightPane,
-            getSettings().game.enableTextureReplacements,
             GraphicsTunerProps{
                 .option = GraphicsOption::TextureReplacements,
                 .title = "Enable Texture Replacements",
                 .helpText = kTextureReplacementHelpText,
-                .valueMin = static_cast<int>(false),
-                .valueMax = static_cast<int>(true),
-                .defaultValue = static_cast<int>(false),
             });
         leftPane.register_control(
             leftPane.add_select_button({
@@ -1239,7 +1203,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             {
                 .key = "Speedrun Mode",
                 .helpText =
-                    "Enables speedrunning options while restricting certain gameplay modifiers.",
+                    "Enables Speedrun game mode option in the Dusklight launch menu.",
                 .onChange =
                     [this](bool enabled) {
                         if (enabled) {

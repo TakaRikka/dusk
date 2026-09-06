@@ -42,7 +42,6 @@ public:
     void SetStatue();
     void SetUnderwaterRoof();
 
-private:
     /* 0x4 */ bool mObject;
     /* 0x5 */ bool mCamera;
     /* 0x6 */ bool mLink;

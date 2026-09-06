@@ -51,7 +51,6 @@ public:
 
     void setSubNumber(int i_subNumber) { mSubNumber = i_subNumber; }
 
-private:
     /* 0x5AC */ request_of_phase_process_class mPhase;
     /* 0x5B4 */ J3DModel* mpModel;
     /* 0x5B8 */ Z2Creature mCreatureSound;

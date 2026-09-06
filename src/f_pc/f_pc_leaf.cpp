@@ -65,9 +65,7 @@ int fpcLf_Create(leafdraw_class* i_leaf) {
         LEAFDRAW_BASE(i_leaf).subtype = fpcBs_MakeOfType(&g_fpcLf_type);
         fpcDwPi_Init(&i_leaf->draw_priority, pprofile->priority);
         i_leaf->unk_0xBC = 0;
-#if TARGET_PC
-        i_leaf->draw_interp_frame = false;
-#endif
+        IF_DUSK(i_leaf->draw_interp_frame = false);
     }
 
     int ret = fpcMtd_Create(&i_leaf->leaf_methods->base, i_leaf);

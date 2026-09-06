@@ -4,10 +4,11 @@
 #include "JSystem/JMessage/control.h"
 #include "JSystem/JMessage/JMessage.h"
 #include "SSystem/SComponent/c_xyz.h"
+
+#if TARGET_PC
 #include "helpers/endian.h"
 #include "helpers/string.hpp"
 
-#if TARGET_PC
 #define D_MSG_CLASS_PAGE_CNT_MAX 40
 #define D_MSG_CLASS_CHAR_CNT_MAX 0x210
 #define D_MSG_CLASS_LINE_MAX 12

@@ -42,7 +42,6 @@ public:
     void setNoHitTimer() { noHitTimer = 20; }
     inline int execute();
 
-private:
     /* 0x568 */ LIGHT_INFLUENCE mLightInfluence;
     /* 0x588 */ dCcD_Stts mStts;
     /* 0x5C4 */ dCcD_Sph mSph;

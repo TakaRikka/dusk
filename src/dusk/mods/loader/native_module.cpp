@@ -6,14 +6,6 @@
 #include <Windows.h>
 #endif
 
-#if defined(__SANITIZE_ADDRESS__)
-#define ADDRESS_SANITIZER 1
-#elif defined(__has_feature)
-#if __has_feature(address_sanitizer)
-#define ADDRESS_SANITIZER 1
-#endif
-#endif
-
 namespace {
 #if defined(_WIN32)
 void* pl_dlopen(const std::filesystem::path& p) {
@@ -39,11 +31,7 @@ std::string pl_dlerror() {
 #else
 #include <dlfcn.h>
 void* pl_dlopen(const std::filesystem::path& p) {
-    int flags = RTLD_LAZY | RTLD_LOCAL;
-#if defined(RTLD_DEEPBIND) && !defined(ADDRESS_SANITIZER)
-    flags |= RTLD_DEEPBIND;
-#endif
-    return dlopen(p.c_str(), flags);
+    return dlopen(p.c_str(), RTLD_LAZY | RTLD_LOCAL);
 }
 void* pl_dlsym(void* h, const char* name) {
     return dlsym(h, name);

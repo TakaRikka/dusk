@@ -1,22 +1,11 @@
-#include <algorithm>
-#include <array>
-#include <aurora/aurora.h>
-#include <chrono>
-#include <numeric>
-#include <string_view>
-
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include "imgui.h"
-#include <imgui_internal.h>
-
 #include "ImGuiConsole.hpp"
+
 #include "ImGuiEngine.hpp"
-#include "JSystem/JUtility/JUTGamePad.h"
+
 #include "dusk/action_bindings.h"
-#include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/config.hpp"
 #include "dusk/data.hpp"
-#include "dusk/dusk.h"
 #include "dusk/frame_interpolation.h"
 #include "dusk/game_mode.hpp"
 #include "dusk/livesplit.h"
@@ -24,12 +13,21 @@
 #include "dusk/presentation.hpp"
 #include "dusk/settings.h"
 #include "dusk/ui/ui.hpp"
+
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_name.h"
-#include "fmt/format.h"
-#include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_main.h"
-#include "tracy/Tracy.hpp"
+
+#include "JSystem/JUtility/JUTGamePad.h"
+
+#include <aurora/aurora.h>
+#include <fmt/format.h>
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <tracy/Tracy.hpp>
+
+#include <array>
+#include <chrono>
+#include <string_view>
 
 #if _WIN32
 #define NOMINMAX

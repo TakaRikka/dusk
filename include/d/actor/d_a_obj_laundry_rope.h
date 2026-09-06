@@ -58,7 +58,6 @@ public:
     static DUSK_GAME_DATA const daObjLndRope_Attr_c mAttr;
     static const daObjLndRope_Hio_c M_Hio;
 
-private:
     /* 0x0568 */ mDoExt_3DlineMat1_c mRopeMat;
     /* 0x05a4 */ request_of_phase_process_class mPhase;
     /* 0x05ac */ Mtx mMtx;

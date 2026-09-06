@@ -25,7 +25,6 @@ public:
     void onReserve() { mReserve = 1; }
     void offReserve() { mReserve = 0; }
 
-private:
     /* 0x04 */ J2DScreen* m_cursorYellowScrn;
     /* 0x08 */ J2DPane* m_cursorYellowAllPane;
     /* 0x0C */ J2DPane* m_cursorYellow0Pane;
@@ -126,7 +125,6 @@ public:
     bool getLockCntMax() { return m_lockCnt >= BOOMERANG_LOCK_MAX; }
     void onLockDistanceCancel() { onStateFlg0(FLG0_LOCK_DIST_CANCEL); }
 
-private:
     /* 0x568 */ J3DModel* mp_boomModel;
     /* 0x56C */ J3DModel* mp_shippuModel;
     /* 0x570 */ J3DAnmTextureSRTKey* m_windBtk;

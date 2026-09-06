@@ -21,16 +21,15 @@
 #include "d/d_msg_string.h"
 #include "d/d_meter_haihai.h"
 #include "d/d_menu_window.h"
-#include "dusk/settings.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-#include "dusk/version.hpp"
-#include "helpers/string.hpp"
-
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#include "dusk/settings.h"
+#include "dusk/version.hpp"
+#include "helpers/string.hpp"
 #endif
 
 #if (PLATFORM_WII || PLATFORM_SHIELD)

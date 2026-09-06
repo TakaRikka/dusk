@@ -5,26 +5,29 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <cstdio>
-#include <cstring>
+#include "d/d_menu_item_explain.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTTexture.h"
+#include <cstdio>
+#include <cstring>
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_kantera_icon_meter.h"
 #include "d/d_lib.h"
-#include "d/d_menu_item_explain.h"
+#include "d/d_select_cursor.h"
 #include "d/d_meter2_info.h"
 #include "d/d_meter_HIO.h"
-#include "d/d_msg_scrn_3select.h"
-#include "d/d_msg_scrn_arrow.h"
 #include "d/d_msg_string.h"
-#include "d/d_select_cursor.h"
-#include "dusk/version.hpp"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_graphic.h"
+#include "d/d_msg_scrn_3select.h"
+#include "d/d_msg_scrn_arrow.h"
+
+#if TARGET_PC
+#include "dusk/version.hpp"
+#endif
 
 typedef void (dMenu_ItemExplain_c::*initFunc)();
 static initFunc init_process[] = {

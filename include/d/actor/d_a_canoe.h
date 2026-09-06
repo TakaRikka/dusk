@@ -65,7 +65,6 @@ public:
         field_0x1456 = 15;
     }
 
-private:
     /* 0x0568 */ request_of_phase_process_class mPhaseReq;
     /* 0x0570 */ J3DModel* mpModel;
     /* 0x0574 */ J3DModel* mpPaddleModel;

@@ -11,15 +11,10 @@
 #include "d/d_camera.h"
 #include "f_op/f_op_camera_mng.h"
 
-#include "dusk/frame_interpolation.h"
-
-const u16 l_M_Hijiki00TEX__width = 31;
-const u16 l_M_Hijiki00TEX__height = 31;
-const u16 l_M_kusa05_RGBATEX__width = 31;
-const u16 l_M_kusa05_RGBATEX__height = 31;
-
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
+#include "dusk/frame_interpolation.h"
+
 using GameVersion = dusk::version::GameVersion;
 
 template <typename T, size_t N>
@@ -60,6 +55,11 @@ DEFINE_GRASS_ASSET(l_M_Hijiki00TEX, u8, 0x800, {
 #include "assets/l_M_kusa05_RGBATEX.h"  // ALIGN 32
 #include "assets/l_M_Hijiki00TEX.h"     // ALIGN 32
 #endif
+
+const u16 l_M_Hijiki00TEX__width = 31;
+const u16 l_M_Hijiki00TEX__height = 31;
+const u16 l_M_kusa05_RGBATEX__width = 31;
+const u16 l_M_kusa05_RGBATEX__height = 31;
 
 static u8 l_pos[960] = {
     0x3F, 0x4A, 0x56, 0xEF, 0xC2, 0x20, 0x00, 0x00, 0x41, 0xFB, 0x17, 0xE4, 0x41, 0xAA, 0xBB, 0xEA,

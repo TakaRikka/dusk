@@ -11,8 +11,9 @@
 
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
+
+#include <tracy/Tracy.hpp>
 #endif
-#include "tracy/Tracy.hpp"
 
 #if TARGET_PC
 #define JPA_DRAW_CTX_PARAM , ParticleDrawCtx* ctx

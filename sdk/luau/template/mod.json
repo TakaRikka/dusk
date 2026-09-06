@@ -1,0 +1,8 @@
+{
+  "id": "com.example.my_script_mod",
+  "name": "My Script Mod",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "description": "A Luau script mod",
+  "runtime": "dev.twilitrealm.luau@1.0"
+}

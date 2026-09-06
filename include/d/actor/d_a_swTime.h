@@ -30,7 +30,6 @@ public:
     int execute();
     int _delete();
 
-private:
     /* 0x568 */ u8 mTime;
     /* 0x569 */ u8 mSwbit;
     /* 0x56A */ u8 mSwbit2;

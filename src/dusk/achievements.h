@@ -1,13 +1,12 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 #include <cstdint>
 #include <functional>
-#include <queue>
-#include <string>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-#include "nlohmann/json.hpp"
 
 namespace dusk {
 

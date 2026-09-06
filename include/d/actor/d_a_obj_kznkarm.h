@@ -63,7 +63,6 @@ public:
     static DUSK_GAME_DATA daObjKznkarm_Attr_c const M_attr;
     static DUSK_GAME_DATA actionFunc ActionTable[4][2];
 
-private:
     /* 0x568 */ J3DModel* mpModel;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ dBgS_AcchCir mAcchCir;

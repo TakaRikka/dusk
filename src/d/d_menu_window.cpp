@@ -26,7 +26,7 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-#ifdef TARGET_PC
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #endif
 

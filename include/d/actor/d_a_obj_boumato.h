@@ -50,7 +50,7 @@ public:
  *
  */
 class daObj_BouMato_c : public fopAc_ac_c {
-private:
+public:
     /* 0x568 */ OBJ_BOUMATO_HIO_CLASS* mpHIO;
     /* 0x56C */ request_of_phase_process_class mPhase;
     /* 0x574 */ J3DModel* mModel;

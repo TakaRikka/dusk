@@ -29,7 +29,6 @@ public:
         virtual ~daObjMHasu_c() {};
 
         void setRideFlag(bool i_ride) { mRideFlag = i_ride; }
-private:
     /* 0x5A8 */ Mtx mMtx;
     /* 0x5D8 */ Mtx mMtx2;
     /* 0x608 */ J3DModel* mModel;

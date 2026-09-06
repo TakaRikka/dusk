@@ -5,20 +5,20 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 
-#include <cstring>
+#include "d/d_msg_scrn_3select.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
 #include "JSystem/J2DGraph/J2DGrafContext.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include <cstring>
 #include "d/d_com_inf_game.h"
-#include "d/d_msg_object.h"
-#include "d/d_msg_scrn_3select.h"
-#include "d/d_pane_class.h"
 #include "d/d_select_cursor.h"
-#include "dusk/version.hpp"
+#include "d/d_msg_object.h"
+#include "d/d_pane_class.h"
 
 #if TARGET_PC
 #include "dusk/menu_pointer.h"
+#include "dusk/version.hpp"
 
 namespace {
 bool hit_choice_pane(CPaneMgr* pane, f32 padding) {

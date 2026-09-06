@@ -11,6 +11,7 @@
 #include "d/d_menu_dmap_map.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_graphic.h"
+
 #if TARGET_PC
 #include <dolphin/gx/GXExtra.h>
 #endif

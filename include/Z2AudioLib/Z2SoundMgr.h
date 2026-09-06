@@ -38,7 +38,6 @@ public:
     const JAISeqMgr* getSeqMgr() const { return &seqMgr_; }
     JAIStreamMgr* getStreamMgr() { return &streamMgr_; }
 
-private:
     /* 0x004 */ JAISeMgr seMgr_;
     /* 0x728 */ JAISeqMgr seqMgr_;
     /* 0x79C */ JAIStreamMgr streamMgr_;

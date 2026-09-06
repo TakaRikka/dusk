@@ -224,6 +224,12 @@ daPy_anmHeap_c::~daPy_anmHeap_c() {
     if (mAnimeHeap != NULL) {
         mDoExt_destroySolidHeap(mAnimeHeap);
     }
+#if TARGET_PC
+    freeTempBuffers();
+    if (mOwnedBuffer != NULL) {
+        JKRFreeToSysHeap(mOwnedBuffer);
+    }
+#endif
 }
 
 void daPy_anmHeap_c::initData() {
@@ -236,6 +242,56 @@ void* daPy_anmHeap_c::mallocBuffer() {
     mBuffer = JKR_NEW_ARRAY_ARGS(u8, mBufferSize, 0x20);
     return mBuffer;
 }
+
+#if TARGET_PC
+constexpr u32 kAlignment = 0x20;
+
+void daPy_anmHeap_c::reserveBuffer(u16 i_resId) {
+    // Ensure mBuffer is large enough to hold the resource
+    u32 size = daPy_getAnmResourceSize(i_resId, mBufferSize);
+    if (size <= mBufferSize) {
+        return;
+    }
+
+    // If not, replace it with a new buffer allocated from the system heap. Callers still copy
+    // archive data in on every load: setAnmTransform bswaps key tables in place, so we can't point
+    // it at the archive's cached copy directly.
+    u8* buffer = static_cast<u8*>(JKRAllocFromSysHeap(size, kAlignment));
+    JUT_ASSERT(__LINE__, buffer != NULL);
+    if (mOwnedBuffer != NULL) {
+        JKRFreeToSysHeap(mOwnedBuffer);
+    }
+    mOwnedBuffer = buffer;  // Mark it as owned so we release it later
+    mBuffer = buffer;
+    mBufferSize = size;
+}
+
+void* daPy_anmHeap_c::allocTempBuffer(u16 i_resId, u32* io_size) {
+    // Check if the resource can fit in io_size
+    u32 size = daPy_getAnmResourceSize(i_resId, *io_size);
+    if (size <= *io_size) {
+        return JKR_NEW_ARRAY_ARGS(u8, *io_size, kAlignment);
+    }
+
+    // If not, allocate a new temp buffer from the system heap, plus kAlignment extra bytes.
+    // We stash a pointer to the next buffer at the beginning, forming a chain so we can free
+    // them all later.
+    void** temp = static_cast<void**>(JKRAllocFromSysHeap(kAlignment + size, kAlignment));
+    JUT_ASSERT(__LINE__, temp != NULL);
+    *temp = mTempBuffers;
+    mTempBuffers = temp;
+    *io_size = size;
+    return reinterpret_cast<u8*>(temp) + kAlignment;
+}
+
+void daPy_anmHeap_c::freeTempBuffers() {
+    while (mTempBuffers != NULL) {
+        void** temp = mTempBuffers;
+        mTempBuffers = static_cast<void**>(*temp);
+        JKRFreeToSysHeap(temp);
+    }
+}
+#endif
 
 void daPy_anmHeap_c::createHeap(daPy_anmHeap_c::daAlinkHEAP_TYPE i_heapType, const char* name) {
     u32 size;
@@ -310,6 +366,7 @@ void* daPy_anmHeap_c::loadData(u16 i_resId) {
     };
 
     if (mArcNo == 0xFFFF) {
+        IF_DUSK(reserveBuffer(i_resId);)
         JKRReadIdxResource(mBuffer, mBufferSize, i_resId, dComIfGp_getAnmArchive());
         #if DEBUG
         daPy_aramBufferCheck(mBuffer, mBufferSize);
@@ -363,35 +420,12 @@ void* daPy_anmHeap_c::loadDataDemoRID(u16 i_resID, u16 i_arcNo) {
 
 JKRHeap* daPy_anmHeap_c::setAnimeHeap() {
     mAnimeHeap->freeAll();
+    IF_DUSK(freeTempBuffers();)
     return mDoExt_setCurrentHeap(mAnimeHeap);
 }
 
 #if !PLATFORM_WII
-#if TARGET_PC
-#include "dusk/dvd_asset.hpp"
-using GameVersion = dusk::version::GameVersion;
-static const u8* l_sightDL_get() { 
-    static u8 buf[0x89];
-    static bool _ = (
-        dusk::LoadDolAsset(
-            buf,
-            {
-            {GameVersion::GcnUsa,     0x803BA0C0},
-            {GameVersion::GcnPal,     0x803BBDA0},
-            {GameVersion::GcnJpn,     0x803B4220},
-            {GameVersion::WiiUsaRev0, 0x803F63C0},
-            {GameVersion::WiiUsa,     0x803E1640},
-            {GameVersion::WiiPal,     0x803E23A0},
-            {GameVersion::WiiJpn,     0x803DF600}
-            },
-            0x89
-        ),
-        true
-    );
-    return buf;
-}
-#define l_sightDL (l_sightDL_get())
-#else
+#if !TARGET_PC
 #include "assets/l_sightDL__d_a_player.h"
 #endif
 
@@ -435,7 +469,33 @@ void daPy_sightPacket_c::draw() {
     GXLoadPosMtxImm(mProjMtx, GX_PNMTX0);
     GXSetCurrentMtx(0);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+#if TARGET_PC
+    GXSetNumTexGens(1);
+    GXSetNumTevStages(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetDither(GX_TRUE);
+    GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
+    GXPosition3u8(1, 1, 0);
+    GXTexCoord2u8(1, 1);
+    GXPosition3u8(255, 1, 0);
+    GXTexCoord2u8(0, 1);
+    GXPosition3u8(1, 255, 0);
+    GXTexCoord2u8(1, 0);
+    GXPosition3u8(255, 255, 0);
+    GXTexCoord2u8(0, 0);
+    GXEnd();
+#else
     GXCallDisplayList(l_sightDL, 0x80);
+#endif
     J3DShape::resetVcdVatCache();
 }
 

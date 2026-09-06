@@ -84,7 +84,6 @@ public:
     void homeMenuSeCallback(s32);    
 #endif
 
-private:
     /* 0x000 */ JAISoundHandle mSoundHandle[24];
     /* 0x060 */ JAISoundHandles mSoundHandles;
     #if VERSION >= VERSION_WII_USA_R0

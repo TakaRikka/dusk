@@ -1,7 +1,12 @@
 #include "dusk/autosave.h"
+
 #include "dusk/ui/ui.hpp"
 #include "imgui/ImGuiConsole.hpp"
 #include "mods/svc/save.hpp"
+
+#include "d/actor/d_a_alink.h"
+#include "m_Do/m_Do_MemCard.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 
 bool shouldAutoSave = false;
 u8 mSaveBuffer[QUEST_LOG_SIZE * 3];

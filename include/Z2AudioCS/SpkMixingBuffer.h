@@ -13,7 +13,6 @@ public:
     bool update(s32 chan);
     void bzeroBuffer(s32 chan);
 
-private:
     /* 0x00 */ s16* mBuffer[4];
 };
 

@@ -13,7 +13,9 @@
 #include "SSystem/SComponent/c_counter.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
+#endif
 
 namespace {
 static u8 event_debug_evnt() {

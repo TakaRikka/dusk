@@ -13,12 +13,12 @@
 #include "d/actor/d_a_alink.h"
 #include <cstring>
 
+#if TARGET_PC
 #include "helpers/string.hpp"
 
-#ifdef __MWERKS__
-#define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))
-#else
 #define LOAD_4BYTE_STRING_LITERAL(x) read_big_endian_u32(x)
+#else
+#define LOAD_4BYTE_STRING_LITERAL(x) (*(u32*)(x))
 #endif
 
 namespace {

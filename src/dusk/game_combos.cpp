@@ -18,7 +18,7 @@ static daAlink_c* getPlayer() {
     return (daAlink_c*)dComIfGp_getPlayer(0);
 }
 
-static void consumeButtons(u32 mask) {
+static void consumeButtons(u16 mask) {
     mDoCPd_c::getCpadInfo(PAD_1).mPressedButtonFlags &= ~mask;
     mDoCPd_c::getCpadInfo(PAD_1).mButtonFlags &= ~mask;
 }
@@ -107,8 +107,8 @@ void processGameCombos() {
         getTransientSettings().moveLinkActive = false;
     }
 
-    const u32 held = mDoCPd_c::getHold(PAD_1);
-    const u32 trig = mDoCPd_c::getTrig(PAD_1);
+    const u16 held = mDoCPd_c::getHold(PAD_1) & 0xFFFF;
+    const u16 trig = mDoCPd_c::getTrig(PAD_1) & 0xFFFF;
 
     for (const auto& combo : kCombos) {
         if ((held & combo.holdMask) != combo.holdMask) {

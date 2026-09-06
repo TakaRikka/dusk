@@ -157,7 +157,7 @@ int daKey_c::create() {
 
 #if TARGET_PC
     mItemGiveTag = dusk::mods::item_give_tag_freestanding(getSaveBitNo());
-    const auto [item, displayItem] =
+    const auto [item, displayItem, _] =
         dusk::mods::item_check_resolve(mItemGiveTag, dItemNo_SMALL_KEY_e, this);
     m_itemNo = item;
     if (m_itemNo == dItemNo_NONE_e) {

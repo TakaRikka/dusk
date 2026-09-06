@@ -26,7 +26,6 @@ public:
 
     int getSwNo() { return fopAcM_GetParamBit(this, 0, 8); }
 
-private:
     /* 0x5A8 */ Mtx mMtx1;
     /* 0x5D8 */ Mtx mMtx2;
     /* 0x608 */ J3DModel* mpModel;

@@ -56,7 +56,6 @@ public:
     u8 CreateChk();
     int create();
 
-private:
     /* 0x590 */ dCcD_Stts mStts;
     /* 0x5CC */ dCcD_Sph mSphere;
     /* 0x704 */ daPy_boomerangMove_c mBoomerangMove;

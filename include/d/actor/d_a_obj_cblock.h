@@ -49,7 +49,6 @@ public:
     u8 getSwNo() { return fopAcM_GetParamBit(this, 16, 8); }
     u8 getPathID() { return fopAcM_GetParamBit(this, 24, 8); }
 
-private:
     /* 0x5A0 */ request_of_phase_process_class phase;
     /* 0x5A8 */ J3DModel* model1;
     /* 0x5AC */ J3DModel* model2;

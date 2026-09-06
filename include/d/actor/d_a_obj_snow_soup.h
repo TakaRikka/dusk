@@ -28,7 +28,6 @@ public:
     void createSmkEmtChange(int);
     void deleteSmkEmtChange(int);
 
-private:
     /* 0x574 */ cXyz mFirewoodPos;
     /* 0x580 */ cXyz mBubblePos;
     /* 0x58C */ JPABaseEmitter* mpSmkEmtCommon[4];

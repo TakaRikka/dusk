@@ -3,17 +3,16 @@
 #include "dusk/mod_loader.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/svc/item.hpp"
-
-#include "aurora/lib/logging.hpp"
-#include "d/d_com_inf_game.h"
-#include "d/d_item_data.h"
 #include "mods/items.h"
 
+#include "d/d_com_inf_game.h"
+#include "d/d_item_data.h"
+
+#include <aurora/lib/logging.hpp>
 #include <fmt/format.h>
 
 #include <algorithm>
 #include <array>
-#include <cstring>
 #include <exception>
 #include <string>
 #include <unordered_map>
@@ -120,6 +119,12 @@ constexpr std::array kMessageChecks{
         .vanillaItem = dItemNo_HORSE_FLUTE_e,
         .enqueueAtDisplay = false,
     },
+    MessageCheck{
+        .group = 2,
+        .messageId = 6531,
+        .name = ITEM_CHECK_SHAD_DOMINION_ROD,
+        .vanillaItem = dItemNo_COPY_ROD_2_e,
+    }
 };
 
 std::unordered_map<LoadedMod*, ModItemChecks> s_modChecks;
@@ -152,7 +157,7 @@ std::string poe_check_name(uint8_t bitNo) {
 }
 
 std::string shop_check_name(uint8_t itemNo) {
-    return fmt::format("shop:{}:{}", current_stage_name(), itemNo);
+    return fmt::format("shop:{}:{}:{}", current_stage_name(), dStage_roomControl_c::getStayNo(), itemNo);
 }
 
 std::string bug_check_name(uint8_t insectId) {
@@ -229,6 +234,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
         .vanilla_item = itemNo,
         .current_item = itemNo,
         .current_display_item = itemNo,
+        .was_resolved = false,
     };
     for (const auto& resolve : resolves) {
         if (!resolve.mod->active) {
@@ -237,6 +243,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
         if (resolve.fixedValue) {
             info.current_item = resolve.itemNo;
             info.current_display_item = resolve.itemNo;
+            info.was_resolved = true;
             continue;
         }
 
@@ -251,6 +258,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
                 }
                 info.current_item = resolution.item;
                 info.current_display_item = resolution.display_item;
+                info.was_resolved = true;
             }
         } catch (const std::exception& e) {
             fail_mod(*resolve.mod, MOD_ERROR,
@@ -263,6 +271,7 @@ ItemCheckResolution item_check_resolve(const char* name, uint8_t itemNo, fopAc_a
     return {
         .item = info.current_item,
         .display_item = info.current_display_item,
+        .was_resolved = info.was_resolved,
     };
 }
 

@@ -270,7 +270,6 @@ public:
 
     static DUSK_GAME_DATA dMenu_Fmap_c* MyClass;
 
-// private:
     /* 0x004 */ JKRExpHeap* mpHeap;
     /* 0x008 */ JKRExpHeap* mpTalkHeap;
     /* 0x00C */ STControl* mpStick;

@@ -75,6 +75,17 @@ ModResult item_resolve_check(
     return MOD_OK;
 }
 
+ModResult item_resolve_check_full(ModContext* context, const char* name, uint8_t originalItemNo,
+    ItemCheckResolution* outResolution) {
+    if (mod_from_context(context) == nullptr || !is_valid_check_name(name) ||
+        outResolution == nullptr)
+    {
+        return MOD_INVALID_ARGUMENT;
+    }
+    *outResolution = item_check_resolve(name, originalItemNo, nullptr);
+    return MOD_OK;
+}
+
 ModResult item_give_item(
     ModContext* context, const char* checkName, uint8_t itemNo, uint32_t flags) {
     auto* mod = mod_from_context(context);
@@ -130,6 +141,7 @@ constexpr ItemService s_itemService{
     .give_item = item_give_item,
     .observe_gives = item_observe_gives,
     .unobserve_gives = item_unobserve_gives,
+    .resolve_check_full = item_resolve_check_full,
 };
 
 }  // namespace

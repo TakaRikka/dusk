@@ -1,10 +1,10 @@
 #pragma once
 
-#include "button.hpp"
 #include "component.hpp"
 #include "document.hpp"
 #include "ui.hpp"
 
+#include <algorithm>
 #include <functional>
 #include <memory>
 #include <type_traits>
@@ -28,6 +28,7 @@ public:
 
     bool focus() override;
     void update() override;
+    void refresh();
     bool handle_nav_command(NavCommand cmd);
 
 private:
@@ -49,21 +50,34 @@ enum class GraphicsOption {
     TextureReplacements,
 };
 
-Rml::String format_graphics_setting_value(GraphicsOption option, int value);
+struct GraphicsSetting {
+    int min = 0;
+    int max = 0;
+    int defaultValue = 0;
+    int step = 1;
+    bool watchesRenderSize = false;
+    int (*read)() = nullptr;
+    void (*write)(int) = nullptr;
+    Rml::String (*label)(int) = nullptr;
+    const char* (*cvarName)() = nullptr;
+    bool (*isModified)() = nullptr;
+
+    static const GraphicsSetting& of(GraphicsOption option);
+
+    void set(int value) const { write(std::clamp(value, min, max)); }
+    Rml::String text() const { return label(read()); }
+};
 
 struct GraphicsTunerProps {
     GraphicsOption option;
     Rml::String title;
     Rml::String helpText;
-    int valueMin = 0;
-    int valueMax = 0;
-    int defaultValue = 0;
-    int step = 1;
 };
 
 class GraphicsTuner : public Document {
 public:
     explicit GraphicsTuner(GraphicsTunerProps props);
+    ~GraphicsTuner() override;
 
     void show() override;
     void hide(bool close) override;
@@ -85,13 +99,13 @@ private:
 
     void reset_default();
 
-    GraphicsOption mOption;
-    int mValueMin = 0;
-    int mValueMax = 0;
-    int mDefaultValue = 0;
+    GraphicsSetting mSetting;
     std::vector<std::unique_ptr<Component> > mComponents;
-    SteppedCarousel* mCarousel;
+    SteppedCarousel* mCarousel = nullptr;
     Rml::Element* mRoot;
+    u64 mSubscription = 0;
+    u32 mLastRenderWidth = 0;
+    u32 mLastRenderHeight = 0;
 };
 
 }  // namespace dusk::ui

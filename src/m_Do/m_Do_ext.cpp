@@ -24,9 +24,12 @@
 #include "m_Do/m_Do_mtx.h"
 #include <cstdio>
 #include <cstring>
-#include "dusk/logging.h"
+
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#include "dusk/logging.h"
 #include "dusk/version.hpp"
+#endif
 
 DUSK_GAME_DATA u8 mDoExt::CurrentHeapAdjustVerbose;
 DUSK_GAME_DATA u8 mDoExt::HeapAdjustVerbose;
@@ -310,6 +313,11 @@ static void mDoExt_modelDiff(J3DModel* i_model) {
     modelMtxErrorCheck(i_model);
     i_model->calcMaterial();
     i_model->diff();
+#if TARGET_PC
+    if (!dusk::frame_interp::is_sim_frame()) {
+        return;
+    }
+#endif
     i_model->entry();
 }
 

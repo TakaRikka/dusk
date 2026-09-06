@@ -18,7 +18,6 @@ public:
     void setMessageIndex(int i, u16 messageIndex) { mMessageIndex[i] = messageIndex; }
     u16 getMessageIndex(int i) { return mMessageIndex[i]; }
 
-private:
     /* 0x04 */ u32 mItemIndex[7];
     /* 0x20 */ u16 mMessageIndex[7];
 };

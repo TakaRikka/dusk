@@ -25,7 +25,6 @@ public:
     void setTextBoxPtr(J2DTextBox* p_textBox) { mpTextBoxPtr = p_textBox; }
     void resetType() { mType = 0x47; }
 
-// private:
     /* 0x04 */ J2DTextBox* mpTextBoxPtr;
     /* 0x08 */ f32 mPosX;
     /* 0x0C */ f32 mPosY;
@@ -53,7 +52,6 @@ public:
 
     void setRupeeColor(u8 color) { mRupeeColor = color; }
 
-// private:
     /* 0x004 */ COutFontSet_c* mpOfs[35];
     /* 0x090 */ J2DPicture* mpPane[70];
     /* 0x1A8 */ f32 mAlphaRatio;

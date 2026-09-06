@@ -26,7 +26,6 @@ public:
     u32 getNameArg_0() { return fopAcM_GetParamBit(this, 0, 4); }
     u32 getArg_0() { return fopAcM_GetParamBit(this, 4, 4); }
 
-private:
     /* 0x574 */ J3DModel* mpModel;
     /* 0x578 */ u8 mArg;
 };

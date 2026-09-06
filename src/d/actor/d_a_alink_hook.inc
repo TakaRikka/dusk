@@ -8,8 +8,13 @@
 #include "d/actor/d_a_obj_swhang.h"
 #include "d/actor/d_a_obj_chandelier.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
+
+#if TARGET_PC
 #include "dusk/frame_interpolation.h"
 #include "dusk/settings.h"
+
+static const int HS_CHAIN_MAX_LINKS = 600;
+#endif
 
 enum {
     HS_MODE_NONE_e,
@@ -18,10 +23,6 @@ enum {
     HS_MODE_FLY_e,
     HS_MODE_RETURN_e = 6,
 };
-
-#if TARGET_PC
-static const int HS_CHAIN_MAX_LINKS = 600;
-#endif
 
 void daAlink_c::hsChainShape_c::draw() {
     static const int dummy = 0;
@@ -34,9 +35,7 @@ void daAlink_c::hsChainShape_c::draw() {
     j3dSys.setVtxPos(modelData->getVtxPosArray(), modelData->getVtxNum());
     j3dSys.setVtxNrm(modelData->getVtxNrmArray(), modelData->getNrmNum());
     j3dSys.setVtxCol(modelData->getVtxColorArray(0), modelData->getColNum());
-#if TARGET_PC
-    j3dSys.setTexture(modelData->getTexture());
-#endif
+    IF_DUSK(j3dSys.setTexture(modelData->getTexture()));
     J3DShape::resetVcdVatCache();
 
     material->loadSharedDL();
@@ -150,12 +149,9 @@ void daAlink_c::hsChainShape_c::draw() {
             hsInterpSubRoot = alink->getHsSubChainRootPos();
             hsInterpSubTop  = alink->getHsSubChainTopPos();
         }
-        const cXyz& chainRootPos = hsInterpRoot;
-        const cXyz& chainTopPos = hsInterpTop;
-#else
-        const cXyz& chainRootPos = alink->getHsChainRootPos();
-        const cXyz& chainTopPos = alink->getHsChainTopPos();
 #endif
+        const cXyz& chainRootPos = DUSK_IF_ELSE(hsInterpRoot, alink->getHsChainRootPos());
+        const cXyz& chainTopPos = DUSK_IF_ELSE(hsInterpTop, alink->getHsChainTopPos());
         cXyz maxDistance = chainRootPos - chainTopPos;
 
         f32 maxDistanceF = maxDistance.abs();
@@ -185,11 +181,9 @@ void daAlink_c::hsChainShape_c::draw() {
             }
             (void)0;
 
-#if TARGET_PC
-            int chainLinks = 0;
-#endif
+            IF_DUSK(int chainLinks = 0);
 
-            while (maxDistanceF > var_f30 IF_DUSK(&&chainLinks < HS_CHAIN_MAX_LINKS)) {
+            while (maxDistanceF > var_f30 IF_DUSK(&& chainLinks < HS_CHAIN_MAX_LINKS)) {
                 temp_f27 = var_f28 * cM_fsin(sp34 * var_f30);
                 s16 spC = cM_atan2s(temp_f27 - var_f26, 5.0f);
                 sp64.x = sp6C.x + spC;
@@ -212,19 +206,12 @@ void daAlink_c::hsChainShape_c::draw() {
                 var_f26 = temp_f27;
                 var_f30 += fabsf(cM_scos(spC)) * 5.0f;
 
-#if TARGET_PC
-                chainLinks++;
-#endif
+                IF_DUSK(chainLinks++);
             }
         }
 
-#if TARGET_PC
-        const cXyz& subChainRootPos = hsInterpSubRoot;
-        const cXyz& subChainTopPos = hsInterpSubTop;
-#else
-        const cXyz& subChainRootPos = alink->getHsSubChainRootPos();
-        const cXyz& subChainTopPos = alink->getHsSubChainTopPos();
-#endif
+        const cXyz& subChainRootPos = DUSK_IF_ELSE(hsInterpSubRoot, alink->getHsSubChainRootPos());
+        const cXyz& subChainTopPos = DUSK_IF_ELSE(hsInterpSubTop, alink->getHsSubChainTopPos());
         maxDistance = subChainRootPos - subChainTopPos;
 
         maxDistanceF = maxDistance.abs();
@@ -235,11 +222,9 @@ void daAlink_c::hsChainShape_c::draw() {
             sp98 = subChainTopPos;
             sp6C.set(maxDistance.atan2sY_XZ(), maxDistance.atan2sX_Z(), 0);
 
-#if TARGET_PC
-            int subChainLinks = 0;
-#endif
+            IF_DUSK(int subChainLinks = 0);
 
-            while (maxDistanceF > var_f30 IF_DUSK(&&subChainLinks < HS_CHAIN_MAX_LINKS)) {
+            while (maxDistanceF > var_f30 IF_DUSK(&& subChainLinks < HS_CHAIN_MAX_LINKS)) {
                 mDoMtx_stack_c::copy(j3dSys.getViewMtx());
                 mDoMtx_stack_c::transM(sp98);
                 mDoMtx_stack_c::ZXYrotM(sp6C);
@@ -252,9 +237,7 @@ void daAlink_c::hsChainShape_c::draw() {
                 sp98 += maxDistance * 5.0f;
                 ANGLE_ADD_2(sp6C.z, 0x3000);
                 var_f30 += 5.0f;
-#if TARGET_PC
-                subChainLinks++;
-#endif
+                IF_DUSK(subChainLinks++);
             }
         }
     }

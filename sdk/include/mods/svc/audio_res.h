@@ -2,6 +2,10 @@
 
 #include <mods/api.h>
 
+#ifdef __cplusplus
+#include <mods/service.hpp>
+#endif
+
 #define AUDIO_RES_SERVICE_ID "dev.twilitrealm.dusklight.audio_res"
 #define AUDIO_RES_SERVICE_MAJOR 1u
 #define AUDIO_RES_SERVICE_MINOR 0u
@@ -427,13 +431,4 @@ typedef struct AudioResService {
     ModResult (*remove_sound_table)(ModContext* ctx, AudioSoundTableHandle handle);
 } AudioResService;
 
-#ifdef __cplusplus
-#include "mods/service.hpp"
-
-template <>
-struct mods::ServiceTraits<AudioResService> {
-    static constexpr const char* id = AUDIO_RES_SERVICE_ID;
-    static constexpr uint16_t major_version = AUDIO_RES_SERVICE_MAJOR;
-    static constexpr uint16_t minor_version = AUDIO_RES_SERVICE_MINOR;
-};
-#endif
+MOD_DECLARE_SERVICE(AudioResService, svc_audio_res, AUDIO_RES_SERVICE_ID, AUDIO_RES_SERVICE_MAJOR, AUDIO_RES_SERVICE_MINOR);

@@ -4,7 +4,7 @@
 #include "aurora/lib/logging.hpp"
 #include "dusk/mods/loader/loader.hpp"
 #include "dusk/mods/svc/id_allocator.hpp"
-#include "dusk/mods/svc/slot_map.hpp"
+#include "dusk/mods/svc/internal.hpp"
 
 namespace dusk::mods::svc::audio_res::bst {
 

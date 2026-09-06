@@ -1,15 +1,17 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphBase/J3DShape.h"
-
-#include <dolphin/gd.h>
-#include <gd.h>
-#include <gx.h>
-#include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
+#include "JSystem/J3DGraphBase/J3DFifo.h"
+#include <gd.h>
+
+#if TARGET_PC
 #include "JSystem/JKernel/JKRHeap.h"
-#include "tracy/Tracy.hpp"
+
+#include <dolphin/gx.h>
+#include <tracy/Tracy.hpp>
+#endif
 
 void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList const*, bool);
 void J3DFifoLoadPosMtxImm(Mtx, u32);

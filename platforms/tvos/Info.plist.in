@@ -47,5 +47,12 @@
     <string>Automatic</string>
     <key>LSSupportsGameMode</key>
     <true />
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsLocalNetworking</key>
+      <true/>
+    </dict>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Dusklight allows network-enabled mods to connect to devices on your local network.</string>
 </dict>
 </plist>

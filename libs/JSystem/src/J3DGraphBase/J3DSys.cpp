@@ -1,15 +1,16 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
-#include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
-#include "helpers/gx_helper.h"
+#include "JSystem/J3DGraphBase/J3DFifo.h"
 #include "global.h"
-#include "tracy/Tracy.hpp"
 
 #if TARGET_PC
 #include "dusk/frame_interpolation.h"
+#include "helpers/gx_helper.h"
+
+#include <tracy/Tracy.hpp>
 #endif
 
 DUSK_GAME_DATA J3DSys j3dSys;

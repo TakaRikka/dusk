@@ -14,7 +14,9 @@
 #include <cstdio>
 #include <cstring>
 
+#if TARGET_PC
 #include "dusk/version.hpp"
+#endif
 
 #if TARGET_PC || VERSION == VERSION_GCN_JPN
 #define STR_BUF_LEN 528

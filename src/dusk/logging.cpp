@@ -1,8 +1,8 @@
 #include "dusk/logging.h"
 
-#include <string_view>
+#include <tracy/Tracy.hpp>
 
-#include "tracy/Tracy.hpp"
+#include <string_view>
 
 bool StubLogEnabled = true;
 
@@ -14,6 +14,7 @@ constexpr std::string_view kStubFragments[] = {
     "Unimplemented: BP register"sv,
     "Unhandled BP register"sv,
     "Unhandled XF register"sv,
+    "Unhandled XF memory write"sv,
     "but selective updates are not implemented"sv,
 };
 

@@ -1,6 +1,6 @@
 #include "audio_res.hpp"
 #include "wsys.hpp"
-#include "../slot_map.hpp"
+#include "../internal.hpp"
 #include "../id_allocator.hpp"
 #include "aurora/lib/logging.hpp"
 #include "dusk/audio/DuskAudioSystem.h"

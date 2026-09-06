@@ -124,7 +124,6 @@ public:
     void OnPushPullOk() { m_pushPull_Ok = true; }
     void OffPushPullOk() { m_pushPull_Ok = false; }
 
-private:
     /* 0x08 */ u8 m_priority;
     /* 0x09 */ u8 m_roomId;
     /* 0x0A */ u8 field_0xa;

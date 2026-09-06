@@ -23,13 +23,12 @@
 #include "m_Do/m_Do_graphic.h"
 #include <cstring>
 
-#include "dusk/utilities.hpp"
-#include "dusk/version.hpp"
-
 #if TARGET_PC
 #include "dusk/game_mode.hpp"
 #include "dusk/menu_pointer.h"
 #include "dusk/mods/svc/save.hpp"
+#include "dusk/utilities.hpp"
+#include "dusk/version.hpp"
 #include "helpers/string.hpp"
 
 namespace {
@@ -1789,10 +1788,16 @@ void dFile_select_c::nameInput2() {
 #if TARGET_PC
         dusk::mods::svc::save_slot_new(mSelectNum);
         const dusk::gamemode::GameMode* gameMode =
-            dusk::gamemode::getGameModeManager().getCurrentGameMode();
+                dusk::gamemode::getGameModeManager().getCurrentGameMode();
         if (gameMode) {
             gameMode->invokeOnNewSaveFunction();
-            gameMode->invokeOnSaveLoadedFunction();
+        }
+
+        // only do OnSaveLoaded callback here if hiding the brightness check screen
+        if (dusk::getSettings().game.hideTvSettingsScreen) {
+            if (gameMode) {
+                gameMode->invokeOnSaveLoadedFunction();
+            }
         }
 #endif
         mDataSelProc = DATASELPROC_NEXT_MODE_WAIT;
@@ -4426,15 +4431,15 @@ void dFile_select_c::_draw() {
         dComIfGd_set2DOpa(mSelIcon);
         dComIfGd_set2DOpa(mSelIcon2);
 
-        #if PLATFORM_GCN
-        #if TARGET_PC
+#if PLATFORM_GCN
+#if TARGET_PC
         dComIfGd_set2DOpaTop(&mFadeDlst);
-        #else
+#else
         mpFadePict->draw(mDoGph_gInf_c::getMinXF(), mDoGph_gInf_c::getMinYF(),
                            mDoGph_gInf_c::getWidthF(), mDoGph_gInf_c::getHeightF(), false, false,
                            false);
-        #endif
-        #endif
+#endif
+#endif
     }
 }
 
