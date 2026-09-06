@@ -19,7 +19,7 @@
 #endif
 
 bool daAlink_c::checkNoSubjectModeCamera() {
-IF_DUSK(if (checkStageName("F_SP116") && dusk::getSettings().game.unrestrictedItems.getValue()) {
+IF_DUSK(if ((checkStageName("F_SP116") || checkStageName("R_SP160")) && dusk::getSettings().game.unrestrictedItems.getValue()) {
             return checkCargoCarry();
         })
     return dCam_getBody()->Type() == dCam_getBody()->GetCameraTypeFromCameraName("Rotary") ||
