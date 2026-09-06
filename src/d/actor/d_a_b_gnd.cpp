@@ -2947,6 +2947,7 @@ static void demo_camera(b_gnd_class* i_this) {
     s8 sp8 = false;
 #if TARGET_PC
     const s16 entry_demo_cam_mode = i_this->mDemoCamMode;
+    const bool holdToMash = DUSK_IF_ELSE(dusk::getSettings().game.holdToMash, false);
 #endif
     switch (i_this->mDemoCamMode) {
     case 0:
@@ -3405,7 +3406,7 @@ static void demo_camera(b_gnd_class* i_this) {
             cLib_addCalc2(&i_this->mDemoCamCenter.z, spF0.z + i_this->mDemoCamCenterTarget.z, 0.1f, 5.0f);
         }
 
-        if ((int)mDoCPd_c::getTrigA(PAD_1) != 0) {
+        if ((int)(holdToMash ? mDoCPd_c::getHoldA(PAD_1) : mDoCPd_c::getTrigA(PAD_1)) != 0) {
             i_this->mTubazeriPushValue += 0.1f;
             if (i_this->mTubazeriPushValue > 1.0f) {
                 i_this->mTubazeriPushValue = 1.0f;

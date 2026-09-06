@@ -8363,7 +8363,9 @@ int daAlink_c::procWolfEnemyHangBite() {
     current.angle.y = shape_angle.y;
     setDoStatusContinuation(3);
 
-    if (doTrigger()) {
+    IF_DUSK(const bool holdToMash = DUSK_IF_ELSE(dusk::getSettings().game.holdToMash, false));
+
+    if (holdToMash ? doButton() : doTrigger()) {
         mProcVar3.field_0x300e = 1;
         mProcVar0.field_0x3008 = mpHIO->mWolf.mWlAttack.mWlAtBite.m.mBiteAttachTime;
     } else if (mProcVar0.field_0x3008 != 0) {
