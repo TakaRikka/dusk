@@ -394,6 +394,7 @@ template class ConfigImpl<FrameInterpMode>;
 template class ConfigImpl<TouchTargeting>;
 template class ConfigImpl<MenuScaling>;
 template class ConfigImpl<Resampler>;
+template class ConfigImpl<AlwaysGreatspinMode>;
 template class ConfigImpl<MagicArmorMode>;
 template class ConfigImpl<ui::ControlLayout>;
 

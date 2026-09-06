@@ -92,6 +92,12 @@ constexpr std::array kMenuScalingModeLabels = {
     "Dusklight",
 };
 
+constexpr std::array kAlwaysGreatspinModes = {
+    "Off",
+    "After Learning Skill",
+    "Always",
+};
+
 constexpr std::array kMagicArmorModes = {
     "Normal",
     "On Damage",
@@ -1268,8 +1274,40 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Moon Jump (R+A)", getSettings().game.moonJump, "Hold R and A to rise into the air.");
         addCheat("Super Clawshot", getSettings().game.superClawshot,
             "Extends Clawshot behavior beyond the normal game rules.");
-        addCheat("Always Greatspin", getSettings().game.alwaysGreatspin,
-            "Allows the Great Spin attack without requiring full health.");
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Always Greatspin",
+                .getValue =
+                    [] {
+                        return kAlwaysGreatspinModes[static_cast<u8>(
+                            getSettings().game.alwaysGreatspin.getValue())];
+                    },
+                .isDisabled = [] { return dusk::speedrun::isActive(); },
+                .isModified =
+                    [] {
+                        return getSettings().game.alwaysGreatspin.getValue() !=
+                               getSettings().game.alwaysGreatspin.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < static_cast<int>(kAlwaysGreatspinModes.size()); i++) {
+                    pane.add_button({
+                            .text = kAlwaysGreatspinModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.alwaysGreatspin.getValue() ==
+                                           static_cast<AlwaysGreatspinMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.alwaysGreatspin.setValue(
+                                static_cast<AlwaysGreatspinMode>(i));
+                            config::save();
+                        });
+                }
+                pane.add_rml("<br/>Allows the Great Spin attack without requiring full health.");
+            });
         addCheat("Fast Iron Boots", getSettings().game.enableFastIronBoots,
             "Speeds up movement while heavy, including wearing the Iron Boots, holding the Ball and Chain, wearing Magic Armor without rupees, etc.");
         addCheat("Can Transform Anywhere", getSettings().game.canTransformAnywhere,

@@ -141,7 +141,7 @@ UserSettings g_userSettings = {
         .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
         .moonJump {"game.moonJump", false},
         .superClawshot {"game.superClawshot", false},
-        .alwaysGreatspin {"game.alwaysGreatspin", false},
+        .alwaysGreatspin {"game.alwaysGreatspin", AlwaysGreatspinMode::OFF},
         .enableFastIronBoots {"game.enableFastIronBoots", false},
         .canTransformAnywhere {"game.canTransformAnywhere", false},
         .fastRoll {"game.fastRoll", false},
