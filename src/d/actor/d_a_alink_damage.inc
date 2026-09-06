@@ -169,6 +169,12 @@ f32 daAlink_c::damageMagnification(BOOL i_checkZoraMag, int param_1) {
     }
 
     if (checkZoraWearAbility() && i_checkZoraMag) {
+        #if TARGET_PC
+        if (dusk::getSettings().game.zoraArmorMode.getValue() == dusk::ZoraArmorMode::Cosmetic ||
+            dusk::getSettings().game.zoraArmorMode.getValue() == dusk::ZoraArmorMode::Cosmetic_Mask) {
+            return base_mag;
+        }
+        #endif
         return 10.0f * base_mag;
     }
 

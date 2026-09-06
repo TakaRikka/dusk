@@ -92,6 +92,13 @@ constexpr std::array kMenuScalingModeLabels = {
     "Dusklight",
 };
 
+constexpr std::array kZoraArmorModes = {
+    "Normal",
+    "Cosmetic",
+    "Mask",
+    "Cosmetic + Mask",
+};
+
 constexpr std::array kMagicArmorModes = {
     "Normal",
     "On Damage",
@@ -1278,6 +1285,40 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Makes Link's roll animation and movement twice as fast.");
         addCheat("Fast Spinner", getSettings().game.fastSpinner,
             "Speeds up Spinner movement while holding R.");
+
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Zora Armor Behavior",
+                .getValue =
+                    [] {
+                        return kZoraArmorModes[static_cast<u8>(getSettings().game.zoraArmorMode.getValue())];
+                    },
+                .isDisabled = [] { return getSettings().game.speedrunMode.getValue(); },
+                .isModified =
+                    [] {
+                        return getSettings().game.zoraArmorMode.getValue() !=
+                               getSettings().game.zoraArmorMode.getDefaultValue();
+                    },
+            }),
+            rightPane, [](Pane& pane) {
+                for (int i = 0; i < kZoraArmorModes.size(); i++) {
+                    pane.add_button({
+                            .text = kZoraArmorModes[i],
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.zoraArmorMode.getValue() == static_cast<ZoraArmorMode>(i);
+                                },
+                        })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.zoraArmorMode.setValue(static_cast<ZoraArmorMode>(i));
+                            config::save();
+                        });
+                }
+                pane.add_rml(
+                    "<br/>Control the behavior of the Zora Armor.");
+            });
+
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Magic Armor Behavior",
