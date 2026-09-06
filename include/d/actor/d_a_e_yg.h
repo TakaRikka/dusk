@@ -63,15 +63,6 @@ public:
     /* 0x0BB4 */ yg_ke_s mYgKes[13];
     /* 0x1880 */ mDoExt_3DlineMat0_c mLineMat;
     /* 0x189C */ u8 mIsFirstSpawn;
-
-#if TARGET_PC
-    static const int TENTACLE_STRAND_COUNT = 13;
-    static const int TENTACLE_SEGMENT_COUNT = 10;
-    cXyz mTentacleInterpPrev[TENTACLE_STRAND_COUNT * TENTACLE_SEGMENT_COUNT];
-    cXyz mTentacleInterpCurr[TENTACLE_STRAND_COUNT * TENTACLE_SEGMENT_COUNT];
-    bool mTentacleInterpPrevValid;
-    bool mTentacleInterpCurrValid;
-#endif
 };
 
 STATIC_ASSERT(sizeof(e_yg_class) == 0x18a0);

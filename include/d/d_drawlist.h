@@ -441,7 +441,7 @@ public:
     }
 
 #if TARGET_PC
-    void refresh3DlineMats(const cXyz& eye);
+    void refresh3DlineMats();
 #endif
 
     void peekZdata() { mPeekZ.peekData(); }

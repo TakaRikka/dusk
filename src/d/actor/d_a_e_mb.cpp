@@ -13,10 +13,6 @@
 #include "c/c_damagereaction.h"
 #include "Z2AudioLib/Z2Instances.h"
 
-#if TARGET_PC
-#include "dusk/interp/frame_interpolation.h"
-#endif
-
 #define ACTION_STANDBY    0
 #define ACTION_WALK1      1
 #define ACTION_MOVE       2
@@ -67,22 +63,6 @@ static void anm_init(e_mb_class* i_this, int i_anmID, f32 i_morf, u8 i_attr, f32
     i_this->mAnm = i_anmID;
 }
 
-#if TARGET_PC
-static void e_mb_rope_interp_callback(void* pUserWork) {
-    e_mb_class* i_this = (e_mb_class*)pUserWork;
-    if (!i_this->mRopeInterpPrevValid || !i_this->mRopeInterpCurrValid) {
-        return;
-    }
-    const f32 alpha = dusk::interp::get_interpolation_step();
-    cXyz* dst = i_this->mRopeMat.getPos(0);
-    for (int i = 0; i < 16; i++) {
-        const cXyz& p0 = i_this->mRopeInterpPrev[i];
-        const cXyz& p1 = i_this->mRopeInterpCurr[i];
-        dst[i] = p0 + (p1 - p0) * alpha;
-    }
-}
-#endif
-
 static int daE_MB_Draw(e_mb_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)i_this;
 
@@ -106,17 +86,6 @@ static int daE_MB_Draw(e_mb_class* i_this) {
     static GXColor l_color = {0x14, 0x0F, 0x00, 0xFF};
     i_this->mRopeMat.update(16, l_color, &a_this->tevStr);
     dComIfGd_set3DlineMat(&i_this->mRopeMat);
-#if TARGET_PC
-    if (dusk::interp::is_enabled()) {
-        if (i_this->mRopeInterpCurrValid) {
-            memcpy(i_this->mRopeInterpPrev, i_this->mRopeInterpCurr, sizeof(i_this->mRopeInterpCurr));
-            i_this->mRopeInterpPrevValid = true;
-        }
-        memcpy(i_this->mRopeInterpCurr, i_this->mRopeMat.getPos(0), 16 * sizeof(cXyz));
-        i_this->mRopeInterpCurrValid = true;
-        dusk::interp::add_interpolation_callback(&e_mb_rope_interp_callback, i_this);
-    }
-#endif
     return 1;
 }
 

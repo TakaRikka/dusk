@@ -1464,6 +1464,7 @@ set(DUSK_FILES
         src/dusk/interp/camera.cpp
         src/dusk/interp/dual_buffer.cpp
         src/dusk/interp/frame_interpolation.cpp
+        src/dusk/interp/line.cpp
         src/dusk/io.cpp
         src/dusk/iso_validate.cpp
         src/dusk/language.cpp

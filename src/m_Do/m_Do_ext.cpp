@@ -26,8 +26,9 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/interp/frame_interpolation.h"
 #include "dusk/game_clock.h"
+#include "dusk/interp/frame_interpolation.h"
+#include "dusk/interp/line.h"
 #include "dusk/logging.h"
 #include "dusk/version.hpp"
 #endif
@@ -35,6 +36,16 @@
 DUSK_GAME_DATA u8 mDoExt::CurrentHeapAdjustVerbose;
 DUSK_GAME_DATA u8 mDoExt::HeapAdjustVerbose;
 DUSK_GAME_DATA u8 mDoExt::HeapAdjustQuiet;
+
+#if TARGET_PC
+namespace {
+enum InterpKind : u8 {
+    LINE_NONE,
+    LINE_UNIFORM_WIDTH,
+    LINE_PER_POINT_WIDTH,
+};
+}  // namespace
+#endif
 
 static void mDoExt_setJ3DData(Mtx mtx, const J3DTransformInfo* transformInfo, u16 param_2) {
     bool local_28;
@@ -2364,6 +2375,12 @@ int mDoExt_3DlineMat0_c::init(u16 param_0, u16 param_1, int param_2) {
 
     field_0x4 = NULL;
     field_0x16 = 0;
+#if TARGET_PC
+    mInterpWidth = 0.0f;
+    mInterpTaper = 0;
+    mInterpKind = LINE_NONE;
+    dusk::interp::line::reset(this);
+#endif
     return 1;
 }
 
@@ -2442,6 +2459,12 @@ void mDoExt_3DlineMat0_c::update(int param_0, f32 param_1, GXColor& param_2, u16
     } else {
         field_0x14 = (u16)param_0;
     }
+
+#if TARGET_PC
+    mInterpWidth = param_1;
+    mInterpTaper = param_3;
+    mInterpKind = LINE_UNIFORM_WIDTH;
+#endif
 
     view_class* sp_2c = dComIfGd_getView();
 
@@ -2561,6 +2584,8 @@ void mDoExt_3DlineMat0_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
         field_0x14 = (u16)param_0;
     }
 
+    IF_DUSK(mInterpKind = LINE_PER_POINT_WIDTH);
+
     view_class* sp_34 = dComIfGd_getView();
 
     mDoExt_3Dline_c* sp_30 = field_0x18;
@@ -2678,7 +2703,10 @@ int mDoExt_3DlineMat1_c::init(u16 param_0, u16 param_1, ResTIMG* param_2, int pa
     field_0x4 = 0;
     mIsDrawn = 0;
 #if TARGET_PC
-    mInterpLineKind = 0;
+    mInterpWidth = 0.0f;
+    mInterpTaper = 0;
+    mInterpKind = LINE_NONE;
+    dusk::interp::line::reset(this);
 #endif
 
     GXInitTexObj(&mTextureObject, (void*)((intptr_t)param_2 + param_2->imageOffset), param_2->width,
@@ -2762,11 +2790,7 @@ void mDoExt_3DlineMat1_c::draw() {
     }
 }
 
-#if TARGET_PC
-void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16 param_3, dKy_tevstr_c* param_4, const cXyz* presentationEye) {
-#else
 void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16 param_3, dKy_tevstr_c* param_4) {
-#endif
     mColor = param_2;
     this->mpTevStr = param_4;
     if (param_0 < 0) {
@@ -2778,9 +2802,9 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16
     }
 
 #if TARGET_PC
-    mInterpLineKind = 1;
-    mInterpLineF = param_1;
-    mInterpLineU16 = param_3;
+    mInterpWidth = param_1;
+    mInterpTaper = param_3;
+    mInterpKind = LINE_UNIFORM_WIDTH;
 #endif
 
     view_class* sp_3c = dComIfGd_getView();
@@ -2836,12 +2860,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16
             local_f31 += local_f30 * 0.02f * (8.0f / param_1);
         }
 
-#if TARGET_PC
-        const cXyz& lineEye = (presentationEye != nullptr && dusk::interp::is_enabled()) ? *presentationEye : sp_3c->lookat.eye;
-        sp_13c = *local_r27 - lineEye;
-#else
         sp_13c = *local_r27 - sp_3c->lookat.eye;
-#endif
         sp_130 = sp_130.outprod(sp_13c);
         sp_130.normalizeZP();
 
@@ -2876,11 +2895,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16
                 local_f31 += local_f30 * 0.02f * (8.0f / param_1);
             }
 
-#if TARGET_PC
-            sp_13c = local_r27[0] - lineEye;
-#else
             sp_13c = local_r27[0] - sp_3c->lookat.eye;
-#endif
             sp_130 = sp_130.outprod(sp_13c);
             sp_130.normalizeZP();
 
@@ -2953,11 +2968,7 @@ void mDoExt_3DlineMat2_c::setMaterial() {
     GXLoadNrmMtxImm(cMtx_getIdentity(), 0);
 }
 
-#if TARGET_PC
-void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* param_4, const cXyz* presentationEye) {
-#else
-void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* param_4
-#endif
+void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* param_4) {
     mColor = param_2;
     this->mpTevStr = param_4;
     if (param_0 < 0) {
@@ -2968,9 +2979,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
         field_0x34 = param_0;
     }
 
-#if TARGET_PC
-    mInterpLineKind = 2;
-#endif
+    IF_DUSK(mInterpKind = LINE_PER_POINT_WIDTH);
 
     view_class* stack_3c = dComIfGd_getView();
     mDoExt_3Dline_c* sp_38 = mpLines;
@@ -2997,12 +3006,6 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
     for (s32 sp_14 = 0; sp_14 < mNumLines; sp_14++) {
         local_r27 = sp_38[0].field_0x0;
         size_p = sp_38->field_0x4;
-#if TARGET_PC
-        if (presentationEye != nullptr && dusk::interp::is_enabled() && size_p == NULL) {
-            sp_38 += 1;
-            continue;
-        }
-#endif
         JUT_ASSERT(5875, size_p != NULL);
         sp_24 = sp_38->field_0x8[mIsDrawn];
         sp_28 = sp_24;
@@ -3016,12 +3019,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
         sp_130 = local_r27[1] - local_r27[0];
         local_f30 = sp_130.abs();
         local_f31 += local_f30 * 0.1f;
-#if TARGET_PC
-        const cXyz& lineEye = (presentationEye != nullptr && dusk::interp::is_enabled()) ? *presentationEye : stack_3c->lookat.eye;
-        sp_13c = local_r27[0] - lineEye;
-#else
         sp_13c = local_r27[0] - stack_3c->lookat.eye;
-#endif
         sp_130 = sp_130.outprod(sp_13c);
         sp_130.normalizeZP();
         local_r30->x = sp_130.x * 64.0f;
@@ -3043,11 +3041,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
             sp_130 = local_r27[1] - local_r27[0];
             local_f30 = sp_130.abs();
             local_f31 += local_f30 * 0.1f;
-#if TARGET_PC
-            sp_13c = local_r27[0] - lineEye;
-#else
             sp_13c = local_r27[0] - stack_3c->lookat.eye;
-#endif
             sp_130 = sp_130.outprod(sp_13c);
             sp_130.normalizeZP();
             local_r30 += 2;
@@ -3092,15 +3086,41 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 }
 
 #if TARGET_PC
-void mDoExt_3DlineMat1_c::refreshGeometryForPresentationEye(const cXyz& eye) {
+namespace {
+
+template <typename Material>
+void refresh_3dline_geometry(Material* material, dusk::interp::line::Points points, u8 kind,
+                             f32 width, u16 taper, GXColor& color, dKy_tevstr_c* tevStr) {
     if (!dusk::interp::is_enabled()) {
         return;
     }
-    if (mInterpLineKind == 1) {
-        update(field_0x34, mInterpLineF, mColor, mInterpLineU16, mpTevStr, &eye);
-    } else if (mInterpLineKind == 2) {
-        update(field_0x34, mColor, mpTevStr, &eye);
+
+    dusk::interp::line::write(material, points);
+    if (kind == LINE_UNIFORM_WIDTH) {
+        material->update(points.point_count, width, color, taper, tevStr);
+    } else if (kind == LINE_PER_POINT_WIDTH) {
+        material->update(points.point_count, color, tevStr);
     }
+}
+
+}  // namespace
+
+void mDoExt_3DlineMat0_c::captureInterpPoints() {
+    dusk::interp::line::capture(this, {field_0x18, field_0x10, field_0x14});
+}
+
+void mDoExt_3DlineMat0_c::refreshGeometryForPresentation() {
+    refresh_3dline_geometry(this, {field_0x18, field_0x10, field_0x14}, mInterpKind,
+                            mInterpWidth, mInterpTaper, field_0x8, field_0xc);
+}
+
+void mDoExt_3DlineMat1_c::captureInterpPoints() {
+    dusk::interp::line::capture(this, {mpLines, mNumLines, field_0x34});
+}
+
+void mDoExt_3DlineMat1_c::refreshGeometryForPresentation() {
+    refresh_3dline_geometry(this, {mpLines, mNumLines, field_0x34}, mInterpKind,
+                            mInterpWidth, mInterpTaper, mColor, mpTevStr);
 }
 #endif
 
@@ -3110,6 +3130,7 @@ void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* i_3DlineMat) {
     }
     i_3DlineMat->field_0x4 = mp3DlineMat;
     mp3DlineMat = i_3DlineMat;
+    IF_DUSK(i_3DlineMat->captureInterpPoints());
 }
 
 void mDoExt_3DlineMatSortPacket::draw() {

@@ -145,6 +145,10 @@ bool is_enabled() {
     return game_clock::g_frameTiming.interpolating;
 }
 
+bool should_capture() {
+    return is_enabled() && game_clock::is_sim_frame();
+}
+
 void begin_record() {
     if (!is_enabled()) {
         clear_interpolation_history();

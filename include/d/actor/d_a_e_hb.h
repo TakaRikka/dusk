@@ -73,12 +73,6 @@ public:
     /* 0x124C */ f32 field_0x124c;
     /* 0x1250 */ u8 field_0x1250[0x1264 - 0x1250];
     /* 0x1264 */ u8 HIOInit;
-#if TARGET_PC
-    cXyz mStalkLineInterpPrev[12];
-    cXyz mStalkLineInterpCurr[12];
-    bool mStalkLineInterpPrevValid;
-    bool mStalkLineInterpCurrValid;
-#endif
 };
 
 STATIC_ASSERT(sizeof(e_hb_class) == 0x1268);

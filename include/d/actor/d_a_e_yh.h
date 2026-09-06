@@ -77,12 +77,6 @@ public:
     /* 0x1260 */ u32 field_0x1260;
     /* 0x1260 */ u8 field_0x1264[0x1270 - 0x1264];
     /* 0x1270 */ bool mIsHIOOwner;
-#if TARGET_PC
-    cXyz mLineInterpPrev[12];
-    cXyz mLineInterpCurr[12];
-    bool mLineInterpPrevValid;
-    bool mLineInterpCurrValid;
-#endif
 };
 
 STATIC_ASSERT(sizeof(e_yh_class) == 0x1274);

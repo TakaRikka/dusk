@@ -12,10 +12,6 @@
 #include "Z2AudioLib/Z2Instances.h"
 #include "f_op/f_op_actor_enemy.h"
 
-#if TARGET_PC
-#include "dusk/interp/frame_interpolation.h"
-#endif
-
 enum E_yg_RES_File_ID {
     /* BCK */
     /* 0x04 */ BCK_YG_BITE_DIE = 0x4,
@@ -138,33 +134,6 @@ static BOOL pl_check(e_yg_class* i_this, f32 i_dist) {
     return FALSE;
 }
 
-#if TARGET_PC
-static void daE_YG_interp_callback(void* pUserWork) {
-    e_yg_class* i_this = (e_yg_class*)pUserWork;
-    fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    if (!i_this->mTentacleInterpPrevValid || !i_this->mTentacleInterpCurrValid) {
-        return;
-    }
-    const f32 alpha = dusk::interp::get_interpolation_step();
-    for (int s = 0; s < e_yg_class::TENTACLE_STRAND_COUNT; s++) {
-        cXyz* dst = i_this->mLineMat.getPos(s);
-        for (int i = 0; i < e_yg_class::TENTACLE_SEGMENT_COUNT; i++) {
-            int idx = s * e_yg_class::TENTACLE_SEGMENT_COUNT + i;
-            const cXyz& p0 = i_this->mTentacleInterpPrev[idx];
-            const cXyz& p1 = i_this->mTentacleInterpCurr[idx];
-            dst[i] = p0 + (p1 - p0) * alpha;
-        }
-    }
-    GXColor color;
-    color.r = JREG_S(0) + 20;
-    color.g = JREG_S(1) + 20;
-    color.b = JREG_S(2) + 20;
-    color.a = 0xFF;
-
-    i_this->mLineMat.update(10, color, &actor->tevStr);
-}
-#endif
-
 static int daE_YG_Draw(e_yg_class* i_this) {
     if (i_this->mDispFlag) {
         return 1;
@@ -191,22 +160,6 @@ static int daE_YG_Draw(e_yg_class* i_this) {
     color.a = 0xFF;
     i_this->mLineMat.update(10, color, &actor->tevStr);
     dComIfGd_set3DlineMatDark(&i_this->mLineMat);
-
-#if TARGET_PC
-    if (dusk::interp::is_enabled()) {
-        if (i_this->mTentacleInterpCurrValid) {
-            memcpy(i_this->mTentacleInterpPrev, i_this->mTentacleInterpCurr, sizeof(i_this->mTentacleInterpCurr));
-            i_this->mTentacleInterpPrevValid = true;
-        }
-        for (int s = 0; s < e_yg_class::TENTACLE_STRAND_COUNT; s++) {
-            cXyz* src = i_this->mLineMat.getPos(s);
-            memcpy(&i_this->mTentacleInterpCurr[s * e_yg_class::TENTACLE_SEGMENT_COUNT], src,
-                   e_yg_class::TENTACLE_SEGMENT_COUNT * sizeof(cXyz));
-        }
-        i_this->mTentacleInterpCurrValid = true;
-        dusk::interp::add_interpolation_callback(&daE_YG_interp_callback, i_this);
-    }
-#endif
 
     dComIfGd_setList();
 
@@ -1425,11 +1378,6 @@ static cPhs_Step daE_YG_Create(fopAc_ac_c* actor) {
             OS_REPORT("//////////////E_YG SET NON !!\n");
             return cPhs_ERROR_e;
         }
-
-#if TARGET_PC
-        i_this->mTentacleInterpPrevValid = false;
-        i_this->mTentacleInterpCurrValid = false;
-#endif
 
         if (!hio_set) {
             i_this->mIsFirstSpawn = 1;

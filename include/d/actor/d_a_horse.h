@@ -196,9 +196,6 @@ public:
     void copyReinPos();
     void setReinPosHandSubstance(int);
     void setReinPosNormalSubstance();
-#if TARGET_PC
-    void lerpControlPoints(f32 alpha);
-#endif
     void bgCheck();
     bool checkSpecialWallHitSubstance(cXyz const&) const;
     void setServiceWaitTimer();

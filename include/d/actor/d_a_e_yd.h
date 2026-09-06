@@ -74,12 +74,6 @@ public:
     /* 0x1250 */ f32 field_0x1250;
     /* 0x1254 */ u8 field_0x1254[0x1268 - 0x1254];
     /* 0x1268 */ u8 field_0x1268;
-#if TARGET_PC
-    cXyz mLineMatInterpPrev[12];
-    cXyz mLineMatInterpCurr[12];
-    bool mLineMatInterpPrevValid;
-    bool mLineMatInterpCurrValid;
-#endif
 };
 
 STATIC_ASSERT(sizeof(e_yd_class) == 0x126c);
