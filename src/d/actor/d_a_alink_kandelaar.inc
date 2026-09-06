@@ -53,7 +53,7 @@ void daAlink_c::setKandelaarMtx(Mtx i_mtx, int param_1, int param_2) {
     }
 }
 
-BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
+BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) IF_DUSK(const) {
     f32 base_y_pos;
     if (checkModeFlg(0x40)) {
         base_y_pos = mRightFootPos.y;
@@ -64,10 +64,15 @@ BOOL daAlink_c::checkWaterInKandelaarOffset(f32 param_0) {
     return param_0 > 65.0f + base_y_pos;
 }
 
+IF_DUSK(BOOL daAlink_c::checkLanternIgnoresWater() const { return dusk::getSettings().game.unrestrictedItems.getValue() && checkNoResetFlg0(FLG0_WATER_IN_MOVE); })
+IF_DUSK(BOOL daAlink_c::checkLanternInWater() const { return checkLanternIgnoresWater() && checkWaterInKandelaarOffset(mWaterY); })
+
 void daAlink_c::checkWaterInKandelaar(f32 param_0) {
     if (checkNoResetFlg2(FLG2_UNK_1) && checkWaterInKandelaarOffset(param_0)) {
         if (mEquipItem == dItemNo_KANTERA_e) {
+    IF_DUSK(if (!checkLanternIgnoresWater()) {)
             deleteEquipItem(TRUE, TRUE);
+    IF_DUSK(})
         } else {
             offKandelaarModel();
             seStartOnlyReverb(Z2SE_AL_ITEM_TAKEOUT);
@@ -87,7 +92,7 @@ bool daAlink_c::checkUseKandelaar(int param_0) {
 
 bool daAlink_c::checkKandelaarSwing(int param_0) const {
     if ((checkKandelaarSwingAnime() || mProcID == PROC_KANDELAAR_SWING) &&
-        (dComIfGs_getOil() != 0 || param_0 == 0))
+        ((dComIfGs_getOil() != 0 IF_DUSK(&& !checkLanternInWater())) || param_0 == 0))
     {
         return true;
     }
@@ -332,7 +337,7 @@ void daAlink_c::initKandelaarSwing() {
     voiceStart(Z2SE_AL_V_SWING_BOTTLE);
     mAtSph.ResetAtHit();
 
-    if (!checkEventRun()) {
+    if (!checkEventRun() IF_DUSK(&& (dComIfGs_getOil() != 0 || (checkLanternInWater() && checkWaterInKandelaarOffset(mWaterY))))) {
         dComIfGp_setItemOilCount(-mpHIO->mItem.mLantern.m.mShakeOilLoss);
     }
 

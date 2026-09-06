@@ -74,6 +74,7 @@ void resetForSpeedrunMode() {
     getSettings().game.alwaysGreatspin.setSpeedrunValue(false);
     getSettings().game.enableFastIronBoots.setSpeedrunValue(false);
     getSettings().game.canTransformAnywhere.setSpeedrunValue(false);
+    getSettings().game.unrestrictedItems.setSpeedrunValue(false);
     getSettings().game.fastRoll.setSpeedrunValue(false);
     getSettings().game.fastSpinner.setSpeedrunValue(false);
     getSettings().game.armorRupeeDrain.setSpeedrunValue(MagicArmorMode::NORMAL);

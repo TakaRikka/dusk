@@ -12,15 +12,23 @@ BOOL daAlink_c::checkZoraWearMaskDraw() {
 }
 
 BOOL daAlink_c::checkAcceptUseItemInWater(u16 i_itemNo) const {
+#if TARGET_PC
+    if (dusk::getSettings().game.unrestrictedItems.getValue() &&
+        checkNoResetFlg0(FLG0_WATER_IN_MOVE)) {
+        return true;
+    }
+#endif
     return i_itemNo == dItemNo_HVY_BOOTS_e || i_itemNo == dItemNo_WATER_BOMB_e || checkHookshotItem(i_itemNo);
 }
 
 void daAlink_c::swimDeleteItem() {
-    if (!checkHookshotItem(mEquipItem) && (mEquipItem != 0x103 || !checkBootsOrArmorHeavy())) {
+IF_DUSK(BOOL keepLanternOut = mEquipItem == dItemNo_KANTERA_e && checkLanternIgnoresWater();)
+
+    if (!checkHookshotItem(mEquipItem) IF_DUSK(&& !keepLanternOut) && (mEquipItem != 0x103 || !checkBootsOrArmorHeavy())) {
         deleteEquipItem(TRUE, TRUE);
     }
 
-    if (checkNoResetFlg2(FLG2_UNK_1)) {
+    if (IF_DUSK(!keepLanternOut &&) checkNoResetFlg2(FLG2_UNK_1)) {
         offKandelaarModel();
     }
 }

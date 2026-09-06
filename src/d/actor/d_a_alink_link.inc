@@ -14,10 +14,14 @@
 #include "dusk/action_bindings.h"
 #include "dusk/gyro.h"
 #include "dusk/mouse.h"
+#include "dusk/settings.h"
 #include "dusk/touch_camera.h"
 #endif
 
 bool daAlink_c::checkNoSubjectModeCamera() {
+IF_DUSK(if ((checkStageName("F_SP116") || checkStageName("R_SP160")) && dusk::getSettings().game.unrestrictedItems.getValue()) {
+            return checkCargoCarry();
+        })
     return dCam_getBody()->Type() == dCam_getBody()->GetCameraTypeFromCameraName("Rotary") ||
            dCam_getBody()->Type() == dCam_getBody()->GetCameraTypeFromCameraName("Rampart2") ||
            dCam_getBody()->Type() == dCam_getBody()->GetCameraTypeFromCameraName("Allay") ||
