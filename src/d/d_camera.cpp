@@ -673,7 +673,8 @@ void dCamera_c::Stay() {
 int dCamera_c::resolveModeStyle(s32 i_type, s32 i_mode) {
     int style = mCamTypeData[i_type].field_0x18[mIsWolf][i_mode];
     if (style < 0 && dusk::getSettings().game.unrestrictedItems.getValue() &&
-        strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0) {
+        (strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0) ||
+         strcmp(dComIfGp_getStartStageName(), "R_SP160") == 0)) {
         style = mCamTypeData[specialType[CAM_TYPE_FIELD_S]].field_0x18[mIsWolf][i_mode];
     }
     return style;
@@ -885,7 +886,8 @@ void dCamera_c::updatePad() {
 #if TARGET_PC
     bool subjectStyleValid = mCamTypeData[mCurType].field_0x18[temp1][4] >= 0;
     if (!subjectStyleValid && dusk::getSettings().game.unrestrictedItems.getValue() &&
-        strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0) {
+        (strcmp(dComIfGp_getStartStageName(), "F_SP116") == 0 ||
+         strcmp(dComIfGp_getStartStageName(), "R_SP160") == 0)) {
         subjectStyleValid = mCamTypeData[specialType[CAM_TYPE_FIELD_S]].field_0x18[temp1][4] >= 0;
     }
 
