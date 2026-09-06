@@ -179,7 +179,13 @@ BOOL daAlink_c::setBodyAngleToCamera() {
                     scale /= dComIfGp_getCameraZoomScale(field_0x317c);
                 }
 
-                const f32 yawDeg = -touchYawDp * dusk::touch_camera::YAW_DEGREES_PER_DP * scale *
+                const bool effectiveInvertX =
+                    dusk::getSettings().game.enableMirrorMode ^
+                    dusk::getSettings().game.invertFirstPersonXAxis;
+
+                const f32 yawFactor = effectiveInvertX ? 1.0f : -1.0f; // preserve original sign convention
+
+                const f32 yawDeg = yawFactor * touchYawDp * dusk::touch_camera::YAW_DEGREES_PER_DP * scale *
                                    dusk::getSettings().game.touchCameraXSensitivity;
                 const f32 pitchDeg = touchPitchDp * dusk::touch_camera::PITCH_DEGREES_PER_DP *
                                      scale * dusk::getSettings().game.touchCameraYSensitivity;

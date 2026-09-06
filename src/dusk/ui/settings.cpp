@@ -964,12 +964,12 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Adjusts vertical free camera sensitivity.<br/><br/>Applies to the control stick only.",
             50, 200, 5, [] { return !getSettings().game.freeCamera; });
         addOption("Invert Camera X Axis", getSettings().game.invertCameraXAxis,
-            "Invert horizontal camera movement.<br/><br/>Applies to the control stick only.");
+            "Invert horizontal camera movement.<br/><br/>Applies to the control stick and touch swipe.");
         addOption("Invert Camera Y Axis", getSettings().game.invertCameraYAxis,
             "Invert vertical camera movement.<br/><br/>Applies to the control stick only.",
             [] { return !getSettings().game.freeCamera; });
         addOption("Invert First Person X Axis", getSettings().game.invertFirstPersonXAxis,
-            "Invert horizontal movement while aiming with items or first person camera.<br/><br/>Applies to the control stick only.");
+            "Invert horizontal movement while aiming with items or first person camera.<br/><br/>Applies to the control stick and touch swipe.");
         addOption("Invert First Person Y Axis", getSettings().game.invertFirstPersonYAxis,
             "Invert vertical movement while aiming with items or first person camera.<br/><br/>Applies to the control stick only.");
 
