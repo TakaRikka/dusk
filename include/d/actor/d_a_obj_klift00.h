@@ -26,7 +26,7 @@ public:
     int Delete();
 
 #if TARGET_PC
-    void onInterpCallback();
+    void onInterpPresentation();
 #endif
 
     enum Param_e {
@@ -52,13 +52,6 @@ public:
     /* 0x0660 */ dCcD_Sph mChainSphereColliders[8];
     /* 0x1020 */ dCcD_Cyl mCylinderCollider;
     /* 0x115C */ s32 mStopSwingingFrames;
-
-#if TARGET_PC
-    cXyz mChainInterpPrev[64];
-    cXyz mChainInterpCurr[64];
-    bool mChainInterpPrevValid;
-    bool mChainInterpCurrValid;
-#endif
 
     // Number of chain models
     u32 getArg0() {
