@@ -5,8 +5,11 @@
 #include "d/d_com_inf_game.h"
 #include "JSystem/J2DGraph/J2DAnimation.h"
 #include "JSystem/J2DGraph/J2DAnmLoader.h"
-#include "dusk/frame_interpolation.h"
 #include <cstring>
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 dSelect_cursorHIO_c::dSelect_cursorHIO_c() {
     field_0x8 = 1.0f;
@@ -281,20 +284,17 @@ void dSelect_cursor_c::update() {
     if (mUpdateFlag) {
         if (field_0x30) {
             if (chkPlayAnime(0)) {
-#ifdef TARGET_PC
-                if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-                {
-                    if (mNameIdx == 1) {
-                        field_0x44 += mpCursorHIO->field_0x8 * fVar1;
-                    } else {
-                        field_0x44 += fVar1;
-                    }
-
-                    if (field_0x44 >= field_0x30->getFrameMax()) {
-                        field_0x44 -= field_0x30->getFrameMax();
-                    }
+                IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+                if (mNameIdx == 1) {
+                    field_0x44 += mpCursorHIO->field_0x8 * fVar1;
+                } else {
+                    field_0x44 += fVar1;
                 }
+
+                if (field_0x44 >= field_0x30->getFrameMax()) {
+                    field_0x44 -= field_0x30->getFrameMax();
+                }
+                IF_DUSK_BLOCK_END
 
                 field_0x30->setFrame(field_0x44);
                 setBpkAnimation(field_0x30);
@@ -310,19 +310,16 @@ void dSelect_cursor_c::update() {
         for (int i = 0; i < 2; i++) {
             if (field_0x34[i]) {
                 if ((i == 0 && chkPlayAnime(2)) || (i == 1 && chkPlayAnime(3))) {
-#ifdef TARGET_PC
-                    if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-                    {
-                        if (mNameIdx == 1) {
-                            field_0x48[i] += mpCursorHIO->field_0x8 * fVar1;
-                        } else {
-                            field_0x48[i] += fVar1;
-                        }
-                        if (field_0x48[i] >= field_0x34[i]->getFrameMax()) {
-                            field_0x48[i] -= field_0x34[i]->getFrameMax();
-                        }
+                    IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+                    if (mNameIdx == 1) {
+                        field_0x48[i] += mpCursorHIO->field_0x8 * fVar1;
+                    } else {
+                        field_0x48[i] += fVar1;
                     }
+                    if (field_0x48[i] >= field_0x34[i]->getFrameMax()) {
+                        field_0x48[i] -= field_0x34[i]->getFrameMax();
+                    }
+                    IF_DUSK_BLOCK_END
 
                     field_0x34[i]->setFrame(field_0x48[i]);
                 }
@@ -331,19 +328,16 @@ void dSelect_cursor_c::update() {
         }
 
         if (field_0x2C && chkPlayAnime(1)) {
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                if (mNameIdx == 1) {
-                    field_0x40 += mpCursorHIO->field_0x8 * fVar1;
-                } else {
-                    field_0x40 += fVar1;
-                }
-                if (field_0x40 >= field_0x2C->getFrameMax()) {
-                    field_0x40 -= field_0x2C->getFrameMax();
-                }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            if (mNameIdx == 1) {
+                field_0x40 += mpCursorHIO->field_0x8 * fVar1;
+            } else {
+                field_0x40 += fVar1;
             }
+            if (field_0x40 >= field_0x2C->getFrameMax()) {
+                field_0x40 -= field_0x2C->getFrameMax();
+            }
+            IF_DUSK_BLOCK_END
 
             field_0x2C->setFrame(field_0x40);
             setBckAnimation(field_0x2C);
@@ -351,12 +345,9 @@ void dSelect_cursor_c::update() {
         }
 
         if (chkPlayAnime(1) && mNameIdx == 0) {
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                setCursorAnimation();
-            }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            setCursorAnimation();
+            IF_DUSK_BLOCK_END
         }
 
         mpScreen->animation();

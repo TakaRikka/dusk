@@ -14,10 +14,6 @@
 #include <gf/GFLight.h>
 #include "m_Do/m_Do_lib.h"
 
-#if TARGET_PC
-#include "dusk/frame_interpolation.h"
-#endif
-
 static BOOL daMirror_c_createHeap(fopAc_ac_c* i_this) {
     return ((daMirror_c*)i_this)->createHeap();
 }

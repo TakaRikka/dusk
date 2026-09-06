@@ -19,7 +19,7 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/version.hpp"
 #include "helpers/string.hpp"
 #endif
@@ -294,7 +294,7 @@ void dMeterButton_c::draw() {
 
             s16 temp_r6 = g_drawHIO.mEmpButton.mRepeatHitFrameNum;
             s16 temp_r6_2 = g_drawHIO.mEmpButton.mRepeatHitFrameNum / 2;
-            IF_DUSK_BLOCK(dusk::frame_interp::get_ui_tick_pending())
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
             field_0x4b8[i]++;
 
             if (field_0x4b8[i] >= temp_r6) {
@@ -379,7 +379,7 @@ void dMeterButton_c::draw() {
 
             if (var_r3) {
 #if TARGET_PC
-                if (dusk::frame_interp::get_ui_tick_pending()) {
+                if (dusk::interp::get_ui_tick_pending()) {
                     mWasListen[i] = var_r22;
                     mWasRepeat[i] = var_r23;
                 } else {
@@ -388,7 +388,7 @@ void dMeterButton_c::draw() {
                 }
 #endif
                 if (var_r22) {
-                    if (field_0x2e8[i] == 18.0f IF_DUSK(&& dusk::frame_interp::get_ui_tick_pending()))
+                    if (field_0x2e8[i] == 18.0f IF_DUSK(&& dusk::interp::get_ui_tick_pending()))
                     {
                         mDoAud_seStart(Z2SE_SY_HINT_BUTTON_BLINK, NULL, 0, 0);
                     }

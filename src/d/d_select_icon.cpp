@@ -2,31 +2,28 @@
 
 #include "d/d_select_icon.h"
 #include "JSystem/J2DGraph/J2DAnimation.h"
-#include "dusk/frame_interpolation.h"
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 dSi_HIO_c::dSi_HIO_c() {}
 
 void dSelect_icon_c::animation() {
     if (field_0x10->getAlpha() != 0) {
-#ifdef TARGET_PC
-        if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-        {
-            field_0x20 += field_0x2c;
-            if (field_0x20 >= field_0x1c->getFrameMax()) {
-                field_0x20 = 0.0f;
-            }
-            field_0x1c->setFrame(field_0x20);
-
-            field_0x28 += field_0x2c;
-            if (field_0x28 >= field_0x24->getFrameMax()) {
-                field_0x28 = 0.0f;
-            }
+        IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+        field_0x20 += field_0x2c;
+        if (field_0x20 >= field_0x1c->getFrameMax()) {
+            field_0x20 = 0.0f;
         }
-#ifdef TARGET_PC
-        // FRAME INTERP NOTE: Set even if not advancing
         field_0x1c->setFrame(field_0x20);
-#endif
+
+        field_0x28 += field_0x2c;
+        if (field_0x28 >= field_0x24->getFrameMax()) {
+            field_0x28 = 0.0f;
+        }
+        IF_DUSK_BLOCK_END
+        IF_DUSK(field_0x1c->setFrame(field_0x20));  // FRAME INTERP NOTE: Set even if not advancing
 
         field_0x24->setFrame(field_0x28);
         field_0x8->animation();

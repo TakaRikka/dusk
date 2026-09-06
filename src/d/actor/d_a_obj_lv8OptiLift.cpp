@@ -12,7 +12,7 @@
 #include "d/d_path.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 daOptiLift_HIO_c::daOptiLift_HIO_c() {
@@ -417,7 +417,7 @@ void daOptiLift_c::setNextPoint() {
 }
 
 #if TARGET_PC
-static void daOptiLift_interp_callback(bool isSimFrame, void* pUserWork) {
+static void daOptiLift_interp_callback(void* pUserWork) {
     daOptiLift_c* lift = static_cast<daOptiLift_c*>(pUserWork);
     if (lift == NULL || lift->mpModel == NULL) {
         return;
@@ -451,7 +451,7 @@ static void daOptiLift_interp_callback(bool isSimFrame, void* pUserWork) {
 
 int daOptiLift_c::Draw() {
 #if TARGET_PC
-    dusk::frame_interp::add_interpolation_callback(&daOptiLift_interp_callback, this);
+    dusk::interp::add_interpolation_callback(&daOptiLift_interp_callback, this);
 #endif
 
     g_env_light.settingTevStruct(0x10, &current.pos, &tevStr);

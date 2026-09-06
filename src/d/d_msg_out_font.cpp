@@ -8,7 +8,7 @@
 #include "f_op/f_op_msg_mng.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/version.hpp"
 #endif
 
@@ -319,7 +319,7 @@ void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param
     }
 
 #if TARGET_PC
-    if (dusk::frame_interp::get_ui_tick_pending()) {
+    if (dusk::interp::get_ui_tick_pending()) {
         for (int i = 0; i < 70; i++) {
             sp256[i] = -1;
         }
@@ -528,7 +528,7 @@ void COutFont_c::draw(J2DTextBox* i_textbox, f32 param_1, f32 param_2, f32 param
                 case 20:
                 case 21:
                 case 22:
-                    IF_DUSK_BLOCK(dusk::frame_interp::get_ui_tick_pending())
+                    IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
                     field_0x1b4[type]++;
                     if (field_0x1b4[type] >= 28) {
                         field_0x1b4[type] = 0;

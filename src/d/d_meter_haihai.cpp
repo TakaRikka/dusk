@@ -11,7 +11,10 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_meter_HIO.h"
 #include "d/d_pane_class.h"
-#include "dusk/frame_interpolation.h"
+
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
+#endif
 
 dMeterHaihai_c::dMeterHaihai_c(u8 i_type) {
     mType = i_type;
@@ -287,20 +290,17 @@ void dMeterHaihai_c::updateHaihai() {
 void dMeterHaihai_c::playBckAnime(J2DAnmTransformKey* i_bck) {
     if (checkPlayAnime(1)) {
         if (i_bck != NULL) {
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                if (mType == 4) {
-                    mBckFrame += g_drawHIO.mWiiLockArrowBCKAnimSpeed;
-                } else {
-                    mBckFrame += g_drawHIO.mScrollArrowBCKAnimSpeed;
-                }
-
-                if (mBckFrame >= i_bck->getFrameMax()) {
-                    mBckFrame -= i_bck->getFrameMax();
-                }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            if (mType == 4) {
+                mBckFrame += g_drawHIO.mWiiLockArrowBCKAnimSpeed;
+            } else {
+                mBckFrame += g_drawHIO.mScrollArrowBCKAnimSpeed;
             }
+
+            if (mBckFrame >= i_bck->getFrameMax()) {
+                mBckFrame -= i_bck->getFrameMax();
+            }
+            IF_DUSK_BLOCK_END
         } else {
             mBtkFrame = 1.0f;
         }
@@ -315,20 +315,17 @@ void dMeterHaihai_c::playBckAnime(J2DAnmTransformKey* i_bck) {
 void dMeterHaihai_c::playBtkAnime(J2DAnmTextureSRTKey* i_btk) {
     if (checkPlayAnime(2)) {
         if (i_btk != NULL) {
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                if (mType == 4) {
-                    mBtkFrame += g_drawHIO.mWiiLockArrowBTKAnimSpeed;
-                } else {
-                    mBtkFrame += g_drawHIO.mScrollArrowBTKAnimSpeed;
-                }
-
-                if (mBtkFrame >= i_btk->getFrameMax()) {
-                    mBtkFrame -= i_btk->getFrameMax();
-                }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            if (mType == 4) {
+                mBtkFrame += g_drawHIO.mWiiLockArrowBTKAnimSpeed;
+            } else {
+                mBtkFrame += g_drawHIO.mScrollArrowBTKAnimSpeed;
             }
+
+            if (mBtkFrame >= i_btk->getFrameMax()) {
+                mBtkFrame -= i_btk->getFrameMax();
+            }
+            IF_DUSK_BLOCK_END
         } else {
             mBtkFrame = 1.0f;
         }
@@ -342,20 +339,17 @@ void dMeterHaihai_c::playBtkAnime(J2DAnmTextureSRTKey* i_btk) {
 void dMeterHaihai_c::playBpkAnime(J2DAnmColor* i_bpk) {
     if (checkPlayAnime(0)) {
         if (i_bpk != NULL) {
-#ifdef TARGET_PC
-            if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-            {
-                if (mType == 4) {
-                    mBpkFrame += g_drawHIO.mWiiLockArrowBPKAnimSpeed;
-                } else {
-                    mBpkFrame += g_drawHIO.mScrollArrowBPKAnimSpeed;
-                }
-
-                if (mBpkFrame >= i_bpk->getFrameMax()) {
-                    mBpkFrame -= i_bpk->getFrameMax();
-                }
+            IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+            if (mType == 4) {
+                mBpkFrame += g_drawHIO.mWiiLockArrowBPKAnimSpeed;
+            } else {
+                mBpkFrame += g_drawHIO.mScrollArrowBPKAnimSpeed;
             }
+
+            if (mBpkFrame >= i_bpk->getFrameMax()) {
+                mBpkFrame -= i_bpk->getFrameMax();
+            }
+            IF_DUSK_BLOCK_END
         } else {
             mBpkFrame = 1.0f;
         }

@@ -26,7 +26,8 @@
 #include <cstring>
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
+#include "dusk/game_clock.h"
 #include "dusk/logging.h"
 #include "dusk/version.hpp"
 #endif
@@ -314,7 +315,7 @@ static void mDoExt_modelDiff(J3DModel* i_model) {
     i_model->calcMaterial();
     i_model->diff();
 #if TARGET_PC
-    if (!dusk::frame_interp::is_sim_frame()) {
+    if (!dusk::game_clock::is_sim_frame()) {
         return;
     }
 #endif
@@ -360,10 +361,11 @@ void mDoExt_modelUpdateDL(J3DModel* i_model) {
 
 void mDoExt_modelEntryDL(J3DModel* i_model) {
 #if TARGET_PC
-    if (!dusk::frame_interp::is_sim_frame()) {
+    if (!dusk::game_clock::is_sim_frame()) {
         // FRAME INTERP NOTE: This fixes issue #355 where some lights would flicker.
         // This is likely better solved by updating J3DMaterial::needsInterpCallBack,
         // but it's unclear what exactly needs to be added.
+        i_model->calcMaterial();
         i_model->diff();
         return;
     }
@@ -2421,7 +2423,7 @@ void mDoExt_3DlineMat0_c::draw() {
     }
 
 #if TARGET_PC
-    if (!dusk::frame_interp::is_enabled())
+    if (!dusk::interp::is_enabled())
 #endif
     {
         field_0x16 ^= (u8)1;
@@ -2753,7 +2755,7 @@ void mDoExt_3DlineMat1_c::draw() {
     }
     GXSetTexCoordScaleManually(GX_TEXCOORD0, 0, 0, 0);
 #if TARGET_PC
-    if (!dusk::frame_interp::is_enabled())
+    if (!dusk::interp::is_enabled())
 #endif
     {
         mIsDrawn ^= (u8)1;
@@ -2835,7 +2837,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, f32 param_1, GXColor& param_2, u16
         }
 
 #if TARGET_PC
-        const cXyz& lineEye = (presentationEye != nullptr && dusk::frame_interp::is_enabled()) ? *presentationEye : sp_3c->lookat.eye;
+        const cXyz& lineEye = (presentationEye != nullptr && dusk::interp::is_enabled()) ? *presentationEye : sp_3c->lookat.eye;
         sp_13c = *local_r27 - lineEye;
 #else
         sp_13c = *local_r27 - sp_3c->lookat.eye;
@@ -2996,7 +2998,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
         local_r27 = sp_38[0].field_0x0;
         size_p = sp_38->field_0x4;
 #if TARGET_PC
-        if (presentationEye != nullptr && dusk::frame_interp::is_enabled() && size_p == NULL) {
+        if (presentationEye != nullptr && dusk::interp::is_enabled() && size_p == NULL) {
             sp_38 += 1;
             continue;
         }
@@ -3015,7 +3017,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
         local_f30 = sp_130.abs();
         local_f31 += local_f30 * 0.1f;
 #if TARGET_PC
-        const cXyz& lineEye = (presentationEye != nullptr && dusk::frame_interp::is_enabled()) ? *presentationEye : stack_3c->lookat.eye;
+        const cXyz& lineEye = (presentationEye != nullptr && dusk::interp::is_enabled()) ? *presentationEye : stack_3c->lookat.eye;
         sp_13c = local_r27[0] - lineEye;
 #else
         sp_13c = local_r27[0] - stack_3c->lookat.eye;
@@ -3091,7 +3093,7 @@ void mDoExt_3DlineMat1_c::update(int param_0, GXColor& param_2, dKy_tevstr_c* pa
 
 #if TARGET_PC
 void mDoExt_3DlineMat1_c::refreshGeometryForPresentationEye(const cXyz& eye) {
-    if (!dusk::frame_interp::is_enabled()) {
+    if (!dusk::interp::is_enabled()) {
         return;
     }
     if (mInterpLineKind == 1) {
@@ -3654,12 +3656,22 @@ void mDoExt_cylinderMPacket::draw() {
     GXSetCullMode(GX_CULL_BACK);
     GXSetClipMode(GX_CLIP_ENABLE);
 
+#if TARGET_PC
+    Mtx modelViewMtx;
+    cMtx_concat(j3dSys.getViewMtx(), mMatrix, modelViewMtx);
+    GXLoadPosMtxImm(modelViewMtx, 0);
+
+    Mtx normalMtx;
+    cMtx_inverseTranspose(modelViewMtx, normalMtx);
+    GXLoadNrmMtxImm(normalMtx, 0);
+#else
     cMtx_concat(j3dSys.getViewMtx(), mMatrix, mMatrix);
 
     GXLoadPosMtxImm(mMatrix, 0);
     cMtx_inverseTranspose(mMatrix, mMatrix);
 
     GXLoadNrmMtxImm(mMatrix, 0);
+#endif
     GXSetCurrentMtx(0);
 
     GXDrawCylinder(8);

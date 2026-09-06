@@ -1,7 +1,5 @@
 #include "dusk/game_clock.h"
 
-#include "dusk/frame_interpolation.h"
-
 #include <aurora/time.hpp>
 
 #include <algorithm>
@@ -13,18 +11,21 @@ namespace dusk::game_clock {
 using native_clock = aurora::time::native_clock;
 using game_clock = aurora::time::game_clock;
 
-FrameTiming g_frameTiming;
+FrameTiming g_frameTiming{.dt = kUiInitialDt};
 
 namespace {
 bool s_initialized = false;
-bool s_fixedStepActive = false;
 bool s_simTickActive = false;
 native_clock::time_point s_previousNativeSample{};
 game_clock::time_point s_latestGameSample{};
 game_clock::time_point s_currentSnapshotTime{};
 game_clock::time_point s_pendingSimTime{};
-
 std::unordered_map<uintptr_t, game_clock::time_point> s_intervalLastSample;
+uint64_t s_presentationEpoch = 1;
+bool s_timingModeInitialized = false;
+bool s_previousSeparatePresentation = false;
+bool s_previousInterpolating = false;
+bool s_previousTimeStopped = false;
 
 constexpr game_clock::duration kSimPeriodDuration =
     std::chrono::duration_cast<game_clock::duration>(std::chrono::duration<float>(kSimPeriod));
@@ -49,6 +50,7 @@ void reset() {
     s_currentSnapshotTime = s_latestGameSample - kSimPeriodDuration;
     s_pendingSimTime = s_currentSnapshotTime;
     s_simTickActive = false;
+    ++s_presentationEpoch;
 }
 
 void set_sim_rate(float hz) {
@@ -65,11 +67,15 @@ const FrameTiming& advance() {
     const auto nativeNow = native_clock::now();
     const auto gameNow = game_clock::now();
     const auto nativeFrameGap = nativeNow - s_previousNativeSample;
+    const auto gameFrameGap = gameNow - s_latestGameSample;
     s_previousNativeSample = nativeNow;
     s_latestGameSample = gameNow;
 
     auto& out = g_frameTiming;
-    out = {.dt = std::chrono::duration<float>().count()};
+    out = {
+        .dt = std::chrono::duration<float>(gameFrameGap).count(),
+        .presentationEpoch = s_presentationEpoch,
+    };
 
     const float timeScale = aurora::time::scale();
     const bool interpolating =
@@ -77,7 +83,21 @@ const FrameTiming& advance() {
     const bool separatePresentation = interpolating || timeScale != 1.0f;
     out.interpolating = interpolating;
     out.separatePresentation = separatePresentation;
-    s_fixedStepActive = separatePresentation;
+
+    const bool timeStopped = timeScale == 0.0f;
+    const bool timingModeChanged =
+        s_timingModeInitialized &&
+        (separatePresentation != s_previousSeparatePresentation ||
+            interpolating != s_previousInterpolating || timeStopped != s_previousTimeStopped);
+    const bool abnormalGap = nativeFrameGap > kAbnormalGapResetThreshold;
+    if (timingModeChanged || abnormalGap) {
+        ++s_presentationEpoch;
+        out.presentationEpoch = s_presentationEpoch;
+    }
+    s_timingModeInitialized = true;
+    s_previousSeparatePresentation = separatePresentation;
+    s_previousInterpolating = interpolating;
+    s_previousTimeStopped = timeStopped;
 
     if (!separatePresentation) {
         s_currentSnapshotTime = gameNow;
@@ -86,7 +106,7 @@ const FrameTiming& advance() {
     }
 
     const auto simulationTarget = interpolating ? gameNow - kSimPeriodDuration : gameNow;
-    if (timeScale == 0.f || nativeFrameGap > kAbnormalGapResetThreshold) {
+    if (timeStopped || abnormalGap) {
         s_currentSnapshotTime = simulationTarget;
         out.numSimTicks = 0;
         return out;
@@ -109,8 +129,8 @@ const FrameTiming& advance() {
 }
 
 void begin_sim_tick() {
-    s_pendingSimTime =
-        s_fixedStepActive ? s_currentSnapshotTime + kSimPeriodDuration : s_latestGameSample;
+    s_pendingSimTime = g_frameTiming.separatePresentation ? s_currentSnapshotTime + kSimPeriodDuration :
+                                                            s_latestGameSample;
     s_simTickActive = true;
 }
 
@@ -121,6 +141,10 @@ void commit_sim_tick() {
     } else {
         s_currentSnapshotTime += kSimPeriodDuration;
     }
+}
+
+bool is_sim_frame() {
+    return !g_frameTiming.separatePresentation || s_simTickActive;
 }
 
 float sample_interpolation_step() {

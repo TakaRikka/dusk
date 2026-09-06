@@ -23,8 +23,10 @@
 #include "m_Do/m_Do_lib.h"
 #include <cstring>
 
-#include "dusk/frame_interpolation.h"
+#if TARGET_PC
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/version.hpp"
+#endif
 
 static int dTimer_createStart2D(s32 param_0, u16 param_1);
 
@@ -1340,23 +1342,20 @@ void dDlst_TimerScrnDraw_c::draw() {
                ((f32)g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f);
 
     for (int i = 0; i < 51; i++) {
-#if TARGET_PC
-        if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-        {
-            if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
-                if (m_getin_info[i].bck_frame < 60.0f) {
-                    m_getin_info[i].bck_frame += g_drawHIO.mMiniGame.mGetInTextAnimSpeed;
-                    if (m_getin_info[i].bck_frame > 60.0f) {
-                        m_getin_info[i].bck_frame = 60.0f;
-                    }
-                } else if (m_getin_info[i].bck_frame < g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f) {
-                    m_getin_info[i].bck_frame++;
-                } else if (m_getin_info[i].bck_frame < temp) {
-                    m_getin_info[i].bck_frame++;
+        IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+        if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
+            if (m_getin_info[i].bck_frame < 60.0f) {
+                m_getin_info[i].bck_frame += g_drawHIO.mMiniGame.mGetInTextAnimSpeed;
+                if (m_getin_info[i].bck_frame > 60.0f) {
+                    m_getin_info[i].bck_frame = 60.0f;
                 }
+            } else if (m_getin_info[i].bck_frame < g_drawHIO.mMiniGame.mGetInTextWaitFrames + 60.0f) {
+                m_getin_info[i].bck_frame++;
+            } else if (m_getin_info[i].bck_frame < temp) {
+                m_getin_info[i].bck_frame++;
             }
         }
+        IF_DUSK_BLOCK_END
 
         if (m_getin_info[i].bck_frame > 0.0f && m_getin_info[i].bck_frame < temp) {
             f32 var_f29 = 1.0f;
@@ -1396,20 +1395,17 @@ void dDlst_TimerScrnDraw_c::draw() {
             if (m_getin_info[i].pikari_frame > 0.0f) {
                 drawPikari(i);
             } else if (m_getin_info[i].pikari_frame == -1.0f) {
-#if TARGET_PC
-                if (dusk::frame_interp::get_ui_tick_pending())
-#endif
-                {
-                    if (m_getin_info[i].field_0xc == 0) {
-                        if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mGetInPikariAppearFrames) {
-                            m_getin_info[i].pikari_frame =
-                                18.0f - g_drawHIO.mMiniGame.mGetInPikariAnimSpeed;
-                        }
-                    } else if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mStartPikariAppearFrames) {
+                IF_DUSK_BLOCK(dusk::interp::get_ui_tick_pending())
+                if (m_getin_info[i].field_0xc == 0) {
+                    if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mGetInPikariAppearFrames) {
                         m_getin_info[i].pikari_frame =
-                            18.0f - g_drawHIO.mMiniGame.mStartPikariAnimSpeed;
+                            18.0f - g_drawHIO.mMiniGame.mGetInPikariAnimSpeed;
                     }
+                } else if (m_getin_info[i].bck_frame > g_drawHIO.mMiniGame.mStartPikariAppearFrames) {
+                    m_getin_info[i].pikari_frame =
+                        18.0f - g_drawHIO.mMiniGame.mStartPikariAnimSpeed;
                 }
+                IF_DUSK_BLOCK_END
             }
         }
     }

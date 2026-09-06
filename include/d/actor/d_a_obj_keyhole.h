@@ -75,9 +75,7 @@ public:
 #endif
 };
 
-#if !TARGET_PC
 STATIC_ASSERT(sizeof(obj_keyhole_class) == 0x2CB8);
-#endif
 
 class daObj_Keyhole_HIO_c : public JORReflexible {
 public:

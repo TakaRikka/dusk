@@ -19,7 +19,7 @@
 #include "m_Do/m_Do_graphic.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #include "dusk/version.hpp"
 #endif
 
@@ -169,7 +169,7 @@ int daTitle_c::Execute() {
     }
 
 #ifdef TARGET_PC
-    if (!dusk::frame_interp::is_enabled()) {
+    if (!dusk::interp::is_enabled()) {
 #endif
         dMenu_Collect3D_c::setViewPortOffsetY(0.0f);
 #ifdef TARGET_PC
@@ -352,7 +352,7 @@ void daTitle_c::fastLogoDispInit() {
     mWaitTimer = 30;
     mProcID = 5;
 
-    IF_DUSK(dusk::frame_interp::request_presentation_sync());
+    IF_DUSK(dusk::interp::request_presentation_sync());
 }
 
 void daTitle_c::fastLogoDisp() {

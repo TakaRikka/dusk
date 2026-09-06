@@ -370,6 +370,9 @@ public:
     u32 getAngleNoFromParam() { return (u8)(fopAcM_GetParam(this) >> 8); }
     void setBlastFlag(u8 i_flag) { mBlastFlag = i_flag; }
     MtxP getHeadMtx() { return mAnm_p->getModel()->getAnmMtx(4); }
+#if TARGET_PC
+    friend void daNpc_zrA_interp_callback(void* pUserWork);
+#endif
 
     /* 0x0B48 */ Z2Creature mCreatureSound;
     /* 0x0BD8 */ J3DModel* mpObjectModel[3];

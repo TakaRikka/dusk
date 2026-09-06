@@ -12,7 +12,7 @@
 
 #if TARGET_PC
 #include "dusk/dvd_asset.hpp"
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 
 #include <aurora/texture.hpp>
 
@@ -212,8 +212,8 @@ void daMant_packet_c::draw() {
                     MtxP src25 = model->getAnmMtx(25);
                     Mtx joint_34_scratch;
                     Mtx joint_25_scratch;
-                    MtxP joint_34 = dusk::frame_interp::lookup_replacement(src34, joint_34_scratch) ? joint_34_scratch : src34;
-                    MtxP joint_25 = dusk::frame_interp::lookup_replacement(src25, joint_25_scratch) ? joint_25_scratch : src25;
+                    MtxP joint_34 = dusk::interp::lookup_replacement(src34, joint_34_scratch) ? joint_34_scratch : src34;
+                    MtxP joint_25 = dusk::interp::lookup_replacement(src25, joint_25_scratch) ? joint_25_scratch : src25;
 
                     cXyz presented_anchor_a;
                     cXyz presented_anchor_b;
@@ -232,7 +232,7 @@ void daMant_packet_c::draw() {
             }
         }
 
-        const f32 step = dusk::frame_interp::get_interpolation_step();
+        const f32 step = dusk::interp::get_interpolation_step();
         for (int i = 0; i < 169; ++i) {
             cXyz curr_local;
             MTXMultVec(curr_frame_inverse, &curr_pos[i], &curr_local);

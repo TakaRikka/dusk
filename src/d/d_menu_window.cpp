@@ -27,7 +27,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 
 #if TARGET_PC
-#include "dusk/frame_interpolation.h"
+#include "dusk/interp/frame_interpolation.h"
 #endif
 
 class dDlst_MENU_CAPTURE_c : public dDlst_base_c {
@@ -126,7 +126,7 @@ public:
     void setCaptureFlag() {
         mFlag = 1;
     #ifdef TARGET_PC
-        dusk::frame_interp::request_presentation_sync();
+        dusk::interp::request_presentation_sync();
     #endif
     }
 
