@@ -3,6 +3,10 @@
 
 #include <types.h>
 
+#if TARGET_PC
+    #include "helpers/endian.h"
+#endif
+
 class JSUInputStream;
 
 /**
