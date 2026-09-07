@@ -3,7 +3,7 @@
 #include "JSystem/JAudio2/JASSimpleWaveBank.h"
 #include <stdint.h>
 
-JASSimpleWaveBank::JASSimpleWaveBank() {
+JASSimpleWaveBank::JASSimpleWaveBank(IF_DUSK(u32 bankId)) IF_DUSK(: JASWaveBank(bankId)) {
     mWaveTable = NULL;
     mWaveTableSize = 0;
 }
@@ -28,7 +28,7 @@ JASWaveHandle* JASSimpleWaveBank::getWaveHandle(u32 no) const {
 
 void JASSimpleWaveBank::setWaveInfo(u32 no, JASWaveInfo const& waveInfo) {
     mWaveTable[no].mWaveInfo = waveInfo;
-    mWaveTable[no].mWaveInfo.field_0x20 = &_48;
+    mWaveTable[no].mWaveInfo.mpLoaded = &mCurrentlyLoaded;
     mWaveTable[no].mHeap = &mHeap;
 }
 

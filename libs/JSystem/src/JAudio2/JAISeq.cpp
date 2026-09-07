@@ -28,7 +28,7 @@ void JAISeq::JAISeqMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posP
                                 JAIAudience* audience, int category, int param_4) {
     inner_.field_0x39c = category;
     reserveChildTracks_(param_4);
-    start_JAISound_(id, posPtr, audience);
+    start_JAISound_(id, posPtr, audience IF_DUSK_ARG(nullptr));
 
     if (inner_.strategyMgr) {
         field_0x3a8 = inner_.strategyMgr->calc(id);

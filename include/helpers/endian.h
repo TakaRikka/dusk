@@ -285,6 +285,7 @@ inline void be_swap(Mtx& val) {
     }
 }
 
+#define LE(T) T
 #define BE(T) BE<T>
 #define BE_HOST(T) (T.host())
 #else

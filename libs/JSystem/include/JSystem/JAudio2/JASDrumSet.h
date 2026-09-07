@@ -21,10 +21,10 @@ struct JASDrumSet : public JASInst {
         /* 0x00 */ f32 mVolume;
         /* 0x04 */ f32 mPitch;
         /* 0x08 */ f32 mPan;
-        /* 0x0C */ u16 field_0xc;
-        /* 0x0E */ u16 field_0xe;
-        /* 0x10 */ f32 field_0x10;
-        /* 0x14 */ f32 field_0x14;
+        /* 0x0C */ u16 mDirectRelease;
+        /* 0x0E */ u16 mWaveId;
+        /* 0x10 */ f32 mVolumeMult;
+        /* 0x14 */ f32 mPitchMult;
     };
 
     JASDrumSet();

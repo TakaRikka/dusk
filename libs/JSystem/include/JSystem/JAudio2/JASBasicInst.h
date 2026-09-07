@@ -14,20 +14,20 @@ const int OSC_MAX = 2;
  */
 struct JASInstParam : public JASSoundParams {
     JASInstParam() {
-        field_0x14 = NULL;
-        field_0x18 = 0;
-        field_0x1a = 0;
-        field_0x1c = 0;
-        field_0x1d = 0;
-        field_0x1e = 0;
+        mOscillators = NULL;
+        mDirectRelease = 0;
+        mWaveId = 0;
+        mChannelType = 0;
+        mOscillatorCount = 0;
+        mDontSetKey = 0;
     }
 
-    JASOscillator::Data** field_0x14;
-    u16 field_0x18;
-    u16 field_0x1a;
-    u8 field_0x1c;
-    u8 field_0x1d;
-    u8 field_0x1e;
+    JASOscillator::Data** mOscillators;
+    u16 mDirectRelease;
+    u16 mWaveId;
+    u8 mChannelType; // Always CHANNEL_WAVE in practice
+    u8 mOscillatorCount;
+    u8 mDontSetKey;
 };
 
 /**
@@ -52,10 +52,10 @@ struct JASBasicInst : public JASInst {
         void setHighKey(int key) { mHighKey = key; }
 
         /* 0x0 */ s32 mHighKey;
-        /* 0x4 */ u16 field_0x4;
+        /* 0x4 */ u16 mWaveId;
         /* 0x6 */ u16 field_0x6;
-        /* 0x8 */ f32 field_0x8;
-        /* 0xC */ f32 field_0xc;
+        /* 0x8 */ f32 mVolumeMult;
+        /* 0xC */ f32 mPitchMult;
     };
 
     JASBasicInst();
@@ -74,7 +74,7 @@ struct JASBasicInst : public JASInst {
 
     /* 0x04 */ f32 mVolume;
     /* 0x08 */ f32 mPitch;
-    /* 0x0C */ JASOscillator::Data const* field_0xc[OSC_MAX];
+    /* 0x0C */ JASOscillator::Data const* mOscillators[OSC_MAX];
     /* 0x10 */ u32 mKeymapCount;
     /* 0x14 */ TKeymap* mKeymap;
 };

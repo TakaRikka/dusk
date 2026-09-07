@@ -1,14 +1,15 @@
 #include "Z2AudioLib/Z2SoundMgr.h"
-#include "Z2AudioLib/Z2Param.h"
-#include "Z2AudioLib/Z2SceneMgr.h"
-#include "Z2AudioLib/Z2SpeechMgr2.h"
-#include "Z2AudioLib/Z2SeqMgr.h"
-#include "Z2AudioLib/Z2SeMgr.h"
-#include "Z2AudioLib/Z2SoundInfo.h"
 #include "JSystem/JAudio2/JASCalc.h"
 #include "JSystem/JAudio2/JASDriverIF.h"
 #include "JSystem/JAudio2/JAUSectionHeap.h"
+#include "Z2AudioLib/Z2Param.h"
+#include "Z2AudioLib/Z2SceneMgr.h"
+#include "Z2AudioLib/Z2SeMgr.h"
+#include "Z2AudioLib/Z2SeqMgr.h"
+#include "Z2AudioLib/Z2SoundInfo.h"
+#include "Z2AudioLib/Z2SpeechMgr2.h"
 #include "d/d_com_inf_game.h"
+#include "dusk/mods/svc/audio_res/bst.hpp"
 
 #if PLATFORM_WII || PLATFORM_SHIELD
 #include "Z2AudioCS/Z2AudioCS.h"
@@ -113,19 +114,25 @@ Z2SoundMgr::Z2SoundMgr() :
     seqMgr_(true),
     streamMgr_(true)
 {
-    soundID_.setAnonymous();
+    bgmMuter.setAnonymous();
 }
 
 bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr) {
     DUSK_AUDIO_SKIP(true);
+    IF_DUSK(using namespace dusk::mods::svc::audio_res::bst);
 
     int soundType = Z2GetSoundInfo()->getSoundType(soundID);
     switch (soundType) {
     case 0: {
-        if (Z2GetSoundInfo()->getSwBit(soundID) & 8) {
+    #if TARGET_PC
+        {
+        auto replace_se = get_override_for_se(soundID);
+    #endif
+
+        if (Z2GetSoundInfo()->getSwBit(soundID IF_DUSK_ARG(replace_se.get())) & SOUND_SW_MUTE_BGM) {
             OS_REPORT("[Z2SoundMgr::startSound] se seq Mute! id = %08x\n", *(u32*)&soundID);
             Z2GetSeqMgr()->bgmAllMute(3, 0.3f);
-            soundID_ = soundID;
+            bgmMuter = soundID;
         }
 
         #if PLATFORM_WII || PLATFORM_SHIELD
@@ -136,15 +143,16 @@ bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JG
         }
         #endif
         
-        bool result = seMgr_.startSound(soundID, handle, posPtr);
+        bool result = seMgr_.startSound(soundID, handle, posPtr IF_DUSK_ARG(std::move(replace_se)));
         return result;
+        IF_DUSK_BLOCK_END
     }
     case 1:
         if (soundID == Z2BGM_LUTERA_DEMO) {
             Z2GetSeqMgr()->bgmStart(Z2BGM_LUTERA2, 0, 0);
             Z2GetSeqMgr()->unMuteSceneBgm(0);
             Z2GetSeqMgr()->changeBgmStatus(0);
-            return seMgr_.startSound(Z2SE_NO_SOUND, handle, posPtr);
+            return seMgr_.startSound(Z2SE_NO_SOUND, handle, posPtr IF_DUSK_ARG(nullptr));
         } else {
             bool loaded = false;
             JAUSectionHeap* sectionHeap = JASGlobalInstance<JAUSectionHeap>::getInstance();
@@ -172,15 +180,21 @@ bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JG
             return seqMgr_.startSound(soundID, handle, posPtr);
         }
     case 2:
+#if TARGET_PC
+        {
+        auto replace_stream = get_override_for_stream(soundID);
+#endif
+
         if (soundID == 0x2000001 || soundID == 0x200004d) {
             streamMgr_.stop(180);
-            return seMgr_.startSound(Z2SE_NO_SOUND, handle, posPtr);
+            return seMgr_.startSound(Z2SE_NO_SOUND, handle, posPtr IF_DUSK_ARG(nullptr));
         }
         if (soundID == 0x2000005) {
             seMgr_.getCategory(9)->pause(false);
             seMgr_.getCategory(9)->getParams()->moveVolume(1.0f, 45);
         }
-        return streamMgr_.startSound(soundID, handle, posPtr);
+        return streamMgr_.startSound(soundID, handle, posPtr IF_DUSK_ARG(std::move(replace_stream)));
+        IF_DUSK_BLOCK_END
     default:
         char error[64];
         SAFE_SPRINTF(error, "Unknown Sound-Type id :%08x\n", (u32)soundID);
@@ -192,11 +206,11 @@ bool Z2SoundMgr::startSound(JAISoundID soundID, JAISoundHandle* handle, const JG
 
 void Z2SoundMgr::calc() {
     seMgr_.calc();
-    if (!soundID_.isAnonymous() && !isPlayingSoundID(soundID_)) {
+    if (!bgmMuter.isAnonymous() && !isPlayingSoundID(bgmMuter)) {
         if (Z2GetSceneMgr()->isSceneExist()) {
             Z2GetSeqMgr()->bgmAllUnMute(3);
         }
-        soundID_.setAnonymous();
+        bgmMuter.setAnonymous();
     }
     seqMgr_.calc();
     streamMgr_.calc();

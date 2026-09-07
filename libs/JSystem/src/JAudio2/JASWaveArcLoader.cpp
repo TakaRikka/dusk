@@ -38,7 +38,7 @@ char* JASWaveArcLoader::getCurrentDir() {
 }
 
 JASWaveArc::JASWaveArc() : mHeap(this) {
-    _48 = 0;
+    mCurrentlyLoaded = 0;
     mStatus = 0;
     mEntryNum = -1;
     mFileLength = 0;
@@ -57,7 +57,7 @@ bool JASWaveArc::loadSetup(u32 param_0) {
     if (mStatus != 1) {
         return false;
     }
-    _48 = 1;
+    mCurrentlyLoaded = 1;
     mStatus = 2;
     return true;
 }
@@ -71,7 +71,7 @@ bool JASWaveArc::eraseSetup() {
         mStatus = 0;
         return false;
     }
-    _48 = 0;
+    mCurrentlyLoaded = 0;
     mStatus = 0;
     return true;
 }
@@ -91,7 +91,7 @@ void JASWaveArc::loadToAramCallback(void* this_) {
 
 bool JASWaveArc::sendLoadCmd() {
     JASMutexLock mutexLock(&mMutex);
-    _48 = 0;
+    mCurrentlyLoaded = 0;
     mStatus = 1;
     loadToAramCallbackParams commandInfo;
     commandInfo.mWavArc = this;

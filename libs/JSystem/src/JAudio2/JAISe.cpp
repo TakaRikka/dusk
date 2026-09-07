@@ -3,6 +3,7 @@
 #include "JSystem/JAudio2/JAISe.h"
 #include "JSystem/JAudio2/JAIAudience.h"
 #include "JSystem/JAudio2/JAISeMgr.h"
+#include "dusk/mods/svc/audio_res/bst.hpp"
 
 JAISe::JAISe(JAISeMgr* seMgr, JAISoundStrategyMgr<JAISe>* soundStrategyMgr, u32 priority) : JSULink<JAISe>(this) {
     inner_.mSoundStrategyMgr = soundStrategyMgr;
@@ -70,7 +71,7 @@ void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params,
             if (inner_.field_0x26c) {
                 switch (inner_.track.getStatus()) {
                 case JASTrack::STATUS_STOPPED:
-                    if (status_.field_0x1.flags.flag1) {
+                    if (status_.field_0x1.flags.mComesBack) {
                         startTrack_(params);
                     } else {
                         stop_JAISound_();
@@ -84,8 +85,8 @@ void JAISe::JAISeCategoryMgr_mixOut_(bool param_0, const JASSoundParams& params,
                 startTrack_(params);
             }
         }
-    } else if (status_.field_0x1.flags.flag1) {
-        if (status_.field_0x1.flags.flag3) {
+    } else if (status_.field_0x1.flags.mComesBack) {
+        if (status_.field_0x1.flags.mPauseWhenOut) {
             inner_.track.pause(true);
         } else {
             stopTrack_();
@@ -129,10 +130,10 @@ bool JAISe::JAISound_tryDie_() {
     return false;
 }
 
-void JAISe::JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience) {
+void JAISe::JAISeMgr_startID_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience IF_DUSK_ARG(std::shared_ptr<SoundEffectReplacementSlot> replacement)) {
     JUT_ASSERT(221, inner_.track.getStatus() == JASTrack::STATUS_FREE);
 
-    start_JAISound_(id, posPtr, audience);
+    start_JAISound_(id, posPtr, audience IF_DUSK_ARG(std::static_pointer_cast<SoundTableReplacementSlot>(replacement)));
     inner_.field_0x26c = 0;
     if (inner_.mSoundStrategyMgr) {
         inner_.field_0x278 = inner_.mSoundStrategyMgr->calc(id);

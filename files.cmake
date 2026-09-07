@@ -1494,6 +1494,14 @@ set(DUSK_FILES
         src/dusk/mods/manifest.cpp
         src/dusk/mods/manifest.hpp
         src/dusk/mods/svc/actor.cpp
+        src/dusk/mods/svc/audio_res/audio_res.hpp
+        src/dusk/mods/svc/audio_res/audio_res.cpp
+        src/dusk/mods/svc/audio_res/bst.cpp
+        src/dusk/mods/svc/audio_res/bst.hpp
+        src/dusk/mods/svc/audio_res/wsys.cpp
+        src/dusk/mods/svc/audio_res/wsys.hpp
+        src/dusk/mods/svc/audio_res/wave.cpp
+        src/dusk/mods/svc/audio_res/opus.cpp
         src/dusk/mods/svc/camera.cpp
         src/dusk/mods/svc/config.cpp
         src/dusk/mods/svc/config.hpp
@@ -1509,6 +1517,8 @@ set(DUSK_FILES
         src/dusk/mods/svc/websocket.cpp
         src/dusk/mods/svc/item.cpp
         src/dusk/mods/svc/item.hpp
+        src/dusk/mods/svc/id_allocator.cpp
+        src/dusk/mods/svc/id_allocator.hpp
         src/dusk/mods/svc/log.cpp
         src/dusk/mods/svc/overlay.cpp
         src/dusk/mods/svc/registry.cpp
@@ -1622,4 +1632,5 @@ set(DUSK_FILES
         src/helpers/endian.cpp
         src/helpers/offset_ptr.cpp
         src/helpers/string.cpp
+        src/helpers/cast.cpp
 )

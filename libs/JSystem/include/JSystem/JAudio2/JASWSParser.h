@@ -26,7 +26,9 @@ public:
     };
 
     struct TCtrlWave {
-        /* 0x0 */ BE(u32) _00;
+        // Wave ID in lower half.
+        // Upper bits appear to be group ID, which is unused by the game code.
+        /* 0x0 */ BE(u32) mWaveAndGroupId;
     };
 
     struct TWave {
@@ -57,13 +59,14 @@ public:
     };
 
     struct TCtrl {
-        /* 0x0 */ u8 _00[4];
+        /* 0x0 */ BE(u32) mMagic; // 'C-DF'.
         /* 0x4 */ BE(u32) mWaveCount;
         /* 0x8 */ TOffset<TCtrlWave> mCtrlWaveOffsets[0];
     };
 
     struct TCtrlScene {
-        /* 0x0 */ u8 _00[0xC];
+        /* 0x0 */ BE(u32) mMagic; // 'SCNE'
+        /* 0x4 */ u8 _00[0x8];
         /* 0xC */ TOffset<TCtrl> mCtrlOffset;
     };
 

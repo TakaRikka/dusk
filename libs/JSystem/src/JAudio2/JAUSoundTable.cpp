@@ -6,6 +6,8 @@
 
 #include "JSystem/JAudio2/JAUSoundTable.h"
 
+#include "dusk/mods/svc/audio_res/bst.hpp"
+
 void JAUSoundTable::init(void const* param_0) {
     if (param_0 != NULL) {
         field_0x0.init(param_0);
@@ -14,10 +16,15 @@ void JAUSoundTable::init(void const* param_0) {
     }
 }
 
-u8 JAUSoundTable::getTypeID(JAISoundID param_0) const {
+u8 JAUSoundTable::getTypeID(JAISoundID param_0 IF_DUSK_ARG(SoundTableReplacementSlot const* replacement)) const {
 #if DUSK_AUDIO_DISABLED
     if (this == NULL) {
         return 0xff;
+    }
+#endif
+#if TARGET_PC
+    if (replacement) {
+        return replacement->get_type_id();
     }
 #endif
     if (param_0.isAnonymous()) {
@@ -34,10 +41,15 @@ u8 JAUSoundTable::getTypeID(JAISoundID param_0) const {
     return group->getTypeID(param_0.id_.info.waveID);
 }
 
-JAUSoundTableItem* JAUSoundTable::getData(JAISoundID param_0) const {
+JAUSoundTableItem DUSK_CONST* JAUSoundTable::getData(JAISoundID param_0 IF_DUSK_ARG(SoundTableReplacementSlot const* replacement)) const {
 #if DUSK_AUDIO_DISABLED
     if (this == NULL) {
         return NULL;
+    }
+#endif
+#if TARGET_PC
+    if (replacement) {
+        return &replacement->item;
     }
 #endif
     if (param_0.isAnonymous()) {

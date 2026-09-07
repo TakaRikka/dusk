@@ -66,7 +66,7 @@ struct JASWaveArc : JASDisposer {
     };
 
     /* 0x04 */ mutable JASHeap mHeap;
-    /* 0x48 */ u32 _48;
+    /* 0x48 */ u32 mCurrentlyLoaded;
     /* 0x4C */ volatile s32 mStatus;
     /* 0x50 */ int mEntryNum;
     /* 0x54 */ u32 mFileLength;

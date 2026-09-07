@@ -6,12 +6,12 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include <stdint.h>
 
-JASBasicWaveBank::JASBasicWaveBank() {
+JASBasicWaveBank::JASBasicWaveBank(IF_DUSK(u32 bankId)) IF_DUSK(: JASWaveBank(bankId)) {
     mWaveTable = NULL;
     mWaveGroupArray = NULL;
     mHandleCount = 0;
     mGroupCount = 0;
-    OSInitMutex(&field_0x4);
+    OSInitMutex(&mWaveTableMutex);
 }
 
 JASBasicWaveBank::~JASBasicWaveBank() {
@@ -44,13 +44,13 @@ void JASBasicWaveBank::setWaveTableSize(u32 param_0, JKRHeap* param_1) {
 }
 
 void JASBasicWaveBank::incWaveTable(JASBasicWaveBank::TWaveGroup const* param_0) {
-    JASMutexLock lock(&field_0x4);
+    JASMutexLock lock(&mWaveTableMutex);
     for (u32 i = 0; i < param_0->getWaveCount(); i++) {
         TWaveHandle* handle = mWaveTable + param_0->getWaveID(i);
         if (!handle->mHeap) {
             handle->mHeap = &param_0->mHeap;
-            handle->field_0x4.field_0x20 = &param_0->_48;
-            handle->field_0x4.mOffsetStart = param_0->mCtrlWaveArray[i].field_0x4;
+            handle->mWaveInfo.mpLoaded = &param_0->mCurrentlyLoaded;
+            handle->mWaveInfo.mOffsetStart = param_0->mCtrlWaveArray[i].mOffsetStart;
         }
     }
 }
@@ -58,13 +58,13 @@ void JASBasicWaveBank::incWaveTable(JASBasicWaveBank::TWaveGroup const* param_0)
 DUSK_GAME_DATA u32 JASBasicWaveBank::mNoLoad;
 
 void JASBasicWaveBank::decWaveTable(JASBasicWaveBank::TWaveGroup const* param_0) {
-    JASMutexLock lock(&field_0x4);
+    JASMutexLock lock(&mWaveTableMutex);
     for (u32 i = 0; i < param_0->getWaveCount(); i++) {
         TWaveHandle* handle = mWaveTable + param_0->getWaveID(i);
         if (handle->mHeap == &param_0->mHeap) {
             handle->mHeap = NULL;
-            handle->field_0x4.field_0x20 = &mNoLoad;
-            handle->field_0x4.mOffsetStart = -1;
+            handle->mWaveInfo.mpLoaded = &mNoLoad;
+            handle->mWaveInfo.mOffsetStart = -1;
         }
     }
 }
@@ -80,15 +80,15 @@ JASWaveHandle* JASBasicWaveBank::getWaveHandle(u32 param_0) const {
 }
 
 void JASBasicWaveBank::setWaveInfo(JASBasicWaveBank::TWaveGroup* wgrp, int index,
-                                   u16 param_2, JASWaveInfo const& param_3) {
+                                   u16 waveId, JASWaveInfo const& param_3) {
     JUT_ASSERT(204, wgrp);
     JUT_ASSERT(205, index < wgrp->mWaveCount);
     JUT_ASSERT(206, index >= 0);
-    mWaveTable[param_2].field_0x4 = param_3;
-    mWaveTable[param_2].field_0x4.field_0x20 = &mNoLoad;
-    mWaveTable[param_2].field_0x4.mOffsetStart = -1;
-    wgrp->mCtrlWaveArray[index].field_0x0 = param_2;
-    wgrp->mCtrlWaveArray[index].field_0x4 = param_3.mOffsetStart;
+    mWaveTable[waveId].mWaveInfo = param_3;
+    mWaveTable[waveId].mWaveInfo.mpLoaded = &mNoLoad;
+    mWaveTable[waveId].mWaveInfo.mOffsetStart = -1;
+    wgrp->mCtrlWaveArray[index].waveId = waveId;
+    wgrp->mCtrlWaveArray[index].mOffsetStart = param_3.mOffsetStart;
 }
 
 JASBasicWaveBank::TWaveGroup::TWaveGroup() {
@@ -122,7 +122,7 @@ void JASBasicWaveBank::TWaveGroup::onEraseDone() {
 u32 JASBasicWaveBank::TWaveGroup::getWaveID(int index) const {
     JUT_ASSERT(298, index < mWaveCount);
     JUT_ASSERT(299, index >= 0);
-    return mCtrlWaveArray[index].field_0x0;
+    return mCtrlWaveArray[index].waveId;
 }
 
 intptr_t JASBasicWaveBank::TWaveHandle::getWavePtr() const {
@@ -131,5 +131,5 @@ intptr_t JASBasicWaveBank::TWaveHandle::getWavePtr() const {
     if (base == 0) {
         return 0;
     }
-    return (intptr_t)base + field_0x4.mOffsetStart;
+    return (intptr_t)base + mWaveInfo.mOffsetStart;
 }

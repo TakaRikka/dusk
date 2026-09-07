@@ -523,9 +523,12 @@ void JASDsp::TChannel::init() {
 void JASDsp::TChannel::playStart() {
     JUT_ASSERT(508, dspMutex);
     field_0x10c = 0;
+#if !TARGET_PC
     field_0x060 = 0;
+#endif
     mResetFlag = 1;
     field_0x066 = 0;
+#if !TARGET_PC
     int i;
     for (i = 0; i < 4; i++) {
         field_0x078[i] = 0;
@@ -534,6 +537,7 @@ void JASDsp::TChannel::playStart() {
     for (i = 0; i < 20; i++) {
         field_0x080[i] = 0;
     }
+#endif
     mIsActive = 1;
 }
 
@@ -601,9 +605,11 @@ void JASDsp::TChannel::setWaveInfo(JASWaveInfo const& waveInfo, u32 aramAddress,
                 break;
             }
         }
+#if !TARGET_PC
         for (i = 0; i < 16; i++) {
             field_0x0b0[i] = 0;
         }
+#endif
     }
 }
 

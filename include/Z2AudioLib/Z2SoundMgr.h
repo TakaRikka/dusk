@@ -41,7 +41,7 @@ public:
     /* 0x004 */ JAISeMgr seMgr_;
     /* 0x728 */ JAISeqMgr seqMgr_;
     /* 0x79C */ JAIStreamMgr streamMgr_;
-    /* 0x80C */ JAISoundID soundID_;
+    /* 0x80C */ JAISoundID bgmMuter;
 };  // Size: 0x810
 
 #if VERSION != VERSION_SHIELD_DEBUG

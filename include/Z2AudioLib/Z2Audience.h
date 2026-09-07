@@ -9,6 +9,8 @@
 #include "JSystem/JAudio2/JAUAudibleParam.h"
 #include "JSystem/TPosition3.h"
 
+#define Z2_AUDIO_PLAYERS 1
+
 struct Z2Audible;
 
 struct Z2AudibleAbsPos {
@@ -49,10 +51,14 @@ struct Z2AudioCamera {
     f32 getCamDist() const { return mCamDist; }
 
 
-    /* 0x00 */ JGeometry::TPosition3f32 field_0x0;
+    /* 0x00 */ JGeometry::TPosition3f32 mViewMatrix;
     /* 0x30 */ JGeometry::TVec3<f32> mVel;
     /* 0x3C */ JGeometry::TVec3<f32> mPos;
-    /* 0x48 */ JGeometry::TVec3<f32> field_0x48;
+
+    /**
+     *
+     */
+    /* 0x48 */ JGeometry::TVec3<f32> mLastPos;
     /* 0x54 */ f32 mFovySin;
     /* 0x58 */ f32 mVolCenterZ;
     /* 0x5C */ f32 mTargetVolume;
@@ -83,14 +89,14 @@ struct Z2SpotMic {
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ f32 field_0x8;
     /* 0x0C */ f32 field_0xc;
-    /* 0x10 */ Z2AudioCamera* field_0x10[1];
+    /* 0x10 */ Z2AudioCamera* field_0x10[Z2_AUDIO_PLAYERS];
     /* 0x14 */ Vec* mPosPtr;
-    /* 0x18 */ f32 field_0x18[1];
+    /* 0x18 */ f32 field_0x18[Z2_AUDIO_PLAYERS];
     /* 0x1C */ f32 field_0x1c;
-    /* 0x20 */ f32 field_0x20[1];
+    /* 0x20 */ f32 field_0x20[Z2_AUDIO_PLAYERS];
     /* 0x24 */ bool mIgnoreIfOut;
     /* 0x25 */ bool mMicOn;
-    /* 0x26 */ bool field_0x26[1];
+    /* 0x26 */ bool field_0x26[Z2_AUDIO_PLAYERS];
 };  // Size: 0x28
 
 struct Z2Audience3DSetting {
@@ -102,62 +108,99 @@ struct Z2Audience3DSetting {
     void updateDolbyDist(f32, f32);
 
     void calcVolumeFactorAll() {
-        field_0x0[1] = 1.25f * field_0x0[0];
-        field_0x0[2] = 1.5f * field_0x0[0];
-        field_0x0[3] = 2.0f * field_0x0[0];
-        field_0x0[4] = 3.0f * field_0x0[0];
-        field_0x0[5] = 4.0f * field_0x0[0];
-        field_0x0[6] = 6.0f * field_0x0[0];
-        field_0x0[7] = 8.0f * field_0x0[0];
-        field_0x0[8] = 0.9f * field_0x0[0];
-        field_0x0[9] = 0.8f * field_0x0[0];
-        field_0x0[10] = 0.7f * field_0x0[0];
-        field_0x0[11] = 0.6f * field_0x0[0];
-        field_0x0[12] = 0.5f * field_0x0[0];
-        field_0x0[13] = 0.4f * field_0x0[0];
-        field_0x0[14] = 0.3f * field_0x0[0];
+        mDistanceMaxes[1] = 1.25f * mDistanceMaxes[0];
+        mDistanceMaxes[2] = 1.5f * mDistanceMaxes[0];
+        mDistanceMaxes[3] = 2.0f * mDistanceMaxes[0];
+        mDistanceMaxes[4] = 3.0f * mDistanceMaxes[0];
+        mDistanceMaxes[5] = 4.0f * mDistanceMaxes[0];
+        mDistanceMaxes[6] = 6.0f * mDistanceMaxes[0];
+        mDistanceMaxes[7] = 8.0f * mDistanceMaxes[0];
+        mDistanceMaxes[8] = 0.9f * mDistanceMaxes[0];
+        mDistanceMaxes[9] = 0.8f * mDistanceMaxes[0];
+        mDistanceMaxes[10] = 0.7f * mDistanceMaxes[0];
+        mDistanceMaxes[11] = 0.6f * mDistanceMaxes[0];
+        mDistanceMaxes[12] = 0.5f * mDistanceMaxes[0];
+        mDistanceMaxes[13] = 0.4f * mDistanceMaxes[0];
+        mDistanceMaxes[14] = 0.3f * mDistanceMaxes[0];
         for (int i = 0; i < 15; i++) {
-            field_0x70[i] = (field_0x40 - 1.0f) / (field_0x0[i] - field_0x3c);
+            mVolumeFactor[i] = (mMinDistanceVolume - 1.0f) / (mDistanceMaxes[i] - mMaxVolumeDistance);
         }
     }
 
     void calcPriorityFactorAll() {
         for (int i = 0; i < 15; i++) {
-            field_0xac[i] = field_0x64 / (field_0x0[i] - field_0x3c);
+            mPriorityFactor[i] = mMaxDistancePriority / (mDistanceMaxes[i] - mMaxVolumeDistance);
         }
     }
 
     void calcFxMixFactorAll() {
         for (int i = 0; i < 15; i++) {
-            field_0xe8[i] = (field_0x54 - field_0x50) / (field_0x0[i] - field_0x3c);
+            mFxMixFactor[i] = (mMaxDistanceFxMix - mMinDistanceFxMix) / (mDistanceMaxes[i] - mMaxVolumeDistance);
         }
     }
 
-    /* 0x000 */ f32 field_0x0[15];
-    /* 0x03C */ f32 field_0x3c;
-    /* 0x040 */ f32 field_0x40;
-    /* 0x044 */ f32 field_0x44;
-    /* 0x048 */ f32 field_0x48;
-    /* 0x04C */ f32 field_0x4c;
-    /* 0x050 */ f32 field_0x50;
-    /* 0x054 */ f32 field_0x54;
-    /* 0x058 */ f32 field_0x58;
-    /* 0x05C */ f32 field_0x5c;
+    /**
+     * Maximum distance a sound can reach before being "far away"
+     * Being far away affects stuff like culling, lowering its priority, forcibly stopping it, etc.
+     * Sounds select which entry they use based on their VolBits.
+     */
+    /* 0x000 */ f32 mDistanceMaxes[15];
+
+    /**
+     * Distance at which the max volume of a sound is reached.
+     * i.e. sounds do *not* get louder if they get closer than this.
+     */
+    /* 0x03C */ f32 mMaxVolumeDistance;
+
+    /**
+     * FX Mix value at maximum distance (@ref mDistanceMaxes)
+     */
+    /* 0x040 */ f32 mMinDistanceVolume;
+    /* 0x044 */ f32 mDolbyFrontDistanceMax;
+    /* 0x048 */ f32 mDolbyBehindDistanceMax;
+    /* 0x04C */ f32 mDolbyCenterValue;
+
+    /**
+     * FX Mix value at minimum distance (@ref mMaxVolumeDistance)
+     */
+    /* 0x050 */ f32 mMinDistanceFxMix;
+
+    /**
+     * FX Mix value at maximum distance (@ref mDistanceMaxes)
+     */
+    /* 0x054 */ f32 mMaxDistanceFxMix;
+    /* 0x058 */ f32 mPanFactor;
+    /* 0x05C */ f32 mSonicSpeed; // Used for doppler effect calculations.
     /* 0x060 */ f32 field_0x60;
-    /* 0x064 */ u32 field_0x64;
+
+    /**
+     * Priority that sounds receive when "far away".
+     * @see mDistanceMaxes
+     */
+    /* 0x064 */ u32 mMaxDistancePriority;
     /* 0x068 */ f32 field_0x68;
     /* 0x06C */ f32 field_0x6c;
-    /* 0x070 */ f32 field_0x70[15];
-    /* 0x0AC */ f32 field_0xac[15];
-    /* 0x0E8 */ f32 field_0xe8[15];
+    /* 0x070 */ f32 mVolumeFactor[15];
+    /* 0x0AC */ f32 mPriorityFactor[15];
+    /* 0x0E8 */ f32 mFxMixFactor[15];
     /* 0x124 */ bool mVolumeDistInit;
     /* 0x125 */ bool mDolbyDistInit;
 };  // Size: 0x128
 
 struct Z2AudibleRelPos {
-    /* 0x00 */ JGeometry::TVec3<f32> field_0x00;
-    /* 0x0C */ f32 field_0xC;
-    /* 0x10 */ f32 field_0x10;
+    /* 0x00 */ JGeometry::TVec3<f32> mCameraRelative;
+
+    /**
+     * Distance from mCameraRelative. This is from the object root and not the
+     * exact distance used for volume/priority calculations.
+     */
+    /* 0x0C */ f32 mTrueDistance;
+
+    /**
+     * Distance from mCameraRelative but offset by mVolCenterZ.
+     * This presumably means the distance is more centered on the object than mTrueDistance.
+     */
+    /* 0x10 */ f32 mCenterDistance;
 };
 
 struct Z2AudibleChannel {
@@ -171,7 +214,7 @@ struct Z2AudibleChannel {
     }
 
     /* 0x00 */ JASSoundParams mParams;
-    /* 0x14 */ Z2AudibleRelPos field_0x14;
+    /* 0x14 */ Z2AudibleRelPos mRelPos;
     /* 0x28 */ f32 field_0x28;
     /* 0x2c */ f32 mPan;
     /* 0x30 */ f32 mDolby;
@@ -200,8 +243,8 @@ struct Z2Audible : public JAIAudible, public JASPoolAllocObject<Z2Audible> {
 
     /* 0x10 */ JAUAudibleParam mParam;
     /* 0x14 */ Z2AudibleAbsPos mAbsPos;
-    /* 0x2C */ Z2AudibleChannel mChannel[1];
-    /* 0x64 */ f32 field_0x64[1];
+    /* 0x2C */ Z2AudibleChannel mChannel[Z2_AUDIO_PLAYERS];
+    /* 0x64 */ f32 mMicDistances[Z2_AUDIO_PLAYERS];
 };
 
 struct Z2Audience : public JAIAudience, public JASGlobalInstance<Z2Audience> {
@@ -223,7 +266,8 @@ struct Z2Audience : public JAIAudience, public JASGlobalInstance<Z2Audience> {
 
     virtual ~Z2Audience();
     virtual JAIAudible* newAudible(const JGeometry::TVec3<f32>& pos, JAISoundID soundID,
-                                                  const JGeometry::TVec3<f32>*, u32);
+                                                  const JGeometry::TVec3<f32>*, u32
+                                                  IF_DUSK_ARG(dusk::mods::svc::audio_res::bst::SoundTableReplacementSlot const*));
     virtual int getMaxChannels();
     virtual void deleteAudible(JAIAudible* audible);
     virtual u32 calcPriority(JAIAudible* audible);

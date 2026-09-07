@@ -8,12 +8,17 @@
 #include "JSystem/JAudio2/JASWaveInfo.h"
 #include "JSystem/JAudio2/JASDSPInterface.h"
 #include <os.h>
+#include <memory>
 
 struct JASDSPChannel;
 
 namespace JASDsp {
     struct TChannel;
 }
+
+#if TARGET_PC
+#include "JSystem/JAudio2/JASSampleDataReference.h"
+#endif
 
 /**
  * @ingroup jsystem-jaudio
@@ -159,12 +164,29 @@ public:
     struct {
         u32 mChannelType; // CHANNEL_WAVE or CHANNEL_OSCILLATOR
         JASWaveInfo mWaveInfo;
-    } field_0xdc;
+    } mAnon;
     union {
         u32 mWaveAramAddress;
         u32 mOscillatorSomething;
         u32 field_0x104;
     };
+
+#if TARGET_PC
+    /**
+     * Memory address at which this sound effect should consider ARAM to start.
+     *
+     * By changing this, sound effects can effectively be played back from anywhere in memory,
+     * rather than just the emulated ARAM space.
+     *
+     * If nullptr, the regular emulated ARAM is used.
+     */
+    void const* mAramBaseAddress;
+
+    /**
+     * @see JASSampleDataReference
+     */
+    std::unique_ptr<JASSampleDataReference> mSampleReference;
+#endif
 
     static DUSK_GAME_DATA OSMessageQueue sBankDisposeMsgQ;
     static DUSK_GAME_DATA OSMessage sBankDisposeMsg[16];

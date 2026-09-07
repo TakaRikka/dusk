@@ -15,9 +15,9 @@ bool JASVoiceBank::getInstParam(int param_0, int param_1, int param_2,
         return false;
     }
     sOscTable = (JASOscillator::Data*)&sOscData;
-    param_3->field_0x1a = param_0;
-    param_3->field_0x1d = 1;
-    param_3->field_0x14 = &sOscTable;
+    param_3->mWaveId = param_0;
+    param_3->mOscillatorCount = 1;
+    param_3->mOscillators = &sOscTable;
     return true;
 }
 

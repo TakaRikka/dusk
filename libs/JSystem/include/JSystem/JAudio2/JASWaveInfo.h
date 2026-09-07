@@ -2,6 +2,11 @@
 #define JASWAVEINFO_H
 
 #include <types.h>
+#include <memory>
+
+#if TARGET_PC
+#include "JSystem/JAudio2/JASSampleDataReference.h"
+#endif
 
 struct JASWaveArc;
 
@@ -17,7 +22,7 @@ struct JASWaveArc;
 struct JASWaveInfo {
     JASWaveInfo() {
         mBaseKey = 0x3c;
-        field_0x20 = &one;
+        mpLoaded = &one;
     }
 
     /* 0x00 */ u8 mWaveFormat;
@@ -31,7 +36,7 @@ struct JASWaveInfo {
     /* 0x18 */ int mSampleCount;
     /* 0x1C */ s16 mpLast;
     /* 0x1E */ s16 mpPenult;
-    /* 0x20 */ const u32* field_0x20;
+    /* 0x20 */ const u32* mpLoaded;
 
     static DUSK_GAME_DATA u32 one;
 };
@@ -45,6 +50,17 @@ public:
     virtual ~JASWaveHandle() {}
     virtual const JASWaveInfo* getWaveInfo() const = 0;
     virtual intptr_t getWavePtr() const = 0;
+#if TARGET_PC
+    /**
+     * @see JASChannel::mAramBaseAddress
+     */
+    [[nodiscard]] virtual void const* getAramBaseAddress() const = 0;
+
+    /**
+     * Create a @ref JASSampleDataReference to keep the sample data for this wave alive.
+     */
+    [[nodiscard]] virtual std::unique_ptr<JASSampleDataReference> getSampleReference() const { return nullptr; }
+#endif
 };
 
 /**
@@ -53,6 +69,12 @@ public:
  */
 class JASWaveBank {
 public:
+#if TARGET_PC
+    const u32 bankId;
+
+    JASWaveBank(u32 bankId) : bankId(bankId) { }
+#endif
+
     virtual ~JASWaveBank() {}
     virtual JASWaveHandle* getWaveHandle(u32) const = 0;
     virtual JASWaveArc* getWaveArc(u32) = 0;

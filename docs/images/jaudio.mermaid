@@ -1,0 +1,58 @@
+flowchart TD
+    Start[Start Sound Effect]
+    subgraph BST
+        params[Look up sound parameters]
+    end
+    Start-->|Sound ID|BST
+
+    subgraph BSC
+        bms_start[Look up BMS start]
+    end
+    Start-->|Sound ID|BSC
+
+    BSC-->|BMS data| bms[BMS interpreter]
+
+    subgraph IBNK
+        bnk[Look up instrument parameters]
+    end
+
+    bms-->|Plays notes| IBNK
+
+    subgraph WSYS
+        wsys[Look up wave sample]
+    end
+
+    IBNK-->|Wave ID|WSYS
+
+
+flowchart TD
+    Start[Start Sound Effect]
+    subgraph BST
+        params[Look up sound parameters]
+    end
+    Start-->|Sound ID|BST
+
+    BST-->|File path| ast[Stream /AudioRes/Stream/xxx.ast from disc]
+
+
+flowchart TD
+    Start[Start Sound Effect]
+    subgraph BST
+        params[Look up sound parameters]
+    end
+    Start-->|Sound ID|BST
+
+    BST-->|Resource ID| arc[Z2SoundSeqs.arc]
+    arc-->|BMS file| bms[BMS interpreter]
+
+    subgraph IBNK
+        bnk[Look up instrument parameters]
+    end
+
+    bms-->|Plays notes| IBNK
+
+    subgraph WSYS
+        wsys[Look up wave sample]
+    end
+
+    IBNK-->|Wave ID|WSYS

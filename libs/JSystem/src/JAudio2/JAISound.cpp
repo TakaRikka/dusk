@@ -54,16 +54,16 @@ s32 JAISoundStatus_::unlockIfLocked() {
 }
 
 void JAISoundParams::mixOutAll(const JASSoundParams& inParams, JASSoundParams* outParams, f32 param_2) {
-    outParams->mVolume = move_.params_.mVolume * (inParams.mVolume * property_.field_0x0) * param_2;
-    outParams->mFxMix = move_.params_.mFxMix + (inParams.mFxMix + property_.field_0x4);
-    outParams->mPitch = move_.params_.mPitch * (inParams.mPitch * property_.field_0x8);
+    outParams->mVolume = move_.params_.mVolume * (inParams.mVolume * property_.mVolume) * param_2;
+    outParams->mFxMix = move_.params_.mFxMix + (inParams.mFxMix + property_.mFxMix);
+    outParams->mPitch = move_.params_.mPitch * (inParams.mPitch * property_.mPitch);
     outParams->mPan = (inParams.mPan + move_.params_.mPan) - 0.5f;
     outParams->mDolby = inParams.mDolby + move_.params_.mDolby;
 }
 
 JAISound::JAISound() : params_() {}
 
-void JAISound::start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience) {
+void JAISound::start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience IF_DUSK_ARG(std::shared_ptr<SoundTableReplacementSlot> replacement)) {
     handle_ = NULL;
     soundID_ = id;
     status_.init();
@@ -72,9 +72,10 @@ void JAISound::start_JAISound_(JAISoundID id, const JGeometry::TVec3<f32>* posPt
     audience_ = audience;
     prepareCount_ = 0;
     count_ = 0;
+    IF_DUSK(this->replacement = std::move(replacement));
 
     if (posPtr != NULL && audience_ != NULL) {
-        audible_ = audience_->newAudible(*posPtr, soundID_, NULL, 0);
+        audible_ = audience_->newAudible(*posPtr, soundID_, NULL, 0 IF_DUSK_ARG(getReplacement()));
     } else {
         audible_ = NULL;
     }
@@ -98,7 +99,7 @@ void JAISound::newAudible(const JGeometry::TVec3<f32>& pos,
     }
 
     JUT_ASSERT(157, audience_);
-    audible_ = audience_->newAudible(pos, soundID_, param_1, param_2);
+    audible_ = audience_->newAudible(pos, soundID_, param_1, param_2 IF_DUSK_ARG(getReplacement()));
 }
 
 void JAISound::stop(u32 fadeTime) {
@@ -181,7 +182,7 @@ bool JAISound::calc_JAISound_() {
     }
 
     if (audience_ != NULL && audible_ != NULL) {
-        if ((priority_ = audience_->calcPriority(audible_)) == 0xFFFFFFFF && status_.field_0x1.flags.flag1 == 0) {
+        if ((priority_ = audience_->calcPriority(audible_)) == 0xFFFFFFFF && status_.field_0x1.flags.mComesBack == 0) {
             stop_JAISound_();
         }
     } else {

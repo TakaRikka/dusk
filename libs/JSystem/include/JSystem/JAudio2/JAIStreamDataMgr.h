@@ -8,7 +8,9 @@
  * 
  */
 struct JAIStreamDataMgr {
-    virtual s32 getStreamFileEntry(JAISoundID) = 0;
+    IF_DUSK(using StreamReplacementSlot2 = dusk::mods::svc::audio_res::bst::StreamReplacementSlot);
+
+    virtual s32 getStreamFileEntry(JAISoundID IF_DUSK_ARG(StreamReplacementSlot2 const*)) = 0;
     virtual ~JAIStreamDataMgr();
 };
 

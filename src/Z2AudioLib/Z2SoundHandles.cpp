@@ -89,7 +89,7 @@ Z2SoundHandlePool* Z2SoundHandles::getLowPrioSound(JAISoundID soundID) {
             return handle;
         }
 
-        u32 prio = soundInfo->getPriority((*handle)->getID());
+        u32 prio = soundInfo->getPriority((*handle)->getID() IF_DUSK_ARG((*handle)->getReplacement()));
         if (prio < low_prio) {
             low_prio = prio;
             rethandle = handle;
@@ -102,7 +102,7 @@ Z2SoundHandlePool* Z2SoundHandles::getLowPrioSound(JAISoundID soundID) {
     }
     #endif
 
-    if (soundInfo->getPriority(soundID) >= low_prio) {
+    if (soundInfo->getPriority(soundID IF_DUSK_ARG(nullptr)) >= low_prio) {
         return rethandle;
     }
 

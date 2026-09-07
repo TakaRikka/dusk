@@ -104,7 +104,7 @@ public:
     JAISe* newSe_(int category, u32 priority);
     void calc();
     void mixOut();
-    bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr);
+    bool startSound(JAISoundID id, JAISoundHandle* handle, const JGeometry::TVec3<f32>* posPtr IF_DUSK_ARG(std::shared_ptr<dusk::mods::svc::audio_res::bst::SoundEffectReplacementSlot> replacement));
     int getNumActiveSe() const;
 
     /* 0x004 */ JAISoundActivity mSoundActivity;

@@ -12,21 +12,27 @@ struct JASBasicWaveBank : public JASWaveBank {
     struct TWaveHandle : public JASWaveHandle {
         TWaveHandle() { mHeap = NULL; }
         virtual intptr_t getWavePtr() const;
-        virtual const JASWaveInfo* getWaveInfo() const { return &field_0x4; }
+        virtual const JASWaveInfo* getWaveInfo() const { return &mWaveInfo; }
+#if TARGET_PC
+        /**
+         * @see JASChannel::mAramBaseAddress
+         */
+        [[nodiscard]] void const* getAramBaseAddress() const override { return nullptr; }
+#endif
         bool compareHeap(JASHeap* heap) const { return mHeap == heap;}
 
-        /* 0x04 */ JASWaveInfo field_0x4;
+        /* 0x04 */ JASWaveInfo mWaveInfo;
         /* 0x28 */ JASHeap* mHeap;
     };
 
     struct TGroupWaveInfo {
         TGroupWaveInfo() {
-            field_0x0 = 0xffff;
-            field_0x4 = -1;
+            waveId = 0xffff;
+            mOffsetStart = -1;
         }
 
-        /* 0x00 */ u16 field_0x0;
-        /* 0x04 */ int field_0x4;
+        /* 0x00 */ u16 waveId;
+        /* 0x04 */ int mOffsetStart;
     };
 
     struct TWaveGroup : JASWaveArc {
@@ -44,7 +50,7 @@ struct JASBasicWaveBank : public JASWaveBank {
         u32 getWaveCount() const { return mWaveCount; }
     };
 
-    JASBasicWaveBank();
+    JASBasicWaveBank(IF_DUSK(u32 bankId));
     ~JASBasicWaveBank();
     TWaveGroup* getWaveGroup(u32);
     void setGroupCount(u32, JKRHeap*);
@@ -56,7 +62,7 @@ struct JASBasicWaveBank : public JASWaveBank {
     JASWaveArc* getWaveArc(u32 param_0) { return getWaveGroup(param_0); }
     u32 getArcCount() const { return mGroupCount; }
 
-    /* 0x04 */ OSMutex field_0x4;
+    /* 0x04 */ OSMutex mWaveTableMutex;
     /* 0x1C */ TWaveHandle* mWaveTable;
     /* 0x20 */ TWaveGroup* mWaveGroupArray;
     /* 0x24 */ u16 mHandleCount;

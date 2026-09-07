@@ -317,7 +317,7 @@ void dusk::audio::DspRender(OutputSubframe& subframe) {
         }
 
         OutputSubframe channelSubframe = {};
-        if (channel.mWaveAramAddress == 0) {
+        if (channel.mWaveAramAddress == 0 && !channel.mAramBaseAddress) {
             RenderOscChannel(channel, channelAux, channelSubframe);
         } else {
             ValidateChannel(channel);
@@ -455,7 +455,8 @@ static int ReadChannelSamplesChunk(
 
     assert(desiredSamples >= 0);
 
-    auto aramBase = static_cast<u8*>(ARGetStorageAddress()) + channel.mWaveAramAddress;
+    auto aramBase = static_cast<u8 const*>(channel.mAramBaseAddress ? channel.mAramBaseAddress : ARGetStorageAddress());
+    aramBase += channel.mWaveAramAddress;
 
     auto curSamplePosition = channel.mSamplePosition;
     u32 skipSamples = curSamplePosition % channel.mSamplesPerBlock;

@@ -10,12 +10,18 @@ struct JASSimpleWaveBank : JASWaveBank, JASWaveArc {
         intptr_t getWavePtr() const;
         TWaveHandle();
         const JASWaveInfo* getWaveInfo() const;
+#if TARGET_PC
+        /**
+         * @see JASChannel::mAramBaseAddress
+         */
+        [[nodiscard]] void const* getAramBaseAddress() const override { return nullptr; }
+#endif
 
         /* 0x04 */ JASWaveInfo mWaveInfo;
         /* 0x28 */ JASHeap* mHeap;
     };
 
-    JASSimpleWaveBank();
+    JASSimpleWaveBank(IF_DUSK(u32 bankId));
     ~JASSimpleWaveBank();
     void setWaveTableSize(u32, JKRHeap*);
     JASWaveHandle* getWaveHandle(u32) const;

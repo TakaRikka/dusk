@@ -10,7 +10,7 @@
  */
 struct JAUAudibleParam {
     f32 getDopplerPower() const {
-        return field_0x0.bytes.b0_0 * (1.0f / 15.0f);
+        return field_0x0.bytes.mDopplerPower * (1.0f / 15.0f);
     }
 
     union {
@@ -19,14 +19,18 @@ struct JAUAudibleParam {
             BE(u16) f1;
         } half;
         struct {
-            u8 b0_0 : 4;
-            u8 b0_4 : 1;
-            u8 b0_5 : 1;
-            u8 b0_6 : 1;
-            u8 b0_7 : 1;
-            u8 b1_0 : 1;
-            u8 b1_1 : 1;
-            u8 b1_2_7 : 6;
+            u8 mDopplerPower : 4;
+            u8 mCalculatePriority : 1;
+            u8 mCalcDistanceVolume : 1;
+            u8 mCalcFxMix : 1;
+            u8 mCullAtMaxDistance : 1;
+            u8 mCalcPan : 1;
+            u8 mCalcDolby : 1;
+            /**
+             * Most bits in this field are unused, 8 indicates clamping of volume
+             * to ensure it doesn't go below 0.2 in mixChannelOut()
+             */
+            u8 mClampMinVolume : 6;
             u8 b2;
             u8 b3;
         } bytes;

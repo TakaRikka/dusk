@@ -14,9 +14,9 @@ JASBasicInst::JASBasicInst() {
     mKeymapCount = 0;
     mKeymap = NULL;
 #if TARGET_ANDROID
-    JASCalc::_bzero(field_0xc, sizeof(field_0xc));
+    JASCalc::_bzero(mOscillators, sizeof(mOscillators));
 #else
-    JASCalc::bzero(field_0xc, sizeof(field_0xc));
+    JASCalc::bzero(mOscillators, sizeof(mOscillators));
 #endif
 }
 
@@ -24,18 +24,18 @@ JASBasicInst::~JASBasicInst() {
     JKR_DELETE_ARRAY(mKeymap);
 }
 
-bool JASBasicInst::getParam(int param_0, int param_1, JASInstParam* param_2) const {
-    UNUSED(param_1);
-    param_2->field_0x1c = 0;
-    param_2->field_0x1e = 0;
-    param_2->field_0x14 = (JASOscillator::Data**)&field_0xc;
-    param_2->field_0x1d = 2;
-    param_2->mVolume = mVolume;
-    param_2->mPitch = mPitch;
+bool JASBasicInst::getParam(int key, int velocity, JASInstParam* o_param) const {
+    UNUSED(velocity);
+    o_param->mChannelType = 0;
+    o_param->mDontSetKey = 0;
+    o_param->mOscillators = (JASOscillator::Data**)&mOscillators;
+    o_param->mOscillatorCount = 2;
+    o_param->mVolume = mVolume;
+    o_param->mPitch = mPitch;
 
     TKeymap* keyMap = NULL;
     for (int i = 0; i < mKeymapCount; i++) {
-        if (param_0 <= mKeymap[i].mHighKey) {
+        if (key <= mKeymap[i].mHighKey) {
             keyMap = &mKeymap[i];
             break;
         }
@@ -45,9 +45,9 @@ bool JASBasicInst::getParam(int param_0, int param_1, JASInstParam* param_2) con
         return false;
     }
 
-    param_2->mVolume *= keyMap->field_0x8;
-    param_2->mPitch *= keyMap->field_0xc;
-    param_2->field_0x1a = u16(keyMap->field_0x4);
+    o_param->mVolume *= keyMap->mVolumeMult;
+    o_param->mPitch *= keyMap->mPitchMult;
+    o_param->mWaveId = u16(keyMap->mWaveId);
     return true;
 }
 
@@ -61,7 +61,7 @@ void JASBasicInst::setKeyRegionCount(u32 count, JKRHeap* param_1) {
 void JASBasicInst::setOsc(int index, JASOscillator::Data const* param_1) {
     JUT_ASSERT(128, index < OSC_MAX);
     JUT_ASSERT(129, index >= 0);
-    field_0xc[index] = param_1;
+    mOscillators[index] = param_1;
 }
 
 JASBasicInst::TKeymap* JASBasicInst::getKeyRegion(int index) {

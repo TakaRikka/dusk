@@ -5,6 +5,7 @@
 #include "JSystem/JAudio2/JAISoundChild.h"
 #include "JSystem/JAudio2/JAIStreamDataMgr.h"
 #include "JSystem/JAudio2/JAIAudience.h"
+#include "dusk/mods/svc/audio_res/bst.hpp"
 
 static void JAIStream_JASAramStreamCallback_(u32 type, JASAramStream* aramStream, void* userData) {
     JAIStream* stream = (JAIStream*)userData;
@@ -34,10 +35,10 @@ JAIStream::JAIStream(JAIStreamMgr* streamMgr, JAISoundStrategyMgr<JAIStream>* so
 
 void JAIStream::JAIStreamMgr_startID_(JAISoundID id, s32 streamFileEntry,
                                       const JGeometry::TVec3<f32>* posPtr, JAIAudience* audience,
-                                      int category) {
+                                      int category IF_DUSK_ARG(std::shared_ptr<dusk::mods::svc::audio_res::bst::StreamReplacementSlot> replacement)) {
     field_0x298 = category;
     field_0x294 = streamFileEntry;
-    start_JAISound_(id, posPtr, audience);
+    start_JAISound_(id, posPtr, audience IF_DUSK_ARG(std::static_pointer_cast<SoundTableReplacementSlot>(replacement)));
     field_0x290 = 0;
 
     if (field_0x2c0 != NULL) {

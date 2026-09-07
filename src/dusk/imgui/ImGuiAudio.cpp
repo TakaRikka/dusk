@@ -1,14 +1,15 @@
+#include <cmath>
 #include "ImGuiConsole.hpp"
 #include "ImGuiMenuTools.hpp"
-#include <cmath>
-#include "JSystem/JAudio2/JAISeq.h"
 #include "JSystem/JAudio2/JAISeMgr.h"
+#include "JSystem/JAudio2/JAISeq.h"
 #include "JSystem/JAudio2/JAISeqMgr.h"
 #include "JSystem/JAudio2/JAIStreamMgr.h"
 #include "JSystem/JAudio2/JASCriticalSection.h"
 #include "JSystem/JAudio2/JASDSPChannel.h"
 #include "JSystem/JAudio2/JASDSPInterface.h"
 #include "JSystem/JAudio2/JASTrack.h"
+#include "JSystem/JAudio2/JAUSectionHeap.h"
 #include "dusk/audio/DuskAudioSystem.h"
 #include "dusk/audio/DuskDsp.hpp"
 
@@ -281,6 +282,37 @@ static void ShowAllJAISeqs() {
     }
 }
 
+static void ShowSeqDataBlock(JAUSeqDataBlock const& block) {
+    char buf[64];
+    SAFE_SPRINTF(buf, "%p", &block);
+    if (ImGui::BeginChild(buf, ImVec2(), ImGuiChildFlags_Border | ImGuiChildFlags_AutoResizeY)) {
+        ImGui::Text("Sound: %08X", block.field_0x10.id_.composite_.host());
+        ImGui::Text("Region: %p %08X", block.region.addr, block.region.size);
+    }
+
+    ImGui::EndChild();
+}
+
+static void ShowSeqDataBlocks() {
+    auto const& heap = *JAUSectionHeap::getInstance();
+    auto const& blocks = heap.sectionHeapData_.seqDataBlocks;
+
+    ImGui::Text("Loaded:");
+    for (auto link = blocks.mLoadedBlocks.getFirst(); link != nullptr; link = link->getNext()) {
+        ShowSeqDataBlock(*link->getObject());
+    }
+
+    ImGui::Text("Loading:");
+    for (auto link = blocks.field_0xc.getFirst(); link != nullptr; link = link->getNext()) {
+        ShowSeqDataBlock(*link->getObject());
+    }
+
+    ImGui::Text("Free:");
+    for (auto link = blocks.mFreeBlocks.getFirst(); link != nullptr; link = link->getNext()) {
+        ShowSeqDataBlock(*link->getObject());
+    }
+}
+
 void dusk::ImGuiMenuTools::ShowAudioDebug() {
     if (!getSettings().backend.enableAdvancedSettings ||
         !ImGuiConsole::CheckMenuViewToggle(ImGuiKey_F10, m_showAudioDebug))
@@ -319,6 +351,11 @@ void dusk::ImGuiMenuTools::ShowAudioDebug() {
 
             if (ImGui::BeginTabItem("JAISeq")) {
                 ShowAllJAISeqs();
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("SeqDataBlocks")) {
+                ShowSeqDataBlocks();
                 ImGui::EndTabItem();
             }
 

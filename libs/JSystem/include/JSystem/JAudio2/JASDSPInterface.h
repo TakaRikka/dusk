@@ -109,7 +109,9 @@ namespace JASDsp {
          * Pitch shift via changing playback speed.
          */
         /* 0x004 */ u16 mPitch;
+#if !TARGET_PC
         /* 0x006 */ short _unused1;
+#endif
 
         /**
          * Set to 1 when playback starts, cleared by DSP later,
@@ -118,19 +120,27 @@ namespace JASDsp {
          * (Corroborated by fields JASAramStream checks never being cleared explicitly by CPU.)
          */
         /* 0x008 */ u16 mResetFlag;
+#if !TARGET_PC
         /* 0x00A */ u8 _unused2[0x00C - 0x00A];
+#endif
         /* 0x00C */ s16 mPauseFlag;
+#if !TARGET_PC
         /* 0x00E */ short _unused3;
+#endif
         /* 0x010 */ OutputChannelConfig mOutputChannels[DSP_OUTPUT_CHANNELS];
+#if !TARGET_PC
         /* 0x040 */ u8 _unused4[0x050 - 0x040];
+#endif
         /* 0x050 */ u16 mAutoMixerPanDolby; // pan is upper 8 bits, dolby lower 8.
         /* 0x052 */ u16 mAutoMixerFxMix;
         /* 0x054 */ u16 mAutoMixerInitVolume;
         /* 0x056 */ u16 mAutoMixerVolume;
         /* 0x058 */ u16 mAutoMixerBeenSet;
+#if !TARGET_PC
         /* 0x05A */ u8 _unused5[0x060 - 0x05A];
         /* 0x060 */ short field_0x060; // Only cleared to zero, presumed used by DSP.
         /* 0x062 */ u8 _unused6[0x064 - 0x062];
+#endif
 
         /**
          * Samples per ADPCM frame for ADPCM audio. Seems just set to 1 for PCM formats.
@@ -139,7 +149,9 @@ namespace JASDsp {
         /* 0x064 */ u16 mSamplesPerBlock;
         /* 0x066 */ short field_0x066; // Only cleared to zero, presumed used by DSP.
         /* 0x068 */ u32 mSamplePosition; // Only ever initialized by code, name is guess.
+#if !TARGET_PC
         /* 0x06C */ u8 _unused7[0x070 - 0x06C];
+#endif
 
         /**
          * Current audio read position in ARAM. Updated by DSP.
@@ -151,11 +163,13 @@ namespace JASDsp {
          * Gets written by DSP, but also CPU.
          */
         /* 0x074 */ u32 mSamplesLeft;      // Never directly cleared to zero. Seems sus. Cleared by DSP?
+#if !TARGET_PC
         /* 0x078 */ short field_0x078[4];  // Only cleared to zero, presumed used by DSP.
         /* 0x080 */ short field_0x080[20]; // Only cleared to zero, presumed used by DSP.
         /* 0x0A8 */ short field_0x0a8[4];  // Only cleared to zero, presumed used by DSP.
         /* 0x0B0 */ u16 field_0x0b0[16];   // Only cleared to zero, presumed used by DSP.
         /* 0x0D0 */ u8 _unused8[0x100 - 0x0D0];
+#endif
         /* 0x100 */ u16 mBytesPerBlock;
         /* 0x102 */ u16 mLoopFlag;
 
@@ -176,9 +190,26 @@ namespace JASDsp {
         /* 0x118 */ u32 mWaveAramAddress;
         /* 0x11C */ int mSampleCount;
         /* 0x120 */ s16 fir_filter_params[8];
+#if !TARGET_PC
         /* 0x130 */ u8 _unused9[0x148 - 0x130];
+#endif
         /* 0x148 */ s16 iir_filter_params[8];
+#if !TARGET_PC
         /* 0x158 */ u8 _unused10[0x180 - 0x158];
+#endif
+
+#if TARGET_PC
+        /**
+         * Memory address at which this sound effect should consider ARAM to start.
+         * This means fields like mWaveAramAddress will be relative to this pointer instead.
+         *
+         * By changing this, sound effects can effectively be played back from anywhere in memory,
+         * rather than just the emulated ARAM space.
+         *
+         * If nullptr, the regular emulated ARAM is used.
+         */
+        void const* mAramBaseAddress;
+#endif
     };
 
     void boot(void (*)(void*));

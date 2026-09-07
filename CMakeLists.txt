@@ -92,6 +92,8 @@ option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled 
 option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structure" OFF)
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
 option(DUSK_ENABLE_CODE_MODS "Enable code mods" ON)
+option(DUSK_ENABLE_OPUS "Enable loading Opus audio files for mods" ON)
+
 
 set(DUSK_HAS_FUNCHOOK OFF)
 if (DUSK_ENABLE_CODE_MODS AND (NOT APPLE OR CMAKE_SYSTEM_NAME STREQUAL "Darwin"))
@@ -182,6 +184,25 @@ FetchContent_Declare(miniz
 )
 
 set(_fetch_content_deps miniz)
+
+if (DUSK_ENABLE_OPUS)
+    message(STATUS "dusklight: Fetching opusfile")
+
+    # Opusfile options
+    SET(OP_DISABLE_HTTP ON CACHE BOOL "" FORCE)
+    SET(OP_DISABLE_DOCS ON CACHE BOOL "" FORCE)
+    SET(OP_DISABLE_EXAMPLES ON CACHE BOOL "" FORCE)
+
+    message(STATUS "dusklight: Fetching opusfile")
+    FetchContent_Declare(
+        opusfile
+        GIT_REPOSITORY https://github.com/xiph/opusfile.git
+        GIT_TAG        6dfd29e7adb87f2e193575fc3fa88cbf1a0b27df
+    )
+
+    list(APPEND _fetch_content_deps opusfile)
+endif ()
+
 if (DUSK_HAS_FUNCHOOK)
     message(STATUS "dusklight: Fetching funchook")
     # cmake/PatchFunchook.cmake patches funchook's cmake/capstone.cmake.in to inject a
@@ -245,6 +266,10 @@ set(GAME_LIBS aurora::core aurora::gx aurora::gd aurora::si aurora::vi aurora::p
     Threads::Threads zstd::libzstd dusklight_game_headers)
 if (DUSK_HAS_FUNCHOOK)
     list(APPEND GAME_LIBS funchook-static)
+endif ()
+if (DUSK_ENABLE_OPUS)
+    list(APPEND GAME_LIBS OpusFile::opusfile)
+    list(APPEND GAME_COMPILE_DEFS DUSK_OPUS=1)
 endif ()
 
 if (WIN32)
@@ -502,6 +527,7 @@ if (DUSK_ENABLE_CODE_MODS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR
     add_subdirectory(mods/custom_actor_demo)
     add_subdirectory(mods/cosmetics)
     add_subdirectory(mods/randomizer)
+    add_subdirectory(mods/audio_mod)
 endif ()
 
 if (APPLE)

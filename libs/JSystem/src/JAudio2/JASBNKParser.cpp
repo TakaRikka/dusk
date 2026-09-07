@@ -115,9 +115,9 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                     JASBasicInst::TKeymap* keymap = instp->getKeyRegion(j);
                     keymap->setHighKey(*data >> 0x18);
                     u32 fVar4 = data[1];
-                    keymap->field_0x4 = JSULoHalf(data[3]);
-                    keymap->field_0x8 = *(BE(f32)*)&data[4];
-                    keymap->field_0xc = *(BE(f32)*)&data[5];
+                    keymap->mWaveId = JSULoHalf(data[3]);
+                    keymap->mVolumeMult = *(BE(f32)*)&data[4];
+                    keymap->mPitchMult = *(BE(f32)*)&data[5];
                     data += 2;
                     for (int k = 0; k < fVar4; k++) {
                         data += 4;
@@ -159,9 +159,9 @@ JASBasicBank* JASBNKParser::Ver1::createBasicBank(void const* stream, JKRHeap* h
                             ptr++;
                         }
                         u32 pVar6 = ptr[0];
-                        percp->field_0xe = JSULoHalf(ptr[2]);
-                        percp->field_0x10 = *(BE(f32)*)&ptr[3];
-                        percp->field_0x14 = *(BE(f32)*)&ptr[4];
+                        percp->mWaveId = JSULoHalf(ptr[2]);
+                        percp->mVolumeMult = *(BE(f32)*)&ptr[3];
+                        percp->mPitchMult = *(BE(f32)*)&ptr[4];
                         for (int k = 0; k < pVar6; k++) {}
                         drump->setPerc(j, percp);
                     }
@@ -260,9 +260,9 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                 TKeymap* tkeymap = tinst->mKeymapOffset[j].ptr(header);
                 keymap->setHighKey(tkeymap->mHighKey);
                 TVmap* tvmap = tkeymap->mVmapOffset.ptr(header);
-                keymap->field_0x4 = JSULoHalf(tvmap->field_0x4);
-                keymap->field_0x8 = tvmap->field_0x8;
-                keymap->field_0xc = tvmap->field_0xc;
+                keymap->mWaveId = JSULoHalf(tvmap->field_0x4);
+                keymap->mVolumeMult = tvmap->field_0x8;
+                keymap->mPitchMult = tvmap->field_0xc;
             }
 
             bank->setInst(i, instp);
@@ -288,9 +288,9 @@ JASBasicBank* JASBNKParser::Ver0::createBasicBank(void const* stream, JKRHeap* h
                         percp->setRelease(tperc->mRelease[j]);
                     }
                     TVmap* vmap = tpmap->mVmapOffset.ptr(header);
-                    percp->field_0xe = JSULoHalf(vmap->field_0x4);
-                    percp->field_0x10 = vmap->field_0x8;
-                    percp->field_0x14 = vmap->field_0xc;
+                    percp->mWaveId = JSULoHalf(vmap->field_0x4);
+                    percp->mVolumeMult = vmap->field_0x8;
+                    percp->mPitchMult = vmap->field_0xc;
                     setp->setPerc(j, percp);
                 }
             }
@@ -314,8 +314,8 @@ JASOscillator::Data* JASBNKParser::Ver0::findOscPtr(JASBasicBank* bank, THeader 
                     if (inst != NULL) {
                         JASInstParam param;
                         inst->getParam(0x3c, 0x7f, &param);
-                        if (j < param.field_0x1d) {
-                            return param.field_0x14[j];
+                        if (j < param.mOscillatorCount) {
+                            return param.mOscillators[j];
                         }
                     }
                 }
