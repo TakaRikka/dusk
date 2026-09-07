@@ -314,6 +314,7 @@ ModResult runtime_activate(ModContext*, ModContext* subject, ModError* outError)
         return set_error(outError, MOD_ERROR, "Failed to create Luau VM");
     }
     lua_callbacks(vm->state)->userdata = vm.get();
+#if NDEBUG // Annoying for debuggers
     lua_callbacks(vm->state)->interrupt = [](lua_State* state, int gc) {
         auto* current = static_cast<Vm*>(lua_callbacks(state)->userdata);
         if (gc < 0 && current != nullptr && current->deadlineActive &&
@@ -322,6 +323,7 @@ ModResult runtime_activate(ModContext*, ModContext* subject, ModError* outError)
             luaL_error(state, "script execution exceeded its time budget");
         }
     };
+#endif
     luaL_openlibs(vm->state);
     luaL_sandbox(vm->state);
 
