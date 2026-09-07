@@ -55,7 +55,7 @@ ModResult load_wav(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::
         return MOD_UNSUPPORTED;
     }
 
-    if (sizeof(ChunkHeader) + riffChunk.header.size > fileData.size()) {
+    if (sizeof(ChunkHeader) + riffChunk.header.size > fileData.size() || riffChunk.header.size < 4) {
         Log.error("[{}] wav file {}: invalid size!", mod.metadata.id, slot.bundle_path);
         return MOD_INVALID_ARGUMENT;
     }
@@ -63,7 +63,7 @@ ModResult load_wav(LoadedMod const& mod, RuntimeWaveReplacementSlot& slot, std::
     bool has_read_fmt = false;
     SampleDataPcm16 pcmData;
 
-    auto waveData = fileData.subspan(sizeof(RiffChunk), riffChunk.header.size);
+    auto waveData = fileData.subspan(sizeof(RiffChunk), riffChunk.header.size - 4);
     while (waveData.size() > sizeof(ChunkHeader)) {
         auto const chunkHeader = read_unaligned<ChunkHeader>(&waveData[0]);
 
